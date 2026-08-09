@@ -101,157 +101,157 @@ export function ensurePlayerView(input: {
   const gestureFlash = Div().class('ran-player-gesture-flash').attr('aria-hidden', 'true').build() as HTMLDivElement;
 
   const progressWrapBuffer = Div().class('ran-player-controller-progress-wrap-buffer').build() as HTMLDivElement;
-    const progressWrapValue = Div().class('ran-player-controller-progress-wrap-value').build() as HTMLDivElement;
-    const progressWrap = Div()
-      .class('ran-player-controller-progress-wrap')
-      .children(progressWrapBuffer, progressWrapValue)
-      .build() as HTMLDivElement;
-    const progressDot = Div().class('ran-player-controller-progress-dot').build() as HTMLDivElement;
-    // Percentage-based (0-100), not raw seconds — duration isn't known at
-    // construction time and changes per source, whereas 0-100 stays valid for
-    // the element's whole lifetime. aria-valuetext (kept in sync in
-    // syncProgressByPercentage) carries the actual "current of total" time
-    // for a screen reader, since a bare percentage isn't very meaningful for
-    // a seek bar.
-    const progress = focusableRole(Div().class('ran-player-controller-progress'), 'slider', 'Seek')
-      .aria('valuemin', '0')
-      .aria('valuemax', '100')
-      .children(progressWrap, progressDot)
-      .build() as HTMLDivElement;
+  const progressWrapValue = Div().class('ran-player-controller-progress-wrap-value').build() as HTMLDivElement;
+  const progressWrap = Div()
+    .class('ran-player-controller-progress-wrap')
+    .children(progressWrapBuffer, progressWrapValue)
+    .build() as HTMLDivElement;
+  const progressDot = Div().class('ran-player-controller-progress-dot').build() as HTMLDivElement;
+  // Percentage-based (0-100), not raw seconds — duration isn't known at
+  // construction time and changes per source, whereas 0-100 stays valid for
+  // the element's whole lifetime. aria-valuetext (kept in sync in
+  // syncProgressByPercentage) carries the actual "current of total" time
+  // for a screen reader, since a bare percentage isn't very meaningful for
+  // a seek bar.
+  const progress = focusableRole(Div().class('ran-player-controller-progress'), 'slider', 'Seek')
+    .aria('valuemin', '0')
+    .aria('valuemax', '100')
+    .children(progressWrap, progressDot)
+    .build() as HTMLDivElement;
 
-    const playerControllerBottomPlayBtn = createIconControl(
-      'ran-player-controller-bottom-left-btn',
-      'play',
-      'Play',
-      'var(--ran-player-toggle-width, 20px)',
-    );
-    const playerControllerBottomTimeCurrent = Div()
-      .class('ran-player-controller-bottom-left-time-current')
-      .build() as HTMLDivElement;
-    const playerControllerBottomTimeDivide = Div()
-      .class('ran-player-controller-bottom-left-time-divide')
-      .build() as HTMLDivElement;
-    const playerControllerBottomTimeDuration = Div()
-      .class('ran-player-controller-bottom-left-time-duration')
-      .build() as HTMLDivElement;
-    const playerControllerBottomLeft = Div()
-      .class('ran-player-controller-bottom-left')
-      .children(
-        playerControllerBottomPlayBtn,
-        playerControllerBottomTimeCurrent,
-        playerControllerBottomTimeDivide,
-        playerControllerBottomTimeDuration,
-      )
-      .build() as HTMLDivElement;
+  const playerControllerBottomPlayBtn = createIconControl(
+    'ran-player-controller-bottom-left-btn',
+    'play',
+    'Play',
+    'var(--ran-player-toggle-width, 20px)',
+  );
+  const playerControllerBottomTimeCurrent = Div()
+    .class('ran-player-controller-bottom-left-time-current')
+    .build() as HTMLDivElement;
+  const playerControllerBottomTimeDivide = Div()
+    .class('ran-player-controller-bottom-left-time-divide')
+    .build() as HTMLDivElement;
+  const playerControllerBottomTimeDuration = Div()
+    .class('ran-player-controller-bottom-left-time-duration')
+    .build() as HTMLDivElement;
+  const playerControllerBottomLeft = Div()
+    .class('ran-player-controller-bottom-left')
+    .children(
+      playerControllerBottomPlayBtn,
+      playerControllerBottomTimeCurrent,
+      playerControllerBottomTimeDivide,
+      playerControllerBottomTimeDuration,
+    )
+    .build() as HTMLDivElement;
 
-    const playerIdentifier = 'ran-player' + `${performance.now()}`.replace('.', '');
-    const playControllerBottomSpeedPopover = View('r-select')
-      .attr('value', '1')
-      .attr('trigger', 'hover,click')
-      .attr('type', 'text')
-      .attr('placement', 'top')
-      .attr('getPopupContainerId', playerIdentifier)
-      .attr('dropdownclass', 'video-speed-dropdown')
-      .aria('label', 'Playback speed')
-      .attr('title', 'Playback speed')
-      .children(...speedOptions.map((item) => View('r-option').attr('value', `${item.value}`).text(item.label).build()))
-      .build() as HTMLElement;
-    playControllerBottomSpeedPopover.addEventListener('change', onSpeedChange);
-    const playControllerBottomSpeed = Div()
-      .class('ran-player-controller-bottom-right-speed')
-      .children(playControllerBottomSpeedPopover)
-      .build() as HTMLDivElement;
+  const playerIdentifier = 'ran-player' + `${performance.now()}`.replace('.', '');
+  const playControllerBottomSpeedPopover = View('r-select')
+    .attr('value', '1')
+    .attr('trigger', 'hover,click')
+    .attr('type', 'text')
+    .attr('placement', 'top')
+    .attr('getPopupContainerId', playerIdentifier)
+    .attr('dropdownclass', 'video-speed-dropdown')
+    .aria('label', 'Playback speed')
+    .attr('title', 'Playback speed')
+    .children(...speedOptions.map((item) => View('r-option').attr('value', `${item.value}`).text(item.label).build()))
+    .build() as HTMLElement;
+  playControllerBottomSpeedPopover.addEventListener('change', onSpeedChange);
+  const playControllerBottomSpeed = Div()
+    .class('ran-player-controller-bottom-right-speed')
+    .children(playControllerBottomSpeedPopover)
+    .build() as HTMLDivElement;
 
-    const playControllerBottomVolumeIcon = Div()
-      .class('ran-player-controller-bottom-right-volume-icon')
-      .children(icon('volume', 'var(--ran-player-volume-icon-width, 20px)'))
-      .build() as HTMLDivElement;
-    const playControllerBottomVolumeProgress = View('r-progress')
-      .class('ran-player-controller-bottom-right-volume-progress')
-      .attr('percent', '50')
-      .attr('type', 'drag')
-      .build() as Progress;
-    const playControllerBottomVolume = Div()
-      .class('ran-player-controller-bottom-right-volume')
-      .attr('title', 'Volume')
-      .children(playControllerBottomVolumeIcon, playControllerBottomVolumeProgress)
-      .build() as HTMLDivElement;
+  const playControllerBottomVolumeIcon = Div()
+    .class('ran-player-controller-bottom-right-volume-icon')
+    .children(icon('volume', 'var(--ran-player-volume-icon-width, 20px)'))
+    .build() as HTMLDivElement;
+  const playControllerBottomVolumeProgress = View('r-progress')
+    .class('ran-player-controller-bottom-right-volume-progress')
+    .attr('percent', '50')
+    .attr('type', 'drag')
+    .build() as Progress;
+  const playControllerBottomVolume = Div()
+    .class('ran-player-controller-bottom-right-volume')
+    .attr('title', 'Volume')
+    .children(playControllerBottomVolumeIcon, playControllerBottomVolumeProgress)
+    .build() as HTMLDivElement;
 
-    // Empty/hidden until `createSubtitleSelect()` (index.ts) builds an `<r-select>`
-    // into it once `tracks` is set — same lazy-population pattern as clarity below.
-    const playControllerBottomSubtitle = Div()
-      .class('ran-player-controller-bottom-right-subtitle')
-      .build() as HTMLDivElement;
-    const playControllerBottomClarity = Div()
-      .class('ran-player-controller-bottom-right-clarity')
-      .build() as HTMLDivElement;
-    // Hidden by default (`ran-player-controller-bottom-right-pip-hidden`, toggled by
-    // `syncPipButtonVisibility` in index.ts once `isPipSupported()` is known — that check
-    // needs `document`, so it can't run at SSR/construction time). No `<r-icon>` child
-    // needed for aria: the icon is decorative by default when it carries no aria-label of
-    // its own, and this button already has one via `focusableRole`.
-    const playControllerBottomPip = createIconControl(
-      'ran-player-controller-bottom-right-pip ran-player-controller-bottom-right-pip-hidden',
-      'pip',
-      'Picture in picture',
-      'var(--ran-player-pip-width, 20px)',
-    );
-    // Hidden by default, same reasoning/mechanism as PiP above — visibility toggled by
-    // `syncRemoteButtonVisibility` once `isRemotePlaybackSupported()` is known.
-    const playControllerBottomRemote = createIconControl(
-      'ran-player-controller-bottom-right-remote ran-player-controller-bottom-right-remote-hidden',
-      'cast',
-      'Cast to device',
-      'var(--ran-player-remote-width, 20px)',
-    );
-    const playControllerBottomRightFullScreen = createIconControl(
-      'ran-player-controller-bottom-right-full',
-      'fullscreen',
-      'Fullscreen',
-      'var(--ran-player-fullscreen-width, 20px)',
-    );
+  // Empty/hidden until `createSubtitleSelect()` (index.ts) builds an `<r-select>`
+  // into it once `tracks` is set — same lazy-population pattern as clarity below.
+  const playControllerBottomSubtitle = Div()
+    .class('ran-player-controller-bottom-right-subtitle')
+    .build() as HTMLDivElement;
+  const playControllerBottomClarity = Div()
+    .class('ran-player-controller-bottom-right-clarity')
+    .build() as HTMLDivElement;
+  // Hidden by default (`ran-player-controller-bottom-right-pip-hidden`, toggled by
+  // `syncPipButtonVisibility` in index.ts once `isPipSupported()` is known — that check
+  // needs `document`, so it can't run at SSR/construction time). No `<r-icon>` child
+  // needed for aria: the icon is decorative by default when it carries no aria-label of
+  // its own, and this button already has one via `focusableRole`.
+  const playControllerBottomPip = createIconControl(
+    'ran-player-controller-bottom-right-pip ran-player-controller-bottom-right-pip-hidden',
+    'pip',
+    'Picture in picture',
+    'var(--ran-player-pip-width, 20px)',
+  );
+  // Hidden by default, same reasoning/mechanism as PiP above — visibility toggled by
+  // `syncRemoteButtonVisibility` once `isRemotePlaybackSupported()` is known.
+  const playControllerBottomRemote = createIconControl(
+    'ran-player-controller-bottom-right-remote ran-player-controller-bottom-right-remote-hidden',
+    'cast',
+    'Cast to device',
+    'var(--ran-player-remote-width, 20px)',
+  );
+  const playControllerBottomRightFullScreen = createIconControl(
+    'ran-player-controller-bottom-right-full',
+    'fullscreen',
+    'Fullscreen',
+    'var(--ran-player-fullscreen-width, 20px)',
+  );
 
-    const playerControllerBottomRight = Div()
-      .class('ran-player-controller-bottom-right')
-      .children(
-        playControllerBottomSubtitle,
-        playControllerBottomClarity,
-        playControllerBottomSpeed,
-        playControllerBottomVolume,
-        playControllerBottomPip,
-        playControllerBottomRemote,
-        playControllerBottomRightFullScreen,
-      )
-      .build() as HTMLDivElement;
+  const playerControllerBottomRight = Div()
+    .class('ran-player-controller-bottom-right')
+    .children(
+      playControllerBottomSubtitle,
+      playControllerBottomClarity,
+      playControllerBottomSpeed,
+      playControllerBottomVolume,
+      playControllerBottomPip,
+      playControllerBottomRemote,
+      playControllerBottomRightFullScreen,
+    )
+    .build() as HTMLDivElement;
 
-    const playerControllerBottom = Div()
-      .class('ran-player-controller-bottom')
-      .children(playerControllerBottomLeft, playerControllerBottomRight)
-      .build() as HTMLDivElement;
+  const playerControllerBottom = Div()
+    .class('ran-player-controller-bottom')
+    .children(playerControllerBottomLeft, playerControllerBottomRight)
+    .build() as HTMLDivElement;
 
-    // Hidden (`display:none`) until `applyThumbnailPreview()` (`core/thumbnails.ts`) has a
-    // cue to show for the hovered time — empty/no `thumbnails` attribute means this box
-    // never appears, same progressive-enhancement rule as the PiP/cast buttons.
-    const playerTipThumbnail = Div().class('ran-player-controller-tip-thumbnail').build() as HTMLDivElement;
-    const playerTipTime = Div().class('ran-player-controller-tip-time').build() as HTMLDivElement;
-    const playerTipText = Div().class('ran-player-controller-tip-text').build() as HTMLDivElement;
-    const playerTip = Div()
-      .class('ran-player-controller-tip')
-      .children(playerTipThumbnail, playerTipTime, playerTipText)
-      .build() as HTMLDivElement;
+  // Hidden (`display:none`) until `applyThumbnailPreview()` (`core/thumbnails.ts`) has a
+  // cue to show for the hovered time — empty/no `thumbnails` attribute means this box
+  // never appears, same progressive-enhancement rule as the PiP/cast buttons.
+  const playerTipThumbnail = Div().class('ran-player-controller-tip-thumbnail').build() as HTMLDivElement;
+  const playerTipTime = Div().class('ran-player-controller-tip-time').build() as HTMLDivElement;
+  const playerTipText = Div().class('ran-player-controller-tip-text').build() as HTMLDivElement;
+  const playerTip = Div()
+    .class('ran-player-controller-tip')
+    .children(playerTipThumbnail, playerTipTime, playerTipText)
+    .build() as HTMLDivElement;
 
-    const playerController = Div()
-      .class('ran-player-controller')
-      .children(playerTip, progress, playerControllerBottom)
-      .build() as HTMLDivElement;
+  const playerController = Div()
+    .class('ran-player-controller')
+    .children(playerTip, progress, playerControllerBottom)
+    .build() as HTMLDivElement;
 
-    const player = Div()
-      .class('ran-player')
-      .id(playerIdentifier)
-      .children(container, playerBtn, gestureFlash, playerController)
-      .build() as HTMLDivElement;
+  const player = Div()
+    .class('ran-player')
+    .id(playerIdentifier)
+    .children(container, playerBtn, gestureFlash, playerController)
+    .build() as HTMLDivElement;
 
-    shadowDom.appendChild(player);
+  shadowDom.appendChild(player);
 
   return {
     player,
