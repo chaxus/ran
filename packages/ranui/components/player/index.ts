@@ -128,6 +128,9 @@ export class RanPlayer extends RanElement {
   _volume?: number;
   _video?: HTMLVideoElement;
   _engine?: EngineAdapter;
+  /** Set once `connectedCallback` has run for the first time — see its use in
+   * `attributeChangedCallback` below for why this exists. */
+  _didInitialConnect = false;
   _tracks: PlayerTrackConfig[] = [];
   _thumbnailCues: ThumbnailCue[] = [];
   _thumbnailLoadGuard: RaceGuard = createRaceGuard();
@@ -802,6 +805,7 @@ export class RanPlayer extends RanElement {
     // tolerates an undefined video, calling it before the video existed went
     // unnoticed — but it always fell back to `false`, permanently hiding the
     // cast button even in a fully supporting browser).
+    this._didInitialConnect = true;
     this.updatePlayer();
     this.syncPipButtonVisibility();
     this.syncRemoteButtonVisibility();
@@ -821,7 +825,27 @@ export class RanPlayer extends RanElement {
   }
   attributeChangedCallback(k: string, o: string, n: string): void {
     if ((k === 'src' || k === 'format') && o !== n) {
-      this.updatePlayer();
+      // Guarded on having connected at least once already: `src` set
+      // *before* the element is inserted (`document.createElement('r-player')`
+      // + `el.src = url` + `container.appendChild(el)` — a completely normal
+      // way to build one programmatically) fires this callback synchronously
+      // while still disconnected, and `connectedCallback` runs right after
+      // and calls `updatePlayer()` itself, reading the (already current)
+      // attribute. Calling `updatePlayer()` here too for that same initial
+      // state fired a second, redundant `engine.load()` a tick before the
+      // first in-flight manifest fetch's `destroy()` could reliably cancel
+      // it — occasionally racing past the destroy and still resolving, which
+      // built the clarity/quality `<r-select>` (and its portaled dropdown
+      // panel) twice, leaking one every time. The same double-fire happens
+      // for plain parsed HTML too (`<r-player src="...">`), since the Custom
+      // Elements upgrade algorithm enqueues attributeChangedCallback for
+      // every already-present attribute *and* connectedCallback as part of
+      // the same reaction batch, in that order — so this flag (not
+      // `isConnected`, which can already be true during that same batch)
+      // is what actually distinguishes "the initial connect hasn't run its
+      // own updatePlayer() yet" from "src changed on an already-running
+      // player," which must still reload immediately.
+      if (this._didInitialConnect) this.updatePlayer();
     }
     if (k === 'volume' && o !== n) {
       this.setVolume(Number(n));
