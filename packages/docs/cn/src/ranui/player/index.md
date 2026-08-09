@@ -83,7 +83,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 指向一个 WebVTT manifest，cue 内容遵循 YouTube / Video.js 的雪碧图约定——每条 cue 的文本是一张图片引用加 `#xywh=x,y,w,h` 片段，标出要从共享雪碧图里裁剪的那一块：
 
-```vtt
+```text
 WEBVTT
 
 00:00:00.000 --> 00:00:05.000

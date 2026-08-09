@@ -151,7 +151,7 @@ Touch-only, on by default, no attribute to enable: double-tap the left half of t
 
 `thumbnails` points at a WebVTT manifest whose cues follow the sprite-sheet convention YouTube and Video.js use — each cue's text is an image reference plus a `#xywh=x,y,w,h` fragment identifying its crop out of a shared sprite sheet:
 
-```vtt
+```text
 WEBVTT
 
 00:00:00.000 --> 00:00:05.000

@@ -40,8 +40,11 @@ describe('r-input contract', () => {
 
     input.setAttribute('label', 'Username');
 
-    const wrapper = (input as any)._shadowDom.querySelector('.ran-input') as HTMLElement;
-    const labelEl = wrapper.querySelector('.ran-input-label') as HTMLLabelElement;
+    // The label renders as a static caption above the field — a sibling of
+    // `.ran-input` at the shadow-root level (same as `.ran-input-message`
+    // below it), not nested inside the bordered box.
+    const shadow = (input as any)._shadowDom as ShadowRoot;
+    const labelEl = shadow.querySelector('.ran-input-label') as HTMLLabelElement;
 
     expect(labelEl).toBeTruthy();
     expect(labelEl.innerHTML).toBe('Username');
@@ -55,8 +58,8 @@ describe('r-input contract', () => {
     input.setAttribute('label', 'First');
     input.setAttribute('label', 'Second');
 
-    const wrapper = (input as any)._input as HTMLElement;
-    const labelEl = wrapper.querySelector('.ran-input-label') as HTMLLabelElement;
+    const shadow = (input as any)._shadowDom as ShadowRoot;
+    const labelEl = shadow.querySelector('.ran-input-label') as HTMLLabelElement;
     expect(labelEl.innerHTML).toBe('Second');
   });
 
@@ -316,8 +319,8 @@ describe('r-input contract', () => {
 
     input.removeAttribute('label');
     expect((input as any)._label).toBeUndefined();
-    const wrapper = (input as any)._input as HTMLElement;
-    const labelEl = wrapper.querySelector('.ran-input-label');
+    const shadow = (input as any)._shadowDom as ShadowRoot;
+    const labelEl = shadow.querySelector('.ran-input-label');
     expect(labelEl).toBeNull();
   });
 

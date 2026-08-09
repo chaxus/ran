@@ -179,13 +179,13 @@ export class Input extends RanElement {
     }
   }
   /**
-   * @description: 获取类似于 Metiral Design 的输入体验。
+   * @description: 获取字段上方的静态说明文字（label）。
    */
   get label(): string {
     return this.getAttribute('label') || '';
   }
   /**
-   * @description: 设置类似于 Metiral Design 的输入体验。
+   * @description: 设置字段上方的静态说明文字（label）。
    */
   set label(value: string) {
     this.setAttribute('label', value);
@@ -421,12 +421,17 @@ export class Input extends RanElement {
           // Associate the label with the control so screen readers announce it and
           // clicking the label focuses the field.
           this._label.htmlFor = this._inputContent.id;
-          this._input.appendChild(this._label as HTMLLabelElement);
+          // A static caption, not floating — insert as a sibling *before*
+          // `.ran-input` (same shadow-root level as `.ran-input-message`
+          // below it), not nested inside the bordered box. It renders in
+          // normal block flow above the field, so it always occupies its
+          // own space and can never overlap adjacent content.
+          this._shadowDom.insertBefore(this._label as HTMLLabelElement, this._input);
         }
       } else {
         this._input.removeAttribute('label');
         if (this._label) {
-          this._input.removeChild(this._label);
+          this._label.remove();
           this._label = undefined;
         }
       }
