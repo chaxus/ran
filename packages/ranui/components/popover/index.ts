@@ -145,14 +145,26 @@ export class Popover extends RanElement {
   createContent = (content: HTMLCollection): void => {
     if (!content) return;
     if (!this.popoverContent) {
+      // r-dropdown is a zero-padding primitive (select's item list wants
+      // edge-to-edge rows); a popover's arbitrary content needs breathing
+      // room, or it renders flush against the rounded panel edges — hence
+      // the 12px default below. A `var(--ran-popover-content-padding, 12px)`
+      // *reference* doesn't work here: `this.popoverContent` (`<r-dropdown>`)
+      // gets portaled to `document.body`/`getPopupContainerId` a few lines
+      // down, so by paint time it's no longer a DOM descendant of `<r-popover>`
+      // and can't inherit a custom property set on it (e.g. a consumer's
+      // `.cssVar('ran-popover-content-padding', '0')`, as r-colorpicker does
+      // to avoid double-padding its own already-padded panel — see
+      // `components/colorpicker/index.ts`). Reading it via `getComputedStyle`
+      // on `this` — still attached to its real place in the DOM at this point
+      // — resolves the *value* once and bakes it onto the portaled node as a
+      // literal, sidestepping the broken inheritance chain entirely.
+      const contentPadding = getComputedStyle(this).getPropertyValue('--ran-popover-content-padding').trim() || '12px';
       this.popoverContent = View('r-dropdown')
         .class('ran-popover-dropdown')
         .style('display', 'none')
         .style('position', 'absolute')
-        // r-dropdown is a zero-padding primitive (select's item list wants
-        // edge-to-edge rows); a popover's arbitrary content needs breathing
-        // room, or it renders flush against the rounded panel edges.
-        .cssVar('ran-dropdown-padding', 'var(--ran-popover-content-padding, 12px)')
+        .cssVar('ran-dropdown-padding', contentPadding)
         .build() as HTMLElement;
       this.popoverContent?.addEventListener('click', this.stopPropagation);
 
