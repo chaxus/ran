@@ -145,13 +145,24 @@
 // match anything regardless of what class the host actually carried — the
 // animation silently never ran. `:host(.message-in)` is the correct way to select
 // the host element, by its own class, from inside its own shadow root's styles.
+// `animation-fill-mode: forwards` is required on both: the JS side removes
+// each class via its own `setTimeout` clocked to the same nominal duration as
+// the CSS animation (see `AnimationTime` in index.ts), but a `setTimeout`
+// callback and a CSS animation's natural completion are scheduled on
+// different clocks and drift by a few ms. Without `forwards`, the instant the
+// animation completes it snaps back to the pre-animation state (full
+// opacity/height/padding) for however long that drift window lasts — read as
+// a bounce right before the element disappears. `forwards` freezes the
+// keyframe's end state instead, so there's nothing to snap back to.
 :host(.message-in) {
   animation-name: var(--ran-message-in-animation-name, MessageMoveIn);
   animation-duration: var(--ran-message-in-animation-duration, 0.3s);
   animation-timing-function: var(--ran-message-in-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
+  animation-fill-mode: var(--ran-message-in-animation-fill-mode, forwards);
 }
 :host(.message-leave) {
   animation-name: var(--ran-message-leave-animation-name, MessageMoveOut);
   animation-duration: var(--ran-message-leave-animation-duration, 0.3s);
   animation-timing-function: var(--ran-message-leave-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
+  animation-fill-mode: var(--ran-message-leave-animation-fill-mode, forwards);
 }
