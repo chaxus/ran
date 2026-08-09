@@ -86,17 +86,19 @@ A **4px base unit** with **nine values** only: `--ran-space-1..24` → `4, 8, 12
 
 Fonts: `--ran-font-family` (Geist Sans, UI & prose), `--ran-font-mono` (Geist Mono, code, data, and eyebrow/labels). Base: `--ran-font-size: 14px`, `--ran-line-height: 1.5715`.
 
-Decide by **role**; the role fixes font, size, weight, line-height:
+Decide by **role**; the role fixes font, size, weight, line-height. Each row is backed by real tokens in `theme/tokens.less` — reference them (`var(--ran-{component}-…, var(--ran-text-{role}…, fallback))`), don't hand-copy the px/weight number:
 
-| Role    | Use                    | Weight  | Notes                                                 |
-| ------- | ---------------------- | ------- | ----------------------------------------------------- |
-| heading | Titles                 | 600     | Tight letter-spacing (≈ -0.03em); 32 / 24 / 20 / 16px |
-| label   | Single-line, scannable | 500     | 14 / 13 / 12px; no wrapping                           |
-| copy    | Multi-line body        | 400     | line-height ~1.55; 16 / 14px                          |
-| button  | Button text            | 500     | 14px; `line-height: 1` for crisp vertical centering   |
-| mono    | Code, data, eyebrows   | 400/500 | `--ran-font-mono`                                     |
+| Role    | Use                    | Weight                                       | Size tokens                                                              | Notes                                                        |
+| ------- | ---------------------- | --------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| heading | Titles                 | `--ran-text-heading-weight` (600)             | `--ran-text-heading-1..4` (32/24/20/16px)                                 | Tight tracking `--ran-text-heading-tracking` (≈ -0.03em)     |
+| label   | Single-line, scannable | `--ran-text-label-weight` (500)               | `--ran-text-label-1..3` (14/13/12px)                                      | No wrapping                                                  |
+| copy    | Multi-line body        | `--ran-text-copy-weight` (400)                | `--ran-text-copy-1..2` (16/14px)                                          | line-height ~1.55 (`--ran-line-height`)                      |
+| button  | Button text            | `--ran-text-button-weight` (500)              | `--ran-text-button-size` (14px)                                           | `--ran-text-button-line-height: 1` for crisp vertical centering |
+| mono    | Code, data, eyebrows   | `--ran-text-mono-weight-regular/medium` (400/500) | borrows label/copy size tiers                                          | `--ran-font-mono`                                            |
 
 **Rule:** ask "what role is this text?" (heading / label / copy / button) — the style follows. Don't pick raw px per instance.
+
+**A role is a tool, not a law.** Transient/decorative UI that doesn't map to any role (an active-link weight bump, a player gesture-flash overlay) keeps its own one-off component token instead of being forced into the nearest role — see `r-link`'s `--ran-link-active-font-weight` and `r-player`'s `--ran-player-gesture-flash-font-weight`.
 
 ---
 

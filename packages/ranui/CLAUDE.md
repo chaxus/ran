@@ -14,7 +14,7 @@ For each element's **attributes / properties / events / slots / `::part()`**, co
 - **Dark-safe fallbacks.** A component token's fallback must point at a token that _flips_ (`var(--ran-color-text, …)`, `var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`) — never a light-only literal like `rgba(0,0,0,.06)` or `#e6f7ff`, which breaks in dark mode.
 - **Spacing:** the `--ran-space-*` scale only (4px base, 9 values). 8 within a group, 16 between groups, 32–40 between sections.
 - **Sizing:** element intrinsic dimensions (icon size, control height, small square/rect controls) use the separate `--ran-size-*` scale (16/18/20/24/28/30/32), never `--ran-space-*` — spacing and sizing have different ranges/progressions and consumers need to retune one without perturbing the other. A one-off dimension that isn't shared across components (e.g. a menu's `min-width`) stays a plain component token with its own literal fallback instead of forcing a scale step.
-- **Typography:** choose a role (heading / label / copy / button / mono), not a raw px size.
+- **Typography:** choose a role (heading / label / copy / button / mono), not a raw px size — each role is backed by real `--ran-text-*` tokens (`--ran-text-heading-1..4`, `-label-1..3`, `-copy-1..2`, `-button-size`, plus matching `-weight` tokens), see DESIGN.md §3. Text that doesn't map to any role (a one-off emphasis state) keeps its own component token rather than being forced in.
 - **Elevation = role.** Pick the shadow by what the element _is_: in-flow surface (card/section) → `--ran-shadow-elevated`; floating overlay (dropdown, select, popover, toast/message) → `--ran-shadow-menu`; blocking dialog → `--ran-shadow-modal`. A floating overlay must never fall back to the card tier (`elevated`) — it looks flat.
 - **Radius/motion:** use the tokens; prefer no motion (0ms) and keep what remains quick (150/200/300ms); respect `prefers-reduced-motion`.
 - **Copy:** buttons = action + object ("Deploy project"); errors = what + how; toasts state the change ("Project deleted").
@@ -632,6 +632,8 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 --ran-radius-sm 6 | --ran-radius-md 12 | --ran-radius-lg 16 | --ran-radius-full
 --ran-space-1..24          /* 4 8 12 16 24 32 40 64 96 */
 --ran-size-1..7            /* 16 18 20 24 28 30 32 — element dimensions (icons, controls), separate from Spacing */
+--ran-text-heading-1..4 (32/24/20/16) | -label-1..3 (14/13/12) | -copy-1..2 (16/14) | -button-size (14)
+--ran-text-heading-weight 600 | -label-weight 500 | -copy-weight 400 | -button-weight 500 | -mono-weight-regular/medium 400/500
 --ran-shadow-elevated | --ran-shadow-menu | --ran-shadow-modal | --ran-focus-ring
 --ran-z-modal 1000 | --ran-z-dropdown 1100 | --ran-z-message 1200   /* overlay stacking ladder; see DESIGN.md §4 */
 
