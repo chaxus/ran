@@ -29,10 +29,10 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 ## 代码演示
 
-<r-player style="display: block;width:100%;max-width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+<r-player style="display: block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
 
 ```xml
-  <r-player src="/ran/hls/example.m3u8"></r-player>
+  <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
 ```
 
 ## 属性
@@ -78,7 +78,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 ### thumbnails
 
 ```html
-<r-player src="/ran/hls/example.m3u8" thumbnails="/ran/hls/thumbnails.vtt"></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" thumbnails="/ran/hls/thumbnails.vtt"></r-player>
 ```
 
 指向一个 WebVTT manifest，cue 内容遵循 YouTube / Video.js 的雪碧图约定——每条 cue 的文本是一张图片引用加 `#xywh=x,y,w,h` 片段，标出要从共享雪碧图里裁剪的那一块：

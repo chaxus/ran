@@ -30,11 +30,11 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 ## Quick Start
 
 <Demo>
-  <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+  <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
 </Demo>
 
 ```html
-<r-player src="/ran/hls/example.m3u8"></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
 ```
 
 > The element renders as `display: block`. Give it an explicit width/height (inline style or CSS) so the video has a box to fill.
@@ -66,11 +66,11 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 ### Video Source `src`
 
 <Demo>
-  <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+  <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
 </Demo>
 
 ```html
-<r-player src="/ran/hls/example.m3u8"></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
 ```
 
 ### WebRTC Live Playback `format="webrtc"`
@@ -102,7 +102,7 @@ at `0` for this engine.
 Value is on a `0`–`100` scale.
 
 ```html
-<r-player src="/ran/hls/example.m3u8" volume="30"></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" volume="30"></r-player>
 ```
 
 ### Initial Playback Time `currentTime`
@@ -110,25 +110,25 @@ Value is on a `0`–`100` scale.
 Seconds from the start of the media.
 
 ```html
-<r-player src="/ran/hls/example.m3u8" currentTime="15"></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" currentTime="15"></r-player>
 ```
 
 ### Playback Speed `playbackRate`
 
 ```html
-<r-player src="/ran/hls/example.m3u8" playbackRate="1.5"></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" playbackRate="1.5"></r-player>
 ```
 
 ### Debug Logging `debug`
 
 ```html
-<r-player src="/ran/hls/example.m3u8" debug="true"></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" debug="true"></r-player>
 ```
 
 ### Poster, Autoplay, Loop, Muted
 
 ```html
-<r-player src="/ran/hls/example.m3u8" poster="/ran/hls/poster.jpg" autoplay muted loop></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" poster="/ran/hls/poster.jpg" autoplay muted loop></r-player>
 ```
 
 ### Picture-in-Picture
@@ -146,7 +146,7 @@ Touch-only, on by default, no attribute to enable: double-tap the left half of t
 ### Thumbnail Scrubbing Preview `thumbnails`
 
 ```html
-<r-player src="/ran/hls/example.m3u8" thumbnails="/ran/hls/thumbnails.vtt"></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" thumbnails="/ran/hls/thumbnails.vtt"></r-player>
 ```
 
 `thumbnails` points at a WebVTT manifest whose cues follow the sprite-sheet convention YouTube and Video.js use — each cue's text is an image reference plus a `#xywh=x,y,w,h` fragment identifying its crop out of a shared sprite sheet:
@@ -182,7 +182,7 @@ On by default. A fatal streaming-engine error or a native `<video>` `error` even
 ### Resume Playback `remember-position`
 
 ```html
-<r-player src="/ran/hls/example.m3u8" remember-position></r-player>
+<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" remember-position></r-player>
 ```
 
 Saves `getCurrentTime()` to `localStorage` (keyed by `src`) on `pause` and whenever the tab becomes hidden (`visibilitychange`, more reliable than `beforeunload`), restores it on the next load of that same `src`, and clears it once the video reaches `ended`. Silently skipped if the saved position is within 2 seconds of the duration — a finished video restarts fresh rather than "resuming" at its own end. Only the position is remembered; volume/speed/subtitle preferences are separate opt-ins.
@@ -234,7 +234,7 @@ The player exposes imperative controls on the element instance:
 The player dispatches a single `change` CustomEvent. Every internal state transition — native media events and the player's own UI actions — funnels through it, so you subscribe once and switch on `detail.type`.
 
 ```html
-<r-player id="player" src="/ran/hls/example.m3u8"></r-player>
+<r-player id="player" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
 
 <script>
   const player = document.getElementById('player');

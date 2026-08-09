@@ -247,7 +247,7 @@ const FilePreview = () => {
 
 - `Player`
 
-<r-player style="display: block;width:100%;max-width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+<r-player style="display: block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
 
 - `Select`
 
