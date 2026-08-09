@@ -36,6 +36,7 @@ Options are supplied as slotted `<r-option>` children. Each option's `value` att
 
 | Property              | Type      | Default    | Description                                                                             |
 | --------------------- | --------- | ---------- | --------------------------------------------------------------------------------------- |
+| `label`               | `string`  | `''`       | Static caption above the field — same pattern as `r-input`'s `label`, so a labeled select lines up with a labeled input in a form |
 | `value`               | `string`  | `''`       | Selected value. Setting it updates the closed-state label; ignored while `disabled`     |
 | `defaultValue`        | `string`  | `''`       | Initial selected value, matched against option `value`                                  |
 | `disabled`            | `boolean` | `false`    | Whether the select is disabled                                                          |

@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-09T04:16:28.588Z
+Generated at: 2026-08-09T04:44:51.905Z
 
 31 custom elements.
 
@@ -354,11 +354,25 @@ Source: `components/section/index.ts`
 
 Source: `components/select/index.ts`
 
-- **Attributes**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
-- **Properties**: `defaultValue: string`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `required: boolean`, `sheet: string`, `showSearch: string`, `trigger: string`, `type: string`, `validationMessage: string`, `validity: ValidityState | undefined`, `value: string`
+- **Attributes**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `label: string`, `placement: string`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
+- **Properties**: 
+  - `defaultValue: string`
+  - `disabled: boolean`
+  - `dropdownclass: string`
+  - `getPopupContainerId: string`
+  - `label: string` — 字段上方的静态说明文字（label）。
+  - `placement: string`
+  - `required: boolean`
+  - `sheet: string`
+  - `showSearch: string`
+  - `trigger: string`
+  - `type: string`
+  - `validationMessage: string`
+  - `validity: ValidityState | undefined`
+  - `value: string`
 - **Events**: `change` → detail `{ label, value }` · `search` → detail `{ value }`
 - **Slots**: `default`
-- **Parts**: `icon`, `search`, `select`, `selection`, `selection-item`
+- **Parts**: `icon`, `label`, `search`, `select`, `selection`, `selection-item`
 
 ## `<r-skeleton>`
 
