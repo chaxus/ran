@@ -147,6 +147,13 @@ export default defineConfig({
           // this dashjs adapter (see packages/ranui/components/player/core/adapters/dash.ts).
           // Scoped to that one chunk so a real COMMONJS_VARIABLE_IN_ESM elsewhere still surfaces.
           if (warning.code === 'COMMONJS_VARIABLE_IN_ESM' && warning.id?.includes('dash.all.min')) return;
+          // ranui's icon system (see "Name-driven lazy variant loading" in packages/ranui/CLAUDE.md)
+          // deliberately both statically imports a few common icons into the entry chunk (so they
+          // render with zero async flash) and dynamically imports every builtin on first use by name
+          // (so uncommon ones stay lazy). Rollup can't tell that's intentional and flags every such
+          // icon as an "ineffective" dynamic import — expected and desired, per that doc, not a bug.
+          // Scoped to ranui's dist so a genuinely ineffective dynamic import in docs' own code still surfaces.
+          if (warning.code === 'INEFFECTIVE_DYNAMIC_IMPORT' && warning.id?.includes('/ranui/dist/')) return;
           warn(warning);
         },
       },

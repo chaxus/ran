@@ -1,4 +1,4 @@
-import { perToNum, range } from 'ranuts/utils';
+import { range } from 'ranuts/utils';
 import progressCss from './index.less?inline';
 import { Div, EventManager, RanElement } from '@/utils/index';
 import {
@@ -12,6 +12,23 @@ import { defineSSR } from '@/utils/ssr-registry';
 import { sliderStepFromKeydown } from '@/utils/a11y';
 
 const attributes: string[] = ['percent', 'type', 'total', 'dot', 'sheet'];
+
+/**
+ * Parse `percent`/`total` attribute text into a plain number, tolerating an
+ * optional trailing "%" as pure decoration (`percent="40"` and `percent="40%"`
+ * mean the same thing here). Deliberately NOT `ranuts`' `perToNum` — that
+ * utility's documented contract is "convert a percent string into a 0-1
+ * fraction" (`perToNum('40%') === 0.4`), which is the wrong shape for this
+ * component: `percent` and `total` share one scale (0-100 by default) and
+ * `updateCurrentProgress` divides percent/total itself, so silently
+ * pre-dividing by 100 here double-converts — `percent="40%"` rendered as
+ * 0.4/100 = 0.4%, a barely-visible sliver instead of the intended 40%.
+ */
+const parsePercentLike = (str: string | null): number => {
+  const trimmed = (str ?? '').trim();
+  if (!trimmed) return 0;
+  return trimmed.endsWith('%') ? Number(trimmed.slice(0, -1)) : Number(trimmed);
+};
 
 export class Progress extends RanElement {
   _progress!: HTMLDivElement;
@@ -58,7 +75,7 @@ export class Progress extends RanElement {
 
   get percent(): string {
     const percentAttr = this.getAttribute('percent') || '0';
-    const num = perToNum(percentAttr);
+    const num = parsePercentLike(percentAttr);
     const totalNum = Number(this.total);
     if (num > totalNum) {
       // ⚠️ Keep it silent or cap it, console.error is too loud for dev
@@ -74,7 +91,7 @@ export class Progress extends RanElement {
   get total(): string {
     const total = this.getAttribute('total');
     if (!total) return '100'; // 💡 Better default for "percent" context
-    return `${perToNum(total)}`;
+    return `${parsePercentLike(total)}`;
   }
   set total(value: string) {
     this.setAttribute('total', value || '100');
@@ -218,8 +235,8 @@ export class Progress extends RanElement {
   };
 
   _preSerialize(): void {
-    const percent = Number(this.getAttribute('percent') || '0');
-    const total = Number(this.getAttribute('total') || '100');
+    const percent = parsePercentLike(this.getAttribute('percent') || '0');
+    const total = parsePercentLike(this.getAttribute('total') || '100');
     const fraction = range(percent / total, 0, 1);
     this.style.setProperty('--progress-percent', String(fraction));
   }
