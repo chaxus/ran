@@ -21,7 +21,7 @@ test('modal mask is not clipped by page chrome mid-close-fade', async ({ page })
       body { margin: 0; }
       .nav { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: red; z-index: 30; }
       .wrap { isolation: isolate; }
-      .wrap:has(r-modal[open]) { position: relative; z-index: 100; }
+      .wrap:has(r-modal[open]), .wrap:has(r-modal[closing]) { position: relative; z-index: 100; }
     `;
     document.head.appendChild(style);
     const nav = document.createElement('div');
@@ -53,6 +53,7 @@ test('modal mask is not clipped by page chrome mid-close-fade', async ({ page })
     return { tag: el?.tagName, cls: (el as HTMLElement)?.className };
   });
   console.log('element at nav position mid-close (120ms in):', JSON.stringify(pixel));
+  expect(pixel.cls).not.toBe('nav');
 
   await page.screenshot({ path: 'repro-modal-midclose-120.png' });
 
@@ -62,6 +63,7 @@ test('modal mask is not clipped by page chrome mid-close-fade', async ({ page })
     return { tag: el?.tagName, cls: (el as HTMLElement)?.className };
   });
   console.log('element at nav position mid-close (170ms in):', JSON.stringify(pixel2));
+  expect(pixel2.cls).not.toBe('nav');
   await page.screenshot({ path: 'repro-modal-midclose-170.png' });
 
   await page.waitForTimeout(400);

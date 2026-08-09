@@ -162,42 +162,8 @@ export const mergeExports = (obj: Record<string, string>, exports: Record<string
 };
 
 /**
- * @description: Define a property on the global object
- * @param {string} name
- * @param {string} value
- * @return {*}
- */
-export const setAttributeByGlobal = (name: string, value: unknown): void => {
-  if (typeof window !== 'undefined') {
-    window[name as any] = value as any;
-  }
-  if (typeof global !== 'undefined') {
-    // @ts-expect-error global
-    global[name as any as keyof typeof global] = value as any;
-  }
-};
-
-/**
  * Deep-compare two values, in the manner of Lodash's isEqual.
  */
-
-/**
- * Whether two primitives are the same value, handling the special cases NaN and -0/+0.
- */
-export function sameValueZero(x: any, y: any): boolean {
-  // NaN
-  if (x === x ? y !== y : y === y) {
-    return false;
-  }
-
-  // -0 vs +0
-  if (x === 0 && y === 0) {
-    return 1 / x === 1 / y;
-  }
-
-  // Ordinary primitive comparison
-  return x === y;
-}
 
 /**
  * Whether the value is object-like
