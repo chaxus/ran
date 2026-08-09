@@ -8,11 +8,11 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**376 exports** across 6 entry points. Generated at 2026-08-08T15:50:26.551Z.
+**381 exports** across 6 entry points. Generated at 2026-08-09T03:48:42.025Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 294 exports
+- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 299 exports
 - [`ranuts/sw`](#ranutssw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 12 exports
@@ -47,6 +47,7 @@ import { /* … */ } from 'ranuts/utils';
 - `cloneDeep<T>(value: T, cloneMap?: WeakMap<object, any>) => T` — Deep clone, covering the complex built-in types and circular references.
 - `componentToHex(c: string | number) => string`
 - `compose<T>(middleware: Array<Middleware<T>>) => ComposedMiddleware<T>` — Run a chain of async functions as if it were sequential
+- `computePlacement(options: ComputePlacementOptions) => ComputedPlacement` — Position a floating panel relative to an anchor rect: flips to the opposite
 - `connection() => number | undefined` — Current network status: type, throughput, and whether the connection changed
 - `convertImageToBase64(file: File) => Promise<convertImageToBase64Return>` — Convert an image to base64
 - `crc32(data: Uint8Array) => number` — CRC32 checksum (IEEE 802.3 polynomial), the one ZIP stores per entry.
@@ -240,6 +241,8 @@ import { /* … */ } from 'ranuts/utils';
 - `interface BridgeManagerOptions`
 - `interface BroadcastPayload`
 - `interface CallToPayload`
+- `interface ComputedPlacement`
+- `interface ComputePlacementOptions`
 - `interface Debounced`
 - `interface Deferred` — Promise primitives that JavaScript does not ship: an externally settled promise and a
 - `interface DoubleTapDetector`
@@ -264,6 +267,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface PaginateOptions`
 - `interface PaginateResult`
 - `interface PendingRequest`
+- `interface PlacementRect`
 - `interface PortBridge` — A point-to-point bridge over MessagePort.
 - `interface PrefetchOptions`
 - `interface RaceGuard`
@@ -300,6 +304,7 @@ import { /* … */ } from 'ranuts/utils';
 - `type LocaleChangeHandler`
 - `type LocaleMessages` — Locale → dictionary. Parameterised by the dictionary shape so an app can hand in its own
 - `type MessageDict`
+- `type Placement`
 - `type RelativeStyle` — `'compact'` is ours; the other three are `Intl.RelativeTimeFormat` styles.
 - `type SpeechErrorKind` — `denied` means the user or the browser refused the microphone — worth surfacing.
 - `type StringValues` — "An object whose values are all strings" — the constraint the dictionary type parameter

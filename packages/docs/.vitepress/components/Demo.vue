@@ -37,25 +37,38 @@ withDefaults(
   background: var(--vp-c-bg-soft);
   /* A demo may embed a component that carries its own elevated z-index (e.g.
    * r-dropdown's --ran-z-dropdown: 1100) as *content*, not as a real triggered
-   * overlay. Without a stacking context of its own, that z-index compares
-   * directly against page-level chrome (VitePress's mobile sidebar + its
-   * backdrop), so the demo panel paints on top of the dimmed sidebar instead
-   * of staying inside its own box. isolation:isolate contains it.
-   *
-   * `isolation` alone only *contains* the comparison — it doesn't grant this
-   * box any priority in its *own* parent's stacking order, and a plain
-   * `position:static` element with no `z-index` still paints at the lowest
-   * "in-flow content" tier there. VitePress's own fixed-position chrome (nav
-   * z-index:30, backdrop:50, sidebar:60 — see `vitepress/theme-default`'s
-   * `vars.css`) sits above that tier regardless of what's isolated inside it,
-   * so a *real*, user-triggered overlay demoed inline here — `r-modal`,
-   * `r-message` (unlike the always-open-in-demo dropdown case above, these
-   * are opened on click and meant to cover the whole page) — rendered below
-   * the nav/sidebar instead of over them. `position:relative` + a `z-index`
-   * comfortably above VitePress's whole range gives the isolated box itself
-   * that priority, so its truly-fixed-position contents now escape upward
-   * past the site's own chrome without needing to out-rank it token-by-token. */
+   * overlay — just an always-open panel shown for illustration. Without a
+   * stacking context of its own, that z-index would compare directly against
+   * page-level chrome (VitePress's mobile sidebar + its backdrop), painting
+   * the demo panel on top of the dimmed sidebar instead of staying inside its
+   * own box. isolation:isolate contains it, and costs nothing extra: an
+   * isolated box with no z-index/position of its own still paints at the
+   * plain in-flow tier in *its* parent's stacking order, i.e. below
+   * VitePress's nav (z-index:30, see `vitepress/theme-default`'s `vars.css`).
+   * That's why every demo gets isolation unconditionally. */
   isolation: isolate;
+}
+
+/* `r-modal` demoed inline renders a *real*, fixed-position, page-covering
+ * dialog while open (unlike the always-open-dropdown-as-content case above)
+ * — and isolation traps position:fixed descendants into the box's own
+ * stacking context same as anything else, so without extra priority the
+ * open dialog would render below the nav/sidebar instead of over them.
+ * `:has(r-modal[open])` (native attribute reflection — see r-modal's `open`
+ * accessor) scopes the escape to exactly the moment a nested modal is open,
+ * so a closed demo (the common case) never pays for it: no `position` or
+ * `z-index` sits on the box the rest of the time, so it can never paint over
+ * the sticky nav during ordinary scrolling the way the old *unconditional*
+ * z-index:100 on every demo did — that blanket rule promoted the box itself,
+ * not just its overlay content, above chrome that in-flow page content is
+ * only ever supposed to sit below.
+ * `r-message` needs no such rule: its toasts already portal to
+ * `document.body` (see `components/message/container.ts`), so they're never
+ * descendants of this box to begin with and their own z-index (1200) already
+ * outranks VitePress's whole chrome range on its own.
+ * See `packages/ranui/docs/DESIGN.md` §4 for the component-side z-index
+ * ladder this is bridging into the host page. */
+.ran-demo__preview:has(r-modal[open]) {
   position: relative;
   z-index: 100;
 }

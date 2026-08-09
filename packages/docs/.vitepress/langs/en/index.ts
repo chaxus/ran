@@ -213,6 +213,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'create - Create DOM element', link: '/src/ranuts/utils/create' },
               { text: 'EventManager - Scoped listeners', link: '/src/ranuts/utils/event_manager' },
               { text: 'adoptStyles - Shadow DOM CSS', link: '/src/ranuts/utils/adopt_styles' },
+              { text: 'computePlacement - Floating panel flip/shift', link: '/src/ranuts/utils/placement' },
             ],
           },
           {

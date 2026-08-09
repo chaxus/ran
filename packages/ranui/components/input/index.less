@@ -2,6 +2,18 @@
   position: var(--ran-input-host-position, relative);
   display: var(--ran-input-host-display, block);
   box-sizing: var(--ran-input-host-box-sizing, border-box);
+  // Reserve room for the floated label unconditionally (not just while
+  // floated) so the box's own flow height already accounts for it. Without
+  // this, the label — position:absolute relative to `.ran-input`, floating
+  // to above `.ran-input`'s own top edge — escapes past this host's box
+  // entirely and overlaps whatever sits above it in a stacked form (the
+  // previous field's border, in the common case). Reserving the space here
+  // instead keeps the float inside *this* element's own box, which the
+  // parent's layout (flex gap, margin) already accounts for, and avoids a
+  // layout shift when the label transitions between resting and floated.
+  &([label]) {
+    padding-top: var(--ran-input-label-reserved-space, var(--ran-space-6, 24px));
+  }
   &([placeholder]) {
     .ran-input {
       &-label {
@@ -59,18 +71,26 @@
      the native input, and :focus-within fired for that too, leaving a ring on
      every click. Keyboard-only, matching r-button's :focus-visible convention;
      the token also matches r-checkbox's ring for a consistent focus treatment. */
+  // Border and ring both go blue on focus — DESIGN.md §1 reserves blue for
+  // "links and the focus ring only", so the border must match the ring
+  // color here rather than switching to the monochrome --ran-color-primary
+  // (which would put a black-bordered box inside a blue ring: two
+  // uncoordinated focus signals instead of one).
   &:has(.ran-input-content:focus-visible) {
-    border-color: var(--ran-input-active-border-color, var(--ran-color-primary, #171717));
+    border-color: var(--ran-input-active-border-color, var(--ran-color-link, #006bff));
     box-shadow: var(--ran-input-active-box-shadow, var(--ran-focus-ring));
     border-right-width: var(--ran-input-active-border-right-width, 1px);
     outline: var(--ran-input-active-outline, 0);
   }
+  // Hover darkens the border one step on the gray ladder — matching
+  // r-button/r-card's own hover treatment — rather than switching to blue,
+  // which DESIGN.md reserves for links and focus only.
   &:hover {
-    border-color: var(--ran-input-hover-border-color, var(--ran-color-primary, #006bff));
+    border-color: var(--ran-input-hover-border-color, var(--ran-color-border-hover, #c9c9c9));
     border-right-width: var(--ran-input-hover-border-right-width, 1px);
   }
   & > .ran-input-content:hover ~ .ran-input-label {
-    color: var(--ran-input-label-hover-color, var(--ran-color-primary, #006bff));
+    color: var(--ran-input-label-hover-color, var(--ran-color-text, #171717));
   }
   &[value] > .ran-input-label {
     top: var(--ran-input-label-value-top, 0);

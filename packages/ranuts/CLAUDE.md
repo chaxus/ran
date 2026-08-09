@@ -70,6 +70,7 @@ packages/ranuts/
 │   │   ├── chain.ts          # Chain / create — chainable DOM builder (shared with vnode)
 │   │   ├── style.ts          # adoptStyles / adoptSheetText — Shadow DOM CSS injection
 │   │   ├── canvas.ts         # Canvas 2D geometry — roundRectByArc, fanShapedByArc, getLinearGradient
+│   │   ├── placement.ts      # computePlacement — flip/shift floating-panel placement (re-exported by ranui/utils/placement)
 │   │   ├── tween.ts          # easing curves (quad/cubic/quart/quint/sine/expo/circ)
 │   │   ├── visual/           # ranuts/visual — 2D rendering engine (see below)
 │   │   └── totp/             # TOTP + hand-rolled SHA

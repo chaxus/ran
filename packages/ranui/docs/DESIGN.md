@@ -128,6 +128,29 @@ A floating overlay must **never** fall back to `--ran-shadow-elevated` (the card
 
 Override a tier globally (set `--ran-z-dropdown` on `:root`) or per component (`--ran-dropdown-host-z-index`, `--ran-modal-root-z-index`, `--ran-message-z-index`) — never reach for `!important`. An overlay open while the page scrolls must re-run its placement on `scroll`/`resize` so it tracks its trigger (e.g. inside a sticky header).
 
+**Consuming a ranui overlay inside your own page chrome.** The ladder (1000–1200) is deliberately chosen to sit far above any realistic host-page chrome (nav bars, sidebars, backdrops are typically in the tens — VitePress's own is nav:30/backdrop:50/sidebar:60). Two component-side facts follow from that gap, and change what a host page needs to do:
+
+- **A portaled overlay never needs the host's help.** `r-message` and any panel that moves itself to `document.body` (`r-select`, `r-popover` — see the portaling pitfall above) compares its own z-index directly against the host's root-level chrome. Since 1000+ already beats anything in the tens, it wins with zero extra CSS on the host's side.
+- **A non-portaled fixed overlay (`r-modal`'s dialog stays inside its own shadow DOM) only escapes as far as its nearest ancestor stacking context.** If a host wraps embedded content in anything that creates one — `isolation: isolate`, `opacity < 1`, `transform`, `filter`, `will-change` — a `position: fixed` descendant is trapped inside it for stacking purposes (its *layout* still escapes to the viewport; only *paint order* is trapped). The wrapper then needs its own elevated `z-index` for the trapped content to climb back out.
+
+The mistake to avoid: **don't promote the wrapper unconditionally to fix that.** Giving a wrapper `position: relative; z-index: <high>` at all times elevates *everything in it* — including static, non-overlay content — above the host's own chrome for its entire scroll lifetime, not just while an overlay is actually open. On a scrollable page that reliably paints ordinary content over a sticky nav/header the moment their boxes happen to overlap (ranui's own docs site shipped exactly this: every `<Demo>` wrapper carried a blanket `z-index: 100` "just in case," so a 100%-static example — no overlay in it at all — painted over the sticky nav on ordinary scroll). Scope the elevation to exactly when it's needed instead:
+
+```css
+/* Isolate unconditionally (cheap — no z-index/position means no promotion
+   of its own, so it costs nothing while nothing inside is elevated) */
+.host-wrapper {
+  isolation: isolate;
+}
+/* Escalate only while a real overlay is actually open, via a live selector
+   on its reflected attribute — never a blanket rule "in case" one might open */
+.host-wrapper:has(r-modal[open]) {
+  position: relative;
+  z-index: 100; /* comfortably above the host's own chrome range */
+}
+```
+
+`:has()` works here specifically because `open` is a real reflected HTML attribute (`hasAttribute`/`setAttribute`, not just a JS property) — check the same for any other component before relying on it in a selector.
+
 ---
 
 ## 5. Motion — prefer none

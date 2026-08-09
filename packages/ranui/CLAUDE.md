@@ -39,6 +39,7 @@ packages/ranui/
 │   ├── ssr-registry.ts   # defineSSR, SSR support
 │   ├── theme.ts          # setTheme, setThemeToken(s), initTheme (light/dark/system)
 │   ├── style.ts          # adoptStyles, adoptSheetText — binds ranui's markers onto ranuts'
+│   ├── placement.ts      # re-export of ranuts/utils computePlacement (the algorithm itself lives in ranuts)
 │   └── dom.ts            # falseList, isDisabled
 ├── theme/                # tokens.less (Geist base+semantic) + dark.less (dark mixin)
 ├── docs/DESIGN.md        # ⭐ AI-facing design standard — follow it for ANY UI work

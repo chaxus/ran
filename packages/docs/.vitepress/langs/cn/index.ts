@@ -218,6 +218,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'create - 创建 DOM 元素', link: '/cn/src/ranuts/utils/create' },
               { text: 'EventManager - 作用域事件管理', link: '/cn/src/ranuts/utils/event_manager' },
               { text: 'adoptStyles - Shadow DOM 样式注入', link: '/cn/src/ranuts/utils/adopt_styles' },
+              { text: 'computePlacement - 浮层翻转/平移定位', link: '/cn/src/ranuts/utils/placement' },
             ],
           },
           {
