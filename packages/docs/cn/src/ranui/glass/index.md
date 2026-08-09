@@ -1,3 +1,7 @@
+---
+description: '液态磨砂玻璃表面——backdrop 模糊、SVG 液态光线弯折、镜面亮边，在不支持 backdrop-filter 时优雅降级。'
+---
+
 # Glass 毛玻璃
 
 液态 / 磨砂玻璃表面。`<r-glass>` 会对它背后的内容做磨砂与折射——`backdrop-filter` 的模糊 + 提饱和做磨砂，SVG `feDisplacementMap` 做液态光线弯折，再加镜面亮边与高光形成"玻璃感"。所有视觉参数都可通过属性与 token 调节，内容放默认插槽。

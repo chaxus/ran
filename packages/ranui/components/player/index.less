@@ -90,6 +90,124 @@
   animation: var(--video-control-loading-animation, loading 1s infinite);
 }
 
+// Shared "icon control" chrome — the box model, hover pill, and
+// keyboard-only focus ring every plain-icon control in the bottom bar
+// (fullscreen/pip/remote, plus the left-side play/pause toggle) needs
+// identically. Before this, each one was a separately hand-written ~20-line
+// block; fixing one thing (a missing `flex-shrink`, an off-scale padding, a
+// size that drifted from the others) meant remembering to repeat the fix in
+// every other block too, which is exactly how `fullscreen` ended up alone
+// at 16px while everything else was 18-20px. Every value below is passed in
+// explicitly by the caller (not derived from a name string via `@{}`
+// interpolation) so each control's own `--ran-player-{name}-*` tokens stay
+// written out and grep-able at the call site — only the *shape* (which
+// properties, which selectors, in what order) lives here once.
+.player-icon-control(
+  @display;
+  @align-items;
+  @width;
+  @height;
+  @padding;
+  @radius;
+  @color;
+  @cursor;
+  @outline;
+  @transition;
+  @hover-background;
+  @focus-outline;
+  @focus-offset;
+  @focus-radius
+) {
+  display: @display;
+  align-items: @align-items;
+  justify-content: center;
+  width: @width;
+  height: @height;
+  padding: @padding;
+  border-radius: @radius;
+  color: @color;
+  cursor: @cursor;
+  outline: @outline;
+  transition: @transition;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: @hover-background;
+  }
+
+  r-icon {
+    width: 100%;
+    height: 100%;
+  }
+
+  &:focus-visible {
+    outline: @focus-outline;
+    outline-offset: @focus-offset;
+    border-radius: @focus-radius;
+  }
+}
+
+// Shared "pill control" chrome — the box model, hover pill, and (since
+// `r-select`'s own focus ring is deliberately suppressed for `type="text"`,
+// see `components/select/index.less`) the `:has()`-based fallback keyboard
+// focus ring, shared by every select-wrapping text control (speed/subtitle/
+// clarity). Same duplication problem and same fix as `.player-icon-control`
+// above — see its comment. The `<r-select>` child's own chrome (flex-shrink,
+// `::part()` overrides, `--ran-select-min-height`) stays hand-written per
+// control below; only this outer wrapper's shape is shared.
+.player-pill-control(
+  @width;
+  @height;
+  @padding;
+  @radius;
+  @color;
+  @font-family;
+  @font-size;
+  @font-style;
+  @font-weight;
+  @line-height;
+  @cursor;
+  @outline;
+  @transition;
+  @hover-background;
+  @active-focus-outline;
+  @has-focus-outline;
+  @has-focus-offset
+) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: @width;
+  height: @height;
+  padding: @padding;
+  border-radius: @radius;
+  color: @color;
+  font-family: @font-family;
+  font-size: @font-size;
+  font-style: @font-style;
+  font-weight: @font-weight;
+  line-height: @line-height;
+  cursor: @cursor;
+  outline: @outline;
+  transition: @transition;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: @hover-background;
+  }
+
+  &:active,
+  &:focus {
+    outline: @active-focus-outline;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  &:has(r-select:focus-visible) {
+    outline: @has-focus-outline;
+    outline-offset: @has-focus-offset;
+  }
+}
+
 /* The player skin is a fixed dark control bar over arbitrary video content —
    a dark, monochrome --ran-color-primary ring would have no contrast here
    regardless of the page's own light/dark theme, so it gets its own
@@ -445,49 +563,41 @@
           // in view.ts, independent of this box's model) — `padding` is additive
           // under the default `content-box` sizing, so it grows a comfortable
           // hit target *around* that unchanged icon rather than shrinking it.
-          // Same "bigger tap target + visible hover affordance" language every
-          // other right-side control below now uses, so the whole bar reads as
-          // one coherent toolbar instead of the play button being the one
-          // plain, untouched icon among styled ones.
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: var(--ran-player-toggle-width, var(--ran-size-3, 20px));
-          height: var(--ran-player-toggle-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-toggle-padding, var(--ran-space-1, 4px));
-          border-radius: var(--ran-player-toggle-border-radius, var(--ran-radius-sm, 6px));
-          color: var(--ran-player-toggle-color, #fff);
-          cursor: var(--ran-player-toggle-cursor, pointer);
-          outline: var(--ran-player-toggle-outline, 0);
-          transition: var(--ran-player-toggle-transition, none);
-          -webkit-tap-highlight-color: transparent;
 
-          &:hover {
-            background: var(--ran-player-toggle-hover-background, rgba(255, 255, 255, 0.12));
-          }
-
-          r-icon {
-            width: 100%;
-            height: 100%;
-          }
-
+          // The one extra rule `toggle` alone carries (pip/remote/fullscreen
+          // never had it) — MUST come *before* the mixin call below, not
+          // after: `:focus` and `:focus-visible` have equal specificity, so
+          // whichever rule is later in the compiled source wins when both
+          // match at once (always true while focus-visible holds). Putting
+          // this after the mixin silently let its `outline: 0` clobber the
+          // mixin's own `:focus-visible` ring — caught by a before/after
+          // computed-style diff during the refactor that introduced the
+          // mixin, not by eye.
           &:active,
           &:focus {
             outline: var(--ran-player-toggle-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
 
-          &:focus-visible {
-            outline: var(
+          .player-icon-control(
+            @display: flex;
+            @align-items: center;
+            @width: var(--ran-player-toggle-width, var(--ran-size-3, 20px));
+            @height: var(--ran-player-toggle-height, var(--ran-size-3, 20px));
+            @padding: var(--ran-player-toggle-padding, var(--ran-space-1, 4px));
+            @radius: var(--ran-player-toggle-border-radius, var(--ran-radius-sm, 6px));
+            @color: var(--ran-player-toggle-color, #fff);
+            @cursor: var(--ran-player-toggle-cursor, pointer);
+            @outline: var(--ran-player-toggle-outline, 0);
+            @transition: var(--ran-player-toggle-transition, none);
+            @hover-background: var(--ran-player-toggle-hover-background, rgba(255, 255, 255, 0.12));
+            @focus-outline: var(
               --ran-player-toggle-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-toggle-focus-visible-outline-offset, 2px);
-            border-radius: var(
-              --ran-player-toggle-focus-visible-border-radius,
-              var(--ran-radius-sm, 6px)
-            );
-          }
+            @focus-offset: var(--ran-player-toggle-focus-visible-outline-offset, 2px);
+            @focus-radius: var(--ran-player-toggle-focus-visible-border-radius, var(--ran-radius-sm, 6px));
+          );
         }
 
         &-time {
@@ -626,52 +736,39 @@
           // 30x20 core (same reasoning as `&-volume` above) instead of
           // shrinking the "1.5X" label inside it, and gives this text control
           // the same hover pill every icon control in the row now has.
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: var(--ran-player-speed-width, var(--ran-size-6, 30px));
-          height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-speed-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
-          border-radius: var(--ran-player-speed-border-radius, var(--ran-radius-sm, 6px));
-          color: var(--ran-player-speed-color, #fff);
-          font-family: var(--ran-player-speed-font-family, PingFang SC);
-          font-size: var(--ran-player-speed-font-size, var(--ran-text-label-1, 14px));
-          font-style: var(--ran-player-speed-font-style, normal);
-          font-weight: var(--ran-player-speed-font-weight, var(--ran-text-label-weight, 500));
-          line-height: var(--ran-player-speed-line-height, normal);
-          cursor: var(--ran-player-speed-cursor, pointer);
-          outline: var(--ran-player-speed-outline, 0);
-          transition: var(--ran-player-speed-transition, none);
-          -webkit-tap-highlight-color: transparent;
-
-          &:hover {
-            background: var(--ran-player-speed-hover-background, rgba(255, 255, 255, 0.12));
-          }
-
-          &:active,
-          &:focus {
-            outline: var(--ran-player-speed-focus-outline, 0);
-            -webkit-tap-highlight-color: transparent;
-          }
-
+          //
           // `r-select`'s own focus-visible ring is deliberately suppressed
           // for `type="text"` (see `components/select/index.less`) — this is
           // that type, for the borderless trigger look this row needs, which
           // otherwise leaves keyboard users with *zero* visible focus
           // indicator here (DESIGN.md §7: every interactive element needs
-          // one). `:has()` reaches into the select's focus state from the
-          // wrapper — light-DOM `r-select:focus-visible` matches regardless
-          // of shadow encapsulation, since the custom element host itself
-          // (not something inside its shadow root) is the actual focus
-          // target — to draw the ring here instead, in the same light-on-dark
-          // treatment every other control in this row uses.
-          &:has(r-select:focus-visible) {
-            outline: var(
+          // one). `.player-pill-control`'s `:has()` rule reaches into the
+          // select's focus state from the wrapper instead — light-DOM
+          // `r-select:focus-visible` matches regardless of shadow
+          // encapsulation, since the custom element host itself (not
+          // something inside its shadow root) is the actual focus target.
+          .player-pill-control(
+            @width: var(--ran-player-speed-width, var(--ran-size-6, 30px));
+            @height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
+            @padding: var(--ran-player-speed-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
+            @radius: var(--ran-player-speed-border-radius, var(--ran-radius-sm, 6px));
+            @color: var(--ran-player-speed-color, #fff);
+            @font-family: var(--ran-player-speed-font-family, PingFang SC);
+            @font-size: var(--ran-player-speed-font-size, var(--ran-text-label-1, 14px));
+            @font-style: var(--ran-player-speed-font-style, normal);
+            @font-weight: var(--ran-player-speed-font-weight, var(--ran-text-label-weight, 500));
+            @line-height: var(--ran-player-speed-line-height, normal);
+            @cursor: var(--ran-player-speed-cursor, pointer);
+            @outline: var(--ran-player-speed-outline, 0);
+            @transition: var(--ran-player-speed-transition, none);
+            @hover-background: var(--ran-player-speed-hover-background, rgba(255, 255, 255, 0.12));
+            @active-focus-outline: var(--ran-player-speed-focus-outline, 0);
+            @has-focus-outline: var(
               --ran-player-speed-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-speed-focus-visible-outline-offset, 2px);
-          }
+            @has-focus-offset: var(--ran-player-speed-focus-visible-outline-offset, 2px);
+          );
 
           r-select {
             // `flex-shrink: 0` — `&-speed` above is a flex row narrower (30px)
@@ -729,48 +826,35 @@
         }
 
         &-subtitle {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--ran-player-subtitle-color, #fff);
-          font-family: var(--ran-player-subtitle-font-family, PingFang SC);
-          font-size: var(--ran-player-subtitle-font-size, var(--ran-text-label-1, 14px));
-          width: var(--ran-player-subtitle-width, var(--ran-size-6, 30px));
-          height: var(--ran-player-subtitle-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-subtitle-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
-          border-radius: var(--ran-player-subtitle-border-radius, var(--ran-radius-sm, 6px));
-          font-style: var(--ran-player-subtitle-font-style, normal);
-          font-weight: var(--ran-player-subtitle-font-weight, var(--ran-text-label-weight, 500));
-          line-height: var(--ran-player-subtitle-line-height, normal);
-          cursor: var(--ran-player-subtitle-cursor, pointer);
-          outline: var(--ran-player-subtitle-outline, 0);
-          transition: var(--ran-player-subtitle-transition, none);
-          -webkit-tap-highlight-color: transparent;
-
-          &:hover {
-            background: var(--ran-player-subtitle-hover-background, rgba(255, 255, 255, 0.12));
-          }
-
-          // Empty when no tracks are configured — collapse instead of leaving a gap.
-          // `:empty` outranks the plain class rule above on specificity alone, so
-          // this still wins regardless of source order.
-          &:empty {
-            display: none;
-          }
-
-          &:active,
-          &:focus {
-            outline: var(--ran-player-subtitle-focus-outline, 0);
-            -webkit-tap-highlight-color: transparent;
-          }
-
-          // See the identical comment on `&-speed`'s `:has(r-select:focus-visible)` above.
-          &:has(r-select:focus-visible) {
-            outline: var(
+          .player-pill-control(
+            @width: var(--ran-player-subtitle-width, var(--ran-size-6, 30px));
+            @height: var(--ran-player-subtitle-height, var(--ran-size-3, 20px));
+            @padding: var(--ran-player-subtitle-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
+            @radius: var(--ran-player-subtitle-border-radius, var(--ran-radius-sm, 6px));
+            @color: var(--ran-player-subtitle-color, #fff);
+            @font-family: var(--ran-player-subtitle-font-family, PingFang SC);
+            @font-size: var(--ran-player-subtitle-font-size, var(--ran-text-label-1, 14px));
+            @font-style: var(--ran-player-subtitle-font-style, normal);
+            @font-weight: var(--ran-player-subtitle-font-weight, var(--ran-text-label-weight, 500));
+            @line-height: var(--ran-player-subtitle-line-height, normal);
+            @cursor: var(--ran-player-subtitle-cursor, pointer);
+            @outline: var(--ran-player-subtitle-outline, 0);
+            @transition: var(--ran-player-subtitle-transition, none);
+            @hover-background: var(--ran-player-subtitle-hover-background, rgba(255, 255, 255, 0.12));
+            @active-focus-outline: var(--ran-player-subtitle-focus-outline, 0);
+            @has-focus-outline: var(
               --ran-player-subtitle-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-subtitle-focus-visible-outline-offset, 2px);
+            @has-focus-offset: var(--ran-player-subtitle-focus-visible-outline-offset, 2px);
+          );
+
+          // Empty when no tracks are configured — collapse instead of leaving a gap.
+          // `:empty` outranks the mixin's plain class rule on specificity
+          // alone (class+pseudo-class beats class alone), so this still wins
+          // regardless of source order.
+          &:empty {
+            display: none;
           }
 
           r-select {
@@ -811,42 +895,28 @@
         }
 
         &-clarity {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--ran-player-clarity-color, #fff);
-          font-family: var(--ran-player-clarity-font-family, PingFang SC);
-          font-size: var(--ran-player-clarity-font-size, var(--ran-text-label-1, 14px));
-          width: var(--ran-player-clarity-width, var(--ran-size-6, 30px));
-          height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-clarity-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
-          border-radius: var(--ran-player-clarity-border-radius, var(--ran-radius-sm, 6px));
-          font-style: var(--ran-player-clarity-font-style, normal);
-          font-weight: var(--ran-player-clarity-font-weight, var(--ran-text-label-weight, 500));
-          line-height: var(--ran-player-clarity-line-height, normal);
-          cursor: var(--ran-player-clarity-cursor, pointer);
-          outline: var(--ran-player-clarity-outline, 0);
-          transition: var(--ran-player-clarity-transition, none);
-          -webkit-tap-highlight-color: transparent;
-
-          &:hover {
-            background: var(--ran-player-clarity-hover-background, rgba(255, 255, 255, 0.12));
-          }
-
-          &:active,
-          &:focus {
-            outline: var(--ran-player-clarity-focus-outline, 0);
-            -webkit-tap-highlight-color: transparent;
-          }
-
-          // See the identical comment on `&-speed`'s `:has(r-select:focus-visible)` above.
-          &:has(r-select:focus-visible) {
-            outline: var(
+          .player-pill-control(
+            @width: var(--ran-player-clarity-width, var(--ran-size-6, 30px));
+            @height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
+            @padding: var(--ran-player-clarity-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
+            @radius: var(--ran-player-clarity-border-radius, var(--ran-radius-sm, 6px));
+            @color: var(--ran-player-clarity-color, #fff);
+            @font-family: var(--ran-player-clarity-font-family, PingFang SC);
+            @font-size: var(--ran-player-clarity-font-size, var(--ran-text-label-1, 14px));
+            @font-style: var(--ran-player-clarity-font-style, normal);
+            @font-weight: var(--ran-player-clarity-font-weight, var(--ran-text-label-weight, 500));
+            @line-height: var(--ran-player-clarity-line-height, normal);
+            @cursor: var(--ran-player-clarity-cursor, pointer);
+            @outline: var(--ran-player-clarity-outline, 0);
+            @transition: var(--ran-player-clarity-transition, none);
+            @hover-background: var(--ran-player-clarity-hover-background, rgba(255, 255, 255, 0.12));
+            @active-focus-outline: var(--ran-player-clarity-focus-outline, 0);
+            @has-focus-outline: var(
               --ran-player-clarity-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-clarity-focus-visible-outline-offset, 2px);
-          }
+            @has-focus-offset: var(--ran-player-clarity-focus-visible-outline-offset, 2px);
+          );
 
           r-select {
             // See the identical comments on `&-speed`'s `r-select` above
@@ -897,82 +967,54 @@
         }
 
         &-pip {
-          display: var(--ran-player-pip-display, flex);
-          align-items: var(--ran-player-pip-align-items, center);
-          justify-content: center;
-          width: var(--ran-player-pip-width, var(--ran-size-3, 20px));
-          height: var(--ran-player-pip-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-pip-padding, var(--ran-space-1, 4px));
-          border-radius: var(--ran-player-pip-border-radius, var(--ran-radius-sm, 6px));
-          color: var(--ran-player-pip-color, #fff);
-          cursor: var(--ran-player-pip-cursor, pointer);
-          outline: var(--ran-player-pip-outline, 0);
-          transition: var(--ran-player-pip-transition, none);
-          -webkit-tap-highlight-color: transparent;
-
-          &:hover {
-            background: var(--ran-player-pip-hover-background, rgba(255, 255, 255, 0.12));
-          }
-
-          r-icon {
-            width: 100%;
-            height: 100%;
-          }
-
-          &-hidden {
-            display: none;
-          }
-
-          &:focus-visible {
-            outline: var(
+          .player-icon-control(
+            @display: var(--ran-player-pip-display, flex);
+            @align-items: var(--ran-player-pip-align-items, center);
+            @width: var(--ran-player-pip-width, var(--ran-size-3, 20px));
+            @height: var(--ran-player-pip-height, var(--ran-size-3, 20px));
+            @padding: var(--ran-player-pip-padding, var(--ran-space-1, 4px));
+            @radius: var(--ran-player-pip-border-radius, var(--ran-radius-sm, 6px));
+            @color: var(--ran-player-pip-color, #fff);
+            @cursor: var(--ran-player-pip-cursor, pointer);
+            @outline: var(--ran-player-pip-outline, 0);
+            @transition: var(--ran-player-pip-transition, none);
+            @hover-background: var(--ran-player-pip-hover-background, rgba(255, 255, 255, 0.12));
+            @focus-outline: var(
               --ran-player-pip-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-pip-focus-visible-outline-offset, 2px);
-            border-radius: var(
-              --ran-player-pip-focus-visible-border-radius,
-              var(--ran-radius-sm, 6px)
-            );
+            @focus-offset: var(--ran-player-pip-focus-visible-outline-offset, 2px);
+            @focus-radius: var(--ran-player-pip-focus-visible-border-radius, var(--ran-radius-sm, 6px));
+          );
+
+          &-hidden {
+            display: none;
           }
         }
 
         &-remote {
-          display: var(--ran-player-remote-display, flex);
-          align-items: var(--ran-player-remote-align-items, center);
-          justify-content: center;
-          width: var(--ran-player-remote-width, var(--ran-size-3, 20px));
-          height: var(--ran-player-remote-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-remote-padding, var(--ran-space-1, 4px));
-          border-radius: var(--ran-player-remote-border-radius, var(--ran-radius-sm, 6px));
-          color: var(--ran-player-remote-color, #fff);
-          cursor: var(--ran-player-remote-cursor, pointer);
-          outline: var(--ran-player-remote-outline, 0);
-          transition: var(--ran-player-remote-transition, none);
-          -webkit-tap-highlight-color: transparent;
-
-          &:hover {
-            background: var(--ran-player-remote-hover-background, rgba(255, 255, 255, 0.12));
-          }
-
-          r-icon {
-            width: 100%;
-            height: 100%;
-          }
-
-          &-hidden {
-            display: none;
-          }
-
-          &:focus-visible {
-            outline: var(
+          .player-icon-control(
+            @display: var(--ran-player-remote-display, flex);
+            @align-items: var(--ran-player-remote-align-items, center);
+            @width: var(--ran-player-remote-width, var(--ran-size-3, 20px));
+            @height: var(--ran-player-remote-height, var(--ran-size-3, 20px));
+            @padding: var(--ran-player-remote-padding, var(--ran-space-1, 4px));
+            @radius: var(--ran-player-remote-border-radius, var(--ran-radius-sm, 6px));
+            @color: var(--ran-player-remote-color, #fff);
+            @cursor: var(--ran-player-remote-cursor, pointer);
+            @outline: var(--ran-player-remote-outline, 0);
+            @transition: var(--ran-player-remote-transition, none);
+            @hover-background: var(--ran-player-remote-hover-background, rgba(255, 255, 255, 0.12));
+            @focus-outline: var(
               --ran-player-remote-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-remote-focus-visible-outline-offset, 2px);
-            border-radius: var(
-              --ran-player-remote-focus-visible-border-radius,
-              var(--ran-radius-sm, 6px)
-            );
+            @focus-offset: var(--ran-player-remote-focus-visible-outline-offset, 2px);
+            @focus-radius: var(--ran-player-remote-focus-visible-border-radius, var(--ran-radius-sm, 6px));
+          );
+
+          &-hidden {
+            display: none;
           }
         }
 
@@ -981,39 +1023,25 @@
           // this row (an odd deliberate emphasis choice for the *last* icon
           // rather than a natural one); now matches the row's shared 20px icon
           // size like every other icon control.
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--ran-player-fullscreen-color, #fff);
-          width: var(--ran-player-fullscreen-width, var(--ran-size-3, 20px));
-          height: var(--ran-player-fullscreen-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-fullscreen-padding, var(--ran-space-1, 4px));
-          border-radius: var(--ran-player-fullscreen-border-radius, var(--ran-radius-sm, 6px));
-          cursor: var(--ran-player-fullscreen-cursor, pointer);
-          outline: var(--ran-player-fullscreen-outline, 0);
-          transition: var(--ran-player-fullscreen-transition, none);
-          -webkit-tap-highlight-color: transparent;
-
-          &:hover {
-            background: var(--ran-player-fullscreen-hover-background, rgba(255, 255, 255, 0.12));
-          }
-
-          r-icon {
-            width: 100%;
-            height: 100%;
-          }
-
-          &:focus-visible {
-            outline: var(
+          .player-icon-control(
+            @display: flex;
+            @align-items: center;
+            @width: var(--ran-player-fullscreen-width, var(--ran-size-3, 20px));
+            @height: var(--ran-player-fullscreen-height, var(--ran-size-3, 20px));
+            @padding: var(--ran-player-fullscreen-padding, var(--ran-space-1, 4px));
+            @radius: var(--ran-player-fullscreen-border-radius, var(--ran-radius-sm, 6px));
+            @color: var(--ran-player-fullscreen-color, #fff);
+            @cursor: var(--ran-player-fullscreen-cursor, pointer);
+            @outline: var(--ran-player-fullscreen-outline, 0);
+            @transition: var(--ran-player-fullscreen-transition, none);
+            @hover-background: var(--ran-player-fullscreen-hover-background, rgba(255, 255, 255, 0.12));
+            @focus-outline: var(
               --ran-player-fullscreen-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-fullscreen-focus-visible-outline-offset, 2px);
-            border-radius: var(
-              --ran-player-fullscreen-focus-visible-border-radius,
-              var(--ran-radius-sm, 6px)
-            );
-          }
+            @focus-offset: var(--ran-player-fullscreen-focus-visible-outline-offset, 2px);
+            @focus-radius: var(--ran-player-fullscreen-focus-visible-border-radius, var(--ran-radius-sm, 6px));
+          );
         }
       }
     }

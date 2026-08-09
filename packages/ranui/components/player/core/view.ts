@@ -24,6 +24,16 @@ function icon(name: string, sizeVar: string): HTMLElement {
   return View('r-icon').attr('name', name).attr('size', sizeVar).build() as HTMLElement;
 }
 
+/** A focusable icon-only button (play/pause toggle, pip, cast, fullscreen) —
+ * these were four separately hand-written `focusableRole(Div()...).children(icon(...)).build()`
+ * calls, easy for one to drift from the others (a missing class, a different
+ * aria-label pattern). One factory makes that structurally impossible. */
+function createIconControl(className: string, iconName: string, ariaLabel: string, sizeVar: string): HTMLDivElement {
+  return focusableRole(Div().class(className), 'button', ariaLabel)
+    .children(icon(iconName, sizeVar))
+    .build() as HTMLDivElement;
+}
+
 export interface SpeedOption {
   label: string;
   value: number;
@@ -112,13 +122,12 @@ export function ensurePlayerView(input: {
       .children(progressWrap, progressDot)
       .build() as HTMLDivElement;
 
-    const playerControllerBottomPlayBtn = focusableRole(
-      Div().class('ran-player-controller-bottom-left-btn'),
-      'button',
+    const playerControllerBottomPlayBtn = createIconControl(
+      'ran-player-controller-bottom-left-btn',
+      'play',
       'Play',
-    )
-      .children(icon('play', 'var(--ran-player-toggle-width, 20px)'))
-      .build() as HTMLDivElement;
+      'var(--ran-player-toggle-width, 20px)',
+    );
     const playerControllerBottomTimeCurrent = Div()
       .class('ran-player-controller-bottom-left-time-current')
       .build() as HTMLDivElement;
@@ -182,29 +191,26 @@ export function ensurePlayerView(input: {
     // needs `document`, so it can't run at SSR/construction time). No `<r-icon>` child
     // needed for aria: the icon is decorative by default when it carries no aria-label of
     // its own, and this button already has one via `focusableRole`.
-    const playControllerBottomPip = focusableRole(
-      Div().class('ran-player-controller-bottom-right-pip ran-player-controller-bottom-right-pip-hidden'),
-      'button',
+    const playControllerBottomPip = createIconControl(
+      'ran-player-controller-bottom-right-pip ran-player-controller-bottom-right-pip-hidden',
+      'pip',
       'Picture in picture',
-    )
-      .children(icon('pip', 'var(--ran-player-pip-width, 20px)'))
-      .build() as HTMLDivElement;
+      'var(--ran-player-pip-width, 20px)',
+    );
     // Hidden by default, same reasoning/mechanism as PiP above — visibility toggled by
     // `syncRemoteButtonVisibility` once `isRemotePlaybackSupported()` is known.
-    const playControllerBottomRemote = focusableRole(
-      Div().class('ran-player-controller-bottom-right-remote ran-player-controller-bottom-right-remote-hidden'),
-      'button',
+    const playControllerBottomRemote = createIconControl(
+      'ran-player-controller-bottom-right-remote ran-player-controller-bottom-right-remote-hidden',
+      'cast',
       'Cast to device',
-    )
-      .children(icon('cast', 'var(--ran-player-remote-width, 20px)'))
-      .build() as HTMLDivElement;
-    const playControllerBottomRightFullScreen = focusableRole(
-      Div().class('ran-player-controller-bottom-right-full'),
-      'button',
+      'var(--ran-player-remote-width, 20px)',
+    );
+    const playControllerBottomRightFullScreen = createIconControl(
+      'ran-player-controller-bottom-right-full',
+      'fullscreen',
       'Fullscreen',
-    )
-      .children(icon('fullscreen', 'var(--ran-player-fullscreen-width, 20px)'))
-      .build() as HTMLDivElement;
+      'var(--ran-player-fullscreen-width, 20px)',
+    );
 
     const playerControllerBottomRight = Div()
       .class('ran-player-controller-bottom-right')

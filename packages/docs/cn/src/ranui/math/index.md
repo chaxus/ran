@@ -1,3 +1,7 @@
+---
+description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML——无需 canvas、SVG 或 KaTeX 运行时。'
+---
+
 # math 数学公式
 
 使用 [Temml](https://temml.org/) 将 `LaTeX` 数学公式直接编译为原生 `MathML`，在 `HTML` 页面中高质量展示。

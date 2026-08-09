@@ -1,3 +1,7 @@
+---
+description: '一个 system/light/dark 三态分段控件，接入 ranui 主题 API，跨标签页同步。'
+---
+
 # ThemeSwitch 主题切换
 
 三态分段控件——**system（跟随系统）/ light（浅色）/ dark（深色）**——直接接入 ranui 的

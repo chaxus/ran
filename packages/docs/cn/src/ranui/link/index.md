@@ -1,3 +1,7 @@
+---
+description: '一个感知路由的锚点，拦截应用内导航，外部链接照常交给浏览器处理。'
+---
+
 # Link 链接
 
 一个感知路由的锚点。它会用 `<a>` 包裹插槽内容并拦截应用内导航：内部 `href` 会交给当前激活的 ranui 路由处理（`push`，当设置了 `replace` 时则为 `replace`）；外部链接（`https://`、`//`、`mailto:`、`tel:`）以及带修饰键的点击（中键 / ctrl / cmd / shift / alt）则照常交给浏览器。当没有注册路由时，它会派发一个可冒泡、可穿透 Shadow DOM 的 `ran-navigate` `CustomEvent`，其 `detail` 为 `{ path, replace }`。

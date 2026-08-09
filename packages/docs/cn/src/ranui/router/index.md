@@ -1,3 +1,7 @@
+---
+description: '面向单页应用的客户端路由：声明式组件、JS API、导航守卫、View Transitions 与跨文档（MPA）支持。'
+---
+
 # Router 路由
 
 用于单页应用的客户端路由。提供声明式 HTML 组件和 JavaScript API，支持导航守卫、View Transitions 动画过渡以及跨文档（MPA）场景。
