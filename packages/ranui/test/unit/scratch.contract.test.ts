@@ -1,6 +1,26 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import '@/components/scratch';
 
+const pointer = (type: string, init: Partial<PointerEventInit> & { clientX?: number; clientY?: number }): PointerEvent =>
+  new PointerEvent(type, { pointerId: 1, bubbles: true, ...init });
+
+const mockDrawingContext = () => ({
+  beginPath: vi.fn(),
+  moveTo: vi.fn(),
+  lineTo: vi.fn(),
+  stroke: vi.fn(),
+  arc: vi.fn(),
+  fill: vi.fn(),
+  closePath: vi.fn(),
+  clearRect: vi.fn(),
+  fillRect: vi.fn(),
+  fillStyle: '',
+  globalCompositeOperation: '',
+  lineCap: '',
+  lineJoin: '',
+  lineWidth: 0,
+});
+
 describe('r-scratch contract', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
@@ -18,101 +38,136 @@ describe('r-scratch contract', () => {
     expect(shadow.querySelector('.ran-scratch-ticket-canvas')).not.toBeNull();
   });
 
-  it('initializes state with touchStart false and scratchArea 0', () => {
+  it('initializes state with isScratching false and scratchedArea 0', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
 
-    expect(scratch.state.touchStart).toBe(false);
-    expect(scratch.state.scratchArea).toBe(0);
+    expect(scratch.state.isScratching).toBe(false);
+    expect(scratch.state.scratchedArea).toBe(0);
   });
 
-  it('touchStartScratch sets touchStart to true', () => {
+  it('onScratchPointerDown sets isScratching and strokes a dab at the pointer position', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
-
-    const touch = { clientX: 10, clientY: 10 };
-    const event = { touches: [touch] } as unknown as TouchEvent;
-    scratch.touchStartScratch(event);
-    expect(scratch.state.touchStart).toBe(true);
-  });
-
-  it('touchEndScratch sets touchStart to false', () => {
-    const scratch = document.createElement('r-scratch') as any;
-    document.body.appendChild(scratch);
-
-    scratch.state.touchStart = true;
     scratch.scratchTicket.width = 100;
     scratch.scratchTicket.height = 100;
-
-    const mockCtx = {
-      beginPath: vi.fn(),
-      arc: vi.fn(),
-      fill: vi.fn(),
-      closePath: vi.fn(),
-      clearRect: vi.fn(),
-      globalCompositeOperation: '',
-    };
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 100, height: 100 } as DOMRect);
+    const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
-    scratch.touchEndScratch();
-    expect(scratch.state.touchStart).toBe(false);
+    scratch.onScratchPointerDown(pointer('pointerdown', { clientX: 40, clientY: 60 }));
+
+    expect(scratch.state.isScratching).toBe(true);
+    expect(scratch.state.lastX).toBe(40);
+    expect(scratch.state.lastY).toBe(60);
+    expect(mockCtx.moveTo).toHaveBeenCalledWith(40, 60);
+    expect(mockCtx.lineTo).toHaveBeenCalledWith(40, 60);
+    expect(mockCtx.stroke).toHaveBeenCalled();
   });
 
-  it('touchMoveScratch increments scratchArea when touchStart is true', () => {
+  it('does not start scratching while disabled', () => {
     const scratch = document.createElement('r-scratch') as any;
+    scratch.setAttribute('disabled', '');
     document.body.appendChild(scratch);
 
-    scratch.state.touchStart = true;
-    scratch.state.scratchArea = 0;
+    scratch.onScratchPointerDown(pointer('pointerdown', { clientX: 10, clientY: 10 }));
+    expect(scratch.state.isScratching).toBe(false);
+  });
 
-    const mockCtx = {
-      beginPath: vi.fn(),
-      arc: vi.fn(),
-      fill: vi.fn(),
-      closePath: vi.fn(),
-      globalCompositeOperation: '',
-    };
+  it('onScratchPointerMove strokes a line from the last point to the new one and accumulates scratchedArea', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
+    scratch.scratchTicket.width = 200;
+    scratch.scratchTicket.height = 200;
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 200, height: 200 } as DOMRect);
+    const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
-    scratch.touchMoveScratch();
-    expect(scratch.state.scratchArea).toBe(30);
-    expect(mockCtx.beginPath).toHaveBeenCalled();
-    expect(mockCtx.arc).toHaveBeenCalled();
+    scratch.onScratchPointerDown(pointer('pointerdown', { clientX: 0, clientY: 0 }));
+    const areaAfterDown = scratch.state.scratchedArea;
+    scratch.onScratchPointerMove(pointer('pointermove', { clientX: 30, clientY: 40 })); // distance 50
+
+    expect(mockCtx.moveTo).toHaveBeenLastCalledWith(0, 0);
+    expect(mockCtx.lineTo).toHaveBeenLastCalledWith(30, 40);
+    expect(scratch.state.lastX).toBe(30);
+    expect(scratch.state.lastY).toBe(40);
+    expect(scratch.state.scratchedArea).toBeGreaterThan(areaAfterDown);
   });
 
-  it('touchMoveScratch does nothing when touchStart is false', () => {
+  it('maps client coordinates through the canvas resolution scale, not raw client offsets', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
-
-    scratch.state.touchStart = false;
-    const mockCtx = { beginPath: vi.fn() };
+    // Canvas resolution 200x100 rendered at half size (100x50 CSS px) -> scale factor 2.
+    scratch.scratchTicket.width = 200;
+    scratch.scratchTicket.height = 100;
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 10, top: 20, width: 100, height: 50 } as DOMRect);
+    const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
-    scratch.touchMoveScratch();
-    expect(mockCtx.beginPath).not.toHaveBeenCalled();
+    scratch.onScratchPointerDown(pointer('pointerdown', { clientX: 60, clientY: 45 })); // (60-10)*2=100, (45-20)*2=50
+
+    expect(scratch.state.lastX).toBe(100);
+    expect(scratch.state.lastY).toBe(50);
   });
 
-  it('touchEndScratch clears canvas when scratchArea exceeds 3% threshold', () => {
+  it('onScratchPointerMove does nothing when not currently scratching', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
+    const mockCtx = mockDrawingContext();
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
+    scratch.onScratchPointerMove(pointer('pointermove', { clientX: 5, clientY: 5 }));
+    expect(mockCtx.stroke).not.toHaveBeenCalled();
+  });
+
+  it('onScratchPointerUp sets isScratching false and clears the canvas past the auto-reveal threshold', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
     scratch.scratchTicket.width = 100;
     scratch.scratchTicket.height = 100;
-    scratch.state.scratchArea = 500; // > 100*100*0.03 = 300
+    scratch.state.isScratching = true;
+    scratch.state.scratchedArea = 100 * 100 * 0.5; // above the 0.35 threshold
 
-    const mockCtx = {
-      clearRect: vi.fn(),
-      beginPath: vi.fn(),
-      arc: vi.fn(),
-      fill: vi.fn(),
-      closePath: vi.fn(),
-      globalCompositeOperation: '',
-    };
+    const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
-    scratch.touchEndScratch();
+    scratch.onScratchPointerUp();
+
+    expect(scratch.state.isScratching).toBe(false);
     expect(mockCtx.clearRect).toHaveBeenCalledWith(0, 0, 100, 100);
-    expect(scratch.state.scratchArea).toBe(0);
+    expect(scratch.state.scratchedArea).toBe(0);
+  });
+
+  it('onScratchPointerUp does not clear when scratchedArea is below the threshold', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
+    scratch.scratchTicket.width = 100;
+    scratch.scratchTicket.height = 100;
+    scratch.state.scratchedArea = 10;
+
+    const mockCtx = mockDrawingContext();
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
+
+    scratch.onScratchPointerUp();
+    expect(mockCtx.clearRect).not.toHaveBeenCalled();
+    expect(scratch.state.scratchedArea).toBe(10);
+  });
+
+  it('onScratchPointerMove returns when ctx is null', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
+
+    scratch.state.isScratching = true;
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(null as any);
+    expect(() => scratch.onScratchPointerMove(pointer('pointermove', { clientX: 1, clientY: 1 }))).not.toThrow();
+  });
+
+  it('onScratchPointerUp returns when ctx is null', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
+
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(null as any);
+    expect(() => scratch.onScratchPointerUp()).not.toThrow();
   });
 
   it('attributeChangedCallback appends container and calls drawScratchTicket when value changes', () => {
@@ -133,26 +188,23 @@ describe('r-scratch contract', () => {
     expect(drawSpy).not.toHaveBeenCalled();
   });
 
-  it('connectedCallback binds touch listeners on the canvas', () => {
+  it('connectedCallback binds pointer listeners on the canvas — mouse and touch share one path', () => {
     const scratch = document.createElement('r-scratch') as any;
     const addSpy = vi.spyOn(scratch.scratchTicket, 'addEventListener');
 
     document.body.appendChild(scratch);
 
-    expect(addSpy).toHaveBeenCalledWith('touchstart', scratch.touchStartScratch, expect.any(Object));
-    expect(addSpy).toHaveBeenCalledWith('touchmove', scratch.touchMoveScratch, expect.any(Object));
-    expect(addSpy).toHaveBeenCalledWith('touchend', scratch.touchEndScratch, expect.any(Object));
+    expect(addSpy).toHaveBeenCalledWith('pointerdown', scratch.onScratchPointerDown, expect.any(Object));
+    expect(addSpy).toHaveBeenCalledWith('pointermove', scratch.onScratchPointerMove, expect.any(Object));
+    expect(addSpy).toHaveBeenCalledWith('pointerup', scratch.onScratchPointerUp, expect.any(Object));
+    expect(addSpy).toHaveBeenCalledWith('pointercancel', scratch.onScratchPointerUp, expect.any(Object));
   });
 
   it('drawScratchTicket paints an opaque cover instead of leaving the canvas blank', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
 
-    const mockCtx = {
-      fillRect: vi.fn(),
-      fillStyle: '',
-      globalCompositeOperation: '',
-    };
+    const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
     scratch.drawScratchTicket();
@@ -161,39 +213,33 @@ describe('r-scratch contract', () => {
     expect(mockCtx.fillRect).toHaveBeenCalledWith(0, 0, scratch.scratchTicket.width, scratch.scratchTicket.height);
   });
 
-  it('touchEndScratch does not clear when scratchArea below threshold', () => {
+  it('syncCanvasResolution matches the canvas buffer to its rendered size × devicePixelRatio', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
-
-    scratch.scratchTicket.width = 100;
-    scratch.scratchTicket.height = 100;
-    scratch.state.scratchArea = 10; // below 100*100*0.03 = 300
-
-    const mockCtx = {
-      clearRect: vi.fn(),
-    };
+    vi.spyOn(scratch.scratchTicketContainer, 'getBoundingClientRect').mockReturnValue({ width: 240, height: 120 } as DOMRect);
+    const originalDpr = window.devicePixelRatio;
+    Object.defineProperty(window, 'devicePixelRatio', { value: 2, configurable: true });
+    const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
-    scratch.touchEndScratch();
-    expect(mockCtx.clearRect).not.toHaveBeenCalled();
-    expect(scratch.state.scratchArea).toBe(10);
+    scratch.syncCanvasResolution();
+
+    expect(scratch.scratchTicket.width).toBe(480);
+    expect(scratch.scratchTicket.height).toBe(240);
+    Object.defineProperty(window, 'devicePixelRatio', { value: originalDpr, configurable: true });
   });
 
-  it('touchMoveScratch returns when ctx is null', () => {
+  it('syncCanvasResolution is a no-op when the size has not changed', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
+    vi.spyOn(scratch.scratchTicketContainer, 'getBoundingClientRect').mockReturnValue({ width: 240, height: 120 } as DOMRect);
+    Object.defineProperty(window, 'devicePixelRatio', { value: 1, configurable: true });
+    scratch.syncCanvasResolution();
+    scratch.state.scratchedArea = 42;
 
-    scratch.state.touchStart = true;
-    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(null as any);
-    expect(() => scratch.touchMoveScratch()).not.toThrow();
-  });
+    scratch.syncCanvasResolution();
 
-  it('touchEndScratch returns when ctx is null', () => {
-    const scratch = document.createElement('r-scratch') as any;
-    document.body.appendChild(scratch);
-
-    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(null as any);
-    expect(() => scratch.touchEndScratch()).not.toThrow();
+    expect(scratch.state.scratchedArea).toBe(42); // unchanged — no reset happened
   });
 
   it('projects arbitrary light-DOM content as the reveal layer via the default slot', () => {
@@ -230,16 +276,8 @@ describe('r-scratch contract', () => {
     document.body.appendChild(scratch);
     expect(scratch.getAttribute('aria-disabled')).toBe('true');
 
-    scratch.touchStartScratch();
-    expect(scratch.state.touchStart).toBe(false);
-
-    scratch.state.touchStart = true; // simulate as if a touch had started
-    // fillRect included: attributeChangedCallback always redraws the cover, so
-    // flipping `disabled` below re-enters drawScratchTicket via the same mock.
-    const mockCtx = { beginPath: vi.fn(), arc: vi.fn(), fill: vi.fn(), closePath: vi.fn(), fillRect: vi.fn() };
-    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
-    scratch.touchMoveScratch();
-    expect(mockCtx.beginPath).not.toHaveBeenCalled();
+    scratch.onScratchPointerDown(pointer('pointerdown', { clientX: 1, clientY: 1 }));
+    expect(scratch.state.isScratching).toBe(false);
 
     scratch.disabled = false;
     expect(scratch.getAttribute('aria-disabled')).toBe('false');

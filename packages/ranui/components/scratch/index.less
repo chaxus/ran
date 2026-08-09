@@ -40,4 +40,8 @@
   width: 100%;
   height: 100%;
   z-index: 2;
+  cursor: var(--ran-scratch-cursor, pointer);
+  /* A touch drag across the scratch surface must scratch, never scroll/zoom the page. */
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
 }

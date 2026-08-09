@@ -10,10 +10,15 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 
+/** Auto-reveals the rest once this fraction of the canvas has been stroked over — a
+ * common scratch-card UX (scratch a bit, the reveal completes on its own) rather than
+ * requiring the whole cover to be manually cleared pixel-by-pixel. */
+const AUTO_REVEAL_THRESHOLD = 0.35;
+
 class ScratchTicket extends RanElement {
   scratchTicketContainer: HTMLDivElement;
   scratchTicket: HTMLCanvasElement;
-  state: { touchStart: boolean; scratchArea: number };
+  state: { isScratching: boolean; scratchedArea: number; lastX: number; lastY: number };
   scratchAward: HTMLDivElement;
   _shadowDom: ShadowRoot;
   _events = new EventManager();
@@ -46,8 +51,10 @@ class ScratchTicket extends RanElement {
     this.scratchTicket = scratchTicket;
 
     this.state = {
-      touchStart: false,
-      scratchArea: 0,
+      isScratching: false,
+      scratchedArea: 0,
+      lastX: 0,
+      lastY: 0,
     };
   }
   get disabled(): boolean {
@@ -69,31 +76,75 @@ class ScratchTicket extends RanElement {
   syncDisabled = (): void => {
     this.setAttribute('aria-disabled', this.disabled ? 'true' : 'false');
   };
-  touchStartScratch = (): void => {
-    if (this.disabled) return;
-    this.state.touchStart = true;
+  /**
+   * Radius (canvas-space px) of the "coin" doing the scratching — scaled to the
+   * canvas's own resolution so it reads as the same relative size regardless of
+   * the element's actual display size or devicePixelRatio.
+   */
+  private brushRadius = (): number => {
+    return Math.max(14, Math.min(this.scratchTicket.width, this.scratchTicket.height) * 0.09);
   };
-  touchMoveScratch = (): void => {
-    // `pointer-events: none` on [disabled] already stops real touches from
-    // reaching here — this guard is for a programmatically dispatched event.
-    if (this.disabled || !this.state.touchStart) return;
+  /** Maps a pointer event's viewport coordinates onto the canvas's own drawing-buffer
+   * coordinate space — the two can differ (CSS size vs. canvas resolution / devicePixelRatio),
+   * so a raw `clientX - rect.left` would scratch the wrong spot on anything but a 1:1 canvas. */
+  private toCanvasPoint = (clientX: number, clientY: number): { x: number; y: number } => {
+    const rect = this.scratchTicket.getBoundingClientRect();
+    const scaleX = rect.width > 0 ? this.scratchTicket.width / rect.width : 1;
+    const scaleY = rect.height > 0 ? this.scratchTicket.height / rect.height : 1;
+    return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+  };
+  /**
+   * Erases a stroke from `(fromX, fromY)` to `(toX, toY)` — a connected line, not an
+   * isolated dab, so a fast drag reveals a continuous trail instead of a dotted one.
+   * `scratchedArea` approximates the stroked rectangle (`length × brush diameter`); it's
+   * a coarse heuristic (not an actual transparent-pixel count) but is honest about how
+   * much the user has actually swept, unlike a flat per-event increment.
+   */
+  private scratchStroke = (fromX: number, fromY: number, toX: number, toY: number): void => {
     const ctx = this.scratchTicket.getContext('2d');
     if (!ctx) return;
-    this.state.scratchArea += 30;
-    ctx.beginPath();
-    ctx.arc(100, 100, 30, 0, 2 * Math.PI);
+    const radius = this.brushRadius();
     ctx.globalCompositeOperation = 'destination-out';
-    ctx.fill();
-    ctx.closePath();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = radius * 2;
+    ctx.beginPath();
+    ctx.moveTo(fromX, fromY);
+    ctx.lineTo(toX, toY);
+    ctx.stroke();
+    const distance = Math.max(Math.hypot(toX - fromX, toY - fromY), 1);
+    this.state.scratchedArea += distance * radius * 2;
   };
-  touchEndScratch = (): void => {
-    this.state.touchStart = false;
+  /** Pointer Events unify mouse/touch/pen — one code path scratches on both desktop and mobile. */
+  onScratchPointerDown = (e: PointerEvent): void => {
+    if (this.disabled) return;
+    // Stops the page from scrolling under a touch drag on the scratch surface, and
+    // (per the Pointer Events spec) suppresses the synthetic compatibility `click`/
+    // `mouse*` events a touch would otherwise also fire.
+    e.preventDefault();
+    this.state.isScratching = true;
+    this.scratchTicket.setPointerCapture?.(e.pointerId);
+    const { x, y } = this.toCanvasPoint(e.clientX, e.clientY);
+    this.state.lastX = x;
+    this.state.lastY = y;
+    // A tap with no drag should still reveal a dab at that point, not nothing.
+    this.scratchStroke(x, y, x, y);
+  };
+  onScratchPointerMove = (e: PointerEvent): void => {
+    if (this.disabled || !this.state.isScratching) return;
+    const { x, y } = this.toCanvasPoint(e.clientX, e.clientY);
+    this.scratchStroke(this.state.lastX, this.state.lastY, x, y);
+    this.state.lastX = x;
+    this.state.lastY = y;
+  };
+  onScratchPointerUp = (): void => {
+    this.state.isScratching = false;
     if (this.disabled) return;
     const { width, height } = this.scratchTicket;
     const ctx = this.scratchTicket.getContext('2d');
     if (!ctx) return;
-    if (this.state.scratchArea > width * height * 0.03) {
-      this.state.scratchArea = 0;
+    if (this.state.scratchedArea > width * height * AUTO_REVEAL_THRESHOLD) {
+      this.state.scratchedArea = 0;
       ctx.clearRect(0, 0, width, height);
     }
   };
@@ -106,14 +157,40 @@ class ScratchTicket extends RanElement {
     ctx.fillStyle = coverColor || '#6b6b6b';
     ctx.fillRect(0, 0, width, height);
   };
+  /**
+   * Matches the canvas's internal drawing-buffer resolution to its actual rendered
+   * CSS size (× devicePixelRatio for crisp strokes on HiDPI screens) instead of the
+   * browser's fixed 300×150 default. Without this, `toCanvasPoint` still maps pointer
+   * coordinates correctly (it accounts for whatever scale is in effect), but the cover
+   * itself renders soft/blurry once CSS stretches a 300×150 buffer to the element's
+   * real size — and resetting the buffer always clears prior scratch progress, which
+   * is the correct behavior for a real resize (e.g. an orientation change).
+   */
+  syncCanvasResolution = (): void => {
+    const rect = this.scratchTicketContainer.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    const dpr = window.devicePixelRatio || 1;
+    const width = Math.max(1, Math.round(rect.width * dpr));
+    const height = Math.max(1, Math.round(rect.height * dpr));
+    if (this.scratchTicket.width === width && this.scratchTicket.height === height) return;
+    this.scratchTicket.width = width;
+    this.scratchTicket.height = height;
+    this.state.scratchedArea = 0;
+    this.drawScratchTicket();
+  };
+  private onWindowResize = (): void => {
+    this.syncCanvasResolution();
+  };
   connectedCallback(): void {
     this.handlerExternalCss();
     this.syncDisabled();
     this._events
-      .on(this.scratchTicket, 'touchstart', this.touchStartScratch)
-      .on(this.scratchTicket, 'touchmove', this.touchMoveScratch)
-      .on(this.scratchTicket, 'touchend', this.touchEndScratch);
-    this.drawScratchTicket();
+      .on(this.scratchTicket, 'pointerdown', this.onScratchPointerDown as EventListener, { passive: false })
+      .on(this.scratchTicket, 'pointermove', this.onScratchPointerMove as EventListener)
+      .on(this.scratchTicket, 'pointerup', this.onScratchPointerUp)
+      .on(this.scratchTicket, 'pointercancel', this.onScratchPointerUp)
+      .on(window, 'resize', this.onWindowResize);
+    this.syncCanvasResolution();
   }
   disconnectedCallback(): void {
     this._events.abort();

@@ -1,4 +1,9 @@
 :host {
+  // A bare custom element defaults to `display: inline`, which silently drops
+  // `transform` entirely (it only applies to block/inline-block/etc. boxes) —
+  // the enter/exit animations below (`translateY` + `opacity`) never had a
+  // box that could render them on.
+  display: var(--ran-message-host-display, block);
   &([type="toast"]) {
     .ran-message {
       &-notice {
@@ -127,14 +132,23 @@
   z-index: var(--ran-message-z-index, var(--ran-z-message, 1200));
   width: var(--ran-message-width, 100%);
   pointer-events: var(--ran-message-pointer-events, none);
-  .message-in {
-    animation-name: var(--ran-message-in-animation-name, MessageMoveIn);
-    animation-duration: var(--ran-message-in-animation-duration, 0.3s);
-    animation-timing-function: var(--ran-message-in-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
-  }
-  .message-leave {
-    animation-name: var(--ran-message-leave-animation-name, MessageMoveOut);
-    animation-duration: var(--ran-message-leave-animation-duration, 0.3s);
-    animation-timing-function: var(--ran-message-leave-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
-  }
+}
+
+// `.message-in`/`.message-leave` are toggled on the light-DOM `<r-message>` host
+// itself (see `index.ts`'s `commonPrompt`) — `.ranui-message` is the message-stack
+// *container* div, a light-DOM ancestor `container.ts` appends straight to
+// `document.body`. A shadow-scoped stylesheet can never select outside its own
+// shadow tree, so `.ranui-message .message-in { … }` (the old nesting) could never
+// match anything regardless of what class the host actually carried — the
+// animation silently never ran. `:host(.message-in)` is the correct way to select
+// the host element, by its own class, from inside its own shadow root's styles.
+:host(.message-in) {
+  animation-name: var(--ran-message-in-animation-name, MessageMoveIn);
+  animation-duration: var(--ran-message-in-animation-duration, 0.3s);
+  animation-timing-function: var(--ran-message-in-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
+}
+:host(.message-leave) {
+  animation-name: var(--ran-message-leave-animation-name, MessageMoveOut);
+  animation-duration: var(--ran-message-leave-animation-duration, 0.3s);
+  animation-timing-function: var(--ran-message-leave-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
 }
