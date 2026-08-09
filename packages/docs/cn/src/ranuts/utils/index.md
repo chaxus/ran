@@ -46,6 +46,7 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | 方法            | 说明                             | 详细内容                                 |
 | --------------- | -------------------------------- | ---------------------------------------- |
 | range           | 限制数字在指定范围内             | [range](./range.md)                      |
+| clamp / lerp / inverseLerp / remap / fit / linearstep / smoothstep | shader 风格的插值与区间映射 | [range](./range.md) |
 | mathjs          | 精确的数字运算函数               | [mathjs](./mathjs.md)                    |
 | perToNum        | 将百分比字符串转换为数字         | [perToNum](./per_to_num.md)              |
 | transformNumber | 将数字转换为带单位的格式化字符串 | [transformNumber](./transform_number.md) |
@@ -58,6 +59,8 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | hexToRgb    | 将十六进制颜色值转换为 RGB    | [hexToRgb](./hex_to_rgb.md)      |
 | rgbToHex    | 将 RGB 值转换为十六进制颜色值 | [rgbToHex](./rgb_to_hex.md)      |
 | randomColor | 生成随机颜色对象              | [randomColor](./random_color.md) |
+| Color / ColorScheme | 颜色类、值类、格式转换、调色板生成 | [Color](./color.md) |
+| blendScreen / blendMultiply / blendOverlay / luma / vibrance / cosinePalette / srgbToLinear | shader 风格的颜色混合与调色数学（0–1 通道） | [Color](./color.md) |
 
 ## 时间处理
 

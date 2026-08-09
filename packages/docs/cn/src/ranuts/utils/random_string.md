@@ -62,3 +62,14 @@ console.log(tempFileName); // 例如: 'temp_1703123456789-xyz1234567.txt'
 2. **字符集**：使用 `ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678` 字符集，排除了容易混淆的字符（如 0、O、1、I、l 等）。
 3. **格式**：返回格式为 `{时间戳}-{随机字符}`。
 4. **长度**：参数 `len` 只控制随机字符部分的长度，不包括时间戳和连字符。
+
+## getRandomString
+
+一个更轻量的版本：没有时间戳前缀，也不限制字符集——就是 `Math.random().toString(36)` 截取 `len` 个字符（base-36，也就是 `0-9a-z`）。不像 `randomString` 那样具备抗碰撞能力，适合用在不需要"唯一性能扛住时间戳级别碰撞"的场景，比如临时的 DOM id 或者缓存穿透用的查询参数。
+
+```js
+import { getRandomString } from 'ranuts/utils';
+
+getRandomString(); // 例如 'k3j9x2p1'（8 个字符）
+getRandomString(4); // 例如 'a1b2'
+```

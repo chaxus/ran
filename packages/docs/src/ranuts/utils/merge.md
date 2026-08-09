@@ -72,3 +72,44 @@ console.log(result); // { a: 1 } (returns as is)
 2. **Shallow merge**: Only performs one-level merging, does not deep merge nested objects.
 3. **Property override**: If both objects have the same key, the second object's value will override the first object's value.
 4. **Return value**: Returns the first object (which has been modified).
+
+## mergeExports
+
+A different tool despite the name: builds a **lazily-evaluated, frozen** exports object from a
+map of getters, instead of copying plain values. Each getter runs at most once — the first
+access — and the result is cached from then on, via the same `once` wrapper `ranuts/utils`
+exports separately. Nested plain objects are merged (and frozen) recursively; anything that
+isn't a getter or a nested object throws.
+
+```js
+import { mergeExports } from 'ranuts/utils';
+
+const lazyModule = mergeExports(
+  {},
+  {
+    get expensive() {
+      console.log('computing...');
+      return heavyComputation();
+    },
+    nested: {
+      get value() {
+        return 42;
+      },
+    },
+  },
+);
+
+lazyModule.expensive; // logs 'computing...', then returns the result
+lazyModule.expensive; // returns the cached result, does not log again
+```
+
+#### Notes
+
+1. **Not a general-purpose merge.** Use `merge` for plain values; `mergeExports` is for
+   building a module-shaped object where some properties are expensive to compute and should
+   only run if actually read.
+2. **The result is frozen** (`Object.freeze`), and every defined property is
+   `configurable: false` — the returned object cannot be reassigned or have properties added.
+3. **Throws on anything else.** A value that is neither a getter nor a plain nested object
+   (an array, a function, a primitive assigned directly) throws `Exposed values must be either
+   a getter or a nested object`.

@@ -158,7 +158,10 @@ const themeCnConfig: DefaultTheme.Config = {
             text: '数字处理',
             collapsed: true,
             items: [
-              { text: 'range - 限制数字范围', link: '/cn/src/ranuts/utils/range' },
+              {
+                text: 'range / clamp / lerp / remap / smoothstep - 插值与区间映射',
+                link: '/cn/src/ranuts/utils/range',
+              },
               { text: 'mathjs - 精确数字运算', link: '/cn/src/ranuts/utils/mathjs' },
               { text: 'perToNum - 百分比转数字', link: '/cn/src/ranuts/utils/per_to_num' },
               { text: 'transformNumber - 数字格式化', link: '/cn/src/ranuts/utils/transform_number' },
@@ -175,6 +178,10 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'randomColor - 生成随机颜色', link: '/cn/src/ranuts/utils/random_color' },
               { text: 'Color - 颜色类与转换', link: '/cn/src/ranuts/utils/color' },
               { text: 'hexToAlpha / rgbaToRgb - 透明度相关', link: '/cn/src/ranuts/utils/color' },
+              {
+                text: 'blendScreen / luma / cosinePalette - shader 混合数学',
+                link: '/cn/src/ranuts/utils/color',
+              },
             ],
           },
           {

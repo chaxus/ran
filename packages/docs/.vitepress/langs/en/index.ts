@@ -153,7 +153,10 @@ const themeEnConfig: DefaultTheme.Config = {
             text: 'Number Processing',
             collapsed: true,
             items: [
-              { text: 'range - Clamp number range', link: '/src/ranuts/utils/range' },
+              {
+                text: 'range / clamp / lerp / remap / smoothstep - Interpolation & remapping',
+                link: '/src/ranuts/utils/range',
+              },
               { text: 'mathjs - Precise calculation', link: '/src/ranuts/utils/mathjs' },
               { text: 'perToNum - Percentage to number', link: '/src/ranuts/utils/per_to_num' },
               { text: 'transformNumber - Format number', link: '/src/ranuts/utils/transform_number' },
@@ -170,6 +173,10 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'randomColor - Generate random color', link: '/src/ranuts/utils/random_color' },
               { text: 'Color - Color classes & conversions', link: '/src/ranuts/utils/color' },
               { text: 'hexToAlpha / rgbaToRgb - Alpha helpers', link: '/src/ranuts/utils/color' },
+              {
+                text: 'blendScreen / luma / cosinePalette - Shader-math blend helpers',
+                link: '/src/ranuts/utils/color',
+              },
             ],
           },
           {

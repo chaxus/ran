@@ -205,6 +205,43 @@ new ColorScheme(colorVal: (string | number)[], angleArray: number[])
 `rgbaToRgb` / `rgbaToHex` 的底色**写死是白色**。它们是为那些不接受 alpha 通道的场合准备的（比如要写回 6 位 hex）。深色主题下合成结果会偏亮，需要别的底色请自己做混合。
 :::
 
+### 混合与 shader 数学工具
+
+这些是 `ranuts/visual` 后处理滤镜（`ColorAdjustFilter` 等）背后用到的调色/混合数学，在这里单独导出是为了 CPU 侧复用——比如生成一张缩略图预览时，不需要为此专门起一条 GPU 管线。和本模块其余部分不同，**这里的通道都是 0–1**，不是 0–255 或 0–100——这是 shader 世界的惯例。
+
+| 函数                                 | 说明                                                                          | 签名                                             |
+| ------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `luma(r, g, b)`                     | 感知亮度（Rec. 601 权重）。保持输入原本的量纲——0–1 或 0–255 都行                  | `(r, g, b) => number`                           |
+| `blendScreen(base, blend)`          | 滤色混合：逐通道 `1 - (1-base)(1-blend)`                                          | `(base: RGB, blend: RGB) => RGB`                |
+| `blendMultiply(base, blend)`        | 正片叠底混合：逐通道 `base * blend`                                               | `(base: RGB, blend: RGB) => RGB`                |
+| `blendOverlay(base, blend)`         | 叠加混合：暗部用正片叠底，亮部用滤色                                              | `(base: RGB, blend: RGB) => RGB`                |
+| `brightnessContrast(color, b, c)`   | 逐通道 `(通道 - 0.5) * contrast + 0.5 + brightness`                              | `(color: RGB, brightness, contrast) => RGB`     |
+| `saturation(color, amount)`         | 向亮度混合。`0` = 灰阶，`1` = 不变，`>1` = 更饱和                                  | `(color: RGB, amount: number) => RGB`           |
+| `vibrance(color, amount)`           | 类似 `saturation`，但对本就不饱和的颜色提升更多，对已饱和的颜色提升更少。`>0` 增强，`<0` 减弱 | `(color: RGB, amount: number) => RGB`           |
+| `cosinePalette(t, a, b, c, d)`      | Inigo Quilez 余弦渐变调色板：`a + b·cos(2π(c·t + d))`，`a`–`d` 各是一个 RGB 三元组，`t` 是 0–1 的位置 | `(t, a: RGB, b: RGB, c: RGB, d: RGB) => RGB`    |
+| `srgbToLinear(c)` / `linearToSrgb(c)` | 在 sRGB（从 hex 颜色读出来的就是这个）和线性光（shader 数学要用的）之间转换单个通道       | `(c: number) => number`                         |
+
+```ts
+import { blendScreen, brightnessContrast, cosinePalette, srgbToLinear, linearToSrgb } from 'ranuts/utils';
+
+// 对两个 0-1 颜色做滤色混合
+const screened = blendScreen([0.8, 0.2, 0.1], [0.1, 0.5, 0.9]);
+
+// 提高一点对比度，略微降低亮度
+const graded = brightnessContrast([0.6, 0.6, 0.6], -0.05, 1.2);
+
+// 在 t=0.35 处采样一个程序化渐变调色板
+const swatch = cosinePalette(0.35, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [1, 1, 1], [0, 0.33, 0.67]);
+
+// 混合、光照这类需要伽马校正的运算应该在线性空间里做
+const linear = srgbToLinear(0.5);
+const backToSrgb = linearToSrgb(linear); // ≈ 0.5
+```
+
+::: warning
+混合与调色数学要在**线性光**空间下运算，结果在物理上才是正确的——8 位的 hex 颜色是 sRGB 编码的，如果混合结果需要"看起来对"而不只是"能跑起来"，先用 `srgbToLinear` 转一下。
+:::
+
 ### 格式正则
 
 用于校验颜色字符串的正则。`RGB_REGEX` 和 `RGBA_REGEX` **不允许空格**，匹配前请先去掉（`value.replace(/\s+/g, '')`）。

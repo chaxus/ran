@@ -46,6 +46,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | Method          | Description                                   | Detail                                   |
 | --------------- | --------------------------------------------- | ---------------------------------------- |
 | range           | Clamp number within specified range           | [range](./range.md)                      |
+| clamp / lerp / inverseLerp / remap / fit / linearstep / smoothstep | Shader-style interpolation & remapping | [range](./range.md) |
 | mathjs          | Precise number calculation function           | [mathjs](./mathjs.md)                    |
 | perToNum        | Convert percentage string to number           | [perToNum](./per_to_num.md)              |
 | transformNumber | Convert number to formatted string with units | [transformNumber](./transform_number.md) |
@@ -58,6 +59,8 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | hexToRgb    | Convert hexadecimal color value to RGB        | [hexToRgb](./hex_to_rgb.md)      |
 | rgbToHex    | Convert RGB values to hexadecimal color value | [rgbToHex](./rgb_to_hex.md)      |
 | randomColor | Generate random color object                  | [randomColor](./random_color.md) |
+| Color / ColorScheme | Color class, value classes, conversions, palette generator | [Color](./color.md) |
+| blendScreen / blendMultiply / blendOverlay / luma / vibrance / cosinePalette / srgbToLinear | Shader-style colour blend & grade math (0–1 channels) | [Color](./color.md) |
 
 ## Time Processing
 
