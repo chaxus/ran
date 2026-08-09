@@ -635,7 +635,7 @@ function sortNodes(n: number): void {
   if (zArr.length < n) {
     zArr = new Uint32Array(n);
     zBuf = new Uint32Array(n);
-    sortBuf = new Array(n);
+    sortBuf = Array.from({ length: n });
   }
   for (let i = 0; i < n; i++) zArr[i] = sortArr[i].z;
 

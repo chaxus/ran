@@ -202,9 +202,12 @@ export class Select extends RanElement {
    * (see input/index.ts `listenLabel`), so a labeled select and a labeled
    * input placed side by side in a form line up: same token, same "renders
    * above, reserves its own space, never overlaps" behavior. Associated via
-   * `aria-labelledby` rather than `<label for>`: the interactive element is
-   * this host with `role="combobox"` (set in connectedCallback), not a
-   * native form control the label's `for` could target.
+   * `aria-label` (plain text) rather than `aria-labelledby` pointing at the
+   * rendered `<label>`'s id: that label lives inside this select's own shadow
+   * root, and a plain `aria-labelledby` id-ref cannot cross into a shadow
+   * tree — even the host's own child shadow root counts as a separate tree.
+   * Verified directly: with `aria-labelledby`, the combobox's computed
+   * accessible name came back empty in the accessibility tree.
    */
   private _syncLabel = (value: string | null): void => {
     if (value != null) {
@@ -214,14 +217,14 @@ export class Select extends RanElement {
         if (!this.id) this.id = `ran-select-${++selectIdSeq}`;
         this._label = Label().class('ran-select-label').part('label').text(value).build() as HTMLLabelElement;
         this._label.id = `${this.id}-label`;
-        this.setAttribute('aria-labelledby', this._label.id);
         this._label.addEventListener('click', () => this.focus());
         this._shadowDom.insertBefore(this._label, this._select);
       }
+      this.setAttribute('aria-label', value);
     } else if (this._label) {
       this._label.remove();
       this._label = undefined;
-      this.removeAttribute('aria-labelledby');
+      this.removeAttribute('aria-label');
     }
   };
   /**
@@ -940,16 +943,20 @@ export class Select extends RanElement {
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return;
     if (name === 'disabled' && this._select) {
-      if (!newValue || newValue === 'false') {
-        this._select.removeAttribute('disabled');
-        this._selection.removeAttribute('disabled');
-        this.removeAttribute('aria-disabled');
-        if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
-      } else {
+      // `newValue` is the raw attribute string — for the standard boolean-attribute form
+      // `<r-select disabled>` that's `''`, which `!newValue` (the old check) treated as
+      // falsy and wrongly took the "not disabled" branch. Read the actual current state via
+      // the `disabled` getter (isDisabled/falseList) instead of re-deriving it from the string.
+      if (this.disabled) {
         this._select.setAttribute('disabled', '');
         this._selection.setAttribute('disabled', '');
         this.setAttribute('aria-disabled', 'true');
         this.tabIndex = -1;
+      } else {
+        this._select.removeAttribute('disabled');
+        this._selection.removeAttribute('disabled');
+        this.removeAttribute('aria-disabled');
+        if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
       }
     }
     if (name === 'value') this.syncSelectedFromValue(newValue);

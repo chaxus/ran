@@ -11,7 +11,7 @@ import { createAdapterEmitter, type EngineAdapter, type EngineQualityLevel } fro
 export function createHlsAdapter(): EngineAdapter {
   const emitter = createAdapterEmitter();
   let hls: Hls | undefined;
-  let levelMap = new Map<string, string>();
+  const levelMap = new Map<string, string>();
   let levels: EngineQualityLevel[] = [];
 
   const handleManifestLoaded = (_event: string, data: ManifestLoadedData): void => {
