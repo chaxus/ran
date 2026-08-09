@@ -35,4 +35,4 @@ const insert = (list: number[]): number[] => {
 
 ## Algorithm analysis
 
-Insertion sort in the implementation, usually use in-place sort (that is, only need to use O(1) of the additional space of the sort), so in the process of scanning from back to forward, the sorted elements need to be repeatedly moved backward step by step, to provide insertion space for the latest elements.
+Insertion sort is stable — the `while` loop only shifts elements strictly greater than `current`, so equal elements never cross — and sorts in place, needing only O(1) extra space. Its time complexity is O(n²) on average and in the worst case (a reverse-sorted input), but this implementation's `while` loop exits immediately when `list[preIndex]` is no longer greater than `current`, so an already-sorted (or nearly sorted) input runs in close to O(n) with no extra flag needed — unlike this page's bubble sort implementation, which always runs the full O(n²) regardless of input order.

@@ -38,4 +38,4 @@ const select = (list: number[]): number[] => {
 
 ## Algorithm analysis
 
-One of the most stable sorting algorithms, because whatever data goes in is O(n2) time complexity, so when using it, the smaller the data size, the better. The only benefit may be that it doesn't take up extra memory space. In theory, selection sorting may also be the most common sorting method that people think of.
+Selection sort is **not stable**: swapping the found minimum into place can jump it past other elements with an equal key, changing their relative order (e.g. sorting `[3a, 3b, 1]` by value, where `3a`/`3b` are equal-valued but distinguishable, leaves `3b` before `3a`). It sorts in place, needing only O(1) extra space, and is O(n²) in the best, average, **and** worst case — unlike insertion sort, an already-sorted input gets no speedup, because the inner loop always scans the entire remaining unsorted region to find the minimum. Its one real advantage is a bounded number of swaps: at most n-1, versus up to O(n²) for bubble or insertion sort, which matters when a swap is expensive relative to a comparison.

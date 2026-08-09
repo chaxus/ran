@@ -92,6 +92,34 @@ export function createChromeHandlers(deps: PlayerChromeDeps): PlayerChromeHandle
     removeClassToElement(refs.player, 'ran-player-buffering');
   };
 
+  // The speed/quality/subtitle `<r-select>` dropdown panels aren't
+  // descendants of `.ran-player-controller` — they portal straight into
+  // `.ran-player` via `getPopupContainerId` — so hiding the controller's
+  // opacity has no effect on them at all. Without this check, a user who
+  // opens one of those menus and then holds the mouse still for 2s (reading
+  // the options — an entirely normal thing to do) sees the *bar* fade out
+  // from under the *menu*, leaving the panel floating alone with no visible
+  // trigger beneath it. `r-select` reflects its open state as a real
+  // `aria-expanded` attribute on every open/close path (selecting an option,
+  // clicking away, Escape) regardless of what triggered it, so checking it
+  // here covers all of them.
+  const isAnySelectDropdownOpen = (): boolean => !!refs.player.querySelector('r-select[aria-expanded="true"]');
+
+  const scheduleControllerBarHide = (): void => {
+    state.controllerBarTimeId = setTimeout(() => {
+      if (isAnySelectDropdownOpen()) {
+        // Still open — don't give up on hiding, just recheck shortly. This
+        // also covers a mouse that never moves again after the menu closes,
+        // which the normal mousemove-driven re-arm below wouldn't catch.
+        scheduleControllerBarHide();
+        return;
+      }
+      refs.playerController.style.setProperty('opacity', '0');
+      clearTimeout(state.controllerBarTimeId);
+      state.controllerBarTimeId = undefined;
+    }, 2000);
+  };
+
   const showControllerBar = (e?: MouseEvent): void => {
     if (e) {
       const dom = e.target as HTMLElement;
@@ -110,11 +138,7 @@ export function createChromeHandlers(deps: PlayerChromeDeps): PlayerChromeHandle
         clearTimeout(state.controllerBarTimeId);
         state.controllerBarTimeId = undefined;
       }
-      state.controllerBarTimeId = setTimeout(() => {
-        refs.playerController.style.setProperty('opacity', '0');
-        clearTimeout(state.controllerBarTimeId);
-        state.controllerBarTimeId = undefined;
-      }, 2000);
+      scheduleControllerBarHide();
     } else {
       refs.playerController.style.setProperty('opacity', '1');
       if (state.controllerBarTimeId) {

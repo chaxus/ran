@@ -578,7 +578,20 @@ export class Select extends RanElement {
         // boundary-aware flip (which assumes viewport coordinates) doesn't
         // apply here, so fall back to the simple two-way placement.
         const rootRect = root.getBoundingClientRect();
-        const selectLeft = left - rootRect.left;
+        // Center the panel on the trigger rather than left-aligning it. The
+        // `width` set above forces the panel to match the trigger's own
+        // width, but a consumer can still make the *rendered* panel wider
+        // than that (e.g. `::part(dropdown) { min-width: … }`, so a longer
+        // option label isn't clipped on a deliberately compact trigger — see
+        // `r-player`'s speed/quality menus) — `min-width` wins over the
+        // inline `width` once it's larger. Reading the panel's real rendered
+        // width here (a synchronous layout read, but this only runs once per
+        // open, not on a hot path) and centering against it means: when the
+        // panel matches the trigger (the common case), this computes the
+        // exact same position as a plain left-align (zero offset) — it only
+        // shifts anything when the two widths actually diverge.
+        const panelWidth = this._selectionDropdown.getBoundingClientRect().width;
+        const selectLeft = left - rootRect.left - (panelWidth - width) / 2;
         let selectTop = bottom - rootRect.top + OFFSET;
         if (this.placement === 'top') {
           selectTop = top - rootRect.top - this._selectionDropdown.clientHeight - OFFSET;
