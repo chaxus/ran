@@ -1,3 +1,9 @@
+// NAMING NOTE: this directory/class is "tab"/Tabs, registering the *container*
+// element `<r-tabs>`. The individual pane element `<r-tab>` (singular) lives in
+// `../tabpane/` as class TabPane — the directory names are effectively swapped
+// from what the registered tags would suggest. Left as-is because `ranui/tab`
+// and `ranui/tabpane` are both public npm subpath exports; renaming either would
+// break real consumers' import paths.
 import { isDisabled, RanElement } from '@/utils/index';
 import tabCss from './index.less?inline';
 import { Div, EventManager, Slot, View } from '@/utils/builder';

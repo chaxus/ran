@@ -1,3 +1,11 @@
+// NAMING NOTE: this directory/class is "tabpane"/TabPane, but the element it
+// registers is `<r-tab>` (singular — one pane), and the *container* lives in
+// `../tab/` as class `Tabs`, registering `<r-tab**s**>`. The directory names are
+// effectively swapped from what the registered tags would suggest. This is left
+// as-is rather than renamed: both `ranui/tab` and `ranui/tabpane` are public npm
+// subpath exports (see package.json `exports`), so renaming either directory
+// would break real consumers' import paths. If you're looking for `<r-tab>`,
+// you're in the right file; if you're looking for `<r-tabs>`, see `../tab/`.
 import tabPaneCss from './index.less?inline';
 import { Slot, EventManager } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
@@ -109,7 +117,7 @@ export class TabPane extends RanElement {
     if (oldValue === newValue) return;
     if (this.key && this.parent?.updateAttribute) {
       if (name === 'icon') this.parent?.updateAttribute(this.key, 'icon', newValue);
-      if (name === 'iconSize') this.parent?.updateAttribute(this.key, 'iconSize', newValue);
+      if (name === 'iconsize') this.parent?.updateAttribute(this.key, 'iconSize', newValue);
       if (name === 'effect') this.parent?.updateAttribute(this.key, 'effect', newValue);
       if (name === 'disabled') this.parent?.updateAttribute(this.key, 'disabled', newValue);
     }

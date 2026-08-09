@@ -559,7 +559,9 @@ describe('r-tabs and r-tab contract', () => {
 
     const spy = vi.spyOn(tabs, 'updateAttribute');
 
-    tabPane.attributeChangedCallback('iconSize', '', '24');
+    // The DOM lowercases attribute names before invoking attributeChangedCallback,
+    // so the real callback name is 'iconsize', not 'iconSize'.
+    tabPane.attributeChangedCallback('iconsize', '', '24');
     expect(spy).toHaveBeenCalledWith('k1', 'iconSize', '24');
 
     tabPane.attributeChangedCallback('effect', '', 'slide');
@@ -567,6 +569,31 @@ describe('r-tabs and r-tab contract', () => {
 
     tabPane.attributeChangedCallback('disabled', '', 'true');
     expect(spy).toHaveBeenCalledWith('k1', 'disabled', 'true');
+  });
+
+  it('r-tab syncs iconSize to its header through a real setAttribute call, not just a manual attributeChangedCallback invocation', () => {
+    // Regression test for a case-sensitivity bug: 'iconSize' in observedAttributes
+    // never matched the DOM's lowercased attribute name, so a real setAttribute()
+    // after connect silently failed to update the rendered tab header's icon size.
+    const tabs = document.createElement('r-tabs') as any;
+    document.body.appendChild(tabs);
+
+    const tabPane = document.createElement('r-tab') as any;
+    tabPane.setAttribute('r-key', 'k1');
+    tabPane.setAttribute('label', 'A');
+    tabs.appendChild(tabPane);
+    tabPane.parent = tabs;
+
+    const tab1 = document.createElement('r-tab');
+    tab1.setAttribute('label', 'A');
+    tab1.setAttribute('r-key', 'k1');
+    const header = tabs.createTabHeader(tab1, 0);
+    tabs._nav.appendChild(header);
+    tabs.tabHeaderKeyMapIndex = { k1: 0 };
+
+    tabPane.setAttribute('iconSize', '24');
+
+    expect(header.getAttribute('iconSize')).toBe('24');
   });
 
   it('type getter returns flat by default', () => {
