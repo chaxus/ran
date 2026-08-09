@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getAllQueryString, getQuery, isInIframe, queryFlag } from '@/utils/bom';
+import { getAllQueryString, isInIframe, queryFlag } from '@/utils/bom';
 import { createStore, localStorageGetItem, localStorageRemoveItem, localStorageSetItem } from '@/utils/storage';
 import { resolveLocale } from '@/utils/lang';
 
@@ -35,10 +35,6 @@ describe('getAllQueryString', () => {
     expect(getAllQueryString('https://x.dev/a')).toEqual({});
     expect(getAllQueryString('')).toEqual({});
     expect(getAllQueryString()).toEqual({}); // no window in the node test env
-  });
-
-  it('getQuery is the same function', () => {
-    expect(getQuery('?a=1&b')).toEqual(getAllQueryString('?a=1&b'));
   });
 });
 

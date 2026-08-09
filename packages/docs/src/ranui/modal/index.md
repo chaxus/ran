@@ -50,6 +50,8 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 | `autoFocus`    | `boolean` | `true`  | Whether the first focusable element is focused on open |
 | `sheet`        | `string`  | `''`    | CSS injected into the shadow DOM                       |
 
+`closing` is a read-only attribute the element reflects on itself (not a settable property): present from the moment `close()` runs until the mask/dialog's fade-and-scale-out transition actually finishes (~0.3s later, same timing as the `afterclose` event). Useful for a host page that needs the modal to still count as "present" through that visual tail — see Best Practices below.
+
 ### Title `title`
 
 ```html
@@ -215,3 +217,4 @@ r-modal::part(mask) {
 - **Footer actions**: Put primary/secondary buttons in `slot="footer"`; the footer bar only appears when the slot has content.
 - **Non-dismissible flows**: Set `closable="false"` and `maskClosable="false"` to force an explicit choice.
 - **One-off dialogs**: Use `Modal.confirm` / `Modal.info` for quick prompts instead of authoring markup.
+- **Escalating a host page above the modal while it's open**: match `:has(r-modal[open]), :has(r-modal[closing])`, not just `[open]` — `open` is removed the instant `close()` runs, but the mask/dialog transition keeps painting for ~0.3s more, and dropping a z-index escalation mid-fade lets the still-visible mask repaint under whatever it was lifted above (this repo's own docs site hit exactly this — see `packages/docs/.vitepress/components/Demo.vue`).

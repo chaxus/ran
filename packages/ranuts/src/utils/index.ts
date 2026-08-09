@@ -20,7 +20,6 @@ import {
 import {
   MessageCodec,
   arrayBufferToString,
-  changeHumpToLowerCase,
   checkEncoding,
   clearBr,
   clearStr,
@@ -29,7 +28,6 @@ import {
   isString,
   md5,
   randomString,
-  str2Xml,
   strParse,
   toFullWidth,
   toHalfWidth,
@@ -51,16 +49,13 @@ import {
   getCookieByName,
   getFrame,
   getPixelRatio,
-  getQuery,
   getWindow,
   imageRequest,
   isInIframe,
   isSafari,
   networkSpeed,
   queryFlag,
-  removeGhosting,
   requestUrlToBuffer,
-  retain,
 } from './bom';
 import {
   BRIDGE_MARKER,

@@ -60,6 +60,7 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 | `tint`        | `string`  | subtle  | Glass fill tint — any CSS background value.                                                       |
 | `sheen`       | `boolean` | `false` | Animated specular sweep across the surface.                                                       |
 | `interactive` | `boolean` | `false` | Hover lift + press-scale feedback, for clickable glass. Also makes the host a keyboard-operable button — `role="button"`, a tab stop, Enter/Space act like a click. |
+| `rim`         | `boolean` | `false` | Opt-in WebGL specular rim + chromatic edge for a more physically-lit look. Falls back to the plain CSS specular gradient when WebGL is unavailable. |
 
 ### Refraction `displace`
 
@@ -92,6 +93,23 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 <r-glass sheen interactive displace="36">
   <div>Hover &amp; press me</div>
 </r-glass>
+```
+
+### Rim — WebGL specular edge (opt-in)
+
+`rim` adds a second highlight layer rendered with WebGL: a specular rim lit from a fixed top-left light direction, plus a subtle chromatic (RGB) fringe at the panel's rounded-rect border. Unlike the `displace` refraction, **it never samples the backdrop** — the shader only knows the panel's own width/height/corner radius, so it costs none of the interactivity/accessibility tradeoffs a full backdrop-capturing WebGL approach would (see [Notes](#notes)). It's a purely decorative layer on top of the same `backdrop-filter` frost; turning it on or off never changes what's behind the glass or how it's sampled.
+
+Silently falls back to the plain CSS specular gradient when WebGL is unavailable (very old browsers, WebGL disabled, SSR) — there's no broken/blank state to design around.
+
+<Demo>
+  <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
+    <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">no rim</div></r-glass>
+    <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
+  </div>
+</Demo>
+
+```html
+<r-glass>…plain CSS specular…</r-glass> <r-glass rim>…WebGL rim + chromatic edge…</r-glass>
 ```
 
 ### CSS parts & tokens
