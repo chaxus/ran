@@ -53,3 +53,16 @@ test('popover — click trigger again closes it', async ({ page }) => {
   await trigger.click();
   await expect(content).toHaveCSS('display', 'none');
 });
+
+test('popover — removing the host while open also removes the portaled panel', async ({ page }) => {
+  await mount(page, `<div id="host-wrap">${POPOVER_HTML}</div>`);
+  const trigger = page.locator('r-button');
+  await trigger.click();
+  await expect(page.locator('.ran-popover-dropdown')).toHaveCSS('display', 'block');
+
+  // Simulates an SPA route swap / conditional unmount tearing down the host
+  // while its panel is open and portaled to document.body.
+  await page.evaluate(() => document.getElementById('host-wrap')?.remove());
+
+  await expect(page.locator('.ran-popover-dropdown')).toHaveCount(0);
+});

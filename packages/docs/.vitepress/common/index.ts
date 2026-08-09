@@ -56,7 +56,7 @@ export const UTILS_PATH = `${HOME}src/ranuts/utils/`;
 
 export const RANUI_PATH = `${HOME}src/ranui/`;
 
-export const ARTICLE_PATH = `${HOME}src/article/design_mode`;
+export const ARTICLE_PATH = `${HOME}src/article/doc_preview`;
 
 export const GITHUB = 'https://github.com/chaxus/ran';
 

@@ -6,25 +6,11 @@ import { GITHUB, EDITOR } from '../../common/index.ts';
 const articleEnSidebar: DefaultTheme.SidebarItem[] = [
   {
     items: [
-      { text: '23 classic design patterns', link: '/src/article/design_mode' },
       { text: 'How AI agents work', link: '/src/article/ai/' },
       { text: 'Functional programming', link: '/src/article/functional_programming' },
       { text: 'Web document preview', link: '/src/article/doc_preview' },
       { text: 'Web video encryption', link: '/src/article/video' },
       { text: 'Visual rendering engine', link: '/src/article/visual' },
-      { text: 'Abstract syntax tree', link: '/src/article/ast_parse/tokenizer' },
-      {
-        text: 'TypeScript type system',
-        collapsed: true,
-        items: [
-          { text: 'Overview', link: '/src/article/typescript/' },
-          { text: 'Counting with array length', link: '/src/article/typescript/calculate' },
-          { text: 'Pattern matching and extraction', link: '/src/article/typescript/pattern' },
-          { text: 'Reconstruction for transformation', link: '/src/article/typescript/reconstruction' },
-          { text: 'Recursive reuse', link: '/src/article/typescript/recursion' },
-          { text: 'Distributed conditional types', link: '/src/article/typescript/union_type' },
-        ],
-      },
       {
         text: 'Sorting algorithm',
         link: '/src/article/sort/',
@@ -67,7 +53,7 @@ const themeEnConfig: DefaultTheme.Config = {
   },
   nav: [
     { text: 'Home', link: '/' },
-    { text: 'Articles', link: '/src/article/design_mode' },
+    { text: 'Articles', link: '/src/article/doc_preview' },
     { text: 'Doc Editor', link: EDITOR },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],

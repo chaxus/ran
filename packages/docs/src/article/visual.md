@@ -95,7 +95,7 @@ We'll implement a `start` method and a `render` method following these two rende
 
 Before rendering, we also need to consider extensibility. Although only `canvas` rendering is used for now, we should obviously leave room for extending to `webGL` and `webGPU` rendering capability.
 
-So we design a `getRenderer` method to make that choice. Based on the passed-in `prefer`, it selects the rendering method. Following the [Interface Segregation Principle](/src/article/design_mode), each rendering method is its own independent class.
+So we design a `getRenderer` method to make that choice. Based on the passed-in `prefer`, it selects the rendering method. Following the Interface Segregation Principle, each rendering method is its own independent class.
 
 ```ts
 export const getRenderer = (options: IApplicationOptions): Renderer => {

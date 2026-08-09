@@ -18,7 +18,7 @@ a virtual DOM, and Node server tooling.
 
 - [ranui — Web Components UI library](https://ran.chaxus.com/src/ranui/): button, input, select, checkbox, radio, card, tabs, modal, popover, dropdown, progress, message, icon, and more `<r-*>` elements, with theming, i18n, routing and SSR
 - [ranuts — utility library](https://ran.chaxus.com/src/ranuts/): functional (debounce, throttle, memoize, compose), string/object/number/colour utils, storage and IndexedDB, Web Worker request/response on both ends, Service Worker caching and precache, text pagination, postMessage bridge, ZIP, i18n, audio recording, speech-to-text, a 2D rendering engine, virtual DOM, TOTP
-- [Articles](https://ran.chaxus.com/src/article/design_mode): design-pattern and front-end engineering notes (parsers, compilers, bundlers, TypeScript, algorithms)
+- [Articles](https://ran.chaxus.com/src/article/doc_preview): front-end engineering notes — web document preview, video encryption, a 2D/WebGL/WebGPU rendering engine, sorting algorithms, functional programming, AI agents, linear algebra
 
 ## Entry points
 

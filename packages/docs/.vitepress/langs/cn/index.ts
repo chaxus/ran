@@ -6,30 +6,11 @@ import { GITHUB, EDITOR } from '../../common/index.ts';
 const articleCnSidebar: DefaultTheme.SidebarItem[] = [
   {
     items: [
-      { text: '23 种经典设计模式', link: '/cn/src/article/design_mode' },
       { text: 'AI Agent 原理', link: '/cn/src/article/ai/' },
       { text: '函数式编程', link: '/cn/src/article/functional_programming' },
       { text: 'web 文档预览方案', link: '/cn/src/article/doc_preview' },
       { text: 'Web 视频加密动态方案', link: '/cn/src/article/video' },
       { text: '可视化渲染引擎', link: '/cn/src/article/visual' },
-      { text: '抽象语法树', link: '/cn/src/article/ast_parse/tokenizer' },
-      {
-        text: 'Service Worker (sw)',
-        collapsed: true,
-        items: [{ text: '缓存策略与预取', link: '/cn/src/ranuts/sw/' }],
-      },
-      {
-        text: 'TypeScript 类型系统',
-        collapsed: true,
-        items: [
-          { text: '总览', link: '/cn/src/article/typescript/' },
-          { text: '用数组长度做计数', link: '/cn/src/article/typescript/calculate' },
-          { text: '模式匹配与提取', link: '/cn/src/article/typescript/pattern' },
-          { text: '重新构造做变换', link: '/cn/src/article/typescript/reconstruction' },
-          { text: '递归复用', link: '/cn/src/article/typescript/recursion' },
-          { text: '分布式条件类型', link: '/cn/src/article/typescript/union_type' },
-        ],
-      },
       {
         text: '排序算法',
         link: '/cn/src/article/sort/',
@@ -72,7 +53,7 @@ const themeCnConfig: DefaultTheme.Config = {
   },
   nav: [
     { text: '首页', link: '/cn/' },
-    { text: '文章', link: '/cn/src/article/design_mode' },
+    { text: '文章', link: '/cn/src/article/doc_preview' },
     { text: '文档编辑器', link: EDITOR },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],
@@ -380,6 +361,11 @@ const themeCnConfig: DefaultTheme.Config = {
         text: '虚拟 DOM (vnode)',
         collapsed: true,
         items: [{ text: '虚拟 DOM', link: '/cn/src/ranuts/vnode/' }],
+      },
+      {
+        text: 'Service Worker (sw)',
+        collapsed: true,
+        items: [{ text: '缓存策略与预取', link: '/cn/src/ranuts/sw/' }],
       },
       {
         text: 'Node 服务',
