@@ -1,6 +1,7 @@
 import { BatchRenderer } from '@/utils/visual/render/batchRenderer';
 import { initShader, setupVertexLayout } from '@/utils/visual/render/utils/webgl/initShader';
 import { toRgbArray } from '@/utils/visual/render/utils/index';
+import { WebGLRenderTarget } from '@/utils/visual/render/renderTarget';
 import type { IApplicationOptions } from '@/utils/visual/types';
 
 // The WebGL and WebGPU backends share BatchRenderer's batching pipeline (triangulate → pack
@@ -14,6 +15,11 @@ export class WebGLRenderer extends BatchRenderer {
     u_root_transform: WebGLUniformLocation;
     u_projection_matrix: WebGLUniformLocation;
   };
+  // Lazily created only when `filters` are set: two ping-pong scene targets + a shared
+  // full-screen quad. Nothing here allocates when the renderer runs without filters.
+  private targetA?: WebGLRenderTarget;
+  private targetB?: WebGLRenderTarget;
+  private quadBuffer?: WebGLBuffer;
 
   constructor(options: IApplicationOptions) {
     super(options);
@@ -79,7 +85,59 @@ export class WebGLRenderer extends BatchRenderer {
 
   protected draw(): void {
     const gl = this.gl;
+    const width = this.canvasEle.width;
+    const height = this.canvasEle.height;
+
+    // Fast path: no post-processing — draw the batch straight to the canvas (unchanged).
+    if (this.filters.length === 0) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, width, height);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_INT, 0);
+      return;
+    }
+
+    this.ensurePostResources(width, height);
+    const targetA = this.targetA as WebGLRenderTarget;
+    const targetB = this.targetB as WebGLRenderTarget;
+
+    // Draw the scene into the first target instead of the canvas.
+    targetA.bind();
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_INT, 0);
+
+    // Run the filter chain, ping-ponging between the two targets; the last pass writes to the
+    // canvas (output = null).
+    let read = targetA;
+    let write = targetB;
+    for (let i = 0; i < this.filters.length; i++) {
+      const isLast = i === this.filters.length - 1;
+      this.filters[i].apply(gl, this.quadBuffer as WebGLBuffer, read.texture, isLast ? null : write, width, height);
+      if (!isLast) {
+        const swap = read;
+        read = write;
+        write = swap;
+      }
+    }
+
+    // Filters bound their own program/buffers/attributes — restore the batch state so the next
+    // frame's transform uniforms and draw target the batch program again.
+    gl.useProgram(this.program);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.glVertexBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.glIndexBuffer);
+    setupVertexLayout(gl, this.program);
+  }
+
+  private ensurePostResources(width: number, height: number): void {
+    const gl = this.gl;
+    if (!this.quadBuffer) {
+      this.quadBuffer = gl.createBuffer() as WebGLBuffer;
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.quadBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      this.targetA = new WebGLRenderTarget(gl);
+      this.targetB = new WebGLRenderTarget(gl);
+    }
+    this.targetA?.resize(width, height);
+    this.targetB?.resize(width, height);
   }
 }

@@ -6,7 +6,7 @@ description: 'The ranui Input (<r-input>) is a basic form control for keyboard e
 
 Input component for entering content via keyboard, the most basic form control.
 
-> **Use when** you need a text field with a floating label, leading icon, validation status/message, and native form participation — `<r-input>` covers text, password, and number entry.
+> **Use when** you need a text field with a static top-aligned label, leading icon, validation status/message, and native form participation — `<r-input>` covers text, password, and number entry.
 
 ## Quick Start
 
@@ -26,7 +26,7 @@ Input component for entering content via keyboard, the most basic form control.
 
 | Property      | Type      | Default | Description                                                                        |
 | ------------- | --------- | ------- | ---------------------------------------------------------------------------------- |
-| `label`       | `string`  | `''`    | Floating label for a Material Design style experience                              |
+| `label`       | `string`  | `''`    | Static caption rendered above the field                                            |
 | `placeholder` | `string`  | `''`    | Placeholder text, forwarded to the native `<input>`                                |
 | `value`       | `string`  | `''`    | Field value; reflected as an attribute and relayed to the form                     |
 | `disabled`    | `boolean` | `false` | Whether the input is disabled                                                      |
@@ -43,7 +43,9 @@ Input component for entering content via keyboard, the most basic form control.
 
 ### Label `label`
 
-Provides a Material Design style floating label.
+A static caption rendered above the field — always visible, never overlaps adjacent
+content, and doesn't shift the layout on focus (top-aligned labels also complete forms
+faster than inline/floating ones — see [Luke Wroblewski's eye-tracking research](https://www.lukew.com/ff/entry.asp?504=)).
 
 <Demo column>
   <r-input label="Username"></r-input>
@@ -205,7 +207,7 @@ Exposed via `::part()` for external styling.
 | --------- | --------------------------------------------------------- |
 | `input`   | The field wrapper                                         |
 | `content` | The inner native `<input>` control                        |
-| `label`   | The floating label (present when `label` set)             |
+| `label`   | The static label above the field (present when `label` set) |
 | `message` | The helper / validation text (present when `message` set) |
 
 ```css

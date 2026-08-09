@@ -566,3 +566,106 @@ export class ColorScheme {
     return new this(colorVal, [-45, 45, 180]);
   }
 }
+
+/** An RGB triple with each channel in 0..1 (linear or sRGB depending on the operation). */
+export type RGB = [number, number, number];
+
+/**
+ * @description: Convert one sRGB channel (0..1) to linear-light (IEC 61966-2-1 transfer function).
+ * @param {number} c sRGB channel, 0..1
+ * @return {number} linear-light channel, 0..1
+ */
+export const srgbToLinear = (c: number): number => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+
+/**
+ * @description: Convert one linear-light channel (0..1) to sRGB.
+ * @param {number} c linear-light channel, 0..1
+ * @return {number} sRGB channel, 0..1
+ */
+export const linearToSrgb = (c: number): number => (c <= 0.0031308 ? c * 12.92 : 1.055 * c ** (1 / 2.4) - 0.055);
+
+/**
+ * @description: Perceived brightness (luma) of an RGB colour using Rec. 601 weights. Channels may be 0..1 or 0..255 — the result keeps that scale.
+ * @param {number} r
+ * @param {number} g
+ * @param {number} b
+ * @return {number}
+ */
+export const luma = (r: number, g: number, b: number): number => 0.299 * r + 0.587 * g + 0.114 * b;
+
+const mapRGB = (a: RGB, b: RGB, f: (x: number, y: number) => number): RGB => [
+  f(a[0], b[0]),
+  f(a[1], b[1]),
+  f(a[2], b[2]),
+];
+
+/**
+ * @description: Screen blend of two colours (channel-wise `1 - (1 - base)(1 - blend)`). Channels in 0..1.
+ * @param {RGB} base
+ * @param {RGB} blend
+ * @return {RGB}
+ */
+export const blendScreen = (base: RGB, blend: RGB): RGB => mapRGB(base, blend, (x, y) => 1 - (1 - x) * (1 - y));
+
+/**
+ * @description: Multiply blend of two colours (channel-wise `base * blend`). Channels in 0..1.
+ * @param {RGB} base
+ * @param {RGB} blend
+ * @return {RGB}
+ */
+export const blendMultiply = (base: RGB, blend: RGB): RGB => mapRGB(base, blend, (x, y) => x * y);
+
+/**
+ * @description: Overlay blend of two colours (multiply in shadows, screen in highlights). Channels in 0..1.
+ * @param {RGB} base
+ * @param {RGB} blend
+ * @return {RGB}
+ */
+export const blendOverlay = (base: RGB, blend: RGB): RGB =>
+  mapRGB(base, blend, (x, y) => (x < 0.5 ? 2 * x * y : 1 - 2 * (1 - x) * (1 - y)));
+
+/**
+ * @description: Adjust brightness and contrast of a colour: `(c - 0.5) * contrast + 0.5 + brightness` per channel. Channels in 0..1.
+ * @param {RGB} color
+ * @param {number} brightness additive, e.g. 0 = none
+ * @param {number} contrast multiplicative, e.g. 1 = none
+ * @return {RGB}
+ */
+export const brightnessContrast = (color: RGB, brightness: number, contrast: number): RGB =>
+  color.map((c) => (c - 0.5) * contrast + 0.5 + brightness) as RGB;
+
+/**
+ * @description: Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
+ * @param {RGB} color
+ * @param {number} amount
+ * @return {RGB}
+ */
+export const saturation = (color: RGB, amount: number): RGB => {
+  const grey = 0.2125 * color[0] + 0.7154 * color[1] + 0.0721 * color[2];
+  return color.map((c) => grey + (c - grey) * amount) as RGB;
+};
+
+/**
+ * @description: Vibrance — saturates muted colours more than already-saturated ones. `amount` > 0 boosts, < 0 mutes. Channels in 0..1.
+ * @param {RGB} color
+ * @param {number} amount
+ * @return {RGB}
+ */
+export const vibrance = (color: RGB, amount: number): RGB => {
+  const average = (color[0] + color[1] + color[2]) / 3;
+  const mx = Math.max(color[0], color[1], color[2]);
+  const t = (mx - average) * (-amount * 3);
+  return color.map((c) => c + (mx - c) * t) as RGB;
+};
+
+/**
+ * @description: Inigo Quilez cosine gradient palette: `a + b * cos(2π(c·t + d))`. Each of `a,b,c,d` is an RGB triple; `t` is the position 0..1. Returns an RGB triple.
+ * @param {number} t position along the gradient
+ * @param {RGB} a base / offset
+ * @param {RGB} b amplitude
+ * @param {RGB} c frequency
+ * @param {RGB} d phase
+ * @return {RGB}
+ */
+export const cosinePalette = (t: number, a: RGB, b: RGB, c: RGB, d: RGB): RGB =>
+  [0, 1, 2].map((i) => a[i] + b[i] * Math.cos(2 * Math.PI * (c[i] * t + d[i]))) as RGB;

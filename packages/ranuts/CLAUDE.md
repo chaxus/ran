@@ -110,8 +110,18 @@ A PixiJS-style 2D engine. The non-obvious parts, so you don't have to re-derive 
   aligned. GPU vertex colors are premultiplied + packed little-endian into one u32.
 - **Inherent backend difference**: stroke/join geometry is native `ctx.stroke()` on Canvas
   vs. custom triangulation (`render/utils/verticy.ts`) on GPU — not pixel-identical by design.
+- **Post-processing (WebGL)**: `app.filters = [new ColorAdjustFilter({ saturation: 1.4 })]`
+  runs full-screen passes after the scene. The WebGL backend draws the batch into a
+  `WebGLRenderTarget` (FBO) and ping-pongs the `Filter` chain to the canvas; the last pass
+  outputs to the screen. Extend `Filter` with any fragment shader (it samples the previous
+  pass through `u_texture`/`u_resolution`). Zero cost when `filters` is empty (the batch draws
+  straight to the canvas, unchanged); Canvas/WebGPU ignore filters. Lives in
+  `render/{renderTarget,filter}.ts`.
 
 Tests for the color pipeline and batch packing live next to the source as `*.test.ts`.
+The colour-grade + interpolation helpers used by shaders (`fit`/`remap`/`lerp`/`smoothstep`
+in `utils/number.ts`; `srgbToLinear`/`luma`/`blend*`/`saturation`/`cosinePalette` in
+`utils/color.ts`) are exported from `ranuts/utils` for CPU-side reuse.
 
 ---
 

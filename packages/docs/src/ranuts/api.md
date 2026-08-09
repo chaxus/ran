@@ -1,6 +1,6 @@
 ---
 title: ranuts API reference
-description: Every symbol exported by ranuts — 381 exports across 6 entry points, with signatures and descriptions.
+description: Every symbol exported by ranuts — 403 exports across 6 entry points, with signatures and descriptions.
 ---
 
 # ranuts API (Generated)
@@ -13,14 +13,14 @@ constraints, conventions) read [CLAUDE.md](https://github.com/chaxus/ran/blob/ma
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**381 exports** across 6 entry points. Generated at 2026-08-09T03:48:42.025Z.
+**403 exports** across 6 entry points. Generated at 2026-08-09T04:33:57.199Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 299 exports
+- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 317 exports
 - [`ranuts/sw`](#ranutssw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
-- [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 12 exports
+- [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 16 exports
 - [`ranuts/i18n`](#ranutsi18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 9 exports
 - [`ranuts/vnode`](#ranutsvnode) — Snabbdom-style virtual DOM · _browser_ · 26 exports
 
@@ -43,10 +43,15 @@ import { /* … */ } from 'ranuts/utils';
 - `arrayBufferToString(buffer: ArrayBuffer | Uint8Array) => string` — Decode bytes into a string using the sniffed encoding. Required when reading
 - `audioVendor() => Promise<string>` — Audio fingerprint. 1. Generate an audio stream (triangle wave), run an FFT over it and hash the result with SHA. 2. Generate an audio stream (sine wave), run it through dynamic compression and hash with MD5.
 - `autosizeTextarea(element: HTMLTextAreaElement) => (() => void)` — Make a `<textarea>` grow and shrink with its content, so a long message is
+- `blendMultiply(base: RGB, blend: RGB) => RGB` — Multiply blend of two colours (channel-wise `base * blend`). Channels in 0..1.
+- `blendOverlay(base: RGB, blend: RGB) => RGB` — Overlay blend of two colours (multiply in shadows, screen in highlights). Channels in 0..1.
+- `blendScreen(base: RGB, blend: RGB) => RGB` — Screen blend of two colours (channel-wise `1 - (1 - base)(1 - blend)`). Channels in 0..1.
+- `brightnessContrast(color: RGB, brightness: number, contrast: number) => RGB` — Adjust brightness and contrast of a colour: `(c - 0.5) * contrast + 0.5 + brightness` per channel. Channels in 0..1.
 - `buildOffsets(lengths: readonly number[]) => number[]` — The global start offset of every chunk in the concatenated coordinate
 - `canvasVendor() => string | null`
 - `changeHumpToLowerCase(str: string) => string`
 - `checkEncoding(uint8Array: Uint8Array) => string`
+- `clamp(value: number, min: number, max: number) => number` — Clamp `value` into the inclusive range `[min, max]`.
 - `clearBr(str?: string) => string` — Strip whitespace, line breaks and HTML tags out of a string
 - `clearStr(str: string, options?: ClearStrOption) => string` — Trim surrounding whitespace, percent-decode, and drop surrounding quotes
 - `cloneDeep<T>(value: T, cloneMap?: WeakMap<object, any>) => T` — Deep clone, covering the complex built-in types and circular references.
@@ -55,6 +60,7 @@ import { /* … */ } from 'ranuts/utils';
 - `computePlacement(options: ComputePlacementOptions) => ComputedPlacement` — Position a floating panel relative to an anchor rect: flips to the opposite
 - `connection() => number | undefined` — Current network status: type, throughput, and whether the connection changed
 - `convertImageToBase64(file: File) => Promise<convertImageToBase64Return>` — Convert an image to base64
+- `cosinePalette(t: number, a: RGB, b: RGB, c: RGB, d: RGB) => RGB` — Inigo Quilez cosine gradient palette: `a + b * cos(2π(c·t + d))`. Each of `a,b,c,d` is an RGB triple; `t` is the position 0..1. Returns an RGB triple.
 - `crc32(data: Uint8Array) => number` — CRC32 checksum (IEEE 802.3 polynomial), the one ZIP stores per entry.
 - `create(tagName: string, options?: ElementCreationOptions) => Chain`
 - `createData(params?: Record<string, unknown>) => Record<string, unknown>` — Build the standard envelope that accompanies a report — page URL, referrer,
@@ -81,6 +87,7 @@ import { /* … */ } from 'ranuts/utils';
 - `escapeHtml(string?: string | number | null) => string`
 - `fanShapedByArc(ctx: CanvasRenderingContext2D, maxRadius: number, start: number, end: number, gutter: number) => void` — Trace a pie slice with arc(), including the gutter between slices.
 - `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the properties whose values appear in `list` — typically used to drop empty strings and nulls
+- `fit(value: number, a1: number, a2: number, b1: number, b2: number) => number` — Remap `value` from `[a1, a2]` onto `[b1, b2]` and clamp to the output range — the shader `fit`.
 - `formatDate(value?: DateInput, pattern?: string) => string` — Format a date with a token pattern. Accepts a timestamp, a date string, a
 - `formatDuration(seconds: number) => string` — Format an elapsed number of **seconds** as a colon-separated clock duration,
 - `formatJson(value: string | object, onError?: (error: Error) => void, indent?: number) => string` — Pretty-print JSON. Accepts an object or a JSON string (single quotes are
@@ -124,6 +131,7 @@ import { /* … */ } from 'ranuts/utils';
 - `imageRequest(url?: string) => Promise<number>` — Request an image (used to time the network)
 - `indexForOffset(offsets: readonly number[], offset: number) => number` — Binary-search which chunk a global offset falls into — the last index
 - `inflateRaw(data: Uint8Array) => Promise<Uint8Array>` — Decompress raw DEFLATE bytes (no zlib or gzip wrapper) — the form ZIP
+- `inverseLerp(a: number, b: number, value: number) => number` — Inverse of `lerp` — where `value` sits between `a` and `b`, as 0..1. Returns 0 when `a === b`. Not clamped.
 - `isBangDevice() => boolean`
 - `isEqual(value: any, other: any, seen?: Map<any, any>) => boolean` — Deep-compare two values.
 - `isImageSize(file: File, width?: number, height?: number) => Promise<boolean>` — Check an image's dimensions against a given width / height. When both are
@@ -134,10 +142,14 @@ import { /* … */ } from 'ranuts/utils';
 - `isString(obj: unknown) => boolean`
 - `isUrlCached(url: string) => Promise<boolean>` — Whether a URL is already in CacheStorage. When probing a group of files,
 - `isWeiXin() => boolean` — Whether this is the WeChat in-app browser
+- `lerp(a: number, b: number, t: number) => number` — Linear interpolation from `a` to `b` by `t` (t=0 → a, t=1 → b). Not clamped.
+- `linearstep(edge0: number, edge1: number, x: number) => number` — Linear ramp — 0 below `edge0`, 1 above `edge1`, a straight line between (the shader `linearstep`, no smoothing).
+- `linearToSrgb(c: number) => number` — Convert one linear-light channel (0..1) to sRGB.
 - `loadScript({ type, content }: LoadScriptOptions) => Promise<{ success: boolean; }>` — Inject one script dynamically, de-duplicated by content.
 - `localStorageGetItem(name: string) => string` — Read a string from localStorage, or `''` when missing or unavailable.
 - `localStorageRemoveItem(name: string) => void` — Remove a key from localStorage. Silently does nothing when storage is unavailable.
 - `localStorageSetItem(name: string, value: string) => void` — Write a string to localStorage. Silently does nothing when storage is
+- `luma(r: number, g: number, b: number) => number` — Perceived brightness (luma) of an RGB colour using Rec. 601 weights. Channels may be 0..1 or 0..255 — the result keeps that scale.
 - `matchMediaQuery(query: string) => boolean` — Read whether a media query currently matches, synchronously. Returns false under SSR.
 - `mathjs(a: number, type: string, b: number) => ComputeNumberResult`
 - `md5(str: string) => string` — MD5 hash function implementation
@@ -173,6 +185,7 @@ import { /* … */ } from 'ranuts/utils';
 - `readFileAsUint8Array(blob: Blob) => Promise<Uint8Array<ArrayBuffer>>` — Read a File / Blob as a Uint8Array (pair with checkEncoding / arrayBufferToString for encoding sniffing)
 - `readZipEntries(bytes: Uint8Array) => ZipEntry[]` — Read an archive's central directory. Returns `[]` for anything that is not
 - `readZipEntry(bytes: Uint8Array, entry: string | ZipEntry) => Promise<Uint8Array | null>` — Extract one entry's decompressed bytes. Resolves `null` when the entry is
+- `remap(value: number, a1: number, a2: number, b1: number, b2: number) => number` — Linearly remap `value` from range `[a1, a2]` onto `[b1, b2]`. Not clamped (GLSL-style map).
 - `removeClassToElement(element: Element, removeClass: string) => void` — Remove a class from an element
 - `removeGhosting(event: DragEvent) => void` — Remove the drag event's ghost image
 - `replaceOld(source: any, name: string, replacement: (...args: unknown[]) => unknown, isForced?: boolean) => () => void` — Replace a property on an object, wrapping whatever was there before.
@@ -189,6 +202,7 @@ import { /* … */ } from 'ranuts/utils';
 - `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
 - `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
 - `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
+- `saturation(color: RGB, amount: number) => RGB` — Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
 - `scriptOnLoad(urls: string[], append?: HTMLElement, callback?: () => void) => Promise<void>` — Insert script/link tags dynamically
 - `segmentByRanges<T>(text: string, chunkStart: number, ranges: readonly OffsetRange<T>[]) => Segment<T>[]` — Split one chunk of text into a sequence of plain / matched spans according
 - `serveWorker<Req extends WorkerRequestBase, Res extends object = object, Progress = unknown>(handler: (request: Req, context: WorkerHandlerContext<Progress>) =>…` — Serve requests inside a Web Worker, mirroring {@link WorkerClient} on the
@@ -197,6 +211,8 @@ import { /* … */ } from 'ranuts/utils';
 - `setMime(ext: string, mimeType: string) => Map<string, string>`
 - `setReportUrl(next: ReportConfig | string) => void` — Configure the default reporting endpoint (and optionally the cookie holding
 - `singleFlight<T>(fn: () => Promise<T>) => SingleFlight<T>` — The async flavour of "run once": concurrent callers share one in-flight
+- `smoothstep(edge0: number, edge1: number, x: number) => number` — Smooth Hermite interpolation between 0 and 1 for `edge0 < x < edge1` (GLSL `smoothstep`).
+- `srgbToLinear(c: number) => number` — Convert one sRGB channel (0..1) to linear-light (IEC 61966-2-1 transfer function).
 - `str2Xml(xmlStr: string, format?: DOMParserSupportedType) => HTMLElement | undefined` — Parse a string into XML using the given MIME type
 - `strParse(str?: string, sep?: string | RegExp, eq?: string | RegExp) => Record<string, string>` — Parse a delimited string into an object, e.g.
 - `throttle<T extends (...args: any[]) => any>(fn: T, delay?: number) => Throttled<T>` — Throttle — under a burst of calls, run at a fixed interval: the first call
@@ -209,6 +225,7 @@ import { /* … */ } from 'ranuts/utils';
 - `transformText(content: string | ArrayBuffer) => TransformText | undefined`
 - `truncate(value: string, options: TruncateOptions | number) => string` — Shorten a string to a maximum length, marking the cut with an ellipsis.
 - `useI18n<TDict extends StringValues<TDict> = MessageDict>() => I18nCore<TDict> | null` — The active global instance, or null when none was created. Pass the same
+- `vibrance(color: RGB, amount: number) => RGB` — Vibrance — saturates muted colours more than already-saturated ones. `amount` > 0 boosts, < 0 mutes. Channels in 0..1.
 - `watchMediaQuery(query: string, callback: (matches: boolean) => void) => (() => void)` — Watch a media query. The callback **fires once synchronously with the
 - `webglVendor() => { vendor: string; renderer: string; } | null`
 - `whenIdle(callback: () => void, options?: WhenIdleOptions) => (() => void)` — Run a callback while the browser is idle, falling back to setTimeout where
@@ -311,6 +328,7 @@ import { /* … */ } from 'ranuts/utils';
 - `type MessageDict`
 - `type Placement`
 - `type RelativeStyle` — `'compact'` is ours; the other three are `Intl.RelativeTimeFormat` styles.
+- `type RGB` — An RGB triple with each channel in 0..1 (linear or sRGB depending on the operation).
 - `type SpeechErrorKind` — `denied` means the user or the browser refused the microphone — worth surfacing.
 - `type StringValues` — "An object whose values are all strings" — the constraint the dictionary type parameter
 - `type TextLanguage` — Coarse language bucket: Chinese / English / other only
@@ -429,11 +447,15 @@ import { /* … */ } from 'ranuts/visual';
 ### Classes
 
 - `class Application`
+- `class ColorAdjustFilter` — A ready-made colour-grade filter: brightness, contrast and saturation. Mirrors the
 - `class Container`
+- `class Filter` — A full-screen post-processing pass. Sample the previous pass through `u_texture` (and
 - `class Graphics`
+- `class WebGLRenderTarget`
 
 ### Interfaces
 
+- `interface ColorAdjustOptions`
 - `interface IApplicationOptions`
 - `interface IFillStyleOptions`
 - `interface ILineStyleOptions`

@@ -308,3 +308,76 @@ export const parseEnglishNumber = (value: string): number | null => {
   if (EN_NUMBER_WORDS[text] !== undefined) return EN_NUMBER_WORDS[text];
   return parseRomanNumber(text);
 };
+
+/**
+ * @description: Clamp `value` into the inclusive range `[min, max]`.
+ * @param {number} value
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
+export const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
+
+/**
+ * @description: Linear interpolation from `a` to `b` by `t` (t=0 → a, t=1 → b). Not clamped.
+ * @param {number} a start value
+ * @param {number} b end value
+ * @param {number} t interpolation factor
+ * @return {number}
+ */
+export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
+
+/**
+ * @description: Inverse of `lerp` — where `value` sits between `a` and `b`, as 0..1. Returns 0 when `a === b`. Not clamped.
+ * @param {number} a start value
+ * @param {number} b end value
+ * @param {number} value probed value
+ * @return {number}
+ */
+export const inverseLerp = (a: number, b: number, value: number): number => (a === b ? 0 : (value - a) / (b - a));
+
+/**
+ * @description: Linearly remap `value` from range `[a1, a2]` onto `[b1, b2]`. Not clamped (GLSL-style map).
+ * @param {number} value
+ * @param {number} a1 input range start
+ * @param {number} a2 input range end
+ * @param {number} b1 output range start
+ * @param {number} b2 output range end
+ * @return {number}
+ */
+export const remap = (value: number, a1: number, a2: number, b1: number, b2: number): number =>
+  b1 + ((value - a1) * (b2 - b1)) / (a2 - a1);
+
+/**
+ * @description: Remap `value` from `[a1, a2]` onto `[b1, b2]` and clamp to the output range — the shader `fit`.
+ * @param {number} value
+ * @param {number} a1 input range start
+ * @param {number} a2 input range end
+ * @param {number} b1 output range start
+ * @param {number} b2 output range end
+ * @return {number}
+ */
+export const fit = (value: number, a1: number, a2: number, b1: number, b2: number): number =>
+  clamp(remap(value, a1, a2, b1, b2), Math.min(b1, b2), Math.max(b1, b2));
+
+/**
+ * @description: Linear ramp — 0 below `edge0`, 1 above `edge1`, a straight line between (the shader `linearstep`, no smoothing).
+ * @param {number} edge0
+ * @param {number} edge1
+ * @param {number} x
+ * @return {number}
+ */
+export const linearstep = (edge0: number, edge1: number, x: number): number =>
+  edge0 === edge1 ? (x < edge0 ? 0 : 1) : clamp((x - edge0) / (edge1 - edge0), 0, 1);
+
+/**
+ * @description: Smooth Hermite interpolation between 0 and 1 for `edge0 < x < edge1` (GLSL `smoothstep`).
+ * @param {number} edge0
+ * @param {number} edge1
+ * @param {number} x
+ * @return {number}
+ */
+export const smoothstep = (edge0: number, edge1: number, x: number): number => {
+  const t = linearstep(edge0, edge1, x);
+  return t * t * (3 - 2 * t);
+};

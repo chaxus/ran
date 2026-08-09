@@ -1,6 +1,8 @@
 import { Application } from '@/utils/visual/application';
 import { Container } from '@/utils/visual/vertex/container';
 import { Graphics } from '@/utils/visual/graphics/graphics';
+import { ColorAdjustFilter, Filter } from '@/utils/visual/render/filter';
+import { WebGLRenderTarget } from '@/utils/visual/render/renderTarget';
 import {
   BYTES_PER_VERTEX,
   LINE_CAP,
@@ -10,11 +12,15 @@ import {
   SHAPE_TYPE,
 } from '@/utils/visual/enums';
 import type { IApplicationOptions, IFillStyleOptions, ILineStyleOptions } from '@/utils/visual/types';
+import type { ColorAdjustOptions } from '@/utils/visual/render/filter';
 
 export {
   Application,
   Container,
   Graphics,
+  Filter,
+  ColorAdjustFilter,
+  WebGLRenderTarget,
   SHAPE_TYPE,
   LINE_CAP,
   LINE_JOIN,
@@ -23,4 +29,4 @@ export {
   BYTES_PER_VERTEX,
 };
 
-export type { IApplicationOptions, IFillStyleOptions, ILineStyleOptions };
+export type { IApplicationOptions, IFillStyleOptions, ILineStyleOptions, ColorAdjustOptions };

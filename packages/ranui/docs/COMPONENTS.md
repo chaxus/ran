@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-08T15:29:33.582Z
+Generated at: 2026-08-09T04:16:28.588Z
 
 31 custom elements.
 
@@ -151,7 +151,7 @@ Source: `components/input/index.ts`
 - **Properties**: 
   - `disabled: boolean` — input 上 disabled 属性
   - `icon: string` — 一个 icon
-  - `label: string` — 类似于 Metiral Design 的输入体验。
+  - `label: string` — 字段上方的静态说明文字（label）。
   - `max: string` — 当 input 类型为 number 类型时，可以获取 max 属性
   - `message: string` — 下方的提示/校验文案
   - `min: string` — 当 input 类型为 number 类型时，可以获取 min 属性

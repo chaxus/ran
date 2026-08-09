@@ -1,6 +1,6 @@
 import { isMobile, range, throttle } from 'ranuts/utils';
 import selectCss from './index.less?inline';
-import arrowDownIcon from '@/assets/icons/arrow-down.svg?raw';
+import chevronDownIcon from '@/assets/icons/chevron-down.svg?raw';
 import { RanElement, isDisabled } from '@/utils/index';
 import '@/components/select/option';
 import '@/components/dropdown';
@@ -10,7 +10,7 @@ import { defineSSR } from '@/utils/ssr-registry';
 import { computePlacement } from '@/utils/placement';
 import '@/components/input';
 import type { Input } from '@/components/input';
-import { Div, EventManager, InputBuilder, Slot, Span, View } from '@/utils/builder';
+import { Div, EventManager, InputBuilder, Label, Slot, Span, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
@@ -42,9 +42,17 @@ const placementDirection: PlacementDirection = {
 
 // The dropdown caret is part of the select's own chrome, so the component
 // registers its icon itself rather than relying on the consumer to do it.
-registerIcon('arrow-down', arrowDownIcon);
+// Outline/stroke style (matching r-icon's other self-registered core glyphs —
+// copy/check/download etc. — not the filled 1024-grid builtin set), since a
+// solid filled triangle reads heavier than the thin caret every mainstream
+// implementation (Radix, GitHub Primer, Vercel Geist) uses for this affordance.
+registerIcon('chevron-down', chevronDownIcon);
 
 const animationTime = 300;
+
+// Monotonic id source so each select's rendered <label> can point its
+// `for`/aria-labelledby at a stable id (mirrors r-input's inputIdSeq).
+let selectIdSeq = 0;
 
 export class Select extends RanElement {
   // Participate in native forms: the selected value is host state, so relay it via
@@ -74,6 +82,7 @@ export class Select extends RanElement {
   _activeOption?: HTMLElement;
   _text: HTMLSpanElement;
   _selector: HTMLDivElement;
+  _label: HTMLLabelElement | undefined;
   onSearch?: (this: HTMLElement, ev: Event) => unknown;
   static get observedAttributes(): string[] {
     return [
@@ -82,6 +91,7 @@ export class Select extends RanElement {
       'sheet',
       'type',
       'value',
+      'label',
       // Attribute names are lowercased by the DOM, so these MUST be lowercase to
       // be observed — the previous camelCase entries never fired (which is why
       // defaultValue/showSearch used to apply only on first connect).
@@ -123,7 +133,7 @@ export class Select extends RanElement {
                 View('r-icon')
                   .class('icon')
                   .part('icon')
-                  .attr('name', 'arrow-down')
+                  .attr('name', 'chevron-down')
                   .attr('color', 'var(--ran-color-text-secondary)')
                   .attr('size', '16'),
                 Div().children(
@@ -175,6 +185,45 @@ export class Select extends RanElement {
   set required(value: boolean | string) {
     setBooleanAttribute(this, 'required', !(!value || value === 'false'));
   }
+  /**
+   * @description: 获取字段上方的静态说明文字（label）。
+   */
+  get label(): string {
+    return this.getAttribute('label') || '';
+  }
+  /**
+   * @description: 设置字段上方的静态说明文字（label）。
+   */
+  set label(value: string) {
+    this.setAttribute('label', value);
+  }
+  /**
+   * A static caption above the field — same pattern as r-input's `label`
+   * (see input/index.ts `listenLabel`), so a labeled select and a labeled
+   * input placed side by side in a form line up: same token, same "renders
+   * above, reserves its own space, never overlaps" behavior. Associated via
+   * `aria-labelledby` rather than `<label for>`: the interactive element is
+   * this host with `role="combobox"` (set in connectedCallback), not a
+   * native form control the label's `for` could target.
+   */
+  private _syncLabel = (value: string | null): void => {
+    if (value != null) {
+      if (this._label) {
+        this._label.innerHTML = value;
+      } else {
+        if (!this.id) this.id = `ran-select-${++selectIdSeq}`;
+        this._label = Label().class('ran-select-label').part('label').text(value).build() as HTMLLabelElement;
+        this._label.id = `${this.id}-label`;
+        this.setAttribute('aria-labelledby', this._label.id);
+        this._label.addEventListener('click', () => this.focus());
+        this._shadowDom.insertBefore(this._label, this._select);
+      }
+    } else if (this._label) {
+      this._label.remove();
+      this._label = undefined;
+      this.removeAttribute('aria-labelledby');
+    }
+  };
   /**
    * Lets `required` be seen by form.checkValidity()/reportValidity()/:invalid,
    * and mirrors it into aria-required/aria-invalid for assistive tech.
@@ -885,6 +934,7 @@ export class Select extends RanElement {
     if (name === 'value') this.syncSelectedFromValue(newValue);
     if (name === 'required' || name === 'disabled') this._updateValidity();
     if (name === 'sheet' && this._shadowDom) this.handlerExternalCss();
+    if (name === 'label' && this._shadowDom) this._syncLabel(newValue);
     // Reactive: `defaultValue` and `showSearch` used to apply only on first
     // connect. Re-run the same effect their initial-connect code performs when
     // they change afterwards.

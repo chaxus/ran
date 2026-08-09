@@ -6,7 +6,12 @@
   position: var(--ran-select-host-position, relative);
   display: var(--ran-select-host-display, inline-block);
   cursor: var(--ran-select-host-cursor, pointer);
-  height: var(--ran-select-host-height, var(--ran-size-7, 32px));
+  // No explicit height here — `.selection` below carries its own min-height
+  // independent of this host, so :host sizes to content naturally: 32px
+  // (the field alone) when unlabeled, or that plus the label's own height
+  // when `label` is set (see `.ran-select-label`, a sibling inserted before
+  // `.ran-select` — same structure r-input uses for the same reason: a
+  // labeled select and a labeled input must line up in a form).
   outline: var(--ran-select-host-outline, 0);
   -webkit-tap-highlight-color: var(--ran-select-host-tap-highlight-color, transparent);
   &,
@@ -90,6 +95,22 @@
   }
 }
 
+// Static caption above the field — same tokens, same "renders in normal block
+// flow as a sibling inserted before the field, never overlaps adjacent
+// content" pattern as r-input's `.ran-input-label` (see DESIGN.md §3 and
+// r-input's index.less for the full rationale).
+.ran-select-label {
+  display: var(--ran-select-label-display, block);
+  margin-bottom: var(--ran-select-label-margin-bottom, var(--ran-space-1, 4px));
+  font-size: var(--ran-select-label-font-size, var(--ran-text-label-1, 14px));
+  font-weight: var(--ran-select-label-font-weight, var(--ran-text-label-weight, 500));
+  color: var(--ran-select-label-color, var(--ran-color-text, #171717));
+  cursor: var(--ran-select-label-cursor, pointer);
+}
+:host([disabled]) .ran-select-label {
+  color: var(--ran-select-label-disabled-color, var(--ran-color-text-disabled, #999));
+  cursor: var(--ran-select-label-disabled-cursor, not-allowed);
+}
 .ran-select {
   width: var(--ran-select-root-width, 100%);
   height: var(--ran-select-root-height, 100%);
@@ -114,6 +135,7 @@
     transition: var(--ran-select-transition, none);
     width: var(--ran-select-width, 100%);
     height: var(--ran-select-height, 100%);
+    min-height: var(--ran-select-min-height, var(--ran-size-7, 32px));
     padding: var(--ran-select-padding, 0 var(--ran-space-3, 12px));
     box-sizing: var(--ran-select-box-sizing, border-box);
     margin: var(--ran-select-margin, 0);

@@ -2,6 +2,7 @@ import { getRenderer } from '@/utils/visual/render';
 import { Container } from '@/utils/visual/vertex/container';
 import { EventSystem } from '@/utils/visual/event';
 import type { Renderer } from '@/utils/visual/render/render';
+import type { Filter } from '@/utils/visual/render/filter';
 import type { IApplicationOptions } from '@/utils/visual/types';
 
 // The rendering engine's entry point: hand it the canvas and it starts rendering.
@@ -40,6 +41,21 @@ export class Application {
     const app = new Application(options);
     await app.renderer.init();
     return app;
+  }
+
+  /**
+   * Full-screen post-processing passes applied after the scene is drawn, in order. WebGL only
+   * (the Canvas backend ignores them).
+   *
+   * @example
+   * app.filters = [new ColorAdjustFilter({ saturation: 1.4, contrast: 1.1 })];
+   */
+  public get filters(): Filter[] {
+    return this.renderer.filters;
+  }
+
+  public set filters(filters: Filter[]) {
+    this.renderer.filters = filters;
   }
 
   public render(): void {
