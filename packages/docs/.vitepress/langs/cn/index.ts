@@ -298,6 +298,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'imageRequest - 测试网络延迟', link: '/cn/src/ranuts/utils/image_request' },
               { text: 'networkSpeed - 测试网络速度', link: '/cn/src/ranuts/utils/network_speed' },
               { text: 'connection - 获取网络连接信息', link: '/cn/src/ranuts/utils/connection' },
+              { text: 'getStatus / status - HTTP 状态码查询', link: '/cn/src/ranuts/utils/status' },
               { text: 'prefetch - 空闲时预热缓存', link: '/cn/src/ranuts/utils/prefetch' },
               { text: 'WorkerClient - Worker 请求响应', link: '/cn/src/ranuts/utils/worker_client' },
               { text: 'paginateText - 文本分页', link: '/cn/src/ranuts/utils/paginate' },

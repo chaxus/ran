@@ -579,8 +579,14 @@
             --ran-progress-track-height: 4px;
             --ran-progress-track-background: rgba(255, 255, 255, 0.3);
             --ran-progress-fill-background: rgba(255, 255, 255, 0.8);
-            --ran-progress-dot-top: -2px;
-            --ran-progress-dot-left: -4px;
+            // No `--ran-progress-dot-top` override here (there used to be one,
+            // `-2px`) — `r-progress` now centers its track and dot vertically
+            // within whatever height its host is given by default (see
+            // `components/progress/index.less`), which is exactly this case:
+            // a 20px-tall host (to match the icon beside it) around a 4px
+            // track. The old `-2px` was a hand-tuned offset compensating for
+            // the track sitting flush at the *top* of that 20px box instead —
+            // it would now fight the new centering instead of matching it.
             --ran-progress-dot-width: 8px;
             --ran-progress-dot-height: 8px;
             --ran-progress-dot-background: rgba(255, 255, 255, 1);
@@ -596,8 +602,6 @@
               }
 
               &-dot {
-                --ran-progress-dot-top: -2px;
-                --ran-progress-dot-left: -4px;
                 --ran-progress-dot-width: 8px;
                 --ran-progress-dot-height: 8px;
                 --ran-progress-dot-background: rgba(255, 255, 255, 1);

@@ -148,6 +148,7 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | imageRequest | 通过图片请求测试网络延迟 | [imageRequest](./image_request.md) |
 | networkSpeed | 测试网络的 ping 值和抖动 | [networkSpeed](./network_speed.md) |
 | connection   | 获取当前网络连接信息     | [connection](./connection.md)      |
+| getStatus / status | HTTP 状态码 ↔ 消息查询           | [getStatus](./status.md)           |
 
 ## 浏览器
 

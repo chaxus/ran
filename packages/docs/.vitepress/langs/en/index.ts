@@ -296,6 +296,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'imageRequest - Test network latency', link: '/src/ranuts/utils/image_request' },
               { text: 'networkSpeed - Test network speed', link: '/src/ranuts/utils/network_speed' },
               { text: 'connection - Get network info', link: '/src/ranuts/utils/connection' },
+              { text: 'getStatus / status - HTTP status code lookup', link: '/src/ranuts/utils/status' },
               { text: 'prefetch - Warm the cache when idle', link: '/src/ranuts/utils/prefetch' },
               { text: 'WorkerClient - Worker request/response', link: '/src/ranuts/utils/worker_client' },
               { text: 'paginateText - Paginate text into pages', link: '/src/ranuts/utils/paginate' },

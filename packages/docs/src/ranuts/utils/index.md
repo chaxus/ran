@@ -148,6 +148,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | imageRequest | Test network latency via image request     | [imageRequest](./image_request.md) |
 | networkSpeed | Test network ping value and jitter         | [networkSpeed](./network_speed.md) |
 | connection   | Get current network connection information | [connection](./connection.md)      |
+| getStatus / status | HTTP status code ↔ message lookup    | [getStatus](./status.md)           |
 
 ## Browser
 

@@ -334,3 +334,4 @@ console.log(decoded); // => { msg: '你好 👋', n: 1 }
 9. **非浏览器环境**：无 `window`（Node / SSR）时，`PostMessageBridge` 实例化不会抛错，`send` 会以明确错误 reject，`broadcast` / `destroy` 静默降级。
 10. **优先 PortBridge**：新代码建议用 `openPortBridge` / `acceptPortBridge`——点对点信道从结构上避免了串扰、伪造与自答问题。
 11. **`broadcastToAll`**：`Client.broadcastToAll` 以源 `'*'` 向当前窗口发送，出于安全考虑不推荐使用——优先使用定向的 `call` / `broadcast`。
+12. **`BRIDGE_MARKER` / `DEFAULT_CHANNEL`**：上面第 2 点和第 6 点背后用到的两个原始值也是导出的，如果你需要直接检查 `postMessage` 流量（比如在 devtools 里挂个监听、或者写测试），而不是通过 `PostMessageBridge` 来用，就能用得上。`BRIDGE_MARKER` 是每条 bridge 消息都携带的协议标记字符串；`DEFAULT_CHANNEL` 是没传 channel 时使用的字面量 `'default'`。

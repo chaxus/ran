@@ -32,7 +32,21 @@
     height: var(--ran-progress-track-height, 8px);
     border-radius: var(--ran-progress-track-border-radius, var(--ran-radius-full, 9999px));
     background: var(--ran-progress-track-background, var(--ran-gray-200, #ebebeb));
-    position: var(--ran-progress-track-position, relative);
+    // Was a plain in-flow `position: relative`, which put the track flush at
+    // the *top* of `.ran-progress` — fine only when the host's own height
+    // exactly equals the track height. The moment a consumer gives the host
+    // extra height without giving the track all of it too (e.g. the player's
+    // volume slider: a 20px-tall host so its icon can sit at a normal size,
+    // but a 4px track), the track visibly sat at the top instead of centered,
+    // offset from anything vertically centered beside it (like that icon).
+    // Centering unconditionally here means the track always sits mid-height
+    // of whatever the host's own height is, matching how a slider is
+    // expected to behave next to other same-row controls, regardless of the
+    // host/track height ratio.
+    position: var(--ran-progress-track-position, absolute);
+    top: var(--ran-progress-track-top, 50%);
+    left: var(--ran-progress-track-left, 0);
+    transform: var(--ran-progress-track-transform, translateY(-50%));
     overflow: var(--ran-progress-track-overflow, hidden);
     &-value {
       position: var(--ran-progress-fill-position, absolute);
@@ -51,17 +65,18 @@
   }
   &-dot {
     position: var(--ran-progress-dot-position, absolute);
-    // A calc() default, not a hardcoded magic number — the old `-5px` only centered
-    // an 18px dot on an 8px track because it happened to assume `border-box` sizing
-    // that the rule never actually declared (see `box-sizing` below); the moment
-    // either `--ran-progress-track-height` or `--ran-progress-dot-height` was
-    // overridden (as the player's volume slider does), it silently drifted off
-    // center. This recomputes from whichever track-height/dot-height are actually
-    // in effect, so a consumer overriding either token — or leaving both at their
-    // defaults — always gets a centered dot without needing to also override `top`.
-    top: var(--ran-progress-dot-top, calc((var(--ran-progress-track-height, 8px) - var(--ran-progress-dot-height, 14px)) / 2));
+    // Centered the same way as `-wrap` above (`top: 50%` + a `translateY`
+    // folded into the combined transform below) instead of the previous
+    // `calc((track-height - dot-height) / 2)`. That calc only centered the
+    // dot *relative to the track*, which was correct exactly because the
+    // track itself was assumed to sit flush at `.ran-progress`'s top edge —
+    // once the track is centered instead (see `-wrap`), that assumption no
+    // longer holds, and centering both independently the same way keeps them
+    // aligned with each other regardless of how tall `.ran-progress` itself
+    // is relative to either.
+    top: var(--ran-progress-dot-top, 50%);
     left: calc(var(--progress-percent, 0) * 100%);
-    transform: translateX(-50%);
+    transform: var(--ran-progress-dot-transform, translate(-50%, -50%));
     border-radius: var(--ran-progress-dot-border-radius, 50%);
     // `border-box` so the declared width/height is the dot's actual rendered size —
     // `content-box` (the browser default) would add the border on top, quietly
