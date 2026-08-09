@@ -1702,7 +1702,6 @@ Visitor.splice(a,2);
 - [javaScript 设计模式统计](https://zhuanlan.zhihu.com/p/472719016)
 - [ES6 系列之我们来聊聊装饰器](https://juejin.cn/post/6844903713866252296)
 - [设计模式之生成器模式](https://segmentfault.com/a/1190000038250020)
-- [https://juejin.im/user/57f8ffda2e958a005581e3c0/posts](https://juejin.im/user/57f8ffda2e958a005581e3c0/posts)
 - [https://design-patterns.readthedocs.io/zh_CN/latest/index.html](https://design-patterns.readthedocs.io/zh_CN/latest/index.html)
 - [https://blog.csdn.net/lovelion/article/details/17517213](https://blog.csdn.net/lovelion/article/details/17517213)
 - [https://github.com/skyming/Trip-to-iOS-Design-Patterns](https://github.com/skyming/Trip-to-iOS-Design-Patterns)

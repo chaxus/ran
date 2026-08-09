@@ -828,6 +828,15 @@
             -webkit-tap-highlight-color: transparent;
           }
 
+          // See the identical comment on `&-speed`'s `:has(r-select:focus-visible)` above.
+          &:has(r-select:focus-visible) {
+            outline: var(
+              --ran-player-clarity-focus-visible-outline,
+              2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
+            );
+            outline-offset: var(--ran-player-clarity-focus-visible-outline-offset, 2px);
+          }
+
           r-select {
             // See the identical comment on `&-speed`'s `r-select` above.
             flex-shrink: 0;
