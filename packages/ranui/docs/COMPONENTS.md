@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-09T04:44:51.905Z
+Generated at: 2026-08-09T05:20:23.379Z
 
 31 custom elements.
 
@@ -94,11 +94,11 @@ Source: `components/select/dropdown-item/index.ts`
 
 Source: `components/glass/index.ts`
 
-- **Attributes**: `blur`, `displace: string`, `frequency: string`, `radius: string`, `saturate: string`, `tint: string`
+- **Attributes**: `blur`, `displace: string`, `frequency: string`, `interactive: boolean`, `radius: string`, `saturate: string`, `tint: string`
 - **Properties**: 
   - `displace: string` — Liquid refraction strength — the SVG displacement scale. `0` is a flat pane.
   - `frequency: string` — Turbulence base frequency — smaller = larger, smoother liquid ripples.
-  - `interactive: boolean` — Hover lift + press-scale feedback (for clickable glass).
+  - `interactive: boolean` — Hover lift + press-scale feedback, for clickable glass. Also makes the host
   - `radius: string` — Corner radius, in px.
   - `saturate: string` — `r-glass` — a liquid / frosted glass surface.
   - `sheen: boolean` — Animated specular sweep across the surface.

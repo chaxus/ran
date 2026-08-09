@@ -328,6 +328,18 @@ export class Popover extends RanElement {
     this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-height', `${height}px`);
     this.popoverContent.style.setProperty('--ran-dropdown-min-width', `${popoverContentRect.width}px`);
     this.popoverContent.style.setProperty('--ran-dropdown-min-height', `${popoverContentRect.height}px`);
+    // `.top`/`.bottom` in dropdown/index.less now self-center the arrow on the
+    // *panel* (`left: 50%`) by default — correct for a bare `<r-dropdown>` with
+    // no trigger. A popover's panel is edge-aligned with the trigger, not
+    // center-aligned (see `popoverLeft` above), so its own center usually isn't
+    // the trigger's center. Re-measure both boxes now that `inset` is applied
+    // and feed the panel-center → trigger-center pixel delta back in as a nudge
+    // on top of that self-centering base, so the arrow still points at the
+    // trigger precisely instead of at the panel's midpoint.
+    const finalPanelRect = this.popoverContent.getBoundingClientRect();
+    const triggerCenterX = left + width / 2;
+    const panelCenterX = finalPanelRect.left + finalPanelRect.width / 2;
+    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-offset', `${triggerCenterX - panelCenterX}px`);
   };
   /**
    * @description: 鼠标移入

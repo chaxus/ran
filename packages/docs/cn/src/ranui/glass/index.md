@@ -59,7 +59,7 @@
 | `radius`      | `number`  | `20`    | 圆角半径（px）。                                                 |
 | `tint`        | `string`  | 淡白    | 玻璃填充色，任意 CSS 背景值。                                    |
 | `sheen`       | `boolean` | `false` | 表面流动的镜面高光动画。                                         |
-| `interactive` | `boolean` | `false` | hover 抬升 + 按下回弹反馈，用于可点击的玻璃。                    |
+| `interactive` | `boolean` | `false` | hover 抬升 + 按下回弹反馈，用于可点击的玻璃。同时让 host 变成可键盘操作的按钮——`role="button"`、可 tab 到、Enter/Space 等同点击。 |
 
 ### CSS parts 与 token
 
@@ -75,9 +75,13 @@
 | `--ran-glass-shadow`           | 阴影（高光 + 景深）。 |
 | `--ran-glass-specular-background` | 镜面高光背景。        |
 | `--ran-glass-specular-opacity` | 镜面高光强度。        |
+| `--ran-glass-reduced-transparency-background` | 系统"降低透明度"开启时的兜底背景。 |
+| `--ran-glass-reduced-transparency-shadow` | 同一状态下的兜底阴影。 |
 
 ## 说明
 
-- **背景采样**：`<r-glass>` 通过 `backdrop-filter` 折射它背后的 DOM，因此在普通页面内容上直接可用。要折射 **WebGPU / 3D canvas** 场景则需要着色器方案——那部分放在独立 demo，不打包进本组件以保持轻量。
+- **背景采样**：`<r-glass>` 通过 `backdrop-filter` 折射它背后的 DOM，因此在普通页面内容上直接可用——包括背后可选中的文字、正在播放的视频、可交互元素。用 WebGL/WebGPU 着色器方案理论上"液态感"更强、且三大浏览器表现一致，但代价是要先把背景栅格化成一张贴图，会牺牲同样这些交互性/可访问性，且包体积明显更重——这里刻意没有走这条路。
 - **可读性**：正文请放在不透明的内层面上，不要只靠玻璃扛对比度。
+- **降低透明度**：`<r-glass>` 响应系统级"降低透明度 / 提高对比度"设置（`prefers-reduced-transparency: reduce`）：会切换成一个不透明、跟随主题的实色面（默认 `--ran-color-bg-elevated`），而不是继续磨砂/折射。系统原生控件是自动适配的，这是自定义元素对等的实现。
+- **跨浏览器折射差异**：`feDisplacementMap` 液态效果目前只在 Chromium 内核渲染，Safari/Firefox 会丢弃 `backdrop-filter` 里这一段、保留模糊/饱和度/亮度的磨砂效果——这是合理的（虽然更平的）降级，不是坏掉了。
 - **动效纪律**：表面只过渡 `transform`（绝不过渡颜色），所以明暗主题切换始终一帧完成；流光与按下都遵循 `prefers-reduced-motion`。

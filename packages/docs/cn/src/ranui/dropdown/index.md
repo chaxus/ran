@@ -64,4 +64,13 @@ r-dropdown::part(dropdown) {
 高于对话框。使用方负责设置宿主的尺寸与位置并将其挂载。`r-popover` 与 `r-select` 均基于此
 元素构建。
 
+**箭头默认居中于面板本身**：`r-dropdown` 并不知道"触发元素"是什么，只知道自己的面板。
+在没有外部定位逻辑接入的情况下，`arrow="top"` / `"bottom"` 默认居中于面板自身宽度——这正是
+上面示例中裸用 `r-dropdown` 时的正确表现。`r-popover` 在 `r-dropdown` 之上叠加了"感知触发元素"
+的能力：它会测量真实的触发元素，并通过 `--ran-dropdown-arrow-anchor-offset` 传入一个像素偏移量，
+即使面板比触发元素更宽、且与其边缘对齐而非居中对齐，箭头依然精确指向触发元素中心——这与
+Radix UI 中无箭头的 `DropdownMenu` 和基于 Floating UI 精确计算的 `Popover.Arrow` /
+`Tooltip.Arrow` 的关系一致。若在 `r-dropdown` 之上自建感知触发元素的面板，可直接设置该变量，
+无需重新实现 `r-popover` 的定位逻辑。
+
 通过 `import 'ranui'`（注册全部组件）或独立子路径 `import 'ranui/dropdown'` 引入。

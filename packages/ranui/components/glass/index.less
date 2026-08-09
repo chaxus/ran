@@ -119,3 +119,22 @@
     transition: none;
   }
 }
+
+/* Users who turn on the OS-level "reduce transparency" / "increase contrast"
+   setting (macOS, iOS, Windows) get a solid, theme-aware surface instead of a
+   translucent/refractive one — same spirit as the prefers-reduced-motion block
+   above, but for the glass itself rather than its animations. Native controls
+   pick this up automatically; a custom element has to opt in by hand.
+   backdrop-filter: none also makes the SVG refraction filter moot, so nothing
+   else needs to change. */
+@media (prefers-reduced-transparency: reduce) {
+  .ran-glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--ran-glass-reduced-transparency-background, var(--ran-color-bg-elevated));
+    box-shadow: var(--ran-glass-reduced-transparency-shadow, var(--ran-shadow-elevated));
+  }
+  .ran-glass-specular {
+    display: none;
+  }
+}

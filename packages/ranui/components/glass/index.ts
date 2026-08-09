@@ -1,8 +1,9 @@
 import glassCss from './index.less?inline';
-import { Div, Slot } from '@/utils/builder';
+import { Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import { ensureShadowElement, ensureShadowRoot, getStringAttribute, setStringAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
+import { isActivationKey } from '@/utils/a11y';
 
 let _glassSeq = 0;
 
@@ -16,8 +17,12 @@ let _glassSeq = 0;
  * slot. Parts: `glass` (the pane), `specular` (the highlight layer).
  *
  * Backdrop note: this samples the DOM behind the host — the portable technique.
- * A WebGPU shader path (for refracting a canvas/3D scene) is documented
- * separately and not bundled here, to keep the element lean.
+ * A WebGL/WebGPU shader path (rasterizing the backdrop into a texture for a
+ * fragment shader to refract) would look more "liquid" and work identically
+ * across browsers, but costs the backdrop's interactivity/accessibility
+ * (buttons, selectable text, live video behind the glass all become a flat
+ * pixel buffer) and a much heavier bundle — deliberately not pursued here to
+ * keep `<r-glass>` usable over arbitrary real content.
  */
 export class Glass extends RanElement {
   _shadowDom!: ShadowRoot;
@@ -25,9 +30,15 @@ export class Glass extends RanElement {
   private _turb: SVGElement | null = null;
   private _disp: SVGElement | null = null;
   private _uid = `ran-glass-${(_glassSeq += 1)}`;
+  private _events = new EventManager();
+  // Tracks whether *this component* put tabindex="0" on, so _syncInteractive
+  // can take it back off when `interactive` is removed — without leaking into
+  // a tabindex a consumer set explicitly themselves (mirrors r-progress's
+  // syncA11y for the same reason: `type="drag"` there, `interactive` here).
+  private _tabIndexOwnedByComponent = false;
 
   static get observedAttributes(): string[] {
-    return ['blur', 'saturate', 'displace', 'frequency', 'radius', 'tint'];
+    return ['blur', 'saturate', 'displace', 'frequency', 'radius', 'tint', 'interactive'];
   }
 
   constructor() {
@@ -95,7 +106,12 @@ export class Glass extends RanElement {
     this.toggleAttribute('sheen', v);
   }
 
-  /** Hover lift + press-scale feedback (for clickable glass). */
+  /**
+   * Hover lift + press-scale feedback, for clickable glass. Also makes the host
+   * a keyboard-operable button: `role="button"`, a tab stop (unless the consumer
+   * already set one), and Enter/Space dispatch a click — see `_syncInteractive`/
+   * `_onKeydown`.
+   */
   get interactive(): boolean {
     return this.hasAttribute('interactive');
   }
@@ -159,15 +175,61 @@ export class Glass extends RanElement {
     this.style.setProperty(prop, needsUnit ? `${value.trim()}${unit}` : value);
   }
 
+  /**
+   * `interactive` makes the whole panel a click target (see the `sheen`/hover-lift
+   * CSS — "for clickable glass"), so it needs the same keyboard activation a real
+   * `<button>` gets for free: Enter/Space act like a click. Mirrors r-button's and
+   * r-colorpicker's swatch keydown handler.
+   */
+  private _onKeydown = (e: KeyboardEvent): void => {
+    if (!this.interactive) return;
+    if (isActivationKey(e)) {
+      e.preventDefault();
+      this.click();
+    }
+  };
+
+  /**
+   * role="button" + a tab stop only while `interactive` — a purely decorative
+   * glass panel must stay out of the tab order and off the accessibility tree;
+   * without this a keyboard/screen-reader user had no way to tell (or reach)
+   * that a glass panel was clickable at all.
+   */
+  private _syncInteractive(): void {
+    if (this.interactive) {
+      this.setAttribute('role', 'button');
+      if (!this.hasAttribute('tabindex')) {
+        this.tabIndex = 0;
+        this._tabIndexOwnedByComponent = true;
+      }
+    } else {
+      this.removeAttribute('role');
+      if (this._tabIndexOwnedByComponent) {
+        this.removeAttribute('tabindex');
+        this._tabIndexOwnedByComponent = false;
+      }
+    }
+  }
+
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
   connectedCallback(): void {
     this._ensureFilter();
     Glass.observedAttributes.forEach((n) => this._apply(n));
+    this._syncInteractive();
+    this._events.on(this, 'keydown', this._onKeydown as EventListener);
+  }
+
+  disconnectedCallback(): void {
+    this._events.abort();
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue === newValue) return;
+    if (name === 'interactive') {
+      this._syncInteractive();
+      return;
+    }
     this._apply(name);
   }
 }

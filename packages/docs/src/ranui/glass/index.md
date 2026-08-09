@@ -59,7 +59,7 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 | `radius`      | `number`  | `20`    | Corner radius, in px.                                                                             |
 | `tint`        | `string`  | subtle  | Glass fill tint — any CSS background value.                                                       |
 | `sheen`       | `boolean` | `false` | Animated specular sweep across the surface.                                                       |
-| `interactive` | `boolean` | `false` | Hover lift + press-scale feedback, for clickable glass.                                           |
+| `interactive` | `boolean` | `false` | Hover lift + press-scale feedback, for clickable glass. Also makes the host a keyboard-operable button — `role="button"`, a tab stop, Enter/Space act like a click. |
 
 ### Refraction `displace`
 
@@ -108,6 +108,8 @@ Style internals with `::part(glass)` and `::part(specular)`, or override the `--
 | `--ran-glass-shadow`           | Box shadow stack (specular + depth). |
 | `--ran-glass-specular-background` | Specular highlight background.       |
 | `--ran-glass-specular-opacity` | Specular strength.                   |
+| `--ran-glass-reduced-transparency-background` | Fallback surface when the OS "reduce transparency" setting is on. |
+| `--ran-glass-reduced-transparency-shadow` | Fallback shadow in that same state. |
 
 ```css
 r-glass::part(glass) {
@@ -117,6 +119,8 @@ r-glass::part(glass) {
 
 ## Notes
 
-- **Backdrop sampling.** `<r-glass>` refracts the DOM behind it via `backdrop-filter`, so it works over normal page content. Refracting a **WebGPU / 3D canvas** scene instead needs a shader path — that lives in a standalone demo, not this element, to keep it lean.
+- **Backdrop sampling.** `<r-glass>` refracts the DOM behind it via `backdrop-filter`, so it works over normal page content — including selectable text, live video, and interactive elements behind the glass. A WebGL/WebGPU shader path would look more "liquid" and work identically across browsers, but requires rasterizing the backdrop into a texture first, which costs that same interactivity/accessibility and a much heavier bundle — deliberately not pursued here.
 - **Legibility.** Keep body text on a solid inner surface; don't rely on the glass alone for contrast.
+- **Reduced transparency.** `<r-glass>` responds to the OS-level "reduce transparency" / "increase contrast" setting (`prefers-reduced-transparency: reduce`): it swaps to a solid, theme-aware surface (`--ran-color-bg-elevated` by default) instead of frosting/refracting. Native controls do this automatically; this is the custom-element equivalent.
+- **Cross-browser refraction.** The `feDisplacementMap` liquid effect currently renders in Chromium only — Safari and Firefox drop that part of the `backdrop-filter` value and keep the blur/saturate/brightness frost, which is a legitimate (if flatter) fallback, not a broken state.
 - **Motion.** The surface only ever transitions `transform` (never color), so light/dark theme switches stay in one frame. Sheen and press respect `prefers-reduced-motion`.
