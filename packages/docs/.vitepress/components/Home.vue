@@ -764,11 +764,7 @@ const delay = (i: number) => ({ '--d': `${i * 70}ms` });
 .live-progress {
   width: 100%;
   --ran-progress-track-height: 6px;
-  --ran-progress-fill-background: linear-gradient(
-    90deg,
-    var(--ran-blue-600, #48aeff),
-    var(--ran-blue-700, #006bff)
-  );
+  --ran-progress-fill-background: linear-gradient(90deg, var(--ran-blue-600, #48aeff), var(--ran-blue-700, #006bff));
 }
 .live-loading {
   --loading-circle-line-border-width: 22px;

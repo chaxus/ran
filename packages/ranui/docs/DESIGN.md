@@ -88,13 +88,13 @@ Fonts: `--ran-font-family` (Geist Sans, UI & prose), `--ran-font-mono` (Geist Mo
 
 Decide by **role**; the role fixes font, size, weight, line-height. Each row is backed by real tokens in `theme/tokens.less` — reference them (`var(--ran-{component}-…, var(--ran-text-{role}…, fallback))`), don't hand-copy the px/weight number:
 
-| Role    | Use                    | Weight                                       | Size tokens                                                              | Notes                                                        |
-| ------- | ---------------------- | --------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| heading | Titles                 | `--ran-text-heading-weight` (600)             | `--ran-text-heading-1..4` (32/24/20/16px)                                 | Tight tracking `--ran-text-heading-tracking` (≈ -0.03em)     |
-| label   | Single-line, scannable | `--ran-text-label-weight` (500)               | `--ran-text-label-1..3` (14/13/12px)                                      | No wrapping                                                  |
-| copy    | Multi-line body        | `--ran-text-copy-weight` (400)                | `--ran-text-copy-1..2` (16/14px)                                          | line-height ~1.55 (`--ran-line-height`)                      |
-| button  | Button text            | `--ran-text-button-weight` (500)              | `--ran-text-button-size` (14px)                                           | `--ran-text-button-line-height: 1` for crisp vertical centering |
-| mono    | Code, data, eyebrows   | `--ran-text-mono-weight-regular/medium` (400/500) | borrows label/copy size tiers                                          | `--ran-font-mono`                                            |
+| Role    | Use                    | Weight                                            | Size tokens                               | Notes                                                           |
+| ------- | ---------------------- | ------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------- |
+| heading | Titles                 | `--ran-text-heading-weight` (600)                 | `--ran-text-heading-1..4` (32/24/20/16px) | Tight tracking `--ran-text-heading-tracking` (≈ -0.03em)        |
+| label   | Single-line, scannable | `--ran-text-label-weight` (500)                   | `--ran-text-label-1..3` (14/13/12px)      | No wrapping                                                     |
+| copy    | Multi-line body        | `--ran-text-copy-weight` (400)                    | `--ran-text-copy-1..2` (16/14px)          | line-height ~1.55 (`--ran-line-height`)                         |
+| button  | Button text            | `--ran-text-button-weight` (500)                  | `--ran-text-button-size` (14px)           | `--ran-text-button-line-height: 1` for crisp vertical centering |
+| mono    | Code, data, eyebrows   | `--ran-text-mono-weight-regular/medium` (400/500) | borrows label/copy size tiers             | `--ran-font-mono`                                               |
 
 **Rule:** ask "what role is this text?" (heading / label / copy / button) — the style follows. Don't pick raw px per instance.
 
@@ -131,9 +131,9 @@ Override a tier globally (set `--ran-z-dropdown` on `:root`) or per component (`
 **Consuming a ranui overlay inside your own page chrome.** The ladder (1000–1200) is deliberately chosen to sit far above any realistic host-page chrome (nav bars, sidebars, backdrops are typically in the tens — VitePress's own is nav:30/backdrop:50/sidebar:60). Two component-side facts follow from that gap, and change what a host page needs to do:
 
 - **A portaled overlay never needs the host's help.** `r-message` and any panel that moves itself to `document.body` (`r-select`, `r-popover` — see the portaling pitfall above) compares its own z-index directly against the host's root-level chrome. Since 1000+ already beats anything in the tens, it wins with zero extra CSS on the host's side.
-- **A non-portaled fixed overlay (`r-modal`'s dialog stays inside its own shadow DOM) only escapes as far as its nearest ancestor stacking context.** If a host wraps embedded content in anything that creates one — `isolation: isolate`, `opacity < 1`, `transform`, `filter`, `will-change` — a `position: fixed` descendant is trapped inside it for stacking purposes (its *layout* still escapes to the viewport; only *paint order* is trapped). The wrapper then needs its own elevated `z-index` for the trapped content to climb back out.
+- **A non-portaled fixed overlay (`r-modal`'s dialog stays inside its own shadow DOM) only escapes as far as its nearest ancestor stacking context.** If a host wraps embedded content in anything that creates one — `isolation: isolate`, `opacity < 1`, `transform`, `filter`, `will-change` — a `position: fixed` descendant is trapped inside it for stacking purposes (its _layout_ still escapes to the viewport; only _paint order_ is trapped). The wrapper then needs its own elevated `z-index` for the trapped content to climb back out.
 
-The mistake to avoid: **don't promote the wrapper unconditionally to fix that.** Giving a wrapper `position: relative; z-index: <high>` at all times elevates *everything in it* — including static, non-overlay content — above the host's own chrome for its entire scroll lifetime, not just while an overlay is actually open. On a scrollable page that reliably paints ordinary content over a sticky nav/header the moment their boxes happen to overlap (ranui's own docs site shipped exactly this: every `<Demo>` wrapper carried a blanket `z-index: 100` "just in case," so a 100%-static example — no overlay in it at all — painted over the sticky nav on ordinary scroll). Scope the elevation to exactly when it's needed instead:
+The mistake to avoid: **don't promote the wrapper unconditionally to fix that.** Giving a wrapper `position: relative; z-index: <high>` at all times elevates _everything in it_ — including static, non-overlay content — above the host's own chrome for its entire scroll lifetime, not just while an overlay is actually open. On a scrollable page that reliably paints ordinary content over a sticky nav/header the moment their boxes happen to overlap (ranui's own docs site shipped exactly this: every `<Demo>` wrapper carried a blanket `z-index: 100` "just in case," so a 100%-static example — no overlay in it at all — painted over the sticky nav on ordinary scroll). Scope the elevation to exactly when it's needed instead:
 
 ```css
 /* Isolate unconditionally (cheap — no z-index/position means no promotion
@@ -182,11 +182,7 @@ transition:
   color 0.2s;
 
 /* ✓ motion props only — theme flip is instant, interaction still animates */
-transition: var(
-  --ran-checkbox-tick-transition,
-  transform 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),
-  opacity 0.1s
-);
+transition: var(--ran-checkbox-tick-transition, transform 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s);
 
 /* ✓ no motion at all, with an opt-in hook for consumers */
 transition: var(--ran-input-transition, none);
@@ -251,10 +247,10 @@ that only works on one.
   `_attachReposition`, `r-popover`'s `_attachReposition`); an in-flow element needs a
   `ResizeObserver` on the container that actually drives the measurement, not a plain `window`
   `resize` (`r-tabs`'s `_navResizeObserver` on `_nav`, re-running `setTabLine`). Narrow-viewport
-  testing (see the checklist) exercises the *initial* layout at that width — it does not exercise
-  *resizing into* it, which is where this class of bug actually shows up.
+  testing (see the checklist) exercises the _initial_ layout at that width — it does not exercise
+  _resizing into_ it, which is where this class of bug actually shows up.
 - **Verify on both inputs before shipping**, not just both color schemes: click-drag with a mouse
-  *and* touch-drag (or the Chrome DevTools device toolbar's touch emulation) on anything with
+  _and_ touch-drag (or the Chrome DevTools device toolbar's touch emulation) on anything with
   `touch-action` in its CSS; tab/click through anything with `trigger="hover"`; drag the browser
   window narrower/wider (not just load at a fixed width) on anything with a measured position.
 
@@ -302,11 +298,11 @@ not encode the full DOM/BEM nesting path into the token name (e.g.
 `--ran-player-controller-bottom-right-align-volume-icon-mute-background` is wrong — the position
 inside `.controller` isn't part of the token's identity).
 
-| Avoid (full DOM path) | Prefer |
-| --- | --- |
+| Avoid (full DOM path)                                           | Prefer                                    |
+| --------------------------------------------------------------- | ----------------------------------------- |
 | `--ran-select-selection-search-input-active-border-right-width` | `--ran-select-search-active-border-width` |
-| `--ran-btn-content-hover-background-color` | `--ran-btn-hover-background` |
-| `--ran-progress-wrap-value-background` | `--ran-progress-fill-background` |
+| `--ran-btn-content-hover-background-color`                      | `--ran-btn-hover-background`              |
+| `--ran-progress-wrap-value-background`                          | `--ran-progress-fill-background`          |
 
 This applies to **new** component tokens going forward. See `changelogs/2026-08-08.md` for the
 pass that brought existing components in line with it (0.5.0-alpha.0).

@@ -16,93 +16,93 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 
 ## String Processing
 
-| Method                | Description                                                          | Detail                                                  |
-| --------------------- | -------------------------------------------------------------------- | ------------------------------------------------------- |
-| md5                   | MD5 hash function                                                    | [md5](./md5.md)                                         |
-| randomString / getRandomString | Generate random string                                     | [randomString](./random_string.md)                      |
-| clearBr               | Remove spaces, HTML tags, and line breaks from string                | [clearBr](./clear_br.md)                                |
-| clearStr              | Remove leading/trailing spaces, URL encoding, and quotes from string | [clearStr](./clear_str.md)                              |
-| truncate              | Shorten a string with an ellipsis, Unicode-safe                      | [truncate](./truncate.md)                               |
-| strParse              | Parse string into object                                             | [strParse](./str_parse.md)                              |
-| toString              | Convert value to string type                                         | [toString](./to_string.md)                              |
-| transformText         | Convert ArrayBuffer to text                                          | [transformText](./transform_text.md)                    |
-| checkEncoding         | Detect character encoding of Uint8Array data                         | [checkEncoding](./check_encoding.md)                    |
-| getMatchingSentences  | Extract complete sentences containing keywords                       | [getMatchingSentences](./get_matching_sentences.md)     |
-| isString              | Determine if value is string type                                    | [isString](./is_string.md)                              |
+| Method                         | Description                                                          | Detail                                              |
+| ------------------------------ | -------------------------------------------------------------------- | --------------------------------------------------- |
+| md5                            | MD5 hash function                                                    | [md5](./md5.md)                                     |
+| randomString / getRandomString | Generate random string                                               | [randomString](./random_string.md)                  |
+| clearBr                        | Remove spaces, HTML tags, and line breaks from string                | [clearBr](./clear_br.md)                            |
+| clearStr                       | Remove leading/trailing spaces, URL encoding, and quotes from string | [clearStr](./clear_str.md)                          |
+| truncate                       | Shorten a string with an ellipsis, Unicode-safe                      | [truncate](./truncate.md)                           |
+| strParse                       | Parse string into object                                             | [strParse](./str_parse.md)                          |
+| toString                       | Convert value to string type                                         | [toString](./to_string.md)                          |
+| transformText                  | Convert ArrayBuffer to text                                          | [transformText](./transform_text.md)                |
+| checkEncoding                  | Detect character encoding of Uint8Array data                         | [checkEncoding](./check_encoding.md)                |
+| getMatchingSentences           | Extract complete sentences containing keywords                       | [getMatchingSentences](./get_matching_sentences.md) |
+| isString                       | Determine if value is string type                                    | [isString](./is_string.md)                          |
 
 ## Object Processing
 
-| Method      | Description                                | Detail                          |
-| ----------- | ------------------------------------------ | ------------------------------- |
-| merge / mergeExports | Merge objects; lazy-getter exports object       | [merge](./merge.md)             |
-| isEqual     | Deep comparison of two values for equality | [isEqual](./is_equal.md)        |
-| cloneDeep   | Deep clone objects or arrays               | [cloneDeep](./clone_deep.md)    |
-| querystring | Convert object to URL query string         | [querystring](./querystring.md) |
-| filterObj   | Filter object                              | [filterObj](./filter_obj.md)    |
-| formatJson  | Formatted JSON                             | [formatJson](./format_json.md)  |
+| Method               | Description                                | Detail                          |
+| -------------------- | ------------------------------------------ | ------------------------------- |
+| merge / mergeExports | Merge objects; lazy-getter exports object  | [merge](./merge.md)             |
+| isEqual              | Deep comparison of two values for equality | [isEqual](./is_equal.md)        |
+| cloneDeep            | Deep clone objects or arrays               | [cloneDeep](./clone_deep.md)    |
+| querystring          | Convert object to URL query string         | [querystring](./querystring.md) |
+| filterObj            | Filter object                              | [filterObj](./filter_obj.md)    |
+| formatJson           | Formatted JSON                             | [formatJson](./format_json.md)  |
 
 ## Number Processing
 
-| Method          | Description                                   | Detail                                   |
-| --------------- | --------------------------------------------- | ---------------------------------------- |
-| range           | Clamp number within specified range           | [range](./range.md)                      |
-| clamp / lerp / inverseLerp / remap / fit / linearstep / smoothstep | Shader-style interpolation & remapping | [range](./range.md) |
-| mathjs          | Precise number calculation function           | [mathjs](./mathjs.md)                    |
-| perToNum        | Convert percentage string to number           | [perToNum](./per_to_num.md)              |
-| transformNumber | Convert number to formatted string with units | [transformNumber](./transform_number.md) |
-| addNumSym       | Add positive/negative sign to number          | [addNumSym](./add_num_sym.md)            |
+| Method                                                             | Description                                   | Detail                                   |
+| ------------------------------------------------------------------ | --------------------------------------------- | ---------------------------------------- |
+| range                                                              | Clamp number within specified range           | [range](./range.md)                      |
+| clamp / lerp / inverseLerp / remap / fit / linearstep / smoothstep | Shader-style interpolation & remapping        | [range](./range.md)                      |
+| mathjs                                                             | Precise number calculation function           | [mathjs](./mathjs.md)                    |
+| perToNum                                                           | Convert percentage string to number           | [perToNum](./per_to_num.md)              |
+| transformNumber                                                    | Convert number to formatted string with units | [transformNumber](./transform_number.md) |
+| addNumSym                                                          | Add positive/negative sign to number          | [addNumSym](./add_num_sym.md)            |
 
 ## Color Processing
 
-| Method      | Description                                   | Detail                           |
-| ----------- | --------------------------------------------- | -------------------------------- |
-| hexToRgb    | Convert hexadecimal color value to RGB        | [hexToRgb](./hex_to_rgb.md)      |
-| rgbToHex    | Convert RGB values to hexadecimal color value | [rgbToHex](./rgb_to_hex.md)      |
-| randomColor | Generate random color object                  | [randomColor](./random_color.md) |
-| Color / ColorScheme | Color class, value classes, conversions, palette generator | [Color](./color.md) |
-| blendScreen / blendMultiply / blendOverlay / luma / vibrance / cosinePalette / srgbToLinear | Shader-style colour blend & grade math (0–1 channels) | [Color](./color.md) |
+| Method                                                                                      | Description                                                | Detail                           |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------- |
+| hexToRgb                                                                                    | Convert hexadecimal color value to RGB                     | [hexToRgb](./hex_to_rgb.md)      |
+| rgbToHex                                                                                    | Convert RGB values to hexadecimal color value              | [rgbToHex](./rgb_to_hex.md)      |
+| randomColor                                                                                 | Generate random color object                               | [randomColor](./random_color.md) |
+| Color / ColorScheme                                                                         | Color class, value classes, conversions, palette generator | [Color](./color.md)              |
+| blendScreen / blendMultiply / blendOverlay / luma / vibrance / cosinePalette / srgbToLinear | Shader-style colour blend & grade math (0–1 channels)      | [Color](./color.md)              |
 
 ## Time Processing
 
-| Method          | Description                                    | Detail                                    |
-| --------------- | ---------------------------------------------- | ----------------------------------------- |
-| formatDuration  | Convert time in seconds to formatted string    | [formatDuration](./time_format.md)        |
-| formatRelative  | Describe a time relative to now ("3 days ago") | [formatRelative](./time_format.md)        |
-| parseVttTimestamp / parseVttCueTiming | Parse WebVTT subtitle timing lines | [parseVttTimestamp](./time_format.md) |
-| timestampToTime | Convert timestamp to Date object               | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime | Get high-precision timestamp                   | [performanceTime](./performance_time.md)  |
+| Method                                | Description                                    | Detail                                    |
+| ------------------------------------- | ---------------------------------------------- | ----------------------------------------- |
+| formatDuration                        | Convert time in seconds to formatted string    | [formatDuration](./time_format.md)        |
+| formatRelative                        | Describe a time relative to now ("3 days ago") | [formatRelative](./time_format.md)        |
+| parseVttTimestamp / parseVttCueTiming | Parse WebVTT subtitle timing lines             | [parseVttTimestamp](./time_format.md)     |
+| timestampToTime                       | Convert timestamp to Date object               | [timestampToTime](./timestamp_to_time.md) |
+| performanceTime                       | Get high-precision timestamp                   | [performanceTime](./performance_time.md)  |
 
 ## Device Detection
 
-| Method        | Description                              | Detail                               |
-| ------------- | ---------------------------------------- | ------------------------------------ |
-| isMobile      | Determine if device is mobile            | [isMobile](./is_mobile.md)           |
-| isWeiXin      | Determine if browser is WeChat           | [isWeiXin](./is_weixin.md)           |
-| isClient      | Determine if environment is client       | [isClient](./is_client.md)           |
-| isSafari      | Determine if browser is Safari           | [isSafari](./is_safari.md)           |
-| currentDevice | Get current device type                  | [currentDevice](./current_device.md) |
+| Method        | Description                        | Detail                               |
+| ------------- | ---------------------------------- | ------------------------------------ |
+| isMobile      | Determine if device is mobile      | [isMobile](./is_mobile.md)           |
+| isWeiXin      | Determine if browser is WeChat     | [isWeiXin](./is_weixin.md)           |
+| isClient      | Determine if environment is client | [isClient](./is_client.md)           |
+| isSafari      | Determine if browser is Safari     | [isSafari](./is_safari.md)           |
+| currentDevice | Get current device type            | [currentDevice](./current_device.md) |
 
 ## DOM Manipulation
 
-| Method                 | Description                            | Detail                                                  |
-| ---------------------- | -------------------------------------- | ------------------------------------------------------- |
-| addClassToElement      | Add CSS class name to DOM element      | [addClassToElement](./add_class_to_element.md)          |
-| removeClassToElement   | Remove CSS class name from DOM element | [removeClassToElement](./remove_class_to_element.md)    |
-| createDocumentFragment | Create DocumentFragment                | [createDocumentFragment](./create_document_fragment.md) |
-| escapeHtml             | Escape HTML special characters         | [escapeHtml](./escape_html.md)                          |
-| Chain                  | Chainable DOM manipulation class       | [Chain](./chain.md)                                     |
-| create                 | Helper function to create DOM elements | [create](./create.md)                                   |
-| EventManager / createDoubleTapDetector | Scoped listener registry & double-tap detection | [EventManager](./event_manager.md)     |
-| adoptStyles            | Inject stylesheet text into a shadow root | [adoptStyles](./adopt_styles.md)                      |
-| computePlacement       | Flip/shift a floating panel relative to an anchor | [computePlacement](./placement.md)            |
-| setFontSize2html       | Flexible-rem viewport scaling for mobile layouts | [setFontSize2html](./set_font_size.md)         |
+| Method                                 | Description                                       | Detail                                                  |
+| -------------------------------------- | ------------------------------------------------- | ------------------------------------------------------- |
+| addClassToElement                      | Add CSS class name to DOM element                 | [addClassToElement](./add_class_to_element.md)          |
+| removeClassToElement                   | Remove CSS class name from DOM element            | [removeClassToElement](./remove_class_to_element.md)    |
+| createDocumentFragment                 | Create DocumentFragment                           | [createDocumentFragment](./create_document_fragment.md) |
+| escapeHtml                             | Escape HTML special characters                    | [escapeHtml](./escape_html.md)                          |
+| Chain                                  | Chainable DOM manipulation class                  | [Chain](./chain.md)                                     |
+| create                                 | Helper function to create DOM elements            | [create](./create.md)                                   |
+| EventManager / createDoubleTapDetector | Scoped listener registry & double-tap detection   | [EventManager](./event_manager.md)                      |
+| adoptStyles                            | Inject stylesheet text into a shadow root         | [adoptStyles](./adopt_styles.md)                        |
+| computePlacement                       | Flip/shift a floating panel relative to an anchor | [computePlacement](./placement.md)                      |
+| setFontSize2html                       | Flexible-rem viewport scaling for mobile layouts  | [setFontSize2html](./set_font_size.md)                  |
 
 ## Media
 
-| Method                | Description                            | Detail                                          |
-| --------------------- | --------------------------------------- | ------------------------------------------------ |
-| AudioRecorder         | Record microphone audio to a `Blob`     | [AudioRecorder](./audio_recorder.md)             |
-| createSpeechRecognizer | Speech-to-text over the Web Speech API | [createSpeechRecognizer](./speech.md)            |
+| Method                 | Description                            | Detail                                |
+| ---------------------- | -------------------------------------- | ------------------------------------- |
+| AudioRecorder          | Record microphone audio to a `Blob`    | [AudioRecorder](./audio_recorder.md)  |
+| createSpeechRecognizer | Speech-to-text over the Web Speech API | [createSpeechRecognizer](./speech.md) |
 
 ## Storage
 
@@ -143,18 +143,18 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 
 ## Network
 
-| Method       | Description                                | Detail                             |
-| ------------ | ------------------------------------------ | ---------------------------------- |
-| imageRequest | Test network latency via image request     | [imageRequest](./image_request.md) |
-| networkSpeed | Test network ping value and jitter         | [networkSpeed](./network_speed.md) |
-| connection   | Get current network connection information | [connection](./connection.md)      |
-| getStatus / status | HTTP status code ↔ message lookup    | [getStatus](./status.md)           |
+| Method             | Description                                | Detail                             |
+| ------------------ | ------------------------------------------ | ---------------------------------- |
+| imageRequest       | Test network latency via image request     | [imageRequest](./image_request.md) |
+| networkSpeed       | Test network ping value and jitter         | [networkSpeed](./network_speed.md) |
+| connection         | Get current network connection information | [connection](./connection.md)      |
+| getStatus / status | HTTP status code ↔ message lookup          | [getStatus](./status.md)           |
 
 ## Browser
 
-| Method          | Description                           | Detail                                    |
-| --------------- | ------------------------------------- | ----------------------------------------- |
-| getWindow       | Get viewport window size              | [getWindow](./get_window.md)              |
+| Method                               | Description                                 | Detail                                    |
+| ------------------------------------ | ------------------------------------------- | ----------------------------------------- |
+| getWindow                            | Get viewport window size                    | [getWindow](./get_window.md)              |
 | createObjectURL / requestUrlToBuffer | Create object URL; fetch a URL as raw bytes | [createObjectURL](./create_object_url.md) |
 
 ## Script Loading
@@ -173,11 +173,11 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 
 ## Others
 
-| Method               | Description                            | Detail                                               |
-| -------------------- | -------------------------------------- | ---------------------------------------------------- |
-| TOTP                 | Time-based One-Time Password generator | [TOTP](./totp.md)                                    |
-| createSignal         | Create reactive signal                 | [createSignal](./create_signal.md)                   |
-| setMime / MimeType   | Set or update MIME type mapping        | [setMime](./set_mime.md)                             |
-| getExtensions        | Get extensions from MIME type          | [getExtensions](./get_extensions.md)                 |
-| SyncHook             | Synchronous event hook class           | [SyncHook](./sync_hook.md)                           |
-| durationHandler      | Create delayed execution function      | [durationHandler](./duration_handler.md)             |
+| Method             | Description                            | Detail                                   |
+| ------------------ | -------------------------------------- | ---------------------------------------- |
+| TOTP               | Time-based One-Time Password generator | [TOTP](./totp.md)                        |
+| createSignal       | Create reactive signal                 | [createSignal](./create_signal.md)       |
+| setMime / MimeType | Set or update MIME type mapping        | [setMime](./set_mime.md)                 |
+| getExtensions      | Get extensions from MIME type          | [getExtensions](./get_extensions.md)     |
+| SyncHook           | Synchronous event hook class           | [SyncHook](./sync_hook.md)               |
+| durationHandler    | Create delayed execution function      | [durationHandler](./duration_handler.md) |

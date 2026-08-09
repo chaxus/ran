@@ -212,17 +212,17 @@ too light — blend against your own backdrop instead.
 
 The colour-grade and blend math behind `ranuts/visual`'s post-processing filters (`ColorAdjustFilter` and friends), exported here for CPU-side reuse — computing a thumbnail preview, say, without spinning up a GPU pipeline. Unlike the rest of this module, **channels here are 0–1**, not 0–255 or 0–100 — the convention shaders use.
 
-| Function                            | Description                                                                                              | Signature                                       |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| `luma(r, g, b)`                     | Perceived brightness (Rec. 601 weights). Keeps whatever scale the inputs are in — 0–1 or 0–255              | `(r, g, b) => number`                           |
-| `blendScreen(base, blend)`          | Screen blend: `1 - (1-base)(1-blend)` per channel                                                            | `(base: RGB, blend: RGB) => RGB`                |
-| `blendMultiply(base, blend)`        | Multiply blend: `base * blend` per channel                                                                   | `(base: RGB, blend: RGB) => RGB`                |
-| `blendOverlay(base, blend)`         | Overlay: multiply in shadows, screen in highlights                                                           | `(base: RGB, blend: RGB) => RGB`                |
-| `brightnessContrast(color, b, c)`   | `(channel - 0.5) * contrast + 0.5 + brightness` per channel                                                  | `(color: RGB, brightness, contrast) => RGB`     |
-| `saturation(color, amount)`         | Mix toward luminance. `0` = greyscale, `1` = unchanged, `>1` = more saturated                                | `(color: RGB, amount: number) => RGB`           |
-| `vibrance(color, amount)`           | Like `saturation`, but saturates muted channels more than already-saturated ones. `>0` boosts, `<0` mutes    | `(color: RGB, amount: number) => RGB`           |
-| `cosinePalette(t, a, b, c, d)`      | Inigo Quilez cosine gradient: `a + b·cos(2π(c·t + d))`, each of `a`–`d` an RGB triple, `t` the position 0–1  | `(t, a: RGB, b: RGB, c: RGB, d: RGB) => RGB`    |
-| `srgbToLinear(c)` / `linearToSrgb(c)` | Convert one channel between sRGB (what you read from a hex color) and linear light (what shader math wants) | `(c: number) => number`                         |
+| Function                              | Description                                                                                                 | Signature                                    |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `luma(r, g, b)`                       | Perceived brightness (Rec. 601 weights). Keeps whatever scale the inputs are in — 0–1 or 0–255              | `(r, g, b) => number`                        |
+| `blendScreen(base, blend)`            | Screen blend: `1 - (1-base)(1-blend)` per channel                                                           | `(base: RGB, blend: RGB) => RGB`             |
+| `blendMultiply(base, blend)`          | Multiply blend: `base * blend` per channel                                                                  | `(base: RGB, blend: RGB) => RGB`             |
+| `blendOverlay(base, blend)`           | Overlay: multiply in shadows, screen in highlights                                                          | `(base: RGB, blend: RGB) => RGB`             |
+| `brightnessContrast(color, b, c)`     | `(channel - 0.5) * contrast + 0.5 + brightness` per channel                                                 | `(color: RGB, brightness, contrast) => RGB`  |
+| `saturation(color, amount)`           | Mix toward luminance. `0` = greyscale, `1` = unchanged, `>1` = more saturated                               | `(color: RGB, amount: number) => RGB`        |
+| `vibrance(color, amount)`             | Like `saturation`, but saturates muted channels more than already-saturated ones. `>0` boosts, `<0` mutes   | `(color: RGB, amount: number) => RGB`        |
+| `cosinePalette(t, a, b, c, d)`        | Inigo Quilez cosine gradient: `a + b·cos(2π(c·t + d))`, each of `a`–`d` an RGB triple, `t` the position 0–1 | `(t, a: RGB, b: RGB, c: RGB, d: RGB) => RGB` |
+| `srgbToLinear(c)` / `linearToSrgb(c)` | Convert one channel between sRGB (what you read from a hex color) and linear light (what shader math wants) | `(c: number) => number`                      |
 
 ```ts
 import { blendScreen, brightnessContrast, cosinePalette, srgbToLinear, linearToSrgb } from 'ranuts/utils';

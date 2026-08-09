@@ -175,7 +175,14 @@ describe('r-player contract', () => {
     const destroySpy = vi.fn();
 
     player._video = video;
-    player._engine = { destroy: destroySpy, setQuality: vi.fn(), getQualityLevels: vi.fn(() => []), on: vi.fn(), load: vi.fn(), reloadsOnQualityChange: true };
+    player._engine = {
+      destroy: destroySpy,
+      setQuality: vi.fn(),
+      getQualityLevels: vi.fn(() => []),
+      on: vi.fn(),
+      load: vi.fn(),
+      reloadsOnQualityChange: true,
+    };
 
     document.body.removeChild(player);
 
@@ -296,9 +303,7 @@ describe('r-player contract', () => {
     player._video = video;
     const safePlaySpy = vi.spyOn(player, 'safePlay');
 
-    player._playControllerBottomSpeedPopover.dispatchEvent(
-      new CustomEvent('change', { detail: { value: '1.5' } }),
-    );
+    player._playControllerBottomSpeedPopover.dispatchEvent(new CustomEvent('change', { detail: { value: '1.5' } }));
 
     expect(player.ctx.playbackRate).toBe(1.5);
     expect(player._video.playbackRate).toBe(1.5);
@@ -311,9 +316,7 @@ describe('r-player contract', () => {
     player._video = document.createElement('video');
     player._video.volume = 0.5;
 
-    player._playControllerBottomVolumeProgress.dispatchEvent(
-      new CustomEvent('change', { detail: { value: 80 } }),
-    );
+    player._playControllerBottomVolumeProgress.dispatchEvent(new CustomEvent('change', { detail: { value: 80 } }));
 
     expect(player.ctx.volume).toBe(80);
     expect(player._video.volume).toBe(0.8);

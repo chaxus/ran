@@ -23,7 +23,16 @@ describe('r-player media event handlers', () => {
       seenTypes.push((event as CustomEvent).detail.type);
     });
 
-    const eventNames = ['complete', 'emptied', 'loadstart', 'ratechange', 'stalled', 'suspend', 'timeupdate', 'volumechange'];
+    const eventNames = [
+      'complete',
+      'emptied',
+      'loadstart',
+      'ratechange',
+      'stalled',
+      'suspend',
+      'timeupdate',
+      'volumechange',
+    ];
 
     eventNames.forEach((eventName) => {
       player._video.dispatchEvent(new Event(eventName));

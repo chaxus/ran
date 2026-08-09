@@ -94,10 +94,10 @@ if (result.success) {
 
 #### 参数
 
-| 参数      | 说明                                                    | 类型                                              | 默认值 |
-| --------- | --------------------------------------------------------- | ---------------------------------------------------- | ------ |
-| `src`     | 要请求的 URL                                              | `string`                                            | 必填   |
-| `options` | `method`（默认 `'GET'`）和 `responseType`（默认 `'arraybuffer'`） | `Partial<RequestUrlToArraybufferOption>`   | 必填   |
+| 参数      | 说明                                                              | 类型                                     | 默认值 |
+| --------- | ----------------------------------------------------------------- | ---------------------------------------- | ------ |
+| `src`     | 要请求的 URL                                                      | `string`                                 | 必填   |
+| `options` | `method`（默认 `'GET'`）和 `responseType`（默认 `'arraybuffer'`） | `Partial<RequestUrlToArraybufferOption>` | 必填   |
 
 #### 返回
 

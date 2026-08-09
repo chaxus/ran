@@ -85,18 +85,20 @@ export class ColorPicker extends RanElement {
         .children(colorpickerInner)
         .build() as HTMLDivElement;
       const popoverContent = View('r-content').class('ran-content').build() as HTMLElement;
-      return View('r-popover')
-        .class('ran-popover')
-        .attr('trigger', 'click')
-        // r-popover's floating panel defaults to 12px of its own padding
-        // (`--ran-popover-content-padding`) for arbitrary content — but the
-        // picker panel built in openColorPicker() already owns its full
-        // chrome (12px padding, 224px width the palette/slider sizing is
-        // measured against, see panel.less `.ran-color-picker-inner-content`).
-        // Leaving the outer default on double-padded the panel.
-        .cssVar('ran-popover-content-padding', '0')
-        .children(colorpicker, popoverContent)
-        .build() as HTMLElement;
+      return (
+        View('r-popover')
+          .class('ran-popover')
+          .attr('trigger', 'click')
+          // r-popover's floating panel defaults to 12px of its own padding
+          // (`--ran-popover-content-padding`) for arbitrary content — but the
+          // picker panel built in openColorPicker() already owns its full
+          // chrome (12px padding, 224px width the palette/slider sizing is
+          // measured against, see panel.less `.ran-color-picker-inner-content`).
+          // Leaving the outer default on double-padded the panel.
+          .cssVar('ran-popover-content-padding', '0')
+          .children(colorpicker, popoverContent)
+          .build() as HTMLElement
+      );
     });
     this.popoverBlock = popoverBlock;
     this.popoverContent = popoverBlock.querySelector('r-content') as HTMLElement;

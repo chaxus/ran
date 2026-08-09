@@ -12,102 +12,105 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 2
 
 #### Tokens
+
 <!-- layers: semantic: 13 · skin: 3 · component: 68 · internal: 9 -->
-- `--ran-btn-active-background` *(component)*
-- `--ran-btn-active-border-color` *(component)*
-- `--ran-btn-active-transform` *(component)*
-- `--ran-btn-after-background-image` *(component)*
-- `--ran-btn-after-opacity` *(component)*
-- `--ran-btn-after-transform` *(component)*
-- `--ran-btn-after-transition` *(component)*
-- `--ran-btn-align-items` *(component)*
-- `--ran-btn-align-self` *(component)*
-- `--ran-btn-background` *(component)*
-- `--ran-btn-background-image` *(component)*
-- `--ran-btn-border` *(component)*
-- `--ran-btn-border-color` *(component)*
-- `--ran-btn-border-image-slice` *(component)*
-- `--ran-btn-border-image-source` *(component)*
-- `--ran-btn-border-image-width` *(component)*
-- `--ran-btn-border-radius` *(component)*
-- `--ran-btn-box-shadow` *(component)*
-- `--ran-btn-box-sizing` *(component)*
-- `--ran-btn-color` *(component)*
-- `--ran-btn-content-background-image` *(component)*
-- `--ran-btn-content-box-sizing` *(component)*
-- `--ran-btn-content-display` *(component)*
-- `--ran-btn-content-justify-content` *(component)*
-- `--ran-btn-cursor` *(component)*
-- `--ran-btn-disabled-cursor` *(component)*
-- `--ran-btn-disabled-opacity` *(component)*
-- `--ran-btn-disabled-pointer-events` *(component)*
-- `--ran-btn-display` *(component)*
-- `--ran-btn-focus-outline` *(component)*
-- `--ran-btn-focus-outline-offset` *(component)*
-- `--ran-btn-font-family` *(component)*
-- `--ran-btn-font-size` *(component)*
-- `--ran-btn-font-weight` *(component)*
-- `--ran-btn-hover-background` *(component)*
-- `--ran-btn-hover-border-color` *(component)*
-- `--ran-btn-hover-color` *(component)*
-- `--ran-btn-icon-margin-right` *(component)*
-- `--ran-btn-line-height` *(component)*
-- `--ran-btn-overflow` *(component)*
-- `--ran-btn-padding` *(component)*
-- `--ran-btn-pointer-events` *(component)*
-- `--ran-btn-position` *(component)*
-- `--ran-btn-slot-display` *(component)*
-- `--ran-btn-surface-background` *(component)*
-- `--ran-btn-surface-background-image` *(component)*
-- `--ran-btn-surface-box-sizing` *(component)*
-- `--ran-btn-surface-cursor` *(component)*
-- `--ran-btn-surface-disabled-cursor` *(component)*
-- `--ran-btn-surface-disabled-opacity` *(component)*
-- `--ran-btn-surface-disabled-pointer-events` *(component)*
-- `--ran-btn-surface-display` *(component)*
-- `--ran-btn-surface-outline` *(component)*
-- `--ran-btn-surface-position` *(component)*
-- `--ran-btn-surface-touch-action` *(component)*
-- `--ran-btn-surface-transition` *(component)*
-- `--ran-btn-surface-user-select` *(component)*
-- `--ran-btn-text-align` *(component)*
-- `--ran-btn-text-border` *(component)*
-- `--ran-btn-text-box-shadow` *(component)*
-- `--ran-btn-text-surface-background` *(component)*
-- `--ran-btn-touch-action` *(component)*
-- `--ran-btn-transition` *(component)*
-- `--ran-btn-user-select` *(component)*
-- `--ran-btn-warning-background` *(component)*
-- `--ran-btn-warning-border-color` *(component)*
-- `--ran-btn-warning-color` *(component)*
-- `--ran-btn-white-space` *(component)*
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-border-hover` *(semantic)*
-- `--ran-color-danger` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-primary-active` *(semantic)*
-- `--ran-color-primary-hover` *(semantic)*
-- `--ran-color-primary-text` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-gray-alpha-400` *(internal)*
-- `--ran-motion-duration-base` *(semantic)*
-- `--ran-motion-ease-spring` *(semantic)*
-- `--ran-motion-ease-standard` *(semantic)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-skin-border-image-width` *(skin)*
-- `--ran-skin-font-family` *(skin)*
-- `--ran-skin-raised-shadow` *(skin)*
-- `--ran-space-1` *(internal)*
-- `--ran-space-2` *(internal)*
-- `--ran-space-4` *(internal)*
-- `--ran-text-button-line-height` *(internal)*
-- `--ran-text-button-size` *(internal)*
-- `--ran-text-button-weight` *(internal)*
-- `--ran-x` *(internal)*
-- `--ran-y` *(internal)*
+
+- `--ran-btn-active-background` _(component)_
+- `--ran-btn-active-border-color` _(component)_
+- `--ran-btn-active-transform` _(component)_
+- `--ran-btn-after-background-image` _(component)_
+- `--ran-btn-after-opacity` _(component)_
+- `--ran-btn-after-transform` _(component)_
+- `--ran-btn-after-transition` _(component)_
+- `--ran-btn-align-items` _(component)_
+- `--ran-btn-align-self` _(component)_
+- `--ran-btn-background` _(component)_
+- `--ran-btn-background-image` _(component)_
+- `--ran-btn-border` _(component)_
+- `--ran-btn-border-color` _(component)_
+- `--ran-btn-border-image-slice` _(component)_
+- `--ran-btn-border-image-source` _(component)_
+- `--ran-btn-border-image-width` _(component)_
+- `--ran-btn-border-radius` _(component)_
+- `--ran-btn-box-shadow` _(component)_
+- `--ran-btn-box-sizing` _(component)_
+- `--ran-btn-color` _(component)_
+- `--ran-btn-content-background-image` _(component)_
+- `--ran-btn-content-box-sizing` _(component)_
+- `--ran-btn-content-display` _(component)_
+- `--ran-btn-content-justify-content` _(component)_
+- `--ran-btn-cursor` _(component)_
+- `--ran-btn-disabled-cursor` _(component)_
+- `--ran-btn-disabled-opacity` _(component)_
+- `--ran-btn-disabled-pointer-events` _(component)_
+- `--ran-btn-display` _(component)_
+- `--ran-btn-focus-outline` _(component)_
+- `--ran-btn-focus-outline-offset` _(component)_
+- `--ran-btn-font-family` _(component)_
+- `--ran-btn-font-size` _(component)_
+- `--ran-btn-font-weight` _(component)_
+- `--ran-btn-hover-background` _(component)_
+- `--ran-btn-hover-border-color` _(component)_
+- `--ran-btn-hover-color` _(component)_
+- `--ran-btn-icon-margin-right` _(component)_
+- `--ran-btn-line-height` _(component)_
+- `--ran-btn-overflow` _(component)_
+- `--ran-btn-padding` _(component)_
+- `--ran-btn-pointer-events` _(component)_
+- `--ran-btn-position` _(component)_
+- `--ran-btn-slot-display` _(component)_
+- `--ran-btn-surface-background` _(component)_
+- `--ran-btn-surface-background-image` _(component)_
+- `--ran-btn-surface-box-sizing` _(component)_
+- `--ran-btn-surface-cursor` _(component)_
+- `--ran-btn-surface-disabled-cursor` _(component)_
+- `--ran-btn-surface-disabled-opacity` _(component)_
+- `--ran-btn-surface-disabled-pointer-events` _(component)_
+- `--ran-btn-surface-display` _(component)_
+- `--ran-btn-surface-outline` _(component)_
+- `--ran-btn-surface-position` _(component)_
+- `--ran-btn-surface-touch-action` _(component)_
+- `--ran-btn-surface-transition` _(component)_
+- `--ran-btn-surface-user-select` _(component)_
+- `--ran-btn-text-align` _(component)_
+- `--ran-btn-text-border` _(component)_
+- `--ran-btn-text-box-shadow` _(component)_
+- `--ran-btn-text-surface-background` _(component)_
+- `--ran-btn-touch-action` _(component)_
+- `--ran-btn-transition` _(component)_
+- `--ran-btn-user-select` _(component)_
+- `--ran-btn-warning-background` _(component)_
+- `--ran-btn-warning-border-color` _(component)_
+- `--ran-btn-warning-color` _(component)_
+- `--ran-btn-white-space` _(component)_
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-border-hover` _(semantic)_
+- `--ran-color-danger` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-primary-active` _(semantic)_
+- `--ran-color-primary-hover` _(semantic)_
+- `--ran-color-primary-text` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-gray-alpha-400` _(internal)_
+- `--ran-motion-duration-base` _(semantic)_
+- `--ran-motion-ease-spring` _(semantic)_
+- `--ran-motion-ease-standard` _(semantic)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-skin-border-image-width` _(skin)_
+- `--ran-skin-font-family` _(skin)_
+- `--ran-skin-raised-shadow` _(skin)_
+- `--ran-space-1` _(internal)_
+- `--ran-space-2` _(internal)_
+- `--ran-space-4` _(internal)_
+- `--ran-text-button-line-height` _(internal)_
+- `--ran-text-button-size` _(internal)_
+- `--ran-text-button-weight` _(internal)_
+- `--ran-x` _(internal)_
+- `--ran-y` _(internal)_
 
 #### Parts
+
 - `button`
 - `content`
 
@@ -117,44 +120,47 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 7
 
 #### Tokens
+
 <!-- layers: semantic: 7 · skin: 2 · internal: 26 -->
-- `--ran-card-background` *(internal)*
-- `--ran-card-border-color` *(internal)*
-- `--ran-card-description-color` *(internal)*
-- `--ran-card-description-font-size` *(internal)*
-- `--ran-card-description-font-weight` *(internal)*
-- `--ran-card-description-margin-top` *(internal)*
-- `--ran-card-display` *(internal)*
-- `--ran-card-gap` *(internal)*
-- `--ran-card-header-gap` *(internal)*
-- `--ran-card-hover-border-color` *(internal)*
-- `--ran-card-hover-shadow` *(internal)*
-- `--ran-card-min-height` *(internal)*
-- `--ran-card-padding` *(internal)*
-- `--ran-card-radius` *(internal)*
-- `--ran-card-shadow` *(internal)*
-- `--ran-card-title-color` *(internal)*
-- `--ran-card-title-font-size` *(internal)*
-- `--ran-card-title-font-weight` *(internal)*
-- `--ran-card-title-letter-spacing` *(internal)*
-- `--ran-color-bg` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-border-hover` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-color-text-secondary` *(semantic)*
-- `--ran-radius-md` *(semantic)*
-- `--ran-shadow-elevated` *(semantic)*
-- `--ran-skin-border-style` *(skin)*
-- `--ran-skin-border-width` *(skin)*
-- `--ran-space-1` *(internal)*
-- `--ran-space-4` *(internal)*
-- `--ran-text-copy-2` *(internal)*
-- `--ran-text-copy-weight` *(internal)*
-- `--ran-text-heading-4` *(internal)*
-- `--ran-text-heading-tracking` *(internal)*
-- `--ran-text-heading-weight` *(internal)*
+
+- `--ran-card-background` _(internal)_
+- `--ran-card-border-color` _(internal)_
+- `--ran-card-description-color` _(internal)_
+- `--ran-card-description-font-size` _(internal)_
+- `--ran-card-description-font-weight` _(internal)_
+- `--ran-card-description-margin-top` _(internal)_
+- `--ran-card-display` _(internal)_
+- `--ran-card-gap` _(internal)_
+- `--ran-card-header-gap` _(internal)_
+- `--ran-card-hover-border-color` _(internal)_
+- `--ran-card-hover-shadow` _(internal)_
+- `--ran-card-min-height` _(internal)_
+- `--ran-card-padding` _(internal)_
+- `--ran-card-radius` _(internal)_
+- `--ran-card-shadow` _(internal)_
+- `--ran-card-title-color` _(internal)_
+- `--ran-card-title-font-size` _(internal)_
+- `--ran-card-title-font-weight` _(internal)_
+- `--ran-card-title-letter-spacing` _(internal)_
+- `--ran-color-bg` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-border-hover` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-color-text-secondary` _(semantic)_
+- `--ran-radius-md` _(semantic)_
+- `--ran-shadow-elevated` _(semantic)_
+- `--ran-skin-border-style` _(skin)_
+- `--ran-skin-border-width` _(skin)_
+- `--ran-space-1` _(internal)_
+- `--ran-space-4` _(internal)_
+- `--ran-text-copy-2` _(internal)_
+- `--ran-text-copy-weight` _(internal)_
+- `--ran-text-heading-4` _(internal)_
+- `--ran-text-heading-tracking` _(internal)_
+- `--ran-text-heading-weight` _(internal)_
 
 #### Parts
+
 - `body`
 - `card`
 - `description`
@@ -169,91 +175,94 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 5
 
 #### Tokens
+
 <!-- layers: semantic: 7 · skin: 2 · component: 69 · internal: 4 -->
-- `--ran-checkbox-border-radius` *(component)*
-- `--ran-checkbox-box-sizing` *(component)*
-- `--ran-checkbox-checked-background-color` *(component)*
-- `--ran-checkbox-checked-background-image` *(component)*
-- `--ran-checkbox-checked-border` *(component)*
-- `--ran-checkbox-color` *(component)*
-- `--ran-checkbox-cursor` *(component)*
-- `--ran-checkbox-disabled-cursor` *(component)*
-- `--ran-checkbox-disabled-opacity` *(component)*
-- `--ran-checkbox-disabled-pointer-events` *(component)*
-- `--ran-checkbox-display` *(component)*
-- `--ran-checkbox-focus-border-color` *(component)*
-- `--ran-checkbox-focus-box-shadow` *(component)*
-- `--ran-checkbox-font-family` *(component)*
-- `--ran-checkbox-font-size` *(component)*
-- `--ran-checkbox-height` *(component)*
-- `--ran-checkbox-host-box-sizing` *(component)*
-- `--ran-checkbox-host-display` *(component)*
-- `--ran-checkbox-host-list-style` *(component)*
-- `--ran-checkbox-host-margin` *(component)*
-- `--ran-checkbox-host-padding` *(component)*
-- `--ran-checkbox-host-position` *(component)*
-- `--ran-checkbox-inner-background-color` *(component)*
-- `--ran-checkbox-inner-border` *(component)*
-- `--ran-checkbox-inner-border-collapse` *(component)*
-- `--ran-checkbox-inner-border-image-slice` *(component)*
-- `--ran-checkbox-inner-border-image-source` *(component)*
-- `--ran-checkbox-inner-border-image-width` *(component)*
-- `--ran-checkbox-inner-border-radius` *(component)*
-- `--ran-checkbox-inner-box-sizing` *(component)*
-- `--ran-checkbox-inner-direction` *(component)*
-- `--ran-checkbox-inner-display` *(component)*
-- `--ran-checkbox-inner-height` *(component)*
-- `--ran-checkbox-inner-width` *(component)*
-- `--ran-checkbox-input-cursor` *(component)*
-- `--ran-checkbox-input-inset` *(component)*
-- `--ran-checkbox-input-margin` *(component)*
-- `--ran-checkbox-input-opacity` *(component)*
-- `--ran-checkbox-input-position` *(component)*
-- `--ran-checkbox-input-z-index` *(component)*
-- `--ran-checkbox-label-color` *(component)*
-- `--ran-checkbox-label-font-family` *(component)*
-- `--ran-checkbox-label-font-size` *(component)*
-- `--ran-checkbox-label-font-weight` *(component)*
-- `--ran-checkbox-label-gap` *(component)*
-- `--ran-checkbox-label-line-height` *(component)*
-- `--ran-checkbox-line-height` *(component)*
-- `--ran-checkbox-list-style` *(component)*
-- `--ran-checkbox-margin` *(component)*
-- `--ran-checkbox-padding` *(component)*
-- `--ran-checkbox-pop-animation` *(component)*
-- `--ran-checkbox-position` *(component)*
-- `--ran-checkbox-tick-border` *(component)*
-- `--ran-checkbox-tick-border-inline-start` *(component)*
-- `--ran-checkbox-tick-border-top` *(component)*
-- `--ran-checkbox-tick-box-sizing` *(component)*
-- `--ran-checkbox-tick-checked-opacity` *(component)*
-- `--ran-checkbox-tick-content` *(component)*
-- `--ran-checkbox-tick-display` *(component)*
-- `--ran-checkbox-tick-height` *(component)*
-- `--ran-checkbox-tick-inset-inline-start` *(component)*
-- `--ran-checkbox-tick-opacity` *(component)*
-- `--ran-checkbox-tick-position` *(component)*
-- `--ran-checkbox-tick-top` *(component)*
-- `--ran-checkbox-tick-transform` *(component)*
-- `--ran-checkbox-tick-transition` *(component)*
-- `--ran-checkbox-tick-width` *(component)*
-- `--ran-checkbox-white-space` *(component)*
-- `--ran-checkbox-width` *(component)*
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-bg-muted` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-focus-ring` *(internal)*
-- `--ran-motion-duration-base` *(semantic)*
-- `--ran-motion-ease-bouncy` *(semantic)*
-- `--ran-size-1` *(internal)*
-- `--ran-skin-border-image-width` *(skin)*
-- `--ran-skin-font-family` *(skin)*
-- `--ran-text-label-1` *(internal)*
-- `--ran-text-label-weight` *(internal)*
+
+- `--ran-checkbox-border-radius` _(component)_
+- `--ran-checkbox-box-sizing` _(component)_
+- `--ran-checkbox-checked-background-color` _(component)_
+- `--ran-checkbox-checked-background-image` _(component)_
+- `--ran-checkbox-checked-border` _(component)_
+- `--ran-checkbox-color` _(component)_
+- `--ran-checkbox-cursor` _(component)_
+- `--ran-checkbox-disabled-cursor` _(component)_
+- `--ran-checkbox-disabled-opacity` _(component)_
+- `--ran-checkbox-disabled-pointer-events` _(component)_
+- `--ran-checkbox-display` _(component)_
+- `--ran-checkbox-focus-border-color` _(component)_
+- `--ran-checkbox-focus-box-shadow` _(component)_
+- `--ran-checkbox-font-family` _(component)_
+- `--ran-checkbox-font-size` _(component)_
+- `--ran-checkbox-height` _(component)_
+- `--ran-checkbox-host-box-sizing` _(component)_
+- `--ran-checkbox-host-display` _(component)_
+- `--ran-checkbox-host-list-style` _(component)_
+- `--ran-checkbox-host-margin` _(component)_
+- `--ran-checkbox-host-padding` _(component)_
+- `--ran-checkbox-host-position` _(component)_
+- `--ran-checkbox-inner-background-color` _(component)_
+- `--ran-checkbox-inner-border` _(component)_
+- `--ran-checkbox-inner-border-collapse` _(component)_
+- `--ran-checkbox-inner-border-image-slice` _(component)_
+- `--ran-checkbox-inner-border-image-source` _(component)_
+- `--ran-checkbox-inner-border-image-width` _(component)_
+- `--ran-checkbox-inner-border-radius` _(component)_
+- `--ran-checkbox-inner-box-sizing` _(component)_
+- `--ran-checkbox-inner-direction` _(component)_
+- `--ran-checkbox-inner-display` _(component)_
+- `--ran-checkbox-inner-height` _(component)_
+- `--ran-checkbox-inner-width` _(component)_
+- `--ran-checkbox-input-cursor` _(component)_
+- `--ran-checkbox-input-inset` _(component)_
+- `--ran-checkbox-input-margin` _(component)_
+- `--ran-checkbox-input-opacity` _(component)_
+- `--ran-checkbox-input-position` _(component)_
+- `--ran-checkbox-input-z-index` _(component)_
+- `--ran-checkbox-label-color` _(component)_
+- `--ran-checkbox-label-font-family` _(component)_
+- `--ran-checkbox-label-font-size` _(component)_
+- `--ran-checkbox-label-font-weight` _(component)_
+- `--ran-checkbox-label-gap` _(component)_
+- `--ran-checkbox-label-line-height` _(component)_
+- `--ran-checkbox-line-height` _(component)_
+- `--ran-checkbox-list-style` _(component)_
+- `--ran-checkbox-margin` _(component)_
+- `--ran-checkbox-padding` _(component)_
+- `--ran-checkbox-pop-animation` _(component)_
+- `--ran-checkbox-position` _(component)_
+- `--ran-checkbox-tick-border` _(component)_
+- `--ran-checkbox-tick-border-inline-start` _(component)_
+- `--ran-checkbox-tick-border-top` _(component)_
+- `--ran-checkbox-tick-box-sizing` _(component)_
+- `--ran-checkbox-tick-checked-opacity` _(component)_
+- `--ran-checkbox-tick-content` _(component)_
+- `--ran-checkbox-tick-display` _(component)_
+- `--ran-checkbox-tick-height` _(component)_
+- `--ran-checkbox-tick-inset-inline-start` _(component)_
+- `--ran-checkbox-tick-opacity` _(component)_
+- `--ran-checkbox-tick-position` _(component)_
+- `--ran-checkbox-tick-top` _(component)_
+- `--ran-checkbox-tick-transform` _(component)_
+- `--ran-checkbox-tick-transition` _(component)_
+- `--ran-checkbox-tick-width` _(component)_
+- `--ran-checkbox-white-space` _(component)_
+- `--ran-checkbox-width` _(component)_
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-bg-muted` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-focus-ring` _(internal)_
+- `--ran-motion-duration-base` _(semantic)_
+- `--ran-motion-ease-bouncy` _(semantic)_
+- `--ran-size-1` _(internal)_
+- `--ran-skin-border-image-width` _(skin)_
+- `--ran-skin-font-family` _(skin)_
+- `--ran-text-label-1` _(internal)_
+- `--ran-text-label-weight` _(internal)_
 
 #### Parts
+
 - `checkbox`
 - `inner`
 - `input`
@@ -266,33 +275,36 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 2
 
 #### Tokens
+
 <!-- layers: semantic: 5 · component: 13 · internal: 6 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-border-hover` *(semantic)*
-- `--ran-colorpicker-background` *(component)*
-- `--ran-colorpicker-block-border-radius` *(component)*
-- `--ran-colorpicker-block-height` *(component)*
-- `--ran-colorpicker-block-width` *(component)*
-- `--ran-colorpicker-border` *(component)*
-- `--ran-colorpicker-border-radius` *(component)*
-- `--ran-colorpicker-disabled-cursor` *(component)*
-- `--ran-colorpicker-disabled-opacity` *(component)*
-- `--ran-colorpicker-height` *(component)*
-- `--ran-colorpicker-hover-border-color` *(component)*
-- `--ran-colorpicker-min-width` *(component)*
-- `--ran-colorpicker-padding` *(component)*
-- `--ran-colorpicker-transition` *(component)*
-- `--ran-gray-500` *(internal)*
-- `--ran-gray-alpha-100` *(internal)*
-- `--ran-gray-alpha-200` *(internal)*
-- `--ran-radius-md` *(semantic)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-size-4` *(internal)*
-- `--ran-size-7` *(internal)*
-- `--ran-space-1` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-border-hover` _(semantic)_
+- `--ran-colorpicker-background` _(component)_
+- `--ran-colorpicker-block-border-radius` _(component)_
+- `--ran-colorpicker-block-height` _(component)_
+- `--ran-colorpicker-block-width` _(component)_
+- `--ran-colorpicker-border` _(component)_
+- `--ran-colorpicker-border-radius` _(component)_
+- `--ran-colorpicker-disabled-cursor` _(component)_
+- `--ran-colorpicker-disabled-opacity` _(component)_
+- `--ran-colorpicker-height` _(component)_
+- `--ran-colorpicker-hover-border-color` _(component)_
+- `--ran-colorpicker-min-width` _(component)_
+- `--ran-colorpicker-padding` _(component)_
+- `--ran-colorpicker-transition` _(component)_
+- `--ran-gray-500` _(internal)_
+- `--ran-gray-alpha-100` _(internal)_
+- `--ran-gray-alpha-200` _(internal)_
+- `--ran-radius-md` _(semantic)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-size-4` _(internal)_
+- `--ran-size-7` _(internal)_
+- `--ran-space-1` _(internal)_
 
 #### Parts
+
 - `block`
 - `swatch`
 
@@ -302,67 +314,70 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 6 · skin: 1 · component: 46 · internal: 5 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-dropdown-arrow-anchor-height` *(component)*
-- `--ran-dropdown-arrow-anchor-offset` *(component)*
-- `--ran-dropdown-arrow-anchor-offset-y` *(component)*
-- `--ran-dropdown-arrow-anchor-width` *(component)*
-- `--ran-dropdown-arrow-box-sizing` *(component)*
-- `--ran-dropdown-arrow-display` *(component)*
-- `--ran-dropdown-arrow-fill-background` *(component)*
-- `--ran-dropdown-arrow-height` *(component)*
-- `--ran-dropdown-arrow-overflow` *(component)*
-- `--ran-dropdown-arrow-overlap` *(component)*
-- `--ran-dropdown-arrow-pointer-events` *(component)*
-- `--ran-dropdown-arrow-position` *(component)*
-- `--ran-dropdown-arrow-shadow` *(component)*
-- `--ran-dropdown-arrow-shape-offset` *(component)*
-- `--ran-dropdown-arrow-tip-background` *(component)*
-- `--ran-dropdown-arrow-tip-box-shadow` *(component)*
-- `--ran-dropdown-arrow-width` *(component)*
-- `--ran-dropdown-arrow-z-index` *(component)*
-- `--ran-dropdown-background` *(component)*
-- `--ran-dropdown-border` *(component)*
-- `--ran-dropdown-border-radius` *(component)*
-- `--ran-dropdown-box-shadow` *(component)*
-- `--ran-dropdown-box-sizing` *(component)*
-- `--ran-dropdown-color` *(component)*
-- `--ran-dropdown-container-box-sizing` *(component)*
-- `--ran-dropdown-container-display` *(component)*
-- `--ran-dropdown-container-height` *(component)*
-- `--ran-dropdown-container-position` *(component)*
-- `--ran-dropdown-container-width` *(component)*
-- `--ran-dropdown-cursor` *(component)*
-- `--ran-dropdown-font-family` *(component)*
-- `--ran-dropdown-font-size` *(component)*
-- `--ran-dropdown-font-variant` *(component)*
-- `--ran-dropdown-font-weight` *(component)*
-- `--ran-dropdown-height` *(component)*
-- `--ran-dropdown-host-text-align` *(component)*
-- `--ran-dropdown-host-z-index` *(component)*
-- `--ran-dropdown-list-style` *(component)*
-- `--ran-dropdown-margin` *(component)*
-- `--ran-dropdown-min-height` *(component)*
-- `--ran-dropdown-min-width` *(component)*
-- `--ran-dropdown-outline` *(component)*
-- `--ran-dropdown-overflow` *(component)*
-- `--ran-dropdown-padding` *(component)*
-- `--ran-dropdown-width` *(component)*
-- `--ran-dropdown-z-index` *(component)*
-- `--ran-radius-md` *(semantic)*
-- `--ran-shadow-elevated` *(semantic)*
-- `--ran-shadow-menu` *(semantic)*
-- `--ran-skin-font-family` *(skin)*
-- `--ran-text-label-1` *(internal)*
-- `--ran-text-label-weight` *(internal)*
-- `--ran-x` *(internal)*
-- `--ran-y` *(internal)*
-- `--ran-z-dropdown` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-dropdown-arrow-anchor-height` _(component)_
+- `--ran-dropdown-arrow-anchor-offset` _(component)_
+- `--ran-dropdown-arrow-anchor-offset-y` _(component)_
+- `--ran-dropdown-arrow-anchor-width` _(component)_
+- `--ran-dropdown-arrow-box-sizing` _(component)_
+- `--ran-dropdown-arrow-display` _(component)_
+- `--ran-dropdown-arrow-fill-background` _(component)_
+- `--ran-dropdown-arrow-height` _(component)_
+- `--ran-dropdown-arrow-overflow` _(component)_
+- `--ran-dropdown-arrow-overlap` _(component)_
+- `--ran-dropdown-arrow-pointer-events` _(component)_
+- `--ran-dropdown-arrow-position` _(component)_
+- `--ran-dropdown-arrow-shadow` _(component)_
+- `--ran-dropdown-arrow-shape-offset` _(component)_
+- `--ran-dropdown-arrow-tip-background` _(component)_
+- `--ran-dropdown-arrow-tip-box-shadow` _(component)_
+- `--ran-dropdown-arrow-width` _(component)_
+- `--ran-dropdown-arrow-z-index` _(component)_
+- `--ran-dropdown-background` _(component)_
+- `--ran-dropdown-border` _(component)_
+- `--ran-dropdown-border-radius` _(component)_
+- `--ran-dropdown-box-shadow` _(component)_
+- `--ran-dropdown-box-sizing` _(component)_
+- `--ran-dropdown-color` _(component)_
+- `--ran-dropdown-container-box-sizing` _(component)_
+- `--ran-dropdown-container-display` _(component)_
+- `--ran-dropdown-container-height` _(component)_
+- `--ran-dropdown-container-position` _(component)_
+- `--ran-dropdown-container-width` _(component)_
+- `--ran-dropdown-cursor` _(component)_
+- `--ran-dropdown-font-family` _(component)_
+- `--ran-dropdown-font-size` _(component)_
+- `--ran-dropdown-font-variant` _(component)_
+- `--ran-dropdown-font-weight` _(component)_
+- `--ran-dropdown-height` _(component)_
+- `--ran-dropdown-host-text-align` _(component)_
+- `--ran-dropdown-host-z-index` _(component)_
+- `--ran-dropdown-list-style` _(component)_
+- `--ran-dropdown-margin` _(component)_
+- `--ran-dropdown-min-height` _(component)_
+- `--ran-dropdown-min-width` _(component)_
+- `--ran-dropdown-outline` _(component)_
+- `--ran-dropdown-overflow` _(component)_
+- `--ran-dropdown-padding` _(component)_
+- `--ran-dropdown-width` _(component)_
+- `--ran-dropdown-z-index` _(component)_
+- `--ran-radius-md` _(semantic)_
+- `--ran-shadow-elevated` _(semantic)_
+- `--ran-shadow-menu` _(semantic)_
+- `--ran-skin-font-family` _(skin)_
+- `--ran-text-label-1` _(internal)_
+- `--ran-text-label-weight` _(internal)_
+- `--ran-x` _(internal)_
+- `--ran-y` _(internal)_
+- `--ran-z-dropdown` _(internal)_
 
 #### Parts
+
 - `dropdown`
 
 ### `glass`
@@ -371,33 +386,36 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 2
 
 #### Tokens
+
 <!-- layers: semantic: 5 · internal: 19 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-glass-blur` *(internal)*
-- `--ran-glass-border` *(internal)*
-- `--ran-glass-brightness` *(internal)*
-- `--ran-glass-display` *(internal)*
-- `--ran-glass-min-height` *(internal)*
-- `--ran-glass-min-width` *(internal)*
-- `--ran-glass-padding` *(internal)*
-- `--ran-glass-position` *(internal)*
-- `--ran-glass-radius` *(internal)*
-- `--ran-glass-reduced-transparency-background` *(internal)*
-- `--ran-glass-reduced-transparency-shadow` *(internal)*
-- `--ran-glass-refraction` *(internal)*
-- `--ran-glass-saturate` *(internal)*
-- `--ran-glass-shadow` *(internal)*
-- `--ran-glass-sheen-duration` *(internal)*
-- `--ran-glass-specular-background` *(internal)*
-- `--ran-glass-specular-opacity` *(internal)*
-- `--ran-glass-tint` *(internal)*
-- `--ran-glass-transition` *(internal)*
-- `--ran-motion-duration-base` *(semantic)*
-- `--ran-motion-duration-fast` *(semantic)*
-- `--ran-motion-ease-spring` *(semantic)*
-- `--ran-shadow-elevated` *(semantic)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-glass-blur` _(internal)_
+- `--ran-glass-border` _(internal)_
+- `--ran-glass-brightness` _(internal)_
+- `--ran-glass-display` _(internal)_
+- `--ran-glass-min-height` _(internal)_
+- `--ran-glass-min-width` _(internal)_
+- `--ran-glass-padding` _(internal)_
+- `--ran-glass-position` _(internal)_
+- `--ran-glass-radius` _(internal)_
+- `--ran-glass-reduced-transparency-background` _(internal)_
+- `--ran-glass-reduced-transparency-shadow` _(internal)_
+- `--ran-glass-refraction` _(internal)_
+- `--ran-glass-saturate` _(internal)_
+- `--ran-glass-shadow` _(internal)_
+- `--ran-glass-sheen-duration` _(internal)_
+- `--ran-glass-specular-background` _(internal)_
+- `--ran-glass-specular-opacity` _(internal)_
+- `--ran-glass-tint` _(internal)_
+- `--ran-glass-transition` _(internal)_
+- `--ran-motion-duration-base` _(semantic)_
+- `--ran-motion-duration-fast` _(semantic)_
+- `--ran-motion-ease-spring` _(semantic)_
+- `--ran-shadow-elevated` _(semantic)_
 
 #### Parts
+
 - `glass`
 - `specular`
 
@@ -407,22 +425,25 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: component: 13 -->
-- `--ran-icon-align-items` *(component)*
-- `--ran-icon-color` *(component)*
-- `--ran-icon-display` *(component)*
-- `--ran-icon-font-size` *(component)*
-- `--ran-icon-host-display` *(component)*
-- `--ran-icon-host-spin-animation` *(component)*
-- `--ran-icon-host-spin-transform` *(component)*
-- `--ran-icon-justify-content` *(component)*
-- `--ran-icon-margin` *(component)*
-- `--ran-icon-svg-fill` *(component)*
-- `--ran-icon-svg-height` *(component)*
-- `--ran-icon-svg-stroke` *(component)*
-- `--ran-icon-svg-width` *(component)*
+
+- `--ran-icon-align-items` _(component)_
+- `--ran-icon-color` _(component)_
+- `--ran-icon-display` _(component)_
+- `--ran-icon-font-size` _(component)_
+- `--ran-icon-host-display` _(component)_
+- `--ran-icon-host-spin-animation` _(component)_
+- `--ran-icon-host-spin-transform` _(component)_
+- `--ran-icon-justify-content` _(component)_
+- `--ran-icon-margin` _(component)_
+- `--ran-icon-svg-fill` _(component)_
+- `--ran-icon-svg-height` _(component)_
+- `--ran-icon-svg-stroke` _(component)_
+- `--ran-icon-svg-width` _(component)_
 
 #### Parts
+
 - `ran-icon`
 
 ### `image`
@@ -431,9 +452,11 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `input`
@@ -442,140 +465,143 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 4
 
 #### Tokens
+
 <!-- layers: semantic: 12 · skin: 2 · component: 105 · internal: 12 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-bg-muted` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-border-hover` *(semantic)*
-- `--ran-color-danger` *(semantic)*
-- `--ran-color-link` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-color-text-disabled` *(semantic)*
-- `--ran-color-text-secondary` *(semantic)*
-- `--ran-color-warning` *(semantic)*
-- `--ran-focus-ring` *(internal)*
-- `--ran-input-active-border-color` *(component)*
-- `--ran-input-active-border-right-width` *(component)*
-- `--ran-input-active-box-shadow` *(component)*
-- `--ran-input-active-outline` *(component)*
-- `--ran-input-align-items` *(component)*
-- `--ran-input-background-color` *(component)*
-- `--ran-input-background-image` *(component)*
-- `--ran-input-border` *(component)*
-- `--ran-input-border-image-slice` *(component)*
-- `--ran-input-border-image-source` *(component)*
-- `--ran-input-border-image-width` *(component)*
-- `--ran-input-border-radius` *(component)*
-- `--ran-input-box-sizing` *(component)*
-- `--ran-input-color` *(component)*
-- `--ran-input-content--webkit-appearance` *(component)*
-- `--ran-input-content-background-color` *(component)*
-- `--ran-input-content-background-image` *(component)*
-- `--ran-input-content-border` *(component)*
-- `--ran-input-content-border-radius` *(component)*
-- `--ran-input-content-box-sizing` *(component)*
-- `--ran-input-content-color` *(component)*
-- `--ran-input-content-cursor` *(component)*
-- `--ran-input-content-disabled-background-color` *(component)*
-- `--ran-input-content-disabled-border-color` *(component)*
-- `--ran-input-content-disabled-box-shadow` *(component)*
-- `--ran-input-content-disabled-color` *(component)*
-- `--ran-input-content-disabled-cursor` *(component)*
-- `--ran-input-content-disabled-opacity` *(component)*
-- `--ran-input-content-font-feature-settings` *(component)*
-- `--ran-input-content-font-size` *(component)*
-- `--ran-input-content-font-variant` *(component)*
-- `--ran-input-content-font-weight` *(component)*
-- `--ran-input-content-height` *(component)*
-- `--ran-input-content-hover-border` *(component)*
-- `--ran-input-content-hover-box-shadow` *(component)*
-- `--ran-input-content-hover-outline` *(component)*
-- `--ran-input-content-letter-spacing` *(component)*
-- `--ran-input-content-line-height` *(component)*
-- `--ran-input-content-list-style` *(component)*
-- `--ran-input-content-margin` *(component)*
-- `--ran-input-content-min-height` *(component)*
-- `--ran-input-content-min-width` *(component)*
-- `--ran-input-content-outline` *(component)*
-- `--ran-input-content-padding` *(component)*
-- `--ran-input-content-placeholder-color` *(component)*
-- `--ran-input-content-position` *(component)*
-- `--ran-input-content-status-padding-right` *(component)*
-- `--ran-input-content-text-align` *(component)*
-- `--ran-input-content-text-indent` *(component)*
-- `--ran-input-content-text-overflow` *(component)*
-- `--ran-input-content-text-rendering` *(component)*
-- `--ran-input-content-text-shadow` *(component)*
-- `--ran-input-content-text-transform` *(component)*
-- `--ran-input-content-touch-action` *(component)*
-- `--ran-input-content-transition` *(component)*
-- `--ran-input-content-width` *(component)*
-- `--ran-input-content-word-spacing` *(component)*
-- `--ran-input-content-writing-mode` *(component)*
-- `--ran-input-disabled-background-color` *(component)*
-- `--ran-input-disabled-border-color` *(component)*
-- `--ran-input-disabled-box-shadow` *(component)*
-- `--ran-input-disabled-color` *(component)*
-- `--ran-input-disabled-cursor` *(component)*
-- `--ran-input-disabled-opacity` *(component)*
-- `--ran-input-display` *(component)*
-- `--ran-input-error-border-color` *(component)*
-- `--ran-input-font-family` *(component)*
-- `--ran-input-font-size` *(component)*
-- `--ran-input-height` *(component)*
-- `--ran-input-host-box-sizing` *(component)*
-- `--ran-input-host-display` *(component)*
-- `--ran-input-host-position` *(component)*
-- `--ran-input-hover-border-color` *(component)*
-- `--ran-input-hover-border-right-width` *(component)*
-- `--ran-input-icon-align-items` *(component)*
-- `--ran-input-icon-display` *(component)*
-- `--ran-input-icon-justify-content` *(component)*
-- `--ran-input-label-color` *(component)*
-- `--ran-input-label-disabled-color` *(component)*
-- `--ran-input-label-disabled-cursor` *(component)*
-- `--ran-input-label-display` *(component)*
-- `--ran-input-label-error-color` *(component)*
-- `--ran-input-label-font-size` *(component)*
-- `--ran-input-label-font-weight` *(component)*
-- `--ran-input-label-margin-bottom` *(component)*
-- `--ran-input-label-warning-color` *(component)*
-- `--ran-input-line-height` *(component)*
-- `--ran-input-message-color` *(component)*
-- `--ran-input-message-error-color` *(component)*
-- `--ran-input-message-font-size` *(component)*
-- `--ran-input-message-font-weight` *(component)*
-- `--ran-input-message-line-height` *(component)*
-- `--ran-input-message-margin-top` *(component)*
-- `--ran-input-message-warning-color` *(component)*
-- `--ran-input-min-height` *(component)*
-- `--ran-input-min-width` *(component)*
-- `--ran-input-overflow` *(component)*
-- `--ran-input-padding` *(component)*
-- `--ran-input-position` *(component)*
-- `--ran-input-status-icon-height` *(component)*
-- `--ran-input-status-icon-right` *(component)*
-- `--ran-input-status-icon-width` *(component)*
-- `--ran-input-transition` *(component)*
-- `--ran-input-warning-border-color` *(component)*
-- `--ran-input-width` *(component)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-size-1` *(internal)*
-- `--ran-size-6` *(internal)*
-- `--ran-size-7` *(internal)*
-- `--ran-skin-border-image-width` *(skin)*
-- `--ran-skin-font-family` *(skin)*
-- `--ran-space-1` *(internal)*
-- `--ran-space-3` *(internal)*
-- `--ran-space-8` *(internal)*
-- `--ran-text-copy-2` *(internal)*
-- `--ran-text-copy-weight` *(internal)*
-- `--ran-text-label-1` *(internal)*
-- `--ran-text-label-3` *(internal)*
-- `--ran-text-label-weight` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-bg-muted` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-border-hover` _(semantic)_
+- `--ran-color-danger` _(semantic)_
+- `--ran-color-link` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-color-text-disabled` _(semantic)_
+- `--ran-color-text-secondary` _(semantic)_
+- `--ran-color-warning` _(semantic)_
+- `--ran-focus-ring` _(internal)_
+- `--ran-input-active-border-color` _(component)_
+- `--ran-input-active-border-right-width` _(component)_
+- `--ran-input-active-box-shadow` _(component)_
+- `--ran-input-active-outline` _(component)_
+- `--ran-input-align-items` _(component)_
+- `--ran-input-background-color` _(component)_
+- `--ran-input-background-image` _(component)_
+- `--ran-input-border` _(component)_
+- `--ran-input-border-image-slice` _(component)_
+- `--ran-input-border-image-source` _(component)_
+- `--ran-input-border-image-width` _(component)_
+- `--ran-input-border-radius` _(component)_
+- `--ran-input-box-sizing` _(component)_
+- `--ran-input-color` _(component)_
+- `--ran-input-content--webkit-appearance` _(component)_
+- `--ran-input-content-background-color` _(component)_
+- `--ran-input-content-background-image` _(component)_
+- `--ran-input-content-border` _(component)_
+- `--ran-input-content-border-radius` _(component)_
+- `--ran-input-content-box-sizing` _(component)_
+- `--ran-input-content-color` _(component)_
+- `--ran-input-content-cursor` _(component)_
+- `--ran-input-content-disabled-background-color` _(component)_
+- `--ran-input-content-disabled-border-color` _(component)_
+- `--ran-input-content-disabled-box-shadow` _(component)_
+- `--ran-input-content-disabled-color` _(component)_
+- `--ran-input-content-disabled-cursor` _(component)_
+- `--ran-input-content-disabled-opacity` _(component)_
+- `--ran-input-content-font-feature-settings` _(component)_
+- `--ran-input-content-font-size` _(component)_
+- `--ran-input-content-font-variant` _(component)_
+- `--ran-input-content-font-weight` _(component)_
+- `--ran-input-content-height` _(component)_
+- `--ran-input-content-hover-border` _(component)_
+- `--ran-input-content-hover-box-shadow` _(component)_
+- `--ran-input-content-hover-outline` _(component)_
+- `--ran-input-content-letter-spacing` _(component)_
+- `--ran-input-content-line-height` _(component)_
+- `--ran-input-content-list-style` _(component)_
+- `--ran-input-content-margin` _(component)_
+- `--ran-input-content-min-height` _(component)_
+- `--ran-input-content-min-width` _(component)_
+- `--ran-input-content-outline` _(component)_
+- `--ran-input-content-padding` _(component)_
+- `--ran-input-content-placeholder-color` _(component)_
+- `--ran-input-content-position` _(component)_
+- `--ran-input-content-status-padding-right` _(component)_
+- `--ran-input-content-text-align` _(component)_
+- `--ran-input-content-text-indent` _(component)_
+- `--ran-input-content-text-overflow` _(component)_
+- `--ran-input-content-text-rendering` _(component)_
+- `--ran-input-content-text-shadow` _(component)_
+- `--ran-input-content-text-transform` _(component)_
+- `--ran-input-content-touch-action` _(component)_
+- `--ran-input-content-transition` _(component)_
+- `--ran-input-content-width` _(component)_
+- `--ran-input-content-word-spacing` _(component)_
+- `--ran-input-content-writing-mode` _(component)_
+- `--ran-input-disabled-background-color` _(component)_
+- `--ran-input-disabled-border-color` _(component)_
+- `--ran-input-disabled-box-shadow` _(component)_
+- `--ran-input-disabled-color` _(component)_
+- `--ran-input-disabled-cursor` _(component)_
+- `--ran-input-disabled-opacity` _(component)_
+- `--ran-input-display` _(component)_
+- `--ran-input-error-border-color` _(component)_
+- `--ran-input-font-family` _(component)_
+- `--ran-input-font-size` _(component)_
+- `--ran-input-height` _(component)_
+- `--ran-input-host-box-sizing` _(component)_
+- `--ran-input-host-display` _(component)_
+- `--ran-input-host-position` _(component)_
+- `--ran-input-hover-border-color` _(component)_
+- `--ran-input-hover-border-right-width` _(component)_
+- `--ran-input-icon-align-items` _(component)_
+- `--ran-input-icon-display` _(component)_
+- `--ran-input-icon-justify-content` _(component)_
+- `--ran-input-label-color` _(component)_
+- `--ran-input-label-disabled-color` _(component)_
+- `--ran-input-label-disabled-cursor` _(component)_
+- `--ran-input-label-display` _(component)_
+- `--ran-input-label-error-color` _(component)_
+- `--ran-input-label-font-size` _(component)_
+- `--ran-input-label-font-weight` _(component)_
+- `--ran-input-label-margin-bottom` _(component)_
+- `--ran-input-label-warning-color` _(component)_
+- `--ran-input-line-height` _(component)_
+- `--ran-input-message-color` _(component)_
+- `--ran-input-message-error-color` _(component)_
+- `--ran-input-message-font-size` _(component)_
+- `--ran-input-message-font-weight` _(component)_
+- `--ran-input-message-line-height` _(component)_
+- `--ran-input-message-margin-top` _(component)_
+- `--ran-input-message-warning-color` _(component)_
+- `--ran-input-min-height` _(component)_
+- `--ran-input-min-width` _(component)_
+- `--ran-input-overflow` _(component)_
+- `--ran-input-padding` _(component)_
+- `--ran-input-position` _(component)_
+- `--ran-input-status-icon-height` _(component)_
+- `--ran-input-status-icon-right` _(component)_
+- `--ran-input-status-icon-width` _(component)_
+- `--ran-input-transition` _(component)_
+- `--ran-input-warning-border-color` _(component)_
+- `--ran-input-width` _(component)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-size-1` _(internal)_
+- `--ran-size-6` _(internal)_
+- `--ran-size-7` _(internal)_
+- `--ran-skin-border-image-width` _(skin)_
+- `--ran-skin-font-family` _(skin)_
+- `--ran-space-1` _(internal)_
+- `--ran-space-3` _(internal)_
+- `--ran-space-8` _(internal)_
+- `--ran-text-copy-2` _(internal)_
+- `--ran-text-copy-weight` _(internal)_
+- `--ran-text-label-1` _(internal)_
+- `--ran-text-label-3` _(internal)_
+- `--ran-text-label-weight` _(internal)_
 
 #### Parts
+
 - `content`
 - `input`
 - `label`
@@ -587,15 +613,18 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 3 · internal: 3 -->
-- `--ran-color-link` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-link-active-font-weight` *(internal)*
-- `--ran-link-focus-outline` *(internal)*
-- `--ran-link-focus-outline-offset` *(internal)*
-- `--ran-radius-sm` *(semantic)*
+
+- `--ran-color-link` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-link-active-font-weight` _(internal)_
+- `--ran-link-focus-outline` _(internal)_
+- `--ran-link-focus-outline-offset` _(internal)_
+- `--ran-radius-sm` _(semantic)_
 
 #### Parts
+
 - (none)
 
 ### `loading`
@@ -604,9 +633,11 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `loading/variants/arc`
@@ -615,12 +646,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `arc`
 
 ### `loading/variants/circle`
@@ -629,12 +663,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `circle`
 
 ### `loading/variants/circle-fold`
@@ -643,12 +680,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `circle-fold`
 
 ### `loading/variants/circle-line`
@@ -657,12 +697,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `circle-line`
 
 ### `loading/variants/circle-rotate`
@@ -671,12 +714,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `circle-rotate`
 
 ### `loading/variants/circle-spin`
@@ -685,12 +731,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `circle-spin`
 
 ### `loading/variants/circle-turn`
@@ -699,12 +748,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `circle-turn`
 
 ### `loading/variants/cube`
@@ -713,12 +765,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `cube`
 
 ### `loading/variants/cube-dim`
@@ -727,12 +782,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `cube-dim`
 
 ### `loading/variants/cube-fold`
@@ -741,12 +799,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `cube-fold`
 
 ### `loading/variants/cube-grid`
@@ -755,12 +816,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `cube-grid`
 
 ### `loading/variants/dot`
@@ -769,12 +833,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `dot`
 
 ### `loading/variants/dot-bar`
@@ -783,12 +850,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `dot-bar`
 
 ### `loading/variants/dot-circle`
@@ -797,12 +867,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `dot-circle`
 
 ### `loading/variants/dot-line`
@@ -811,12 +884,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `dot-line`
 
 ### `loading/variants/dot-pulse`
@@ -825,12 +901,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `dot-pulse`
 
 ### `loading/variants/double-bounce`
@@ -839,12 +918,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `double-bounce`
 
 ### `loading/variants/drop`
@@ -853,12 +935,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `drop`
 
 ### `loading/variants/line`
@@ -867,12 +952,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `line`
 
 ### `loading/variants/line-scale`
@@ -881,12 +969,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `line-scale`
 
 ### `loading/variants/pacman`
@@ -895,12 +986,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `pacman`
 
 ### `loading/variants/pulse`
@@ -909,12 +1003,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `pulse`
 
 ### `loading/variants/rotate`
@@ -923,12 +1020,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `rotate`
 
 ### `loading/variants/scale-out`
@@ -937,12 +1037,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `scale-out`
 
 ### `loading/variants/solar`
@@ -951,12 +1054,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 2
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `solar`
 - `sun`
 
@@ -966,12 +1072,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `square`
 
 ### `loading/variants/stretch`
@@ -980,12 +1089,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `stretch`
 
 ### `loading/variants/text`
@@ -994,12 +1106,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `text`
 
 ### `loading/variants/triple-bounce`
@@ -1008,12 +1123,15 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-success` *(semantic)*
-- `--ran-color-text` *(semantic)*
+
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-success` _(semantic)_
+- `--ran-color-text` _(semantic)_
 
 #### Parts
+
 - `triple-bounce`
 
 ### `math`
@@ -1022,55 +1140,58 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 6
 
 #### Tokens
+
 <!-- layers: semantic: 10 · component: 28 · internal: 8 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-bg-muted` *(semantic)*
-- `--ran-color-danger` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-color-text-secondary` *(semantic)*
-- `--ran-font-mono` *(semantic)*
-- `--ran-gray-alpha-100` *(internal)*
-- `--ran-math-align` *(component)*
-- `--ran-math-button-color` *(component)*
-- `--ran-math-button-focus-outline` *(component)*
-- `--ran-math-button-hover-background` *(component)*
-- `--ran-math-button-hover-color` *(component)*
-- `--ran-math-button-size` *(component)*
-- `--ran-math-color` *(component)*
-- `--ran-math-display` *(component)*
-- `--ran-math-error-background` *(component)*
-- `--ran-math-error-color` *(component)*
-- `--ran-math-error-font-size` *(component)*
-- `--ran-math-error-font-weight` *(component)*
-- `--ran-math-error-padding` *(component)*
-- `--ran-math-inline-display` *(component)*
-- `--ran-math-item-color` *(component)*
-- `--ran-math-menu-item-font-size` *(component)*
-- `--ran-math-menu-item-font-weight` *(component)*
-- `--ran-math-menu-item-padding-block` *(component)*
-- `--ran-math-menu-item-padding-inline` *(component)*
-- `--ran-math-menu-padding` *(component)*
-- `--ran-math-menu-top` *(component)*
-- `--ran-math-position` *(component)*
-- `--ran-math-toolbar-background` *(component)*
-- `--ran-math-toolbar-gap` *(component)*
-- `--ran-math-toolbar-padding` *(component)*
-- `--ran-math-toolbar-right` *(component)*
-- `--ran-math-toolbar-shadow` *(component)*
-- `--ran-math-toolbar-top` *(component)*
-- `--ran-radius-md` *(semantic)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-shadow-menu` *(semantic)*
-- `--ran-size-5` *(internal)*
-- `--ran-space-1` *(internal)*
-- `--ran-space-2` *(internal)*
-- `--ran-space-3` *(internal)*
-- `--ran-text-label-2` *(internal)*
-- `--ran-text-label-weight` *(internal)*
-- `--ran-text-mono-weight-regular` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-bg-muted` _(semantic)_
+- `--ran-color-danger` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-color-text-secondary` _(semantic)_
+- `--ran-font-mono` _(semantic)_
+- `--ran-gray-alpha-100` _(internal)_
+- `--ran-math-align` _(component)_
+- `--ran-math-button-color` _(component)_
+- `--ran-math-button-focus-outline` _(component)_
+- `--ran-math-button-hover-background` _(component)_
+- `--ran-math-button-hover-color` _(component)_
+- `--ran-math-button-size` _(component)_
+- `--ran-math-color` _(component)_
+- `--ran-math-display` _(component)_
+- `--ran-math-error-background` _(component)_
+- `--ran-math-error-color` _(component)_
+- `--ran-math-error-font-size` _(component)_
+- `--ran-math-error-font-weight` _(component)_
+- `--ran-math-error-padding` _(component)_
+- `--ran-math-inline-display` _(component)_
+- `--ran-math-item-color` _(component)_
+- `--ran-math-menu-item-font-size` _(component)_
+- `--ran-math-menu-item-font-weight` _(component)_
+- `--ran-math-menu-item-padding-block` _(component)_
+- `--ran-math-menu-item-padding-inline` _(component)_
+- `--ran-math-menu-padding` _(component)_
+- `--ran-math-menu-top` _(component)_
+- `--ran-math-position` _(component)_
+- `--ran-math-toolbar-background` _(component)_
+- `--ran-math-toolbar-gap` _(component)_
+- `--ran-math-toolbar-padding` _(component)_
+- `--ran-math-toolbar-right` _(component)_
+- `--ran-math-toolbar-shadow` _(component)_
+- `--ran-math-toolbar-top` _(component)_
+- `--ran-radius-md` _(semantic)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-shadow-menu` _(semantic)_
+- `--ran-size-5` _(internal)_
+- `--ran-space-1` _(internal)_
+- `--ran-space-2` _(internal)_
+- `--ran-space-3` _(internal)_
+- `--ran-text-label-2` _(internal)_
+- `--ran-text-label-weight` _(internal)_
+- `--ran-text-mono-weight-regular` _(internal)_
 
 #### Parts
+
 - `button`
 - `error`
 - `math`
@@ -1084,47 +1205,50 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 6
 
 #### Tokens
+
 <!-- layers: semantic: 8 · internal: 30 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-bg-muted` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-color-text-secondary` *(semantic)*
-- `--ran-mermaid-button-color` *(internal)*
-- `--ran-mermaid-button-focus-outline` *(internal)*
-- `--ran-mermaid-button-focus-outline-offset` *(internal)*
-- `--ran-mermaid-button-hover-background` *(internal)*
-- `--ran-mermaid-button-hover-color` *(internal)*
-- `--ran-mermaid-button-size` *(internal)*
-- `--ran-mermaid-error-color` *(internal)*
-- `--ran-mermaid-error-font-size` *(internal)*
-- `--ran-mermaid-error-font-weight` *(internal)*
-- `--ran-mermaid-error-padding` *(internal)*
-- `--ran-mermaid-menu-item-color` *(internal)*
-- `--ran-mermaid-menu-item-font-size` *(internal)*
-- `--ran-mermaid-menu-item-font-weight` *(internal)*
-- `--ran-mermaid-menu-item-padding-block` *(internal)*
-- `--ran-mermaid-menu-item-padding-inline` *(internal)*
-- `--ran-mermaid-menu-padding` *(internal)*
-- `--ran-mermaid-menu-top` *(internal)*
-- `--ran-mermaid-padding` *(internal)*
-- `--ran-mermaid-toolbar-background` *(internal)*
-- `--ran-mermaid-toolbar-gap` *(internal)*
-- `--ran-mermaid-toolbar-padding` *(internal)*
-- `--ran-mermaid-toolbar-right` *(internal)*
-- `--ran-mermaid-toolbar-shadow` *(internal)*
-- `--ran-mermaid-toolbar-top` *(internal)*
-- `--ran-radius-md` *(semantic)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-shadow-menu` *(semantic)*
-- `--ran-size-5` *(internal)*
-- `--ran-space-1` *(internal)*
-- `--ran-space-2` *(internal)*
-- `--ran-space-3` *(internal)*
-- `--ran-text-label-2` *(internal)*
-- `--ran-text-label-weight` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-bg-muted` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-color-text-secondary` _(semantic)_
+- `--ran-mermaid-button-color` _(internal)_
+- `--ran-mermaid-button-focus-outline` _(internal)_
+- `--ran-mermaid-button-focus-outline-offset` _(internal)_
+- `--ran-mermaid-button-hover-background` _(internal)_
+- `--ran-mermaid-button-hover-color` _(internal)_
+- `--ran-mermaid-button-size` _(internal)_
+- `--ran-mermaid-error-color` _(internal)_
+- `--ran-mermaid-error-font-size` _(internal)_
+- `--ran-mermaid-error-font-weight` _(internal)_
+- `--ran-mermaid-error-padding` _(internal)_
+- `--ran-mermaid-menu-item-color` _(internal)_
+- `--ran-mermaid-menu-item-font-size` _(internal)_
+- `--ran-mermaid-menu-item-font-weight` _(internal)_
+- `--ran-mermaid-menu-item-padding-block` _(internal)_
+- `--ran-mermaid-menu-item-padding-inline` _(internal)_
+- `--ran-mermaid-menu-padding` _(internal)_
+- `--ran-mermaid-menu-top` _(internal)_
+- `--ran-mermaid-padding` _(internal)_
+- `--ran-mermaid-toolbar-background` _(internal)_
+- `--ran-mermaid-toolbar-gap` _(internal)_
+- `--ran-mermaid-toolbar-padding` _(internal)_
+- `--ran-mermaid-toolbar-right` _(internal)_
+- `--ran-mermaid-toolbar-shadow` _(internal)_
+- `--ran-mermaid-toolbar-top` _(internal)_
+- `--ran-radius-md` _(semantic)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-shadow-menu` _(semantic)_
+- `--ran-size-5` _(internal)_
+- `--ran-space-1` _(internal)_
+- `--ran-space-2` _(internal)_
+- `--ran-space-3` _(internal)_
+- `--ran-text-label-2` _(internal)_
+- `--ran-text-label-weight` _(internal)_
 
 #### Parts
+
 - `button`
 - `diagram`
 - `error`
@@ -1138,95 +1262,98 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 5 · skin: 1 · component: 75 · internal: 5 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-message-box-sizing` *(component)*
-- `--ran-message-color` *(component)*
-- `--ran-message-content-background` *(component)*
-- `--ran-message-content-border-image-slice` *(component)*
-- `--ran-message-content-border-image-source` *(component)*
-- `--ran-message-content-border-image-width` *(component)*
-- `--ran-message-content-border-radius` *(component)*
-- `--ran-message-content-box-shadow` *(component)*
-- `--ran-message-content-display` *(component)*
-- `--ran-message-content-padding` *(component)*
-- `--ran-message-content-pointer-events` *(component)*
-- `--ran-message-content-toast-background` *(component)*
-- `--ran-message-content-toast-border-radius` *(component)*
-- `--ran-message-content-toast-display` *(component)*
-- `--ran-message-content-toast-padding` *(component)*
-- `--ran-message-content-toast-pointer-events` *(component)*
-- `--ran-message-font-feature-settings` *(component)*
-- `--ran-message-font-size` *(component)*
-- `--ran-message-font-variant` *(component)*
-- `--ran-message-font-weight` *(component)*
-- `--ran-message-host-display` *(component)*
-- `--ran-message-in-animation-duration` *(component)*
-- `--ran-message-in-animation-fill-mode` *(component)*
-- `--ran-message-in-animation-name` *(component)*
-- `--ran-message-in-animation-timing-function` *(component)*
-- `--ran-message-info-align-items` *(component)*
-- `--ran-message-info-display` *(component)*
-- `--ran-message-info-toast-align-items` *(component)*
-- `--ran-message-info-toast-display` *(component)*
-- `--ran-message-ist-style` *(component)*
-- `--ran-message-leave-animation-duration` *(component)*
-- `--ran-message-leave-animation-fill-mode` *(component)*
-- `--ran-message-leave-animation-name` *(component)*
-- `--ran-message-leave-animation-timing-function` *(component)*
-- `--ran-message-left` *(component)*
-- `--ran-message-line-height` *(component)*
-- `--ran-message-margin` *(component)*
-- `--ran-message-notice-margin` *(component)*
-- `--ran-message-notice-max-width` *(component)*
-- `--ran-message-notice-padding` *(component)*
-- `--ran-message-notice-text-align` *(component)*
-- `--ran-message-notice-toast-margin` *(component)*
-- `--ran-message-notice-toast-max-width` *(component)*
-- `--ran-message-notice-toast-padding` *(component)*
-- `--ran-message-notice-toast-text-align` *(component)*
-- `--ran-message-notice-toast-word-break` *(component)*
-- `--ran-message-notice-word-break` *(component)*
-- `--ran-message-padding` *(component)*
-- `--ran-message-pointer-events` *(component)*
-- `--ran-message-position` *(component)*
-- `--ran-message-text-color` *(component)*
-- `--ran-message-text-font-feature-settings` *(component)*
-- `--ran-message-text-font-size` *(component)*
-- `--ran-message-text-font-variant` *(component)*
-- `--ran-message-text-font-weight` *(component)*
-- `--ran-message-text-list-style` *(component)*
-- `--ran-message-text-margin` *(component)*
-- `--ran-message-text-padding` *(component)*
-- `--ran-message-text-pointer-events` *(component)*
-- `--ran-message-text-toast-color` *(component)*
-- `--ran-message-text-toast-font-feature-settings` *(component)*
-- `--ran-message-text-toast-font-size` *(component)*
-- `--ran-message-text-toast-font-variant` *(component)*
-- `--ran-message-text-toast-font-weight` *(component)*
-- `--ran-message-text-toast-list-style` *(component)*
-- `--ran-message-text-toast-margin` *(component)*
-- `--ran-message-text-toast-padding` *(component)*
-- `--ran-message-text-toast-pointer-events` *(component)*
-- `--ran-message-text-toast-width` *(component)*
-- `--ran-message-text-toast-z-index` *(component)*
-- `--ran-message-text-width` *(component)*
-- `--ran-message-text-z-index` *(component)*
-- `--ran-message-top` *(component)*
-- `--ran-message-width` *(component)*
-- `--ran-message-z-index` *(component)*
-- `--ran-radius-md` *(semantic)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-shadow-menu` *(semantic)*
-- `--ran-skin-border-image-width` *(skin)*
-- `--ran-space-3` *(internal)*
-- `--ran-space-4` *(internal)*
-- `--ran-text-copy-2` *(internal)*
-- `--ran-text-copy-weight` *(internal)*
-- `--ran-z-message` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-message-box-sizing` _(component)_
+- `--ran-message-color` _(component)_
+- `--ran-message-content-background` _(component)_
+- `--ran-message-content-border-image-slice` _(component)_
+- `--ran-message-content-border-image-source` _(component)_
+- `--ran-message-content-border-image-width` _(component)_
+- `--ran-message-content-border-radius` _(component)_
+- `--ran-message-content-box-shadow` _(component)_
+- `--ran-message-content-display` _(component)_
+- `--ran-message-content-padding` _(component)_
+- `--ran-message-content-pointer-events` _(component)_
+- `--ran-message-content-toast-background` _(component)_
+- `--ran-message-content-toast-border-radius` _(component)_
+- `--ran-message-content-toast-display` _(component)_
+- `--ran-message-content-toast-padding` _(component)_
+- `--ran-message-content-toast-pointer-events` _(component)_
+- `--ran-message-font-feature-settings` _(component)_
+- `--ran-message-font-size` _(component)_
+- `--ran-message-font-variant` _(component)_
+- `--ran-message-font-weight` _(component)_
+- `--ran-message-host-display` _(component)_
+- `--ran-message-in-animation-duration` _(component)_
+- `--ran-message-in-animation-fill-mode` _(component)_
+- `--ran-message-in-animation-name` _(component)_
+- `--ran-message-in-animation-timing-function` _(component)_
+- `--ran-message-info-align-items` _(component)_
+- `--ran-message-info-display` _(component)_
+- `--ran-message-info-toast-align-items` _(component)_
+- `--ran-message-info-toast-display` _(component)_
+- `--ran-message-ist-style` _(component)_
+- `--ran-message-leave-animation-duration` _(component)_
+- `--ran-message-leave-animation-fill-mode` _(component)_
+- `--ran-message-leave-animation-name` _(component)_
+- `--ran-message-leave-animation-timing-function` _(component)_
+- `--ran-message-left` _(component)_
+- `--ran-message-line-height` _(component)_
+- `--ran-message-margin` _(component)_
+- `--ran-message-notice-margin` _(component)_
+- `--ran-message-notice-max-width` _(component)_
+- `--ran-message-notice-padding` _(component)_
+- `--ran-message-notice-text-align` _(component)_
+- `--ran-message-notice-toast-margin` _(component)_
+- `--ran-message-notice-toast-max-width` _(component)_
+- `--ran-message-notice-toast-padding` _(component)_
+- `--ran-message-notice-toast-text-align` _(component)_
+- `--ran-message-notice-toast-word-break` _(component)_
+- `--ran-message-notice-word-break` _(component)_
+- `--ran-message-padding` _(component)_
+- `--ran-message-pointer-events` _(component)_
+- `--ran-message-position` _(component)_
+- `--ran-message-text-color` _(component)_
+- `--ran-message-text-font-feature-settings` _(component)_
+- `--ran-message-text-font-size` _(component)_
+- `--ran-message-text-font-variant` _(component)_
+- `--ran-message-text-font-weight` _(component)_
+- `--ran-message-text-list-style` _(component)_
+- `--ran-message-text-margin` _(component)_
+- `--ran-message-text-padding` _(component)_
+- `--ran-message-text-pointer-events` _(component)_
+- `--ran-message-text-toast-color` _(component)_
+- `--ran-message-text-toast-font-feature-settings` _(component)_
+- `--ran-message-text-toast-font-size` _(component)_
+- `--ran-message-text-toast-font-variant` _(component)_
+- `--ran-message-text-toast-font-weight` _(component)_
+- `--ran-message-text-toast-list-style` _(component)_
+- `--ran-message-text-toast-margin` _(component)_
+- `--ran-message-text-toast-padding` _(component)_
+- `--ran-message-text-toast-pointer-events` _(component)_
+- `--ran-message-text-toast-width` _(component)_
+- `--ran-message-text-toast-z-index` _(component)_
+- `--ran-message-text-width` _(component)_
+- `--ran-message-text-z-index` _(component)_
+- `--ran-message-top` _(component)_
+- `--ran-message-width` _(component)_
+- `--ran-message-z-index` _(component)_
+- `--ran-radius-md` _(semantic)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-shadow-menu` _(semantic)_
+- `--ran-skin-border-image-width` _(skin)_
+- `--ran-space-3` _(internal)_
+- `--ran-space-4` _(internal)_
+- `--ran-text-copy-2` _(internal)_
+- `--ran-text-copy-weight` _(internal)_
+- `--ran-z-message` _(internal)_
 
 #### Parts
+
 - (none)
 
 ### `modal`
@@ -1235,80 +1362,83 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 8
 
 #### Tokens
+
 <!-- layers: semantic: 11 · skin: 1 · component: 51 · internal: 8 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-border-secondary` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-primary-text` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-color-text-secondary` *(semantic)*
-- `--ran-modal-action-font-size` *(component)*
-- `--ran-modal-action-font-weight` *(component)*
-- `--ran-modal-action-padding-inline` *(component)*
-- `--ran-modal-actions-gap` *(component)*
-- `--ran-modal-body-color` *(component)*
-- `--ran-modal-body-max-height` *(component)*
-- `--ran-modal-body-overflow` *(component)*
-- `--ran-modal-body-padding` *(component)*
-- `--ran-modal-close-background` *(component)*
-- `--ran-modal-close-border` *(component)*
-- `--ran-modal-close-color` *(component)*
-- `--ran-modal-close-cursor` *(component)*
-- `--ran-modal-close-font-size` *(component)*
-- `--ran-modal-close-padding` *(component)*
-- `--ran-modal-dialog-background` *(component)*
-- `--ran-modal-dialog-border-image-slice` *(component)*
-- `--ran-modal-dialog-border-image-source` *(component)*
-- `--ran-modal-dialog-border-image-width` *(component)*
-- `--ran-modal-dialog-border-radius` *(component)*
-- `--ran-modal-dialog-box-shadow` *(component)*
-- `--ran-modal-dialog-margin` *(component)*
-- `--ran-modal-dialog-max-height` *(component)*
-- `--ran-modal-dialog-offset-y` *(component)*
-- `--ran-modal-dialog-outline` *(component)*
-- `--ran-modal-dialog-overflow` *(component)*
-- `--ran-modal-dialog-position` *(component)*
-- `--ran-modal-dialog-width` *(component)*
-- `--ran-modal-footer-align-items` *(component)*
-- `--ran-modal-footer-border-top` *(component)*
-- `--ran-modal-footer-gap` *(component)*
-- `--ran-modal-footer-justify-content` *(component)*
-- `--ran-modal-footer-padding` *(component)*
-- `--ran-modal-header-align-items` *(component)*
-- `--ran-modal-header-border-bottom` *(component)*
-- `--ran-modal-header-display` *(component)*
-- `--ran-modal-header-hidden-padding` *(component)*
-- `--ran-modal-header-justify-content` *(component)*
-- `--ran-modal-header-padding` *(component)*
-- `--ran-modal-host-position` *(component)*
-- `--ran-modal-mask-background` *(component)*
-- `--ran-modal-mask-inset` *(component)*
-- `--ran-modal-mask-position` *(component)*
-- `--ran-modal-root-inset` *(component)*
-- `--ran-modal-root-position` *(component)*
-- `--ran-modal-root-z-index` *(component)*
-- `--ran-modal-title-color` *(component)*
-- `--ran-modal-title-font-size` *(component)*
-- `--ran-modal-title-font-weight` *(component)*
-- `--ran-modal-title-letter-spacing` *(component)*
-- `--ran-modal-title-line-height` *(component)*
-- `--ran-modal-title-margin` *(component)*
-- `--ran-radius-md` *(semantic)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-shadow-elevated` *(semantic)*
-- `--ran-shadow-modal` *(semantic)*
-- `--ran-skin-border-image-width` *(skin)*
-- `--ran-space-3` *(internal)*
-- `--ran-space-4` *(internal)*
-- `--ran-text-button-size` *(internal)*
-- `--ran-text-button-weight` *(internal)*
-- `--ran-text-heading-4` *(internal)*
-- `--ran-text-heading-tracking` *(internal)*
-- `--ran-text-heading-weight` *(internal)*
-- `--ran-z-modal` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-border-secondary` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-primary-text` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-color-text-secondary` _(semantic)_
+- `--ran-modal-action-font-size` _(component)_
+- `--ran-modal-action-font-weight` _(component)_
+- `--ran-modal-action-padding-inline` _(component)_
+- `--ran-modal-actions-gap` _(component)_
+- `--ran-modal-body-color` _(component)_
+- `--ran-modal-body-max-height` _(component)_
+- `--ran-modal-body-overflow` _(component)_
+- `--ran-modal-body-padding` _(component)_
+- `--ran-modal-close-background` _(component)_
+- `--ran-modal-close-border` _(component)_
+- `--ran-modal-close-color` _(component)_
+- `--ran-modal-close-cursor` _(component)_
+- `--ran-modal-close-font-size` _(component)_
+- `--ran-modal-close-padding` _(component)_
+- `--ran-modal-dialog-background` _(component)_
+- `--ran-modal-dialog-border-image-slice` _(component)_
+- `--ran-modal-dialog-border-image-source` _(component)_
+- `--ran-modal-dialog-border-image-width` _(component)_
+- `--ran-modal-dialog-border-radius` _(component)_
+- `--ran-modal-dialog-box-shadow` _(component)_
+- `--ran-modal-dialog-margin` _(component)_
+- `--ran-modal-dialog-max-height` _(component)_
+- `--ran-modal-dialog-offset-y` _(component)_
+- `--ran-modal-dialog-outline` _(component)_
+- `--ran-modal-dialog-overflow` _(component)_
+- `--ran-modal-dialog-position` _(component)_
+- `--ran-modal-dialog-width` _(component)_
+- `--ran-modal-footer-align-items` _(component)_
+- `--ran-modal-footer-border-top` _(component)_
+- `--ran-modal-footer-gap` _(component)_
+- `--ran-modal-footer-justify-content` _(component)_
+- `--ran-modal-footer-padding` _(component)_
+- `--ran-modal-header-align-items` _(component)_
+- `--ran-modal-header-border-bottom` _(component)_
+- `--ran-modal-header-display` _(component)_
+- `--ran-modal-header-hidden-padding` _(component)_
+- `--ran-modal-header-justify-content` _(component)_
+- `--ran-modal-header-padding` _(component)_
+- `--ran-modal-host-position` _(component)_
+- `--ran-modal-mask-background` _(component)_
+- `--ran-modal-mask-inset` _(component)_
+- `--ran-modal-mask-position` _(component)_
+- `--ran-modal-root-inset` _(component)_
+- `--ran-modal-root-position` _(component)_
+- `--ran-modal-root-z-index` _(component)_
+- `--ran-modal-title-color` _(component)_
+- `--ran-modal-title-font-size` _(component)_
+- `--ran-modal-title-font-weight` _(component)_
+- `--ran-modal-title-letter-spacing` _(component)_
+- `--ran-modal-title-line-height` _(component)_
+- `--ran-modal-title-margin` _(component)_
+- `--ran-radius-md` _(semantic)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-shadow-elevated` _(semantic)_
+- `--ran-shadow-modal` _(semantic)_
+- `--ran-skin-border-image-width` _(skin)_
+- `--ran-space-3` _(internal)_
+- `--ran-space-4` _(internal)_
+- `--ran-text-button-size` _(internal)_
+- `--ran-text-button-weight` _(internal)_
+- `--ran-text-heading-4` _(internal)_
+- `--ran-text-heading-tracking` _(internal)_
+- `--ran-text-heading-weight` _(internal)_
+- `--ran-z-modal` _(internal)_
 
 #### Parts
+
 - `body`
 - `close`
 - `dialog`
@@ -1324,385 +1454,388 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 5 · component: 358 · internal: 13 -->
-- `--ran-color-` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-dropdown-background` *(component)*
-- `--ran-dropdown-border` *(component)*
-- `--ran-dropdown-box-shadow` *(component)*
-- `--ran-dropdown-min-width` *(component)*
-- `--ran-dropdown-option-active-background-color` *(component)*
-- `--ran-dropdown-option-active-hover-background-color` *(component)*
-- `--ran-dropdown-option-item-color` *(component)*
-- `--ran-dropdown-option-item-content-color` *(component)*
-- `--ran-dropdown-option-item-content-font-size` *(component)*
-- `--ran-dropdown-option-item-content-text-align` *(component)*
-- `--ran-dropdown-option-item-hover-background-color` *(component)*
-- `--ran-dropdown-option-item-padding` *(component)*
-- `--ran-dropdown-padding` *(component)*
-- `--ran-focus-ring-inverse-color` *(internal)*
-- `--ran-player-clarity-border-radius` *(component)*
-- `--ran-player-clarity-color` *(component)*
-- `--ran-player-clarity-cursor` *(component)*
-- `--ran-player-clarity-focus-outline` *(component)*
-- `--ran-player-clarity-focus-visible-outline` *(component)*
-- `--ran-player-clarity-focus-visible-outline-offset` *(component)*
-- `--ran-player-clarity-font-family` *(component)*
-- `--ran-player-clarity-font-size` *(component)*
-- `--ran-player-clarity-font-style` *(component)*
-- `--ran-player-clarity-font-weight` *(component)*
-- `--ran-player-clarity-height` *(component)*
-- `--ran-player-clarity-hover-background` *(component)*
-- `--ran-player-clarity-line-height` *(component)*
-- `--ran-player-clarity-outline` *(component)*
-- `--ran-player-clarity-padding` *(component)*
-- `--ran-player-clarity-select-height` *(component)*
-- `--ran-player-clarity-select-width` *(component)*
-- `--ran-player-clarity-transition` *(component)*
-- `--ran-player-clarity-width` *(component)*
-- `--ran-player-controller-backdrop-filter` *(component)*
-- `--ran-player-controller-background` *(component)*
-- `--ran-player-controller-bottom` *(component)*
-- `--ran-player-controller-box-sizing` *(component)*
-- `--ran-player-controller-height` *(component)*
-- `--ran-player-controller-left` *(component)*
-- `--ran-player-controller-opacity` *(component)*
-- `--ran-player-controller-padding` *(component)*
-- `--ran-player-controller-position` *(component)*
-- `--ran-player-controller-transition` *(component)*
-- `--ran-player-controller-width` *(component)*
-- `--ran-player-controls-align-items` *(component)*
-- `--ran-player-controls-display` *(component)*
-- `--ran-player-controls-justify-content` *(component)*
-- `--ran-player-controls-left-align-items` *(component)*
-- `--ran-player-controls-left-display` *(component)*
-- `--ran-player-controls-left-justify-content` *(component)*
-- `--ran-player-controls-left-user-select` *(component)*
-- `--ran-player-controls-margin-top` *(component)*
-- `--ran-player-controls-right-align-items` *(component)*
-- `--ran-player-controls-right-display` *(component)*
-- `--ran-player-controls-right-gap` *(component)*
-- `--ran-player-controls-right-justify-content` *(component)*
-- `--ran-player-controls-right-user-select` *(component)*
-- `--ran-player-controls-width` *(component)*
-- `--ran-player-display` *(component)*
-- `--ran-player-dropdown-z-index` *(component)*
-- `--ran-player-focus-outline` *(component)*
-- `--ran-player-focus-outline-color` *(component)*
-- `--ran-player-focus-outline-offset` *(component)*
-- `--ran-player-fullscreen-border-radius` *(component)*
-- `--ran-player-fullscreen-color` *(component)*
-- `--ran-player-fullscreen-cursor` *(component)*
-- `--ran-player-fullscreen-focus-visible-border-radius` *(component)*
-- `--ran-player-fullscreen-focus-visible-outline` *(component)*
-- `--ran-player-fullscreen-focus-visible-outline-offset` *(component)*
-- `--ran-player-fullscreen-height` *(component)*
-- `--ran-player-fullscreen-hover-background` *(component)*
-- `--ran-player-fullscreen-outline` *(component)*
-- `--ran-player-fullscreen-padding` *(component)*
-- `--ran-player-fullscreen-transition` *(component)*
-- `--ran-player-fullscreen-width` *(component)*
-- `--ran-player-gesture-flash-background` *(component)*
-- `--ran-player-gesture-flash-border-radius` *(component)*
-- `--ran-player-gesture-flash-color` *(component)*
-- `--ran-player-gesture-flash-font-size` *(component)*
-- `--ran-player-gesture-flash-font-weight` *(component)*
-- `--ran-player-gesture-flash-left` *(component)*
-- `--ran-player-gesture-flash-padding` *(component)*
-- `--ran-player-gesture-flash-position` *(component)*
-- `--ran-player-gesture-flash-right` *(component)*
-- `--ran-player-gesture-flash-top` *(component)*
-- `--ran-player-gesture-flash-transition` *(component)*
-- `--ran-player-gesture-flash-z-index` *(component)*
-- `--ran-player-height` *(component)*
-- `--ran-player-knowledge-color` *(component)*
-- `--ran-player-knowledge-cursor` *(component)*
-- `--ran-player-knowledge-font-family` *(component)*
-- `--ran-player-knowledge-font-size` *(component)*
-- `--ran-player-knowledge-font-style` *(component)*
-- `--ran-player-knowledge-font-weight` *(component)*
-- `--ran-player-knowledge-line-height` *(component)*
-- `--ran-player-knowledge-margin-right` *(component)*
-- `--ran-player-loading-animation` *(component)*
-- `--ran-player-loading-background-position` *(component)*
-- `--ran-player-loading-background-repeat` *(component)*
-- `--ran-player-loading-background-size` *(component)*
-- `--ran-player-loading-filter` *(component)*
-- `--ran-player-loading-height` *(component)*
-- `--ran-player-loading-left` *(component)*
-- `--ran-player-loading-mask-backdrop-filter` *(component)*
-- `--ran-player-loading-mask-background` *(component)*
-- `--ran-player-loading-mask-z-index` *(component)*
-- `--ran-player-loading-position` *(component)*
-- `--ran-player-loading-top` *(component)*
-- `--ran-player-loading-width` *(component)*
-- `--ran-player-loading-z-index` *(component)*
-- `--ran-player-overflow` *(component)*
-- `--ran-player-pip-align-items` *(component)*
-- `--ran-player-pip-border-radius` *(component)*
-- `--ran-player-pip-color` *(component)*
-- `--ran-player-pip-cursor` *(component)*
-- `--ran-player-pip-display` *(component)*
-- `--ran-player-pip-focus-visible-border-radius` *(component)*
-- `--ran-player-pip-focus-visible-outline` *(component)*
-- `--ran-player-pip-focus-visible-outline-offset` *(component)*
-- `--ran-player-pip-height` *(component)*
-- `--ran-player-pip-hover-background` *(component)*
-- `--ran-player-pip-outline` *(component)*
-- `--ran-player-pip-padding` *(component)*
-- `--ran-player-pip-transition` *(component)*
-- `--ran-player-pip-width` *(component)*
-- `--ran-player-play-btn-color` *(component)*
-- `--ran-player-play-btn-filter` *(component)*
-- `--ran-player-play-btn-height` *(component)*
-- `--ran-player-play-btn-left` *(component)*
-- `--ran-player-play-btn-position` *(component)*
-- `--ran-player-play-btn-top` *(component)*
-- `--ran-player-play-btn-transform` *(component)*
-- `--ran-player-play-btn-width` *(component)*
-- `--ran-player-position` *(component)*
-- `--ran-player-prism-auto-stream-selector-display` *(component)*
-- `--ran-player-prism-position` *(component)*
-- `--ran-player-progress-active-outline` *(component)*
-- `--ran-player-progress-box-sizing` *(component)*
-- `--ran-player-progress-buffer-background` *(component)*
-- `--ran-player-progress-buffer-border-radius` *(component)*
-- `--ran-player-progress-buffer-box-sizing` *(component)*
-- `--ran-player-progress-buffer-height` *(component)*
-- `--ran-player-progress-buffer-left` *(component)*
-- `--ran-player-progress-buffer-position` *(component)*
-- `--ran-player-progress-buffer-top` *(component)*
-- `--ran-player-progress-buffer-transform` *(component)*
-- `--ran-player-progress-buffer-transform-origin` *(component)*
-- `--ran-player-progress-buffer-width` *(component)*
-- `--ran-player-progress-buffer-will-change` *(component)*
-- `--ran-player-progress-buffer-z-index` *(component)*
-- `--ran-player-progress-cursor` *(component)*
-- `--ran-player-progress-dot-background` *(component)*
-- `--ran-player-progress-dot-border-radius` *(component)*
-- `--ran-player-progress-dot-cursor` *(component)*
-- `--ran-player-progress-dot-height` *(component)*
-- `--ran-player-progress-dot-left` *(component)*
-- `--ran-player-progress-dot-position` *(component)*
-- `--ran-player-progress-dot-top` *(component)*
-- `--ran-player-progress-dot-width` *(component)*
-- `--ran-player-progress-dot-z-index` *(component)*
-- `--ran-player-progress-fill-background` *(component)*
-- `--ran-player-progress-fill-border-radius` *(component)*
-- `--ran-player-progress-fill-box-sizing` *(component)*
-- `--ran-player-progress-fill-cursor` *(component)*
-- `--ran-player-progress-fill-height` *(component)*
-- `--ran-player-progress-fill-left` *(component)*
-- `--ran-player-progress-fill-position` *(component)*
-- `--ran-player-progress-fill-top` *(component)*
-- `--ran-player-progress-fill-transform` *(component)*
-- `--ran-player-progress-fill-transform-origin` *(component)*
-- `--ran-player-progress-fill-width` *(component)*
-- `--ran-player-progress-fill-will-change` *(component)*
-- `--ran-player-progress-fill-z-index` *(component)*
-- `--ran-player-progress-focus-outline` *(component)*
-- `--ran-player-progress-focus-visible-border-radius` *(component)*
-- `--ran-player-progress-focus-visible-outline` *(component)*
-- `--ran-player-progress-focus-visible-outline-offset` *(component)*
-- `--ran-player-progress-height` *(component)*
-- `--ran-player-progress-position` *(component)*
-- `--ran-player-progress-track-background` *(component)*
-- `--ran-player-progress-track-border-radius` *(component)*
-- `--ran-player-progress-track-box-sizing` *(component)*
-- `--ran-player-progress-track-height` *(component)*
-- `--ran-player-progress-track-overflow` *(component)*
-- `--ran-player-progress-track-pointer-events` *(component)*
-- `--ran-player-progress-track-position` *(component)*
-- `--ran-player-progress-track-width` *(component)*
-- `--ran-player-progress-width` *(component)*
-- `--ran-player-remote-align-items` *(component)*
-- `--ran-player-remote-border-radius` *(component)*
-- `--ran-player-remote-color` *(component)*
-- `--ran-player-remote-cursor` *(component)*
-- `--ran-player-remote-display` *(component)*
-- `--ran-player-remote-focus-visible-border-radius` *(component)*
-- `--ran-player-remote-focus-visible-outline` *(component)*
-- `--ran-player-remote-focus-visible-outline-offset` *(component)*
-- `--ran-player-remote-height` *(component)*
-- `--ran-player-remote-hover-background` *(component)*
-- `--ran-player-remote-outline` *(component)*
-- `--ran-player-remote-padding` *(component)*
-- `--ran-player-remote-transition` *(component)*
-- `--ran-player-remote-width` *(component)*
-- `--ran-player-select-item-color` *(component)*
-- `--ran-player-select-item-font-size` *(component)*
-- `--ran-player-select-item-font-weight` *(component)*
-- `--ran-player-speed-border-radius` *(component)*
-- `--ran-player-speed-color` *(component)*
-- `--ran-player-speed-cursor` *(component)*
-- `--ran-player-speed-focus-outline` *(component)*
-- `--ran-player-speed-focus-visible-outline` *(component)*
-- `--ran-player-speed-focus-visible-outline-offset` *(component)*
-- `--ran-player-speed-font-family` *(component)*
-- `--ran-player-speed-font-size` *(component)*
-- `--ran-player-speed-font-style` *(component)*
-- `--ran-player-speed-font-weight` *(component)*
-- `--ran-player-speed-height` *(component)*
-- `--ran-player-speed-hover-background` *(component)*
-- `--ran-player-speed-line-height` *(component)*
-- `--ran-player-speed-outline` *(component)*
-- `--ran-player-speed-padding` *(component)*
-- `--ran-player-speed-select-height` *(component)*
-- `--ran-player-speed-select-width` *(component)*
-- `--ran-player-speed-transition` *(component)*
-- `--ran-player-speed-width` *(component)*
-- `--ran-player-subtitle-border-radius` *(component)*
-- `--ran-player-subtitle-color` *(component)*
-- `--ran-player-subtitle-cursor` *(component)*
-- `--ran-player-subtitle-focus-outline` *(component)*
-- `--ran-player-subtitle-focus-visible-outline` *(component)*
-- `--ran-player-subtitle-focus-visible-outline-offset` *(component)*
-- `--ran-player-subtitle-font-family` *(component)*
-- `--ran-player-subtitle-font-size` *(component)*
-- `--ran-player-subtitle-font-style` *(component)*
-- `--ran-player-subtitle-font-weight` *(component)*
-- `--ran-player-subtitle-height` *(component)*
-- `--ran-player-subtitle-hover-background` *(component)*
-- `--ran-player-subtitle-line-height` *(component)*
-- `--ran-player-subtitle-outline` *(component)*
-- `--ran-player-subtitle-padding` *(component)*
-- `--ran-player-subtitle-select-height` *(component)*
-- `--ran-player-subtitle-select-width` *(component)*
-- `--ran-player-subtitle-transition` *(component)*
-- `--ran-player-subtitle-width` *(component)*
-- `--ran-player-time-align-items` *(component)*
-- `--ran-player-time-current-color` *(component)*
-- `--ran-player-time-current-font-family` *(component)*
-- `--ran-player-time-current-font-size` *(component)*
-- `--ran-player-time-current-font-style` *(component)*
-- `--ran-player-time-current-font-weight` *(component)*
-- `--ran-player-time-current-line-height` *(component)*
-- `--ran-player-time-current-min-width` *(component)*
-- `--ran-player-time-current-position` *(component)*
-- `--ran-player-time-current-text-align` *(component)*
-- `--ran-player-time-current-top` *(component)*
-- `--ran-player-time-display` *(component)*
-- `--ran-player-time-divide-color` *(component)*
-- `--ran-player-time-divide-font-family` *(component)*
-- `--ran-player-time-divide-font-size` *(component)*
-- `--ran-player-time-divide-font-style` *(component)*
-- `--ran-player-time-divide-font-weight` *(component)*
-- `--ran-player-time-divide-line-height` *(component)*
-- `--ran-player-time-divide-margin` *(component)*
-- `--ran-player-time-divide-position` *(component)*
-- `--ran-player-time-divide-text-align` *(component)*
-- `--ran-player-time-divide-top` *(component)*
-- `--ran-player-time-duration-color` *(component)*
-- `--ran-player-time-duration-font-family` *(component)*
-- `--ran-player-time-duration-font-size` *(component)*
-- `--ran-player-time-duration-font-style` *(component)*
-- `--ran-player-time-duration-font-weight` *(component)*
-- `--ran-player-time-duration-line-height` *(component)*
-- `--ran-player-time-duration-min-width` *(component)*
-- `--ran-player-time-duration-position` *(component)*
-- `--ran-player-time-duration-text-align` *(component)*
-- `--ran-player-time-duration-top` *(component)*
-- `--ran-player-time-justify-content` *(component)*
-- `--ran-player-time-margin-left` *(component)*
-- `--ran-player-tip-background` *(component)*
-- `--ran-player-tip-border-radius` *(component)*
-- `--ran-player-tip-box-shadow` *(component)*
-- `--ran-player-tip-box-sizing` *(component)*
-- `--ran-player-tip-color` *(component)*
-- `--ran-player-tip-font-family` *(component)*
-- `--ran-player-tip-font-size` *(component)*
-- `--ran-player-tip-font-variant` *(component)*
-- `--ran-player-tip-font-weight` *(component)*
-- `--ran-player-tip-height` *(component)*
-- `--ran-player-tip-line-height` *(component)*
-- `--ran-player-tip-list-style` *(component)*
-- `--ran-player-tip-margin` *(component)*
-- `--ran-player-tip-max-width` *(component)*
-- `--ran-player-tip-opacity` *(component)*
-- `--ran-player-tip-outline` *(component)*
-- `--ran-player-tip-overflow` *(component)*
-- `--ran-player-tip-padding` *(component)*
-- `--ran-player-tip-position` *(component)*
-- `--ran-player-tip-text-align` *(component)*
-- `--ran-player-tip-text-margin-top` *(component)*
-- `--ran-player-tip-text-max-width` *(component)*
-- `--ran-player-tip-text-overflow` *(component)*
-- `--ran-player-tip-text-text-align` *(component)*
-- `--ran-player-tip-text-text-overflow` *(component)*
-- `--ran-player-tip-text-white-space` *(component)*
-- `--ran-player-tip-thumbnail-border` *(component)*
-- `--ran-player-tip-thumbnail-border-radius` *(component)*
-- `--ran-player-tip-thumbnail-bottom` *(component)*
-- `--ran-player-tip-thumbnail-box-shadow` *(component)*
-- `--ran-player-tip-thumbnail-left` *(component)*
-- `--ran-player-tip-thumbnail-margin-bottom` *(component)*
-- `--ran-player-tip-thumbnail-position` *(component)*
-- `--ran-player-tip-thumbnail-transform` *(component)*
-- `--ran-player-tip-time-margin-top` *(component)*
-- `--ran-player-tip-time-max-width` *(component)*
-- `--ran-player-tip-time-overflow` *(component)*
-- `--ran-player-tip-time-text-align` *(component)*
-- `--ran-player-tip-time-text-overflow` *(component)*
-- `--ran-player-tip-time-white-space` *(component)*
-- `--ran-player-tip-top` *(component)*
-- `--ran-player-tip-white-space` *(component)*
-- `--ran-player-tip-z-index` *(component)*
-- `--ran-player-toggle-border-radius` *(component)*
-- `--ran-player-toggle-color` *(component)*
-- `--ran-player-toggle-cursor` *(component)*
-- `--ran-player-toggle-focus-outline` *(component)*
-- `--ran-player-toggle-focus-visible-border-radius` *(component)*
-- `--ran-player-toggle-focus-visible-outline` *(component)*
-- `--ran-player-toggle-focus-visible-outline-offset` *(component)*
-- `--ran-player-toggle-height` *(component)*
-- `--ran-player-toggle-hover-background` *(component)*
-- `--ran-player-toggle-outline` *(component)*
-- `--ran-player-toggle-padding` *(component)*
-- `--ran-player-toggle-transition` *(component)*
-- `--ran-player-toggle-width` *(component)*
-- `--ran-player-video-height` *(component)*
-- `--ran-player-video-width` *(component)*
-- `--ran-player-video-wrap-height` *(component)*
-- `--ran-player-video-wrap-width` *(component)*
-- `--ran-player-volume-align-items` *(component)*
-- `--ran-player-volume-border-radius` *(component)*
-- `--ran-player-volume-cursor` *(component)*
-- `--ran-player-volume-display` *(component)*
-- `--ran-player-volume-hover-background` *(component)*
-- `--ran-player-volume-icon-color` *(component)*
-- `--ran-player-volume-icon-height` *(component)*
-- `--ran-player-volume-icon-margin-right` *(component)*
-- `--ran-player-volume-icon-width` *(component)*
-- `--ran-player-volume-justify-content` *(component)*
-- `--ran-player-volume-padding` *(component)*
-- `--ran-player-volume-progress-width` *(component)*
-- `--ran-player-volume-transition` *(component)*
-- `--ran-player-width` *(component)*
-- `--ran-progress-dot-background` *(component)*
-- `--ran-progress-dot-height` *(component)*
-- `--ran-progress-dot-top` *(component)*
-- `--ran-progress-dot-width` *(component)*
-- `--ran-progress-fill-background` *(component)*
-- `--ran-progress-track-background` *(component)*
-- `--ran-progress-track-height` *(component)*
-- `--ran-radius-full` *(semantic)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-select-min-height` *(component)*
-- `--ran-size-3` *(internal)*
-- `--ran-size-4` *(internal)*
-- `--ran-size-6` *(internal)*
-- `--ran-space-1` *(internal)*
-- `--ran-space-2` *(internal)*
-- `--ran-text-label-1` *(internal)*
-- `--ran-text-label-3` *(internal)*
-- `--ran-text-label-weight` *(internal)*
-- `--ran-text-mono-weight-regular` *(internal)*
-- `--ran-x` *(internal)*
-- `--ran-y` *(internal)*
-- `--ran-z-dropdown` *(internal)*
+
+- `--ran-color-` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-dropdown-background` _(component)_
+- `--ran-dropdown-border` _(component)_
+- `--ran-dropdown-box-shadow` _(component)_
+- `--ran-dropdown-min-width` _(component)_
+- `--ran-dropdown-option-active-background-color` _(component)_
+- `--ran-dropdown-option-active-hover-background-color` _(component)_
+- `--ran-dropdown-option-item-color` _(component)_
+- `--ran-dropdown-option-item-content-color` _(component)_
+- `--ran-dropdown-option-item-content-font-size` _(component)_
+- `--ran-dropdown-option-item-content-text-align` _(component)_
+- `--ran-dropdown-option-item-hover-background-color` _(component)_
+- `--ran-dropdown-option-item-padding` _(component)_
+- `--ran-dropdown-padding` _(component)_
+- `--ran-focus-ring-inverse-color` _(internal)_
+- `--ran-player-clarity-border-radius` _(component)_
+- `--ran-player-clarity-color` _(component)_
+- `--ran-player-clarity-cursor` _(component)_
+- `--ran-player-clarity-focus-outline` _(component)_
+- `--ran-player-clarity-focus-visible-outline` _(component)_
+- `--ran-player-clarity-focus-visible-outline-offset` _(component)_
+- `--ran-player-clarity-font-family` _(component)_
+- `--ran-player-clarity-font-size` _(component)_
+- `--ran-player-clarity-font-style` _(component)_
+- `--ran-player-clarity-font-weight` _(component)_
+- `--ran-player-clarity-height` _(component)_
+- `--ran-player-clarity-hover-background` _(component)_
+- `--ran-player-clarity-line-height` _(component)_
+- `--ran-player-clarity-outline` _(component)_
+- `--ran-player-clarity-padding` _(component)_
+- `--ran-player-clarity-select-height` _(component)_
+- `--ran-player-clarity-select-width` _(component)_
+- `--ran-player-clarity-transition` _(component)_
+- `--ran-player-clarity-width` _(component)_
+- `--ran-player-controller-backdrop-filter` _(component)_
+- `--ran-player-controller-background` _(component)_
+- `--ran-player-controller-bottom` _(component)_
+- `--ran-player-controller-box-sizing` _(component)_
+- `--ran-player-controller-height` _(component)_
+- `--ran-player-controller-left` _(component)_
+- `--ran-player-controller-opacity` _(component)_
+- `--ran-player-controller-padding` _(component)_
+- `--ran-player-controller-position` _(component)_
+- `--ran-player-controller-transition` _(component)_
+- `--ran-player-controller-width` _(component)_
+- `--ran-player-controls-align-items` _(component)_
+- `--ran-player-controls-display` _(component)_
+- `--ran-player-controls-justify-content` _(component)_
+- `--ran-player-controls-left-align-items` _(component)_
+- `--ran-player-controls-left-display` _(component)_
+- `--ran-player-controls-left-justify-content` _(component)_
+- `--ran-player-controls-left-user-select` _(component)_
+- `--ran-player-controls-margin-top` _(component)_
+- `--ran-player-controls-right-align-items` _(component)_
+- `--ran-player-controls-right-display` _(component)_
+- `--ran-player-controls-right-gap` _(component)_
+- `--ran-player-controls-right-justify-content` _(component)_
+- `--ran-player-controls-right-user-select` _(component)_
+- `--ran-player-controls-width` _(component)_
+- `--ran-player-display` _(component)_
+- `--ran-player-dropdown-z-index` _(component)_
+- `--ran-player-focus-outline` _(component)_
+- `--ran-player-focus-outline-color` _(component)_
+- `--ran-player-focus-outline-offset` _(component)_
+- `--ran-player-fullscreen-border-radius` _(component)_
+- `--ran-player-fullscreen-color` _(component)_
+- `--ran-player-fullscreen-cursor` _(component)_
+- `--ran-player-fullscreen-focus-visible-border-radius` _(component)_
+- `--ran-player-fullscreen-focus-visible-outline` _(component)_
+- `--ran-player-fullscreen-focus-visible-outline-offset` _(component)_
+- `--ran-player-fullscreen-height` _(component)_
+- `--ran-player-fullscreen-hover-background` _(component)_
+- `--ran-player-fullscreen-outline` _(component)_
+- `--ran-player-fullscreen-padding` _(component)_
+- `--ran-player-fullscreen-transition` _(component)_
+- `--ran-player-fullscreen-width` _(component)_
+- `--ran-player-gesture-flash-background` _(component)_
+- `--ran-player-gesture-flash-border-radius` _(component)_
+- `--ran-player-gesture-flash-color` _(component)_
+- `--ran-player-gesture-flash-font-size` _(component)_
+- `--ran-player-gesture-flash-font-weight` _(component)_
+- `--ran-player-gesture-flash-left` _(component)_
+- `--ran-player-gesture-flash-padding` _(component)_
+- `--ran-player-gesture-flash-position` _(component)_
+- `--ran-player-gesture-flash-right` _(component)_
+- `--ran-player-gesture-flash-top` _(component)_
+- `--ran-player-gesture-flash-transition` _(component)_
+- `--ran-player-gesture-flash-z-index` _(component)_
+- `--ran-player-height` _(component)_
+- `--ran-player-knowledge-color` _(component)_
+- `--ran-player-knowledge-cursor` _(component)_
+- `--ran-player-knowledge-font-family` _(component)_
+- `--ran-player-knowledge-font-size` _(component)_
+- `--ran-player-knowledge-font-style` _(component)_
+- `--ran-player-knowledge-font-weight` _(component)_
+- `--ran-player-knowledge-line-height` _(component)_
+- `--ran-player-knowledge-margin-right` _(component)_
+- `--ran-player-loading-animation` _(component)_
+- `--ran-player-loading-background-position` _(component)_
+- `--ran-player-loading-background-repeat` _(component)_
+- `--ran-player-loading-background-size` _(component)_
+- `--ran-player-loading-filter` _(component)_
+- `--ran-player-loading-height` _(component)_
+- `--ran-player-loading-left` _(component)_
+- `--ran-player-loading-mask-backdrop-filter` _(component)_
+- `--ran-player-loading-mask-background` _(component)_
+- `--ran-player-loading-mask-z-index` _(component)_
+- `--ran-player-loading-position` _(component)_
+- `--ran-player-loading-top` _(component)_
+- `--ran-player-loading-width` _(component)_
+- `--ran-player-loading-z-index` _(component)_
+- `--ran-player-overflow` _(component)_
+- `--ran-player-pip-align-items` _(component)_
+- `--ran-player-pip-border-radius` _(component)_
+- `--ran-player-pip-color` _(component)_
+- `--ran-player-pip-cursor` _(component)_
+- `--ran-player-pip-display` _(component)_
+- `--ran-player-pip-focus-visible-border-radius` _(component)_
+- `--ran-player-pip-focus-visible-outline` _(component)_
+- `--ran-player-pip-focus-visible-outline-offset` _(component)_
+- `--ran-player-pip-height` _(component)_
+- `--ran-player-pip-hover-background` _(component)_
+- `--ran-player-pip-outline` _(component)_
+- `--ran-player-pip-padding` _(component)_
+- `--ran-player-pip-transition` _(component)_
+- `--ran-player-pip-width` _(component)_
+- `--ran-player-play-btn-color` _(component)_
+- `--ran-player-play-btn-filter` _(component)_
+- `--ran-player-play-btn-height` _(component)_
+- `--ran-player-play-btn-left` _(component)_
+- `--ran-player-play-btn-position` _(component)_
+- `--ran-player-play-btn-top` _(component)_
+- `--ran-player-play-btn-transform` _(component)_
+- `--ran-player-play-btn-width` _(component)_
+- `--ran-player-position` _(component)_
+- `--ran-player-prism-auto-stream-selector-display` _(component)_
+- `--ran-player-prism-position` _(component)_
+- `--ran-player-progress-active-outline` _(component)_
+- `--ran-player-progress-box-sizing` _(component)_
+- `--ran-player-progress-buffer-background` _(component)_
+- `--ran-player-progress-buffer-border-radius` _(component)_
+- `--ran-player-progress-buffer-box-sizing` _(component)_
+- `--ran-player-progress-buffer-height` _(component)_
+- `--ran-player-progress-buffer-left` _(component)_
+- `--ran-player-progress-buffer-position` _(component)_
+- `--ran-player-progress-buffer-top` _(component)_
+- `--ran-player-progress-buffer-transform` _(component)_
+- `--ran-player-progress-buffer-transform-origin` _(component)_
+- `--ran-player-progress-buffer-width` _(component)_
+- `--ran-player-progress-buffer-will-change` _(component)_
+- `--ran-player-progress-buffer-z-index` _(component)_
+- `--ran-player-progress-cursor` _(component)_
+- `--ran-player-progress-dot-background` _(component)_
+- `--ran-player-progress-dot-border-radius` _(component)_
+- `--ran-player-progress-dot-cursor` _(component)_
+- `--ran-player-progress-dot-height` _(component)_
+- `--ran-player-progress-dot-left` _(component)_
+- `--ran-player-progress-dot-position` _(component)_
+- `--ran-player-progress-dot-top` _(component)_
+- `--ran-player-progress-dot-width` _(component)_
+- `--ran-player-progress-dot-z-index` _(component)_
+- `--ran-player-progress-fill-background` _(component)_
+- `--ran-player-progress-fill-border-radius` _(component)_
+- `--ran-player-progress-fill-box-sizing` _(component)_
+- `--ran-player-progress-fill-cursor` _(component)_
+- `--ran-player-progress-fill-height` _(component)_
+- `--ran-player-progress-fill-left` _(component)_
+- `--ran-player-progress-fill-position` _(component)_
+- `--ran-player-progress-fill-top` _(component)_
+- `--ran-player-progress-fill-transform` _(component)_
+- `--ran-player-progress-fill-transform-origin` _(component)_
+- `--ran-player-progress-fill-width` _(component)_
+- `--ran-player-progress-fill-will-change` _(component)_
+- `--ran-player-progress-fill-z-index` _(component)_
+- `--ran-player-progress-focus-outline` _(component)_
+- `--ran-player-progress-focus-visible-border-radius` _(component)_
+- `--ran-player-progress-focus-visible-outline` _(component)_
+- `--ran-player-progress-focus-visible-outline-offset` _(component)_
+- `--ran-player-progress-height` _(component)_
+- `--ran-player-progress-position` _(component)_
+- `--ran-player-progress-track-background` _(component)_
+- `--ran-player-progress-track-border-radius` _(component)_
+- `--ran-player-progress-track-box-sizing` _(component)_
+- `--ran-player-progress-track-height` _(component)_
+- `--ran-player-progress-track-overflow` _(component)_
+- `--ran-player-progress-track-pointer-events` _(component)_
+- `--ran-player-progress-track-position` _(component)_
+- `--ran-player-progress-track-width` _(component)_
+- `--ran-player-progress-width` _(component)_
+- `--ran-player-remote-align-items` _(component)_
+- `--ran-player-remote-border-radius` _(component)_
+- `--ran-player-remote-color` _(component)_
+- `--ran-player-remote-cursor` _(component)_
+- `--ran-player-remote-display` _(component)_
+- `--ran-player-remote-focus-visible-border-radius` _(component)_
+- `--ran-player-remote-focus-visible-outline` _(component)_
+- `--ran-player-remote-focus-visible-outline-offset` _(component)_
+- `--ran-player-remote-height` _(component)_
+- `--ran-player-remote-hover-background` _(component)_
+- `--ran-player-remote-outline` _(component)_
+- `--ran-player-remote-padding` _(component)_
+- `--ran-player-remote-transition` _(component)_
+- `--ran-player-remote-width` _(component)_
+- `--ran-player-select-item-color` _(component)_
+- `--ran-player-select-item-font-size` _(component)_
+- `--ran-player-select-item-font-weight` _(component)_
+- `--ran-player-speed-border-radius` _(component)_
+- `--ran-player-speed-color` _(component)_
+- `--ran-player-speed-cursor` _(component)_
+- `--ran-player-speed-focus-outline` _(component)_
+- `--ran-player-speed-focus-visible-outline` _(component)_
+- `--ran-player-speed-focus-visible-outline-offset` _(component)_
+- `--ran-player-speed-font-family` _(component)_
+- `--ran-player-speed-font-size` _(component)_
+- `--ran-player-speed-font-style` _(component)_
+- `--ran-player-speed-font-weight` _(component)_
+- `--ran-player-speed-height` _(component)_
+- `--ran-player-speed-hover-background` _(component)_
+- `--ran-player-speed-line-height` _(component)_
+- `--ran-player-speed-outline` _(component)_
+- `--ran-player-speed-padding` _(component)_
+- `--ran-player-speed-select-height` _(component)_
+- `--ran-player-speed-select-width` _(component)_
+- `--ran-player-speed-transition` _(component)_
+- `--ran-player-speed-width` _(component)_
+- `--ran-player-subtitle-border-radius` _(component)_
+- `--ran-player-subtitle-color` _(component)_
+- `--ran-player-subtitle-cursor` _(component)_
+- `--ran-player-subtitle-focus-outline` _(component)_
+- `--ran-player-subtitle-focus-visible-outline` _(component)_
+- `--ran-player-subtitle-focus-visible-outline-offset` _(component)_
+- `--ran-player-subtitle-font-family` _(component)_
+- `--ran-player-subtitle-font-size` _(component)_
+- `--ran-player-subtitle-font-style` _(component)_
+- `--ran-player-subtitle-font-weight` _(component)_
+- `--ran-player-subtitle-height` _(component)_
+- `--ran-player-subtitle-hover-background` _(component)_
+- `--ran-player-subtitle-line-height` _(component)_
+- `--ran-player-subtitle-outline` _(component)_
+- `--ran-player-subtitle-padding` _(component)_
+- `--ran-player-subtitle-select-height` _(component)_
+- `--ran-player-subtitle-select-width` _(component)_
+- `--ran-player-subtitle-transition` _(component)_
+- `--ran-player-subtitle-width` _(component)_
+- `--ran-player-time-align-items` _(component)_
+- `--ran-player-time-current-color` _(component)_
+- `--ran-player-time-current-font-family` _(component)_
+- `--ran-player-time-current-font-size` _(component)_
+- `--ran-player-time-current-font-style` _(component)_
+- `--ran-player-time-current-font-weight` _(component)_
+- `--ran-player-time-current-line-height` _(component)_
+- `--ran-player-time-current-min-width` _(component)_
+- `--ran-player-time-current-position` _(component)_
+- `--ran-player-time-current-text-align` _(component)_
+- `--ran-player-time-current-top` _(component)_
+- `--ran-player-time-display` _(component)_
+- `--ran-player-time-divide-color` _(component)_
+- `--ran-player-time-divide-font-family` _(component)_
+- `--ran-player-time-divide-font-size` _(component)_
+- `--ran-player-time-divide-font-style` _(component)_
+- `--ran-player-time-divide-font-weight` _(component)_
+- `--ran-player-time-divide-line-height` _(component)_
+- `--ran-player-time-divide-margin` _(component)_
+- `--ran-player-time-divide-position` _(component)_
+- `--ran-player-time-divide-text-align` _(component)_
+- `--ran-player-time-divide-top` _(component)_
+- `--ran-player-time-duration-color` _(component)_
+- `--ran-player-time-duration-font-family` _(component)_
+- `--ran-player-time-duration-font-size` _(component)_
+- `--ran-player-time-duration-font-style` _(component)_
+- `--ran-player-time-duration-font-weight` _(component)_
+- `--ran-player-time-duration-line-height` _(component)_
+- `--ran-player-time-duration-min-width` _(component)_
+- `--ran-player-time-duration-position` _(component)_
+- `--ran-player-time-duration-text-align` _(component)_
+- `--ran-player-time-duration-top` _(component)_
+- `--ran-player-time-justify-content` _(component)_
+- `--ran-player-time-margin-left` _(component)_
+- `--ran-player-tip-background` _(component)_
+- `--ran-player-tip-border-radius` _(component)_
+- `--ran-player-tip-box-shadow` _(component)_
+- `--ran-player-tip-box-sizing` _(component)_
+- `--ran-player-tip-color` _(component)_
+- `--ran-player-tip-font-family` _(component)_
+- `--ran-player-tip-font-size` _(component)_
+- `--ran-player-tip-font-variant` _(component)_
+- `--ran-player-tip-font-weight` _(component)_
+- `--ran-player-tip-height` _(component)_
+- `--ran-player-tip-line-height` _(component)_
+- `--ran-player-tip-list-style` _(component)_
+- `--ran-player-tip-margin` _(component)_
+- `--ran-player-tip-max-width` _(component)_
+- `--ran-player-tip-opacity` _(component)_
+- `--ran-player-tip-outline` _(component)_
+- `--ran-player-tip-overflow` _(component)_
+- `--ran-player-tip-padding` _(component)_
+- `--ran-player-tip-position` _(component)_
+- `--ran-player-tip-text-align` _(component)_
+- `--ran-player-tip-text-margin-top` _(component)_
+- `--ran-player-tip-text-max-width` _(component)_
+- `--ran-player-tip-text-overflow` _(component)_
+- `--ran-player-tip-text-text-align` _(component)_
+- `--ran-player-tip-text-text-overflow` _(component)_
+- `--ran-player-tip-text-white-space` _(component)_
+- `--ran-player-tip-thumbnail-border` _(component)_
+- `--ran-player-tip-thumbnail-border-radius` _(component)_
+- `--ran-player-tip-thumbnail-bottom` _(component)_
+- `--ran-player-tip-thumbnail-box-shadow` _(component)_
+- `--ran-player-tip-thumbnail-left` _(component)_
+- `--ran-player-tip-thumbnail-margin-bottom` _(component)_
+- `--ran-player-tip-thumbnail-position` _(component)_
+- `--ran-player-tip-thumbnail-transform` _(component)_
+- `--ran-player-tip-time-margin-top` _(component)_
+- `--ran-player-tip-time-max-width` _(component)_
+- `--ran-player-tip-time-overflow` _(component)_
+- `--ran-player-tip-time-text-align` _(component)_
+- `--ran-player-tip-time-text-overflow` _(component)_
+- `--ran-player-tip-time-white-space` _(component)_
+- `--ran-player-tip-top` _(component)_
+- `--ran-player-tip-white-space` _(component)_
+- `--ran-player-tip-z-index` _(component)_
+- `--ran-player-toggle-border-radius` _(component)_
+- `--ran-player-toggle-color` _(component)_
+- `--ran-player-toggle-cursor` _(component)_
+- `--ran-player-toggle-focus-outline` _(component)_
+- `--ran-player-toggle-focus-visible-border-radius` _(component)_
+- `--ran-player-toggle-focus-visible-outline` _(component)_
+- `--ran-player-toggle-focus-visible-outline-offset` _(component)_
+- `--ran-player-toggle-height` _(component)_
+- `--ran-player-toggle-hover-background` _(component)_
+- `--ran-player-toggle-outline` _(component)_
+- `--ran-player-toggle-padding` _(component)_
+- `--ran-player-toggle-transition` _(component)_
+- `--ran-player-toggle-width` _(component)_
+- `--ran-player-video-height` _(component)_
+- `--ran-player-video-width` _(component)_
+- `--ran-player-video-wrap-height` _(component)_
+- `--ran-player-video-wrap-width` _(component)_
+- `--ran-player-volume-align-items` _(component)_
+- `--ran-player-volume-border-radius` _(component)_
+- `--ran-player-volume-cursor` _(component)_
+- `--ran-player-volume-display` _(component)_
+- `--ran-player-volume-hover-background` _(component)_
+- `--ran-player-volume-icon-color` _(component)_
+- `--ran-player-volume-icon-height` _(component)_
+- `--ran-player-volume-icon-margin-right` _(component)_
+- `--ran-player-volume-icon-width` _(component)_
+- `--ran-player-volume-justify-content` _(component)_
+- `--ran-player-volume-padding` _(component)_
+- `--ran-player-volume-progress-width` _(component)_
+- `--ran-player-volume-transition` _(component)_
+- `--ran-player-width` _(component)_
+- `--ran-progress-dot-background` _(component)_
+- `--ran-progress-dot-height` _(component)_
+- `--ran-progress-dot-top` _(component)_
+- `--ran-progress-dot-width` _(component)_
+- `--ran-progress-fill-background` _(component)_
+- `--ran-progress-track-background` _(component)_
+- `--ran-progress-track-height` _(component)_
+- `--ran-radius-full` _(semantic)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-select-min-height` _(component)_
+- `--ran-size-3` _(internal)_
+- `--ran-size-4` _(internal)_
+- `--ran-size-6` _(internal)_
+- `--ran-space-1` _(internal)_
+- `--ran-space-2` _(internal)_
+- `--ran-text-label-1` _(internal)_
+- `--ran-text-label-3` _(internal)_
+- `--ran-text-label-weight` _(internal)_
+- `--ran-text-mono-weight-regular` _(internal)_
+- `--ran-x` _(internal)_
+- `--ran-y` _(internal)_
+- `--ran-z-dropdown` _(internal)_
 
 #### Parts
+
 - (none)
 
 ### `player/core/adapters`
@@ -1711,9 +1844,11 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `popover`
@@ -1722,16 +1857,19 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: component: 7 -->
-- `--ran-popover-block-display` *(component)*
-- `--ran-popover-box-sizing` *(component)*
-- `--ran-popover-display` *(component)*
-- `--ran-popover-host-display` *(component)*
-- `--ran-popover-margin` *(component)*
-- `--ran-popover-padding` *(component)*
-- `--ran-popover-position` *(component)*
+
+- `--ran-popover-block-display` _(component)_
+- `--ran-popover-box-sizing` _(component)_
+- `--ran-popover-display` _(component)_
+- `--ran-popover-host-display` _(component)_
+- `--ran-popover-margin` _(component)_
+- `--ran-popover-padding` _(component)_
+- `--ran-popover-position` _(component)_
 
 #### Parts
+
 - (none)
 
 ### `popover/content`
@@ -1740,9 +1878,11 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `progress`
@@ -1751,49 +1891,52 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 3
 
 #### Tokens
+
 <!-- layers: semantic: 4 · component: 34 · internal: 2 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-gray-200` *(internal)*
-- `--ran-progress-cursor` *(component)*
-- `--ran-progress-dot-background` *(component)*
-- `--ran-progress-dot-border` *(component)*
-- `--ran-progress-dot-border-radius` *(component)*
-- `--ran-progress-dot-box-shadow` *(component)*
-- `--ran-progress-dot-cursor` *(component)*
-- `--ran-progress-dot-height` *(component)*
-- `--ran-progress-dot-position` *(component)*
-- `--ran-progress-dot-top` *(component)*
-- `--ran-progress-dot-transform` *(component)*
-- `--ran-progress-dot-width` *(component)*
-- `--ran-progress-fill-background` *(component)*
-- `--ran-progress-fill-border-radius` *(component)*
-- `--ran-progress-fill-height` *(component)*
-- `--ran-progress-fill-left` *(component)*
-- `--ran-progress-fill-position` *(component)*
-- `--ran-progress-fill-top` *(component)*
-- `--ran-progress-fill-transform-origin` *(component)*
-- `--ran-progress-fill-width` *(component)*
-- `--ran-progress-fill-will-change` *(component)*
-- `--ran-progress-focus-outline` *(component)*
-- `--ran-progress-focus-outline-offset` *(component)*
-- `--ran-progress-height` *(component)*
-- `--ran-progress-position` *(component)*
-- `--ran-progress-track-background` *(component)*
-- `--ran-progress-track-border-radius` *(component)*
-- `--ran-progress-track-height` *(component)*
-- `--ran-progress-track-left` *(component)*
-- `--ran-progress-track-overflow` *(component)*
-- `--ran-progress-track-position` *(component)*
-- `--ran-progress-track-top` *(component)*
-- `--ran-progress-track-transform` *(component)*
-- `--ran-progress-track-width` *(component)*
-- `--ran-progress-width` *(component)*
-- `--ran-radius-full` *(semantic)*
-- `--ran-shadow-elevated` *(semantic)*
-- `--ran-size-3` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-gray-200` _(internal)_
+- `--ran-progress-cursor` _(component)_
+- `--ran-progress-dot-background` _(component)_
+- `--ran-progress-dot-border` _(component)_
+- `--ran-progress-dot-border-radius` _(component)_
+- `--ran-progress-dot-box-shadow` _(component)_
+- `--ran-progress-dot-cursor` _(component)_
+- `--ran-progress-dot-height` _(component)_
+- `--ran-progress-dot-position` _(component)_
+- `--ran-progress-dot-top` _(component)_
+- `--ran-progress-dot-transform` _(component)_
+- `--ran-progress-dot-width` _(component)_
+- `--ran-progress-fill-background` _(component)_
+- `--ran-progress-fill-border-radius` _(component)_
+- `--ran-progress-fill-height` _(component)_
+- `--ran-progress-fill-left` _(component)_
+- `--ran-progress-fill-position` _(component)_
+- `--ran-progress-fill-top` _(component)_
+- `--ran-progress-fill-transform-origin` _(component)_
+- `--ran-progress-fill-width` _(component)_
+- `--ran-progress-fill-will-change` _(component)_
+- `--ran-progress-focus-outline` _(component)_
+- `--ran-progress-focus-outline-offset` _(component)_
+- `--ran-progress-height` _(component)_
+- `--ran-progress-position` _(component)_
+- `--ran-progress-track-background` _(component)_
+- `--ran-progress-track-border-radius` _(component)_
+- `--ran-progress-track-height` _(component)_
+- `--ran-progress-track-left` _(component)_
+- `--ran-progress-track-overflow` _(component)_
+- `--ran-progress-track-position` _(component)_
+- `--ran-progress-track-top` _(component)_
+- `--ran-progress-track-transform` _(component)_
+- `--ran-progress-track-width` _(component)_
+- `--ran-progress-width` _(component)_
+- `--ran-radius-full` _(semantic)_
+- `--ran-shadow-elevated` _(semantic)_
+- `--ran-size-3` _(internal)_
 
 #### Parts
+
 - `dot`
 - `fill`
 - `track`
@@ -1804,18 +1947,21 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 1 · component: 8 -->
-- `--ran-color-border` *(semantic)*
-- `--ran-radar-display` *(component)*
-- `--ran-radar-fill-color` *(component)*
-- `--ran-radar-height` *(component)*
-- `--ran-radar-line-color` *(component)*
-- `--ran-radar-polygon-color` *(component)*
-- `--ran-radar-position` *(component)*
-- `--ran-radar-stroke-color` *(component)*
-- `--ran-radar-width` *(component)*
+
+- `--ran-color-border` _(semantic)_
+- `--ran-radar-display` _(component)_
+- `--ran-radar-fill-color` _(component)_
+- `--ran-radar-height` _(component)_
+- `--ran-radar-line-color` _(component)_
+- `--ran-radar-polygon-color` _(component)_
+- `--ran-radar-position` _(component)_
+- `--ran-radar-stroke-color` _(component)_
+- `--ran-radar-width` _(component)_
 
 #### Parts
+
 - (none)
 
 ### `route`
@@ -1824,9 +1970,11 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `router`
@@ -1835,9 +1983,11 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `scratch`
@@ -1846,16 +1996,19 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 2 · component: 5 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-text-secondary` *(semantic)*
-- `--ran-scratch-award-background` *(component)*
-- `--ran-scratch-cover-background` *(component)*
-- `--ran-scratch-cursor` *(component)*
-- `--ran-scratch-disabled-cursor` *(component)*
-- `--ran-scratch-disabled-opacity` *(component)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-text-secondary` _(semantic)_
+- `--ran-scratch-award-background` _(component)_
+- `--ran-scratch-cover-background` _(component)_
+- `--ran-scratch-cursor` _(component)_
+- `--ran-scratch-disabled-cursor` _(component)_
+- `--ran-scratch-disabled-opacity` _(component)_
 
 #### Parts
+
 - `award`
 
 ### `section`
@@ -1864,37 +2017,40 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 4
 
 #### Tokens
+
 <!-- layers: semantic: 6 · skin: 2 · internal: 20 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-color-text-secondary` *(semantic)*
-- `--ran-radius-md` *(semantic)*
-- `--ran-section-background` *(internal)*
-- `--ran-section-border-color` *(internal)*
-- `--ran-section-header-gap` *(internal)*
-- `--ran-section-header-margin-bottom` *(internal)*
-- `--ran-section-heading-color` *(internal)*
-- `--ran-section-heading-font-size` *(internal)*
-- `--ran-section-heading-font-weight` *(internal)*
-- `--ran-section-heading-letter-spacing` *(internal)*
-- `--ran-section-padding` *(internal)*
-- `--ran-section-radius` *(internal)*
-- `--ran-section-scroll-margin-top` *(internal)*
-- `--ran-section-shadow` *(internal)*
-- `--ran-section-subtitle-color` *(internal)*
-- `--ran-shadow-elevated` *(semantic)*
-- `--ran-skin-border-style` *(skin)*
-- `--ran-skin-border-width` *(skin)*
-- `--ran-space-2` *(internal)*
-- `--ran-space-24` *(internal)*
-- `--ran-space-6` *(internal)*
-- `--ran-space-8` *(internal)*
-- `--ran-text-heading-2` *(internal)*
-- `--ran-text-heading-tracking` *(internal)*
-- `--ran-text-heading-weight` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-color-text-secondary` _(semantic)_
+- `--ran-radius-md` _(semantic)_
+- `--ran-section-background` _(internal)_
+- `--ran-section-border-color` _(internal)_
+- `--ran-section-header-gap` _(internal)_
+- `--ran-section-header-margin-bottom` _(internal)_
+- `--ran-section-heading-color` _(internal)_
+- `--ran-section-heading-font-size` _(internal)_
+- `--ran-section-heading-font-weight` _(internal)_
+- `--ran-section-heading-letter-spacing` _(internal)_
+- `--ran-section-padding` _(internal)_
+- `--ran-section-radius` _(internal)_
+- `--ran-section-scroll-margin-top` _(internal)_
+- `--ran-section-shadow` _(internal)_
+- `--ran-section-subtitle-color` _(internal)_
+- `--ran-shadow-elevated` _(semantic)_
+- `--ran-skin-border-style` _(skin)_
+- `--ran-skin-border-width` _(skin)_
+- `--ran-space-2` _(internal)_
+- `--ran-space-24` _(internal)_
+- `--ran-space-6` _(internal)_
+- `--ran-space-8` _(internal)_
+- `--ran-text-heading-2` _(internal)_
+- `--ran-text-heading-tracking` _(internal)_
+- `--ran-text-heading-weight` _(internal)_
 
 #### Parts
+
 - `body`
 - `header`
 - `heading`
@@ -1906,156 +2062,159 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 6
 
 #### Tokens
+
 <!-- layers: semantic: 6 · skin: 1 · component: 132 · internal: 8 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-color-text-disabled` *(semantic)*
-- `--ran-focus-ring` *(internal)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-select-background-color` *(component)*
-- `--ran-select-background-image` *(component)*
-- `--ran-select-border` *(component)*
-- `--ran-select-border-radius` *(component)*
-- `--ran-select-box-sizing` *(component)*
-- `--ran-select-color` *(component)*
-- `--ran-select-display` *(component)*
-- `--ran-select-focus-border` *(component)*
-- `--ran-select-focus-box-shadow` *(component)*
-- `--ran-select-font-family` *(component)*
-- `--ran-select-font-size` *(component)*
-- `--ran-select-font-weight` *(component)*
-- `--ran-select-height` *(component)*
-- `--ran-select-host-cursor` *(component)*
-- `--ran-select-host-disabled-cursor` *(component)*
-- `--ran-select-host-disabled-opacity` *(component)*
-- `--ran-select-host-disabled-pointer-events` *(component)*
-- `--ran-select-host-display` *(component)*
-- `--ran-select-host-focus-outline` *(component)*
-- `--ran-select-host-hover-cursor` *(component)*
-- `--ran-select-host-outline` *(component)*
-- `--ran-select-host-position` *(component)*
-- `--ran-select-host-tap-highlight-color` *(component)*
-- `--ran-select-hover-border` *(component)*
-- `--ran-select-icon-align-items` *(component)*
-- `--ran-select-icon-color` *(component)*
-- `--ran-select-icon-display` *(component)*
-- `--ran-select-icon-font-size` *(component)*
-- `--ran-select-icon-font-style` *(component)*
-- `--ran-select-icon-height` *(component)*
-- `--ran-select-icon-inset-inline-end` *(component)*
-- `--ran-select-icon-inset-inline-start` *(component)*
-- `--ran-select-icon-margin-top` *(component)*
-- `--ran-select-icon-pointer-events` *(component)*
-- `--ran-select-icon-position` *(component)*
-- `--ran-select-icon-text-align` *(component)*
-- `--ran-select-icon-text-display` *(component)*
-- `--ran-select-icon-text-rendering` *(component)*
-- `--ran-select-icon-text-transform` *(component)*
-- `--ran-select-icon-top` *(component)*
-- `--ran-select-icon-transform` *(component)*
-- `--ran-select-item-align-items` *(component)*
-- `--ran-select-item-appearance` *(component)*
-- `--ran-select-item-background` *(component)*
-- `--ran-select-item-border` *(component)*
-- `--ran-select-item-cursor` *(component)*
-- `--ran-select-item-display` *(component)*
-- `--ran-select-item-focus-color` *(component)*
-- `--ran-select-item-focus-cursor` *(component)*
-- `--ran-select-item-font-family` *(component)*
-- `--ran-select-item-height` *(component)*
-- `--ran-select-item-hover-color` *(component)*
-- `--ran-select-item-hover-cursor` *(component)*
-- `--ran-select-item-left` *(component)*
-- `--ran-select-item-margin` *(component)*
-- `--ran-select-item-outline` *(component)*
-- `--ran-select-item-overflow` *(component)*
-- `--ran-select-item-padding` *(component)*
-- `--ran-select-item-position` *(component)*
-- `--ran-select-item-right` *(component)*
-- `--ran-select-item-search-cursor` *(component)*
-- `--ran-select-item-text-overflow` *(component)*
-- `--ran-select-item-top` *(component)*
-- `--ran-select-item-user-select` *(component)*
-- `--ran-select-item-white-space` *(component)*
-- `--ran-select-label-color` *(component)*
-- `--ran-select-label-cursor` *(component)*
-- `--ran-select-label-disabled-color` *(component)*
-- `--ran-select-label-disabled-cursor` *(component)*
-- `--ran-select-label-display` *(component)*
-- `--ran-select-label-font-size` *(component)*
-- `--ran-select-label-font-weight` *(component)*
-- `--ran-select-label-margin-bottom` *(component)*
-- `--ran-select-line-height` *(component)*
-- `--ran-select-list-style` *(component)*
-- `--ran-select-margin` *(component)*
-- `--ran-select-min-height` *(component)*
-- `--ran-select-option-display` *(component)*
-- `--ran-select-padding` *(component)*
-- `--ran-select-position` *(component)*
-- `--ran-select-root-box-sizing` *(component)*
-- `--ran-select-root-color` *(component)*
-- `--ran-select-root-display` *(component)*
-- `--ran-select-root-font-family` *(component)*
-- `--ran-select-root-font-size` *(component)*
-- `--ran-select-root-font-weight` *(component)*
-- `--ran-select-root-height` *(component)*
-- `--ran-select-root-line-height` *(component)*
-- `--ran-select-root-list-style` *(component)*
-- `--ran-select-root-margin` *(component)*
-- `--ran-select-root-padding` *(component)*
-- `--ran-select-root-position` *(component)*
-- `--ran-select-root-width` *(component)*
-- `--ran-select-search-active-border` *(component)*
-- `--ran-select-search-active-border-color` *(component)*
-- `--ran-select-search-active-border-width` *(component)*
-- `--ran-select-search-active-box-shadow` *(component)*
-- `--ran-select-search-active-height` *(component)*
-- `--ran-select-search-active-outline` *(component)*
-- `--ran-select-search-active-padding` *(component)*
-- `--ran-select-search-appearance` *(component)*
-- `--ran-select-search-background` *(component)*
-- `--ran-select-search-border` *(component)*
-- `--ran-select-search-cancel-appearance` *(component)*
-- `--ran-select-search-cancel-display` *(component)*
-- `--ran-select-search-content-min-height` *(component)*
-- `--ran-select-search-cursor` *(component)*
-- `--ran-select-search-display` *(component)*
-- `--ran-select-search-focus-cursor` *(component)*
-- `--ran-select-search-font-family` *(component)*
-- `--ran-select-search-height` *(component)*
-- `--ran-select-search-hover-cursor` *(component)*
-- `--ran-select-search-input-border` *(component)*
-- `--ran-select-search-input-outline` *(component)*
-- `--ran-select-search-input-padding` *(component)*
-- `--ran-select-search-inset-inline-end` *(component)*
-- `--ran-select-search-inset-inline-start` *(component)*
-- `--ran-select-search-left` *(component)*
-- `--ran-select-search-margin` *(component)*
-- `--ran-select-search-opacity` *(component)*
-- `--ran-select-search-outline` *(component)*
-- `--ran-select-search-padding` *(component)*
-- `--ran-select-search-position` *(component)*
-- `--ran-select-search-top` *(component)*
-- `--ran-select-search-visible-cursor` *(component)*
-- `--ran-select-search-visible-display` *(component)*
-- `--ran-select-search-visible-opacity` *(component)*
-- `--ran-select-select-color` *(component)*
-- `--ran-select-text-background` *(component)*
-- `--ran-select-text-border` *(component)*
-- `--ran-select-transition` *(component)*
-- `--ran-select-width` *(component)*
-- `--ran-size-1` *(internal)*
-- `--ran-size-7` *(internal)*
-- `--ran-skin-font-family` *(skin)*
-- `--ran-space-1` *(internal)*
-- `--ran-space-3` *(internal)*
-- `--ran-text-label-1` *(internal)*
-- `--ran-text-label-3` *(internal)*
-- `--ran-text-label-weight` *(internal)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-color-text-disabled` _(semantic)_
+- `--ran-focus-ring` _(internal)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-select-background-color` _(component)_
+- `--ran-select-background-image` _(component)_
+- `--ran-select-border` _(component)_
+- `--ran-select-border-radius` _(component)_
+- `--ran-select-box-sizing` _(component)_
+- `--ran-select-color` _(component)_
+- `--ran-select-display` _(component)_
+- `--ran-select-focus-border` _(component)_
+- `--ran-select-focus-box-shadow` _(component)_
+- `--ran-select-font-family` _(component)_
+- `--ran-select-font-size` _(component)_
+- `--ran-select-font-weight` _(component)_
+- `--ran-select-height` _(component)_
+- `--ran-select-host-cursor` _(component)_
+- `--ran-select-host-disabled-cursor` _(component)_
+- `--ran-select-host-disabled-opacity` _(component)_
+- `--ran-select-host-disabled-pointer-events` _(component)_
+- `--ran-select-host-display` _(component)_
+- `--ran-select-host-focus-outline` _(component)_
+- `--ran-select-host-hover-cursor` _(component)_
+- `--ran-select-host-outline` _(component)_
+- `--ran-select-host-position` _(component)_
+- `--ran-select-host-tap-highlight-color` _(component)_
+- `--ran-select-hover-border` _(component)_
+- `--ran-select-icon-align-items` _(component)_
+- `--ran-select-icon-color` _(component)_
+- `--ran-select-icon-display` _(component)_
+- `--ran-select-icon-font-size` _(component)_
+- `--ran-select-icon-font-style` _(component)_
+- `--ran-select-icon-height` _(component)_
+- `--ran-select-icon-inset-inline-end` _(component)_
+- `--ran-select-icon-inset-inline-start` _(component)_
+- `--ran-select-icon-margin-top` _(component)_
+- `--ran-select-icon-pointer-events` _(component)_
+- `--ran-select-icon-position` _(component)_
+- `--ran-select-icon-text-align` _(component)_
+- `--ran-select-icon-text-display` _(component)_
+- `--ran-select-icon-text-rendering` _(component)_
+- `--ran-select-icon-text-transform` _(component)_
+- `--ran-select-icon-top` _(component)_
+- `--ran-select-icon-transform` _(component)_
+- `--ran-select-item-align-items` _(component)_
+- `--ran-select-item-appearance` _(component)_
+- `--ran-select-item-background` _(component)_
+- `--ran-select-item-border` _(component)_
+- `--ran-select-item-cursor` _(component)_
+- `--ran-select-item-display` _(component)_
+- `--ran-select-item-focus-color` _(component)_
+- `--ran-select-item-focus-cursor` _(component)_
+- `--ran-select-item-font-family` _(component)_
+- `--ran-select-item-height` _(component)_
+- `--ran-select-item-hover-color` _(component)_
+- `--ran-select-item-hover-cursor` _(component)_
+- `--ran-select-item-left` _(component)_
+- `--ran-select-item-margin` _(component)_
+- `--ran-select-item-outline` _(component)_
+- `--ran-select-item-overflow` _(component)_
+- `--ran-select-item-padding` _(component)_
+- `--ran-select-item-position` _(component)_
+- `--ran-select-item-right` _(component)_
+- `--ran-select-item-search-cursor` _(component)_
+- `--ran-select-item-text-overflow` _(component)_
+- `--ran-select-item-top` _(component)_
+- `--ran-select-item-user-select` _(component)_
+- `--ran-select-item-white-space` _(component)_
+- `--ran-select-label-color` _(component)_
+- `--ran-select-label-cursor` _(component)_
+- `--ran-select-label-disabled-color` _(component)_
+- `--ran-select-label-disabled-cursor` _(component)_
+- `--ran-select-label-display` _(component)_
+- `--ran-select-label-font-size` _(component)_
+- `--ran-select-label-font-weight` _(component)_
+- `--ran-select-label-margin-bottom` _(component)_
+- `--ran-select-line-height` _(component)_
+- `--ran-select-list-style` _(component)_
+- `--ran-select-margin` _(component)_
+- `--ran-select-min-height` _(component)_
+- `--ran-select-option-display` _(component)_
+- `--ran-select-padding` _(component)_
+- `--ran-select-position` _(component)_
+- `--ran-select-root-box-sizing` _(component)_
+- `--ran-select-root-color` _(component)_
+- `--ran-select-root-display` _(component)_
+- `--ran-select-root-font-family` _(component)_
+- `--ran-select-root-font-size` _(component)_
+- `--ran-select-root-font-weight` _(component)_
+- `--ran-select-root-height` _(component)_
+- `--ran-select-root-line-height` _(component)_
+- `--ran-select-root-list-style` _(component)_
+- `--ran-select-root-margin` _(component)_
+- `--ran-select-root-padding` _(component)_
+- `--ran-select-root-position` _(component)_
+- `--ran-select-root-width` _(component)_
+- `--ran-select-search-active-border` _(component)_
+- `--ran-select-search-active-border-color` _(component)_
+- `--ran-select-search-active-border-width` _(component)_
+- `--ran-select-search-active-box-shadow` _(component)_
+- `--ran-select-search-active-height` _(component)_
+- `--ran-select-search-active-outline` _(component)_
+- `--ran-select-search-active-padding` _(component)_
+- `--ran-select-search-appearance` _(component)_
+- `--ran-select-search-background` _(component)_
+- `--ran-select-search-border` _(component)_
+- `--ran-select-search-cancel-appearance` _(component)_
+- `--ran-select-search-cancel-display` _(component)_
+- `--ran-select-search-content-min-height` _(component)_
+- `--ran-select-search-cursor` _(component)_
+- `--ran-select-search-display` _(component)_
+- `--ran-select-search-focus-cursor` _(component)_
+- `--ran-select-search-font-family` _(component)_
+- `--ran-select-search-height` _(component)_
+- `--ran-select-search-hover-cursor` _(component)_
+- `--ran-select-search-input-border` _(component)_
+- `--ran-select-search-input-outline` _(component)_
+- `--ran-select-search-input-padding` _(component)_
+- `--ran-select-search-inset-inline-end` _(component)_
+- `--ran-select-search-inset-inline-start` _(component)_
+- `--ran-select-search-left` _(component)_
+- `--ran-select-search-margin` _(component)_
+- `--ran-select-search-opacity` _(component)_
+- `--ran-select-search-outline` _(component)_
+- `--ran-select-search-padding` _(component)_
+- `--ran-select-search-position` _(component)_
+- `--ran-select-search-top` _(component)_
+- `--ran-select-search-visible-cursor` _(component)_
+- `--ran-select-search-visible-display` _(component)_
+- `--ran-select-search-visible-opacity` _(component)_
+- `--ran-select-select-color` _(component)_
+- `--ran-select-text-background` _(component)_
+- `--ran-select-text-border` _(component)_
+- `--ran-select-transition` _(component)_
+- `--ran-select-width` _(component)_
+- `--ran-size-1` _(internal)_
+- `--ran-size-7` _(internal)_
+- `--ran-skin-font-family` _(skin)_
+- `--ran-space-1` _(internal)_
+- `--ran-space-3` _(internal)_
+- `--ran-text-label-1` _(internal)_
+- `--ran-text-label-3` _(internal)_
+- `--ran-text-label-weight` _(internal)_
 
 #### Parts
+
 - `icon`
 - `label`
 - `search`
@@ -2069,37 +2228,40 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 2
 
 #### Tokens
+
 <!-- layers: semantic: 2 · component: 24 · internal: 2 -->
-- `--ran-blue-100` *(internal)*
-- `--ran-color-text` *(semantic)*
-- `--ran-dropdown-option-active-background-color` *(component)*
-- `--ran-dropdown-option-active-font-weight` *(component)*
-- `--ran-dropdown-option-active-hover-background-color` *(component)*
-- `--ran-dropdown-option-item-border-radius` *(component)*
-- `--ran-dropdown-option-item-color` *(component)*
-- `--ran-dropdown-option-item-content-box-sizing` *(component)*
-- `--ran-dropdown-option-item-content-color` *(component)*
-- `--ran-dropdown-option-item-content-font-family` *(component)*
-- `--ran-dropdown-option-item-content-font-size` *(component)*
-- `--ran-dropdown-option-item-content-font-variant` *(component)*
-- `--ran-dropdown-option-item-content-line-height` *(component)*
-- `--ran-dropdown-option-item-content-list-style` *(component)*
-- `--ran-dropdown-option-item-content-overflow` *(component)*
-- `--ran-dropdown-option-item-content-text-align` *(component)*
-- `--ran-dropdown-option-item-content-text-overflow` *(component)*
-- `--ran-dropdown-option-item-content-white-space` *(component)*
-- `--ran-dropdown-option-item-cursor` *(component)*
-- `--ran-dropdown-option-item-display` *(component)*
-- `--ran-dropdown-option-item-font-size` *(component)*
-- `--ran-dropdown-option-item-font-weight` *(component)*
-- `--ran-dropdown-option-item-hover-background-color` *(component)*
-- `--ran-dropdown-option-item-padding` *(component)*
-- `--ran-dropdown-option-item-position` *(component)*
-- `--ran-dropdown-option-item-transition` *(component)*
-- `--ran-gray-alpha-100` *(internal)*
-- `--ran-radius-sm` *(semantic)*
+
+- `--ran-blue-100` _(internal)_
+- `--ran-color-text` _(semantic)_
+- `--ran-dropdown-option-active-background-color` _(component)_
+- `--ran-dropdown-option-active-font-weight` _(component)_
+- `--ran-dropdown-option-active-hover-background-color` _(component)_
+- `--ran-dropdown-option-item-border-radius` _(component)_
+- `--ran-dropdown-option-item-color` _(component)_
+- `--ran-dropdown-option-item-content-box-sizing` _(component)_
+- `--ran-dropdown-option-item-content-color` _(component)_
+- `--ran-dropdown-option-item-content-font-family` _(component)_
+- `--ran-dropdown-option-item-content-font-size` _(component)_
+- `--ran-dropdown-option-item-content-font-variant` _(component)_
+- `--ran-dropdown-option-item-content-line-height` _(component)_
+- `--ran-dropdown-option-item-content-list-style` _(component)_
+- `--ran-dropdown-option-item-content-overflow` _(component)_
+- `--ran-dropdown-option-item-content-text-align` _(component)_
+- `--ran-dropdown-option-item-content-text-overflow` _(component)_
+- `--ran-dropdown-option-item-content-white-space` _(component)_
+- `--ran-dropdown-option-item-cursor` _(component)_
+- `--ran-dropdown-option-item-display` _(component)_
+- `--ran-dropdown-option-item-font-size` _(component)_
+- `--ran-dropdown-option-item-font-weight` _(component)_
+- `--ran-dropdown-option-item-hover-background-color` _(component)_
+- `--ran-dropdown-option-item-padding` _(component)_
+- `--ran-dropdown-option-item-position` _(component)_
+- `--ran-dropdown-option-item-transition` _(component)_
+- `--ran-gray-alpha-100` _(internal)_
+- `--ran-radius-sm` _(semantic)_
 
 #### Parts
+
 - `content`
 - `item`
 
@@ -2109,9 +2271,11 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `skeleton`
@@ -2120,19 +2284,22 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 1 · component: 6 · internal: 3 -->
-- `--ran-gray-alpha-200` *(internal)*
-- `--ran-gray-alpha-500` *(internal)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-size-1` *(internal)*
-- `--ran-skeleton-background` *(component)*
-- `--ran-skeleton-border-radius` *(component)*
-- `--ran-skeleton-height` *(component)*
-- `--ran-skeleton-shimmer-animation-duration` *(component)*
-- `--ran-skeleton-shimmer-background` *(component)*
-- `--ran-skeleton-width` *(component)*
+
+- `--ran-gray-alpha-200` _(internal)_
+- `--ran-gray-alpha-500` _(internal)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-size-1` _(internal)_
+- `--ran-skeleton-background` _(component)_
+- `--ran-skeleton-border-radius` _(component)_
+- `--ran-skeleton-height` _(component)_
+- `--ran-skeleton-shimmer-animation-duration` _(component)_
+- `--ran-skeleton-shimmer-background` _(component)_
+- `--ran-skeleton-width` _(component)_
 
 #### Parts
+
 - (none)
 
 ### `tab`
@@ -2141,30 +2308,33 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 6
 
 #### Tokens
+
 <!-- layers: semantic: 5 · component: 14 · internal: 2 -->
-- `--ran-color-bg-elevated` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-radius-md` *(semantic)*
-- `--ran-radius-sm` *(semantic)*
-- `--ran-space-2` *(internal)*
-- `--ran-space-3` *(internal)*
-- `--ran-tab-active-color` *(component)*
-- `--ran-tab-border-color` *(component)*
-- `--ran-tab-border-radius` *(component)*
-- `--ran-tab-content-background` *(component)*
-- `--ran-tab-content-border` *(component)*
-- `--ran-tab-content-border-radius` *(component)*
-- `--ran-tab-content-margin-top` *(component)*
-- `--ran-tab-content-transition` *(component)*
-- `--ran-tab-line-border-radius` *(component)*
-- `--ran-tab-line-color` *(component)*
-- `--ran-tab-line-height` *(component)*
-- `--ran-tab-line-margin-top` *(component)*
-- `--ran-tab-line-transition` *(component)*
-- `--ran-tab-panel-padding` *(component)*
+
+- `--ran-color-bg-elevated` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-radius-md` _(semantic)_
+- `--ran-radius-sm` _(semantic)_
+- `--ran-space-2` _(internal)_
+- `--ran-space-3` _(internal)_
+- `--ran-tab-active-color` _(component)_
+- `--ran-tab-border-color` _(component)_
+- `--ran-tab-border-radius` _(component)_
+- `--ran-tab-content-background` _(component)_
+- `--ran-tab-content-border` _(component)_
+- `--ran-tab-content-border-radius` _(component)_
+- `--ran-tab-content-margin-top` _(component)_
+- `--ran-tab-content-transition` _(component)_
+- `--ran-tab-line-border-radius` _(component)_
+- `--ran-tab-line-color` _(component)_
+- `--ran-tab-line-height` _(component)_
+- `--ran-tab-line-margin-top` _(component)_
+- `--ran-tab-line-transition` _(component)_
+- `--ran-tab-panel-padding` _(component)_
 
 #### Parts
+
 - `content`
 - `content-wrap`
 - `header`
@@ -2178,9 +2348,11 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 1
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - `content`
 
 ### `theme-switch`
@@ -2189,35 +2361,37 @@ Generated at: 2026-08-09T09:27:33.927Z
 - Parts: 2
 
 #### Tokens
+
 <!-- layers: semantic: 6 · skin: 2 · internal: 18 -->
-- `--ran-color-bg-hover` *(semantic)*
-- `--ran-color-border` *(semantic)*
-- `--ran-color-primary` *(semantic)*
-- `--ran-color-text` *(semantic)*
-- `--ran-color-text-secondary` *(semantic)*
-- `--ran-radius-full` *(semantic)*
-- `--ran-size-1` *(internal)*
-- `--ran-size-5` *(internal)*
-- `--ran-skin-border-style` *(skin)*
-- `--ran-skin-border-width` *(skin)*
-- `--ran-space-1` *(internal)*
-- `--ran-theme-switch-` *(internal)*
-- `--ran-theme-switch-background` *(internal)*
-- `--ran-theme-switch-border-color` *(internal)*
-- `--ran-theme-switch-button-active-background` *(internal)*
-- `--ran-theme-switch-button-active-color` *(internal)*
-- `--ran-theme-switch-button-color` *(internal)*
-- `--ran-theme-switch-button-focus-outline` *(internal)*
-- `--ran-theme-switch-button-focus-outline-offset` *(internal)*
-- `--ran-theme-switch-button-hover-color` *(internal)*
-- `--ran-theme-switch-button-size` *(internal)*
-- `--ran-theme-switch-display` *(internal)*
-- `--ran-theme-switch-gap` *(internal)*
-- `--ran-theme-switch-icon-size` *(internal)*
-- `--ran-theme-switch-padding` *(internal)*
-- `--ran-theme-switch-radius` *(internal)*
+
+- `--ran-color-bg-hover` _(semantic)_
+- `--ran-color-border` _(semantic)_
+- `--ran-color-primary` _(semantic)_
+- `--ran-color-text` _(semantic)_
+- `--ran-color-text-secondary` _(semantic)_
+- `--ran-radius-full` _(semantic)_
+- `--ran-size-1` _(internal)_
+- `--ran-size-5` _(internal)_
+- `--ran-skin-border-style` _(skin)_
+- `--ran-skin-border-width` _(skin)_
+- `--ran-space-1` _(internal)_
+- `--ran-theme-switch-` _(internal)_
+- `--ran-theme-switch-background` _(internal)_
+- `--ran-theme-switch-border-color` _(internal)_
+- `--ran-theme-switch-button-active-background` _(internal)_
+- `--ran-theme-switch-button-active-color` _(internal)_
+- `--ran-theme-switch-button-color` _(internal)_
+- `--ran-theme-switch-button-focus-outline` _(internal)_
+- `--ran-theme-switch-button-focus-outline-offset` _(internal)_
+- `--ran-theme-switch-button-hover-color` _(internal)_
+- `--ran-theme-switch-button-size` _(internal)_
+- `--ran-theme-switch-display` _(internal)_
+- `--ran-theme-switch-gap` _(internal)_
+- `--ran-theme-switch-icon-size` _(internal)_
+- `--ran-theme-switch-padding` _(internal)_
+- `--ran-theme-switch-radius` _(internal)_
 
 #### Parts
+
 - `button ${choice}`
 - `switch`
-

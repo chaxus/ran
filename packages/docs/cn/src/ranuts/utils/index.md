@@ -16,61 +16,61 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 
 ## 字符串处理
 
-| 方法                  | 说明                                  | 详细内容                                                |
-| --------------------- | ------------------------------------- | ------------------------------------------------------- |
-| md5                   | MD5 哈希函数                          | [md5](./md5.md)                                         |
-| randomString / getRandomString | 生成随机字符串                | [randomString](./random_string.md)                      |
-| clearBr               | 清除字符串中的空格、HTML 标签和换行符 | [clearBr](./clear_br.md)                                |
-| clearStr              | 去除字符串首尾的空格、URL 编码和引号  | [clearStr](./clear_str.md)                              |
-| truncate              | 用省略号截断字符串，对 Unicode 安全    | [truncate](./truncate.md)                               |
-| strParse              | 将字符串解析为对象                    | [strParse](./str_parse.md)                              |
-| toString              | 将值转换为字符串类型                  | [toString](./to_string.md)                              |
-| transformText         | 将 ArrayBuffer 转换为文本             | [transformText](./transform_text.md)                    |
-| checkEncoding         | 检测 Uint8Array 数据的字符编码        | [checkEncoding](./check_encoding.md)                    |
-| getMatchingSentences  | 提取包含关键词的完整句子              | [getMatchingSentences](./get_matching_sentences.md)     |
-| isString              | 判断值是否为字符串类型                | [isString](./is_string.md)                              |
+| 方法                           | 说明                                  | 详细内容                                            |
+| ------------------------------ | ------------------------------------- | --------------------------------------------------- |
+| md5                            | MD5 哈希函数                          | [md5](./md5.md)                                     |
+| randomString / getRandomString | 生成随机字符串                        | [randomString](./random_string.md)                  |
+| clearBr                        | 清除字符串中的空格、HTML 标签和换行符 | [clearBr](./clear_br.md)                            |
+| clearStr                       | 去除字符串首尾的空格、URL 编码和引号  | [clearStr](./clear_str.md)                          |
+| truncate                       | 用省略号截断字符串，对 Unicode 安全   | [truncate](./truncate.md)                           |
+| strParse                       | 将字符串解析为对象                    | [strParse](./str_parse.md)                          |
+| toString                       | 将值转换为字符串类型                  | [toString](./to_string.md)                          |
+| transformText                  | 将 ArrayBuffer 转换为文本             | [transformText](./transform_text.md)                |
+| checkEncoding                  | 检测 Uint8Array 数据的字符编码        | [checkEncoding](./check_encoding.md)                |
+| getMatchingSentences           | 提取包含关键词的完整句子              | [getMatchingSentences](./get_matching_sentences.md) |
+| isString                       | 判断值是否为字符串类型                | [isString](./is_string.md)                          |
 
 ## 对象处理
 
-| 方法        | 说明                        | 详细内容                        |
-| ----------- | --------------------------- | ------------------------------- |
+| 方法                 | 说明                           | 详细内容                        |
+| -------------------- | ------------------------------ | ------------------------------- |
 | merge / mergeExports | 合并对象；惰性 getter 导出对象 | [merge](./merge.md)             |
-| isEqual     | 深度比较两个值是否相等      | [isEqual](./is_equal.md)        |
-| cloneDeep   | 深度克隆对象或数组          | [cloneDeep](./clone_deep.md)    |
-| querystring | 将对象转换为 URL 查询字符串 | [querystring](./querystring.md) |
-| filterObj   | 过滤对象                    | [filterObj](./filter_obj.md)    |
-| formatJson  | 格式化 JSON                 | [formatJson](./format_json.md)  |
+| isEqual              | 深度比较两个值是否相等         | [isEqual](./is_equal.md)        |
+| cloneDeep            | 深度克隆对象或数组             | [cloneDeep](./clone_deep.md)    |
+| querystring          | 将对象转换为 URL 查询字符串    | [querystring](./querystring.md) |
+| filterObj            | 过滤对象                       | [filterObj](./filter_obj.md)    |
+| formatJson           | 格式化 JSON                    | [formatJson](./format_json.md)  |
 
 ## 数字处理
 
-| 方法            | 说明                             | 详细内容                                 |
-| --------------- | -------------------------------- | ---------------------------------------- |
-| range           | 限制数字在指定范围内             | [range](./range.md)                      |
-| clamp / lerp / inverseLerp / remap / fit / linearstep / smoothstep | shader 风格的插值与区间映射 | [range](./range.md) |
-| mathjs          | 精确的数字运算函数               | [mathjs](./mathjs.md)                    |
-| perToNum        | 将百分比字符串转换为数字         | [perToNum](./per_to_num.md)              |
-| transformNumber | 将数字转换为带单位的格式化字符串 | [transformNumber](./transform_number.md) |
-| addNumSym       | 给数字添加正负号                 | [addNumSym](./add_num_sym.md)            |
+| 方法                                                               | 说明                             | 详细内容                                 |
+| ------------------------------------------------------------------ | -------------------------------- | ---------------------------------------- |
+| range                                                              | 限制数字在指定范围内             | [range](./range.md)                      |
+| clamp / lerp / inverseLerp / remap / fit / linearstep / smoothstep | shader 风格的插值与区间映射      | [range](./range.md)                      |
+| mathjs                                                             | 精确的数字运算函数               | [mathjs](./mathjs.md)                    |
+| perToNum                                                           | 将百分比字符串转换为数字         | [perToNum](./per_to_num.md)              |
+| transformNumber                                                    | 将数字转换为带单位的格式化字符串 | [transformNumber](./transform_number.md) |
+| addNumSym                                                          | 给数字添加正负号                 | [addNumSym](./add_num_sym.md)            |
 
 ## 颜色处理
 
-| 方法        | 说明                          | 详细内容                         |
-| ----------- | ----------------------------- | -------------------------------- |
-| hexToRgb    | 将十六进制颜色值转换为 RGB    | [hexToRgb](./hex_to_rgb.md)      |
-| rgbToHex    | 将 RGB 值转换为十六进制颜色值 | [rgbToHex](./rgb_to_hex.md)      |
-| randomColor | 生成随机颜色对象              | [randomColor](./random_color.md) |
-| Color / ColorScheme | 颜色类、值类、格式转换、调色板生成 | [Color](./color.md) |
-| blendScreen / blendMultiply / blendOverlay / luma / vibrance / cosinePalette / srgbToLinear | shader 风格的颜色混合与调色数学（0–1 通道） | [Color](./color.md) |
+| 方法                                                                                        | 说明                                        | 详细内容                         |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------- | -------------------------------- |
+| hexToRgb                                                                                    | 将十六进制颜色值转换为 RGB                  | [hexToRgb](./hex_to_rgb.md)      |
+| rgbToHex                                                                                    | 将 RGB 值转换为十六进制颜色值               | [rgbToHex](./rgb_to_hex.md)      |
+| randomColor                                                                                 | 生成随机颜色对象                            | [randomColor](./random_color.md) |
+| Color / ColorScheme                                                                         | 颜色类、值类、格式转换、调色板生成          | [Color](./color.md)              |
+| blendScreen / blendMultiply / blendOverlay / luma / vibrance / cosinePalette / srgbToLinear | shader 风格的颜色混合与调色数学（0–1 通道） | [Color](./color.md)              |
 
 ## 时间处理
 
-| 方法            | 说明                             | 详细内容                                  |
-| --------------- | -------------------------------- | ----------------------------------------- |
-| formatDuration  | 将时间秒数转换为格式化字符串     | [formatDuration](./time_format.md)        |
-| formatRelative  | 描述相对当前的时间（「3 天前」） | [formatRelative](./time_format.md)        |
-| parseVttTimestamp / parseVttCueTiming | 解析 WebVTT 字幕时间行 | [parseVttTimestamp](./time_format.md) |
-| timestampToTime | 将时间戳转换为 Date 对象         | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime | 获取高精度时间戳                 | [performanceTime](./performance_time.md)  |
+| 方法                                  | 说明                             | 详细内容                                  |
+| ------------------------------------- | -------------------------------- | ----------------------------------------- |
+| formatDuration                        | 将时间秒数转换为格式化字符串     | [formatDuration](./time_format.md)        |
+| formatRelative                        | 描述相对当前的时间（「3 天前」） | [formatRelative](./time_format.md)        |
+| parseVttTimestamp / parseVttCueTiming | 解析 WebVTT 字幕时间行           | [parseVttTimestamp](./time_format.md)     |
+| timestampToTime                       | 将时间戳转换为 Date 对象         | [timestampToTime](./timestamp_to_time.md) |
+| performanceTime                       | 获取高精度时间戳                 | [performanceTime](./performance_time.md)  |
 
 ## 设备检测
 
@@ -84,25 +84,25 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 
 ## DOM 操作
 
-| 方法                   | 说明                     | 详细内容                                                |
-| ---------------------- | ------------------------ | ------------------------------------------------------- |
-| addClassToElement      | 给 DOM 元素添加 CSS 类名 | [addClassToElement](./add_class_to_element.md)          |
-| removeClassToElement   | 从 DOM 元素移除 CSS 类名 | [removeClassToElement](./remove_class_to_element.md)    |
-| createDocumentFragment | 创建 DocumentFragment    | [createDocumentFragment](./create_document_fragment.md) |
-| escapeHtml             | 转义 HTML 特殊字符       | [escapeHtml](./escape_html.md)                          |
-| Chain                  | 链式调用的 DOM 操作类    | [Chain](./chain.md)                                     |
-| create                 | 创建 DOM 元素的辅助函数  | [create](./create.md)                                   |
-| EventManager / createDoubleTapDetector | 作用域事件注册表与双击检测 | [EventManager](./event_manager.md)         |
-| adoptStyles            | 把样式文本注入 shadow root | [adoptStyles](./adopt_styles.md)                       |
-| computePlacement       | 相对锚点翻转/平移浮层位置  | [computePlacement](./placement.md)                     |
-| setFontSize2html       | 移动端 flexible rem 视口适配 | [setFontSize2html](./set_font_size.md)               |
+| 方法                                   | 说明                         | 详细内容                                                |
+| -------------------------------------- | ---------------------------- | ------------------------------------------------------- |
+| addClassToElement                      | 给 DOM 元素添加 CSS 类名     | [addClassToElement](./add_class_to_element.md)          |
+| removeClassToElement                   | 从 DOM 元素移除 CSS 类名     | [removeClassToElement](./remove_class_to_element.md)    |
+| createDocumentFragment                 | 创建 DocumentFragment        | [createDocumentFragment](./create_document_fragment.md) |
+| escapeHtml                             | 转义 HTML 特殊字符           | [escapeHtml](./escape_html.md)                          |
+| Chain                                  | 链式调用的 DOM 操作类        | [Chain](./chain.md)                                     |
+| create                                 | 创建 DOM 元素的辅助函数      | [create](./create.md)                                   |
+| EventManager / createDoubleTapDetector | 作用域事件注册表与双击检测   | [EventManager](./event_manager.md)                      |
+| adoptStyles                            | 把样式文本注入 shadow root   | [adoptStyles](./adopt_styles.md)                        |
+| computePlacement                       | 相对锚点翻转/平移浮层位置    | [computePlacement](./placement.md)                      |
+| setFontSize2html                       | 移动端 flexible rem 视口适配 | [setFontSize2html](./set_font_size.md)                  |
 
 ## 音视频
 
-| 方法                    | 说明                        | 详细内容                                   |
-| ----------------------- | --------------------------- | -------------------------------------------- |
-| AudioRecorder           | 把麦克风录音录制成 `Blob`    | [AudioRecorder](./audio_recorder.md)         |
-| createSpeechRecognizer  | 基于 Web Speech API 的语音转文本 | [createSpeechRecognizer](./speech.md)    |
+| 方法                   | 说明                             | 详细内容                              |
+| ---------------------- | -------------------------------- | ------------------------------------- |
+| AudioRecorder          | 把麦克风录音录制成 `Blob`        | [AudioRecorder](./audio_recorder.md)  |
+| createSpeechRecognizer | 基于 Web Speech API 的语音转文本 | [createSpeechRecognizer](./speech.md) |
 
 ## 存储
 
@@ -143,18 +143,18 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 
 ## 网络
 
-| 方法         | 说明                     | 详细内容                           |
-| ------------ | ------------------------ | ---------------------------------- |
-| imageRequest | 通过图片请求测试网络延迟 | [imageRequest](./image_request.md) |
-| networkSpeed | 测试网络的 ping 值和抖动 | [networkSpeed](./network_speed.md) |
-| connection   | 获取当前网络连接信息     | [connection](./connection.md)      |
-| getStatus / status | HTTP 状态码 ↔ 消息查询           | [getStatus](./status.md)           |
+| 方法               | 说明                     | 详细内容                           |
+| ------------------ | ------------------------ | ---------------------------------- |
+| imageRequest       | 通过图片请求测试网络延迟 | [imageRequest](./image_request.md) |
+| networkSpeed       | 测试网络的 ping 值和抖动 | [networkSpeed](./network_speed.md) |
+| connection         | 获取当前网络连接信息     | [connection](./connection.md)      |
+| getStatus / status | HTTP 状态码 ↔ 消息查询   | [getStatus](./status.md)           |
 
 ## 浏览器
 
-| 方法            | 说明                 | 详细内容                                  |
-| --------------- | -------------------- | ----------------------------------------- |
-| getWindow       | 获取可视窗口大小     | [getWindow](./get_window.md)              |
+| 方法                                 | 说明                              | 详细内容                                  |
+| ------------------------------------ | --------------------------------- | ----------------------------------------- |
+| getWindow                            | 获取可视窗口大小                  | [getWindow](./get_window.md)              |
 | createObjectURL / requestUrlToBuffer | 创建对象 URL；拉取 URL 为原始字节 | [createObjectURL](./create_object_url.md) |
 
 ## 脚本加载
@@ -173,11 +173,11 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 
 ## 其他
 
-| 方法                 | 说明                       | 详细内容                                             |
-| -------------------- | -------------------------- | ---------------------------------------------------- |
-| TOTP                 | 基于时间的一次性密码生成器 | [TOTP](./totp.md)                                    |
-| createSignal         | 创建响应式信号             | [createSignal](./create_signal.md)                   |
-| setMime / MimeType   | 设置或更新 MIME 类型映射   | [setMime](./set_mime.md)                             |
-| getExtensions        | 根据 MIME 类型获取扩展名   | [getExtensions](./get_extensions.md)                 |
-| SyncHook             | 同步事件钩子类             | [SyncHook](./sync_hook.md)                           |
-| durationHandler      | 创建延迟执行函数           | [durationHandler](./duration_handler.md)             |
+| 方法               | 说明                       | 详细内容                                 |
+| ------------------ | -------------------------- | ---------------------------------------- |
+| TOTP               | 基于时间的一次性密码生成器 | [TOTP](./totp.md)                        |
+| createSignal       | 创建响应式信号             | [createSignal](./create_signal.md)       |
+| setMime / MimeType | 设置或更新 MIME 类型映射   | [setMime](./set_mime.md)                 |
+| getExtensions      | 根据 MIME 类型获取扩展名   | [getExtensions](./get_extensions.md)     |
+| SyncHook           | 同步事件钩子类             | [SyncHook](./sync_hook.md)               |
+| durationHandler    | 创建延迟执行函数           | [durationHandler](./duration_handler.md) |

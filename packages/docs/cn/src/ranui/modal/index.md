@@ -39,17 +39,17 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 
 ### 属性
 
-| 属性           | 类型      | 默认值  | 说明                                 |
-| -------------- | --------- | ------- | ------------------------------------ |
-| `open`         | `boolean` | `false` | 对话框是否可见                       |
-| `title`        | `string`  | `''`    | 头部标题文本（为空时回退为 `Modal`） |
-| `closable`     | `boolean` | `true`  | 是否显示关闭（`x`）按钮              |
-| `maskClosable` | `boolean` | `true`  | 点击背景遮罩是否关闭对话框           |
-| `closeOnEsc`   | `boolean` | `true`  | 按下 `Escape` 键是否关闭对话框       |
-| `lockScroll`   | `boolean` | `true`  | 对话框打开时是否锁定 body 滚动       |
-| `autoFocus`    | `boolean` | `true`  | 打开时是否自动聚焦第一个可聚焦元素   |
+| 属性           | 类型      | 默认值  | 说明                                   |
+| -------------- | --------- | ------- | -------------------------------------- |
+| `open`         | `boolean` | `false` | 对话框是否可见                         |
+| `title`        | `string`  | `''`    | 头部标题文本（为空时回退为 `Modal`）   |
+| `closable`     | `boolean` | `true`  | 是否显示关闭（`x`）按钮                |
+| `maskClosable` | `boolean` | `true`  | 点击背景遮罩是否关闭对话框             |
+| `closeOnEsc`   | `boolean` | `true`  | 按下 `Escape` 键是否关闭对话框         |
+| `lockScroll`   | `boolean` | `true`  | 对话框打开时是否锁定 body 滚动         |
+| `autoFocus`    | `boolean` | `true`  | 打开时是否自动聚焦第一个可聚焦元素     |
 | `hideHeader`   | `boolean` | `false` | 完全去掉标题栏，只留一个悬浮的关闭按钮 |
-| `sheet`        | `string`  | `''`    | 注入到 shadow DOM 中的 CSS           |
+| `sheet`        | `string`  | `''`    | 注入到 shadow DOM 中的 CSS             |
 
 ### 标题 `title`
 

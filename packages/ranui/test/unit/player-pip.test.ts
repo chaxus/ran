@@ -74,16 +74,16 @@ describe('r-player picture-in-picture', () => {
     withPipEnabled(false, () => {
       const player = makePlayer();
       player.syncPipButtonVisibility();
-      expect(
-        player._playControllerBottomPip.classList.contains('ran-player-controller-bottom-right-pip-hidden'),
-      ).toBe(true);
+      expect(player._playControllerBottomPip.classList.contains('ran-player-controller-bottom-right-pip-hidden')).toBe(
+        true,
+      );
     });
     withPipEnabled(true, () => {
       const player = makePlayer();
       player.syncPipButtonVisibility();
-      expect(
-        player._playControllerBottomPip.classList.contains('ran-player-controller-bottom-right-pip-hidden'),
-      ).toBe(false);
+      expect(player._playControllerBottomPip.classList.contains('ran-player-controller-bottom-right-pip-hidden')).toBe(
+        false,
+      );
     });
   });
 

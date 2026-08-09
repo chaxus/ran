@@ -203,12 +203,12 @@ input.addEventListener('change', (event) => {
 
 Exposed via `::part()` for external styling.
 
-| Part      | Element                                                   |
-| --------- | --------------------------------------------------------- |
-| `input`   | The field wrapper                                         |
-| `content` | The inner native `<input>` control                        |
+| Part      | Element                                                     |
+| --------- | ----------------------------------------------------------- |
+| `input`   | The field wrapper                                           |
+| `content` | The inner native `<input>` control                          |
 | `label`   | The static label above the field (present when `label` set) |
-| `message` | The helper / validation text (present when `message` set) |
+| `message` | The helper / validation text (present when `message` set)   |
 
 ```css
 r-input::part(content) {

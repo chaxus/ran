@@ -24,22 +24,22 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 ### 属性
 
-| 属性          | 类型      | 默认值 | 说明                                                       |
-| ------------- | --------- | ------ | ------------------------------------------------------------ |
-| `label`       | `string`  | `''`   | 渲染在字段上方的静态标签                                    |
-| `placeholder` | `string`  | `''`   | 占位提示文字，转发给内部原生 `<input>`                      |
-| `value`       | `string`  | `''`   | 字段值，会反映为属性并同步给表单                              |
-| `disabled`    | `boolean` | `false`| 是否禁用                                                     |
-| `type`        | `string`  | `''`   | 转发给内部控件的原生 input 类型（`text`、`password`、`number` …） |
-| `icon`        | `string`  | `''`   | 字段内前置图标名称（以 `r-icon` 渲染）                        |
-| `name`        | `string`  | `''`   | 参与表单时使用的字段名                                        |
-| `status`      | `string`  | `''`   | 校验状态：`error`、`warning`                                  |
-| `message`     | `string`  | `''`   | 渲染在字段下方的辅助/校验文字                                  |
-| `min`         | `string`  | `''`   | 最小值；`type="number"` 时转发给内部 `<input>`                |
-| `max`         | `string`  | `''`   | 最大值；`type="number"` 时转发给内部 `<input>`                |
-| `step`        | `string`  | `''`   | 步长；`type="number"` 时转发给内部 `<input>`                  |
-| `required`    | `boolean` | `false`| 转发给内部 `<input>`，使原生约束校验生效                        |
-| `sheet`       | `string`  | `''`   | 注入 shadow root 的自定义样式                                 |
+| 属性          | 类型      | 默认值  | 说明                                                              |
+| ------------- | --------- | ------- | ----------------------------------------------------------------- |
+| `label`       | `string`  | `''`    | 渲染在字段上方的静态标签                                          |
+| `placeholder` | `string`  | `''`    | 占位提示文字，转发给内部原生 `<input>`                            |
+| `value`       | `string`  | `''`    | 字段值，会反映为属性并同步给表单                                  |
+| `disabled`    | `boolean` | `false` | 是否禁用                                                          |
+| `type`        | `string`  | `''`    | 转发给内部控件的原生 input 类型（`text`、`password`、`number` …） |
+| `icon`        | `string`  | `''`    | 字段内前置图标名称（以 `r-icon` 渲染）                            |
+| `name`        | `string`  | `''`    | 参与表单时使用的字段名                                            |
+| `status`      | `string`  | `''`    | 校验状态：`error`、`warning`                                      |
+| `message`     | `string`  | `''`    | 渲染在字段下方的辅助/校验文字                                     |
+| `min`         | `string`  | `''`    | 最小值；`type="number"` 时转发给内部 `<input>`                    |
+| `max`         | `string`  | `''`    | 最大值；`type="number"` 时转发给内部 `<input>`                    |
+| `step`        | `string`  | `''`    | 步长；`type="number"` 时转发给内部 `<input>`                      |
+| `required`    | `boolean` | `false` | 转发给内部 `<input>`，使原生约束校验生效                          |
+| `sheet`       | `string`  | `''`    | 注入 shadow root 的自定义样式                                     |
 
 ### 标签 `label`
 
@@ -103,8 +103,7 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 </Demo>
 
 ```html
-<r-input icon="lock" type="password" placeholder="密码"></r-input>
-<r-input type="number" placeholder="数字"></r-input>
+<r-input icon="lock" type="password" placeholder="密码"></r-input> <r-input type="number" placeholder="数字"></r-input>
 ```
 
 ### 校验状态 `status`
@@ -143,10 +142,10 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 两个事件都以 `CustomEvent` 派发，当前值携带在 `detail` 中。
 
-| 事件     | 触发时机                             | `detail`             |
-| -------- | -------------------------------------- | -------------------- |
-| `input`  | 每次按键时触发（对应原生 `input`）      | `{ value: string }`  |
-| `change` | 提交/失焦时触发（对应原生 `change`）    | `{ value: string }`  |
+| 事件     | 触发时机                             | `detail`            |
+| -------- | ------------------------------------ | ------------------- |
+| `input`  | 每次按键时触发（对应原生 `input`）   | `{ value: string }` |
+| `change` | 提交/失焦时触发（对应原生 `change`） | `{ value: string }` |
 
 ### `input` 事件
 
@@ -201,8 +200,8 @@ input.addEventListener('change', (event) => {
 
 通过 `::part()` 选择器定位内部结构：
 
-| Part      | 对应元素                                |
-| --------- | ---------------------------------------- |
+| Part      | 对应元素                                  |
+| --------- | ----------------------------------------- |
 | `input`   | 字段外层容器                              |
 | `content` | 内部原生 `<input>` 控件                   |
 | `label`   | 字段上方的静态标签（设置 `label` 时存在） |

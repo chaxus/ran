@@ -96,9 +96,9 @@ if (result.success) {
 
 #### Parameters
 
-| Parameter | Description                                        | Type                                         | Default  |
-| --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
-| `src`     | URL to fetch                                          | `string`                                        | Required |
+| Parameter | Description                                                             | Type                                     | Default  |
+| --------- | ----------------------------------------------------------------------- | ---------------------------------------- | -------- |
+| `src`     | URL to fetch                                                            | `string`                                 | Required |
 | `options` | `method` (default `'GET'`) and `responseType` (default `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | Required |
 
 #### Return

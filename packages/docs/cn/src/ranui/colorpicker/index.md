@@ -68,7 +68,7 @@ picker.addEventListener('change', (e) => {
 | --------------------------------------- | ---------------- |
 | `--ran-colorpicker-background`          | 色块背景         |
 | `--ran-colorpicker-border`              | 色块边框         |
-| `--ran-colorpicker-hover-border-color`        | 悬停时的边框颜色 |
+| `--ran-colorpicker-hover-border-color`  | 悬停时的边框颜色 |
 | `--ran-colorpicker-border-radius`       | 色块圆角         |
 | `--ran-colorpicker-block-border-radius` | 内部块圆角       |
 | `--ran-colorpicker-transition`          | 悬停过渡         |

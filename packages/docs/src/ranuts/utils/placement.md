@@ -34,22 +34,22 @@ panel.style.left = `${left + window.scrollX}px`;
 
 #### Parameters
 
-| Parameter          | Description                                                                                    | Type                       | Default              |
-| ------------------ | ------------------------------------------------------------------------------------------------ | -------------------------- | --------------------- |
-| `options.anchor`    | Anchor (trigger) rect, in viewport coordinates (e.g. `getBoundingClientRect()`)                 | `{ top, left, width, height }` | Required          |
-| `options.floating`  | The floating panel's own size                                                                    | `{ width, height }`        | Required               |
-| `options.placement` | Preferred side. Flips to the opposite side when it lacks room and the opposite side has more     | `'top' \| 'bottom' \| 'left' \| 'right'` | Required |
-| `options.offset`    | Gap kept between the anchor and the floating panel, in px                                        | `number`                   | `0`                    |
-| `options.boundary`  | Region the panel must stay inside, in viewport coordinates                                       | `{ top, left, width, height }` | Window viewport    |
-| `options.padding`   | Minimum gap kept between the panel and the boundary edge when shifting, in px                    | `number`                   | `8`                    |
+| Parameter           | Description                                                                                  | Type                                     | Default         |
+| ------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------- |
+| `options.anchor`    | Anchor (trigger) rect, in viewport coordinates (e.g. `getBoundingClientRect()`)              | `{ top, left, width, height }`           | Required        |
+| `options.floating`  | The floating panel's own size                                                                | `{ width, height }`                      | Required        |
+| `options.placement` | Preferred side. Flips to the opposite side when it lacks room and the opposite side has more | `'top' \| 'bottom' \| 'left' \| 'right'` | Required        |
+| `options.offset`    | Gap kept between the anchor and the floating panel, in px                                    | `number`                                 | `0`             |
+| `options.boundary`  | Region the panel must stay inside, in viewport coordinates                                   | `{ top, left, width, height }`           | Window viewport |
+| `options.padding`   | Minimum gap kept between the panel and the boundary edge when shifting, in px                | `number`                                 | `8`             |
 
 #### Return
 
-| Argument    | Description                          | Type                                     |
-| ----------- | ------------------------------------- | ----------------------------------------- |
-| `top`       | Resolved `top`, in the same coordinate space as `anchor` | `number`                |
-| `left`      | Resolved `left`, in the same coordinate space as `anchor` | `number`               |
-| `placement` | The side actually used, after flip    | `'top' \| 'bottom' \| 'left' \| 'right'` |
+| Argument    | Description                                               | Type                                     |
+| ----------- | --------------------------------------------------------- | ---------------------------------------- |
+| `top`       | Resolved `top`, in the same coordinate space as `anchor`  | `number`                                 |
+| `left`      | Resolved `left`, in the same coordinate space as `anchor` | `number`                                 |
+| `placement` | The side actually used, after flip                        | `'top' \| 'bottom' \| 'left' \| 'right'` |
 
 ## Notes
 

@@ -1,7 +1,7 @@
 # truncate
 
 Shorten a string to a maximum length, marking the cut with an ellipsis — Unicode-safe,
-and aware that *which end* you keep changes what the truncation means.
+and aware that _which end_ you keep changes what the truncation means.
 
 ## Usage
 
@@ -23,25 +23,25 @@ truncate('0xabcdef0123456789', { length: 11, position: 'middle' });
 
 #### Parameters
 
-| Parameter | Description                               | Type                        | Default  |
-| --------- | ------------------------------------------ | ---------------------------- | -------- |
+| Parameter | Description                                 | Type                        | Default  |
+| --------- | ------------------------------------------- | --------------------------- | -------- |
 | `value`   | The string to shorten                       | `string`                    | Required |
 | `options` | A bare number is shorthand for `{ length }` | `TruncateOptions \| number` | Required |
 
 #### `TruncateOptions`
 
-| Field      | Description                                                                          | Type                             | Default |
-| ---------- | -------------------------------------------------------------------------------------- | --------------------------------- | ------- |
-| `length`   | Maximum length of the result, including the ellipsis                                  | `number`                          | —       |
-| `position` | Which end survives — see below                                                        | `'end' \| 'start' \| 'middle'`    | `'end'` |
-| `ellipsis` | The marker inserted at the cut                                                        | `string`                          | `'…'`   |
+| Field      | Description                                          | Type                           | Default |
+| ---------- | ---------------------------------------------------- | ------------------------------ | ------- |
+| `length`   | Maximum length of the result, including the ellipsis | `number`                       | —       |
+| `position` | Which end survives — see below                       | `'end' \| 'start' \| 'middle'` | `'end'` |
+| `ellipsis` | The marker inserted at the cut                       | `string`                       | `'…'`   |
 
 `position` decides which end survives, and that choice carries real information:
 
 - `'end'` (default) keeps the beginning — right for prose and titles.
 - `'start'` keeps the **tail**, which is what a file path wants: `/Users/someone/work/…`
   are the bytes a reader already knows; `…/src/utils/str.ts` is the part they need.
-- `'middle'` keeps both ends, for identifiers whose head *and* tail are meaningful, such
+- `'middle'` keeps both ends, for identifiers whose head _and_ tail are meaningful, such
   as a hash or an account number.
 
 #### Return

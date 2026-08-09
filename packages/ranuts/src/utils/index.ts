@@ -80,16 +80,7 @@ import type {
   PendingRequest,
   PortBridge,
 } from './bridge';
-import {
-  cloneDeep,
-  filterObj,
-  formatJson,
-  isEqual,
-  merge,
-  mergeExports,
-  querystring,
-  replaceOld,
-} from './obj';
+import { cloneDeep, filterObj, formatJson, isEqual, merge, mergeExports, querystring, replaceOld } from './obj';
 import { MimeType, getExtensions, getMime, setMime } from './mimeType';
 import { AudioRecorder } from './audioRecorder';
 import { createSignal, subscribers } from './signal';

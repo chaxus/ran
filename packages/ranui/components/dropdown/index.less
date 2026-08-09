@@ -237,9 +237,7 @@
       // if that's overridden, not a fixed pixel value. Without this, the
       // arrow's *bounding box* centers correctly on the trigger but the
       // visible triangle inside it doesn't.
-      transform: translateX(
-          calc(0px - var(--ran-dropdown-arrow-width, 16px) + var(--ran-dropdown-arrow-overlap, 2px))
-        )
+      transform: translateX(calc(0px - var(--ran-dropdown-arrow-width, 16px) + var(--ran-dropdown-arrow-overlap, 2px)))
         translateY(
           calc(
             var(--ran-dropdown-arrow-width, 16px) / 2 +
@@ -311,7 +309,10 @@
       overflow: visible; // let the drop-shadow filter bleed outside the 16×16 viewBox
     }
     path {
-      fill: var(--ran-dropdown-arrow-fill-background, var(--ran-dropdown-arrow-tip-background, var(--ran-color-bg-elevated, #fff)));
+      fill: var(
+        --ran-dropdown-arrow-fill-background,
+        var(--ran-dropdown-arrow-tip-background, var(--ran-color-bg-elevated, #fff))
+      );
       // `--ran-dropdown-arrow-shadow` takes a `filter: drop-shadow(...)` value —
       // NOT the same syntax as the old `--ran-dropdown-arrow-tip-box-shadow`
       // (a `box-shadow` value), which is why this doesn't chain to that old

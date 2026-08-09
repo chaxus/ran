@@ -43,23 +43,23 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 ### 属性
 
-| 属性                   | 类型                   | 默认值  | 说明                                                                                     |
-| ---------------------- | ---------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| `src`                  | `string`               | `''`    | 视频资源地址。改变它会重新加载播放器。引擎（HLS/native）按扩展名自动探测。               |
-| `format`               | `string`               | `''`    | 强制指定引擎——`hls`/`dash`/`flv`/`webrtc`/`native`——代替按 `src` 扩展名自动探测。适用于拿不到扩展名的加签/无后缀流地址；`webrtc` **必须**显式指定（WHEP 端点没有扩展名可探测）。改变它会重新加载播放器。 |
-| `volume`               | `string`               | `''`    | 初始音量，`0`–`100` 制——和 `setVolume()`/`getVolume()` 是同一套刻度。                   |
-| `currentTime`          | `string`               | `''`    | 初始播放位置（秒）。也接受小写形式 `currenttime`。                                       |
-| `playbackRate`         | `string`               | `''`    | 播放倍速（如 `1`、`1.5`、`2`）。也接受小写形式 `playbackrate`。                          |
-| `debug`                | `string`               | `''`    | 为真值时，把每个内部 `change` 事件和警告都打印到控制台。                                 |
-| `sheet`                | `string`               | `''`    | 注入组件 shadow DOM 的自定义样式文本。                                                   |
-| `poster`               | `string`               | `''`    | 播放开始前显示的封面图 URL。直接透传给 `<video poster>`。                                |
-| `autoplay`             | `boolean`              | `false` | 布尔属性——出现即为 `true`，等价于原生 `<video autoplay>`。多数浏览器要求同时设置 `muted` 才能在无用户交互时自动播放。 |
-| `loop`                 | `boolean`              | `false` | 布尔属性——播放结束后循环，等价于原生 `<video loop>`。                                    |
-| `muted`                | `boolean`              | `false` | 布尔属性——初始静音。内部会同时把音量设为 `0`（保证静音图标/滑块状态一致）**以及**设置原生 `<video>.muted` 标志（满足浏览器的静音自动播放策略）。移除该属性会恢复之前的音量。 |
-| `thumbnails`           | `string`               | `''`    | WebVTT 雪碧图 manifest 的地址——在进度条悬停提示上方显示裁剪后的缩略图。详见下方[缩略图预览](#缩略图预览-thumbnails)。和 `src` 无关：只有这个属性本身变化时才会重新抓取。 |
-| `disable-error-modal`  | `boolean`              | `false` | 关闭内置的错误 + 重试对话框——错误依然会通过 `error`/`sourceerror` 这两个 `change` 事件到达你手上，可以在此基础上搭自己的 UI。 |
-| `remember-position`    | `boolean`              | `false` | 开启断点续播：`pause` 时和标签页切到后台时把当前播放位置存到 `localStorage`（按 `src` 区分），下次加载同一个 `src` 时恢复，播放结束后清除。 |
-| `tracks`               | `PlayerTrackConfig[]`  | `[]`    | 字幕/CC 轨道——**只有 JS 属性，没有对应的 HTML attribute**（播放器每次加载都会清空自己的 light DOM，声明式的 `<track>` 子标签活不下来）。详见下方[字幕/CC](#字幕-cc-tracks)。 |
+| 属性                  | 类型                  | 默认值  | 说明                                                                                                                                                                                                     |
+| --------------------- | --------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src`                 | `string`              | `''`    | 视频资源地址。改变它会重新加载播放器。引擎（HLS/native）按扩展名自动探测。                                                                                                                               |
+| `format`              | `string`              | `''`    | 强制指定引擎——`hls`/`dash`/`flv`/`webrtc`/`native`——代替按 `src` 扩展名自动探测。适用于拿不到扩展名的加签/无后缀流地址；`webrtc` **必须**显式指定（WHEP 端点没有扩展名可探测）。改变它会重新加载播放器。 |
+| `volume`              | `string`              | `''`    | 初始音量，`0`–`100` 制——和 `setVolume()`/`getVolume()` 是同一套刻度。                                                                                                                                    |
+| `currentTime`         | `string`              | `''`    | 初始播放位置（秒）。也接受小写形式 `currenttime`。                                                                                                                                                       |
+| `playbackRate`        | `string`              | `''`    | 播放倍速（如 `1`、`1.5`、`2`）。也接受小写形式 `playbackrate`。                                                                                                                                          |
+| `debug`               | `string`              | `''`    | 为真值时，把每个内部 `change` 事件和警告都打印到控制台。                                                                                                                                                 |
+| `sheet`               | `string`              | `''`    | 注入组件 shadow DOM 的自定义样式文本。                                                                                                                                                                   |
+| `poster`              | `string`              | `''`    | 播放开始前显示的封面图 URL。直接透传给 `<video poster>`。                                                                                                                                                |
+| `autoplay`            | `boolean`             | `false` | 布尔属性——出现即为 `true`，等价于原生 `<video autoplay>`。多数浏览器要求同时设置 `muted` 才能在无用户交互时自动播放。                                                                                    |
+| `loop`                | `boolean`             | `false` | 布尔属性——播放结束后循环，等价于原生 `<video loop>`。                                                                                                                                                    |
+| `muted`               | `boolean`             | `false` | 布尔属性——初始静音。内部会同时把音量设为 `0`（保证静音图标/滑块状态一致）**以及**设置原生 `<video>.muted` 标志（满足浏览器的静音自动播放策略）。移除该属性会恢复之前的音量。                             |
+| `thumbnails`          | `string`              | `''`    | WebVTT 雪碧图 manifest 的地址——在进度条悬停提示上方显示裁剪后的缩略图。详见下方[缩略图预览](#缩略图预览-thumbnails)。和 `src` 无关：只有这个属性本身变化时才会重新抓取。                                 |
+| `disable-error-modal` | `boolean`             | `false` | 关闭内置的错误 + 重试对话框——错误依然会通过 `error`/`sourceerror` 这两个 `change` 事件到达你手上，可以在此基础上搭自己的 UI。                                                                            |
+| `remember-position`   | `boolean`             | `false` | 开启断点续播：`pause` 时和标签页切到后台时把当前播放位置存到 `localStorage`（按 `src` 区分），下次加载同一个 `src` 时恢复，播放结束后清除。                                                              |
+| `tracks`              | `PlayerTrackConfig[]` | `[]`    | 字幕/CC 轨道——**只有 JS 属性，没有对应的 HTML attribute**（播放器每次加载都会清空自己的 light DOM，声明式的 `<track>` 子标签活不下来）。详见下方[字幕/CC](#字幕-cc-tracks)。                             |
 
 > 观察的属性列表（来自 `observedAttributes`）：`src`、`format`、`volume`、`currentTime`/`currenttime`、`playbackRate`/`playbackrate`、`debug`、`sheet`、`poster`、`thumbnails`、`autoplay`、`loop`、`muted`、`disable-error-modal`、`remember-position`。
 
@@ -114,7 +114,13 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 ### 封面图、自动播放、循环、静音
 
 ```html
-<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" poster="/ran/hls/poster.jpg" autoplay muted loop></r-player>
+<r-player
+  src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+  poster="/ran/hls/poster.jpg"
+  autoplay
+  muted
+  loop
+></r-player>
 ```
 
 ### 画中画
@@ -185,13 +191,13 @@ player.addEventListener('change', () => {
 
 `getMetrics()` 返回一个从下面文档的同一个 `change` 事件流派生出的普通对象快照——不需要额外开启任何跟踪：
 
-| 字段                  | 类型              | 说明                                                            |
-| --------------------- | ----------------- | ---------------------------------------------------------------- |
-| `rebufferCount`       | `number`          | `waiting`→`playing` 的转换次数（卡顿后恢复播放的次数）。         |
-| `rebufferDuration`    | `number`          | 所有卡顿累计耗时（毫秒）。                                       |
-| `firstFrameMs`        | `number \| null`  | 从当前 `src` 开始加载到首帧可播放的耗时（毫秒）；首帧出现前为 `null`。 |
-| `qualitySwitchCount`  | `number`          | 用户在清晰度选择器里切换档位的次数。                             |
-| `errorCount`          | `number`          | `error`/`sourceerror` 事件的次数。                               |
+| 字段                 | 类型             | 说明                                                                   |
+| -------------------- | ---------------- | ---------------------------------------------------------------------- |
+| `rebufferCount`      | `number`         | `waiting`→`playing` 的转换次数（卡顿后恢复播放的次数）。               |
+| `rebufferDuration`   | `number`         | 所有卡顿累计耗时（毫秒）。                                             |
+| `firstFrameMs`       | `number \| null` | 从当前 `src` 开始加载到首帧可播放的耗时（毫秒）；首帧出现前为 `null`。 |
+| `qualitySwitchCount` | `number`         | 用户在清晰度选择器里切换档位的次数。                                   |
+| `errorCount`         | `number`         | `error`/`sourceerror` 事件的次数。                                     |
 
 每次加载新的 `src`/`format` 都会重置这份快照——它永远只描述**当前**这个源，不是跨源的累计值。
 
@@ -199,21 +205,21 @@ player.addEventListener('change', () => {
 
 播放器在元素实例上暴露了以下命令式控制方法：
 
-| 方法                                          | 说明                                                       |
-| --------------------------------------------- | ------------------------------------------------------------ |
-| `play(time?)`                                 | 开始播放，可选跳转到 `time`（秒）。                          |
-| `pause()`                                     | 暂停播放。                                                    |
-| `getCurrentTime()`                            | 当前播放位置（秒）。                                          |
-| `setCurrentTime(seconds)`                     | 跳转到指定位置。                                              |
-| `getTotalTime()`                              | 媒体总时长（秒）。                                            |
-| `getVolume()` / `setVolume(v)`                | 读取/设置音量，`0`–`100` 制——和 `volume` 属性同一套刻度。    |
-| `getPlaybackRate()` / `setPlaybackRate(n)`    | 读取/设置倍速。                                               |
-| `customRequestFullscreen()`                   | 进入全屏。返回一个 `Promise`。                                |
-| `customExitFullscreen()`                      | 退出全屏。返回一个 `Promise`。                                |
-| `togglePip()`                                 | 进入/退出画中画。不支持或没有加载源时是空操作。               |
-| `setSubtitleLanguage(lang)`                   | 按 `srclang` 设置当前字幕轨道，或传 `'off'` 关闭。            |
-| `getMetrics()`                                | 读取当前的 [QoE 埋点](#qoe-埋点) 快照。                       |
-| `showRemotePlaybackPicker()`                  | 打开浏览器自带的 AirPlay/Remote Playback 设备选择器。不支持或没有加载源时是空操作。 |
+| 方法                                       | 说明                                                                                |
+| ------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `play(time?)`                              | 开始播放，可选跳转到 `time`（秒）。                                                 |
+| `pause()`                                  | 暂停播放。                                                                          |
+| `getCurrentTime()`                         | 当前播放位置（秒）。                                                                |
+| `setCurrentTime(seconds)`                  | 跳转到指定位置。                                                                    |
+| `getTotalTime()`                           | 媒体总时长（秒）。                                                                  |
+| `getVolume()` / `setVolume(v)`             | 读取/设置音量，`0`–`100` 制——和 `volume` 属性同一套刻度。                           |
+| `getPlaybackRate()` / `setPlaybackRate(n)` | 读取/设置倍速。                                                                     |
+| `customRequestFullscreen()`                | 进入全屏。返回一个 `Promise`。                                                      |
+| `customExitFullscreen()`                   | 退出全屏。返回一个 `Promise`。                                                      |
+| `togglePip()`                              | 进入/退出画中画。不支持或没有加载源时是空操作。                                     |
+| `setSubtitleLanguage(lang)`                | 按 `srclang` 设置当前字幕轨道，或传 `'off'` 关闭。                                  |
+| `getMetrics()`                             | 读取当前的 [QoE 埋点](#qoe-埋点) 快照。                                             |
+| `showRemotePlaybackPicker()`               | 打开浏览器自带的 AirPlay/Remote Playback 设备选择器。不支持或没有加载源时是空操作。 |
 
 ## 事件
 
@@ -234,57 +240,57 @@ player.addEventListener('change', () => {
 
 ### `detail` 载荷
 
-| 属性          | 类型      | 说明                       |
-| ------------- | --------- | -------------------------- |
-| `type`        | `string`  | 发生变化的事件类型。       |
+| 属性          | 类型      | 说明                      |
+| ------------- | --------- | ------------------------- |
+| `type`        | `string`  | 发生变化的事件类型。      |
 | `data`        | `unknown` | 和这次变化关联的值/事件。 |
-| `currentTime` | `number`  | 当前播放时间（秒）。       |
-| `duration`    | `number`  | 媒体总时长（秒）。         |
-| `tag`         | `Element` | `<r-player>` 实例本身。    |
+| `currentTime` | `number`  | 当前播放时间（秒）。      |
+| `duration`    | `number`  | 媒体总时长（秒）。        |
+| `tag`         | `Element` | `<r-player>` 实例本身。   |
 
 ### `detail.type` 取值
 
 从底层 `<video>` 转发的原生媒体状态：
 
-| 类型             | 说明                                                              |
-| ---------------- | ------------------------------------------------------------------- |
-| `canplay`        | 有足够数据可以开始播放。                                            |
-| `canplaythrough` | 可以不缓冲地播放到结束。                                            |
-| `complete`       | 渲染完成。                                                          |
-| `durationchange` | `duration` 值发生变化。                                             |
-| `emptied`        | 媒体内容被清空/重新加载。                                           |
-| `ended`          | 播放到达结尾。                                                      |
+| 类型             | 说明                                                                                |
+| ---------------- | ----------------------------------------------------------------------------------- |
+| `canplay`        | 有足够数据可以开始播放。                                                            |
+| `canplaythrough` | 可以不缓冲地播放到结束。                                                            |
+| `complete`       | 渲染完成。                                                                          |
+| `durationchange` | `duration` 值发生变化。                                                             |
+| `emptied`        | 媒体内容被清空/重新加载。                                                           |
+| `ended`          | 播放到达结尾。                                                                      |
 | `error`          | 发生媒体错误（除非设了 `disable-error-modal`，否则也会弹出内置的错误+重试对话框）。 |
-| `loadstart`      | 浏览器开始加载媒体。                                                |
-| `loadedmetadata` | 元数据已加载。                                                      |
-| `loadeddata`     | 首帧已加载。                                                        |
-| `progress`       | 资源加载期间周期性触发。                                            |
-| `ratechange`     | 播放速率发生变化。                                                  |
-| `seeking`        | 跳帧（seek）开始。                                                  |
-| `seeked`         | 跳帧（seek）完成。                                                  |
-| `stalled`        | 浏览器正尝试获取数据但数据没有到达。                                |
-| `suspend`        | 媒体加载被挂起。                                                    |
-| `timeupdate`     | `currentTime` 发生变化。                                            |
-| `volumechange`   | video 元素的音量发生变化。                                          |
-| `waiting`        | 播放因等待数据而停止。                                              |
-| `play`           | 播放已开始。                                                        |
-| `playing`        | 缓冲/暂停之后播放恢复。                                             |
-| `pause`          | 播放已暂停。                                                        |
+| `loadstart`      | 浏览器开始加载媒体。                                                                |
+| `loadedmetadata` | 元数据已加载。                                                                      |
+| `loadeddata`     | 首帧已加载。                                                                        |
+| `progress`       | 资源加载期间周期性触发。                                                            |
+| `ratechange`     | 播放速率发生变化。                                                                  |
+| `seeking`        | 跳帧（seek）开始。                                                                  |
+| `seeked`         | 跳帧（seek）完成。                                                                  |
+| `stalled`        | 浏览器正尝试获取数据但数据没有到达。                                                |
+| `suspend`        | 媒体加载被挂起。                                                                    |
+| `timeupdate`     | `currentTime` 发生变化。                                                            |
+| `volumechange`   | video 元素的音量发生变化。                                                          |
+| `waiting`        | 播放因等待数据而停止。                                                              |
+| `play`           | 播放已开始。                                                                        |
+| `playing`        | 缓冲/暂停之后播放恢复。                                                             |
+| `pause`          | 播放已暂停。                                                                        |
 
 播放器自身的动作：
 
-| 类型                | `data`                    | 说明                                                                                     |
-| ------------------- | -------------------------- | ------------------------------------------------------------------------------------------ |
-| `volume`            | `number`（`0`–`100`）     | 通过控制栏或静音切换改变了音量。                                                          |
-| `speed`             | `number`                  | 通过倍速选择器改变了播放速度。                                                            |
-| `fullscreen`        | `boolean`                 | 进入（`true`）或退出（`false`）全屏。                                                     |
-| `pictureinpicture`  | `boolean`                 | 进入（`true`）或退出（`false`）画中画——不管是通过 `togglePip()` 还是浏览器自己的画中画窗口控件触发的。 |
-| `subtitlechange`    | `string`                  | 通过 CC 选择器或 `setSubtitleLanguage()` 切换了字幕语言——一个 `srclang`，或 `'off'`。       |
-| `resume`            | `number`                  | 加载时静默恢复了保存的位置（`remember-position`）；`data` 是恢复到的秒数。                 |
-| `levelsready`       | `{ levels }`               | 流媒体引擎解析完 manifest，清晰度档位已可用。                                             |
-| `sourceerror`       | `{ fatal, detail }`        | 发生流媒体引擎错误（回退到原始 `src`；**致命**错误在没设 `disable-error-modal` 时还会弹出错误+重试对话框——非致命错误是引擎自己的内部恢复，不会弹）。 |
-| `qualityswitch`     | `{ level }`                | 用户在清晰度选择器里选择了一个档位。                                                       |
-| `gestureseek`       | `{ direction, seconds }`   | 双击快进/快退手势触发（`direction` 是 `'forward'`/`'backward'`）。                          |
+| 类型               | `data`                   | 说明                                                                                                                                                 |
+| ------------------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `volume`           | `number`（`0`–`100`）    | 通过控制栏或静音切换改变了音量。                                                                                                                     |
+| `speed`            | `number`                 | 通过倍速选择器改变了播放速度。                                                                                                                       |
+| `fullscreen`       | `boolean`                | 进入（`true`）或退出（`false`）全屏。                                                                                                                |
+| `pictureinpicture` | `boolean`                | 进入（`true`）或退出（`false`）画中画——不管是通过 `togglePip()` 还是浏览器自己的画中画窗口控件触发的。                                               |
+| `subtitlechange`   | `string`                 | 通过 CC 选择器或 `setSubtitleLanguage()` 切换了字幕语言——一个 `srclang`，或 `'off'`。                                                                |
+| `resume`           | `number`                 | 加载时静默恢复了保存的位置（`remember-position`）；`data` 是恢复到的秒数。                                                                           |
+| `levelsready`      | `{ levels }`             | 流媒体引擎解析完 manifest，清晰度档位已可用。                                                                                                        |
+| `sourceerror`      | `{ fatal, detail }`      | 发生流媒体引擎错误（回退到原始 `src`；**致命**错误在没设 `disable-error-modal` 时还会弹出错误+重试对话框——非致命错误是引擎自己的内部恢复，不会弹）。 |
+| `qualityswitch`    | `{ level }`              | 用户在清晰度选择器里选择了一个档位。                                                                                                                 |
+| `gestureseek`      | `{ direction, seconds }` | 双击快进/快退手势触发（`direction` 是 `'forward'`/`'backward'`）。                                                                                   |
 
 ## 插槽
 

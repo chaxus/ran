@@ -597,7 +597,8 @@ export class Select extends RanElement {
         // two widths actually diverge.
         const dropdownShadow = (this._selectionDropdown as unknown as { _shadowDom?: ShadowRoot })._shadowDom;
         const panelEl = dropdownShadow?.querySelector<HTMLElement>('.ranui-dropdown');
-        const panelWidth = panelEl?.getBoundingClientRect().width ?? this._selectionDropdown.getBoundingClientRect().width;
+        const panelWidth =
+          panelEl?.getBoundingClientRect().width ?? this._selectionDropdown.getBoundingClientRect().width;
         const selectLeft = left - rootRect.left - (panelWidth - width) / 2;
         let selectTop = bottom - rootRect.top + OFFSET;
         if (this.placement === 'top') {

@@ -18,7 +18,9 @@ class MockDashPlayer {
 let instance: MockDashPlayer;
 
 vi.mock('dashjs', () => {
-  const MediaPlayer = vi.fn(() => ({ create: () => instance })) as unknown as { (): { create: () => MockDashPlayer } } & {
+  const MediaPlayer = vi.fn(() => ({ create: () => instance })) as unknown as {
+    (): { create: () => MockDashPlayer };
+  } & {
     events: { STREAM_INITIALIZED: string; ERROR: string; MANIFEST_LOADED: string };
   };
   MediaPlayer.events = { STREAM_INITIALIZED: 'streamInitialized', ERROR: 'error', MANIFEST_LOADED: 'manifestLoaded' };
@@ -101,7 +103,9 @@ describe('createDashAdapter', () => {
 
     adapter.setQuality('rep-720');
 
-    expect(instance.updateSettings).toHaveBeenCalledWith({ streaming: { abr: { autoSwitchBitrate: { video: false } } } });
+    expect(instance.updateSettings).toHaveBeenCalledWith({
+      streaming: { abr: { autoSwitchBitrate: { video: false } } },
+    });
     expect(instance.setRepresentationForTypeById).toHaveBeenCalledWith('video', 'rep-720');
   });
 
@@ -112,7 +116,9 @@ describe('createDashAdapter', () => {
 
     adapter.setQuality('auto');
 
-    expect(instance.updateSettings).toHaveBeenCalledWith({ streaming: { abr: { autoSwitchBitrate: { video: true } } } });
+    expect(instance.updateSettings).toHaveBeenCalledWith({
+      streaming: { abr: { autoSwitchBitrate: { video: true } } },
+    });
     expect(instance.setRepresentationForTypeById).not.toHaveBeenCalled();
   });
 

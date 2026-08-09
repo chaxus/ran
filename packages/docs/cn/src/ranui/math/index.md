@@ -24,16 +24,16 @@ description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML—
 
 ### 属性
 
-| 属性         | 类型      | 默认值    | 说明                                                                 |
-| ------------ | --------- | --------- | -------------------------------------------------------------------- |
-| `latex`      | `string`  | `''`      | 待渲染的 LaTeX 公式，通过该属性传入，而非 slot 文本。                |
-| `display`    | `string`  | `'block'` | `block`（行间公式）或 `inline`（行内公式）。                         |
-| `font`       | `string`  | `''`      | 设为 `system` 可跳过内置的 Latin Modern Math 字体，改用系统数学字体。 |
-| `macros`     | `string`  | `''`      | 一个 Temml 宏的 JSON 对象；无效 JSON 会被静默忽略。                   |
-| `wrap`       | `string`  | `''`      | Temml 的软换行方式：`none`、`tex` 或 `=`。                            |
-| `copy`       | `boolean` | `false`   | 显示复制按钮。裸 `copy` 复制 LaTeX 源码；`copy="mathml"` 复制渲染出的 MathML。 |
-| `download`   | `boolean` | `false`   | 显示下载按钮/菜单，用于下载源码（`.tex`）和/或 MathML（`.mml`）。     |
-| `sheet`      | `string`  | `''`      | 注入组件 shadow DOM 的 CSS。                                          |
+| 属性       | 类型      | 默认值    | 说明                                                                           |
+| ---------- | --------- | --------- | ------------------------------------------------------------------------------ |
+| `latex`    | `string`  | `''`      | 待渲染的 LaTeX 公式，通过该属性传入，而非 slot 文本。                          |
+| `display`  | `string`  | `'block'` | `block`（行间公式）或 `inline`（行内公式）。                                   |
+| `font`     | `string`  | `''`      | 设为 `system` 可跳过内置的 Latin Modern Math 字体，改用系统数学字体。          |
+| `macros`   | `string`  | `''`      | 一个 Temml 宏的 JSON 对象；无效 JSON 会被静默忽略。                            |
+| `wrap`     | `string`  | `''`      | Temml 的软换行方式：`none`、`tex` 或 `=`。                                     |
+| `copy`     | `boolean` | `false`   | 显示复制按钮。裸 `copy` 复制 LaTeX 源码；`copy="mathml"` 复制渲染出的 MathML。 |
+| `download` | `boolean` | `false`   | 显示下载按钮/菜单，用于下载源码（`.tex`）和/或 MathML（`.mml`）。              |
+| `sheet`    | `string`  | `''`      | 注入组件 shadow DOM 的 CSS。                                                   |
 
 > 💡 **提示**：`latex` 属性的 getter 会用 `decodeURIComponent` 解码后再渲染，因此支持传入 URI 编码后的公式。以 slotted 文本内容传入公式无效——只有 `latex` 属性会被渲染。
 
@@ -59,12 +59,12 @@ description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML—
 
 ## 事件
 
-| 事件       | detail                             | 触发时机                                   |
-| ---------- | ----------------------------------- | -------------------------------------------- |
-| `render`   | `{ ok: true }`                      | 公式渲染成功。                               |
-| `error`    | `{ message: string }`               | Temml 解析公式失败（如非法的 LaTeX）。       |
-| `copied`   | `{ kind: 'source' \| 'mathml' }`    | 复制按钮已将源码或 MathML 复制到剪贴板。     |
-| `download` | `{ format: 'source' \| 'mathml' }`  | 下载按钮已保存 `.tex` 或 `.mml` 文件。       |
+| 事件       | detail                             | 触发时机                                 |
+| ---------- | ---------------------------------- | ---------------------------------------- |
+| `render`   | `{ ok: true }`                     | 公式渲染成功。                           |
+| `error`    | `{ message: string }`              | Temml 解析公式失败（如非法的 LaTeX）。   |
+| `copied`   | `{ kind: 'source' \| 'mathml' }`   | 复制按钮已将源码或 MathML 复制到剪贴板。 |
+| `download` | `{ format: 'source' \| 'mathml' }` | 下载按钮已保存 `.tex` 或 `.mml` 文件。   |
 
 ## 最佳实践
 

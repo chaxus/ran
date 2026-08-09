@@ -58,10 +58,22 @@ test('recheck clarity + speed dropdown centering with real hover', async ({ page
         const panel = shadow?.querySelector('.ranui-dropdown') as HTMLElement | null;
         const panelRect = panel?.getBoundingClientRect();
         return {
-          selectRect: { x: Math.round(selectRect.x), w: Math.round(selectRect.width), centerX: Math.round(selectRect.x + selectRect.width / 2) },
-          dropdownHostRect: { x: Math.round(dropdownRect.x), w: Math.round(dropdownRect.width), centerX: Math.round(dropdownRect.x + dropdownRect.width / 2) },
+          selectRect: {
+            x: Math.round(selectRect.x),
+            w: Math.round(selectRect.width),
+            centerX: Math.round(selectRect.x + selectRect.width / 2),
+          },
+          dropdownHostRect: {
+            x: Math.round(dropdownRect.x),
+            w: Math.round(dropdownRect.width),
+            centerX: Math.round(dropdownRect.x + dropdownRect.width / 2),
+          },
           panelRect: panelRect
-            ? { x: Math.round(panelRect.x), w: Math.round(panelRect.width), centerX: Math.round(panelRect.x + panelRect.width / 2) }
+            ? {
+                x: Math.round(panelRect.x),
+                w: Math.round(panelRect.width),
+                centerX: Math.round(panelRect.x + panelRect.width / 2),
+              }
             : null,
         };
       },

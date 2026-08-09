@@ -1,5 +1,5 @@
 ---
-description: 'A three-state system/light/dark segmented control wired to ranui''s theme API, synced across tabs.'
+description: "A three-state system/light/dark segmented control wired to ranui's theme API, synced across tabs."
 ---
 
 # ThemeSwitch

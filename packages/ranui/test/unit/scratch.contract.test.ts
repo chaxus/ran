@@ -1,8 +1,10 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import '@/components/scratch';
 
-const pointer = (type: string, init: Partial<PointerEventInit> & { clientX?: number; clientY?: number }): PointerEvent =>
-  new PointerEvent(type, { pointerId: 1, bubbles: true, ...init });
+const pointer = (
+  type: string,
+  init: Partial<PointerEventInit> & { clientX?: number; clientY?: number },
+): PointerEvent => new PointerEvent(type, { pointerId: 1, bubbles: true, ...init });
 
 const mockDrawingContext = () => ({
   beginPath: vi.fn(),
@@ -51,7 +53,12 @@ describe('r-scratch contract', () => {
     document.body.appendChild(scratch);
     scratch.scratchTicket.width = 100;
     scratch.scratchTicket.height = 100;
-    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 100, height: 100 } as DOMRect);
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      top: 0,
+      width: 100,
+      height: 100,
+    } as DOMRect);
     const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
@@ -79,7 +86,12 @@ describe('r-scratch contract', () => {
     document.body.appendChild(scratch);
     scratch.scratchTicket.width = 200;
     scratch.scratchTicket.height = 200;
-    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 200, height: 200 } as DOMRect);
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      top: 0,
+      width: 200,
+      height: 200,
+    } as DOMRect);
     const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
@@ -100,7 +112,12 @@ describe('r-scratch contract', () => {
     // Canvas resolution 200x100 rendered at half size (100x50 CSS px) -> scale factor 2.
     scratch.scratchTicket.width = 200;
     scratch.scratchTicket.height = 100;
-    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 10, top: 20, width: 100, height: 50 } as DOMRect);
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({
+      left: 10,
+      top: 20,
+      width: 100,
+      height: 50,
+    } as DOMRect);
     const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
@@ -192,7 +209,12 @@ describe('r-scratch contract', () => {
   it('ignores a non-primary mouse button (e.g. right-click-drag)', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
-    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 100, height: 100 } as DOMRect);
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      top: 0,
+      width: 100,
+      height: 100,
+    } as DOMRect);
     const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
@@ -205,15 +227,24 @@ describe('r-scratch contract', () => {
   it('a second touch mid-scratch does not hijack the active stroke', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
-    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 100, height: 100 } as DOMRect);
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      top: 0,
+      width: 100,
+      height: 100,
+    } as DOMRect);
     const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
-    scratch.onScratchPointerDown(pointer('pointerdown', { pointerId: 1, pointerType: 'touch', clientX: 10, clientY: 10 }));
+    scratch.onScratchPointerDown(
+      pointer('pointerdown', { pointerId: 1, pointerType: 'touch', clientX: 10, clientY: 10 }),
+    );
     expect(scratch.state.activePointerId).toBe(1);
 
     // A second finger touches down before the first is lifted.
-    scratch.onScratchPointerDown(pointer('pointerdown', { pointerId: 2, pointerType: 'touch', clientX: 90, clientY: 90 }));
+    scratch.onScratchPointerDown(
+      pointer('pointerdown', { pointerId: 2, pointerType: 'touch', clientX: 90, clientY: 90 }),
+    );
     expect(scratch.state.activePointerId).toBe(1); // still the first finger
 
     // The second finger's move must not be able to draw either.
@@ -270,7 +301,10 @@ describe('r-scratch contract', () => {
   it('syncCanvasResolution matches the canvas buffer to its rendered size × devicePixelRatio', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
-    vi.spyOn(scratch.scratchTicketContainer, 'getBoundingClientRect').mockReturnValue({ width: 240, height: 120 } as DOMRect);
+    vi.spyOn(scratch.scratchTicketContainer, 'getBoundingClientRect').mockReturnValue({
+      width: 240,
+      height: 120,
+    } as DOMRect);
     const originalDpr = window.devicePixelRatio;
     Object.defineProperty(window, 'devicePixelRatio', { value: 2, configurable: true });
     const mockCtx = mockDrawingContext();
@@ -286,7 +320,10 @@ describe('r-scratch contract', () => {
   it('syncCanvasResolution is a no-op when the size has not changed', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
-    vi.spyOn(scratch.scratchTicketContainer, 'getBoundingClientRect').mockReturnValue({ width: 240, height: 120 } as DOMRect);
+    vi.spyOn(scratch.scratchTicketContainer, 'getBoundingClientRect').mockReturnValue({
+      width: 240,
+      height: 120,
+    } as DOMRect);
     Object.defineProperty(window, 'devicePixelRatio', { value: 1, configurable: true });
     scratch.syncCanvasResolution();
     scratch.state.scratchedArea = 42;

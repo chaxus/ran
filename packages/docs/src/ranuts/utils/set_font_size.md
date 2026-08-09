@@ -30,9 +30,9 @@ single call is enough for the lifetime of the page.
 
 #### Parameters
 
-| Parameter     | Description                                             | Type     | Default |
-| -------------- | -------------------------------------------------------- | -------- | ------- |
-| `designWidth`  | The width, in px, your design mockup was created at       | `number` | `375`   |
+| Parameter     | Description                                         | Type     | Default |
+| ------------- | --------------------------------------------------- | -------- | ------- |
+| `designWidth` | The width, in px, your design mockup was created at | `number` | `375`   |
 
 #### Return
 

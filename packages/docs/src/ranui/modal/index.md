@@ -39,17 +39,17 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 
 ### Properties
 
-| Property       | Type      | Default | Description                                            |
-| -------------- | --------- | ------- | ------------------------------------------------------ |
-| `open`         | `boolean` | `false` | Whether the modal is visible                           |
-| `title`        | `string`  | `''`    | Header title text (falls back to `Modal` when empty)   |
-| `closable`     | `boolean` | `true`  | Whether the close (`x`) button is shown                |
-| `maskClosable` | `boolean` | `true`  | Whether clicking the backdrop mask closes the modal    |
-| `closeOnEsc`   | `boolean` | `true`  | Whether pressing `Escape` closes the modal             |
-| `lockScroll`   | `boolean` | `true`  | Whether body scroll is locked while the modal is open  |
-| `autoFocus`    | `boolean` | `true`  | Whether the first focusable element is focused on open |
+| Property       | Type      | Default | Description                                                   |
+| -------------- | --------- | ------- | ------------------------------------------------------------- |
+| `open`         | `boolean` | `false` | Whether the modal is visible                                  |
+| `title`        | `string`  | `''`    | Header title text (falls back to `Modal` when empty)          |
+| `closable`     | `boolean` | `true`  | Whether the close (`x`) button is shown                       |
+| `maskClosable` | `boolean` | `true`  | Whether clicking the backdrop mask closes the modal           |
+| `closeOnEsc`   | `boolean` | `true`  | Whether pressing `Escape` closes the modal                    |
+| `lockScroll`   | `boolean` | `true`  | Whether body scroll is locked while the modal is open         |
+| `autoFocus`    | `boolean` | `true`  | Whether the first focusable element is focused on open        |
 | `hideHeader`   | `boolean` | `false` | Drops the title bar entirely, leaving a floating close button |
-| `sheet`        | `string`  | `''`    | CSS injected into the shadow DOM                       |
+| `sheet`        | `string`  | `''`    | CSS injected into the shadow DOM                              |
 
 `closing` is a read-only attribute the element reflects on itself (not a settable property): present from the moment `close()` runs until the mask/dialog's fade-and-scale-out transition actually finishes (~0.3s later, same timing as the `afterclose` event). Useful for a host page that needs the modal to still count as "present" through that visual tail — see Best Practices below.
 

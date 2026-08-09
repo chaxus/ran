@@ -94,12 +94,12 @@ Pass a CSS string through `sheet` to override the skeleton's look inside its sha
 
 The skeleton also exposes CSS custom properties for theming without `sheet`:
 
-| Variable                            | Default                        | Description                   |
-| ----------------------------------- | ------------------------------ | ----------------------------- |
-| `--ran-skeleton-height`             | `16px`                         | Height of the placeholder bar |
-| `--ran-skeleton-background`         | `var(--ran-gray-alpha-200, …)` | Base (non-shimmer) fill color |
-| `--ran-skeleton-border-radius`      | `var(--ran-radius-sm, 6px)`    | Corner radius                 |
-| `--ran-skeleton-shimmer-background`            | `linear-gradient(90deg, …)`    | The moving highlight gradient |
+| Variable                                    | Default                        | Description                   |
+| ------------------------------------------- | ------------------------------ | ----------------------------- |
+| `--ran-skeleton-height`                     | `16px`                         | Height of the placeholder bar |
+| `--ran-skeleton-background`                 | `var(--ran-gray-alpha-200, …)` | Base (non-shimmer) fill color |
+| `--ran-skeleton-border-radius`              | `var(--ran-radius-sm, 6px)`    | Corner radius                 |
+| `--ran-skeleton-shimmer-background`         | `linear-gradient(90deg, …)`    | The moving highlight gradient |
 | `--ran-skeleton-shimmer-animation-duration` | `1.4s`                         | Duration of one shimmer sweep |
 
 <Demo>

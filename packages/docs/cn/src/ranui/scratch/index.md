@@ -28,10 +28,10 @@ description: '一个实验性的刮刮卡组件：拖动擦除画布覆盖层，
 
 ### 属性
 
-| 属性       | 类型      | 默认值  | 说明                                                                     |
-| ---------- | --------- | ------- | ---------------------------------------------------------------------------- |
+| 属性       | 类型      | 默认值  | 说明                                                                                     |
+| ---------- | --------- | ------- | ---------------------------------------------------------------------------------------- |
 | `disabled` | `boolean` | `false` | 禁用刮除交互（覆盖层画布上加 `pointer-events: none`，指针事件 handler 里也有对应判断）。 |
-| `sheet`    | `string`  | `''`    | 注入组件 shadow DOM 的 CSS。                                                  |
+| `sheet`    | `string`  | `''`    | 注入组件 shadow DOM 的 CSS。                                                             |
 
 ### 禁用态 `disabled`
 
@@ -50,7 +50,10 @@ description: '一个实验性的刮刮卡组件：拖动擦除画布覆盖层，
 </Demo>
 
 ```html
-<r-scratch sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }" style="display: block; width: 240px; height: 120px;">
+<r-scratch
+  sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }"
+  style="display: block; width: 240px; height: 120px;"
+>
   🎁
 </r-scratch>
 ```
@@ -77,19 +80,19 @@ description: '一个实验性的刮刮卡组件：拖动擦除画布覆盖层，
 
 ## 插槽
 
-| 插槽       | 说明                                       |
-| ---------- | -------------------------------------------- |
-| 默认插槽   | 揭晓内容，投影到刮层下方的显露层里。         |
+| 插槽     | 说明                                 |
+| -------- | ------------------------------------ |
+| 默认插槽 | 揭晓内容，投影到刮层下方的显露层里。 |
 
 ## 样式
 
 该组件**不暴露任何 `::part()` 钩子**，但两个层的颜色都是走主题 token 的 CSS 变量。其 Shadow DOM 是三层固定结构：
 
-| 类名                          | 作用                                                                                                    |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `.ran-scratch-ticket`         | 铺满的相对定位容器（`width: 100%; height: 100%`）。                                                          |
-| `.ran-scratch-ticket-award`   | 显露层，`z-index: 1`，`background: var(--ran-scratch-award-background, var(--ran-color-bg-elevated, #fff))`；默认插槽挂在这里。 |
-| `.ran-scratch-ticket-canvas`  | 刮除覆盖层画布，`z-index: 2`；填充色来自宿主上的 `--ran-scratch-cover-background`（默认 `var(--ran-color-text-secondary, #6b6b6b)`）。 |
+| 类名                         | 作用                                                                                                                                   |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `.ran-scratch-ticket`        | 铺满的相对定位容器（`width: 100%; height: 100%`）。                                                                                    |
+| `.ran-scratch-ticket-award`  | 显露层，`z-index: 1`，`background: var(--ran-scratch-award-background, var(--ran-color-bg-elevated, #fff))`；默认插槽挂在这里。        |
+| `.ran-scratch-ticket-canvas` | 刮除覆盖层画布，`z-index: 2`；填充色来自宿主上的 `--ran-scratch-cover-background`（默认 `var(--ran-color-text-secondary, #6b6b6b)`）。 |
 
 两个颜色都走主题 token、带字面量回退，因此默认就能适配明暗主题，也可以通过 `--ran-scratch-award-background` / `--ran-scratch-cover-background` 覆盖。宿主尺寸请使用普通的 `width` / `height` 设置。
 

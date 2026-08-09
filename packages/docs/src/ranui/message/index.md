@@ -151,14 +151,14 @@ message.info({
 
 The toast stack lives in a body-portaled container; each `<r-message>` renders its content inside a shadow DOM whose surface is themeable via CSS variables (all with sensible fallbacks).
 
-| CSS Variable                                   | Default                        | Description               |
-| ---------------------------------------------- | ------------------------------ | ------------------------- |
-| `--ran-message-content-background`      | `var(--ran-color-bg-elevated)` | Toast surface background  |
-| `--ran-message-content-border-radius`   | `var(--ran-radius-md)`         | Toast corner radius       |
-| `--ran-message-content-box-shadow`      | `var(--ran-shadow-menu)`       | Toast elevation           |
-| `--ran-message-text-color` | `var(--ran-color-text)`        | Toast text color          |
-| `--ran-message-z-index`                        | `var(--ran-z-message, 1200)`   | Stack z-index             |
-| `--ran-message-top`                            | `8px`                          | Stack offset from the top |
+| CSS Variable                          | Default                        | Description               |
+| ------------------------------------- | ------------------------------ | ------------------------- |
+| `--ran-message-content-background`    | `var(--ran-color-bg-elevated)` | Toast surface background  |
+| `--ran-message-content-border-radius` | `var(--ran-radius-md)`         | Toast corner radius       |
+| `--ran-message-content-box-shadow`    | `var(--ran-shadow-menu)`       | Toast elevation           |
+| `--ran-message-text-color`            | `var(--ran-color-text)`        | Toast text color          |
+| `--ran-message-z-index`               | `var(--ran-z-message, 1200)`   | Stack z-index             |
+| `--ran-message-top`                   | `8px`                          | Stack offset from the top |
 
 ## Best Practices
 

@@ -97,12 +97,12 @@ inverseLerp(0, 100, 150); // 1.5 — not clamped
 
 #### Parameters
 
-| Function                       | Parameter | Description        | Type     |
-| -------------------------------- | --------- | -------------------- | -------- |
-| `lerp(a, b, t)`                 | `a`, `b`  | Start / end value     | `number` |
-|                                   | `t`       | Interpolation factor  | `number` |
-| `inverseLerp(a, b, value)`      | `a`, `b`  | Start / end value     | `number` |
-|                                   | `value`   | Probed value          | `number` |
+| Function                   | Parameter | Description          | Type     |
+| -------------------------- | --------- | -------------------- | -------- |
+| `lerp(a, b, t)`            | `a`, `b`  | Start / end value    | `number` |
+|                            | `t`       | Interpolation factor | `number` |
+| `inverseLerp(a, b, value)` | `a`, `b`  | Start / end value    | `number` |
+|                            | `value`   | Probed value         | `number` |
 
 ### remap / fit
 

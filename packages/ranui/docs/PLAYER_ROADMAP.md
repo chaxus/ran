@@ -52,7 +52,7 @@ gaps), and any newly-discovered gap is worth closing the same way rather than pa
   rendered only when the browser supports the standards-track Remote Playback API or Safari's
   `webkitShowPlaybackTargetPicker()` (progressive enhancement — `core/remote-playback.ts`).
 - **QoE metrics**: `getMetrics()` returns `{rebufferCount, rebufferDuration, firstFrameMs,
-  qualitySwitchCount, errorCount}` for the current source, derived from the existing `change`
+qualitySwitchCount, errorCount}` for the current source, derived from the existing `change`
   event stream (`core/metrics.ts`).
 - **Mobile gestures**: touch-only — double-tap left/right half of the video to seek ∓10s,
   vertical swipe on the right half for volume; mouse/pen interaction is untouched
@@ -116,20 +116,20 @@ green.
 
 ## 2. Gap vs. reference players
 
-| # | Feature | Reference | Current state | Worth adding? |
-| - | ------- | --------- | -------------- | -------------- |
-| 1 | Subtitles/CC | native `<video controls>`, YouTube | **shipped (Phase 1)** | ✅ table-stakes for many use cases |
-| 2 | Picture-in-Picture | native `<video controls>`, YouTube | **shipped (Phase 0)** | ✅ one native API call, high value/cost ratio |
-| 3 | `poster`/`autoplay`/`loop`/`muted` | native `<video>` | **shipped (Phase 0)** | ✅ trivial, commonly expected |
-| 4 | Error + retry UI | Video.js, Shaka | **shipped (Phase 1)** | ✅ real UX gap today |
-| 5 | Resume playback | YouTube (signed-in), many VOD players | **shipped (Phase 1)** | ✅ opt-in, low complexity via `localStorage` |
-| 6 | Thumbnail scrubbing preview | YouTube, Video.js (VTT sprite plugin) | **shipped (Phase 3)** | ✅ done via `core/thumbnails.ts`, a new `thumbnails` attribute |
-| 7 | DASH | Shaka, dash.js-based players | **shipped (Phase 2)** | ✅ done via the engine-adapter refactor (§3) |
-| 8 | FLV / raw MPEG-TS | Video.js + flv.js/mpegts.js plugins | **shipped (Phase 2)** | ✅ done via `mpegts.js` (see below) |
-| 9 | Mobile gestures (double-tap seek, swipe volume) | YouTube app, most native players | **shipped (Phase 3)** | ✅ done via `core/gestures.ts`, Pointer Events idiom borrowed from `r-mermaid` |
-| 10 | AirPlay / Remote Playback | native `<video controls>` on Safari/Chrome | **shipped (Phase 3)** | ✅ done via `core/remote-playback.ts`, feature-detected same as PiP |
-| 11 | QoE metrics hook | Shaka, hls.js's own stats, commercial players | **shipped (Phase 3)** | ✅ done via `core/metrics.ts`, pure computation on existing events |
-| 12 | WebRTC low-latency live | ultra-low-latency live players | **shipped (Phase 4)** | ✅ done via WHEP (`core/adapters/webrtc.ts`), a new `webrtc` engine format — see §3 |
+| #   | Feature                                         | Reference                                     | Current state         | Worth adding?                                                                       |
+| --- | ----------------------------------------------- | --------------------------------------------- | --------------------- | ----------------------------------------------------------------------------------- |
+| 1   | Subtitles/CC                                    | native `<video controls>`, YouTube            | **shipped (Phase 1)** | ✅ table-stakes for many use cases                                                  |
+| 2   | Picture-in-Picture                              | native `<video controls>`, YouTube            | **shipped (Phase 0)** | ✅ one native API call, high value/cost ratio                                       |
+| 3   | `poster`/`autoplay`/`loop`/`muted`              | native `<video>`                              | **shipped (Phase 0)** | ✅ trivial, commonly expected                                                       |
+| 4   | Error + retry UI                                | Video.js, Shaka                               | **shipped (Phase 1)** | ✅ real UX gap today                                                                |
+| 5   | Resume playback                                 | YouTube (signed-in), many VOD players         | **shipped (Phase 1)** | ✅ opt-in, low complexity via `localStorage`                                        |
+| 6   | Thumbnail scrubbing preview                     | YouTube, Video.js (VTT sprite plugin)         | **shipped (Phase 3)** | ✅ done via `core/thumbnails.ts`, a new `thumbnails` attribute                      |
+| 7   | DASH                                            | Shaka, dash.js-based players                  | **shipped (Phase 2)** | ✅ done via the engine-adapter refactor (§3)                                        |
+| 8   | FLV / raw MPEG-TS                               | Video.js + flv.js/mpegts.js plugins           | **shipped (Phase 2)** | ✅ done via `mpegts.js` (see below)                                                 |
+| 9   | Mobile gestures (double-tap seek, swipe volume) | YouTube app, most native players              | **shipped (Phase 3)** | ✅ done via `core/gestures.ts`, Pointer Events idiom borrowed from `r-mermaid`      |
+| 10  | AirPlay / Remote Playback                       | native `<video controls>` on Safari/Chrome    | **shipped (Phase 3)** | ✅ done via `core/remote-playback.ts`, feature-detected same as PiP                 |
+| 11  | QoE metrics hook                                | Shaka, hls.js's own stats, commercial players | **shipped (Phase 3)** | ✅ done via `core/metrics.ts`, pure computation on existing events                  |
+| 12  | WebRTC low-latency live                         | ultra-low-latency live players                | **shipped (Phase 4)** | ✅ done via WHEP (`core/adapters/webrtc.ts`), a new `webrtc` engine format — see §3 |
 
 ---
 
@@ -139,8 +139,8 @@ green.
   `<video>`, not the user's light DOM — the player already clears `this.innerHTML = ''` on
   every source load (documented "no slots" behavior), so a declarative `<track>` child would
   be wiped. Expose an imperative `tracks` property (`player.tracks = [{kind, src, srclang,
-  label, default}]`) that builds `<track>` elements onto `_video` in `updatePlayer()`. Cue
-  *rendering* is free — the browser paints `<track kind="subtitles">` cues natively, no
+label, default}]`) that builds `<track>` elements onto `_video` in `updatePlayer()`. Cue
+  _rendering_ is free — the browser paints `<track kind="subtitles">` cues natively, no
   custom renderer needed for v1. Add a CC toggle button (`<r-icon>` + `registerIcon`) and a
   language picker reusing the same `<r-select>` popover pattern as clarity/speed
   (`createClaritySelect` is the template). Persist the last-chosen language via
@@ -157,7 +157,7 @@ green.
   `muted` needs to sync the volume signal (`setVolume(0)` semantics) so the mute icon doesn't
   disagree with the real `<video>.muted` state on initial load.
 - **Error + retry UI** → **`r-modal`'s existing `Modal.error({title, content, okText,
-  onConfirm})` static helper** (`components/modal/index.ts`) — no new overlay primitive
+onConfirm})` static helper** (`components/modal/index.ts`) — no new overlay primitive
   needed, exactly the same reuse `r-mermaid`'s fullscreen lightbox makes of `r-modal`. Wire
   into `hlsError`/media `error` handling, gated on `data.fatal` (hls.js's error payload
   already carries this) so transient/recoverable errors don't interrupt playback with a
@@ -170,7 +170,7 @@ green.
   `loadedmetadata` when the saved position is meaningfully short of the duration.
 - **Thumbnail scrubbing preview — shipped (Phase 3).** `core/thumbnails.ts` parses a WebVTT
   sprite manifest (the same convention YouTube/Video.js use: cues whose text is
-  `spritesheet.jpg#xywh=x,y,w,h`) — cue *timing* parsing (`"00:00:05.000 --> ..."` → seconds)
+  `spritesheet.jpg#xywh=x,y,w,h`) — cue _timing_ parsing (`"00:00:05.000 --> ..."` → seconds)
   is generic enough that it moved to `ranuts/utils`'s `parseVttCueTiming`/`parseVttTimestamp`
   (the inverse of `formatDuration`, which already lived there); `parseThumbnailVtt` layers the
   player-specific `#xywh=` sprite-rect parsing on top and is still independently testable,
@@ -196,7 +196,7 @@ green.
   way** — `dashjs`'s multi-bitrate renditions live inside one manifest, switched via
   `player.setQualityFor('video', index)`, no new URL. So the fix is a proper engine-adapter
   interface — `{ load(src), destroy(), getQualityLevels(), setQuality(id), on(event,
-  handler) }` — that HLS, DASH, and FLV/TS implementations all conform to, with a small
+handler) }` — that HLS, DASH, and FLV/TS implementations all conform to, with a small
   `detectFormat(src, typeHint?)` utility (`.m3u8`→hls, `.mpd`→dash, `.flv`→flv, else
   native) picking the adapter. Each engine lib becomes a **lazy dynamic `import()`** exactly
   like `mermaid`/`temml` — reached only when a matching `src` is actually set — which also
@@ -212,7 +212,7 @@ green.
   `setPointerCapture`), since Pointer Events unify mouse/touch/pen, unlike the mouse-only drag
   code the player's own progress bar uses. Scope: double-tap left/right half of `_container` →
   seek ∓10s with a brief `-10s`/`+10s` flash (`ran-player-gesture-flash`, `pointer-events:
-  none` so it never intercepts taps); vertical swipe starting on the right half → volume. (A
+none` so it never intercepts taps); vertical swipe starting on the right half → volume. (A
   left-half "swipe for brightness" gesture some native apps have was considered and dropped
   from scope — it'd have to fake dimming via a CSS `filter` on the video element, which is an
   app-specific gimmick more than a general-purpose library feature.) Everything is gated on
@@ -293,11 +293,11 @@ green.
 - **Phase 2 — done:** Engine-adapter architecture generalization (`core/adapters/types.ts`'s
   `{load, destroy, getQualityLevels, setQuality, on, reloadsOnQualityChange}` interface; HLS
   converted onto it and `hls.js` migrated from a 749KB vendored blob to a lazy npm dependency)
-  + DASH (`dashjs`, `core/adapters/dash.ts`) + FLV/TS (`mpegts.js`, `core/adapters/flv.ts`) —
-  shipped together since all three depend on the same new architecture. A new `format`
-  attribute forces a specific engine for URLs that can't be sniffed by extension. The
-  `hlsManifestLoaded`/`hlsError` `change` event types were renamed to the generic
-  `levelsready`/`sourceerror` as part of this — a deliberate breaking change (alpha stage).
+  - DASH (`dashjs`, `core/adapters/dash.ts`) + FLV/TS (`mpegts.js`, `core/adapters/flv.ts`) —
+    shipped together since all three depend on the same new architecture. A new `format`
+    attribute forces a specific engine for URLs that can't be sniffed by extension. The
+    `hlsManifestLoaded`/`hlsError` `change` event types were renamed to the generic
+    `levelsready`/`sourceerror` as part of this — a deliberate breaking change (alpha stage).
 - **Phase 3 — done:** QoE metrics (`core/metrics.ts` + `getMetrics()`, a new `qualityswitch`
   change event). AirPlay/Remote Playback (`core/remote-playback.ts` + `showRemotePlaybackPicker()`,
   a new `cast` icon). Mobile gestures (`core/gestures.ts`, a new `gestureseek` change event).

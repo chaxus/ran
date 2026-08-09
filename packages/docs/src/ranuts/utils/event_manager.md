@@ -132,14 +132,14 @@ el.addEventListener('pointerup', (e) => {
 
 #### Parameters (`DoubleTapDetectorOptions`)
 
-| Option          | Description                                     | Type     | Default |
-| ---------------- | -------------------------------------------------- | -------- | ------- |
-| `windowMs`       | Max gap between the two taps, in ms                | `number` | `300`   |
-| `maxDistancePx`  | Max 2D distance between the two taps, in px        | `number` | `60`    |
+| Option          | Description                                 | Type     | Default |
+| --------------- | ------------------------------------------- | -------- | ------- |
+| `windowMs`      | Max gap between the two taps, in ms         | `number` | `300`   |
+| `maxDistancePx` | Max 2D distance between the two taps, in px | `number` | `60`    |
 
 #### `DoubleTapDetector`
 
-| Member    | Description                                                                                                                | Type                                            |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| `check`   | Record a tap at `(x, y)` and report whether it forms a double-tap with the immediately preceding one. A detected double-tap resets tracking, so a third rapid tap starts a fresh pair rather than counting as part of the same double-tap. | `(x: number, y: number, now?: number) => boolean` |
-| `reset`   | Forget the last recorded tap — call this when a gesture other than a tap (a drag) starts                                     | `() => void`                                     |
+| Member  | Description                                                                                                                                                                                                                                | Type                                              |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| `check` | Record a tap at `(x, y)` and report whether it forms a double-tap with the immediately preceding one. A detected double-tap resets tracking, so a third rapid tap starts a fresh pair rather than counting as part of the same double-tap. | `(x: number, y: number, now?: number) => boolean` |
+| `reset` | Forget the last recorded tap — call this when a gesture other than a tap (a drag) starts                                                                                                                                                   | `() => void`                                      |

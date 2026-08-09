@@ -356,10 +356,7 @@ export class Popover extends RanElement {
     // Because the reference frame here is an *edge*, not a center like the
     // X-axis case above, the correction is an edge-to-edge delta (how far the
     // panel's top actually drifted from the trigger's top), not center-to-center.
-    this.popoverContent.style.setProperty(
-      '--ran-dropdown-arrow-anchor-offset-y',
-      `${top - finalPanelRect.top}px`,
-    );
+    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-offset-y', `${top - finalPanelRect.top}px`);
   };
   /**
    * The panel is mounted on document.body (or getPopupContainerId) and

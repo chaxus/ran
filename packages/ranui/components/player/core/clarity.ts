@@ -8,7 +8,10 @@ export interface PlayerClarityRefs {
   player: HTMLDivElement;
 }
 
-export type PlayerClarityRuntimeState = Pick<PlayerRuntimeState<PlaybackSnapshot>, 'isSwitchingSource' | 'pendingPlaybackRestore'>;
+export type PlayerClarityRuntimeState = Pick<
+  PlayerRuntimeState<PlaybackSnapshot>,
+  'isSwitchingSource' | 'pendingPlaybackRestore'
+>;
 
 export interface PlayerClarityCtx<TLevel extends EngineQualityLevel = EngineQualityLevel> {
   levels: TLevel[];

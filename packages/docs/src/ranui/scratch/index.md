@@ -28,10 +28,10 @@ Whatever you put inside `<r-scratch>` is the reveal content — an amount, an im
 
 ### Properties
 
-| Property   | Type      | Default | Description                                                            |
-| ---------- | --------- | ------- | -------------------------------------------------------------------------- |
+| Property   | Type      | Default | Description                                                                                                      |
+| ---------- | --------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
 | `disabled` | `boolean` | `false` | Disables scratch interaction (`pointer-events: none` on the cover canvas, plus a guard in the pointer handlers). |
-| `sheet`    | `string`  | `''`    | CSS injected into the component's shadow DOM.                              |
+| `sheet`    | `string`  | `''`    | CSS injected into the component's shadow DOM.                                                                    |
 
 ### Disabled State `disabled`
 
@@ -50,7 +50,10 @@ Whatever you put inside `<r-scratch>` is the reveal content — an amount, an im
 </Demo>
 
 ```html
-<r-scratch sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }" style="display: block; width: 240px; height: 120px;">
+<r-scratch
+  sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }"
+  style="display: block; width: 240px; height: 120px;"
+>
   🎁
 </r-scratch>
 ```
@@ -77,19 +80,19 @@ The canvas's internal resolution is synced to its actual rendered CSS size × `d
 
 ## Slots
 
-| Slot      | Description                                                                        |
-| --------- | --------------------------------------------------------------------------------- |
-| (default) | The reveal content, projected into the layer beneath the scratch cover.           |
+| Slot      | Description                                                             |
+| --------- | ----------------------------------------------------------------------- |
+| (default) | The reveal content, projected into the layer beneath the scratch cover. |
 
 ## Styling
 
 This component exposes **no `::part()` hooks**, but its two layer colors are theme-token-driven CSS variables. Its shadow DOM is three fixed layers:
 
-| Class                         | Role                                                                                                                    |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `.ran-scratch-ticket`         | Full-size relative container (`width: 100%; height: 100%`)                                                             |
-| `.ran-scratch-ticket-award`   | The reveal layer, `z-index: 1`, `background: var(--ran-scratch-award-background, var(--ran-color-bg-elevated, #fff))`; holds the default slot |
-| `.ran-scratch-ticket-canvas`  | The scratch cover canvas, `z-index: 2`; filled with `--ran-scratch-cover-background` (default `var(--ran-color-text-secondary, #6b6b6b)`), set on the host |
+| Class                        | Role                                                                                                                                                       |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `.ran-scratch-ticket`        | Full-size relative container (`width: 100%; height: 100%`)                                                                                                 |
+| `.ran-scratch-ticket-award`  | The reveal layer, `z-index: 1`, `background: var(--ran-scratch-award-background, var(--ran-color-bg-elevated, #fff))`; holds the default slot              |
+| `.ran-scratch-ticket-canvas` | The scratch cover canvas, `z-index: 2`; filled with `--ran-scratch-cover-background` (default `var(--ran-color-text-secondary, #6b6b6b)`), set on the host |
 
 Both colors route through theme tokens with a literal fallback, so they adapt to light/dark mode by default and can be overridden with `--ran-scratch-award-background` / `--ran-scratch-cover-background`. Size the host with plain `width` / `height`.
 

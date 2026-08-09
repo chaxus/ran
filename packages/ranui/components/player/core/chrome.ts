@@ -18,7 +18,10 @@ export interface PlayerChromeRefs {
   playControllerBottomRemote: HTMLDivElement;
 }
 
-export type PlayerChromeRuntimeState = Pick<PlayerRuntimeState<PlaybackSnapshot>, 'isBuffering' | 'controllerBarTimeId'>;
+export type PlayerChromeRuntimeState = Pick<
+  PlayerRuntimeState<PlaybackSnapshot>,
+  'isBuffering' | 'controllerBarTimeId'
+>;
 
 export interface PlayerChromeDeps {
   refs: PlayerChromeRefs;

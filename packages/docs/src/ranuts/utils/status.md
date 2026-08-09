@@ -23,9 +23,9 @@ status.retry[503]; // true
 
 #### Parameters
 
-| Parameter | Description                                             | Type               | Default  |
-| --------- | ---------------------------------------------------------- | -------------------- | -------- |
-| `code`    | A status code, a numeric string, or a status message       | `number \| string`  | Required |
+| Parameter | Description                                          | Type               | Default  |
+| --------- | ---------------------------------------------------- | ------------------ | -------- |
+| `code`    | A status code, a numeric string, or a status message | `number \| string` | Required |
 
 #### Return
 
@@ -35,14 +35,14 @@ back to a message lookup if it isn't a known code). Throws if the input matches 
 
 ### `status`
 
-| Field      | Description                                                        | Type                     |
-| ---------- | --------------------------------------------------------------------- | -------------------------- |
-| `message`  | Code → message                                                       | `Map<number, string>`    |
-| `code`     | Lower-cased message → code                                           | `Map<string, number>`    |
-| `codes`    | Every known code                                                      | `number[]`                |
-| `redirect` | Codes that redirect (`300`, `301`, `302`, `303`, `305`, `307`, `308`) | `Record<number, true>`   |
-| `empty`    | Codes with no body (`204`, `205`, `304`)                              | `Record<number, true>`   |
-| `retry`    | Codes worth retrying (`502`, `503`, `504`)                            | `Record<number, true>`   |
+| Field      | Description                                                           | Type                   |
+| ---------- | --------------------------------------------------------------------- | ---------------------- |
+| `message`  | Code → message                                                        | `Map<number, string>`  |
+| `code`     | Lower-cased message → code                                            | `Map<string, number>`  |
+| `codes`    | Every known code                                                      | `number[]`             |
+| `redirect` | Codes that redirect (`300`, `301`, `302`, `303`, `305`, `307`, `308`) | `Record<number, true>` |
+| `empty`    | Codes with no body (`204`, `205`, `304`)                              | `Record<number, true>` |
+| `retry`    | Codes worth retrying (`502`, `503`, `504`)                            | `Record<number, true>` |
 
 ## Notes
 

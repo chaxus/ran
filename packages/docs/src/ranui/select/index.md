@@ -34,20 +34,20 @@ Options are supplied as slotted `<r-option>` children. Each option's `value` att
 
 ### Properties
 
-| Property              | Type      | Default    | Description                                                                             |
-| --------------------- | --------- | ---------- | --------------------------------------------------------------------------------------- |
+| Property              | Type      | Default    | Description                                                                                                                       |
+| --------------------- | --------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `label`               | `string`  | `''`       | Static caption above the field — same pattern as `r-input`'s `label`, so a labeled select lines up with a labeled input in a form |
-| `value`               | `string`  | `''`       | Selected value. Setting it updates the closed-state label; ignored while `disabled`     |
-| `defaultValue`        | `string`  | `''`       | Initial selected value, matched against option `value`                                  |
-| `disabled`            | `boolean` | `false`    | Whether the select is disabled                                                          |
-| `type`                | `string`  | `''`       | `text` renders a borderless, transparent trigger with no arrow icon; otherwise bordered |
-| `placement`           | `string`  | `'bottom'` | Dropdown direction: `top`, `bottom`                                                     |
-| `showSearch`          | `boolean` | `false`    | Show an inline search box that filters options by label                                 |
-| `getPopupContainerId` | `string`  | `''`       | Element `id` to mount the dropdown into (defaults to `document.body`)                   |
-| `dropdownclass`       | `string`  | `''`       | Custom class applied to the dropdown panel                                              |
-| `trigger`             | `string`  | `'click'`  | How the dropdown opens: `click`, `hover`, or `click,hover` (hover is ignored on mobile) |
-| `required`            | `boolean` | `false`    | Whether a selection is required for the form to submit                                  |
-| `sheet`               | `string`  | `''`       | CSS injected into the shadow DOM                                                        |
+| `value`               | `string`  | `''`       | Selected value. Setting it updates the closed-state label; ignored while `disabled`                                               |
+| `defaultValue`        | `string`  | `''`       | Initial selected value, matched against option `value`                                                                            |
+| `disabled`            | `boolean` | `false`    | Whether the select is disabled                                                                                                    |
+| `type`                | `string`  | `''`       | `text` renders a borderless, transparent trigger with no arrow icon; otherwise bordered                                           |
+| `placement`           | `string`  | `'bottom'` | Dropdown direction: `top`, `bottom`                                                                                               |
+| `showSearch`          | `boolean` | `false`    | Show an inline search box that filters options by label                                                                           |
+| `getPopupContainerId` | `string`  | `''`       | Element `id` to mount the dropdown into (defaults to `document.body`)                                                             |
+| `dropdownclass`       | `string`  | `''`       | Custom class applied to the dropdown panel                                                                                        |
+| `trigger`             | `string`  | `'click'`  | How the dropdown opens: `click`, `hover`, or `click,hover` (hover is ignored on mobile)                                           |
+| `required`            | `boolean` | `false`    | Whether a selection is required for the form to submit                                                                            |
+| `sheet`               | `string`  | `''`       | CSS injected into the shadow DOM                                                                                                  |
 
 > **Note:** `defaultValue` and `showSearch` are reactive — changing them after the element has connected is re-processed (alongside `value`, `disabled`, and `sheet`) in `attributeChangedCallback`. Updating `defaultValue` re-applies the matching selection; toggling `showSearch` wires or unwires the inline search box.
 
@@ -296,13 +296,13 @@ Fired only when `showSearch` is enabled, as the user types in the search box (th
 
 ## CSS Parts
 
-| Part             | Description                                         |
-| ---------------- | --------------------------------------------------- |
-| `select`         | Root wrapper of the select                          |
-| `selection`      | The trigger box (border, background, layout)        |
-| `icon`           | Dropdown arrow icon                                 |
-| `selection-item` | Element showing the selected option's label         |
-| `search`         | The inline search input (visible with `showSearch`) |
+| Part             | Description                                                 |
+| ---------------- | ----------------------------------------------------------- |
+| `select`         | Root wrapper of the select                                  |
+| `selection`      | The trigger box (border, background, layout)                |
+| `icon`           | Dropdown arrow icon                                         |
+| `selection-item` | Element showing the selected option's label                 |
+| `search`         | The inline search input (visible with `showSearch`)         |
 | `label`          | The static label above the field (present when `label` set) |
 
 ## Best Practices

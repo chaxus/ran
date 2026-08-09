@@ -74,9 +74,9 @@ description: 'ranui Skeleton（<r-skeleton>）在内容加载时展示带微光�
 
 ### 属性
 
-| 属性    | 类型     | 默认值 | 说明                                     |
-| ------- | -------- | ------ | ---------------------------------------- |
-| `sheet` | `string` | `''`   | 注入组件 shadow DOM 的自定义样式         |
+| 属性    | 类型     | 默认值 | 说明                             |
+| ------- | -------- | ------ | -------------------------------- |
+| `sheet` | `string` | `''`   | 注入组件 shadow DOM 的自定义样式 |
 
 ### 自定义样式 `sheet`
 
@@ -94,13 +94,13 @@ description: 'ranui Skeleton（<r-skeleton>）在内容加载时展示带微光�
 
 骨架屏还暴露了一组 CSS 自定义属性，不用 `sheet` 也能做主题定制：
 
-| 变量                                         | 默认值                          | 说明                     |
-| -------------------------------------------- | -------------------------------- | ------------------------ |
-| `--ran-skeleton-height`                      | `16px`                           | 占位条的高度              |
-| `--ran-skeleton-background`                  | `var(--ran-gray-alpha-200, …)`   | 基础（非微光）填充色      |
-| `--ran-skeleton-border-radius`               | `var(--ran-radius-sm, 6px)`      | 圆角半径                  |
-| `--ran-skeleton-shimmer-background`          | `linear-gradient(90deg, …)`      | 移动高光的渐变            |
-| `--ran-skeleton-shimmer-animation-duration`  | `1.4s`                           | 一次微光扫过的时长        |
+| 变量                                        | 默认值                         | 说明                 |
+| ------------------------------------------- | ------------------------------ | -------------------- |
+| `--ran-skeleton-height`                     | `16px`                         | 占位条的高度         |
+| `--ran-skeleton-background`                 | `var(--ran-gray-alpha-200, …)` | 基础（非微光）填充色 |
+| `--ran-skeleton-border-radius`              | `var(--ran-radius-sm, 6px)`    | 圆角半径             |
+| `--ran-skeleton-shimmer-background`         | `linear-gradient(90deg, …)`    | 移动高光的渐变       |
+| `--ran-skeleton-shimmer-animation-duration` | `1.4s`                         | 一次微光扫过的时长   |
 
 <Demo>
   <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>

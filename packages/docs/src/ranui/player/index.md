@@ -43,23 +43,23 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 
 ### Properties
 
-| Property       | Type     | Default | Description                                                                                           |
-| -------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| `src`          | `string` | `''`    | Video resource URL. Changing it reloads the player. Engine (HLS/native) is auto-detected from the extension. |
-| `format`       | `string` | `''`    | Force a specific engine — `hls` / `dash` / `flv` / `webrtc` / `native` — instead of auto-detecting from `src`'s extension. Useful for extensionless/signed streaming URLs; **required** for `webrtc` (a WHEP endpoint has no extension to detect). Changing it reloads the player. |
-| `volume`       | `string` | `''`    | Initial volume on a `0`–`100` scale — same scale as `setVolume()`/`getVolume()`. |
-| `currentTime`  | `string` | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                       |
-| `playbackRate` | `string` | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.          |
-| `debug`        | `string` | `''`    | When truthy, logs every internal `change` event and warnings to the console.                          |
-| `sheet`        | `string` | `''`    | CSS text injected into the component's shadow DOM for custom styling.                                 |
-| `poster`       | `string` | `''`    | Image URL shown before playback starts. Passed straight to `<video poster>`.                          |
-| `autoplay`     | `boolean` | `false` | Boolean attribute — presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture. |
-| `loop`         | `boolean` | `false` | Boolean attribute — loops playback on end, same as native `<video loop>`.                             |
-| `muted`        | `boolean` | `false` | Boolean attribute — starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume. |
-| `thumbnails`   | `string` | `''`    | URL of a WebVTT sprite-sheet manifest — shows a cropped thumbnail above the seek-bar hover tip. See [Thumbnail Scrubbing Preview](#thumbnail-scrubbing-preview-thumbnails) below. Independent of `src`: only refetched when this attribute itself changes. |
-| `disable-error-modal` | `boolean` | `false` | Opt out of the built-in error + retry dialog — errors still reach you via the `error`/`sourceerror` `change` events, so build your own UI on top. |
-| `remember-position` | `boolean` | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends. |
-| `tracks`       | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks — **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children wouldn't survive). See [Subtitles/CC](#subtitles-cc-tracks) below. |
+| Property              | Type                  | Default | Description                                                                                                                                                                                                                                                                        |
+| --------------------- | --------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src`                 | `string`              | `''`    | Video resource URL. Changing it reloads the player. Engine (HLS/native) is auto-detected from the extension.                                                                                                                                                                       |
+| `format`              | `string`              | `''`    | Force a specific engine — `hls` / `dash` / `flv` / `webrtc` / `native` — instead of auto-detecting from `src`'s extension. Useful for extensionless/signed streaming URLs; **required** for `webrtc` (a WHEP endpoint has no extension to detect). Changing it reloads the player. |
+| `volume`              | `string`              | `''`    | Initial volume on a `0`–`100` scale — same scale as `setVolume()`/`getVolume()`.                                                                                                                                                                                                   |
+| `currentTime`         | `string`              | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                                                                                                                                                                                                    |
+| `playbackRate`        | `string`              | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.                                                                                                                                                                                       |
+| `debug`               | `string`              | `''`    | When truthy, logs every internal `change` event and warnings to the console.                                                                                                                                                                                                       |
+| `sheet`               | `string`              | `''`    | CSS text injected into the component's shadow DOM for custom styling.                                                                                                                                                                                                              |
+| `poster`              | `string`              | `''`    | Image URL shown before playback starts. Passed straight to `<video poster>`.                                                                                                                                                                                                       |
+| `autoplay`            | `boolean`             | `false` | Boolean attribute — presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture.                                                                                                            |
+| `loop`                | `boolean`             | `false` | Boolean attribute — loops playback on end, same as native `<video loop>`.                                                                                                                                                                                                          |
+| `muted`               | `boolean`             | `false` | Boolean attribute — starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume.                          |
+| `thumbnails`          | `string`              | `''`    | URL of a WebVTT sprite-sheet manifest — shows a cropped thumbnail above the seek-bar hover tip. See [Thumbnail Scrubbing Preview](#thumbnail-scrubbing-preview-thumbnails) below. Independent of `src`: only refetched when this attribute itself changes.                         |
+| `disable-error-modal` | `boolean`             | `false` | Opt out of the built-in error + retry dialog — errors still reach you via the `error`/`sourceerror` `change` events, so build your own UI on top.                                                                                                                                  |
+| `remember-position`   | `boolean`             | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends.                                                                      |
+| `tracks`              | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks — **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children wouldn't survive). See [Subtitles/CC](#subtitles-cc-tracks) below.                                                          |
 
 > Observed attributes (from `observedAttributes`): `src`, `format`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `thumbnails`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
 
@@ -128,7 +128,13 @@ Seconds from the start of the media.
 ### Poster, Autoplay, Loop, Muted
 
 ```html
-<r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" poster="/ran/hls/poster.jpg" autoplay muted loop></r-player>
+<r-player
+  src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+  poster="/ran/hls/poster.jpg"
+  autoplay
+  muted
+  loop
+></r-player>
 ```
 
 ### Picture-in-Picture
@@ -199,13 +205,13 @@ player.addEventListener('change', () => {
 
 `getMetrics()` returns a plain-object snapshot derived from the same `change` event stream documented below — there's no separate tracking to opt into:
 
-| Field                | Type              | Description                                                              |
-| -------------------- | ----------------- | ------------------------------------------------------------------------- |
-| `rebufferCount`       | `number`          | Number of `waiting`→`playing` transitions (stalls that then recovered).   |
-| `rebufferDuration`    | `number`          | Total time (ms) spent stalled across all rebuffers.                      |
-| `firstFrameMs`        | `number \| null`  | ms from the current `src` starting to load to the first playable frame; `null` until then. |
-| `qualitySwitchCount`  | `number`          | Number of clarity levels the user has picked from the quality selector.  |
-| `errorCount`          | `number`          | Number of `error`/`sourceerror` events.                                  |
+| Field                | Type             | Description                                                                                |
+| -------------------- | ---------------- | ------------------------------------------------------------------------------------------ |
+| `rebufferCount`      | `number`         | Number of `waiting`→`playing` transitions (stalls that then recovered).                    |
+| `rebufferDuration`   | `number`         | Total time (ms) spent stalled across all rebuffers.                                        |
+| `firstFrameMs`       | `number \| null` | ms from the current `src` starting to load to the first playable frame; `null` until then. |
+| `qualitySwitchCount` | `number`         | Number of clarity levels the user has picked from the quality selector.                    |
+| `errorCount`         | `number`         | Number of `error`/`sourceerror` events.                                                    |
 
 The snapshot resets whenever a new `src`/`format` loads — it always describes the **current** source, not a running total across sources.
 
@@ -213,20 +219,20 @@ The snapshot resets whenever a new `src`/`format` loads — it always describes 
 
 The player exposes imperative controls on the element instance:
 
-| Method                                     | Description                                             |
-| ------------------------------------------ | ------------------------------------------------------- |
-| `play(time?)`                              | Start playback, optionally seeking to `time` (seconds). |
-| `pause()`                                  | Pause playback.                                         |
-| `getCurrentTime()`                         | Current playback position in seconds.                   |
-| `setCurrentTime(seconds)`                  | Seek to a position.                                     |
-| `getTotalTime()`                           | Total media duration in seconds.                        |
-| `getVolume()` / `setVolume(v)`             | Read/set volume on a `0`–`100` scale — same scale as the `volume` attribute. |
-| `getPlaybackRate()` / `setPlaybackRate(n)` | Read/set the speed multiplier.                          |
-| `customRequestFullscreen()`                | Enter fullscreen. Returns a `Promise`.                  |
-| `customExitFullscreen()`                   | Exit fullscreen. Returns a `Promise`.                   |
-| `togglePip()`                              | Enter/exit Picture-in-Picture. No-op if unsupported or no source is loaded. |
-| `setSubtitleLanguage(lang)`                | Set the active subtitle track by `srclang`, or `'off'` to disable. |
-| `getMetrics()`                             | Read the current [QoE metrics](#qoe-metrics) snapshot. |
+| Method                                     | Description                                                                                            |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `play(time?)`                              | Start playback, optionally seeking to `time` (seconds).                                                |
+| `pause()`                                  | Pause playback.                                                                                        |
+| `getCurrentTime()`                         | Current playback position in seconds.                                                                  |
+| `setCurrentTime(seconds)`                  | Seek to a position.                                                                                    |
+| `getTotalTime()`                           | Total media duration in seconds.                                                                       |
+| `getVolume()` / `setVolume(v)`             | Read/set volume on a `0`–`100` scale — same scale as the `volume` attribute.                           |
+| `getPlaybackRate()` / `setPlaybackRate(n)` | Read/set the speed multiplier.                                                                         |
+| `customRequestFullscreen()`                | Enter fullscreen. Returns a `Promise`.                                                                 |
+| `customExitFullscreen()`                   | Exit fullscreen. Returns a `Promise`.                                                                  |
+| `togglePip()`                              | Enter/exit Picture-in-Picture. No-op if unsupported or no source is loaded.                            |
+| `setSubtitleLanguage(lang)`                | Set the active subtitle track by `srclang`, or `'off'` to disable.                                     |
+| `getMetrics()`                             | Read the current [QoE metrics](#qoe-metrics) snapshot.                                                 |
 | `showRemotePlaybackPicker()`               | Open the browser's AirPlay/Remote Playback device picker. No-op if unsupported or no source is loaded. |
 
 ## Events
@@ -260,45 +266,45 @@ The player dispatches a single `change` CustomEvent. Every internal state transi
 
 Native media states forwarded from the underlying `<video>`:
 
-| Type             | Description                                           |
-| ---------------- | ----------------------------------------------------- |
-| `canplay`        | Enough data to start playing.                         |
-| `canplaythrough` | Can play to the end without buffering.                |
-| `complete`       | Rendering complete.                                   |
-| `durationchange` | The `duration` value changed.                         |
-| `emptied`        | Media emptied / reloaded.                             |
-| `ended`          | Playback reached the end.                             |
+| Type             | Description                                                                                               |
+| ---------------- | --------------------------------------------------------------------------------------------------------- |
+| `canplay`        | Enough data to start playing.                                                                             |
+| `canplaythrough` | Can play to the end without buffering.                                                                    |
+| `complete`       | Rendering complete.                                                                                       |
+| `durationchange` | The `duration` value changed.                                                                             |
+| `emptied`        | Media emptied / reloaded.                                                                                 |
+| `ended`          | Playback reached the end.                                                                                 |
 | `error`          | A media error occurred (also opens the built-in error+retry dialog, unless `disable-error-modal` is set). |
-| `loadstart`      | The browser began loading the media.                  |
-| `loadedmetadata` | Metadata has loaded.                                  |
-| `loadeddata`     | The first frame has loaded.                           |
-| `progress`       | Fired periodically while the resource loads.          |
-| `ratechange`     | Playback rate changed.                                |
-| `seeking`        | A seek started.                                       |
-| `seeked`         | A seek completed.                                     |
-| `stalled`        | The browser is trying to fetch data but none arrived. |
-| `suspend`        | Media loading was suspended.                          |
-| `timeupdate`     | `currentTime` changed.                                |
-| `volumechange`   | The video element's volume changed.                   |
-| `waiting`        | Playback stalled waiting for data.                    |
-| `play`           | Playback started.                                     |
-| `playing`        | Playback resumed after buffering/pause.               |
-| `pause`          | Playback paused.                                      |
+| `loadstart`      | The browser began loading the media.                                                                      |
+| `loadedmetadata` | Metadata has loaded.                                                                                      |
+| `loadeddata`     | The first frame has loaded.                                                                               |
+| `progress`       | Fired periodically while the resource loads.                                                              |
+| `ratechange`     | Playback rate changed.                                                                                    |
+| `seeking`        | A seek started.                                                                                           |
+| `seeked`         | A seek completed.                                                                                         |
+| `stalled`        | The browser is trying to fetch data but none arrived.                                                     |
+| `suspend`        | Media loading was suspended.                                                                              |
+| `timeupdate`     | `currentTime` changed.                                                                                    |
+| `volumechange`   | The video element's volume changed.                                                                       |
+| `waiting`        | Playback stalled waiting for data.                                                                        |
+| `play`           | Playback started.                                                                                         |
+| `playing`        | Playback resumed after buffering/pause.                                                                   |
+| `pause`          | Playback paused.                                                                                          |
 
 Player-specific actions:
 
-| Type                | `data`             | Description                                            |
-| ------------------- | ------------------ | ------------------------------------------------------ |
-| `volume`            | `number` (`0`–`100`) | Volume changed via the control bar or mute toggle.     |
-| `speed`             | `number`           | Playback speed changed via the speed selector.         |
-| `fullscreen`        | `boolean`          | Fullscreen entered (`true`) or exited (`false`).       |
-| `pictureinpicture`  | `boolean`          | Picture-in-Picture entered (`true`) or exited (`false`) — fires whether triggered by `togglePip()` or the browser's own PiP window controls. |
-| `subtitlechange`    | `string`           | Subtitle language changed via the CC picker or `setSubtitleLanguage()` — a `srclang`, or `'off'`. |
-| `resume`            | `number`           | A saved position was silently restored on load (`remember-position`); `data` is the restored time in seconds. |
-| `levelsready`       | `{ levels }`       | The streaming engine's manifest was parsed; clarity levels are now available. |
-| `sourceerror`       | `{ fatal, detail }` | A streaming-engine error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set — non-fatal errors are the engine's own internal recovery and don't). |
-| `qualityswitch`     | `{ level }`        | The user picked a clarity level from the quality selector.                                        |
-| `gestureseek`       | `{ direction, seconds }` | A double-tap seek gesture fired (`direction` is `'forward'`/`'backward'`).                    |
+| Type               | `data`                   | Description                                                                                                                                                                                                                   |
+| ------------------ | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `volume`           | `number` (`0`–`100`)     | Volume changed via the control bar or mute toggle.                                                                                                                                                                            |
+| `speed`            | `number`                 | Playback speed changed via the speed selector.                                                                                                                                                                                |
+| `fullscreen`       | `boolean`                | Fullscreen entered (`true`) or exited (`false`).                                                                                                                                                                              |
+| `pictureinpicture` | `boolean`                | Picture-in-Picture entered (`true`) or exited (`false`) — fires whether triggered by `togglePip()` or the browser's own PiP window controls.                                                                                  |
+| `subtitlechange`   | `string`                 | Subtitle language changed via the CC picker or `setSubtitleLanguage()` — a `srclang`, or `'off'`.                                                                                                                             |
+| `resume`           | `number`                 | A saved position was silently restored on load (`remember-position`); `data` is the restored time in seconds.                                                                                                                 |
+| `levelsready`      | `{ levels }`             | The streaming engine's manifest was parsed; clarity levels are now available.                                                                                                                                                 |
+| `sourceerror`      | `{ fatal, detail }`      | A streaming-engine error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set — non-fatal errors are the engine's own internal recovery and don't). |
+| `qualityswitch`    | `{ level }`              | The user picked a clarity level from the quality selector.                                                                                                                                                                    |
+| `gestureseek`      | `{ direction, seconds }` | A double-tap seek gesture fired (`direction` is `'forward'`/`'backward'`).                                                                                                                                                    |
 
 ## Slots
 

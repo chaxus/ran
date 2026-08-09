@@ -16,7 +16,11 @@ import {
 } from './core/state';
 import { createPlayerVisualSignals, type PlayerVisualSignals } from './core/store';
 import { createPlaybackVisualEffects, type PlayerVisualEffectRefs } from './core/effects';
-import { createErrorModalController, type PlayerErrorModalController, type PlayerErrorModalDeps } from './core/error-modal';
+import {
+  createErrorModalController,
+  type PlayerErrorModalController,
+  type PlayerErrorModalDeps,
+} from './core/error-modal';
 import { createSeekHandlers, type PlayerSeekDeps, type PlayerSeekHandlers } from './core/seek';
 import { createChromeHandlers, type PlayerChromeDeps, type PlayerChromeHandlers } from './core/chrome';
 import { createMediaEventHandlers, type PlayerMediaDispatchDeps } from './core/media-dispatch';

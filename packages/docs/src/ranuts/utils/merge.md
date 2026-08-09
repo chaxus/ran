@@ -112,4 +112,4 @@ lazyModule.expensive; // returns the cached result, does not log again
    `configurable: false` — the returned object cannot be reassigned or have properties added.
 3. **Throws on anything else.** A value that is neither a getter nor a plain nested object
    (an array, a function, a primitive assigned directly) throws `Exposed values must be either
-   a getter or a nested object`.
+a getter or a nested object`.

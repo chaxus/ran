@@ -283,18 +283,18 @@ A pruning pass: every symbol below had zero call sites anywhere in this monorepo
 a repo-wide grep, not just this package), no test, and — except `getQuery` — no narrative doc
 page. Removed rather than deprecated, per the same `0.x`-experimental rationale as 0.3.
 
-| Symbol                                              | Why removed                                                                                          | Migration                        |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------- |
-| `getQuery`                                          | Byte-identical alias of `getAllQueryString` since 0.3; the alias itself was never a reason to keep it. | `getAllQueryString`.              |
-| `audioVendor` / `canvasVendor` / `webglVendor`       | Browser-fingerprinting helpers (canvas/audio/webgl hashing) in `behavior.ts`. No consumer, no docs.    | None.                             |
-| `setAttributeByGlobal`                               | Wrote to `window`/`global` by string key with no guard — a footgun with no caller in this repo.        | Assign the global directly.       |
-| `getRegionalLatitudeAndLongitude`                    | Never re-exported from the `ranuts/utils` barrel — unreachable through the public API.                | `navigator.geolocation` directly. |
-| `sameValueZero`                                      | Same — defined in `obj.ts` but never wired into the barrel or into `isEqual`.                          | `Object.is`.                      |
-| `isBangDevice`                                       | Notch heuristic hard-coded `screen.width`/`height` pairs through the iPhone 12 line only; already stale for 13–16 and rots further every generation. | `env('viewport-fit=cover')` + CSS `env(safe-area-inset-*)`. |
-| `str2Xml`                                            | Thin wrapper over `DOMParser` (plus a dead `ActiveXObject` branch for pre-2016 IE).                    | `new DOMParser().parseFromString(str, type)`. |
-| `changeHumpToLowerCase`                              | One-line camelCase→snake_case wrapper, no caller.                                                      | `str.replace(/[A-Z]/g, (c) => '_' + c.toLowerCase())`. |
-| `removeGhosting`                                     | Real but narrow drag-ghost-image hack; documented but never called from anywhere in this repo.         | Inline at the call site if needed. |
-| `retain`                                             | Real but narrow back-button-override hack; same story as `removeGhosting`.                             | Inline at the call site if needed. |
+| Symbol                                         | Why removed                                                                                                                                          | Migration                                                   |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `getQuery`                                     | Byte-identical alias of `getAllQueryString` since 0.3; the alias itself was never a reason to keep it.                                               | `getAllQueryString`.                                        |
+| `audioVendor` / `canvasVendor` / `webglVendor` | Browser-fingerprinting helpers (canvas/audio/webgl hashing) in `behavior.ts`. No consumer, no docs.                                                  | None.                                                       |
+| `setAttributeByGlobal`                         | Wrote to `window`/`global` by string key with no guard — a footgun with no caller in this repo.                                                      | Assign the global directly.                                 |
+| `getRegionalLatitudeAndLongitude`              | Never re-exported from the `ranuts/utils` barrel — unreachable through the public API.                                                               | `navigator.geolocation` directly.                           |
+| `sameValueZero`                                | Same — defined in `obj.ts` but never wired into the barrel or into `isEqual`.                                                                        | `Object.is`.                                                |
+| `isBangDevice`                                 | Notch heuristic hard-coded `screen.width`/`height` pairs through the iPhone 12 line only; already stale for 13–16 and rots further every generation. | `env('viewport-fit=cover')` + CSS `env(safe-area-inset-*)`. |
+| `str2Xml`                                      | Thin wrapper over `DOMParser` (plus a dead `ActiveXObject` branch for pre-2016 IE).                                                                  | `new DOMParser().parseFromString(str, type)`.               |
+| `changeHumpToLowerCase`                        | One-line camelCase→snake_case wrapper, no caller.                                                                                                    | `str.replace(/[A-Z]/g, (c) => '_' + c.toLowerCase())`.      |
+| `removeGhosting`                               | Real but narrow drag-ghost-image hack; documented but never called from anywhere in this repo.                                                       | Inline at the call site if needed.                          |
+| `retain`                                       | Real but narrow back-button-override hack; same story as `removeGhosting`.                                                                           | Inline at the call site if needed.                          |
 
 `packages/docs/.vitepress/plugins/env.ts` and `.vitepress/theme/index.ts` were the only actual
 in-repo consumers found (`isBangDevice` for an unused `$env.isBang` field, `setAttributeByGlobal`

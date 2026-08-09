@@ -216,7 +216,10 @@
    offset): the host is usually a full-bleed 100%×100% box, and an outward
    ring would get clipped by a video-wrapper `overflow: hidden` ancestor. */
 :host(:focus-visible) {
-  outline: var(--ran-player-focus-outline, 2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff)));
+  outline: var(
+    --ran-player-focus-outline,
+    2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
+  );
   outline-offset: var(--ran-player-focus-outline-offset, -2px);
 }
 
@@ -484,10 +487,7 @@
           2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
         );
         outline-offset: var(--ran-player-progress-focus-visible-outline-offset, 4px);
-        border-radius: var(
-          --ran-player-progress-focus-visible-border-radius,
-          var(--ran-radius-full, 9999px)
-        );
+        border-radius: var(--ran-player-progress-focus-visible-border-radius, var(--ran-radius-full, 9999px));
       }
 
       &-wrap {

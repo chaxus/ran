@@ -45,33 +45,33 @@ at the start of each capture rather than frozen at creation time.
 
 #### Parameters (`SpeechRecognizerOptions`)
 
-| Option           | Description                                                                       | Type                                       | Default |
-| ----------------- | ---------------------------------------------------------------------------------- | ------------------------------------------- | ------- |
-| `lang`            | BCP 47 tag (`'en-US'`, `'zh-CN'`), or a function read at the start of each capture | `string \| (() => string)`                  | `''`    |
-| `continuous`      | Keep listening across pauses instead of stopping at the first one                  | `boolean`                                   | `true`  |
-| `interimResults`  | Emit partial results as the speaker talks                                          | `boolean`                                   | `true`  |
-| `onResult`        | Called with the transcript of the **whole capture so far**, and whether it's final | `(transcript: string, isFinal: boolean) => void` | `-` |
-| `onError`         | Called with a classified error                                                     | `(error: SpeechError) => void`              | `-`     |
-| `onStart`         | Fires when a capture begins                                                        | `() => void`                                | `-`     |
-| `onEnd`           | Fires once per capture, however it ended — stopped, timed out, or errored          | `() => void`                                | `-`     |
+| Option           | Description                                                                        | Type                                             | Default |
+| ---------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------ | ------- |
+| `lang`           | BCP 47 tag (`'en-US'`, `'zh-CN'`), or a function read at the start of each capture | `string \| (() => string)`                       | `''`    |
+| `continuous`     | Keep listening across pauses instead of stopping at the first one                  | `boolean`                                        | `true`  |
+| `interimResults` | Emit partial results as the speaker talks                                          | `boolean`                                        | `true`  |
+| `onResult`       | Called with the transcript of the **whole capture so far**, and whether it's final | `(transcript: string, isFinal: boolean) => void` | `-`     |
+| `onError`        | Called with a classified error                                                     | `(error: SpeechError) => void`                   | `-`     |
+| `onStart`        | Fires when a capture begins                                                        | `() => void`                                     | `-`     |
+| `onEnd`          | Fires once per capture, however it ended — stopped, timed out, or errored          | `() => void`                                     | `-`     |
 
 #### `SpeechRecognizer`
 
-| Member       | Description                                                                    | Type      |
-| ------------ | -------------------------------------------------------------------------------- | --------- |
-| `supported`  | `false` when the platform has no speech recognition; every method is then a no-op | `boolean` (getter) |
-| `active`     | Whether a capture is currently running                                            | `boolean` (getter) |
-| `start()`    | Begin a capture. Ignored if one is already running                                | `() => void` |
-| `stop()`     | End the current capture; results already recognized are kept, `onEnd` follows     | `() => void` |
-| `abort()`    | End the current capture and discard pending results                               | `() => void` |
-| `toggle()`   | Start if idle, stop if running — what a single microphone button wants            | `() => void` |
+| Member      | Description                                                                       | Type               |
+| ----------- | --------------------------------------------------------------------------------- | ------------------ |
+| `supported` | `false` when the platform has no speech recognition; every method is then a no-op | `boolean` (getter) |
+| `active`    | Whether a capture is currently running                                            | `boolean` (getter) |
+| `start()`   | Begin a capture. Ignored if one is already running                                | `() => void`       |
+| `stop()`    | End the current capture; results already recognized are kept, `onEnd` follows     | `() => void`       |
+| `abort()`   | End the current capture and discard pending results                               | `() => void`       |
+| `toggle()`  | Start if idle, stop if running — what a single microphone button wants            | `() => void`       |
 
 #### `SpeechError`
 
-| Field    | Description                                                                                                    | Type              |
-| -------- | ---------------------------------------------------------------------------------------------------------------- | ----------------- |
+| Field    | Description                                                                                                                               | Type              |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
 | `kind`   | `'denied'` (mic refused — worth surfacing), `'noSpeech'` / `'aborted'` (routine, usually not worth showing), `'failed'` (everything else) | `SpeechErrorKind` |
-| `detail` | The raw `error` string from the platform event                                                                   | `string`          |
+| `detail` | The raw `error` string from the platform event                                                                                            | `string`          |
 
 ## Notes
 

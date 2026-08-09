@@ -54,16 +54,16 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 
 ### Properties
 
-| Property      | Type      | Default | Description                                                                                       |
-| ------------- | --------- | ------- | ------------------------------------------------------------------------------------------------- |
-| `blur`        | `number`  | `16`    | Backdrop blur radius, in px (the frost amount).                                                   |
-| `saturate`    | `number`  | `180`   | Backdrop saturation, as a percentage — lifts the color of what's behind the glass.                |
-| `displace`    | `number`  | `8`     | Liquid refraction strength (SVG displacement scale). `0` is a flat frosted pane; higher = wavier. |
-| `frequency`   | `number`  | `0.005` | Turbulence base frequency — smaller values give larger, smoother ripples.                         |
-| `radius`      | `number`  | `20`    | Corner radius, in px.                                                                             |
-| `tint`        | `string`  | subtle  | Glass fill tint — any CSS background value.                                                       |
-| `sheen`       | `boolean` | `false` | Animated specular sweep across the surface.                                                       |
-| `interactive` | `boolean` | `false` | Hover lift + press-scale feedback, for clickable glass. Also makes the host a keyboard-operable button — `role="button"`, a tab stop, Enter/Space act like a click. |
+| Property      | Type      | Default | Description                                                                                                                                                                                                                                         |
+| ------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `blur`        | `number`  | `16`    | Backdrop blur radius, in px (the frost amount).                                                                                                                                                                                                     |
+| `saturate`    | `number`  | `180`   | Backdrop saturation, as a percentage — lifts the color of what's behind the glass.                                                                                                                                                                  |
+| `displace`    | `number`  | `8`     | Liquid refraction strength (SVG displacement scale). `0` is a flat frosted pane; higher = wavier.                                                                                                                                                   |
+| `frequency`   | `number`  | `0.005` | Turbulence base frequency — smaller values give larger, smoother ripples.                                                                                                                                                                           |
+| `radius`      | `number`  | `20`    | Corner radius, in px.                                                                                                                                                                                                                               |
+| `tint`        | `string`  | subtle  | Glass fill tint — any CSS background value.                                                                                                                                                                                                         |
+| `sheen`       | `boolean` | `false` | Animated specular sweep across the surface.                                                                                                                                                                                                         |
+| `interactive` | `boolean` | `false` | Hover lift + press-scale feedback, for clickable glass. Also makes the host a keyboard-operable button — `role="button"`, a tab stop, Enter/Space act like a click.                                                                                 |
 | `rim`         | `boolean` | `false` | Opt-in specular rim + chromatic edge for a more physically-lit look. WebGL first (always, synchronously), transparently upgraded to WebGPU in the background if available. Falls back to the plain CSS specular gradient when neither is available. |
 
 ### Refraction `displace`
@@ -120,18 +120,18 @@ Renders on WebGL first — synchronous, works in effectively every browser, so t
 
 Style internals with `::part(glass)`, `::part(specular)`, and (when `rim` is set) `::part(rim)`, or override the `--ran-glass-*` custom properties:
 
-| Token                          | Purpose                              |
-| ------------------------------ | ------------------------------------ |
-| `--ran-glass-blur`             | Backdrop blur radius.                |
-| `--ran-glass-saturate`         | Backdrop saturation.                 |
-| `--ran-glass-radius`           | Corner radius.                       |
-| `--ran-glass-tint`             | Fill background.                     |
-| `--ran-glass-border`           | Rim border.                          |
-| `--ran-glass-shadow`           | Box shadow stack (specular + depth). |
-| `--ran-glass-specular-background` | Specular highlight background.       |
-| `--ran-glass-specular-opacity` | Specular strength.                   |
+| Token                                         | Purpose                                                           |
+| --------------------------------------------- | ----------------------------------------------------------------- |
+| `--ran-glass-blur`                            | Backdrop blur radius.                                             |
+| `--ran-glass-saturate`                        | Backdrop saturation.                                              |
+| `--ran-glass-radius`                          | Corner radius.                                                    |
+| `--ran-glass-tint`                            | Fill background.                                                  |
+| `--ran-glass-border`                          | Rim border.                                                       |
+| `--ran-glass-shadow`                          | Box shadow stack (specular + depth).                              |
+| `--ran-glass-specular-background`             | Specular highlight background.                                    |
+| `--ran-glass-specular-opacity`                | Specular strength.                                                |
 | `--ran-glass-reduced-transparency-background` | Fallback surface when the OS "reduce transparency" setting is on. |
-| `--ran-glass-reduced-transparency-shadow` | Fallback shadow in that same state. |
+| `--ran-glass-reduced-transparency-shadow`     | Fallback shadow in that same state.                               |
 
 ```css
 r-glass::part(glass) {

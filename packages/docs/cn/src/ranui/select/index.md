@@ -34,20 +34,20 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 
 ### Select 属性
 
-| 属性                  | 类型      | 默认值     | 说明                                                                       |
-| --------------------- | --------- | ---------- | -------------------------------------------------------------------------- |
-| `label`               | `string`  | `''`       | 字段上方的静态标题——和 `r-input` 的 `label` 用法一致，方便和输入框对齐    |
-| `value`               | `string`  | `''`       | 选中的值。设置它会更新收起状态下的显示文本；`disabled` 时忽略             |
-| `defaultValue`        | `string`  | `''`       | 初始选中的值，与选项的 `value` 匹配                                       |
-| `disabled`            | `boolean` | `false`    | 是否禁用选择器                                                            |
-| `type`                | `string`  | `''`       | `text` 渲染成无边框、透明背景、不带箭头图标的触发器；否则带边框            |
-| `placement`           | `string`  | `'bottom'` | 下拉框展示方向：`top`、`bottom`                                            |
-| `showSearch`          | `boolean` | `false`    | 是否显示按标签过滤选项的内联搜索框                                        |
-| `getPopupContainerId` | `string`  | `''`       | 下拉框挂载元素的 `id`（默认挂载到 `document.body`）                       |
-| `dropdownclass`       | `string`  | `''`       | 下拉面板的自定义 class 名                                                 |
+| 属性                  | 类型      | 默认值     | 说明                                                                         |
+| --------------------- | --------- | ---------- | ---------------------------------------------------------------------------- |
+| `label`               | `string`  | `''`       | 字段上方的静态标题——和 `r-input` 的 `label` 用法一致，方便和输入框对齐       |
+| `value`               | `string`  | `''`       | 选中的值。设置它会更新收起状态下的显示文本；`disabled` 时忽略                |
+| `defaultValue`        | `string`  | `''`       | 初始选中的值，与选项的 `value` 匹配                                          |
+| `disabled`            | `boolean` | `false`    | 是否禁用选择器                                                               |
+| `type`                | `string`  | `''`       | `text` 渲染成无边框、透明背景、不带箭头图标的触发器；否则带边框              |
+| `placement`           | `string`  | `'bottom'` | 下拉框展示方向：`top`、`bottom`                                              |
+| `showSearch`          | `boolean` | `false`    | 是否显示按标签过滤选项的内联搜索框                                           |
+| `getPopupContainerId` | `string`  | `''`       | 下拉框挂载元素的 `id`（默认挂载到 `document.body`）                          |
+| `dropdownclass`       | `string`  | `''`       | 下拉面板的自定义 class 名                                                    |
 | `trigger`             | `string`  | `'click'`  | 下拉框的触发方式：`click`、`hover`，或 `click,hover`（`hover` 在移动端无效） |
-| `required`            | `boolean` | `false`    | 表单提交前是否要求已选择                                                  |
-| `sheet`               | `string`  | `''`       | 注入 shadow DOM 的自定义样式                                              |
+| `required`            | `boolean` | `false`    | 表单提交前是否要求已选择                                                     |
+| `sheet`               | `string`  | `''`       | 注入 shadow DOM 的自定义样式                                                 |
 
 > **注意**：`defaultValue` 和 `showSearch` 是响应式的——元素连接后再修改它们，也会在 `attributeChangedCallback` 里被重新处理（和 `value`、`disabled`、`sheet` 一样）。更新 `defaultValue` 会重新应用匹配的选中项；切换 `showSearch` 会装配或卸载内联搜索框。
 
@@ -55,11 +55,11 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 
 选项通过 `<r-option>` 子元素提供。
 
-| 属性       | 类型      | 默认值  | 说明                                                     |
-| ---------- | --------- | ------- | -------------------------------------------------------- |
-| `value`    | `string`  | `''`    | 选项的值；被选中时作为 select 的值发出                    |
-| `disabled` | `boolean` | `false` | 标记该选项不可选——点击和键盘选择都会跳过它                |
-| `sheet`    | `string`  | `''`    | 注入选项 shadow DOM 的自定义样式                          |
+| 属性       | 类型      | 默认值  | 说明                                       |
+| ---------- | --------- | ------- | ------------------------------------------ |
+| `value`    | `string`  | `''`    | 选项的值；被选中时作为 select 的值发出     |
+| `disabled` | `boolean` | `false` | 标记该选项不可选——点击和键盘选择都会跳过它 |
+| `sheet`    | `string`  | `''`    | 注入选项 shadow DOM 的自定义样式           |
 
 选项标签或值重复时会打印一条 `console.warn`。
 
@@ -289,19 +289,19 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ## 插槽
 
-| 插槽      | 说明                                   |
-| --------- | -------------------------------------- |
-| （默认）  | 接受用于定义可选项的 `<r-option>` 元素 |
+| 插槽     | 说明                                   |
+| -------- | -------------------------------------- |
+| （默认） | 接受用于定义可选项的 `<r-option>` 元素 |
 
 ## CSS Parts
 
-| Part             | 说明                                     |
-| ---------------- | ---------------------------------------- |
-| `select`         | select 的根容器                          |
-| `selection`      | 触发器方框（边框、背景、布局）           |
-| `icon`           | 下拉箭头图标                             |
-| `selection-item` | 显示选中项标签的元素                     |
-| `search`         | 内联搜索输入框（`showSearch` 时可见）    |
+| Part             | 说明                                        |
+| ---------------- | ------------------------------------------- |
+| `select`         | select 的根容器                             |
+| `selection`      | 触发器方框（边框、背景、布局）              |
+| `icon`           | 下拉箭头图标                                |
+| `selection-item` | 显示选中项标签的元素                        |
+| `search`         | 内联搜索输入框（`showSearch` 时可见）       |
 | `label`          | 字段上方的静态标题（设置了 `label` 时存在） |
 
 ## 最佳实践

@@ -71,34 +71,34 @@ description: '液态磨砂玻璃表面——backdrop 模糊、SVG 液态光线�
 
 ### 属性
 
-| 属性          | 类型      | 默认值  | 说明                                                             |
-| ------------- | --------- | ------- | ---------------------------------------------------------------- |
-| `blur`        | `number`  | `16`    | 背景模糊半径（px），即磨砂程度。                                 |
-| `saturate`    | `number`  | `180`   | 背景饱和度百分比，提升玻璃后内容的色彩（vibrancy）。             |
-| `displace`    | `number`  | `8`     | 液态折射强度（SVG 位移 scale）。`0` 为纯磨砂平面，越大越"波浪"。 |
-| `frequency`   | `number`  | `0.005` | 湍流基频，越小则涟漪越大越平滑。                                 |
-| `radius`      | `number`  | `20`    | 圆角半径（px）。                                                 |
-| `tint`        | `string`  | 淡白    | 玻璃填充色，任意 CSS 背景值。                                    |
-| `sheen`       | `boolean` | `false` | 表面流动的镜面高光动画。                                         |
-| `interactive` | `boolean` | `false` | hover 抬升 + 按下回弹反馈，用于可点击的玻璃。同时让 host 变成可键盘操作的按钮——`role="button"`、可 tab 到、Enter/Space 等同点击。 |
+| 属性          | 类型      | 默认值  | 说明                                                                                                                                              |
+| ------------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `blur`        | `number`  | `16`    | 背景模糊半径（px），即磨砂程度。                                                                                                                  |
+| `saturate`    | `number`  | `180`   | 背景饱和度百分比，提升玻璃后内容的色彩（vibrancy）。                                                                                              |
+| `displace`    | `number`  | `8`     | 液态折射强度（SVG 位移 scale）。`0` 为纯磨砂平面，越大越"波浪"。                                                                                  |
+| `frequency`   | `number`  | `0.005` | 湍流基频，越小则涟漪越大越平滑。                                                                                                                  |
+| `radius`      | `number`  | `20`    | 圆角半径（px）。                                                                                                                                  |
+| `tint`        | `string`  | 淡白    | 玻璃填充色，任意 CSS 背景值。                                                                                                                     |
+| `sheen`       | `boolean` | `false` | 表面流动的镜面高光动画。                                                                                                                          |
+| `interactive` | `boolean` | `false` | hover 抬升 + 按下回弹反馈，用于可点击的玻璃。同时让 host 变成可键盘操作的按钮——`role="button"`、可 tab 到、Enter/Space 等同点击。                 |
 | `rim`         | `boolean` | `false` | 可选开启的镜面边缘 + 色散描边，观感更"有光"。优先 WebGL（始终同步可用），后台悄悄升级到 WebGPU（若可用）。两者都不可用时降级为普通 CSS 镜面渐变。 |
 
 ### CSS parts 与 token
 
 用 `::part(glass)`、`::part(specular)`、以及（开启 `rim` 时的）`::part(rim)` 或覆盖 `--ran-glass-*` 自定义属性来定制内部：
 
-| Token                          | 作用                  |
-| ------------------------------ | --------------------- |
-| `--ran-glass-blur`             | 背景模糊半径。        |
-| `--ran-glass-saturate`         | 背景饱和度。          |
-| `--ran-glass-radius`           | 圆角半径。            |
-| `--ran-glass-tint`             | 填充背景。            |
-| `--ran-glass-border`           | 亮边。                |
-| `--ran-glass-shadow`           | 阴影（高光 + 景深）。 |
-| `--ran-glass-specular-background` | 镜面高光背景。        |
-| `--ran-glass-specular-opacity` | 镜面高光强度。        |
+| Token                                         | 作用                               |
+| --------------------------------------------- | ---------------------------------- |
+| `--ran-glass-blur`                            | 背景模糊半径。                     |
+| `--ran-glass-saturate`                        | 背景饱和度。                       |
+| `--ran-glass-radius`                          | 圆角半径。                         |
+| `--ran-glass-tint`                            | 填充背景。                         |
+| `--ran-glass-border`                          | 亮边。                             |
+| `--ran-glass-shadow`                          | 阴影（高光 + 景深）。              |
+| `--ran-glass-specular-background`             | 镜面高光背景。                     |
+| `--ran-glass-specular-opacity`                | 镜面高光强度。                     |
 | `--ran-glass-reduced-transparency-background` | 系统"降低透明度"开启时的兜底背景。 |
-| `--ran-glass-reduced-transparency-shadow` | 同一状态下的兜底阴影。 |
+| `--ran-glass-reduced-transparency-shadow`     | 同一状态下的兜底阴影。             |
 
 ## 说明
 

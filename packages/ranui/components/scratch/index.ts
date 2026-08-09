@@ -47,7 +47,11 @@ class ScratchTicket extends RanElement {
         .build() as HTMLCanvasElement;
       // Default slot: whatever the consumer puts under <r-scratch> is the reveal
       // content, projected here so it renders underneath the scratch cover.
-      const scratchAward = Div().class('ran-scratch-ticket-award').part('award').children(Slot()).build() as HTMLDivElement;
+      const scratchAward = Div()
+        .class('ran-scratch-ticket-award')
+        .part('award')
+        .children(Slot())
+        .build() as HTMLDivElement;
       return Div().class('ran-scratch-ticket').children(scratchTicket, scratchAward).build() as HTMLDivElement;
     });
     const scratchAward = scratchTicketContainer.querySelector('.ran-scratch-ticket-award') as HTMLDivElement;

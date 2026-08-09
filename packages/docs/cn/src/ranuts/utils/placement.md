@@ -29,22 +29,22 @@ panel.style.left = `${left + window.scrollX}px`;
 
 #### Parameters
 
-| 参数                | 说明                                                             | 类型                                      | 默认值           |
-| ------------------- | ---------------------------------------------------------------- | ----------------------------------------- | ---------------- |
-| `options.anchor`    | 锚点（触发器）矩形，视口坐标（例如 `getBoundingClientRect()`）    | `{ top, left, width, height }`            | 无                |
-| `options.floating`  | 浮层面板自身尺寸                                                  | `{ width, height }`                       | 无                |
-| `options.placement` | 首选方向；当该方向空间不足、且对侧空间更充足时会翻转到对侧        | `'top' \| 'bottom' \| 'left' \| 'right'`  | 无                |
-| `options.offset`    | 锚点与浮层之间保留的间距（px）                                    | `number`                                  | `0`               |
-| `options.boundary`  | 面板必须停留其内的区域，视口坐标                                  | `{ top, left, width, height }`            | 窗口视口          |
-| `options.padding`   | 平移时面板与边界之间保留的最小间距（px）                          | `number`                                  | `8`               |
+| 参数                | 说明                                                           | 类型                                     | 默认值   |
+| ------------------- | -------------------------------------------------------------- | ---------------------------------------- | -------- |
+| `options.anchor`    | 锚点（触发器）矩形，视口坐标（例如 `getBoundingClientRect()`） | `{ top, left, width, height }`           | 无       |
+| `options.floating`  | 浮层面板自身尺寸                                               | `{ width, height }`                      | 无       |
+| `options.placement` | 首选方向；当该方向空间不足、且对侧空间更充足时会翻转到对侧     | `'top' \| 'bottom' \| 'left' \| 'right'` | 无       |
+| `options.offset`    | 锚点与浮层之间保留的间距（px）                                 | `number`                                 | `0`      |
+| `options.boundary`  | 面板必须停留其内的区域，视口坐标                               | `{ top, left, width, height }`           | 窗口视口 |
+| `options.padding`   | 平移时面板与边界之间保留的最小间距（px）                       | `number`                                 | `8`      |
 
 #### Return
 
-| 参数        | 说明                              | 类型                                      |
-| ----------- | --------------------------------- | ----------------------------------------- |
-| `top`       | 计算出的 `top`，坐标空间与 `anchor` 相同 | `number`                             |
-| `left`      | 计算出的 `left`，坐标空间与 `anchor` 相同 | `number`                            |
-| `placement` | 翻转后实际使用的方向               | `'top' \| 'bottom' \| 'left' \| 'right'` |
+| 参数        | 说明                                      | 类型                                     |
+| ----------- | ----------------------------------------- | ---------------------------------------- |
+| `top`       | 计算出的 `top`，坐标空间与 `anchor` 相同  | `number`                                 |
+| `left`      | 计算出的 `left`，坐标空间与 `anchor` 相同 | `number`                                 |
+| `placement` | 翻转后实际使用的方向                      | `'top' \| 'bottom' \| 'left' \| 'right'` |
 
 ## 注意事项
 

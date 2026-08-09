@@ -695,21 +695,13 @@ describe('r-select contract', () => {
     (select as any)._internals.setValidity = setValidity;
 
     select.required = 'true';
-    expect(setValidity).toHaveBeenLastCalledWith(
-      { valueMissing: true },
-      expect.any(String),
-      select,
-    );
+    expect(setValidity).toHaveBeenLastCalledWith({ valueMissing: true }, expect.any(String), select);
 
     select.value = '1';
     expect(setValidity).toHaveBeenLastCalledWith({});
 
     select.value = '';
-    expect(setValidity).toHaveBeenLastCalledWith(
-      { valueMissing: true },
-      expect.any(String),
-      select,
-    );
+    expect(setValidity).toHaveBeenLastCalledWith({ valueMissing: true }, expect.any(String), select);
 
     select.disabled = true;
     expect(setValidity).toHaveBeenLastCalledWith({});

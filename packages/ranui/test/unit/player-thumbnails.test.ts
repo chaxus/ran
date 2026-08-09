@@ -104,10 +104,7 @@ describe('core/thumbnails loadThumbnailCues', () => {
   });
 
   it('fetches and parses the manifest on success', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({ ok: true, text: () => Promise.resolve(SAMPLE_VTT) }),
-    );
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, text: () => Promise.resolve(SAMPLE_VTT) }));
     const cues = await loadThumbnailCues('https://cdn.example.com/video/thumbs.vtt');
     expect(cues).toHaveLength(3);
   });
@@ -138,7 +135,15 @@ describe('core/thumbnails applyThumbnailPreview', () => {
 
   it('sizes and crops the background image to the cue rect', () => {
     const el = document.createElement('div');
-    applyThumbnailPreview(el, { start: 0, end: 5, url: 'https://cdn.example.com/sprite.jpg', x: 20, y: 40, w: 160, h: 90 });
+    applyThumbnailPreview(el, {
+      start: 0,
+      end: 5,
+      url: 'https://cdn.example.com/sprite.jpg',
+      x: 20,
+      y: 40,
+      w: 160,
+      h: 90,
+    });
     expect(el.style.display).toBe('block');
     expect(el.style.width).toBe('160px');
     expect(el.style.height).toBe('90px');
