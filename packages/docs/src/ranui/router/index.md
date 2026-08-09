@@ -112,6 +112,7 @@ Shows its slotted content when the current path matches `path`; hides it otherwi
 | --------- | --------- | ------- | ------------------------------------------------------------- |
 | `path`    | `string`  | `'/'`   | Pattern to match. Supports `:param` segments and `*` wildcard |
 | `exact`   | `boolean` | `false` | Require an exact match (no prefix matching)                   |
+| `src`     | `string`  | `''`    | Module specifier for lazy, code-split, mount/unmount page rendering |
 | `sheet`   | `string`  | `''`    | CSS injected into the shadow DOM                              |
 
 #### Events
