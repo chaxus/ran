@@ -1,4 +1,5 @@
 import { createDoubleTapDetector } from 'ranuts/utils';
+import { createFlashController } from './flash';
 
 /**
  * Mobile gestures — double-tap left/right half to seek ∓10s, vertical swipe
@@ -61,7 +62,7 @@ export function attachGestureHandlers(
   let startVolume = 0;
   let isSwiping = false;
   let pendingSingleTapTimer: ReturnType<typeof setTimeout> | undefined;
-  let flashTimer: ReturnType<typeof setTimeout> | undefined;
+  const flash = createFlashController(refs.gestureFlash, FLASH_VISIBLE_MS);
   const doubleTapDetector = createDoubleTapDetector({
     windowMs: DOUBLE_TAP_WINDOW_MS,
     maxDistancePx: DOUBLE_TAP_MAX_DISTANCE_PX,
@@ -79,15 +80,10 @@ export function attachGestureHandlers(
   };
 
   const showSeekFlash = (direction: GestureSeekDirection): void => {
-    refs.gestureFlash.textContent = direction === 'forward' ? `+${SEEK_SECONDS}s` : `-${SEEK_SECONDS}s`;
-    refs.gestureFlash.classList.toggle('ran-player-gesture-flash-right', direction === 'forward');
-    refs.gestureFlash.classList.toggle('ran-player-gesture-flash-left', direction === 'backward');
-    refs.gestureFlash.classList.add('ran-player-gesture-flash-visible');
-    if (flashTimer !== undefined) clearTimeout(flashTimer);
-    flashTimer = setTimeout(() => {
-      refs.gestureFlash.classList.remove('ran-player-gesture-flash-visible');
-      flashTimer = undefined;
-    }, FLASH_VISIBLE_MS);
+    flash.show(
+      direction === 'forward' ? `+${SEEK_SECONDS}s` : `-${SEEK_SECONDS}s`,
+      direction === 'forward' ? 'ran-player-gesture-flash-right' : 'ran-player-gesture-flash-left',
+    );
   };
 
   const seek = (direction: GestureSeekDirection): void => {
@@ -158,7 +154,7 @@ export function attachGestureHandlers(
   return {
     destroy: (): void => {
       clearPendingSingleTap();
-      if (flashTimer !== undefined) clearTimeout(flashTimer);
+      flash.destroy();
       abortController.abort();
     },
   };

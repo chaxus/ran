@@ -366,6 +366,14 @@
       transform: translate(-50%, -50%);
     }
 
+    // Used for a general, non-directional notice (e.g. "no cast device
+    // found" — `core/chrome.ts`'s `showRemotePlaybackPicker`), as opposed to
+    // `-left`/`-right`'s seek-direction anchoring.
+    &-center {
+      left: var(--ran-player-gesture-flash-center, 50%);
+      transform: translate(-50%, -50%);
+    }
+
     &-visible {
       opacity: 1;
     }
@@ -749,7 +757,7 @@
           // encapsulation, since the custom element host itself (not
           // something inside its shadow root) is the actual focus target.
           // `@width` and `&-select`'s own `width` below are kept in sync
-          // (both 50px, not this row's `--ran-size-6`/30px scale step) —
+          // (both 36px, not this row's `--ran-size-6`/30px scale step) —
           // they used to disagree (wrapper 30px vs. the inner select's own
           // 46px), and since the select has `flex-shrink: 0`, it simply
           // overflowed the narrower wrapper rather than being clipped or
@@ -760,10 +768,16 @@
           // dropdown panel above it (still deliberately wider — see the
           // panel's own `min-width` override further up — so the longest
           // option label, e.g. clarity's "1080", never clips).
+          //
+          // 36px (was 50px) — the pill only ever holds a 2-4 char value
+          // ("Auto", "1.5X"), so the old width read as a wide empty button
+          // next to its tightly-hugging icon-control neighbors (pip/cast/
+          // fullscreen). Matches YouTube/Vimeo-style compact speed/quality
+          // chips: the box hugs the label, not a fixed generic control size.
           .player-pill-control(
-            @width: var(--ran-player-speed-width, 50px);
+            @width: var(--ran-player-speed-width, 36px);
             @height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
-            @padding: var(--ran-player-speed-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
+            @padding: var(--ran-player-speed-padding, var(--ran-space-1, 4px) var(--ran-space-1, 4px));
             @radius: var(--ran-player-speed-border-radius, var(--ran-radius-sm, 6px));
             @color: var(--ran-player-speed-color, #fff);
             @font-family: var(--ran-player-speed-font-family, PingFang SC);
@@ -790,10 +804,10 @@
             // hover-pill padding), squashing "1.5X"/"0.8X" and — since the
             // open dropdown panel positions itself off *this* element's rect
             // — throwing the panel off-center too. Its width now matches
-            // `&-speed`'s own `@width` above (both 50px) rather than
+            // `&-speed`'s own `@width` above (both 36px) rather than
             // overflowing a narrower wrapper.
             flex-shrink: 0;
-            width: var(--ran-player-speed-select-width, 50px);
+            width: var(--ran-player-speed-select-width, 36px);
             height: var(--ran-player-speed-select-height, var(--ran-size-3, 20px));
             // `r-select`'s own `.selection` (the shadow-internal box the label
             // text actually sits in) defaults `min-height` to 32px — sized for
@@ -851,7 +865,10 @@
         }
 
         &-subtitle {
-          // See the identical comment on `&-speed`'s `@width` above — kept in
+          // Deliberately NOT narrowed to 36px like `&-speed`/`&-clarity` below —
+          // subtitle track labels are consumer-supplied (`track.label`, e.g.
+          // "English", "简体中文") and unbounded in length, unlike the fixed
+          // 2-4 char "Auto"/"1.5X" vocabulary those two always show. Kept in
           // sync with the `r-select`'s own `width` below (both 50px).
           .player-pill-control(
             @width: var(--ran-player-subtitle-width, 50px);
@@ -935,11 +952,13 @@
 
         &-clarity {
           // See the identical comment on `&-speed`'s `@width` above — kept in
-          // sync with the `r-select`'s own `width` below (both 50px).
+          // sync with the `r-select`'s own `width` below (both 40px, 4px
+          // wider than speed's 36px: quality labels top out at "1080p", one
+          // character longer than speed's longest "2.0X"/"1.0X").
           .player-pill-control(
-            @width: var(--ran-player-clarity-width, 50px);
+            @width: var(--ran-player-clarity-width, 40px);
             @height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
-            @padding: var(--ran-player-clarity-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
+            @padding: var(--ran-player-clarity-padding, var(--ran-space-1, 4px) var(--ran-space-1, 4px));
             @radius: var(--ran-player-clarity-border-radius, var(--ran-radius-sm, 6px));
             @color: var(--ran-player-clarity-color, #fff);
             @font-family: var(--ran-player-clarity-font-family, PingFang SC);
@@ -963,7 +982,7 @@
             // See the identical comments on `&-speed`'s `r-select` above
             // (`flex-shrink`, matched `width`, and `--ran-select-min-height`).
             flex-shrink: 0;
-            width: var(--ran-player-clarity-select-width, 50px);
+            width: var(--ran-player-clarity-select-width, 40px);
             height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
             --ran-select-min-height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
             outline: 0;

@@ -313,6 +313,7 @@ export class RanPlayer extends RanElement {
       playControllerBottomVolume: this._playControllerBottomVolume,
       playControllerBottomPip: this._playControllerBottomPip,
       playControllerBottomRemote: this._playControllerBottomRemote,
+      gestureFlash: this._gestureFlash,
     },
     state: this._runtimeState,
     ctx: this.ctx,

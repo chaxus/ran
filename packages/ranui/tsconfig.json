@@ -9,6 +9,7 @@
     "resolveJsonModule": true,
     "target": "ESNext",
     "declaration": true,
+    "emitDeclarationOnly": true,
     "outDir": "dist",
     "types": ["./typings.d.ts"],
     "forceConsistentCasingInFileNames": true,

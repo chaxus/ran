@@ -77,6 +77,7 @@ export function createClarityHandlers<TLevel extends EngineQualityLevel = Engine
       .attr('placement', 'top')
       .attr('dropdownclass', 'video-clarity-dropdown')
       .aria('label', 'Video quality')
+      .attr('title', 'Video quality')
       .children(Fragment as unknown as HTMLElement)
       .build() as HTMLElement;
 

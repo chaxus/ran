@@ -96,6 +96,33 @@ describe('r-player cast/AirPlay button', () => {
     expect(prompt).toHaveBeenCalledTimes(1);
   });
 
+  it('flashes a visible notice and emits a change event when the picker rejects (no receiver found etc.)', async () => {
+    vi.useFakeTimers();
+    try {
+      const player = makePlayer();
+      const prompt = vi.fn().mockRejectedValue(new Error('NotFoundError'));
+      (player._video as unknown as { remote: { prompt: () => Promise<void> } }).remote = { prompt };
+      const onChange = vi.fn();
+      player.addEventListener('change', onChange);
+
+      player._playControllerBottomRemote.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      // Let the rejected promise's `.catch` microtask run under fake timers.
+      await vi.advanceTimersByTimeAsync(0);
+
+      expect(onChange).toHaveBeenCalledWith(
+        expect.objectContaining({ detail: expect.objectContaining({ type: 'remoteplaybackerror' }) }),
+      );
+      expect(player._gestureFlash.textContent).toBe('No cast device found');
+      expect(player._gestureFlash.classList.contains('ran-player-gesture-flash-visible')).toBe(true);
+      expect(player._gestureFlash.classList.contains('ran-player-gesture-flash-center')).toBe(true);
+
+      await vi.advanceTimersByTimeAsync(1800);
+      expect(player._gestureFlash.classList.contains('ran-player-gesture-flash-visible')).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('shows the button after a real connect in a supporting browser — no manual re-sync', () => {
     // Regression test: connectedCallback() used to call syncRemoteButtonVisibility()
     // before updatePlayer() had created `_video`, so isRemotePlaybackSupported(undefined)

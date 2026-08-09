@@ -69,6 +69,7 @@ export function createSubtitleHandlers(deps: PlayerSubtitleDeps): PlayerSubtitle
       .attr('placement', 'top')
       .attr('dropdownclass', 'video-subtitle-dropdown')
       .aria('label', 'Subtitles')
+      .attr('title', 'Subtitles')
       .children(Fragment as unknown as HTMLElement)
       .build() as HTMLElement;
 

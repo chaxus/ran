@@ -1,6 +1,7 @@
 import { addClassToElement, range, removeClassToElement } from 'ranuts/utils';
 import { isActivationKey } from '@/utils/a11y';
 import { PLAY_STATE_LIST } from './constants';
+import { createFlashController } from './flash';
 import { exitDocumentFullscreen, requestElementFullscreen } from './fullscreen';
 import { shouldResumePlayback } from './playback';
 import type { PlaybackSnapshot } from './playback';
@@ -9,6 +10,8 @@ import { isRemotePlaybackSupported, requestRemotePlayback } from './remote-playb
 import { maybeSaveResumePosition } from './resume';
 import type { PlayerContextState, PlayerRuntimeState } from './state';
 
+const REMOTE_PLAYBACK_FLASH_MS = 1800;
+
 export interface PlayerChromeRefs {
   player: HTMLDivElement;
   playerBtn: HTMLDivElement;
@@ -16,6 +19,7 @@ export interface PlayerChromeRefs {
   playControllerBottomVolume: HTMLDivElement;
   playControllerBottomPip: HTMLDivElement;
   playControllerBottomRemote: HTMLDivElement;
+  gestureFlash: HTMLElement;
 }
 
 export type PlayerChromeRuntimeState = Pick<
@@ -84,6 +88,7 @@ export interface PlayerChromeHandlers {
  */
 export function createChromeHandlers(deps: PlayerChromeDeps): PlayerChromeHandlers {
   const { refs, state, ctx } = deps;
+  const remoteFlash = createFlashController(refs.gestureFlash, REMOTE_PLAYBACK_FLASH_MS);
 
   const setLoadingState = (loading: boolean): void => {
     if (state.isBuffering === loading) return;
@@ -335,6 +340,14 @@ export function createChromeHandlers(deps: PlayerChromeDeps): PlayerChromeHandle
       if (!video) return;
       requestRemotePlayback(video).catch((error) => {
         if (deps.isDebug()) console.warn(`request remote playback error:${error}`);
+        // The click itself worked — the browser's own cast/AirPlay picker
+        // rejected (most commonly: no receiver reachable on the network).
+        // Previously this was swallowed silently, which reads as "the
+        // button did nothing" with zero indication why. `change()` lets a
+        // consumer build custom UI around it; the flash gives every player
+        // a default, non-blocking one without requiring a listener.
+        deps.change('remoteplaybackerror', { message: 'No cast device found' });
+        remoteFlash.show('No cast device found', 'ran-player-gesture-flash-center');
       });
     },
     /**

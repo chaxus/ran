@@ -3,13 +3,17 @@ import { Div, View } from '@/utils/builder';
 import type { ElementBuilder } from '@/utils/builder';
 
 /** A keyboard-focusable, labeled control — the play/fullscreen buttons and the
- * seek slider all need the same tabIndex + role + aria-label triple. */
+ * seek slider all need the same tabIndex + role + aria-label triple. `title`
+ * rides along with `aria-label` (same pattern as `r-mermaid`'s `iconButton`)
+ * so a mouse user hovering an icon-only control — pip, cast, fullscreen —
+ * gets the native browser tooltip explaining what it does, not just a
+ * screen-reader-only name. */
 function focusableRole<T extends HTMLElement>(
   builder: ElementBuilder<T>,
   role: string,
   label: string,
 ): ElementBuilder<T> {
-  return builder.tabIndex(0).role(role).aria('label', label);
+  return builder.tabIndex(0).role(role).aria('label', label).attr('title', label);
 }
 
 /**
@@ -156,6 +160,7 @@ export function ensurePlayerView(input: {
       .attr('getPopupContainerId', playerIdentifier)
       .attr('dropdownclass', 'video-speed-dropdown')
       .aria('label', 'Playback speed')
+      .attr('title', 'Playback speed')
       .children(...speedOptions.map((item) => View('r-option').attr('value', `${item.value}`).text(item.label).build()))
       .build() as HTMLElement;
     playControllerBottomSpeedPopover.addEventListener('change', onSpeedChange);
@@ -175,6 +180,7 @@ export function ensurePlayerView(input: {
       .build() as Progress;
     const playControllerBottomVolume = Div()
       .class('ran-player-controller-bottom-right-volume')
+      .attr('title', 'Volume')
       .children(playControllerBottomVolumeIcon, playControllerBottomVolumeProgress)
       .build() as HTMLDivElement;
 
