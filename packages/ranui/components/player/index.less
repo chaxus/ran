@@ -685,6 +685,15 @@
             flex-shrink: 0;
             width: var(--ran-player-speed-select-width, 46px);
             height: var(--ran-player-speed-select-height, var(--ran-size-3, 20px));
+            // `r-select`'s own `.selection` (the shadow-internal box the label
+            // text actually sits in) defaults `min-height` to 32px — sized for
+            // a normal standalone select, not this compact 20px-tall inline
+            // control. Since `min-height` always wins over the (correctly
+            // 20px) `height: 100%` it inherits, the text ended up vertically
+            // centered in a 32px box invisibly taller than the visible pill,
+            // reading as pushed toward the bottom. Match it to this select's
+            // own height so the internal box and the visible pill agree.
+            --ran-select-min-height: var(--ran-player-speed-select-height, var(--ran-size-3, 20px));
             outline: 0;
             -webkit-tap-highlight-color: transparent;
 
@@ -765,10 +774,12 @@
           }
 
           r-select {
-            // See the identical comment on `&-speed`'s `r-select` above.
+            // See the identical comments on `&-speed`'s `r-select` above
+            // (`flex-shrink` and `--ran-select-min-height` both).
             flex-shrink: 0;
             width: var(--ran-player-subtitle-select-width, 46px);
             height: var(--ran-player-subtitle-select-height, var(--ran-size-3, 20px));
+            --ran-select-min-height: var(--ran-player-subtitle-select-height, var(--ran-size-3, 20px));
             outline: 0;
             -webkit-tap-highlight-color: transparent;
 
@@ -838,10 +849,12 @@
           }
 
           r-select {
-            // See the identical comment on `&-speed`'s `r-select` above.
+            // See the identical comments on `&-speed`'s `r-select` above
+            // (`flex-shrink` and `--ran-select-min-height` both).
             flex-shrink: 0;
             width: var(--ran-player-clarity-select-width, 46px);
             height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
+            --ran-select-min-height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
             outline: 0;
             -webkit-tap-highlight-color: transparent;
 

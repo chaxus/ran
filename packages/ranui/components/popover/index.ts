@@ -156,6 +156,7 @@ export class Popover extends RanElement {
       this.popoverContent?.addEventListener('click', this.stopPropagation);
 
       const div = Div().children(this.popoverContent).build() as HTMLDivElement;
+      this.popoverInner = div;
 
       if (this.trigger.includes('hover') && !isMobile()) {
         this.popoverContent?.addEventListener('mouseleave', this.blur);
@@ -445,6 +446,27 @@ export class Popover extends RanElement {
   }
   disconnectedCallback(): void {
     this._events.abort();
+    // popoverContent/popoverInner are portaled to document.body (or
+    // getPopupContainerId) — outside this.subtree, so removing the host from
+    // the DOM (an SPA route swap, a v-if/conditional unmount, …) never
+    // removes them on its own. Left behind, an open panel stays visible
+    // forever and — since every listener that could close it lived on
+    // `_events` and was just aborted above — nothing can close it either.
+    // Cancel in-flight open/close debounces first so a pending timeout can't
+    // fire after teardown and resurrect the (about to be detached) panel.
+    this.setDropdownDisplayBlock.cancel();
+    this.setDropdownDisplayNone.cancel();
+    this.blur.cancel();
+    this.removeDropDownTimeId.cancel();
+    clearTimeout(this.dropDownInTimeId);
+    this.dropDownInTimeId = undefined;
+    clearTimeout(this.dropDownOutTimeId);
+    this.dropDownOutTimeId = undefined;
+    clearTimeout(this.removeTimeId);
+    this.removeTimeId = undefined;
+    this.popoverInner?.remove();
+    this.popoverInner = undefined;
+    this.popoverContent = undefined;
   }
   attributeChangedCallback(n: string, o: string, v: string): void {
     if (o === v) return;
