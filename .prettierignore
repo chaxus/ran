@@ -15,9 +15,10 @@ test-results/
 playwright-report/
 coverage/
 
-# Generated API reference (`pnpm -F ranuts doc:api`), emitted to two places. Prettier
+# Generated API reference (`pnpm -F ranuts doc:api`), emitted to three places. Prettier
 # actively corrupts it: the illustrative snippet `import { /* … */ } from 'ranuts/utils'`
 # gets reformatted to `import {} from /* … */ 'ranuts/utils'`, moving the placeholder
 # comment outside the braces. Regenerating is the only source of truth here.
 packages/ranuts/docs/API.md
 packages/docs/src/ranuts/api.md
+packages/docs/cn/src/ranuts/api.md

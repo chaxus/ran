@@ -22,6 +22,12 @@ const OUTPUT_FILE = path.join(ROOT, 'docs', 'API.md');
 // the full exported surface a real URL — so it lands in the sitemap, and in `llms-full.txt`
 // (which concatenates the site's markdown), instead of only existing inside the npm tarball.
 const SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'src', 'ranuts', 'api.md');
+// Third output: the Chinese docs-site page. `cn/src/` is a manual 1:1 mirror of `src/`
+// (see packages/docs/CLAUDE.md), and this was the one page missing from it. The page
+// chrome (headings, intro, counts) is Chinese; the per-symbol descriptions stay English
+// because they are extracted verbatim from source JSDoc, which is written in English
+// by convention.
+const CN_SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'cn', 'src', 'ranuts', 'api.md');
 const TSCONFIG = path.join(ROOT, 'tsconfig.json');
 const REPO_BLOB = 'https://github.com/chaxus/ran/blob/main/packages/ranuts';
 const DOCS_ROOT = path.join(ROOT, '..', 'docs');
@@ -34,6 +40,7 @@ interface Entry {
   subpath: string;
   file: string;
   blurb: string;
+  blurbCn: string;
   runtime: string;
 }
 
@@ -44,33 +51,44 @@ const ENTRIES: Entry[] = [
     subpath: 'ranuts/utils',
     file: 'src/utils/index.ts',
     blurb: 'Browser and general-purpose utilities',
+    blurbCn: '浏览器与通用工具函数',
     runtime: 'browser + node',
   },
   {
     subpath: 'ranuts/sw',
     file: 'src/sw/index.ts',
     blurb: 'Service Worker caching strategies and the precache protocol',
+    blurbCn: 'Service Worker 缓存策略与预缓存协议',
     runtime: 'service worker only',
   },
   {
     subpath: 'ranuts/node',
     file: 'src/node/index.ts',
     blurb: 'Node server utilities (fs / http / ws / middleware)',
+    blurbCn: 'Node 服务端工具（fs / http / ws / 中间件）',
     runtime: 'node only',
   },
   {
     subpath: 'ranuts/visual',
     file: 'src/utils/visual/index.ts',
     blurb: '2D rendering engine (Canvas / WebGL / WebGPU)',
+    blurbCn: '2D 渲染引擎（Canvas / WebGL / WebGPU）',
     runtime: 'browser only',
   },
   {
     subpath: 'ranuts/i18n',
     file: 'src/utils/i18n.ts',
     blurb: 'Framework-agnostic i18n engine (also re-exported from ranuts/utils)',
+    blurbCn: '框架无关的 i18n 引擎（也从 ranuts/utils 再导出）',
     runtime: 'browser + node',
   },
-  { subpath: 'ranuts/vnode', file: 'src/vnode/index.ts', blurb: 'Snabbdom-style virtual DOM', runtime: 'browser' },
+  {
+    subpath: 'ranuts/vnode',
+    file: 'src/vnode/index.ts',
+    blurb: 'Snabbdom-style virtual DOM',
+    blurbCn: 'Snabbdom 风格的虚拟 DOM',
+    runtime: 'browser',
+  },
 ];
 
 type Kind = 'function' | 'class' | 'interface' | 'type' | 'enum' | 'const' | 'namespace' | 'other';
@@ -93,6 +111,26 @@ const KIND_TITLES: Record<Kind, string> = {
   const: 'Constants',
   namespace: 'Namespaces',
   other: 'Other',
+};
+
+const KIND_TITLES_CN: Record<Kind, string> = {
+  function: '函数',
+  class: '类',
+  interface: '接口',
+  type: '类型',
+  enum: '枚举',
+  const: '常量',
+  namespace: '命名空间',
+  other: '其他',
+};
+
+// The `runtime` strings also appear in prose on the CN page.
+const RUNTIME_CN: Record<string, string> = {
+  'browser + node': '浏览器 + node',
+  'service worker only': '仅 service worker',
+  'node only': '仅 node',
+  'browser only': '仅浏览器',
+  browser: '浏览器',
 };
 
 const KIND_ORDER: Kind[] = ['function', 'class', 'interface', 'type', 'enum', 'const', 'namespace', 'other'];
@@ -325,8 +363,10 @@ async function main(): Promise<void> {
 
     let total = 0;
     const tocLines: string[] = ['## Entry points', ''];
+    const tocLinesCn: string[] = ['## 入口点', ''];
 
     const sections: string[] = [];
+    const sectionsCn: string[] = [];
     for (const entry of ENTRIES) {
       const sourceFile = program.getSourceFile(path.join(ROOT, entry.file));
       if (!sourceFile) {
@@ -346,16 +386,9 @@ async function main(): Promise<void> {
       tocLines.push(
         `- [\`${entry.subpath}\`](#${anchor}) — ${entry.blurb} · _${entry.runtime}_ · ${symbols.length} exports`,
       );
-
-      const sec: string[] = [];
-      sec.push(`## \`${entry.subpath}\``);
-      sec.push('');
-      sec.push(`${entry.blurb} · runtime: **${entry.runtime}** · source: \`${entry.file}\``);
-      sec.push('');
-      sec.push('```ts');
-      sec.push(`import { /* … */ } from '${entry.subpath}';`);
-      sec.push('```');
-      sec.push('');
+      tocLinesCn.push(
+        `- [\`${entry.subpath}\`](#${anchor}) — ${entry.blurbCn} · _${RUNTIME_CN[entry.runtime] ?? entry.runtime}_ · ${symbols.length} 个导出`,
+      );
 
       const byKind = new Map<Kind, ApiSymbol[]>();
       for (const s of symbols) {
@@ -363,22 +396,51 @@ async function main(): Promise<void> {
         arr.push(s);
         byKind.set(s.kind, arr);
       }
+
+      // The `## \`ranuts/…\`` section headings are identical in both languages, so the
+      // TOC anchors above resolve on either page.
+      const sec: string[] = [];
+      sec.push(`## \`${entry.subpath}\``);
+      sec.push('');
+      sec.push(`${entry.blurb} · runtime: **${entry.runtime}** · source: \`${entry.file}\``);
+      sec.push('');
+      const secCn: string[] = [];
+      secCn.push(`## \`${entry.subpath}\``);
+      secCn.push('');
+      secCn.push(
+        `${entry.blurbCn} · 运行环境：**${RUNTIME_CN[entry.runtime] ?? entry.runtime}** · 源码：\`${entry.file}\``,
+      );
+      secCn.push('');
+      for (const target of [sec, secCn]) {
+        target.push('```ts');
+        target.push(`import { /* … */ } from '${entry.subpath}';`);
+        target.push('```');
+        target.push('');
+      }
+
       for (const kind of KIND_ORDER) {
         const arr = byKind.get(kind);
         if (!arr || !arr.length) continue;
         sec.push(`### ${KIND_TITLES[kind]}`);
         sec.push('');
+        secCn.push(`### ${KIND_TITLES_CN[kind]}`);
+        secCn.push('');
         for (const s of arr) {
-          sec.push(`- \`${s.signature}\`${s.desc ? ` — ${s.desc}` : ''}`);
+          const line = `- \`${s.signature}\`${s.desc ? ` — ${s.desc}` : ''}`;
+          sec.push(line);
+          secCn.push(line);
         }
         sec.push('');
+        secCn.push('');
       }
       sections.push(sec.join('\n'));
+      sectionsCn.push(secCn.join('\n'));
     }
 
+    const generatedAt = new Date().toISOString();
     const header = [
       ...lines,
-      `**${total} exports** across ${ENTRIES.length} entry points. Generated at ${new Date().toISOString()}.`,
+      `**${total} exports** across ${ENTRIES.length} entry points. Generated at ${generatedAt}.`,
       '',
       ...tocLines,
       '',
@@ -402,6 +464,33 @@ async function main(): Promise<void> {
     ].join('\n');
     await fs.writeFile(SITE_OUTPUT_FILE, siteBody, 'utf8');
     console.log(`Generated: ${path.relative(ROOT, SITE_OUTPUT_FILE)}`);
+
+    // Chinese docs-site page — same data, Chinese page chrome. Per-symbol descriptions
+    // stay English (extracted verbatim from source JSDoc).
+    const cnBody = [
+      '---',
+      'title: ranuts API 参考',
+      `description: ranuts 导出的全部符号 — ${ENTRIES.length} 个入口点，共 ${total} 个导出，含签名与描述。`,
+      '---',
+      '',
+      '# ranuts API（自动生成）',
+      '',
+      '由 `bin/generate-api-docs.ts`（`npm run doc:api`）自动生成：按入口点列出每一个导出',
+      '符号的签名与一行描述。描述直接提取自源码 JSDoc，因此保持英文。使用指引（该从哪个',
+      `入口导入、运行环境约束、约定）请先阅读 [CLAUDE.md](${REPO_BLOB}/CLAUDE.md)。`,
+      '',
+      '请从符号所属的**子路径**导入，例如 `import { debounce } from',
+      "'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。",
+      '',
+      `**${total} 个导出**，共 ${ENTRIES.length} 个入口点。生成时间 ${generatedAt}。`,
+      '',
+      ...tocLinesCn,
+      '',
+      sectionsCn.join('\n'),
+      '',
+    ].join('\n');
+    await fs.writeFile(CN_SITE_OUTPUT_FILE, cnBody, 'utf8');
+    console.log(`Generated: ${path.relative(ROOT, CN_SITE_OUTPUT_FILE)}`);
 
     await checkDocsDrift();
   } finally {

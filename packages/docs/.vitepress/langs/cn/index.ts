@@ -75,7 +75,7 @@ const themeCnConfig: DefaultTheme.Config = {
       },
       {
         text: 'API 索引（全部 393 个导出）',
-        link: '/src/ranuts/api',
+        link: '/cn/src/ranuts/api',
       },
       {
         text: '工具函数',
