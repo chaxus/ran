@@ -255,12 +255,18 @@ system-font stack already present in `temml.css`.
 - **Raw Temml theme/trust options** (`errorColor`, `trust`, `colorIsTextColor`) as
   attributes if needed.
 
-### 3.3 Shared with r-mermaid
+### 3.3 Shared with r-mermaid (and r-markdown)
 
-Both are §1 renderers. **Don't** pre-extract a shared base for just two — but once a
-third arrives (`r-code` with shiki), factor the common bits (source resolution:
-attr-or-textContent; error-to-`::part(error)`+event; lazy-import guard) into a small
-`utils/renderer.ts` mixin/helper. Note the theme axis differs (mermaid re-renders via a
+Both are §1 renderers, and **`r-markdown`** (`components/markdown/`) is the third: it
+lazy-loads marked + DOMPurify + remend as one chunk (`render.ts`), shiki as another
+(`highlight.ts`, opt-in via `highlight`), and _composes_ the other two — closed
+` ```mermaid ` fences become `<r-mermaid>`, `$$…$$` / `\(…\)` become `<r-math>`,
+each registered on demand via `import('@/components/…')` from the render chunk. Its
+streaming model (remend → block split → per-block DOM diff) is described in the module
+headers of `blocks.ts` / `render.ts` / `index.ts`. With three renderers in place, factoring
+the common bits (source resolution: attr-or-textContent; error-to-`::part(error)`+event;
+lazy-import guard) into a small `utils/renderer.ts` helper is now the documented next
+refactor — not done yet, to keep the r-markdown change scoped. Note the theme axis differs (mermaid re-renders via a
 MutationObserver; math rides `currentColor` for free), so the theme step stays
 per-component. For now, keep them parallel and consistent by copying this checklist.
 

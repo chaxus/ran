@@ -109,6 +109,8 @@
   "card.icon": "图标",
   "card.colorpicker": "颜色选择器",
   "card.popover": "气泡卡片",
+  "card.markdown": "Markdown",
+  "markdown.stream": "模拟流式输出",
   "card.math": "公式",
   "card.player": "播放器",
   "sec.more": "浮层、媒体与工具",

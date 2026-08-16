@@ -408,6 +408,7 @@ const themeEnConfig: DefaultTheme.Config = {
           { text: 'Image', link: '/src/ranui/image/' },
           { text: 'Math', link: '/src/ranui/math/' },
           { text: 'Mermaid', link: '/src/ranui/mermaid/' },
+          { text: 'Markdown', link: '/src/ranui/markdown/' },
           { text: 'CheckBox', link: '/src/ranui/checkbox/' },
           { text: 'Tabs', link: '/src/ranui/tab/' },
           { text: 'Preview', link: '/src/ranui/preview/' },

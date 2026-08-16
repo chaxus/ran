@@ -161,6 +161,61 @@ const renderRadar = (): void => {
   if (radar) radar.abilitys = RADAR_DATA;
 };
 
+// ── Markdown: simulated token stream ──────────────────────────────────
+const MARKDOWN_SAMPLE = `# Streaming Markdown
+
+\`<r-markdown>\` renders **AI-style output** as it arrives: half-typed *emphasis*, \`inline code\`,
+[links](https://github.com/chaxus/ran) and lists are closed on the fly, and only the block that
+changed is re-rendered.
+
+## Code
+
+\`\`\`ts
+export const fib = (n: number): number => (n < 2 ? n : fib(n - 1) + fib(n - 2));
+console.log(fib(10));
+\`\`\`
+
+## Table
+
+| Feature | Status |
+| --- | --- |
+| Streaming | ✅ |
+| Mermaid / Math | ✅ |
+
+## Diagram
+
+\`\`\`mermaid
+graph LR; A[Prompt] --> B[Model]; B --> C[Tokens]; C --> D[r-markdown]
+\`\`\`
+
+## Math
+
+$$
+E = mc^2
+$$
+
+> Done — every renderer above is lazy-loaded on first use.
+`;
+
+const markdownEl = document.getElementById('demo-markdown') as (HTMLElement & { content: string }) | null;
+let streamTimer = 0;
+document.getElementById('markdown-stream')?.addEventListener('click', () => {
+  if (!markdownEl) return;
+  window.clearInterval(streamTimer);
+  let i = 0;
+  markdownEl.setAttribute('caret', '');
+  markdownEl.content = '';
+  streamTimer = window.setInterval(() => {
+    i = Math.min(MARKDOWN_SAMPLE.length, i + 3 + Math.floor(Math.random() * 6));
+    markdownEl.content = MARKDOWN_SAMPLE.slice(0, i);
+    if (i >= MARKDOWN_SAMPLE.length) {
+      window.clearInterval(streamTimer);
+      markdownEl.removeAttribute('caret');
+    }
+  }, 30);
+});
+if (markdownEl) markdownEl.content = MARKDOWN_SAMPLE;
+
 // ── Modal open / close wiring ─────────────────────────────────────────
 const modal = document.getElementById('demo-modal') as (HTMLElement & { open: boolean }) | null;
 document.getElementById('open-modal')?.addEventListener('click', () => {
