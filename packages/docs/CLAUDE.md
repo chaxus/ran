@@ -19,7 +19,7 @@ packages/docs/
 │   └── langs/{en,cn}/     # sidebar + nav per language
 ├── src/                   # English pages
 ├── cn/src/                # Chinese pages (same tree)
-├── public/                # copied verbatim: sw.js, llms.txt, robots.txt, _headers, fonts…
+├── public/                # copied verbatim: sw.js, llms.txt, robots.txt, _headers, _redirects, fonts…
 └── bin/build.sh           # vitepress build + llms-full.txt + Service Worker assembly
 ```
 

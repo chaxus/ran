@@ -115,7 +115,7 @@ pnpm --filter ranui build
 
 ## 📚 Documentation
 
-- **📖 Blog & Articles**: [Design Patterns & More](https://ran.chaxus.com/src/article/design_mode)
+- **📖 Blog & Articles**: [Web Document Preview](https://ran.chaxus.com/src/article/doc_preview)
 - **🎨 RanUI Documentation**: [UI Library Guide](https://ran.chaxus.com/src/ranui/)
 - **🛠️ RanUTS Documentation**: [Utility Library Guide](https://ran.chaxus.com/src/ranuts/)
 - **📝 Project Documentation**: [docs](packages/docs)

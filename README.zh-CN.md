@@ -115,7 +115,7 @@ pnpm --filter ranui build
 
 ## 📚 文档
 
-- **📖 博客和文章**: [设计模式等](https://ran.chaxus.com/src/article/design_mode)
+- **📖 博客和文章**: [Web 文档预览](https://ran.chaxus.com/cn/src/article/doc_preview)
 - **🎨 RanUI 文档**: [UI 库指南](https://ran.chaxus.com/cn/src/ranui/)
 - **🛠️ RanUTS 文档**: [工具函数库指南](https://ran.chaxus.com/cn/src/ranuts/)
 - **📝 项目文档**: [docs](packages/docs)
