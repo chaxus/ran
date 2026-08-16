@@ -1,4 +1,5 @@
 import path, { resolve } from 'node:path';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { BuildOptions, PluginOption, UserConfig } from 'vite';
@@ -32,20 +33,28 @@ const enableAnalyze = process.env.RANUI_ANALYZE === 'true';
 const FRAMEWORK_EXTERNAL = ['react', 'react-dom', 'vue'];
 
 /**
- * Additionally left unbundled in the **ES** build only.
+ * Every entry in `dependencies`, read from package.json so the two cannot drift.
  *
- * ranui otherwise inlines its dependencies so `dist/*.js` is self-contained, but shiki is
- * a different shape: its bundled-language map is ~600 dynamic imports, so inlining it
- * copies every grammar into ranui's own tarball (+21 MB) and pre-decides the chunking for
- * consumers who have a bundler of their own. Leaving the import bare hands that job back —
- * `import('shiki')` resolves from node_modules (shiki stays a regular `dependency`, so it
- * still auto-installs) and the consumer's bundler splits it.
+ * These are left **unbundled in the ES build**, which is what declaring them as
+ * dependencies was always supposed to mean. Inlining them instead made every consumer pay
+ * for each one twice: once as a copy inside `dist/`, and again as the npm install that
+ * copy shadowed and that nothing ever loaded — around 240 MB of node_modules (dashjs,
+ * mermaid, hls.js…) that no import could reach. Leaving the specifier bare also hands
+ * chunking back to the consumer's own bundler, which knows their target and can dedupe a
+ * library they already depend on. shiki made the cost visible (~600 grammar modules
+ * fanning out into ranui's tarball), but the problem was never shiki-specific.
  *
- * Deliberately not applied to the CJS/IIFE outputs: those exist to be dropped in via
- * `<script src>` with no resolver, so they must stay self-contained — they use
- * `singleFileResolve` to inline shiki's smaller web bundle instead.
+ * Deliberately **not** applied to the CJS/IIFE outputs: those exist to be dropped in via
+ * `<script src>` with no resolver, so they must stay self-contained. They use
+ * `singleFileResolve`, which additionally swaps shiki for its smaller web bundle.
  */
-const ES_EXTERNAL = ['shiki', 'shiki/engine/javascript'];
+const RUNTIME_DEPENDENCIES = Object.keys(
+  (createRequire(import.meta.url)('./package.json') as { dependencies?: Record<string, string> }).dependencies ?? {},
+);
+
+/** Matches a dependency and any of its subpaths (`ranuts/utils`, `shiki/engine/javascript`). */
+const isRuntimeDependency = (id: string): boolean =>
+  RUNTIME_DEPENDENCIES.some((dep) => id === dep || id.startsWith(`${dep}/`));
 
 const chunkOptimization: Partial<BuildOptions> = {
   chunkSizeWarningLimit: 500,
@@ -149,7 +158,7 @@ export const es: BuildOptions = {
   ...chunkOptimization,
   rollupOptions: {
     ...chunkOptimization.rollupOptions,
-    external: [...FRAMEWORK_EXTERNAL, ...ES_EXTERNAL],
+    external: (id: string): boolean => FRAMEWORK_EXTERNAL.includes(id) || isRuntimeDependency(id),
   },
   outDir: resolve(__dirname, 'dist'),
   lib: {

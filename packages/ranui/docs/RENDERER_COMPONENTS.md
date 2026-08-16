@@ -22,7 +22,11 @@ predates it and should be brought in line):
    auto-installs with ranui — no peerDependency gap; yarn classic never auto-installs
    peers) but is only ever reached via a **dynamic `import()` inside `render()`**. Result:
    apps that never use the component don't bundle the lib; it arrives as an async chunk on
-   first render. Verified for r-mermaid: `dist/mermaid.js` is a 91-byte stub, the lib is a
+   first render. Since 2026-08-16 the ES build also leaves the specifier **bare**
+   (`RUNTIME_DEPENDENCIES` in `vite.config.ts` externalizes everything in `dependencies`),
+   so the lib is resolved from the consumer's `node_modules` and chunked by their bundler
+   rather than copied into ranui's own `dist/`. The CJS/IIFE outputs still inline it —
+   they are dropped in via `<script src>` with no resolver. Verified for r-mermaid: `dist/mermaid.js` is a 91-byte stub, the lib is a
    separate `mermaid.core-*.js` chunk, and the full `index.js` has zero static mermaid
    imports.
 2. **Source from either an attribute or text content.** Priority: a URI-encoded attribute
