@@ -50,6 +50,34 @@ const chunkOptimization: Partial<BuildOptions> = {
   minify: minifyMode,
 };
 
+const RESOLVE_EXTENSIONS = ['.mjs', '.js', '.cjs', '.ts', '.jsx', '.tsx', '.json'];
+
+const pathAlias: Record<string, string> = {
+  '@/components': resolve(__dirname, 'components/'),
+  '@/assets': resolve(__dirname, 'assets/'),
+  '@/public': resolve(__dirname, 'public/'),
+  '@/utils': resolve(__dirname, 'utils/'),
+};
+
+/**
+ * Resolution for the **single-file** outputs (CJS + IIFE bundles, and the standalone
+ * per-component IIFE files). These formats cannot code-split, so an import of `shiki`
+ * would inline its entire grammar set — ~600 languages, tens of megabytes — into one
+ * file. The web bundle carries the ~50 most common languages instead, which is what
+ * makes a `<script src>` drop-in viable at all.
+ *
+ * The per-component **ES** build does not use this: there `shiki` stays whole and every
+ * language becomes its own lazy chunk, so a consumer downloads only what a code fence
+ * actually asks for. `ranui/markdown` is therefore the entry to prefer.
+ */
+export const singleFileResolve = {
+  alias: [
+    ...Object.entries(pathAlias).map(([find, replacement]) => ({ find, replacement })),
+    { find: /^shiki$/, replacement: 'shiki/bundle/web' },
+  ],
+  extensions: RESOLVE_EXTENSIONS,
+};
+
 export const bundle: BuildOptions = {
   ...chunkOptimization,
   outDir: resolve(__dirname, 'dist'),
@@ -79,6 +107,7 @@ export const componentEntries: Record<string, string> = {
   select: resolve(__dirname, 'components/select/index.ts'),
   math: resolve(__dirname, 'components/math/index.ts'),
   mermaid: resolve(__dirname, 'components/mermaid/index.ts'),
+  markdown: resolve(__dirname, 'components/markdown/index.ts'),
   player: resolve(__dirname, 'components/player/index.ts'),
   progress: resolve(__dirname, 'components/progress/index.ts'),
   checkbox: resolve(__dirname, 'components/checkbox/index.ts'),
@@ -137,14 +166,8 @@ export const viteConfig: UserConfig = {
       : null,
   ],
   resolve: {
-    alias: {
-      '@/components': resolve(__dirname, 'components/'),
-
-      '@/assets': resolve(__dirname, 'assets/'),
-      '@/public': resolve(__dirname, 'public/'),
-      '@/utils': resolve(__dirname, 'utils/'),
-    },
-    extensions: ['.mjs', '.js', '.cjs', '.ts', '.jsx', '.tsx', '.json'],
+    alias: pathAlias,
+    extensions: RESOLVE_EXTENSIONS,
   },
   css: {
     preprocessorOptions: {

@@ -6,9 +6,9 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-09T09:00:44.700Z
+Generated at: 2026-08-16T07:12:26.488Z
 
-31 custom elements.
+32 custom elements.
 
 ## `<r-button>`
 
@@ -101,7 +101,7 @@ Source: `components/glass/index.ts`
   - `interactive: boolean` — Hover lift + press-scale feedback, for clickable glass. Also makes the host
   - `radius: string` — Corner radius, in px.
   - `rim: boolean` — Opt-in GPU specular rim + chromatic edge, lit from a fixed top-left light —
-  - `saturate: string` — `r-glass` — a liquid / frosted glass surface.
+  - `saturate: string` — Backdrop saturation, as a percentage number (e.g. `180`).
   - `sheen: boolean` — Animated specular sweep across the surface.
   - `tint: string` — Glass fill tint (any CSS background value).
 - **Events**: —
@@ -165,7 +165,7 @@ Source: `components/input/index.ts`
   - `type: string` — input 的类型
   - `validationMessage: string`
   - `validity: ValidityState | undefined`
-  - `value: string` — 聚焦到内部原生 <input>。宿主自身不在 tab 序、也无内建 focus 行为，
+  - `value: string` — input 的值
 - **Events**: `change` → detail `{ value }` · `input` → detail `{ value }`
 - **Slots**: —
 - **Parts**: `content`, `input`, `label`, `message`
@@ -189,6 +189,27 @@ Source: `components/loading/index.ts`
 - **Events**: —
 - **Slots**: —
 - **Parts**: —
+
+## `<r-markdown>`
+
+Source: `components/markdown/index.ts`
+
+- **Attributes**: `caret: string`, `content: string`, `copy`, `download`, `highlight: string | null`, `inline-math`, `line-numbers`, `link-target`, `mode: string`, `sheet: string`, `theme: string`
+- **Properties**:
+  - `caret: string`
+  - `content: string` — Markdown source. Resolution order: the `content` property (set via JS, not
+  - `copyable: boolean`
+  - `downloadable: boolean`
+  - `highlight: string | null` — `""` → github-light/github-dark; `"a"` → both; `"a b"` → light / dark theme.
+  - `inlineMath: boolean`
+  - `lineNumbers: boolean`
+  - `linkTarget: string`
+  - `mode: string`
+  - `sheet: string`
+  - `theme: string`
+- **Events**: —
+- **Slots**: —
+- **Parts**: `block`, `body`, `error`, `markdown`
 
 ## `<r-math>`
 
@@ -269,7 +290,7 @@ Source: `components/player/index.ts`
   - `rememberPosition: boolean`
   - `sheet: string`
   - `src: string`
-  - `thumbnails: string` — 初始化 view 和 video 的全局上下文
+  - `thumbnails: string` — URL of a WebVTT sprite-sheet manifest (cues whose text is
   - `tracks: PlayerTrackConfig[]` — 字幕/CC 轨道配置，imperative 属性而不是 attribute——player 会在每次
   - `volume: string`
 - **Events**: `change` → detail `{ currentTime, data, duration, tag, type }`
@@ -316,7 +337,7 @@ Source: `components/route/index.ts`
   - `params: Record<string, string>`
   - `path: string`
   - `sheet: string`
-  - `src: string` — A lazy page module's default export: render into `host`, optionally return a cleanup. */
+  - `src: string` — Module specifier for lazy, code-split, mount/unmount page rendering.
 - **Events**: `routematch` → detail `{ params, path }`
 - **Slots**: `default`
 - **Parts**: —
@@ -412,7 +433,7 @@ Source: `components/theme-switch/index.ts`
 - **Attributes**: `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **Properties**:
   - `sheet: string`
-  - `value: RanThemeName` — `<r-theme-switch>` — a three-state (system / light / dark) segmented control
+  - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.
 - **Events**: `change` → detail `{ theme }`
 - **Slots**: —
 - **Parts**: `button ${choice}`, `switch`

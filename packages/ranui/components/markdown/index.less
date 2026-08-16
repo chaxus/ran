@@ -1,0 +1,343 @@
+:host {
+  display: var(--ran-markdown-display, block);
+  box-sizing: border-box;
+  color: var(--ran-markdown-color, var(--ran-color-text, #171717));
+  font-family: var(--ran-markdown-font-family, var(--ran-font-family, inherit));
+  font-size: var(--ran-markdown-font-size, var(--ran-text-copy-1, 16px));
+  line-height: var(--ran-markdown-line-height, 1.7);
+  overflow-wrap: break-word;
+  /* Long code lines / wide diagrams scroll inside their own box instead of widening the
+     host (a chat bubble, a grid cell) — the host takes its width from its container only. */
+  contain: inline-size;
+  /* inline-size containment gives the host a 0 intrinsic width, so an explicit width is
+     what makes it fill a flex row / grid cell instead of collapsing. */
+  width: var(--ran-markdown-width, 100%);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ran-markdown {
+  position: relative;
+}
+
+.ran-markdown-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-markdown-gap, var(--ran-space-4, 16px));
+}
+
+/* Each streamed block is its own box; margins live on the block gap, not on the
+   children, so a re-rendered block never shifts its neighbours. `min-width: 0` lets a
+   long code line scroll inside its box instead of widening the whole component. */
+.ran-markdown-block {
+  min-width: 0;
+  max-width: 100%;
+}
+.ran-markdown-block > :first-child {
+  margin-top: 0;
+}
+.ran-markdown-block > :last-child {
+  margin-bottom: 0;
+}
+
+/* ── Streaming caret ───────────────────────────────────────────────────────── */
+:host([caret]) .ran-markdown-block:last-child:not([data-no-caret]) > :last-child::after {
+  content: var(--ran-markdown-caret, '\258B'); /* ▋ */
+  display: inline-block;
+  margin-left: 0.15em;
+  color: var(--ran-markdown-caret-color, var(--ran-color-text-secondary, #666));
+  animation: ran-markdown-caret 1s steps(2, start) infinite;
+}
+:host([caret='circle']) .ran-markdown-block:last-child:not([data-no-caret]) > :last-child::after {
+  content: var(--ran-markdown-caret, '\25CF'); /* ● */
+  font-size: 0.6em;
+  vertical-align: middle;
+}
+@keyframes ran-markdown-caret {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* ── Typography ────────────────────────────────────────────────────────────── */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: var(--ran-markdown-heading-margin, var(--ran-space-6, 32px) 0 var(--ran-space-3, 12px));
+  color: var(--ran-markdown-heading-color, var(--ran-color-text, #171717));
+  font-weight: var(--ran-markdown-heading-weight, var(--ran-text-heading-weight, 600));
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+h1 {
+  font-size: var(--ran-markdown-h1-size, var(--ran-text-heading-1, 32px));
+}
+h2 {
+  font-size: var(--ran-markdown-h2-size, var(--ran-text-heading-2, 24px));
+}
+h3 {
+  font-size: var(--ran-markdown-h3-size, var(--ran-text-heading-3, 20px));
+}
+h4,
+h5,
+h6 {
+  font-size: var(--ran-markdown-h4-size, var(--ran-text-heading-4, 16px));
+}
+
+p {
+  margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
+}
+
+a {
+  color: var(--ran-markdown-link-color, var(--ran-color-link, #0070f3));
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-color: var(--ran-markdown-link-underline, var(--ran-gray-alpha-500, currentColor));
+}
+a:hover {
+  text-decoration-color: currentColor;
+}
+a[data-incomplete] {
+  color: inherit;
+  text-decoration: none;
+  cursor: text;
+}
+
+strong {
+  font-weight: var(--ran-markdown-strong-weight, 600);
+}
+del {
+  color: var(--ran-color-text-secondary, #666);
+}
+
+hr {
+  height: 0;
+  margin: var(--ran-space-6, 32px) 0;
+  border: 0;
+  border-top: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
+    var(--ran-markdown-hr-color, var(--ran-color-border, #eaeaea));
+}
+
+ul,
+ol {
+  margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
+  padding-left: var(--ran-markdown-list-indent, var(--ran-space-6, 32px));
+}
+li {
+  margin: var(--ran-markdown-list-item-margin, var(--ran-space-1, 4px)) 0;
+}
+li > p {
+  margin-bottom: var(--ran-space-2, 8px);
+}
+li > ul,
+li > ol {
+  margin: var(--ran-space-1, 4px) 0 0;
+}
+li:has(> input[type='checkbox']) {
+  list-style: none;
+  margin-left: calc(-1 * var(--ran-space-5, 24px));
+}
+li > input[type='checkbox'] {
+  margin: 0 var(--ran-space-2, 8px) 0 0;
+  vertical-align: -0.1em;
+  accent-color: var(--ran-color-primary, #0070f3);
+}
+
+blockquote {
+  margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
+  padding: var(--ran-space-1, 4px) 0 var(--ran-space-1, 4px) var(--ran-space-4, 16px);
+  border-left: var(--ran-markdown-blockquote-border-width, 3px) solid
+    var(--ran-markdown-blockquote-border, var(--ran-color-border-secondary, #d4d4d4));
+  color: var(--ran-markdown-blockquote-color, var(--ran-color-text-secondary, #666));
+}
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--ran-markdown-image-radius, var(--ran-radius-sm, 6px));
+}
+
+/* ── Inline code ───────────────────────────────────────────────────────────── */
+:not(pre) > code {
+  padding: 0.15em 0.4em;
+  border-radius: var(--ran-radius-sm, 6px);
+  background: var(--ran-markdown-inline-code-bg, var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.06)));
+  color: var(--ran-markdown-inline-code-color, inherit);
+  font-family: var(--ran-markdown-mono-font, var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace));
+  font-size: 0.875em;
+  overflow-wrap: anywhere;
+}
+
+/* ── Code blocks ───────────────────────────────────────────────────────────── */
+.ran-md-code {
+  margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
+  border: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
+    var(--ran-markdown-code-border, var(--ran-color-border, #eaeaea));
+  border-radius: var(--ran-markdown-code-radius, var(--ran-radius-md, 12px));
+  background: var(--ran-markdown-code-bg, var(--ran-color-bg-muted, #fafafa));
+  overflow: hidden;
+  /* Off-screen blocks skip layout/paint — long answers stay cheap. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 120px;
+}
+.ran-md-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ran-space-2, 8px);
+  min-height: var(--ran-markdown-code-header-height, var(--ran-size-7, 32px));
+  padding: 0 var(--ran-space-2, 8px) 0 var(--ran-space-3, 12px);
+  border-bottom: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
+    var(--ran-markdown-code-border, var(--ran-color-border, #eaeaea));
+  background: var(--ran-markdown-code-header-bg, transparent);
+}
+.ran-md-code-lang {
+  color: var(--ran-markdown-code-lang-color, var(--ran-color-text-secondary, #666));
+  font-family: var(--ran-markdown-mono-font, var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace));
+  font-size: var(--ran-text-label-3, 12px);
+  line-height: 1;
+  text-transform: lowercase;
+}
+.ran-md-code-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-1, 4px);
+}
+.ran-md-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ran-markdown-button-size, var(--ran-size-4, 24px));
+  height: var(--ran-markdown-button-size, var(--ran-size-4, 24px));
+  padding: 0;
+  border: none;
+  border-radius: var(--ran-radius-sm, 6px);
+  background: transparent;
+  color: var(--ran-markdown-button-color, var(--ran-color-text-secondary, #666));
+  cursor: pointer;
+}
+.ran-md-btn:hover {
+  background: var(--ran-markdown-button-hover-background, var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.06)));
+  color: var(--ran-markdown-button-hover-color, var(--ran-color-text, #171717));
+}
+.ran-md-btn:focus-visible {
+  outline: var(--ran-focus-ring, 2px solid var(--ran-color-primary, #0070f3));
+  outline-offset: 1px;
+}
+
+.ran-md-pre {
+  margin: 0;
+  padding: var(--ran-markdown-code-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px));
+  overflow-x: auto;
+  background: transparent !important; /* shiki's theme bg is dropped in favour of the token above */
+  color: var(--ran-markdown-code-color, var(--ran-color-text, #171717));
+  font-family: var(--ran-markdown-mono-font, var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace));
+  font-size: var(--ran-markdown-code-font-size, var(--ran-text-label-2, 13px));
+  line-height: var(--ran-markdown-code-line-height, 1.6);
+  tab-size: 2;
+}
+.ran-md-pre code {
+  display: block;
+  padding: 0;
+  background: transparent;
+  font: inherit;
+  white-space: pre;
+}
+.ran-md-pre .line {
+  display: inline;
+}
+.ran-md-pre .line:empty::after {
+  content: ' ';
+}
+
+/* Line numbers via CSS counters (opt-in `line-numbers`). */
+.ran-md-code[data-line-numbers] .ran-md-pre code {
+  counter-reset: line;
+}
+.ran-md-code[data-line-numbers] .ran-md-pre .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: var(--ran-markdown-line-number-width, 2.5em);
+  margin-right: var(--ran-space-3, 12px);
+  color: var(--ran-markdown-line-number-color, var(--ran-color-text-disabled, #a3a3a3));
+  text-align: right;
+  user-select: none;
+}
+
+/* Dual-theme shiki output: pick the light or dark token colour by resolved theme. */
+.ran-md-pre.shiki span {
+  color: var(--shiki-light);
+}
+.is-dark .ran-md-pre.shiki span {
+  color: var(--shiki-dark);
+}
+@media (prefers-color-scheme: dark) {
+  .is-system .ran-md-pre.shiki span {
+    color: var(--shiki-dark);
+  }
+}
+
+/* ── Tables ────────────────────────────────────────────────────────────────── */
+.ran-md-table-wrap {
+  margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
+  border: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
+    var(--ran-markdown-table-border, var(--ran-color-border, #eaeaea));
+  border-radius: var(--ran-markdown-table-radius, var(--ran-radius-md, 12px));
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ran-markdown-table-font-size, var(--ran-text-copy-2, 14px));
+}
+th,
+td {
+  padding: var(--ran-markdown-table-cell-padding, var(--ran-space-2, 8px) var(--ran-space-3, 12px));
+  border-bottom: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
+    var(--ran-markdown-table-border, var(--ran-color-border, #eaeaea));
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: var(--ran-markdown-table-header-bg, var(--ran-color-bg-muted, #fafafa));
+  color: var(--ran-markdown-table-header-color, var(--ran-color-text-secondary, #666));
+  font-weight: var(--ran-text-label-weight, 500);
+  white-space: nowrap;
+}
+tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ── Embedded renderers ────────────────────────────────────────────────────── */
+.ran-md-mermaid,
+r-math[display='block'] {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
+}
+.ran-md-math-block {
+  overflow-x: auto;
+}
+r-math[display='inline'] {
+  vertical-align: middle;
+}
+
+/* ── Error ─────────────────────────────────────────────────────────────────── */
+.ran-markdown-error {
+  margin: 0;
+  padding: var(--ran-markdown-error-padding, var(--ran-space-2, 8px) var(--ran-space-3, 12px));
+  border-radius: var(--ran-radius-sm, 6px);
+  background: var(--ran-markdown-error-background, var(--ran-red-100, #fff0f0));
+  color: var(--ran-markdown-error-color, var(--ran-color-danger, #e5484d));
+  font-family: var(--ran-font-mono, ui-monospace, monospace);
+  font-size: var(--ran-text-label-2, 13px);
+  white-space: pre-wrap;
+}

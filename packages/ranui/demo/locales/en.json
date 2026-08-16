@@ -109,6 +109,8 @@
   "card.icon": "Icon",
   "card.colorpicker": "Color picker",
   "card.popover": "Popover",
+  "card.markdown": "Markdown",
+  "markdown.stream": "Stream a reply",
   "card.math": "Math",
   "card.player": "Player",
   "sec.more": "Overlays, media & utilities",

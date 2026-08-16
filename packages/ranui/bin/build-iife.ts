@@ -23,7 +23,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'vite';
 import type { LibraryOptions } from 'vite';
-import { componentEntries, viteConfig } from '../vite.config';
+import { componentEntries, singleFileResolve, viteConfig } from '../vite.config';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -45,7 +45,7 @@ const main = async (): Promise<void> => {
       ...viteConfig,
       root: ROOT,
       configFile: false,
-      logLevel: 'warn',
+      resolve: singleFileResolve,
       define: {
         'import.meta.env.DEV': JSON.stringify(false),
         'import.meta.env.PROD': JSON.stringify(true),

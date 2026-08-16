@@ -467,6 +467,13 @@
                 <r-math copy download latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
                 <p>Inline math <r-math display="inline" latex="e^{i\pi} + 1 = 0"></r-math> flows with text.</p>
               </div>
+              <div class="demo-card" id="component-markdown" style="grid-column: 1 / -1">
+                <h3 data-i18n="card.markdown">Markdown</h3>
+                <div class="row" style="margin-bottom: var(--ran-space-3)">
+                  <r-button id="markdown-stream" type="primary" data-i18n="markdown.stream">Stream a reply</r-button>
+                </div>
+                <r-markdown id="demo-markdown" copy download line-numbers highlight></r-markdown>
+              </div>
             </div>
             <div class="panel" id="component-player" style="margin-top: var(--ran-space-4)">
               <h3 data-i18n="card.player" style="margin: 0 0 var(--ran-space-3); font-size: 14px; font-weight: 600">

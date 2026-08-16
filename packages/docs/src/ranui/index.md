@@ -256,6 +256,10 @@ import 'ranui';
 
 <r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
 
+- `markdown`
+
+<r-markdown copy content="**Streaming** Markdown with `code`, tables, mermaid and math."></r-markdown>
+
 ## Event
 
 - Modern 'web' standards

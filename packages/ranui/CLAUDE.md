@@ -155,7 +155,7 @@ export default MyComponent;
 - Export both named (`export class`) and default (`export default`)
 - Use `EventManager` from `@/utils/builder` for lifecycle-bound listeners in `connectedCallback`; call `manager.abort()` in `disconnectedCallback` — never manually call `removeEventListener` per listener
 
-### Async external-lib renderer components (`r-mermaid`, `r-math`)
+### Async external-lib renderer components (`r-mermaid`, `r-math`, `r-markdown`)
 
 Some components lazy-load a heavy third-party library and render its output into the shadow root. Follow this specialized recipe (full evaluation + enrichment roadmap in [`docs/RENDERER_COMPONENTS.md`](docs/RENDERER_COMPONENTS.md) — read it before building or enriching one, so it isn't re-analyzed):
 
@@ -164,6 +164,7 @@ Some components lazy-load a heavy third-party library and render its output into
 - **Errors → DOM, not console**: render an `::part(error)` box + dispatch an `error` CustomEvent (`bubbles+composed`). Both `r-mermaid` and `r-math` do this.
 - **Theme**: `r-mermaid` uses `theme=auto|light|dark` with a `MutationObserver` on `documentElement` (disconnected in `disconnectedCallback`) because it bakes colors into its SVG and must re-render. `r-math` needs **none of that** — native MathML inherits `color` via `currentColor`, so `:host { color: var(--ran-color-text) }` flips light/dark in the same paint with zero JS.
 - **Bundled fonts for consistency (r-math)**: MathML's appearance depends on the reader's system math font, so `r-math` bundles **Latin Modern Math** (+ a small script/prime face), inlined as `?inline` data-URIs, **dynamically imported** (own lazy chunk — never eager in the barrel) and registered **once at the document level** (Chromium ignores `@font-face` inside a shadow root). See `assets/fonts/LICENSE.md`.
+- **`r-markdown`** is the composed renderer: parser chunk (marked + DOMPurify + remend) lazy, shiki lazy + opt-in, and it embeds `<r-mermaid>` / `<r-math>` for fences / math instead of re-implementing them. Streaming = `remend` (closes half-streamed markdown) → `parseMarkdownIntoBlocks` (marked lexer) → re-render only the block whose text changed. Everything ranui adds to the rendered HTML (code header, buttons, wrappers, `<r-mermaid>`/`<r-math>`) is built with the builder; only markdown-produced nodes are located by query.
 - **Interactive controls (fullscreen / zoom-pan / copy / download) are opt-in** boolean attributes — a bare element renders a clean static result. Reuse existing mechanisms: **`r-modal`** for the fullscreen overlay, the `r-colorpicker`/`r-player` pointer-drag idiom (`range()` + `getBoundingClientRect()`) + a `wheel`/`transform:scale()` for pan-zoom, `<r-icon>`+`registerIcon` for toolbar buttons (the pattern `r-player` itself now uses throughout — see `docs/PLAYER_ROADMAP.md` §1.4). Do **not** reinvent overlay/focus-trap.
 
 ### Name-driven lazy variant loading (`r-loading`, `r-icon`)
