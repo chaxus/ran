@@ -175,4 +175,5 @@ r-markdown::part(code) {
 - **净化**：Markdown 里的原始 HTML 会经过 DOMPurify——脚本、事件属性、`javascript:` URL、`<style>`、表单与 iframe 都会被移除。任务列表的复选框会保留。
 - **按块 diff** 以位置为 key，因此未变化块内的 DOM 状态（打开的全屏图表、滚动过的表格）在流式更新中得以保留。文档只 lex 一次、每块用自己的 token 渲染，因此链接引用定义可以跨块解析（`[文字][id]` 在一块、`[id]: url` 在另一块）。
 - **GFM 脚注**（`[^1]`）**不支持**——marked 没有脚注 tokenizer，标记会原样渲染成文本。
-- **独立 IIFE**：`dist/iife/markdown.iife.js` 无法代码分割，会内联 mermaid、Temml 以及 shiki 的 _web_ 语言包（约 50 种常见语言）。优先使用 ES 入口（`ranui/markdown`），每种语言都是独立的懒加载 chunk。
+- **shiki 由你自己的安装解析**：ES 构建保留裸的 `import('shiki')`，由你的打包器分包，只下载代码围栏实际用到的语法。shiki 是 ranui 的普通依赖，`npm i ranui` 就已带上，无需额外安装。
+- **独立 IIFE**：`dist/iife/markdown.iife.js` 没有模块解析器，因此改为内联 mermaid、Temml 以及 shiki 的 _web_ 语言包（约 50 种常见语言）。想要完整语言覆盖且体积更小，请用 ES 入口（`ranui/markdown`）。

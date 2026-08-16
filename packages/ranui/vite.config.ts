@@ -28,6 +28,25 @@ const minifyMode = parseMinifyMode(process.env.RANUI_MINIFY);
 const cssMinifyMode = parseCssMinifyMode(process.env.RANUI_CSS_MINIFY);
 const enableAnalyze = process.env.RANUI_ANALYZE === 'true';
 
+/** Host frameworks a consumer already has; never ours to bundle. */
+const FRAMEWORK_EXTERNAL = ['react', 'react-dom', 'vue'];
+
+/**
+ * Additionally left unbundled in the **ES** build only.
+ *
+ * ranui otherwise inlines its dependencies so `dist/*.js` is self-contained, but shiki is
+ * a different shape: its bundled-language map is ~600 dynamic imports, so inlining it
+ * copies every grammar into ranui's own tarball (+21 MB) and pre-decides the chunking for
+ * consumers who have a bundler of their own. Leaving the import bare hands that job back —
+ * `import('shiki')` resolves from node_modules (shiki stays a regular `dependency`, so it
+ * still auto-installs) and the consumer's bundler splits it.
+ *
+ * Deliberately not applied to the CJS/IIFE outputs: those exist to be dropped in via
+ * `<script src>` with no resolver, so they must stay self-contained — they use
+ * `singleFileResolve` to inline shiki's smaller web bundle instead.
+ */
+const ES_EXTERNAL = ['shiki', 'shiki/engine/javascript'];
+
 const chunkOptimization: Partial<BuildOptions> = {
   chunkSizeWarningLimit: 500,
   assetsInlineLimit: 1024,
@@ -36,7 +55,7 @@ const chunkOptimization: Partial<BuildOptions> = {
   reportCompressedSize: false,
   emptyOutDir: true,
   rollupOptions: {
-    external: ['react', 'react-dom', 'vue'],
+    external: FRAMEWORK_EXTERNAL,
     output: {
       assetFileNames: (assetInfo): string => {
         if (assetInfo.names?.includes('style.css')) return 'ranui.css';
@@ -128,6 +147,10 @@ export const componentEntries: Record<string, string> = {
 
 export const es: BuildOptions = {
   ...chunkOptimization,
+  rollupOptions: {
+    ...chunkOptimization.rollupOptions,
+    external: [...FRAMEWORK_EXTERNAL, ...ES_EXTERNAL],
+  },
   outDir: resolve(__dirname, 'dist'),
   lib: {
     entry: {

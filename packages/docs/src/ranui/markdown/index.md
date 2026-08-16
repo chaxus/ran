@@ -201,6 +201,9 @@ Override on the element (each falls back to a semantic token, then a literal):
   across blocks (`[text][id]` in one block, `[id]: url` in another).
 - **GFM footnotes** (`[^1]`) are **not** supported — marked has no footnote tokenizer, so
   the markers render as literal text.
-- **Standalone IIFE**: `dist/iife/markdown.iife.js` can't code-split, so it inlines mermaid,
-  Temml and shiki's _web_ language bundle (~50 common languages). Prefer the ES entry
-  (`ranui/markdown`) where every language is its own lazy chunk.
+- **shiki resolves from your own install.** The ES build leaves `import('shiki')` bare, so
+  your bundler code-splits it and downloads only the grammars your code fences use. shiki is
+  a regular dependency of ranui, so `npm i ranui` already brings it — nothing extra to add.
+- **Standalone IIFE**: `dist/iife/markdown.iife.js` has no resolver, so it inlines mermaid,
+  Temml and shiki's _web_ language bundle (~50 common languages) instead. Prefer the ES
+  entry (`ranui/markdown`) for full language coverage and a smaller download.
