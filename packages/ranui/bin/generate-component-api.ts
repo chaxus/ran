@@ -78,7 +78,9 @@ function resolveType(type: string, aliases: Map<string, string>): string {
  * or first text line). Getter wins over setter. */
 function extractDescriptions(src: string): Map<string, string> {
   const out = new Map<string, string>();
-  const re = /\/\*\*([\s\S]*?)\*\/\s*(?:get|set)\s+([A-Za-z$][\w$]*)\s*\(/g;
+  // The body must not cross a `*/`, otherwise an unrelated earlier JSDoc (e.g. on a module
+  // constant) gets attributed to the first accessor that has a multi-line comment.
+  const re = /\/\*\*((?:[^*]|\*(?!\/))*)\*\/\s*(?:get|set)\s+([A-Za-z$][\w$]*)\s*\(/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(src))) {
     const name = m[2];
