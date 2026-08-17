@@ -58,6 +58,7 @@ packages/ranuts/
 │   │   ├── idb.ts            # WebDB (declarative stores) + createHandoff (one-shot value handoff)
 │   │   ├── worker.ts         # WorkerClient — request/response over a Web Worker
 │   │   ├── zip.ts            # ZIP read/rewrite — crc32, inflateRaw, rewriteZip, createZip
+│   │   ├── binary.ts         # bytes ↔ base64 (chunked), gzip sniff/decompress, zip/HTML signature sniff, decodeTextBytes, saveFileToDisk
 │   │   ├── async.ts          # deferred / withTimeout / withTimeoutFallback / delay / createRaceGuard
 │   │   ├── storage.ts        # localStorage* + createStore (prefixed JSON view)
 │   │   ├── segment.ts        # offsets ↔ chunks, range→segment splitting (highlights)
