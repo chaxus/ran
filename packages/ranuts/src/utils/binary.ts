@@ -149,7 +149,9 @@ interface SaveFileOptions {
 type SaveFilePicker = (options: {
   suggestedName: string;
   types: Array<{ description: string; accept: Record<string, string[]> }>;
-}) => Promise<{ createWritable: () => Promise<{ write: (data: Blob | Uint8Array) => Promise<void>; close: () => Promise<void> }> }>;
+}) => Promise<{
+  createWritable: () => Promise<{ write: (data: Blob | Uint8Array) => Promise<void>; close: () => Promise<void> }>;
+}>;
 
 /**
  * @description: Save bytes to disk: a real "Save as" dialog through the File
