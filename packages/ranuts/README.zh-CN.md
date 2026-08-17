@@ -36,13 +36,29 @@ npm install ranuts@latest --save
 
 [一些常用的函数和工具](https://ran.chaxus.com/cn/src/ranuts/)
 
+**面向 AI / 大模型：** 从 [CLAUDE.md](./CLAUDE.md)（入口点、运行时约束、代码约定）和
+[docs/API.md](./docs/API.md)（自动生成的 API 参考，含每个导出符号的签名与说明，用
+`npm run doc:api` 重新生成）开始。
+
+也可以从 `ran` 插件市场安装现成的 **Claude Code skill**，它会把导入映射、`ranuts/utils`
+清单、用法示例和代码约定交给助手，并指向包内附带的 API 参考：
+
+```bash
+/plugin marketplace add chaxus/ran
+/plugin install ranuts@ran
+```
+
+装好后 Claude 会自动使用（也可以手动调用 `/ranuts:ranuts`）。
+
 ## 使用方式
 
 按需导入。您可以选择：
 
-- `ranuts/utils` —— DOM/BOM、字符串、对象、数字、颜色、时间、存储、i18n 等工具
+- `ranuts/utils` —— DOM/BOM、字符串、对象、数字、颜色、时间、存储、二进制/zip、
+  Worker/IndexedDB、i18n 等工具
 - `ranuts/node` —— HTTP 服务、路由、ws、fs、流、中间件（**仅 Node**）
 - `ranuts/visual` —— 2D 渲染引擎（Canvas / WebGL / WebGPU，**仅浏览器**）
+- `ranuts/sw` —— 缓存策略 + 预缓存协议的 Service Worker 一侧（**仅 Service Worker**）
 - `ranuts/vnode` —— Snabbdom 风格的虚拟 DOM
 - `ranuts/i18n` —— 单独的 i18n 引擎，不牵入 `utils` 的其余部分
 

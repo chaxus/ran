@@ -10,6 +10,8 @@ Experimental utility library with commonly used functions and tools
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
+**English** | [中文](./README.zh-CN.md)
+
 ---
 
 ## ⚠️ Important Notice
@@ -53,9 +55,11 @@ Claude then uses it automatically (or invoke it as `/ranuts:ranuts`).
 
 Import as required. You can select:
 
-- `ranuts/utils` — DOM/BOM, string, object, number, colour, time, storage, i18n helpers
+- `ranuts/utils` — DOM/BOM, string, object, number, colour, time, storage, binary/zip,
+  worker/IndexedDB, i18n helpers
 - `ranuts/node` — HTTP server, router, ws, fs, streams, middleware (**Node only**)
 - `ranuts/visual` — 2D rendering engine (Canvas / WebGL / WebGPU, **browser only**)
+- `ranuts/sw` — cache strategies + the precache protocol's service-worker half (**service worker only**)
 - `ranuts/vnode` — Snabbdom-style virtual DOM
 - `ranuts/i18n` — the i18n engine on its own, without the rest of `utils`
 
