@@ -141,6 +141,17 @@ import { computePlacement } from './placement';
 import type { ComputePlacementOptions, ComputedPlacement, Placement, PlacementRect } from './placement';
 import type { ResolveLocaleOptions, TextLanguage } from './lang';
 import { readFileAsArrayBuffer, readFileAsDataURL, readFileAsText, readFileAsUint8Array } from './file';
+import {
+  base64ToBytes,
+  bytesToBase64,
+  decodeTextBytes,
+  fetchMaybeGzip,
+  gunzipMaybe,
+  isGzip,
+  isHtmlDocument,
+  isZipContainer,
+  saveFileToDisk,
+} from './binary';
 import { WorkerClient, serveWorker } from './worker';
 import type {
   ServeWorkerOptions,
@@ -382,6 +393,15 @@ export {
   resolveLocale,
   readFileAsArrayBuffer,
   readFileAsUint8Array,
+  base64ToBytes,
+  bytesToBase64,
+  decodeTextBytes,
+  fetchMaybeGzip,
+  gunzipMaybe,
+  isGzip,
+  isHtmlDocument,
+  isZipContainer,
+  saveFileToDisk,
   readFileAsText,
   readFileAsDataURL,
   WorkerClient,
