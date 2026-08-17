@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: ranuts 导出的全部符号 — 6 个入口点，共 393 个导出，含签名与描述。
+description: ranuts 导出的全部符号 — 6 个入口点，共 402 个导出，含签名与描述。
 ---
 
 # ranuts API（自动生成）
@@ -12,11 +12,11 @@ description: ranuts 导出的全部符号 — 6 个入口点，共 393 个导出
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**393 个导出**，共 6 个入口点。生成时间 2026-08-13T14:02:17.188Z。
+**402 个导出**，共 6 个入口点。生成时间 2026-08-17T14:42:17.466Z。
 
 ## 入口点
 
-- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 307 个导出
+- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 316 个导出
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 缓存策略与预缓存协议 · _仅 service worker_ · 9 个导出
 - [`ranuts/node`](#ranuts-node) — Node 服务端工具（fs / http / ws / 中间件） · _仅 node_ · 26 个导出
 - [`ranuts/visual`](#ranuts-visual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _仅浏览器_ · 16 个导出
@@ -41,11 +41,13 @@ import { /* … */ } from 'ranuts/utils';
 - `appendUrl(url: string, params?: Record<string, string>) => string` — Turn an object into a query string and append it to a URL
 - `arrayBufferToString(buffer: ArrayBuffer | Uint8Array) => string` — Decode bytes into a string using the sniffed encoding. Required when reading
 - `autosizeTextarea(element: HTMLTextAreaElement) => (() => void)` — Make a `<textarea>` grow and shrink with its content, so a long message is
+- `base64ToBytes(base64: string) => Uint8Array<ArrayBuffer>` — Decode base64 into bytes. Accepts a bare payload or a full
 - `blendMultiply(base: RGB, blend: RGB) => RGB` — Multiply blend of two colours (channel-wise `base * blend`). Channels in 0..1.
 - `blendOverlay(base: RGB, blend: RGB) => RGB` — Overlay blend of two colours (multiply in shadows, screen in highlights). Channels in 0..1.
 - `blendScreen(base: RGB, blend: RGB) => RGB` — Screen blend of two colours (channel-wise `1 - (1 - base)(1 - blend)`). Channels in 0..1.
 - `brightnessContrast(color: RGB, brightness: number, contrast: number) => RGB` — Adjust brightness and contrast of a colour: `(c - 0.5) * contrast + 0.5 + brightness` per channel. Channels in 0..1.
 - `buildOffsets(lengths: readonly number[]) => number[]` — The global start offset of every chunk in the concatenated coordinate
+- `bytesToBase64(data: Uint8Array | ArrayBuffer) => string` — Encode bytes as base64 without blowing the call stack.
 - `checkEncoding(uint8Array: Uint8Array) => string`
 - `clamp(value: number, min: number, max: number) => number` — Clamp `value` into the inclusive range `[min, max]`.
 - `clearBr(str?: string) => string` — Strip whitespace, line breaks and HTML tags out of a string
@@ -75,6 +77,7 @@ import { /* … */ } from 'ranuts/utils';
 - `currentDevice() => CurrentDevice`
 - `cutRound(img: ImgSource, radius: number) => ImgSource` — Round an image's corners, returning an offscreen canvas.
 - `debounce<T extends (...args: any[]) => any>(fn: T, ms?: number) => Debounced<T>` — Debounce — on a burst of calls, run only the last one, **`ms` milliseconds
+- `decodeTextBytes(bytes: Uint8Array, encodings?: string[]) => string` — Decode text bytes, trying encodings in order until one holds.
 - `deferred<T = void>() => Deferred<T>` — A promise plus its `resolve` / `reject`, for the case where the thing that
 - `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
 - `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary language from the ratio of CJK to Latin characters.
@@ -82,6 +85,7 @@ import { /* … */ } from 'ranuts/utils';
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`
 - `fanShapedByArc(ctx: CanvasRenderingContext2D, maxRadius: number, start: number, end: number, gutter: number) => void` — Trace a pie slice with arc(), including the gutter between slices.
+- `fetchMaybeGzip(input: RequestInfo | URL, init?: RequestInit) => Promise<Uint8Array>` — Fetch a resource that may be delivered gzipped or already
 - `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the properties whose values appear in `list` — typically used to drop empty strings and nulls
 - `fit(value: number, a1: number, a2: number, b1: number, b2: number) => number` — Remap `value` from `[a1, a2]` onto `[b1, b2]` and clamp to the output range — the shader `fit`.
 - `formatDate(value?: DateInput, pattern?: string) => string` — Format a date with a token pattern. Accepts a timestamp, a date string, a
@@ -107,6 +111,7 @@ import { /* … */ } from 'ranuts/utils';
 - `getStatus(code?: number | string) => number | string | undefined` — Get the status code.
 - `getTangentByPointer(x: number, y: number) => Array<number>` — The tangent line at a point on a circle
 - `getWindow() => ClientRatio` — Get the viewport size across browsers
+- `gunzipMaybe(bytes: Uint8Array) => Promise<Uint8Array>` — Decompress bytes if — and only if — they are still gzipped.
 - `handleConsole(hooks?: (...args: unknown[]) => void) => (() => void)` — Tap into `console` so every call also reaches your hook, while still printing
 - `handleError(hooks?: (error: ErrorPayload) => void) => (() => void)` — Listen for uncaught errors and unhandled promise rejections, in the capture
 - `handleFetchHook(options?: Partial<Options>) => (() => void)` — Instrument `window.fetch` so every request, response and failure reaches your
@@ -128,6 +133,8 @@ import { /* … */ } from 'ranuts/utils';
 - `inflateRaw(data: Uint8Array) => Promise<Uint8Array>` — Decompress raw DEFLATE bytes (no zlib or gzip wrapper) — the form ZIP
 - `inverseLerp(a: number, b: number, value: number) => number` — Inverse of `lerp` — where `value` sits between `a` and `b`, as 0..1. Returns 0 when `a === b`. Not clamped.
 - `isEqual(value: any, other: any, seen?: Map<any, any>) => boolean` — Deep-compare two values.
+- `isGzip(bytes: Uint8Array) => boolean` — Whether the bytes start with the gzip magic number (1f 8b).
+- `isHtmlDocument(bytes: Uint8Array) => boolean` — Whether the bytes are an HTML document rather than the binary
 - `isImageSize(file: File, width?: number, height?: number) => Promise<boolean>` — Check an image's dimensions against a given width / height. When both are
 - `isInIframe() => boolean` — Whether this page is running inside an iframe. Returns false under SSR.
 - `isMobile() => boolean` — Whether this is a mobile device
@@ -136,6 +143,7 @@ import { /* … */ } from 'ranuts/utils';
 - `isString(obj: unknown) => boolean`
 - `isUrlCached(url: string) => Promise<boolean>` — Whether a URL is already in CacheStorage. When probing a group of files,
 - `isWeiXin() => boolean` — Whether this is the WeChat in-app browser
+- `isZipContainer(bytes: Uint8Array) => boolean` — Whether the bytes are a ZIP container (PK\x03\x04) — which is
 - `lerp(a: number, b: number, t: number) => number` — Linear interpolation from `a` to `b` by `t` (t=0 → a, t=1 → b). Not clamped.
 - `linearstep(edge0: number, edge1: number, x: number) => number` — Linear ramp — 0 below `edge0`, 1 above `edge1`, a straight line between (the shader `linearstep`, no smoothing).
 - `linearToSrgb(c: number) => number` — Convert one linear-light channel (0..1) to sRGB.
@@ -195,6 +203,7 @@ import { /* … */ } from 'ranuts/utils';
 - `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
 - `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
 - `saturation(color: RGB, amount: number) => RGB` — Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
+- `saveFileToDisk(data: Blob | Uint8Array, fileName: string, options?: SaveFileOptions) => Promise<boolean>` — Save bytes to disk: a real "Save as" dialog through the File
 - `scriptOnLoad(urls: string[], append?: HTMLElement, callback?: () => void) => Promise<void>` — Insert script/link tags dynamically
 - `segmentByRanges<T>(text: string, chunkStart: number, ranges: readonly OffsetRange<T>[]) => Segment<T>[]` — Split one chunk of text into a sequence of plain / matched spans according
 - `serveWorker<Req extends WorkerRequestBase, Res extends object = object, Progress = unknown>(handler: (request: Req, context: WorkerHandlerContext<Progress>) =>…` — Serve requests inside a Web Worker, mirroring {@link WorkerClient} on the
