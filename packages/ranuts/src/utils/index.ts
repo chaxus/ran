@@ -34,6 +34,10 @@ import {
   toString,
   transformText,
   truncate,
+  truncateWithMarker,
+  fenceCode,
+  slugify,
+  csvEscape,
 } from './str';
 import type { TransformText, TruncateOptions, TruncatePosition } from './str';
 import { createSpeechRecognizer, isSpeechRecognitionSupported } from './speech';
@@ -151,7 +155,11 @@ import {
   isHtmlDocument,
   isZipContainer,
   saveFileToDisk,
+  bytesToBase64Url,
+  base64UrlToBytes,
+  concatBytes,
 } from './binary';
+import { UNAMBIGUOUS_ALPHABET, safeEqual, secureRandomString, secureToken } from './secure';
 import { WorkerClient, serveWorker } from './worker';
 import type {
   ServeWorkerOptions,
@@ -497,6 +505,17 @@ export {
   createI18n,
   useI18n,
   computePlacement,
+  safeEqual,
+  secureRandomString,
+  secureToken,
+  UNAMBIGUOUS_ALPHABET,
+  bytesToBase64Url,
+  base64UrlToBytes,
+  concatBytes,
+  truncateWithMarker,
+  fenceCode,
+  slugify,
+  csvEscape,
 };
 
 export type {

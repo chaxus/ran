@@ -22,7 +22,18 @@ export const currentDevice = (): CurrentDevice => {
   return 'pc';
 };
 
+/**
+ * @description: Whether a `window` existed **when this module was first imported**.
+ *
+ * @deprecated Evaluated once at module load, so it is stuck at `false` for the life of the
+ * process in any SSR-then-hydrate flow, and cannot be stubbed in a test. New code checks
+ * `typeof window === 'undefined'` inside the function that needs it. Kept exported so
+ * existing callers keep compiling.
+ */
 export const isClient = typeof window !== 'undefined';
+
+/** Resolved per call, which is what makes the checks below correct after hydration. */
+const hasWindow = (): boolean => typeof window !== 'undefined';
 
 /** Viewport breakpoint, matching where the mobile layout takes over */
 export const MOBILE_MEDIA_QUERY = '(max-width: 768px)';
@@ -83,7 +94,7 @@ export const watchMediaQuery = (query: string, callback: (matches: boolean) => v
  * @return {*}
  */
 export const isWeiXin = (): boolean => {
-  if (isClient) {
+  if (hasWindow()) {
     // navigator.userAgent carries the browser type and version, the OS and the engine, so it can identify the browser
     const ua = window.navigator.userAgent.toLowerCase();
     // alert(ua)
@@ -97,7 +108,7 @@ export const isWeiXin = (): boolean => {
  * Whether this is a mobile device
  */
 export const isMobile = (): boolean => {
-  if (!isClient) return false;
+  if (!hasWindow()) return false;
   const ua = window.navigator.userAgent;
   if (/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(ua)) {
     return true;

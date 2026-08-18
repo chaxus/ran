@@ -45,6 +45,62 @@ export const base64ToBytes = (base64: string): Uint8Array<ArrayBuffer> => {
   return bytes;
 };
 
+/**
+ * @description: Encode bytes as base64url — the URL- and filename-safe alphabet from RFC 4648
+ * §5, with `+/` swapped for `-_` and the `=` padding dropped.
+ *
+ * This is the spelling JWTs, WebAuthn payloads, OAuth device codes and anything that rides in
+ * a query string or a path segment use. Plain base64 breaks in all of those: `+` becomes a
+ * space when a form-encoded value is parsed, and `/` splits a path.
+ *
+ * @param {Uint8Array | ArrayBuffer} data
+ * @return {string}
+ */
+export const bytesToBase64Url = (data: Uint8Array | ArrayBuffer): string =>
+  bytesToBase64(data).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+/**
+ * @description: Decode base64url back into bytes, restoring the padding the encoder dropped.
+ * Returns `null` on anything that is not valid base64url, because the usual caller is
+ * checking a token someone else supplied and a throw there is just a crash with extra steps.
+ *
+ * @param {string} value
+ * @return {Uint8Array | null}
+ */
+export const base64UrlToBytes = (value: string): Uint8Array | null => {
+  try {
+    const restored = value.replace(/-/g, '+').replace(/_/g, '/');
+    // atob rejects an unpadded string in some engines; pad back to a multiple of four.
+    const padded = restored.padEnd(Math.ceil(restored.length / 4) * 4, '=');
+    return base64ToBytes(padded);
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * @description: Join byte chunks into one buffer, in order.
+ *
+ * The reason this exists as its own function: text that arrives in chunks must be joined
+ * *before* it is decoded, never after. A multi-byte UTF-8 character straddling a chunk
+ * boundary decodes to replacement characters when each chunk is decoded on its own, and the
+ * damage is invisible until someone reads a log with a Chinese name in it.
+ *
+ * @param {Uint8Array[]} chunks
+ * @return {Uint8Array}
+ */
+export const concatBytes = (chunks: readonly Uint8Array[]): Uint8Array => {
+  let total = 0;
+  for (const chunk of chunks) total += chunk.length;
+  const out = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    out.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return out;
+};
+
 /** @description: Whether the bytes start with the gzip magic number (1f 8b). */
 export const isGzip = (bytes: Uint8Array): boolean => bytes.length >= 2 && bytes[0] === 0x1f && bytes[1] === 0x8b;
 
@@ -193,10 +249,19 @@ export const saveFileToDisk = async (
     } catch (error) {
       // The user dismissing the dialog is a normal outcome, not a failure.
       if ((error as Error)?.name === 'AbortError') return false;
-      throw error;
+      // Anything else — most often a SecurityError because the picker needs a *live* user
+      // gesture and the caller awaited something first (fetching what it is about to save is
+      // the usual reason) — falls through to the anchor below rather than throwing. The
+      // fallback needs no gesture and always worked; losing the file to report a failed
+      // upgrade path would be the worse outcome.
     }
   }
 
+  return anchorDownload(blob, fileName);
+};
+
+/** The universal path: a programmatic click on an object URL. Needs no gesture and no API. */
+const anchorDownload = (blob: Blob, fileName: string): boolean => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;

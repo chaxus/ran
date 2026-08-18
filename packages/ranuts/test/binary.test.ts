@@ -159,6 +159,29 @@ describe('saveFileToDisk', () => {
     await expect(saveFileToDisk(enc('bytes'), 'x.txt')).resolves.toBe(false);
   });
 
+  it('falls back to an anchor download when the picker refuses, rather than losing the file', async () => {
+    // The case this exists for: `showSaveFilePicker` needs a live user gesture, and the usual
+    // caller awaits the data it is about to save first — by then the activation is gone and
+    // the picker throws SecurityError. Throwing here would drop a file the anchor path,
+    // which needs no gesture, could still have written.
+    const denied = Object.assign(new Error('must be handling a user gesture'), { name: 'SecurityError' });
+    vi.stubGlobal(
+      'showSaveFilePicker',
+      vi.fn(async () => {
+        throw denied;
+      }),
+    );
+    vi.stubGlobal('URL', { ...URL, createObjectURL: vi.fn(() => 'blob:fallback'), revokeObjectURL: vi.fn() });
+    const clicked: string[] = [];
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) {
+      clicked.push(this.download);
+    });
+
+    await expect(saveFileToDisk(enc('bytes'), 'saved-anyway.txt')).resolves.toBe(true);
+    expect(clicked).toEqual(['saved-anyway.txt']);
+    vi.restoreAllMocks();
+  });
+
   it('falls back to an anchor download when the picker is unavailable', async () => {
     vi.stubGlobal('showSaveFilePicker', undefined);
     vi.stubGlobal('URL', { ...URL, createObjectURL: vi.fn(() => 'blob:x'), revokeObjectURL: vi.fn() });

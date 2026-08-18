@@ -1,5 +1,4 @@
 import { performanceTime } from '@/utils/time';
-import { isClient } from '@/utils/device';
 
 /**
  * @description: Read a named cookie
@@ -100,7 +99,10 @@ export const getPixelRatio = (context: CanvasRenderingContext2D & Partial<Contex
     context.msBackingStorePixelRatio ||
     context.oBackingStorePixelRatio ||
     1;
-  return ((isClient && window.devicePixelRatio) || 1) / backingStore;
+  // Checked here rather than through the module-load `isClient`, which is stuck at false
+  // after SSR-then-hydrate — and a wrong pixel ratio renders a blurry canvas, quietly.
+  const devicePixelRatio = typeof window === 'undefined' ? 1 : window.devicePixelRatio;
+  return (devicePixelRatio || 1) / backingStore;
 };
 
 export const createObjectURL = async (src: Blob | ArrayBuffer | Response): Promise<string> => {

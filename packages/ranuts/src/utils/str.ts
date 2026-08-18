@@ -56,6 +56,17 @@ export const isString = (obj: unknown): boolean => {
   return window.toString.call(obj) === '[object String]';
 };
 
+/**
+ * @description: A short random-ish string prefixed with the current timestamp.
+ *
+ * **Not cryptographically secure** — it draws from `Math.random()`, whose output is
+ * predictable from previous values. Good for a DOM id, a message correlation key or a cache
+ * buster; never for a token, code or anything an attacker benefits from guessing. Use
+ * `secureRandomString` / `secureToken` for those.
+ *
+ * @param {number} len characters of randomness after the timestamp
+ * @return {string}
+ */
 export function randomString(len: number = 8): string {
   const chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
   const maxPos = chars.length;
@@ -499,6 +510,15 @@ export const md5 = (str: string): string => {
   return (wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d)).toLowerCase();
 };
 // Generate a random string
+/**
+ * @description: A short random-ish base-36 string.
+ *
+ * **Not cryptographically secure** — `Math.random()` based, like `randomString`. Use
+ * `secureRandomString` / `secureToken` when the value must be unguessable.
+ *
+ * @param {number} len
+ * @return {string}
+ */
 export const getRandomString = (len: number = 8): string => {
   return Math.random()
     .toString(36)
@@ -1079,4 +1099,78 @@ export const MessageCodec = {
       );
     }
   },
+};
+
+/**
+ * @description: Cut text to `max` characters and mark that it was cut.
+ *
+ * Different from `truncate`, which is for display: that one keeps a head and a tail around an
+ * ellipsis so a path or a name stays recognisable. This one is for text about to cross a
+ * boundary — a log line into a database row, tool output into a message, a field into a
+ * fixed-size frame — where the job is to respect a hard ceiling and leave evidence that
+ * something was dropped. Silent truncation is the failure this prevents: a reader who cannot
+ * tell a short answer from a cut-off one will trust the cut-off one.
+ *
+ * @param {string} text
+ * @param {number} max maximum characters to keep, before the marker
+ * @param {string} marker appended when anything was dropped
+ * @return {string}
+ */
+export const truncateWithMarker = (text: string, max: number, marker: string = '…[truncated]'): string =>
+  text.length > max ? text.slice(0, max) + marker : text;
+
+/**
+ * @description: Wrap text in a Markdown code fence long enough to survive backticks inside it.
+ *
+ * A fixed ``` fence breaks the moment the body contains one — the block ends early and the
+ * rest of the document renders as prose, which is exactly what happens when you paste a
+ * Markdown snippet or a transcript into a report. CommonMark closes a fence only on a run at
+ * least as long as the opening one, so the fix is to measure the longest run in the body and
+ * open with one backtick more.
+ *
+ * @param {string} body
+ * @param {string} lang info string for the opening fence
+ * @return {string}
+ */
+export const fenceCode = (body: string, lang: string = ''): string => {
+  const longestRun = Math.max(0, ...Array.from(body.matchAll(/`+/g), (match) => match[0].length));
+  const fence = '`'.repeat(Math.max(3, longestRun + 1));
+  return `${fence}${lang}\n${body}\n${fence}`;
+};
+
+/**
+ * @description: Reduce text to a lowercase `a-z0-9-` slug, safe as a filename on every
+ * filesystem and as a URL segment.
+ *
+ * Non-ASCII is dropped rather than transliterated: a guess at romanisation is wrong often
+ * enough that an empty slug — which the caller can detect and replace — beats a confidently
+ * mangled one. Callers that need CJK titles preserved should keep the original alongside.
+ *
+ * @param {string} text
+ * @param {number} maxLength longest slug to return; trailing dashes are trimmed after cutting
+ * @return {string} the slug, or `''` when nothing survived
+ */
+export const slugify = (text: string, maxLength: number = 60): string =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, maxLength)
+    .replace(/-+$/g, '');
+
+/**
+ * @description: Escape one CSV field: doubles any quote and wraps the value when it contains
+ * a comma, a quote or a newline (RFC 4180).
+ *
+ * A leading `=`, `+`, `-` or `@` is also prefixed with a quote, because spreadsheet software
+ * treats those as formulas — the "CSV injection" that turns an exported username into a
+ * command when someone opens the file.
+ *
+ * @param {string | number} value
+ * @return {string}
+ */
+export const csvEscape = (value: string | number): string => {
+  const text = String(value);
+  const guarded = /^[=+\-@]/.test(text) ? `'${text}` : text;
+  return /[",\n\r]/.test(guarded) ? `"${guarded.replace(/"/g, '""')}"` : guarded;
 };

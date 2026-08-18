@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: ranuts 导出的全部符号 — 6 个入口点，共 402 个导出，含签名与描述。
+description: ranuts 导出的全部符号 — 6 个入口点，共 413 个导出，含签名与描述。
 ---
 
 # ranuts API（自动生成）
@@ -12,11 +12,11 @@ description: ranuts 导出的全部符号 — 6 个入口点，共 402 个导出
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**402 个导出**，共 6 个入口点。生成时间 2026-08-17T14:42:17.466Z。
+**413 个导出**，共 6 个入口点。生成时间 2026-08-18T13:16:54.528Z。
 
 ## 入口点
 
-- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 316 个导出
+- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 327 个导出
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 缓存策略与预缓存协议 · _仅 service worker_ · 9 个导出
 - [`ranuts/node`](#ranuts-node) — Node 服务端工具（fs / http / ws / 中间件） · _仅 node_ · 26 个导出
 - [`ranuts/visual`](#ranuts-visual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _仅浏览器_ · 16 个导出
@@ -42,12 +42,14 @@ import { /* … */ } from 'ranuts/utils';
 - `arrayBufferToString(buffer: ArrayBuffer | Uint8Array) => string` — Decode bytes into a string using the sniffed encoding. Required when reading
 - `autosizeTextarea(element: HTMLTextAreaElement) => (() => void)` — Make a `<textarea>` grow and shrink with its content, so a long message is
 - `base64ToBytes(base64: string) => Uint8Array<ArrayBuffer>` — Decode base64 into bytes. Accepts a bare payload or a full
+- `base64UrlToBytes(value: string) => Uint8Array | null` — Decode base64url back into bytes, restoring the padding the encoder dropped.
 - `blendMultiply(base: RGB, blend: RGB) => RGB` — Multiply blend of two colours (channel-wise `base * blend`). Channels in 0..1.
 - `blendOverlay(base: RGB, blend: RGB) => RGB` — Overlay blend of two colours (multiply in shadows, screen in highlights). Channels in 0..1.
 - `blendScreen(base: RGB, blend: RGB) => RGB` — Screen blend of two colours (channel-wise `1 - (1 - base)(1 - blend)`). Channels in 0..1.
 - `brightnessContrast(color: RGB, brightness: number, contrast: number) => RGB` — Adjust brightness and contrast of a colour: `(c - 0.5) * contrast + 0.5 + brightness` per channel. Channels in 0..1.
 - `buildOffsets(lengths: readonly number[]) => number[]` — The global start offset of every chunk in the concatenated coordinate
 - `bytesToBase64(data: Uint8Array | ArrayBuffer) => string` — Encode bytes as base64 without blowing the call stack.
+- `bytesToBase64Url(data: Uint8Array | ArrayBuffer) => string` — Encode bytes as base64url — the URL- and filename-safe alphabet from RFC 4648
 - `checkEncoding(uint8Array: Uint8Array) => string`
 - `clamp(value: number, min: number, max: number) => number` — Clamp `value` into the inclusive range `[min, max]`.
 - `clearBr(str?: string) => string` — Strip whitespace, line breaks and HTML tags out of a string
@@ -56,6 +58,7 @@ import { /* … */ } from 'ranuts/utils';
 - `componentToHex(c: string | number) => string`
 - `compose<T>(middleware: Array<Middleware<T>>) => ComposedMiddleware<T>` — Run a chain of async functions as if it were sequential
 - `computePlacement(options: ComputePlacementOptions) => ComputedPlacement` — Position a floating panel relative to an anchor rect: flips to the opposite
+- `concatBytes(chunks: readonly Uint8Array[]) => Uint8Array` — Join byte chunks into one buffer, in order.
 - `connection() => number | undefined` — Current network status: type, throughput, and whether the connection changed
 - `convertImageToBase64(file: File) => Promise<convertImageToBase64Return>` — Convert an image to base64
 - `cosinePalette(t: number, a: RGB, b: RGB, c: RGB, d: RGB) => RGB` — Inigo Quilez cosine gradient palette: `a + b * cos(2π(c·t + d))`. Each of `a,b,c,d` is an RGB triple; `t` is the position 0..1. Returns an RGB triple.
@@ -74,6 +77,7 @@ import { /* … */ } from 'ranuts/utils';
 - `createSpeechRecognizer(options?: SpeechRecognizerOptions) => SpeechRecognizer` — Create a dictation session over the Web Speech API.
 - `createStore<T>(prefix?: string) => JsonStore<T>` — A prefixed, JSON-serialising view over localStorage.
 - `createZip(files: ReadonlyArray<{ name: string; data: Uint8Array | string; }>) => Uint8Array` — Build a ZIP from scratch, every entry STORED. No compression, so this is
+- `csvEscape(value: string | number) => string` — Escape one CSV field: doubles any quote and wraps the value when it contains
 - `currentDevice() => CurrentDevice`
 - `cutRound(img: ImgSource, radius: number) => ImgSource` — Round an image's corners, returning an offscreen canvas.
 - `debounce<T extends (...args: any[]) => any>(fn: T, ms?: number) => Debounced<T>` — Debounce — on a burst of calls, run only the last one, **`ms` milliseconds
@@ -85,6 +89,7 @@ import { /* … */ } from 'ranuts/utils';
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`
 - `fanShapedByArc(ctx: CanvasRenderingContext2D, maxRadius: number, start: number, end: number, gutter: number) => void` — Trace a pie slice with arc(), including the gutter between slices.
+- `fenceCode(body: string, lang?: string) => string` — Wrap text in a Markdown code fence long enough to survive backticks inside it.
 - `fetchMaybeGzip(input: RequestInfo | URL, init?: RequestInit) => Promise<Uint8Array>` — Fetch a resource that may be delivered gzipped or already
 - `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the properties whose values appear in `list` — typically used to drop empty strings and nulls
 - `fit(value: number, a1: number, a2: number, b1: number, b2: number) => number` — Remap `value` from `[a1, a2]` onto `[b1, b2]` and clamp to the output range — the shader `fit`.
@@ -106,7 +111,7 @@ import { /* … */ } from 'ranuts/utils';
 - `getMime(ext: string) => string | undefined`
 - `getPerformance() => BasicType | undefined`
 - `getPixelRatio(context: CanvasRenderingContext2D & Partial<Context>) => number` — Get the device pixel ratio
-- `getRandomString(len?: number) => string`
+- `getRandomString(len?: number) => string` — A short random-ish base-36 string.
 - `getReportUrl() => string` — The currently configured reporting endpoint, or `''` when none was set
 - `getStatus(code?: number | string) => number | string | undefined` — Get the status code.
 - `getTangentByPointer(x: number, y: number) => Array<number>` — The tangent line at a point on a circle
@@ -179,7 +184,7 @@ import { /* … */ } from 'ranuts/utils';
 - `queryFlag(key: string, url?: string) => boolean` — Read a query parameter as a boolean flag. True for `?k`, `?k=`, `?k=1` and
 - `querystring(data?: {}) => string` — Serialise an object into a URL query string
 - `randomColor() => Color`
-- `randomString(len?: number) => string`
+- `randomString(len?: number) => string` — A short random-ish string prefixed with the current timestamp.
 - `range(num: number, min?: number, max?: number) => number` — Clamp a value between a minimum and a maximum
 - `readFileAsArrayBuffer(blob: Blob) => Promise<ArrayBuffer>` — Read a File / Blob as an ArrayBuffer
 - `readFileAsDataURL(blob: Blob) => Promise<string>` — Read a File / Blob as a data: URL (image previews and the like)
@@ -202,15 +207,19 @@ import { /* … */ } from 'ranuts/utils';
 - `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
 - `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
 - `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
+- `safeEqual(a: string | Uint8Array, b: string | Uint8Array) => boolean` — Compare two secrets in time that does not depend on where they first differ.
 - `saturation(color: RGB, amount: number) => RGB` — Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
 - `saveFileToDisk(data: Blob | Uint8Array, fileName: string, options?: SaveFileOptions) => Promise<boolean>` — Save bytes to disk: a real "Save as" dialog through the File
 - `scriptOnLoad(urls: string[], append?: HTMLElement, callback?: () => void) => Promise<void>` — Insert script/link tags dynamically
+- `secureRandomString(length: number, alphabet?: string) => string` — A random string drawn from `alphabet` using the platform CSPRNG.
+- `secureToken(bytes?: number) => string` — A random hex token of `bytes` bytes, from the platform CSPRNG.
 - `segmentByRanges<T>(text: string, chunkStart: number, ranges: readonly OffsetRange<T>[]) => Segment<T>[]` — Split one chunk of text into a sequence of plain / matched spans according
 - `serveWorker<Req extends WorkerRequestBase, Res extends object = object, Progress = unknown>(handler: (request: Req, context: WorkerHandlerContext<Progress>) =>…` — Serve requests inside a Web Worker, mirroring {@link WorkerClient} on the
 - `setFontSize2html(designWidth?: number) => void` — Set the root font size from the design mock's width
 - `setMime(ext: string, mimeType: string) => Map<string, string>`
 - `setReportUrl(next: ReportConfig | string) => void` — Configure the default reporting endpoint (and optionally the cookie holding
 - `singleFlight<T>(fn: () => Promise<T>) => SingleFlight<T>` — The async flavour of "run once": concurrent callers share one in-flight
+- `slugify(text: string, maxLength?: number) => string` — Reduce text to a lowercase `a-z0-9-` slug, safe as a filename on every
 - `smoothstep(edge0: number, edge1: number, x: number) => number` — Smooth Hermite interpolation between 0 and 1 for `edge0 < x < edge1` (GLSL `smoothstep`).
 - `srgbToLinear(c: number) => number` — Convert one sRGB channel (0..1) to linear-light (IEC 61966-2-1 transfer function).
 - `strParse(str?: string, sep?: string | RegExp, eq?: string | RegExp) => Record<string, string>` — Parse a delimited string into an object, e.g.
@@ -223,6 +232,7 @@ import { /* … */ } from 'ranuts/utils';
 - `transformNumber(value: string, locale?: string, precision?: number, fixed?: number) => string`
 - `transformText(content: string | ArrayBuffer) => TransformText | undefined`
 - `truncate(value: string, options: TruncateOptions | number) => string` — Shorten a string to a maximum length, marking the cut with an ellipsis.
+- `truncateWithMarker(text: string, max: number, marker?: string) => string` — Cut text to `max` characters and mark that it was cut.
 - `useI18n<TDict extends StringValues<TDict> = MessageDict>() => I18nCore<TDict> | null` — The active global instance, or null when none was created. Pass the same
 - `vibrance(color: RGB, amount: number) => RGB` — Vibrance — saturates muted colours more than already-saturated ones. `amount` > 0 boosts, < 0 mutes. Channels in 0..1.
 - `watchMediaQuery(query: string, callback: (matches: boolean) => void) => (() => void)` — Watch a media query. The callback **fires once synchronously with the
@@ -346,7 +356,7 @@ import { /* … */ } from 'ranuts/utils';
 - `const expo: SpeedType`
 - `const FMT: Record<string, string[]>`
 - `const HEX_COLOR_REGEX: RegExp` — `#rgb` / `#rrggbb` (the `#` is required)
-- `const isClient: boolean`
+- `const isClient: boolean` — Whether a `window` existed **when this module was first imported**.
 - `const MessageCodec: { encode(data: any): string; decode<T = any>(encodedStr: string): T | null; encodeFile(file: File): Promise<string>; decodeFile(encoded: st…` — Message codec.
 - `const MimeType: Map<string, string>`
 - `const MOBILE_MEDIA_QUERY: "(max-width: 768px)"` — Viewport breakpoint, matching where the mobile layout takes over
@@ -359,6 +369,7 @@ import { /* … */ } from 'ranuts/utils';
 - `const sine: SpeedType`
 - `const status: { message: Map<number, string>; code: Map<string, number>; codes: number[]; redirect: { 300: boolean; 301: boolean; 302: boolean; 303: boolean; 3…`
 - `const subscribers: SyncHook` — Global event bus: a signal carrying a `subscriber` broadcasts through it on change
+- `const UNAMBIGUOUS_ALPHABET: "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"` — Unambiguous by design: no `0`/`O`, no `1`/`l`/`I`. For codes a human reads aloud or retypes.
 - `const ZIP_DEFLATE: 8`
 - `const ZIP_STORED: 0` — Compression methods this module understands.
 
