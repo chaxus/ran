@@ -204,10 +204,19 @@ describe('r-markdown contract', () => {
 
   it('applies shiki highlighting when `highlight` is set (dual-theme spans)', async () => {
     const el = await mount({ highlight: '' }, '```javascript\nlet x\n```');
-    // highlighter loads asynchronously the first time
-    await new Promise((r) => setTimeout(r, 20));
-    const pre = body(el).querySelector('pre') as HTMLElement;
-    expect(pre.classList.contains('shiki')).toBe(true);
+    // The highlighter loads asynchronously the first time and swaps the <pre> in when it
+    // lands, with no promise to await — a fixed sleep is a coin flip on a loaded CI runner,
+    // which is exactly how this test failed on one matrix leg and passed on the other three.
+    const pre = await vi.waitFor(
+      () => {
+        // Asserted on the *only* `pre` in the body, so this still proves the plain block was
+        // replaced rather than a highlighted one appended alongside it.
+        const found = body(el).querySelector('pre') as HTMLElement | null;
+        expect(found?.classList.contains('shiki')).toBe(true);
+        return found as HTMLElement;
+      },
+      { timeout: 5000, interval: 10 },
+    );
     expect(pre.classList.contains('ran-md-pre')).toBe(true);
     expect(pre.getAttribute('style')).toBeNull();
     expect(pre.innerHTML).toContain('--shiki-dark');
