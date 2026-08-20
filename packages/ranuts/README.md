@@ -61,6 +61,7 @@ Import as required. You can select:
 - `ranuts/visual` — 2D rendering engine (Canvas / WebGL / WebGPU, **browser only**)
 - `ranuts/sw` — cache strategies + the precache protocol's service-worker half (**service worker only**)
 - `ranuts/vnode` — Snabbdom-style virtual DOM
+- `ranuts/stream` — Server-Sent Events parsing plus a provider-neutral fold of a streamed model response
 - `ranuts/i18n` — the i18n engine on its own, without the rest of `utils`
 
 ```js

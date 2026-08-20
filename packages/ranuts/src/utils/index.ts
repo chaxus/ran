@@ -1,3 +1,4 @@
+import { createBottomFollower } from './scroll';
 import { SyncHook } from './subscribe';
 import {
   Mathjs,
@@ -39,6 +40,7 @@ import {
   slugify,
   csvEscape,
 } from './str';
+import type { BottomFollower, BottomFollowerOptions } from './scroll';
 import type { TransformText, TruncateOptions, TruncatePosition } from './str';
 import { createSpeechRecognizer, isSpeechRecognitionSupported } from './speech';
 import type { SpeechError, SpeechErrorKind, SpeechRecognizer, SpeechRecognizerOptions } from './speech';
@@ -262,6 +264,7 @@ import {
 } from '@/utils/color';
 import type { RGB } from '@/utils/color';
 export {
+  createBottomFollower,
   performanceTime,
   timeFormat,
   timestampToTime,
@@ -592,4 +595,6 @@ export type {
   ComputedPlacement,
   Placement,
   PlacementRect,
+  BottomFollower,
+  BottomFollowerOptions,
 };
