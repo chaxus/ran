@@ -37,6 +37,7 @@ Each subpath is an independent, tree-shakeable barrel. Import from the subpath, 
 | `ranuts/i18n`   | `src/utils/i18n.ts`         | `I18nCore` / `createI18n` / `useI18n` — DOM-free    | browser + node     |
 | `ranuts/sw`     | `src/sw/index.ts`           | Cache strategies + the precache protocol's SW half  | **service worker** |
 | `ranuts/vnode`  | `src/vnode/index.ts`        | Snabbdom-style virtual DOM (`h`, `init`, modules)   | browser            |
+| `ranuts/stream` | `src/stream/index.ts`       | SSE parsing + provider-neutral model-stream fold    | browser + node     |
 
 \* `ranuts/utils` is broad: most functions are browser-oriented (touch `window`/`document`),
 but pure helpers (`str`, `obj`, `number`, `compose`, `cloneDeep`, …) run anywhere. Functions
@@ -74,10 +75,12 @@ packages/ranuts/
 │   │   ├── canvas.ts         # Canvas 2D geometry — roundRectByArc, fanShapedByArc, getLinearGradient
 │   │   ├── placement.ts      # computePlacement — flip/shift floating-panel placement (re-exported by ranui/utils/placement)
 │   │   ├── tween.ts          # easing curves (quad/cubic/quart/quint/sine/expo/circ)
+│   │   ├── scroll.ts         # createBottomFollower — follow the floor without fighting the reader
 │   │   ├── visual/           # ranuts/visual — 2D rendering engine (see below)
 │   │   └── totp/             # TOTP + hand-rolled SHA
 │   ├── node/                 # ranuts/node — mini HTTP framework
-│   └── vnode/                # ranuts/vnode — virtual DOM
+│   ├── vnode/                # ranuts/vnode — virtual DOM
+│   └── stream/               # ranuts/stream — SSE + StreamChunk + accumulator
 ├── bin/
 │   ├── build.sh              # build (tsc types + vite es/umd)
 │   └── generate-api-docs.ts  # ⭐ doc:api — emits docs/API.md from source + JSDoc
@@ -126,6 +129,59 @@ in `utils/number.ts`; `srgbToLinear`/`luma`/`blend*`/`saturation`/`cosinePalette
 `utils/color.ts`) are exported from `ranuts/utils` for CPU-side reuse.
 
 ---
+
+## Streaming a model response
+
+`ranuts/stream` is three layers, each usable alone. The split is the point: only the
+middle one is vendor-specific, and it is the one ranuts does **not** ship.
+
+1. `parseEventStream(source)` — bytes → `ServerSentEvent`. Transport only, no model
+   concepts. Handles the parts that bite: a chunk boundary anywhere (including inside a
+   multi-byte character or between `\r` and `\n`), repeated `data:` joined with `\n`, one
+   space stripped after the colon, `:` comment keep-alives, a leading BOM, and a trailing
+   block the server never terminated.
+2. `StreamChunk` — the provider-neutral vocabulary. **You write the mapping** from your
+   provider's event shape onto it; `mapEventStream(source, map)` is the seam, and returning
+   `[]` from the mapping is how a keep-alive or a `[DONE]` sentinel is dropped.
+3. `createStreamAccumulator()` — folds chunks into blocks, so a view reads `snapshot()`,
+   `text()`, `reasoning()`, or `toolCalls()` instead of concatenating deltas itself.
+
+Non-obvious rules the vocabulary encodes:
+
+- **Group by `index`, never by arrival order.** Reasoning and text interleave, and several
+  tool calls open at once.
+- **Tool arguments stay raw JSON text.** Half a JSON document is not a value. The
+  accumulator never parses `argumentsDelta`; parse once, after `finish`.
+- **`block-start` is optional.** Several providers open a block with its first delta, so
+  the accumulator opens one on demand. Do not require it in your mapping either.
+- **`block-end` wins.** When a provider sends an assembled block, it replaces whatever the
+  deltas accumulated.
+- **`finish` terminates.** `usage` arrives before it; nothing after it.
+
+## Following the bottom of a scroller
+
+`createBottomFollower` (from `ranuts/utils`) keeps an append-only view — a streaming
+transcript, a log tail, a terminal — pinned to its floor without fighting the reader.
+
+The hard part is telling your own scroll writes apart from the reader's. It uses an
+**observed-top ledger**: every programmatic write records the `scrollTop` it produced, and
+a scroll event whose position deviates from the ledger is the reader. That covers wheel,
+touch, scrollbar, keyboard and stray `scrollIntoView` calls at once, without listening for
+any input device — no list of device listeners is ever complete.
+
+Using it:
+
+- Call `follow()` whenever content changes; it is a no-op while the reader is scrolled up.
+- Pass `observe: [column]` for growth that appends no node — streaming text grows an
+  existing node, so it has to be observed rather than announced.
+- Before loading older content, `captureAnchor(row)` on a row that is actually on screen,
+  and `restoreAnchor()` after the prepend lands. Resolving to `null` means the row did not
+  survive; omitting the resolver reuses the captured element.
+- A shrink-clamp never transfers ownership. A reader who had scrolled up stays unpinned
+  even when the clamp leaves them at the floor, and re-pins on their next scroll —
+  re-pinning on a clamp would take control back with no input from them.
+- Scrolling is always instant. Smooth scrolling animates toward a moving target during
+  streaming, and its intermediate positions read as reader input on the next event.
 
 ## Conventions
 

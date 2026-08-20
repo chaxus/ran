@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: ranuts 导出的全部符号 — 6 个入口点，共 413 个导出，含签名与描述。
+description: ranuts 导出的全部符号 — 7 个入口点，共 431 个导出，含签名与描述。
 ---
 
 # ranuts API（自动生成）
@@ -12,16 +12,17 @@ description: ranuts 导出的全部符号 — 6 个入口点，共 413 个导出
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**413 个导出**，共 6 个入口点。
+**431 个导出**，共 7 个入口点。
 
 ## 入口点
 
-- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 327 个导出
+- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 330 个导出
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 缓存策略与预缓存协议 · _仅 service worker_ · 9 个导出
 - [`ranuts/node`](#ranuts-node) — Node 服务端工具（fs / http / ws / 中间件） · _仅 node_ · 26 个导出
 - [`ranuts/visual`](#ranuts-visual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _仅浏览器_ · 16 个导出
 - [`ranuts/i18n`](#ranuts-i18n) — 框架无关的 i18n 引擎（也从 ranuts/utils 再导出） · _浏览器 + node_ · 9 个导出
 - [`ranuts/vnode`](#ranuts-vnode) — Snabbdom 风格的虚拟 DOM · _浏览器_ · 26 个导出
+- [`ranuts/stream`](#ranuts-stream) — Server-Sent Events 解析与厂商中立的模型流折叠 · _浏览器 + node_ · 15 个导出
 
 ## `ranuts/utils`
 
@@ -64,6 +65,7 @@ import { /* … */ } from 'ranuts/utils';
 - `cosinePalette(t: number, a: RGB, b: RGB, c: RGB, d: RGB) => RGB` — Inigo Quilez cosine gradient palette: `a + b * cos(2π(c·t + d))`. Each of `a,b,c,d` is an RGB triple; `t` is the position 0..1. Returns an RGB triple.
 - `crc32(data: Uint8Array) => number` — CRC32 checksum (IEEE 802.3 polynomial), the one ZIP stores per entry.
 - `create(tagName: string, options?: ElementCreationOptions) => Chain`
+- `createBottomFollower(options: BottomFollowerOptions) => BottomFollower` — Creates a bottom-follow controller for one scrollport.
 - `createData(params?: Record<string, unknown>) => Record<string, unknown>` — Build the standard envelope that accompanies a report — page URL, referrer,
 - `createDocumentFragment(list: Element[]) => DocumentFragment | undefined` — Create a DocumentFragment
 - `createDoubleTapDetector(options?: DoubleTapDetectorOptions) => DoubleTapDetector` — Double-tap detection over raw `(x, y, time)` samples — pointer-type-agnostic,
@@ -268,6 +270,8 @@ import { /* … */ } from 'ranuts/utils';
 
 - `interface AcceptPortBridgeOptions`
 - `interface BeaconPayload`
+- `interface BottomFollower` — Imperative bottom-follow controller.
+- `interface BottomFollowerOptions` — How to construct a follower.
 - `interface BridgeManagerOptions`
 - `interface BroadcastPayload`
 - `interface CallToPayload`
@@ -561,4 +565,36 @@ import { /* … */ } from 'ranuts/vnode';
 ### 命名空间
 
 - `namespace is` — Type guards — array / string / primitive / VNode
+
+## `ranuts/stream`
+
+Server-Sent Events 解析与厂商中立的模型流折叠 · 运行环境：**浏览器 + node** · 源码：`src/stream/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/stream';
+```
+
+### 函数
+
+- `createStreamAccumulator() => StreamAccumulator` — Creates a fold over one streamed response.
+- `mapEventStream(source: ByteSource, map: (event: ServerSentEvent) => readonly StreamChunk[]) => AsyncGenerator<StreamChunk>` — Maps SSE events onto StreamChunk values using a caller-supplied vendor mapping.
+- `parseEventStream(source: ByteSource) => AsyncGenerator<ServerSentEvent>` — Parses a byte stream as `text/event-stream`.
+
+### 接口
+
+- `interface ReasoningBlock` — Model reasoning, when the provider exposes it. Kept separate from TextBlock
+- `interface ServerSentEvent` — One parsed `text/event-stream` event.
+- `interface StreamAccumulator` — Stateful fold over one response's chunks.
+- `interface StreamSnapshot` — Immutable view of everything received so far.
+- `interface TextBlock` — Assistant prose addressed to the user.
+- `interface TokenUsage` — Token counts reported for one response. Every field is optional: providers differ.
+- `interface ToolCallBlock` — One tool invocation requested by the model.
+
+### 类型
+
+- `type ByteSource` — Anything `for await` can walk that yields byte chunks — a `fetch` body, or a fake.
+- `type ContentBlock` — One completed unit of assistant output.
+- `type ContentBlockType` — Discriminator for the content a block accumulates.
+- `type FinishReason` — Why the response ended.
+- `type StreamChunk` — One normalized event from a streamed response.
 
