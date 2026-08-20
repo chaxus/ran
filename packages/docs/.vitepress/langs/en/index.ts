@@ -420,6 +420,7 @@ const themeEnConfig: DefaultTheme.Config = {
           { text: 'Mermaid', link: '/src/ranui/mermaid/' },
           { text: 'Markdown', link: '/src/ranui/markdown/' },
           { text: 'Conversation', link: '/src/ranui/conversation/' },
+          { text: 'Tool Card', link: '/src/ranui/tool-card/' },
           { text: 'CheckBox', link: '/src/ranui/checkbox/' },
           { text: 'Tabs', link: '/src/ranui/tab/' },
           { text: 'Preview', link: '/src/ranui/preview/' },

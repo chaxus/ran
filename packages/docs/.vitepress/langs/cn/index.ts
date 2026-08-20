@@ -417,6 +417,7 @@ const themeCnConfig: DefaultTheme.Config = {
           { text: 'Mermaid 图表', link: '/cn/src/ranui/mermaid/' },
           { text: 'Markdown 富文本', link: '/cn/src/ranui/markdown/' },
           { text: 'Conversation 对话', link: '/cn/src/ranui/conversation/' },
+          { text: 'ToolCard 工具卡片', link: '/cn/src/ranui/tool-card/' },
           { text: 'CheckBox 多选框', link: '/cn/src/ranui/checkbox/' },
           { text: 'Tabs 标签页', link: '/cn/src/ranui/tab/' },
           { text: 'Preview 预览', link: '/cn/src/ranui/preview/' },

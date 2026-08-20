@@ -818,6 +818,44 @@ looking at what they were looking at.
 
 ---
 
+### r-tool-card
+
+Renders a tool call and its result from a **declared intent** rather than from markup.
+
+A tool that returns HTML has picked a renderer, a theme, and a layout on the UI's behalf,
+and it does so in the one place — the model-facing result — where UI concerns do not belong.
+Declaring an intent keeps the two apart: the tool names the shape of what it did, and each
+surface renders that shape its own way.
+
+```ts
+const card = document.querySelector('r-tool-card')!;
+card.call = { card: 'terminal', title: 'pnpm test', cwd: '/repo' };
+card.status = 'running';
+// …later
+card.result = { card: 'terminal', output: '2351 passed', exitCode: 0 };
+card.status = 'success';
+```
+
+Card kinds: `generic` (title, key/value input, content), `terminal` (command, cwd, output,
+exit code), `diff` (per-file hunks, rendered through `diffLines` from `ranuts/utils`; a null
+`oldText` means the file is being created). Any `locations` on a call render as buttons that
+fire `locationclick`, so an editor can jump to what the tool touched.
+
+Two rules, both from the same place — these views are computed on a live call **and again
+when a log is replayed**:
+
+- **A view is a pure function of the call's arguments** (plus the result, for a result
+  view). No I/O, no clock, no session state, or a replay disagrees with what the user
+  originally saw. A `diff` built at call time uses `oldText: null` for a create precisely
+  because a caller has no prior content to read.
+- **An unrecognised card degrades, it never throws.** A newer producer's card kind, or a
+  value mangled in storage, renders as `generic` with whatever title it has. Display must
+  not be able to break a replay — the element treats anything it does not recognise as
+  generic, and a malformed view renders empty rather than raising.
+
+Use it as a `mount` target from an `r-conversation` view: the tool-call node's `patch`
+assigns `call`, `result` and `status`.
+
 ## Testing
 
 ### Setup
