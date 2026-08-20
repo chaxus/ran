@@ -1,4 +1,5 @@
 import { createBottomFollower } from './scroll';
+import { diffLines } from './diff';
 import { SyncHook } from './subscribe';
 import {
   Mathjs,
@@ -41,6 +42,7 @@ import {
   csvEscape,
 } from './str';
 import type { BottomFollower, BottomFollowerOptions } from './scroll';
+import type { DiffHunk, DiffLine, DiffLineKind, DiffOptions } from './diff';
 import type { TransformText, TruncateOptions, TruncatePosition } from './str';
 import { createSpeechRecognizer, isSpeechRecognitionSupported } from './speech';
 import type { SpeechError, SpeechErrorKind, SpeechRecognizer, SpeechRecognizerOptions } from './speech';
@@ -265,6 +267,7 @@ import {
 import type { RGB } from '@/utils/color';
 export {
   createBottomFollower,
+  diffLines,
   performanceTime,
   timeFormat,
   timestampToTime,
@@ -597,4 +600,8 @@ export type {
   PlacementRect,
   BottomFollower,
   BottomFollowerOptions,
+  DiffHunk,
+  DiffLine,
+  DiffLineKind,
+  DiffOptions,
 };
