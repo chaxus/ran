@@ -116,6 +116,13 @@ const ENTRIES: Entry[] = [
     blurbCn: 'Snabbdom 风格的虚拟 DOM',
     runtime: 'browser',
   },
+  {
+    subpath: 'ranuts/stream',
+    file: 'src/stream/index.ts',
+    blurb: 'Server-Sent Events parsing and a provider-neutral model-stream fold',
+    blurbCn: 'Server-Sent Events 解析与厂商中立的模型流折叠',
+    runtime: 'browser + node',
+  },
 ];
 
 type Kind = 'function' | 'class' | 'interface' | 'type' | 'enum' | 'const' | 'namespace' | 'other';
