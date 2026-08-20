@@ -162,21 +162,36 @@ function extractParts(src: string): string[] {
   return uniqSorted(out);
 }
 
+/**
+ * Extracts a component's slots.
+ *
+ * A `Slot()` counts as the default slot only when nothing names it. Testing for `Slot()`
+ * alone reported a default slot for every component that has only named ones. The window
+ * for one call stops at the next `Slot()`, so a later slot's name cannot be read as this
+ * one's.
+ *
+ * @param src Component source.
+ * @returns Whether a default slot exists, and every named slot.
+ */
 function extractSlots(src: string): { defaultSlot: boolean; namedSlots: string[] } {
-  const defaultSlot = /\bSlot\(\)/.test(src) || /<slot/.test(src);
   const named: string[] = [];
-  const re = /Slot\(\)[\s\S]{0,80}?\.attr\(\s*['"`]name['"`]\s*,\s*['"`]([^'"`]+)['"`]/g;
-  let m = re.exec(src);
-  while (m) {
-    named.push(m[1]);
-    m = re.exec(src);
+  let defaultSlot = false;
+  const NAME_ATTR = /\.attr\(\s*['"`]name['"`]\s*,\s*['"`]([^'"`]+)['"`]/;
+
+  const calls = [...src.matchAll(/\bSlot\(\)/g)].map((match) => match.index);
+  calls.forEach((start, i) => {
+    const window = src.slice(start, Math.min(calls[i + 1] ?? src.length, start + 80));
+    const name = NAME_ATTR.exec(window);
+    if (name === null) defaultSlot = true;
+    else named.push(name[1]);
+  });
+
+  for (const match of src.matchAll(/<slot\b([^>]*)>/g)) {
+    const name = /\bname=['"]([^'"]+)['"]/.exec(match[1]);
+    if (name === null) defaultSlot = true;
+    else named.push(name[1]);
   }
-  const re2 = /<slot[^>]*\bname=['"]([^'"]+)['"]/g;
-  let m2 = re2.exec(src);
-  while (m2) {
-    named.push(m2[1]);
-    m2 = re2.exec(src);
-  }
+
   return { defaultSlot, namedSlots: uniqSorted(named) };
 }
 
