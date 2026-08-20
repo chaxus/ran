@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { Button } from '@/components/button';
 // Ensure custom elements are defined
@@ -275,5 +278,51 @@ describe('r-button contract', () => {
     btn.setAttribute('sheet', '.btn { color: blue; }');
     expect(true).toBe(true);
     (window as any).CSSStyleSheet = origCSS;
+  });
+});
+
+/**
+ * The raised shadow is painted on the host box, while the visible surface and
+ * its radius live inside the shadow DOM. If the host is left square, a rounded
+ * button sits inside a square shadow and its bottom edge shows as a straight
+ * line poking out past both corners -- invisible at the 6px default, obvious
+ * as soon as a consumer rounds the button into a pill.
+ */
+describe('r-button host shape', () => {
+  const source = readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), '../../components/button/index.less'),
+    'utf8',
+  );
+
+  /** Declarations written directly on `:host`, with nested blocks removed. */
+  const hostBlock = (): string => {
+    const open = source.indexOf('{', source.indexOf('\n:host {'));
+    let depth = 1;
+    let i = open + 1;
+    let own = '';
+    let nested = 0;
+    for (; depth > 0 && i < source.length; i++) {
+      const ch = source[i];
+      if (ch === '{') {
+        depth++;
+        nested++;
+      } else if (ch === '}') {
+        depth--;
+        if (depth > 0) nested--;
+      } else if (nested === 0) own += ch;
+    }
+    return own;
+  };
+
+  it('rounds the host with the same variable as the surface it shadows', () => {
+    const own = hostBlock();
+    expect(own).toMatch(/box-shadow:/);
+    // Same token, same fallback: one lever rounds the host, the surface and the
+    // content together, so the shadow can never disagree with the button.
+    const radius = 'border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 6px));';
+    expect(own).toContain(radius);
+    expect(source).toContain(`  .ran-btn {`);
+    // The surface inside carries the identical declaration.
+    expect(source.split(radius).length).toBeGreaterThanOrEqual(3);
   });
 });
