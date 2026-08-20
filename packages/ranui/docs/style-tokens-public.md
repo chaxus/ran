@@ -1725,3 +1725,87 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `button ${choice}`
 - `switch`
 
+### `tool-card`
+
+- Tokens: 60
+- Parts: 14
+
+#### Tokens
+<!-- layers: semantic: 15 · internal: 45 -->
+- `--ran-color-bg`
+- `--ran-color-bg-muted`
+- `--ran-color-bg-subtle`
+- `--ran-color-border`
+- `--ran-color-danger`
+- `--ran-color-link`
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
+- `--ran-font-mono`
+- `--ran-green-200`
+- `--ran-radius-full`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-red-200`
+- `--ran-size-1`
+- `--ran-size-4`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-copy-2`
+- `--ran-text-label-weight`
+- `--ran-text-mono-weight-regular`
+- `--ran-tool-card-added-background`
+- `--ran-tool-card-background`
+- `--ran-tool-card-body-border-color`
+- `--ran-tool-card-border-color`
+- `--ran-tool-card-border-radius`
+- `--ran-tool-card-color`
+- `--ran-tool-card-description-color`
+- `--ran-tool-card-description-gap`
+- `--ran-tool-card-error-border-color`
+- `--ran-tool-card-file-gap`
+- `--ran-tool-card-focus-color`
+- `--ran-tool-card-font-size`
+- `--ran-tool-card-gutter-color`
+- `--ran-tool-card-header-background`
+- `--ran-tool-card-header-gap`
+- `--ran-tool-card-hunk-gap`
+- `--ran-tool-card-input-gap`
+- `--ran-tool-card-input-key-color`
+- `--ran-tool-card-line-gap`
+- `--ran-tool-card-location-color`
+- `--ran-tool-card-locations-gap`
+- `--ran-tool-card-output-background`
+- `--ran-tool-card-output-font`
+- `--ran-tool-card-output-radius`
+- `--ran-tool-card-output-weight`
+- `--ran-tool-card-path-color`
+- `--ran-tool-card-path-gap`
+- `--ran-tool-card-removed-background`
+- `--ran-tool-card-status-color`
+- `--ran-tool-card-status-error-color`
+- `--ran-tool-card-status-radius`
+- `--ran-tool-card-status-size`
+- `--ran-tool-card-status-success-color`
+- `--ran-tool-card-title-weight`
+- `--ran-tool-card-toggle-color`
+
+#### Parts
+- `body`
+- `card`
+- `description`
+- `exit`
+- `file`
+- `header`
+- `hunk`
+- `line`
+- `location`
+- `locations`
+- `path`
+- `status`
+- `title`
+- `toggle`
+

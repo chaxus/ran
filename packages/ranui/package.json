@@ -95,6 +95,9 @@
       "conversation": [
         "./dist/components/conversation/index.d.ts"
       ],
+      "tool-card": [
+        "./dist/components/tool-card/index.d.ts"
+      ],
       "scratch": [
         "./dist/components/scratch/index.d.ts"
       ],
@@ -343,6 +346,11 @@
     "./conversation": {
       "types": "./dist/components/conversation/index.d.ts",
       "import": "./dist/conversation.js",
+      "require": "./dist/index.cjs"
+    },
+    "./tool-card": {
+      "types": "./dist/components/tool-card/index.d.ts",
+      "import": "./dist/tool-card.js",
       "require": "./dist/index.cjs"
     },
     "./scratch": {

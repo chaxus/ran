@@ -89,7 +89,11 @@ without waking the view. Order is fixed at `start`, so a streaming message keeps
 fighting the reader: call `follow()` on every content change, pass `observe: [column]` for
 growth that appends no node, and anchor with `captureAnchor`/`restoreAnchor` around a prepend.
 
-`<r-conversation>` in ranui composes all three.
+`diffLines(oldText, newText, { context })` (from `ranuts/utils`) returns unified-style
+hunks with both gutters, degrading to a wholesale replacement past a table cap rather
+than allocating unbounded memory.
+
+`<r-conversation>` and `<r-tool-card>` in ranui compose all of this.
 
 ## Usage example
 

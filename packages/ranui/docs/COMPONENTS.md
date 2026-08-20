@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-33 custom elements.
+34 custom elements.
 
 ## `<r-button>`
 
@@ -449,4 +449,19 @@ Source: `components/theme-switch/index.ts`
 - **Events**: `change` → detail `{ theme }`
 - **Slots**: —
 - **Parts**: `button ${choice}`, `switch`
+
+## `<r-tool-card>`
+
+Source: `components/tool-card/index.ts`
+
+- **Attributes**: `open: boolean`, `sheet: string`, `status: ToolCardStatus`
+- **Properties**:
+  - `call: ToolCallView | null` — The pending view, derived from the call's arguments.
+  - `open: boolean` — Whether the body is expanded.
+  - `result: ToolResultView | null` — The completed view. Replaces the pending one once set.
+  - `sheet: string`
+  - `status: ToolCardStatus` — Lifecycle of the call, reflected so styling can key off it.
+- **Events**: `locationclick` → detail `{ location }`
+- **Slots**: —
+- **Parts**: `body`, `card`, `description`, `exit`, `file`, `header`, `hunk`, `line`, `location`, `locations`, `path`, `status`, `title`, `toggle`
 

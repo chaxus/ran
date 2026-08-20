@@ -71,6 +71,10 @@ SSR helpers: `import { defineSSR } from 'ranui/ssr-registry'` (source) / `ranui/
   default and does not fight the reader; `pinnedchange` drives a "jump to latest" button.
   Use `<r-markdown>` as the prose row — its `mode="streaming"` already closes half-streamed
   markdown. Projection and cadence: `ranuts/conversation`.
+- **Tool calls**: `r-tool-card` — set `call` / `result` / `status` from a **declared
+  intent** (`generic` / `terminal` / `diff`), never markup. Views must be pure functions
+  of the call's arguments, because they are recomputed on replay; an unrecognised card
+  degrades to `generic` instead of throwing.
 
 ## Builder + reactivity (from `ranui/builder`)
 
