@@ -8,11 +8,11 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**440 exports** across 8 entry points.
+**445 exports** across 8 entry points.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 330 exports
+- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 335 exports
 - [`ranuts/sw`](#ranuts-sw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranuts-node) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranuts-visual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 16 exports
@@ -84,6 +84,7 @@ import { /* … */ } from 'ranuts/utils';
 - `deferred<T = void>() => Deferred<T>` — A promise plus its `resolve` / `reject`, for the case where the thing that
 - `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
 - `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary language from the ratio of CJK to Latin characters.
+- `diffLines(oldText: string, newText: string, options?: DiffOptions) => DiffHunk[]` — Diffs two texts by line.
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`
@@ -276,6 +277,9 @@ import { /* … */ } from 'ranuts/utils';
 - `interface ComputePlacementOptions`
 - `interface Debounced`
 - `interface Deferred` — Promise primitives that JavaScript does not ship: an externally settled promise and a
+- `interface DiffHunk` — A run of changed lines plus the context around it.
+- `interface DiffLine` — One line of a diff, carrying both line numbers so a gutter can show either side.
+- `interface DiffOptions` — How to compute a diff.
 - `interface DoubleTapDetector`
 - `interface DoubleTapDetectorOptions`
 - `interface FormatRelativeOptions`
@@ -330,6 +334,7 @@ import { /* … */ } from 'ranuts/utils';
 
 - `type CurrentDevice`
 - `type DateInput` — Accepted everywhere a moment in time is taken; `undefined` means "now".
+- `type DiffLineKind` — What happened to one line.
 - `type EasingFn` — One easing function: (elapsed, from, delta, duration) => current value
 - `type ImgSource` — A bitmap container usable both as a drawImage source and as a render target
 - `type LocaleChangeHandler`

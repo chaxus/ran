@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: ranuts 导出的全部符号 — 8 个入口点，共 440 个导出，含签名与描述。
+description: ranuts 导出的全部符号 — 8 个入口点，共 445 个导出，含签名与描述。
 ---
 
 # ranuts API（自动生成）
@@ -12,11 +12,11 @@ description: ranuts 导出的全部符号 — 8 个入口点，共 440 个导出
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**440 个导出**，共 8 个入口点。
+**445 个导出**，共 8 个入口点。
 
 ## 入口点
 
-- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 330 个导出
+- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 335 个导出
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 缓存策略与预缓存协议 · _仅 service worker_ · 9 个导出
 - [`ranuts/node`](#ranuts-node) — Node 服务端工具（fs / http / ws / 中间件） · _仅 node_ · 26 个导出
 - [`ranuts/visual`](#ranuts-visual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _仅浏览器_ · 16 个导出
@@ -88,6 +88,7 @@ import { /* … */ } from 'ranuts/utils';
 - `deferred<T = void>() => Deferred<T>` — A promise plus its `resolve` / `reject`, for the case where the thing that
 - `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
 - `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary language from the ratio of CJK to Latin characters.
+- `diffLines(oldText: string, newText: string, options?: DiffOptions) => DiffHunk[]` — Diffs two texts by line.
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`
@@ -280,6 +281,9 @@ import { /* … */ } from 'ranuts/utils';
 - `interface ComputePlacementOptions`
 - `interface Debounced`
 - `interface Deferred` — Promise primitives that JavaScript does not ship: an externally settled promise and a
+- `interface DiffHunk` — A run of changed lines plus the context around it.
+- `interface DiffLine` — One line of a diff, carrying both line numbers so a gutter can show either side.
+- `interface DiffOptions` — How to compute a diff.
 - `interface DoubleTapDetector`
 - `interface DoubleTapDetectorOptions`
 - `interface FormatRelativeOptions`
@@ -334,6 +338,7 @@ import { /* … */ } from 'ranuts/utils';
 
 - `type CurrentDevice`
 - `type DateInput` — Accepted everywhere a moment in time is taken; `undefined` means "now".
+- `type DiffLineKind` — What happened to one line.
 - `type EasingFn` — One easing function: (elapsed, from, delta, duration) => current value
 - `type ImgSource` — A bitmap container usable both as a drawImage source and as a render target
 - `type LocaleChangeHandler`

@@ -77,6 +77,7 @@ packages/ranuts/
 │   │   ├── placement.ts      # computePlacement — flip/shift floating-panel placement (re-exported by ranui/utils/placement)
 │   │   ├── tween.ts          # easing curves (quad/cubic/quart/quint/sine/expo/circ)
 │   │   ├── scroll.ts         # createBottomFollower — follow the floor without fighting the reader
+│   │   ├── diff.ts           # diffLines — line-level diff as unified-style hunks
 │   │   ├── visual/           # ranuts/visual — 2D rendering engine (see below)
 │   │   └── totp/             # TOTP + hand-rolled SHA
 │   ├── node/                 # ranuts/node — mini HTTP framework
