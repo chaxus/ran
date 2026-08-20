@@ -121,6 +121,9 @@ export const es: BuildOptions = {
       // Its own entry because it runs in a ServiceWorkerGlobalScope — no window, no document.
       sw: resolve(__dirname, 'src/sw/index.ts'),
       vnode: resolve(__dirname, 'src/vnode/index.ts'),
+      // Its own entry so a consumer folding a model stream on a server or in a test
+      // does not pull the DOM-oriented `ranuts/utils` barrel along with it.
+      stream: resolve(__dirname, 'src/stream/index.ts'),
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {
