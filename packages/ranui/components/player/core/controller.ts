@@ -53,6 +53,10 @@ const CONTROLLER_EVENT_BINDINGS: ControllerEventBinding[] = [
   { target: 'container', eventName: 'click', handler: 'onContainerClick' },
   { target: 'playerBtn', eventName: 'click', handler: 'onPlayerBtnClick' },
   { target: 'host', eventName: 'keydown', handler: 'onKeydown' },
+  // TODO(player-touch-scrub): scrubbing is mouse-only — dragging the progress dot does
+  // nothing on touch. `gestures.ts` covers double-tap-to-seek and volume swipe but not
+  // this drag. Rebuild it on pointerdown/pointermove/pointerup with setPointerCapture and
+  // `touch-action: none` on the dot, then drop the mouse-only-drag baseline entry.
   { target: 'progressDot', eventName: 'mousedown', handler: 'onProgressDotMouseDown' },
   { target: 'playBtn', eventName: 'click', handler: 'onPlayBtnClick' },
   { target: 'playBtn', eventName: 'keydown', handler: 'onPlayBtnKeydown' },
