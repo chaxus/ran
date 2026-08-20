@@ -28,16 +28,17 @@ from the **subpath that owns it** (below) — not from a deep source path.
 Each subpath is an independent, tree-shakeable barrel. Import from the subpath, never from
 `ranuts/dist/...` or `@/...` (that alias is internal to the source).
 
-| Import from     | Source                      | What                                                | Runtime            |
-| --------------- | --------------------------- | --------------------------------------------------- | ------------------ |
-| `ranuts`        | `index.ts`                  | Root barrel — re-exports the utils + visual surface | browser + node     |
-| `ranuts/utils`  | `src/utils/index.ts`        | DOM/BOM, string, object, number, color, time, etc.  | browser + node\*   |
-| `ranuts/node`   | `src/node/index.ts`         | HTTP server, router, ws, fs, streams, middleware    | **node only**      |
-| `ranuts/visual` | `src/utils/visual/index.ts` | 2D rendering engine (Canvas / WebGL / WebGPU)       | **browser only**   |
-| `ranuts/i18n`   | `src/utils/i18n.ts`         | `I18nCore` / `createI18n` / `useI18n` — DOM-free    | browser + node     |
-| `ranuts/sw`     | `src/sw/index.ts`           | Cache strategies + the precache protocol's SW half  | **service worker** |
-| `ranuts/vnode`  | `src/vnode/index.ts`        | Snabbdom-style virtual DOM (`h`, `init`, modules)   | browser            |
-| `ranuts/stream` | `src/stream/index.ts`       | SSE parsing + provider-neutral model-stream fold    | browser + node     |
+| Import from           | Source                      | What                                                | Runtime            |
+| --------------------- | --------------------------- | --------------------------------------------------- | ------------------ |
+| `ranuts`              | `index.ts`                  | Root barrel — re-exports the utils + visual surface | browser + node     |
+| `ranuts/utils`        | `src/utils/index.ts`        | DOM/BOM, string, object, number, color, time, etc.  | browser + node\*   |
+| `ranuts/node`         | `src/node/index.ts`         | HTTP server, router, ws, fs, streams, middleware    | **node only**      |
+| `ranuts/visual`       | `src/utils/visual/index.ts` | 2D rendering engine (Canvas / WebGL / WebGPU)       | **browser only**   |
+| `ranuts/i18n`         | `src/utils/i18n.ts`         | `I18nCore` / `createI18n` / `useI18n` — DOM-free    | browser + node     |
+| `ranuts/sw`           | `src/sw/index.ts`           | Cache strategies + the precache protocol's SW half  | **service worker** |
+| `ranuts/vnode`        | `src/vnode/index.ts`        | Snabbdom-style virtual DOM (`h`, `init`, modules)   | browser            |
+| `ranuts/stream`       | `src/stream/index.ts`       | SSE parsing + provider-neutral model-stream fold    | browser + node     |
+| `ranuts/conversation` | `src/conversation/index.ts` | Event log → renderable conversation nodes           | browser + node     |
 
 \* `ranuts/utils` is broad: most functions are browser-oriented (touch `window`/`document`),
 but pure helpers (`str`, `obj`, `number`, `compose`, `cloneDeep`, …) run anywhere. Functions
@@ -80,7 +81,8 @@ packages/ranuts/
 │   │   └── totp/             # TOTP + hand-rolled SHA
 │   ├── node/                 # ranuts/node — mini HTTP framework
 │   ├── vnode/                # ranuts/vnode — virtual DOM
-│   └── stream/               # ranuts/stream — SSE + StreamChunk + accumulator
+│   ├── stream/               # ranuts/stream — SSE + StreamChunk + accumulator
+│   └── conversation/         # ranuts/conversation — event log → nodes, with publication cadence
 ├── bin/
 │   ├── build.sh              # build (tsc types + vite es/umd)
 │   └── generate-api-docs.ts  # ⭐ doc:api — emits docs/API.md from source + JSDoc
@@ -157,6 +159,48 @@ Non-obvious rules the vocabulary encodes:
 - **`block-end` wins.** When a provider sends an assembled block, it replaces whatever the
   deltas accumulated.
 - **`finish` terminates.** `usage` arrives before it; nothing after it.
+
+## Projecting an event log into a conversation
+
+`ranuts/conversation` turns an append-only log into the nodes a view renders. The
+alternative — a view that switches on event type and mutates a component tree — puts
+ordering, identity and partial-update reconciliation in the view, where every new kind of
+content has to be threaded through by hand.
+
+Here each kind of content is an independently registered state machine:
+
+```ts
+const engine = createConversationEngine<Event>({ definitions: [message, toolCall] });
+engine.subscribe((nodes) => render(nodes));
+engine.push(event);
+```
+
+A definition says which events are its own (`match`), folds them into its own state
+(`start` / `update`), and never learns that the others exist. Adding a kind is adding a
+definition, not editing a renderer.
+
+Semantics you need before writing one:
+
+- **Every definition sees every event.** Claims are independent; the engine does not stop
+  at the first match, so one log event can drive two nodes.
+- **Order is fixed at `start`.** A node that keeps updating stays where it opened, so a
+  streaming message does not jump to the end of the list on every delta.
+- **An `update` for an id with no open node is dropped.** That is honest when the start
+  event was trimmed from a paged window; inventing a node from a partial update would
+  render something that never existed.
+- **`publication` is the streaming throttle.** `animation-frame` coalesces every delta
+  between two paints into one notification; `immediate` is for discrete facts, where
+  waiting a frame only adds latency; `none` records without waking the view. Cadence
+  escalates and never relaxes — an `immediate` while a frame is pending fires now and
+  cancels the frame.
+- **`reader.previous(kind)` is backward-only**, so replaying the same log reproduces the
+  same view. A definition that could see nodes started after it would not.
+
+`scheduler` is injectable, which is how the cadence tests run without a paint. The default
+uses `requestAnimationFrame` in a browser and a microtask elsewhere.
+
+`<r-conversation>` in ranui is the DOM consumer of all of this — see
+[ranui/CLAUDE.md](../ranui/CLAUDE.md#r-conversation).
 
 ## Following the bottom of a scroller
 

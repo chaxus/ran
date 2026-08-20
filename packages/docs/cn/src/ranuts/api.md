@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: ranuts 导出的全部符号 — 7 个入口点，共 431 个导出，含签名与描述。
+description: ranuts 导出的全部符号 — 8 个入口点，共 440 个导出，含签名与描述。
 ---
 
 # ranuts API（自动生成）
@@ -12,7 +12,7 @@ description: ranuts 导出的全部符号 — 7 个入口点，共 431 个导出
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**431 个导出**，共 7 个入口点。
+**440 个导出**，共 8 个入口点。
 
 ## 入口点
 
@@ -23,6 +23,7 @@ description: ranuts 导出的全部符号 — 7 个入口点，共 431 个导出
 - [`ranuts/i18n`](#ranuts-i18n) — 框架无关的 i18n 引擎（也从 ranuts/utils 再导出） · _浏览器 + node_ · 9 个导出
 - [`ranuts/vnode`](#ranuts-vnode) — Snabbdom 风格的虚拟 DOM · _浏览器_ · 26 个导出
 - [`ranuts/stream`](#ranuts-stream) — Server-Sent Events 解析与厂商中立的模型流折叠 · _浏览器 + node_ · 15 个导出
+- [`ranuts/conversation`](#ranuts-conversation) — 将只追加的事件日志投影为可渲染的对话节点 · _浏览器 + node_ · 9 个导出
 
 ## `ranuts/utils`
 
@@ -597,4 +598,30 @@ import { /* … */ } from 'ranuts/stream';
 - `type ContentBlockType` — Discriminator for the content a block accumulates.
 - `type FinishReason` — Why the response ended.
 - `type StreamChunk` — One normalized event from a streamed response.
+
+## `ranuts/conversation`
+
+将只追加的事件日志投影为可渲染的对话节点 · 运行环境：**浏览器 + node** · 源码：`src/conversation/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/conversation';
+```
+
+### 函数
+
+- `createConversationEngine<Event>(options: ConversationEngineOptions<Event>) => ConversationEngine<Event>` — Creates an engine over a set of definitions.
+
+### 接口
+
+- `interface ConversationEngine` — A running conversation projection.
+- `interface ConversationEngineOptions` — How to construct an engine.
+- `interface ConversationMatch` — A definition's claim on one event.
+- `interface ConversationNode` — One live node, as a view sees it.
+- `interface ConversationNodeDefinition` — One independently registered event-to-node state machine.
+- `interface ConversationReader` — Strictly-backward lookup offered to a definition while it starts a node.
+
+### 类型
+
+- `type ConversationPublication` — When subscribers should see the result of one accepted event.
+- `type FrameScheduler` — Defers work to the next paint, or to a microtask where there is no paint.
 

@@ -124,6 +124,9 @@ export const es: BuildOptions = {
       // Its own entry so a consumer folding a model stream on a server or in a test
       // does not pull the DOM-oriented `ranuts/utils` barrel along with it.
       stream: resolve(__dirname, 'src/stream/index.ts'),
+      // Its own entry for the same reason as `stream`: projecting a log into nodes is
+      // DOM-free, and a consumer doing it on a server should not pull `ranuts/utils`.
+      conversation: resolve(__dirname, 'src/conversation/index.ts'),
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {

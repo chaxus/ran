@@ -8,7 +8,7 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**431 exports** across 7 entry points.
+**440 exports** across 8 entry points.
 
 ## Entry points
 
@@ -19,6 +19,7 @@ Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 - [`ranuts/i18n`](#ranuts-i18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 9 exports
 - [`ranuts/vnode`](#ranuts-vnode) — Snabbdom-style virtual DOM · _browser_ · 26 exports
 - [`ranuts/stream`](#ranuts-stream) — Server-Sent Events parsing and a provider-neutral model-stream fold · _browser + node_ · 15 exports
+- [`ranuts/conversation`](#ranuts-conversation) — Project an append-only event log into renderable conversation nodes · _browser + node_ · 9 exports
 
 ## `ranuts/utils`
 
@@ -593,4 +594,30 @@ import { /* … */ } from 'ranuts/stream';
 - `type ContentBlockType` — Discriminator for the content a block accumulates.
 - `type FinishReason` — Why the response ended.
 - `type StreamChunk` — One normalized event from a streamed response.
+
+## `ranuts/conversation`
+
+Project an append-only event log into renderable conversation nodes · runtime: **browser + node** · source: `src/conversation/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/conversation';
+```
+
+### Functions
+
+- `createConversationEngine<Event>(options: ConversationEngineOptions<Event>) => ConversationEngine<Event>` — Creates an engine over a set of definitions.
+
+### Interfaces
+
+- `interface ConversationEngine` — A running conversation projection.
+- `interface ConversationEngineOptions` — How to construct an engine.
+- `interface ConversationMatch` — A definition's claim on one event.
+- `interface ConversationNode` — One live node, as a view sees it.
+- `interface ConversationNodeDefinition` — One independently registered event-to-node state machine.
+- `interface ConversationReader` — Strictly-backward lookup offered to a definition while it starts a node.
+
+### Types
+
+- `type ConversationPublication` — When subscribers should see the result of one accepted event.
+- `type FrameScheduler` — Defers work to the next paint, or to a microtask where there is no paint.
 
