@@ -20,6 +20,14 @@
   align-self: var(--ran-btn-align-self, flex-start);
   background-image: var(--ran-btn-background-image, none);
   box-shadow: var(--ran-btn-box-shadow, var(--ran-skin-raised-shadow, 0 2px #00000004));
+  // The raised shadow above is painted on THIS box, so it has to be shaped like
+  // the surface it sits behind. Without this the host stays a rectangle: a
+  // rounded button ends up inside a square shadow, whose bottom edge shows as a
+  // straight line poking out past both corners. Invisible at the 6px default,
+  // which is why it survived — a consumer rounding the button to a pill
+  // (--ran-btn-border-radius: var(--ran-radius-full)) sees it immediately.
+  // Same reasoning as the `.ran-btn` radius below, one box further out.
+  border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 6px));
   cursor: var(--ran-btn-cursor, pointer);
   user-select: var(--ran-btn-user-select, none);
   touch-action: var(--ran-btn-touch-action, manipulation);
