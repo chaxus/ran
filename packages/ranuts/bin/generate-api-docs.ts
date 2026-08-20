@@ -44,6 +44,33 @@ interface Entry {
   runtime: string;
 }
 
+const CHECK = process.argv.includes('--check');
+const REGEN_HINT = 'pnpm -F ranuts doc:api';
+
+/**
+ * Writes generated `content` to `file`, or under `--check` verifies that the committed
+ * file already matches and marks the run failed when it does not.
+ *
+ * Trailing whitespace is stripped so the output is byte-identical to what Prettier
+ * produces. Without that, `lint:prettier` rewrites the file after generation and the
+ * freshness gate can never be satisfied.
+ *
+ * @param file Absolute path of the generated file.
+ * @param content Freshly generated contents.
+ */
+async function emit(file: string, content: string): Promise<void> {
+  const normalized = content.replace(/[ \t]+$/gm, '');
+  const rel = path.relative(ROOT, file).split(path.sep).join('/');
+  if (!CHECK) {
+    await fs.writeFile(file, normalized, 'utf8');
+    console.log(`Generated: ${rel}`);
+    return;
+  }
+  if ((await fs.readFile(file, 'utf8').catch(() => '')) === normalized) return;
+  console.error(`[stale] ${rel} — regenerate with \`${REGEN_HINT}\``);
+  process.exitCode = 1;
+}
+
 // Keep in sync with package.json "exports". The root "." entry is intentionally
 // omitted: it re-exports the utils + visual surface and would only duplicate.
 const ENTRIES: Entry[] = [
@@ -437,18 +464,10 @@ async function main(): Promise<void> {
       sectionsCn.push(secCn.join('\n'));
     }
 
-    const generatedAt = new Date().toISOString();
-    const header = [
-      ...lines,
-      `**${total} exports** across ${ENTRIES.length} entry points. Generated at ${generatedAt}.`,
-      '',
-      ...tocLines,
-      '',
-    ];
+    const header = [...lines, `**${total} exports** across ${ENTRIES.length} entry points.`, '', ...tocLines, ''];
 
     const body = `${header.join('\n')}\n${sections.join('\n')}\n`;
-    await fs.writeFile(OUTPUT_FILE, body, 'utf8');
-    console.log(`Generated: ${path.relative(ROOT, OUTPUT_FILE)} (${total} exports, ${ENTRIES.length} entry points)`);
+    await emit(OUTPUT_FILE, body);
 
     // Docs-site copy. Two edits are needed and both would be wrong to skip:
     // frontmatter, so the page gets its own <title>/<meta description> rather than
@@ -462,8 +481,7 @@ async function main(): Promise<void> {
       '',
       body.replace('[../CLAUDE.md](../CLAUDE.md)', `[CLAUDE.md](${REPO_BLOB}/CLAUDE.md)`),
     ].join('\n');
-    await fs.writeFile(SITE_OUTPUT_FILE, siteBody, 'utf8');
-    console.log(`Generated: ${path.relative(ROOT, SITE_OUTPUT_FILE)}`);
+    await emit(SITE_OUTPUT_FILE, siteBody);
 
     // Chinese docs-site page — same data, Chinese page chrome. Per-symbol descriptions
     // stay English (extracted verbatim from source JSDoc).
@@ -482,15 +500,14 @@ async function main(): Promise<void> {
       '请从符号所属的**子路径**导入，例如 `import { debounce } from',
       "'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。",
       '',
-      `**${total} 个导出**，共 ${ENTRIES.length} 个入口点。生成时间 ${generatedAt}。`,
+      `**${total} 个导出**，共 ${ENTRIES.length} 个入口点。`,
       '',
       ...tocLinesCn,
       '',
       sectionsCn.join('\n'),
       '',
     ].join('\n');
-    await fs.writeFile(CN_SITE_OUTPUT_FILE, cnBody, 'utf8');
-    console.log(`Generated: ${path.relative(ROOT, CN_SITE_OUTPUT_FILE)}`);
+    await emit(CN_SITE_OUTPUT_FILE, cnBody);
 
     await checkDocsDrift();
   } finally {

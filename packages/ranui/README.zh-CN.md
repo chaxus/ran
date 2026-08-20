@@ -59,6 +59,8 @@ npm install ranui --save
 pnpm doc:style
 ```
 
+CI 会在仓库根目录运行 `pnpm run verify:docs`，当自动生成的文档与源码不一致时构建失败。
+
 ### 主题
 
 RanUI 基于 [Geist 设计体系](https://vercel.com/geist) 提供统一的 CSS Token 主题体系——Geist 是 Vercel 的开源设计语言，其核心是把颜色组织成一条**状态阶梯**（每条色阶 100→1000，每档一个固定职责：背景 → 悬停 → 边框 → 实心填充 → 文字）。RanUI 采用这套阶梯并搭配 **Geist Sans / Geist Mono**，因此暗色模式只需重定义基础色阶，所有语义 Token 自动翻转。支持 `light`、`dark`、`system` 三种模式（已不再提供主题包）。可在运行时切换模式或覆盖任意 Token（SSR 安全）：

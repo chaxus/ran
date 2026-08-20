@@ -15,10 +15,16 @@ test-results/
 playwright-report/
 coverage/
 
-# Generated API reference (`pnpm -F ranuts doc:api`), emitted to three places. Prettier
-# actively corrupts it: the illustrative snippet `import { /* … */ } from 'ranuts/utils'`
+# Generated documentation. Every file below is produced by a generator that owns its
+# exact bytes and is freshness-gated by `pnpm run verify:docs`; Prettier reformatting it
+# after generation would make the two checks contradict each other, so only regenerating
+# is the source of truth. For `packages/ranuts/docs/API.md` Prettier also actively
+# corrupts the content: the illustrative snippet `import { /* … */ } from 'ranuts/utils'`
 # gets reformatted to `import {} from /* … */ 'ranuts/utils'`, moving the placeholder
-# comment outside the braces. Regenerating is the only source of truth here.
+# comment outside the braces.
 packages/ranuts/docs/API.md
 packages/docs/src/ranuts/api.md
 packages/docs/cn/src/ranuts/api.md
+packages/ranui/docs/COMPONENTS.md
+packages/ranui/docs/style-tokens-parts.md
+packages/ranui/docs/style-tokens-public.md

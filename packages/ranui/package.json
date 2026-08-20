@@ -152,7 +152,9 @@
     "test:update": "npm run e2e:install && playwright test --update-snapshots",
     "tsc": "tsc --noEmit",
     "doc:style": "tsx ./bin/generate-style-docs.ts",
-    "doc:api": "tsx ./bin/generate-component-api.ts"
+    "doc:style:check": "tsx ./bin/generate-style-docs.ts --check",
+    "doc:api": "tsx ./bin/generate-component-api.ts",
+    "doc:api:check": "tsx ./bin/generate-component-api.ts --check"
   },
   "files": [
     "dist",

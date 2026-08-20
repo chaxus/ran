@@ -17,7 +17,9 @@
     "lint:fix": "oxlint --config .oxlintrc.json --fix .",
     "lint:prettier": "prettier --check --cache .",
     "format": "prettier --write --cache .",
-    "cpd": "jscpd ./packages"
+    "cpd": "jscpd ./packages",
+    "verify:docs": "pnpm -F ranui doc:api:check && pnpm -F ranui doc:style:check && pnpm -F ranuts doc:api:check",
+    "publint": "pnpm exec publint packages/ranui && pnpm exec publint packages/ranuts"
   },
   "homepage": "https://ran.chaxus.com/",
   "keywords": [],
@@ -26,6 +28,7 @@
   "devDependencies": {
     "jscpd": "5.0.14",
     "oxlint": "1.77.0",
-    "prettier": "3.9.6"
+    "prettier": "3.9.6",
+    "publint": "0.3.24"
   }
 }

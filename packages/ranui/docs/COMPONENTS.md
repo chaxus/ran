@@ -6,8 +6,6 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-16T07:12:26.488Z
-
 32 custom elements.
 
 ## `<r-button>`
@@ -123,7 +121,7 @@ Source: `components/icon/index.ts`
 > is registered. Register once, in the browser, before the first `<r-icon>` connects:
 >
 > ```ts
-> import { registerBuiltinIcons } from 'ranui'; // or 'ranui/icons'
+> import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'
 > registerBuiltinIcons(); // registers every name in RAN_ICON_NAMES
 > ```
 >
@@ -437,3 +435,4 @@ Source: `components/theme-switch/index.ts`
 - **Events**: `change` → detail `{ theme }`
 - **Slots**: —
 - **Parts**: `button ${choice}`, `switch`
+
