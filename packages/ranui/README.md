@@ -57,6 +57,9 @@ Regenerate after changing a component's API with:
 pnpm doc:api
 ```
 
+CI runs `pnpm run verify:docs` from the repository root, which fails when a generated
+reference no longer matches its source.
+
 ### AI / Claude Code skill
 
 A ready-to-use skill lets AI assistants (Claude Code) read and use ranui without

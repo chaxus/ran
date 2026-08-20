@@ -203,6 +203,33 @@ const ELEMENT_NOTES: Record<string, string> = {
   ].join('\n'),
 };
 
+const CHECK = process.argv.includes('--check');
+const REGEN_HINT = 'pnpm -F ranui doc:api';
+
+/**
+ * Writes generated `content` to `file`, or under `--check` verifies that the committed
+ * file already matches and marks the run failed when it does not.
+ *
+ * Trailing whitespace is stripped so the output is byte-identical to what Prettier
+ * produces. Without that, `lint:prettier` rewrites the file after generation and the
+ * freshness gate can never be satisfied.
+ *
+ * @param file Absolute path of the generated file.
+ * @param content Freshly generated contents.
+ */
+async function emit(file: string, content: string): Promise<void> {
+  const normalized = content.replace(/[ \t]+$/gm, '');
+  const rel = path.relative(ROOT, file).split(path.sep).join('/');
+  if (!CHECK) {
+    await fs.writeFile(file, normalized, 'utf8');
+    console.log(`Generated: ${rel}`);
+    return;
+  }
+  if ((await fs.readFile(file, 'utf8').catch(() => '')) === normalized) return;
+  console.error(`[stale] ${rel} — regenerate with \`${REGEN_HINT}\``);
+  process.exitCode = 1;
+}
+
 function renderProps(props: Prop[]): string {
   if (!props.length) return '—';
   const sig = (p: Prop): string => `\`${p.type ? `${p.name}: ${p.type}` : p.name}\``;
@@ -232,6 +259,40 @@ function renderEvents(events: Evt[]): string {
     .join(' · ');
 }
 
+/**
+ * Directories under `components/` that legitimately contribute no custom element.
+ * Each entry needs a reason: the guard below exists to catch elements this extractor
+ * failed to see, and an unexplained entry turns it back off for that directory.
+ */
+const NON_ELEMENT_COMPONENT_DIRS: Record<string, string> = {};
+
+/**
+ * Fails generation when a component directory contributes no documented element.
+ *
+ * Elements are discovered by matching a literal `defineSSR('tag')` call, so a component
+ * that registers its tag any other way is skipped without an error and silently vanishes
+ * from the reference. This turns that silence into a build failure.
+ *
+ * @param elements Every element the extractor found.
+ */
+async function assertEveryComponentDocumented(elements: ElementApi[]): Promise<void> {
+  const covered = new Set(elements.map((el) => el.file.split('/')[1]));
+  const entries = await fs.readdir(COMPONENTS_DIR, { withFileTypes: true });
+  const missing = entries
+    .filter((e) => e.isDirectory() && !covered.has(e.name) && !(e.name in NON_ELEMENT_COMPONENT_DIRS))
+    .map((e) => e.name);
+  if (!missing.length) return;
+  console.error(
+    `[component-api] ${missing.length} component director${missing.length === 1 ? 'y contributes' : 'ies contribute'} no element:`,
+  );
+  for (const name of missing) console.error(`  - components/${name}`);
+  console.error(
+    "Each element is found by a literal `defineSSR('tag')` call. Register the tag that way, " +
+      'or add the directory to NON_ELEMENT_COMPONENT_DIRS with a reason.',
+  );
+  process.exit(1);
+}
+
 async function main(): Promise<void> {
   const files = (await walkDir(COMPONENTS_DIR)).filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'));
   const elements: ElementApi[] = [];
@@ -253,6 +314,8 @@ async function main(): Promise<void> {
     });
   }
 
+  await assertEveryComponentDocumented(elements);
+
   elements.sort((a, b) => a.tag.localeCompare(b.tag));
 
   const lines: string[] = [
@@ -263,8 +326,6 @@ async function main(): Promise<void> {
     'shape), slots, and `::part()` names — extracted from source. For CSS variables',
     '(theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for',
     'design rules see [DESIGN.md](./DESIGN.md).',
-    '',
-    `Generated at: ${new Date().toISOString()}`,
     '',
     `${elements.length} custom elements.`,
     '',
@@ -291,8 +352,7 @@ async function main(): Promise<void> {
     lines.push('');
   }
 
-  await fs.writeFile(OUTPUT_FILE, `${lines.join('\n')}\n`, 'utf8');
-  console.log(`Generated: ${path.relative(ROOT, OUTPUT_FILE)} (${elements.length} elements)`);
+  await emit(OUTPUT_FILE, `${lines.join('\n')}\n`);
 }
 
 main().catch((error) => {

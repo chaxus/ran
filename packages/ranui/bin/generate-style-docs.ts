@@ -7,6 +7,33 @@ const OUTPUT_FILE = path.join(ROOT, 'docs', 'style-tokens-parts.md');
 const OUTPUT_PUBLIC_FILE = path.join(ROOT, 'docs', 'style-tokens-public.md');
 const FILTER_CONFIG_FILE = path.join(ROOT, 'docs', 'style-token-filter.json');
 
+const CHECK = process.argv.includes('--check');
+const REGEN_HINT = 'pnpm -F ranui doc:style';
+
+/**
+ * Writes generated `content` to `file`, or under `--check` verifies that the committed
+ * file already matches and marks the run failed when it does not.
+ *
+ * Trailing whitespace is stripped so the output is byte-identical to what Prettier
+ * produces. Without that, `lint:prettier` rewrites the file after generation and the
+ * freshness gate can never be satisfied.
+ *
+ * @param file Absolute path of the generated file.
+ * @param content Freshly generated contents.
+ */
+async function emit(file: string, content: string): Promise<void> {
+  const normalized = content.replace(/[ \t]+$/gm, '');
+  const rel = path.relative(ROOT, file).split(path.sep).join('/');
+  if (!CHECK) {
+    await fs.writeFile(file, normalized, 'utf8');
+    console.log(`Generated: ${rel}`);
+    return;
+  }
+  if ((await fs.readFile(file, 'utf8').catch(() => '')) === normalized) return;
+  console.error(`[stale] ${rel} — regenerate with \`${REGEN_HINT}\``);
+  process.exitCode = 1;
+}
+
 const DEFAULT_EXCLUDE_CONTAINS = [
   '-host-',
   '-root-',
@@ -261,8 +288,6 @@ function buildDoc(entries: ComponentEntry[], mode: 'full' | 'public', filterConf
     lines.push('It is a filtered, public-facing style API view (structural/internal tokens excluded).');
   }
   lines.push('');
-  lines.push(`Generated at: ${new Date().toISOString()}`);
-  lines.push('');
   lines.push('## Components');
   lines.push('');
 
@@ -333,10 +358,8 @@ async function main(): Promise<void> {
   const fullDoc = buildDoc(entries, 'full', filterConfig);
   const publicDoc = buildDoc(entries, 'public', filterConfig);
 
-  await fs.writeFile(OUTPUT_FILE, fullDoc, 'utf8');
-  await fs.writeFile(OUTPUT_PUBLIC_FILE, publicDoc, 'utf8');
-  console.log(`Generated: ${path.relative(ROOT, OUTPUT_FILE)}`);
-  console.log(`Generated: ${path.relative(ROOT, OUTPUT_PUBLIC_FILE)}`);
+  await emit(OUTPUT_FILE, fullDoc);
+  await emit(OUTPUT_PUBLIC_FILE, publicDoc);
 }
 
 main().catch((error) => {

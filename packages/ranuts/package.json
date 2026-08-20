@@ -64,6 +64,7 @@
     "tsc": "tsc --noEmit",
     "dev": "vite --host",
     "doc:api": "tsx ./bin/generate-api-docs.ts",
+    "doc:api:check": "tsx ./bin/generate-api-docs.ts --check",
     "prepublish": "npm run build"
   },
   "keywords": [

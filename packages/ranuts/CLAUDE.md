@@ -13,7 +13,8 @@ and Node server tooling. Multi-entry, tree-shakeable, ships ESM + UMD.
 
 - **[docs/API.md](docs/API.md)** — ⭐ generated, authoritative list of **every exported
   symbol** with its signature + one-line description, grouped by entry point. Regenerate
-  with `npm run doc:api` after changing any public API. Read this to find what exists.
+  with `npm run doc:api` after changing any public API — CI fails if you forget. Read
+  this to find what exists.
 - **This file** — orientation: which entry to import, runtime constraints, conventions,
   and gotchas. Read this to decide _where_ things go and _how_ to add them.
 
@@ -214,6 +215,7 @@ npm run tsc          # type-check only (tsc --noEmit)
 npm run test         # vitest run (node env)
 npm run test:coverage
 npm run doc:api      # regenerate docs/API.md from source + JSDoc
+npm run doc:api:check  # verify it is fresh without writing (what CI runs)
 ```
 
 - **Tests**: Vitest, **node environment** (no jsdom) — `vitest.config.ts` has no `environment`

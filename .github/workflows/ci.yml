@@ -36,6 +36,12 @@ jobs:
       - name: Format check
         run: pnpm run lint:prettier
 
+      # Generated docs (ranui COMPONENTS.md / style tokens, ranuts API.md and its two
+      # docs-site copies) are committed. Without this, a component API change that
+      # skipped `doc:api` leaves the reference silently wrong.
+      - name: Generated docs are fresh
+        run: pnpm run verify:docs
+
       - name: Lint
         run: pnpm run lint
 
@@ -73,6 +79,10 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+      - name: Lint published package manifests
+        if: matrix.os == 'ubuntu-latest' && matrix.node_version == 24
+        run: pnpm run publint
 
       - name: Test
         run: pnpm run test

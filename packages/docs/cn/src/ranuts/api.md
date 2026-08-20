@@ -12,7 +12,7 @@ description: ranuts 导出的全部符号 — 6 个入口点，共 413 个导出
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**413 个导出**，共 6 个入口点。生成时间 2026-08-18T13:16:54.528Z。
+**413 个导出**，共 6 个入口点。
 
 ## 入口点
 
