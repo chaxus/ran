@@ -65,6 +65,12 @@ SSR helpers: `import { defineSSR } from 'ranui/ssr-registry'` (source) / `ranui/
 - **Layout/content**: `r-card`, `r-section`, `r-tab`/`r-tabs`, `r-icon`, `r-img`,
   `r-link`, `r-math`, `r-player`, `r-radar`.
 - **Routing**: `r-router`, `r-route`, `r-link` (history/hash SPA routing).
+- **Streaming transcript**: `r-conversation` — renders an append-only event log. Register
+  each kind of content as a view (`match`/`start`/`update` fold state, `mount`/`patch`
+  render it) **before the first `push`**; it throws afterwards. Bottom-follow is on by
+  default and does not fight the reader; `pinnedchange` drives a "jump to latest" button.
+  Use `<r-markdown>` as the prose row — its `mode="streaming"` already closes half-streamed
+  markdown. Projection and cadence: `ranuts/conversation`.
 
 ## Builder + reactivity (from `ranui/builder`)
 
