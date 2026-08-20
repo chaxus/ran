@@ -92,6 +92,9 @@
       "card": [
         "./dist/components/card/index.d.ts"
       ],
+      "conversation": [
+        "./dist/components/conversation/index.d.ts"
+      ],
       "scratch": [
         "./dist/components/scratch/index.d.ts"
       ],
@@ -335,6 +338,11 @@
     "./card": {
       "types": "./dist/components/card/index.d.ts",
       "import": "./dist/card.js",
+      "require": "./dist/index.cjs"
+    },
+    "./conversation": {
+      "types": "./dist/components/conversation/index.d.ts",
+      "import": "./dist/conversation.js",
       "require": "./dist/index.cjs"
     },
     "./scratch": {

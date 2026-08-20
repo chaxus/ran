@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-32 custom elements.
+33 custom elements.
 
 ## `<r-button>`
 
@@ -67,6 +67,20 @@ Source: `components/popover/content/index.ts`
 - **Events**: `change`
 - **Slots**: `default`
 - **Parts**: —
+
+## `<r-conversation>`
+
+Source: `components/conversation/index.ts`
+
+- **Attributes**: `empty: string`, `follow: boolean`, `sheet: string`
+- **Properties**:
+  - `empty: string` — Text shown while the projection has produced no rows.
+  - `follow: boolean` — Whether new content is followed until the reader scrolls away from the floor.
+  - `pinned: boolean` — Whether the view is currently following new content.
+  - `sheet: string`
+- **Events**: `pinnedchange` → detail `{ pinned }`
+- **Slots**: `footer (named)`
+- **Parts**: `conversation`, `empty`, `footer`, `list`
 
 ## `<r-dropdown>`
 

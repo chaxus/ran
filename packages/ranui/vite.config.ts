@@ -146,6 +146,7 @@ export const componentEntries: Record<string, string> = {
   loading: resolve(__dirname, 'components/loading/index.ts'),
   scratch: resolve(__dirname, 'components/scratch/index.ts'),
   card: resolve(__dirname, 'components/card/index.ts'),
+  conversation: resolve(__dirname, 'components/conversation/index.ts'),
   glass: resolve(__dirname, 'components/glass/index.ts'),
   section: resolve(__dirname, 'components/section/index.ts'),
   router: resolve(__dirname, 'components/router/index.ts'),
