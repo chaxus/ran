@@ -755,6 +755,69 @@ r-card::part(header) {
 
 ---
 
+### r-conversation
+
+Renders an append-only event log as a conversation. It owns the three things that are
+tedious and easy to get wrong, and nothing else: projecting events into nodes, keeping the
+view pinned to its floor without fighting the reader, and reconciling rows against the node
+list. What a message or a tool call _looks like_ is a registered view, not the element's
+business.
+
+The projection is [`ranuts/conversation`](../ranuts/CLAUDE.md); bottom-follow is
+`createBottomFollower` from `ranuts/utils`. Read those before writing a view — the rules
+about cadence and scroll ownership live there.
+
+```ts
+const chat = document.querySelector('r-conversation')!;
+
+chat.register({
+  kind: 'message',
+  // Which events are mine, and which node they belong to.
+  match: (e) =>
+    e.type === 'message/start'
+      ? { id: e.id, role: 'start' }
+      : e.type === 'message/delta'
+        ? { id: e.id, role: 'update' }
+        : null,
+  // Fold them into my own state.
+  start: () => ({ text: '' }),
+  update: (state, e) => ({ text: state.text + e.text }),
+  // Per-token deltas coalesce to one repaint per frame; discrete facts do not wait.
+  publication: (e) => (e.type === 'message/delta' ? 'animation-frame' : 'immediate'),
+  // How that state reaches the screen.
+  mount: () => document.createElement('r-markdown'),
+  patch: (el, node) => {
+    (el as Markdown).content = node.state.text;
+  },
+});
+
+chat.push({ type: 'message/start', id: 'm1' });
+chat.push({ type: 'message/delta', id: 'm1', text: 'Hello' });
+```
+
+Rules that bite if broken:
+
+- **Register every view before the first `push`.** The projection is built once from the
+  registered set, so a later registration would silently miss every event already folded
+  in. It throws rather than doing that.
+- **`update` folds state; `patch` writes it to the DOM.** They are named apart because they
+  are different jobs — `patch` folds nothing, and runs once per frame on a streaming row.
+- **`mount` is optional.** A view without it contributes state that other views read
+  through `reader.previous`, and renders nothing.
+- **Rows keep the position they opened in.** A streaming message does not jump to the end
+  of the list on every delta.
+- **`r-markdown` is the intended row for prose.** It already closes half-streamed
+  `**bold`, backticks, links and `$$` math in `mode="streaming"` — do not re-solve that in
+  a view.
+
+Bottom-follow: on by default, `follow="false"` leaves the reader in control from the start.
+The element fires `pinnedchange` with `detail.pinned` so a "jump to latest" affordance can
+track it, and `scrollToBottom()` takes control back. For paging in older content, call
+`captureAnchor()` before the prepend and `restoreAnchor()` after, so the reader keeps
+looking at what they were looking at.
+
+---
+
 ## Testing
 
 ### Setup

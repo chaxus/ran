@@ -218,6 +218,32 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `block`
 - `swatch`
 
+### `conversation`
+
+- Tokens: 12
+- Parts: 4
+
+#### Tokens
+<!-- layers: semantic: 3 · internal: 9 -->
+- `--ran-color-bg`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-conversation-background`
+- `--ran-conversation-color`
+- `--ran-conversation-empty-color`
+- `--ran-conversation-font-size`
+- `--ran-conversation-footer-background`
+- `--ran-conversation-gap`
+- `--ran-space-4`
+- `--ran-space-8`
+- `--ran-text-copy-2`
+
+#### Parts
+- `conversation`
+- `empty`
+- `footer`
+- `list`
+
 ### `dropdown`
 
 - Tokens: 27
