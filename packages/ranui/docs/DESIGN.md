@@ -15,6 +15,26 @@
 
 Conflict resolution order: **user goals → verified evidence → this file → repo guidance (`CLAUDE.md`) → shipped patterns → general heuristics.**
 
+## What is machine-checked
+
+Five of the rules below are enforced by `pnpm -F ranui verify:design`, which CI runs on
+every pull request. Everything else in this file is still binding — it is simply not
+mechanically decidable, so it relies on review and on rendering the result.
+
+| Rule                   | Enforces                                                                                   | Section |
+| ---------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| `dark-unsafe-fallback` | a component token's colour fallback points at a token that flips, not a light-only literal | §1      |
+| `bare-colour`          | raw colour literals do not appear outside a token fallback                                 | §1      |
+| `spacing-scale`        | `padding` / `margin` / `gap` come from `--ran-space-*`                                     | §2      |
+| `sizing-scale`         | intrinsic dimensions never borrow from the spacing scale                                   | §2      |
+| `mouse-only-drag`      | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
+
+Existing violations are recorded per file in
+[design-rule-baseline.json](./design-rule-baseline.json) and act as a **ratchet**: a count
+that rises fails as a new violation, and a count that falls fails until it is lowered, so a
+fix cannot silently regress later. The baseline is a record of debt, not permission — the
+target for every entry is zero.
+
 ---
 
 ## 1. Color — a state ladder, not a palette
@@ -319,4 +339,5 @@ pass that brought existing components in line with it (0.5.0-alpha.0).
 - [ ] **Keyboard / focus** behavior verified; visible focus everywhere.
 - [ ] Edge cases: long text, large numbers, both locales (en / zh).
 - [ ] Spacing comes from the scale; type uses a role; color uses semantic tokens.
+- [ ] `pnpm -F ranui verify:design` passes — it checks the five mechanical rules above.
 - [ ] Copy follows §6; nothing signals state by color alone (§7).

@@ -154,7 +154,8 @@
     "doc:style": "tsx ./bin/generate-style-docs.ts",
     "doc:style:check": "tsx ./bin/generate-style-docs.ts --check",
     "doc:api": "tsx ./bin/generate-component-api.ts",
-    "doc:api:check": "tsx ./bin/generate-component-api.ts --check"
+    "doc:api:check": "tsx ./bin/generate-component-api.ts --check",
+    "verify:design": "tsx ./bin/verify-design-rules.ts"
   },
   "files": [
     "dist",

@@ -8,6 +8,8 @@ Web Components library built with TypeScript. All components use Shadow DOM enca
 
 **[docs/DESIGN.md](docs/DESIGN.md) is the authoritative, executable design standard.** Follow it whenever your work changes what a user sees. It is based on the Geist design system (light/dark only).
 
+Five of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, and mouse-only drag loops. Known violations are ratcheted in [docs/design-rule-baseline.json](docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
+
 For each element's **attributes / properties / events / slots / `::part()`**, consult **[docs/COMPONENTS.md](docs/COMPONENTS.md)** (generated — run `npm run doc:api` after changing any component's API; CI fails if you forget) and **[docs/style-tokens-public.md](docs/style-tokens-public.md)** for its CSS variables. The non-negotiables:
 
 - **Color is a state ladder, not a palette.** Each scale step 100→1000 has one fixed job: 100 default bg · 200 hover bg · 300 active bg · 400 border · 500 hover border · 600 active border · 700 solid · 800 solid hover · 900 secondary text · 1000 primary text. Use the **semantic tokens** (`--ran-color-*`), never raw hex, in components.

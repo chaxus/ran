@@ -19,6 +19,7 @@
     "format": "prettier --write --cache .",
     "cpd": "jscpd ./packages",
     "verify:docs": "pnpm -F ranui doc:api:check && pnpm -F ranui doc:style:check && pnpm -F ranuts doc:api:check",
+    "verify:design": "pnpm -F ranui verify:design",
     "publint": "pnpm exec publint packages/ranui && pnpm exec publint packages/ranuts"
   },
   "homepage": "https://ran.chaxus.com/",
