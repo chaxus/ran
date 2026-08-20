@@ -44,6 +44,10 @@
     "./stream": {
       "types": "./dist/src/stream/index.d.ts",
       "import": "./dist/src/stream/index.js"
+    },
+    "./conversation": {
+      "types": "./dist/src/conversation/index.d.ts",
+      "import": "./dist/src/conversation/index.js"
     }
   },
   "repository": {

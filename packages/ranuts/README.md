@@ -62,6 +62,7 @@ Import as required. You can select:
 - `ranuts/sw` — cache strategies + the precache protocol's service-worker half (**service worker only**)
 - `ranuts/vnode` — Snabbdom-style virtual DOM
 - `ranuts/stream` — Server-Sent Events parsing plus a provider-neutral fold of a streamed model response
+- `ranuts/conversation` — project an append-only event log into renderable conversation nodes
 - `ranuts/i18n` — the i18n engine on its own, without the rest of `utils`
 
 ```js

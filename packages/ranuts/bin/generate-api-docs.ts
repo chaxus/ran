@@ -123,6 +123,13 @@ const ENTRIES: Entry[] = [
     blurbCn: 'Server-Sent Events 解析与厂商中立的模型流折叠',
     runtime: 'browser + node',
   },
+  {
+    subpath: 'ranuts/conversation',
+    file: 'src/conversation/index.ts',
+    blurb: 'Project an append-only event log into renderable conversation nodes',
+    blurbCn: '将只追加的事件日志投影为可渲染的对话节点',
+    runtime: 'browser + node',
+  },
 ];
 
 type Kind = 'function' | 'class' | 'interface' | 'type' | 'enum' | 'const' | 'namespace' | 'other';
