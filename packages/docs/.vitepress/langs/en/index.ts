@@ -366,6 +366,16 @@ const themeEnConfig: DefaultTheme.Config = {
         items: [{ text: 'Virtual DOM', link: '/src/ranuts/vnode/' }],
       },
       {
+        text: 'Streaming (stream)',
+        collapsed: true,
+        items: [{ text: 'Streaming model responses', link: '/src/ranuts/stream/' }],
+      },
+      {
+        text: 'Conversation (conversation)',
+        collapsed: true,
+        items: [{ text: 'Event log to nodes', link: '/src/ranuts/conversation/' }],
+      },
+      {
         text: 'Service Worker (sw)',
         collapsed: true,
         items: [{ text: 'Caching & precache', link: '/src/ranuts/sw/' }],
@@ -409,6 +419,7 @@ const themeEnConfig: DefaultTheme.Config = {
           { text: 'Math', link: '/src/ranui/math/' },
           { text: 'Mermaid', link: '/src/ranui/mermaid/' },
           { text: 'Markdown', link: '/src/ranui/markdown/' },
+          { text: 'Conversation', link: '/src/ranui/conversation/' },
           { text: 'CheckBox', link: '/src/ranui/checkbox/' },
           { text: 'Tabs', link: '/src/ranui/tab/' },
           { text: 'Preview', link: '/src/ranui/preview/' },

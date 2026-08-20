@@ -363,6 +363,16 @@ const themeCnConfig: DefaultTheme.Config = {
         items: [{ text: '虚拟 DOM', link: '/cn/src/ranuts/vnode/' }],
       },
       {
+        text: '流式响应 (stream)',
+        collapsed: true,
+        items: [{ text: '流式模型响应', link: '/cn/src/ranuts/stream/' }],
+      },
+      {
+        text: '对话投影 (conversation)',
+        collapsed: true,
+        items: [{ text: '事件日志到节点', link: '/cn/src/ranuts/conversation/' }],
+      },
+      {
         text: 'Service Worker (sw)',
         collapsed: true,
         items: [{ text: '缓存策略与预取', link: '/cn/src/ranuts/sw/' }],
@@ -406,6 +416,7 @@ const themeCnConfig: DefaultTheme.Config = {
           { text: 'Math 数学公式', link: '/cn/src/ranui/math/' },
           { text: 'Mermaid 图表', link: '/cn/src/ranui/mermaid/' },
           { text: 'Markdown 富文本', link: '/cn/src/ranui/markdown/' },
+          { text: 'Conversation 对话', link: '/cn/src/ranui/conversation/' },
           { text: 'CheckBox 多选框', link: '/cn/src/ranui/checkbox/' },
           { text: 'Tabs 标签页', link: '/cn/src/ranui/tab/' },
           { text: 'Preview 预览', link: '/cn/src/ranui/preview/' },
