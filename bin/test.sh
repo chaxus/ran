@@ -1,9 +1,8 @@
 #!/bin/bash
 set -e
 
-pnpm -F docs tsc
-pnpm -F ranuts tsc
-pnpm -F ranuts test
-# ranui's test script covers its own tsc + unit + ssr (and rebuilds ranuts first)
-pnpm -F ranui test
-pnpm -F im test
+# ranui and im resolve ranuts through its build output, so it has to exist first.
+pnpm -F ranuts build
+
+# Every package declaring the `test` check in packages/manifest.json.
+node bin/run-checks.mjs test

@@ -17,7 +17,8 @@
   ],
   "scripts": {
     "dev": "vite --host --force",
-    "build": "sh ./bin/build.sh"
+    "build": "sh ./bin/build.sh",
+    "tsc": "tsc --noEmit"
   },
   "keywords": [],
   "author": "chaxus",

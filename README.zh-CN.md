@@ -74,6 +74,8 @@
 | [cpro](packages/cpro)                   | C/C++ 学习与实验 |
 | [rust](packages/rust)                   | Rust 学习与实验  |
 
+CI 实际检查哪些包，声明在 [packages/manifest.json](packages/manifest.json) 里。这份清单是**可执行的**而不是描述性的：`bin/run-checks.mjs` 会对声明了某项检查的包逐一运行它，因此清单里写着「被检查」的包就真的被检查，没被检查的则写明原因。`pnpm run verify:packages` 会在 `packages/` 下出现清单里没有的目录时失败——新包无法在没人决定「查不查」的情况下悄悄加入。
+
 ## 🚀 快速开始
 
 ### 安装

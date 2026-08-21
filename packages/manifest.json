@@ -1,0 +1,55 @@
+{
+  "$comment": "Every directory under packages/ is declared here, with the checks it runs in CI. This file is executable, not descriptive: bin/run-checks.mjs runs a check across the packages that declare it, so a package listed here as checked really is checked, and one that is not says why. bin/verify-packages.mjs keeps it honest against what is on disk. Order is the order checks run in.",
+  "packages": {
+    "ranuts": {
+      "status": "product",
+      "checks": ["tsc", "test"]
+    },
+    "ranui": {
+      "status": "product",
+      "checks": ["tsc", "test"]
+    },
+    "docs": {
+      "status": "support",
+      "checks": ["tsc"]
+    },
+    "im": {
+      "status": "experimental",
+      "checks": ["tsc", "test"]
+    },
+    "visual": {
+      "status": "experimental",
+      "checks": ["tsc"]
+    },
+    "ranite": {
+      "status": "experimental",
+      "checks": [],
+      "reason": "Does not typecheck yet: 9 errors remain after adding the missing @types, including a real ModuleNode | undefined assignment in ModuleGraph.ts and an unindexable command table in cli.ts. Fixing them is a decision about this package's own semantics, not a config change. Its tsconfig was repaired here so `pnpm -F ranite tsc` reports those errors instead of failing on a removed compiler option."
+    },
+    "cpro": {
+      "status": "stub",
+      "checks": [],
+      "reason": "Placeholder: no source yet, and the test script is still the npm-init one that fails on purpose."
+    },
+    "debug": {
+      "status": "stub",
+      "checks": [],
+      "reason": "Placeholder: a single file and no build, tsconfig, or entry point to check."
+    },
+    "image-process": {
+      "status": "stub",
+      "checks": [],
+      "reason": "Placeholder: a single file and no build, tsconfig, or entry point to check."
+    },
+    "precss": {
+      "status": "non-js",
+      "checks": [],
+      "reason": "CSS sources with no package.json; nothing in the JavaScript toolchain applies."
+    },
+    "rust": {
+      "status": "non-js",
+      "checks": [],
+      "reason": "Rust sources with no package.json; built and tested by cargo, not by this workspace."
+    }
+  }
+}
