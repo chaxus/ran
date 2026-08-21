@@ -75,6 +75,10 @@ SSR helpers: `import { defineSSR } from 'ranui/ssr-registry'` (source) / `ranui/
   intent** (`generic` / `terminal` / `diff`), never markup. Views must be pure functions
   of the call's arguments, because they are recomputed on replay; an unrecognised card
   degrades to `generic` instead of throwing.
+- **Chain of thought**: `r-reasoning` — expands while `streaming` is set, collapses when
+  it clears, and **stops following once the reader opens or closes it themselves**
+  (setting `open` from script counts). Feed `content` from `ranuts/stream`'s
+  `reasoning-delta` blocks.
 
 ## Builder + reactivity (from `ranui/builder`)
 
