@@ -9,7 +9,9 @@
   },
   "scripts": {
     "dev": "sh ./bin/dev.sh",
-    "build": "vite build"
+    "build": "vite build",
+    "tsc": "tsc --noEmit",
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +27,8 @@
     "react-router-dom": "7.18.2",
     "tsx": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vitest": "^4.1.8"
   },
   "dependencies": {
     "ranuts": "workspace:*"
