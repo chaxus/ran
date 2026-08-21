@@ -74,6 +74,8 @@ This monorepo contains various experimental packages:
 | [cpro](packages/cpro)                   | C/C++ learning & experiments    |
 | [rust](packages/rust)                   | Rust learning & experiments     |
 
+Which of these CI actually checks is declared in [packages/manifest.json](packages/manifest.json), and that file is executable rather than descriptive: `bin/run-checks.mjs` runs a check across the packages that declare it, so a package listed there as checked really is, and one that is not says why. `pnpm run verify:packages` fails when a directory under `packages/` is missing from it, so a new package cannot arrive without someone deciding whether it is checked.
+
 ## 🚀 Quick Start
 
 ### Installation

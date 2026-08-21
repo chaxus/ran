@@ -8,13 +8,17 @@
   },
   "scripts": {
     "start": "tsup --watch",
-    "build": "tsup --minify"
+    "build": "tsup --minify",
+    "tsc": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "8.0.1",
+    "@types/connect": "^3.4.38",
+    "@types/debug": "^4.1.12",
+    "@types/fs-extra": "^11.0.4",
     "chokidar": "5.0.0",
     "connect": "3.7.0",
     "picocolors": "1.1.1",
