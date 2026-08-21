@@ -69,6 +69,10 @@ const calls = accumulator.toolCalls(); // arguments 仍是文本——在这里�
 
 它同时接受 `AsyncIterable<Uint8Array>` 和 `ReadableStream`，因此测试可以直接喂字节切片，无需网络。
 
+## 一份可参考的映射实现
+
+本仓库的 `packages/im` 就是一个真实使用者：一条 OpenAI 兼容的 SSE 路由、到 `StreamChunk` 的映射，以及一个持有快照而非自行拼接增量的视图。它的往返测试会把真实服务端产生的字节、按多种分块大小喂进真实客户端，因此两侧的分帧无法悄悄跑偏。
+
 ## 相关
 
 - [ranuts/conversation](../conversation/) —— 把产生的事件投影为可渲染节点

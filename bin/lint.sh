@@ -10,3 +10,6 @@ pnpm -F ranui build
 pnpm -F docs tsc
 pnpm -F ranui tsc
 pnpm -F ranuts tsc
+# im consumes ranuts/stream; without this its types drifted unchecked (see the
+# pre-existing arity error this line first surfaced).
+pnpm -F im tsc

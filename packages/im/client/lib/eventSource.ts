@@ -1,135 +1,141 @@
-interface RequestOption {
-  onopen?: () => void;
-  onmessage?: (data: string) => void;
-  onclose?: () => void;
-  onerror?: (e: Error) => void;
+import { createStreamAccumulator, mapEventStream } from 'ranuts/stream';
+import type { ServerSentEvent, StreamChunk, StreamSnapshot } from 'ranuts/stream';
+
+/**
+ * One chunk of an OpenAI-compatible chat completion stream.
+ *
+ * Only the fields this client reads are declared. A provider sends more, and a field it
+ * adds later must not stop this from compiling.
+ */
+interface WireChunk {
+  choices?: {
+    index?: number;
+    delta?: { content?: string; reasoning_content?: string };
+    finish_reason?: string | null;
+  }[];
+  usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
 }
 
-enum EventSourceStatus {
-  CONNECTING,
-  OPEN,
-  CLOSED,
-  ERROR,
+/** Terminal sentinel the OpenAI wire format sends instead of closing cleanly. */
+const DONE = '[DONE]';
+
+/**
+ * Maps `finish_reason` onto the neutral vocabulary.
+ *
+ * @param reason The provider's reason, if it sent one.
+ * @returns The neutral reason.
+ */
+function finishReason(reason: string): StreamChunk & { type: 'finish' } {
+  if (reason === 'length') return { type: 'finish', reason: 'length' };
+  if (reason === 'tool_calls') return { type: 'finish', reason: 'tool-calls' };
+  if (reason === 'content_filter') return { type: 'finish', reason: 'content-filter' };
+  return { type: 'finish', reason: 'stop' };
 }
 
-export class EventStreamFetch {
-  controller?: AbortController;
-  status: EventSourceStatus;
-  constructor() {
-    this.controller = undefined;
-    this.status = EventSourceStatus.CLOSED;
+/**
+ * Maps one wire event onto zero or more {@link StreamChunk}s.
+ *
+ * This is the only vendor-specific code in the pipeline, and `ranuts/stream` deliberately
+ * ships no such mapping: the framing and the fold are the same everywhere, the wire shape
+ * is not. Point this at a different provider by rewriting this function alone.
+ *
+ * @param event One parsed Server-Sent Event.
+ * @returns The chunks it carries, empty for a sentinel or an unparseable payload.
+ */
+export function toStreamChunks(event: ServerSentEvent): StreamChunk[] {
+  if (event.data === '' || event.data === DONE) return [];
+
+  let wire: WireChunk;
+  try {
+    wire = JSON.parse(event.data) as WireChunk;
+  } catch {
+    // A provider that emits a keep-alive comment as data, or a truncated final event on an
+    // aborted connection, must not take the stream down.
+    return [];
   }
-  // 建立 FETCH-SSE 连接
-  public fetchStream = (url: string, body: Record<string, string> = {}, callback: Function): Promise<void> => {
-    this.controller = new AbortController();
-    const headers = {
-      'content-type': 'application/json',
-      Accept: 'text/event-stream',
-      Connection: 'keep-alive',
-    };
-    return this.fetchEventSource(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-      signal: this.controller.signal,
-      onopen: () => {
-        this.status = EventSourceStatus.OPEN;
-        console.log('FETCH 连接打开');
-      },
-      onclose: () => {
-        this.status = EventSourceStatus.CLOSED;
-        console.log('FETCH 连接关闭');
-      },
-      onmessage: (event) => {
-        this.status = EventSourceStatus.CONNECTING;
-        const data = JSON.parse(event);
-        callback(data);
-        console.log('FETCH 接收到消息：', data);
-      },
-      onerror: (e) => {
-        this.status = EventSourceStatus.ERROR;
-        console.log(e);
+
+  const chunks: StreamChunk[] = [];
+  for (const choice of wire.choices ?? []) {
+    const index = choice.index ?? 0;
+    const { content, reasoning_content: reasoning } = choice.delta ?? {};
+    if (reasoning !== undefined && reasoning !== '') chunks.push({ type: 'reasoning-delta', index, text: reasoning });
+    if (content !== undefined && content !== '') chunks.push({ type: 'text-delta', index, text: content });
+    if (typeof choice.finish_reason === 'string') chunks.push(finishReason(choice.finish_reason));
+  }
+  if (wire.usage !== undefined) {
+    chunks.push({
+      type: 'usage',
+      usage: {
+        inputTokens: wire.usage.prompt_tokens,
+        outputTokens: wire.usage.completion_tokens,
+        totalTokens: wire.usage.total_tokens,
       },
     });
-  };
-  // 断开 FETCH-SSE 连接
-  public close = (): void => {
-    if (this.controller) {
-      this.status = EventSourceStatus.CLOSED;
-      this.controller.abort();
-      this.controller = undefined;
-    }
-  };
-  private fetchEventSource = (url: string, options: RequestOption & RequestInit): Promise<void> => {
-    return fetch(url, options)
-      .then((response) => {
-        if (response.status === 200) {
-          if (options.onopen) {
-            options.onopen();
-          }
-          return response.body;
-        }
-      })
-      .then((rb) => {
-        // eslint-disable-next-line n/no-unsupported-features/node-builtins
-        const reader = rb?.pipeThrough(new TextDecoderStream()).getReader();
-        const push = (): Promise<void> | undefined => {
-          // done 为数据流是否接收完成，boolean
-          // value 为返回数据，Uint8Array
-          return reader?.read().then(({ done, value }) => {
-            if (done) {
-              if (options.onclose) {
-                options.onclose();
-              }
-              return;
-            }
-            if (options.onmessage) {
-              options.onmessage(value);
-            }
-            // 持续读取流信息
-            return push();
-          });
-        };
-        // 开始读取流信息
-        return push();
-      })
-      .catch((e) => {
-        if (options.onerror) {
-          options.onerror(e);
-        }
-      });
-  };
+  }
+  // Usage must precede the terminal finish, and a provider that attaches both to one event
+  // leaves the order to us.
+  return chunks.sort((a, b) => Number(a.type === 'finish') - Number(b.type === 'finish'));
 }
 
-export class EventStreamSource {
-  // eslint-disable-next-line n/no-unsupported-features/node-builtins
-  eventSource?: EventSource;
-  status: EventSourceStatus;
-  constructor() {
-    this.status = EventSourceStatus.CLOSED;
-  }
-  // 建立 SSE 连接
-  public connectSSE = (url: string): void => {
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
-    this.eventSource = new EventSource(url);
-    this.eventSource.onopen = () => {
-      this.status = EventSourceStatus.OPEN;
-      console.log('SSE 连接打开');
-    };
-    this.eventSource.onerror = () => {
-      this.status = EventSourceStatus.ERROR;
-      console.log('SSE 连接错误');
-    };
-    this.eventSource.onmessage = (event) => {
-      this.status = EventSourceStatus.CONNECTING;
-      const data = JSON.parse(event.data);
-      console.log('SSE 接收到消息：', data);
-    };
+/** How to run one streamed request. */
+export interface DialogOptions {
+  /** Called after every accepted chunk, with the folded state so far. */
+  onUpdate: (snapshot: StreamSnapshot) => void;
+  /** Called once the stream ends, cleanly or not. */
+  onEnd?: (snapshot: StreamSnapshot, error?: Error) => void;
+}
+
+/** A request in flight. */
+export interface DialogStream {
+  /** Aborts the request; `onEnd` still runs. */
+  close: () => void;
+}
+
+/**
+ * Streams one dialog turn.
+ *
+ * The SSE framing and the fold come from `ranuts/stream`, so what is left here is the
+ * request, the mapping, and cancellation.
+ *
+ * @param url Endpoint to POST to.
+ * @param body Request body.
+ * @param options Update and completion callbacks.
+ * @returns A handle that can abort the request.
+ */
+export function streamDialog(url: string, body: Record<string, string>, options: DialogOptions): DialogStream {
+  const controller = new AbortController();
+  const accumulator = createStreamAccumulator();
+
+  const run = async (): Promise<void> => {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', accept: 'text/event-stream' },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+    // A non-2xx response body is an error page, not a stream; reading it as one would
+    // silently render nothing, which is what the previous implementation did.
+    if (!response.ok) throw new Error(`dialog failed: ${response.status} ${response.statusText}`);
+    if (response.body === null) throw new Error('dialog failed: response carried no body');
+
+    for await (const chunk of mapEventStream(response.body, toStreamChunks)) {
+      accumulator.push(chunk);
+      options.onUpdate(accumulator.snapshot());
+    }
   };
 
-  // 断开 SSE 连接
-  public closeSSE = (): void => {
-    this.status = EventSourceStatus.CLOSED;
-    this.eventSource?.close();
+  run().then(
+    () => options.onEnd?.(accumulator.snapshot()),
+    (error: unknown) => {
+      // An abort is this client's own doing, not a failure to report.
+      if (controller.signal.aborted) options.onEnd?.(accumulator.snapshot());
+      else options.onEnd?.(accumulator.snapshot(), error instanceof Error ? error : new Error(String(error)));
+    },
+  );
+
+  return {
+    close: () => {
+      controller.abort();
+    },
   };
 }

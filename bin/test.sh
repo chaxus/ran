@@ -6,3 +6,4 @@ pnpm -F ranuts tsc
 pnpm -F ranuts test
 # ranui's test script covers its own tsc + unit + ssr (and rebuilds ranuts first)
 pnpm -F ranui test
+pnpm -F im test

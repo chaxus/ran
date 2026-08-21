@@ -86,6 +86,13 @@ The framing rules are small and almost never fully implemented. `parseEventStrea
 It accepts any `AsyncIterable<Uint8Array>` as well as a `ReadableStream`, so a test can feed it
 byte slices without a network.
 
+## A worked mapping
+
+`packages/im` in this repository is a working consumer: an OpenAI-compatible SSE route, the
+mapping onto `StreamChunk`, and a view that holds a snapshot rather than concatenating
+deltas itself. Its round-trip test drives the real server's bytes through the real client at
+several chunk sizes, so the two halves cannot drift apart.
+
 ## See also
 
 - [ranuts/conversation](../conversation/) — project the resulting events into renderable nodes
