@@ -5,7 +5,9 @@
     // 否则只能通过 import * as path from 'path' 进行导入
     "esModuleInterop": true,
     "target": "ES2020",
-    "moduleResolution": "node",
+    // "node" was an alias for node10, which TypeScript has removed. "bundler" is what
+    // this package actually is: sources compiled by a bundler, not resolved by Node.
+    "moduleResolution": "bundler",
     "module": "ES2020"
     // "strict": true
   }
