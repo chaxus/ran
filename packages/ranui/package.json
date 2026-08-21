@@ -95,6 +95,9 @@
       "conversation": [
         "./dist/components/conversation/index.d.ts"
       ],
+      "reasoning": [
+        "./dist/components/reasoning/index.d.ts"
+      ],
       "tool-card": [
         "./dist/components/tool-card/index.d.ts"
       ],
@@ -346,6 +349,11 @@
     "./conversation": {
       "types": "./dist/components/conversation/index.d.ts",
       "import": "./dist/conversation.js",
+      "require": "./dist/index.cjs"
+    },
+    "./reasoning": {
+      "types": "./dist/components/reasoning/index.d.ts",
+      "import": "./dist/reasoning.js",
       "require": "./dist/index.cjs"
     },
     "./tool-card": {

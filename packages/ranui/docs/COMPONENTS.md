@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-34 custom elements.
+35 custom elements.
 
 ## `<r-button>`
 
@@ -338,6 +338,22 @@ Source: `components/radar/index.ts`
 - **Events**: —
 - **Slots**: —
 - **Parts**: —
+
+## `<r-reasoning>`
+
+Source: `components/reasoning/index.ts`
+
+- **Attributes**: `duration: number | null`, `label: string`, `open: boolean`, `sheet: string`, `streaming: boolean`
+- **Properties**:
+  - `content: string` — The reasoning text. Assigning repeatedly is the streaming path.
+  - `duration: number | null` — How long the model spent, in milliseconds. Rendered beside the label when set.
+  - `label: string` — Summary text. Defaults to `Reasoning`.
+  - `open: boolean` — Whether the body is expanded.
+  - `sheet: string`
+  - `streaming: boolean` — Whether reasoning is still arriving.
+- **Events**: —
+- **Slots**: `default`
+- **Parts**: `body`, `label`, `marker`, `meta`, `reasoning`, `summary`, `text`
 
 ## `<r-route>`
 

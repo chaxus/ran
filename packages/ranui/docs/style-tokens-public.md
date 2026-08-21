@@ -1433,6 +1433,40 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 #### Parts
 - (none)
 
+### `reasoning`
+
+- Tokens: 17
+- Parts: 7
+
+#### Tokens
+<!-- layers: semantic: 4 · internal: 13 -->
+- `--ran-color-border`
+- `--ran-color-primary`
+- `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
+- `--ran-reasoning-border-color`
+- `--ran-reasoning-color`
+- `--ran-reasoning-focus-color`
+- `--ran-reasoning-font-size`
+- `--ran-reasoning-label-weight`
+- `--ran-reasoning-marker-color`
+- `--ran-reasoning-meta-color`
+- `--ran-reasoning-summary-gap`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-copy-2`
+- `--ran-text-label-weight`
+
+#### Parts
+- `body`
+- `label`
+- `marker`
+- `meta`
+- `reasoning`
+- `summary`
+- `text`
+
 ### `route`
 
 - Tokens: 0

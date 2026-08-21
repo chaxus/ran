@@ -856,6 +856,35 @@ when a log is replayed**:
 Use it as a `mount` target from an `r-conversation` view: the tool-call node's `patch`
 assigns `call`, `result` and `status`.
 
+---
+
+### r-reasoning
+
+A collapsible chain of thought.
+
+Reasoning is the one part of a response a reader wants to watch while it happens and almost
+never wants to keep afterwards, so the element expands while `streaming` is set and
+collapses when it clears.
+
+**Until the reader touches it.** Once they expand or collapse it themselves — or a caller
+sets `open` from script — the automatic behaviour stops for good. That is the same
+ownership rule `createBottomFollower` applies to scrolling, for the same reason: an
+interface that keeps re-deciding something the reader already decided is worse than one
+that never decided at all.
+
+```ts
+const reasoning = document.querySelector('r-reasoning')!;
+reasoning.streaming = true; // expands
+reasoning.content += delta; // grows while visible
+reasoning.duration = 4200; // "4.2s" beside the label
+reasoning.streaming = false; // collapses, unless the reader intervened
+```
+
+Sub-second durations render as nothing: a reader cares that it was fast, not that it was
+340ms. The default slot replaces the rendered text, for a caller that wants `<r-markdown>`
+in the body. `ranuts/stream` already separates `reasoning-delta` from `text-delta`, so a
+conversation view can feed this directly from `snapshot().blocks`.
+
 ## Testing
 
 ### Setup
