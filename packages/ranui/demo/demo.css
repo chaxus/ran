@@ -239,7 +239,7 @@ main {
 }
 
 .hero h1 {
-  margin: 0 0 var(--ran-space-5);
+  margin: 0 0 var(--ran-space-6);
   font-size: clamp(36px, 5vw, 56px);
   line-height: 1.08;
   font-weight: 600;
@@ -430,7 +430,7 @@ section > p.lead {
 /* ── Code blocks ─────────────────────────────────────────────────────── */
 .code {
   margin: 0;
-  padding: var(--ran-space-5);
+  padding: var(--ran-space-6);
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-md);
   background: var(--ran-color-bg-muted);
@@ -705,7 +705,7 @@ footer a {
 .role-row {
   display: flex;
   align-items: baseline;
-  gap: var(--ran-space-5);
+  gap: var(--ran-space-6);
   padding: var(--ran-space-4) 0;
   border-top: 1px solid var(--ran-color-border-secondary);
 }
@@ -731,7 +731,7 @@ footer a {
 .motion-row {
   display: flex;
   align-items: baseline;
-  gap: var(--ran-space-5);
+  gap: var(--ran-space-6);
   padding: var(--ran-space-3) 0;
   border-top: 1px solid var(--ran-color-border-secondary);
 }
@@ -760,7 +760,7 @@ footer a {
 }
 
 .guideline {
-  padding: var(--ran-space-5);
+  padding: var(--ran-space-6);
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-md);
   background: var(--ran-color-bg-elevated);

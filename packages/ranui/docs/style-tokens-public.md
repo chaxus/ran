@@ -311,11 +311,12 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `disclosure-row`
 
-- Tokens: 22
+- Tokens: 25
 - Parts: 7
 
 #### Tokens
-<!-- layers: semantic: 7 · internal: 15 -->
+<!-- layers: semantic: 8 · internal: 17 -->
+- `--ran-color-bg`
 - `--ran-color-bg-hover`
 - `--ran-color-danger`
 - `--ran-color-primary`
@@ -333,6 +334,8 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-disclosure-radius`
 - `--ran-disclosure-sep-color`
 - `--ran-disclosure-summary-color`
+- `--ran-disclosure-sweep-color`
+- `--ran-disclosure-sweep-duration`
 - `--ran-disclosure-title-weight`
 - `--ran-disclosure-transition`
 - `--ran-radius-sm`
@@ -1539,36 +1542,25 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `reasoning`
 
-- Tokens: 17
-- Parts: 7
+- Tokens: 10
+- Parts: 3
 
 #### Tokens
-<!-- layers: semantic: 4 · internal: 13 -->
+<!-- layers: semantic: 2 · internal: 8 -->
 - `--ran-color-border`
-- `--ran-color-primary`
-- `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
+- `--ran-reasoning-body-indent`
 - `--ran-reasoning-border-color`
 - `--ran-reasoning-color`
-- `--ran-reasoning-focus-color`
 - `--ran-reasoning-font-size`
-- `--ran-reasoning-label-weight`
-- `--ran-reasoning-marker-color`
-- `--ran-reasoning-meta-color`
-- `--ran-reasoning-summary-gap`
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-3`
 - `--ran-text-copy-2`
-- `--ran-text-label-weight`
 
 #### Parts
 - `body`
-- `label`
-- `marker`
-- `meta`
-- `reasoning`
-- `summary`
+- `row`
 - `text`
 
 ### `route`
@@ -1919,12 +1911,11 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `tool-card`
 
-- Tokens: 46
+- Tokens: 44
 - Parts: 11
 
 #### Tokens
-<!-- layers: semantic: 11 · internal: 35 -->
-- `--ran-color-bg`
+<!-- layers: semantic: 10 · internal: 34 -->
 - `--ran-color-bg-muted`
 - `--ran-color-border`
 - `--ran-color-danger`
@@ -1969,7 +1960,6 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-tool-card-path-color`
 - `--ran-tool-card-path-gap`
 - `--ran-tool-card-removed-background`
-- `--ran-tool-card-sweep-color`
 
 #### Parts
 - `body`

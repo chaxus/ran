@@ -23,49 +23,6 @@
   padding: var(--ran-tool-card-body-padding, var(--ran-space-2) 0 var(--ran-space-2) var(--ran-space-6));
 }
 
-/* A shimmer band gliding across the row while the call runs. A spinner says "something is
-   happening somewhere"; a sweep over the row says *this* row is the one still working, and
-   it costs no layout because it is a pseudo-element over the existing line. */
-.ran-tool-card-sweep {
-  position: relative;
-  overflow: hidden;
-}
-
-:host([status='running']) .ran-tool-card-sweep::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 12rem;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--ran-tool-card-sweep-color, color-mix(in srgb, var(--ran-color-bg) 65%, transparent)) 55%,
-    transparent 100%
-  );
-  animation: ran-tool-card-sweep 2.6s ease-out infinite;
-  pointer-events: none;
-}
-
-/* Ends at 90% and holds: without the hold each pass starts the instant the last one ends,
-   which reads as a stutter rather than a beat. */
-@keyframes ran-tool-card-sweep {
-  0% {
-    left: -12rem;
-  }
-  90%,
-  100% {
-    left: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :host([status='running']) .ran-tool-card-sweep::after {
-    animation: none;
-  }
-}
-
 /* IN and OUT in one bordered card, each section capped and scrolling on its own so a long
    input never buries a short output. */
 .ran-tool-card-io {

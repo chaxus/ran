@@ -115,7 +115,6 @@ export class ToolCard extends RanElement {
     const row = ensureShadowElement(this._shadowDom, 'r-disclosure-row', () =>
       View('r-disclosure-row')
         .attr('part', 'row')
-        .class('ran-tool-card-sweep')
         .children(
           View('r-state-dot').attr('slot', 'leading').build(),
           Div().class('ran-tool-card-body').attr('part', 'body').build(),
@@ -208,6 +207,7 @@ export class ToolCard extends RanElement {
     this._row.summary = summaryOf(view);
     this._row.open = this.open;
     this._row.tone = status === 'error' ? 'error' : '';
+    this._row.busy = status === 'running';
     this._dot.state = DOT_STATE[status];
 
     this._body.replaceChildren();
