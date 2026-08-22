@@ -101,6 +101,9 @@
       "tool-card": [
         "./dist/components/tool-card/index.d.ts"
       ],
+      "voice-button": [
+        "./dist/components/voice-button/index.d.ts"
+      ],
       "scratch": [
         "./dist/components/scratch/index.d.ts"
       ],
@@ -354,6 +357,11 @@
     "./reasoning": {
       "types": "./dist/components/reasoning/index.d.ts",
       "import": "./dist/reasoning.js",
+      "require": "./dist/index.cjs"
+    },
+    "./voice-button": {
+      "types": "./dist/components/voice-button/index.d.ts",
+      "import": "./dist/voice-button.js",
       "require": "./dist/index.cjs"
     },
     "./tool-card": {

@@ -1,0 +1,121 @@
+:host {
+  display: inline-flex;
+}
+
+/* Nothing to offer on a platform without speech recognition, and a button that cannot work
+   is worse than no button: it invites a tap and then explains itself. */
+:host([hidden]) {
+  display: none;
+}
+
+.ran-voice {
+  display: inline-flex;
+  /* The press owns this pointer: without it a hold-to-talk gesture scrolls the page and the
+     button never sees the move that decides cancel-versus-send. */
+  touch-action: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ran-voice-border-color, var(--ran-color-border));
+  border-radius: var(--ran-voice-border-radius, var(--ran-radius-md));
+  background: var(--ran-voice-background, var(--ran-color-bg));
+  padding: 0;
+  width: var(--ran-voice-size, var(--ran-size-7));
+  height: var(--ran-voice-size, var(--ran-size-7));
+  color: var(--ran-voice-color, var(--ran-color-text-secondary));
+  cursor: pointer;
+}
+
+.ran-voice:hover:not(:disabled) {
+  border-color: var(--ran-voice-hover-border-color, var(--ran-color-border-hover));
+  color: var(--ran-voice-hover-color, var(--ran-color-text));
+}
+
+.ran-voice:focus-visible {
+  outline: 2px solid var(--ran-voice-focus-color, var(--ran-color-primary));
+  outline-offset: 2px;
+}
+
+.ran-voice:disabled {
+  color: var(--ran-voice-disabled-color, var(--ran-color-text-disabled));
+  cursor: not-allowed;
+}
+
+/* Listening is a state the speaker must be able to see at a glance and from across the
+   room: colour alone would fail anyone who cannot distinguish it, so the ring carries the
+   same information as the fill. */
+:host([listening]) .ran-voice {
+  border-color: var(--ran-voice-active-border-color, var(--ran-color-danger));
+  background: var(--ran-voice-active-background, var(--ran-red-200));
+  color: var(--ran-voice-active-color, var(--ran-color-danger));
+}
+
+:host([listening]) .ran-voice::after {
+  position: absolute;
+  border: 2px solid var(--ran-voice-active-border-color, var(--ran-color-danger));
+  border-radius: var(--ran-voice-border-radius, var(--ran-radius-md));
+  width: var(--ran-voice-size, var(--ran-size-7));
+  height: var(--ran-voice-size, var(--ran-size-7));
+  content: '';
+  animation: ran-voice-pulse 1.6s ease-out infinite;
+}
+
+.ran-voice {
+  position: relative;
+}
+
+@keyframes ran-voice-pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+/* The ring is the only motion here, and it is decoration: the border and fill above already
+   say the same thing, so dropping it costs no information. */
+@media (prefers-reduced-motion: reduce) {
+  :host([listening]) .ran-voice::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Hold-to-talk feedback. On touch the button is held, not toggled, so the speaker needs to
+   see two things without looking away from what they are saying: that it is recording, and
+   how to back out. Anchored to the button and pushed above it, because a finger is covering
+   the button itself. */
+.ran-voice-hint {
+  position: absolute;
+  bottom: calc(100% + var(--ran-voice-hint-gap, var(--ran-space-2)));
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
+  border-radius: var(--ran-voice-hint-radius, var(--ran-radius-md));
+  background: var(--ran-voice-hint-background, var(--ran-color-bg-elevated));
+  box-shadow: var(--ran-voice-hint-shadow, var(--ran-shadow-menu));
+  padding: var(--ran-voice-hint-padding, var(--ran-space-2) var(--ran-space-3));
+  min-width: max-content;
+  color: var(--ran-voice-hint-color, var(--ran-color-text-secondary));
+  font-size: var(--ran-voice-hint-font-size, var(--ran-text-label-3));
+  text-align: center;
+  pointer-events: none;
+}
+
+:host(:not([holding])) .ran-voice-hint {
+  display: none;
+}
+
+/* Releasing here discards the capture, so the hint says so in the colour the rest of the
+   system uses for destructive outcomes — and in words, because colour alone is not a
+   message. */
+:host([cancelling]) .ran-voice-hint {
+  color: var(--ran-voice-hint-cancel-color, var(--ran-color-danger));
+}
+
+:host([cancelling]) .ran-voice {
+  border-color: var(--ran-voice-active-border-color, var(--ran-color-danger));
+  background: var(--ran-voice-cancel-background, var(--ran-color-bg-subtle));
+}

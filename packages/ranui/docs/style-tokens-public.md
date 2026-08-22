@@ -1843,3 +1843,53 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `title`
 - `toggle`
 
+### `voice-button`
+
+- Tokens: 37
+- Parts: 3
+
+#### Tokens
+<!-- layers: semantic: 12 · internal: 25 -->
+- `--ran-color-bg`
+- `--ran-color-bg-elevated`
+- `--ran-color-bg-subtle`
+- `--ran-color-border`
+- `--ran-color-border-hover`
+- `--ran-color-danger`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
+- `--ran-radius-md`
+- `--ran-red-200`
+- `--ran-shadow-menu`
+- `--ran-size-7`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-label-3`
+- `--ran-voice-active-background`
+- `--ran-voice-active-border-color`
+- `--ran-voice-active-color`
+- `--ran-voice-background`
+- `--ran-voice-border-color`
+- `--ran-voice-border-radius`
+- `--ran-voice-cancel-background`
+- `--ran-voice-color`
+- `--ran-voice-disabled-color`
+- `--ran-voice-focus-color`
+- `--ran-voice-hint-background`
+- `--ran-voice-hint-cancel-color`
+- `--ran-voice-hint-color`
+- `--ran-voice-hint-font-size`
+- `--ran-voice-hint-gap`
+- `--ran-voice-hint-radius`
+- `--ran-voice-hint-shadow`
+- `--ran-voice-hover-border-color`
+- `--ran-voice-hover-color`
+- `--ran-voice-size`
+
+#### Parts
+- `button`
+- `hint`
+- `icon`
+

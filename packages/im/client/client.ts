@@ -5,6 +5,8 @@ import 'ranui/button';
 import 'ranui/markdown';
 import 'ranui/reasoning';
 import 'ranui/theme-switch';
+import 'ranui/voice-button';
+import message from 'ranui/message';
 import { initTheme } from 'ranui/theme';
 import { streamDialog } from '@/client/lib/eventSource';
 import type { DialogStream } from '@/client/lib/eventSource';
@@ -29,6 +31,10 @@ const question = document.querySelector('#question') as HTMLElement & { value: s
 const send = document.querySelector('#send') as HTMLElement & { disabled: boolean };
 const stop = document.querySelector('#stop') as HTMLElement & { disabled: boolean };
 const notice = document.querySelector('#notice') as HTMLElement;
+const mic = document.querySelector('#mic') as HTMLElement & { listening: boolean; stop: () => void };
+
+const DEMO_NOTICE =
+  '演示模式：未配置 API key，回答来自内置示例。设置 IM_API_KEY（可选 IM_BASE_URL、IM_MODEL）后重启即可对接真实模型。';
 
 // Every view registers before the first push; the projection is built once, and the
 // element throws rather than silently missing events a later registration never saw.
@@ -81,13 +87,9 @@ function ask(content: string): void {
     { messages: history },
     {
       onMode: (mode) => {
-        // The answer's content is the model's; a note about configuration is not, so it
-        // arrives as a header and is shown here rather than mixed into the stream.
-        setNotice(
-          mode === 'demo'
-            ? '演示模式：未配置 API key，回答来自内置示例。设置 IM_API_KEY（可选 IM_BASE_URL、IM_MODEL）后重启即可对接真实模型。'
-            : '',
-        );
+        // Confirms what the server already stamped into the page, and corrects it if the
+        // server was restarted with a key while this tab stayed open.
+        setNotice(mode === 'demo' ? DEMO_NOTICE : '');
       },
       onUpdate: (snapshot) => {
         const next = eventsFromSnapshot(id, snapshot, emitted);
@@ -105,18 +107,46 @@ function ask(content: string): void {
         chat.push(error === undefined ? { type: 'turn/end', id } : { type: 'turn/error', id, message: error.message });
         if (text !== '') history.push({ role: 'assistant', content: text });
         inFlight = null;
-        // Resolves the light/dark choice `r-theme-switch` offers, and the `system` default it
-        // starts on, before the first interaction rather than after it.
-        initTheme();
-
         setRunning(false);
       },
     },
   );
 }
 
+// ── Dictation ──────────────────────────────────────────────────────────────
+//
+// Speech arrives as the transcript of the whole capture, revised as recognition firms up,
+// so the text already in the box is remembered at the start and the transcript is appended
+// to it. Appending each event instead would repeat every revision.
+let dictationBase = '';
+
+mic.addEventListener('voicestart', () => {
+  const typed = question.value;
+  // A space between what was typed and what is said, unless one is already there — without
+  // it, dictating after a half-typed word runs the two together.
+  dictationBase = typed === '' || /\s$/.test(typed) ? typed : `${typed} `;
+});
+
+mic.addEventListener('voiceresult', (event) => {
+  const { transcript } = (event as CustomEvent<{ transcript: string; isFinal: boolean }>).detail;
+  question.value = dictationBase + transcript;
+});
+
+mic.addEventListener('voiceerror', (event) => {
+  const { kind } = (event as CustomEvent<{ kind: string; detail: string }>).detail;
+  // A silent pause and a programmatic stop travel the same channel as a real failure and
+  // are neither; showing them would nag after every capture.
+  // `message` is null when there is no window — ranui returns no toast API during server
+  // rendering, and this file only ever runs in a browser, but the type says what it says.
+  if (kind === 'denied') message?.error('麦克风被拒绝。请在浏览器地址栏的权限设置里允许后重试。');
+  else if (kind === 'failed') message?.error('语音识别失败，请重试或改用键盘输入。');
+});
+
 composer.addEventListener('submit', (event) => {
   event.preventDefault();
+  // Sending while still dictating: end the capture first, so the words already spoken land
+  // in the message rather than in the box after it has been cleared.
+  if (mic.listening) mic.stop();
   const content = question.value.trim();
   if (content === '' || inFlight !== null) return;
   question.value = '';
@@ -125,5 +155,13 @@ composer.addEventListener('submit', (event) => {
 
 send.addEventListener('click', () => composer.requestSubmit());
 stop.addEventListener('click', () => inFlight?.close());
+
+// Resolves the light/dark choice `r-theme-switch` offers, and the `system` default it starts
+// on, before the first interaction rather than after it.
+initTheme();
+
+// The server knows which mode it is in and says so in the markup, so the notice is on screen
+// at first paint — someone should know they are talking to a canned answer before they type.
+if ((document.querySelector('main')?.dataset.mode ?? '') === 'demo') setNotice(DEMO_NOTICE);
 
 setRunning(false);
