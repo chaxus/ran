@@ -277,3 +277,29 @@ describe('matchSelector — compound selectors', () => {
     expect(result).toEqual([wanted]);
   });
 });
+
+describe('matchSelector — pathological input', () => {
+  it('stays linear on an unterminated attribute selector', () => {
+    // The obvious regex for the attribute form backtracks across every position here, which
+    // is polynomial in the selector's length. querySelector is a library entry point, so
+    // the caller chooses what reaches it.
+    const node = el('div');
+    const started = Date.now();
+    for (let length = 1000; length <= 20000; length *= 2) {
+      expect(matchSelector(node, '['.repeat(length))).toBe(false);
+    }
+    expect(Date.now() - started).toBeLessThan(1000);
+  });
+
+  it('rejects an unterminated attribute rather than matching the tag before it', () => {
+    expect(matchSelector(el('div'), 'div[name="x"')).toBe(false);
+  });
+
+  it('rejects a qualifier that qualifies nothing', () => {
+    const node = el('div');
+    node.classList.add('row');
+    expect(matchSelector(node, 'div.')).toBe(false);
+    expect(matchSelector(node, '.row.')).toBe(false);
+    expect(matchSelector(node, '#')).toBe(false);
+  });
+});
