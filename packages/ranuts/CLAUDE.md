@@ -325,6 +325,11 @@ npm run doc:api:check  # verify it is fresh without writing (what CI runs)
   `getRgb`'s CSS fallback returns black without `document`).
 - **`onConsoleLog` throws**: the test config fails any test that logs to console — don't leave
   stray `console.*` in code under test.
+- **Never assert on unseeded randomness**: sampling the real CSPRNG can only estimate the property
+  under test, and a window tight enough to catch a real bias also fails on chance every few
+  thousand runs — which reads as a mystery CI failure on one matrix leg. Replace the sample with
+  scripted bytes and assert the mapping exactly; `test/utils/secure.test.ts` has the `withBytes`
+  helper that stubs `crypto.getRandomValues` for the length of one draw.
 
 ---
 
@@ -344,6 +349,7 @@ npm run doc:api:check  # verify it is fresh without writing (what CI runs)
 | Branching on `isClient` in new code                                              | It's a module-load-time constant — wrong after SSR, unstubbable in tests. Check `typeof window === 'undefined'` inside the function.                    |
 | Reaching for `randomString` / `getRandomString` to make a token or code          | Both are `Math.random()` based and predictable. Use `secureRandomString` / `secureToken` from `secure.ts` for anything an attacker would want to guess. |
 | Comparing a secret with `===`                                                    | Returns early at the first differing byte, leaking the shared prefix through timing. Use `safeEqual`.                                                   |
+| Asserting a distribution drawn from the real CSPRNG                              | The window that catches the bias also fires on sampling noise. Script the bytes with `withBytes` (`test/utils/secure.test.ts`) and assert an equality.  |
 | Decoding chunked text per chunk                                                  | A multi-byte character straddling a boundary becomes replacement characters. `concatBytes` first, decode once.                                          |
 | `window.setTimeout` in a `ranuts/utils` module                                   | Throws outside a document. Use the bare `setTimeout`.                                                                                                   |
 | A module-level factory that keeps mutable state shared by everything it produces | Give each produced function its own state (this is why `generateThrottle` was removed).                                                                 |
