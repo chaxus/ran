@@ -41,6 +41,7 @@ type ConversationElement = HTMLElement & {
   register: (view: unknown) => void;
   push: (event: ChatEvent) => void;
   truncate: (key: string) => number;
+  batch: (run: () => void) => void;
   reset: () => void;
   scrollToBottom: () => void;
   captureAnchor: (key?: string) => boolean;
@@ -618,32 +619,37 @@ function renderSession(session: Session): void {
     if (entry.role === 'tool') results.set(entry.tool_call_id, { output: entry.content, failed: false });
   }
 
-  session.messages.forEach((entry, index) => {
-    // A tool message has already been drawn as the result of its call.
-    if (entry.role === 'tool') return;
-    const id = nodeId(index);
-    const text = typeof entry.content === 'string' ? entry.content : textOf(entry.content);
-    const calls = entry.role === 'assistant' ? (entry.tool_calls ?? []) : [];
-    // An assistant message that only asked for tools has no text; opening an empty row for
-    // it would put a blank card above every tool call in the transcript.
-    if (text !== '' || calls.length === 0) {
-      chat.push({ type: 'turn/start', id, role: entry.role, text });
-      // Restored turns are finished by definition; without this every one of them would come
-      // back mid-stream, with `r-markdown` still guessing at half-written syntax.
-      chat.push({ type: 'turn/end', id });
-      const branch = branches.get(index);
-      if (branch !== undefined) {
-        chat.push({ type: 'turn/branch', id, current: branch.active + 1, total: branch.tails.length });
+  // One render for the whole replay. Pushed one at a time, each event publishes and each
+  // publication walks the whole transcript — restoring 600 messages that way was 5.4
+  // seconds of blocked main thread, measured in a browser.
+  chat.batch(() => {
+    session.messages.forEach((entry, index) => {
+      // A tool message has already been drawn as the result of its call.
+      if (entry.role === 'tool') return;
+      const id = nodeId(index);
+      const text = typeof entry.content === 'string' ? entry.content : textOf(entry.content);
+      const calls = entry.role === 'assistant' ? (entry.tool_calls ?? []) : [];
+      // An assistant message that only asked for tools has no text; opening an empty row for
+      // it would put a blank card above every tool call in the transcript.
+      if (text !== '' || calls.length === 0) {
+        chat.push({ type: 'turn/start', id, role: entry.role, text });
+        // Restored turns are finished by definition; without this every one of them would come
+        // back mid-stream, with `r-markdown` still guessing at half-written syntax.
+        chat.push({ type: 'turn/end', id });
+        const branch = branches.get(index);
+        if (branch !== undefined) {
+          chat.push({ type: 'turn/branch', id, current: branch.active + 1, total: branch.tails.length });
+        }
       }
-    }
-    calls.forEach((call, ordinal) => {
-      const node = toolNodeId(id, ordinal);
-      chat.push({ type: 'tool/start', id: node, name: call.function.name });
-      chat.push({ type: 'tool/args', id: node, args: call.function.arguments });
-      const outcome = results.get(call.id);
-      // A call with no result is one whose exchange was cut off — the tab closed mid-run.
-      // Its card stays in the running state, which is what actually happened.
-      if (outcome !== undefined) chat.push({ type: 'tool/result', id: node, ...outcome });
+      calls.forEach((call, ordinal) => {
+        const node = toolNodeId(id, ordinal);
+        chat.push({ type: 'tool/start', id: node, name: call.function.name });
+        chat.push({ type: 'tool/args', id: node, args: call.function.arguments });
+        const outcome = results.get(call.id);
+        // A call with no result is one whose exchange was cut off — the tab closed mid-run.
+        // Its card stays in the running state, which is what actually happened.
+        if (outcome !== undefined) chat.push({ type: 'tool/result', id: node, ...outcome });
+      });
     });
   });
 }

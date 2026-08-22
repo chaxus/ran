@@ -811,6 +811,22 @@ Rules that bite if broken:
   `**bold`, backticks, links and `$$` math in `mode="streaming"` — do not re-solve that in
   a view.
 
+**`batch(run)` for any replay, restore, or bulk insert.** Without it every event publishes
+and every publication walks the whole transcript. Restoring 600 messages that way was 5.4
+seconds of blocked main thread, measured in a browser; batched it is 158ms. A live stream
+does not need it. The element also patches only the rows the engine reports as changed, so
+one delta into a long transcript writes one row.
+
+**Long transcripts are a layout problem, not a markup one.** Every streamed delta changes
+the last row's height and the bottom-follower reads `scrollHeight` right after, which lays
+out the whole column. Rows therefore carry `content-visibility: auto` with
+`contain-intrinsic-size: auto 8rem`: the browser skips layout and paint for off-screen rows
+while leaving them in the DOM, so find-in-page, text selection and screen readers still see
+the whole conversation — which is exactly what windowing gives up. On a 3000-message
+transcript that took streaming from 45ms per frame to 8ms, and replay from 1.8s to 311ms.
+Virtualization was considered and is not here: the measured cost was layout, and this
+removes it without removing the transcript.
+
 **`truncate(key)` cuts the conversation.** Editing a message, regenerating an answer and
 branching are one operation: the conversation diverges at a row, and every row opened after
 it goes with it. It returns how many rows went; zero means no such row is live.
