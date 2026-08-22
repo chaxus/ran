@@ -1,15 +1,20 @@
 import { test, expect } from '@playwright/test';
-import { demoSetup } from '../helpers';
+import { demoSetup, settlePainted } from '../helpers';
 
 test.beforeEach(async ({ page }) => {
   await demoSetup(page, 'r-colorpicker');
 });
 
+/** True once a picker has painted its swatch from its declared value. */
+const swatchPainted = (root: ShadowRoot): boolean => {
+  const swatch = root.querySelector('.ran-colorpicker-inner') as HTMLElement | null;
+  return swatch !== null && swatch.style.background !== '';
+};
+
 test('colorpicker default appearance', async ({ page }) => {
   const section = page.locator('#component-colorpicker');
   await expect(section).toBeVisible();
-  // Give the canvas time to fully render
-  await page.waitForTimeout(200);
+  await settlePainted(page, '#component-colorpicker r-colorpicker', swatchPainted);
   await expect(section).toHaveScreenshot('colorpicker-default.png');
 });
 
@@ -34,6 +39,6 @@ test('colorpicker rgba value', async ({ page }) => {
   // Second colorpicker has value="rgba(255,0,0,0.5)"
   const second = pickers.nth(1);
   await expect(second).toBeVisible();
-  await page.waitForTimeout(200);
+  await settlePainted(page, '#component-colorpicker r-colorpicker', swatchPainted);
   await expect(second).toHaveScreenshot('colorpicker-rgba.png');
 });

@@ -24,7 +24,11 @@ test.beforeEach(async ({ page }) => {
 test('modal — closed (trigger only)', async ({ page }) => {
   await mount(page, MODAL_HTML);
   await expect(page.locator('#open-btn')).toBeVisible();
-  await expect(page.locator('div').first()).toHaveScreenshot('modal-closed.png');
+  // A couple of pixels of tolerance on the trigger's antialiased edge. Text rasterisation
+  // shifts between Chrome builds, and this frame is one button on white — a real regression
+  // to it moves far more than that. Re-recording instead would just bake in whichever build
+  // recorded last, and drift again on the next one.
+  await expect(page.locator('div').first()).toHaveScreenshot('modal-closed.png', { maxDiffPixels: 8 });
 });
 
 test('modal — open', async ({ page }) => {

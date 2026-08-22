@@ -122,3 +122,31 @@ export async function insideShadow<T>(page: Page, host: string, read: (root: Sha
     { selector: host, source: read.toString() },
   ) as Promise<T>;
 }
+
+/**
+ * Waits until every matching component has finished painting itself.
+ *
+ * `paint` runs inside each element's shadow root and answers whether that one is settled.
+ * A fixed `waitForTimeout` cannot: it passes whether the work finished or not, so a
+ * screenshot recorded on a slow run captures a half-built component and then becomes the
+ * baseline every later run is measured against. Two colorpicker baselines were recorded
+ * that way — blank swatches on a picker that declares a colour — and stayed wrong until
+ * someone looked at the image.
+ *
+ * @param page The page under test.
+ * @param selector Elements to wait for.
+ * @param paint Runs against one element's shadow root; true when that element is settled.
+ */
+export async function settlePainted(page: Page, selector: string, paint: (root: ShadowRoot) => boolean): Promise<void> {
+  await page.waitForFunction(
+    ({ sel, source }) => {
+      const nodes = [...document.querySelectorAll(sel)] as Array<HTMLElement & { _shadowDom?: ShadowRoot }>;
+      if (nodes.length === 0) return false;
+      // eslint-disable-next-line no-new-func -- the predicate is authored in this repo and
+      // serialised across the page boundary, which is the only way to pass one in.
+      const settled = new Function(`return (${source})`)() as (root: ShadowRoot) => boolean;
+      return nodes.every((node) => node._shadowDom !== undefined && settled(node._shadowDom));
+    },
+    { sel: selector, source: paint.toString() },
+  );
+}
