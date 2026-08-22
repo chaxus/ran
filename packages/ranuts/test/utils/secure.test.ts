@@ -3,8 +3,33 @@
  * `===` gets those right too — but the properties that are the reason these exist: a
  * comparison that does not short-circuit, and a draw that is uniform and unpredictable.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { safeEqual, secureRandomString, secureToken, UNAMBIGUOUS_ALPHABET } from '@/utils/secure';
+
+/**
+ * Runs `draw` against a scripted byte sequence instead of the CSPRNG, repeating the sequence if
+ * the draw asks for more. What these functions promise is a mapping from bytes to output, so
+ * supplying the bytes turns each promise into an equation. Sampling the real CSPRNG could only
+ * ever estimate the same thing, and an estimate tight enough to catch the bias also fails on
+ * chance every few thousand runs.
+ */
+const withBytes = <T>(bytes: readonly number[], draw: () => T): T => {
+  let cursor = 0;
+  const spy = vi
+    .spyOn(globalThis.crypto, 'getRandomValues')
+    .mockImplementation(<A extends ArrayBufferView | null>(array: A): A => {
+      if (array) {
+        const view = new Uint8Array(array.buffer, array.byteOffset, array.byteLength);
+        for (let i = 0; i < view.length; i++) view[i] = bytes[cursor++ % bytes.length]!;
+      }
+      return array;
+    });
+  try {
+    return draw();
+  } finally {
+    spy.mockRestore();
+  }
+};
 
 describe('safeEqual', () => {
   it('accepts identical strings and rejects different ones', () => {
@@ -58,21 +83,27 @@ describe('secureRandomString', () => {
     expect(secureRandomString(200)).toMatch(/^[A-Z2-9]+$/);
   });
 
-  it('draws uniformly even when the alphabet does not divide 256', () => {
-    // The alphabet length is chosen so the bias cannot hide in sampling noise. 256 = 2×100 + 56,
-    // so a plain `byte % 100` gives the first 56 characters three chances per byte and the rest
-    // only two — they would come up ~50% more often. Rejection sampling is what removes that,
-    // and a 6-character alphabet (2.4% bias) is too gentle to notice if someone deletes it.
-    const alphabet = Array.from({ length: 100 }, (_, i) => String.fromCharCode(33 + i)).join('');
-    const counts = new Map<string, number>(Array.from(alphabet, (c) => [c, 0]));
-    const draws = 100_000;
-    for (const char of secureRandomString(draws, alphabet)) counts.set(char, counts.get(char)! + 1);
+  // A 100-character alphabet is what makes the two halves of uniformity separable: 256 = 2×100 + 56,
+  // so bytes 0..199 are the ones that divide evenly and 200..255 are the remainder a plain
+  // `byte % 100` would fold back onto the first 56 characters, handing them three chances per
+  // byte against everyone else's two.
+  const ALPHABET = Array.from({ length: 100 }, (_, i) => String.fromCharCode(33 + i)).join('');
 
-    const overRepresented = counts.get(alphabet[0]!)!;
-    const underRepresented = counts.get(alphabet[99]!)!;
-    // Under bias this ratio is ~1.5; sampling noise at 1000 expected draws is well under 15%.
-    expect(overRepresented / underRepresented).toBeGreaterThan(0.85);
-    expect(overRepresented / underRepresented).toBeLessThan(1.15);
+  it('spends the evenly dividing bytes equally across the alphabet', () => {
+    const drawn = withBytes(
+      Array.from({ length: 200 }, (_, i) => i),
+      () => secureRandomString(200, ALPHABET),
+    );
+    const counts = new Map<string, number>(Array.from(ALPHABET, (c) => [c, 0]));
+    for (const char of drawn) counts.set(char, counts.get(char)! + 1);
+    expect([...new Set(counts.values())]).toEqual([2]);
+  });
+
+  it('discards the leftover bytes rather than folding them onto the first characters', () => {
+    // The other half of uniformity, and the half a distribution check reports only as noise.
+    // 200 and 255 are above the ceiling and must produce nothing; the draw is satisfied by the
+    // two bytes below it, so anything else in the result came from a fold.
+    expect(withBytes([200, 255, 0, 99], () => secureRandomString(2, ALPHABET))).toBe(`${ALPHABET[0]}${ALPHABET[99]}`);
   });
 
   it('draws more characters than one getRandomValues call may return', () => {
@@ -105,9 +136,9 @@ describe('secureToken', () => {
 
   it('pads a byte that needs it', () => {
     // Array.from + toString(16) drops the leading zero of any byte below 0x10; without the
-    // pad the token would occasionally be short, which breaks a fixed-width column.
-    const tokens = Array.from({ length: 50 }, () => secureToken(8));
-    for (const token of tokens) expect(token).toHaveLength(16);
+    // pad the token would be short, which breaks a fixed-width column. Scripted rather than
+    // sampled so the byte that needs the pad is present by construction.
+    expect(withBytes([0x00, 0x0f, 0x10, 0xff], () => secureToken(4))).toBe('000f10ff');
   });
 
   it('refuses a non-positive size', () => {
