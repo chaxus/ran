@@ -26,14 +26,15 @@ const createStaticServer =
     const contentType = MIME_TYPES[extname] || 'application/octet-stream';
     fs.readFile(filePath, (error, content) => {
       if (error) {
-        if (error.code === 'ENOENT') {
-          // The middleware chain hands in a zero-argument `next`; passing ctx here was
-          // ignored at runtime and rejected by tsc, which nothing ran on this package.
-          callback();
-        } else {
-          res.writeHead(500);
-          res.end(`Server Error: ${error.code}`);
-        }
+        // Anything this middleware cannot serve belongs to the next one. Only ENOENT was
+        // treated that way, so a request for `/` — which resolves to the static directory
+        // itself — answered 500 EISDIR and the page never reached its controller. That
+        // stayed hidden while `dist/views/` did not exist, because then the same request
+        // failed with ENOENT and fell through.
+        //
+        // The middleware chain hands in a zero-argument `next`; passing ctx here was
+        // ignored at runtime and rejected by tsc, which nothing ran on this package.
+        callback();
       } else {
         res.writeHead(200, { 'Content-Type': contentType });
         res.end(content, 'utf-8');
