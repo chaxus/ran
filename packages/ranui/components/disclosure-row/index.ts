@@ -23,13 +23,13 @@ import { defineSSR } from '@/utils/ssr-registry';
  * layout and the title never shifts under the pointer.
  *
  * ```html
- * <r-disclosure-row expandable title="fetch_url" summary="https://example.com">
+ * <r-disclosure-row expandable heading="fetch_url" summary="https://example.com">
  *   <r-state-dot slot="leading" state="running"></r-state-dot>
  *   <pre>…the expanded body…</pre>
  * </r-disclosure-row>
  * ```
  *
- * Attributes: `open`, `expandable`, `title`, `summary`, `tone` (`error` colours the
+ * Attributes: `open`, `expandable`, `heading`, `summary`, `tone` (`error` colours the
  * summary), `sheet`. Fires {@link DISCLOSURE_TOGGLE} with `detail.open`.
  */
 /**
@@ -50,7 +50,7 @@ export class DisclosureRow extends RanElement {
   _sep!: HTMLElement;
 
   static get observedAttributes(): string[] {
-    return ['open', 'expandable', 'title', 'summary', 'tone', 'sheet'];
+    return ['open', 'expandable', 'heading', 'summary', 'tone', 'sheet'];
   }
 
   constructor() {
@@ -117,12 +117,19 @@ export class DisclosureRow extends RanElement {
     else this.removeAttribute('expandable');
   }
 
-  /** The fixed-width left half of the line. */
-  get title(): string {
-    return getStringAttribute(this, 'title');
+  /**
+   * The fixed-width left half of the line.
+   *
+   * Not `title`: that is a native `HTMLElement` attribute, and the browser renders it as a
+   * tooltip. A component using it for a heading makes every instance sprout a tooltip
+   * repeating the text already on screen, and there is no way to switch that off once the
+   * attribute is set.
+   */
+  get heading(): string {
+    return getStringAttribute(this, 'heading');
   }
-  set title(value: string) {
-    setStringAttribute(this, 'title', value);
+  set heading(value: string) {
+    setStringAttribute(this, 'heading', value);
   }
 
   /** The truncating right half. Empty drops the separator with it. */
@@ -181,12 +188,12 @@ export class DisclosureRow extends RanElement {
   };
 
   private _sync(): void {
-    const { title, summary, expandable, open } = this;
-    this._title.textContent = title;
+    const { heading, summary, expandable, open } = this;
+    this._title.textContent = heading;
     this._summary.textContent = summary;
     // The dot is punctuation between two texts; with only one of them there is nothing to
     // punctuate, and a row ending in a stray dot reads as truncated.
-    this._sep.hidden = summary === '' || title === '';
+    this._sep.hidden = summary === '' || heading === '';
     // Not a button when there is nothing to open: a control that does nothing is worse in
     // the accessibility tree than plain text, because it invites a press.
     this._row.setAttribute('aria-expanded', expandable ? String(open) : 'false');

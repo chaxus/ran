@@ -65,7 +65,7 @@ describe('r-card contract', () => {
 
   it('syncs title attribute to title element on connectedCallback', () => {
     const card = document.createElement('r-card') as Card;
-    card.setAttribute('title', 'My Card');
+    card.setAttribute('heading', 'My Card');
     document.body.appendChild(card);
 
     const shadow = (card as any)._shadowDom as ShadowRoot;
@@ -76,19 +76,19 @@ describe('r-card contract', () => {
     const card = document.createElement('r-card') as Card;
     document.body.appendChild(card);
 
-    card.setAttribute('title', 'First');
+    card.setAttribute('heading', 'First');
     expect((card as any)._titleEl.textContent).toBe('First');
 
-    card.setAttribute('title', 'Second');
+    card.setAttribute('heading', 'Second');
     expect((card as any)._titleEl.textContent).toBe('Second');
   });
 
   it('clears title element when title attribute is removed', () => {
     const card = document.createElement('r-card') as Card;
-    card.setAttribute('title', 'To Remove');
+    card.setAttribute('heading', 'To Remove');
     document.body.appendChild(card);
 
-    card.removeAttribute('title');
+    card.removeAttribute('heading');
     expect((card as any)._titleEl.textContent).toBe('');
   });
 
@@ -96,22 +96,22 @@ describe('r-card contract', () => {
     const card = document.createElement('r-card') as Card;
     document.body.appendChild(card);
 
-    card.setAttribute('title', 'Test Title');
-    expect(card.title).toBe('Test Title');
+    card.setAttribute('heading', 'Test Title');
+    expect(card.heading).toBe('Test Title');
   });
 
   it('title getter returns empty string when attribute is absent', () => {
     const card = document.createElement('r-card') as Card;
     document.body.appendChild(card);
-    expect(card.title).toBe('');
+    expect(card.heading).toBe('');
   });
 
   it('title setter updates the attribute', () => {
     const card = document.createElement('r-card') as Card;
     document.body.appendChild(card);
 
-    card.title = 'Via Setter';
-    expect(card.getAttribute('title')).toBe('Via Setter');
+    card.heading = 'Via Setter';
+    expect(card.getAttribute('heading')).toBe('Via Setter');
   });
 
   // ── Description attribute ─────────────────────────────────────────────────
@@ -220,7 +220,7 @@ describe('r-card contract', () => {
     document.body.appendChild(card);
 
     const syncTitle = vi.spyOn(card as any, '_syncTitle');
-    card.attributeChangedCallback('title', 'same', 'same');
+    card.attributeChangedCallback('heading', 'same', 'same');
     expect(syncTitle).not.toHaveBeenCalled();
   });
 
@@ -229,7 +229,7 @@ describe('r-card contract', () => {
     document.body.appendChild(card);
 
     const syncTitle = vi.spyOn(card as any, '_syncTitle');
-    card.attributeChangedCallback('title', null, 'New Title');
+    card.attributeChangedCallback('heading', null, 'New Title');
     expect(syncTitle).toHaveBeenCalledOnce();
   });
 

@@ -33,7 +33,7 @@ describe('r-disclosure-row contract', () => {
 
   it('puts the title and summary on one line', () => {
     const { row, title, summary } = mount();
-    row.title = 'fetch_url';
+    row.heading = 'fetch_url';
     row.summary = 'https://example.com';
     expect(title.textContent).toBe('fetch_url');
     expect(summary.textContent).toBe('https://example.com');
@@ -42,7 +42,7 @@ describe('r-disclosure-row contract', () => {
   it('drops the separator when there is nothing to punctuate', () => {
     // A row ending in a stray dot reads as truncated.
     const { row, sep } = mount();
-    row.title = 'ping';
+    row.heading = 'ping';
     expect(sep.hidden).toBe(true);
     row.summary = 'once';
     expect(sep.hidden).toBe(false);

@@ -26,6 +26,12 @@ const BASE_BODY_STYLE = 'margin: 0; padding: 24px; background: #ffffff; box-sizi
 /**
  * Navigate to the dev server, wait for a custom element tag to register,
  * freeze all animations, and clear the body for isolated component mounting.
+ *
+ * Screenshot the element you mounted, not `body`. The demo app this navigates to can repaint
+ * into the body after the clear, and a capture that happens to catch it comes back a
+ * different height — `toHaveScreenshot` then alternates between two sizes across its retries
+ * and reports whichever it ended on. A component's baseline should be of the component
+ * anyway.
  */
 export async function isolatedSetup(page: Page, url: string, waitForTag: string): Promise<void> {
   await page.goto(url, { waitUntil: 'load' });

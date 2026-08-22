@@ -13,7 +13,7 @@ A structured content container with header, body, and footer zones for grouping 
 ### Basic Usage
 
 <Demo>
-  <r-card title="Card title" description="Optional subtitle" style="max-width: 360px;">
+  <r-card heading="Card title" description="Optional subtitle" style="max-width: 360px;">
     <span slot="extra" style="font-size: 12px;">tag</span>
     <p style="margin: 0;">Body content goes in the default slot.</p>
     <a slot="footer" href="#">View notes</a>
@@ -21,7 +21,7 @@ A structured content container with header, body, and footer zones for grouping 
 </Demo>
 
 ```html
-<r-card title="Card title" description="Optional subtitle">
+<r-card heading="Card title" description="Optional subtitle">
   <span slot="extra">tag</span>
   <p>Body content goes in the default slot.</p>
   <a slot="footer" href="#">View notes</a>
@@ -44,13 +44,13 @@ A structured content container with header, body, and footer zones for grouping 
 The card heading, shown at the top of the header. Hidden when empty.
 
 <Demo>
-  <r-card title="Only a title" style="max-width: 360px;">
+  <r-card heading="Only a title" style="max-width: 360px;">
     <p style="margin: 0;">Body content.</p>
   </r-card>
 </Demo>
 
 ```html
-<r-card title="Only a title">
+<r-card heading="Only a title">
   <p>Body content.</p>
 </r-card>
 ```
@@ -60,13 +60,13 @@ The card heading, shown at the top of the header. Hidden when empty.
 A subtitle rendered below the title. Hidden when empty. When neither `title` nor `description` is set, the whole header is hidden.
 
 <Demo>
-  <r-card title="Title" description="A short supporting subtitle" style="max-width: 360px;">
+  <r-card heading="Title" description="A short supporting subtitle" style="max-width: 360px;">
     <p style="margin: 0;">Body content.</p>
   </r-card>
 </Demo>
 
 ```html
-<r-card title="Title" description="A short supporting subtitle">
+<r-card heading="Title" description="A short supporting subtitle">
   <p>Body content.</p>
 </r-card>
 ```
@@ -76,13 +76,13 @@ A subtitle rendered below the title. Hidden when empty. When neither `title` nor
 Cards don't react to hover by default. Add the `hoverable` attribute on cards that are actually clickable: on hover the border darkens one step on the gray ladder (`--ran-color-border` → `--ran-color-border-hover`) and the surface takes the quiet elevated shadow (`--ran-shadow-elevated`).
 
 <Demo>
-  <r-card hoverable title="Hoverable card" description="Hover me" style="max-width: 360px; cursor: pointer;">
+  <r-card hoverable heading="Hoverable card" description="Hover me" style="max-width: 360px; cursor: pointer;">
     <p style="margin: 0;">The border darkens and the card lifts slightly.</p>
   </r-card>
 </Demo>
 
 ```html
-<r-card hoverable title="Hoverable card" description="Hover me">
+<r-card hoverable heading="Hoverable card" description="Hover me">
   <p>The border darkens and the card lifts slightly.</p>
 </r-card>
 ```
@@ -94,7 +94,7 @@ Cards don't react to hover by default. Add the `hoverable` attribute on cards th
 CSS injected into the card's shadow DOM — the same `sheet` convention used by every other ranui component.
 
 ```html
-<r-card title="Themed card" sheet=".ran-card { background: #f6ffed; }">
+<r-card heading="Themed card" sheet=".ran-card { background: #f6ffed; }">
   <p>Body content.</p>
 </r-card>
 ```

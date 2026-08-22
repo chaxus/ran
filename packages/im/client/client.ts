@@ -162,11 +162,15 @@ const MAX_STEPS = 6;
 async function ask(text: string): Promise<void> {
   const staged = [...attachments.attachments];
   const content = await buildContent(text, staged);
-  // The transcript shows what was attached, because a message that reads "看看这个" with no
-  // sign of the four screenshots beside it is a message nobody can reconstruct later.
-  const shown = staged.length === 0 ? text : `${text}\n\n${staged.map((a) => `\`${a.name}\``).join(' · ')}`;
-
-  chat.push({ type: 'turn/start', id: nodeId(current.messages.length), role: 'user', text: shown });
+  chat.push({
+    type: 'turn/start',
+    id: nodeId(current.messages.length),
+    role: 'user',
+    text,
+    // The transcript shows what was attached, because a message that reads "看看这个" with no
+    // sign of the four screenshots beside it is a message nobody can reconstruct later.
+    images: imagesOf(content),
+  });
   chat.push({ type: 'turn/end', id: nodeId(current.messages.length) });
   current.messages.push({ role: 'user', content });
   // Named from the first thing said in it, once: a conversation renamed on every turn is a
@@ -707,7 +711,7 @@ function renderSession(session: Session): void {
       // An assistant message that only asked for tools has no text; opening an empty row for
       // it would put a blank card above every tool call in the transcript.
       if (text !== '' || calls.length === 0) {
-        chat.push({ type: 'turn/start', id, role: entry.role, text });
+        chat.push({ type: 'turn/start', id, role: entry.role, text, images: imagesOf(entry.content) });
         // Restored turns are finished by definition; without this every one of them would come
         // back mid-stream, with `r-markdown` still guessing at half-written syntax.
         chat.push({ type: 'turn/end', id });
@@ -730,11 +734,21 @@ function renderSession(session: Session): void {
 }
 
 /**
+ * The images a message carries.
+ *
+ * @param content Message content.
+ * @returns Their data URLs, in order.
+ */
+function imagesOf(content: MessageContent): string[] {
+  if (typeof content === 'string') return [];
+  return content.filter((part) => part.type === 'image_url').map((part) => part.image_url.url);
+}
+
+/**
  * The readable part of a message.
  *
  * @param content Message content.
- * @returns Its text, with attachments named — a restored turn that showed nothing where four
- *   screenshots were is a turn nobody can reconstruct.
+ * @returns Just the text. The images are a separate part of the row.
  */
 function textOf(content: MessageContent): string {
   if (typeof content === 'string') return content;
@@ -742,8 +756,8 @@ function textOf(content: MessageContent): string {
     .filter((part): part is Extract<ContentPart, { type: 'text' }> => part.type === 'text')
     .map((part) => part.text)
     .join('\n');
-  const images = content.filter((part) => part.type === 'image_url').length;
-  return images === 0 ? text : `${text}\n\n${images} 张图片`;
+  // Images are drawn, not described — see `imagesOf`.
+  return text;
 }
 
 /** Redraws the conversation list. */

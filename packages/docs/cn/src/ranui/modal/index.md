@@ -16,7 +16,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 
 <Demo>
   <r-button onclick="document.getElementById('quickstart-modal').open = true">打开对话框</r-button>
-  <r-modal id="quickstart-modal" title="基础对话框">
+  <r-modal id="quickstart-modal" heading="基础对话框">
     <p>这是对话框的内容。</p>
     <div slot="footer">
       <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">确定</r-button>
@@ -27,7 +27,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 ```html
 <r-button onclick="modal.open = true">打开对话框</r-button>
 
-<r-modal id="modal" title="基础对话框">
+<r-modal id="modal" heading="基础对话框">
   <p>这是对话框的内容。</p>
   <div slot="footer">
     <r-button type="primary" onclick="modal.open = false">确定</r-button>
@@ -56,7 +56,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 ### 标题 `title`
 
 ```html
-<r-modal open title="删除条目">
+<r-modal open heading="删除条目">
   <p>确定要删除该条目吗？</p>
 </r-modal>
 ```
@@ -66,7 +66,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 隐藏头部关闭按钮，使对话框只能通过你自己的控件关闭。
 
 ```html
-<r-modal open title="条款" closable="false">
+<r-modal open heading="条款" closable="false">
   <p>你必须接受条款才能继续。</p>
   <div slot="footer">
     <r-button type="primary">接受</r-button>
@@ -79,7 +79,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 默认点击背景遮罩会关闭对话框。设为 `false` 则要求显式操作才能关闭。
 
 ```html
-<r-modal open title="未保存的更改" maskClosable="false">
+<r-modal open heading="未保存的更改" maskClosable="false">
   <p>点击外部不会关闭此对话框。</p>
 </r-modal>
 ```
@@ -87,7 +87,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 ### 按 Escape 关闭 `closeOnEsc`
 
 ```html
-<r-modal open title="报告" closeOnEsc="false">
+<r-modal open heading="报告" closeOnEsc="false">
   <p>该对话框已禁用 Escape 键。</p>
 </r-modal>
 ```
@@ -95,7 +95,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 ### 锁定滚动 `lockScroll`
 
 ```html
-<r-modal open title="预览" lockScroll="false">
+<r-modal open heading="预览" lockScroll="false">
   <p>对话框背后的页面仍可滚动。</p>
 </r-modal>
 ```
@@ -103,7 +103,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 ### 自动聚焦 `autoFocus`
 
 ```html
-<r-modal open title="搜索" autoFocus="false">
+<r-modal open heading="搜索" autoFocus="false">
   <input type="text" placeholder="输入以搜索" />
 </r-modal>
 ```
@@ -126,7 +126,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 | `footer` | 底部操作区；仅在该插槽有内容时才显示底栏 |
 
 ```html
-<r-modal open title="确认">
+<r-modal open heading="确认">
   <p>主体内容放在默认插槽中。</p>
   <div slot="footer">
     <r-button onclick="modal.open = false">取消</r-button>
@@ -149,7 +149,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 | `afterclose`  | 否     | `{ trigger }` | 关闭过渡动画结束后触发                     |
 
 ```html
-<r-modal id="modal" title="示例"></r-modal>
+<r-modal id="modal" heading="示例"></r-modal>
 
 <script>
   const modal = document.getElementById('modal');

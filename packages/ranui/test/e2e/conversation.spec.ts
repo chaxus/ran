@@ -174,6 +174,6 @@ test.describe('r-conversation', () => {
 
   test('renders', async ({ page }) => {
     await conversation(page, ['帮我看一下这段代码', '好的，我来看看。', '谢谢']);
-    await expect(page.locator('body')).toHaveScreenshot('conversation.png');
+    await expect(page.locator('#chat')).toHaveScreenshot('conversation.png');
   });
 });
