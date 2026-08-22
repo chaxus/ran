@@ -98,6 +98,20 @@ describe('r-tool-card contract', () => {
     expect(body.querySelector('pre')?.textContent).toBe('a\nb');
   });
 
+  it('wraps generic content and leaves terminal output unwrapped', () => {
+    // Terminal output is aligned in columns and wrapping destroys the alignment that made it
+    // readable; a generic result is arbitrary text, and not wrapping it means reading a
+    // fetched page by dragging a scrollbar sideways one line at a time.
+    const { card, body } = mount();
+    card.call = { card: 'generic', title: 'Fetch' };
+    card.result = { card: 'generic', content: 'a very long single line' };
+    expect(body.querySelector('pre')?.classList.contains('ran-tool-card-output-wrap')).toBe(true);
+
+    card.call = { card: 'terminal', title: 'ls' };
+    card.result = { card: 'terminal', output: 'a very long single line' };
+    expect(body.querySelector('pre')?.classList.contains('ran-tool-card-output-wrap')).toBe(false);
+  });
+
   it('surfaces a non-zero exit code and stays silent on zero', () => {
     const { card, body } = mount();
     card.call = { card: 'terminal', title: 'ls' };

@@ -8,6 +8,7 @@ import 'ranui/theme-switch';
 import 'ranui/attachments';
 import 'ranui/icon';
 import 'ranui/voice-button';
+import 'ranui/tool-card';
 import message from 'ranui/message';
 import { initTheme } from 'ranui/theme';
 import { formatRelative, readFileAsDataURL } from 'ranuts/utils';
@@ -16,8 +17,10 @@ import type { Session, SessionStore, StoredMessage } from '@/client/sessions';
 import type { Attachment, AttachmentRejection } from 'ranui';
 import { streamDialog } from '@/client/lib/eventSource';
 import type { DialogStream } from '@/client/lib/eventSource';
-import { eventsFromSnapshot, reasoningView, turnView } from '@/client/chat';
+import { NOTHING_EMITTED, eventsFromSnapshot, reasoningView, toolNodeId, toolView, turnView } from '@/client/chat';
 import type { ChatEvent, EmittedSoFar } from '@/client/chat';
+import { parseToolArgs, runTool, toolsForRequest } from '@/client/tools/index';
+import type { WireToolCall } from '@/client/chat-types';
 
 /** `<r-conversation>`, as far as this file needs it. */
 type ConversationElement = HTMLElement & {
@@ -54,6 +57,7 @@ const DEMO_NOTICE =
 // element throws rather than silently missing events a later registration never saw.
 chat.register(turnView);
 chat.register(reasoningView);
+chat.register(toolView);
 
 let store: SessionStore;
 let current: Session;
@@ -83,9 +87,18 @@ function setNotice(text: string): void {
 }
 
 /**
+ * How many provider round trips one user message may cost.
+ *
+ * A model that calls a tool, reads the result and calls again is working; a model that calls
+ * the same tool forever is a bill. The ceiling is on round trips rather than on calls,
+ * because several calls answered in one round is the case worth encouraging.
+ */
+const MAX_STEPS = 6;
+
+/**
  * Sends one turn and streams the answer into the conversation.
  *
- * @param content What the user typed.
+ * @param text What the user typed.
  */
 async function ask(text: string): Promise<void> {
   turn += 1;
@@ -98,8 +111,7 @@ async function ask(text: string): Promise<void> {
   const shown = staged.length === 0 ? text : `${text}\n\n${staged.map((a) => `\`${a.name}\``).join(' · ')}`;
 
   chat.push({ type: 'turn/start', id: `${id}-user`, role: 'user', text: shown });
-  const asked: StoredMessage = { role: 'user', content };
-  current.messages.push(asked);
+  current.messages.push({ role: 'user', content });
   // Named from the first thing said in it, once: a conversation renamed on every turn is a
   // list entry that keeps moving under the reader.
   if (current.messages.length === 1) current.title = titleFrom(content);
@@ -107,42 +119,138 @@ async function ask(text: string): Promise<void> {
   await persist();
   await renderSessions();
 
-  let emitted: EmittedSoFar = { text: 0, reasoning: 0 };
-  let answered = false;
   setRunning(true);
+  await runStep(id, 0);
+}
 
-  inFlight = streamDialog(
-    '/api/im/dialog',
-    { messages: current.messages },
-    {
-      onMode: (mode) => {
-        // Confirms what the server already stamped into the page, and corrects it if the
-        // server was restarted with a key while this tab stayed open.
-        setNotice(mode === 'demo' ? DEMO_NOTICE : '');
+/**
+ * Runs one provider round trip, and the next one when the model asked for tools.
+ *
+ * The loop lives here rather than in the stream layer because continuing is a decision about
+ * the conversation: it needs the history to append to, the transcript to draw into, and a
+ * ceiling on how many times it may happen. `streamDialog` knows about one response.
+ *
+ * @param id The user turn every round of this exchange belongs to.
+ * @param step Which round this is, counted from 0.
+ * @returns Once the exchange has ended, whether by an answer, a failure, or the ceiling.
+ */
+function runStep(id: string, step: number): Promise<void> {
+  // Each round gets its own node ids: its reasoning, its answer and its tool cards are
+  // separate rows from the previous round's, which is what makes a multi-step exchange
+  // readable rather than one row that keeps being rewritten.
+  const round = `${id}-r${step}`;
+  let emitted: EmittedSoFar = NOTHING_EMITTED;
+  let answered = false;
+
+  return new Promise((resolve) => {
+    inFlight = streamDialog(
+      '/api/im/dialog',
+      { messages: current.messages, tools: toolsForRequest() },
+      {
+        onMode: (mode) => {
+          // Confirms what the server already stamped into the page, and corrects it if the
+          // server was restarted with a key while this tab stayed open.
+          setNotice(mode === 'demo' ? DEMO_NOTICE : '');
+        },
+        onUpdate: (snapshot) => {
+          const next = eventsFromSnapshot(round, snapshot, emitted);
+          emitted = next.emitted;
+          for (const event of next.events) {
+            if (event.type === 'turn/start') answered = true;
+            chat.push(event);
+          }
+        },
+        onEnd: (snapshot, error) => {
+          inFlight = null;
+          const text = snapshot.blocks.reduce((out, b) => (b.type === 'text' ? out + b.text : out), '');
+          const calls = snapshot.blocks.filter((block) => block.type === 'tool-call');
+
+          if (error !== undefined) {
+            // A failure before any text has no row to attach itself to; open one so the
+            // reader sees what happened instead of a request that produced nothing.
+            if (!answered) chat.push({ type: 'turn/start', id: round, role: 'assistant', text: '' });
+            chat.push({ type: 'turn/error', id: round, message: error.message });
+            setRunning(false);
+            resolve();
+            return;
+          }
+
+          if (calls.length === 0) {
+            chat.push({ type: 'turn/end', id: round });
+            if (text !== '') {
+              current.messages.push({ role: 'assistant', content: text });
+              void persist().then(renderSessions);
+            }
+            setRunning(false);
+            resolve();
+            return;
+          }
+
+          chat.push({ type: 'turn/end', id: round });
+          void continueWithTools(id, step, round, text, calls).then(resolve);
+        },
       },
-      onUpdate: (snapshot) => {
-        const next = eventsFromSnapshot(id, snapshot, emitted);
-        emitted = next.emitted;
-        for (const event of next.events) {
-          if (event.type === 'turn/start') answered = true;
-          chat.push(event);
-        }
-      },
-      onEnd: (snapshot, error) => {
-        const text = snapshot.blocks.reduce((out, b) => (b.type === 'text' ? out + b.text : out), '');
-        // A failure before any text has no row to attach itself to; open one so the reader
-        // sees what happened instead of a request that silently produced nothing.
-        if (!answered && error !== undefined) chat.push({ type: 'turn/start', id, role: 'assistant', text: '' });
-        chat.push(error === undefined ? { type: 'turn/end', id } : { type: 'turn/error', id, message: error.message });
-        if (text !== '') {
-          current.messages.push({ role: 'assistant', content: text });
-          void persist().then(renderSessions);
-        }
-        inFlight = null;
-        setRunning(false);
-      },
-    },
-  );
+    );
+  });
+}
+
+/**
+ * Runs the tools a round asked for and starts the next round.
+ *
+ * The assistant message carrying the calls is appended before any tool runs: a provider
+ * rejects a `role: 'tool'` message whose id names no call in the message before it, so the
+ * two halves are written in the order the wire format requires, not the order they complete.
+ *
+ * @param id The user turn this exchange belongs to.
+ * @param step Which round produced these calls.
+ * @param round The node-id prefix that round used.
+ * @param text Any text the model wrote alongside the calls.
+ * @param calls The calls, in block order.
+ */
+async function continueWithTools(
+  id: string,
+  step: number,
+  round: string,
+  text: string,
+  calls: readonly { id: string; name: string; arguments: string }[],
+): Promise<void> {
+  const wire: WireToolCall[] = calls.map((call, ordinal) => ({
+    // A provider that streamed no id — some do for a single call — still needs one to
+    // correlate the result, and it only has to be unique within this exchange.
+    id: call.id === '' ? `${round}-${ordinal}` : call.id,
+    type: 'function',
+    function: { name: call.name, arguments: call.arguments },
+  }));
+  current.messages.push({ role: 'assistant', content: text, tool_calls: wire });
+
+  // Concurrently: the model asked for all of them at once, and running them in sequence
+  // would make two independent lookups cost the sum of their latencies for no reason.
+  const outcomes = await Promise.all(calls.map((call) => runTool(call.name, parseToolArgs(call.arguments))));
+
+  outcomes.forEach((outcome, ordinal) => {
+    const call = calls[ordinal];
+    const entry = wire[ordinal];
+    if (call === undefined || entry === undefined) return;
+    chat.push({ type: 'tool/result', id: toolNodeId(round, ordinal), output: outcome.output, failed: outcome.failed });
+    // A failed tool still goes back to the model. It is the model's turn, and "that URL does
+    // not resolve" is something it can act on; withholding it leaves it waiting forever.
+    current.messages.push({ role: 'tool', content: outcome.output, tool_call_id: entry.id, name: call.name });
+  });
+
+  await persist();
+  await renderSessions();
+
+  if (step + 1 >= MAX_STEPS) {
+    chat.push({ type: 'turn/start', id: `${round}-halt`, role: 'assistant', text: '' });
+    chat.push({
+      type: 'turn/error',
+      id: `${round}-halt`,
+      message: `已连续调用工具 ${MAX_STEPS} 轮仍未给出答案，已停止。`,
+    });
+    setRunning(false);
+    return;
+  }
+  await runStep(id, step + 1);
 }
 
 // ── Sessions ───────────────────────────────────────────────────────────────
@@ -181,13 +289,39 @@ function blankSession(): Session {
 function renderSession(session: Session): void {
   chat.reset();
   turn = 0;
+  // Results are indexed by call id first, because a tool message names the call it answers
+  // and the two are not adjacent when the model made several calls at once.
+  const results = new Map<string, { output: string; failed: boolean }>();
+  for (const entry of session.messages) {
+    // A stored result carries no verdict — the wire format has no field for one, and the
+    // model is not told either. Replay shows every finished call as finished.
+    if (entry.role === 'tool') results.set(entry.tool_call_id, { output: entry.content, failed: false });
+  }
+
   session.messages.forEach((entry, index) => {
+    // A tool message has already been drawn as the result of its call.
+    if (entry.role === 'tool') return;
     const id = `restored-${index}`;
     const text = typeof entry.content === 'string' ? entry.content : textOf(entry.content);
-    chat.push({ type: 'turn/start', id, role: entry.role, text });
-    // Restored turns are finished by definition; without this every one of them would come
-    // back mid-stream, with `r-markdown` still guessing at half-written syntax.
-    chat.push({ type: 'turn/end', id });
+    // An assistant message that only asked for tools has no text; opening an empty row for
+    // it would put a blank card above every tool call in the transcript.
+    if (text !== '' || entry.role === 'user' || entry.tool_calls === undefined) {
+      chat.push({ type: 'turn/start', id, role: entry.role, text });
+      // Restored turns are finished by definition; without this every one of them would come
+      // back mid-stream, with `r-markdown` still guessing at half-written syntax.
+      chat.push({ type: 'turn/end', id });
+    }
+    if (entry.role !== 'assistant') return;
+
+    (entry.tool_calls ?? []).forEach((call, ordinal) => {
+      const node = toolNodeId(id, ordinal);
+      chat.push({ type: 'tool/start', id: node, name: call.function.name });
+      chat.push({ type: 'tool/args', id: node, args: call.function.arguments });
+      const outcome = results.get(call.id);
+      // A call with no result is one whose exchange was cut off — the tab closed mid-run.
+      // Its card stays in the running state, which is what actually happened.
+      if (outcome !== undefined) chat.push({ type: 'tool/result', id: node, ...outcome });
+    });
   });
 }
 

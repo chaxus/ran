@@ -15,3 +15,29 @@ export type ContentPart = { type: 'text'; text: string } | { type: 'image_url'; 
  * once there is something besides text.
  */
 export type MessageContent = string | ContentPart[];
+
+/**
+ * One tool call as the wire format carries it, in a request and in a stored history.
+ *
+ * The field names are the provider's, not this app's: these travel back to the model
+ * verbatim on the next request, and renaming them here would mean renaming them again on
+ * the way out.
+ */
+export interface WireToolCall {
+  id: string;
+  type: 'function';
+  function: { name: string; arguments: string };
+}
+
+/**
+ * One turn, as it is stored and as the provider expects it.
+ *
+ * `tool_calls` and `tool_call_id` are not optional decoration: a provider rejects a
+ * `role: 'tool'` message whose id names no call in the assistant message before it, so a
+ * history that dropped either field cannot be sent at all. That is why they are stored
+ * rather than reconstructed — a reloaded conversation has to be resumable.
+ */
+export type StoredMessage =
+  | { role: 'user'; content: MessageContent }
+  | { role: 'assistant'; content: MessageContent; tool_calls?: WireToolCall[] }
+  | { role: 'tool'; content: string; tool_call_id: string; name: string };

@@ -14,6 +14,8 @@ const serverRender = {
   'post=>#/api/user/login#': 'user#login',
   // IM 消息通信
   'post=>#/api/im/dialog#': 'im#dialog',
+  // 工具调用：抓取网页（浏览器受同源策略限制，必须经由服务端）
+  'post=>#/api/im/fetch#': 'im#fetch',
 };
 
 export default {
