@@ -27,6 +27,11 @@ $bin/tsx ./bin/build-iife.ts
 
 $bin/tsc --declaration --emitDeclarationOnly --outDir ./dist --project tsconfig.json
 
+# tsc emits the `@/` aliases verbatim — a declaration file carries no `paths`, so a
+# consumer resolving them against their own config finds nothing and every published type
+# degrades to `any`. Rewrite them to relative specifiers.
+$bin/tsx ./bin/rewrite-dts-aliases.ts
+
 cp tsconfig.json ./dist
 cp typings.d.ts ./dist
 
