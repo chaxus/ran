@@ -269,29 +269,84 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `conversation`
 
-- Tokens: 12
-- Parts: 4
+- Tokens: 27
+- Parts: 5
 
 #### Tokens
-<!-- layers: semantic: 3 · internal: 9 -->
+<!-- layers: semantic: 7 · internal: 20 -->
 - `--ran-color-bg`
+- `--ran-color-border`
+- `--ran-color-border-hover`
+- `--ran-color-primary`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-conversation-background`
 - `--ran-conversation-color`
 - `--ran-conversation-empty-color`
+- `--ran-conversation-focus-color`
 - `--ran-conversation-font-size`
 - `--ran-conversation-footer-background`
 - `--ran-conversation-gap`
+- `--ran-conversation-measure`
+- `--ran-conversation-older-border-color`
+- `--ran-conversation-older-color`
+- `--ran-conversation-older-font-size`
+- `--ran-conversation-older-hover-border-color`
+- `--ran-conversation-older-hover-color`
+- `--ran-conversation-older-radius`
+- `--ran-radius-full`
+- `--ran-space-1`
+- `--ran-space-3`
 - `--ran-space-4`
 - `--ran-space-8`
 - `--ran-text-copy-2`
+- `--ran-text-copy-3`
 
 #### Parts
 - `conversation`
 - `empty`
 - `footer`
 - `list`
+- `older`
+
+### `disclosure-row`
+
+- Tokens: 22
+- Parts: 7
+
+#### Tokens
+<!-- layers: semantic: 7 · internal: 15 -->
+- `--ran-color-bg-hover`
+- `--ran-color-error`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
+- `--ran-disclosure-color`
+- `--ran-disclosure-error-color`
+- `--ran-disclosure-focus-color`
+- `--ran-disclosure-font-size`
+- `--ran-disclosure-gap`
+- `--ran-disclosure-hover-background`
+- `--ran-disclosure-leading-color`
+- `--ran-disclosure-leading-size`
+- `--ran-disclosure-radius`
+- `--ran-disclosure-sep-color`
+- `--ran-disclosure-summary-color`
+- `--ran-disclosure-title-weight`
+- `--ran-disclosure-transition`
+- `--ran-radius-sm`
+- `--ran-space-2`
+- `--ran-text-copy-2`
+
+#### Parts
+- `body`
+- `disclosure`
+- `leading`
+- `row`
+- `separator`
+- `summary`
+- `title`
 
 ### `dropdown`
 
@@ -1731,6 +1786,29 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 #### Parts
 - (none)
 
+### `state-dot`
+
+- Tokens: 12
+- Parts: 1
+
+#### Tokens
+<!-- layers: semantic: 5 · internal: 7 -->
+- `--ran-color-error`
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text-disabled`
+- `--ran-color-warning`
+- `--ran-state-dot-color`
+- `--ran-state-dot-error-color`
+- `--ran-state-dot-halo-opacity`
+- `--ran-state-dot-running-color`
+- `--ran-state-dot-size`
+- `--ran-state-dot-success-color`
+- `--ran-state-dot-warning-color`
+
+#### Parts
+- `dot`
+
 ### `tab`
 
 - Tokens: 17
@@ -1841,54 +1919,46 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `tool-card`
 
-- Tokens: 60
-- Parts: 14
+- Tokens: 46
+- Parts: 11
 
 #### Tokens
-<!-- layers: semantic: 15 · internal: 45 -->
+<!-- layers: semantic: 11 · internal: 35 -->
 - `--ran-color-bg`
 - `--ran-color-bg-muted`
-- `--ran-color-bg-subtle`
 - `--ran-color-border`
-- `--ran-color-danger`
+- `--ran-color-error`
 - `--ran-color-link`
-- `--ran-color-primary`
-- `--ran-color-success`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
 - `--ran-font-mono`
 - `--ran-green-200`
-- `--ran-radius-full`
 - `--ran-radius-md`
 - `--ran-radius-sm`
 - `--ran-red-200`
-- `--ran-size-1`
 - `--ran-size-4`
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-3`
+- `--ran-space-6`
 - `--ran-text-copy-2`
-- `--ran-text-label-weight`
+- `--ran-text-copy-3`
 - `--ran-text-mono-weight-regular`
 - `--ran-tool-card-added-background`
-- `--ran-tool-card-background`
-- `--ran-tool-card-body-border-color`
-- `--ran-tool-card-border-color`
-- `--ran-tool-card-border-radius`
+- `--ran-tool-card-body-gap`
 - `--ran-tool-card-color`
-- `--ran-tool-card-description-color`
-- `--ran-tool-card-description-gap`
-- `--ran-tool-card-error-border-color`
 - `--ran-tool-card-file-gap`
-- `--ran-tool-card-focus-color`
 - `--ran-tool-card-font-size`
 - `--ran-tool-card-gutter-color`
-- `--ran-tool-card-header-background`
-- `--ran-tool-card-header-gap`
 - `--ran-tool-card-hunk-gap`
-- `--ran-tool-card-input-gap`
-- `--ran-tool-card-input-key-color`
+- `--ran-tool-card-io-background`
+- `--ran-tool-card-io-border-color`
+- `--ran-tool-card-io-error-color`
+- `--ran-tool-card-io-gutter-gap`
+- `--ran-tool-card-io-label-color`
+- `--ran-tool-card-io-label-size`
+- `--ran-tool-card-io-radius`
 - `--ran-tool-card-line-gap`
 - `--ran-tool-card-location-color`
 - `--ran-tool-card-locations-gap`
@@ -1899,29 +1969,20 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-tool-card-path-color`
 - `--ran-tool-card-path-gap`
 - `--ran-tool-card-removed-background`
-- `--ran-tool-card-status-color`
-- `--ran-tool-card-status-error-color`
-- `--ran-tool-card-status-radius`
-- `--ran-tool-card-status-size`
-- `--ran-tool-card-status-success-color`
-- `--ran-tool-card-title-weight`
-- `--ran-tool-card-toggle-color`
+- `--ran-tool-card-sweep-color`
 
 #### Parts
 - `body`
-- `card`
-- `description`
 - `exit`
 - `file`
-- `header`
 - `hunk`
+- `io`
+- `io-text`
 - `line`
 - `location`
 - `locations`
 - `path`
-- `status`
-- `title`
-- `toggle`
+- `row`
 
 ### `voice-button`
 

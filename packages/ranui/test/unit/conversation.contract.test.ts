@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { Conversation } from '@/components/conversation';
+import { Conversation, OLDER_REQUEST } from '@/components/conversation';
 import type { ConversationNodeView } from '@/components/conversation';
 import '@/components/conversation';
+import '@/components/state-dot';
 
 type Event =
   | { type: 'message'; id: string; text: string }
@@ -290,5 +291,99 @@ describe('r-conversation render economy', () => {
     chat.register(counting(patches));
     chat.push({ id: 'a' });
     expect(patches.get('note:a')).toBe(1);
+  });
+});
+
+describe('r-conversation rows that are custom elements', () => {
+  it('does not hide a row whose content all lives in a shadow root', () => {
+    // A view may mount a custom element as its row, and such an element has no light-DOM
+    // children at all — it is `:empty` while rendering a full line. A `:empty { display:
+    // none }` rule meant to collapse a declined row therefore hides working ones. A view
+    // that wants to render nothing returns null from `mount`, which is already handled.
+    const chat = document.createElement('r-conversation') as Conversation;
+    document.body.appendChild(chat);
+    chat.register({
+      kind: 'probe',
+      match: (event: { id: string }) => ({ id: event.id, role: 'start' as const }),
+      start: () => null,
+      update: (state: null) => state,
+      mount: () => document.createElement('r-state-dot'),
+    });
+    chat.push({ id: 'a' });
+
+    const shadow = (chat as unknown as { _shadowDom: ShadowRoot })._shadowDom;
+    const row = shadow.querySelector<HTMLElement>('.ran-conversation-row')!;
+    expect(row.tagName).toBe('R-STATE-DOT');
+    expect(row.children.length).toBe(0);
+    expect(getComputedStyle(row).display).not.toBe('none');
+  });
+});
+
+describe('r-conversation paging', () => {
+  /**
+   * Mounts a conversation with its paging parts.
+   *
+   * @returns The element, the affordance row, and its button.
+   */
+  const mount = (): { chat: Conversation; older: HTMLElement; button: HTMLButtonElement } => {
+    const chat = document.createElement('r-conversation') as Conversation;
+    document.body.appendChild(chat);
+    const shadow = (chat as unknown as { _shadowDom: ShadowRoot })._shadowDom;
+    const older = shadow.querySelector<HTMLElement>('.ran-conversation-older')!;
+    return { chat, older, button: older.querySelector('button')! };
+  };
+
+  it('hides the affordance until there is something older to fetch', () => {
+    const { chat, older, button } = mount();
+    expect(older.hidden).toBe(true);
+    chat.older = '加载更早';
+    expect(older.hidden).toBe(false);
+    expect(button.textContent).toBe('加载更早');
+  });
+
+  it('asks the owner rather than fetching anything itself', () => {
+    // The element does not know where a conversation lives.
+    const { chat, button } = mount();
+    const listener = vi.fn();
+    chat.addEventListener(OLDER_REQUEST, listener);
+    chat.older = 'more';
+    button.click();
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  it('captures the anchor before asking, not after the rows land', () => {
+    // By the time a page lands the prepend has already moved everything, and there is no
+    // earlier position left to record.
+    const { chat, button } = mount();
+    const order: string[] = [];
+    chat.addEventListener(OLDER_REQUEST, () => order.push('asked'));
+    vi.spyOn(chat, 'captureAnchor').mockImplementation(() => {
+      order.push('captured');
+      return true;
+    });
+    chat.older = 'more';
+    button.click();
+    expect(order).toEqual(['captured', 'asked']);
+  });
+
+  it('goes inert while a page is in flight, without disappearing', () => {
+    // A button that vanishes mid-fetch takes the only statement that more exists with it.
+    const { chat, button, older } = mount();
+    const listener = vi.fn();
+    chat.addEventListener(OLDER_REQUEST, listener);
+    chat.older = 'more';
+    chat.loadingOlder = true;
+    expect(older.hidden).toBe(false);
+    expect(button.disabled).toBe(true);
+    button.click();
+    expect(listener).not.toHaveBeenCalled();
+  });
+
+  it('keeps the paging row out of the row list, so it is never reordered', () => {
+    const { chat } = mount();
+    const shadow = (chat as unknown as { _shadowDom: ShadowRoot })._shadowDom;
+    const list = shadow.querySelector<HTMLElement>('.ran-conversation-list')!;
+    chat.older = 'more';
+    expect(list.querySelector('.ran-conversation-older')).toBeNull();
   });
 });

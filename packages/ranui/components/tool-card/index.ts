@@ -1,5 +1,5 @@
 import componentCss from './index.less?inline';
-import { ButtonBuilder, Div, EventManager, Span } from '@/utils/builder';
+import { ButtonBuilder, Div, EventManager, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
@@ -11,6 +11,11 @@ import {
 import { defineSSR } from '@/utils/ssr-registry';
 import { diffLines } from 'ranuts/utils';
 import type { DiffHunk } from 'ranuts/utils';
+import '@/components/disclosure-row';
+import '@/components/state-dot';
+import { DISCLOSURE_TOGGLE } from '@/components/disclosure-row';
+import type { DisclosureRow } from '@/components/disclosure-row';
+import type { StateDot } from '@/components/state-dot';
 import type { ToolCallView, ToolCardStatus, ToolDiff, ToolLocation, ToolResultView } from './types';
 
 export type { ToolCallView, ToolCardStatus, ToolDiff, ToolLocation, ToolResultView } from './types';
@@ -34,12 +39,46 @@ function cardOf(view: { card?: unknown } | null): 'generic' | 'terminal' | 'diff
 }
 
 /**
- * `<r-tool-card>` — renders a tool call and its result from a declared intent.
+ * The one line a collapsed call shows beside its title.
+ *
+ * Taken from the view when the producer named one, and otherwise derived — a tool that
+ * did not think about its collapsed line still gets a useful one rather than a bare title.
+ * Derivation is deliberately shallow: the first argument, the command, the first path. The
+ * collapsed row has one line, and picking the most important field is the producer's job.
+ *
+ * @param view The pending view.
+ * @returns The summary text, or an empty string when there is nothing worth showing.
+ */
+function summaryOf(view: ToolCallView | null): string {
+  if (view === null) return '';
+  if (typeof view.summary === 'string') return view.summary;
+  if (view.card === 'terminal') return view.description ?? view.cwd ?? '';
+  // Guarded like every other read of a view: these arrive from a tool and are replayed
+  // from a log, so a malformed one has to degrade rather than throw. A card that can break
+  // rendering can break a whole replay.
+  if (view.card === 'diff') return Array.isArray(view.diffs) ? view.diffs.map((diff) => diff.path).join(' · ') : '';
+  const input = view.card === 'generic' ? view.input : undefined;
+  const first = typeof input === 'object' && input !== null ? Object.values(input)[0] : undefined;
+  return typeof first === 'string' ? first : '';
+}
+
+/** Status a state dot shows for a card status. */
+const DOT_STATE = { running: 'running', success: 'success', error: 'error' } as const;
+
+/**
+ * `<r-tool-card>` — one tool call, as a line you can skim and open.
  *
  * The tool says what its call *is* — a shell command, a file edit, something generic — and
  * this element decides what that looks like. Keeping the two apart is what lets the same
- * call render as a terminal block here, a single line in a compact transcript, and a jump
- * target in an editor, without the tool knowing any of them exist.
+ * call render as a row here, a single line in a compact transcript, and a jump target in an
+ * editor, without the tool knowing any of them exist.
+ *
+ * **It renders as a row, not a box.** A run of tool calls is a list: twelve bordered cards
+ * down a transcript is twelve things competing with the answer, while twelve one-line rows
+ * is something a reader skims past on the way to the reply. The name is about the render
+ * intent — `ToolCallView.card` names *what the payload is* — not about the chrome.
+ *
+ * Everything starts collapsed for the same reason.
  *
  * ```ts
  * const card = document.querySelector('r-tool-card');
@@ -56,8 +95,8 @@ function cardOf(view: { card?: unknown } | null): 'generic' | 'terminal' | 'diff
 export class ToolCard extends RanElement {
   _events = new EventManager();
   _shadowDom!: ShadowRoot;
-  _header!: HTMLElement;
-  _title!: HTMLElement;
+  _row!: DisclosureRow;
+  _dot!: StateDot;
   _body!: HTMLElement;
 
   private _call: ToolCallView | null = null;
@@ -71,29 +110,22 @@ export class ToolCard extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
-    const root = ensureShadowElement(this._shadowDom, '.ran-tool-card', () =>
-      Div()
-        .class('ran-tool-card')
-        .attr('part', 'card')
+    // Built through the builder, not `document.createElement`: this constructor also runs
+    // during server rendering, where there is no document. The SSR gate is what says so.
+    const row = ensureShadowElement(this._shadowDom, 'r-disclosure-row', () =>
+      View('r-disclosure-row')
+        .attr('part', 'row')
+        .class('ran-tool-card-sweep')
         .children(
-          ButtonBuilder()
-            .class('ran-tool-card-header')
-            .attr('part', 'header')
-            .attr('type', 'button')
-            .attr('aria-expanded', 'false')
-            .children(
-              Span().class('ran-tool-card-status').attr('part', 'status').build(),
-              Span().class('ran-tool-card-title').attr('part', 'title').build(),
-              Span().class('ran-tool-card-toggle').attr('part', 'toggle').text('▸').build(),
-            )
-            .build(),
+          View('r-state-dot').attr('slot', 'leading').build(),
           Div().class('ran-tool-card-body').attr('part', 'body').build(),
         )
         .build(),
-    );
-    this._header = root.querySelector<HTMLElement>('.ran-tool-card-header')!;
-    this._title = root.querySelector<HTMLElement>('.ran-tool-card-title')!;
-    this._body = root.querySelector<HTMLElement>('.ran-tool-card-body')!;
+    ) as DisclosureRow;
+
+    this._row = row;
+    this._dot = row.querySelector<HTMLElement>('r-state-dot') as StateDot;
+    this._body = row.querySelector<HTMLElement>('.ran-tool-card-body')!;
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────
@@ -145,8 +177,11 @@ export class ToolCard extends RanElement {
 
   connectedCallback(): void {
     this.handlerExternalCss();
-    this._events.on(this._header, 'click', this._toggle);
-    this._syncOpen();
+    // The row owns the open state and announces its own changes; this element only mirrors
+    // them onto itself so a page can style `[open]` and read it back.
+    this._events.on(this._row, DISCLOSURE_TOGGLE, (event) => {
+      this.open = (event as CustomEvent<{ open: boolean }>).detail.open;
+    });
     this._render();
   }
 
@@ -154,10 +189,10 @@ export class ToolCard extends RanElement {
     this._events.abort();
   }
 
-  attributeChangedCallback(name: string, old: string, next: string): void {
+  attributeChangedCallback(name: string, old: string | null, next: string | null): void {
     if (old === next) return;
     if (name === 'sheet') this.handlerExternalCss();
-    if (name === 'open') this._syncOpen();
+    else this._render();
   }
 
   handlerExternalCss = (): void => {
@@ -166,20 +201,14 @@ export class ToolCard extends RanElement {
 
   // ── Internals ──────────────────────────────────────────────────────────
 
-  private _toggle = (): void => {
-    this.open = !this.open;
-  };
-
-  private _syncOpen(): void {
-    const open = this.open;
-    this._header.setAttribute('aria-expanded', open ? 'true' : 'false');
-    const toggle = this._header.querySelector<HTMLElement>('.ran-tool-card-toggle');
-    if (toggle !== null) toggle.textContent = open ? '▾' : '▸';
-  }
-
   private _render(): void {
     const view = this._call;
-    this._title.textContent = view !== null && 'title' in view ? view.title : '';
+    const status = this.status;
+    this._row.title = view !== null && 'title' in view ? view.title : '';
+    this._row.summary = summaryOf(view);
+    this._row.open = this.open;
+    this._row.tone = status === 'error' ? 'error' : '';
+    this._dot.state = DOT_STATE[status];
 
     this._body.replaceChildren();
     const card = cardOf(this._result ?? view);
@@ -189,52 +218,71 @@ export class ToolCard extends RanElement {
 
     const locations = view !== null && 'locations' in view ? view.locations : undefined;
     if (Array.isArray(locations) && locations.length > 0) this._body.appendChild(this._renderLocations(locations));
+
+    // A row with an empty body offers a toggle that reveals nothing, which is worse than
+    // offering none — it invites a press and answers with a blank.
+    this._row.expandable = this._body.childNodes.length > 0;
+  }
+
+  /**
+   * Builds the IN/OUT card the generic body is shown in.
+   *
+   * Two gutter-labelled sections in one surface, each capped and scrolling on its own so a
+   * long input never buries a short output. Either half may be absent.
+   *
+   * @param input What went in, or null.
+   * @param output What came back, or null.
+   * @param failed Whether the output describes a failure.
+   * @returns The card, or null when there is nothing to show.
+   */
+  private _ioCard(input: string | null, output: string | null, failed: boolean): HTMLElement | null {
+    if (input === null && output === null) return null;
+    const card = Div().class('ran-tool-card-io').attr('part', 'io').build();
+    const section = (label: string, text: string, error: boolean): HTMLElement => {
+      const row = Div().class('ran-tool-card-io-section').build();
+      const value = Span().class('ran-tool-card-io-text').attr('part', 'io-text').text(text).build();
+      if (error) value.dataset.error = '';
+      row.append(Span().class('ran-tool-card-io-label').attr('aria-hidden', 'true').text(label).build(), value);
+      return row;
+    };
+    if (input !== null) card.appendChild(section('IN', input, false));
+    if (output !== null) card.appendChild(section('OUT', output, failed));
+    return card;
   }
 
   private _renderGeneric(): void {
     const call = this._call;
     const result = this._result;
-    if (call !== null && call.card === 'generic' && call.input !== undefined) {
-      const list = document.createElement('dl');
-      list.className = 'ran-tool-card-input';
-      list.setAttribute('part', 'input');
-      for (const [key, value] of Object.entries(call.input)) {
-        const term = document.createElement('dt');
-        term.textContent = key;
-        const description = document.createElement('dd');
-        description.textContent = value;
-        list.append(term, description);
-      }
-      this._body.appendChild(list);
-    }
-    const content = result !== null && result.card === 'generic' ? result.content : undefined;
-    // Wrapped: a generic result is whatever text the tool returned — a sentence, a fetched
-    // page — and reading it should not mean dragging a scrollbar sideways one line at a time.
-    if (content !== undefined && content !== '') this._body.appendChild(this._pre(content, 'wrap'));
+    const input =
+      call !== null && call.card === 'generic' && call.input !== undefined
+        ? Object.entries(call.input)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join('\n')
+        : null;
+    const output = result !== null && result.card === 'generic' && result.content !== undefined ? result.content : null;
+    const card = this._ioCard(input, output === '' ? null : output, this.status === 'error');
+    if (card !== null) this._body.appendChild(card);
   }
 
   private _renderTerminal(): void {
     const call = this._call;
-    if (call !== null && call.card === 'terminal') {
-      const parts = [call.description, call.cwd === undefined ? undefined : `cwd: ${call.cwd}`].filter(
-        (part): part is string => part !== undefined && part !== '',
-      );
-      if (parts.length > 0) {
-        this._body.appendChild(
-          Div().class('ran-tool-card-description').attr('part', 'description').text(parts.join(' · ')).build(),
-        );
-      }
-    }
     const result = this._result;
-    if (result !== null && result.card === 'terminal') {
-      // Unwrapped: terminal output is aligned in columns, and wrapping it destroys the
-      // alignment that made it readable in the terminal it came from.
-      this._body.appendChild(this._pre(result.output, 'preserve'));
-      if (result.exitCode !== undefined && result.exitCode !== 0) {
-        this._body.appendChild(
-          Div().class('ran-tool-card-description').attr('part', 'exit').text(`exit ${result.exitCode}`).build(),
-        );
-      }
+    const input =
+      call !== null && call.card === 'terminal' ? (call.cwd === undefined ? null : `cwd: ${call.cwd}`) : null;
+    if (result === null || result.card !== 'terminal') {
+      const card = this._ioCard(input, null, false);
+      if (card !== null) this._body.appendChild(card);
+      return;
+    }
+    // Terminal output is aligned in columns and keeps its own block, unwrapped: wrapping
+    // destroys the alignment that made it readable in the terminal it came from.
+    const card = this._ioCard(input, null, false);
+    if (card !== null) this._body.appendChild(card);
+    this._body.appendChild(this._pre(result.output, 'preserve'));
+    if (result.exitCode !== undefined && result.exitCode !== 0) {
+      this._body.appendChild(
+        Div().class('ran-tool-card-description').attr('part', 'exit').text(`exit ${result.exitCode}`).build(),
+      );
     }
   }
 

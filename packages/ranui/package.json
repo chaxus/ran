@@ -104,6 +104,12 @@
       "token-meter": [
         "./dist/components/token-meter/index.d.ts"
       ],
+      "state-dot": [
+        "./dist/components/state-dot/index.d.ts"
+      ],
+      "disclosure-row": [
+        "./dist/components/disclosure-row/index.d.ts"
+      ],
       "attachments": [
         "./dist/components/attachments/index.d.ts"
       ],
@@ -383,6 +389,16 @@
     "./token-meter": {
       "types": "./dist/components/token-meter/index.d.ts",
       "import": "./dist/token-meter.js",
+      "require": "./dist/index.cjs"
+    },
+    "./state-dot": {
+      "types": "./dist/components/state-dot/index.d.ts",
+      "import": "./dist/state-dot.js",
+      "require": "./dist/index.cjs"
+    },
+    "./disclosure-row": {
+      "types": "./dist/components/disclosure-row/index.d.ts",
+      "import": "./dist/disclosure-row.js",
       "require": "./dist/index.cjs"
     },
     "./scratch": {
