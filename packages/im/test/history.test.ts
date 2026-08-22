@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { replyStart, survivingBranches } from '@/client/history';
+import {
+  activeCompaction,
+  replyStart,
+  requestMessages,
+  survivingBranches,
+  survivingCompactions,
+} from '@/client/history';
 import type { Branch, StoredMessage } from '@/client/chat-types';
 
 /** A conversation where the model answered one question by calling a tool. */
@@ -30,12 +36,10 @@ describe('replyStart', () => {
   });
 
   it('returns 0 when nothing above the reply was asked by a user', () => {
-    // A conversation that opens with a compaction summary has exactly this shape.
-    const compacted: StoredMessage[] = [
-      { role: 'system', content: 'summary' },
-      { role: 'assistant', content: 'a' },
-    ];
-    expect(replyStart(compacted, 1)).toBe(0);
+    // A conversation whose visible head is an answer — the first page after a fold — has
+    // exactly this shape.
+    const opening: StoredMessage[] = [{ role: 'assistant', content: 'a' }];
+    expect(replyStart(opening, 0)).toBe(0);
   });
 
   it('does not run off the end of a history shorter than the index', () => {
@@ -67,5 +71,66 @@ describe('survivingBranches', () => {
 
   it('keeps everything when the cut is past them all', () => {
     expect(survivingBranches(branches, 99)).toHaveLength(2);
+  });
+});
+
+describe('the log and the request are different things', () => {
+  const log: StoredMessage[] = [
+    { role: 'user', content: 'q1' },
+    { role: 'assistant', content: 'a1' },
+    { role: 'user', content: 'q2' },
+    { role: 'assistant', content: 'a2' },
+  ];
+
+  it('sends the whole log when nothing has been folded', () => {
+    expect(requestMessages(log, [])).toEqual(log);
+  });
+
+  it('replaces a folded prefix with a summary and leaves the log alone', () => {
+    // The point of the whole design: compaction shortens the request, never the history.
+    const sent = requestMessages(log, [{ at: 2, summary: 'they discussed q1' }]);
+    expect(sent).toEqual([
+      { role: 'system', content: 'they discussed q1' },
+      { role: 'user', content: 'q2' },
+      { role: 'assistant', content: 'a2' },
+    ]);
+    expect(log).toHaveLength(4);
+  });
+
+  it('is governed by the newest boundary, since a later fold subsumes an earlier one', () => {
+    const sent = requestMessages(log, [
+      { at: 1, summary: 'first fold' },
+      { at: 3, summary: 'second fold' },
+    ]);
+    expect(sent).toEqual([
+      { role: 'system', content: 'second fold' },
+      { role: 'assistant', content: 'a2' },
+    ]);
+  });
+
+  it('reports the boundary in force, and none when there is none', () => {
+    expect(activeCompaction([])).toBeNull();
+    expect(
+      activeCompaction([
+        { at: 1, summary: 'a' },
+        { at: 3, summary: 'b' },
+      ]),
+    ).toEqual({ at: 3, summary: 'b' });
+  });
+
+  it('drops a boundary that a cut left pointing past the end of the log', () => {
+    // A boundary at 3 in a log cut to 2 messages would fold the whole conversation away.
+    const kept = survivingCompactions(
+      [
+        { at: 1, summary: 'a' },
+        { at: 3, summary: 'b' },
+      ],
+      2,
+    );
+    expect(kept).toEqual([{ at: 1, summary: 'a' }]);
+  });
+
+  it('keeps a boundary exactly at the cut, which still points at a real message', () => {
+    expect(survivingCompactions([{ at: 2, summary: 'a' }], 2)).toHaveLength(1);
   });
 });
