@@ -149,6 +149,7 @@ export const componentEntries: Record<string, string> = {
   conversation: resolve(__dirname, 'components/conversation/index.ts'),
   reasoning: resolve(__dirname, 'components/reasoning/index.ts'),
   'tool-card': resolve(__dirname, 'components/tool-card/index.ts'),
+  attachments: resolve(__dirname, 'components/attachments/index.ts'),
   'voice-button': resolve(__dirname, 'components/voice-button/index.ts'),
   glass: resolve(__dirname, 'components/glass/index.ts'),
   section: resolve(__dirname, 'components/section/index.ts'),

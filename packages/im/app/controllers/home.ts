@@ -8,6 +8,7 @@ import { getEnv } from '@/app/lib/index';
 import { FORMAT, HTML_PATH_MAP } from '@/app/lib/constant';
 import type { Context } from '@/app/types/index';
 // Registering the elements is what gives the server anything to render.
+import 'ranui/attachments';
 import 'ranui/card';
 import 'ranui/conversation';
 import 'ranui/input';
