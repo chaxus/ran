@@ -57,6 +57,12 @@ jobs:
       - name: Run E2E tests
         run: pnpm --filter ranui exec playwright test --project=chromium
 
+      # im is the assembled application, and its defects have all been integration-level —
+      # what the browser draws once the pieces are wired together, which no unit test sees.
+      # The suite runs keyless against the built-in sample answer, so it needs no secret.
+      - name: Run im E2E tests
+        run: pnpm --filter im exec playwright test --project=chromium
+
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v7

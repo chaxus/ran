@@ -11,12 +11,15 @@
     "dev": "sh ./bin/dev.sh",
     "build": "vite build",
     "tsc": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "e2e:install": "playwright install chromium",
+    "test:e2e": "npm run e2e:install && playwright test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "@types/node": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
