@@ -191,6 +191,19 @@ export class Conversation extends RanElement {
     return this._engine?.truncate(key) ?? 0;
   }
 
+  /**
+   * Runs a burst of pushes as one render.
+   *
+   * Replaying a stored conversation without this is quadratic: every event publishes and
+   * every publication walks the whole transcript. Use it for any replay, restore, or bulk
+   * insert; a live stream does not need it, because one delta changes one row.
+   *
+   * @param run The pushes to run.
+   */
+  batch(run: () => void): void {
+    this._ensureEngine().batch(run);
+  }
+
   /** Drops every node and row, keeping the registered views. */
   reset(): void {
     this._engine?.reset();
@@ -268,8 +281,8 @@ export class Conversation extends RanElement {
     const engine = createConversationEngine<unknown>({
       definitions: this._views as unknown as ConversationNodeDefinition<unknown, unknown>[],
     });
-    this._unsubscribe = engine.subscribe((nodes) => {
-      this._renderNodes(nodes);
+    this._unsubscribe = engine.subscribe((nodes, changed) => {
+      this._renderNodes(nodes, changed);
     });
     this._engine = engine;
     return engine;
@@ -279,7 +292,7 @@ export class Conversation extends RanElement {
     return this._views.find((view) => view.kind === kind);
   }
 
-  private _renderNodes(nodes: readonly ConversationNode[]): void {
+  private _renderNodes(nodes: readonly ConversationNode[], changed?: ReadonlySet<string>): void {
     const live = new Set<string>();
 
     for (const node of nodes) {
@@ -288,6 +301,7 @@ export class Conversation extends RanElement {
       live.add(node.key);
 
       let row = this._rows.get(node.key);
+      let mounted = false;
       if (row === undefined) {
         const created = view.mount(node as ConversationNode<never>);
         if (created === null) continue;
@@ -297,8 +311,15 @@ export class Conversation extends RanElement {
         created.dataset.key = node.key;
         this._rows.set(node.key, created);
         row = created;
+        mounted = true;
       }
-      view.patch?.(row, node as ConversationNode<never>);
+      // A row whose state did not change is left alone. On a long transcript nearly every
+      // row is unchanged on every frame, and re-writing all of them once per delta is the
+      // difference between a transcript that streams and one that stalls. A row mounted in
+      // this pass is always patched — it has nothing in it yet.
+      if (mounted || changed === undefined || changed.has(node.key)) {
+        view.patch?.(row, node as ConversationNode<never>);
+      }
     }
 
     for (const [key, row] of this._rows) {
