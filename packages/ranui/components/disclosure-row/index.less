@@ -21,6 +21,8 @@
 /* One line, always. A summary row that wraps stops being scannable, which is the whole
    reason a run of these reads as a list rather than as a wall. */
 .ran-disclosure-row {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   gap: var(--ran-disclosure-gap, var(--ran-space-2));
@@ -111,6 +113,44 @@
 
 :host([tone='error']) .ran-disclosure-summary {
   color: var(--ran-disclosure-error-color, var(--ran-color-danger));
+}
+
+/* A shimmer band gliding across the row while its work is still running. A spinner says
+   something somewhere is happening; a sweep over the row says *this* row is the one still
+   working, and it costs no layout because it is a pseudo-element over the existing line. */
+:host([busy]) .ran-disclosure-row::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ran-disclosure-sweep-color, color-mix(in srgb, var(--ran-color-bg) 65%, transparent)) 55%,
+    transparent 100%
+  );
+  width: var(--ran-disclosure-sweep-width, 12rem);
+  animation: ran-disclosure-sweep var(--ran-disclosure-sweep-duration, 2.6s) ease-out infinite;
+  pointer-events: none;
+}
+
+/* Ends at 90% and holds: without the hold each pass starts the instant the last one ends,
+   which reads as a stutter rather than a beat. */
+@keyframes ran-disclosure-sweep {
+  0% {
+    left: -12rem;
+  }
+  90%,
+  100% {
+    left: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([busy]) .ran-disclosure-row::after {
+    animation: none;
+  }
 }
 
 .ran-disclosure-body {

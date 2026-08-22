@@ -1,5 +1,6 @@
 :host {
   display: block;
+  min-width: 0;
   color: var(--ran-reasoning-color, var(--ran-color-text-secondary));
   font-size: var(--ran-reasoning-font-size, var(--ran-text-copy-2));
 }
@@ -11,69 +12,13 @@
   display: none;
 }
 
-.ran-reasoning {
-  border-left: 2px solid var(--ran-reasoning-border-color, var(--ran-color-border));
-  padding-left: var(--ran-reasoning-padding-left, var(--ran-space-3));
-}
-
-.ran-reasoning-summary {
-  display: flex;
-  align-items: center;
-  gap: var(--ran-reasoning-summary-gap, var(--ran-space-2));
-  border: none;
-  background: none;
-  padding: var(--ran-reasoning-summary-padding, var(--ran-space-1) 0);
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-}
-
-.ran-reasoning-summary:focus-visible {
-  outline: 2px solid var(--ran-reasoning-focus-color, var(--ran-color-primary));
-  outline-offset: 2px;
-}
-
-.ran-reasoning-marker {
-  flex: none;
-  color: var(--ran-reasoning-marker-color, var(--ran-color-text-disabled));
-}
-
-.ran-reasoning-label {
-  font-weight: var(--ran-reasoning-label-weight, var(--ran-text-label-weight));
-}
-
-.ran-reasoning-meta {
-  color: var(--ran-reasoning-meta-color, var(--ran-color-text-disabled));
-}
-
+/* The body keeps the quiet left rule that says "this is the thinking, not the answer"; the
+   header is `r-disclosure-row`, the same one a tool call uses, so a transcript carrying both
+   has one disclosure language rather than two. */
 .ran-reasoning-body {
-  padding-bottom: var(--ran-reasoning-body-padding, var(--ran-space-2));
+  border-left: 2px solid var(--ran-reasoning-border-color, var(--ran-color-border));
+  padding: var(--ran-reasoning-body-padding, var(--ran-space-1) 0 var(--ran-space-2) var(--ran-space-3));
+  margin-left: var(--ran-reasoning-body-indent, var(--ran-space-2));
   overflow-wrap: anywhere;
   white-space: pre-wrap;
-}
-
-:host(:not([open])) .ran-reasoning-body {
-  display: none;
-}
-
-/* While reasoning streams the label pulses, so a long silent think does not read as a
-   stall. Reduced-motion readers get the same information without the animation. */
-:host([streaming]) .ran-reasoning-label {
-  animation: ran-reasoning-pulse 1.6s ease-in-out infinite;
-}
-
-@keyframes ran-reasoning-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.55;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :host([streaming]) .ran-reasoning-label {
-    animation: none;
-  }
 }

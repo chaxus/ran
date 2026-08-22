@@ -1,5 +1,5 @@
 import componentCss from './index.less?inline';
-import { ButtonBuilder, Div, EventManager, Slot, Span } from '@/utils/builder';
+import { Div, EventManager, Slot, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
@@ -9,27 +9,54 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
+import { DISCLOSURE_TOGGLE } from '@/components/disclosure-row';
+import '@/components/disclosure-row';
+import type { DisclosureRow } from '@/components/disclosure-row';
+
+/**
+ * The line a collapsed reasoning block shows.
+ *
+ * While it is still arriving, the **latest** line — a reader watching a model think wants to
+ * see where it has got to, and the opening sentence stopped being news several paragraphs
+ * ago. Once it has stopped, the **first** line, because that is where the block starts and
+ * the reader is now deciding whether to open it at all.
+ *
+ * @param text The reasoning so far.
+ * @param streaming Whether more is still arriving.
+ * @returns The line to show, or an empty string when there is nothing yet.
+ */
+function summaryOf(text: string, streaming: boolean): string {
+  const visible = text.trimEnd();
+  if (visible === '') return '';
+  if (!streaming) return visible.split('\n', 1)[0] ?? '';
+  const at = visible.lastIndexOf('\n');
+  return at === -1 ? visible : visible.slice(at + 1);
+}
 
 /**
  * `<r-reasoning>` — a collapsible chain of thought.
  *
  * Reasoning is the one part of a response a reader wants to watch while it happens and
- * almost never wants to keep afterwards. So the element expands while `streaming` is set
- * and collapses when it clears.
+ * almost never wants to keep afterwards. So the element expands while `streaming` is set and
+ * collapses when it clears, and the collapsed line keeps showing where the thinking has got
+ * to — see {@link summaryOf}.
  *
- * **Until the reader touches it.** Once they expand or collapse it themselves, the
- * automatic behaviour stops for good — the same ownership rule `createBottomFollower`
- * applies to scrolling, and for the same reason: an interface that keeps re-deciding
- * something the reader has already decided is worse than one that never decided at all.
- * Setting `open` from script counts as taking control too, since script is acting for a
- * caller who has an opinion.
+ * **Until the reader touches it.** Once they expand or collapse it themselves, the automatic
+ * behaviour stops for good — the same ownership rule `createBottomFollower` applies to
+ * scrolling, and for the same reason: an interface that keeps re-deciding something the
+ * reader has already decided is worse than one that never decided at all. Setting `open`
+ * from script counts as taking control too, since script is acting for a caller who has an
+ * opinion.
+ *
+ * The header is `r-disclosure-row`, the same chrome a tool call uses, so a transcript
+ * carrying both has one disclosure language rather than two.
  *
  * ```ts
  * const reasoning = document.querySelector('r-reasoning');
- * reasoning.streaming = true;          // expands
+ * reasoning.streaming = true;          // expands, and sweeps
  * reasoning.content += delta;          // grows while visible
  * reasoning.streaming = false;         // collapses, unless the reader intervened
- * reasoning.duration = 4200;           // "thought for 4.2s"
+ * reasoning.duration = 4200;           // "4.2s" beside the label
  * ```
  *
  * Attributes: `open`, `streaming`, `label`, `duration` (ms), `sheet`. The default slot
@@ -38,10 +65,7 @@ import { defineSSR } from '@/utils/ssr-registry';
 export class Reasoning extends RanElement {
   _events = new EventManager();
   _shadowDom!: ShadowRoot;
-  _summary!: HTMLElement;
-  _label!: HTMLElement;
-  _meta!: HTMLElement;
-  _marker!: HTMLElement;
+  _row!: DisclosureRow;
   _text!: HTMLElement;
 
   /**
@@ -62,22 +86,11 @@ export class Reasoning extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
-    const root = ensureShadowElement(this._shadowDom, '.ran-reasoning', () =>
-      Div()
-        .class('ran-reasoning')
-        .attr('part', 'reasoning')
+    const row = ensureShadowElement(this._shadowDom, 'r-disclosure-row', () =>
+      View('r-disclosure-row')
+        .attr('part', 'row')
+        .attr('expandable', '')
         .children(
-          ButtonBuilder()
-            .class('ran-reasoning-summary')
-            .attr('part', 'summary')
-            .attr('type', 'button')
-            .attr('aria-expanded', 'false')
-            .children(
-              Span().class('ran-reasoning-marker').attr('part', 'marker').text('▸').build(),
-              Span().class('ran-reasoning-label').attr('part', 'label').build(),
-              Span().class('ran-reasoning-meta').attr('part', 'meta').build(),
-            )
-            .build(),
           Div()
             .class('ran-reasoning-body')
             .attr('part', 'body')
@@ -85,12 +98,9 @@ export class Reasoning extends RanElement {
             .build(),
         )
         .build(),
-    );
-    this._summary = root.querySelector<HTMLElement>('.ran-reasoning-summary')!;
-    this._label = root.querySelector<HTMLElement>('.ran-reasoning-label')!;
-    this._meta = root.querySelector<HTMLElement>('.ran-reasoning-meta')!;
-    this._marker = root.querySelector<HTMLElement>('.ran-reasoning-marker')!;
-    this._text = root.querySelector<HTMLElement>('.ran-reasoning-text')!;
+    ) as DisclosureRow;
+    this._row = row;
+    this._text = row.querySelector<HTMLElement>('.ran-reasoning-text')!;
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────
@@ -102,6 +112,7 @@ export class Reasoning extends RanElement {
   set content(value: string) {
     this._content = value;
     this._text.textContent = value;
+    this._syncRow();
   }
 
   /** Whether reasoning is still arriving. */
@@ -153,8 +164,14 @@ export class Reasoning extends RanElement {
 
   connectedCallback(): void {
     this.handlerExternalCss();
-    this._events.on(this._summary, 'click', this._toggle);
-    this._syncSummary();
+    // The row announces its own toggles; a toggle it did not make itself is the reader.
+    this._events.on(this._row, DISCLOSURE_TOGGLE, (event) => {
+      this._readerOwns = true;
+      this._writingOpen = true;
+      this.open = (event as CustomEvent<{ open: boolean }>).detail.open;
+      this._writingOpen = false;
+    });
+    this._syncRow();
   }
 
   disconnectedCallback(): void {
@@ -164,13 +181,13 @@ export class Reasoning extends RanElement {
   attributeChangedCallback(name: string, old: string | null, next: string | null): void {
     if (old === next) return;
     if (name === 'sheet') this.handlerExternalCss();
-    if (name === 'label' || name === 'duration') this._syncSummary();
+    if (name === 'label' || name === 'duration') this._syncRow();
     if (name === 'streaming') this._followStreaming(next !== null);
     if (name === 'open') {
-      // An `open` change this element did not make is a caller stating an intent, and
-      // takes the automatic behaviour off the table for the rest of the element's life.
+      // An `open` change this element did not make is a caller stating an intent, and takes
+      // the automatic behaviour off the table for the rest of the element's life.
       if (!this._writingOpen) this._readerOwns = true;
-      this._syncSummary();
+      this._syncRow();
     }
   }
 
@@ -180,31 +197,28 @@ export class Reasoning extends RanElement {
 
   // ── Internals ──────────────────────────────────────────────────────────
 
-  private _toggle = (): void => {
-    this._readerOwns = true;
-    this.open = !this.open;
-  };
-
   /**
    * Expands while reasoning arrives and collapses when it stops.
    *
    * @param streaming Whether reasoning is still arriving.
    */
   private _followStreaming(streaming: boolean): void {
+    this._syncRow();
     if (this._readerOwns) return;
     this._writingOpen = true;
     this.open = streaming;
     this._writingOpen = false;
   }
 
-  private _syncSummary(): void {
-    const open = this.open;
-    this._summary.setAttribute('aria-expanded', open ? 'true' : 'false');
-    this._marker.textContent = open ? '▾' : '▸';
-    this._label.textContent = this.label;
+  private _syncRow(): void {
+    const streaming = this.streaming;
     const duration = this.duration;
+    this._row.open = this.open;
+    this._row.busy = streaming;
     // Sub-second thinking is noise; a reader cares that it was fast, not that it was 340ms.
-    this._meta.textContent = duration === null || duration < 1000 ? '' : `${(duration / 1000).toFixed(1)}s`;
+    const meta = duration === null || duration < 1000 ? '' : `${(duration / 1000).toFixed(1)}s`;
+    this._row.heading = meta === '' ? this.label : `${this.label} · ${meta}`;
+    this._row.summary = summaryOf(this._content, streaming);
   }
 }
 

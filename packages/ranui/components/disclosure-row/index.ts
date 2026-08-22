@@ -30,7 +30,7 @@ import { defineSSR } from '@/utils/ssr-registry';
  * ```
  *
  * Attributes: `open`, `expandable`, `heading`, `summary`, `tone` (`error` colours the
- * summary), `sheet`. Fires {@link DISCLOSURE_TOGGLE} with `detail.open`.
+ * summary), `busy` (a shimmer sweep while the work is running), `sheet`. Fires {@link DISCLOSURE_TOGGLE} with `detail.open`.
  */
 /**
  * Name of the event a row fires when it opens or closes.
@@ -50,7 +50,7 @@ export class DisclosureRow extends RanElement {
   _sep!: HTMLElement;
 
   static get observedAttributes(): string[] {
-    return ['open', 'expandable', 'heading', 'summary', 'tone', 'sheet'];
+    return ['open', 'expandable', 'heading', 'summary', 'tone', 'busy', 'sheet'];
   }
 
   constructor() {
@@ -138,6 +138,20 @@ export class DisclosureRow extends RanElement {
   }
   set summary(value: string) {
     setStringAttribute(this, 'summary', value);
+  }
+
+  /**
+   * Whether the work this row stands for is still running.
+   *
+   * Draws a shimmer sweep across the line. A spinner says something somewhere is happening;
+   * a sweep over the row says this row is the one still working.
+   */
+  get busy(): boolean {
+    return this.hasAttribute('busy');
+  }
+  set busy(value: boolean) {
+    if (value) this.setAttribute('busy', '');
+    else this.removeAttribute('busy');
   }
 
   /** `error` colours the summary; anything else is the ordinary tone. */

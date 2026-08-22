@@ -869,8 +869,10 @@ until given a `label` — a dot beside a row that already states the outcome is 
 screen reader.
 
 `r-disclosure-row` is the one-line `[leading] title · summary` chrome, with the leading icon
-and its hover chevron sharing one grid cell so the swap costs no layout. Two things that
-bite:
+and its hover chevron sharing one grid cell so the swap costs no layout. `busy` draws the
+shimmer sweep — a spinner says something somewhere is happening, a sweep over the row says
+_this_ row is the one still working. It lives here rather than in either consumer because
+both a running tool call and streaming reasoning want it. Two things that bite:
 
 - **The heading attribute is `heading`, not `title`.** `title` is a native `HTMLElement`
   attribute the browser renders as a tooltip, so a component using it for a heading makes
@@ -879,6 +881,22 @@ bite:
 - **Its event is `disclosuretoggle`, not `toggle`.** `toggle` is what `<details>` fires, and
   its `ToggleEvent` carries `oldState`/`newState` rather than a `detail`; a listener typed
   against the platform name finds nothing in it.
+
+### r-reasoning
+
+Built on `r-disclosure-row`, so a transcript carrying reasoning and tool calls has one
+disclosure language rather than two. What is specific to it:
+
+- **The collapsed line follows the thinking.** While it streams, the summary is the _latest_
+  line — a reader watching a model think wants to see where it has got to, and the opening
+  sentence stopped being news several paragraphs ago. Once it stops, the _first_ line,
+  because that is where the block starts and the reader is now deciding whether to open it.
+- **It expands while streaming and collapses when that clears — until the reader touches
+  it.** After their own gesture the automatic behaviour stops for good, the same ownership
+  rule `createBottomFollower` applies to scrolling. Setting `open` from script counts as
+  taking control too, since script is acting for a caller with an opinion.
+- **`duration` under a second is not shown.** A reader cares that it was fast, not that it
+  was 340ms.
 
 ### r-tool-card
 

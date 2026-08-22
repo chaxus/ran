@@ -104,8 +104,9 @@ Source: `components/conversation/index.ts`
 
 Source: `components/disclosure-row/index.ts`
 
-- **Attributes**: `expandable: boolean`, `heading: string`, `open: boolean`, `sheet: string`, `summary: string`, `tone: string`
+- **Attributes**: `busy: boolean`, `expandable: boolean`, `heading: string`, `open: boolean`, `sheet: string`, `summary: string`, `tone: string`
 - **Properties**:
+  - `busy: boolean` — Whether the work this row stands for is still running.
   - `expandable: boolean` — Whether the row has a body worth opening.
   - `heading: string` — The fixed-width left half of the line.
   - `open: boolean` — Whether the body is shown.
@@ -387,7 +388,7 @@ Source: `components/reasoning/index.ts`
   - `streaming: boolean` — Whether reasoning is still arriving.
 - **Events**: —
 - **Slots**: `default`
-- **Parts**: `body`, `label`, `marker`, `meta`, `reasoning`, `summary`, `text`
+- **Parts**: `body`, `row`, `text`
 
 ## `<r-route>`
 

@@ -39,6 +39,14 @@ interface Rule {
   /** Extensions this rule reads. */
   extensions: string[];
   /**
+   * Directories this rule scans, relative to the package root. Defaults to `components`.
+   *
+   * Most rules are about component discipline and have no business in the demo's own
+   * stylesheet. `undefined-token-fallback` is different: a dead token reference is simply
+   * wrong wherever it is written, and the demo is where five of them were hiding.
+   */
+  roots?: string[];
+  /**
    * @param source File contents.
    * @param file Path relative to the ranui package root, POSIX separators.
    * @returns Every violation in this file.
@@ -215,19 +223,26 @@ const RULES: Rule[] = [
     id: 'undefined-token-fallback',
     summary: 'a component token falls back to a `--ran-*` token the theme never defines',
     fix: "Point the fallback at a token that exists — `grep -- '--ran-color-' theme/tokens.less` lists them. A `var()` naming an undeclared property resolves to nothing at all: the declaration is dropped and the element silently keeps whatever it inherited, which for a colour is usually the body text colour and looks almost right.",
-    extensions: ['.less'],
+    extensions: ['.less', '.css'],
+    roots: ['components', 'demo', 'theme'],
     scan(source, file) {
       const out: Violation[] = [];
       lines(stripComments(source)).forEach((line, i) => {
-        for (const match of line.matchAll(VAR_WITH_FALLBACK)) {
-          const fallback = match[2].trim();
-          // Only a fallback that is itself a bare `var(--ran-…)` with nothing after it: that
-          // is the end of the chain, so it has to resolve. A fallback with its own fallback
-          // is somebody else's problem, and this rule sees that one too on its own line.
-          const inner = /^var\(\s*(--ran-[a-zA-Z0-9-]+)\s*\)$/.exec(fallback);
+        // Every `var()` on the line, with whatever follows the name up to the closing paren.
+        for (const match of line.matchAll(/var\(\s*(--ran-[a-zA-Z0-9-]+)\s*(,([^;]*))?\)/g)) {
+          const [, name, , fallback] = match;
+          if (fallback === undefined) {
+            // No fallback: the reference is the whole chain, so the name must resolve. A
+            // component's own override hook is always written with one.
+            if (!themeTokens.has(name)) out.push({ file, line: i + 1, text: `${name} (undeclared, no fallback)` });
+            continue;
+          }
+          // A fallback that is itself a bare `var(--ran-…)` ends the chain, so it has to
+          // resolve. One with its own fallback is seen on its own by the pass above.
+          const inner = /^\s*var\(\s*(--ran-[a-zA-Z0-9-]+)\s*\)\s*$/.exec(fallback);
           if (inner === null) continue;
           if (themeTokens.has(inner[1])) continue;
-          out.push({ file, line: i + 1, text: `${match[1]} → ${inner[1]} (undeclared)` });
+          out.push({ file, line: i + 1, text: `${name} → ${inner[1]} (undeclared)` });
         }
       });
       return out;
@@ -241,10 +256,12 @@ const RULES: Rule[] = [
  * @param extensions Extensions to include, with the leading dot.
  * @returns Paths relative to the ranui package root, POSIX separators, sorted.
  */
-async function collect(extensions: string[]): Promise<string[]> {
+async function collect(extensions: string[], roots: string[] = ['components']): Promise<string[]> {
   const out: string[] = [];
   const walk = async (dir: string): Promise<void> => {
     for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
+      // Build output is a copy of the source with every violation already counted once.
+      if (entry.name === 'dist' || entry.name === 'node_modules') continue;
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) await walk(full);
       else if (extensions.includes(path.extname(entry.name)) && !entry.name.endsWith('.test.ts')) {
@@ -252,7 +269,7 @@ async function collect(extensions: string[]): Promise<string[]> {
       }
     }
   };
-  await walk(COMPONENTS_DIR);
+  for (const root of roots) await walk(path.join(ROOT, root));
   return out.sort();
 }
 
@@ -278,7 +295,7 @@ async function main(): Promise<void> {
   const found = new Map<string, Violation[]>();
   for (const rule of RULES) {
     const violations: Violation[] = [];
-    for (const file of await collect(rule.extensions)) {
+    for (const file of await collect(rule.extensions, rule.roots)) {
       violations.push(...rule.scan(await fs.readFile(path.join(ROOT, file), 'utf8'), file));
     }
     found.set(rule.id, violations);
