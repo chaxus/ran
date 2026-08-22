@@ -1,7 +1,7 @@
 import { WebDB, createStore } from 'ranuts/utils';
 import type { IDBCollection } from 'ranuts/utils';
 import type { TokenUsage } from 'ranuts/stream';
-import type { MessageContent, StoredMessage } from '@/client/chat-types';
+import type { Branch, MessageContent, StoredMessage } from '@/client/chat-types';
 
 export type { StoredMessage } from '@/client/chat-types';
 
@@ -21,6 +21,8 @@ export interface Session {
    * currently carries, and after one compaction the two stop resembling each other.
    */
   usage?: TokenUsage;
+  /** Recorded alternatives, in `at` order. See {@link Branch}. */
+  branches?: Branch[];
 }
 
 const DB_NAME = 'ran-im';

@@ -216,6 +216,13 @@ Semantics you need before writing one:
   cancels the frame.
 - **`reader.previous(kind)` is backward-only**, so replaying the same log reproduces the
   same view. A definition that could see nodes started after it would not.
+- **`truncate(key)` is what editing, regenerating and branching are made of.** All three
+  mean "the conversation diverges here", and what follows the divergence is no longer part
+  of it. It cuts by `seq` rather than by position — a node that opened before the cut
+  survives even if its latest update came after it, which is the same rule node order
+  follows — and returns how many nodes went, because zero is the caller's cue that its own
+  idea of the conversation is stale. Without it the only way back is `reset()` and a full
+  replay, which discards every node that did not change and makes the view flash.
 
 `scheduler` is injectable, which is how the cadence tests run without a paint. The default
 uses `requestAnimationFrame` in a browser and a microtask elsewhere.
