@@ -7,11 +7,51 @@ const isHTMLElementMockNode = (node: MockNode): node is HTMLElementMock => {
   return 'tagName' in node && 'childrenList' in node;
 };
 
+/** Characters that begin a new qualifier, and so end the one before it. */
+const QUALIFIER_START = '.#[';
+
 /**
- * The pieces of a compound selector: an optional leading tag, then any number of class, id
- * and attribute qualifiers.
+ * Splits a compound selector into its parts.
+ *
+ * Hand-written rather than a regular expression: the obvious pattern for the attribute
+ * form, `\[[^\]]*\]`, backtracks across every position on an input like `[[[[[`, which is
+ * polynomial in the selector's length. This walks the string once. A selector is not
+ * usually attacker-controlled, but `querySelector` is a library entry point and the caller
+ * chooses what reaches it.
+ *
+ * @param selector The trimmed, non-empty selector.
+ * @returns Its parts, or null when the selector uses syntax this engine does not implement.
  */
-const COMPOUND_PART = /^[a-zA-Z][\w-]*|\.[^.#[\]]+|#[^.#[\]]+|\[[^\]]*\]/g;
+function splitCompound(selector: string): string[] | null {
+  const parts: string[] = [];
+  let at = 0;
+
+  const tag = /^[a-zA-Z][\w-]*/.exec(selector);
+  if (tag !== null) {
+    parts.push(tag[0]);
+    at = tag[0].length;
+  }
+
+  while (at < selector.length) {
+    const start = selector[at];
+    if (start === '[') {
+      const close = selector.indexOf(']', at + 1);
+      if (close === -1) return null;
+      parts.push(selector.slice(at, close + 1));
+      at = close + 1;
+      continue;
+    }
+    if (start !== '.' && start !== '#') return null;
+    let end = at + 1;
+    while (end < selector.length && !QUALIFIER_START.includes(selector[end])) end += 1;
+    // A bare `.` or `#` qualifies nothing.
+    if (end === at + 1) return null;
+    parts.push(selector.slice(at, end));
+    at = end;
+  }
+
+  return parts.length > 0 ? parts : null;
+}
 
 /**
  * Matches one simple selector — a single tag, class, id, or attribute test.
@@ -60,8 +100,8 @@ const matchSimple = (node: HTMLElementMock, selector: string): boolean => {
 export const matchSelector = (node: HTMLElementMock, selector: string): boolean => {
   const trimmed = selector.trim();
   if (!trimmed) return false;
-  const parts = trimmed.match(COMPOUND_PART);
-  if (parts === null || parts.join('') !== trimmed) return false;
+  const parts = splitCompound(trimmed);
+  if (parts === null) return false;
   return parts.every((part) => matchSimple(node, part));
 };
 
