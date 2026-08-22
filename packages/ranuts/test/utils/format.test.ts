@@ -38,6 +38,18 @@ describe('formatDate', () => {
     expect(formatDate(SAMPLE, '[MM]MM')).toBe('MM07');
   });
 
+  it('ends a literal at the next bracket of either kind', () => {
+    // A literal cannot contain '[', so the opening one here is not a literal and stands as text.
+    expect(formatDate(SAMPLE, '[x[y]')).toBe('[xy');
+  });
+
+  it('leaves unclosed brackets alone without rescanning them', () => {
+    // Admitting '[' inside a literal costs each unclosed one a scan to the end of the pattern,
+    // which took ~14s at this length. The assertion is the result; the timeout is the guard.
+    const pattern = '['.repeat(100_000);
+    expect(formatDate(SAMPLE, pattern)).toBe(pattern);
+  });
+
   it('accepts a timestamp, a string or nothing', () => {
     expect(formatDate(SAMPLE.getTime(), 'YYYY')).toBe('2026');
     expect(formatDate('2026-07-25T00:00:00.000Z', 'YYYY')).toBe('2026');

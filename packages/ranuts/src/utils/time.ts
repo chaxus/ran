@@ -8,8 +8,12 @@ const toDate = (value?: DateInput): Date => (value === undefined || value === nu
 /**
  * Format tokens, longest first so `YYYY` is matched before `YY` and `MM` before `M`.
  * Case is significant: `MM` is the month, `mm` the minute; `HH` is 24-hour, `hh` 12-hour.
+ *
+ * A `[...]` literal cannot contain `[`. Admitting one costs an unclosed `[` a scan to the end of
+ * the pattern from every position it appears at, which is quadratic in a pattern this library
+ * accepts from its caller; excluding it makes each attempt fail at the next character.
  */
-const TOKEN = /YYYY|YY|MM|M|DD|D|HH|H|hh|h|mm|m|ss|s|SSS|A|a|\[([^\]]*)]/g;
+const TOKEN = /YYYY|YY|MM|M|DD|D|HH|H|hh|h|mm|m|ss|s|SSS|A|a|\[([^[\]]*)]/g;
 
 /**
  * @description: Format a date with a token pattern. Accepts a timestamp, a date string, a
