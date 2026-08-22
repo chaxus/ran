@@ -14,7 +14,7 @@ import { TOOLS, parseToolArgs } from '@/client/tools/index';
  * started them, and reasoning arrives first.
  */
 export type ChatEvent =
-  | { type: 'turn/start'; id: string; role: 'user' | 'assistant'; text: string }
+  | { type: 'turn/start'; id: string; role: TurnRole; text: string }
   | { type: 'turn/text'; id: string; text: string }
   | { type: 'turn/end'; id: string }
   | { type: 'turn/error'; id: string; message: string }
@@ -27,12 +27,24 @@ export type ChatEvent =
   | { type: 'tool/args'; id: string; args: string }
   | { type: 'tool/result'; id: string; output: string; failed: boolean };
 
+/**
+ * Who a row belongs to.
+ *
+ * `system` is compaction's summary standing in for the turns it folded away. It is a row
+ * rather than a silent replacement because a history that quietly shrinks is a history the
+ * reader cannot trust — they reload and their conversation is shorter than they left it.
+ */
+export type TurnRole = 'user' | 'assistant' | 'system';
+
 interface TurnState {
-  role: 'user' | 'assistant';
+  role: TurnRole;
   text: string;
   streaming: boolean;
   error: string | null;
 }
+
+/** What each row is headed with. */
+const TURN_TITLES: Record<TurnRole, string> = { user: '你', assistant: '助手', system: '早期对话摘要' };
 
 interface ReasoningState {
   text: string;
@@ -82,7 +94,7 @@ export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
     // A row is mounted into the conversation's shadow tree, where a page stylesheet cannot
     // reach it — so it has to be an element that styles itself.
     const card = document.createElement('r-card');
-    card.setAttribute('title', node.state.role === 'user' ? '你' : '助手');
+    card.setAttribute('title', TURN_TITLES[node.state.role]);
     card.appendChild(document.createElement('r-markdown'));
     return card;
   },

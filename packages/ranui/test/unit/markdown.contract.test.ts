@@ -117,6 +117,42 @@ describe('r-markdown contract', () => {
     expect(anchor.getAttribute('target')).toBeNull();
   });
 
+  it('ends a bare URL where the Chinese prose after it begins', async () => {
+    // GFM ends an autolink at whitespace, which was written for English. In CJK prose the
+    // next word follows the URL immediately, so the whole run became one address and the
+    // link navigated somewhere the text never named — worse than no link at all.
+    const el = await mount({}, '见 https://example.com获取内容，谢谢');
+    const a = body(el).querySelector('a') as HTMLAnchorElement;
+    expect(a.getAttribute('href')).toBe('https://example.com');
+    expect(a.textContent).toBe('https://example.com');
+    expect(body(el).textContent).toContain('获取内容');
+  });
+
+  it('cuts at the first Chinese character, not the last run of them', async () => {
+    // The real case this came from ended in Latin text, so trimming only a trailing run left
+    // the link exactly as broken as before.
+    const el = await mount({}, '见 https://example.com获取内容，内容为“Example Domain”');
+    const a = body(el).querySelector('a') as HTMLAnchorElement;
+    expect(a.getAttribute('href')).toBe('https://example.com');
+  });
+
+  it('leaves a Chinese path alone, because there it is plausibly part of the address', async () => {
+    // `https://zh.wikipedia.org/wiki/中文` is one URL. A hostname cannot contain these
+    // characters; a path can, and truncating there would break a link that worked.
+    const el = await mount({}, 'https://zh.wikipedia.org/wiki/中文');
+    const a = body(el).querySelector('a') as HTMLAnchorElement;
+    expect(decodeURI(a.getAttribute('href') ?? '')).toBe('https://zh.wikipedia.org/wiki/中文');
+  });
+
+  it('leaves an explicit link whose label is Chinese alone', async () => {
+    // Only an autolink — where the text IS the address — is trimmed. A label the author
+    // wrote is not a mistake to correct.
+    const el = await mount({}, '[示例站点](https://example.com/路径)');
+    const a = body(el).querySelector('a') as HTMLAnchorElement;
+    expect(a.textContent).toBe('示例站点');
+    expect(a.getAttribute('href')).toContain('example.com');
+  });
+
   it('marks a half-streamed link as incomplete plain text', async () => {
     const el = await mount({}, 'See [the docs](https://exa');
     const a = body(el).querySelector('a') as HTMLAnchorElement;

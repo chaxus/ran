@@ -1,6 +1,14 @@
 :host {
   display: block;
 }
+
+/* `hidden` is how a caller hides an element, and the UA rule that implements it is a
+   user-agent rule — any author `display` on `:host` outranks it. Without this, setting
+   `hidden` does nothing at all. */
+:host([hidden]) {
+  display: none;
+}
+
 .ran-mermaid {
   position: relative;
   padding: var(--ran-mermaid-padding, 0);

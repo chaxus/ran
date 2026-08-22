@@ -26,6 +26,7 @@
 
           <r-conversation id="chat" class="chat" empty="发一条消息开始对话">
             <div class="composer-shell" id="drop" slot="footer">
+              <r-token-meter id="tokens" class="composer-meter" label="上下文" hidden></r-token-meter>
               <r-attachments
                 id="attachments"
                 accept="image/*,.pdf,.txt,.md,.csv,.json"

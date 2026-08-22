@@ -170,6 +170,25 @@ const RULES: Rule[] = [
       return out;
     },
   },
+  {
+    id: 'hidden-inert',
+    summary: 'a `:host` display rule makes the standard `hidden` attribute do nothing',
+    fix: "Add `:host([hidden]) { display: none; }`. The UA stylesheet's `[hidden] { display: none }` is a user-agent rule, and any author `display` on `:host` outranks it — so `element.hidden = true` silently leaves the element on screen.",
+    extensions: ['.less'],
+    scan(source, file) {
+      const stripped = stripComments(source);
+      // Only a `:host` rule with no condition; `:host([open])` and friends are states the
+      // element already controls, and none of them can shadow the `hidden` attribute.
+      const displays = lines(stripped)
+        .map((line, i) => ({ line, i }))
+        .filter(({ line }) => /^\s*display:\s*(block|flex|grid|inline-block|inline-flex|inline-grid)\s*;/.test(line));
+      if (displays.length === 0) return [];
+      if (!/^:host\s*\{/m.test(stripped)) return [];
+      if (/:host\(\[hidden\]\)/.test(stripped)) return [];
+      const first = displays[0];
+      return [{ file, line: first.i + 1, text: first.line.trim() }];
+    },
+  },
 ];
 
 /**

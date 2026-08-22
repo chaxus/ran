@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-37 custom elements.
+38 custom elements.
 
 ## `<r-attachments>`
 
@@ -481,6 +481,22 @@ Source: `components/theme-switch/index.ts`
 - **Events**: `change` → detail `{ theme }`
 - **Slots**: —
 - **Parts**: `button ${choice}`, `switch`
+
+## `<r-token-meter>`
+
+Source: `components/token-meter/index.ts`
+
+- **Attributes**: `label: string`, `limit: number`, `sheet: string`, `spent: number`, `used: number`
+- **Properties**:
+  - `label: string` — Prefix for the readout. Defaults to `Context`; an empty string leaves only the counts.
+  - `level: 'ok' | 'warn' | 'over'` — How full the window is. Derived; assigning it is overwritten on the next update.
+  - `limit: number` — Context window size in tokens. Zero or absent hides the bar and shows only counts.
+  - `sheet: string`
+  - `spent: number` — Tokens billed across the conversation so far.
+  - `used: number` — Tokens the next request will carry — the history, not the whole conversation.
+- **Events**: —
+- **Slots**: —
+- **Parts**: `fill`, `meter`, `text`, `track`
 
 ## `<r-tool-card>`
 

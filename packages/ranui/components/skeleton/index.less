@@ -17,6 +17,13 @@
   height: var(--ran-skeleton-height, var(--ran-size-1, 16px));
 }
 
+/* `hidden` is how a caller hides an element, and the UA rule that implements it is a
+   user-agent rule — any author `display` on `:host` outranks it. Without this, setting
+   `hidden` does nothing at all. */
+:host([hidden]) {
+  display: none;
+}
+
 .ran-skeleton {
   position: relative;
   z-index: 0;

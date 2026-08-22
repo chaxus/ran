@@ -162,6 +162,13 @@
   z-index: var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100));
 }
 
+/* `hidden` is how a caller hides an element, and the UA rule that implements it is a
+   user-agent rule — any author `display` on `:host` outranks it. Without this, setting
+   `hidden` does nothing at all. */
+:host([hidden]) {
+  display: none;
+}
+
 .ranui-dropdown {
   transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
   box-sizing: var(--ran-dropdown-box-sizing, border-box);

@@ -60,7 +60,7 @@ npm install ranuts@latest --save
 - `ranuts/visual` —— 2D 渲染引擎（Canvas / WebGL / WebGPU，**仅浏览器**）
 - `ranuts/sw` —— 缓存策略 + 预缓存协议的 Service Worker 一侧（**仅 Service Worker**）
 - `ranuts/vnode` —— Snabbdom 风格的虚拟 DOM
-- `ranuts/stream` —— Server-Sent Events 解析，以及对流式模型响应的厂商中立折叠
+- `ranuts/stream` —— Server-Sent Events 解析、对流式模型响应的厂商中立折叠，以及判断历史何时装不下的 token 预算
 - `ranuts/conversation` —— 将只追加的事件日志投影为可渲染的对话节点
 - `ranuts/i18n` —— 单独的 i18n 引擎，不牵入 `utils` 的其余部分
 

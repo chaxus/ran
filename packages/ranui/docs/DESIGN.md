@@ -17,7 +17,7 @@ Conflict resolution order: **user goals → verified evidence → this file → 
 
 ## What is machine-checked
 
-Five of the rules below are enforced by `pnpm -F ranui verify:design`, which CI runs on
+Six of the rules below are enforced by `pnpm -F ranui verify:design`, which CI runs on
 every pull request. Everything else in this file is still binding — it is simply not
 mechanically decidable, so it relies on review and on rendering the result.
 
@@ -28,6 +28,7 @@ mechanically decidable, so it relies on review and on rendering the result.
 | `spacing-scale`        | `padding` / `margin` / `gap` come from `--ran-space-*`                                     | §2      |
 | `sizing-scale`         | intrinsic dimensions never borrow from the spacing scale                                   | §2      |
 | `mouse-only-drag`      | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
+| `hidden-inert`         | a `:host` display rule does not silently disable the `hidden` attribute                    | §9      |
 
 Existing violations are recorded per file in
 [design-rule-baseline.json](./design-rule-baseline.json) and act as a **ratchet**: a count
@@ -286,6 +287,23 @@ that only works on one.
 - **Theme switching UI is a component**: use `<r-theme-switch>` (system / light / dark segmented pill, wired to `setTheme`/localStorage, syncs across instances and updates `theme-color` metas) instead of hand-rolling toggles. Localize with `label` / `label-system` / `label-light` / `label-dark`.
 - **Typography ships with the system**: `import 'ranui/fonts'` (or link `dist/fonts/fonts.css`) self-hosts Geist Sans + Geist Mono (variable, OFL-licensed) — the canonical faces behind `--ran-font-family` / `--ran-font-mono`. Without it the stacks fall back to system fonts.
 - See [THEME_STYLE_SYSTEM_DESIGN.md](./THEME_STYLE_SYSTEM_DESIGN.md) for the token architecture and [style-tokens-public.md](./style-tokens-public.md) for the generated per-component token list.
+
+---
+
+### `hidden` must keep working
+
+A component that sets `display` on `:host` **must** also carry:
+
+```less
+:host([hidden]) {
+  display: none;
+}
+```
+
+`[hidden] { display: none }` is a **user-agent** rule, and any author `display` on `:host`
+outranks it. Without the guard, `element.hidden = true` leaves the element on screen and
+nothing reports an error — which is how nineteen components in this library shipped with
+`hidden` doing nothing at all. `verify:design` enforces it because the failure is silent.
 
 ---
 
