@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createConversationEngine } from '@/conversation/index.ts';
-import type { ConversationNode, ConversationNodeDefinition, FrameScheduler } from '@/conversation/index.ts';
+import type {
+  ConversationEngine,
+  ConversationNode,
+  ConversationNodeDefinition,
+  FrameScheduler,
+} from '@/conversation/index.ts';
 
 /** A log event shaped like something a chat backend would actually emit. */
 type Event =
@@ -329,5 +334,99 @@ describe('conversation engine lifecycle', () => {
     engine.destroy();
     flush();
     expect(listener).not.toHaveBeenCalled();
+  });
+});
+
+describe('truncate — the operation editing, regenerating and branching are made of', () => {
+  /** A definition that opens a node per id and appends text to it. */
+  const notes: ConversationNodeDefinition<{ id: string; text?: string }, string> = {
+    kind: 'note',
+    match: (event) => ({ id: event.id, role: event.text === undefined ? 'start' : 'update' }),
+    start: () => '',
+    update: (state, event) => state + (event.text ?? ''),
+  };
+
+  /**
+   * Builds an engine that publishes synchronously.
+   *
+   * @returns The engine.
+   */
+  const engine = (): ConversationEngine<{ id: string; text?: string }> =>
+    createConversationEngine<{ id: string; text?: string }>({
+      definitions: [notes as ConversationNodeDefinition<{ id: string; text?: string }, unknown>],
+      scheduler: (run) => {
+        run();
+        return () => {};
+      },
+    });
+
+  it('drops the named node and everything opened after it', () => {
+    const e = engine();
+    e.push({ id: 'a' });
+    e.push({ id: 'b' });
+    e.push({ id: 'c' });
+    expect(e.truncate('note:b')).toBe(2);
+    expect(e.nodes().map((node) => node.id)).toEqual(['a']);
+  });
+
+  it('keeps a node that opened before the cut even when its last update came after', () => {
+    // Cut by `seq`, not by position. A message still streaming when the reader edits an
+    // older one is above the cut, and what a reader sees above the cut must be what stays.
+    const e = engine();
+    e.push({ id: 'a' });
+    e.push({ id: 'b' });
+    e.push({ id: 'a', text: 'more' });
+    expect(e.truncate('note:b')).toBe(1);
+    expect(e.nodes().map((node) => [node.id, node.state])).toEqual([['a', 'more']]);
+  });
+
+  it('reports zero for a key it does not have, rather than dropping nothing in silence', () => {
+    // Zero is the caller's cue that its idea of the conversation is stale. Silently
+    // succeeding would leave the old tail on screen under freshly pushed events.
+    const e = engine();
+    e.push({ id: 'a' });
+    expect(e.truncate('note:missing')).toBe(0);
+    expect(e.nodes()).toHaveLength(1);
+  });
+
+  it('lets the truncated id be used again', () => {
+    const e = engine();
+    e.push({ id: 'a' });
+    e.push({ id: 'b' });
+    e.truncate('note:b');
+    e.push({ id: 'b' });
+    e.push({ id: 'b', text: 'again' });
+    expect(e.nodes().map((node) => [node.id, node.state])).toEqual([
+      ['a', ''],
+      ['b', 'again'],
+    ]);
+  });
+
+  it('keeps new nodes after the survivors rather than reusing a dropped position', () => {
+    const e = engine();
+    e.push({ id: 'a' });
+    e.push({ id: 'b' });
+    e.truncate('note:b');
+    e.push({ id: 'c' });
+    expect(e.nodes().map((node) => node.id)).toEqual(['a', 'c']);
+  });
+
+  it('publishes once, immediately', () => {
+    const e = engine();
+    e.push({ id: 'a' });
+    e.push({ id: 'b' });
+    const seen: number[] = [];
+    e.subscribe((nodes) => seen.push(nodes.length));
+    e.truncate('note:b');
+    expect(seen).toEqual([1]);
+  });
+
+  it('does not notify when it dropped nothing', () => {
+    const e = engine();
+    e.push({ id: 'a' });
+    const seen: number[] = [];
+    e.subscribe((nodes) => seen.push(nodes.length));
+    e.truncate('note:nope');
+    expect(seen).toEqual([]);
   });
 });

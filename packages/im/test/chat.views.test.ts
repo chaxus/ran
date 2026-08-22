@@ -155,6 +155,28 @@ describe('the conversation the views build', () => {
     expect(card.state).toMatchObject({ output: null });
   });
 
+  it('records which message a row stands for, so a row can be cut at', () => {
+    // Edit, regenerate and branch are all "cut the history at index N". A row whose id says
+    // nothing about N cannot ask for any of them.
+    const [row] = project([{ type: 'turn/start', id: 'm7', role: 'user', text: 'hi' }]);
+    expect(row.state).toMatchObject({ index: 7 });
+  });
+
+  it('stands for no message when its id is not one', () => {
+    // The halt notice a capped tool loop leaves behind is a row with nothing to regenerate.
+    const [row] = project([{ type: 'turn/start', id: 'm3-r0-halt', role: 'assistant', text: '' }]);
+    expect(row.state).toMatchObject({ index: null });
+  });
+
+  it('carries the alternatives recorded at its point', () => {
+    const [row] = project([
+      { type: 'turn/start', id: 'm2', role: 'assistant', text: 'a' },
+      { type: 'turn/end', id: 'm2' },
+      { type: 'turn/branch', id: 'm2', current: 2, total: 3 },
+    ]);
+    expect(row.state).toMatchObject({ branch: { current: 2, total: 3 } });
+  });
+
   it('emits nothing for a snapshot that has not grown', () => {
     const accumulator = createStreamAccumulator();
     accumulator.push({ type: 'text-delta', index: 1, text: 'x' });

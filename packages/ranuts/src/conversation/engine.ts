@@ -68,6 +68,24 @@ export interface ConversationEngine<Event> {
    * @returns A function that removes the subscriber.
    */
   subscribe(listener: (nodes: readonly ConversationNode[]) => void): () => void;
+  /**
+   * Drops one node and every node started after it.
+   *
+   * This is what editing, regenerating, and branching are made of: all three mean "the
+   * conversation diverges here", and what follows the divergence is no longer part of it.
+   * Without this the only way back is {@link ConversationEngine.reset} and a full replay,
+   * which throws away every node that did not change and makes the view flash.
+   *
+   * Ordering is by `seq` — when a node opened — not by position, so a node that has been
+   * updating since before the cut survives even though its latest update came after it.
+   * That is the same rule the node order itself follows.
+   *
+   * @param key The `kind:id` of the first node to drop.
+   * @returns How many nodes were dropped. Zero means the key names no live node, which is
+   *   a caller's cue that its own idea of the conversation is stale — silently dropping
+   *   nothing would leave the old tail on screen under freshly pushed events.
+   */
+  truncate(key: string): number;
   /** Drops every node and pending publication, keeping the definitions. */
   reset(): void;
   /** Cancels any pending publication and drops subscribers. */
@@ -99,6 +117,9 @@ interface LiveNode {
  * - **Cadence escalates, never relaxes.** An `immediate` publication while a frame is
  *   pending fires now and cancels the frame; an `animation-frame` publication while one is
  *   already pending joins it.
+ * - **`truncate` cuts by `seq`, not by position.** A node that opened before the cut
+ *   survives even if its most recent update came after it — the same rule node order
+ *   follows, so what a reader sees above the cut is exactly what stays.
  *
  * @param options Definitions and optional scheduler.
  * @returns The engine.
@@ -197,6 +218,22 @@ export function createConversationEngine<Event>(options: ConversationEngineOptio
       }
 
       publish(cadence);
+    },
+
+    truncate(key) {
+      const from = byKey.get(key);
+      if (from === undefined) return 0;
+      const kept = nodes.filter((node) => node.seq < from.seq);
+      const dropped = nodes.length - kept.length;
+      for (const node of nodes) {
+        if (node.seq >= from.seq) byKey.delete(node.key);
+      }
+      nodes = kept;
+      snapshot = null;
+      // Immediate, and cancelling any pending frame: a truncation is one discrete decision,
+      // and a frame scheduled by the deltas it just discarded would repaint the old tail.
+      publish('immediate');
+      return dropped;
     },
 
     nodes: currentNodes,
