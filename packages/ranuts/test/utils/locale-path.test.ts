@@ -72,6 +72,14 @@ describe('createLocalePath — sub-directory deployment', () => {
 
   it('normalizes the base by dropping the trailing slash', () => {
     expect(paths.base).toBe('/weread');
+    expect(createLocalePath({ locales: LOCALES, base: '/weread///' }).base).toBe('/weread');
+  });
+
+  it('leaves a base that does not end in a slash alone, however many it contains', () => {
+    // The miss is the common case, and `/\/+$/` answers it by rescanning from every slash —
+    // ~14s at this length. The assertion is the result; the runner's timeout is the guard.
+    const base = `${'/'.repeat(100_000)}x`;
+    expect(createLocalePath({ locales: LOCALES, base }).base).toBe(base);
   });
 
   it('prepends the base to every generated link', () => {

@@ -89,6 +89,22 @@ describe('utils/canvas', () => {
     expect(ctx.createLinearGradient).toHaveBeenCalledWith(...expected);
   });
 
+  it('rejects a value that is not a linear-gradient', () => {
+    const ctx = createContextMock();
+    expect(() => getLinearGradient(ctx, 0, 0, 100, 50, 'red')).toThrow(TypeError);
+    // An empty argument list has nothing to make stops from
+    expect(() => getLinearGradient(ctx, 0, 0, 100, 50, 'linear-gradient()')).toThrow(TypeError);
+  });
+
+  it('rejects an unterminated value without rescanning it', () => {
+    // The argument list is located by index. Finding the closing parenthesis with `.+` instead
+    // costs a scan to the end of the string from every position it could start at, which took
+    // ~10s at this length. The assertion is the result; the runner's timeout is the guard.
+    const ctx = createContextMock();
+    const unterminated = `linear-gradient(${'linear-gradient(a'.repeat(20_000)}`;
+    expect(() => getLinearGradient(ctx, 0, 0, 100, 50, unterminated)).toThrow(TypeError);
+  });
+
   it.each([0, 30, 60, 120, 160, 200, 240, 300, 330])('creates linear gradients for %sdeg', (degree) => {
     const ctx = createContextMock();
     getLinearGradient(ctx, 0, 0, 100, 50, `linear-gradient(${degree}deg, red, blue)`);

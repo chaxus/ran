@@ -42,9 +42,25 @@ export interface LocalePath {
   alternates: (pathname: string) => Array<{ code: string; href: string }>;
 }
 
+/**
+ * Drop the run of `/` at the end of `value`.
+ *
+ * A loop rather than `/\/+$/`, which re-scans to the end from every position when the string
+ * does not end in a slash — quadratic in the length of a base this library accepts from its
+ * caller, and the miss is the common case.
+ *
+ * @param {string} value
+ * @return {string}
+ */
+const trimTrailingSlash = (value: string): string => {
+  let end = value.length;
+  while (end > 0 && value[end - 1] === '/') end--;
+  return value.slice(0, end);
+};
+
 /** Normalise the base: drop the trailing slash, add a leading one; an empty base stays empty */
 const normalizeBase = (base: string): string => {
-  const trimmed = base.trim().replace(/\/+$/, '');
+  const trimmed = trimTrailingSlash(base.trim());
   if (!trimmed) return '';
   return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
 };

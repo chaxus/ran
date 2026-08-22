@@ -82,6 +82,28 @@ export const roundRectByArc = (ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]
   ctx.closePath();
 };
 
+const LINEAR_GRADIENT = 'linear-gradient(';
+
+/**
+ * The text between `linear-gradient(` and the closing parenthesis.
+ *
+ * Located by index rather than by `/linear-gradient\((.+)\)/`, whose `.+` re-scans to the end
+ * of the string from every starting position when no closing parenthesis follows — quadratic in
+ * the length of a value this library accepts from its caller.
+ *
+ * @param {string} background a CSS `linear-gradient(...)` value
+ * @return {string} the argument list, still unsplit
+ * @throws {TypeError} when `background` is not a `linear-gradient(...)` value
+ */
+const gradientBody = (background: string): string => {
+  const open = background.indexOf(LINEAR_GRADIENT);
+  const close = background.lastIndexOf(')');
+  if (open === -1 || close <= open + LINEAR_GRADIENT.length) {
+    throw new TypeError('getLinearGradient: background must be a linear-gradient(...) value');
+  }
+  return background.slice(open + LINEAR_GRADIENT.length, close);
+};
+
 /**
  * @description: Translate a CSS `linear-gradient(...)` string into a Canvas CanvasGradient.
  *
@@ -96,6 +118,7 @@ export const roundRectByArc = (ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]
  * @param {number} h rectangle height
  * @param {string} background a string such as `linear-gradient(90deg, red, blue)`
  * @return {CanvasGradient} assignable straight to fillStyle / strokeStyle
+ * @throws {TypeError} when `background` is not a `linear-gradient(...)` value
  */
 export const getLinearGradient = (
   ctx: CanvasRenderingContext2D,
@@ -105,7 +128,7 @@ export const getLinearGradient = (
   h: number,
   background: string,
 ): CanvasGradient => {
-  const context = (/linear-gradient\((.+)\)/.exec(background) as Array<string>)[1]
+  const context = gradientBody(background)
     .split(',') // split on commas
     .map((text: string) => text.trim()); // trim each part
   let deg = context.shift() as string;

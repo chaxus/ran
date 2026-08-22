@@ -1139,6 +1139,24 @@ export const fenceCode = (body: string, lang: string = ''): string => {
 };
 
 /**
+ * Drop the runs of `-` at both ends of `value`.
+ *
+ * A loop rather than `/^-+|-+$/g`, whose `-+` re-scans to the end from every position it can
+ * start at. The collapse step before it leaves no two adjacent dashes, so the scan stays short
+ * here, but that is a property of one caller rather than of the expression.
+ *
+ * @param {string} value
+ * @return {string}
+ */
+const trimDashes = (value: string): string => {
+  let start = 0;
+  let end = value.length;
+  while (start < end && value[start] === '-') start++;
+  while (end > start && value[end - 1] === '-') end--;
+  return value.slice(start, end);
+};
+
+/**
  * @description: Reduce text to a lowercase `a-z0-9-` slug, safe as a filename on every
  * filesystem and as a URL segment.
  *
@@ -1151,12 +1169,7 @@ export const fenceCode = (body: string, lang: string = ''): string => {
  * @return {string} the slug, or `''` when nothing survived
  */
 export const slugify = (text: string, maxLength: number = 60): string =>
-  text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, maxLength)
-    .replace(/-+$/g, '');
+  trimDashes(trimDashes(text.toLowerCase().replace(/[^a-z0-9]+/g, '-')).slice(0, maxLength));
 
 /**
  * @description: Escape one CSV field: doubles any quote and wraps the value when it contains
