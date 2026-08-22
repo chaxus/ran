@@ -51,9 +51,6 @@ interface TurnState {
   branch: { current: number; total: number } | null;
 }
 
-/** What each row is headed with. */
-const TURN_TITLES: Record<TurnRole, string> = { user: '你', assistant: '助手', system: '早期对话摘要' };
-
 interface ReasoningState {
   text: string;
   streaming: boolean;
@@ -107,82 +104,94 @@ export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
   // facts, and waiting a frame for them only adds latency.
   publication: (event) => (event.type === 'turn/text' ? 'animation-frame' : 'immediate'),
   mount: (node) => {
-    // A row is mounted into the conversation's shadow tree, where a page stylesheet cannot
-    // reach it — so it has to be an element that styles itself.
-    const card = document.createElement('r-card');
-    card.setAttribute('title', TURN_TITLES[node.state.role]);
-    card.appendChild(document.createElement('r-markdown'));
-    card.appendChild(actionBar(node.state.index));
-    return card;
+    // The compaction marker is a different thing wearing the same node kind: a boundary
+    // notice, not something anyone said. It gets a row, not a message.
+    if (node.state.role === 'system') return compactionRow();
+
+    const row = document.createElement('div');
+    row.className = `turn turn-${node.state.role}`;
+    // No card. A message needs no box: a user turn is identified by the bubble it sits in
+    // and the side it sits on, and an assistant turn is the answer — drawing a frame around
+    // the answer puts a second thing on screen competing with it.
+    //
+    // A user's message is text, not markdown. They typed it; rendering it as markdown turns
+    // their asterisks into emphasis and lets a stray backtick eat the rest of the line.
+    // It is also the only shape that works: `r-markdown` declares `contain: inline-size` and
+    // so has no intrinsic width, which collapses a bubble that sizes to its own content.
+    const body = document.createElement('div');
+    body.className = node.state.role === 'user' ? 'turn-bubble' : 'turn-answer';
+    if (node.state.role !== 'user') body.appendChild(document.createElement('r-markdown'));
+    row.append(body, actionBar(node.state.index));
+    return row;
   },
   patch: (element, node) => {
-    const markdown = element.querySelector('r-markdown') as ContentElement | null;
-    if (markdown === null) return;
-    const { text, error, streaming } = node.state;
-    markdown.content = error === null ? text : `${text}\n\n⚠️ ${error}`;
-    // Streaming mode closes half-written markdown; a finished message has none to close,
-    // and guessing at it would be inventing syntax the model did not send.
-    markdown.setAttribute('mode', streaming ? 'streaming' : 'static');
+    const { text, error, streaming, role } = node.state;
+    if (role === 'system') {
+      patchCompaction(element, node.state);
+      return;
+    }
+    const body = element.querySelector('.turn-bubble, .turn-answer') as HTMLElement | null;
+    if (body === null) return;
+    const shown = error === null ? text : `${text}\n\n⚠️ ${error}`;
+    if (role === 'user') body.textContent = shown;
+    else {
+      const markdown = body.querySelector('r-markdown') as ContentElement | null;
+      if (markdown === null) return;
+      markdown.content = shown;
+      // Streaming mode closes half-written markdown; a finished message has none to close,
+      // and guessing at it would be inventing syntax the model did not send.
+      markdown.setAttribute('mode', streaming ? 'streaming' : 'static');
+    }
     patchActions(element, node.state);
   },
 };
 
 /**
- * Styles for the row actions, adopted into the conversation's shadow root.
+ * Builds the compaction marker.
  *
- * These live in a string handed to `r-conversation`'s `sheet` attribute because the rows are
- * built into that shadow tree, where a page stylesheet cannot reach them. The values are
- * ranui tokens, which resolve there like anywhere else.
+ * One dim line with the summary folded behind it. A summary is not conversation — nobody
+ * said it — and giving it the weight of a message puts the machine's bookkeeping in the
+ * middle of what two parties actually exchanged. The line is there because a history that
+ * silently changes size is one the reader cannot trust; the body is there because they
+ * should be able to check what was kept.
+ *
+ * @returns The row.
  */
-export const TURN_ACTION_CSS = `
-.turn-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--ran-space-1);
-  margin-top: var(--ran-space-2);
-  /* Held back until the row is hovered or something inside it has focus: a column of
-     buttons under every message is louder than the messages. Focus is what keeps it
-     reachable without a pointer. */
-  opacity: 0;
-  transition: opacity 120ms ease-out;
+function compactionRow(): HTMLElement {
+  const row = document.createElement('div');
+  row.className = 'turn turn-system';
+  const disclosure = document.createElement('r-disclosure-row');
+  disclosure.setAttribute('expandable', '');
+  disclosure.setAttribute('title', '早期对话已压缩');
+  disclosure.appendChild(document.createElement('r-markdown'));
+  row.appendChild(disclosure);
+  return row;
 }
-.ran-conversation-row:hover .turn-actions,
-.ran-conversation-row:focus-within .turn-actions {
-  opacity: 1;
+
+/**
+ * Writes the summary into a compaction marker.
+ *
+ * @param element The row.
+ * @param state The row's state.
+ */
+function patchCompaction(element: HTMLElement, state: TurnState): void {
+  const markdown = element.querySelector('r-markdown') as ContentElement | null;
+  if (markdown !== null) markdown.content = state.text;
+  // The collapsed line carries the summary's first line, so the marker says what was kept
+  // without being opened.
+  element.querySelector('r-disclosure-row')?.setAttribute('summary', state.text.split('\n', 1)[0] ?? '');
 }
-.turn-action {
-  border: 1px solid var(--ran-color-border);
-  border-radius: var(--ran-radius-sm);
-  background: transparent;
-  padding: var(--ran-space-1) var(--ran-space-2);
-  color: var(--ran-color-text-secondary);
-  font: inherit;
-  font-size: var(--ran-text-copy-3);
-  line-height: 1;
-  cursor: pointer;
-}
-.turn-action:hover {
-  border-color: var(--ran-color-border-strong);
-  color: var(--ran-color-text);
-}
-.turn-action:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
-  outline-offset: 2px;
-  /* Always visible when focused, whatever the hover state — otherwise keyboard users
-     tab onto a control they cannot see. */
-  opacity: 1;
-}
-.turn-branch-count {
-  color: var(--ran-color-text-disabled);
-  font-size: var(--ran-text-copy-3);
-  font-variant-numeric: tabular-nums;
-}
-@media (prefers-reduced-motion: reduce) {
-  .turn-actions {
-    transition: none;
-  }
-}
-`;
+
+/**
+ * Styles for the conversation rows, adopted into `r-conversation`'s shadow root.
+ *
+ * A real stylesheet imported as text rather than a template literal in this file. The rows
+ * are built into a shadow tree a page stylesheet cannot reach, so the CSS has to travel as
+ * a string — but a template literal ends at the first backtick, and a CSS comment that
+ * mentions a property in backticks is exactly that. It failed that way once. A file also
+ * gets formatted, highlighted and linted like the CSS it is.
+ */
+export { default as TURN_ACTION_CSS } from '@/client/assets/turn.css?inline';
 
 // ── Row actions ────────────────────────────────────────────────────────────
 

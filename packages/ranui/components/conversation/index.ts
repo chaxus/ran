@@ -1,5 +1,5 @@
 import componentCss from './index.less?inline';
-import { Div, EventManager, Slot } from '@/utils/builder';
+import { ButtonBuilder, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
@@ -13,6 +13,15 @@ import { createBottomFollower } from 'ranuts/utils';
 import type { BottomFollower } from 'ranuts/utils';
 import { createConversationEngine } from 'ranuts/conversation';
 import type { ConversationEngine, ConversationNode, ConversationNodeDefinition } from 'ranuts/conversation';
+
+/**
+ * Name of the event the paging affordance fires.
+ *
+ * The element does not fetch anything — it does not know where a conversation lives. It
+ * states that the reader asked, having already captured the anchor; the owner prepends its
+ * rows and calls {@link Conversation.restoreAnchor}.
+ */
+export const OLDER_REQUEST = 'olderrequest';
 
 /**
  * One kind of conversation content: the state machine that owns its events, plus how to
@@ -81,6 +90,8 @@ export class Conversation extends RanElement {
   _shadowDom!: ShadowRoot;
   _scroll!: HTMLElement;
   _list!: HTMLElement;
+  _older!: HTMLElement;
+  _olderButton!: HTMLButtonElement;
   _footer!: HTMLElement;
 
   private _views: ConversationNodeView<never, never>[] = [];
@@ -92,7 +103,7 @@ export class Conversation extends RanElement {
   private _emptyRow: HTMLElement | null = null;
 
   static get observedAttributes(): string[] {
-    return ['follow', 'empty', 'sheet'];
+    return ['follow', 'empty', 'older', 'loading-older', 'sheet'];
   }
 
   constructor() {
@@ -103,7 +114,16 @@ export class Conversation extends RanElement {
       Div()
         .class('ran-conversation')
         .attr('part', 'conversation')
-        .children(Div().class('ran-conversation-list').attr('part', 'list').build())
+        .children(
+          // Above the list, not inside it: the reorder pass walks the list's children and
+          // would treat a paging row as a row to be pushed down by the first prepend.
+          Div()
+            .class('ran-conversation-older')
+            .attr('part', 'older')
+            .children(ButtonBuilder().attr('type', 'button').build())
+            .build(),
+          Div().class('ran-conversation-list').attr('part', 'list').build(),
+        )
         .build(),
     );
     // Outside the scrollport, not inside it: a footer that scrolls with the transcript is a
@@ -117,9 +137,36 @@ export class Conversation extends RanElement {
         .build(),
     );
     this._list = this._scroll.querySelector<HTMLElement>('.ran-conversation-list')!;
+    this._older = this._scroll.querySelector<HTMLElement>('.ran-conversation-older')!;
+    this._olderButton = this._older.querySelector<HTMLButtonElement>('button')!;
+    this._older.hidden = true;
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────
+
+  /**
+   * Label for the paging affordance above the first row. Empty hides it.
+   *
+   * A conversation log only grows, so a client that renders all of it eventually renders
+   * more than anyone will read. Paging keeps the rendered set bounded without pretending
+   * the rest is gone: the button is the statement that there is more, and
+   * {@link Conversation.olderrequest} is the request for it.
+   */
+  get older(): string {
+    return getStringAttribute(this, 'older');
+  }
+  set older(value: string) {
+    setStringAttribute(this, 'older', value);
+  }
+
+  /** Whether a page is in flight; the affordance stays visible and goes inert. */
+  get loadingOlder(): boolean {
+    return this.hasAttribute('loading-older');
+  }
+  set loadingOlder(value: boolean) {
+    if (value) this.setAttribute('loading-older', '');
+    else this.removeAttribute('loading-older');
+  }
 
   /** Whether new content is followed until the reader scrolls away from the floor. */
   get follow(): boolean {
@@ -242,6 +289,8 @@ export class Conversation extends RanElement {
   connectedCallback(): void {
     this.handlerExternalCss();
     this._syncEmpty();
+    this._syncOlder();
+    this._events.on(this._olderButton, 'click', this._requestOlder);
     this._follower = createBottomFollower({
       scrollport: this._scroll,
       // The list grows without appending a node whenever a row streams; the footer
@@ -268,6 +317,7 @@ export class Conversation extends RanElement {
     if (old === next) return;
     if (name === 'sheet') this.handlerExternalCss();
     if (name === 'empty') this._syncEmpty();
+    if (name === 'older' || name === 'loading-older') this._syncOlder();
   }
 
   handlerExternalCss = (): void => {
@@ -341,6 +391,26 @@ export class Conversation extends RanElement {
 
     this._syncEmpty();
     if (this.follow) this._follower?.follow();
+  }
+
+  /**
+   * Asks the owner for the page above the first row, holding the reader's position.
+   *
+   * The anchor is captured before the request rather than after it lands: by then the
+   * prepend has already moved everything, and there is no earlier position left to record.
+   * The owner restores it with {@link Conversation.restoreAnchor} once its rows are in.
+   */
+  private _requestOlder = (): void => {
+    if (this.loadingOlder) return;
+    this.captureAnchor();
+    this.dispatchEvent(new CustomEvent(OLDER_REQUEST, { bubbles: true, composed: true }));
+  };
+
+  private _syncOlder(): void {
+    const label = this.older;
+    this._older.hidden = label === '';
+    this._olderButton.textContent = label;
+    this._olderButton.disabled = this.loadingOlder;
   }
 
   private _syncEmpty(): void {

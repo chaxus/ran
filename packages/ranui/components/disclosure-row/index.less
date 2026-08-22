@@ -1,0 +1,129 @@
+:host {
+  display: block;
+  min-width: 0;
+  color: var(--ran-disclosure-color, var(--ran-color-text));
+  font-size: var(--ran-disclosure-font-size, var(--ran-text-copy-2));
+}
+
+/* `hidden` is how a caller hides an element, and the UA rule that implements it is a
+   user-agent rule — any author `display` on `:host` outranks it. Without this, setting
+   `hidden` does nothing at all. */
+:host([hidden]) {
+  display: none;
+}
+
+.ran-disclosure {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* One line, always. A summary row that wraps stops being scannable, which is the whole
+   reason a run of these reads as a list rather than as a wall. */
+.ran-disclosure-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-disclosure-gap, var(--ran-space-2));
+  border: none;
+  border-radius: var(--ran-disclosure-radius, var(--ran-radius-sm));
+  background: none;
+  padding: 0;
+  width: 100%;
+  min-width: 0;
+  height: var(--ran-disclosure-row-height, 24px);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+:host([expandable]) .ran-disclosure-row {
+  cursor: pointer;
+}
+
+:host([expandable]) .ran-disclosure-row:hover {
+  background: var(--ran-disclosure-hover-background, var(--ran-color-bg-hover));
+}
+
+.ran-disclosure-row:focus-visible {
+  outline: 2px solid var(--ran-disclosure-focus-color, var(--ran-color-primary));
+  outline-offset: 2px;
+}
+
+/* The leading slot holds two things in the same 16px box: whatever the caller put there
+   at rest, and a chevron that fades in on hover. Stacking them in one grid cell means the
+   swap costs no layout, so the title never shifts under the pointer. */
+.ran-disclosure-leading {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--ran-disclosure-leading-size, 16px);
+  height: var(--ran-disclosure-leading-size, 16px);
+  color: var(--ran-disclosure-leading-color, var(--ran-color-text-secondary));
+}
+
+.ran-disclosure-icon,
+.ran-disclosure-chevron {
+  display: inline-flex;
+  grid-area: 1 / 1;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--ran-disclosure-transition, 100ms) ease;
+}
+
+.ran-disclosure-chevron {
+  opacity: 0;
+}
+
+:host([expandable]) .ran-disclosure-row:hover .ran-disclosure-icon,
+:host([expandable][open]) .ran-disclosure-icon {
+  opacity: 0;
+}
+
+:host([expandable]) .ran-disclosure-row:hover .ran-disclosure-chevron,
+:host([expandable]) .ran-disclosure-row:focus-visible .ran-disclosure-chevron,
+:host([expandable][open]) .ran-disclosure-chevron {
+  opacity: 1;
+}
+
+.ran-disclosure-title {
+  flex: none;
+  font-weight: var(--ran-disclosure-title-weight, 400);
+}
+
+/* A 2px dot between title and summary. Dropped with an empty summary, so a row that is
+   only its title shows no trailing punctuation. */
+.ran-disclosure-sep {
+  flex: none;
+  border-radius: 50%;
+  background: var(--ran-disclosure-sep-color, var(--ran-color-text-disabled));
+  width: 2px;
+  height: 2px;
+}
+
+.ran-disclosure-summary {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ran-disclosure-summary-color, var(--ran-color-text-secondary));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:host([tone='error']) .ran-disclosure-summary {
+  color: var(--ran-disclosure-error-color, var(--ran-color-error));
+}
+
+.ran-disclosure-body {
+  min-width: 0;
+}
+
+:host(:not([open])) .ran-disclosure-body {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ran-disclosure-icon,
+  .ran-disclosure-chevron {
+    transition: none;
+  }
+}

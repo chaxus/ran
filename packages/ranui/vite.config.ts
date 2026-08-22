@@ -150,6 +150,8 @@ export const componentEntries: Record<string, string> = {
   reasoning: resolve(__dirname, 'components/reasoning/index.ts'),
   'tool-card': resolve(__dirname, 'components/tool-card/index.ts'),
   'token-meter': resolve(__dirname, 'components/token-meter/index.ts'),
+  'state-dot': resolve(__dirname, 'components/state-dot/index.ts'),
+  'disclosure-row': resolve(__dirname, 'components/disclosure-row/index.ts'),
   attachments: resolve(__dirname, 'components/attachments/index.ts'),
   'voice-button': resolve(__dirname, 'components/voice-button/index.ts'),
   glass: resolve(__dirname, 'components/glass/index.ts'),

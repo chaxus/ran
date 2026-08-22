@@ -1,0 +1,80 @@
+:host {
+  display: inline-block;
+  flex: none;
+  width: var(--ran-state-dot-size, 8px);
+  height: var(--ran-state-dot-size, 8px);
+}
+
+/* `hidden` is how a caller hides an element, and the UA rule that implements it is a
+   user-agent rule — any author `display` on `:host` outranks it. Without this, setting
+   `hidden` does nothing at all. */
+:host([hidden]) {
+  display: none;
+}
+
+/* A halo and a core in one element: the halo is the same colour at low opacity, the core
+   a 60% inset of it. Two layers of one `currentColor` rather than two tokens per state,
+   so a new state is one colour rule. */
+.ran-state-dot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  color: var(--ran-state-dot-color, var(--ran-color-text-disabled));
+}
+
+.ran-state-dot::before,
+.ran-state-dot::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.ran-state-dot::before {
+  inset: 0;
+  opacity: var(--ran-state-dot-halo-opacity, 0.16);
+}
+
+.ran-state-dot::after {
+  inset: 20%;
+}
+
+:host([state='running']) .ran-state-dot {
+  color: var(--ran-state-dot-running-color, var(--ran-color-primary));
+}
+
+:host([state='success']) .ran-state-dot {
+  color: var(--ran-state-dot-success-color, var(--ran-color-success));
+}
+
+:host([state='warning']) .ran-state-dot {
+  color: var(--ran-state-dot-warning-color, var(--ran-color-warning));
+}
+
+:host([state='error']) .ran-state-dot {
+  color: var(--ran-state-dot-error-color, var(--ran-color-error));
+}
+
+/* Running is the only animated state, and it pulses the core rather than spinning:
+   a spinner at 8px is a smudge, and the halo gives the pulse something to breathe into. */
+:host([state='running']) .ran-state-dot::after {
+  animation: ran-state-dot-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes ran-state-dot-pulse {
+  0%,
+  100% {
+    inset: 20%;
+    opacity: 1;
+  }
+  50% {
+    inset: 32%;
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([state='running']) .ran-state-dot::after {
+    animation: none;
+  }
+}

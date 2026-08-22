@@ -34,9 +34,21 @@ export interface ToolDiff {
   newText: string;
 }
 
+/**
+ * The one line a collapsed call shows beside its title.
+ *
+ * Optional and worth setting. The element derives one when it is absent — the first
+ * argument, the command, the first path — but only the tool knows which of its arguments
+ * is the one a reader scanning a run of calls needs to see. `fetch_url` wants the address;
+ * a tool with six arguments wants whichever names the thing it acted on.
+ */
+interface ToolSummary {
+  summary?: string;
+}
+
 /** The pending card, derived from a call's arguments. */
 export type ToolCallView =
-  | {
+  | (ToolSummary & {
       card: 'generic';
       title: string;
       /** Icon hint — `read`, `search`, and so on. Unknown values fall back to no icon. */
@@ -44,9 +56,9 @@ export type ToolCallView =
       /** Arguments worth showing, already stringified by the producer. */
       input?: Record<string, string>;
       locations?: ToolLocation[];
-    }
-  | { card: 'terminal'; title: string; description?: string; cwd?: string }
-  | { card: 'diff'; title: string; diffs: ToolDiff[]; locations?: ToolLocation[] };
+    })
+  | (ToolSummary & { card: 'terminal'; title: string; description?: string; cwd?: string })
+  | (ToolSummary & { card: 'diff'; title: string; diffs: ToolDiff[]; locations?: ToolLocation[] });
 
 /** The completed card, replacing the pending one. */
 export type ToolResultView =

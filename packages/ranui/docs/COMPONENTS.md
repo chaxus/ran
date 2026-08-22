@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-38 custom elements.
+40 custom elements.
 
 ## `<r-attachments>`
 
@@ -88,15 +88,33 @@ Source: `components/popover/content/index.ts`
 
 Source: `components/conversation/index.ts`
 
-- **Attributes**: `empty: string`, `follow: boolean`, `sheet: string`
+- **Attributes**: `empty: string`, `follow: boolean`, `loading-older`, `older: string`, `sheet: string`
 - **Properties**:
   - `empty: string` — Text shown while the projection has produced no rows.
   - `follow: boolean` — Whether new content is followed until the reader scrolls away from the floor.
+  - `loadingOlder: boolean` — Whether a page is in flight; the affordance stays visible and goes inert.
+  - `older: string` — Label for the paging affordance above the first row. Empty hides it.
   - `pinned: boolean` — Whether the view is currently following new content.
   - `sheet: string`
 - **Events**: `pinnedchange` → detail `{ pinned }`
 - **Slots**: `footer (named)`
-- **Parts**: `conversation`, `empty`, `footer`, `list`
+- **Parts**: `conversation`, `empty`, `footer`, `list`, `older`
+
+## `<r-disclosure-row>`
+
+Source: `components/disclosure-row/index.ts`
+
+- **Attributes**: `expandable: boolean`, `open: boolean`, `sheet: string`, `summary: string`, `title: string`, `tone: string`
+- **Properties**:
+  - `expandable: boolean` — Whether the row has a body worth opening.
+  - `open: boolean` — Whether the body is shown.
+  - `sheet: string`
+  - `summary: string` — The truncating right half. Empty drops the separator with it.
+  - `title: string` — The fixed-width left half of the line.
+  - `tone: string` — `error` colours the summary; anything else is the ordinary tone.
+- **Events**: —
+- **Slots**: `default`, `leading (named)`
+- **Parts**: `body`, `disclosure`, `leading`, `row`, `separator`, `summary`, `title`
 
 ## `<r-dropdown>`
 
@@ -450,6 +468,19 @@ Source: `components/skeleton/index.ts`
 - **Slots**: —
 - **Parts**: —
 
+## `<r-state-dot>`
+
+Source: `components/state-dot/index.ts`
+
+- **Attributes**: `label: string`, `sheet: string`, `state: 'idle' | 'running' | 'success' | 'warning' | 'error'`
+- **Properties**:
+  - `label: string` — Accessible name.
+  - `sheet: string`
+  - `state: 'idle' | 'running' | 'success' | 'warning' | 'error'` — Which lifecycle step to show. Unknown values render as `idle`.
+- **Events**: —
+- **Slots**: —
+- **Parts**: `dot`
+
 ## `<r-tab>`
 
 Source: `components/tabpane/index.ts`
@@ -511,7 +542,7 @@ Source: `components/tool-card/index.ts`
   - `status: ToolCardStatus` — Lifecycle of the call, reflected so styling can key off it.
 - **Events**: `locationclick` → detail `{ location }`
 - **Slots**: —
-- **Parts**: `body`, `card`, `description`, `exit`, `file`, `header`, `hunk`, `line`, `location`, `locations`, `path`, `status`, `title`, `toggle`
+- **Parts**: `body`, `exit`, `file`, `hunk`, `io`, `io-text`, `line`, `location`, `locations`, `path`, `row`
 
 ## `<r-voice-button>`
 
