@@ -15,34 +15,43 @@
         <r-theme-switch></r-theme-switch>
       </header>
 
-      <p class="page-notice" id="notice" hidden></p>
+      <div class="layout">
+        <aside class="sessions" id="sessions" aria-label="对话列表">
+          <r-button id="new-session" type="primary" class="sessions-new">新建对话</r-button>
+          <ul class="sessions-list" id="sessions-list"></ul>
+        </aside>
 
-      <r-conversation id="chat" class="chat" empty="发一条消息开始对话">
-        <div class="composer-shell" id="drop" slot="footer">
-          <r-attachments
-            id="attachments"
-            accept="image/*,.pdf,.txt,.md,.csv,.json"
-            max-size="10485760"
-            max-count="6"
-          ></r-attachments>
-          <form class="composer" id="composer">
-            <r-input id="question" class="composer-input" placeholder="说点什么" value="介绍一下你自己"></r-input>
-            <r-voice-button
-              id="mic"
-              label="按住说话，或点击开始语音输入"
-              active-label="停止语音输入（Esc 放弃）"
-              hold-hint="松开发送 · 上滑取消"
-              cancel-hint="松开取消"
-            ></r-voice-button>
-            <r-button id="attach" aria-label="添加图片或文件" title="添加图片或文件">
-              <r-icon name="plus"></r-icon>
-            </r-button>
-            <r-button id="send" type="primary">发送</r-button>
-            <r-button id="stop" disabled>停止</r-button>
-            <input id="picker" class="picker" type="file" multiple accept="image/*,.pdf,.txt,.md,.csv,.json" />
-          </form>
+        <div class="thread">
+          <p class="page-notice" id="notice" hidden></p>
+
+          <r-conversation id="chat" class="chat" empty="发一条消息开始对话">
+            <div class="composer-shell" id="drop" slot="footer">
+              <r-attachments
+                id="attachments"
+                accept="image/*,.pdf,.txt,.md,.csv,.json"
+                max-size="10485760"
+                max-count="6"
+              ></r-attachments>
+              <form class="composer" id="composer">
+                <r-input id="question" class="composer-input" placeholder="说点什么" value="介绍一下你自己"></r-input>
+                <r-voice-button
+                  id="mic"
+                  label="按住说话，或点击开始语音输入"
+                  active-label="停止语音输入（Esc 放弃）"
+                  hold-hint="松开发送 · 上滑取消"
+                  cancel-hint="松开取消"
+                ></r-voice-button>
+                <r-button id="attach" aria-label="添加图片或文件" title="添加图片或文件">
+                  <r-icon name="plus"></r-icon>
+                </r-button>
+                <r-button id="send" type="primary">发送</r-button>
+                <r-button id="stop" disabled>停止</r-button>
+                <input id="picker" class="picker" type="file" multiple accept="image/*,.pdf,.txt,.md,.csv,.json" />
+              </form>
+            </div>
+          </r-conversation>
         </div>
-      </r-conversation>
+      </div>
     </main>
   </body>
 </html>

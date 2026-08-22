@@ -34,6 +34,16 @@ README 开头那段"做减法"以前只是主张：这个包自己用着 React�
 | `<pre>{text}</pre>`                            | `r-conversation` + `r-card` + `r-markdown` + `r-reasoning` |
 | `classnames` + CSS Modules                     | ranui token + 一份页面级 CSS                               |
 
+## 会话
+
+左侧是这台浏览器上的对话列表，按最近使用排序。刷新会回到刚才那一条，而不是回到空白页再让你自己找回去。
+
+标题取自第一句话，只取一次——每轮都重命名会让列表条目在读者眼皮底下不停移动。
+
+**持久化在 IndexedDB**（`ranuts/utils` 的 `WebDB`），读用 `collection` 的宽容句柄：无痕窗口、禁用存储的浏览器读不到时返回空列表，页面照常打开而不是白屏。**写不走这条路**——`WebDB` 自己的文档说得清楚，当写入本身就是用户的动作时，吞掉失败是错的默认值，而刚聊完的一段对话正是这种情况。写失败会提示一次（不是每轮一次，否则磁盘满会变成一堵墙）。
+
+空对话不落库：一个还没人说过话的会话不值一条记录，每次开页都写一条只会把列表填满空白。
+
 ## 配置
 
 不配置也能跑：没有 API key 时走内置示例回答，页面上会说明。
@@ -57,7 +67,9 @@ app/lib/provider.ts      从环境解析 provider
 app/controllers/im.ts    真实模式：原样转发上游 SSE；演示模式：内置回答
 client/lib/eventSource   toStreamChunks 映射 + streamDialog
 client/chat.ts           两个对话 view：turn 与 reasoning
-client/client.ts         注册 view、驱动输入框
+client/chat-types.ts     消息形状，供 client 与 sessions 共用
+client/sessions.ts       IndexedDB 会话存储与标题推导
+client/client.ts         注册 view、驱动输入框、会话列表、附件、语音
 ```
 
 **厂商映射是本地代码，这是有意的。** `ranuts/stream` 不提供任何厂商的映射：分帧与折叠各家一样，wire 格式不一样。要接到别的服务商，只需重写 [`toStreamChunks`](./client/lib/eventSource.ts) 一个函数。
