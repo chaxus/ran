@@ -86,3 +86,33 @@ export async function mount(page: Page, html: string): Promise<void> {
     document.body.innerHTML = h;
   }, html);
 }
+
+/**
+ * Reads a measurement from inside a component's shadow root.
+ *
+ * Every ranui component uses a **closed** shadow root, which Playwright's locators cannot
+ * pierce — `getByRole`, `getByText` and `querySelector` all stop at the boundary and simply
+ * find nothing. What does cross is the instance property `_shadowDom`, which the element
+ * keeps for its own use and the unit tests already read.
+ *
+ * Using it here is deliberate rather than a workaround: without it an e2e spec can only
+ * assert host geometry and screenshots, and screenshots are macOS-local (see
+ * `playwright.config.ts`) — so every assertion that runs in CI would be lost.
+ *
+ * @param page The page under test.
+ * @param host Selector for the component in the document.
+ * @param read Runs against the component's shadow root; must return a serialisable value.
+ * @returns Whatever `read` returned.
+ */
+export async function insideShadow<T>(page: Page, host: string, read: (root: ShadowRoot) => T): Promise<T> {
+  return page.evaluate(
+    ({ selector, source }) => {
+      const element = document.querySelector(selector) as (HTMLElement & { _shadowDom?: ShadowRoot }) | null;
+      if (element?._shadowDom === undefined) throw new Error(`no shadow root on ${selector}`);
+      // eslint-disable-next-line no-new-func -- the function is authored in this repo and
+      // serialised across the page boundary, which is the only way to pass one in.
+      return (new Function(`return (${source})`)() as (root: ShadowRoot) => unknown)(element._shadowDom);
+    },
+    { selector: host, source: read.toString() },
+  ) as Promise<T>;
+}
