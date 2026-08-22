@@ -219,3 +219,61 @@ describe('collectMatches', () => {
     expect(result[0]).toBe(li2);
   });
 });
+
+describe('matchSelector — compound selectors', () => {
+  /**
+   * A `<slot name="footer">`, the shape that broke server rendering for r-card.
+   *
+   * @returns The node.
+   */
+  function footerSlot(): HTMLElementMock {
+    const node = el('slot');
+    node.setAttribute('name', 'footer');
+    return node;
+  }
+
+  it('matches a tag qualified by an attribute', () => {
+    expect(matchSelector(footerSlot(), 'slot[name="footer"]')).toBe(true);
+    expect(matchSelector(footerSlot(), "slot[name='footer']")).toBe(true);
+  });
+
+  it('rejects when the tag matches but the attribute does not', () => {
+    expect(matchSelector(footerSlot(), 'slot[name="header"]')).toBe(false);
+  });
+
+  it('rejects when the attribute matches but the tag does not', () => {
+    expect(matchSelector(footerSlot(), 'div[name="footer"]')).toBe(false);
+  });
+
+  it('requires every qualifier of a longer compound to match', () => {
+    const node = el('div');
+    node.classList.add('row');
+    node.setAttribute('id', 'first');
+    node.setAttribute('data-kind', 'a');
+
+    expect(matchSelector(node, 'div.row#first')).toBe(true);
+    expect(matchSelector(node, '.row[data-kind="a"]')).toBe(true);
+    expect(matchSelector(node, 'div.row#second')).toBe(false);
+    expect(matchSelector(node, 'span.row')).toBe(false);
+    expect(matchSelector(node, '.row[data-kind="b"]')).toBe(false);
+  });
+
+  it('finds nothing for a selector this engine does not implement', () => {
+    // Matching on the part it understood would return an arbitrary node; a combinator or a
+    // pseudo-class it cannot evaluate should match nothing at all.
+    expect(matchSelector(footerSlot(), 'div > slot')).toBe(false);
+    expect(matchSelector(footerSlot(), 'div slot')).toBe(false);
+    expect(matchSelector(footerSlot(), 'slot:first-child')).toBe(false);
+  });
+
+  it('collects compound matches from a tree', () => {
+    const root = el('div');
+    const wanted = footerSlot();
+    const other = el('slot');
+    root.childrenList.push(other as never, wanted as never);
+
+    const result: HTMLElementMock[] = [];
+    collectMatches(root.childrenList as never, 'slot[name="footer"]', result);
+    expect(result).toEqual([wanted]);
+  });
+});
