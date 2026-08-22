@@ -7,7 +7,7 @@ describe('r-player contract', () => {
     document.body.innerHTML = '';
   });
 
-  it('recovers drag state when mouseup happens on document', () => {
+  it('recovers drag state when pointerup happens on document', () => {
     const player = document.createElement('r-player') as any;
     document.body.appendChild(player);
 
@@ -20,7 +20,7 @@ describe('r-player contract', () => {
     const safePlaySpy = vi.spyOn(player, 'safePlay').mockImplementation(() => undefined);
     const rafSpy = vi.spyOn(player, 'requestAnimationFrame').mockImplementation(() => undefined);
 
-    document.dispatchEvent(new MouseEvent('mouseup'));
+    document.dispatchEvent(new PointerEvent('pointerup'));
 
     expect(setCurrentTimeSpy).toHaveBeenCalledWith(30);
     expect(safePlaySpy).toHaveBeenCalled();
@@ -40,7 +40,7 @@ describe('r-player contract', () => {
     const playSpy = vi.spyOn(player, 'play').mockImplementation(() => undefined);
     const pauseSpy = vi.spyOn(player, 'pause').mockImplementation(() => undefined);
 
-    document.dispatchEvent(new MouseEvent('mouseup'));
+    document.dispatchEvent(new PointerEvent('pointerup'));
 
     expect(playSpy).not.toHaveBeenCalled();
     expect(pauseSpy).toHaveBeenCalled();

@@ -99,7 +99,7 @@ describe('r-player interaction methods', () => {
     expect(player.ctx.currentTime).toBe(25);
   });
 
-  it('dragging the progress dot updates preview progress and resumes playback on mouseup', () => {
+  it('dragging the progress dot updates preview progress and resumes playback on pointerup', () => {
     const player = makePlayer();
     player._video = document.createElement('video');
     Object.defineProperty(player._video, 'duration', { value: 100, configurable: true });
@@ -109,9 +109,9 @@ describe('r-player interaction methods', () => {
     player._progress.getBoundingClientRect = vi.fn(() => ({ left: 0 }) as DOMRect);
     vi.spyOn(player._video, 'play').mockReturnValue(Promise.resolve() as any);
 
-    player._progressDot.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
-    document.dispatchEvent(new MouseEvent('mousemove', { clientX: 109 }));
-    document.dispatchEvent(new MouseEvent('mouseup'));
+    player._progressDot.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    document.dispatchEvent(new PointerEvent('pointermove', { clientX: 109 }));
+    document.dispatchEvent(new PointerEvent('pointerup'));
 
     expect(player.moveProgress.mouseDown).toBe(false);
     expect(player.ctx.currentTime).toBe(50);

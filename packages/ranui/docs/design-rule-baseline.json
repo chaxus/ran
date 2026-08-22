@@ -71,8 +71,6 @@
       "components/player/index.less": 2
     },
     "sizing-scale": {},
-    "mouse-only-drag": {
-      "components/player/core/controller.ts": 3
-    }
+    "mouse-only-drag": {}
   }
 }

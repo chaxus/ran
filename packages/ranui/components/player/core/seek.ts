@@ -56,10 +56,11 @@ export interface PlayerSeekDeps {
 export interface PlayerSeekHandlers {
   progressClick: (e: MouseEvent) => void;
   onProgressKeydown: (e: KeyboardEvent) => void;
-  progressDotMouseDown: () => void;
+  progressDotPointerDown: (e: PointerEvent) => void;
   progressDotMouseMove: (e: MouseEvent) => void;
-  progressDotMouseMoveDocument: (e: MouseEvent) => void;
-  progressDotMouseUp: () => void;
+  progressDotPointerMove: (e: PointerEvent) => void;
+  progressDotPointerUp: () => void;
+  progressDotPointerCancel: () => void;
   syncProgressByPercentage: (percentage: number) => void;
   seekToPercentage: (percentage: number) => void;
   updateCurrentProgress: () => void;
@@ -214,7 +215,10 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       e.preventDefault();
       deps.seekToPercentage(next / 100);
     },
-    progressDotMouseDown: (): void => {
+    progressDotPointerDown: (e: PointerEvent): void => {
+      // Stops the browser synthesising a second, compatibility mouse drag on top of this
+      // one, which would run every update twice on touch.
+      e.preventDefault();
       refs.playerBtn.style.setProperty('display', 'none');
       state.moveProgress.mouseDown = true;
       const duration = deps.getTotalTime() || ctx.duration;
@@ -235,7 +239,7 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       deps.syncProgressByPercentage(percentage);
       state.moveProgress.percentage = Math.floor(percentage * 100) / 100;
     },
-    progressDotMouseMoveDocument: (e: MouseEvent): void => {
+    progressDotPointerMove: (e: PointerEvent): void => {
       if (!state.moveProgress.mouseDown) return;
       const rect = refs.progress.getBoundingClientRect();
       const offsetX = e.clientX - rect.left - 9;
@@ -243,7 +247,7 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       deps.syncProgressByPercentage(percentage);
       state.moveProgress.percentage = Math.floor(percentage * 100) / 100;
     },
-    progressDotMouseUp: (): void => {
+    progressDotPointerUp: (): void => {
       if (!state.moveProgress.mouseDown) return;
       const shouldResume = state.wasPlayingBeforeSeek;
       deps.seekToPercentage(state.moveProgress.percentage);
@@ -256,6 +260,28 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
         return;
       }
       deps.pause();
+      deps.cancelAnimationFrame();
+    },
+    /**
+     * Ends a drag the pointer was taken away from — a touch the browser reclaimed for a
+     * scroll, a system gesture, a call arriving.
+     *
+     * No seek: the drag never reached a destination the viewer chose, so committing the
+     * last position it happened to pass through would move the video somewhere nobody asked
+     * for. Re-reading the real currentTime lets the progress effect snap the bar back.
+     */
+    progressDotPointerCancel: (): void => {
+      if (!state.moveProgress.mouseDown) return;
+      const shouldResume = state.wasPlayingBeforeSeek;
+      state.moveProgress.mouseDown = false;
+      state.isSeeking = false;
+      state.wasPlayingBeforeSeek = false;
+      deps.updateCurrentProgress();
+      if (shouldResume) {
+        deps.safePlay(true);
+        deps.requestAnimationFrame(deps.updateCurrentProgress);
+        return;
+      }
       deps.cancelAnimationFrame();
     },
     progressMouseEnter: updateProgressTip,

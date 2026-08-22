@@ -669,10 +669,11 @@ export class RanPlayer extends RanElement {
   seekToPercentage = (percentage: number): void => this._seek.seekToPercentage(percentage);
   progressClick = (e: MouseEvent): void => this._seek.progressClick(e);
   onProgressKeydown = (e: KeyboardEvent): void => this._seek.onProgressKeydown(e);
-  progressDotMouseDown = (): void => this._seek.progressDotMouseDown();
+  progressDotPointerDown = (e: PointerEvent): void => this._seek.progressDotPointerDown(e);
   progressDotMouseMove = (e: MouseEvent): void => this._seek.progressDotMouseMove(e);
-  progressDotMouseMoveDocument = (e: MouseEvent): void => this._seek.progressDotMouseMoveDocument(e);
-  progressDotMouseUp = (): void => this._seek.progressDotMouseUp();
+  progressDotPointerMove = (e: PointerEvent): void => this._seek.progressDotPointerMove(e);
+  progressDotPointerUp = (): void => this._seek.progressDotPointerUp();
+  progressDotPointerCancel = (): void => this._seek.progressDotPointerCancel();
   requestAnimationFrame = (fn: Function): void => this._seek.requestAnimationFrame(fn);
   cancelAnimationFrame = (): void => this._seek.cancelAnimationFrame();
   updateCurrentProgress = (): void => this._seek.updateCurrentProgress();
@@ -777,7 +778,7 @@ export class RanPlayer extends RanElement {
       onContainerClick: this.dispatchClickPlayerContainerAction,
       onPlayerBtnClick: this.dispatchClickPlayerBtnAction,
       onKeydown: this.SpaceKeyDown,
-      onProgressDotMouseDown: this.progressDotMouseDown,
+      onProgressDotPointerDown: this.progressDotPointerDown,
       onPlayBtnClick: this.dispatchClickPlayerBtnAction,
       onPlayBtnKeydown: this.onPlayBtnKeydown,
       onFullScreenKeydown: this.onFullScreenKeydown,
@@ -787,8 +788,9 @@ export class RanPlayer extends RanElement {
       onProgressMouseMove: this.progressMouseMove,
       onProgressMouseLeave: this.progressMouseLeave,
       onPlayerMouseMove: this.progressDotMouseMove,
-      onDocumentMouseMove: this.progressDotMouseMoveDocument,
-      onDocumentMouseUp: this.progressDotMouseUp,
+      onDocumentPointerMove: this.progressDotPointerMove,
+      onDocumentPointerUp: this.progressDotPointerUp,
+      onDocumentPointerCancel: this.progressDotPointerCancel,
       onVolumeChange: this.changeVolumeProgress,
       onFullScreenClick: this.openFullScreen,
       onVolumeIconClick: this.changePlayerVolume,
