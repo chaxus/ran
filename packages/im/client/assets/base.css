@@ -62,6 +62,120 @@ body {
   color: var(--ran-color-text-secondary);
 }
 
+.layout {
+  display: flex;
+  flex: 1;
+  gap: var(--ran-space-3);
+  min-height: 0;
+}
+
+.sessions {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--ran-space-2);
+  width: 220px;
+  min-height: 0;
+}
+
+.sessions-list {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.session {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  border-radius: var(--ran-radius-md);
+  padding: var(--ran-space-2);
+  cursor: pointer;
+}
+
+.session:hover {
+  background: var(--ran-color-bg-hover);
+}
+
+/* The open conversation, marked by more than colour: `aria-current` carries it to a screen
+   reader and the weight carries it to anyone who cannot separate the two backgrounds. */
+.session[aria-current='true'] {
+  background: var(--ran-color-bg-active);
+  font-weight: var(--ran-text-label-weight);
+}
+
+.session-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.session-time {
+  flex: none;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+}
+
+.session-delete {
+  flex: none;
+  visibility: hidden;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--ran-color-text-secondary);
+  cursor: pointer;
+}
+
+.session:hover .session-delete,
+.session-delete:focus-visible {
+  visibility: visible;
+}
+
+.thread {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--ran-space-3);
+  min-width: 0;
+  min-height: 0;
+}
+
+/* On a narrow screen the list becomes a strip above the thread rather than a column beside
+   it: 220px of sidebar on a phone leaves nothing for the conversation. */
+@media (max-width: 720px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sessions {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+  }
+
+  .sessions-list {
+    display: flex;
+    flex: 1;
+    gap: var(--ran-space-2);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .session {
+    flex: none;
+    max-width: 160px;
+  }
+
+  .session-time,
+  .session-delete {
+    display: none;
+  }
+}
+
 .chat {
   flex: 1;
   min-height: 0;
