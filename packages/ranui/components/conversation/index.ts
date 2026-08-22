@@ -81,6 +81,7 @@ export class Conversation extends RanElement {
   _shadowDom!: ShadowRoot;
   _scroll!: HTMLElement;
   _list!: HTMLElement;
+  _footer!: HTMLElement;
 
   private _views: ConversationNodeView<never, never>[] = [];
   private _engine: ConversationEngine<unknown> | null = null;
@@ -102,14 +103,17 @@ export class Conversation extends RanElement {
       Div()
         .class('ran-conversation')
         .attr('part', 'conversation')
-        .children(
-          Div().class('ran-conversation-list').attr('part', 'list').build(),
-          Div()
-            .class('ran-conversation-footer')
-            .attr('part', 'footer')
-            .children(Slot().attr('name', 'footer').build())
-            .build(),
-        )
+        .children(Div().class('ran-conversation-list').attr('part', 'list').build())
+        .build(),
+    );
+    // Outside the scrollport, not inside it: a footer that scrolls with the transcript is a
+    // composer that leaves the frame, and one made sticky still floats up under the last
+    // message while the transcript is shorter than the frame.
+    this._footer = ensureShadowElement(this._shadowDom, '.ran-conversation-footer', () =>
+      Div()
+        .class('ran-conversation-footer')
+        .attr('part', 'footer')
+        .children(Slot().attr('name', 'footer').build())
         .build(),
     );
     this._list = this._scroll.querySelector<HTMLElement>('.ran-conversation-list')!;
@@ -215,7 +219,7 @@ export class Conversation extends RanElement {
       scrollport: this._scroll,
       // The list grows without appending a node whenever a row streams; the footer
       // resizes outside the list when a composer grows.
-      observe: [this._list, this._scroll.querySelector<HTMLElement>('.ran-conversation-footer')!],
+      observe: [this._list, this._footer],
       onPinnedChange: (pinned) => {
         this.dispatchEvent(new CustomEvent('pinnedchange', { detail: { pinned }, bubbles: true, composed: true }));
       },

@@ -1,5 +1,9 @@
 :host {
-  display: block;
+  /* A column so the footer can sit outside the scroller: inside it, a composer only reaches
+     the bottom of the frame once the transcript is long enough to overflow, and floats up
+     under the last message when it is not. */
+  display: flex;
+  flex-direction: column;
   min-height: 0;
   color: var(--ran-conversation-color, var(--ran-color-text));
   font-size: var(--ran-conversation-font-size, var(--ran-text-copy-2));
@@ -7,8 +11,8 @@
 
 .ran-conversation {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  height: 100%;
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -31,8 +35,7 @@
 }
 
 .ran-conversation-footer {
-  position: sticky;
-  bottom: 0;
+  flex: none;
   background: var(--ran-conversation-footer-background, var(--ran-color-bg));
 }
 
