@@ -34,7 +34,14 @@ describe('bytesToBase64 / base64ToBytes', () => {
     const big = new Uint8Array(600_000);
     for (let i = 0; i < big.length; i++) big[i] = i % 256;
     expect(() => String.fromCharCode.apply(null, Array.from(big))).toThrow();
-    expect(base64ToBytes(bytesToBase64(big))).toEqual(big);
+
+    const round = base64ToBytes(bytesToBase64(big));
+    // Compared by hand rather than with `toEqual`: on 600,000 elements the deep-equality
+    // walk and the diff it prepares for a possible failure cost seconds, which is how this
+    // test timed out under a loaded parallel run while passing on its own. The assertion is
+    // the same one — same length, same bytes — and it is O(n) with no diff machinery.
+    expect(round.length).toBe(big.length);
+    expect(round.every((byte, at) => byte === big[at])).toBe(true);
   });
 
   it('strips a data: URL prefix when decoding', () => {
