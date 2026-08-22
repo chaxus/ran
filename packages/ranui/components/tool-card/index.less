@@ -80,13 +80,23 @@
 
 .ran-tool-card-output {
   margin: 0;
-  overflow-x: auto;
+  // A tool result is unbounded — a fetched page, a file, a log. The card summarises a call;
+  // it is not the place to lay out ten thousand characters down the transcript.
+  max-height: var(--ran-tool-card-output-max-height, 18rem);
+  overflow: auto;
+  overscroll-behavior: contain;
   border-radius: var(--ran-tool-card-output-radius, var(--ran-radius-sm));
   background: var(--ran-tool-card-output-background, var(--ran-color-bg-muted));
   padding: var(--ran-tool-card-output-padding, var(--ran-space-2));
   font-weight: var(--ran-tool-card-output-weight, var(--ran-text-mono-weight-regular));
   font-family: var(--ran-tool-card-output-font, var(--ran-font-mono));
   white-space: pre;
+}
+
+.ran-tool-card-output-wrap {
+  white-space: pre-wrap;
+  // `break-word` leaves a long URL or a base64 blob pushing the card wider than its column.
+  overflow-wrap: anywhere;
 }
 
 .ran-tool-card-input {

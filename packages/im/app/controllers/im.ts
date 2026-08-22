@@ -4,13 +4,17 @@ import type { Context } from '@/app/types/index';
 
 /** One turn of the conversation, as the client sends it and the provider expects it. */
 interface ChatMessage {
-  role: 'system' | 'user' | 'assistant';
+  role: 'system' | 'user' | 'assistant' | 'tool';
   /**
    * A plain string for a text-only turn, or the parts a multimodal one carries. Forwarded
    * as it arrives: which shapes a model accepts is between the client and the provider, and
    * a proxy that narrowed this would have to be changed for every new part type.
    */
   content: unknown;
+  /** Present on an assistant message that asked for tools, and on the results that answer it. */
+  tool_calls?: unknown;
+  tool_call_id?: string;
+  name?: string;
 }
 
 const POEM = [
@@ -83,7 +87,12 @@ export function extractMessage(body: string): string {
  * @param provider The configured provider.
  * @param messages The conversation to send.
  */
-async function streamProvider(ctx: Context, provider: LiveProvider, messages: ChatMessage[]): Promise<void> {
+async function streamProvider(
+  ctx: Context,
+  provider: LiveProvider,
+  messages: ChatMessage[],
+  tools: unknown[] | undefined,
+): Promise<void> {
   const { res, req } = ctx;
   const send = sender((chunk) => res.write(chunk));
   const abort = new AbortController();
@@ -96,7 +105,15 @@ async function streamProvider(ctx: Context, provider: LiveProvider, messages: Ch
         'content-type': 'application/json',
         authorization: `Bearer ${provider.apiKey}`,
       },
-      body: JSON.stringify({ model: provider.model, messages, stream: true, stream_options: { include_usage: true } }),
+      body: JSON.stringify({
+        model: provider.model,
+        messages,
+        stream: true,
+        stream_options: { include_usage: true },
+        // Omitted rather than sent empty: a provider that receives `tools: []` may reject the
+        // request outright, and one that does not still pays for the field.
+        ...(tools === undefined || tools.length === 0 ? {} : { tools, tool_choice: 'auto' }),
+      }),
       signal: abort.signal,
     });
 
@@ -168,7 +185,118 @@ function streamDemo(ctx: Context): void {
   });
 }
 
+/** How much of a fetched page is worth returning; a model reads text, not a whole site. */
+const FETCH_LIMIT = 200_000;
+/** A page that has not answered in this long is not going to be useful mid-turn. */
+const FETCH_TIMEOUT_MS = 15_000;
+
+/**
+ * Strips a fetched HTML document down to the text a model can read.
+ *
+ * Deliberately not a parser. Script and style content has to go — it is most of the bytes
+ * and none of the meaning — and beyond that a model reads through markup perfectly well, so
+ * anything more here is a dependency and a source of its own bugs.
+ *
+ * @param html The document.
+ * @returns Its readable text.
+ */
+export function readableText(html: string): string {
+  return (
+    html
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      // Ampersand last: decoding it first would let `&amp;lt;` turn into a tag.
+      .replace(/&amp;/g, '&')
+      .replace(/[ \t\r\f]+/g, ' ')
+      .replace(/\n\s*\n\s*\n+/g, '\n\n')
+      .trim()
+  );
+}
+
+/**
+ * Whether a URL is one this server will fetch on a model's behalf.
+ *
+ * The model chooses this address, and the server reaches it with the server's own network
+ * access — which on a developer machine includes localhost and whatever else is on the LAN.
+ * Restricting the scheme and refusing an obviously internal host is the difference between a
+ * fetch tool and a request forwarder pointed at the inside of the network.
+ *
+ * @param raw The address the model asked for.
+ * @returns The parsed URL, or the reason it was refused.
+ */
+export function allowedUrl(raw: string): { url: URL } | { error: string } {
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return { error: '不是合法的地址' };
+  }
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return { error: '只支持 http 和 https' };
+  const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  if (
+    host === 'localhost' ||
+    host.endsWith('.localhost') ||
+    host === '::1' ||
+    /^127\./.test(host) ||
+    /^10\./.test(host) ||
+    /^192\.168\./.test(host) ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(host) ||
+    /^169\.254\./.test(host) ||
+    /^f[cd]/.test(host)
+  ) {
+    return { error: '不允许访问内网地址' };
+  }
+  return { url };
+}
+
 export default class IMController {
+  /**
+   * Fetches one page for the client's `fetch_url` tool.
+   *
+   * A browser cannot fetch a third-party page from a page, so the tool asks the server. The
+   * address comes from the model, which is why {@link allowedUrl} decides what may be
+   * reached before anything is opened.
+   *
+   * @param ctx Request context.
+   */
+  async fetch(ctx: Context): Promise<void> {
+    const { res } = ctx;
+    const { url: raw } = ctx.request.body as { url?: string };
+    const reply = (status: number, payload: unknown): void => {
+      res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify(payload));
+    };
+
+    const checked = allowedUrl(typeof raw === 'string' ? raw : '');
+    if ('error' in checked) {
+      reply(400, { error: checked.error });
+      return;
+    }
+
+    try {
+      const response = await globalThis.fetch(checked.url, {
+        headers: { 'user-agent': 'ran-im/1.0 (+tool fetch_url)', accept: 'text/html,text/plain;q=0.9,*/*;q=0.5' },
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+        redirect: 'follow',
+      });
+      if (!response.ok) {
+        reply(200, { error: `${response.status} ${response.statusText}` });
+        return;
+      }
+      const body = (await response.text()).slice(0, FETCH_LIMIT);
+      const type = response.headers.get('content-type') ?? '';
+      reply(200, { text: type.includes('html') ? readableText(body) : body });
+    } catch (error) {
+      reply(200, { error: error instanceof Error ? error.message : String(error) });
+    }
+  }
+
   /**
    * Streams an answer as Server-Sent Events, from a real provider when one is configured
    * and from a canned poem otherwise.
@@ -184,7 +312,7 @@ export default class IMController {
    */
   dialog(ctx: Context): void {
     const { res, req } = ctx;
-    const body = ctx.request.body as { messages?: ChatMessage[]; question?: string };
+    const body = ctx.request.body as { messages?: ChatMessage[]; question?: string; tools?: unknown[] };
     const messages: ChatMessage[] =
       body.messages ?? (body.question === undefined ? [] : [{ role: 'user', content: body.question }]);
 
@@ -205,7 +333,7 @@ export default class IMController {
       streamDemo(ctx);
       return;
     }
-    void streamProvider(ctx, provider, messages);
+    void streamProvider(ctx, provider, messages, body.tools);
     req.on('close', () => {
       res.end();
     });

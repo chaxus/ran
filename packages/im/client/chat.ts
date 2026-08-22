@@ -1,5 +1,6 @@
-import type { ConversationNodeView } from 'ranui';
+import type { ConversationNodeView, ToolCallView, ToolCardStatus, ToolResultView } from 'ranui';
 import type { StreamSnapshot } from 'ranuts/stream';
+import { TOOLS, parseToolArgs } from '@/client/tools/index';
 
 /**
  * What the conversation is built from.
@@ -18,7 +19,13 @@ export type ChatEvent =
   | { type: 'turn/end'; id: string }
   | { type: 'turn/error'; id: string; message: string }
   | { type: 'reasoning/start'; id: string }
-  | { type: 'reasoning/text'; id: string; text: string };
+  | { type: 'reasoning/text'; id: string; text: string }
+  // A tool call opens as soon as its name is known and its arguments are still arriving, so
+  // the reader sees `抓取网页` before the URL rather than a blank pause the length of the
+  // model writing JSON.
+  | { type: 'tool/start'; id: string; name: string }
+  | { type: 'tool/args'; id: string; args: string }
+  | { type: 'tool/result'; id: string; output: string; failed: boolean };
 
 interface TurnState {
   role: 'user' | 'assistant';
@@ -30,6 +37,14 @@ interface TurnState {
 interface ReasoningState {
   text: string;
   streaming: boolean;
+}
+
+interface ToolState {
+  name: string;
+  /** Raw JSON text, which is only a value once the call is complete. */
+  args: string;
+  output: string | null;
+  failed: boolean;
 }
 
 /** An element that takes its content through a `content` property. */
@@ -115,11 +130,85 @@ export const reasoningView: ConversationNodeView<ChatEvent, ReasoningState> = {
   },
 };
 
+/** `r-tool-card`, as far as this file needs it. */
+type ToolCardElement = HTMLElement & {
+  call: ToolCallView | null;
+  result: ToolResultView | null;
+  status: ToolCardStatus;
+};
+
+/**
+ * Fallback card for a tool this build does not have.
+ *
+ * A conversation stored when a tool existed is replayed after it was renamed or removed, and
+ * the call is still part of what was said. Showing the name and the raw arguments is worse
+ * than the real card and far better than a hole in the transcript.
+ *
+ * @param state The call as it was recorded.
+ * @returns A generic pending card.
+ */
+function unknownToolCall(state: ToolState): ToolCallView {
+  return { card: 'generic', title: state.name, input: state.args === '' ? undefined : { 参数: state.args } };
+}
+
+/**
+ * One tool call, rendered from the intent its tool declares.
+ *
+ * The views are recomputed from `state` on every patch rather than stored: they are pure
+ * functions of the arguments by contract, so recomputing costs nothing and keeps a replayed
+ * card identical to the live one. It also means a card is never left showing a view built
+ * from arguments that have since been revised by a later delta.
+ */
+export const toolView: ConversationNodeView<ChatEvent, ToolState> = {
+  kind: 'tool',
+  match: (event) => {
+    if (event.type === 'tool/start') return { id: event.id, role: 'start' };
+    if (event.type === 'tool/args' || event.type === 'tool/result') return { id: event.id, role: 'update' };
+    return null;
+  },
+  start: (event) => ({
+    name: event.type === 'tool/start' ? event.name : '',
+    args: '',
+    output: null,
+    failed: false,
+  }),
+  update: (state, event) => {
+    // Replacement, not concatenation: the accumulator already folded the deltas, and this
+    // carries the whole arguments text as it currently stands.
+    if (event.type === 'tool/args') return { ...state, args: event.args };
+    if (event.type === 'tool/result') return { ...state, output: event.output, failed: event.failed };
+    return state;
+  },
+  // Arguments arrive as a burst of tokens; a result is one discrete fact.
+  publication: (event) => (event.type === 'tool/args' ? 'animation-frame' : 'immediate'),
+  mount: () => document.createElement('r-tool-card'),
+  patch: (element, node) => {
+    const card = element as ToolCardElement;
+    const { name, args, output, failed } = node.state;
+    const tool = TOOLS.get(name);
+    const parsed = parseToolArgs(args);
+
+    card.call = tool === undefined ? unknownToolCall(node.state) : tool.call(parsed);
+    if (output === null) {
+      card.result = null;
+      card.status = 'running';
+      return;
+    }
+    card.result = tool === undefined || failed ? { card: 'generic', content: output } : tool.result(parsed, output);
+    card.status = failed ? 'error' : 'success';
+  },
+};
+
 /** How much of a response has already been turned into events. */
 export interface EmittedSoFar {
   text: number;
   reasoning: number;
+  /** Per tool call, in block order: whether its node is open and how much of its arguments went out. */
+  tools: { started: boolean; args: number }[];
 }
+
+/** Nothing emitted yet. */
+export const NOTHING_EMITTED: EmittedSoFar = { text: 0, reasoning: 0, tools: [] };
 
 /**
  * Reports what a snapshot grew by, as conversation events.
@@ -156,5 +245,35 @@ export function eventsFromSnapshot(
     events.push({ type: 'turn/text', id, text: text.slice(emitted.text) });
   }
 
-  return { events, emitted: { text: text.length, reasoning: reasoning.length } };
+  const calls = snapshot.blocks.filter((block) => block.type === 'tool-call');
+  const tools = calls.map((call, ordinal) => {
+    const before = emitted.tools[ordinal] ?? { started: false, args: 0 };
+    // Opened on the name, not on the block: a tool call's first delta carries the id and the
+    // name, and a card titled with an empty string would be on screen for the whole time the
+    // model spends writing the arguments.
+    if (!before.started && call.name === '') return before;
+    if (!before.started) events.push({ type: 'tool/start', id: toolNodeId(id, ordinal), name: call.name });
+    // Whole text rather than the tail: `arguments` is JSON that only means anything complete,
+    // and the card re-parses it on every patch.
+    if (call.arguments.length !== before.args) {
+      events.push({ type: 'tool/args', id: toolNodeId(id, ordinal), args: call.arguments });
+    }
+    return { started: true, args: call.arguments.length };
+  });
+
+  return { events, emitted: { text: text.length, reasoning: reasoning.length, tools } };
+}
+
+/**
+ * Names the conversation node of one tool call.
+ *
+ * Derived rather than taken from the provider's call id so that a replay, which has the ids
+ * but rebuilds the turn from scratch, produces the same nodes in the same order.
+ *
+ * @param turnId The turn the call belongs to.
+ * @param ordinal Its position among that turn's calls.
+ * @returns The node id.
+ */
+export function toolNodeId(turnId: string, ordinal: number): string {
+  return `${turnId}-tool-${ordinal}`;
 }

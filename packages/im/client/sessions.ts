@@ -1,12 +1,8 @@
 import { WebDB, createStore } from 'ranuts/utils';
 import type { IDBCollection } from 'ranuts/utils';
-import type { MessageContent } from '@/client/chat-types';
+import type { MessageContent, StoredMessage } from '@/client/chat-types';
 
-/** One turn, as it is stored and as the provider expects it. */
-export interface StoredMessage {
-  role: 'user' | 'assistant';
-  content: MessageContent;
-}
+export type { StoredMessage } from '@/client/chat-types';
 
 /** One conversation. */
 export interface Session {

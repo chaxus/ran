@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createStreamAccumulator, mapEventStream } from 'ranuts/stream';
 import IMController from '@/app/controllers/im';
-import { toStreamChunks } from '@/client/lib/eventSource';
+import { createChunkMapper } from '@/client/lib/eventSource';
 import type { Context } from '@/app/types/index';
 
 /**
@@ -58,7 +58,7 @@ async function runClient(
   })();
 
   const accumulator = createStreamAccumulator();
-  for await (const chunk of mapEventStream(source, toStreamChunks)) accumulator.push(chunk);
+  for await (const chunk of mapEventStream(source, createChunkMapper())) accumulator.push(chunk);
   return accumulator.snapshot();
 }
 

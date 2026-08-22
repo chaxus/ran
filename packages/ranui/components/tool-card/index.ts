@@ -208,7 +208,9 @@ export class ToolCard extends RanElement {
       this._body.appendChild(list);
     }
     const content = result !== null && result.card === 'generic' ? result.content : undefined;
-    if (content !== undefined && content !== '') this._body.appendChild(this._pre(content));
+    // Wrapped: a generic result is whatever text the tool returned — a sentence, a fetched
+    // page — and reading it should not mean dragging a scrollbar sideways one line at a time.
+    if (content !== undefined && content !== '') this._body.appendChild(this._pre(content, 'wrap'));
   }
 
   private _renderTerminal(): void {
@@ -225,7 +227,9 @@ export class ToolCard extends RanElement {
     }
     const result = this._result;
     if (result !== null && result.card === 'terminal') {
-      this._body.appendChild(this._pre(result.output));
+      // Unwrapped: terminal output is aligned in columns, and wrapping it destroys the
+      // alignment that made it readable in the terminal it came from.
+      this._body.appendChild(this._pre(result.output, 'preserve'));
       if (result.exitCode !== undefined && result.exitCode !== 0) {
         this._body.appendChild(
           Div().class('ran-tool-card-description').attr('part', 'exit').text(`exit ${result.exitCode}`).build(),
@@ -289,9 +293,17 @@ export class ToolCard extends RanElement {
     return list;
   }
 
-  private _pre(text: string): HTMLElement {
+  /**
+   * Builds the monospaced block a result is shown in.
+   *
+   * @param text The text to show.
+   * @param lines Whether long lines wrap. Terminal output is column-aligned and must not;
+   *   arbitrary text must, or reading it means scrolling sideways per line.
+   * @returns The block.
+   */
+  private _pre(text: string, lines: 'wrap' | 'preserve'): HTMLElement {
     const pre = document.createElement('pre');
-    pre.className = 'ran-tool-card-output';
+    pre.className = lines === 'wrap' ? 'ran-tool-card-output ran-tool-card-output-wrap' : 'ran-tool-card-output';
     pre.setAttribute('part', 'output');
     pre.textContent = text;
     return pre;

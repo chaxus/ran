@@ -67,20 +67,55 @@ IM_MODEL=deepseek-chat                    # 可选
 ```
 app/lib/provider.ts      从环境解析 provider
 app/controllers/im.ts    真实模式：原样转发上游 SSE；演示模式：内置回答
-client/lib/eventSource   toStreamChunks 映射 + streamDialog
-client/chat.ts           两个对话 view：turn 与 reasoning
+client/lib/eventSource   createChunkMapper 映射 + streamDialog
+client/tools/index.ts    工具表：schema、渲染意图、执行器
+client/chat.ts           三个对话 view：turn、reasoning、tool
 client/chat-types.ts     消息形状，供 client 与 sessions 共用
 client/sessions.ts       IndexedDB 会话存储与标题推导
-client/client.ts         注册 view、驱动输入框、会话列表、附件、语音
+client/client.ts         注册 view、驱动输入框、会话列表、附件、语音、工具回路
 ```
 
-**厂商映射是本地代码，这是有意的。** `ranuts/stream` 不提供任何厂商的映射：分帧与折叠各家一样，wire 格式不一样。要接到别的服务商，只需重写 [`toStreamChunks`](./client/lib/eventSource.ts) 一个函数。
+**厂商映射是本地代码，这是有意的。** `ranuts/stream` 不提供任何厂商的映射：分帧与折叠各家一样，wire 格式不一样。要接到别的服务商，只需重写 [`createChunkMapper`](./client/lib/eventSource.ts) 一个工厂。
+
+它是工厂而不是纯函数，因为 block index 必须**分配**而不能算出来。`choices[].index` 编号的是 choice，而推理、答案、每一个工具调用都是同一个 choice 的不同 block；累加器按 index 归类 block，两种内容共用一个 index 会让它把后者当成前者"改变了类型"，从而丢掉已经收到的内容。用 choice 编号做算术只能靠给每个 choice 预留固定步长来避开，而这是一个"等着某次响应的工具调用数超过步长"的碰撞。发放下一个空闲编号则根本不会碰撞。
 
 真实模式下服务端**只做字节转发**，不解析也不重组。在链路里再放一份 SSE 实现，就多了一处可能和厂商对"事件在哪里结束"产生分歧的地方；只做拷贝的代理不会。
 
+## 工具调用
+
+模型可以调用工具，结果回喂后再继续——这是"聊天客户端"和"agent 界面"之间的那条线。
+
+一轮的形态是：模型边说话边写调用 → 卡片就地出现 → 工具并发执行 → 结果作为 `role: 'tool'` 消息回喂 → 下一轮。上限是 **6 个来回**，限的是来回次数而不是调用次数：一轮里答完好几个调用正是值得鼓励的形态。
+
+**一个工具是四样必须放在一起的东西**（[`client/tools/index.ts`](./client/tools/index.ts)）：
+
+|                   | 作用               | 约束                                       |
+| ----------------- | ------------------ | ------------------------------------------ |
+| `schema`          | 告诉模型它接受什么 | 唯一跨到模型那边的部分                     |
+| `call` / `result` | 渲染意图           | **必须是参数的纯函数**                     |
+| `run`             | 执行               | 唯一允许有副作用的部分；返回值是给模型读的 |
+
+`call` / `result` 的纯函数要求不是风格问题。它们在调用进行中算一次，在每次回放存档时再算一次——读了时钟、读了文件、读了会话状态，回放画出来的卡片就和用户当初看到的不一样。`write_note` 的 `call` 即使在覆盖一份已有笔记时也用 `oldText: null`，正是因为调用发生的那一刻没有"之前的内容"可读；旧内容出现在 `result` 里，而它是由**已经记录下来的**调用返回值推导的。
+
+内置三个工具，恰好覆盖浏览器能诚实产出的全部渲染意图：
+
+- `get_current_time` — 纯本地，`generic` 卡片
+- `fetch_url` — 经服务端抓取（浏览器受同源策略限制），`generic` 卡片
+- `write_note` — 命名笔记，`diff` 卡片，覆盖时显示真实 diff
+
+`terminal` 意图没有内置生产者：浏览器里没有 shell，编一个只是假货。
+
+**`/api/im/fetch` 的地址是模型选的，服务端用服务端自己的网络可达性去访问它。** 所以 `allowedUrl` 在打开任何连接之前就限定协议并拒掉内网地址——localhost、私有网段、以及凭据所在的云元数据地址 `169.254.169.254`。少了这一层，"抓取工具"就是一个指向内网的请求转发器。
+
+`tool_calls` / `tool_call_id` 是**存下来的**，不是重建的：厂商会拒绝一条 `tool_call_id` 在前一条 assistant 消息里找不到对应调用的 `role: 'tool'` 消息，所以丢了任何一半的历史根本发不出去——而重新加载的对话必须能继续。
+
 ### 对话如何构成
 
-推理和答案是两个独立注册的 view，而不是一个 view 里的两段分支。节点按**开启它的事件**排序，而推理先到——所以推理行自然排在答案上方，不需要任何排序逻辑。两者都只在真正有内容时才开启节点，因此不输出推理的模型不会留下一个空的"思考过程"块。
+推理、答案和工具卡片是三个独立注册的 view，而不是一个 view 里的几段分支。节点按**开启它的事件**排序，而推理先到——所以推理行自然排在答案上方，不需要任何排序逻辑。两者都只在真正有内容时才开启节点，因此不输出推理的模型不会留下一个空的"思考过程"块。
+
+工具卡片在**名字**到达时开启，而不是在 block 到达时：名字随第一个 delta 一起来，参数则要等模型把 JSON 写完——按 block 开启会让一张标题为空的卡片在屏幕上停留那么久。
+
+一次交换的每一轮各有自己的节点 id（`t1-r0`、`t1-r1`……），所以多轮工具调用读起来是依次排列的若干行，而不是一行被反复重写。
 
 ### 这次重写修掉的问题
 
