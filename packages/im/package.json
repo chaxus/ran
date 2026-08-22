@@ -18,19 +18,13 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "catalog:",
-    "@types/react": "19.2.15",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "5.2.0",
-    "classnames": "2.5.1",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "react-router-dom": "7.18.2",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "^4.1.8"
   },
   "dependencies": {
+    "ranui": "workspace:*",
     "ranuts": "workspace:*"
   }
 }
