@@ -1,6 +1,6 @@
 ---
 title: ranuts API reference
-description: Every symbol exported by ranuts — 446 exports across 8 entry points, with signatures and descriptions.
+description: Every symbol exported by ranuts — 451 exports across 8 entry points, with signatures and descriptions.
 ---
 
 # ranuts API (Generated)
@@ -13,7 +13,7 @@ constraints, conventions) read [CLAUDE.md](https://github.com/chaxus/ran/blob/ma
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**446 exports** across 8 entry points.
+**451 exports** across 8 entry points.
 
 ## Entry points
 
@@ -23,7 +23,7 @@ Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 - [`ranuts/visual`](#ranuts-visual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 16 exports
 - [`ranuts/i18n`](#ranuts-i18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 9 exports
 - [`ranuts/vnode`](#ranuts-vnode) — Snabbdom-style virtual DOM · _browser_ · 26 exports
-- [`ranuts/stream`](#ranuts-stream) — Server-Sent Events parsing and a provider-neutral model-stream fold · _browser + node_ · 15 exports
+- [`ranuts/stream`](#ranuts-stream) — SSE parsing, a provider-neutral model-stream fold, and the token budget that decides when a history stops fitting · _browser + node_ · 20 exports
 - [`ranuts/conversation`](#ranuts-conversation) — Project an append-only event log into renderable conversation nodes · _browser + node_ · 9 exports
 
 ## `ranuts/utils`
@@ -576,7 +576,7 @@ import { /* … */ } from 'ranuts/vnode';
 
 ## `ranuts/stream`
 
-Server-Sent Events parsing and a provider-neutral model-stream fold · runtime: **browser + node** · source: `src/stream/index.ts`
+SSE parsing, a provider-neutral model-stream fold, and the token budget that decides when a history stops fitting · runtime: **browser + node** · source: `src/stream/index.ts`
 
 ```ts
 import { /* … */ } from 'ranuts/stream';
@@ -584,12 +584,17 @@ import { /* … */ } from 'ranuts/stream';
 
 ### Functions
 
+- `addUsage(total: TokenUsage | undefined, next: TokenUsage | undefined) => TokenUsage` — Adds two usage reports.
 - `createStreamAccumulator() => StreamAccumulator` — Creates a fold over one streamed response.
+- `estimateTokens(text: string) => number` — Estimates how many tokens a string costs.
 - `mapEventStream(source: ByteSource, map: (event: ServerSentEvent) => readonly StreamChunk[]) => AsyncGenerator<StreamChunk>` — Maps SSE events onto StreamChunk values using a caller-supplied vendor mapping.
 - `parseEventStream(source: ByteSource) => AsyncGenerator<ServerSentEvent>` — Parses a byte stream as `text/event-stream`.
+- `planCompaction(sizes: readonly number[], limits: CompactionLimits) => CompactionPlan` — Decides how much of a history no longer fits.
 
 ### Interfaces
 
+- `interface CompactionLimits` — What a compaction has to fit under, and what it may not touch.
+- `interface CompactionPlan` — What to do with a history that has grown.
 - `interface ReasoningBlock` — Model reasoning, when the provider exposes it. Kept separate from TextBlock
 - `interface ServerSentEvent` — One parsed `text/event-stream` event.
 - `interface StreamAccumulator` — Stateful fold over one response's chunks.
