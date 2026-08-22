@@ -119,7 +119,8 @@ const ENTRIES: Entry[] = [
   {
     subpath: 'ranuts/stream',
     file: 'src/stream/index.ts',
-    blurb: 'Server-Sent Events parsing and a provider-neutral model-stream fold',
+    blurb:
+      'SSE parsing, a provider-neutral model-stream fold, and the token budget that decides when a history stops fitting',
     blurbCn: 'Server-Sent Events 解析与厂商中立的模型流折叠',
     runtime: 'browser + node',
   },

@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: ranuts 导出的全部符号 — 8 个入口点，共 446 个导出，含签名与描述。
+description: ranuts 导出的全部符号 — 8 个入口点，共 451 个导出，含签名与描述。
 ---
 
 # ranuts API（自动生成）
@@ -12,7 +12,7 @@ description: ranuts 导出的全部符号 — 8 个入口点，共 446 个导出
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**446 个导出**，共 8 个入口点。
+**451 个导出**，共 8 个入口点。
 
 ## 入口点
 
@@ -22,7 +22,7 @@ description: ranuts 导出的全部符号 — 8 个入口点，共 446 个导出
 - [`ranuts/visual`](#ranuts-visual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _仅浏览器_ · 16 个导出
 - [`ranuts/i18n`](#ranuts-i18n) — 框架无关的 i18n 引擎（也从 ranuts/utils 再导出） · _浏览器 + node_ · 9 个导出
 - [`ranuts/vnode`](#ranuts-vnode) — Snabbdom 风格的虚拟 DOM · _浏览器_ · 26 个导出
-- [`ranuts/stream`](#ranuts-stream) — Server-Sent Events 解析与厂商中立的模型流折叠 · _浏览器 + node_ · 15 个导出
+- [`ranuts/stream`](#ranuts-stream) — Server-Sent Events 解析与厂商中立的模型流折叠 · _浏览器 + node_ · 20 个导出
 - [`ranuts/conversation`](#ranuts-conversation) — 将只追加的事件日志投影为可渲染的对话节点 · _浏览器 + node_ · 9 个导出
 
 ## `ranuts/utils`
@@ -583,12 +583,17 @@ import { /* … */ } from 'ranuts/stream';
 
 ### 函数
 
+- `addUsage(total: TokenUsage | undefined, next: TokenUsage | undefined) => TokenUsage` — Adds two usage reports.
 - `createStreamAccumulator() => StreamAccumulator` — Creates a fold over one streamed response.
+- `estimateTokens(text: string) => number` — Estimates how many tokens a string costs.
 - `mapEventStream(source: ByteSource, map: (event: ServerSentEvent) => readonly StreamChunk[]) => AsyncGenerator<StreamChunk>` — Maps SSE events onto StreamChunk values using a caller-supplied vendor mapping.
 - `parseEventStream(source: ByteSource) => AsyncGenerator<ServerSentEvent>` — Parses a byte stream as `text/event-stream`.
+- `planCompaction(sizes: readonly number[], limits: CompactionLimits) => CompactionPlan` — Decides how much of a history no longer fits.
 
 ### 接口
 
+- `interface CompactionLimits` — What a compaction has to fit under, and what it may not touch.
+- `interface CompactionPlan` — What to do with a history that has grown.
 - `interface ReasoningBlock` — Model reasoning, when the provider exposes it. Kept separate from TextBlock
 - `interface ServerSentEvent` — One parsed `text/event-stream` event.
 - `interface StreamAccumulator` — Stateful fold over one response's chunks.
