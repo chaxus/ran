@@ -34,6 +34,8 @@ README 开头那段"做减法"以前只是主张：这个包自己用着 React�
 | `<pre>{text}</pre>`                            | `r-conversation` + `r-card` + `r-markdown` + `r-reasoning` |
 | `classnames` + CSS Modules                     | ranui token + 一份页面级 CSS                               |
 
+与 [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) 的差距分析与后续规划见 [ROADMAP.md](./ROADMAP.md)。
+
 ## 会话
 
 左侧是这台浏览器上的对话列表，按最近使用排序。刷新会回到刚才那一条，而不是回到空白页再让你自己找回去。
