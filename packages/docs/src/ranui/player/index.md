@@ -17,6 +17,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 - Picture-in-Picture toggle — the button only renders when the browser actually supports it
 - AirPlay/Remote Playback button — the browser's own device picker, feature-detected the same way as Picture-in-Picture
 - Mobile gestures — double-tap the left/right half to seek ∓10s, vertical swipe on the right half for volume (touch only; mouse/pen interaction is unaffected)
+- Scrubbing with touch, pen or mouse — the progress dot drags from one Pointer Events path, and a drag the browser reclaims mid-gesture releases without seeking somewhere the viewer never chose
 - Thumbnail scrubbing preview — set `thumbnails` to a WebVTT sprite-sheet manifest URL, a cropped preview appears above the seek-bar hover tip
 - `poster` / `autoplay` / `loop` / `muted` — standard `<video>` attributes, passed straight through
 - Subtitles/CC — set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice

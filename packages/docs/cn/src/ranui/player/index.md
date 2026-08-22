@@ -17,6 +17,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 - 画中画（Picture-in-Picture）切换——只在浏览器真正支持时才渲染按钮
 - AirPlay / Remote Playback 投屏按钮——浏览器自带的设备选择器，用和画中画一样的方式做特性检测
 - 移动端手势——双击左/右半边快退/快进 10 秒，右半边竖向滑动调节音量（仅触摸生效；鼠标/触控笔交互不受影响）
+- 触摸、触控笔与鼠标均可拖动进度——进度点走同一条 Pointer Events 路径；若浏览器在手势中途收回指针，拖拽会直接释放，而不会跳到一个观看者从未选定的位置
 - 缩略图预览——把 `thumbnails` 设为 WebVTT 雪碧图 manifest 地址，进度条悬停提示上方会出现裁剪后的预览图
 - `poster` / `autoplay` / `loop` / `muted`——标准 `<video>` 属性，直接透传
 - 字幕/CC——设置 `tracks` 属性，浏览器原生渲染字幕 cue，语言选择器会记住用户的选择

@@ -550,6 +550,9 @@
         height: var(--ran-player-progress-dot-height, 8px);
         background: var(--ran-player-progress-dot-background, rgba(255, 255, 255, 1));
         cursor: var(--ran-player-progress-dot-cursor, pointer);
+        /* The drag owns this pointer: without it a touch drag scrolls the page and the
+           player never receives a pointermove. */
+        touch-action: none;
       }
     }
 

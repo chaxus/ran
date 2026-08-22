@@ -19,7 +19,7 @@ export interface PlayerControllerHandlers {
   onContainerClick: (e: Event) => void;
   onPlayerBtnClick: (e: Event) => void;
   onKeydown: (e: KeyboardEvent) => void;
-  onProgressDotMouseDown: (e: MouseEvent) => void;
+  onProgressDotPointerDown: (e: PointerEvent) => void;
   onPlayBtnClick: (e: Event) => void;
   onPlayBtnKeydown: (e: KeyboardEvent) => void;
   onFullScreenKeydown: (e: KeyboardEvent) => void;
@@ -29,8 +29,9 @@ export interface PlayerControllerHandlers {
   onProgressMouseMove: (e: MouseEvent) => void;
   onProgressMouseLeave: (e: MouseEvent) => void;
   onPlayerMouseMove: (e: MouseEvent) => void;
-  onDocumentMouseMove: (e: MouseEvent) => void;
-  onDocumentMouseUp: (e: MouseEvent) => void;
+  onDocumentPointerMove: (e: PointerEvent) => void;
+  onDocumentPointerUp: (e: PointerEvent) => void;
+  onDocumentPointerCancel: (e: PointerEvent) => void;
   onVolumeChange: (e: Event) => void;
   onFullScreenClick: (e: Event) => void;
   onVolumeIconClick: (e: Event) => void;
@@ -53,11 +54,17 @@ const CONTROLLER_EVENT_BINDINGS: ControllerEventBinding[] = [
   { target: 'container', eventName: 'click', handler: 'onContainerClick' },
   { target: 'playerBtn', eventName: 'click', handler: 'onPlayerBtnClick' },
   { target: 'host', eventName: 'keydown', handler: 'onKeydown' },
-  // TODO(player-touch-scrub): scrubbing is mouse-only — dragging the progress dot does
-  // nothing on touch. `gestures.ts` covers double-tap-to-seek and volume swipe but not
-  // this drag. Rebuild it on pointerdown/pointermove/pointerup with setPointerCapture and
-  // `touch-action: none` on the dot, then drop the mouse-only-drag baseline entry.
-  { target: 'progressDot', eventName: 'mousedown', handler: 'onProgressDotMouseDown' },
+  // Scrubbing runs on Pointer Events so it works with touch and pen, not just a mouse —
+  // paired with `touch-action: none` on the dot so the browser scrolls the page instead of
+  // delivering the drag. `pointercancel` matters here and has no mouse equivalent: a touch
+  // drag can be taken away by the browser or the system at any moment, and without it the
+  // player would stay stuck mid-seek.
+  //
+  // The move/up/cancel listeners sit on `document` for the drag's whole life rather than
+  // being attached per drag the way `r-progress` does. That component's reason does not
+  // apply here: it exists to keep a page full of progress bars from each holding a
+  // document listener, and a page holds one or two players, not fifty.
+  { target: 'progressDot', eventName: 'pointerdown', handler: 'onProgressDotPointerDown' },
   { target: 'playBtn', eventName: 'click', handler: 'onPlayBtnClick' },
   { target: 'playBtn', eventName: 'keydown', handler: 'onPlayBtnKeydown' },
   { target: 'fullScreenBtn', eventName: 'keydown', handler: 'onFullScreenKeydown' },
@@ -67,8 +74,9 @@ const CONTROLLER_EVENT_BINDINGS: ControllerEventBinding[] = [
   { target: 'progress', eventName: 'mousemove', handler: 'onProgressMouseMove' },
   { target: 'progress', eventName: 'mouseleave', handler: 'onProgressMouseLeave' },
   { target: 'player', eventName: 'mousemove', handler: 'onPlayerMouseMove' },
-  { target: 'document', eventName: 'mousemove', handler: 'onDocumentMouseMove' },
-  { target: 'document', eventName: 'mouseup', handler: 'onDocumentMouseUp' },
+  { target: 'document', eventName: 'pointermove', handler: 'onDocumentPointerMove' },
+  { target: 'document', eventName: 'pointerup', handler: 'onDocumentPointerUp' },
+  { target: 'document', eventName: 'pointercancel', handler: 'onDocumentPointerCancel' },
   { target: 'volumeProgress', eventName: 'change', handler: 'onVolumeChange' },
   { target: 'fullScreenBtn', eventName: 'click', handler: 'onFullScreenClick' },
   { target: 'volumeIcon', eventName: 'click', handler: 'onVolumeIconClick' },
