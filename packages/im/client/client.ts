@@ -5,9 +5,13 @@ import 'ranui/button';
 import 'ranui/markdown';
 import 'ranui/reasoning';
 import 'ranui/theme-switch';
+import 'ranui/attachments';
+import 'ranui/icon';
 import 'ranui/voice-button';
 import message from 'ranui/message';
 import { initTheme } from 'ranui/theme';
+import { readFileAsDataURL } from 'ranuts/utils';
+import type { Attachment, AttachmentRejection } from 'ranui';
 import { streamDialog } from '@/client/lib/eventSource';
 import type { DialogStream } from '@/client/lib/eventSource';
 import { eventsFromSnapshot, reasoningView, turnView } from '@/client/chat';
@@ -19,10 +23,21 @@ type ConversationElement = HTMLElement & {
   push: (event: ChatEvent) => void;
 };
 
+/** One part of a multimodal message. */
+export type ContentPart = { type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } };
+
+/**
+ * What a message carries.
+ *
+ * A plain string for a text-only turn — the form every provider accepts — and parts only
+ * once there is something besides text.
+ */
+export type MessageContent = string | ContentPart[];
+
 /** One turn of the conversation, as the provider expects it. */
 interface ChatMessage {
   role: 'user' | 'assistant';
-  content: string;
+  content: MessageContent;
 }
 
 const chat = document.querySelector('#chat') as ConversationElement;
@@ -32,6 +47,15 @@ const send = document.querySelector('#send') as HTMLElement & { disabled: boolea
 const stop = document.querySelector('#stop') as HTMLElement & { disabled: boolean };
 const notice = document.querySelector('#notice') as HTMLElement;
 const mic = document.querySelector('#mic') as HTMLElement & { listening: boolean; stop: () => void };
+
+const attachments = document.querySelector('#attachments') as HTMLElement & {
+  attachments: readonly Attachment[];
+  add: (files: Iterable<File>) => Attachment[];
+  clear: () => void;
+};
+const picker = document.querySelector('#picker') as HTMLInputElement;
+const attach = document.querySelector('#attach') as HTMLElement;
+const drop = document.querySelector('#drop') as HTMLElement;
 
 const DEMO_NOTICE =
   '演示模式：未配置 API key，回答来自内置示例。设置 IM_API_KEY（可选 IM_BASE_URL、IM_MODEL）后重启即可对接真实模型。';
@@ -71,12 +95,19 @@ function setNotice(text: string): void {
  *
  * @param content What the user typed.
  */
-function ask(content: string): void {
+async function ask(text: string): Promise<void> {
   turn += 1;
   const id = `t${turn}`;
 
-  chat.push({ type: 'turn/start', id: `${id}-user`, role: 'user', text: content });
+  const staged = [...attachments.attachments];
+  const content = await buildContent(text, staged);
+  // The transcript shows what was attached, because a message that reads "看看这个" with no
+  // sign of the four screenshots beside it is a message nobody can reconstruct later.
+  const shown = staged.length === 0 ? text : `${text}\n\n${staged.map((a) => `\`${a.name}\``).join(' · ')}`;
+
+  chat.push({ type: 'turn/start', id: `${id}-user`, role: 'user', text: shown });
   history.push({ role: 'user', content });
+  attachments.clear();
 
   let emitted: EmittedSoFar = { text: 0, reasoning: 0 };
   let answered = false;
@@ -113,6 +144,98 @@ function ask(content: string): void {
   );
 }
 
+// ── Attachments ────────────────────────────────────────────────────────────
+//
+// Three gestures, one destination. Whichever way a file arrives — picked, pasted, dropped —
+// it goes through the same `add`, so validation and preview cannot differ by entry point.
+
+const REJECTION_TEXT: Record<AttachmentRejection, string> = {
+  'too-large': '文件超过 10 MB',
+  'type-not-accepted': '不支持这种文件类型',
+  'too-many': '最多同时附带 6 个文件',
+  duplicate: '这个文件已经在列表里了',
+};
+
+attachments.addEventListener('attachmentrejected', (event) => {
+  const { file, reason } = (event as CustomEvent<{ file: File; reason: AttachmentRejection }>).detail;
+  // Named, because "a file was rejected" leaves the reader checking which of the four they
+  // just dropped is missing.
+  message?.warning(`${file.name}：${REJECTION_TEXT[reason]}`);
+});
+
+attach.addEventListener('click', () => picker.click());
+
+picker.addEventListener('change', () => {
+  if (picker.files !== null) attachments.add(picker.files);
+  // Cleared so picking the same file again still fires `change`; the browser reports no
+  // change when the value is identical, and the second pick would look ignored.
+  picker.value = '';
+});
+
+question.addEventListener('paste', (event) => {
+  const files = (event as ClipboardEvent).clipboardData?.files;
+  if (files === undefined || files.length === 0) return;
+  // Only when the clipboard actually carries files. Intercepting every paste would break
+  // pasting text, which is what the box is mostly for.
+  event.preventDefault();
+  attachments.add(files);
+});
+
+let dragDepth = 0;
+
+drop.addEventListener('dragenter', (event) => {
+  if (!(event as DragEvent).dataTransfer?.types.includes('Files')) return;
+  event.preventDefault();
+  // Counted, not toggled: dragging across a child fires leave-then-enter, and a boolean
+  // would flicker the highlight off every time the pointer crossed the input.
+  dragDepth += 1;
+  drop.classList.add('is-dropping');
+});
+
+drop.addEventListener('dragover', (event) => {
+  if ((event as DragEvent).dataTransfer?.types.includes('Files')) event.preventDefault();
+});
+
+drop.addEventListener('dragleave', () => {
+  dragDepth = Math.max(0, dragDepth - 1);
+  if (dragDepth === 0) drop.classList.remove('is-dropping');
+});
+
+drop.addEventListener('drop', (event) => {
+  const files = (event as DragEvent).dataTransfer?.files;
+  dragDepth = 0;
+  drop.classList.remove('is-dropping');
+  if (files === undefined || files.length === 0) return;
+  // Without this the browser navigates away to display the dropped file, taking the
+  // conversation with it.
+  event.preventDefault();
+  attachments.add(files);
+});
+
+/**
+ * Builds the content of a user message.
+ *
+ * A text-only turn stays a plain string, which is what every provider accepts; parts are
+ * used only once there is something besides text, so a conversation that never attaches
+ * anything sends exactly what it sent before.
+ *
+ * @param text What was typed.
+ * @param staged The files staged alongside it.
+ * @returns The `content` field for the request.
+ */
+async function buildContent(text: string, staged: readonly Attachment[]): Promise<MessageContent> {
+  if (staged.length === 0) return text;
+  const parts: ContentPart[] = [];
+  for (const attachment of staged) {
+    if (!attachment.type.startsWith('image/')) continue;
+    // A data URL, built once at send time. The preview used an object URL, which costs a
+    // reference rather than a base64 copy of the bytes.
+    parts.push({ type: 'image_url', image_url: { url: await readFileAsDataURL(attachment.file) } });
+  }
+  if (text !== '') parts.push({ type: 'text', text });
+  return parts;
+}
+
 // ── Dictation ──────────────────────────────────────────────────────────────
 //
 // Speech arrives as the transcript of the whole capture, revised as recognition firms up,
@@ -147,10 +270,11 @@ composer.addEventListener('submit', (event) => {
   // Sending while still dictating: end the capture first, so the words already spoken land
   // in the message rather than in the box after it has been cleared.
   if (mic.listening) mic.stop();
-  const content = question.value.trim();
-  if (content === '' || inFlight !== null) return;
+  const text = question.value.trim();
+  // Attachments alone are a message: "look at this" is often the whole point of sending one.
+  if ((text === '' && attachments.attachments.length === 0) || inFlight !== null) return;
   question.value = '';
-  ask(content);
+  void ask(text);
 });
 
 send.addEventListener('click', () => composer.requestSubmit());

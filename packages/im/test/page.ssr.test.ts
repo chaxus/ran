@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import 'ranui/button';
 import 'ranui/card';
+import 'ranui/attachments';
 import 'ranui/conversation';
 import 'ranui/input';
 import 'ranui/reasoning';
@@ -28,9 +29,11 @@ describe('the page server-renders without a framework', () => {
   });
 
   it('keeps the composer in the conversation footer slot', () => {
-    // The footer is a sticky seat the follower observes, so a growing composer does not
-    // silently push the latest message out of view.
-    expect(html).toMatch(/<form[^>]*slot="footer"/);
+    // The slot is on the shell rather than the form: the attachment strip and the form are
+    // one seat, and the follower observes that seat so a growing composer — or a row of
+    // thumbnails appearing above it — does not push the latest message out of view.
+    expect(html).toMatch(/<div[^>]*class="composer-shell"[^>]*slot="footer"/);
+    expect(html).toContain('<form class="composer"');
   });
 
   it('ships no framework runtime', () => {

@@ -381,3 +381,36 @@ export const smoothstep = (edge0: number, edge1: number, x: number): number => {
   const t = linearstep(edge0, edge1, x);
   return t * t * (3 - 2 * t);
 };
+
+/** Binary units, which is what a file manager reports and therefore what a reader expects. */
+const BYTE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB'] as const;
+
+/**
+ * @description: Format a byte count for a person to read.
+ *
+ * Steps in units of 1024 and keeps one decimal from KB up, because "1.4 MB" is the number a
+ * file manager shows for the same file and a reader comparing the two should not have to
+ * wonder. Bytes get no decimal — a fraction of a byte is not a thing.
+ *
+ * @param {number} bytes Byte count. Negative or non-finite input yields `'0 B'`, since there
+ * is no honest reading of a file with a negative size.
+ * @return {string}
+ * @example
+ * ```ts
+ * formatBytes(0);        // '0 B'
+ * formatBytes(999);      // '999 B'
+ * formatBytes(1024);     // '1.0 KB'
+ * formatBytes(1536);     // '1.5 KB'
+ * formatBytes(1048576);  // '1.0 MB'
+ * ```
+ */
+export const formatBytes = (bytes: number): string => {
+  if (!Number.isFinite(bytes) || bytes <= 0) return '0 B';
+  let value = bytes;
+  let unit = 0;
+  while (value >= 1024 && unit < BYTE_UNITS.length - 1) {
+    value /= 1024;
+    unit += 1;
+  }
+  return unit === 0 ? `${Math.round(value)} B` : `${value.toFixed(1)} ${BYTE_UNITS[unit]}`;
+};

@@ -5,6 +5,55 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ## Components
 
+### `attachments`
+
+- Tokens: 32
+- Parts: 7
+
+#### Tokens
+<!-- layers: semantic: 9 · internal: 23 -->
+- `--ran-attachment-background`
+- `--ran-attachment-border-color`
+- `--ran-attachment-border-radius`
+- `--ran-attachment-focus-color`
+- `--ran-attachment-gap`
+- `--ran-attachment-icon-color`
+- `--ran-attachment-name-color`
+- `--ran-attachment-name-font-size`
+- `--ran-attachment-remove-color`
+- `--ran-attachment-remove-hover-background`
+- `--ran-attachment-remove-hover-color`
+- `--ran-attachment-remove-radius`
+- `--ran-attachment-remove-size`
+- `--ran-attachment-size-color`
+- `--ran-attachment-size-font-size`
+- `--ran-attachment-thumb-radius`
+- `--ran-attachment-thumb-size`
+- `--ran-attachments-gap`
+- `--ran-color-bg-hover`
+- `--ran-color-bg-subtle`
+- `--ran-color-border`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-radius-full`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-size-3`
+- `--ran-size-6`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-text-label-3`
+
+#### Parts
+- `attachment`
+- `icon`
+- `list`
+- `name`
+- `remove`
+- `size`
+- `thumb`
+
 ### `button`
 
 - Tokens: 65

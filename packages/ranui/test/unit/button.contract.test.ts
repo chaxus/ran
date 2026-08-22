@@ -326,3 +326,43 @@ describe('r-button host shape', () => {
     expect(source.split(radius).length).toBeGreaterThanOrEqual(3);
   });
 });
+
+describe('r-button accessible name', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it('forwards aria-label to the element that carries the button role', () => {
+    // The role lives on a div in the shadow root and the name normally comes from the
+    // slotted content — which for an icon-only button is an <r-icon> with no text. Without
+    // forwarding there is no way to name such a button from outside at all.
+    const button = document.createElement('r-button');
+    button.setAttribute('aria-label', '添加图片或文件');
+    button.appendChild(document.createElement('r-icon'));
+    document.body.appendChild(button);
+
+    const inner = (button as unknown as { _shadowDom: ShadowRoot })._shadowDom.querySelector('.ran-btn');
+    expect(inner?.getAttribute('aria-label')).toBe('添加图片或文件');
+  });
+
+  it('tracks a label set after mount, and removes it again', () => {
+    const button = document.createElement('r-button');
+    document.body.appendChild(button);
+    const inner = (button as unknown as { _shadowDom: ShadowRoot })._shadowDom.querySelector('.ran-btn')!;
+
+    button.setAttribute('aria-label', 'Send');
+    expect(inner.getAttribute('aria-label')).toBe('Send');
+
+    button.removeAttribute('aria-label');
+    expect(inner.hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('leaves a labelled-by-content button unnamed by this path', () => {
+    // A button whose slot carries text already has a name; forwarding nothing is correct.
+    const button = document.createElement('r-button');
+    button.textContent = '发送';
+    document.body.appendChild(button);
+    const inner = (button as unknown as { _shadowDom: ShadowRoot })._shadowDom.querySelector('.ran-btn')!;
+    expect(inner.hasAttribute('aria-label')).toBe(false);
+  });
+});

@@ -70,11 +70,32 @@ body {
   overflow: hidden;
 }
 
+.composer-shell {
+  border-top: 1px solid var(--ran-color-border);
+  padding: var(--ran-space-3);
+}
+
+/* The real file input stays in the accessibility tree and stays keyboard-reachable; it is
+   only pulled out of the visual flow, because `display: none` would take it out of both. */
+.picker {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Anywhere over the composer is a target, so a dropped file does not have to be aimed. */
+.composer-shell.is-dropping {
+  outline: 2px dashed var(--ran-color-primary);
+  outline-offset: -4px;
+  background: var(--ran-color-bg-subtle);
+}
+
 .composer {
   display: flex;
   gap: var(--ran-space-2);
-  border-top: 1px solid var(--ran-color-border);
-  padding: var(--ran-space-3);
+  padding: 0;
 }
 
 .composer-input {
