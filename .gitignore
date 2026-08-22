@@ -26,3 +26,9 @@ report
 
 # test coverage
 coverage
+
+# Credentials. packages/im reads .env from here for its API key, so an untracked
+# rule is the difference between a local secret and a committed one.
+.env
+.env.*
+!.env.example
