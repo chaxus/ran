@@ -101,3 +101,24 @@ describe('toStreamChunks — the OpenAI-compatible mapping', () => {
     expect(toStreamChunks(event({ id: 'x', object: 'chat.completion.chunk' }))).toEqual([]);
   });
 });
+
+describe('toStreamChunks — failures the provider reports mid-stream', () => {
+  it('throws with the provider message rather than folding an empty answer', () => {
+    expect(() => toStreamChunks(event({ error: { status: 401, message: 'invalid api key' } }))).toThrow(
+      'invalid api key (401)',
+    );
+  });
+
+  it('omits a status it does not have', () => {
+    expect(() => toStreamChunks(event({ error: { message: 'upstream unreachable' } }))).toThrow(
+      /^upstream unreachable$/,
+    );
+    expect(() => toStreamChunks(event({ error: { status: 0, message: 'upstream unreachable' } }))).toThrow(
+      /^upstream unreachable$/,
+    );
+  });
+
+  it('still reports something when the error carries no message', () => {
+    expect(() => toStreamChunks(event({ error: {} }))).toThrow(/rejected the request/);
+  });
+});
