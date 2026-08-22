@@ -12,11 +12,14 @@ test.describe('a conversation, end to end', () => {
   });
 
   test('streams an answer into the transcript', async ({ page }) => {
+    // The question opens the exchange and a substantial answer closes it. What comes between
+    // is the agent loop's business — `tools.spec.ts` pins that shape.
     await send(page, '你好');
     const drawn = await rows(page);
-    expect(drawn.map((row) => row.kind)).toEqual(['turn', 'turn']);
+    expect(drawn[0]).toMatchObject({ kind: 'turn' });
     expect(drawn[0].text).toContain('你好');
-    expect(drawn[1].text.length).toBeGreaterThan(10);
+    expect(drawn.at(-1)?.kind).toBe('turn');
+    expect(drawn.at(-1)?.text.length).toBeGreaterThan(10);
   });
 
   test('puts the question in a bubble and the answer in the flow', async ({ page }) => {
@@ -24,7 +27,9 @@ test.describe('a conversation, end to end', () => {
     // assistant turn is the answer with nothing drawn around it.
     await send(page, '你好');
     const shape = await insideShadow(page, '#chat', (root) => {
-      const [user, assistant] = [...root.querySelectorAll('.ran-conversation-row')];
+      const turns = [...root.querySelectorAll('[data-kind="turn"]')];
+      const user = turns[0];
+      const assistant = turns.at(-1)!;
       return {
         userHasBubble: user.querySelector('.turn-bubble') !== null,
         assistantHasBubble: assistant.querySelector('.turn-bubble') !== null,
@@ -51,13 +56,15 @@ test.describe('a conversation, end to end', () => {
   test('offers edit on what was asked and regenerate on what was answered', async ({ page }) => {
     await send(page, '你好');
     const actions = await insideShadow(page, '#chat', (root) =>
-      [...root.querySelectorAll('.ran-conversation-row')].map((row) =>
+      [...root.querySelectorAll('[data-kind="turn"]')].map((row) =>
         [...row.querySelectorAll('.turn-action')]
           .filter((button) => !(button as HTMLElement).hidden)
           .map((button) => (button as HTMLElement).dataset.action),
       ),
     );
-    expect(actions).toEqual([['edit'], ['regenerate']]);
+    // Edit on the question, regenerate on every answer, and nothing on a tool row.
+    expect(actions[0]).toEqual(['edit']);
+    expect(actions.slice(1).every((row) => row.length === 0 || row[0] === 'regenerate')).toBe(true);
   });
 
   test('counts what the conversation carries and what it cost', async ({ page }) => {

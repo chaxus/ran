@@ -153,6 +153,52 @@ async function streamProvider(
  *
  * @param ctx Request context.
  */
+/**
+ * Streams a single tool call, so the demo shows the agent loop rather than only a monologue.
+ *
+ * A clone with no key otherwise never sees a tool card at all — the one feature that
+ * separates this from a chat box. It answers with `get_current_time` because that tool runs
+ * entirely in the browser: no network, no key, and the result is real.
+ *
+ * @param ctx Request context.
+ * @param id Stable id for this response's chunks.
+ */
+function streamDemoToolCall(ctx: Context, id: string): void {
+  const { res } = ctx;
+  const send = sender((chunk) => res.write(chunk));
+  const call = {
+    index: 0,
+    id: `${id}-call`,
+    type: 'function',
+    function: { name: 'get_current_time', arguments: '{}' },
+  };
+  send({ id, object: 'chat.completion.chunk', choices: [{ index: 0, delta: { content: '我先看一下现在几点。' } }] });
+  send({ id, object: 'chat.completion.chunk', choices: [{ index: 0, delta: { tool_calls: [call] } }] });
+  send({
+    id,
+    object: 'chat.completion.chunk',
+    choices: [{ index: 0, delta: {}, finish_reason: 'tool_calls' }],
+    usage: { completion_tokens: 12 },
+  });
+  send('[DONE]');
+  res.end();
+}
+
+/**
+ * Whether this demo turn should answer with a tool call rather than with the poem.
+ *
+ * Only on a request that offered tools — the compaction summariser sends none, and it wants
+ * prose — and only while nothing has come back from one yet, which is what stops the loop
+ * after the client feeds the result back.
+ *
+ * @param messages The conversation as sent.
+ * @param tools The tools offered, if any.
+ * @returns Whether to call a tool.
+ */
+export function demoShouldCallTool(messages: readonly ChatMessage[], tools: unknown[] | undefined): boolean {
+  return tools !== undefined && tools.length > 0 && !messages.some((message) => message.role === 'tool');
+}
+
 function streamDemo(ctx: Context): void {
   const { res, req } = ctx;
   const send = sender((chunk) => res.write(chunk));
@@ -357,7 +403,8 @@ export default class IMController {
     // so `this` is undefined by the time it runs. These are module functions for that
     // reason, not for style.
     if (provider.mode === 'demo') {
-      streamDemo(ctx);
+      if (demoShouldCallTool(messages, body.tools)) streamDemoToolCall(ctx, `demo-${Date.now()}`);
+      else streamDemo(ctx);
       return;
     }
     void streamProvider(ctx, provider, messages, body.tools);
