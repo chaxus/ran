@@ -15,10 +15,19 @@ interface WireChunk {
   error?: { status?: number; message?: string };
   choices?: {
     index?: number;
-    delta?: { content?: string; reasoning_content?: string };
+    /**
+     * Either field is null while the other is being produced — a reasoning model sends
+     * `content: null` for every thinking delta. Null is not the same as absent, and
+     * treating it as a value concatenates the string "null" into the answer.
+     */
+    delta?: { content?: string | null; reasoning_content?: string | null };
     finish_reason?: string | null;
   }[];
-  usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
+  /**
+   * Null on every chunk but the last, which is how DeepSeek and OpenAI report "no counts
+   * yet" — not by omitting the field.
+   */
+  usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } | null;
 }
 
 /** Terminal sentinel the OpenAI wire format sends instead of closing cleanly. */
@@ -69,13 +78,25 @@ export function toStreamChunks(event: ServerSentEvent): StreamChunk[] {
 
   const chunks: StreamChunk[] = [];
   for (const choice of wire.choices ?? []) {
-    const index = choice.index ?? 0;
+    // `choices[].index` numbers the choice, not the block. Reasoning and the answer are two
+    // blocks of one choice, so they need two block indices: sharing one makes the
+    // accumulator treat the first content delta as the choice switching type, and the
+    // reasoning accumulated so far is replaced by an empty text block. A reasoning model
+    // sends 50-odd reasoning deltas and then the answer, so the visible result is either
+    // the thinking or the answer, never both.
+    const choiceIndex = choice.index ?? 0;
+    const reasoningIndex = choiceIndex * 2;
+    const textIndex = choiceIndex * 2 + 1;
     const { content, reasoning_content: reasoning } = choice.delta ?? {};
-    if (reasoning !== undefined && reasoning !== '') chunks.push({ type: 'reasoning-delta', index, text: reasoning });
-    if (content !== undefined && content !== '') chunks.push({ type: 'text-delta', index, text: content });
+    if (typeof reasoning === 'string' && reasoning !== '') {
+      chunks.push({ type: 'reasoning-delta', index: reasoningIndex, text: reasoning });
+    }
+    if (typeof content === 'string' && content !== '') {
+      chunks.push({ type: 'text-delta', index: textIndex, text: content });
+    }
     if (typeof choice.finish_reason === 'string') chunks.push(finishReason(choice.finish_reason));
   }
-  if (wire.usage !== undefined) {
+  if (wire.usage !== undefined && wire.usage !== null) {
     chunks.push({
       type: 'usage',
       usage: {
