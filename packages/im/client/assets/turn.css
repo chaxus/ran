@@ -1,0 +1,88 @@
+/* A message is a message. No frame, no header, no card — the only structure the transcript
+   needs is the column rhythm and which side a turn sits on. */
+.turn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-2);
+  min-width: 0;
+}
+
+.turn-user {
+  align-items: flex-end;
+}
+
+/* The bubble is what identifies a user turn, together with the side. Capped well short of
+   the measure so a short message reads as an aside rather than as a full-width block, and
+   pre-wrap so the line breaks someone typed survive into it. */
+.turn-bubble {
+  border-radius: 1.25rem;
+  background: var(--ran-color-bg-muted);
+  padding: var(--ran-space-2) var(--ran-space-4);
+  max-width: min(32rem, 82%);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.turn-answer {
+  min-width: 0;
+}
+
+/* The compaction marker is a boundary notice, not conversation: one dim line, a step
+   quieter than anything anyone said. */
+.turn-system {
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-copy-3);
+}
+
+.turn-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-1);
+  /* Held back until the row is hovered or something inside it has focus: a row of buttons
+     under every message is louder than the messages. Focus is what keeps it reachable
+     without a pointer. */
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+.ran-conversation-row:hover .turn-actions,
+.ran-conversation-row:focus-within .turn-actions {
+  opacity: 1;
+}
+
+.turn-action {
+  border: none;
+  border-radius: var(--ran-radius-sm);
+  background: none;
+  padding: var(--ran-space-1) var(--ran-space-2);
+  color: var(--ran-color-text-disabled);
+  font: inherit;
+  font-size: var(--ran-text-copy-3);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.turn-action:hover {
+  background: var(--ran-color-bg-hover);
+  color: var(--ran-color-text);
+}
+
+.turn-action:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+  /* Always visible when focused, whatever the hover state — otherwise keyboard users tab
+     onto a control they cannot see. */
+  opacity: 1;
+}
+
+.turn-branch-count {
+  color: var(--ran-color-text-disabled);
+  font-size: var(--ran-text-copy-3);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turn-actions {
+    transition: none;
+  }
+}

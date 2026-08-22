@@ -29,11 +29,22 @@
   overflow-anchor: none;
 }
 
+/* One column, one rhythm. Every row sits in the same centred measure and every gap is the
+   same, so the transcript reads as a single conversation rather than as a stack of panels —
+   the spacing is the only structure it needs, and any box drawn around a row competes with
+   the content inside it. */
 .ran-conversation-list {
   display: flex;
   flex-direction: column;
+  /* `width: 100%` and padding on the same box: without border-box the padding is added to
+     the hundred percent and the column overflows its scroller, clipping every line at the
+     right edge. A shadow root inherits no page reset, so it has to be said here. */
+  box-sizing: border-box;
   gap: var(--ran-conversation-gap, var(--ran-space-4));
+  margin: 0 auto;
   padding: var(--ran-conversation-padding, var(--ran-space-4));
+  width: 100%;
+  max-width: var(--ran-conversation-measure, 46rem);
 }
 
 .ran-conversation-row {
@@ -50,6 +61,51 @@
      first guess for a row that never has been. */
   content-visibility: auto;
   contain-intrinsic-size: auto 8rem;
+}
+
+/* The paging affordance sits above the first row, inside the same measure, and reserves no
+   space when there is nothing older to fetch. */
+.ran-conversation-older {
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  margin: 0 auto;
+  padding: var(--ran-conversation-padding, var(--ran-space-4)) var(--ran-conversation-padding, var(--ran-space-4)) 0;
+  width: 100%;
+  max-width: var(--ran-conversation-measure, 46rem);
+}
+
+/* An author `display` beats the user-agent `[hidden]` rule wherever it is written, not
+   only on `:host` — without this the affordance keeps its box, and its padding pushes the
+   column wider than the scroller. */
+.ran-conversation-older[hidden] {
+  display: none;
+}
+
+.ran-conversation-older button {
+  border: 1px solid var(--ran-conversation-older-border-color, var(--ran-color-border));
+  border-radius: var(--ran-conversation-older-radius, var(--ran-radius-full));
+  background: none;
+  padding: var(--ran-conversation-older-padding, var(--ran-space-1) var(--ran-space-3));
+  color: var(--ran-conversation-older-color, var(--ran-color-text-secondary));
+  font: inherit;
+  font-size: var(--ran-conversation-older-font-size, var(--ran-text-copy-3));
+  cursor: pointer;
+}
+
+.ran-conversation-older button:hover:not(:disabled) {
+  border-color: var(--ran-conversation-older-hover-border-color, var(--ran-color-border-hover));
+  color: var(--ran-conversation-older-hover-color, var(--ran-color-text));
+}
+
+.ran-conversation-older button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.ran-conversation-older button:focus-visible {
+  outline: 2px solid var(--ran-conversation-focus-color, var(--ran-color-primary));
+  outline-offset: 2px;
 }
 
 .ran-conversation-footer {
