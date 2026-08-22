@@ -79,6 +79,11 @@ SSR helpers: `import { defineSSR } from 'ranui/ssr-registry'` (source) / `ranui/
   it clears, and **stops following once the reader opens or closes it themselves**
   (setting `open` from script counts). Feed `content` from `ranuts/stream`'s
   `reasoning-delta` blocks.
+- **Dictation**: `r-voice-button` — a microphone button over `ranuts`' `createSpeechRecognizer`.
+  It reports the **whole capture so far** on each `voiceresult` (interim results are
+  revised), so remember the text already in the box at `voicestart` and concatenate once.
+  It never sends, hides itself where the API is absent, and only `denied`/`failed` are
+  worth surfacing — `noSpeech`/`aborted` are routine.
 
 ## Builder + reactivity (from `ranui/builder`)
 

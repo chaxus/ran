@@ -124,6 +124,8 @@ export const RAN_ICON_NAMES = [
   'lock',
   'menu',
   'message',
+  'mic',
+  'mic-off',
   'more',
   'pause',
   'pip',

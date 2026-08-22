@@ -885,6 +885,47 @@ Sub-second durations render as nothing: a reader cares that it was fast, not tha
 in the body. `ranuts/stream` already separates `reasoning-delta` from `text-delta`, so a
 conversation view can feed this directly from `snapshot().blocks`.
 
+### r-voice-button
+
+Dictation for a text composer, over `createSpeechRecognizer` from `ranuts/utils`.
+
+A microphone button, and nothing else. It owns the capture and reports what was heard;
+where that text goes is the caller's decision, because a component that also wrote into an
+input would have to know which input, whether to append or replace, and what to do about
+the caret — three answers that differ per app.
+
+```ts
+const mic = document.querySelector('r-voice-button')!;
+let base = '';
+mic.addEventListener('voicestart', () => {
+  base = input.value;
+});
+mic.addEventListener('voiceresult', (e) => {
+  input.value = base + e.detail.transcript; // the whole capture, revised as it firms up
+});
+```
+
+Decisions worth not re-litigating:
+
+- **It does not send.** Recognition is wrong often enough that committing on the speaker's
+  behalf takes away the review they need. It fills the box and stops.
+- **The whole capture is reported, not the newest fragment.** Interim results are revised,
+  so a consumer that appended each event would end up with `你好你好世界`. Remember the
+  text that was already there and concatenate once.
+- **It hides itself where speech recognition does not exist** — Firefox, and anything with
+  the API absent. `hidden`, not `disabled`: disabled says "not now", absent says "not here".
+- **Only `denied` and `failed` are worth showing.** `noSpeech` and `aborted` are a silent
+  pause and a programmatic stop; they arrive through the same channel as a real failure and
+  are not one. Showing them nags after every capture.
+- **`toggle()` reads the recognizer, not the reflected attribute.** The attribute follows
+  the platform's start event, and a capture that has begun without reporting it would leave
+  the two disagreeing — the next activation would try to open a second capture, be refused,
+  and the button would sit there doing nothing.
+- **The accessible name changes with the state**, not only the icon, and `aria-pressed`
+  carries the toggle. Escape discards a capture rather than committing it.
+- **`lang` is read per capture** and defaults to the document's, so an app that switches
+  locale mid-session dictates in the language it is showing.
+
 ## Testing
 
 ### Setup

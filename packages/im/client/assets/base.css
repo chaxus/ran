@@ -81,3 +81,15 @@ body {
   flex: 1;
   min-width: 0;
 }
+
+/* The composer wraps on a narrow screen rather than squeezing the field to nothing; the
+   field takes the first row on its own and the controls follow. */
+@media (max-width: 480px) {
+  .composer {
+    flex-wrap: wrap;
+  }
+
+  .composer-input {
+    flex-basis: 100%;
+  }
+}

@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-35 custom elements.
+36 custom elements.
 
 ## `<r-button>`
 
@@ -480,4 +480,24 @@ Source: `components/tool-card/index.ts`
 - **Events**: `locationclick` → detail `{ location }`
 - **Slots**: —
 - **Parts**: `body`, `card`, `description`, `exit`, `file`, `header`, `hunk`, `line`, `location`, `locations`, `path`, `status`, `title`, `toggle`
+
+## `<r-voice-button>`
+
+Source: `components/voice-button/index.ts`
+
+- **Attributes**: `active-label`, `cancel-hint`, `cancelling`, `disabled: boolean`, `hold-hint`, `holding`, `label: string`, `listening: boolean`, `sheet: string`
+- **Properties**:
+  - `activeLabel: string` — Accessible name while listening; the name has to change, not only the icon.
+  - `cancelHint: string` — Replaces {@link holdHint} once the finger has slid far enough to discard.
+  - `continuous: boolean` — Keep listening across pauses instead of stopping at the first one.
+  - `disabled: boolean`
+  - `holdHint: string` — Shown above the button while a finger is held down.
+  - `label: string` — Accessible name while idle.
+  - `lang: string` — Language being spoken, as a BCP 47 tag.
+  - `listening: boolean` — Whether a capture is running. Reflected, so `:host([listening])` can style it.
+  - `sheet: string`
+  - `supported: boolean` — Whether this platform can recognize speech at all.
+- **Events**: —
+- **Slots**: —
+- **Parts**: `button`, `hint`, `icon`
 

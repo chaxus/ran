@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { renderHTMLToString } from 'ranui/ssr-stream';
+import { resolveProvider } from '@/app/lib/provider';
 import { vite } from '@/app/lib/vite';
 import { getEnv } from '@/app/lib/index';
 import { FORMAT, HTML_PATH_MAP } from '@/app/lib/constant';
@@ -33,7 +34,13 @@ export default class HomeController {
   async index(ctx: Context): Promise<void> {
     try {
       const template = fs.readFileSync(path.resolve(__dirname, HTML_PATH_MAP[env]), FORMAT);
-      const html = await vite.transformIndexHtml(ctx.request.path, template);
+      // Stamped into the markup rather than left for the first response's header: someone
+      // should know they are talking to a canned answer before they type, not after.
+      const withMode = template.replace(
+        '<main class="page"',
+        `<main class="page" data-mode="${resolveProvider().mode}"`,
+      );
+      const html = await vite.transformIndexHtml(ctx.request.path, withMode);
       ctx.res.setHeader('Content-Type', 'text/html; charset=utf-8');
       ctx.res.end(await renderHTMLToString(html));
     } catch (error) {
