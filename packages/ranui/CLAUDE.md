@@ -821,11 +821,19 @@ one delta into a long transcript writes one row.
 the last row's height and the bottom-follower reads `scrollHeight` right after, which lays
 out the whole column. Rows therefore carry `content-visibility: auto` with
 `contain-intrinsic-size: auto 8rem`: the browser skips layout and paint for off-screen rows
-while leaving them in the DOM, so find-in-page, text selection and screen readers still see
-the whole conversation — which is exactly what windowing gives up. On a 3000-message
-transcript that took streaming from 45ms per frame to 8ms, and replay from 1.8s to 311ms.
-Virtualization was considered and is not here: the measured cost was layout, and this
-removes it without removing the transcript.
+while leaving them **in the DOM**, so find-in-page and text selection keep working — which
+is exactly what windowing gives up. On a 3000-message transcript that took streaming from
+45ms per frame to 8ms, and replay from 1.8s to 311ms.
+
+The cost, stated accurately: **a skipped subtree is not in the accessibility tree until it
+is scrolled into view** (measured — a DevTools a11y snapshot of a long transcript contains
+only the rows near the viewport). That is lighter than windowing, where the rows are not
+in the document at all and scrolling does not reveal them, but it is not "a screen reader
+sees the whole conversation".
+
+Virtualization is not here: the measured cost was layout, and this removes it for one
+bounded cost. For a log that grows without end, the answer is **paging** — see
+`older` / `OLDER_REQUEST` above — not windowing.
 
 **`truncate(key)` cuts the conversation.** Editing a message, regenerating an answer and
 branching are one operation: the conversation diverges at a row, and every row opened after

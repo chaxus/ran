@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach, vi } from 'vitest';
+import { describe, expect, it, beforeAll, beforeEach, vi } from 'vitest';
 import type { Markdown } from '@/components/markdown';
 
 // shiki is heavy and pulls WASM-free grammars lazily; stub it so the highlight path
@@ -35,6 +35,14 @@ const shadow = (el: Markdown): ShadowRoot => (el as unknown as { _shadowDom: Sha
 const body = (el: Markdown): HTMLElement => shadow(el).querySelector('.ran-markdown-body') as HTMLElement;
 
 describe('r-markdown contract', () => {
+  // The component's renderer is a lazy chunk — marked, DOMPurify and shiki — and the first
+  // test to touch it pays for loading all three. Under a loaded parallel run that alone
+  // exceeded the 5s default and failed whichever test happened to be first, which is not a
+  // failure about that test. Loaded once here, with a timeout sized for a cold module graph.
+  beforeAll(async () => {
+    await import('@/components/markdown');
+  }, 30_000);
+
   beforeEach(() => {
     document.body.innerHTML = '';
   });

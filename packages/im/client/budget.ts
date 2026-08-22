@@ -7,7 +7,7 @@
  */
 import { estimateTokens, planCompaction } from 'ranuts/stream';
 import type { CompactionPlan } from 'ranuts/stream';
-import type { StoredMessage } from '@/client/chat-types';
+import type { WireMessage } from '@/client/chat-types';
 
 /**
  * Per-message overhead the wire format adds: the role, the delimiters, the envelope.
@@ -40,7 +40,7 @@ export const SUMMARY_TOKENS = 400;
  * @param message The message.
  * @returns Its estimated tokens.
  */
-export function messageTokens(message: StoredMessage): number {
+export function messageTokens(message: WireMessage): number {
   let tokens = MESSAGE_OVERHEAD;
   const content = message.content;
   if (typeof content === 'string') tokens += estimateTokens(content);
@@ -63,7 +63,7 @@ export function messageTokens(message: StoredMessage): number {
 const IMAGE_TOKENS = 800;
 
 /** Estimated tokens the next request will carry. */
-export function contextTokens(messages: readonly StoredMessage[]): number {
+export function contextTokens(messages: readonly WireMessage[]): number {
   return messages.reduce((sum, message) => sum + messageTokens(message), 0);
 }
 
@@ -82,7 +82,7 @@ export function contextTokens(messages: readonly StoredMessage[]): number {
  * @param cut The proposed number of leading messages to compact.
  * @returns A cut that leaves a sendable history.
  */
-export function safeBoundary(messages: readonly StoredMessage[], cut: number): number {
+export function safeBoundary(messages: readonly WireMessage[], cut: number): number {
   let boundary = Math.min(cut, messages.length);
   while (boundary < messages.length && messages[boundary]?.role === 'tool') boundary += 1;
   return boundary;
@@ -103,7 +103,7 @@ export interface BudgetDecision extends CompactionPlan {
  *   nothing is known, so nothing is compacted — acting on an invented window would drop a
  *   conversation nobody needed to lose.
  */
-export function decideBudget(messages: readonly StoredMessage[], limit: number): BudgetDecision {
+export function decideBudget(messages: readonly WireMessage[], limit: number): BudgetDecision {
   const sizes = messages.map(messageTokens);
   const used = sizes.reduce((sum, size) => sum + size, 0);
   if (limit === 0) return { used, compact: 0, projected: used, fits: true };

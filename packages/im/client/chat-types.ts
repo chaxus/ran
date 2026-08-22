@@ -38,9 +38,6 @@ export interface WireToolCall {
  * rather than reconstructed — a reloaded conversation has to be resumable.
  */
 export type StoredMessage =
-  // Compaction's replacement for a prefix it folded away. A system message because that is
-  // what every provider reads as context rather than as something someone said.
-  | { role: 'system'; content: string }
   | { role: 'user'; content: MessageContent }
   | { role: 'assistant'; content: MessageContent; tool_calls?: WireToolCall[] }
   | { role: 'tool'; content: string; tool_call_id: string; name: string };
@@ -63,4 +60,37 @@ export interface Branch {
   tails: StoredMessage[][];
   /** Which entry is currently spliced into `messages`. */
   active: number;
+}
+
+/**
+ * One point where the conversation was folded for the model's benefit.
+ *
+ * **The log is not what is sent.** A conversation log only ever grows; compaction is a fact
+ * about assembling the next request, not a licence to delete what was said. Storing the
+ * boundary instead of splicing the array is the whole difference between a client that runs
+ * out of context gracefully and one that destroys its user's history to stay under a limit.
+ *
+ * `at` is an index into the log: assembling a request means the summary, then everything
+ * from `at` onward. Rendering means the whole log, with a marker drawn at `at`.
+ */
+export interface Compaction {
+  /** First log message the model still sees in full. */
+  at: number;
+  /** What stands in for everything before {@link Compaction.at}. */
+  summary: string;
+}
+
+/**
+ * A message as the provider's request body wants it.
+ *
+ * A superset of {@link StoredMessage}: every stored message is one of these, plus the
+ * `system` message a compaction contributes, which was never said by anyone and so is not
+ * part of the log.
+ */
+export interface WireMessage {
+  role: 'system' | 'user' | 'assistant' | 'tool';
+  content: MessageContent;
+  tool_calls?: WireToolCall[];
+  tool_call_id?: string;
+  name?: string;
 }

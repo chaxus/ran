@@ -1,7 +1,7 @@
 import { WebDB, createStore } from 'ranuts/utils';
 import type { IDBCollection } from 'ranuts/utils';
 import type { TokenUsage } from 'ranuts/stream';
-import type { Branch, MessageContent, StoredMessage } from '@/client/chat-types';
+import type { Branch, Compaction, MessageContent, StoredMessage } from '@/client/chat-types';
 
 export type { StoredMessage } from '@/client/chat-types';
 
@@ -12,6 +12,13 @@ export interface Session {
   title: string;
   createdAt: number;
   updatedAt: number;
+  /**
+   * Everything that was said, in order, only ever appended to.
+   *
+   * Compaction does not touch it — see {@link Compaction}. The one thing that does shorten
+   * it is the reader editing or regenerating, which is them saying that part of the
+   * conversation is being replaced; the tail they replaced is kept in {@link Session.branches}.
+   */
   messages: StoredMessage[];
   /**
    * Tokens billed across every round of this conversation, including rounds whose messages
@@ -23,6 +30,8 @@ export interface Session {
   usage?: TokenUsage;
   /** Recorded alternatives, in `at` order. See {@link Branch}. */
   branches?: Branch[];
+  /** Points where the log was folded for the model, in `at` order. See {@link Compaction}. */
+  compactions?: Compaction[];
 }
 
 const DB_NAME = 'ran-im';
