@@ -20,7 +20,12 @@ interface WireChunk {
      * `content: null` for every thinking delta. Null is not the same as absent, and
      * treating it as a value concatenates the string "null" into the answer.
      */
-    delta?: { content?: string | null; reasoning_content?: string | null };
+    delta?: {
+      content?: string | null;
+      reasoning_content?: string | null;
+      /** Streamed in pieces like the text is; `index` numbers the call within the choice. */
+      tool_calls?: { index?: number; id?: string; function?: { name?: string; arguments?: string } }[];
+    };
     finish_reason?: string | null;
   }[];
   /**
@@ -47,68 +52,94 @@ function finishReason(reason: string): StreamChunk & { type: 'finish' } {
 }
 
 /**
- * Maps one wire event onto zero or more {@link StreamChunk}s.
+ * Builds the mapping from one provider's wire events onto {@link StreamChunk}s.
  *
  * This is the only vendor-specific code in the pipeline, and `ranuts/stream` deliberately
  * ships no such mapping: the framing and the fold are the same everywhere, the wire shape
- * is not. Point this at a different provider by rewriting this function alone.
+ * is not. Point this at a different provider by rewriting this factory alone.
  *
- * @param event One parsed Server-Sent Event.
- * @returns The chunks it carries, empty for a sentinel or an unparseable payload.
+ * A factory rather than a plain function because block indices have to be *allocated*.
+ * `choices[].index` numbers the choice; reasoning, the answer and each tool call are
+ * separate blocks of one choice, and the accumulator keys blocks by index — two kinds
+ * sharing one index makes it read the second as the first changing type and discard what it
+ * had. Arithmetic on the choice number can only avoid that by reserving a fixed stride per
+ * choice, which is a collision waiting for a response with more tool calls than the stride
+ * allows. Handing out the next free index instead cannot collide at all.
+ *
+ * One mapper per response: the allocation is that response's.
+ *
+ * @returns A mapping from one event to the chunks it carries.
  */
-export function toStreamChunks(event: ServerSentEvent): StreamChunk[] {
-  if (event.data === '' || event.data === DONE) return [];
+export function createChunkMapper(): (event: ServerSentEvent) => StreamChunk[] {
+  const blocks = new Map<string, number>();
+  const blockIndex = (key: string): number => {
+    const existing = blocks.get(key);
+    if (existing !== undefined) return existing;
+    const next = blocks.size;
+    blocks.set(key, next);
+    return next;
+  };
 
-  let wire: WireChunk;
-  try {
-    wire = JSON.parse(event.data) as WireChunk;
-  } catch {
-    // A provider that emits a keep-alive comment as data, or a truncated final event on an
-    // aborted connection, must not take the stream down.
-    return [];
-  }
+  return function toStreamChunks(event: ServerSentEvent): StreamChunk[] {
+    if (event.data === '' || event.data === DONE) return [];
 
-  // An error event carries no content to fold, and returning nothing would let the stream
-  // end looking like a complete empty answer. Throwing lands it in the same failure path a
-  // dropped connection takes, with the provider's own message intact.
-  if (wire.error !== undefined) {
-    const status = wire.error.status === undefined || wire.error.status === 0 ? '' : ` (${wire.error.status})`;
-    throw new Error(`${wire.error.message ?? 'the provider rejected the request'}${status}`);
-  }
-
-  const chunks: StreamChunk[] = [];
-  for (const choice of wire.choices ?? []) {
-    // `choices[].index` numbers the choice, not the block. Reasoning and the answer are two
-    // blocks of one choice, so they need two block indices: sharing one makes the
-    // accumulator treat the first content delta as the choice switching type, and the
-    // reasoning accumulated so far is replaced by an empty text block. A reasoning model
-    // sends 50-odd reasoning deltas and then the answer, so the visible result is either
-    // the thinking or the answer, never both.
-    const choiceIndex = choice.index ?? 0;
-    const reasoningIndex = choiceIndex * 2;
-    const textIndex = choiceIndex * 2 + 1;
-    const { content, reasoning_content: reasoning } = choice.delta ?? {};
-    if (typeof reasoning === 'string' && reasoning !== '') {
-      chunks.push({ type: 'reasoning-delta', index: reasoningIndex, text: reasoning });
+    let wire: WireChunk;
+    try {
+      wire = JSON.parse(event.data) as WireChunk;
+    } catch {
+      // A provider that emits a keep-alive comment as data, or a truncated final event on
+      // an aborted connection, must not take the stream down.
+      return [];
     }
-    if (typeof content === 'string' && content !== '') {
-      chunks.push({ type: 'text-delta', index: textIndex, text: content });
+
+    // An error event carries no content to fold, and returning nothing would let the stream
+    // end looking like a complete empty answer. Throwing lands it in the same failure path a
+    // dropped connection takes, with the provider's own message intact.
+    if (wire.error !== undefined) {
+      const status = wire.error.status === undefined || wire.error.status === 0 ? '' : ` (${wire.error.status})`;
+      throw new Error(`${wire.error.message ?? 'the provider rejected the request'}${status}`);
     }
-    if (typeof choice.finish_reason === 'string') chunks.push(finishReason(choice.finish_reason));
-  }
-  if (wire.usage !== undefined && wire.usage !== null) {
-    chunks.push({
-      type: 'usage',
-      usage: {
-        inputTokens: wire.usage.prompt_tokens,
-        outputTokens: wire.usage.completion_tokens,
-        totalTokens: wire.usage.total_tokens,
-      },
-    });
-  }
-  // Usage must precede the terminal finish, and a provider that attaches both to one event
-  // leaves the order to us.
-  return chunks.sort((a, b) => Number(a.type === 'finish') - Number(b.type === 'finish'));
+
+    const chunks: StreamChunk[] = [];
+    for (const choice of wire.choices ?? []) {
+      const at = choice.index ?? 0;
+      const { content, reasoning_content: reasoning, tool_calls: toolCalls } = choice.delta ?? {};
+
+      if (typeof reasoning === 'string' && reasoning !== '') {
+        chunks.push({ type: 'reasoning-delta', index: blockIndex(`${at}:reasoning`), text: reasoning });
+      }
+      if (typeof content === 'string' && content !== '') {
+        chunks.push({ type: 'text-delta', index: blockIndex(`${at}:text`), text: content });
+      }
+      for (const call of toolCalls ?? []) {
+        const ordinal = call.index ?? 0;
+        chunks.push({
+          type: 'tool-call-delta',
+          index: blockIndex(`${at}:tool:${ordinal}`),
+          // The id and name arrive once, on the first delta of each call; later ones carry
+          // only more argument text. `''` is how the accumulator is told to keep what it has.
+          id: call.id ?? '',
+          name: call.function?.name,
+          argumentsDelta: call.function?.arguments ?? '',
+        });
+      }
+      if (typeof choice.finish_reason === 'string') chunks.push(finishReason(choice.finish_reason));
+    }
+
+    if (wire.usage !== undefined && wire.usage !== null) {
+      chunks.push({
+        type: 'usage',
+        usage: {
+          inputTokens: wire.usage.prompt_tokens,
+          outputTokens: wire.usage.completion_tokens,
+          totalTokens: wire.usage.total_tokens,
+        },
+      });
+    }
+    // Usage must precede the terminal finish, and a provider that attaches both to one event
+    // leaves the order to us.
+    return chunks.sort((a, b) => Number(a.type === 'finish') - Number(b.type === 'finish'));
+  };
 }
 
 /** Whether the answer came from a configured provider or the built-in sample. */
@@ -163,7 +194,8 @@ export function streamDialog(url: string, body: Record<string, unknown>, options
     if (response.body === null) throw new Error('dialog failed: response carried no body');
     options.onMode?.(response.headers.get('x-im-mode') === 'live' ? 'live' : 'demo');
 
-    for await (const chunk of mapEventStream(response.body, toStreamChunks)) {
+    // One mapper per response: block indices are allocated for this response's blocks.
+    for await (const chunk of mapEventStream(response.body, createChunkMapper())) {
       accumulator.push(chunk);
       options.onUpdate(accumulator.snapshot());
     }

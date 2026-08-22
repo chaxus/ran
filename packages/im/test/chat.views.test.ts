@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createConversationEngine } from 'ranuts/conversation';
 import { createStreamAccumulator } from 'ranuts/stream';
-import { eventsFromSnapshot, reasoningView, turnView } from '@/client/chat';
+import { NOTHING_EMITTED, eventsFromSnapshot, reasoningView, toolView, turnView } from '@/client/chat';
 import type { ChatEvent, EmittedSoFar } from '@/client/chat';
 
 /**
@@ -15,7 +15,7 @@ import type { ChatEvent, EmittedSoFar } from '@/client/chat';
  */
 function project(events: ChatEvent[]): { key: string; kind: string; state: unknown }[] {
   const engine = createConversationEngine<ChatEvent>({
-    definitions: [turnView, reasoningView],
+    definitions: [turnView, reasoningView, toolView],
     // Publish synchronously so a test does not have to wait for a frame that never comes.
     scheduler: (run) => {
       run();
@@ -38,7 +38,7 @@ function eventsFor(
   chunks: Parameters<ReturnType<typeof createStreamAccumulator>['push']>[0][],
 ): ChatEvent[] {
   const accumulator = createStreamAccumulator();
-  let emitted: EmittedSoFar = { text: 0, reasoning: 0 };
+  let emitted: EmittedSoFar = NOTHING_EMITTED;
   const events: ChatEvent[] = [];
   for (const chunk of chunks) {
     accumulator.push(chunk);
@@ -103,10 +103,62 @@ describe('the conversation the views build', () => {
     expect(nodes[0].state).toMatchObject({ streaming: false, error: 'invalid api key (401)' });
   });
 
+  it('opens a tool card on the name, not on the first byte of arguments', () => {
+    // The name arrives with the first delta and the arguments take as long as the model
+    // takes to write JSON. Opening on the block would put a card titled with an empty string
+    // on screen for that whole time.
+    const events = eventsFor('t1', [
+      { type: 'tool-call-delta', index: 0, id: 'c1', name: 'get_current_time', argumentsDelta: '' },
+      { type: 'tool-call-delta', index: 0, id: '', argumentsDelta: '{"tz"' },
+      { type: 'tool-call-delta', index: 0, id: '', argumentsDelta: ':"UTC"}' },
+    ]);
+    expect(events).toEqual([
+      { type: 'tool/start', id: 't1-tool-0', name: 'get_current_time' },
+      { type: 'tool/args', id: 't1-tool-0', args: '{"tz"' },
+      { type: 'tool/args', id: 't1-tool-0', args: '{"tz":"UTC"}' },
+    ]);
+  });
+
+  it('emits nothing for a call whose name has not arrived', () => {
+    expect(eventsFor('t1', [{ type: 'tool-call-delta', index: 0, id: 'c1', argumentsDelta: '{' }])).toEqual([]);
+  });
+
+  it("gives each of a turn's calls its own node", () => {
+    const events = eventsFor('t1', [
+      { type: 'tool-call-delta', index: 0, id: 'a', name: 'one', argumentsDelta: '{}' },
+      { type: 'tool-call-delta', index: 1, id: 'b', name: 'two', argumentsDelta: '{}' },
+    ]);
+    expect(events.filter((event) => event.type === 'tool/start')).toEqual([
+      { type: 'tool/start', id: 't1-tool-0', name: 'one' },
+      { type: 'tool/start', id: 't1-tool-1', name: 'two' },
+    ]);
+  });
+
+  it('puts a tool card after the text the model wrote before calling it', () => {
+    const nodes = project([
+      ...eventsFor('t1', [
+        { type: 'text-delta', index: 0, text: '我来查一下' },
+        { type: 'tool-call-delta', index: 1, id: 'a', name: 'get_current_time', argumentsDelta: '{}' },
+      ]),
+      { type: 'tool/result', id: 't1-tool-0', output: '16:20', failed: false },
+    ]);
+    expect(nodes.map((node) => node.kind)).toEqual(['turn', 'tool']);
+    expect(nodes[1].state).toMatchObject({ name: 'get_current_time', output: '16:20', failed: false });
+  });
+
+  it('keeps a call running until its result arrives', () => {
+    const [card] = project(
+      eventsFor('t1', [{ type: 'tool-call-delta', index: 0, id: 'a', name: 'x', argumentsDelta: '' }]),
+    );
+    // A card with no result is a call still in flight — which is also what a conversation cut
+    // off mid-run comes back as, because that is what happened.
+    expect(card.state).toMatchObject({ output: null });
+  });
+
   it('emits nothing for a snapshot that has not grown', () => {
     const accumulator = createStreamAccumulator();
     accumulator.push({ type: 'text-delta', index: 1, text: 'x' });
-    const first = eventsFromSnapshot('t1', accumulator.snapshot(), { text: 0, reasoning: 0 });
+    const first = eventsFromSnapshot('t1', accumulator.snapshot(), NOTHING_EMITTED);
     const second = eventsFromSnapshot('t1', accumulator.snapshot(), first.emitted);
 
     expect(first.events).toHaveLength(2);
