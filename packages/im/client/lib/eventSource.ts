@@ -145,15 +145,22 @@ export function createChunkMapper(): (event: ServerSentEvent) => StreamChunk[] {
 /** Whether the answer came from a configured provider or the built-in sample. */
 export type DialogMode = 'live' | 'demo';
 
+/** What the server says about itself, before any content arrives. */
+export interface DialogServer {
+  mode: DialogMode;
+  /** Tokens the configured model accepts, or zero when the server did not say. */
+  contextLimit: number;
+}
+
 /** How to run one streamed request. */
 export interface DialogOptions {
   /**
    * Called once the response headers arrive, before any content.
    *
-   * The server reports this in a header rather than in the stream: the answer's content is
-   * the model's, and a note about how the server is configured is not.
+   * The server reports these in headers rather than in the stream: the answer's content is
+   * the model's, and facts about how the server is configured are not.
    */
-  onMode?: (mode: DialogMode) => void;
+  onOpen?: (server: DialogServer) => void;
   /** Called after every accepted chunk, with the folded state so far. */
   onUpdate: (snapshot: StreamSnapshot) => void;
   /** Called once the stream ends, cleanly or not. */
@@ -192,7 +199,13 @@ export function streamDialog(url: string, body: Record<string, unknown>, options
     // silently render nothing, which is what the previous implementation did.
     if (!response.ok) throw new Error(`dialog failed: ${response.status} ${response.statusText}`);
     if (response.body === null) throw new Error('dialog failed: response carried no body');
-    options.onMode?.(response.headers.get('x-im-mode') === 'live' ? 'live' : 'demo');
+    const limit = Number(response.headers.get('x-im-context-limit'));
+    options.onOpen?.({
+      mode: response.headers.get('x-im-mode') === 'live' ? 'live' : 'demo',
+      // Zero rather than a guess: a client that invented a window would compact a
+      // conversation that fits, and the meter would state a limit nobody set.
+      contextLimit: Number.isFinite(limit) && limit > 0 ? limit : 0,
+    });
 
     // One mapper per response: block indices are allocated for this response's blocks.
     for await (const chunk of mapEventStream(response.body, createChunkMapper())) {

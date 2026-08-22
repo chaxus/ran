@@ -1808,6 +1808,37 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `button ${choice}`
 - `switch`
 
+### `token-meter`
+
+- Tokens: 17
+- Parts: 4
+
+#### Tokens
+<!-- layers: semantic: 6 · internal: 11 -->
+- `--ran-color-bg-muted`
+- `--ran-color-error`
+- `--ran-color-primary`
+- `--ran-color-text-secondary`
+- `--ran-color-warning`
+- `--ran-radius-full`
+- `--ran-space-2`
+- `--ran-text-copy-3`
+- `--ran-token-meter-color`
+- `--ran-token-meter-fill-background`
+- `--ran-token-meter-font-size`
+- `--ran-token-meter-gap`
+- `--ran-token-meter-over-background`
+- `--ran-token-meter-track-background`
+- `--ran-token-meter-track-radius`
+- `--ran-token-meter-transition`
+- `--ran-token-meter-warn-background`
+
+#### Parts
+- `fill`
+- `meter`
+- `text`
+- `track`
+
 ### `tool-card`
 
 - Tokens: 60

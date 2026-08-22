@@ -28,17 +28,17 @@ from the **subpath that owns it** (below) — not from a deep source path.
 Each subpath is an independent, tree-shakeable barrel. Import from the subpath, never from
 `ranuts/dist/...` or `@/...` (that alias is internal to the source).
 
-| Import from           | Source                      | What                                                | Runtime            |
-| --------------------- | --------------------------- | --------------------------------------------------- | ------------------ |
-| `ranuts`              | `index.ts`                  | Root barrel — re-exports the utils + visual surface | browser + node     |
-| `ranuts/utils`        | `src/utils/index.ts`        | DOM/BOM, string, object, number, color, time, etc.  | browser + node\*   |
-| `ranuts/node`         | `src/node/index.ts`         | HTTP server, router, ws, fs, streams, middleware    | **node only**      |
-| `ranuts/visual`       | `src/utils/visual/index.ts` | 2D rendering engine (Canvas / WebGL / WebGPU)       | **browser only**   |
-| `ranuts/i18n`         | `src/utils/i18n.ts`         | `I18nCore` / `createI18n` / `useI18n` — DOM-free    | browser + node     |
-| `ranuts/sw`           | `src/sw/index.ts`           | Cache strategies + the precache protocol's SW half  | **service worker** |
-| `ranuts/vnode`        | `src/vnode/index.ts`        | Snabbdom-style virtual DOM (`h`, `init`, modules)   | browser            |
-| `ranuts/stream`       | `src/stream/index.ts`       | SSE parsing + provider-neutral model-stream fold    | browser + node     |
-| `ranuts/conversation` | `src/conversation/index.ts` | Event log → renderable conversation nodes           | browser + node     |
+| Import from           | Source                      | What                                                            | Runtime            |
+| --------------------- | --------------------------- | --------------------------------------------------------------- | ------------------ |
+| `ranuts`              | `index.ts`                  | Root barrel — re-exports the utils + visual surface             | browser + node     |
+| `ranuts/utils`        | `src/utils/index.ts`        | DOM/BOM, string, object, number, color, time, etc.              | browser + node\*   |
+| `ranuts/node`         | `src/node/index.ts`         | HTTP server, router, ws, fs, streams, middleware                | **node only**      |
+| `ranuts/visual`       | `src/utils/visual/index.ts` | 2D rendering engine (Canvas / WebGL / WebGPU)                   | **browser only**   |
+| `ranuts/i18n`         | `src/utils/i18n.ts`         | `I18nCore` / `createI18n` / `useI18n` — DOM-free                | browser + node     |
+| `ranuts/sw`           | `src/sw/index.ts`           | Cache strategies + the precache protocol's SW half              | **service worker** |
+| `ranuts/vnode`        | `src/vnode/index.ts`        | Snabbdom-style virtual DOM (`h`, `init`, modules)               | browser            |
+| `ranuts/stream`       | `src/stream/index.ts`       | SSE parsing + provider-neutral model-stream fold + token budget | browser + node     |
+| `ranuts/conversation` | `src/conversation/index.ts` | Event log → renderable conversation nodes                       | browser + node     |
 
 \* `ranuts/utils` is broad: most functions are browser-oriented (touch `window`/`document`),
 but pure helpers (`str`, `obj`, `number`, `compose`, `cloneDeep`, …) run anywhere. Functions
@@ -82,7 +82,7 @@ packages/ranuts/
 │   │   └── totp/             # TOTP + hand-rolled SHA
 │   ├── node/                 # ranuts/node — mini HTTP framework
 │   ├── vnode/                # ranuts/vnode — virtual DOM
-│   ├── stream/               # ranuts/stream — SSE + StreamChunk + accumulator
+│   ├── stream/               # ranuts/stream — SSE + StreamChunk + accumulator + budget
 │   └── conversation/         # ranuts/conversation — event log → nodes, with publication cadence
 ├── bin/
 │   ├── build.sh              # build (tsc types + vite es/umd)
@@ -135,7 +135,7 @@ in `utils/number.ts`; `srgbToLinear`/`luma`/`blend*`/`saturation`/`cosinePalette
 
 ## Streaming a model response
 
-`ranuts/stream` is three layers, each usable alone. The split is the point: only the
+`ranuts/stream` is four layers, each usable alone. The split is the point: only the
 middle one is vendor-specific, and it is the one ranuts does **not** ship.
 
 1. `parseEventStream(source)` — bytes → `ServerSentEvent`. Transport only, no model
@@ -148,6 +148,9 @@ middle one is vendor-specific, and it is the one ranuts does **not** ship.
    `[]` from the mapping is how a keep-alive or a `[DONE]` sentinel is dropped.
 3. `createStreamAccumulator()` — folds chunks into blocks, so a view reads `snapshot()`,
    `text()`, `reasoning()`, or `toolCalls()` instead of concatenating deltas itself.
+4. `estimateTokens` / `addUsage` / `planCompaction` — the budget. A chat client that skips
+   this works for a week and then stops: every turn carries the whole history, the request
+   grows monotonically, and one day the provider refuses it as a wall.
 
 Non-obvious rules the vocabulary encodes:
 
@@ -160,6 +163,23 @@ Non-obvious rules the vocabulary encodes:
 - **`block-end` wins.** When a provider sends an assembled block, it replaces whatever the
   deltas accumulated.
 - **`finish` terminates.** `usage` arrives before it; nothing after it.
+
+Non-obvious rules the budget encodes:
+
+- **`estimateTokens` is an estimate, and CJK is not four characters a token.** A BPE
+  vocabulary trained mostly on Latin script rarely merges CJK, so counting it at the Latin
+  rate underestimates a Chinese conversation about fourfold — the difference between
+  compacting in time and compacting after the provider refuses. A real tokenizer is a
+  per-model dependency measured in megabytes, and this decides _when to act_, not billing.
+- **`addUsage` keeps a field one side omitted.** Providers differ in what they send, and a
+  running total that lost `outputTokens` the moment one response omitted it is worse than
+  no total.
+- **`planCompaction` counts the summary it will add.** Without that it returns "fits" for a
+  request that does not. It also never touches the protected tail, and reports `fits: false`
+  rather than compacting it anyway — the caller decides, because nothing can be done there
+  that does not lose the user's own words.
+- **It takes sizes, not messages.** What replaces a folded prefix, and which cut points a
+  wire format allows, are the caller's business.
 
 ## Projecting an event log into a conversation
 

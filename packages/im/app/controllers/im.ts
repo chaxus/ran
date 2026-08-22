@@ -324,6 +324,10 @@ export default class IMController {
       // Without this a proxy may buffer the whole response and defeat streaming entirely.
       'X-Accel-Buffering': 'no',
       'X-IM-Mode': provider.mode,
+      // The client compacts against this. It is a deployment fact — which model is
+      // configured — and a browser that guessed would compact a conversation that fits or
+      // fail to compact one that does not.
+      'X-IM-Context-Limit': String(provider.contextLimit),
     });
 
     // The router resolves a handler as `controller[name][method]` and calls it detached,
