@@ -53,6 +53,30 @@ describe('turning a fetched document into something a model can read', () => {
     expect(readableText(html)).toBe('Hi');
   });
 
+  it('closes a script tag the way HTML allows, not only the way it is usually written', () => {
+    // `</script >` is a valid end tag. A pattern requiring `</script>` exactly leaves the
+    // whole element in place, the tag stripper removes only the tags, and the script body
+    // reaches the model as prose. CodeQL's js/bad-tag-filter caught this one.
+    expect(readableText('<p>a</p><script>alert(1)</script >')).toBe('a');
+    expect(readableText('<p>a</p><style>b{color:red}</style\n>')).toBe('a');
+  });
+
+  it('drops a raw-text element a truncated page never closed', () => {
+    // A fetch that hit the byte limit mid-script ends exactly like this.
+    expect(readableText('<p>a</p><script>alert(1); var x =')).toBe('a');
+  });
+
+  it('does not mistake a longer name for a script tag', () => {
+    // Treating `<scriptfoo>` as one would swallow the rest of the document.
+    expect(readableText('<scriptfoo>keep me</scriptfoo><p>and me</p>')).toBe('keep me and me');
+  });
+
+  it('removes a comment whole, including one that contains a bare >', () => {
+    // The tag stripper ends at the first `>`, so without handling comments first the rest
+    // of the comment spills into the text.
+    expect(readableText('<p>a</p><!-- hidden > still hidden --><p>b</p>')).toBe('a b');
+  });
+
   it('decodes the entities a document actually carries', () => {
     expect(readableText('<p>a&nbsp;b &lt;tag&gt; &quot;q&quot; &#39;s&#39;</p>')).toBe('a b <tag> "q" \'s\'');
   });
