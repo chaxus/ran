@@ -4,17 +4,10 @@ export const ADMINISTRATOR = 1;
 // serverRenderServer
 const HTML_PATH_DEV = '../../views/index.html';
 export const FORMAT = 'utf-8';
-export const TEMPLATE_REPLACE = '<!--ssr-outlet-->';
-const RENDER_PATH_DEV = '/client/server.tsx';
-const HTML_PATH_PROD = '../../dist/client/views/index.html';
-const RENDER_PATH_PROD = '../../dist/server/server.js';
+const HTML_PATH_PROD = '../../dist/views/index.html';
 export const HTML_PATH_MAP: Record<string, string> = {
   dev: HTML_PATH_DEV,
   prod: HTML_PATH_PROD,
-};
-export const RENDER_PATH_MAP: Record<string, string> = {
-  dev: RENDER_PATH_DEV,
-  prod: RENDER_PATH_PROD,
 };
 // serverRender
 export const PRODUCTION = 'production';

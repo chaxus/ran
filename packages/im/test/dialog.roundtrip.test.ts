@@ -63,17 +63,30 @@ async function runClient(
 }
 
 describe('dialog round trip — the real controller through the real client', () => {
+  let previousKey: string | undefined;
+
   beforeEach(() => {
     vi.useFakeTimers();
+    // Force the demo path. Without this the test reads whatever key the machine happens to
+    // have — from the environment or a repository `.env` — and a unit test starts making
+    // paid network calls. An empty `IM_API_KEY` wins over every other source, so this is
+    // deterministic rather than a hope that none is configured.
+    previousKey = process.env.IM_API_KEY;
+    process.env.IM_API_KEY = '';
   });
   afterEach(() => {
     vi.useRealTimers();
+    if (previousKey === undefined) delete process.env.IM_API_KEY;
+    else process.env.IM_API_KEY = previousKey;
   });
 
   it('declares an event stream and frames every event as SSE', () => {
     const { status, headers, body } = runServer('hello');
     expect(status).toBe(200);
     expect(headers['Content-Type']).toBe('text/event-stream');
+    // Which path answered is a header, not a stream event: the content is the model's, and
+    // a note about configuration is not.
+    expect(headers['X-IM-Mode']).toBe('demo');
     // Every write is one `data:` line terminated by a blank line. The previous
     // implementation set this header and then wrote bare JSON.
     expect(body.startsWith('data: ')).toBe(true);
@@ -90,12 +103,14 @@ describe('dialog round trip — the real controller through the real client', ()
 
     expect(snapshot.done).toBe(true);
     expect(snapshot.finishReason).toBe('stop');
-    expect(snapshot.usage?.inputTokens).toBe('春江花月夜'.length);
 
     const text = snapshot.blocks.reduce((out, block) => (block.type === 'text' ? out + block.text : out), '');
     expect(text.startsWith('春江花月夜\n春江潮水连海平')).toBe(true);
     expect(text.endsWith('但见长江送流水。\n')).toBe(true);
     expect(snapshot.usage?.outputTokens).toBe(text.length);
+    // No invented prompt count: a canned answer was not prompted by anything, and reporting
+    // the question's length as a token count would be a number that means nothing.
+    expect(snapshot.usage?.inputTokens).toBeUndefined();
   });
 
   it('reconstructs the same answer however the bytes are sliced', async () => {

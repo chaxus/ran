@@ -8,6 +8,11 @@ import type { ServerSentEvent, StreamChunk, StreamSnapshot } from 'ranuts/stream
  * adds later must not stop this from compiling.
  */
 interface WireChunk {
+  /**
+   * Set by this app's own route when the provider call fails, and by some providers when a
+   * request is rejected mid-stream.
+   */
+  error?: { status?: number; message?: string };
   choices?: {
     index?: number;
     delta?: { content?: string; reasoning_content?: string };
@@ -54,6 +59,14 @@ export function toStreamChunks(event: ServerSentEvent): StreamChunk[] {
     return [];
   }
 
+  // An error event carries no content to fold, and returning nothing would let the stream
+  // end looking like a complete empty answer. Throwing lands it in the same failure path a
+  // dropped connection takes, with the provider's own message intact.
+  if (wire.error !== undefined) {
+    const status = wire.error.status === undefined || wire.error.status === 0 ? '' : ` (${wire.error.status})`;
+    throw new Error(`${wire.error.message ?? 'the provider rejected the request'}${status}`);
+  }
+
   const chunks: StreamChunk[] = [];
   for (const choice of wire.choices ?? []) {
     const index = choice.index ?? 0;
@@ -77,8 +90,18 @@ export function toStreamChunks(event: ServerSentEvent): StreamChunk[] {
   return chunks.sort((a, b) => Number(a.type === 'finish') - Number(b.type === 'finish'));
 }
 
+/** Whether the answer came from a configured provider or the built-in sample. */
+export type DialogMode = 'live' | 'demo';
+
 /** How to run one streamed request. */
 export interface DialogOptions {
+  /**
+   * Called once the response headers arrive, before any content.
+   *
+   * The server reports this in a header rather than in the stream: the answer's content is
+   * the model's, and a note about how the server is configured is not.
+   */
+  onMode?: (mode: DialogMode) => void;
   /** Called after every accepted chunk, with the folded state so far. */
   onUpdate: (snapshot: StreamSnapshot) => void;
   /** Called once the stream ends, cleanly or not. */
@@ -98,11 +121,11 @@ export interface DialogStream {
  * request, the mapping, and cancellation.
  *
  * @param url Endpoint to POST to.
- * @param body Request body.
+ * @param body Request body, serialised as JSON.
  * @param options Update and completion callbacks.
  * @returns A handle that can abort the request.
  */
-export function streamDialog(url: string, body: Record<string, string>, options: DialogOptions): DialogStream {
+export function streamDialog(url: string, body: Record<string, unknown>, options: DialogOptions): DialogStream {
   const controller = new AbortController();
   const accumulator = createStreamAccumulator();
 
@@ -117,6 +140,7 @@ export function streamDialog(url: string, body: Record<string, string>, options:
     // silently render nothing, which is what the previous implementation did.
     if (!response.ok) throw new Error(`dialog failed: ${response.status} ${response.statusText}`);
     if (response.body === null) throw new Error('dialog failed: response carried no body');
+    options.onMode?.(response.headers.get('x-im-mode') === 'live' ? 'live' : 'demo');
 
     for await (const chunk of mapEventStream(response.body, toStreamChunks)) {
       accumulator.push(chunk);
