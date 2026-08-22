@@ -191,6 +191,26 @@ const FETCH_LIMIT = 200_000;
 const FETCH_TIMEOUT_MS = 15_000;
 
 /**
+ * Matches a raw-text element and everything inside it.
+ *
+ * Three details each cost something when missed:
+ *
+ * - **`\s*` before the closing `>`.** `</script >` is a valid end tag. A pattern requiring
+ *   `</script>` exactly does not match it, so the whole element stays, the tag stripper
+ *   below removes only the tags, and the script body reaches the model as prose.
+ * - **`(?:…|$)`.** A truncated page can end mid-element. Without the alternative the match
+ *   fails outright and the same leak happens.
+ * - **`\b` after the name.** `<scriptfoo>` is not a script tag, and treating it as one
+ *   would swallow the rest of the document.
+ *
+ * @param tag Element name.
+ * @returns The pattern, global and case-insensitive.
+ */
+function rawTextElement(tag: string): RegExp {
+  return new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?(?:</${tag}\\s*>|$)`, 'gi');
+}
+
+/**
  * Strips a fetched HTML document down to the text a model can read.
  *
  * Deliberately not a parser. Script and style content has to go — it is most of the bytes
@@ -203,8 +223,11 @@ const FETCH_TIMEOUT_MS = 15_000;
 export function readableText(html: string): string {
   return (
     html
-      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
-      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+      .replace(rawTextElement('script'), ' ')
+      .replace(rawTextElement('style'), ' ')
+      // Comments before tags: a comment may contain `>`, and the tag stripper would end at
+      // the first one and spill the rest of the comment into the text.
+      .replace(/<!--[\s\S]*?(?:-->|$)/g, ' ')
       .replace(/<[^>]+>/g, ' ')
       .replace(/&nbsp;/g, ' ')
       .replace(/&lt;/g, '<')
