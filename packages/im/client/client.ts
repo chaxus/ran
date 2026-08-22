@@ -5,6 +5,7 @@ import 'ranui/button';
 import 'ranui/markdown';
 import 'ranui/reasoning';
 import 'ranui/theme-switch';
+import { initTheme } from 'ranui/theme';
 import { streamDialog } from '@/client/lib/eventSource';
 import type { DialogStream } from '@/client/lib/eventSource';
 import { eventsFromSnapshot, reasoningView, turnView } from '@/client/chat';
@@ -104,6 +105,10 @@ function ask(content: string): void {
         chat.push(error === undefined ? { type: 'turn/end', id } : { type: 'turn/error', id, message: error.message });
         if (text !== '') history.push({ role: 'assistant', content: text });
         inFlight = null;
+        // Resolves the light/dark choice `r-theme-switch` offers, and the `system` default it
+        // starts on, before the first interaction rather than after it.
+        initTheme();
+
         setRunning(false);
       },
     },

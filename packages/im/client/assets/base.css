@@ -1,3 +1,15 @@
+/* ranui's design tokens, which every rule below consumes. Imported here rather than from
+   the client entry so the browser has them from the first paint: the page is server
+   rendered, and tokens arriving with the script would leave the shell unstyled until then.
+
+   Without this every `--ran-*` reference resolves to nothing — and a `border: 1px solid
+   var(--undefined)` is invalid at computed-value time, so it does not fall back to a
+   default border, it produces no border at all. The components still looked right, because
+   each carries its own styles with its own fallbacks inside its shadow root; only the page
+   chrome was unstyled, which is exactly the kind of thing that reads as "fine" in a
+   screenshot. */
+@import 'ranui/style';
+
 /* Page chrome only. Everything inside the conversation styles itself: rows are mounted
    into r-conversation's shadow tree, so a page rule cannot reach them — which is why every
    row this app mounts is a custom element that brings its own styles. */

@@ -105,8 +105,12 @@ describe('dialog round trip — the real controller through the real client', ()
     expect(snapshot.finishReason).toBe('stop');
 
     const text = snapshot.blocks.reduce((out, block) => (block.type === 'text' ? out + block.text : out), '');
-    expect(text.startsWith('春江花月夜\n春江潮水连海平')).toBe(true);
+    // The demo answer is Markdown, because the renderer on the other end is: a heading, a
+    // blockquote, and blank-line-separated couplets, which is what a model would send and
+    // what a single `\n` between lines would not survive.
+    expect(text.startsWith('## 春江花月夜\n\n春江潮水连海平')).toBe(true);
     expect(text.endsWith('但见长江送流水。\n')).toBe(true);
+    expect(text).toContain('> 江畔何人初见月？');
     expect(snapshot.usage?.outputTokens).toBe(text.length);
     // No invented prompt count: a canned answer was not prompted by anything, and reporting
     // the question's length as a token count would be a number that means nothing.
