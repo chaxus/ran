@@ -97,7 +97,13 @@ const currentTime: ToolDefinition = {
   },
   call: (args) => {
     const zone = str(args, 'timezone');
-    return { card: 'generic', title: '读取当前时间', kind: 'read', input: zone === '' ? undefined : { 时区: zone } };
+    return {
+      card: 'generic',
+      title: '读取当前时间',
+      kind: 'read',
+      summary: zone,
+      input: zone === '' ? undefined : { 时区: zone },
+    };
   },
   result: (_args, output) => ({ card: 'generic', content: output }),
   run: async (args) => {
@@ -127,7 +133,13 @@ const fetchUrl: ToolDefinition = {
     properties: { url: { type: 'string', description: 'Absolute http or https URL.' } },
     required: ['url'],
   },
-  call: (args) => ({ card: 'generic', title: '抓取网页', kind: 'search', input: { 地址: str(args, 'url') } }),
+  call: (args) => ({
+    card: 'generic',
+    title: '抓取网页',
+    kind: 'search',
+    summary: str(args, 'url'),
+    input: { 地址: str(args, 'url') },
+  }),
   result: (_args, output) => ({ card: 'generic', content: output }),
   run: async (args) => {
     const url = str(args, 'url');
@@ -171,6 +183,9 @@ const writeNote: ToolDefinition = {
   call: (args) => ({
     card: 'diff',
     title: `写入 ${str(args, 'name')}`,
+    // The first line of what is being written. Left to derive, the collapsed row would read
+    // `写入 notes.md · notes.md` — the path twice and the content not at all.
+    summary: str(args, 'content').split('\n', 1)[0] ?? '',
     diffs: [{ path: str(args, 'name'), oldText: null, newText: str(args, 'content') }],
   }),
   result: (args, output) => {

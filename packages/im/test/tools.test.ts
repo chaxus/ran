@@ -82,7 +82,19 @@ describe('the tool registry', () => {
     expect(write?.call({ name: 'notes.md', content: 'after' })).toEqual({
       card: 'diff',
       title: '写入 notes.md',
+      summary: 'after',
       diffs: [{ path: 'notes.md', oldText: null, newText: 'after' }],
     });
+  });
+
+  it('names a summary that says something the title does not', () => {
+    // The element derives one when a tool does not name it, but only the tool knows which
+    // argument matters: derived, `write_note` would read `写入 notes.md · notes.md` — the
+    // path twice and the content not at all.
+    const write = TOOLS.get('write_note');
+    expect(write?.call({ name: 'notes.md', content: '第一行\n第二行' })).toMatchObject({ summary: '第一行' });
+
+    const fetch = TOOLS.get('fetch_url');
+    expect(fetch?.call({ url: 'https://a.test' })).toMatchObject({ summary: 'https://a.test' });
   });
 });
