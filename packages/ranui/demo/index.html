@@ -372,7 +372,7 @@
             <h2 data-i18n="sec.surfaces">Surfaces</h2>
             <div class="grid">
               <r-card
-                data-i18n-title="card.cross.title"
+                data-i18n-heading="card.cross.title"
                 data-i18n-desc="card.cross.desc"
                 title="Cross-framework"
                 description="Drop ranui into React, Vue, or vanilla — they are native custom elements."
@@ -380,7 +380,7 @@
                 <span slot="extra">native</span>
               </r-card>
               <r-card
-                data-i18n-title="card.token.title"
+                data-i18n-heading="card.token.title"
                 data-i18n-desc="card.token.desc"
                 title="Token-based styling"
                 description="Theme with documented CSS variables, no build step required."
@@ -388,7 +388,7 @@
                 <span slot="extra">theme</span>
               </r-card>
               <r-card
-                data-i18n-title="card.ssr.title"
+                data-i18n-heading="card.ssr.title"
                 data-i18n-desc="card.ssr.desc"
                 title="SSR ready"
                 description="Server-render to a string and hydrate on the client."
@@ -554,7 +554,7 @@ const html = renderToString(document.createElement('r-button'));
         ><a href="https://github.com/chaxus/ran" target="_blank">github.com/chaxus/ran</a>
       </footer>
 
-      <r-modal id="demo-modal" data-i18n-title="modal.title" title="Deploy to production">
+      <r-modal id="demo-modal" data-i18n-heading="modal.title" title="Deploy to production">
         <p data-i18n="modal.body">This will push the current build to the production environment. Continue?</p>
         <div slot="footer">
           <r-button data-i18n="modal.cancel" onclick="document.getElementById('demo-modal').open = false"

@@ -44,12 +44,12 @@ Source: `components/button/index.ts`
 
 Source: `components/card/index.ts`
 
-- **Attributes**: `description: string`, `hoverable: boolean`, `sheet: string`, `title: string`
+- **Attributes**: `description: string`, `heading: string`, `hoverable: boolean`, `sheet: string`
 - **Properties**:
   - `description: string`
+  - `heading: string` — Heading text.
   - `hoverable: boolean` — Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable.
   - `sheet: string`
-  - `title: string`
 - **Events**: —
 - **Slots**: `default`, `extra (named)`, `footer (named)`
 - **Parts**: `body`, `card`, `description`, `extra`, `footer`, `header`, `title`
@@ -104,13 +104,13 @@ Source: `components/conversation/index.ts`
 
 Source: `components/disclosure-row/index.ts`
 
-- **Attributes**: `expandable: boolean`, `open: boolean`, `sheet: string`, `summary: string`, `title: string`, `tone: string`
+- **Attributes**: `expandable: boolean`, `heading: string`, `open: boolean`, `sheet: string`, `summary: string`, `tone: string`
 - **Properties**:
   - `expandable: boolean` — Whether the row has a body worth opening.
+  - `heading: string` — The fixed-width left half of the line.
   - `open: boolean` — Whether the body is shown.
   - `sheet: string`
   - `summary: string` — The truncating right half. Empty drops the separator with it.
-  - `title: string` — The fixed-width left half of the line.
   - `tone: string` — `error` colours the summary; anything else is the ordinary tone.
 - **Events**: —
 - **Slots**: `default`, `leading (named)`
@@ -291,17 +291,17 @@ Source: `components/message/index.ts`
 
 Source: `components/modal/index.ts`
 
-- **Attributes**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `hide-header`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`, `title: string`
+- **Attributes**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `heading: string`, `hide-header`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`
 - **Properties**:
   - `autoFocus: boolean`
   - `closable: boolean`
   - `closeOnEsc: boolean`
+  - `heading: string` — Heading text.
   - `hideHeader: boolean` — Headerless mode: drops the title bar and its border, leaving only a floating
   - `lockScroll: boolean`
   - `maskClosable: boolean`
   - `open: boolean`
   - `sheet: string`
-  - `title: string`
 - **Events**: `afterclose` → detail `{ trigger }` · `afteropen` · `beforeclose` → detail `{ trigger }` · `beforeopen` · `close` → detail `{ trigger }` · `open`
 - **Slots**: `default`, `footer (named)`
 - **Parts**: `body`, `close`, `dialog`, `footer`, `header`, `mask`, `root`, `title`

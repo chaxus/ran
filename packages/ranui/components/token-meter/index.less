@@ -1,7 +1,7 @@
 :host {
   display: block;
   color: var(--ran-token-meter-color, var(--ran-color-text-secondary));
-  font-size: var(--ran-token-meter-font-size, var(--ran-text-copy-3));
+  font-size: var(--ran-token-meter-font-size, var(--ran-text-label-3));
 }
 
 /* `hidden` is how a caller hides an element, and the UA rule that implements it is a
@@ -43,7 +43,7 @@
 }
 
 :host([level='over']) .ran-token-meter-fill {
-  background: var(--ran-token-meter-over-background, var(--ran-color-error));
+  background: var(--ran-token-meter-over-background, var(--ran-color-danger));
 }
 
 .ran-token-meter-text {

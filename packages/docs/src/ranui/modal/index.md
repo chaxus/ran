@@ -16,7 +16,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 
 <Demo>
   <r-button onclick="document.getElementById('quickstart-modal').open = true">Open Modal</r-button>
-  <r-modal id="quickstart-modal" title="Basic Modal">
+  <r-modal id="quickstart-modal" heading="Basic Modal">
     <p>This is the modal content.</p>
     <div slot="footer">
       <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">OK</r-button>
@@ -27,7 +27,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 ```html
 <r-button onclick="modal.open = true">Open Modal</r-button>
 
-<r-modal id="modal" title="Basic Modal">
+<r-modal id="modal" heading="Basic Modal">
   <p>This is the modal content.</p>
   <div slot="footer">
     <r-button type="primary" onclick="modal.open = false">OK</r-button>
@@ -56,7 +56,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 ### Title `title`
 
 ```html
-<r-modal open title="Delete item">
+<r-modal open heading="Delete item">
   <p>Are you sure you want to delete this item?</p>
 </r-modal>
 ```
@@ -66,7 +66,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 Hides the header close button so the modal can only be dismissed through your own controls.
 
 ```html
-<r-modal open title="Terms" closable="false">
+<r-modal open heading="Terms" closable="false">
   <p>You must accept the terms to continue.</p>
   <div slot="footer">
     <r-button type="primary">Accept</r-button>
@@ -79,7 +79,7 @@ Hides the header close button so the modal can only be dismissed through your ow
 By default clicking the backdrop closes the modal. Set to `false` to require an explicit action.
 
 ```html
-<r-modal open title="Unsaved changes" maskClosable="false">
+<r-modal open heading="Unsaved changes" maskClosable="false">
   <p>Clicking outside will not dismiss this dialog.</p>
 </r-modal>
 ```
@@ -87,7 +87,7 @@ By default clicking the backdrop closes the modal. Set to `false` to require an 
 ### Close on Escape `closeOnEsc`
 
 ```html
-<r-modal open title="Report" closeOnEsc="false">
+<r-modal open heading="Report" closeOnEsc="false">
   <p>The Escape key is disabled for this dialog.</p>
 </r-modal>
 ```
@@ -95,7 +95,7 @@ By default clicking the backdrop closes the modal. Set to `false` to require an 
 ### Lock Scroll `lockScroll`
 
 ```html
-<r-modal open title="Preview" lockScroll="false">
+<r-modal open heading="Preview" lockScroll="false">
   <p>The page behind the modal can still scroll.</p>
 </r-modal>
 ```
@@ -103,7 +103,7 @@ By default clicking the backdrop closes the modal. Set to `false` to require an 
 ### Auto Focus `autoFocus`
 
 ```html
-<r-modal open title="Search" autoFocus="false">
+<r-modal open heading="Search" autoFocus="false">
   <input type="text" placeholder="Type to search" />
 </r-modal>
 ```
@@ -126,7 +126,7 @@ Drops the title bar and its border entirely, leaving only a floating close butto
 | `footer`  | Footer actions; the footer bar only shows when this is filled |
 
 ```html
-<r-modal open title="Confirm">
+<r-modal open heading="Confirm">
   <p>Body content goes in the default slot.</p>
   <div slot="footer">
     <r-button onclick="modal.open = false">Cancel</r-button>
@@ -149,7 +149,7 @@ All close-related events carry a `trigger` in `event.detail` describing what cau
 | `afterclose`  | No         | `{ trigger }` | Fired after the close transition finishes         |
 
 ```html
-<r-modal id="modal" title="Example"></r-modal>
+<r-modal id="modal" heading="Example"></r-modal>
 
 <script>
   const modal = document.getElementById('modal');

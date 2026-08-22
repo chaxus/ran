@@ -18,7 +18,7 @@ export class Card extends RanElement {
   _footerEl!: HTMLElement;
 
   static get observedAttributes(): string[] {
-    return ['title', 'description', 'sheet', 'hoverable'];
+    return ['heading', 'description', 'sheet', 'hoverable'];
   }
 
   constructor() {
@@ -63,11 +63,19 @@ export class Card extends RanElement {
 
   // ── Accessors ──────────────────────────────────────────────────────────────
 
-  get title(): string {
-    return getStringAttribute(this, 'title');
+  /**
+   * Heading text.
+   *
+   * Not `title`: that is a native `HTMLElement` attribute, and the browser renders it as a
+   * tooltip. A component using it for a heading makes every instance sprout a tooltip
+   * repeating the text already on screen, and there is no way to switch that off once the
+   * attribute is set.
+   */
+  get heading(): string {
+    return getStringAttribute(this, 'heading');
   }
-  set title(value: string) {
-    setStringAttribute(this, 'title', value);
+  set heading(value: string) {
+    setStringAttribute(this, 'heading', value);
   }
 
   get description(): string {
@@ -99,7 +107,7 @@ export class Card extends RanElement {
   // ── Internal sync ──────────────────────────────────────────────────────────
 
   private _syncTitle(): void {
-    this._titleEl.textContent = this.getAttribute('title') ?? '';
+    this._titleEl.textContent = this.getAttribute('heading') ?? '';
   }
 
   private _syncDescription(): void {
@@ -116,7 +124,7 @@ export class Card extends RanElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue === newValue) return;
-    if (name === 'title') this._syncTitle();
+    if (name === 'heading') this._syncTitle();
     if (name === 'description') this._syncDescription();
     if (name === 'sheet') syncSheetAttribute(this, this._shadowDom, name, oldValue, newValue);
   }

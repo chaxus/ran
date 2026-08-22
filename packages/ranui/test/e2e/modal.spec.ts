@@ -10,7 +10,7 @@ const MODAL_HTML = `
       const m = document.querySelector('r-modal');
       if (typeof m.open === 'function') m.open(); else m.setAttribute('open', '');
     ">Open Modal</r-button>
-    <r-modal id="demo-modal" title="Demo Modal">
+    <r-modal id="demo-modal" heading="Demo Modal">
       <p>This is modal body content.</p>
       <r-button onclick="document.querySelector('r-modal').removeAttribute('open')">Close</r-button>
     </r-modal>

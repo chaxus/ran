@@ -63,7 +63,7 @@ export class Modal extends RanElement {
   static get observedAttributes(): string[] {
     return [
       'open',
-      'title',
+      'heading',
       'maskClosable',
       'closeOnEsc',
       'lockScroll',
@@ -144,11 +144,19 @@ export class Modal extends RanElement {
     }
   }
 
-  get title(): string {
-    return this.getAttribute('title') || '';
+  /**
+   * Heading text.
+   *
+   * Not `title`: that is a native `HTMLElement` attribute, and the browser renders it as a
+   * tooltip. A dialog using it for its heading makes the whole dialog sprout a tooltip
+   * repeating the text already on screen, and there is no way to switch that off once the
+   * attribute is set.
+   */
+  get heading(): string {
+    return this.getAttribute('heading') || '';
   }
-  set title(value: string) {
-    this.setAttribute('title', value || '');
+  set heading(value: string) {
+    this.setAttribute('heading', value || '');
   }
 
   get maskClosable(): boolean {
@@ -241,9 +249,9 @@ export class Modal extends RanElement {
   };
 
   syncTitle = (): void => {
-    this._title.textContent = this.title || 'Modal';
+    this._title.textContent = this.heading || 'Modal';
     // In headerless mode the visible title is gone; keep the dialog's a11y name current.
-    if (this.hideHeader) this._dialog.setAttribute('aria-label', this.title || 'Modal');
+    if (this.hideHeader) this._dialog.setAttribute('aria-label', this.heading || 'Modal');
   };
 
   syncClosable = (): void => {
@@ -259,7 +267,7 @@ export class Modal extends RanElement {
     // The <h3 id=_labelId> title leaves the a11y tree when the header is hidden, so
     // aria-labelledby would dangle — label the dialog directly instead.
     if (hideHeader) {
-      this._dialog.setAttribute('aria-label', this.title || 'Modal');
+      this._dialog.setAttribute('aria-label', this.heading || 'Modal');
       this._dialog.removeAttribute('aria-labelledby');
     } else {
       this._dialog.setAttribute('aria-labelledby', this._labelId);
@@ -561,7 +569,7 @@ export class Modal extends RanElement {
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return;
-    if (name === 'title') {
+    if (name === 'heading') {
       this.syncTitle();
       return;
     }
@@ -616,7 +624,7 @@ export class Modal extends RanElement {
 
     return new Promise((resolve) => {
       const modal = View<Modal>('r-modal').build();
-      modal.title = title;
+      modal.heading = title;
       modal.maskClosable = maskClosable;
       modal.closeOnEsc = closeOnEsc;
       modal.lockScroll = lockScroll;

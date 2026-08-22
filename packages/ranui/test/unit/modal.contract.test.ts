@@ -56,13 +56,13 @@ describe('r-modal contract', () => {
     expect(titleEl?.textContent).toBe('Modal');
 
     // Set title
-    modal.title = 'New Title';
+    modal.heading = 'New Title';
     await sleep();
-    expect(modal.getAttribute('title')).toBe('New Title');
+    expect(modal.getAttribute('heading')).toBe('New Title');
     expect(titleEl?.textContent).toBe('New Title');
 
     // Remove title
-    modal.removeAttribute('title');
+    modal.removeAttribute('heading');
     await sleep();
     expect(titleEl?.textContent).toBe('Modal'); // Fallback to default
   });
@@ -368,7 +368,7 @@ describe('r-modal contract', () => {
     await sleep(40);
     const modal = document.querySelector('r-modal') as Modal;
     expect(modal).toBeTruthy();
-    expect(modal.title).toBe('Info');
+    expect(modal.heading).toBe('Info');
 
     const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
     confirmButton.click();
@@ -380,7 +380,7 @@ describe('r-modal contract', () => {
     const task = Modal.success('Success!');
     await sleep(40);
     const modal = document.querySelector('r-modal') as Modal;
-    expect(modal.title).toBe('Success');
+    expect(modal.heading).toBe('Success');
     const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
     confirmButton.click();
     await task;
@@ -390,7 +390,7 @@ describe('r-modal contract', () => {
     const task = Modal.warning({ content: 'Warn' });
     await sleep(40);
     const modal = document.querySelector('r-modal') as Modal;
-    expect(modal.title).toBe('Warning');
+    expect(modal.heading).toBe('Warning');
     const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
     confirmButton.click();
     await task;
@@ -400,7 +400,7 @@ describe('r-modal contract', () => {
     const task = Modal.error({ title: 'Custom Error', content: 'Err' });
     await sleep(40);
     const modal = document.querySelector('r-modal') as Modal;
-    expect(modal.title).toBe('Custom Error');
+    expect(modal.heading).toBe('Custom Error');
     const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
     confirmButton.click();
     await task;
@@ -448,7 +448,7 @@ describe('r-modal contract', () => {
     const shadow = modal._shadowDom as ShadowRoot;
     const titleEl = shadow?.querySelector('.ran-modal-title') as HTMLElement;
     titleEl.textContent = 'Before';
-    (modal as any).attributeChangedCallback('title', 'same', 'same');
+    (modal as any).attributeChangedCallback('heading', 'same', 'same');
     expect(titleEl.textContent).toBe('Before');
   });
 

@@ -31,7 +31,7 @@
    quieter than anything anyone said. */
 .turn-system {
   color: var(--ran-color-text-secondary);
-  font-size: var(--ran-text-copy-3);
+  font-size: var(--ran-text-label-3);
 }
 
 .turn-actions {
@@ -57,7 +57,7 @@
   padding: var(--ran-space-1) var(--ran-space-2);
   color: var(--ran-color-text-disabled);
   font: inherit;
-  font-size: var(--ran-text-copy-3);
+  font-size: var(--ran-text-label-3);
   line-height: 1;
   cursor: pointer;
 }
@@ -77,7 +77,7 @@
 
 .turn-branch-count {
   color: var(--ran-color-text-disabled);
-  font-size: var(--ran-text-copy-3);
+  font-size: var(--ran-text-label-3);
   font-variant-numeric: tabular-nums;
 }
 
@@ -85,4 +85,32 @@
   .turn-actions {
     transition: none;
   }
+}
+
+/* Attachments above the message, on the same side as it. Capped so a screenshot is a
+   thumbnail in the transcript rather than a full-height wall between two sentences — the
+   point is that it was sent, and the original opens from the file it came from. */
+.turn-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ran-space-2);
+  max-width: 100%;
+}
+
+.turn-images img {
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-md);
+  max-width: min(16rem, 100%);
+  max-height: 12rem;
+  object-fit: cover;
+}
+
+/* A provider failure is not something the model said, so it does not share the message's
+   voice: its own line, in the error colour, under whatever did arrive. */
+.turn-failure {
+  margin: 0;
+  border-left: 2px solid var(--ran-color-danger);
+  padding-left: var(--ran-space-3);
+  color: var(--ran-color-danger);
+  font-size: var(--ran-text-label-3);
 }

@@ -204,7 +204,7 @@ export class ToolCard extends RanElement {
   private _render(): void {
     const view = this._call;
     const status = this.status;
-    this._row.title = view !== null && 'title' in view ? view.title : '';
+    this._row.heading = view !== null && 'title' in view ? view.title : '';
     this._row.summary = summaryOf(view);
     this._row.open = this.open;
     this._row.tone = status === 'error' ? 'error' : '';

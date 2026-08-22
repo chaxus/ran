@@ -26,14 +26,17 @@ body {
   font-size: var(--ran-text-copy-2);
 }
 
+/* Full width, not a centred 860px block. `r-conversation` already centres its own message
+   column at a readable measure; capping the page as well meant the transcript was squeezed
+   to whatever was left after the sidebar — 596px on a 1512px screen — with dead space on
+   both sides. The component owns the measure; the page owns the frame. */
 .page {
   display: flex;
   flex-direction: column;
   gap: var(--ran-space-3);
   box-sizing: border-box;
-  margin: 0 auto;
   padding: var(--ran-space-4);
-  width: min(860px, 100%);
+  width: 100%;
   height: 100vh;
   height: 100dvh;
 }
@@ -74,7 +77,7 @@ body {
   flex: none;
   flex-direction: column;
   gap: var(--ran-space-2);
-  width: 220px;
+  width: 240px;
   min-height: 0;
 }
 
@@ -135,13 +138,23 @@ body {
   visibility: visible;
 }
 
+/* One measure for the whole thread. Custom properties inherit through a shadow boundary, so
+   declaring it here is what `r-conversation` centres its message column at *and* what the
+   composer below matches — the two would otherwise sit on different axes, with messages
+   centred in a narrow column above an input spanning the whole panel. */
 .thread {
+  --thread-measure: 46rem;
+
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: var(--ran-space-3);
   min-width: 0;
   min-height: 0;
+}
+
+.chat {
+  --ran-conversation-measure: var(--thread-measure);
 }
 
 /* On a narrow screen the list becomes a strip above the thread rather than a column beside
@@ -185,8 +198,12 @@ body {
 }
 
 .composer-shell {
+  box-sizing: border-box;
+  margin: 0 auto;
   border-top: 1px solid var(--ran-color-border);
   padding: var(--ran-space-3);
+  width: 100%;
+  max-width: calc(var(--thread-measure) + var(--ran-space-4));
 }
 
 /* The real file input stays in the accessibility tree and stays keyboard-reachable; it is
