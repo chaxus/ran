@@ -312,7 +312,9 @@ describe('conversation engine lifecycle', () => {
     listener.mockClear();
     engine.reset();
     expect(engine.nodes()).toEqual([]);
-    expect(listener).toHaveBeenCalledExactlyOnceWith([]);
+    // `undefined` for the changed set: every node is gone, so no set of keys describes
+    // what a subscriber has to redo.
+    expect(listener).toHaveBeenCalledExactlyOnceWith([], undefined);
   });
 
   it('cancels a pending frame on reset', () => {
@@ -428,5 +430,138 @@ describe('truncate — the operation editing, regenerating and branching are mad
     e.subscribe((nodes) => seen.push(nodes.length));
     e.truncate('note:nope');
     expect(seen).toEqual([]);
+  });
+});
+
+describe('batching and change reporting', () => {
+  /** A definition that opens a node per id and appends text to it. */
+  const notes: ConversationNodeDefinition<{ id: string; text?: string }, string> = {
+    kind: 'note',
+    match: (event) => ({ id: event.id, role: event.text === undefined ? 'start' : 'update' }),
+    start: () => '',
+    update: (state, event) => state + (event.text ?? ''),
+    publication: (event) => (event.text === undefined ? 'immediate' : 'animation-frame'),
+  };
+
+  /**
+   * Builds an engine with a manual scheduler.
+   *
+   * @returns The engine, a flush for the pending frame, and the listener.
+   */
+  const setup = (): {
+    engine: ConversationEngine<{ id: string; text?: string }>;
+    flush: () => void;
+    listener: ReturnType<typeof vi.fn>;
+  } => {
+    let pending: (() => void) | null = null;
+    const engine = createConversationEngine<{ id: string; text?: string }>({
+      definitions: [notes as ConversationNodeDefinition<{ id: string; text?: string }, unknown>],
+      scheduler: (run) => {
+        pending = run;
+        return () => {
+          pending = null;
+        };
+      },
+    });
+    const listener = vi.fn();
+    engine.subscribe(listener);
+    return {
+      engine,
+      flush: () => {
+        const run = pending;
+        pending = null;
+        run?.();
+      },
+      listener,
+    };
+  };
+
+  it('publishes a burst once instead of once per event', () => {
+    // Replaying a stored conversation without this is quadratic: every event publishes,
+    // every publication hands over the whole node list, and a DOM subscriber walks all of
+    // it. On a 600-message transcript that was 5.4 seconds of blocked main thread.
+    const { engine, listener } = setup();
+    engine.batch(() => {
+      for (let i = 0; i < 50; i += 1) engine.push({ id: `n${i}` });
+    });
+    expect(listener).toHaveBeenCalledTimes(1);
+    expect(listener.mock.calls[0][0]).toHaveLength(50);
+  });
+
+  it('takes the highest cadence any event in the burst asked for', () => {
+    const { engine, listener, flush } = setup();
+    engine.batch(() => {
+      engine.push({ id: 'a' });
+      engine.push({ id: 'a', text: 'x' });
+    });
+    // A start is immediate, so the burst is immediate even though a delta joined it.
+    expect(listener).toHaveBeenCalledTimes(1);
+
+    listener.mockClear();
+    engine.batch(() => {
+      engine.push({ id: 'a', text: 'y' });
+      engine.push({ id: 'a', text: 'z' });
+    });
+    expect(listener).not.toHaveBeenCalled();
+    flush();
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  it('publishes nothing for a burst that accepted nothing', () => {
+    const { engine, listener } = setup();
+    engine.batch(() => {});
+    expect(listener).not.toHaveBeenCalled();
+  });
+
+  it('joins a nested batch to the outer one rather than publishing early', () => {
+    const { engine, listener } = setup();
+    engine.batch(() => {
+      engine.push({ id: 'a' });
+      engine.batch(() => {
+        engine.push({ id: 'b' });
+      });
+      expect(listener).not.toHaveBeenCalled();
+    });
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  it('still publishes what a throwing burst folded in', () => {
+    // The nodes are already changed; leaving subscribers on the previous set would be a
+    // view that disagrees with the engine.
+    const { engine, listener } = setup();
+    expect(() =>
+      engine.batch(() => {
+        engine.push({ id: 'a' });
+        throw new Error('boom');
+      }),
+    ).toThrow('boom');
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  it('reports only the keys whose state changed', () => {
+    // On a long transcript the node list is mostly unchanged every frame, and rewriting all
+    // of it once per delta is the difference between a transcript that streams and one that
+    // stalls.
+    const { engine, listener, flush } = setup();
+    engine.batch(() => {
+      engine.push({ id: 'a' });
+      engine.push({ id: 'b' });
+    });
+    listener.mockClear();
+    engine.push({ id: 'b', text: 'hi' });
+    flush();
+    expect([...listener.mock.calls[0][1]]).toEqual(['note:b']);
+  });
+
+  it('clears the reported set between publications', () => {
+    const { engine, listener, flush } = setup();
+    engine.push({ id: 'a' });
+    listener.mockClear();
+    engine.push({ id: 'a', text: '1' });
+    flush();
+    listener.mockClear();
+    engine.push({ id: 'a', text: '2' });
+    flush();
+    expect([...listener.mock.calls[0][1]]).toEqual(['note:a']);
   });
 });

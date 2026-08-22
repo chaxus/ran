@@ -216,6 +216,15 @@ Semantics you need before writing one:
   cancels the frame.
 - **`reader.previous(kind)` is backward-only**, so replaying the same log reproduces the
   same view. A definition that could see nodes started after it would not.
+- **`batch(run)` for any replay.** Without it, restoring a stored conversation is
+  quadratic: every event publishes, every publication hands subscribers the whole node
+  list, and a DOM subscriber walks all of it. Measured on a 600-message transcript that was
+  5.4 seconds of blocked main thread; batched it is 158ms. A live stream does not need it —
+  one delta changes one row.
+- **A subscriber gets the keys that changed.** On a long transcript nearly every row is
+  unchanged on every frame, and rewriting all of them once per delta is the difference
+  between a transcript that streams and one that stalls. `undefined` means every node
+  changed, which is what a reset reports.
 - **`truncate(key)` is what editing, regenerating and branching are made of.** All three
   mean "the conversation diverges here", and what follows the divergence is no longer part
   of it. It cuts by `seq` rather than by position — a node that opened before the cut

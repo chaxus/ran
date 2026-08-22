@@ -236,3 +236,59 @@ describe('r-conversation contract', () => {
     expect(shadow).toBeTruthy();
   });
 });
+
+describe('r-conversation render economy', () => {
+  /** A view that counts how often each row is patched. */
+  const counting = (patches: Map<string, number>): ConversationNodeView<{ id: string; text?: string }, string> => ({
+    kind: 'note',
+    match: (event) => ({ id: event.id, role: event.text === undefined ? 'start' : 'update' }),
+    start: () => '',
+    update: (state, event) => state + (event.text ?? ''),
+    publication: () => 'immediate',
+    mount: () => document.createElement('div'),
+    patch: (element, node) => {
+      patches.set(node.key, (patches.get(node.key) ?? 0) + 1);
+      element.textContent = node.state;
+    },
+  });
+
+  it('patches only the rows whose state changed', () => {
+    // On a long transcript nearly every row is unchanged on every frame, and re-writing all
+    // of them once per delta is the difference between a transcript that streams and one
+    // that stalls.
+    const patches = new Map<string, number>();
+    const chat = document.createElement('r-conversation') as Conversation;
+    document.body.appendChild(chat);
+    chat.register(counting(patches));
+
+    chat.batch(() => {
+      for (let i = 0; i < 20; i += 1) chat.push({ id: `n${i}` });
+    });
+    patches.clear();
+
+    chat.push({ id: 'n7', text: 'x' });
+    expect([...patches.keys()]).toEqual(['note:n7']);
+  });
+
+  it('renders a batched burst once', () => {
+    const patches = new Map<string, number>();
+    const chat = document.createElement('r-conversation') as Conversation;
+    document.body.appendChild(chat);
+    chat.register(counting(patches));
+
+    chat.batch(() => {
+      for (let i = 0; i < 20; i += 1) chat.push({ id: `n${i}` });
+    });
+    // One patch each: without batching the first row would be patched twenty times.
+    expect([...patches.values()].every((count) => count === 1)).toBe(true);
+  });
+
+  it('patches a row it just mounted, even when nothing reports it changed', () => {
+    const patches = new Map<string, number>();
+    const chat = document.createElement('r-conversation') as Conversation;
+    document.body.appendChild(chat);
+    chat.register(counting(patches));
+    chat.push({ id: 'a' });
+    expect(patches.get('note:a')).toBe(1);
+  });
+});

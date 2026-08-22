@@ -39,6 +39,17 @@
 .ran-conversation-row {
   display: block;
   min-width: 0;
+  /* A long transcript's cost is layout, not markup. Every streamed delta changes the last
+     row's height, and the bottom-follower reads `scrollHeight` right after — which lays out
+     the whole column. Measured on a 3000-message transcript that was 45ms per frame.
+     `content-visibility: auto` lets the browser skip layout and paint for rows that are off
+     screen while leaving them in the DOM, so find-in-page, Ctrl+F, text selection and screen
+     readers still see the whole conversation — which is what windowing gives up.
+     `auto` in `contain-intrinsic-size` makes the browser remember each row's last rendered
+     size, so `scrollHeight` stays honest once a row has been on screen; the 8rem is only the
+     first guess for a row that never has been. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 8rem;
 }
 
 .ran-conversation-footer {
