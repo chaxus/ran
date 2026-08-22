@@ -177,6 +177,20 @@ export class Conversation extends RanElement {
     this._ensureEngine().push(event);
   }
 
+  /**
+   * Drops one row and every row opened after it.
+   *
+   * Editing a message, regenerating an answer and branching are the same operation: the
+   * conversation diverges here, and what follows the divergence is no longer part of it.
+   *
+   * @param key The `kind:id` of the first row to drop.
+   * @returns How many rows were dropped. Zero means no such row is live, which is a
+   *   caller's cue that its own idea of the conversation is stale.
+   */
+  truncate(key: string): number {
+    return this._engine?.truncate(key) ?? 0;
+  }
+
   /** Drops every node and row, keeping the registered views. */
   reset(): void {
     this._engine?.reset();

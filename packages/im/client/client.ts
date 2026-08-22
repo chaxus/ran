@@ -18,10 +18,20 @@ import type { Session, SessionStore } from '@/client/sessions';
 import type { Attachment, AttachmentRejection } from 'ranui';
 import { streamDialog } from '@/client/lib/eventSource';
 import type { DialogStream } from '@/client/lib/eventSource';
-import { NOTHING_EMITTED, eventsFromSnapshot, reasoningView, toolNodeId, toolView, turnView } from '@/client/chat';
-import type { ChatEvent, EmittedSoFar } from '@/client/chat';
+import {
+  NOTHING_EMITTED,
+  eventsFromSnapshot,
+  reasoningView,
+  TURN_ACTION_CSS,
+  TURN_ACTION_EVENT,
+  toolNodeId,
+  toolView,
+  turnView,
+} from '@/client/chat';
+import type { ChatEvent, EmittedSoFar, TurnActionDetail } from '@/client/chat';
 import { parseToolArgs, runTool, toolsForRequest } from '@/client/tools/index';
-import type { StoredMessage, WireToolCall } from '@/client/chat-types';
+import type { Branch, StoredMessage, WireToolCall } from '@/client/chat-types';
+import { replyStart, survivingBranches } from '@/client/history';
 import { KEEP_RECENT, contextTokens, decideBudget } from '@/client/budget';
 import { addUsage } from 'ranuts/stream';
 import type { TokenUsage } from 'ranuts/stream';
@@ -30,7 +40,11 @@ import type { TokenUsage } from 'ranuts/stream';
 type ConversationElement = HTMLElement & {
   register: (view: unknown) => void;
   push: (event: ChatEvent) => void;
+  truncate: (key: string) => number;
   reset: () => void;
+  scrollToBottom: () => void;
+  captureAnchor: (key?: string) => boolean;
+  restoreAnchor: () => boolean;
 };
 
 import type { ContentPart, MessageContent } from '@/client/chat-types';
@@ -60,6 +74,10 @@ const DEMO_NOTICE =
 
 // Every view registers before the first push; the projection is built once, and the
 // element throws rather than silently missing events a later registration never saw.
+// The rows live in the conversation's shadow tree, where a page stylesheet cannot reach
+// them, so their styles travel in with them.
+chat.setAttribute('sheet', TURN_ACTION_CSS);
+
 chat.register(turnView);
 chat.register(reasoningView);
 chat.register(toolView);
@@ -67,7 +85,6 @@ chat.register(toolView);
 let store: SessionStore;
 let current: Session;
 let inFlight: DialogStream | null = null;
-let turn = 0;
 /**
  * The model's context window, as the server reported it on the last response.
  *
@@ -114,16 +131,14 @@ const MAX_STEPS = 6;
  * @param text What the user typed.
  */
 async function ask(text: string): Promise<void> {
-  turn += 1;
-  const id = `t${turn}`;
-
   const staged = [...attachments.attachments];
   const content = await buildContent(text, staged);
   // The transcript shows what was attached, because a message that reads "看看这个" with no
   // sign of the four screenshots beside it is a message nobody can reconstruct later.
   const shown = staged.length === 0 ? text : `${text}\n\n${staged.map((a) => `\`${a.name}\``).join(' · ')}`;
 
-  chat.push({ type: 'turn/start', id: `${id}-user`, role: 'user', text: shown });
+  chat.push({ type: 'turn/start', id: nodeId(current.messages.length), role: 'user', text: shown });
+  chat.push({ type: 'turn/end', id: nodeId(current.messages.length) });
   current.messages.push({ role: 'user', content });
   // Named from the first thing said in it, once: a conversation renamed on every turn is a
   // list entry that keeps moving under the reader.
@@ -133,8 +148,160 @@ async function ask(text: string): Promise<void> {
   await renderSessions();
 
   setRunning(true);
-  await runStep(id, 0);
+  await runStep(0);
 }
+
+/**
+ * Names the conversation node of one stored message.
+ *
+ * Node ids are message indices rather than a per-request counter so that a row always knows
+ * which message it is. That is what edit, regenerate and branch need: all three are "cut the
+ * history at index N", and a row whose id says nothing about N cannot ask for it.
+ *
+ * The index is knowable before the message exists: a round's assistant message lands at
+ * `messages.length` as it stands when the round starts, because nothing else is appended in
+ * between. Live rows and replayed rows therefore agree on every id.
+ *
+ * @param index Position in `current.messages`.
+ * @returns The node id.
+ */
+function nodeId(index: number): string {
+  return `m${index}`;
+}
+
+// ── Editing, regenerating, branching ───────────────────────────────────────
+//
+// All three are one operation with three entry points: the conversation diverges at some
+// index, and everything after it is no longer part of it. What differs is where the cut
+// falls and what happens next.
+
+/**
+ * The alternative currently being replaced, once a regeneration is in flight.
+ *
+ * Held here rather than passed down the round chain because the tail is only complete when
+ * the whole exchange ends, which may be several rounds later.
+ */
+let pendingBranch: number | null = null;
+
+/**
+ * Cuts the conversation at one index, in the history and in the transcript together.
+ *
+ * @param index First message to drop.
+ * @returns The messages that were dropped, in order.
+ */
+function cutAt(index: number): StoredMessage[] {
+  const dropped = current.messages.slice(index);
+  current.messages = current.messages.slice(0, index);
+  current.branches = survivingBranches(current.branches ?? [], index);
+  // The transcript is cut at the row the message opened. Rows are dropped by when they
+  // opened, so the tool cards and reasoning of a cut turn go with it.
+  chat.truncate(`turn:${nodeId(index)}`);
+  return dropped;
+}
+
+/**
+ * Loads a user message back into the composer and cuts the conversation there.
+ *
+ * @param index The user message being edited.
+ */
+async function editAt(index: number): Promise<void> {
+  const message = current.messages[index];
+  if (message === undefined || message.role !== 'user') return;
+  inFlight?.close();
+  question.value = textOf(message.content);
+  cutAt(index);
+  // Rebuilt rather than trimmed: the rows below the cut are gone, but the ones above may
+  // have gained or lost a branch switcher, and the history is the only thing that knows.
+  renderSession(current);
+  await persist();
+  renderMeter();
+  // The cut shrank the transcript, and the follower reads that as the reader having
+  // scrolled up. It was not the reader — they asked for this, and what they want to see is
+  // the end of what is left, right above the box they are about to type in.
+  chat.scrollToBottom();
+  question.focus();
+}
+
+/**
+ * Re-runs the model's reply to the message before this one, keeping the old reply.
+ *
+ * @param index A message inside the reply being replaced.
+ */
+async function regenerateAt(index: number): Promise<void> {
+  const from = replyStart(current.messages, index);
+  if (from >= current.messages.length) return;
+  inFlight?.close();
+  const previous = cutAt(from);
+
+  const existing = (current.branches ?? []).find((branch) => branch.at === from);
+  if (existing === undefined) {
+    current.branches = [...(current.branches ?? []), { at: from, tails: [previous], active: 0 }];
+  } else {
+    // Regenerating from an alternative records what was on screen, whichever one it was.
+    existing.tails[existing.active] = previous;
+  }
+  pendingBranch = from;
+
+  renderSession(current);
+  await persist();
+  chat.scrollToBottom();
+  setRunning(true);
+  await runStep(0);
+}
+
+/**
+ * Records the finished reply as the newest alternative at the point it replaced.
+ *
+ * Called when an exchange ends rather than when a round does: an answer that took three
+ * tool calls is one alternative, not three.
+ */
+async function closeBranch(): Promise<void> {
+  const at = pendingBranch;
+  pendingBranch = null;
+  if (at === null) return;
+  const branch = (current.branches ?? []).find((entry) => entry.at === at);
+  if (branch === undefined) return;
+  branch.tails.push(current.messages.slice(at));
+  branch.active = branch.tails.length - 1;
+  renderSession(current);
+  await persist();
+  renderMeter();
+}
+
+/**
+ * Swaps in another recorded alternative.
+ *
+ * @param index A message inside the current alternative.
+ * @param delta -1 for the previous one, 1 for the next.
+ */
+async function switchBranch(index: number, delta: number): Promise<void> {
+  const branch = (current.branches ?? []).find((entry) => entry.at === index);
+  if (branch === undefined) return;
+  const next = branch.active + delta;
+  const tail = branch.tails[next];
+  if (tail === undefined) return;
+  inFlight?.close();
+  // What is on screen is written back first: it is the alternative being left, and it may
+  // have grown since it was recorded.
+  branch.tails[branch.active] = current.messages.slice(branch.at);
+  branch.active = next;
+  current.messages = [...current.messages.slice(0, branch.at), ...tail];
+  // Held rather than scrolled: the reader is comparing two answers at one point, and the
+  // alternatives differ in length. Sending them to the floor moves the thing they are
+  // reading off the screen.
+  chat.captureAnchor(`turn:${nodeId(branch.at)}`);
+  renderSession(current);
+  chat.restoreAnchor();
+  await persist();
+  renderMeter();
+}
+
+chat.addEventListener(TURN_ACTION_EVENT, (event) => {
+  const { action, index } = (event as CustomEvent<TurnActionDetail>).detail;
+  if (action === 'edit') void editAt(index);
+  else if (action === 'regenerate') void regenerateAt(index);
+  else void switchBranch(index, action === 'next' ? 1 : -1);
+});
 
 // ── Compaction ─────────────────────────────────────────────────────────────
 
@@ -266,23 +433,22 @@ function renderMeter(): void {
  * @param step Which round this is, counted from 0.
  * @returns Once the exchange has ended, whether by an answer, a failure, or the ceiling.
  */
-async function runStep(id: string, step: number): Promise<void> {
+async function runStep(step: number): Promise<void> {
   await compactIfNeeded();
-  return sendRound(id, step);
+  return sendRound(step);
 }
 
 /**
  * Sends one request and folds its response into the transcript.
  *
- * @param id The user turn every round of this exchange belongs to.
  * @param step Which round this is, counted from 0.
  * @returns Once this round has ended, whether by an answer, a failure, or tools.
  */
-function sendRound(id: string, step: number): Promise<void> {
-  // Each round gets its own node ids: its reasoning, its answer and its tool cards are
-  // separate rows from the previous round's, which is what makes a multi-step exchange
-  // readable rather than one row that keeps being rewritten.
-  const round = `${id}-r${step}`;
+function sendRound(step: number): Promise<void> {
+  // Where this round's assistant message will land. Each round gets its own row, which is
+  // what makes a multi-step exchange readable rather than one row that keeps being rewritten.
+  const at = current.messages.length;
+  const round = nodeId(at);
   let emitted: EmittedSoFar = NOTHING_EMITTED;
   let answered = false;
 
@@ -308,12 +474,10 @@ function sendRound(id: string, step: number): Promise<void> {
         },
         onEnd: (snapshot, error) => {
           inFlight = null;
-          // Counted before anything else, and counted even on a failure: a response that
-          // died halfway was still billed for what it produced.
-          if (snapshot.usage !== undefined) {
-            current.usage = addUsage(current.usage, snapshot.usage);
-            renderMeter();
-          }
+          // Counted even on a failure: a response that died halfway was still billed for
+          // what it produced. The meter is redrawn after the message is stored, not here —
+          // `used` counts the history, and the history does not include this answer yet.
+          if (snapshot.usage !== undefined) current.usage = addUsage(current.usage, snapshot.usage);
           const text = snapshot.blocks.reduce((out, b) => (b.type === 'text' ? out + b.text : out), '');
           const calls = snapshot.blocks.filter((block) => block.type === 'tool-call');
 
@@ -322,24 +486,28 @@ function sendRound(id: string, step: number): Promise<void> {
             // reader sees what happened instead of a request that produced nothing.
             if (!answered) chat.push({ type: 'turn/start', id: round, role: 'assistant', text: '' });
             chat.push({ type: 'turn/error', id: round, message: error.message });
+            renderMeter();
             setRunning(false);
-            resolve();
+            // A failed regeneration still ends the exchange, and the alternative it produced
+            // is the failure. Leaving the capture open would attach it to the next answer.
+            void closeBranch().then(resolve);
             return;
           }
 
           if (calls.length === 0) {
             chat.push({ type: 'turn/end', id: round });
-            if (text !== '') {
-              current.messages.push({ role: 'assistant', content: text });
-              void persist().then(renderSessions);
-            }
+            if (text !== '') current.messages.push({ role: 'assistant', content: text });
+            renderMeter();
             setRunning(false);
-            resolve();
+            void persist()
+              .then(renderSessions)
+              .then(closeBranch)
+              .then(() => resolve());
             return;
           }
 
           chat.push({ type: 'turn/end', id: round });
-          void continueWithTools(id, step, round, text, calls).then(resolve);
+          void continueWithTools(step, round, text, calls).then(resolve);
         },
       },
     );
@@ -353,14 +521,12 @@ function sendRound(id: string, step: number): Promise<void> {
  * rejects a `role: 'tool'` message whose id names no call in the message before it, so the
  * two halves are written in the order the wire format requires, not the order they complete.
  *
- * @param id The user turn this exchange belongs to.
  * @param step Which round produced these calls.
  * @param round The node-id prefix that round used.
  * @param text Any text the model wrote alongside the calls.
  * @param calls The calls, in block order.
  */
 async function continueWithTools(
-  id: string,
   step: number,
   round: string,
   text: string,
@@ -391,6 +557,7 @@ async function continueWithTools(
 
   await persist();
   await renderSessions();
+  renderMeter();
 
   if (step + 1 >= MAX_STEPS) {
     chat.push({ type: 'turn/start', id: `${round}-halt`, role: 'assistant', text: '' });
@@ -400,9 +567,10 @@ async function continueWithTools(
       message: `已连续调用工具 ${MAX_STEPS} 轮仍未给出答案，已停止。`,
     });
     setRunning(false);
+    await closeBranch();
     return;
   }
-  await runStep(id, step + 1);
+  await runStep(step + 1);
 }
 
 // ── Sessions ───────────────────────────────────────────────────────────────
@@ -440,10 +608,10 @@ function blankSession(): Session {
  */
 function renderSession(session: Session): void {
   chat.reset();
-  turn = 0;
   // Results are indexed by call id first, because a tool message names the call it answers
   // and the two are not adjacent when the model made several calls at once.
   const results = new Map<string, { output: string; failed: boolean }>();
+  const branches = new Map<number, Branch>((session.branches ?? []).map((branch) => [branch.at, branch]));
   for (const entry of session.messages) {
     // A stored result carries no verdict — the wire format has no field for one, and the
     // model is not told either. Replay shows every finished call as finished.
@@ -453,7 +621,7 @@ function renderSession(session: Session): void {
   session.messages.forEach((entry, index) => {
     // A tool message has already been drawn as the result of its call.
     if (entry.role === 'tool') return;
-    const id = `restored-${index}`;
+    const id = nodeId(index);
     const text = typeof entry.content === 'string' ? entry.content : textOf(entry.content);
     const calls = entry.role === 'assistant' ? (entry.tool_calls ?? []) : [];
     // An assistant message that only asked for tools has no text; opening an empty row for
@@ -463,6 +631,10 @@ function renderSession(session: Session): void {
       // Restored turns are finished by definition; without this every one of them would come
       // back mid-stream, with `r-markdown` still guessing at half-written syntax.
       chat.push({ type: 'turn/end', id });
+      const branch = branches.get(index);
+      if (branch !== undefined) {
+        chat.push({ type: 'turn/branch', id, current: branch.active + 1, total: branch.tails.length });
+      }
     }
     calls.forEach((call, ordinal) => {
       const node = toolNodeId(id, ordinal);

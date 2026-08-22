@@ -44,3 +44,23 @@ export type StoredMessage =
   | { role: 'user'; content: MessageContent }
   | { role: 'assistant'; content: MessageContent; tool_calls?: WireToolCall[] }
   | { role: 'tool'; content: string; tool_call_id: string; name: string };
+
+/**
+ * Alternative answers recorded at one point in a conversation.
+ *
+ * A tail rather than a single message: an answer can be several messages — the model calls
+ * a tool, reads the result, and answers — and switching between alternatives has to swap all
+ * of them together or the tool results stop matching the calls above them.
+ *
+ * Alternatives at a point are dropped when the history is cut at or before it. A branch
+ * whose starting point no longer exists is not a choice; it is a record of a conversation
+ * that was replaced.
+ */
+export interface Branch {
+  /** Index in `messages` where every recorded tail begins. */
+  at: number;
+  /** Each entry is the whole history from {@link Branch.at} onward. */
+  tails: StoredMessage[][];
+  /** Which entry is currently spliced into `messages`. */
+  active: number;
+}

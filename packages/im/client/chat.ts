@@ -18,6 +18,10 @@ export type ChatEvent =
   | { type: 'turn/text'; id: string; text: string }
   | { type: 'turn/end'; id: string }
   | { type: 'turn/error'; id: string; message: string }
+  // Sent for a row that has recorded alternatives, so the row can offer to switch between
+  // them. Separate from `turn/start` because branch state is a fact about the stored
+  // conversation, and a live row being streamed has no idea whether it will gain one.
+  | { type: 'turn/branch'; id: string; current: number; total: number }
   | { type: 'reasoning/start'; id: string }
   | { type: 'reasoning/text'; id: string; text: string }
   // A tool call opens as soon as its name is known and its arguments are still arriving, so
@@ -41,6 +45,10 @@ interface TurnState {
   text: string;
   streaming: boolean;
   error: string | null;
+  /** Position in the stored history, or null for a row that stands for no stored message. */
+  index: number | null;
+  /** 1-based position among this point's recorded alternatives, and how many there are. */
+  branch: { current: number; total: number } | null;
 }
 
 /** What each row is headed with. */
@@ -70,7 +78,12 @@ export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
   kind: 'turn',
   match: (event) => {
     if (event.type === 'turn/start') return { id: event.id, role: 'start' };
-    if (event.type === 'turn/text' || event.type === 'turn/end' || event.type === 'turn/error') {
+    if (
+      event.type === 'turn/text' ||
+      event.type === 'turn/end' ||
+      event.type === 'turn/error' ||
+      event.type === 'turn/branch'
+    ) {
       return { id: event.id, role: 'update' };
     }
     return null;
@@ -80,11 +93,14 @@ export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
     text: event.type === 'turn/start' ? event.text : '',
     streaming: event.type === 'turn/start' && event.role === 'assistant',
     error: null,
+    index: messageIndex(event.id),
+    branch: null,
   }),
   update: (state, event) => {
     if (event.type === 'turn/text') return { ...state, text: state.text + event.text };
     if (event.type === 'turn/end') return { ...state, streaming: false };
     if (event.type === 'turn/error') return { ...state, streaming: false, error: event.message };
+    if (event.type === 'turn/branch') return { ...state, branch: { current: event.current, total: event.total } };
     return state;
   },
   // A burst of tokens repaints once per frame; opening, closing and failing are discrete
@@ -96,6 +112,7 @@ export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
     const card = document.createElement('r-card');
     card.setAttribute('title', TURN_TITLES[node.state.role]);
     card.appendChild(document.createElement('r-markdown'));
+    card.appendChild(actionBar(node.state.index));
     return card;
   },
   patch: (element, node) => {
@@ -106,9 +123,183 @@ export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
     // Streaming mode closes half-written markdown; a finished message has none to close,
     // and guessing at it would be inventing syntax the model did not send.
     markdown.setAttribute('mode', streaming ? 'streaming' : 'static');
+    patchActions(element, node.state);
   },
 };
 
+/**
+ * Styles for the row actions, adopted into the conversation's shadow root.
+ *
+ * These live in a string handed to `r-conversation`'s `sheet` attribute because the rows are
+ * built into that shadow tree, where a page stylesheet cannot reach them. The values are
+ * ranui tokens, which resolve there like anywhere else.
+ */
+export const TURN_ACTION_CSS = `
+.turn-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-1);
+  margin-top: var(--ran-space-2);
+  /* Held back until the row is hovered or something inside it has focus: a column of
+     buttons under every message is louder than the messages. Focus is what keeps it
+     reachable without a pointer. */
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+.ran-conversation-row:hover .turn-actions,
+.ran-conversation-row:focus-within .turn-actions {
+  opacity: 1;
+}
+.turn-action {
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  background: transparent;
+  padding: var(--ran-space-1) var(--ran-space-2);
+  color: var(--ran-color-text-secondary);
+  font: inherit;
+  font-size: var(--ran-text-copy-3);
+  line-height: 1;
+  cursor: pointer;
+}
+.turn-action:hover {
+  border-color: var(--ran-color-border-strong);
+  color: var(--ran-color-text);
+}
+.turn-action:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+  /* Always visible when focused, whatever the hover state — otherwise keyboard users
+     tab onto a control they cannot see. */
+  opacity: 1;
+}
+.turn-branch-count {
+  color: var(--ran-color-text-disabled);
+  font-size: var(--ran-text-copy-3);
+  font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+  .turn-actions {
+    transition: none;
+  }
+}
+`;
+
+// ── Row actions ────────────────────────────────────────────────────────────
+
+/** What a row's buttons ask the conversation to do. */
+export type TurnAction = 'edit' | 'regenerate' | 'previous' | 'next';
+
+/** `turnaction` event detail. */
+export interface TurnActionDetail {
+  action: TurnAction;
+  /** Index of the message the row stands for. */
+  index: number;
+}
+
+/**
+ * Recovers the message index a node id names.
+ *
+ * @param id The node id.
+ * @returns The index, or null for a row that stands for no stored message — the halt notice
+ *   a capped tool loop leaves behind is one, and it has nothing to edit or regenerate.
+ */
+function messageIndex(id: string): number | null {
+  const match = /^m(\d+)$/.exec(id);
+  return match === null ? null : Number(match[1]);
+}
+
+/** Buttons a row can show, in the order they appear. */
+const ACTION_LABELS: { action: TurnAction; label: string }[] = [
+  { action: 'previous', label: '‹' },
+  { action: 'next', label: '›' },
+  { action: 'edit', label: '编辑' },
+  { action: 'regenerate', label: '重新生成' },
+];
+
+/**
+ * Builds the action bar every row carries.
+ *
+ * Built once at mount and shown or hidden in `patch` rather than rebuilt: a button that is
+ * recreated on every token loses focus mid-stream, and these sit under a message that
+ * streams for seconds.
+ *
+ * Each button announces itself with a composed {@link TURN_ACTION_EVENT}. It has to: rows
+ * are mounted into `r-conversation`'s **closed** shadow root, so a listener on the page
+ * cannot see the button in `composedPath()` and has no way to work out what was clicked. A
+ * custom event carries its own detail across the boundary intact.
+ *
+ * @param index Position of the message this row stands for, fixed for the row's whole life.
+ * @returns The bar, with every button present and hidden.
+ */
+function actionBar(index: number | null): HTMLElement {
+  const bar = document.createElement('div');
+  bar.className = 'turn-actions';
+  bar.append(
+    ...ACTION_LABELS.map(({ action, label }) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `turn-action turn-action-${action}`;
+      button.dataset.action = action;
+      button.textContent = label;
+      button.hidden = true;
+      button.addEventListener('click', () => {
+        if (index === null) return;
+        const detail: TurnActionDetail = { action, index };
+        button.dispatchEvent(new CustomEvent(TURN_ACTION_EVENT, { detail, bubbles: true, composed: true }));
+      });
+      return button;
+    }),
+  );
+  const count = document.createElement('span');
+  count.className = 'turn-branch-count';
+  count.hidden = true;
+  bar.appendChild(count);
+  return bar;
+}
+
+/**
+ * Shows the actions this row can offer.
+ *
+ * @param element The row.
+ * @param state The row's current state.
+ */
+function patchActions(element: HTMLElement, state: TurnState): void {
+  const bar = element.querySelector('.turn-actions') as HTMLElement | null;
+  if (bar === null) return;
+  const { index, role, streaming, branch } = state;
+  // Nothing is offered while the answer is still arriving: every one of these cuts the
+  // history, and cutting it out from under a request in flight is how a half-written answer
+  // lands in a conversation it no longer belongs to.
+  const usable = index !== null && !streaming;
+
+  const show: Record<TurnAction, boolean> = {
+    edit: usable && role === 'user',
+    regenerate: usable && role === 'assistant',
+    previous: usable && branch !== null && branch.current > 1,
+    next: usable && branch !== null && branch.current < branch.total,
+  };
+  for (const button of bar.querySelectorAll<HTMLElement>('.turn-action')) {
+    const action = button.dataset.action as TurnAction;
+    button.hidden = !show[action];
+    button.setAttribute('aria-label', ARIA_LABELS[action]);
+  }
+  const count = bar.querySelector('.turn-branch-count') as HTMLElement | null;
+  if (count === null) return;
+  count.hidden = !usable || branch === null;
+  count.textContent = branch === null ? '' : `${branch.current}/${branch.total}`;
+  bar.hidden = !usable || (!show.edit && !show.regenerate && branch === null);
+}
+
+/** Accessible names; `‹` and `›` are not names a screen reader can read out. */
+const ARIA_LABELS: Record<TurnAction, string> = {
+  previous: '上一个回答',
+  next: '下一个回答',
+  edit: '编辑这条消息并重新发送',
+  regenerate: '重新生成这个回答',
+};
+
+/** Event a row's action button fires. Detail is a {@link TurnActionDetail}. */
+export const TURN_ACTION_EVENT = 'turnaction';
 /**
  * Reasoning, in its own row above the answer.
  *

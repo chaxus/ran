@@ -811,11 +811,27 @@ Rules that bite if broken:
   `**bold`, backticks, links and `$$` math in `mode="streaming"` — do not re-solve that in
   a view.
 
+**`truncate(key)` cuts the conversation.** Editing a message, regenerating an answer and
+branching are one operation: the conversation diverges at a row, and every row opened after
+it goes with it. It returns how many rows went; zero means no such row is live.
+
 Bottom-follow: on by default, `follow="false"` leaves the reader in control from the start.
 The element fires `pinnedchange` with `detail.pinned` so a "jump to latest" affordance can
 track it, and `scrollToBottom()` takes control back. For paging in older content, call
 `captureAnchor()` before the prepend and `restoreAnchor()` after, so the reader keeps
 looking at what they were looking at.
+
+**A cut needs one of the two, deliberately chosen.** Truncating shrinks the transcript, and
+the follower reads a shrinking scrollport as the reader having scrolled up — it was not the
+reader. After an edit or a regeneration `scrollToBottom()` is right: what the reader wants
+is the end of what is left. After switching between alternatives it is wrong: they are
+comparing two answers at one point, the alternatives differ in length, and the floor is
+somewhere else — hold the row with `captureAnchor` / `restoreAnchor` instead.
+
+**Rows live in a closed shadow root.** A listener on the page cannot see them in
+`composedPath()`, so a row that offers controls must dispatch its own
+`composed: true` CustomEvent carrying what was clicked. Reading the path from outside
+silently finds nothing.
 
 ---
 
