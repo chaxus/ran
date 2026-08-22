@@ -27,6 +27,101 @@ function sender(write: (chunk: string) => void): (payload: unknown) => void {
   };
 }
 
+/**
+ * Forwards a provider's stream to the browser byte for byte.
+ *
+ * Nothing is parsed or reassembled on the way through. Re-framing here would put a second
+ * SSE implementation in the path, and the client already has one that is tested; a proxy
+ * that only copies cannot disagree with the provider about where an event ends.
+ *
+ * @param ctx Request context.
+ * @param provider The configured provider.
+ * @param messages The conversation to send.
+ */
+async function streamProvider(ctx: Context, provider: LiveProvider, messages: ChatMessage[]): Promise<void> {
+  const { res, req } = ctx;
+  const send = sender((chunk) => res.write(chunk));
+  const abort = new AbortController();
+  req.on('close', () => abort.abort());
+
+  try {
+    const upstream = await fetch(`${provider.baseURL}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${provider.apiKey}`,
+      },
+      body: JSON.stringify({ model: provider.model, messages, stream: true, stream_options: { include_usage: true } }),
+      signal: abort.signal,
+    });
+
+    if (!upstream.ok || upstream.body === null) {
+      // The provider's own message is the useful one — a key that expired, a model that
+      // does not exist. Surfacing it beats a generic failure the reader cannot act on.
+      const detail = await upstream.text().catch(() => '');
+      send({ error: { status: upstream.status, message: detail.slice(0, 500) || upstream.statusText } });
+      send('[DONE]');
+      res.end();
+      return;
+    }
+
+    const reader = upstream.body.getReader();
+    const decoder = new TextDecoder();
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      res.write(decoder.decode(value, { stream: true }));
+    }
+    res.end();
+  } catch (error) {
+    // An abort is the reader closing the tab, not a failure to report.
+    if (abort.signal.aborted) {
+      res.end();
+      return;
+    }
+    send({ error: { status: 0, message: error instanceof Error ? error.message : String(error) } });
+    send('[DONE]');
+    res.end();
+  }
+}
+
+/**
+ * Streams the canned answer, so a clone with no key still shows a working conversation.
+ *
+ * @param ctx Request context.
+ */
+function streamDemo(ctx: Context): void {
+  const { res, req } = ctx;
+  const send = sender((chunk) => res.write(chunk));
+  const id = `demo-${Date.now()}`;
+  let sent = 0;
+
+  const timer = setInterval(() => {
+    // Deltas, not the accumulated answer: resending the whole text on every tick costs
+    // O(n²) bytes to transmit n characters, and leaves the client no way to tell an
+    // append from a rewrite.
+    const delta = POEM.slice(sent, sent + CHUNK_SIZE);
+    sent += delta.length;
+    send({ id, object: 'chat.completion.chunk', choices: [{ index: 0, delta: { content: delta } }] });
+
+    if (sent < POEM.length) return;
+    clearInterval(timer);
+    send({
+      id,
+      object: 'chat.completion.chunk',
+      choices: [{ index: 0, delta: {}, finish_reason: 'stop' }],
+      usage: { completion_tokens: POEM.length },
+    });
+    send('[DONE]');
+    res.end();
+  }, INTERVAL_MS);
+
+  req.on('close', () => {
+    clearInterval(timer);
+    res.end();
+  });
+}
+
 export default class IMController {
   /**
    * Streams an answer as Server-Sent Events, from a real provider when one is configured
@@ -57,112 +152,15 @@ export default class IMController {
       'X-IM-Mode': provider.mode,
     });
 
+    // The router resolves a handler as `controller[name][method]` and calls it detached,
+    // so `this` is undefined by the time it runs. These are module functions for that
+    // reason, not for style.
     if (provider.mode === 'demo') {
-      this.streamDemo(ctx);
+      streamDemo(ctx);
       return;
     }
-    void this.streamProvider(ctx, provider, messages);
+    void streamProvider(ctx, provider, messages);
     req.on('close', () => {
-      res.end();
-    });
-  }
-
-  /**
-   * Forwards a provider's stream to the browser byte for byte.
-   *
-   * Nothing is parsed or reassembled on the way through. Re-framing here would put a second
-   * SSE implementation in the path, and the client already has one that is tested; a proxy
-   * that only copies cannot disagree with the provider about where an event ends.
-   *
-   * @param ctx Request context.
-   * @param provider The configured provider.
-   * @param messages The conversation to send.
-   */
-  private async streamProvider(ctx: Context, provider: LiveProvider, messages: ChatMessage[]): Promise<void> {
-    const { res, req } = ctx;
-    const send = sender((chunk) => res.write(chunk));
-    const abort = new AbortController();
-    req.on('close', () => abort.abort());
-
-    try {
-      const upstream = await fetch(`${provider.baseURL}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          authorization: `Bearer ${provider.apiKey}`,
-        },
-        body: JSON.stringify({
-          model: provider.model,
-          messages,
-          stream: true,
-          stream_options: { include_usage: true },
-        }),
-        signal: abort.signal,
-      });
-
-      if (!upstream.ok || upstream.body === null) {
-        // The provider's own message is the useful one — a key that expired, a model that
-        // does not exist. Surfacing it beats a generic failure the reader cannot act on.
-        const detail = await upstream.text().catch(() => '');
-        send({ error: { status: upstream.status, message: detail.slice(0, 500) || upstream.statusText } });
-        send('[DONE]');
-        res.end();
-        return;
-      }
-
-      const reader = upstream.body.getReader();
-      const decoder = new TextDecoder();
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        res.write(decoder.decode(value, { stream: true }));
-      }
-      res.end();
-    } catch (error) {
-      // An abort is the reader closing the tab, not a failure to report.
-      if (abort.signal.aborted) {
-        res.end();
-        return;
-      }
-      send({ error: { status: 0, message: error instanceof Error ? error.message : String(error) } });
-      send('[DONE]');
-      res.end();
-    }
-  }
-
-  /**
-   * Streams the canned answer, so a clone with no key still shows a working conversation.
-   *
-   * @param ctx Request context.
-   */
-  private streamDemo(ctx: Context): void {
-    const { res, req } = ctx;
-    const send = sender((chunk) => res.write(chunk));
-    const id = `demo-${Date.now()}`;
-    let sent = 0;
-
-    const timer = setInterval(() => {
-      // Deltas, not the accumulated answer: resending the whole text on every tick costs
-      // O(n²) bytes to transmit n characters, and leaves the client no way to tell an
-      // append from a rewrite.
-      const delta = POEM.slice(sent, sent + CHUNK_SIZE);
-      sent += delta.length;
-      send({ id, object: 'chat.completion.chunk', choices: [{ index: 0, delta: { content: delta } }] });
-
-      if (sent < POEM.length) return;
-      clearInterval(timer);
-      send({
-        id,
-        object: 'chat.completion.chunk',
-        choices: [{ index: 0, delta: {}, finish_reason: 'stop' }],
-        usage: { completion_tokens: POEM.length },
-      });
-      send('[DONE]');
-      res.end();
-    }, INTERVAL_MS);
-
-    req.on('close', () => {
-      clearInterval(timer);
       res.end();
     });
   }
