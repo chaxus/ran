@@ -207,6 +207,13 @@ export const viteConfig: UserConfig = {
     extensions: RESOLVE_EXTENSIONS,
   },
   css: {
+    // Vite 8 defaults to a worker pool for CSS preprocessors, and its worker
+    // handshake polls `receiveMessageOnPort` a fixed 10 times after `Atomics.wait`
+    // unlocks. Under CI CPU contention that budget runs out and the build dies with
+    // "[less] Failed to receive message from sync port after 10 attempts". Run less on
+    // the main thread: the theme is a handful of files, so the lost parallelism is
+    // cheaper than a flaky build.
+    preprocessorMaxWorkers: 0,
     preprocessorOptions: {
       less: {
         javascriptEnabled: true,

@@ -1,3 +1,7 @@
+set -e
+# Without this a failed vite build leaves an incomplete dist/ behind while the
+# script runs on and still exits 0, so the breakage surfaces in a downstream package.
+
 bin=./node_modules/.bin
 dist=./dist
 
