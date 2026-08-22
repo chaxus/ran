@@ -206,6 +206,14 @@ body {
   background: var(--ran-color-bg-subtle);
 }
 
+/* Sized by the page, not by the element: the meter fills whatever width it is given, and
+   given the whole composer it becomes a metre of empty track with a number at the end. */
+.composer-meter {
+  margin-left: auto;
+  margin-bottom: var(--ran-space-2);
+  max-width: 16rem;
+}
+
 .composer {
   display: flex;
   gap: var(--ran-space-2);

@@ -1,5 +1,6 @@
 import { WebDB, createStore } from 'ranuts/utils';
 import type { IDBCollection } from 'ranuts/utils';
+import type { TokenUsage } from 'ranuts/stream';
 import type { MessageContent, StoredMessage } from '@/client/chat-types';
 
 export type { StoredMessage } from '@/client/chat-types';
@@ -12,6 +13,14 @@ export interface Session {
   createdAt: number;
   updatedAt: number;
   messages: StoredMessage[];
+  /**
+   * Tokens billed across every round of this conversation, including rounds whose messages
+   * compaction has since folded away.
+   *
+   * Stored rather than derived: what a conversation cost is not recoverable from what it
+   * currently carries, and after one compaction the two stop resembling each other.
+   */
+  usage?: TokenUsage;
 }
 
 const DB_NAME = 'ran-im';

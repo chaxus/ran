@@ -63,10 +63,26 @@ im 不是产品，它是 ranui/ranuts 的真实消费者。这一路已经证明
 **代价：** 中。工具执行本身在浏览器里可以从最小的一两个开始（比如 `fetch` 一个 URL、算个表达式），
 不需要沙箱。
 
-### P0 · token 计量与上下文管理
+### P0 · token 计量与上下文管理 —— 已完成
 
-**现状：** 用量已经在流里（`snapshot.usage`），**没有任何地方展示或累加**。历史无限增长，
+**当初的现状：** 用量已经在流里（`snapshot.usage`），**没有任何地方展示或累加**。历史无限增长，
 直到某天请求被 provider 以超长拒绝。
+
+**做完之后：** `ranuts/stream` 多了 `estimateTokens` / `addUsage` / `planCompaction`，
+ranui 多了 `r-token-meter`，im 的 `client/budget.ts` 负责"一条消息值多少、切口能落在哪里"，
+上限由服务端在 `X-IM-Context-Limit` 里报告。细节见 [README 的"Token 计量与压缩"一节](./README.md#token-计量与压缩)。
+
+**它逼出的组件库缺口**（两个，都是在浏览器里看出来的）：
+
+1. **`hidden` 在 19 个组件上是完全失效的。** `[hidden] { display: none }` 是 UA 规则，
+   `:host` 上任何作者写的 `display` 都盖过它。于是 `element.hidden = true` 什么也不做，而且
+   不报错。现在每个组件都带 `:host([hidden]) { display: none; }`，并由 `verify:design` 的
+   第 6 条规则守着——因为这种失败是静默的。
+2. **`r-markdown` 会把中文正文吞进裸链接里。** GFM 规定自动链接在空白处结束，这是按英文写的；
+   中文里下一个词紧贴着 URL，于是 `https://example.com获取内容` 整段被当成一个地址，链接指向
+   一个谁也没写过的 punycode 域名。**错的链接比没有链接更糟。** 现在在**权限部分**（host）
+   遇到第一个 CJK 字符就截断——主机名不可能包含这些字符，而路径里可以
+   （`https://zh.wikipedia.org/wiki/中文` 是一个完整的 URL，截断它会弄坏本来好的链接）。
 
 **缺什么：** 每轮用量展示、会话累计、上下文接近上限时的提示，以及最基本的压缩（dsh 的 `compaction`
 是一个完整的 capability seam；im 需要的只是"把早期若干轮换成一段摘要"）。

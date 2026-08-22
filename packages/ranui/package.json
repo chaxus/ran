@@ -101,6 +101,9 @@
       "tool-card": [
         "./dist/components/tool-card/index.d.ts"
       ],
+      "token-meter": [
+        "./dist/components/token-meter/index.d.ts"
+      ],
       "attachments": [
         "./dist/components/attachments/index.d.ts"
       ],
@@ -375,6 +378,11 @@
     "./tool-card": {
       "types": "./dist/components/tool-card/index.d.ts",
       "import": "./dist/tool-card.js",
+      "require": "./dist/index.cjs"
+    },
+    "./token-meter": {
+      "types": "./dist/components/token-meter/index.d.ts",
+      "import": "./dist/token-meter.js",
       "require": "./dist/index.cjs"
     },
     "./scratch": {

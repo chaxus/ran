@@ -421,6 +421,58 @@ const enhanceCodeBlock = (pre: HTMLPreElement, ctx: EnhanceContext): HTMLElement
  * Nodes are collected first and mutated after: replacing an element mid-traversal would
  * move the walker out from under itself.
  */
+/**
+ * Characters that cannot be part of a hostname but are ordinary prose in CJK writing.
+ *
+ * GFM ends an autolink at whitespace, which was written for English. In Chinese, Japanese and
+ * Korean the next word follows a URL immediately — `https://example.com获取内容` is an address
+ * and four characters — so GFM reads the whole run as one address and the link navigates to a
+ * punycoded domain nobody named. A wrong link is worse than no link.
+ */
+const CJK = /[\u3000-\u303f\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uac00-\ud7af\uf900-\ufaff\uff00-\uffef]/u;
+
+/** Scheme and authority of a bare URL, up to the first path, query, or fragment character. */
+const AUTHORITY = /^(https?:\/\/|www\.)([^/?#]*)/;
+
+/**
+ * Ends an autolinked URL where its hostname stops being a hostname.
+ *
+ * The cut is made in the authority only. A hostname cannot contain these characters, so one
+ * appearing there is certainly prose. In a *path* the same character is plausibly part of the
+ * address — `https://zh.wikipedia.org/wiki/中文` is one URL — and truncating it would break a
+ * link that worked.
+ *
+ * Only autolinks are touched, which is the case where the link text IS the address. An
+ * explicit `[label](url)` is what the author wrote, not a mistake to correct.
+ *
+ * @param a The anchor to inspect. Shortened in place, with the trimmed remainder re-inserted
+ *   as a sibling so the prose stays in the paragraph instead of vanishing into the link.
+ */
+const trimAutolink = (a: HTMLAnchorElement): void => {
+  const text = a.textContent ?? '';
+  const href = a.getAttribute('href') ?? '';
+  // Compared after decoding: the renderer percent-encodes non-ASCII in the href while the
+  // link text keeps the characters, so an autolink's two halves are equal only once decoded.
+  let decoded = href;
+  try {
+    decoded = decodeURI(href);
+  } catch {
+    // A href with a stray `%` is not valid percent-encoding. Comparing it as written simply
+    // means this anchor is not recognised as an autolink, and it is left alone.
+  }
+  if (text !== decoded) return;
+
+  const authority = AUTHORITY.exec(text);
+  if (authority === null) return;
+  const host = authority[2];
+  const at = host.search(CJK);
+  if (at < 0) return;
+  const url = text.slice(0, authority[1].length + at);
+  a.textContent = url;
+  a.setAttribute('href', url);
+  a.after(document.createTextNode(text.slice(url.length)));
+};
+
 export const enhance = (root: HTMLElement, ctx: EnhanceContext): EnhanceResult => {
   const pres: HTMLPreElement[] = [];
   const links: HTMLAnchorElement[] = [];
@@ -474,6 +526,7 @@ export const enhance = (root: HTMLElement, ctx: EnhanceContext): EnhanceResult =
       continue;
     }
     if (href.startsWith('#')) continue;
+    trimAutolink(a);
     if (ctx.linkTarget && ctx.linkTarget !== '_self') {
       a.setAttribute('target', ctx.linkTarget);
       a.setAttribute('rel', 'noopener noreferrer');

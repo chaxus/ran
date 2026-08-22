@@ -1,0 +1,58 @@
+:host {
+  display: block;
+  color: var(--ran-token-meter-color, var(--ran-color-text-secondary));
+  font-size: var(--ran-token-meter-font-size, var(--ran-text-copy-3));
+}
+
+/* `hidden` is how a caller hides an element, and the UA rule that implements it is a
+   user-agent rule — any author `display` on `:host` outranks it. Without this, setting
+   `hidden` does nothing at all. */
+:host([hidden]) {
+  display: none;
+}
+
+.ran-token-meter {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-token-meter-gap, var(--ran-space-2));
+}
+
+.ran-token-meter-track {
+  flex: 1;
+  border-radius: var(--ran-token-meter-track-radius, var(--ran-radius-full));
+  background: var(--ran-token-meter-track-background, var(--ran-color-bg-muted));
+  /* Minimum, not fixed: the bar has to stay legible next to a long label in a narrow
+     composer, and a fixed width would either overflow it or waste the space it has. */
+  min-width: var(--ran-token-meter-track-width, 4rem);
+  height: var(--ran-token-meter-track-height, 0.375rem);
+  overflow: hidden;
+}
+
+.ran-token-meter-fill {
+  transition: width var(--ran-token-meter-transition, 200ms) ease-out;
+  border-radius: inherit;
+  background: var(--ran-token-meter-fill-background, var(--ran-color-primary));
+  height: 100%;
+}
+
+/* The two escalations. `warn` says the window is filling; `over` says the next request
+   will not fit. Colour alone does not carry either — `title` states the numbers, and the
+   element exposes `level` as an attribute for a caller that wants to say more. */
+:host([level='warn']) .ran-token-meter-fill {
+  background: var(--ran-token-meter-warn-background, var(--ran-color-warning));
+}
+
+:host([level='over']) .ran-token-meter-fill {
+  background: var(--ran-token-meter-over-background, var(--ran-color-error));
+}
+
+.ran-token-meter-text {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ran-token-meter-fill {
+    transition: none;
+  }
+}

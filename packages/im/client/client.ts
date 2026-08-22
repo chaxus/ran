@@ -9,18 +9,22 @@ import 'ranui/attachments';
 import 'ranui/icon';
 import 'ranui/voice-button';
 import 'ranui/tool-card';
+import 'ranui/token-meter';
 import message from 'ranui/message';
 import { initTheme } from 'ranui/theme';
 import { formatRelative, readFileAsDataURL } from 'ranuts/utils';
 import { openSessionStore, titleFrom } from '@/client/sessions';
-import type { Session, SessionStore, StoredMessage } from '@/client/sessions';
+import type { Session, SessionStore } from '@/client/sessions';
 import type { Attachment, AttachmentRejection } from 'ranui';
 import { streamDialog } from '@/client/lib/eventSource';
 import type { DialogStream } from '@/client/lib/eventSource';
 import { NOTHING_EMITTED, eventsFromSnapshot, reasoningView, toolNodeId, toolView, turnView } from '@/client/chat';
 import type { ChatEvent, EmittedSoFar } from '@/client/chat';
 import { parseToolArgs, runTool, toolsForRequest } from '@/client/tools/index';
-import type { WireToolCall } from '@/client/chat-types';
+import type { StoredMessage, WireToolCall } from '@/client/chat-types';
+import { KEEP_RECENT, contextTokens, decideBudget } from '@/client/budget';
+import { addUsage } from 'ranuts/stream';
+import type { TokenUsage } from 'ranuts/stream';
 
 /** `<r-conversation>`, as far as this file needs it. */
 type ConversationElement = HTMLElement & {
@@ -49,6 +53,7 @@ const attach = document.querySelector('#attach') as HTMLElement;
 const drop = document.querySelector('#drop') as HTMLElement;
 const sessionList = document.querySelector('#sessions-list') as HTMLElement;
 const newSession = document.querySelector('#new-session') as HTMLElement;
+const meter = document.querySelector('#tokens') as HTMLElement & { limit: number; used: number; spent: number };
 
 const DEMO_NOTICE =
   '演示模式：未配置 API key，回答来自内置示例。设置 IM_API_KEY（可选 IM_BASE_URL、IM_MODEL）后重启即可对接真实模型。';
@@ -63,6 +68,14 @@ let store: SessionStore;
 let current: Session;
 let inFlight: DialogStream | null = null;
 let turn = 0;
+/**
+ * The model's context window, as the server reported it on the last response.
+ *
+ * Zero until the first request comes back, which is the honest state: the browser does not
+ * know which model is configured, and a guessed window would compact a conversation that
+ * fits or state a limit nobody set.
+ */
+let contextLimit = 0;
 /** Reported once per page, not once per failed write, so a full disk does not become a wall. */
 let storageWarned = false;
 
@@ -123,6 +136,125 @@ async function ask(text: string): Promise<void> {
   await runStep(id, 0);
 }
 
+// ── Compaction ─────────────────────────────────────────────────────────────
+
+/**
+ * How much of the folded prefix is sent to be summarized.
+ *
+ * The prefix is by definition too big for the window — that is why it is being compacted —
+ * so the summarizer cannot be handed all of it. The oldest part of an old conversation is
+ * also the part a summary loses least by generalising, which is why this keeps the tail.
+ */
+const SUMMARY_INPUT_CHARS = 12_000;
+
+const SUMMARY_PROMPT =
+  '下面是一段对话的早期部分。请写一段紧凑的摘要，保留：用户的目标和约束、已经确定的结论、' +
+  '尚未解决的问题、以及后续回答需要的事实（名称、数字、路径、链接）。不要评论，不要复述格式，直接给摘要。';
+
+/**
+ * Renders a slice of history as plain text for the summarizer.
+ *
+ * Flattened to one message rather than replayed as a conversation: the slice contains tool
+ * results whose `tool_call_id` pairing would have to survive the trip, and images that would
+ * be re-uploaded to be described in a sentence. Neither is worth carrying to produce prose.
+ *
+ * @param messages The slice to fold.
+ * @returns The transcript, oldest-first and truncated from the front.
+ */
+function transcriptOf(messages: readonly StoredMessage[]): string {
+  const lines = messages.map((entry) => {
+    const body = typeof entry.content === 'string' ? entry.content : textOf(entry.content);
+    if (entry.role === 'tool') return `[工具 ${entry.name} 的结果] ${body}`;
+    if (entry.role === 'assistant' && entry.tool_calls !== undefined) {
+      const called = entry.tool_calls.map((call) => call.function.name).join('、');
+      return `助手：${body}${body === '' ? '' : ' '}[调用了 ${called}]`;
+    }
+    return `${entry.role === 'user' ? '用户' : '助手'}：${body}`;
+  });
+  const text = lines.join('\n');
+  return text.length <= SUMMARY_INPUT_CHARS ? text : `…\n${text.slice(text.length - SUMMARY_INPUT_CHARS)}`;
+}
+
+/**
+ * Asks the model to summarize a slice of history.
+ *
+ * @param messages The slice being folded away.
+ * @returns The summary, or null when the request failed — a failed compaction leaves the
+ *   history alone, which is worse than compacting and far better than losing it.
+ */
+function summarize(messages: readonly StoredMessage[]): Promise<string | null> {
+  return new Promise((resolve) => {
+    // No tools: this call produces prose, and offering it a clock or a fetcher only invites
+    // a round trip that cannot help.
+    streamDialog(
+      '/api/im/dialog',
+      { messages: [{ role: 'user', content: `${SUMMARY_PROMPT}\n\n---\n${transcriptOf(messages)}` }] },
+      {
+        onUpdate: () => {},
+        onEnd: (snapshot, error) => {
+          if (snapshot.usage !== undefined) current.usage = addUsage(current.usage, snapshot.usage);
+          const text = snapshot.blocks.reduce((out, b) => (b.type === 'text' ? out + b.text : out), '');
+          resolve(error !== undefined || text.trim() === '' ? null : text);
+        },
+      },
+    );
+  });
+}
+
+/**
+ * Folds away as much of the history as no longer fits, before a request is sent.
+ *
+ * Called on every round rather than only on the first: a turn that calls tools grows the
+ * history several times over between the user's message and the answer, and a fetched page
+ * is the largest single thing a conversation ever gains.
+ */
+async function compactIfNeeded(): Promise<void> {
+  const decision = decideBudget(current.messages, contextLimit);
+  renderMeter();
+  if (decision.compact === 0) {
+    // Nothing to fold and still over: one message larger than the window. Saying so beats
+    // letting the provider answer with a rejection nobody can act on.
+    if (!decision.fits) {
+      setNotice(`这轮对话已超出模型上下文（约 ${decision.used} tokens，上限 ${contextLimit}），最近的消息可能被拒绝。`);
+    }
+    return;
+  }
+
+  const folded = current.messages.slice(0, decision.compact);
+  setNotice(`对话已接近上下文上限，正在把最早的 ${folded.length} 条消息压缩成摘要…`);
+  const summary = await summarize(folded);
+  if (summary === null) {
+    setNotice('压缩摘要失败，历史保持原样。如果接下来请求被拒绝，请新建对话。');
+    return;
+  }
+
+  current.messages = [{ role: 'system', content: summary }, ...current.messages.slice(decision.compact)];
+  setNotice('');
+  // Redrawn rather than patched: the transcript no longer matches the history, and rebuilding
+  // it from the stored messages is the one way the two cannot drift apart.
+  renderSession(current);
+  await persist();
+  renderMeter();
+}
+
+/**
+ * Redraws the context meter from the open conversation.
+ *
+ * Both numbers, because they answer different questions and stop resembling each other after
+ * the first compaction: `used` is what the next request will carry, `spent` is what the
+ * conversation has cost.
+ */
+function renderMeter(): void {
+  const used = contextTokens(current.messages);
+  const spent = current.usage?.totalTokens ?? 0;
+  meter.limit = contextLimit;
+  meter.used = used;
+  meter.spent = spent;
+  // Nothing to say before the first request: no limit has been reported and nothing has been
+  // sent, so the meter would be a bar at zero beside two zeroes.
+  meter.hidden = used === 0 && spent === 0;
+}
+
 /**
  * Runs one provider round trip, and the next one when the model asked for tools.
  *
@@ -134,7 +266,19 @@ async function ask(text: string): Promise<void> {
  * @param step Which round this is, counted from 0.
  * @returns Once the exchange has ended, whether by an answer, a failure, or the ceiling.
  */
-function runStep(id: string, step: number): Promise<void> {
+async function runStep(id: string, step: number): Promise<void> {
+  await compactIfNeeded();
+  return sendRound(id, step);
+}
+
+/**
+ * Sends one request and folds its response into the transcript.
+ *
+ * @param id The user turn every round of this exchange belongs to.
+ * @param step Which round this is, counted from 0.
+ * @returns Once this round has ended, whether by an answer, a failure, or tools.
+ */
+function sendRound(id: string, step: number): Promise<void> {
   // Each round gets its own node ids: its reasoning, its answer and its tool cards are
   // separate rows from the previous round's, which is what makes a multi-step exchange
   // readable rather than one row that keeps being rewritten.
@@ -147,10 +291,12 @@ function runStep(id: string, step: number): Promise<void> {
       '/api/im/dialog',
       { messages: current.messages, tools: toolsForRequest() },
       {
-        onMode: (mode) => {
+        onOpen: (server) => {
           // Confirms what the server already stamped into the page, and corrects it if the
           // server was restarted with a key while this tab stayed open.
-          setNotice(mode === 'demo' ? DEMO_NOTICE : '');
+          setNotice(server.mode === 'demo' ? DEMO_NOTICE : '');
+          contextLimit = server.contextLimit;
+          renderMeter();
         },
         onUpdate: (snapshot) => {
           const next = eventsFromSnapshot(round, snapshot, emitted);
@@ -162,6 +308,12 @@ function runStep(id: string, step: number): Promise<void> {
         },
         onEnd: (snapshot, error) => {
           inFlight = null;
+          // Counted before anything else, and counted even on a failure: a response that
+          // died halfway was still billed for what it produced.
+          if (snapshot.usage !== undefined) {
+            current.usage = addUsage(current.usage, snapshot.usage);
+            renderMeter();
+          }
           const text = snapshot.blocks.reduce((out, b) => (b.type === 'text' ? out + b.text : out), '');
           const calls = snapshot.blocks.filter((block) => block.type === 'tool-call');
 
@@ -303,17 +455,16 @@ function renderSession(session: Session): void {
     if (entry.role === 'tool') return;
     const id = `restored-${index}`;
     const text = typeof entry.content === 'string' ? entry.content : textOf(entry.content);
+    const calls = entry.role === 'assistant' ? (entry.tool_calls ?? []) : [];
     // An assistant message that only asked for tools has no text; opening an empty row for
     // it would put a blank card above every tool call in the transcript.
-    if (text !== '' || entry.role === 'user' || entry.tool_calls === undefined) {
+    if (text !== '' || calls.length === 0) {
       chat.push({ type: 'turn/start', id, role: entry.role, text });
       // Restored turns are finished by definition; without this every one of them would come
       // back mid-stream, with `r-markdown` still guessing at half-written syntax.
       chat.push({ type: 'turn/end', id });
     }
-    if (entry.role !== 'assistant') return;
-
-    (entry.tool_calls ?? []).forEach((call, ordinal) => {
+    calls.forEach((call, ordinal) => {
       const node = toolNodeId(id, ordinal);
       chat.push({ type: 'tool/start', id: node, name: call.function.name });
       chat.push({ type: 'tool/args', id: node, args: call.function.arguments });
@@ -403,6 +554,7 @@ async function openSession(id: string): Promise<void> {
   store.setCurrentId(session.id);
   renderSession(session);
   await renderSessions();
+  renderMeter();
 }
 
 /**
@@ -417,6 +569,7 @@ async function deleteSession(id: string): Promise<void> {
     current = blankSession();
     store.setCurrentId(current.id);
     renderSession(current);
+    renderMeter();
   }
   await renderSessions();
 }
@@ -426,6 +579,7 @@ newSession.addEventListener('click', () => {
   current = blankSession();
   store.setCurrentId(current.id);
   renderSession(current);
+  renderMeter();
   void renderSessions();
 });
 
@@ -588,6 +742,9 @@ async function boot(): Promise<void> {
   if (restored !== null) renderSession(restored);
   store.setCurrentId(current.id);
   await renderSessions();
+  // A restored conversation already carries context, and leaving the meter at its markup
+  // default showed a bar at zero above a transcript full of messages.
+  renderMeter();
 }
 
 void boot();

@@ -38,6 +38,9 @@ export interface WireToolCall {
  * rather than reconstructed — a reloaded conversation has to be resumable.
  */
 export type StoredMessage =
+  // Compaction's replacement for a prefix it folded away. A system message because that is
+  // what every provider reads as context rather than as something someone said.
+  | { role: 'system'; content: string }
   | { role: 'user'; content: MessageContent }
   | { role: 'assistant'; content: MessageContent; tool_calls?: WireToolCall[] }
   | { role: 'tool'; content: string; tool_call_id: string; name: string };
