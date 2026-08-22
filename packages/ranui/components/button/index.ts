@@ -16,7 +16,7 @@ export class Button extends RanElement {
   debounceTimeId?: NodeJS.Timeout;
 
   static get observedAttributes(): string[] {
-    return ['disabled', 'icon', 'effect', 'iconSize', 'type', 'sheet'];
+    return ['disabled', 'icon', 'effect', 'iconSize', 'type', 'aria-label', 'sheet'];
   }
 
   constructor() {
@@ -207,6 +207,7 @@ export class Button extends RanElement {
     this.handlerExternalCss();
     this.setIcon();
     this.syncA11yState();
+    this.syncAriaLabel();
     this._events
       .on(this._btn, 'mousedown', this.mousedown)
       .on(this._btn, 'mouseup', this.mouseup)
@@ -222,10 +223,25 @@ export class Button extends RanElement {
     this._events.abort();
   }
 
+  /**
+   * Copies the host's `aria-label` onto the element that actually carries the button role.
+   *
+   * The role lives on a div inside the shadow root, and an accessible name is normally
+   * taken from the slotted content — which for an icon-only button is an `<r-icon>` with no
+   * text. Without this there is no way to name such a button from outside, and DESIGN.md
+   * requires every icon-only control to have one.
+   */
+  syncAriaLabel = (): void => {
+    const label = this.getAttribute('aria-label');
+    if (label === null) this._btn.removeAttribute('aria-label');
+    else this._btn.setAttribute('aria-label', label);
+  };
+
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return;
 
     if (name === 'disabled' && this._btnContent) this.syncA11yState();
+    if (name === 'aria-label') this.syncAriaLabel();
     if (name === 'icon' || name === 'iconSize') this.setIcon();
     if (name === 'sheet') this.handlerExternalCss();
   }

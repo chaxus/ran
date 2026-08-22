@@ -1,0 +1,85 @@
+:host {
+  display: block;
+}
+
+/* Nothing attached, nothing to reserve space for: an empty strip above a composer is a gap
+   the reader has to learn to ignore. */
+:host(:not([count])) .ran-attachments {
+  display: none;
+}
+
+.ran-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ran-attachments-gap, var(--ran-space-2));
+  padding: var(--ran-attachments-padding, var(--ran-space-2) 0);
+}
+
+.ran-attachment {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: var(--ran-attachment-gap, var(--ran-space-2));
+  border: 1px solid var(--ran-attachment-border-color, var(--ran-color-border));
+  border-radius: var(--ran-attachment-border-radius, var(--ran-radius-md));
+  background: var(--ran-attachment-background, var(--ran-color-bg-subtle));
+  padding: var(--ran-attachment-padding, var(--ran-space-1) var(--ran-space-2));
+  max-width: var(--ran-attachment-max-width, 220px);
+}
+
+.ran-attachment-thumb {
+  flex: none;
+  border-radius: var(--ran-attachment-thumb-radius, var(--ran-radius-sm));
+  width: var(--ran-attachment-thumb-size, var(--ran-size-6));
+  height: var(--ran-attachment-thumb-size, var(--ran-size-6));
+  object-fit: cover;
+}
+
+.ran-attachment-icon {
+  flex: none;
+  color: var(--ran-attachment-icon-color, var(--ran-color-text-secondary));
+}
+
+.ran-attachment-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ran-attachment-name {
+  overflow: hidden;
+  color: var(--ran-attachment-name-color, var(--ran-color-text));
+  font-size: var(--ran-attachment-name-font-size, var(--ran-text-label-3));
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ran-attachment-size {
+  color: var(--ran-attachment-size-color, var(--ran-color-text-secondary));
+  font-size: var(--ran-attachment-size-font-size, var(--ran-text-label-3));
+}
+
+.ran-attachment-remove {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--ran-attachment-remove-radius, var(--ran-radius-full));
+  background: none;
+  padding: 0;
+  width: var(--ran-attachment-remove-size, var(--ran-size-3));
+  height: var(--ran-attachment-remove-size, var(--ran-size-3));
+  color: var(--ran-attachment-remove-color, var(--ran-color-text-secondary));
+  cursor: pointer;
+}
+
+.ran-attachment-remove:hover {
+  background: var(--ran-attachment-remove-hover-background, var(--ran-color-bg-hover));
+  color: var(--ran-attachment-remove-hover-color, var(--ran-color-text));
+}
+
+.ran-attachment-remove:focus-visible {
+  outline: 2px solid var(--ran-attachment-focus-color, var(--ran-color-primary));
+  outline-offset: 1px;
+}

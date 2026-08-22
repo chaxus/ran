@@ -224,8 +224,9 @@ ensureShadowElement<T>(root: ShadowRoot, selector: string, factory: () => T): T
 // getAttribute with fallback (null → fallback)
 getStringAttribute(element: HTMLElement, name: string, fallback?: string): string
 
-// setAttribute; removes attribute if value is null/undefined
-// removeEmpty:true → also removes on falsy string ('')
+// setAttribute. A null/undefined value writes the EMPTY STRING, not nothing —
+// `removeEmpty: true` is what removes the attribute, for null/undefined and ''
+// alike. Reach for it whenever a `:host(:not([attr]))` rule depends on absence.
 setStringAttribute(element: HTMLElement, name: string, value: string | null | undefined, options?: { removeEmpty?: boolean }): void
 
 // Sets/removes boolean attribute, optionally mirrors to aria-{aria}
@@ -884,6 +885,42 @@ Sub-second durations render as nothing: a reader cares that it was fast, not tha
 340ms. The default slot replaces the rendered text, for a caller that wants `<r-markdown>`
 in the body. `ranuts/stream` already separates `reasoning-delta` from `text-delta`, so a
 conversation view can feed this directly from `snapshot().blocks`.
+
+### r-attachments
+
+The files staged alongside a message: it holds the list, previews it, validates what
+arrives, and owns the object URLs it creates.
+
+It does **not** collect files. Paste, drag-and-drop and a file picker are three gestures
+belonging to three different elements of a composer, and which of them an app offers is the
+app's decision — call `add()` from whichever it wires.
+
+```ts
+input.addEventListener('paste', (e) => {
+  // Only when the clipboard actually carries files; intercepting every paste breaks pasting
+  // text, which is what the box is mostly for.
+  if (e.clipboardData?.files.length) {
+    e.preventDefault();
+    strip.add(e.clipboardData.files);
+  }
+});
+```
+
+- **Previews are object URLs, not data URLs.** Previewing costs a reference to bytes the
+  browser already holds; reading a 10 MB photo into base64 to show a 40px thumbnail costs
+  the string. The data URL is built later, once, by whoever sends. Every URL created here is
+  revoked here — on detach, on clear, and on disconnect.
+- **Rejection is reported, never silent.** A file that vanishes because it was 3 MB over a
+  limit nobody mentioned reads as a bug in the page. `attachmentrejected` carries the file
+  and one of `too-large` / `type-not-accepted` / `too-many` / `duplicate`.
+- **The same file twice is a slip, not an instruction** — name, size and modification time
+  together, which is what a file manager treats as the same file.
+- **`detach(id)`, not `remove(id)`.** Every element already has a `remove()` that takes no
+  arguments and takes itself out of the document; shadowing it with different semantics is
+  a trap for anyone reaching for the standard method.
+- The thumbnail's alt text is **the file name**, not "image": four attachments all announced
+  as "image" have told the reader nothing about which is which. Each remove button is named
+  after its file for the same reason.
 
 ### r-voice-button
 

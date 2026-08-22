@@ -8,11 +8,11 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**445 exports** across 8 entry points.
+**446 exports** across 8 entry points.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 335 exports
+- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 336 exports
 - [`ranuts/sw`](#ranuts-sw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranuts-node) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranuts-visual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 16 exports
@@ -93,6 +93,7 @@ import { /* … */ } from 'ranuts/utils';
 - `fetchMaybeGzip(input: RequestInfo | URL, init?: RequestInit) => Promise<Uint8Array>` — Fetch a resource that may be delivered gzipped or already
 - `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the properties whose values appear in `list` — typically used to drop empty strings and nulls
 - `fit(value: number, a1: number, a2: number, b1: number, b2: number) => number` — Remap `value` from `[a1, a2]` onto `[b1, b2]` and clamp to the output range — the shader `fit`.
+- `formatBytes(bytes: number) => string` — Format a byte count for a person to read.
 - `formatDate(value?: DateInput, pattern?: string) => string` — Format a date with a token pattern. Accepts a timestamp, a date string, a
 - `formatDuration(seconds: number) => string` — Format an elapsed number of **seconds** as a colon-separated clock duration,
 - `formatJson(value: string | object, onError?: (error: Error) => void, indent?: number) => string` — Pretty-print JSON. Accepts an object or a JSON string (single quotes are

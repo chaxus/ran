@@ -4,6 +4,7 @@ import { SyncHook } from './subscribe';
 import {
   Mathjs,
   addNumSym,
+  formatBytes,
   clamp,
   fit,
   inverseLerp,
@@ -268,6 +269,7 @@ import type { RGB } from '@/utils/color';
 export {
   createBottomFollower,
   diffLines,
+  formatBytes,
   performanceTime,
   timeFormat,
   timestampToTime,

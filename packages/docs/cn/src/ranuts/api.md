@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: ranuts 导出的全部符号 — 8 个入口点，共 445 个导出，含签名与描述。
+description: ranuts 导出的全部符号 — 8 个入口点，共 446 个导出，含签名与描述。
 ---
 
 # ranuts API（自动生成）
@@ -12,11 +12,11 @@ description: ranuts 导出的全部符号 — 8 个入口点，共 445 个导出
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**445 个导出**，共 8 个入口点。
+**446 个导出**，共 8 个入口点。
 
 ## 入口点
 
-- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 335 个导出
+- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 336 个导出
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 缓存策略与预缓存协议 · _仅 service worker_ · 9 个导出
 - [`ranuts/node`](#ranuts-node) — Node 服务端工具（fs / http / ws / 中间件） · _仅 node_ · 26 个导出
 - [`ranuts/visual`](#ranuts-visual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _仅浏览器_ · 16 个导出
@@ -97,6 +97,7 @@ import { /* … */ } from 'ranuts/utils';
 - `fetchMaybeGzip(input: RequestInfo | URL, init?: RequestInit) => Promise<Uint8Array>` — Fetch a resource that may be delivered gzipped or already
 - `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the properties whose values appear in `list` — typically used to drop empty strings and nulls
 - `fit(value: number, a1: number, a2: number, b1: number, b2: number) => number` — Remap `value` from `[a1, a2]` onto `[b1, b2]` and clamp to the output range — the shader `fit`.
+- `formatBytes(bytes: number) => string` — Format a byte count for a person to read.
 - `formatDate(value?: DateInput, pattern?: string) => string` — Format a date with a token pattern. Accepts a timestamp, a date string, a
 - `formatDuration(seconds: number) => string` — Format an elapsed number of **seconds** as a colon-separated clock duration,
 - `formatJson(value: string | object, onError?: (error: Error) => void, indent?: number) => string` — Pretty-print JSON. Accepts an object or a JSON string (single quotes are

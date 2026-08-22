@@ -5,7 +5,12 @@ import type { Context } from '@/app/types/index';
 /** One turn of the conversation, as the client sends it and the provider expects it. */
 interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
-  content: string;
+  /**
+   * A plain string for a text-only turn, or the parts a multimodal one carries. Forwarded
+   * as it arrives: which shapes a model accepts is between the client and the provider, and
+   * a proxy that narrowed this would have to be changed for every new part type.
+   */
+  content: unknown;
 }
 
 const POEM = [
@@ -46,6 +51,28 @@ function sender(write: (chunk: string) => void): (payload: unknown) => void {
 }
 
 /**
+ * Pulls the human-readable part out of a provider's error body.
+ *
+ * Every OpenAI-compatible provider answers a rejection with `{"error":{"message":…}}`, and
+ * showing the envelope around it asks the reader to parse JSON to find the one sentence
+ * that tells them what to do. A body in some other shape is passed through as-is, truncated,
+ * rather than dropped — an unrecognised error is still better than none.
+ *
+ * @param body The raw response body.
+ * @returns The message to show.
+ */
+export function extractMessage(body: string): string {
+  try {
+    const parsed = JSON.parse(body) as { error?: { message?: unknown } };
+    const message = parsed.error?.message;
+    if (typeof message === 'string' && message !== '') return message;
+  } catch {
+    // Not JSON; fall through to the raw body.
+  }
+  return body.slice(0, 500);
+}
+
+/**
  * Forwards a provider's stream to the browser byte for byte.
  *
  * Nothing is parsed or reassembled on the way through. Re-framing here would put a second
@@ -75,9 +102,10 @@ async function streamProvider(ctx: Context, provider: LiveProvider, messages: Ch
 
     if (!upstream.ok || upstream.body === null) {
       // The provider's own message is the useful one — a key that expired, a model that
-      // does not exist. Surfacing it beats a generic failure the reader cannot act on.
-      const detail = await upstream.text().catch(() => '');
-      send({ error: { status: upstream.status, message: detail.slice(0, 500) || upstream.statusText } });
+      // cannot read images. Surfacing it beats a generic failure the reader cannot act on,
+      // but the reader should not have to read JSON to find it either.
+      const body = await upstream.text().catch(() => '');
+      send({ error: { status: upstream.status, message: extractMessage(body) || upstream.statusText } });
       send('[DONE]');
       res.end();
       return;

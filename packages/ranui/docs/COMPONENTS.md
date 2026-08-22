@@ -6,13 +6,29 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-36 custom elements.
+37 custom elements.
+
+## `<r-attachments>`
+
+Source: `components/attachments/index.ts`
+
+- **Attributes**: `sheet: string`
+- **Properties**:
+  - `accept: string` — Comma-separated types or extensions, in the form `<input accept>` takes.
+  - `attachments: readonly Attachment[]` — The staged files, in the order they arrived.
+  - `files: File[]` — Just the files, for building a request body.
+  - `maxCount: number` — Most files that may be staged at once; unlimited when unset.
+  - `maxSize: number` — Largest file accepted, in bytes.
+  - `sheet: string`
+- **Events**: —
+- **Slots**: —
+- **Parts**: `attachment`, `icon`, `list`, `name`, `remove`, `size`, `thumb`
 
 ## `<r-button>`
 
 Source: `components/button/index.ts`
 
-- **Attributes**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
+- **Attributes**: `aria-label`, `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
 - **Properties**:
   - `disabled: boolean | string`
   - `effect: string`

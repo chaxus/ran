@@ -79,6 +79,11 @@ SSR helpers: `import { defineSSR } from 'ranui/ssr-registry'` (source) / `ranui/
   it clears, and **stops following once the reader opens or closes it themselves**
   (setting `open` from script counts). Feed `content` from `ranuts/stream`'s
   `reasoning-delta` blocks.
+- **Attachments**: `r-attachments` — holds the files staged with a message, previews them,
+  validates, and owns its object URLs (revoked on detach/clear/disconnect). It does not
+  collect files: call `add(files)` from paste, drop or a picker. Removal is `detach(id)`,
+  because `remove()` already means "take yourself out of the document". Rejections are
+  reported, never silent.
 - **Dictation**: `r-voice-button` — a microphone button over `ranuts`' `createSpeechRecognizer`.
   It reports the **whole capture so far** on each `voiceresult` (interim results are
   revised), so remember the text already in the box at `voicestart` and concatenate once.
