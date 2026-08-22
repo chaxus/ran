@@ -1,14 +1,12 @@
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  plugins: [react()],
   build: {
     target: 'esnext',
     manifest: true,
@@ -21,7 +19,7 @@ export default defineConfig({
       '@/client': resolve(__dirname, 'client'),
       '@/app': resolve(__dirname, 'app'),
     },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.css'],
+    extensions: ['.mjs', '.js', '.ts', '.json', '.css'],
   },
   css: {
     // preprocessorOptions: {
