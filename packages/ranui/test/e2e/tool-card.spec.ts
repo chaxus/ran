@@ -54,7 +54,9 @@ test.describe('r-tool-card', () => {
     // has a closed root of its own — so `textContent` does not reach it. The row's own
     // attribute is the observable seam, and it is what the card writes.
     expect(
-      await insideShadow(page, 'r-tool-card', (root) => root.querySelector('r-disclosure-row')?.getAttribute('title')),
+      await insideShadow(page, 'r-tool-card', (root) =>
+        root.querySelector('r-disclosure-row')?.getAttribute('heading'),
+      ),
     ).toBe('读取当前时间');
   });
 
@@ -115,7 +117,7 @@ test.describe('r-tool-card', () => {
         status: 'error',
       },
     ]);
-    await expect(page.locator('body')).toHaveScreenshot('tool-card-states.png');
+    await expect(page.locator('#column')).toHaveScreenshot('tool-card-states.png');
   });
 
   test('renders a diff body', async ({ page }) => {
@@ -131,6 +133,6 @@ test.describe('r-tool-card', () => {
       },
     ]);
     await page.locator('r-tool-card').click();
-    await expect(page.locator('body')).toHaveScreenshot('tool-card-diff.png');
+    await expect(page.locator('#column')).toHaveScreenshot('tool-card-diff.png');
   });
 });

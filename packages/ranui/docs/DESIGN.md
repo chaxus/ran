@@ -17,18 +17,19 @@ Conflict resolution order: **user goals → verified evidence → this file → 
 
 ## What is machine-checked
 
-Six of the rules below are enforced by `pnpm -F ranui verify:design`, which CI runs on
+Seven of the rules below are enforced by `pnpm -F ranui verify:design`, which CI runs on
 every pull request. Everything else in this file is still binding — it is simply not
 mechanically decidable, so it relies on review and on rendering the result.
 
-| Rule                   | Enforces                                                                                   | Section |
-| ---------------------- | ------------------------------------------------------------------------------------------ | ------- |
-| `dark-unsafe-fallback` | a component token's colour fallback points at a token that flips, not a light-only literal | §1      |
-| `bare-colour`          | raw colour literals do not appear outside a token fallback                                 | §1      |
-| `spacing-scale`        | `padding` / `margin` / `gap` come from `--ran-space-*`                                     | §2      |
-| `sizing-scale`         | intrinsic dimensions never borrow from the spacing scale                                   | §2      |
-| `mouse-only-drag`      | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
-| `hidden-inert`         | a `:host` display rule does not silently disable the `hidden` attribute                    | §9      |
+| Rule                       | Enforces                                                                                   | Section |
+| -------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| `dark-unsafe-fallback`     | a component token's colour fallback points at a token that flips, not a light-only literal | §1      |
+| `bare-colour`              | raw colour literals do not appear outside a token fallback                                 | §1      |
+| `spacing-scale`            | `padding` / `margin` / `gap` come from `--ran-space-*`                                     | §2      |
+| `sizing-scale`             | intrinsic dimensions never borrow from the spacing scale                                   | §2      |
+| `mouse-only-drag`          | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
+| `hidden-inert`             | a `:host` display rule does not silently disable the `hidden` attribute                    | §9      |
+| `undefined-token-fallback` | a component token's fallback names a token the theme actually declares                     | §1      |
 
 Existing violations are recorded per file in
 [design-rule-baseline.json](./design-rule-baseline.json) and act as a **ratchet**: a count
@@ -289,6 +290,21 @@ that only works on one.
 - See [THEME_STYLE_SYSTEM_DESIGN.md](./THEME_STYLE_SYSTEM_DESIGN.md) for the token architecture and [style-tokens-public.md](./style-tokens-public.md) for the generated per-component token list.
 
 ---
+
+### A fallback must name a token that exists
+
+`var(--ran-component-thing, var(--ran-color-error))` looks correct and does nothing:
+`--ran-color-error` was never declared — the danger colour is `--ran-color-danger`. A `var()`
+naming an undeclared property resolves to _nothing_, the whole declaration is dropped, and
+the element silently keeps whatever it inherited. For a colour that is usually the body text
+colour, which looks almost right, so nothing ever looks broken enough to investigate.
+
+Four error states shipped invisible this way before `verify:design` grew the rule, and it
+immediately found three more (`--ran-text-copy-3`, which does not exist either — the 12px
+step is `--ran-text-label-3`).
+
+The rule reads the declared names out of `theme/tokens.less`, so adding a token needs no
+edit here.
 
 ### `hidden` must keep working
 

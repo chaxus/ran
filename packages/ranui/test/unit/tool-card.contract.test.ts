@@ -41,7 +41,7 @@ describe('r-tool-card contract', () => {
   it('puts the title and a summary on the collapsed line', () => {
     const { card, row } = mount();
     card.call = { card: 'generic', title: '抓取网页', summary: 'https://example.com' };
-    expect(row.title).toBe('抓取网页');
+    expect(row.heading).toBe('抓取网页');
     expect(row.summary).toBe('https://example.com');
   });
 
@@ -204,7 +204,7 @@ describe('r-tool-card contract', () => {
   it('degrades an unrecognised card to generic rather than throwing', () => {
     const { card, shadow, body } = mount();
     card.call = { card: 'holographic', title: 'From a newer producer' } as never;
-    expect((shadow.querySelector('r-disclosure-row') as DisclosureRow).title).toBe('From a newer producer');
+    expect((shadow.querySelector('r-disclosure-row') as DisclosureRow).heading).toBe('From a newer producer');
     expect(body.querySelector('.ran-tool-card-line')).toBeNull();
   });
 
@@ -220,7 +220,7 @@ describe('r-tool-card contract', () => {
     const { card, shadow } = mount();
     card.call = { card: 'generic', title: 'Something' };
     card.call = null;
-    expect((shadow.querySelector('r-disclosure-row') as DisclosureRow).title).toBe('');
+    expect((shadow.querySelector('r-disclosure-row') as DisclosureRow).heading).toBe('');
   });
 
   // ── Locations ───────────────────────────────────────────────────────────

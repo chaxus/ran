@@ -75,6 +75,28 @@ function lines(source: string): string[] {
   return stripComments(source).split('\n');
 }
 
+/** Global design tokens, as declared by the theme. */
+const THEME_TOKENS = path.join(ROOT, 'theme', 'tokens.less');
+
+/**
+ * Every `--ran-*` custom property the theme defines.
+ *
+ * Read from the theme rather than hard-coded: a token added there must not need this file
+ * edited too, and a rule carrying its own copy of the list is a rule that goes stale.
+ * Loaded once by {@link main} because `Rule.scan` is synchronous.
+ */
+let themeTokens = new Set<string>();
+
+/**
+ * Reads the theme's token declarations.
+ *
+ * @returns The declared `--ran-*` names.
+ */
+async function loadThemeTokens(): Promise<Set<string>> {
+  const source = await fs.readFile(THEME_TOKENS, 'utf8');
+  return new Set([...source.matchAll(/^\s*(--ran-[a-z0-9-]+)\s*:/gm)].map((match) => match[1]));
+}
+
 const RULES: Rule[] = [
   {
     id: 'dark-unsafe-fallback',
@@ -189,6 +211,28 @@ const RULES: Rule[] = [
       return [{ file, line: first.i + 1, text: first.line.trim() }];
     },
   },
+  {
+    id: 'undefined-token-fallback',
+    summary: 'a component token falls back to a `--ran-*` token the theme never defines',
+    fix: "Point the fallback at a token that exists — `grep -- '--ran-color-' theme/tokens.less` lists them. A `var()` naming an undeclared property resolves to nothing at all: the declaration is dropped and the element silently keeps whatever it inherited, which for a colour is usually the body text colour and looks almost right.",
+    extensions: ['.less'],
+    scan(source, file) {
+      const out: Violation[] = [];
+      lines(stripComments(source)).forEach((line, i) => {
+        for (const match of line.matchAll(VAR_WITH_FALLBACK)) {
+          const fallback = match[2].trim();
+          // Only a fallback that is itself a bare `var(--ran-…)` with nothing after it: that
+          // is the end of the chain, so it has to resolve. A fallback with its own fallback
+          // is somebody else's problem, and this rule sees that one too on its own line.
+          const inner = /^var\(\s*(--ran-[a-zA-Z0-9-]+)\s*\)$/.exec(fallback);
+          if (inner === null) continue;
+          if (themeTokens.has(inner[1])) continue;
+          out.push({ file, line: i + 1, text: `${match[1]} → ${inner[1]} (undeclared)` });
+        }
+      });
+      return out;
+    },
+  },
 ];
 
 /**
@@ -230,6 +274,7 @@ const BASELINE_COMMENT =
  * Entry point: scans every rule, then either rewrites the baseline or compares against it.
  */
 async function main(): Promise<void> {
+  themeTokens = await loadThemeTokens();
   const found = new Map<string, Violation[]>();
   for (const rule of RULES) {
     const violations: Violation[] = [];

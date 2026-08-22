@@ -12,14 +12,14 @@ description: '带有页眉、主体和页脚区域的结构化内容容器——
 
 ### 基础用法
 
-<r-card title="卡片标题" description="可选的副标题" style="max-width: 360px;">
+<r-card heading="卡片标题" description="可选的副标题" style="max-width: 360px;">
   <span slot="extra" style="font-size: 12px;">标签</span>
   <p style="margin: 0;">主体内容放在默认插槽里。</p>
   <a slot="footer" href="#">查看说明</a>
 </r-card>
 
 ```xml
-<r-card title="卡片标题" description="可选的副标题">
+<r-card heading="卡片标题" description="可选的副标题">
   <span slot="extra">标签</span>
   <p>主体内容放在默认插槽里。</p>
   <a slot="footer" href="#">查看说明</a>
@@ -41,12 +41,12 @@ description: '带有页眉、主体和页脚区域的结构化内容容器——
 
 卡片标题，显示在页眉顶部。为空时隐藏。
 
-<r-card title="仅有标题" style="max-width: 360px;">
+<r-card heading="仅有标题" style="max-width: 360px;">
   <p style="margin: 0;">主体内容。</p>
 </r-card>
 
 ```xml
-<r-card title="仅有标题">
+<r-card heading="仅有标题">
   <p>主体内容。</p>
 </r-card>
 ```
@@ -55,12 +55,12 @@ description: '带有页眉、主体和页脚区域的结构化内容容器——
 
 渲染在标题下方的副标题。为空时隐藏。当 `title` 和 `description` 都未设置时，整个页眉都会隐藏。
 
-<r-card title="标题" description="一段简短的辅助副标题" style="max-width: 360px;">
+<r-card heading="标题" description="一段简短的辅助副标题" style="max-width: 360px;">
   <p style="margin: 0;">主体内容。</p>
 </r-card>
 
 ```xml
-<r-card title="标题" description="一段简短的辅助副标题">
+<r-card heading="标题" description="一段简短的辅助副标题">
   <p>主体内容。</p>
 </r-card>
 ```
@@ -69,12 +69,12 @@ description: '带有页眉、主体和页脚区域的结构化内容容器——
 
 卡片默认不响应悬停。为真正可点击的卡片添加 `hoverable` 属性：悬停时边框在灰阶上加深一档（`--ran-color-border` → `--ran-color-border-hover`），同时表面获得轻量的抬升阴影（`--ran-shadow-elevated`）。
 
-<r-card hoverable title="可悬停卡片" description="把鼠标移上来" style="max-width: 360px; cursor: pointer;">
+<r-card hoverable heading="可悬停卡片" description="把鼠标移上来" style="max-width: 360px; cursor: pointer;">
   <p style="margin: 0;">边框加深，卡片轻微抬升。</p>
 </r-card>
 
 ```xml
-<r-card hoverable title="可悬停卡片" description="把鼠标移上来">
+<r-card hoverable heading="可悬停卡片" description="把鼠标移上来">
   <p>边框加深，卡片轻微抬升。</p>
 </r-card>
 ```
@@ -86,7 +86,7 @@ description: '带有页眉、主体和页脚区域的结构化内容容器——
 注入到卡片 Shadow DOM 中的 CSS —— 与其他所有 ranui 组件一致的 `sheet` 约定。
 
 ```xml
-<r-card title="自定义主题卡片" sheet=".ran-card { background: #f6ffed; }">
+<r-card heading="自定义主题卡片" sheet=".ran-card { background: #f6ffed; }">
   <p>主体内容。</p>
 </r-card>
 ```

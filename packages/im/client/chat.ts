@@ -14,7 +14,7 @@ import { TOOLS, parseToolArgs } from '@/client/tools/index';
  * started them, and reasoning arrives first.
  */
 export type ChatEvent =
-  | { type: 'turn/start'; id: string; role: TurnRole; text: string }
+  | { type: 'turn/start'; id: string; role: TurnRole; text: string; images?: readonly string[] }
   | { type: 'turn/text'; id: string; text: string }
   | { type: 'turn/end'; id: string }
   | { type: 'turn/error'; id: string; message: string }
@@ -43,6 +43,8 @@ export type TurnRole = 'user' | 'assistant' | 'system';
 interface TurnState {
   role: TurnRole;
   text: string;
+  /** Data URLs of the images attached to this message, in the order they were staged. */
+  images: readonly string[];
   streaming: boolean;
   error: string | null;
   /** Position in the stored history, or null for a row that stands for no stored message. */
@@ -88,6 +90,7 @@ export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
   start: (event) => ({
     role: event.type === 'turn/start' ? event.role : 'assistant',
     text: event.type === 'turn/start' ? event.text : '',
+    images: event.type === 'turn/start' ? (event.images ?? []) : [],
     streaming: event.type === 'turn/start' && event.role === 'assistant',
     error: null,
     index: messageIndex(event.id),
@@ -121,7 +124,19 @@ export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
     const body = document.createElement('div');
     body.className = node.state.role === 'user' ? 'turn-bubble' : 'turn-answer';
     if (node.state.role !== 'user') body.appendChild(document.createElement('r-markdown'));
-    row.append(body, actionBar(node.state.index));
+
+    // Above the bubble, as its own row: an image is the message as much as the text beside
+    // it, and a transcript that says "2 张图片" where two screenshots were is a transcript
+    // nobody can read back.
+    const images = document.createElement('div');
+    images.className = 'turn-images';
+    images.hidden = true;
+
+    const failure = document.createElement('p');
+    failure.className = 'turn-failure';
+    failure.hidden = true;
+
+    row.append(images, body, failure, actionBar(node.state.index));
     return row;
   },
   patch: (element, node) => {
@@ -132,19 +147,60 @@ export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
     }
     const body = element.querySelector('.turn-bubble, .turn-answer') as HTMLElement | null;
     if (body === null) return;
-    const shown = error === null ? text : `${text}\n\n⚠️ ${error}`;
-    if (role === 'user') body.textContent = shown;
+    if (role === 'user') body.textContent = text;
     else {
       const markdown = body.querySelector('r-markdown') as ContentElement | null;
       if (markdown === null) return;
-      markdown.content = shown;
+      markdown.content = text;
       // Streaming mode closes half-written markdown; a finished message has none to close,
       // and guessing at it would be inventing syntax the model did not send.
       markdown.setAttribute('mode', streaming ? 'streaming' : 'static');
     }
+    // A message with no text is a message that is only its attachments, and an empty bubble
+    // under them is a bubble with nothing in it.
+    body.hidden = text === '';
+
+    patchImages(element, node.state.images);
+    // Its own row, not appended to the message: a provider's failure is not something the
+    // model said, and concatenating it into the markdown makes it inherit whatever syntax
+    // the answer was in the middle of.
+    const failure = element.querySelector('.turn-failure') as HTMLElement | null;
+    if (failure !== null) {
+      failure.hidden = error === null;
+      failure.textContent = error ?? '';
+    }
     patchActions(element, node.state);
   },
 };
+
+/**
+ * Draws a message's images, adding and removing only what changed.
+ *
+ * Rebuilt only when the set changes: an `<img>` recreated on every patch restarts its decode
+ * and flickers, and a streaming turn patches once a frame.
+ *
+ * @param element The row.
+ * @param images Data URLs, in order.
+ */
+function patchImages(element: HTMLElement, images: readonly string[]): void {
+  const box = element.querySelector('.turn-images') as HTMLElement | null;
+  if (box === null) return;
+  box.hidden = images.length === 0;
+  const current = [...box.querySelectorAll('img')].map((img) => img.src);
+  if (current.length === images.length && current.every((src, at) => src === images[at])) return;
+  box.replaceChildren(
+    ...images.map((src) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      // Decoded off the main thread and out of the way until it is on screen; a transcript
+      // of screenshots would otherwise decode all of them at once on replay.
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      return img;
+    }),
+  );
+}
 
 /**
  * Builds the compaction marker.
@@ -162,7 +218,7 @@ function compactionRow(): HTMLElement {
   row.className = 'turn turn-system';
   const disclosure = document.createElement('r-disclosure-row');
   disclosure.setAttribute('expandable', '');
-  disclosure.setAttribute('title', '早期对话已压缩');
+  disclosure.setAttribute('heading', '早期对话已压缩');
   disclosure.appendChild(document.createElement('r-markdown'));
   row.appendChild(disclosure);
   return row;
@@ -177,9 +233,25 @@ function compactionRow(): HTMLElement {
 function patchCompaction(element: HTMLElement, state: TurnState): void {
   const markdown = element.querySelector('r-markdown') as ContentElement | null;
   if (markdown !== null) markdown.content = state.text;
-  // The collapsed line carries the summary's first line, so the marker says what was kept
-  // without being opened.
-  element.querySelector('r-disclosure-row')?.setAttribute('summary', state.text.split('\n', 1)[0] ?? '');
+  element.querySelector('r-disclosure-row')?.setAttribute('summary', excerpt(state.text));
+}
+
+/** How much of a summary the collapsed line carries. */
+const EXCERPT_LENGTH = 40;
+
+/**
+ * Takes the opening of a summary for the collapsed line.
+ *
+ * The line is visually truncated by CSS whatever its length, but the whole string becomes
+ * the row's accessible name — and a two-hundred-character button name is not a name. The
+ * body still holds all of it.
+ *
+ * @param text The full summary.
+ * @returns Its opening, ellipsised when there is more.
+ */
+function excerpt(text: string): string {
+  const line = text.split('\n', 1)[0] ?? '';
+  return line.length <= EXCERPT_LENGTH ? line : `${line.slice(0, EXCERPT_LENGTH)}…`;
 }
 
 /**

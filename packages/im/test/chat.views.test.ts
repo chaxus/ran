@@ -177,6 +177,24 @@ describe('the conversation the views build', () => {
     expect(row.state).toMatchObject({ branch: { current: 2, total: 3 } });
   });
 
+  it('carries the images a message was sent with', () => {
+    // A transcript that says "2 张图片" where two screenshots were is one nobody can read back.
+    const [row] = project([
+      { type: 'turn/start', id: 'm0', role: 'user', text: '看看这个', images: ['data:image/png;base64,AA'] },
+    ]);
+    expect(row.state).toMatchObject({ text: '看看这个', images: ['data:image/png;base64,AA'] });
+  });
+
+  it('keeps a failure out of the message text', () => {
+    // A provider's failure is not something the model said. Concatenated into the markdown it
+    // inherits whatever syntax the answer was in the middle of.
+    const [row] = project([
+      { type: 'turn/start', id: 'm1', role: 'assistant', text: '半句话' },
+      { type: 'turn/error', id: 'm1', message: 'invalid api key (401)' },
+    ]);
+    expect(row.state).toMatchObject({ text: '半句话', error: 'invalid api key (401)' });
+  });
+
   it('emits nothing for a snapshot that has not grown', () => {
     const accumulator = createStreamAccumulator();
     accumulator.push({ type: 'text-delta', index: 1, text: 'x' });

@@ -25,8 +25,8 @@ test.describe('r-disclosure-row', () => {
     await mount(
       page,
       `<div style="width: 360px">
-         <r-disclosure-row id="short" title="ls" summary="/repo"></r-disclosure-row>
-         <r-disclosure-row id="long" title="fetch_url" summary="${'https://example.com/very/long/path/'.repeat(8)}"></r-disclosure-row>
+         <r-disclosure-row id="short" heading="ls" summary="/repo"></r-disclosure-row>
+         <r-disclosure-row id="long" heading="fetch_url" summary="${'https://example.com/very/long/path/'.repeat(8)}"></r-disclosure-row>
        </div>`,
     );
     const heights = await page.evaluate(() =>
@@ -41,7 +41,7 @@ test.describe('r-disclosure-row', () => {
     await mount(
       page,
       `<div id="box" style="width: 300px; overflow: hidden">
-         <r-disclosure-row title="fetch_url" summary="${'x'.repeat(400)}"></r-disclosure-row>
+         <r-disclosure-row heading="fetch_url" summary="${'x'.repeat(400)}"></r-disclosure-row>
        </div>`,
     );
     const overflow = await page.evaluate(() => {
@@ -54,14 +54,14 @@ test.describe('r-disclosure-row', () => {
   test('is a control only when there is something to open', async ({ page }) => {
     // A press that reveals nothing is worse than no control, so the row says so rather than
     // silently doing nothing.
-    await mount(page, `<r-disclosure-row title="Ping"></r-disclosure-row>`);
+    await mount(page, `<r-disclosure-row heading="Ping"></r-disclosure-row>`);
     expect(
       await insideShadow(page, 'r-disclosure-row', (root) =>
         root.querySelector('.ran-disclosure-row')?.getAttribute('aria-disabled'),
       ),
     ).toBe('true');
 
-    await mount(page, `<r-disclosure-row expandable title="Read"><p>body</p></r-disclosure-row>`);
+    await mount(page, `<r-disclosure-row expandable heading="Read"><p>body</p></r-disclosure-row>`);
     expect(
       await insideShadow(page, 'r-disclosure-row', (root) =>
         root.querySelector('.ran-disclosure-row')?.getAttribute('aria-disabled'),
@@ -74,7 +74,7 @@ test.describe('r-disclosure-row', () => {
     // a target inside it.
     await mount(
       page,
-      `<r-disclosure-row expandable title="Read" summary="a.ts"><p id="body">contents</p></r-disclosure-row>`,
+      `<r-disclosure-row expandable heading="Read" summary="a.ts"><p id="body">contents</p></r-disclosure-row>`,
     );
     await expect(page.locator('#body')).toBeHidden();
     await page.locator('r-disclosure-row').click();
@@ -83,20 +83,30 @@ test.describe('r-disclosure-row', () => {
   });
 
   test('does not open a row with nothing inside, however hard it is clicked', async ({ page }) => {
-    await mount(page, `<r-disclosure-row title="Ping"></r-disclosure-row>`);
+    await mount(page, `<r-disclosure-row heading="Ping"></r-disclosure-row>`);
     await page.locator('r-disclosure-row').click();
     await expect(page.locator('r-disclosure-row')).not.toHaveAttribute('open', '');
+  });
+
+  test('sets no native tooltip, whatever it is headed with', async ({ page }) => {
+    // `title` is a native HTMLElement attribute and the browser renders it as a tooltip. A
+    // component that used it for a heading made every row sprout a tooltip repeating the
+    // text already on screen, and nothing switches that off once the attribute is set.
+    await mount(page, `<r-disclosure-row heading="fetch_url" summary="https://example.com"></r-disclosure-row>`);
+    await expect(page.locator('r-disclosure-row')).not.toHaveAttribute('title', /.*/);
+    const insideTitle = await insideShadow(page, 'r-disclosure-row', (root) => root.querySelector('[title]') === null);
+    expect(insideTitle).toBe(true);
   });
 
   test('renders', async ({ page }) => {
     await mount(
       page,
-      `<div style="width: 420px; display: flex; flex-direction: column; gap: 4px">
-         <r-disclosure-row title="读取当前时间" summary="Asia/Shanghai"></r-disclosure-row>
-         <r-disclosure-row expandable title="抓取网页" summary="https://example.com"><p>body</p></r-disclosure-row>
-         <r-disclosure-row title="写入 plan.md"></r-disclosure-row>
+      `<div id="column" style="width: 420px; display: flex; flex-direction: column; gap: 4px">
+         <r-disclosure-row heading="读取当前时间" summary="Asia/Shanghai"></r-disclosure-row>
+         <r-disclosure-row expandable heading="抓取网页" summary="https://example.com"><p>body</p></r-disclosure-row>
+         <r-disclosure-row heading="写入 plan.md"></r-disclosure-row>
        </div>`,
     );
-    await expect(page.locator('body')).toHaveScreenshot('disclosure-row.png');
+    await expect(page.locator('#column')).toHaveScreenshot('disclosure-row.png');
   });
 });

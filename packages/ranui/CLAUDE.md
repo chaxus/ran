@@ -710,7 +710,7 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 A structured content container with header, body, and footer zones.
 
 ```html
-<r-card title="Card Title" description="Optional subtitle" sheet=".ran-card { background: red; }">
+<r-card heading="Card Title" description="Optional subtitle" sheet=".ran-card { background: red; }">
   <!-- Default slot: body content -->
   <p>Body content goes here</p>
 
@@ -858,6 +858,27 @@ somewhere else — hold the row with `captureAnchor` / `restoreAnchor` instead.
 silently finds nothing.
 
 ---
+
+### r-state-dot / r-disclosure-row
+
+The two primitives the tool row and the compaction marker share.
+
+`r-state-dot` is an 8px lifecycle indicator: a halo and a core in one element, both
+`currentColor`, so a state is one colour rule rather than two tokens. It is `aria-hidden`
+until given a `label` — a dot beside a row that already states the outcome is noise in a
+screen reader.
+
+`r-disclosure-row` is the one-line `[leading] title · summary` chrome, with the leading icon
+and its hover chevron sharing one grid cell so the swap costs no layout. Two things that
+bite:
+
+- **The heading attribute is `heading`, not `title`.** `title` is a native `HTMLElement`
+  attribute the browser renders as a tooltip, so a component using it for a heading makes
+  every instance sprout a tooltip repeating the text already on screen — and nothing turns
+  that off once it is set. `r-card` and `r-modal` carry the same rename for the same reason.
+- **Its event is `disclosuretoggle`, not `toggle`.** `toggle` is what `<details>` fires, and
+  its `ToggleEvent` carries `oldState`/`newState` rather than a `detail`; a listener typed
+  against the platform name finds nothing in it.
 
 ### r-tool-card
 
