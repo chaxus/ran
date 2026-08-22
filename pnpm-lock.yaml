@@ -123,6 +123,9 @@ importers:
         specifier: workspace:*
         version: link:../ranuts
     devDependencies:
+      '@playwright/test':
+        specifier: 1.62.1
+        version: 1.62.1
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2
