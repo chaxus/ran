@@ -11,6 +11,7 @@ import 'ranui/tool-card';
 import 'ranui/token-meter';
 import 'ranui/disclosure-row';
 import 'ranui/state-dot';
+import { OLDER_REQUEST } from 'ranui';
 import message from 'ranui/message';
 import { initTheme } from 'ranui/theme';
 import { formatRelative, readFileAsDataURL } from 'ranuts/utils';
@@ -31,14 +32,21 @@ import {
 } from '@/client/chat';
 import type { ChatEvent, EmittedSoFar, TurnActionDetail } from '@/client/chat';
 import { parseToolArgs, runTool, toolsForRequest } from '@/client/tools/index';
-import type { Branch, StoredMessage, WireToolCall } from '@/client/chat-types';
-import { replyStart, survivingBranches } from '@/client/history';
-import { KEEP_RECENT, contextTokens, decideBudget } from '@/client/budget';
+import type { Branch, Compaction, StoredMessage, WireToolCall } from '@/client/chat-types';
+import {
+  activeCompaction,
+  replyStart,
+  requestMessages,
+  survivingBranches,
+  survivingCompactions,
+} from '@/client/history';
+import { KEEP_RECENT, contextTokens, decideBudget, messageTokens } from '@/client/budget';
 import { addUsage } from 'ranuts/stream';
 import type { TokenUsage } from 'ranuts/stream';
 
 /** `<r-conversation>`, as far as this file needs it. */
 type ConversationElement = HTMLElement & {
+  older: string;
   register: (view: unknown) => void;
   push: (event: ChatEvent) => void;
   truncate: (key: string) => number;
@@ -71,6 +79,15 @@ const sessionList = document.querySelector('#sessions-list') as HTMLElement;
 const newSession = document.querySelector('#new-session') as HTMLElement;
 const meter = document.querySelector('#tokens') as HTMLElement & { limit: number; used: number; spent: number };
 
+/**
+ * How many messages a page adds.
+ *
+ * Sized so the first page fills a tall window several times over — the affordance should be
+ * a rare deliberate act, not something a reader hits while scrolling back through this
+ * morning's conversation.
+ */
+const PAGE_SIZE = 80;
+
 const DEMO_NOTICE =
   '演示模式：未配置 API key，回答来自内置示例。设置 IM_API_KEY（可选 IM_BASE_URL、IM_MODEL）后重启即可对接真实模型。';
 
@@ -95,6 +112,16 @@ let inFlight: DialogStream | null = null;
  * fits or state a limit nobody set.
  */
 let contextLimit = 0;
+/**
+ * How many of the log's newest messages are on screen.
+ *
+ * Named `shown` rather than `window`: a module-level `window` shadows the global one for
+ * every line in this file.
+ *
+ * Grown by the paging affordance, never shrunk while a conversation stays open: a reader who
+ * fetched older messages and then sent one would otherwise watch them disappear.
+ */
+let shown = PAGE_SIZE;
 /** Reported once per page, not once per failed write, so a full disk does not become a wall. */
 let storageWarned = false;
 
@@ -195,6 +222,7 @@ function cutAt(index: number): StoredMessage[] {
   const dropped = current.messages.slice(index);
   current.messages = current.messages.slice(0, index);
   current.branches = survivingBranches(current.branches ?? [], index);
+  current.compactions = survivingCompactions(current.compactions ?? [], index);
   // The transcript is cut at the row the message opened. Rows are dropped by when they
   // opened, so the tool cards and reasoning of a cut turn go with it.
   chat.truncate(`turn:${nodeId(index)}`);
@@ -298,6 +326,15 @@ async function switchBranch(index: number, delta: number): Promise<void> {
   renderMeter();
 }
 
+chat.addEventListener(OLDER_REQUEST, () => {
+  // The element captured the reader's position before asking. Grow the window, redraw, and
+  // put the row they were looking at back where it was — a prepend that scrolled them to
+  // the top would lose the place they asked from.
+  shown += PAGE_SIZE;
+  renderSession(current);
+  chat.restoreAnchor();
+});
+
 chat.addEventListener(TURN_ACTION_EVENT, (event) => {
   const { action, index } = (event as CustomEvent<TurnActionDetail>).detail;
   if (action === 'edit') void editAt(index);
@@ -347,17 +384,26 @@ function transcriptOf(messages: readonly StoredMessage[]): string {
 /**
  * Asks the model to summarize a slice of history.
  *
+ * @param carried The summary already standing in for everything before this slice, or null
+ *   on the first compaction. Folded in so nothing is lost across repeated compactions.
  * @param messages The slice being folded away.
  * @returns The summary, or null when the request failed — a failed compaction leaves the
  *   history alone, which is worse than compacting and far better than losing it.
  */
-function summarize(messages: readonly StoredMessage[]): Promise<string | null> {
+function summarize(carried: string | null, messages: readonly StoredMessage[]): Promise<string | null> {
   return new Promise((resolve) => {
     // No tools: this call produces prose, and offering it a clock or a fetcher only invites
     // a round trip that cannot help.
     streamDialog(
       '/api/im/dialog',
-      { messages: [{ role: 'user', content: `${SUMMARY_PROMPT}\n\n---\n${transcriptOf(messages)}` }] },
+      {
+        messages: [
+          {
+            role: 'user',
+            content: `${SUMMARY_PROMPT}\n\n---\n${carried === null ? '' : `${carried}\n\n`}${transcriptOf(messages)}`,
+          },
+        ],
+      },
       {
         onUpdate: () => {},
         onEnd: (snapshot, error) => {
@@ -377,44 +423,15 @@ function summarize(messages: readonly StoredMessage[]): Promise<string | null> {
  * history several times over between the user's message and the answer, and a fetched page
  * is the largest single thing a conversation ever gains.
  */
-async function compactIfNeeded(): Promise<void> {
-  const decision = decideBudget(current.messages, contextLimit);
-  renderMeter();
-  if (decision.compact === 0) {
-    // Nothing to fold and still over: one message larger than the window. Saying so beats
-    // letting the provider answer with a rejection nobody can act on.
-    if (!decision.fits) {
-      setNotice(`这轮对话已超出模型上下文（约 ${decision.used} tokens，上限 ${contextLimit}），最近的消息可能被拒绝。`);
-    }
-    return;
-  }
-
-  const folded = current.messages.slice(0, decision.compact);
-  setNotice(`对话已接近上下文上限，正在把最早的 ${folded.length} 条消息压缩成摘要…`);
-  const summary = await summarize(folded);
-  if (summary === null) {
-    setNotice('压缩摘要失败，历史保持原样。如果接下来请求被拒绝，请新建对话。');
-    return;
-  }
-
-  current.messages = [{ role: 'system', content: summary }, ...current.messages.slice(decision.compact)];
-  setNotice('');
-  // Redrawn rather than patched: the transcript no longer matches the history, and rebuilding
-  // it from the stored messages is the one way the two cannot drift apart.
-  renderSession(current);
-  await persist();
-  renderMeter();
-}
-
 /**
  * Redraws the context meter from the open conversation.
  *
  * Both numbers, because they answer different questions and stop resembling each other after
  * the first compaction: `used` is what the next request will carry, `spent` is what the
- * conversation has cost.
+ * conversation has cost — and after a fold the log holds far more than the request does.
  */
 function renderMeter(): void {
-  const used = contextTokens(current.messages);
+  const used = contextTokens(requestMessages(current.messages, current.compactions ?? []));
   const spent = current.usage?.totalTokens ?? 0;
   meter.limit = contextLimit;
   meter.used = used;
@@ -425,16 +442,57 @@ function renderMeter(): void {
 }
 
 /**
- * Runs one provider round trip, and the next one when the model asked for tools.
+ * Where the model's view of the log currently starts.
  *
- * The loop lives here rather than in the stream layer because continuing is a decision about
- * the conversation: it needs the history to append to, the transcript to draw into, and a
- * ceiling on how many times it may happen. `streamDialog` knows about one response.
- *
- * @param id The user turn every round of this exchange belongs to.
- * @param step Which round this is, counted from 0.
- * @returns Once the exchange has ended, whether by an answer, a failure, or the ceiling.
+ * @returns The active boundary's index, or 0 when nothing has been folded yet.
  */
+function compactedFrom(): number {
+  return activeCompaction(current.compactions ?? [])?.at ?? 0;
+}
+
+async function compactIfNeeded(): Promise<void> {
+  const active = activeCompaction(current.compactions ?? []);
+  const from = active?.at ?? 0;
+  // Budgeted over the tail alone, with the standing summary charged against the limit
+  // rather than offered up as the first thing to drop. It is the oldest entry in the
+  // request, so a planner that ranked by age would fold away the only record of everything
+  // it already folded.
+  const carried = active === null ? 0 : messageTokens({ role: 'system', content: active.summary });
+  const tail = current.messages.slice(from);
+  const decision = decideBudget(tail, contextLimit === 0 ? 0 : Math.max(1, contextLimit - carried));
+  renderMeter();
+
+  if (decision.compact === 0) {
+    // Nothing left to fold and still over: one message larger than the window. Saying so
+    // beats letting the provider answer with a rejection nobody can act on.
+    if (!decision.fits) {
+      setNotice(
+        `这轮对话已超出模型上下文（约 ${decision.used + carried} tokens，上限 ${contextLimit}），最近的消息可能被拒绝。`,
+      );
+    }
+    return;
+  }
+
+  const folded = tail.slice(0, decision.compact);
+  setNotice(`对话已接近上下文上限，正在把最早的 ${folded.length} 条消息压缩成摘要…`);
+  // The standing summary goes in with them: a second compaction that summarised only the
+  // new messages would drop everything the first one was holding.
+  const summary = await summarize(active?.summary ?? null, folded);
+  if (summary === null) {
+    setNotice('压缩摘要失败，历史保持原样。如果接下来请求被拒绝，请新建对话。');
+    return;
+  }
+
+  // Recorded, not spliced. The log keeps every message; only the next request is shorter.
+  current.compactions = [...(current.compactions ?? []), { at: from + decision.compact, summary }];
+  setNotice('');
+  // Redrawn rather than patched: the transcript gains a marker at the boundary, and
+  // rebuilding it from the stored conversation is the one way the two cannot drift apart.
+  renderSession(current);
+  await persist();
+  renderMeter();
+}
+
 async function runStep(step: number): Promise<void> {
   await compactIfNeeded();
   return sendRound(step);
@@ -457,7 +515,9 @@ function sendRound(step: number): Promise<void> {
   return new Promise((resolve) => {
     inFlight = streamDialog(
       '/api/im/dialog',
-      { messages: current.messages, tools: toolsForRequest() },
+      // The log is not the request: a compaction folds its prefix into a summary here, and
+      // nowhere else. See `requestMessages`.
+      { messages: requestMessages(current.messages, current.compactions ?? []), tools: toolsForRequest() },
       {
         onOpen: (server) => {
           // Confirms what the server already stamped into the page, and corrects it if the
@@ -610,6 +670,12 @@ function blankSession(): Session {
  */
 function renderSession(session: Session): void {
   chat.reset();
+  // Only the tail is drawn. A log only grows, so a client that renders all of it eventually
+  // renders more than anyone will read; `window` is how much of it is on screen, and the
+  // paging affordance is the statement that there is more.
+  const first = Math.max(0, session.messages.length - shown);
+  chat.older = first === 0 ? '' : `加载更早的 ${first} 条`;
+  const compactions = new Map<number, Compaction>((session.compactions ?? []).map((entry) => [entry.at, entry]));
   // Results are indexed by call id first, because a tool message names the call it answers
   // and the two are not adjacent when the model made several calls at once.
   const results = new Map<string, { output: string; failed: boolean }>();
@@ -625,6 +691,14 @@ function renderSession(session: Session): void {
   // seconds of blocked main thread, measured in a browser.
   chat.batch(() => {
     session.messages.forEach((entry, index) => {
+      if (index < first) return;
+      // A boundary draws its marker before the first message the model still sees whole, so
+      // the reader can see exactly where the fold falls in what they said.
+      const fold = compactions.get(index);
+      if (fold !== undefined) {
+        chat.push({ type: 'turn/start', id: `c${index}`, role: 'system', text: fold.summary });
+        chat.push({ type: 'turn/end', id: `c${index}` });
+      }
       // A tool message has already been drawn as the result of its call.
       if (entry.role === 'tool') return;
       const id = nodeId(index);
@@ -731,6 +805,7 @@ async function openSession(id: string): Promise<void> {
   if (session === null) return;
   current = session;
   store.setCurrentId(session.id);
+  shown = PAGE_SIZE;
   renderSession(session);
   await renderSessions();
   renderMeter();
@@ -747,6 +822,7 @@ async function deleteSession(id: string): Promise<void> {
     inFlight?.close();
     current = blankSession();
     store.setCurrentId(current.id);
+    shown = PAGE_SIZE;
     renderSession(current);
     renderMeter();
   }
@@ -757,6 +833,7 @@ newSession.addEventListener('click', () => {
   inFlight?.close();
   current = blankSession();
   store.setCurrentId(current.id);
+  shown = PAGE_SIZE;
   renderSession(current);
   renderMeter();
   void renderSessions();
