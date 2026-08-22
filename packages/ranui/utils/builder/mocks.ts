@@ -125,6 +125,31 @@ export class HTMLElementMock {
     return this.shadowRoot as unknown as ShadowRoot;
   }
 
+  /**
+   * Slot assignment, which this mock does not model.
+   *
+   * Serialization walks a tree that has not been slotted, so nothing is assigned and the
+   * honest answer is none. A component that decides its rendered output from what is
+   * slotted therefore serializes its empty state and settles once the element upgrades in
+   * the browser — `r-modal`'s footer class is the case this was written for.
+   *
+   * Present at all because the alternative is throwing: `assignedNodes` was simply absent,
+   * so any component calling it failed to render on the server rather than rendering
+   * something incomplete.
+   *
+   * @returns An empty list.
+   */
+  assignedNodes(): HTMLElementMock[] {
+    return [];
+  }
+
+  /**
+   * @returns An empty list; see {@link HTMLElementMock.assignedNodes}.
+   */
+  assignedElements(): HTMLElementMock[] {
+    return [];
+  }
+
   querySelector(selector: string): HTMLElementMock | null {
     const result = this.querySelectorAll(selector);
     return result.length > 0 ? result[0] : null;

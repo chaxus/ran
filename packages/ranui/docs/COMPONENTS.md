@@ -189,7 +189,7 @@ Source: `components/link/index.ts`
 - **Attributes**: `href: string`, `replace: boolean`, `sheet: string`
 - **Properties**: `href: string`, `replace: boolean`, `sheet: string`
 - **Events**: `ran-navigate` → detail `{ path, replace }`
-- **Slots**: —
+- **Slots**: `default`
 - **Parts**: —
 
 ## `<r-loading>`

@@ -41,7 +41,14 @@ export class RadarChart extends RanElement {
   abilityRadarChart: HTMLCanvasElement;
   _iconElement?: HTMLElement;
   _shadowDom: ShadowRoot;
-  resizeObserver: ResizeObserver;
+  /**
+   * Created on connect rather than in the constructor.
+   *
+   * Server rendering constructs the element and serializes it without ever connecting it,
+   * and `ResizeObserver` does not exist there — building one in the constructor made this
+   * element throw during SSR instead of rendering.
+   */
+  resizeObserver?: ResizeObserver;
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, radarCss);
@@ -58,8 +65,6 @@ export class RadarChart extends RanElement {
 
     this.abilityRadarChartContainer = container;
     this.abilityRadarChart = radarChart;
-    this.resizeObserver = new ResizeObserver(this.resize);
-    this.resizeObserver.observe(this.abilityRadarChartContainer);
   }
   resize = (): void => {
     this.refreshData();
@@ -323,10 +328,12 @@ export class RadarChart extends RanElement {
   }
   connectedCallback() {
     this.handlerExternalCss();
+    this.resizeObserver ??= new ResizeObserver(this.resize);
+    this.resizeObserver.observe(this.abilityRadarChartContainer);
     this.refreshData();
   }
   disconnectedCallback() {
-    this.resizeObserver.disconnect();
+    this.resizeObserver?.disconnect();
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue === newValue) return;

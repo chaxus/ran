@@ -7,21 +7,16 @@ import '../../../index';
 /**
  * Tags whose server rendering this does not assert, each with a reason.
  *
- * An exemption is a decision someone made and wrote down, not a component that quietly
- * stopped rendering — which is exactly how `r-card` shipped throwing on the server, from a
- * compound selector the SSR mock could not match, with nothing to notice it.
+ * Empty, and worth keeping empty. An exemption is a decision someone made and wrote down,
+ * not a component that quietly stopped rendering — which is how `r-card` shipped throwing
+ * on the server, from a compound selector the SSR mock could not match, with nothing to
+ * notice it.
  *
- * The four below fail today and are recorded rather than fixed here: three reach for a
- * browser global the server does not have, and one calls a slot method the mock does not
- * implement. Each is a decision about that component's own behaviour. What this list buys
- * meanwhile is that the number cannot grow silently.
+ * The five this check first found are all fixed: three built a browser-only observer or
+ * reached for `document` in their constructor, which server rendering never gets past, and
+ * two were gaps in the mock rather than in the components.
  */
-const EXEMPT: Record<string, string> = {
-  'r-content': 'Constructs a MutationObserver, which the server has none of.',
-  'r-link': 'Reaches for `document` while constructing.',
-  'r-modal': 'Calls `assignedNodes()` on a slot; the SSR mock does not implement it.',
-  'r-radar': 'Constructs a ResizeObserver, which the server has none of.',
-};
+const EXEMPT: Record<string, string> = {};
 
 const tags = [...getSSRRegistry().keys()].sort();
 

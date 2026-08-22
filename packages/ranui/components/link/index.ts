@@ -1,5 +1,5 @@
 import linkCss from './index.less?inline';
-import { EventManager } from '@/utils/builder';
+import { EventManager, Slot, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
@@ -23,11 +23,11 @@ export class Link extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, linkCss);
-    const anchor = ensureShadowElement(this._shadowDom, 'a', () => {
-      const a = document.createElement('a');
-      a.appendChild(document.createElement('slot'));
-      return a;
-    });
+    // Built through the builder, not `document.createElement`: server rendering has no
+    // `document`, and reaching for one here made this element throw instead of render.
+    const anchor = ensureShadowElement(this._shadowDom, 'a', () =>
+      View<HTMLAnchorElement>('a').children(Slot().build()).build(),
+    );
     this._anchor = anchor as HTMLAnchorElement;
   }
 

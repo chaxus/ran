@@ -5,7 +5,14 @@ import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
 
 export class Content extends RanElement {
-  observer: MutationObserver;
+  /**
+   * Created on connect rather than in the constructor.
+   *
+   * Server rendering constructs the element and serializes it without ever connecting it,
+   * and `MutationObserver` does not exist there — building one in the constructor made this
+   * element throw during SSR instead of rendering.
+   */
+  observer?: MutationObserver;
   _shadowDom: ShadowRoot;
   _slot: HTMLElement;
   constructor() {
@@ -13,7 +20,6 @@ export class Content extends RanElement {
     this._shadowDom = ensureShadowRoot(this, contentCss);
     const slot = ensureShadowElement(this._shadowDom, '.slot', () => Slot().class('slot').build() as HTMLElement);
     this._slot = slot;
-    this.observer = new MutationObserver(this.callback);
   }
   callback = (mutations: MutationRecord[]): void => {
     for (const mutation of mutations) {
@@ -37,10 +43,11 @@ export class Content extends RanElement {
     );
   };
   connectedCallback(): void {
+    this.observer ??= new MutationObserver(this.callback);
     this.observer.observe(this, { attributes: true, childList: true, subtree: true });
   }
   disconnectedCallback(): void {
-    this.observer.disconnect();
+    this.observer?.disconnect();
   }
 }
 
