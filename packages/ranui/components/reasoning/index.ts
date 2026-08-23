@@ -2,7 +2,6 @@ import componentCss from './index.less?inline';
 import { createRef, Div, EventManager, Slot, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -88,20 +87,19 @@ export class Reasoning extends RanElement {
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
     const text = createRef<HTMLElement>();
-    const row = mountShadowTree(this._shadowDom, () =>
-      View('r-disclosure-row')
-        .attr('part', 'row')
-        .attr('expandable', '')
-        .children(
-          Div()
-            .class('ran-reasoning-body')
-            .attr('part', 'body')
-            .children(Span().class('ran-reasoning-text').ref(text).attr('part', 'text').build(), Slot().build())
-            .build(),
-        )
-        .build(),
-    ) as DisclosureRow;
-    this._row = row;
+    const row = View('r-disclosure-row')
+      .attr('part', 'row')
+      .attr('expandable', '')
+      .children(
+        Div()
+          .class('ran-reasoning-body')
+          .attr('part', 'body')
+          .children(Span().class('ran-reasoning-text').ref(text).attr('part', 'text').build(), Slot().build())
+          .build(),
+      )
+      .build();
+    this._shadowDom.appendChild(row);
+    this._row = row as DisclosureRow;
     this._text = shadowPart(text, 'text');
   }
 

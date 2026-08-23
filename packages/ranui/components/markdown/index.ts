@@ -1,11 +1,11 @@
 import { RanElement } from '@/utils/index';
 import { Div, View, createRef } from '@/utils/builder';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
   setBooleanAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 // Registers <r-icon>; the code-block toolbar's <r-icon name="copy"> etc. resolve their SVG
@@ -128,17 +128,13 @@ export class Markdown extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, markdownCss);
     const bodyRef = createRef<HTMLDivElement>();
-    this._wrap = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-markdown')
-        .part('markdown')
-        .children(Div().class('ran-markdown-body').part('body').ref(bodyRef))
-        .build(),
-    );
-    // mountShadowTree may return a pre-existing tree (re-connect), so fall back to a lookup.
-    // mountShadowTree can hand back a tree built by a previous connect (or SSR), in
-    // which case the factory never ran and the ref is empty; the body is its first child.
-    this._body = bodyRef.current ?? (this._wrap.firstElementChild as HTMLElement);
+    this._wrap = Div()
+      .class('ran-markdown')
+      .part('markdown')
+      .children(Div().class('ran-markdown-body').part('body').ref(bodyRef))
+      .build();
+    this._shadowDom.appendChild(this._wrap);
+    this._body = shadowPart(bodyRef, 'body');
   }
 
   // ── Accessors ─────────────────────────────────────────────────────────────

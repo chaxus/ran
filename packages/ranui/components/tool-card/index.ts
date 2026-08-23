@@ -2,7 +2,6 @@ import componentCss from './index.less?inline';
 import { ButtonBuilder, createRef, Div, EventManager, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -115,17 +114,16 @@ export class ToolCard extends RanElement {
     // during server rendering, where there is no document. The SSR gate is what says so.
     const dot = createRef<StateDot>();
     const body = createRef<HTMLDivElement>();
-    const row = mountShadowTree(this._shadowDom, () =>
-      View('r-disclosure-row')
-        .attr('part', 'row')
-        .children(
-          View('r-state-dot').ref(dot).attr('slot', 'leading').build(),
-          Div().class('ran-tool-card-body').ref(body).attr('part', 'body').build(),
-        )
-        .build(),
-    ) as DisclosureRow;
+    const row = View('r-disclosure-row')
+      .attr('part', 'row')
+      .children(
+        View('r-state-dot').ref(dot).attr('slot', 'leading').build(),
+        Div().class('ran-tool-card-body').ref(body).attr('part', 'body').build(),
+      )
+      .build();
+    this._shadowDom.appendChild(row);
 
-    this._row = row;
+    this._row = row as DisclosureRow;
     this._dot = shadowPart(dot, 'state dot');
     this._body = shadowPart(body, 'body');
   }

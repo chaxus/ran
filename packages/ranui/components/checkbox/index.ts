@@ -3,7 +3,6 @@ import { RanElement, falseList, isDisabled } from '@/utils/index';
 import { createRef, Div, EventManager, InputBuilder, Slot, Span } from '@/utils/builder';
 import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -49,23 +48,22 @@ export class Checkbox extends RanElement {
     const containerRef = createRef<HTMLDivElement>();
     const checkInputRef = createRef<HTMLInputElement>();
     const checkInnerRef = createRef<HTMLSpanElement>();
-    const wrapper = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-checkbox-wrapper')
-        .part('wrapper')
-        .children(
-          Div()
-            .class('ran-checkbox')
-            .ref(containerRef)
-            .part('checkbox')
-            .children(
-              InputBuilder().class('ran-checkbox-input').ref(checkInputRef).part('input').attr('type', 'checkbox'),
-              Span().class('ran-checkbox-inner').ref(checkInnerRef).part('inner'),
-            ),
-          Span().class('ran-checkbox-label').part('label').children(Slot()),
-        )
-        .build(),
-    );
+    const wrapper = Div()
+      .class('ran-checkbox-wrapper')
+      .part('wrapper')
+      .children(
+        Div()
+          .class('ran-checkbox')
+          .ref(containerRef)
+          .part('checkbox')
+          .children(
+            InputBuilder().class('ran-checkbox-input').ref(checkInputRef).part('input').attr('type', 'checkbox'),
+            Span().class('ran-checkbox-inner').ref(checkInnerRef).part('inner'),
+          ),
+        Span().class('ran-checkbox-label').part('label').children(Slot()),
+      )
+      .build();
+    this._shadowDom.appendChild(wrapper);
 
     this.container = shadowPart(containerRef, 'ran checkbox');
     this.checkInput = shadowPart(checkInputRef, 'input');

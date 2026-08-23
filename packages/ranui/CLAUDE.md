@@ -35,7 +35,7 @@ packages/ranui/
 │       ├── index.ts      # Component class + defineSSR()
 │       └── index.less    # Shadow DOM styles (auto-imports base.less)
 ├── utils/
-│   ├── component.ts      # ensureShadowRoot, mountShadowTree, attribute helpers
+│   ├── component.ts      # ensureShadowRoot, shadowPart, attribute helpers
 │   ├── builder/          # ElementBuilder fluent DOM builder
 │   ├── router/           # RouterCore, createRouter, useRouter, enableMpaViewTransitions
 │   ├── i18n/             # re-export of ranuts/i18n (the engine itself lives in ranuts)
@@ -71,7 +71,6 @@ import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
-  mountShadowTree,
   getStringAttribute,
   setStringAttribute,
   shadowPart,
@@ -96,7 +95,7 @@ export class MyComponent extends RanElement {
     // afterwards: that re-derives the element through a class name, and a rename on one side
     // yields `null` that the `!` waves through. `verify:design` rejects it (DESIGN.md §9).
     const inner = createRef<HTMLDivElement>();
-    mountShadowTree(this._shadowDom, () =>
+    this._shadowDom.appendChild(
       Div()
         .class('ran-mycomp')
         .attr('part', 'mycomp')
@@ -159,7 +158,7 @@ export default MyComponent;
 
 - Extend `RanElement` (= `HTMLElement` in browser, `HTMLElementMock` in SSR)
 - Always use `ensureShadowRoot` — never call `attachShadow` directly
-- Always use `mountShadowTree` to build the Shadow DOM subtree, in the constructor and nowhere else
+- Build the Shadow DOM subtree with the builder and `appendChild` it, in the constructor and nowhere else
 - Capture every element with `.ref()` while building and read it back with `shadowPart`; never `querySelector` for something the component itself built
 - Always guard `attributeChangedCallback` with `if (old === next) return;`
 - Always include `sheet` in `observedAttributes` and wire `syncSheetAttribute`
@@ -227,9 +226,6 @@ After creating `components/mycomp/index.ts`:
 ```typescript
 // Create or reuse shadow root (cached via WeakMap, applies CSS)
 ensureShadowRoot(host: HTMLElement, cssText?: string, options?: ShadowRootInit): ShadowRoot
-
-// Build the component's shadow tree and append it. Constructor only, exactly once.
-mountShadowTree<T>(root: ShadowRoot, factory: () => T): T
 
 // The element a builder captured; throws, naming the field, if `.ref()` never filled it
 shadowPart<T>(ref: Ref<T>, name: string): T

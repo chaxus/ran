@@ -2,7 +2,6 @@ import componentCss from './index.less?inline';
 import { ButtonBuilder, createRef, EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -83,18 +82,17 @@ export class VoiceButton extends RanElement {
     const iconRef = createRef<HTMLElement>();
     const hintRef = createRef<HTMLElement>();
 
-    const button = mountShadowTree(this._shadowDom, () =>
-      ButtonBuilder()
-        .class('ran-voice')
-        .attr('part', 'button')
-        .attr('type', 'button')
-        .attr('aria-pressed', 'false')
-        .children(
-          View('r-icon').ref(iconRef).attr('name', 'mic').attr('part', 'icon').build(),
-          View('span').class('ran-voice-hint').ref(hintRef).attr('part', 'hint').build(),
-        )
-        .build(),
-    );
+    const button = ButtonBuilder()
+      .class('ran-voice')
+      .attr('part', 'button')
+      .attr('type', 'button')
+      .attr('aria-pressed', 'false')
+      .children(
+        View('r-icon').ref(iconRef).attr('name', 'mic').attr('part', 'icon').build(),
+        View('span').class('ran-voice-hint').ref(hintRef).attr('part', 'hint').build(),
+      )
+      .build();
+    this._shadowDom.appendChild(button);
     this._button = button as HTMLButtonElement;
     this._icon = shadowPart(iconRef, 'r icon');
     this._hint = shadowPart(hintRef, 'hint');

@@ -574,7 +574,6 @@ export class RanPlayer extends RanElement {
     this._playControllerBottomClarity.innerHTML = '';
     // 如果有子元素，进行置空
     this.innerHTML = '';
-    if (!this._shadowDom.contains(this._player)) this._shadowDom.appendChild(this._player);
     this._isSwitchingSource = false;
     this.setLoadingState(false);
     this.resetTransientState();

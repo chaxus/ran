@@ -3,7 +3,6 @@ import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -40,27 +39,23 @@ class ScratchTicket extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, scratchCss);
-    const scratchAwardRef = createRef<HTMLDivElement>();
-    const scratchTicketRef = createRef<HTMLCanvasElement>();
-    const scratchTicketContainer = mountShadowTree(this._shadowDom, () => {
-      const scratchTicket = View('canvas')
-        .class('ran-scratch-ticket-canvas')
-        .ref(scratchTicketRef)
-        .style('width', '100%')
-        .style('height', '100%')
-        .build() as HTMLCanvasElement;
-      // Default slot: whatever the consumer puts under <r-scratch> is the reveal
-      // content, projected here so it renders underneath the scratch cover.
-      const scratchAward = Div()
-        .class('ran-scratch-ticket-award')
-        .ref(scratchAwardRef)
-        .part('award')
-        .children(Slot())
-        .build() as HTMLDivElement;
-      return Div().class('ran-scratch-ticket').children(scratchTicket, scratchAward).build() as HTMLDivElement;
-    });
-    const scratchAward = shadowPart(scratchAwardRef, 'ticket award');
-    const scratchTicket = shadowPart(scratchTicketRef, 'ticket canvas');
+    const scratchTicket = View('canvas')
+      .class('ran-scratch-ticket-canvas')
+      .style('width', '100%')
+      .style('height', '100%')
+      .build() as HTMLCanvasElement;
+    // Default slot: whatever the consumer puts under <r-scratch> is the reveal
+    // content, projected here so it renders underneath the scratch cover.
+    const scratchAward = Div()
+      .class('ran-scratch-ticket-award')
+      .part('award')
+      .children(Slot())
+      .build() as HTMLDivElement;
+    const scratchTicketContainer = Div()
+      .class('ran-scratch-ticket')
+      .children(scratchTicket, scratchAward)
+      .build() as HTMLDivElement;
+    this._shadowDom.appendChild(scratchTicketContainer);
 
     this.scratchTicketContainer = scratchTicketContainer;
     this.scratchAward = scratchAward;
@@ -239,9 +234,6 @@ class ScratchTicket extends RanElement {
   }
   attributeChangedCallback(name: string, old: string, next: string): void {
     if (old === next) return;
-    if (!this._shadowDom.contains(this.scratchTicketContainer)) {
-      this._shadowDom.appendChild(this.scratchTicketContainer);
-    }
     if (name === 'disabled') this.syncDisabled();
     if (name === 'sheet') this.handlerExternalCss();
     this.drawScratchTicket();

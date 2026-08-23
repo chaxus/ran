@@ -2,7 +2,6 @@ import componentCss from './index.less?inline';
 import { ButtonBuilder, createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -114,33 +113,31 @@ export class Conversation extends RanElement {
     const list = createRef<HTMLDivElement>();
     const older = createRef<HTMLDivElement>();
     const olderButton = createRef<HTMLButtonElement>();
-    this._scroll = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-conversation')
-        .attr('part', 'conversation')
-        .children(
-          // Above the list, not inside it: the reorder pass walks the list's children and
-          // would treat a paging row as a row to be pushed down by the first prepend.
-          Div()
-            .class('ran-conversation-older')
-            .ref(older)
-            .attr('part', 'older')
-            .children(ButtonBuilder().ref(olderButton).attr('type', 'button').build())
-            .build(),
-          Div().class('ran-conversation-list').ref(list).attr('part', 'list').build(),
-        )
-        .build(),
-    );
+    this._scroll = Div()
+      .class('ran-conversation')
+      .attr('part', 'conversation')
+      .children(
+        // Above the list, not inside it: the reorder pass walks the list's children and
+        // would treat a paging row as a row to be pushed down by the first prepend.
+        Div()
+          .class('ran-conversation-older')
+          .ref(older)
+          .attr('part', 'older')
+          .children(ButtonBuilder().ref(olderButton).attr('type', 'button').build())
+          .build(),
+        Div().class('ran-conversation-list').ref(list).attr('part', 'list').build(),
+      )
+      .build();
+    this._shadowDom.appendChild(this._scroll);
     // Outside the scrollport, not inside it: a footer that scrolls with the transcript is a
     // composer that leaves the frame, and one made sticky still floats up under the last
     // message while the transcript is shorter than the frame.
-    this._footer = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-conversation-footer')
-        .attr('part', 'footer')
-        .children(Slot().attr('name', 'footer').build())
-        .build(),
-    );
+    this._footer = Div()
+      .class('ran-conversation-footer')
+      .attr('part', 'footer')
+      .children(Slot().attr('name', 'footer').build())
+      .build();
+    this._shadowDom.appendChild(this._footer);
     this._list = shadowPart(list, 'list');
     this._older = shadowPart(older, 'older');
     this._olderButton = shadowPart(olderButton, 'older button');

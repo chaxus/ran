@@ -1,13 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   ensureShadowRoot,
-  mountShadowTree,
   getStringAttribute,
   setBooleanAttribute,
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
-import { Div } from '@/utils/builder';
 
 describe('utils/component helpers', () => {
   afterEach(() => {
@@ -37,30 +35,6 @@ describe('utils/component helpers', () => {
     const second = ensureShadowRoot(host);
 
     expect(second).toBe(first);
-  });
-
-  it('mountShadowTree builds and mounts the tree', () => {
-    const host = document.createElement('div');
-    const root = ensureShadowRoot(host);
-
-    const result = mountShadowTree(root, () => Div().class('target').build());
-
-    expect(result).toBe(root.querySelector('.target'));
-  });
-
-  it('mountShadowTree runs the factory even when the root already holds a matching element', () => {
-    // A server-rendered tree never survives to be reused: components attach a *closed*
-    // shadow root, so `attachShadow` runs and clears the declarative root's children. The
-    // factory is the only thing that fills the tree, which is why callers can rely on the
-    // refs it captures. This asserts the helper does not quietly skip it.
-    const host = document.createElement('div');
-    const root = ensureShadowRoot(host);
-    const stale = Div().class('target').build();
-    root.appendChild(stale);
-
-    const result = mountShadowTree(root, () => Div().class('target').build());
-
-    expect(result).not.toBe(stale);
   });
 
   it('getStringAttribute and setStringAttribute reflect string attributes', () => {

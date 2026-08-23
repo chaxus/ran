@@ -1,7 +1,6 @@
 import { RanElement } from '@/utils/index';
 import { createRef, Div, EventManager, View } from '@/utils/builder';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -36,16 +35,15 @@ export class Mermaid extends RanElement {
     const diagramRef = createRef<HTMLDivElement>();
     const toolbarRef = createRef<HTMLDivElement>();
     const iconRef = createRef<HTMLElement>();
-    this._wrap = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-mermaid')
-        .part('mermaid')
-        .children(
-          Div().class('ran-mermaid-diagram').ref(diagramRef).part('diagram'),
-          Div().class('ran-mermaid-toolbar').ref(toolbarRef).part('toolbar'),
-        )
-        .build(),
-    );
+    this._wrap = Div()
+      .class('ran-mermaid')
+      .part('mermaid')
+      .children(
+        Div().class('ran-mermaid-diagram').ref(diagramRef).part('diagram'),
+        Div().class('ran-mermaid-toolbar').ref(toolbarRef).part('toolbar'),
+      )
+      .build();
+    this._shadowDom.appendChild(this._wrap);
     this._diagram = shadowPart(diagramRef, 'diagram');
     this._toolbar = shadowPart(toolbarRef, 'toolbar');
   }
