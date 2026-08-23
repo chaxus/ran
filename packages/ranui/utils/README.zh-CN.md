@@ -8,7 +8,7 @@
 
 ```ts
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -20,7 +20,8 @@ import {
 | API                                                        | 说明                                                                          |
 | :--------------------------------------------------------- | :---------------------------------------------------------------------------- |
 | `ensureShadowRoot(host, cssText?, options?)`               | 创建或复用缓存的 Shadow Root，并应用组件 CSS；不要直接调用 `attachShadow()`。 |
-| `ensureShadowElement(root, selector, factory)`             | 从 Shadow Root 查询已有元素；如果不存在，则追加 `factory` 返回的元素。        |
+| `mountShadowTree(root, factory)`                           | 构建组件的 shadow 树并挂载。只在 constructor 里调用，且只调一次。             |
+| `shadowPart(ref, name)`                                    | 取出 builder 用 `.ref()` 捕获的元素；从未捕获时抛错并指出是哪个字段。         |
 | `getStringAttribute(element, name, fallback?)`             | 读取属性，并在属性不存在时返回字符串兜底值。                                  |
 | `setStringAttribute(element, name, value, options?)`       | 设置字符串属性；`removeEmpty: true` 会移除空值。                              |
 | `setBooleanAttribute(element, name, value, options?)`      | 设置或移除布尔属性，可选同步到 `aria-*` 属性。                                |

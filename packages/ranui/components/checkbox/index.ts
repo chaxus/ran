@@ -3,7 +3,7 @@ import { RanElement, falseList, isDisabled } from '@/utils/index';
 import { createRef, Div, EventManager, InputBuilder, Slot, Span } from '@/utils/builder';
 import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -49,7 +49,7 @@ export class Checkbox extends RanElement {
     const containerRef = createRef<HTMLDivElement>();
     const checkInputRef = createRef<HTMLInputElement>();
     const checkInnerRef = createRef<HTMLSpanElement>();
-    const wrapper = ensureShadowElement(this._shadowDom, '.ran-checkbox-wrapper', () =>
+    const wrapper = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-checkbox-wrapper')
         .part('wrapper')

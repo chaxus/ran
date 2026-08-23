@@ -3,7 +3,7 @@ import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -42,7 +42,7 @@ class ScratchTicket extends RanElement {
     this._shadowDom = ensureShadowRoot(this, scratchCss);
     const scratchAwardRef = createRef<HTMLDivElement>();
     const scratchTicketRef = createRef<HTMLCanvasElement>();
-    const scratchTicketContainer = ensureShadowElement(this._shadowDom, '.ran-scratch-ticket', () => {
+    const scratchTicketContainer = mountShadowTree(this._shadowDom, () => {
       const scratchTicket = View('canvas')
         .class('ran-scratch-ticket-canvas')
         .ref(scratchTicketRef)

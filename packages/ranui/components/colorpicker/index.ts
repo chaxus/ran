@@ -6,7 +6,7 @@ import '@/components/input';
 import '@/components/select';
 import { defineSSR } from '@/utils/ssr-registry';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -81,7 +81,7 @@ export class ColorPicker extends RanElement {
     const popoverContentRef = createRef<HTMLElement>();
     const colorpickerRef = createRef<HTMLDivElement>();
     const colorpickerInnerRef = createRef<HTMLDivElement>();
-    const popoverBlock = ensureShadowElement(this._shadowDom, 'r-popover', () => {
+    const popoverBlock = mountShadowTree(this._shadowDom, () => {
       const colorpickerInner = Div()
         .class('ran-colorpicker-inner')
         .ref(colorpickerInnerRef)

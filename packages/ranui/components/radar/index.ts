@@ -2,7 +2,7 @@ import { getPixelRatio, roundRectByArc } from 'ranuts/utils';
 import radarCss from './index.less?inline';
 import { createRef, Div, RanElement, View } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -47,9 +47,8 @@ export class RadarChart extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, radarCss);
     const radarChartRef = createRef<HTMLCanvasElement>();
-    const container = ensureShadowElement(
+    const container = mountShadowTree(
       this._shadowDom,
-      '.ran-radar',
       () =>
         Div()
           .class('ran-radar')

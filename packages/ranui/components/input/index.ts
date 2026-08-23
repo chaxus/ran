@@ -3,7 +3,7 @@ import { createRef, Div, EventManager, InputBuilder, Label, View } from '@/utils
 import { checkInternalsValidity, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import '@/components/icon/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -64,7 +64,7 @@ export class Input extends RanElement {
     }
     this._shadowDom = ensureShadowRoot(this, inputCss);
     const inputContentRef = createRef<HTMLInputElement>();
-    const wrap = ensureShadowElement(this._shadowDom, '.ran-input', () =>
+    const wrap = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-input')
         .part('input')

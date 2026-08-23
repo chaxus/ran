@@ -8,7 +8,7 @@ Use these helpers in every component constructor and attribute sync path.
 
 ```ts
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -20,7 +20,8 @@ import {
 | API                                                        | Description                                                                                             |
 | :--------------------------------------------------------- | :------------------------------------------------------------------------------------------------------ |
 | `ensureShadowRoot(host, cssText?, options?)`               | Create or reuse a cached Shadow Root and apply component CSS. Prefer this over direct `attachShadow()`. |
-| `ensureShadowElement(root, selector, factory)`             | Query an existing element from the Shadow Root, or append the factory result if it is missing.          |
+| `mountShadowTree(root, factory)`                           | Build the component's shadow tree and append it. Call from the constructor, once.                       |
+| `shadowPart(ref, name)`                                    | The element a builder captured with `.ref()`; throws, naming the field, if it never was.                |
 | `getStringAttribute(element, name, fallback?)`             | Read an attribute with a string fallback.                                                               |
 | `setStringAttribute(element, name, value, options?)`       | Set a string attribute; `removeEmpty: true` removes empty values.                                       |
 | `setBooleanAttribute(element, name, value, options?)`      | Set or remove a boolean attribute, optionally mirroring to `aria-*`.                                    |

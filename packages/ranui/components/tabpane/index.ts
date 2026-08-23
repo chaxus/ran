@@ -9,7 +9,7 @@
 import tabPaneCss from './index.less?inline';
 import { Slot, EventManager } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowElement, ensureShadowRoot, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import { mountShadowTree, ensureShadowRoot, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 interface ExtendParentNode {
@@ -30,7 +30,7 @@ export class TabPane extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, tabPaneCss);
-    const slot = ensureShadowElement(this._shadowDom, 'slot', () => Slot().part('content').build() as HTMLSlotElement);
+    const slot = mountShadowTree(this._shadowDom, () => Slot().part('content').build() as HTMLSlotElement);
     this._div = slot;
   }
   get label() {

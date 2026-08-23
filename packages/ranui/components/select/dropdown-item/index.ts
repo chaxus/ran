@@ -4,7 +4,7 @@ import { createRef, Div, Slot } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -25,7 +25,7 @@ export class DropdownItem extends RanElement {
     this._shadowDom = ensureShadowRoot(this, less);
     const slotRef = createRef<HTMLSlotElement>();
     const contentRef = createRef<HTMLDivElement>();
-    const ionDropdownItem = ensureShadowElement(this._shadowDom, '.ranui-dropdown-option-item', () => {
+    const ionDropdownItem = mountShadowTree(this._shadowDom, () => {
       const slot = Slot().class('slot').ref(slotRef).build() as HTMLSlotElement;
       const ionDropdownItemContent = Div()
         .class('ranui-dropdown-option-item-content')

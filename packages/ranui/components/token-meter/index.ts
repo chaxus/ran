@@ -2,7 +2,7 @@ import componentCss from './index.less?inline';
 import { createRef, Div, Span } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -69,7 +69,7 @@ export class TokenMeter extends RanElement {
 
     const fill = createRef<HTMLDivElement>();
     const text = createRef<HTMLElement>();
-    const root = ensureShadowElement(this._shadowDom, '.ran-token-meter', () =>
+    const root = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-token-meter')
         .attr('part', 'meter')

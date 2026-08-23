@@ -2,7 +2,7 @@ import componentCss from './index.less?inline';
 import { ButtonBuilder, createRef, EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -83,7 +83,7 @@ export class VoiceButton extends RanElement {
     const iconRef = createRef<HTMLElement>();
     const hintRef = createRef<HTMLElement>();
 
-    const button = ensureShadowElement(this._shadowDom, '.ran-voice', () =>
+    const button = mountShadowTree(this._shadowDom, () =>
       ButtonBuilder()
         .class('ran-voice')
         .attr('part', 'button')

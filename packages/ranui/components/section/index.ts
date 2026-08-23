@@ -2,7 +2,7 @@ import sectionCss from './index.less?inline';
 import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -28,7 +28,7 @@ export class Section extends RanElement {
     const headingElRef = createRef<HTMLDivElement>();
     const subtitleElRef = createRef<HTMLDivElement>();
 
-    const container = ensureShadowElement(this._shadowDom, '.ran-section-header', () => {
+    const container = mountShadowTree(this._shadowDom, () => {
       const header = Div()
         .class('ran-section-header')
         .attr('part', 'header')

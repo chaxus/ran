@@ -2,7 +2,7 @@ import failImage from '../../assets/image/failImage';
 import { Div } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -21,7 +21,7 @@ export class ImageElement extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, imageCss);
-    const container = ensureShadowElement(this._shadowDom, '.ran-image', () => Div().class('ran-image').build());
+    const container = mountShadowTree(this._shadowDom, () => Div().class('ran-image').build());
     this._container = container;
   }
   get fallback() {

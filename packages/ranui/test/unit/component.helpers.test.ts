@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   ensureShadowRoot,
-  ensureShadowElement,
+  mountShadowTree,
   getStringAttribute,
   setBooleanAttribute,
   setStringAttribute,
@@ -39,25 +39,28 @@ describe('utils/component helpers', () => {
     expect(second).toBe(first);
   });
 
-  it('ensureShadowElement reuses matching elements', () => {
-    const host = document.createElement('div');
-    const root = ensureShadowRoot(host);
-    const existing = Div().class('target').build();
-    root.appendChild(existing);
-
-    const result = ensureShadowElement(root, '.target', () => Div().class('target').build());
-
-    expect(result).toBe(existing);
-    expect(root.querySelectorAll('.target')).toHaveLength(1);
-  });
-
-  it('ensureShadowElement appends newly built elements when missing', () => {
+  it('mountShadowTree builds and mounts the tree', () => {
     const host = document.createElement('div');
     const root = ensureShadowRoot(host);
 
-    const result = ensureShadowElement(root, '.target', () => Div().class('target').build());
+    const result = mountShadowTree(root, () => Div().class('target').build());
 
     expect(result).toBe(root.querySelector('.target'));
+  });
+
+  it('mountShadowTree runs the factory even when the root already holds a matching element', () => {
+    // A server-rendered tree never survives to be reused: components attach a *closed*
+    // shadow root, so `attachShadow` runs and clears the declarative root's children. The
+    // factory is the only thing that fills the tree, which is why callers can rely on the
+    // refs it captures. This asserts the helper does not quietly skip it.
+    const host = document.createElement('div');
+    const root = ensureShadowRoot(host);
+    const stale = Div().class('target').build();
+    root.appendChild(stale);
+
+    const result = mountShadowTree(root, () => Div().class('target').build());
+
+    expect(result).not.toBe(stale);
   });
 
   it('getStringAttribute and setStringAttribute reflect string attributes', () => {
