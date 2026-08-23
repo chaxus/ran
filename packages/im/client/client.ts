@@ -40,9 +40,8 @@ import {
   survivingBranches,
   survivingCompactions,
 } from '@/client/history';
-import { KEEP_RECENT, contextTokens, decideBudget, messageTokens } from '@/client/budget';
+import { contextTokens, decideBudget, messageTokens } from '@/client/budget';
 import { addUsage } from 'ranuts/stream';
-import type { TokenUsage } from 'ranuts/stream';
 
 /** `<r-conversation>`, as far as this file needs it. */
 type ConversationElement = HTMLElement & {
@@ -475,15 +474,6 @@ function renderMeter(): void {
   // Nothing to say before the first request: no limit has been reported and nothing has been
   // sent, so the meter would be a bar at zero beside two zeroes.
   meter.hidden = used === 0 && spent === 0;
-}
-
-/**
- * Where the model's view of the log currently starts.
- *
- * @returns The active boundary's index, or 0 when nothing has been folded yet.
- */
-function compactedFrom(): number {
-  return activeCompaction(current.compactions ?? [])?.at ?? 0;
 }
 
 async function compactIfNeeded(): Promise<void> {

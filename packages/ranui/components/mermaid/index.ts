@@ -34,7 +34,6 @@ export class Mermaid extends RanElement {
     this._shadowDom = ensureShadowRoot(this, mermaidCss);
     const diagramRef = createRef<HTMLDivElement>();
     const toolbarRef = createRef<HTMLDivElement>();
-    const iconRef = createRef<HTMLElement>();
     this._wrap = Div()
       .class('ran-mermaid')
       .part('mermaid')

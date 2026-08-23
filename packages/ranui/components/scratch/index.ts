@@ -1,14 +1,8 @@
 import scratchCss from './index.less?inline';
-import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
+import { Div, EventManager, Slot, View } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
-import {
-  ensureShadowRoot,
-  getStringAttribute,
-  setStringAttribute,
-  shadowPart,
-  syncSheetAttribute,
-} from '@/utils/component';
+import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 
 /** Auto-reveals the rest once this fraction of the canvas has been stroked over — a
  * common scratch-card UX (scratch a bit, the reveal completes on its own) rather than

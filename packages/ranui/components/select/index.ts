@@ -9,7 +9,6 @@ import { registerIcon } from '@/components/icon';
 import { defineSSR } from '@/utils/ssr-registry';
 import { computePlacement } from '@/utils/placement';
 import '@/components/input';
-import type { Input } from '@/components/input';
 import { createRef, Div, EventManager, InputBuilder, Label, Slot, Span, View } from '@/utils/builder';
 import {
   ensureShadowRoot,
