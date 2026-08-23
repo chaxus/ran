@@ -1,11 +1,12 @@
 import componentCss from './index.less?inline';
-import { ButtonBuilder, EventManager, View } from '@/utils/builder';
+import { ButtonBuilder, createRef, EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -79,6 +80,8 @@ export class VoiceButton extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
+    const iconRef = createRef<HTMLElement>();
+    const hintRef = createRef<HTMLElement>();
 
     const button = ensureShadowElement(this._shadowDom, '.ran-voice', () =>
       ButtonBuilder()
@@ -87,14 +90,14 @@ export class VoiceButton extends RanElement {
         .attr('type', 'button')
         .attr('aria-pressed', 'false')
         .children(
-          View('r-icon').attr('name', 'mic').attr('part', 'icon').build(),
-          View('span').class('ran-voice-hint').attr('part', 'hint').build(),
+          View('r-icon').ref(iconRef).attr('name', 'mic').attr('part', 'icon').build(),
+          View('span').class('ran-voice-hint').ref(hintRef).attr('part', 'hint').build(),
         )
         .build(),
     );
     this._button = button as HTMLButtonElement;
-    this._icon = button.querySelector<HTMLElement>('r-icon')!;
-    this._hint = button.querySelector<HTMLElement>('.ran-voice-hint')!;
+    this._icon = shadowPart(iconRef, 'r icon');
+    this._hint = shadowPart(hintRef, 'hint');
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────

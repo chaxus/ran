@@ -9,12 +9,13 @@ import { debounce, isMobile } from 'ranuts/utils';
 import { RanElement } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/dropdown';
-import { Div, EventManager, Slot, View } from '@/utils/builder';
+import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import popoverCss from './index.less?inline';
@@ -88,14 +89,20 @@ export class Popover extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, popoverCss);
+    const slotRef = createRef<HTMLSlotElement>();
     const block = ensureShadowElement(
       this._shadowDom,
       '.ran-popover-block',
-      () => Div().class('ran-popover-block').role('tooltip').children(Slot().class('slot')).build() as HTMLDivElement,
+      () =>
+        Div()
+          .class('ran-popover-block')
+          .role('tooltip')
+          .children(Slot().class('slot').ref(slotRef))
+          .build() as HTMLDivElement,
     );
 
     this.popoverBlock = block;
-    this._slot = block.querySelector('.slot') as HTMLSlotElement;
+    this._slot = shadowPart(slotRef, 'slot');
   }
   get placement(): string {
     return getStringAttribute(this, 'placement', 'top');

@@ -1,11 +1,12 @@
 import sectionCss from './index.less?inline';
-import { Div, EventManager, Slot } from '@/utils/builder';
+import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -24,14 +25,21 @@ export class Section extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, sectionCss);
+    const headingElRef = createRef<HTMLDivElement>();
+    const subtitleElRef = createRef<HTMLDivElement>();
 
     const container = ensureShadowElement(this._shadowDom, '.ran-section-header', () => {
       const header = Div()
         .class('ran-section-header')
         .attr('part', 'header')
         .children(
-          Div().class('ran-section-heading').attr('part', 'heading').attr('role', 'heading').attr('aria-level', '2'),
-          Div().class('ran-section-subtitle').attr('part', 'subtitle'),
+          Div()
+            .class('ran-section-heading')
+            .ref(headingElRef)
+            .attr('part', 'heading')
+            .attr('role', 'heading')
+            .attr('aria-level', '2'),
+          Div().class('ran-section-subtitle').ref(subtitleElRef).attr('part', 'subtitle'),
         )
         .build();
 
@@ -43,8 +51,8 @@ export class Section extends RanElement {
     });
 
     this._headerEl = container;
-    this._headingEl = container.querySelector<HTMLDivElement>('.ran-section-heading')!;
-    this._subtitleEl = container.querySelector<HTMLDivElement>('.ran-section-subtitle')!;
+    this._headingEl = shadowPart(headingElRef, 'heading');
+    this._subtitleEl = shadowPart(subtitleElRef, 'subtitle');
   }
 
   get heading(): string {

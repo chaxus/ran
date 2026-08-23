@@ -1,11 +1,12 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { RanElement } from '@/utils/index';
-import { Div, Slot } from '@/utils/builder';
+import { createRef, Div, Slot } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import dropdownCss from './index.less?inline';
@@ -32,6 +33,8 @@ export class Dropdown extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, dropdownCss);
+    const dropdownRef = createRef<HTMLDivElement>();
+    const slotRef = createRef<HTMLSlotElement>();
     const container = ensureShadowElement(
       this._shadowDom,
       '.ranui-dropdown-container',
@@ -43,15 +46,16 @@ export class Dropdown extends RanElement {
               .style('-webkit-tap-highlight-color', 'transparent')
               .style('outline', '0')
               .class('ranui-dropdown')
+              .ref(dropdownRef)
               .part('dropdown')
-              .children(Slot().class('slot')),
+              .children(Slot().class('slot').ref(slotRef)),
           )
           .build() as HTMLElement,
     );
 
     this.container = container;
-    this.dropdown = container.querySelector('.ranui-dropdown') as HTMLElement;
-    this._slot = container.querySelector('.slot') as HTMLSlotElement;
+    this.dropdown = shadowPart(dropdownRef, 'ranui dropdown');
+    this._slot = shadowPart(slotRef, 'slot');
   }
   get transit(): string {
     return getStringAttribute(this, 'transit');

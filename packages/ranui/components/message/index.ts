@@ -4,12 +4,13 @@ import closeCircleFill from '@/assets/icons/close-circle-fill.svg?raw';
 import infoCircleFill from '@/assets/icons/info-circle-fill.svg?raw';
 import warningCircleFill from '@/assets/icons/warning-circle-fill.svg?raw';
 import { registerIcons } from '@/components/icon';
-import { Div, Span, View } from '@/utils/builder';
+import { createRef, Div, Span, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { RanElement } from '@/utils/index';
@@ -57,6 +58,10 @@ export class CustomMessage extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, messageCss);
+    const contentRef = createRef<HTMLDivElement>();
+    const infoRef = createRef<HTMLDivElement>();
+    const iconRef = createRef<HTMLElement>();
+    const spanRef = createRef<HTMLSpanElement>();
     const notice = ensureShadowElement(
       this._shadowDom,
       '.ran-message-notice',
@@ -66,16 +71,22 @@ export class CustomMessage extends RanElement {
           .children(
             Div()
               .class('ran-message-notice-content')
-              .children(Div().class('ran-message-notice-content-info').children(View('r-icon'), Span())),
+              .ref(contentRef)
+              .children(
+                Div()
+                  .class('ran-message-notice-content-info')
+                  .ref(infoRef)
+                  .children(View('r-icon').ref(iconRef), Span().ref(spanRef)),
+              ),
           )
           .build() as HTMLDivElement,
     );
 
     this._notice = notice;
-    this._content = notice.querySelector('.ran-message-notice-content') as HTMLDivElement;
-    this._info = notice.querySelector('.ran-message-notice-content-info') as HTMLDivElement;
-    this._icon = notice.querySelector('r-icon') as HTMLElement;
-    this._span = notice.querySelector('span') as HTMLSpanElement;
+    this._content = shadowPart(contentRef, 'notice content');
+    this._info = shadowPart(infoRef, 'notice content info');
+    this._icon = shadowPart(iconRef, 'r icon');
+    this._span = shadowPart(spanRef, 'span');
 
     this.handlerExternalCss();
   }

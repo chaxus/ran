@@ -1,11 +1,12 @@
 import componentCss from './index.less?inline';
-import { ButtonBuilder, Div, EventManager, Slot } from '@/utils/builder';
+import { ButtonBuilder, createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -110,6 +111,9 @@ export class Conversation extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
+    const list = createRef<HTMLDivElement>();
+    const older = createRef<HTMLDivElement>();
+    const olderButton = createRef<HTMLButtonElement>();
     this._scroll = ensureShadowElement(this._shadowDom, '.ran-conversation', () =>
       Div()
         .class('ran-conversation')
@@ -119,10 +123,11 @@ export class Conversation extends RanElement {
           // would treat a paging row as a row to be pushed down by the first prepend.
           Div()
             .class('ran-conversation-older')
+            .ref(older)
             .attr('part', 'older')
-            .children(ButtonBuilder().attr('type', 'button').build())
+            .children(ButtonBuilder().ref(olderButton).attr('type', 'button').build())
             .build(),
-          Div().class('ran-conversation-list').attr('part', 'list').build(),
+          Div().class('ran-conversation-list').ref(list).attr('part', 'list').build(),
         )
         .build(),
     );
@@ -136,9 +141,9 @@ export class Conversation extends RanElement {
         .children(Slot().attr('name', 'footer').build())
         .build(),
     );
-    this._list = this._scroll.querySelector<HTMLElement>('.ran-conversation-list')!;
-    this._older = this._scroll.querySelector<HTMLElement>('.ran-conversation-older')!;
-    this._olderButton = this._older.querySelector<HTMLButtonElement>('button')!;
+    this._list = shadowPart(list, 'list');
+    this._older = shadowPart(older, 'older');
+    this._olderButton = shadowPart(olderButton, 'older button');
     this._older.hidden = true;
   }
 

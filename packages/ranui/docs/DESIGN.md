@@ -30,6 +30,7 @@ mechanically decidable, so it relies on review and on rendering the result.
 | `mouse-only-drag`          | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
 | `hidden-inert`             | a `:host` display rule does not silently disable the `hidden` attribute                    | §9      |
 | `undefined-token-fallback` | a component token's fallback names a token the theme actually declares                     | §1      |
+| `built-then-queried`       | a component holds the elements it built, instead of searching its own shadow tree for them | §9      |
 
 Existing violations are recorded per file in
 [design-rule-baseline.json](./design-rule-baseline.json) and act as a **ratchet**: a count
@@ -320,6 +321,37 @@ A component that sets `display` on `:host` **must** also carry:
 outranks it. Without the guard, `element.hidden = true` leaves the element on screen and
 nothing reports an error — which is how nineteen components in this library shipped with
 `hidden` doing nothing at all. `verify:design` enforces it because the failure is silent.
+
+### Hold what you build
+
+A component builds its shadow tree once, in the constructor. Every element in it comes back
+from the builder, so capture it there:
+
+```ts
+const body = createRef<HTMLDivElement>();
+const root = ensureShadowElement(this._shadowDom, '.ran-thing', () =>
+  Div().class('ran-thing').children(Div().class('ran-thing-body').ref(body)).build(),
+);
+this._body = shadowPart(body, 'body');
+```
+
+Not `root.querySelector('.ran-thing-body')!`. The query re-derives what the builder already
+returned, and it re-derives it through a **string**: rename the class in `index.less` and the
+builder and the query drift apart with nothing to catch it. `querySelector` then returns
+`null`, the `!` waves it through, and the failure surfaces later as a property read on
+nothing — far from the rename that caused it. `shadowPart` throws at construction instead,
+naming the field.
+
+The exception is a container whose children arrive **after** the build — options rendered
+from data, nodes a third-party library injects. No ref could have captured those, so the live
+query is the only source. Mark it on the line above and say what puts them there:
+
+```ts
+// runtime children: r-dropdown-item elements are appended from `options` as it changes.
+return Array.from(this._dropdown.querySelectorAll('r-dropdown-item'));
+```
+
+The marker needs a reason after the colon; an empty one does not silence the rule.
 
 ---
 

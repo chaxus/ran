@@ -1,7 +1,13 @@
 import glassCss from './index.less?inline';
-import { Div, EventManager, Slot } from '@/utils/builder';
+import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowElement, ensureShadowRoot, getStringAttribute, setStringAttribute } from '@/utils/component';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  shadowPart,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { isActivationKey } from '@/utils/a11y';
 import { createRimRenderer, type RimRenderer } from './rim';
@@ -31,6 +37,8 @@ let _glassSeq = 0;
 export class Glass extends RanElement {
   _shadowDom!: ShadowRoot;
   private _glass!: HTMLElement;
+  /** The specular layer the rim renderer mounts into. */
+  private _specular!: HTMLDivElement;
   private _turb: SVGElement | null = null;
   private _disp: SVGElement | null = null;
   private _uid = `ran-glass-${(_glassSeq += 1)}`;
@@ -49,13 +57,15 @@ export class Glass extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, glassCss);
+    const specularRef = createRef<HTMLDivElement>();
     this._glass = ensureShadowElement(this._shadowDom, '.ran-glass', () =>
       Div()
         .class('ran-glass')
         .attr('part', 'glass')
-        .children(Div().class('ran-glass-specular').attr('part', 'specular'), Slot())
+        .children(Div().class('ran-glass-specular').ref(specularRef).attr('part', 'specular'), Slot())
         .build(),
     );
+    this._specular = shadowPart(specularRef, 'specular layer');
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────────
@@ -170,9 +180,7 @@ export class Glass extends RanElement {
    */
   private _ensureRim(): void {
     if (this._rimRenderer || typeof document === 'undefined') return;
-    const container = this._glass.querySelector('.ran-glass-specular');
-    if (!container) return;
-    this._rimRenderer = createRimRenderer(container as HTMLElement);
+    this._rimRenderer = createRimRenderer(this._specular);
     this._rimRenderer.setRadius(Number(this.radius) || 20);
   }
 
