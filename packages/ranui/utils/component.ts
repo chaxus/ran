@@ -1,4 +1,5 @@
 import { adoptSheetText, adoptStyles } from './style';
+import type { Ref } from './builder/core';
 
 const shadowRootCache = new WeakMap<HTMLElement, ShadowRoot>();
 
@@ -33,6 +34,26 @@ export const ensureShadowElement = <T extends HTMLElement>(root: ShadowRoot, sel
   const element = factory();
   root.appendChild(element);
   return element;
+};
+
+/**
+ * The element the builder captured for this component, or a loud failure.
+ *
+ * Components build their shadow tree once, in the constructor, so `.ref()` on the builder
+ * is the element — there is nothing to search for. Reading it back out with a selector
+ * re-derives what the caller already had, and a renamed class then silently yields `null`
+ * that surfaces much later as a property read on nothing. `verify-design-rules` rejects
+ * that pattern; this is the replacement.
+ *
+ * @param ref - Holder passed to `.ref()` on the builder for this element.
+ * @param name - Field name for the failure message.
+ * @returns The element.
+ * @throws Error - When the builder never captured it, which means the `.ref()` call is
+ *   missing or the tree was built somewhere the ref could not reach.
+ */
+export const shadowPart = <T extends HTMLElement>(ref: Ref<T>, name: string): T => {
+  if (ref.current === null) throw new Error(`ranui: ${name} is missing its .ref() on the builder`);
+  return ref.current;
 };
 
 export const getStringAttribute = (element: HTMLElement, name: string, fallback = ''): string => {

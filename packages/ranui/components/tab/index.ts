@@ -6,12 +6,13 @@
 // break real consumers' import paths.
 import { isDisabled, RanElement } from '@/utils/index';
 import tabCss from './index.less?inline';
-import { Div, EventManager, Slot, View } from '@/utils/builder';
+import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -43,6 +44,12 @@ export class Tabs extends RanElement {
     this._tabsId = ++tabsSeq;
     this._shadowDom = ensureShadowRoot(this, tabCss);
     this.tabHeaderKeyMapIndex = {};
+    const headerRef = createRef<HTMLDivElement>();
+    const navRef = createRef<HTMLDivElement>();
+    const lineRef = createRef<HTMLDivElement>();
+    const contentRef = createRef<HTMLDivElement>();
+    const wrapRef = createRef<HTMLDivElement>();
+    const slotRef = createRef<HTMLSlotElement>();
 
     const wrap = ensureShadowElement(
       this._shadowDom,
@@ -54,26 +61,30 @@ export class Tabs extends RanElement {
           .children(
             Div()
               .class('ran-tab-header')
+              .ref(headerRef)
               .part('header')
               .children(
-                Div().class('ran-tab-header-nav').part('nav'),
-                Div().class('ran-tab-header-line').part('indicator'),
+                Div().class('ran-tab-header-nav').ref(navRef).part('nav'),
+                Div().class('ran-tab-header-line').ref(lineRef).part('indicator'),
               ),
             Div()
               .class('ran-tab-content')
+              .ref(contentRef)
               .part('content')
-              .children(Div().class('ran-tab-content-wrap').part('content-wrap').children(Slot())),
+              .children(
+                Div().class('ran-tab-content-wrap').ref(wrapRef).part('content-wrap').children(Slot().ref(slotRef)),
+              ),
           )
           .build() as HTMLDivElement,
     );
 
     this._container = wrap;
-    this._header = wrap.querySelector('.ran-tab-header') as HTMLDivElement;
-    this._nav = wrap.querySelector('.ran-tab-header-nav') as HTMLDivElement;
-    this._line = wrap.querySelector('.ran-tab-header-line') as HTMLDivElement;
-    this._content = wrap.querySelector('.ran-tab-content') as HTMLDivElement;
-    this._wrap = wrap.querySelector('.ran-tab-content-wrap') as HTMLDivElement;
-    this._slot = wrap.querySelector('slot') as HTMLSlotElement;
+    this._header = shadowPart(headerRef, 'header');
+    this._nav = shadowPart(navRef, 'header nav');
+    this._line = shadowPart(lineRef, 'header line');
+    this._content = shadowPart(contentRef, 'content');
+    this._wrap = shadowPart(wrapRef, 'content wrap');
+    this._slot = shadowPart(slotRef, 'slot');
     // The header row is the WAI-ARIA tablist; each header's role/selection and the
     // panels' roles are wired up in syncTabsAria once the panes are slotted in.
     this._nav.setAttribute('role', 'tablist');

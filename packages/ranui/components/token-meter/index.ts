@@ -1,11 +1,12 @@
 import componentCss from './index.less?inline';
-import { Div, Span } from '@/utils/builder';
+import { createRef, Div, Span } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -66,6 +67,8 @@ export class TokenMeter extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
+    const fill = createRef<HTMLDivElement>();
+    const text = createRef<HTMLElement>();
     const root = ensureShadowElement(this._shadowDom, '.ran-token-meter', () =>
       Div()
         .class('ran-token-meter')
@@ -78,15 +81,15 @@ export class TokenMeter extends RanElement {
           Div()
             .class('ran-token-meter-track')
             .attr('part', 'track')
-            .children(Div().class('ran-token-meter-fill').attr('part', 'fill').build())
+            .children(Div().class('ran-token-meter-fill').ref(fill).attr('part', 'fill').build())
             .build(),
-          Span().class('ran-token-meter-text').attr('part', 'text').build(),
+          Span().class('ran-token-meter-text').ref(text).attr('part', 'text').build(),
         )
         .build(),
     );
     this._root = root;
-    this._fill = root.querySelector<HTMLElement>('.ran-token-meter-fill')!;
-    this._text = root.querySelector<HTMLElement>('.ran-token-meter-text')!;
+    this._fill = shadowPart(fill, 'fill');
+    this._text = shadowPart(text, 'text');
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────

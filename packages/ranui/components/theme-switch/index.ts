@@ -34,26 +34,39 @@ export class ThemeSwitch extends RanElement {
   _events = new EventManager();
   _shadowDom: ShadowRoot;
   _group: HTMLDivElement;
+  /** The three choice buttons, in {@link CHOICES} order. */
+  _buttons: HTMLButtonElement[];
 
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, themeSwitchCss);
-    this._group = ensureShadowElement(this._shadowDom, '.ran-theme-switch', () => {
-      // Build via the isSSR-aware builder (not raw document.*) so the constructor
-      // is SSR-safe. SVG glyphs are innerHTML, set client-only (like r-icon; the
-      // SSR shadow renders empty and the client rebuilds it).
-      const buttons = CHOICES.map((choice) => {
-        const button = ButtonBuilder()
-          .attr('type', 'button')
-          .data('choice', choice)
-          .attr('part', `button ${choice}`)
-          .aria('pressed', 'false')
-          .build();
-        if (!isSSR) button.innerHTML = ICONS[choice];
-        return button;
-      });
-      return Div().class('ran-theme-switch').attr('part', 'switch').role('group').children(buttons).build();
-    }) as HTMLDivElement;
+    // Built before the factory, not inside it: these are the elements `_syncLabels` and
+    // `_reflect` drive on every theme change, and a list assembled inside a factory that
+    // may not run would leave both silently updating nothing.
+    // SVG glyphs are innerHTML, set client-only (like r-icon; the SSR shadow renders empty
+    // and the client rebuilds it).
+    this._buttons = CHOICES.map((choice) => {
+      const button = ButtonBuilder()
+        .attr('type', 'button')
+        .data('choice', choice)
+        .attr('part', `button ${choice}`)
+        .aria('pressed', 'false')
+        .build() as HTMLButtonElement;
+      if (!isSSR) button.innerHTML = ICONS[choice];
+      return button;
+    });
+    // Built via the isSSR-aware builder (not raw document.*) so the constructor is SSR-safe.
+    this._group = ensureShadowElement(
+      this._shadowDom,
+      '.ran-theme-switch',
+      () =>
+        Div()
+          .class('ran-theme-switch')
+          .attr('part', 'switch')
+          .role('group')
+          .children(this._buttons)
+          .build() as HTMLDivElement,
+    );
   }
 
   get sheet(): string {
@@ -78,14 +91,14 @@ export class ThemeSwitch extends RanElement {
 
   _syncLabels(): void {
     this._group.setAttribute('aria-label', this.getAttribute('label') || 'Theme');
-    for (const button of this._group.querySelectorAll<HTMLButtonElement>('button')) {
+    for (const button of this._buttons) {
       button.setAttribute('aria-label', this._label(button.dataset.choice as RanThemeName));
     }
   }
 
   _reflect(): void {
     const current = this.value;
-    for (const button of this._group.querySelectorAll<HTMLButtonElement>('button')) {
+    for (const button of this._buttons) {
       button.setAttribute('aria-pressed', button.dataset.choice === current ? 'true' : 'false');
     }
   }

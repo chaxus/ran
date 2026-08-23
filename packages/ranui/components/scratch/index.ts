@@ -1,5 +1,5 @@
 import scratchCss from './index.less?inline';
-import { Div, EventManager, Slot, View } from '@/utils/builder';
+import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import {
@@ -7,6 +7,7 @@ import {
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 
@@ -39,9 +40,12 @@ class ScratchTicket extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, scratchCss);
+    const scratchAwardRef = createRef<HTMLDivElement>();
+    const scratchTicketRef = createRef<HTMLCanvasElement>();
     const scratchTicketContainer = ensureShadowElement(this._shadowDom, '.ran-scratch-ticket', () => {
       const scratchTicket = View('canvas')
         .class('ran-scratch-ticket-canvas')
+        .ref(scratchTicketRef)
         .style('width', '100%')
         .style('height', '100%')
         .build() as HTMLCanvasElement;
@@ -49,13 +53,14 @@ class ScratchTicket extends RanElement {
       // content, projected here so it renders underneath the scratch cover.
       const scratchAward = Div()
         .class('ran-scratch-ticket-award')
+        .ref(scratchAwardRef)
         .part('award')
         .children(Slot())
         .build() as HTMLDivElement;
       return Div().class('ran-scratch-ticket').children(scratchTicket, scratchAward).build() as HTMLDivElement;
     });
-    const scratchAward = scratchTicketContainer.querySelector('.ran-scratch-ticket-award') as HTMLDivElement;
-    const scratchTicket = scratchTicketContainer.querySelector('.ran-scratch-ticket-canvas') as HTMLCanvasElement;
+    const scratchAward = shadowPart(scratchAwardRef, 'ticket award');
+    const scratchTicket = shadowPart(scratchTicketRef, 'ticket canvas');
 
     this.scratchTicketContainer = scratchTicketContainer;
     this.scratchAward = scratchAward;

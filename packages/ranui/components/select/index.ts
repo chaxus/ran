@@ -10,13 +10,14 @@ import { defineSSR } from '@/utils/ssr-registry';
 import { computePlacement } from '@/utils/placement';
 import '@/components/input';
 import type { Input } from '@/components/input';
-import { Div, EventManager, InputBuilder, Label, Slot, Span, View } from '@/utils/builder';
+import { createRef, Div, EventManager, InputBuilder, Label, Slot, Span, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
@@ -70,7 +71,7 @@ export class Select extends RanElement {
   _shadowDom: ShadowRoot;
   _select: HTMLDivElement;
   _selection: HTMLDivElement;
-  _search: Input;
+  _search: HTMLInputElement;
   _icon: HTMLElement;
   _selectDropdown?: HTMLDivElement;
   _selectionDropdown?: HTMLElement;
@@ -122,6 +123,12 @@ export class Select extends RanElement {
     this._optionValueMapLabel = new Map();
 
     this._shadowDom = ensureShadowRoot(this, selectCss);
+    const selectionRef = createRef<HTMLDivElement>();
+    const selectorRef = createRef<HTMLDivElement>();
+    const iconRef = createRef<HTMLElement>();
+    const textRef = createRef<HTMLSpanElement>();
+    const searchRef = createRef<HTMLInputElement>();
+    const slotRef = createRef<HTMLSlotElement>();
     const wrap = ensureShadowElement(
       this._shadowDom,
       '.ran-select',
@@ -132,35 +139,40 @@ export class Select extends RanElement {
           .children(
             Div()
               .class('selection')
+              .ref(selectionRef)
               .part('selection')
               .children(
                 View('r-icon')
                   .class('icon')
+                  .ref(iconRef)
                   .part('icon')
                   .attr('name', 'chevron-down')
                   .attr('color', 'var(--ran-color-text-secondary)')
                   .attr('size', '16'),
-                Div().children(
-                  Span().class('selection-item').part('selection-item'),
-                  InputBuilder()
-                    .class('selection-search')
-                    .part('search')
-                    .attr('type', 'search')
-                    .attr('autocomplete', 'off'),
-                ),
+                Div()
+                  .ref(selectorRef)
+                  .children(
+                    Span().class('selection-item').ref(textRef).part('selection-item'),
+                    InputBuilder()
+                      .class('selection-search')
+                      .ref(searchRef)
+                      .part('search')
+                      .attr('type', 'search')
+                      .attr('autocomplete', 'off'),
+                  ),
               ),
-            Slot().class('slot'),
+            Slot().ref(slotRef).class('slot'),
           )
           .build() as HTMLDivElement,
     );
 
     this._select = wrap;
-    this._selection = wrap.querySelector('.selection') as HTMLDivElement;
-    this._selector = this._selection.querySelector('div') as HTMLDivElement;
-    this._icon = wrap.querySelector('.icon') as HTMLElement;
-    this._text = wrap.querySelector('.selection-item') as HTMLSpanElement;
-    this._search = wrap.querySelector('.selection-search') as Input;
-    this._slot = wrap.querySelector('slot') as HTMLSlotElement;
+    this._selection = shadowPart(selectionRef, 'selection');
+    this._selector = shadowPart(selectorRef, 'selector');
+    this._icon = shadowPart(iconRef, 'icon');
+    this._text = shadowPart(textRef, 'selection item');
+    this._search = shadowPart(searchRef, 'selection search');
+    this._slot = shadowPart(slotRef, 'slot');
   }
   get value(): string {
     return this.getAttribute('value') || '';
@@ -366,6 +378,8 @@ export class Select extends RanElement {
 
   getDropdownOptions = (): HTMLElement[] => {
     if (!this._selectionDropdown) return [];
+    // runtime children: r-dropdown-item elements are appended from `options` as it changes,
+    // so the live set is the only source — see `renderOptions`.
     return Array.from(this._selectionDropdown.querySelectorAll('r-dropdown-item')) as HTMLElement[];
   };
 
@@ -729,7 +743,9 @@ export class Select extends RanElement {
   };
   removeDropDownTimeId = (e: Event): void => {
     e.stopPropagation();
-    this._search.setAttribute('value', '');
+    // The property, not the attribute: once the user has typed, the input's value is dirty
+    // and no longer tracks `value=`, so setting the attribute leaves the search box filled.
+    this._search.value = '';
     if (this.trigger.includes('hover') && !isMobile()) {
       clearTimeout(this.removeTimeId);
       this.removeTimeId = undefined;

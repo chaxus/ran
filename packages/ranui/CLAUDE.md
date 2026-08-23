@@ -8,7 +8,7 @@ Web Components library built with TypeScript. All components use Shadow DOM enca
 
 **[docs/DESIGN.md](docs/DESIGN.md) is the authoritative, executable design standard.** Follow it whenever your work changes what a user sees. It is based on the Geist design system (light/dark only).
 
-Five of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, and mouse-only drag loops. Known violations are ratcheted in [docs/design-rule-baseline.json](docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
+Eight of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, mouse-only drag loops, `:host` display rules that disable `hidden`, token fallbacks naming undeclared tokens, and components searching their own shadow tree for elements they built. Known violations are ratcheted in [docs/design-rule-baseline.json](docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
 
 For each element's **attributes / properties / events / slots / `::part()`**, consult **[docs/COMPONENTS.md](docs/COMPONENTS.md)** (generated — run `npm run doc:api` after changing any component's API; CI fails if you forget) and **[docs/style-tokens-public.md](docs/style-tokens-public.md)** for its CSS variables. The non-negotiables:
 
@@ -67,13 +67,14 @@ Every component follows this exact structure:
 
 ```typescript
 import componentCss from './index.less?inline';
-import { Div, EventManager, Slot } from '@/utils/builder';
+import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
   ensureShadowElement,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -81,7 +82,7 @@ import { defineSSR } from '@/utils/ssr-registry';
 export class MyComponent extends RanElement {
   _events = new EventManager();
   _shadowDom!: ShadowRoot;
-  _myEl!: HTMLElement; // store refs to queried elements
+  _myEl!: HTMLElement; // the elements this component built, held, never searched for
 
   static get observedAttributes(): string[] {
     return ['my-attr', 'sheet']; // always include 'sheet'
@@ -91,10 +92,18 @@ export class MyComponent extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
-    const root = ensureShadowElement(this._shadowDom, '.ran-mycomp', () =>
-      Div().class('ran-mycomp').attr('part', 'mycomp').children(Slot()).build(),
+    // Capture each element as it is built. Never `root.querySelector('.ran-mycomp-inner')!`
+    // afterwards: that re-derives the element through a class name, and a rename on one side
+    // yields `null` that the `!` waves through. `verify:design` rejects it (DESIGN.md §9).
+    const inner = createRef<HTMLDivElement>();
+    ensureShadowElement(this._shadowDom, '.ran-mycomp', () =>
+      Div()
+        .class('ran-mycomp')
+        .attr('part', 'mycomp')
+        .children(Div().class('ran-mycomp-inner').ref(inner).children(Slot()))
+        .build(),
     );
-    this._myEl = root.querySelector<HTMLElement>('.ran-mycomp-inner')!;
+    this._myEl = shadowPart(inner, 'inner');
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────
@@ -151,6 +160,7 @@ export default MyComponent;
 - Extend `RanElement` (= `HTMLElement` in browser, `HTMLElementMock` in SSR)
 - Always use `ensureShadowRoot` — never call `attachShadow` directly
 - Always use `ensureShadowElement` to build the Shadow DOM subtree (idempotent)
+- Capture every element with `.ref()` while building and read it back with `shadowPart`; never `querySelector` for something the component itself built
 - Always guard `attributeChangedCallback` with `if (old === next) return;`
 - Always include `sheet` in `observedAttributes` and wire `syncSheetAttribute`
 - Always call `defineSSR` (not bare `customElements.define`)

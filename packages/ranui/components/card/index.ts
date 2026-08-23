@@ -1,11 +1,12 @@
 import cardCss from './index.less?inline';
-import { Div, Slot } from '@/utils/builder';
+import { createRef, Div, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -24,6 +25,11 @@ export class Card extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, cardCss);
+    const headerElRef = createRef<HTMLDivElement>();
+    const titleElRef = createRef<HTMLDivElement>();
+    const descriptionElRef = createRef<HTMLDivElement>();
+    const footerElRef = createRef<HTMLDivElement>();
+    const footerSlotRef = createRef<HTMLSlotElement>();
 
     const card = ensureShadowElement(this._shadowDom, '.ran-card', () =>
       Div()
@@ -32,30 +38,35 @@ export class Card extends RanElement {
         .children(
           Div()
             .class('ran-card-header')
+            .ref(headerElRef)
             .attr('part', 'header')
             .children(
               Div()
                 .class('ran-card-title-area')
                 .children(
-                  Div().class('ran-card-title').attr('part', 'title'),
-                  Div().class('ran-card-description').attr('part', 'description'),
+                  Div().class('ran-card-title').ref(titleElRef).attr('part', 'title'),
+                  Div().class('ran-card-description').ref(descriptionElRef).attr('part', 'description'),
                 ),
               Slot().attr('name', 'extra').attr('part', 'extra'),
             ),
           Div().class('ran-card-body').attr('part', 'body').children(Slot()),
-          Div().class('ran-card-footer').attr('part', 'footer').children(Slot().attr('name', 'footer')),
+          Div()
+            .class('ran-card-footer')
+            .ref(footerElRef)
+            .attr('part', 'footer')
+            .children(Slot().attr('name', 'footer').ref(footerSlotRef)),
         )
         .build(),
     );
 
-    this._headerEl = card.querySelector<HTMLElement>('.ran-card-header')!;
-    this._titleEl = card.querySelector<HTMLElement>('.ran-card-title')!;
-    this._descriptionEl = card.querySelector<HTMLElement>('.ran-card-description')!;
-    this._footerEl = card.querySelector<HTMLElement>('.ran-card-footer')!;
+    this._headerEl = shadowPart(headerElRef, 'header');
+    this._titleEl = shadowPart(titleElRef, 'title');
+    this._descriptionEl = shadowPart(descriptionElRef, 'description');
+    this._footerEl = shadowPart(footerElRef, 'footer');
 
     // Hide footer until content is slotted
     this._footerEl.style.display = 'none';
-    const footerSlot = this._footerEl.querySelector<HTMLSlotElement>('slot[name="footer"]')!;
+    const footerSlot = shadowPart(footerSlotRef, 'slot[name="footer"]');
     footerSlot.addEventListener('slotchange', () => {
       this._footerEl.style.display = footerSlot.assignedElements().length > 0 ? '' : 'none';
     });

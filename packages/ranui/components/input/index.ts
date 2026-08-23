@@ -1,5 +1,5 @@
 import { RanElement, falseList, isDisabled } from '@/utils/index';
-import { Div, EventManager, InputBuilder, Label, View } from '@/utils/builder';
+import { createRef, Div, EventManager, InputBuilder, Label, View } from '@/utils/builder';
 import { checkInternalsValidity, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import '@/components/icon/index';
 import {
@@ -8,6 +8,7 @@ import {
   getStringAttribute,
   setBooleanAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import inputCss from './index.less?inline';
@@ -62,15 +63,16 @@ export class Input extends RanElement {
       this._internals = undefined;
     }
     this._shadowDom = ensureShadowRoot(this, inputCss);
+    const inputContentRef = createRef<HTMLInputElement>();
     const wrap = ensureShadowElement(this._shadowDom, '.ran-input', () =>
       Div()
         .class('ran-input')
         .part('input')
-        .children(InputBuilder().class('ran-input-content').part('content'))
+        .children(InputBuilder().class('ran-input-content').ref(inputContentRef).part('content'))
         .build(),
     );
     this._input = wrap;
-    this._inputContent = wrap.querySelector('.ran-input-content') as HTMLInputElement;
+    this._inputContent = shadowPart(inputContentRef, 'content');
     // A stable id so a rendered <label> can point its `for` at this control,
     // giving it an accessible name and click-to-focus (both in the same shadow root).
     if (!this._inputContent.id) this._inputContent.id = `ran-input-${++inputIdSeq}`;

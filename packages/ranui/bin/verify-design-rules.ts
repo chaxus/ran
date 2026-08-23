@@ -54,6 +54,12 @@ interface Rule {
   scan: (source: string, file: string) => Violation[];
 }
 
+/**
+ * Opt-out for `built-then-queried`, written on the line above the query as
+ * `// runtime children: <what puts them there>`. Only for elements added after the build.
+ */
+const RUNTIME_CHILDREN = /\/\/\s*runtime children:\s*\S/;
+
 /** Colour literal in any CSS notation. */
 const COLOUR = /#[0-9a-fA-F]{3,8}\b|\brgba?\([^()]*\)|\bhsla?\([^()]*\)/g;
 /** `var(--token, fallback)`; the fallback may nest one level of parentheses. */
@@ -243,6 +249,44 @@ const RULES: Rule[] = [
           if (inner === null) continue;
           if (themeTokens.has(inner[1])) continue;
           out.push({ file, line: i + 1, text: `${name} → ${inner[1]} (undeclared)` });
+        }
+      });
+      return out;
+    },
+  },
+  {
+    id: 'built-then-queried',
+    summary: 'a component searches its own shadow tree for an element it just built',
+    fix: "Capture the element while building it: `const body = createRef<HTMLDivElement>()`, `.ref(body)` on the builder, then `shadowPart(body, 'body')`. The builder already returns the element, so a selector re-derives what the caller had; when a class is renamed on one side only, the query yields `null` under a non-null assertion and surfaces much later as a property read on nothing.",
+    extensions: ['.ts'],
+    scan(source, file) {
+      const clean = stripComments(source);
+      // Names bound to a tree this component built. `ensureShadowElement` counts: its factory
+      // is the builder, and every element below the returned root came from it.
+      const built = new Set<string>();
+      for (const match of clean.matchAll(/(?:const|let)\s+(\w+)(?:\s*:[^=;]+)?\s*=\s*([\s\S]*?);\n/g)) {
+        if (/\.build\(\)|ensureShadowElement\(/.test(match[2])) built.add(match[1]);
+      }
+      for (const match of clean.matchAll(/this\.(\w+)\s*=\s*([\s\S]*?);\n/g)) {
+        if (/\.build\(\)|ensureShadowElement\(/.test(match[2])) built.add(`this.${match[1]}`);
+      }
+      if (built.size === 0) return [];
+      const out: Violation[] = [];
+      // `lines()` strips comments; the opt-out marker is a comment, so read the file as written.
+      const raw = source.split('\n');
+      lines(clean).forEach((line, i) => {
+        for (const match of line.matchAll(/((?:this\.)?\w+)\.querySelector(?:All)?\s*[<(]/g)) {
+          if (!built.has(match[1])) continue;
+          // The receiver was built here, but its children need not have been: a container
+          // filled from data at runtime holds elements no ref could have captured. Opting
+          // out names which ones, on the line above, so the claim is reviewable.
+          let above = i - 1;
+          while (above >= 0 && raw[above].trim().startsWith('//')) {
+            if (RUNTIME_CHILDREN.test(raw[above])) break;
+            above -= 1;
+          }
+          if (above >= 0 && raw[above].trim().startsWith('//')) continue;
+          out.push({ file, line: i + 1, text: line.trim() });
         }
       });
       return out;
