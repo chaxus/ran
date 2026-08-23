@@ -1130,6 +1130,16 @@ matching the runner and committed alongside the macOS one — 128 more binaries 
 step. That is the open option if visual regressions start slipping through; until then this is
 recorded as a known gap rather than papered over.
 
+**Re-record with `npm run test:update`, never with `--project`.** Every spec runs under three
+projects — `chromium`, `Google Chrome`, `Mobile Chrome` — so each screenshot has three baselines.
+Refreshing one project leaves the other two holding a picture of the old component, and nothing
+reports it: CI ignores snapshots, and locally you only see it if you run the whole suite and read
+past the failures you expected. Eleven baselines were stale this way, across three separate
+changes, each of which refreshed `chromium` alone — including one commit that says so in its own
+message. After re-recording, open the new PNGs. A baseline is a claim about what the component
+looks like, and a screenshot taken before the component finished rendering makes that claim
+wrongly while still passing forever after.
+
 > A hosted service (Argos) was wired in for exactly this and has been **removed**. Its token was
 > never configured, so `if (process.env.ARGOS_TOKEN)` was always false: 77 `argosScreenshot`
 > calls across 15 specs uploaded nothing, and the workflow named "Visual Regression" gated on
