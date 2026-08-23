@@ -33,7 +33,7 @@ predates it and should be brought in line):
    (`code` for mermaid, `latex` for math) so multiline / `<|--` / `$$` survive HTML
    parsing; else `this.textContent.trim()` for hand-authoring. Both r-mermaid and r-math
    do this.
-3. **Render into a `mountShadowTree` container**, never light DOM. Note: mermaid
+3. **Render into a container built in the constructor**, never light DOM. Note: mermaid
    returns a statically-sized SVG and Temml returns a self-contained MathML string that the
    browser lays out natively — so placing the result into a (closed) shadow root is safe.
 4. **Errors go to the DOM, not the console.** Render an `::part(error)` box with the
@@ -281,7 +281,7 @@ per-component. For now, keep them parallel and consistent by copying this checkl
 - [ ] Heavy lib is a **regular `dependency`**, reached only via dynamic `import()` in
       `render()` (lazy async chunk; nothing eager in `index.js`).
 - [ ] Source = URI-encoded attribute **or** `textContent`.
-- [ ] Renders into `mountShadowTree` container (closed shadow root via
+- [ ] Renders into a constructor-built container (closed shadow root via
       `ensureShadowRoot`).
 - [ ] Errors → `::part(error)` + `error` CustomEvent (`bubbles+composed`), never
       console-only.

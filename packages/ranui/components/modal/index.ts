@@ -1,13 +1,7 @@
 import modalCss from './index.less?inline';
 import { RanElement, falseList } from '@/utils/index';
 import { ButtonBuilder, Div, EventManager, Slot, View } from '@/utils/builder';
-import {
-  mountShadowTree,
-  ensureShadowRoot,
-  getStringAttribute,
-  setStringAttribute,
-  syncSheetAttribute,
-} from '@/utils/component';
+import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 const FOCUSABLE_SELECTOR =
@@ -83,40 +77,37 @@ export class Modal extends RanElement {
     this._afterOpenTimer = null;
     this._afterCloseTimer = null;
     this._shadowDom = ensureShadowRoot(this, modalCss);
-    const root = mountShadowTree(
-      this._shadowDom,
-      () =>
+    const root = Div()
+      .class('ran-modal-root')
+      .part('root')
+      .children(
+        Div().class('ran-modal-mask').part('mask'),
         Div()
-          .class('ran-modal-root')
-          .part('root')
+          .class('ran-modal-dialog')
+          .part('dialog')
+          .role('dialog')
+          .attr('aria-modal', 'true')
+          .tabIndex(-1)
+          .labelledBy(this._labelId)
           .children(
-            Div().class('ran-modal-mask').part('mask'),
-            Div()
-              .class('ran-modal-dialog')
-              .part('dialog')
-              .role('dialog')
-              .attr('aria-modal', 'true')
-              .tabIndex(-1)
-              .labelledBy(this._labelId)
+            View('header')
+              .class('ran-modal-header')
+              .part('header')
               .children(
-                View('header')
-                  .class('ran-modal-header')
-                  .part('header')
-                  .children(
-                    View('h3').class('ran-modal-title').part('title').id(this._labelId),
-                    View('button')
-                      .class('ran-modal-close')
-                      .part('close')
-                      .attr('type', 'button')
-                      .label('Close dialog')
-                      .text('x'),
-                  ),
-                Div().class('ran-modal-body').part('body').children(Slot()),
-                View('footer').class('ran-modal-footer').part('footer').children(Slot().attr('name', 'footer')),
+                View('h3').class('ran-modal-title').part('title').id(this._labelId),
+                View('button')
+                  .class('ran-modal-close')
+                  .part('close')
+                  .attr('type', 'button')
+                  .label('Close dialog')
+                  .text('x'),
               ),
-          )
-          .build() as HTMLDivElement,
-    );
+            Div().class('ran-modal-body').part('body').children(Slot()),
+            View('footer').class('ran-modal-footer').part('footer').children(Slot().attr('name', 'footer')),
+          ),
+      )
+      .build() as HTMLDivElement;
+    this._shadowDom.appendChild(root);
 
     this._root = root;
     this._mask = this._root.querySelector('.ran-modal-mask') as HTMLDivElement;

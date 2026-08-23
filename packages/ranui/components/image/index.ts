@@ -1,13 +1,7 @@
 import failImage from '../../assets/image/failImage';
 import { Div } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import {
-  mountShadowTree,
-  ensureShadowRoot,
-  getStringAttribute,
-  setStringAttribute,
-  syncSheetAttribute,
-} from '@/utils/component';
+import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import imageCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -21,7 +15,8 @@ export class ImageElement extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, imageCss);
-    const container = mountShadowTree(this._shadowDom, () => Div().class('ran-image').build());
+    const container = Div().class('ran-image').build();
+    this._shadowDom.appendChild(container);
     this._container = container;
   }
   get fallback() {

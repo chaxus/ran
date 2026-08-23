@@ -2,7 +2,6 @@ import componentCss from './index.less?inline';
 import { ButtonBuilder, createRef, Div, EventManager, Slot, Span } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -62,34 +61,33 @@ export class DisclosureRow extends RanElement {
     const title = createRef<HTMLElement>();
     const summary = createRef<HTMLElement>();
     const sep = createRef<HTMLElement>();
-    const root = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-disclosure')
-        .attr('part', 'disclosure')
-        .children(
-          ButtonBuilder()
-            .class('ran-disclosure-row')
-            .ref(row)
-            .attr('part', 'row')
-            .attr('type', 'button')
-            .children(
-              Span()
-                .class('ran-disclosure-leading')
-                .attr('part', 'leading')
-                .children(
-                  Span().class('ran-disclosure-icon').children(Slot().attr('name', 'leading').build()).build(),
-                  Span().class('ran-disclosure-chevron').attr('aria-hidden', 'true').text('▸').build(),
-                )
-                .build(),
-              Span().class('ran-disclosure-title').ref(title).attr('part', 'title').build(),
-              Span().class('ran-disclosure-sep').ref(sep).attr('part', 'separator').attr('aria-hidden', 'true').build(),
-              Span().class('ran-disclosure-summary').ref(summary).attr('part', 'summary').build(),
-            )
-            .build(),
-          Div().class('ran-disclosure-body').attr('part', 'body').children(Slot().build()).build(),
-        )
-        .build(),
-    );
+    const root = Div()
+      .class('ran-disclosure')
+      .attr('part', 'disclosure')
+      .children(
+        ButtonBuilder()
+          .class('ran-disclosure-row')
+          .ref(row)
+          .attr('part', 'row')
+          .attr('type', 'button')
+          .children(
+            Span()
+              .class('ran-disclosure-leading')
+              .attr('part', 'leading')
+              .children(
+                Span().class('ran-disclosure-icon').children(Slot().attr('name', 'leading').build()).build(),
+                Span().class('ran-disclosure-chevron').attr('aria-hidden', 'true').text('▸').build(),
+              )
+              .build(),
+            Span().class('ran-disclosure-title').ref(title).attr('part', 'title').build(),
+            Span().class('ran-disclosure-sep').ref(sep).attr('part', 'separator').attr('aria-hidden', 'true').build(),
+            Span().class('ran-disclosure-summary').ref(summary).attr('part', 'summary').build(),
+          )
+          .build(),
+        Div().class('ran-disclosure-body').attr('part', 'body').children(Slot().build()).build(),
+      )
+      .build();
+    this._shadowDom.appendChild(root);
     this._row = shadowPart(row, 'row');
     this._title = shadowPart(title, 'title');
     this._summary = shadowPart(summary, 'summary');

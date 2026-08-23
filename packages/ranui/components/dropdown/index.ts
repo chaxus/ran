@@ -2,7 +2,6 @@ import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { RanElement } from '@/utils/index';
 import { createRef, Div, Slot } from '@/utils/builder';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -35,22 +34,19 @@ export class Dropdown extends RanElement {
     this._shadowDom = ensureShadowRoot(this, dropdownCss);
     const dropdownRef = createRef<HTMLDivElement>();
     const slotRef = createRef<HTMLSlotElement>();
-    const container = mountShadowTree(
-      this._shadowDom,
-      () =>
+    const container = Div()
+      .class('ranui-dropdown-container')
+      .children(
         Div()
-          .class('ranui-dropdown-container')
-          .children(
-            Div()
-              .style('-webkit-tap-highlight-color', 'transparent')
-              .style('outline', '0')
-              .class('ranui-dropdown')
-              .ref(dropdownRef)
-              .part('dropdown')
-              .children(Slot().class('slot').ref(slotRef)),
-          )
-          .build() as HTMLElement,
-    );
+          .style('-webkit-tap-highlight-color', 'transparent')
+          .style('outline', '0')
+          .class('ranui-dropdown')
+          .ref(dropdownRef)
+          .part('dropdown')
+          .children(Slot().class('slot').ref(slotRef)),
+      )
+      .build() as HTMLElement;
+    this._shadowDom.appendChild(container);
 
     this.container = container;
     this.dropdown = shadowPart(dropdownRef, 'ranui dropdown');

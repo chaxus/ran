@@ -330,9 +330,7 @@ from the builder, so capture it there:
 
 ```ts
 const body = createRef<HTMLDivElement>();
-const root = mountShadowTree(this._shadowDom, () =>
-  Div().class('ran-thing').children(Div().class('ran-thing-body').ref(body)).build(),
-);
+this._shadowDom.appendChild(Div().class('ran-thing').children(Div().class('ran-thing-body').ref(body)).build());
 this._body = shadowPart(body, 'body');
 ```
 
@@ -344,9 +342,9 @@ nothing — far from the rename that caused it. `shadowPart` throws at construct
 naming the field.
 
 This holds because the tree is built **once, in the constructor**, which `verify:design`
-also enforces. `mountShadowTree` appends unconditionally: a second call from
-`connectedCallback` would mount a second copy on every reconnect, and its refs would replace
-the ones the component is already driving.
+also enforces. `appendChild` is unconditional: a second mount from `connectedCallback` would
+add a second copy on every reconnect, and its refs would replace the ones the component is
+already driving.
 
 It is fair to ask why the tree is not reused from the server-rendered markup instead. It
 cannot be. Server rendering does emit a declarative shadow root — the `im` demo page ships

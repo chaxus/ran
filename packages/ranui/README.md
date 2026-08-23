@@ -416,7 +416,7 @@ See the [Router documentation](https://ran.chaxus.com/src/ranui/router/) for the
 
 ### SSR & Builder
 
-For SSR or declarative UI construction, RanUI internally uses `builder`, the SSR registry, and Declarative Shadow DOM. Components reuse an existing Shadow Root through `ensureShadowRoot` and build their tree through `mountShadowTree`. The server-rendered tree paints the first frame and is then replaced: components attach a **closed** shadow root, and `attachShadow` clears a declarative one's children, so the client always rebuilds.
+For SSR or declarative UI construction, RanUI internally uses `builder`, the SSR registry, and Declarative Shadow DOM. Components reuse an existing Shadow Root through `ensureShadowRoot` and build their tree in the constructor. The server-rendered tree paints the first frame and is then replaced: components attach a **closed** shadow root, and `attachShadow` clears a declarative one's children, so the client always rebuilds.
 
 Source-level SSR rendering example:
 
@@ -439,7 +439,7 @@ When adding or maintaining components, follow the package conventions:
 
 - Extend `RanElement`; do not directly extend the browser `HTMLElement`.
 - Use `ensureShadowRoot` to create or reuse Shadow Roots; do not call `attachShadow` directly.
-- Use `mountShadowTree` to build the Shadow DOM subtree, in the constructor and nowhere else.
+- Build the Shadow DOM subtree in the constructor and nowhere else.
 - Capture elements with `.ref()` as you build them and read them back with `shadowPart`; never `querySelector` for something the component itself built.
 - Include `sheet` in `observedAttributes` and sync component-level style overrides through `syncSheetAttribute`.
 - Guard `attributeChangedCallback` with `if (old === next) return;`.

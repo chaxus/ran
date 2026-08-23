@@ -60,6 +60,12 @@ interface Rule {
  */
 const RUNTIME_CHILDREN = /\/\/\s*runtime children:\s*\S/;
 
+/**
+ * Opt-out for `shadow-mount-outside-constructor`, written on the line above the append as
+ * `// deferred mount: <why>`. Only for content that cannot exist when the component is built.
+ */
+const DEFERRED_MOUNT = /\/\/\s*deferred mount:\s*\S/;
+
 /** Colour literal in any CSS notation. */
 const COLOUR = /#[0-9a-fA-F]{3,8}\b|\brgba?\([^()]*\)|\bhsla?\([^()]*\)/g;
 /** `var(--token, fallback)`; the fallback may nest one level of parentheses. */
@@ -255,26 +261,31 @@ const RULES: Rule[] = [
     },
   },
   {
-    id: 'tree-built-outside-constructor',
-    summary: 'a component builds its shadow tree somewhere other than its constructor',
-    fix: 'Move the `mountShadowTree` call into the constructor. It appends unconditionally, so a second call from `connectedCallback` mounts a second copy on every reconnect; and the refs a later build captures replace the ones the component is already driving.',
+    id: 'shadow-mount-outside-constructor',
+    summary: "a component appends to its shadow root somewhere other than its constructor",
+    fix: "Build and append the component's tree in the constructor. Content that genuinely cannot exist yet — a validation message, a lazily created canvas — opts out with `// deferred mount: <why it cannot be built up front>` on the line above, which also has to say how a second append is prevented.",
     extensions: ['.ts'],
     scan(source, file) {
       const clean = stripComments(source);
+      const raw = source.split('\n');
       const out: Violation[] = [];
-      for (const match of clean.matchAll(/mountShadowTree\(/g)) {
-        // The nearest method header above the call names the enclosing function.
+      for (const match of clean.matchAll(/(?:this\.)?_?[Ss]hadow(?:Dom|Root)\.append(?:Child)?\(/g)) {
         const before = clean.slice(0, match.index);
         let enclosing = '';
-        for (const header of before.matchAll(/^\s{2}(?:(?:private|public|protected)\s+)?(\w+)\s*\([^)]*\)\s*(?::[^{]+)?\{/gm)) {
-          enclosing = header[1];
+        for (const header of before.matchAll(
+          /^\s{2}(?:(?:private|public|protected|static)\s+)?(?:(get|set)\s+)?(\w+)\s*(?:\([^)]*\)\s*(?::[^{]+)?|=\s*\([^)]*\)\s*(?::[^=]+)?=>\s*)\{/gm,
+        )) {
+          enclosing = header[1] ? `${header[1]} ${header[2]}` : header[2];
         }
         if (enclosing === 'constructor') continue;
-        out.push({
-          file,
-          line: before.split('\n').length,
-          text: `mountShadowTree in \`${enclosing || '<top level>'}\``,
-        });
+        const line = before.split('\n').length;
+        let above = line - 2;
+        while (above >= 0 && raw[above].trim().startsWith('//')) {
+          if (DEFERRED_MOUNT.test(raw[above])) break;
+          above -= 1;
+        }
+        if (above >= 0 && raw[above].trim().startsWith('//')) continue;
+        out.push({ file, line, text: `appends to the shadow root in \`${enclosing || '<top level>'}\`` });
       }
       return out;
     },
@@ -286,14 +297,14 @@ const RULES: Rule[] = [
     extensions: ['.ts'],
     scan(source, file) {
       const clean = stripComments(source);
-      // Names bound to a tree this component built. `mountShadowTree` counts: its factory
+      // Names bound to a tree this component built. an appended tree counts: the builder
       // is the builder, and every element below the returned root came from it.
       const built = new Set<string>();
       for (const match of clean.matchAll(/(?:const|let)\s+(\w+)(?:\s*:[^=;]+)?\s*=\s*([\s\S]*?);\n/g)) {
-        if (/\.build\(\)|mountShadowTree\(/.test(match[2])) built.add(match[1]);
+        if (/\.build\(\)|\.appendChild\(/.test(match[2])) built.add(match[1]);
       }
       for (const match of clean.matchAll(/this\.(\w+)\s*=\s*([\s\S]*?);\n/g)) {
-        if (/\.build\(\)|mountShadowTree\(/.test(match[2])) built.add(`this.${match[1]}`);
+        if (/\.build\(\)|\.appendChild\(/.test(match[2])) built.add(`this.${match[1]}`);
       }
       if (built.size === 0) return [];
       const out: Violation[] = [];

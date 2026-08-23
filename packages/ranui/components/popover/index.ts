@@ -11,7 +11,6 @@ import '@/components/popover/content';
 import '@/components/dropdown';
 import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -90,15 +89,12 @@ export class Popover extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, popoverCss);
     const slotRef = createRef<HTMLSlotElement>();
-    const block = mountShadowTree(
-      this._shadowDom,
-      () =>
-        Div()
-          .class('ran-popover-block')
-          .role('tooltip')
-          .children(Slot().class('slot').ref(slotRef))
-          .build() as HTMLDivElement,
-    );
+    const block = Div()
+      .class('ran-popover-block')
+      .role('tooltip')
+      .children(Slot().class('slot').ref(slotRef))
+      .build() as HTMLDivElement;
+    this._shadowDom.appendChild(block);
 
     this.popoverBlock = block;
     this._slot = shadowPart(slotRef, 'slot');

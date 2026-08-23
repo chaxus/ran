@@ -29,28 +29,6 @@ export const ensureShadowRoot = (
 };
 
 /**
- * Builds a component's shadow tree and mounts it, once.
- *
- * This does not look for an existing tree to reuse, because there is never one to find.
- * Server rendering does emit a declarative shadow root, but every ranui component attaches
- * a **closed** one: `host.shadowRoot` stays `null`, so {@link ensureShadowRoot} reaches
- * `attachShadow`, and attaching to an element that already has a declarative shadow root
- * removes that root's children. The server-rendered markup paints the first frame and is
- * then replaced by an identical client-built tree. Reuse would need `mode: 'open'`, which
- * this library does not use.
- *
- * Callers therefore keep what the builder hands them — see {@link shadowPart}.
- *
- * @param root - The component's shadow root.
- * @param factory - Builds the tree. Called exactly once, from the component's constructor.
- * @returns The mounted element.
- */
-export const mountShadowTree = <T extends HTMLElement>(root: ShadowRoot, factory: () => T): T => {
-  const element = factory();
-  root.appendChild(element);
-  return element;
-};
-/**
  * The element the builder captured for this component, or a loud failure.
  *
  * Components build their shadow tree once, in the constructor, so `.ref()` on the builder

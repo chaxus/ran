@@ -261,6 +261,8 @@ export function ensurePlayerView(input: {
     .children(container, playerBtn, gestureFlash, playerController)
     .build() as HTMLDivElement;
 
+  // deferred mount: this is the constructor's own work, extracted into a function —
+  // `ensurePlayerView` has exactly one caller, the r-player constructor.
   shadowDom.appendChild(player);
 
   return {

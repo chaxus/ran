@@ -383,16 +383,18 @@ describe('r-scratch contract', () => {
     expect(scratch.sheet).toBe('.ran-scratch-ticket-award { background: red; }');
   });
 
-  it('attributeChangedCallback appends container when not in shadow DOM', () => {
+  it('keeps its container mounted across attribute changes', () => {
+    // This replaced a test that removed the container itself and then asserted
+    // `attributeChangedCallback` put it back. Nothing in the component ever removes it, so
+    // that branch was unreachable and the test was the only thing keeping it alive. What
+    // has to hold is that the container mounted at construction stays mounted.
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
-
-    // Remove the container from shadow DOM to trigger the append branch
-    scratch._shadowDom.removeChild(scratch.scratchTicketContainer);
-    expect(scratch._shadowDom.contains(scratch.scratchTicketContainer)).toBe(false);
+    expect(scratch._shadowDom.contains(scratch.scratchTicketContainer)).toBe(true);
 
     const drawSpy = vi.spyOn(scratch, 'drawScratchTicket').mockImplementation(() => {});
     scratch.attributeChangedCallback('disabled', null, 'true');
+
     expect(scratch._shadowDom.contains(scratch.scratchTicketContainer)).toBe(true);
     expect(drawSpy).toHaveBeenCalled();
   });

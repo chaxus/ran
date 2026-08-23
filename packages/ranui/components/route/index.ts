@@ -1,13 +1,7 @@
 import routeCss from './index.less?inline';
 import { EventManager, Slot, createRoot, onCleanup, isSSR } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import {
-  ensureShadowRoot,
-  mountShadowTree,
-  getStringAttribute,
-  setStringAttribute,
-  syncSheetAttribute,
-} from '@/utils/component';
+import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { getSSGPath, matchPath } from '@/utils/router';
 
@@ -36,7 +30,7 @@ export class Route extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, routeCss);
-    mountShadowTree(this._shadowDom, () => Slot().build());
+    this._shadowDom.appendChild(Slot().build());
   }
 
   get path(): string {

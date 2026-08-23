@@ -1,7 +1,7 @@
 import themeSwitchCss from './index.less?inline';
 import { ButtonBuilder, Div, EventManager, isSSR } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, mountShadowTree, getStringAttribute, setStringAttribute } from '@/utils/component';
+import { ensureShadowRoot, getStringAttribute, setStringAttribute } from '@/utils/component';
 import { syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { getTheme, setTheme } from '@/utils/theme';
@@ -56,16 +56,13 @@ export class ThemeSwitch extends RanElement {
       return button;
     });
     // Built via the isSSR-aware builder (not raw document.*) so the constructor is SSR-safe.
-    this._group = mountShadowTree(
-      this._shadowDom,
-      () =>
-        Div()
-          .class('ran-theme-switch')
-          .attr('part', 'switch')
-          .role('group')
-          .children(this._buttons)
-          .build() as HTMLDivElement,
-    );
+    this._group = Div()
+      .class('ran-theme-switch')
+      .attr('part', 'switch')
+      .role('group')
+      .children(this._buttons)
+      .build() as HTMLDivElement;
+    this._shadowDom.appendChild(this._group);
   }
 
   get sheet(): string {
