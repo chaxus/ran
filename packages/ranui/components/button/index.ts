@@ -1,9 +1,9 @@
 import { currentDevice } from 'ranuts/utils';
 import buttonCss from './index.less?inline';
 import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
-import { EventManager, View } from '@/utils/builder';
+import { createRef, EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
-import { ensureShadowElement, ensureShadowRoot, syncSheetAttribute } from '@/utils/component';
+import { ensureShadowElement, ensureShadowRoot, shadowPart, syncSheetAttribute } from '@/utils/component';
 import { isActivationKey } from '@/utils/a11y';
 
 export class Button extends RanElement {
@@ -22,6 +22,8 @@ export class Button extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, buttonCss);
+    const btnContentRef = createRef<HTMLDivElement>();
+    const slotRef = createRef<HTMLSlotElement>();
 
     const btn = ensureShadowElement(this._shadowDom, '.ran-btn', () =>
       Div()
@@ -29,12 +31,18 @@ export class Button extends RanElement {
         .attr('part', 'button')
         .role('button')
         .tabIndex(0)
-        .children(Div().class('ran-btn-content').attr('part', 'content').children(Slot().class('slot')))
+        .children(
+          Div()
+            .class('ran-btn-content')
+            .ref(btnContentRef)
+            .attr('part', 'content')
+            .children(Slot().ref(slotRef).class('slot')),
+        )
         .build(),
     );
     this._btn = btn;
-    this._btnContent = btn.querySelector<HTMLDivElement>('.ran-btn-content')!;
-    this._slot = btn.querySelector<HTMLSlotElement>('slot')!;
+    this._btnContent = shadowPart(btnContentRef, 'content');
+    this._slot = shadowPart(slotRef, 'slot');
   }
 
   // ── Properties ─────────────────────────────────────────────────────────────

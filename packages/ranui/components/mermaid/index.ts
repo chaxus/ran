@@ -1,11 +1,12 @@
 import { RanElement } from '@/utils/index';
-import { Div, View, EventManager } from '@/utils/builder';
+import { createRef, Div, EventManager, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
-  setStringAttribute,
   setBooleanAttribute,
+  setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 // Registers <r-icon>; the toolbar's <r-icon name="copy"> etc. resolve their SVG via
@@ -32,18 +33,21 @@ export class Mermaid extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, mermaidCss);
+    const diagramRef = createRef<HTMLDivElement>();
+    const toolbarRef = createRef<HTMLDivElement>();
+    const iconRef = createRef<HTMLElement>();
     this._wrap = ensureShadowElement(this._shadowDom, '.ran-mermaid', () =>
       Div()
         .class('ran-mermaid')
         .part('mermaid')
         .children(
-          Div().class('ran-mermaid-diagram').part('diagram'),
-          Div().class('ran-mermaid-toolbar').part('toolbar'),
+          Div().class('ran-mermaid-diagram').ref(diagramRef).part('diagram'),
+          Div().class('ran-mermaid-toolbar').ref(toolbarRef).part('toolbar'),
         )
         .build(),
     );
-    this._diagram = this._wrap.querySelector('.ran-mermaid-diagram') as HTMLElement;
-    this._toolbar = this._wrap.querySelector('.ran-mermaid-toolbar') as HTMLElement;
+    this._diagram = shadowPart(diagramRef, 'diagram');
+    this._toolbar = shadowPart(toolbarRef, 'toolbar');
   }
   // ── Accessors ─────────────────────────────────────────────────────────────
   get code(): string {

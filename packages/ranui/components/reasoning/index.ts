@@ -1,11 +1,12 @@
 import componentCss from './index.less?inline';
-import { Div, EventManager, Slot, Span, View } from '@/utils/builder';
+import { createRef, Div, EventManager, Slot, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -86,6 +87,7 @@ export class Reasoning extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
+    const text = createRef<HTMLElement>();
     const row = ensureShadowElement(this._shadowDom, 'r-disclosure-row', () =>
       View('r-disclosure-row')
         .attr('part', 'row')
@@ -94,13 +96,13 @@ export class Reasoning extends RanElement {
           Div()
             .class('ran-reasoning-body')
             .attr('part', 'body')
-            .children(Span().class('ran-reasoning-text').attr('part', 'text').build(), Slot().build())
+            .children(Span().class('ran-reasoning-text').ref(text).attr('part', 'text').build(), Slot().build())
             .build(),
         )
         .build(),
     ) as DisclosureRow;
     this._row = row;
-    this._text = row.querySelector<HTMLElement>('.ran-reasoning-text')!;
+    this._text = shadowPart(text, 'text');
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────

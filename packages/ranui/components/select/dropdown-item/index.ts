@@ -1,6 +1,6 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import less from './index.less?inline';
-import { Div, Slot } from '@/utils/builder';
+import { createRef, Div, Slot } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import {
@@ -8,6 +8,7 @@ import {
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 
@@ -22,11 +23,14 @@ export class DropdownItem extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, less);
+    const slotRef = createRef<HTMLSlotElement>();
+    const contentRef = createRef<HTMLDivElement>();
     const ionDropdownItem = ensureShadowElement(this._shadowDom, '.ranui-dropdown-option-item', () => {
-      const slot = Slot().class('slot').build() as HTMLSlotElement;
+      const slot = Slot().class('slot').ref(slotRef).build() as HTMLSlotElement;
       const ionDropdownItemContent = Div()
         .class('ranui-dropdown-option-item-content')
         .part('content')
+        .ref(contentRef)
         .children(slot)
         .build() as HTMLDivElement;
       return Div()
@@ -35,14 +39,9 @@ export class DropdownItem extends RanElement {
         .children(ionDropdownItemContent)
         .build() as HTMLDivElement;
     });
-    const ionDropdownItemContent = ionDropdownItem.querySelector(
-      '.ranui-dropdown-option-item-content',
-    ) as HTMLDivElement;
-    const slot = ionDropdownItem.querySelector('slot') as HTMLSlotElement;
-
-    this._slot = slot as any;
-    this.ionDropdownItemContent = ionDropdownItemContent as any;
-    this.ionDropdownItem = ionDropdownItem as any;
+    this._slot = shadowPart(slotRef, 'slot');
+    this.ionDropdownItemContent = shadowPart(contentRef, 'content');
+    this.ionDropdownItem = ionDropdownItem;
   }
   get value(): string {
     return getStringAttribute(this, 'value');

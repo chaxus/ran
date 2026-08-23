@@ -1,11 +1,12 @@
 import componentCss from './index.less?inline';
-import { ButtonBuilder, Div, EventManager, Slot, Span } from '@/utils/builder';
+import { ButtonBuilder, createRef, Div, EventManager, Slot, Span } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -57,6 +58,10 @@ export class DisclosureRow extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
+    const row = createRef<HTMLButtonElement>();
+    const title = createRef<HTMLElement>();
+    const summary = createRef<HTMLElement>();
+    const sep = createRef<HTMLElement>();
     const root = ensureShadowElement(this._shadowDom, '.ran-disclosure', () =>
       Div()
         .class('ran-disclosure')
@@ -64,6 +69,7 @@ export class DisclosureRow extends RanElement {
         .children(
           ButtonBuilder()
             .class('ran-disclosure-row')
+            .ref(row)
             .attr('part', 'row')
             .attr('type', 'button')
             .children(
@@ -75,19 +81,19 @@ export class DisclosureRow extends RanElement {
                   Span().class('ran-disclosure-chevron').attr('aria-hidden', 'true').text('▸').build(),
                 )
                 .build(),
-              Span().class('ran-disclosure-title').attr('part', 'title').build(),
-              Span().class('ran-disclosure-sep').attr('part', 'separator').attr('aria-hidden', 'true').build(),
-              Span().class('ran-disclosure-summary').attr('part', 'summary').build(),
+              Span().class('ran-disclosure-title').ref(title).attr('part', 'title').build(),
+              Span().class('ran-disclosure-sep').ref(sep).attr('part', 'separator').attr('aria-hidden', 'true').build(),
+              Span().class('ran-disclosure-summary').ref(summary).attr('part', 'summary').build(),
             )
             .build(),
           Div().class('ran-disclosure-body').attr('part', 'body').children(Slot().build()).build(),
         )
         .build(),
     );
-    this._row = root.querySelector<HTMLElement>('.ran-disclosure-row')!;
-    this._title = root.querySelector<HTMLElement>('.ran-disclosure-title')!;
-    this._summary = root.querySelector<HTMLElement>('.ran-disclosure-summary')!;
-    this._sep = root.querySelector<HTMLElement>('.ran-disclosure-sep')!;
+    this._row = shadowPart(row, 'row');
+    this._title = shadowPart(title, 'title');
+    this._summary = shadowPart(summary, 'summary');
+    this._sep = shadowPart(sep, 'separator');
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────

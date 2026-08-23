@@ -1,6 +1,6 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { RanElement, falseList, isDisabled } from '@/utils/index';
-import { Div, EventManager, InputBuilder, Slot, Span } from '@/utils/builder';
+import { createRef, Div, EventManager, InputBuilder, Slot, Span } from '@/utils/builder';
 import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import {
   ensureShadowElement,
@@ -8,6 +8,7 @@ import {
   getStringAttribute,
   setBooleanAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import checkboxCss from './index.less?inline';
@@ -45,6 +46,9 @@ export class Checkbox extends RanElement {
       this._internals = undefined;
     }
     this._shadowDom = ensureShadowRoot(this, checkboxCss);
+    const containerRef = createRef<HTMLDivElement>();
+    const checkInputRef = createRef<HTMLInputElement>();
+    const checkInnerRef = createRef<HTMLSpanElement>();
     const wrapper = ensureShadowElement(this._shadowDom, '.ran-checkbox-wrapper', () =>
       Div()
         .class('ran-checkbox-wrapper')
@@ -52,19 +56,20 @@ export class Checkbox extends RanElement {
         .children(
           Div()
             .class('ran-checkbox')
+            .ref(containerRef)
             .part('checkbox')
             .children(
-              InputBuilder().class('ran-checkbox-input').part('input').attr('type', 'checkbox'),
-              Span().class('ran-checkbox-inner').part('inner'),
+              InputBuilder().class('ran-checkbox-input').ref(checkInputRef).part('input').attr('type', 'checkbox'),
+              Span().class('ran-checkbox-inner').ref(checkInnerRef).part('inner'),
             ),
           Span().class('ran-checkbox-label').part('label').children(Slot()),
         )
         .build(),
     );
 
-    this.container = wrapper.querySelector('.ran-checkbox') as HTMLElement;
-    this.checkInput = wrapper.querySelector('.ran-checkbox-input') as HTMLInputElement;
-    this.checkInner = wrapper.querySelector('.ran-checkbox-inner') as HTMLSpanElement;
+    this.container = shadowPart(containerRef, 'ran checkbox');
+    this.checkInput = shadowPart(checkInputRef, 'input');
+    this.checkInner = shadowPart(checkInnerRef, 'inner');
     // The host is the accessible checkbox (see connectedCallback); the inner
     // <input> is a decorative visual/hit target, so keep it out of the a11y tree
     // and tab order to avoid a duplicate, always-unchecked checkbox node.

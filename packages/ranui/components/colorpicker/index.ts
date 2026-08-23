@@ -1,6 +1,6 @@
 import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hexToHsv, hsvToRgb, range, rgbToHex, rgbToHsv } from 'ranuts/utils';
 import { signal, createEffect, RanElement, isDisabled } from '@/utils/index';
-import { Div, View, EventManager, Style } from '@/utils/builder';
+import { createRef, Div, EventManager, Style, View } from '@/utils/builder';
 import '@/components/popover';
 import '@/components/input';
 import '@/components/select';
@@ -10,6 +10,7 @@ import {
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import colorPickerCss from './index.less?inline';
@@ -77,14 +78,22 @@ export class ColorPicker extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, colorPickerCss);
+    const popoverContentRef = createRef<HTMLElement>();
+    const colorpickerRef = createRef<HTMLDivElement>();
+    const colorpickerInnerRef = createRef<HTMLDivElement>();
     const popoverBlock = ensureShadowElement(this._shadowDom, 'r-popover', () => {
-      const colorpickerInner = Div().class('ran-colorpicker-inner').part('swatch').build() as HTMLDivElement;
+      const colorpickerInner = Div()
+        .class('ran-colorpicker-inner')
+        .ref(colorpickerInnerRef)
+        .part('swatch')
+        .build() as HTMLDivElement;
       const colorpicker = Div()
         .class('ran-colorpicker-block')
+        .ref(colorpickerRef)
         .part('block')
         .children(colorpickerInner)
         .build() as HTMLDivElement;
-      const popoverContent = View('r-content').class('ran-content').build() as HTMLElement;
+      const popoverContent = View('r-content').ref(popoverContentRef).class('ran-content').build() as HTMLElement;
       return (
         View('r-popover')
           .class('ran-popover')
@@ -101,9 +110,9 @@ export class ColorPicker extends RanElement {
       );
     });
     this.popoverBlock = popoverBlock;
-    this.popoverContent = popoverBlock.querySelector('r-content') as HTMLElement;
-    this.colorpicker = popoverBlock.querySelector('.ran-colorpicker-block') as HTMLDivElement;
-    this.colorpickerInner = popoverBlock.querySelector('.ran-colorpicker-inner') as HTMLDivElement;
+    this.popoverContent = shadowPart(popoverContentRef, 'r content');
+    this.colorpicker = shadowPart(colorpickerRef, 'block');
+    this.colorpickerInner = shadowPart(colorpickerInnerRef, 'inner');
     // The swatch is the trigger: make it a focusable button that opens the picker
     // (keyboard support wired in connectedCallback) and announces its purpose.
     this.colorpicker.setAttribute('role', 'button');

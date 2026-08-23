@@ -1,11 +1,12 @@
 import { RanElement } from '@/utils/index';
-import { Div, View, EventManager } from '@/utils/builder';
+import { createRef, Div, EventManager, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
-  setStringAttribute,
   setBooleanAttribute,
+  setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 // Registers <r-icon>; the opt-in toolbar's <r-icon name="copy"> resolves its SVG via
@@ -81,15 +82,22 @@ export class Math extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, `${mathCss}\n${temmlCss}`);
+    const containRef = createRef<HTMLDivElement>();
+    const toolbarRef = createRef<HTMLDivElement>();
+    const mathRef = createRef<HTMLElement>();
+    const iconRef = createRef<HTMLElement>();
     this._wrap = ensureShadowElement(this._shadowDom, '.ran-math', () =>
       Div()
         .class('ran-math')
         .part('math')
-        .children(Div().class('ran-math-render').part('render'), Div().class('ran-math-toolbar').part('toolbar'))
+        .children(
+          Div().class('ran-math-render').ref(containRef).part('render'),
+          Div().class('ran-math-toolbar').ref(toolbarRef).part('toolbar'),
+        )
         .build(),
     );
-    this.contain = this._wrap.querySelector('.ran-math-render') as HTMLElement;
-    this._toolbar = this._wrap.querySelector('.ran-math-toolbar') as HTMLElement;
+    this.contain = shadowPart(containRef, 'render');
+    this._toolbar = shadowPart(toolbarRef, 'toolbar');
   }
   // ── Accessors ─────────────────────────────────────────────────────────────
   // Source: URI-encoded `latex` attribute (so `{`, `\`, newlines survive HTML

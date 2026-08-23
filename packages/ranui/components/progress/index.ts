@@ -1,11 +1,12 @@
 import { range } from 'ranuts/utils';
 import progressCss from './index.less?inline';
-import { Div, EventManager, RanElement } from '@/utils/index';
+import { createRef, Div, EventManager, RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -56,21 +57,28 @@ export class Progress extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, progressCss);
+    const progressWrapRef = createRef<HTMLDivElement>();
+    const progressWrapValueRef = createRef<HTMLDivElement>();
+    const progressDotRef = createRef<HTMLDivElement>();
 
     const container = ensureShadowElement(this._shadowDom, '.ran-progress', () =>
       Div()
         .class('ran-progress')
         .children(
-          Div().class('ran-progress-wrap').part('track').children(Div().class('ran-progress-wrap-value').part('fill')),
-          Div().class('ran-progress-dot').part('dot'),
+          Div()
+            .class('ran-progress-wrap')
+            .ref(progressWrapRef)
+            .part('track')
+            .children(Div().class('ran-progress-wrap-value').ref(progressWrapValueRef).part('fill')),
+          Div().class('ran-progress-dot').ref(progressDotRef).part('dot'),
         )
         .build(),
     );
 
     this._progress = container;
-    this._progressWrap = container.querySelector('.ran-progress-wrap')!;
-    this._progressWrapValue = container.querySelector('.ran-progress-wrap-value')!;
-    this._progressDot = container.querySelector('.ran-progress-dot')!;
+    this._progressWrap = shadowPart(progressWrapRef, 'wrap');
+    this._progressWrapValue = shadowPart(progressWrapValueRef, 'wrap value');
+    this._progressDot = shadowPart(progressDotRef, 'dot');
   }
 
   get percent(): string {

@@ -1,11 +1,12 @@
 import componentCss from './index.less?inline';
-import { ButtonBuilder, Div, EventManager, Span, View } from '@/utils/builder';
+import { ButtonBuilder, createRef, Div, EventManager, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -112,19 +113,21 @@ export class ToolCard extends RanElement {
 
     // Built through the builder, not `document.createElement`: this constructor also runs
     // during server rendering, where there is no document. The SSR gate is what says so.
+    const dot = createRef<StateDot>();
+    const body = createRef<HTMLDivElement>();
     const row = ensureShadowElement(this._shadowDom, 'r-disclosure-row', () =>
       View('r-disclosure-row')
         .attr('part', 'row')
         .children(
-          View('r-state-dot').attr('slot', 'leading').build(),
-          Div().class('ran-tool-card-body').attr('part', 'body').build(),
+          View('r-state-dot').ref(dot).attr('slot', 'leading').build(),
+          Div().class('ran-tool-card-body').ref(body).attr('part', 'body').build(),
         )
         .build(),
     ) as DisclosureRow;
 
     this._row = row;
-    this._dot = row.querySelector<HTMLElement>('r-state-dot') as StateDot;
-    this._body = row.querySelector<HTMLElement>('.ran-tool-card-body')!;
+    this._dot = shadowPart(dot, 'state dot');
+    this._body = shadowPart(body, 'body');
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────
