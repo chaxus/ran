@@ -133,6 +133,43 @@ Per-axis label styling (`backgroundColor`, `fontSize`, `fontColor`) can be set o
 ></r-radar>
 ```
 
+### Complete Example Data
+
+An HTML `attribute` can only carry a `string`, so the data goes in as a `json` string and is
+parsed back into an array of objects with `JSON.parse` — malformed `JSON` cannot be parsed:
+
+```json
+[
+  {
+    "abilityName": "HP",
+    "scoreRate": "10",
+    "backgroundColor": "red",
+    "fontSize": "30",
+    "fontColor": "blue"
+  },
+  {
+    "abilityName": "ATK",
+    "scoreRate": "90"
+  },
+  {
+    "abilityName": "DEF",
+    "scoreRate": "20"
+  },
+  {
+    "abilityName": "Elemental Mastery",
+    "scoreRate": "50"
+  },
+  {
+    "abilityName": "Crit Rate",
+    "scoreRate": "80"
+  },
+  {
+    "abilityName": "Crit DMG",
+    "scoreRate": "50"
+  }
+]
+```
+
 ### CSS Variables
 
 The chart colors can also be set (theme-reactively) through CSS custom properties on the host:

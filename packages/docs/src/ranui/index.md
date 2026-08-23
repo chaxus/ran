@@ -24,8 +24,56 @@ Development scheme based on `Web Components`
 <a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
 <a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-- `git`：<a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`https://github.com/chaxus/ran/tree/main/packages/ranui`</a>
+- `git`：<a href="https://github.com/chaxus/ran">`https://github.com/chaxus/ran`</a>
 - `npm`：<a href="https://www.npmjs.com/package/ranui">`https://www.npmjs.com/package/ranui`</a>
+
+## Install
+
+With npm:
+
+```console
+npm install ranui --save
+```
+
+## Import
+
+Support for on-demand import
+
+```js
+import 'ranui/button';
+```
+
+If there is a style problem, you can import the style manually
+
+```js
+import 'ranui/style';
+```
+
+If there is a type problem, you can manually import the type
+
+```ts
+import 'ranui/types';
+```
+
+Or
+
+```ts
+import 'ranui/dist/typings';
+```
+
+It can also be imported globally, which is more convenient, so that there is no need to consider anything, so that it is done.
+
+- `ES module`
+
+```js
+import 'ranui';
+```
+
+- `UMD`, `IIFE`, `CJS`
+
+```html
+<script src="./ranui/dist/umd/index.umd.cjs"></script>
+```
 
 ## Usage
 
@@ -118,46 +166,6 @@ const FilePreview = () => {
     </div>
   );
 };
-```
-
-## Import
-
-Support for on-demand import
-
-```js
-import 'ranui/button';
-```
-
-If there is a style problem, you can import the style manually
-
-```js
-import 'ranui/style';
-```
-
-If there is a type problem, you can manually import the type
-
-```ts
-import 'ranui/types';
-```
-
-Or
-
-```ts
-import 'ranui/dist/typings';
-```
-
-It can also be imported globally, which is more convenient, so that there is no need to consider anything, so that it is done.
-
-- `ES module`
-
-```js
-import 'ranui';
-```
-
-- `UMD`, `IIFE`, `CJS`
-
-```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
 
 ## Overview

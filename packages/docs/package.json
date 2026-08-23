@@ -8,6 +8,7 @@
     "dev": "vitepress dev",
     "build": "sh ./bin/build.sh",
     "tsc": "tsc --noEmit",
+    "verify:mirror": "tsx ./bin/verify-bilingual-mirror.ts",
     "serve": "vitepress serve"
   },
   "repository": {

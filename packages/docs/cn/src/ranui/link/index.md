@@ -94,7 +94,7 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 
 ## 样式
 
-可点击的 `<a>` 位于封闭的 Shadow Root 中，不暴露任何 `::part()`。它读取全局的 `--ran-color-link`、`--ran-color-primary`（聚焦环）与 `--ran-radius-sm` 令牌 —— 不存在组件级的 `--ran-link-*` 变量。请直接为宿主设置样式、覆盖这些令牌，或通过 `sheet` 注入锚点样式。宿主还通过 `:host([active]) a` 定义了激活态样式（加粗 + 下划线），因此你可以设置 `active` 属性来标记当前链接。
+主题令牌用全局的，不是组件级的 —— `--ran-link-*` 并不存在。
 
 ```css
 r-link {

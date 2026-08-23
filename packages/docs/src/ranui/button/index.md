@@ -93,6 +93,10 @@ Button component for triggering instant actions with multiple styles and states.
 
 ## Events
 
+### Click Event
+
+The button supports standard click handling.
+
 ```html
 <r-button onclick="handleClick()">Click Me</r-button>
 

@@ -228,7 +228,7 @@ CMD node demos/01.js
 $ docker container run --rm - p 8000:3000 -it koa-demo:0.0.1
 ```
 
-# 问题：
+## 问题
 
 1. 如果遇到 docker desktop 登录不上，可以尝试 `docker login`进行登录，命令行登录会输出错误的信息，如果发现是网络问题，换一个代理即可。
 2. `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`

@@ -99,3 +99,13 @@ CSS injected into the link's shadow DOM — the same `sheet` convention used by 
 - **Active state**: The host styles `:host([active]) a` (bold + underline), so set the `active` attribute to mark the current link.
 - **Styling as a button/card**: Put the surface (background, border, radius) on the host, and inject the `<a>` box model (`display`, `padding`, `width`) through `sheet` so the whole area is clickable.
 - **Theming**: The `<a>` reads the global `--ran-color-link`, `--ran-color-primary` (focus ring), and `--ran-radius-sm` tokens — override those tokens rather than expecting component-scoped `--ran-link-*` variables (there are none).
+
+## Styling
+
+Theme through the global tokens, not component-scoped ones — there are no `--ran-link-*`.
+
+```css
+r-link {
+  --ran-color-link: var(--brand);
+}
+```
