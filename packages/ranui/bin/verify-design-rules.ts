@@ -20,7 +20,6 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(process.cwd());
-const COMPONENTS_DIR = path.join(ROOT, 'components');
 const BASELINE_FILE = path.join(ROOT, 'docs', 'design-rule-baseline.json');
 const UPDATE = process.argv.includes('--update-baseline');
 

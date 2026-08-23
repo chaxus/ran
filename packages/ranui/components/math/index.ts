@@ -83,8 +83,6 @@ export class Math extends RanElement {
     this._shadowDom = ensureShadowRoot(this, `${mathCss}\n${temmlCss}`);
     const containRef = createRef<HTMLDivElement>();
     const toolbarRef = createRef<HTMLDivElement>();
-    const mathRef = createRef<HTMLElement>();
-    const iconRef = createRef<HTMLElement>();
     this._wrap = Div()
       .class('ran-math')
       .part('math')

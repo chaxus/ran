@@ -28,6 +28,8 @@ describe('the URL a model may ask the server to fetch', () => {
       'http://169.254.169.254/latest/meta-data/',
       'http://[::1]/',
       'http://[fd00::1]/',
+      // Both halves of the unique-local range: fc00::/8 and fd00::/8.
+      'http://[fc00::1]/',
     ]) {
       expect(allowedUrl(host)).toMatchObject({ error: '不允许访问内网地址' });
     }

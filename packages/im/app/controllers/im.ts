@@ -312,12 +312,14 @@ export function allowedUrl(raw: string): { url: URL } | { error: string } {
     host === 'localhost' ||
     host.endsWith('.localhost') ||
     host === '::1' ||
-    /^127\./.test(host) ||
-    /^10\./.test(host) ||
-    /^192\.168\./.test(host) ||
+    host.startsWith('127.') ||
+    host.startsWith('10.') ||
+    host.startsWith('192.168.') ||
+    // The only one that stays a regex: 172.16–172.31 is a range, not a prefix.
     /^172\.(1[6-9]|2\d|3[01])\./.test(host) ||
-    /^169\.254\./.test(host) ||
-    /^f[cd]/.test(host)
+    host.startsWith('169.254.') ||
+    host.startsWith('fc') ||
+    host.startsWith('fd')
   ) {
     return { error: '不允许访问内网地址' };
   }

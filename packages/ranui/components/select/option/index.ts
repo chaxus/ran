@@ -1,6 +1,6 @@
-import { createRef, Div, Slot } from '@/utils/builder';
+import { Div, Slot } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
-import { ensureShadowRoot, setStringAttribute, shadowPart, syncSheetAttribute } from '@/utils/component';
+import { ensureShadowRoot, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 export class Option extends RanElement {
