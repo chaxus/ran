@@ -30,14 +30,20 @@
  *   }
  */
 export class EventManager {
-  private ac: AbortController;
-
-  constructor() {
-    this.ac = new AbortController();
-  }
+  /**
+   * Created on first use, and dropped again by {@link abort}.
+   *
+   * No component registers a listener in its constructor — they all wait for
+   * `connectedCallback` — and some managers, like the drag-scoped one in `r-progress`,
+   * only ever register during an interaction that may not happen. Allocating eagerly
+   * charged every construction, and every `abort()`, for a controller that might go unused:
+   * about 30% of a mount/unmount cycle for `r-progress`.
+   */
+  private ac: AbortController | null = null;
 
   /** The underlying AbortSignal — pass to addEventListener options directly if needed. */
   get signal(): AbortSignal {
+    this.ac ??= new AbortController();
     return this.ac.signal;
   }
 
@@ -54,7 +60,7 @@ export class EventManager {
     options?: Omit<AddEventListenerOptions, 'signal'>,
   ): this;
   on(target: EventTarget, type: string, handler: any, options?: Omit<AddEventListenerOptions, 'signal'>): this {
-    target.addEventListener(type, handler, { ...options, signal: this.ac.signal });
+    target.addEventListener(type, handler, { ...options, signal: this.signal });
     return this;
   }
 
@@ -81,17 +87,17 @@ export class EventManager {
         const target = (ev.target as Element | null)?.closest(selector);
         if (target && parent.contains(target)) handler(ev as HTMLElementEventMap[K], target);
       },
-      { ...options, signal: this.ac.signal },
+      { ...options, signal: this.signal },
     );
     return this;
   }
 
   /**
-   * Remove all registered listeners and reset internal AbortController.
-   * Safe to call multiple times; next on() / delegate() calls start fresh.
+   * Remove all registered listeners and drop the controller.
+   * Safe to call multiple times; the next on() / delegate() starts a fresh one.
    */
   abort(): void {
-    this.ac.abort();
-    this.ac = new AbortController();
+    this.ac?.abort();
+    this.ac = null;
   }
 }
