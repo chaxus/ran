@@ -78,6 +78,7 @@ const drop = document.querySelector('#drop') as HTMLElement;
 const sessionList = document.querySelector('#sessions-list') as HTMLElement;
 const newSession = document.querySelector('#new-session') as HTMLElement;
 const meter = document.querySelector('#tokens') as HTMLElement & { limit: number; used: number; spent: number };
+const elapsed = document.querySelector('#elapsed') as HTMLElement;
 
 /**
  * How many messages a page adds.
@@ -105,6 +106,14 @@ let store: SessionStore;
 let current: Session;
 let inFlight: DialogStream | null = null;
 /**
+ * Cancels the exchange in flight — the request *and* whatever its tools are waiting on.
+ *
+ * One per exchange rather than per round: Stop means "this whole thing", and a controller
+ * that only covered the current request would let a fetch the model started keep running and
+ * deliver its answer into a conversation that had moved on.
+ */
+let cancelExchange: AbortController | null = null;
+/**
  * The model's context window, as the server reported it on the last response.
  *
  * Zero until the first request comes back, which is the honest state: the browser does not
@@ -125,14 +134,36 @@ let shown = PAGE_SIZE;
 /** Reported once per page, not once per failed write, so a full disk does not become a wall. */
 let storageWarned = false;
 
+/** Ticks the running clock; null while nothing is running. */
+let elapsedTimer: ReturnType<typeof setInterval> | null = null;
+
 /**
- * Reflects whether a request is running into the two buttons that depend on it.
+ * Reflects whether a request is running into the two buttons that depend on it, and runs the
+ * clock beside the composer.
+ *
+ * A turn that calls tools can take a while with nothing on screen changing — the answer has
+ * not started and the tool rows are done. Without a clock the only signal that anything is
+ * happening is that Stop is enabled, which is not a signal anyone reads.
  *
  * @param running Whether a request is in flight.
  */
 function setRunning(running: boolean): void {
   send.disabled = running;
   stop.disabled = !running;
+
+  if (elapsedTimer !== null) clearInterval(elapsedTimer);
+  elapsedTimer = null;
+  elapsed.hidden = !running;
+  if (!running) return;
+
+  const startedAt = Date.now();
+  const tick = (): void => {
+    elapsed.textContent = `运行中 · ${((Date.now() - startedAt) / 1000).toFixed(1)}s`;
+  };
+  tick();
+  // Ten a second is smooth enough to read as a clock and cheap enough to ignore; the row is
+  // one text node.
+  elapsedTimer = setInterval(tick, 100);
 }
 
 /**
@@ -181,6 +212,7 @@ async function ask(text: string): Promise<void> {
   await renderSessions();
 
   setRunning(true);
+  cancelExchange = new AbortController();
   await runStep(0);
 }
 
@@ -531,7 +563,7 @@ function sendRound(step: number): Promise<void> {
           renderMeter();
         },
         onUpdate: (snapshot) => {
-          const next = eventsFromSnapshot(round, snapshot, emitted);
+          const next = eventsFromSnapshot(round, snapshot, emitted, Date.now());
           emitted = next.emitted;
           for (const event of next.events) {
             if (event.type === 'turn/start') answered = true;
@@ -561,7 +593,7 @@ function sendRound(step: number): Promise<void> {
           }
 
           if (calls.length === 0) {
-            chat.push({ type: 'turn/end', id: round });
+            chat.push({ type: 'turn/end', id: round, at: Date.now() });
             if (text !== '') current.messages.push({ role: 'assistant', content: text });
             renderMeter();
             setRunning(false);
@@ -609,7 +641,16 @@ async function continueWithTools(
 
   // Concurrently: the model asked for all of them at once, and running them in sequence
   // would make two independent lookups cost the sum of their latencies for no reason.
-  const outcomes = await Promise.all(calls.map((call) => runTool(call.name, parseToolArgs(call.arguments))));
+  const signal = cancelExchange?.signal ?? new AbortController().signal;
+  const outcomes = await Promise.all(calls.map((call) => runTool(call.name, parseToolArgs(call.arguments), signal)));
+
+  // Stopped while the tools ran. Their results belong to an exchange the reader ended, and
+  // feeding them back would start another round they did not ask for.
+  if (signal.aborted) {
+    setRunning(false);
+    await closeBranch();
+    return;
+  }
 
   outcomes.forEach((outcome, ordinal) => {
     const call = calls[ordinal];
@@ -987,7 +1028,11 @@ composer.addEventListener('submit', (event) => {
 });
 
 send.addEventListener('click', () => composer.requestSubmit());
-stop.addEventListener('click', () => inFlight?.close());
+stop.addEventListener('click', () => {
+  // Both halves: the stream this round is reading, and anything its tools are waiting on.
+  cancelExchange?.abort();
+  inFlight?.close();
+});
 
 // Resolves the light/dark choice `r-theme-switch` offers, and the `system` default it starts
 // on, before the first interaction rather than after it.

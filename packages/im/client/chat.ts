@@ -16,13 +16,15 @@ import { TOOLS, parseToolArgs } from '@/client/tools/index';
 export type ChatEvent =
   | { type: 'turn/start'; id: string; role: TurnRole; text: string; images?: readonly string[] }
   | { type: 'turn/text'; id: string; text: string }
-  | { type: 'turn/end'; id: string }
+  | { type: 'turn/end'; id: string; at?: number }
   | { type: 'turn/error'; id: string; message: string }
   // Sent for a row that has recorded alternatives, so the row can offer to switch between
   // them. Separate from `turn/start` because branch state is a fact about the stored
   // conversation, and a live row being streamed has no idea whether it will gain one.
   | { type: 'turn/branch'; id: string; current: number; total: number }
-  | { type: 'reasoning/start'; id: string }
+  // Carries the clock because a projection must be replayable: reading `Date.now()` inside
+  // the view would make a reload compute a different duration than the one the reader saw.
+  | { type: 'reasoning/start'; id: string; at: number }
   | { type: 'reasoning/text'; id: string; text: string }
   // A tool call opens as soon as its name is known and its arguments are still arriving, so
   // the reader sees `抓取网页` before the URL rather than a blank pause the length of the
@@ -56,6 +58,9 @@ interface TurnState {
 interface ReasoningState {
   text: string;
   streaming: boolean;
+  /** When the thinking began, and how long it took once it stopped. */
+  startedAt: number;
+  durationMs: number | null;
 }
 
 interface ToolState {
@@ -70,7 +75,12 @@ interface ToolState {
 type ContentElement = HTMLElement & { content: string };
 
 /** `r-reasoning`, as far as this file needs it. */
-type ReasoningElement = HTMLElement & { content: string; streaming: boolean; label: string };
+type ReasoningElement = HTMLElement & {
+  content: string;
+  streaming: boolean;
+  label: string;
+  duration: number | null;
+};
 
 /** One row per message, whoever wrote it. */
 export const turnView: ConversationNodeView<ChatEvent, TurnState> = {
@@ -289,12 +299,20 @@ function messageIndex(id: string): number | null {
   return match === null ? null : Number(match[1]);
 }
 
-/** Buttons a row can show, in the order they appear. */
-const ACTION_LABELS: { action: TurnAction; label: string }[] = [
-  { action: 'previous', label: '‹' },
-  { action: 'next', label: '›' },
-  { action: 'edit', label: '编辑' },
-  { action: 'regenerate', label: '重新生成' },
+/**
+ * Buttons a row can show, in the order they appear.
+ *
+ * Icons rather than words. Two text buttons under every message reserve a line of their own
+ * whether or not anyone is looking at them — and they have to reserve it, because revealing
+ * them on hover would otherwise shift the whole transcript under the pointer. An icon row
+ * costs a third of the height for the same affordance, and `ARIA_LABELS` is what actually
+ * names each one.
+ */
+const ACTION_LABELS: { action: TurnAction; icon: string }[] = [
+  { action: 'previous', icon: 'chevron-down' },
+  { action: 'next', icon: 'chevron-down' },
+  { action: 'edit', icon: 'pencil' },
+  { action: 'regenerate', icon: 'refresh' },
 ];
 
 /**
@@ -316,12 +334,15 @@ function actionBar(index: number | null): HTMLElement {
   const bar = document.createElement('div');
   bar.className = 'turn-actions';
   bar.append(
-    ...ACTION_LABELS.map(({ action, label }) => {
+    ...ACTION_LABELS.map(({ action, icon }) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = `turn-action turn-action-${action}`;
       button.dataset.action = action;
-      button.textContent = label;
+      const glyph = document.createElement('r-icon');
+      glyph.setAttribute('name', icon);
+      glyph.setAttribute('size', '14');
+      button.appendChild(glyph);
       button.hidden = true;
       button.addEventListener('click', () => {
         if (index === null) return;
@@ -395,10 +416,17 @@ export const reasoningView: ConversationNodeView<ChatEvent, ReasoningState> = {
     if (event.type === 'reasoning/text' || event.type === 'turn/end') return { id: event.id, role: 'update' };
     return null;
   },
-  start: () => ({ text: '', streaming: true }),
+  start: (event) => ({
+    text: '',
+    streaming: true,
+    startedAt: event.type === 'reasoning/start' ? event.at : 0,
+    durationMs: null,
+  }),
   update: (state, event) => {
     if (event.type === 'reasoning/text') return { ...state, text: state.text + event.text };
-    if (event.type === 'turn/end') return { ...state, streaming: false };
+    if (event.type === 'turn/end') {
+      return { ...state, streaming: false, durationMs: event.at === undefined ? null : event.at - state.startedAt };
+    }
     return state;
   },
   publication: (event) => (event.type === 'reasoning/text' ? 'animation-frame' : 'immediate'),
@@ -411,6 +439,9 @@ export const reasoningView: ConversationNodeView<ChatEvent, ReasoningState> = {
     const reasoning = element as ReasoningElement;
     reasoning.content = node.state.text;
     reasoning.streaming = node.state.streaming;
+    // The element hides anything under a second on its own; this only has to stop reporting
+    // a duration it does not have.
+    reasoning.duration = node.state.durationMs;
   },
 };
 
@@ -504,12 +535,16 @@ export const NOTHING_EMITTED: EmittedSoFar = { text: 0, reasoning: 0, tools: [] 
  * @param id The turn these belong to.
  * @param snapshot The latest snapshot.
  * @param emitted How much has already been emitted.
+ * @param now The current time, passed in rather than read here: this runs again on every
+ *   replay, and a clock read inside it would make a reloaded conversation report a different
+ *   duration than the one the reader watched.
  * @returns The new events, and the counts to pass in next time.
  */
 export function eventsFromSnapshot(
   id: string,
   snapshot: StreamSnapshot,
   emitted: EmittedSoFar,
+  now: number,
 ): { events: ChatEvent[]; emitted: EmittedSoFar } {
   const join = (type: 'text' | 'reasoning'): string =>
     snapshot.blocks.reduce((out, block) => (block.type === type ? out + block.text : out), '');
@@ -521,7 +556,7 @@ export function eventsFromSnapshot(
   // Reasoning first, and its node opens on the first delta rather than with the request, so
   // a model that reports none leaves no empty block behind.
   if (reasoning.length > emitted.reasoning) {
-    if (emitted.reasoning === 0) events.push({ type: 'reasoning/start', id });
+    if (emitted.reasoning === 0) events.push({ type: 'reasoning/start', id, at: now });
     events.push({ type: 'reasoning/text', id, text: reasoning.slice(emitted.reasoning) });
   }
   if (text.length > emitted.text) {

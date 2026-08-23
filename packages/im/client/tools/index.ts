@@ -56,10 +56,13 @@ export interface ToolDefinition {
    * Performs the call.
    *
    * @param args The arguments the model sent.
+   * @param signal Aborted when the reader stops the exchange. A tool that waits on anything
+   *   — a network call, a subprocess — must pass this on, or Stop will leave it running and
+   *   the answer it produces will arrive in a conversation that moved on without it.
    * @returns The text the model reads back. Throwing is reserved for a genuine defect;
    *   an expected failure is a returned sentence, because the model can act on that.
    */
-  run: (args: ToolArgs) => Promise<string>;
+  run: (args: ToolArgs, signal: AbortSignal) => Promise<string>;
 }
 
 /**
@@ -141,7 +144,7 @@ const fetchUrl: ToolDefinition = {
     input: { 地址: str(args, 'url') },
   }),
   result: (_args, output) => ({ card: 'generic', content: output }),
-  run: async (args) => {
+  run: async (args, signal) => {
     const url = str(args, 'url');
     if (url === '') return '没有提供地址。';
     // Through this app's own server: a browser cannot fetch a third-party page from a page,
@@ -150,6 +153,7 @@ const fetchUrl: ToolDefinition = {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ url }),
+      signal,
     });
     const body = (await response.json()) as { text?: string; error?: string };
     if (typeof body.error === 'string') return `抓取失败：${body.error}`;
@@ -254,14 +258,19 @@ export interface ToolOutcome {
  *
  * @param name The tool the model named.
  * @param args Its parsed arguments.
+ * @param signal Aborted when the reader stops the exchange.
  * @returns The text the model reads back, and whether it describes a failure.
  */
-export async function runTool(name: string, args: ToolArgs): Promise<ToolOutcome> {
+export async function runTool(name: string, args: ToolArgs, signal: AbortSignal): Promise<ToolOutcome> {
   const tool = TOOLS.get(name);
   if (tool === undefined) return { output: `没有名为 ${name} 的工具。`, failed: true };
   try {
-    return { output: await tool.run(args), failed: false };
+    return { output: await tool.run(args, signal), failed: false };
   } catch (error) {
+    // An abort is the reader pressing Stop, not a failure the model should read about — the
+    // caller drops the whole exchange, and a sentence about it would only be sent back if it
+    // did not.
+    if (signal.aborted) return { output: '已取消。', failed: true };
     return { output: `工具执行失败：${error instanceof Error ? error.message : String(error)}`, failed: true };
   }
 }

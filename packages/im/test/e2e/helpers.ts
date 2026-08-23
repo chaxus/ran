@@ -1,29 +1,7 @@
 import type { Page } from '@playwright/test';
+import { insideShadow } from 'ranui/testing';
 
-/**
- * Reads a measurement from inside a component's shadow root.
- *
- * ranui components use **closed** shadow roots, which Playwright's locators cannot pierce —
- * `getByRole`, `getByText` and `querySelector` all stop at the boundary and find nothing.
- * The instance property `_shadowDom` does cross, and is the seam ranui's own tests use.
- *
- * @param page The page under test.
- * @param host Selector for the component in the document.
- * @param read Runs against the component's shadow root; must return a serialisable value.
- * @returns Whatever `read` returned.
- */
-export async function insideShadow<T>(page: Page, host: string, read: (root: ShadowRoot) => T): Promise<T> {
-  return page.evaluate(
-    ({ selector, source }) => {
-      const element = document.querySelector(selector) as (HTMLElement & { _shadowDom?: ShadowRoot }) | null;
-      if (element?._shadowDom === undefined) throw new Error(`no shadow root on ${selector}`);
-      // eslint-disable-next-line no-new-func -- the function is authored in this repo and
-      // serialised across the page boundary, which is the only way to pass one in.
-      return (new Function(`return (${source})`)() as (root: ShadowRoot) => unknown)(element._shadowDom);
-    },
-    { selector: host, source: read.toString() },
-  ) as Promise<T>;
-}
+export { insideShadow };
 
 /**
  * Opens the app on an empty conversation, with nothing carried over from another spec.

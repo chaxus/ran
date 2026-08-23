@@ -3,7 +3,7 @@
 .turn {
   display: flex;
   flex-direction: column;
-  gap: var(--ran-space-2);
+  gap: var(--ran-space-1);
   min-width: 0;
 }
 
@@ -50,16 +50,31 @@
   opacity: 1;
 }
 
+/* An icon button with no line box, so the row it reserves is the height of a target rather
+   than the height of a line of text plus padding.
+   24px is the floor, not a preference: it is the minimum pointer target size (WCAG 2.5.8),
+   and this row is small and quiet enough already without being hard to hit. */
 .turn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   border-radius: var(--ran-radius-sm);
   background: none;
-  padding: var(--ran-space-1) var(--ran-space-2);
+  padding: 0;
+  width: 24px;
+  height: 24px;
   color: var(--ran-color-text-disabled);
-  font: inherit;
-  font-size: var(--ran-text-label-3);
-  line-height: 1;
   cursor: pointer;
+}
+
+/* The two branch chevrons are one icon turned; `chevron-down` is the only one shipped. */
+.turn-action-previous r-icon {
+  transform: rotate(90deg);
+}
+
+.turn-action-next r-icon {
+  transform: rotate(-90deg);
 }
 
 .turn-action:hover {

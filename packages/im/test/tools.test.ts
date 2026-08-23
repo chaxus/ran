@@ -38,20 +38,20 @@ describe('the tool registry', () => {
 
   it('reports an unknown tool back to the model instead of failing the turn', () => {
     // The model is mid-turn; its next move depends on reading what went wrong.
-    return runTool('no_such_tool', {}).then((outcome) => {
+    return runTool('no_such_tool', {}, new AbortController().signal).then((outcome) => {
       expect(outcome.failed).toBe(true);
       expect(outcome.output).toContain('no_such_tool');
     });
   });
 
   it('names an invalid timezone back rather than reporting the tool broken', async () => {
-    const outcome = await runTool('get_current_time', { timezone: 'Middle/Earth' });
+    const outcome = await runTool('get_current_time', { timezone: 'Middle/Earth' }, new AbortController().signal);
     expect(outcome.failed).toBe(false);
     expect(outcome.output).toContain('Middle/Earth');
   });
 
   it('answers with a formatted time when the timezone is real', async () => {
-    const outcome = await runTool('get_current_time', { timezone: 'Asia/Shanghai' });
+    const outcome = await runTool('get_current_time', { timezone: 'Asia/Shanghai' }, new AbortController().signal);
     expect(outcome.output).toMatch(/\d{4}/);
   });
 
@@ -60,14 +60,14 @@ describe('the tool registry', () => {
     expect(write).toBeDefined();
     if (write === undefined) return;
 
-    const first = await runTool('write_note', { name: 'plan.md', content: 'one' });
+    const first = await runTool('write_note', { name: 'plan.md', content: 'one' }, new AbortController().signal);
     // A create has nothing to diff against, and the card says so with a null old side.
     expect(write.result({ name: 'plan.md', content: 'one' }, first.output)).toEqual({
       card: 'diff',
       diffs: [{ path: 'plan.md', oldText: null, newText: 'one' }],
     });
 
-    const second = await runTool('write_note', { name: 'plan.md', content: 'two' });
+    const second = await runTool('write_note', { name: 'plan.md', content: 'two' }, new AbortController().signal);
     expect(write.result({ name: 'plan.md', content: 'two' }, second.output)).toEqual({
       card: 'diff',
       diffs: [{ path: 'plan.md', oldText: 'one', newText: 'two' }],
@@ -78,7 +78,7 @@ describe('the tool registry', () => {
     // The call view may not read the note map: a replayed conversation has an empty one and
     // would draw a diff the user never saw.
     const write = TOOLS.get('write_note');
-    await runTool('write_note', { name: 'notes.md', content: 'before' });
+    await runTool('write_note', { name: 'notes.md', content: 'before' }, new AbortController().signal);
     expect(write?.call({ name: 'notes.md', content: 'after' })).toEqual({
       card: 'diff',
       title: '写入 notes.md',
@@ -96,5 +96,48 @@ describe('the tool registry', () => {
 
     const fetch = TOOLS.get('fetch_url');
     expect(fetch?.call({ url: 'https://a.test' })).toMatchObject({ summary: 'https://a.test' });
+  });
+
+  it('reports a cancelled call as cancelled, not as a failure to explain', () => {
+    // Stop is the reader ending the exchange. The caller drops the whole thing, so there is
+    // nobody to read a sentence about what went wrong.
+    const controller = new AbortController();
+    controller.abort();
+    return runTool('get_current_time', {}, controller.signal).then((outcome) => {
+      // This tool never waits on anything, so it completes regardless — what matters is that
+      // a tool which *does* wait reports the abort rather than an error the model would read.
+      expect(outcome.failed).toBe(false);
+    });
+  });
+
+  it('hands the cancel signal to a tool that waits on the network', async () => {
+    // Without this, Stop leaves the fetch running and its answer arrives in a conversation
+    // that already moved on.
+    const original = globalThis.fetch;
+    let seen: AbortSignal | undefined;
+    globalThis.fetch = ((_input: unknown, init?: { signal?: AbortSignal }) => {
+      seen = init?.signal;
+      return Promise.resolve({ json: () => Promise.resolve({ text: 'ok' }) } as Response);
+    }) as typeof fetch;
+    try {
+      const controller = new AbortController();
+      await runTool('fetch_url', { url: 'https://a.test' }, controller.signal);
+      expect(seen).toBe(controller.signal);
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
+
+  it('turns an abort mid-flight into a cancellation rather than an error', async () => {
+    const original = globalThis.fetch;
+    globalThis.fetch = (() => Promise.reject(new DOMException('aborted', 'AbortError'))) as typeof fetch;
+    try {
+      const controller = new AbortController();
+      controller.abort();
+      const outcome = await runTool('fetch_url', { url: 'https://a.test' }, controller.signal);
+      expect(outcome).toEqual({ output: '已取消。', failed: true });
+    } finally {
+      globalThis.fetch = original;
+    }
   });
 });

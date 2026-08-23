@@ -26,7 +26,14 @@
 
           <r-conversation id="chat" class="chat" empty="发一条消息开始对话">
             <div class="composer-shell" id="drop" slot="footer">
-              <r-token-meter id="tokens" class="composer-meter" label="上下文" hidden></r-token-meter>
+              <div class="composer-status">
+                <!-- No live region: this ticks ten times a second, and `role="status"` would
+                     make a screen reader announce every one of them. What matters — that a
+                     turn is running — is already carried by the Stop button becoming
+                     enabled. The clock is for eyes. -->
+                <p class="composer-elapsed" id="elapsed" aria-hidden="true" hidden></p>
+                <r-token-meter id="tokens" class="composer-meter" label="上下文" hidden></r-token-meter>
+              </div>
               <r-attachments
                 id="attachments"
                 accept="image/*,.pdf,.txt,.md,.csv,.json"

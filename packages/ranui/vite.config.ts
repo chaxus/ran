@@ -180,6 +180,7 @@ export const es: BuildOptions = {
       ssr: resolve(__dirname, 'ssr.ts'),
       'ssr-stream': resolve(__dirname, 'ssr-stream.ts'),
       theme: resolve(__dirname, 'theme.ts'),
+      testing: resolve(__dirname, 'testing.ts'),
       i18n: resolve(__dirname, 'i18n.ts'),
       icons: resolve(__dirname, 'components/icon/builtin.ts'),
       style: resolve(__dirname, 'style.ts'),

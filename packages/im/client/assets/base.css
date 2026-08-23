@@ -223,12 +223,27 @@ body {
   background: var(--ran-color-bg-subtle);
 }
 
+/* The strip above the input: what the turn is doing on the left, what it costs on the right. */
+.composer-status {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-3);
+  margin-bottom: var(--ran-space-2);
+  min-height: 1.25rem;
+}
+
 /* Sized by the page, not by the element: the meter fills whatever width it is given, and
    given the whole composer it becomes a metre of empty track with a number at the end. */
 .composer-meter {
   margin-left: auto;
-  margin-bottom: var(--ran-space-2);
   max-width: 16rem;
+}
+
+.composer-elapsed {
+  margin: 0;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+  font-variant-numeric: tabular-nums;
 }
 
 .composer {

@@ -17,6 +17,9 @@
       "ssr-stream": [
         "./dist/ssr-stream.d.ts"
       ],
+      "testing": [
+        "./dist/testing.d.ts"
+      ],
       "theme": [
         "./dist/theme.d.ts"
       ],
@@ -234,6 +237,11 @@
     "./theme": {
       "types": "./dist/theme.d.ts",
       "import": "./dist/theme.js",
+      "require": "./dist/index.cjs"
+    },
+    "./testing": {
+      "types": "./dist/testing.d.ts",
+      "import": "./dist/testing.js",
       "require": "./dist/index.cjs"
     },
     "./i18n": {
