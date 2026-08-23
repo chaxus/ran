@@ -2,7 +2,7 @@ import { range } from 'ranuts/utils';
 import progressCss from './index.less?inline';
 import { createRef, Div, EventManager, RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -61,7 +61,7 @@ export class Progress extends RanElement {
     const progressWrapValueRef = createRef<HTMLDivElement>();
     const progressDotRef = createRef<HTMLDivElement>();
 
-    const container = ensureShadowElement(this._shadowDom, '.ran-progress', () =>
+    const container = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-progress')
         .children(

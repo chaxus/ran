@@ -2,7 +2,7 @@ import modalCss from './index.less?inline';
 import { RanElement, falseList } from '@/utils/index';
 import { ButtonBuilder, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -83,9 +83,8 @@ export class Modal extends RanElement {
     this._afterOpenTimer = null;
     this._afterCloseTimer = null;
     this._shadowDom = ensureShadowRoot(this, modalCss);
-    const root = ensureShadowElement(
+    const root = mountShadowTree(
       this._shadowDom,
-      '.ran-modal-root',
       () =>
         Div()
           .class('ran-modal-root')

@@ -1,7 +1,7 @@
 import { RanElement } from '@/utils/index';
 import { Div } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -80,11 +80,7 @@ export class Loading extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this);
-    const contain = ensureShadowElement(
-      this._shadowDom,
-      '.ran-loading',
-      () => Div().class('ran-loading').build() as HTMLDivElement,
-    );
+    const contain = mountShadowTree(this._shadowDom, () => Div().class('ran-loading').build() as HTMLDivElement);
     this.contain = contain;
   }
   get name(): ICON_NAME_AMP {

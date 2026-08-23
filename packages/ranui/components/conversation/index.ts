@@ -2,7 +2,7 @@ import componentCss from './index.less?inline';
 import { ButtonBuilder, createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -114,7 +114,7 @@ export class Conversation extends RanElement {
     const list = createRef<HTMLDivElement>();
     const older = createRef<HTMLDivElement>();
     const olderButton = createRef<HTMLButtonElement>();
-    this._scroll = ensureShadowElement(this._shadowDom, '.ran-conversation', () =>
+    this._scroll = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-conversation')
         .attr('part', 'conversation')
@@ -134,7 +134,7 @@ export class Conversation extends RanElement {
     // Outside the scrollport, not inside it: a footer that scrolls with the transcript is a
     // composer that leaves the frame, and one made sticky still floats up under the last
     // message while the transcript is shorter than the frame.
-    this._footer = ensureShadowElement(this._shadowDom, '.ran-conversation-footer', () =>
+    this._footer = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-conversation-footer')
         .attr('part', 'footer')

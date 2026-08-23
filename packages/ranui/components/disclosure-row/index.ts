@@ -2,7 +2,7 @@ import componentCss from './index.less?inline';
 import { ButtonBuilder, createRef, Div, EventManager, Slot, Span } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -62,7 +62,7 @@ export class DisclosureRow extends RanElement {
     const title = createRef<HTMLElement>();
     const summary = createRef<HTMLElement>();
     const sep = createRef<HTMLElement>();
-    const root = ensureShadowElement(this._shadowDom, '.ran-disclosure', () =>
+    const root = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-disclosure')
         .attr('part', 'disclosure')

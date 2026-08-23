@@ -2,7 +2,7 @@ import componentCss from './index.less?inline';
 import { createRef, Div, EventManager, Slot, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -88,7 +88,7 @@ export class Reasoning extends RanElement {
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
     const text = createRef<HTMLElement>();
-    const row = ensureShadowElement(this._shadowDom, 'r-disclosure-row', () =>
+    const row = mountShadowTree(this._shadowDom, () =>
       View('r-disclosure-row')
         .attr('part', 'row')
         .attr('expandable', '')

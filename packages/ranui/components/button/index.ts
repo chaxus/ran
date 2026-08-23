@@ -3,7 +3,7 @@ import buttonCss from './index.less?inline';
 import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
 import { createRef, EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
-import { ensureShadowElement, ensureShadowRoot, shadowPart, syncSheetAttribute } from '@/utils/component';
+import { mountShadowTree, ensureShadowRoot, shadowPart, syncSheetAttribute } from '@/utils/component';
 import { isActivationKey } from '@/utils/a11y';
 
 export class Button extends RanElement {
@@ -25,7 +25,7 @@ export class Button extends RanElement {
     const btnContentRef = createRef<HTMLDivElement>();
     const slotRef = createRef<HTMLSlotElement>();
 
-    const btn = ensureShadowElement(this._shadowDom, '.ran-btn', () =>
+    const btn = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-btn')
         .attr('part', 'button')

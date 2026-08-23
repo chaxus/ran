@@ -8,7 +8,7 @@ Web Components library built with TypeScript. All components use Shadow DOM enca
 
 **[docs/DESIGN.md](docs/DESIGN.md) is the authoritative, executable design standard.** Follow it whenever your work changes what a user sees. It is based on the Geist design system (light/dark only).
 
-Eight of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, mouse-only drag loops, `:host` display rules that disable `hidden`, token fallbacks naming undeclared tokens, and components searching their own shadow tree for elements they built. Known violations are ratcheted in [docs/design-rule-baseline.json](docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
+Nine of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, mouse-only drag loops, `:host` display rules that disable `hidden`, token fallbacks naming undeclared tokens, components searching their own shadow tree for elements they built, and shadow trees built outside the constructor. Known violations are ratcheted in [docs/design-rule-baseline.json](docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
 
 For each element's **attributes / properties / events / slots / `::part()`**, consult **[docs/COMPONENTS.md](docs/COMPONENTS.md)** (generated — run `npm run doc:api` after changing any component's API; CI fails if you forget) and **[docs/style-tokens-public.md](docs/style-tokens-public.md)** for its CSS variables. The non-negotiables:
 
@@ -35,7 +35,7 @@ packages/ranui/
 │       ├── index.ts      # Component class + defineSSR()
 │       └── index.less    # Shadow DOM styles (auto-imports base.less)
 ├── utils/
-│   ├── component.ts      # ensureShadowRoot, ensureShadowElement, attribute helpers
+│   ├── component.ts      # ensureShadowRoot, mountShadowTree, attribute helpers
 │   ├── builder/          # ElementBuilder fluent DOM builder
 │   ├── router/           # RouterCore, createRouter, useRouter, enableMpaViewTransitions
 │   ├── i18n/             # re-export of ranuts/i18n (the engine itself lives in ranuts)
@@ -71,7 +71,7 @@ import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
-  ensureShadowElement,
+  mountShadowTree,
   getStringAttribute,
   setStringAttribute,
   shadowPart,
@@ -96,7 +96,7 @@ export class MyComponent extends RanElement {
     // afterwards: that re-derives the element through a class name, and a rename on one side
     // yields `null` that the `!` waves through. `verify:design` rejects it (DESIGN.md §9).
     const inner = createRef<HTMLDivElement>();
-    ensureShadowElement(this._shadowDom, '.ran-mycomp', () =>
+    mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-mycomp')
         .attr('part', 'mycomp')
@@ -159,7 +159,7 @@ export default MyComponent;
 
 - Extend `RanElement` (= `HTMLElement` in browser, `HTMLElementMock` in SSR)
 - Always use `ensureShadowRoot` — never call `attachShadow` directly
-- Always use `ensureShadowElement` to build the Shadow DOM subtree (idempotent)
+- Always use `mountShadowTree` to build the Shadow DOM subtree, in the constructor and nowhere else
 - Capture every element with `.ref()` while building and read it back with `shadowPart`; never `querySelector` for something the component itself built
 - Always guard `attributeChangedCallback` with `if (old === next) return;`
 - Always include `sheet` in `observedAttributes` and wire `syncSheetAttribute`
@@ -228,8 +228,11 @@ After creating `components/mycomp/index.ts`:
 // Create or reuse shadow root (cached via WeakMap, applies CSS)
 ensureShadowRoot(host: HTMLElement, cssText?: string, options?: ShadowRootInit): ShadowRoot
 
-// Query element from shadow root; if missing, run factory() and append
-ensureShadowElement<T>(root: ShadowRoot, selector: string, factory: () => T): T
+// Build the component's shadow tree and append it. Constructor only, exactly once.
+mountShadowTree<T>(root: ShadowRoot, factory: () => T): T
+
+// The element a builder captured; throws, naming the field, if `.ref()` never filled it
+shadowPart<T>(ref: Ref<T>, name: string): T
 
 // getAttribute with fallback (null → fallback)
 getStringAttribute(element: HTMLElement, name: string, fallback?: string): string

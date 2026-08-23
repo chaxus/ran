@@ -2,7 +2,7 @@ import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { RanElement } from '@/utils/index';
 import { createRef, Div, Slot } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -35,9 +35,8 @@ export class Dropdown extends RanElement {
     this._shadowDom = ensureShadowRoot(this, dropdownCss);
     const dropdownRef = createRef<HTMLDivElement>();
     const slotRef = createRef<HTMLSlotElement>();
-    const container = ensureShadowElement(
+    const container = mountShadowTree(
       this._shadowDom,
-      '.ranui-dropdown-container',
       () =>
         Div()
           .class('ranui-dropdown-container')

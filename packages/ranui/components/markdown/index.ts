@@ -1,7 +1,7 @@
 import { RanElement } from '@/utils/index';
 import { Div, View, createRef } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -128,15 +128,15 @@ export class Markdown extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, markdownCss);
     const bodyRef = createRef<HTMLDivElement>();
-    this._wrap = ensureShadowElement(this._shadowDom, '.ran-markdown', () =>
+    this._wrap = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-markdown')
         .part('markdown')
         .children(Div().class('ran-markdown-body').part('body').ref(bodyRef))
         .build(),
     );
-    // ensureShadowElement may return a pre-existing tree (re-connect), so fall back to a lookup.
-    // ensureShadowElement can hand back a tree built by a previous connect (or SSR), in
+    // mountShadowTree may return a pre-existing tree (re-connect), so fall back to a lookup.
+    // mountShadowTree can hand back a tree built by a previous connect (or SSR), in
     // which case the factory never ran and the ref is empty; the body is its first child.
     this._body = bodyRef.current ?? (this._wrap.firstElementChild as HTMLElement);
   }

@@ -12,7 +12,7 @@ import '@/components/input';
 import type { Input } from '@/components/input';
 import { createRef, Div, EventManager, InputBuilder, Label, Slot, Span, View } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -129,9 +129,8 @@ export class Select extends RanElement {
     const textRef = createRef<HTMLSpanElement>();
     const searchRef = createRef<HTMLInputElement>();
     const slotRef = createRef<HTMLSlotElement>();
-    const wrap = ensureShadowElement(
+    const wrap = mountShadowTree(
       this._shadowDom,
-      '.ran-select',
       () =>
         Div()
           .class('ran-select')

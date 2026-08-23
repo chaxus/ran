@@ -1,7 +1,7 @@
 import { RanElement } from '@/utils/index';
 import { createRef, Div, EventManager, View } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -36,7 +36,7 @@ export class Mermaid extends RanElement {
     const diagramRef = createRef<HTMLDivElement>();
     const toolbarRef = createRef<HTMLDivElement>();
     const iconRef = createRef<HTMLElement>();
-    this._wrap = ensureShadowElement(this._shadowDom, '.ran-mermaid', () =>
+    this._wrap = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-mermaid')
         .part('mermaid')

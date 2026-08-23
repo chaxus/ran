@@ -3,7 +3,7 @@ import { EventManager } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
-  ensureShadowElement,
+  mountShadowTree,
   getStringAttribute,
   setStringAttribute,
   syncSheetAttribute,
@@ -23,7 +23,7 @@ export class Link extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, linkCss);
-    const anchor = ensureShadowElement(this._shadowDom, 'a', () => {
+    const anchor = mountShadowTree(this._shadowDom, () => {
       const a = document.createElement('a');
       a.appendChild(document.createElement('slot'));
       return a;

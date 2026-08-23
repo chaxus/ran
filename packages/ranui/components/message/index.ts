@@ -6,7 +6,7 @@ import warningCircleFill from '@/assets/icons/warning-circle-fill.svg?raw';
 import { registerIcons } from '@/components/icon';
 import { createRef, Div, Span, View } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -62,9 +62,8 @@ export class CustomMessage extends RanElement {
     const infoRef = createRef<HTMLDivElement>();
     const iconRef = createRef<HTMLElement>();
     const spanRef = createRef<HTMLSpanElement>();
-    const notice = ensureShadowElement(
+    const notice = mountShadowTree(
       this._shadowDom,
-      '.ran-message-notice',
       () =>
         Div()
           .class('ran-message-notice')

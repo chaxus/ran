@@ -1,7 +1,7 @@
 import skeletonCss from './index.less?inline';
 import { Div } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -21,7 +21,7 @@ export class Skeleton extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, skeletonCss);
-    this._div = ensureShadowElement(this._shadowDom, '.ran-skeleton', () => Div().class('ran-skeleton').build());
+    this._div = mountShadowTree(this._shadowDom, () => Div().class('ran-skeleton').build());
   }
 
   get sheet(): string {

@@ -3,7 +3,7 @@ import { EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
-  ensureShadowElement,
+  mountShadowTree,
   getStringAttribute,
   setStringAttribute,
   syncSheetAttribute,
@@ -28,7 +28,7 @@ export class Router extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, routerCss);
-    const slot = ensureShadowElement(this._shadowDom, 'slot', () => Slot().build());
+    const slot = mountShadowTree(this._shadowDom, () => Slot().build());
     this._slot = slot as HTMLSlotElement;
   }
 

@@ -1,7 +1,7 @@
 import { createRef, Div, Slot } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   setStringAttribute,
   shadowPart,
@@ -23,7 +23,7 @@ export class Option extends RanElement {
     const optionContentRef = createRef<HTMLDivElement>();
     const slotRef = createRef<HTMLSlotElement>();
 
-    const option = ensureShadowElement(this._shadowDom, '.ran-select-dropdown-option', () => {
+    const option = mountShadowTree(this._shadowDom, () => {
       const slot = Slot().ref(slotRef).build() as HTMLSlotElement;
       const optionContent = Div()
         .class('ran-select-dropdown-option-content')

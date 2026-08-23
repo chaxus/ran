@@ -2,7 +2,7 @@ import cardCss from './index.less?inline';
 import { createRef, Div, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -31,7 +31,7 @@ export class Card extends RanElement {
     const footerElRef = createRef<HTMLDivElement>();
     const footerSlotRef = createRef<HTMLSlotElement>();
 
-    const card = ensureShadowElement(this._shadowDom, '.ran-card', () =>
+    const card = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-card')
         .attr('part', 'card')
