@@ -262,7 +262,7 @@ const RULES: Rule[] = [
   },
   {
     id: 'shadow-mount-outside-constructor',
-    summary: "a component appends to its shadow root somewhere other than its constructor",
+    summary: 'a component appends to its shadow root somewhere other than its constructor',
     fix: "Build and append the component's tree in the constructor. Content that genuinely cannot exist yet — a validation message, a lazily created canvas — opts out with `// deferred mount: <why it cannot be built up front>` on the line above, which also has to say how a second append is prevented.",
     extensions: ['.ts'],
     scan(source, file) {

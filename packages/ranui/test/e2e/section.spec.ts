@@ -19,9 +19,7 @@ test.describe('r-section', () => {
   test('puts the heading above the body', async ({ page }) => {
     await mount(page, '<r-section id="s" heading="Heading" subtitle="Subtitle">Body copy.</r-section>');
 
-    const order = await insideShadow(page, '#s', (root) =>
-      [...root.children].map((child) => child.className),
-    );
+    const order = await insideShadow(page, '#s', (root) => [...root.children].map((child) => child.className));
     expect(order).toEqual(['ran-section-header', 'ran-section-body']);
   });
 
