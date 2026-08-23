@@ -42,7 +42,8 @@ function eventsFor(
   const events: ChatEvent[] = [];
   for (const chunk of chunks) {
     accumulator.push(chunk);
-    const next = eventsFromSnapshot(id, accumulator.snapshot(), emitted);
+    // A fixed clock, because the duration a projection reports has to be reproducible.
+    const next = eventsFromSnapshot(id, accumulator.snapshot(), emitted, 1_000);
     emitted = next.emitted;
     events.push(...next.events);
   }
@@ -195,11 +196,30 @@ describe('the conversation the views build', () => {
     expect(row.state).toMatchObject({ text: '半句话', error: 'invalid api key (401)' });
   });
 
+  it('reports how long the thinking took, measured from the events', () => {
+    // Read off the log, not off a clock in the view: a reloaded conversation must report the
+    // duration the reader watched, not the time since the page opened.
+    const [row] = project([
+      { type: 'reasoning/start', id: 'm1', at: 1_000 },
+      { type: 'reasoning/text', id: 'm1', text: '想一想' },
+      { type: 'turn/end', id: 'm1', at: 5_200 },
+    ]);
+    expect(row.state).toMatchObject({ streaming: false, durationMs: 4_200 });
+  });
+
+  it('reports no duration for a turn that ended without a clock', () => {
+    const [row] = project([
+      { type: 'reasoning/start', id: 'm1', at: 1_000 },
+      { type: 'turn/end', id: 'm1' },
+    ]);
+    expect(row.state).toMatchObject({ durationMs: null });
+  });
+
   it('emits nothing for a snapshot that has not grown', () => {
     const accumulator = createStreamAccumulator();
     accumulator.push({ type: 'text-delta', index: 1, text: 'x' });
-    const first = eventsFromSnapshot('t1', accumulator.snapshot(), NOTHING_EMITTED);
-    const second = eventsFromSnapshot('t1', accumulator.snapshot(), first.emitted);
+    const first = eventsFromSnapshot('t1', accumulator.snapshot(), NOTHING_EMITTED, 1_000);
+    const second = eventsFromSnapshot('t1', accumulator.snapshot(), first.emitted, 1_000);
 
     expect(first.events).toHaveLength(2);
     expect(second.events).toEqual([]);

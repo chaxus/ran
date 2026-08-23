@@ -859,6 +859,29 @@ silently finds nothing.
 
 ---
 
+### Testing against a closed shadow root — `ranui/testing`
+
+Every component renders into a **closed** shadow root, and Playwright's locators are on the
+outside of that: `getByRole`, `getByText` and `querySelector` all stop at the boundary and
+quietly find _nothing at all_, so a spec written against them passes while asserting on
+elements it never saw. Two suites here were written that way before anyone noticed.
+
+`ranui/testing` is the seam, given a name and a reason:
+
+- **`insideShadow(page, host, read)`** runs `read` against one component's shadow root, via
+  the instance property `_shadowDom` — a JS property, so it crosses where a DOM lookup does
+  not. It throws on a missing element rather than returning `undefined`, which would read as
+  "the thing under test is gone" and send the reader looking in the wrong place.
+- **`settlePainted(page, selector, settled)`** waits until every match reports itself
+  painted. Use it instead of `waitForTimeout`, which passes whether the work finished or
+  not: two baselines here were recorded after one, capturing blank swatches on a colour
+  picker that declares a colour, and every later run was measured against that.
+
+It is public API rather than test scaffolding because every consumer hits the same wall, and
+typed against the shape of a page rather than against Playwright — a component library that
+made consumers install a test runner to import a type would be charging them for our own
+convenience.
+
 ### r-state-dot / r-disclosure-row
 
 The two primitives the tool row and the compaction marker share.
