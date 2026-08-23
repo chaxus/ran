@@ -1,7 +1,6 @@
 import { RanElement } from '@/utils/index';
 import { createRef, Div, EventManager, View } from '@/utils/builder';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -86,16 +85,15 @@ export class Math extends RanElement {
     const toolbarRef = createRef<HTMLDivElement>();
     const mathRef = createRef<HTMLElement>();
     const iconRef = createRef<HTMLElement>();
-    this._wrap = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-math')
-        .part('math')
-        .children(
-          Div().class('ran-math-render').ref(containRef).part('render'),
-          Div().class('ran-math-toolbar').ref(toolbarRef).part('toolbar'),
-        )
-        .build(),
-    );
+    this._wrap = Div()
+      .class('ran-math')
+      .part('math')
+      .children(
+        Div().class('ran-math-render').ref(containRef).part('render'),
+        Div().class('ran-math-toolbar').ref(toolbarRef).part('toolbar'),
+      )
+      .build();
+    this._shadowDom.appendChild(this._wrap);
     this.contain = shadowPart(containRef, 'render');
     this._toolbar = shadowPart(toolbarRef, 'toolbar');
   }

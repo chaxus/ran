@@ -6,7 +6,6 @@ import warningCircleFill from '@/assets/icons/warning-circle-fill.svg?raw';
 import { registerIcons } from '@/components/icon';
 import { createRef, Div, Span, View } from '@/utils/builder';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -62,24 +61,21 @@ export class CustomMessage extends RanElement {
     const infoRef = createRef<HTMLDivElement>();
     const iconRef = createRef<HTMLElement>();
     const spanRef = createRef<HTMLSpanElement>();
-    const notice = mountShadowTree(
-      this._shadowDom,
-      () =>
+    const notice = Div()
+      .class('ran-message-notice')
+      .children(
         Div()
-          .class('ran-message-notice')
+          .class('ran-message-notice-content')
+          .ref(contentRef)
           .children(
             Div()
-              .class('ran-message-notice-content')
-              .ref(contentRef)
-              .children(
-                Div()
-                  .class('ran-message-notice-content-info')
-                  .ref(infoRef)
-                  .children(View('r-icon').ref(iconRef), Span().ref(spanRef)),
-              ),
-          )
-          .build() as HTMLDivElement,
-    );
+              .class('ran-message-notice-content-info')
+              .ref(infoRef)
+              .children(View('r-icon').ref(iconRef), Span().ref(spanRef)),
+          ),
+      )
+      .build() as HTMLDivElement;
+    this._shadowDom.appendChild(notice);
 
     this._notice = notice;
     this._content = shadowPart(contentRef, 'notice content');

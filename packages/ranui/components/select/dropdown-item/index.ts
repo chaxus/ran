@@ -4,7 +4,6 @@ import { createRef, Div, Slot } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -25,20 +24,19 @@ export class DropdownItem extends RanElement {
     this._shadowDom = ensureShadowRoot(this, less);
     const slotRef = createRef<HTMLSlotElement>();
     const contentRef = createRef<HTMLDivElement>();
-    const ionDropdownItem = mountShadowTree(this._shadowDom, () => {
-      const slot = Slot().class('slot').ref(slotRef).build() as HTMLSlotElement;
-      const ionDropdownItemContent = Div()
-        .class('ranui-dropdown-option-item-content')
-        .part('content')
-        .ref(contentRef)
-        .children(slot)
-        .build() as HTMLDivElement;
-      return Div()
-        .class('ranui-dropdown-option-item')
-        .part('item')
-        .children(ionDropdownItemContent)
-        .build() as HTMLDivElement;
-    });
+    const slot = Slot().class('slot').ref(slotRef).build() as HTMLSlotElement;
+    const ionDropdownItemContent = Div()
+      .class('ranui-dropdown-option-item-content')
+      .part('content')
+      .ref(contentRef)
+      .children(slot)
+      .build() as HTMLDivElement;
+    const ionDropdownItem = Div()
+      .class('ranui-dropdown-option-item')
+      .part('item')
+      .children(ionDropdownItemContent)
+      .build() as HTMLDivElement;
+    this._shadowDom.appendChild(ionDropdownItem);
     this._slot = shadowPart(slotRef, 'slot');
     this.ionDropdownItemContent = shadowPart(contentRef, 'content');
     this.ionDropdownItem = ionDropdownItem;

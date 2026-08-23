@@ -8,7 +8,6 @@ import { isDisabled, RanElement } from '@/utils/index';
 import tabCss from './index.less?inline';
 import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -51,31 +50,28 @@ export class Tabs extends RanElement {
     const wrapRef = createRef<HTMLDivElement>();
     const slotRef = createRef<HTMLSlotElement>();
 
-    const wrap = mountShadowTree(
-      this._shadowDom,
-      () =>
+    const wrap = Div()
+      .class('ran-tab')
+      .part('tabs')
+      .children(
         Div()
-          .class('ran-tab')
-          .part('tabs')
+          .class('ran-tab-header')
+          .ref(headerRef)
+          .part('header')
           .children(
-            Div()
-              .class('ran-tab-header')
-              .ref(headerRef)
-              .part('header')
-              .children(
-                Div().class('ran-tab-header-nav').ref(navRef).part('nav'),
-                Div().class('ran-tab-header-line').ref(lineRef).part('indicator'),
-              ),
-            Div()
-              .class('ran-tab-content')
-              .ref(contentRef)
-              .part('content')
-              .children(
-                Div().class('ran-tab-content-wrap').ref(wrapRef).part('content-wrap').children(Slot().ref(slotRef)),
-              ),
-          )
-          .build() as HTMLDivElement,
-    );
+            Div().class('ran-tab-header-nav').ref(navRef).part('nav'),
+            Div().class('ran-tab-header-line').ref(lineRef).part('indicator'),
+          ),
+        Div()
+          .class('ran-tab-content')
+          .ref(contentRef)
+          .part('content')
+          .children(
+            Div().class('ran-tab-content-wrap').ref(wrapRef).part('content-wrap').children(Slot().ref(slotRef)),
+          ),
+      )
+      .build() as HTMLDivElement;
+    this._shadowDom.appendChild(wrap);
 
     this._container = wrap;
     this._header = shadowPart(headerRef, 'header');

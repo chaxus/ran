@@ -2,7 +2,6 @@ import componentCss from './index.less?inline';
 import { createRef, Div, Span } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -69,24 +68,23 @@ export class TokenMeter extends RanElement {
 
     const fill = createRef<HTMLDivElement>();
     const text = createRef<HTMLElement>();
-    const root = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-token-meter')
-        .attr('part', 'meter')
-        // A progress bar by role, so a screen reader reads it as a proportion rather than
-        // as two loose numbers.
-        .attr('role', 'progressbar')
-        .attr('aria-valuemin', '0')
-        .children(
-          Div()
-            .class('ran-token-meter-track')
-            .attr('part', 'track')
-            .children(Div().class('ran-token-meter-fill').ref(fill).attr('part', 'fill').build())
-            .build(),
-          Span().class('ran-token-meter-text').ref(text).attr('part', 'text').build(),
-        )
-        .build(),
-    );
+    const root = Div()
+      .class('ran-token-meter')
+      .attr('part', 'meter')
+      // A progress bar by role, so a screen reader reads it as a proportion rather than
+      // as two loose numbers.
+      .attr('role', 'progressbar')
+      .attr('aria-valuemin', '0')
+      .children(
+        Div()
+          .class('ran-token-meter-track')
+          .attr('part', 'track')
+          .children(Div().class('ran-token-meter-fill').ref(fill).attr('part', 'fill').build())
+          .build(),
+        Span().class('ran-token-meter-text').ref(text).attr('part', 'text').build(),
+      )
+      .build();
+    this._shadowDom.appendChild(root);
     this._root = root;
     this._fill = shadowPart(fill, 'fill');
     this._text = shadowPart(text, 'text');

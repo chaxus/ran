@@ -1,12 +1,6 @@
 import { createRef, Div, Slot } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
-import {
-  mountShadowTree,
-  ensureShadowRoot,
-  setStringAttribute,
-  shadowPart,
-  syncSheetAttribute,
-} from '@/utils/component';
+import { ensureShadowRoot, setStringAttribute, shadowPart, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 export class Option extends RanElement {
@@ -20,20 +14,10 @@ export class Option extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this);
-    const optionContentRef = createRef<HTMLDivElement>();
-    const slotRef = createRef<HTMLSlotElement>();
-
-    const option = mountShadowTree(this._shadowDom, () => {
-      const slot = Slot().ref(slotRef).build() as HTMLSlotElement;
-      const optionContent = Div()
-        .class('ran-select-dropdown-option-content')
-        .ref(optionContentRef)
-        .children(slot)
-        .build() as HTMLDivElement;
-      return Div().class('ran-select-dropdown-option').children(optionContent).build() as HTMLDivElement;
-    });
-    const optionContent = shadowPart(optionContentRef, 'dropdown option content');
-    const slot = shadowPart(slotRef, 'slot');
+    const slot = Slot().build() as HTMLSlotElement;
+    const optionContent = Div().class('ran-select-dropdown-option-content').children(slot).build() as HTMLDivElement;
+    const option = Div().class('ran-select-dropdown-option').children(optionContent).build() as HTMLDivElement;
+    this._shadowDom.appendChild(option);
 
     this._slot = slot;
     this._optionContent = optionContent;

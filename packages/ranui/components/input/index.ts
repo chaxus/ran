@@ -3,7 +3,6 @@ import { createRef, Div, EventManager, InputBuilder, Label, View } from '@/utils
 import { checkInternalsValidity, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import '@/components/icon/index';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -64,13 +63,12 @@ export class Input extends RanElement {
     }
     this._shadowDom = ensureShadowRoot(this, inputCss);
     const inputContentRef = createRef<HTMLInputElement>();
-    const wrap = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-input')
-        .part('input')
-        .children(InputBuilder().class('ran-input-content').ref(inputContentRef).part('content'))
-        .build(),
-    );
+    const wrap = Div()
+      .class('ran-input')
+      .part('input')
+      .children(InputBuilder().class('ran-input-content').ref(inputContentRef).part('content'))
+      .build();
+    this._shadowDom.appendChild(wrap);
     this._input = wrap;
     this._inputContent = shadowPart(inputContentRef, 'content');
     // A stable id so a rendered <label> can point its `for` at this control,
@@ -496,6 +494,8 @@ export class Input extends RanElement {
         // Same shadow root as _inputContent, so an id-ref between them resolves —
         // links the helper/validation text to the field for assistive tech.
         this._message.id = `${this._inputContent.id}-message`;
+        // deferred mount: the message element exists only while there is a message to show.
+        // The enclosing `if (!this._message)` is what keeps this to a single append.
         this._shadowDom.appendChild(this._message);
         this._inputContent.setAttribute('aria-describedby', this._message.id);
       }

@@ -12,7 +12,6 @@ import '@/components/input';
 import type { Input } from '@/components/input';
 import { createRef, Div, EventManager, InputBuilder, Label, Slot, Span, View } from '@/utils/builder';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -129,41 +128,38 @@ export class Select extends RanElement {
     const textRef = createRef<HTMLSpanElement>();
     const searchRef = createRef<HTMLInputElement>();
     const slotRef = createRef<HTMLSlotElement>();
-    const wrap = mountShadowTree(
-      this._shadowDom,
-      () =>
+    const wrap = Div()
+      .class('ran-select')
+      .part('select')
+      .children(
         Div()
-          .class('ran-select')
-          .part('select')
+          .class('selection')
+          .ref(selectionRef)
+          .part('selection')
           .children(
+            View('r-icon')
+              .class('icon')
+              .ref(iconRef)
+              .part('icon')
+              .attr('name', 'chevron-down')
+              .attr('color', 'var(--ran-color-text-secondary)')
+              .attr('size', '16'),
             Div()
-              .class('selection')
-              .ref(selectionRef)
-              .part('selection')
+              .ref(selectorRef)
               .children(
-                View('r-icon')
-                  .class('icon')
-                  .ref(iconRef)
-                  .part('icon')
-                  .attr('name', 'chevron-down')
-                  .attr('color', 'var(--ran-color-text-secondary)')
-                  .attr('size', '16'),
-                Div()
-                  .ref(selectorRef)
-                  .children(
-                    Span().class('selection-item').ref(textRef).part('selection-item'),
-                    InputBuilder()
-                      .class('selection-search')
-                      .ref(searchRef)
-                      .part('search')
-                      .attr('type', 'search')
-                      .attr('autocomplete', 'off'),
-                  ),
+                Span().class('selection-item').ref(textRef).part('selection-item'),
+                InputBuilder()
+                  .class('selection-search')
+                  .ref(searchRef)
+                  .part('search')
+                  .attr('type', 'search')
+                  .attr('autocomplete', 'off'),
               ),
-            Slot().ref(slotRef).class('slot'),
-          )
-          .build() as HTMLDivElement,
-    );
+          ),
+        Slot().ref(slotRef).class('slot'),
+      )
+      .build() as HTMLDivElement;
+    this._shadowDom.appendChild(wrap);
 
     this._select = wrap;
     this._selection = shadowPart(selectionRef, 'selection');

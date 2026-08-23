@@ -3,7 +3,7 @@ import buttonCss from './index.less?inline';
 import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
 import { createRef, EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
-import { mountShadowTree, ensureShadowRoot, shadowPart, syncSheetAttribute } from '@/utils/component';
+import { ensureShadowRoot, shadowPart, syncSheetAttribute } from '@/utils/component';
 import { isActivationKey } from '@/utils/a11y';
 
 export class Button extends RanElement {
@@ -25,21 +25,20 @@ export class Button extends RanElement {
     const btnContentRef = createRef<HTMLDivElement>();
     const slotRef = createRef<HTMLSlotElement>();
 
-    const btn = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-btn')
-        .attr('part', 'button')
-        .role('button')
-        .tabIndex(0)
-        .children(
-          Div()
-            .class('ran-btn-content')
-            .ref(btnContentRef)
-            .attr('part', 'content')
-            .children(Slot().ref(slotRef).class('slot')),
-        )
-        .build(),
-    );
+    const btn = Div()
+      .class('ran-btn')
+      .attr('part', 'button')
+      .role('button')
+      .tabIndex(0)
+      .children(
+        Div()
+          .class('ran-btn-content')
+          .ref(btnContentRef)
+          .attr('part', 'content')
+          .children(Slot().ref(slotRef).class('slot')),
+      )
+      .build();
+    this._shadowDom.appendChild(btn);
     this._btn = btn;
     this._btnContent = shadowPart(btnContentRef, 'content');
     this._slot = shadowPart(slotRef, 'slot');

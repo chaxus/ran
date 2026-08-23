@@ -2,7 +2,6 @@ import sectionCss from './index.less?inline';
 import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -28,27 +27,24 @@ export class Section extends RanElement {
     const headingElRef = createRef<HTMLDivElement>();
     const subtitleElRef = createRef<HTMLDivElement>();
 
-    // Two trees, mounted in order. Building both inside one factory and returning the header
-    // put it back at the end — `mountShadowTree` appends what it is given, and appending a
-    // node that is already a child moves it — so the heading rendered below the body.
-    const container = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-section-header')
-        .attr('part', 'header')
-        .children(
-          Div()
-            .class('ran-section-heading')
-            .ref(headingElRef)
-            .attr('part', 'heading')
-            .attr('role', 'heading')
-            .attr('aria-level', '2'),
-          Div().class('ran-section-subtitle').ref(subtitleElRef).attr('part', 'subtitle'),
-        )
-        .build(),
-    );
-    mountShadowTree(this._shadowDom, () =>
-      Div().class('ran-section-body').attr('part', 'body').children(Slot()).build(),
-    );
+    // Two trees, mounted in order. These used to be built inside one factory that appended
+    // both itself and returned the header, which the mount helper then appended again —
+    // appending a node that is already a child moves it — so the heading rendered last.
+    const container = Div()
+      .class('ran-section-header')
+      .attr('part', 'header')
+      .children(
+        Div()
+          .class('ran-section-heading')
+          .ref(headingElRef)
+          .attr('part', 'heading')
+          .attr('role', 'heading')
+          .attr('aria-level', '2'),
+        Div().class('ran-section-subtitle').ref(subtitleElRef).attr('part', 'subtitle'),
+      )
+      .build();
+    this._shadowDom.appendChild(container);
+    this._shadowDom.appendChild(Div().class('ran-section-body').attr('part', 'body').children(Slot()).build());
 
     this._headerEl = container;
     this._headingEl = shadowPart(headingElRef, 'heading');

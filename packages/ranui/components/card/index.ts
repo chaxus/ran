@@ -2,7 +2,6 @@ import cardCss from './index.less?inline';
 import { createRef, Div, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -31,33 +30,32 @@ export class Card extends RanElement {
     const footerElRef = createRef<HTMLDivElement>();
     const footerSlotRef = createRef<HTMLSlotElement>();
 
-    const card = mountShadowTree(this._shadowDom, () =>
-      Div()
-        .class('ran-card')
-        .attr('part', 'card')
-        .children(
-          Div()
-            .class('ran-card-header')
-            .ref(headerElRef)
-            .attr('part', 'header')
-            .children(
-              Div()
-                .class('ran-card-title-area')
-                .children(
-                  Div().class('ran-card-title').ref(titleElRef).attr('part', 'title'),
-                  Div().class('ran-card-description').ref(descriptionElRef).attr('part', 'description'),
-                ),
-              Slot().attr('name', 'extra').attr('part', 'extra'),
-            ),
-          Div().class('ran-card-body').attr('part', 'body').children(Slot()),
-          Div()
-            .class('ran-card-footer')
-            .ref(footerElRef)
-            .attr('part', 'footer')
-            .children(Slot().attr('name', 'footer').ref(footerSlotRef)),
-        )
-        .build(),
-    );
+    const card = Div()
+      .class('ran-card')
+      .attr('part', 'card')
+      .children(
+        Div()
+          .class('ran-card-header')
+          .ref(headerElRef)
+          .attr('part', 'header')
+          .children(
+            Div()
+              .class('ran-card-title-area')
+              .children(
+                Div().class('ran-card-title').ref(titleElRef).attr('part', 'title'),
+                Div().class('ran-card-description').ref(descriptionElRef).attr('part', 'description'),
+              ),
+            Slot().attr('name', 'extra').attr('part', 'extra'),
+          ),
+        Div().class('ran-card-body').attr('part', 'body').children(Slot()),
+        Div()
+          .class('ran-card-footer')
+          .ref(footerElRef)
+          .attr('part', 'footer')
+          .children(Slot().attr('name', 'footer').ref(footerSlotRef)),
+      )
+      .build();
+    this._shadowDom.appendChild(card);
 
     this._headerEl = shadowPart(headerElRef, 'header');
     this._titleEl = shadowPart(titleElRef, 'title');
