@@ -255,20 +255,45 @@ const RULES: Rule[] = [
     },
   },
   {
+    id: 'tree-built-outside-constructor',
+    summary: 'a component builds its shadow tree somewhere other than its constructor',
+    fix: 'Move the `mountShadowTree` call into the constructor. It appends unconditionally, so a second call from `connectedCallback` mounts a second copy on every reconnect; and the refs a later build captures replace the ones the component is already driving.',
+    extensions: ['.ts'],
+    scan(source, file) {
+      const clean = stripComments(source);
+      const out: Violation[] = [];
+      for (const match of clean.matchAll(/mountShadowTree\(/g)) {
+        // The nearest method header above the call names the enclosing function.
+        const before = clean.slice(0, match.index);
+        let enclosing = '';
+        for (const header of before.matchAll(/^\s{2}(?:(?:private|public|protected)\s+)?(\w+)\s*\([^)]*\)\s*(?::[^{]+)?\{/gm)) {
+          enclosing = header[1];
+        }
+        if (enclosing === 'constructor') continue;
+        out.push({
+          file,
+          line: before.split('\n').length,
+          text: `mountShadowTree in \`${enclosing || '<top level>'}\``,
+        });
+      }
+      return out;
+    },
+  },
+  {
     id: 'built-then-queried',
     summary: 'a component searches its own shadow tree for an element it just built',
     fix: "Capture the element while building it: `const body = createRef<HTMLDivElement>()`, `.ref(body)` on the builder, then `shadowPart(body, 'body')`. The builder already returns the element, so a selector re-derives what the caller had; when a class is renamed on one side only, the query yields `null` under a non-null assertion and surfaces much later as a property read on nothing.",
     extensions: ['.ts'],
     scan(source, file) {
       const clean = stripComments(source);
-      // Names bound to a tree this component built. `ensureShadowElement` counts: its factory
+      // Names bound to a tree this component built. `mountShadowTree` counts: its factory
       // is the builder, and every element below the returned root came from it.
       const built = new Set<string>();
       for (const match of clean.matchAll(/(?:const|let)\s+(\w+)(?:\s*:[^=;]+)?\s*=\s*([\s\S]*?);\n/g)) {
-        if (/\.build\(\)|ensureShadowElement\(/.test(match[2])) built.add(match[1]);
+        if (/\.build\(\)|mountShadowTree\(/.test(match[2])) built.add(match[1]);
       }
       for (const match of clean.matchAll(/this\.(\w+)\s*=\s*([\s\S]*?);\n/g)) {
-        if (/\.build\(\)|ensureShadowElement\(/.test(match[2])) built.add(`this.${match[1]}`);
+        if (/\.build\(\)|mountShadowTree\(/.test(match[2])) built.add(`this.${match[1]}`);
       }
       if (built.size === 0) return [];
       const out: Violation[] = [];

@@ -21,16 +21,17 @@ Seven of the rules below are enforced by `pnpm -F ranui verify:design`, which CI
 every pull request. Everything else in this file is still binding — it is simply not
 mechanically decidable, so it relies on review and on rendering the result.
 
-| Rule                       | Enforces                                                                                   | Section |
-| -------------------------- | ------------------------------------------------------------------------------------------ | ------- |
-| `dark-unsafe-fallback`     | a component token's colour fallback points at a token that flips, not a light-only literal | §1      |
-| `bare-colour`              | raw colour literals do not appear outside a token fallback                                 | §1      |
-| `spacing-scale`            | `padding` / `margin` / `gap` come from `--ran-space-*`                                     | §2      |
-| `sizing-scale`             | intrinsic dimensions never borrow from the spacing scale                                   | §2      |
-| `mouse-only-drag`          | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
-| `hidden-inert`             | a `:host` display rule does not silently disable the `hidden` attribute                    | §9      |
-| `undefined-token-fallback` | a component token's fallback names a token the theme actually declares                     | §1      |
-| `built-then-queried`       | a component holds the elements it built, instead of searching its own shadow tree for them | §9      |
+| Rule                             | Enforces                                                                                   | Section |
+| -------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| `dark-unsafe-fallback`           | a component token's colour fallback points at a token that flips, not a light-only literal | §1      |
+| `bare-colour`                    | raw colour literals do not appear outside a token fallback                                 | §1      |
+| `spacing-scale`                  | `padding` / `margin` / `gap` come from `--ran-space-*`                                     | §2      |
+| `sizing-scale`                   | intrinsic dimensions never borrow from the spacing scale                                   | §2      |
+| `mouse-only-drag`                | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
+| `hidden-inert`                   | a `:host` display rule does not silently disable the `hidden` attribute                    | §9      |
+| `undefined-token-fallback`       | a component token's fallback names a token the theme actually declares                     | §1      |
+| `built-then-queried`             | a component holds the elements it built, instead of searching its own shadow tree for them | §9      |
+| `tree-built-outside-constructor` | a component's shadow tree is built in its constructor, once                                | §9      |
 
 Existing violations are recorded per file in
 [design-rule-baseline.json](./design-rule-baseline.json) and act as a **ratchet**: a count
@@ -329,7 +330,7 @@ from the builder, so capture it there:
 
 ```ts
 const body = createRef<HTMLDivElement>();
-const root = ensureShadowElement(this._shadowDom, '.ran-thing', () =>
+const root = mountShadowTree(this._shadowDom, () =>
   Div().class('ran-thing').children(Div().class('ran-thing-body').ref(body)).build(),
 );
 this._body = shadowPart(body, 'body');
@@ -341,6 +342,28 @@ builder and the query drift apart with nothing to catch it. `querySelector` then
 `null`, the `!` waves it through, and the failure surfaces later as a property read on
 nothing — far from the rename that caused it. `shadowPart` throws at construction instead,
 naming the field.
+
+This holds because the tree is built **once, in the constructor**, which `verify:design`
+also enforces. `mountShadowTree` appends unconditionally: a second call from
+`connectedCallback` would mount a second copy on every reconnect, and its refs would replace
+the ones the component is already driving.
+
+It is fair to ask why the tree is not reused from the server-rendered markup instead. It
+cannot be. Server rendering does emit a declarative shadow root — the `im` demo page ships
+nine of them — but every component attaches a **closed** one, so `host.shadowRoot` is `null`,
+`ensureShadowRoot` reaches `attachShadow`, and attaching to an element that already has a
+declarative shadow root **removes that root's children**. Measured in a browser:
+
+| `shadowrootmode` | `host.shadowRoot` | children after `attachShadow` |
+| ---------------- | ----------------- | ----------------------------- |
+| `open`           | the root          | kept                          |
+| `closed`         | `null`            | **cleared**                   |
+
+So the server-rendered tree paints the first frame and is then replaced by an identical
+client-built one. Reuse would require `mode: 'open'`, and with it the queries this section
+exists to remove — refs cannot capture markup the component did not build. Closed shadow
+roots are the deliberate choice here, so the factory always runs and the refs are always
+filled.
 
 The exception is a container whose children arrive **after** the build — options rendered
 from data, nodes a third-party library injects. No ref could have captured those, so the live

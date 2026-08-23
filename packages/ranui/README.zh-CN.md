@@ -382,7 +382,7 @@ enableMpaViewTransitions();
 
 ### SSR & Builder (推荐)
 
-对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，RanUI 内部使用 `builder`、SSR registry 与 Declarative Shadow DOM。组件会通过 `ensureShadowRoot` 复用已有 Shadow Root，并通过 `ensureShadowElement` 保持初始化幂等。
+对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，RanUI 内部使用 `builder`、SSR registry 与 Declarative Shadow DOM。组件通过 `ensureShadowRoot` 复用已有 Shadow Root，并通过 `mountShadowTree` 构建自己的树。服务端渲染出的树只负责首帧绘制，随后会被替换：组件挂的是 **closed** shadow root，而 `attachShadow` 会清空声明式 shadow root 的子节点，因此客户端总是重建。
 
 源码内的 SSR 渲染示例：
 
@@ -405,7 +405,8 @@ const html = renderToString(button);
 
 - 组件继承 `RanElement`，不要直接继承浏览器环境下的 `HTMLElement`。
 - 使用 `ensureShadowRoot` 创建或复用 Shadow Root，不要直接调用 `attachShadow`。
-- 使用 `ensureShadowElement` 构建 Shadow DOM 子树，保证重复构造时幂等。
+- 使用 `mountShadowTree` 构建 Shadow DOM 子树，只在 constructor 里调用。
+- 构建时用 `.ref()` 捕获元素，再用 `shadowPart` 取回；不要用 `querySelector` 去查组件自己建出来的东西。
 - `observedAttributes` 包含 `sheet`，并通过 `syncSheetAttribute` 同步组件级样式覆盖。
 - `attributeChangedCallback` 首行使用 `if (old === next) return;` 避免重复同步。
 - 使用 `defineSSR('r-name', Component)` 注册组件，而不是直接调用 `customElements.define`。

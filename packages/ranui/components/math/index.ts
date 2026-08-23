@@ -1,7 +1,7 @@
 import { RanElement } from '@/utils/index';
 import { createRef, Div, EventManager, View } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setBooleanAttribute,
@@ -86,7 +86,7 @@ export class Math extends RanElement {
     const toolbarRef = createRef<HTMLDivElement>();
     const mathRef = createRef<HTMLElement>();
     const iconRef = createRef<HTMLElement>();
-    this._wrap = ensureShadowElement(this._shadowDom, '.ran-math', () =>
+    this._wrap = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-math')
         .part('math')

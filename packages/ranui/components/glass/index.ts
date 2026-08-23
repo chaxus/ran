@@ -2,7 +2,7 @@ import glassCss from './index.less?inline';
 import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -58,7 +58,7 @@ export class Glass extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, glassCss);
     const specularRef = createRef<HTMLDivElement>();
-    this._glass = ensureShadowElement(this._shadowDom, '.ran-glass', () =>
+    this._glass = mountShadowTree(this._shadowDom, () =>
       Div()
         .class('ran-glass')
         .attr('part', 'glass')

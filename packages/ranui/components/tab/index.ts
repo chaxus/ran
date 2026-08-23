@@ -8,7 +8,7 @@ import { isDisabled, RanElement } from '@/utils/index';
 import tabCss from './index.less?inline';
 import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
-  ensureShadowElement,
+  mountShadowTree,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
@@ -51,9 +51,8 @@ export class Tabs extends RanElement {
     const wrapRef = createRef<HTMLDivElement>();
     const slotRef = createRef<HTMLSlotElement>();
 
-    const wrap = ensureShadowElement(
+    const wrap = mountShadowTree(
       this._shadowDom,
-      '.ran-tab',
       () =>
         Div()
           .class('ran-tab')
