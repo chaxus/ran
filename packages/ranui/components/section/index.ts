@@ -28,8 +28,11 @@ export class Section extends RanElement {
     const headingElRef = createRef<HTMLDivElement>();
     const subtitleElRef = createRef<HTMLDivElement>();
 
-    const container = mountShadowTree(this._shadowDom, () => {
-      const header = Div()
+    // Two trees, mounted in order. Building both inside one factory and returning the header
+    // put it back at the end — `mountShadowTree` appends what it is given, and appending a
+    // node that is already a child moves it — so the heading rendered below the body.
+    const container = mountShadowTree(this._shadowDom, () =>
+      Div()
         .class('ran-section-header')
         .attr('part', 'header')
         .children(
@@ -41,14 +44,11 @@ export class Section extends RanElement {
             .attr('aria-level', '2'),
           Div().class('ran-section-subtitle').ref(subtitleElRef).attr('part', 'subtitle'),
         )
-        .build();
-
-      const body = Div().class('ran-section-body').attr('part', 'body').children(Slot()).build();
-
-      this._shadowDom.appendChild(header);
-      this._shadowDom.appendChild(body);
-      return header;
-    });
+        .build(),
+    );
+    mountShadowTree(this._shadowDom, () =>
+      Div().class('ran-section-body').attr('part', 'body').children(Slot()).build(),
+    );
 
     this._headerEl = container;
     this._headingEl = shadowPart(headingElRef, 'heading');
