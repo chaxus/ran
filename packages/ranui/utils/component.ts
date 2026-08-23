@@ -14,6 +14,29 @@ export const REDUCED_MOTION_CSS =
   'animation-duration:.01ms !important;animation-iteration-count:1 !important;' +
   'transition-duration:.01ms !important;scroll-behavior:auto !important}}';
 
+/** Component CSS joined with {@link REDUCED_MOTION_CSS}, keyed by the component's own text. */
+const withMotionCache = new Map<string, string>();
+
+/**
+ * The component's styles with the reduced-motion overrides appended, built once per component.
+ *
+ * The join has to happen somewhere, and doing it per construction produced a fresh string
+ * every time — which the stylesheet cache could only look up by hashing the whole of it,
+ * about a quarter of `r-button`'s construction cost. Keying on `cssText` instead looks up
+ * through the module-level string the component imported, whose hash the engine already has,
+ * and hands the cache the same joined string on every call.
+ *
+ * @param cssText - The component's own styles.
+ * @returns The text to adopt: the component's styles first, so the overrides win.
+ */
+const withReducedMotion = (cssText: string): string => {
+  const cached = withMotionCache.get(cssText);
+  if (cached !== undefined) return cached;
+  const joined = cssText ? `${cssText}\n${REDUCED_MOTION_CSS}` : REDUCED_MOTION_CSS;
+  withMotionCache.set(cssText, joined);
+  return joined;
+};
+
 export const ensureShadowRoot = (
   host: HTMLElement,
   cssText = '',
@@ -21,10 +44,7 @@ export const ensureShadowRoot = (
 ): ShadowRoot => {
   const root = host.shadowRoot || shadowRootCache.get(host) || host.attachShadow(options);
   shadowRootCache.set(host, root);
-  // Append the reduced-motion overrides AFTER the component CSS (last wins) in the
-  // same adopted sheet, so they apply in both the constructable-stylesheet and the
-  // <style> fallback paths (the fallback only injects one marked style per root).
-  adoptStyles(root, cssText ? `${cssText}\n${REDUCED_MOTION_CSS}` : REDUCED_MOTION_CSS);
+  adoptStyles(root, withReducedMotion(cssText));
   return root;
 };
 
