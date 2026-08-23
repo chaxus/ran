@@ -117,6 +117,19 @@ describe('r-select contract', () => {
     expect((select as any).defaultValue).toBe('def');
   });
 
+  it('clears the search box when the dropdown closes, after the user has typed', async () => {
+    // The search field is a native <input>, so once a user types into it the value is dirty
+    // and no longer follows the `value` attribute. Clearing it by attribute — which is what
+    // this did while `_search` was mistyped as the `r-input` custom element — leaves the text
+    // sitting there for the next open.
+    const select = await createSelectWithOptions();
+    select._search.value = 'typed by the user';
+
+    select.removeDropDownTimeId(new Event('mouseenter'));
+
+    expect(select._search.value).toBe('');
+  });
+
   it('showSearch getter and setter', async () => {
     const select = await createSelectWithOptions();
     (select as any).showSearch = 'true';

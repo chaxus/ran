@@ -43,6 +43,23 @@ describe('r-player poster/autoplay/loop/muted', () => {
     expect(player._video.loop).toBe(true);
   });
 
+  it('keeps its tree mounted across a source switch', () => {
+    // `updatePlayer` used to re-append the player tree "if missing", guarding against a
+    // `this.innerHTML = ''` two lines above it — which clears light DOM and never touched the
+    // shadow tree. Nothing in the component removes it, so the guard was unreachable and is
+    // gone; this is what has to stay true in its place. The other tests here read `_video`,
+    // which answers the same whether or not the tree is still in the root.
+    const player = makePlayer();
+    player.setAttribute('src', 'https://example.com/a.mp4');
+    player.updatePlayer();
+    expect(player._shadowDom.contains(player._player)).toBe(true);
+
+    player.setAttribute('src', 'https://example.com/b.mp4');
+    player.updatePlayer();
+
+    expect(player._shadowDom.contains(player._player)).toBe(true);
+  });
+
   it('starts muted (volume 0, video.muted true) when the muted attribute is set', () => {
     const player = makePlayer();
     player.setAttribute('muted', '');
