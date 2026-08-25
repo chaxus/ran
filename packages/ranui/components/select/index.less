@@ -124,16 +124,21 @@
   list-style: var(--ran-select-root-list-style, none);
   font-family: var(--ran-select-root-font-family, var(--ran-skin-font-family, @font-family));
   position: var(--ran-select-root-position, relative);
-  display: var(--ran-select-root-display, inline-block);
-  /* An inline-block sits on the text baseline, so the host reserves descender
-     space under it that nothing draws in: `:host` measured 38px around a 32px
-     field, and the field -- with everything in it -- rode 3px above the host's
-     own centre. Any row that centres a select against its siblings (a globe
-     icon beside a language menu, a label beside a field) was therefore 3px out,
-     which reads as the icon being misaligned rather than the select being too
-     tall. Topping it out removes the phantom row and makes `:host` the 32px the
-     comment above claims it is. */
-  vertical-align: var(--ran-select-root-vertical-align, top);
+  /* Block, not inline-block. This element fills the host (`width`/`height`
+     100%) and is never laid out beside anything, so being inline-level bought
+     nothing and cost a line box: the host reserved descender space under it
+     that nothing draws in, and everything inside rode above the host's own
+     centre. The size of that gap is the consumer's inherited `line-height`, so
+     it varied by page -- 2px in a bare container, 6px in the demo's header --
+     and any row centring a select against a sibling was out by half of it. It
+     read as the sibling being misaligned: in the demo's language menu the globe
+     was on the centre line and the select was not.
+
+     `display: block` removes the line box outright rather than re-aligning the
+     element inside it, and keeps `:host` the 32px the comment there claims.
+     Shrink-to-fit is unaffected -- an unstyled select measures the same 26px
+     either way -- because the host, not this element, is what shrinks. */
+  display: var(--ran-select-root-display, block);
   .selection {
     position: var(--ran-select-position, relative);
     background-color: var(--ran-select-background-color, var(--ran-color-bg-elevated, #ffffff));
