@@ -182,9 +182,40 @@ back inside the viewport by the shift. The suffix survives an auto-flip: `bottom
 
 Both components expose a single unnamed default slot — there are no named slots.
 
+## Open State `open`
+
+`open` is the panel's state, reflected as an attribute the way `<details open>` and `<dialog open>` are. Nothing infers it from the panel's `display`, which trails the state by the length of the exit animation — so the attribute, `aria-expanded` and what is on screen cannot disagree.
+
+```html
+<r-popover id="pop" trigger="click">
+  <r-button>Trigger</r-button>
+  <r-content><div>Content</div></r-content>
+</r-popover>
+
+<script>
+  const pop = document.getElementById('pop');
+  pop.open = true; // or pop.show()
+  pop.open = false; // or pop.hide()
+  pop.toggle();
+</script>
+```
+
+`show()`, `hide()` and `toggle()` are thin wrappers over it. `closePopover()` remains as an alias for `hide()`.
+
 ## Events
 
-`<r-popover>` dispatches no custom events. It is driven by standard DOM interaction:
+`<r-popover>` fires four events around the panel's transitions, none of which carry a `detail`:
+
+| Event        | When                                                     |
+| ------------ | -------------------------------------------------------- |
+| `show`       | The panel is about to appear.                            |
+| `after-show` | It has appeared and any entrance animation has finished. |
+| `hide`       | The panel is about to close.                             |
+| `after-hide` | It has closed and any exit animation has finished.       |
+
+The wait is the stylesheet's own animation rather than a duration copied into script, so under `prefers-reduced-motion` — where there is no animation to play — `after-hide` follows `hide` immediately instead of after a fixed delay.
+
+It is otherwise driven by standard DOM interaction:
 
 - **Open**: `mouseenter` (when `trigger` includes `hover`), `click`, or pressing `Enter` / `Space` while focused.
 - **Close**: `mouseleave` (hover mode), pressing `Escape`, or a `click` elsewhere in the document.

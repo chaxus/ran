@@ -273,3 +273,71 @@ test('select — the open attribute drives the panel both ways', async ({ page }
   await expect(page.locator('r-dropdown-item').first()).toBeHidden();
   await expect(el).toHaveAttribute('aria-expanded', 'false');
 });
+
+// The exit used to be a hardcoded 300ms in JS, matched by hand against the
+// stylesheet's own duration. Now the code asks the element what it is
+// animating, so a panel with nothing to animate finishes immediately — and
+// `prefers-reduced-motion` is the case where that is not a micro-optimisation
+// but the whole point: a reader who asked for less motion should not be made to
+// wait out the motion they are not getting.
+test('select — with reduced motion the panel has no animation to wait for', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await mount(
+    page,
+    `
+    <r-select id="sel" style="width: 200px" defaultValue="lucy" trigger="click">
+      <r-option value="jack">Jack</r-option>
+      <r-option value="lucy">Lucy</r-option>
+    </r-select>
+  `,
+  );
+  const el = page.locator('#sel');
+  await page.waitForTimeout(50);
+
+  await el.click();
+  await page.waitForTimeout(60);
+  const running = await el.evaluate((node: HTMLElement & { _selectionDropdown?: HTMLElement }) =>
+    node._selectionDropdown ? node._selectionDropdown.getAnimations().length : -1,
+  );
+  expect(running).toBe(0);
+
+  // Closed well inside the 300ms the old timer would have insisted on.
+  await el.click();
+  await page.waitForTimeout(60);
+  const display = await el.evaluate((node: HTMLElement & { _selectionDropdown?: HTMLElement }) =>
+    node._selectionDropdown ? node._selectionDropdown.style.display : '',
+  );
+  expect(display).toBe('none');
+});
+
+// `show`/`hide` fire on the intent, `after-show`/`after-hide` once the panel has
+// actually arrived. A consumer that has to clean up after a panel closes needs
+// the second pair, and before these existed there was nothing to listen to.
+test('select — emits show/after-show and hide/after-hide around the transition', async ({ page }) => {
+  await mount(
+    page,
+    `
+    <r-select id="sel" style="width: 200px" defaultValue="lucy" trigger="click">
+      <r-option value="jack">Jack</r-option>
+      <r-option value="lucy">Lucy</r-option>
+    </r-select>
+  `,
+  );
+  const el = page.locator('#sel');
+  await page.waitForTimeout(50);
+
+  await el.evaluate((node) => {
+    (window as unknown as { seen: string[] }).seen = [];
+    for (const name of ['show', 'after-show', 'hide', 'after-hide']) {
+      node.addEventListener(name, () => (window as unknown as { seen: string[] }).seen.push(name));
+    }
+  });
+
+  await el.click();
+  await page.waitForTimeout(500);
+  await el.click();
+  await page.waitForTimeout(500);
+
+  const seen = await page.evaluate(() => (window as unknown as { seen: string[] }).seen);
+  expect(seen).toEqual(['show', 'after-show', 'hide', 'after-hide']);
+});

@@ -202,9 +202,40 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 
 两个组件都只暴露一个匿名默认插槽——没有具名插槽。
 
+## 展开状态 `open`
+
+`open` 就是面板的状态，像 `<details open>`、`<dialog open>` 一样反射为属性。没有任何地方再从面板的 `display` 反推状态——那个值比状态滞后一整段退场动画——所以属性、`aria-expanded` 和屏幕上看到的三者不会互相矛盾。
+
+```html
+<r-popover id="pop" trigger="click">
+  <r-button>触发器</r-button>
+  <r-content><div>内容</div></r-content>
+</r-popover>
+
+<script>
+  const pop = document.getElementById('pop');
+  pop.open = true; // 或 pop.show()
+  pop.open = false; // 或 pop.hide()
+  pop.toggle();
+</script>
+```
+
+`show()`、`hide()`、`toggle()` 只是它的薄封装；`closePopover()` 作为 `hide()` 的别名保留。
+
 ## 事件
 
-`<r-popover>` 不会派发任何自定义事件，而是由标准的 DOM 交互驱动：
+`<r-popover>` 会在面板开合前后派发四个事件，都不带 `detail`：
+
+| 事件         | 时机                                 |
+| ------------ | ------------------------------------ |
+| `show`       | 面板即将出现。                       |
+| `after-show` | 面板已出现，入场动画（若有）已结束。 |
+| `hide`       | 面板即将关闭。                       |
+| `after-hide` | 面板已关闭，退场动画（若有）已结束。 |
+
+等待的是样式表里那个动画本身，而不是抄进脚本里的一个时长。所以在 `prefers-reduced-motion` 下——压根没有动画要播——`after-hide` 会紧接着 `hide` 发出，而不是干等一个固定延迟。
+
+除此之外，它由标准的 DOM 交互驱动：
 
 - **打开**：`mouseenter`（当 `trigger` 包含 `hover` 时）、`click`，或聚焦时按下 `Enter` / `Space`。
 - **关闭**：`mouseleave`（hover 模式）、按下 `Escape`，或点击文档中的其他位置。

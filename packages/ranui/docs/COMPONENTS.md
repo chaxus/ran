@@ -348,13 +348,14 @@ Source: `components/player/index.ts`
 
 Source: `components/popover/index.ts`
 
-- **Attributes**: `placement: string`, `sheet: string`, `trigger: string`
+- **Attributes**: `open: boolean`, `placement: Placement`, `sheet: string`, `trigger: string`
 - **Properties**:
   - `getPopupContainerId: string`
-  - `placement: string` — Which side of the trigger the panel sits on, with an optional alignment.
+  - `open: boolean` — Whether the panel is showing.
+  - `placement: Placement` — Which side of the trigger the panel sits on, with an optional alignment.
   - `sheet: string`
   - `trigger: string`
-- **Events**: —
+- **Events**: `after-hide` · `after-show` · `hide` · `show`
 - **Slots**: `default`
 - **Parts**: —
 
@@ -443,7 +444,7 @@ Source: `components/section/index.ts`
 
 Source: `components/select/index.ts`
 
-- **Attributes**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placement: string`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
+- **Attributes**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placement: Placement`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
 - **Properties**:
   - `defaultValue: string`
   - `disabled: boolean`
@@ -451,7 +452,7 @@ Source: `components/select/index.ts`
   - `getPopupContainerId: string`
   - `label: string` — 字段上方的静态说明文字（label）。
   - `open: boolean` — Whether the dropdown is showing.
-  - `placement: string`
+  - `placement: Placement` — Which side of the trigger the panel opens on, with an optional alignment.
   - `required: boolean`
   - `sheet: string`
   - `showSearch: string`
@@ -460,7 +461,7 @@ Source: `components/select/index.ts`
   - `validationMessage: string`
   - `validity: ValidityState | undefined`
   - `value: string`
-- **Events**: `change` → detail `{ label, value }` · `search` → detail `{ value }`
+- **Events**: `after-hide` · `after-show` · `change` → detail `{ label, value }` · `hide` · `search` → detail `{ value }` · `show`
 - **Slots**: `default`
 - **Parts**: `icon`, `label`, `search`, `select`, `selection`, `selection-item`
 

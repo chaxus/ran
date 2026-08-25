@@ -70,7 +70,11 @@ export function createSubtitleHandlers(deps: PlayerSubtitleDeps): PlayerSubtitle
       .attr('value', 'Off')
       .attr('type', 'text')
       .attr('trigger', 'hover,click')
-      .attr('placement', 'top')
+      // `-center`, explicitly. The panel is wider than this trigger (a short
+      // icon button against full option labels), and it used to be centred by a
+      // hardcoded rule inside r-select's custom-container branch. That branch now
+      // aligns the way every other path does, so what was implicit is stated.
+      .attr('placement', 'top-center')
       .attr('dropdownclass', 'video-subtitle-dropdown')
       .aria('label', 'Subtitles')
       .attr('title', 'Subtitles')

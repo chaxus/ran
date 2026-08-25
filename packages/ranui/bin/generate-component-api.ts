@@ -131,13 +131,22 @@ function detailKeys(body: string): string[] {
   );
 }
 
-/** Custom events the element dispatches, with their `detail` keys when present. */
+/**
+ * Custom events the element dispatches, with their `detail` keys when present.
+ *
+ * Found by reading the `new CustomEvent(...)` calls in the file, plus anything
+ * declared with the standard `@fires <name>` JSDoc tag. The tag is how an
+ * element documents an event it dispatches from somewhere else -- r-select and
+ * r-popover raise theirs from the shared floating controller, and scanning this
+ * file alone would report both as having no events at all.
+ */
 function extractEvents(src: string): Evt[] {
-  const names = uniqSorted(
-    (src.match(/new\s+CustomEvent\(\s*['"`]([^'"`]+)['"`]/g) || []).map((s) =>
+  const names = uniqSorted([
+    ...(src.match(/new\s+CustomEvent\(\s*['"`]([^'"`]+)['"`]/g) || []).map((s) =>
       s.replace(/.*['"`]([^'"`]+)['"`]$/, '$1'),
     ),
-  );
+    ...[...src.matchAll(/@fires\s+([a-zA-Z][\w-]*)/g)].map((m) => m[1]),
+  ]);
   const details = new Map<string, string[]>();
   const re = /new\s+CustomEvent\(\s*['"`]([^'"`]+)['"`][\s\S]{0,220}?detail:\s*\{([^{}]*)\}/g;
   let m: RegExpExecArray | null;
