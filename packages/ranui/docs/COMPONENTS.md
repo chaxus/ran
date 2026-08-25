@@ -349,7 +349,11 @@ Source: `components/player/index.ts`
 Source: `components/popover/index.ts`
 
 - **Attributes**: `placement: string`, `sheet: string`, `trigger: string`
-- **Properties**: `getPopupContainerId: string`, `placement: string`, `sheet: string`, `trigger: string`
+- **Properties**:
+  - `getPopupContainerId: string`
+  - `placement: string` — Which side of the trigger the panel sits on, with an optional alignment.
+  - `sheet: string`
+  - `trigger: string`
 - **Events**: —
 - **Slots**: `default`
 - **Parts**: —

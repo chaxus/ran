@@ -2,5 +2,12 @@
 // in, numbers out), never touches the DOM or a component, and `getBoundingClientRect()` is
 // always called by the ranui component itself before handing the rect in. ranui keeps this
 // module path so `@/utils/placement` (popover, select) stays importable unchanged.
-export { computePlacement } from 'ranuts/utils';
-export type { ComputePlacementOptions, ComputedPlacement, Placement, PlacementRect } from 'ranuts/utils';
+export { alignCrossAxis, computePlacement } from 'ranuts/utils';
+export type {
+  ComputePlacementOptions,
+  ComputedPlacement,
+  Placement,
+  PlacementAlign,
+  PlacementRect,
+  PlacementSide,
+} from 'ranuts/utils';

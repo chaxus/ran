@@ -330,4 +330,107 @@ describe('r-popover contract', () => {
 
     expect(() => popover.placementPosition()).not.toThrow();
   });
+  // ── Cross-axis alignment (`placement="bottom-end"` and friends) ──────────
+  //
+  // The suffix is new; the bare form is not. Everything inside this component
+  // that keys a four-entry table off `placement` -- the transit animation, the
+  // arrow direction, the custom-container coordinate branch -- has to read the
+  // side alone, or a suffixed placement lands on `undefined` and takes the
+  // panel's animation and arrow with it.
+  describe('cross-axis alignment', () => {
+    const sleep = (ms = 50) => new Promise((r) => setTimeout(r, ms));
+
+    /** A popover whose trigger and panel report fixed rects (jsdom lays out nothing). */
+    const mountMeasured = async (placement: string, containerId?: string) => {
+      const popover = document.createElement('r-popover') as any;
+      popover.placement = placement;
+      if (containerId) popover.setAttribute('getPopupContainerId', containerId);
+      popover.innerHTML = `<div id="trigger">Trigger</div><r-content>Content</r-content>`;
+      document.body.appendChild(popover);
+      await sleep(100);
+
+      const trigger = popover.querySelector('#trigger') as HTMLElement;
+      trigger.getBoundingClientRect = () =>
+        ({ top: 100, left: 500, width: 120, height: 40, bottom: 140, right: 620 }) as DOMRect;
+      popover.popoverContent.getBoundingClientRect = () =>
+        ({ top: 0, left: 0, width: 200, height: 150, bottom: 150, right: 200 }) as DOMRect;
+      return popover;
+    };
+
+    it("pins the panel to the trigger's trailing edge for `-end`, and to its leading edge without a suffix", async () => {
+      const start = await mountMeasured('bottom');
+      start.placementPosition();
+      expect(start.popoverContent.style.getPropertyValue('--ran-x')).toBe('500px');
+
+      const end = await mountMeasured('bottom-end');
+      end.placementPosition();
+      // Trigger's right edge is 620; a 200px panel ending there starts at 420.
+      expect(end.popoverContent.style.getPropertyValue('--ran-x')).toBe('420px');
+    });
+
+    it('centres the panel on the trigger for `-center`', async () => {
+      const popover = await mountMeasured('bottom-center');
+      popover.placementPosition();
+      // 500 + (120 - 200) / 2
+      expect(popover.popoverContent.style.getPropertyValue('--ran-x')).toBe('460px');
+    });
+
+    it('aligns on the vertical axis for a left/right placement', async () => {
+      // Sat further down the viewport than the shared rect: `-end` against a
+      // trigger 100px from the top would put the panel above the viewport, and
+      // the boundary shift -- correctly -- pulls it back, which measures the
+      // clamp rather than the alignment.
+      const lowerTrigger = (popover: any) => {
+        (popover.querySelector('#trigger') as HTMLElement).getBoundingClientRect = () =>
+          ({ top: 300, left: 500, width: 120, height: 40, bottom: 340, right: 620 }) as DOMRect;
+      };
+
+      const start = await mountMeasured('right');
+      lowerTrigger(start);
+      start.placementPosition();
+      expect(start.popoverContent.style.getPropertyValue('--ran-y')).toBe('300px');
+
+      const end = await mountMeasured('right-end');
+      lowerTrigger(end);
+      end.placementPosition();
+      // Trigger's bottom edge is 340; a 150px panel ending there starts at 190.
+      expect(end.popoverContent.style.getPropertyValue('--ran-y')).toBe('190px');
+      // The cross axis moved; the main axis did not.
+      expect(end.popoverContent.style.getPropertyValue('--ran-x')).toBe(
+        start.popoverContent.style.getPropertyValue('--ran-x'),
+      );
+    });
+
+    it('still points the arrow at the trigger when the placement carries a suffix', async () => {
+      const popover = await mountMeasured('bottom-end');
+      popover.changePlacement();
+      await sleep(100);
+      // `oppositeSide` has four entries and no 'bottom-end' — reading the whole
+      // attribute here yields undefined and leaves the arrow on whatever side
+      // it last had.
+      expect(popover.popoverContent?.getAttribute('arrow')).toBe('top');
+    });
+
+    it('still animates in from the side when the placement carries a suffix', async () => {
+      const popover = await mountMeasured('bottom-end');
+      popover.setDropdownDisplayBlock();
+      await sleep(60);
+      expect(popover.popoverContent.getAttribute('transit')).toBe('ran-dropdown-down-in');
+    });
+
+    it('aligns inside a custom container too, not only in the body portal', async () => {
+      const containerId = 'test-popover-container-align';
+      const container = document.createElement('div');
+      container.id = containerId;
+      document.body.appendChild(container);
+      container.getBoundingClientRect = () =>
+        ({ top: 50, left: 100, width: 800, height: 600, bottom: 650, right: 900 }) as DOMRect;
+
+      const popover = await mountMeasured('bottom-end', containerId);
+      popover.placementPosition();
+      // Same 420 as the portal branch, expressed relative to the container's
+      // own left edge (100).
+      expect(popover.popoverContent.style.getPropertyValue('--ran-x')).toBe('320px');
+    });
+  });
 });

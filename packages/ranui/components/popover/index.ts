@@ -19,7 +19,13 @@ import {
 } from '@/utils/component';
 import popoverCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
-import { computePlacement, type Placement } from '@/utils/placement';
+import {
+  alignCrossAxis,
+  computePlacement,
+  type Placement,
+  type PlacementAlign,
+  type PlacementSide,
+} from '@/utils/placement';
 import { isActivationKey } from '@/utils/a11y';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
@@ -99,11 +105,32 @@ export class Popover extends RanElement {
     this.popoverBlock = block;
     this._slot = shadowPart(slotRef, 'slot');
   }
+  /**
+   * Which side of the trigger the panel sits on, with an optional alignment.
+   *
+   * `bottom`, `bottom-end`, `right-center`, … — the suffix lines the panel up
+   * with the trigger's leading edge, centre or trailing edge along the cross
+   * axis. A bare side means `-start`, which is how this attribute has always
+   * behaved.
+   */
   get placement(): string {
     return getStringAttribute(this, 'placement', 'top');
   }
   set placement(value: string) {
     setStringAttribute(this, 'placement', value);
+  }
+  /**
+   * The side alone. Everything that keys off a four-entry table -- the transit
+   * animation, the arrow direction, the custom-container coordinate branch --
+   * reads this rather than `placement`, which may carry an alignment suffix
+   * those tables have no entry for.
+   */
+  private get placementSide(): PlacementSide {
+    return this.placement.split('-')[0] as PlacementSide;
+  }
+  /** The cross-axis alignment alone; `start` when the attribute names none. */
+  private get placementAlign(): PlacementAlign {
+    return (this.placement.split('-')[1] as PlacementAlign | undefined) ?? 'start';
   }
   get trigger(): string {
     return getStringAttribute(this, 'trigger', 'hover');
@@ -241,7 +268,7 @@ export class Popover extends RanElement {
     this.dropDownOutTimeId = undefined;
     if (this.popoverContent && this.popoverContent.style.display !== 'block') {
       this.updateAriaExpanded(true);
-      this.popoverContent.setAttribute('transit', placementDirection[this.placement].add);
+      this.popoverContent.setAttribute('transit', placementDirection[this.placementSide].add);
       this.popoverContent?.style.setProperty('display', 'block');
       this.placementPosition();
       this._attachReposition();
@@ -267,7 +294,7 @@ export class Popover extends RanElement {
     if (this.popoverContent && this.popoverContent.style.display !== 'none') {
       this._detachReposition();
       this.updateAriaExpanded(false);
-      this.popoverContent.setAttribute('transit', placementDirection[this.placement].remove);
+      this.popoverContent.setAttribute('transit', placementDirection[this.placementSide].remove);
       this.dropDownOutTimeId = setTimeout(() => {
         this.popoverContent?.style.setProperty('display', 'none');
         if (this.popoverContent) {
@@ -305,20 +332,27 @@ export class Popover extends RanElement {
     if (this.getPopupContainerId && root) {
       // Coordinates are relative to the custom container, not the viewport —
       // boundary-aware flip (which assumes viewport coordinates) doesn't
-      // apply here, so fall back to the simple placement.
+      // apply here, so fall back to the simple placement. The cross-axis
+      // alignment still applies, and goes through the same `alignCrossAxis`
+      // computePlacement uses: an attribute that works on one of these two
+      // branches and silently does nothing on the other is worse than one
+      // that doesn't exist.
       const rootRect = root.getBoundingClientRect();
+      const align = this.placementAlign;
+      const alignX = (): number => alignCrossAxis(align, left, width, popoverContentRect.width) - rootRect.left;
+      const alignY = (): number => alignCrossAxis(align, top, height, popoverContentRect.height) - rootRect.top;
       popoverTop = bottom - rootRect.top + arrowHeight;
-      popoverLeft = left - rootRect.left;
-      if (this.placement === PLACEMENT_TYPE.TOP) {
+      popoverLeft = alignX();
+      if (this.placementSide === PLACEMENT_TYPE.TOP) {
         popoverTop = top - rootRect.top - this.popoverContent.clientHeight - arrowHeight;
       }
-      if (this.placement === PLACEMENT_TYPE.LEFT) {
+      if (this.placementSide === PLACEMENT_TYPE.LEFT) {
         popoverLeft = left - rootRect.left - Math.max(popoverContentRect.width, width) - arrowHeight;
-        popoverTop = top - rootRect.top;
+        popoverTop = alignY();
       }
-      if (this.placement === PLACEMENT_TYPE.RIGHT) {
+      if (this.placementSide === PLACEMENT_TYPE.RIGHT) {
         popoverLeft = left - rootRect.left + width + arrowHeight;
-        popoverTop = top - rootRect.top;
+        popoverTop = alignY();
       }
     } else {
       // Portaled to <body>: viewport-relative, so flip to the opposite side
@@ -468,7 +502,7 @@ export class Popover extends RanElement {
     // stays flipped — pointing the arrow away from the trigger. The
     // getPopupContainerId branch has no flip concept, so it always applies.
     if (!this.getPopupContainerId && this.popoverContent?.style.display === 'block') return;
-    const side = oppositeSide[this.placement as PLACEMENT_TYPE];
+    const side = oppositeSide[this.placementSide as PLACEMENT_TYPE];
     if (side) this.popoverContent?.setAttribute('arrow', side);
   }, HOVER_TIME);
   connectedCallback(): void {
