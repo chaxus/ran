@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: ranuts 导出的全部符号 — 8 个入口点，共 451 个导出，含签名与描述。
+description: ranuts 导出的全部符号 — 8 个入口点，共 454 个导出，含签名与描述。
 ---
 
 # ranuts API（自动生成）
@@ -12,11 +12,11 @@ description: ranuts 导出的全部符号 — 8 个入口点，共 451 个导出
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**451 个导出**，共 8 个入口点。
+**454 个导出**，共 8 个入口点。
 
 ## 入口点
 
-- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 336 个导出
+- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 339 个导出
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 缓存策略与预缓存协议 · _仅 service worker_ · 9 个导出
 - [`ranuts/node`](#ranuts-node) — Node 服务端工具（fs / http / ws / 中间件） · _仅 node_ · 26 个导出
 - [`ranuts/visual`](#ranuts-visual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _仅浏览器_ · 16 个导出
@@ -40,6 +40,7 @@ import { /* … */ } from 'ranuts/utils';
 - `addNumSym(value: string | number, flag?: string | number) => string`
 - `adoptSheetText(shadowRoot: ShadowRoot, cssText: string, marker?: string) => void` — Inject dynamic styles supplied at runtime (a component's `sheet` property, say).
 - `adoptStyles(shadowRoot: ShadowRoot, cssText: string, marker?: string) => void` — Inject a component's static styles into a shadow root.
+- `alignCrossAxis(align: PlacementAlign, anchorStart: number, anchorSize: number, floatingSize: number) => number` — Where a floating panel starts along the cross axis, given how
 - `appendUrl(url: string, params?: Record<string, string>) => string` — Turn an object into a query string and append it to a URL
 - `arrayBufferToString(buffer: ArrayBuffer | Uint8Array) => string` — Decode bytes into a string using the sniffed encoding. Required when reading
 - `autosizeTextarea(element: HTMLTextAreaElement) => (() => void)` — Make a `<textarea>` grow and shrink with its content, so a long message is
@@ -345,7 +346,9 @@ import { /* … */ } from 'ranuts/utils';
 - `type LocaleChangeHandler`
 - `type LocaleMessages` — Locale → dictionary. Parameterised by the dictionary shape so an app can hand in its own
 - `type MessageDict`
-- `type Placement`
+- `type Placement` — A side, optionally suffixed with a cross-axis alignment — the same grammar
+- `type PlacementAlign` — Where the panel lines up along the cross axis: with the anchor's leading
+- `type PlacementSide` — The side of the anchor a floating panel sits on.
 - `type RelativeStyle` — `'compact'` is ours; the other three are `Intl.RelativeTimeFormat` styles.
 - `type RGB` — An RGB triple with each channel in 0..1 (linear or sRGB depending on the operation).
 - `type SpeechErrorKind` — `denied` means the user or the browser refused the microphone — worth surfacing.

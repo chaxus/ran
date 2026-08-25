@@ -8,11 +8,11 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**451 exports** across 8 entry points.
+**454 exports** across 8 entry points.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 336 exports
+- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 339 exports
 - [`ranuts/sw`](#ranuts-sw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranuts-node) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranuts-visual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 16 exports
@@ -36,6 +36,7 @@ import { /* … */ } from 'ranuts/utils';
 - `addNumSym(value: string | number, flag?: string | number) => string`
 - `adoptSheetText(shadowRoot: ShadowRoot, cssText: string, marker?: string) => void` — Inject dynamic styles supplied at runtime (a component's `sheet` property, say).
 - `adoptStyles(shadowRoot: ShadowRoot, cssText: string, marker?: string) => void` — Inject a component's static styles into a shadow root.
+- `alignCrossAxis(align: PlacementAlign, anchorStart: number, anchorSize: number, floatingSize: number) => number` — Where a floating panel starts along the cross axis, given how
 - `appendUrl(url: string, params?: Record<string, string>) => string` — Turn an object into a query string and append it to a URL
 - `arrayBufferToString(buffer: ArrayBuffer | Uint8Array) => string` — Decode bytes into a string using the sniffed encoding. Required when reading
 - `autosizeTextarea(element: HTMLTextAreaElement) => (() => void)` — Make a `<textarea>` grow and shrink with its content, so a long message is
@@ -341,7 +342,9 @@ import { /* … */ } from 'ranuts/utils';
 - `type LocaleChangeHandler`
 - `type LocaleMessages` — Locale → dictionary. Parameterised by the dictionary shape so an app can hand in its own
 - `type MessageDict`
-- `type Placement`
+- `type Placement` — A side, optionally suffixed with a cross-axis alignment — the same grammar
+- `type PlacementAlign` — Where the panel lines up along the cross axis: with the anchor's leading
+- `type PlacementSide` — The side of the anchor a floating panel sits on.
 - `type RelativeStyle` — `'compact'` is ours; the other three are `Intl.RelativeTimeFormat` styles.
 - `type RGB` — An RGB triple with each channel in 0..1 (linear or sRGB depending on the operation).
 - `type SpeechErrorKind` — `denied` means the user or the browser refused the microphone — worth surfacing.
