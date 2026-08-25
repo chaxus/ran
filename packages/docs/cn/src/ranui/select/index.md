@@ -143,6 +143,25 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 `placement` 只是一个偏好设置，不是保证：当触发器靠近视口边缘、偏好方向放不下时，下拉框会自动翻转到另一侧，并水平偏移以保持在屏幕内。这一行为只对默认的 body 级挂载生效——设置了 `getPopupContainerId` 时，请自行选一个适合容器的 `placement`。
 
+方向可以带一个对齐后缀——`bottom-end`、`top-center` 等，和 `r-popover` 是同一套写法。只写方向等同于 `-start`，即面板的起始边与触发器的起始边对齐。
+
+只有当面板和触发器不一样宽时，后缀才会产生差别——默认情况下面板宽度就跟着触发器走。把面板撑宽（用 `r-dropdown::part(dropdown)`，经 `dropdownclass` 定位到它，因为面板是挂到 `<body>` 上的、并不在 select 的 shadow root 里），对齐就会按真正绘制出来的宽度计算：
+
+```html
+<style>
+  r-dropdown.wide::part(dropdown) {
+    min-width: 220px;
+  }
+</style>
+
+<!-- 面板右边缘与触发器右边缘对齐 -->
+<r-select placement="bottom-end" dropdownclass="wide" style="width: 80px">
+  <r-option value="a">一个很长的选项文字</r-option>
+</r-select>
+```
+
+另外，边界平移的优先级高于对齐：触发器离视口边缘足够近时，无论要求了哪种对齐，面板都会被推回可视区域内。
+
 <Demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>

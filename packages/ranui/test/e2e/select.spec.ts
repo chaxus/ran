@@ -341,3 +341,74 @@ test('select — emits show/after-show and hide/after-hide around the transition
   const seen = await page.evaluate(() => (window as unknown as { seen: string[] }).seen);
   expect(seen).toEqual(['show', 'after-show', 'hide', 'after-hide']);
 });
+
+// The alignment suffix on r-select, which needs a shape to be visible in at all:
+// the panel host tracks the trigger's width, so with a panel the same width as
+// its trigger every alignment computes the same position. It only differs once a
+// consumer widens the panel past the trigger — and then it also exercises the
+// part that made this awkward, that the extra width overflows the panel *host*
+// and is invisible to a measurement taken on it. Alignment and flip both have to
+// use what is actually painted.
+test('select — the placement suffix aligns the panel that is painted, not the host box', async ({ page }) => {
+  // Stacked, and kept well clear of both viewport edges: the boundary shift
+  // outranks the alignment (as it should — a correctly aligned panel off-screen
+  // is worse than a nudged one), so a trigger near an edge measures the clamp
+  // instead of what this is about. The first draft put them in a row 120px
+  // apart at 600px wide and the centred one came back 15px out, shifted.
+  await page.setViewportSize({ width: 1000, height: 600 });
+  await mount(
+    page,
+    `
+    <style>r-dropdown.wide::part(dropdown) { min-width: 220px; }</style>
+    <div style="padding: 40px 0 40px 420px; display: flex; flex-direction: column; gap: 24px;">
+      <r-select id="start" placement="bottom" trigger="click" defaultValue="a" dropdownclass="wide" style="width: 80px">
+        <r-option value="a">A</r-option>
+      </r-select>
+      <r-select id="end" placement="bottom-end" trigger="click" defaultValue="a" dropdownclass="wide" style="width: 80px">
+        <r-option value="a">A</r-option>
+      </r-select>
+      <r-select id="centre" placement="bottom-center" trigger="click" defaultValue="a" dropdownclass="wide" style="width: 80px">
+        <r-option value="a">A</r-option>
+      </r-select>
+    </div>
+  `,
+  );
+  await page.waitForTimeout(50);
+
+  const read = async (id: string) => {
+    const el = page.locator(`#${id}`);
+    await el.evaluate((node: HTMLElement & { open: boolean }) => {
+      node.open = true;
+    });
+    await page.waitForTimeout(400);
+    const box = await el.evaluate((node: HTMLElement & { _selectionDropdown?: HTMLElement }) => {
+      const trigger = node.getBoundingClientRect();
+      const host = node._selectionDropdown as HTMLElement & { _shadowDom?: ShadowRoot };
+      const painted = host._shadowDom?.querySelector('.ranui-dropdown')?.getBoundingClientRect();
+      return {
+        triggerLeft: trigger.left,
+        triggerRight: trigger.right,
+        panelLeft: painted?.left ?? 0,
+        panelRight: painted?.right ?? 0,
+        panelWidth: painted?.width ?? 0,
+      };
+    });
+    await el.evaluate((node: HTMLElement & { open: boolean }) => {
+      node.open = false;
+    });
+    await page.waitForTimeout(400);
+    return box;
+  };
+
+  const start = await read('start');
+  const end = await read('end');
+  const centre = await read('centre');
+
+  // The panel really is wider than its trigger, or this proves nothing.
+  expect(start.panelWidth).toBeGreaterThan(start.triggerRight - start.triggerLeft);
+
+  expect(Math.abs(start.panelLeft - start.triggerLeft)).toBeLessThanOrEqual(1);
+  expect(Math.abs(end.panelRight - end.triggerRight)).toBeLessThanOrEqual(1);
+  const centreDelta = (centre.panelLeft + centre.panelRight) / 2 - (centre.triggerLeft + centre.triggerRight) / 2;
+  expect(Math.abs(centreDelta)).toBeLessThanOrEqual(1);
+});

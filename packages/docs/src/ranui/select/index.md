@@ -144,6 +144,25 @@ labeled input placed side by side in a form line up (same height, same top edge)
 
 `placement` is a preference, not a guarantee: when the trigger is near a viewport edge and the preferred side lacks room, the dropdown automatically flips to the other side and shifts horizontally to stay on-screen. This only applies to the default body-level mount — with `getPopupContainerId` set, choose a `placement` that fits the container.
 
+A side can carry an alignment suffix — `bottom-end`, `top-center`, and so on, the same grammar `r-popover` takes. A bare side means `-start`, which lines the panel's leading edge up with the trigger's.
+
+The suffix only changes anything when the panel is a different width from its trigger, since the panel tracks the trigger's width by default. Widen it (`r-dropdown::part(dropdown)`, reached through `dropdownclass`, because the panel is portalled to `<body>` rather than living in the select's shadow root) and the alignment is computed against what is actually painted:
+
+```html
+<style>
+  r-dropdown.wide::part(dropdown) {
+    min-width: 220px;
+  }
+</style>
+
+<!-- panel's right edge on the trigger's right edge -->
+<r-select placement="bottom-end" dropdownclass="wide" style="width: 80px">
+  <r-option value="a">A long option label</r-option>
+</r-select>
+```
+
+Note that the boundary shift outranks the alignment: a trigger close enough to a viewport edge gets its panel nudged back on-screen whatever alignment was asked for.
+
 <Demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>
