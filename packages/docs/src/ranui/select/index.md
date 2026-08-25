@@ -41,7 +41,8 @@ Options are supplied as slotted `<r-option>` children. Each option's `value` att
 | `defaultValue`        | `string`  | `''`       | Initial selected value, matched against option `value`                                                                            |
 | `disabled`            | `boolean` | `false`    | Whether the select is disabled                                                                                                    |
 | `type`                | `string`  | `''`       | `text` renders a borderless, transparent trigger with no arrow icon; otherwise bordered                                           |
-| `placement`           | `string`  | `'bottom'` | Dropdown direction: `top`, `bottom`                                                                                               |
+| `open`                | `boolean` | `false`    | Whether the dropdown is showing. This _is_ the state — set it to open or close the panel                                          |
+| `placement`           | `string`  | `'bottom'` | Which side the dropdown opens on, with an optional alignment: `bottom`, `bottom-end`, `top-center`, …                             |
 | `showSearch`          | `boolean` | `false`    | Show an inline search box that filters options by label                                                                           |
 | `getPopupContainerId` | `string`  | `''`       | Element `id` to mount the dropdown into (defaults to `document.body`)                                                             |
 | `dropdownclass`       | `string`  | `''`       | Custom class applied to the dropdown panel                                                                                        |
@@ -159,6 +160,34 @@ labeled input placed side by side in a form line up (same height, same top edge)
 </r-select>
 ```
 
+### Open State `open`
+
+`open` is the dropdown's state, reflected as an attribute the way `<details open>` and `<dialog open>` are. Nothing infers the state from the panel's `display` — that trails the state by the length of the exit animation — so the attribute, `aria-expanded` and what is on screen cannot disagree.
+
+That makes it a supported way to drive the component, and something to style and to assert against:
+
+```html
+<r-select id="picker" open>
+  <r-option value="185">Mike</r-option>
+</r-select>
+
+<script>
+  const picker = document.getElementById('picker');
+  picker.open = true; // or picker.show()
+  picker.open = false; // or picker.hide()
+  picker.toggle();
+</script>
+
+<style>
+  /* the trigger, while its panel is open */
+  r-select[open]::part(selection) {
+    border-color: var(--ran-color-primary);
+  }
+</style>
+```
+
+`show()`, `hide()` and `toggle()` are thin wrappers over it, for when a method reads better than an assignment.
+
 ### Search Function `showSearch`
 
 <Demo>
@@ -269,6 +298,22 @@ Fired only when `showSearch` is enabled, as the user types in the search box (th
   });
 </script>
 ```
+
+### `show` / `after-show` / `hide` / `after-hide`
+
+Fired around the panel's transitions. `show` and `hide` announce the intent, as the transition begins; `after-show` and `after-hide` fire once the panel has actually arrived and any animation has finished — that is the pair to listen to when something has to happen only after the panel is really gone.
+
+They carry no `detail`.
+
+```html
+<script>
+  const picker = document.getElementById('picker');
+  picker.addEventListener('show', () => console.log('opening'));
+  picker.addEventListener('after-hide', () => console.log('closed, and done animating'));
+</script>
+```
+
+The wait is the stylesheet's own animation rather than a duration copied into script, so under `prefers-reduced-motion` — where the panel has no animation to play — `after-hide` follows `hide` immediately instead of after a fixed delay.
 
 ## Form Association
 

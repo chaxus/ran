@@ -23,7 +23,11 @@ export { Math } from '@/components/math';
 export { Mermaid } from '@/components/mermaid';
 export { Markdown } from '@/components/markdown';
 export { PLACEMENT_TYPE, Popover } from '@/components/popover';
-export type { PlacementDirection } from '@/components/popover';
+// The floating panel machinery both r-popover and r-select run on. Exported so
+// a consumer building its own floating component gets the same positioning,
+// portalling, scroll-following and animation handling rather than a third copy.
+export { FloatingController } from '@/utils/floating';
+export type { FloatingOptions, FloatingPosition } from '@/utils/floating';
 export { ARROW_TYPE, Dropdown } from '@/components/dropdown';
 export { Card } from '@/components/card';
 export { Conversation } from '@/components/conversation';

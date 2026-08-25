@@ -66,3 +66,76 @@ test('popover — removing the host while open also removes the portaled panel',
 
   await expect(page.locator('.ran-popover-dropdown')).toHaveCount(0);
 });
+
+// ── open state, shared with r-select through the floating controller ─────────
+
+// Same contract as r-select's: `open` is the state, the trigger toggles it, and
+// the announced state cannot drift from the panel. Both components run the same
+// controller now, so this is here to make sure the wiring on this side is
+// actually connected — not to re-test the controller.
+test('popover — clicking the trigger toggles open, however fast the clicks arrive', async ({ page }) => {
+  await mount(
+    page,
+    `
+    <div style="padding: 60px;">
+      <r-popover id="pop" placement="bottom" trigger="click">
+        <r-button>Trigger</r-button>
+        <r-content><div style="padding: 8px 12px;">Content</div></r-content>
+      </r-popover>
+    </div>
+  `,
+  );
+  const popover = page.locator('#pop');
+  const trigger = page.locator('r-button');
+  await page.waitForTimeout(50);
+
+  const readings: { open: boolean; aria: string | null }[] = [];
+  for (let i = 0; i < 4; i++) {
+    await trigger.click();
+    await page.waitForTimeout(40);
+    readings.push(
+      await popover.evaluate((node) => ({
+        open: node.hasAttribute('open'),
+        aria: node.getAttribute('aria-expanded'),
+      })),
+    );
+  }
+
+  expect(readings.map((r) => r.open)).toEqual([true, false, true, false]);
+  for (const r of readings) expect(r.aria).toBe(String(r.open));
+});
+
+test('popover — the open property drives the panel, and the events bracket it', async ({ page }) => {
+  await mount(
+    page,
+    `
+    <div style="padding: 60px;">
+      <r-popover id="pop" placement="bottom" trigger="click">
+        <r-button>Trigger</r-button>
+        <r-content><div id="body" style="padding: 8px 12px;">Content</div></r-content>
+      </r-popover>
+    </div>
+  `,
+  );
+  const popover = page.locator('#pop');
+  await page.waitForTimeout(50);
+
+  await popover.evaluate((node) => {
+    (window as unknown as { seen: string[] }).seen = [];
+    for (const name of ['show', 'after-show', 'hide', 'after-hide']) {
+      node.addEventListener(name, () => (window as unknown as { seen: string[] }).seen.push(name));
+    }
+  });
+
+  await popover.evaluate((node: HTMLElement & { show: () => void }) => node.show());
+  await page.waitForTimeout(500);
+  await expect(page.locator('#body')).toBeVisible();
+  await expect(popover).toHaveAttribute('open', '');
+
+  await popover.evaluate((node: HTMLElement & { hide: () => void }) => node.hide());
+  await page.waitForTimeout(500);
+  await expect(page.locator('#body')).toBeHidden();
+
+  const seen = await page.evaluate(() => (window as unknown as { seen: string[] }).seen);
+  expect(seen).toEqual(['show', 'after-show', 'hide', 'after-hide']);
+});

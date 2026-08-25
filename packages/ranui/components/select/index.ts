@@ -7,7 +7,8 @@ import '@/components/dropdown';
 import '@/components/select/dropdown-item';
 import { registerIcon } from '@/components/icon';
 import { defineSSR } from '@/utils/ssr-registry';
-import { computePlacement } from '@/utils/placement';
+import { FloatingController } from '@/utils/floating';
+import type { Placement } from '@/utils/placement';
 import '@/components/input';
 import { createRef, Div, EventManager, InputBuilder, Label, Slot, Span, View } from '@/utils/builder';
 import {
@@ -26,19 +27,6 @@ interface Option {
   disabled?: boolean;
 }
 
-type PlacementDirection = Record<string, Record<string, string>>;
-
-const placementDirection: PlacementDirection = {
-  bottom: {
-    add: 'ran-dropdown-down-in',
-    remove: 'ran-dropdown-down-out',
-  },
-  top: {
-    add: 'ran-dropdown-up-in',
-    remove: 'ran-dropdown-up-out',
-  },
-};
-
 // The dropdown caret is part of the select's own chrome, so the component
 // registers its icon itself rather than relying on the consumer to do it.
 // Outline/stroke style (matching r-icon's other self-registered core glyphs —
@@ -47,12 +35,16 @@ const placementDirection: PlacementDirection = {
 // implementation (Radix, GitHub Primer, Vercel Geist) uses for this affordance.
 registerIcon('chevron-down', chevronDownIcon);
 
-const animationTime = 300;
-
 // Monotonic id source so each select's rendered <label> can point its
 // `for`/aria-labelledby at a stable id (mirrors r-input's inputIdSeq).
 let selectIdSeq = 0;
 
+/**
+ * @fires show - The panel is about to appear.
+ * @fires after-show - The panel has appeared and any entrance animation has finished.
+ * @fires hide - The panel is about to close.
+ * @fires after-hide - The panel has closed and any exit animation has finished.
+ */
 export class Select extends RanElement {
   // Participate in native forms: the selected value is host state, so relay it via
   // ElementInternals so `new FormData(form)` collects it.
@@ -73,8 +65,34 @@ export class Select extends RanElement {
   _icon: HTMLElement;
   _selectDropdown?: HTMLDivElement;
   _selectionDropdown?: HTMLElement;
-  _selectDropDownInTimeId?: NodeJS.Timeout;
-  _selectDropDownOutTimeId?: NodeJS.Timeout;
+  /**
+   * Positioning, portalling, scroll-following, the enter/exit animation and the
+   * show/hide events all live in the shared controller — r-popover drives the
+   * same one, so the two cannot drift apart the way their hand-copied
+   * reposition listeners had begun to.
+   */
+  _floating = new FloatingController({
+    host: this,
+    panel: () => this._selectionDropdown,
+    placement: () => this.placement,
+    offset: 4,
+    containerId: () => this.getPopupContainerId,
+    // The panel host tracks the trigger's width, and it has to be set before the
+    // panel is measured: the flip decision reads a height that depends on it.
+    beforeMeasure: (anchorRect, panel) => {
+      panel.style.setProperty('width', `${anchorRect.width}px`);
+    },
+    // A consumer can widen the panel *inside* that host (`::part(dropdown)`),
+    // and the overflow is invisible to a measurement taken on the host — so
+    // align and flip against what is actually painted. See r-player's quality
+    // menu, whose trigger is far narrower than its options.
+    measurePanel: (panel) => {
+      const shadow = (panel as unknown as { _shadowDom?: ShadowRoot })._shadowDom;
+      const rendered = shadow?.querySelector<HTMLElement>('.ranui-dropdown')?.getBoundingClientRect();
+      const own = panel.getBoundingClientRect();
+      return { width: rendered?.width ?? own.width, height: rendered?.height ?? own.height };
+    },
+  });
   _optionList: Option[];
   _optionLabelMapValue: Map<string, string>;
   _optionValueMapLabel: Map<string, string>;
@@ -306,10 +324,18 @@ export class Select extends RanElement {
   set type(value: string) {
     this.setAttribute('type', value || '');
   }
-  get placement(): string {
-    return this.getAttribute('placement') || 'bottom';
+  /**
+   * Which side of the trigger the panel opens on, with an optional alignment.
+   *
+   * `bottom`, `bottom-end`, `top-center`, … — the same grammar r-popover takes,
+   * because both now position through the same controller. A bare side means
+   * `-start`. Typed rather than left as `string`: these are the values the
+   * positioner understands, and an editor should say so.
+   */
+  get placement(): Placement {
+    return (this.getAttribute('placement') || 'bottom') as Placement;
   }
-  set placement(value: string) {
+  set placement(value: Placement) {
     this.setAttribute('placement', value || '');
   }
   get sheet(): string {
@@ -393,47 +419,24 @@ export class Select extends RanElement {
     }
   }
 
-  /**
-   * Drive the panel from `open`. The only place display, the reposition
-   * listeners, the transit class and `aria-expanded` are written.
-   *
-   * Both animation timers are cleared on every transition, whichever direction
-   * it goes: they exist to finish an animation, and a timer left over from the
-   * opposite direction would either hide a panel that has since re-opened or
-   * strip the transit class off one that is still animating in.
-   */
+  /** Drive the panel from `open`. Everything below it is the controller's. */
   _applyOpen = (): void => {
-    const open = this.open;
-    this.updateAriaExpanded(open);
-    if (!this._selectionDropdown) return;
-    clearTimeout(this._selectDropDownInTimeId);
-    this._selectDropDownInTimeId = undefined;
-    clearTimeout(this._selectDropDownOutTimeId);
-    this._selectDropDownOutTimeId = undefined;
+    this._floating.apply(this.open);
+  };
 
-    if (open) {
-      // The entrance transit class is applied from inside placementPosition()
-      // instead of here, once it knows the *resolved* (possibly flipped) side —
-      // deciding it here from the nominal `placement` would play the slide from
-      // the wrong direction whenever a flip actually happens.
-      this._selectionDropdown.style.setProperty('display', 'block');
-      this._attachReposition();
-      this.placementPosition(true);
-      this._selectDropDownInTimeId = setTimeout(() => {
-        this._selectionDropdown?.removeAttribute('transit');
-        this._selectDropDownInTimeId = undefined;
-      }, animationTime);
-      return;
-    }
+  /** Open the dropdown. */
+  show = (): void => {
+    this.open = true;
+  };
 
-    this._detachReposition();
-    if (this._selectionDropdown.style.display === 'none') return;
-    this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].remove);
-    this._selectDropDownOutTimeId = setTimeout(() => {
-      this._selectionDropdown?.style.setProperty('display', 'none');
-      this._selectionDropdown?.removeAttribute('transit');
-      this._selectDropDownOutTimeId = undefined;
-    }, animationTime);
+  /** Close the dropdown. */
+  hide = (): void => {
+    this.open = false;
+  };
+
+  /** Flip the dropdown between open and closed. */
+  toggle = (): void => {
+    this.open = !this.open;
   };
 
   getDropdownOptions = (): HTMLElement[] => {
@@ -648,117 +651,19 @@ export class Select extends RanElement {
     this.open = true;
   };
   /**
-   * @param applyEntranceTransit - Only true for the call that opens the
-   * dropdown (from `selectMouseDown`). Scroll/resize-triggered repositioning
-   * (`_repositionDropdown`) reuses this same method while already open and
-   * must not re-trigger the entrance animation on every scroll tick.
+   * Position the panel against the trigger.
+   *
+   * Kept as a method because it is part of this element's surface, but the work
+   * is the shared controller's — including staying with the trigger when the
+   * page scrolls, which this component and r-popover used to implement
+   * separately, one carrying a comment that it mirrored the other.
+   *
+   * @param applyEntranceTransit - Only true for the call that opens the panel.
+   * Scroll/resize repositioning reuses this while already open and must not
+   * replay the entrance animation on every tick.
    */
   placementPosition = (applyEntranceTransit = false): void => {
-    if (!this._selectionDropdown || !this._selectDropdown) return;
-
-    // Defer coordinate mapping to next animation frame so that display: block
-    // changes and newly-populated drop-down items are factored into measurements.
-    // This also defers the flip decision itself (it needs the panel's real,
-    // laid-out height), which is why the entrance transit class — chosen from
-    // the *resolved* side, not the nominal `placement` — is applied here too,
-    // rather than synchronously in setSelectDropdownDisplayBlock.
-    requestAnimationFrame(() => {
-      if (!this._selectionDropdown || !this._selectDropdown) return;
-      const rect = this.getBoundingClientRect();
-      const { top, left, bottom, width, height } = rect;
-      const rootNode = this.getRootNode() as ShadowRoot | Document;
-      const root =
-        (rootNode.getElementById ? rootNode.getElementById(this.getPopupContainerId) : null) ||
-        document.getElementById(this.getPopupContainerId);
-      this._selectionDropdown.style.setProperty('position', `absolute`);
-      this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
-      this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
-      const OFFSET = 4;
-      this._selectionDropdown.style.setProperty('width', `${width}px`);
-
-      if (this.getPopupContainerId && root) {
-        // Coordinates are relative to the custom container, not the viewport —
-        // boundary-aware flip (which assumes viewport coordinates) doesn't
-        // apply here, so fall back to the simple two-way placement.
-        const rootRect = root.getBoundingClientRect();
-        // Center the panel on the trigger rather than left-aligning it. The
-        // `width` set above forces *`r-dropdown`'s own host box* to match the
-        // trigger's width, but a consumer can still make the panel *inside*
-        // it wider (e.g. `::part(dropdown) { min-width: … }`, so a longer
-        // option label isn't clipped on a deliberately compact trigger — see
-        // `r-player`'s speed/quality menus): `min-width` on the shadow-
-        // internal `.ranui-dropdown` beats the host's inline `width` for that
-        // inner element, but the host's *own* box (what `getBoundingClientRect`
-        // on `this._selectionDropdown` reports) stays exactly the width we
-        // just set — the wider panel simply overflows it, invisible to a
-        // measurement taken on the host. Reaching into the host's own shadow
-        // root for the actual `.ranui-dropdown` panel gets the *rendered*
-        // width instead (falling back to the host's width if that shadow
-        // query ever comes back empty). When the panel matches the trigger
-        // (the common case), this computes the exact same position as a
-        // plain left-align (zero offset) — it only shifts anything when the
-        // two widths actually diverge.
-        const dropdownShadow = (this._selectionDropdown as unknown as { _shadowDom?: ShadowRoot })._shadowDom;
-        const panelEl = dropdownShadow?.querySelector<HTMLElement>('.ranui-dropdown');
-        const panelWidth =
-          panelEl?.getBoundingClientRect().width ?? this._selectionDropdown.getBoundingClientRect().width;
-        const selectLeft = left - rootRect.left - (panelWidth - width) / 2;
-        let selectTop = bottom - rootRect.top + OFFSET;
-        if (this.placement === 'top') {
-          selectTop = top - rootRect.top - this._selectionDropdown.clientHeight - OFFSET;
-        }
-        this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
-        if (applyEntranceTransit) {
-          this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add);
-        }
-        return;
-      }
-
-      // Portaled to <body>: viewport-relative, so flip to the opposite side
-      // when the preferred side lacks room (e.g. select near the bottom of the
-      // screen) and shift horizontally to stay on-screen — the same
-      // flip/shift middleware pattern Floating UI/Radix use.
-      const {
-        top: selectTop,
-        left: selectLeft,
-        placement: resolvedPlacement,
-      } = computePlacement({
-        anchor: { top, left, width, height },
-        floating: { width, height: this._selectionDropdown.clientHeight },
-        placement: this.placement === 'top' ? 'top' : 'bottom',
-        offset: OFFSET,
-      });
-      this._selectionDropdown.style.setProperty(
-        'inset',
-        `${selectTop + window.scrollY}px auto auto ${selectLeft + window.scrollX}px`,
-      );
-      if (applyEntranceTransit) {
-        this._selectionDropdown.setAttribute('transit', placementDirection[resolvedPlacement].add);
-      }
-    });
-  };
-
-  /**
-   * The dropdown is mounted on document.body and positioned once on open, so it
-   * detaches from the trigger when the page (or any scroll container) scrolls —
-   * e.g. a select inside a sticky header. Re-run placement on scroll/resize
-   * while it is open. Capture-phase scroll catches nested scroll containers too.
-   */
-  _repositionBound = false;
-  _repositionDropdown = (): void => {
-    if (this._selectionDropdown?.style.display === 'block') this.placementPosition();
-  };
-  _attachReposition = (): void => {
-    if (this._repositionBound || typeof window === 'undefined') return;
-    window.addEventListener('scroll', this._repositionDropdown, true);
-    window.addEventListener('resize', this._repositionDropdown);
-    this._repositionBound = true;
-  };
-  _detachReposition = (): void => {
-    if (!this._repositionBound || typeof window === 'undefined') return;
-    window.removeEventListener('scroll', this._repositionDropdown, true);
-    window.removeEventListener('resize', this._repositionDropdown);
-    this._repositionBound = false;
+    this._floating.position(applyEntranceTransit);
   };
   /**
    * @description: 设置下拉框
@@ -1052,7 +957,7 @@ export class Select extends RanElement {
   disconnectedCallback(): void {
     this._events.abort();
     this._searchEvents.abort();
-    this._detachReposition();
+    this._floating.destroy();
     this.removeSelectDropdown();
     clearTimeout(this._typeaheadTimeId);
   }

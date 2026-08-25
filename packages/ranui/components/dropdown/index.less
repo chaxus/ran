@@ -342,3 +342,25 @@
     }
   }
 }
+
+// A floating panel appearing is exactly the kind of motion a reader who asked
+// for less of it means: it slides and fades in the corner of their eye every
+// time a menu opens. Killing the animation outright rather than shortening it —
+// the panel still appears, just without the travel.
+//
+// This is also the whole of the reduced-motion handling for r-select and
+// r-popover, because the JS that used to hold a duration alongside this one now
+// asks the element what it is animating (`getAnimations()`), and gets an empty
+// list here. Panel and code agree without either being told about the other.
+@media (prefers-reduced-motion: reduce) {
+  .ran-dropdown-down-in,
+  .ran-dropdown-down-out,
+  .ran-dropdown-up-in,
+  .ran-dropdown-up-out,
+  .ran-dropdown-left-in,
+  .ran-dropdown-left-out,
+  .ran-dropdown-right-in,
+  .ran-dropdown-right-out {
+    animation: none;
+  }
+}

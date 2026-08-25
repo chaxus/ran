@@ -19,43 +19,23 @@ import {
 } from '@/utils/component';
 import popoverCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
-import {
-  alignCrossAxis,
-  computePlacement,
-  type Placement,
-  type PlacementAlign,
-  type PlacementSide,
-} from '@/utils/placement';
+import { FloatingController } from '@/utils/floating';
+import type { Placement, PlacementSide } from '@/utils/placement';
 import { isActivationKey } from '@/utils/a11y';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
 const arrowHeight = 8;
 
-const animationTime = 300;
+/**
+ * How long a hover-triggered panel stays up after the pointer leaves, so a
+ * pointer crossing the gap between trigger and panel does not dismiss it. Not
+ * an animation duration: the animation now ends when the stylesheet says it
+ * does, which is what the shared controller waits for.
+ */
+const HOVER_CLOSE_DELAY = 300;
 
 const HOVER_TIME = 16;
-
-export type PlacementDirection = Record<string, Record<string, string>>;
-
-const placementDirection: PlacementDirection = {
-  bottom: {
-    add: 'ran-dropdown-down-in',
-    remove: 'ran-dropdown-down-out',
-  },
-  top: {
-    add: 'ran-dropdown-up-in',
-    remove: 'ran-dropdown-up-out',
-  },
-  left: {
-    add: 'ran-dropdown-left-in',
-    remove: 'ran-dropdown-left-out',
-  },
-  right: {
-    add: 'ran-dropdown-right-in',
-    remove: 'ran-dropdown-right-out',
-  },
-};
 
 export enum PLACEMENT_TYPE {
   TOP = 'top',
@@ -73,6 +53,12 @@ const oppositeSide: Record<PLACEMENT_TYPE, PLACEMENT_TYPE> = {
   [PLACEMENT_TYPE.RIGHT]: PLACEMENT_TYPE.LEFT,
 };
 
+/**
+ * @fires show - The panel is about to appear.
+ * @fires after-show - The panel has appeared and any entrance animation has finished.
+ * @fires hide - The panel is about to close.
+ * @fires after-hide - The panel has closed and any exit animation has finished.
+ */
 export class Popover extends RanElement {
   _events = new EventManager();
   _slot: HTMLSlotElement;
@@ -81,12 +67,58 @@ export class Popover extends RanElement {
   popoverInner?: HTMLDivElement;
   popoverInnerBlock?: HTMLDivElement;
   _shadowDom: ShadowRoot;
-  dropDownInTimeId?: NodeJS.Timeout;
-  dropDownOutTimeId?: NodeJS.Timeout;
   removeTimeId?: NodeJS.Timeout;
   _repositionBound = false;
+  /**
+   * Positioning, portalling, scroll-following, the enter/exit animation and the
+   * show/hide events are the shared controller's — r-select drives the same one.
+   * What stays here is what only a popover knows: which child is the trigger,
+   * and where its arrow has to point afterwards.
+   */
+  _floating = new FloatingController({
+    host: this,
+    panel: () => this.popoverContent,
+    // The *trigger*, not the host. The host is `display: block` and stretches to
+    // fill whatever block container it sits in (a demo card, a form row), so its
+    // own rect is usually far wider and taller than anything visible. Feeding
+    // that to the arrow-centring maths used to push the arrow clean off the
+    // panel, and to the left/right placement maths used to offset the panel too.
+    anchor: () => (Array.from(this.children).find((el) => el.tagName !== 'R-CONTENT') as HTMLElement) ?? this,
+    placement: () => this.placement,
+    offset: arrowHeight,
+    containerId: () => this.getPopupContainerId,
+    afterPosition: (position, panel) => {
+      const { anchorRect, panelRect, side } = position;
+      // A flip changes which side the panel actually renders on — repoint the
+      // arrow so it still points back at the trigger, not at the nominal side.
+      const opposite = oppositeSide[side as PLACEMENT_TYPE];
+      if (opposite) panel.setAttribute('arrow', opposite);
+      panel.style.setProperty('--ran-dropdown-arrow-anchor-width', `${anchorRect.width}px`);
+      panel.style.setProperty('--ran-dropdown-arrow-anchor-height', `${anchorRect.height}px`);
+      panel.style.setProperty('--ran-dropdown-min-width', `${panelRect.width}px`);
+      panel.style.setProperty('--ran-dropdown-min-height', `${panelRect.height}px`);
+      // `.top`/`.bottom` in dropdown/index.less self-centre the arrow on the
+      // *panel* (`left: 50%`), which is right for a bare `<r-dropdown>` with no
+      // trigger. A popover's panel is edge-aligned with its trigger, so the
+      // panel's centre usually is not the trigger's. Re-measure now that `inset`
+      // is applied and feed the panel-centre → trigger-centre delta back as a
+      // nudge on top of that base.
+      const finalPanelRect = panel.getBoundingClientRect();
+      const triggerCentreX = anchorRect.left + anchorRect.width / 2;
+      const panelCentreX = finalPanelRect.left + finalPanelRect.width / 2;
+      panel.style.setProperty('--ran-dropdown-arrow-anchor-offset', `${triggerCentreX - panelCentreX}px`);
+      // `.left`/`.right` measure the arrow from the *panel's top edge* rather
+      // than from a self-centring base, so their formula only points at the
+      // trigger while the panel's top edge is flush with the trigger's. The
+      // boundary shift breaks that (a trigger near the viewport edge gets the
+      // panel clamped vertically, and the arrow's formula has no idea), so the
+      // correction here is an edge-to-edge delta, not centre-to-centre.
+      panel.style.setProperty('--ran-dropdown-arrow-anchor-offset-y', `${anchorRect.top - finalPanelRect.top}px`);
+    },
+  });
+
   static get observedAttributes(): string[] {
-    return ['placement', 'trigger', 'sheet'];
+    return ['open', 'placement', 'trigger', 'sheet'];
   }
   public readonly closePopover = (): void => {
     this.setDropdownDisplayNone();
@@ -113,10 +145,10 @@ export class Popover extends RanElement {
    * axis. A bare side means `-start`, which is how this attribute has always
    * behaved.
    */
-  get placement(): string {
-    return getStringAttribute(this, 'placement', 'top');
+  get placement(): Placement {
+    return getStringAttribute(this, 'placement', 'top') as Placement;
   }
-  set placement(value: string) {
+  set placement(value: Placement) {
     setStringAttribute(this, 'placement', value);
   }
   /**
@@ -128,10 +160,47 @@ export class Popover extends RanElement {
   private get placementSide(): PlacementSide {
     return this.placement.split('-')[0] as PlacementSide;
   }
-  /** The cross-axis alignment alone; `start` when the attribute names none. */
-  private get placementAlign(): PlacementAlign {
-    return (this.placement.split('-')[1] as PlacementAlign | undefined) ?? 'start';
+  /**
+   * Whether the panel is showing.
+   *
+   * The state itself, reflected the way `<details open>` and `<dialog open>` do
+   * it — not inferred from the panel's `style.display`, which trails the state
+   * by the length of the exit animation and answers about the frame rather than
+   * the intent. Reflecting it also puts it where a consumer can reach it:
+   * `:host([open])` in CSS, `popover.open = true` from script, an attribute to
+   * assert in a test instead of a poll.
+   */
+  get open(): boolean {
+    return this.hasAttribute('open');
   }
+  set open(value: boolean) {
+    if (value) {
+      this.setAttribute('open', '');
+    } else {
+      this.removeAttribute('open');
+    }
+  }
+
+  /** Drive the panel from `open`. Everything below it is the controller's. */
+  _applyOpen = (): void => {
+    this._floating.apply(this.open);
+  };
+
+  /** Show the panel. */
+  show = (): void => {
+    this.open = true;
+  };
+
+  /** Hide the panel. */
+  hide = (): void => {
+    this.open = false;
+  };
+
+  /** Flip the panel between shown and hidden. */
+  toggle = (): void => {
+    this.open = !this.open;
+  };
+
   get trigger(): string {
     return getStringAttribute(this, 'trigger', 'hover');
   }
@@ -244,7 +313,7 @@ export class Popover extends RanElement {
     this.removeTimeId = setTimeout(() => {
       this.removeDropDownTimeId();
       this.setDropdownDisplayNone();
-    }, animationTime);
+    }, HOVER_CLOSE_DELAY);
   }, HOVER_TIME);
   /**
    * @description: 移除下拉框
@@ -261,174 +330,24 @@ export class Popover extends RanElement {
    * @return {*}
    */
   setDropdownDisplayBlock = debounce((): void => {
-    if (this.dropDownInTimeId) return;
-    clearTimeout(this.dropDownInTimeId);
-    this.dropDownInTimeId = undefined;
-    clearTimeout(this.dropDownOutTimeId);
-    this.dropDownOutTimeId = undefined;
-    if (this.popoverContent && this.popoverContent.style.display !== 'block') {
-      this.updateAriaExpanded(true);
-      this.popoverContent.setAttribute('transit', placementDirection[this.placementSide].add);
-      this.popoverContent?.style.setProperty('display', 'block');
-      this.placementPosition();
-      this._attachReposition();
-      this.dropDownInTimeId = setTimeout(() => {
-        if (this.popoverContent) {
-          this.popoverContent.removeAttribute('transit');
-        }
-        clearTimeout(this.dropDownInTimeId);
-        this.dropDownInTimeId = undefined;
-      }, animationTime);
-    }
+    this.open = true;
   }, HOVER_TIME);
   /**
    * @description: 移除 select dropdown
    * @return {*}
    */
   setDropdownDisplayNone = debounce((): void => {
-    if (this.dropDownOutTimeId) return;
-    clearTimeout(this.dropDownInTimeId);
-    this.dropDownInTimeId = undefined;
-    clearTimeout(this.dropDownOutTimeId);
-    this.dropDownOutTimeId = undefined;
-    if (this.popoverContent && this.popoverContent.style.display !== 'none') {
-      this._detachReposition();
-      this.updateAriaExpanded(false);
-      this.popoverContent.setAttribute('transit', placementDirection[this.placementSide].remove);
-      this.dropDownOutTimeId = setTimeout(() => {
-        this.popoverContent?.style.setProperty('display', 'none');
-        if (this.popoverContent) {
-          this.popoverContent.removeAttribute('transit');
-        }
-        clearTimeout(this.dropDownOutTimeId);
-        this.dropDownOutTimeId = undefined;
-      }, animationTime);
-    }
+    this.open = false;
   }, HOVER_TIME);
   /**
-   * @description: 设置 popover 位置
-   * @param {*} void
-   * @return {*}
+   * Position the panel against the trigger.
+   *
+   * Kept on the element because it is part of its surface, but the work — flip,
+   * shift, alignment, the custom-container branch, and staying with the trigger
+   * as the page scrolls — is the shared controller's.
    */
   placementPosition = (): void => {
-    if (!this.popoverContent) return;
-    // Measure the *trigger*, not `this` — the host is `display: block` and
-    // stretches to fill whatever block container it sits in (a demo card,
-    // a form row, …), so its own rect is usually far wider/taller than the
-    // visible trigger. Using it here used to feed a wildly oversized anchor
-    // width/height into the arrow-centering math (`--ran-dropdown-arrow-
-    // anchor-width/height` in dropdown/index.less), pushing the arrow off
-    // the panel entirely, and into the RIGHT/LEFT placement math (`left +
-    // width`), offsetting the panel itself too. The trigger is whatever
-    // light-DOM child isn't the `<r-content>` content panel.
-    const triggerEl = (Array.from(this.children).find((el) => el.tagName !== 'R-CONTENT') as HTMLElement) ?? this;
-    const rect = triggerEl.getBoundingClientRect();
-    const { top, left, bottom, width, height } = rect;
-    const root = document.getElementById(this.getPopupContainerId);
-    const popoverContentRect = this.popoverContent.getBoundingClientRect();
-    let popoverTop: number;
-    let popoverLeft: number;
-
-    if (this.getPopupContainerId && root) {
-      // Coordinates are relative to the custom container, not the viewport —
-      // boundary-aware flip (which assumes viewport coordinates) doesn't
-      // apply here, so fall back to the simple placement. The cross-axis
-      // alignment still applies, and goes through the same `alignCrossAxis`
-      // computePlacement uses: an attribute that works on one of these two
-      // branches and silently does nothing on the other is worse than one
-      // that doesn't exist.
-      const rootRect = root.getBoundingClientRect();
-      const align = this.placementAlign;
-      const alignX = (): number => alignCrossAxis(align, left, width, popoverContentRect.width) - rootRect.left;
-      const alignY = (): number => alignCrossAxis(align, top, height, popoverContentRect.height) - rootRect.top;
-      popoverTop = bottom - rootRect.top + arrowHeight;
-      popoverLeft = alignX();
-      if (this.placementSide === PLACEMENT_TYPE.TOP) {
-        popoverTop = top - rootRect.top - this.popoverContent.clientHeight - arrowHeight;
-      }
-      if (this.placementSide === PLACEMENT_TYPE.LEFT) {
-        popoverLeft = left - rootRect.left - Math.max(popoverContentRect.width, width) - arrowHeight;
-        popoverTop = alignY();
-      }
-      if (this.placementSide === PLACEMENT_TYPE.RIGHT) {
-        popoverLeft = left - rootRect.left + width + arrowHeight;
-        popoverTop = alignY();
-      }
-    } else {
-      // Portaled to <body>: viewport-relative, so flip to the opposite side
-      // when the preferred side lacks room and shift along the cross axis to
-      // stay on-screen — the same flip/shift middleware pattern Floating
-      // UI/Radix use.
-      const computed = computePlacement({
-        anchor: { top, left, width, height },
-        floating: { width: popoverContentRect.width, height: popoverContentRect.height },
-        placement: this.placement as Placement,
-        offset: arrowHeight,
-      });
-      popoverTop = computed.top + window.scrollY;
-      popoverLeft = computed.left + window.scrollX;
-      // A flip changes which side the panel actually renders on — repoint the
-      // arrow so it still points back at the trigger instead of the nominal side.
-      const side = oppositeSide[computed.placement as PLACEMENT_TYPE];
-      if (side) this.popoverContent.setAttribute('arrow', side);
-    }
-
-    this.popoverContent.style.setProperty('inset', `${popoverTop}px auto auto ${popoverLeft}px`);
-    this.popoverContent.style.setProperty('--ran-x', `${popoverLeft}px`);
-    this.popoverContent.style.setProperty('--ran-y', `${popoverTop}px`);
-    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-width', `${width}px`);
-    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-height', `${height}px`);
-    this.popoverContent.style.setProperty('--ran-dropdown-min-width', `${popoverContentRect.width}px`);
-    this.popoverContent.style.setProperty('--ran-dropdown-min-height', `${popoverContentRect.height}px`);
-    // `.top`/`.bottom` in dropdown/index.less now self-center the arrow on the
-    // *panel* (`left: 50%`) by default — correct for a bare `<r-dropdown>` with
-    // no trigger. A popover's panel is edge-aligned with the trigger, not
-    // center-aligned (see `popoverLeft` above), so its own center usually isn't
-    // the trigger's center. Re-measure both boxes now that `inset` is applied
-    // and feed the panel-center → trigger-center pixel delta back in as a nudge
-    // on top of that self-centering base, so the arrow still points at the
-    // trigger precisely instead of at the panel's midpoint.
-    const finalPanelRect = this.popoverContent.getBoundingClientRect();
-    const triggerCenterX = left + width / 2;
-    const panelCenterX = finalPanelRect.left + finalPanelRect.width / 2;
-    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-offset', `${triggerCenterX - panelCenterX}px`);
-    // `.left`/`.right` measure the arrow's vertical position as an offset from
-    // the *panel's top edge* (`top: max(0, anchor-height/2 - arrow-size)`,
-    // not a `left: 50%`-style self-centering base like `.top`/`.bottom` get),
-    // which only points at the trigger's center when the panel's top edge is
-    // flush with the trigger's top edge (`popoverTop = top` above). That
-    // assumption breaks once `computePlacement`'s boundary shift kicks in
-    // (trigger near the top/bottom edge of the viewport) — the panel gets
-    // clamped vertically while the arrow's formula has no idea, so it stops
-    // pointing at the trigger and the whole thing reads as "misaligned".
-    // Because the reference frame here is an *edge*, not a center like the
-    // X-axis case above, the correction is an edge-to-edge delta (how far the
-    // panel's top actually drifted from the trigger's top), not center-to-center.
-    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-offset-y', `${top - finalPanelRect.top}px`);
-  };
-  /**
-   * The panel is mounted on document.body (or getPopupContainerId) and
-   * positioned once on open, so it detaches from the trigger when the page
-   * (or any scroll container) scrolls, or when a resize reflows the trigger —
-   * e.g. a popover inside a sticky header, or the color picker swatch shown
-   * in a narrower layout. Re-run placement on scroll/resize while open.
-   * Capture-phase scroll catches nested scroll containers too. Mirrors
-   * r-select's `_attachReposition`.
-   */
-  _repositionDropdown = (): void => {
-    if (this.popoverContent?.style.display === 'block') this.placementPosition();
-  };
-  _attachReposition = (): void => {
-    if (this._repositionBound || typeof window === 'undefined') return;
-    window.addEventListener('scroll', this._repositionDropdown, true);
-    window.addEventListener('resize', this._repositionDropdown);
-    this._repositionBound = true;
-  };
-  _detachReposition = (): void => {
-    if (!this._repositionBound || typeof window === 'undefined') return;
-    window.removeEventListener('scroll', this._repositionDropdown, true);
-    window.removeEventListener('resize', this._repositionDropdown);
-    this._repositionBound = false;
+    this._floating.position();
   };
   /**
    * @description: 鼠标移入
@@ -454,11 +373,7 @@ export class Popover extends RanElement {
   clickPopover = (e: Event): void => {
     e.stopPropagation();
     e.preventDefault();
-    if (this.popoverContent?.style.display === 'block') {
-      this.setDropdownDisplayNone();
-    } else {
-      this.setDropdownDisplayBlock();
-    }
+    this.toggle();
   };
   keydownPopover = (e: KeyboardEvent): void => {
     if (isActivationKey(e)) {
@@ -501,7 +416,7 @@ export class Popover extends RanElement {
     // revert `arrow` to the nominal, unflipped side while the panel itself
     // stays flipped — pointing the arrow away from the trigger. The
     // getPopupContainerId branch has no flip concept, so it always applies.
-    if (!this.getPopupContainerId && this.popoverContent?.style.display === 'block') return;
+    if (!this.getPopupContainerId && this.open) return;
     const side = oppositeSide[this.placementSide as PLACEMENT_TYPE];
     if (side) this.popoverContent?.setAttribute('arrow', side);
   }, HOVER_TIME);
@@ -530,11 +445,7 @@ export class Popover extends RanElement {
     this.setDropdownDisplayNone.cancel();
     this.blur.cancel();
     this.removeDropDownTimeId.cancel();
-    this._detachReposition();
-    clearTimeout(this.dropDownInTimeId);
-    this.dropDownInTimeId = undefined;
-    clearTimeout(this.dropDownOutTimeId);
-    this.dropDownOutTimeId = undefined;
+    this._floating.destroy();
     clearTimeout(this.removeTimeId);
     this.removeTimeId = undefined;
     this.popoverInner?.remove();
@@ -546,6 +457,7 @@ export class Popover extends RanElement {
     if (n === 'trigger') this.popoverTrigger();
     if (n === 'placement') this.changePlacement();
     if (n === 'sheet') this.handlerExternalCss();
+    if (n === 'open') this._applyOpen();
   }
 }
 

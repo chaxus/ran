@@ -573,24 +573,23 @@ describe('r-select contract', () => {
     expect((select as unknown as { _text: HTMLElement })._text.textContent).toBe('Apple');
   });
 
-  it('attaches scroll/resize listeners to reposition the dropdown and removes them on close', () => {
-    const select = document.createElement('r-select') as unknown as {
-      _attachReposition: () => void;
-      _detachReposition: () => void;
-      _repositionBound: boolean;
-    };
-    document.body.appendChild(select as unknown as Node);
+  // Driven through `open` rather than by calling the listener plumbing directly:
+  // that plumbing now lives in the shared floating controller, and what this
+  // component promises is that an open panel follows its trigger — not that it
+  // owns a particular pair of private methods.
+  it('follows the trigger while open: listeners go on when it opens and off when it closes', async () => {
+    const select = await createSelectWithOptions();
+    select.createOption();
 
     const addSpy = vi.spyOn(window, 'addEventListener');
-    select._attachReposition();
-    expect(select._repositionBound).toBe(true);
+    select.open = true;
     expect(addSpy.mock.calls.some((c) => c[0] === 'scroll')).toBe(true);
     expect(addSpy.mock.calls.some((c) => c[0] === 'resize')).toBe(true);
 
     const removeSpy = vi.spyOn(window, 'removeEventListener');
-    select._detachReposition();
-    expect(select._repositionBound).toBe(false);
+    select.open = false;
     expect(removeSpy.mock.calls.some((c) => c[0] === 'scroll')).toBe(true);
+    expect(removeSpy.mock.calls.some((c) => c[0] === 'resize')).toBe(true);
 
     addSpy.mockRestore();
     removeSpy.mockRestore();

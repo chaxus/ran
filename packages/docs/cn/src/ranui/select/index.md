@@ -41,7 +41,8 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 | `defaultValue`        | `string`  | `''`       | 初始选中的值，与选项的 `value` 匹配                                          |
 | `disabled`            | `boolean` | `false`    | 是否禁用选择器                                                               |
 | `type`                | `string`  | `''`       | `text` 渲染成无边框、透明背景、不带箭头图标的触发器；否则带边框              |
-| `placement`           | `string`  | `'bottom'` | 下拉框展示方向：`top`、`bottom`                                              |
+| `open`                | `boolean` | `false`    | 下拉框是否展开。它**就是**状态本身，赋值即可开合                             |
+| `placement`           | `string`  | `'bottom'` | 下拉框展开的方向，可加对齐后缀：`bottom`、`bottom-end`、`top-center` 等      |
 | `showSearch`          | `boolean` | `false`    | 是否显示按标签过滤选项的内联搜索框                                           |
 | `getPopupContainerId` | `string`  | `''`       | 下拉框挂载元素的 `id`（默认挂载到 `document.body`）                          |
 | `dropdownclass`       | `string`  | `''`       | 下拉面板的自定义 class 名                                                    |
@@ -158,6 +159,34 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 </r-select>
 ```
 
+### 展开状态 `open`
+
+`open` 就是下拉框的状态，像 `<details open>`、`<dialog open>` 一样反射为属性。没有任何地方再从面板的 `display` 反推状态——那个值比状态滞后一整段退场动画——所以属性、`aria-expanded` 和屏幕上看到的三者不会互相矛盾。
+
+因此它既是驱动组件的正式方式，也是可以拿来写样式、写断言的东西：
+
+```html
+<r-select id="picker" open>
+  <r-option value="185">Mike</r-option>
+</r-select>
+
+<script>
+  const picker = document.getElementById('picker');
+  picker.open = true; // 或 picker.show()
+  picker.open = false; // 或 picker.hide()
+  picker.toggle();
+</script>
+
+<style>
+  /* 面板展开时的触发器 */
+  r-select[open]::part(selection) {
+    border-color: var(--ran-color-primary);
+  }
+</style>
+```
+
+`show()`、`hide()`、`toggle()` 只是它的薄封装，用方法比赋值更顺手时可以用。
+
 ### 搜索功能 `showSearch`
 
 <Demo>
@@ -268,6 +297,22 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
   });
 </script>
 ```
+
+### `show` / `after-show` / `hide` / `after-hide`
+
+在面板开合的前后触发。`show` 和 `hide` 表示**意图**，在过渡开始时发出；`after-show` 和 `after-hide` 在面板真正到位、动画结束后发出——需要"等面板确实消失了再做某事"时，听后面这一对。
+
+这两对事件都不带 `detail`。
+
+```html
+<script>
+  const picker = document.getElementById('picker');
+  picker.addEventListener('show', () => console.log('正在展开'));
+  picker.addEventListener('after-hide', () => console.log('已收起，动画也结束了'));
+</script>
+```
+
+等待的是样式表里那个动画本身，而不是抄进脚本里的一个时长。所以在 `prefers-reduced-motion` 下——面板压根没有动画要播——`after-hide` 会紧接着 `hide` 发出，而不是干等一个固定延迟。
 
 ## 表单关联
 
