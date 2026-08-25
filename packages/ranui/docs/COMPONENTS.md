@@ -443,13 +443,14 @@ Source: `components/section/index.ts`
 
 Source: `components/select/index.ts`
 
-- **Attributes**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `placement: string`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
+- **Attributes**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placement: string`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
 - **Properties**:
   - `defaultValue: string`
   - `disabled: boolean`
   - `dropdownclass: string`
   - `getPopupContainerId: string`
   - `label: string` — 字段上方的静态说明文字（label）。
+  - `open: boolean` — Whether the dropdown is showing.
   - `placement: string`
   - `required: boolean`
   - `sheet: string`

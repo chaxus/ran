@@ -100,6 +100,7 @@ export class Select extends RanElement {
       // defaultValue/showSearch used to apply only on first connect).
       'defaultvalue',
       'showsearch',
+      'open', // whether the dropdown is showing — the single source of truth
       'placement', // 弹窗的方向
       'getpopupcontainerid', // 挂载的节点——同上，必须小写才会被观察到
       'dropdownclass', // 弹窗的类名
@@ -370,6 +371,71 @@ export class Select extends RanElement {
     this.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
   };
 
+  /**
+   * Whether the dropdown is showing.
+   *
+   * This attribute *is* the state; nothing else infers it. The panel's
+   * `style.display` cannot serve that purpose because it lags the state by the
+   * length of the exit animation, and every read of it during that window
+   * answers about the frame rather than the intent. Reflecting it the way
+   * `<details open>` and `<dialog open>` do also puts the state where a
+   * consumer can reach it: `:host([open])` in CSS, `select.open = true` from
+   * script, and an attribute assertion in a test instead of a poll.
+   */
+  get open(): boolean {
+    return this.hasAttribute('open');
+  }
+  set open(value: boolean) {
+    if (value) {
+      this.setAttribute('open', '');
+    } else {
+      this.removeAttribute('open');
+    }
+  }
+
+  /**
+   * Drive the panel from `open`. The only place display, the reposition
+   * listeners, the transit class and `aria-expanded` are written.
+   *
+   * Both animation timers are cleared on every transition, whichever direction
+   * it goes: they exist to finish an animation, and a timer left over from the
+   * opposite direction would either hide a panel that has since re-opened or
+   * strip the transit class off one that is still animating in.
+   */
+  _applyOpen = (): void => {
+    const open = this.open;
+    this.updateAriaExpanded(open);
+    if (!this._selectionDropdown) return;
+    clearTimeout(this._selectDropDownInTimeId);
+    this._selectDropDownInTimeId = undefined;
+    clearTimeout(this._selectDropDownOutTimeId);
+    this._selectDropDownOutTimeId = undefined;
+
+    if (open) {
+      // The entrance transit class is applied from inside placementPosition()
+      // instead of here, once it knows the *resolved* (possibly flipped) side —
+      // deciding it here from the nominal `placement` would play the slide from
+      // the wrong direction whenever a flip actually happens.
+      this._selectionDropdown.style.setProperty('display', 'block');
+      this._attachReposition();
+      this.placementPosition(true);
+      this._selectDropDownInTimeId = setTimeout(() => {
+        this._selectionDropdown?.removeAttribute('transit');
+        this._selectDropDownInTimeId = undefined;
+      }, animationTime);
+      return;
+    }
+
+    this._detachReposition();
+    if (this._selectionDropdown.style.display === 'none') return;
+    this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].remove);
+    this._selectDropDownOutTimeId = setTimeout(() => {
+      this._selectionDropdown?.style.setProperty('display', 'none');
+      this._selectionDropdown?.removeAttribute('transit');
+      this._selectDropDownOutTimeId = undefined;
+    }, animationTime);
+  };
+
   getDropdownOptions = (): HTMLElement[] => {
     if (!this._selectionDropdown) return [];
     // runtime children: r-dropdown-item elements are appended from `options` as it changes,
@@ -572,43 +638,14 @@ export class Select extends RanElement {
    * @return {*}
    */
   setSelectDropdownDisplayNone = (): void => {
-    if (this._selectDropDownOutTimeId) return;
-    this.updateAriaExpanded(false);
-    if (this._selectionDropdown && this._selectionDropdown.style.display !== 'none') {
-      this._detachReposition();
-      this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].remove);
-      this._selectDropDownOutTimeId = setTimeout(() => {
-        this._selectionDropdown?.style.setProperty('display', 'none');
-        if (this._selectionDropdown) {
-          this._selectionDropdown.removeAttribute('transit');
-        }
-        clearTimeout(this._selectDropDownOutTimeId);
-        this._selectDropDownOutTimeId = undefined;
-      }, animationTime);
-    }
+    this.open = false;
   };
   /**
    * @description: 添加 select dropdown
    * @return {*}
    */
   setSelectDropdownDisplayBlock = (): void => {
-    if (this._selectDropDownInTimeId) return;
-    this.updateAriaExpanded(true);
-    if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
-      // The entrance transit class is applied from inside placementPosition()
-      // instead of here, once it knows the *resolved* (possibly flipped) side —
-      // deciding it here from the nominal `placement` would play the slide from
-      // the wrong direction whenever a flip actually happens.
-      this._selectionDropdown?.style.setProperty('display', 'block');
-      this._attachReposition();
-      this._selectDropDownInTimeId = setTimeout(() => {
-        if (this._selectionDropdown) {
-          this._selectionDropdown.removeAttribute('transit');
-        }
-        clearTimeout(this._selectDropDownInTimeId);
-        this._selectDropDownInTimeId = undefined;
-      }, animationTime);
-    }
+    this.open = true;
   };
   /**
    * @param applyEntranceTransit - Only true for the call that opens the
@@ -727,13 +764,18 @@ export class Select extends RanElement {
    * @description: 设置下拉框
    * @return {*}
    */
+  /**
+   * Toggle, not close-then-open. The old body ran both transitions on every
+   * click and let the surviving one depend on which animation timer happened to
+   * be in flight, so a run of clicks on a stationary pointer produced: open,
+   * close, open-and-immediately-close, and an `aria-expanded` that had come
+   * apart from what was on screen.
+   */
   selectMouseDown = (e: Event): void => {
     e.stopPropagation();
     if (isDisabled(this)) return;
     this.removeDropDownTimeId(e);
-    this.setSelectDropdownDisplayNone();
-    this.setSelectDropdownDisplayBlock();
-    this.placementPosition(true);
+    this.open = !this.open;
   };
   removeDropDownTimeId = (e: Event): void => {
     e.stopPropagation();
@@ -972,6 +1014,9 @@ export class Select extends RanElement {
     // no layout and no dropdown built yet. Re-apply it here, now that the element
     // is connected, so the closed-state label and the active option are correct.
     this.reapplyValueAfterConnect();
+    // `<r-select open>` in markup: the attribute was set before the dropdown
+    // existed, so its attributeChangedCallback had nothing to act on.
+    if (this.open) this._applyOpen();
   }
 
   /**
@@ -1039,6 +1084,7 @@ export class Select extends RanElement {
     // they change afterwards.
     if (name === 'defaultvalue') this.setDefaultValue();
     if (name === 'showsearch' && this._search) this._applyShowSearch();
+    if (name === 'open') this._applyOpen();
   }
 
   /**
