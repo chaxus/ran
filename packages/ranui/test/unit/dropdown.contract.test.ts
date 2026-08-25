@@ -56,16 +56,41 @@ describe('r-dropdown contract', () => {
     expect(dropdown.hasAttribute('transit')).toBe(false);
   });
 
-  it('handlerTransit adds and removes transit class from dropdown', async () => {
+  // Replaces a case that asserted the class disappeared on its own after 300ms.
+  // That timer was a fourth copy of a duration the stylesheet owns, and it took
+  // off `this.transit` as read at that moment rather than the class it had put
+  // on — change direction inside the window and it removed the new class while
+  // the old one stayed forever, leaving a panel with both `-in` and `-out`
+  // applied. The class now lives exactly as long as the attribute does, and the
+  // caller that set it decides when the animation is over.
+  it('mirrors the transit attribute onto the panel, and takes the old class off', async () => {
     const dropdown = document.createElement('r-dropdown') as any;
     document.body.appendChild(dropdown);
 
     dropdown.transit = 'ran-dropdown-down-in';
-    dropdown.handlerTransit();
-
     expect(dropdown.dropdown.classList.contains('ran-dropdown-down-in')).toBe(true);
-    await sleep(350);
+
+    // Reversing direction must not leave the first class behind.
+    dropdown.transit = 'ran-dropdown-down-out';
     expect(dropdown.dropdown.classList.contains('ran-dropdown-down-in')).toBe(false);
+    expect(dropdown.dropdown.classList.contains('ran-dropdown-down-out')).toBe(true);
+
+    // And it stays until the attribute goes, rather than expiring on a timer.
+    await sleep(350);
+    expect(dropdown.dropdown.classList.contains('ran-dropdown-down-out')).toBe(true);
+
+    dropdown.removeAttribute('transit');
+    expect(dropdown.dropdown.classList.contains('ran-dropdown-down-out')).toBe(false);
+  });
+
+  it('exposes the element its animations run on', () => {
+    // They run on a class inside the shadow root, so `getAnimations()` on the
+    // host reports nothing and `{ subtree: true }` does not cross the boundary.
+    // Anything waiting for the panel's transition asks for this instead of
+    // reaching through the shadow tree for a class name.
+    const dropdown = document.createElement('r-dropdown') as any;
+    document.body.appendChild(dropdown);
+    expect(dropdown.getAnimationTarget()).toBe(dropdown.dropdown);
   });
 
   it('stopPropagation calls event.stopPropagation', () => {

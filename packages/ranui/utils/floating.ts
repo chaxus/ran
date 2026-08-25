@@ -109,7 +109,22 @@ export interface FloatingOptions {
  * immediately when there is nothing to wait for: a panel under
  * `prefers-reduced-motion`, or one whose animation a consumer turned off.
  */
-const settleAnimations = (el: HTMLElement, done: () => void): void => {
+/**
+ * A panel that knows where its own animations run.
+ *
+ * `r-dropdown` applies them to an element inside its shadow root, so
+ * `getAnimations()` on the host reports nothing — and `{ subtree: true }` does
+ * not cross a shadow boundary either. Rather than reach through the shadow tree
+ * for a class name, the panel is asked.
+ */
+interface AnimatablePanel extends HTMLElement {
+  getAnimationTarget?: () => Element;
+}
+
+const animationTargetOf = (panel: HTMLElement): Element => (panel as AnimatablePanel).getAnimationTarget?.() ?? panel;
+
+const settleAnimations = (panel: HTMLElement, done: () => void): void => {
+  const el = animationTargetOf(panel);
   // No animation API (jsdom) or no frames to wait for: there is provably
   // nothing running, so finish in this tick rather than a microtask later.
   if (typeof el.getAnimations !== 'function' || typeof requestAnimationFrame !== 'function') {
@@ -136,6 +151,19 @@ export class FloatingController {
   private options: FloatingOptions;
   private repositionBound = false;
   /**
+   * Whether the panel is meant to be showing.
+   *
+   * Held here rather than read back from `panel.style.display`, for the same
+   * reason the components stopped reading it: during the exit animation the
+   * panel is still `block` while the intent is already closed, so a re-open
+   * arriving in that window would look like a no-op and be swallowed. That is
+   * the bug this whole controller exists to make impossible; reintroducing it
+   * one layer down would be a poor joke.
+   */
+  private opened = false;
+  /** Pending reposition frame, so a scroll burst coalesces into one write. */
+  private repositionFrame = 0;
+  /**
    * Bumped on every transition. An async tail (waiting on animations) checks it
    * before touching the DOM, so a panel that has since been re-opened is never
    * hidden by the exit that was already in flight when it re-opened. A timeout
@@ -160,11 +188,17 @@ export class FloatingController {
    * disagree with each other or with the state.
    */
   apply = (open: boolean): void => {
-    const generation = ++this.generation;
     const { host } = this.options;
     host.setAttribute('aria-expanded', open ? 'true' : 'false');
     const panel = this.options.panel();
+    // No panel yet: the state is recorded on the host, and the component
+    // re-applies once it has built one. Deliberately not remembered here — a
+    // component that marks itself open before its panel exists must still get a
+    // real transition when it re-applies, not an idempotent no-op.
     if (!panel) return;
+    if (open === this.opened) return;
+    this.opened = open;
+    const generation = ++this.generation;
 
     if (open) {
       host.dispatchEvent(new CustomEvent('show'));
@@ -180,8 +214,13 @@ export class FloatingController {
     }
 
     this.detachReposition();
-    if (panel.style.display === 'none') return;
     host.dispatchEvent(new CustomEvent('hide'));
+    // The exit class is set synchronously, so the wait can begin right away. On
+    // the way in, `position` schedules the class a frame out and the wait below
+    // is scheduled after it — same frame, and callbacks run in the order they
+    // were registered, so the class is on the panel before anything looks for
+    // an animation. `getAnimations()` forces the style recalculation that makes
+    // it visible.
     panel.setAttribute('transit', TRANSIT[this.side()].exit);
     settleAnimations(panel, () => {
       if (generation !== this.generation) return;
@@ -229,11 +268,12 @@ export class FloatingController {
     const panelWidth = measured?.width ?? ownRect.width;
     const panelHeight = measured?.height ?? ownRect.height;
     const requested = this.options.placement();
-    const align = (requested.split('-')[1] as PlacementAlign | undefined) ?? 'start';
+    const [requestedSide, requestedAlign] = requested.split('-') as [PlacementSide, PlacementAlign | undefined];
+    const align: PlacementAlign = requestedAlign ?? 'start';
 
     let top: number;
     let left: number;
-    let side = this.side();
+    let side = requestedSide;
 
     if (container) {
       // Coordinates are relative to the container, not the viewport, so the
@@ -288,8 +328,19 @@ export class FloatingController {
    * scrollers, which do not bubble.
    */
   private reposition = (): void => {
-    const panel = this.options.panel();
-    if (panel?.style.display === 'block') this.position();
+    if (!this.opened || this.repositionFrame) return;
+    if (typeof requestAnimationFrame !== 'function') {
+      this.position();
+      return;
+    }
+    // Scroll fires far more often than the screen updates, and each pass here
+    // reads the anchor's box and then writes the panel's — interleaving those
+    // is what makes a scroll handler janky. One write per frame is all the
+    // display can show anyway.
+    this.repositionFrame = requestAnimationFrame(() => {
+      this.repositionFrame = 0;
+      if (this.opened) this.position();
+    });
   };
 
   private attachReposition(): void {
@@ -309,6 +360,11 @@ export class FloatingController {
   /** Drop the listeners. Call from `disconnectedCallback`. */
   destroy = (): void => {
     this.generation++;
+    this.opened = false;
+    if (this.repositionFrame && typeof cancelAnimationFrame === 'function') {
+      cancelAnimationFrame(this.repositionFrame);
+      this.repositionFrame = 0;
+    }
     this.detachReposition();
   };
 }

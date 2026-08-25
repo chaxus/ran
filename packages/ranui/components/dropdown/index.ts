@@ -11,8 +11,6 @@ import {
 import dropdownCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
-const animationTime = 300;
-
 export enum ARROW_TYPE {
   TOP = 'top',
   BOTTOM = 'bottom',
@@ -73,14 +71,41 @@ export class Dropdown extends RanElement {
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
+  /** The class currently mirrored onto the panel, so it can be taken off again. */
+  private appliedTransit = '';
+  /**
+   * Mirror the `transit` attribute onto the panel as a class, and nothing else.
+   *
+   * It used to add the class and set a 300ms timer to take it off — a fourth
+   * copy of a duration the stylesheet already owns, and one that removed
+   * `this.transit` as read *at that moment* rather than the class it had
+   * actually added. Change direction inside that window (open, close, open) and
+   * the timer took off the new class while the old one stayed on forever: a
+   * panel could sit with both `-in` and `-out` applied, playing whichever the
+   * stylesheet happened to order last.
+   *
+   * The class now lives exactly as long as the attribute does. Whoever sets the
+   * attribute decides when the animation is over — for r-select and r-popover
+   * that is the shared floating controller, which waits on the animation itself
+   * rather than on a number.
+   */
   handlerTransit = (): void => {
-    if (this.transit && this.dropdown) {
-      addClassToElement(this.dropdown, this.transit);
-      setTimeout(() => {
-        removeClassToElement(this.dropdown, this.transit);
-      }, animationTime);
-    }
+    if (!this.dropdown) return;
+    if (this.appliedTransit) removeClassToElement(this.dropdown, this.appliedTransit);
+    this.appliedTransit = this.transit;
+    if (this.appliedTransit) addClassToElement(this.dropdown, this.appliedTransit);
   };
+
+  /**
+   * The element the panel's own animations run on.
+   *
+   * The animation is applied to a class inside this shadow root, so
+   * `getAnimations()` on the host reports nothing — and `{ subtree: true }` does
+   * not cross a shadow boundary either (verified). A caller that needs to wait
+   * for the panel's transition asks for this rather than reaching into the
+   * shadow tree and depending on a class name.
+   */
+  getAnimationTarget = (): Element => this.dropdown;
   handlerArrow = (): void => {
     const arrow = (this.arrow || '').trim();
     if (!arrow) {
@@ -121,12 +146,7 @@ export class Dropdown extends RanElement {
     // this.removeEventListener('click', this.stopPropagation);
   }
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
-    if (name === 'transit' && newValue) {
-      addClassToElement(this.dropdown, this.transit);
-      setTimeout(() => {
-        removeClassToElement(this.dropdown, this.transit);
-      }, animationTime);
-    }
+    if (name === 'transit') this.handlerTransit();
     if (name === 'arrow') {
       this.handlerArrow();
     }
