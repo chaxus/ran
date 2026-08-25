@@ -177,6 +177,14 @@ body::before {
 
 .lang-select {
   width: 96px;
+  /* 13px to match the links and the theme toggle either side of it; the
+     component's own default is 14px, which made the language the largest text
+     in the header. */
+  --ran-select-font-size: 13px;
+  --ran-select-root-font-size: 13px;
+  /* and 400, the weight the links carry — the select defaults to 500 */
+  --ran-select-font-weight: 400;
+  --ran-select-root-font-weight: 400;
   --ran-select-item-left: 24px;
   /* no arrow, so the item doesn't need to reserve room on the right */
   --ran-select-item-right: 8px;
