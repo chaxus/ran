@@ -36,12 +36,12 @@ The trigger lives in the default slot; the floating content is wrapped in a nest
 
 ### Properties
 
-| Property              | Type     | Default   | Description                                                                        |
-| --------------------- | -------- | --------- | ---------------------------------------------------------------------------------- |
-| `placement`           | `string` | `'top'`   | Panel position relative to the trigger: `top`, `bottom`, `left`, `right`           |
-| `trigger`             | `string` | `'hover'` | How the panel opens: `hover` or `click` (a `click` handler is always bound)        |
-| `getPopupContainerId` | `string` | `''`      | `id` of an element to position the panel within (read at open time; not reflected) |
-| `sheet`               | `string` | `''`      | CSS injected into the component's shadow DOM                                       |
+| Property              | Type     | Default   | Description                                                                                                                                     |
+| --------------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `placement`           | `string` | `'top'`   | Panel position relative to the trigger: `top`, `bottom`, `left`, `right`, each optionally suffixed with `-start` (default), `-center` or `-end` |
+| `trigger`             | `string` | `'hover'` | How the panel opens: `hover` or `click` (a `click` handler is always bound)                                                                     |
+| `getPopupContainerId` | `string` | `''`      | `id` of an element to position the panel within (read at open time; not reflected)                                                              |
+| `sheet`               | `string` | `''`      | CSS injected into the component's shadow DOM                                                                                                    |
 
 ### Trigger Mode `trigger`
 
@@ -135,6 +135,44 @@ The trigger lives in the default slot; the floating content is wrapped in a nest
 </r-popover>
 ```
 
+### Alignment `placement="<side>-<align>"`
+
+A bare side lines the panel's leading edge up with the trigger's. Add `-center` or `-end` when it
+should sit centred on the trigger, or flush with the trigger's trailing edge instead — what a menu
+anchored to the right end of a header bar wants, so that it opens inwards rather than being pushed
+back inside the viewport by the shift. The suffix survives an auto-flip: `bottom-end` becomes
+`top-end`, not `top`.
+
+<Demo column>
+  <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
+    <r-button>bottom</r-button>
+    <r-content>
+      <div style="width: 200px;">bottom — same as bottom-start</div>
+    </r-content>
+  </r-popover>
+  <r-popover trigger="hover" placement="bottom-center" style="display: inline-block;">
+    <r-button>bottom-center</r-button>
+    <r-content>
+      <div style="width: 200px;">bottom-center</div>
+    </r-content>
+  </r-popover>
+  <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">
+    <r-button>bottom-end</r-button>
+    <r-content>
+      <div style="width: 200px;">bottom-end</div>
+    </r-content>
+  </r-popover>
+</Demo>
+
+```html
+<r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">
+  <r-button>bottom-end</r-button>
+  <r-content>
+    <div style="width: 200px;">bottom-end</div>
+  </r-content>
+</r-popover>
+```
+
 ## Slots
 
 | Component     | Slot      | Description                                                                                    |
@@ -161,4 +199,4 @@ Accessibility is wired automatically: the host receives `tabindex="0"`, `aria-ha
 - **Content wrapper**: Always wrap panel content in `<r-content>` — plain children that are not inside `<r-content>` are not shown as the floating panel.
 - **Inline sizing**: The host is `display: block`; add `style="display: inline-block;"` (or place it in an inline context) so it shrinks to the trigger.
 - **Placement**: `placement` is a preference, not a guarantee — when the trigger is near a viewport edge and the preferred side lacks room, the panel automatically flips to the opposite side and shifts along the cross axis to stay on-screen. This auto-flip only applies to the default body-level positioning.
-- **Scoped container**: Use `getPopupContainerId` to anchor the panel inside a specific scroll/positioning container when the default body-level positioning is not desired — flip/shift do not apply in this mode, so choose a `placement` that fits the container.
+- **Scoped container**: Use `getPopupContainerId` to anchor the panel inside a specific scroll/positioning container when the default body-level positioning is not desired — flip/shift do not apply in this mode, so choose a `placement` that fits the container. The alignment suffix does apply there, exactly as it does in the body portal.

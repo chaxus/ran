@@ -34,12 +34,12 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 
 ### 属性
 
-| 属性                  | 类型     | 默认值    | 说明                                                        |
-| --------------------- | -------- | --------- | ----------------------------------------------------------- |
-| `placement`           | `string` | `'top'`   | 面板相对触发器的位置：`top`、`bottom`、`left`、`right`      |
-| `trigger`             | `string` | `'hover'` | 面板打开方式：`hover` 或 `click`（`click` 事件始终会绑定）  |
-| `getPopupContainerId` | `string` | `''`      | 面板定位所在容器的元素 `id`（在打开时读取，不会反映为属性） |
-| `sheet`               | `string` | `''`      | 注入到组件 Shadow DOM 的 CSS                                |
+| 属性                  | 类型     | 默认值    | 说明                                                                                                              |
+| --------------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------- |
+| `placement`           | `string` | `'top'`   | 面板相对触发器的位置：`top`、`bottom`、`left`、`right`，每个都可以再加 `-start`（默认）、`-center` 或 `-end` 后缀 |
+| `trigger`             | `string` | `'hover'` | 面板打开方式：`hover` 或 `click`（`click` 事件始终会绑定）                                                        |
+| `getPopupContainerId` | `string` | `''`      | 面板定位所在容器的元素 `id`（在打开时读取，不会反映为属性）                                                       |
+| `sheet`               | `string` | `''`      | 注入到组件 Shadow DOM 的 CSS                                                                                      |
 
 ### 触发方式 `trigger`
 
@@ -157,6 +157,42 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
   </r-popover>
 ```
 
+### 对齐方式 `placement="<方向>-<对齐>"`
+
+只写方向时，面板的起始边与触发器的起始边对齐。需要面板在触发器上居中、或与触发器的末尾边对齐时，加
+`-center` 或 `-end` 后缀——顶栏右端的菜单要的就是后者：它向内展开，而不是先溢出视口、再被平移推回来。
+后缀会跟着自动翻转一起保留：`bottom-end` 翻转后是 `top-end`，而不是 `top`。
+
+<Demo column>
+  <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
+    <r-button>bottom</r-button>
+    <r-content>
+      <div style="width: 200px;">bottom — 等同于 bottom-start</div>
+    </r-content>
+  </r-popover>
+  <r-popover trigger="hover" placement="bottom-center" style="display: inline-block;">
+    <r-button>bottom-center</r-button>
+    <r-content>
+      <div style="width: 200px;">bottom-center</div>
+    </r-content>
+  </r-popover>
+  <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">
+    <r-button>bottom-end</r-button>
+    <r-content>
+      <div style="width: 200px;">bottom-end</div>
+    </r-content>
+  </r-popover>
+</Demo>
+
+```html
+<r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">
+  <r-button>bottom-end</r-button>
+  <r-content>
+    <div style="width: 200px;">bottom-end</div>
+  </r-content>
+</r-popover>
+```
+
 ## 插槽
 
 | 组件          | 插槽   | 说明                                                                       |
@@ -183,4 +219,4 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 - **内容包裹**：始终把面板内容包裹在 `<r-content>` 中——不在 `<r-content>` 里的普通子节点不会作为浮层显示。
 - **内联尺寸**：host 元素默认是 `display: block`；加上 `style="display: inline-block;"`（或放在内联上下文中）让它收缩到触发器大小。
 - **位置**：`placement` 只是一个偏好，而非保证——当触发器靠近视口边缘、首选方向空间不够时，面板会自动翻转到相反一侧，并沿交叉轴平移以保持在可视区域内。这种自动翻转只在默认的 body 级定位下生效。
-- **限定容器**：当不想用默认的 body 级定位时，用 `getPopupContainerId` 把面板锚定到指定的滚动/定位容器内——这种模式下不会应用翻转/平移，因此要选择一个适合该容器的 `placement`。
+- **限定容器**：当不想用默认的 body 级定位时，用 `getPopupContainerId` 把面板锚定到指定的滚动/定位容器内——这种模式下不会应用翻转/平移，因此要选择一个适合该容器的 `placement`。对齐后缀在这种模式下照常生效，与 body 级定位完全一致。
