@@ -125,6 +125,15 @@
   font-family: var(--ran-select-root-font-family, var(--ran-skin-font-family, @font-family));
   position: var(--ran-select-root-position, relative);
   display: var(--ran-select-root-display, inline-block);
+  /* An inline-block sits on the text baseline, so the host reserves descender
+     space under it that nothing draws in: `:host` measured 38px around a 32px
+     field, and the field -- with everything in it -- rode 3px above the host's
+     own centre. Any row that centres a select against its siblings (a globe
+     icon beside a language menu, a label beside a field) was therefore 3px out,
+     which reads as the icon being misaligned rather than the select being too
+     tall. Topping it out removes the phantom row and makes `:host` the 32px the
+     comment above claims it is. */
+  vertical-align: var(--ran-select-root-vertical-align, top);
   .selection {
     position: var(--ran-select-position, relative);
     background-color: var(--ran-select-background-color, var(--ran-color-bg-elevated, #ffffff));
