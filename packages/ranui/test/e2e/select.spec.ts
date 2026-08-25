@@ -192,3 +192,84 @@ test('select — the label sits on the host centre, so a centred sibling lines u
   expect(Math.abs(centres.label - centres.host)).toBeLessThanOrEqual(0.5);
   expect(Math.abs(centres.label - centres.sibling)).toBeLessThanOrEqual(0.5);
 });
+
+// ── open state ──────────────────────────────────────────────────────────────
+
+// Reported from the demo's header: hover the trigger, then click without moving
+// the pointer. Open. Click again: closes. Click again: it flashes open and shuts
+// itself, and from there the menu is stuck.
+//
+// The trigger used to run both transitions on every click -- close, then open --
+// and which one survived depended on which 300ms animation timer happened to be
+// in flight, since each read `style.display` to decide whether it had anything
+// to do. `display` lags the intent by the length of the exit animation, so
+// during that window every read answers about the frame instead of the state.
+// `aria-expanded` came apart from the panel in the same window: at one point the
+// panel was `display: none` while the combobox still announced itself expanded.
+//
+// Clicks here are dispatched faster than the animation on purpose. That is the
+// whole bug: at a slow enough cadence the old code looks fine.
+test('select — clicking the trigger toggles, however fast the clicks arrive', async ({ page }) => {
+  await mount(
+    page,
+    `
+    <r-select id="sel" style="width: 200px" defaultValue="lucy" trigger="click">
+      <r-option value="jack">Jack</r-option>
+      <r-option value="lucy">Lucy</r-option>
+    </r-select>
+  `,
+  );
+  const el = page.locator('#sel');
+  await page.waitForTimeout(50);
+
+  const readings: { open: boolean; aria: string | null }[] = [];
+  for (let i = 0; i < 6; i++) {
+    await el.click();
+    await page.waitForTimeout(30); // well inside the 300ms animation window
+    readings.push(
+      await el.evaluate((node) => ({ open: node.hasAttribute('open'), aria: node.getAttribute('aria-expanded') })),
+    );
+  }
+
+  // Strict alternation from closed: open, closed, open, ...
+  expect(readings.map((r) => r.open)).toEqual([true, false, true, false, true, false]);
+  // And the announced state never disagrees with the real one.
+  for (const r of readings) expect(r.aria).toBe(String(r.open));
+
+  // Not wedged: it still opens after the run.
+  await page.waitForTimeout(400);
+  await el.click();
+  await page.waitForTimeout(400);
+  await expect(el).toHaveAttribute('open', '');
+  await expect(page.locator('r-dropdown-item').first()).toBeVisible();
+});
+
+// `open` is the state, so setting it is a supported way to drive the component —
+// that is the point of reflecting it rather than keeping it in a private field.
+test('select — the open attribute drives the panel both ways', async ({ page }) => {
+  await mount(
+    page,
+    `
+    <r-select id="sel" style="width: 200px" defaultValue="lucy" trigger="click">
+      <r-option value="jack">Jack</r-option>
+      <r-option value="lucy">Lucy</r-option>
+    </r-select>
+  `,
+  );
+  const el = page.locator('#sel');
+  await page.waitForTimeout(50);
+
+  await el.evaluate((node: HTMLElement & { open: boolean }) => {
+    node.open = true;
+  });
+  await page.waitForTimeout(400);
+  await expect(page.locator('r-dropdown-item').first()).toBeVisible();
+  await expect(el).toHaveAttribute('aria-expanded', 'true');
+
+  await el.evaluate((node: HTMLElement & { open: boolean }) => {
+    node.open = false;
+  });
+  await page.waitForTimeout(400);
+  await expect(page.locator('r-dropdown-item').first()).toBeHidden();
+  await expect(el).toHaveAttribute('aria-expanded', 'false');
+});

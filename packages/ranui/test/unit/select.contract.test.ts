@@ -413,24 +413,37 @@ describe('r-select contract', () => {
     expect(() => select.selectOptionElement(null)).not.toThrow();
   });
 
-  it('setSelectDropdownDisplayNone returns early if timer already pending', async () => {
+  // These two replace a pair that asserted the opposite: that an animation timer
+  // already in flight made the open/close methods return early without touching
+  // `aria-expanded`. That early return was the defect -- it is how a click could
+  // land in the exit animation's window and be swallowed, and how the announced
+  // state drifted from the panel -- so the old cases had pinned the bug as the
+  // contract. What is worth pinning is that `open` is the state and everything
+  // else follows it.
+  it('open reflects to the attribute and drives aria-expanded', async () => {
     const select = await createSelectWithOptions();
     select.createOption();
-    (select as any)._selectDropDownOutTimeId = 999;
-    const spy = vi.spyOn(select, 'updateAriaExpanded');
-    select.setSelectDropdownDisplayNone();
-    expect(spy).not.toHaveBeenCalled();
-    (select as any)._selectDropDownOutTimeId = undefined;
+
+    select.open = true;
+    expect(select.hasAttribute('open')).toBe(true);
+    expect(select.getAttribute('aria-expanded')).toBe('true');
+
+    select.open = false;
+    expect(select.hasAttribute('open')).toBe(false);
+    expect(select.getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('setSelectDropdownDisplayBlock returns early if timer already pending', async () => {
+  it('clicking the trigger toggles open rather than reopening it', async () => {
     const select = await createSelectWithOptions();
     select.createOption();
-    (select as any)._selectDropDownInTimeId = 999;
-    const spy = vi.spyOn(select, 'updateAriaExpanded');
-    select.setSelectDropdownDisplayBlock();
-    expect(spy).not.toHaveBeenCalled();
-    (select as any)._selectDropDownInTimeId = undefined;
+
+    const click = () => (select as any).selectMouseDown(new Event('click'));
+    const seen: boolean[] = [];
+    for (let i = 0; i < 4; i++) {
+      click();
+      seen.push(select.open);
+    }
+    expect(seen).toEqual([true, false, true, false]);
   });
 
   it('createSelectDropdownContent with options creates dropdown items', async () => {
