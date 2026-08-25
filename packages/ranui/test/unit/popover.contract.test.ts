@@ -4,6 +4,32 @@ import type { Popover } from '@/components/popover/index';
 import '@/components/popover/index';
 import '@/components/popover/content/index';
 
+/**
+ * Record every value the `transit` attribute takes on an element.
+ *
+ * The class is on the panel only while the animation runs, and jsdom animates
+ * nothing, so it is put on and taken off again within a frame or two. Asserting
+ * it is still there after a fixed wait would be asserting the old behaviour: a
+ * 300ms timer that expired on its own. What is worth checking is the value it
+ * took -- the direction -- which a recorder catches however briefly it was set.
+ */
+const recordTransit = (el: Element): string[] => {
+  const seen: string[] = [];
+  const note = (value: string | null): void => {
+    if (value && !seen.includes(value)) seen.push(value);
+  };
+  const observer = new MutationObserver((records) => {
+    // `oldValue`, not just the current value: with no animation to wait for the
+    // class is put on and taken off inside one synchronous block, so by the time
+    // this callback runs the attribute is already back to null. The value it
+    // held is only recoverable from the record.
+    for (const record of records) note(record.oldValue);
+    note(el.getAttribute('transit'));
+  });
+  observer.observe(el, { attributes: true, attributeFilter: ['transit'], attributeOldValue: true });
+  return seen;
+};
+
 describe('r-popover contract', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
@@ -38,10 +64,11 @@ describe('r-popover contract', () => {
     expect(popoverContent.style.display).toBe('none');
 
     // Simulate mouseenter
+    const transits = recordTransit(popoverContent);
     popover.dispatchEvent(new MouseEvent('mouseenter'));
     await sleep(100);
     expect(popoverContent.style.display).toBe('block');
-    expect(popoverContent.getAttribute('transit')).toBe('ran-dropdown-up-in');
+    expect(transits).toContain('ran-dropdown-up-in');
 
     // Simulate mouseleave
     popover.dispatchEvent(new MouseEvent('mouseleave'));
@@ -413,9 +440,13 @@ describe('r-popover contract', () => {
 
     it('still animates in from the side when the placement carries a suffix', async () => {
       const popover = await mountMeasured('bottom-end');
+      // `ran-dropdown-down-end` is not a class anyone defines; reading the whole
+      // attribute for this lookup would land on `undefined` and take the panel's
+      // animation with it.
+      const transits = recordTransit(popover.popoverContent);
       popover.setDropdownDisplayBlock();
       await sleep(60);
-      expect(popover.popoverContent.getAttribute('transit')).toBe('ran-dropdown-down-in');
+      expect(transits).toContain('ran-dropdown-down-in');
     });
 
     it('aligns inside a custom container too, not only in the body portal', async () => {

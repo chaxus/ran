@@ -19,6 +19,8 @@ const mount = (): { host: HTMLElement; panel: HTMLElement } => {
   return { host, panel };
 };
 
+const nextFrame = (): Promise<void> => new Promise((resolve) => requestAnimationFrame(() => resolve()));
+
 const controllerFor = (host: HTMLElement, panel: HTMLElement, extra = {}): FloatingController =>
   new FloatingController({
     host,
@@ -46,7 +48,7 @@ describe('FloatingController', () => {
     expect(host.getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('fires show then after-show on open, and hide then after-hide on close', () => {
+  it('fires show then after-show on open, and hide then after-hide on close', async () => {
     const { host, panel } = mount();
     const controller = controllerFor(host, panel);
     const seen: string[] = [];
@@ -55,6 +57,10 @@ describe('FloatingController', () => {
     }
 
     controller.apply(true);
+    // The entrance class is written a frame after the panel is shown -- the flip
+    // decision needs a laid-out panel -- and only then can anything wait on the
+    // animation, so `after-show` lands one frame behind `show` by design.
+    await nextFrame();
     controller.apply(false);
     expect(seen).toEqual(['show', 'after-show', 'hide', 'after-hide']);
   });
@@ -74,7 +80,7 @@ describe('FloatingController', () => {
     expect(ariaAtShow).toBe('true');
   });
 
-  it('lets a re-open cancel the close that was still finishing', () => {
+  it('lets a re-open cancel the close that was still finishing', async () => {
     // The close's tail hides the panel. Without the generation check it would
     // run anyway and hide a panel that had since been re-opened — the same
     // class of bug as the swallowed click, one layer down.
@@ -84,8 +90,10 @@ describe('FloatingController', () => {
     host.addEventListener('after-hide', afterHide);
 
     controller.apply(true);
+    await nextFrame();
     controller.apply(false);
     controller.apply(true);
+    await nextFrame();
 
     expect(panel.style.display).toBe('block');
     // The superseded close must not report completion either.
@@ -113,7 +121,7 @@ describe('FloatingController', () => {
     expect(host.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('positions against the anchor when one is given rather than the host', () => {
+  it('positions against the anchor when one is given rather than the host', async () => {
     const { host, panel } = mount();
     const anchor = document.createElement('div');
     document.body.appendChild(anchor);
@@ -122,6 +130,7 @@ describe('FloatingController', () => {
 
     const controller = controllerFor(host, panel, { anchor: () => anchor });
     controller.apply(true);
+    await nextFrame();
     controller.position();
 
     // bottom placement, 4px offset: 120 + 4. Left edges align.
@@ -129,7 +138,7 @@ describe('FloatingController', () => {
     expect(panel.style.getPropertyValue('--ran-x')).toBe('200px');
   });
 
-  it('aligns to the anchor inside a custom container too', () => {
+  it('aligns to the anchor inside a custom container too', async () => {
     const { host, panel } = mount();
     const container = document.createElement('div');
     container.id = 'floating-container';
@@ -146,6 +155,7 @@ describe('FloatingController', () => {
       placement: () => 'bottom-end',
     });
     controller.apply(true);
+    await nextFrame();
     controller.position();
 
     // Trailing edges together: anchor ends at 250, a 120px panel starts at 130,
@@ -154,7 +164,7 @@ describe('FloatingController', () => {
     expect(panel.style.getPropertyValue('--ran-y')).toBe('114px');
   });
 
-  it('positions against the measured panel size when the host box understates it', () => {
+  it('positions against the measured panel size when the host box understates it', async () => {
     // r-select pins the panel host's width to the trigger's; a consumer can make
     // the panel inside wider, and that overflow is invisible to the host's rect.
     const { host, panel } = mount();
@@ -168,6 +178,7 @@ describe('FloatingController', () => {
       measurePanel: () => ({ width: 200, height: 60 }),
     });
     controller.apply(true);
+    await nextFrame();
     controller.position();
 
     // Aligned against 200px, not the 50px the host box reports: 250 - 200.
@@ -196,7 +207,7 @@ describe('FloatingController', () => {
     remove.mockRestore();
   });
 
-  it('hands the hooks the resolved side and alignment', () => {
+  it('hands the hooks the resolved side and alignment', async () => {
     const { host, panel } = mount();
     const afterPosition = vi.fn();
     const beforeMeasure = vi.fn();
@@ -207,6 +218,7 @@ describe('FloatingController', () => {
     });
 
     controller.apply(true);
+    await nextFrame();
     controller.position();
 
     expect(beforeMeasure).toHaveBeenCalled();

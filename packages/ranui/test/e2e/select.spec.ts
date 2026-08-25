@@ -281,7 +281,6 @@ test('select — the open attribute drives the panel both ways', async ({ page }
 // but the whole point: a reader who asked for less motion should not be made to
 // wait out the motion they are not getting.
 test('select — with reduced motion the panel has no animation to wait for', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
   await mount(
     page,
     `
@@ -294,15 +293,40 @@ test('select — with reduced motion the panel has no animation to wait for', as
   const el = page.locator('#sel');
   await page.waitForTimeout(50);
 
-  await el.click();
-  await page.waitForTimeout(60);
-  const running = await el.evaluate((node: HTMLElement & { _selectionDropdown?: HTMLElement }) =>
-    node._selectionDropdown ? node._selectionDropdown.getAnimations().length : -1,
-  );
-  expect(running).toBe(0);
+  const runningAnimations = async () =>
+    el.evaluate(async (node: HTMLElement & { open: boolean; _selectionDropdown?: HTMLElement }) => {
+      const panel = node._selectionDropdown as HTMLElement & { getAnimationTarget?: () => Element };
+      const target = panel.getAnimationTarget?.() ?? panel;
+      let peak = 0;
+      node.open = true;
+      for (let i = 0; i < 8; i++) {
+        peak = Math.max(peak, target.getAnimations().length);
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+      }
+      node.open = false;
+      return peak;
+    });
 
-  // Closed well inside the 300ms the old timer would have insisted on.
-  await el.click();
+  // Both halves, because Playwright reports `reduce` by default: asserting only
+  // that the reduced case has no animation would pass against a suite that
+  // never animates at all, which is exactly what this file did before.
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  expect(await runningAnimations()).toBeGreaterThan(0);
+  await page.waitForTimeout(600);
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  expect(await runningAnimations()).toBe(0);
+
+  // And with nothing to wait for, the panel is closed well inside the 300ms the
+  // old hardcoded timer would have insisted on.
+  await page.waitForTimeout(600);
+  await el.evaluate((node: HTMLElement & { open: boolean }) => {
+    node.open = true;
+  });
+  await page.waitForTimeout(100);
+  await el.evaluate((node: HTMLElement & { open: boolean }) => {
+    node.open = false;
+  });
   await page.waitForTimeout(60);
   const display = await el.evaluate((node: HTMLElement & { _selectionDropdown?: HTMLElement }) =>
     node._selectionDropdown ? node._selectionDropdown.style.display : '',
@@ -411,4 +435,75 @@ test('select — the placement suffix aligns the panel that is painted, not the 
   expect(Math.abs(end.panelRight - end.triggerRight)).toBeLessThanOrEqual(1);
   const centreDelta = (centre.panelLeft + centre.panelRight) / 2 - (centre.triggerLeft + centre.triggerRight) / 2;
   expect(Math.abs(centreDelta)).toBeLessThanOrEqual(1);
+});
+
+// The entrance animation, which a refactor switched off entirely while every
+// other case kept passing: the panel appeared, correctly placed, with `open`
+// and `aria-expanded` right — it just did not slide.
+//
+// The wait for the animation was looking at the panel host, and r-dropdown runs
+// its animations on an element inside its shadow root. `getAnimations()` on the
+// host reports nothing, and `{ subtree: true }` does not cross a shadow
+// boundary, so the wait concluded there was no animation, declared it finished
+// and stripped the class — cancelling the animation a frame after it started.
+test('select — the entrance animation actually plays', async ({ page }) => {
+  // Playwright reports `prefers-reduced-motion: reduce` by default, and the
+  // stylesheet honours that with `animation: none` — so without this the panel
+  // correctly has nothing to animate and the case would pass on an empty set,
+  // proving nothing.
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await mount(
+    page,
+    `
+    <r-select id="sel" style="width: 200px" defaultValue="lucy" trigger="click">
+      <r-option value="jack">Jack</r-option>
+      <r-option value="lucy">Lucy</r-option>
+    </r-select>
+  `,
+  );
+  const el = page.locator('#sel');
+  await page.waitForTimeout(50);
+
+  const result = await el.evaluate(async (node: HTMLElement & { open: boolean; _selectionDropdown?: HTMLElement }) => {
+    const panel = node._selectionDropdown as HTMLElement & { getAnimationTarget?: () => Element };
+    // The animation runs inside the panel's shadow root; `getAnimations()` on
+    // the host reports nothing, and `{ subtree: true }` does not cross a shadow
+    // boundary. The panel says where to look.
+    const target = panel.getAnimationTarget?.() ?? panel;
+    // Waiting for `animationend`, not just for an animation to appear. Stripping
+    // the class mid-flight cancels the animation, which fires `cancel` and never
+    // `animationend` — but it does leave a frame or two where one was running,
+    // so anything that merely samples for a running animation calls an
+    // interrupted entrance a success. That is how the first version of this case
+    // passed against the very bug it was written for.
+    return new Promise<string | null>((resolve) => {
+      target.addEventListener('animationend', (event) => resolve((event as AnimationEvent).animationName), {
+        once: true,
+      });
+      setTimeout(() => resolve(null), 2000);
+      node.open = true;
+    });
+  });
+
+  expect(result).toBe('ranui-dropdown-down-in');
+
+  // And it is cleaned up once finished: the class does not outlive the animation.
+  await page.waitForTimeout(600);
+  const settled = await el.evaluate((node: HTMLElement & { _selectionDropdown?: HTMLElement }) => {
+    const panel = node._selectionDropdown as HTMLElement & { getAnimationTarget?: () => Element };
+    const target = panel.getAnimationTarget?.() ?? panel;
+    return {
+      transit: panel.getAttribute('transit'),
+      classes: target.className,
+      running: target.getAnimations().length,
+    };
+  });
+  expect(settled.transit).toBeNull();
+  expect(settled.running).toBe(0);
+  // Both direction classes stacking up was its own bug: r-dropdown removed the
+  // class named by whatever `transit` said at the time its timer fired, not the
+  // one it had added, so reversing direction inside that window left the first
+  // one on forever.
+  expect(settled.classes).not.toContain('ran-dropdown-down-in');
+  expect(settled.classes).not.toContain('ran-dropdown-down-out');
 });
