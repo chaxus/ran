@@ -32,7 +32,7 @@ description: '底层浮层面板原语——r-popover 和 r-select 用来定位�
 | 属性      | 类型     | 默认值 | 说明                                                       |
 | --------- | -------- | ------ | ---------------------------------------------------------- |
 | `arrow`   | `string` | `''`   | 箭头方向：`top`、`bottom`、`left`、`right`。不设置则无箭头 |
-| `transit` | `string` | `''`   | 应用到面板约 300ms 的 CSS class，用于播放入场动画          |
+| `transit` | `string` | `''`   | 映射到面板上的动画 class，属性在多久 class 就在多久        |
 | `sheet`   | `string` | `''`   | 注入到组件 shadow DOM 的 CSS                               |
 
 ### 箭头方向 `arrow`
@@ -71,9 +71,19 @@ description: '底层浮层面板原语——r-popover 和 r-select 用来定位�
 
 ### 入场动画 `transit`
 
-短暂（约 300ms）作用于面板的 CSS 类名，用于播放进入/退出动画，动画结束后自动移除。
-组件内置了这些动画类：`ran-dropdown-down-in` / `-down-out` / `-up-in` / `-up-out` /
-`-left-in` / `-left-out` / `-right-in` / `-right-out`。
+映射到面板上的 CSS 类名，用于播放进入/退出动画。组件内置了这些动画类：
+`ran-dropdown-down-in` / `-down-out` / `-up-in` / `-up-out` / `-left-in` /
+`-left-out` / `-right-in` / `-right-out`。
+
+**class 存在的时长与属性完全一致**——什么时候算动画结束由设置属性的人决定，移除属性即
+移除 class。（它曾经是约 300ms 后自行过期的，那个时长在 JS 里另存了一份，和样式表里的
+那份手工对齐。而且那个定时器移除的是"触发那一刻 `transit` 的值"，不是它当初加上去的那个
+class，所以在这段窗口里换方向，第一个 class 就永久留在面板上了——`-in` 和 `-out` 同时
+生效。）
+
+`getAnimationTarget()` 返回动画真正跑在哪个元素上。它在 shadow root 里面，所以在 host 上
+调 `getAnimations()` 读不到任何东西，`{ subtree: true }` 也不穿透 shadow 边界——需要等面板
+动画结束的代码应该问它，而不是伸进 shadow 树里按 class 名去找。
 
 <Demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">

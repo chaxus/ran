@@ -267,8 +267,9 @@ that only works on one.
   `getBoundingClientRect()` — a portaled panel's coordinates, a sliding indicator's offset — goes
   stale on a resize, a container reflow, or (for a portaled panel) a scroll, none of which are the
   interaction that originally triggered the measurement. A body-portaled panel needs `scroll`
-  (capture phase, for nested scroll containers) + `resize` listeners while open (`r-select`'s
-  `_attachReposition`, `r-popover`'s `_attachReposition`); an in-flow element needs a
+  (capture phase, for nested scroll containers) + `resize` listeners while open (both `r-select`
+  and `r-popover` get them from `FloatingController`, which is where that lives now); an in-flow
+  element needs a
   `ResizeObserver` on the container that actually drives the measurement, not a plain `window`
   `resize` (`r-tabs`'s `_navResizeObserver` on `_nav`, re-running `setTabLine`). Narrow-viewport
   testing (see the checklist) exercises the _initial_ layout at that width — it does not exercise
