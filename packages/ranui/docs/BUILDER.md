@@ -49,6 +49,28 @@ const submit = View('r-button') // any tag, incl. custom elements
   .build();
 ```
 
+### SVG
+
+Tags that only exist in SVG (`svg`, `path`, `circle`, `g`, …) are created in the
+SVG namespace automatically — `document.createElement('svg')` would return an
+`HTMLUnknownElement` that the browser does not render as SVG, and whose
+`viewBox` would be flattened to `viewbox` and then ignored.
+
+```ts
+const icon = View('svg')
+  .attrs({ viewBox: '0 0 16 16', 'aria-hidden': 'true' })
+  .children(View('circle').attrs({ cx: '8', cy: '8', r: '6.25' }).build())
+  .build();
+```
+
+The tags SVG shares with HTML — `a`, `script`, `style`, `title` — stay HTML,
+since guessing would break the far commoner case. Use `Svg()` when one of those
+is meant as SVG:
+
+```ts
+Svg('a').attr('href', '#').children(View('path').attr('d', 'M1 1').build()).build();
+```
+
 Factories: `View(tag)`, `Div`, `Span`, `Slot`, `ButtonBuilder`, `InputBuilder`,
 `Label`, `Ul`, `Li`, `Section`, `Article`, `Nav`, `Header`, `Footer`, `Main`,
 `Style`, `DeclarativeShadow`. For anything else use `View('tag')`.

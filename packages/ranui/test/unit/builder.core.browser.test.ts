@@ -900,3 +900,56 @@ describe('Composition — Show/Switch containing For/Index', () => {
     });
   });
 });
+
+// ---------------------------------------------------------------------------
+// SVG namespace
+// ---------------------------------------------------------------------------
+
+describe('SVG elements', () => {
+  /**
+   * `document.createElement('svg')` returns an `HTMLUnknownElement`. Nothing
+   * about that is loud: the element exists, children append to it, and a
+   * serialized page looks right at a glance. What breaks is invisible from the
+   * JS side -- the browser does not render it as SVG, and HTML lowercases
+   * attribute names, so `viewBox` arrives as `viewbox` and SVG (which reads it
+   * case-sensitively) ignores it. The icon comes out blank.
+   *
+   * Found from the outside: a static-site generator rendering the same page in
+   * node and in jsdom produced different bytes, and the difference was that one
+   * `viewBox` had been flattened.
+   */
+  it('creates SVG-only tags in the SVG namespace', () => {
+    const svg = new ElementBuilder('svg').build();
+    const path = new ElementBuilder('path').build();
+    expect(svg.namespaceURI).toBe('http://www.w3.org/2000/svg');
+    expect(path.namespaceURI).toBe('http://www.w3.org/2000/svg');
+  });
+
+  it('keeps camelCase attribute names, which SVG reads case-sensitively', () => {
+    const svg = new ElementBuilder('svg').attrs({ viewBox: '0 0 16 16' }).build();
+    expect(svg.getAttribute('viewBox')).toBe('0 0 16 16');
+    expect(svg.outerHTML).toContain('viewBox="0 0 16 16"');
+  });
+
+  it('leaves the tags SVG shares with HTML as HTML', () => {
+    // Guessing here would break the far commoner case: `View('a')` is a link.
+    for (const tag of ['a', 'script', 'style', 'title']) {
+      expect(new ElementBuilder(tag).build().namespaceURI).toBe('http://www.w3.org/1999/xhtml');
+    }
+  });
+
+  it('takes an explicit namespace for those shared tags', () => {
+    const link = new ElementBuilder('a', 'http://www.w3.org/2000/svg').build();
+    expect(link.namespaceURI).toBe('http://www.w3.org/2000/svg');
+  });
+
+  it('nests as SVG, so an icon built through the builder actually renders', () => {
+    const icon = new ElementBuilder('svg')
+      .attrs({ viewBox: '0 0 16 16', 'aria-hidden': 'true' })
+      .children(new ElementBuilder('circle').attrs({ cx: '8', cy: '8', r: '6.25' }).build())
+      .build();
+    expect(icon.outerHTML).toBe(
+      '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25"></circle></svg>',
+    );
+  });
+});

@@ -408,11 +408,77 @@ const appendChildren = (parent: Node, items: Child[]): void => {
   });
 };
 
+export const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
+
+/**
+ * Tags that exist only in SVG, so a builder can create them correctly without
+ * being told which namespace they belong to.
+ *
+ * Deliberately excludes the tags SVG shares with HTML -- `a`, `script`,
+ * `style`, `title` -- since guessing wrong there would silently produce the
+ * wrong kind of element for the far more common HTML case. Reach for `Svg()`
+ * when one of those is meant as SVG.
+ */
+const SVG_ONLY_TAGS = new Set([
+  'svg',
+  'circle',
+  'clipPath',
+  'defs',
+  'desc',
+  'ellipse',
+  'feBlend',
+  'feColorMatrix',
+  'feComposite',
+  'feDropShadow',
+  'feFlood',
+  'feGaussianBlur',
+  'feMerge',
+  'feMergeNode',
+  'feOffset',
+  'filter',
+  'foreignObject',
+  'g',
+  'image',
+  'line',
+  'linearGradient',
+  'marker',
+  'mask',
+  'path',
+  'pattern',
+  'polygon',
+  'polyline',
+  'radialGradient',
+  'rect',
+  'stop',
+  'switch',
+  'symbol',
+  'text',
+  'textPath',
+  'tspan',
+  'use',
+]);
+
 export class ElementBuilder<T extends HTMLElement = HTMLElement> {
   private el: T;
 
-  constructor(tag: string) {
-    this.el = (isSSR ? new HTMLElementMock(tag) : document.createElement(tag)) as unknown as T;
+  /**
+   * @param tag element name
+   * @param namespace element namespace; inferred for SVG-only tags, and forced
+   * by `Svg()` for the tags SVG shares with HTML.
+   *
+   * The namespace matters more than it looks. `document.createElement('svg')`
+   * yields an `HTMLUnknownElement`: the browser does not render it as SVG, and
+   * -- because HTML lowercases attribute names -- `viewBox` lands as `viewbox`,
+   * which SVG reads case-sensitively and therefore ignores. An icon built that
+   * way is invisible, with markup that looks right in a serialized page.
+   */
+  constructor(tag: string, namespace?: string) {
+    const ns = namespace ?? (SVG_ONLY_TAGS.has(tag) ? SVG_NAMESPACE : undefined);
+    this.el = (isSSR
+      ? new HTMLElementMock(tag)
+      : ns
+        ? document.createElementNS(ns, tag)
+        : document.createElement(tag)) as unknown as T;
   }
 
   id(value: string): this {
