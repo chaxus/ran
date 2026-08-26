@@ -6,6 +6,19 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Added
 
+- **The builder creates SVG elements in the SVG namespace.** `View('svg')` and
+  every other SVG-only tag (`path`, `circle`, `g`, …) now go through
+  `createElementNS`, and `Svg()` is exported for the tags SVG shares with HTML
+  (`a`, `script`, `style`, `title`), where inferring would break the commoner
+  HTML case. Previously every tag went through `document.createElement`, which
+  returns an `HTMLUnknownElement` for `svg`: the browser does not render it as
+  SVG, and — because HTML lowercases attribute names — `viewBox` arrived as
+  `viewbox`, which SVG reads case-sensitively and therefore ignores. An icon
+  built with the builder was blank, with markup that read correctly in a
+  serialized page. Found from the outside: a static-site generator rendering the
+  same page under node and under jsdom produced different bytes, and the
+  difference was a flattened `viewBox`.
+
 - **One floating-panel controller behind `r-select` and `r-popover` (`FloatingController`, exported)** — portalling, positioning (flip/shift/alignment), following the anchor on scroll and resize, the enter/exit animation and the open/closed state machine were written twice, once per component, and had begun to drift: `r-select`'s reposition listeners carried a comment saying they mirrored `r-popover`'s, which is what keeping a shared thing in step by hand looks like just before it stops working. Both now drive the same controller and pass in only what they alone know — `r-select` the panel width it copies from its trigger (and the rendered width a consumer may have widened past it with `::part(dropdown)`), `r-popover` which light-DOM child is the trigger and where its arrow must end up. Exported from the barrel so a third floating component gets this rather than a third copy.
 - **`open` on `r-select` and `r-popover`** — a reflected attribute, and _the_ state, the way `<details open>` and `<dialog open>` are. Nothing infers it from the panel's `style.display` any more, which trails the state by the length of the exit animation. `show()` / `hide()` / `toggle()` are the methods; `:host([open])` becomes stylable, `el.open = true` a supported way to drive either component, and an attribute assertion replaces polling a style in tests.
 - **`show` / `after-show` / `hide` / `after-hide` on both components** — the first of each pair announces the intent as the transition starts, the second fires once the panel has arrived and any animation has finished. Neither component previously offered any way to know a panel had opened. Declared with the standard `@fires` JSDoc tag, which the API doc generator now reads — events dispatched from the shared controller are invisible to a scan of the component file, so both would otherwise have been documented as having no events at all.

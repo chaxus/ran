@@ -1,7 +1,23 @@
-import { ElementBuilder } from './core';
+import { ElementBuilder, SVG_NAMESPACE } from './core';
 
 export const View = <T extends HTMLElement = HTMLElement>(tag: string): ElementBuilder<T> => new ElementBuilder<T>(tag);
 export const Div = (): ElementBuilder<HTMLDivElement> => View<HTMLDivElement>('div');
+
+/**
+ * An element in the SVG namespace.
+ *
+ * `View()` already infers it for tags that only exist in SVG (`path`, `circle`,
+ * `g`, …), so this is for the ones SVG shares with HTML -- `a`, `script`,
+ * `style`, `title` -- where guessing would break the commoner HTML case.
+ *
+ * ```ts
+ * View('svg').attrs({ viewBox: '0 0 16 16' }).children(
+ *   Svg('a').attr('href', '#').children(View('path').attr('d', 'M1 1').build()).build(),
+ * );
+ * ```
+ */
+export const Svg = <T extends HTMLElement = HTMLElement>(tag: string): ElementBuilder<T> =>
+  new ElementBuilder<T>(tag, SVG_NAMESPACE);
 export const Span = (): ElementBuilder<HTMLSpanElement> => View<HTMLSpanElement>('span');
 export const Slot = (): ElementBuilder<HTMLSlotElement> => View<HTMLSlotElement>('slot');
 export const ButtonBuilder = (): ElementBuilder<HTMLButtonElement> => View<HTMLButtonElement>('button');
