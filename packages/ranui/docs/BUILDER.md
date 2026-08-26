@@ -49,6 +49,20 @@ const submit = View('r-button') // any tag, incl. custom elements
   .build();
 ```
 
+### Markup that is already HTML
+
+`text()` escapes; `unsafeHtml()` does not. It is the only way to put content
+that _is_ HTML into a builder tree — rendered markdown, a fragment assembled
+elsewhere, a translated string carrying its own emphasis.
+
+```ts
+View('p').unsafeHtml('Local-first · <b>open source</b>').build();
+```
+
+Everything handed to it is parsed as markup, so sanitize anything that came from
+outside the program first. Like `textContent`, it replaces whatever content the
+element had, and the last of `text()` / `unsafeHtml()` to run wins.
+
 ### SVG
 
 Tags that only exist in SVG (`svg`, `path`, `circle`, `g`, …) are created in the

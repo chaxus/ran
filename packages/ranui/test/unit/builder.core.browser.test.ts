@@ -953,3 +953,38 @@ describe('SVG elements', () => {
     );
   });
 });
+
+// ---------------------------------------------------------------------------
+// unsafeHtml
+// ---------------------------------------------------------------------------
+
+describe('unsafeHtml', () => {
+  /**
+   * The counterpart to `text()`. Without it a builder cannot express content
+   * that already is HTML -- rendered markdown, a fragment assembled elsewhere, a
+   * translated string carrying its own emphasis -- which is why a static-site
+   * generator with markdown in it had to concatenate strings instead.
+   */
+  it('inserts markup as markup, where text() would escape it', () => {
+    const withText = new ElementBuilder('div').text('<b>hi</b>').build();
+    const withHtml = new ElementBuilder('div').unsafeHtml('<b>hi</b>').build();
+
+    expect(withText.textContent).toBe('<b>hi</b>');
+    expect(withText.innerHTML).toBe('&lt;b&gt;hi&lt;/b&gt;');
+    expect(withHtml.innerHTML).toBe('<b>hi</b>');
+    expect(withHtml.querySelector('b')).not.toBeNull();
+  });
+
+  it('replaces whatever content the element had', () => {
+    const el = new ElementBuilder('div')
+      .children(new ElementBuilder('span').text('first').build())
+      .unsafeHtml('<i>second</i>')
+      .build();
+    expect(el.innerHTML).toBe('<i>second</i>');
+  });
+
+  it('is last-write-wins against text(), the way the DOM is', () => {
+    expect(new ElementBuilder('div').text('a').unsafeHtml('<b>c</b>').build().innerHTML).toBe('<b>c</b>');
+    expect(new ElementBuilder('div').unsafeHtml('<b>c</b>').text('a').build().innerHTML).toBe('a');
+  });
+});

@@ -40,7 +40,24 @@ export class HTMLElementMock {
   public inlineStyles: Map<string, string> = new Map<string, string>();
   public childrenList: (HTMLElementMock | string | DocumentFragmentMock)[] = [];
   public shadowRoot: ShadowRootMock | null = null;
-  public textContent: string | null = null;
+  private _textContent: string | null = null;
+
+  /**
+   * Setting either `textContent` or `innerHTML` replaces the element's content
+   * in a real DOM, so the last one written wins. This mock used to keep both
+   * and let `serialize()` prefer the text, which meant
+   * `el.textContent = 'a'; el.innerHTML = '<b/>'` rendered `a` here and `<b/>`
+   * in a browser -- the kind of difference that only surfaces once the same
+   * template is rendered in both, which is exactly what a static-site generator
+   * under vitest does.
+   */
+  get textContent(): string | null {
+    return this._textContent;
+  }
+
+  set textContent(value: string | null) {
+    this._textContent = value;
+  }
   public content?: DocumentFragmentMock;
   private eventListeners: Map<string, Set<EventListenerOrEventListenerObject>> = new Map();
 
@@ -73,11 +90,16 @@ export class HTMLElementMock {
   private _innerHTML: string = '';
 
   get innerHTML(): string {
+    // Reading it back reflects whichever was written last, as a browser does:
+    // after `el.textContent = 'a'`, `el.innerHTML` is `a`, not the markup that
+    // was there before.
+    if (this._textContent !== null) return escapeHtml(this._textContent);
     return this._innerHTML;
   }
 
   set innerHTML(value: string) {
     this._innerHTML = value;
+    this._textContent = null;
     if (this.tagName === 'template' && this.content) {
       this.content.childrenList = [value];
     }
