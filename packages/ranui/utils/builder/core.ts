@@ -656,6 +656,30 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this;
   }
 
+  /**
+   * Set the element's content from a string of markup, without escaping it.
+   *
+   * The counterpart to `text()`, and named for the difference: `text()` escapes,
+   * this does not. Everything handed here is parsed as HTML, so anything that
+   * came from outside the program must be sanitized before it arrives.
+   *
+   * It exists because some content simply *is* HTML, and a builder without this
+   * cannot express it at all: markdown rendered for a page, a fragment assembled
+   * somewhere else, a translated string that carries its own emphasis
+   * (`Local-first · <b>open source</b>`). That gap is why a static-site
+   * generator with markdown in it could not be written against this API and had
+   * to concatenate strings instead.
+   *
+   * Like `textContent`, this replaces whatever content the element had --
+   * including anything set by `text()` or `children()` before it.
+   */
+  unsafeHtml(value: string | Getter<string>): this {
+    this.bind(value, (v) => {
+      this.el.innerHTML = v;
+    });
+    return this;
+  }
+
   ref(holder: Ref<T>): this {
     holder.current = this.el;
     return this;

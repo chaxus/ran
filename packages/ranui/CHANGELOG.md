@@ -6,6 +6,16 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Added
 
+- **`unsafeHtml()` on the builder.** `text()` escapes, so until now a builder
+  tree could not contain content that already is HTML — rendered markdown, a
+  fragment assembled elsewhere, a translated string carrying its own emphasis
+  (`Local-first · <b>open source</b>`). There was no way to express it at all,
+  which is why a static-site generator with markdown in it had to concatenate
+  strings instead of using this API. Named for the difference: everything handed
+  to it is parsed as markup, so sanitize anything from outside the program
+  first. It replaces the element's content, and the last of `text()` /
+  `unsafeHtml()` to run wins, as in the DOM.
+
 - **The builder creates SVG elements in the SVG namespace.** `View('svg')` and
   every other SVG-only tag (`path`, `circle`, `g`, …) now go through
   `createElementNS`, and `Svg()` is exported for the tags SVG shares with HTML
@@ -54,6 +64,14 @@ All notable changes to `ranui` will be documented in this file.
 - **Default (secondary) `r-button` hover no longer flips to the accent color** — it darkens the border (gray 400 → 500) and keeps primary text, per the Geist state ladder; the default ripple is now a translucent gray (`--ran-gray-alpha-400`) instead of primary blue.
 
 ### Fixed
+
+- **The SSR mock's `textContent` and `innerHTML` replace each other, as they do
+  in a browser.** The mock kept both and let serialization prefer the text, so
+  `el.textContent = 'a'; el.innerHTML = '<b/>'` rendered `a` under node and
+  `<b/>` in a browser; reading `innerHTML` back after setting `textContent`
+  returned the markup that had been replaced. Only visible when the same
+  template is rendered in both environments — which is exactly what a
+  static-site generator under vitest does.
 
 - **A run of clicks on `r-select`'s trigger no longer wedges the menu** — hover the trigger, click (opens), click again without moving (closes), click again: the panel flashed open, shut itself, and from there the menu was stuck. The trigger ran _both_ transitions on every click, close then open, and which one survived depended on which of two 300ms animation timers happened to be in flight, because each read `style.display` to decide whether it had anything to do. Inside that window `display` answers about the frame rather than the intent. The trigger now toggles `open`, which is the state.
 - **`aria-expanded` can no longer drift from the panel** — measured mid-sequence in the same bug, the combobox announced itself expanded while its panel was `display: none`. One code path now writes the display, the transit class, the reposition listeners and `aria-expanded`, so the four cannot disagree.
