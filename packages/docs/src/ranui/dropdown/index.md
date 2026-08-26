@@ -28,11 +28,11 @@ A low-level floating-panel primitive: a rounded, elevated surface with an option
 
 ### Properties
 
-| Property  | Type     | Default | Description                                                             |
-| --------- | -------- | ------- | ----------------------------------------------------------------------- |
-| `arrow`   | `string` | `''`    | Arrow side: `top`, `bottom`, `left`, `right`. Omit for no arrow.        |
-| `transit` | `string` | `''`    | CSS class applied to the panel for ~300ms to play an entrance animation |
-| `sheet`   | `string` | `''`    | CSS injected into the component's shadow DOM                            |
+| Property  | Type     | Default | Description                                                                  |
+| --------- | -------- | ------- | ---------------------------------------------------------------------------- |
+| `arrow`   | `string` | `''`    | Arrow side: `top`, `bottom`, `left`, `right`. Omit for no arrow.             |
+| `transit` | `string` | `''`    | Animation class mirrored onto the panel, for as long as the attribute is set |
+| `sheet`   | `string` | `''`    | CSS injected into the component's shadow DOM                                 |
 
 ### Arrow Direction `arrow`
 
@@ -70,7 +70,11 @@ Renders a pointing arrow on one side of the panel. Omit the attribute for no arr
 
 ### Entrance Animation `transit`
 
-A CSS class name applied to the panel briefly (~300ms) to play an entrance/exit animation, then removed automatically. The component ships these animation classes: `ran-dropdown-down-in` / `-down-out` / `-up-in` / `-up-out` / `-left-in` / `-left-out` / `-right-in` / `-right-out`.
+A CSS class name mirrored onto the panel to play an entrance or exit animation. The component ships these: `ran-dropdown-down-in` / `-down-out` / `-up-in` / `-up-out` / `-left-in` / `-left-out` / `-right-in` / `-right-out`.
+
+The class lives exactly as long as the attribute does — whoever sets it decides when the animation is over, and removing the attribute removes the class. (It used to expire on its own after ~300ms, a duration held in JS alongside the one in the stylesheet. That timer removed whatever `transit` said at the moment it fired rather than the class it had added, so reversing direction inside the window left the first class on the panel permanently, with both `-in` and `-out` applied.)
+
+`getAnimationTarget()` returns the element the animation actually runs on. It is inside the shadow root, so `getAnimations()` on the host reports nothing and `{ subtree: true }` does not cross the boundary — anything waiting for the panel's transition to finish should ask for it rather than reach through the shadow tree for a class name.
 
 <Demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
