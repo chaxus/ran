@@ -221,6 +221,21 @@ r-modal::part(mask) {
 }
 ```
 
+## Styling
+
+`<r-modal>` exposes **23 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-modal {
+  --ran-modal-mask-background: var(--ran-color-bg-subtle);
+}
+```
+
+Parts: `body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
+
+The full list is in [style tokens](/src/ranui/style-tokens#modal); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Trigger + toggle**: Open with `modal.open = true` and close with `modal.open = false`, or call `close()`.

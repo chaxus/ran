@@ -110,3 +110,18 @@ chat.addEventListener('pinnedchange', (e) => {
 - [ranuts/stream](../../ranuts/stream/) —— 把厂商的 SSE 转成这里 push 的事件
 - [ranuts/conversation](../../ranuts/conversation/) —— 投影层，含发布节奏
 - [Markdown](../markdown/) —— 面向流式的正文行
+
+## 自定义样式
+
+`<r-conversation>` 自身暴露了 **14 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-conversation {
+  --ran-conversation-background: var(--ran-color-bg-subtle);
+}
+```
+
+Part：`conversation` · `empty` · `footer` · `list` · `older`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#conversation)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。

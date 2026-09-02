@@ -153,6 +153,21 @@ r-checkbox::part(label) {
 }
 ```
 
+## 自定义样式
+
+`<r-checkbox>` 自身暴露了 **32 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-checkbox {
+  --ran-checkbox-color: var(--ran-color-text-secondary);
+}
+```
+
+Part：`checkbox` · `inner` · `input` · `label` · `wrapper`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#checkbox)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+
 ## 最佳实践
 
 - **给复选框加标签**：提供插槽文本，让控件拥有可访问的名称。

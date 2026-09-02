@@ -85,6 +85,21 @@ A `duration` that is not a finite, non-negative number reads back as `null`.
 The summary is a real `<button type="button">` with `aria-expanded`, so it is reachable and
 operable from the keyboard without extra wiring.
 
+## Styling
+
+`<r-reasoning>` exposes **4 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-reasoning {
+  --ran-reasoning-color: var(--ran-color-text-secondary);
+}
+```
+
+Parts: `body` · `row` · `text`
+
+The full list is in [style tokens](/src/ranui/style-tokens#reasoning); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## See also
 
 - [Conversation](../conversation/) — mount this as the reasoning row of a transcript

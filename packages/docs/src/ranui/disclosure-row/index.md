@@ -110,6 +110,21 @@ row.addEventListener('disclosuretoggle', () => {
 
 `row` · `leading` · `title` · `separator` · `summary` · `disclosure` · `body`
 
+## Styling
+
+`<r-disclosure-row>` exposes **15 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-disclosure-row {
+  --ran-disclosure-hover-background: var(--ran-color-bg-subtle);
+}
+```
+
+Parts: `body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
+
+The full list is in [style tokens](/src/ranui/style-tokens#disclosure-row); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Give a row a body, or don't make it expandable.** A chevron that opens an empty area is a

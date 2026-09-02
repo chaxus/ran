@@ -150,6 +150,21 @@ type AttachmentRejection = 'too-large' | 'type-not-accepted' | 'too-many' | 'dup
 缩略图的 alt 是**文件名**，不是「图片」：四个附件都念成「图片」，等于什么都没告诉读者。移除按钮同理，
 各自以文件命名。
 
+## 自定义样式
+
+`<r-attachments>` 自身暴露了 **17 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-attachments {
+  --ran-attachment-background: var(--ran-color-bg-subtle);
+}
+```
+
+Part：`attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#attachments)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+
 ## 最佳实践
 
 - **服务端也要校验。** `accept` 和 `max-size` 是对上传者的体贴，不是安全边界。

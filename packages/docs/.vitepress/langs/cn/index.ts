@@ -398,6 +398,10 @@ const themeCnConfig: DefaultTheme.Config = {
         link: '/cn/src/ranui/api',
       },
       {
+        text: '样式令牌与 Part',
+        link: '/cn/src/ranui/style-tokens',
+      },
+      {
         text: 'Changelog 更新日志',
         link: '/cn/src/ranui/changelog',
       },

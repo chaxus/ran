@@ -269,6 +269,21 @@ tabs.addEventListener('change', (e) => {
 
 `<r-tab>` 本身不派发任何自定义事件。
 
+## 自定义样式
+
+`<r-tabs>` 自身暴露了 **10 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-tabs {
+  --ran-tab-content-background: var(--ran-color-bg-subtle);
+}
+```
+
+Part：`content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#tab)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+
 ## 最佳实践
 
 - **稳定的身份标识**：给每个 `<r-tab>` 一个唯一的 `r-key`，用 `<r-tabs>` 上的 `active` 驱动选中状态，而不是依赖位置索引。

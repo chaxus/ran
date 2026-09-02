@@ -216,6 +216,21 @@ r-input::part(content) {
 }
 ```
 
+## Styling
+
+`<r-input>` exposes **61 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-input {
+  --ran-input-color: var(--ran-color-text-secondary);
+}
+```
+
+Parts: `content` · `input` · `label` · `message`
+
+The full list is in [style tokens](/src/ranui/style-tokens#input); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Labels**: Add a meaningful `label` so the field has an accessible name.

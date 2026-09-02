@@ -120,6 +120,21 @@ activation would try to open a second capture, be refused, and do nothing.
 
 `button`, `icon`.
 
+## Styling
+
+`<r-voice-button>` exposes **20 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-voice-button {
+  --ran-voice-background: var(--ran-color-bg-subtle);
+}
+```
+
+Parts: `button` · `hint` · `icon`
+
+The full list is in [style tokens](/src/ranui/style-tokens#voice-button); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## See also
 
 - [`createSpeechRecognizer`](../../ranuts/utils/) — the recognizer this wraps

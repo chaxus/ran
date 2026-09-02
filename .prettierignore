@@ -30,5 +30,7 @@ packages/docs/src/ranui/api.md
 packages/docs/cn/src/ranui/api.md
 packages/docs/src/ranui/changelog.md
 packages/docs/cn/src/ranui/changelog.md
+packages/docs/src/ranui/style-tokens.md
+packages/docs/cn/src/ranui/style-tokens.md
 packages/ranui/docs/style-tokens-parts.md
 packages/ranui/docs/style-tokens-public.md

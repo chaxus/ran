@@ -156,6 +156,21 @@ A thumbnail's alt text is **the file name**, not "image": four attachments all a
 "image" have told the reader nothing about which is which. Each remove button is named after
 its file for the same reason.
 
+## Styling
+
+`<r-attachments>` exposes **17 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-attachments {
+  --ran-attachment-background: var(--ran-color-bg-subtle);
+}
+```
+
+Parts: `attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
+
+The full list is in [style tokens](/src/ranui/style-tokens#attachments); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Validate on the server too.** `accept` and `max-size` are a courtesy to the person

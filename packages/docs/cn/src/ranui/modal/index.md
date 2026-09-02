@@ -221,6 +221,21 @@ r-modal::part(mask) {
 }
 ```
 
+## 自定义样式
+
+`<r-modal>` 自身暴露了 **23 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-modal {
+  --ran-modal-mask-background: var(--ran-color-bg-subtle);
+}
+```
+
+Part：`body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#modal)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+
 ## 最佳实践
 
 - **触发 + 切换**：用 `modal.open = true` 打开、`modal.open = false` 关闭，或调用 `close()`。

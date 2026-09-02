@@ -142,3 +142,18 @@ Set spin to turn on the rotation, and pass in a number to control the rotation s
 Click any icon to copy its markup.
 
 <IconGallery />
+
+## Styling
+
+`<r-icon>` exposes **6 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-icon {
+  --ran-icon-color: var(--ran-color-text-secondary);
+}
+```
+
+Parts: `ran-icon`
+
+The full list is in [style tokens](/src/ranui/style-tokens#icon); which token to reach for is the [design system](/src/ranui/design-system/).

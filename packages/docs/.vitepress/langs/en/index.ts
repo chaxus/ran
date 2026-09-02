@@ -401,6 +401,10 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranui/api',
       },
       {
+        text: 'Style tokens & parts',
+        link: '/src/ranui/style-tokens',
+      },
+      {
         text: 'Changelog',
         link: '/src/ranui/changelog',
       },

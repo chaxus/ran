@@ -66,6 +66,21 @@ Render high-quality LaTeX math formulas in HTML pages using Temml, compiled stra
 | `copied`   | `{ kind: 'source' \| 'mathml' }`   | The copy button copied the source or MathML to the clipboard. |
 | `download` | `{ format: 'source' \| 'mathml' }` | The download button saved a `.tex` or `.mml` file.            |
 
+## Styling
+
+`<r-math>` exposes **16 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-math {
+  --ran-math-error-background: var(--ran-color-bg-subtle);
+}
+```
+
+Parts: `button` · `error` · `math` · `menu` · `render` · `toolbar`
+
+The full list is in [style tokens](/src/ranui/style-tokens#math); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Provide formulas via `latex`**: Set the formula on the `latex` attribute; slotted text content is not rendered.

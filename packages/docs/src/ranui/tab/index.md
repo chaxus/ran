@@ -269,6 +269,21 @@ tabs.addEventListener('change', (e) => {
 
 `<r-tab>` does not dispatch any custom events.
 
+## Styling
+
+`<r-tabs>` exposes **10 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-tabs {
+  --ran-tab-content-background: var(--ran-color-bg-subtle);
+}
+```
+
+Parts: `content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
+
+The full list is in [style tokens](/src/ranui/style-tokens#tab); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Stable identity**: Give each `<r-tab>` a unique `r-key` and drive selection with `active` on `<r-tabs>` instead of relying on positional indexes.

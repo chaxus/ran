@@ -5,6 +5,11 @@ const ROOT = path.resolve(process.cwd());
 const COMPONENTS_DIR = path.join(ROOT, 'components');
 const OUTPUT_FILE = path.join(ROOT, 'docs', 'style-tokens-parts.md');
 const OUTPUT_PUBLIC_FILE = path.join(ROOT, 'docs', 'style-tokens-public.md');
+// The public view, published to the docs site in both languages. Every component page links
+// to its own anchor here for "which CSS variables can I set on this element" — the answer was
+// previously only inside the repository, so a reader on the site had no way to reach it.
+const SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'src', 'ranui', 'style-tokens.md');
+const CN_SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'cn', 'src', 'ranui', 'style-tokens.md');
 const FILTER_CONFIG_FILE = path.join(ROOT, 'docs', 'style-token-filter.json');
 
 const CHECK = process.argv.includes('--check');
@@ -357,9 +362,61 @@ async function main(): Promise<void> {
 
   const fullDoc = buildDoc(entries, 'full', filterConfig);
   const publicDoc = buildDoc(entries, 'public', filterConfig);
+  // The site pages carry the same body under their own page chrome; `## Components` and the
+  // `# …` title are dropped so the per-component `###` headings become the page's own outline.
+  // Promote the headings one level: on the site each component is a top-level section of the
+  // page, which is also what puts it in the outline (VitePress lists `##` by default).
+  const body = publicDoc
+    .slice(publicDoc.indexOf('### `'))
+    .replace(/^### /gm, '## ')
+    .replace(/^#### /gm, '### ');
 
   await emit(OUTPUT_FILE, fullDoc);
   await emit(OUTPUT_PUBLIC_FILE, publicDoc);
+
+  await emit(
+    SITE_OUTPUT_FILE,
+    [
+      '---',
+      'title: ranui style tokens',
+      'description: The CSS custom properties and ::part() names every ranui element exposes, extracted from its stylesheet.',
+      '---',
+      '',
+      '# Style tokens and parts',
+      '',
+      'Every CSS custom property and `::part()` name each element exposes, extracted from its',
+      'stylesheet by `pnpm -F ranui doc:style` so it cannot drift. Structural and internal tokens',
+      'are filtered out: what is left is the styling API you can rely on.',
+      '',
+      'Set a token anywhere it inherits from — `:root`, a wrapper, or the element itself — and',
+      'prefer a semantic token when one covers the change, since it reaches every component at',
+      'once. The vocabulary is the [design system](/src/ranui/design-system/); the naming rule is',
+      '`--ran-{component}-{element}[-{state}]-{property}`.',
+      '',
+      body,
+    ].join('\n'),
+  );
+
+  await emit(
+    CN_SITE_OUTPUT_FILE,
+    [
+      '---',
+      'title: ranui 样式令牌',
+      'description: ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称，均从其样式表提取。',
+      '---',
+      '',
+      '# 样式令牌与 Part',
+      '',
+      '每个元素暴露的全部 CSS 自定义属性与 `::part()` 名称，由 `pnpm -F ranui doc:style` 从其样式表',
+      '提取，因此不会与代码脱节。结构性与内部令牌已被过滤掉，剩下的就是可以放心依赖的样式接口。',
+      '',
+      '令牌可以设在任何能继承到的地方——`:root`、外层容器，或元素本身；如果某个语义令牌就能表达这次',
+      '改动，优先用它，因为它一次影响所有组件。词汇表见[设计系统](/cn/src/ranui/design-system/)，',
+      '命名规则是 `--ran-{component}-{element}[-{state}]-{property}`。',
+      '',
+      body,
+    ].join('\n'),
+  );
 }
 
 main().catch((error) => {

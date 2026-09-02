@@ -1,0 +1,2033 @@
+---
+title: ranui 样式令牌
+description: ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称，均从其样式表提取。
+---
+
+# 样式令牌与 Part
+
+每个元素暴露的全部 CSS 自定义属性与 `::part()` 名称，由 `pnpm -F ranui doc:style` 从其样式表
+提取，因此不会与代码脱节。结构性与内部令牌已被过滤掉，剩下的就是可以放心依赖的样式接口。
+
+令牌可以设在任何能继承到的地方——`:root`、外层容器，或元素本身；如果某个语义令牌就能表达这次
+改动，优先用它，因为它一次影响所有组件。词汇表见[设计系统](/cn/src/ranui/design-system/)，
+命名规则是 `--ran-{component}-{element}[-{state}]-{property}`。
+
+## `attachments`
+
+- Tokens: 32
+- Parts: 7
+
+### Tokens
+<!-- layers: semantic: 9 · internal: 23 -->
+- `--ran-attachment-background`
+- `--ran-attachment-border-color`
+- `--ran-attachment-border-radius`
+- `--ran-attachment-focus-color`
+- `--ran-attachment-gap`
+- `--ran-attachment-icon-color`
+- `--ran-attachment-name-color`
+- `--ran-attachment-name-font-size`
+- `--ran-attachment-remove-color`
+- `--ran-attachment-remove-hover-background`
+- `--ran-attachment-remove-hover-color`
+- `--ran-attachment-remove-radius`
+- `--ran-attachment-remove-size`
+- `--ran-attachment-size-color`
+- `--ran-attachment-size-font-size`
+- `--ran-attachment-thumb-radius`
+- `--ran-attachment-thumb-size`
+- `--ran-attachments-gap`
+- `--ran-color-bg-hover`
+- `--ran-color-bg-subtle`
+- `--ran-color-border`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-radius-full`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-size-3`
+- `--ran-size-6`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-text-label-3`
+
+### Parts
+- `attachment`
+- `icon`
+- `list`
+- `name`
+- `remove`
+- `size`
+- `thumb`
+
+## `button`
+
+- Tokens: 65
+- Parts: 2
+
+### Tokens
+<!-- layers: semantic: 14 · skin: 2 · component: 43 · internal: 6 -->
+- `--ran-btn-active-background`
+- `--ran-btn-active-border-color`
+- `--ran-btn-active-transform`
+- `--ran-btn-after-background-image`
+- `--ran-btn-after-opacity`
+- `--ran-btn-after-transform`
+- `--ran-btn-after-transition`
+- `--ran-btn-align-items`
+- `--ran-btn-align-self`
+- `--ran-btn-background`
+- `--ran-btn-background-image`
+- `--ran-btn-border`
+- `--ran-btn-border-color`
+- `--ran-btn-border-image-slice`
+- `--ran-btn-border-image-source`
+- `--ran-btn-border-radius`
+- `--ran-btn-box-shadow`
+- `--ran-btn-color`
+- `--ran-btn-content-background-image`
+- `--ran-btn-content-justify-content`
+- `--ran-btn-disabled-opacity`
+- `--ran-btn-font-family`
+- `--ran-btn-font-size`
+- `--ran-btn-font-weight`
+- `--ran-btn-hover-background`
+- `--ran-btn-hover-border-color`
+- `--ran-btn-hover-color`
+- `--ran-btn-padding`
+- `--ran-btn-surface-background`
+- `--ran-btn-surface-background-image`
+- `--ran-btn-surface-disabled-opacity`
+- `--ran-btn-surface-transition`
+- `--ran-btn-surface-user-select`
+- `--ran-btn-text-align`
+- `--ran-btn-text-border`
+- `--ran-btn-text-box-shadow`
+- `--ran-btn-text-surface-background`
+- `--ran-btn-transition`
+- `--ran-btn-user-select`
+- `--ran-btn-warning-background`
+- `--ran-btn-warning-border-color`
+- `--ran-btn-warning-color`
+- `--ran-btn-white-space`
+- `--ran-color-bg-elevated`
+- `--ran-color-border`
+- `--ran-color-border-hover`
+- `--ran-color-danger`
+- `--ran-color-primary`
+- `--ran-color-primary-active`
+- `--ran-color-primary-hover`
+- `--ran-color-primary-text`
+- `--ran-color-text`
+- `--ran-gray-alpha-400`
+- `--ran-motion-duration-base`
+- `--ran-motion-ease-spring`
+- `--ran-motion-ease-standard`
+- `--ran-radius-full`
+- `--ran-radius-sm`
+- `--ran-skin-font-family`
+- `--ran-skin-raised-shadow`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-space-4`
+- `--ran-text-button-size`
+- `--ran-text-button-weight`
+
+### Parts
+- `button`
+- `content`
+
+## `card`
+
+- Tokens: 30
+- Parts: 7
+
+### Tokens
+<!-- layers: semantic: 7 · skin: 1 · internal: 22 -->
+- `--ran-card-background`
+- `--ran-card-border-color`
+- `--ran-card-description-color`
+- `--ran-card-description-font-size`
+- `--ran-card-description-font-weight`
+- `--ran-card-gap`
+- `--ran-card-header-gap`
+- `--ran-card-hover-border-color`
+- `--ran-card-hover-shadow`
+- `--ran-card-radius`
+- `--ran-card-shadow`
+- `--ran-card-title-color`
+- `--ran-card-title-font-size`
+- `--ran-card-title-font-weight`
+- `--ran-card-title-letter-spacing`
+- `--ran-color-bg`
+- `--ran-color-border`
+- `--ran-color-border-hover`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-radius-md`
+- `--ran-shadow-elevated`
+- `--ran-skin-border-style`
+- `--ran-space-1`
+- `--ran-space-4`
+- `--ran-text-copy-2`
+- `--ran-text-copy-weight`
+- `--ran-text-heading-4`
+- `--ran-text-heading-tracking`
+- `--ran-text-heading-weight`
+
+### Parts
+- `body`
+- `card`
+- `description`
+- `extra`
+- `footer`
+- `header`
+- `title`
+
+## `checkbox`
+
+- Tokens: 44
+- Parts: 5
+
+### Tokens
+<!-- layers: semantic: 7 · skin: 1 · component: 32 · internal: 4 -->
+- `--ran-checkbox-border-radius`
+- `--ran-checkbox-checked-background-color`
+- `--ran-checkbox-checked-background-image`
+- `--ran-checkbox-checked-border`
+- `--ran-checkbox-color`
+- `--ran-checkbox-disabled-opacity`
+- `--ran-checkbox-focus-border-color`
+- `--ran-checkbox-focus-box-shadow`
+- `--ran-checkbox-font-family`
+- `--ran-checkbox-font-size`
+- `--ran-checkbox-inner-background-color`
+- `--ran-checkbox-inner-border`
+- `--ran-checkbox-inner-border-collapse`
+- `--ran-checkbox-inner-border-image-slice`
+- `--ran-checkbox-inner-border-image-source`
+- `--ran-checkbox-inner-border-radius`
+- `--ran-checkbox-inner-direction`
+- `--ran-checkbox-input-opacity`
+- `--ran-checkbox-label-color`
+- `--ran-checkbox-label-font-family`
+- `--ran-checkbox-label-font-size`
+- `--ran-checkbox-label-font-weight`
+- `--ran-checkbox-label-gap`
+- `--ran-checkbox-pop-animation`
+- `--ran-checkbox-tick-border`
+- `--ran-checkbox-tick-border-inline-start`
+- `--ran-checkbox-tick-checked-opacity`
+- `--ran-checkbox-tick-content`
+- `--ran-checkbox-tick-opacity`
+- `--ran-checkbox-tick-transform`
+- `--ran-checkbox-tick-transition`
+- `--ran-checkbox-white-space`
+- `--ran-color-bg-elevated`
+- `--ran-color-bg-muted`
+- `--ran-color-border`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-focus-ring`
+- `--ran-motion-duration-base`
+- `--ran-motion-ease-bouncy`
+- `--ran-size-1`
+- `--ran-skin-font-family`
+- `--ran-text-label-1`
+- `--ran-text-label-weight`
+
+### Parts
+- `checkbox`
+- `inner`
+- `input`
+- `label`
+- `wrapper`
+
+## `colorpicker`
+
+- Tokens: 18
+- Parts: 2
+
+### Tokens
+<!-- layers: semantic: 5 · component: 7 · internal: 6 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-border`
+- `--ran-color-border-hover`
+- `--ran-colorpicker-background`
+- `--ran-colorpicker-block-border-radius`
+- `--ran-colorpicker-border`
+- `--ran-colorpicker-border-radius`
+- `--ran-colorpicker-disabled-opacity`
+- `--ran-colorpicker-hover-border-color`
+- `--ran-colorpicker-transition`
+- `--ran-gray-500`
+- `--ran-gray-alpha-100`
+- `--ran-gray-alpha-200`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-size-4`
+- `--ran-size-7`
+- `--ran-space-1`
+
+### Parts
+- `block`
+- `swatch`
+
+## `conversation`
+
+- Tokens: 27
+- Parts: 5
+
+### Tokens
+<!-- layers: semantic: 7 · internal: 20 -->
+- `--ran-color-bg`
+- `--ran-color-border`
+- `--ran-color-border-hover`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-conversation-background`
+- `--ran-conversation-color`
+- `--ran-conversation-empty-color`
+- `--ran-conversation-focus-color`
+- `--ran-conversation-font-size`
+- `--ran-conversation-footer-background`
+- `--ran-conversation-gap`
+- `--ran-conversation-measure`
+- `--ran-conversation-older-border-color`
+- `--ran-conversation-older-color`
+- `--ran-conversation-older-font-size`
+- `--ran-conversation-older-hover-border-color`
+- `--ran-conversation-older-hover-color`
+- `--ran-conversation-older-radius`
+- `--ran-radius-full`
+- `--ran-space-1`
+- `--ran-space-3`
+- `--ran-space-4`
+- `--ran-space-8`
+- `--ran-text-copy-2`
+- `--ran-text-label-3`
+
+### Parts
+- `conversation`
+- `empty`
+- `footer`
+- `list`
+- `older`
+
+## `disclosure-row`
+
+- Tokens: 25
+- Parts: 7
+
+### Tokens
+<!-- layers: semantic: 8 · internal: 17 -->
+- `--ran-color-bg`
+- `--ran-color-bg-hover`
+- `--ran-color-danger`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
+- `--ran-disclosure-color`
+- `--ran-disclosure-error-color`
+- `--ran-disclosure-focus-color`
+- `--ran-disclosure-font-size`
+- `--ran-disclosure-gap`
+- `--ran-disclosure-hover-background`
+- `--ran-disclosure-leading-color`
+- `--ran-disclosure-leading-size`
+- `--ran-disclosure-radius`
+- `--ran-disclosure-sep-color`
+- `--ran-disclosure-summary-color`
+- `--ran-disclosure-sweep-color`
+- `--ran-disclosure-sweep-duration`
+- `--ran-disclosure-title-weight`
+- `--ran-disclosure-transition`
+- `--ran-radius-sm`
+- `--ran-space-2`
+- `--ran-text-copy-2`
+
+### Parts
+- `body`
+- `disclosure`
+- `leading`
+- `row`
+- `separator`
+- `summary`
+- `title`
+
+## `dropdown`
+
+- Tokens: 27
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 6 · skin: 1 · component: 17 · internal: 3 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-border`
+- `--ran-color-text`
+- `--ran-dropdown-animation-duration`
+- `--ran-dropdown-arrow-anchor-offset`
+- `--ran-dropdown-arrow-fill-background`
+- `--ran-dropdown-arrow-overlap`
+- `--ran-dropdown-arrow-shadow`
+- `--ran-dropdown-arrow-shape-offset`
+- `--ran-dropdown-arrow-tip-background`
+- `--ran-dropdown-arrow-tip-box-shadow`
+- `--ran-dropdown-background`
+- `--ran-dropdown-border`
+- `--ran-dropdown-border-radius`
+- `--ran-dropdown-box-shadow`
+- `--ran-dropdown-color`
+- `--ran-dropdown-font-family`
+- `--ran-dropdown-font-size`
+- `--ran-dropdown-font-variant`
+- `--ran-dropdown-font-weight`
+- `--ran-radius-md`
+- `--ran-shadow-elevated`
+- `--ran-shadow-menu`
+- `--ran-skin-font-family`
+- `--ran-text-label-1`
+- `--ran-text-label-weight`
+- `--ran-z-dropdown`
+
+### Parts
+- `dropdown`
+
+## `glass`
+
+- Tokens: 19
+- Parts: 2
+
+### Tokens
+<!-- layers: semantic: 5 · internal: 14 -->
+- `--ran-color-bg-elevated`
+- `--ran-glass-blur`
+- `--ran-glass-border`
+- `--ran-glass-brightness`
+- `--ran-glass-radius`
+- `--ran-glass-reduced-transparency-background`
+- `--ran-glass-reduced-transparency-shadow`
+- `--ran-glass-refraction`
+- `--ran-glass-saturate`
+- `--ran-glass-shadow`
+- `--ran-glass-sheen-duration`
+- `--ran-glass-specular-background`
+- `--ran-glass-specular-opacity`
+- `--ran-glass-tint`
+- `--ran-glass-transition`
+- `--ran-motion-duration-base`
+- `--ran-motion-duration-fast`
+- `--ran-motion-ease-spring`
+- `--ran-shadow-elevated`
+
+### Parts
+- `glass`
+- `specular`
+
+## `icon`
+
+- Tokens: 6
+- Parts: 1
+
+### Tokens
+<!-- layers: component: 6 -->
+- `--ran-icon-align-items`
+- `--ran-icon-color`
+- `--ran-icon-font-size`
+- `--ran-icon-justify-content`
+- `--ran-icon-svg-fill`
+- `--ran-icon-svg-stroke`
+
+### Parts
+- `ran-icon`
+
+## `image`
+
+- Tokens: 0
+- Parts: 0
+
+### Tokens
+- (none)
+
+### Parts
+- (none)
+
+## `input`
+
+- Tokens: 86
+- Parts: 4
+
+### Tokens
+<!-- layers: semantic: 12 · skin: 1 · component: 61 · internal: 12 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-bg-muted`
+- `--ran-color-border`
+- `--ran-color-border-hover`
+- `--ran-color-danger`
+- `--ran-color-link`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
+- `--ran-color-warning`
+- `--ran-focus-ring`
+- `--ran-input-active-border-color`
+- `--ran-input-active-box-shadow`
+- `--ran-input-align-items`
+- `--ran-input-background-color`
+- `--ran-input-background-image`
+- `--ran-input-border`
+- `--ran-input-border-image-slice`
+- `--ran-input-border-image-source`
+- `--ran-input-border-radius`
+- `--ran-input-color`
+- `--ran-input-content--webkit-appearance`
+- `--ran-input-content-background-color`
+- `--ran-input-content-background-image`
+- `--ran-input-content-border`
+- `--ran-input-content-border-radius`
+- `--ran-input-content-color`
+- `--ran-input-content-disabled-background-color`
+- `--ran-input-content-disabled-border-color`
+- `--ran-input-content-disabled-box-shadow`
+- `--ran-input-content-disabled-color`
+- `--ran-input-content-disabled-opacity`
+- `--ran-input-content-font-feature-settings`
+- `--ran-input-content-font-size`
+- `--ran-input-content-font-variant`
+- `--ran-input-content-font-weight`
+- `--ran-input-content-hover-border`
+- `--ran-input-content-hover-box-shadow`
+- `--ran-input-content-letter-spacing`
+- `--ran-input-content-placeholder-color`
+- `--ran-input-content-text-align`
+- `--ran-input-content-text-indent`
+- `--ran-input-content-text-rendering`
+- `--ran-input-content-text-shadow`
+- `--ran-input-content-text-transform`
+- `--ran-input-content-transition`
+- `--ran-input-content-word-spacing`
+- `--ran-input-content-writing-mode`
+- `--ran-input-disabled-background-color`
+- `--ran-input-disabled-border-color`
+- `--ran-input-disabled-box-shadow`
+- `--ran-input-disabled-color`
+- `--ran-input-disabled-opacity`
+- `--ran-input-error-border-color`
+- `--ran-input-font-family`
+- `--ran-input-font-size`
+- `--ran-input-hover-border-color`
+- `--ran-input-icon-align-items`
+- `--ran-input-icon-justify-content`
+- `--ran-input-label-color`
+- `--ran-input-label-disabled-color`
+- `--ran-input-label-error-color`
+- `--ran-input-label-font-size`
+- `--ran-input-label-font-weight`
+- `--ran-input-label-warning-color`
+- `--ran-input-message-color`
+- `--ran-input-message-error-color`
+- `--ran-input-message-font-size`
+- `--ran-input-message-font-weight`
+- `--ran-input-message-warning-color`
+- `--ran-input-transition`
+- `--ran-input-warning-border-color`
+- `--ran-radius-sm`
+- `--ran-size-1`
+- `--ran-size-6`
+- `--ran-size-7`
+- `--ran-skin-font-family`
+- `--ran-space-1`
+- `--ran-space-3`
+- `--ran-space-8`
+- `--ran-text-copy-2`
+- `--ran-text-copy-weight`
+- `--ran-text-label-1`
+- `--ran-text-label-3`
+- `--ran-text-label-weight`
+
+### Parts
+- `content`
+- `input`
+- `label`
+- `message`
+
+## `link`
+
+- Tokens: 4
+- Parts: 0
+
+### Tokens
+<!-- layers: semantic: 3 · internal: 1 -->
+- `--ran-color-link`
+- `--ran-color-primary`
+- `--ran-link-active-font-weight`
+- `--ran-radius-sm`
+
+### Parts
+- (none)
+
+## `loading`
+
+- Tokens: 0
+- Parts: 0
+
+### Tokens
+- (none)
+
+### Parts
+- (none)
+
+## `loading/variants/arc`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `arc`
+
+## `loading/variants/circle`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `circle`
+
+## `loading/variants/circle-fold`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `circle-fold`
+
+## `loading/variants/circle-line`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `circle-line`
+
+## `loading/variants/circle-rotate`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `circle-rotate`
+
+## `loading/variants/circle-spin`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `circle-spin`
+
+## `loading/variants/circle-turn`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `circle-turn`
+
+## `loading/variants/cube`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `cube`
+
+## `loading/variants/cube-dim`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `cube-dim`
+
+## `loading/variants/cube-fold`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `cube-fold`
+
+## `loading/variants/cube-grid`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `cube-grid`
+
+## `loading/variants/dot`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `dot`
+
+## `loading/variants/dot-bar`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `dot-bar`
+
+## `loading/variants/dot-circle`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `dot-circle`
+
+## `loading/variants/dot-line`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `dot-line`
+
+## `loading/variants/dot-pulse`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `dot-pulse`
+
+## `loading/variants/double-bounce`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `double-bounce`
+
+## `loading/variants/drop`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `drop`
+
+## `loading/variants/line`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `line`
+
+## `loading/variants/line-scale`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `line-scale`
+
+## `loading/variants/pacman`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `pacman`
+
+## `loading/variants/pulse`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `pulse`
+
+## `loading/variants/rotate`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `rotate`
+
+## `loading/variants/scale-out`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `scale-out`
+
+## `loading/variants/solar`
+
+- Tokens: 3
+- Parts: 2
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `solar`
+- `sun`
+
+## `loading/variants/square`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `square`
+
+## `loading/variants/stretch`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `stretch`
+
+## `loading/variants/text`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `text`
+
+## `loading/variants/triple-bounce`
+
+- Tokens: 3
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 3 -->
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text`
+
+### Parts
+- `triple-bounce`
+
+## `markdown`
+
+- Tokens: 78
+- Parts: 4
+
+### Tokens
+<!-- layers: semantic: 13 · skin: 1 · internal: 64 -->
+- `--ran-color-bg-muted`
+- `--ran-color-border`
+- `--ran-color-border-secondary`
+- `--ran-color-danger`
+- `--ran-color-link`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
+- `--ran-focus-ring`
+- `--ran-font-family`
+- `--ran-font-mono`
+- `--ran-gray-alpha-200`
+- `--ran-gray-alpha-500`
+- `--ran-markdown-blockquote-border`
+- `--ran-markdown-blockquote-color`
+- `--ran-markdown-button-color`
+- `--ran-markdown-button-hover-background`
+- `--ran-markdown-button-hover-color`
+- `--ran-markdown-button-size`
+- `--ran-markdown-caret`
+- `--ran-markdown-caret-color`
+- `--ran-markdown-code-bg`
+- `--ran-markdown-code-border`
+- `--ran-markdown-code-color`
+- `--ran-markdown-code-font-size`
+- `--ran-markdown-code-header-bg`
+- `--ran-markdown-code-lang-color`
+- `--ran-markdown-code-radius`
+- `--ran-markdown-color`
+- `--ran-markdown-error-background`
+- `--ran-markdown-error-color`
+- `--ran-markdown-font-family`
+- `--ran-markdown-font-size`
+- `--ran-markdown-gap`
+- `--ran-markdown-h1-size`
+- `--ran-markdown-h2-size`
+- `--ran-markdown-h3-size`
+- `--ran-markdown-h4-size`
+- `--ran-markdown-heading-color`
+- `--ran-markdown-heading-weight`
+- `--ran-markdown-hr-color`
+- `--ran-markdown-image-radius`
+- `--ran-markdown-inline-code-bg`
+- `--ran-markdown-inline-code-color`
+- `--ran-markdown-line-number-color`
+- `--ran-markdown-link-color`
+- `--ran-markdown-link-underline`
+- `--ran-markdown-list-indent`
+- `--ran-markdown-mono-font`
+- `--ran-markdown-strong-weight`
+- `--ran-markdown-table-border`
+- `--ran-markdown-table-font-size`
+- `--ran-markdown-table-header-bg`
+- `--ran-markdown-table-header-color`
+- `--ran-markdown-table-radius`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-red-100`
+- `--ran-size-4`
+- `--ran-size-7`
+- `--ran-skin-border-style`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-space-4`
+- `--ran-space-5`
+- `--ran-space-6`
+- `--ran-text-copy-1`
+- `--ran-text-copy-2`
+- `--ran-text-heading-1`
+- `--ran-text-heading-2`
+- `--ran-text-heading-3`
+- `--ran-text-heading-4`
+- `--ran-text-heading-weight`
+- `--ran-text-label-2`
+- `--ran-text-label-3`
+- `--ran-text-label-weight`
+
+### Parts
+- `block`
+- `body`
+- `error`
+- `markdown`
+
+## `math`
+
+- Tokens: 34
+- Parts: 6
+
+### Tokens
+<!-- layers: semantic: 10 · component: 16 · internal: 8 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-bg-muted`
+- `--ran-color-danger`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-font-mono`
+- `--ran-gray-alpha-100`
+- `--ran-math-align`
+- `--ran-math-button-color`
+- `--ran-math-button-hover-background`
+- `--ran-math-button-hover-color`
+- `--ran-math-button-size`
+- `--ran-math-color`
+- `--ran-math-error-background`
+- `--ran-math-error-color`
+- `--ran-math-error-font-size`
+- `--ran-math-error-font-weight`
+- `--ran-math-item-color`
+- `--ran-math-menu-item-font-size`
+- `--ran-math-menu-item-font-weight`
+- `--ran-math-toolbar-background`
+- `--ran-math-toolbar-gap`
+- `--ran-math-toolbar-shadow`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-shadow-menu`
+- `--ran-size-5`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-label-2`
+- `--ran-text-label-weight`
+- `--ran-text-mono-weight-regular`
+
+### Parts
+- `button`
+- `error`
+- `math`
+- `menu`
+- `render`
+- `toolbar`
+
+## `mermaid`
+
+- Tokens: 27
+- Parts: 6
+
+### Tokens
+<!-- layers: semantic: 8 · internal: 19 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-bg-muted`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-mermaid-button-color`
+- `--ran-mermaid-button-hover-background`
+- `--ran-mermaid-button-hover-color`
+- `--ran-mermaid-button-size`
+- `--ran-mermaid-error-color`
+- `--ran-mermaid-error-font-size`
+- `--ran-mermaid-error-font-weight`
+- `--ran-mermaid-menu-item-color`
+- `--ran-mermaid-menu-item-font-size`
+- `--ran-mermaid-menu-item-font-weight`
+- `--ran-mermaid-toolbar-background`
+- `--ran-mermaid-toolbar-gap`
+- `--ran-mermaid-toolbar-shadow`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-shadow-menu`
+- `--ran-size-5`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-label-2`
+- `--ran-text-label-weight`
+
+### Parts
+- `button`
+- `diagram`
+- `error`
+- `menu`
+- `mermaid`
+- `toolbar`
+
+## `message`
+
+- Tokens: 47
+- Parts: 0
+
+### Tokens
+<!-- layers: semantic: 5 · component: 37 · internal: 5 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-text`
+- `--ran-message-color`
+- `--ran-message-content-background`
+- `--ran-message-content-border-image-slice`
+- `--ran-message-content-border-image-source`
+- `--ran-message-content-border-radius`
+- `--ran-message-content-box-shadow`
+- `--ran-message-content-toast-background`
+- `--ran-message-content-toast-border-radius`
+- `--ran-message-font-feature-settings`
+- `--ran-message-font-size`
+- `--ran-message-font-variant`
+- `--ran-message-font-weight`
+- `--ran-message-in-animation-duration`
+- `--ran-message-in-animation-fill-mode`
+- `--ran-message-in-animation-name`
+- `--ran-message-in-animation-timing-function`
+- `--ran-message-info-align-items`
+- `--ran-message-info-toast-align-items`
+- `--ran-message-ist-style`
+- `--ran-message-leave-animation-duration`
+- `--ran-message-leave-animation-fill-mode`
+- `--ran-message-leave-animation-name`
+- `--ran-message-leave-animation-timing-function`
+- `--ran-message-notice-text-align`
+- `--ran-message-notice-toast-text-align`
+- `--ran-message-notice-toast-word-break`
+- `--ran-message-notice-word-break`
+- `--ran-message-text-color`
+- `--ran-message-text-font-feature-settings`
+- `--ran-message-text-font-size`
+- `--ran-message-text-font-variant`
+- `--ran-message-text-font-weight`
+- `--ran-message-text-toast-color`
+- `--ran-message-text-toast-font-feature-settings`
+- `--ran-message-text-toast-font-size`
+- `--ran-message-text-toast-font-variant`
+- `--ran-message-text-toast-font-weight`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-shadow-menu`
+- `--ran-space-3`
+- `--ran-space-4`
+- `--ran-text-copy-2`
+- `--ran-text-copy-weight`
+- `--ran-z-message`
+
+### Parts
+- (none)
+
+## `modal`
+
+- Tokens: 42
+- Parts: 8
+
+### Tokens
+<!-- layers: semantic: 11 · component: 23 · internal: 8 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-border`
+- `--ran-color-border-secondary`
+- `--ran-color-primary`
+- `--ran-color-primary-text`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-modal-action-font-size`
+- `--ran-modal-action-font-weight`
+- `--ran-modal-actions-gap`
+- `--ran-modal-body-color`
+- `--ran-modal-close-background`
+- `--ran-modal-close-border`
+- `--ran-modal-close-color`
+- `--ran-modal-close-font-size`
+- `--ran-modal-dialog-background`
+- `--ran-modal-dialog-border-image-slice`
+- `--ran-modal-dialog-border-image-source`
+- `--ran-modal-dialog-border-radius`
+- `--ran-modal-dialog-box-shadow`
+- `--ran-modal-footer-align-items`
+- `--ran-modal-footer-gap`
+- `--ran-modal-footer-justify-content`
+- `--ran-modal-header-align-items`
+- `--ran-modal-header-justify-content`
+- `--ran-modal-mask-background`
+- `--ran-modal-title-color`
+- `--ran-modal-title-font-size`
+- `--ran-modal-title-font-weight`
+- `--ran-modal-title-letter-spacing`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-shadow-elevated`
+- `--ran-shadow-modal`
+- `--ran-space-3`
+- `--ran-space-4`
+- `--ran-text-button-size`
+- `--ran-text-button-weight`
+- `--ran-text-heading-4`
+- `--ran-text-heading-tracking`
+- `--ran-text-heading-weight`
+- `--ran-z-modal`
+
+### Parts
+- `body`
+- `close`
+- `dialog`
+- `footer`
+- `header`
+- `mask`
+- `root`
+- `title`
+
+## `player`
+
+- Tokens: 165
+- Parts: 0
+
+### Tokens
+<!-- layers: semantic: 5 · component: 149 · internal: 11 -->
+- `--ran-color-`
+- `--ran-color-border`
+- `--ran-color-primary`
+- `--ran-dropdown-background`
+- `--ran-dropdown-border`
+- `--ran-dropdown-box-shadow`
+- `--ran-dropdown-option-active-background-color`
+- `--ran-dropdown-option-active-hover-background-color`
+- `--ran-dropdown-option-item-color`
+- `--ran-dropdown-option-item-content-color`
+- `--ran-dropdown-option-item-content-font-size`
+- `--ran-dropdown-option-item-content-text-align`
+- `--ran-dropdown-option-item-hover-background-color`
+- `--ran-focus-ring-inverse-color`
+- `--ran-player-clarity-border-radius`
+- `--ran-player-clarity-color`
+- `--ran-player-clarity-font-family`
+- `--ran-player-clarity-font-size`
+- `--ran-player-clarity-font-style`
+- `--ran-player-clarity-font-weight`
+- `--ran-player-clarity-hover-background`
+- `--ran-player-clarity-transition`
+- `--ran-player-controller-backdrop-filter`
+- `--ran-player-controller-background`
+- `--ran-player-controller-opacity`
+- `--ran-player-controller-transition`
+- `--ran-player-controls-align-items`
+- `--ran-player-controls-justify-content`
+- `--ran-player-fullscreen-border-radius`
+- `--ran-player-fullscreen-color`
+- `--ran-player-fullscreen-focus-visible-border-radius`
+- `--ran-player-fullscreen-hover-background`
+- `--ran-player-fullscreen-transition`
+- `--ran-player-gesture-flash-background`
+- `--ran-player-gesture-flash-border-radius`
+- `--ran-player-gesture-flash-center`
+- `--ran-player-gesture-flash-color`
+- `--ran-player-gesture-flash-font-size`
+- `--ran-player-gesture-flash-font-weight`
+- `--ran-player-gesture-flash-transition`
+- `--ran-player-knowledge-color`
+- `--ran-player-knowledge-font-family`
+- `--ran-player-knowledge-font-size`
+- `--ran-player-knowledge-font-style`
+- `--ran-player-knowledge-font-weight`
+- `--ran-player-loading-animation`
+- `--ran-player-loading-background-repeat`
+- `--ran-player-loading-background-size`
+- `--ran-player-loading-filter`
+- `--ran-player-loading-mask-backdrop-filter`
+- `--ran-player-loading-mask-background`
+- `--ran-player-pip-align-items`
+- `--ran-player-pip-border-radius`
+- `--ran-player-pip-color`
+- `--ran-player-pip-focus-visible-border-radius`
+- `--ran-player-pip-hover-background`
+- `--ran-player-pip-transition`
+- `--ran-player-play-btn-color`
+- `--ran-player-play-btn-filter`
+- `--ran-player-play-btn-transform`
+- `--ran-player-progress-buffer-background`
+- `--ran-player-progress-buffer-border-radius`
+- `--ran-player-progress-buffer-transform`
+- `--ran-player-progress-buffer-transform-origin`
+- `--ran-player-progress-buffer-will-change`
+- `--ran-player-progress-dot-background`
+- `--ran-player-progress-dot-border-radius`
+- `--ran-player-progress-fill-background`
+- `--ran-player-progress-fill-border-radius`
+- `--ran-player-progress-fill-transform`
+- `--ran-player-progress-fill-transform-origin`
+- `--ran-player-progress-fill-will-change`
+- `--ran-player-progress-focus-visible-border-radius`
+- `--ran-player-progress-track-background`
+- `--ran-player-progress-track-border-radius`
+- `--ran-player-remote-align-items`
+- `--ran-player-remote-border-radius`
+- `--ran-player-remote-color`
+- `--ran-player-remote-focus-visible-border-radius`
+- `--ran-player-remote-hover-background`
+- `--ran-player-remote-transition`
+- `--ran-player-select-item-color`
+- `--ran-player-select-item-font-size`
+- `--ran-player-select-item-font-weight`
+- `--ran-player-speed-border-radius`
+- `--ran-player-speed-color`
+- `--ran-player-speed-font-family`
+- `--ran-player-speed-font-size`
+- `--ran-player-speed-font-style`
+- `--ran-player-speed-font-weight`
+- `--ran-player-speed-hover-background`
+- `--ran-player-speed-transition`
+- `--ran-player-subtitle-border-radius`
+- `--ran-player-subtitle-color`
+- `--ran-player-subtitle-font-family`
+- `--ran-player-subtitle-font-size`
+- `--ran-player-subtitle-font-style`
+- `--ran-player-subtitle-font-weight`
+- `--ran-player-subtitle-hover-background`
+- `--ran-player-subtitle-transition`
+- `--ran-player-time-align-items`
+- `--ran-player-time-current-color`
+- `--ran-player-time-current-font-family`
+- `--ran-player-time-current-font-size`
+- `--ran-player-time-current-font-style`
+- `--ran-player-time-current-font-weight`
+- `--ran-player-time-current-text-align`
+- `--ran-player-time-divide-color`
+- `--ran-player-time-divide-font-family`
+- `--ran-player-time-divide-font-size`
+- `--ran-player-time-divide-font-style`
+- `--ran-player-time-divide-font-weight`
+- `--ran-player-time-divide-text-align`
+- `--ran-player-time-duration-color`
+- `--ran-player-time-duration-font-family`
+- `--ran-player-time-duration-font-size`
+- `--ran-player-time-duration-font-style`
+- `--ran-player-time-duration-font-weight`
+- `--ran-player-time-duration-text-align`
+- `--ran-player-time-justify-content`
+- `--ran-player-tip-background`
+- `--ran-player-tip-border-radius`
+- `--ran-player-tip-box-shadow`
+- `--ran-player-tip-color`
+- `--ran-player-tip-font-family`
+- `--ran-player-tip-font-size`
+- `--ran-player-tip-font-variant`
+- `--ran-player-tip-font-weight`
+- `--ran-player-tip-opacity`
+- `--ran-player-tip-text-align`
+- `--ran-player-tip-text-text-align`
+- `--ran-player-tip-text-white-space`
+- `--ran-player-tip-thumbnail-border`
+- `--ran-player-tip-thumbnail-border-radius`
+- `--ran-player-tip-thumbnail-box-shadow`
+- `--ran-player-tip-thumbnail-transform`
+- `--ran-player-tip-time-text-align`
+- `--ran-player-tip-time-white-space`
+- `--ran-player-tip-white-space`
+- `--ran-player-toggle-border-radius`
+- `--ran-player-toggle-color`
+- `--ran-player-toggle-focus-visible-border-radius`
+- `--ran-player-toggle-hover-background`
+- `--ran-player-toggle-transition`
+- `--ran-player-volume-align-items`
+- `--ran-player-volume-border-radius`
+- `--ran-player-volume-hover-background`
+- `--ran-player-volume-icon-color`
+- `--ran-player-volume-justify-content`
+- `--ran-player-volume-transition`
+- `--ran-progress-dot-background`
+- `--ran-progress-fill-background`
+- `--ran-progress-track-background`
+- `--ran-radius-full`
+- `--ran-radius-sm`
+- `--ran-size-3`
+- `--ran-size-4`
+- `--ran-size-6`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-text-label-1`
+- `--ran-text-label-3`
+- `--ran-text-label-weight`
+- `--ran-text-mono-weight-regular`
+- `--ran-z-dropdown`
+
+### Parts
+- (none)
+
+## `player/core/adapters`
+
+- Tokens: 0
+- Parts: 0
+
+### Tokens
+- (none)
+
+### Parts
+- (none)
+
+## `popover`
+
+- Tokens: 0
+- Parts: 0
+
+### Tokens
+- (none)
+
+### Parts
+- (none)
+
+## `popover/content`
+
+- Tokens: 0
+- Parts: 0
+
+### Tokens
+- (none)
+
+### Parts
+- (none)
+
+## `progress`
+
+- Tokens: 18
+- Parts: 3
+
+### Tokens
+<!-- layers: semantic: 4 · component: 12 · internal: 2 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-primary`
+- `--ran-gray-200`
+- `--ran-progress-dot-background`
+- `--ran-progress-dot-border`
+- `--ran-progress-dot-border-radius`
+- `--ran-progress-dot-box-shadow`
+- `--ran-progress-dot-transform`
+- `--ran-progress-fill-background`
+- `--ran-progress-fill-border-radius`
+- `--ran-progress-fill-transform-origin`
+- `--ran-progress-fill-will-change`
+- `--ran-progress-track-background`
+- `--ran-progress-track-border-radius`
+- `--ran-progress-track-transform`
+- `--ran-radius-full`
+- `--ran-shadow-elevated`
+- `--ran-size-3`
+
+### Parts
+- `dot`
+- `fill`
+- `track`
+
+## `radar`
+
+- Tokens: 5
+- Parts: 0
+
+### Tokens
+<!-- layers: semantic: 1 · component: 4 -->
+- `--ran-color-border`
+- `--ran-radar-fill-color`
+- `--ran-radar-line-color`
+- `--ran-radar-polygon-color`
+- `--ran-radar-stroke-color`
+
+### Parts
+- (none)
+
+## `reasoning`
+
+- Tokens: 10
+- Parts: 3
+
+### Tokens
+<!-- layers: semantic: 2 · internal: 8 -->
+- `--ran-color-border`
+- `--ran-color-text-secondary`
+- `--ran-reasoning-body-indent`
+- `--ran-reasoning-border-color`
+- `--ran-reasoning-color`
+- `--ran-reasoning-font-size`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-copy-2`
+
+### Parts
+- `body`
+- `row`
+- `text`
+
+## `route`
+
+- Tokens: 0
+- Parts: 0
+
+### Tokens
+- (none)
+
+### Parts
+- (none)
+
+## `router`
+
+- Tokens: 0
+- Parts: 0
+
+### Tokens
+- (none)
+
+### Parts
+- (none)
+
+## `scratch`
+
+- Tokens: 5
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 2 · component: 3 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-text-secondary`
+- `--ran-scratch-award-background`
+- `--ran-scratch-cover-background`
+- `--ran-scratch-disabled-opacity`
+
+### Parts
+- `award`
+
+## `section`
+
+- Tokens: 24
+- Parts: 4
+
+### Tokens
+<!-- layers: semantic: 6 · skin: 1 · internal: 17 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-border`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-radius-md`
+- `--ran-section-background`
+- `--ran-section-border-color`
+- `--ran-section-header-gap`
+- `--ran-section-heading-color`
+- `--ran-section-heading-font-size`
+- `--ran-section-heading-font-weight`
+- `--ran-section-heading-letter-spacing`
+- `--ran-section-radius`
+- `--ran-section-shadow`
+- `--ran-section-subtitle-color`
+- `--ran-shadow-elevated`
+- `--ran-skin-border-style`
+- `--ran-space-2`
+- `--ran-space-24`
+- `--ran-space-6`
+- `--ran-space-8`
+- `--ran-text-heading-2`
+- `--ran-text-heading-tracking`
+- `--ran-text-heading-weight`
+
+### Parts
+- `body`
+- `header`
+- `heading`
+- `subtitle`
+
+## `select`
+
+- Tokens: 62
+- Parts: 6
+
+### Tokens
+<!-- layers: semantic: 6 · skin: 1 · component: 47 · internal: 8 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-border`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-focus-ring`
+- `--ran-radius-sm`
+- `--ran-select-background-color`
+- `--ran-select-background-image`
+- `--ran-select-border`
+- `--ran-select-border-radius`
+- `--ran-select-color`
+- `--ran-select-focus-border`
+- `--ran-select-focus-box-shadow`
+- `--ran-select-font-family`
+- `--ran-select-font-size`
+- `--ran-select-font-weight`
+- `--ran-select-hover-border`
+- `--ran-select-icon-align-items`
+- `--ran-select-icon-color`
+- `--ran-select-icon-font-size`
+- `--ran-select-icon-font-style`
+- `--ran-select-icon-text-align`
+- `--ran-select-icon-text-rendering`
+- `--ran-select-icon-text-transform`
+- `--ran-select-icon-transform`
+- `--ran-select-item-align-items`
+- `--ran-select-item-appearance`
+- `--ran-select-item-background`
+- `--ran-select-item-border`
+- `--ran-select-item-focus-color`
+- `--ran-select-item-font-family`
+- `--ran-select-item-hover-color`
+- `--ran-select-item-user-select`
+- `--ran-select-item-white-space`
+- `--ran-select-label-color`
+- `--ran-select-label-disabled-color`
+- `--ran-select-label-font-size`
+- `--ran-select-label-font-weight`
+- `--ran-select-search-active-border`
+- `--ran-select-search-active-border-color`
+- `--ran-select-search-active-box-shadow`
+- `--ran-select-search-appearance`
+- `--ran-select-search-background`
+- `--ran-select-search-border`
+- `--ran-select-search-cancel-appearance`
+- `--ran-select-search-font-family`
+- `--ran-select-search-input-border`
+- `--ran-select-search-opacity`
+- `--ran-select-search-visible-opacity`
+- `--ran-select-select-color`
+- `--ran-select-text-background`
+- `--ran-select-text-border`
+- `--ran-select-transition`
+- `--ran-size-1`
+- `--ran-size-7`
+- `--ran-skin-font-family`
+- `--ran-space-1`
+- `--ran-space-3`
+- `--ran-text-label-1`
+- `--ran-text-label-3`
+- `--ran-text-label-weight`
+
+### Parts
+- `icon`
+- `label`
+- `search`
+- `select`
+- `selection`
+- `selection-item`
+
+## `select/dropdown-item`
+
+- Tokens: 19
+- Parts: 2
+
+### Tokens
+<!-- layers: semantic: 2 · component: 15 · internal: 2 -->
+- `--ran-blue-100`
+- `--ran-color-text`
+- `--ran-dropdown-option-active-background-color`
+- `--ran-dropdown-option-active-font-weight`
+- `--ran-dropdown-option-active-hover-background-color`
+- `--ran-dropdown-option-item-border-radius`
+- `--ran-dropdown-option-item-color`
+- `--ran-dropdown-option-item-content-color`
+- `--ran-dropdown-option-item-content-font-family`
+- `--ran-dropdown-option-item-content-font-size`
+- `--ran-dropdown-option-item-content-font-variant`
+- `--ran-dropdown-option-item-content-text-align`
+- `--ran-dropdown-option-item-content-white-space`
+- `--ran-dropdown-option-item-font-size`
+- `--ran-dropdown-option-item-font-weight`
+- `--ran-dropdown-option-item-hover-background-color`
+- `--ran-dropdown-option-item-transition`
+- `--ran-gray-alpha-100`
+- `--ran-radius-sm`
+
+### Parts
+- `content`
+- `item`
+
+## `select/option`
+
+- Tokens: 0
+- Parts: 0
+
+### Tokens
+- (none)
+
+### Parts
+- (none)
+
+## `skeleton`
+
+- Tokens: 8
+- Parts: 0
+
+### Tokens
+<!-- layers: semantic: 1 · component: 4 · internal: 3 -->
+- `--ran-gray-alpha-200`
+- `--ran-gray-alpha-500`
+- `--ran-radius-sm`
+- `--ran-size-1`
+- `--ran-skeleton-background`
+- `--ran-skeleton-border-radius`
+- `--ran-skeleton-shimmer-animation-duration`
+- `--ran-skeleton-shimmer-background`
+
+### Parts
+- (none)
+
+## `state-dot`
+
+- Tokens: 12
+- Parts: 1
+
+### Tokens
+<!-- layers: semantic: 5 · internal: 7 -->
+- `--ran-color-danger`
+- `--ran-color-primary`
+- `--ran-color-success`
+- `--ran-color-text-disabled`
+- `--ran-color-warning`
+- `--ran-state-dot-color`
+- `--ran-state-dot-error-color`
+- `--ran-state-dot-halo-opacity`
+- `--ran-state-dot-running-color`
+- `--ran-state-dot-size`
+- `--ran-state-dot-success-color`
+- `--ran-state-dot-warning-color`
+
+### Parts
+- `dot`
+
+## `tab`
+
+- Tokens: 17
+- Parts: 6
+
+### Tokens
+<!-- layers: semantic: 5 · component: 10 · internal: 2 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-border`
+- `--ran-color-primary`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-tab-active-color`
+- `--ran-tab-border-color`
+- `--ran-tab-border-radius`
+- `--ran-tab-content-background`
+- `--ran-tab-content-border`
+- `--ran-tab-content-border-radius`
+- `--ran-tab-content-transition`
+- `--ran-tab-line-border-radius`
+- `--ran-tab-line-color`
+- `--ran-tab-line-transition`
+
+### Parts
+- `content`
+- `content-wrap`
+- `header`
+- `indicator`
+- `nav`
+- `tabs`
+
+## `tabpane`
+
+- Tokens: 0
+- Parts: 1
+
+### Tokens
+- (none)
+
+### Parts
+- `content`
+
+## `theme-switch`
+
+- Tokens: 21
+- Parts: 2
+
+### Tokens
+<!-- layers: semantic: 6 · skin: 1 · internal: 14 -->
+- `--ran-color-bg-hover`
+- `--ran-color-border`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-secondary`
+- `--ran-radius-full`
+- `--ran-size-1`
+- `--ran-size-5`
+- `--ran-skin-border-style`
+- `--ran-space-1`
+- `--ran-theme-switch-`
+- `--ran-theme-switch-background`
+- `--ran-theme-switch-border-color`
+- `--ran-theme-switch-button-active-background`
+- `--ran-theme-switch-button-active-color`
+- `--ran-theme-switch-button-color`
+- `--ran-theme-switch-button-hover-color`
+- `--ran-theme-switch-button-size`
+- `--ran-theme-switch-gap`
+- `--ran-theme-switch-icon-size`
+- `--ran-theme-switch-radius`
+
+### Parts
+- `button ${choice}`
+- `switch`
+
+## `token-meter`
+
+- Tokens: 17
+- Parts: 4
+
+### Tokens
+<!-- layers: semantic: 6 · internal: 11 -->
+- `--ran-color-bg-muted`
+- `--ran-color-danger`
+- `--ran-color-primary`
+- `--ran-color-text-secondary`
+- `--ran-color-warning`
+- `--ran-radius-full`
+- `--ran-space-2`
+- `--ran-text-label-3`
+- `--ran-token-meter-color`
+- `--ran-token-meter-fill-background`
+- `--ran-token-meter-font-size`
+- `--ran-token-meter-gap`
+- `--ran-token-meter-over-background`
+- `--ran-token-meter-track-background`
+- `--ran-token-meter-track-radius`
+- `--ran-token-meter-transition`
+- `--ran-token-meter-warn-background`
+
+### Parts
+- `fill`
+- `meter`
+- `text`
+- `track`
+
+## `tool-card`
+
+- Tokens: 44
+- Parts: 11
+
+### Tokens
+<!-- layers: semantic: 10 · internal: 34 -->
+- `--ran-color-bg-muted`
+- `--ran-color-border`
+- `--ran-color-danger`
+- `--ran-color-link`
+- `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
+- `--ran-font-mono`
+- `--ran-green-200`
+- `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-red-200`
+- `--ran-size-4`
+- `--ran-space-1`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-space-6`
+- `--ran-text-copy-2`
+- `--ran-text-label-3`
+- `--ran-text-mono-weight-regular`
+- `--ran-tool-card-added-background`
+- `--ran-tool-card-body-gap`
+- `--ran-tool-card-color`
+- `--ran-tool-card-file-gap`
+- `--ran-tool-card-font-size`
+- `--ran-tool-card-gutter-color`
+- `--ran-tool-card-hunk-gap`
+- `--ran-tool-card-io-background`
+- `--ran-tool-card-io-border-color`
+- `--ran-tool-card-io-error-color`
+- `--ran-tool-card-io-gutter-gap`
+- `--ran-tool-card-io-label-color`
+- `--ran-tool-card-io-label-size`
+- `--ran-tool-card-io-radius`
+- `--ran-tool-card-line-gap`
+- `--ran-tool-card-location-color`
+- `--ran-tool-card-locations-gap`
+- `--ran-tool-card-output-background`
+- `--ran-tool-card-output-font`
+- `--ran-tool-card-output-radius`
+- `--ran-tool-card-output-weight`
+- `--ran-tool-card-path-color`
+- `--ran-tool-card-path-gap`
+- `--ran-tool-card-removed-background`
+
+### Parts
+- `body`
+- `exit`
+- `file`
+- `hunk`
+- `io`
+- `io-text`
+- `line`
+- `location`
+- `locations`
+- `path`
+- `row`
+
+## `voice-button`
+
+- Tokens: 37
+- Parts: 3
+
+### Tokens
+<!-- layers: semantic: 12 · internal: 25 -->
+- `--ran-color-bg`
+- `--ran-color-bg-elevated`
+- `--ran-color-bg-subtle`
+- `--ran-color-border`
+- `--ran-color-border-hover`
+- `--ran-color-danger`
+- `--ran-color-primary`
+- `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
+- `--ran-radius-md`
+- `--ran-red-200`
+- `--ran-shadow-menu`
+- `--ran-size-7`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-label-3`
+- `--ran-voice-active-background`
+- `--ran-voice-active-border-color`
+- `--ran-voice-active-color`
+- `--ran-voice-background`
+- `--ran-voice-border-color`
+- `--ran-voice-border-radius`
+- `--ran-voice-cancel-background`
+- `--ran-voice-color`
+- `--ran-voice-disabled-color`
+- `--ran-voice-focus-color`
+- `--ran-voice-hint-background`
+- `--ran-voice-hint-cancel-color`
+- `--ran-voice-hint-color`
+- `--ran-voice-hint-font-size`
+- `--ran-voice-hint-gap`
+- `--ran-voice-hint-radius`
+- `--ran-voice-hint-shadow`
+- `--ran-voice-hover-border-color`
+- `--ran-voice-hover-color`
+- `--ran-voice-size`
+
+### Parts
+- `button`
+- `hint`
+- `icon`
+

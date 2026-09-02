@@ -109,3 +109,18 @@ diff 行带有 `data-kind`，取值为 `context`、`added` 或 `removed`。
 
 - [Conversation 对话](../conversation/) —— 把它作为工具调用 view 的 `mount` 目标
 - [ranuts/utils](../../ranuts/utils/) —— 渲染 `diff` 卡片所用的 `diffLines`
+
+## 自定义样式
+
+`<r-tool-card>` 自身暴露了 **24 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-tool-card {
+  --ran-tool-card-io-background: var(--ran-color-bg-subtle);
+}
+```
+
+Part：`body` · `exit` · `file` · `hunk` · `io` · `io-text` · `line` · `location` · `locations` · `path` · `row`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#tool-card)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。

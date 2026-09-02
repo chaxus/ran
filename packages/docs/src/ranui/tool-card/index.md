@@ -124,6 +124,21 @@ Diff lines carry `data-kind` of `context`, `added`, or `removed`.
 The header is a real `<button type="button">` with `aria-expanded`, so it is reachable and
 operable from the keyboard without any extra wiring.
 
+## Styling
+
+`<r-tool-card>` exposes **24 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-tool-card {
+  --ran-tool-card-io-background: var(--ran-color-bg-subtle);
+}
+```
+
+Parts: `body` · `exit` · `file` · `hunk` · `io` · `io-text` · `line` · `location` · `locations` · `path` · `row`
+
+The full list is in [style tokens](/src/ranui/style-tokens#tool-card); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## See also
 
 - [Conversation](../conversation/) — use this as the `mount` target for a tool-call view

@@ -4,392 +4,239 @@ description: 'ranui 是基于原生自定义元素（<r-*>）的 Web Components 
 
 # ranui
 
-基于 `Web Components`开发方案
+一个建立在**原生自定义元素**之上的 UI 组件库。每个组件都是一个 `<r-*>` 标签，因此在 React、Vue、
+Svelte、Solid、Astro 乃至一个纯 HTML 文件里的用法完全一致——没有适配层，也不需要匹配框架版本。
+TypeScript 类型、基于设计令牌的明暗主题、Shadow DOM 封装与服务端渲染都是内置的。
 
-## 特点
+<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://unpkg.com/ranui/dist/index.js"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-1. **跨框架兼容：** 与 React, Vue, Preact, SolidJS, Svelte 等兼容。可以和遵循 W3C 标准的任何 JavaScript 项目集成。
-2. **原生体验：** 易于入门，像使用本地 div 标签，简化项目大小和减少学习成本。
-3. **模块化设计：** 可选导入和全量导入，以增强可维护性和可伸缩性。
-4. **交互式丰富文档：** 提供详细的交互式文档，并附有有效的示例子。
-5. **支持类型校验：** 基于 TypeScript 构建，具有类型支持，确保代码的健壮性和可维护性。
-6. **持久和稳定：** 与框架 (React/vue) 无关，避免破坏性的更新，并确保持续的项目运行。
+- **npm**：<a href="https://www.npmjs.com/package/ranui">`ranui`</a> ·
+  **源码**：<a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`packages/ranui`</a>
+- ranui 处于 **alpha** 阶段：版本中会包含破坏性变更。请锁定确切版本，升级前先读
+  [更新日志](/cn/src/ranui/changelog)。
 
 ## 安装
 
-使用 npm:
-
-```console
-npm install ranui --save
+```bash
+npm install ranui
 ```
-
-## 引入方式
-
-支持按需导入，以显著减少包体积大小
-
-```js
-import 'ranui/button';
-```
-
-如果遇到样式问题，可以选择手动导入样式文件
-
-```js
-import 'ranui/style';
-```
-
-如果遇到类型问题，可以选择手动导入类型文件
-
-```ts
-import 'ranui/types';
-```
-
-或者
-
-```ts
-import 'ranui/dist/typings';
-```
-
-也支持全量导入
-
-```ts
-import 'ranui';
-```
-
-- ES module
-
-```js
-import 'ranui';
-```
-
-或者
-
-```js
-import 'ranui/button';
-```
-
-- UMD, IIFE, CJS
 
 ```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
+<!-- 或者直接用 CDN，不需要构建步骤 -->
+<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
 ```
 
-## 使用方式
+## 使用
 
-它是基于`Web Components`的组件，你可以不用关注框架就可以使用它。
+引入即完成注册，之后写标签就行。
 
-在大多数情况下，您可以像使用本地 `div` 标签一样使用它
-
-下面是一些例子：
-
-- html
-- js
-- jsx
-- vue
-- tsx
-
-### html
+```js
+import 'ranui'; // 全部组件
+import 'ranui/button'; // 或只要一个
+```
 
 ```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
+<r-button type="primary">部署项目</r-button>
+```
+
+在任何框架里都是同一个标签——差别只在于各框架如何传值和绑事件，这部分在
+[编码规范](/cn/src/ranui/coding-guides/#框架接入)里讲全了：
+
+::: code-group
+
+```html [HTML]
+<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
 
 <body>
   <r-button>Button</r-button>
 </body>
 ```
 
-### js
-
-```js
+```jsx [React]
 import 'ranui';
 
-const Button = document.createElement('r-button');
-Button.appendChild('this is button text');
-document.body.appendChild(Button);
+export const App = () => <r-button type="primary">部署</r-button>;
+// 复杂值与事件监听要走 ref —— 见编码规范。
 ```
 
-### jsx
-
-```jsx
-import 'ranui';
-
-const App = () => {
-  return (
-    <>
-      <r-button>Button</r-button>
-    </>
-  );
-};
-```
-
-### vue
-
-```vue
+```vue [Vue]
 <template>
-  <r-button></r-button>
+  <r-button type="primary" @click="deploy">部署</r-button>
 </template>
-<script>
+
+<script setup>
 import 'ranui';
 </script>
+<!-- 需要在构建配置的 compilerOptions.isCustomElement 里放行 `r-` 前缀。 -->
 ```
 
-### tsx
-
-```tsx
-// react
-import type { SyntheticEvent } from 'react';
-import React, { useRef } from 'react';
+```js [原生 JS]
 import 'ranui';
 
-const FilePreview = () => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
-    if (ref.current) {
-      const uploadFile = document.createElement('input');
-      uploadFile.setAttribute('type', 'file');
-      uploadFile.click();
-      uploadFile.onchange = (e) => {
-        const { files = [] } = uploadFile;
-        if (files && files?.length > 0 && ref.current) {
-          ref.current.setAttribute('src', '');
-          const file = files[0];
-          const url = URL.createObjectURL(file);
-          ref.current.setAttribute('src', url);
-        }
-      };
-    }
-  };
-  return (
-    <div>
-      <r-preview ref={ref}></r-preview>
-      <r-button type="primary" onClick={uploadFile}>
-        choose file to preview
-      </r-button>
-    </div>
-  );
-};
+const button = document.createElement('r-button');
+button.textContent = '部署';
+document.body.appendChild(button);
 ```
 
-## Overview 组件总览
+:::
 
-- `Button`
+## 入口
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="primary">主要按钮</r-button>
+每个入口只注册名字所说的东西——只想要主题的页面不会为组件库付费。
+
+| 引入                                                  | 内容                                        |
+| ----------------------------------------------------- | ------------------------------------------- |
+| `ranui`                                               | 全部组件                                    |
+| `ranui/<component>`                                   | 单个组件——`ranui/button`、`ranui/select`…   |
+| [`ranui/theme`](/cn/src/ranui/theme/)                 | 明暗主题与令牌覆盖；不含元素                |
+| [`ranui/i18n`](/cn/src/ranui/i18n/)                   | 翻译引擎；不含元素                          |
+| `ranui/fonts`                                         | 自托管的 Geist Sans + Geist Mono            |
+| `ranui/style`                                         | 样式表，供构建工具没有自动引入时使用        |
+| [`ranui/builder`](/cn/src/ranui/builder/)             | 带细粒度响应式的链式 DOM 构建器             |
+| [`ranui/ssr`](/cn/src/ranui/ssr/)、`ranui/ssr-stream` | 服务端渲染                                  |
+| `ranui/testing`                                       | 在测试中进入 closed shadow root 的助手      |
+| `ranui/typings`                                       | JSX / TS 环境类型声明                       |
+
+## 组件
+
+共 40 个元素。每一个的属性、属性值、事件、插槽和 `::part()` 名称，都在
+[元素 API 参考](/cn/src/ranui/api)里。
+
+**通用** —— [Button 按钮](/cn/src/ranui/button/) · [Icon 图标](/cn/src/ranui/icon/) ·
+[Loading 加载中](/cn/src/ranui/loading/)
+
+**数据录入** —— [Input 输入框](/cn/src/ranui/input/) ·
+[CheckBox 多选框](/cn/src/ranui/checkbox/) · [Select 选择框](/cn/src/ranui/select/) ·
+[ColorPicker 颜色选择器](/cn/src/ranui/colorpicker/) ·
+[Attachments 附件条](/cn/src/ranui/attachments/) ·
+[VoiceButton 语音按钮](/cn/src/ranui/voice-button/) · [表单](/cn/src/ranui/form/)
+
+**数据展示** —— [Card 卡片](/cn/src/ranui/card/) · [Section 区块](/cn/src/ranui/section/) ·
+[Tabs 标签页](/cn/src/ranui/tab/) · [Image 图片](/cn/src/ranui/image/) ·
+[Progress 进度条](/cn/src/ranui/progress/) · [Radar 雷达图](/cn/src/ranui/radar/) ·
+[Player 播放器](/cn/src/ranui/player/) · [Preview 预览](/cn/src/ranui/preview/) ·
+[Glass 毛玻璃](/cn/src/ranui/glass/) · [Scratch 刮刮卡](/cn/src/ranui/scratch/) ·
+[StateDot 状态点](/cn/src/ranui/state-dot/) ·
+[DisclosureRow 折叠行](/cn/src/ranui/disclosure-row/)
+
+**内容渲染** —— [Markdown 富文本](/cn/src/ranui/markdown/) ·
+[Math 数学公式](/cn/src/ranui/math/) · [Mermaid 图表](/cn/src/ranui/mermaid/)
+
+**AI 与对话** —— [Conversation 对话](/cn/src/ranui/conversation/) ·
+[Reasoning 思维链](/cn/src/ranui/reasoning/) ·
+[ToolCard 工具卡片](/cn/src/ranui/tool-card/) ·
+[TokenMeter 上下文用量](/cn/src/ranui/token-meter/)
+
+**浮层与反馈** —— [Modal 对话框](/cn/src/ranui/modal/) ·
+[Popover 气泡卡片](/cn/src/ranui/popover/) · [Dropdown 下拉面板](/cn/src/ranui/dropdown/) ·
+[Message 全局提示](/cn/src/ranui/message/) · [Skeleton 骨架屏](/cn/src/ranui/skeleton/)
+
+**导航** —— [Router 路由](/cn/src/ranui/router/) · [Route 路由出口](/cn/src/ranui/route/) ·
+[Link 链接](/cn/src/ranui/link/)
+
+**基础能力** —— [Theme 主题系统](/cn/src/ranui/theme/) ·
+[ThemeSwitch 主题切换](/cn/src/ranui/theme-switch/) · [i18n 国际化](/cn/src/ranui/i18n/)
+
+有五个元素没有独立页面，因为它们只存在于另一个组件内部：`<r-option>`（Select）、
+`<r-tabs>`（Tabs）、`<r-img>`（Image）、`<r-dropdown-item>`（Dropdown）、
+`<r-content>`（Popover）。它们和其他元素一样都在 API 参考里。
+
+### 实时示例
+
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:12px">
+  <r-button type="primary">主要按钮</r-button>
+  <r-button type="warning">警告按钮</r-button>
+  <r-button type="text">文字按钮</r-button>
+  <r-button>默认按钮</r-button>
+  <r-icon name="lock" size="28"></r-icon>
+  <r-icon name="user" size="28"></r-icon>
+  <r-icon name="loading" size="28" color="#1E90FF" spin></r-icon>
 </div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="warning">警告按钮</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button type="text">文本按钮</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button >默认按钮</r-button>
+
+<div style="width:100%;margin-bottom:12px">
+  <r-progress percent="0.7" type="drag"></r-progress>
 </div>
 
-- `Icon`
+<r-markdown copy content="**流式** Markdown，支持 `代码`、表格、mermaid 与数学公式。"></r-markdown>
 
-<div style='display:flex'>
-     <r-icon name="lock" size="50" ></r-icon>
-     <r-icon name="user" size="50" ></r-icon>
-     <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
-</div>
+## 自定义样式
 
-- `Skeleton`
+组件渲染进 **closed** shadow root：页面 CSS 漏不进去，选择器也穿不过去。进入的方式有四种，按优先级
+排列。
 
-<div style="width: 100px;margin-top:10px">
-    <r-skeleton ></r-skeleton>
-</div>
-<div style="margin-top:10px">
-    <r-skeleton ></r-skeleton>
-</div>
-<div style="margin-top:10px">
-    <r-skeleton ></r-skeleton>
-</div>
-<div style="width: 200px;margin-top:10px;margin-bottom: 12px;">
-    <r-skeleton ></r-skeleton>
-</div>
-
-- `Input`
-
-<div style="display:block;margin-right: 8px;margin-bottom: 12px;">
-     <r-input label="user"></r-input>
-</div>
-
-<div style="display:block;margin-right: 8px;margin-bottom: 12px;">
-     <r-input icon="lock" type="password"></r-input>
-</div>
-
-- `message`
-
-<r-button onclick="message.info('这是一条提示')">信息提示</r-button>
-<r-button onclick="message.warning('这是一条提示')">警告提示</r-button>
-<r-button onclick="message.error('这是一条提示')">错误提示</r-button>
-<r-button onclick="message.success('这是一条提示')">成功提示</r-button>
-<r-button onclick="message.toast('这是一条提示')">toast 提示</r-button>
-
-- `Tab`
-
-<div style="display:block;margin-right: 8px;margin-bottom: 12px;">
-   <r-tabs>
-      <r-tab label="home" icon="home">tab1</r-tab>
-      <r-tab label="message" icon="message">tab2</r-tab>
-      <r-tab label="user" icon="user">tab3</r-tab>
-   </r-tabs>
-</div>
-
-- `Radar`
-
-<r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
-
-- `Progress`
-
-<r-progress type="drag" ></r-progress>
-
-- `Player`
-
-<r-player style="display: block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-
-- `Select`
-
- <r-select style="width: 120px; height: 40px" defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
-    </r-select>
-
-- `Loading`
-
-<r-loading name="circle-fold"></r-loading>
-
-- `math`
-
-<r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
-
-- `markdown`
-
-<r-markdown copy content="**Streaming** Markdown with `code`, tables, mermaid and math."></r-markdown>
-
-## Event 事件
-
-- 现代`web`标准
-
-在`W3C`标准中，你可以使用`on`属性在`HTML`元素上定义事件处理程序。但这是旧的事件处理程序的方法。
-
-现代的`web`开发推荐使用`addEventListener`方法。
+**1. 设计令牌（CSS 自定义属性）**——它们会继承穿过边界，因此设在 `:root`、外层容器或元素上都有效：
 
 ```html
-<r-button id="button">按钮</r-button>
+<r-progress percent="0.7" type="drag" style="--ran-progress-track-background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f)"></r-progress>
+```
+
+<div style="width:100%;margin:12px 0">
+  <r-progress percent="0.7" type="drag" style="--ran-progress-track-background:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
+</div>
+
+**2. `::part()`**——令牌覆盖不到的结构性调整 · **3. `sheet` 属性**——把 CSS 注入 shadow root ·
+**4. 插槽内容**——它留在你的文档里，直接吃你的页面 CSS。
+
+令牌名字见[设计系统](/cn/src/ranui/design-system/)，如何取舍见
+[设计规范](/cn/src/ranui/design-guides/)，机制细节见
+[编码规范](/cn/src/ranui/coding-guides/#跨-shadow-边界上样式)。
+
+## 事件
+
+组件派发 `CustomEvent`，负载放在 `detail` 里。请把监听绑在元素上——是否冒泡是各组件自己的决定，
+API 参考里逐个都标注了：
+
+```html
+<r-select id="env"></r-select>
 
 <script>
-  const button = document.getElementById('button');
-  button.addEventListener('click', function (event) {
-    alert('新的点击事件！');
+  document.getElementById('env').addEventListener('change', (event) => {
+    console.log(event.detail.value);
   });
 </script>
 ```
 
-然而，如果你确实需要使用`on`属性，下面是一个示例：
+`onchange="…"` 属性写法和 `el.onchange = …` 属性值写法也都能用（它们本来就是普通 DOM 元素），但这
+两种只能挂一个处理函数、也拿不到捕获阶段，所以首选 `addEventListener`。
 
-```html
-<r-input onchange="change(this.value)"></r-input>
+## 接下来读什么
 
-<script>
-  function change(e) {
-    console.log('e--->', e);
-  }
-</script>
-```
+| 如果你想……                     | 读                                                  |
+| ------------------------------ | --------------------------------------------------- |
+| 查某个元素的确切接口           | [元素 API](/cn/src/ranui/api)                       |
+| 知道该用哪个令牌、为什么       | [设计系统](/cn/src/ranui/design-system/)            |
+| 做出像一套系统的界面           | [设计规范](/cn/src/ranui/design-guides/)            |
+| 把 ranui 正确接进应用          | [编码规范](/cn/src/ranui/coding-guides/)            |
+| 接入明暗主题，或整体换皮       | [主题系统](/cn/src/ranui/theme/)                    |
+| 把界面翻译成别的语言           | [i18n 国际化](/cn/src/ranui/i18n/)                  |
+| 在服务端渲染                   | [服务端渲染](/cn/src/ranui/ssr/)                    |
+| 不用框架写响应式视图           | [Builder 构建器](/cn/src/ranui/builder/)            |
+| 升级前看看改了什么             | [更新日志](/cn/src/ranui/changelog)                 |
 
-请注意，使用`on`属性来定义事件处理程序有一些限制和缺点。
+## 兼容性
 
-例如，你不能使用事件捕获或事件委托，而且每个事件类型都需要一个单独的属性。
-
-这也是为什么现代的`web`开发推荐使用`addEventListener`方法的原因。
-
-还可以使用`property`的方式：
-
-```html
-<r-input id="input"></r-input>
-
-<script>
-  const input = document.getElementById("input")
-  input.onchange = (e) {
-    console.log('e--->', e)
-  }
-</script>
-```
-
-## style 自定义样式
-
-### `::part`伪类
-
-```html
-<r-input id="input"></r-input>
-
-<style>
-  /* #input 指的是当前的自定义元素
-  ::part(input) 中的 input 指的是，当前自定义元素内部的 Shadow DOM 元素的类 */
-  #input::part(input) {
-    width: 100px;
-  }
-</style>
-```
-
-具体的伪类名称可以查看具体的具体介绍
-
-### 通过`sheet`属性传入
-
-会在所有的组件上加一个`sheet`属性，传入`CSSStyleSheet`字符串。会直接插入到`Shadow DOM`中
-
-### `css3`变量`var`
-
-通过给组件设置`css3`变量，从而自定义组件内部的指定样式，比如：
-
-<r-progress percent="0.7" type="drag"></r-progress>
-<br />
-<r-progress percent="0.7" type="drag" style="--ran-progress-track-background:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
-
-```html
-<r-progress percent="0.7" type="drag"></r-progress>
-<r-progress
-  percent="0.70"
-  type="drag"
-  style="--ran-progress-track-background:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"
-></r-progress>
-```
-
-具体`css3`变量名称可以参考每个组件的介绍和说明
-
-## Compatibility 兼容性
-
-- 不支持 `IE`，其他均有较好支持
+所有现代浏览器——组件库建立在 Custom Elements v1、Shadow DOM v1 与 CSS 自定义属性之上。
+**不支持 Internet Explorer。**
 
 ![](../../../assets/ranui/customElements.png)
 
-## Contributors 贡献者
+## 贡献者
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
 
-## Other 相关资源
+## 延伸阅读
 
-1. [优秀的组件设计](https://www.checklist.design/)
-2. [在线生成 CSS 渐变色](https://webgradients.com/)
-3. [优秀设计作品，有 psd 和 sketch](https://webgradients.com/)
-4. [3D UI 设计，类似于 3D 版的 figma](https://spline.design/)
-5. [设计规范](https://lawsofux.com/)
-6. [优秀设计作品](https://dribbble.com/)
-7. [element UI 中文网](https://element.eleme.cn/#/zh-CN)
-8. [Ant design 中文网](https://ant.design/index-cn)
-9. [在线绘制 CSS 动画](https://animista.net/)
-10. [tailwindcss 组件库](https://www.tailwindcss.cn/resources)
-11. [animate css 非常优秀的 css 动画](https://animate.style/)
-12. [can i use 检测兼容性 API 网站](https://caniuse.com/)
-13. [figma](https://www.figma.com/)
+这个库所依据的标准：[W3C](https://www.w3.org/) ·
+[ECMA](https://www.ecma-international.org/) · [RFC](https://www.rfc-editor.org/) ·
+[Can I use](https://caniuse.com/)
 
-## 协议和标准
-
-1. [RFCs](https://www.rfc-editor.org/)
-2. [ECMA](https://www.ecma-international.org/)
-3. [w3c](https://www.w3.org/)
+值得常开着的设计参考：[Checklist Design](https://www.checklist.design/) ·
+[Laws of UX](https://lawsofux.com/) · [Geist](https://vercel.com/geist) ·
+[Ant Design](https://ant.design/index-cn) · [Element UI](https://element.eleme.cn/#/zh-CN) ·
+[Animista](https://animista.net/) · [WebGradients](https://webgradients.com/)

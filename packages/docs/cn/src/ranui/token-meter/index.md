@@ -97,6 +97,21 @@ r-token-meter[level='warn'] ~ .composer-hint {
 元素始终带有陈述具体数字的 `title`，因此**颜色永远不是唯一载体**——进度条变琥珀色是第二重信号，而不是
 唯一信号。重新设计配色时请保持这一点。
 
+## 自定义样式
+
+`<r-token-meter>` 自身暴露了 **9 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-token-meter {
+  --ran-token-meter-fill-background: var(--ran-color-bg-subtle);
+}
+```
+
+Part：`fill` · `meter` · `text` · `track`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#token-meter)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+
 ## 最佳实践
 
 - **在构造请求的地方更新 `used`**，而不是在渲染流程里——人们信任的那个数，是下一次请求真正会发出去的量。

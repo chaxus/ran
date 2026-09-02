@@ -104,6 +104,21 @@ row.addEventListener('disclosuretoggle', () => {
 
 `row` · `leading` · `title` · `separator` · `summary` · `disclosure` · `body`
 
+## 自定义样式
+
+`<r-disclosure-row>` 自身暴露了 **15 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-disclosure-row {
+  --ran-disclosure-hover-background: var(--ran-color-bg-subtle);
+}
+```
+
+Part：`body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#disclosure-row)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+
 ## 最佳实践
 
 - **要么给行配正文，要么别让它可展开。** 展开后是空的箭头是条死路；不加 `expandable`，它就老老实实

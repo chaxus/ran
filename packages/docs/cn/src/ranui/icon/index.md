@@ -142,3 +142,18 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 点击任意图标即可复制其用法。
 
 <IconGallery />
+
+## 自定义样式
+
+`<r-icon>` 自身暴露了 **6 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-icon {
+  --ran-icon-color: var(--ran-color-text-secondary);
+}
+```
+
+Part：`ran-icon`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#icon)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。

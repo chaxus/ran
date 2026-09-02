@@ -311,6 +311,19 @@ Player-specific actions:
 
 The player does not accept slotted content: it clears its own light-DOM children (`this.innerHTML = ''`) in the constructor and again on every source load. For custom overlays, style the player via the `sheet` attribute instead.
 
+## Styling
+
+`<r-player>` exposes **136 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-player {
+  --ran-player-tip-background: var(--ran-color-bg-subtle);
+}
+```
+
+The full list is in [style tokens](/src/ranui/style-tokens#player); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Sizing**: The host is `display: block` with no intrinsic size — always give it an explicit width and height, otherwise the video collapses.

@@ -105,6 +105,21 @@ The element always carries a `title` stating the numbers, so **colour is never t
 carrier** of the warning — the bar going amber is a second signal, not the only one. Keep it
 that way if you restyle the levels.
 
+## Styling
+
+`<r-token-meter>` exposes **9 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-token-meter {
+  --ran-token-meter-fill-background: var(--ran-color-bg-subtle);
+}
+```
+
+Parts: `fill` · `meter` · `text` · `track`
+
+The full list is in [style tokens](/src/ranui/style-tokens#token-meter); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Update `used` from the same place you build the request**, not from a rendering pass —

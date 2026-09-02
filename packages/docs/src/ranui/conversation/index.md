@@ -124,6 +124,21 @@ after, so the reader keeps looking at what they were looking at.
 Each row also carries `data-kind` and `data-key`, so a consumer can style or find one without
 reaching into the shadow tree.
 
+## Styling
+
+`<r-conversation>` exposes **14 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-conversation {
+  --ran-conversation-background: var(--ran-color-bg-subtle);
+}
+```
+
+Parts: `conversation` · `empty` · `footer` · `list` · `older`
+
+The full list is in [style tokens](/src/ranui/style-tokens#conversation); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## See also
 
 - [ranuts/stream](../../ranuts/stream/) — turn a provider's SSE into the events pushed here

@@ -153,6 +153,21 @@ r-checkbox::part(label) {
 }
 ```
 
+## Styling
+
+`<r-checkbox>` exposes **32 CSS custom properties** of its own, plus the semantic tokens it reads
+from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+
+```css
+r-checkbox {
+  --ran-checkbox-color: var(--ran-color-text-secondary);
+}
+```
+
+Parts: `checkbox` · `inner` · `input` · `label` · `wrapper`
+
+The full list is in [style tokens](/src/ranui/style-tokens#checkbox); which token to reach for is the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Label your checkboxes**: Provide slotted text so the control has an accessible name.

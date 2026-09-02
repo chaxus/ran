@@ -213,6 +213,21 @@ r-input::part(content) {
 }
 ```
 
+## 自定义样式
+
+`<r-input>` 自身暴露了 **61 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-input {
+  --ran-input-color: var(--ran-color-text-secondary);
+}
+```
+
+Part：`content` · `input` · `label` · `message`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#input)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+
 ## 最佳实践
 
 - **标签**：设置有意义的 `label`，让字段拥有可访问的名称。

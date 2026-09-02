@@ -66,6 +66,21 @@ description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML—
 | `copied`   | `{ kind: 'source' \| 'mathml' }`   | 复制按钮已将源码或 MathML 复制到剪贴板。 |
 | `download` | `{ format: 'source' \| 'mathml' }` | 下载按钮已保存 `.tex` 或 `.mml` 文件。   |
 
+## 自定义样式
+
+`<r-math>` 自身暴露了 **16 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-math {
+  --ran-math-error-background: var(--ran-color-bg-subtle);
+}
+```
+
+Part：`button` · `error` · `math` · `menu` · `render` · `toolbar`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#math)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+
 ## 最佳实践
 
 - **通过 `latex` 提供公式**：将公式设置在 `latex` 属性上；slot 文本内容不会被渲染。

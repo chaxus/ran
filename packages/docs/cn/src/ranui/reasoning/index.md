@@ -76,3 +76,18 @@ reasoning.streaming = !snapshot.done;
 
 - [Conversation 对话](../conversation/) —— 把它作为记录里的推理行挂载
 - [ranuts/stream](../../ranuts/stream/) —— `reasoning-delta` 的来源
+
+## 自定义样式
+
+`<r-reasoning>` 自身暴露了 **4 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
+地方都有效——`:root`、外层容器，或元素本身：
+
+```css
+r-reasoning {
+  --ran-reasoning-color: var(--ran-color-text-secondary);
+}
+```
+
+Part：`body` · `row` · `text`
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#reasoning)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
