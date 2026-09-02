@@ -141,6 +141,55 @@ i18n.addMessages('fr', fr); // merges into any existing 'fr' dictionary
 i18n.setLocale('fr');
 ```
 
+## Localizing component text
+
+The components do **not** read from this engine themselves. That is deliberate: a component
+reaching into a global singleton would tie every consumer to one instance and one key-naming
+scheme, and would make a page that imports one button pull in the translation layer. Instead
+**every user-visible string is an input** — an attribute, a property, an option, or slotted
+content — so localizing ranui means passing `t()` output in where the string already goes:
+
+```js
+const i18n = useI18n(); // messages below assumed registered
+
+modal.setAttribute('title', i18n.t('dialog.deleteProject.title'));
+themeSwitch.setAttribute('label-dark', i18n.t('theme.dark'));
+```
+
+Most components have no text of their own at all — it arrives through slots and attributes you
+already write. A handful ship an English default for a string that has nowhere else to come
+from, mostly accessible names:
+
+| Component                                         | Built-in English                                                                                                        | Override with                                        |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `Modal.confirm` / `Modal.open`                    | title `Confirm`, buttons `OK` / `Cancel`                                                                                | the `title`, `okText`, `cancelText` options          |
+| `Modal.info` / `.success` / `.warning` / `.error` | titles `Info` / `Success` / `Warning` / `Error`                                                                         | the `title` option                                   |
+| `<r-theme-switch>`                                | aria-labels `Theme`, `System theme`, `Light theme`, `Dark theme`                                                        | `label`, `label-system`, `label-light`, `label-dark` |
+| `<r-voice-button>`                                | aria-labels `Start voice input` / `Stop voice input`; hints `Release to keep · slide up to cancel`, `Release to cancel` | `label`, `active-label`, `hold-hint`, `cancel-hint`  |
+| `<r-reasoning>`                                   | header label `Reasoning`                                                                                                | `label`                                              |
+| `<r-token-meter>`                                 | label `Context`                                                                                                         | `label`                                              |
+| `<r-colorpicker>`                                 | aria-labels `Choose color`, `Hue`, `Alpha opacity`                                                                      | `label`, `hue-label`, `alpha-label`                  |
+
+A practical pattern is to re-apply them from one place on every locale change, so the same code
+runs at startup and after a switch:
+
+```js
+const i18n = useI18n();
+
+const applyLabels = () => {
+  document.querySelectorAll('r-voice-button').forEach((el) => {
+    el.setAttribute('label', i18n.t('voice.start'));
+    el.setAttribute('active-label', i18n.t('voice.stop'));
+  });
+};
+
+applyLabels();
+i18n.onChange(applyLabels);
+```
+
+Remember to keep `document.documentElement.lang` in step too — it is what the browser, screen
+readers and `:lang()` selectors go by.
+
 ## API
 
 `createI18n(config)` creates and registers the global singleton (call once);

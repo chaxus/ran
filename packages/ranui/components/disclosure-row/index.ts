@@ -38,6 +38,8 @@ import { defineSSR } from '@/utils/ssr-registry';
  * Not `toggle`: that is the native event `<details>` fires, and its `ToggleEvent` carries
  * `oldState`/`newState` rather than a `detail` — a listener typed against the platform's
  * name gets the platform's payload and finds nothing in it.
+ *
+ * @fires disclosuretoggle - The row was expanded or collapsed.
  */
 export const DISCLOSURE_TOGGLE = 'disclosuretoggle';
 

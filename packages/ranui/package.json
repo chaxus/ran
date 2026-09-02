@@ -187,7 +187,9 @@
   "files": [
     "dist",
     "typings.d.ts",
+    "CLAUDE.md",
     "docs/DESIGN.md",
+    "docs/CODING.md",
     "docs/COMPONENTS.md",
     "docs/BUILDER.md",
     "docs/style-tokens-public.md"

@@ -136,6 +136,51 @@ i18n.addMessages('fr', fr); // 合并进已有的 'fr' 字典
 i18n.setLocale('fr');
 ```
 
+## 组件文案的本地化
+
+组件**不会**自己去读这个引擎。这是刻意的：组件若伸手去拿全局单例，就把所有使用者绑死在同一个实例和
+同一套 key 命名上，而且只引入一个按钮的页面也会被迫带上翻译层。取而代之的是**所有用户可见的文案都是
+输入**——属性、property、选项或插槽内容——所以本地化 ranui 就是把 `t()` 的结果传到文案本来就该进去的
+地方：
+
+```js
+const i18n = useI18n(); // 假设消息已注册
+
+modal.setAttribute('title', i18n.t('dialog.deleteProject.title'));
+themeSwitch.setAttribute('label-dark', i18n.t('theme.dark'));
+```
+
+多数组件根本没有自己的文案——文字都来自你已经在写的插槽和属性。少数组件为「没有别处可来」的字符串
+内置了英文默认值，主要是无障碍名称：
+
+| 组件                                              | 内置英文                                                                                                              | 覆盖方式                                             |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `Modal.confirm` / `Modal.open`                    | 标题 `Confirm`，按钮 `OK` / `Cancel`                                                                                  | `title`、`okText`、`cancelText` 选项                 |
+| `Modal.info` / `.success` / `.warning` / `.error` | 标题 `Info` / `Success` / `Warning` / `Error`                                                                         | `title` 选项                                         |
+| `<r-theme-switch>`                                | aria-label `Theme`、`System theme`、`Light theme`、`Dark theme`                                                       | `label`、`label-system`、`label-light`、`label-dark` |
+| `<r-voice-button>`                                | aria-label `Start voice input` / `Stop voice input`；提示 `Release to keep · slide up to cancel`、`Release to cancel` | `label`、`active-label`、`hold-hint`、`cancel-hint`  |
+| `<r-reasoning>`                                   | 头部标签 `Reasoning`                                                                                                  | `label`                                              |
+| `<r-token-meter>`                                 | 标签 `Context`                                                                                                        | `label`                                              |
+| `<r-colorpicker>`                                 | aria-label `Choose color`、`Hue`、`Alpha opacity`                                                                     | `label`、`hue-label`、`alpha-label`                  |
+
+实用做法是把它们集中在一处、随语言切换重新应用，这样启动时和切换后跑的是同一段代码：
+
+```js
+const i18n = useI18n();
+
+const applyLabels = () => {
+  document.querySelectorAll('r-voice-button').forEach((el) => {
+    el.setAttribute('label', i18n.t('voice.start'));
+    el.setAttribute('active-label', i18n.t('voice.stop'));
+  });
+};
+
+applyLabels();
+i18n.onChange(applyLabels);
+```
+
+别忘了同步 `document.documentElement.lang`——浏览器、屏幕阅读器和 `:lang()` 选择器都以它为准。
+
 ## API
 
 `createI18n(config)` 创建并注册全局单例（只调用一次）；`useI18n()` 返回该单例，若尚未调用

@@ -394,11 +394,20 @@ const themeCnConfig: DefaultTheme.Config = {
         link: '/cn/src/ranui/',
       },
       {
+        text: '元素 API（全部 40 个元素）',
+        link: '/cn/src/ranui/api',
+      },
+      {
         text: '基础能力',
         items: [
-          { text: 'Theme 主题与令牌', link: '/cn/src/ranui/theme/' },
+          { text: 'Design system 设计系统', link: '/cn/src/ranui/design-system/' },
+          { text: 'Design guidelines 设计规范', link: '/cn/src/ranui/design-guides/' },
+          { text: 'Coding guidelines 编码规范', link: '/cn/src/ranui/coding-guides/' },
+          { text: 'Theme 主题系统', link: '/cn/src/ranui/theme/' },
           { text: 'ThemeSwitch 主题切换', link: '/cn/src/ranui/theme-switch/' },
           { text: 'i18n 国际化', link: '/cn/src/ranui/i18n/' },
+          { text: 'Builder 构建器', link: '/cn/src/ranui/builder/' },
+          { text: 'SSR 服务端渲染', link: '/cn/src/ranui/ssr/' },
         ],
       },
       {
@@ -419,6 +428,9 @@ const themeCnConfig: DefaultTheme.Config = {
           { text: 'Conversation 对话', link: '/cn/src/ranui/conversation/' },
           { text: 'ToolCard 工具卡片', link: '/cn/src/ranui/tool-card/' },
           { text: 'Reasoning 思维链', link: '/cn/src/ranui/reasoning/' },
+          { text: 'StateDot 状态点', link: '/cn/src/ranui/state-dot/' },
+          { text: 'DisclosureRow 折叠行', link: '/cn/src/ranui/disclosure-row/' },
+          { text: 'TokenMeter 上下文用量', link: '/cn/src/ranui/token-meter/' },
           { text: 'CheckBox 多选框', link: '/cn/src/ranui/checkbox/' },
           { text: 'Tabs 标签页', link: '/cn/src/ranui/tab/' },
           { text: 'Preview 预览', link: '/cn/src/ranui/preview/' },
@@ -439,6 +451,7 @@ const themeCnConfig: DefaultTheme.Config = {
         items: [
           { text: 'Input 输入框', link: '/cn/src/ranui/input/' },
           { text: 'VoiceButton 语音按钮', link: '/cn/src/ranui/voice-button/' },
+          { text: 'Attachments 附件条', link: '/cn/src/ranui/attachments/' },
           { text: '表单', link: '/cn/src/ranui/form/' },
           { text: 'ColorPicker 颜色选择器', link: '/cn/src/ranui/colorpicker/' },
         ],

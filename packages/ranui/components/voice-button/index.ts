@@ -48,6 +48,11 @@ import type { SpeechError, SpeechRecognizer } from 'ranuts/utils';
  *
  * Events: `voicestart`, `voiceresult` (`{ transcript, isFinal }`), `voiceerror`
  * (`{ kind, detail }`), `voiceend`.
+ *
+ * @fires voicestart - Capture began.
+ * @fires voiceresult - A transcript arrived; interim results are revised, so this carries the whole capture.
+ * @fires voiceerror - Capture failed.
+ * @fires voiceend - Capture ended.
  */
 export class VoiceButton extends RanElement {
   _events = new EventManager();

@@ -5,6 +5,13 @@
 > instead of drifting in style. Based on the [Geist design system](https://vercel.com/design)
 > ([design.md](https://vercel.com/design.md) / [design.dark.md](https://vercel.com/design.dark.md)).
 
+> Companion documents: [CODING.md](./CODING.md) is the engineering standard for the same code
+> (architecture, state ownership, events, testing). The consumer-facing versions are published
+> as [Design system](https://ran.chaxus.com/src/ranui/design-system/),
+> [Design guidelines](https://ran.chaxus.com/src/ranui/design-guides/) and
+> [Coding guidelines](https://ran.chaxus.com/src/ranui/coding-guides/) — update those when a
+> rule here changes in a way consumers can see.
+
 ## How to use this file
 
 - Prefer **semantic tokens** (`--ran-color-*`, `--ran-space-*`, …) over raw scales or hex.
@@ -17,21 +24,21 @@ Conflict resolution order: **user goals → verified evidence → this file → 
 
 ## What is machine-checked
 
-Seven of the rules below are enforced by `pnpm -F ranui verify:design`, which CI runs on
+Nine of the rules below are enforced by `pnpm -F ranui verify:design`, which CI runs on
 every pull request. Everything else in this file is still binding — it is simply not
 mechanically decidable, so it relies on review and on rendering the result.
 
-| Rule                             | Enforces                                                                                   | Section |
-| -------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
-| `dark-unsafe-fallback`           | a component token's colour fallback points at a token that flips, not a light-only literal | §1      |
-| `bare-colour`                    | raw colour literals do not appear outside a token fallback                                 | §1      |
-| `spacing-scale`                  | `padding` / `margin` / `gap` come from `--ran-space-*`                                     | §2      |
-| `sizing-scale`                   | intrinsic dimensions never borrow from the spacing scale                                   | §2      |
-| `mouse-only-drag`                | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
-| `hidden-inert`                   | a `:host` display rule does not silently disable the `hidden` attribute                    | §9      |
-| `undefined-token-fallback`       | a component token's fallback names a token the theme actually declares                     | §1      |
-| `built-then-queried`             | a component holds the elements it built, instead of searching its own shadow tree for them | §9      |
-| `tree-built-outside-constructor` | a component's shadow tree is built in its constructor, once                                | §9      |
+| Rule                               | Enforces                                                                                   | Section |
+| ---------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| `dark-unsafe-fallback`             | a component token's colour fallback points at a token that flips, not a light-only literal | §1      |
+| `bare-colour`                      | raw colour literals do not appear outside a token fallback                                 | §1      |
+| `spacing-scale`                    | `padding` / `margin` / `gap` come from `--ran-space-*`                                     | §2      |
+| `sizing-scale`                     | intrinsic dimensions never borrow from the spacing scale                                   | §2      |
+| `mouse-only-drag`                  | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
+| `hidden-inert`                     | a `:host` display rule does not silently disable the `hidden` attribute                    | §9      |
+| `undefined-token-fallback`         | a component token's fallback names a token the theme actually declares                     | §1      |
+| `built-then-queried`               | a component holds the elements it built, instead of searching its own shadow tree for them | §9      |
+| `shadow-mount-outside-constructor` | a component's shadow tree is built in its constructor, once                                | §9      |
 
 Existing violations are recorded per file in
 [design-rule-baseline.json](./design-rule-baseline.json) and act as a **ratchet**: a count
@@ -427,5 +434,5 @@ pass that brought existing components in line with it (0.5.0-alpha.0).
 - [ ] **Keyboard / focus** behavior verified; visible focus everywhere.
 - [ ] Edge cases: long text, large numbers, both locales (en / zh).
 - [ ] Spacing comes from the scale; type uses a role; color uses semantic tokens.
-- [ ] `pnpm -F ranui verify:design` passes — it checks the five mechanical rules above.
+- [ ] `pnpm -F ranui verify:design` passes — it checks the nine mechanical rules above.
 - [ ] Copy follows §6; nothing signals state by color alone (§7).

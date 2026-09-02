@@ -1,29 +1,22 @@
 ---
-description: 'ranui 基于 Geist 设计令牌的明暗主题系统——组件消费语义令牌，而不是写死颜色。'
+description: 'ranui 的运行时主题系统：initTheme / setTheme / getTheme、light / dark / system 模式、局部作用域与运行时令牌覆盖。'
 ---
 
-# Theming 主题
+# Theming 主题系统
 
-ranui 提供基于**设计令牌**（CSS 自定义属性）的明暗主题系统。组件从不写死颜色，而是消费语义
-令牌，因此切换主题或覆盖某个令牌即可一次性重塑整个组件库的样式。令牌体系基于
-[Geist](https://vercel.com/geist) 设计语言。
+ranui 样式体系中**运行时**的那一半：在 light、dark、system 之间切换，持久化用户选择，以及在运行
+时覆盖令牌。
 
-**Geist 是什么：** Geist 是 Vercel 的开源设计体系——vercel.com 与 Next.js 文档站背后用的就是
-它。它的核心思想是**颜色是一条「状态阶梯」，而非调色板**：每条色阶从 100 走到 1000，每一档都有
-固定职责（100 默认背景 · 200 悬停 · 300 激活 · 400 边框 · 500 悬停边框 · 600 激活边框 · 700 实心
-填充 · 800 实心悬停 · 900 次要文字 · 1000 主要文字）。ranui 把这套阶梯落成 `--ran-*` 色阶，在其上
-叠加**语义令牌**（`--ran-color-bg`、`--ran-color-text`、`--ran-color-border` 等），并以
-**Geist Sans / Geist Mono** 作为默认字体。实际收益是：暗色模式只需重定义基础色阶——每个语义令牌
-都引用它并自动翻转，因此组件天然暗色安全。完整阶梯见下方 [令牌分层](#令牌分层) 与 [字体](#字体)。
+令牌本身——它们叫什么、各自负责什么——属于[设计系统](/cn/src/ranui/design-system/)；如何在其中取舍
+属于[设计规范](/cn/src/ranui/design-guides/)。本页只讲**如何应用**。
 
-> **适用场景**：需要为 ranui 应用接入明暗主题时——调用 `initTheme` / `setTheme`，并消费语义化的 `--ran-color-*` 设计令牌，这样切换主题或覆盖某个令牌就能一次性重塑整个组件库的样式。
+> **适用场景**：需要为 ranui 应用接入明暗主题时——加载时调用一次 `initTheme`，用 `setTheme` 切换，
+> 若想在不新增 CSS 的前提下覆盖个别令牌则用 `setThemeToken(s)`。
 
 主题只有 **light（浅色）** 和 **dark（深色）** 两种，外加跟随操作系统偏好的 **system** 模式。
 （旧的「主题包（theme pack）」API 已移除，`setThemePack` / `RanThemePackName` 不再存在。）
 
 ## 快速开始
-
-页面加载时调用一次 `initTheme()` 恢复用户上次的选择，再用 `setTheme()` 切换：
 
 ```js
 import { initTheme, setTheme, getTheme } from 'ranui/theme';
@@ -38,15 +31,14 @@ setTheme('system'); // 跟随 prefers-color-scheme 实时更新
 getTheme(); // → 'light' | 'dark' | 'system' | ''
 ```
 
-独立的 **`ranui/theme`** 入口只包含主题引擎——引入它不会注册任何自定义元素，因此只需要
-Token 和暗色模式的页面不会把整个组件库带进来。如果偏好单一引入，这些函数同样从顶层
-`ranui` 主入口重新导出。
+独立的 **`ranui/theme`** 入口只包含主题引擎——引入它不会注册任何自定义元素，因此只需要令牌和暗色
+模式的页面不会把整个组件库带进来。如果偏好单一引入，这些函数同样从顶层 `ranui` 主入口重新导出。
 
 `setTheme` 会在 `<html>` 上写入 `data-ran-theme`（以及兼容用的 `theme`）属性，所有组件样式随之
-响应。选择会保存在 localStorage 键 `ran-theme` 下。
+响应。选择保存在 localStorage 键 `ran-theme` 下。
 
-如果需要现成的主题切换 UI，直接使用 [`<r-theme-switch>`](/cn/src/ranui/theme-switch/) 组件——
-一个接入该 API 的 system / light / dark 分段控件。
+如果需要现成的切换 UI，直接使用 [`<r-theme-switch>`](/cn/src/ranui/theme-switch/)——一个已接入
+该 API 的 system / light / dark 分段控件，会在多个实例之间同步，并更新 `theme-color` meta。
 
 ## API
 
@@ -67,87 +59,25 @@ type ThemeTarget = HTMLElement | Document; // 默认 document.documentElement
 type ThemeTokenMap = Record<string, string | number | null | undefined>;
 ```
 
-**`target`** — 所有函数默认作用于 `<html>`（`document.documentElement`）。传入某个元素可将
-主题或令牌覆盖限定到局部子树。
+**`target`** — 所有函数默认作用于 `<html>`（`document.documentElement`）。传入某个元素可将主题或
+令牌覆盖限定到局部子树。
 
-**SSR 安全** — 所有对 `document` / `localStorage` / `matchMedia` 的访问都有守卫，服务端渲染
-时这些函数不会抛错，只是空操作。
+**SSR 安全** — 所有对 `document` / `localStorage` / `matchMedia` 的访问都有守卫，服务端渲染时这些
+函数不会抛错，只是空操作。
 
-## 令牌分层
+## 暗色模式是怎么工作的
 
-令牌分为两层，**应用中只消费语义层**——它会在明暗之间自动翻转。
+`setTheme('dark')` 在 `<html>` 上写入 `data-ran-theme="dark"`。样式表随后**只重定义基础色板**
+（单一来源），每个 `--ran-color-*` 语义令牌都通过 `var()` 引用它，于是自动翻转——没有任何组件带着
+自己的暗色覆盖。
 
-**第一层 —— 基础调色板**（原始色阶，很少直接使用）：每种颜色从 `100 → 1000` 共 10 档 ——
-`--ran-gray-100..1000`、`--ran-gray-alpha-100..1000`、`--ran-blue/red/amber/green-100..1000`，
-以及 `--ran-background-100/200`。
+由此有两个结论：
 
-**第二层 —— 语义令牌**（`--ran-color-*` 等）映射到基础色阶。深色模式只重定义基础色阶，因此每个
-语义令牌通过 `var()` 自动翻转，无需为组件逐一编写深色覆盖。
-
-### 语义颜色令牌
-
-| 令牌                           | 用途                   |
-| ------------------------------ | ---------------------- |
-| `--ran-color-primary`          | 主操作（单色）         |
-| `--ran-color-primary-hover`    | 主操作悬停             |
-| `--ran-color-primary-active`   | 主操作激活             |
-| `--ran-color-primary-text`     | 主操作表面上的反色墨水 |
-| `--ran-color-success`          | 成功                   |
-| `--ran-color-warning`          | 警告                   |
-| `--ran-color-danger`           | 危险 / 错误            |
-| `--ran-color-bg`               | 页面背景               |
-| `--ran-color-bg-subtle`        | 次级背景               |
-| `--ran-color-bg-elevated`      | 卡片 / 表面背景        |
-| `--ran-color-bg-muted`         | 弱化表面               |
-| `--ran-color-bg-hover`         | 悬停表面               |
-| `--ran-color-bg-active`        | 激活表面               |
-| `--ran-color-text`             | 主文本                 |
-| `--ran-color-text-secondary`   | 次级文本               |
-| `--ran-color-text-disabled`    | 禁用文本               |
-| `--ran-color-border`           | 默认边框               |
-| `--ran-color-border-secondary` | 次级边框               |
-| `--ran-color-border-hover`     | 悬停边框               |
-| `--ran-color-border-active`    | 激活边框               |
-| `--ran-color-link`             | 链接色                 |
-
-**primary（主操作）** 这组令牌即单色的「最高对比度」操作（Geist 品牌色调，即
-`<r-button type="primary">`）：浅色模式黑底白字，深色模式白底黑字。它不携带任何色相——
-蓝色只保留给链接（`--ran-color-link`）和聚焦环。`--ran-color-primary-text` 是位于主操作
-表面上的文本/图标所用的反色墨水（它也会翻转，因此主按钮在明暗两种模式下都能正确显示）。
-
-**颜色是状态阶梯，而非调色板。** 在一条色阶内每一档都有固定职责：`100` 默认背景 · `200` 悬停背景 ·
-`300` 激活背景 · `400` 边框 · `500` 悬停边框 · `600` 激活边框 · `700` 实色 · `800` 实色悬停 ·
-`900` 次级文本 · `1000` 主文本。
-
-### 非颜色令牌
-
-| 分组 | 令牌                                                                                             |
-| ---- | ------------------------------------------------------------------------------------------------ |
-| 圆角 | `--ran-radius-sm` 6px · `--ran-radius-md` 12px · `--ran-radius-lg` 16px · `--ran-radius-full`    |
-| 间距 | `--ran-space-1..24`（4px 基准：4 · 8 · 12 · 16 · 24 · 32 · 40 · 64 · 96）                        |
-| 阴影 | `--ran-shadow-elevated`（在流表面）· `--ran-shadow-menu`（浮层）· `--ran-shadow-modal`（对话框） |
-| 层级 | `--ran-z-modal` 1000 · `--ran-z-dropdown` 1100 · `--ran-z-message` 1200                          |
-| 动效 | `--ran-motion-duration-fast` 0.15s · `--ran-motion-duration-base` 0.2s                           |
-| 焦点 | `--ran-focus-ring`                                                                               |
-| 排版 | `--ran-font-family`（Geist Sans）· `--ran-font-mono`（Geist Mono）                               |
-
-## 字体
-
-ranui 自托管了 `--ran-font-family` / `--ran-font-mono` 背后的标准字体——**Geist Sans** 与
-**Geist Mono**（可变字重 100–900，SIL OFL 1.1 许可）。字体文件随包分发，一行导入即可加载，
-不依赖任何 CDN：
-
-```js
-// 打包器
-import 'ranui/fonts';
-```
-
-```html
-<!-- 静态页面 -->
-<link rel="stylesheet" href="…/ranui/dist/fonts/fonts.css" />
-```
-
-不导入也一切正常——排版令牌会回退到系统字体，只是没有 Geist 字形。
+- **只要消费语义令牌，你自己的 CSS 也免费获得暗色模式**；反之，写死颜色或写了只在浅色下成立的
+  兜底值就会出错。见
+  [在自己的 CSS 里使用令牌](/cn/src/ranui/design-system/#在自己的-css-里使用令牌)。
+- **主题翻转时不应该有任何过渡动画。** CSS 分不清颜色为什么变了，因此调色属性上的 `transition`
+  会在切换主题时让每个元素按各自的时长淡入淡出。ranui 的组件刻意不这么做，你的也不该这么做。
 
 ## 自定义令牌
 
@@ -156,16 +86,16 @@ import 'ranui/fonts';
 ```js
 import { setThemeToken, setThemeTokens, clearThemeToken } from 'ranui/theme';
 
-// 在 <html> 上覆盖单个令牌（影响全局）
+// 单个令牌，作用于 <html>（影响全局）
 setThemeToken('--ran-color-primary', '#7c3aed');
 
-// 批量覆盖
+// 批量设置
 setThemeTokens({
   '--ran-color-primary': '#7c3aed',
   '--ran-radius-md': '8px',
 });
 
-// 限定到子树
+// 限定到局部子树
 setThemeToken('--ran-color-primary', '#e11d48', document.querySelector('#panel'));
 
 // 移除覆盖
@@ -174,8 +104,7 @@ clearThemeToken('--ran-color-primary');
 
 ### 构建时（CSS）
 
-在 `:root`（或任意作用域）下覆盖语义令牌。由于深色模式只重定义基础色阶，若想做「不随主题翻转」的
-改动就覆盖**语义**令牌，若想让改动也随主题翻转则覆盖**基础色阶**：
+在 `:root` 或任意作用域覆盖：
 
 ```css
 :root {
@@ -184,9 +113,28 @@ clearThemeToken('--ran-color-primary');
 }
 ```
 
-## 深色模式原理
+### 该覆盖哪一层
 
-`setTheme('dark')` 会在 `<html>` 上设置 `data-ran-theme="dark"`。样式表只为深色重定义第一层基础
-色阶（集中在 `theme/dark.less` 单一来源）；每个 `--ran-color-*` 语义令牌都通过 `var()` 引用色阶，
-因此自动翻转。这也是组件级令牌必须使用**深色安全回退**的原因——回退值应指向一个会翻转的令牌
-（`var(--ran-color-text, …)`），而不是像 `rgba(0,0,0,.06)` 这样只适用于浅色的字面量。
+因为暗色模式只重定义基础色板：
+
+- 覆盖**语义**令牌（`--ran-color-primary`）：明暗两套主题下都保持同一个值。
+- 覆盖**基础**色阶档位（`--ran-blue-700`）：希望这个改动也跟着主题翻转——所有引用它的语义令牌都会
+  跟随。
+- 覆盖**组件**令牌（`--ran-btn-hover-background`）：只改一个元素。
+
+完整分层见[设计系统](/cn/src/ranui/design-system/#两层令牌)。注意运行时覆盖是目标元素上的**内联
+样式**：它在该子树内胜过样式表规则——这正是分区主题能生效的原因，也正是忘记清除的覆盖后来很难被
+发现的原因。
+
+## 把主题限定到页面局部
+
+所有函数都接受 target，因此预览区可以和外层页面使用不同的主题：
+
+```js
+const preview = document.querySelector('#preview');
+
+setTheme('dark', preview); // 只影响这棵子树
+getTheme(preview); // → 'dark'
+```
+
+属性会写在该元素上而不是 `<html>`，剩下的交给令牌的层叠继承。

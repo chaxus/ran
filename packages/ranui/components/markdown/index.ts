@@ -91,6 +91,11 @@ const EXTENSIONS: Record<string, string> = {
  *
  * Fenced ```mermaid blocks become `<r-mermaid>`, `$$…$$` / `\[…\]` / `\(…\)` become
  * `<r-math>`; both are lazily registered only when the content needs them.
+ *
+ * @fires render - A render pass finished; `detail` counts the blocks and how many changed.
+ * @fires error - Parsing or rendering failed; `detail.message` says why.
+ * @fires copied - A code block was copied from its header.
+ * @fires download - A code block was downloaded from its header.
  */
 export class Markdown extends RanElement {
   _shadowDom: ShadowRoot;

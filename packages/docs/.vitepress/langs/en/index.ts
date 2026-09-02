@@ -397,11 +397,20 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranui/',
       },
       {
+        text: 'Element API (all 40 elements)',
+        link: '/src/ranui/api',
+      },
+      {
         text: 'Foundations',
         items: [
-          { text: 'Theme & Tokens', link: '/src/ranui/theme/' },
+          { text: 'Design system', link: '/src/ranui/design-system/' },
+          { text: 'Design guidelines', link: '/src/ranui/design-guides/' },
+          { text: 'Coding guidelines', link: '/src/ranui/coding-guides/' },
+          { text: 'Theming', link: '/src/ranui/theme/' },
           { text: 'ThemeSwitch', link: '/src/ranui/theme-switch/' },
           { text: 'i18n', link: '/src/ranui/i18n/' },
+          { text: 'Builder', link: '/src/ranui/builder/' },
+          { text: 'Server rendering', link: '/src/ranui/ssr/' },
         ],
       },
       {
@@ -422,6 +431,9 @@ const themeEnConfig: DefaultTheme.Config = {
           { text: 'Conversation', link: '/src/ranui/conversation/' },
           { text: 'Tool Card', link: '/src/ranui/tool-card/' },
           { text: 'Reasoning', link: '/src/ranui/reasoning/' },
+          { text: 'StateDot', link: '/src/ranui/state-dot/' },
+          { text: 'DisclosureRow', link: '/src/ranui/disclosure-row/' },
+          { text: 'TokenMeter', link: '/src/ranui/token-meter/' },
           { text: 'CheckBox', link: '/src/ranui/checkbox/' },
           { text: 'Tabs', link: '/src/ranui/tab/' },
           { text: 'Preview', link: '/src/ranui/preview/' },
@@ -442,6 +454,7 @@ const themeEnConfig: DefaultTheme.Config = {
         items: [
           { text: 'Input', link: '/src/ranui/input/' },
           { text: 'Voice Button', link: '/src/ranui/voice-button/' },
+          { text: 'Attachments', link: '/src/ranui/attachments/' },
           { text: 'Forms', link: '/src/ranui/form/' },
           { text: 'ColorPicker', link: '/src/ranui/colorpicker/' },
         ],

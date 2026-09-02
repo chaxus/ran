@@ -84,6 +84,9 @@ export interface ConversationNodeView<Event = unknown, State = unknown> extends 
  * control from the start), `empty` (text shown while there are no rows), `sheet`.
  * Fires `pinnedchange` with `detail.pinned` whenever bottom-follow is gained or lost, so a
  * "jump to latest" affordance can track it.
+ *
+ * @fires pinnedchange - Bottom-follow was gained or lost.
+ * @fires olderrequest - The reader reached the top and older content should be paged in.
  */
 export class Conversation extends RanElement {
   _events = new EventManager();

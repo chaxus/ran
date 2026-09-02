@@ -55,6 +55,9 @@ let sequence = 0;
  *
  * Events: `attachmentschange` (`{ attachments }`), `attachmentrejected`
  * (`{ file, reason }`).
+ *
+ * @fires attachmentschange - The staged list changed.
+ * @fires attachmentrejected - A file was refused; `detail.reason` says which rule it broke.
  */
 export class Attachments extends RanElement {
   _events = new EventManager();

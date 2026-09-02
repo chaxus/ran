@@ -132,6 +132,35 @@ describe('r-colorpicker contract', () => {
     expect(cp.colorPickerInner).toBeTruthy();
   });
 
+  it('a11y: accessible names come from attributes, so they can be localized', () => {
+    const cp = document.createElement('r-colorpicker') as any;
+    cp.setAttribute('label', '选择颜色');
+    cp.setAttribute('hue-label', '色相');
+    cp.setAttribute('alpha-label', '不透明度');
+    document.body.appendChild(cp);
+
+    expect(cp.colorpicker.getAttribute('aria-label')).toBe('选择颜色');
+
+    // The sliders are built with the panel, on first open.
+    cp.onSwatchKeydown({ key: 'Enter', preventDefault() {} });
+    expect(cp.colorPickerHueSlider.getAttribute('aria-label')).toBe('色相');
+    expect(cp.colorPickerAlphaSlider.getAttribute('aria-label')).toBe('不透明度');
+  });
+
+  it('a11y: a label changed after the panel exists reaches the sliders too', () => {
+    const cp = document.createElement('r-colorpicker') as any;
+    document.body.appendChild(cp);
+    cp.onSwatchKeydown({ key: 'Enter', preventDefault() {} });
+
+    // The English defaults are what an app without the attributes gets.
+    expect(cp.colorPickerHueSlider.getAttribute('aria-label')).toBe('Hue');
+
+    cp.hueLabel = 'Farbton';
+    cp.label = 'Farbe wählen';
+    expect(cp.colorPickerHueSlider.getAttribute('aria-label')).toBe('Farbton');
+    expect(cp.colorpicker.getAttribute('aria-label')).toBe('Farbe wählen');
+  });
+
   it('disabled: does not open on click and marks the host aria-disabled', () => {
     const cp = document.createElement('r-colorpicker') as any;
     cp.setAttribute('disabled', '');

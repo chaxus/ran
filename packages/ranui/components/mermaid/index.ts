@@ -16,6 +16,15 @@ import { defineSSR } from '@/utils/ssr-registry';
 
 let seq = 0;
 
+/**
+ * `<r-mermaid>` — a Mermaid diagram, with the library loaded only when one renders.
+ *
+ * @fires render - The diagram finished rendering.
+ * @fires error - Rendering or an export failed; `detail.message` says why.
+ * @fires copied - The source was copied from the opt-in toolbar.
+ * @fires download - An SVG / PNG / source download was started.
+ * @fires fullscreenchange - The fullscreen overlay opened or closed.
+ */
 export class Mermaid extends RanElement {
   _events = new EventManager();
   _shadowDom: ShadowRoot;

@@ -61,6 +61,14 @@ const ensureMathFonts = (): Promise<void> => {
   return mathFontsPromise;
 };
 
+/**
+ * `<r-math>` — LaTeX compiled to native MathML with Temml, so the browser lays it out.
+ *
+ * @fires render - The formula finished rendering.
+ * @fires error - Rendering failed; `detail.message` says why.
+ * @fires copied - The source or the MathML was copied from the opt-in toolbar.
+ * @fires download - A download was started from the opt-in toolbar.
+ */
 export class Math extends RanElement {
   _events = new EventManager();
   _shadowDom: ShadowRoot;

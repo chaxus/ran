@@ -4,7 +4,9 @@ Web Components library built with TypeScript. All components use Shadow DOM enca
 
 ---
 
-## Design Standards — read before building or changing any UI
+## Standards — read before building or changing anything
+
+Two companion standards sit above this file. **[docs/DESIGN.md](docs/DESIGN.md)** governs what a component looks like; **[docs/CODING.md](docs/CODING.md)** governs how it is built — layering, state ownership, the event contract, SSR, testing and the antipatterns. This file is the _reference_ they assume: the canonical skeleton, the utility APIs and the per-component notes. When a rule and a snippet disagree, the rule wins.
 
 **[docs/DESIGN.md](docs/DESIGN.md) is the authoritative, executable design standard.** Follow it whenever your work changes what a user sees. It is based on the Geist design system (light/dark only).
 

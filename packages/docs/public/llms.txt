@@ -17,6 +17,12 @@ a virtual DOM, and Node server tooling.
 ## Docs
 
 - [ranui — Web Components UI library](https://ran.chaxus.com/src/ranui/): button, input, select, checkbox, radio, card, tabs, modal, popover, dropdown, progress, message, icon, and more `<r-*>` elements, with theming, i18n, routing and SSR
+- [ranui design system](https://ran.chaxus.com/src/ranui/design-system/): the Geist-based token catalog — colour ladder, semantic tokens, spacing, typography, radius, elevation, stacking, motion
+- [ranui design guidelines](https://ran.chaxus.com/src/ranui/design-guides/): the rules for building a screen with it — pick a role, let the token supply the value, design every state
+- [ranui coding guidelines](https://ran.chaxus.com/src/ranui/coding-guides/): entry points, the attribute/property/event contract, styling across the Shadow DOM boundary, SSR, testing, antipatterns
+- [ranui element API](https://ran.chaxus.com/src/ranui/api): all 40 custom elements with their attributes, properties, events (detail shape + dispatch flags), slots and ::part() names, generated from source
+- [ranui builder](https://ran.chaxus.com/src/ranui/builder/): the fluent DOM builder with fine-grained reactivity — signals, Show/For/Index, ownership and teardown
+- [ranui server rendering](https://ran.chaxus.com/src/ranui/ssr/): declarative shadow DOM via renderHTMLToString / renderToStream, and what the client rebuilds
 - [ranuts — utility library](https://ran.chaxus.com/src/ranuts/): functional (debounce, throttle, memoize, compose), string/object/number/colour utils, storage and IndexedDB, Web Worker request/response on both ends, Service Worker caching and precache, text pagination, postMessage bridge, ZIP, i18n, audio recording, speech-to-text, a 2D rendering engine, virtual DOM, TOTP
 - [Articles](https://ran.chaxus.com/src/article/doc_preview): front-end engineering notes — web document preview, video encryption, a 2D/WebGL/WebGPU rendering engine, sorting algorithms, functional programming, AI agents, linear algebra
 

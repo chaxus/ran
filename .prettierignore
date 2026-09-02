@@ -26,5 +26,7 @@ packages/ranuts/docs/API.md
 packages/docs/src/ranuts/api.md
 packages/docs/cn/src/ranuts/api.md
 packages/ranui/docs/COMPONENTS.md
+packages/docs/src/ranui/api.md
+packages/docs/cn/src/ranui/api.md
 packages/ranui/docs/style-tokens-parts.md
 packages/ranui/docs/style-tokens-public.md

@@ -71,7 +71,7 @@ export class ColorPicker extends RanElement {
   _editingInput = false;
 
   static get observedAttributes(): string[] {
-    return ['disabled', 'value', 'sheet'];
+    return ['disabled', 'value', 'sheet', 'label', 'hue-label', 'alpha-label'];
   }
 
   constructor() {
@@ -114,13 +114,41 @@ export class ColorPicker extends RanElement {
     this.colorpicker.setAttribute('role', 'button');
     this.colorpicker.setAttribute('tabindex', '0');
     this.colorpicker.setAttribute('aria-haspopup', 'dialog');
-    this.colorpicker.setAttribute('aria-label', 'Choose color');
+    this.colorpicker.setAttribute('aria-label', this.label);
 
     this.colorPickerPaletteSelect = false;
     this.createContext();
   }
 
   // ── Accessors ───────────────────────────────────────────────────────────
+  /**
+   * Accessible name of the swatch that opens the picker. An attribute rather than a
+   * constant because ranui ships no translation dictionary: a string only the source
+   * can set is a string no consumer can localize.
+   */
+  get label(): string {
+    return getStringAttribute(this, 'label', 'Choose color');
+  }
+  set label(value: string) {
+    setStringAttribute(this, 'label', value);
+  }
+
+  /** Accessible name of the hue slider. */
+  get hueLabel(): string {
+    return getStringAttribute(this, 'hue-label', 'Hue');
+  }
+  set hueLabel(value: string) {
+    setStringAttribute(this, 'hue-label', value);
+  }
+
+  /** Accessible name of the opacity slider. */
+  get alphaLabel(): string {
+    return getStringAttribute(this, 'alpha-label', 'Alpha opacity');
+  }
+  set alphaLabel(value: string) {
+    setStringAttribute(this, 'alpha-label', value);
+  }
+
   get value(): string {
     return this.context?.value.getter() || '';
   }
@@ -335,6 +363,18 @@ export class ColorPicker extends RanElement {
     else if (this._activeSlider) this.updateSliderFromEvent(this._activeSlider, pe);
   };
 
+  /**
+   * Re-applies the accessible names after one of the label attributes changes.
+   *
+   * The sliders exist only once the panel has been opened, so this skips them until then —
+   * `createPanel` reads the same accessors when it builds them.
+   */
+  syncLabels = (): void => {
+    this.colorpicker.setAttribute('aria-label', this.label);
+    this.colorPickerHueSlider?.setAttribute('aria-label', this.hueLabel);
+    this.colorPickerAlphaSlider?.setAttribute('aria-label', this.alphaLabel);
+  };
+
   /** Make a slider a focusable, described `role="slider"`; valuenow is kept live in setupEffects. */
   initSliderA11y = (el: HTMLElement, label: string, max: number): void => {
     el.setAttribute('role', 'slider');
@@ -465,7 +505,7 @@ export class ColorPicker extends RanElement {
       .on('keydown', this.sliderKeydown('hue'))
       .children(this.colorPickerHueThumb)
       .build() as HTMLElement;
-    this.initSliderA11y(this.colorPickerHueSlider, 'Hue', HUE);
+    this.initSliderA11y(this.colorPickerHueSlider, this.hueLabel, HUE);
 
     this.colorPickerAlphaTrack = Div().class('ran-color-picker-slider-alpha-track').build() as HTMLElement;
     this.colorPickerAlphaThumb = Div().class('ran-color-picker-slider-thumb').build() as HTMLElement;
@@ -475,7 +515,7 @@ export class ColorPicker extends RanElement {
       .on('keydown', this.sliderKeydown('alpha'))
       .children(this.colorPickerAlphaTrack, this.colorPickerAlphaThumb)
       .build() as HTMLElement;
-    this.initSliderA11y(this.colorPickerAlphaSlider, 'Alpha opacity', 100);
+    this.initSliderA11y(this.colorPickerAlphaSlider, this.alphaLabel, 100);
 
     const sliders = Div()
       .class('ran-color-picker-sliders')
@@ -550,6 +590,7 @@ export class ColorPicker extends RanElement {
     if (name === 'value') this.updateColorValue(next);
     if (name === 'disabled') this.syncDisabledState();
     if (name === 'sheet') this.handlerExternalCss();
+    if (name === 'label' || name === 'hue-label' || name === 'alpha-label') this.syncLabels();
   }
 }
 
