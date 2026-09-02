@@ -401,6 +401,10 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranui/api',
       },
       {
+        text: 'Changelog',
+        link: '/src/ranui/changelog',
+      },
+      {
         text: 'Foundations',
         items: [
           { text: 'Design system', link: '/src/ranui/design-system/' },

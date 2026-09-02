@@ -398,6 +398,10 @@ const themeCnConfig: DefaultTheme.Config = {
         link: '/cn/src/ranui/api',
       },
       {
+        text: 'Changelog 更新日志',
+        link: '/cn/src/ranui/changelog',
+      },
+      {
         text: '基础能力',
         items: [
           { text: 'Design system 设计系统', link: '/cn/src/ranui/design-system/' },

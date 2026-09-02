@@ -4,356 +4,225 @@ description: 'ranui is a Web Components UI library built on native custom elemen
 
 # ranui
 
-Development scheme based on `Web Components`
-
-## Feature
-
-1. **Cross-Framework Compatibility**: Works seamlessly with React, Vue, Preact, SolidJS, Svelte, and more. Integrates with any JavaScript project following W3C standards.
-2. **Pure Native Experience**: No need for npm, React/Vue, or build tools. Easy to start, like using native div tags, simplifying structure and reducing learning costs.
-3. **Modular Design**: Breaks systems into small, reusable components for enhanced maintainability and scalability.
-4. **Open-Source**: Licensed under MIT, providing free access to all source code for personal or commercial use.
-5. **Interactive Documentation**: Offers detailed, interactive documentation with live examples for efficient learning.
-6. **Type-Checking**: Built on TypeScript with full type support, ensuring robust and maintainable code.
-7. **Stability and Durability**: Provides exceptional stability, avoiding disruptive updates and ensuring continuous project operation.
-
-## Situation
+A UI library built on **native custom elements**. Every component is an `<r-*>` tag, so it works
+in React, Vue, Svelte, Solid, Astro or a plain HTML file the same way — there is no adapter and
+no framework version to match. TypeScript types, light/dark theming through design tokens,
+Shadow DOM encapsulation and server rendering are included.
 
 <a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://unpkg.com/ranui/dist/index.js"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
 <a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-- `git`：<a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`https://github.com/chaxus/ran/tree/main/packages/ranui`</a>
-- `npm`：<a href="https://www.npmjs.com/package/ranui">`https://www.npmjs.com/package/ranui`</a>
+- **npm**: <a href="https://www.npmjs.com/package/ranui">`ranui`</a> ·
+  **source**: <a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`packages/ranui`</a>
+- ranui is **alpha**: versions ship breaking changes. Pin an exact version and read the
+  [changelog](/src/ranui/changelog) before upgrading.
 
-## Usage
+## Install
 
-In most cases, you can use it just like a native `div` tag.
-
-Here are some examples
-
-1. `html`
-2. `js`
-3. `jsx`
-4. `vue`
-5. `tsx`
-
-### 1.`html`
+```bash
+npm install ranui
+```
 
 ```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
+<!-- or from a CDN, no build step -->
+<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
+```
+
+## Use it
+
+Importing registers the elements; after that you write tags.
+
+```js
+import 'ranui'; // every component
+import 'ranui/button'; // or just one
+```
+
+```html
+<r-button type="primary">Deploy project</r-button>
+```
+
+It is the same tag in every framework — the differences are in how each one passes values and
+binds events, which the [coding guidelines](/src/ranui/coding-guides/#framework-integration)
+cover in full:
+
+::: code-group
+
+```html [HTML]
+<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
 
 <body>
   <r-button>Button</r-button>
 </body>
 ```
 
-### 2.`js`
-
-```js
+```jsx [React]
 import 'ranui';
 
-const Button = document.createElement('r-button');
-Button.appendChild('this is button text');
-document.body.appendChild(Button);
+export const App = () => <r-button type="primary">Deploy</r-button>;
+// Rich values and event listeners go through a ref — see the coding guidelines.
 ```
 
-### 3.`jsx`
-
-```jsx
-import 'ranui';
-const App = () => {
-  return (
-    <>
-      <r-button>Button</r-button>
-    </>
-  );
-};
-```
-
-### 4.`vue`
-
-```vue
+```vue [Vue]
 <template>
-  <r-button>Button</r-button>
+  <r-button type="primary" @click="deploy">Deploy</r-button>
 </template>
-<script>
+
+<script setup>
 import 'ranui';
 </script>
+<!-- Add `r-` to compilerOptions.isCustomElement in your build config. -->
 ```
 
-### 5.`tsx`
-
-```tsx
-// react
-import type { SyntheticEvent } from 'react';
-import React, { useRef } from 'react';
+```js [Plain JS]
 import 'ranui';
 
-const FilePreview = () => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
-    if (ref.current) {
-      const uploadFile = document.createElement('input');
-      uploadFile.setAttribute('type', 'file');
-      uploadFile.click();
-      uploadFile.onchange = (e) => {
-        const { files = [] } = uploadFile;
-        if (files && files?.length > 0 && ref.current) {
-          ref.current.setAttribute('src', '');
-          const file = files[0];
-          const url = URL.createObjectURL(file);
-          ref.current.setAttribute('src', url);
-        }
-      };
-    }
-  };
-  return (
-    <div>
-      <r-preview ref={ref}></r-preview>
-      <r-button type="primary" onClick={uploadFile}>
-        choose file to preview
-      </r-button>
-    </div>
-  );
-};
+const button = document.createElement('r-button');
+button.textContent = 'Deploy';
+document.body.appendChild(button);
 ```
 
-## Import
+:::
 
-Support for on-demand import
+## Entry points
 
-```js
-import 'ranui/button';
-```
+Each entry registers exactly what its name says, so a page that only wants theming never pays
+for the component library.
 
-If there is a style problem, you can import the style manually
+| Import                            | Contains                                                      |
+| --------------------------------- | ------------------------------------------------------------- |
+| `ranui`                           | Every component                                               |
+| `ranui/<component>`               | One component — `ranui/button`, `ranui/select`, …             |
+| [`ranui/theme`](/src/ranui/theme/) | Light/dark theming and token overrides; no elements           |
+| [`ranui/i18n`](/src/ranui/i18n/)  | The translation engine; no elements                           |
+| `ranui/fonts`                     | Self-hosted Geist Sans + Geist Mono                           |
+| `ranui/style`                     | The stylesheet, if your setup does not pick it up             |
+| [`ranui/builder`](/src/ranui/builder/) | The fluent DOM builder with fine-grained reactivity      |
+| [`ranui/ssr`](/src/ranui/ssr/), `ranui/ssr-stream` | Server rendering                              |
+| `ranui/testing`                   | Helpers for reaching into a closed shadow root from a test    |
+| `ranui/typings`                   | Ambient JSX / TS element types                                |
 
-```js
-import 'ranui/style';
-```
+## Components
 
-If there is a type problem, you can manually import the type
+40 elements. Every one of them, with its attributes, properties, events, slots and `::part()`
+names, is in the [element API reference](/src/ranui/api).
 
-```ts
-import 'ranui/types';
-```
+**Common** — [Button](/src/ranui/button/) · [Icon](/src/ranui/icon/) ·
+[Loading](/src/ranui/loading/)
 
-Or
+**Data entry** — [Input](/src/ranui/input/) · [CheckBox](/src/ranui/checkbox/) ·
+[Select](/src/ranui/select/) · [ColorPicker](/src/ranui/colorpicker/) ·
+[Attachments](/src/ranui/attachments/) · [VoiceButton](/src/ranui/voice-button/) ·
+[Forms](/src/ranui/form/)
 
-```ts
-import 'ranui/dist/typings';
-```
+**Data display** — [Card](/src/ranui/card/) · [Section](/src/ranui/section/) ·
+[Tabs](/src/ranui/tab/) · [Image](/src/ranui/image/) · [Progress](/src/ranui/progress/) ·
+[Radar](/src/ranui/radar/) · [Player](/src/ranui/player/) · [Preview](/src/ranui/preview/) ·
+[Glass](/src/ranui/glass/) · [Scratch](/src/ranui/scratch/) ·
+[StateDot](/src/ranui/state-dot/) · [DisclosureRow](/src/ranui/disclosure-row/)
 
-It can also be imported globally, which is more convenient, so that there is no need to consider anything, so that it is done.
+**Content rendering** — [Markdown](/src/ranui/markdown/) · [Math](/src/ranui/math/) ·
+[Mermaid](/src/ranui/mermaid/)
 
-- `ES module`
+**AI & chat** — [Conversation](/src/ranui/conversation/) ·
+[Reasoning](/src/ranui/reasoning/) · [ToolCard](/src/ranui/tool-card/) ·
+[TokenMeter](/src/ranui/token-meter/)
 
-```js
-import 'ranui';
-```
+**Overlays & feedback** — [Modal](/src/ranui/modal/) · [Popover](/src/ranui/popover/) ·
+[Dropdown](/src/ranui/dropdown/) · [Message](/src/ranui/message/) ·
+[Skeleton](/src/ranui/skeleton/)
 
-- `UMD`, `IIFE`, `CJS`
+**Navigation** — [Router](/src/ranui/router/) · [Route](/src/ranui/route/) ·
+[Link](/src/ranui/link/)
 
-```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
-```
+**Foundations** — [Theming](/src/ranui/theme/) · [ThemeSwitch](/src/ranui/theme-switch/) ·
+[i18n](/src/ranui/i18n/)
 
-## Overview
+Five elements have no page of their own because they only exist inside another: `<r-option>`
+(Select), `<r-tabs>` (Tabs), `<r-img>` (Image), `<r-dropdown-item>` (Dropdown) and
+`<r-content>` (Popover). They are in the API reference like everything else.
 
-- `Button`
+### Live
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="primary">Primary button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="warning">Warning button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button type="text">Text button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button >Default button</r-button>
-</div>
-
-- `Icon`
-
-<div style='display:flex'>
-     <r-icon name="lock" size="50" ></r-icon>
-     <r-icon name="user" size="50" ></r-icon>
-     <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
-</div>
-
-- `Skeleton`
-
-<div style="width: 100px;margin-top:10px">
-    <r-skeleton ></r-skeleton>
-</div>
-<div style="margin-top:10px">
-    <r-skeleton ></r-skeleton>
-</div>
-<div style="margin-top:10px">
-    <r-skeleton ></r-skeleton>
-</div>
-<div style="width: 200px;margin-top:10px;margin-bottom: 12px;">
-    <r-skeleton ></r-skeleton>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:12px">
+  <r-button type="primary">Primary</r-button>
+  <r-button type="warning">Warning</r-button>
+  <r-button type="text">Text</r-button>
+  <r-button>Default</r-button>
+  <r-icon name="lock" size="28"></r-icon>
+  <r-icon name="user" size="28"></r-icon>
+  <r-icon name="loading" size="28" color="#1E90FF" spin></r-icon>
 </div>
 
-- `Input`
-
-<div style="display:block;margin-right: 8px;margin-bottom: 12px;">
-     <r-input label="user"></r-input>
+<div style="width:100%;margin-bottom:12px">
+  <r-progress percent="0.7" type="drag"></r-progress>
 </div>
-
-<div style="display:block;margin-right: 8px;margin-bottom: 12px;">
-     <r-input icon="lock" type="password"></r-input>
-</div>
-
-- `message`
-
-<r-button onclick="message.info('This is a hint')">Information prompt</r-button>
-<r-button onclick="message.warning('This is a hint')">Warning prompt</r-button>
-<r-button onclick="message.error('This is a hint')">Error prompt</r-button>
-<r-button onclick="message.success('This is a hint')">Success tip</r-button>
-<r-button onclick="message.toast('This is a hint')">toast tip</r-button>
-
-- `Tab`
-
-<div style="display:block;margin-right: 8px;margin-bottom: 12px;">
-   <r-tabs>
-      <r-tab label="home" icon="home">tab1</r-tab>
-      <r-tab label="message" icon="message">tab2</r-tab>
-      <r-tab label="user" icon="user">tab3</r-tab>
-   </r-tabs>
-</div>
-
-- `Radar`
-
-<r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-
-- `Progress`
-
-<r-progress type="drag" ></r-progress>
-
-- `Player`
-
-<r-player style="display: block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-
-- `Select`
-
- <r-select style="width: 120px; height: 40px" defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
-    </r-select>
-
-- `Loading`
-
-<r-loading name="circle-fold"></r-loading>
-
-- `math`
-
-<r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
-
-- `markdown`
 
 <r-markdown copy content="**Streaming** Markdown with `code`, tables, mermaid and math."></r-markdown>
 
-## Event
+## Styling
 
-- Modern 'web' standards
+Components render into a **closed** shadow root: page CSS cannot leak in, and selectors cannot
+reach through. There are four ways in, in order of preference.
 
-In the W3C standard, you can use the on attribute to define event handlers on HTML elements. But this is the old event handler approach.
-
-Modern web development recommends the addEventListener method.
+**1. Design tokens (CSS custom properties)** — they inherit across the boundary, so setting one
+on `:root`, on a wrapper or on the element all work:
 
 ```html
-<r-button id="button">Button</r-button>
+<r-progress percent="0.7" type="drag" style="--ran-progress-track-background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f)"></r-progress>
+```
+
+<div style="width:100%;margin:12px 0">
+  <r-progress percent="0.7" type="drag" style="--ran-progress-track-background:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
+</div>
+
+**2. `::part()`** for structural tweaks the tokens do not cover ·
+**3. the `sheet` attribute** to inject CSS into the shadow root ·
+**4. slotted content**, which stays in your document and takes your page CSS.
+
+The token names are the [design system](/src/ranui/design-system/); the rules for choosing
+between them are the [design guidelines](/src/ranui/design-guides/); the mechanics are in the
+[coding guidelines](/src/ranui/coding-guides/#styling-across-the-shadow-boundary).
+
+## Events
+
+Components dispatch `CustomEvent`s with the payload in `detail`. Bind on the element — whether
+an event bubbles is a per-component decision, and the API reference states it for every one:
+
+```html
+<r-select id="env"></r-select>
 
 <script>
-  const button = document.getElementById('button');
-  button.addEventListener('click', function (event) {
-    alert('New click event!');
+  document.getElementById('env').addEventListener('change', (event) => {
+    console.log(event.detail.value);
   });
 </script>
 ```
 
-However, if you do need to use the 'on' attribute, here is an example:
+The `onchange="…"` attribute form and the `el.onchange = …` property form both work, since
+these are ordinary DOM elements — but they allow only one handler and no capture phase, so
+`addEventListener` is the one to reach for.
 
-```html
-<r-input onchange="change(this.value)"></r-input>
+## Where to go next
 
-<script>
-  function change(e) {
-    console.log('e--->', e);
-  }
-</script>
-```
+| If you want to…                                  | Read                                                  |
+| ------------------------------------------------ | ----------------------------------------------------- |
+| Look up an element's exact API                   | [Element API](/src/ranui/api)                         |
+| Know which token to use, and why                 | [Design system](/src/ranui/design-system/)            |
+| Build a screen that looks like one system        | [Design guidelines](/src/ranui/design-guides/)        |
+| Wire ranui into an app correctly                 | [Coding guidelines](/src/ranui/coding-guides/)        |
+| Add light/dark, or restyle everything            | [Theming](/src/ranui/theme/)                          |
+| Translate the interface                          | [i18n](/src/ranui/i18n/)                              |
+| Render on a server                               | [Server rendering](/src/ranui/ssr/)                   |
+| Build reactive views without a framework         | [Builder](/src/ranui/builder/)                        |
+| See what changed before upgrading                | [Changelog](/src/ranui/changelog)                     |
 
-Note that using the 'on' attribute to define event handlers has some limitations and disadvantages.
+## Browser support
 
-For example, you can't use event capture or event delegation, and each event type requires a separate attribute.
-
-This is why the addEventListener method is recommended for modern web development.
-
-You can also use the 'property' method:
-
-```html
-<r-input id="input"></r-input>
-
-<script>
-  const input = document.getElementById("input")
-  input.onchange = (e) {
-    console.log('e--->', e)
-  }
-</script>
-```
-
-## style
-
-### `::part`
-
-```html
-<r-input id="input"></r-input>
-
-<style>
-  /* #input refers to the current custom element
-input in ::part(input) refers to the class  of the Shadow DOM element inside the current custom element*/
-  #input::part(input) {
-    width: 100px;
-  }
-</style>
-```
-
-For specific pseudo-class names(`::part`), please refer to the specific introduction.
-
-### Pass in by attribute
-
-A `sheet` attribute is added to all components, passing in a `CSSStyleSheet` string. It will be inserted directly into the `Shadow DOM`.
-
-### `CSS3` variable `var`
-
-By setting the `CSS3` variable for a component, you can customize the specified styles within the component, such as:
-
-<r-progress percent="0.7" type="drag"></r-progress>
-<br />
-<r-progress percent="0.7" type="drag" style="--ran-progress-track-background:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
-
-```html
-<r-progress percent="0.7" type="drag"></r-progress>
-<r-progress
-  percent="0.70"
-  type="drag"
-  style="--ran-progress-track-background:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"
-></r-progress>
-```
-
-For specific `CSS3` variable names, refer to the introduction and description of each component.
-
-## Compatibility
-
-- Do not support `IE`, others have better support
+Every modern browser — the library is built on Custom Elements v1, Shadow DOM v1 and CSS custom
+properties. **Internet Explorer is not supported.**
 
 ![](../../assets/ranui/customElements.png)
 
@@ -363,24 +232,13 @@ For specific `CSS3` variable names, refer to the introduction and description of
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
 
-## Other
+## Further reading
 
-1. [Great component design](https://www.checklist.design/)
-2. [Generate CSS gradients online](https://webgradients.com/)
-3. [Great design work, with PSD and Sketch files](https://webgradients.com/)
-4. [3D UI design, like a 3D version of Figma](https://spline.design/)
-5. [Design guidelines](https://lawsofux.com/)
-6. [Great design work](https://dribbble.com/)
-7. [Element UI (Chinese docs)](https://element.eleme.cn/#/zh-CN)
-8. [Ant Design (Chinese docs)](https://ant.design/index-cn)
-9. [Draw CSS animations online](https://animista.net/)
-10. [tailwindcss](https://www.tailwindcss.cn/resources)
-11. [animate css](https://animate.style/)
-12. [can i use](https://caniuse.com/)
-13. [figma](https://www.figma.com/)
+Standards this library is built on: [W3C](https://www.w3.org/) ·
+[ECMA](https://www.ecma-international.org/) · [RFCs](https://www.rfc-editor.org/) ·
+[Can I use](https://caniuse.com/)
 
-## Protocols and standards
-
-1. [RFCs](https://www.rfc-editor.org/)
-2. [ECMA](https://www.ecma-international.org/)
-3. [w3c](https://www.w3.org/)
+Design references worth keeping open: [Checklist Design](https://www.checklist.design/) ·
+[Laws of UX](https://lawsofux.com/) · [Geist](https://vercel.com/geist) ·
+[Ant Design](https://ant.design/index-cn) · [Element UI](https://element.eleme.cn/#/zh-CN) ·
+[Animista](https://animista.net/) · [WebGradients](https://webgradients.com/)

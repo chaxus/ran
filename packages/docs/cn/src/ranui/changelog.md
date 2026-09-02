@@ -1,0 +1,183 @@
+---
+title: ranui 更新日志
+description: ranui 的变更记录——新增、变更、修复与移除及其原因，以及每一批改动背后的工程记录。
+---
+
+# Changelog 更新日志
+
+由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.md` 生成，因此本页与 npm 包内的
+副本不会出现分歧。条目内容直接取自源文件，保持英文。
+
+::: warning ranui 处于 alpha 阶段
+版本以 `0.x-alpha` 发布，**其中会包含破坏性变更**——现阶段优先把设计做对，而不是保住 API 形状。
+请锁定确切版本，并在升级前先读本页。
+:::
+
+## [Unreleased]
+
+### Added
+
+- **`unsafeHtml()` on the builder.** `text()` escapes, so until now a builder
+  tree could not contain content that already is HTML — rendered markdown, a
+  fragment assembled elsewhere, a translated string carrying its own emphasis
+  (`Local-first · <b>open source</b>`). There was no way to express it at all,
+  which is why a static-site generator with markdown in it had to concatenate
+  strings instead of using this API. Named for the difference: everything handed
+  to it is parsed as markup, so sanitize anything from outside the program
+  first. It replaces the element's content, and the last of `text()` /
+  `unsafeHtml()` to run wins, as in the DOM.
+
+- **The builder creates SVG elements in the SVG namespace.** `View('svg')` and
+  every other SVG-only tag (`path`, `circle`, `g`, …) now go through
+  `createElementNS`, and `Svg()` is exported for the tags SVG shares with HTML
+  (`a`, `script`, `style`, `title`), where inferring would break the commoner
+  HTML case. Previously every tag went through `document.createElement`, which
+  returns an `HTMLUnknownElement` for `svg`: the browser does not render it as
+  SVG, and — because HTML lowercases attribute names — `viewBox` arrived as
+  `viewbox`, which SVG reads case-sensitively and therefore ignores. An icon
+  built with the builder was blank, with markup that read correctly in a
+  serialized page. Found from the outside: a static-site generator rendering the
+  same page under node and under jsdom produced different bytes, and the
+  difference was a flattened `viewBox`.
+
+- **One floating-panel controller behind `r-select` and `r-popover` (`FloatingController`, exported)** — portalling, positioning (flip/shift/alignment), following the anchor on scroll and resize, the enter/exit animation and the open/closed state machine were written twice, once per component, and had begun to drift: `r-select`'s reposition listeners carried a comment saying they mirrored `r-popover`'s, which is what keeping a shared thing in step by hand looks like just before it stops working. Both now drive the same controller and pass in only what they alone know — `r-select` the panel width it copies from its trigger (and the rendered width a consumer may have widened past it with `::part(dropdown)`), `r-popover` which light-DOM child is the trigger and where its arrow must end up. Exported from the barrel so a third floating component gets this rather than a third copy.
+- **`open` on `r-select` and `r-popover`** — a reflected attribute, and _the_ state, the way `<details open>` and `<dialog open>` are. Nothing infers it from the panel's `style.display` any more, which trails the state by the length of the exit animation. `show()` / `hide()` / `toggle()` are the methods; `:host([open])` becomes stylable, `el.open = true` a supported way to drive either component, and an attribute assertion replaces polling a style in tests.
+- **`show` / `after-show` / `hide` / `after-hide` on both components** — the first of each pair announces the intent as the transition starts, the second fires once the panel has arrived and any animation has finished. Neither component previously offered any way to know a panel had opened. Declared with the standard `@fires` JSDoc tag, which the API doc generator now reads — events dispatched from the shared controller are invisible to a scan of the component file, so both would otherwise have been documented as having no events at all.
+- **`prefers-reduced-motion` support for `r-dropdown` / `r-select` / `r-popover`** — the three most animation-heavy components in the library were the ones without it, while eight others already had it. The media query sets `animation: none`; because the exit now waits on the stylesheet rather than a duration copied into script, the panel also closes at once instead of sitting through a delay for motion that was never played.
+
+- **`serializeForm(form)`** — a small utility (`import { serializeForm } from 'ranui'`) that collects a `<form>`'s named fields into a plain object via `FormData`, replacing `<r-form>` (removed — see below) as the recommended way to turn a submit into something you can `JSON.stringify` or send as a fetch body. Works with any real `<form>`, not just one containing ranui fields.
+- **`r-input`, `r-checkbox`, and `r-select` implement `formResetCallback` and native validity (`ElementInternals.setValidity`)** — a native `form.reset()` (or `<button type="reset">`) now actually restores each field to its pre-interaction state (previously a no-op: being form-associated only ever covered `FormData` collection, not reset or validation). `r-checkbox` and `r-select` gain a `required` property/attribute (previously only `r-input` had one); an empty `required` field now blocks submission and shows the browser's native validation UI, anchored on the field, exactly like a native control — `<fieldset disabled>` propagation (`formDisabledCallback`) is a deliberate non-goal here. All three also expose `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage`, matching the native field API.
+- **`<r-input>` now relays `focus()` / `blur()` / `select()` to its inner `<input>`** — the host element isn't in the tab order and its shadow root is closed, so previously there was no way to focus the field from JS (`el.focus()` hit the inert host, `el.shadowRoot` was `null`). The three native methods are now overridden to forward into the real control, enabling programmatic focus, "focus-search" shortcuts (e.g. `/`), and focus-then-select-all flows. No attribute/markup change; covered by a contract test.
+- **Dedicated `ranui/scratch`, `ranui/section` subpath entries** — these two components already shipped via the `ranui` barrel and were built as `dist/scratch.js` / `dist/section.js`, but were missing from the package `exports` map, so `import 'ranui/scratch'` (etc.) failed to resolve. The per-component subpath imports now work, matching every other element entry.
+- **Dedicated `ranui/theme` and `ranui/i18n` subpath entries** — the theming engine (`initTheme`/`setTheme`/`setThemeToken(s)`/`clearThemeToken`) and the i18n engine (`createI18n`/`useI18n`/`I18nCore`) are now importable on their own (`import { initTheme } from 'ranui/theme'`, `import { createI18n } from 'ranui/i18n'`). Neither entry registers any custom elements, so consumers that only want tokens/dark mode or translation keep components out of their bundle. The same APIs remain re-exported from the `ranui` barrel. Built as `dist/theme.js` / `dist/i18n.js`; documented at `docs/src/ranui/{theme,i18n}/`.
+- **Monochrome primary (Vercel/Geist brand tone)** — `--ran-color-primary` / `-hover` / `-active` are now the black-on-white ↔ white-on-black monochrome action (was blue), plus a new **`--ran-color-primary-text`** (the inverse ink for text/icons on a primary surface — it flips too, so a primary button reads correctly in both themes). **Blue is now reserved for links (`--ran-color-link`) and the focus ring only** (`--ran-focus-ring` decoupled from primary and pinned to blue). This supersedes the earlier separate `--ran-color-contrast-*` tokens and `r-button type="contrast"` variant, both removed as redundant — the **default `type="primary"` button is the monochrome action**. Status hues (red/green/amber) are unchanged. **Breaking (pre-release):** anything referencing `--ran-color-contrast-*` or `type="contrast"` should move to `--ran-color-primary*` / `type="primary"`.
+- **`<r-theme-switch>`** — a Vercel-style three-state (system / light / dark) segmented pill wired to the theme API (`setTheme`, localStorage `ran-theme`). Instances sync across the page and across tabs, `label`/`label-*` attributes localize aria-labels, a composed `change` event reports `{ theme }`, and `theme-color` metas are kept in step using the resolved `--ran-color-bg` (originals restored in `system`). Ships as `ranui/theme-switch` + `dist/iife/theme-switch.iife.js`.
+- **Self-hosted Geist faces: `ranui/fonts`** — `dist/fonts/fonts.css` + variable-weight `Geist-Variable.woff2` / `GeistMono-Variable.woff2` (~138 KB total, SIL OFL 1.1, license shipped alongside). One import gives consumers the canonical faces behind `--ran-font-family` / `--ran-font-mono`, self-hosted and offline-friendly (no CDN).
+- **`r-card hoverable` attribute** — opt-in Geist interactive-card hover (border 400 → 500 + elevated shadow; `--ran-card-hover-border-color` / `--ran-card-hover-shadow` overridable). Non-interactive cards stay inert.
+- **Reactive ownership + `untrack` in `ranui/builder`** — the signal engine now exposes `createRoot` / `onCleanup` / `getOwner` / `runWithOwner` (plus the `Owner` type) and `untrack`, re-exported from both `ranui/builder` and `ranui`. Effects and memos form an owner tree: disposing a scope (`createRoot((dispose) => …)`) tears down every effect, memo, binding, and `onCleanup` it spawned in one call — the intended teardown unit per page/route in an MPA/SPA. A self-referential effect (reads and writes the same signal) now throws a "cyclic dependency" error instead of looping. Documented in the new `docs/BUILDER.md`.
+- **Reactive `ElementBuilder` bindings** — `text` / `attr` / `class` / `boolAttr` / `style` / `part` / `data` / `aria` / `role` / `label` now accept a **getter** (a signal or `computed`) in addition to a plain value; the DOM updates itself on change via an effect owned by the current scope. Passing a plain value keeps the previous one-shot behavior. (Reactivity applies to the single-key `style(prop, getter)` form, not the object/`attrs` map forms.)
+- **`<r-route src>` lazy, code-split pages** — a route with a `src` module specifier now dynamically `import()`s that module on match and runs its `default: (host) => void | (() => void)` render **inside a `createRoot`**; leaving the route disposes that scope, tearing down every effect, binding, and `onCleanup` the page registered (an optional returned cleanup runs too). The per-page-lifecycle mode for larger multi-page apps; static (slotted) routes are unchanged and stay the SSG default. Imports are guarded against leave→re-enter races.
+- **Nested route configs** — `createRouter({ routes })` now accepts `children` on a route; paths are flattened to absolute (`parent/child`) for matching and `getStaticPaths()` (SSG enumeration). `matchPath` is now a single exported helper shared by `RouterCore` and `<r-route>`.
+
+### Changed
+
+- **`r-select`'s `placement` takes an alignment suffix, and both components' `placement` is typed `Placement`** — `bottom-end`, `top-center` and the rest, the grammar `r-popover` already accepted, now that both position through the same controller. A bare side still means `-start`. **Breaking (pre-release):** `placement` was `string` on both; it is now the union the positioner actually understands.
+- **`r-select` aligns the same way inside a custom container as it does in the viewport** — its `getPopupContainerId` branch centred the panel on the trigger by a hardcoded rule while its viewport branch aligned to the leading edge, so the same `placement` meant two different things depending on where the panel was mounted. Both now go through one alignment path. **Breaking (pre-release):** a panel in a custom container that relied on the implicit centring should ask for it by name — `r-player`'s quality and subtitle menus now set `placement="top-center"`.
+- **`PlacementDirection` is no longer exported** — the transit-class table is the controller's, and internal. **Breaking (pre-release):** the type has no replacement in the public surface.
+
+- **Component-scoped CSS custom property names are shortened to a fixed grammar**: `--ran-{component}-{element}[-{state}]-{property}`, replacing the previous convention of encoding the full BEM class nesting path into the token name (e.g. `--ran-select-selection-search-input-active-border-right-width` → `--ran-select-search-active-border-width`). Applied rename-only (every override point preserved 1:1, no fallback values changed) across all 29 components, including `player` (225 of its own tokens, plus its `--ran-progress-*` overrides for the embedded volume slider — `player` was renamed last since it was under active development the same day); the removed `form` component was excluded. New naming spec documented in `docs/DESIGN.md` §9. **Breaking (pre-release):** any consumer override targeting one of the renamed tokens needs its new name — see `docs/style-tokens-public.md` for the current list and `changelogs/2026-08-08.md` for the full rationale and a representative rename table.
+
+- **`<r-form>` is removed. Use a plain `<form>` + the new `serializeForm()` utility instead.** `<r-form>` built its own internal `<form>` in shadow DOM and slotted fields into it (originally via a named slot `r-form_content`, later redesigned to a default slot); neither ever actually worked in a real browser, for either native controls or form-associated custom elements — a `<form>` hidden inside shadow DOM can never become the form owner of light-DOM children (form ownership resolves over the real DOM ancestor chain, which does not cross into shadow roots — verified directly: a plain slotted `<input>`'s `.form` was `null` and invisible to `FormData`). A later revision fixed this by requiring a real `<form>` nested inside `<r-form>` — which meant `<r-form>` was reduced to giving that `<form>` a default layout and a JSON-serializing `value` property, an extra wrapper element around your own `<form>` for two things a plain `<form>` didn't otherwise need help with. `r-input`/`r-checkbox`/`r-select` already work inside any native `<form>` on their own (they're form-associated custom elements — see below). **Breaking (pre-1.0 alpha):** remove the `<r-form>` wrapper — `<r-form><form>...</form></r-form>` becomes just `<form>...</form>`; import `serializeForm` from `ranui` to turn a `submit` into a plain object instead of reading `<r-form>`'s `value`.
+- **`computed` is now lazy + value-memoized** — a memo no longer recomputes eagerly on every dependency write; it recomputes only when read after a dependency changed, and an unread memo never computes at all. It also re-notifies its observers **only when its derived value actually changes** (default `Object.is`, override via `computed(fn, { equals })`), so effects behind a value-stable memo no longer re-run. **Behavior change:** code that relied on a `computed`'s side effects running eagerly must move them into a `createEffect`; a memo whose body has side effects will not run until first read.
+
+- **i18n `t()` now escapes literal braces via doubling** (`{{` → `{`, `}}` → `}`), matching the Rust/Python/.NET format-string convention, so a message can show a literal `{token}` (write `{{token}}`) while still interpolating real `{param}` placeholders. Escaping and interpolation run in one left-to-right pass and apply with or without params. A lone or spaced brace (`{ ... }`) is still passed through untouched, so CSS/JSON/code in a message stays safe. **Behavior change:** any existing message containing a literal `{{` or `}}` that was _not_ meant as an escape will now collapse to a single brace.
+- **`r-card` default surface is now Geist-style bordered** — page background (`--ran-color-bg`) + 1px `--ran-color-border`, replacing the muted gray fill (`--ran-color-bg-muted`). Consumers that want the old inset look can set `--ran-card-background: var(--ran-color-bg-muted)`. Also added a dedicated `--ran-card-border-color` component token so hover border-darkening can be driven from outside the (closed) shadow root.
+- **Default (secondary) `r-button` hover no longer flips to the accent color** — it darkens the border (gray 400 → 500) and keeps primary text, per the Geist state ladder; the default ripple is now a translucent gray (`--ran-gray-alpha-400`) instead of primary blue.
+
+### Fixed
+
+- **The SSR mock's `textContent` and `innerHTML` replace each other, as they do
+  in a browser.** The mock kept both and let serialization prefer the text, so
+  `el.textContent = 'a'; el.innerHTML = '<b/>'` rendered `a` under node and
+  `<b/>` in a browser; reading `innerHTML` back after setting `textContent`
+  returned the markup that had been replaced. Only visible when the same
+  template is rendered in both environments — which is exactly what a
+  static-site generator under vitest does.
+
+- **A run of clicks on `r-select`'s trigger no longer wedges the menu** — hover the trigger, click (opens), click again without moving (closes), click again: the panel flashed open, shut itself, and from there the menu was stuck. The trigger ran _both_ transitions on every click, close then open, and which one survived depended on which of two 300ms animation timers happened to be in flight, because each read `style.display` to decide whether it had anything to do. Inside that window `display` answers about the frame rather than the intent. The trigger now toggles `open`, which is the state.
+- **`aria-expanded` can no longer drift from the panel** — measured mid-sequence in the same bug, the combobox announced itself expanded while its panel was `display: none`. One code path now writes the display, the transit class, the reposition listeners and `aria-expanded`, so the four cannot disagree.
+- **The panel's exit no longer waits out a duration copied into script** — `dropdown/index.less` holds the animation duration and three JS files each held a `const animationTime = 300` matched against it by hand; a comment in that stylesheet records what happened the last time the two drifted, and a consumer setting `--ran-dropdown-animation-duration` would have reproduced it. The controller asks the element what it is animating (`getAnimations()`), which cannot drift and returns immediately when there is nothing to wait for.
+- **`r-select`'s host no longer reserves a phantom row beneath itself** — `:host` is an inline-block and the field inside it was another, so the host reserved descender space nothing paints: 38px of host around a 32px field, with everything inside riding 3px above the host's own centre. The size of the gap is the consumer's inherited `line-height`, so it varied by page. It is invisible in a screenshot of a lone select and undetectable in jsdom; it shows up as a _sibling_ looking misaligned the moment a select shares a centred row with one. The field is now `display: block` and the host measures the 32px its own comment always claimed.
+- **`r-button`'s raised shadow now follows the button's radius** — the shadow is painted on the host element, but the radius only ever reached the surface and content inside the shadow DOM, so the host stayed a rectangle: a rounded button sat inside a square shadow whose bottom edge showed as a straight line poking past both corners. Invisible at the 6px default, which is how it survived; a consumer rounding the button into a pill (`--ran-btn-border-radius: var(--ran-radius-full)`) saw it immediately. The host now reads the same `--ran-btn-border-radius` as the surface, so one variable rounds all three boxes and the shadow can no longer disagree with the button.
+- **`r-colorpicker` stays reactive after a disconnect → reconnect** — the panel's 4 update effects are disposed on every `disconnectedCallback` but were only set up once (on first open), so a moved/re-parented picker went silently inert (dragging no longer updated the swatch/thumbs). `connectedCallback` now re-arms them when the panel already exists but the disposers were cleared.
+- **`currentRoute.params` is now populated for config-based routes** — `RouterCore._navigate` fills `to.params` via the new `matchParams(path)` (first matching flattened route wins), so `:param` values are available on `RouteLocation` after navigation instead of always being `{}`.
+- Replaced legacy antd-era hardcoded fallbacks (`#1890ff`, `#40a9ff`, `#d9d9d9`) in button/card/section/input/checkbox/colorpicker/select/message with current Geist token values (`#006bff`, `#eaeaea`, `#f2f2f2`) so a missing token layer degrades to the correct palette.
+
+### Added
+
+- **Accessibility pass across components (DESIGN.md §7):**
+  - `r-message` toasts are now announced by screen readers: the stack is a persistent `aria-live="polite"` region, each toast is `aria-atomic`, and `error`/`warning` escalate to an assertive `role="alert"` (others `role="status"`).
+  - `r-img` gains an `alt` attribute/property forwarded to the inner `<img>`; when unset it defaults to an empty `alt` (decorative) so screen readers skip it instead of announcing the URL.
+  - `r-checkbox`, `r-input`, and `r-select` are now **form-associated** (`ElementInternals` + `setFormValue`), so their values are collected by `new FormData(form)` when they're real descendants of a native `<form>`. `r-checkbox` also exposes the host as the single `role="checkbox"` (with `aria-checked`, roving `tabindex`, Space/Enter toggle, `aria-disabled`) and hides the decorative inner input; `r-input` associates its rendered `<label>` with the control via `for`/`id`.
+  - `r-tabs` implements the WAI-ARIA tabs pattern: `role="tablist"`/`tab`/`tabpanel`, `aria-selected`, `aria-controls`/`aria-labelledby`, a roving `tabindex`, and Arrow/Home/End keyboard navigation.
+  - `r-colorpicker` is keyboard-operable: the hue/alpha sliders are `role="slider"` with `aria-valuemin/max/now` and Arrow/Home/End adjustment, and the swatch trigger (`role="button"`, `aria-haspopup="dialog"`) opens the panel via Enter/Space.
+  - Every component honours `prefers-reduced-motion: reduce` — a reduced-motion override is adopted into each shadow root via `ensureShadowRoot`.
+- `r-button` `type` (`''` | `primary` | `warning` | `text`) is now a real observed attribute + property, so it appears in the generated API docs and works as `button.type = …`.
+- `docs/COMPONENTS.md` now includes **typed properties** (e.g. `checked: boolean`, `value: string`) and **event `detail` shapes** (e.g. `r-select change → { value, label }`, `r-checkbox change → { checked }`, `r-input input/change → { value }`), extracted from source.
+- `docs/COMPONENTS.md` — a generated per-element API reference (attributes, properties, events, slots, `::part()`) for all 29 custom elements, via `npm run doc:api` (`bin/generate-component-api.ts`). Published with the package and referenced from CLAUDE.md so agents can use components without reading source.
+- `r-input` now signals `status="error"`/`"warning"` with more than color (DESIGN.md §7): an automatic status icon, plus an optional `message` attribute that renders helper/validation text below the field.
+
+- Rebuilt the demo as a token-driven, Geist-style multi-page app routed with ranui's own `r-router`/`r-route`/`r-link` (Overview, Design, Components, Guide) in history mode, with a Cloudflare Pages `_redirects` SPA fallback. Top nav has route links, GitHub/Issues, an EN/中文 `r-select` language switcher (persisted, `navigator.language`-detected), and a light/dark toggle. See `changelogs/2026-06-27.md`.
+- New Geist-based design tokens: full `--ran-gray/gray-alpha/blue/red/amber/green-100..1000` scales, `--ran-background-100/200`, `--ran-space-*` spacing scale, `--ran-radius-full`, `--ran-shadow-menu/modal`, `--ran-focus-ring`, and `--ran-color-primary-hover/active`.
+- New framework-agnostic i18n utility (`utils/i18n`, exported from `ranui` as `createI18n` / `useI18n` / `I18nCore`): `t(key, params)` with locale fallback + `{param}` interpolation, `setLocale`/`onChange` subscription, `addMessages`, localStorage persistence, and `navigator` locale detection. SSR-safe. Mirrors the router core/singleton design.
+- Interaction-state semantic tokens following Geist's 100–1000 state model: `--ran-color-bg-hover` / `-bg-active` / `-border-hover` / `-border-active`.
+- The demo's Design route is now a methodology page (color state ladder, spacing rhythm, typography roles, motion durations, copy do/don't, accessibility), modeled on the Vercel/Geist design spec.
+- `docs/DESIGN.md` — an AI-facing, executable design specification (color states, spacing, typography roles, radius/elevation, motion, copy, accessibility, component application, and a pre-ship checklist).
+
+### Changed
+
+- **Theme system redesigned around the Geist design system.** Semantic tokens (`--ran-color-*`) now map onto Geist base scales; dark mode is a single source of truth (`theme/dark.less` mixin) that redefines the base scale so every semantic token flips automatically.
+- Aligned components with Geist: control radius (`button`, `input`, `select`), primary button hover/active scale stepping, menu/modal radius + shadows, and Geist font/motion tokens.
+- Added keyboard focus rings (`:focus-visible` / `:focus-within`) to `button`, `input`, `link`, `checkbox`, and `progress`.
+
+### Removed
+
+- **Removed all opt-in theme packs** (pixel-retro, windows-98, windows-xp, system-6, wired, paper, neo-brutalism), the `dark-overrides`/`transitions` stylesheets, the wired SVG pipeline, the `roughjs` dependency, and the `setThemePack`/`getThemePack`/`RanThemePackName` APIs. Only the base light/dark theme remains.
+- Removed dead `theme/color.less` and `theme/compat.less` (legacy aliases with no consumers) and the pack-only `--ran-skin-*` primitives.
+
+### Fixed
+
+- `r-input` no longer balloons in height when a `message` is set: the field box now defaults to content height (`--ran-input-height: auto`, min-height still 32px) instead of `100%`, which mis-resolved against the taller host once a message stacked below.
+- `r-input` `change` now fires on commit/blur (native semantics) instead of on every keystroke — `input` still fires per keystroke. Previously every keypress dispatched `change`.
+- `r-select` listbox items now expose `role="option"` (they already had `aria-selected`), so screen readers announce them.
+- `r-select` long selected text now ellipsizes (the selection item is width-bounded so `text-overflow: ellipsis` can trigger) instead of being hard-clipped.
+- Lowered `engines.node` from `>=24.0.0` to `>=20.19.0` so consumers on Node 20–23 don't get an engine warning.
+- Fixed dark-mode rendering bugs from hardcoded colors: `dropdown-item` text/hover/active, `skeleton` base + shimmer (previously invisible in dark), and `radar` canvas label color and grid lines now follow the theme tokens.
+- **Boolean-semantic properties now return real booleans** instead of strings (the string form made `if (el.prop)` always truthy): `r-checkbox.checked`, `r-checkbox.disabled`, `r-input.disabled`, `r-input.required`. Setters still accept boolean or string; boolean attributes now reflect as `disabled=""` (HTML convention). (Breaking — pre-1.0 beta.)
+- Demo hero CTA text is now vertically centered (the inner anchor's `height:100%` collapsed against an auto-height host; fixed with a fixed host height + `line-height:1`).
+- Demo route navigation is now reachable on mobile (it was hidden under 820px); it drops to its own full-width row instead.
+- Demo accessibility: GitHub/Issues links now have `aria-label`s (they become icon-only on mobile), the primary `<nav>` is labelled, and the demo honors `prefers-reduced-motion`.
+- Elevation: recalibrated the overlay shadow tiers (`--ran-shadow-menu`, `--ran-shadow-modal`) so floating layers (dropdown, select, modal, message) actually read as elevated — the earlier Geist-literal values were imperceptible. `message` now uses the menu tier instead of the flat card tier. Documented "elevation = role" in DESIGN.md §4 / CLAUDE.md.
+
+### Tests
+
+- Improved `r-player` unit coverage by adding controls, media event handler, fullscreen compatibility, interaction, and manifest level tests.
+- Increased `player/index.ts` line coverage to 87.97% and overall ranui line coverage to 93.08%.
+- Added coverage for player lifecycle cleanup, Hls teardown, media listener cleanup, attribute synchronization, clarity switching, seeking, volume, fullscreen, and controller interactions.
+- Added shared unit test helpers for mounting components, waiting for async DOM work, and mocking element geometry.
+- Added keyboard and accessibility contract coverage for `r-popover` and `r-select`.
+
+### Fixed
+
+- Restored the remembered volume when unmuting `r-player`.
+- Guarded player controller hover and progress leave handlers against events without an element target.
+- Made player fullscreen helpers fall back to prefixed browser APIs when standard fullscreen APIs are unavailable.
+- Made `r-popover` keyboard-focusable, track `aria-expanded`, support Enter/Space/Escape keyboard interactions, and remove the same listeners it registers.
+
+### Changed
+
+- Extracted player fullscreen API selection and HLS manifest level normalization into focused core helpers for easier testing.
+
+## 工程记录
+
+每一批改动为什么发生的长文记录，与代码放在一起，不在此处摘要。它们是上面这些条目背后的推理过程。
+
+| 日期 | ranui |
+| ---- | ------- |
+| 2026-08-16 | [new `<r-markdown>`: streaming Markdown renderer](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-08-16.md) |
+| 2026-08-08 | [`<r-form>` redesign + native reset/validation for form fields](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-08-08.md) |
+| 2026-07-04 | [r-message：toast 变成可朗读的 live region](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-07-04.md) |
+| 2026-06-28 | [r-select：下拉箭头图标自注册 + 暗色适配](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-06-28.md) |
+| 2026-06-27 | [主题系统重做：采用 Geist 设计系统](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-06-27.md) |
+| 2026-06-21 | [视觉回归测试体系建立](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-06-21.md) |
+| 2026-05-31 | [主题系统与 Demo 优化](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-05-31.md) |
+| 2026-05-24 | [单元测试覆盖率提升](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-05-24.md) |
+
+| 日期 | 仓库整体 |
+| ---- | ------- |
+| 2026-07-25 | [补齐：现有模块的缺口](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-25.md) |
+| 2026-07-19 | [builder：`children()` 支持响应式 getter（reactive children）](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-19.md) |
+| 2026-07-11 | [Geist contrast action + bordered card default](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-11.md) |
+
+发布与标签见 [GitHub](https://github.com/chaxus/ran/releases)，已发布的每个版本见
+[npm](https://www.npmjs.com/package/ranui?activeTab=versions).
