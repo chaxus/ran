@@ -39,7 +39,10 @@ interface Note {
  */
 async function emit(file: string, content: string): Promise<void> {
   const normalized = content.replace(/[ \t]+$/gm, '');
-  const rel = path.relative(path.join(ROOT, '..', '..'), file).split(path.sep).join('/');
+  const rel = path
+    .relative(path.join(ROOT, '..', '..'), file)
+    .split(path.sep)
+    .join('/');
   if (!CHECK) {
     await fs.writeFile(file, normalized, 'utf8');
     console.log(`Generated: ${rel}`);
@@ -106,7 +109,11 @@ async function main(): Promise<void> {
   const changelog = await fs.readFile(CHANGELOG_FILE, 'utf8');
   // The file's own H1 and intro are replaced by page chrome below; keep everything from the
   // first version heading on, which is the content a reader came for.
-  const body = changelog.slice(changelog.search(/^## /m)).trimEnd();
+  // VitePress compiles every page as a Vue template, so a `{{` anywhere in the prose — and
+  // this changelog documents i18n's `{{`/`}}` brace escaping — is read as an interpolation
+  // and fails the build, inline code included. `::: v-pre` turns compilation off for the
+  // block while markdown still renders inside it.
+  const body = ['::: v-pre', '', changelog.slice(changelog.search(/^## /m)).trimEnd(), '', ':::'].join('\n');
   const componentNotes = await readNotes(NOTES_DIR, 'packages/ranui/changelogs');
   const repoNotes = await readNotes(REPO_NOTES_DIR, 'changelogs');
 

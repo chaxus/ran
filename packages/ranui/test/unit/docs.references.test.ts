@@ -52,8 +52,11 @@ const docs = [
 ].filter(
   (file) =>
     existsSync(file) &&
-    // A changelog's job is to name what changed, including what was removed.
-    !file.endsWith('CHANGELOG.md'),
+    // A changelog's job is to name what changed, including what was removed. That holds for
+    // the generated site page as much as for the source file it is generated from -- and the
+    // page also quotes file names like `_redirects`, which this rule cannot tell apart from a
+    // private symbol.
+    !/changelog\.md$/i.test(file),
 );
 
 const source = [

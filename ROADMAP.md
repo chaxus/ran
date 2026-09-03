@@ -20,6 +20,24 @@ Direction and near-term plans for the `ran` ecosystem. Subject to change.
 - Structured data (JSON-LD) and an `llms.txt` map for AI answer engines.
 - Bundle/perf review (lazy-load large media).
 
+### Task-oriented guides
+
+The documentation is organised by **thing** — one page per element, one per utility. Nothing is
+organised by **task**, and the library's most distinctive capability only exists as a task:
+`r-conversation` + `r-markdown` + `r-attachments` + `r-voice-button` + `r-token-meter`, over
+`ranuts/stream` and `ranuts/conversation`, is a complete AI chat interface, and a reader has to
+assemble that from seven pages to find out.
+
+The missing page is a worked build — "an AI chat UI in ranui", from an empty file to streaming,
+attachments, dictation and a context meter, with the decisions stated as they are made. Held
+deliberately: the shape of that guide is not settled yet (one long build, or a set of short
+recipes?), and a half-considered tutorial is worse than none because it becomes the thing people
+copy. Revisit once the component set behind it stops moving.
+
+Adjacent, smaller, and worth doing before it: a page for ranuts on **when to reach for a
+utility instead of the platform** — already partly answered by the choosing guide, but the
+"don't use this, the browser has it" direction deserves its own treatment.
+
 ### Component coverage
 
 ranui ships **40 custom elements**, strong on the AI/chat surface (`r-conversation`,

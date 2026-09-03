@@ -92,7 +92,7 @@ import { /* … */ } from 'ranuts/utils';
 - `fanShapedByArc(ctx: CanvasRenderingContext2D, maxRadius: number, start: number, end: number, gutter: number) => void` — Trace a pie slice with arc(), including the gutter between slices.
 - `fenceCode(body: string, lang?: string) => string` — Wrap text in a Markdown code fence long enough to survive backticks inside it.
 - `fetchMaybeGzip(input: RequestInfo | URL, init?: RequestInit) => Promise<Uint8Array>` — Fetch a resource that may be delivered gzipped or already
-- `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the properties whose values appear in `list` — typically used to drop empty strings and nulls
+- `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the listed keys — typically used to drop fields before sending an object on
 - `fit(value: number, a1: number, a2: number, b1: number, b2: number) => number` — Remap `value` from `[a1, a2]` onto `[b1, b2]` and clamp to the output range — the shader `fit`.
 - `formatBytes(bytes: number) => string` — Format a byte count for a person to read.
 - `formatDate(value?: DateInput, pattern?: string) => string` — Format a date with a token pattern. Accepts a timestamp, a date string, a

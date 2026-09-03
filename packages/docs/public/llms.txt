@@ -23,7 +23,10 @@ a virtual DOM, and Node server tooling.
 - [ranui element API](https://ran.chaxus.com/src/ranui/api): all 40 custom elements with their attributes, properties, events (detail shape + dispatch flags), slots and ::part() names, generated from source
 - [ranui builder](https://ran.chaxus.com/src/ranui/builder/): the fluent DOM builder with fine-grained reactivity — signals, Show/For/Index, ownership and teardown
 - [ranui server rendering](https://ran.chaxus.com/src/ranui/ssr/): declarative shadow DOM via renderHTMLToString / renderToStream, and what the client rebuilds
+- [ranui style tokens](https://ran.chaxus.com/src/ranui/style-tokens): the CSS custom properties and ::part() names every element exposes, extracted from its stylesheet
+- [ranui changelog](https://ran.chaxus.com/src/ranui/changelog): what changed and why, plus the dated engineering notes — ranui is alpha and ships breaking changes
 - [ranuts — utility library](https://ran.chaxus.com/src/ranuts/): functional (debounce, throttle, memoize, compose), string/object/number/colour utils, storage and IndexedDB, Web Worker request/response on both ends, Service Worker caching and precache, text pagination, postMessage bridge, ZIP, i18n, audio recording, speech-to-text, a 2D rendering engine, virtual DOM, TOTP
+- [ranuts — choosing a utility](https://ran.chaxus.com/src/ranuts/choosing/): which of two similar exports to reach for (debounce vs throttle, once vs singleFlight, localStorage vs IndexedDB, bridge vs worker client) and when the platform already has it
 - [Articles](https://ran.chaxus.com/src/article/doc_preview): front-end engineering notes — web document preview, video encryption, a 2D/WebGL/WebGPU rendering engine, sorting algorithms, functional programming, AI agents, linear algebra
 
 ## Entry points

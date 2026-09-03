@@ -78,6 +78,10 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranuts/api',
       },
       {
+        text: 'Choosing a utility',
+        link: '/src/ranuts/choosing/',
+      },
+      {
         text: 'Utility Functions',
         link: '/src/ranuts/utils/',
         collapsed: false,

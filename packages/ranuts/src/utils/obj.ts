@@ -59,11 +59,14 @@ export const formatJson = (
 };
 
 /**
- * @description: Return a new object without the properties whose values appear in `list` — typically used to drop empty strings and nulls
+ * @description: Return a new object without the listed keys — typically used to drop fields before sending an object on
  * @param {Object} obj source object
- * @param {Array} list values to remove
+ * @param {Array} list keys to remove
  * @return {Object}
  */
+// The description said "properties whose values appear in `list`" until now, and the generated
+// API reference repeated it verbatim; the implementation has always compared `Object.keys(obj)`
+// against the list, so the doc sent readers looking for behaviour that was never there.
 
 export const filterObj = (obj: Record<string, unknown>, list: Array<string>): Record<string, unknown> => {
   const result: Record<string, unknown> = {};

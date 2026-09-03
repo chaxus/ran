@@ -78,6 +78,10 @@ const themeCnConfig: DefaultTheme.Config = {
         link: '/cn/src/ranuts/api',
       },
       {
+        text: '选型指南',
+        link: '/cn/src/ranuts/choosing/',
+      },
+      {
         text: '工具函数',
         link: '/cn/src/ranuts/utils/',
         collapsed: false,

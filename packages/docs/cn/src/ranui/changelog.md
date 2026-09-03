@@ -13,6 +13,8 @@ description: ranui 的变更记录——新增、变更、修复与移除及其�
 请锁定确切版本，并在升级前先读本页。
 :::
 
+::: v-pre
+
 ## [Unreleased]
 
 ### Added
@@ -157,6 +159,8 @@ description: ranui 的变更记录——新增、变更、修复与移除及其�
 ### Changed
 
 - Extracted player fullscreen API selection and HLS manifest level normalization into focused core helpers for easier testing.
+
+:::
 
 ## 工程记录
 

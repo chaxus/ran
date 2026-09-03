@@ -14,6 +14,8 @@ still being improved in preference to preserving an API shape, so pin an exact v
 read this page before upgrading.
 :::
 
+::: v-pre
+
 ## [Unreleased]
 
 ### Added
@@ -158,6 +160,8 @@ read this page before upgrading.
 ### Changed
 
 - Extracted player fullscreen API selection and HLS manifest level normalization into focused core helpers for easier testing.
+
+:::
 
 ## Engineering notes
 

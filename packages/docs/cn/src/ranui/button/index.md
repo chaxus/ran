@@ -114,6 +114,35 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 </script>
 ```
 
+## 自定义样式
+
+`<r-button>` 自身暴露了 **43 个 CSS 自定义属性**——`--ran-btn-background`、`--ran-btn-color`、
+`--ran-btn-border-color` 及其 `hover` / `active` 变体，加上 `warning` 变体的三个——另外还会读取主题
+里的语义令牌。
+
+```css
+/* 单个按钮，或某个作用域下的所有按钮 */
+r-button {
+  --ran-btn-background: var(--ran-color-bg-subtle);
+  --ran-btn-hover-background: var(--ran-color-bg-hover);
+  --ran-btn-border-radius: var(--ran-radius-full);
+}
+```
+
+如果这次改动并非按钮独有，优先改**语义**令牌：覆盖 `--ran-color-primary` 会重塑所有地方的主操作，
+而不只是这里。
+
+Part：`button` · `content`
+
+```css
+r-button::part(content) {
+  letter-spacing: 0.02em;
+}
+```
+
+完整清单见[样式令牌](/cn/src/ranui/style-tokens#button)；该选哪个令牌见
+[设计系统](/cn/src/ranui/design-system/)。
+
 ## 最佳实践
 
 - **主要操作**: 使用 `type="primary"` 的按钮（单色——浅色黑底白字 / 深色白底黑字）

@@ -103,6 +103,35 @@ Button component for triggering instant actions with multiple styles and states.
 </script>
 ```
 
+## Styling
+
+`<r-button>` exposes **43 CSS custom properties** of its own — `--ran-btn-background`,
+`--ran-btn-color`, `--ran-btn-border-color`, their `hover` / `active` variants, and the
+`warning` variant's three — plus the semantic tokens it reads from the theme.
+
+```css
+/* one button, or every button under a scope */
+r-button {
+  --ran-btn-background: var(--ran-color-bg-subtle);
+  --ran-btn-hover-background: var(--ran-color-bg-hover);
+  --ran-btn-border-radius: var(--ran-radius-full);
+}
+```
+
+Reach for a **semantic** token instead when the change is not button-specific: overriding
+`--ran-color-primary` restyles the primary action everywhere, not just here.
+
+Parts: `button` · `content`
+
+```css
+r-button::part(content) {
+  letter-spacing: 0.02em;
+}
+```
+
+The full list is in [style tokens](/src/ranui/style-tokens#button); which token to reach for is
+the [design system](/src/ranui/design-system/).
+
 ## Best Practices
 
 - **Primary Actions**: Use `type="primary"` (monochrome — black-on-white / white-on-black)

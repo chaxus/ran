@@ -91,18 +91,18 @@ document.body.appendChild(button);
 Each entry registers exactly what its name says, so a page that only wants theming never pays
 for the component library.
 
-| Import                            | Contains                                                      |
-| --------------------------------- | ------------------------------------------------------------- |
-| `ranui`                           | Every component                                               |
-| `ranui/<component>`               | One component — `ranui/button`, `ranui/select`, …             |
-| [`ranui/theme`](/src/ranui/theme/) | Light/dark theming and token overrides; no elements           |
-| [`ranui/i18n`](/src/ranui/i18n/)  | The translation engine; no elements                           |
-| `ranui/fonts`                     | Self-hosted Geist Sans + Geist Mono                           |
-| `ranui/style`                     | The stylesheet, if your setup does not pick it up             |
-| [`ranui/builder`](/src/ranui/builder/) | The fluent DOM builder with fine-grained reactivity      |
-| [`ranui/ssr`](/src/ranui/ssr/), `ranui/ssr-stream` | Server rendering                              |
-| `ranui/testing`                   | Helpers for reaching into a closed shadow root from a test    |
-| `ranui/typings`                   | Ambient JSX / TS element types                                |
+| Import                                             | Contains                                                   |
+| -------------------------------------------------- | ---------------------------------------------------------- |
+| `ranui`                                            | Every component                                            |
+| `ranui/<component>`                                | One component — `ranui/button`, `ranui/select`, …          |
+| [`ranui/theme`](/src/ranui/theme/)                 | Light/dark theming and token overrides; no elements        |
+| [`ranui/i18n`](/src/ranui/i18n/)                   | The translation engine; no elements                        |
+| `ranui/fonts`                                      | Self-hosted Geist Sans + Geist Mono                        |
+| `ranui/style`                                      | The stylesheet, if your setup does not pick it up          |
+| [`ranui/builder`](/src/ranui/builder/)             | The fluent DOM builder with fine-grained reactivity        |
+| [`ranui/ssr`](/src/ranui/ssr/), `ranui/ssr-stream` | Server rendering                                           |
+| `ranui/testing`                                    | Helpers for reaching into a closed shadow root from a test |
+| `ranui/typings`                                    | Ambient JSX / TS element types                             |
 
 ## Components
 
@@ -171,7 +171,11 @@ reach through. There are four ways in, in order of preference.
 on `:root`, on a wrapper or on the element all work:
 
 ```html
-<r-progress percent="0.7" type="drag" style="--ran-progress-track-background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f)"></r-progress>
+<r-progress
+  percent="0.7"
+  type="drag"
+  style="--ran-progress-track-background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f)"
+></r-progress>
 ```
 
 <div style="width:100%;margin:12px 0">
@@ -207,17 +211,17 @@ these are ordinary DOM elements — but they allow only one handler and no captu
 
 ## Where to go next
 
-| If you want to…                                  | Read                                                  |
-| ------------------------------------------------ | ----------------------------------------------------- |
-| Look up an element's exact API                   | [Element API](/src/ranui/api)                         |
-| Know which token to use, and why                 | [Design system](/src/ranui/design-system/)            |
-| Build a screen that looks like one system        | [Design guidelines](/src/ranui/design-guides/)        |
-| Wire ranui into an app correctly                 | [Coding guidelines](/src/ranui/coding-guides/)        |
-| Add light/dark, or restyle everything            | [Theming](/src/ranui/theme/)                          |
-| Translate the interface                          | [i18n](/src/ranui/i18n/)                              |
-| Render on a server                               | [Server rendering](/src/ranui/ssr/)                   |
-| Build reactive views without a framework         | [Builder](/src/ranui/builder/)                        |
-| See what changed before upgrading                | [Changelog](/src/ranui/changelog)                     |
+| If you want to…                           | Read                                           |
+| ----------------------------------------- | ---------------------------------------------- |
+| Look up an element's exact API            | [Element API](/src/ranui/api)                  |
+| Know which token to use, and why          | [Design system](/src/ranui/design-system/)     |
+| Build a screen that looks like one system | [Design guidelines](/src/ranui/design-guides/) |
+| Wire ranui into an app correctly          | [Coding guidelines](/src/ranui/coding-guides/) |
+| Add light/dark, or restyle everything     | [Theming](/src/ranui/theme/)                   |
+| Translate the interface                   | [i18n](/src/ranui/i18n/)                       |
+| Render on a server                        | [Server rendering](/src/ranui/ssr/)            |
+| Build reactive views without a framework  | [Builder](/src/ranui/builder/)                 |
+| See what changed before upgrading         | [Changelog](/src/ranui/changelog)              |
 
 ## Browser support
 

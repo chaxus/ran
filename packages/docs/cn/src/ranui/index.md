@@ -88,18 +88,18 @@ document.body.appendChild(button);
 
 每个入口只注册名字所说的东西——只想要主题的页面不会为组件库付费。
 
-| 引入                                                  | 内容                                        |
-| ----------------------------------------------------- | ------------------------------------------- |
-| `ranui`                                               | 全部组件                                    |
-| `ranui/<component>`                                   | 单个组件——`ranui/button`、`ranui/select`…   |
-| [`ranui/theme`](/cn/src/ranui/theme/)                 | 明暗主题与令牌覆盖；不含元素                |
-| [`ranui/i18n`](/cn/src/ranui/i18n/)                   | 翻译引擎；不含元素                          |
-| `ranui/fonts`                                         | 自托管的 Geist Sans + Geist Mono            |
-| `ranui/style`                                         | 样式表，供构建工具没有自动引入时使用        |
-| [`ranui/builder`](/cn/src/ranui/builder/)             | 带细粒度响应式的链式 DOM 构建器             |
-| [`ranui/ssr`](/cn/src/ranui/ssr/)、`ranui/ssr-stream` | 服务端渲染                                  |
-| `ranui/testing`                                       | 在测试中进入 closed shadow root 的助手      |
-| `ranui/typings`                                       | JSX / TS 环境类型声明                       |
+| 引入                                                  | 内容                                      |
+| ----------------------------------------------------- | ----------------------------------------- |
+| `ranui`                                               | 全部组件                                  |
+| `ranui/<component>`                                   | 单个组件——`ranui/button`、`ranui/select`… |
+| [`ranui/theme`](/cn/src/ranui/theme/)                 | 明暗主题与令牌覆盖；不含元素              |
+| [`ranui/i18n`](/cn/src/ranui/i18n/)                   | 翻译引擎；不含元素                        |
+| `ranui/fonts`                                         | 自托管的 Geist Sans + Geist Mono          |
+| `ranui/style`                                         | 样式表，供构建工具没有自动引入时使用      |
+| [`ranui/builder`](/cn/src/ranui/builder/)             | 带细粒度响应式的链式 DOM 构建器           |
+| [`ranui/ssr`](/cn/src/ranui/ssr/)、`ranui/ssr-stream` | 服务端渲染                                |
+| `ranui/testing`                                       | 在测试中进入 closed shadow root 的助手    |
+| `ranui/typings`                                       | JSX / TS 环境类型声明                     |
 
 ## 组件
 
@@ -171,7 +171,11 @@ document.body.appendChild(button);
 **1. 设计令牌（CSS 自定义属性）**——它们会继承穿过边界，因此设在 `:root`、外层容器或元素上都有效：
 
 ```html
-<r-progress percent="0.7" type="drag" style="--ran-progress-track-background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f)"></r-progress>
+<r-progress
+  percent="0.7"
+  type="drag"
+  style="--ran-progress-track-background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f)"
+></r-progress>
 ```
 
 <div style="width:100%;margin:12px 0">
@@ -205,17 +209,17 @@ API 参考里逐个都标注了：
 
 ## 接下来读什么
 
-| 如果你想……                     | 读                                                  |
-| ------------------------------ | --------------------------------------------------- |
-| 查某个元素的确切接口           | [元素 API](/cn/src/ranui/api)                       |
-| 知道该用哪个令牌、为什么       | [设计系统](/cn/src/ranui/design-system/)            |
-| 做出像一套系统的界面           | [设计规范](/cn/src/ranui/design-guides/)            |
-| 把 ranui 正确接进应用          | [编码规范](/cn/src/ranui/coding-guides/)            |
-| 接入明暗主题，或整体换皮       | [主题系统](/cn/src/ranui/theme/)                    |
-| 把界面翻译成别的语言           | [i18n 国际化](/cn/src/ranui/i18n/)                  |
-| 在服务端渲染                   | [服务端渲染](/cn/src/ranui/ssr/)                    |
-| 不用框架写响应式视图           | [Builder 构建器](/cn/src/ranui/builder/)            |
-| 升级前看看改了什么             | [更新日志](/cn/src/ranui/changelog)                 |
+| 如果你想……               | 读                                       |
+| ------------------------ | ---------------------------------------- |
+| 查某个元素的确切接口     | [元素 API](/cn/src/ranui/api)            |
+| 知道该用哪个令牌、为什么 | [设计系统](/cn/src/ranui/design-system/) |
+| 做出像一套系统的界面     | [设计规范](/cn/src/ranui/design-guides/) |
+| 把 ranui 正确接进应用    | [编码规范](/cn/src/ranui/coding-guides/) |
+| 接入明暗主题，或整体换皮 | [主题系统](/cn/src/ranui/theme/)         |
+| 把界面翻译成别的语言     | [i18n 国际化](/cn/src/ranui/i18n/)       |
+| 在服务端渲染             | [服务端渲染](/cn/src/ranui/ssr/)         |
+| 不用框架写响应式视图     | [Builder 构建器](/cn/src/ranui/builder/) |
+| 升级前看看改了什么       | [更新日志](/cn/src/ranui/changelog)      |
 
 ## 兼容性
 
