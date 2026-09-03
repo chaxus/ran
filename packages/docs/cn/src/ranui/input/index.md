@@ -6,7 +6,7 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 用于键盘输入的基础表单控件，是最基础的表单控件。
 
-> **适用场景**：需要一个带静态顶部标签、前置图标、校验状态/提示文本、并能参与原生表单的文本字段——`<r-input>` 覆盖文本、密码、数字输入。
+> **适用场景**：需要一个带静态顶部标签、前置图标、校验状态/提示文本、并能参与原生表单的文本字段时，`<r-input>` 覆盖文本、密码、数字输入。
 
 ## 快速开始
 
@@ -43,7 +43,7 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 ### 标签 `label`
 
-渲染在字段上方的静态标签——始终可见，不会与相邻内容重叠，聚焦时也不会引起布局跳动（顶部对齐的标签比内联/浮动标签填写更快，见 [Luke Wroblewski 的眼动研究](https://www.lukew.com/ff/entry.asp?504=)）。
+渲染在字段上方的静态标签：始终可见，不会与相邻内容重叠，聚焦时也不会引起布局跳动（顶部对齐的标签比内联/浮动标签填写更快，见 [Luke Wroblewski 的眼动研究](https://www.lukew.com/ff/entry.asp?504=)）。
 
 <Demo column>
   <r-input label="用户名"></r-input>
@@ -177,7 +177,7 @@ input.addEventListener('change', (event) => {
 
 ## 表单关联
 
-`r-input` 是一个表单关联自定义元素（`static formAssociated = true`）。它挂载了 `ElementInternals`，并通过 `setFormValue` 上报自己的值，因此只要是原生 `<form>` 的真实子孙元素，就能被 `new FormData(form)` 收集到——记得设置 `name` 来指定它的 key。把提交结果转成普通对象时，参见 [Forms](/cn/src/ranui/form/) 里的 `serializeForm()` 辅助函数。
+`r-input` 是一个表单关联自定义元素（`static formAssociated = true`）。它挂载了 `ElementInternals`，并通过 `setFormValue` 上报自己的值，因此只要是原生 `<form>` 的真实子孙元素，就能被 `new FormData(form)` 收集到，记得设置 `name` 来指定它的 key。把提交结果转成普通对象时，参见 [Forms](/cn/src/ranui/form/) 里的 `serializeForm()` 辅助函数。
 
 ```html
 <form>
@@ -185,9 +185,9 @@ input.addEventListener('change', (event) => {
 </form>
 ```
 
-**重置**：原生的 `form.reset()`（或 `<button type="reset">`）会把字段恢复到它首次连接时的值——通过浏览器自动调用的生命周期钩子 `formResetCallback()` 实现。
+**重置**：原生的 `form.reset()`（或 `<button type="reset">`）会把字段恢复到它首次连接时的值，这是通过浏览器自动调用的生命周期钩子 `formResetCallback()` 实现的。
 
-**校验**：设置 `required` 后，空字段会通过 `ElementInternals.setValidity()` 变为无效状态——`form.checkValidity()`/`form.reportValidity()` 能感知到，提交时会显示浏览器原生的校验提示，锚定在该字段上。`disabled` 的字段永远不会阻塞校验，与原生 `<input>` 语义一致。`r-input` 也暴露了原生字段常见的方法/属性：`checkValidity()`、`reportValidity()`、`validity`、`validationMessage`。
+**校验**：设置 `required` 后，空字段会通过 `ElementInternals.setValidity()` 变为无效状态，`form.checkValidity()`/`form.reportValidity()` 能感知到，提交时会显示浏览器原生的校验提示，锚定在该字段上。`disabled` 的字段永远不会阻塞校验，与原生 `<input>` 语义一致。`r-input` 也暴露了原生字段常见的方法/属性：`checkValidity()`、`reportValidity()`、`validity`、`validationMessage`。
 
 ```html
 <form>
@@ -216,7 +216,7 @@ r-input::part(content) {
 ## 自定义样式
 
 `<r-input>` 自身暴露了 **61 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
-地方都有效——`:root`、外层容器，或元素本身：
+地方都有效，比如 `:root`、外层容器，或元素本身：
 
 ```css
 r-input {

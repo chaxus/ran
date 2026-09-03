@@ -6,9 +6,9 @@ description: 'ranui Preview（<r-preview>）在浏览器中在线预览 docx、p
 
 支持 `docx`、`pptx`、`pdf`、`xlsx` 文件的在线预览组件
 
-> **适用场景**：需要在浏览器中预览 `docx`、`pptx`、`pdf` 或 `xlsx` 文件——`<r-preview>` 从文件 URL 打开一个文档预览弹窗（现已作为独立的 `@ranui/preview` 包发布）。
+> **适用场景**：需要在浏览器中预览 `docx`、`pptx`、`pdf` 或 `xlsx` 文件时，`<r-preview>` 会从文件 URL 打开一个文档预览弹窗（现已作为独立的 `@ranui/preview` 包发布）。
 
-> ⚠️ **重要通知**: ranui 包在 0.1.10-alpha-27 版本之后将不再提供此组件，请迁移到独立的 [@ranui/preview](https://www.npmjs.com/package/@ranui/preview) 包
+> ⚠️ **重要通知**：ranui 包在 0.1.10-alpha-27 版本之后将不再提供此组件，请迁移到独立的 [@ranui/preview](https://www.npmjs.com/package/@ranui/preview) 包
 
 ## 快速开始
 
@@ -91,7 +91,7 @@ npm install ranui
 <r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **提示**: 默认使用 `https://edit.chaxus.com` 提供的预览服务，如需自部署请参考 [OnlyOffice Web Local](https://github.com/ranuts/document)
+> 💡 **提示**：默认使用 `https://edit.chaxus.com` 提供的预览服务，如需自部署请参考 [OnlyOffice Web Local](https://github.com/ranuts/document)
 
 ## 迁移指南
 

@@ -6,7 +6,7 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 按钮组件用于触发一个即时操作，支持多种样式和状态。
 
-> **适用场景**：需要一个开箱即用、自带 primary/contrast/warning/text 样式以及禁用、图标支持的可点击操作控件时——用 `<r-button>` 代替手写 `<button>` 样式。
+> **适用场景**：需要一个开箱即用的可点击操作控件，自带 primary/contrast/warning/text 样式，还支持禁用状态和图标时，用 `<r-button>` 代替手写 `<button>` 样式。
 
 ## 快速开始
 
@@ -49,7 +49,7 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 <r-button>默认按钮</r-button>
 ```
 
-`primary` 是单色（无彩色）操作按钮，来自 Geist 设计语言：浅色模式下黑底白字，深色模式下白底黑字。蓝色在此不承载品牌含义——它只保留给链接和聚焦环。它消费 `--ran-color-primary*` 令牌（`--ran-color-primary`、`-hover`、`-active`，以及作为反色墨水的 `--ran-color-primary-text`）——参见 [Theme 主题与令牌](/cn/src/ranui/theme/)。
+`primary` 是单色（无彩色）操作按钮，来自 Geist 设计语言：浅色模式下黑底白字，深色模式下白底黑字。蓝色在这里不承担品牌色的角色，只留给链接和聚焦环使用。它用的是 `--ran-color-primary*` 令牌（`--ran-color-primary`、`-hover`、`-active`，以及作为反色墨水的 `--ran-color-primary-text`），详见 [Theme 主题与令牌](/cn/src/ranui/theme/)。
 
 ### 禁用状态 `disabled`
 
@@ -73,7 +73,7 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 可以通过 `icon` 属性为按钮添加图标，或者直接在按钮内使用 Icon 组件
 
-> 💡 **提示**: 如果需要控制图标的具体位置，建议直接使用 Icon 组件而不是 icon 属性
+> 💡 **提示**：如果需要控制图标的具体位置，建议直接使用 Icon 组件而不是 icon 属性
 
 <Demo>
   <r-button type="default" icon="user">默认按钮</r-button>
@@ -116,8 +116,8 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 ## 自定义样式
 
-`<r-button>` 自身暴露了 **43 个 CSS 自定义属性**——`--ran-btn-background`、`--ran-btn-color`、
-`--ran-btn-border-color` 及其 `hover` / `active` 变体，加上 `warning` 变体的三个——另外还会读取主题
+`<r-button>` 自身暴露了 **43 个 CSS 自定义属性**：`--ran-btn-background`、`--ran-btn-color`、
+`--ran-btn-border-color` 及其 `hover` / `active` 变体，再加上 `warning` 变体的三个；另外还会读取主题
 里的语义令牌。
 
 ```css
@@ -145,8 +145,8 @@ r-button::part(content) {
 
 ## 最佳实践
 
-- **主要操作**: 使用 `type="primary"` 的按钮（单色——浅色黑底白字 / 深色白底黑字）
-- **危险操作**: 使用 `type="warning"` 的按钮
-- **次要操作**: 使用 `type="text"` 的按钮
-- **禁用状态**: 在操作不可用时使用 `disabled` 属性
-- **图标使用**: 为按钮添加相关图标可以提升用户体验
+- **主要操作**：使用 `type="primary"` 的按钮（单色，浅色模式黑底白字，深色模式白底黑字）
+- **危险操作**：使用 `type="warning"` 的按钮
+- **次要操作**：使用 `type="text"` 的按钮
+- **禁用状态**：在操作不可用时使用 `disabled` 属性
+- **图标使用**：为按钮添加相关图标可以提升用户体验

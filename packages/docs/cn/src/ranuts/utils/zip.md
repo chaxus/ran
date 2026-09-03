@@ -3,7 +3,7 @@
 零依赖读写 ZIP 压缩包，DEFLATE 直接用浏览器自带的实现。
 
 ZIP 是 OOXML（`.docx` / `.xlsx` / `.pptx`）、EPUB、ODF、浏览器扩展的容器格式。「从包里取一个
-文件」和「改包里的一个文件」是高频需求，为此引入一整个 ZIP 库代价太大 —— 这两件事需要的只是
+文件」和「改包里的一个文件」是高频需求，为此引入一整个 ZIP 库的代价太大。这两件事需要的只是
 中央目录加 DEFLATE，而 DEFLATE 现在已经作为 `DecompressionStream` 内建在每个浏览器里。
 
 ## API
@@ -108,18 +108,18 @@ const zip = createZip([
 2. **重写出来的条目不压缩**。被替换和被追加的条目以 STORED 写入，所以输出比输入大；未改动的
    条目原样保留其压缩数据。对「改完就交出去」的流程这是划算的取舍，对归档则不是。
 
-3. **无改动时 `rewriteZip` 原样返回入参数组** —— 包括 transform 返回了完全相同字节的情况。
+3. **无改动时 `rewriteZip` 会原样返回入参数组**，包括 transform 返回了完全相同字节的情况。
    空转路径零成本，返回值可以直接用 `===` 判断。
 
 4. **尺寸一律取自中央目录，绝不取自 local header**。流式写入器写出的包会置 general purpose
    bit 3，local header 里留零，真实数值追加在压缩数据之后的 data descriptor 里。相信 local
-   header 是手写 ZIP 解析器在真实文件上翻车最常见的原因；`rewriteZip` 同时会重写 local
-   header 并清掉该标志位，因此产物能被严格解析器读取。
+   header 是手写 ZIP 解析器在真实文件上翻车最常见的原因；`rewriteZip` 会同时重写 local
+   header 并清掉该标志位，让严格的解析器也能正常读取产物。
 
-5. **transform 抛错时保留原条目**。transform 抛异常，或条目使用了不支持的压缩方式，都会原样
-   拷贝原内容 —— 重写绝不能把没看懂的数据弄丢。
+5. **transform 抛错时会保留原条目**。transform 抛出异常，或者条目使用了不支持的压缩方式，都会原样
+   拷贝原始内容：重写绝不能把看不懂的数据弄丢。
 
 6. **不支持 ZIP64、加密、分卷**。超过 4 GiB 或条目数超过 65535 的包不在范围内。
    `readZipEntries` 对无法解析的输入返回 `[]` 而不是抛错，因为调用方通常是在检查用户给的文件。
 
-7. **`inflateRaw` 依赖 `DecompressionStream`** —— 当前所有浏览器和 Node 18+ 都有。缺失时抛错。
+7. **`inflateRaw` 依赖 `DecompressionStream`**，当前所有浏览器和 Node 18+ 都已内置该接口；缺失时会抛错。

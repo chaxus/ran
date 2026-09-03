@@ -20,28 +20,6 @@
   }
 }
 
-/* VitePress gives `.VPNavBarTitle .title` (the logo `<a>`) a reserved-sidebar-
-   width column (`--vp-sidebar-width`, ~272px) so it lines up with the sidebar
-   below — but the anchor's own clickable box fills that whole column even
-   though the logo mark + "ran" wordmark only need ~88px of it. `ProductSwitcher`
-   (`#nav-bar-content-before`, see `NavLayout.vue`) renders into that leftover
-   gap, right after the visible logo — and anything rendered there is
-   unclickable: `.title`'s own DIV wrapper carries an explicit `z-index: 2`,
-   while `.content` (everything after the logo, including the switcher) is
-   capped at `z-index: 1` — a hard ceiling no z-index on the switcher itself
-   can climb past, since z-index only ever wins against *siblings inside the
-   same stacking context*. Every click in that gap resolved to the anchor
-   instead of the switcher underneath it, so the switcher silently navigated
-   home instead of opening. Fix at the source: shrink the anchor's hit-box to
-   its actual content and let clicks in the now-empty margin pass through. */
-#app .VPNavBarTitle {
-  pointer-events: none;
-}
-#app .VPNavBarTitle .title {
-  width: fit-content;
-  pointer-events: auto;
-}
-
 .font-icon {
   padding: 2px 8px;
   border-radius: 4px;

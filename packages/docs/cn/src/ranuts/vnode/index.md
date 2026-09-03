@@ -15,8 +15,8 @@
 import { init, h, classModule, propsModule, styleModule, eventListenersModule } from 'ranuts/vnode';
 ```
 
-> 注意：在本实现中 `init()` **不接受任何参数** —— 模块集合是固定的、在内部注册的，因此各个
-> `*Module` 导出不需要传给 `init`。它们被导出仅供参考和查看。
+> 注意：在本实现中 `init()` **不接受任何参数**：模块集合是固定的、在内部注册的，因此各个
+> `*Module` 导出不需要传给 `init`。导出它们只是为了方便参考和查看。
 
 ## 示例
 
@@ -108,7 +108,7 @@ h('svg', { attrs: { width: 100, height: 100 } }, [h('circle', { attrs: { cx: 50,
 | ------------------------ | ------------------------------------------------ |
 | `h(sel)`                 | 仅根据选择器创建元素                             |
 | `h(sel, data)`           | 带 `VNodeData` 的元素（`data` 可为 `null`）      |
-| `h(sel, children)`       | 带子节点的元素 —— 文本/数字、单个 `VNode` 或数组 |
+| `h(sel, children)`       | 带子节点的元素（文本/数字、单个 `VNode` 或数组） |
 | `h(sel, data, children)` | 同时带数据和子节点的元素                         |
 
 #### Parameters
@@ -116,7 +116,7 @@ h('svg', { attrs: { width: 100, height: 100 } }, [h('circle', { attrs: { cx: 50,
 | 参数       | 说明                                                                                               | 类型                |
 | ---------- | -------------------------------------------------------------------------------------------------- | ------------------- |
 | `sel`      | CSS 风格选择器：`tag`、`tag#id`、`tag.class`、组合（`div#id.a.b`）。`svg…` 会自动附加 SVG 命名空间 | `string`            |
-| `data`     | 节点数据 —— class / props / attrs / style / 监听器 / key / hook，可为 `null`                       | `VNodeData \| null` |
+| `data`     | 节点数据（class / props / attrs / style / 监听器 / key / hook），可为 `null`                       | `VNodeData \| null` |
 | `children` | 文本或数字（会变成文本节点）、单个 `VNode`，或它们的数组                                           | `VNodeChildren`     |
 
 #### `VNodeData` 字段
@@ -125,12 +125,12 @@ h('svg', { attrs: { width: 100, height: 100 } }, [h('circle', { attrs: { cx: 50,
 | ------- | ------------------------------------------------------------------- | --------------------------------------------- | ---------------------- |
 | `props` | 通过 `elm[key] = value` 设置的 DOM 属性                             | `Record<string, any>`                         | `propsModule`          |
 | `attrs` | 通过 `setAttribute` 设置的 HTML 属性（`true`/`false` 用于开关属性） | `Record<string, string \| number \| boolean>` | `attributesModule`     |
-| `class` | 条件类名 —— `name → boolean` 映射                                   | `Record<string, boolean>`                     | `classModule`          |
-| `style` | 内联样式 —— `name → value` 映射（`--var` 键使用 CSS 变量）          | `Record<string, any>`                         | `styleModule`          |
-| `on`    | 事件监听器 —— `event → handler`（或处理函数数组）                   | `Record<string, Function \| Function[]>`      | `eventListenersModule` |
+| `class` | 条件类名（`name → boolean` 映射）                                   | `Record<string, boolean>`                     | `classModule`          |
+| `style` | 内联样式（`name → value` 映射，`--var` 键使用 CSS 变量）            | `Record<string, any>`                         | `styleModule`          |
+| `on`    | 事件监听器（`event → handler`，或处理函数数组）                     | `Record<string, Function \| Function[]>`      | `eventListenersModule` |
 | `key`   | diff 算法用于匹配/重排子节点的稳定标识                              | `string \| number`                            | （diff 核心）          |
 | `ns`    | 命名空间 URI（在 SVG 子树中自动设置）                               | `string`                                      | （diff 核心）          |
-| `hook`  | 单个 vnode 的生命周期钩子（`Hooks`）                                | `Hooks`                                       | （类型层 —— 见注意）   |
+| `hook`  | 单个 vnode 的生命周期钩子（`Hooks`）                                | `Hooks`                                       | （类型层，见注意）     |
 
 > 注意：`hook` 与 `Hooks` 类型属于公开的类型层。本精简实现通过**模块**生命周期
 > （`create` / `update` / `destroy`）驱动 DOM；当前的 `patch` 流程不会调用单个 vnode 的
@@ -164,8 +164,8 @@ h('svg', { attrs: { width: 100, height: 100 } }, [h('circle', { attrs: { cx: 50,
 
 | 类型                | 结构 / 含义                                                                                   |
 | ------------------- | --------------------------------------------------------------------------------------------- |
-| `VNode`             | `{ sel, data, children, elm, text, key, listener? }` —— 一个虚拟节点                          |
-| `VNodeData`         | `{ props?, attrs?, class?, style?, on?, key?, ns?, hook? }` —— 见上文字段                     |
+| `VNode`             | `{ sel, data, children, elm, text, key, listener? }`，一个虚拟节点                            |
+| `VNodeData`         | `{ props?, attrs?, class?, style?, on?, key?, ns?, hook? }`，见上文字段                       |
 | `VNodes`            | `VNode[]`                                                                                     |
 | `VNodeChildElement` | `VNode \| string \| number`                                                                   |
 | `VNodeChildren`     | `VNodeChildElement \| VNodeChildElement[]`                                                    |
@@ -174,7 +174,7 @@ h('svg', { attrs: { width: 100, height: 100 } }, [h('circle', { attrs: { cx: 50,
 | `Hooks`             | `{ pre?, init?, create?, insert?, prepatch?, update?, postpatch?, destroy?, remove?, post? }` |
 | `DOMAPI`            | 描述 `patch` 所用 DOM 操作的接口（参见 `htmlDomApi`）                                         |
 | `Fragment`          | 用于片段处理的 `DocumentFragment` 扩展                                                        |
-| `Modules`           | `Record<string, Record<string, ModuleHook>>` —— 模块注册表的形状                              |
+| `Modules`           | `Record<string, Record<string, ModuleHook>>`，模块注册表的形状                                |
 | `ModuleHook`        | 单个模块生命周期回调                                                                          |
 
 ## 注意事项
@@ -183,6 +183,6 @@ h('svg', { attrs: { width: 100, height: 100 } }, [h('circle', { attrs: { cx: 50,
    Node 中。
 2. **保留上一个 vnode。** `patch` 返回新的 `VNode`。请把它保存下来，在下一次更新时作为
    `oldVnode` 传入，这样 diff 才会基于当前的树来计算。
-3. **`text` 和 `children` 互斥** —— 一个节点要么是文本节点，要么是带子节点的元素。
+3. **`text` 和 `children` 互斥**：一个节点要么是文本节点，要么是带子节点的元素。
 4. **列表请使用 `key`。** 渲染动态列表时，给同级节点设置稳定的 `key` 值，让 diff 能够匹配并
    重排节点，而不是重新创建它们。

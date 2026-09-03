@@ -67,12 +67,12 @@ serveWorker(async (request, { progress }) => {
 
 ## 注意
 
-1. **worker 懒创建**，首次 `send` 才创建 —— 重活不该在页面加载时就起。
+1. **worker 懒创建**，只有第一次 `send` 时才会创建：重活本来就不该在页面加载时就启动。
 2. **进度消息不结束请求**，一条请求可以持续上报进度，最后只 resolve 一次。
 3. **worker 崩溃会拒绝全部在途请求**。worker 内的未捕获错误不带 `operationId`，无法归属到某条请求。
 4. **`dispose()` 终止并拒绝**，下次 `send` 会重建 worker。
 5. **超时只拒绝该请求**，worker 继续存活。
 6. **大 buffer 用 `transfer`** 转移所有权，避免结构化克隆的拷贝开销。
-7. **`serveWorker` 连同步抛错一起接住**。sync throw 会逃到 worker 的 error handler，
-   而那条路径不带 `operationId` —— 客户端只能把**所有**在途请求一起失败，而不是坏掉的那一个。
-8. **两侧一起提供是刻意的**。手写 worker 侧正是 id 回传与错误信封在各项目间跑偏的地方。
+7. **`serveWorker` 连同步抛出的错误也会接住**。同步 throw 会逃到 worker 的 error handler，
+   而这条路径不带 `operationId`，客户端只能让**所有**在途请求一起失败，没法只失败真正出问题的那一个。
+8. **两端配套提供是刻意的设计**。手写 worker 端的实现，正是 id 回传和错误信封的写法最容易在不同项目之间跑偏走样的地方。

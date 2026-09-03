@@ -8,7 +8,7 @@ Pass in a string to get the value of the cookie with the specified name
 
 | argument | Instructions                                          | type     |
 | -------- | ----------------------------------------------------- | -------- |
-| `sting`  | Returns the value of a cookie with the specified name | `string` |
+| `string` | Returns the value of a cookie with the specified name | `string` |
 
 ### Options
 

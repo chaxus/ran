@@ -64,7 +64,7 @@ setMime('.xyz', 'application/x-xyz-format');
 
 ## MimeType
 
-`getMime`、`setMime`、`getExtensions` 背后共用的 `Map<string, string>`——如果你想遍历所有已知的扩展名/类型对，而不是只查一个，可以直接导入它。
+`getMime`、`setMime`、`getExtensions` 背后共用的 `Map<string, string>`。如果你想遍历所有已知的扩展名/类型对，而不是只查一个，可以直接导入它。
 
 ```js
 import { MimeType } from 'ranuts/utils';
@@ -74,4 +74,4 @@ MimeType.size; // 已知扩展名的总数
 [...MimeType.entries()].filter(([, type]) => type.startsWith('image/'));
 ```
 
-它就是 `setMime` 修改的那个 `Map` 实例，所以通过 `setMime` 做的修改会立刻在这里可见，反过来直接改这个 `Map` 也一样生效——`setMime` 只是为常见场景提供了一个具名入口。
+它就是 `setMime` 修改的那个 `Map` 实例，所以通过 `setMime` 做的修改会立刻在这里可见，反过来直接改这个 `Map` 也一样生效。`setMime` 只是为常见场景提供了一个具名入口。

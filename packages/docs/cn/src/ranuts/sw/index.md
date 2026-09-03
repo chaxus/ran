@@ -1,6 +1,6 @@
 # ranuts/sw —— Service Worker
 
-Service Worker 的基础件：每个 SW 最后都会写的那两种缓存策略，以及预取协议的 worker 半边 ——
+Service Worker 的基础件：每个 SW 最后都会写的那两种缓存策略，以及预取协议的 worker 半边。
 它的页面半边在 [prefetch](../utils/prefetch)。
 
 ```js
@@ -11,7 +11,7 @@ import { cacheFirst, networkFirst, precache, dropCachesExcept, servePrecache } f
 从 `ranuts/utils` 引会把面向 DOM 的模块一起拖进 worker 包。
 
 **它假定 service worker 是打包产物。** 手写、以静态文件直接 serve 的 `sw.js` 引不了
-`node_modules` —— 要么把它纳入打包，要么把需要的片段抄过去。
+`node_modules`，要么把它纳入打包，要么把需要的片段抄过去。
 
 ## API
 
@@ -53,11 +53,11 @@ servePrecache({ type: 'precache-models', cacheName: MODELS });
 
 ## 注意
 
-1. **`cacheFirst` 给内容哈希过的不可变资源** —— 脚本、样式、字体、模型权重。
-   **`networkFirst` 给必须立刻反映发版的东西** —— HTML 导航、manifest。
+1. **`cacheFirst` 给内容哈希过的不可变资源**（脚本、样式、字体、模型权重）。
+   **`networkFirst` 给必须立刻反映发版的东西**（HTML 导航、manifest）。
 2. **两个策略都不会 reject**。离线且无缓存时返回 408，`respondWith` 不会炸。
 3. **response 是在读 body 之前同步 clone 的**。先 `await caches.open()` 再 clone 是经典 bug：
    那时 body 可能已经在流向页面，`clone()` 直接抛。
-4. **`precache` 幂等且逐条容错** —— 清单里有一个 404 不该让整个 install 失败。
+4. **`precache` 幂等且逐条容错**：清单里有一个 404 不该让整个 install 失败。
 5. **在 SW 里下载正是 `servePrecache` 的意义**。任务包在 `event.waitUntil` 里，能扛过页面导航；
    页面侧的 fetch 在用户点走的瞬间就被 abort，大文件下次访问从头重下。

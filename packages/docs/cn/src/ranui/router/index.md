@@ -6,7 +6,7 @@ description: '面向单页应用的客户端路由：声明式组件、JS API、
 
 用于单页应用的客户端路由。提供声明式 HTML 组件和 JavaScript API，支持导航守卫、View Transitions 动画过渡以及跨文档（MPA）场景。
 
-> **适用场景**：需要支持导航守卫、View Transitions 过渡以及跨文档（MPA）能力的客户端 SPA 路由——用 `createRouter` 搭配 `<r-router>` / `<r-route>` / `<r-link>` 即可搭建应用内导航。
+> **适用场景**：需要支持导航守卫、View Transitions 过渡以及跨文档（MPA）能力的客户端 SPA 路由，用 `createRouter` 搭配 `<r-router>` / `<r-route>` / `<r-link>` 即可搭建应用内导航。
 
 ## 快速开始
 
@@ -27,7 +27,7 @@ const router = createRouter({
   ],
 });
 
-// 2. 权限守卫——未登录用户重定向到登录页
+// 2. 权限守卫：未登录用户重定向到登录页
 router.beforeEach((to, from, next) => {
   if (to.meta?.requiresAuth && !sessionStorage.getItem('token')) {
     next('/login');
@@ -62,7 +62,7 @@ router.onRouteChange((to) => {
 ```
 
 ```css
-/* SPA 过渡动画——路由间交叉淡入淡出 */
+/* SPA 过渡动画：路由间交叉淡入淡出 */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -132,7 +132,7 @@ router.onRouteChange((to) => {
 
 #### 懒加载挂载/卸载 `src`
 
-对于更大的多页应用，`r-route` 可以按页面做代码分割，而不是把插槽内容一次性都打进主包。给 `src` 传一个模块路径；路径匹配时，`r-route` 会动态 `import()` 这个模块，并调用它的默认导出——`(host: HTMLElement) => void | (() => void)`——在一个响应式作用域内运行，传入一个用于渲染的 host 元素。离开该路由时，这整个作用域会被一次性销毁（页面注册的每个 effect、绑定、`onCleanup` 都会被清理），渲染内容也会被移除；再次进入该路由时，会直接用缓存的模块重新挂载，不会重新请求。
+对于更大的多页应用，`r-route` 可以按页面做代码分割，而不是把插槽内容一次性都打进主包。给 `src` 传一个模块路径，路径匹配时 `r-route` 会动态 `import()` 这个模块，调用它的默认导出（类型为 `(host: HTMLElement) => void | (() => void)`），在一个响应式作用域内运行，并传入一个用于渲染的 host 元素。离开该路由时，整个作用域会一次性销毁（页面注册的每个 effect、绑定、`onCleanup` 都会被清理），渲染内容也会被移除；再次进入该路由时，会直接用缓存的模块重新挂载，不会重新请求。
 
 ```html
 <r-route path="/settings" src="/pages/settings.js"></r-route>
@@ -148,7 +148,7 @@ export default function renderSettings(host) {
 }
 ```
 
-这个模式只在客户端生效——SSR/SSG 期间，懒加载路由只会解析显示/隐藏状态，不会加载页面模块本身。
+这个模式只在客户端生效：SSR/SSG 期间，懒加载路由只会解析显示/隐藏状态，不会加载页面模块本身。
 
 ### `r-link`
 
@@ -172,7 +172,7 @@ export default function renderSettings(host) {
 
 #### 插槽
 
-`r-router`、`r-route`、`r-link` 都没有具名插槽——各自只渲染默认（无名）`<slot>`：`r-router` 和 `r-route` 原样投影子路由/路由内容，`r-link` 把放进去的任何内容作为链接的可见内容原样投影出来。三者也都没有定义 `::part()`，所以这一组件没有 CSS Parts 小节。
+`r-router`、`r-route`、`r-link` 都没有具名插槽，各自只渲染默认（无名）`<slot>`：`r-router` 和 `r-route` 原样投影子路由/路由内容，`r-link` 把放进去的任何内容作为链接的可见内容原样投影出来。三者也都没有定义 `::part()`，因此这一组件没有 CSS Parts 小节。
 
 ## JavaScript API
 
@@ -361,7 +361,7 @@ SPA 导航使用 `startViewTransition()`，全页面跳转使用 `@view-transiti
 
 ## `view-transition-name` — 共享元素过渡
 
-`view-transition-name` 是让**特定元素**（而非整个视口）在两个页面间产生位移动画的关键属性。浏览器会捕获元素在两侧的位置和尺寸，并自动生成补间动画——这就是 [Chrome Profiles 演示](https://view-transitions.chrome.dev/profiles/mpa/) 中卡片飞入效果的实现原理。
+`view-transition-name` 是让**特定元素**（而非整个视口）在两个页面间产生位移动画的关键属性。浏览器会捕获元素在两侧的位置和尺寸，并自动生成补间动画，这正是 [Chrome Profiles 演示](https://view-transitions.chrome.dev/profiles/mpa/) 中卡片飞入效果的实现原理。
 
 ### 基础用法
 
@@ -466,11 +466,11 @@ router.beforeEach((to, from, next) => {
 }
 ```
 
-要将某个元素排除在过渡之外，设为 `view-transition-name: none`（如 `.sidebar { view-transition-name: none; }`）。要让多个部分各自独立动画，给每个元素分配一个唯一的名称——没有名称的元素都会随根过渡一起淡入淡出。
+要将某个元素排除在过渡之外，设为 `view-transition-name: none`（如 `.sidebar { view-transition-name: none; }`）。要让多个部分各自独立动画，需要给每个元素分配一个唯一的名称；没有名称的元素都会随根过渡一起淡入淡出。
 
 ## SSR / SSG
 
-所有 browser API（`window`、`history`、`document`）都用 `typeof` 判断做了调用守卫，因此在 Node/Deno 的 SSR 环境中调用 `createRouter` 是安全的。在 SSR 场景下，`push` 和 `replace` 仍会执行导航守卫并更新 `currentRoute`，但会跳过 `history.pushState` / `history.replaceState`；`popstate` 监听器永远不会在服务端注册。客户端正常水合（hydrate）即可——用同样的配置再调用一次 `createRouter`。
+所有浏览器 API（`window`、`history`、`document`）都用 `typeof` 判断做了守卫，因此在 Node/Deno 的 SSR 环境中调用 `createRouter` 是安全的。在 SSR 场景下，`push` 和 `replace` 仍会执行导航守卫并更新 `currentRoute`，但会跳过 `history.pushState` / `history.replaceState`；`popstate` 监听器永远不会在服务端注册。客户端正常水合（hydrate）即可：用同样的配置再调用一次 `createRouter`。
 
 ## 类型参考
 

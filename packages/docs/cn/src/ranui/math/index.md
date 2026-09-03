@@ -1,12 +1,12 @@
 ---
-description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML——无需 canvas、SVG 或 KaTeX 运行时。'
+description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML，无需 canvas、SVG 或 KaTeX 运行时。'
 ---
 
 # Math 数学公式
 
 使用 [Temml](https://temml.org/) 将 `LaTeX` 数学公式直接编译为原生 `MathML`，在 `HTML` 页面中高质量展示。
 
-> **适用场景**：需要在网页中渲染 LaTeX 数学公式时——`<r-math>` 会用 [Temml](https://temml.org/) 将 `latex` 属性中的表达式编译为 MathML，交由浏览器自身完成排版（无需 canvas/SVG，也不依赖 KaTeX 运行时）。
+> **适用场景**：需要在网页中渲染 LaTeX 数学公式时，`<r-math>` 会用 [Temml](https://temml.org/) 将 `latex` 属性中的表达式编译为 MathML，交由浏览器自身完成排版（无需 canvas/SVG，也不依赖 KaTeX 运行时）。
 
 ## 快速开始
 
@@ -35,7 +35,7 @@ description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML—
 | `download` | `boolean` | `false`   | 显示下载按钮/菜单，用于下载源码（`.tex`）和/或 MathML（`.mml`）。              |
 | `sheet`    | `string`  | `''`      | 注入组件 shadow DOM 的 CSS。                                                   |
 
-> 💡 **提示**：`latex` 属性的 getter 会用 `decodeURIComponent` 解码后再渲染，因此支持传入 URI 编码后的公式。以 slotted 文本内容传入公式无效——只有 `latex` 属性会被渲染。
+> 💡 **提示**：`latex` 属性的 getter 会用 `decodeURIComponent` 解码后再渲染，因此支持传入 URI 编码后的公式。以 slotted 文本内容传入公式不会生效，只有 `latex` 属性的内容才会渲染。
 
 ### 公式 `latex`
 
@@ -69,7 +69,7 @@ description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML—
 ## 自定义样式
 
 `<r-math>` 自身暴露了 **16 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
-地方都有效——`:root`、外层容器，或元素本身：
+地方都有效，比如 `:root`、外层容器，或元素本身：
 
 ```css
 r-math {

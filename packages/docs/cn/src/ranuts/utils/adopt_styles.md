@@ -23,7 +23,7 @@ class MyElement extends HTMLElement {
 
 ### adoptStyles
 
-组件的**静态**样式。降级路径按 **root** 去重：一个 shadowRoot 只保留一个带标记的 `<style>`，先到先得 —— 组件的静态样式在一个 root 内只应该有一份，第二次调用意味着调用方写错了。
+组件的**静态**样式。降级路径按 **root** 去重：一个 shadowRoot 只保留一个带标记的 `<style>`，先到先得。组件的静态样式在一个 root 内只应该有一份，第二次调用说明调用方写错了。
 
 #### 参数
 

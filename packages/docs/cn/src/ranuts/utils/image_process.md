@@ -32,7 +32,7 @@ document.body.appendChild(faded as HTMLCanvasElement);
 | `promise` | 加载好的图片元素 | `Promise<ImgSource>` |
 
 ::: tip
-reject 出去的是原始的 error **事件**而非 `Error` 对象。`<img>` 的 `onerror` 拿不到失败原因 —— 跨域时浏览器刻意不透露 —— 包装成 `Error` 只会造出一条假的错误信息。
+reject 出去的是原始的 error **事件**而非 `Error` 对象。`<img>` 的 `onerror` 拿不到失败原因（跨域失败时浏览器故意不透露），包装成 `Error` 只会造出一条假的错误信息。
 :::
 
 ### cutRound
@@ -98,5 +98,5 @@ type ImgSource = HTMLImageElement | HTMLCanvasElement;
 
 ## 相关
 
-- [convertImageToBase64](/cn/src/ranuts/utils/convert_image_to_base64) —— `File` → base64 dataURL
-- [isImageSize](/cn/src/ranuts/utils/is_image_size) —— 校验图片尺寸
+- [convertImageToBase64](/cn/src/ranuts/utils/convert_image_to_base64)：`File` → base64 dataURL
+- [isImageSize](/cn/src/ranuts/utils/is_image_size)：校验图片尺寸

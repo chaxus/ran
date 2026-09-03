@@ -133,7 +133,7 @@ new Hsla(col: Array<string | number>) // [h, s, l, a]
 
 ### ColorScheme
 
-生成一组相关联的 `Color` 对象——既可以直接由一组颜色生成，也可以由一个基准色按一组色相角度旋转得到。静态工厂方法覆盖了常见的配色方案。
+生成一组相关联的 `Color` 对象，既可以直接由一组颜色生成，也可以由一个基准色按一组色相角度旋转得到。静态工厂方法覆盖了常见的配色方案。
 
 #### 构造函数
 
@@ -192,7 +192,7 @@ new ColorScheme(colorVal: (string | number)[], angleArray: number[])
 
 ### 透明度相关
 
-透明度用 **0 – 100** 表示，与本模块其余函数对饱和度、亮度的百分比口径一致 —— 不是 CSS `rgba()` 用的 0 – 1。
+透明度用 **0 – 100** 表示，与本模块其余函数对饱和度、亮度的百分比口径一致，不是 CSS `rgba()` 用的 0 – 1。
 
 | 函数                  | 说明                                                     | 签名                       |
 | --------------------- | -------------------------------------------------------- | -------------------------- |
@@ -207,11 +207,11 @@ new ColorScheme(colorVal: (string | number)[], angleArray: number[])
 
 ### 混合与 shader 数学工具
 
-这些是 `ranuts/visual` 后处理滤镜（`ColorAdjustFilter` 等）背后用到的调色/混合数学，在这里单独导出是为了 CPU 侧复用——比如生成一张缩略图预览时，不需要为此专门起一条 GPU 管线。和本模块其余部分不同，**这里的通道都是 0–1**，不是 0–255 或 0–100——这是 shader 世界的惯例。
+这些是 `ranuts/visual` 后处理滤镜（`ColorAdjustFilter` 等）背后用到的调色/混合数学，在这里单独导出是为了 CPU 侧复用，比如生成一张缩略图预览时，不需要为此专门起一条 GPU 管线。和本模块其余部分不同，**这里的通道都是 0–1**，不是 0–255 或 0–100，这是 shader 世界的惯例。
 
 | 函数                                  | 说明                                                                                                  | 签名                                         |
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `luma(r, g, b)`                       | 感知亮度（Rec. 601 权重）。保持输入原本的量纲——0–1 或 0–255 都行                                      | `(r, g, b) => number`                        |
+| `luma(r, g, b)`                       | 感知亮度（Rec. 601 权重）。保持输入原本的量纲，0–1 或 0–255 都行                                      | `(r, g, b) => number`                        |
 | `blendScreen(base, blend)`            | 滤色混合：逐通道 `1 - (1-base)(1-blend)`                                                              | `(base: RGB, blend: RGB) => RGB`             |
 | `blendMultiply(base, blend)`          | 正片叠底混合：逐通道 `base * blend`                                                                   | `(base: RGB, blend: RGB) => RGB`             |
 | `blendOverlay(base, blend)`           | 叠加混合：暗部用正片叠底，亮部用滤色                                                                  | `(base: RGB, blend: RGB) => RGB`             |
@@ -239,7 +239,7 @@ const backToSrgb = linearToSrgb(linear); // ≈ 0.5
 ```
 
 ::: warning
-混合与调色数学要在**线性光**空间下运算，结果在物理上才是正确的——8 位的 hex 颜色是 sRGB 编码的，如果混合结果需要"看起来对"而不只是"能跑起来"，先用 `srgbToLinear` 转一下。
+混合与调色数学要在**线性光**空间下运算，结果在物理上才是正确的：8 位的 hex 颜色是 sRGB 编码的，如果混合结果需要"看起来对"而不只是"能跑起来"，先用 `srgbToLinear` 转一下。
 :::
 
 ### 格式正则
@@ -350,5 +350,5 @@ console.log(`${bold[0]}important${bold[1]}`);
 1. **即时计算**：`Color` 在构造函数中计算出所有表示形式，因此 `hex`、`rgb`、`rgba`、`hsl` 与 `hsla` 在构造时总是保持同步。
 2. **HSL setter 会重算 RGB**：`setHue` / `setSat` / `setLum` 会更新 HSL，然后通过 `updateFromHsl` 重新推导 RGB 与 hex；`setAlpha` 只影响 `rgba` 与 `hsla`。
 3. **数组或通道两种入参**：若干转换函数（`rgbToHex`、`rgbToHsl`、`hslToRgb`）既接受三个通道参数，也接受把单个数组作为第一个参数。
-4. **HSV 与 HSB**：`hsvToRgb` 是 `hsbToRgb` 的别名，`hsvToHsl` 是 HSB→HSL 转换的别名——此处 HSV 与 HSB 指同一模型。
+4. **HSV 与 HSB**：`hsvToRgb` 是 `hsbToRgb` 的别名，`hsvToHsl` 是 HSB→HSL 转换的别名，此处 HSV 与 HSB 指同一模型。
 5. **FMT 仅限终端**：这些 ANSI 转义序列只有在支持它们的终端中才会呈现为样式；在浏览器控制台中会显示为原始控制字符。

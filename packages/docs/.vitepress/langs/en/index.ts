@@ -53,7 +53,9 @@ const themeEnConfig: DefaultTheme.Config = {
   },
   nav: [
     { text: 'Home', link: '/' },
-    { text: 'Articles', link: '/src/article/doc_preview' },
+    { text: 'ranui', link: '/src/ranui/', activeMatch: '^/src/ranui/' },
+    { text: 'ranuts', link: '/src/ranuts/', activeMatch: '^/src/ranuts/' },
+    { text: 'Articles', link: '/src/article/doc_preview', activeMatch: '^/src/(article|note)/' },
     { text: 'Doc Editor', link: EDITOR },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],

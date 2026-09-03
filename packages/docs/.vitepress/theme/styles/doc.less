@@ -21,10 +21,20 @@
 }
 
 /* ---------- API tables: one premium card, not zebra rows ---------- */
+/* VitePress's default is `display: block; overflow-x: auto` (a scrolling box), which the
+   card treatment replaces with a real `display: table`. A real table can never shrink
+   below its min-content width, so `config.ts` wraps every markdown table in
+   `.vp-table-wrap`, which takes over the scrolling: the card stays 100% wide and, if a
+   table's widest unbreakable cell still exceeds the 688px content column, the wrapper
+   scrolls instead of the table sliding under the right-hand outline (that happened). */
+.vp-doc .vp-table-wrap {
+  margin: 22px 0;
+  overflow-x: auto;
+}
 .vp-doc table {
   display: table;
   width: 100%;
-  margin: 22px 0;
+  margin: 0;
   border-collapse: separate;
   border-spacing: 0;
   border: 1px solid var(--vp-c-divider);
@@ -42,6 +52,10 @@
   border: 0;
   border-bottom: 1px solid var(--vp-c-divider);
   padding: 11px 16px;
+  /* `break-word`, not `anywhere`: it does not shrink a column's min-content, so
+     identifiers never split mid-word — a cell that is still too wide scrolls via
+     `.vp-table-wrap` instead. */
+  overflow-wrap: break-word;
 }
 .vp-doc thead th {
   background: var(--vp-c-bg-soft);
@@ -69,7 +83,9 @@
   background: var(--vp-c-bg-alt);
   font-size: 12.5px;
   padding: 2px 7px;
-  white-space: nowrap;
+  /* wrap at spaces (`(html: string) => Promise<string>`), never `nowrap`: a nowrap
+     signature is exactly what used to overflow the content column. */
+  white-space: normal;
 }
 
 /* ---------- inline code & links ---------- */

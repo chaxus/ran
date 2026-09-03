@@ -10,7 +10,7 @@
 
 ## formatDuration
 
-把经过的**秒数**格式化成冒号分隔的时钟时长——播放器进度条上的那种形态。不足一小时用 `mm:ss`，超过则展开为 `hh:mm:ss`。
+把经过的**秒数**格式化成冒号分隔的时钟时长，也就是播放器进度条上常见的那种形态。不足一小时用 `mm:ss`，超过则展开为 `hh:mm:ss`。
 
 #### 参数
 
@@ -20,7 +20,7 @@
 
 #### 返回值
 
-`string` —— 时长字符串；输入不是有限数时返回 `''`。
+`string`：时长字符串；输入不是有限数时返回 `''`。
 
 ```js
 import { formatDuration } from 'ranuts/utils';
@@ -39,13 +39,13 @@ formatDuration(NaN); // ''
 
 ## formatRelative
 
-描述某个时间点相对于另一个时间点的位置——「3 天前」「2 小时后」。
+描述某个时间点相对于另一个时间点的位置，比如「3 天前」「2 小时后」。
 
 本地化交给平台的
 [`Intl.RelativeTimeFormat`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat)，
 它自 2020 年起在所有主流浏览器可用，且已经掌握各语言的复数与词形规则。`formatRelative` 只补上 `Intl` 有意留白的那部分：决定用**哪个单位**来表达这段间隔。
 
-和 `Intl` 一样，它只报告**单一**单位——3 天 6 小时的间隔是「3 天前」，不会是「3 天 6 小时前」。
+和 `Intl` 一样，它只报告**单一**单位：3 天 6 小时的间隔算作「3 天前」，不会说成「3 天 6 小时前」。
 
 #### 参数
 
@@ -63,7 +63,7 @@ formatDuration(NaN); // ''
 
 #### 返回值
 
-`string` —— 描述文本；两端任一无法解析时返回 `''`。
+`string`：描述文本；两端任一无法解析时返回 `''`。
 
 ```js
 import { formatRelative } from 'ranuts/utils';
@@ -90,14 +90,14 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 ```
 
 ::: warning 它不携带方向
-`compact` 只是量值，未来的时间戳和过去的渲染结果完全相同——都是 `5m`。它是为「已发生事件的信息流」准备的。凡是读者需要分辨过去与未来的场合，请改用其他风格。
+`compact` 只是量值，未来的时间戳和过去的渲染结果完全相同，都是 `5m`。它是为「已发生事件的信息流」准备的。凡是读者需要分辨过去与未来的场合，请改用其他风格。
 :::
 
 ## parseVttTimestamp / parseVttCueTiming
 
-解析 WebVTT 字幕的时间信息——`.vtt` 文件里 `hh:mm:ss.mmm --> hh:mm:ss.mmm` 这样的行。
+解析 WebVTT 字幕的时间信息，即 `.vtt` 文件里 `hh:mm:ss.mmm --> hh:mm:ss.mmm` 这样的行。
 
-`parseVttTimestamp` 解析单个时间戳（`hh:` 部分可选）为秒数；`parseVttCueTiming` 解析一整行 cue 时间信息——用 `-->` 分隔的两端，忽略结尾附带的 cue 设置（比如 `align:start line:0`）——返回 `{ start, end }`。
+`parseVttTimestamp` 把单个时间戳（`hh:` 部分可选）解析成秒数；`parseVttCueTiming` 解析一整行 cue 时间信息，即用 `-->` 分隔的两端，并忽略结尾附带的 cue 设置（比如 `align:start line:0`），返回 `{ start, end }`。
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
@@ -110,11 +110,11 @@ parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
 ```
 
-两者在输入不匹配时都返回 `undefined`——不会抛出异常——这样字幕文件里格式错误的一行可以被跳过，而不会导致整个解析过程中断。
+两者在输入不匹配时都返回 `undefined`，不会抛出异常，这样字幕文件里格式错误的一行可以直接跳过，不会中断整个解析过程。
 
 ## 注意事项
 
-1. **单位选择**：`formatRelative` 取间隔真正填满的最粗单位，再在该单位内取整。当取整正好顶到下一个单位的门口——59.6 分钟取整成「60 分钟」——它会自动进位，于是你读到的是「1 小时前」。
+1. **单位选择**：`formatRelative` 取间隔真正填满的最粗单位，再在该单位内取整。当取整结果正好达到下一个单位的临界点（比如 59.6 分钟会取整成「60 分钟」）时，会自动进位，于是显示为「1 小时前」。
 2. **对称取整**：先对绝对值取整再补回符号。因为 JavaScript 里 `Math.round(-1.5)` 是 `-1`，否则 90 分钟前会显示「1 小时前」，而 90 分钟后却显示「2 小时后」。
 3. **格式化器复用**：`Intl.RelativeTimeFormat` 实例按 locale/style/numeric 组合缓存，因此渲染一百条时间戳的列表只会构造一个格式化器，而不是一百个。
 4. **降级**：在没有 `Intl.RelativeTimeFormat` 的运行时上会回退到 compact 形态，而不是抛错。

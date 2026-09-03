@@ -6,7 +6,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 在多个面板之间切换的标签容器。用 `<r-tabs>` 作为容器，里面放一个或多个 `<r-tab>` 面板。
 
-> **适用场景**：需要一个能在多个面板间切换的标签容器——用 `<r-tabs>` 搭配 `<r-tab>` 子元素，每个子元素提供一个标题 `label` 和面板内容。
+> **适用场景**：需要一个能在多个面板间切换的标签容器：用 `<r-tabs>` 搭配 `<r-tab>` 子元素，每个子元素提供一个标题 `label` 和面板内容。
 
 ## 快速开始
 
@@ -60,7 +60,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 | `effect`   | `boolean` | —       | 标题的水波纹效果（通常由父级的 `effect` 设置）     |
 | `sheet`    | `string`  | `''`    | 注入 shadow DOM 的自定义样式文本                   |
 
-> `key` 属性的 getter/setter 读写的是 `r-key` 这个 attribute（没有直接用 `key` 这个名字，因为它是保留字段）。请在元素连接前设置好 `label` 和 `r-key`——标题构建完成之后，这两个属性的变化不会被重新处理。
+> `key` 属性的 getter/setter 读写的是 `r-key` 这个 attribute（没有直接用 `key` 这个名字，因为它是保留字段）。请在元素连接前设置好 `label` 和 `r-key`：标题构建完成之后，这两个属性的变化不会被重新处理。
 
 ### 标题样式 `type`
 
@@ -164,7 +164,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 </r-tabs>
 ```
 
-> 同一个 `<r-tabs>` 内每个 `r-key` 必须唯一——构建标题时如果有面板的 key 重复或缺失会抛出错误。
+> 同一个 `<r-tabs>` 内每个 `r-key` 必须唯一：构建标题时如果有面板的 key 重复或缺失会抛出错误。
 
 ### 禁用面板 `disabled`
 
@@ -258,7 +258,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 ### `change`
 
-当某个观察中的属性发生变化时——最主要是激活标签切换时——`<r-tabs>` 会派发 `change` `CustomEvent`。`event.detail.active` 是当前激活的 key（选中 `<r-tab>` 的 `r-key`，没设置 `r-key` 时为其索引）。
+当某个被监听的属性发生变化时（最主要是激活标签切换时），`<r-tabs>` 会派发 `change` `CustomEvent`。`event.detail.active` 是当前激活的 key（选中 `<r-tab>` 的 `r-key`，没设置 `r-key` 时为其索引）。
 
 ```js
 const tabs = document.querySelector('r-tabs');
@@ -272,7 +272,7 @@ tabs.addEventListener('change', (e) => {
 ## 自定义样式
 
 `<r-tabs>` 自身暴露了 **10 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
-地方都有效——`:root`、外层容器，或元素本身：
+地方都有效，比如 `:root`、外层容器，或元素本身：
 
 ```css
 r-tabs {
@@ -290,4 +290,4 @@ Part：`content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 - **样式选择**：需要带边框、文档风格的标签条时用 `type="line"`；需要极简的滑动下划线时用默认的 `type="flat"`。
 - **对齐**：在宽容器里用 `align="center"` 或 `align="end"` 重新定位标题行。
 - **禁用面板**：用 `disabled` 标记不可用的面板；它们会同时跳过点击选择和默认选中逻辑。
-- **键盘导航**：标题行是一个 WAI-ARIA tablist——方向键在标签间移动（配合 `Home`/`End`），只有激活的标签在 tab 顺序里。
+- **键盘导航**：标题行是一个 WAI-ARIA tablist，方向键在标签间移动（配合 `Home`/`End`），只有激活的标签在 tab 顺序里。

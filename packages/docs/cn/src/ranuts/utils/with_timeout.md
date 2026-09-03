@@ -4,13 +4,13 @@ JavaScript 没有内建的两个 Promise 原语：可以从外部结束的 promi
 
 ## API
 
-| 函数                                                     | 说明                                           |
-| -------------------------------------------------------- | ---------------------------------------------- |
-| `deferred<T>()`                                          | `{ promise, resolve, reject }` —— 从外部结束它 |
-| `withTimeout(promise, ms, options?)`                     | `ms` 内未结束则以 `TimeoutError` 拒绝          |
-| `withTimeoutFallback(promise, ms, fallback, onTimeout?)` | 超时时返回兜底值，而不是拒绝                   |
-| `delay(ms)`                                              | `ms` 毫秒后 resolve                            |
-| `TimeoutError`                                           | `withTimeout` 抛出的错误类型                   |
+| 函数                                                     | 说明                                         |
+| -------------------------------------------------------- | -------------------------------------------- |
+| `deferred<T>()`                                          | `{ promise, resolve, reject }`，从外部结束它 |
+| `withTimeout(promise, ms, options?)`                     | `ms` 内未结束则以 `TimeoutError` 拒绝        |
+| `withTimeoutFallback(promise, ms, fallback, onTimeout?)` | 超时时返回兜底值，而不是拒绝                 |
+| `delay(ms)`                                              | `ms` 毫秒后 resolve                          |
+| `TimeoutError`                                           | `withTimeout` 抛出的错误类型                 |
 
 ### `withTimeout` 选项
 
@@ -65,15 +65,15 @@ await queue.add(() => withTimeout(recreateEditor(config), 30_000));
 
 ## 注意事项
 
-1. **定时器一定会被清理**，包括任务先完成的情况。常见的手写版本
-   —— `Promise.race([task, new Promise((_, r) => setTimeout(r, ms))])` —— 在任务先完成时会把
-   定时器漏掉：在 Node 里让进程多活满一个超时周期，在测试里则留下一个会打到下一个用例的定时器。
+1. **一定会清理定时器**，包括任务先完成的情况。常见的手写写法
+   （`Promise.race([task, new Promise((_, r) => setTimeout(r, ms))])`）在任务先完成时会漏掉
+   定时器：在 Node 里会让进程多活满一个超时周期，在测试里则会留下一个定时器，打到下一个用例头上。
 
 2. **超时不会取消任务**。promise 本身无法取消，中断请求、终止 worker、关闭连接这些事要在
    `onTimeout` 里做。
 
-3. **`withTimeoutFallback` 只吞掉超时**。被包装的 promise 真正 reject 时仍然向外抛
-   —— 超时不算错误，但错误依然是错误。
+3. **`withTimeoutFallback` 只吞掉超时**。被包装的 promise 真正 reject 时仍然会向外抛出：
+   超时不算错误，但错误终究还是错误。
 
 4. **`delay` 用裸 `setTimeout`**，因此在 Node、Web Worker、浏览器里都能用；
    `window.setTimeout` 在没有 document 的环境会抛 ReferenceError。

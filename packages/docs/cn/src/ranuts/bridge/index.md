@@ -1,14 +1,14 @@
 # Bridge（postMessage）
 
-一个构建在 `window.postMessage` 之上的轻量级跨上下文通信层。它让两个浏览上下文——父页面与 `<iframe>`、弹窗，或任何你持有引用的 `Window`——通过请求/响应（类 RPC）的 API 以及单向广播互相通信。
+一个构建在 `window.postMessage` 之上的轻量级跨上下文通信层。它让两个浏览上下文（父页面与 `<iframe>`、弹窗，或任何你持有引用的 `Window`）通过请求/响应（类 RPC）的 API，以及单向广播互相通信。
 
 消息直接以**结构化对象**跨越边界（依赖 `postMessage` 原生的结构化克隆算法），因此 `Date`、`Map`、`Set`、`ArrayBuffer`、`File` 等类型都能完整保留，无需自行序列化。每条消息带一个协议标记，从而与页面上其它库（HMR、DevTools、第三方 SDK）的 `postMessage` 流量区分开。
 
 有三种使用方式：
 
-- **`PostMessageBridge`** —— 底层原语。一个实例封装一个目标 `Window`。用 `on` 注册处理器，用 `send` 发送并等待响应，用 `broadcast` 发送且不等待响应。
-- **`BridgeManager` / `bridgeManager` / `Client` / `Platform`** —— 更上层的封装，维护一个具名 bridge 的注册表（单例），并提供轻量的 `Client`（调用方）和 `Platform`（接收方）门面。
-- **`openPortBridge` / `acceptPortBridge` / `createPortBridge`** —— 基于 `MessageChannel` / `MessagePort` 的点对点桥接（**推荐用于新代码**）。握手后双方各持一个私有 port 通信，从结构上规避跨窗口串消息、来源伪造、同窗口多桥串台与自答自问，也无需 origin 过滤。
+- **`PostMessageBridge`**：底层原语。一个实例封装一个目标 `Window`。用 `on` 注册处理器，用 `send` 发送并等待响应，用 `broadcast` 发送且不等待响应。
+- **`BridgeManager` / `bridgeManager` / `Client` / `Platform`**：更上层的封装，维护一个具名 bridge 的注册表（单例），并提供轻量的 `Client`（调用方）和 `Platform`（接收方）门面。
+- **`openPortBridge` / `acceptPortBridge` / `createPortBridge`**：基于 `MessageChannel` / `MessagePort` 的点对点桥接（**推荐用于新代码**）。握手后双方各持一个私有 port 通信，从结构上规避跨窗口串消息、来源伪造、同窗口多桥串台与自答自问，也无需 origin 过滤。
 
 > **兼容性说明**：线路格式为结构化对象（不再是 Base64 字符串）。同版本的两端可直接互通，`Client`（`PostMessageBridge`）与 `Platform` 也共用同一套信封协议。若存在「旧页面 ↔ 新页面」跨版本通信，则协议不一致。
 
@@ -99,7 +99,7 @@ import { bridgeManager } from 'ranuts/utils';
 
 返回的 `PortBridge` 提供与 `PostMessageBridge` 一致的 `on` / `off` / `send` / `broadcast` / `destroy`。
 
-- **`OpenPortBridgeOptions`**：`{ targetWindow: Window; targetOrigin?: string; name?: string }` —— `name` 用于在一个页面里区分多个独立 port 连接，两端须一致（默认 `'default'`）。
+- **`OpenPortBridgeOptions`**：`{ targetWindow: Window; targetOrigin?: string; name?: string }`，其中 `name` 用于在一个页面里区分多个独立 port 连接，两端须一致（默认 `'default'`）。
 - **`AcceptPortBridgeOptions`**：`{ targetOrigin?: string; name?: string }`。
 
 ### `MessageCodec`
@@ -184,7 +184,7 @@ interface MessageHandler<T = unknown, R = unknown> {
 
 ### 底层用法：页面与 iframe 之间的 `PostMessageBridge`
 
-**父页面** —— 与 iframe 的 `contentWindow` 通信：
+**父页面**（与 iframe 的 `contentWindow` 通信）：
 
 ```js
 import { PostMessageBridge } from 'ranuts/utils';
@@ -204,7 +204,7 @@ iframe.addEventListener('load', async () => {
 });
 ```
 
-**iframe 内部** —— 注册处理器：
+**iframe 内部**（注册处理器）：
 
 ```js
 import { PostMessageBridge } from 'ranuts/utils';
@@ -224,7 +224,7 @@ bridge.on('theme:change', ({ mode }) => {
 
 ### 高层用法：`Client`（父页面）与 `Platform`（iframe）
 
-**iframe 内部** —— 用 `Platform` 暴露一组方法：
+**iframe 内部**（用 `Platform` 暴露一组方法）：
 
 ```js
 import { Platform } from 'ranuts/utils';
@@ -238,7 +238,7 @@ const { destroy } = Platform.init({
 // destroy();
 ```
 
-**父页面** —— 连接并按 id 调用：
+**父页面**（连接并按 id 调用）：
 
 ```js
 import { Client } from 'ranuts/utils';
@@ -267,7 +267,7 @@ iframe.addEventListener('load', async () => {
 
 ### 点对点用法：`openPortBridge` / `acceptPortBridge`（推荐）
 
-**父页面**（发起方）—— 创建通道并把一端交给 iframe：
+**父页面**（发起方，创建通道并把一端交给 iframe）：
 
 ```js
 import { openPortBridge } from 'ranuts/utils';
@@ -285,7 +285,7 @@ iframe.addEventListener('load', async () => {
 });
 ```
 
-**iframe 内部**（接收方）—— 等待递来的 port：
+**iframe 内部**（接收方，等待递来的 port）：
 
 ```js
 import { acceptPortBridge } from 'ranuts/utils';
@@ -331,7 +331,7 @@ console.log(decoded); // => { msg: '你好 👋', n: 1 }
 6. **通道隔离**：同一窗口上挂多个 bridge 时，给两端传相同的 `channel` 即可互不串扰。
 7. **唯一 id**：若复用已存在的 id，`connectClient` 会抛出 `Bridge <id> already exists`。省略 `id` 可获得自动生成的 id。
 8. **清理**：所有 `PostMessageBridge` 共享一个全局 `message` 监听器（最后一个 bridge 销毁后自动摘除）。不再需要连接时请调用 `destroy()`（或 `Client.remove` / `removeClient`）以 reject 挂起请求、释放资源。
-9. **非浏览器环境**：无 `window`（Node / SSR）时，`PostMessageBridge` 实例化不会抛错，`send` 会以明确错误 reject，`broadcast` / `destroy` 静默降级。
-10. **优先 PortBridge**：新代码建议用 `openPortBridge` / `acceptPortBridge`——点对点信道从结构上避免了串扰、伪造与自答问题。
-11. **`broadcastToAll`**：`Client.broadcastToAll` 以源 `'*'` 向当前窗口发送，出于安全考虑不推荐使用——优先使用定向的 `call` / `broadcast`。
+9. **非浏览器环境**：无 `window`（Node / SSR）时，创建 `PostMessageBridge` 实例不会抛错，`send` 会以明确错误 reject，`broadcast` / `destroy` 静默降级。
+10. **优先 PortBridge**：新代码建议用 `openPortBridge` / `acceptPortBridge`。点对点信道从结构上避免了串扰、伪造与自答问题。
+11. **`broadcastToAll`**：`Client.broadcastToAll` 以源 `'*'` 向当前窗口发送，出于安全考虑不推荐使用，请优先使用定向的 `call` / `broadcast`。
 12. **`BRIDGE_MARKER` / `DEFAULT_CHANNEL`**：上面第 2 点和第 6 点背后用到的两个原始值也是导出的，如果你需要直接检查 `postMessage` 流量（比如在 devtools 里挂个监听、或者写测试），而不是通过 `PostMessageBridge` 来用，就能用得上。`BRIDGE_MARKER` 是每条 bridge 消息都携带的协议标记字符串；`DEFAULT_CHANNEL` 是没传 channel 时使用的字面量 `'default'`。

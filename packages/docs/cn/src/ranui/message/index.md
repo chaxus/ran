@@ -6,7 +6,7 @@ description: 'ranui Message 以命令式方式展示全局反馈（info/success/
 
 用于操作结果的全局反馈组件，通过命令式的 `message` API 调用，渲染为可自动关闭的 toast。
 
-> **适用场景**：当你需要一条短暂、自动消失的 toast 来确认操作结果时——调用命令式的 `message.info` / `success` / `warning` / `error` / `toast` API，而不是编写标签。
+> **适用场景**：需要一条短暂、自动消失的 toast 来确认操作结果时，调用命令式的 `message.info` / `success` / `warning` / `error` / `toast` API 即可，不必手写标签。
 
 ## 快速开始
 
@@ -66,17 +66,17 @@ message.info({
 | `zIndex`       | `number \| string`          | `1200`          | toast 容器的堆叠层级（z-index）                          |
 | `getContainer` | `() => HTMLElement \| null` | `document.body` | 返回 toast 堆栈挂载到的目标元素                          |
 
-> 传入 `null`、`undefined` 或空参数不会有任何效果——不会显示任何内容。
+> 传入 `null`、`undefined` 或空参数不会有任何效果，不会显示任何内容。
 
 ### 元素属性 `r-message`
 
 每条 toast 都是一个 `<r-message>` 自定义元素。全局 API 会替你设置这些属性，但也可以直接使用它们。
 
-| 属性      | 类型     | 默认值 | 说明                                                                                           |
-| --------- | -------- | ------ | ---------------------------------------------------------------------------------------------- |
-| `type`    | `string` | —      | `info`、`success`、`warning`、`error`、`toast` 之一，决定图标/颜色以及 ARIA live region 的角色 |
-| `content` | `string` | —      | 渲染在 toast 内部的文本                                                                        |
-| `sheet`   | `string` | `''`   | 注入到组件 Shadow DOM 中的 CSS                                                                 |
+| 属性      | 类型     | 默认值 | 说明                                                                                            |
+| --------- | -------- | ------ | ----------------------------------------------------------------------------------------------- |
+| `type`    | `string` | —      | `info`、`success`、`warning`、`error`、`toast` 之一，决定图标、颜色以及 ARIA live region 的角色 |
+| `content` | `string` | —      | 渲染在 toast 内部的文本                                                                         |
+| `sheet`   | `string` | `''`   | 注入到组件 Shadow DOM 中的 CSS                                                                  |
 
 ## 提示类型 `type`
 
@@ -93,7 +93,7 @@ message.info({
     <r-button  onclick="message.error('这是一条提示')">错误提示</r-button>
 </div>
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button  onclick="message.toast('这是一条提示')">toast提示</r-button>
+     <r-button  onclick="message.toast('这是一条提示')">toast 提示</r-button>
 </div>
 
 ```html
@@ -101,7 +101,7 @@ message.info({
 <r-button onclick="message.success('这是一条提示')">成功提示</r-button>
 <r-button onclick="message.warning('这是一条提示')">警告提示</r-button>
 <r-button onclick="message.error('这是一条提示')">错误提示</r-button>
-<r-button onclick="message.toast('这是一条提示')">toast提示</r-button>
+<r-button onclick="message.toast('这是一条提示')">toast 提示</r-button>
 ```
 
 ## 自定义时长 `duration`
@@ -172,8 +172,8 @@ toast 堆栈挂载在一个传送到 `body` 的容器中；每个 `<r-message>` 
 
 ## 最佳实践
 
-- **陈述结果**：把 toast 文案写成一个结果——「项目已删除」「已保存修改」——而不是含糊的「成功」。
+- **陈述结果**：把 toast 文案写成一个结果，比如「项目已删除」「已保存修改」，而不是含糊的「成功」。
 - **成功 / 信息**：使用 `message.success` / `message.info` 表示不阻塞流程的确认。
 - **错误 / 警告**：使用 `message.error` / `message.warning`；它们会升级为强调（assertive）的 ARIA live region，让屏幕阅读器打断当前朗读进行播报。
-- **保持简洁**：toast 会自动消失——较长或需要操作的内容应放进对话框。
+- **保持简洁**：toast 会自动消失，较长或需要用户操作的内容应放进对话框。
 - **谨慎调整时长**：可以为较长的文案适当延长 `duration`，但不要让短暂反馈变得常驻不消失。

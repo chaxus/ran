@@ -1,5 +1,5 @@
 ---
-description: '底层浮层面板原语——r-popover 和 r-select 用来定位、控制层级的基础构建块。'
+description: '底层浮层面板原语，是 r-popover 和 r-select 用来定位、控制层级的基础构建块。'
 ---
 
 # Dropdown 下拉面板
@@ -7,7 +7,7 @@ description: '底层浮层面板原语——r-popover 和 r-select 用来定位�
 底层浮层面板原语：一个圆角、带投影的悬浮表面，可选配指向箭头。它自身携带浮层 z-index，
 是 `r-popover` 和 `r-select` 定位并挂载到 `<body>` 时复用的基础元素。
 
-> **适用场景**：需要构建像弹出层或下拉菜单这样的低层级浮层面板 —— `<r-dropdown>` 携带 z-index 与箭头，省去手写定位逻辑。
+> **适用场景**：需要构建像弹出层或下拉菜单这样的低层级浮层面板时，`<r-dropdown>` 携带 z-index 与箭头，省去手写定位逻辑。
 
 ## 快速开始
 
@@ -75,15 +75,15 @@ description: '底层浮层面板原语——r-popover 和 r-select 用来定位�
 `ran-dropdown-down-in` / `-down-out` / `-up-in` / `-up-out` / `-left-in` /
 `-left-out` / `-right-in` / `-right-out`。
 
-**class 存在的时长与属性完全一致**——什么时候算动画结束由设置属性的人决定，移除属性即
+**class 存在的时长与属性完全一致**：什么时候算动画结束由设置属性的人决定，移除属性即
 移除 class。（它曾经是约 300ms 后自行过期的，那个时长在 JS 里另存了一份，和样式表里的
-那份手工对齐。而且那个定时器移除的是"触发那一刻 `transit` 的值"，不是它当初加上去的那个
-class，所以在这段窗口里换方向，第一个 class 就永久留在面板上了——`-in` 和 `-out` 同时
+那份手工对齐。而且那个定时器移除的是"触发那一刻 `transit` 的值"，而不是它当初加上去的那个
+class，所以在这段窗口里换方向的话，第一个 class 就会永久留在面板上：`-in` 和 `-out` 同时
 生效。）
 
 `getAnimationTarget()` 返回动画真正跑在哪个元素上。它在 shadow root 里面，所以在 host 上
-调 `getAnimations()` 读不到任何东西，`{ subtree: true }` 也不穿透 shadow 边界——需要等面板
-动画结束的代码应该问它，而不是伸进 shadow 树里按 class 名去找。
+调 `getAnimations()` 读不到任何东西，`{ subtree: true }` 也不穿透 shadow 边界：需要等面板
+动画结束的代码应该去问它，而不是钻进 shadow 树里按 class 名查找。
 
 <Demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
@@ -158,5 +158,5 @@ r-dropdown {
 - **底层原语**：只有需要自定义浮层面板时才直接使用 `r-dropdown`；常见场景优先用 `r-popover` 或 `r-select`。
 - **设置宿主尺寸**：面板默认 `width` / `height` 为宿主的 100%，所以要给宿主显式的尺寸与定位，再将其挂载。
 - **层级**：宿主携带 `--ran-z-dropdown`（`1100`），因此层级高于对话框；需要时可通过 `--ran-dropdown-host-z-index` 覆盖。
-- **箭头默认居中于面板本身**：`r-dropdown` 并不知道"触发元素"是什么，只知道自己的面板。在没有外部定位逻辑接入的情况下，`arrow="top"` / `"bottom"` 默认居中于面板自身宽度——这正是上面示例中裸用 `r-dropdown` 时的正确表现。`r-popover` 在 `r-dropdown` 之上叠加了"感知触发元素"的能力：它会测量真实的触发元素，并通过 `--ran-dropdown-arrow-anchor-offset` 传入一个像素偏移量，即使面板比触发元素更宽、且与其边缘对齐而非居中对齐，箭头依然精确指向触发元素中心。若在 `r-dropdown` 之上自建感知触发元素的面板，可直接设置该变量，无需重新实现 `r-popover` 的定位逻辑。
+- **箭头默认居中于面板本身**：`r-dropdown` 并不知道"触发元素"是什么，只知道自己的面板。在没有外部定位逻辑接入的情况下，`arrow="top"` / `"bottom"` 默认居中于面板自身宽度，这正是上面示例中裸用 `r-dropdown` 时的正确表现。`r-popover` 在 `r-dropdown` 之上叠加了"感知触发元素"的能力：它会测量真实的触发元素，并通过 `--ran-dropdown-arrow-anchor-offset` 传入一个像素偏移量；即使面板比触发元素更宽、且与其边缘对齐而非居中对齐，箭头依然会精确指向触发元素中心。若要在 `r-dropdown` 之上自建感知触发元素的面板，可以直接设置该变量，不必重新实现一遍 `r-popover` 的定位逻辑。
 - **引入方式**：通过 `import 'ranui'`（注册全部组件）或独立子路径 `import 'ranui/dropdown'` 引入。

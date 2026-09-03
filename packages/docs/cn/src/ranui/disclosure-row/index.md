@@ -7,7 +7,7 @@ description: 'ranui DisclosureRow（<r-disclosure-row>）是一行「标题 · �
 一行 `[前缀] 标题 · 摘要` 的骨架，展开后显示正文。`<r-reasoning>` 与 `<r-tool-card>` 用的是同一个
 它，因此同时含有两者的会话只有一套折叠语言，而不是两套。
 
-> **适用场景**：一行紧凑的文字代表着更大的一团内容——一次工具调用、一段思维链、一组日志——而细节
+> **适用场景**：一行紧凑的文字代表着更大的一团内容（一次工具调用、一段思维链、一组日志），而细节
 > 值得先藏起来、需要时再看。
 
 ## 快速开始
@@ -83,8 +83,8 @@ description: 'ranui DisclosureRow（<r-disclosure-row>）是一行「标题 · �
 | `disclosuretoggle` | —      | bubbles, composed | 该行被展开或收起。 |
 
 ::: warning 事件名是 `disclosuretoggle`，不是 `toggle`
-`toggle` 是 `<details>` 派发的原生事件，它的 `ToggleEvent` 带的是 `oldState` / `newState` 而不是
-`detail`——按平台的名字去接，拿到的是平台的负载，里面什么都没有。状态请从元素上读：`row.open`。
+`toggle` 是 `<details>` 派发的原生事件，它的 `ToggleEvent` 带的是 `oldState` / `newState`，而不是
+`detail`：按原生事件名去监听是接不到这份数据的。状态请直接从元素上读：`row.open`。
 :::
 
 ```js
@@ -107,7 +107,7 @@ row.addEventListener('disclosuretoggle', () => {
 ## 自定义样式
 
 `<r-disclosure-row>` 自身暴露了 **15 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
-地方都有效——`:root`、外层容器，或元素本身：
+地方都有效，比如 `:root`、外层容器，或元素本身：
 
 ```css
 r-disclosure-row {
@@ -123,6 +123,6 @@ Part：`body` · `disclosure` · `leading` · `row` · `separator` · `summary` 
 
 - **要么给行配正文，要么别让它可展开。** 展开后是空的箭头是条死路；不加 `expandable`，它就老老实实
   是一行。
-- **heading 用固定词表**（`Read file`、`Run tests`、`Search`），把变化的部分放进 summary——这正是一列
-  行可以被快速扫读的原因。
-- **`tone="error"` 必须配文字，不能只靠颜色**——摘要要说清失败的是什么。
+- **heading 用固定词表**（`Read file`、`Run tests`、`Search`），把变化的部分放进 summary。这正是一列
+  行能被快速扫读的原因。
+- **`tone="error"` 必须配文字，不能只靠颜色**：摘要要说清失败的是什么。

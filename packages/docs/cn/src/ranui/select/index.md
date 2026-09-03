@@ -6,7 +6,7 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 
 从一组选项中选择单个值的下拉选择器，支持可选的搜索与表单参与。
 
-> **适用场景**：需要一个由 `<r-option>` 子元素构建的单值下拉选择器，可选支持搜索和原生表单参与——`<r-select>` 负责展开、过滤，以及 `FormData` 上报。
+> **适用场景**：需要一个由 `<r-option>` 子元素构建的单值下拉选择器，可选支持搜索和原生表单参与：`<r-select>` 负责展开、过滤，以及 `FormData` 上报。
 
 ## 快速开始
 
@@ -36,7 +36,7 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 
 | 属性                  | 类型      | 默认值     | 说明                                                                         |
 | --------------------- | --------- | ---------- | ---------------------------------------------------------------------------- |
-| `label`               | `string`  | `''`       | 字段上方的静态标题——和 `r-input` 的 `label` 用法一致，方便和输入框对齐       |
+| `label`               | `string`  | `''`       | 字段上方的静态标题，和 `r-input` 的 `label` 用法一致，方便和输入框对齐       |
 | `value`               | `string`  | `''`       | 选中的值。设置它会更新收起状态下的显示文本；`disabled` 时忽略                |
 | `defaultValue`        | `string`  | `''`       | 初始选中的值，与选项的 `value` 匹配                                          |
 | `disabled`            | `boolean` | `false`    | 是否禁用选择器                                                               |
@@ -50,7 +50,7 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 | `required`            | `boolean` | `false`    | 表单提交前是否要求已选择                                                     |
 | `sheet`               | `string`  | `''`       | 注入 shadow DOM 的自定义样式                                                 |
 
-> **注意**：`defaultValue` 和 `showSearch` 是响应式的——元素连接后再修改它们，也会在 `attributeChangedCallback` 里被重新处理（和 `value`、`disabled`、`sheet` 一样）。更新 `defaultValue` 会重新应用匹配的选中项；切换 `showSearch` 会装配或卸载内联搜索框。
+> **注意**：`defaultValue` 和 `showSearch` 是响应式的：元素连接后再修改它们，也会在 `attributeChangedCallback` 里重新处理（和 `value`、`disabled`、`sheet` 一样）。更新 `defaultValue` 会重新应用匹配的选中项；切换 `showSearch` 会装配或卸载内联搜索框。
 
 ### Option 属性
 
@@ -59,14 +59,14 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 | 属性       | 类型      | 默认值  | 说明                                       |
 | ---------- | --------- | ------- | ------------------------------------------ |
 | `value`    | `string`  | `''`    | 选项的值；被选中时作为 select 的值发出     |
-| `disabled` | `boolean` | `false` | 标记该选项不可选——点击和键盘选择都会跳过它 |
+| `disabled` | `boolean` | `false` | 标记该选项不可选，点击和键盘选择都会跳过它 |
 | `sheet`    | `string`  | `''`    | 注入选项 shadow DOM 的自定义样式           |
 
 选项标签或值重复时会打印一条 `console.warn`。
 
 ### 标题 `label`
 
-字段上方的静态标题——始终可见，不会和相邻内容重叠。使用和 `r-input` 的 `label` 相同的
+字段上方的静态标题，始终可见，不会和相邻内容重叠。使用和 `r-input` 的 `label` 相同的
 token 与布局，所以并排放置的带标题 select 和带标题 input 会对齐（同样的高度、同样的顶边）。
 
 <Demo>
@@ -141,11 +141,11 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### 下拉方向 `placement`
 
-`placement` 只是一个偏好设置，不是保证：当触发器靠近视口边缘、偏好方向放不下时，下拉框会自动翻转到另一侧，并水平偏移以保持在屏幕内。这一行为只对默认的 body 级挂载生效——设置了 `getPopupContainerId` 时，请自行选一个适合容器的 `placement`。
+`placement` 只是一个偏好设置，不是保证：当触发器靠近视口边缘、偏好方向放不下时，下拉框会自动翻转到另一侧，并水平偏移以保持在屏幕内。这一行为只对默认的 body 级挂载生效；设置了 `getPopupContainerId` 时，请自行选一个适合容器的 `placement`。
 
-方向可以带一个对齐后缀——`bottom-end`、`top-center` 等，和 `r-popover` 是同一套写法。只写方向等同于 `-start`，即面板的起始边与触发器的起始边对齐。
+方向可以带一个对齐后缀，比如 `bottom-end`、`top-center`，和 `r-popover` 是同一套写法。只写方向等同于 `-start`，即面板的起始边与触发器的起始边对齐。
 
-只有当面板和触发器不一样宽时，后缀才会产生差别——默认情况下面板宽度就跟着触发器走。把面板撑宽（用 `r-dropdown::part(dropdown)`，经 `dropdownclass` 定位到它，因为面板是挂到 `<body>` 上的、并不在 select 的 shadow root 里），对齐就会按真正绘制出来的宽度计算：
+只有当面板和触发器不一样宽时，后缀才会产生差别：默认情况下面板宽度就跟着触发器走。把面板撑宽（用 `r-dropdown::part(dropdown)`，经 `dropdownclass` 定位到它，因为面板是挂到 `<body>` 上的、并不在 select 的 shadow root 里），对齐就会按真正绘制出来的宽度计算：
 
 ```html
 <style>
@@ -180,7 +180,7 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### 展开状态 `open`
 
-`open` 就是下拉框的状态，像 `<details open>`、`<dialog open>` 一样反射为属性。没有任何地方再从面板的 `display` 反推状态——那个值比状态滞后一整段退场动画——所以属性、`aria-expanded` 和屏幕上看到的三者不会互相矛盾。
+`open` 就是下拉框的状态，像 `<details open>`、`<dialog open>` 一样反射为属性。没有任何地方再从面板的 `display` 反推状态（那个值比状态滞后一整段退场动画），所以属性、`aria-expanded` 和屏幕上看到的三者不会互相矛盾。
 
 因此它既是驱动组件的正式方式，也是可以拿来写样式、写断言的东西：
 
@@ -319,7 +319,7 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### `show` / `after-show` / `hide` / `after-hide`
 
-在面板开合的前后触发。`show` 和 `hide` 表示**意图**，在过渡开始时发出；`after-show` 和 `after-hide` 在面板真正到位、动画结束后发出——需要"等面板确实消失了再做某事"时，听后面这一对。
+在面板开合的前后触发。`show` 和 `hide` 表示**意图**，在过渡开始时发出；`after-show` 和 `after-hide` 在面板真正到位、动画结束后发出。需要"等面板确实消失了再做某事"时，监听后面这一对。
 
 这两对事件都不带 `detail`。
 
@@ -331,7 +331,7 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 </script>
 ```
 
-等待的是样式表里那个动画本身，而不是抄进脚本里的一个时长。所以在 `prefers-reduced-motion` 下——面板压根没有动画要播——`after-hide` 会紧接着 `hide` 发出，而不是干等一个固定延迟。
+等待的是样式表里那个动画本身，而不是抄进脚本里的一个时长。所以在 `prefers-reduced-motion` 下（面板压根没有动画要播），`after-hide` 会紧接着 `hide` 发出，而不是干等一个固定延迟。
 
 ## 表单关联
 

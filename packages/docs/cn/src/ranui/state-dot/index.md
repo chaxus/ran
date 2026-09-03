@@ -1,5 +1,5 @@
 ---
-description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指示点——idle、running、success、warning、error——由光晕与实心点两层组成。'
+description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指示点（idle、running、success、warning、error），由光晕与实心点两层组成。'
 ---
 
 # StateDot 状态点
@@ -7,7 +7,7 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
 一个 8px 的生命周期指示点：光晕与实心点在同一个元素里，两层都用 `currentColor`，因此一个状态是
 一条颜色规则，而不是两个令牌。
 
-> **适用场景**：某一行需要表明一件事进行到哪一步——排队中、进行中、已完成、失败——又不值得为它单开
+> **适用场景**：某一行需要表明一件事进行到哪一步（排队中、进行中、已完成、失败），又不值得为它单开
 > 一行时。`<r-tool-card>` 和会话压缩标记用的都是它。
 
 ## 快速开始
@@ -30,12 +30,12 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
 <r-state-dot state="error"></r-state-dot>
 ```
 
-`running` 会脉动，其余都是静止的。无法识别的值渲染为 `idle` 而不是消失——这样，生产端新增、页面还
+`running` 会脉动，其余都是静止的。无法识别的值渲染为 `idle` 而不是消失，这样一来，生产端新增、页面还
 没学会的状态，仍然占着它在行里的位置。
 
 ### 与文字并排
 
-点承载状态，文字承载含义。永远不要让颜色成为区分两行的唯一线索——见
+点承载状态，文字承载含义。永远不要让颜色成为区分两行的唯一线索，详见
 [设计规范](/cn/src/ranui/design-guides/#无障碍)。
 
 <Demo column>
@@ -62,7 +62,7 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
 ### 无障碍
 
 **没有 `label` 时这个点是 `aria-hidden` 的。** 如果同一行的文字已经说明了结果，点在屏幕阅读器里就
-是噪音——把「进行中」念两遍帮不了任何人。只有当点是状态的**唯一**载体时才设置 `label`：
+是噪音，把「进行中」念两遍帮不了任何人。只有当点是状态的**唯一**载体时才设置 `label`：
 
 ```html
 <!-- 文字已经说了：让点保持沉默 -->
@@ -93,4 +93,4 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
 | `--ran-state-dot-error-color`   | `--ran-color-danger`                |
 | `--ran-state-dot-halo-opacity`  | `0.16`                              |
 
-`running` 是脉动实心点而不是旋转——8px 的转圈只会糊成一团；在 `prefers-reduced-motion` 下脉动会停止。
+`running` 是脉动实心点而不是旋转：8px 的转圈只会糊成一团；在 `prefers-reduced-motion` 下脉动会停止。

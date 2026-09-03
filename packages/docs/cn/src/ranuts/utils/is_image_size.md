@@ -87,7 +87,7 @@ async function handleFileUpload(file) {
 1. 同时传 `width` 与 `height` 时**必须同时满足**；两者都不传则只校验文件能否解码为图片。
 2. **解码失败会 reject**（损坏文件、非图片），而不是让 promise 永远挂着。
 3. **无论成功失败都会 revoke object URL**，批量校验时不会泄漏 blob URL 到页面卸载。
-4. **仅浏览器可用** —— SSR 下会以明确的错误 reject。
+4. **仅浏览器可用**：SSR 下会以明确的错误 reject。
 
 ::: warning 0.3 已修复
 此前后一个条件会整个覆盖前一个，同时传 `width` 和 `height` 时宽度被静默忽略；没有 `onerror`，

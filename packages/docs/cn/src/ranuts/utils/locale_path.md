@@ -1,6 +1,6 @@
 # createLocalePath
 
-多语言站点的 URL 换算。纯函数、无全局状态、无 DOM —— 构建期脚本（sitemap、`hreflang`）
+多语言站点的 URL 换算。纯函数、无全局状态、无 DOM，构建期脚本（sitemap、`hreflang`）
 和浏览器里都能跑。
 
 采用**子目录**（`/zh/book/`）而非子域名（`zh.example.com/book/`）：搜索引擎把子域名当独立站点、
@@ -51,11 +51,11 @@ paths.alternates(location.pathname).forEach(({ code, href }) => {
 
 ## 注意
 
-1. **`href` 是幂等的**。加新前缀前会先剥掉已有前缀，传入已本地化的路径不会叠加 ——
+1. **`href` 是幂等的**。加新前缀前会先剥掉已有前缀，所以传入已本地化的路径不会叠加，
    `hrefForLocale` 本身就是 `href`。
 2. **长前缀优先匹配**，`zh` 不会吃掉 `/zh-hant/...`。
 3. **`base` 只从开头剥**。用 `replace(base, '')` 会替换字符串中第一次出现的位置，
    路径中部含有同名片段时会剥错地方。
-4. **query 与 hash 会保留** —— 换算只作用于 pathname。
+4. **query 与 hash 会保留**，换算只作用于 pathname。
 5. **没有全局「当前语言」**。语言 code 由调用方显式传入或走默认值；当前语言是 i18n 运行时的职责，
    不是本模块的。

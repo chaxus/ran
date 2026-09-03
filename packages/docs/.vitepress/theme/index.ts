@@ -6,7 +6,6 @@ import { localStorageGetItem } from 'ranuts/utils';
 import env from '../plugins/env';
 import TOTP from '../components/TOTP.vue';
 import Layout from '../components/Layout.vue';
-import NavLayout from '../components/NavLayout.vue';
 import Home from '../components/Home.vue';
 import HomeCinematic from '../components/HomeCinematic.vue';
 import GlassPlayground from '../components/GlassPlayground.vue';
@@ -85,8 +84,6 @@ const enablePageTransitions = (router: Router): void => {
 
 export default {
   extends: DefaultTheme,
-  // Wrap the default layout to mount the product switcher (ranui/ranuts) next to the logo.
-  Layout: NavLayout,
   enhanceApp({ app, router }: EnhanceAppContext): void {
     if (!import.meta.env.SSR) {
       // `@ranui/preview` pins its own old `ranui` dependency and bundles it, so it

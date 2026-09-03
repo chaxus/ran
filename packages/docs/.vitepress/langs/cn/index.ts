@@ -53,7 +53,9 @@ const themeCnConfig: DefaultTheme.Config = {
   },
   nav: [
     { text: '首页', link: '/cn/' },
-    { text: '文章', link: '/cn/src/article/doc_preview' },
+    { text: 'ranui', link: '/cn/src/ranui/', activeMatch: '^/cn/src/ranui/' },
+    { text: 'ranuts', link: '/cn/src/ranuts/', activeMatch: '^/cn/src/ranuts/' },
+    { text: '文章', link: '/cn/src/article/doc_preview', activeMatch: '^/cn/src/(article|note)/' },
     { text: '文档编辑器', link: EDITOR },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],

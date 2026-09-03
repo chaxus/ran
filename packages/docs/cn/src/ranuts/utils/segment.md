@@ -1,7 +1,7 @@
 # buildOffsets / indexForOffset / segmentByRanges
 
 「内容分块 + 标注记录在拼接后坐标系」的坐标换算。把高亮存成**全局偏移**而不是「第 N 块第 M 个字」，
-重新分块后标注依然有效 —— 改字号、改页宽、改分片大小，标注仍指向同一段文字。
+重新分块后标注依然有效：改字号、改页宽、改分片大小，标注仍指向同一段文字。
 
 ## API
 
@@ -15,7 +15,7 @@ buildOffsets([3, 5, 2]); // [0, 3, 8]
 
 ### indexForOffset(offsets, offset)
 
-二分查找全局偏移落在第几块。越界会夹取到 `[0, offsets.length - 1]`，空数组返回 `0` ——
+二分查找全局偏移落在第几块。越界会夹取到 `[0, offsets.length - 1]`，空数组返回 `0`，
 返回值总是可以安全索引。
 
 ### segmentByRanges(text, chunkStart, ranges)

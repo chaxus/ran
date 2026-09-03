@@ -10,7 +10,7 @@ import { createConversationEngine } from 'ranuts/conversation';
 
 ## 为什么不对事件类型做 switch
 
-渲染对话的常见做法，是让视图对事件类型做 switch 并修改组件树。那会把排序、身份识别与局部更新的对账全部塞进**视图**，于是每新增一种内容——工具调用、审批请求、状态行——都要手工穿一遍，视图每多一种内容就多一个分支。
+渲染对话的常见做法，是让视图对事件类型做 switch 并修改组件树。那会把排序、身份识别与局部更新的对账全部塞进**视图**，于是每新增一种内容（工具调用、审批请求、状态行）都要手工穿一遍，视图每多一种内容就多一个分支。
 
 这里每一种内容都是**独立注册的状态机**：一个 definition 声明哪些事件属于自己，把它们折叠进自己的状态，并且永远不知道其他 definition 的存在。新增一种内容是新增一个 definition，而不是修改渲染器。
 
@@ -45,7 +45,7 @@ engine.push(event);
 - **每个 definition 都会看到每个事件。** 引擎不会在第一个认领处停下，因此一条日志事件可以同时驱动两个节点。
 - **顺序在 `start` 时固定。** 持续更新的节点停留在它打开时的位置，因此流式消息不会每来一个增量就跳到列表末尾。
 - **找不到已打开节点的 `update` 会被丢弃。** 当起始事件被分页窗口裁掉时，这是诚实的处理方式；凭一条局部更新凭空造出节点，等于渲染一个从未存在过的东西。
-- **重复的 `start` 会就地重开该节点。** 既然 definition 判定这是一个新节点，旧状态就被丢弃而非合并——但位置保留。
+- **重复的 `start` 会就地重开该节点。** 既然 definition 判定这是一个新节点，旧状态就被丢弃而非合并，但位置保留。
 - **`reader.previous(kind)` 只能向后看。** 能看到自己之后才开启的节点的 definition，会因运行时机不同而给出不同结果，重放同一份日志也就复现不出同一个视图。
 
 ## 发布节奏
@@ -54,8 +54,8 @@ engine.push(event);
 
 | 节奏              | 适用于                                                |
 | ----------------- | ----------------------------------------------------- |
-| `animation-frame` | 逐 token 的增量——两次绘制之间的所有增量合并为一次通知 |
-| `immediate`       | 离散事实——工具结果、审批；等一帧只会徒增延迟          |
+| `animation-frame` | 逐 token 的增量：两次绘制之间的所有增量合并为一次通知 |
+| `immediate`       | 离散事实（工具结果、审批），等一帧只会徒增延迟        |
 | `none`            | 后续发布反正会带上的状态；只记录，不唤醒视图          |
 
 **节奏只升不降。** 已有待处理帧时到来的 `immediate` 会立即发布并取消该帧，而不是通知两次。省略 `publication` 等同于 `immediate`。
@@ -78,6 +78,6 @@ interface ConversationNode<State> {
 
 ## 相关
 
-- [ranuts/stream](../stream/) —— 产生这些事件
-- [`<r-conversation>`](../../ranui/conversation/) —— 渲染这些节点
-- [ranuts/utils](../utils/) 中的 `createBottomFollower` —— 让视图保持吸附在底部
+- [ranuts/stream](../stream/)：产生这些事件
+- [`<r-conversation>`](../../ranui/conversation/)：渲染这些节点
+- [ranuts/utils](../utils/) 中的 `createBottomFollower`：让视图保持吸附在底部

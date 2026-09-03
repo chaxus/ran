@@ -1,6 +1,6 @@
 # queryFlag / isInIframe
 
-读取 URL 上的布尔开关，以及判断页面是否被嵌入 —— `?embed`、`?readonly`、`?debug` 背后的两个判断。
+读取 URL 上的布尔开关，并判断页面是否被嵌入：这是 `?embed`、`?readonly`、`?debug` 背后的两个判断。
 
 ## API
 
@@ -65,13 +65,13 @@ openDocument(file, { readonly: queryFlag('readonly') });
 
 ## 注意事项
 
-1. **不带值是最常见的写法**。`?embed` 没有值，`getQuery(url).embed` 得到 `''` —— 是假值 ——
-   直接判真假会静默漏掉这种最常见的形式。`queryFlag` 就是为此存在的。
+1. **不带值是最常见的写法**。`?embed` 没有值，`getQuery(url).embed` 得到的是假值 `''`；
+   直接判真假会静默漏掉这种最常见的形式。`queryFlag` 就是为此而存在的。
 
 2. **`?k=false` 为假**。显式的否定会被尊重，而不是当成「参数存在即开启」。
 
-3. **`isInIframe` 做了保护**。某些引擎下跨源读取 `window.parent` 会抛错；读不到父窗口即视为
-   被嵌入 —— 因为事实就是如此。
+3. **`isInIframe` 做了保护**。某些引擎下跨源读取 `window.parent` 会抛错；读不到父窗口就视为
+   已被嵌入，因为事实就是如此。
 
 4. **两者都是 SSR 安全的**。没有 `window` 时 `isInIframe` 返回 `false`，`queryFlag` 在未传
-   `url` 时返回 `false` —— 传入 URL 后二者都可以在构建期脚本里使用。
+   `url` 时也返回 `false`；只要传入 URL，二者都可以在构建期脚本里使用。

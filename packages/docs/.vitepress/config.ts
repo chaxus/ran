@@ -190,6 +190,40 @@ export default defineConfig({
         }
         return defaultFence(tokens, idx, options, env, self);
       };
+
+      // Every table is wrapped in a horizontal-scroll container. `doc.less` renders
+      // tables as a real `display: table` card (VitePress's default is a scrolling
+      // `display: block`), and a real table can never be narrower than its widest
+      // unbreakable cell — so a long signature used to push the whole table past the
+      // content column and under the right-hand outline. With the wrapper the table
+      // keeps its card look at 100% width and, in the rare case its min-content still
+      // exceeds the column, the wrapper scrolls instead of overlapping.
+      md.renderer.rules.table_open = () => '<div class="vp-table-wrap"><table>';
+      md.renderer.rules.table_close = () => '</table></div>';
+
+      // A hard line break inside a Chinese paragraph is rendered as a space by
+      // markdown-it (softbreak → "\n" → collapsed by Vue's whitespace condensing), so
+      // the hard-wrapped `cn/src/**/*.md` sources showed stray spaces mid-sentence
+      // ("执行 之前"). Drop the break when both neighbours are CJK text; keep it when
+      // either side is Latin, inline code or a link, where the source style already
+      // puts a space between Chinese and Western text anyway.
+      const CJK = /[\u3000-\u303f\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff00-\uffef]/;
+      const defaultSoftbreak =
+        md.renderer.rules.softbreak?.bind(md.renderer.rules) ??
+        ((_tokens: any, _idx: number, options: any) => (options.breaks ? '<br>\n' : '\n'));
+      md.renderer.rules.softbreak = (tokens: any, idx: number, options: any, env: any, self: any) => {
+        const prev = tokens[idx - 1];
+        const next = tokens[idx + 1];
+        if (
+          prev?.type === 'text' &&
+          next?.type === 'text' &&
+          CJK.test(prev.content.slice(-1)) &&
+          CJK.test(next.content.charAt(0))
+        ) {
+          return '';
+        }
+        return defaultSoftbreak(tokens, idx, options, env, self);
+      };
     },
   },
   // Per-page SEO: canonical, EN/CN hreflang alternates (existence-checked so we never

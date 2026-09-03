@@ -44,7 +44,7 @@ formatDate('not a date'); // 'Invalid Date'
 
 ::: warning 0.3 修复并提供替代
 旧实现链式调用六次 `.replace()` 且带忽略大小写标志，导致两个问题：后一个模式可能命中前一步刚写入的
-数字；`/M+/g`、`/m+/g`、`/D+/gi` 互相重叠 —— 所以小写模板 `yyyy-mm-dd` 会输出「年-分钟-日」。
+数字，`/M+/g`、`/m+/g`、`/D+/gi` 又互相重叠，所以小写模板 `yyyy-mm-dd` 会输出「年-分钟-日」。
 
 `timestampToTime` 已废弃，请改用 `formatDate`：往 `Date` 实例上挂方法在序列化后会丢失，
 类型也只能标成 `Function`。它的 `format` 现在委托给 `formatDate`，老调用方也能享受修复后的占位符处理。

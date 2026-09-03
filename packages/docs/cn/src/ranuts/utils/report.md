@@ -43,10 +43,10 @@ report({ payload: { ...createData(), type: 'page_view' } });
 2. **降级依据是 sendBeacon 是否真的成功**，而不是 `navigator` 存不存在。浏览器队列超配额时
    `sendBeacon` 也会返回 `false`，这种情况同样会落到图片兜底。
 3. **每次事件都要调 `createData()`，不要在初始化时调一次**。它记录的是调用那一刻的 URL 和时间戳，
-   提到处理函数外面会让之后所有事件都上报页面加载时的状态。
+   把它提到处理函数外面调用，会让之后所有事件都上报页面加载时的状态。
 
 ::: warning 0.3 取代 getHost
 `getHost()` 已删除。它用一个硬编码到本仓库作者的域名拼出日志接口，而且一次遗留改动早已把它的
-输出退化成字面量 `'//log.'` —— 一个不可达的 host，于是所有不带 `url` 的上报都被静默发进了黑洞。
+输出退化成字面量 `'//log.'`（一个不可达的 host），于是所有不带 `url` 的上报都被静默发进了黑洞。
 `createData()` 同样不再读硬编码的 `chaxus_prod` cookie，改为配置 `userIdCookie`。
 :::

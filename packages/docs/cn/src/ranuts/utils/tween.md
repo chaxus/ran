@@ -1,13 +1,13 @@
 # 缓动函数（tween）
 
-七组缓动曲线，每组都有 `easeIn` 和 `easeOut` 两种形态。它们是纯数学映射 —— 不碰 DOM，也不自带 RAF 循环。由你在自己的动画帧里把当前时间喂进来，取回这一帧应该用的值。
+七组缓动曲线，每组都有 `easeIn` 和 `easeOut` 两种形态。它们是纯数学映射，不碰 DOM，也不自带 RAF 循环。你在自己的动画帧里把当前时间传入，就能拿到这一帧该用的值。
 
 参数沿用 Robert Penner 的经典约定：
 
-- `t` —— 已经过去的时间
-- `b` —— 初始值
-- `c` —— 总变化量（终值 = `b + c`）
-- `d` —— 总时长
+- `t`：已经过去的时间
+- `b`：初始值
+- `c`：总变化量（终值 = `b + c`）
+- `d`：总时长
 
 每个函数内部都做了 `t >= d` 的钳制，所以超时调用返回终值而不是越界外推。
 
@@ -69,6 +69,6 @@ type EasingFn = (t: number, b: number, c: number, d: number) => number;
 
 ## 说明
 
-`easeIn` 起步慢、逐渐加速；`easeOut` 起步快、逐渐减速。响应用户操作的 UI 通常用 `easeOut` 观感更好 —— 元素立刻动起来然后稳住，而不是先迟疑一下。
+`easeIn` 起步慢、逐渐加速；`easeOut` 起步快、逐渐减速。响应用户操作的 UI 通常用 `easeOut` 观感更好：元素立刻动起来然后稳住，而不会先迟疑一下再动。
 
 感谢 [zhangxinxu/Tween](https://github.com/zhangxinxu/Tween)。

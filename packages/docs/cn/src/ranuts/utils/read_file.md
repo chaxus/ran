@@ -22,8 +22,8 @@ input.addEventListener('change', async (e) => {
 
 ## 注意
 
-1. **三条出口都接上了** —— `onload`、`onerror`、`onabort`。漏接 `onabort` 是让用户取消选择后
+1. **三条出口都接上了**：`onload`、`onerror`、`onabort`。漏接 `onabort` 是让用户取消选择后
    promise 永远挂着的经典写法。
 2. **`FileReader` 不存在时以明确的错误 reject**（Node、部分 worker 环境）。
-3. **来源不明的文件不要直接 `new TextDecoder().decode()`** —— 那等于假定 UTF-8，会把 GBK/Big5
+3. **来源不明的文件不要直接 `new TextDecoder().decode()`**：那等于假定 UTF-8，会把 GBK/Big5
    解成乱码。用 `arrayBufferToString`，它会先嗅探。

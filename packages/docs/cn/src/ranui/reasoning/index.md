@@ -1,5 +1,5 @@
 ---
-description: '可折叠的思维链：推理流式到达时展开，结束时收起——直到读者自己做出决定。'
+description: '可折叠的思维链：推理流式到达时展开，结束时收起，直到读者自己做出决定。'
 ---
 
 # Reasoning 思维链
@@ -10,7 +10,7 @@ description: '可折叠的思维链：推理流式到达时展开，结束时收
 
 推理是一次响应里读者最想「看着它发生」、事后却几乎不想保留的部分。因此这个元素在 `streaming` 置位时展开，在它清除时收起。
 
-**直到读者自己动手。** 一旦读者自己展开或收起过，自动行为就永久停止——这与 [`createBottomFollower`](../../ranuts/utils/) 对滚动采用的是同一条所有权规则，理由也相同：一个不断替读者重新做决定的界面，比一个从不做决定的界面更糟。从脚本设置 `open` 同样算作接管，因为脚本是在替一个有主张的调用方行事。
+**直到读者自己动手。** 一旦读者自己展开或收起过，自动行为就永久停止，这与 [`createBottomFollower`](../../ranuts/utils/) 对滚动采用的是同一条所有权规则，理由也相同：一个不断替读者重新做决定的界面，比一个从不做决定的界面更糟。从脚本设置 `open` 同样算作接管，因为脚本本身就是在代表一个有明确意图的调用方行事。
 
 ## 快速开始
 
@@ -74,13 +74,13 @@ reasoning.streaming = !snapshot.done;
 
 ## 相关
 
-- [Conversation 对话](../conversation/) —— 把它作为记录里的推理行挂载
-- [ranuts/stream](../../ranuts/stream/) —— `reasoning-delta` 的来源
+- [Conversation 对话](../conversation/)：把它作为记录里的推理行挂载
+- [ranuts/stream](../../ranuts/stream/)：`reasoning-delta` 的来源
 
 ## 自定义样式
 
 `<r-reasoning>` 自身暴露了 **4 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
-地方都有效——`:root`、外层容器，或元素本身：
+地方都有效，比如 `:root`、外层容器，或元素本身：
 
 ```css
 r-reasoning {

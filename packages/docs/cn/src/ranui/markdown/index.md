@@ -35,11 +35,11 @@ Inline \\(e^{i\\pi} + 1 = 0\\) 与文字同行。`;
 
 # Markdown
 
-以框架无关的 Web Component 渲染 Markdown——包括 **逐 token 到达的 AI 输出**。`<r-markdown>` 参考 Vercel 的 [Streamdown](https://streamdown.ai) 设计：文本流式到达时会即时闭合半截的 `**粗体`、`` `代码 ``、链接和 `$$` 公式，把文档切成块并 **只重渲染发生变化的那一块**，长回复不会因为每个 token 都从头重新解析。
+以框架无关的 Web Component 渲染 Markdown，包括**逐 token 到达的 AI 输出**。`<r-markdown>` 参考 Vercel 的 [Streamdown](https://streamdown.ai) 设计：文本流式到达时会即时闭合半截的 `**粗体`、`` `代码 ``、链接和 `$$` 公式，把文档切成块并 **只重渲染发生变化的那一块**，长回复不会因为每个 token 都从头重新解析。
 
-围栏 ` ```mermaid ` 代码块会变成 [`<r-mermaid>`](/cn/src/ranui/mermaid/)，公式变成 [`<r-math>`](/cn/src/ranui/math/)，代码可用 shiki 高亮——这三者都在内容首次需要时才懒加载。输出经 DOMPurify 净化。
+围栏 ` ```mermaid ` 代码块会变成 [`<r-mermaid>`](/cn/src/ranui/mermaid/)，公式变成 [`<r-math>`](/cn/src/ranui/math/)，代码可用 shiki 高亮，这三者都在内容首次需要时才懒加载。输出经 DOMPurify 净化。
 
-> **何时使用**：需要展示不完全可控的 Markdown——聊天回复、LLM 流式输出、用户评论、文档——并希望开箱即得流式、代码/图表/公式支持与安全 HTML，而不必自己拼装解析器、净化器和高亮器。
+> **何时使用**：需要展示不完全可控的 Markdown（聊天回复、LLM 流式输出、用户评论、文档），并希望开箱即得流式、代码/图表/公式支持与安全 HTML，而不必自己拼装解析器、净化器和高亮器。
 
 ## 快速开始
 
@@ -56,7 +56,7 @@ import 'ranui'; // 或独立入口：
 import 'ranui/markdown';
 ```
 
-内容来源依次为：**`content` 属性（property，推荐）**——不会反射到 attribute，流式写入长文本不会抖动 DOM；`content` attribute；元素的文本内容：
+内容来源依次为：**`content` 属性（property，推荐）**，不会反射到 attribute，流式写入长文本不会抖动 DOM；`content` attribute；元素的文本内容：
 
 ```js
 const el = document.querySelector('r-markdown');
@@ -172,8 +172,8 @@ r-markdown::part(code) {
 ## 说明
 
 - **懒加载**：解析器 chunk（marked + DOMPurify + remend）在首次渲染时加载；shiki、mermaid、Temml 各自只在内容用到时才加载。不渲染 Markdown 的应用零成本。
-- **净化**：Markdown 里的原始 HTML 会经过 DOMPurify——脚本、事件属性、`javascript:` URL、`<style>`、表单与 iframe 都会被移除。任务列表的复选框会保留。
+- **净化**：Markdown 里的原始 HTML 会经过 DOMPurify：脚本、事件属性、`javascript:` URL、`<style>`、表单与 iframe 都会被移除。任务列表的复选框会保留。
 - **按块 diff** 以位置为 key，因此未变化块内的 DOM 状态（打开的全屏图表、滚动过的表格）在流式更新中得以保留。文档只 lex 一次、每块用自己的 token 渲染，因此链接引用定义可以跨块解析（`[文字][id]` 在一块、`[id]: url` 在另一块）。
-- **GFM 脚注**（`[^1]`）**不支持**——marked 没有脚注 tokenizer，标记会原样渲染成文本。
+- **GFM 脚注**（`[^1]`）**不支持**：marked 没有脚注 tokenizer，标记会原样渲染成文本。
 - **shiki 由你自己的安装解析**：ES 构建保留裸的 `import('shiki')`，由你的打包器分包，只下载代码围栏实际用到的语法。shiki 是 ranui 的普通依赖，`npm i ranui` 就已带上，无需额外安装。
 - **独立 IIFE**：`dist/iife/markdown.iife.js` 没有模块解析器，因此改为内联 mermaid、Temml 以及 shiki 的 _web_ 语言包（约 50 种常见语言）。想要完整语言覆盖且体积更小，请用 ES 入口（`ranui/markdown`）。

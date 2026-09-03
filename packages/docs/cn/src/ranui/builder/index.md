@@ -1,5 +1,5 @@
 ---
-description: 'ranui/builder——不依赖框架的链式 DOM 构建器，带 SwiftUI / Solid 风格的细粒度响应式：构建一次，之后只更新绑定到该信号的那个节点。'
+description: 'ranui/builder 是不依赖框架的链式 DOM 构建器，带 SwiftUI / Solid 风格的细粒度响应式：只构建一次，之后只更新绑定到对应信号的那个节点。'
 ---
 
 # Builder 构建器
@@ -11,7 +11,7 @@ description: 'ranui/builder——不依赖框架的链式 DOM 构建器，带 Sw
 > 用与 ranui 内部一致的构建方式。
 
 > **核心原则：构建一次，原地更新。** 视图函数只运行**一次**；状态变化只更新绑定到该信号的那个节点，
-> 不存在整棵树的重渲染。按形状挑选原语——值 → getter 绑定；条件 → `Show` / `Switch`；列表 →
+> 不存在整棵树的重渲染。按数据形状挑选原语：值用 getter 绑定；条件用 `Show` / `Switch`；列表用
 > `For` / `Index`。
 
 ```js
@@ -49,7 +49,7 @@ const header = Div()
 ```
 
 `Div()`、`Span()`、`ButtonBuilder()`、`InputBuilder()`、`Label()`、`Ul()`、`Li()`、`Section()`、
-`Article()`、`Nav()`、`Header()`、`Footer()`、`Main()`、`Style()`、`Slot()`——其余标签（包括自定义
+`Article()`、`Nav()`、`Header()`、`Footer()`、`Main()`、`Style()`、`Slot()`。其余标签（包括自定义
 元素）用 `View('any-tag')`。
 
 ### 链式 API
@@ -86,7 +86,7 @@ ref.current?.closePopover();
 
 ```js
 const [count, setCount] = signal(0);
-count(); // 读取——在 effect 和 memo 内部会被追踪
+count(); // 读取；在 effect 和 memo 内部会被追踪
 setCount(1); // 写入；setCount((n) => n + 1) 同样可用
 // 值没变的写入是空操作（Object.is；可用 signal(v, { equals }) 覆盖比较方式）
 
@@ -106,10 +106,10 @@ batch(() => {
 untrack(() => count()); // 读取但不订阅
 ```
 
-- **`computed` 是惰性的**——没被读过的 memo 永远不会重算；而且只有它的**值**变了才会通知下游，因此
-  稳定 memo 后面的 effect 会一直睡着。
+- **`computed` 是惰性的**：没被读过的 memo 永远不会重算；而且只有它的**值**变了才会通知下游，所以
+  值稳定的 memo 后面的 effect 不会被无谓触发。
 - **effect 自动追踪**：只有最近一次运行中真正读过的信号才保持订阅，因此条件分支不会留下过期订阅。
-- **循环 effect 会抛错**而不是死循环——读并写同一个信号的 effect 是 bug，运行时拒绝无限跑下去。
+- **循环 effect 会直接抛错**，而不是死循环：既读又写同一个信号的 effect 是 bug，运行时不会让它无限跑下去。
 
 ### 响应式绑定
 
@@ -150,12 +150,12 @@ Ul().children(
 
 决定 `For` 是否真的复用了节点的四条规则：
 
-- **`key` 必须唯一。** 重复的 key 会被忽略（只渲染第一个），开发模式下会警告。不要用数组下标当 key
-  ——那样一重排就失去了复用。
+- **`key` 必须唯一。** 重复的 key 会被忽略（只渲染第一个），开发模式下会警告。不要用数组下标当 key，
+  否则一重排就失去了复用。
 - **要用新数组更新。** `each` 读的是信号，原地修改同一个数组再 set 回去会被相等性跳过，列表不会更新。
 - **`render` 每个项目只跑一次**，不是每次列表变化都跑。逐行更新交给信号；`index` 是 getter，因此重排
   之后依然正确。
-- **移除一个项目会销毁该行的作用域**——它的 effect 和清理一并执行。
+- **移除一个项目会销毁该行的作用域**，它的 effect 会被销毁，清理函数会一并执行。
 
 优先用 `Show` / `For`，而不是原始 getter 子节点：getter 会在它读到的**每一次**变化上重建整个区域，
 哪怕结果并没有变，于是里面的焦点、滚动位置、输入值和过渡动画统统丢失。
@@ -181,8 +181,8 @@ dispose(); // 移除绑定的 effect 并执行清理
 
 ### 按页面拆除
 
-给每个页面 / 路由一个自己的 root，导航时销毁它——这个页面创建的所有 effect、绑定、定时器和监听器一次
-性全部拆掉：
+给每个页面 / 路由一个自己的 root，导航时销毁它，这个页面创建的所有 effect、绑定、定时器和监听器就会
+一次性全部拆掉：
 
 ```js
 let disposePage = null;
@@ -202,8 +202,8 @@ function showPage(render, host) {
 
 ::: warning 在 Web Component 内部不要用 getter 绑定
 组件的 `constructor` 和 `connectedCallback` **不是**响应式作用域，因此在那里创建的 getter 绑定或
-`createEffect` 是「孤儿」，永远不会被销毁——它会在已经断开的节点上继续触发；如果信号比元素活得久，还会
-把元素钉在内存里。请用普通值构建，用显式的 `createEffect` 驱动更新，把它们的 dispose 收集起来在
+`createEffect` 是「孤儿」，永远不会被销毁：它会在已经断开的节点上继续触发；如果信号比元素活得久，还会
+让元素无法被回收。请用普通值构建，用显式的 `createEffect` 驱动更新，把它们的 dispose 收集起来在
 `disconnectedCallback` 里调用，并在重新连接时重新装配。见[编码规范](/cn/src/ranui/coding-guides/)。
 :::
 
@@ -228,12 +228,12 @@ disconnectedCallback() {
 ## 服务端渲染
 
 构建器在 [SSR](/cn/src/ranui/ssr/) 下同样可用：`build()` 返回 mock 节点，`serialize()` 返回 HTML。
-响应式绑定、`For`、`Show` 在服务端**只渲染一次**，作为静态快照——在代码跑进浏览器之前不存在任何协调
+响应式绑定、`For`、`Show` 在服务端**只渲染一次**，作为静态快照，在代码跑进浏览器之前不会发生任何协调
 （reconciliation）。
 
 ## 完整参考
 
-本页是常用子集。完整参考——每个工厂函数、每个操作符、SVG 命名空间规则，以及 `Switch` / `Match` 的细节
-——见仓库中的
+本页只是常用子集。完整参考（每个工厂函数、每个操作符、SVG 命名空间规则，以及 `Switch` / `Match` 的
+细节）见仓库中的
 [BUILDER.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/BUILDER.md)，它同样随 npm 包
 一起发布。

@@ -4,11 +4,11 @@ description: '一个 system/light/dark 三态分段控件，接入 ranui 主题 
 
 # ThemeSwitch 主题切换
 
-三态分段控件——**system（跟随系统）/ light（浅色）/ dark（深色）**——直接接入 ranui 的
+三态分段控件，在 **system（跟随系统）/ light（浅色）/ dark（深色）** 之间切换，直接接入 ranui 的
 [主题 API](/cn/src/ranui/theme/)。点击某一段会调用 `setTheme()`，把选择持久化到 localStorage
 键 `ran-theme`，并让页面上（以及其他标签页里）的所有实例保持同步。
 
-> **适用场景**：需要一个开箱即用的 system/light/dark 分段控件，并接入 ranui 主题 API 时——`<r-theme-switch>` 已经处理好持久化、系统跟随与跨标签页同步，无需自己手写一个开关。
+> **适用场景**：需要一个开箱即用的 system/light/dark 分段控件，并接入 ranui 主题 API 时：`<r-theme-switch>` 已经处理好持久化、系统跟随与跨标签页同步，无需自己手写一个开关。
 
 ## 快速开始
 
@@ -27,7 +27,7 @@ import 'ranui'; // 或者按组件单独引入：
 import 'ranui/theme-switch';
 ```
 
-> 💡 **在本文档站上**，主题由站点右上角的开关驱动，它会自行覆写 `data-ran-theme`——所以上面的
+> 💡 **在本文档站上**，主题由站点右上角的开关驱动，它会自行覆写 `data-ran-theme`，所以上面的
 > 演示可能被站点重置。在你自己的应用里，`<r-theme-switch>` 就是主题的唯一入口。
 
 页面加载时先调用一次 `initTheme()`，让保存的选择在开关渲染前恢复：
@@ -75,11 +75,11 @@ document.querySelector('r-theme-switch').addEventListener('change', (e) => {
 
 ## 行为
 
-- **持久化** —— 选择通过 `setTheme()` 生效，保存到 localStorage（`ran-theme`），下次访问由
+- **持久化**：选择通过 `setTheme()` 生效，保存到 localStorage（`ran-theme`），下次访问由
   `initTheme()` 恢复。
-- **多实例同步** —— 页眉放一个、页脚放一个，任意一处切换两处都会更新。
-- **跨标签页同步** —— 其他标签页切换了主题，本控件通过 `storage` 事件跟着更新。
-- **浏览器界面色** —— 强制浅色/深色时会把 `<meta name="theme-color">` 更新为解析后的页面背景色，
+- **多实例同步**：页眉放一个、页脚放一个，任意一处切换两处都会更新。
+- **跨标签页同步**：其他标签页切换了主题，本控件通过 `storage` 事件跟着更新。
+- **浏览器界面色**：强制浅色/深色时会把 `<meta name="theme-color">` 更新为解析后的页面背景色，
   让浏览器 / PWA 的界面色匹配；选回 `system` 时恢复每个 meta 原本（可能带媒体查询）的内容。
 
 ## CSS Parts
@@ -115,7 +115,7 @@ r-theme-switch {
 
 ## 最佳实践
 
-- **单一入口**：用 `<r-theme-switch>` 代替手写开关——持久化、系统跟随、实例同步、
+- **单一入口**：用 `<r-theme-switch>` 代替手写开关：持久化、系统跟随、实例同步、
   `theme-color` meta 更新它都已处理好。
 - **尽早恢复**：尽可能早地调用 `initTheme()`（最好在首帧前内联执行），避免浅色→深色的闪烁。
 - **本地化**：按钮只有图标，非英文界面请设置 `label` / `label-*`。

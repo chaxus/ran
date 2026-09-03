@@ -65,7 +65,7 @@ console.log(tempFileName); // 例如: 'temp_1703123456789-xyz1234567.txt'
 
 ## getRandomString
 
-一个更轻量的版本：没有时间戳前缀，也不限制字符集——就是 `Math.random().toString(36)` 截取 `len` 个字符（base-36，也就是 `0-9a-z`）。不像 `randomString` 那样具备抗碰撞能力，适合用在不需要"唯一性能扛住时间戳级别碰撞"的场景，比如临时的 DOM id 或者缓存穿透用的查询参数。
+一个更轻量的版本，没有时间戳前缀，也不限制字符集，就是对 `Math.random().toString(36)` 的结果截取 `len` 个字符（base-36，也就是 `0-9a-z`）。它不像 `randomString` 那样具备抗碰撞能力，适合用在不需要「唯一性扛得住时间戳级别碰撞」的场景，比如临时的 DOM id，或缓存穿透用的查询参数。
 
 ```js
 import { getRandomString } from 'ranuts/utils';

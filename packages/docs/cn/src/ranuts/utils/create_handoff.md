@@ -1,6 +1,6 @@
 # createHandoff
 
-在同源的两个页面之间交接一个值 —— `File`、`Blob`，以及任何可结构化克隆的数据。
+在同源的两个页面之间交接一个值：`File`、`Blob`，以及任何可结构化克隆的数据。
 
 用户在 A 页面选中的 `File` 没法直接带到 B 页面：它塞不进 URL，也不可序列化，而
 `sessionStorage` 只能存字符串。IndexedDB 能原样存放可结构化克隆的值，于是 A 页面把值放进去
@@ -47,7 +47,7 @@ const handoff = createHandoff({ dbName: 'document-handoff' });
 
 if (queryFlag('open')) {
   const file = await handoff.take();
-  if (file) openDocument(file); // 刷新后为 null —— 值已被消费
+  if (file) openDocument(file); // 刷新后为 null，因为值已经被取走
 }
 ```
 
@@ -58,7 +58,7 @@ if (queryFlag('open')) {
 
 2. **两个标签页不会同时取到**。读和删共用一个事务，标签页之间的竞争最终只有一方拿到值。
 
-3. **`put` 在事务提交时才 resolve**，而不是在写请求成功时 —— 只有事务提交后数据才落盘，而
+3. **`put` 在事务提交时才 resolve**，而不是在写请求成功时。因为只有事务提交后数据才落盘，而
    页面通常紧接着就跳走了。
 
 4. **失败是静默的**。IndexedDB 不可用或被禁（SSR、隐私模式、三方 iframe）时，`put` 返回
@@ -66,5 +66,5 @@ if (queryFlag('open')) {
 
 5. **仓库在版本 1 由先打开数据库的一方创建**，另一方打开时会发现它已经存在。
 
-6. **一次只放一个值**。这是交接而非队列 —— 第二次 `put` 会覆盖上一个待取值。需要真正的存储请用
+6. **一次只放一个值**。这是交接而非队列，第二次 `put` 会覆盖上一个待取值。需要真正的存储请用
    [`WebDB`](/cn/src/ranuts/utils/web_db)。

@@ -111,7 +111,7 @@ type Handler = (ctx: Context, next: Next) => void;
 ```
 
 从 `ctx.request` 读取请求数据（`method`、`path`、`url`、`query`、`body`），
-通过 `ctx.res` 发送响应。路径为精确匹配 —— 不支持 `:param` 动态段；查询参数
+通过 `ctx.res` 发送响应。路径为精确匹配，不支持 `:param` 动态段；查询参数
 请使用 `ctx.request.query`。
 
 ### 中间件

@@ -20,7 +20,7 @@
 
 #### 返回值
 
-`supported` 中的某一项 —— 一定是其中之一，不会返回任意字符串。
+`supported` 中的某一项：一定是其中之一，不会返回任意字符串。
 
 ## 示例
 
@@ -78,8 +78,8 @@ const locale = paths.localeFromPath(location.pathname) ?? resolveLocale({ suppor
 3. **匹配大小写不敏感，并按基础语言回退**。`supported: ['en', 'zh-CN']` 时，`en-GB` 命中
    `en`，`zh` 命中 `zh-CN`。
 
-4. **按顺序遍历 `navigator.languages`**，而不只看 `navigator.language` —— 前者是用户真实的
-   偏好排序，而它的第一项往往并不是最合适的那个。
+4. **按顺序遍历 `navigator.languages`**，而不只看 `navigator.language`：前者是用户真实的
+   偏好排序，但它的第一项往往并不是最合适的那个。
 
 5. **每个来源都会静默降级**。没有 `window`、没有 `document.cookie`、没有 localStorage 时，各自
    什么也不提供，因此整条链在 SSR 和构建期脚本里同样可用。

@@ -6,23 +6,23 @@ description: 'ranui Icon（<r-icon>）渲染语义化矢量图形（SVG），支
 
 语义化的矢量图形
 
-> **适用场景**：需要在界面中内联使用一个具名的、可缩放、可重新着色的矢量图标（可选旋转动画）——`<r-icon>` 按 `name` 渲染一个已注册的 SVG。
+> **适用场景**：需要在界面中内联使用一个具名的、可缩放、可重新着色的矢量图标（可选旋转动画）时，`<r-icon>` 按 `name` 渲染一个已注册的 SVG。
 
 ## 使用图标
 
 ### 最简单：直接用自带名称（零配置）
 
-ranui 已把自带图标集**内联进了产物包**。自带 `name` 会**按需自动加载**——无需注册、无需 import、无需接线任何资源路径。只有你实际用到的那个 SVG 会被拉取（每个都是独立的异步 chunk），所以引用一个图标绝不会把整套图标全打进来：
+ranui 已把自带图标集**内联进了产物包**。自带 `name` 会**按需自动加载**：无需注册、无需 import、无需接线任何资源路径。只有你实际用到的那个 SVG 会被拉取（每个都是独立的异步 chunk），所以引用一个图标绝不会把整套图标全打进来：
 
 ```html
 <r-icon name="lock"></r-icon> <r-icon name="eye"></r-icon>
 ```
 
-有效的自带名称就是 `RanIconName` 联合类型 / `RAN_ICON_NAMES` 元组（见下）。**自定义**名称若从未注册，仍然**什么都不渲染**（一片空白）—— 这只针对你自己的 SVG，见 [自定义图标](#自定义图标)。
+有效的自带名称就是 `RanIconName` 联合类型 / `RAN_ICON_NAMES` 元组（见下）。**自定义**名称若从未注册，仍然**什么都不渲染**（一片空白），这只针对你自己的 SVG，见 [自定义图标](#自定义图标)。
 
 ### 可选：一次性全量注册
 
-如果你希望所有自带图标都**同步可用**（不走逐个异步加载——例如图标密集的页面想避免首帧闪烁，或在没有代码分割的环境里），尽早只调用一次 `registerBuiltinIcons()`：
+如果你希望所有自带图标都**同步可用**（不走逐个异步加载，比如图标密集的页面想避免首帧闪烁，或在没有代码分割的环境里），尽早只调用一次 `registerBuiltinIcons()`：
 
 ```ts
 import { registerBuiltinIcons } from 'ranui'; // 或 'ranui/icons'
@@ -55,7 +55,7 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 <r-icon name='<svg viewBox="0 0 24 24">…</svg>'></r-icon>
 ```
 
-> **注意：** 原始的 `assets/icons/*.svg` 文件**不在**已发布的 npm 包内（只发布 `dist/`），所以在外部应用中 `import '…/lock.svg?raw'` 无法从 `ranui` 解析——自带图标请用 `registerBuiltinIcons()`，或注册你自己的 SVG 字符串。
+> **注意：** 原始的 `assets/icons/*.svg` 文件**不在**已发布的 npm 包内（只发布 `dist/`），所以在外部应用中 `import '…/lock.svg?raw'` 无法从 `ranui` 解析。自带图标请用 `registerBuiltinIcons()`，或注册你自己的 SVG 字符串。
 
 > **SSR / 时序。** 注册必须在浏览器端执行。如果某个 `<r-icon>` 在其图标注册之前就挂载，它会先保持空白，待注册完成后自动补上（元素会监听 `ranui-icon-registered` 事件）。要避免图标空白闪烁，请在入口模块最顶部注册，让注册表在首个组件渲染前就已就绪。开发模式下，未注册的名称会打印 `[ranui-icon] icon not registered: <name>`。
 
@@ -146,7 +146,7 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 ## 自定义样式
 
 `<r-icon>` 自身暴露了 **6 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
-地方都有效——`:root`、外层容器，或元素本身：
+地方都有效，比如 `:root`、外层容器，或元素本身：
 
 ```css
 r-icon {

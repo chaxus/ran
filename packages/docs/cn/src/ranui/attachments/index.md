@@ -7,8 +7,8 @@ description: 'ranui Attachments（<r-attachments>）承载消息旁待发送的�
 消息旁待发送的文件：`<r-attachments>` 保存列表、生成预览、校验到达的文件，并负责回收自己创建的
 object URL。
 
-> **适用场景**：输入框需要展示「即将发送什么」时。它**不负责收集文件**——粘贴、拖拽、文件选择器是
-> 输入区里三个不同元素上的三种手势，提供哪几种是应用自己的决定。在你接的那个手势里调用 `add()`。
+> **适用场景**：输入框需要展示「即将发送什么」时。它**不负责收集文件**：粘贴、拖拽、文件选择器是
+> 输入区里三个不同元素上的三种手势，提供哪几种由应用自己决定。在你接的那个手势里调用 `add()`。
 
 ## 快速开始
 
@@ -79,8 +79,8 @@ strip.addEventListener('attachmentrejected', (event) => {
 });
 ```
 
-`duplicate` 同时比较文件名、大小和修改时间——也就是文件管理器眼中的「同一个文件」。同一个文件附两次
-是手滑，不是指令。
+`duplicate` 同时比较文件名、大小和修改时间，也就是文件管理器眼中的「同一个文件」。同一个文件附两次
+是手滑，不是故意的。
 
 ## API 参考
 
@@ -95,7 +95,7 @@ strip.addEventListener('attachmentrejected', (event) => {
 | `files`       | —           | `File[]`                | `[]`    | 只有文件本身，便于构造请求体。                    |
 | `sheet`       | `sheet`     | `string`                | `''`    | 注入 shadow root 的 CSS。                         |
 
-`attachments` 和 `files` 是只读视图——请通过 `add()` 暂存文件。
+`attachments` 和 `files` 是只读视图，请通过 `add()` 暂存文件。
 
 ### 方法
 
@@ -106,8 +106,8 @@ strip.addEventListener('attachmentrejected', (event) => {
 | `clear()`    | `void`         | 清空全部，并回收它们的 object URL。            |
 
 ::: tip 是 `detach(id)`，不是 `remove(id)`
-每个元素本来就有一个不接受参数、把自己从文档里摘掉的 `remove()`。用不同语义去覆盖它，对任何伸手去用
-标准方法的人都是个陷阱。
+每个元素本来就自带一个 `remove()`：不接受参数，把自己从文档里摘掉。用不同的语义去覆盖它，会给任何
+想调用标准方法的人埋下一个陷阱。
 :::
 
 ### 事件
@@ -138,12 +138,12 @@ type AttachmentRejection = 'too-large' | 'type-not-accepted' | 'too-many' | 'dup
 
 ## 预览是怎么做的
 
-预览用的是 **object URL，不是 data URL**。预览的代价只是引用浏览器已经持有的字节；而把一张 10 MB 的
-照片读成 base64 字符串只为显示 40px 的缩略图，代价是那个字符串。data URL 留给真正发送的那一步，构造
-一次即可。
+预览用的是 **object URL，不是 data URL**。预览只需要引用浏览器已经握有的字节，开销很小；而把一张
+10 MB 的照片转成 base64 字符串，只是为了显示一个 40px 的缩略图，开销就是那一整个字符串。data URL
+留到真正发送时再构造一次就够了。
 
-组件创建的每一个 URL 都由它自己回收——移除时、清空时、断开连接时。不要把 `previewUrl` 留到附件生命
-周期之外使用。
+组件创建的每一个 URL 都由它自己回收：移除时、清空时、断开连接时都会回收。不要把 `previewUrl` 留到
+附件生命周期结束之后再用。
 
 ## 无障碍
 
@@ -153,7 +153,7 @@ type AttachmentRejection = 'too-large' | 'type-not-accepted' | 'too-many' | 'dup
 ## 自定义样式
 
 `<r-attachments>` 自身暴露了 **17 个 CSS 自定义属性**，另外还会读取主题里的语义令牌。令牌设在任何能继承到的
-地方都有效——`:root`、外层容器，或元素本身：
+地方都有效，比如 `:root`、外层容器，或元素本身：
 
 ```css
 r-attachments {
@@ -168,5 +168,5 @@ Part：`attachment` · `icon` · `list` · `name` · `remove` · `size` · `thum
 ## 最佳实践
 
 - **服务端也要校验。** `accept` 和 `max-size` 是对上传者的体贴，不是安全边界。
-- **发送成功后再清空**，不要提前——请求失败时文件应当还留着，方便重试。
+- **发送成功后再清空**，不要提前：请求失败时文件应当还留着，方便重试。
 - **每一次拒绝都要解释。** 这个事件存在的意义，就是让附件条永远不会悄悄吞掉一个文件。

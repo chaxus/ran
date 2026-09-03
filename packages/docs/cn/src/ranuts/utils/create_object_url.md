@@ -80,7 +80,7 @@ async function previewImage(file) {
 
 ## requestUrlToBuffer
 
-通过 `XMLHttpRequest` 把一个 URL 拉取成原始字节——通常就是上面 `createObjectURL` 要吃的那份数据，当你需要在把它变成可展示的 URL 之前先检查或处理一下（比如校验魔数、解码音频）的时候会用到。
+通过 `XMLHttpRequest` 把一个 URL 拉取成原始字节，通常就是上面 `createObjectURL` 所需要的那份数据。当你需要在把它变成可展示的 URL 之前先检查或处理一下（比如校验魔数、解码音频）时会用到。
 
 ```js
 import { requestUrlToBuffer, createObjectURL } from 'ranuts/utils';
@@ -101,7 +101,7 @@ if (result.success) {
 
 #### 返回
 
-`Promise`，HTTP 200 时 resolve 为 `{ success: true, data, message: '' }`；其他情况**是 reject**，携带 `{ success: false, data: status, message }`——请求失败是一次 rejection，不是 resolve 出 `success: false`，所以只写 `.then()` 不写 `.catch()` 的话，失败会变成一个未处理的 rejection。
+`Promise`，HTTP 200 时 resolve 为 `{ success: true, data, message: '' }`；其他情况**是 reject**，携带 `{ success: false, data: status, message }`。也就是说请求失败是一次 rejection，而不是 resolve 出 `success: false`，所以只写 `.then()` 不写 `.catch()` 的话，失败会变成一个未处理的 rejection。
 
 ::: tip 新代码优先用 fetch
 这个函数写在 `fetch` 还没普及之前，底层用的是 `XMLHttpRequest`。如果你不是特别需要 XHR 的特性（上传进度事件、`abort()`），`fetch(url).then(r => r.arrayBuffer())` 能做同样的事，而且失败时是 Promise 原生的 rejection 形态。
