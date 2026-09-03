@@ -8,8 +8,8 @@ The one-line `[leading] title · summary` chrome that expands to reveal a body. 
 shared by `<r-reasoning>` and `<r-tool-card>`, so a transcript carrying both has one
 disclosure language instead of two.
 
-> **Use when** you have a compact line that stands for something larger — a tool call, a
-> chain of thought, a log group — and the detail is worth hiding until asked for.
+> **Use when** you have a compact line that stands for something larger (a tool call, a
+> chain of thought, a log group) and the detail is worth hiding until asked for.
 
 ## Quick Start
 
@@ -77,7 +77,7 @@ layout.
 ::: warning The attribute is `heading`, not `title`
 `title` is a native `HTMLElement` attribute the browser renders as a tooltip, so a component
 that used it for a heading would make every instance sprout a tooltip repeating the text
-already on screen — and nothing turns that off once it is set. `<r-card>` and `<r-modal>`
+already on screen, and nothing turns that off once it is set. `<r-card>` and `<r-modal>`
 carry the same rename for the same reason.
 :::
 
@@ -89,7 +89,7 @@ carry the same rename for the same reason.
 
 ::: warning The event is `disclosuretoggle`, not `toggle`
 `toggle` is what `<details>` fires, and its `ToggleEvent` carries `oldState` / `newState`
-rather than a `detail` — a listener typed against the platform name finds nothing in it. Read
+rather than a `detail`; a listener typed against the platform name finds nothing in it. Read
 the state from the element: `row.open`.
 :::
 
@@ -101,10 +101,10 @@ row.addEventListener('disclosuretoggle', () => {
 
 ### Slots
 
-| Slot      | Content                                                      |
-| --------- | ------------------------------------------------------------ |
-| `default` | The body, revealed while `open`.                             |
-| `leading` | An indicator before the heading — typically `<r-state-dot>`. |
+| Slot      | Content                                                     |
+| --------- | ----------------------------------------------------------- |
+| `default` | The body, revealed while `open`.                            |
+| `leading` | An indicator before the heading, typically `<r-state-dot>`. |
 
 ### Parts
 
@@ -113,7 +113,7 @@ row.addEventListener('disclosuretoggle', () => {
 ## Styling
 
 `<r-disclosure-row>` exposes **15 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-disclosure-row {
@@ -131,4 +131,4 @@ The full list is in [style tokens](/src/ranui/style-tokens#disclosure-row); whic
   dead end; leave `expandable` off and the row stays a line.
 - **Keep the heading a fixed vocabulary** (`Read file`, `Run tests`, `Search`) and put the
   variable part in the summary. That is what makes a column of rows scannable.
-- **Pair `tone="error"` with words, never colour alone** — the summary should say what failed.
+- **Pair `tone="error"` with words, never colour alone**: the summary should say what failed.

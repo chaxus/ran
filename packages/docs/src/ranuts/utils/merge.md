@@ -76,8 +76,8 @@ console.log(result); // { a: 1 } (returns as is)
 ## mergeExports
 
 A different tool despite the name: builds a **lazily-evaluated, frozen** exports object from a
-map of getters, instead of copying plain values. Each getter runs at most once — the first
-access — and the result is cached from then on, via the same `once` wrapper `ranuts/utils`
+map of getters, instead of copying plain values. Each getter runs at most once, on first
+access, and the result is cached from then on, via the same `once` wrapper `ranuts/utils`
 exports separately. Nested plain objects are merged (and frozen) recursively; anything that
 isn't a getter or a nested object throws.
 
@@ -109,7 +109,7 @@ lazyModule.expensive; // returns the cached result, does not log again
    building a module-shaped object where some properties are expensive to compute and should
    only run if actually read.
 2. **The result is frozen** (`Object.freeze`), and every defined property is
-   `configurable: false` — the returned object cannot be reassigned or have properties added.
+   `configurable: false`, so the returned object cannot be reassigned or have properties added.
 3. **Throws on anything else.** A value that is neither a getter nor a plain nested object
    (an array, a function, a primitive assigned directly) throws `Exposed values must be either
 a getter or a nested object`.

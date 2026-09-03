@@ -1,5 +1,5 @@
 ---
-description: 'Renders an append-only event log as a conversation — projection, bottom-follow, and row reconciliation, with each kind of content registered as an independent view.'
+description: 'Renders an append-only event log as a conversation, handling projection, bottom-follow, and row reconciliation, with each kind of content registered as an independent view.'
 ---
 
 # Conversation
@@ -8,7 +8,7 @@ Renders an append-only event log as a conversation. The element owns the three t
 tedious and easy to get wrong, and nothing else: projecting events into nodes, keeping the view
 pinned to its floor without fighting the reader, and reconciling rows against the node list.
 
-> **Use when** you are rendering a streaming transcript — a chat, an agent session, a log — and
+> **Use when** you are rendering a streaming transcript (a chat, an agent session, a log) and
 > want each kind of content (message, tool call, status line) to be an independent registration
 > rather than another branch in a growing renderer.
 
@@ -59,7 +59,7 @@ closes half-streamed `**bold`, backticks, links and `$$` math, so a view never h
   registered set, so a later registration would silently miss every event already folded in. The
   element throws rather than doing that.
 - **`update` folds state; `patch` writes it to the DOM.** They are named apart because they are
-  different jobs — `patch` folds nothing, and runs once per frame on a streaming row, so keep it
+  different jobs: `patch` folds nothing, and runs once per frame on a streaming row, so keep it
   cheap.
 - **`mount` is optional.** A view without it contributes state that other views read through
   `reader.previous`, and renders nothing.
@@ -69,7 +69,7 @@ closes half-streamed `**bold`, backticks, links and `$$` math, so a view never h
 ## Bottom-follow
 
 On by default. The view stays pinned to its floor as content arrives, stops the instant the
-reader scrolls up, and re-pins when they come back down — without fighting them, because the
+reader scrolls up, and re-pins when they come back down, all without fighting them, because the
 follower distinguishes its own scroll writes from the reader's rather than listening for input
 devices.
 
@@ -113,9 +113,9 @@ after, so the reader keeps looking at what they were looking at.
 
 ### Slots
 
-| Slot     | Description                                                                       |
-| -------- | --------------------------------------------------------------------------------- |
-| `footer` | Sticky area below the rows — a composer belongs here, and its height is observed. |
+| Slot     | Description                                                                      |
+| -------- | -------------------------------------------------------------------------------- |
+| `footer` | Sticky area below the rows: a composer belongs here, and its height is observed. |
 
 ### Parts
 
@@ -127,7 +127,7 @@ reaching into the shadow tree.
 ## Styling
 
 `<r-conversation>` exposes **14 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-conversation {
@@ -141,6 +141,6 @@ The full list is in [style tokens](/src/ranui/style-tokens#conversation); which 
 
 ## See also
 
-- [ranuts/stream](../../ranuts/stream/) — turn a provider's SSE into the events pushed here
-- [ranuts/conversation](../../ranuts/conversation/) — the projection, including cadence
-- [Markdown](../markdown/) — the streaming-aware row for prose
+- [ranuts/stream](../../ranuts/stream/): turn a provider's SSE into the events pushed here
+- [ranuts/conversation](../../ranuts/conversation/): the projection, including cadence
+- [Markdown](../markdown/): the streaming-aware row for prose

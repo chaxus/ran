@@ -16,7 +16,7 @@ DOM.
 import { init, h, classModule, propsModule, styleModule, eventListenersModule } from 'ranuts/vnode';
 ```
 
-> Note: in this implementation `init()` takes **no arguments** — the module set is fixed and
+> Note: in this implementation `init()` takes **no arguments**: the module set is fixed and
 > registered internally, so the individual `*Module` exports do not need to be passed to
 > `init`. They are exported for reference and inspection.
 
@@ -108,33 +108,33 @@ the new `VNode`, which you keep as the "old" value for the next call.
 
 Hyperscript helper that builds a `VNode`. It is overloaded:
 
-| Signature                | Description                                                   |
-| ------------------------ | ------------------------------------------------------------- |
-| `h(sel)`                 | Element from a selector only                                  |
-| `h(sel, data)`           | Element with `VNodeData` (`data` may be `null`)               |
-| `h(sel, children)`       | Element with children — a text/number, a `VNode`, or an array |
-| `h(sel, data, children)` | Element with data and children                                |
+| Signature                | Description                                                  |
+| ------------------------ | ------------------------------------------------------------ |
+| `h(sel)`                 | Element from a selector only                                 |
+| `h(sel, data)`           | Element with `VNodeData` (`data` may be `null`)              |
+| `h(sel, children)`       | Element with children: a text/number, a `VNode`, or an array |
+| `h(sel, data, children)` | Element with data and children                               |
 
 #### Parameters
 
 | Parameter  | Description                                                                                                   | Type                |
 | ---------- | ------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `sel`      | CSS-style selector: `tag`, `tag#id`, `tag.class`, combined (`div#id.a.b`). `svg…` auto-adds the SVG namespace | `string`            |
-| `data`     | Node data — class / props / attrs / style / listeners / key / hook. May be `null`                             | `VNodeData \| null` |
+| `data`     | Node data: class / props / attrs / style / listeners / key / hook. May be `null`                              | `VNodeData \| null` |
 | `children` | A text or number (becomes a text node), a single `VNode`, or an array of them                                 | `VNodeChildren`     |
 
 #### `VNodeData` fields
 
-| Field   | Description                                                             | Type                                          | Applied by                |
-| ------- | ----------------------------------------------------------------------- | --------------------------------------------- | ------------------------- |
-| `props` | DOM properties set via `elm[key] = value`                               | `Record<string, any>`                         | `propsModule`             |
-| `attrs` | HTML attributes set via `setAttribute` (`true`/`false` toggle the attr) | `Record<string, string \| number \| boolean>` | `attributesModule`        |
-| `class` | Conditional classes — a `name → boolean` map                            | `Record<string, boolean>`                     | `classModule`             |
-| `style` | Inline styles — a `name → value` map (`--var` keys use CSS variables)   | `Record<string, any>`                         | `styleModule`             |
-| `on`    | Event listeners — `event → handler` (or an array of handlers)           | `Record<string, Function \| Function[]>`      | `eventListenersModule`    |
-| `key`   | Stable identity used by the diff algorithm to match/reorder children    | `string \| number`                            | (diff core)               |
-| `ns`    | Namespace URI (set automatically for SVG subtrees)                      | `string`                                      | (diff core)               |
-| `hook`  | Per-vnode lifecycle hooks (`Hooks`)                                     | `Hooks`                                       | (type surface — see note) |
+| Field   | Description                                                             | Type                                          | Applied by               |
+| ------- | ----------------------------------------------------------------------- | --------------------------------------------- | ------------------------ |
+| `props` | DOM properties set via `elm[key] = value`                               | `Record<string, any>`                         | `propsModule`            |
+| `attrs` | HTML attributes set via `setAttribute` (`true`/`false` toggle the attr) | `Record<string, string \| number \| boolean>` | `attributesModule`       |
+| `class` | Conditional classes: a `name → boolean` map                             | `Record<string, boolean>`                     | `classModule`            |
+| `style` | Inline styles: a `name → value` map (`--var` keys use CSS variables)    | `Record<string, any>`                         | `styleModule`            |
+| `on`    | Event listeners: `event → handler` (or an array of handlers)            | `Record<string, Function \| Function[]>`      | `eventListenersModule`   |
+| `key`   | Stable identity used by the diff algorithm to match/reorder children    | `string \| number`                            | (diff core)              |
+| `ns`    | Namespace URI (set automatically for SVG subtrees)                      | `string`                                      | (diff core)              |
+| `hook`  | Per-vnode lifecycle hooks (`Hooks`)                                     | `Hooks`                                       | (type surface: see note) |
 
 > Note: `hook` and the `Hooks` type are part of the public type surface. This trimmed
 > implementation drives the DOM through the **module** lifecycle (`create` / `update` /
@@ -169,8 +169,8 @@ exported individually.
 
 | Type                | Shape / meaning                                                                               |
 | ------------------- | --------------------------------------------------------------------------------------------- |
-| `VNode`             | `{ sel, data, children, elm, text, key, listener? }` — a virtual node                         |
-| `VNodeData`         | `{ props?, attrs?, class?, style?, on?, key?, ns?, hook? }` — see fields above                |
+| `VNode`             | `{ sel, data, children, elm, text, key, listener? }`: a virtual node                          |
+| `VNodeData`         | `{ props?, attrs?, class?, style?, on?, key?, ns?, hook? }`: see fields above                 |
 | `VNodes`            | `VNode[]`                                                                                     |
 | `VNodeChildElement` | `VNode \| string \| number`                                                                   |
 | `VNodeChildren`     | `VNodeChildElement \| VNodeChildElement[]`                                                    |
@@ -179,7 +179,7 @@ exported individually.
 | `Hooks`             | `{ pre?, init?, create?, insert?, prepatch?, update?, postpatch?, destroy?, remove?, post? }` |
 | `DOMAPI`            | Interface describing the DOM operations `patch` uses (see `htmlDomApi`)                       |
 | `Fragment`          | `DocumentFragment` extension used for fragment handling                                       |
-| `Modules`           | `Record<string, Record<string, ModuleHook>>` — the module registry shape                      |
+| `Modules`           | `Record<string, Record<string, ModuleHook>>`: the module registry shape                       |
 | `ModuleHook`        | A single module lifecycle callback                                                            |
 
 ## Notes
@@ -188,7 +188,7 @@ exported individually.
    not in Node.
 2. **Keep the last vnode.** `patch` returns the new `VNode`. Store it and pass it as `oldVnode`
    on the next update so diffs are computed against the current tree.
-3. **`text` and `children` are mutually exclusive** on a `VNode` — a node is either a text node
+3. **`text` and `children` are mutually exclusive** on a `VNode`: a node is either a text node
    or an element with children.
 4. **Use `key` for lists.** When rendering dynamic lists, give siblings stable `key` values so
    the diff can match and reorder nodes instead of recreating them.

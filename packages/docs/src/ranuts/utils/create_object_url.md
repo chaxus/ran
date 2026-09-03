@@ -80,7 +80,7 @@ async function previewImage(file) {
 
 ## requestUrlToBuffer
 
-Fetch a URL as raw bytes over `XMLHttpRequest` — the source those bytes typically feed into
+Fetch a URL as raw bytes over `XMLHttpRequest`. Those bytes typically feed into
 `createObjectURL` above, when you need to inspect or transform them (checking a magic number,
 decoding audio) before turning them into a displayable URL.
 
@@ -104,7 +104,7 @@ if (result.success) {
 #### Return
 
 `Promise` resolving to `{ success: true, data, message: '' }` on an HTTP 200, or **rejecting**
-with `{ success: false, data: status, message }` otherwise — a failed request is a rejection,
+with `{ success: false, data: status, message }` otherwise. A failed request is a rejection,
 not a resolved `success: false`, so a bare `.then()` without `.catch()` will surface it as an
 unhandled rejection.
 

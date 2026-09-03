@@ -54,12 +54,12 @@ A prefixed, JSON-serialising view over localStorage.
 
 #### Return
 
-| Method               | Description                                                        |
-| -------------------- | ------------------------------------------------------------------ |
-| `get(key, fallback)` | Stored value, or `fallback` when missing, unavailable or corrupt   |
-| `set(key, value)`    | Serialise and store; `false` when nothing was written              |
-| `remove(key)`        | Remove the key                                                     |
-| `keyOf(key)`         | Full storage key (`prefix + key`) — useful for `storage` listeners |
+| Method               | Description                                                       |
+| -------------------- | ----------------------------------------------------------------- |
+| `get(key, fallback)` | Stored value, or `fallback` when missing, unavailable or corrupt  |
+| `set(key, value)`    | Serialise and store; `false` when nothing was written             |
+| `remove(key)`        | Remove the key                                                    |
+| `keyOf(key)`         | Full storage key (`prefix + key`), useful for `storage` listeners |
 
 ## Example
 
@@ -138,8 +138,8 @@ prefs.set('theme', 'dark');
 
 ## Notes
 
-1. **Nothing here throws.** Missing storage, a blocked third-party frame, private mode, quota
-   — all of them degrade quietly. `localStorageGetItem` returns `''`, the setters do nothing,
+1. **Nothing here throws.** Missing storage, a blocked third-party frame, private mode, quota:
+   all of them degrade quietly. `localStorageGetItem` returns `''`, the setters do nothing,
    and `createStore().set()` reports `false`.
 
 2. **Guarded at call time, not module load.** The storage lookup happens inside each call, so

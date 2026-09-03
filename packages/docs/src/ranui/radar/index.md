@@ -6,7 +6,7 @@ description: 'A radar/spider chart for comparing several metrics of one dataset 
 
 Radar chart for comparing several metrics of one dataset on a two-dimensional canvas.
 
-> **Use when** you need a radar/spider chart to compare several metrics of one dataset — feed `<r-radar>` a JSON array of axis names and scores through the `abilitys` attribute.
+> **Use when** you need a radar/spider chart to compare several metrics of one dataset. Feed `<r-radar>` a JSON array of axis names and scores through the `abilitys` attribute.
 
 ## Quick Start
 
@@ -60,7 +60,7 @@ Each entry of the `abilitys` array accepts the following keys:
 | `fontColor`       | `string` | No       | Label text color (defaults to `--ran-color-text`)               |
 | `fontFamily`      | `string` | No       | Label font family (default `SimHei`)                            |
 
-> Note: `colorPolygon`, `colorLine`, `fillColor`, and `strokeColor` are read case-insensitively, so they render correctly whether the attribute is present up front or changed after mount — updating any of them re-renders the chart. For theme-aware styling, prefer the CSS variables below.
+> Note: `colorPolygon`, `colorLine`, `fillColor`, and `strokeColor` are read case-insensitively, so they render correctly whether the attribute is present up front or changed after mount; updating any of them re-renders the chart. For theme-aware styling, prefer the CSS variables below.
 
 ### Chart Data `abilitys`
 
@@ -156,7 +156,7 @@ None. `<r-radar>` does not dispatch any custom events.
 
 ## Best Practices
 
-- **Sizing**: The host has no intrinsic size — always set an explicit `width`/`height` (via `style` or the `--ran-radar-width`/`--ran-radar-height` variables). The chart auto-redraws on container resize via a `ResizeObserver`.
+- **Sizing**: The host has no intrinsic size; always set an explicit `width`/`height` (via `style` or the `--ran-radar-width`/`--ran-radar-height` variables). The chart auto-redraws on container resize via a `ResizeObserver`.
 - **Data format**: Pass valid JSON in `abilitys`; malformed JSON is logged and cannot be parsed. Use the `abilitys` JS property when working with real arrays in script.
 - **Scale**: `scoreRate` is measured against a fixed maximum of `100`; normalize your values to that range.
 - **Theming**: The color attributes (`colorPolygon`, `colorLine`, `fillColor`, `strokeColor`) are reactive and re-render the chart when changed after mount. Prefer the `--ran-radar-*` CSS variables when you want colors to follow the light/dark theme automatically.

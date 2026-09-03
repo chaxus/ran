@@ -6,7 +6,7 @@ description: 'Render Mermaid diagrams (flowcharts, sequence, class, state, gantt
 
 Render [Mermaid](https://mermaid.js.org/) diagrams (flowcharts, sequence, class, state,
 gantt…) as a framework-agnostic web component. `<r-mermaid>` lazy-loads the mermaid library
-on first render — apps that never use it pay nothing — and draws the diagram into its shadow
+on first render (apps that never use it pay nothing) and draws the diagram into its shadow
 root, so it's isolated from page styles.
 
 > **Use when** you want to drop a diagram from text into any page without wiring up mermaid
@@ -28,7 +28,7 @@ import 'ranui/mermaid';
 ```
 
 The diagram source is read from the element's **text content**, or from a URI-encoded
-`code` attribute (use `code` when the syntax contains `<` — e.g. `classDiagram` `<|--` —
+`code` attribute (use `code` when the syntax contains `<`, e.g. `classDiagram` `<|--`,
 so it survives HTML parsing):
 
 ```js
@@ -48,10 +48,10 @@ diagram. The toolbar appears on hover (top-right).
 <r-mermaid copy download fullscreen>graph TD; A --> B; B --> C</r-mermaid>
 ```
 
-- **copy** — copies the diagram source to the clipboard.
-- **download** — SVG / PNG / source (`.mmd`); a single format downloads directly, multiple
+- **copy**: copies the diagram source to the clipboard.
+- **download**: SVG / PNG / source (`.mmd`); a single format downloads directly, multiple
   show a menu. Restrict with `download="svg"` or `download="svg png"`.
-- **fullscreen** — opens a headerless lightbox (r-modal) with **pan & zoom** (wheel to zoom,
+- **fullscreen**: opens a headerless lightbox (r-modal) with **pan & zoom** (wheel to zoom,
   drag to pan, reset); close via the ✕, backdrop click, or `Esc`.
 
 ## API Reference
@@ -110,5 +110,5 @@ Override on the element (each falls back to a semantic token, then a literal):
 - **Rendering fidelity**: `<r-mermaid>` uses mermaid's own render, so all diagram types and
   themes are supported.
 - **PNG export**: diagrams that use HTML labels (mermaid `htmlLabels`) render via
-  `<foreignObject>`, which can taint the canvas and make PNG export fail — an `error` event
+  `<foreignObject>`, which can taint the canvas and make PNG export fail; an `error` event
   is dispatched in that case. SVG and source export always work.

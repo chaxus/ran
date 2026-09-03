@@ -6,7 +6,7 @@ description: 'The ranui Player (<r-player>) wraps native <video> with a unified 
 
 A native `<r-player>` media element that wraps a `<video>` with a unified control bar, progress dragging, volume control, playback speed, fullscreen, and HLS/DASH/FLV/WebRTC streaming.
 
-> **Use when** you need a video player with a built-in control bar, progress scrubbing, playback speed, fullscreen, and HLS/DASH/FLV/WebRTC streaming — `<r-player>` wraps `<video>` and runs unchanged across frameworks.
+> **Use when** you need a video player with a built-in control bar, progress scrubbing, playback speed, fullscreen, and HLS/DASH/FLV/WebRTC streaming. `<r-player>` wraps `<video>` and runs unchanged across frameworks.
 
 Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on demand for their respective formats, so the same player runs unchanged across frameworks. Capabilities driven from source:
 
@@ -14,18 +14,18 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 - Volume control and mute toggle
 - Playback speed selection
 - Fullscreen toggle (and `Esc` to exit)
-- Picture-in-Picture toggle — the button only renders when the browser actually supports it
-- AirPlay/Remote Playback button — the browser's own device picker, feature-detected the same way as Picture-in-Picture
-- Mobile gestures — double-tap the left/right half to seek ∓10s, vertical swipe on the right half for volume (touch only; mouse/pen interaction is unaffected)
-- Scrubbing with touch, pen or mouse — the progress dot drags from one Pointer Events path, and a drag the browser reclaims mid-gesture releases without seeking somewhere the viewer never chose
-- Thumbnail scrubbing preview — set `thumbnails` to a WebVTT sprite-sheet manifest URL, a cropped preview appears above the seek-bar hover tip
-- `poster` / `autoplay` / `loop` / `muted` — standard `<video>` attributes, passed straight through
-- Subtitles/CC — set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
-- Error + retry — a `Modal.error()` dialog on fatal playback failures, on by default, opt-out via `disable-error-modal`
-- Resume playback — opt-in via `remember-position`, saved to `localStorage`, keyed per `src`
-- QoE metrics — `getMetrics()` derives rebuffer count/duration, first-frame time, quality-switch count and error count from the existing event stream
-- HLS (`.m3u8`) and DASH (`.mpd`) playback with automatic bitrate switching and a manual clarity selector; FLV/raw MPEG-TS (`.flv`/`.ts`) playback via `mpegts.js` — every engine lazy-loads on demand, no setup required. Force a specific engine (or opt back into plain `<video src>`) via the `format` attribute when a URL's extension can't be sniffed.
-- WebRTC low-latency live playback via WHEP (`format="webrtc"`, `src` is a WHEP endpoint URL) — no library dependency, `RTCPeerConnection` is a native browser API.
+- Picture-in-Picture toggle: the button only renders when the browser actually supports it
+- AirPlay/Remote Playback button: the browser's own device picker, feature-detected the same way as Picture-in-Picture
+- Mobile gestures: double-tap the left/right half to seek ∓10s, vertical swipe on the right half for volume (touch only; mouse/pen interaction is unaffected)
+- Scrubbing with touch, pen or mouse: the progress dot drags from one Pointer Events path, and a drag the browser reclaims mid-gesture releases without seeking somewhere the viewer never chose
+- Thumbnail scrubbing preview: set `thumbnails` to a WebVTT sprite-sheet manifest URL, and a cropped preview appears above the seek-bar hover tip
+- `poster` / `autoplay` / `loop` / `muted`: standard `<video>` attributes, passed straight through
+- Subtitles/CC: set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
+- Error + retry: a `Modal.error()` dialog on fatal playback failures, on by default, opt out via `disable-error-modal`
+- Resume playback: opt in via `remember-position`, saved to `localStorage`, keyed per `src`
+- QoE metrics: `getMetrics()` derives rebuffer count/duration, first-frame time, quality-switch count and error count from the existing event stream
+- HLS (`.m3u8`) and DASH (`.mpd`) playback with automatic bitrate switching and a manual clarity selector; FLV/raw MPEG-TS (`.flv`/`.ts`) playback via `mpegts.js`. Every engine lazy-loads on demand, no setup required. Force a specific engine (or opt back into plain `<video src>`) via the `format` attribute when a URL's extension can't be sniffed.
+- WebRTC low-latency live playback via WHEP (`format="webrtc"`, `src` is a WHEP endpoint URL): no library dependency, `RTCPeerConnection` is a native browser API.
 - Keyboard shortcuts: `Space` play/pause, `ArrowLeft` / `ArrowRight` seek 5s, `Escape` exit fullscreen, `Home`/`End`/arrows on the focused seek bar
 
 ## Quick Start
@@ -44,23 +44,23 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 
 ### Properties
 
-| Property              | Type                  | Default | Description                                                                                                                                                                                                                                                                        |
-| --------------------- | --------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src`                 | `string`              | `''`    | Video resource URL. Changing it reloads the player. Engine (HLS/native) is auto-detected from the extension.                                                                                                                                                                       |
-| `format`              | `string`              | `''`    | Force a specific engine — `hls` / `dash` / `flv` / `webrtc` / `native` — instead of auto-detecting from `src`'s extension. Useful for extensionless/signed streaming URLs; **required** for `webrtc` (a WHEP endpoint has no extension to detect). Changing it reloads the player. |
-| `volume`              | `string`              | `''`    | Initial volume on a `0`–`100` scale — same scale as `setVolume()`/`getVolume()`.                                                                                                                                                                                                   |
-| `currentTime`         | `string`              | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                                                                                                                                                                                                    |
-| `playbackRate`        | `string`              | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.                                                                                                                                                                                       |
-| `debug`               | `string`              | `''`    | When truthy, logs every internal `change` event and warnings to the console.                                                                                                                                                                                                       |
-| `sheet`               | `string`              | `''`    | CSS text injected into the component's shadow DOM for custom styling.                                                                                                                                                                                                              |
-| `poster`              | `string`              | `''`    | Image URL shown before playback starts. Passed straight to `<video poster>`.                                                                                                                                                                                                       |
-| `autoplay`            | `boolean`             | `false` | Boolean attribute — presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture.                                                                                                            |
-| `loop`                | `boolean`             | `false` | Boolean attribute — loops playback on end, same as native `<video loop>`.                                                                                                                                                                                                          |
-| `muted`               | `boolean`             | `false` | Boolean attribute — starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume.                          |
-| `thumbnails`          | `string`              | `''`    | URL of a WebVTT sprite-sheet manifest — shows a cropped thumbnail above the seek-bar hover tip. See [Thumbnail Scrubbing Preview](#thumbnail-scrubbing-preview-thumbnails) below. Independent of `src`: only refetched when this attribute itself changes.                         |
-| `disable-error-modal` | `boolean`             | `false` | Opt out of the built-in error + retry dialog — errors still reach you via the `error`/`sourceerror` `change` events, so build your own UI on top.                                                                                                                                  |
-| `remember-position`   | `boolean`             | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends.                                                                      |
-| `tracks`              | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks — **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children wouldn't survive). See [Subtitles/CC](#subtitles-cc-tracks) below.                                                          |
+| Property              | Type                  | Default | Description                                                                                                                                                                                                                                                                      |
+| --------------------- | --------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src`                 | `string`              | `''`    | Video resource URL. Changing it reloads the player. Engine (HLS/native) is auto-detected from the extension.                                                                                                                                                                     |
+| `format`              | `string`              | `''`    | Force a specific engine (`hls` / `dash` / `flv` / `webrtc` / `native`) instead of auto-detecting from `src`'s extension. Useful for extensionless/signed streaming URLs; **required** for `webrtc` (a WHEP endpoint has no extension to detect). Changing it reloads the player. |
+| `volume`              | `string`              | `''`    | Initial volume on a `0`–`100` scale, the same scale as `setVolume()`/`getVolume()`.                                                                                                                                                                                              |
+| `currentTime`         | `string`              | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                                                                                                                                                                                                  |
+| `playbackRate`        | `string`              | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.                                                                                                                                                                                     |
+| `debug`               | `string`              | `''`    | When truthy, logs every internal `change` event and warnings to the console.                                                                                                                                                                                                     |
+| `sheet`               | `string`              | `''`    | CSS text injected into the component's shadow DOM for custom styling.                                                                                                                                                                                                            |
+| `poster`              | `string`              | `''`    | Image URL shown before playback starts. Passed straight to `<video poster>`.                                                                                                                                                                                                     |
+| `autoplay`            | `boolean`             | `false` | Boolean attribute: presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture.                                                                                                           |
+| `loop`                | `boolean`             | `false` | Boolean attribute: loops playback on end, same as native `<video loop>`.                                                                                                                                                                                                         |
+| `muted`               | `boolean`             | `false` | Boolean attribute: starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume.                         |
+| `thumbnails`          | `string`              | `''`    | URL of a WebVTT sprite-sheet manifest; shows a cropped thumbnail above the seek-bar hover tip. See [Thumbnail Scrubbing Preview](#thumbnail-scrubbing-preview-thumbnails) below. Independent of `src`: only refetched when this attribute itself changes.                        |
+| `disable-error-modal` | `boolean`             | `false` | Opt out of the built-in error + retry dialog. Errors still reach you via the `error`/`sourceerror` `change` events, so build your own UI on top.                                                                                                                                 |
+| `remember-position`   | `boolean`             | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends.                                                                    |
+| `tracks`              | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks. **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children wouldn't survive). See [Subtitles/CC](#subtitles-cc-tracks) below.                                                         |
 
 > Observed attributes (from `observedAttributes`): `src`, `format`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `thumbnails`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
 
@@ -81,10 +81,10 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 ```
 
 For low-latency live streams, set `format="webrtc"` and point `src` at a **WHEP** (WebRTC-HTTP
-Egress Protocol) endpoint — the kind Cloudflare Stream, LiveKit egress, Millicast, and similar
+Egress Protocol) endpoint, the kind Cloudflare Stream, LiveKit egress, Millicast, and similar
 platforms expose. There's no library dependency: `RTCPeerConnection` and `fetch` are native
 browser APIs, so unlike HLS/DASH/FLV this engine has no lazy chunk to download. A WHEP endpoint
-has no file extension to auto-detect, so `format="webrtc"` is **required** — it's never inferred
+has no file extension to auto-detect, so `format="webrtc"` is **required**; it's never inferred
 from `src`.
 
 Under the hood: creates an `RTCPeerConnection` with `recvonly` audio/video transceivers, waits
@@ -93,7 +93,7 @@ SDP answer from the response body, and attaches the incoming stream via `video.s
 Ending playback `DELETE`s the session resource the server returned in the response's `Location`
 header. Scope is deliberately modest: non-trickle ICE (capped at a few seconds, then proceeds
 with whatever candidates it has) rather than WHEP's PATCH-based trickle mechanism, and no
-`Link: rel="ice-server"` header parsing for server-supplied STUN/TURN hints — most directly
+`Link: rel="ice-server"` header parsing for server-supplied STUN/TURN hints; most directly
 reachable WHEP deployments work without either. Like FLV, there's no clarity selector: WHEP has
 no standard client-facing multi-bitrate selection, so `getMetrics()`'s `qualitySwitchCount` stays
 at `0` for this engine.
@@ -140,15 +140,15 @@ Seconds from the start of the media.
 
 ### Picture-in-Picture
 
-The PiP button in the control bar only appears when `document.pictureInPictureEnabled` is true — there's no dead button in browsers that don't support it. Toggle it programmatically with `togglePip()`.
+The PiP button in the control bar only appears when `document.pictureInPictureEnabled` is true. There's no dead button in browsers that don't support it. Toggle it programmatically with `togglePip()`.
 
 ### AirPlay / Remote Playback
 
-The cast button appears when the browser exposes either the standards-track Remote Playback API (`videoElement.remote.prompt()` — Chrome/Edge) or Safari's `webkitShowPlaybackTargetPicker()` (AirPlay); it's hidden, not disabled, everywhere else — the same progressive-enhancement rule as Picture-in-Picture. Open the device picker programmatically with `showRemotePlaybackPicker()`.
+The cast button appears when the browser exposes either the standards-track Remote Playback API (`videoElement.remote.prompt()`, Chrome/Edge) or Safari's `webkitShowPlaybackTargetPicker()` (AirPlay); it's hidden, not disabled, everywhere else, the same progressive-enhancement rule as Picture-in-Picture. Open the device picker programmatically with `showRemotePlaybackPicker()`.
 
 ### Mobile Gestures
 
-Touch-only, on by default, no attribute to enable: double-tap the left half of the video to seek back 10 seconds, double-tap the right half to seek forward 10 seconds (a brief `-10s`/`+10s` flash confirms it), and drag vertically on the right half to adjust volume. Mouse and pen interaction is completely untouched — a single touch tap still toggles play/pause, just debounced by the same window used to detect a double-tap, so a double-tap-to-seek never lets the in-between tap flicker playback. Fires a `gestureseek` `change` event (`{ direction, seconds }`) alongside the existing `volume` event for the swipe.
+Touch-only, on by default, no attribute to enable: double-tap the left half of the video to seek back 10 seconds, double-tap the right half to seek forward 10 seconds (a brief `-10s`/`+10s` flash confirms it), and drag vertically on the right half to adjust volume. Mouse and pen interaction is completely untouched. A single touch tap still toggles play/pause, just debounced by the same window used to detect a double-tap, so a double-tap-to-seek never lets the in-between tap flicker playback. Fires a `gestureseek` `change` event (`{ direction, seconds }`) alongside the existing `volume` event for the swipe.
 
 ### Thumbnail Scrubbing Preview `thumbnails`
 
@@ -156,7 +156,7 @@ Touch-only, on by default, no attribute to enable: double-tap the left half of t
 <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" thumbnails="/ran/hls/thumbnails.vtt"></r-player>
 ```
 
-`thumbnails` points at a WebVTT manifest whose cues follow the sprite-sheet convention YouTube and Video.js use — each cue's text is an image reference plus a `#xywh=x,y,w,h` fragment identifying its crop out of a shared sprite sheet:
+`thumbnails` points at a WebVTT manifest whose cues follow the sprite-sheet convention YouTube and Video.js use: each cue's text is an image reference plus a `#xywh=x,y,w,h` fragment identifying its crop out of a shared sprite sheet:
 
 ```text
 WEBVTT
@@ -168,7 +168,7 @@ sprites.jpg#xywh=0,0,160,90
 sprites.jpg#xywh=160,0,160,90
 ```
 
-The image reference is resolved relative to the VTT file's own URL, so a sprite sheet next to the manifest needs no absolute path. Hovering (or dragging) the seek bar shows the cue covering that time as a cropped thumbnail above the existing time tooltip — nothing renders when `thumbnails` is unset, or before the manifest has loaded. The manifest is fetched and parsed once per `thumbnails` change, independent of `src`: switching quality/source doesn't refetch it.
+The image reference is resolved relative to the VTT file's own URL, so a sprite sheet next to the manifest needs no absolute path. Hovering (or dragging) the seek bar shows the cue covering that time as a cropped thumbnail above the existing time tooltip; nothing renders when `thumbnails` is unset, or before the manifest has loaded. The manifest is fetched and parsed once per `thumbnails` change, independent of `src`: switching quality/source doesn't refetch it.
 
 ### Subtitles/CC `tracks`
 
@@ -180,11 +180,11 @@ player.tracks = [
 ];
 ```
 
-Each entry becomes a native `<track>` on the underlying `<video>` — cue rendering is entirely the browser's own, the player doesn't draw anything custom. A language picker (an `<r-select>`, same interaction as the clarity selector) appears in the control bar with **Off** plus one entry per track; picking a language is remembered in `localStorage` and applied automatically the next time any `<r-player>` on the page gets tracks (global preference, not per-video) — falling back to whichever track has `default: true` if nothing was saved yet. Setting `tracks = []` removes the picker and every track. `setSubtitleLanguage(lang)` sets the active language imperatively (`lang` is a `srclang`, or `'off'`).
+Each entry becomes a native `<track>` on the underlying `<video>`; cue rendering is entirely the browser's own, the player doesn't draw anything custom. A language picker (an `<r-select>`, same interaction as the clarity selector) appears in the control bar with **Off** plus one entry per track; picking a language is remembered in `localStorage` and applied automatically the next time any `<r-player>` on the page gets tracks (global preference, not per-video), falling back to whichever track has `default: true` if nothing was saved yet. Setting `tracks = []` removes the picker and every track. `setSubtitleLanguage(lang)` sets the active language imperatively (`lang` is a `srclang`, or `'off'`).
 
 ### Error + Retry
 
-On by default. A fatal streaming-engine error or a native `<video>` `error` event opens a `Modal.error()` dialog (lazy-loaded — `r-modal` isn't fetched at all until something actually fails) with a **Retry** button that reloads the player. Set `disable-error-modal` to turn this off and handle errors yourself via the `error`/`sourceerror` `change` events instead. Non-fatal engine errors (hls.js recovers these internally) never trigger the dialog.
+On by default. A fatal streaming-engine error or a native `<video>` `error` event opens a `Modal.error()` dialog (lazy-loaded: `r-modal` isn't fetched at all until something actually fails) with a **Retry** button that reloads the player. Set `disable-error-modal` to turn this off and handle errors yourself via the `error`/`sourceerror` `change` events instead. Non-fatal engine errors (hls.js recovers these internally) never trigger the dialog.
 
 ### Resume Playback `remember-position`
 
@@ -192,7 +192,7 @@ On by default. A fatal streaming-engine error or a native `<video>` `error` even
 <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" remember-position></r-player>
 ```
 
-Saves `getCurrentTime()` to `localStorage` (keyed by `src`) on `pause` and whenever the tab becomes hidden (`visibilitychange`, more reliable than `beforeunload`), restores it on the next load of that same `src`, and clears it once the video reaches `ended`. Silently skipped if the saved position is within 2 seconds of the duration — a finished video restarts fresh rather than "resuming" at its own end. Only the position is remembered; volume/speed/subtitle preferences are separate opt-ins.
+Saves `getCurrentTime()` to `localStorage` (keyed by `src`) on `pause` and whenever the tab becomes hidden (`visibilitychange`, more reliable than `beforeunload`), restores it on the next load of that same `src`, and clears it once the video reaches `ended`. Silently skipped if the saved position is within 2 seconds of the duration: a finished video restarts fresh rather than "resuming" at its own end. Only the position is remembered; volume/speed/subtitle preferences are separate opt-ins.
 
 ### QoE Metrics
 
@@ -204,7 +204,7 @@ player.addEventListener('change', () => {
 });
 ```
 
-`getMetrics()` returns a plain-object snapshot derived from the same `change` event stream documented below — there's no separate tracking to opt into:
+`getMetrics()` returns a plain-object snapshot derived from the same `change` event stream documented below; there's no separate tracking to opt into:
 
 | Field                | Type             | Description                                                                                |
 | -------------------- | ---------------- | ------------------------------------------------------------------------------------------ |
@@ -214,7 +214,7 @@ player.addEventListener('change', () => {
 | `qualitySwitchCount` | `number`         | Number of clarity levels the user has picked from the quality selector.                    |
 | `errorCount`         | `number`         | Number of `error`/`sourceerror` events.                                                    |
 
-The snapshot resets whenever a new `src`/`format` loads — it always describes the **current** source, not a running total across sources.
+The snapshot resets whenever a new `src`/`format` loads. It always describes the **current** source, not a running total across sources.
 
 ## Methods
 
@@ -227,7 +227,7 @@ The player exposes imperative controls on the element instance:
 | `getCurrentTime()`                         | Current playback position in seconds.                                                                  |
 | `setCurrentTime(seconds)`                  | Seek to a position.                                                                                    |
 | `getTotalTime()`                           | Total media duration in seconds.                                                                       |
-| `getVolume()` / `setVolume(v)`             | Read/set volume on a `0`–`100` scale — same scale as the `volume` attribute.                           |
+| `getVolume()` / `setVolume(v)`             | Read/set volume on a `0`–`100` scale, the same scale as the `volume` attribute.                        |
 | `getPlaybackRate()` / `setPlaybackRate(n)` | Read/set the speed multiplier.                                                                         |
 | `customRequestFullscreen()`                | Enter fullscreen. Returns a `Promise`.                                                                 |
 | `customExitFullscreen()`                   | Exit fullscreen. Returns a `Promise`.                                                                  |
@@ -238,7 +238,7 @@ The player exposes imperative controls on the element instance:
 
 ## Events
 
-The player dispatches a single `change` CustomEvent. Every internal state transition — native media events and the player's own UI actions — funnels through it, so you subscribe once and switch on `detail.type`.
+The player dispatches a single `change` CustomEvent. Every internal state transition (native media events and the player's own UI actions) funnels through it, so you subscribe once and switch on `detail.type`.
 
 ```html
 <r-player id="player" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
@@ -294,18 +294,18 @@ Native media states forwarded from the underlying `<video>`:
 
 Player-specific actions:
 
-| Type               | `data`                   | Description                                                                                                                                                                                                                   |
-| ------------------ | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `volume`           | `number` (`0`–`100`)     | Volume changed via the control bar or mute toggle.                                                                                                                                                                            |
-| `speed`            | `number`                 | Playback speed changed via the speed selector.                                                                                                                                                                                |
-| `fullscreen`       | `boolean`                | Fullscreen entered (`true`) or exited (`false`).                                                                                                                                                                              |
-| `pictureinpicture` | `boolean`                | Picture-in-Picture entered (`true`) or exited (`false`) — fires whether triggered by `togglePip()` or the browser's own PiP window controls.                                                                                  |
-| `subtitlechange`   | `string`                 | Subtitle language changed via the CC picker or `setSubtitleLanguage()` — a `srclang`, or `'off'`.                                                                                                                             |
-| `resume`           | `number`                 | A saved position was silently restored on load (`remember-position`); `data` is the restored time in seconds.                                                                                                                 |
-| `levelsready`      | `{ levels }`             | The streaming engine's manifest was parsed; clarity levels are now available.                                                                                                                                                 |
-| `sourceerror`      | `{ fatal, detail }`      | A streaming-engine error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set — non-fatal errors are the engine's own internal recovery and don't). |
-| `qualityswitch`    | `{ level }`              | The user picked a clarity level from the quality selector.                                                                                                                                                                    |
-| `gestureseek`      | `{ direction, seconds }` | A double-tap seek gesture fired (`direction` is `'forward'`/`'backward'`).                                                                                                                                                    |
+| Type               | `data`                   | Description                                                                                                                                                                                                                  |
+| ------------------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `volume`           | `number` (`0`–`100`)     | Volume changed via the control bar or mute toggle.                                                                                                                                                                           |
+| `speed`            | `number`                 | Playback speed changed via the speed selector.                                                                                                                                                                               |
+| `fullscreen`       | `boolean`                | Fullscreen entered (`true`) or exited (`false`).                                                                                                                                                                             |
+| `pictureinpicture` | `boolean`                | Picture-in-Picture entered (`true`) or exited (`false`); fires whether triggered by `togglePip()` or the browser's own PiP window controls.                                                                                  |
+| `subtitlechange`   | `string`                 | Subtitle language changed via the CC picker or `setSubtitleLanguage()`: a `srclang`, or `'off'`.                                                                                                                             |
+| `resume`           | `number`                 | A saved position was silently restored on load (`remember-position`); `data` is the restored time in seconds.                                                                                                                |
+| `levelsready`      | `{ levels }`             | The streaming engine's manifest was parsed; clarity levels are now available.                                                                                                                                                |
+| `sourceerror`      | `{ fatal, detail }`      | A streaming-engine error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set; non-fatal errors are the engine's own internal recovery and don't). |
+| `qualityswitch`    | `{ level }`              | The user picked a clarity level from the quality selector.                                                                                                                                                                   |
+| `gestureseek`      | `{ direction, seconds }` | A double-tap seek gesture fired (`direction` is `'forward'`/`'backward'`).                                                                                                                                                   |
 
 ## Slots
 
@@ -314,7 +314,7 @@ The player does not accept slotted content: it clears its own light-DOM children
 ## Styling
 
 `<r-player>` exposes **136 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-player {
@@ -326,11 +326,11 @@ The full list is in [style tokens](/src/ranui/style-tokens#player); which token 
 
 ## Best Practices
 
-- **Sizing**: The host is `display: block` with no intrinsic size — always give it an explicit width and height, otherwise the video collapses.
-- **Streaming engines**: `.m3u8` (HLS), `.mpd` (DASH), and `.flv`/`.ts` (FLV/MPEG-TS via `mpegts.js`) sources each load their engine lazily and automatically — no setup required. If a URL's extension can't be sniffed (extensionless/signed CDN URLs), set the `format` attribute explicitly (e.g. `format="dash"`) instead of relying on detection. WebRTC (`format="webrtc"`) is always explicit — a WHEP endpoint has nothing to sniff.
-- **One listener**: Prefer a single `change` listener with a `switch (detail.type)` over trying to attach many event handlers — all state flows through `change`.
-- **Volume units**: `volume` (attribute), `setVolume()`/`getVolume()`, and the `volume` change payload all use a single `0`–`100` scale. Only the underlying native `<video>.volume` is `0`–`1` — the player converts at that one boundary.
-- **Picture-in-Picture is progressive enhancement**: the button is hidden, not disabled, when the browser lacks support — don't rely on it always being present in the DOM.
+- **Sizing**: The host is `display: block` with no intrinsic size; always give it an explicit width and height, otherwise the video collapses.
+- **Streaming engines**: `.m3u8` (HLS), `.mpd` (DASH), and `.flv`/`.ts` (FLV/MPEG-TS via `mpegts.js`) sources each load their engine lazily and automatically; no setup required. If a URL's extension can't be sniffed (extensionless/signed CDN URLs), set the `format` attribute explicitly (e.g. `format="dash"`) instead of relying on detection. WebRTC (`format="webrtc"`) is always explicit: a WHEP endpoint has nothing to sniff.
+- **One listener**: Prefer a single `change` listener with a `switch (detail.type)` over trying to attach many event handlers; all state flows through `change`.
+- **Volume units**: `volume` (attribute), `setVolume()`/`getVolume()`, and the `volume` change payload all use a single `0`–`100` scale. Only the underlying native `<video>.volume` is `0`–`1`; the player converts at that one boundary.
+- **Picture-in-Picture is progressive enhancement**: the button is hidden, not disabled, when the browser lacks support; don't rely on it always being present in the DOM.
 - **Custom styling**: Use the `sheet` attribute to inject shadow-DOM CSS; there are no exported `::part()` handles on the player itself.
 
 ## Roadmap

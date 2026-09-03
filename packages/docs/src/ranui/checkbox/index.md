@@ -6,7 +6,7 @@ description: 'The ranui Checkbox (<r-checkbox>) toggles a single on/off choice, 
 
 Checkbox component for toggling a single on/off choice, with an optional label and native form support.
 
-> **Use when** you need a single on/off toggle with a label that participates in native forms — `<r-checkbox>` reports its checked state to `FormData` and is keyboard-operable.
+> **Use when** you need a single on/off toggle with a label that participates in native forms: `<r-checkbox>` reports its checked state to `FormData` and is keyboard-operable.
 
 ## Quick Start
 
@@ -156,7 +156,7 @@ r-checkbox::part(label) {
 ## Styling
 
 `<r-checkbox>` exposes **32 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-checkbox {
@@ -174,4 +174,4 @@ The full list is in [style tokens](/src/ranui/style-tokens#checkbox); which toke
 - **Checked vs. value**: Use `checked` for boolean state; read `value` (`'true'` / `'false'`) when collecting form data.
 - **Disabled State**: Use `disabled` when the choice is unavailable.
 - **Listen to `change`**: Read `event.detail.checked` rather than re-querying the DOM.
-- **Forms**: Drop `r-checkbox` inside a `<form>` — its value is collected automatically when checked. See [Forms](/src/ranui/form/) for the `serializeForm()` helper that turns a submit into a plain object.
+- **Forms**: Drop `r-checkbox` inside a `<form>`; its value is collected automatically when checked. See [Forms](/src/ranui/form/) for the `serializeForm()` helper that turns a submit into a plain object.

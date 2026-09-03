@@ -62,7 +62,7 @@ import { /* … */ } from 'ranuts/utils';
 - `compose<T>(middleware: Array<Middleware<T>>) => ComposedMiddleware<T>` — Run a chain of async functions as if it were sequential
 - `computePlacement(options: ComputePlacementOptions) => ComputedPlacement` — Position a floating panel relative to an anchor rect: flips to the opposite
 - `concatBytes(chunks: readonly Uint8Array[]) => Uint8Array` — Join byte chunks into one buffer, in order.
-- `connection() => number | undefined` — Current network status: type, throughput, and whether the connection changed
+- `connection() => NetworkInformation | undefined` — Current network status: type, throughput, and whether the connection changed
 - `convertImageToBase64(file: File) => Promise<convertImageToBase64Return>` — Convert an image to base64
 - `cosinePalette(t: number, a: RGB, b: RGB, c: RGB, d: RGB) => RGB` — Inigo Quilez cosine gradient palette: `a + b * cos(2π(c·t + d))`. Each of `a,b,c,d` is an RGB triple; `t` is the position 0..1. Returns an RGB triple.
 - `crc32(data: Uint8Array) => number` — CRC32 checksum (IEEE 802.3 polynomial), the one ZIP stores per entry.

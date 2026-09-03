@@ -5,7 +5,7 @@ description: 'ranui is a Web Components UI library built on native custom elemen
 # ranui
 
 A UI library built on **native custom elements**. Every component is an `<r-*>` tag, so it works
-in React, Vue, Svelte, Solid, Astro or a plain HTML file the same way — there is no adapter and
+in React, Vue, Svelte, Solid, Astro or a plain HTML file the same way. There is no adapter and
 no framework version to match. TypeScript types, light/dark theming through design tokens,
 Shadow DOM encapsulation and server rendering are included.
 
@@ -44,7 +44,7 @@ import 'ranui/button'; // or just one
 <r-button type="primary">Deploy project</r-button>
 ```
 
-It is the same tag in every framework — the differences are in how each one passes values and
+It is the same tag in every framework: the differences are in how each one passes values and
 binds events, which the [coding guidelines](/src/ranui/coding-guides/#framework-integration)
 cover in full:
 
@@ -94,7 +94,7 @@ for the component library.
 | Import                                             | Contains                                                   |
 | -------------------------------------------------- | ---------------------------------------------------------- |
 | `ranui`                                            | Every component                                            |
-| `ranui/<component>`                                | One component — `ranui/button`, `ranui/select`, …          |
+| `ranui/<component>`                                | One component: `ranui/button`, `ranui/select`, …           |
 | [`ranui/theme`](/src/ranui/theme/)                 | Light/dark theming and token overrides; no elements        |
 | [`ranui/i18n`](/src/ranui/i18n/)                   | The translation engine; no elements                        |
 | `ranui/fonts`                                      | Self-hosted Geist Sans + Geist Mono                        |
@@ -109,35 +109,35 @@ for the component library.
 40 elements. Every one of them, with its attributes, properties, events, slots and `::part()`
 names, is in the [element API reference](/src/ranui/api).
 
-**Common** — [Button](/src/ranui/button/) · [Icon](/src/ranui/icon/) ·
+**Common**: [Button](/src/ranui/button/) · [Icon](/src/ranui/icon/) ·
 [Loading](/src/ranui/loading/)
 
-**Data entry** — [Input](/src/ranui/input/) · [CheckBox](/src/ranui/checkbox/) ·
+**Data entry**: [Input](/src/ranui/input/) · [CheckBox](/src/ranui/checkbox/) ·
 [Select](/src/ranui/select/) · [ColorPicker](/src/ranui/colorpicker/) ·
 [Attachments](/src/ranui/attachments/) · [VoiceButton](/src/ranui/voice-button/) ·
 [Forms](/src/ranui/form/)
 
-**Data display** — [Card](/src/ranui/card/) · [Section](/src/ranui/section/) ·
+**Data display**: [Card](/src/ranui/card/) · [Section](/src/ranui/section/) ·
 [Tabs](/src/ranui/tab/) · [Image](/src/ranui/image/) · [Progress](/src/ranui/progress/) ·
 [Radar](/src/ranui/radar/) · [Player](/src/ranui/player/) · [Preview](/src/ranui/preview/) ·
 [Glass](/src/ranui/glass/) · [Scratch](/src/ranui/scratch/) ·
 [StateDot](/src/ranui/state-dot/) · [DisclosureRow](/src/ranui/disclosure-row/)
 
-**Content rendering** — [Markdown](/src/ranui/markdown/) · [Math](/src/ranui/math/) ·
+**Content rendering**: [Markdown](/src/ranui/markdown/) · [Math](/src/ranui/math/) ·
 [Mermaid](/src/ranui/mermaid/)
 
-**AI & chat** — [Conversation](/src/ranui/conversation/) ·
+**AI & chat**: [Conversation](/src/ranui/conversation/) ·
 [Reasoning](/src/ranui/reasoning/) · [ToolCard](/src/ranui/tool-card/) ·
 [TokenMeter](/src/ranui/token-meter/)
 
-**Overlays & feedback** — [Modal](/src/ranui/modal/) · [Popover](/src/ranui/popover/) ·
+**Overlays & feedback**: [Modal](/src/ranui/modal/) · [Popover](/src/ranui/popover/) ·
 [Dropdown](/src/ranui/dropdown/) · [Message](/src/ranui/message/) ·
 [Skeleton](/src/ranui/skeleton/)
 
-**Navigation** — [Router](/src/ranui/router/) · [Route](/src/ranui/route/) ·
+**Navigation**: [Router](/src/ranui/router/) · [Route](/src/ranui/route/) ·
 [Link](/src/ranui/link/)
 
-**Foundations** — [Theming](/src/ranui/theme/) · [ThemeSwitch](/src/ranui/theme-switch/) ·
+**Foundations**: [Theming](/src/ranui/theme/) · [ThemeSwitch](/src/ranui/theme-switch/) ·
 [i18n](/src/ranui/i18n/)
 
 Five elements have no page of their own because they only exist inside another: `<r-option>`
@@ -167,7 +167,7 @@ Five elements have no page of their own because they only exist inside another: 
 Components render into a **closed** shadow root: page CSS cannot leak in, and selectors cannot
 reach through. There are four ways in, in order of preference.
 
-**1. Design tokens (CSS custom properties)** — they inherit across the boundary, so setting one
+**1. Design tokens (CSS custom properties)**: they inherit across the boundary, so setting one
 on `:root`, on a wrapper or on the element all work:
 
 ```html
@@ -192,7 +192,7 @@ between them are the [design guidelines](/src/ranui/design-guides/); the mechani
 
 ## Events
 
-Components dispatch `CustomEvent`s with the payload in `detail`. Bind on the element — whether
+Components dispatch `CustomEvent`s with the payload in `detail`. Bind on the element: whether
 an event bubbles is a per-component decision, and the API reference states it for every one:
 
 ```html
@@ -206,7 +206,7 @@ an event bubbles is a per-component decision, and the API reference states it fo
 ```
 
 The `onchange="…"` attribute form and the `el.onchange = …` property form both work, since
-these are ordinary DOM elements — but they allow only one handler and no capture phase, so
+these are ordinary DOM elements, but they allow only one handler and no capture phase, so
 `addEventListener` is the one to reach for.
 
 ## Where to go next
@@ -225,8 +225,8 @@ these are ordinary DOM elements — but they allow only one handler and no captu
 
 ## Browser support
 
-Every modern browser — the library is built on Custom Elements v1, Shadow DOM v1 and CSS custom
-properties. **Internet Explorer is not supported.**
+The library works in every modern browser: it is built on Custom Elements v1, Shadow DOM v1 and
+CSS custom properties. **Internet Explorer is not supported.**
 
 ![](../../assets/ranui/customElements.png)
 

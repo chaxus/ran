@@ -1,6 +1,6 @@
 # queryFlag / isInIframe
 
-Read a boolean URL flag, and tell whether the page is embedded — the two checks behind
+Read a boolean URL flag, and tell whether the page is embedded: the two checks behind
 `?embed`, `?readonly` and `?debug`.
 
 ## API
@@ -67,7 +67,7 @@ openDocument(file, { readonly: queryFlag('readonly') });
 ## Notes
 
 1. **A bare flag is the common spelling.** `?embed` carries no value, so
-   `getQuery(url).embed` is `''` — falsy — and a plain truthiness check silently misses the
+   `getQuery(url).embed` is `''` (falsy), and a plain truthiness check silently misses the
    most common form. That is what `queryFlag` exists for.
 
 2. **`?k=false` is false.** An explicit negative is honoured rather than treated as "present,
@@ -77,4 +77,4 @@ openDocument(file, { readonly: queryFlag('readonly') });
    engines; an unreadable parent is treated as embedded, because that is what it means.
 
 4. **Both are SSR-safe.** With no `window`, `isInIframe` is `false` and `queryFlag` is `false`
-   unless a `url` is passed — so both work in build-time scripts by supplying the URL.
+   unless a `url` is passed, so both work in build-time scripts by supplying the URL.

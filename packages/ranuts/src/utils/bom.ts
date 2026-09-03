@@ -303,11 +303,28 @@ export const getWindow = (): ClientRatio => {
 };
 
 /**
+ * The subset of the Network Information API's `NetworkInformation` object that browsers
+ * actually ship. It is not in TypeScript's DOM lib because the spec is not standardised.
+ */
+export interface NetworkInformation extends EventTarget {
+  /** 'slow-2g' | '2g' | '3g' | '4g' */
+  effectiveType?: string;
+  /** Estimated downlink bandwidth in Mbps */
+  downlink?: number;
+  /** Estimated round-trip time in milliseconds */
+  rtt?: number;
+  /** Whether the user has asked for reduced data usage */
+  saveData?: boolean;
+  /** 'wifi' | 'cellular' | 'ethernet' | … where the platform exposes it */
+  type?: string;
+}
+
+/**
  * @description: Current network status: type, throughput, and whether the connection changed
  */
-export const connection = (): number | undefined => {
+export const connection = (): NetworkInformation | undefined => {
   if (typeof window !== 'undefined') {
-    return (window.navigator as any).connection;
+    return (window.navigator as Navigator & { connection?: NetworkInformation }).connection;
   }
 };
 

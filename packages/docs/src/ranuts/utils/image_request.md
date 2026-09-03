@@ -1,6 +1,6 @@
 # imageRequest
 
-Test network latency (ping value) through image request.
+Test network latency (ping) using an image request.
 
 ## API
 
@@ -62,6 +62,6 @@ async function testNetwork() {
 ## Notes
 
 1. **Default URL**: If URL is not provided, defaults to GitHub's favicon (about 2.2KB).
-2. **Measurement method**: Measures network latency through image loading time, time difference from request initiation to image load completion.
+2. **Measurement method**: Measures network latency by timing image load, from when the request starts to when the image finishes loading.
 3. **Error handling**: If image loading fails, Promise will reject.
 4. **Use case**: Commonly used for network quality detection, performance monitoring, etc.

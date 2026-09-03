@@ -4,25 +4,25 @@ description: 'The ranui Icon (<r-icon>) renders semantic vector graphics (SVG) w
 
 # Icon
 
-Semantic vector graphics
+Renders semantic vector graphics (SVG) with sizing and color control.
 
-> **Use when** you need a named, resizable, recolorable vector icon (with an optional spin animation) inline in your UI — `<r-icon>` renders a registered SVG by `name`.
+> **Use when** you need a named, resizable, recolorable vector icon (with an optional spin animation) inline in your UI: `<r-icon>` renders a registered SVG by `name`.
 
 ## Using icons
 
 ### Easiest: just use a bundled name (zero config)
 
-ranui ships its icon set **inlined into the package**. A bundled `name` **loads itself on demand** — no registration, no imports, no asset-path wiring. Only the SVG you actually use is fetched (each is a separate async chunk), so referencing one icon never pulls the whole set:
+ranui ships its icon set **inlined into the package**. A bundled `name` **loads itself on demand**: no registration, no imports, no asset-path wiring. Only the SVG you actually use is fetched (each is a separate async chunk), so referencing one icon never pulls the whole set:
 
 ```html
 <r-icon name="lock"></r-icon> <r-icon name="eye"></r-icon>
 ```
 
-The valid bundled names are the `RanIconName` union / `RAN_ICON_NAMES` tuple (see below). A **custom** name that was never registered still renders **nothing** (a blank space) — that only applies to your own SVGs, covered under [Custom icons](#custom-icons).
+The valid bundled names are the `RanIconName` union / `RAN_ICON_NAMES` tuple (see below). A **custom** name that was never registered still renders **nothing** (a blank space); that only applies to your own SVGs, covered under [Custom icons](#custom-icons).
 
 ### Optional: eager-register the whole set
 
-If you'd rather have every bundled icon available **synchronously** (no per-icon async load — e.g. to avoid a first-paint flash on icon-dense views, or in an environment without code-splitting), call `registerBuiltinIcons()` once, as early as possible:
+If you'd rather have every bundled icon available **synchronously** (no per-icon async load, e.g. to avoid a first-paint flash on icon-dense views, or in an environment without code-splitting), call `registerBuiltinIcons()` once, as early as possible:
 
 ```ts
 import { registerBuiltinIcons } from 'ranui'; // or 'ranui/icons'
@@ -55,7 +55,7 @@ You can also skip the registry entirely by passing raw SVG markup straight to `n
 <r-icon name='<svg viewBox="0 0 24 24">…</svg>'></r-icon>
 ```
 
-> **Note:** the raw `assets/icons/*.svg` files are **not** part of the published npm package (it ships only `dist/`), so `import '…/lock.svg?raw'` from `ranui` won't resolve — use `registerBuiltinIcons()` for the bundled set, or register your own SVG strings.
+> **Note:** the raw `assets/icons/*.svg` files are **not** part of the published npm package (it ships only `dist/`), so `import '…/lock.svg?raw'` from `ranui` won't resolve; use `registerBuiltinIcons()` for the bundled set, or register your own SVG strings.
 
 > **SSR / timing.** Registration must run in the browser. If an `<r-icon>` connects before its icon is registered it stays blank, then fills in automatically when registration completes (the element listens for the `ranui-icon-registered` event). To avoid a flash of empty icons, register at the very top of your entry module so the registry is populated before the first component renders. In dev, an unregistered name logs `[ranui-icon] icon not registered: <name>`.
 
@@ -77,7 +77,7 @@ You can also skip the registry entirely by passing raw SVG markup straight to `n
 
 ### `name`
 
-Select a different icon based on the name
+Select a different icon based on the name.
 
 <Demo>
   <r-icon name="lock" size="50"></r-icon>
@@ -123,7 +123,7 @@ Select a different icon based on the name
 
 ### `spin`
 
-Set spin to turn on the rotation, and pass in a number to control the rotation speed. The smaller the number, the faster the rotation
+Set spin to turn on the rotation, and pass in a number to control the rotation speed. The smaller the number, the faster the rotation.
 
 <Demo>
   <r-icon name="loading" size="50" color="#1E90FF" spin="0.7"></r-icon>
@@ -146,7 +146,7 @@ Click any icon to copy its markup.
 ## Styling
 
 `<r-icon>` exposes **6 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-icon {

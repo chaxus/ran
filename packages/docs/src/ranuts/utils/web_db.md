@@ -1,6 +1,6 @@
 # WebDB
 
-A Promise wrapper around IndexedDB. Native IndexedDB is event-callback + transaction based —
+A Promise wrapper around IndexedDB. Native IndexedDB is event-callback + transaction based:
 every read or write is five steps (open → transaction → objectStore → request →
 `onsuccess`/`onerror`). `WebDB` collapses that to `await db.add({ storeName, data })`.
 
@@ -55,7 +55,7 @@ const all = await notes.all(); // [] if it failed
 
 ::: warning Pick the right layer
 Every method **swallows the error**. That is the right default for what most apps keep in
-IndexedDB — reading progress, drafts, caches — where a failed read should degrade the feature,
+IndexedDB (reading progress, drafts, caches), where a failed read should degrade the feature,
 not take down the screen. It is the wrong default when the write _is_ the user's action
 (saving a document, completing a purchase): there, call the `IDBResult` methods above and
 handle the failure.
@@ -82,7 +82,7 @@ const { data } = await db.readByKey({ storeName: 'books', key: '1' });
 
 ## Notes
 
-1. **Stores can only be created inside an upgrade transaction** — that's why they are declared
+1. **Stores can only be created inside an upgrade transaction**: that's why they are declared
    up front rather than created after the database opens. Creating a missing store or index is
    idempotent, so it is safe to keep the same `stores` array across versions.
 2. **Version downgrades self-heal.** Opening with a version lower than what is on disk throws a

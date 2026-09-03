@@ -1,12 +1,12 @@
 ---
-description: 'A structured content container with header, body, and footer zones — a Geist-style bordered surface for grouping related content.'
+description: 'A structured content container with header, body, and footer zones, presented as a Geist-style bordered surface for grouping related content.'
 ---
 
 # Card
 
-A structured content container with header, body, and footer zones for grouping related content. Cards are Geist-style bordered surfaces — page background plus a 1px border, not a gray fill — and stay inert on hover unless you opt in with `hoverable`.
+A structured content container with header, body, and footer zones for grouping related content. Cards are Geist-style bordered surfaces (page background plus a 1px border, not a gray fill) and stay inert on hover unless you opt in with `hoverable`.
 
-> **Use when** you need to group related content into a bordered surface with title, description, body, and footer zones — `<r-card>` gives you those slots plus an optional `hoverable` interactive state.
+> **Use when** you need to group related content into a bordered surface with title, description, body, and footer zones: `<r-card>` gives you those slots plus an optional `hoverable` interactive state.
 
 ## Quick Start
 
@@ -34,12 +34,12 @@ A structured content container with header, body, and footer zones for grouping 
 
 | Property      | Type      | Default | Description                                                                  |
 | ------------- | --------- | ------- | ---------------------------------------------------------------------------- |
-| `title`       | `string`  | `''`    | Card heading, shown at the top of the header. Hidden when empty.             |
+| `heading`     | `string`  | `''`    | Card heading, shown at the top of the header. Hidden when empty.             |
 | `description` | `string`  | `''`    | Subtitle rendered below the title. Hidden when empty.                        |
 | `hoverable`   | `boolean` | `false` | Interactive card: hover darkens the border and lifts to the elevated shadow. |
 | `sheet`       | `string`  | `''`    | CSS injected into the card's shadow DOM.                                     |
 
-### Title `title`
+### Heading `heading`
 
 The card heading, shown at the top of the header. Hidden when empty.
 
@@ -87,11 +87,11 @@ Cards don't react to hover by default. Add the `hoverable` attribute on cards th
 </r-card>
 ```
 
-`hoverable` is purely presentational — gate it to cards that respond to clicks, and keep non-interactive cards inert.
+`hoverable` is purely presentational: gate it to cards that respond to clicks, and keep non-interactive cards inert.
 
 ### External Styles `sheet`
 
-CSS injected into the card's shadow DOM — the same `sheet` convention used by every other ranui component.
+CSS injected into the card's shadow DOM. It follows the same `sheet` convention used by every other ranui component.
 
 ```html
 <r-card heading="Themed card" sheet=".ran-card { background: #f6ffed; }">
@@ -104,7 +104,7 @@ CSS injected into the card's shadow DOM — the same `sheet` convention used by 
 | Slot        | Description                                                              |
 | ----------- | ------------------------------------------------------------------------ |
 | _(default)_ | Body content, rendered in the card body.                                 |
-| `extra`     | Right side of the header — badges, links, or actions.                    |
+| `extra`     | Right side of the header: badges, links, or actions.                     |
 | `footer`    | Footer content. The footer is hidden until this slot has assigned nodes. |
 
 ## CSS Parts
@@ -144,5 +144,5 @@ The card is a passive container and dispatches no custom events.
 - **Body Content**: Place primary content in the default slot.
 - **Header Actions**: Use the `extra` slot for badges, links, or actions aligned to the right of the header.
 - **Footer**: Use the `footer` slot for secondary actions or links; it stays hidden until you slot content into it.
-- **Hover Feedback**: Add `hoverable` only to cards that are clickable — non-interactive cards must not react to hover.
+- **Hover Feedback**: Add `hoverable` only to cards that are clickable; non-interactive cards must not react to hover.
 - **Theming**: Prefer CSS variables and `::part()` over the `sheet` attribute for reusable styling.

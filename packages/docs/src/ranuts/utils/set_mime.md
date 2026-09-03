@@ -65,7 +65,7 @@ setMime('.xyz', 'application/x-xyz-format');
 ## MimeType
 
 The underlying `Map<string, string>` that `getMime`, `setMime` and `getExtensions` all read
-and write — imported directly if you want to enumerate every known extension/type pair rather
+and write. Import it directly if you want to enumerate every known extension/type pair rather
 than look one up.
 
 ```js
@@ -77,5 +77,5 @@ MimeType.size; // total number of known extensions
 ```
 
 It's the same `Map` instance `setMime` mutates, so changes made through `setMime` are visible
-here immediately, and vice versa — mutating it directly works too, `setMime` is just a
+here immediately, and vice versa. Mutating it directly works too; `setMime` is just a
 named entry point for the common case.

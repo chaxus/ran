@@ -6,7 +6,7 @@ description: 'The ranui Skeleton (<r-skeleton>) shows a shimmering placeholder t
 
 Placeholder graphic that fills the space of content while it loads, using a shimmering animation.
 
-> **Use when** you need a shimmering placeholder bar to hold a content's space while it loads — size `<r-skeleton>`'s parent to match the real content, then swap it out when data arrives.
+> **Use when** you need a shimmering placeholder bar to hold the space for content while it loads. Size `<r-skeleton>`'s parent to match the real content, then swap it out when data arrives.
 
 ## Quick Start
 

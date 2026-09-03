@@ -1,19 +1,19 @@
 ---
-description: 'A microphone button for a text composer — it reports what was heard and lets the app decide where the text goes, and never sends on the speaker’s behalf.'
+description: "A microphone button for a text composer that reports what was heard, lets the app decide where the text goes, and never sends on the speaker's behalf."
 ---
 
 # Voice Button
 
 Dictation for a text composer, over the Web Speech API.
 
-> **Use when** you want speech as _another_ way to fill a text field — not as a replacement
+> **Use when** you want speech as _another_ way to fill a text field, not as a replacement
 > for it. Typing must stay available: a voice-only path excludes anyone with a speech
 > difference, anyone in a noisy room, and anyone whose browser has no recognition at all.
 
 A microphone button, and nothing else. It owns the capture and reports what was heard; where
 that text goes is the caller's decision, because a component that also wrote into an input
 would have to know which input, whether to append or replace, and what to do about the
-caret — three answers that differ per app.
+caret: three answers that differ per app.
 
 ## Quick Start
 
@@ -53,14 +53,14 @@ review they need. This fills the box and stops there. Sending stays a deliberate
 
 Firefox ships no speech recognition, and neither does any browser with the API absent. The
 element sets `hidden` rather than `disabled`: **disabled says "not now", absent says "not
-here"**, and a button that cannot work is worse than no button — it invites a tap and then
+here"**, and a button that cannot work is worse than no button; it invites a tap and then
 explains itself.
 
 ### Only two of four errors are worth showing
 
 | Kind       | What it is                 | Show it?                   |
 | ---------- | -------------------------- | -------------------------- |
-| `denied`   | the microphone was refused | **yes** — it is actionable |
+| `denied`   | the microphone was refused | **yes** (it is actionable) |
 | `failed`   | anything else went wrong   | **yes**                    |
 | `noSpeech` | a silent pause             | no                         |
 | `aborted`  | a programmatic stop        | no                         |
@@ -71,7 +71,7 @@ them nags after every capture.
 ### Accessibility
 
 The accessible **name changes with the state**, not only the icon, and `aria-pressed`
-carries the toggle — a screen reader announces "Stop voice input, pressed", not an icon.
+carries the toggle: a screen reader announces "Stop voice input, pressed", not an icon.
 **Escape discards** a capture rather than committing it, which is what a speaker who
 realises mid-sentence that they said the wrong thing wants.
 
@@ -88,16 +88,16 @@ locale mid-session dictates in the language it is showing.
 
 ### Properties
 
-| Property      | Type      | Default               | Description                                                    |
-| ------------- | --------- | --------------------- | -------------------------------------------------------------- |
-| `lang`        | `string`  | the document's        | BCP 47 tag for the language being spoken. Read per capture.    |
-| `continuous`  | `boolean` | `true`                | Keep listening across pauses instead of stopping at the first. |
-| `disabled`    | `boolean` | `false`               |                                                                |
-| `label`       | `string`  | `'Start voice input'` | Accessible name while idle.                                    |
-| `activeLabel` | `string`  | `'Stop voice input'`  | Accessible name while listening.                               |
-| `listening`   | `boolean` | `false`               | Read-only, reflected — style with `:host([listening])`.        |
-| `supported`   | `boolean` | —                     | Read-only. Whether this platform can recognize speech.         |
-| `sheet`       | `string`  | `''`                  | CSS injected into the element's shadow DOM.                    |
+| Property      | Type      | Default               | Description                                                                                                              |
+| ------------- | --------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `lang`        | `string`  | the document's        | BCP 47 tag for the language being spoken. Read per capture.                                                              |
+| `continuous`  | `boolean` | `true`                | Keep listening across pauses instead of stopping at the first.                                                           |
+| `disabled`    | `boolean` | `false`               | Disables the button: `start()` is ignored and the inner button is disabled. Does not stop a capture already in progress. |
+| `label`       | `string`  | `'Start voice input'` | Accessible name while idle.                                                                                              |
+| `activeLabel` | `string`  | `'Stop voice input'`  | Accessible name while listening.                                                                                         |
+| `listening`   | `boolean` | `false`               | Read-only, reflected: style with `:host([listening])`.                                                                   |
+| `supported`   | `boolean` | —                     | Read-only. Whether this platform can recognize speech.                                                                   |
+| `sheet`       | `string`  | `''`                  | CSS injected into the element's shadow DOM.                                                                              |
 
 ### Methods
 
@@ -109,12 +109,12 @@ activation would try to open a second capture, be refused, and do nothing.
 
 ### Events
 
-| Event         | Detail                    | Fired when                     |
-| ------------- | ------------------------- | ------------------------------ |
-| `voicestart`  | —                         | a capture begins               |
-| `voiceresult` | `{ transcript, isFinal }` | text arrives or is revised     |
-| `voiceerror`  | `{ kind, detail }`        | the platform reports a problem |
-| `voiceend`    | —                         | the capture ends, however      |
+| Event         | Detail                    | Fired when                            |
+| ------------- | ------------------------- | ------------------------------------- |
+| `voicestart`  | —                         | a capture begins                      |
+| `voiceresult` | `{ transcript, isFinal }` | text arrives or is revised            |
+| `voiceerror`  | `{ kind, detail }`        | the platform reports a problem        |
+| `voiceend`    | —                         | the capture ends, whatever the reason |
 
 ### Parts
 
@@ -123,7 +123,7 @@ activation would try to open a second capture, be refused, and do nothing.
 ## Styling
 
 `<r-voice-button>` exposes **20 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from: `:root`, a wrapper, or the element:
 
 ```css
 r-voice-button {
@@ -137,5 +137,5 @@ The full list is in [style tokens](/src/ranui/style-tokens#voice-button); which 
 
 ## See also
 
-- [`createSpeechRecognizer`](../../ranuts/utils/) — the recognizer this wraps
-- [Conversation](../conversation/) — the transcript a dictated message lands in
+- [`createSpeechRecognizer`](../../ranuts/utils/): the recognizer this wraps
+- [Conversation](../conversation/): the transcript a dictated message lands in

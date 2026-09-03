@@ -1,6 +1,6 @@
 # getMime
 
-Pass in file format extension, returns `mime type`.
+Pass in a file extension and get back the `mime type`.
 
 ## API
 

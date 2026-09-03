@@ -1,6 +1,6 @@
 # WriteFile
 
-Write content to file.
+Write content to a file.
 
 ## API
 

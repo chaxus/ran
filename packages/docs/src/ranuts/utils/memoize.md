@@ -1,6 +1,6 @@
 # once / singleFlight
 
-Run something **exactly once** and reuse the result — lazy initialization for config parsing,
+Run something **exactly once** and reuse the result: lazy initialization for config parsing,
 expensive one-off computation, lazy getters. `once` is synchronous; `singleFlight` is the
 async counterpart.
 
@@ -53,14 +53,14 @@ await Promise.all([ready(), ready(), ready()]); // opens once
    need per-argument caching, use a `Map` yourself.
 2. **`once` releases `fn` after evaluating**, so whatever it captured can be garbage collected.
 3. **`singleFlight` does not cache rejections.** A failed attempt clears the cache so a
-   transient network blip stays retryable — caching a rejected promise would make one glitch
+   transient network blip stays retryable. Caching a rejected promise would make one glitch
    permanent.
 4. **Concurrent `singleFlight` callers share the in-flight promise**, so `fn` runs once even
    when N callers race. This is the fix for the classic "init() returns void, so callers can't
    await it, so early writes fail" bug.
 
 ::: warning Renamed in 0.3
-`memoize` was a misleading name — it never cached by argument, it just ran once. It is now an
+`memoize` was a misleading name: it never cached by argument, it just ran once. It is now an
 alias of `once` and is deprecated. The type signature was also wrong before (declared as
 zero-argument while it forwarded arguments); it now infers from `fn`.
 :::

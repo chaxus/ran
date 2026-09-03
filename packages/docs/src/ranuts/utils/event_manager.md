@@ -4,8 +4,8 @@ A lifecycle-scoped event registry backed by `AbortController`, plus a small poin
 agnostic double-tap detector for touch gestures.
 
 The problem it solves is _taking listeners back off_. `removeEventListener` only works when you
-hand it the **exact same** function reference and options you registered with — wrap a handler in
-an arrow function on the way in and you can never remove it again. Components that mount and
+hand it the **exact same** function reference and options you registered with. Wrap a handler in
+an arrow function on the way in, and you can never remove it again. Components that mount and
 unmount repeatedly then leak a listener per cycle. `AbortController` turns all of that into a
 single `abort()`.
 
@@ -112,7 +112,7 @@ The underlying `AbortSignal`, in case you want to pass it to `addEventListener` 
 
 ## createDoubleTapDetector
 
-Double-tap detection over raw `(x, y, time)` samples — pointer-type-agnostic, so it works
+Double-tap detection over raw `(x, y, time)` samples. Pointer-type-agnostic, so it works
 the same whether it's fed from Pointer, Touch, or Mouse events. Built for touch gestures
 (double-tap to seek, to zoom, to like) where re-deriving the timestamp + distance
 threshold logic at every call site is easy to get subtly wrong: comparing only one axis,
@@ -142,4 +142,4 @@ el.addEventListener('pointerup', (e) => {
 | Member  | Description                                                                                                                                                                                                                                | Type                                              |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- |
 | `check` | Record a tap at `(x, y)` and report whether it forms a double-tap with the immediately preceding one. A detected double-tap resets tracking, so a third rapid tap starts a fresh pair rather than counting as part of the same double-tap. | `(x: number, y: number, now?: number) => boolean` |
-| `reset` | Forget the last recorded tap — call this when a gesture other than a tap (a drag) starts                                                                                                                                                   | `() => void`                                      |
+| `reset` | Forget the last recorded tap; call this when a gesture other than a tap (a drag) starts                                                                                                                                                    | `() => void`                                      |

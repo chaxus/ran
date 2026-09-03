@@ -21,7 +21,7 @@ The catalogue of messages is yours; this only picks the key.
 
 #### Return
 
-The matching entry of `supported` — always one of them, never an arbitrary string.
+The matching entry of `supported`: always one of them, never an arbitrary string.
 
 ## Example
 
@@ -80,8 +80,8 @@ const locale = paths.localeFromPath(location.pathname) ?? resolveLocale({ suppor
 3. **Matching is case-insensitive and falls back by base language.** With
    `supported: ['en', 'zh-CN']`, `en-GB` matches `en` and `zh` matches `zh-CN`.
 
-4. **`navigator.languages` is consulted in order**, not just `navigator.language` — the list
+4. **`navigator.languages` is consulted in order**, not just `navigator.language`: the list
    is the user's actual ranked preference, and its head is often not the best available match.
 
-5. **Every source degrades quietly.** No `window`, no `document.cookie`, no localStorage —
+5. **Every source degrades quietly.** No `window`, no `document.cookie`, no localStorage:
    each simply contributes nothing, so the chain works under SSR and in build-time scripts.

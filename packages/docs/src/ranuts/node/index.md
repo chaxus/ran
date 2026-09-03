@@ -87,7 +87,7 @@ registration order; calling `next()` twice throws.
 | `res`     | The server response. Write with `res.setHeader` / `res.writeHead` / `res.end`.           | `http.ServerResponse`       |
 | `ipv4()`  | Returns the machine's first non-internal IPv4 address (or `undefined`).                  | `() => string \| undefined` |
 | `request` | Added by `body()`: `{ method, path, url, query, body }`. `query` is a `URLSearchParams`. | `object` (dynamic)          |
-| `[key]`   | `Context` is an open bag — middleware may attach arbitrary fields.                       | `any`                       |
+| `[key]`   | `Context` is an open bag: middleware may attach arbitrary fields.                        | `any`                       |
 
 ### Router
 
@@ -114,7 +114,7 @@ type Handler = (ctx: Context, next: Next) => void;
 ```
 
 Read request data from `ctx.request` (`method`, `path`, `url`, `query`, `body`) and
-send a response through `ctx.res`. Paths are matched exactly — there is no `:param`
+send a response through `ctx.res`. Paths are matched exactly: there is no `:param`
 segment support; use `ctx.request.query` for query parameters.
 
 ### Middleware

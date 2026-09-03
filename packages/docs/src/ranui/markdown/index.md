@@ -35,18 +35,18 @@ Inline \\(e^{i\\pi} + 1 = 0\\) flows with text.`;
 
 # Markdown
 
-Render Markdown — including **token-by-token AI output** — as a framework-agnostic web
+Render Markdown (including **token-by-token AI output**) as a framework-agnostic web
 component. `<r-markdown>` is modelled after Vercel's [Streamdown](https://streamdown.ai):
 while text streams in it closes half-typed `**bold`, `` `code ``, links and `$$` math on the
 fly, splits the document into blocks and re-renders **only the block that changed**, so a
 long answer never re-parses from the top on every token.
 
 Fenced ` ```mermaid ` blocks become [`<r-mermaid>`](/src/ranui/mermaid/), math becomes
-[`<r-math>`](/src/ranui/math/), and code can be highlighted with shiki — every one of these is
+[`<r-math>`](/src/ranui/math/), and code can be highlighted with shiki; every one of these is
 lazy-loaded the first time the content needs it. Output is sanitized with DOMPurify.
 
-> **Use when** you display Markdown you don't fully control — chat replies, LLM streams,
-> user comments, docs — and want streaming, code/diagram/math support and safe HTML without
+> **Use when** you display Markdown you don't fully control (chat replies, LLM streams,
+> user comments, docs) and want streaming, code/diagram/math support and safe HTML without
 > wiring a parser, sanitizer and highlighter yourself.
 
 ## Quick Start
@@ -64,7 +64,7 @@ import 'ranui'; // or the standalone entry:
 import 'ranui/markdown';
 ```
 
-The source is read from the **`content` property** (preferred — not reflected, so streaming
+The source is read from the **`content` property** (preferred, not reflected, so streaming
 a long answer doesn't churn the DOM), the `content` attribute, or the element's text content:
 
 ```js
@@ -79,7 +79,7 @@ el.removeAttribute('caret');
 ## Streaming
 
 `mode="streaming"` (the default) runs the text through [remend](https://www.npmjs.com/package/remend)
-first — the incomplete-markdown terminator extracted from Streamdown — so a half-received
+first (the incomplete-markdown terminator extracted from Streamdown), so a half-received
 `**bold` renders as bold instead of literal asterisks, `[text](https://exa` shows as plain
 text until the URL closes, `- ` doesn't turn the previous paragraph into a heading, and so
 on. Set `mode="static"` for finished documents to skip that pass and render in one piece.
@@ -92,7 +92,7 @@ on. Set `mode="static"` for finished documents to skip that pass and render in o
 <r-markdown caret content="Half-typed *emphasis*, `inline code`, and **bold that is still arriving"></r-markdown>
 ```
 
-- **caret** — `caret` shows a blinking `▋`, `caret="circle"` a `●`, after the last block.
+- **caret**: `caret` shows a blinking `▋`, `caret="circle"` a `●`, after the last block.
   It hides automatically while a code fence is still open or the last block is a table.
 - **incomplete code fences** stay plain (no highlighting flash, no half-rendered diagram)
   until the closing fence arrives; the container carries `data-incomplete` meanwhile.
@@ -193,17 +193,17 @@ Override on the element (each falls back to a semantic token, then a literal):
 - **Lazy-loaded**: the parser chunk (marked + DOMPurify + remend) loads on first render;
   shiki, mermaid and Temml each load only when the content uses them. Apps that never render
   markdown pay nothing.
-- **Sanitized**: raw HTML in the markdown goes through DOMPurify — scripts, event handlers,
+- **Sanitized**: raw HTML in the markdown goes through DOMPurify: scripts, event handlers,
   `javascript:` URLs, `<style>`, forms and iframes are removed. Task-list checkboxes survive.
 - **Block diffing** keys blocks by position, so DOM state inside untouched blocks (an open
   fullscreen diagram, a scrolled table) survives streaming updates. The document is lexed
   once and each block renders from its own tokens, so a link reference definition resolves
   across blocks (`[text][id]` in one block, `[id]: url` in another).
-- **GFM footnotes** (`[^1]`) are **not** supported — marked has no footnote tokenizer, so
+- **GFM footnotes** (`[^1]`) are **not** supported: marked has no footnote tokenizer, so
   the markers render as literal text.
 - **shiki resolves from your own install.** The ES build leaves `import('shiki')` bare, so
   your bundler code-splits it and downloads only the grammars your code fences use. shiki is
-  a regular dependency of ranui, so `npm i ranui` already brings it — nothing extra to add.
+  a regular dependency of ranui, so `npm i ranui` already brings it; nothing extra to add.
 - **Standalone IIFE**: `dist/iife/markdown.iife.js` has no resolver, so it inlines mermaid,
   Temml and shiki's _web_ language bundle (~50 common languages) instead. Prefer the ES
   entry (`ranui/markdown`) for full language coverage and a smaller download.

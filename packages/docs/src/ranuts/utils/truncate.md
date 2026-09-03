@@ -1,6 +1,6 @@
 # truncate
 
-Shorten a string to a maximum length, marking the cut with an ellipsis — Unicode-safe,
+Shorten a string to a maximum length, marking the cut with an ellipsis. It is Unicode-safe,
 and aware that _which end_ you keep changes what the truncation means.
 
 ## Usage
@@ -46,14 +46,14 @@ truncate('0xabcdef0123456789', { length: 11, position: 'middle' });
 
 #### Return
 
-`string` — never longer than `length`. If `length` is shorter than the ellipsis itself,
+`string`: never longer than `length`. If `length` is shorter than the ellipsis itself,
 the result is a truncated ellipsis rather than an overflow.
 
 ## Notes
 
 1. **Slices by Unicode code point, not UTF-16 code unit.** A naive `value.slice(i)` can
-   land inside a surrogate pair — any character outside the Basic Multilingual Plane
-   (emoji, some CJK extension characters) is 2 UTF-16 units — producing an unpaired
+   land inside a surrogate pair: any character outside the Basic Multilingual Plane
+   (emoji, some CJK extension characters) is 2 UTF-16 units, producing an unpaired
    surrogate next to the ellipsis that renders as mojibake. `truncate` iterates by code
    point instead, so multi-unit characters are never split.
 2. A `value` shorter than `length` is returned unchanged — no ellipsis is added.

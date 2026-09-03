@@ -1,5 +1,5 @@
 ---
-description: 'The ranui StateDot (<r-state-dot>) is an 8px lifecycle indicator — idle, running, success, warning, error — drawn as a halo and a core in one element.'
+description: 'The ranui StateDot (<r-state-dot>) is an 8px lifecycle indicator (idle, running, success, warning, error) drawn as a halo and a core in one element.'
 ---
 
 # StateDot
@@ -7,8 +7,8 @@ description: 'The ranui StateDot (<r-state-dot>) is an 8px lifecycle indicator �
 An 8px lifecycle indicator: a halo and a core in one element, both `currentColor`, so a state
 is one colour rule rather than two tokens.
 
-> **Use when** a row needs to show where a piece of work is — queued, running, finished,
-> failed — without spending a whole line on it. It is the dot `<r-tool-card>` and the
+> **Use when** a row needs to show where a piece of work is (queued, running, finished,
+> failed) without spending a whole line on it. It is the dot `<r-tool-card>` and the
 > compaction marker both use.
 
 ## Quick Start
@@ -38,7 +38,7 @@ its place in the row.
 ### Beside a label
 
 The dot carries the state; the text carries the meaning. Never let the colour be the only
-thing that distinguishes two rows — see [design guidelines](/src/ranui/design-guides/#accessibility).
+thing that distinguishes two rows. See [design guidelines](/src/ranui/design-guides/#accessibility).
 
 <Demo column>
   <div style="display:flex;align-items:center;gap:8px">
@@ -64,7 +64,7 @@ thing that distinguishes two rows — see [design guidelines](/src/ranui/design-
 ### Accessibility
 
 **The dot is `aria-hidden` until you give it a `label`.** A dot beside a row that already
-states its outcome in text is noise in a screen reader — announcing "running" twice helps
+states its outcome in text is noise in a screen reader: announcing "running" twice helps
 nobody. Set `label` only when the dot is the _only_ carrier of the state:
 
 ```html
@@ -96,5 +96,5 @@ it, both painted from `currentColor`. So a state is one token, not two:
 | `--ran-state-dot-error-color`   | `--ran-color-danger`               |
 | `--ran-state-dot-halo-opacity`  | `0.16`                             |
 
-`running` pulses the core rather than spinning — a spinner at 8px is a smudge — and the pulse
+`running` pulses the core rather than spinning (a spinner at 8px is a smudge), and the pulse
 stops under `prefers-reduced-motion`.

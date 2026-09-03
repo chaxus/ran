@@ -5,7 +5,7 @@ data behind their back.
 
 The key fact: if a Service Worker does cache-first on same-origin GETs, simply `fetch`-ing a
 URL once puts it in CacheStorage. Any later request for the same URL hits the cache and works
-offline. Prefetching therefore needs no special downloader — just pull the bytes in.
+offline. Prefetching therefore needs no special downloader: just pull the bytes in.
 
 ## API
 
@@ -48,11 +48,11 @@ const ready = await isUrlCached(modelFiles.at(-1));
    Saver, on a slow connection, or when the user opted out.
 2. **Unknown means allowed.** The Network Information API does not exist in Safari or Firefox;
    being unable to read the connection is not a reason to never prefetch.
-3. **Lists are fetched serially** — saturating the pipe would slow down the page the user is
+3. **Lists are fetched serially**: saturating the pipe would slow down the page the user is
    actually looking at.
 4. **Prefer the Service Worker path.** A SW using `event.waitUntil` keeps downloading across
    navigations; a main-thread fetch dies when the user clicks away. Without a controlling SW
    it falls back automatically.
 5. **Probe the largest file** when checking whether a set is cached, or a half-finished
    download reads as complete.
-6. **Failures are silent by design** — a failed prefetch just means the real load downloads later.
+6. **Failures are silent by design**: a failed prefetch just means the real load downloads later.

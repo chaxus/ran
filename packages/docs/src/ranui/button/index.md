@@ -1,12 +1,12 @@
 ---
-description: 'The ranui Button (<r-button>) triggers instant actions with multiple types, sizes, and loading/disabled states — a framework-agnostic Web Component.'
+description: 'The ranui Button (<r-button>) is a framework-agnostic Web Component that triggers instant actions with multiple types, sizes, and loading/disabled states.'
 ---
 
 # Button
 
 Button component for triggering instant actions with multiple styles and states.
 
-> **Use when** you need a clickable action control with ready-made primary/contrast/warning/text styles plus disabled and icon support — reach for `<r-button>` instead of styling a raw `<button>`.
+> **Use when** you need a clickable action control with ready-made primary/contrast/warning/text styles plus disabled and icon support: reach for `<r-button>` instead of styling a raw `<button>`.
 
 ## Quick Start
 
@@ -47,7 +47,7 @@ Button component for triggering instant actions with multiple styles and states.
 <r-button>Default Button</r-button>
 ```
 
-`primary` is the monochrome action (from the Geist design language): black-on-white in light mode, white-on-black in dark mode. Blue carries no brand meaning here — it is reserved for links and the focus ring. It rides the `--ran-color-primary*` tokens (`--ran-color-primary`, `-hover`, `-active`, and `--ran-color-primary-text` for the inverse ink) — see [Theme & Tokens](/src/ranui/theme/).
+`primary` is the monochrome action (from the Geist design language): black-on-white in light mode, white-on-black in dark mode. Blue carries no brand meaning here; it is reserved for links and the focus ring. It rides the `--ran-color-primary*` tokens (`--ran-color-primary`, `-hover`, `-active`, and `--ran-color-primary-text` for the inverse ink); see [Theme & Tokens](/src/ranui/theme/).
 
 ### Disabled State `disabled`
 
@@ -105,9 +105,9 @@ Button component for triggering instant actions with multiple styles and states.
 
 ## Styling
 
-`<r-button>` exposes **43 CSS custom properties** of its own — `--ran-btn-background`,
+`<r-button>` exposes **43 CSS custom properties** of its own: `--ran-btn-background`,
 `--ran-btn-color`, `--ran-btn-border-color`, their `hover` / `active` variants, and the
-`warning` variant's three — plus the semantic tokens it reads from the theme.
+`warning` variant's three, plus the semantic tokens it reads from the theme.
 
 ```css
 /* one button, or every button under a scope */
@@ -134,7 +134,7 @@ the [design system](/src/ranui/design-system/).
 
 ## Best Practices
 
-- **Primary Actions**: Use `type="primary"` (monochrome — black-on-white / white-on-black)
+- **Primary Actions**: Use `type="primary"` (monochrome: black-on-white / white-on-black)
 - **Dangerous Actions**: Use `type="warning"`
 - **Secondary Actions**: Use `type="text"`
 - **Disabled State**: Use `disabled` when actions unavailable

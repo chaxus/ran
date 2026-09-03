@@ -1,17 +1,17 @@
 ---
-description: 'Renders a tool call and its result from a declared intent — generic, terminal, or diff — rather than from markup a tool had to choose.'
+description: 'Renders a tool call and its result from a declared intent (generic, terminal, or diff) rather than from markup a tool had to choose.'
 ---
 
 # Tool Card
 
 Renders a tool call and its result from a **declared intent** rather than from markup.
 
-> **Use when** you are showing what an agent or a job actually did — a shell command, a file
-> edit, a lookup — and want the tool to say _what it is_ while the surface decides what it
+> **Use when** you are showing what an agent or a job actually did (a shell command, a file
+> edit, a lookup) and want the tool to say _what it is_ while the surface decides what it
 > looks like.
 
 A tool that returns HTML has picked a renderer, a theme, and a layout on the UI's behalf, and
-it does so in the one place — the model-facing result — where UI concerns do not belong.
+it does so in the one place (the model-facing result) where UI concerns do not belong.
 Declaring an intent keeps the two apart: the same call can render as a terminal block here, a
 single line in a compact transcript, and a jump target in an editor, without the tool knowing
 any of them exist.
@@ -59,7 +59,7 @@ card.result = { card: 'terminal', output: 'total 8\ndrwxr-xr-x …', exitCode: 0
 
 The call creates or modifies files. Each entry renders as unified-style hunks with both
 gutters, computed by `diffLines` from [ranuts/utils](../../ranuts/utils/). **A null `oldText`
-means the file is being created** — which is what a call-time view has, since a caller has no
+means the file is being created**, which is what a call-time view has, since a caller has no
 prior content to read.
 
 ```ts
@@ -76,7 +76,7 @@ These views are computed on a live call **and again when a log is replayed**. Ev
 follows from that.
 
 - **A view is a pure function of the call's arguments** (plus the result, for a result view).
-  No I/O, no clock, no session state — otherwise a replay disagrees with what the user
+  No I/O, no clock, no session state; otherwise a replay disagrees with what the user
   originally saw.
 - **An unrecognised card degrades, it never throws.** A card kind from a newer producer, or a
   value mangled in storage, renders as `generic` with whatever title it has, and a malformed
@@ -127,7 +127,7 @@ operable from the keyboard without any extra wiring.
 ## Styling
 
 `<r-tool-card>` exposes **24 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from: `:root`, a wrapper, or the element:
 
 ```css
 r-tool-card {
@@ -141,5 +141,5 @@ The full list is in [style tokens](/src/ranui/style-tokens#tool-card); which tok
 
 ## See also
 
-- [Conversation](../conversation/) — use this as the `mount` target for a tool-call view
-- [ranuts/utils](../../ranuts/utils/) — `diffLines`, which renders the `diff` card
+- [Conversation](../conversation/): use this as the `mount` target for a tool-call view
+- [ranuts/utils](../../ranuts/utils/): `diffLines`, which renders the `diff` card

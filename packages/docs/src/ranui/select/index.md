@@ -6,7 +6,7 @@ description: 'The ranui Select (<r-select>) is a dropdown for choosing a value f
 
 Dropdown selector for choosing a single value from a list of options, with optional search and form participation.
 
-> **Use when** you need a single-value dropdown selector built from `<r-option>` children, with optional search and native form participation — `<r-select>` handles opening, filtering, and `FormData` reporting.
+> **Use when** you need a single-value dropdown selector built from `<r-option>` children, with optional search and native form participation. `<r-select>` handles opening, filtering, and `FormData` reporting.
 
 ## Quick Start
 
@@ -36,12 +36,12 @@ Options are supplied as slotted `<r-option>` children. Each option's `value` att
 
 | Property              | Type      | Default    | Description                                                                                                                       |
 | --------------------- | --------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `label`               | `string`  | `''`       | Static caption above the field — same pattern as `r-input`'s `label`, so a labeled select lines up with a labeled input in a form |
+| `label`               | `string`  | `''`       | Static caption above the field (same pattern as `r-input`'s `label`), so a labeled select lines up with a labeled input in a form |
 | `value`               | `string`  | `''`       | Selected value. Setting it updates the closed-state label; ignored while `disabled`                                               |
 | `defaultValue`        | `string`  | `''`       | Initial selected value, matched against option `value`                                                                            |
 | `disabled`            | `boolean` | `false`    | Whether the select is disabled                                                                                                    |
 | `type`                | `string`  | `''`       | `text` renders a borderless, transparent trigger with no arrow icon; otherwise bordered                                           |
-| `open`                | `boolean` | `false`    | Whether the dropdown is showing. This _is_ the state — set it to open or close the panel                                          |
+| `open`                | `boolean` | `false`    | Whether the dropdown is showing. This _is_ the state: set it to open or close the panel                                           |
 | `placement`           | `string`  | `'bottom'` | Which side the dropdown opens on, with an optional alignment: `bottom`, `bottom-end`, `top-center`, …                             |
 | `showSearch`          | `boolean` | `false`    | Show an inline search box that filters options by label                                                                           |
 | `getPopupContainerId` | `string`  | `''`       | Element `id` to mount the dropdown into (defaults to `document.body`)                                                             |
@@ -50,7 +50,7 @@ Options are supplied as slotted `<r-option>` children. Each option's `value` att
 | `required`            | `boolean` | `false`    | Whether a selection is required for the form to submit                                                                            |
 | `sheet`               | `string`  | `''`       | CSS injected into the shadow DOM                                                                                                  |
 
-> **Note:** `defaultValue` and `showSearch` are reactive — changing them after the element has connected is re-processed (alongside `value`, `disabled`, and `sheet`) in `attributeChangedCallback`. Updating `defaultValue` re-applies the matching selection; toggling `showSearch` wires or unwires the inline search box.
+> **Note:** `defaultValue` and `showSearch` are reactive: changing them after the element has connected is re-processed (alongside `value`, `disabled`, and `sheet`) in `attributeChangedCallback`. Updating `defaultValue` re-applies the matching selection; toggling `showSearch` wires or unwires the inline search box.
 
 ### Option Properties
 
@@ -66,7 +66,7 @@ Duplicate option labels or values log a `console.warn`.
 
 ### Label `label`
 
-A static caption rendered above the field — always visible, never overlaps adjacent
+A static caption rendered above the field: always visible, never overlaps adjacent
 content. Uses the same tokens and layout as `r-input`'s `label`, so a labeled select and a
 labeled input placed side by side in a form line up (same height, same top edge).
 
@@ -142,9 +142,9 @@ labeled input placed side by side in a form line up (same height, same top edge)
 
 ### Dropdown Direction `placement`
 
-`placement` is a preference, not a guarantee: when the trigger is near a viewport edge and the preferred side lacks room, the dropdown automatically flips to the other side and shifts horizontally to stay on-screen. This only applies to the default body-level mount — with `getPopupContainerId` set, choose a `placement` that fits the container.
+`placement` is a preference, not a guarantee: when the trigger is near a viewport edge and the preferred side lacks room, the dropdown automatically flips to the other side and shifts horizontally to stay on-screen. This only applies to the default body-level mount; with `getPopupContainerId` set, choose a `placement` that fits the container.
 
-A side can carry an alignment suffix — `bottom-end`, `top-center`, and so on, the same grammar `r-popover` takes. A bare side means `-start`, which lines the panel's leading edge up with the trigger's.
+A side can carry an alignment suffix: `bottom-end`, `top-center`, and so on, the same grammar `r-popover` takes. A bare side means `-start`, which lines the panel's leading edge up with the trigger's.
 
 The suffix only changes anything when the panel is a different width from its trigger, since the panel tracks the trigger's width by default. Widen it (`r-dropdown::part(dropdown)`, reached through `dropdownclass`, because the panel is portalled to `<body>` rather than living in the select's shadow root) and the alignment is computed against what is actually painted:
 
@@ -181,7 +181,7 @@ Note that the boundary shift outranks the alignment: a trigger close enough to a
 
 ### Open State `open`
 
-`open` is the dropdown's state, reflected as an attribute the way `<details open>` and `<dialog open>` are. Nothing infers the state from the panel's `display` — that trails the state by the length of the exit animation — so the attribute, `aria-expanded` and what is on screen cannot disagree.
+`open` is the dropdown's state, reflected as an attribute the way `<details open>` and `<dialog open>` are. Nothing infers the state from the panel's `display` (that trails the state by the length of the exit animation), so the attribute, `aria-expanded`, and what is on screen cannot disagree.
 
 That makes it a supported way to drive the component, and something to style and to assert against:
 
@@ -320,7 +320,7 @@ Fired only when `showSearch` is enabled, as the user types in the search box (th
 
 ### `show` / `after-show` / `hide` / `after-hide`
 
-Fired around the panel's transitions. `show` and `hide` announce the intent, as the transition begins; `after-show` and `after-hide` fire once the panel has actually arrived and any animation has finished — that is the pair to listen to when something has to happen only after the panel is really gone.
+Fired around the panel's transitions. `show` and `hide` announce the intent, as the transition begins; `after-show` and `after-hide` fire once the panel has actually arrived and any animation has finished. That is the pair to listen to when something has to happen only after the panel is really gone.
 
 They carry no `detail`.
 
@@ -332,13 +332,13 @@ They carry no `detail`.
 </script>
 ```
 
-The wait is the stylesheet's own animation rather than a duration copied into script, so under `prefers-reduced-motion` — where the panel has no animation to play — `after-hide` follows `hide` immediately instead of after a fixed delay.
+The wait is the stylesheet's own animation rather than a duration copied into script, so under `prefers-reduced-motion` (where the panel has no animation to play), `after-hide` follows `hide` immediately instead of after a fixed delay.
 
 ## Form Association
 
 `r-select` is a form-associated custom element (`static formAssociated = true`). It relays its selected `value` through `ElementInternals`, so it is collected by `new FormData(form)` under the select's `name`, when it's a real descendant of a native `<form>`. The form value is seeded from any initial selection on connect and kept in sync as the value changes.
 
-**Reset**: a native `form.reset()` restores `defaultValue`'s selection if one is set, otherwise clears the selection entirely — via `formResetCallback()`.
+**Reset**: a native `form.reset()` restores `defaultValue`'s selection if one is set, otherwise clears the selection entirely, via `formResetCallback()`.
 
 **Validation**: `required` makes an empty selection invalid via `ElementInternals.setValidity()`, visible to `form.checkValidity()`/`form.reportValidity()`; a `disabled` select never blocks validation. `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage` are exposed on the element, same as a native field.
 

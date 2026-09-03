@@ -1,7 +1,7 @@
 # setFontSize2html
 
 Set the root `<html>` `font-size` proportionally to the viewport, so a design mocked up
-at a fixed width (375px, a typical mobile design width) scales with the real screen —
+at a fixed width (375px, a typical mobile design width) scales with the real screen:
 the classic "flexible rem" technique for mobile web layouts built in `rem` units.
 
 ## Usage
@@ -36,19 +36,19 @@ single call is enough for the lifetime of the page.
 
 #### Return
 
-No return value (`void`) — it sets `documentElement.style.fontSize` as a side effect and
+No return value (`void`). It sets `documentElement.style.fontSize` as a side effect and
 installs its own `resize` / `orientationchange` listeners.
 
 ## Notes
 
 1. **iPad gets a different baseline automatically.** When `currentDevice()` reports an
    iPad, the design width and aspect ratio switch to `768` / `1024:768` instead of using
-   `designWidth` as passed — this function assumes a phone mockup by default and adjusts
+   `designWidth` as passed. This function assumes a phone mockup by default and adjusts
    for the one common exception.
 2. **There's no teardown.** Unlike most listener-installing helpers in this library,
-   `setFontSize2html` doesn't return an unsubscribe function — it's meant to be called once
+   `setFontSize2html` doesn't return an unsubscribe function. It's meant to be called once
    for the page's entire lifetime, not scoped to a component that mounts and unmounts.
-3. Requires `document`/`window` — guard the call site if this code can run during SSR.
+3. Requires `document`/`window`; guard the call site if this code can run during SSR.
 4. Pairs with a CSS build step (postcss-pxtorem or similar) that converts your `px` mockup
-   values to `rem` at the same base — `setFontSize2html` only sets the root font size, it
+   values to `rem` at the same base. `setFontSize2html` only sets the root font size; it
    doesn't convert your stylesheet.

@@ -1,16 +1,16 @@
 ---
-description: 'How to build forms with ranui — r-input, r-checkbox, and r-select work directly inside a plain native <form>, no wrapper component required.'
+description: 'How to build forms with ranui: r-input, r-checkbox, and r-select work directly inside a plain native <form>, no wrapper component required.'
 ---
 
 # Forms
 
-ranui does not ship a `<form>`-wrapping component. `r-input`, `r-checkbox`, and `r-select` are themselves [Form-Associated Custom Elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_form-associated_custom_elements) — each calls `attachInternals()` and relays its value via `ElementInternals.setFormValue()` — so they already work inside a plain native `<form>`: `new FormData(form)` collects them, `form.reset()` restores their pre-interaction state, and a `required` field blocks submission and shows the browser's native validation UI, anchored on the field. None of that needs any ranui-specific markup.
+ranui does not ship a `<form>`-wrapping component. `r-input`, `r-checkbox`, and `r-select` are themselves [Form-Associated Custom Elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_form-associated_custom_elements) (each calls `attachInternals()` and relays its value via `ElementInternals.setFormValue()`), so they already work inside a plain native `<form>`: `new FormData(form)` collects them, `form.reset()` restores their pre-interaction state, and a `required` field blocks submission and shows the browser's native validation UI, anchored on the field. None of that needs any ranui-specific markup.
 
-> **Use when** you're assembling a form out of `r-input`/`r-checkbox`/`r-select` — just use a real `<form>`, and reach for `serializeForm()` (below) if you want the submitted values as a plain object instead of hand-rolling `FormData` iteration.
+> **Use when** you're assembling a form out of `r-input`/`r-checkbox`/`r-select`: just use a real `<form>`, and reach for `serializeForm()` (below) if you want the submitted values as a plain object instead of hand-rolling `FormData` iteration.
 
 ## Quick Start
 
-All three field types, submitted with a plain `<form>` — try changing a field and submitting to see the live result below. This demo builds the object with the browser's own `FormData`/`Object.fromEntries` (no import needed); `serializeForm()`, introduced next, does the same thing plus one thing `Object.fromEntries` can't: a repeated field name comes back as an array instead of silently keeping only the last value.
+All three field types, submitted with a plain `<form>`. Try changing a field and submitting to see the live result below. This demo builds the object with the browser's own `FormData`/`Object.fromEntries` (no import needed); `serializeForm()`, introduced next, does the same thing plus one thing `Object.fromEntries` can't: a repeated field name comes back as an array instead of silently keeping only the last value.
 
 <Demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
@@ -25,7 +25,7 @@ All three field types, submitted with a plain `<form>` — try changing a field 
 </Demo>
 
 > As the [Layout](#layout) section below covers: fields have no default form-level layout of
-> their own, so every example on this page — including this one — sets its own `<form>` CSS
+> their own, so every example on this page (including this one) sets its own `<form>` CSS
 > (`display: flex; flex-direction: column; gap: …`). Omitting it stacks fields in plain
 > in-flow order with no spacing between them, which reads as broken/overlapping rather than
 > a form.
@@ -53,7 +53,7 @@ All three field types, submitted with a plain `<form>` — try changing a field 
 
 ## `serializeForm(form)`
 
-Collects a `<form>`'s named fields into a plain object via `FormData` — the boilerplate every consumer otherwise hand-rolls to turn a submit into something they can `JSON.stringify` or send as a fetch body. It's a plain function with no dependency on ranui fields specifically; it works with any real `<form>`.
+Collects a `<form>`'s named fields into a plain object via `FormData`: the boilerplate every consumer otherwise hand-rolls to turn a submit into something they can `JSON.stringify` or send as a fetch body. It's a plain function with no dependency on ranui fields specifically; it works with any real `<form>`.
 
 ```ts
 function serializeForm(form: HTMLFormElement): Record<string, unknown>;
@@ -71,7 +71,7 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 ## Layout
 
-Fields have no default form-level layout — style your own `<form>` with plain CSS:
+Fields have no default form-level layout: style your own `<form>` with plain CSS:
 
 <Demo column>
   <form style="display: flex; flex-direction: column; gap: 16px;">
@@ -91,7 +91,7 @@ Fields have no default form-level layout — style your own `<form>` with plain 
 
 ## Validation and reset
 
-`r-input`, `r-checkbox`, and `r-select` all support `required` (which blocks submission and triggers the browser's native validation bubble, exactly like a native field) plus `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage`. A native `form.reset()` — or `<button type="reset">` — restores each field to its pre-interaction state via `formResetCallback()`. See each field's own docs ([Input](/src/ranui/input/#form-association), [Checkbox](/src/ranui/checkbox/#form-association), [Select](/src/ranui/select/#form-association)) for details.
+`r-input`, `r-checkbox`, and `r-select` all support `required` (which blocks submission and triggers the browser's native validation bubble, exactly like a native field) plus `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage`. A native `form.reset()` (or `<button type="reset">`) restores each field to its pre-interaction state via `formResetCallback()`. See each field's own docs ([Input](/src/ranui/input/#form-association), [Checkbox](/src/ranui/checkbox/#form-association), [Select](/src/ranui/select/#form-association)) for details.
 
 <Demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
@@ -109,4 +109,4 @@ Fields have no default form-level layout — style your own `<form>` with plain 
 
 ## Why no `<r-form>` wrapper?
 
-A plain native `<form>` is already enough — ranui's field components work inside one directly, with no wrapper needed. `serializeForm()` fills the one real gap: turning a submission into a plain object.
+A plain native `<form>` is already enough: ranui's field components work inside one directly, with no wrapper needed. `serializeForm()` fills the one real gap: turning a submission into a plain object.

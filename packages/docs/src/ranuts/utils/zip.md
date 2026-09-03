@@ -5,7 +5,7 @@ Read and patch ZIP archives with no dependencies, using the platform's own DEFLA
 ZIP is the container behind OOXML (`.docx` / `.xlsx` / `.pptx`), EPUB, ODF and browser
 extensions. "Pull one file out of this archive" and "rewrite one file inside this archive"
 come up constantly, and a full ZIP library is a large dependency for that. Everything those
-two tasks need is the central directory plus DEFLATE — and DEFLATE now ships in every
+two tasks need is the central directory plus DEFLATE, and DEFLATE now ships in every
 browser as `DecompressionStream`.
 
 ## API
@@ -131,5 +131,5 @@ const zip = createZip([
    entries are out of scope. `readZipEntries` returns `[]` for anything it cannot parse
    rather than throwing, because the usual caller is inspecting a user-supplied file.
 
-7. **`inflateRaw` needs `DecompressionStream`** — available in all current browsers and in
+7. **`inflateRaw` needs `DecompressionStream`**: available in all current browsers and in
    Node 18+. It throws where the API is missing.

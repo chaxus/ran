@@ -17,11 +17,11 @@ A minimal signal: `[read, write]`, with optional broadcast over the shared
 
 `equals` semantics:
 
-| Value            | Behaviour                                                          |
-| ---------------- | ------------------------------------------------------------------ |
-| omitted / `true` | `Object.is` — reference/value equality (standard signal semantics) |
-| `false`          | Every write counts as a change and notifies                        |
-| a function       | Return `true` to mean "equal, skip the notification"               |
+| Value            | Behaviour                                                         |
+| ---------------- | ----------------------------------------------------------------- |
+| omitted / `true` | `Object.is`: reference/value equality (standard signal semantics) |
+| `false`          | Every write counts as a change and notifies                       |
+| a function       | Return `true` to mean "equal, skip the notification"              |
 
 #### Return
 
@@ -46,7 +46,7 @@ const [tree, setTree] = createSignal(initial, { equals: isEqual });
 
 1. **Reference equality by default.** A freshly built but deep-equal object _is_ a change.
    This matches standard signal semantics and keeps writes O(1).
-2. **Deep comparison is opt-in** via `{ equals: isEqual }` — the cost is then visible at the
+2. **Deep comparison is opt-in** via `{ equals: isEqual }`, so the cost is visible at the
    call site.
 3. **`subscriber` is optional.** Without it the signal is purely local state.
 

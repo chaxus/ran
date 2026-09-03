@@ -13,7 +13,7 @@ own. [`<r-conversation>`](../../ranui/conversation/) is the DOM consumer.
 
 The usual way to render a conversation is a view that switches on event type and mutates a
 component tree. That puts ordering, identity, and partial-update reconciliation **in the view**,
-so every new kind of content — a tool call, an approval prompt, a status line — has to be
+so every new kind of content (a tool call, an approval prompt, a status line) has to be
 threaded through by hand, and the view grows a branch per kind.
 
 Here each kind is an **independently registered state machine**. A definition says which events
@@ -58,7 +58,7 @@ written.
   start event was trimmed from a paged window; inventing a node from a partial update would
   render something that never existed.
 - **A repeated `start` re-opens the node in place.** The definition decided this is a new node,
-  so the old state is discarded rather than merged into — and the position is kept.
+  so the old state is discarded rather than merged into, and the position is kept.
 - **`reader.previous(kind)` is backward-only.** A definition that could see nodes started after
   it would give a different answer depending on when it ran, and replaying the same log would
   not reproduce the same view.
@@ -67,11 +67,11 @@ written.
 
 `publication` is the streaming throttle, and the only performance knob you need:
 
-| Cadence           | Use for                                                                           |
-| ----------------- | --------------------------------------------------------------------------------- |
-| `animation-frame` | per-token deltas — every delta between two paints coalesces into one notification |
-| `immediate`       | discrete facts — a tool result, an approval; waiting a frame only adds latency    |
-| `none`            | state a later publication will carry anyway; recorded without waking the view     |
+| Cadence           | Use for                                                                          |
+| ----------------- | -------------------------------------------------------------------------------- |
+| `animation-frame` | per-token deltas: every delta between two paints coalesces into one notification |
+| `immediate`       | discrete facts: a tool result, an approval; waiting a frame only adds latency    |
+| `none`            | state a later publication will carry anyway; recorded without waking the view    |
 
 **Cadence escalates and never relaxes.** An `immediate` publication while a frame is pending
 fires now and cancels the frame, rather than notifying twice. Omitting `publication` means
@@ -97,6 +97,6 @@ view can hold one across a publication without it changing underneath.
 
 ## See also
 
-- [ranuts/stream](../stream/) — produce the events
-- [`<r-conversation>`](../../ranui/conversation/) — render the nodes
-- `createBottomFollower` in [ranuts/utils](../utils/) — keep the view pinned to its floor
+- [ranuts/stream](../stream/): produce the events
+- [`<r-conversation>`](../../ranui/conversation/): render the nodes
+- `createBottomFollower` in [ranuts/utils](../utils/): keep the view pinned to its floor

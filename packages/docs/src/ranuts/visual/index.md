@@ -1,6 +1,6 @@
 # visual
 
-A PixiJS-style 2D rendering engine. Build a scene graph of shapes and render it through one of three backends — Canvas2D, WebGL, or WebGPU — chosen at runtime.
+A PixiJS-style 2D rendering engine. Build a scene graph of shapes and render it through one of three backends (Canvas2D, WebGL, or WebGPU), chosen at runtime.
 
 The engine is layered as **`Application`** (lifecycle / render loop) → **`Renderer`** (the backend) → a scene graph of **`Container`** (a group) → **`Graphics`** (a drawable). You add nodes to `app.stage` and the renderer draws them.
 
@@ -102,7 +102,7 @@ Prefer the async factory **`Application.create(...)`** over `new Application(...
 
 ### `Container`
 
-A group node — the "group" concept of the scene graph. It holds children and transform state but renders nothing itself; drawables such as `Graphics` extend it. Add a `Container` to build subtrees that move/scale/rotate together.
+A group node, the "group" concept of the scene graph. It holds children and transform state but renders nothing itself; drawables such as `Graphics` extend it. Add a `Container` to build subtrees that move/scale/rotate together.
 
 #### Methods
 
@@ -245,6 +245,6 @@ The backend is chosen by `IApplicationOptions.prefer` (a `RENDERER_TYPE`); it de
 - **`CANVAS`** draws directly through the Canvas2D API (`fillRect`, `arc`, `ctx.stroke()`, …).
 - **`WEB_GL`** and **`WEB_GPU`** share one `BatchRenderer` pipeline: shapes are triangulated, packed into a single interleaved vertex buffer, and drawn in one call.
 
-All three backends accept **any CSS color** — hex (`#rgb` / `#rrggbb`), named colors, `rgb()`, and `hsl()` all resolve consistently.
+All three backends accept **any CSS color**: hex (`#rgb` / `#rrggbb`), named colors, `rgb()`, and `hsl()` all resolve consistently.
 
 > **Stroke geometry differs by backend, by design.** Line caps and joins are drawn by the browser's native `ctx.stroke()` on the Canvas backend, but by custom triangulation on the WebGL/WebGPU backends. The two are not pixel-identical.

@@ -5,12 +5,12 @@ description: 'A framework-agnostic internationalization engine: a small core wit
 # i18n
 
 A framework-agnostic internationalization engine. It mirrors the [router](/src/ranui/router/)
-design — a small core (`I18nCore`) with an optional global singleton
+design: a small core (`I18nCore`) with an optional global singleton
 (`createI18n` / `useI18n`) and no DOM coupling, so you bind it to the UI however you like.
 
-> **Use when** you need runtime locale switching in a ranui app — call `createI18n` once, then read strings with `useI18n().t(key, params)` and switch languages with `setLocale`. It has no framework or DOM dependency, so it works in plain JS, any framework, and SSR.
+> **Use when** you need runtime locale switching in a ranui app. Call `createI18n` once, then read strings with `useI18n().t(key, params)` and switch languages with `setLocale`. It has no framework or DOM dependency, so it works in plain JS, any framework, and SSR.
 
-The engine ships as its own **`ranui/i18n`** entry — importing it registers **no** custom
+The engine ships as its own **`ranui/i18n`** entry: importing it registers **no** custom
 elements, so a page that only needs translation never pulls in the component library. The
 same exports are also available from the top-level `ranui` barrel.
 
@@ -42,11 +42,11 @@ i18n.t('hero.title', { name: 'Ada' }); // → "你好 Ada"
 `t(key)` looks up `messages[activeLocale][key]`, then `messages[fallbackLocale][key]`, and
 finally returns the `key` itself if neither exists. `{param}` placeholders in the string are
 interpolated from the second argument. Because lookup is a flat map access, **keys are literal
-strings** — write `'hero.title'` as one key, not a nested `{ hero: { title } }` object.
+strings**: write `'hero.title'` as one key, not a nested `{ hero: { title } }` object.
 
 ## Parameters (interpolation)
 
-Yes — messages take runtime parameters. Put `{name}`-style placeholders in the string and pass
+Yes, messages take runtime parameters. Put `{name}`-style placeholders in the string and pass
 the values as the second argument to `t()`; each `{param}` is replaced by the matching value:
 
 ```js
@@ -70,21 +70,21 @@ i18n.t('greeting', { user: 'Ada' }); // → "Welcome back, Ada!"
 
 Details:
 
-- Placeholder syntax is `{word}` (letters, digits, `_`). Values may be strings or numbers —
+- Placeholder syntax is `{word}` (letters, digits, `_`). Values may be strings or numbers:
   numbers are stringified.
 - A placeholder with no matching key is **left as-is** (`{oops}` stays literally in the output),
   which makes missing params easy to spot rather than silently blank.
 - Interpolation runs after locale fallback, so the same params work no matter which locale
   actually resolved the string.
-- There is no built-in pluralization or number/date formatting — compose those with
+- There is no built-in pluralization or number/date formatting; compose those with
   `Intl.NumberFormat` / `Intl.PluralRules` and pass the formatted string in as a param.
 
 ## Escaping literal braces
 
 A lone `{` or `}`, or a spaced group like `{ color: red }`, is **not** a placeholder and passes
-through untouched — so CSS, JSON, and code fragments inside a message are safe by default. The
+through untouched, so CSS, JSON, and code fragments inside a message are safe by default. The
 only ambiguous case is a literal `{word}` you want to show verbatim. To escape it, **double the
-braces** — the same convention as Rust `format!`, Python `str.format`, and .NET `String.Format`:
+braces** (the same convention as Rust `format!`, Python `str.format`, and .NET `String.Format`):
 
 ::: v-pre
 
@@ -146,8 +146,8 @@ i18n.setLocale('fr');
 The components do **not** read from this engine themselves. That is deliberate: a component
 reaching into a global singleton would tie every consumer to one instance and one key-naming
 scheme, and would make a page that imports one button pull in the translation layer. Instead
-**every user-visible string is an input** — an attribute, a property, an option, or slotted
-content — so localizing ranui means passing `t()` output in where the string already goes:
+**every user-visible string is an input**: an attribute, a property, an option, or slotted
+content, so localizing ranui means passing `t()` output in where the string already goes:
 
 ```js
 const i18n = useI18n(); // messages below assumed registered
@@ -156,7 +156,7 @@ modal.setAttribute('title', i18n.t('dialog.deleteProject.title'));
 themeSwitch.setAttribute('label-dark', i18n.t('theme.dark'));
 ```
 
-Most components have no text of their own at all — it arrives through slots and attributes you
+Most components have no text of their own at all: it arrives through slots and attributes you
 already write. A handful ship an English default for a string that has nowhere else to come
 from, mostly accessible names:
 
@@ -187,7 +187,7 @@ applyLabels();
 i18n.onChange(applyLabels);
 ```
 
-Remember to keep `document.documentElement.lang` in step too — it is what the browser, screen
+Remember to keep `document.documentElement.lang` in step too: it is what the browser, screen
 readers and `:lang()` selectors go by.
 
 ## API

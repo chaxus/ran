@@ -1,12 +1,12 @@
 ---
-description: 'The ranui Input (<r-input>) is a basic form control for keyboard entry, with types, sizes and validation — a native Web Component for any framework.'
+description: 'The ranui Input (<r-input>) is a basic form control for keyboard entry, with types, sizes and validation, implemented as a native Web Component for any framework.'
 ---
 
 # Input
 
 Input component for entering content via keyboard, the most basic form control.
 
-> **Use when** you need a text field with a static top-aligned label, leading icon, validation status/message, and native form participation — `<r-input>` covers text, password, and number entry.
+> **Use when** you need a text field with a static top-aligned label, leading icon, validation status/message, and native form participation: `<r-input>` covers text, password, and number entry.
 
 ## Quick Start
 
@@ -43,9 +43,9 @@ Input component for entering content via keyboard, the most basic form control.
 
 ### Label `label`
 
-A static caption rendered above the field — always visible, never overlaps adjacent
+A static caption rendered above the field: always visible, never overlaps adjacent
 content, and doesn't shift the layout on focus (top-aligned labels also complete forms
-faster than inline/floating ones — see [Luke Wroblewski's eye-tracking research](https://www.lukew.com/ff/entry.asp?504=)).
+faster than inline/floating ones; see [Luke Wroblewski's eye-tracking research](https://www.lukew.com/ff/entry.asp?504=)).
 
 <Demo column>
   <r-input label="Username"></r-input>
@@ -180,7 +180,7 @@ input.addEventListener('change', (event) => {
 
 ## Form Association
 
-`r-input` is a form-associated custom element (`static formAssociated = true`). It attaches `ElementInternals` and relays its value via `setFormValue`, so the field is collected by `new FormData(form)` when it's a real descendant of a native `<form>` — set `name` to give the value a key. See [Forms](/src/ranui/form/) for the `serializeForm()` helper that turns a submit into a plain object.
+`r-input` is a form-associated custom element (`static formAssociated = true`). It attaches `ElementInternals` and relays its value via `setFormValue`, so the field is collected by `new FormData(form)` when it's a real descendant of a native `<form>`; set `name` to give the value a key. See [Forms](/src/ranui/form/) for the `serializeForm()` helper that turns a submit into a plain object.
 
 ```html
 <form>
@@ -188,9 +188,9 @@ input.addEventListener('change', (event) => {
 </form>
 ```
 
-**Reset**: a native `form.reset()` (or `<button type="reset">`) restores the value the field had when it first connected — implemented via `formResetCallback()`, one of the lifecycle hooks the browser calls automatically on a form-associated custom element.
+**Reset**: a native `form.reset()` (or `<button type="reset">`) restores the value the field had when it first connected, implemented via `formResetCallback()`, one of the lifecycle hooks the browser calls automatically on a form-associated custom element.
 
-**Validation**: setting `required` makes an empty field invalid via `ElementInternals.setValidity()` — `form.checkValidity()`/`form.reportValidity()` see it, and submitting shows the browser's native validation bubble anchored on the field. `disabled` fields never block validation, matching native `<input>`. `r-input` also exposes the usual native-field methods/properties: `checkValidity()`, `reportValidity()`, `validity`, `validationMessage`.
+**Validation**: setting `required` makes an empty field invalid via `ElementInternals.setValidity()`; `form.checkValidity()`/`form.reportValidity()` see it, and submitting shows the browser's native validation bubble anchored on the field. `disabled` fields never block validation, matching native `<input>`. `r-input` also exposes the usual native-field methods/properties: `checkValidity()`, `reportValidity()`, `validity`, `validationMessage`.
 
 ```html
 <form>
@@ -219,7 +219,7 @@ r-input::part(content) {
 ## Styling
 
 `<r-input>` exposes **61 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-input {

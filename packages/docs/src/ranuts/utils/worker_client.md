@@ -1,7 +1,7 @@
 # WorkerClient
 
 Request/response over a Web Worker. A raw worker only has "post a message" and "receive a
-message" — send two tasks concurrently and two messages come back with no way to tell which
+message": send two tasks concurrently and two messages come back with no way to tell which
 belongs to which. `WorkerClient` stamps an id on every request and routes each response back
 to its own promise.
 
@@ -69,7 +69,7 @@ serveWorker(async (request, { progress }) => {
 
 ## Notes
 
-1. **The worker is created lazily**, on the first `send` — heavy work should not start at page load.
+1. **The worker is created lazily**, on the first `send`: heavy work should not start at page load.
 2. **Progress messages don't settle the request**, so one request can stream many updates and
    still resolve once at the end.
 3. **A worker crash rejects every in-flight request.** An uncaught error inside a worker carries
@@ -78,7 +78,7 @@ serveWorker(async (request, { progress }) => {
 5. **A timeout rejects only that request** and leaves the worker alive.
 6. **Use `transfer` for large buffers** to move ownership instead of structured-cloning a copy.
 7. **`serveWorker` catches synchronous throws too.** A sync throw inside `onmessage` escapes to
-   the worker's error handler, and that path carries no `operationId` — so the client could only
+   the worker's error handler, and that path carries no `operationId`, so the client could only
    fail _every_ in-flight request rather than the one that actually broke.
 8. **Both halves ship together on purpose.** Hand-rolling the worker side is where the id echo
    and the error envelope drift apart between projects.

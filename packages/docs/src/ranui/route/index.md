@@ -6,7 +6,7 @@ description: 'A routing outlet that shows its slotted content only while the cur
 
 A routing outlet element. Placed inside an [`r-router`](../router/), it shows its slotted content when the current path matches its `path` pattern and hides it otherwise.
 
-> **Use when** you need a routing outlet that shows its content only while the current path matches a pattern (with `:param` and `*` support) — place `<r-route>` inside an `<r-router>` to build a client-side view switch.
+> **Use when** you need a routing outlet that shows its content only while the current path matches a pattern (with `:param` and `*` support). Place `<r-route>` inside an `<r-router>` to build a client-side view switch.
 
 ## Quick Start
 
@@ -28,7 +28,7 @@ An `r-route` whose `path` is `/` matches the default path, so its content render
 
 ### Inside a Router
 
-Used inside an [`r-router`](../router/), several routes act as a switch — the router syncs every `r-route` child on navigation, showing the ones whose `path` matches and hiding the rest:
+Used inside an [`r-router`](../router/), several routes act as a switch: the router syncs every `r-route` child on navigation, showing the ones whose `path` matches and hiding the rest:
 
 ```html
 <r-router>
@@ -77,7 +77,7 @@ route.params; // e.g. { id: '42' }
 
 ### Exact Match `exact`
 
-Boolean attribute. When present, the outlet matches only an exact path (no prefix matching) — `path="/users" exact` matches `/users` but not `/users/42`.
+Boolean attribute. When present, the outlet matches only an exact path (no prefix matching): `path="/users" exact` matches `/users` but not `/users/42`.
 
 ```html
 <r-route path="/" exact><h2>Home</h2></r-route>
@@ -85,7 +85,7 @@ Boolean attribute. When present, the outlet matches only an exact path (no prefi
 
 ### External CSS `sheet`
 
-CSS injected into the component's shadow DOM — the same `sheet` convention used by every other ranui component.
+CSS injected into the component's shadow DOM, the same `sheet` convention used by every other ranui component.
 
 ### Slots
 

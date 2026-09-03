@@ -1,6 +1,6 @@
 # AppendFile
 
-Append data to file.
+Append data to a file.
 
 ## API
 

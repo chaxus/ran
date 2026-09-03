@@ -1,6 +1,6 @@
 # getStatus / status
 
-An HTTP status code ↔ message lookup table, plus a two-way `getStatus` helper — the same
+An HTTP status code ↔ message lookup table, plus a two-way `getStatus` helper: the same
 data Node's own `http.STATUS_CODES` provides, packaged for use in the browser too.
 
 ## Usage
@@ -29,7 +29,7 @@ status.retry[503]; // true
 
 #### Return
 
-`number | string` — pass a `number` and get the **message** back; pass a `string` and get
+`number | string`. Pass a `number` and get the **message** back; pass a `string` and get
 the **code** back (a numeric string like `'404'` is parsed as a code first, and only falls
 back to a message lookup if it isn't a known code). Throws if the input matches neither.
 
@@ -46,10 +46,10 @@ back to a message lookup if it isn't a known code). Throws if the input matches 
 
 ## Notes
 
-1. **`getStatus` throws on an unknown code or message** — `TypeError` for a non-`number`/
+1. **`getStatus` throws on an unknown code or message**: `TypeError` for a non-`number`/
    `string` argument, `Error` otherwise. Wrap it in `try`/`catch` (or check `status.codes.includes(n)`
    first) when the input isn't guaranteed valid, e.g. a status code read off the wire.
-2. **`status.redirect` / `empty` / `retry` are plain objects, not `Set`s** — check membership
+2. **`status.redirect` / `empty` / `retry` are plain objects, not `Set`s**: check membership
    with `status.retry[code]`, not `.has()`.
 3. Runs in both browser and Node (`ranuts/utils`), so it's usable on the client for the same
    code↔message mapping a server-side `ranuts/node` handler would use.

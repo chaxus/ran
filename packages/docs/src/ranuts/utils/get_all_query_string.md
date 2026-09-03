@@ -64,8 +64,8 @@ console.log(params.search); // 'hello world' (automatically decoded)
 ## Notes
 
 1. **A bare flag keeps its place.** `?embed` and `?embed=` both yield `{ embed: '' }`. Before
-   0.3 any parameter without a value was dropped, which made `?readonly` and `?embed` — the
-   usual way to write a boolean flag — indistinguishable from the parameter being absent. Read
+   0.3 any parameter without a value was dropped, which made `?readonly` and `?embed` (the
+   usual way to write a boolean flag) indistinguishable from the parameter being absent. Read
    such a flag with [`queryFlag`](/src/ranuts/utils/query_flag).
 
 2. **A fragment never leaks into the last value.** `?lang=en#section` yields `{ lang: 'en' }`.
@@ -73,7 +73,7 @@ console.log(params.search); // 'hello world' (automatically decoded)
 3. **Only the first `=` splits**, so a value may contain one: `?next=/a?b=1` yields
    `{ next: '/a?b=1' }`.
 
-4. **URL decoding**: keys and values are percent-decoded, and `+` becomes a space — matching
+4. **URL decoding**: keys and values are percent-decoded, and `+` becomes a space, matching
    `URLSearchParams`. A malformed escape such as `%zz` is kept verbatim rather than dropping
    the parameter, so one bad value cannot hide the others.
 

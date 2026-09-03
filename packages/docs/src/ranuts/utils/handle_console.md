@@ -1,6 +1,6 @@
 # Instrumentation hooks
 
-Tap into `console`, `fetch`, `XMLHttpRequest`, clicks and uncaught errors — for a monitoring
+Tap into `console`, `fetch`, `XMLHttpRequest`, clicks, and uncaught errors, for a monitoring
 backend, a debug overlay, or tests.
 
 **Every one of them returns a teardown function. Keep it and call it.** Instrumenting a global
@@ -44,7 +44,7 @@ teardown.forEach((off) => off());
    afterwards, restoring blindly would silently uninstall that layer, so it declines instead.
 3. **`handleXhrHook` patches the prototype**, so it applies to every instance; its listeners
    are registered with `{ once: true }` so a reused XHR object does not accumulate them.
-4. **Do not report console output to a console-logging backend** — the hook fires on the very
+4. **Do not report console output to a console-logging backend**: the hook fires on the very
    call it produces. (This is why `Monitor`'s `console` channel is off by default.)
 
 ::: warning Changed in 0.3

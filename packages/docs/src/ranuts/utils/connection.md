@@ -8,9 +8,9 @@ Get current network connection information (Network Information API).
 
 #### Return
 
-| Argument              | Description                            | Type                  |
-| --------------------- | -------------------------------------- | --------------------- |
-| `number \| undefined` | Network connection object or undefined | `number \| undefined` |
+| Argument                          | Description                            | Type                              |
+| --------------------------------- | -------------------------------------- | --------------------------------- |
+| `NetworkInformation \| undefined` | Network connection object or undefined | `NetworkInformation \| undefined` |
 
 #### Parameters
 

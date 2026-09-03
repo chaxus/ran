@@ -34,7 +34,7 @@ toHalfWidth('（１）'); // '(1)'
 
 ## Notes
 
-1. **Pass only the number segment.** `第三章` returns `null` — pull `三` out with your own
+1. **Pass only the number segment.** `第三章` returns `null`: pull `三` out with your own
    pattern first, then parse it.
 2. **`十` with nothing in front is 1**, so `十五` is 15, not 5.
 3. **`parseEnglishNumber` tries digits, then words, then Roman.** `twenty-one` and above are

@@ -6,7 +6,7 @@ description: 'A router-aware anchor that intercepts in-app navigation and falls 
 
 Router-aware anchor that renders an `<a>` around its slotted content and intercepts in-app navigation.
 
-> **Use when** you need an anchor that routes internal paths through the ranui router while letting external links fall through to the browser — `<r-link>` intercepts in-app navigation and does `push`/`replace` for you.
+> **Use when** you need an anchor that routes internal paths through the ranui router while letting external links fall through to the browser: `<r-link>` intercepts in-app navigation and does `push`/`replace` for you.
 
 ## Quick Start
 
@@ -59,7 +59,7 @@ Boolean attribute. When present, in-app navigation replaces the current history 
 
 ### External Styles `sheet`
 
-CSS injected into the link's shadow DOM — the same `sheet` convention used by every other ranui component. Because the clickable `<a>` lives inside the shadow root, use `sheet` to give it a box model (`display`, `padding`, `width`) when you want the host to read as a button or card.
+CSS injected into the link's shadow DOM. It follows the same `sheet` convention used by every other ranui component. Because the clickable `<a>` lives inside the shadow root, use `sheet` to give it a box model (`display`, `padding`, `width`) when you want the host to read as a button or card.
 
 <Demo>
   <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">Padded link</r-link>
@@ -94,8 +94,8 @@ CSS injected into the link's shadow DOM — the same `sheet` convention used by 
 ## Best Practices
 
 - **Internal navigation**: Use a root-relative `href` (e.g. `/docs`) so the router handles it in-app.
-- **External links**: Absolute URLs and `mailto:` / `tel:` fall through to the browser — no extra config needed.
+- **External links**: Absolute URLs and `mailto:` / `tel:` fall through to the browser; no extra config needed.
 - **Replacing history**: Add `replace` for links that shouldn't create a back-button entry (e.g. redirects, tab switches).
 - **Active state**: The host styles `:host([active]) a` (bold + underline), so set the `active` attribute to mark the current link.
 - **Styling as a button/card**: Put the surface (background, border, radius) on the host, and inject the `<a>` box model (`display`, `padding`, `width`) through `sheet` so the whole area is clickable.
-- **Theming**: The `<a>` reads the global `--ran-color-link`, `--ran-color-primary` (focus ring), and `--ran-radius-sm` tokens — override those tokens rather than expecting component-scoped `--ran-link-*` variables (there are none).
+- **Theming**: The `<a>` reads the global `--ran-color-link`, `--ran-color-primary` (focus ring), and `--ran-radius-sm` tokens; override those tokens rather than expecting component-scoped `--ran-link-*` variables (there are none).

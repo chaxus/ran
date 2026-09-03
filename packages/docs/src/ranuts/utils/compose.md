@@ -1,6 +1,6 @@
 # compose
 
-Compose multiple middleware functions, converting asynchronous functions to execute synchronously. Commonly used to build middleware systems, such as Koa-style middleware.
+Compose multiple middleware functions into one that runs them one after another, each receiving the context and a `next` that continues the chain. Commonly used to build middleware systems, such as Koa-style middleware.
 
 ## API
 

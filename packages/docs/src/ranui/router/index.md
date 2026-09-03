@@ -6,7 +6,7 @@ description: 'Client-side SPA routing with declarative components, a JS API, nav
 
 Client-side routing for Single Page Applications. Provides declarative HTML components and a JavaScript API with navigation guards, View Transitions, and cross-document (MPA) support.
 
-> **Use when** you need client-side SPA routing with navigation guards, View Transitions, and cross-document (MPA) support — `createRouter` plus `<r-router>` / `<r-route>` / `<r-link>` wire up in-app navigation.
+> **Use when** you need client-side SPA routing with navigation guards, View Transitions, and cross-document (MPA) support. `createRouter` plus `<r-router>` / `<r-route>` / `<r-link>` wire up in-app navigation.
 
 ## Quick Start
 
@@ -134,11 +134,11 @@ Shows its slotted content when the current path matches `path`; hides it otherwi
 
 For a larger multi-page app, `r-route` can code-split each page instead of always
 shipping its slotted content up front. Set `src` to a module specifier; on match,
-`r-route` dynamically `import()`s it and calls its default export — `(host: HTMLElement)
-=> void | (() => void)` — inside a reactive scope, passing a host element to render
-into. Leaving the route disposes that whole scope in one call (every effect, binding,
-and `onCleanup` the page registered), then removes the rendered content; returning to
-the route re-mounts from the cached module without re-fetching it.
+`r-route` dynamically `import()`s it and calls its default export, a function of type
+`(host: HTMLElement) => void | (() => void)`, inside a reactive scope, passing a host
+element to render into. Leaving the route disposes that whole scope in one call (every
+effect, binding, and `onCleanup` the page registered), then removes the rendered
+content; returning to the route re-mounts from the cached module without re-fetching it.
 
 ```html
 <r-route path="/settings" src="/pages/settings.js"></r-route>
@@ -154,7 +154,7 @@ export default function renderSettings(host) {
 }
 ```
 
-This mode is client-only — during SSR/SSG, a lazy route only resolves its
+This mode is client-only: during SSR/SSG, a lazy route only resolves its
 show/hide state, not the page module itself.
 
 ### `r-link`
@@ -179,7 +179,7 @@ External URLs (`http://`, `//`, `mailto:`, `tel:`) pass through as normal `<a>` 
 
 #### Slots
 
-None of `r-router`, `r-route`, or `r-link` expose a named slot — each renders only
+None of `r-router`, `r-route`, or `r-link` expose a named slot. Each renders only
 the default (unnamed) `<slot>`: `r-router` and `r-route` project their child routes
 or route content as-is, and `r-link` projects whatever you put inside it as the
 link's visible content. None of the three define any `::part()` either, so there's
@@ -228,8 +228,8 @@ All hook methods return an **unsubscribe function**.
 | `beforeEach(guard)`      | `(guard: NavigationGuard) => () => void`                | Register a navigation guard; runs before navigation commits |
 | `afterEach(handler)`     | `(handler: RouteChangeHandler) => () => void`           | Post-navigation hook; runs after DOM is updated             |
 | `onRouteChange(handler)` | `(handler: RouteChangeHandler) => () => void`           | Subscribe to every route change                             |
-| `onPageSwap(handler)`    | `(handler: (e: PageSwapEvent) => void) => () => void`   | Cross-document `pageswap` event — MPA mode only             |
-| `onPageReveal(handler)`  | `(handler: (e: PageRevealEvent) => void) => () => void` | Cross-document `pagereveal` event — MPA mode only           |
+| `onPageSwap(handler)`    | `(handler: (e: PageSwapEvent) => void) => () => void`   | Cross-document `pageswap` event (MPA mode only)             |
+| `onPageReveal(handler)`  | `(handler: (e: PageRevealEvent) => void) => () => void` | Cross-document `pagereveal` event (MPA mode only)           |
 | `destroy()`              | `() => void`                                            | Remove all listeners and injected CSS                       |
 | `currentRoute`           | `RouteLocation \| null`                                 | Current route location object                               |
 | `mode`                   | `'history' \| 'hash'`                                   | History mode                                                |
@@ -372,7 +372,7 @@ SPA navigations use `startViewTransition()`. Full-page navigations use the CSS `
 
 ## `view-transition-name` — Shared Element Transitions
 
-`view-transition-name` animates a specific element between two pages rather than the whole viewport. The browser captures the element's position and size on both sides and animates between them — this is the card-flyout effect in the [Chrome Profiles demo](https://view-transitions.chrome.dev/profiles/mpa/).
+`view-transition-name` animates a specific element between two pages rather than the whole viewport. The browser captures the element's position and size on both sides and animates between them. This is the card-flyout effect in the [Chrome Profiles demo](https://view-transitions.chrome.dev/profiles/mpa/).
 
 ### Basic usage
 
@@ -478,11 +478,11 @@ router.beforeEach((to, from, next) => {
 }
 ```
 
-To exclude an element from a transition use `view-transition-name: none`. To animate multiple parts independently, assign each a unique name — everything without a name fades via the root transition.
+To exclude an element from a transition use `view-transition-name: none`. To animate multiple parts independently, assign each a unique name; everything without a name fades via the root transition.
 
 ## SSR / SSG
 
-All browser APIs (`window`, `history`, `document`) are guarded with `typeof` checks, so `createRouter` is safe to call in a Node/Deno SSR environment. In SSR context, `push` and `replace` run navigation guards and update `currentRoute` but skip `history.pushState` / `history.replaceState`. `popstate` listeners are never registered server-side. Hydrate normally on the client — call `createRouter` again with the same config.
+All browser APIs (`window`, `history`, `document`) are guarded with `typeof` checks, so `createRouter` is safe to call in a Node/Deno SSR environment. In SSR context, `push` and `replace` run navigation guards and update `currentRoute` but skip `history.pushState` / `history.replaceState`. `popstate` listeners are never registered server-side. Hydrate normally on the client: call `createRouter` again with the same config.
 
 ## Type Reference
 

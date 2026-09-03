@@ -20,7 +20,7 @@ The configured endpoint, or `''`.
 ### report({ url?, type?, payload })
 
 Sends `payload`. Prefers `navigator.sendBeacon` and falls back to a 1x1 image request.
-Returns `true` when some transport accepted it, `false` when nothing could send — including
+Returns `true` when some transport accepted it, `false` when nothing could send, including
 when no endpoint has been configured.
 
 ### createData(params?)
@@ -45,15 +45,15 @@ report({ payload: { ...createData(), type: 'page_view' } });
    belongs, so `report()` returns `false` rather than guessing.
 2. **The transport is chosen by whether sendBeacon actually succeeded**, not by whether
    `navigator` exists. `sendBeacon` also returns `false` when the browser's queue is over
-   quota — that case falls through to the image beacon too.
+   quota; that case falls through to the image beacon too.
 3. **Call `createData()` per event, not once at setup.** It snapshots the URL and timestamp at
    the moment it runs; hoisting it out of a handler makes every later event report the state
    of page load.
 
 ::: warning Replaces getHost in 0.3
 `getHost()` has been removed. It built a log endpoint from a domain hard-coded to this repo's
-author, and a leftover edit had already degraded its output to the literal `'//log.'` — not a
-reachable host — so every report without an explicit `url` was silently posted into the void.
+author, and a leftover edit had already degraded its output to the literal `'//log.'` (not a
+reachable host), so every report without an explicit `url` was silently posted into the void.
 `createData()` likewise no longer reads a hard-coded `chaxus_prod` cookie; configure
 `userIdCookie` instead.
 :::

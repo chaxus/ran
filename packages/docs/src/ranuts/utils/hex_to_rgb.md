@@ -70,5 +70,5 @@ console.log(hex2); // '#ff5733'
 
 1. **Format requirement**: Supports 6-digit hexadecimal color values (e.g., `#ff0000` or `ff0000`).
 2. **Return value**: Returns `[r, g, b]` array on success, `null` on failure.
-3. **Case insensitive**: Case insensitive, both `#FF0000` and `#ff0000` work.
+3. **Case insensitivity**: Both `#FF0000` and `#ff0000` work.
 4. **Use case**: Commonly used for color conversion, color processing, CSS color handling, etc.

@@ -1,11 +1,11 @@
 ---
-description: "ranui's design language and its complete token reference — every global `--ran-*` token: the Geist colour ladder with light and dark values, semantic roles, spacing, sizing, typography, radius, elevation, stacking, motion, focus and skin primitives."
+description: "ranui's design language and its complete token reference: every global `--ran-*` token, covering the Geist colour ladder with light and dark values, semantic roles, spacing, sizing, typography, radius, elevation, stacking, motion, focus and skin primitives."
 ---
 
 # Design system
 
 The **design language** ranui is built from, and the **complete** catalog of the tokens that
-express it — every global `--ran-*` custom property the library declares, with its value in
+express it: every global `--ran-*` custom property the library declares, with its value in
 both themes. Components read these instead of hard-coding values, so overriding one token
 restyles everything that consumes it.
 
@@ -13,12 +13,12 @@ Three pages answer three different questions, and they are deliberately separate
 
 | Page                                           | Answers                                             |
 | ---------------------------------------------- | --------------------------------------------------- |
-| **Design system** (this page)                  | _What_ the tokens are — the vocabulary              |
+| **Design system** (this page)                  | _What_ the tokens are: the vocabulary               |
 | [Design guidelines](/src/ranui/design-guides/) | _How to choose_ between them when building a screen |
 | [Theming](/src/ranui/theme/)                   | _How to switch and override_ them at runtime        |
 
-> **Use when** you need the name or the value of a token — a colour role, a spacing step, an
-> icon size, a shadow tier, an easing curve — or want to understand why the scales are shaped
+> **Use when** you need the name or the value of a token (a colour role, a spacing step, an
+> icon size, a shadow tier, an easing curve) or want to understand why the scales are shaped
 > the way they are.
 
 ## The language: Geist
@@ -34,9 +34,9 @@ ranui adopts that ladder as its `--ran-*` scales, layers semantic tokens on top,
 
 ## Two layers
 
-**Layer 1 — base palette.** The raw scales below. Rarely consumed directly.
+**Layer 1: base palette.** The raw scales below. Rarely consumed directly.
 
-**Layer 2 — semantic tokens.** `--ran-color-*` and friends, mapped onto layer 1. **Consume
+**Layer 2: semantic tokens.** `--ran-color-*` and friends, mapped onto layer 1. **Consume
 this layer.** Dark mode redefines only layer 1, so every semantic token flips through `var()`
 with no per-component dark overrides anywhere in the library.
 
@@ -59,7 +59,7 @@ Every hue scale runs `100 → 1000`, and each step has one fixed job:
 | ---- | --------------------------- | ---- | ------------------------- |
 | 100  | Default background          | 600  | Active border             |
 | 200  | Hover background            | 700  | Solid fill (button/badge) |
-| 300  | Active (pressed) background | 800  | Solid fill — hover        |
+| 300  | Active (pressed) background | 800  | Solid fill (hover)        |
 | 400  | Default border              | 900  | Secondary text & icons    |
 | 500  | Hover border                | 1000 | Primary text & icons      |
 
@@ -89,7 +89,7 @@ The scale behind text, borders and surfaces.
 
 ### Gray alpha — `--ran-gray-alpha-100..1000`
 
-Translucent, so it layers over any surface — the right choice for a scrim, a hover wash or a
+Translucent, so it layers over any surface: the right choice for a scrim, a hover wash or a
 divider that must sit on unknown content.
 
 | Step | Light       | Dark        |
@@ -207,7 +207,7 @@ toward the page background rather than along a scale, so dark mode redefines the
 
 ### What each accent means
 
-- **Primary is monochrome** — black-on-white in light, white-on-black in dark (the Geist brand
+- **Primary is monochrome**: black-on-white in light, white-on-black in dark (the Geist brand
   tone, `<r-button type="primary">`). Text and icons on it use `--ran-color-primary-text`,
   which flips with it. There is no separate "contrast" token: primary _is_ the
   highest-contrast action.
@@ -216,7 +216,7 @@ toward the page background rather than along a scale, so dark mode redefines the
 - **Green = success · amber = warning · red = danger.** One meaning each.
 
 There is no `--ran-color-error`; the token is `--ran-color-danger`. A `var()` naming a property
-that was never declared resolves to nothing and the entire declaration is dropped — silently,
+that was never declared resolves to nothing and the entire declaration is dropped silently,
 which is why the wrong name is worth checking against this table rather than guessing.
 
 ## Spacing
@@ -232,7 +232,7 @@ Gaps between things: `padding`, `margin`, `gap`. A 4px base unit with **nine val
 | `--ran-space-6` | 24px  |                  |       |
 
 The number is the multiple of 4px, so the scale skips: there is no `--ran-space-5`. That is the
-point — a limited set is what produces a page's rhythm.
+point: a limited set is what produces a page's rhythm.
 
 ## Sizing
 
@@ -249,8 +249,8 @@ An element's own dimensions: icon sizes, control heights, small square or rectan
 | `--ran-size-7` | 32px  | Default control height          |
 
 **This is a separate scale from spacing on purpose**, and mixing them is a machine-checked
-error (`sizing-scale`). The two have different ranges and progressions — a 4px-doubling
-spacing scale produces awkward values for icon and control sizes — and a consumer must be able
+error (`sizing-scale`). The two have different ranges and progressions (a 4px-doubling
+spacing scale produces awkward values for icon and control sizes), and a consumer must be able
 to retune one without disturbing the other: an icon getting bigger should not also widen every
 gap that happens to share its pixel value. Where a step coincides numerically with a spacing
 step (`--ran-size-4` and `--ran-space-6` are both 24px) that is coincidence, not aliasing.
@@ -264,7 +264,7 @@ a plain component token with its own literal fallback rather than being forced o
 | ------------------- | ------------------------------------------------------------ |
 | `--ran-font-family` | Geist / Geist Sans, then the system UI stack                 |
 | `--ran-font-mono`   | Geist Mono, then `ui-monospace`, SF Mono, Menlo, Consolas, … |
-| `--ran-font-size`   | `14px` — the base size                                       |
+| `--ran-font-size`   | `14px` (the base size)                                       |
 | `--ran-line-height` | `1.5715`                                                     |
 
 Type is organised by **role**, and the role fixes font, size, weight and line-height together:
@@ -284,7 +284,7 @@ Two tokens exist only to make a role land correctly:
 | `--ran-text-heading-tracking`   | `-0.03em` | Headings need tighter tracking at display sizes.       |
 | `--ran-text-button-line-height` | `1`       | Crisp vertical centring inside a fixed-height control. |
 
-Geist caps weight at 600 (semibold) — emphasis comes from size and spacing, not from a heavier
+Geist caps weight at 600 (semibold). Emphasis comes from size and spacing, not from a heavier
 face. There is no `--ran-text-copy-3`: the 12px step is `--ran-text-label-3`.
 
 ### Fonts
@@ -300,28 +300,28 @@ import 'ranui/fonts'; // bundlers
 <link rel="stylesheet" href="…/ranui/dist/fonts/fonts.css" />
 ```
 
-Without it the tokens fall back to system font stacks — everything still works, just without
+Without it the tokens fall back to system font stacks; everything still works, just without
 the Geist faces.
 
 ## Radius
 
-| Token               | Value    | Use for                          |
-| ------------------- | -------- | -------------------------------- |
-| `--ran-radius-sm`   | `6px`    | Controls — button, input, select |
-| `--ran-radius-md`   | `12px`   | Cards, dialogs                   |
-| `--ran-radius-lg`   | `16px`   | Large surfaces                   |
-| `--ran-radius-full` | `9999px` | Pills, avatars                   |
+| Token               | Value    | Use for                         |
+| ------------------- | -------- | ------------------------------- |
+| `--ran-radius-sm`   | `6px`    | Controls: button, input, select |
+| `--ran-radius-md`   | `12px`   | Cards, dialogs                  |
+| `--ran-radius-lg`   | `16px`   | Large surfaces                  |
+| `--ran-radius-full` | `9999px` | Pills, avatars                  |
 
 ## Elevation
 
-Shadow is a **role**, not decoration — pick the tier by what the element is. Dark mode replaces
+Shadow is a **role**, not decoration. Pick the tier by what the element is. Dark mode replaces
 all three, because a shadow tuned for a white page disappears on a black one.
 
-| Token                   | Use for                                                               | Light                                                           | Dark                                                                                        |
-| ----------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `--ran-shadow-elevated` | In-flow surfaces that also have a border — `r-card`, `r-section`      | `0 1px 2px rgba(0,0,0,.04), 0 2px 4px -2px rgba(0,0,0,.05)`     | `0 1px 2px rgba(0,0,0,.16)`                                                                 |
-| `--ran-shadow-menu`     | Transient layers over content — dropdown, select menu, popover, toast | `0 2px 4px rgba(0,0,0,.05), 0 8px 24px -6px rgba(0,0,0,.14)`    | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
-| `--ran-shadow-modal`    | Blocking dialogs — `r-modal`                                          | `0 4px 12px rgba(0,0,0,.08), 0 20px 48px -12px rgba(0,0,0,.22)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
+| Token                   | Use for                                                              | Light                                                           | Dark                                                                                        |
+| ----------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `--ran-shadow-elevated` | In-flow surfaces that also have a border: `r-card`, `r-section`      | `0 1px 2px rgba(0,0,0,.04), 0 2px 4px -2px rgba(0,0,0,.05)`     | `0 1px 2px rgba(0,0,0,.16)`                                                                 |
+| `--ran-shadow-menu`     | Transient layers over content: dropdown, select menu, popover, toast | `0 2px 4px rgba(0,0,0,.05), 0 8px 24px -6px rgba(0,0,0,.14)`    | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
+| `--ran-shadow-modal`    | Blocking dialogs: `r-modal`                                          | `0 4px 12px rgba(0,0,0,.08), 0 20px 48px -12px rgba(0,0,0,.22)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
 
 Borderless overlays rely on the shadow alone for separation, so the overlay tiers carry real
 weight; an overlay falling back to the raised tier looks flat and pinned to the page.
@@ -330,15 +330,15 @@ weight; an overlay falling back to the raised tier looks flat and pinned to the 
 
 Floating overlays portal to `<body>`, so they need an explicit tier:
 
-| Token              | Default | Use for                                                                                       |
-| ------------------ | ------- | --------------------------------------------------------------------------------------------- |
-| `--ran-z-modal`    | `1000`  | Blocking dialogs and their mask                                                               |
-| `--ran-z-dropdown` | `1100`  | Dropdown / select menu / popover — **above** modal, so a select inside a dialog stays visible |
-| `--ran-z-message`  | `1200`  | Toasts and notifications — always on top                                                      |
+| Token              | Default | Use for                                                                                      |
+| ------------------ | ------- | -------------------------------------------------------------------------------------------- |
+| `--ran-z-modal`    | `1000`  | Blocking dialogs and their mask                                                              |
+| `--ran-z-dropdown` | `1100`  | Dropdown / select menu / popover: **above** modal, so a select inside a dialog stays visible |
+| `--ran-z-message`  | `1200`  | Toasts and notifications: always on top                                                      |
 
 The ladder starts at 1000 so it clears ordinary page chrome (nav bars and backdrops normally
 live in the tens). Override a tier on `:root`, or per component
-(`--ran-dropdown-host-z-index`, `--ran-modal-root-z-index`, `--ran-message-z-index`) — never
+(`--ran-dropdown-host-z-index`, `--ran-modal-root-z-index`, `--ran-message-z-index`), never
 with `!important`.
 
 ## Motion
@@ -349,18 +349,18 @@ with `!important`.
 | `--ran-motion-duration-base` | `0.2s`  | Popovers, menus                  |
 | `--ran-motion-duration-slow` | `0.35s` | Larger reveals                   |
 
-| Easing token                 | Curve                               | Character                             |
-| ---------------------------- | ----------------------------------- | ------------------------------------- |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.645,0.045,0.355,1)` | In-out, general purpose               |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`       | Quick, no overshoot — toggles         |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.34,1.26,0.5,1)`     | Slight overshoot — buttons, cards     |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)`    | Playful overshoot — like, add-to-cart |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`         | Calm, no overshoot — reveals, layout  |
+| Easing token                 | Curve                               | Character                            |
+| ---------------------------- | ----------------------------------- | ------------------------------------ |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.645,0.045,0.355,1)` | In-out, general purpose              |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`       | Quick, no overshoot: toggles         |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.34,1.26,0.5,1)`     | Slight overshoot: buttons, cards     |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)`    | Playful overshoot: like, add-to-cart |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`         | Calm, no overshoot: reveals, layout  |
 
 The spring family is distilled from tuned SwiftUI springs (response/damping reduced to a
 single-overshoot bézier).
 
-**Pair these with motion properties only** — `transform`, `opacity`, box geometry. Palette
+**Pair these with motion properties only**: `transform`, `opacity`, box geometry. Palette
 properties (`background-color`, `color`, `border-color`, `box-shadow`, `fill`, `stroke`)
 deliberately carry no default transition, because CSS cannot tell an interaction apart from a
 theme flip: any fade you add to a colour also fires when light↔dark switches. Every component
@@ -373,7 +373,7 @@ still exposes a `--ran-*-transition` hook if you want to opt back in.
 | `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700)` | The standard ring, as a `box-shadow`                        |
 | `--ran-focus-ring-inverse-color` | `#fff`                                                               | The ring colour for a surface that is dark in _both_ themes |
 
-The ring is two layers — a background-coloured inner ring and a blue outer one — so it stays
+The ring is two layers: a background-coloured inner ring and a blue outer one, so it stays
 visible on any surface, and it stays blue rather than following the now-monochrome primary.
 
 `--ran-focus-ring-inverse-color` is **deliberately not redefined in dark mode**: it exists for
@@ -383,7 +383,7 @@ over arbitrary video), and that surface does not change when the page does.
 ## Skin primitives
 
 The few structural values components share that are not colour, size or type. Kept minimal on
-purpose — this layer used to be much larger and most of it was removed with the theme packs.
+purpose: this layer used to be much larger and most of it was removed with the theme packs.
 
 | Token                           | Value                        | For                                                                         |
 | ------------------------------- | ---------------------------- | --------------------------------------------------------------------------- |
@@ -395,18 +395,18 @@ purpose — this layer used to be much larger and most of it was removed with th
 
 ## What dark mode redefines
 
-`data-ran-theme="dark"` on `<html>` (or on any subtree — see [theming](/src/ranui/theme/))
+`data-ran-theme="dark"` on `<html>` (or on any subtree, see [theming](/src/ranui/theme/))
 redefines **the base palette and nothing else**, with three exceptions that cannot resolve
 through a scale:
 
-- the whole of layer 1 — every step of gray, gray-alpha, blue, red, amber, green, and both
+- the whole of layer 1: every step of gray, gray-alpha, blue, red, amber, green, and both
   backgrounds;
 - `--ran-color-bg-elevated`, which points at `--ran-gray-100` in dark so a card lifts off a
   black page instead of vanishing into it;
 - `--ran-color-primary-hover` / `-active`, which are literals rather than scale references;
 - all three shadow tiers, retuned for a dark ground.
 
-Everything else — every other semantic token, every size, every duration — is defined once.
+Everything else (every other semantic token, every size, every duration) is defined once.
 
 ## Component tokens
 
@@ -417,7 +417,7 @@ Below the semantic layer, every component exposes its own hooks, named:
 ```
 
 for example `--ran-btn-hover-background`, `--ran-select-search-active-border-width`. They
-default to semantic tokens — `var(--ran-btn-background, var(--ran-color-primary, #171717))` —
+default to semantic tokens: `var(--ran-btn-background, var(--ran-color-primary, #171717))`,
 so overriding a semantic token reaches all of them, and overriding a component token narrows
 the change to one element.
 
@@ -442,7 +442,7 @@ in the repository; the per-element API is [here](/src/ranui/api). For how to app
 Three rules keep that dark-safe:
 
 1. **No raw hex** for anything that should follow the theme.
-2. **A fallback must name a token that flips** — `var(--ran-color-text, var(--ran-gray-1000))`,
+2. **A fallback must name a token that flips**: `var(--ran-color-text, var(--ran-gray-1000))`,
    never `var(--ran-color-text, #171717)`.
 3. **A fallback must name a token that exists**, or the declaration is dropped and the element
    silently keeps whatever it inherited.

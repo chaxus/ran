@@ -133,7 +133,7 @@ new Hsla(col: Array<string | number>) // [h, s, l, a]
 
 ### ColorScheme
 
-Generates a palette of related `Color` objects — either directly from a list of colors, or from a base color rotated by an array of hue angles. Static factory methods cover common color-harmony schemes.
+Generates a palette of related `Color` objects, either directly from a list of colors or from a base color rotated by an array of hue angles. Static factory methods cover common color-harmony schemes.
 
 #### Constructor
 
@@ -192,12 +192,12 @@ Standalone functions used internally by `Color`; each is exported for direct use
 
 ### Alpha helpers
 
-Alpha is expressed as **0 – 100**, matching the percentage scale the rest of this module uses for
-saturation and lightness — not the 0 – 1 that CSS `rgba()` takes.
+Alpha is expressed as **0–100**, matching the percentage scale the rest of this module uses for
+saturation and lightness, not the 0–1 that CSS `rgba()` takes.
 
 | Function              | Description                                                        | Signature                  |
 | --------------------- | ------------------------------------------------------------------ | -------------------------- |
-| `hexToAlpha(aa)`      | A two-digit hex alpha channel (`ff` / `80` / `00`) → 0 – 100       | `(aa: string) => number`   |
+| `hexToAlpha(aa)`      | A two-digit hex alpha channel (`ff` / `80` / `00`) → 0–100         | `(aa: string) => number`   |
 | `rgbaString(r,g,b,a)` | Build a CSS `rgba()` string; `a` is divided by 100                 | `(r, g, b, a) => string`   |
 | `rgbaToRgb(r,g,b,a)`  | Composite a translucent colour **onto white** → opaque `[r, g, b]` | `(r, g, b, a) => number[]` |
 | `rgbaToHex(r,g,b,a)`  | The same composite, returned as a 6-digit hex string               | `(r, g, b, a) => string`   |
@@ -205,16 +205,16 @@ saturation and lightness — not the 0 – 1 that CSS `rgba()` takes.
 ::: warning
 `rgbaToRgb` / `rgbaToHex` hard-code **white** as the backdrop. They exist for places that cannot
 accept an alpha channel (writing back a 6-digit hex, say). Under a dark theme the result will read
-too light — blend against your own backdrop instead.
+too light; blend against your own backdrop instead.
 :::
 
 ### Blend & shader-math helpers
 
-The colour-grade and blend math behind `ranuts/visual`'s post-processing filters (`ColorAdjustFilter` and friends), exported here for CPU-side reuse — computing a thumbnail preview, say, without spinning up a GPU pipeline. Unlike the rest of this module, **channels here are 0–1**, not 0–255 or 0–100 — the convention shaders use.
+The colour-grade and blend math behind `ranuts/visual`'s post-processing filters (`ColorAdjustFilter` and friends), exported here for CPU-side reuse (computing a thumbnail preview, say, without spinning up a GPU pipeline). Unlike the rest of this module, **channels here are 0–1**, not 0–255 or 0–100, matching the convention shaders use.
 
 | Function                              | Description                                                                                                 | Signature                                    |
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `luma(r, g, b)`                       | Perceived brightness (Rec. 601 weights). Keeps whatever scale the inputs are in — 0–1 or 0–255              | `(r, g, b) => number`                        |
+| `luma(r, g, b)`                       | Perceived brightness (Rec. 601 weights). Keeps whatever scale the inputs are in (0–1 or 0–255)              | `(r, g, b) => number`                        |
 | `blendScreen(base, blend)`            | Screen blend: `1 - (1-base)(1-blend)` per channel                                                           | `(base: RGB, blend: RGB) => RGB`             |
 | `blendMultiply(base, blend)`          | Multiply blend: `base * blend` per channel                                                                  | `(base: RGB, blend: RGB) => RGB`             |
 | `blendOverlay(base, blend)`           | Overlay: multiply in shadows, screen in highlights                                                          | `(base: RGB, blend: RGB) => RGB`             |
@@ -242,13 +242,13 @@ const backToSrgb = linearToSrgb(linear); // ≈ 0.5
 ```
 
 ::: warning
-Blend and grade math operates on **linear-light** values for physically-correct results — an 8-bit hex color is sRGB-encoded, so run it through `srgbToLinear` first if the blend needs to look right rather than merely compile.
+Blend and grade math operates on **linear-light** values for physically correct results. An 8-bit hex color is sRGB-encoded, so run it through `srgbToLinear` first if the blend needs to look right rather than merely compile.
 :::
 
 ### Format patterns
 
 Regular expressions for validating colour strings. `RGB_REGEX` and `RGBA_REGEX` do **not** tolerate
-spaces — strip them first (`value.replace(/\s+/g, '')`).
+spaces; strip them first (`value.replace(/\s+/g, '')`).
 
 | Constant          | Matches                                            |
 | ----------------- | -------------------------------------------------- |
@@ -354,5 +354,5 @@ console.log(`${bold[0]}important${bold[1]}`);
 1. **Eager computation**: A `Color` computes all representations in its constructor, so `hex`, `rgb`, `rgba`, `hsl` and `hsla` are always in sync at construction time.
 2. **HSL setters recompute RGB**: `setHue` / `setSat` / `setLum` update HSL and then re-derive RGB and hex via `updateFromHsl`. `setAlpha` only affects `rgba` and `hsla`.
 3. **Array-or-channels inputs**: Several conversion functions (`rgbToHex`, `rgbToHsl`, `hslToRgb`) accept either three channel arguments or a single array as the first argument.
-4. **HSV vs HSB**: `hsvToRgb` is an alias of `hsbToRgb`, and `hsvToHsl` an alias of the HSB→HSL conversion — HSV and HSB refer to the same model here.
+4. **HSV vs HSB**: `hsvToRgb` is an alias of `hsbToRgb`, and `hsvToHsl` an alias of the HSB→HSL conversion. HSV and HSB refer to the same model here.
 5. **FMT is terminal-only**: The ANSI escape sequences render as styling only in a terminal that supports them; in a browser console they appear as raw control characters.

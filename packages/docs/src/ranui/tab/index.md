@@ -1,12 +1,12 @@
 ---
-description: 'The ranui Tabs (<r-tabs>) organize content into switchable panels — a native Web Component usable in any framework.'
+description: 'The ranui Tabs (<r-tabs>), a native Web Component usable in any framework, organize content into switchable panels.'
 ---
 
 # Tab
 
 Tabbed container that switches between panes. Compose `<r-tabs>` as the container with one or more `<r-tab>` panes inside it.
 
-> **Use when** you need a tabbed container that switches between panes — compose `<r-tabs>` with `<r-tab>` children, each supplying a header `label` and pane body.
+> **Use when** you need a tabbed container that switches between panes. Compose `<r-tabs>` with `<r-tab>` children, each supplying a header `label` and pane body.
 
 ## Quick Start
 
@@ -60,7 +60,7 @@ A single pane. Its attributes are read by the parent `<r-tabs>` to build the mat
 | `effect`   | `boolean` | —       | Ripple effect on the header (normally set by the parent's `effect`) |
 | `sheet`    | `string`  | `''`    | CSS text injected into the shadow DOM                               |
 
-> The `key` property getter/setter reads and writes the `r-key` attribute (the plain `key` name is avoided because it is a reserved field). Set `label` and `r-key` before the element is connected — changes to those two attributes are not re-processed after the headers are built.
+> The `key` property getter/setter reads and writes the `r-key` attribute (the plain `key` name is avoided because it is a reserved field). Set `label` and `r-key` before the element is connected: changes to those two attributes are not re-processed after the headers are built.
 
 ### Header Style `type`
 
@@ -164,7 +164,7 @@ With explicit `r-key` values (panes without a key fall back to their index):
 </r-tabs>
 ```
 
-> Every `r-key` within one `<r-tabs>` must be unique — duplicate or missing keys on some panes throw an error while headers are being built.
+> Every `r-key` within one `<r-tabs>` must be unique: duplicate or missing keys on some panes throw an error while headers are being built.
 
 ### Disabled Pane `disabled`
 
@@ -258,7 +258,7 @@ Set `effect` on `<r-tabs>` to enable the click ripple on the header buttons. Whe
 
 ### `change`
 
-`<r-tabs>` dispatches a `change` `CustomEvent` when an observed attribute changes — most notably when the active tab switches. `event.detail.active` is the current active key (the `r-key` of the selected `<r-tab>`, or its index when no `r-key` is set).
+`<r-tabs>` dispatches a `change` `CustomEvent` when an observed attribute changes, most notably when the active tab switches. `event.detail.active` is the current active key (the `r-key` of the selected `<r-tab>`, or its index when no `r-key` is set).
 
 ```js
 const tabs = document.querySelector('r-tabs');
@@ -272,7 +272,7 @@ tabs.addEventListener('change', (e) => {
 ## Styling
 
 `<r-tabs>` exposes **10 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from: `:root`, a wrapper, or the element:
 
 ```css
 r-tabs {
@@ -290,4 +290,4 @@ The full list is in [style tokens](/src/ranui/style-tokens#tab); which token to 
 - **Style choice**: Use `type="line"` for a bordered, document-style tab strip; `type="flat"` (default) for the minimal sliding underline.
 - **Alignment**: Use `align="center"` or `align="end"` to reposition the header row within wide containers.
 - **Disabled panes**: Mark unavailable panes with `disabled`; they are skipped for both clicks and default selection.
-- **Keyboard navigation**: The header row is a WAI-ARIA tablist — arrow keys move between tabs (with `Home`/`End`), and only the active tab is in the tab order.
+- **Keyboard navigation**: The header row is a WAI-ARIA tablist: arrow keys move between tabs (with `Home`/`End`), and only the active tab is in the tab order.

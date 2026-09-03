@@ -1,7 +1,7 @@
 # debounce
 
 Debounce: when a function is triggered rapidly, run it **only after the triggering stops**
-for `ms` milliseconds. Use it when only the final state matters — search-as-you-type,
+for `ms` milliseconds. Use it when only the final state matters: search-as-you-type,
 window resize, autosave.
 
 For "I need the intermediate values too", use [throttle](./throttle).
@@ -42,6 +42,6 @@ onUnmount(() => save.cancel());
 ## Notes
 
 1. **Only the last call runs**, with the arguments of that last call.
-2. **`this` is taken from the call site** — `obj.handler()` sees `obj`.
+2. **`this` is taken from the call site**: `obj.handler()` sees `obj`.
 3. **Always `cancel()` on teardown**, otherwise the pending timer fires into a destroyed context.
 4. **Fully typed**: parameter and return types are inferred from `fn`.

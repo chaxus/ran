@@ -60,7 +60,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | rgbToHex                                                                                    | Convert RGB values to hexadecimal color value              | [rgbToHex](./rgb_to_hex.md)      |
 | randomColor                                                                                 | Generate random color object                               | [randomColor](./random_color.md) |
 | Color / ColorScheme                                                                         | Color class, value classes, conversions, palette generator | [Color](./color.md)              |
-| blendScreen / blendMultiply / blendOverlay / luma / vibrance / cosinePalette / srgbToLinear | Shader-style colour blend & grade math (0–1 channels)      | [Color](./color.md)              |
+| blendScreen / blendMultiply / blendOverlay / luma / vibrance / cosinePalette / srgbToLinear | Shader-style color blend & grade math (0–1 channels)       | [Color](./color.md)              |
 
 ## Time Processing
 
@@ -121,10 +121,10 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 
 ## Cookie
 
-| Method          | Description                            | Detail                                     |
-| --------------- | -------------------------------------- | ------------------------------------------ |
-| getCookie       | Gets the value of the specified cookie | [getCookie](./get_cookie.md)               |
-| getCookieByName | Get Cookie value by regex              | [getCookieByName](./get_cookie_by_name.md) |
+| Method          | Description                           | Detail                                     |
+| --------------- | ------------------------------------- | ------------------------------------------ |
+| getCookie       | Get the value of the specified cookie | [getCookie](./get_cookie.md)               |
+| getCookieByName | Get Cookie value by regex             | [getCookieByName](./get_cookie_by_name.md) |
 
 ## Image Processing
 

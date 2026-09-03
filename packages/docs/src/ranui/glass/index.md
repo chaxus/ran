@@ -1,12 +1,12 @@
 ---
-description: 'A liquid frosted-glass surface — backdrop blur, SVG light-bending displacement, and a specular rim, degrading gracefully where backdrop-filter is unsupported.'
+description: 'A liquid frosted-glass surface combining backdrop blur, SVG light-bending displacement, and a specular rim, degrading gracefully where backdrop-filter is unsupported.'
 ---
 
 # Glass
 
-A liquid / frosted glass surface. `<r-glass>` frosts and refracts whatever sits behind it — `backdrop-filter` blur + saturate for the frost, an SVG `feDisplacementMap` for the liquid light-bending, plus a specular rim and highlight for the glass read. Everything is token-driven; content goes in the default slot.
+A liquid / frosted glass surface. `<r-glass>` frosts and refracts whatever sits behind it: `backdrop-filter` blur + saturate for the frost, an SVG `feDisplacementMap` for the liquid light-bending, plus a specular rim and highlight for the glass read. Everything is token-driven; content goes in the default slot.
 
-> **Use when** you want a premium translucent panel over rich content — a hero card, a floating toolbar, a media overlay. The `displace` knob sets how _liquid_ it looks (0 is a flat frosted pane). All effects degrade to a plain translucent surface where `backdrop-filter` is unsupported.
+> **Use when** you want a premium translucent panel over rich content (a hero card, a floating toolbar, a media overlay). The `displace` knob sets how _liquid_ it looks (0 is a flat frosted pane). All effects degrade to a plain translucent surface where `backdrop-filter` is unsupported.
 
 ## Playground
 
@@ -20,7 +20,7 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 </r-glass>
 ```
 
-> Place `<r-glass>` over colorful or busy content — the effect is invisible over a flat background.
+> Place `<r-glass>` over colorful or busy content: the effect is invisible over a flat background.
 
 ## Nesting
 
@@ -57,18 +57,18 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 | Property      | Type      | Default | Description                                                                                                                                                                                                                                         |
 | ------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `blur`        | `number`  | `16`    | Backdrop blur radius, in px (the frost amount).                                                                                                                                                                                                     |
-| `saturate`    | `number`  | `180`   | Backdrop saturation, as a percentage — lifts the color of what's behind the glass.                                                                                                                                                                  |
+| `saturate`    | `number`  | `180`   | Backdrop saturation, as a percentage: lifts the color of what's behind the glass.                                                                                                                                                                   |
 | `displace`    | `number`  | `8`     | Liquid refraction strength (SVG displacement scale). `0` is a flat frosted pane; higher = wavier.                                                                                                                                                   |
-| `frequency`   | `number`  | `0.005` | Turbulence base frequency — smaller values give larger, smoother ripples.                                                                                                                                                                           |
+| `frequency`   | `number`  | `0.005` | Turbulence base frequency: smaller values give larger, smoother ripples.                                                                                                                                                                            |
 | `radius`      | `number`  | `20`    | Corner radius, in px.                                                                                                                                                                                                                               |
-| `tint`        | `string`  | subtle  | Glass fill tint — any CSS background value.                                                                                                                                                                                                         |
+| `tint`        | `string`  | subtle  | Glass fill tint: any CSS background value.                                                                                                                                                                                                          |
 | `sheen`       | `boolean` | `false` | Animated specular sweep across the surface.                                                                                                                                                                                                         |
-| `interactive` | `boolean` | `false` | Hover lift + press-scale feedback, for clickable glass. Also makes the host a keyboard-operable button — `role="button"`, a tab stop, Enter/Space act like a click.                                                                                 |
+| `interactive` | `boolean` | `false` | Hover lift + press-scale feedback, for clickable glass. Also makes the host a keyboard-operable button: `role="button"`, a tab stop, Enter/Space act like a click.                                                                                  |
 | `rim`         | `boolean` | `false` | Opt-in specular rim + chromatic edge for a more physically-lit look. WebGL first (always, synchronously), transparently upgraded to WebGPU in the background if available. Falls back to the plain CSS specular gradient when neither is available. |
 
 ### Refraction `displace`
 
-`displace` drives the SVG `feDisplacementMap` scale — how strongly light bends through the surface. Set it to `0` for a plain frosted pane.
+`displace` drives the SVG `feDisplacementMap` scale: how strongly light bends through the surface. Set it to `0` for a plain frosted pane.
 
 <Demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
@@ -101,9 +101,9 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 
 ### Rim — GPU specular edge (opt-in)
 
-`rim` adds a second highlight layer: a specular rim lit from a fixed top-left light direction, plus a subtle chromatic (RGB) fringe at the panel's rounded-rect border. Unlike the `displace` refraction, **it never samples the backdrop** — the shader only knows the panel's own width/height/corner radius, so it costs none of the interactivity/accessibility tradeoffs a full backdrop-capturing GPU approach would (see [Notes](#notes)). It's a purely decorative layer on top of the same `backdrop-filter` frost; turning it on or off never changes what's behind the glass or how it's sampled.
+`rim` adds a second highlight layer: a specular rim lit from a fixed top-left light direction, plus a subtle chromatic (RGB) fringe at the panel's rounded-rect border. Unlike the `displace` refraction, **it never samples the backdrop**: the shader only knows the panel's own width/height/corner radius, so it costs none of the interactivity/accessibility tradeoffs a full backdrop-capturing GPU approach would (see [Notes](#notes)). It's a purely decorative layer on top of the same `backdrop-filter` frost; turning it on or off never changes what's behind the glass or how it's sampled.
 
-Renders on WebGL first — synchronous, works in effectively every browser, so the rim never delays its own first paint — and transparently upgrades to WebGPU in the background if the browser has it (same effect, pixel-identical output). Falls back to the plain CSS specular gradient when neither GPU API is available (very old browsers, disabled, SSR) — there's no broken/blank state to design around.
+Renders on WebGL first (synchronous, works in effectively every browser, so the rim never delays its own first paint) and transparently upgrades to WebGPU in the background if the browser has it (same effect, pixel-identical output). Falls back to the plain CSS specular gradient when neither GPU API is available (very old browsers, disabled, SSR); there's no broken/blank state to design around.
 
 <Demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
@@ -141,8 +141,8 @@ r-glass::part(glass) {
 
 ## Notes
 
-- **Backdrop sampling.** `<r-glass>` refracts the DOM behind it via `backdrop-filter`, so selectable text, live video, and interactive elements behind the glass keep working. `rim` (above) is a purely decorative GPU layer computed from the panel's own shape — it never samples the backdrop.
+- **Backdrop sampling.** `<r-glass>` refracts the DOM behind it via `backdrop-filter`, so selectable text, live video, and interactive elements behind the glass keep working. `rim` (above) is a purely decorative GPU layer computed from the panel's own shape: it never samples the backdrop.
 - **Legibility.** Keep body text on a solid inner surface; don't rely on the glass alone for contrast.
 - **Reduced transparency.** `<r-glass>` responds to the OS-level "reduce transparency" / "increase contrast" setting (`prefers-reduced-transparency: reduce`): it swaps to a solid, theme-aware surface (`--ran-color-bg-elevated` by default) instead of frosting/refracting. Native controls do this automatically; this is the custom-element equivalent.
-- **Cross-browser refraction.** The `feDisplacementMap` liquid effect currently renders in Chromium only — Safari and Firefox drop that part of the `backdrop-filter` value and keep the blur/saturate/brightness frost, which is a legitimate (if flatter) fallback, not a broken state.
+- **Cross-browser refraction.** The `feDisplacementMap` liquid effect currently renders in Chromium only: Safari and Firefox drop that part of the `backdrop-filter` value and keep the blur/saturate/brightness frost, which is a legitimate (if flatter) fallback, not a broken state.
 - **Motion.** The surface only ever transitions `transform` (never color), so light/dark theme switches stay in one frame. Sheen and press respect `prefers-reduced-motion`.

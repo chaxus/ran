@@ -10,8 +10,8 @@ import { parseEventStream, mapEventStream, createStreamAccumulator } from 'ranut
 **Its own entry point.** Nothing here touches the DOM, so a response can be folded in a test or
 on a server; importing it from `ranuts/utils` would drag DOM-facing modules along.
 
-**No vendor lives here.** Every mainstream chat completion API streams the same four things —
-assistant text, separately-billed reasoning text, tool calls, a token count — but each names and
+**No vendor lives here.** Every mainstream chat completion API streams the same four things
+(assistant text, separately-billed reasoning text, tool calls, a token count), but each names and
 interleaves them differently. Mapping one provider's event onto `StreamChunk` is the only
 vendor-specific step, and it stays with you: baking one wire format in would make the other two
 layers unusable for anyone else.
@@ -46,7 +46,7 @@ type StreamChunk =
 - **`block-end` carries the assembled block**, and wins over what the deltas built. A consumer
   that only wants finished blocks can ignore every delta.
 - **Tool arguments stay raw JSON text.** Half a JSON document is not a value. Parse
-  `arguments` once, after `finish` — parsing `argumentsDelta` mid-stream is where streaming tool
+  `arguments` once, after `finish`: parsing `argumentsDelta` mid-stream is where streaming tool
   calls usually break.
 - **`block-start` is optional.** Several providers open a block with its first delta, so the
   accumulator opens one on demand. Do not require it in your mapping either.
@@ -95,5 +95,5 @@ several chunk sizes, so the two halves cannot drift apart.
 
 ## See also
 
-- [ranuts/conversation](../conversation/) — project the resulting events into renderable nodes
-- [`<r-conversation>`](../../ranui/conversation/) — render those nodes
+- [ranuts/conversation](../conversation/): project the resulting events into renderable nodes
+- [`<r-conversation>`](../../ranui/conversation/): render those nodes

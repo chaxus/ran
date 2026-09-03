@@ -65,7 +65,7 @@ console.log(tempFileName); // e.g.: 'temp_1703123456789-xyz1234567.txt'
 
 ## getRandomString
 
-A lighter alternative: no timestamp prefix, no restricted character set — just
+A lighter alternative: no timestamp prefix, no restricted character set, just
 `Math.random().toString(36)` sliced to `len` characters (base-36, so `0-9a-z`). Not
 collision-resistant the way `randomString` is; use it for things like a one-off DOM id or a
 cache-busting query param where uniqueness doesn't need to survive a timestamp collision.

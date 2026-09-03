@@ -6,7 +6,7 @@ description: 'The ranui Image (<r-image>) renders an image with a built-in fallb
 
 Image component that renders an image with a built-in fallback shown when the source fails to load.
 
-> **Use when** you need an image that gracefully degrades to a placeholder if the source fails to load — `<r-img>` swaps in a built-in broken-image graphic or your own `fallback`.
+> **Use when** you need an image that gracefully degrades to a placeholder if the source fails to load: `<r-img>` swaps in a built-in broken-image graphic or your own `fallback`.
 
 ## Quick Start
 
@@ -26,12 +26,12 @@ Image component that renders an image with a built-in fallback shown when the so
 
 | Property   | Type     | Default                        | Description                                                                    |
 | ---------- | -------- | ------------------------------ | ------------------------------------------------------------------------------ |
-| `src`      | `string` | `''`                           | Image source URL. Reactive — changing it after mount reloads the image.        |
+| `src`      | `string` | `''`                           | Image source URL. Reactive: changing it after mount reloads the image.         |
 | `alt`      | `string` | `''`                           | Alternative text forwarded to the inner `<img>`. Empty marks it as decorative. |
 | `fallback` | `string` | built-in broken-image data URI | Image shown when `src` fails to load.                                          |
 | `sheet`    | `string` | `''`                           | CSS injected into the component's shadow DOM.                                  |
 
-`src`, `alt`, `fallback`, and `sheet` are all observed and update reactively — changing any of them on a mounted element takes effect immediately.
+`src`, `alt`, `fallback`, and `sheet` are all observed and update reactively: changing any of them on a mounted element takes effect immediately.
 
 ### Image Source `src`
 

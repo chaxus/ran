@@ -6,7 +6,7 @@ Promise primitives JavaScript does not ship: an externally settled promise, and 
 
 | Function                                                 | Description                                              |
 | -------------------------------------------------------- | -------------------------------------------------------- |
-| `deferred<T>()`                                          | `{ promise, resolve, reject }` — settle it from outside  |
+| `deferred<T>()`                                          | `{ promise, resolve, reject }`, settle it from outside   |
 | `withTimeout(promise, ms, options?)`                     | Reject with `TimeoutError` if it has not settled in `ms` |
 | `withTimeoutFallback(promise, ms, fallback, onTimeout?)` | Resolve `fallback` instead of rejecting                  |
 | `delay(ms)`                                              | Resolve after `ms`                                       |
@@ -66,7 +66,7 @@ await queue.add(() => withTimeout(recreateEditor(config), 30_000));
 ## Notes
 
 1. **The timer is always cleared**, including when the work wins the race. The usual
-   hand-rolled version — `Promise.race([task, new Promise((_, r) => setTimeout(r, ms))])` —
+   hand-rolled version (`Promise.race([task, new Promise((_, r) => setTimeout(r, ms))])`)
    leaks the timer whenever the task finishes first. In Node that keeps the process alive for
    the full deadline; in tests it leaves a stray timer firing into the next test.
 
@@ -74,7 +74,7 @@ await queue.add(() => withTimeout(recreateEditor(config), 30_000));
    where you abort the fetch, terminate the worker, or close the connection.
 
 3. **`withTimeoutFallback` only absorbs the deadline.** A genuine rejection from the wrapped
-   promise still propagates — a timeout is not an error, but an error still is.
+   promise still propagates: a timeout is not an error, but an error still is.
 
 4. **`delay` uses the bare `setTimeout`**, so it works in Node, Web Workers and the browser
    alike. `window.setTimeout` would throw outside a document.

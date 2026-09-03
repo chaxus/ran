@@ -8,9 +8,9 @@
 
 #### Return
 
-| 参数                  | 说明                     | 类型                  |
-| --------------------- | ------------------------ | --------------------- |
-| `number \| undefined` | 网络连接对象或 undefined | `number \| undefined` |
+| 参数                              | 说明                     | 类型                              |
+| --------------------------------- | ------------------------ | --------------------------------- |
+| `NetworkInformation \| undefined` | 网络连接对象或 undefined | `NetworkInformation \| undefined` |
 
 #### Parameters
 

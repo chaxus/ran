@@ -1,6 +1,6 @@
 # Canvas 2D geometry
 
-Path builders and angle maths for Canvas 2D. Every path function **only builds the path** — it
+Path builders and angle maths for Canvas 2D. Every path function **only builds the path**; it
 never calls `fill()` or `stroke()`, so the caller decides how to paint it.
 
 ## Usage
@@ -106,7 +106,7 @@ No return value (`void`)
 Translate a CSS `linear-gradient(...)` string into a Canvas `CanvasGradient`.
 
 `createLinearGradient` only takes a start and an end point, while CSS describes direction as an
-angle — so the circle is split into eight 45° sectors and the tangent turns the angle back into
+angle, so the circle is split into eight 45° sectors and the tangent turns the angle back into
 start/end coordinates on the rectangle's boundary. Keyword directions (`to top` / `to bottom` /
 `to left` / `to right`) are handled directly.
 

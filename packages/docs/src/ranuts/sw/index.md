@@ -1,6 +1,6 @@
 # ranuts/sw — Service Worker
 
-Building blocks for a service worker: the two caching strategies every SW ends up writing, and
+Building blocks for a Service Worker: the two caching strategies every SW ends up writing, and
 the worker half of the precache protocol whose page half lives in
 [prefetch](../utils/prefetch).
 
@@ -12,8 +12,8 @@ import { cacheFirst, networkFirst, precache, dropCachesExcept, servePrecache } f
 `document` do not exist; importing it from `ranuts/utils` would drag DOM-facing modules into a
 worker bundle.
 
-**It assumes a bundled service worker.** A hand-written `sw.js` served as a static file cannot
-import from `node_modules` — either bundle it, or copy the pieces you need.
+**It assumes a bundled Service Worker.** A hand-written `sw.js` served as a static file cannot
+import from `node_modules`: either bundle it, or copy the pieces you need.
 
 ## API
 
@@ -55,15 +55,15 @@ servePrecache({ type: 'precache-models', cacheName: MODELS });
 
 ## Notes
 
-1. **`cacheFirst` for immutable, content-hashed assets** — scripts, styles, fonts, model
-   weights. **`networkFirst` for anything that must reflect a deploy immediately** — HTML
+1. **`cacheFirst` for immutable, content-hashed assets**: scripts, styles, fonts, model
+   weights. **`networkFirst` for anything that must reflect a deploy immediately**: HTML
    navigations, a manifest.
 2. **Neither strategy rejects.** A network failure with nothing cached resolves to a 408, so a
    `respondWith` never blows up.
 3. **The response is cloned synchronously, before the body is read.** Awaiting `caches.open()`
    first and cloning afterwards is the classic bug: by then the body may already be streaming
    to the page, and `clone()` throws.
-4. **`precache` is idempotent and per-URL forgiving** — one 404 in the list must not abort an
+4. **`precache` is idempotent and per-URL forgiving**: one 404 in the list must not abort an
    install.
 5. **Downloading in the SW is the point of `servePrecache`.** The work is wrapped in
    `event.waitUntil`, so it survives navigations; a page-side fetch is aborted the moment the

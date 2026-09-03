@@ -76,7 +76,7 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranuts/',
       },
       {
-        text: 'API reference (all 393 exports)',
+        text: 'API reference (all 454 exports)',
         link: '/src/ranuts/api',
       },
       {

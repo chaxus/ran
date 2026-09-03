@@ -6,7 +6,7 @@ description: 'A compact color swatch that opens a picker panel with saturation/l
 
 A compact color swatch that opens a popover panel with a saturation/lightness palette, a hue slider, an alpha slider, and a HEX/RGB value input. Its `value` accepts and emits standard CSS color strings.
 
-> **Use when** you need to let users pick a color with a saturation/hue/alpha panel and HEX/RGB input — `<r-colorpicker>` accepts and emits standard CSS color strings and reports every format on `change`.
+> **Use when** you need to let users pick a color with a saturation/hue/alpha panel and HEX/RGB input: `<r-colorpicker>` accepts and emits standard CSS color strings and reports every format on `change`.
 
 ## Quick Start
 
@@ -76,7 +76,7 @@ picker.disabled = false; // re-enable
 
 ### External Styles `sheet`
 
-CSS injected into the component's shadow DOM — the same `sheet` convention used by every other ranui component.
+CSS injected into the component's shadow DOM. It follows the same `sheet` convention used by every other ranui component.
 
 ```html
 <r-colorpicker value="#006bff" sheet=".ran-colorpicker { border-radius: 6px; }"></r-colorpicker>
@@ -86,7 +86,7 @@ CSS injected into the component's shadow DOM — the same `sheet` convention use
 
 ### `change`
 
-Fires whenever the color changes — dragging the palette, moving a slider, editing the value input, or setting the `value` attribute. It **bubbles** and is **composed** (crosses shadow boundaries). `event.detail` carries the color in every format:
+Fires whenever the color changes: dragging the palette, moving a slider, editing the value input, or setting the `value` attribute. It **bubbles** and is **composed** (crosses shadow boundaries). `event.detail` carries the color in every format:
 
 | Field   | Type     | Example                                   |
 | ------- | -------- | ----------------------------------------- |
@@ -145,8 +145,8 @@ r-colorpicker {
 
 ## Best Practices
 
-- **Input formats**: Feed `value` any CSS color string — HEX, `rgb(...)`, or `rgba(...)`; the picker normalizes it internally.
+- **Input formats**: Feed `value` any CSS color string: HEX, `rgb(...)`, or `rgba(...)`; the picker normalizes it internally.
 - **Reading the result**: Listen for `change` and read `event.detail` for the exact format you need (`hex`, `rgb`, `rgba`, `alpha`).
 - **Alpha**: Use `rgba(...)` input or the alpha slider when you need transparency; the read-back `value` becomes an `rgba(...)` string whenever alpha drops below 1.
-- **Keyboard**: The swatch and both sliders are focusable and keyboard-operable — no mouse required.
+- **Keyboard**: The swatch and both sliders are focusable and keyboard-operable; no mouse is required.
 - **Importing**: Load via `import 'ranui'` (registers every component) or the standalone `import 'ranui/colorpicker'`.

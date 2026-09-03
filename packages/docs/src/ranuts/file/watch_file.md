@@ -1,6 +1,6 @@
 # WatchFile
 
-Watch if a file has changed.
+Watch whether a file has changed.
 
 ## API
 

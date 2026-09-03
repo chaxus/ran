@@ -6,7 +6,7 @@ description: 'The ranui Modal (<r-modal>) is a dialog for focused interactions, 
 
 Dialog component for focused interactions on top of the current page, with focus trapping, scroll locking, and background inerting.
 
-> **Use when** you need a dialog for a focused interaction over the page, with focus trapping, scroll locking, and background inerting — drive `<r-modal>` via the `open` attribute or the imperative `Modal.confirm` / `Modal.info` helpers.
+> **Use when** you need a dialog for a focused interaction over the page, with focus trapping, scroll locking, and background inerting. Drive `<r-modal>` via the `open` attribute or the imperative `Modal.confirm` / `Modal.info` helpers.
 
 ## Quick Start
 
@@ -42,7 +42,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 | Property       | Type      | Default | Description                                                   |
 | -------------- | --------- | ------- | ------------------------------------------------------------- |
 | `open`         | `boolean` | `false` | Whether the modal is visible                                  |
-| `title`        | `string`  | `''`    | Header title text (falls back to `Modal` when empty)          |
+| `heading`      | `string`  | `''`    | Header title text (falls back to `Modal` when empty)          |
 | `closable`     | `boolean` | `true`  | Whether the close (`x`) button is shown                       |
 | `maskClosable` | `boolean` | `true`  | Whether clicking the backdrop mask closes the modal           |
 | `closeOnEsc`   | `boolean` | `true`  | Whether pressing `Escape` closes the modal                    |
@@ -51,7 +51,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 | `hideHeader`   | `boolean` | `false` | Drops the title bar entirely, leaving a floating close button |
 | `sheet`        | `string`  | `''`    | CSS injected into the shadow DOM                              |
 
-`closing` is a read-only attribute the element reflects on itself (not a settable property): present from the moment `close()` runs until the mask/dialog's fade-and-scale-out transition actually finishes (~0.3s later, same timing as the `afterclose` event). Useful for a host page that needs the modal to still count as "present" through that visual tail — see Best Practices below.
+`closing` is a read-only attribute the element reflects on itself (not a settable property): present from the moment `close()` runs until the mask/dialog's fade-and-scale-out transition actually finishes (~0.3s later, same timing as the `afterclose` event). Useful for a host page that needs the modal to still count as "present" through that visual tail; see Best Practices below.
 
 ### Title `title`
 
@@ -224,7 +224,7 @@ r-modal::part(mask) {
 ## Styling
 
 `<r-modal>` exposes **23 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-modal {
@@ -243,4 +243,4 @@ The full list is in [style tokens](/src/ranui/style-tokens#modal); which token t
 - **Footer actions**: Put primary/secondary buttons in `slot="footer"`; the footer bar only appears when the slot has content.
 - **Non-dismissible flows**: Set `closable="false"` and `maskClosable="false"` to force an explicit choice.
 - **One-off dialogs**: Use `Modal.confirm` / `Modal.info` for quick prompts instead of authoring markup.
-- **Escalating a host page above the modal while it's open**: match `:has(r-modal[open]), :has(r-modal[closing])`, not just `[open]` — `open` is removed the instant `close()` runs, but the mask/dialog transition keeps painting for ~0.3s more, and dropping a z-index escalation mid-fade lets the still-visible mask repaint under whatever it was lifted above.
+- **Escalating a host page above the modal while it's open**: match `:has(r-modal[open]), :has(r-modal[closing])`, not just `[open]`. `open` is removed the instant `close()` runs, but the mask/dialog transition keeps painting for ~0.3s more; dropping a z-index escalation mid-fade lets the still-visible mask repaint under whatever it was lifted above.

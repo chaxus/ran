@@ -30,7 +30,7 @@ const SITE_TAGLINE_CN = 'ran — Web Components 组件库（ranui）与 TypeScri
 const HOME_DESC_EN =
   'ran is an open-source front-end ecosystem: ranui, a framework-agnostic Web Components UI library on native custom elements, and ranuts, a tree-shakeable TypeScript utility library.';
 const HOME_DESC_CN =
-  'ran 是一套开源前端生态：ranui —— 基于原生 custom elements、框架无关的 Web Components 组件库；ranuts —— 可 tree-shaking 的 TypeScript 工具库。';
+  'ran 是一套开源前端生态：ranui 是基于原生 custom elements、框架无关的 Web Components 组件库；ranuts 是可 tree-shaking 的 TypeScript 工具库。';
 
 /**
  * Convert a VitePress source path (e.g. `src/ranui/index.md`) to its site URL path.

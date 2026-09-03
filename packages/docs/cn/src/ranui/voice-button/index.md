@@ -70,16 +70,16 @@ Firefox 不提供语音识别，任何缺少该 API 的浏览器也一样。元�
 
 ### 属性
 
-| 属性          | 类型      | 默认值                | 说明                                           |
-| ------------- | --------- | --------------------- | ---------------------------------------------- |
-| `lang`        | `string`  | 文档的语言            | 所说语言的 BCP 47 标签，每次录音时读取。       |
-| `continuous`  | `boolean` | `true`                | 跨停顿持续监听，而不是在第一次停顿时结束。     |
-| `disabled`    | `boolean` | `false`               |                                                |
-| `label`       | `string`  | `'Start voice input'` | 空闲时的可访问名称。                           |
-| `activeLabel` | `string`  | `'Stop voice input'`  | 监听时的可访问名称。                           |
-| `listening`   | `boolean` | `false`               | 只读并反射，可用 `:host([listening])` 设样式。 |
-| `supported`   | `boolean` | —                     | 只读。当前平台能否识别语音。                   |
-| `sheet`       | `string`  | `''`                  | 注入元素 Shadow DOM 的 CSS。                   |
+| 属性          | 类型      | 默认值                | 说明                                                                         |
+| ------------- | --------- | --------------------- | ---------------------------------------------------------------------------- |
+| `lang`        | `string`  | 文档的语言            | 所说语言的 BCP 47 标签，每次录音时读取。                                     |
+| `continuous`  | `boolean` | `true`                | 跨停顿持续监听，而不是在第一次停顿时结束。                                   |
+| `disabled`    | `boolean` | `false`               | 禁用按钮：`start()` 会被忽略，内部按钮也一并禁用；不会中止已经在进行的录音。 |
+| `label`       | `string`  | `'Start voice input'` | 空闲时的可访问名称。                                                         |
+| `activeLabel` | `string`  | `'Stop voice input'`  | 监听时的可访问名称。                                                         |
+| `listening`   | `boolean` | `false`               | 只读并反射，可用 `:host([listening])` 设样式。                               |
+| `supported`   | `boolean` | —                     | 只读。当前平台能否识别语音。                                                 |
+| `sheet`       | `string`  | `''`                  | 注入元素 Shadow DOM 的 CSS。                                                 |
 
 ### 方法
 

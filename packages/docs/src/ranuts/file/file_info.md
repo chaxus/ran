@@ -1,6 +1,6 @@
 # QueryFileInfo
 
-Query detailed information of a file, commonly used to distinguish between file and directory, can be determined through returned data (data.isDirectory()).
+Query detailed information about a file. Commonly used to distinguish a file from a directory, which can be determined from the returned data (`data.isDirectory()`).
 
 ## API
 

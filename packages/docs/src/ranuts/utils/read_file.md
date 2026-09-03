@@ -22,8 +22,8 @@ input.addEventListener('change', async (e) => {
 
 ## Notes
 
-1. **All three exits are wired** — `onload`, `onerror` and `onabort`. Forgetting `onabort` is
+1. **All three exits are wired**: `onload`, `onerror` and `onabort`. Forgetting `onabort` is
    the classic way to leave a promise pending forever when the user cancels the picker.
 2. **Rejects with a clear error** where `FileReader` does not exist (Node, some worker contexts).
-3. **Never `new TextDecoder().decode()` a file of unknown origin** — that assumes UTF-8 and turns
+3. **Never `new TextDecoder().decode()` a file of unknown origin**: that assumes UTF-8 and turns
    GBK/Big5 into mojibake. Use `arrayBufferToString`, which sniffs first.

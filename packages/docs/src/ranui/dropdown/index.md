@@ -1,12 +1,12 @@
 ---
-description: 'A low-level floating-panel primitive — the positioning and z-index building block that r-popover and r-select are built on.'
+description: 'A low-level floating-panel primitive providing the positioning and z-index building block that r-popover and r-select are built on.'
 ---
 
 # Dropdown
 
 A low-level floating-panel primitive: a rounded, elevated surface with an optional directional arrow. It carries the overlay z-index and is the building block that `r-popover` and `r-select` position and portal to `<body>`.
 
-> **Use when** you need a low-level floating panel to build overlays like popovers or select menus — `<r-dropdown>` carries the z-index and arrow so you don't hand-roll positioning.
+> **Use when** you need a low-level floating panel to build overlays like popovers or select menus: `<r-dropdown>` carries the z-index and arrow so you don't hand-roll positioning.
 
 ## Quick Start
 
@@ -72,9 +72,9 @@ Renders a pointing arrow on one side of the panel. Omit the attribute for no arr
 
 A CSS class name mirrored onto the panel to play an entrance or exit animation. The component ships these: `ran-dropdown-down-in` / `-down-out` / `-up-in` / `-up-out` / `-left-in` / `-left-out` / `-right-in` / `-right-out`.
 
-The class lives exactly as long as the attribute does — whoever sets it decides when the animation is over, and removing the attribute removes the class. (It used to expire on its own after ~300ms, a duration held in JS alongside the one in the stylesheet. That timer removed whatever `transit` said at the moment it fired rather than the class it had added, so reversing direction inside the window left the first class on the panel permanently, with both `-in` and `-out` applied.)
+The class lives exactly as long as the attribute does: whoever sets it decides when the animation is over, and removing the attribute removes the class. (It used to expire on its own after ~300ms, a duration held in JS alongside the one in the stylesheet. That timer removed whatever `transit` said at the moment it fired rather than the class it had added, so reversing direction inside the window left the first class on the panel permanently, with both `-in` and `-out` applied.)
 
-`getAnimationTarget()` returns the element the animation actually runs on. It is inside the shadow root, so `getAnimations()` on the host reports nothing and `{ subtree: true }` does not cross the boundary — anything waiting for the panel's transition to finish should ask for it rather than reach through the shadow tree for a class name.
+`getAnimationTarget()` returns the element the animation actually runs on. It is inside the shadow root, so `getAnimations()` on the host reports nothing and `{ subtree: true }` does not cross the boundary. Anything waiting for the panel's transition to finish should ask for it rather than reach through the shadow tree for a class name.
 
 <Demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
@@ -90,7 +90,7 @@ The class lives exactly as long as the attribute does — whoever sets it decide
 
 ### External Styles `sheet`
 
-CSS injected into the panel's shadow DOM — the same `sheet` convention used by every other ranui component.
+CSS injected into the panel's shadow DOM. It follows the same `sheet` convention used by every other ranui component.
 
 ```html
 <r-dropdown arrow="top" sheet=".ranui-dropdown { border: 1px solid #999; }">
@@ -144,5 +144,5 @@ r-dropdown {
 - **Low-level primitive**: Use `r-dropdown` directly only when you need a custom floating panel; prefer `r-popover` or `r-select` for common cases.
 - **Size the host**: The panel defaults to `width` / `height: 100%` of the host, so give the host an explicit size and position, then portal it.
 - **Stacking**: The host carries `--ran-z-dropdown` (`1100`) so it stacks above dialogs; override with `--ran-dropdown-host-z-index` if needed.
-- **Arrow, self-centered by default**: `r-dropdown` has no concept of a "trigger" — it only knows its own panel. With no positioning consumer wired up, `arrow="top"`/`"bottom"` centers on the panel's own width; that's the correct default for using `r-dropdown` bare (as in the demos above). `r-popover` sits on top of `r-dropdown` specifically to add trigger-awareness: it measures the real trigger element and feeds a pixel offset back in via `--ran-dropdown-arrow-anchor-offset`, nudging the arrow to point at the trigger's center even when the panel is wider and edge-aligned rather than centered on it. A consumer building its own trigger-aware panel on `r-dropdown` can set that variable directly instead of re-deriving `r-popover`'s positioning logic.
+- **Arrow, self-centered by default**: `r-dropdown` has no concept of a "trigger": it only knows its own panel. With no positioning consumer wired up, `arrow="top"`/`"bottom"` centers on the panel's own width; that's the correct default for using `r-dropdown` bare (as in the demos above). `r-popover` sits on top of `r-dropdown` specifically to add trigger-awareness: it measures the real trigger element and feeds a pixel offset back in via `--ran-dropdown-arrow-anchor-offset`, nudging the arrow to point at the trigger's center even when the panel is wider and edge-aligned rather than centered on it. A consumer building its own trigger-aware panel on `r-dropdown` can set that variable directly instead of re-deriving `r-popover`'s positioning logic.
 - **Import**: Load via `import 'ranui'` (registers every component) or the standalone `import 'ranui/dropdown'`.

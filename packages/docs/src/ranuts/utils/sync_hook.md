@@ -1,6 +1,6 @@
 # SyncHook
 
-Synchronous event hook class for implementing publish-subscribe pattern.
+Synchronous event hook class for implementing the publish-subscribe pattern.
 
 ## API
 

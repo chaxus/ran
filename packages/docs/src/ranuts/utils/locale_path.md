@@ -12,11 +12,11 @@ locale carries a prefix.
 
 ### createLocalePath(config)
 
-| Parameter       | Description                                                             | Type            | Default           |
-| --------------- | ----------------------------------------------------------------------- | --------------- | ----------------- |
-| `locales`       | `{ code, prefix? }[]` — no prefix means "default locale, lives at root" | `LocaleRoute[]` | Required          |
-| `defaultLocale` | Default locale code                                                     | `string`        | first prefix-less |
-| `base`          | Deployment sub-path, e.g. `/weread`; trailing slash is ignored          | `string`        | `''`              |
+| Parameter       | Description                                                            | Type            | Default           |
+| --------------- | ---------------------------------------------------------------------- | --------------- | ----------------- |
+| `locales`       | `{ code, prefix? }[]`; no prefix means "default locale, lives at root" | `LocaleRoute[]` | Required          |
+| `defaultLocale` | Default locale code                                                    | `string`        | first prefix-less |
+| `base`          | Deployment sub-path, e.g. `/weread`; trailing slash is ignored         | `string`        | `''`              |
 
 Returns:
 
@@ -24,7 +24,7 @@ Returns:
 | ------------------------------- | --------------------------------------------------------------- |
 | `base` / `defaultLocale`        | Normalized config, read-only                                    |
 | `localeFromPath(pathname)`      | Detect the locale; unknown paths fall back to the default       |
-| `stripLocale(pathname)`         | Drop the locale prefix — the language-agnostic path for routing |
+| `stripLocale(pathname)`         | Drop the locale prefix: the language-agnostic path for routing  |
 | `href(path, code?)`             | Build a link for a locale                                       |
 | `hrefForLocale(pathname, code)` | Re-point the current path at another locale (language switcher) |
 | `alternates(pathname)`          | Every locale's URL, for `<link rel="alternate" hreflang>`       |
@@ -58,6 +58,6 @@ paths.alternates(location.pathname).forEach(({ code, href }) => {
 2. **Longest prefix wins**, so `zh` does not swallow `/zh-hant/...`.
 3. **`base` is only stripped from the start.** Using `replace(base, '')` would strip the first
    occurrence anywhere, which breaks when the path contains the base string mid-way.
-4. **Query and hash are preserved** — the maths only touches the pathname.
+4. **Query and hash are preserved**: the maths only touches the pathname.
 5. **No global "current locale".** Pass the code explicitly, or default it. Which locale is
    active is the i18n runtime's job, not this module's.

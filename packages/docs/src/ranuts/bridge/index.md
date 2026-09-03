@@ -1,14 +1,14 @@
 # Bridge (postMessage)
 
-A small cross-context messaging layer built on top of `window.postMessage`. It lets two browsing contexts — a parent page and an `<iframe>`, a popup, or any other `Window` you hold a reference to — talk to each other with a request/response (RPC-style) API and one-way broadcasts.
+A small cross-context messaging layer built on top of `window.postMessage`. It lets two browsing contexts (a parent page and an `<iframe>`, a popup, or any other `Window` you hold a reference to) talk to each other with a request/response (RPC-style) API and one-way broadcasts.
 
 Messages cross the boundary as **structured objects** (using `postMessage`'s native structured clone algorithm), so types like `Date`, `Map`, `Set`, `ArrayBuffer`, and `File` survive intact with no manual serialization. Each message carries a protocol marker so it can be told apart from other libraries' `postMessage` traffic (HMR, DevTools, third-party SDKs).
 
 There are three ways to use it:
 
-- **`PostMessageBridge`** — the low-level primitive. One instance wraps one target `Window`. Register handlers with `on`, send-and-await with `send`, fire-and-forget with `broadcast`.
-- **`BridgeManager` / `bridgeManager` / `Client` / `Platform`** — a higher-level layer that keeps a registry of named bridges (a singleton), plus thin `Client` (caller side) and `Platform` (receiver side) facades.
-- **`openPortBridge` / `acceptPortBridge` / `createPortBridge`** — a point-to-point bridge built on `MessageChannel` / `MessagePort` (**recommended for new code**). After a one-time handshake each side holds a private port, structurally avoiding cross-window cross-talk, source spoofing, same-window channel collisions, and self-answering — with no origin filtering needed.
+- **`PostMessageBridge`**: the low-level primitive. One instance wraps one target `Window`. Register handlers with `on`, send-and-await with `send`, fire-and-forget with `broadcast`.
+- **`BridgeManager` / `bridgeManager` / `Client` / `Platform`**: a higher-level layer that keeps a registry of named bridges (a singleton), plus thin `Client` (caller side) and `Platform` (receiver side) facades.
+- **`openPortBridge` / `acceptPortBridge` / `createPortBridge`**: a point-to-point bridge built on `MessageChannel` / `MessagePort` (**recommended for new code**). After a one-time handshake each side holds a private port, which structurally avoids cross-window cross-talk, source spoofing, same-window channel collisions, and self-answering, with no origin filtering needed.
 
 > **Compatibility**: the wire format is a structured object (no longer a Base64 string). Same-version endpoints interoperate directly, and `Client` (`PostMessageBridge`) shares one envelope protocol with `Platform`. An old-page ↔ new-page mix across versions will not agree on the protocol.
 
@@ -89,7 +89,7 @@ A facade for the **receiving** side (typically the code running inside an iframe
 
 ### PortBridge (MessagePort-based, recommended for new code)
 
-A point-to-point bridge built on `MessageChannel` / `MessagePort`. A port is a **private-channel capability** the browser provides: only the two sides that obtained the port during the handshake can communicate. That structurally avoids cross-window cross-talk, source spoofing, same-window channel collisions, and self-answering — with no origin filtering and no protocol marker needed. Payloads use structured clone too.
+A point-to-point bridge built on `MessageChannel` / `MessagePort`. A port is a **private-channel capability** the browser provides: only the two sides that obtained the port during the handshake can communicate. That structurally avoids cross-window cross-talk, source spoofing, same-window channel collisions, and self-answering, with no origin filtering and no protocol marker needed. Payloads use structured clone too.
 
 | Function                     | Description                                                                                                  | Signature                                                    |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -99,7 +99,7 @@ A point-to-point bridge built on `MessageChannel` / `MessagePort`. A port is a *
 
 The returned `PortBridge` exposes the same `on` / `off` / `send` / `broadcast` / `destroy` as `PostMessageBridge`.
 
-- **`OpenPortBridgeOptions`**: `{ targetWindow: Window; targetOrigin?: string; name?: string }` — `name` distinguishes multiple independent port connections in one page and must match on both ends (default `'default'`).
+- **`OpenPortBridgeOptions`**: `{ targetWindow: Window; targetOrigin?: string; name?: string }`. `name` distinguishes multiple independent port connections in one page and must match on both ends (default `'default'`).
 - **`AcceptPortBridgeOptions`**: `{ targetOrigin?: string; name?: string }`.
 
 ### `MessageCodec`
@@ -184,7 +184,7 @@ The argument to `Client.call`.
 
 ### Low-level: `PostMessageBridge` between a page and an iframe
 
-**Parent page** — talk to the iframe's `contentWindow`:
+**Parent page**, talking to the iframe's `contentWindow`:
 
 ```js
 import { PostMessageBridge } from 'ranuts/utils';
@@ -204,7 +204,7 @@ iframe.addEventListener('load', async () => {
 });
 ```
 
-**Inside the iframe** — register handlers:
+**Inside the iframe**, registering handlers:
 
 ```js
 import { PostMessageBridge } from 'ranuts/utils';
@@ -224,7 +224,7 @@ bridge.on('theme:change', ({ mode }) => {
 
 ### High-level: `Client` (parent) and `Platform` (iframe)
 
-**Inside the iframe** — expose a set of methods with `Platform`:
+**Inside the iframe**, exposing a set of methods with `Platform`:
 
 ```js
 import { Platform } from 'ranuts/utils';
@@ -238,7 +238,7 @@ const { destroy } = Platform.init({
 // destroy();
 ```
 
-**Parent page** — connect and call by id:
+**Parent page**, connecting and calling by id:
 
 ```js
 import { Client } from 'ranuts/utils';
@@ -267,7 +267,7 @@ iframe.addEventListener('load', async () => {
 
 ### Point-to-point: `openPortBridge` / `acceptPortBridge` (recommended)
 
-**Parent page** (initiator) — create a channel and hand one end to the iframe:
+**Parent page** (initiator), creating a channel and handing one end to the iframe:
 
 ```js
 import { openPortBridge } from 'ranuts/utils';
@@ -285,7 +285,7 @@ iframe.addEventListener('load', async () => {
 });
 ```
 
-**Inside the iframe** (receiver) — wait for the handed-over port:
+**Inside the iframe** (receiver), waiting for the handed-over port:
 
 ```js
 import { acceptPortBridge } from 'ranuts/utils';
@@ -332,6 +332,6 @@ console.log(decoded); // => { msg: 'héllo 👋', n: 1 }
 7. **Unique ids**: `connectClient` throws `Bridge <id> already exists` if you reuse an id. Omit `id` to get an auto-generated one.
 8. **Cleanup**: all `PostMessageBridge` instances share one global `message` listener (removed automatically after the last bridge is destroyed). Call `destroy()` (or `Client.remove` / `removeClient`) when a connection is no longer needed to reject pending requests and free resources.
 9. **Non-browser environments**: without `window` (Node / SSR), constructing a `PostMessageBridge` does not throw; `send` rejects with a clear error, and `broadcast` / `destroy` degrade to no-ops.
-10. **Prefer PortBridge**: for new code, use `openPortBridge` / `acceptPortBridge` — a point-to-point channel structurally avoids cross-talk, spoofing, and self-answering.
-11. **`broadcastToAll`**: `Client.broadcastToAll` posts to the current window with origin `'*'` and is discouraged for security reasons — prefer targeted `call` / `broadcast`.
+10. **Prefer PortBridge**: for new code, use `openPortBridge` / `acceptPortBridge`. A point-to-point channel structurally avoids cross-talk, spoofing, and self-answering.
+11. **`broadcastToAll`**: `Client.broadcastToAll` posts to the current window with origin `'*'` and is discouraged for security reasons. Prefer targeted `call` / `broadcast` instead.
 12. **`BRIDGE_MARKER` / `DEFAULT_CHANNEL`**: the two raw values behind points 2 and 6 above are also exported, in case you're inspecting `postMessage` traffic directly (a devtools listener, a test) rather than going through `PostMessageBridge`. `BRIDGE_MARKER` is the protocol marker string every bridge message carries; `DEFAULT_CHANNEL` is the literal `'default'` channel id used when none is passed.

@@ -1,6 +1,6 @@
 # Statistical execution time
 
-Sometimes, we need statistics on the execution time of a function to analyze performance. Therefore, the 'startTask' and 'taskEnd' functions are wrapped. Three other statistical methods are also introduced
+Sometimes we need to measure a function's execution time to analyze performance, so the `startTask` and `taskEnd` functions are provided for that purpose. Three other timing methods are also introduced:
 
 1. `new Date().getTime()`,
 2. `console.time()` , `console.timeEnd()`,
@@ -56,10 +56,10 @@ console.log('Task execution time:', time);
 
 ## III. `console.time()`, `console.timeEnd()`
 
-Start a timer to track the duration of an operation. Each timer must have a unique name, and a page can run up to 10,000 timers simultaneously. When `console.timeEnd()` is called with the timer name as a parameter, the browser will output the elapsed time of the corresponding timer in milliseconds. Compared to `new Date().getTime()`, time statistics are more precise, can be accurate to 0.001 milliseconds (e.g., 0.134ms).
+Start a timer to track the duration of an operation. Each timer must have a unique name, and a page can run up to 10,000 timers simultaneously. When `console.timeEnd()` is called with the timer name as a parameter, the browser will output the elapsed time of the corresponding timer in milliseconds. Compared to `new Date().getTime()`, this method is more precise, accurate to as little as 0.001 milliseconds (e.g., 0.134ms).
 
 ## IV. `performance.now()`
 
-`performance.now()` returns time with precision up to microseconds, and is not affected by system time (system clock may be manually adjusted or tampered with by NTP and other software). Additionally, `performance.timing.navigationStart + performance.now()` approximately equals `Date.now()`. Therefore, `performance.now()` is more recommended for statistics on JS execution time.
+`performance.now()` returns time with precision up to microseconds, and is not affected by system time (system clock may be manually adjusted or tampered with by NTP and other software). Additionally, `performance.timing.navigationStart + performance.now()` approximately equals `Date.now()`. Therefore, `performance.now()` is the more recommended choice for measuring JS execution time.
 
 > Note: To provide protection against timing attacks and fingerprinting, the precision of `performance.now()` may be reduced based on browser settings. In `Firefox`, the `privacy.reduceTimerPrecision` preference is enabled by default with a default value of `1ms`. Enabling `privacy.resistFingerprinting` will change the precision to 100ms or the value of `privacy.resistFingerprinting.reduceTimerPrecision.microseconds`, whichever is larger.

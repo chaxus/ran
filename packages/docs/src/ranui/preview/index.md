@@ -2,11 +2,11 @@
 description: 'The ranui Preview (<r-preview>) renders in-browser online previews of docx, pptx, pdf and xlsx files.'
 ---
 
-# preview
+# Preview
 
-Online preview component for `docx`, `pptx`, `pdf`, and `xlsx` files
+Online preview component for `docx`, `pptx`, `pdf`, and `xlsx` files.
 
-> **Use when** you need to preview `docx`, `pptx`, `pdf`, or `xlsx` files in the browser — `<r-preview>` opens a document preview modal from a file URL (now shipped as the standalone `@ranui/preview` package).
+> **Use when** you need to preview `docx`, `pptx`, `pdf`, or `xlsx` files in the browser. `<r-preview>` opens a document preview modal from a file URL (now shipped as the standalone `@ranui/preview` package).
 
 > ⚠️ **Important Notice**: The ranui package will no longer provide this component after version 0.1.10-alpha-27. Please migrate to the standalone [@ranui/preview](https://www.npmjs.com/package/@ranui/preview) package.
 
@@ -65,7 +65,7 @@ npm install ranui
 
 ### File Source `src`
 
-Set the file URL to open the preview modal, empty value will not display
+Set the file URL to open the preview modal; an empty value won't display it.
 
 ```html
 <r-preview src="https://example.com/document.docx"></r-preview>
@@ -73,7 +73,7 @@ Set the file URL to open the preview modal, empty value will not display
 
 ### Closeable `closeable`
 
-Control the close behavior of the preview modal
+Control the close behavior of the preview modal.
 
 ```html
 <!-- Closeable by default -->
@@ -85,13 +85,13 @@ Control the close behavior of the preview modal
 
 ### Custom Preview Service `baseUrl`
 
-When you need to customize the document preview service, you can specify the service address through the `baseUrl` property
+When you need to customize the document preview service, you can specify the service address through the `baseUrl` property.
 
 ```html
 <r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **Tip**: Defaults to the hosted preview service at `https://edit.chaxus.com`. To self-host it, see [OnlyOffice Web Local](https://github.com/ranuts/document)
+> 💡 **Tip**: Defaults to the hosted preview service at `https://edit.chaxus.com`. To self-host it, see [OnlyOffice Web Local](https://github.com/ranuts/document).
 
 ## Migration Guide
 

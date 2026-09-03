@@ -1,12 +1,12 @@
 ---
-description: 'Render LaTeX math formulas as native MathML using Temml — no canvas, SVG, or KaTeX runtime.'
+description: 'Render LaTeX math formulas as native MathML using Temml, with no canvas, SVG, or KaTeX runtime.'
 ---
 
 # Math
 
 Render high-quality LaTeX math formulas in HTML pages using Temml, compiled straight to native MathML.
 
-> **Use when** you need to render a LaTeX math formula as display math in an HTML page — `<r-math>` typesets the expression from its `latex` attribute with [Temml](https://temml.org/), which compiles LaTeX to MathML that the browser lays out itself (no canvas/SVG, no KaTeX runtime).
+> **Use when** you need to render a LaTeX math formula as display math in an HTML page. `<r-math>` typesets the expression from its `latex` attribute with [Temml](https://temml.org/), which compiles LaTeX to MathML that the browser lays out itself (no canvas/SVG, no KaTeX runtime).
 
 ## Quick Start
 
@@ -35,7 +35,7 @@ Render high-quality LaTeX math formulas in HTML pages using Temml, compiled stra
 | `download` | `boolean` | `false`   | Shows a download button/menu for the source (`.tex`) and/or MathML (`.mml`).                          |
 | `sheet`    | `string`  | `''`      | CSS injected into the component's shadow DOM.                                                         |
 
-> 💡 **Note**: The `latex` property getter decodes its value with `decodeURIComponent`, so URI-encoded formulas are decoded before rendering. Providing the formula as slotted text content has no effect — only the `latex` attribute is rendered.
+> 💡 **Note**: The `latex` property getter decodes its value with `decodeURIComponent`, so URI-encoded formulas are decoded before rendering. Providing the formula as slotted text content has no effect; only the `latex` attribute is rendered.
 
 ### Formula `latex`
 
@@ -69,7 +69,7 @@ Render high-quality LaTeX math formulas in HTML pages using Temml, compiled stra
 ## Styling
 
 `<r-math>` exposes **16 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-math {

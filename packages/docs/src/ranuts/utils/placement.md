@@ -5,7 +5,7 @@ opposite side when the preferred side lacks room and the opposite side has more,
 along the cross axis to stay within a boundary. Mirrors Floating UI's `flip`/`shift` middleware,
 minus the dependency.
 
-Pure geometry — it never touches the DOM itself. Pass in `getBoundingClientRect()` results and
+Pure geometry: it never touches the DOM itself. Pass in `getBoundingClientRect()` results and
 it hands back the coordinates to write.
 
 ## Usage
@@ -53,15 +53,15 @@ panel.style.left = `${left + window.scrollX}px`;
 
 ## Notes
 
-1. **Coordinates are viewport-relative throughout** — the same space as `anchor`. If the panel
+1. **Coordinates are viewport-relative throughout**, the same space as `anchor`. If the panel
    is positioned with `position: absolute` against the document, add `scrollX`/`scrollY`
    yourself when writing the style (see the usage example above).
-2. **No real layout, no flip/shift.** When `anchor` or `floating` has a zero width/height —
-   jsdom (which never performs actual layout), or a panel read before its content has
-   settled — the space calculations would spuriously "detect" a collision on every call, so
+2. **No real layout, no flip/shift.** When `anchor` or `floating` has a zero width or height
+   (jsdom, which never performs actual layout, or a panel read before its content has
+   settled), the space calculations would spuriously "detect" a collision on every call. So
    `computePlacement` skips flip/shift entirely and returns the caller's preferred `placement`
    as-is.
-3. **Shift is skipped when the panel is larger than the boundary itself** — clamping would only
+3. **Shift is skipped when the panel is larger than the boundary itself**: clamping would only
    move it further off-screen the other way.
 4. Used internally by `ranui`'s `r-popover` and `r-select` to keep a body-portaled dropdown on
    screen.

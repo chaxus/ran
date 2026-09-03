@@ -6,7 +6,7 @@ description: 'The ranui Popover (<r-popover>) reveals a floating bubble card on 
 
 Popover component that reveals a floating bubble card layer when the trigger is hovered or clicked.
 
-> **Use when** you need a floating bubble panel that opens on hover or click of a trigger — `<r-popover>` positions and portals its `<r-content>` panel and wires the accessibility for you.
+> **Use when** you need a floating bubble panel that opens on hover or click of a trigger. `<r-popover>` positions and portals its `<r-content>` panel and wires the accessibility for you.
 
 ## Quick Start
 
@@ -138,8 +138,8 @@ The trigger lives in the default slot; the floating content is wrapped in a nest
 ### Alignment `placement="<side>-<align>"`
 
 A bare side lines the panel's leading edge up with the trigger's. Add `-center` or `-end` when it
-should sit centred on the trigger, or flush with the trigger's trailing edge instead — what a menu
-anchored to the right end of a header bar wants, so that it opens inwards rather than being pushed
+should sit centred on the trigger, or flush with the trigger's trailing edge instead, useful for a menu
+anchored to the right end of a header bar, so that it opens inwards rather than being pushed
 back inside the viewport by the shift. The suffix survives an auto-flip: `bottom-end` becomes
 `top-end`, not `top`.
 
@@ -180,11 +180,11 @@ back inside the viewport by the shift. The suffix survives an auto-flip: `bottom
 | `<r-popover>` | (default) | The trigger element plus the `<r-content>` wrapper                                             |
 | `<r-content>` | (default) | The floating panel's content; these children are portaled to `document.body` and shown on open |
 
-Both components expose a single unnamed default slot — there are no named slots.
+Both components expose a single unnamed default slot; there are no named slots.
 
 ## Open State `open`
 
-`open` is the panel's state, reflected as an attribute the way `<details open>` and `<dialog open>` are. Nothing infers it from the panel's `display`, which trails the state by the length of the exit animation — so the attribute, `aria-expanded` and what is on screen cannot disagree.
+`open` is the panel's state, reflected as an attribute the way `<details open>` and `<dialog open>` are. Nothing infers it from the panel's `display`, which trails the state by the length of the exit animation, so the attribute, `aria-expanded` and what is on screen cannot disagree.
 
 ```html
 <r-popover id="pop" trigger="click">
@@ -213,7 +213,7 @@ Both components expose a single unnamed default slot — there are no named slot
 | `hide`       | The panel is about to close.                             |
 | `after-hide` | It has closed and any exit animation has finished.       |
 
-The wait is the stylesheet's own animation rather than a duration copied into script, so under `prefers-reduced-motion` — where there is no animation to play — `after-hide` follows `hide` immediately instead of after a fixed delay.
+The wait is the stylesheet's own animation rather than a duration copied into script, so under `prefers-reduced-motion` (where there is no animation to play), `after-hide` follows `hide` immediately instead of after a fixed delay.
 
 It is otherwise driven by standard DOM interaction:
 
@@ -227,7 +227,7 @@ Accessibility is wired automatically: the host receives `tabindex="0"`, `aria-ha
 ## Best Practices
 
 - **Trigger element**: Place a focusable control (e.g. `<r-button>`) as the trigger so keyboard open/close works.
-- **Content wrapper**: Always wrap panel content in `<r-content>` — plain children that are not inside `<r-content>` are not shown as the floating panel.
+- **Content wrapper**: Always wrap panel content in `<r-content>`: plain children that are not inside `<r-content>` are not shown as the floating panel.
 - **Inline sizing**: The host is `display: block`; add `style="display: inline-block;"` (or place it in an inline context) so it shrinks to the trigger.
-- **Placement**: `placement` is a preference, not a guarantee — when the trigger is near a viewport edge and the preferred side lacks room, the panel automatically flips to the opposite side and shifts along the cross axis to stay on-screen. This auto-flip only applies to the default body-level positioning.
-- **Scoped container**: Use `getPopupContainerId` to anchor the panel inside a specific scroll/positioning container when the default body-level positioning is not desired — flip/shift do not apply in this mode, so choose a `placement` that fits the container. The alignment suffix does apply there, exactly as it does in the body portal.
+- **Placement**: `placement` is a preference, not a guarantee: when the trigger is near a viewport edge and the preferred side lacks room, the panel automatically flips to the opposite side and shifts along the cross axis to stay on-screen. This auto-flip only applies to the default body-level positioning.
+- **Scoped container**: Use `getPopupContainerId` to anchor the panel inside a specific scroll/positioning container when the default body-level positioning is not desired. Flip/shift do not apply in this mode, so choose a `placement` that fits the container. The alignment suffix does apply there, exactly as it does in the body portal.

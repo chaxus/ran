@@ -1,21 +1,21 @@
 # filterObj
 
-Filter the properties of the object, remove the properties of the object in the list array, return a new object, usually used to remove null characters and null
+Filter an object's properties, removing any whose key appears in the `list` array, and return a new object. Commonly used to strip out empty strings and null values.
 
 ## API
 
 ### Return
 
-| argument | Instructions     | type     |
-| -------- | ---------------- | -------- |
-| `Object` | Return an object | `Object` |
+| Argument | Description         | Type     |
+| -------- | ------------------- | -------- |
+| `Object` | The filtered object | `Object` |
 
 ### Options
 
-| argument | Instructions           | type     | Default value |
-| -------- | ---------------------- | -------- | ------------- |
-| obj      | Objects to be filtered | `object` | Required      |
-| list     | Filter array           | `array`  | Required      |
+| Argument | Description               | Type     | Default  |
+| -------- | ------------------------- | -------- | -------- |
+| `obj`    | Object to filter          | `object` | Required |
+| `list`   | Keys to remove from `obj` | `array`  | Required |
 
 ## Example
 

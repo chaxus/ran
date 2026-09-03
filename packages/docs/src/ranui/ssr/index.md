@@ -1,5 +1,5 @@
 ---
-description: 'Server-render ranui components to declarative shadow DOM with ranui/ssr-stream — correct first paint before any JavaScript runs.'
+description: 'Server-render ranui components to declarative shadow DOM with ranui/ssr-stream for correct first paint before any JavaScript runs.'
 ---
 
 # Server rendering
@@ -7,8 +7,8 @@ description: 'Server-render ranui components to declarative shadow DOM with ranu
 ranui components serialize to **declarative shadow DOM**, so a server can emit the real markup
 and the first paint is correct before any JavaScript runs.
 
-> **Use when** you render pages on a server or at build time — an SSG, an Express/Hono/Workers
-> route, an email-preview job — and want `<r-*>` elements to arrive as visible markup rather
+> **Use when** you render pages on a server or at build time (an SSG, an Express/Hono/Workers
+> route, an email-preview job) and want `<r-*>` elements to arrive as visible markup rather
 > than as empty tags waiting for hydration.
 
 ## Quick Start
@@ -40,7 +40,7 @@ for await (const chunk of renderToStream(pageHtml)) response.write(chunk);
 
 ### One component at a time
 
-`ranui/ssr` renders an instance you constructed yourself — useful when you are assembling a
+`ranui/ssr` renders an instance you constructed yourself, useful when you are assembling a
 tree in Node rather than templating a string:
 
 ```js
@@ -68,7 +68,7 @@ children_ when the mode is closed. So the server-rendered tree paints the first 
 then replaced by an identical client-built one. Two consequences:
 
 - You get correct first paint, not hydration reuse. That is the deliberate trade for closed
-  roots — see the [coding guidelines](/src/ranui/coding-guides/#server-rendering).
+  roots. See the [coding guidelines](/src/ranui/coding-guides/#server-rendering).
 - **Never put state in the server-rendered shadow markup** expecting the client to read it
   back. Pass it through attributes, which survive.
 
@@ -86,8 +86,8 @@ if it stops rendering, so this list cannot grow silently.
 
 `initTheme()` is a no-op on the server (all `document` / `localStorage` / `matchMedia` access
 is guarded), so the theme is applied by the client. To avoid a flash of the wrong theme, set
-`data-ran-theme` on `<html>` in your server template — from a cookie, or from a tiny inline
-script that reads `localStorage` before first paint — and let
+`data-ran-theme` on `<html>` in your server template (from a cookie, or from a tiny inline
+script that reads `localStorage` before first paint) and let
 [`initTheme`](/src/ranui/theme/) take over afterwards.
 
 ## Best Practices

@@ -1,20 +1,20 @@
 # getCookie
 
-Pass in a string to get the value of the cookie with the specified name
+Get the value of the cookie with the given name.
 
 ## API
 
 ### Return
 
-| argument | Instructions                                          | type     |
-| -------- | ----------------------------------------------------- | -------- |
-| `string` | Returns the value of a cookie with the specified name | `string` |
+| Argument | Description                                     | Type     |
+| -------- | ----------------------------------------------- | -------- |
+| `string` | The value of the cookie with the specified name | `string` |
 
 ### Options
 
-| argument | Instructions                                         | type     | Default value |
-| -------- | ---------------------------------------------------- | -------- | ------------- |
-| name     | Specifies the value of the name that gets the cookie | `string` | Required      |
+| Argument | Description                | Type     | Default  |
+| -------- | -------------------------- | -------- | -------- |
+| `name`   | Name of the cookie to read | `string` | Required |
 
 ## Example
 

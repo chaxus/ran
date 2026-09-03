@@ -1,5 +1,5 @@
 ---
-description: 'A collapsible chain of thought that expands while reasoning streams and collapses when it ends — until the reader decides otherwise.'
+description: 'A collapsible chain of thought that expands while reasoning streams and collapses when it ends, until the reader decides otherwise.'
 ---
 
 # Reasoning
@@ -14,7 +14,7 @@ never wants to keep. So the element expands while `streaming` is set and collaps
 clears.
 
 **Until the reader touches it.** Once they expand or collapse it themselves, the automatic
-behaviour stops for good — the same ownership rule
+behaviour stops for good. The same ownership rule
 [`createBottomFollower`](../../ranuts/utils/) applies to scrolling, and for the same reason:
 an interface that keeps re-deciding something the reader has already decided is worse than
 one that never decided at all. Setting `open` from script counts as taking control too,
@@ -88,7 +88,7 @@ operable from the keyboard without extra wiring.
 ## Styling
 
 `<r-reasoning>` exposes **4 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-reasoning {
@@ -102,5 +102,5 @@ The full list is in [style tokens](/src/ranui/style-tokens#reasoning); which tok
 
 ## See also
 
-- [Conversation](../conversation/) — mount this as the reasoning row of a transcript
-- [ranuts/stream](../../ranuts/stream/) — where `reasoning-delta` comes from
+- [Conversation](../conversation/): mount this as the reasoning row of a transcript
+- [ranuts/stream](../../ranuts/stream/): where `reasoning-delta` comes from

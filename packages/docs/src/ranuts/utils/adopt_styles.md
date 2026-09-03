@@ -26,8 +26,8 @@ class MyElement extends HTMLElement {
 ### adoptStyles
 
 A component's **static** styles. The fallback path de-duplicates per **root**: a shadow root keeps
-exactly one marked `<style>`, first writer wins — a component's static styles should exist once per
-root, so a second call means the caller made a mistake.
+exactly one marked `<style>`, and the first writer wins. A component's static styles should exist
+once per root, so a second call means the caller made a mistake.
 
 #### Parameters
 

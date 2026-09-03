@@ -4,7 +4,7 @@ Throttle: when a function is triggered rapidly, run it at most once per interval
 call runs immediately (leading edge) and the last call inside a window is replayed when the
 window closes (trailing edge), so the final state is never dropped.
 
-Use it for scroll, pointer-move and drag — anything that needs **continuous feedback**.
+Use it for scroll, pointer-move and drag: anything that needs **continuous feedback**.
 For "only the final value matters" (search-as-you-type, autosave), use [debounce](./debounce).
 
 ## API

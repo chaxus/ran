@@ -1,5 +1,5 @@
 ---
-description: 'ranui/builder — a framework-free fluent DOM builder with SwiftUI/Solid-style fine-grained reactivity: build once, then update only the node a signal is bound to.'
+description: 'ranui/builder is a framework-free fluent DOM builder with SwiftUI/Solid-style fine-grained reactivity: build once, then update only the node a signal is bound to.'
 ---
 
 # Builder
@@ -8,12 +8,12 @@ description: 'ranui/builder — a framework-free fluent DOM builder with SwiftUI
 is what the components themselves are written with, published as its own entry so an app can
 use it for its own layout and glue.
 
-> **Use when** you want reactive views without a framework — a page, a route, a widget — or you
+> **Use when** you want reactive views without a framework (a page, a route, a widget) or you
 > are writing a custom element and want the same construction style ranui uses internally.
 
 > **The principle: build once, update in place.** A view function runs **once**. A state change
 > updates only the exact node bound to that signal; there is no re-render of a tree. Pick the
-> primitive that matches the shape — value → a getter binding; conditional → `Show` / `Switch`;
+> primitive that matches the shape: value → a getter binding; conditional → `Show` / `Switch`;
 > list → `For` / `Index`.
 
 ```js
@@ -52,7 +52,7 @@ const header = Div()
 ```
 
 `Div()`, `Span()`, `ButtonBuilder()`, `InputBuilder()`, `Label()`, `Ul()`, `Li()`, `Section()`,
-`Article()`, `Nav()`, `Header()`, `Footer()`, `Main()`, `Style()`, `Slot()` — plus
+`Article()`, `Nav()`, `Header()`, `Footer()`, `Main()`, `Style()`, `Slot()`, plus
 `View('any-tag')` for anything else, including custom elements.
 
 ### Chainable API
@@ -69,7 +69,7 @@ const header = Div()
 | Terminal       | `build()`, `serialize()` (SSR HTML string)                                                                    |
 
 `children()` accepts elements, strings, other builders, arrays, `null` / `undefined` (skipped)
-and getters (live regions — see below).
+and getters (live regions, see below).
 
 ### Refs
 
@@ -109,11 +109,11 @@ batch(() => {
 untrack(() => count()); // read without subscribing
 ```
 
-- **`computed` is lazy** — an unread memo never recomputes, and it re-notifies only when its
+- **`computed` is lazy**: an unread memo never recomputes, and it re-notifies only when its
   _value_ changes, so effects behind a stable memo stay asleep.
 - **Effects auto-track**: only the signals read on the latest run stay subscribed, so a
   conditional never leaves a stale subscription behind.
-- **A cyclic effect throws** rather than looping — an effect that writes a signal it reads is
+- **A cyclic effect throws** rather than looping: an effect that writes a signal it reads is
   a bug the runtime refuses to run forever.
 
 ### Reactive bindings
@@ -156,12 +156,12 @@ Ul().children(
 Four rules that decide whether `For` actually reuses anything:
 
 - **`key` must be unique.** A duplicate is ignored (only the first item renders) and warned
-  about in development. Don't key by array index — that defeats reuse on reorder.
+  about in development. Don't key by array index: that defeats reuse on reorder.
 - **Update with a new array.** `each` reads a signal, so mutating the same array in place and
   re-setting it is skipped by equality and the list never updates.
 - **`render` runs once per item**, not per list change. Drive per-row updates with signals;
   `index` is a getter, so it stays correct after a reorder.
-- **Removing an item disposes that row's scope** — its effects and cleanups go with it.
+- **Removing an item disposes that row's scope**: its effects and cleanups go with it.
 
 Prefer `Show` / `For` over a raw getter child: the getter rebuilds its whole region on every
 change it reads, even one that does not alter the result, so focus, scroll position, input
@@ -190,7 +190,7 @@ never auto-disposes.
 
 ### Per-page teardown
 
-Give each page or route its own root and dispose it on navigation — every effect, binding,
+Give each page or route its own root and dispose it on navigation: every effect, binding,
 timer and listener that page created goes in one call:
 
 ```js
@@ -211,7 +211,7 @@ match, its default export runs inside a `createRoot`, and that root is disposed 
 
 ::: warning Inside a Web Component, don't use getter bindings
 A component's `constructor` and `connectedCallback` are **not** reactive scopes, so a getter
-binding or `createEffect` created there is orphaned and never disposed — it keeps firing on a
+binding or `createEffect` created there is orphaned and never disposed; it keeps firing on a
 detached node, and if the signal outlives the element it pins the element in memory. Build with
 plain values and drive updates with explicit `createEffect`s whose dispose functions you collect
 and call in `disconnectedCallback`, re-arming on reconnect. See the
@@ -240,11 +240,11 @@ disconnectedCallback() {
 
 Builders work under [SSR](/src/ranui/ssr/): `build()` returns a mock node and `serialize()`
 returns HTML. Reactive bindings, `For` and `Show` render **once** on the server, as a static
-snapshot — there is no reconciliation until the code runs in a browser.
+snapshot; there is no reconciliation until the code runs in a browser.
 
 ## Full reference
 
-This page is the working subset. The complete reference — every factory, every operator, the
-SVG namespace rules, and the `Switch` / `Match` details — is
+This page is the working subset. The complete reference (every factory, every operator, the
+SVG namespace rules, and the `Switch` / `Match` details) is
 [BUILDER.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/BUILDER.md) in the
 repository, which also ships inside the npm package.

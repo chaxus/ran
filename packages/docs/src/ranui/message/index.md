@@ -6,7 +6,7 @@ description: 'The ranui Message API shows global feedback (info, success, warnin
 
 Global feedback component for operation results, invoked imperatively through the `message` API and rendered as a dismissable toast.
 
-> **Use when** you need a transient, auto-dismissing toast to confirm an operation result — call the imperative `message.info` / `success` / `warning` / `error` / `toast` API instead of placing markup.
+> **Use when** you need a transient, auto-dismissing toast to confirm an operation result. Call the imperative `message.info` / `success` / `warning` / `error` / `toast` API instead of placing markup.
 
 ## Quick Start
 
@@ -66,7 +66,7 @@ message.info({
 | `zIndex`       | `number \| string`          | `1200`          | Stacking order of the toast container                                             |
 | `getContainer` | `() => HTMLElement \| null` | `document.body` | Returns the element the toast stack mounts into                                   |
 
-> Passing `null`, `undefined`, or an empty argument is a no-op — nothing is shown.
+> Passing `null`, `undefined`, or an empty argument is a no-op: nothing is shown.
 
 ### Element Attributes `r-message`
 
@@ -162,8 +162,8 @@ The toast stack lives in a body-portaled container; each `<r-message>` renders i
 
 ## Best Practices
 
-- **State the change**: write toast copy as a result — "Project deleted", "Changes saved" — not a vague "Success".
+- **State the change**: write toast copy as a result, such as "Project deleted" or "Changes saved", not a vague "Success".
 - **Success / Info**: use `message.success` / `message.info` for non-blocking confirmations.
 - **Errors / Warnings**: use `message.error` / `message.warning`; these escalate to an assertive ARIA live region so screen readers interrupt.
-- **Keep it brief**: a toast auto-dismisses — reserve long or actionable content for a dialog.
+- **Keep it brief**: a toast auto-dismisses, so reserve long or actionable content for a dialog.
 - **Tune duration sparingly**: raise `duration` for longer messages, but avoid making transient feedback sticky.

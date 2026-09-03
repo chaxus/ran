@@ -6,7 +6,7 @@ description: 'A page-section surface with an optional accessible heading and sub
 
 Page section surface with an optional heading and subtitle above a slotted body.
 
-> **Use when** you need to label a major region of a page with an accessible level-2 heading and optional subtitle above its content — `<r-section>` provides the header row and body surface.
+> **Use when** you need to label a major region of a page with an accessible level-2 heading and optional subtitle above its content. `<r-section>` provides the header row and body surface.
 
 ## Quick Start
 
@@ -70,7 +70,7 @@ A supporting line below the heading. Hidden when empty.
 
 ### Shadow CSS `sheet`
 
-CSS injected into the section's shadow DOM — the same `sheet` convention used by every other ranui component.
+CSS injected into the section's shadow DOM, the same `sheet` convention used by every other ranui component.
 
 <Demo align="stretch">
   <r-section heading="Themed section" subtitle="Heading recolored via sheet." sheet=".ran-section-heading { color: #006bff; }">
@@ -116,5 +116,5 @@ r-section::part(subtitle) {
 
 - **Section titles**: Set `heading` to label each major region of a page.
 - **Context**: Use `subtitle` for a short supporting line; omit both to render a plain surface with no header row.
-- **Accessibility**: The heading is exposed as an ARIA level-2 heading, so it participates in the document outline — keep headings meaningful.
+- **Accessibility**: The heading is exposed as an ARIA level-2 heading, so it participates in the document outline; keep headings meaningful.
 - **Theming**: Prefer the `--ran-section-*` CSS variables or `::part()` selectors over the `sheet` attribute for reusable styling.

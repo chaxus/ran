@@ -48,5 +48,5 @@ Rejects with `{ success: false, error }` when an external script fails to load.
 
 An **inline** script is evaluated synchronously the moment it is appended and never dispatches a
 `load` event afterwards. Waiting only on `onload` would leave the promise pending forever in a real
-browser — so for `type: 'content'` this function resolves as soon as `append` returns. (jsdom _does_
+browser, so for `type: 'content'` this function resolves as soon as `append` returns. (jsdom _does_
 dispatch a load event for inline scripts, which is why a unit test would not catch the difference.)

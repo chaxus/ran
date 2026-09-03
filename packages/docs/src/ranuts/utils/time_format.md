@@ -11,8 +11,8 @@ confusion. `ranuts` gives each one its own function:
 
 ## formatDuration
 
-Formats an elapsed number of **seconds** as a colon-separated clock duration — the shape a
-media player uses for a playhead. `mm:ss`, widening to `hh:mm:ss` past an hour.
+Formats an elapsed number of **seconds** as a colon-separated clock duration (the shape a
+media player uses for a playhead): `mm:ss`, widening to `hh:mm:ss` past an hour.
 
 #### Parameters
 
@@ -22,7 +22,7 @@ media player uses for a playhead. `mm:ss`, widening to `hh:mm:ss` past an hour.
 
 #### Returns
 
-`string` — the duration, or `''` when the input is not a finite number.
+`string`: the duration, or `''` when the input is not a finite number.
 
 ```js
 import { formatDuration } from 'ranuts/utils';
@@ -43,7 +43,7 @@ behaves identically, but it said nothing about _which_ of the three time formats
 
 ## formatRelative
 
-Describes a point in time relative to another — "3 days ago", "in 2 hours".
+Describes a point in time relative to another: "3 days ago", "in 2 hours".
 
 Localization is delegated to the platform's
 [`Intl.RelativeTimeFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat),
@@ -51,7 +51,7 @@ available in every major browser since 2020, which already knows each language's
 inflection rules. `formatRelative` supplies only the part `Intl` deliberately leaves out:
 choosing _which_ unit to express the gap in.
 
-Like `Intl` itself it reports a **single** unit — a gap of 3 days and 6 hours is "3 days ago",
+Like `Intl` itself it reports a **single** unit: a gap of 3 days and 6 hours is "3 days ago",
 never "3 days and 6 hours ago".
 
 #### Parameters
@@ -97,19 +97,19 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 ```
 
 ::: warning It carries no direction
-`compact` is a magnitude, so a future timestamp renders exactly like a past one — `5m` either
-way. It is meant for feeds of past events. Use one of the other styles anywhere the reader has
+`compact` is a magnitude, so a future timestamp renders exactly like a past one (`5m` either
+way). It is meant for feeds of past events. Use one of the other styles anywhere the reader has
 to tell past from future.
 :::
 
 ## parseVttTimestamp / parseVttCueTiming
 
-Parsing for WebVTT subtitle/caption timing — the `hh:mm:ss.mmm --> hh:mm:ss.mmm` lines in a
+Parsing for WebVTT subtitle/caption timing: the `hh:mm:ss.mmm --> hh:mm:ss.mmm` lines in a
 `.vtt` file.
 
 `parseVttTimestamp` parses one timestamp (`hh:` is optional) into seconds; `parseVttCueTiming`
-parses a full cue timing line — both sides, separated by `-->`, with any trailing cue settings
-(`align:start line:0`) ignored — into `{ start, end }`.
+parses a full cue timing line: both sides, separated by `-->`, with any trailing cue settings
+(`align:start line:0`) ignored, into `{ start, end }`.
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
@@ -122,14 +122,14 @@ parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
 ```
 
-Both return `undefined` — never throw — when the input doesn't match, so a malformed line in a
+Both return `undefined`, never throw, when the input doesn't match, so a malformed line in a
 subtitle file can be skipped rather than aborting the whole parse.
 
 ## Notes
 
 1. **Unit choice**: `formatRelative` picks the coarsest unit the gap actually fills, then
-   rounds within it. When rounding lands on the next unit's doorstep — 59.6 minutes rounding
-   to "60 minutes" — it promotes, so you read "1 hour ago".
+   rounds within it. When rounding lands on the next unit's doorstep (59.6 minutes rounding
+   to "60 minutes"), it promotes, so you read "1 hour ago".
 2. **Symmetric rounding**: the magnitude is rounded and the sign reapplied, because
    `Math.round(-1.5)` is `-1` in JavaScript and would otherwise make 90 minutes ago read
    "1 hour ago" while 90 minutes ahead read "in 2 hours".

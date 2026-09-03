@@ -1,6 +1,6 @@
 # createHandoff
 
-Hand a value — a `File`, a `Blob`, anything structured-cloneable — from one page to the next
+Hand a value (a `File`, a `Blob`, anything structured-cloneable) from one page to the next
 on the same origin.
 
 A `File` the user picked on page A cannot travel to page B. It will not fit in a URL and is
@@ -62,7 +62,7 @@ if (queryFlag('open')) {
    race between tabs hands the value to exactly one of them.
 
 3. **`put` resolves on commit, not on the write request.** The value is only durable once the
-   transaction commits — and the page usually navigates away immediately after.
+   transaction commits, and the page usually navigates away immediately after.
 
 4. **Failures are quiet.** A missing or blocked IndexedDB (SSR, private mode, a third-party
    frame) makes `put` resolve `false` and `take` resolve `null`. A page that merely _tried_ to
@@ -71,5 +71,5 @@ if (queryFlag('open')) {
 5. **The store is created at version 1** by whichever side opens the database first; the
    other finds it already there.
 
-6. **One value at a time.** This is a handoff, not a queue — a second `put` overwrites the
+6. **One value at a time.** This is a handoff, not a queue: a second `put` overwrites the
    pending value. Use [`WebDB`](/src/ranuts/utils/web_db) when you need real storage.

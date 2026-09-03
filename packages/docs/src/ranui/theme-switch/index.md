@@ -4,12 +4,12 @@ description: "A three-state system/light/dark segmented control wired to ranui's
 
 # ThemeSwitch
 
-A three-state segmented control — **system / light / dark** — wired to ranui's
+A three-state segmented control (**system / light / dark**) wired to ranui's
 [theme API](/src/ranui/theme/). Clicking a segment calls `setTheme()`, persists the choice
 under the localStorage key `ran-theme`, and keeps every instance on the page (and in other
 tabs) in sync.
 
-> **Use when** you need a ready-made system/light/dark segmented control wired to ranui's theme API — `<r-theme-switch>` handles persistence, system tracking, and cross-tab sync so you don't hand-roll a toggle.
+> **Use when** you need a ready-made system/light/dark segmented control wired to ranui's theme API. `<r-theme-switch>` handles persistence, system tracking, and cross-tab sync so you don't hand-roll a toggle.
 
 ## Quick Start
 
@@ -29,7 +29,7 @@ import 'ranui/theme-switch';
 ```
 
 > 💡 **On this docs site** the theme is driven by the site-wide toggle in the header, which
-> overwrites `data-ran-theme` on its own — so the demo above may be reset by the site. In your
+> overwrites `data-ran-theme` on its own, so the demo above may be reset by the site. In your
 > app, `<r-theme-switch>` is the source of truth.
 
 Call `initTheme()` once on page load so the saved choice is restored before the switch renders:
@@ -82,12 +82,12 @@ document.querySelector('r-theme-switch').addEventListener('change', (e) => {
 
 ## Behavior
 
-- **Persistence** — selections go through `setTheme()`, so they're saved to localStorage
+- **Persistence**: selections go through `setTheme()`, so they're saved to localStorage
   (`ran-theme`) and restored by `initTheme()` on the next visit.
-- **Multi-instance sync** — place one switch in the header and another in the footer; picking a
+- **Multi-instance sync**: place one switch in the header and another in the footer; picking a
   theme on either updates both.
-- **Cross-tab sync** — a theme flipped in another tab updates this control via the `storage` event.
-- **Browser chrome** — forced light/dark updates `<meta name="theme-color">` to the resolved page
+- **Cross-tab sync**: a theme flipped in another tab updates this control via the `storage` event.
+- **Browser chrome**: forced light/dark updates `<meta name="theme-color">` to the resolved page
   background so the browser/PWA chrome matches; choosing `system` restores each meta's original
   (possibly media-qualified) content.
 
@@ -124,7 +124,7 @@ r-theme-switch {
 
 ## Best Practices
 
-- **One source of truth**: use `<r-theme-switch>` instead of hand-rolling a toggle — it already
+- **One source of truth**: use `<r-theme-switch>` instead of hand-rolling a toggle; it already
   handles persistence, system tracking, instance sync, and `theme-color` metas.
 - **Restore early**: call `initTheme()` as early as possible (ideally inline before first paint)
   to avoid a light→dark flash.

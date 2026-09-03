@@ -2,7 +2,7 @@
 
 Coordinate maths for "content split into chunks, annotations stored against the joined text".
 Store a highlight as a **global offset** rather than "chunk N, character M" and it survives
-re-chunking — change the font size, the page width or the shard size and the annotation still
+re-chunking: change the font size, the page width or the shard size, and the annotation still
 points at the same words.
 
 ## API
@@ -18,7 +18,7 @@ buildOffsets([3, 5, 2]); // [0, 3, 8]
 ### indexForOffset(offsets, offset)
 
 Binary search for the chunk a global offset falls in. Out-of-range offsets are clamped to
-`[0, offsets.length - 1]`, and an empty array returns `0` — the result is always safe to index with.
+`[0, offsets.length - 1]`, and an empty array returns `0`. The result is always safe to index with.
 
 ### segmentByRanges(text, chunkStart, ranges)
 

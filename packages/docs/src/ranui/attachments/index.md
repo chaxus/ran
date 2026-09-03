@@ -8,8 +8,8 @@ The files staged alongside a message: `<r-attachments>` holds the list, previews
 what arrives, and owns the object URLs it creates.
 
 > **Use when** a composer needs to show what is about to be sent. It does **not** collect
-> files — paste, drag-and-drop and a file picker are three gestures belonging to three
-> different elements of a composer, and which of them your app offers is your decision. Call
+> files: paste, drag-and-drop and a file picker are three separate gestures, each belonging to
+> a different element of a composer, and which of them your app offers is your decision. Call
 > `add()` from whichever you wire.
 
 ## Quick Start
@@ -43,8 +43,8 @@ dropZone.addEventListener('drop', (event) => {
 ```
 
 The strip renders one row per file with a thumbnail (images), the name, the size and a remove
-button. `count` is reflected onto the host — and **removed** when the strip is empty, rather
-than set to `0` — so an empty strip can take no space:
+button. `count` is reflected onto the host, and **removed** when the strip is empty rather
+than set to `0`, so an empty strip can take no space:
 
 ```css
 r-attachments:not([count]) {
@@ -61,7 +61,7 @@ await fetch('/api/messages', { method: 'POST', body });
 strip.clear();
 ```
 
-`files` is just the `File` objects, in order — the shape a request body wants. `attachments`
+`files` is just the `File` objects, in order: the shape a request body wants. `attachments`
 is the richer list (`id`, `name`, `size`, `type`, `previewUrl`) when you need to render your
 own view of the same state.
 
@@ -83,8 +83,8 @@ strip.addEventListener('attachmentrejected', (event) => {
 });
 ```
 
-`duplicate` compares name, size and modification time together — what a file manager treats as
-the same file. Attaching the same file twice is a slip, not an instruction.
+`duplicate` compares name, size and modification time together, matching what a file manager
+treats as the same file. Attaching the same file twice is a slip, not an instruction.
 
 ## API Reference
 
@@ -99,7 +99,7 @@ the same file. Attaching the same file twice is a slip, not an instruction.
 | `files`       | —           | `File[]`                | `[]`    | Just the files, for building a request body.                             |
 | `sheet`       | `sheet`     | `string`                | `''`    | CSS injected into the shadow root.                                       |
 
-`attachments` and `files` are read-only views — stage files through `add()`.
+`attachments` and `files` are read-only views. Stage files through `add()`.
 
 ### Methods
 
@@ -147,7 +147,7 @@ Previews are **object URLs, not data URLs**. Previewing costs a reference to byt
 already holds; reading a 10 MB photo into a base64 string to show a 40px thumbnail costs the
 string. Build the data URL later, once, in whatever sends.
 
-Every URL the element creates it also revokes — on detach, on clear, and on disconnect. Don't
+Every URL the element creates it also revokes, on detach, on clear, and on disconnect. Don't
 hold `previewUrl` past the attachment's life.
 
 ## Accessibility
@@ -159,7 +159,7 @@ its file for the same reason.
 ## Styling
 
 `<r-attachments>` exposes **17 CSS custom properties** of its own, plus the semantic tokens it reads
-from the theme. Set one anywhere it inherits from — `:root`, a wrapper, or the element:
+from the theme. Set one anywhere it inherits from, such as `:root`, a wrapper, or the element:
 
 ```css
 r-attachments {
@@ -175,6 +175,6 @@ The full list is in [style tokens](/src/ranui/style-tokens#attachments); which t
 
 - **Validate on the server too.** `accept` and `max-size` are a courtesy to the person
   attaching, not a security boundary.
-- **Clear after a successful send**, not before — a failed request should leave the files
+- **Clear after a successful send**, not before. A failed request should leave the files
   staged so they can be retried.
 - **Explain every rejection.** The event exists so the strip never silently swallows a file.

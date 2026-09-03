@@ -1,15 +1,15 @@
 # Easing functions (tween)
 
-Seven easing families, each with an `easeIn` and an `easeOut` form. They are pure maths — no DOM,
+Seven easing families, each with an `easeIn` and an `easeOut` form. They are pure maths: no DOM,
 no RAF loop of their own. You feed the current time in from your own animation frame and get back
 the value that frame should use.
 
 Parameters follow Robert Penner's classic convention:
 
-- `t` — current time (how much has elapsed)
-- `b` — beginning value
-- `c` — change in value (the end value is `b + c`)
-- `d` — duration
+- `t`: current time (how much has elapsed)
+- `b`: beginning value
+- `c`: change in value (the end value is `b + c`)
+- `d`: duration
 
 Every function clamps internally on `t >= d`, so calling past the end returns the final value
 rather than extrapolating out of range.
@@ -36,7 +36,7 @@ requestAnimationFrame(tick);
 | `cubic` | cubic (`t³`)     | Noticeably snappier than `quad`           |
 | `quart` | quartic (`t⁴`)   | Strong acceleration                       |
 | `quint` | quintic (`t⁵`)   | Very strong; the end dominates the motion |
-| `sine`  | sinusoidal       | Softest of all — barely reads as an ease  |
+| `sine`  | sinusoidal       | Softest of all, barely reads as an ease   |
 | `expo`  | exponential      | Nearly still, then a sudden run           |
 | `circ`  | circular         | Slow start, very abrupt finish            |
 
@@ -73,7 +73,7 @@ type EasingFn = (t: number, b: number, c: number, d: number) => number;
 ## Notes
 
 `easeIn` starts slow and accelerates; `easeOut` starts fast and decelerates. For UI that responds
-to a user action, `easeOut` usually reads better — the element moves immediately and settles,
+to a user action, `easeOut` usually reads better: the element moves immediately and settles,
 rather than hesitating first.
 
 With thanks to [zhangxinxu/Tween](https://github.com/zhangxinxu/Tween).
