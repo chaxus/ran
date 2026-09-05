@@ -8,16 +8,16 @@ Crea una función de ejecución diferida que llama a la función indicada pasado
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| ---------- | ---------------------------------------------------- | ---------------------------------- |
+| Argumento  | Descripción                                         | Tipo                               |
+| ---------- | --------------------------------------------------- | ---------------------------------- |
 | `Function` | Devuelve una función que recibe el tiempo de espera | `(duration: number) => Promise<U>` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| ----------- | ------------------------------ | ---------- | -------- |
-| `handler` | Función que se va a ejecutar | `Function` | Obligatorio |
-| `...params` | Argumentos que se le pasan | `T[]` | Obligatorio |
+| Parámetro   | Descripción                  | Tipo       | Por defecto |
+| ----------- | ---------------------------- | ---------- | ----------- |
+| `handler`   | Función que se va a ejecutar | `Function` | Obligatorio |
+| `...params` | Argumentos que se le pasan   | `T[]`      | Obligatorio |
 
 ## Ejemplo
 

@@ -8,14 +8,14 @@ Obtiene la relación de resolución del contexto de un canvas, para tratar panta
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| -------- | ----------- | -------- |
-| `number` | La relación de píxeles | `number` |
+| Argumento | Descripción            | Tipo     |
+| --------- | ---------------------- | -------- |
+| `number`  | La relación de píxeles | `number` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | --------------------------- | -------------------------- | -------- |
+| Parámetro | Descripción                      | Tipo                       | Por defecto |
+| --------- | -------------------------------- | -------------------------- | ----------- |
 | `context` | Contexto de dibujo 2D del canvas | `CanvasRenderingContext2D` | Obligatorio |
 
 ## Ejemplo

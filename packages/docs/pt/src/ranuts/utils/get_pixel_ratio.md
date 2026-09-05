@@ -8,14 +8,14 @@ Obtém a razão de resolução do contexto de um canvas, para lidar com telas de
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| -------- | ----------- | -------- |
-| `number` | A razão de pixels | `number` |
+| Argumento | Descrição         | Tipo     |
+| --------- | ----------------- | -------- |
+| `number`  | A razão de pixels | `number` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | --------------------------- | -------------------------- | -------- |
+| Parâmetro | Descrição                        | Tipo                       | Padrão      |
+| --------- | -------------------------------- | -------------------------- | ----------- |
 | `context` | Contexto de desenho 2D do canvas | `CanvasRenderingContext2D` | Obrigatório |
 
 ## Exemplo

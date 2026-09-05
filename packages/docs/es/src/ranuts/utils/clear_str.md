@@ -8,22 +8,22 @@ Quita de una cadena los espacios de los extremos, la codificación de URL y las 
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| -------- | -------------- | -------- |
-| `string` | La cadena limpia | `string` |
+| Argumento | Descripción      | Tipo     |
+| --------- | ---------------- | -------- |
+| `string`  | La cadena limpia | `string` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | --------------------- | ---------------- | -------- |
-| `str` | Cadena que se limpia | `string` | Obligatorio |
-| `options` | Opciones de configuración | `ClearStrOption` | `{}` |
+| Parámetro | Descripción               | Tipo             | Por defecto |
+| --------- | ------------------------- | ---------------- | ----------- |
+| `str`     | Cadena que se limpia      | `string`         | Obligatorio |
+| `options` | Opciones de configuración | `ClearStrOption` | `{}`        |
 
 #### Opciones
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| ------------ | ----------------------------- | --------- | ------- |
-| `urlencoded` | Si se decodifica la URL | `boolean` | `true` |
+| Parámetro    | Descripción             | Tipo      | Por defecto |
+| ------------ | ----------------------- | --------- | ----------- |
+| `urlencoded` | Si se decodifica la URL | `boolean` | `true`      |
 
 ## Ejemplo
 

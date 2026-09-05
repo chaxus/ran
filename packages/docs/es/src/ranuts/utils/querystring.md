@@ -8,15 +8,15 @@ Convierte un objeto en una cadena de consulta para una URL.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| -------- | ---------------- | -------- |
-| `string` | La cadena de consulta | `string` |
+| Argumento | Descripción           | Tipo     |
+| --------- | --------------------- | -------- |
+| `string`  | La cadena de consulta | `string` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | ----------------- | -------- | ------- |
-| `data` | Objeto que se convierte | `Object` | `{}` |
+| Parámetro | Descripción             | Tipo     | Por defecto |
+| --------- | ----------------------- | -------- | ----------- |
+| `data`    | Objeto que se convierte | `Object` | `{}`        |
 
 ## Ejemplo
 

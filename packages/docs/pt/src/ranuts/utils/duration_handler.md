@@ -8,16 +8,16 @@ Cria uma função de execução adiada que chama a função indicada depois de c
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| ---------- | ---------------------------------------------------- | ---------------------------------- |
+| Argumento  | Descrição                                       | Tipo                               |
+| ---------- | ----------------------------------------------- | ---------------------------------- |
 | `Function` | Devolve uma função que recebe o tempo de espera | `(duration: number) => Promise<U>` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| ----------- | ------------------------------ | ---------- | -------- |
-| `handler` | Função que será executada | `Function` | Obrigatório |
-| `...params` | Argumentos passados a ela | `T[]` | Obrigatório |
+| Parâmetro   | Descrição                 | Tipo       | Padrão      |
+| ----------- | ------------------------- | ---------- | ----------- |
+| `handler`   | Função que será executada | `Function` | Obrigatório |
+| `...params` | Argumentos passados a ela | `T[]`      | Obrigatório |
 
 ## Exemplo
 

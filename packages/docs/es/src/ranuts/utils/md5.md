@@ -8,15 +8,15 @@ Función hash MD5: convierte una cadena en su valor MD5 (una cadena hexadecimal)
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| -------- | ----------------------------------- | -------- |
-| `string` | El valor MD5 (cadena hexadecimal) | `string` |
+| Argumento | Descripción                       | Tipo     |
+| --------- | --------------------------------- | -------- |
+| `string`  | El valor MD5 (cadena hexadecimal) | `string` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | -------------- | -------- | -------- |
-| `str` | Cadena a la que aplicar el hash | `string` | Obligatorio |
+| Parámetro | Descripción                     | Tipo     | Por defecto |
+| --------- | ------------------------------- | -------- | ----------- |
+| `str`     | Cadena a la que aplicar el hash | `string` | Obligatorio |
 
 ## Ejemplo
 

@@ -8,15 +8,15 @@ Converte um objeto em uma string de consulta para URL.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| -------- | ---------------- | -------- |
-| `string` | A string de consulta | `string` |
+| Argumento | Descrição            | Tipo     |
+| --------- | -------------------- | -------- |
+| `string`  | A string de consulta | `string` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | ----------------- | -------- | ------- |
-| `data` | Objeto que será convertido | `Object` | `{}` |
+| Parâmetro | Descrição                  | Tipo     | Padrão |
+| --------- | -------------------------- | -------- | ------ |
+| `data`    | Objeto que será convertido | `Object` | `{}`   |
 
 ## Exemplo
 

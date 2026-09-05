@@ -8,21 +8,21 @@ Convierte un `ArrayBuffer` en texto: detecta la codificación y decodifica.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| ---------------------------- | ------------------------------------- | ---------------------------- |
+| Argumento                    | Descripción                             | Tipo                         |
+| ---------------------------- | --------------------------------------- | ---------------------------- |
 | `TransformText \| undefined` | El objeto con el resultado, o undefined | `TransformText \| undefined` |
 
 #### TransformText
 
-| Propiedad | Descripción | Tipo |
-| ---------- | ----------------- | -------- |
+| Propiedad  | Descripción               | Tipo     |
+| ---------- | ------------------------- | -------- |
 | `encoding` | La codificación detectada | `string` |
-| `content` | El texto decodificado | `string` |
+| `content`  | El texto decodificado     | `string` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | ------------------ | ----------------------- | -------- |
+| Parámetro | Descripción                | Tipo                    | Por defecto |
+| --------- | -------------------------- | ----------------------- | ----------- |
 | `content` | Contenido que se convierte | `string \| ArrayBuffer` | Obligatorio |
 
 ## Ejemplo

@@ -8,16 +8,16 @@ Obtiene el tamaño de la ventana visible, sea cual sea el navegador.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| ------------- | ------------------ | ------------- |
+| Argumento     | Descripción                           | Tipo          |
+| ------------- | ------------------------------------- | ------------- |
 | `ClientRatio` | El objeto con el tamaño de la ventana | `ClientRatio` |
 
 #### ClientRatio
 
-| Propiedad | Descripción | Tipo |
-| -------- | ---------------------- | -------- |
-| `width` | Ancho de la ventana (píxeles) | `number` |
-| `height` | Alto de la ventana (píxeles) | `number` |
+| Propiedad | Descripción                   | Tipo     |
+| --------- | ----------------------------- | -------- |
+| `width`   | Ancho de la ventana (píxeles) | `number` |
+| `height`  | Alto de la ventana (píxeles)  | `number` |
 
 #### Parámetros
 

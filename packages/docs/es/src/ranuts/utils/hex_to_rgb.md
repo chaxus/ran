@@ -8,15 +8,15 @@ Convierte un color hexadecimal en un array RGB.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
+| Argumento               | Descripción                 | Tipo                    |
 | ----------------------- | --------------------------- | ----------------------- |
 | `Array<number> \| null` | Array RGB [r, g, b], o null | `Array<number> \| null` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | ----------------------- | -------- | -------- |
-| `hex` | Color hexadecimal | `string` | Obligatorio |
+| Parámetro | Descripción       | Tipo     | Por defecto |
+| --------- | ----------------- | -------- | ----------- |
+| `hex`     | Color hexadecimal | `string` | Obligatorio |
 
 ## Ejemplo
 
