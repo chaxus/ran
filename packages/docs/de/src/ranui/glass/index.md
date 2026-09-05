@@ -131,7 +131,7 @@ Gestalte das Innenleben über `::part(glass)`, `::part(specular)` und (wenn `rim
 | `--ran-glass-shadow`                          | Schattenstapel (Glanz + Tiefe).                                              |
 | `--ran-glass-specular-background`             | Hintergrund des spekularen Glanzlichts.                                      |
 | `--ran-glass-specular-opacity`                | Stärke des Glanzlichts.                                                      |
-| `--ran-glass-reduced-transparency-background` | Ersatzfläche, wenn die Systemeinstellung „Transparenz reduzieren" aktiv ist. |
+| `--ran-glass-reduced-transparency-background` | Ersatzfläche, wenn die Systemeinstellung „Transparenz reduzieren“ aktiv ist. |
 | `--ran-glass-reduced-transparency-shadow`     | Ersatzschatten im selben Zustand.                                            |
 
 ```css
@@ -144,6 +144,6 @@ r-glass::part(glass) {
 
 - **Abtasten des Hintergrunds.** `<r-glass>` bricht das DOM dahinter über `backdrop-filter`, sodass markierbarer Text, laufende Videos und bedienbare Elemente hinter dem Glas weiter funktionieren. `rim` (oben) ist eine rein dekorative GPU-Schicht, berechnet aus der Form der Fläche selbst: Sie tastet den Hintergrund nie ab.
 - **Lesbarkeit.** Halte Fließtext auf einer deckenden inneren Fläche; verlasse dich für den Kontrast nicht allein auf das Glas.
-- **Reduzierte Transparenz.** `<r-glass>` reagiert auf die Systemeinstellung „Transparenz reduzieren" / „Kontrast erhöhen" (`prefers-reduced-transparency: reduce`): Statt zu mattieren und zu brechen wechselt es auf eine deckende, themenbewusste Fläche (standardmäßig `--ran-color-bg-elevated`). Native Bedienelemente tun das von selbst; dies ist das Gegenstück für ein Custom Element.
+- **Reduzierte Transparenz.** `<r-glass>` reagiert auf die Systemeinstellung „Transparenz reduzieren“ / „Kontrast erhöhen“ (`prefers-reduced-transparency: reduce`): Statt zu mattieren und zu brechen wechselt es auf eine deckende, themenbewusste Fläche (standardmäßig `--ran-color-bg-elevated`). Native Bedienelemente tun das von selbst; dies ist das Gegenstück für ein Custom Element.
 - **Brechung über Browser hinweg.** Der flüssige `feDisplacementMap`-Effekt wird derzeit nur in Chromium gezeichnet: Safari und Firefox verwerfen diesen Teil des `backdrop-filter`-Werts und behalten das Matt aus blur / saturate / brightness — ein legitimer, wenn auch flacherer Rückfall, kein kaputter Zustand.
 - **Bewegung.** Die Fläche animiert ausschließlich `transform`, nie Farbe, sodass ein Wechsel zwischen hellem und dunklem Thema in einem Bild erledigt ist. Schimmer und Drücken achten auf `prefers-reduced-motion`.

@@ -156,8 +156,8 @@ Trennen vom Dokument. Halte `previewUrl` nicht über die Lebensdauer des Anhangs
 
 ## Barrierefreiheit
 
-Der Alternativtext eines Vorschaubilds ist **der Dateiname**, nicht „Bild": vier Anhänge, die alle
-als „Bild" angesagt werden, haben der lesenden Person nichts darüber gesagt, welcher welcher ist.
+Der Alternativtext eines Vorschaubilds ist **der Dateiname**, nicht „Bild“: vier Anhänge, die alle
+als „Bild“ angesagt werden, haben der lesenden Person nichts darüber gesagt, welcher welcher ist.
 Jede Entfernen-Schaltfläche trägt aus demselben Grund den Namen ihrer Datei.
 
 ## Styling

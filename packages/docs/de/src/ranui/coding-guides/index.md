@@ -183,7 +183,7 @@ Ansonsten teste den Vertrag, nicht das Innenleben: Setze ein Attribut oder eine 
 | Den Wert einer Komponente in den eigenen Zustand und zurück spiegeln | Zwei Besitzer, ein Wert; sie laufen auseinander und können in Schleifen geraten.               |
 | Elemente neu erzeugen, um sie zu aktualisieren                       | Lässt den Konstruktor erneut laufen, verliert Fokus und internen Zustand. Setze Eigenschaften. |
 | Eine Farbe neben einer themenbewussten Komponente festschreiben      | Bricht in dem Moment, in dem das Theme wechselt. Nimm semantische Tokens.                      |
-| Pauschales `z-index` an einer Hülle, „falls" ein Overlay aufgeht     | Hebt statischen Inhalt für immer über dein eigenes Rahmenwerk. Grenze es mit `:has()` ein.     |
+| Pauschales `z-index` an einer Hülle, „falls“ ein Overlay aufgeht     | Hebt statischen Inhalt für immer über dein eigenes Rahmenwerk. Grenze es mit `:has()` ein.     |
 | Im Test auf `shadowRoot` warten                                      | Siehe oben: Prüfe über `ranui/testing` oder anhand beobachtbaren Verhaltens.                   |
 
 ## Zu ranui beitragen

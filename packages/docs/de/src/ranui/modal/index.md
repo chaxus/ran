@@ -51,7 +51,7 @@ Ob das Modal sichtbar ist, steuert das Attribut `open` (oder die Eigenschaft `op
 | `hideHeader`   | `boolean` | `false`  | Lässt die Titelleiste ganz weg und behält nur eine schwebende Schließen-Schaltfläche |
 | `sheet`        | `string`  | `''`     | CSS, das in das Shadow DOM eingefügt wird                                            |
 
-`closing` ist ein schreibgeschütztes Attribut, das das Element auf sich selbst spiegelt (keine setzbare Eigenschaft): Es ist vom Moment an gesetzt, in dem `close()` läuft, bis der Übergang von Maske und Dialog (Ausblenden und Verkleinern) tatsächlich fertig ist — etwa 0,3 s später, zum selben Zeitpunkt wie das `afterclose`-Ereignis. Nützlich für eine Gastgeberseite, für die das Modal während dieses sichtbaren Nachlaufs noch als „vorhanden" zählen muss; siehe die bewährten Vorgehensweisen weiter unten.
+`closing` ist ein schreibgeschütztes Attribut, das das Element auf sich selbst spiegelt (keine setzbare Eigenschaft): Es ist vom Moment an gesetzt, in dem `close()` läuft, bis der Übergang von Maske und Dialog (Ausblenden und Verkleinern) tatsächlich fertig ist — etwa 0,3 s später, zum selben Zeitpunkt wie das `afterclose`-Ereignis. Nützlich für eine Gastgeberseite, für die das Modal während dieses sichtbaren Nachlaufs noch als „vorhanden“ zählen muss; siehe die bewährten Vorgehensweisen weiter unten.
 
 ### Titel `title`
 
