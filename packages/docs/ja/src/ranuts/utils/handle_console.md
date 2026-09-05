@@ -6,14 +6,14 @@
 
 ## API
 
-| Function | 差し込む先 | 戻り値 |
-| ---------------------------- | ------------------------------------ | ------------- |
-| `handleConsole(hook)` | `console.log/info/warn/error/assert` | `restore` |
-| `handleFetchHook(options)` | `window.fetch` | `restore` |
-| `handleXhrHook(options)` | `XMLHttpRequest#open` / `#send` | `restore` |
-| `handleError(hook)` | `error` と `unhandledrejection` | `unsubscribe` |
-| `handleClick(hook)` | document のクリック（キャプチャー段階） | `unsubscribe` |
-| `replaceOld(obj, key, wrap)` | 任意のオブジェクトの任意のプロパティ | `restore` |
+| Function                     | 差し込む先                              | 戻り値        |
+| ---------------------------- | --------------------------------------- | ------------- |
+| `handleConsole(hook)`        | `console.log/info/warn/error/assert`    | `restore`     |
+| `handleFetchHook(options)`   | `window.fetch`                          | `restore`     |
+| `handleXhrHook(options)`     | `XMLHttpRequest#open` / `#send`         | `restore`     |
+| `handleError(hook)`          | `error` と `unhandledrejection`         | `unsubscribe` |
+| `handleClick(hook)`          | document のクリック（キャプチャー段階） | `unsubscribe` |
+| `replaceOld(obj, key, wrap)` | 任意のオブジェクトの任意のプロパティ    | `restore`     |
 
 `handleFetchHook` と `handleXhrHook` は `{ requestHook, responseHook, errorHook }` を受け取ります。
 
