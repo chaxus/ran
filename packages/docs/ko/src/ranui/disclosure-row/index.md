@@ -59,16 +59,16 @@ description: 'ranui DisclosureRow(<r-disclosure-row>)는 "제목 · 요약"을 �
 
 ### 속성
 
-| 속성         | 어트리뷰트   | 타입      | 기본값  | 설명                                                          |
-| ------------ | ------------ | --------- | ------- | ------------------------------------------------------------- |
-| `heading`    | `heading`    | `string`  | `''`    | 너비가 정해진 왼쪽 절반.                                      |
-| `summary`    | `summary`    | `string`  | `''`    | 넘치면 잘리는 오른쪽 절반. 비우면 구분 기호도 함께 사라집니다. |
+| 속성         | 어트리뷰트   | 타입      | 기본값  | 설명                                                                   |
+| ------------ | ------------ | --------- | ------- | ---------------------------------------------------------------------- |
+| `heading`    | `heading`    | `string`  | `''`    | 너비가 정해진 왼쪽 절반.                                               |
+| `summary`    | `summary`    | `string`  | `''`    | 넘치면 잘리는 오른쪽 절반. 비우면 구분 기호도 함께 사라집니다.         |
 | `open`       | `open`       | `boolean` | `false` | 본문을 보일지 여부. 어트리뷰트로 반영되므로 `:has([open])`이 통합니다. |
-| `expandable` | `expandable` | `boolean` | `false` | 열어 볼 만한 본문이 있는지 여부.                              |
-| `busy`       | `busy`       | `boolean` | `false` | 이 행이 대신하는 작업이 아직 도는지 여부.                     |
-| `tone`       | `tone`       | `string`  | `''`    | `error`는 요약에 색을 입힙니다. 그 밖의 값은 평범한 색조입니다. |
-| `name`       | `name`       | `string`  | `''`    | 행을 묶어, 하나를 열면 나머지가 닫히게 합니다.                |
-| `sheet`      | `sheet`      | `string`  | `''`    | 섀도 루트에 주입할 CSS.                                       |
+| `expandable` | `expandable` | `boolean` | `false` | 열어 볼 만한 본문이 있는지 여부.                                       |
+| `busy`       | `busy`       | `boolean` | `false` | 이 행이 대신하는 작업이 아직 도는지 여부.                              |
+| `tone`       | `tone`       | `string`  | `''`    | `error`는 요약에 색을 입힙니다. 그 밖의 값은 평범한 색조입니다.        |
+| `name`       | `name`       | `string`  | `''`    | 행을 묶어, 하나를 열면 나머지가 닫히게 합니다.                         |
+| `sheet`      | `sheet`      | `string`  | `''`    | 섀도 루트에 주입할 CSS.                                                |
 
 ::: warning 어트리뷰트는 `title`이 아니라 `heading`입니다
 `title`은 브라우저가 툴팁으로 그려 주는 네이티브 `HTMLElement` 어트리뷰트입니다. 그러니 이것을 제목으로 쓰는 컴포넌트는 인스턴스마다 화면에 이미 있는 글자를 그대로 되풀이하는 툴팁을 돋게 만들고, 한번 붙으면 그것을 끌 방법이 없습니다. `<r-card>`와 `<r-modal>`도 같은 이유로 같은 이름을 바꿔 씁니다.
@@ -76,10 +76,10 @@ description: 'ranui DisclosureRow(<r-disclosure-row>)는 "제목 · 요약"을 �
 
 ### 이벤트
 
-| 이벤트                   | detail              | 전파                       | 설명                              |
-| ------------------------ | ------------------- | -------------------------- | --------------------------------- |
-| `disclosurebeforetoggle` | `{ open: boolean }` | bubbles, composed, 취소 가능 | 행이 막 펼쳐지거나 접히려는 참.   |
-| `disclosuretoggle`       | `{ open: boolean }` | bubbles, composed          | 행이 펼쳐졌거나 접혔습니다.       |
+| 이벤트                   | detail              | 전파                         | 설명                            |
+| ------------------------ | ------------------- | ---------------------------- | ------------------------------- |
+| `disclosurebeforetoggle` | `{ open: boolean }` | bubbles, composed, 취소 가능 | 행이 막 펼쳐지거나 접히려는 참. |
+| `disclosuretoggle`       | `{ open: boolean }` | bubbles, composed            | 행이 펼쳐졌거나 접혔습니다.     |
 
 ::: warning 이벤트는 `toggle`이 아니라 `disclosuretoggle`입니다
 `toggle`은 `<details>`가 내보내는 것이고, 그 `ToggleEvent`는 `detail` 대신 `oldState` / `newState`를 싣습니다. 플랫폼 이름에 맞춰 타입을 준 리스너는 그 안에서 아무것도 찾지 못합니다. 상태는 요소에서 읽으세요: `row.open`.
@@ -125,11 +125,11 @@ row.addEventListener('disclosurebeforetoggle', async (event) => {
 
 ### 슬롯
 
-| 슬롯      | 내용                                                          |
-| --------- | ------------------------------------------------------------- |
-| `default` | 본문. `open`인 동안 드러납니다.                               |
-| `leading` | 제목 앞의 표시자. 보통 `<r-state-dot>`.                       |
-| `heading` | 왼쪽 절반의 마크업. `heading` 어트리뷰트의 평문을 대신합니다. |
+| 슬롯      | 내용                                                            |
+| --------- | --------------------------------------------------------------- |
+| `default` | 본문. `open`인 동안 드러납니다.                                 |
+| `leading` | 제목 앞의 표시자. 보통 `<r-state-dot>`.                         |
+| `heading` | 왼쪽 절반의 마크업. `heading` 어트리뷰트의 평문을 대신합니다.   |
 | `summary` | 오른쪽 절반의 마크업. `summary` 어트리뷰트의 평문을 대신합니다. |
 
 `heading`과 `summary`는 어트리뷰트로 평범한 문자열을 받으며, 도구 호출 행에는 대개 그것으로 충분합니다. 그 절반이 마크업을 품어야 할 때(코드, 링크, 약어 같은 것) 슬롯에 넣으세요. 어트리뷰트의 글자는 슬롯의 대체 내용이므로, 슬롯에 넣은 것이 그대로 자리를 대신합니다.
