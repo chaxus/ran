@@ -1,6 +1,6 @@
 ---
 title: ranui 변경 이력
-description: ranui에서 무엇이 바뀌었는지 — 추가·변경·수정·제거와 그 이유, 그리고 각 묶음 뒤에 있는 날짜별 엔지니어링 노트.
+description: ranui 에서 무엇이 바뀌었는지 — 추가·변경·수정·제거와 그 이유, 그리고 각 묶음 뒤에 있는 날짜별 엔지니어링 노트.
 ---
 
 # 변경 이력
@@ -8,7 +8,7 @@ description: ranui에서 무엇이 바뀌었는지 — 추가·변경·수정·�
 `pnpm -F ranui doc:changelog`가 `packages/ranui/CHANGELOG.md`에서 생성하므로 이 페이지와 npm
 패키지 안의 사본이 어긋날 수 없습니다. 항목은 원문 그대로라서 영어입니다.
 
-::: warning ranui는 alpha 단계입니다
+::: warning ranui 는 alpha 단계입니다
 버전은 `0.x-alpha`로 배포되며 **호환성을 깨는 변경도 그 안에 들어갑니다**. API 모양을 지키기보다
 설계를 더 낫게 만드는 쪽을 우선하는 단계이니, 정확한 버전을 고정하고 업그레이드 전에 이 페이지를
 읽어 주세요.
