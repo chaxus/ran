@@ -320,11 +320,11 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 
 ## `disclosure-row`
 
-- Tokens: 28
+- Tokens: 29
 - Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 9 · internal: 19 -->
+<!-- layers: semantic: 9 · internal: 20 -->
 - `--ran-color-bg`
 - `--ran-color-bg-hover`
 - `--ran-color-danger`
@@ -351,6 +351,7 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 - `--ran-disclosure-transition`
 - `--ran-motion-ease-standard`
 - `--ran-radius-sm`
+- `--ran-size-7`
 - `--ran-space-2`
 - `--ran-text-copy-2`
 

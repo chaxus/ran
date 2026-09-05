@@ -31,6 +31,17 @@
   height: var(--ran-disclosure-row-height, 24px);
 }
 
+/* 24px is the WCAG 2.5.8 minimum exactly, and rows stack with no gap, so on a touch screen
+   every target sits flush against its neighbours with nothing to spare. The hit area cannot
+   be grown past the row without overlapping the row above, which trades a small target for
+   a wrong one — the height itself has to go up. A caller that sets the token keeps its own
+   value on every input type. */
+@media (pointer: coarse) {
+  .ran-disclosure-row {
+    height: var(--ran-disclosure-row-height, var(--ran-size-7, 32px));
+  }
+}
+
 :host([expandable]) .ran-disclosure-row {
   cursor: pointer;
 }
@@ -114,6 +125,9 @@
 .ran-disclosure-title {
   flex: none;
   font-weight: var(--ran-disclosure-title-weight, 400);
+  /* Slotted markup must not push the line taller than the row it sits on. */
+  min-width: 0;
+  white-space: nowrap;
 }
 
 /* A 2px dot between title and summary. Dropped with an empty summary, so a row that is

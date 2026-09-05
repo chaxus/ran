@@ -318,11 +318,11 @@ description: ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称�
 
 ## `disclosure-row`
 
-- Tokens: 28
+- Tokens: 29
 - Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 9 · internal: 19 -->
+<!-- layers: semantic: 9 · internal: 20 -->
 - `--ran-color-bg`
 - `--ran-color-bg-hover`
 - `--ran-color-danger`
@@ -349,6 +349,7 @@ description: ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称�
 - `--ran-disclosure-transition`
 - `--ran-motion-ease-standard`
 - `--ran-radius-sm`
+- `--ran-size-7`
 - `--ran-space-2`
 - `--ran-text-copy-2`
 

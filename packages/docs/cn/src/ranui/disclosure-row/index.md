@@ -133,12 +133,31 @@ row.addEventListener('disclosurebeforetoggle', async (event) => {
 收起时正文是被裁切而不是被移除，这样才能做动画。同时它会被标记为 `inert`，内容用
 `content-visibility: hidden` 跳过渲染，因此收起期间既不在 Tab 顺序里，也不占渲染开销。
 
+行高 24px，正好卡在 WCAG 2.5.8 的最小值上，而且行与行之间没有间隔。在粗指针（触摸）设备上默认行高会
+变成 32px：命中区无法在不与上一行重叠的前提下继续扩大，而重叠只会把「目标偏小」换成「点错行」。设置
+`--ran-disclosure-row-height` 可以在任何输入方式下固定行高。
+
 ### 插槽
 
-| 插槽      | 内容                                     |
-| --------- | ---------------------------------------- |
-| `default` | 正文，在 `open` 时显示。                 |
-| `leading` | 标题前的指示物，通常是 `<r-state-dot>`。 |
+| 插槽      | 内容                                            |
+| --------- | ----------------------------------------------- |
+| `default` | 正文，在 `open` 时显示。                        |
+| `leading` | 标题前的指示物，通常是 `<r-state-dot>`。        |
+| `heading` | 左半边的标记内容，替代 `heading` 属性的纯文本。 |
+| `summary` | 右半边的标记内容，替代 `summary` 属性的纯文本。 |
+
+`heading` 和 `summary` 作为属性只能传纯文本，对工具调用行来说通常够用。如果这一半需要带标记
+（代码、链接、缩写），改用插槽。属性文本正是插槽的后备内容，所以插入内容会直接把它顶掉：
+
+```html
+<r-disclosure-row expandable>
+  <code slot="heading">fetch()</code>
+  <a slot="summary" href="https://example.com">https://example.com</a>
+  <pre>…</pre>
+</r-disclosure-row>
+```
+
+插槽内容同样算作这一行的一半，因此分隔符的出现和消失规则与用属性时完全一致。
 
 ### Part
 

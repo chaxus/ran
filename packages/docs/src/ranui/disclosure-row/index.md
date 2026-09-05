@@ -146,12 +146,34 @@ A collapsed body is clipped rather than removed, so that it can animate. It is a
 `inert` and its contents are skipped with `content-visibility: hidden`, which keeps it out
 of the tab order and off the render path while it is closed.
 
+The row is 24px tall, which is the WCAG 2.5.8 minimum exactly, and rows stack with no gap.
+On a coarse pointer the default height goes to 32px, because the hit area cannot be grown
+past the row without overlapping the row above it, which trades a small target for a wrong
+one. Setting `--ran-disclosure-row-height` pins the height on every input type.
+
 ### Slots
 
-| Slot      | Content                                                     |
-| --------- | ----------------------------------------------------------- |
-| `default` | The body, revealed while `open`.                            |
-| `leading` | An indicator before the heading, typically `<r-state-dot>`. |
+| Slot      | Content                                                                    |
+| --------- | -------------------------------------------------------------------------- |
+| `default` | The body, revealed while `open`.                                           |
+| `leading` | An indicator before the heading, typically `<r-state-dot>`.                |
+| `heading` | Markup for the left half, replacing the `heading` attribute's plain text.  |
+| `summary` | Markup for the right half, replacing the `summary` attribute's plain text. |
+
+`heading` and `summary` take plain strings as attributes, which is what a tool-call row
+usually needs. When the half has to carry markup — code, a link, an abbreviation — slot it
+instead. The attribute text is the slot's fallback, so slotted content simply replaces it:
+
+```html
+<r-disclosure-row expandable>
+  <code slot="heading">fetch()</code>
+  <a slot="summary" href="https://example.com">https://example.com</a>
+  <pre>…</pre>
+</r-disclosure-row>
+```
+
+Slotted content counts as one half of the line, so the separator appears and disappears the
+same way it does for the attributes.
 
 ### Parts
 
