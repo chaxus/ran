@@ -32,6 +32,7 @@ ranui adopts that ladder as its `--ran-*` scales, layers semantic tokens on top,
 **Geist Sans / Geist Mono** as the default typefaces.
 
 ## Two layers {#two-layers}
+
 **Layer 1: base palette.** The raw scales below. Rarely consumed directly.
 
 **Layer 2: semantic tokens.** `--ran-color-*` and friends, mapped onto layer 1. **Consume
@@ -50,6 +51,7 @@ a semantic token and it changes one role; change a component token and it change
 ## Colour
 
 ### The ladder {#the-ladder}
+
 Every hue scale runs `100 → 1000`, and each step has one fixed job:
 
 | Step | Role                        | Step | Role                      |
@@ -217,6 +219,7 @@ that was never declared resolves to nothing and the entire declaration is droppe
 which is why the wrong name is worth checking against this table rather than guessing.
 
 ## Spacing {#spacing}
+
 Gaps between things: `padding`, `margin`, `gap`. A 4px base unit with **nine values**, no more:
 
 | Token           | Value | Token            | Value |
@@ -255,6 +258,7 @@ A genuinely one-off dimension that no other component shares (a menu's `min-widt
 a plain component token with its own literal fallback rather than being forced onto a step.
 
 ## Typography {#typography}
+
 | Token               | Value                                                        |
 | ------------------- | ------------------------------------------------------------ |
 | `--ran-font-family` | Geist / Geist Sans, then the system UI stack                 |
@@ -322,6 +326,7 @@ Borderless overlays rely on the shadow alone for separation, so the overlay tier
 weight; an overlay falling back to the raised tier looks flat and pinned to the page.
 
 ## Stacking {#stacking}
+
 Floating overlays portal to `<body>`, so they need an explicit tier:
 
 | Token              | Default | Use for                                                                                      |
@@ -421,6 +426,7 @@ in the repository; the per-element API is [here](/src/ranui/api). For how to app
 [Theming](/src/ranui/theme/#customizing-tokens).
 
 ## Using tokens in your own CSS {#using-tokens-in-your-own-css}
+
 ```css
 .panel {
   background: var(--ran-color-bg-elevated);

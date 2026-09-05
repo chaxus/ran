@@ -100,6 +100,20 @@ for (const locale of LOCALES) {
  * code blocks and `<Demo>` blocks it holds. Translating prose never changes any of these, so
  * a mismatch means the translation lost something rather than said it differently.
  */
+/** Backticks outside fenced code blocks — see the parity check below for why that matters. */
+const proseBackticks = (file: string): number => {
+  let inFence = false;
+  let count = 0;
+  for (const line of readFileSync(file, 'utf8').split('\n')) {
+    if (/^\s*(```|~~~)/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (!inFence) count += (line.match(/`/g) ?? []).length;
+  }
+  return count;
+};
+
 const skeleton = (file: string): { levels: string; fences: number; demos: number } => {
   const text = readFileSync(file, 'utf8');
   let inFence = false;
@@ -131,6 +145,15 @@ for (const locale of LOCALES) {
       if (en.levels !== other.levels) fail(`${locale.id}: ${where} heading outline differs (en ${en.levels}, got ${other.levels})`);
       if (en.fences !== other.fences) fail(`${locale.id}: ${where} has ${other.fences} code blocks, en has ${en.fences}`);
       if (en.demos !== other.demos) fail(`${locale.id}: ${where} has ${other.demos} <Demo> blocks, en has ${en.demos}`);
+      // An odd number of backticks *in prose* means an inline-code span was never closed.
+      // Markdown then swallows the rest of the paragraph into `<code>`, which reads as a
+      // formatting glitch rather than an error — and it is exactly what an unquoted shell
+      // heredoc does to a `word`, the likeliest way a translated page gets mangled.
+      // Fenced blocks are excluded: their contents legitimately hold unpaired backticks
+      // (a shell example using command substitution, say), so counting them proves nothing.
+      if (proseBackticks(target) % 2 === 1) {
+        fail(`${locale.id}: ${where} has an unclosed inline-code span (odd backtick count in prose)`);
+      }
     }
   }
 }
@@ -143,7 +166,7 @@ if (errors.length) {
     ['missing label', (e: string) => e.includes('missing label')],
     ['stray label', (e: string) => e.includes('stray label')],
     ['empty UI string', (e: string) => e.includes('empty UI string')],
-    ['structure mismatch', (e: string) => /heading outline|code blocks|<Demo> blocks/.test(e)],
+    ['structure mismatch', (e: string) => /heading outline|code blocks|<Demo> blocks|backtick/.test(e)],
     ['extra page', (e: string) => e.includes('extra page')],
     ['missing page', (e: string) => e.includes('missing page')],
     ['other', () => true],
