@@ -14,19 +14,21 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 
 触发器放在默认插槽中；浮层内容包裹在嵌套的 `<r-content>` 元素里。
 
-<r-popover style="display: inline-block;">
+<Demo>
+  <r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
-      <div>this is content</div>
+      <div>这是浮层内容</div>
     </r-content>
   </r-popover>
+</Demo>
 
-```xml
+```html
 <r-popover style="display: inline-block;">
-    <r-button>popover</r-button>
-    <r-content>
-      <div>this is content</div>
-    </r-content>
+  <r-button>popover</r-button>
+  <r-content>
+    <div>这是浮层内容</div>
+  </r-content>
 </r-popover>
 ```
 
@@ -43,118 +45,94 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 
 ### 触发方式 `trigger`
 
-触发方式
-
-- `hover`
-
-<r-popover trigger="hover" style="display: inline-block;">
+<Demo>
+  <r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
       <div>hover</div>
     </r-content>
   </r-popover>
+  <r-popover trigger="click" style="display: inline-block;">
+    <r-button>click</r-button>
+    <r-content>
+      <div>click</div>
+    </r-content>
+  </r-popover>
+</Demo>
 
-```xml
+```html
 <r-popover trigger="hover" style="display: inline-block;">
-    <r-button>hover</r-button>
-    <r-content>
-      <div>hover</div>
-    </r-content>
-  </r-popover>
-```
-
-- `click`
+  <r-button>hover</r-button>
+  <r-content>
+    <div>hover</div>
+  </r-content>
+</r-popover>
 
 <r-popover trigger="click" style="display: inline-block;">
-    <r-button>click</r-button>
-    <r-content>
-      <div>click</div>
-    </r-content>
-  </r-popover>
-
-```xml
-<r-popover trigger="click" style="display: inline-block;">
-    <r-button>click</r-button>
-    <r-content>
-      <div>click</div>
-    </r-content>
-  </r-popover>
+  <r-button>click</r-button>
+  <r-content>
+    <div>click</div>
+  </r-content>
+</r-popover>
 ```
 
 ### 位置 `placement`
 
-展示的位置
-
-- `top`
-
-<r-popover trigger="hover" placement="top" style="display: inline-block;">
+<Demo column>
+  <r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>
     </r-content>
   </r-popover>
+  <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
+    <r-button>bottom</r-button>
+    <r-content>
+      <div>bottom</div>
+    </r-content>
+  </r-popover>
+  <r-popover trigger="hover" placement="left" style="display: inline-block;">
+    <r-button>left</r-button>
+    <r-content>
+      <div>left</div>
+    </r-content>
+  </r-popover>
+  <r-popover trigger="hover" placement="right" style="display: inline-block;">
+    <r-button>right</r-button>
+    <r-content>
+      <div>right</div>
+    </r-content>
+  </r-popover>
+</Demo>
 
-```xml
+```html
 <r-popover trigger="hover" placement="top" style="display: inline-block;">
-    <r-button>top</r-button>
-    <r-content>
-      <div>top</div>
-    </r-content>
-  </r-popover>
-```
-
-- `bottom`
+  <r-button>top</r-button>
+  <r-content>
+    <div>top</div>
+  </r-content>
+</r-popover>
 
 <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
-    <r-button>bottom</r-button>
-    <r-content>
-      <div>bottom</div>
-    </r-content>
-  </r-popover>
-
-```xml
-<r-popover trigger="hover" placement="bottom" style="display: inline-block;">
-    <r-button>bottom</r-button>
-    <r-content>
-      <div>bottom</div>
-    </r-content>
-  </r-popover>
-```
-
-- `left`
+  <r-button>bottom</r-button>
+  <r-content>
+    <div>bottom</div>
+  </r-content>
+</r-popover>
 
 <r-popover trigger="hover" placement="left" style="display: inline-block;">
-    <r-button>left</r-button>
-    <r-content>
-      <div>left</div>
-    </r-content>
-  </r-popover>
-
-```xml
-<r-popover trigger="hover" placement="left" style="display: inline-block;">
-    <r-button>left</r-button>
-    <r-content>
-      <div>left</div>
-    </r-content>
-  </r-popover>
-```
-
-- `right`
+  <r-button>left</r-button>
+  <r-content>
+    <div>left</div>
+  </r-content>
+</r-popover>
 
 <r-popover trigger="hover" placement="right" style="display: inline-block;">
-    <r-button>right</r-button>
-    <r-content>
-      <div>right</div>
-    </r-content>
-  </r-popover>
-
-```xml
-<r-popover trigger="hover" placement="right" style="display: inline-block;">
-    <r-button>right</r-button>
-    <r-content>
-      <div>right</div>
-    </r-content>
-  </r-popover>
+  <r-button>right</r-button>
+  <r-content>
+    <div>right</div>
+  </r-content>
+</r-popover>
 ```
 
 ### 对齐方式 `placement="<方向>-<对齐>"`
