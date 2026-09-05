@@ -15,7 +15,7 @@ Auf dieser Seite geht es um **Urteilsvermögen**: zu welchem Token man greift un
 1. **Klarheit vor Eigenart.** Die Hauptaufgabe und die Hauptaktion müssen unverkennbar sein, bevor irgendetwas anderes erwogen wird.
 2. **Zusammensetzen statt neu erfinden.** Greif zu `r-button`, `r-input`, `r-select` und `r-modal`, bevor du aus `div`s eine Primitive baust: Diese Komponenten bringen Fokus-, Tastatur- und ARIA-Verhalten schon mit, das du sonst wieder herleiten müsstest.
 3. **Tokens, niemals rohe Werte.** Ein Hex-Code, ein Abstand von `20px` oder ein von Hand gewählter Schatten sind Entscheidungen, die dem Theme nicht folgen werden.
-4. **Nach Rolle und Zustand entscheiden, nicht nach Augenmaß.** „Was ist dieser Text?" (Überschrift / Beschriftung / Fließtext / Schaltfläche) hat eine Antwort; „welche Größe sieht richtig aus?" hat keine.
+4. **Nach Rolle und Zustand entscheiden, nicht nach Augenmaß.** „Was ist dieser Text?“ (Überschrift / Beschriftung / Fließtext / Schaltfläche) hat eine Antwort; „welche Größe sieht richtig aus?“ hat keine.
 5. **Entwirf jeden erreichbaren Zustand.** Normal, Überfahren, Gedrückt, Fokus, Deaktiviert, Ladend, Leer, Fehler: Der Normalfall ist einer von acht.
 6. **Prüfe, was gezeichnet wurde.** In Hell _und_ Dunkel, schmal _und_ breit, mit Maus _und_ Finger. Eine Durchsicht findet keinen Schatten, den man nicht sieht.
 
@@ -69,7 +69,7 @@ Eine Rolle ist ein Werkzeug, kein Gesetz: Wirklich einmaliger Zierschriftzug (ei
 .embed {
   isolation: isolate; /* billig: kein eigener z-index, also wird nichts angehoben */
 }
-/* Nur anheben, solange ein echtes Overlay offen ist — nie „für alle Fälle" */
+/* Nur anheben, solange ein echtes Overlay offen ist — nie „für alle Fälle“ */
 .embed:has(r-modal[open]),
 .embed:has(r-modal[closing]) {
   position: relative;
@@ -93,10 +93,10 @@ Nichts Nicht-Interaktives darf interaktiv aussehen. `r-card` reagiert nur mit de
 
 Auch Texte gehören zum System:
 
-- **Schaltflächen** nennen eine Handlung **und** ein Objekt. ✅ „Mitglied löschen" ❌ „Löschen", „OK".
-- **Fehler** sagen, was passiert ist, und dann, wie man es behebt. ✅ „Bauen fehlgeschlagen: Das Bündel überschreitet die Größengrenze. Verkleinere es oder erhöhe die Grenze." ❌ „Vorgang fehlgeschlagen, bitte erneut versuchen."
-- **Bestätigungen und Hinweise** benennen die Änderung, nicht den Erfolg. ✅ „Projekt gelöscht" ❌ „Erfolgreich gelöscht" (dass der Hinweis erscheint, sagt den Erfolg schon).
-- Lass den Zusammenhang das Überflüssige wegnehmen: Ein Dialog mit dem Titel „Projekt löschen" braucht keine Schaltfläche „Projekt endgültig und für immer löschen".
+- **Schaltflächen** nennen eine Handlung **und** ein Objekt. ✅ „Mitglied löschen“ ❌ „Löschen“, „OK“.
+- **Fehler** sagen, was passiert ist, und dann, wie man es behebt. ✅ „Bauen fehlgeschlagen: Das Bündel überschreitet die Größengrenze. Verkleinere es oder erhöhe die Grenze.“ ❌ „Vorgang fehlgeschlagen, bitte erneut versuchen.“
+- **Bestätigungen und Hinweise** benennen die Änderung, nicht den Erfolg. ✅ „Projekt gelöscht“ ❌ „Erfolgreich gelöscht“ (dass der Hinweis erscheint, sagt den Erfolg schon).
+- Lass den Zusammenhang das Überflüssige wegnehmen: Ein Dialog mit dem Titel „Projekt löschen“ braucht keine Schaltfläche „Projekt endgültig und für immer löschen“.
 
 ## Barrierefreiheit {#accessibility}
 

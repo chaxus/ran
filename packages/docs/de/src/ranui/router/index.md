@@ -365,7 +365,7 @@ SPA-Navigationen nutzen `startViewTransition()`. Vollständige Seitennavigatione
 
 ### Grundlegende Verwendung
 
-Vergib denselben Namen an das „gleiche" Element auf Ausgangs- und Zielseite:
+Vergib denselben Namen an das „gleiche“ Element auf Ausgangs- und Zielseite:
 
 ```html
 <!-- Listenseite -->

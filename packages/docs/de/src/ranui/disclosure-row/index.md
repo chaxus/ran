@@ -1,5 +1,5 @@
 ---
-description: 'Die ranui-DisclosureRow (<r-disclosure-row>) ist eine einzeilige „Titel · Zusammenfassung"-Zeile, die sich zu einem Rumpf aufklappt — mit einem Schimmer, solange die Arbeit dahinter läuft.'
+description: 'Die ranui-DisclosureRow (<r-disclosure-row>) ist eine einzeilige „Titel · Zusammenfassung“-Zeile, die sich zu einem Rumpf aufklappt — mit einem Schimmer, solange die Arbeit dahinter läuft.'
 ---
 
 # DisclosureRow
@@ -91,7 +91,7 @@ row.addEventListener('disclosuretoggle', () => {
 });
 ```
 
-`disclosurebeforetoggle` feuert zuerst und lässt sich ablehnen — das macht „hol den Rumpf beim ersten Öffnen" und „weigere dich zuzuklappen, solange eine Änderung ungesichert ist" überhaupt erst ausdrückbar. Die Plattform hat kein Gegenstück: `<details>` löst nur das nachträgliche `toggle` aus, und die Bitte um ein abbrechbares `beforetoggle` ist bis heute offen.
+`disclosurebeforetoggle` feuert zuerst und lässt sich ablehnen — das macht „hol den Rumpf beim ersten Öffnen“ und „weigere dich zuzuklappen, solange eine Änderung ungesichert ist“ überhaupt erst ausdrückbar. Die Plattform hat kein Gegenstück: `<details>` löst nur das nachträgliche `toggle` aus, und die Bitte um ein abbrechbares `beforetoggle` ist bis heute offen.
 
 ```js
 row.addEventListener('disclosurebeforetoggle', async (event) => {
