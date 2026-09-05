@@ -51,12 +51,15 @@ const themeEnConfig: DefaultTheme.Config = {
   search: {
     provider: 'local',
   },
+  // Lowercase throughout: `ranui` and `ranuts` are package names and are always written
+  // lowercase, so title-casing the labels around them made the two look like different
+  // kinds of thing rather than one row of destinations.
   nav: [
-    { text: 'Home', link: '/' },
+    { text: 'home', link: '/' },
     { text: 'ranui', link: '/src/ranui/', activeMatch: '^/src/ranui/' },
     { text: 'ranuts', link: '/src/ranuts/', activeMatch: '^/src/ranuts/' },
-    { text: 'Articles', link: '/src/article/doc_preview', activeMatch: '^/src/(article|note)/' },
-    { text: 'Doc Editor', link: EDITOR },
+    { text: 'articles', link: '/src/article/doc_preview', activeMatch: '^/src/(article|note)/' },
+    { text: 'doc editor', link: EDITOR },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],
   footer: {
