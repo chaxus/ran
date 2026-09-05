@@ -10,11 +10,15 @@
  *    here is seconds instead of minutes, and it also runs when the page exists in a locale
  *    but nowhere else (a stray file the other languages never got).
  * 3. **A stray label key** is dead weight that survives every rename of the structure.
+ * 4. **A translation that lost its shape** — a truncated file, a heading demoted from `###`
+ *    to `##`, a code fence or `<Demo>` block dropped in the rewrite. The page still builds
+ *    and still reads like prose, so nothing catches it except comparing the skeleton against
+ *    the English original.
  *
  * `packages/docs/CLAUDE.md` warns that `cn/src/` is a manual mirror of `src/`. With eight
  * languages that warning stops being enough, so it is enforced here instead.
  */
-import { existsSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { LOCALES } from '../.vitepress/langs/locales.ts';
 import { NAV, SIDEBAR } from '../.vitepress/langs/structure.ts';
@@ -91,12 +95,69 @@ for (const locale of LOCALES) {
   }
 }
 
+/**
+ * A page's language-independent skeleton: the heading levels in order, and how many fenced
+ * code blocks and `<Demo>` blocks it holds. Translating prose never changes any of these, so
+ * a mismatch means the translation lost something rather than said it differently.
+ */
+const skeleton = (file: string): { levels: string; fences: number; demos: number } => {
+  const text = readFileSync(file, 'utf8');
+  let inFence = false;
+  const levels: string[] = [];
+  let fences = 0;
+  for (const line of text.split('\n')) {
+    if (/^\s*(```|~~~)/.test(line)) {
+      inFence = !inFence;
+      if (inFence) fences++;
+      continue;
+    }
+    if (inFence) continue;
+    const heading = /^(#{1,6}) /.exec(line);
+    if (heading) levels.push(String(heading[1].length));
+  }
+  return { levels: levels.join(''), fences, demos: (text.match(/<Demo\b/g) ?? []).length };
+};
+
+for (const locale of LOCALES) {
+  if (!locale.dir) continue;
+  for (const tree of locale.mirrors) {
+    const sub = tree.replace(/^\/|\/$/g, '');
+    for (const page of pagesUnder(join(ROOT, sub))) {
+      const target = join(ROOT, locale.dir, sub, page);
+      if (!existsSync(target)) continue; // already reported as a missing page
+      const en = skeleton(join(ROOT, sub, page));
+      const other = skeleton(target);
+      const where = `${locale.dir}/${sub}/${page}`;
+      if (en.levels !== other.levels) fail(`${locale.id}: ${where} heading outline differs (en ${en.levels}, got ${other.levels})`);
+      if (en.fences !== other.fences) fail(`${locale.id}: ${where} has ${other.fences} code blocks, en has ${en.fences}`);
+      if (en.demos !== other.demos) fail(`${locale.id}: ${where} has ${other.demos} <Demo> blocks, en has ${en.demos}`);
+    }
+  }
+}
+
 if (errors.length) {
+  // Report a sample of *each kind* rather than the first N overall. A language still being
+  // translated reports one "missing page" per page, and a flat cap let those bury every
+  // structural and label error behind them — the ones that need acting on now.
+  const KIND = [
+    ['missing label', (e: string) => e.includes('missing label')],
+    ['stray label', (e: string) => e.includes('stray label')],
+    ['empty UI string', (e: string) => e.includes('empty UI string')],
+    ['structure mismatch', (e: string) => /heading outline|code blocks|<Demo> blocks/.test(e)],
+    ['extra page', (e: string) => e.includes('extra page')],
+    ['missing page', (e: string) => e.includes('missing page')],
+    ['other', () => true],
+  ] as const;
   console.error(`check:langs — ${errors.length} problem(s):`);
-  // Cap the listing: a language that has not been translated yet reports one line per page,
-  // which buries every other kind of error.
-  for (const e of errors.slice(0, 40)) console.error(`  ${e}`);
-  if (errors.length > 40) console.error(`  … and ${errors.length - 40} more`);
+  const remaining = new Set(errors);
+  for (const [name, matches] of KIND) {
+    const group = [...remaining].filter(matches);
+    if (!group.length) continue;
+    for (const e of group) remaining.delete(e);
+    console.error(`\n  ${name} (${group.length}):`);
+    for (const e of group.slice(0, 12)) console.error(`    ${e}`);
+    if (group.length > 12) console.error(`    … and ${group.length - 12} more`);
+  }
   process.exit(1);
 }
-console.log(`check:langs — ${LOCALES.length} languages, ${wanted.size} labels, all complete`);
+console.log(`check:langs — ${LOCALES.length} languages, ${wanted.size} labels, all pages present and structurally matched`);
