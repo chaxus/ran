@@ -1,6 +1,6 @@
 import { currentDevice } from 'ranuts/utils';
 import buttonCss from './index.less?inline';
-import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
+import { Div, RanElement, Slot, isDisabled } from '@/utils/index';
 import { createRef, EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowRoot, shadowPart, syncSheetAttribute } from '@/utils/component';
@@ -91,15 +91,25 @@ export class Button extends RanElement {
     }
   }
 
-  get effect(): string {
-    return this.getAttribute('effect') || '';
+  /**
+   * Whether the click ripple is drawn. On by default; opt out with `effect="false"`.
+   *
+   * The opt-out is the literal value `false`, not the presence of the attribute, because
+   * the default is *on*. Gating the CSS on a bare `[effect]` inverted every path except
+   * the one the docs happened to show: `effect="true"` turned the ripple off, and the
+   * property was backwards as well (`el.effect = false` removed the attribute, which
+   * re-enabled it). Frameworks reach the element through the property, not the attribute
+   * (React always, Vue for any key that exists on the element), so they all hit that path.
+   *
+   * The getter mirrors the selector in `index.less` exactly: anything other than the
+   * string `false` means the ripple is on.
+   */
+  get effect(): boolean {
+    return this.getAttribute('effect') !== 'false';
   }
-  set effect(value: string | null) {
-    if (falseList.includes(value) || !value) {
-      this.removeAttribute('effect');
-    } else {
-      this.setAttribute('effect', value);
-    }
+  set effect(value: boolean | string | null | undefined) {
+    if (!value || value === 'false') this.setAttribute('effect', 'false');
+    else this.removeAttribute('effect');
   }
 
   /** Visual variant: `''` (default) | `'primary'` (monochrome) | `'warning'` | `'text'`. Drives the `:host([type=...])` styles. */

@@ -466,7 +466,7 @@ const themeCnConfig: DefaultTheme.Config = {
           { text: 'Input 输入框', link: '/cn/src/ranui/input/' },
           { text: 'VoiceButton 语音按钮', link: '/cn/src/ranui/voice-button/' },
           { text: 'Attachments 附件条', link: '/cn/src/ranui/attachments/' },
-          { text: '表单', link: '/cn/src/ranui/form/' },
+          { text: 'Form 表单', link: '/cn/src/ranui/form/' },
           { text: 'ColorPicker 颜色选择器', link: '/cn/src/ranui/colorpicker/' },
         ],
       },

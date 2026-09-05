@@ -42,10 +42,10 @@ description: ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/button/index.ts`
 
-- **属性（attribute）**: `aria-label`, `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
+- **属性（attribute）**: `aria-label`, `disabled: boolean | string`, `effect: boolean`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
 - **属性值（property）**:
   - `disabled: boolean | string`
-  - `effect: string`
+  - `effect: boolean` — Whether the click ripple is drawn. On by default; opt out with `effect="false"`.
   - `icon: string`
   - `iconSize: string`
   - `sheet: string`

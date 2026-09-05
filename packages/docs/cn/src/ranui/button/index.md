@@ -86,17 +86,21 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 ### 特效控制 `effect`
 
-如果需要纯净的按钮样式，可以设置 `effect="false"` 来禁用点击时的水波纹特效
+点击水波纹默认开启。想要纯净的按钮样式，设置 `effect="false"` 关掉它。下面两个按钮只有这一个属性不同，
+分别点一下就能看出区别。水波纹是指针设备上的效果，视口宽度 1024px 以上才会绘制。
 
 <Demo>
-  <r-button type="default" effect="false" icon="user">默认按钮</r-button>
-  <r-button type="primary" effect="false" icon="home">主要按钮</r-button>
+  <r-button type="primary" icon="home">默认：有水波纹</r-button>
+  <r-button type="primary" icon="home" effect="false">effect="false"：无水波纹</r-button>
 </Demo>
 
 ```html
-<r-button type="default" effect="false" icon="user">默认按钮</r-button>
-<r-button type="primary" effect="false" icon="home">主要按钮</r-button>
+<r-button type="primary" icon="home">默认：有水波纹</r-button>
+<r-button type="primary" icon="home" effect="false">effect="false"：无水波纹</r-button>
 ```
+
+只有字面值 `false` 会关闭水波纹，`effect="true"` 和其他任何值都保持开启。在脚本里请按布尔值设置属性值：
+`button.effect = false`。
 
 ## 事件
 
