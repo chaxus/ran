@@ -1,5 +1,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { DOC_LOCALE_DIRS, sitePagePath } from './doc-site-locales.ts';
+import { CHANGELOG_PAGE_COPY } from './changelog-page-copy.ts';
 
 // Generates the docs-site changelog pages from CHANGELOG.md and the dated
 // engineering notes under changelogs/. Run via `npm run doc:changelog`.
@@ -15,12 +17,11 @@ const CHANGELOG_FILE = path.join(ROOT, 'CHANGELOG.md');
 // translated at generation time so the wording is reviewed by a person, the same way every
 // other page under `cn/src/` is. When an entry is added to CHANGELOG.md and not here, the
 // Chinese page falls back to the English body for that release rather than going stale
-// silently — see `pickBody`.
+// silently — see `pickBody`. Chinese is the only language with such a source; the rest show
+// the English entries under their own page chrome, and each says so.
 const CN_CHANGELOG_FILE = path.join(ROOT, 'CHANGELOG.zh-CN.md');
 const NOTES_DIR = path.join(ROOT, 'changelogs');
 const REPO_NOTES_DIR = path.join(ROOT, '..', '..', 'changelogs');
-const SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'src', 'ranui', 'changelog.md');
-const CN_SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'cn', 'src', 'ranui', 'changelog.md');
 const REPO_BLOB = 'https://github.com/chaxus/ran/blob/main';
 
 const CHECK = process.argv.includes('--check');
@@ -50,6 +51,8 @@ async function emit(file: string, content: string): Promise<void> {
     .split(path.sep)
     .join('/');
   if (!CHECK) {
+    // A newly added language has no tree on disk until its first page lands here.
+    await fs.mkdir(path.dirname(file), { recursive: true });
     await fs.writeFile(file, normalized, 'utf8');
     console.log(`Generated: ${rel}`);
     return;
@@ -137,76 +140,44 @@ async function main(): Promise<void> {
   const componentNotes = await readNotes(NOTES_DIR, 'packages/ranui/changelogs');
   const repoNotes = await readNotes(REPO_NOTES_DIR, 'changelogs');
 
-  await emit(
-    SITE_OUTPUT_FILE,
-    [
-      '---',
-      'title: ranui changelog',
-      'description: What changed in ranui — added, changed, fixed and removed, with the reasoning, plus the dated engineering notes behind each batch.',
-      '---',
-      '',
-      '# Changelog',
-      '',
-      'Generated from `packages/ranui/CHANGELOG.md` by `pnpm -F ranui doc:changelog`, so this page',
-      'and the copy inside the npm tarball cannot disagree.',
-      '',
-      '::: warning ranui is alpha',
-      'Versions are published as `0.x-alpha`, and **breaking changes ship in them**. The design is',
-      'still being improved in preference to preserving an API shape, so pin an exact version and',
-      'read this page before upgrading.',
-      ':::',
-      '',
-      body,
-      '',
-      '## Engineering notes',
-      '',
-      'Longer-form notes on why a batch of changes happened, kept beside the code rather than',
-      'summarised here. They are the reasoning behind the entries above.',
-      '',
-      renderNoteTable(componentNotes, ['Date', 'ranui']),
-      '',
-      renderNoteTable(repoNotes, ['Date', 'Repository-wide']),
-      '',
-      `Releases and tags are on [GitHub](${REPO_BLOB.replace('/blob/main', '')}/releases), and every`,
-      'published version is on [npm](https://www.npmjs.com/package/ranui?activeTab=versions).',
-      '',
-    ].join('\n'),
-  );
+  const releasesUrl = `${REPO_BLOB.replace('/blob/main', '')}/releases`;
+  const npmUrl = 'https://www.npmjs.com/package/ranui?activeTab=versions';
 
-  await emit(
-    CN_SITE_OUTPUT_FILE,
-    [
-      '---',
-      'title: ranui 更新日志',
-      'description: ranui 的变更记录——新增、变更、修复与移除及其原因，以及每一批改动背后的工程记录。',
-      '---',
-      '',
-      '# Changelog 更新日志',
-      '',
-      cnChangelog
-        ? '由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.zh-CN.md` 生成，与英文版一同维护，\n因此本页与 npm 包内的副本不会出现分歧。'
-        : '由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.md` 生成，因此本页与 npm 包内的\n副本不会出现分歧。条目内容直接取自源文件，保持英文。',
-      '',
-      '::: warning ranui 处于 alpha 阶段',
-      '版本以 `0.x-alpha` 发布，**其中会包含破坏性变更**——现阶段优先把设计做对，而不是保住 API 形状。',
-      '请锁定确切版本，并在升级前先读本页。',
-      ':::',
-      '',
-      cnBody,
-      '',
-      '## 工程记录',
-      '',
-      '每一批改动为什么发生的长文记录，与代码放在一起，不在此处摘要。它们是上面这些条目背后的推理过程。',
-      '',
-      renderNoteTable(componentNotes, ['日期', 'ranui']),
-      '',
-      renderNoteTable(repoNotes, ['日期', '仓库整体']),
-      '',
-      `发布与标签见 [GitHub](${REPO_BLOB.replace('/blob/main', '')}/releases)，已发布的每个版本见`,
-      '[npm](https://www.npmjs.com/package/ranui?activeTab=versions).',
-      '',
-    ].join('\n'),
-  );
+  for (const dir of DOC_LOCALE_DIRS) {
+    const copy = CHANGELOG_PAGE_COPY[dir];
+    // Only Chinese has its own changelog source; everyone else renders the English entries.
+    const translated = dir === 'cn' && Boolean(cnChangelog);
+    await emit(
+      sitePagePath(ROOT, dir, 'ranui', 'changelog.md'),
+      [
+        '---',
+        `title: ${copy.title}`,
+        `description: ${copy.description}`,
+        '---',
+        '',
+        `# ${copy.heading}`,
+        '',
+        copy.generatedNote(translated),
+        '',
+        `::: warning ${copy.alphaTitle}`,
+        ...copy.alphaBody,
+        ':::',
+        '',
+        translated ? cnBody : body,
+        '',
+        `## ${copy.notesHeading}`,
+        '',
+        ...copy.notesIntro,
+        '',
+        renderNoteTable(componentNotes, [copy.tableHeaders[0], copy.tableHeaders[1]]),
+        '',
+        renderNoteTable(repoNotes, [copy.tableHeaders[0], copy.tableHeaders[2]]),
+        '',
+        ...copy.footer(releasesUrl, npmUrl),
+        '',
+      ].join('\n'),
+    );
+  }
 }
 
 main().catch((error) => {

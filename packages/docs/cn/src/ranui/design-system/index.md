@@ -28,8 +28,7 @@ ranui 的令牌基于 [Geist](https://vercel.com/geist)，也就是 Vercel 的�
 ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并以 **Geist Sans / Geist Mono** 作为
 默认字体。
 
-## 两层令牌
-
+## 两层令牌 {#two-layers}
 **第一层，基础色板**：下面这些原始色阶，很少直接消费。
 
 **第二层，语义令牌**：`--ran-color-*` 等，映射到第一层。**请使用这一层。** 暗色模式只重定义第一
@@ -45,8 +44,7 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 ## 颜色
 
-### 状态阶梯
-
+### 状态阶梯 {#the-ladder}
 每条色阶从 `100` 走到 `1000`，每一档职责固定：
 
 | 档位 | 职责             | 档位 | 职责                  |
@@ -208,8 +206,7 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 不存在 `--ran-color-error`，危险色叫 `--ran-color-danger`。`var()` 引用一个从未声明过的属性会解析
 为「空」，整条声明会被丢弃，而且不会有任何报错，所以名字宁可对着表查，也别猜。
 
-## 间距
-
+## 间距 {#spacing}
 元素之间的距离：`padding`、`margin`、`gap`。以 4px 为基数，**只有九档**：
 
 | 令牌            | 值   | 令牌             | 值   |
@@ -244,8 +241,7 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 真正一次性、没有别的组件共享的尺寸（比如某个菜单的 `min-width`），就保持为带自己字面量兜底的组件
 令牌，不要硬塞进某一档。
 
-## 排版
-
+## 排版 {#typography}
 | 令牌                | 值                                                           |
 | ------------------- | ------------------------------------------------------------ |
 | `--ran-font-family` | Geist / Geist Sans，其后是系统 UI 字体栈                     |
@@ -310,8 +306,7 @@ import 'ranui/fonts'; // 打包器
 无边框的浮层只靠投影与页面拉开距离，所以浮层层级的投影必须有真实重量；浮层若回退到「抬起」层级，
 看起来就像贴在页面上。
 
-## 层级
-
+## 层级 {#stacking}
 浮层会 portal 到 `<body>`，因此需要明确的层级：
 
 | 令牌               | 默认值 | 用于                                                                     |
@@ -399,10 +394,9 @@ CSS 分不清「交互」和「主题翻转」，你给颜色加的淡入淡出�
 
 完整清单见仓库中的
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)，
-逐元素接口见[元素 API](/cn/src/ranui/api)。怎么覆盖见[主题系统](/cn/src/ranui/theme/#自定义令牌)。
+逐元素接口见[元素 API](/cn/src/ranui/api)。怎么覆盖见[主题系统](/cn/src/ranui/theme/#customizing-tokens)。
 
-## 在自己的 CSS 里使用令牌
-
+## 在自己的 CSS 里使用令牌 {#using-tokens-in-your-own-css}
 ```css
 .panel {
   background: var(--ran-color-bg-elevated);

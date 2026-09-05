@@ -1,0 +1,9 @@
+{
+  "lang": "Español",
+  "components_totp_1": "Generar",
+  "components_totp_2": "Introduce la clave de 2FA",
+  "components_totp_3": "Aún no has introducido la clave de 2FA",
+  "components_totp_4": "caduca",
+  "components_totp_5": "La clave introducida no es válida",
+  "components_totp_6": "Verificación 2FA"
+}

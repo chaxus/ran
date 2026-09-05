@@ -199,10 +199,14 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useData, withBase } from 'vitepress';
+import { localeFromLang, localeHref as localeHref_ } from '../langs/locales';
+import { homeCopy } from './home-copy';
 
 const { lang } = useData();
-const isCN = computed(() => (lang.value || '').toLowerCase().startsWith('zh'));
-const localeHref = (path: string): string => withBase(isCN.value ? `/cn${path}` : path);
+const locale = computed(() => localeFromLang(lang.value || ''));
+// Only the trees this language actually mirrors get its prefix; the rest link to the
+// English page, which exists, rather than to a prefixed 404. See `langs/locales.ts`.
+const localeHref = (path: string): string => withBase(localeHref_(path, locale.value));
 
 const root = ref<HTMLElement | null>(null);
 const statNums = ref<HTMLElement[]>([]);
@@ -327,266 +331,15 @@ const icons: Record<string, string> = {
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l2.1 5.3 5.4 2.1-5.4 2.1L12 18l-2.1-5.5L4.5 10.4l5.4-2.1z"/></svg>',
 };
 
-const en = {
-  eyebrow: 'Open source · MIT Licensed',
-  headline: 'A Web Components UI library and a typed utility library',
-  subtitle:
-    'ranui ships 40 framework-agnostic r- elements; ranuts packs 90+ tree-shakeable TypeScript helpers. Use them in Vue, React, or plain HTML, with no build step required.',
-  ctaPrimary: 'Explore Components',
-  ctaSecondary: 'Star on GitHub',
-  stats: [
-    { num: '40', label: 'Components' },
-    { num: '90+', label: 'Utilities' },
-    { num: '2', label: 'Languages' },
-    { num: 'MIT', label: 'Licensed' },
-  ],
-  pillars: [
-    {
-      kind: 'ui',
-      title: 'ranui',
-      desc: 'A framework-agnostic Web Components library. Drop 40 styled r- elements into any stack: Vue, React, or plain HTML.',
-      more: 'Browse components',
-      link: '/src/ranui/',
-    },
-    {
-      kind: 'utils',
-      title: 'ranuts',
-      desc: '90+ typed helpers for strings, objects, color, time, files and the DOM. Tree-shakeable, zero-dependency.',
-      more: 'Read the docs',
-      link: '/src/ranuts/',
-    },
-    {
-      kind: 'article',
-      title: 'Articles',
-      desc: 'Longer write-ups on rendering engines, functional programming, sorting algorithms and the web platform.',
-      more: 'Start reading',
-      link: '/src/article/doc_preview',
-    },
-  ],
-  capsKicker: 'Capabilities',
-  capsTitle: 'What most libraries leave out',
-  capsSub: 'Five in ranuts, five in ranui.',
-  caps: [
-    {
-      lib: 'ranuts',
-      tag: 'utilities',
-      items: [
-        {
-          kind: 'bridge',
-          name: 'Bridge',
-          api: 'PostMessageBridge',
-          desc: 'Promise-based RPC over postMessage across iframes, workers and tabs, with structured-clone transport and channel isolation.',
-        },
-        {
-          kind: 'gpu',
-          name: 'Visual',
-          api: 'Application',
-          desc: 'A PixiJS-style scene graph with a pluggable WebGPU / WebGL / Canvas renderer backend.',
-        },
-        {
-          kind: 'vdom',
-          name: 'Virtual DOM',
-          api: 'h() · init()',
-          desc: 'A snabbdom-style vDOM: hyperscript, patch, pluggable modules and lifecycle hooks.',
-        },
-        {
-          kind: 'totp',
-          name: 'TOTP',
-          api: 'TOTP',
-          desc: 'RFC-6238 one-time passwords, SHA-1 through SHA3-512, with zero crypto dependencies.',
-        },
-        {
-          kind: 'mime',
-          name: 'MIME registry',
-          api: 'getMime()',
-          desc: 'A ~1000-entry bidirectional MIME ⇄ file-extension lookup.',
-        },
-      ],
-    },
-    {
-      lib: 'ranui',
-      tag: 'components',
-      items: [
-        {
-          kind: 'player',
-          name: 'Player',
-          api: '<r-player>',
-          desc: 'An HLS adaptive-streaming video player with a modular controller core.',
-        },
-        {
-          kind: 'droplet',
-          name: 'Color picker',
-          api: '<r-colorpicker>',
-          desc: 'A full HSV picker with hue + alpha sliders and live HEX / RGBA output.',
-        },
-        {
-          kind: 'radar',
-          name: 'Radar chart',
-          api: '<r-radar>',
-          desc: 'A canvas-drawn radar chart with per-axis labels and per-axis label styling.',
-        },
-        {
-          kind: 'sigma',
-          name: 'Math',
-          api: '<r-math>',
-          desc: 'Renders LaTeX to native MathML with lazily-loaded Temml, from a single attribute.',
-        },
-        {
-          kind: 'scratch',
-          name: 'Scratch card',
-          api: '<r-scratch>',
-          desc: 'An interactive canvas scratch-to-reveal with a completion threshold.',
-        },
-      ],
-    },
-  ],
-  startKicker: 'Quick start',
-  startTitle: 'Install and use',
-  startDesc:
-    'Install both packages, register the elements once, and use them anywhere. No build step or framework required.',
-  startStep1: 'Install & register',
-  startStep2: 'Use anywhere',
-  copy: 'Copy install command',
-  liveLabel: 'Live',
-  liveNote: 'Real ranui components, running right on this page.',
-  features: [
-    {
-      kind: 'agnostic',
-      title: 'Works everywhere',
-      desc: 'Standards-based custom elements run in any framework, or none at all.',
-    },
-    { kind: 'typed', title: 'Fully typed', desc: 'Written in TypeScript, shipped with declarations end to end.' },
-    {
-      kind: 'pwa',
-      title: 'Installable & offline',
-      desc: 'The docs are a PWA, with their own service worker.',
-    },
-    { kind: 'i18n', title: 'Bilingual', desc: 'Every page maintained in English and 简体中文.' },
-  ],
-};
+const t = computed(() => homeCopy(locale.value.dir));
 
-const cn = {
-  eyebrow: '开源 · MIT 协议',
-  headline: 'Web Components 组件库与 TypeScript 工具集',
-  subtitle:
-    'ranui 提供 40 个框架无关的 r- 元素，ranuts 收录 90+ 个可 Tree-shaking 的类型化工具函数，在 Vue、React 或纯 HTML 中直接使用，无需构建步骤。',
-  ctaPrimary: '浏览组件',
-  ctaSecondary: '前往 GitHub',
-  stats: [
-    { num: '40', label: '组件' },
-    { num: '90+', label: '工具函数' },
-    { num: '2', label: '语言' },
-    { num: 'MIT', label: '协议' },
-  ],
-  pillars: [
-    {
-      kind: 'ui',
-      title: 'ranui',
-      desc: '框架无关的 Web Components 组件库。40 个开箱即用的 r- 元素，可放进 Vue、React 或纯 HTML 的任意技术栈。',
-      more: '查看组件',
-      link: '/src/ranui/',
-    },
-    {
-      kind: 'utils',
-      title: 'ranuts',
-      desc: '90+ 个带类型的工具函数，覆盖字符串、对象、颜色、时间、文件与 DOM。支持 Tree-shaking，零依赖。',
-      more: '阅读文档',
-      link: '/src/ranuts/',
-    },
-    {
-      kind: 'article',
-      title: '文章',
-      desc: '关于渲染引擎、函数式编程、排序算法与 Web 平台的长文。',
-      more: '开始阅读',
-      link: '/src/article/doc_preview',
-    },
-  ],
-  capsKicker: '特色能力',
-  capsTitle: '多数库没有的能力',
-  capsSub: 'ranuts 五项，ranui 五项。',
-  caps: [
-    {
-      lib: 'ranuts',
-      tag: '工具函数',
-      items: [
-        {
-          kind: 'bridge',
-          name: 'Bridge 通信桥',
-          api: 'PostMessageBridge',
-          desc: '基于 postMessage 的 Promise 化 RPC，跨 iframe、Worker 与标签页通信，结构化克隆传输、通道隔离。',
-        },
-        {
-          kind: 'gpu',
-          name: 'Visual 渲染引擎',
-          api: 'Application',
-          desc: 'PixiJS 风格的场景图，可插拔 WebGPU / WebGL / Canvas 渲染后端。',
-        },
-        {
-          kind: 'vdom',
-          name: '虚拟 DOM',
-          api: 'h() · init()',
-          desc: 'snabbdom 风格的 vDOM：hyperscript、patch、可插拔模块与生命周期钩子。',
-        },
-        {
-          kind: 'totp',
-          name: 'TOTP 验证码',
-          api: 'TOTP',
-          desc: 'RFC-6238 一次性口令，支持 SHA-1 到 SHA3-512，零加密依赖。',
-        },
-        { kind: 'mime', name: 'MIME 注册表', api: 'getMime()', desc: '约 1000 条的 MIME ⇄ 文件扩展名双向查询。' },
-      ],
-    },
-    {
-      lib: 'ranui',
-      tag: '组件',
-      items: [
-        { kind: 'player', name: '播放器', api: '<r-player>', desc: 'HLS 自适应码率视频播放器，模块化的控制器内核。' },
-        {
-          kind: 'droplet',
-          name: '取色器',
-          api: '<r-colorpicker>',
-          desc: '完整 HSV 取色，带色相 + 透明度滑块，实时输出 HEX / RGBA。',
-        },
-        {
-          kind: 'radar',
-          name: '雷达图',
-          api: '<r-radar>',
-          desc: 'Canvas 绘制的雷达图，支持逐轴标签与逐轴标签样式。',
-        },
-        {
-          kind: 'sigma',
-          name: '数学公式',
-          api: '<r-math>',
-          desc: '通过懒加载的 Temml，用一个属性把 LaTeX 公式渲染成原生 MathML。',
-        },
-        { kind: 'scratch', name: '刮刮卡', api: '<r-scratch>', desc: '可交互的 Canvas 刮开揭晓，带完成度阈值。' },
-      ],
-    },
-  ],
-  startKicker: '快速开始',
-  startTitle: '安装与使用',
-  startDesc: '安装两个包，注册一次元素，即可在任意地方使用，无需构建步骤，也不依赖任何框架。',
-  startStep1: '安装并注册',
-  startStep2: '随处使用',
-  copy: '复制安装命令',
-  liveLabel: '实时',
-  liveNote: '真实的 ranui 组件，就运行在这个页面上。',
-  features: [
-    { kind: 'agnostic', title: '随处可用', desc: '基于标准的自定义元素，在任意框架或无框架下都能运行。' },
-    { kind: 'typed', title: '完整类型', desc: '全程 TypeScript 编写，附带类型声明。' },
-    { kind: 'pwa', title: '可安装 · 离线', desc: '文档本身就是一个 PWA，带自己的 Service Worker。' },
-    { kind: 'i18n', title: '双语维护', desc: '每一页都同时维护英文与简体中文。' },
-  ],
-};
 
-const t = computed(() => (isCN.value ? cn : en));
-
-// split the headline into words so each can rise on its own.
-// CN has no spaces → treat the whole string as one segment.
+// Split the headline into words so each can rise on its own. Languages that opt out
+// (`splitWords: false` — the CJK headlines, and Persian) rise as a single segment: word
+// units either do not exist there or are not worth reordering an RTL line for.
 const headlineLines = computed<string[][]>(() => {
   const h = t.value.headline;
-  if (isCN.value) return [[h]];
-  return [h.split(/\s+/)];
+  return [t.value.splitWords ? h.split(/\s+/) : [h]];
 });
 const totalWords = computed(() => headlineLines.value.reduce((n, l) => n + l.length, 0));
 const wordIndex = (li: number, wi: number): number => {

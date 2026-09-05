@@ -64,7 +64,7 @@ const html = renderToString(new Button());
 第一帧，随后会被一棵一模一样的客户端树替换。由此有两点要注意：
 
 - 它保证的是首屏正确，不是 hydration 复用：closed root 没法被客户端复用，原因见上文。详见
-  [编码规范](/cn/src/ranui/coding-guides/#服务端渲染)。
+  [编码规范](/cn/src/ranui/coding-guides/#server-rendering)。
 - **不要把状态写进服务端渲染的 shadow 标记里**，指望客户端再读回来。状态请通过属性传递，属性在重建后
   仍然保留。
 

@@ -1,0 +1,9 @@
+{
+  "lang": "日本語",
+  "components_totp_1": "生成する",
+  "components_totp_2": "2FA のキーを入力してください",
+  "components_totp_3": "2FA のキーがまだ入力されていません",
+  "components_totp_4": "有効期限",
+  "components_totp_5": "入力されたキーは無効です",
+  "components_totp_6": "2FA 認証"
+}

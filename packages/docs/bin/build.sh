@@ -25,7 +25,16 @@ llms_full="./.vitepress/dist/llms-full.txt"
 # 管道的退出码只看最后一个命令 —— find 失败时 sort 照样成功，循环拿到空输入，
 # 结果是静默产出一个空的 llms-full.txt。分成两步后 set -e 才能拦住 find 的失败。
 md_list=$(mktemp)
-find ./src ./cn/src -name "*.md" > "$md_list"
+# 每种语言一个内容目录：英文在 ./src，其余在 ./<语言>/src（见 .vitepress/langs/locales.ts）。
+# 用通配符而不是写死列表 —— 加一门语言就该只改 locales.ts，不该记得回来改这里，
+# 忘了改的后果是静默的：llms-full.txt 少掉整整一门语言，而构建照常成功。
+# ./*/src 只匹配一层，node_modules / public / vue 下都没有 src，不会误伤。
+md_dirs="./src"
+for d in ./*/src; do
+  [ -d "$d" ] && md_dirs="$md_dirs $d"
+done
+# shellcheck disable=SC2086 # md_dirs 是有意按空格拆成多个路径参数的
+find $md_dirs -name "*.md" > "$md_list"
 sort -o "$md_list" "$md_list"
 {
   echo "# ran — full documentation corpus"

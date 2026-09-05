@@ -159,4 +159,4 @@ description: ranui 的变更记录——新增、变更、修复与移除及其�
 | 2026-07-11 | [Geist contrast action + bordered card default](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-11.md) |
 
 发布与标签见 [GitHub](https://github.com/chaxus/ran/releases)，已发布的每个版本见
-[npm](https://www.npmjs.com/package/ranui?activeTab=versions).
+[npm](https://www.npmjs.com/package/ranui?activeTab=versions)。

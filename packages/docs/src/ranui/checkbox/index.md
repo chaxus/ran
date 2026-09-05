@@ -115,7 +115,7 @@ A disabled checkbox does not fire `change`.
 | --------- | -------------------------------------------- |
 | (default) | The checkbox label, rendered next to the box |
 
-## Form Association
+## Form Association {#form-association}
 
 `r-checkbox` is a form-associated custom element (`formAssociated = true`). It relays its checked state through `ElementInternals.setFormValue`, so it participates in native forms and is collected by `new FormData(form)` when it's a real descendant of a native `<form>`. Following native checkbox semantics, it contributes its `value` only when checked.
 
