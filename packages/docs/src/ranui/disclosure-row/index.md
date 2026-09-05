@@ -76,6 +76,7 @@ or while open, and the state indicator is what shows the rest of the time.
 | `expandable` | `expandable` | `boolean` | `false` | Whether the row has a body worth opening.                        |
 | `busy`       | `busy`       | `boolean` | `false` | Whether the work this row stands for is still running.           |
 | `tone`       | `tone`       | `string`  | `''`    | `error` colours the summary; anything else is the ordinary tone. |
+| `name`       | `name`       | `string`  | `''`    | Groups rows so opening one closes the rest.                      |
 | `sheet`      | `sheet`      | `string`  | `''`    | CSS injected into the shadow root.                               |
 
 ::: warning The attribute is `heading`, not `title`
@@ -87,9 +88,10 @@ carry the same rename for the same reason.
 
 ### Events
 
-| Event              | Detail | Dispatch          | Description                        |
-| ------------------ | ------ | ----------------- | ---------------------------------- |
-| `disclosuretoggle` | —      | bubbles, composed | The row was expanded or collapsed. |
+| Event                    | Detail              | Dispatch                      | Description                                   |
+| ------------------------ | ------------------- | ----------------------------- | --------------------------------------------- |
+| `disclosurebeforetoggle` | `{ open: boolean }` | bubbles, composed, cancelable | The row is about to be expanded or collapsed. |
+| `disclosuretoggle`       | `{ open: boolean }` | bubbles, composed             | The row was expanded or collapsed.            |
 
 ::: warning The event is `disclosuretoggle`, not `toggle`
 `toggle` is what `<details>` fires, and its `ToggleEvent` carries `oldState` / `newState`
@@ -102,6 +104,47 @@ row.addEventListener('disclosuretoggle', () => {
   console.log(row.open ? 'opened' : 'closed');
 });
 ```
+
+`disclosurebeforetoggle` fires first and can be refused, which is what makes "fetch the body
+the first time it is opened" and "refuse to collapse while an edit is unsaved" expressible.
+The platform has no equivalent: `<details>` fires only the after-the-fact `toggle`, and the
+request for a cancelable `beforetoggle` on it is still open.
+
+```js
+row.addEventListener('disclosurebeforetoggle', async (event) => {
+  if (!event.detail.open || row.dataset.loaded) return;
+  event.preventDefault(); // hold it closed until the body is there
+  row.append(await fetchBody());
+  row.dataset.loaded = 'true';
+  row.open = true;
+});
+```
+
+Only a press fires it. A programmatic `row.open = true` is the application changing its own
+mind, and there is nobody for it to ask.
+
+### One row at a time
+
+`name` groups rows the way `name` groups `<details>`: opening one closes the others. The
+group is the whole document, and the rows do not have to be siblings.
+
+```html
+<r-disclosure-row name="run" heading="Install" expandable>…</r-disclosure-row>
+<r-disclosure-row name="run" heading="Build" expandable>…</r-disclosure-row>
+<r-disclosure-row name="run" heading="Test" expandable>…</r-disclosure-row>
+```
+
+### Accessibility
+
+A row is a control only when it has something to open. With `expandable` the row carries
+`role="button"`, a tab stop, `aria-expanded` and `aria-controls` pointing at the body;
+without it the row carries none of them, because announcing a line of text as a button
+invites a press that does nothing. `busy` sets `aria-busy`, so the sweep is not the only
+signal that the work is still running.
+
+A collapsed body is clipped rather than removed, so that it can animate. It is also made
+`inert` and its contents are skipped with `content-visibility: hidden`, which keeps it out
+of the tab order and off the render path while it is closed.
 
 ### Slots
 

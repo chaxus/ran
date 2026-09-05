@@ -129,17 +129,19 @@ description: ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/disclosure-row/index.ts`
 
-- **属性（attribute）**: `busy: boolean`, `expandable: boolean`, `heading: string`, `open: boolean`, `sheet: string`, `summary: string`, `tone: string`
+- **属性（attribute）**: `busy: boolean`, `expandable: boolean`, `heading: string`, `name: string`, `open: boolean`, `sheet: string`, `summary: string`, `tone: string`
 - **属性值（property）**:
   - `busy: boolean` — Whether the work this row stands for is still running.
   - `expandable: boolean` — Whether the row has a body worth opening.
   - `heading: string` — The fixed-width left half of the line.
+  - `name: string` — Groups rows so that opening one closes the rest.
   - `open: boolean` — Whether the body is shown.
   - `sheet: string`
   - `summary: string` — The truncating right half. Empty drops the separator with it.
   - `tone: string` — `error` colours the summary; anything else is the ordinary tone.
 - **事件**:
-  - `disclosuretoggle` · bubbles, composed
+  - `disclosurebeforetoggle` · bubbles, composed, cancelable · detail `{ open }`
+  - `disclosuretoggle` · bubbles, composed · detail `{ open }`
 - **插槽**: `默认插槽`, `leading（具名）`
 - **Part**: `body`, `disclosure`, `leading`, `row`, `separator`, `summary`, `title`
 
