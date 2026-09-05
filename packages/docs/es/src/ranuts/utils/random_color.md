@@ -8,9 +8,9 @@ Genera un objeto de color aleatorio.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| -------- | ------------------- | ------- |
-| `Color` | Objeto de color aleatorio | `Color` |
+| Argumento | Descripción               | Tipo    |
+| --------- | ------------------------- | ------- |
+| `Color`   | Objeto de color aleatorio | `Color` |
 
 #### Parámetros
 

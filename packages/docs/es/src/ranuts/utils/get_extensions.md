@@ -8,15 +8,15 @@ Devuelve el array de extensiones de archivo que corresponden a un tipo MIME.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| -------- | ---------------------------------- | ---------- |
-| `Array` | Array de extensiones (sin el punto) | `string[]` |
+| Argumento | Descripción                         | Tipo       |
+| --------- | ----------------------------------- | ---------- |
+| `Array`   | Array de extensiones (sin el punto) | `string[]` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| ---------- | ----------- | -------- | -------- |
-| `mimeType` | Tipo MIME | `string` | Obligatorio |
+| Parámetro  | Descripción | Tipo     | Por defecto |
+| ---------- | ----------- | -------- | ----------- |
+| `mimeType` | Tipo MIME   | `string` | Obligatorio |
 
 ## Ejemplo
 

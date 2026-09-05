@@ -104,9 +104,7 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 ## 事件
 
-### 点击事件
-
-按钮支持标准的点击事件处理
+按钮支持标准的点击事件处理。
 
 ```html
 <r-button onclick="handleClick()">点击我</r-button>

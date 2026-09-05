@@ -8,8 +8,8 @@ Ermittelt den Typ des aktuellen Geräts.
 
 #### Rückgabe
 
-| Argument | Beschreibung | Typ |
-| --------------- | ------------------ | ----------------------------------------- |
+| Argument        | Beschreibung                   | Typ                                       |
+| --------------- | ------------------------------ | ----------------------------------------- |
 | `CurrentDevice` | Zeichenkette mit dem Gerätetyp | `'ipad' \| 'android' \| 'iphone' \| 'pc'` |
 
 #### Parameter

@@ -6,11 +6,11 @@ Alle drei halten dieselbe Zusage: Lässt sich die Eingabe nicht vollständig aus
 
 ## API
 
-| Funktion | Nimmt an |
-| --------------------------- | --------------------------------------------------------------------------------------- |
+| Funktion                    | Nimmt an                                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------------------ |
 | `parseChineseNumber(value)` | Ziffern (halb- und vollbreit), `一二三…`, die Stellen `十百千万/萬`, Kurz- und Langzeichen |
-| `parseRomanNumber(value)` | `IVXLCDM`, Groß- wie Kleinschreibung, subtraktive Schreibweise (`IV`, `IX`) |
-| `parseEnglishNumber(value)` | Ziffern, die englischen Zahlwörter `one`–`twenty`, danach römische Zahlen |
+| `parseRomanNumber(value)`   | `IVXLCDM`, Groß- wie Kleinschreibung, subtraktive Schreibweise (`IV`, `IX`)                |
+| `parseEnglishNumber(value)` | Ziffern, die englischen Zahlwörter `one`–`twenty`, danach römische Zahlen                  |
 
 Verwandte Zeichenketten-Helfer: `toHalfWidth(value)` / `toFullWidth(value)` vereinheitlichen vollbreite Zeichen — `parseChineseNumber` wendet das schon für dich an.
 

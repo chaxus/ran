@@ -8,16 +8,16 @@ Hilfsfunktion zum Erzeugen von DOM-Elementen, sowohl HTML als auch SVG.
 
 #### Rückgabe
 
-| Argument | Beschreibung | Typ |
-| ------------- | ------------------- | ------------- |
+| Argument      | Beschreibung             | Typ           |
+| ------------- | ------------------------ | ------------- |
 | `HTMLElement` | Das erzeugte DOM-Element | `HTMLElement` |
 
 #### Parameter
 
-| Parameter | Beschreibung | Typ | Standard |
-| --------- | --------------------------- | ------------------------ | -------- |
-| `tagName` | Name des Tags | `string` | Erforderlich |
-| `options` | Optionen zum Erzeugen (optional) | `ElementCreationOptions` | Optional |
+| Parameter | Beschreibung                     | Typ                      | Standard     |
+| --------- | -------------------------------- | ------------------------ | ------------ |
+| `tagName` | Name des Tags                    | `string`                 | Erforderlich |
+| `options` | Optionen zum Erzeugen (optional) | `ElementCreationOptions` | Optional     |
 
 ## Beispiel
 

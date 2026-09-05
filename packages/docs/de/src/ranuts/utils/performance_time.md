@@ -8,8 +8,8 @@ Liefert einen hochauflösenden Zeitstempel, im Browser wie in Node.js.
 
 #### Rückgabe
 
-| Argument | Beschreibung | Typ |
-| -------- | --------------------------------------- | -------- |
+| Argument | Beschreibung                                | Typ      |
+| -------- | ------------------------------------------- | -------- |
 | `number` | Hochauflösender Zeitstempel (Millisekunden) | `number` |
 
 #### Parameter

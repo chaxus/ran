@@ -6,11 +6,11 @@ Os três seguem o mesmo contrato: **devolvem `null` em vez de chutar** quando a 
 
 ## API
 
-| Função | Aceita |
-| --------------------------- | --------------------------------------------------------------------------------------- |
+| Função                      | Aceita                                                                                                        |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `parseChineseNumber(value)` | Dígitos (de meia largura e largura inteira), `一二三…`, as unidades `十百千万/萬`, simplificado e tradicional |
-| `parseRomanNumber(value)` | `IVXLCDM`, em qualquer caixa, com notação subtrativa (`IV`, `IX`) |
-| `parseEnglishNumber(value)` | Dígitos, os numerais ingleses `one`–`twenty` e, depois, números romanos |
+| `parseRomanNumber(value)`   | `IVXLCDM`, em qualquer caixa, com notação subtrativa (`IV`, `IX`)                                             |
+| `parseEnglishNumber(value)` | Dígitos, os numerais ingleses `one`–`twenty` e, depois, números romanos                                       |
 
 Auxiliares de string relacionados: `toHalfWidth(value)` / `toFullWidth(value)` normalizam caracteres de largura inteira, algo que `parseChineseNumber` já aplica por você.
 

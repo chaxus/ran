@@ -8,15 +8,15 @@ Stellt fest, ob ein Wert vom Typ Zeichenkette ist.
 
 #### Rückgabe
 
-| Argument | Beschreibung | Typ |
-| --------- | ---------------------- | --------- |
+| Argument  | Beschreibung                | Typ       |
+| --------- | --------------------------- | --------- |
 | `boolean` | Ob es eine Zeichenkette ist | `boolean` |
 
 #### Parameter
 
-| Parameter | Beschreibung | Typ | Standard |
-| --------- | -------------- | --------- | -------- |
-| `obj` | Zu prüfender Wert | `unknown` | Erforderlich |
+| Parameter | Beschreibung      | Typ       | Standard     |
+| --------- | ----------------- | --------- | ------------ |
+| `obj`     | Zu prüfender Wert | `unknown` | Erforderlich |
 
 ## Beispiel
 

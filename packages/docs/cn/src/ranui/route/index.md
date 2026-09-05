@@ -111,18 +111,18 @@ route.params; // 例如 { id: '42' }，需等路由器匹配到该路由后才�
 当该出口变为激活状态（其 `path` 匹配当前路径）时触发。该事件会**冒泡**。
 `event.detail` 为 `{ path, params }`：
 
-```xml
+```html
 <r-route path="/users/:id"><h2>用户资料</h2></r-route>
-```
 
-```js
-// 按同样的方式创建路由，挂载前先监听
-const route = document.createElement('r-route');
-route.path = '/users/:id';
-route.addEventListener('routematch', (e) => {
-  console.log(e.detail.path, e.detail.params); // '/users/42', { id: '42' }
-});
-router.append(route);
+<script>
+  // 按同样的方式创建路由，挂载前先监听
+  const route = document.createElement('r-route');
+  route.path = '/users/:id';
+  route.addEventListener('routematch', (e) => {
+    console.log(e.detail.path, e.detail.params); // '/users/42', { id: '42' }
+  });
+  router.append(route);
+</script>
 ```
 
 ## 样式定制

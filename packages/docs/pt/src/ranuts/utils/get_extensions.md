@@ -8,14 +8,14 @@ Devolve o array de extensões de arquivo correspondentes a um tipo MIME.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| -------- | ---------------------------------- | ---------- |
-| `Array` | Array de extensões (sem o ponto) | `string[]` |
+| Argumento | Descrição                        | Tipo       |
+| --------- | -------------------------------- | ---------- |
+| `Array`   | Array de extensões (sem o ponto) | `string[]` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| ---------- | ----------- | -------- | -------- |
+| Parâmetro  | Descrição | Tipo     | Padrão      |
+| ---------- | --------- | -------- | ----------- |
 | `mimeType` | Tipo MIME | `string` | Obrigatório |
 
 ## Exemplo

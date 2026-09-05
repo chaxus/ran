@@ -8,9 +8,9 @@ Obtém um carimbo de tempo de alta precisão, tanto no navegador quanto no Node.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| -------- | --------------------------------------- | -------- |
-| `number` | Carimbo de tempo de alta precisão (milissegundos) | `number` |
+| Argumento | Descrição                                         | Tipo     |
+| --------- | ------------------------------------------------- | -------- |
+| `number`  | Carimbo de tempo de alta precisão (milissegundos) | `number` |
 
 #### Parâmetros
 
