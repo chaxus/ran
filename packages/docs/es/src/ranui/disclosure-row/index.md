@@ -59,16 +59,16 @@ Sin nada en `leading`, la punta de flecha se queda a la vista, porque es la úni
 
 ### Propiedades
 
-| Propiedad    | Atributo     | Tipo      | Por defecto | Descripción                                                        |
-| ------------ | ------------ | --------- | ----------- | ------------------------------------------------------------------ |
-| `heading`    | `heading`    | `string`  | `''`        | La mitad izquierda de la línea, de ancho fijo.                     |
-| `summary`    | `summary`    | `string`  | `''`        | La mitad derecha, que se recorta. Vacía, se lleva el separador.    |
+| Propiedad    | Atributo     | Tipo      | Por defecto | Descripción                                                                |
+| ------------ | ------------ | --------- | ----------- | -------------------------------------------------------------------------- |
+| `heading`    | `heading`    | `string`  | `''`        | La mitad izquierda de la línea, de ancho fijo.                             |
+| `summary`    | `summary`    | `string`  | `''`        | La mitad derecha, que se recorta. Vacía, se lleva el separador.            |
 | `open`       | `open`       | `boolean` | `false`     | Si el cuerpo está a la vista. Se refleja, así que `:has([open])` funciona. |
-| `expandable` | `expandable` | `boolean` | `false`     | Si la fila tiene un cuerpo que merezca abrirse.                    |
-| `busy`       | `busy`       | `boolean` | `false`     | Si el trabajo que representa esta fila sigue en marcha.            |
-| `tone`       | `tone`       | `string`  | `''`        | `error` colorea el resumen; cualquier otro valor es el tono normal. |
-| `name`       | `name`       | `string`  | `''`        | Agrupa filas, de modo que abrir una cierre las demás.              |
-| `sheet`      | `sheet`      | `string`  | `''`        | CSS inyectado en el shadow root.                                   |
+| `expandable` | `expandable` | `boolean` | `false`     | Si la fila tiene un cuerpo que merezca abrirse.                            |
+| `busy`       | `busy`       | `boolean` | `false`     | Si el trabajo que representa esta fila sigue en marcha.                    |
+| `tone`       | `tone`       | `string`  | `''`        | `error` colorea el resumen; cualquier otro valor es el tono normal.        |
+| `name`       | `name`       | `string`  | `''`        | Agrupa filas, de modo que abrir una cierre las demás.                      |
+| `sheet`      | `sheet`      | `string`  | `''`        | CSS inyectado en el shadow root.                                           |
 
 ::: warning El atributo es `heading`, no `title`
 `title` es un atributo nativo de `HTMLElement` que el navegador dibuja como un tooltip, así que un componente que lo usara para un encabezado haría que cada instancia sacase un tooltip repitiendo el texto que ya está en pantalla, y nada lo apaga una vez puesto. `<r-card>` y `<r-modal>` llevan el mismo cambio de nombre por la misma razón.
@@ -76,10 +76,10 @@ Sin nada en `leading`, la punta de flecha se queda a la vista, porque es la úni
 
 ### Eventos
 
-| Evento                   | Detalle             | Despacho                          | Descripción                                  |
-| ------------------------ | ------------------- | --------------------------------- | -------------------------------------------- |
-| `disclosurebeforetoggle` | `{ open: boolean }` | burbujea, composed, cancelable    | La fila está a punto de abrirse o cerrarse.  |
-| `disclosuretoggle`       | `{ open: boolean }` | burbujea, composed                | La fila se abrió o se cerró.                 |
+| Evento                   | Detalle             | Despacho                       | Descripción                                 |
+| ------------------------ | ------------------- | ------------------------------ | ------------------------------------------- |
+| `disclosurebeforetoggle` | `{ open: boolean }` | burbujea, composed, cancelable | La fila está a punto de abrirse o cerrarse. |
+| `disclosuretoggle`       | `{ open: boolean }` | burbujea, composed             | La fila se abrió o se cerró.                |
 
 ::: warning El evento es `disclosuretoggle`, no `toggle`
 `toggle` es lo que dispara `<details>`, y su `ToggleEvent` lleva `oldState` / `newState` en vez de un `detail`; un escuchador tipado contra el nombre de la plataforma no encuentra nada dentro. Lee el estado del elemento: `row.open`.
@@ -125,12 +125,12 @@ La fila mide 24px de alto, que es exactamente el mínimo de la WCAG 2.5.8, y las
 
 ### Slots
 
-| Slot      | Contenido                                                                     |
-| --------- | ----------------------------------------------------------------------------- |
-| `default` | El cuerpo, a la vista mientras esté `open`.                                   |
-| `leading` | Un indicador antes del título, normalmente `<r-state-dot>`.                   |
+| Slot      | Contenido                                                                             |
+| --------- | ------------------------------------------------------------------------------------- |
+| `default` | El cuerpo, a la vista mientras esté `open`.                                           |
+| `leading` | Un indicador antes del título, normalmente `<r-state-dot>`.                           |
 | `heading` | Marcado para la mitad izquierda, que sustituye al texto plano del atributo `heading`. |
-| `summary` | Marcado para la mitad derecha, que sustituye al texto plano del atributo `summary`. |
+| `summary` | Marcado para la mitad derecha, que sustituye al texto plano del atributo `summary`.   |
 
 `heading` y `summary` toman cadenas simples como atributos, que es lo que suele necesitar la fila de una llamada a una herramienta. Cuando la mitad tenga que llevar marcado —código, un enlace, una abreviatura— ponlo en el slot. El texto del atributo es el respaldo del slot, así que el contenido del slot simplemente lo sustituye:
 

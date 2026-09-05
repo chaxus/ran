@@ -59,16 +59,16 @@ Sem nada no `leading`, a seta fica sempre à vista, já que ela é a única marc
 
 ### Propriedades
 
-| Propriedade  | Atributo     | Tipo      | Padrão  | Descrição                                                        |
-| ------------ | ------------ | --------- | ------- | ---------------------------------------------------------------- |
-| `heading`    | `heading`    | `string`  | `''`    | A metade esquerda da linha, de largura fixa.                     |
+| Propriedade  | Atributo     | Tipo      | Padrão  | Descrição                                                             |
+| ------------ | ------------ | --------- | ------- | --------------------------------------------------------------------- |
+| `heading`    | `heading`    | `string`  | `''`    | A metade esquerda da linha, de largura fixa.                          |
 | `summary`    | `summary`    | `string`  | `''`    | A metade direita, que corta o excesso. Vazia, leva o separador junto. |
-| `open`       | `open`       | `boolean` | `false` | Se o corpo está à vista. É refletido, então `:has([open])` funciona. |
-| `expandable` | `expandable` | `boolean` | `false` | Se a linha tem um corpo que valha a pena abrir.                  |
-| `busy`       | `busy`       | `boolean` | `false` | Se o trabalho que esta linha representa ainda está rodando.      |
-| `tone`       | `tone`       | `string`  | `''`    | `error` colore o resumo; qualquer outro valor é o tom comum.     |
-| `name`       | `name`       | `string`  | `''`    | Agrupa linhas, de modo que abrir uma feche as demais.            |
-| `sheet`      | `sheet`      | `string`  | `''`    | CSS injetado no shadow root.                                     |
+| `open`       | `open`       | `boolean` | `false` | Se o corpo está à vista. É refletido, então `:has([open])` funciona.  |
+| `expandable` | `expandable` | `boolean` | `false` | Se a linha tem um corpo que valha a pena abrir.                       |
+| `busy`       | `busy`       | `boolean` | `false` | Se o trabalho que esta linha representa ainda está rodando.           |
+| `tone`       | `tone`       | `string`  | `''`    | `error` colore o resumo; qualquer outro valor é o tom comum.          |
+| `name`       | `name`       | `string`  | `''`    | Agrupa linhas, de modo que abrir uma feche as demais.                 |
+| `sheet`      | `sheet`      | `string`  | `''`    | CSS injetado no shadow root.                                          |
 
 ::: warning O atributo é `heading`, não `title`
 `title` é um atributo nativo de `HTMLElement` que o navegador desenha como dica de tela, então um componente que o usasse para um título faria toda instância brotar uma dica repetindo o texto que já está na tela — e nada desliga isso depois de definido. `<r-card>` e `<r-modal>` levam a mesma troca de nome pelo mesmo motivo.
@@ -76,10 +76,10 @@ Sem nada no `leading`, a seta fica sempre à vista, já que ela é a única marc
 
 ### Eventos
 
-| Evento                   | Detail              | Despacho                        | Descrição                                     |
-| ------------------------ | ------------------- | ------------------------------- | --------------------------------------------- |
-| `disclosurebeforetoggle` | `{ open: boolean }` | borbulha, composed, cancelável  | A linha está prestes a abrir ou fechar.       |
-| `disclosuretoggle`       | `{ open: boolean }` | borbulha, composed              | A linha abriu ou fechou.                      |
+| Evento                   | Detail              | Despacho                       | Descrição                               |
+| ------------------------ | ------------------- | ------------------------------ | --------------------------------------- |
+| `disclosurebeforetoggle` | `{ open: boolean }` | borbulha, composed, cancelável | A linha está prestes a abrir ou fechar. |
+| `disclosuretoggle`       | `{ open: boolean }` | borbulha, composed             | A linha abriu ou fechou.                |
 
 ::: warning O evento é `disclosuretoggle`, não `toggle`
 `toggle` é o que o `<details>` dispara, e o `ToggleEvent` dele carrega `oldState` / `newState` em vez de um `detail`; um ouvinte tipado pelo nome da plataforma não acha nada ali dentro. Leia o estado do elemento: `row.open`.
@@ -125,12 +125,12 @@ A linha tem 24px de altura, exatamente o mínimo da WCAG 2.5.8, e as linhas se e
 
 ### Slots
 
-| Slot      | Conteúdo                                                                       |
-| --------- | ------------------------------------------------------------------------------ |
-| `default` | O corpo, revelado enquanto estiver `open`.                                     |
-| `leading` | Um indicador antes do título, normalmente `<r-state-dot>`.                     |
+| Slot      | Conteúdo                                                                          |
+| --------- | --------------------------------------------------------------------------------- |
+| `default` | O corpo, revelado enquanto estiver `open`.                                        |
+| `leading` | Um indicador antes do título, normalmente `<r-state-dot>`.                        |
 | `heading` | Marcação para a metade esquerda, substituindo o texto puro do atributo `heading`. |
-| `summary` | Marcação para a metade direita, substituindo o texto puro do atributo `summary`. |
+| `summary` | Marcação para a metade direita, substituindo o texto puro do atributo `summary`.  |
 
 `heading` e `summary` recebem strings simples como atributos, que é o que a linha de uma chamada de ferramenta costuma precisar. Quando a metade tiver de carregar marcação — código, um link, uma abreviação — coloque no slot. O texto do atributo é o conteúdo reserva do slot, então o que você põe no slot simplesmente o substitui:
 

@@ -59,16 +59,16 @@ Steht in `leading` nichts, bleibt das Winkelzeichen sichtbar, denn es ist das ei
 
 ### Eigenschaften
 
-| Eigenschaft  | Attribut     | Typ       | Standard | Beschreibung                                                       |
-| ------------ | ------------ | --------- | -------- | ------------------------------------------------------------------ |
-| `heading`    | `heading`    | `string`  | `''`     | Die linke Hälfte der Zeile, mit fester Breite.                     |
+| Eigenschaft  | Attribut     | Typ       | Standard | Beschreibung                                                            |
+| ------------ | ------------ | --------- | -------- | ----------------------------------------------------------------------- |
+| `heading`    | `heading`    | `string`  | `''`     | Die linke Hälfte der Zeile, mit fester Breite.                          |
 | `summary`    | `summary`    | `string`  | `''`     | Die rechte, abgeschnittene Hälfte. Leer nimmt sie das Trennzeichen mit. |
 | `open`       | `open`       | `boolean` | `false`  | Ob der Rumpf gezeigt wird. Wird gespiegelt, `:has([open])` greift also. |
-| `expandable` | `expandable` | `boolean` | `false`  | Ob die Zeile einen Rumpf hat, der das Öffnen lohnt.                |
-| `busy`       | `busy`       | `boolean` | `false`  | Ob die Arbeit, für die diese Zeile steht, noch läuft.              |
-| `tone`       | `tone`       | `string`  | `''`     | `error` färbt die Zusammenfassung; alles andere ist der übliche Ton. |
-| `name`       | `name`       | `string`  | `''`     | Gruppiert Zeilen, sodass das Öffnen einer die übrigen schließt.    |
-| `sheet`      | `sheet`      | `string`  | `''`     | CSS, das in den Shadow Root eingefügt wird.                        |
+| `expandable` | `expandable` | `boolean` | `false`  | Ob die Zeile einen Rumpf hat, der das Öffnen lohnt.                     |
+| `busy`       | `busy`       | `boolean` | `false`  | Ob die Arbeit, für die diese Zeile steht, noch läuft.                   |
+| `tone`       | `tone`       | `string`  | `''`     | `error` färbt die Zusammenfassung; alles andere ist der übliche Ton.    |
+| `name`       | `name`       | `string`  | `''`     | Gruppiert Zeilen, sodass das Öffnen einer die übrigen schließt.         |
+| `sheet`      | `sheet`      | `string`  | `''`     | CSS, das in den Shadow Root eingefügt wird.                             |
 
 ::: warning Das Attribut heißt `heading`, nicht `title`
 `title` ist ein natives Attribut von `HTMLElement`, das der Browser als Tooltip zeichnet. Eine Komponente, die es für eine Überschrift benutzte, ließe an jeder Instanz einen Tooltip sprießen, der den Text vom Bildschirm wiederholt — und nichts schaltet das wieder ab, wenn es einmal gesetzt ist. `<r-card>` und `<r-modal>` tragen aus demselben Grund dieselbe Umbenennung.
@@ -76,10 +76,10 @@ Steht in `leading` nichts, bleibt das Winkelzeichen sichtbar, denn es ist das ei
 
 ### Ereignisse
 
-| Ereignis                 | Detail              | Auslösung                       | Beschreibung                                        |
-| ------------------------ | ------------------- | ------------------------------- | --------------------------------------------------- |
-| `disclosurebeforetoggle` | `{ open: boolean }` | bubbles, composed, abbrechbar   | Die Zeile wird gleich auf- oder zugeklappt.         |
-| `disclosuretoggle`       | `{ open: boolean }` | bubbles, composed               | Die Zeile wurde auf- oder zugeklappt.               |
+| Ereignis                 | Detail              | Auslösung                     | Beschreibung                                |
+| ------------------------ | ------------------- | ----------------------------- | ------------------------------------------- |
+| `disclosurebeforetoggle` | `{ open: boolean }` | bubbles, composed, abbrechbar | Die Zeile wird gleich auf- oder zugeklappt. |
+| `disclosuretoggle`       | `{ open: boolean }` | bubbles, composed             | Die Zeile wurde auf- oder zugeklappt.       |
 
 ::: warning Das Ereignis heißt `disclosuretoggle`, nicht `toggle`
 `toggle` ist, was `<details>` auslöst, und dessen `ToggleEvent` trägt `oldState` / `newState` statt eines `detail`; ein Listener, der gegen den Plattformnamen typisiert ist, findet darin nichts. Lies den Zustand am Element: `row.open`.
@@ -125,11 +125,11 @@ Die Zeile ist 24px hoch, genau das Minimum aus WCAG 2.5.8, und Zeilen stapeln si
 
 ### Slots
 
-| Slot      | Inhalt                                                                        |
-| --------- | ----------------------------------------------------------------------------- |
-| `default` | Der Rumpf, sichtbar solange `open`.                                           |
-| `leading` | Ein Indikator vor der Überschrift, typischerweise `<r-state-dot>`.            |
-| `heading` | Markup für die linke Hälfte, ersetzt den einfachen Text des Attributs `heading`. |
+| Slot      | Inhalt                                                                            |
+| --------- | --------------------------------------------------------------------------------- |
+| `default` | Der Rumpf, sichtbar solange `open`.                                               |
+| `leading` | Ein Indikator vor der Überschrift, typischerweise `<r-state-dot>`.                |
+| `heading` | Markup für die linke Hälfte, ersetzt den einfachen Text des Attributs `heading`.  |
 | `summary` | Markup für die rechte Hälfte, ersetzt den einfachen Text des Attributs `summary`. |
 
 `heading` und `summary` nehmen als Attribute einfache Zeichenketten — das reicht der Zeile eines Werkzeugaufrufs meist. Muss die Hälfte Markup tragen (Code, ein Link, eine Abkürzung), leg es stattdessen in den Slot. Der Attributtext ist der Rückfall des Slots, der Slot-Inhalt ersetzt ihn also schlicht:
