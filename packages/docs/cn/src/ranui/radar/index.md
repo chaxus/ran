@@ -29,12 +29,13 @@ description: '在二维画布上对比一份数据集的多项指标的雷达图
 也可以通过 `abilitys` 这个 JS 属性以命令式方式设置数据；它既接受数组（会被重新字符串化写回 attribute），也接受 JSON 字符串：
 
 ```js
-const radar = document.querySelector('r-radar');
+const radar = document.createElement('r-radar');
 radar.abilitys = [
   { abilityName: '生命', scoreRate: 10 },
   { abilityName: '攻击', scoreRate: 90 },
   { abilityName: '防御', scoreRate: 20 },
 ];
+chart.append(radar);
 ```
 
 ## API 参考

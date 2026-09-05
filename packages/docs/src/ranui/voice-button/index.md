@@ -22,7 +22,9 @@ caret: three answers that differ per app.
 ```
 
 ```ts
-const mic = document.querySelector('r-voice-button');
+const mic = document.createElement('r-voice-button');
+mic.label = 'Start voice input';
+mic.activeLabel = 'Stop voice input';
 const input = document.querySelector('textarea');
 let base = '';
 
@@ -34,13 +36,15 @@ mic.addEventListener('voicestart', () => {
 mic.addEventListener('voiceresult', (event) => {
   input.value = base + event.detail.transcript;
 });
+
+composer.append(mic);
 ```
 
 ## The decisions behind it
 
 ### It reports the whole capture, not the newest fragment
 
-Interim results are **revised** as recognition firms up: "你好" becomes "你好世界", it does
+Interim results are **revised** as recognition continues: "你好" becomes "你好世界", it does
 not gain a second event carrying "世界". A consumer that appended each event would end up
 with `你好你好世界`. Remember the text that was already in the field and concatenate once.
 
@@ -51,10 +55,12 @@ review they need. This fills the box and stops there. Sending stays a deliberate
 
 ### It hides itself where recognition does not exist
 
-Firefox ships no speech recognition, and neither does any browser with the API absent. The
-element sets `hidden` rather than `disabled`: **disabled says "not now", absent says "not
-here"**, and a button that cannot work is worse than no button; it invites a tap and then
-explains itself.
+Firefox ships no speech recognition, and neither does any browser with the API absent. When
+recognition isn't supported, the element hides itself with `hidden` instead of disabling
+itself with `disabled`: `disabled` implies the feature exists but is temporarily unavailable,
+while removing the button is accurate when the feature doesn't exist on this platform at all.
+Showing a button that can never work would invite a tap that does nothing, and then require an
+explanation.
 
 ### Only two of four errors are worth showing
 
@@ -66,7 +72,7 @@ explains itself.
 | `aborted`  | a programmatic stop        | no                         |
 
 The last two arrive through the same channel as a real failure and are not one. Surfacing
-them nags after every capture.
+them would show an error after every ordinary capture, not just real failures.
 
 ### Accessibility
 

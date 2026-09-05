@@ -27,12 +27,14 @@ since script is acting for a caller who has an opinion.
 ```
 
 ```ts
-const reasoning = document.querySelector('r-reasoning');
+const reasoning = document.createElement('r-reasoning');
 
 reasoning.streaming = true; // expands
 reasoning.content += delta; // grows while visible
 reasoning.duration = 4200; // "4.2s" beside the label
 reasoning.streaming = false; // collapses, unless the reader intervened
+
+conversation.append(reasoning);
 ```
 
 `ranuts/stream` already keeps `reasoning-delta` apart from `text-delta`, so a view can feed

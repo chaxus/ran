@@ -67,8 +67,9 @@ const html = renderToString(new Button());
 children_ when the mode is closed. So the server-rendered tree paints the first frame and is
 then replaced by an identical client-built one. Two consequences:
 
-- You get correct first paint, not hydration reuse. That is the deliberate trade for closed
-  roots. See the [coding guidelines](/src/ranui/coding-guides/#server-rendering).
+- You get correct first paint, not hydration reuse: closed shadow roots cannot be reused by
+  the client, for the reason above. See the
+  [coding guidelines](/src/ranui/coding-guides/#server-rendering).
 - **Never put state in the server-rendered shadow markup** expecting the client to read it
   back. Pass it through attributes, which survive.
 
@@ -76,8 +77,8 @@ then replaced by an identical client-built one. Two consequences:
 or `offsetWidth` resolves after mount, in the browser. Components are written so their initial
 layout comes from CSS for exactly this reason.
 
-**Four elements do not server-render today**, each because it reaches for a browser API while
-constructing: `<r-content>` (`MutationObserver`), `<r-link>` (`document`), `<r-modal>` (a slot
+**Four elements do not server-render today**, each because it accesses a browser API in its
+constructor: `<r-content>` (`MutationObserver`), `<r-link>` (`document`), `<r-modal>` (a slot
 method the SSR mock does not implement) and `<r-radar>` (`ResizeObserver`). They pass through
 as plain tags and upgrade on the client. Every other element is covered by a test that fails
 if it stops rendering, so this list cannot grow silently.

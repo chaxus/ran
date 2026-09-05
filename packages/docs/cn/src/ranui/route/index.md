@@ -71,8 +71,10 @@ description: '一个路由出口元素，仅当当前路径匹配其 path 模式
 从只读的 `params` 属性读取捕获到的参数（每个值都经过 `decodeURIComponent` 解码）：
 
 ```js
-const route = document.querySelector('r-route');
-route.params; // 例如 { id: '42' }
+const route = document.createElement('r-route');
+route.path = '/users/:id';
+router.append(route);
+route.params; // 例如 { id: '42' }，需等路由器匹配到该路由后才有值
 ```
 
 ### 精确匹配 `exact`
@@ -112,9 +114,13 @@ route.params; // 例如 { id: '42' }
 ```
 
 ```js
-document.querySelector('r-route').addEventListener('routematch', (e) => {
+// 按同样的方式创建路由，挂载前先监听
+const route = document.createElement('r-route');
+route.path = '/users/:id';
+route.addEventListener('routematch', (e) => {
   console.log(e.detail.path, e.detail.params); // '/users/42', { id: '42' }
 });
+router.append(route);
 ```
 
 ## 样式定制

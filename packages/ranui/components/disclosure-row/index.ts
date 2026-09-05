@@ -1,5 +1,5 @@
 import componentCss from './index.less?inline';
-import { ButtonBuilder, createRef, Div, EventManager, Slot, Span } from '@/utils/builder';
+import { ButtonBuilder, createRef, Div, EventManager, Slot, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
@@ -46,10 +46,13 @@ export const DISCLOSURE_TOGGLE = 'disclosuretoggle';
 export class DisclosureRow extends RanElement {
   _events = new EventManager();
   _shadowDom!: ShadowRoot;
+  _root!: HTMLElement;
   _row!: HTMLElement;
   _title!: HTMLElement;
   _summary!: HTMLElement;
   _sep!: HTMLElement;
+  _leadingSlot!: HTMLSlotElement;
+  _bodyInner!: HTMLElement;
 
   static get observedAttributes(): string[] {
     return ['open', 'expandable', 'heading', 'summary', 'tone', 'busy', 'sheet'];
@@ -63,6 +66,8 @@ export class DisclosureRow extends RanElement {
     const title = createRef<HTMLElement>();
     const summary = createRef<HTMLElement>();
     const sep = createRef<HTMLElement>();
+    const leadingSlot = createRef<HTMLSlotElement>();
+    const bodyInner = createRef<HTMLDivElement>();
     const root = Div()
       .class('ran-disclosure')
       .attr('part', 'disclosure')
@@ -77,8 +82,27 @@ export class DisclosureRow extends RanElement {
               .class('ran-disclosure-leading')
               .attr('part', 'leading')
               .children(
-                Span().class('ran-disclosure-icon').children(Slot().attr('name', 'leading').build()).build(),
-                Span().class('ran-disclosure-chevron').attr('aria-hidden', 'true').text('▸').build(),
+                Span()
+                  .class('ran-disclosure-icon')
+                  .children(Slot().ref(leadingSlot).attr('name', 'leading').build())
+                  .build(),
+                // An inline SVG rather than the `▸` character: a text glyph is drawn by
+                // whichever font resolves it, so its weight, size and baseline vary by
+                // platform, and it cannot take a stroke width. Same path and stroke as
+                // `assets/icons/chevron-down.svg`, inline rather than through `r-icon`
+                // because a row is meant to appear dozens of times in a list and this
+                // avoids a custom-element upgrade for each one.
+                View('svg')
+                  .class('ran-disclosure-chevron')
+                  .attr('viewBox', '0 0 24 24')
+                  .attr('fill', 'none')
+                  .attr('stroke', 'currentColor')
+                  .attr('stroke-width', '1.75')
+                  .attr('stroke-linecap', 'round')
+                  .attr('stroke-linejoin', 'round')
+                  .attr('aria-hidden', 'true')
+                  .children(View('path').attr('d', 'M6 9l6 6 6-6').build())
+                  .build(),
               )
               .build(),
             Span().class('ran-disclosure-title').ref(title).attr('part', 'title').build(),
@@ -86,10 +110,19 @@ export class DisclosureRow extends RanElement {
             Span().class('ran-disclosure-summary').ref(summary).attr('part', 'summary').build(),
           )
           .build(),
-        Div().class('ran-disclosure-body').attr('part', 'body').children(Slot().build()).build(),
+        // Two elements, not one: the outer box animates `grid-template-rows`, and the
+        // inner one clips what does not fit yet. A single element cannot do both.
+        Div()
+          .class('ran-disclosure-body')
+          .attr('part', 'body')
+          .children(Div().class('ran-disclosure-body-inner').ref(bodyInner).children(Slot().build()).build())
+          .build(),
       )
       .build();
     this._shadowDom.appendChild(root);
+    this._root = root;
+    this._leadingSlot = leadingSlot.current as HTMLSlotElement;
+    this._bodyInner = bodyInner.current as HTMLElement;
     this._row = shadowPart(row, 'row');
     this._title = shadowPart(title, 'title');
     this._summary = shadowPart(summary, 'summary');
@@ -180,6 +213,8 @@ export class DisclosureRow extends RanElement {
   connectedCallback(): void {
     this.handlerExternalCss();
     this._events.on(this._row, 'click', this._toggle);
+    this._events.on(this._leadingSlot, 'slotchange', this._syncLeading);
+    this._syncLeading();
     this._sync();
   }
 
@@ -207,6 +242,23 @@ export class DisclosureRow extends RanElement {
     );
   };
 
+  /**
+   * Records whether anything was slotted into `leading`.
+   *
+   * With leading content the chevron shares that 16px cell and only appears on hover,
+   * focus or while open, so the state icon is what a reader sees at rest. With nothing
+   * slotted the chevron is the only affordance the row has, so hiding it until hover would
+   * leave an expandable row looking like plain text. CSS cannot ask whether a slot is
+   * empty, so the answer is recorded as a class.
+   */
+  private _syncLeading = (): void => {
+    if (typeof this._leadingSlot?.assignedNodes !== 'function') return;
+    const filled = this._leadingSlot
+      .assignedNodes({ flatten: true })
+      .some((node) => node.nodeType === Node.ELEMENT_NODE || (node.textContent ?? '').trim() !== '');
+    this._root.classList.toggle('has-leading', filled);
+  };
+
   private _sync(): void {
     const { heading, summary, expandable, open } = this;
     this._title.textContent = heading;
@@ -223,6 +275,10 @@ export class DisclosureRow extends RanElement {
     } else {
       this._row.setAttribute('aria-disabled', 'true');
     }
+    // A collapsed body is clipped, not removed, so that it can animate. Clipped content is
+    // still focusable and still read out, so it is made inert instead — the previous
+    // `display: none` did that for free.
+    this._bodyInner.inert = !(expandable && open);
   }
 }
 

@@ -40,7 +40,9 @@ description: 'ranui DisclosureRow（<r-disclosure-row>）是一行「标题 · �
 
 ### 带前缀指示
 
-`leading` 插槽与悬停时的折叠箭头共用同一个网格单元，因此悬停切换不产生布局开销。
+`leading` 插槽与折叠箭头共用同一个网格单元，因此两者互换不产生布局开销，标题不会在指针下方移动。
+
+没有 `leading` 内容时，箭头一直显示，它是这一行唯一能表明可展开的标记；有 `leading` 内容时，箭头改为在悬停、聚焦或展开时出现，其余时候显示的是状态点。
 
 <Demo column>
   <r-disclosure-row heading="Build" summary="failed in 4.2s" tone="error" expandable>
@@ -121,8 +123,8 @@ Part：`body` · `disclosure` · `leading` · `row` · `separator` · `summary` 
 
 ## 最佳实践
 
-- **要么给行配正文，要么别让它可展开。** 展开后是空的箭头是条死路；不加 `expandable`，它就老老实实
-  是一行。
+- **要么给行配正文，要么别让它可展开。** 展开后却是空的，箭头就没有意义；不加 `expandable`，
+  这一行就保持单行。
 - **heading 用固定词表**（`Read file`、`Run tests`、`Search`），把变化的部分放进 summary。这正是一列
   行能被快速扫读的原因。
 - **`tone="error"` 必须配文字，不能只靠颜色**：摘要要说清失败的是什么。

@@ -6,9 +6,9 @@ description: 'ranui TokenMeter（<r-token-meter>）显示一段会话占用了�
 
 一段会话正在占用多少上下文窗口。
 
-> **适用场景**：在有上下文上限的模型上做聊天界面时。每一个省掉它的客户端都是「用一周然后突然不能
-> 用」：每一轮都携带全部历史，请求单调增长，某一天服务端直接拒绝。拒绝说来就来，像迎面撞上一堵墙；这
-> 个组件就是在撞墙之前，把这种增长显示出来的仪表。
+> **适用场景**：在有上下文上限的模型上做聊天界面时。不显示用量的客户端一开始都正常，直到某天开始
+> 失败：每一轮都会带上完整历史，请求只增不减，最终超过上限被服务端拒绝。这个组件把这个增长过程显示
+> 出来。
 
 ## 快速开始
 
@@ -25,10 +25,11 @@ description: 'ranui TokenMeter（<r-token-meter>）显示一段会话占用了�
 ```
 
 ```js
-const meter = document.querySelector('r-token-meter');
+const meter = document.createElement('r-token-meter');
 meter.limit = 65536;
 meter.used = 41200; // 下一次请求会携带的上下文
 meter.spent = 128431; // 整段会话累计计费的 token，可选
+composer.append(meter);
 ```
 
 进度条填充到 `used / limit`，并按三档升级：**ok**、**warn**（达到上限的 80% 起）、**over**。`level`
@@ -80,8 +81,8 @@ r-token-meter[level='warn'] ~ .composer-hint {
 | `level` | `level` | `'ok' \| 'warn' \| 'over'` | 推导得出    | 窗口的拥挤程度。**由组件写入**：外部赋值会在下次更新时被覆盖。 |
 | `sheet` | `sheet` | `string`                   | `''`        | 注入 shadow root 的 CSS。                                      |
 
-计数按人读数的方式格式化：一千以下给精确值（`847` 是一个人能记住的数），一千以上做缩写（`41.2k`、
-`128k`）。`128,431` 的第三位数字不会改变任何人的决定。
+计数格式便于快速阅读：一千以下显示精确值（`847` 这样的数字足够短，能一眼读全），一千以上用缩写
+（`41.2k`、`128k`）；`128,431` 的第三位数字不会改变读者的任何判断。
 
 ### Part
 

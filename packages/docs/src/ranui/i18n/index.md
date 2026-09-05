@@ -144,8 +144,9 @@ i18n.setLocale('fr');
 ## Localizing component text
 
 The components do **not** read from this engine themselves. That is deliberate: a component
-reaching into a global singleton would tie every consumer to one instance and one key-naming
-scheme, and would make a page that imports one button pull in the translation layer. Instead
+that read directly from a global singleton would tie every consumer to one instance and one
+key-naming scheme, and would make a page that imports one button pull in the translation
+layer too. Instead
 **every user-visible string is an input**: an attribute, a property, an option, or slotted
 content, so localizing ranui means passing `t()` output in where the string already goes:
 

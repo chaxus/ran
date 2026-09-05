@@ -53,9 +53,10 @@ description: '一个紧凑的色块，点击展开面板，包含饱和度/明�
 ```
 
 ```js
-const picker = document.querySelector('r-colorpicker');
+const picker = document.createElement('r-colorpicker');
 picker.value = '#00c853';
 console.log(picker.value); // 读回当前颜色
+toolbar.append(picker);
 ```
 
 ### 禁用状态 `disabled`
@@ -73,9 +74,10 @@ console.log(picker.value); // 读回当前颜色
 ```
 
 ```js
-const picker = document.querySelector('r-colorpicker');
+const picker = document.createElement('r-colorpicker');
 picker.disabled = true; // 阻止交互
 picker.disabled = false; // 重新启用
+toolbar.append(picker);
 ```
 
 ### 外部样式 `sheet`
@@ -105,10 +107,11 @@ picker.disabled = false; // 重新启用
 <r-colorpicker value="#1677ff"></r-colorpicker>
 
 <script>
-  const picker = document.querySelector('r-colorpicker');
+  const picker = document.createElement('r-colorpicker');
   picker.addEventListener('change', (e) => {
     console.log(e.detail.hex, e.detail.alpha);
   });
+  toolbar.append(picker);
 </script>
 ```
 

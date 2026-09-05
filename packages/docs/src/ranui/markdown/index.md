@@ -68,12 +68,13 @@ The source is read from the **`content` property** (preferred, not reflected, so
 a long answer doesn't churn the DOM), the `content` attribute, or the element's text content:
 
 ```js
-const el = document.querySelector('r-markdown');
+const el = document.createElement('r-markdown');
 el.setAttribute('caret', ''); // show a blinking caret while streaming
 for await (const chunk of stream) {
   el.content += chunk; // only the last block re-renders
 }
 el.removeAttribute('caret');
+container.append(el);
 ```
 
 ## Streaming

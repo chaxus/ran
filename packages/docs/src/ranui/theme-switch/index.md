@@ -75,9 +75,11 @@ The three buttons are icon-only, so each carries an `aria-label`. Override them 
 | `change` | `{ theme: 'system' \| 'light' \| 'dark' }` | Fired when the user picks a theme. Bubbles and crosses shadow DOM. |
 
 ```js
-document.querySelector('r-theme-switch').addEventListener('change', (e) => {
+const themeSwitch = document.createElement('r-theme-switch');
+themeSwitch.addEventListener('change', (e) => {
   console.log('theme is now', e.detail.theme);
 });
+toolbar.append(themeSwitch);
 ```
 
 ## Behavior

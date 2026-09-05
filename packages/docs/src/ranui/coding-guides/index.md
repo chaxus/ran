@@ -21,8 +21,8 @@ the [design system](/src/ranui/design-system/).
    will move.
 2. **Own state in exactly one place.** Either your app owns the value and pushes it in, or the
    component owns it and tells you when it changes. Mirroring both ways is how values drift.
-3. **Style through the seams.** Custom properties, `::part()`, `sheet` and slots cross the
-   Shadow DOM boundary. Ordinary selectors do not; no amount of specificity changes that.
+3. **Style across the Shadow DOM boundary through custom properties, `::part()`, `sheet` and
+   slots.** Ordinary selectors do not cross it; no amount of specificity changes that.
 4. **Import what you use.** Every component has its own entry; the barrel is a convenience, not
    a requirement.
 5. **Prefer the platform.** These are custom elements: `addEventListener`, `setAttribute` and
@@ -204,9 +204,10 @@ yourself. Unknown tags pass through untouched, so it is safe to run over a whole
 Two things to know:
 
 - **The client rebuilds, it does not reuse.** Because the roots are closed, the browser cannot
-  hand the server-rendered tree back to the component, so on upgrade each element constructs
-  an identical one. You get first paint from the server; you do not get hydration reuse, and
-  you must not put state in the server-rendered shadow markup expecting the client to read it.
+  reuse the server-rendered tree for the component, so on upgrade each element constructs an
+  identical one from scratch. You get first paint from the server; you do not get hydration
+  reuse, and you must not put state in the server-rendered shadow markup expecting the client
+  to read it.
 - **Nothing measured is available on the server.** Anything that depends on
   `getBoundingClientRect` or `offsetWidth` resolves after mount, in the browser.
 

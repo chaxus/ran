@@ -6,10 +6,10 @@ description: 'The ranui TokenMeter (<r-token-meter>) shows how much of a model c
 
 How much of the context window a conversation is using.
 
-> **Use when** you are building a chat UI against a model with a context limit. Every client
-> that omits this works for a week and then stops working: each turn carries the whole
-> history, the request grows monotonically, and one day the provider refuses it. The refusal
-> arrives as a wall. This is the instrument that makes the growth visible before then.
+> **Use when** you are building a chat UI against a model with a context limit. A client that
+> doesn't show this works fine at first, then fails: every turn resends the full history, the
+> request only grows, and eventually the provider rejects it for exceeding the limit. This
+> component shows that growth before the request gets rejected.
 
 ## Quick Start
 
@@ -26,10 +26,11 @@ How much of the context window a conversation is using.
 ```
 
 ```js
-const meter = document.querySelector('r-token-meter');
+const meter = document.createElement('r-token-meter');
 meter.limit = 65536;
 meter.used = 41200; // context the next request will carry
 meter.spent = 128431; // tokens billed across the conversation, optional
+composer.append(meter);
 ```
 
 The bar fills to `used / limit` and escalates through three levels: **ok**, **warn** (from 80%
@@ -86,9 +87,9 @@ window size is unknown.
 | `level`  | `level`   | `'ok' \| 'warn' \| 'over'` | derived     | How full the window is. **Set by the element**: writing it is overwritten on the next update. |
 | `sheet`  | `sheet`   | `string`                   | `''`        | CSS injected into the shadow root.                                                            |
 
-Counts are formatted the way a reader scans them: exact below a thousand (`847` is a number
-someone can hold), abbreviated above (`41.2k`, `128k`); the third digit of `128,431` tells a
-reader nothing they act on.
+Counts are formatted for quick reading: exact below a thousand (`847` is short enough to read
+exactly), abbreviated above (`41.2k`, `128k`); the third digit of `128,431` doesn't change what
+a reader does with it.
 
 ### Parts
 

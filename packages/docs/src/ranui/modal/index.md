@@ -234,7 +234,7 @@ r-modal {
 
 Parts: `body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
 
-The full list is in [style tokens](/src/ranui/style-tokens#modal); which token to reach for is the [design system](/src/ranui/design-system/).
+The full list is in [style tokens](/src/ranui/style-tokens#modal); which token to use is in the [design system](/src/ranui/design-system/).
 
 ## Best Practices
 

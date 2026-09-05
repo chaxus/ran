@@ -320,11 +320,11 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 
 ## `disclosure-row`
 
-- Tokens: 25
+- Tokens: 28
 - Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 8 · internal: 17 -->
+<!-- layers: semantic: 9 · internal: 19 -->
 - `--ran-color-bg`
 - `--ran-color-bg-hover`
 - `--ran-color-danger`
@@ -332,6 +332,7 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
+- `--ran-disclosure-chevron-size`
 - `--ran-disclosure-color`
 - `--ran-disclosure-error-color`
 - `--ran-disclosure-focus-color`
@@ -346,7 +347,9 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 - `--ran-disclosure-sweep-color`
 - `--ran-disclosure-sweep-duration`
 - `--ran-disclosure-title-weight`
+- `--ran-disclosure-toggle-duration`
 - `--ran-disclosure-transition`
+- `--ran-motion-ease-standard`
 - `--ran-radius-sm`
 - `--ran-space-2`
 - `--ran-text-copy-2`
@@ -1889,19 +1892,23 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 
 ## `token-meter`
 
-- Tokens: 17
-- Parts: 4
+- Tokens: 21
+- Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 6 · internal: 11 -->
+<!-- layers: semantic: 6 · component: 3 · internal: 12 -->
 - `--ran-color-bg-muted`
 - `--ran-color-danger`
 - `--ran-color-primary`
 - `--ran-color-text-secondary`
 - `--ran-color-warning`
+- `--ran-progress-fill-background`
+- `--ran-progress-track-background`
+- `--ran-progress-track-border-radius`
 - `--ran-radius-full`
 - `--ran-space-2`
 - `--ran-text-label-3`
+- `--ran-token-meter-`
 - `--ran-token-meter-color`
 - `--ran-token-meter-fill-background`
 - `--ran-token-meter-font-size`
@@ -1913,10 +1920,8 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 - `--ran-token-meter-warn-background`
 
 ### Parts
-- `fill`
 - `meter`
 - `text`
-- `track`
 
 ## `tool-card`
 

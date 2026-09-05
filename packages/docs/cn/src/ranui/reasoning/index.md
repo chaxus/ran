@@ -19,12 +19,14 @@ description: '可折叠的思维链：推理流式到达时展开，结束时收
 ```
 
 ```ts
-const reasoning = document.querySelector('r-reasoning');
+const reasoning = document.createElement('r-reasoning');
 
 reasoning.streaming = true; // 展开
 reasoning.content += delta; // 可见状态下增长
 reasoning.duration = 4200; // 标签旁显示 "4.2s"
 reasoning.streaming = false; // 收起（除非读者已介入）
+
+conversation.append(reasoning);
 ```
 
 `ranuts/stream` 本来就把 `reasoning-delta` 与 `text-delta` 分开，所以视图可以直接从快照喂数据：

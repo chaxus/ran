@@ -17,7 +17,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 - Picture-in-Picture toggle: the button only renders when the browser actually supports it
 - AirPlay/Remote Playback button: the browser's own device picker, feature-detected the same way as Picture-in-Picture
 - Mobile gestures: double-tap the left/right half to seek ∓10s, vertical swipe on the right half for volume (touch only; mouse/pen interaction is unaffected)
-- Scrubbing with touch, pen or mouse: the progress dot drags from one Pointer Events path, and a drag the browser reclaims mid-gesture releases without seeking somewhere the viewer never chose
+- Scrubbing with touch, pen or mouse: the progress dot uses a single Pointer Events implementation for all three; if the browser reclaims the pointer mid-drag, the drag ends without seeking, since the pointer was never released at a position the viewer chose
 - Thumbnail scrubbing preview: set `thumbnails` to a WebVTT sprite-sheet manifest URL, and a cropped preview appears above the seek-bar hover tip
 - `poster` / `autoplay` / `loop` / `muted`: standard `<video>` attributes, passed straight through
 - Subtitles/CC: set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
@@ -60,7 +60,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 | `thumbnails`          | `string`              | `''`    | URL of a WebVTT sprite-sheet manifest; shows a cropped thumbnail above the seek-bar hover tip. See [Thumbnail Scrubbing Preview](#thumbnail-scrubbing-preview-thumbnails) below. Independent of `src`: only refetched when this attribute itself changes.                        |
 | `disable-error-modal` | `boolean`             | `false` | Opt out of the built-in error + retry dialog. Errors still reach you via the `error`/`sourceerror` `change` events, so build your own UI on top.                                                                                                                                 |
 | `remember-position`   | `boolean`             | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends.                                                                    |
-| `tracks`              | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks. **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children wouldn't survive). See [Subtitles/CC](#subtitles-cc-tracks) below.                                                         |
+| `tracks`              | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks. **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children would be removed before they took effect). See [Subtitles/CC](#subtitles-cc-tracks) below.                                 |
 
 > Observed attributes (from `observedAttributes`): `src`, `format`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `thumbnails`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
 
@@ -173,11 +173,12 @@ The image reference is resolved relative to the VTT file's own URL, so a sprite 
 ### Subtitles/CC `tracks`
 
 ```js
-const player = document.querySelector('r-player');
+const player = document.createElement('r-player');
 player.tracks = [
   { src: '/captions/en.vtt', srclang: 'en', label: 'English', default: true },
   { src: '/captions/fr.vtt', srclang: 'fr', label: 'Français' },
 ];
+stage.append(player);
 ```
 
 Each entry becomes a native `<track>` on the underlying `<video>`; cue rendering is entirely the browser's own, the player doesn't draw anything custom. A language picker (an `<r-select>`, same interaction as the clarity selector) appears in the control bar with **Off** plus one entry per track; picking a language is remembered in `localStorage` and applied automatically the next time any `<r-player>` on the page gets tracks (global preference, not per-video), falling back to whichever track has `default: true` if nothing was saved yet. Setting `tracks = []` removes the picker and every track. `setSubtitleLanguage(lang)` sets the active language imperatively (`lang` is a `srclang`, or `'off'`).
@@ -197,11 +198,12 @@ Saves `getCurrentTime()` to `localStorage` (keyed by `src`) on `pause` and whene
 ### QoE Metrics
 
 ```js
-const player = document.querySelector('r-player');
+const player = document.createElement('r-player');
 player.addEventListener('change', () => {
   console.log(player.getMetrics());
   // { rebufferCount, rebufferDuration, firstFrameMs, qualitySwitchCount, errorCount }
 });
+stage.append(player);
 ```
 
 `getMetrics()` returns a plain-object snapshot derived from the same `change` event stream documented below; there's no separate tracking to opt into:

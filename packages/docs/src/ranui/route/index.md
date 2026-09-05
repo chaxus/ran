@@ -71,8 +71,10 @@ Without `exact`, the pattern matches the path as a **prefix** (trailing segments
 Read the captured parameters from the read-only `params` property (each value is `decodeURIComponent`-decoded):
 
 ```js
-const route = document.querySelector('r-route');
-route.params; // e.g. { id: '42' }
+const route = document.createElement('r-route');
+route.path = '/users/:id';
+router.append(route);
+route.params; // e.g. { id: '42' } once the router matches this route
 ```
 
 ### Exact Match `exact`
@@ -108,9 +110,13 @@ Fires when this outlet becomes active (its `path` matches the current path). It 
 <r-route path="/users/:id"><h2>User profile</h2></r-route>
 
 <script>
-  document.querySelector('r-route').addEventListener('routematch', (e) => {
+  // Listen before mounting a route built the same way
+  const route = document.createElement('r-route');
+  route.path = '/users/:id';
+  route.addEventListener('routematch', (e) => {
     console.log(e.detail.path, e.detail.params); // '/users/42', { id: '42' }
   });
+  router.append(route);
 </script>
 ```
 

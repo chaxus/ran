@@ -6,11 +6,11 @@ description: 'A liquid frosted-glass surface combining backdrop blur, SVG light-
 
 A liquid / frosted glass surface. `<r-glass>` frosts and refracts whatever sits behind it: `backdrop-filter` blur + saturate for the frost, an SVG `feDisplacementMap` for the liquid light-bending, plus a specular rim and highlight for the glass read. Everything is token-driven; content goes in the default slot.
 
-> **Use when** you want a premium translucent panel over rich content (a hero card, a floating toolbar, a media overlay). The `displace` knob sets how _liquid_ it looks (0 is a flat frosted pane). All effects degrade to a plain translucent surface where `backdrop-filter` is unsupported.
+> **Use when** you want a translucent panel over rich, colorful content (a hero card, a floating toolbar, a media overlay). The `displace` attribute sets how _liquid_ it looks (0 is a flat frosted pane). All effects degrade to a plain translucent surface where `backdrop-filter` is unsupported.
 
 ## Playground
 
-Drag the glass around the stage, tune every knob, and copy the exact markup. The default parameters are the iOS frosted-material look.
+Drag the glass around the stage, adjust every attribute, and copy the exact markup. The default parameters are the iOS frosted-material look.
 
 <GlassPlayground />
 

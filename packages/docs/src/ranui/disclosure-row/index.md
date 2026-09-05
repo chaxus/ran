@@ -33,8 +33,8 @@ summary drops the separator with it.
 
 ### While the work is running
 
-`busy` draws a shimmer sweep across the row. A spinner says _something somewhere_ is
-happening; a sweep over the row says **this** row is the one still working.
+`busy` draws a shimmer sweep across the row. A spinner only indicates that something,
+somewhere, is happening; a sweep over the row identifies which row is still working.
 
 <Demo column>
   <r-disclosure-row heading="Run tests" summary="2351 passed" busy expandable></r-disclosure-row>
@@ -43,8 +43,12 @@ happening; a sweep over the row says **this** row is the one still working.
 
 ### With a leading indicator
 
-The `leading` slot and its hover chevron share one grid cell, so the swap on hover costs no
-layout.
+The `leading` slot and the chevron share one grid cell, so swapping between them costs no
+layout and the heading never shifts under the pointer.
+
+With nothing slotted into `leading` the chevron stays visible, since it is the only mark
+telling a reader the row opens. With leading content the chevron appears on hover, on focus
+or while open, and the state indicator is what shows the rest of the time.
 
 <Demo column>
   <r-disclosure-row heading="Build" summary="failed in 4.2s" tone="error" expandable>
@@ -127,8 +131,8 @@ The full list is in [style tokens](/src/ranui/style-tokens#disclosure-row); whic
 
 ## Best Practices
 
-- **Give a row a body, or don't make it expandable.** A chevron that opens an empty area is a
-  dead end; leave `expandable` off and the row stays a line.
+- **Give a row a body, or don't make it expandable.** A chevron that opens onto empty space
+  serves no purpose; leave `expandable` off and the row stays a single line.
 - **Keep the heading a fixed vocabulary** (`Read file`, `Run tests`, `Search`) and put the
   variable part in the summary. That is what makes a column of rows scannable.
 - **Pair `tone="error"` with words, never colour alone**: the summary should say what failed.

@@ -21,7 +21,7 @@ what arrives, and owns the object URLs it creates.
 ```
 
 ```js
-const strip = document.querySelector('r-attachments');
+const strip = document.createElement('r-attachments');
 
 // A file picker
 picker.addEventListener('change', () => strip.add(picker.files));
@@ -40,6 +40,8 @@ dropZone.addEventListener('drop', (event) => {
   event.preventDefault();
   strip.add(event.dataTransfer.files);
 });
+
+composer.append(strip);
 ```
 
 The strip renders one row per file with a thumbnail (images), the name, the size and a remove
@@ -177,4 +179,4 @@ The full list is in [style tokens](/src/ranui/style-tokens#attachments); which t
   attaching, not a security boundary.
 - **Clear after a successful send**, not before. A failed request should leave the files
   staged so they can be retried.
-- **Explain every rejection.** The event exists so the strip never silently swallows a file.
+- **Explain every rejection.** The event exists so the strip never silently drops a file.

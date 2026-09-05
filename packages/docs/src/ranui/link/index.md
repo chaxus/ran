@@ -85,9 +85,13 @@ CSS injected into the link's shadow DOM. It follows the same `sheet` convention 
 <r-link href="/docs">Docs</r-link>
 
 <script>
-  document.querySelector('r-link').addEventListener('ran-navigate', (e) => {
+  const link = document.createElement('r-link');
+  link.href = '/docs';
+  link.textContent = 'Docs';
+  link.addEventListener('ran-navigate', (e) => {
     console.log(e.detail.path, e.detail.replace);
   });
+  nav.append(link);
 </script>
 ```
 

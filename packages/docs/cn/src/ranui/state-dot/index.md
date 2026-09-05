@@ -35,7 +35,7 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
 
 ### 与文字并排
 
-点承载状态，文字承载含义。永远不要让颜色成为区分两行的唯一线索，详见
+点只用颜色表示状态，不解释颜色代表什么。永远不要让颜色成为区分两行的唯一线索，详见
 [设计规范](/cn/src/ranui/design-guides/#无障碍)。
 
 <Demo column>
@@ -93,4 +93,4 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
 | `--ran-state-dot-error-color`   | `--ran-color-danger`                |
 | `--ran-state-dot-halo-opacity`  | `0.16`                              |
 
-`running` 是脉动实心点而不是旋转：8px 的转圈只会糊成一团；在 `prefers-reduced-motion` 下脉动会停止。
+`running` 是脉动实心点而不是旋转：8px 太小，转动看不出方向；在 `prefers-reduced-motion` 下脉动会停止。

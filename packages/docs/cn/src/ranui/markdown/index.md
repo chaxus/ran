@@ -59,12 +59,13 @@ import 'ranui/markdown';
 内容来源依次为：**`content` 属性（property，推荐）**，不会反射到 attribute，流式写入长文本不会抖动 DOM；`content` attribute；元素的文本内容：
 
 ```js
-const el = document.querySelector('r-markdown');
+const el = document.createElement('r-markdown');
 el.setAttribute('caret', ''); // 流式期间显示闪烁光标
 for await (const chunk of stream) {
   el.content += chunk; // 只有最后一块会重渲染
 }
 el.removeAttribute('caret');
+container.append(el);
 ```
 
 ## 流式渲染

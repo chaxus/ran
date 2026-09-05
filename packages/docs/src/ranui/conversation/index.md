@@ -6,7 +6,8 @@ description: 'Renders an append-only event log as a conversation, handling proje
 
 Renders an append-only event log as a conversation. The element owns the three things that are
 tedious and easy to get wrong, and nothing else: projecting events into nodes, keeping the view
-pinned to its floor without fighting the reader, and reconciling rows against the node list.
+pinned to the bottom without overriding the reader's own scrolling, and reconciling rows
+against the node list.
 
 > **Use when** you are rendering a streaming transcript (a chat, an agent session, a log) and
 > want each kind of content (message, tool call, status line) to be an independent registration
@@ -23,7 +24,7 @@ projection is [ranuts/conversation](../../ranuts/conversation/) and its scrollin
 ```
 
 ```ts
-const chat = document.querySelector('r-conversation');
+const chat = document.createElement('r-conversation');
 
 chat.register({
   kind: 'message',
@@ -48,6 +49,8 @@ chat.register({
 
 chat.push({ type: 'message/start', id: 'm1' });
 chat.push({ type: 'message/delta', id: 'm1', text: 'Hello' });
+
+container.append(chat);
 ```
 
 `<r-markdown>` is the intended row for prose: in its default `mode="streaming"` it already
@@ -68,10 +71,10 @@ closes half-streamed `**bold`, backticks, links and `$$` math, so a view never h
 
 ## Bottom-follow
 
-On by default. The view stays pinned to its floor as content arrives, stops the instant the
-reader scrolls up, and re-pins when they come back down, all without fighting them, because the
-follower distinguishes its own scroll writes from the reader's rather than listening for input
-devices.
+On by default. The view stays pinned to the bottom as content arrives, stops the instant the
+reader scrolls up, and re-pins when they scroll back down, without overriding manual scrolling
+at any point, because the follower distinguishes its own scroll writes from the reader's rather
+than listening for input devices.
 
 ```ts
 chat.addEventListener('pinnedchange', (e) => {

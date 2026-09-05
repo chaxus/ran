@@ -63,7 +63,7 @@ const html = renderToString(new Button());
 的元素调用 `attachShadow`，在 closed 模式下**会清空该 root 的子节点**。所以服务端渲染出来的树只负责
 第一帧，随后会被一棵一模一样的客户端树替换。由此有两点要注意：
 
-- 它保证的是首屏正确，不是 hydration 复用。这是选用 closed root 的代价，原因见
+- 它保证的是首屏正确，不是 hydration 复用：closed root 没法被客户端复用，原因见上文。详见
   [编码规范](/cn/src/ranui/coding-guides/#服务端渲染)。
 - **不要把状态写进服务端渲染的 shadow 标记里**，指望客户端再读回来。状态请通过属性传递，属性在重建后
   仍然保留。

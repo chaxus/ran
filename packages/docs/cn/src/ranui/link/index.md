@@ -77,9 +77,13 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 <r-link href="/docs">Docs</r-link>
 
 <script>
-  document.querySelector('r-link').addEventListener('ran-navigate', (e) => {
+  const link = document.createElement('r-link');
+  link.href = '/docs';
+  link.textContent = 'Docs';
+  link.addEventListener('ran-navigate', (e) => {
     console.log(e.detail.path, e.detail.replace);
   });
+  nav.append(link);
 </script>
 ```
 

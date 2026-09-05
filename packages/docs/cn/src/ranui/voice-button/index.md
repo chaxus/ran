@@ -17,7 +17,9 @@ description: '文本输入框的麦克风按钮：它只报告听到了什么，
 ```
 
 ```ts
-const mic = document.querySelector('r-voice-button');
+const mic = document.createElement('r-voice-button');
+mic.label = '开始语音输入';
+mic.activeLabel = '停止语音输入';
 const input = document.querySelector('textarea');
 let base = '';
 
@@ -29,6 +31,8 @@ mic.addEventListener('voicestart', () => {
 mic.addEventListener('voiceresult', (event) => {
   input.value = base + event.detail.transcript;
 });
+
+composer.append(mic);
 ```
 
 ## 背后的几个决定
@@ -43,7 +47,7 @@ mic.addEventListener('voiceresult', (event) => {
 
 ### 没有识别能力时它把自己隐藏
 
-Firefox 不提供语音识别，任何缺少该 API 的浏览器也一样。元素设置的是 `hidden` 而不是 `disabled`：**disabled 说的是「现在不行」，不存在说的是「这里没有」**。一个注定不能工作的按钮比没有按钮更糟，它诱使你点一下，然后再来解释自己。
+Firefox 不提供语音识别，任何缺少该 API 的浏览器也一样。不支持时，元素用 `hidden` 隐藏自己，而不是用 `disabled` 禁用自己：`disabled` 暗示功能存在但暂时不可用，而这里的情况是功能在该平台上根本不存在，直接移除按钮才准确。显示一个永远不会生效的按钮，只会引诱用户点一下却毫无反应，还得额外解释原因。
 
 ### 四类错误里只有两类值得提示
 
@@ -54,7 +58,7 @@ Firefox 不提供语音识别，任何缺少该 API 的浏览器也一样。元�
 | `noSpeech` | 一次静默停顿 | 不要                     |
 | `aborted`  | 程序主动停止 | 不要                     |
 
-后两者与真正的失败走同一个通道，但它们并不是失败。把它们显示出来，等于每次录音后都唠叨一遍。
+后两者与真正的失败走同一个通道，但它们并不是失败。把它们显示出来，会导致每一次普通录音后都弹出一条错误，而不只是真正失败时才弹出。
 
 ### 无障碍
 
