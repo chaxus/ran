@@ -22,15 +22,20 @@ coverage/
 # corrupts the content: the illustrative snippet `import { /* … */ } from 'ranuts/utils'`
 # gets reformatted to `import {} from /* … */ 'ranuts/utils'`, moving the placeholder
 # comment outside the braces.
+#
+# The docs site publishes each generated page once per language. The `*` glob covers every
+# translated tree (`cn`, `ja`, `es`, …) so adding a language never means remembering to add
+# four more lines here — forgetting would turn `lint:prettier` red the first time anyone ran
+# a generator.
 packages/ranuts/docs/API.md
 packages/docs/src/ranuts/api.md
-packages/docs/cn/src/ranuts/api.md
+packages/docs/*/src/ranuts/api.md
 packages/ranui/docs/COMPONENTS.md
 packages/docs/src/ranui/api.md
-packages/docs/cn/src/ranui/api.md
+packages/docs/*/src/ranui/api.md
 packages/docs/src/ranui/changelog.md
-packages/docs/cn/src/ranui/changelog.md
+packages/docs/*/src/ranui/changelog.md
 packages/docs/src/ranui/style-tokens.md
-packages/docs/cn/src/ranui/style-tokens.md
+packages/docs/*/src/ranui/style-tokens.md
 packages/ranui/docs/style-tokens-parts.md
 packages/ranui/docs/style-tokens-public.md

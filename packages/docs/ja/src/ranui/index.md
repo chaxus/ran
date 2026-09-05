@@ -91,18 +91,18 @@ document.body.appendChild(button);
 各エントリーは名前どおりのものだけを登録します。テーマだけが欲しいページがコンポーネント
 ライブラリの分を負担することはありません。
 
-| import                                                   | 中身                                                     |
-| -------------------------------------------------------- | -------------------------------------------------------- |
-| `ranui`                                                  | すべてのコンポーネント                                   |
-| `ranui/<component>`                                      | コンポーネント一つ：`ranui/button`、`ranui/select`、…    |
-| [`ranui/theme`](/ja/src/ranui/theme/)                    | ライト／ダークテーマとトークンの上書き。要素は含まない    |
-| [`ranui/i18n`](/ja/src/ranui/i18n/)                      | 翻訳エンジン。要素は含まない                             |
-| `ranui/fonts`                                            | セルフホストの Geist Sans + Geist Mono                    |
-| `ranui/style`                                            | スタイルシート。自動で読み込まれない環境向け              |
-| [`ranui/builder`](/ja/src/ranui/builder/)                | 細粒度リアクティビティつきの流暢な DOM ビルダー          |
-| [`ranui/ssr`](/ja/src/ranui/ssr/), `ranui/ssr-stream`    | サーバーレンダリング                                     |
-| `ranui/testing`                                          | テストから閉じた shadow root に手を入れるためのヘルパー   |
-| `ranui/typings`                                          | アンビエントな JSX / TS の要素型                          |
+| import                                                | 中身                                                    |
+| ----------------------------------------------------- | ------------------------------------------------------- |
+| `ranui`                                               | すべてのコンポーネント                                  |
+| `ranui/<component>`                                   | コンポーネント一つ：`ranui/button`、`ranui/select`、…   |
+| [`ranui/theme`](/ja/src/ranui/theme/)                 | ライト／ダークテーマとトークンの上書き。要素は含まない  |
+| [`ranui/i18n`](/ja/src/ranui/i18n/)                   | 翻訳エンジン。要素は含まない                            |
+| `ranui/fonts`                                         | セルフホストの Geist Sans + Geist Mono                  |
+| `ranui/style`                                         | スタイルシート。自動で読み込まれない環境向け            |
+| [`ranui/builder`](/ja/src/ranui/builder/)             | 細粒度リアクティビティつきの流暢な DOM ビルダー         |
+| [`ranui/ssr`](/ja/src/ranui/ssr/), `ranui/ssr-stream` | サーバーレンダリング                                    |
+| `ranui/testing`                                       | テストから閉じた shadow root に手を入れるためのヘルパー |
+| `ranui/typings`                                       | アンビエントな JSX / TS の要素型                        |
 
 ## コンポーネント
 
@@ -212,17 +212,17 @@ document.body.appendChild(button);
 
 ## 次に読むもの
 
-| やりたいこと                                   | 読むページ                                             |
-| ---------------------------------------------- | ------------------------------------------------------ |
-| 要素の正確な API を調べる                      | [要素 API](/ja/src/ranui/api)                          |
-| どのトークンを使うべきか、その理由を知る       | [デザインシステム](/ja/src/ranui/design-system/)       |
-| 一つの体系に見える画面を作る                   | [デザインガイドライン](/ja/src/ranui/design-guides/)   |
-| ranui をアプリへ正しく組み込む                 | [コーディング規約](/ja/src/ranui/coding-guides/)       |
-| ライト／ダークを足す、全体を作り替える         | [テーマ](/ja/src/ranui/theme/)                         |
-| インターフェースを翻訳する                     | [i18n](/ja/src/ranui/i18n/)                            |
-| サーバー側で描画する                           | [サーバーレンダリング](/ja/src/ranui/ssr/)             |
-| フレームワークなしでリアクティブな画面を作る   | [ビルダー](/ja/src/ranui/builder/)                     |
-| アップグレード前に変更点を確認する             | [更新履歴](/ja/src/ranui/changelog)                    |
+| やりたいこと                                 | 読むページ                                           |
+| -------------------------------------------- | ---------------------------------------------------- |
+| 要素の正確な API を調べる                    | [要素 API](/ja/src/ranui/api)                        |
+| どのトークンを使うべきか、その理由を知る     | [デザインシステム](/ja/src/ranui/design-system/)     |
+| 一つの体系に見える画面を作る                 | [デザインガイドライン](/ja/src/ranui/design-guides/) |
+| ranui をアプリへ正しく組み込む               | [コーディング規約](/ja/src/ranui/coding-guides/)     |
+| ライト／ダークを足す、全体を作り替える       | [テーマ](/ja/src/ranui/theme/)                       |
+| インターフェースを翻訳する                   | [i18n](/ja/src/ranui/i18n/)                          |
+| サーバー側で描画する                         | [サーバーレンダリング](/ja/src/ranui/ssr/)           |
+| フレームワークなしでリアクティブな画面を作る | [ビルダー](/ja/src/ranui/builder/)                   |
+| アップグレード前に変更点を確認する           | [更新履歴](/ja/src/ranui/changelog)                  |
 
 ## ブラウザ対応
 
