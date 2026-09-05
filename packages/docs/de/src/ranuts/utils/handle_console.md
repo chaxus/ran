@@ -6,14 +6,14 @@ Klink dich in `console`, `fetch`, `XMLHttpRequest`, Klicks und nicht abgefangene
 
 ## API
 
-| Function | Greift ein bei | Rückgabe |
-| ---------------------------- | ------------------------------------ | ------------- |
-| `handleConsole(hook)` | `console.log/info/warn/error/assert` | `restore` |
-| `handleFetchHook(options)` | `window.fetch` | `restore` |
-| `handleXhrHook(options)` | `XMLHttpRequest#open` / `#send` | `restore` |
-| `handleError(hook)` | `error` und `unhandledrejection` | `unsubscribe` |
-| `handleClick(hook)` | Klicks auf dem Dokument (Capture-Phase) | `unsubscribe` |
-| `replaceOld(obj, key, wrap)` | Jede Eigenschaft jedes Objekts | `restore` |
+| Function                     | Greift ein bei                          | Rückgabe      |
+| ---------------------------- | --------------------------------------- | ------------- |
+| `handleConsole(hook)`        | `console.log/info/warn/error/assert`    | `restore`     |
+| `handleFetchHook(options)`   | `window.fetch`                          | `restore`     |
+| `handleXhrHook(options)`     | `XMLHttpRequest#open` / `#send`         | `restore`     |
+| `handleError(hook)`          | `error` und `unhandledrejection`        | `unsubscribe` |
+| `handleClick(hook)`          | Klicks auf dem Dokument (Capture-Phase) | `unsubscribe` |
+| `replaceOld(obj, key, wrap)` | Jede Eigenschaft jedes Objekts          | `restore`     |
 
 `handleFetchHook` und `handleXhrHook` nehmen `{ requestHook, responseHook, errorHook }`.
 

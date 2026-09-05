@@ -8,16 +8,16 @@ Vergleicht zwei Werte tief auf Gleichheit, auch zusammengesetzte Typen wie Objek
 
 #### Rückgabe
 
-| Argument | Beschreibung | Typ |
-| --------- | -------------------------------- | --------- |
+| Argument  | Beschreibung                    | Typ       |
+| --------- | ------------------------------- | --------- |
 | `boolean` | Ob die beiden Werte gleich sind | `boolean` |
 
 #### Parameter
 
-| Parameter | Beschreibung | Typ | Standard |
-| --------- | ----------------------- | ----- | -------- |
-| `value` | Erster zu vergleichender Wert | `any` | Erforderlich |
-| `other` | Zweiter zu vergleichender Wert | `any` | Erforderlich |
+| Parameter | Beschreibung                   | Typ   | Standard     |
+| --------- | ------------------------------ | ----- | ------------ |
+| `value`   | Erster zu vergleichender Wert  | `any` | Erforderlich |
+| `other`   | Zweiter zu vergleichender Wert | `any` | Erforderlich |
 
 ## Beispiel
 

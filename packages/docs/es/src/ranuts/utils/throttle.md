@@ -10,19 +10,19 @@ Estrangulamiento: cuando una función se dispara muchas veces seguidas, se ejecu
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | --------------------- | ---------- | -------- |
-| `fn` | Función a la que aplicar el estrangulamiento | `Function` | Obligatorio |
-| `delay` | Intervalo mínimo (ms) | `number` | `300` |
+| Parámetro | Descripción                                  | Tipo       | Por defecto |
+| --------- | -------------------------------------------- | ---------- | ----------- |
+| `fn`      | Función a la que aplicar el estrangulamiento | `Function` | Obligatorio |
+| `delay`   | Intervalo mínimo (ms)                        | `number`   | `300`       |
 
 #### Devuelve
 
 Una función estrangulada que conserva el `this` y los argumentos del punto de llamada, además de:
 
-| Miembro | Descripción | Tipo |
-| ----------- | ---------------------------------- | --------------- |
-| `cancel()` | Descarta la llamada final pendiente | `() => void` |
-| `pending()` | Si hay una llamada final esperando | `() => boolean` |
+| Miembro     | Descripción                         | Tipo            |
+| ----------- | ----------------------------------- | --------------- |
+| `cancel()`  | Descarta la llamada final pendiente | `() => void`    |
+| `pending()` | Si hay una llamada final esperando  | `() => boolean` |
 
 ## Ejemplo
 

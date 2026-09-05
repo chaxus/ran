@@ -56,7 +56,7 @@ console.log(encoded); // نشانی کدگذاری‌شده
 ```js
 import { encodeUrl } from 'ranuts';
 
-// دنباله‌های خراب (مانند ‎%foo‎) دوباره کدگذاری می‌شوند
+// دنباله‌های خراب (مانند %foo) دوباره کدگذاری می‌شوند
 const url = 'https://example.com/path%foo';
 const encoded = encodeUrl(url);
 console.log(encoded); // 'https://example.com/path%25foo'

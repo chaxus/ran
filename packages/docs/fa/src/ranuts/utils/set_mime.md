@@ -39,7 +39,7 @@ console.log(mime); // 'application/x-my-custom-type'
 ```js
 import { setMime, getMime } from 'ranuts';
 
-// تغییر نوع MIME برای ‎.js‎
+// تغییر نوع MIME برای .js
 setMime('.js', 'application/javascript-custom');
 
 const mime = getMime('script.js');

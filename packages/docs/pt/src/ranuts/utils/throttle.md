@@ -10,18 +10,18 @@ Use para rolagem, movimento do ponteiro e arrasto: tudo que precisa de **respost
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | --------------------- | ---------- | -------- |
-| `fn` | Função que recebe o throttle | `Function` | Obrigatório |
-| `delay` | Intervalo mínimo (ms) | `number` | `300` |
+| Parâmetro | Descrição                    | Tipo       | Padrão      |
+| --------- | ---------------------------- | ---------- | ----------- |
+| `fn`      | Função que recebe o throttle | `Function` | Obrigatório |
+| `delay`   | Intervalo mínimo (ms)        | `number`   | `300`       |
 
 #### Retorna
 
 Uma função com throttle que preserva o `this` e os argumentos do ponto de chamada, além de:
 
-| Membro | Descrição | Tipo |
-| ----------- | ---------------------------------- | --------------- |
-| `cancel()` | Descarta a chamada final pendente | `() => void` |
+| Membro      | Descrição                         | Tipo            |
+| ----------- | --------------------------------- | --------------- |
+| `cancel()`  | Descarta a chamada final pendente | `() => void`    |
 | `pending()` | Se há uma chamada final esperando | `() => boolean` |
 
 ## Exemplo

@@ -8,23 +8,23 @@ Convierte un archivo de imagen en una cadena codificada en Base64.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| ------------------------------------- | -------------------------------------- | --------- |
+| Argumento                             | Descripción                                        | Tipo      |
+| ------------------------------------- | -------------------------------------------------- | --------- |
 | `Promise<convertImageToBase64Return>` | Promesa que se resuelve con el objeto de resultado | `Promise` |
 
 #### convertImageToBase64Return
 
-| Propiedad | Descripción | Tipo |
-| --------- | ------------------ | ------------------------------- |
-| `success` | Si salió bien | `boolean` |
-| `data` | Los datos en Base64 | `string \| ArrayBuffer \| null` |
-| `message` | Mensaje de error | `string` |
+| Propiedad | Descripción         | Tipo                            |
+| --------- | ------------------- | ------------------------------- |
+| `success` | Si salió bien       | `boolean`                       |
+| `data`    | Los datos en Base64 | `string \| ArrayBuffer \| null` |
+| `message` | Mensaje de error    | `string`                        |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | ----------------- | ------ | -------- |
-| `file` | El objeto de archivo de imagen | `File` | Obligatorio |
+| Parámetro | Descripción                    | Tipo   | Por defecto |
+| --------- | ------------------------------ | ------ | ----------- |
+| `file`    | El objeto de archivo de imagen | `File` | Obligatorio |
 
 ## Ejemplo
 

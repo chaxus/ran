@@ -6,18 +6,18 @@ Da formato a una fecha con un patrón de tokens.
 
 ### formatDate(value?, pattern?)
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | ---------------------------------------------- | -------------------------- | ----------------------- |
-| `value` | Marca de tiempo, cadena de fecha o `Date`; omítelo para el momento actual | `number \| string \| Date` | ahora |
-| `pattern` | Patrón de tokens | `string` | `'YYYY-MM-DD HH:mm:ss'` |
+| Parámetro | Descripción                                                               | Tipo                       | Por defecto             |
+| --------- | ------------------------------------------------------------------------- | -------------------------- | ----------------------- |
+| `value`   | Marca de tiempo, cadena de fecha o `Date`; omítelo para el momento actual | `number \| string \| Date` | ahora                   |
+| `pattern` | Patrón de tokens                                                          | `string`                   | `'YYYY-MM-DD HH:mm:ss'` |
 
-| Token | Significado | Token | Significado |
-| ----------- | ------------ | -------- | ------------- |
-| `YYYY`/`YY` | Año | `mm`/`m` | Minuto |
-| `MM`/`M` | Mes (1–12) | `ss`/`s` | Segundo |
-| `DD`/`D` | Día | `SSS` | Milisegundos |
-| `HH`/`H` | Hora (0–23) | `A`/`a` | AM/PM · am/pm |
-| `hh`/`h` | Hora (1–12) | `[...]` | Texto literal |
+| Token       | Significado | Token    | Significado   |
+| ----------- | ----------- | -------- | ------------- |
+| `YYYY`/`YY` | Año         | `mm`/`m` | Minuto        |
+| `MM`/`M`    | Mes (1–12)  | `ss`/`s` | Segundo       |
+| `DD`/`D`    | Día         | `SSS`    | Milisegundos  |
+| `HH`/`H`    | Hora (0–23) | `A`/`a`  | AM/PM · am/pm |
+| `hh`/`h`    | Hora (1–12) | `[...]`  | Texto literal |
 
 Devuelve `'Invalid Date'` cuando la entrada no se puede interpretar.
 

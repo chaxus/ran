@@ -8,10 +8,10 @@ Envía balizas de telemetría a tu propio punto de recogida.
 
 Configura el punto de recogida por defecto una vez, al arrancar. Acepta una URL como cadena, o un objeto:
 
-| Campo | Descripción | Tipo |
-| -------------- | ----------------------------------------------------------- | -------- |
-| `url` | Punto de recogida por defecto para todo `report()` que no traiga su propia `url` | `string` |
-| `userIdCookie` | Cookie con el identificador de usuario, que `createData()` recoge | `string` |
+| Campo          | Descripción                                                                      | Tipo     |
+| -------------- | -------------------------------------------------------------------------------- | -------- |
+| `url`          | Punto de recogida por defecto para todo `report()` que no traiga su propia `url` | `string` |
+| `userIdCookie` | Cookie con el identificador de usuario, que `createData()` recoge                | `string` |
 
 ### getReportUrl()
 

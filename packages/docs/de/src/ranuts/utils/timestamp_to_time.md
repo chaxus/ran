@@ -6,18 +6,18 @@ Formatiert ein Datum mit einem Muster aus Token.
 
 ### formatDate(value?, pattern?)
 
-| Parameter | Beschreibung | Typ | Standard |
-| --------- | ---------------------------------------------- | -------------------------- | ----------------------- |
-| `value` | Zeitstempel, Datumszeichenkette oder `Date`; weglassen für jetzt | `number \| string \| Date` | jetzt |
-| `pattern` | Muster aus Token | `string` | `'YYYY-MM-DD HH:mm:ss'` |
+| Parameter | Beschreibung                                                     | Typ                        | Standard                |
+| --------- | ---------------------------------------------------------------- | -------------------------- | ----------------------- |
+| `value`   | Zeitstempel, Datumszeichenkette oder `Date`; weglassen für jetzt | `number \| string \| Date` | jetzt                   |
+| `pattern` | Muster aus Token                                                 | `string`                   | `'YYYY-MM-DD HH:mm:ss'` |
 
-| Token | Bedeutung | Token | Bedeutung |
-| ----------- | ------------ | -------- | ------------- |
-| `YYYY`/`YY` | Jahr | `mm`/`m` | Minute |
-| `MM`/`M` | Monat (1–12) | `ss`/`s` | Sekunde |
-| `DD`/`D` | Tag | `SSS` | Millisekunden |
-| `HH`/`H` | Stunde (0–23) | `A`/`a` | AM/PM · am/pm |
-| `hh`/`h` | Stunde (1–12) | `[...]` | Wörtlicher Text |
+| Token       | Bedeutung     | Token    | Bedeutung       |
+| ----------- | ------------- | -------- | --------------- |
+| `YYYY`/`YY` | Jahr          | `mm`/`m` | Minute          |
+| `MM`/`M`    | Monat (1–12)  | `ss`/`s` | Sekunde         |
+| `DD`/`D`    | Tag           | `SSS`    | Millisekunden   |
+| `HH`/`H`    | Stunde (0–23) | `A`/`a`  | AM/PM · am/pm   |
+| `hh`/`h`    | Stunde (1–12) | `[...]`  | Wörtlicher Text |
 
 Gibt `'Invalid Date'` zurück, wenn sich die Eingabe nicht deuten lässt.
 

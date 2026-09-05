@@ -8,10 +8,10 @@ Envia balizas de telemetria para o seu próprio endpoint.
 
 Configure o endpoint padrão uma vez, na inicialização. Aceita uma URL como string, ou um objeto:
 
-| Campo | Descrição | Tipo |
-| -------------- | ----------------------------------------------------------- | -------- |
-| `url` | Endpoint padrão para todo `report()` que não traga a própria `url` | `string` |
-| `userIdCookie` | Cookie com o id do usuário, que o `createData()` recolhe | `string` |
+| Campo          | Descrição                                                          | Tipo     |
+| -------------- | ------------------------------------------------------------------ | -------- |
+| `url`          | Endpoint padrão para todo `report()` que não traga a própria `url` | `string` |
+| `userIdCookie` | Cookie com o id do usuário, que o `createData()` recolhe           | `string` |
 
 ### getReportUrl()
 
