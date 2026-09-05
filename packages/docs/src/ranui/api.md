@@ -44,10 +44,10 @@ Source: `components/attachments/index.ts`
 
 Source: `components/button/index.ts`
 
-- **Attributes**: `aria-label`, `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
+- **Attributes**: `aria-label`, `disabled: boolean | string`, `effect: boolean`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
 - **Properties**:
   - `disabled: boolean | string`
-  - `effect: string`
+  - `effect: boolean` — Whether the click ripple is drawn. On by default; opt out with `effect="false"`.
   - `icon: string`
   - `iconSize: string`
   - `sheet: string`

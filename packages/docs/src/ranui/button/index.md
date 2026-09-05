@@ -81,15 +81,22 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Effect Control `effect`
 
+The click ripple is on by default. Set `effect="false"` for a plain button without it. The two
+buttons below differ only in that attribute, so you can compare them by clicking each. The
+ripple is a pointer-device effect and only renders from a viewport width of 1024px.
+
 <Demo>
-  <r-button type="default" effect="false" icon="user">Default Button</r-button>
-  <r-button type="primary" effect="false" icon="home">Primary Button</r-button>
+  <r-button type="primary" icon="home">Ripple (default)</r-button>
+  <r-button type="primary" icon="home" effect="false">No ripple</r-button>
 </Demo>
 
 ```html
-<r-button type="default" effect="false" icon="user">Default Button</r-button>
-<r-button type="primary" effect="false" icon="home">Primary Button</r-button>
+<r-button type="primary" icon="home">Ripple (default)</r-button>
+<r-button type="primary" icon="home" effect="false">No ripple</r-button>
 ```
+
+Only the literal value `false` turns the ripple off; `effect="true"` and any other value leave
+it on. From script, set the property as a boolean: `button.effect = false`.
 
 ## Events
 

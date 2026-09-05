@@ -188,7 +188,9 @@
   }
 
   @media (min-width: 1024px) {
-    &(:not([disabled], [effect])) {
+    // `[effect='false']`, not a bare `[effect]`: the ripple is on by default, so only an
+    // explicit false turns it off (`effect="true"` used to turn it off too).
+    &(:not([disabled], [effect='false'])) {
       .ran-btn::after {
         content: '';
         display: block;

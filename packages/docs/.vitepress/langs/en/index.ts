@@ -399,7 +399,7 @@ const themeEnConfig: DefaultTheme.Config = {
     ],
     '/src/ranui/': [
       {
-        text: 'Overview ',
+        text: 'Overview',
         link: '/src/ranui/',
       },
       {
@@ -443,7 +443,7 @@ const themeEnConfig: DefaultTheme.Config = {
           { text: 'Mermaid', link: '/src/ranui/mermaid/' },
           { text: 'Markdown', link: '/src/ranui/markdown/' },
           { text: 'Conversation', link: '/src/ranui/conversation/' },
-          { text: 'Tool Card', link: '/src/ranui/tool-card/' },
+          { text: 'ToolCard', link: '/src/ranui/tool-card/' },
           { text: 'Reasoning', link: '/src/ranui/reasoning/' },
           { text: 'StateDot', link: '/src/ranui/state-dot/' },
           { text: 'DisclosureRow', link: '/src/ranui/disclosure-row/' },
@@ -467,9 +467,9 @@ const themeEnConfig: DefaultTheme.Config = {
         text: 'Data Entry',
         items: [
           { text: 'Input', link: '/src/ranui/input/' },
-          { text: 'Voice Button', link: '/src/ranui/voice-button/' },
+          { text: 'VoiceButton', link: '/src/ranui/voice-button/' },
           { text: 'Attachments', link: '/src/ranui/attachments/' },
-          { text: 'Forms', link: '/src/ranui/form/' },
+          { text: 'Form', link: '/src/ranui/form/' },
           { text: 'ColorPicker', link: '/src/ranui/colorpicker/' },
         ],
       },

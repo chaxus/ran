@@ -164,26 +164,41 @@ describe('r-button contract', () => {
     vi.useRealTimers();
   });
 
-  it('effect getter returns attribute value', () => {
+  it('effect defaults to true with no attribute', () => {
     const btn = document.createElement('r-button') as Button;
     document.body.appendChild(btn);
-    btn.setAttribute('effect', 'ripple');
-    expect((btn as any).effect).toBe('ripple');
-  });
-
-  it('effect setter with truthy value sets attribute', () => {
-    const btn = document.createElement('r-button') as Button;
-    document.body.appendChild(btn);
-    (btn as any).effect = 'ripple';
-    expect(btn.getAttribute('effect')).toBe('ripple');
-  });
-
-  it('effect setter with false removes attribute', () => {
-    const btn = document.createElement('r-button') as Button;
-    document.body.appendChild(btn);
-    btn.setAttribute('effect', 'ripple');
-    (btn as any).effect = 'false';
+    expect(btn.effect).toBe(true);
     expect(btn.hasAttribute('effect')).toBe(false);
+  });
+
+  it('effect getter is false only for the literal "false"', () => {
+    const btn = document.createElement('r-button') as Button;
+    document.body.appendChild(btn);
+    btn.setAttribute('effect', 'false');
+    expect(btn.effect).toBe(false);
+    btn.setAttribute('effect', 'true');
+    expect(btn.effect).toBe(true);
+  });
+
+  // The ripple is on by default, so turning it off has to write a value rather than
+  // remove the attribute — removing it is what turns the ripple back on.
+  it('effect setter writes effect="false" for every falsy value', () => {
+    for (const value of [false, 'false', '', null, undefined]) {
+      const btn = document.createElement('r-button') as Button;
+      document.body.appendChild(btn);
+      btn.effect = value as boolean;
+      expect(btn.getAttribute('effect')).toBe('false');
+      expect(btn.effect).toBe(false);
+    }
+  });
+
+  it('effect setter removes the attribute for a truthy value', () => {
+    const btn = document.createElement('r-button') as Button;
+    document.body.appendChild(btn);
+    btn.setAttribute('effect', 'false');
+    btn.effect = true;
+    expect(btn.hasAttribute('effect')).toBe(false);
+    expect(btn.effect).toBe(true);
   });
 
   it('attributeChangedCallback early return when oldValue === newValue', () => {
