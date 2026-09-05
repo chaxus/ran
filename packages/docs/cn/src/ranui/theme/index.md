@@ -80,6 +80,7 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
   会让每个元素在切换主题时按各自的时长淡变。ranui 的组件刻意没有这么做，你的也不应该。
 
 ## 自定义令牌 {#customizing-tokens}
+
 ### 运行时（JS）
 
 ```js

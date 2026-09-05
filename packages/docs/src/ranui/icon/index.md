@@ -34,7 +34,7 @@ The valid names are exported as the `RanIconName` union type and the `RAN_ICON_N
 
 `add-user`, `arrow-down`, `book`, `check-circle`, `check-circle-fill`, `close`, `close-circle`, `close-circle-fill`, `drop`, `eye`, `eye-close`, `github`, `globe`, `home`, `info-circle`, `info-circle-fill`, `issue`, `loading`, `loading-scene`, `lock`, `menu`, `message`, `more`, `plus`, `power-off`, `preview`, `search`, `setting`, `sort`, `team`, `unlock`, `user`, `warning-circle`, `warning-circle-fill`, `without-content`
 
-### Custom icons
+### Custom icons {#custom-icons}
 
 To register your own SVGs (from any icon library or your build's asset pipeline), pass raw SVG strings to `registerIcons` / `registerIcon`:
 

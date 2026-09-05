@@ -334,6 +334,7 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 等待的是样式表里那个动画本身，而不是抄进脚本里的一个时长。所以在 `prefers-reduced-motion` 下（面板压根没有动画要播），`after-hide` 会紧接着 `hide` 发出，而不是干等一个固定延迟。
 
 ## 表单关联 {#form-association}
+
 `r-select` 是一个表单关联自定义元素（`static formAssociated = true`）。它通过 `ElementInternals` 上报选中的 `value`，因此只要是原生 `<form>` 的真实子孙元素，就会以该 select 的 `name` 被 `new FormData(form)` 收集。表单值在连接时就会从初始选中项中取值，之后随值变化保持同步。
 
 **重置**：原生 `form.reset()` 会通过 `formResetCallback()` 恢复 `defaultValue` 对应的选中项（如果设置了的话），否则清空选中状态。
