@@ -36,7 +36,7 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
 ### 与文字并排
 
 点只用颜色表示状态，不解释颜色代表什么。永远不要让颜色成为区分两行的唯一线索，详见
-[设计规范](/cn/src/ranui/design-guides/#无障碍)。
+[设计规范](/cn/src/ranui/design-guides/#accessibility)。
 
 <Demo column>
   <div style="display:flex;align-items:center;gap:8px">

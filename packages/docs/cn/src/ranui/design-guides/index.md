@@ -31,7 +31,7 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 
 ## 选颜色
 
-颜色按**角色与状态**分配，不靠眼睛挑。[状态阶梯](/cn/src/ranui/design-system/#状态阶梯)已经
+颜色按**角色与状态**分配，不靠眼睛挑。[状态阶梯](/cn/src/ranui/design-system/#the-ladder)已经
 固定了悬停和激活长什么样，你要做的是说清角色。
 
 | 这个元素是……           | 用                                                             |
@@ -59,7 +59,7 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 
 ## 间距与节奏
 
-所有间距都从[九档尺度](/cn/src/ranui/design-system/#间距)里取，并让距离本身表达含义：
+所有间距都从[九档尺度](/cn/src/ranui/design-system/#spacing)里取，并让距离本身表达含义：
 
 - 组**内**元素之间 **8px**。
 - 组与组之间 **16px**。
@@ -71,7 +71,7 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 ## 选排版
 
 先问这段文字是什么**角色**（heading、label、copy、button、mono），字体、字号、字重、行高就从
-[排版尺度](/cn/src/ranui/design-system/#排版)里跟着定了，不要逐处挑 px。
+[排版尺度](/cn/src/ranui/design-system/#typography)里跟着定了，不要逐处挑 px。
 
 角色是工具而非法条：真正一次性的装饰文字（播放器手势闪烁提示、激活链接的字重微调）与其硬塞进最接近
 的角色，不如给它一个自己的组件令牌。
@@ -82,7 +82,7 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 看不见的投影提供不了任何深度提示，而退化到卡片层级的浮层看起来就像贴在页面上。
 
 **在自己的页面骨架里嵌入 ranui 浮层。**
-[z-index 阶梯](/cn/src/ranui/design-system/#层级)从 1000 起，就是为了越过常规页面骨架，
+[z-index 阶梯](/cn/src/ranui/design-system/#stacking)从 1000 起，就是为了越过常规页面骨架，
 所以 portal 出去的浮层完全不需要你配合。但**留在自己 Shadow DOM 里**的 `position: fixed` 浮层
 （`r-modal` 的对话框）只能逃到最近的**层叠上下文**为止。如果你用带 `isolation`、`opacity < 1`、
 `transform`、`filter`、`will-change` 的容器包住了嵌入内容，就必须把那个容器的层级抬高，对话框才能
@@ -104,8 +104,7 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 吸顶导航之上。这个 bug 在本站上真实发生过。记得同时匹配 `closing`：`open` 被移除后，遮罩还会按过渡
 时长继续绘制。
 
-## 动效
-
+## 动效 {#motion}
 变化越大，给的时间就越长；不够大就别动。悬停与激活反馈约 150ms，菜单约 200ms，对话框约 300ms，本来
 就一目了然的变化给 0ms。尊重 `prefers-reduced-motion`。
 
@@ -132,8 +131,7 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
   成功了。
 - 让上下文消除冗余：标题已经是「删除项目」的对话框，按钮不需要再叫「永久删除该项目」。
 
-## 无障碍
-
+## 无障碍 {#accessibility}
 - 文字与背景的对比度满足 **WCAG AA**。
 - **绝不只用颜色表达状态**，要配上图标、标签或文字。
 - 所有可交互元素都保留**可见的聚焦环**（`--ran-focus-ring`，或

@@ -86,8 +86,7 @@ Two consequences worth knowing:
   `transition` on a palette property fades every element at its own pace when the theme
   switches. ranui's components deliberately don't; yours shouldn't either.
 
-## Customizing tokens
-
+## Customizing tokens {#customizing-tokens}
 ### At runtime (JS)
 
 ```js

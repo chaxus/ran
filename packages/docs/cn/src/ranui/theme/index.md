@@ -75,12 +75,11 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 - **只要用的是语义令牌，你自己的 CSS 也自动获得暗色模式**；反过来，写死颜色或者写了只在浅色下成立
   的兜底值就会出错。见
-  [在自己的 CSS 里使用令牌](/cn/src/ranui/design-system/#在自己的-css-里使用令牌)。
+  [在自己的 CSS 里使用令牌](/cn/src/ranui/design-system/#using-tokens-in-your-own-css)。
 - **主题翻转时不应该有任何过渡动画。** CSS 分不清颜色是为什么变的，所以颜色属性上的 `transition`
   会让每个元素在切换主题时按各自的时长淡变。ranui 的组件刻意没有这么做，你的也不应该。
 
-## 自定义令牌
-
+## 自定义令牌 {#customizing-tokens}
 ### 运行时（JS）
 
 ```js
@@ -122,7 +121,7 @@ clearThemeToken('--ran-color-primary');
   都会跟着变。
 - 覆盖**组件**令牌（`--ran-btn-hover-background`）：只改一个元素。
 
-完整分层见[设计系统](/cn/src/ranui/design-system/#两层令牌)。注意运行时覆盖写的是目标元素上的
+完整分层见[设计系统](/cn/src/ranui/design-system/#two-layers)。注意运行时覆盖写的是目标元素上的
 **内联样式**：它在该子树内会压过样式表规则。这正是局部主题能生效的原因，也是忘记清除的覆盖事后很难
 被发现的原因。
 

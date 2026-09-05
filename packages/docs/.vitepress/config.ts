@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { defineConfig } from 'vitepress';
-import { themeEnConfig } from './langs/en/index.ts';
-import { themeCnConfig } from './langs/cn/index.ts';
+import { localeConfigs, rootThemeConfig } from './langs/index.ts';
+import { LOCALES, ROOT_LOCALE, localeOfPath, stripLocaleDir } from './langs/locales.ts';
+import { SEO } from './langs/seo.ts';
 import {
   ARTICLE_PATH,
   BASE_PATH,
@@ -21,16 +22,9 @@ import {
   SET_FONT_SIZE,
   UTILS_PATH,
 } from './common/index.ts';
-import { LANGS_DICT } from './lib/constant.ts';
 
 // ── SEO helpers ──────────────────────────────────────────────────────────────
 const ORIGIN = HOME.replace(/\/+$/, ''); // https://ran.chaxus.com
-const SITE_TAGLINE = 'ran — Web Components UI library (ranui) & utility library (ranuts)';
-const SITE_TAGLINE_CN = 'ran — Web Components 组件库（ranui）与 TypeScript 工具库（ranuts）';
-const HOME_DESC_EN =
-  'ran is an open-source front-end ecosystem: ranui, a framework-agnostic Web Components UI library on native custom elements, and ranuts, a tree-shakeable TypeScript utility library.';
-const HOME_DESC_CN =
-  'ran 是一套开源前端生态：ranui 是基于原生 custom elements、框架无关的 Web Components 组件库；ranuts 是可 tree-shaking 的 TypeScript 工具库。';
 
 /**
  * Convert a VitePress source path (e.g. `src/ranui/index.md`) to its site URL path.
@@ -54,7 +48,7 @@ const SITE_JSONLD = {
       url: `${ORIGIN}/`,
       name: 'ran',
       description: DESCRIPTION,
-      inLanguage: ['en', 'zh-CN'],
+      inLanguage: LOCALES.map((l) => l.lang),
       publisher: { '@id': `${ORIGIN}/#person` },
     },
     {
@@ -234,33 +228,31 @@ export default defineConfig({
     const pages = siteConfig.pages;
     const exists = (p: string): boolean => pages.includes(p);
 
-    const enRel = rel.startsWith('cn/') ? rel.slice(3) : rel;
-    const cnRel = `cn/${enRel}`;
+    const locale = localeOfPath(rel);
+    const seo = SEO[locale.dir] ?? SEO[''];
+    // The language-independent path: `ja/src/ranui/index.md` → `src/ranui/index.md`.
+    // Every locale's copy of a page is that locale's directory plus this.
+    const baseRel = stripLocaleDir(rel);
+    const relIn = (dir: string): string => (dir ? `${dir}/${baseRel}` : baseRel);
     const selfUrl = ORIGIN + relToUrl(rel);
-    const enUrl = ORIGIN + relToUrl(enRel);
-    const cnUrl = ORIGIN + relToUrl(cnRel);
 
     // The home page's document <title> is otherwise just "ran" (title === site
     // title, so no template is applied). Promote it to the full tagline so the
     // most important on-page SEO signal carries the product keywords.
-    const isCn = rel.startsWith('cn/');
-    const isHome = enRel === 'index.md';
-    const homeTagline = isCn ? SITE_TAGLINE_CN : SITE_TAGLINE;
+    const isHome = baseRel === 'index.md';
     if (isHome) {
-      pageData.title = homeTagline;
+      pageData.title = seo.tagline;
       pageData.titleTemplate = false;
     }
 
     const title = pageData.title || 'ran';
-    const ogTitle = isHome ? homeTagline : `${title} | ran`;
+    const ogTitle = isHome ? seo.tagline : `${title} | ran`;
     const desc = isHome
-      ? isCn
-        ? HOME_DESC_CN
-        : HOME_DESC_EN
+      ? seo.homeDescription
       : pageData.frontmatter.description ||
         deriveDescription(join(siteConfig.srcDir, rel)) ||
         pageData.description ||
-        `${title} — documentation for ran: ranui Web Components and ranuts utilities.`;
+        seo.fallback(title);
     // Assign to pageData.description (the field VitePress renders into
     // <meta name="description">). Setting frontmatter.description alone is too late —
     // it left all 316 pages sharing the site-level description.
@@ -269,37 +261,34 @@ export default defineConfig({
 
     const head = (pageData.frontmatter.head ??= []);
     head.push(['link', { rel: 'canonical', href: selfUrl }]);
-    if (exists(enRel)) {
-      head.push(['link', { rel: 'alternate', hreflang: 'en', href: enUrl }]);
-      head.push(['link', { rel: 'alternate', hreflang: 'x-default', href: enUrl }]);
-    }
-    if (exists(cnRel)) {
-      head.push(['link', { rel: 'alternate', hreflang: 'zh-CN', href: cnUrl }]);
+    // hreflang for every language that actually ships this page. Existence-checked
+    // against the built page list because most languages carry only the ranui/ranuts
+    // reference — advertising an alternate that 404s is worse than advertising none.
+    // `x-default` follows English, the language served from the root.
+    const translated = LOCALES.filter((l) => exists(relIn(l.dir)));
+    for (const l of translated) {
+      const href = ORIGIN + relToUrl(relIn(l.dir));
+      head.push(['link', { rel: 'alternate', hreflang: l.lang, href }]);
+      if (l.dir === ROOT_LOCALE.dir) head.push(['link', { rel: 'alternate', hreflang: 'x-default', href }]);
     }
     head.push(
       ['meta', { property: 'og:title', content: ogTitle }],
       ['meta', { property: 'og:description', content: desc }],
       ['meta', { property: 'og:url', content: selfUrl }],
-      ['meta', { property: 'og:locale', content: isCn ? 'zh_CN' : 'en_US' }],
-      ['meta', { property: 'og:locale:alternate', content: isCn ? 'en_US' : 'zh_CN' }],
+      ['meta', { property: 'og:locale', content: locale.ogLocale }],
+      ...translated
+        .filter((l) => l.dir !== locale.dir)
+        .map((l) => ['meta', { property: 'og:locale:alternate', content: l.ogLocale }] as [string, Record<string, string>]),
       ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
       ['meta', { name: 'twitter:title', content: ogTitle }],
       ['meta', { name: 'twitter:description', content: desc }],
     );
 
     const lib =
-      enRel === 'src/ranui/index.md'
-        ? {
-            name: 'ranui',
-            description:
-              'A Web Components UI library built on native custom elements, with TypeScript types, light/dark theming, SSR and PWA support.',
-          }
-        : enRel === 'src/ranuts/index.md'
-          ? {
-              name: 'ranuts',
-              description:
-                'A tree-shakeable JavaScript/TypeScript utility library: DOM/BOM, string/object/number helpers, a 2D rendering engine, and a virtual DOM.',
-            }
+      baseRel === 'src/ranui/index.md'
+        ? { name: 'ranui', description: seo.ranui }
+        : baseRel === 'src/ranuts/index.md'
+          ? { name: 'ranuts', description: seo.ranuts }
           : null;
     if (lib) {
       head.push([
@@ -310,6 +299,7 @@ export default defineConfig({
           '@type': 'SoftwareSourceCode',
           name: lib.name,
           description: lib.description,
+          inLanguage: locale.lang,
           programmingLanguage: 'TypeScript',
           codeRepository: 'https://github.com/chaxus/ran',
           url: selfUrl,
@@ -322,8 +312,8 @@ export default defineConfig({
     // reference pages: a TechArticle so search engines and AI answer engines can
     // extract and cite them as API documentation. The two library landing pages
     // above already carry SoftwareSourceCode, so they're excluded here.
-    const isComponentPage = /^src\/ranui\/[^/]+\/index\.md$/.test(enRel) && enRel !== 'src/ranui/index.md';
-    const isUtilPage = enRel.startsWith('src/ranuts/') && enRel !== 'src/ranuts/index.md' && enRel.endsWith('.md');
+    const isComponentPage = /^src\/ranui\/[^/]+\/index\.md$/.test(baseRel) && baseRel !== 'src/ranui/index.md';
+    const isUtilPage = baseRel.startsWith('src/ranuts/') && baseRel !== 'src/ranuts/index.md' && baseRel.endsWith('.md');
     if (isComponentPage || isUtilPage) {
       head.push([
         'script',
@@ -334,7 +324,7 @@ export default defineConfig({
           headline: ogTitle,
           name: title,
           description: desc,
-          inLanguage: isCn ? 'zh-CN' : 'en',
+          inLanguage: locale.lang,
           url: selfUrl,
           about: {
             '@type': 'SoftwareSourceCode',
@@ -348,20 +338,9 @@ export default defineConfig({
       ]);
     }
   },
-  locales: {
-    // root: { label: '简体中文', lang: 'zh-CN' },
-    // en: {
-    //   label: 'English',
-    //   lang: 'en',
-    //   themeConfig: themeEnConfig,
-    // },
-    root: { label: 'English', lang: LANGS_DICT.EN },
-    cn: {
-      label: '简体中文',
-      lang: LANGS_DICT.ZH_CN,
-      themeConfig: themeCnConfig,
-    },
-  },
+  // Every language, assembled from the registry in `langs/locales.ts` — adding one is a
+  // row there plus a file in `langs/messages/`, never an edit here.
+  locales: localeConfigs,
   vue: {
     template: {
       compilerOptions: {
@@ -446,5 +425,5 @@ export default defineConfig({
     // service worker and pwa
     ['script', {}, SERVICE_WORK],
   ],
-  themeConfig: themeEnConfig,
+  themeConfig: rootThemeConfig,
 });

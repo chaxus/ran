@@ -44,7 +44,7 @@ import 'ranui/button'; // 或只要一个
 ```
 
 在任何框架里写的都是同一个标签，差别只在各框架怎么传值、怎么绑事件，这部分
-[编码规范](/cn/src/ranui/coding-guides/#框架接入)里有完整说明：
+[编码规范](/cn/src/ranui/coding-guides/#framework-integration)里有完整说明：
 
 ::: code-group
 
@@ -188,7 +188,7 @@ document.body.appendChild(button);
 
 令牌名称见[设计系统](/cn/src/ranui/design-system/)，怎么取舍见
 [设计规范](/cn/src/ranui/design-guides/)，机制细节见
-[编码规范](/cn/src/ranui/coding-guides/#跨-shadow-边界上样式)。
+[编码规范](/cn/src/ranui/coding-guides/#styling-across-the-shadow-boundary)。
 
 ## 事件
 

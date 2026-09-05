@@ -122,8 +122,7 @@ Content goes in through slots (default and named) and stays in your document, so
 page CSS styles it normally. Only what the component builds internally is out of reach, and
 that is what `::part()` is for.
 
-## Styling across the shadow boundary
-
+## Styling across the shadow boundary {#styling-across-the-shadow-boundary}
 Every ranui component renders into a **closed** shadow root. Page CSS cannot leak in, and
 selectors cannot reach through. There are exactly four ways in, in order of preference:
 
@@ -165,8 +164,7 @@ input.addEventListener('input', (event) => {
 });
 ```
 
-## Framework integration
-
+## Framework integration {#framework-integration}
 These are standard custom elements, so nothing framework-specific is required, but three
 details bite:
 
@@ -182,8 +180,7 @@ details bite:
 
 TypeScript users can `import 'ranui/typings'` for the JSX intrinsic-element declarations.
 
-## Server rendering
-
+## Server rendering {#server-rendering}
 ranui components serialize to **declarative shadow DOM**, so a server can emit the real markup
 and the first paint is correct before any JavaScript runs:
 

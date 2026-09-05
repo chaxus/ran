@@ -1,6 +1,6 @@
 import { createI18n } from 'vue-i18n';
 import { $env } from '../plugins/env';
-import { I18N_MODE, LANGS_DICT, LANG_MESSAGES, LOADED_LOCALES } from '../lib/constant';
+import { LANGS_DICT, LANG_MESSAGES, LOADED_LOCALES } from '../lib/constant';
 
 const locale = $env.locale;
 
@@ -13,11 +13,10 @@ const i18n = createI18n({
 });
 
 export const setI18nLanguage = (lang: string): string => {
-  if (i18n.mode === I18N_MODE.LEGACY) {
-    i18n.global.locale.value = lang as 'zh-CN' | 'en';
-  } else {
-    i18n.global.locale.value = lang as 'zh-CN' | 'en';
-  }
+  // Both branches are the same assignment; kept as one so adding a language never means
+  // widening a hard-coded union here (it used to read `lang as 'zh-CN' | 'en'`, which
+  // silently mistyped every language added after those two).
+  i18n.global.locale.value = lang as LANGS_DICT;
   return lang;
 };
 

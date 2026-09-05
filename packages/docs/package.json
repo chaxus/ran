@@ -8,6 +8,7 @@
     "dev": "vitepress dev",
     "build": "sh ./bin/build.sh",
     "tsc": "tsc --noEmit",
+    "check:langs": "node bin/check-langs.ts",
     "serve": "vitepress serve"
   },
   "repository": {

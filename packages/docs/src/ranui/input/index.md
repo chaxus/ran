@@ -178,7 +178,7 @@ input.addEventListener('change', (event) => {
 });
 ```
 
-## Form Association
+## Form Association {#form-association}
 
 `r-input` is a form-associated custom element (`static formAssociated = true`). It attaches `ElementInternals` and relays its value via `setFormValue`, so the field is collected by `new FormData(form)` when it's a real descendant of a native `<form>`; set `name` to give the value a key. See [Forms](/src/ranui/form/) for the `serializeForm()` helper that turns a submit into a plain object.
 

@@ -1,5 +1,8 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { DOC_LOCALE_DIRS, sitePagePath } from './doc-site-locales.ts';
+import { API_PAGE_COPY, hrefIn } from './api-page-copy.ts';
+import type { Labels } from './api-page-copy.ts';
 
 // Generates docs/COMPONENTS.md — a per-element API reference (attributes,
 // typed properties, events with detail shape, slots, ::part()) extracted from
@@ -9,14 +12,13 @@ const ROOT = path.resolve(process.cwd());
 const COMPONENTS_DIR = path.join(ROOT, 'components');
 const UTILS_DIR = path.join(ROOT, 'utils');
 const OUTPUT_FILE = path.join(ROOT, 'docs', 'COMPONENTS.md');
-// Second and third outputs: the same reference as pages on the docs site. Publishing it
-// there gives the whole element surface a real URL — so it lands in the sitemap and in
-// `llms-full.txt` (which concatenates the site's markdown) instead of only existing inside
-// the npm tarball. `cn/src/` is a manual 1:1 mirror of `src/` (see packages/docs/CLAUDE.md),
-// so the Chinese page is generated alongside: Chinese page chrome and bullet labels, with
-// the extracted per-symbol descriptions left in the English they are written in at source.
-const SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'src', 'ranui', 'api.md');
-const CN_SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'cn', 'src', 'ranui', 'api.md');
+// The same reference is also published as a page on the docs site, in every language it
+// ships. Publishing it there gives the whole element surface a real URL — so it lands in
+// the sitemap and in `llms-full.txt` (which concatenates the site's markdown) instead of
+// only existing inside the npm tarball. Each language gets its own page chrome and bullet
+// labels; the extracted per-symbol descriptions stay in the English they are written in at
+// source, and every page says so. The per-language trees are manual 1:1 mirrors of `src/`
+// (see packages/docs/CLAUDE.md), which `pnpm -F docs check:langs` enforces.
 const REPO_BLOB = 'https://github.com/chaxus/ran/blob/main/packages/ranui';
 
 interface Prop {
@@ -405,40 +407,6 @@ const ELEMENT_NOTES: Record<string, string> = {
   ].join('\n'),
 };
 
-/** The bullet labels around the extracted data, per output language. */
-interface Labels {
-  source: string;
-  attributes: string;
-  properties: string;
-  events: string;
-  slots: string;
-  parts: string;
-  defaultSlot: string;
-  namedSlot: (name: string) => string;
-}
-
-const EN_LABELS: Labels = {
-  source: 'Source',
-  attributes: 'Attributes',
-  properties: 'Properties',
-  events: 'Events',
-  slots: 'Slots',
-  parts: 'Parts',
-  defaultSlot: 'default',
-  namedSlot: (name) => `${name} (named)`,
-};
-
-const CN_LABELS: Labels = {
-  source: '源码',
-  attributes: '属性（attribute）',
-  properties: '属性值（property）',
-  events: '事件',
-  slots: '插槽',
-  parts: 'Part',
-  defaultSlot: '默认插槽',
-  namedSlot: (name) => `${name}（具名）`,
-};
-
 const CHECK = process.argv.includes('--check');
 const REGEN_HINT = 'pnpm -F ranui doc:api';
 
@@ -457,6 +425,10 @@ async function emit(file: string, content: string): Promise<void> {
   const normalized = content.replace(/[ \t]+$/gm, '');
   const rel = path.relative(ROOT, file).split(path.sep).join('/');
   if (!CHECK) {
+    // A language added to the site has no tree on disk until its first page lands here, so
+    // create the directory rather than failing the generator on a locale that is otherwise
+    // fully configured.
+    await fs.mkdir(path.dirname(file), { recursive: true });
     await fs.writeFile(file, normalized, 'utf8');
     console.log(`Generated: ${rel}`);
     return;
@@ -540,20 +512,7 @@ async function assertEveryComponentDocumented(elements: ElementApi[]): Promise<v
   process.exit(1);
 }
 
-const EVENT_LEGEND_EN = [
-  'Each event states the options it is dispatched with: `bubbles`, `composed` (crosses the',
-  'shadow boundary) and `cancelable` (`preventDefault()` vetoes it). **`element-only`** means',
-  'none of the three — a delegated listener on an ancestor never sees that event, so bind to',
-  'the element itself.',
-].join('\n');
-
-const EVENT_LEGEND_CN = [
-  '每个事件都标注了它的派发选项：`bubbles`（冒泡）、`composed`（可穿过 Shadow 边界）、',
-  '`cancelable`（`preventDefault()` 可否决）。**`element-only`** 表示三者皆无——在祖先节点上',
-  '做事件委托永远收不到它，请把监听绑在元素本身上。',
-].join('\n');
-
-/** The per-element sections, identical data under either language's bullet labels. */
+/** The per-element sections — identical data under whichever language's bullet labels. */
 function renderElements(elements: ElementApi[], labels: Labels): string {
   const lines: string[] = [];
   for (const el of elements) {
@@ -630,8 +589,8 @@ async function main(): Promise<void> {
 
   elements.sort((a, b) => a.tag.localeCompare(b.tag));
 
-  const body = renderElements(elements, EN_LABELS);
-  const cnBody = renderElements(elements, CN_LABELS);
+  const en = API_PAGE_COPY[''];
+  const body = renderElements(elements, en.labels);
   const count = elements.length;
 
   await emit(
@@ -645,7 +604,7 @@ async function main(): Promise<void> {
       '(theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for',
       'design rules see [DESIGN.md](./DESIGN.md).',
       '',
-      EVENT_LEGEND_EN,
+      en.eventLegend,
       '',
       `${count} custom elements.`,
       '',
@@ -653,64 +612,33 @@ async function main(): Promise<void> {
     ].join('\n'),
   );
 
-  // Docs-site copy. Two edits are needed and both would be wrong to skip: frontmatter, so
-  // the page gets its own <title>/<meta description> instead of inheriting the site
-  // defaults; and the sibling-file links, which resolve inside the npm tarball but 404 on
-  // the site — point them at their published counterparts, or at GitHub where there is none.
-  await emit(
-    SITE_OUTPUT_FILE,
-    [
-      '---',
-      'title: ranui element API',
-      `description: Every ranui custom element — ${count} elements with their attributes, properties, events, slots and ::part() names, extracted from source.`,
-      '---',
-      '',
-      '# ranui element API (generated)',
-      '',
-      'Auto-generated from the component source by `pnpm -F ranui doc:api`, so it cannot drift',
-      'from what ships. Per-element reference of attributes, typed properties, events (with',
-      'their `detail` shape and dispatch flags), slots, and `::part()` names.',
-      '',
-      'For the CSS variables each element exposes see',
-      `[style-tokens-public.md](${REPO_BLOB}/docs/style-tokens-public.md); for how to choose`,
-      'between them, the [design system](/src/ranui/design-system/) and the',
-      '[design guidelines](/src/ranui/design-guides/). Usage guidance per element lives on its',
-      'own page in the sidebar; this is the exhaustive surface in one place.',
-      '',
-      EVENT_LEGEND_EN,
-      '',
-      `**${count} custom elements.**`,
-      '',
-      body,
-    ].join('\n'),
-  );
-
-  await emit(
-    CN_SITE_OUTPUT_FILE,
-    [
-      '---',
-      'title: ranui 元素 API',
-      `description: ranui 的全部自定义元素 —— ${count} 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。`,
-      '---',
-      '',
-      '# ranui 元素 API（自动生成）',
-      '',
-      '由 `pnpm -F ranui doc:api` 从组件源码自动生成，因此不会与实际发布的代码脱节：逐个元素',
-      '列出属性（attribute）、带类型的属性值（property）、事件（含 `detail` 结构与派发选项）、',
-      '插槽与 `::part()` 名称。描述直接提取自源码 JSDoc，因此保持英文。',
-      '',
-      '每个元素暴露的 CSS 变量见',
-      `[style-tokens-public.md](${REPO_BLOB}/docs/style-tokens-public.md)；如何在其中取舍见`,
-      '[设计系统](/cn/src/ranui/design-system/)与[设计规范](/cn/src/ranui/design-guides/)。',
-      '单个元素的用法说明在侧边栏各自的页面里，这里是一次性列全的完整接口。',
-      '',
-      EVENT_LEGEND_CN,
-      '',
-      `**共 ${count} 个自定义元素。**`,
-      '',
-      cnBody,
-    ].join('\n'),
-  );
+  // Docs-site copies, one per language. Two edits are needed against the tarball version
+  // and both would be wrong to skip: frontmatter, so the page gets its own <title>/<meta
+  // description> instead of inheriting the site defaults; and the sibling-file links, which
+  // resolve inside the npm tarball but 404 on the site — point them at their published
+  // counterparts, or at GitHub where there is none.
+  for (const dir of DOC_LOCALE_DIRS) {
+    const copy = API_PAGE_COPY[dir];
+    await emit(
+      sitePagePath(ROOT, dir, 'ranui', 'api.md'),
+      [
+        '---',
+        `title: ${copy.title}`,
+        `description: ${copy.description(count)}`,
+        '---',
+        '',
+        `# ${copy.heading}`,
+        '',
+        ...copy.intro(hrefIn(dir), REPO_BLOB),
+        '',
+        copy.eventLegend,
+        '',
+        copy.count(count),
+        '',
+        renderElements(elements, copy.labels),
+      ].join('\n'),
+    );
+  }
 }
 
 main().catch((error) => {

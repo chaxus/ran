@@ -1,5 +1,7 @@
 import { promises as fs, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { API_PAGE_COPY, DOC_LOCALE_DIRS } from './api-page-copy.ts';
+import type { DocLocaleDir, Kind, RuntimeKey } from './api-page-copy.ts';
 import { API, SignatureKind, SymbolFlags } from 'typescript/unstable/sync';
 import type { Checker, Symbol as TsSymbol } from 'typescript/unstable/sync';
 import type { Node, SourceFile } from 'typescript/unstable/ast';
@@ -18,30 +20,28 @@ import type { Node, SourceFile } from 'typescript/unstable/ast';
 
 const ROOT = path.resolve(process.cwd());
 const OUTPUT_FILE = path.join(ROOT, 'docs', 'API.md');
-// Second output: the same reference as a page on the docs site. Publishing it there gives
-// the full exported surface a real URL — so it lands in the sitemap, and in `llms-full.txt`
-// (which concatenates the site's markdown), instead of only existing inside the npm tarball.
-const SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'src', 'ranuts', 'api.md');
-// Third output: the Chinese docs-site page. `cn/src/` is a manual 1:1 mirror of `src/`
-// (see packages/docs/CLAUDE.md), and this was the one page missing from it. The page
-// chrome (headings, intro, counts) is Chinese; the per-symbol descriptions stay English
-// because they are extracted verbatim from source JSDoc, which is written in English
-// by convention.
-const CN_SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'cn', 'src', 'ranuts', 'api.md');
+// The same reference is also published as a page on the docs site, once per language.
+// Publishing it there gives the full exported surface a real URL — so it lands in the
+// sitemap, and in `llms-full.txt` (which concatenates the site's markdown), instead of only
+// existing inside the npm tarball. Each language gets its own page chrome (headings, intro,
+// counts, entry-point blurbs); the per-symbol descriptions stay English because they are
+// extracted verbatim from source JSDoc, which is written in English by convention, and each
+// page says so. The per-language trees are manual 1:1 mirrors of `src/` (see
+// packages/docs/CLAUDE.md), enforced by `pnpm -F docs check:langs`.
+const sitePagePath = (dir: DocLocaleDir): string =>
+  path.join(ROOT, '..', 'docs', ...(dir ? [dir] : []), 'src', 'ranuts', 'api.md');
 const TSCONFIG = path.join(ROOT, 'tsconfig.json');
 const REPO_BLOB = 'https://github.com/chaxus/ran/blob/main/packages/ranuts';
 const DOCS_ROOT = path.join(ROOT, '..', 'docs');
-const SIDEBAR_FILES = [
-  path.join(DOCS_ROOT, '.vitepress', 'langs', 'en', 'index.ts'),
-  path.join(DOCS_ROOT, '.vitepress', 'langs', 'cn', 'index.ts'),
-];
+// One locale-agnostic tree drives every language's sidebar, so there is a single file to
+// read — and checking it once now covers all eight languages instead of two.
+const SIDEBAR_FILE = path.join(DOCS_ROOT, '.vitepress', 'langs', 'structure.ts');
 
 interface Entry {
   subpath: string;
   file: string;
-  blurb: string;
-  blurbCn: string;
-  runtime: string;
+  /** Canonical runtime key; each language maps it to its own wording. */
+  runtime: RuntimeKey;
 }
 
 const CHECK = process.argv.includes('--check');
@@ -62,6 +62,8 @@ async function emit(file: string, content: string): Promise<void> {
   const normalized = content.replace(/[ \t]+$/gm, '');
   const rel = path.relative(ROOT, file).split(path.sep).join('/');
   if (!CHECK) {
+    // A newly added language has no tree on disk until its first page lands here.
+    await fs.mkdir(path.dirname(file), { recursive: true });
     await fs.writeFile(file, normalized, 'utf8');
     console.log(`Generated: ${rel}`);
     return;
@@ -77,63 +79,44 @@ const ENTRIES: Entry[] = [
   {
     subpath: 'ranuts/utils',
     file: 'src/utils/index.ts',
-    blurb: 'Browser and general-purpose utilities',
-    blurbCn: '浏览器与通用工具函数',
     runtime: 'browser + node',
   },
   {
     subpath: 'ranuts/sw',
     file: 'src/sw/index.ts',
-    blurb: 'Service Worker caching strategies and the precache protocol',
-    blurbCn: 'Service Worker 缓存策略与预缓存协议',
     runtime: 'service worker only',
   },
   {
     subpath: 'ranuts/node',
     file: 'src/node/index.ts',
-    blurb: 'Node server utilities (fs / http / ws / middleware)',
-    blurbCn: 'Node 服务端工具（fs / http / ws / 中间件）',
     runtime: 'node only',
   },
   {
     subpath: 'ranuts/visual',
     file: 'src/utils/visual/index.ts',
-    blurb: '2D rendering engine (Canvas / WebGL / WebGPU)',
-    blurbCn: '2D 渲染引擎（Canvas / WebGL / WebGPU）',
     runtime: 'browser only',
   },
   {
     subpath: 'ranuts/i18n',
     file: 'src/utils/i18n.ts',
-    blurb: 'Framework-agnostic i18n engine (also re-exported from ranuts/utils)',
-    blurbCn: '框架无关的 i18n 引擎（也从 ranuts/utils 再导出）',
     runtime: 'browser + node',
   },
   {
     subpath: 'ranuts/vnode',
     file: 'src/vnode/index.ts',
-    blurb: 'Snabbdom-style virtual DOM',
-    blurbCn: 'Snabbdom 风格的虚拟 DOM',
     runtime: 'browser',
   },
   {
     subpath: 'ranuts/stream',
     file: 'src/stream/index.ts',
-    blurb:
-      'SSE parsing, a provider-neutral model-stream fold, and the token budget that decides when a history stops fitting',
-    blurbCn: 'Server-Sent Events 解析与厂商中立的模型流折叠',
     runtime: 'browser + node',
   },
   {
     subpath: 'ranuts/conversation',
     file: 'src/conversation/index.ts',
-    blurb: 'Project an append-only event log into renderable conversation nodes',
-    blurbCn: '将只追加的事件日志投影为可渲染的对话节点',
     runtime: 'browser + node',
   },
 ];
-
-type Kind = 'function' | 'class' | 'interface' | 'type' | 'enum' | 'const' | 'namespace' | 'other';
 
 interface ApiSymbol {
   name: string;
@@ -143,37 +126,6 @@ interface ApiSymbol {
 }
 
 const MAX_SIG_LEN = 160;
-
-const KIND_TITLES: Record<Kind, string> = {
-  function: 'Functions',
-  class: 'Classes',
-  interface: 'Interfaces',
-  type: 'Types',
-  enum: 'Enums',
-  const: 'Constants',
-  namespace: 'Namespaces',
-  other: 'Other',
-};
-
-const KIND_TITLES_CN: Record<Kind, string> = {
-  function: '函数',
-  class: '类',
-  interface: '接口',
-  type: '类型',
-  enum: '枚举',
-  const: '常量',
-  namespace: '命名空间',
-  other: '其他',
-};
-
-// The `runtime` strings also appear in prose on the CN page.
-const RUNTIME_CN: Record<string, string> = {
-  'browser + node': '浏览器 + node',
-  'service worker only': '仅 service worker',
-  'node only': '仅 node',
-  'browser only': '仅浏览器',
-  browser: '浏览器',
-};
 
 const KIND_ORDER: Kind[] = ['function', 'class', 'interface', 'type', 'enum', 'const', 'namespace', 'other'];
 
@@ -308,23 +260,21 @@ function collectEntry(checker: Checker, sourceFile: SourceFile): ApiSymbol[] {
 // 0.3 removal: the page was deleted, the sidebar entry wasn't, and it sat as a 404
 // reachable only by URL until someone happened to click it.
 async function collectSidebarLinks(): Promise<string[]> {
-  const linkPattern = /link:\s*'((?:\/cn)?\/src\/ranuts\/[^']*)'/g;
-  const links: string[] = [];
-  for (const sidebarFile of SIDEBAR_FILES) {
-    let text: string;
-    try {
-      text = await fs.readFile(sidebarFile, 'utf8');
-    } catch {
-      continue;
-    }
-    for (const match of text.matchAll(linkPattern)) links.push(match[1]);
+  // `structure.ts` holds links without a locale prefix; the builder adds one per language.
+  const linkPattern = /link:\s*['"](\/src\/ranuts\/[^'"]*)['"]/g;
+  let text: string;
+  try {
+    text = await fs.readFile(SIDEBAR_FILE, 'utf8');
+  } catch {
+    return [];
   }
-  return links;
+  return [...text.matchAll(linkPattern)].map((m) => m[1]);
 }
 
-function linkToFile(link: string): string {
+/** The file a sidebar link resolves to in one language's tree. */
+function linkToFile(link: string, dir: DocLocaleDir = ''): string {
   const rel = link.endsWith('/') ? `${link}index.md` : `${link}.md`;
-  return path.join(DOCS_ROOT, rel);
+  return path.join(DOCS_ROOT, ...(dir ? [dir] : []), rel);
 }
 
 async function collectMarkdownFiles(dir: string): Promise<string[]> {
@@ -352,21 +302,26 @@ async function collectMarkdownFiles(dir: string): Promise<string[]> {
 //   intentionally-unlinked page (rare, but not impossible) shouldn't break the build.
 async function checkDocsDrift(): Promise<void> {
   const links = await collectSidebarLinks();
-  const linkedFiles = new Set(links.map((l) => linkToFile(l)));
+  // The sidebar tree is shared, so every link has to resolve in every language's copy of it.
+  const pairs = DOC_LOCALE_DIRS.flatMap((dir) => links.map((link) => ({ dir, link })));
+  const linkedFiles = new Set(pairs.map(({ dir, link }) => linkToFile(link, dir)));
 
-  const broken = links.filter((l) => {
-    try {
-      readFileSync(linkToFile(l));
-      return false;
-    } catch {
-      return true;
-    }
-  });
+  const broken = pairs
+    .filter(({ dir, link }) => {
+      try {
+        readFileSync(linkToFile(link, dir));
+        return false;
+      } catch {
+        return true;
+      }
+    })
+    .map(({ dir, link }) => (dir ? `/${dir}${link}` : link));
 
-  const allDocs = [
-    ...(await collectMarkdownFiles(path.join(DOCS_ROOT, 'src', 'ranuts'))),
-    ...(await collectMarkdownFiles(path.join(DOCS_ROOT, 'cn', 'src', 'ranuts'))),
-  ];
+  const allDocs = (
+    await Promise.all(
+      DOC_LOCALE_DIRS.map((dir) => collectMarkdownFiles(path.join(DOCS_ROOT, ...(dir ? [dir] : []), 'src', 'ranuts'))),
+    )
+  ).flat();
   // api.md is generated + linked once from a top-level sidebar entry that this
   // regex's /utils|node|.../ path shape doesn't match; exclude it explicitly.
   const orphans = allDocs.filter((f) => !linkedFiles.has(f) && !f.endsWith(`${path.sep}api.md`));
@@ -377,7 +332,7 @@ async function checkDocsDrift(): Promise<void> {
   }
   if (broken.length) {
     console.error(`[api-docs] ${broken.length} sidebar link(s) point at a missing file:`);
-    for (const b of broken) console.error(`  - ${b} → ${path.relative(DOCS_ROOT, linkToFile(b))}`);
+    for (const b of broken) console.error(`  - ${b}`);
     process.exitCode = 1;
   }
 }
@@ -390,25 +345,10 @@ async function main(): Promise<void> {
     if (!project) throw new Error(`no project loaded from ${TSCONFIG}`);
     const { program, checker } = project;
 
-    const lines: string[] = [
-      '# ranuts API (Generated)',
-      '',
-      'Auto-generated by `bin/generate-api-docs.ts` (`npm run doc:api`). Per-entry-point',
-      'reference of every exported symbol with its signature and one-line description,',
-      'extracted from source + JSDoc. For orientation (which entry to import, runtime',
-      'constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.',
-      '',
-      'Import from the **subpath** that owns the symbol, e.g. `import { debounce } from',
-      "'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.",
-      '',
-    ];
-
+    // Collect once, render once per language: symbol extraction is the expensive half and
+    // is language-independent — only the surrounding prose changes.
     let total = 0;
-    const tocLines: string[] = ['## Entry points', ''];
-    const tocLinesCn: string[] = ['## 入口点', ''];
-
-    const sections: string[] = [];
-    const sectionsCn: string[] = [];
+    const collected: { entry: Entry; anchor: string; count: number; byKind: Map<Kind, ApiSymbol[]> }[] = [];
     for (const entry of ENTRIES) {
       const sourceFile = program.getSourceFile(path.join(ROOT, entry.file));
       if (!sourceFile) {
@@ -425,104 +365,93 @@ async function main(): Promise<void> {
       // the separator as a hyphen. Digits are preserved either way, so `ranuts/i18n`
       // is `ranuts-i18n`.
       const anchor = entry.subpath.replace(/[^a-z0-9]+/g, '-');
-      tocLines.push(
-        `- [\`${entry.subpath}\`](#${anchor}) — ${entry.blurb} · _${entry.runtime}_ · ${symbols.length} exports`,
-      );
-      tocLinesCn.push(
-        `- [\`${entry.subpath}\`](#${anchor}) — ${entry.blurbCn} · _${RUNTIME_CN[entry.runtime] ?? entry.runtime}_ · ${symbols.length} 个导出`,
-      );
 
       const byKind = new Map<Kind, ApiSymbol[]>();
-      for (const s of symbols) {
-        const arr = byKind.get(s.kind) ?? [];
-        arr.push(s);
-        byKind.set(s.kind, arr);
+      for (const sym of symbols) {
+        const arr = byKind.get(sym.kind) ?? [];
+        arr.push(sym);
+        byKind.set(sym.kind, arr);
       }
-
-      // The `## \`ranuts/…\`` section headings are identical in both languages, so the
-      // TOC anchors above resolve on either page.
-      const sec: string[] = [];
-      sec.push(`## \`${entry.subpath}\``);
-      sec.push('');
-      sec.push(`${entry.blurb} · runtime: **${entry.runtime}** · source: \`${entry.file}\``);
-      sec.push('');
-      const secCn: string[] = [];
-      secCn.push(`## \`${entry.subpath}\``);
-      secCn.push('');
-      secCn.push(
-        `${entry.blurbCn} · 运行环境：**${RUNTIME_CN[entry.runtime] ?? entry.runtime}** · 源码：\`${entry.file}\``,
-      );
-      secCn.push('');
-      for (const target of [sec, secCn]) {
-        target.push('```ts');
-        target.push(`import { /* … */ } from '${entry.subpath}';`);
-        target.push('```');
-        target.push('');
-      }
-
-      for (const kind of KIND_ORDER) {
-        const arr = byKind.get(kind);
-        if (!arr || !arr.length) continue;
-        sec.push(`### ${KIND_TITLES[kind]}`);
-        sec.push('');
-        secCn.push(`### ${KIND_TITLES_CN[kind]}`);
-        secCn.push('');
-        for (const s of arr) {
-          const line = `- \`${s.signature}\`${s.desc ? ` — ${s.desc}` : ''}`;
-          sec.push(line);
-          secCn.push(line);
-        }
-        sec.push('');
-        secCn.push('');
-      }
-      sections.push(sec.join('\n'));
-      sectionsCn.push(secCn.join('\n'));
+      collected.push({ entry, anchor, count: symbols.length, byKind });
     }
 
-    const header = [...lines, `**${total} exports** across ${ENTRIES.length} entry points.`, '', ...tocLines, ''];
+    /**
+     * Render the whole reference in one language.
+     *
+     * The `## \`ranuts/…\`` section headings and every signature line are identical in every
+     * language, so the TOC anchors resolve on every page and a reader comparing two pages is
+     * looking at the same rows.
+     *
+     * @param dir Locale directory (`''` for English).
+     * @param claudeLink How to link CLAUDE.md — relative inside the npm tarball, absolute on
+     *                   the site, where the relative path 404s.
+     */
+    const renderPage = (dir: DocLocaleDir, claudeLink: string): string => {
+      const copy = API_PAGE_COPY[dir];
+      const toc = [`## ${copy.tocHeading}`, ''];
+      const sections: string[] = [];
 
-    const body = `${header.join('\n')}\n${sections.join('\n')}\n`;
-    await emit(OUTPUT_FILE, body);
+      for (const { entry, anchor, count, byKind } of collected) {
+        const blurb = copy.blurbs[entry.subpath] ?? API_PAGE_COPY[''].blurbs[entry.subpath];
+        const runtime = copy.runtimes[entry.runtime] ?? entry.runtime;
+        toc.push(copy.tocItem({ subpath: entry.subpath, anchor, blurb, runtime, count }));
 
-    // Docs-site copy. Two edits are needed and both would be wrong to skip:
-    // frontmatter, so the page gets its own <title>/<meta description> rather than
-    // inheriting the site defaults; and the `../CLAUDE.md` link, which resolves inside the
-    // npm tarball but 404s on the site — point it at GitHub instead.
-    const siteBody = [
-      '---',
-      'title: ranuts API reference',
-      `description: Every symbol exported by ranuts — ${total} exports across ${ENTRIES.length} entry points, with signatures and descriptions.`,
-      '---',
-      '',
-      body.replace('[../CLAUDE.md](../CLAUDE.md)', `[CLAUDE.md](${REPO_BLOB}/CLAUDE.md)`),
-    ].join('\n');
-    await emit(SITE_OUTPUT_FILE, siteBody);
+        const sec: string[] = [
+          `## \`${entry.subpath}\``,
+          '',
+          copy.sectionMeta({ blurb, runtime, file: entry.file }),
+          '',
+          '```ts',
+          `import { /* … */ } from '${entry.subpath}';`,
+          '```',
+          '',
+        ];
+        for (const kind of KIND_ORDER) {
+          const arr = byKind.get(kind);
+          if (!arr?.length) continue;
+          sec.push(`### ${copy.kindTitles[kind]}`, '');
+          for (const sym of arr) sec.push(`- \`${sym.signature}\`${sym.desc ? ` — ${sym.desc}` : ''}`);
+          sec.push('');
+        }
+        sections.push(sec.join('\n'));
+      }
 
-    // Chinese docs-site page — same data, Chinese page chrome. Per-symbol descriptions
-    // stay English (extracted verbatim from source JSDoc).
-    const cnBody = [
-      '---',
-      'title: ranuts API 参考',
-      `description: ranuts 导出的全部符号 — ${ENTRIES.length} 个入口点，共 ${total} 个导出，含签名与描述。`,
-      '---',
-      '',
-      '# ranuts API（自动生成）',
-      '',
-      '由 `bin/generate-api-docs.ts`（`npm run doc:api`）自动生成：按入口点列出每一个导出',
-      '符号的签名与一行描述。描述直接提取自源码 JSDoc，因此保持英文。使用指引（该从哪个',
-      `入口导入、运行环境约束、约定）请先阅读 [CLAUDE.md](${REPO_BLOB}/CLAUDE.md)。`,
-      '',
-      '请从符号所属的**子路径**导入，例如 `import { debounce } from',
-      "'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。",
-      '',
-      `**${total} 个导出**，共 ${ENTRIES.length} 个入口点。`,
-      '',
-      ...tocLinesCn,
-      '',
-      sectionsCn.join('\n'),
-      '',
-    ].join('\n');
-    await emit(CN_SITE_OUTPUT_FILE, cnBody);
+      return [
+        `# ${copy.heading}`,
+        '',
+        ...copy.intro(claudeLink),
+        '',
+        copy.totalLine(total, ENTRIES.length),
+        '',
+        ...toc,
+        '',
+        sections.join('\n'),
+        '',
+      ].join('\n');
+    };
+
+    // The tarball copy: English, and CLAUDE.md sits one directory up from `docs/API.md`.
+    await emit(OUTPUT_FILE, renderPage('', '[../CLAUDE.md](../CLAUDE.md)'));
+
+    // Docs-site copies. Two edits against the tarball version and both would be wrong to
+    // skip: frontmatter, so each page gets its own <title>/<meta description> rather than
+    // inheriting the site defaults; and the CLAUDE.md link, which resolves inside the npm
+    // tarball but 404s on the site — point it at GitHub instead.
+    const siteClaudeLink = `[CLAUDE.md](${REPO_BLOB}/CLAUDE.md)`;
+    for (const dir of DOC_LOCALE_DIRS) {
+      const copy = API_PAGE_COPY[dir];
+      await emit(
+        sitePagePath(dir),
+        [
+          '---',
+          `title: ${copy.title}`,
+          `description: ${copy.description(total, ENTRIES.length)}`,
+          '---',
+          '',
+          renderPage(dir, siteClaudeLink),
+        ].join('\n'),
+      );
+    }
 
     await checkDocsDrift();
   } finally {

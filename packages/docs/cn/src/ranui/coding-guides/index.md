@@ -111,7 +111,7 @@ modal.addEventListener('beforeclose', (event) => {
 内容通过插槽（默认插槽和具名插槽）传入，并且**留在你的文档里**，所以你的页面 CSS 能正常作用于它们。
 够不到的只有组件内部自己构建的那部分，这正是 `::part()` 的用武之地。
 
-## 跨 Shadow 边界上样式
+## 跨 Shadow 边界上样式 {#styling-across-the-shadow-boundary}
 
 每个 ranui 组件都渲染在 **closed** shadow root 里，页面 CSS 进不去，选择器也穿不透。能进去的方式
 一共四种，按推荐顺序排列：
@@ -151,8 +151,7 @@ input.addEventListener('input', (event) => {
 });
 ```
 
-## 框架接入
-
+## 框架接入 {#framework-integration}
 它们就是标准的自定义元素，不需要任何框架专属的东西，但有三个细节容易踩坑：
 
 - **React**（< 19）会把 JSX 上的每个 prop 都当作 **attribute** 设置，所以复杂值传不进去，`onChange`
@@ -166,8 +165,7 @@ input.addEventListener('input', (event) => {
 
 TypeScript 用户可以 `import 'ranui/typings'` 获得 JSX 内置元素声明。
 
-## 服务端渲染
-
+## 服务端渲染 {#server-rendering}
 ranui 组件可以序列化成**声明式 Shadow DOM**，服务端因此能直接输出真实标记，JS 还没执行时首屏就已经是正确的：
 
 ```js

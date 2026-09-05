@@ -334,7 +334,7 @@ They carry no `detail`.
 
 The wait is the stylesheet's own animation rather than a duration copied into script, so under `prefers-reduced-motion` (where the panel has no animation to play), `after-hide` follows `hide` immediately instead of after a fixed delay.
 
-## Form Association
+## Form Association {#form-association}
 
 `r-select` is a form-associated custom element (`static formAssociated = true`). It relays its selected `value` through `ElementInternals`, so it is collected by `new FormData(form)` under the select's `name`, when it's a real descendant of a native `<form>`. The form value is seeded from any initial selection on connect and kept in sync as the value changes.
 

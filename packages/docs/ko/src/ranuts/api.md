@@ -1,0 +1,641 @@
+---
+title: ranuts API 레퍼런스
+description: ranuts가 내보내는 모든 심볼 — 8개 진입점, 총 454개 export를 시그니처와 설명과 함께.
+---
+
+# ranuts API (자동 생성)
+
+`bin/generate-api-docs.ts`(`npm run doc:api`)가 자동 생성합니다. 진입점별로 내보낸 각 심볼의
+시그니처와 한 줄 설명을 정리한 레퍼런스입니다. 설명은 소스 JSDoc에서 그대로 가져오므로 영어입니다.
+어느 진입점에서 import할지, 실행 환경 제약, 관례 등 전체 그림은 [CLAUDE.md](https://github.com/chaxus/ran/blob/main/packages/ranuts/CLAUDE.md)를 먼저 읽어 주세요.
+
+심볼이 속한 **서브패스**에서 import하세요. 예: `import { debounce } from
+'ranuts/utils'`. 루트 배럴 `ranuts`는 utils + visual 표면을 다시 내보냅니다.
+
+**export 454개**, 진입점 8개.
+
+## 진입점
+
+- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 339개
+- [`ranuts/sw`](#ranuts-sw) — Service Worker 캐싱 전략과 프리캐시 프로토콜 · _service worker 전용_ · export 9개
+- [`ranuts/node`](#ranuts-node) — Node 서버 유틸리티 (fs / http / ws / 미들웨어) · _node 전용_ · export 26개
+- [`ranuts/visual`](#ranuts-visual) — 2D 렌더링 엔진 (Canvas / WebGL / WebGPU) · _브라우저 전용_ · export 16개
+- [`ranuts/i18n`](#ranuts-i18n) — 프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄) · _브라우저 + node_ · export 9개
+- [`ranuts/vnode`](#ranuts-vnode) — Snabbdom 스타일 가상 DOM · _브라우저_ · export 26개
+- [`ranuts/stream`](#ranuts-stream) — SSE 파싱과 공급자 중립적인 모델 스트림 폴드, 그리고 대화 기록이 언제 더는 들어가지 않는지 판단하는 토큰 예산 · _브라우저 + node_ · export 20개
+- [`ranuts/conversation`](#ranuts-conversation) — 추가 전용 이벤트 로그를 렌더링 가능한 대화 노드로 투영 · _브라우저 + node_ · export 9개
+
+## `ranuts/utils`
+
+브라우저용 및 범용 유틸리티 · 실행 환경: **브라우저 + node** · 소스: `src/utils/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/utils';
+```
+
+### 함수
+
+- `acceptPortBridge({ targetOrigin, name, }?: AcceptPortBridgeOptions) => Promise<PortBridge>` — Acceptor: wait for the port the initiator hands over and return the bridge once the
+- `addClassToElement(element: Element, addClass: string) => void` — Add a class to an element
+- `addNumSym(value: string | number, flag?: string | number) => string`
+- `adoptSheetText(shadowRoot: ShadowRoot, cssText: string, marker?: string) => void` — Inject dynamic styles supplied at runtime (a component's `sheet` property, say).
+- `adoptStyles(shadowRoot: ShadowRoot, cssText: string, marker?: string) => void` — Inject a component's static styles into a shadow root.
+- `alignCrossAxis(align: PlacementAlign, anchorStart: number, anchorSize: number, floatingSize: number) => number` — Where a floating panel starts along the cross axis, given how
+- `appendUrl(url: string, params?: Record<string, string>) => string` — Turn an object into a query string and append it to a URL
+- `arrayBufferToString(buffer: ArrayBuffer | Uint8Array) => string` — Decode bytes into a string using the sniffed encoding. Required when reading
+- `autosizeTextarea(element: HTMLTextAreaElement) => (() => void)` — Make a `<textarea>` grow and shrink with its content, so a long message is
+- `base64ToBytes(base64: string) => Uint8Array<ArrayBuffer>` — Decode base64 into bytes. Accepts a bare payload or a full
+- `base64UrlToBytes(value: string) => Uint8Array | null` — Decode base64url back into bytes, restoring the padding the encoder dropped.
+- `blendMultiply(base: RGB, blend: RGB) => RGB` — Multiply blend of two colours (channel-wise `base * blend`). Channels in 0..1.
+- `blendOverlay(base: RGB, blend: RGB) => RGB` — Overlay blend of two colours (multiply in shadows, screen in highlights). Channels in 0..1.
+- `blendScreen(base: RGB, blend: RGB) => RGB` — Screen blend of two colours (channel-wise `1 - (1 - base)(1 - blend)`). Channels in 0..1.
+- `brightnessContrast(color: RGB, brightness: number, contrast: number) => RGB` — Adjust brightness and contrast of a colour: `(c - 0.5) * contrast + 0.5 + brightness` per channel. Channels in 0..1.
+- `buildOffsets(lengths: readonly number[]) => number[]` — The global start offset of every chunk in the concatenated coordinate
+- `bytesToBase64(data: Uint8Array | ArrayBuffer) => string` — Encode bytes as base64 without blowing the call stack.
+- `bytesToBase64Url(data: Uint8Array | ArrayBuffer) => string` — Encode bytes as base64url — the URL- and filename-safe alphabet from RFC 4648
+- `checkEncoding(uint8Array: Uint8Array) => string`
+- `clamp(value: number, min: number, max: number) => number` — Clamp `value` into the inclusive range `[min, max]`.
+- `clearBr(str?: string) => string` — Strip whitespace, line breaks and HTML tags out of a string
+- `clearStr(str: string, options?: ClearStrOption) => string` — Trim surrounding whitespace, percent-decode, and drop surrounding quotes
+- `cloneDeep<T>(value: T, cloneMap?: WeakMap<object, any>) => T` — Deep clone, covering the complex built-in types and circular references.
+- `componentToHex(c: string | number) => string`
+- `compose<T>(middleware: Array<Middleware<T>>) => ComposedMiddleware<T>` — Run a chain of async functions as if it were sequential
+- `computePlacement(options: ComputePlacementOptions) => ComputedPlacement` — Position a floating panel relative to an anchor rect: flips to the opposite
+- `concatBytes(chunks: readonly Uint8Array[]) => Uint8Array` — Join byte chunks into one buffer, in order.
+- `connection() => NetworkInformation | undefined` — Current network status: type, throughput, and whether the connection changed
+- `convertImageToBase64(file: File) => Promise<convertImageToBase64Return>` — Convert an image to base64
+- `cosinePalette(t: number, a: RGB, b: RGB, c: RGB, d: RGB) => RGB` — Inigo Quilez cosine gradient palette: `a + b * cos(2π(c·t + d))`. Each of `a,b,c,d` is an RGB triple; `t` is the position 0..1. Returns an RGB triple.
+- `crc32(data: Uint8Array) => number` — CRC32 checksum (IEEE 802.3 polynomial), the one ZIP stores per entry.
+- `create(tagName: string, options?: ElementCreationOptions) => Chain`
+- `createBottomFollower(options: BottomFollowerOptions) => BottomFollower` — Creates a bottom-follow controller for one scrollport.
+- `createData(params?: Record<string, unknown>) => Record<string, unknown>` — Build the standard envelope that accompanies a report — page URL, referrer,
+- `createDocumentFragment(list: Element[]) => DocumentFragment | undefined` — Create a DocumentFragment
+- `createDoubleTapDetector(options?: DoubleTapDetectorOptions) => DoubleTapDetector` — Double-tap detection over raw `(x, y, time)` samples — pointer-type-agnostic,
+- `createHandoff<T>({ dbName, storeName, key }: HandoffOptions) => Handoff<T>` — A one-shot value handoff between two pages of the same origin, backed by
+- `createI18n<TDict extends StringValues<TDict> = MessageDict>(config?: I18nConfig<TDict>) => I18nCore<TDict>` — Create and register the global i18n singleton.
+- `createLocalePath(config: LocalePathConfig) => LocalePath` — Create the set of locale path conversion functions.
+- `createObjectURL(src: Blob | ArrayBuffer | Response) => Promise<string>`
+- `createPortBridge(port: MessagePort) => PortBridge` — Build a bridge on any MessagePort (a Web Worker, a SharedWorker, or a port from a completed handshake).
+- `createRaceGuard() => RaceGuard` — Bump-and-compare guard against a stale async response overwriting a newer
+- `createSignal<T = unknown>(value: T, options?: SignalOptions<T>) => [() => T, (newValue: T) => void]` — Create a minimal signal with optional event broadcasting, returned as
+- `createSpeechRecognizer(options?: SpeechRecognizerOptions) => SpeechRecognizer` — Create a dictation session over the Web Speech API.
+- `createStore<T>(prefix?: string) => JsonStore<T>` — A prefixed, JSON-serialising view over localStorage.
+- `createZip(files: ReadonlyArray<{ name: string; data: Uint8Array | string; }>) => Uint8Array` — Build a ZIP from scratch, every entry STORED. No compression, so this is
+- `csvEscape(value: string | number) => string` — Escape one CSV field: doubles any quote and wraps the value when it contains
+- `currentDevice() => CurrentDevice`
+- `cutRound(img: ImgSource, radius: number) => ImgSource` — Round an image's corners, returning an offscreen canvas.
+- `debounce<T extends (...args: any[]) => any>(fn: T, ms?: number) => Debounced<T>` — Debounce — on a burst of calls, run only the last one, **`ms` milliseconds
+- `decodeTextBytes(bytes: Uint8Array, encodings?: string[]) => string` — Decode text bytes, trying encodings in order until one holds.
+- `deferred<T = void>() => Deferred<T>` — A promise plus its `resolve` / `reject`, for the case where the thing that
+- `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
+- `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary language from the ratio of CJK to Latin characters.
+- `diffLines(oldText: string, newText: string, options?: DiffOptions) => DiffHunk[]` — Diffs two texts by line.
+- `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
+- `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
+- `escapeHtml(string?: string | number | null) => string`
+- `fanShapedByArc(ctx: CanvasRenderingContext2D, maxRadius: number, start: number, end: number, gutter: number) => void` — Trace a pie slice with arc(), including the gutter between slices.
+- `fenceCode(body: string, lang?: string) => string` — Wrap text in a Markdown code fence long enough to survive backticks inside it.
+- `fetchMaybeGzip(input: RequestInfo | URL, init?: RequestInit) => Promise<Uint8Array>` — Fetch a resource that may be delivered gzipped or already
+- `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the listed keys — typically used to drop fields before sending an object on
+- `fit(value: number, a1: number, a2: number, b1: number, b2: number) => number` — Remap `value` from `[a1, a2]` onto `[b1, b2]` and clamp to the output range — the shader `fit`.
+- `formatBytes(bytes: number) => string` — Format a byte count for a person to read.
+- `formatDate(value?: DateInput, pattern?: string) => string` — Format a date with a token pattern. Accepts a timestamp, a date string, a
+- `formatDuration(seconds: number) => string` — Format an elapsed number of **seconds** as a colon-separated clock duration,
+- `formatJson(value: string | object, onError?: (error: Error) => void, indent?: number) => string` — Pretty-print JSON. Accepts an object or a JSON string (single quotes are
+- `formatRelative(value: DateInput, options?: FormatRelativeOptions) => string` — Format a point in time relative to another — "3 days ago", "in 2 hours".
+- `getAllQueryString(url?: string) => Record<string, string>` — Parse a URL's query string into an object. Defaults to the current
+- `getAngle(deg: number) => number` — Degrees to radians
+- `getArcPointerByDeg(deg: number, r: number) => [number, number]` — The point on a circle at a given angle
+- `getCookie(objName: string) => string` — Read a named cookie
+- `getCookieByName(name: string) => string`
+- `getExtensions(mimeType: string) => string[]` — Get file extensions from MIME type
+- `getFrame(n?: number) => Promise<number>` — Frames per millisecond; multiply by 1000 for frames per second
+- `getImage(src: string) => Promise<ImgSource>` — Load an image by path, resolving once it has decoded.
+- `getLinearGradient(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, background: string) => CanvasGradient` — Translate a CSS `linear-gradient(...)` string into a Canvas CanvasGradient.
+- `getMatchingSentences(text: string, searchValue: string) => string[]` — Collect the complete sentences of a text that contain the search term, keeping only the
+- `getMatrix(radius: number, sigma?: number) => number[]` — Build a 2D Gaussian weight matrix, normalised so the weights sum to 1.
+- `getMime(ext: string) => string | undefined`
+- `getPerformance() => BasicType | undefined`
+- `getPixelRatio(context: CanvasRenderingContext2D & Partial<Context>) => number` — Get the device pixel ratio
+- `getRandomString(len?: number) => string` — A short random-ish base-36 string.
+- `getReportUrl() => string` — The currently configured reporting endpoint, or `''` when none was set
+- `getStatus(code?: number | string) => number | string | undefined` — Get the status code.
+- `getTangentByPointer(x: number, y: number) => Array<number>` — The tangent line at a point on a circle
+- `getWindow() => ClientRatio` — Get the viewport size across browsers
+- `gunzipMaybe(bytes: Uint8Array) => Promise<Uint8Array>` — Decompress bytes if — and only if — they are still gzipped.
+- `handleConsole(hooks?: (...args: unknown[]) => void) => (() => void)` — Tap into `console` so every call also reaches your hook, while still printing
+- `handleError(hooks?: (error: ErrorPayload) => void) => (() => void)` — Listen for uncaught errors and unhandled promise rejections, in the capture
+- `handleFetchHook(options?: Partial<Options>) => (() => void)` — Instrument `window.fetch` so every request, response and failure reaches your
+- `handleXhrHook(options?: Partial<Options>) => (() => void)` — Instrument `XMLHttpRequest` (`open` / `send`) so requests, responses and
+- `hexToAlpha(aa: string) => number` — A two-digit hex alpha channel (`ff` / `80` / `00`) to a 0–100 percentage.
+- `hexToHsb(hex: string) => number[] | null` — `#rrggbb` / `#rgb` to `[h, s, b]`; null when the hex is invalid.
+- `hexToHsv(hex: string) => number[] | null`
+- `hexToRgb(hex: string) => Array<number> | null` — `#rrggbb` / `#rgb` (with or without the `#`) to `[r, g, b]`; null when it cannot be parsed.
+- `hsbToHsl(h: number, s: number, b: number) => number[]`
+- `hsbToRgb(h: number, s: number, v: number) => number[]`
+- `hslToHsb(h: number, s: number, l: number) => number[]` — `[h, s, l]` to `[h, s, b]`
+- `hslToHsv(h: number, s: number, l: number) => number[]`
+- `hslToRgb(h: number | string | number[], s: number | string, l: number | string) => Array<number>`
+- `hsvToHsl(h: number, s: number, b: number) => number[]`
+- `hsvToRgb(h: number, s: number, v: number) => number[]`
+- `hue2rgb(p: number, q: number, t: number) => number`
+- `imageRequest(url?: string) => Promise<number>` — Request an image (used to time the network)
+- `indexForOffset(offsets: readonly number[], offset: number) => number` — Binary-search which chunk a global offset falls into — the last index
+- `inflateRaw(data: Uint8Array) => Promise<Uint8Array>` — Decompress raw DEFLATE bytes (no zlib or gzip wrapper) — the form ZIP
+- `inverseLerp(a: number, b: number, value: number) => number` — Inverse of `lerp` — where `value` sits between `a` and `b`, as 0..1. Returns 0 when `a === b`. Not clamped.
+- `isEqual(value: any, other: any, seen?: Map<any, any>) => boolean` — Deep-compare two values.
+- `isGzip(bytes: Uint8Array) => boolean` — Whether the bytes start with the gzip magic number (1f 8b).
+- `isHtmlDocument(bytes: Uint8Array) => boolean` — Whether the bytes are an HTML document rather than the binary
+- `isImageSize(file: File, width?: number, height?: number) => Promise<boolean>` — Check an image's dimensions against a given width / height. When both are
+- `isInIframe() => boolean` — Whether this page is running inside an iframe. Returns false under SSR.
+- `isMobile() => boolean` — Whether this is a mobile device
+- `isSafari() => boolean | undefined | string`
+- `isSpeechRecognitionSupported() => boolean` — Whether this runtime can recognize speech. Checked at call time, so it is safe
+- `isString(obj: unknown) => boolean`
+- `isUrlCached(url: string) => Promise<boolean>` — Whether a URL is already in CacheStorage. When probing a group of files,
+- `isWeiXin() => boolean` — Whether this is the WeChat in-app browser
+- `isZipContainer(bytes: Uint8Array) => boolean` — Whether the bytes are a ZIP container (PK\x03\x04) — which is
+- `lerp(a: number, b: number, t: number) => number` — Linear interpolation from `a` to `b` by `t` (t=0 → a, t=1 → b). Not clamped.
+- `linearstep(edge0: number, edge1: number, x: number) => number` — Linear ramp — 0 below `edge0`, 1 above `edge1`, a straight line between (the shader `linearstep`, no smoothing).
+- `linearToSrgb(c: number) => number` — Convert one linear-light channel (0..1) to sRGB.
+- `loadScript({ type, content }: LoadScriptOptions) => Promise<{ success: boolean; }>` — Inject one script dynamically, de-duplicated by content.
+- `localStorageGetItem(name: string) => string` — Read a string from localStorage, or `''` when missing or unavailable.
+- `localStorageRemoveItem(name: string) => void` — Remove a key from localStorage. Silently does nothing when storage is unavailable.
+- `localStorageSetItem(name: string, value: string) => void` — Write a string to localStorage. Silently does nothing when storage is
+- `luma(r: number, g: number, b: number) => number` — Perceived brightness (luma) of an RGB colour using Rec. 601 weights. Channels may be 0..1 or 0..255 — the result keeps that scale.
+- `matchMediaQuery(query: string) => boolean` — Read whether a media query currently matches, synchronously. Returns false under SSR.
+- `mathjs(a: number, type: string, b: number) => ComputeNumberResult`
+- `md5(str: string) => string` — MD5 hash function implementation
+- `memoize<T extends Func>(fn: T | unknown) => ((...args: Parameters<T>) => ReturnType<T>)` — Former name of `once`. The name is misleading — it does not cache per
+- `merge(a: Obj, b?: Obj) => Obj` — Merge objects
+- `mergeExports(obj: Record<string, string>, exports: Record<string, string>) => Record<string, string>` — Copy an exports object onto `obj`, then freeze it
+- `navigatorLanguage() => TextLanguage` — Map the browser UI language into the same buckets (the default when there is
+- `networkAllowsDownload(options?: NetworkAllowanceOptions) => boolean` — Whether the current network and user settings allow proactively downloading
+- `networkSpeed(options: Options) => Promise<ReturnType>` — Measure the network's ping by timing requests
+- `noop() => void`
+- `once<T extends Func>(fn: T | unknown) => ((...args: Parameters<T>) => ReturnType<T>)` — Run once — evaluate on the first call, cache the result, and return that
+- `opacity(img: ImgSource, opacity: number) => ImgSource` — Apply an overall opacity to an image, returning an offscreen canvas.
+- `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
+- `paginateText(text: string, box: TextBox, metrics: TextGridMetrics, options?: PaginateOptions) => PaginateResult` — Cut text into pages that fit `box`, given the type metrics.
+- `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic, covering 「十五」「二十三」「一百零三」「一千零一」「三万」.
+- `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
+- `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
+- `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, optionally followed by
+- `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT/SRT-style timestamp — `HH:MM:SS.mmm` or `MM:SS.mmm` (the hour
+- `performanceTime() => number` — Current timestamp
+- `perToNum(str?: string) => number` — Convert a percentage string into a number
+- `prefetchUrl(url: string) => Promise<void>` — Pull a single URL into the cache; skipped when already cached. Failures are
+- `prefetchUrls(urls: string[], options?: PrefetchOptions) => Promise<void>` — Prefetch a group of URLs, **serially** — prefetching is background work, and
+- `prefetchWhenIdle(urls: string[], options?: WhenIdleOptions & NetworkAllowanceOptions & PrefetchOptions) => (() => void)` — Prefetch a group of URLs while idle, subject to `networkAllowsDownload`.
+- `queryFlag(key: string, url?: string) => boolean` — Read a query parameter as a boolean flag. True for `?k`, `?k=`, `?k=1` and
+- `querystring(data?: {}) => string` — Serialise an object into a URL query string
+- `randomColor() => Color`
+- `randomString(len?: number) => string` — A short random-ish string prefixed with the current timestamp.
+- `range(num: number, min?: number, max?: number) => number` — Clamp a value between a minimum and a maximum
+- `readFileAsArrayBuffer(blob: Blob) => Promise<ArrayBuffer>` — Read a File / Blob as an ArrayBuffer
+- `readFileAsDataURL(blob: Blob) => Promise<string>` — Read a File / Blob as a data: URL (image previews and the like)
+- `readFileAsText(blob: Blob, encoding?: string) => Promise<string>` — Read a File / Blob as text
+- `readFileAsUint8Array(blob: Blob) => Promise<Uint8Array<ArrayBuffer>>` — Read a File / Blob as a Uint8Array (pair with checkEncoding / arrayBufferToString for encoding sniffing)
+- `readZipEntries(bytes: Uint8Array) => ZipEntry[]` — Read an archive's central directory. Returns `[]` for anything that is not
+- `readZipEntry(bytes: Uint8Array, entry: string | ZipEntry) => Promise<Uint8Array | null>` — Extract one entry's decompressed bytes. Resolves `null` when the entry is
+- `remap(value: number, a1: number, a2: number, b1: number, b2: number) => number` — Linearly remap `value` from range `[a1, a2]` onto `[b1, b2]`. Not clamped (GLSL-style map).
+- `removeClassToElement(element: Element, removeClass: string) => void` — Remove a class from an element
+- `replaceOld(source: any, name: string, replacement: (...args: unknown[]) => unknown, isForced?: boolean) => () => void` — Replace a property on an object, wrapping whatever was there before.
+- `report({ url, type, payload }: BeaconPayload) => boolean` — Send a telemetry beacon. Prefers `navigator.sendBeacon` (does not block
+- `requestUrlToBuffer(src: string, options: Partial<RequestUrlToArraybufferOption>) => Promise<requestUrlToArraybufferReturn>` — Fetch a URL as an ArrayBuffer
+- `resolveLocale(options: ResolveLocaleOptions) => string` — Resolve which of your supported locales to use, from the usual chain:
+- `rewriteZip(bytes: Uint8Array, options?: RewriteZipOptions) => Promise<Uint8Array>` — Rebuild an archive with some entries replaced and/or new entries appended.
+- `rgbaString(r: number, g: number, b: number, a: number) => string` — Build a CSS `rgba()` string. Alpha is 0–100 rather than 0–1, matching the
+- `rgbaToHex(r: number, g: number, b: number, a: number) => string` — Composite a translucent colour over white and return it as a 6-digit hex.
+- `rgbaToRgb(r: number, g: number, b: number, a: number) => number[]` — Composite a translucent colour **over white**, giving the equivalent opaque rgb.
+- `rgbToHex(r: string | number | Array<string | number>, g?: string | number, b?: string | number) => string`
+- `rgbToHsb(r: number, g: number, b: number) => number[]`
+- `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
+- `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
+- `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
+- `safeEqual(a: string | Uint8Array, b: string | Uint8Array) => boolean` — Compare two secrets in time that does not depend on where they first differ.
+- `saturation(color: RGB, amount: number) => RGB` — Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
+- `saveFileToDisk(data: Blob | Uint8Array, fileName: string, options?: SaveFileOptions) => Promise<boolean>` — Save bytes to disk: a real "Save as" dialog through the File
+- `scriptOnLoad(urls: string[], append?: HTMLElement, callback?: () => void) => Promise<void>` — Insert script/link tags dynamically
+- `secureRandomString(length: number, alphabet?: string) => string` — A random string drawn from `alphabet` using the platform CSPRNG.
+- `secureToken(bytes?: number) => string` — A random hex token of `bytes` bytes, from the platform CSPRNG.
+- `segmentByRanges<T>(text: string, chunkStart: number, ranges: readonly OffsetRange<T>[]) => Segment<T>[]` — Split one chunk of text into a sequence of plain / matched spans according
+- `serveWorker<Req extends WorkerRequestBase, Res extends object = object, Progress = unknown>(handler: (request: Req, context: WorkerHandlerContext<Progress>) =>…` — Serve requests inside a Web Worker, mirroring {@link WorkerClient} on the
+- `setFontSize2html(designWidth?: number) => void` — Set the root font size from the design mock's width
+- `setMime(ext: string, mimeType: string) => Map<string, string>`
+- `setReportUrl(next: ReportConfig | string) => void` — Configure the default reporting endpoint (and optionally the cookie holding
+- `singleFlight<T>(fn: () => Promise<T>) => SingleFlight<T>` — The async flavour of "run once": concurrent callers share one in-flight
+- `slugify(text: string, maxLength?: number) => string` — Reduce text to a lowercase `a-z0-9-` slug, safe as a filename on every
+- `smoothstep(edge0: number, edge1: number, x: number) => number` — Smooth Hermite interpolation between 0 and 1 for `edge0 < x < edge1` (GLSL `smoothstep`).
+- `srgbToLinear(c: number) => number` — Convert one sRGB channel (0..1) to linear-light (IEC 61966-2-1 transfer function).
+- `strParse(str?: string, sep?: string | RegExp, eq?: string | RegExp) => Record<string, string>` — Parse a delimited string into an object, e.g.
+- `throttle<T extends (...args: any[]) => any>(fn: T, delay?: number) => Throttled<T>` — Throttle — under a burst of calls, run at a fixed interval: the first call
+- `timeFormat(time: number) => string` — Format a number of seconds as a colon-separated duration
+- `timestampToTime(timestamp?: number | string) => Date & { format?: Function; }` — Turn a timestamp into a `Date` carrying a `format` method.
+- `toFullWidth(value: string) => string` — Convert half-width characters to full-width (the inverse of `toHalfWidth`)
+- `toHalfWidth(value: string) => string` — Convert full-width characters to half-width (digits, letters, punctuation and
+- `toString(value: string | number) => string`
+- `transformNumber(value: string, locale?: string, precision?: number, fixed?: number) => string`
+- `transformText(content: string | ArrayBuffer) => TransformText | undefined`
+- `truncate(value: string, options: TruncateOptions | number) => string` — Shorten a string to a maximum length, marking the cut with an ellipsis.
+- `truncateWithMarker(text: string, max: number, marker?: string) => string` — Cut text to `max` characters and mark that it was cut.
+- `useI18n<TDict extends StringValues<TDict> = MessageDict>() => I18nCore<TDict> | null` — The active global instance, or null when none was created. Pass the same
+- `vibrance(color: RGB, amount: number) => RGB` — Vibrance — saturates muted colours more than already-saturated ones. `amount` > 0 boosts, < 0 mutes. Channels in 0..1.
+- `watchMediaQuery(query: string, callback: (matches: boolean) => void) => (() => void)` — Watch a media query. The callback **fires once synchronously with the
+- `whenIdle(callback: () => void, options?: WhenIdleOptions) => (() => void)` — Run a callback while the browser is idle, falling back to setTimeout where
+- `withTimeout<T>(promise: Promise<T>, ms: number, options?: { message?: string; onTimeout?: () => void; }) => Promise<T>` — Reject if a promise has not settled within `ms`. The returned promise
+- `withTimeoutFallback<T>(promise: Promise<T>, ms: number, fallback: T, onTimeout?: () => void) => Promise<T>` — Resolve to a fallback value instead of rejecting when `ms` elapses. For
+- `zipHasEntry(bytes: Uint8Array, name: string) => boolean` — Whether the archive contains an entry with exactly this name. Cheaper than
+
+### 클래스
+
+- `class AudioRecorder` — Record audio
+- `class BridgeManager`
+- `class Chain` — Chainable DOM operations
+- `class Color`
+- `class ColorScheme`
+- `class EventManager` — EventManager — a scoped listener registry built on AbortController.
+- `class Hsl`
+- `class Hsla`
+- `class I18nCore` — The engine. Optionally parameterised by your dictionary shape.
+- `class Mathjs` — Arithmetic that works around floating-point precision.
+- `class Monitor` — Front-end telemetry: page-load performance, clicks, errors, fetch/XHR traffic
+- `class PostMessageBridge` — Bridge registration event, consumed by the client
+- `class QuestQueue` — An async task queue with limited concurrency. At most `simultaneous` tasks
+- `class Rgb`
+- `class Rgba`
+- `class SyncHook`
+- `class TimeoutError`
+- `class TOTP`
+- `class WebDB` — A Promise wrapper over IndexedDB. The native API is event-callback and
+- `class WorkerClient` — A worker client with request ids. The request type `Req` is defined by the
+
+### 인터페이스
+
+- `interface AcceptPortBridgeOptions`
+- `interface BeaconPayload`
+- `interface BottomFollower` — Imperative bottom-follow controller.
+- `interface BottomFollowerOptions` — How to construct a follower.
+- `interface BridgeManagerOptions`
+- `interface BroadcastPayload`
+- `interface CallToPayload`
+- `interface ComputedPlacement`
+- `interface ComputePlacementOptions`
+- `interface Debounced`
+- `interface Deferred` — Promise primitives that JavaScript does not ship: an externally settled promise and a
+- `interface DiffHunk` — A run of changed lines plus the context around it.
+- `interface DiffLine` — One line of a diff, carrying both line numbers so a gutter can show either side.
+- `interface DiffOptions` — How to compute a diff.
+- `interface DoubleTapDetector`
+- `interface DoubleTapDetectorOptions`
+- `interface FormatRelativeOptions`
+- `interface Handoff`
+- `interface HandoffOptions`
+- `interface I18nConfig`
+- `interface IDBCollection` — A store name bound once, values unwrapped, failures folded into the empty case
+- `interface IDBResult` — The uniform result shape of every IndexedDB operation. Every method
+- `interface IDBStoreSchema` — Declarative schema for object stores. `openDataBase` creates the missing
+- `interface JsonStore`
+- `interface LoadScriptOptions`
+- `interface LocalePath`
+- `interface LocalePathConfig`
+- `interface LocaleRoute` — URL maths for a multi-language site (pure functions, no global state, no DOM).
+- `interface MessageData`
+- `interface MessageHandler`
+- `interface NetworkAllowanceOptions`
+- `interface OffsetRange` — An annotation in global coordinates: the half-open interval `[start, end)` plus any payload
+- `interface OpenPortBridgeOptions`
+- `interface PaginateOptions`
+- `interface PaginateResult`
+- `interface PendingRequest`
+- `interface PlacementRect`
+- `interface PortBridge` — A point-to-point bridge over MessagePort.
+- `interface PrefetchOptions`
+- `interface RaceGuard`
+- `interface ReportConfig`
+- `interface ResolveLocaleOptions`
+- `interface RewriteZipOptions`
+- `interface Segment` — One piece of the split result: `value === null` marks a plain span covered by no range
+- `interface ServeWorkerOptions`
+- `interface SingleFlight`
+- `interface SpeechError`
+- `interface SpeechRecognizer`
+- `interface SpeechRecognizerOptions`
+- `interface SpeedType` — The ease-in / ease-out pair of one easing family
+- `interface TextBox` — The box each page must fit into, in px.
+- `interface TextGridMetrics`
+- `interface TextPage`
+- `interface Throttled`
+- `interface TransformText`
+- `interface TruncateOptions`
+- `interface WebDBOptions`
+- `interface WhenIdleOptions`
+- `interface WorkerClientOptions`
+- `interface WorkerHandlerContext` — Handed to the handler so it can stream progress for the request it is currently serving
+- `interface WorkerRequestBase` — A request always carries the id the client stamped on it
+- `interface WorkerResponseBase` — A response must at least echo the request id so the two can be paired
+- `interface ZipEntry` — One entry as described by the archive's central directory.
+
+### 타입
+
+- `type CurrentDevice`
+- `type DateInput` — Accepted everywhere a moment in time is taken; `undefined` means "now".
+- `type DiffLineKind` — What happened to one line.
+- `type EasingFn` — One easing function: (elapsed, from, delta, duration) => current value
+- `type ImgSource` — A bitmap container usable both as a drawImage source and as a render target
+- `type LocaleChangeHandler`
+- `type LocaleMessages` — Locale → dictionary. Parameterised by the dictionary shape so an app can hand in its own
+- `type MessageDict`
+- `type Placement` — A side, optionally suffixed with a cross-axis alignment — the same grammar
+- `type PlacementAlign` — Where the panel lines up along the cross axis: with the anchor's leading
+- `type PlacementSide` — The side of the anchor a floating panel sits on.
+- `type RelativeStyle` — `'compact'` is ours; the other three are `Intl.RelativeTimeFormat` styles.
+- `type RGB` — An RGB triple with each channel in 0..1 (linear or sRGB depending on the operation).
+- `type SpeechErrorKind` — `denied` means the user or the browser refused the microphone — worth surfacing.
+- `type StringValues` — "An object whose values are all strings" — the constraint the dictionary type parameter
+- `type TextLanguage` — Coarse language bucket: Chinese / English / other only
+- `type TranslateParams`
+- `type TruncatePosition` — Which end of the string gets dropped when it is too long.
+
+### 상수
+
+- `const ADOPTED_SHEET_MARKER: "data-adopted-sheet"`
+- `const ADOPTED_STYLE_MARKER: "data-adopted-style"` — Default marker attribute on the `<style>` fallback, identifying styles this module injected
+- `const BRIDGE_MARKER: "__ranuts_bridge__"`
+- `const bridgeManager: BridgeManager`
+- `const circ: SpeedType`
+- `const Client: { connect: ({ id, targetWindow, targetOrigin, channel, }: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string; }; remove: (id: strin…`
+- `const cubic: SpeedType`
+- `const DEFAULT_CHANNEL: "default"`
+- `const expo: SpeedType`
+- `const FMT: Record<string, string[]>`
+- `const HEX_COLOR_REGEX: RegExp` — `#rgb` / `#rrggbb` (the `#` is required)
+- `const isClient: boolean` — Whether a `window` existed **when this module was first imported**.
+- `const MessageCodec: { encode(data: any): string; decode<T = any>(encodedStr: string): T | null; encodeFile(file: File): Promise<string>; decodeFile(encoded: st…` — Message codec.
+- `const MimeType: Map<string, string>`
+- `const MOBILE_MEDIA_QUERY: "(max-width: 768px)"` — Viewport breakpoint, matching where the mobile layout takes over
+- `const Platform: { init: <T = unknown, R = unknown>(events: Record<string, MessageHandler<T, R>>) => { destroy: () => void; }; }`
+- `const quad: SpeedType`
+- `const quart: SpeedType`
+- `const quint: SpeedType`
+- `const RGB_REGEX: RegExp` — `rgb(r,g,b)`, no spaces — strip whitespace before matching
+- `const RGBA_REGEX: RegExp` — `rgba(r,g,b,a)`, no spaces — strip whitespace before matching
+- `const sine: SpeedType`
+- `const status: { message: Map<number, string>; code: Map<string, number>; codes: number[]; redirect: { 300: boolean; 301: boolean; 302: boolean; 303: boolean; 3…`
+- `const subscribers: SyncHook` — Global event bus: a signal carrying a `subscriber` broadcasts through it on change
+- `const UNAMBIGUOUS_ALPHABET: "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"` — Unambiguous by design: no `0`/`O`, no `1`/`l`/`I`. For codes a human reads aloud or retypes.
+- `const ZIP_DEFLATE: 8`
+- `const ZIP_STORED: 0` — Compression methods this module understands.
+
+## `ranuts/sw`
+
+Service Worker 캐싱 전략과 프리캐시 프로토콜 · 실행 환경: **service worker 전용** · 소스: `src/sw/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/sw';
+```
+
+### 함수
+
+- `cacheFirst(request: Request, options: CacheStrategyOptions) => Promise<Response>` — Cache-first: serve the stored copy when there is one, otherwise fetch and
+- `dropCachesExcept(keep: readonly string[], options?: { scope?: SWScope; }) => Promise<string[]>` — Delete every cache except the ones named. Call it on `activate` so a new
+- `networkFirst(request: Request, options: CacheStrategyOptions) => Promise<Response>` — Network-first: go to the network, store what comes back, and fall back to the
+- `precache(cacheName: string, urls: readonly string[], options?: { scope?: SWScope; }) => Promise<void>` — Fill a cache with a list of URLs, skipping what is already there. Failures are
+- `servePrecache(options: ServePrecacheOptions) => (() => void)` — Answer the precache messages that `prefetchUrls({ serviceWorkerMessage })`
+
+### 인터페이스
+
+- `interface CacheStrategyOptions`
+- `interface PrecacheMessageEvent` — The bit of `ExtendableMessageEvent` used here, declared locally rather than pulled from
+- `interface ServePrecacheOptions`
+- `interface SWScope` — Minimal view of the SW global the helpers touch, so they can be unit-tested with a stub.
+
+## `ranuts/node`
+
+Node 서버 유틸리티 (fs / http / ws / 미들웨어) · 실행 환경: **node 전용** · 소스: `src/node/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/node';
+```
+
+### 함수
+
+- `appendFile(path: string, content: string) => Promise<Ranuts.Identification>` — Append content to an existing file
+- `bodyMiddleware(options?: Partial<ServerBody>) => MiddlewareFunction`
+- `connect(connectMiddleware: ConnectMiddleware) => MiddlewareFunction`
+- `get({ url }: Request) => Promise<Response>`
+- `getIPAdress() => string | undefined`
+- `default(req: Req) => ParseUrl | undefined` — Parse an IncomingMessage's request URL; the return type is always ParseUrl
+- `prompt({ message, stream, defaultResponse }: PromptOption) => Promise<boolean>`
+- `queryFileInfo(path: string) => Promise<Ranuts.Identification>` — Stat a file — typically to tell a file from a directory via data.isDirectory()
+- `readDir(options: Options) => Array<string>`
+- `readFile(path: string, format?: BufferEncoding) => FilePromiseResult` — Read a file, returning a status code and the content on success
+- `readStream(option: ReadOption) => ReadStream`
+- `runCommand(command: string, args: string[]) => Promise<void>`
+- `startTask() => symbol`
+- `staticMiddleware(option?: Partial<Option>) => MiddlewareFunction`
+- `taskEnd(symbol: symbol) => number | bigint`
+- `traverse(dir: string, callback: Caller, pre?: string) => Promise<any>` — Walk every directory recursively, running a function for each file found
+- `traverseSync(dir: string, callback: Caller, pre?: string) => void` — Synchronous: walk every directory recursively, running a function for each file found
+- `watchFile(path: string, interval?: number) => Promise<Ranuts.Identification>` — Watch a file for changes and report its status
+- `writeFile(path: string, content: string) => Promise<Ranuts.Identification>` — Write a file at the given path, truncating it if it exists and creating it if it does not
+- `writeStream(option: WriteOption) => WriteStream`
+- `WSS(this: any, server: http.Server) => void` — Create a WebSocket Server
+
+### 클래스
+
+- `class Router`
+- `class Server`
+
+### 인터페이스
+
+- `interface Context`
+
+### 상수
+
+- `const isColorSupported: boolean`
+
+### 기타
+
+- `default`
+
+## `ranuts/visual`
+
+2D 렌더링 엔진 (Canvas / WebGL / WebGPU) · 실행 환경: **브라우저 전용** · 소스: `src/utils/visual/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/visual';
+```
+
+### 클래스
+
+- `class Application`
+- `class ColorAdjustFilter` — A ready-made colour-grade filter: brightness, contrast and saturation. Mirrors the
+- `class Container`
+- `class Filter` — A full-screen post-processing pass. Sample the previous pass through `u_texture` (and
+- `class Graphics`
+- `class WebGLRenderTarget`
+
+### 인터페이스
+
+- `interface ColorAdjustOptions`
+- `interface IApplicationOptions`
+- `interface IFillStyleOptions`
+- `interface ILineStyleOptions`
+
+### 열거형
+
+- `enum LINE_CAP`
+- `enum LINE_JOIN`
+- `enum RENDERER_TYPE`
+- `enum SHAPE_TYPE`
+
+### 상수
+
+- `const BYTES_PER_VERTEX: 12`
+- `const MAX_VERTEX_COUNT: 65536`
+
+## `ranuts/i18n`
+
+프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄) · 실행 환경: **브라우저 + node** · 소스: `src/utils/i18n.ts`
+
+```ts
+import { /* … */ } from 'ranuts/i18n';
+```
+
+### 함수
+
+- `createI18n<TDict extends StringValues<TDict> = MessageDict>(config?: I18nConfig<TDict>) => I18nCore<TDict>` — Create and register the global i18n singleton.
+- `useI18n<TDict extends StringValues<TDict> = MessageDict>() => I18nCore<TDict> | null` — The active global instance, or null when none was created. Pass the same
+
+### 클래스
+
+- `class I18nCore` — The engine. Optionally parameterised by your dictionary shape.
+
+### 인터페이스
+
+- `interface I18nConfig`
+
+### 타입
+
+- `type LocaleChangeHandler`
+- `type LocaleMessages` — Locale → dictionary. Parameterised by the dictionary shape so an app can hand in its own
+- `type MessageDict`
+- `type StringValues` — "An object whose values are all strings" — the constraint the dictionary type parameter
+- `type TranslateParams`
+
+## `ranuts/vnode`
+
+Snabbdom 스타일 가상 DOM · 실행 환경: **브라우저** · 소스: `src/vnode/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/vnode';
+```
+
+### 함수
+
+- `addNS(data: VNodeData, children: Array<VNode | string | number> | undefined, sel: string | undefined) => void`
+- `create(tagName: string, options?: ElementCreationOptions) => Chain`
+- `h{ (sel: string): VNode; (sel: string, data: VNodeData | null): VNode; (sel: string, children: VNodeChildren): VNode; (sel: string, data: VNodeData | null, chi… (+3 overloads)`
+- `init() => (oldVnode: VNode | Element, vnode: VNode) => VNode`
+- `vnode(sel: string | undefined, data: any | undefined, children: Array<VNode | string | number> | undefined, text: string | number | undefined, elm: Element | T…`
+
+### 클래스
+
+- `class Chain` — Chainable DOM operations
+
+### 인터페이스
+
+- `interface DOMAPI`
+- `interface Fragment`
+- `interface Hooks`
+- `interface VNode`
+- `interface VNodeData`
+
+### 타입
+
+- `type ArrayOrElement`
+- `type Key`
+- `type ModuleHook`
+- `type Modules`
+- `type VNodeChildElement`
+- `type VNodeChildren`
+- `type VNodes`
+
+### 상수
+
+- `const attributesModule: { create: (oldVnode: VNode, vnode: VNode) => void; update: (oldVnode: VNode, vnode: VNode) => void; }`
+- `const classModule: { create: (oldVnode: VNode, vnode: VNode) => void; update: (oldVnode: VNode, vnode: VNode) => void; }`
+- `const eventListenersModule: { create: (oldVnode: VNode, vnode?: VNode) => void; update: (oldVnode: VNode, vnode?: VNode) => void; destroy: (oldVnode: VNode, vn…`
+- `const htmlDomApi: DOMAPI`
+- `const modules: Modules`
+- `const propsModule: { create: (oldVnode: VNode, vnode: VNode) => void; update: (oldVnode: VNode, vnode: VNode) => void; }`
+- `const styleModule: { pre: () => void; create: (oldVnode: VNode, vnode: VNode) => void; update: (oldVnode: VNode, vnode: VNode) => void; destroy: (vnode: VNode)…`
+
+### 네임스페이스
+
+- `namespace is` — Type guards — array / string / primitive / VNode
+
+## `ranuts/stream`
+
+SSE 파싱과 공급자 중립적인 모델 스트림 폴드, 그리고 대화 기록이 언제 더는 들어가지 않는지 판단하는 토큰 예산 · 실행 환경: **브라우저 + node** · 소스: `src/stream/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/stream';
+```
+
+### 함수
+
+- `addUsage(total: TokenUsage | undefined, next: TokenUsage | undefined) => TokenUsage` — Adds two usage reports.
+- `createStreamAccumulator() => StreamAccumulator` — Creates a fold over one streamed response.
+- `estimateTokens(text: string) => number` — Estimates how many tokens a string costs.
+- `mapEventStream(source: ByteSource, map: (event: ServerSentEvent) => readonly StreamChunk[]) => AsyncGenerator<StreamChunk>` — Maps SSE events onto StreamChunk values using a caller-supplied vendor mapping.
+- `parseEventStream(source: ByteSource) => AsyncGenerator<ServerSentEvent>` — Parses a byte stream as `text/event-stream`.
+- `planCompaction(sizes: readonly number[], limits: CompactionLimits) => CompactionPlan` — Decides how much of a history no longer fits.
+
+### 인터페이스
+
+- `interface CompactionLimits` — What a compaction has to fit under, and what it may not touch.
+- `interface CompactionPlan` — What to do with a history that has grown.
+- `interface ReasoningBlock` — Model reasoning, when the provider exposes it. Kept separate from TextBlock
+- `interface ServerSentEvent` — One parsed `text/event-stream` event.
+- `interface StreamAccumulator` — Stateful fold over one response's chunks.
+- `interface StreamSnapshot` — Immutable view of everything received so far.
+- `interface TextBlock` — Assistant prose addressed to the user.
+- `interface TokenUsage` — Token counts reported for one response. Every field is optional: providers differ.
+- `interface ToolCallBlock` — One tool invocation requested by the model.
+
+### 타입
+
+- `type ByteSource` — Anything `for await` can walk that yields byte chunks — a `fetch` body, or a fake.
+- `type ContentBlock` — One completed unit of assistant output.
+- `type ContentBlockType` — Discriminator for the content a block accumulates.
+- `type FinishReason` — Why the response ended.
+- `type StreamChunk` — One normalized event from a streamed response.
+
+## `ranuts/conversation`
+
+추가 전용 이벤트 로그를 렌더링 가능한 대화 노드로 투영 · 실행 환경: **브라우저 + node** · 소스: `src/conversation/index.ts`
+
+```ts
+import { /* … */ } from 'ranuts/conversation';
+```
+
+### 함수
+
+- `createConversationEngine<Event>(options: ConversationEngineOptions<Event>) => ConversationEngine<Event>` — Creates an engine over a set of definitions.
+
+### 인터페이스
+
+- `interface ConversationEngine` — A running conversation projection.
+- `interface ConversationEngineOptions` — How to construct an engine.
+- `interface ConversationMatch` — A definition's claim on one event.
+- `interface ConversationNode` — One live node, as a view sees it.
+- `interface ConversationNodeDefinition` — One independently registered event-to-node state machine.
+- `interface ConversationReader` — Strictly-backward lookup offered to a definition while it starts a node.
+
+### 타입
+
+- `type ConversationPublication` — When subscribers should see the result of one accepted event.
+- `type FrameScheduler` — Defers work to the next paint, or to a microtask where there is no paint.
+
