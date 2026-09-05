@@ -1,5 +1,5 @@
 ---
-description: 'ranui는 네이티브 커스텀 엘리먼트(<r-*>) 위에 만든 Web Components UI 라이브러리로, TypeScript 타입·라이트/다크 테마·Shadow DOM·SSR·PWA를 지원합니다.'
+description: 'ranui 는 네이티브 커스텀 엘리먼트 (<r-*>) 위에 만든 Web Components UI 라이브러리로, TypeScript 타입·라이트/다크 테마·Shadow DOM·SSR·PWA 를 지원합니다.'
 ---
 
 # ranui
@@ -17,7 +17,7 @@ Shadow DOM 캡슐화, 서버 렌더링이 기본으로 들어 있습니다.
 
 - **npm**: <a href="https://www.npmjs.com/package/ranui">`ranui`</a> ·
   **소스**: <a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`packages/ranui`</a>
-- ranui는 **alpha**입니다. 버전마다 호환성을 깨는 변경이 들어갑니다. 정확한 버전을 고정하고,
+- ranui 는 **alpha**입니다. 버전마다 호환성을 깨는 변경이 들어갑니다. 정확한 버전을 고정하고,
   업그레이드 전에 [변경 이력](/ko/src/ranui/changelog)을 읽으세요.
 
 ## 설치
@@ -27,13 +27,13 @@ npm install ranui
 ```
 
 ```html
-<!-- 또는 CDN에서, 빌드 단계 없이 -->
+<!-- 또는 CDN 에서, 빌드 단계 없이 -->
 <script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
 ```
 
 ## 사용법
 
-import하면 엘리먼트가 등록됩니다. 그다음부터는 태그를 쓰면 됩니다.
+import 하면 엘리먼트가 등록됩니다. 그다음부터는 태그를 쓰면 됩니다.
 
 ```js
 import 'ranui'; // 모든 컴포넌트
@@ -61,7 +61,7 @@ import 'ranui/button'; // 또는 하나만
 import 'ranui';
 
 export const App = () => <r-button type="primary">Deploy</r-button>;
-// 복잡한 값과 이벤트 리스너는 ref를 통해 넘깁니다 — 코딩 가이드를 보세요.
+// 복잡한 값과 이벤트 리스너는 ref 를 통해 넘깁니다 — 코딩 가이드를 보세요.
 ```
 
 ```vue [Vue]
@@ -72,7 +72,7 @@ export const App = () => <r-button type="primary">Deploy</r-button>;
 <script setup>
 import 'ranui';
 </script>
-<!-- 빌드 설정의 compilerOptions.isCustomElement에 `r-`를 추가하세요. -->
+<!-- 빌드 설정의 compilerOptions.isCustomElement 에 `r-`를 추가하세요. -->
 ```
 
 ```js [Plain JS]
@@ -105,7 +105,7 @@ document.body.appendChild(button);
 
 ## 컴포넌트
 
-엘리먼트 40개. 어트리뷰트, 프로퍼티, 이벤트, 슬롯, `::part()` 이름까지 전부
+엘리먼트 40 개. 어트리뷰트, 프로퍼티, 이벤트, 슬롯, `::part()` 이름까지 전부
 [엘리먼트 API 레퍼런스](/ko/src/ranui/api)에 있습니다.
 
 **공통**: [Button](/ko/src/ranui/button/) · [Icon](/ko/src/ranui/icon/) ·
@@ -125,7 +125,7 @@ document.body.appendChild(button);
 **콘텐츠 렌더링**: [Markdown](/ko/src/ranui/markdown/) · [Math](/ko/src/ranui/math/) ·
 [Mermaid](/ko/src/ranui/mermaid/)
 
-**AI와 채팅**: [Conversation](/ko/src/ranui/conversation/) ·
+**AI 와 채팅**: [Conversation](/ko/src/ranui/conversation/) ·
 [Reasoning](/ko/src/ranui/reasoning/) · [ToolCard](/ko/src/ranui/tool-card/) ·
 [TokenMeter](/ko/src/ranui/token-meter/)
 
@@ -163,10 +163,10 @@ document.body.appendChild(button);
 
 ## 스타일
 
-컴포넌트는 **닫힌** 섀도 루트에 그려집니다. 페이지 CSS가 안으로 새지 않고, 선택자도 안까지 닿지
+컴포넌트는 **닫힌** 섀도 루트에 그려집니다. 페이지 CSS 가 안으로 새지 않고, 선택자도 안까지 닿지
 않습니다. 들어가는 길은 네 가지이며, 아래는 권장 순서입니다.
 
-**1. 디자인 토큰(CSS 커스텀 프로퍼티)**: 경계를 넘어 상속되므로 `:root`에 두든, 바깥 컨테이너에
+**1. 디자인 토큰 (CSS 커스텀 프로퍼티)**: 경계를 넘어 상속되므로 `:root`에 두든, 바깥 컨테이너에
 두든, 엘리먼트 자체에 두든 모두 통합니다.
 
 ```html
@@ -182,8 +182,8 @@ document.body.appendChild(button);
 </div>
 
 **2. `::part()`** — 토큰이 닿지 않는 구조적 조정에 ·
-**3. `sheet` 어트리뷰트** — 섀도 루트에 CSS를 주입 ·
-**4. 슬롯에 넣은 콘텐츠** — 여러분의 문서에 남아 페이지 CSS를 그대로 받습니다.
+**3. `sheet` 어트리뷰트** — 섀도 루트에 CSS 를 주입 ·
+**4. 슬롯에 넣은 콘텐츠** — 여러분의 문서에 남아 페이지 CSS 를 그대로 받습니다.
 
 토큰 이름은 [디자인 시스템](/ko/src/ranui/design-system/)에, 무엇을 고를지의 규칙은
 [디자인 가이드](/ko/src/ranui/design-guides/)에, 작동 원리는
@@ -215,7 +215,7 @@ document.body.appendChild(button);
 | 엘리먼트의 정확한 API 찾기              | [엘리먼트 API](/ko/src/ranui/api)             |
 | 어떤 토큰을 왜 써야 하는지 알기         | [디자인 시스템](/ko/src/ranui/design-system/) |
 | 하나의 체계로 보이는 화면 만들기        | [디자인 가이드](/ko/src/ranui/design-guides/) |
-| ranui를 앱에 제대로 붙이기              | [코딩 가이드](/ko/src/ranui/coding-guides/)   |
+| ranui 를 앱에 제대로 붙이기             | [코딩 가이드](/ko/src/ranui/coding-guides/)   |
 | 라이트/다크를 넣거나 전체를 다시 꾸미기 | [테마](/ko/src/ranui/theme/)                  |
 | 인터페이스 번역하기                     | [i18n](/ko/src/ranui/i18n/)                   |
 | 서버에서 렌더링하기                     | [서버 렌더링](/ko/src/ranui/ssr/)             |
@@ -225,7 +225,7 @@ document.body.appendChild(button);
 ## 브라우저 지원
 
 이 라이브러리는 모든 최신 브라우저에서 동작합니다. Custom Elements v1, Shadow DOM v1, CSS 커스텀
-프로퍼티 위에 만들었습니다. **Internet Explorer는 지원하지 않습니다.**
+프로퍼티 위에 만들었습니다. **Internet Explorer 는 지원하지 않습니다.**
 
 ![](../../../assets/ranui/customElements.png)
 

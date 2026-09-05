@@ -48,7 +48,7 @@ reasoning.streaming = !snapshot.done;
 
 ## 알아 둘 만한 점
 
-- **1초 미만의 시간은 아무것도 표시하지 않습니다.** 독자에게 중요한 것은 빨랐다는 사실이지 340ms였다는
+- **1 초 미만의 시간은 아무것도 표시하지 않습니다.** 독자에게 중요한 것은 빨랐다는 사실이지 340ms 였다는
   사실이 아닙니다.
 - **스트리밍 중에는 레이블이 맥동합니다.** 오래 조용히 생각해도 멈춘 것으로 읽히지 않습니다.
   `prefers-reduced-motion`에서는 정보는 그대로 두고 애니메이션만 꺼집니다.
@@ -65,8 +65,8 @@ reasoning.streaming = !snapshot.done;
 | `streaming` | `boolean`        | `false`       | 추론이 아직 도착 중인지 여부.                            |
 | `open`      | `boolean`        | `false`       | 본문이 펼쳐져 있는지 여부.                               |
 | `label`     | `string`         | `'Reasoning'` | 요약 줄의 텍스트.                                        |
-| `duration`  | `number \| null` | `null`        | 생각한 밀리초. 1초 미만은 감춰집니다.                    |
-| `sheet`     | `string`         | `''`          | 엘리먼트의 섀도 DOM에 주입할 CSS.                        |
+| `duration`  | `number \| null` | `null`        | 생각한 밀리초. 1 초 미만은 감춰집니다.                   |
+| `sheet`     | `string`         | `''`          | 엘리먼트의 섀도 DOM 에 주입할 CSS.                       |
 
 유한하고 음이 아닌 수가 아닌 `duration`은 다시 읽으면 `null`이 됩니다.
 
@@ -87,7 +87,7 @@ reasoning.streaming = !snapshot.done;
 
 ## 스타일
 
-`<r-reasoning>`은 자체 **CSS 커스텀 프로퍼티 4개**와 테마에서 읽어 오는 의미 토큰을 공개합니다.
+`<r-reasoning>`은 자체 **CSS 커스텀 프로퍼티 4 개**와 테마에서 읽어 오는 의미 토큰을 공개합니다.
 상속이 닿는 곳이면 어디에나 지정하세요 — `:root`, 바깥 컨테이너, 또는 엘리먼트 자체.
 
 ```css

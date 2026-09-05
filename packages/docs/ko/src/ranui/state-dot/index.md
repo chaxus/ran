@@ -1,5 +1,5 @@
 ---
-description: 'ranui의 StateDot(<r-state-dot>)은 후광과 중심을 한 엘리먼트로 그리는 8px 생명주기 표시점(idle, running, success, warning, error)입니다.'
+description: 'ranui 의 StateDot(<r-state-dot>) 은 후광과 중심을 한 엘리먼트로 그리는 8px 생명주기 표시점 (idle, running, success, warning, error) 입니다.'
 ---
 
 # StateDot
@@ -7,7 +7,7 @@ description: 'ranui의 StateDot(<r-state-dot>)은 후광과 중심을 한 엘리
 8px 생명주기 표시점입니다. 후광과 중심이 한 엘리먼트 안에 있고 둘 다 `currentColor`를 쓰므로,
 하나의 상태는 두 개의 토큰이 아니라 하나의 색 규칙입니다.
 
-> **이럴 때 쓰세요.** 어떤 행이 작업의 어느 단계인지(대기 중, 진행 중, 완료, 실패)를 한 줄을
+> **이럴 때 쓰세요.** 어떤 행이 작업의 어느 단계인지 (대기 중, 진행 중, 완료, 실패) 를 한 줄을
 > 통째로 쓰지 않고 보여야 할 때. `<r-tool-card>`와 압축 표시가 쓰는 점도 이것입니다.
 
 ## 빠른 시작
@@ -46,7 +46,7 @@ description: 'ranui의 StateDot(<r-state-dot>)은 후광과 중심을 한 엘리
   </div>
   <div style="display:flex;align-items:center;gap:8px">
     <r-state-dot state="error"></r-state-dot>
-    <span>테스트 2개 실패</span>
+    <span>테스트 2 개 실패</span>
   </div>
 </Demo>
 
@@ -82,7 +82,7 @@ description: 'ranui의 StateDot(<r-state-dot>)은 후광과 중심을 한 엘리
 
 ### 스타일
 
-각 상태는 색 **하나**입니다. 후광은 그 색의 16%이고 중심은 그것을 60% 안으로 줄인 것이며, 둘 다
+각 상태는 색 **하나**입니다. 후광은 그 색의 16% 이고 중심은 그것을 60% 안으로 줄인 것이며, 둘 다
 `currentColor`로 그립니다. 그러니 하나의 상태는 두 개가 아니라 한 개의 토큰입니다.
 
 | 토큰                            | 기본값                             |
@@ -95,5 +95,5 @@ description: 'ranui의 StateDot(<r-state-dot>)은 후광과 중심을 한 엘리
 | `--ran-state-dot-error-color`   | `--ran-color-danger`               |
 | `--ran-state-dot-halo-opacity`  | `0.16`                             |
 
-`running`은 회전이 아니라 중심을 맥동시킵니다(8px에서는 회전하는 아이콘이 너무 작아 회전으로
+`running`은 회전이 아니라 중심을 맥동시킵니다 (8px 에서는 회전하는 아이콘이 너무 작아 회전으로
 읽히지 않습니다). 맥동은 `prefers-reduced-motion`에서 멈춥니다.
