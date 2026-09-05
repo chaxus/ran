@@ -1,19 +1,6 @@
----
-title: ranui 更新日志
-description: ranui 的变更记录——新增、变更、修复与移除及其原因，以及每一批改动背后的工程记录。
----
+# 更新日志
 
-# Changelog 更新日志
-
-由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.zh-CN.md` 生成，与英文版一同维护，
-因此本页与 npm 包内的副本不会出现分歧。
-
-::: warning ranui 处于 alpha 阶段
-版本以 `0.x-alpha` 发布，**其中会包含破坏性变更**——现阶段优先把设计做对，而不是保住 API 形状。
-请锁定确切版本，并在升级前先读本页。
-:::
-
-::: v-pre
+`ranui` 的所有重要变更都记录在本文件中。
 
 ## [Unreleased]
 
@@ -134,29 +121,3 @@ description: ranui 的变更记录——新增、变更、修复与移除及其�
 ### Changed
 
 - 把播放器的全屏 API 选择逻辑和 HLS 清单层级归一化逻辑提取成了独立的核心辅助函数，便于测试。
-
-:::
-
-## 工程记录
-
-每一批改动为什么发生的长文记录，与代码放在一起，不在此处摘要。它们是上面这些条目背后的推理过程。
-
-| 日期 | ranui |
-| ---- | ------- |
-| 2026-08-16 | [new `<r-markdown>`: streaming Markdown renderer](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-08-16.md) |
-| 2026-08-08 | [`<r-form>` redesign + native reset/validation for form fields](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-08-08.md) |
-| 2026-07-04 | [r-message：toast 变成可朗读的 live region](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-07-04.md) |
-| 2026-06-28 | [r-select：下拉箭头图标自注册 + 暗色适配](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-06-28.md) |
-| 2026-06-27 | [主题系统重做：采用 Geist 设计系统](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-06-27.md) |
-| 2026-06-21 | [视觉回归测试体系建立](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-06-21.md) |
-| 2026-05-31 | [主题系统与 Demo 优化](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-05-31.md) |
-| 2026-05-24 | [单元测试覆盖率提升](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-05-24.md) |
-
-| 日期 | 仓库整体 |
-| ---- | ------- |
-| 2026-07-25 | [补齐：现有模块的缺口](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-25.md) |
-| 2026-07-19 | [builder：`children()` 支持响应式 getter（reactive children）](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-19.md) |
-| 2026-07-11 | [Geist contrast action + bordered card default](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-11.md) |
-
-发布与标签见 [GitHub](https://github.com/chaxus/ran/releases)，已发布的每个版本见
-[npm](https://www.npmjs.com/package/ranui?activeTab=versions).

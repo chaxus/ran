@@ -229,7 +229,7 @@ r-input {
 
 Parts: `content` · `input` · `label` · `message`
 
-The full list is in [style tokens](/src/ranui/style-tokens#input); which token to reach for is the [design system](/src/ranui/design-system/).
+The full list is in [style tokens](/src/ranui/style-tokens#input); which token to use is in the [design system](/src/ranui/design-system/).
 
 ## Best Practices
 

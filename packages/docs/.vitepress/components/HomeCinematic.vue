@@ -333,7 +333,7 @@ const icons: Record<string, string> = {
 
 const en = {
   eyebrow: 'Open source · MIT Licensed',
-  headline: 'A Web Components UI library & typed utility belt',
+  headline: 'A Web Components UI library and a typed utility library',
   subtitle:
     'ranui ships 40 framework-agnostic r- elements; ranuts packs 90+ tree-shakeable TypeScript helpers. Use them in Vue, React, or plain HTML, with no build step required.',
   ctaPrimary: 'Explore Components',
@@ -355,21 +355,21 @@ const en = {
     {
       kind: 'utils',
       title: 'ranuts',
-      desc: 'A utility belt of 90+ typed helpers for strings, objects, color, time, files and the DOM. Tree-shakeable, zero-dependency.',
+      desc: '90+ typed helpers for strings, objects, color, time, files and the DOM. Tree-shakeable, zero-dependency.',
       more: 'Read the docs',
       link: '/src/ranuts/',
     },
     {
       kind: 'article',
       title: 'Articles',
-      desc: 'Field notes and deep dives on rendering engines, functional programming, sorting algorithms and the web platform, written along the way.',
+      desc: 'Longer write-ups on rendering engines, functional programming, sorting algorithms and the web platform.',
       more: 'Start reading',
       link: '/src/article/doc_preview',
     },
   ],
   capsKicker: 'Capabilities',
-  capsTitle: 'Not just another toolkit',
-  capsSub: "A handful of things you won't find in most libraries.",
+  capsTitle: 'What most libraries leave out',
+  capsSub: 'Five in ranuts, five in ranui.',
   caps: [
     {
       lib: 'ranuts',
@@ -427,7 +427,7 @@ const en = {
           kind: 'radar',
           name: 'Radar chart',
           api: '<r-radar>',
-          desc: 'A canvas-drawn radar / ability chart: real data-viz, not a generic widget.',
+          desc: 'A canvas-drawn radar chart with per-axis labels and per-axis label styling.',
         },
         {
           kind: 'sigma',
@@ -445,7 +445,7 @@ const en = {
     },
   ],
   startKicker: 'Quick start',
-  startTitle: 'Get started in seconds',
+  startTitle: 'Install and use',
   startDesc:
     'Install both packages, register the elements once, and use them anywhere. No build step or framework required.',
   startStep1: 'Install & register',
@@ -463,7 +463,7 @@ const en = {
     {
       kind: 'pwa',
       title: 'Installable & offline',
-      desc: 'The docs themselves are a PWA with a hand-rolled service worker.',
+      desc: 'The docs are a PWA, with their own service worker.',
     },
     { kind: 'i18n', title: 'Bilingual', desc: 'Every page maintained in English and 简体中文.' },
   ],
@@ -501,14 +501,14 @@ const cn = {
     {
       kind: 'article',
       title: '文章',
-      desc: '一路记录的技术笔记与深度剖析：渲染引擎、函数式编程、排序算法与 Web 平台。',
+      desc: '关于渲染引擎、函数式编程、排序算法与 Web 平台的长文。',
       more: '开始阅读',
       link: '/src/article/doc_preview',
     },
   ],
   capsKicker: '特色能力',
-  capsTitle: '不只是又一个工具库',
-  capsSub: '一些在多数库里找不到的能力。',
+  capsTitle: '多数库没有的能力',
+  capsSub: 'ranuts 五项，ranui 五项。',
   caps: [
     {
       lib: 'ranuts',
@@ -556,7 +556,7 @@ const cn = {
           kind: 'radar',
           name: '雷达图',
           api: '<r-radar>',
-          desc: 'Canvas 绘制的雷达 / 能力图，是真正的数据可视化，而非通用控件。',
+          desc: 'Canvas 绘制的雷达图，支持逐轴标签与逐轴标签样式。',
         },
         {
           kind: 'sigma',
@@ -569,7 +569,7 @@ const cn = {
     },
   ],
   startKicker: '快速开始',
-  startTitle: '几秒钟即可上手',
+  startTitle: '安装与使用',
   startDesc: '安装两个包，注册一次元素，即可在任意地方使用，无需构建步骤，也不依赖任何框架。',
   startStep1: '安装并注册',
   startStep2: '随处使用',
@@ -579,7 +579,7 @@ const cn = {
   features: [
     { kind: 'agnostic', title: '随处可用', desc: '基于标准的自定义元素，在任意框架或无框架下都能运行。' },
     { kind: 'typed', title: '完整类型', desc: '全程 TypeScript 编写，附带类型声明。' },
-    { kind: 'pwa', title: '可安装 · 离线', desc: '文档本身就是一个 PWA，配有手写的 Service Worker。' },
+    { kind: 'pwa', title: '可安装 · 离线', desc: '文档本身就是一个 PWA，带自己的 Service Worker。' },
     { kind: 'i18n', title: '双语维护', desc: '每一页都同时维护英文与简体中文。' },
   ],
   closing: '一个人可以走得很快，一群人可以走得更远。',

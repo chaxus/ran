@@ -988,3 +988,19 @@ describe('unsafeHtml', () => {
     expect(new ElementBuilder('div').unsafeHtml('<b>c</b>').text('a').build().innerHTML).toBe('a');
   });
 });
+
+describe('class() on SVG elements', () => {
+  // `className` is a read-only SVGAnimatedString on SVG elements, so assigning to it
+  // throws. Thrown inside a custom element's constructor, that leaves the element
+  // un-upgraded with no shadow root, which surfaces as a missing component rather than as
+  // a styling bug — `r-disclosure-row`'s inline chevron hit exactly that.
+  it('sets a class on an SVG element without throwing', () => {
+    const svg = new ElementBuilder('svg').class('chevron').attr('viewBox', '0 0 24 24').build();
+    expect(svg.namespaceURI).toBe('http://www.w3.org/2000/svg');
+    expect(svg.getAttribute('class')).toBe('chevron');
+  });
+
+  it('still sets a class on an HTML element', () => {
+    expect(new ElementBuilder('div').class('a b').build().getAttribute('class')).toBe('a b');
+  });
+});

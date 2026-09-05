@@ -65,25 +65,56 @@
 
 .ran-disclosure-icon,
 .ran-disclosure-chevron {
-  display: inline-flex;
   grid-area: 1 / 1;
-  align-items: center;
-  justify-content: center;
   transition: opacity var(--ran-disclosure-transition, 100ms) ease;
 }
 
+.ran-disclosure-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .ran-disclosure-chevron {
+  width: var(--ran-disclosure-chevron-size, 12px);
+  height: var(--ran-disclosure-chevron-size, 12px);
+  /* Closed points right, open points down. The rotation is the only thing that tells a
+     reader which state the row is in, so it is the thing that has to animate. */
+  transform: rotate(-90deg);
+  transition:
+    opacity var(--ran-disclosure-transition, 100ms) ease,
+    transform var(--ran-disclosure-toggle-duration, 180ms)
+      var(--ran-motion-ease-standard, cubic-bezier(0.645, 0.045, 0.355, 1));
+}
+
+:host([open]) .ran-disclosure-chevron {
+  transform: rotate(0deg);
+}
+
+/* Nothing to open, so no affordance to draw. */
+:host(:not([expandable])) .ran-disclosure-chevron {
+  display: none;
+}
+
+/* With nothing slotted into `leading`, the chevron is the row's only affordance: revealing
+   it on hover would leave an expandable row indistinguishable from plain text until the
+   pointer happened to cross it. `has-leading` is set from `slotchange` — CSS has no way to
+   ask whether a slot is empty. */
+.ran-disclosure.has-leading .ran-disclosure-chevron {
   opacity: 0;
 }
 
-:host([expandable]) .ran-disclosure-row:hover .ran-disclosure-icon,
-:host([expandable][open]) .ran-disclosure-icon {
+/* With leading content the two share one grid cell: the state icon at rest, the chevron on
+   hover, on focus, or while open. Sharing the cell means the swap costs no layout, so the
+   title never shifts under the pointer. */
+:host([expandable]) .has-leading .ran-disclosure-row:hover .ran-disclosure-icon,
+:host([expandable][open]) .has-leading .ran-disclosure-icon {
   opacity: 0;
 }
 
-:host([expandable]) .ran-disclosure-row:hover .ran-disclosure-chevron,
-:host([expandable]) .ran-disclosure-row:focus-visible .ran-disclosure-chevron,
-:host([expandable][open]) .ran-disclosure-chevron {
+:host([expandable]) .has-leading .ran-disclosure-row:hover .ran-disclosure-chevron,
+:host([expandable]) .has-leading .ran-disclosure-row:focus-visible .ran-disclosure-chevron,
+:host([expandable][open]) .has-leading .ran-disclosure-chevron {
   opacity: 1;
 }
 
@@ -153,17 +184,33 @@
   }
 }
 
+/* Opening animates `grid-template-rows` from `0fr` to `1fr`, which is the only CSS-only way
+   to transition to a height nobody measured. `display: none` cannot animate at all, and a
+   `max-height` guess has to be wrong in one direction: too small clips a long body, too
+   large spends most of the duration animating through empty space. */
 .ran-disclosure-body {
+  display: grid;
+  grid-template-rows: 0fr;
   min-width: 0;
+  transition: grid-template-rows var(--ran-disclosure-toggle-duration, 180ms)
+    var(--ran-motion-ease-standard, cubic-bezier(0.645, 0.045, 0.355, 1));
 }
 
-:host(:not([open])) .ran-disclosure-body {
-  display: none;
+:host([open]) .ran-disclosure-body {
+  grid-template-rows: 1fr;
+}
+
+/* The clip has to be on the row's own element: `overflow` on the grid container would be
+   resolved against the track, which is what is being animated. */
+.ran-disclosure-body-inner {
+  min-width: 0;
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ran-disclosure-icon,
-  .ran-disclosure-chevron {
+  .ran-disclosure-chevron,
+  .ran-disclosure-body {
     transition: none;
   }
 }

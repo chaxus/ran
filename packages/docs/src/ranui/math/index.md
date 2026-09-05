@@ -79,7 +79,7 @@ r-math {
 
 Parts: `button` · `error` · `math` · `menu` · `render` · `toolbar`
 
-The full list is in [style tokens](/src/ranui/style-tokens#math); which token to reach for is the [design system](/src/ranui/design-system/).
+The full list is in [style tokens](/src/ranui/style-tokens#math); which token to use is in the [design system](/src/ranui/design-system/).
 
 ## Best Practices
 

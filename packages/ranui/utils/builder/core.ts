@@ -496,10 +496,20 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     else apply(value);
   }
 
+  /**
+   * Sets the element's class.
+   *
+   * Written through `setAttribute` rather than `className`. On an SVG element `className`
+   * is a read-only `SVGAnimatedString`, so assigning to it throws
+   * `Cannot set property className of [object SVGElement] which has only a getter` — which,
+   * happening inside a custom element's constructor, leaves the element un-upgraded with
+   * no shadow root rather than reporting a styling problem. `setAttribute` is equivalent
+   * for HTML elements and correct for both.
+   */
   class(name: string | Getter<string>): this {
     this.bind(name, (n) => {
       if (isSSR) (this.el as unknown as HTMLElementMock).attributes.set('class', n);
-      else this.el.className = n;
+      else this.el.setAttribute('class', n);
     });
     return this;
   }

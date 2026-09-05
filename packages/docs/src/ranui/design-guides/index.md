@@ -29,7 +29,7 @@ these rules lives in the repository as
 4. **Decide by role and state, not by eye.** "What is this text?" (heading / label / copy /
    button) has an answer; "what size looks right?" does not.
 5. **Design every reachable state.** Default, hover, active, focus, disabled, loading, empty,
-   error. The happy path is one of eight.
+   error: the default state is one of eight.
 6. **Verify what rendered.** In light _and_ dark, narrow _and_ wide, mouse _and_ touch. Review
    does not catch a shadow you cannot see.
 
@@ -39,7 +39,7 @@ Conflict order when two rules pull apart: **user goals → verified evidence →
 ## Choosing a color
 
 Color is assigned by **role and state**, never picked by eye. The
-[ladder](/src/ranui/design-system/#the-ladder) has already decided what hover and active look
+[ladder](/src/ranui/design-system/#the-ladder) already fixes what hover and active look
 like; your job is to name the role.
 
 | The element is…                   | Use                                                            |
@@ -53,9 +53,9 @@ like; your job is to name the role.
 | A link                            | `--ran-color-link`                                             |
 
 **Accents have one meaning each.** Primary is monochrome (black-on-white in light,
-white-on-black in dark), so don't recruit blue for it: blue belongs to links and the focus
-ring. Green is success, amber is warning, red is danger; using red for emphasis spends a signal
-you will want later.
+white-on-black in dark), so don't use blue for it: blue belongs to links and the focus
+ring. Green is success, amber is warning, red is danger; using red for emphasis leaves you
+with no way to use it for danger later.
 
 **Three rules that prevent silent breakage:**
 
@@ -93,17 +93,18 @@ nearest role.
 ## Depth: shadow and stacking
 
 **Pick the shadow tier by what the element is** (in-flow surface, floating overlay, or
-blocking dialog) and make sure it is actually perceptible. A shadow nobody can see has failed
-its job, and an overlay that falls back to the card tier looks pinned to the page.
+blocking dialog) and make sure it is actually perceptible. A shadow that cannot be seen
+provides no depth cue, and an overlay that falls back to the card tier looks pinned to the
+page.
 
 **Embedding ranui overlays in your own chrome.** The [z-index
 ladder](/src/ranui/design-system/#stacking) starts at 1000 precisely so it clears ordinary page
 chrome. A portaled overlay therefore needs no help from you. But a `position: fixed` overlay
 that stays inside its own shadow DOM (`r-modal`'s dialog) only escapes as far as its nearest
 ancestor **stacking context**, so if you wrap embedded content in anything that creates one
-(`isolation`, `opacity < 1`, `transform`, `filter`, `will-change`), that wrapper has to be
-elevated for the dialog to climb back out. Scope the escalation to when an overlay is
-_actually_ open:
+(`isolation`, `opacity < 1`, `transform`, `filter`, `will-change`), that wrapper's stacking
+level has to be raised so the dialog is stacked above it again. Scope the escalation to when
+an overlay is _actually_ open:
 
 ```css
 .embed {
@@ -124,7 +125,7 @@ transition after `open` is removed.
 
 ## Motion
 
-The bigger the change, the more time it earns; below that threshold, don't animate. Hover and
+The bigger the change, the more time it gets; below that threshold, don't animate. Hover and
 active feedback is ~150ms, menus ~200ms, dialogs ~300ms, and a change that is already obvious
 gets 0ms. Respect `prefers-reduced-motion`.
 

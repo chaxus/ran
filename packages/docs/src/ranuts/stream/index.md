@@ -83,7 +83,7 @@ The framing rules are small and almost never fully implemented. `parseEventStrea
 - a trailing block the server never terminated with a blank line
 - a `ReadableStream` with no `Symbol.asyncIterator`
 
-It accepts any `AsyncIterable<Uint8Array>` as well as a `ReadableStream`, so a test can feed it
+It accepts any `AsyncIterable<Uint8Array>` as well as a `ReadableStream`, so a test can pass it
 byte slices without a network.
 
 ## A worked mapping

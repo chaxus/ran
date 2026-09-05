@@ -21,9 +21,9 @@ ranui 构建于其上的**设计语言**，以及表达这套语言的**完整**
 
 ## 设计语言：Geist
 
-ranui 的令牌基于 [Geist](https://vercel.com/geist)，也就是 Vercel 的开源设计体系。它的核心思想是
-**颜色是一条「状态阶梯」，而不是调色板**：色阶不是一组好看的深浅供人挑选，而是一组**职责**。200
-不是「稍深一点的灰」，它就是「悬停背景」。阶梯一旦固定，交互状态就不再需要临场判断。
+ranui 的令牌基于 [Geist](https://vercel.com/geist)，也就是 Vercel 的开源设计体系。每条色阶都是
+一条由固定职责组成的阶梯，每一档对应一个职责，而不是供人随意挑选的深浅色块：200 不是「稍深一点
+的灰」，它就是「悬停背景」。每一档的职责一旦固定，给某个交互状态选颜色就是查表，不用临场判断。
 
 ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并以 **Geist Sans / Geist Mono** 作为
 默认字体。
@@ -59,140 +59,140 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 ### 背景
 
-| 令牌                   | 浅色      | 暗色      | 用于         |
-| ---------------------- | --------- | --------- | ------------ |
-| `--ran-background-100` | `#ffffff` | `#000000` | 页面背景     |
-| `--ran-background-200` | `#fafafa` | `#000000` | 轻微区分区域 |
+| 令牌                   | 浅色                                                            | 暗色                                                            | 用于         |
+| ---------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- | ------------ |
+| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | 页面背景     |
+| `--ran-background-200` | <span class="swatch" style="--swatch:#fafafa"></span> `#fafafa` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | 轻微区分区域 |
 
 ### 灰阶 —— `--ran-gray-100..1000`
 
 文字、边框与表面背后的色阶。
 
-| 档位 | 浅色      | 暗色      |
-| ---- | --------- | --------- |
-| 100  | `#f2f2f2` | `#1a1a1a` |
-| 200  | `#ebebeb` | `#1f1f1f` |
-| 300  | `#e6e6e6` | `#292929` |
-| 400  | `#eaeaea` | `#2e2e2e` |
-| 500  | `#c9c9c9` | `#454545` |
-| 600  | `#a8a8a8` | `#878787` |
-| 700  | `#8f8f8f` | `#8f8f8f` |
-| 800  | `#7d7d7d` | `#7d7d7d` |
-| 900  | `#4d4d4d` | `#a0a0a0` |
-| 1000 | `#171717` | `#ededed` |
+| 档位 | 浅色                                                            | 暗色                                                            |
+| ---- | --------------------------------------------------------------- | --------------------------------------------------------------- |
+| 100  | <span class="swatch" style="--swatch:#f2f2f2"></span> `#f2f2f2` | <span class="swatch" style="--swatch:#1a1a1a"></span> `#1a1a1a` |
+| 200  | <span class="swatch" style="--swatch:#ebebeb"></span> `#ebebeb` | <span class="swatch" style="--swatch:#1f1f1f"></span> `#1f1f1f` |
+| 300  | <span class="swatch" style="--swatch:#e6e6e6"></span> `#e6e6e6` | <span class="swatch" style="--swatch:#292929"></span> `#292929` |
+| 400  | <span class="swatch" style="--swatch:#eaeaea"></span> `#eaeaea` | <span class="swatch" style="--swatch:#2e2e2e"></span> `#2e2e2e` |
+| 500  | <span class="swatch" style="--swatch:#c9c9c9"></span> `#c9c9c9` | <span class="swatch" style="--swatch:#454545"></span> `#454545` |
+| 600  | <span class="swatch" style="--swatch:#a8a8a8"></span> `#a8a8a8` | <span class="swatch" style="--swatch:#878787"></span> `#878787` |
+| 700  | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` |
+| 800  | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` |
+| 900  | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` | <span class="swatch" style="--swatch:#a0a0a0"></span> `#a0a0a0` |
+| 1000 | <span class="swatch" style="--swatch:#171717"></span> `#171717` | <span class="swatch" style="--swatch:#ededed"></span> `#ededed` |
 
 ### 半透明灰 —— `--ran-gray-alpha-100..1000`
 
 半透明，可以叠在任意表面上。遮罩、悬停蒙层，或者必须压在未知内容之上的分隔线，都该用它。
 
-| 档位 | 浅色        | 暗色        |
-| ---- | ----------- | ----------- |
-| 100  | `#0000000d` | `#ffffff12` |
-| 200  | `#00000015` | `#ffffff17` |
-| 300  | `#0000001a` | `#ffffff21` |
-| 400  | `#00000014` | `#ffffff24` |
-| 500  | `#00000036` | `#ffffff3d` |
-| 600  | `#0000003d` | `#ffffff82` |
-| 700  | `#00000070` | `#ffffff8a` |
-| 800  | `#00000082` | `#ffffff78` |
-| 900  | `#000000b3` | `#ffffff9c` |
-| 1000 | `#000000e8` | `#ffffffeb` |
+| 档位 | 浅色                                                                         | 暗色                                                                         |
+| ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### 蓝 —— `--ran-blue-100..1000`
 
 只保留给链接与聚焦环。
 
-| 档位 | 浅色      | 暗色      |
-| ---- | --------- | --------- |
-| 100  | `#f0f7ff` | `#06193a` |
-| 200  | `#e9f4ff` | `#022248` |
-| 300  | `#dfefff` | `#002f62` |
-| 400  | `#cae7ff` | `#003674` |
-| 500  | `#94ccff` | `#00418b` |
-| 600  | `#48aeff` | `#0090ff` |
-| 700  | `#006bff` | `#006efe` |
-| 800  | `#0059ec` | `#005be7` |
-| 900  | `#005ff2` | `#47a8ff` |
-| 1000 | `#002359` | `#eaf6ff` |
+| 档位 | 浅色                                                            | 暗色                                                            |
+| ---- | --------------------------------------------------------------- | --------------------------------------------------------------- |
+| 100  | <span class="swatch" style="--swatch:#f0f7ff"></span> `#f0f7ff` | <span class="swatch" style="--swatch:#06193a"></span> `#06193a` |
+| 200  | <span class="swatch" style="--swatch:#e9f4ff"></span> `#e9f4ff` | <span class="swatch" style="--swatch:#022248"></span> `#022248` |
+| 300  | <span class="swatch" style="--swatch:#dfefff"></span> `#dfefff` | <span class="swatch" style="--swatch:#002f62"></span> `#002f62` |
+| 400  | <span class="swatch" style="--swatch:#cae7ff"></span> `#cae7ff` | <span class="swatch" style="--swatch:#003674"></span> `#003674` |
+| 500  | <span class="swatch" style="--swatch:#94ccff"></span> `#94ccff` | <span class="swatch" style="--swatch:#00418b"></span> `#00418b` |
+| 600  | <span class="swatch" style="--swatch:#48aeff"></span> `#48aeff` | <span class="swatch" style="--swatch:#0090ff"></span> `#0090ff` |
+| 700  | <span class="swatch" style="--swatch:#006bff"></span> `#006bff` | <span class="swatch" style="--swatch:#006efe"></span> `#006efe` |
+| 800  | <span class="swatch" style="--swatch:#0059ec"></span> `#0059ec` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
+| 900  | <span class="swatch" style="--swatch:#005ff2"></span> `#005ff2` | <span class="swatch" style="--swatch:#47a8ff"></span> `#47a8ff` |
+| 1000 | <span class="swatch" style="--swatch:#002359"></span> `#002359` | <span class="swatch" style="--swatch:#eaf6ff"></span> `#eaf6ff` |
 
 ### 红 —— `--ran-red-100..1000`
 
 危险与错误。
 
-| 档位 | 浅色      | 暗色      |
-| ---- | --------- | --------- |
-| 100  | `#ffeeef` | `#330a11` |
-| 200  | `#ffe8ea` | `#440d13` |
-| 300  | `#ffe3e4` | `#5d0e17` |
-| 400  | `#ffd7d6` | `#6f101b` |
-| 500  | `#ffb1b3` | `#88151f` |
-| 600  | `#ff676d` | `#f32e40` |
-| 700  | `#fc0035` | `#f13242` |
-| 800  | `#ea001d` | `#e2162a` |
-| 900  | `#d8001b` | `#ff565f` |
-| 1000 | `#47000c` | `#ffe9ed` |
+| 档位 | 浅色                                                            | 暗色                                                            |
+| ---- | --------------------------------------------------------------- | --------------------------------------------------------------- |
+| 100  | <span class="swatch" style="--swatch:#ffeeef"></span> `#ffeeef` | <span class="swatch" style="--swatch:#330a11"></span> `#330a11` |
+| 200  | <span class="swatch" style="--swatch:#ffe8ea"></span> `#ffe8ea` | <span class="swatch" style="--swatch:#440d13"></span> `#440d13` |
+| 300  | <span class="swatch" style="--swatch:#ffe3e4"></span> `#ffe3e4` | <span class="swatch" style="--swatch:#5d0e17"></span> `#5d0e17` |
+| 400  | <span class="swatch" style="--swatch:#ffd7d6"></span> `#ffd7d6` | <span class="swatch" style="--swatch:#6f101b"></span> `#6f101b` |
+| 500  | <span class="swatch" style="--swatch:#ffb1b3"></span> `#ffb1b3` | <span class="swatch" style="--swatch:#88151f"></span> `#88151f` |
+| 600  | <span class="swatch" style="--swatch:#ff676d"></span> `#ff676d` | <span class="swatch" style="--swatch:#f32e40"></span> `#f32e40` |
+| 700  | <span class="swatch" style="--swatch:#fc0035"></span> `#fc0035` | <span class="swatch" style="--swatch:#f13242"></span> `#f13242` |
+| 800  | <span class="swatch" style="--swatch:#ea001d"></span> `#ea001d` | <span class="swatch" style="--swatch:#e2162a"></span> `#e2162a` |
+| 900  | <span class="swatch" style="--swatch:#d8001b"></span> `#d8001b` | <span class="swatch" style="--swatch:#ff565f"></span> `#ff565f` |
+| 1000 | <span class="swatch" style="--swatch:#47000c"></span> `#47000c` | <span class="swatch" style="--swatch:#ffe9ed"></span> `#ffe9ed` |
 
 ### 琥珀 —— `--ran-amber-100..1000`
 
 警告。
 
-| 档位 | 浅色      | 暗色      |
-| ---- | --------- | --------- |
-| 100  | `#fff6de` | `#2a1700` |
-| 200  | `#fff4cf` | `#361900` |
-| 300  | `#fff1c1` | `#502800` |
-| 400  | `#ffdc73` | `#5b3000` |
-| 500  | `#ffc543` | `#703e00` |
-| 600  | `#ffa600` | `#ed9a00` |
-| 700  | `#ffae00` | `#ffae00` |
-| 800  | `#ff9300` | `#ff9300` |
-| 900  | `#aa4d00` | `#ff9300` |
-| 1000 | `#561900` | `#fff3d5` |
+| 档位 | 浅色                                                            | 暗色                                                            |
+| ---- | --------------------------------------------------------------- | --------------------------------------------------------------- |
+| 100  | <span class="swatch" style="--swatch:#fff6de"></span> `#fff6de` | <span class="swatch" style="--swatch:#2a1700"></span> `#2a1700` |
+| 200  | <span class="swatch" style="--swatch:#fff4cf"></span> `#fff4cf` | <span class="swatch" style="--swatch:#361900"></span> `#361900` |
+| 300  | <span class="swatch" style="--swatch:#fff1c1"></span> `#fff1c1` | <span class="swatch" style="--swatch:#502800"></span> `#502800` |
+| 400  | <span class="swatch" style="--swatch:#ffdc73"></span> `#ffdc73` | <span class="swatch" style="--swatch:#5b3000"></span> `#5b3000` |
+| 500  | <span class="swatch" style="--swatch:#ffc543"></span> `#ffc543` | <span class="swatch" style="--swatch:#703e00"></span> `#703e00` |
+| 600  | <span class="swatch" style="--swatch:#ffa600"></span> `#ffa600` | <span class="swatch" style="--swatch:#ed9a00"></span> `#ed9a00` |
+| 700  | <span class="swatch" style="--swatch:#ffae00"></span> `#ffae00` | <span class="swatch" style="--swatch:#ffae00"></span> `#ffae00` |
+| 800  | <span class="swatch" style="--swatch:#ff9300"></span> `#ff9300` | <span class="swatch" style="--swatch:#ff9300"></span> `#ff9300` |
+| 900  | <span class="swatch" style="--swatch:#aa4d00"></span> `#aa4d00` | <span class="swatch" style="--swatch:#ff9300"></span> `#ff9300` |
+| 1000 | <span class="swatch" style="--swatch:#561900"></span> `#561900` | <span class="swatch" style="--swatch:#fff3d5"></span> `#fff3d5` |
 
 ### 绿 —— `--ran-green-100..1000`
 
 成功。
 
-| 档位 | 浅色      | 暗色      |
-| ---- | --------- | --------- |
-| 100  | `#ecfdec` | `#002608` |
-| 200  | `#e5fce7` | `#00320b` |
-| 300  | `#d3fad1` | `#003a0e` |
-| 400  | `#b9f5bc` | `#004615` |
-| 500  | `#82eb8d` | `#006717` |
-| 600  | `#4ce15e` | `#00952d` |
-| 700  | `#28a948` | `#00ac3a` |
-| 800  | `#279141` | `#009432` |
-| 900  | `#107d32` | `#00ca50` |
-| 1000 | `#003a00` | `#d8ffe4` |
+| 档位 | 浅色                                                            | 暗色                                                            |
+| ---- | --------------------------------------------------------------- | --------------------------------------------------------------- |
+| 100  | <span class="swatch" style="--swatch:#ecfdec"></span> `#ecfdec` | <span class="swatch" style="--swatch:#002608"></span> `#002608` |
+| 200  | <span class="swatch" style="--swatch:#e5fce7"></span> `#e5fce7` | <span class="swatch" style="--swatch:#00320b"></span> `#00320b` |
+| 300  | <span class="swatch" style="--swatch:#d3fad1"></span> `#d3fad1` | <span class="swatch" style="--swatch:#003a0e"></span> `#003a0e` |
+| 400  | <span class="swatch" style="--swatch:#b9f5bc"></span> `#b9f5bc` | <span class="swatch" style="--swatch:#004615"></span> `#004615` |
+| 500  | <span class="swatch" style="--swatch:#82eb8d"></span> `#82eb8d` | <span class="swatch" style="--swatch:#006717"></span> `#006717` |
+| 600  | <span class="swatch" style="--swatch:#4ce15e"></span> `#4ce15e` | <span class="swatch" style="--swatch:#00952d"></span> `#00952d` |
+| 700  | <span class="swatch" style="--swatch:#28a948"></span> `#28a948` | <span class="swatch" style="--swatch:#00ac3a"></span> `#00ac3a` |
+| 800  | <span class="swatch" style="--swatch:#279141"></span> `#279141` | <span class="swatch" style="--swatch:#009432"></span> `#009432` |
+| 900  | <span class="swatch" style="--swatch:#107d32"></span> `#107d32` | <span class="swatch" style="--swatch:#00ca50"></span> `#00ca50` |
+| 1000 | <span class="swatch" style="--swatch:#003a00"></span> `#003a00` | <span class="swatch" style="--swatch:#d8ffe4"></span> `#d8ffe4` |
 
 ### 语义颜色令牌
 
 组件真正读取的那一层。这里的一切都通过上面的色阶解析，因此会自己跟着主题翻转。
 
-| 令牌                           | 解析到                                     | 职责                     |
-| ------------------------------ | ------------------------------------------ | ------------------------ |
-| `--ran-color-bg`               | `--ran-background-100`                     | 页面背景                 |
-| `--ran-color-bg-subtle`        | `--ran-background-200`                     | 轻微区分的区域           |
-| `--ran-color-bg-elevated`      | `--ran-background-100` · 暗色下为 gray-100 | 卡片、表面               |
-| `--ran-color-bg-muted`         | `--ran-gray-100`                           | 内凹 / 弱化填充          |
-| `--ran-color-bg-hover`         | `--ran-gray-200`                           | 悬停表面                 |
-| `--ran-color-bg-active`        | `--ran-gray-300`                           | 激活（按下）表面         |
-| `--ran-color-text`             | `--ran-gray-1000`                          | 主要文字                 |
-| `--ran-color-text-secondary`   | `--ran-gray-900`                           | 次要文字                 |
-| `--ran-color-text-disabled`    | `--ran-gray-700`                           | 禁用文字                 |
-| `--ran-color-border`           | `--ran-gray-400`                           | 默认边框                 |
-| `--ran-color-border-secondary` | `--ran-gray-300`                           | 更弱的边框               |
-| `--ran-color-border-hover`     | `--ran-gray-500`                           | 悬停边框                 |
-| `--ran-color-border-active`    | `--ran-gray-600`                           | 激活边框                 |
-| `--ran-color-primary`          | `--ran-gray-1000`                          | 主操作（无彩色）         |
-| `--ran-color-primary-hover`    | `#383838` · 暗色 `#cccccc`                 | 主操作悬停               |
-| `--ran-color-primary-active`   | `#4d4d4d` · 暗色 `#b3b3b3`                 | 主操作按下               |
-| `--ran-color-primary-text`     | `--ran-background-100`                     | 主操作表面**之上**的文字 |
-| `--ran-color-success`          | `--ran-green-700`                          | 成功                     |
-| `--ran-color-warning`          | `--ran-amber-700`                          | 警告                     |
-| `--ran-color-danger`           | `--ran-red-700`                            | 危险 / 错误              |
-| `--ran-color-link`             | `--ran-blue-700`                           | 链接                     |
+| 令牌                           | 解析到                                                                                                                                 | 职责                     |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `--ran-color-bg`               | `--ran-background-100`                                                                                                                 | 页面背景                 |
+| `--ran-color-bg-subtle`        | `--ran-background-200`                                                                                                                 | 轻微区分的区域           |
+| `--ran-color-bg-elevated`      | `--ran-background-100` · 暗色下为 gray-100                                                                                             | 卡片、表面               |
+| `--ran-color-bg-muted`         | `--ran-gray-100`                                                                                                                       | 内凹 / 弱化填充          |
+| `--ran-color-bg-hover`         | `--ran-gray-200`                                                                                                                       | 悬停表面                 |
+| `--ran-color-bg-active`        | `--ran-gray-300`                                                                                                                       | 激活（按下）表面         |
+| `--ran-color-text`             | `--ran-gray-1000`                                                                                                                      | 主要文字                 |
+| `--ran-color-text-secondary`   | `--ran-gray-900`                                                                                                                       | 次要文字                 |
+| `--ran-color-text-disabled`    | `--ran-gray-700`                                                                                                                       | 禁用文字                 |
+| `--ran-color-border`           | `--ran-gray-400`                                                                                                                       | 默认边框                 |
+| `--ran-color-border-secondary` | `--ran-gray-300`                                                                                                                       | 更弱的边框               |
+| `--ran-color-border-hover`     | `--ran-gray-500`                                                                                                                       | 悬停边框                 |
+| `--ran-color-border-active`    | `--ran-gray-600`                                                                                                                       | 激活边框                 |
+| `--ran-color-primary`          | `--ran-gray-1000`                                                                                                                      | 主操作（无彩色）         |
+| `--ran-color-primary-hover`    | <span class="swatch" style="--swatch:#383838"></span> `#383838` · 暗色 <span class="swatch" style="--swatch:#cccccc"></span> `#cccccc` | 主操作悬停               |
+| `--ran-color-primary-active`   | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` · 暗色 <span class="swatch" style="--swatch:#b3b3b3"></span> `#b3b3b3` | 主操作按下               |
+| `--ran-color-primary-text`     | `--ran-background-100`                                                                                                                 | 主操作表面**之上**的文字 |
+| `--ran-color-success`          | `--ran-green-700`                                                                                                                      | 成功                     |
+| `--ran-color-warning`          | `--ran-amber-700`                                                                                                                      | 警告                     |
+| `--ran-color-danger`           | `--ran-red-700`                                                                                                                        | 危险 / 错误              |
+| `--ran-color-link`             | `--ran-blue-700`                                                                                                                       | 链接                     |
 
 `--ran-color-primary-hover` / `-active` 是语义层里仅有的两个字面量：它们是朝页面背景方向走的，而不
 是沿着某条色阶走，所以暗色模式直接重定义了它们。

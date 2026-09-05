@@ -261,10 +261,11 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 当某个被监听的属性发生变化时（最主要是激活标签切换时），`<r-tabs>` 会派发 `change` `CustomEvent`。`event.detail.active` 是当前激活的 key（选中 `<r-tab>` 的 `r-key`，没设置 `r-key` 时为其索引）。
 
 ```js
-const tabs = document.querySelector('r-tabs');
+const tabs = document.createElement('r-tabs');
 tabs.addEventListener('change', (e) => {
   console.log('active tab:', e.detail.active);
 });
+tabbar.append(tabs);
 ```
 
 `<r-tab>` 本身不派发任何自定义事件。

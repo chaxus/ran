@@ -88,6 +88,42 @@
   white-space: normal;
 }
 
+/* ---------- colour ladders: show the colour, not only its hex ---------- */
+/* The design-system page lists every ladder step as a hex string in a table. A hex is not
+   a colour a reader can see, so each cell carries a swatch whose fill comes from the same
+   literal. The value stays in the markdown (the llms-full.txt corpus is built from the
+   sources, and the page has to be readable without JavaScript); the swatch is presentation
+   only. */
+.vp-doc .swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  vertical-align: -2px;
+  border-radius: 4px;
+  background: var(--swatch);
+  /* Inset hairline rather than a border: it keeps the 14px box exact, and it is what makes
+     `#ffffff` visible on a white page and `#000000` on a dark one. */
+  box-shadow: inset 0 0 0 1px var(--vp-c-divider);
+}
+/* A translucent value over an opaque cell reads as a solid colour, which is the one thing
+   the alpha ladder exists to show. Checkerboard behind, colour on top. */
+.vp-doc .swatch.is-alpha {
+  --checker: color-mix(in srgb, var(--vp-c-text-3) 30%, transparent);
+  position: relative;
+  background:
+    linear-gradient(45deg, var(--checker) 25%, transparent 25%, transparent 75%, var(--checker) 75%) 0 0 / 8px 8px,
+    linear-gradient(45deg, var(--checker) 25%, transparent 25%, transparent 75%, var(--checker) 75%) 4px 4px / 8px 8px,
+    var(--vp-c-bg);
+}
+.vp-doc .swatch.is-alpha::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--swatch);
+}
+
 /* ---------- inline code & links ---------- */
 .vp-doc :not(pre) > code {
   border-radius: 5px;

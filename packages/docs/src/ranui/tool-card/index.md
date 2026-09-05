@@ -23,7 +23,7 @@ any of them exist.
 ```
 
 ```ts
-const card = document.querySelector('r-tool-card');
+const card = document.createElement('r-tool-card');
 
 card.call = { card: 'terminal', title: 'pnpm test', cwd: '/repo' };
 card.status = 'running';
@@ -31,6 +31,8 @@ card.status = 'running';
 // …when the call returns
 card.result = { card: 'terminal', output: '2351 passed', exitCode: 0 };
 card.status = 'success';
+
+conversation.append(card);
 ```
 
 ## Card kinds

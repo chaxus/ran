@@ -261,10 +261,11 @@ Set `effect` on `<r-tabs>` to enable the click ripple on the header buttons. Whe
 `<r-tabs>` dispatches a `change` `CustomEvent` when an observed attribute changes, most notably when the active tab switches. `event.detail.active` is the current active key (the `r-key` of the selected `<r-tab>`, or its index when no `r-key` is set).
 
 ```js
-const tabs = document.querySelector('r-tabs');
+const tabs = document.createElement('r-tabs');
 tabs.addEventListener('change', (e) => {
   console.log('active tab:', e.detail.active);
 });
+tabbar.append(tabs);
 ```
 
 `<r-tab>` does not dispatch any custom events.

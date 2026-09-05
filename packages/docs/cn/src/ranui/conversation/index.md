@@ -4,7 +4,7 @@ description: '把只追加的事件日志渲染为对话：投影、底部跟随
 
 # Conversation 对话
 
-把只追加的事件日志渲染为对话。这个元素只拥有三件麻烦且容易做错的事，此外什么都不做：把事件投影成节点、让视图吸附在底部而不与用户的滚动打架、以及把行与节点列表对账。
+把只追加的事件日志渲染为对话。这个元素只拥有三件麻烦且容易做错的事，此外什么都不做：把事件投影成节点、让视图吸附在底部且不覆盖用户自己的滚动操作、以及把行与节点列表对账。
 
 > **适用场景**：当你要渲染一段流式记录（聊天、Agent 会话、日志），并且希望每一种内容（消息、工具调用、状态行）都作为独立的注册单元，而不是让渲染器里的判断分支越堆越多时。
 
@@ -17,7 +17,7 @@ description: '把只追加的事件日志渲染为对话：投影、底部跟随
 ```
 
 ```ts
-const chat = document.querySelector('r-conversation');
+const chat = document.createElement('r-conversation');
 
 chat.register({
   kind: 'message',
@@ -42,6 +42,8 @@ chat.register({
 
 chat.push({ type: 'message/start', id: 'm1' });
 chat.push({ type: 'message/delta', id: 'm1', text: '你好' });
+
+container.append(chat);
 ```
 
 正文行应当使用 `<r-markdown>`：它默认的 `mode="streaming"` 已经会补全半截流出的 `**bold`、反引号、链接与 `$$` 数学，view 里不需要再解决一遍。
@@ -55,7 +57,7 @@ chat.push({ type: 'message/delta', id: 'm1', text: '你好' });
 
 ## 底部跟随
 
-默认开启。内容到达时视图吸附在底部；用户往上滚的瞬间停止；用户滚回底部时重新吸附，而且不会和用户的操作打架，因为跟随器判断的是「自己写入的滚动」和「用户的滚动」之间的区别，而不是去监听输入设备。
+默认开启。内容到达时视图吸附在底部；用户往上滚的瞬间停止；用户滚回底部时重新吸附，且任何时候都不会覆盖用户的手动滚动，因为跟随器判断的是「自己写入的滚动」和「用户的滚动」之间的区别，而不是去监听输入设备。
 
 ```ts
 chat.addEventListener('pinnedchange', (e) => {

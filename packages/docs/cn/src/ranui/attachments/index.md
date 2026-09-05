@@ -19,12 +19,12 @@ object URL。
 ```
 
 ```js
-const strip = document.querySelector('r-attachments');
+const strip = document.createElement('r-attachments');
 
 // 文件选择器
 picker.addEventListener('change', () => strip.add(picker.files));
 
-// 粘贴——仅在剪贴板确实带文件时拦截。拦下每一次粘贴会破坏粘贴文本，
+// 粘贴，仅在剪贴板确实带文件时拦截。拦下每一次粘贴会破坏粘贴文本，
 // 而输入框大部分时候正是用来粘文本的。
 input.addEventListener('paste', (event) => {
   if (event.clipboardData?.files.length) {
@@ -38,6 +38,8 @@ dropZone.addEventListener('drop', (event) => {
   event.preventDefault();
   strip.add(event.dataTransfer.files);
 });
+
+composer.append(strip);
 ```
 
 附件条为每个文件渲染一行：缩略图（图片）、文件名、大小和一个移除按钮。`count` 会反射到宿主元素上，
@@ -169,4 +171,4 @@ Part：`attachment` · `icon` · `list` · `name` · `remove` · `size` · `thum
 
 - **服务端也要校验。** `accept` 和 `max-size` 是对上传者的体贴，不是安全边界。
 - **发送成功后再清空**，不要提前：请求失败时文件应当还留着，方便重试。
-- **每一次拒绝都要解释。** 这个事件存在的意义，就是让附件条永远不会悄悄吞掉一个文件。
+- **每一次拒绝都要解释。** 这个事件存在的意义，就是让附件条永远不会悄悄丢掉一个文件。

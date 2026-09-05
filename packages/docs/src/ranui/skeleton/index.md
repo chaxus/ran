@@ -122,5 +122,5 @@ None. The skeleton renders only its own placeholder bar and does not project slo
 
 - **Match the layout**: Size the parent container so each skeleton matches the width of the real content it stands in for.
 - **Mimic the shape**: Stack multiple skeletons with consistent gaps to represent multi-line text or list rows.
-- **Theme via variables**: Prefer the `--ran-skeleton-*` CSS variables for simple tweaks; reach for `sheet` only when you need selectors the variables don't cover.
+- **Theme via variables**: Prefer the `--ran-skeleton-*` CSS variables for simple tweaks; use `sheet` only when you need selectors the variables don't cover.
 - **Swap on load**: Replace skeletons with real content once data arrives, rather than leaving them animating indefinitely.

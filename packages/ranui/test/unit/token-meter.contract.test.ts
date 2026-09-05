@@ -7,14 +7,16 @@ import '@/components/token-meter';
  *
  * @returns The element and the parts a caller can observe.
  */
-function mount(): { meter: TokenMeter; root: HTMLElement; fill: HTMLElement; text: HTMLElement } {
+function mount(): { meter: TokenMeter; root: HTMLElement; bar: HTMLElement; text: HTMLElement } {
   const meter = document.createElement('r-token-meter') as TokenMeter;
   document.body.appendChild(meter);
   const shadow = (meter as unknown as { _shadowDom: ShadowRoot })._shadowDom;
   return {
     meter,
     root: shadow.querySelector<HTMLElement>('.ran-token-meter')!,
-    fill: shadow.querySelector<HTMLElement>('.ran-token-meter-fill')!,
+    // The bar is an `<r-progress>`; its own track and fill are one shadow root further in,
+    // so the observable contract here is the `percent` it was given.
+    bar: shadow.querySelector<HTMLElement>('.ran-token-meter-bar')!,
     text: shadow.querySelector<HTMLElement>('.ran-token-meter-text')!,
   };
 }
@@ -25,26 +27,38 @@ describe('r-token-meter contract', () => {
   });
 
   it('renders a track, a fill and a readout', () => {
-    const { root, fill, text } = mount();
+    const { root, bar, text } = mount();
     expect(root.getAttribute('role')).toBe('progressbar');
-    expect(fill).not.toBeNull();
+    expect(bar).not.toBeNull();
     expect(text).not.toBeNull();
+    // One progressbar in the accessibility tree, not two nested ones.
+    expect(bar.getAttribute('aria-hidden')).toBe('true');
+    // `track` and `fill` are published parts, so they have to survive the extra shadow root.
+    expect(bar.getAttribute('exportparts')).toBe('track, fill');
   });
 
   it('fills in proportion to the limit', () => {
-    const { meter, fill } = mount();
+    const { meter, bar } = mount();
     meter.limit = 1000;
     meter.used = 250;
-    expect(fill.style.width).toBe('25%');
+    expect(bar.getAttribute('percent')).toBe('25');
+  });
+
+  it('hides the bar when there is no limit to draw a proportion against', () => {
+    const { meter, bar } = mount();
+    meter.used = 250;
+    expect(bar.hasAttribute('hidden')).toBe(true);
+    meter.limit = 1000;
+    expect(bar.hasAttribute('hidden')).toBe(false);
   });
 
   it('stops the fill at the track while still reporting the real number', () => {
     // A bar wider than its track paints outside the rounded corner. The number is what
     // carries the overflow.
-    const { meter, root, fill } = mount();
+    const { meter, root, bar } = mount();
     meter.limit = 1000;
     meter.used = 4000;
-    expect(fill.style.width).toBe('100%');
+    expect(bar.getAttribute('percent')).toBe('100');
     expect(root.getAttribute('aria-valuenow')).toBe('4000');
   });
 
@@ -105,10 +119,10 @@ describe('r-token-meter contract', () => {
   });
 
   it('shows only what is carried when no limit is known', () => {
-    const { meter, text, fill } = mount();
+    const { meter, text, bar } = mount();
     meter.used = 300;
     expect(text.textContent).toBe('Context 300');
-    expect(fill.style.width).toBe('0%');
+    expect(bar.hasAttribute('hidden')).toBe(true);
     expect(meter.level).toBe('ok');
   });
 

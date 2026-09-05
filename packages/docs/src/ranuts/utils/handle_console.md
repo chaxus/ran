@@ -4,7 +4,7 @@ Tap into `console`, `fetch`, `XMLHttpRequest`, clicks, and uncaught errors, for 
 backend, a debug overlay, or tests.
 
 **Every one of them returns a teardown function. Keep it and call it.** Instrumenting a global
-without a way back is a one-way door: tests cannot clean up after themselves, and a hot reload
+with no way to undo it means tests cannot clean up after themselves, and a hot reload
 re-patches an already-patched global until each call is nested through a dozen wrappers and
 every event is reported N times.
 

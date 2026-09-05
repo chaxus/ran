@@ -24,7 +24,7 @@ utility when it genuinely adds something:
 
 ## Doing something less often
 
-Four different questions hide behind "call this less":
+"Call this less" can mean four different things:
 
 | You want…                                                              | Use                | Behaviour                                                           |
 | ---------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------- |
@@ -36,7 +36,7 @@ Four different questions hide behind "call this less":
 **`memoize` is the former name of `once`** and does the same thing: it does not cache per
 argument, which is what the name suggests. New code should say `once`.
 
-The difference that bites: `debounce` on a keystroke handler means nothing runs while the user
+The difference that matters: `debounce` on a keystroke handler means nothing runs while the user
 is typing; `throttle` means something runs the whole time, just not on every key. A search
 suggestion wants `debounce`; a "characters remaining" counter wants `throttle`.
 

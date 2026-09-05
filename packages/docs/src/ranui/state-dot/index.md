@@ -37,8 +37,8 @@ its place in the row.
 
 ### Beside a label
 
-The dot carries the state; the text carries the meaning. Never let the colour be the only
-thing that distinguishes two rows. See [design guidelines](/src/ranui/design-guides/#accessibility).
+The dot only encodes state through colour; it does not explain what the colour means. Never
+let the colour be the only thing that distinguishes two rows. See [design guidelines](/src/ranui/design-guides/#accessibility).
 
 <Demo column>
   <div style="display:flex;align-items:center;gap:8px">
@@ -96,5 +96,5 @@ it, both painted from `currentColor`. So a state is one token, not two:
 | `--ran-state-dot-error-color`   | `--ran-color-danger`               |
 | `--ran-state-dot-halo-opacity`  | `0.16`                             |
 
-`running` pulses the core rather than spinning (a spinner at 8px is a smudge), and the pulse
-stops under `prefers-reduced-motion`.
+`running` pulses the core rather than spinning (at 8px, a spinning icon is too small to read
+as rotation), and the pulse stops under `prefers-reduced-motion`.

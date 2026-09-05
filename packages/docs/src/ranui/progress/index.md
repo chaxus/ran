@@ -108,10 +108,13 @@ Dispatched on the `drag` type whenever the user clicks the track or drags the ha
 <r-progress type="drag" percent="30%"></r-progress>
 
 <script>
-  const progress = document.querySelector('r-progress');
+  const progress = document.createElement('r-progress');
+  progress.type = 'drag';
+  progress.percent = '30%';
   progress.addEventListener('change', (e) => {
     console.log(e.detail.value, e.detail.percent, e.detail.total);
   });
+  container.append(progress);
 </script>
 ```
 

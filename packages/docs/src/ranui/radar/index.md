@@ -28,12 +28,13 @@ Data is supplied through the `abilitys` attribute as a **JSON string** (an array
 You can also set the data imperatively via the `abilitys` JS property, which accepts an array (it is stringified back onto the attribute) or a JSON string:
 
 ```js
-const radar = document.querySelector('r-radar');
+const radar = document.createElement('r-radar');
 radar.abilitys = [
   { abilityName: 'HP', scoreRate: 10 },
   { abilityName: 'Attack', scoreRate: 90 },
   { abilityName: 'DEF', scoreRate: 20 },
 ];
+chart.append(radar);
 ```
 
 ## API Reference

@@ -50,9 +50,10 @@ The current color, as a CSS color string. Accepts HEX (`#1677FF`, `#fff`), `rgb(
 ```
 
 ```js
-const picker = document.querySelector('r-colorpicker');
+const picker = document.createElement('r-colorpicker');
 picker.value = '#00c853';
 console.log(picker.value); // reads back the current color
+toolbar.append(picker);
 ```
 
 ### Disabled `disabled`
@@ -69,9 +70,10 @@ Add the `disabled` attribute to make the picker inert: the swatch no longer open
 ```
 
 ```js
-const picker = document.querySelector('r-colorpicker');
+const picker = document.createElement('r-colorpicker');
 picker.disabled = true; // block interaction
 picker.disabled = false; // re-enable
+toolbar.append(picker);
 ```
 
 ### External Styles `sheet`
@@ -100,10 +102,11 @@ Fires whenever the color changes: dragging the palette, moving a slider, editing
 <r-colorpicker value="#1677ff"></r-colorpicker>
 
 <script>
-  const picker = document.querySelector('r-colorpicker');
+  const picker = document.createElement('r-colorpicker');
   picker.addEventListener('change', (e) => {
     console.log(e.detail.hex, e.detail.alpha);
   });
+  toolbar.append(picker);
 </script>
 ```
 

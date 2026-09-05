@@ -14,7 +14,7 @@ own. [`<r-conversation>`](../../ranui/conversation/) is the DOM consumer.
 The usual way to render a conversation is a view that switches on event type and mutates a
 component tree. That puts ordering, identity, and partial-update reconciliation **in the view**,
 so every new kind of content (a tool call, an approval prompt, a status line) has to be
-threaded through by hand, and the view grows a branch per kind.
+threaded through by hand, and the view gains one branch per kind.
 
 Here each kind is an **independently registered state machine**. A definition says which events
 are its own, folds them into its own state, and never learns the others exist. Adding a kind is
@@ -54,9 +54,9 @@ written.
   event can drive two nodes.
 - **Order is fixed at `start`.** A node that keeps updating stays where it opened, so a
   streaming message does not jump to the end of the list on every delta.
-- **An `update` for an id with no open node is dropped.** That is the honest outcome when the
-  start event was trimmed from a paged window; inventing a node from a partial update would
-  render something that never existed.
+- **An `update` for an id with no open node is dropped.** That is the correct result when the
+  start event was trimmed from a paged window; building a node from a partial update alone
+  would render something that never existed.
 - **A repeated `start` re-opens the node in place.** The definition decided this is a new node,
   so the old state is discarded rather than merged into, and the position is kept.
 - **`reader.previous(kind)` is backward-only.** A definition that could see nodes started after
@@ -65,7 +65,8 @@ written.
 
 ## Publication cadence
 
-`publication` is the streaming throttle, and the only performance knob you need:
+`publication` controls how often subscribers see updates, and it is the only setting you need
+to tune for performance:
 
 | Cadence           | Use for                                                                          |
 | ----------------- | -------------------------------------------------------------------------------- |
@@ -99,4 +100,4 @@ view can hold one across a publication without it changing underneath.
 
 - [ranuts/stream](../stream/): produce the events
 - [`<r-conversation>`](../../ranui/conversation/): render the nodes
-- `createBottomFollower` in [ranuts/utils](../utils/): keep the view pinned to its floor
+- `createBottomFollower` in [ranuts/utils](../utils/): keep the view pinned to the bottom

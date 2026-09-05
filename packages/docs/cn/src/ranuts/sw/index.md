@@ -55,7 +55,7 @@ servePrecache({ type: 'precache-models', cacheName: MODELS });
 
 1. **`cacheFirst` 给内容哈希过的不可变资源**（脚本、样式、字体、模型权重）。
    **`networkFirst` 给必须立刻反映发版的东西**（HTML 导航、manifest）。
-2. **两个策略都不会 reject**。离线且无缓存时返回 408，`respondWith` 不会炸。
+2. **两个策略都不会 reject**。离线且无缓存时返回 408，`respondWith` 不会抛错。
 3. **response 是在读 body 之前同步 clone 的**。先 `await caches.open()` 再 clone 是经典 bug：
    那时 body 可能已经在流向页面，`clone()` 直接抛。
 4. **`precache` 幂等且逐条容错**：清单里有一个 404 不该让整个 install 失败。

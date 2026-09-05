@@ -110,11 +110,11 @@ untrack(() => count()); // read without subscribing
 ```
 
 - **`computed` is lazy**: an unread memo never recomputes, and it re-notifies only when its
-  _value_ changes, so effects behind a stable memo stay asleep.
+  _value_ changes, so effects behind a stable memo do not re-run.
 - **Effects auto-track**: only the signals read on the latest run stay subscribed, so a
   conditional never leaves a stale subscription behind.
 - **A cyclic effect throws** rather than looping: an effect that writes a signal it reads is
-  a bug the runtime refuses to run forever.
+  a bug, and the runtime throws instead of letting it run forever.
 
 ### Reactive bindings
 

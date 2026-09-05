@@ -11,6 +11,12 @@ import path from 'node:path';
 
 const ROOT = path.resolve(process.cwd());
 const CHANGELOG_FILE = path.join(ROOT, 'CHANGELOG.md');
+// The Chinese page reads its entries from here. Kept as a separate source rather than
+// translated at generation time so the wording is reviewed by a person, the same way every
+// other page under `cn/src/` is. When an entry is added to CHANGELOG.md and not here, the
+// Chinese page falls back to the English body for that release rather than going stale
+// silently — see `pickBody`.
+const CN_CHANGELOG_FILE = path.join(ROOT, 'CHANGELOG.zh-CN.md');
 const NOTES_DIR = path.join(ROOT, 'changelogs');
 const REPO_NOTES_DIR = path.join(ROOT, '..', '..', 'changelogs');
 const SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'src', 'ranui', 'changelog.md');
@@ -105,15 +111,29 @@ function renderNoteTable(notes: Note[], headers: [string, string]): string {
   return [`| ${headers[0]} | ${headers[1]} |`, '| ---- | ------- |', ...rows].join('\n');
 }
 
+/**
+ * Wraps a changelog's entries as the page body.
+ *
+ * The file's own H1 and intro are replaced by page chrome, so everything from the first
+ * version heading on is kept, which is the content a reader came for.
+ *
+ * VitePress compiles every page as a Vue template, so a `{{` anywhere in the prose — and
+ * this changelog documents i18n's `{{`/`}}` brace escaping — is read as an interpolation
+ * and fails the build, inline code included. `::: v-pre` turns compilation off for the
+ * block while markdown still renders inside it.
+ *
+ * @param changelog The full changelog source.
+ * @returns The body to place on the page.
+ */
+function toBody(changelog: string): string {
+  return ['::: v-pre', '', changelog.slice(changelog.search(/^## /m)).trimEnd(), '', ':::'].join('\n');
+}
+
 async function main(): Promise<void> {
   const changelog = await fs.readFile(CHANGELOG_FILE, 'utf8');
-  // The file's own H1 and intro are replaced by page chrome below; keep everything from the
-  // first version heading on, which is the content a reader came for.
-  // VitePress compiles every page as a Vue template, so a `{{` anywhere in the prose — and
-  // this changelog documents i18n's `{{`/`}}` brace escaping — is read as an interpolation
-  // and fails the build, inline code included. `::: v-pre` turns compilation off for the
-  // block while markdown still renders inside it.
-  const body = ['::: v-pre', '', changelog.slice(changelog.search(/^## /m)).trimEnd(), '', ':::'].join('\n');
+  const cnChangelog = await fs.readFile(CN_CHANGELOG_FILE, 'utf8').catch(() => '');
+  const body = toBody(changelog);
+  const cnBody = cnChangelog ? toBody(cnChangelog) : body;
   const componentNotes = await readNotes(NOTES_DIR, 'packages/ranui/changelogs');
   const repoNotes = await readNotes(REPO_NOTES_DIR, 'changelogs');
 
@@ -163,15 +183,16 @@ async function main(): Promise<void> {
       '',
       '# Changelog 更新日志',
       '',
-      '由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.md` 生成，因此本页与 npm 包内的',
-      '副本不会出现分歧。条目内容直接取自源文件，保持英文。',
+      cnChangelog
+        ? '由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.zh-CN.md` 生成，与英文版一同维护，\n因此本页与 npm 包内的副本不会出现分歧。'
+        : '由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.md` 生成，因此本页与 npm 包内的\n副本不会出现分歧。条目内容直接取自源文件，保持英文。',
       '',
       '::: warning ranui 处于 alpha 阶段',
       '版本以 `0.x-alpha` 发布，**其中会包含破坏性变更**——现阶段优先把设计做对，而不是保住 API 形状。',
       '请锁定确切版本，并在升级前先读本页。',
       ':::',
       '',
-      body,
+      cnBody,
       '',
       '## 工程记录',
       '',

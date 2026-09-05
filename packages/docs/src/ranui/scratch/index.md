@@ -71,8 +71,8 @@ Pointer coordinates are mapped through the canvas's actual drawing-buffer resolu
 A few device-specific edge cases are handled explicitly rather than left to whatever "unifying" mouse/touch/pen happens to do by default:
 
 - **Mouse**: only the primary (left) button starts a scratch; a right-click-drag or middle-click doesn't.
-- **Multi-touch**: the first finger down owns the stroke; a second finger touching mid-scratch is ignored until the first one lifts, instead of the two silently fighting over the same drawing state.
-- **Interrupted gestures**: if the OS reclaims pointer capture mid-drag without ever firing `pointerup` (seen on some Android WebViews when a system back-swipe gesture interrupts a scratch), a `lostpointercapture` listener resets the internal state anyway; otherwise the component would think it's still scratching and the next unrelated pointer movement would silently keep drawing.
+- **Multi-touch**: the first finger down controls the stroke; a second finger touching mid-scratch is ignored until the first one lifts, instead of both fingers writing to the same drawing state at once.
+- **Interrupted gestures**: if the OS reclaims pointer capture mid-drag without ever firing `pointerup` (seen on some Android WebViews when a system back-swipe gesture interrupts a scratch), a `lostpointercapture` listener resets the internal state anyway; otherwise the component's internal state would stay armed, and the next unrelated pointer movement would silently keep drawing.
 
 ### Canvas resolution
 

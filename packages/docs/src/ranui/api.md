@@ -601,7 +601,7 @@ Source: `components/token-meter/index.ts`
   - `used: number` — Tokens the next request will carry — the history, not the whole conversation.
 - **Events**: —
 - **Slots**: —
-- **Parts**: `fill`, `meter`, `text`, `track`
+- **Parts**: `meter`, `text`
 
 ## `<r-tool-card>`
 

@@ -1,6 +1,10 @@
 import componentCss from './index.less?inline';
-import { createRef, Div, Span } from '@/utils/builder';
+import { createRef, Div, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
+// The bar is an `<r-progress>`, so this entry registers that element too. Imported for the
+// side effect, the same way `r-colorpicker` pulls in the elements it nests.
+import '@/components/progress';
+import type { Progress } from '@/components/progress';
 import {
   ensureShadowRoot,
   getStringAttribute,
@@ -8,7 +12,7 @@ import {
   shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
-import { defineSSR } from '@/utils/ssr-registry';
+import { defineSSR, getSSRConstructor } from '@/utils/ssr-registry';
 
 /** How full the context window is. */
 export type TokenMeterLevel = 'ok' | 'warn' | 'over';
@@ -52,9 +56,28 @@ function short(tokens: number): string {
  * Attributes: `limit`, `used`, `spent`, `label`, `sheet`. `level` is set by the element and
  * writing it from outside is overwritten on the next update.
  */
+/**
+ * Creates the inner `<r-progress>`.
+ *
+ * In a browser this is an ordinary element that upgrades as soon as it is constructed,
+ * because this module imports the component. Under SSR the builder produces an inert mock,
+ * which would serialize as an empty `<r-progress>` tag with no bar inside it. Instantiating
+ * the registered SSR constructor instead gives the element its own shadow tree, which the
+ * serializer then walks like any other child.
+ *
+ * @returns The bar element.
+ */
+function createBar(): Progress {
+  if (typeof document === 'undefined') {
+    const Ctor = getSSRConstructor('r-progress');
+    if (Ctor) return new Ctor() as unknown as Progress;
+  }
+  return View('r-progress').build() as unknown as Progress;
+}
+
 export class TokenMeter extends RanElement {
   _shadowDom!: ShadowRoot;
-  _fill!: HTMLElement;
+  _bar!: Progress;
   _text!: HTMLElement;
   _root!: HTMLElement;
 
@@ -66,8 +89,18 @@ export class TokenMeter extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
-    const fill = createRef<HTMLDivElement>();
     const text = createRef<HTMLElement>();
+    const bar = createBar();
+    bar.setAttribute('class', 'ran-token-meter-bar');
+    bar.setAttribute('part', 'bar');
+    // `r-progress` draws the track and the fill, but both live in *its* shadow root, one
+    // level further in than `::part()` reaches. Re-exporting them keeps the element's
+    // published `track` and `fill` parts addressable from a page as they were before.
+    bar.setAttribute('exportparts', 'track, fill');
+    // One progressbar in the accessibility tree, not two nested ones: the role and the
+    // values are on `.ran-token-meter` below, which also carries the numbers as text.
+    bar.setAttribute('aria-hidden', 'true');
+
     const root = Div()
       .class('ran-token-meter')
       .attr('part', 'meter')
@@ -76,17 +109,13 @@ export class TokenMeter extends RanElement {
       .attr('role', 'progressbar')
       .attr('aria-valuemin', '0')
       .children(
-        Div()
-          .class('ran-token-meter-track')
-          .attr('part', 'track')
-          .children(Div().class('ran-token-meter-fill').ref(fill).attr('part', 'fill').build())
-          .build(),
+        bar as unknown as HTMLElement,
         Span().class('ran-token-meter-text').ref(text).attr('part', 'text').build(),
       )
       .build();
     this._shadowDom.appendChild(root);
     this._root = root;
-    this._fill = shadowPart(fill, 'fill');
+    this._bar = bar;
     this._text = shadowPart(text, 'text');
   }
 
@@ -160,6 +189,19 @@ export class TokenMeter extends RanElement {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
 
+  /**
+   * Renders before the SSR serializer walks this element.
+   *
+   * `_render` otherwise runs from `connectedCallback`, which never fires on the server, so
+   * the server-rendered meter was an empty track with no readout: the numbers appeared only
+   * once the client upgraded the element. The mock serializer calls this hook first, and
+   * then serializes the children, which is when the nested `r-progress` renders its own
+   * fill from the `percent` set here.
+   */
+  _preSerialize(): void {
+    this._render();
+  }
+
   // ── Internals ──────────────────────────────────────────────────────────
 
   /**
@@ -182,7 +224,10 @@ export class TokenMeter extends RanElement {
 
     // Capped at the track, because a bar wider than its track paints outside the rounded
     // corner; `title` and `aria-valuenow` still carry the real number.
-    this._fill.style.width = `${Math.min(100, ratio * 100)}%`;
+    this._bar.percent = String(Math.min(100, ratio * 100));
+    // With no limit there is no proportion to draw, only counts to read.
+    if (limit === 0) this._bar.setAttribute('hidden', '');
+    else this._bar.removeAttribute('hidden');
     this._root.setAttribute('aria-valuenow', String(used));
     this._root.setAttribute('aria-valuemax', String(limit === 0 ? used : limit));
 

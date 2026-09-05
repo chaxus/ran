@@ -17,7 +17,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 - 画中画（Picture-in-Picture）切换：只在浏览器真正支持时才渲染按钮
 - AirPlay / Remote Playback 投屏按钮：调用浏览器自带的设备选择器，用和画中画一样的方式做特性检测
 - 移动端手势：双击左/右半边快退/快进 10 秒，右半边竖向滑动调节音量（仅触摸生效；鼠标/触控笔交互不受影响）
-- 触摸、触控笔与鼠标均可拖动进度：进度点走同一条 Pointer Events 路径；若浏览器在手势中途收回指针，拖拽会直接释放，不会跳到观看者从未选定的位置
+- 触摸、触控笔与鼠标均可拖动进度：三者共用同一套 Pointer Events 实现；若浏览器在拖拽过程中收回指针，拖拽会直接结束且不触发跳转，因为指针并未停在观看者主动选定的位置上
 - 缩略图预览：把 `thumbnails` 设为 WebVTT 雪碧图 manifest 地址后，进度条悬停提示上方会出现裁剪后的预览图
 - `poster` / `autoplay` / `loop` / `muted`：标准 `<video>` 属性，直接透传
 - 字幕/CC：设置 `tracks` 属性，浏览器原生渲染字幕 cue，语言选择器会记住用户的选择
@@ -60,7 +60,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 | `thumbnails`          | `string`              | `''`    | WebVTT 雪碧图 manifest 的地址，在进度条悬停提示上方显示裁剪后的缩略图。详见下方[缩略图预览](#缩略图预览-thumbnails)。和 `src` 无关：只有这个属性本身变化时才会重新抓取。                                   |
 | `disable-error-modal` | `boolean`             | `false` | 关闭内置的错误 + 重试对话框，错误依然会通过 `error`/`sourceerror` 这两个 `change` 事件通知你，可以在此基础上搭建自己的 UI。                                                                                |
 | `remember-position`   | `boolean`             | `false` | 开启断点续播：`pause` 时和标签页切到后台时把当前播放位置存到 `localStorage`（按 `src` 区分），下次加载同一个 `src` 时恢复，播放结束后清除。                                                                |
-| `tracks`              | `PlayerTrackConfig[]` | `[]`    | 字幕/CC 轨道，**只有 JS 属性，没有对应的 HTML attribute**（播放器每次加载都会清空自己的 light DOM，声明式的 `<track>` 子标签活不下来）。详见下方[字幕/CC](#字幕-cc-tracks)。                               |
+| `tracks`              | `PlayerTrackConfig[]` | `[]`    | 字幕/CC 轨道，**只有 JS 属性，没有对应的 HTML attribute**（播放器每次加载都会清空自己的 light DOM，声明式写在里面的 `<track>` 子标签会在生效前就被清除）。详见下方[字幕/CC](#字幕-cc-tracks)。             |
 
 > 观察的属性列表（来自 `observedAttributes`）：`src`、`format`、`volume`、`currentTime`/`currenttime`、`playbackRate`/`playbackrate`、`debug`、`sheet`、`poster`、`thumbnails`、`autoplay`、`loop`、`muted`、`disable-error-modal`、`remember-position`。
 
@@ -159,11 +159,12 @@ sprites.jpg#xywh=160,0,160,90
 ### 字幕/CC `tracks`
 
 ```js
-const player = document.querySelector('r-player');
+const player = document.createElement('r-player');
 player.tracks = [
   { src: '/captions/en.vtt', srclang: 'en', label: 'English', default: true },
   { src: '/captions/fr.vtt', srclang: 'fr', label: 'Français' },
 ];
+stage.append(player);
 ```
 
 每一项会变成挂在原生 `<video>` 上的 `<track>`，字幕 cue 渲染完全交给浏览器，播放器不做任何自定义绘制。控制栏会出现一个语言选择器（一个 `<r-select>`，交互方式和清晰度选择器一样），包含 **Off** 加每条 track 一项；选择语言会存到 `localStorage`（全局偏好，不分视频），下次页面上任何拿到 `tracks` 的 `<r-player>` 都会自动应用；如果之前没存过，就回退到配置里 `default: true` 的那条。把 `tracks` 设为 `[]` 会移除语言选择器和所有轨道。`setSubtitleLanguage(lang)` 可以用代码方式设置当前语言（`lang` 是某条 track 的 `srclang`，或者 `'off'`）。
@@ -183,11 +184,12 @@ player.tracks = [
 ### QoE 埋点
 
 ```js
-const player = document.querySelector('r-player');
+const player = document.createElement('r-player');
 player.addEventListener('change', () => {
   console.log(player.getMetrics());
   // { rebufferCount, rebufferDuration, firstFrameMs, qualitySwitchCount, errorCount }
 });
+stage.append(player);
 ```
 
 `getMetrics()` 返回的是从下文记录的同一个 `change` 事件流派生出的普通对象快照，不需要额外开启任何跟踪：

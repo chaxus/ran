@@ -68,9 +68,11 @@ initTheme();
 | `change` | `{ theme: 'system' \| 'light' \| 'dark' }` | 用户选择主题时触发。冒泡并穿透 Shadow DOM。 |
 
 ```js
-document.querySelector('r-theme-switch').addEventListener('change', (e) => {
+const themeSwitch = document.createElement('r-theme-switch');
+themeSwitch.addEventListener('change', (e) => {
   console.log('当前主题', e.detail.theme);
 });
+toolbar.append(themeSwitch);
 ```
 
 ## 行为

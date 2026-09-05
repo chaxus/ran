@@ -59,7 +59,7 @@ servePrecache({ type: 'precache-models', cacheName: MODELS });
    weights. **`networkFirst` for anything that must reflect a deploy immediately**: HTML
    navigations, a manifest.
 2. **Neither strategy rejects.** A network failure with nothing cached resolves to a 408, so a
-   `respondWith` never blows up.
+   `respondWith` never throws.
 3. **The response is cloned synchronously, before the body is read.** Awaiting `caches.open()`
    first and cloning afterwards is the classic bug: by then the body may already be streaming
    to the page, and `clone()` throws.

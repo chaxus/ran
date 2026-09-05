@@ -599,7 +599,7 @@ description: ranui 的全部自定义元素 —— 40 个元素的属性、属�
   - `used: number` — Tokens the next request will carry — the history, not the whole conversation.
 - **事件**: —
 - **插槽**: —
-- **Part**: `fill`, `meter`, `text`, `track`
+- **Part**: `meter`, `text`
 
 ## `<r-tool-card>`
 
