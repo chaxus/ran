@@ -178,6 +178,42 @@ describe('r-disclosure-row contract', () => {
     expect(DISCLOSURE_TOGGLE).not.toBe('toggle');
   });
 
+  it('lets slotted markup replace the heading and summary text', () => {
+    // The attribute text is the slot's fallback, so a slot renders it exactly when nothing
+    // was assigned — no precedence rule in JavaScript to get wrong.
+    const row = document.createElement('r-disclosure-row') as DisclosureRow;
+    row.heading = 'plain';
+    const code = document.createElement('code');
+    code.slot = 'heading';
+    code.textContent = 'fetch()';
+    row.appendChild(code);
+    document.body.appendChild(row);
+
+    const shadow = (row as unknown as { _shadowDom: ShadowRoot })._shadowDom;
+    const slot = shadow.querySelector<HTMLSlotElement>('slot[name="heading"]')!;
+    expect(slot.assignedNodes()).toEqual([code]);
+    // The fallback still carries the attribute, and stops being rendered while the slot
+    // has content of its own.
+    expect(shadow.querySelector('.ran-disclosure-title-text')!.textContent).toBe('plain');
+  });
+
+  it('counts slotted content when deciding whether to draw the separator', () => {
+    const row = document.createElement('r-disclosure-row') as DisclosureRow;
+    document.body.appendChild(row);
+    const shadow = (row as unknown as { _shadowDom: ShadowRoot })._shadowDom;
+    const sep = shadow.querySelector<HTMLElement>('.ran-disclosure-sep')!;
+
+    const heading = document.createElement('code');
+    heading.slot = 'heading';
+    heading.textContent = 'only';
+    row.appendChild(heading);
+    // One half of the line is not two things to punctuate, however it was supplied.
+    expect(sep.hidden).toBe(true);
+
+    row.summary = 'and a summary';
+    expect(sep.hidden).toBe(false);
+  });
+
   it('carries an error tone the summary can be coloured by', () => {
     const { row } = mount();
     row.tone = 'error';

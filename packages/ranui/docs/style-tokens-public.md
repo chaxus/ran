@@ -311,11 +311,11 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `disclosure-row`
 
-- Tokens: 28
+- Tokens: 29
 - Parts: 7
 
 #### Tokens
-<!-- layers: semantic: 9 · internal: 19 -->
+<!-- layers: semantic: 9 · internal: 20 -->
 - `--ran-color-bg`
 - `--ran-color-bg-hover`
 - `--ran-color-danger`
@@ -342,6 +342,7 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-disclosure-transition`
 - `--ran-motion-ease-standard`
 - `--ran-radius-sm`
+- `--ran-size-7`
 - `--ran-space-2`
 - `--ran-text-copy-2`
 

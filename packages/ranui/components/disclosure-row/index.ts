@@ -71,6 +71,26 @@ let seq = 0;
  */
 const groups = new Map<string, Set<DisclosureRow>>();
 
+/**
+ * Whether anything was slotted into a slot.
+ *
+ * CSS has no way to ask this, and whitespace between tags is assigned to the slot like any
+ * other text, so a node counts only if it is an element or is not blank.
+ *
+ * Not `{ flatten: true }`: flattening substitutes a slot's *fallback* content when nothing
+ * was assigned, so every slot with a fallback — which is how `heading` and `summary` render
+ * their attribute text — would report itself as filled.
+ *
+ * @param slot The slot to inspect. Absent under SSR, where nothing is assigned yet.
+ * @returns Whether the slot has content of its own.
+ */
+function slotFilled(slot: HTMLSlotElement | undefined): boolean {
+  if (typeof slot?.assignedNodes !== 'function') return false;
+  return slot
+    .assignedNodes()
+    .some((node) => node.nodeType === Node.ELEMENT_NODE || (node.textContent ?? '').trim() !== '');
+}
+
 export class DisclosureRow extends RanElement {
   _events = new EventManager();
   _shadowDom!: ShadowRoot;
@@ -80,6 +100,10 @@ export class DisclosureRow extends RanElement {
   _summary!: HTMLElement;
   _sep!: HTMLElement;
   _leadingSlot!: HTMLSlotElement;
+  _headingSlot!: HTMLSlotElement;
+  _summarySlot!: HTMLSlotElement;
+  _titleText!: HTMLElement;
+  _summaryText!: HTMLElement;
   _body!: HTMLElement;
   _bodyInner!: HTMLElement;
   private _bodyId = `ran-disclosure-body-${(seq += 1)}`;
@@ -97,6 +121,10 @@ export class DisclosureRow extends RanElement {
     const summary = createRef<HTMLElement>();
     const sep = createRef<HTMLElement>();
     const leadingSlot = createRef<HTMLSlotElement>();
+    const headingSlot = createRef<HTMLSlotElement>();
+    const summarySlot = createRef<HTMLSlotElement>();
+    const titleText = createRef<HTMLElement>();
+    const summaryText = createRef<HTMLElement>();
     const body = createRef<HTMLDivElement>();
     const bodyInner = createRef<HTMLDivElement>();
     const root = Div()
@@ -140,9 +168,34 @@ export class DisclosureRow extends RanElement {
                   .build(),
               )
               .build(),
-            Span().class('ran-disclosure-title').ref(title).attr('part', 'title').build(),
+            // The attribute text is the slot's *fallback*, so slotted markup replaces it
+            // with no JavaScript and no precedence rule to get wrong: a slot renders its
+            // fallback exactly when nothing was assigned to it.
+            Span()
+              .class('ran-disclosure-title')
+              .ref(title)
+              .attr('part', 'title')
+              .children(
+                Slot()
+                  .ref(headingSlot)
+                  .attr('name', 'heading')
+                  .children(Span().class('ran-disclosure-title-text').ref(titleText).build())
+                  .build(),
+              )
+              .build(),
             Span().class('ran-disclosure-sep').ref(sep).attr('part', 'separator').attr('aria-hidden', 'true').build(),
-            Span().class('ran-disclosure-summary').ref(summary).attr('part', 'summary').build(),
+            Span()
+              .class('ran-disclosure-summary')
+              .ref(summary)
+              .attr('part', 'summary')
+              .children(
+                Slot()
+                  .ref(summarySlot)
+                  .attr('name', 'summary')
+                  .children(Span().class('ran-disclosure-summary-text').ref(summaryText).build())
+                  .build(),
+              )
+              .build(),
           )
           .build(),
         // Two elements, not one: the outer box animates `grid-template-rows`, and the
@@ -159,6 +212,10 @@ export class DisclosureRow extends RanElement {
     this._shadowDom.appendChild(root);
     this._root = root;
     this._leadingSlot = leadingSlot.current as HTMLSlotElement;
+    this._headingSlot = headingSlot.current as HTMLSlotElement;
+    this._summarySlot = summarySlot.current as HTMLSlotElement;
+    this._titleText = titleText.current as HTMLElement;
+    this._summaryText = summaryText.current as HTMLElement;
     this._body = body.current as HTMLElement;
     this._bodyInner = bodyInner.current as HTMLElement;
     this._row = shadowPart(row, 'row');
@@ -267,6 +324,10 @@ export class DisclosureRow extends RanElement {
     // A div with a button role does not get Enter and Space for free.
     this._events.on(this._row, 'keydown', this._keydown);
     this._events.on(this._leadingSlot, 'slotchange', this._syncLeading);
+    // Slotted heading/summary content decides whether the separator has two things to
+    // punctuate, so a change to either has to re-run `_sync`.
+    this._events.on(this._headingSlot, 'slotchange', this._syncFromSlot);
+    this._events.on(this._summarySlot, 'slotchange', this._syncFromSlot);
     this._join();
     this._syncLeading();
     this._sync();
@@ -367,20 +428,26 @@ export class DisclosureRow extends RanElement {
    * empty, so the answer is recorded as a class.
    */
   private _syncLeading = (): void => {
-    if (typeof this._leadingSlot?.assignedNodes !== 'function') return;
-    const filled = this._leadingSlot
-      .assignedNodes({ flatten: true })
-      .some((node) => node.nodeType === Node.ELEMENT_NODE || (node.textContent ?? '').trim() !== '');
-    this._root.classList.toggle('has-leading', filled);
+    this._root.classList.toggle('has-leading', slotFilled(this._leadingSlot));
+  };
+
+  /** Re-runs `_sync` when slotted content changes what the row is showing. */
+  private _syncFromSlot = (): void => {
+    this._sync();
   };
 
   private _sync(): void {
     const { heading, summary, expandable, open } = this;
-    this._title.textContent = heading;
-    this._summary.textContent = summary;
+    // Written to the slot's fallback, not to the wrapper: assigning `textContent` to the
+    // wrapper would delete the slot along with it.
+    this._titleText.textContent = heading;
+    this._summaryText.textContent = summary;
     // The dot is punctuation between two texts; with only one of them there is nothing to
-    // punctuate, and a row ending in a stray dot reads as truncated.
-    this._sep.hidden = summary === '' || heading === '';
+    // punctuate, and a row ending in a stray dot reads as truncated. Slotted content counts
+    // as one of the two, which is why this asks the slot rather than only the attribute.
+    const hasHeading = heading !== '' || slotFilled(this._headingSlot);
+    const hasSummary = summary !== '' || slotFilled(this._summarySlot);
+    this._sep.hidden = !hasHeading || !hasSummary;
     // Only a row with something to open is a control. Without a body it carries no role,
     // no tab stop and no expanded state: it is a line of text, and announcing it as a
     // button invites a press that does nothing.
