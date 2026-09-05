@@ -6,14 +6,14 @@
 
 ## API
 
-| Function | به چه دست می‌برد | بازگشت |
+| Function                     | به چه دست می‌برد                     | بازگشت        |
 | ---------------------------- | ------------------------------------ | ------------- |
-| `handleConsole(hook)` | `console.log/info/warn/error/assert` | `restore` |
-| `handleFetchHook(options)` | `window.fetch` | `restore` |
-| `handleXhrHook(options)` | `XMLHttpRequest#open` / `#send` | `restore` |
-| `handleError(hook)` | `error` و `unhandledrejection` | `unsubscribe` |
-| `handleClick(hook)` | کلیک‌های سند (مرحلهٔ گرفتن) | `unsubscribe` |
-| `replaceOld(obj, key, wrap)` | هر ویژگی روی هر شیء | `restore` |
+| `handleConsole(hook)`        | `console.log/info/warn/error/assert` | `restore`     |
+| `handleFetchHook(options)`   | `window.fetch`                       | `restore`     |
+| `handleXhrHook(options)`     | `XMLHttpRequest#open` / `#send`      | `restore`     |
+| `handleError(hook)`          | `error` و `unhandledrejection`       | `unsubscribe` |
+| `handleClick(hook)`          | کلیک‌های سند (مرحلهٔ گرفتن)          | `unsubscribe` |
+| `replaceOld(obj, key, wrap)` | هر ویژگی روی هر شیء                  | `restore`     |
 
 `handleFetchHook` و `handleXhrHook` مقدار `{ requestHook, responseHook, errorHook }` را می‌گیرند.
 

@@ -10,19 +10,19 @@ Nimm es fürs Scrollen, für Zeigerbewegungen und fürs Ziehen: für alles, was 
 
 #### Parameter
 
-| Parameter | Beschreibung | Typ | Standard |
-| --------- | --------------------- | ---------- | -------- |
-| `fn` | Zu drosselnde Funktion | `Function` | Erforderlich |
-| `delay` | Kleinster Abstand (ms) | `number` | `300` |
+| Parameter | Beschreibung           | Typ        | Standard     |
+| --------- | ---------------------- | ---------- | ------------ |
+| `fn`      | Zu drosselnde Funktion | `Function` | Erforderlich |
+| `delay`   | Kleinster Abstand (ms) | `number`   | `300`        |
 
 #### Rückgabe
 
 Eine gedrosselte Funktion, die das `this` und die Argumente der Aufrufstelle behält, dazu:
 
-| Element | Beschreibung | Typ |
-| ----------- | ---------------------------------- | --------------- |
-| `cancel()` | Verwirft den ausstehenden Aufruf der hinteren Flanke | `() => void` |
-| `pending()` | Ob ein Aufruf der hinteren Flanke wartet | `() => boolean` |
+| Element     | Beschreibung                                         | Typ             |
+| ----------- | ---------------------------------------------------- | --------------- |
+| `cancel()`  | Verwirft den ausstehenden Aufruf der hinteren Flanke | `() => void`    |
+| `pending()` | Ob ein Aufruf der hinteren Flanke wartet             | `() => boolean` |
 
 ## Beispiel
 

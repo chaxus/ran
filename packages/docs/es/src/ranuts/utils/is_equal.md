@@ -8,16 +8,16 @@ Compara en profundidad si dos valores son iguales, incluidos tipos complejos com
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| --------- | -------------------------------- | --------- |
+| Argumento | Descripción                    | Tipo      |
+| --------- | ------------------------------ | --------- |
 | `boolean` | Si los dos valores son iguales | `boolean` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | ----------------------- | ----- | -------- |
-| `value` | Primer valor a comparar | `any` | Obligatorio |
-| `other` | Segundo valor a comparar | `any` | Obligatorio |
+| Parámetro | Descripción              | Tipo  | Por defecto |
+| --------- | ------------------------ | ----- | ----------- |
+| `value`   | Primer valor a comparar  | `any` | Obligatorio |
+| `other`   | Segundo valor a comparar | `any` | Obligatorio |
 
 ## Ejemplo
 

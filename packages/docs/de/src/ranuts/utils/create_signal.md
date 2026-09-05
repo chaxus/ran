@@ -8,19 +8,19 @@ Ein Signal in seiner knappsten Form: `[lesen, schreiben]`, auf Wunsch mit einer 
 
 #### Parameter
 
-| Parameter | Beschreibung | Typ | Standard |
-| -------------------- | ---------------------------------------------------- | -------------------------------------------- | ----------- |
-| `value` | Anfangswert | `T` | Erforderlich |
-| `options.subscriber` | Name des Ereignisses; meldet Änderungen über `subscribers` | `string` | `undefined` |
-| `options.equals` | Wie entschieden wird, ob sich etwas geändert hat | `boolean \| ((prev: T, next: T) => boolean)` | `true` |
+| Parameter            | Beschreibung                                               | Typ                                          | Standard     |
+| -------------------- | ---------------------------------------------------------- | -------------------------------------------- | ------------ |
+| `value`              | Anfangswert                                                | `T`                                          | Erforderlich |
+| `options.subscriber` | Name des Ereignisses; meldet Änderungen über `subscribers` | `string`                                     | `undefined`  |
+| `options.equals`     | Wie entschieden wird, ob sich etwas geändert hat           | `boolean \| ((prev: T, next: T) => boolean)` | `true`       |
 
 Was `equals` bedeutet:
 
-| Wert | Verhalten |
-| ---------------- | ----------------------------------------------------------------- |
+| Wert                 | Verhalten                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------ |
 | weggelassen / `true` | `Object.is`: Gleichheit nach Referenz oder Wert (das übliche Verhalten von Signalen) |
-| `false` | Jedes Schreiben gilt als Änderung und meldet |
-| eine Funktion | `true` heißt „gleich, keine Meldung“ |
+| `false`              | Jedes Schreiben gilt als Änderung und meldet                                         |
+| eine Funktion        | `true` heißt „gleich, keine Meldung“                                                 |
 
 #### Rückgabe
 

@@ -8,10 +8,10 @@ Schickt Telemetrie-Beacons an deinen eigenen Endpunkt.
 
 Lege den Standard-Endpunkt einmal beim Start fest. Erlaubt ist eine URL als Zeichenkette oder ein Objekt:
 
-| Feld | Beschreibung | Typ |
-| -------------- | ----------------------------------------------------------- | -------- |
-| `url` | Standard-Endpunkt für jedes `report()` ohne eigene `url` | `string` |
-| `userIdCookie` | Cookie mit der Benutzer-ID, die `createData()` mitnimmt | `string` |
+| Feld           | Beschreibung                                             | Typ      |
+| -------------- | -------------------------------------------------------- | -------- |
+| `url`          | Standard-Endpunkt für jedes `report()` ohne eigene `url` | `string` |
+| `userIdCookie` | Cookie mit der Benutzer-ID, die `createData()` mitnimmt  | `string` |
 
 ### getReportUrl()
 

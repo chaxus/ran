@@ -6,14 +6,14 @@ Enganche-se em `console`, `fetch`, `XMLHttpRequest`, cliques e erros não captur
 
 ## API
 
-| Function | Instrumenta | Retorna |
-| ---------------------------- | ------------------------------------ | ------------- |
-| `handleConsole(hook)` | `console.log/info/warn/error/assert` | `restore` |
-| `handleFetchHook(options)` | `window.fetch` | `restore` |
-| `handleXhrHook(options)` | `XMLHttpRequest#open` / `#send` | `restore` |
-| `handleError(hook)` | `error` e `unhandledrejection` | `unsubscribe` |
-| `handleClick(hook)` | Cliques no documento (fase de captura) | `unsubscribe` |
-| `replaceOld(obj, key, wrap)` | Qualquer propriedade de qualquer objeto | `restore` |
+| Function                     | Instrumenta                             | Retorna       |
+| ---------------------------- | --------------------------------------- | ------------- |
+| `handleConsole(hook)`        | `console.log/info/warn/error/assert`    | `restore`     |
+| `handleFetchHook(options)`   | `window.fetch`                          | `restore`     |
+| `handleXhrHook(options)`     | `XMLHttpRequest#open` / `#send`         | `restore`     |
+| `handleError(hook)`          | `error` e `unhandledrejection`          | `unsubscribe` |
+| `handleClick(hook)`          | Cliques no documento (fase de captura)  | `unsubscribe` |
+| `replaceOld(obj, key, wrap)` | Qualquer propriedade de qualquer objeto | `restore`     |
 
 `handleFetchHook` e `handleXhrHook` recebem `{ requestHook, responseHook, errorHook }`.
 

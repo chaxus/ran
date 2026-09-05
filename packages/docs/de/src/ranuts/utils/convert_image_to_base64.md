@@ -8,23 +8,23 @@ Wandelt eine Bilddatei in eine Base64-kodierte Zeichenkette um.
 
 #### Rückgabe
 
-| Argument | Beschreibung | Typ |
-| ------------------------------------- | -------------------------------------- | --------- |
+| Argument                              | Beschreibung                                     | Typ       |
+| ------------------------------------- | ------------------------------------------------ | --------- |
 | `Promise<convertImageToBase64Return>` | Promise, das mit dem Ergebnisobjekt erfüllt wird | `Promise` |
 
 #### convertImageToBase64Return
 
-| Eigenschaft | Beschreibung | Typ |
-| --------- | ------------------ | ------------------------------- |
-| `success` | Ob es geklappt hat | `boolean` |
-| `data` | Die Base64-Daten | `string \| ArrayBuffer \| null` |
-| `message` | Fehlermeldung | `string` |
+| Eigenschaft | Beschreibung       | Typ                             |
+| ----------- | ------------------ | ------------------------------- |
+| `success`   | Ob es geklappt hat | `boolean`                       |
+| `data`      | Die Base64-Daten   | `string \| ArrayBuffer \| null` |
+| `message`   | Fehlermeldung      | `string`                        |
 
 #### Parameter
 
-| Parameter | Beschreibung | Typ | Standard |
-| --------- | ----------------- | ------ | -------- |
-| `file` | Das Bilddatei-Objekt | `File` | Erforderlich |
+| Parameter | Beschreibung         | Typ    | Standard     |
+| --------- | -------------------- | ------ | ------------ |
+| `file`    | Das Bilddatei-Objekt | `File` | Erforderlich |
 
 ## Beispiel
 

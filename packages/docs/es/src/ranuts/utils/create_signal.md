@@ -8,19 +8,19 @@ Una señal mínima: `[leer, escribir]`, con difusión opcional por el bus compar
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| -------------------- | ---------------------------------------------------- | -------------------------------------------- | ----------- |
-| `value` | Valor inicial | `T` | Obligatorio |
-| `options.subscriber` | Nombre del evento; al cambiar, avisa por `subscribers` | `string` | `undefined` |
-| `options.equals` | Cómo se decide si «ha cambiado» | `boolean \| ((prev: T, next: T) => boolean)` | `true` |
+| Parámetro            | Descripción                                            | Tipo                                         | Por defecto |
+| -------------------- | ------------------------------------------------------ | -------------------------------------------- | ----------- |
+| `value`              | Valor inicial                                          | `T`                                          | Obligatorio |
+| `options.subscriber` | Nombre del evento; al cambiar, avisa por `subscribers` | `string`                                     | `undefined` |
+| `options.equals`     | Cómo se decide si «ha cambiado»                        | `boolean \| ((prev: T, next: T) => boolean)` | `true`      |
 
 Qué significa `equals`:
 
-| Valor | Comportamiento |
-| ---------------- | ----------------------------------------------------------------- |
+| Valor            | Comportamiento                                                              |
+| ---------------- | --------------------------------------------------------------------------- |
 | omitido o `true` | `Object.is`: igualdad de referencia o de valor (lo habitual en las señales) |
-| `false` | Cada escritura cuenta como cambio y avisa |
-| una función | Devolver `true` significa «son iguales, no avises» |
+| `false`          | Cada escritura cuenta como cambio y avisa                                   |
+| una función      | Devolver `true` significa «son iguales, no avises»                          |
 
 #### Devuelve
 

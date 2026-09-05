@@ -6,14 +6,14 @@
 
 ## API
 
-| Function | 손대는 대상 | 반환값 |
+| Function                     | 손대는 대상                          | 반환값        |
 | ---------------------------- | ------------------------------------ | ------------- |
-| `handleConsole(hook)` | `console.log/info/warn/error/assert` | `restore` |
-| `handleFetchHook(options)` | `window.fetch` | `restore` |
-| `handleXhrHook(options)` | `XMLHttpRequest#open` / `#send` | `restore` |
-| `handleError(hook)` | `error`와 `unhandledrejection` | `unsubscribe` |
-| `handleClick(hook)` | document의 클릭(캡처 단계) | `unsubscribe` |
-| `replaceOld(obj, key, wrap)` | 아무 객체의 아무 속성 | `restore` |
+| `handleConsole(hook)`        | `console.log/info/warn/error/assert` | `restore`     |
+| `handleFetchHook(options)`   | `window.fetch`                       | `restore`     |
+| `handleXhrHook(options)`     | `XMLHttpRequest#open` / `#send`      | `restore`     |
+| `handleError(hook)`          | `error`와 `unhandledrejection`       | `unsubscribe` |
+| `handleClick(hook)`          | document의 클릭(캡처 단계)           | `unsubscribe` |
+| `replaceOld(obj, key, wrap)` | 아무 객체의 아무 속성                | `restore`     |
 
 `handleFetchHook`과 `handleXhrHook`은 `{ requestHook, responseHook, errorHook }`을 받습니다.
 

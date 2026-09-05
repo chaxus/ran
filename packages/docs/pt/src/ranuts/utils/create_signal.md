@@ -8,19 +8,19 @@ Um sinal mínimo: `[ler, escrever]`, com difusão opcional pelo barramento compa
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| -------------------- | ---------------------------------------------------- | -------------------------------------------- | ----------- |
-| `value` | Valor inicial | `T` | Obrigatório |
-| `options.subscriber` | Nome do evento; ao mudar, avisa pelo `subscribers` | `string` | `undefined` |
-| `options.equals` | Como se decide se «mudou» | `boolean \| ((prev: T, next: T) => boolean)` | `true` |
+| Parâmetro            | Descrição                                          | Tipo                                         | Padrão      |
+| -------------------- | -------------------------------------------------- | -------------------------------------------- | ----------- |
+| `value`              | Valor inicial                                      | `T`                                          | Obrigatório |
+| `options.subscriber` | Nome do evento; ao mudar, avisa pelo `subscribers` | `string`                                     | `undefined` |
+| `options.equals`     | Como se decide se «mudou»                          | `boolean \| ((prev: T, next: T) => boolean)` | `true`      |
 
 O que `equals` significa:
 
-| Valor | Comportamento |
-| ---------------- | ----------------------------------------------------------------- |
+| Valor             | Comportamento                                                          |
+| ----------------- | ---------------------------------------------------------------------- |
 | omitido ou `true` | `Object.is`: igualdade de referência ou de valor (o padrão dos sinais) |
-| `false` | Cada escrita conta como mudança e avisa |
-| uma função | Devolver `true` quer dizer «são iguais, não avise» |
+| `false`           | Cada escrita conta como mudança e avisa                                |
+| uma função        | Devolver `true` quer dizer «são iguais, não avise»                     |
 
 #### Retorna
 
