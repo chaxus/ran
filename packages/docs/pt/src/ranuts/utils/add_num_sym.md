@@ -8,16 +8,16 @@ Acrescenta o sinal (+ ou -) a um número.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| -------- | ----------------------- | -------- |
-| `string` | O número, como string, com o sinal | `string` |
+| Argumento | Descrição                          | Tipo     |
+| --------- | ---------------------------------- | -------- |
+| `string`  | O número, como string, com o sinal | `string` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | ------------------------------------- | ------------------ | -------- |
-| `value` | Número ou string a processar | `string \| number` | Obrigatório |
-| `flag` | Marcador de sinal (opcional, para forçá-lo) | `string \| number` | Opcional |
+| Parâmetro | Descrição                                   | Tipo               | Padrão      |
+| --------- | ------------------------------------------- | ------------------ | ----------- |
+| `value`   | Número ou string a processar                | `string \| number` | Obrigatório |
+| `flag`    | Marcador de sinal (opcional, para forçá-lo) | `string \| number` | Opcional    |
 
 ## Exemplo
 

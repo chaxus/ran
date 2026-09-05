@@ -8,21 +8,21 @@ Tira de uma string os espaços das pontas, a codificação de URL e as aspas.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| -------- | -------------- | -------- |
-| `string` | A string limpa | `string` |
+| Argumento | Descrição      | Tipo     |
+| --------- | -------------- | -------- |
+| `string`  | A string limpa | `string` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | --------------------- | ---------------- | -------- |
-| `str` | String que será limpa | `string` | Obrigatório |
-| `options` | Opções de configuração | `ClearStrOption` | `{}` |
+| Parâmetro | Descrição              | Tipo             | Padrão      |
+| --------- | ---------------------- | ---------------- | ----------- |
+| `str`     | String que será limpa  | `string`         | Obrigatório |
+| `options` | Opções de configuração | `ClearStrOption` | `{}`        |
 
 #### Opções
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| ------------ | ----------------------------- | --------- | ------- |
+| Parâmetro    | Descrição               | Tipo      | Padrão |
+| ------------ | ----------------------- | --------- | ------ |
 | `urlencoded` | Se a URL é decodificada | `boolean` | `true` |
 
 ## Exemplo

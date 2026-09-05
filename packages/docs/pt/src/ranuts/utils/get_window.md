@@ -8,16 +8,16 @@ Obtém o tamanho da janela visível, seja qual for o navegador.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| ------------- | ------------------ | ------------- |
+| Argumento     | Descrição                        | Tipo          |
+| ------------- | -------------------------------- | ------------- |
 | `ClientRatio` | O objeto com o tamanho da janela | `ClientRatio` |
 
 #### ClientRatio
 
-| Propriedade | Descrição | Tipo |
-| -------- | ---------------------- | -------- |
-| `width` | Largura da janela (pixels) | `number` |
-| `height` | Altura da janela (pixels) | `number` |
+| Propriedade | Descrição                  | Tipo     |
+| ----------- | -------------------------- | -------- |
+| `width`     | Largura da janela (pixels) | `number` |
+| `height`    | Altura da janela (pixels)  | `number` |
 
 #### Parâmetros
 

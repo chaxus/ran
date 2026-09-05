@@ -8,15 +8,15 @@ Função hash MD5: converte uma string no seu valor MD5 (uma string hexadecimal)
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| -------- | ----------------------------------- | -------- |
-| `string` | O valor MD5 (string hexadecimal) | `string` |
+| Argumento | Descrição                        | Tipo     |
+| --------- | -------------------------------- | -------- |
+| `string`  | O valor MD5 (string hexadecimal) | `string` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | -------------- | -------- | -------- |
-| `str` | String a que se aplica o hash | `string` | Obrigatório |
+| Parâmetro | Descrição                     | Tipo     | Padrão      |
+| --------- | ----------------------------- | -------- | ----------- |
+| `str`     | String a que se aplica o hash | `string` | Obrigatório |
 
 ## Exemplo
 
