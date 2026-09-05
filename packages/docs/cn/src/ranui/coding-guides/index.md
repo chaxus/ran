@@ -152,6 +152,7 @@ input.addEventListener('input', (event) => {
 ```
 
 ## 框架接入 {#framework-integration}
+
 它们就是标准的自定义元素，不需要任何框架专属的东西，但有三个细节容易踩坑：
 
 - **React**（< 19）会把 JSX 上的每个 prop 都当作 **attribute** 设置，所以复杂值传不进去，`onChange`
@@ -166,6 +167,7 @@ input.addEventListener('input', (event) => {
 TypeScript 用户可以 `import 'ranui/typings'` 获得 JSX 内置元素声明。
 
 ## 服务端渲染 {#server-rendering}
+
 ranui 组件可以序列化成**声明式 Shadow DOM**，服务端因此能直接输出真实标记，JS 还没执行时首屏就已经是正确的：
 
 ```js

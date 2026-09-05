@@ -37,18 +37,12 @@ import Loading from '../../../../vue/loading.vue'
 
 将 `name` 设置为内置动画类型之一。任何无法识别的值都不会渲染任何内容（只有下面列表中的名称会被处理）。
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="double-bounce"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="rotate"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-     <r-loading name="stretch"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-     <r-loading name="cube"></r-loading>
-</div>
+<Demo>
+  <r-loading name="double-bounce"></r-loading>
+  <r-loading name="rotate"></r-loading>
+  <r-loading name="stretch"></r-loading>
+  <r-loading name="cube"></r-loading>
+</Demo>
 
 ```html
 <r-loading name="double-bounce"></r-loading>
@@ -132,12 +126,10 @@ r-loading {
 
 ### 实际示例
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="circle" style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="rotate" style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"></r-loading>
-</div>
+<Demo>
+  <r-loading name="circle" style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"></r-loading>
+  <r-loading name="rotate" style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"></r-loading>
+</Demo>
 
 ```html
 <r-loading

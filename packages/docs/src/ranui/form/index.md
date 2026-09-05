@@ -69,7 +69,7 @@ const data = serializeForm(document.querySelector('form'));
 fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 ```
 
-## Layout
+## Layout {#layout}
 
 Fields have no default form-level layout: style your own `<form>` with plain CSS:
 

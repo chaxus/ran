@@ -116,6 +116,7 @@ detail: {
 | （默认） | 复选框的标签，渲染在方框旁 |
 
 ## 表单关联 {#form-association}
+
 `r-checkbox` 是一个表单关联自定义元素（`formAssociated = true`）。它通过 `ElementInternals.setFormValue` 上报选中状态，因此只要是原生 `<form>` 的真实子孙元素，就能参与原生表单，并被 `new FormData(form)` 收集到。遵循原生 checkbox 的语义，只有选中时才会贡献自己的 `value`。
 
 宿主元素本身携带无障碍语义：`role="checkbox"`、`aria-checked`、`aria-disabled`，并支持键盘操作（Space 或 Enter 切换）。

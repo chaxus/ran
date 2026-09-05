@@ -65,7 +65,7 @@ const data = serializeForm(document.querySelector('form'));
 fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 ```
 
-## 布局
+## 布局 {#layout}
 
 字段没有默认的表单级布局，用普通 CSS 给你自己的 `<form>` 设置样式即可：
 
