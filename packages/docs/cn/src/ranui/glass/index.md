@@ -133,6 +133,12 @@ description: '液态磨砂玻璃表面：backdrop 模糊、SVG 液态光线弯�
 | `--ran-glass-reduced-transparency-background` | 系统"降低透明度"开启时的兜底背景。 |
 | `--ran-glass-reduced-transparency-shadow`     | 同一状态下的兜底阴影。             |
 
+```css
+r-glass::part(glass) {
+  --ran-glass-tint: linear-gradient(135deg, rgba(0, 0, 0, 0.2), transparent);
+}
+```
+
 ## 说明
 
 - **背景采样**：`<r-glass>` 通过 `backdrop-filter` 折射它背后的 DOM，因此背后可选中的文字、正在播放的视频、可交互元素都照常可用。上面的 `rim` 是一个只根据面板自身形状计算的纯装饰 GPU 层，不采样背景。
