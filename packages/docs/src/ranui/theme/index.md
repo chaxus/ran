@@ -87,6 +87,7 @@ Two consequences worth knowing:
   switches. ranui's components deliberately don't; yours shouldn't either.
 
 ## Customizing tokens {#customizing-tokens}
+
 ### At runtime (JS)
 
 ```js

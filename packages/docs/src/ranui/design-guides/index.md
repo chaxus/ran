@@ -124,6 +124,7 @@ site once. Match `closing` as well as `open`: the mask keeps painting for the le
 transition after `open` is removed.
 
 ## Motion {#motion}
+
 The bigger the change, the more time it gets; below that threshold, don't animate. Hover and
 active feedback is ~150ms, menus ~200ms, dialogs ~300ms, and a change that is already obvious
 gets 0ms. Respect `prefers-reduced-motion`.
@@ -155,6 +156,7 @@ Copy is part of the system too:
   labelled "Delete project permanently, forever".
 
 ## Accessibility {#accessibility}
+
 - Meet **WCAG AA** contrast for text against its background.
 - **Never signal state with color alone**: pair it with an icon, a label or text.
 - Every interactive element keeps a **visible focus ring** (`--ran-focus-ring`, or

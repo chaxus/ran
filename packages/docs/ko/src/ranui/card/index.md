@@ -4,7 +4,7 @@ description: '머리말·본문·바닥글 영역을 갖춘 구조화된 콘텐�
 
 # Card
 
-머리말·본문·바닥글 영역을 갖추고 관련 있는 내용을 묶는 구조화된 콘텐츠 컨테이너입니다. 카드는 Geist 스타일의 테두리 표면(페이지 배경에 1px 테두리이지, 회색 채움이 아닙니다)이며, `hoverable`을 직접 켜지 않는 한 마우스를 올려도 반응하지 않습니다.
+머리말·본문·바닥글 영역을 갖추고 관련 있는 내용을 묶는 구조화된 콘텐츠 컨테이너입니다. 카드는 Geist 스타일의 테두리 표면 (페이지 배경에 1px 테두리이지, 회색 채움이 아닙니다) 이며, `hoverable`을 직접 켜지 않는 한 마우스를 올려도 반응하지 않습니다.
 
 > **이럴 때 쓰세요.** 관련 있는 내용을 제목·설명·본문·바닥글 영역을 갖춘 테두리 표면으로 묶어야 할 때. `<r-card>`는 그 슬롯들과 함께 선택적인 `hoverable` 상호작용 상태를 제공합니다.
 
@@ -37,7 +37,7 @@ description: '머리말·본문·바닥글 영역을 갖춘 구조화된 콘텐�
 | `heading`     | `string`  | `''`    | 카드 제목. 머리말 맨 위에 나옵니다. 비면 숨겨집니다.              |
 | `description` | `string`  | `''`    | 제목 아래에 그려지는 부제. 비면 숨겨집니다.                       |
 | `hoverable`   | `boolean` | `false` | 상호작용 카드. 마우스를 올리면 테두리가 짙어지고 살짝 떠오릅니다. |
-| `sheet`       | `string`  | `''`    | 카드의 섀도 DOM에 주입할 CSS.                                     |
+| `sheet`       | `string`  | `''`    | 카드의 섀도 DOM 에 주입할 CSS.                                    |
 
 ### 제목 `heading`
 
@@ -73,7 +73,7 @@ description: '머리말·본문·바닥글 영역을 갖춘 구조화된 콘텐�
 
 ### 상호작용 카드 `hoverable`
 
-카드는 기본적으로 마우스에 반응하지 않습니다. 실제로 클릭되는 카드에만 `hoverable` 어트리뷰트를 붙이세요. 마우스를 올리면 테두리가 회색 사다리에서 한 단계 짙어지고(`--ran-color-border` → `--ran-color-border-hover`) 표면이 조용한 떠오름 그림자(`--ran-shadow-elevated`)를 입습니다.
+카드는 기본적으로 마우스에 반응하지 않습니다. 실제로 클릭되는 카드에만 `hoverable` 어트리뷰트를 붙이세요. 마우스를 올리면 테두리가 회색 사다리에서 한 단계 짙어지고 (`--ran-color-border` → `--ran-color-border-hover`) 표면이 조용한 떠오름 그림자 (`--ran-shadow-elevated`) 를 입습니다.
 
 <Demo>
   <r-card hoverable heading="호버되는 카드" description="마우스를 올려 보세요" style="max-width: 360px; cursor: pointer;">
@@ -91,7 +91,7 @@ description: '머리말·본문·바닥글 영역을 갖춘 구조화된 콘텐�
 
 ### 외부 스타일 `sheet`
 
-카드의 섀도 DOM에 주입하는 CSS로, 다른 모든 ranui 컴포넌트와 같은 `sheet` 관례를 따릅니다.
+카드의 섀도 DOM 에 주입하는 CSS 로, 다른 모든 ranui 컴포넌트와 같은 `sheet` 관례를 따릅니다.
 
 ```html
 <r-card heading="테마를 입힌 카드" sheet=".ran-card { background: #f6ffed; }">
@@ -111,15 +111,15 @@ description: '머리말·본문·바닥글 영역을 갖춘 구조화된 콘텐�
 
 카드는 바깥에서 스타일을 주도록 다음 `::part()` 고리를 공개합니다.
 
-| Part          | 설명                        |
-| ------------- | --------------------------- |
-| `card`        | 카드의 바깥 컨테이너.       |
-| `header`      | 머리말 줄.                  |
-| `title`       | 제목 텍스트.                |
-| `description` | 부제 텍스트.                |
-| `extra`       | 머리말의 `extra` 슬롯.      |
-| `body`        | 본문 영역(기본 슬롯).       |
-| `footer`      | 바닥글 영역(`footer` 슬롯). |
+| Part          | 설명                         |
+| ------------- | ---------------------------- |
+| `card`        | 카드의 바깥 컨테이너.        |
+| `header`      | 머리말 줄.                   |
+| `title`       | 제목 텍스트.                 |
+| `description` | 부제 텍스트.                 |
+| `extra`       | 머리말의 `extra` 슬롯.       |
+| `body`        | 본문 영역 (기본 슬롯).       |
+| `footer`      | 바닥글 영역 (`footer` 슬롯). |
 
 덮어쓸 수 있는 CSS 변수: `--ran-card-display`, `--ran-card-min-height`, `--ran-card-gap`, `--ran-card-padding`, `--ran-card-radius`, `--ran-card-background`, `--ran-card-border-color`, `--ran-card-shadow`, `--ran-card-hover-border-color`, `--ran-card-hover-shadow`(뒤의 둘은 `hoverable`일 때 적용), `--ran-card-title-color`, `--ran-card-title-font-size`, `--ran-card-title-font-weight`, `--ran-card-description-color`, `--ran-card-description-font-size`.
 

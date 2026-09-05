@@ -1,12 +1,12 @@
 ---
-description: 'ranui의 Preview(<r-preview>)는 docx, pptx, pdf, xlsx 파일을 브라우저 안에서 온라인으로 미리 봅니다.'
+description: 'ranui 의 Preview(<r-preview>) 는 docx, pptx, pdf, xlsx 파일을 브라우저 안에서 온라인으로 미리 봅니다.'
 ---
 
 # Preview
 
 `docx`, `pptx`, `pdf`, `xlsx` 파일을 위한 온라인 미리보기 컴포넌트입니다.
 
-> **이럴 때 쓰세요.** `docx`, `pptx`, `pdf`, `xlsx` 파일을 브라우저에서 미리 봐야 할 때. `<r-preview>`는 파일 URL로 문서 미리보기 모달을 엽니다(지금은 독립 패키지 `@ranui/preview`로 배포됩니다).
+> **이럴 때 쓰세요.** `docx`, `pptx`, `pdf`, `xlsx` 파일을 브라우저에서 미리 봐야 할 때. `<r-preview>`는 파일 URL 로 문서 미리보기 모달을 엽니다 (지금은 독립 패키지 `@ranui/preview`로 배포됩니다).
 
 > ⚠️ **중요 공지**: 0.1.10-alpha-27 버전 이후로 ranui 패키지는 이 컴포넌트를 제공하지 않습니다. 독립 패키지 [@ranui/preview](https://www.npmjs.com/package/@ranui/preview)로 옮겨 주세요.
 
@@ -65,7 +65,7 @@ npm install ranui
 
 ### 파일 위치 `src`
 
-파일 URL을 지정하면 미리보기 모달이 열립니다. 값이 비어 있으면 열리지 않습니다.
+파일 URL 을 지정하면 미리보기 모달이 열립니다. 값이 비어 있으면 열리지 않습니다.
 
 ```html
 <r-preview src="https://example.com/document.docx"></r-preview>
