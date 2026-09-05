@@ -122,17 +122,19 @@ Source: `components/conversation/index.ts`
 
 Source: `components/disclosure-row/index.ts`
 
-- **Attributes**: `busy: boolean`, `expandable: boolean`, `heading: string`, `open: boolean`, `sheet: string`, `summary: string`, `tone: string`
+- **Attributes**: `busy: boolean`, `expandable: boolean`, `heading: string`, `name: string`, `open: boolean`, `sheet: string`, `summary: string`, `tone: string`
 - **Properties**:
   - `busy: boolean` — Whether the work this row stands for is still running.
   - `expandable: boolean` — Whether the row has a body worth opening.
   - `heading: string` — The fixed-width left half of the line.
+  - `name: string` — Groups rows so that opening one closes the rest.
   - `open: boolean` — Whether the body is shown.
   - `sheet: string`
   - `summary: string` — The truncating right half. Empty drops the separator with it.
   - `tone: string` — `error` colours the summary; anything else is the ordinary tone.
 - **Events**:
-  - `disclosuretoggle` · bubbles, composed
+  - `disclosurebeforetoggle` · bubbles, composed, cancelable · detail `{ open }`
+  - `disclosuretoggle` · bubbles, composed · detail `{ open }`
 - **Slots**: `default`, `leading (named)`
 - **Parts**: `body`, `disclosure`, `leading`, `row`, `separator`, `summary`, `title`
 

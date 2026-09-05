@@ -70,6 +70,7 @@ description: 'ranui DisclosureRow（<r-disclosure-row>）是一行「标题 · �
 | `expandable` | `expandable` | `boolean` | `false` | 这一行是否有值得展开的正文。                             |
 | `busy`       | `busy`       | `boolean` | `false` | 这一行代表的工作是否仍在进行。                           |
 | `tone`       | `tone`       | `string`  | `''`    | `error` 会把摘要染成错误色，其余为普通色调。             |
+| `name`       | `name`       | `string`  | `''`    | 把若干行归为一组，展开一行时收起同组其余行。             |
 | `sheet`      | `sheet`      | `string`  | `''`    | 注入 shadow root 的 CSS。                                |
 
 ::: warning 属性名是 `heading`，不是 `title`
@@ -80,9 +81,10 @@ description: 'ranui DisclosureRow（<r-disclosure-row>）是一行「标题 · �
 
 ### 事件
 
-| 事件               | detail | 派发选项          | 说明               |
-| ------------------ | ------ | ----------------- | ------------------ |
-| `disclosuretoggle` | —      | bubbles, composed | 该行被展开或收起。 |
+| 事件                     | detail              | 派发选项                      | 说明                   |
+| ------------------------ | ------------------- | ----------------------------- | ---------------------- |
+| `disclosurebeforetoggle` | `{ open: boolean }` | bubbles, composed, cancelable | 该行即将被展开或收起。 |
+| `disclosuretoggle`       | `{ open: boolean }` | bubbles, composed             | 该行已被展开或收起。   |
 
 ::: warning 事件名是 `disclosuretoggle`，不是 `toggle`
 `toggle` 是 `<details>` 派发的原生事件，它的 `ToggleEvent` 带的是 `oldState` / `newState`，而不是
@@ -94,6 +96,42 @@ row.addEventListener('disclosuretoggle', () => {
   console.log(row.open ? '已展开' : '已收起');
 });
 ```
+
+`disclosurebeforetoggle` 先触发，并且可以被拒绝。「第一次展开时才去拉取正文」「有未保存的修改时不许
+收起」这两件事都要靠它。平台本身没有对应能力：`<details>` 只有事后的 `toggle`，给它加可取消的
+`beforetoggle` 的提案至今还没落地。
+
+```js
+row.addEventListener('disclosurebeforetoggle', async (event) => {
+  if (!event.detail.open || row.dataset.loaded) return;
+  event.preventDefault(); // 正文到位之前先按住不展开
+  row.append(await fetchBody());
+  row.dataset.loaded = 'true';
+  row.open = true;
+});
+```
+
+只有点击或按键才会触发它。`row.open = true` 这种程序化修改是应用自己改主意，没有谁需要被征求意见。
+
+### 同时只展开一行
+
+`name` 的分组方式和 `<details>` 的 `name` 一致：展开一行会收起同组其余行。分组范围是整个文档，同组的
+行不必相邻。
+
+```html
+<r-disclosure-row name="run" heading="Install" expandable>…</r-disclosure-row>
+<r-disclosure-row name="run" heading="Build" expandable>…</r-disclosure-row>
+<r-disclosure-row name="run" heading="Test" expandable>…</r-disclosure-row>
+```
+
+### 无障碍
+
+只有确实能展开的行才是控件。带 `expandable` 时，该行会有 `role="button"`、一个 Tab 停靠点、
+`aria-expanded`，以及指向正文的 `aria-controls`；不带时这些一个都没有，因为把一行纯文本报成按钮，
+只会引来一次什么都不会发生的点击。`busy` 会写上 `aria-busy`，这样那道扫光就不是唯一的进行中信号。
+
+收起时正文是被裁切而不是被移除，这样才能做动画。同时它会被标记为 `inert`，内容用
+`content-visibility: hidden` 跳过渲染，因此收起期间既不在 Tab 顺序里，也不占渲染开销。
 
 ### 插槽
 

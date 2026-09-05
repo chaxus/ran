@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { DISCLOSURE_TOGGLE, DisclosureRow } from '@/components/disclosure-row';
+import { DISCLOSURE_BEFORE_TOGGLE, DISCLOSURE_TOGGLE, DisclosureRow } from '@/components/disclosure-row';
 import '@/components/disclosure-row';
 
 /**
@@ -50,10 +50,35 @@ describe('r-disclosure-row contract', () => {
     expect(sep.hidden).toBe(true);
   });
 
-  it('uses a real button, so the row is keyboard reachable', () => {
-    const { button } = mount();
-    expect(button.tagName).toBe('BUTTON');
-    expect(button.getAttribute('type')).toBe('button');
+  it('is only a control when there is something to open', () => {
+    // A row with no body is a line of text. Shipping it as a disabled button put a tab
+    // stop on something that does nothing when pressed.
+    const { row, button } = mount();
+    expect(button.getAttribute('role')).toBeNull();
+    expect(button.getAttribute('tabindex')).toBeNull();
+    expect(button.getAttribute('aria-expanded')).toBeNull();
+
+    row.expandable = true;
+    expect(button.getAttribute('role')).toBe('button');
+    expect(button.tabIndex).toBe(0);
+  });
+
+  it('ties the control to the body it controls', () => {
+    const { row, button } = mount();
+    row.expandable = true;
+    const body = (row as unknown as { _body: HTMLElement })._body;
+    expect(body.id).not.toBe('');
+    expect(button.getAttribute('aria-controls')).toBe(body.id);
+  });
+
+  it('opens from the keyboard, since a div gets no activation for free', () => {
+    const { row, button } = mount();
+    row.expandable = true;
+    for (const key of ['Enter', ' ']) {
+      const before = row.open;
+      button.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+      expect(row.open).toBe(!before);
+    }
   });
 
   it('opens on activation and announces it', () => {
@@ -80,14 +105,71 @@ describe('r-disclosure-row contract', () => {
     expect(listener).not.toHaveBeenCalled();
   });
 
-  it('says whether it is expanded, and says when it cannot be', () => {
+  it('says whether it is expanded', () => {
     const { row, button } = mount();
-    expect(button.getAttribute('aria-disabled')).toBe('true');
     row.expandable = true;
-    expect(button.getAttribute('aria-disabled')).toBeNull();
     expect(button.getAttribute('aria-expanded')).toBe('false');
     row.open = true;
     expect(button.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('states that it is busy, not only draws it', () => {
+    // The sweep is the only signal the work is still running, and it is a visual one.
+    const { row, button } = mount();
+    expect(button.getAttribute('aria-busy')).toBeNull();
+    row.busy = true;
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    row.busy = false;
+    expect(button.getAttribute('aria-busy')).toBeNull();
+  });
+
+  it('lets a listener refuse the toggle before it happens', () => {
+    const { row, button } = mount();
+    row.expandable = true;
+    const after = vi.fn();
+    row.addEventListener(DISCLOSURE_BEFORE_TOGGLE, (event) => event.preventDefault());
+    row.addEventListener(DISCLOSURE_TOGGLE, after);
+
+    button.click();
+    expect(row.open).toBe(false);
+    expect(after).not.toHaveBeenCalled();
+  });
+
+  it('announces the state it is about to move to', () => {
+    const { row, button } = mount();
+    row.expandable = true;
+    const before = vi.fn();
+    row.addEventListener(DISCLOSURE_BEFORE_TOGGLE, before);
+    button.click();
+    expect((before.mock.calls[0][0] as CustomEvent).detail).toEqual({ open: true });
+  });
+
+  it('opens one row at a time within a name group', () => {
+    // Same contract as `<details name>`: document-wide, and members need not be siblings.
+    const a = document.createElement('r-disclosure-row') as DisclosureRow;
+    const b = document.createElement('r-disclosure-row') as DisclosureRow;
+    for (const el of [a, b]) {
+      el.expandable = true;
+      el.name = 'group';
+      document.body.appendChild(el);
+    }
+
+    a.open = true;
+    expect([a.open, b.open]).toEqual([true, false]);
+    b.open = true;
+    expect([a.open, b.open]).toEqual([false, true]);
+  });
+
+  it('leaves ungrouped rows alone', () => {
+    const a = document.createElement('r-disclosure-row') as DisclosureRow;
+    const b = document.createElement('r-disclosure-row') as DisclosureRow;
+    for (const el of [a, b]) {
+      el.expandable = true;
+      document.body.appendChild(el);
+    }
+    a.open = true;
+    b.open = true;
+    expect([a.open, b.open]).toEqual([true, true]);
   });
 
   it('names its event apart from the platform one', () => {

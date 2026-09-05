@@ -193,10 +193,6 @@
         <p>{{ f.desc }}</p>
       </div>
     </section>
-
-    <footer class="closing reveal" data-reveal>
-      <span>{{ t.closing }}</span>
-    </footer>
   </div>
 </template>
 
@@ -467,7 +463,6 @@ const en = {
     },
     { kind: 'i18n', title: 'Bilingual', desc: 'Every page maintained in English and 简体中文.' },
   ],
-  closing: 'If you want to go fast, go alone. If you want to go far, go together.',
 };
 
 const cn = {
@@ -582,7 +577,6 @@ const cn = {
     { kind: 'pwa', title: '可安装 · 离线', desc: '文档本身就是一个 PWA，带自己的 Service Worker。' },
     { kind: 'i18n', title: '双语维护', desc: '每一页都同时维护英文与简体中文。' },
   ],
-  closing: '一个人可以走得很快，一群人可以走得更远。',
 };
 
 const t = computed(() => (isCN.value ? cn : en));
@@ -1304,17 +1298,6 @@ const wordIndex = (li: number, wi: number): number => {
   font-size: 13px;
   line-height: 1.55;
   color: var(--vp-c-text-2);
-}
-
-/* ---------- closing ---------- */
-.closing {
-  margin-top: clamp(80px, 11vw, 120px);
-  text-align: center;
-}
-.closing span {
-  font-size: 15px;
-  font-style: italic;
-  color: var(--vp-c-text-3);
 }
 
 /* ---------- responsive ---------- */

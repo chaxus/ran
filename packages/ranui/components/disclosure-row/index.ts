@@ -1,5 +1,5 @@
 import componentCss from './index.less?inline';
-import { ButtonBuilder, createRef, Div, EventManager, Slot, Span, View } from '@/utils/builder';
+import { createRef, Div, EventManager, Slot, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
@@ -9,6 +9,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
+import { isActivationKey } from '@/utils/a11y';
 
 /**
  * `<r-disclosure-row>` — the one-line summary row a run of them reads as a list.
@@ -43,6 +44,33 @@ import { defineSSR } from '@/utils/ssr-registry';
  */
 export const DISCLOSURE_TOGGLE = 'disclosuretoggle';
 
+/**
+ * Name of the event a row fires *before* it opens or closes.
+ *
+ * Cancelable: `event.preventDefault()` leaves the row as it was. That is what makes
+ * "fetch the body the first time it is opened" and "refuse to collapse while an edit is
+ * unsaved" expressible. The platform has no equivalent — `<details>` fires only the
+ * after-the-fact `toggle`, and the request for a cancelable `beforetoggle` on it is still
+ * open (whatwg/html#9743) — so this fills a real gap rather than duplicating one.
+ *
+ * Only a press fires it. A programmatic `row.open = true` is the application changing its
+ * own mind, and there is nobody for it to ask.
+ *
+ * @fires disclosurebeforetoggle - The row is about to be expanded or collapsed.
+ */
+export const DISCLOSURE_BEFORE_TOGGLE = 'disclosurebeforetoggle';
+
+/** Distinguishes one row's body from another's, for `aria-controls`. */
+let seq = 0;
+
+/**
+ * Rows sharing a `name`, so opening one can close the rest.
+ *
+ * Keyed by name and holding connected rows only, which is what `<details name>` does: the
+ * group is document-wide and the members do not have to be siblings.
+ */
+const groups = new Map<string, Set<DisclosureRow>>();
+
 export class DisclosureRow extends RanElement {
   _events = new EventManager();
   _shadowDom!: ShadowRoot;
@@ -52,31 +80,38 @@ export class DisclosureRow extends RanElement {
   _summary!: HTMLElement;
   _sep!: HTMLElement;
   _leadingSlot!: HTMLSlotElement;
+  _body!: HTMLElement;
   _bodyInner!: HTMLElement;
+  private _bodyId = `ran-disclosure-body-${(seq += 1)}`;
 
   static get observedAttributes(): string[] {
-    return ['open', 'expandable', 'heading', 'summary', 'tone', 'busy', 'sheet'];
+    return ['open', 'expandable', 'heading', 'summary', 'tone', 'busy', 'name', 'sheet'];
   }
 
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
-    const row = createRef<HTMLButtonElement>();
+    const row = createRef<HTMLDivElement>();
     const title = createRef<HTMLElement>();
     const summary = createRef<HTMLElement>();
     const sep = createRef<HTMLElement>();
     const leadingSlot = createRef<HTMLSlotElement>();
+    const body = createRef<HTMLDivElement>();
     const bodyInner = createRef<HTMLDivElement>();
     const root = Div()
       .class('ran-disclosure')
       .attr('part', 'disclosure')
       .children(
-        ButtonBuilder()
+        // A div, not a button. `expandable` is what decides whether this row is a control:
+        // a row with no body is a line of text, and shipping it as a disabled button put a
+        // tab stop on something that does nothing when pressed. `_sync` adds the button
+        // role, the tab stop and the keyboard handling when there is something to open —
+        // the same arrangement `r-button` uses.
+        Div()
           .class('ran-disclosure-row')
           .ref(row)
           .attr('part', 'row')
-          .attr('type', 'button')
           .children(
             Span()
               .class('ran-disclosure-leading')
@@ -115,6 +150,8 @@ export class DisclosureRow extends RanElement {
         Div()
           .class('ran-disclosure-body')
           .attr('part', 'body')
+          .id(this._bodyId)
+          .ref(body)
           .children(Div().class('ran-disclosure-body-inner').ref(bodyInner).children(Slot().build()).build())
           .build(),
       )
@@ -122,6 +159,7 @@ export class DisclosureRow extends RanElement {
     this._shadowDom.appendChild(root);
     this._root = root;
     this._leadingSlot = leadingSlot.current as HTMLSlotElement;
+    this._body = body.current as HTMLElement;
     this._bodyInner = bodyInner.current as HTMLElement;
     this._row = shadowPart(row, 'row');
     this._title = shadowPart(title, 'title');
@@ -201,6 +239,19 @@ export class DisclosureRow extends RanElement {
     setStringAttribute(this, 'tone', value);
   }
 
+  /**
+   * Groups rows so that opening one closes the rest.
+   *
+   * Same contract as `<details name>`: the group is the whole document, and members do not
+   * have to be siblings. Absent, the row opens and closes on its own.
+   */
+  get name(): string {
+    return getStringAttribute(this, 'name');
+  }
+  set name(value: string) {
+    setStringAttribute(this, 'name', value);
+  }
+
   get sheet(): string {
     return getStringAttribute(this, 'sheet');
   }
@@ -213,19 +264,34 @@ export class DisclosureRow extends RanElement {
   connectedCallback(): void {
     this.handlerExternalCss();
     this._events.on(this._row, 'click', this._toggle);
+    // A div with a button role does not get Enter and Space for free.
+    this._events.on(this._row, 'keydown', this._keydown);
     this._events.on(this._leadingSlot, 'slotchange', this._syncLeading);
+    this._join();
     this._syncLeading();
     this._sync();
+    if (this.open) this._closeGroupPeers();
   }
 
   disconnectedCallback(): void {
     this._events.abort();
+    this._leave();
   }
 
   attributeChangedCallback(name: string, old: string | null, next: string | null): void {
     if (old === next) return;
-    if (name === 'sheet') this.handlerExternalCss();
-    else this._sync();
+    if (name === 'sheet') {
+      this.handlerExternalCss();
+      return;
+    }
+    if (name === 'name') {
+      this._leave(old ?? '');
+      this._join();
+    }
+    // Exclusivity is enforced here rather than in the press handler so that
+    // `row.open = true` obeys the group too, the way `<details name>` does.
+    if (name === 'open' && next !== null) this._closeGroupPeers();
+    this._sync();
   }
 
   handlerExternalCss = (): void => {
@@ -236,11 +302,60 @@ export class DisclosureRow extends RanElement {
 
   private _toggle = (): void => {
     if (!this.expandable) return;
-    this.open = !this.open;
+    const next = !this.open;
+    const allowed = this.dispatchEvent(
+      new CustomEvent(DISCLOSURE_BEFORE_TOGGLE, {
+        detail: { open: next },
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      }),
+    );
+    if (!allowed) return;
+    this.open = next;
     this.dispatchEvent(
       new CustomEvent(DISCLOSURE_TOGGLE, { detail: { open: this.open }, bubbles: true, composed: true }),
     );
   };
+
+  private _keydown = (event: KeyboardEvent): void => {
+    if (!this.expandable || !isActivationKey(event)) return;
+    // Space scrolls the page otherwise, which is the one thing a reader operating the row
+    // from the keyboard did not ask for.
+    event.preventDefault();
+    this._toggle();
+  };
+
+  /** Adds this row to its `name` group, if it has one. */
+  private _join(): void {
+    const { name } = this;
+    if (!name) return;
+    const group = groups.get(name) ?? new Set<DisclosureRow>();
+    group.add(this);
+    groups.set(name, group);
+  }
+
+  /**
+   * Removes this row from a group.
+   *
+   * @param name The group to leave. Defaults to the current one; an explicit value is what
+   *   lets `name` change without stranding the row in its previous group.
+   */
+  private _leave(name = this.name): void {
+    const group = groups.get(name);
+    if (!group) return;
+    group.delete(this);
+    if (group.size === 0) groups.delete(name);
+  }
+
+  /** Closes every other open row sharing this row's `name`. */
+  private _closeGroupPeers(): void {
+    const group = this.name ? groups.get(this.name) : undefined;
+    if (!group) return;
+    group.forEach((peer) => {
+      if (peer !== this) peer.open = false;
+    });
+  }
 
   /**
    * Records whether anything was slotted into `leading`.
@@ -266,15 +381,25 @@ export class DisclosureRow extends RanElement {
     // The dot is punctuation between two texts; with only one of them there is nothing to
     // punctuate, and a row ending in a stray dot reads as truncated.
     this._sep.hidden = summary === '' || heading === '';
-    // Not a button when there is nothing to open: a control that does nothing is worse in
-    // the accessibility tree than plain text, because it invites a press.
-    this._row.setAttribute('aria-expanded', expandable ? String(open) : 'false');
+    // Only a row with something to open is a control. Without a body it carries no role,
+    // no tab stop and no expanded state: it is a line of text, and announcing it as a
+    // button invites a press that does nothing.
     if (expandable) {
-      this._row.removeAttribute('disabled');
-      this._row.removeAttribute('aria-disabled');
+      this._row.setAttribute('role', 'button');
+      this._row.tabIndex = 0;
+      this._row.setAttribute('aria-expanded', String(open));
+      // Ties the control to what it controls, so a reader can move from one to the other.
+      this._row.setAttribute('aria-controls', this._bodyId);
     } else {
-      this._row.setAttribute('aria-disabled', 'true');
+      this._row.removeAttribute('role');
+      this._row.removeAttribute('tabindex');
+      this._row.removeAttribute('aria-expanded');
+      this._row.removeAttribute('aria-controls');
     }
+    // The sweep is the only signal that this row's work is still running, and it is a
+    // visual one. `aria-busy` is the same statement for a reader who cannot see it.
+    if (this.busy) this._row.setAttribute('aria-busy', 'true');
+    else this._row.removeAttribute('aria-busy');
     // A collapsed body is clipped, not removed, so that it can animate. Clipped content is
     // still focusable and still read out, so it is made inert instead — the previous
     // `display: none` did that for free.

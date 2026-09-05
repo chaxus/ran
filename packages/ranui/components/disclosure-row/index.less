@@ -26,16 +26,9 @@
   display: flex;
   align-items: center;
   gap: var(--ran-disclosure-gap, var(--ran-space-2));
-  border: none;
   border-radius: var(--ran-disclosure-radius, var(--ran-radius-sm));
-  background: none;
-  padding: 0;
-  width: 100%;
   min-width: 0;
   height: var(--ran-disclosure-row-height, 24px);
-  color: inherit;
-  font: inherit;
-  text-align: left;
 }
 
 :host([expandable]) .ran-disclosure-row {
@@ -205,12 +198,24 @@
 .ran-disclosure-body-inner {
   min-width: 0;
   overflow: hidden;
+  /* A closed body is still in the DOM, so without this the browser lays out and paints
+     content nobody can see — once per row, and a transcript has many rows.
+     `content-visibility: hidden` skips that work; `allow-discrete` is what keeps the
+     collapse animating, because the property flips to visible at the start of the opening
+     transition and back to hidden only at the end of the closing one. */
+  content-visibility: hidden;
+  transition: content-visibility var(--ran-disclosure-toggle-duration, 180ms) allow-discrete;
+}
+
+:host([open]) .ran-disclosure-body-inner {
+  content-visibility: visible;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ran-disclosure-icon,
   .ran-disclosure-chevron,
-  .ran-disclosure-body {
+  .ran-disclosure-body,
+  .ran-disclosure-body-inner {
     transition: none;
   }
 }

@@ -157,6 +157,28 @@ interface EventCall {
 }
 
 /**
+ * The file's own `export const NAME = 'value'` string constants.
+ *
+ * A public event name is declared and exported this way so a consumer can listen without
+ * retyping the string, which means the `new CustomEvent(...)` call site holds an identifier
+ * rather than a literal.
+ *
+ * Exported only, deliberately: a module-private constant names an event the element sends
+ * to itself (`r-theme-switch` keeps its instances in step that way), and resolving those
+ * too would publish an internal message as part of the element's API.
+ *
+ * @param src The source file.
+ * @returns Identifier to string value.
+ */
+function stringConstants(src: string): Map<string, string> {
+  const consts = new Map<string, string>();
+  for (const m of src.matchAll(/export\s+const\s+([A-Za-z_$][\w$]*)\s*(?::[^=\n]+)?=\s*['"`]([^'"`\n]*)['"`]/g)) {
+    consts.set(m[1], m[2]);
+  }
+  return consts;
+}
+
+/**
  * Every `new CustomEvent(...)` call in a source file, with its arguments.
  *
  * Brace-counted rather than matched by a fixed-width regex window: the options object is
@@ -164,7 +186,7 @@ interface EventCall {
  * lines (r-link's, for one) pushes them past any window wide enough to be safe on the
  * single-line calls. Strings are skipped so a brace inside a message cannot end the scan.
  */
-function parseCustomEventCalls(src: string): EventCall[] {
+function parseCustomEventCalls(src: string, consts: Map<string, string> = new Map()): EventCall[] {
   const calls: EventCall[] = [];
   const re = /new\s+CustomEvent\s*\(/g;
   while (re.exec(src) !== null) {
@@ -188,7 +210,13 @@ function parseCustomEventCalls(src: string): EventCall[] {
     const comma = topLevelComma(args);
     const first = (comma === -1 ? args : args.slice(0, comma)).trim();
     const literal = /^['"`]([^'"`]+)['"`]$/.exec(first);
-    calls.push({ name: literal ? literal[1] : null, options: comma === -1 ? '' : args.slice(comma + 1) });
+    // An identifier resolves through the file's own string constants. Naming an event once
+    // and exporting it is this codebase's idiom (`DISCLOSURE_TOGGLE`), and treating those
+    // calls as unnamed made every one of them fall through to the generic-dispatcher rule,
+    // which needs all such calls to agree — so a second event with different flags in the
+    // same file turned both into unresolved ones and failed the run.
+    const name = literal ? literal[1] : (consts.get(first) ?? null);
+    calls.push({ name, options: comma === -1 ? '' : args.slice(comma + 1) });
   }
   return calls;
 }
@@ -263,7 +291,7 @@ function collectSharedEventFlags(sources: string[]): Map<string, EventFlags> {
  * so a reference that omits it is worse than one that refuses to build.
  */
 function extractEvents(src: string, shared: Map<string, EventFlags>): Evt[] {
-  const calls = parseCustomEventCalls(src);
+  const calls = parseCustomEventCalls(src, stringConstants(src));
   const names = uniqSorted([
     ...calls.filter((c) => c.name).map((c) => c.name as string),
     ...[...src.matchAll(/@fires\s+([a-zA-Z][\w-]*)/g)].map((m) => m[1]),
