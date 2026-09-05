@@ -8,15 +8,15 @@ Determina si un valor es del tipo cadena.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| --------- | ---------------------- | --------- |
+| Argumento | Descripción      | Tipo      |
+| --------- | ---------------- | --------- |
 | `boolean` | Si es una cadena | `boolean` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | -------------- | --------- | -------- |
-| `obj` | Valor que se comprueba | `unknown` | Obligatorio |
+| Parámetro | Descripción            | Tipo      | Por defecto |
+| --------- | ---------------------- | --------- | ----------- |
+| `obj`     | Valor que se comprueba | `unknown` | Obligatorio |
 
 ## Ejemplo
 

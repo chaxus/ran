@@ -8,9 +8,9 @@ Erzeugt ein zufälliges Farbobjekt.
 
 #### Rückgabe
 
-| Argument | Beschreibung | Typ |
-| -------- | ------------------- | ------- |
-| `Color` | Zufälliges Farbobjekt | `Color` |
+| Argument | Beschreibung          | Typ     |
+| -------- | --------------------- | ------- |
+| `Color`  | Zufälliges Farbobjekt | `Color` |
 
 #### Parameter
 

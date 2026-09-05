@@ -6,10 +6,10 @@ Decide el idioma dominante de un texto por la proporción de caracteres. Pura es
 
 ### detectLanguage(text, sampleSize?)
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| ------------ | -------------------- | -------- | -------- |
-| `text` | Texto que se examina | `string` | Obligatorio |
-| `sampleSize` | Caracteres que se muestrean | `number` | `20000` |
+| Parámetro    | Descripción                 | Tipo     | Por defecto |
+| ------------ | --------------------------- | -------- | ----------- |
+| `text`       | Texto que se examina        | `string` | Obligatorio |
+| `sampleSize` | Caracteres que se muestrean | `number` | `20000`     |
 
 Devuelve `'zh' \| 'en' \| 'other'`.
 

@@ -8,8 +8,8 @@ Obtém o tipo do dispositivo atual.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| --------------- | ------------------ | ----------------------------------------- |
+| Argumento       | Descrição                        | Tipo                                      |
+| --------------- | -------------------------------- | ----------------------------------------- |
 | `CurrentDevice` | String com o tipo de dispositivo | `'ipad' \| 'android' \| 'iphone' \| 'pc'` |
 
 #### Parâmetros

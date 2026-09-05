@@ -6,11 +6,11 @@
 
 ## API
 
-| 함수 | 받아들이는 것 |
-| --------------------------- | --------------------------------------------------------------------------------------- |
+| 함수                        | 받아들이는 것                                                 |
+| --------------------------- | ------------------------------------------------------------- |
 | `parseChineseNumber(value)` | 숫자(반각·전각), `一二三…`, 자릿수 `十百千万/萬`, 간체와 번체 |
-| `parseRomanNumber(value)` | `IVXLCDM`, 대소문자 무관, 뺄셈 표기(`IV`, `IX`) |
-| `parseEnglishNumber(value)` | 숫자, 영어 수사 `one`–`twenty`, 그다음 로마 숫자 |
+| `parseRomanNumber(value)`   | `IVXLCDM`, 대소문자 무관, 뺄셈 표기(`IV`, `IX`)               |
+| `parseEnglishNumber(value)` | 숫자, 영어 수사 `one`–`twenty`, 그다음 로마 숫자              |
 
 관련 문자열 헬퍼: `toHalfWidth(value)` / `toFullWidth(value)`는 전각 문자를 정규화하며, `parseChineseNumber`가 이를 알아서 적용합니다.
 

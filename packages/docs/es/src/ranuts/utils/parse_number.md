@@ -6,11 +6,11 @@ Los tres comparten un mismo contrato: **devuelven `null` en vez de adivinar** cu
 
 ## API
 
-| Función | Acepta |
-| --------------------------- | --------------------------------------------------------------------------------------- |
+| Función                     | Acepta                                                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `parseChineseNumber(value)` | Dígitos (de ancho medio y completo), `一二三…`, las unidades `十百千万/萬`, simplificado y tradicional |
-| `parseRomanNumber(value)` | `IVXLCDM`, en cualquier caja, con notación sustractiva (`IV`, `IX`) |
-| `parseEnglishNumber(value)` | Dígitos, los numerales ingleses `one`–`twenty`, y después números romanos |
+| `parseRomanNumber(value)`   | `IVXLCDM`, en cualquier caja, con notación sustractiva (`IV`, `IX`)                                    |
+| `parseEnglishNumber(value)` | Dígitos, los numerales ingleses `one`–`twenty`, y después números romanos                              |
 
 Ayudas de cadena relacionadas: `toHalfWidth(value)` / `toFullWidth(value)` normalizan los caracteres de ancho completo, algo que `parseChineseNumber` ya aplica por ti.
 

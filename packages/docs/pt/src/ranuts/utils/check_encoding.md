@@ -8,14 +8,14 @@ Detecta a codificação de caracteres de dados em `Uint8Array`.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| -------- | ---------------------- | -------- |
-| `string` | A codificação detectada | `string` |
+| Argumento | Descrição               | Tipo     |
+| --------- | ----------------------- | -------- |
+| `string`  | A codificação detectada | `string` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| ------------ | -------------- | ------------ | -------- |
+| Parâmetro    | Descrição        | Tipo         | Padrão      |
+| ------------ | ---------------- | ------------ | ----------- |
 | `uint8Array` | Dados a analisar | `Uint8Array` | Obrigatório |
 
 ## Exemplo

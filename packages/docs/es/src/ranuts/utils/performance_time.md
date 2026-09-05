@@ -8,9 +8,9 @@ Obtiene una marca de tiempo de alta precisión, tanto en el navegador como en No
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| -------- | --------------------------------------- | -------- |
-| `number` | Marca de tiempo de alta precisión (milisegundos) | `number` |
+| Argumento | Descripción                                      | Tipo     |
+| --------- | ------------------------------------------------ | -------- |
+| `number`  | Marca de tiempo de alta precisión (milisegundos) | `number` |
 
 #### Parámetros
 

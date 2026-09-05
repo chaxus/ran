@@ -6,10 +6,10 @@ Bestimmt die vorherrschende Sprache eines Textes über das Verhältnis der Zeich
 
 ### detectLanguage(text, sampleSize?)
 
-| Parameter | Beschreibung | Typ | Standard |
-| ------------ | -------------------- | -------- | -------- |
-| `text` | Zu untersuchender Text | `string` | Erforderlich |
-| `sampleSize` | Zahl der betrachteten Zeichen | `number` | `20000` |
+| Parameter    | Beschreibung                  | Typ      | Standard     |
+| ------------ | ----------------------------- | -------- | ------------ |
+| `text`       | Zu untersuchender Text        | `string` | Erforderlich |
+| `sampleSize` | Zahl der betrachteten Zeichen | `number` | `20000`      |
 
 Gibt `'zh' \| 'en' \| 'other'` zurück.
 

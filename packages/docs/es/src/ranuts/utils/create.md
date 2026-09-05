@@ -8,16 +8,16 @@ Función de ayuda para crear elementos del DOM, tanto HTML como SVG.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| ------------- | ------------------- | ------------- |
+| Argumento     | Descripción                | Tipo          |
+| ------------- | -------------------------- | ------------- |
 | `HTMLElement` | El elemento del DOM creado | `HTMLElement` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | --------------------------- | ------------------------ | -------- |
-| `tagName` | Nombre de la etiqueta | `string` | Obligatorio |
-| `options` | Opciones de creación (opcional) | `ElementCreationOptions` | Opcional |
+| Parámetro | Descripción                     | Tipo                     | Por defecto |
+| --------- | ------------------------------- | ------------------------ | ----------- |
+| `tagName` | Nombre de la etiqueta           | `string`                 | Obligatorio |
+| `options` | Opciones de creación (opcional) | `ElementCreationOptions` | Opcional    |
 
 ## Ejemplo
 

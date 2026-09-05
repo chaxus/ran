@@ -8,15 +8,15 @@ Liefert das Array der Dateiendungen, die zu einem MIME-Typ gehören.
 
 #### Rückgabe
 
-| Argument | Beschreibung | Typ |
-| -------- | ---------------------------------- | ---------- |
-| `Array` | Array der Dateiendungen (ohne Punkt) | `string[]` |
+| Argument | Beschreibung                         | Typ        |
+| -------- | ------------------------------------ | ---------- |
+| `Array`  | Array der Dateiendungen (ohne Punkt) | `string[]` |
 
 #### Parameter
 
-| Parameter | Beschreibung | Typ | Standard |
-| ---------- | ----------- | -------- | -------- |
-| `mimeType` | MIME-Typ | `string` | Erforderlich |
+| Parameter  | Beschreibung | Typ      | Standard     |
+| ---------- | ------------ | -------- | ------------ |
+| `mimeType` | MIME-Typ     | `string` | Erforderlich |
 
 ## Beispiel
 

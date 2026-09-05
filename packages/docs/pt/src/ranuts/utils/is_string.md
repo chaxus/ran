@@ -8,15 +8,15 @@ Determina se um valor é do tipo string.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| --------- | ---------------------- | --------- |
+| Argumento | Descrição       | Tipo      |
+| --------- | --------------- | --------- |
 | `boolean` | Se é uma string | `boolean` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | -------------- | --------- | -------- |
-| `obj` | Valor a verificar | `unknown` | Obrigatório |
+| Parâmetro | Descrição         | Tipo      | Padrão      |
+| --------- | ----------------- | --------- | ----------- |
+| `obj`     | Valor a verificar | `unknown` | Obrigatório |
 
 ## Exemplo
 

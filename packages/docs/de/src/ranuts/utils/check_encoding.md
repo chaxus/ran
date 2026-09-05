@@ -8,14 +8,14 @@ Erkennt die Zeichenkodierung von Daten in einem `Uint8Array`.
 
 #### Rückgabe
 
-| Argument | Beschreibung | Typ |
+| Argument | Beschreibung           | Typ      |
 | -------- | ---------------------- | -------- |
 | `string` | Die erkannte Kodierung | `string` |
 
 #### Parameter
 
-| Parameter | Beschreibung | Typ | Standard |
-| ------------ | -------------- | ------------ | -------- |
+| Parameter    | Beschreibung           | Typ          | Standard     |
+| ------------ | ---------------------- | ------------ | ------------ |
 | `uint8Array` | Zu untersuchende Daten | `Uint8Array` | Erforderlich |
 
 ## Beispiel

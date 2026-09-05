@@ -12,7 +12,9 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 
 ### 基础用法
 
-<r-link href="/getting-started">开始使用</r-link>
+<Demo>
+  <r-link href="/getting-started">开始使用</r-link>
+</Demo>
 
 ```html
 <r-link href="/getting-started">开始使用</r-link>
@@ -34,8 +36,10 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 
 内部路径会在应用内路由；绝对 URL 以及 `mailto:` / `tel:` 链接则正常导航。
 
-<r-link href="/docs">内部链接</r-link>
-<r-link href="https://example.com">外部链接</r-link>
+<Demo>
+  <r-link href="/docs">内部链接</r-link>
+  <r-link href="https://example.com">外部链接</r-link>
+</Demo>
 
 ```html
 <r-link href="/docs">内部链接</r-link> <r-link href="https://example.com">外部链接</r-link>
@@ -45,7 +49,9 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 
 布尔属性。存在时，应用内导航会替换当前历史记录（`router.replace`），而非新增一条。
 
-<r-link href="/settings" replace>替换记录</r-link>
+<Demo>
+  <r-link href="/settings" replace>替换记录</r-link>
+</Demo>
 
 ```html
 <r-link href="/settings" replace>替换记录</r-link>
@@ -55,7 +61,9 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 
 注入到链接 Shadow DOM 中的 CSS，遵循与其他所有 ranui 组件一致的 `sheet` 约定。由于可点击的 `<a>` 位于 Shadow Root 内，当你希望宿主样式呈现为按钮或卡片时，请通过 `sheet` 为其赋予盒模型（`display`、`padding`、`width`）。
 
-<r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">带内边距的链接</r-link>
+<Demo>
+  <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">带内边距的链接</r-link>
+</Demo>
 
 ```html
 <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; }">带内边距的链接</r-link>
@@ -95,13 +103,3 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 - **激活态**：宿主通过 `:host([active]) a` 定义样式（加粗 + 下划线），因此设置 `active` 属性即可标记当前链接。
 - **作为按钮/卡片使用**：把表面样式（背景、边框、圆角）放在宿主上，再通过 `sheet` 为内部的 `<a>` 注入盒模型（`display`、`padding`、`width`），让整个区域可点击。
 - **主题定制**：`<a>` 读取全局的 `--ran-color-link`、`--ran-color-primary`（聚焦环）与 `--ran-radius-sm` 令牌，请覆盖这些全局令牌，不要指望存在组件级的 `--ran-link-*` 变量（并不存在）。
-
-## 样式
-
-可点击的 `<a>` 位于封闭的 Shadow Root 中，不暴露任何 `::part()`。它读取全局的 `--ran-color-link`、`--ran-color-primary`（聚焦环）与 `--ran-radius-sm` 令牌，不存在组件级的 `--ran-link-*` 变量。请直接为宿主设置样式、覆盖这些令牌，或通过 `sheet` 注入锚点样式。宿主还通过 `:host([active]) a` 定义了激活态样式（加粗 + 下划线），因此你可以设置 `active` 属性来标记当前链接。
-
-```css
-r-link {
-  --ran-color-link: var(--brand);
-}
-```
