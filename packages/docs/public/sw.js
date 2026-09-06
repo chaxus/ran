@@ -119,6 +119,18 @@ const deleteOldCaches = async () => {
 };
 
 this.addEventListener(SERVICE_WORK.INSTALL, function (event) {
+  // 装好就顶上，不在 waiting 里排队。
+  //
+  // 默认行为是新 worker 一直等到该源下所有标签页都关掉才接管——刷新不算，关掉才算。
+  // 对文档站来说这意味着一次部署可能好几天都到不了常开着标签页的读者那里；更糟的是
+  // `deleteOldCaches()` 只在 activate 里跑，所以在它接管之前，**旧缓存里任何一份坏数据
+  // 都清不掉**。上一个 bug（把 404 的 HTML 当样式表缓存下来）正是因此扛过了反复刷新。
+  //
+  // 中途换 controller 的代价在这里是可控的：构建产物都带内容哈希，而 VitePress 的路由
+  // 在页面 chunk 取不到时会重新拉 hashmap.json 再按新哈希重试（见其 router 的 "retry on
+  // fetch fail: ... a new deploy happened while the page is open"），所以已经打开的旧页面
+  // 会自己收敛到新构建，而不是卡在 404。
+  this.skipWaiting();
   // 确保 Service Worker 不会在 waitUntil() 里面的代码执行完毕之前安装完成
   event.waitUntil(
     // 创建了叫做 chaxus_ran 的新缓存
@@ -195,7 +207,12 @@ this.addEventListener(SERVICE_WORK.FETCH, (event) => {
 });
 
 this.addEventListener(SERVICE_WORK.ACTIVATE, (event) => {
-  event.waitUntil(deleteOldCaches());
+  // **先清旧缓存，再接管**，顺序不能反。
+  //
+  // cacheFirst 用的是 `caches.match(url)`——CacheStorage 上的那个，它会遍历**所有**缓存，
+  // 而不只是 CACHE_NAME。所以只要上一版的缓存还在，claim 过来的页面就可能从旧缓存里读到
+  // 陈旧（甚至是坏掉）的资源。先 delete 再 claim，被接管的客户端看到的就只有这一版。
+  event.waitUntil(deleteOldCaches().then(() => this.clients.claim()));
 });
 
 
