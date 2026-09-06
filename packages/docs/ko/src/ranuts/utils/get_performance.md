@@ -8,30 +8,30 @@
 
 #### 반환값
 
-| 인자 | 설명 | 타입 |
-| ------------------------ | -------------------------- | ------------------------ |
+| 인자                     | 설명           | 타입                     |
+| ------------------------ | -------------- | ------------------------ |
 | `BasicType \| undefined` | 성능 지표 객체 | `BasicType \| undefined` |
 
 #### BasicType
 
-| 프로퍼티 | 설명 | 타입 |
-| -------------- | ------------------------------------------------------- | --------------------- |
-| `dnsSearch` | DNS 해석에 걸린 시간(ms) | `number` |
-| `tcpConnect` | TCP 연결에 걸린 시간(ms) | `number` |
-| `sslConnect` | SSL 보안 연결에 걸린 시간(ms) | `number` |
-| `request` | TTFB. 네트워크 요청에 걸린 시간(ms) | `number` |
-| `response` | 데이터 전송에 걸린 시간(ms) | `number` |
-| `parseDomTree` | DOM 해석에 걸린 시간(ms) | `number` |
-| `resource` | 자원을 불러오는 데 걸린 시간(ms) | `number` |
-| `domReady` | DOM Ready까지의 시간(ms) | `number` |
-| `httpHead` | HTTP 헤더의 크기(바이트) | `number` |
-| `interactive` | 처음으로 다룰 수 있게 되기까지의 시간(ms) | `number` |
-| `complete` | 쪽이 온전히 불러와지기까지의 시간(ms) | `number` |
-| `redirect` | 리다이렉트 횟수 | `number` |
-| `redirectTime` | 리다이렉트에 걸린 시간(ms) | `number` |
-| `duration` | 자원 요청에 걸린 총 시간(ms) | `number` |
-| `fp` | First Paint까지의 시간(흰 화면이 이어진 시간, ms) | `number \| undefined` |
-| `fcp` | First Contentful Paint까지의 시간(첫 화면이 다 차기까지, ms) | `number \| undefined` |
+| 프로퍼티       | 설명                                                         | 타입                  |
+| -------------- | ------------------------------------------------------------ | --------------------- |
+| `dnsSearch`    | DNS 해석에 걸린 시간(ms)                                     | `number`              |
+| `tcpConnect`   | TCP 연결에 걸린 시간(ms)                                     | `number`              |
+| `sslConnect`   | SSL 보안 연결에 걸린 시간(ms)                                | `number`              |
+| `request`      | TTFB. 네트워크 요청에 걸린 시간(ms)                          | `number`              |
+| `response`     | 데이터 전송에 걸린 시간(ms)                                  | `number`              |
+| `parseDomTree` | DOM 해석에 걸린 시간(ms)                                     | `number`              |
+| `resource`     | 자원을 불러오는 데 걸린 시간(ms)                             | `number`              |
+| `domReady`     | DOM Ready까지의 시간(ms)                                     | `number`              |
+| `httpHead`     | HTTP 헤더의 크기(바이트)                                     | `number`              |
+| `interactive`  | 처음으로 다룰 수 있게 되기까지의 시간(ms)                    | `number`              |
+| `complete`     | 쪽이 온전히 불러와지기까지의 시간(ms)                        | `number`              |
+| `redirect`     | 리다이렉트 횟수                                              | `number`              |
+| `redirectTime` | 리다이렉트에 걸린 시간(ms)                                   | `number`              |
+| `duration`     | 자원 요청에 걸린 총 시간(ms)                                 | `number`              |
+| `fp`           | First Paint까지의 시간(흰 화면이 이어진 시간, ms)            | `number \| undefined` |
+| `fcp`          | First Contentful Paint까지의 시간(첫 화면이 다 차기까지, ms) | `number \| undefined` |
 
 #### 매개변수
 

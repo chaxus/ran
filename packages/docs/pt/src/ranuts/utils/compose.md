@@ -8,14 +8,14 @@ Junta várias funções intermediárias numa só, que as roda em cadeia; cada um
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| ---------- | ---------------------------- | ----------------------- |
+| Argumento  | Descrição                          | Tipo                    |
+| ---------- | ---------------------------------- | ----------------------- |
 | `Function` | A função intermediária já composta | `ComposedMiddleware<T>` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| ------------ | ----------------------------- | ---------------------- | -------- |
+| Parâmetro    | Descrição                       | Tipo                   | Padrão      |
+| ------------ | ------------------------------- | ---------------------- | ----------- |
 | `middleware` | Array de funções intermediárias | `Array<Middleware<T>>` | Obrigatório |
 
 #### O tipo do middleware
