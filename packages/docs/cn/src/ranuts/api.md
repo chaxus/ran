@@ -88,7 +88,7 @@ import { /* … */ } from 'ranuts/utils';
 - `decodeTextBytes(bytes: Uint8Array, encodings?: string[]) => string` — Decode text bytes, trying encodings in order until one holds.
 - `deferred<T = void>() => Deferred<T>` — A promise plus its `resolve` / `reject`, for the case where the thing that
 - `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
-- `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary language from the ratio of CJK to Latin characters.
+- `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary script from character ratios. Pure statistics, no
 - `diffLines(oldText: string, newText: string, options?: DiffOptions) => DiffHunk[]` — Diffs two texts by line.
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
@@ -353,7 +353,7 @@ import { /* … */ } from 'ranuts/utils';
 - `type RGB` — An RGB triple with each channel in 0..1 (linear or sRGB depending on the operation).
 - `type SpeechErrorKind` — `denied` means the user or the browser refused the microphone — worth surfacing.
 - `type StringValues` — "An object whose values are all strings" — the constraint the dictionary type parameter
-- `type TextLanguage` — Coarse language bucket: Chinese / English / other only
+- `type TextLanguage` — Coarse script bucket: the four writing systems that need different handling, plus
 - `type TranslateParams`
 - `type TruncatePosition` — Which end of the string gets dropped when it is too long.
 
