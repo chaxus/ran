@@ -52,21 +52,25 @@ test.describe('r-disclosure-row', () => {
   });
 
   test('is a control only when there is something to open', async ({ page }) => {
-    // A press that reveals nothing is worse than no control, so the row says so rather than
-    // silently doing nothing.
+    // A press that reveals nothing is worse than no control, so a row with no body is not a
+    // control at all: no role, no tab stop, no expanded state. A focusable `aria-disabled`
+    // button would still take a tab stop to say "nothing here", which is the arrangement
+    // this replaced.
+    const controlShape = (host: string) =>
+      insideShadow(page, host, (root) => {
+        const row = root.querySelector('.ran-disclosure-row');
+        return {
+          role: row?.getAttribute('role') ?? null,
+          tabindex: row?.getAttribute('tabindex') ?? null,
+          expanded: row?.getAttribute('aria-expanded') ?? null,
+        };
+      });
+
     await mount(page, `<r-disclosure-row heading="Ping"></r-disclosure-row>`);
-    expect(
-      await insideShadow(page, 'r-disclosure-row', (root) =>
-        root.querySelector('.ran-disclosure-row')?.getAttribute('aria-disabled'),
-      ),
-    ).toBe('true');
+    expect(await controlShape('r-disclosure-row')).toEqual({ role: null, tabindex: null, expanded: null });
 
     await mount(page, `<r-disclosure-row expandable heading="Read"><p>body</p></r-disclosure-row>`);
-    expect(
-      await insideShadow(page, 'r-disclosure-row', (root) =>
-        root.querySelector('.ran-disclosure-row')?.getAttribute('aria-disabled'),
-      ),
-    ).toBeNull();
+    expect(await controlShape('r-disclosure-row')).toEqual({ role: 'button', tabindex: '0', expanded: 'false' });
   });
 
   test('opens on a click anywhere on the row and reveals its body', async ({ page }) => {
