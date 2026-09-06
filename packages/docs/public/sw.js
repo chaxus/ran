@@ -129,9 +129,20 @@ this.addEventListener(SERVICE_WORK.INSTALL, function (event) {
       // 而 cache.put 允许你存储任何请求/响应对。因此，Cache.add/Cache.addAll 不能用于不透明的响应，而 Cache.put 可以。
       return SERVICE_WORK_CACHE_FILE_PATHS.map(url =>
         fetch(url).then(response => {
-          // 检查响应是否成功
+          // **失败的响应必须丢掉，不能写进缓存。**
+          //
+          // 上面那句"cache.put 允许你存储任何请求/响应对"是这里选用 put 的理由，
+          // 但它同时意味着 put 不会替你挡住 404 —— 这个检查原先只打了一行日志就
+          // 继续 put，于是失败的响应照样进了缓存。
+          //
+          // 后果不是少缓存一个文件，而是整站白页：部署尚未完全生效时装 SW，
+          // /assets/style.<hash>.css 拿到的是 Cloudflare 的 HTML 404 页面，被存进
+          // 缓存后，cacheFirst 每次都命中它并把 HTML 当样式表返回，浏览器报
+          // "Refused to apply style ... MIME type ('text/html')"。资源本身早就正常了，
+          // 而缓存里那份坏的会一直用下去。宁可不缓存，让它回落到网络。
           if (!response.ok) {
-            console.log('service worker fetch response error:', url)
+            console.log('service worker precache skipped (not ok):', response.status, url)
+            return
           }
           // 将响应添加到缓存
           return cache.put(url, response);
