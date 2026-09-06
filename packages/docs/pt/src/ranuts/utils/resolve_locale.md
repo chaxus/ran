@@ -8,15 +8,15 @@ O catálogo de mensagens é seu; isto só escolhe a chave.
 
 ### resolveLocale(options)
 
-| Opção | Descrição | Tipo | Padrão |
-| -------------- | ------------------------------------------------------------------------ | ------------------- | ---------------- |
-| `supported` | As localidades que você de fato publica, da mais específica para a menos | `readonly string[]` | Obrigatório |
-| `fallback` | O que volta quando nada casa | `string` | `supported[0]` |
-| `query` | Parâmetro de consulta que traz uma escolha explícita, por exemplo `lang` | `string` | — |
-| `cookie` | Nome do cookie que traz a escolha | `string` | — |
-| `storageKey` | Chave do localStorage com a última escolha da pessoa | `string` | — |
-| `useNavigator` | Consultar `navigator.languages` e `navigator.language` antes de cair no recurso final | `boolean` | `true` |
-| `url` | URL de onde a consulta é lida | `string` | A localização atual |
+| Opção          | Descrição                                                                             | Tipo                | Padrão              |
+| -------------- | ------------------------------------------------------------------------------------- | ------------------- | ------------------- |
+| `supported`    | As localidades que você de fato publica, da mais específica para a menos              | `readonly string[]` | Obrigatório         |
+| `fallback`     | O que volta quando nada casa                                                          | `string`            | `supported[0]`      |
+| `query`        | Parâmetro de consulta que traz uma escolha explícita, por exemplo `lang`              | `string`            | —                   |
+| `cookie`       | Nome do cookie que traz a escolha                                                     | `string`            | —                   |
+| `storageKey`   | Chave do localStorage com a última escolha da pessoa                                  | `string`            | —                   |
+| `useNavigator` | Consultar `navigator.languages` e `navigator.language` antes de cair no recurso final | `boolean`           | `true`              |
+| `url`          | URL de onde a consulta é lida                                                         | `string`            | A localização atual |
 
 #### Retorna
 

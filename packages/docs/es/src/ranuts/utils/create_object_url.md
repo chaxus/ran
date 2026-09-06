@@ -8,15 +8,15 @@ Crea una URL de objeto a partir de un Blob, un ArrayBuffer o una Response.
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| ----------------- | ----------------------------------- | --------- |
+| Argumento         | Descripción                                  | Tipo      |
+| ----------------- | -------------------------------------------- | --------- |
 | `Promise<string>` | Promesa que se resuelve con la URL de objeto | `Promise` |
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | ----------- | ------------------------------------------- | -------- |
-| `src` | El origen de los datos | `Blob \| ArrayBuffer \| Response \| string` | Obligatorio |
+| Parámetro | Descripción            | Tipo                                        | Por defecto |
+| --------- | ---------------------- | ------------------------------------------- | ----------- |
+| `src`     | El origen de los datos | `Blob \| ArrayBuffer \| Response \| string` | Obligatorio |
 
 ## Ejemplo
 
@@ -94,9 +94,9 @@ if (result.success) {
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | ----------------------------------------------------------------------- | ---------------------------------------- | -------- |
-| `src` | La URL que se descarga | `string` | Obligatorio |
+| Parámetro | Descripción                                                                   | Tipo                                     | Por defecto |
+| --------- | ----------------------------------------------------------------------------- | ---------------------------------------- | ----------- |
+| `src`     | La URL que se descarga                                                        | `string`                                 | Obligatorio |
 | `options` | `method` (por defecto `'GET'`) y `responseType` (por defecto `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | Obligatorio |
 
 #### Devuelve

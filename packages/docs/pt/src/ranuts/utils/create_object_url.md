@@ -8,15 +8,15 @@ Cria uma URL de objeto a partir de um Blob, um ArrayBuffer ou uma Response.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| ----------------- | ----------------------------------- | --------- |
+| Argumento         | Descrição                              | Tipo      |
+| ----------------- | -------------------------------------- | --------- |
 | `Promise<string>` | Promessa resolvida com a URL de objeto | `Promise` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | ----------- | ------------------------------------------- | -------- |
-| `src` | A origem dos dados | `Blob \| ArrayBuffer \| Response \| string` | Obrigatório |
+| Parâmetro | Descrição          | Tipo                                        | Padrão      |
+| --------- | ------------------ | ------------------------------------------- | ----------- |
+| `src`     | A origem dos dados | `Blob \| ArrayBuffer \| Response \| string` | Obrigatório |
 
 ## Exemplo
 
@@ -94,9 +94,9 @@ if (result.success) {
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | ----------------------------------------------------------------------- | ---------------------------------------- | -------- |
-| `src` | A URL que será buscada | `string` | Obrigatório |
+| Parâmetro | Descrição                                                           | Tipo                                     | Padrão      |
+| --------- | ------------------------------------------------------------------- | ---------------------------------------- | ----------- |
+| `src`     | A URL que será buscada                                              | `string`                                 | Obrigatório |
 | `options` | `method` (padrão `'GET'`) e `responseType` (padrão `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | Obrigatório |
 
 #### Retorna
