@@ -39,7 +39,7 @@
 
 ---
 
-[English](./README.md) · 中文
+[English](./README.md) | **中文** | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
 ## ✨ 功能特性
 
@@ -57,10 +57,10 @@
 
 ### 核心库（Alpha 阶段）
 
-| 包名                      | 版本                                                                                              | 下载量                                                                                     | 描述       |
-| ------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------- |
-| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/README.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | Web 组件库 |
-| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/README.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | 工具函数库 |
+| 包名                      | 版本                                                                                                    | 下载量                                                                                     | 描述       |
+| ------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------- |
+| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/README.zh-CN.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | Web 组件库 |
+| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/README.zh-CN.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | 工具函数库 |
 
 ### 实验性项目
 
@@ -134,8 +134,8 @@ pnpm --filter ranui build
 ```
 
 每个 skill 覆盖 import map、清单、用法示例与约定，并指向该包随 npm 发布的 API 文档。
-详见各库 README 里的 skill 小节：[ranui](packages/ranui/README.md#ai--claude-code-skill)、
-[ranuts](packages/ranuts/README.md)。
+详见各库 README 里的 skill 小节：[ranui](packages/ranui/README.zh-CN.md)、
+[ranuts](packages/ranuts/README.zh-CN.md)。
 
 ## ⚠️ 重要说明
 

@@ -39,7 +39,7 @@
 
 ---
 
-English · [中文](./README.zh-CN.md)
+**English** | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
 ## ✨ Features
 
