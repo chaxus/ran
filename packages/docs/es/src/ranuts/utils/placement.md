@@ -30,22 +30,22 @@ panel.style.left = `${left + window.scrollX}px`;
 
 #### Parámetros
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| ------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------- |
-| `options.anchor` | Rectángulo del ancla (el disparador), en coordenadas del viewport (por ejemplo, `getBoundingClientRect()`) | `{ top, left, width, height }` | Obligatorio |
-| `options.floating` | El tamaño del propio panel flotante | `{ width, height }` | Obligatorio |
-| `options.placement` | Lado preferido. Se pasa al contrario cuando le falta sitio y al contrario le sobra | `'top' \| 'bottom' \| 'left' \| 'right'` | Obligatorio |
-| `options.offset` | Hueco que se deja entre el ancla y el panel flotante, en px | `number` | `0` |
-| `options.boundary` | Región dentro de la cual debe quedarse el panel, en coordenadas del viewport | `{ top, left, width, height }` | El viewport de la ventana |
-| `options.padding` | Hueco mínimo que se deja entre el panel y el borde del límite al desplazarlo, en px | `number` | `8` |
+| Parámetro           | Descripción                                                                                                | Tipo                                     | Por defecto               |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------------------- |
+| `options.anchor`    | Rectángulo del ancla (el disparador), en coordenadas del viewport (por ejemplo, `getBoundingClientRect()`) | `{ top, left, width, height }`           | Obligatorio               |
+| `options.floating`  | El tamaño del propio panel flotante                                                                        | `{ width, height }`                      | Obligatorio               |
+| `options.placement` | Lado preferido. Se pasa al contrario cuando le falta sitio y al contrario le sobra                         | `'top' \| 'bottom' \| 'left' \| 'right'` | Obligatorio               |
+| `options.offset`    | Hueco que se deja entre el ancla y el panel flotante, en px                                                | `number`                                 | `0`                       |
+| `options.boundary`  | Región dentro de la cual debe quedarse el panel, en coordenadas del viewport                               | `{ top, left, width, height }`           | El viewport de la ventana |
+| `options.padding`   | Hueco mínimo que se deja entre el panel y el borde del límite al desplazarlo, en px                        | `number`                                 | `8`                       |
 
 #### Devuelve
 
-| Argumento | Descripción | Tipo |
-| ----------- | --------------------------------------------------------- | ---------------------------------------- |
-| `top` | El `top` resuelto, en el mismo espacio de coordenadas que `anchor` | `number` |
-| `left` | El `left` resuelto, en el mismo espacio de coordenadas que `anchor` | `number` |
-| `placement` | El lado que se acabó usando, ya con el volteo | `'top' \| 'bottom' \| 'left' \| 'right'` |
+| Argumento   | Descripción                                                         | Tipo                                     |
+| ----------- | ------------------------------------------------------------------- | ---------------------------------------- |
+| `top`       | El `top` resuelto, en el mismo espacio de coordenadas que `anchor`  | `number`                                 |
+| `left`      | El `left` resuelto, en el mismo espacio de coordenadas que `anchor` | `number`                                 |
+| `placement` | El lado que se acabó usando, ya con el volteo                       | `'top' \| 'bottom' \| 'left' \| 'right'` |
 
 ## Notas
 

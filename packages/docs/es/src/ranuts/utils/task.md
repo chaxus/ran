@@ -14,9 +14,9 @@ Se llama antes de que empiece la tarea.
 
 #### Devuelve
 
-| Parámetro | Descripción | Tipo |
-| --------- | --------------- | --------------- |
-| taskId | Identificador de la tarea | `unique symbol` |
+| Parámetro | Descripción               | Tipo            |
+| --------- | ------------------------- | --------------- |
+| taskId    | Identificador de la tarea | `unique symbol` |
 
 ### 2. taskEnd
 
@@ -24,15 +24,15 @@ Se llama cuando la tarea termina; necesita el identificador que devolvió `start
 
 #### Opciones
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| --------- | --------------- | --------------- | -------- |
-| taskId | Identificador de la tarea | `unique symbol` | Obligatorio |
+| Parámetro | Descripción               | Tipo            | Por defecto |
+| --------- | ------------------------- | --------------- | ----------- |
+| taskId    | Identificador de la tarea | `unique symbol` | Obligatorio |
 
 #### Devuelve
 
-| Parámetro | Descripción | Tipo |
-| --------- | ------------------- | -------- |
-| `time` | Lo que tardó la tarea | `number` |
+| Parámetro | Descripción           | Tipo     |
+| --------- | --------------------- | -------- |
+| `time`    | Lo que tardó la tarea | `number` |
 
 ### 3. Ejemplo de uso
 

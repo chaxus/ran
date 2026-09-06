@@ -8,15 +8,15 @@ El catálogo de mensajes es cosa tuya; esto solo elige la clave.
 
 ### resolveLocale(options)
 
-| Opción | Descripción | Tipo | Por defecto |
-| -------------- | ------------------------------------------------------------------------ | ------------------- | ---------------- |
-| `supported` | Las configuraciones que realmente publicas, de la más específica a la menos | `readonly string[]` | Obligatorio |
-| `fallback` | Lo que se devuelve cuando nada coincide | `string` | `supported[0]` |
-| `query` | Parámetro de consulta que lleva una elección explícita, por ejemplo `lang` | `string` | — |
-| `cookie` | Nombre de la cookie que lleva la elección | `string` | — |
-| `storageKey` | Clave de localStorage con lo último que la persona eligió | `string` | — |
-| `useNavigator` | Consultar `navigator.languages` y `navigator.language` antes de recurrir al último recurso | `boolean` | `true` |
-| `url` | URL de la que se lee la consulta | `string` | La ubicación actual |
+| Opción         | Descripción                                                                                | Tipo                | Por defecto         |
+| -------------- | ------------------------------------------------------------------------------------------ | ------------------- | ------------------- |
+| `supported`    | Las configuraciones que realmente publicas, de la más específica a la menos                | `readonly string[]` | Obligatorio         |
+| `fallback`     | Lo que se devuelve cuando nada coincide                                                    | `string`            | `supported[0]`      |
+| `query`        | Parámetro de consulta que lleva una elección explícita, por ejemplo `lang`                 | `string`            | —                   |
+| `cookie`       | Nombre de la cookie que lleva la elección                                                  | `string`            | —                   |
+| `storageKey`   | Clave de localStorage con lo último que la persona eligió                                  | `string`            | —                   |
+| `useNavigator` | Consultar `navigator.languages` y `navigator.language` antes de recurrir al último recurso | `boolean`           | `true`              |
+| `url`          | URL de la que se lee la consulta                                                           | `string`            | La ubicación actual |
 
 #### Devuelve
 

@@ -8,15 +8,15 @@
 
 ### resolveLocale(options)
 
-| 옵션 | 설명 | 타입 | 기본값 |
-| -------------- | ------------------------------------------------------------------------ | ------------------- | ---------------- |
-| `supported` | 실제로 갖춰 둔 로케일. 구체적인 것부터 앞에 둡니다 | `readonly string[]` | 필수 |
-| `fallback` | 아무것도 맞지 않을 때 돌아오는 값 | `string` | `supported[0]` |
-| `query` | 분명한 선택을 실어 나르는 질의 매개변수(`lang` 따위) | `string` | — |
-| `cookie` | 선택을 실어 나르는 쿠키의 이름 | `string` | — |
-| `storageKey` | 사용자가 마지막으로 고른 것이 담긴 localStorage의 키 | `string` | — |
-| `useNavigator` | 기본값으로 떨어지기 전에 `navigator.languages`와 `navigator.language`를 볼지 여부 | `boolean` | `true` |
-| `url` | 질의를 읽어 올 URL | `string` | 지금의 location |
+| 옵션           | 설명                                                                              | 타입                | 기본값          |
+| -------------- | --------------------------------------------------------------------------------- | ------------------- | --------------- |
+| `supported`    | 실제로 갖춰 둔 로케일. 구체적인 것부터 앞에 둡니다                                | `readonly string[]` | 필수            |
+| `fallback`     | 아무것도 맞지 않을 때 돌아오는 값                                                 | `string`            | `supported[0]`  |
+| `query`        | 분명한 선택을 실어 나르는 질의 매개변수(`lang` 따위)                              | `string`            | —               |
+| `cookie`       | 선택을 실어 나르는 쿠키의 이름                                                    | `string`            | —               |
+| `storageKey`   | 사용자가 마지막으로 고른 것이 담긴 localStorage의 키                              | `string`            | —               |
+| `useNavigator` | 기본값으로 떨어지기 전에 `navigator.languages`와 `navigator.language`를 볼지 여부 | `boolean`           | `true`          |
+| `url`          | 질의를 읽어 올 URL                                                                | `string`            | 지금의 location |
 
 #### 반환값
 

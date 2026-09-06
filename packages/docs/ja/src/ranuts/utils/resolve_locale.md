@@ -8,15 +8,15 @@
 
 ### resolveLocale(options)
 
-| オプション | 説明 | 型 | 既定値 |
-| -------------- | ------------------------------------------------------------------------ | ------------------- | ---------------- |
-| `supported` | 実際に用意してあるロケール。細かいものから先に並べます | `readonly string[]` | 必須 |
-| `fallback` | どれにも当てはまらなかったときに返る値 | `string` | `supported[0]` |
-| `query` | はっきり指定された選択を運ぶクエリパラメーター（`lang` など） | `string` | — |
-| `cookie` | 選択を運ぶ Cookie の名前 | `string` | — |
-| `storageKey` | 利用者が最後に選んだものを収めた localStorage のキー | `string` | — |
-| `useNavigator` | 既定値に落ちる前に `navigator.languages` / `navigator.language` を見るかどうか | `boolean` | `true` |
-| `url` | クエリを読み取る URL | `string` | いまの location |
+| オプション     | 説明                                                                           | 型                  | 既定値          |
+| -------------- | ------------------------------------------------------------------------------ | ------------------- | --------------- |
+| `supported`    | 実際に用意してあるロケール。細かいものから先に並べます                         | `readonly string[]` | 必須            |
+| `fallback`     | どれにも当てはまらなかったときに返る値                                         | `string`            | `supported[0]`  |
+| `query`        | はっきり指定された選択を運ぶクエリパラメーター（`lang` など）                  | `string`            | —               |
+| `cookie`       | 選択を運ぶ Cookie の名前                                                       | `string`            | —               |
+| `storageKey`   | 利用者が最後に選んだものを収めた localStorage のキー                           | `string`            | —               |
+| `useNavigator` | 既定値に落ちる前に `navigator.languages` / `navigator.language` を見るかどうか | `boolean`           | `true`          |
+| `url`          | クエリを読み取る URL                                                           | `string`            | いまの location |
 
 #### 戻り値
 

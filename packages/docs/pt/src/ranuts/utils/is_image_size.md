@@ -8,17 +8,17 @@ Verifica se as dimensões de um arquivo de imagem atendem ao que se pede.
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| ------------------ | ------------------------------------------------------------- | --------- |
+| Argumento          | Descrição                                            | Tipo      |
+| ------------------ | ---------------------------------------------------- | --------- |
 | `Promise<boolean>` | Promessa resolvida indicando se as dimensões atendem | `Promise` |
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | -------------------------- | -------- | -------- |
-| `file` | O objeto de arquivo de imagem | `File` | Obrigatório |
-| `width` | Largura esperada (opcional) | `number` | Opcional |
-| `height` | Altura esperada (opcional) | `number` | Opcional |
+| Parâmetro | Descrição                     | Tipo     | Padrão      |
+| --------- | ----------------------------- | -------- | ----------- |
+| `file`    | O objeto de arquivo de imagem | `File`   | Obrigatório |
+| `width`   | Largura esperada (opcional)   | `number` | Opcional    |
+| `height`  | Altura esperada (opcional)    | `number` | Opcional    |
 
 ## Exemplo
 

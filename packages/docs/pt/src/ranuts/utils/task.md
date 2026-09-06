@@ -14,9 +14,9 @@ Chame antes de a tarefa começar.
 
 #### Retorna
 
-| Parâmetro | Descrição | Tipo |
-| --------- | --------------- | --------------- |
-| taskId | Identificador da tarefa | `unique symbol` |
+| Parâmetro | Descrição               | Tipo            |
+| --------- | ----------------------- | --------------- |
+| taskId    | Identificador da tarefa | `unique symbol` |
 
 ### 2. taskEnd
 
@@ -24,15 +24,15 @@ Chame quando a tarefa terminar; precisa do identificador que o `startTask` devol
 
 #### Opções
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| --------- | --------------- | --------------- | -------- |
-| taskId | Identificador da tarefa | `unique symbol` | Obrigatório |
+| Parâmetro | Descrição               | Tipo            | Padrão      |
+| --------- | ----------------------- | --------------- | ----------- |
+| taskId    | Identificador da tarefa | `unique symbol` | Obrigatório |
 
 #### Retorna
 
-| Parâmetro | Descrição | Tipo |
-| --------- | ------------------- | -------- |
-| `time` | Quanto a tarefa demorou | `number` |
+| Parâmetro | Descrição               | Tipo     |
+| --------- | ----------------------- | -------- |
+| `time`    | Quanto a tarefa demorou | `number` |
 
 ### 3. Exemplo de uso
 

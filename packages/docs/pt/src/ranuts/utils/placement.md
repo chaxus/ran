@@ -30,22 +30,22 @@ panel.style.left = `${left + window.scrollX}px`;
 
 #### Parâmetros
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| ------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------- |
-| `options.anchor` | Retângulo da âncora (o gatilho), em coordenadas da viewport (por exemplo, `getBoundingClientRect()`) | `{ top, left, width, height }` | Obrigatório |
-| `options.floating` | O tamanho do próprio painel flutuante | `{ width, height }` | Obrigatório |
-| `options.placement` | Lado preferido. Vira para o oposto quando falta espaço e sobra do outro lado | `'top' \| 'bottom' \| 'left' \| 'right'` | Obrigatório |
-| `options.offset` | Folga mantida entre a âncora e o painel flutuante, em px | `number` | `0` |
-| `options.boundary` | Região dentro da qual o painel precisa ficar, em coordenadas da viewport | `{ top, left, width, height }` | A viewport da janela |
-| `options.padding` | Folga mínima entre o painel e a borda do limite ao deslizá-lo, em px | `number` | `8` |
+| Parâmetro           | Descrição                                                                                            | Tipo                                     | Padrão               |
+| ------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------- | -------------------- |
+| `options.anchor`    | Retângulo da âncora (o gatilho), em coordenadas da viewport (por exemplo, `getBoundingClientRect()`) | `{ top, left, width, height }`           | Obrigatório          |
+| `options.floating`  | O tamanho do próprio painel flutuante                                                                | `{ width, height }`                      | Obrigatório          |
+| `options.placement` | Lado preferido. Vira para o oposto quando falta espaço e sobra do outro lado                         | `'top' \| 'bottom' \| 'left' \| 'right'` | Obrigatório          |
+| `options.offset`    | Folga mantida entre a âncora e o painel flutuante, em px                                             | `number`                                 | `0`                  |
+| `options.boundary`  | Região dentro da qual o painel precisa ficar, em coordenadas da viewport                             | `{ top, left, width, height }`           | A viewport da janela |
+| `options.padding`   | Folga mínima entre o painel e a borda do limite ao deslizá-lo, em px                                 | `number`                                 | `8`                  |
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| ----------- | --------------------------------------------------------- | ---------------------------------------- |
-| `top` | O `top` resolvido, no mesmo espaço de coordenadas de `anchor` | `number` |
-| `left` | O `left` resolvido, no mesmo espaço de coordenadas de `anchor` | `number` |
-| `placement` | O lado de fato usado, já com a virada | `'top' \| 'bottom' \| 'left' \| 'right'` |
+| Argumento   | Descrição                                                      | Tipo                                     |
+| ----------- | -------------------------------------------------------------- | ---------------------------------------- |
+| `top`       | O `top` resolvido, no mesmo espaço de coordenadas de `anchor`  | `number`                                 |
+| `left`      | O `left` resolvido, no mesmo espaço de coordenadas de `anchor` | `number`                                 |
+| `placement` | O lado de fato usado, já com a virada                          | `'top' \| 'bottom' \| 'left' \| 'right'` |
 
 ## Notas
 
