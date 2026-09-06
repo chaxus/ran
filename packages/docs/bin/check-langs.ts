@@ -14,6 +14,10 @@
  *    to `##`, a code fence or `<Demo>` block dropped in the rewrite. The page still builds
  *    and still reads like prose, so nothing catches it except comparing the skeleton against
  *    the English original.
+ * 5. **Frontmatter that stopped being YAML.** A translator turning an em dash into a colon
+ *    (`description: What changed: added, fixed`) makes the value a mapping key, and VitePress
+ *    fails the whole build with a YAML stack trace that names one file and lists no others.
+ *    Six pages broke this way at once; catching it here names all six in a second.
  *
  * `packages/docs/CLAUDE.md` warns that `cn/src/` is a manual mirror of `src/`. With eight
  * languages that warning stops being enough, so it is enforced here instead.
@@ -57,7 +61,8 @@ for (const locale of LOCALES) {
   }
   const have = new Set(Object.keys(messages.labels));
   for (const key of wanted) if (!have.has(key)) fail(`${locale.id}: missing label "${key}"`);
-  for (const key of have) if (!wanted.has(key)) fail(`${locale.id}: stray label "${key}" (no node in structure.ts uses it)`);
+  for (const key of have)
+    if (!wanted.has(key)) fail(`${locale.id}: stray label "${key}" (no node in structure.ts uses it)`);
   for (const [key, value] of Object.entries(messages.ui)) {
     if (!value.trim()) fail(`${locale.id}: empty UI string "${key}"`);
   }
@@ -91,7 +96,8 @@ for (const locale of LOCALES) {
     const source = new Set(pagesUnder(join(ROOT, sub)));
     const target = new Set(pagesUnder(join(ROOT, locale.dir, sub)));
     for (const page of source) if (!target.has(page)) fail(`${locale.id}: missing page ${locale.dir}/${sub}/${page}`);
-    for (const page of target) if (!source.has(page)) fail(`${locale.id}: extra page ${locale.dir}/${sub}/${page} (no English original)`);
+    for (const page of target)
+      if (!source.has(page)) fail(`${locale.id}: extra page ${locale.dir}/${sub}/${page} (no English original)`);
   }
 }
 
@@ -112,6 +118,28 @@ const proseBackticks = (file: string): number => {
     if (!inFence) count += (line.match(/`/g) ?? []).length;
   }
   return count;
+};
+
+/**
+ * A frontmatter value YAML cannot read back.
+ *
+ * Only the plain (unquoted) scalars are at risk: an unescaped `: ` inside one starts a
+ * nested mapping, and a trailing colon makes the whole line a key. Quoted, folded and
+ * flow values say where they end, so they are left alone.
+ */
+const badFrontmatterKey = (file: string): string | undefined => {
+  const text = readFileSync(file, 'utf8');
+  if (!text.startsWith('---\n')) return undefined;
+  const end = text.indexOf('\n---', 4);
+  if (end === -1) return undefined;
+  for (const line of text.slice(4, end).split('\n')) {
+    const entry = /^([A-Za-z_][\w-]*):\s+(.*)$/.exec(line);
+    if (!entry) continue;
+    const value = entry[2];
+    if (/^["'|>[{]/.test(value)) continue;
+    if (value.includes(': ') || value.trimEnd().endsWith(':')) return entry[1];
+  }
+  return undefined;
 };
 
 const skeleton = (file: string): { levels: string; fences: number; demos: number } => {
@@ -142,8 +170,10 @@ for (const locale of LOCALES) {
       const en = skeleton(join(ROOT, sub, page));
       const other = skeleton(target);
       const where = `${locale.dir}/${sub}/${page}`;
-      if (en.levels !== other.levels) fail(`${locale.id}: ${where} heading outline differs (en ${en.levels}, got ${other.levels})`);
-      if (en.fences !== other.fences) fail(`${locale.id}: ${where} has ${other.fences} code blocks, en has ${en.fences}`);
+      if (en.levels !== other.levels)
+        fail(`${locale.id}: ${where} heading outline differs (en ${en.levels}, got ${other.levels})`);
+      if (en.fences !== other.fences)
+        fail(`${locale.id}: ${where} has ${other.fences} code blocks, en has ${en.fences}`);
       if (en.demos !== other.demos) fail(`${locale.id}: ${where} has ${other.demos} <Demo> blocks, en has ${en.demos}`);
       // An odd number of backticks *in prose* means an inline-code span was never closed.
       // Markdown then swallows the rest of the paragraph into `<code>`, which reads as a
@@ -154,6 +184,8 @@ for (const locale of LOCALES) {
       if (proseBackticks(target) % 2 === 1) {
         fail(`${locale.id}: ${where} has an unclosed inline-code span (odd backtick count in prose)`);
       }
+      const badKey = badFrontmatterKey(target);
+      if (badKey) fail(`${locale.id}: ${where} frontmatter "${badKey}" is not valid YAML — quote the value`);
     }
   }
 }
@@ -167,6 +199,7 @@ if (errors.length) {
     ['stray label', (e: string) => e.includes('stray label')],
     ['empty UI string', (e: string) => e.includes('empty UI string')],
     ['structure mismatch', (e: string) => /heading outline|code blocks|<Demo> blocks|backtick/.test(e)],
+    ['frontmatter', (e: string) => e.includes('not valid YAML')],
     ['extra page', (e: string) => e.includes('extra page')],
     ['missing page', (e: string) => e.includes('missing page')],
     ['other', () => true],
@@ -183,4 +216,6 @@ if (errors.length) {
   }
   process.exit(1);
 }
-console.log(`check:langs — ${LOCALES.length} languages, ${wanted.size} labels, all pages present and structurally matched`);
+console.log(
+  `check:langs — ${LOCALES.length} languages, ${wanted.size} labels, all pages present and structurally matched`,
+);

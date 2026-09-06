@@ -1,6 +1,6 @@
 ---
 title: ranui 元素 API
-description: ranui 的全部自定义元素 —— 40 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。
+description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。'
 ---
 
 # ranui 元素 API（自动生成）

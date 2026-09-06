@@ -1,6 +1,6 @@
 ---
 title: ranuts API reference
-description: Every symbol exported by ranuts — 454 exports across 8 entry points, with signatures and descriptions.
+description: 'Every symbol exported by ranuts — 454 exports across 8 entry points, with signatures and descriptions.'
 ---
 
 # ranuts API (Generated)

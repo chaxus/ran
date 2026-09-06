@@ -333,7 +333,6 @@ const icons: Record<string, string> = {
 
 const t = computed(() => homeCopy(locale.value.dir));
 
-
 // Split the headline into words so each can rise on its own. Languages that opt out
 // (`splitWords: false` — the CJK headlines, and Persian) rise as a single segment: word
 // units either do not exist there or are not worth reordering an RTL line for.

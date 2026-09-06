@@ -1,6 +1,6 @@
 ---
 title: ranui changelog
-description: What changed in ranui — added, changed, fixed and removed, with the reasoning, plus the dated engineering notes behind each batch.
+description: 'What changed in ranui — added, changed, fixed and removed, with the reasoning, plus the dated engineering notes behind each batch.'
 ---
 
 # Changelog

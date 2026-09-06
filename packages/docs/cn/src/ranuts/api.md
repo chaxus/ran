@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: ranuts 导出的全部符号 — 8 个入口点，共 454 个导出，含签名与描述。
+description: 'ranuts 导出的全部符号 — 8 个入口点，共 454 个导出，含签名与描述。'
 ---
 
 # ranuts API（自动生成）

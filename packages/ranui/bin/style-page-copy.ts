@@ -47,7 +47,8 @@ export const STYLE_PAGE_COPY: Record<DocLocaleDir, StylePageCopy> = {
   },
   ja: {
     title: 'ranui スタイルトークン',
-    description: 'ranui の各要素が公開する CSS カスタムプロパティと ::part() 名。いずれもスタイルシートから抽出しています。',
+    description:
+      'ranui の各要素が公開する CSS カスタムプロパティと ::part() 名。いずれもスタイルシートから抽出しています。',
     heading: 'スタイルトークンと Part',
     intro: (href) => [
       '各要素が公開する CSS カスタムプロパティと `::part()` 名の一覧です。`pnpm -F ranui doc:style` が',
@@ -96,7 +97,8 @@ export const STYLE_PAGE_COPY: Record<DocLocaleDir, StylePageCopy> = {
   },
   ko: {
     title: 'ranui 스타일 토큰',
-    description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼티와 ::part() 이름. 모두 스타일시트에서 추출했습니다.',
+    description:
+      'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼티와 ::part() 이름. 모두 스타일시트에서 추출했습니다.',
     heading: '스타일 토큰과 Part',
     intro: (href) => [
       '각 엘리먼트가 노출하는 모든 CSS 커스텀 프로퍼티와 `::part()` 이름입니다. `pnpm -F ranui doc:style`이',
@@ -128,7 +130,8 @@ export const STYLE_PAGE_COPY: Record<DocLocaleDir, StylePageCopy> = {
   },
   fa: {
     title: 'توکن‌های استایل ranui',
-    description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part که هر عنصر ranui در اختیار می‌گذارد، استخراج‌شده از شیوه‌نامهٔ خودش.',
+    description:
+      'ویژگی‌های سفارشی CSS و نام‌های ()::part که هر عنصر ranui در اختیار می‌گذارد، استخراج‌شده از شیوه‌نامهٔ خودش.',
     heading: 'توکن‌های استایل و Part‌ها',
     intro: (href) => [
       'هر ویژگی سفارشی CSS و هر نام `()::part` که یک عنصر در اختیار می‌گذارد، به دست',

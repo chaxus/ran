@@ -1,6 +1,6 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import { DOC_LOCALE_DIRS, sitePagePath } from './doc-site-locales.ts';
+import { DOC_LOCALE_DIRS, frontmatterValue, sitePagePath } from './doc-site-locales.ts';
 import { API_PAGE_COPY, hrefIn } from './api-page-copy.ts';
 import type { Labels } from './api-page-copy.ts';
 
@@ -624,7 +624,7 @@ async function main(): Promise<void> {
       [
         '---',
         `title: ${copy.title}`,
-        `description: ${copy.description(count)}`,
+        `description: ${frontmatterValue(copy.description(count))}`,
         '---',
         '',
         `# ${copy.heading}`,

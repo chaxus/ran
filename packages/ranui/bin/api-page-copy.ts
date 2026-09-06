@@ -81,7 +81,8 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       namedSlot: (name) => `${name}（具名）`,
     },
     title: 'ranui 元素 API',
-    description: (n) => `ranui 的全部自定义元素 —— ${n} 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。`,
+    description: (n) =>
+      `ranui 的全部自定义元素 —— ${n} 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。`,
     heading: 'ranui 元素 API（自动生成）',
     intro: (href, repo) => [
       '由 `pnpm -F ranui doc:api` 从组件源码自动生成，因此不会与实际发布的代码脱节：逐个元素',

@@ -164,19 +164,22 @@ body::before {
   color: var(--ran-color-text);
 }
 
-/* Globe sits out of flow at the control's left edge, so the select's box (and
+/* Globe sits out of flow at the control's leading edge, so the select's box (and
    therefore its dropdown) starts at the same x — keeping trigger and dropdown
-   left-aligned. The select text is padded to clear the globe. */
+   aligned. The select text is padded to clear the globe. `inset-inline-start`
+   rather than `left` so it moves to the other edge under `dir="rtl"` (Persian). */
 .lang-switch > r-icon {
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
 }
 
 .lang-select {
-  width: 96px;
+  /* Wide enough for the longest label ("Português") plus the room the globe
+     takes; a fixed width keeps the header from reflowing as you switch. */
+  width: 116px;
   /* 13px to match the links and the theme toggle either side of it; the
      component's own default is 14px, which made the language the largest text
      in the header. */
@@ -192,6 +195,13 @@ body::before {
   --ran-select-root-color: currentColor;
   /* drop the chevron — the globe leads instead */
   --ran-select-icon-display: none;
+}
+
+/* The select's padding tokens are physical, so the room reserved for the globe
+   has to move to the other side by hand when the page flips. */
+[dir='rtl'] .lang-select {
+  --ran-select-item-left: 8px;
+  --ran-select-item-right: 24px;
 }
 
 #theme-toggle {
@@ -700,7 +710,8 @@ footer a {
   color: var(--ran-color-text-secondary);
   width: 48px;
   flex-shrink: 0;
-  text-align: right;
+  /* `end`, not `right`: the label hugs the bar it labels in either direction. */
+  text-align: end;
 }
 
 .space-bar {

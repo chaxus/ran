@@ -31,7 +31,11 @@ const label = (node: SidebarNode, labels: Record<string, string>): string => {
  * Prefix a path for a locale, or leave it alone when the page is not mirrored there.
  * External URLs and the home page are handled first: the home page exists in every locale.
  */
-const buildItems = (nodes: SidebarNode[], locale: LocaleDef, labels: Record<string, string>): DefaultTheme.SidebarItem[] =>
+const buildItems = (
+  nodes: SidebarNode[],
+  locale: LocaleDef,
+  labels: Record<string, string>,
+): DefaultTheme.SidebarItem[] =>
   nodes.map((node) => {
     const item: DefaultTheme.SidebarItem = {};
     if (node.kind) item.text = label(node, labels);

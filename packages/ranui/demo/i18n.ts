@@ -4,18 +4,50 @@
 import { createI18n, useI18n } from '@/utils/i18n';
 import en from './locales/en.json';
 import zh from './locales/zh.json';
+import ja from './locales/ja.json';
+import es from './locales/es.json';
+import pt from './locales/pt.json';
+import ko from './locales/ko.json';
+import de from './locales/de.json';
+import fa from './locales/fa.json';
 
-export type Lang = 'en' | 'zh';
+/**
+ * The demo's language registry — the one list everything else reads: the i18n
+ * dictionaries, the `<html lang>`/`dir` the page ends up with, and the labels in
+ * the switcher. A second hard-coded list of languages anywhere else is a bug; it
+ * will silently miss whichever language is added next.
+ *
+ * `code` is the dictionary key, `htmlLang` the BCP-47 tag that goes on `<html>`.
+ */
+export const LANGS = [
+  { code: 'en', label: 'English', htmlLang: 'en' },
+  { code: 'zh', label: '中文', htmlLang: 'zh-CN' },
+  { code: 'ja', label: '日本語', htmlLang: 'ja' },
+  { code: 'es', label: 'Español', htmlLang: 'es' },
+  { code: 'pt', label: 'Português', htmlLang: 'pt' },
+  { code: 'ko', label: '한국어', htmlLang: 'ko' },
+  { code: 'de', label: 'Deutsch', htmlLang: 'de' },
+  { code: 'fa', label: 'فارسی', htmlLang: 'fa', rtl: true },
+] as const;
+
+export type Lang = (typeof LANGS)[number]['code'];
+
+const DEFAULT_LANG: Lang = 'en';
 
 createI18n({
-  messages: { en, zh },
-  fallbackLocale: 'en',
+  messages: { en, zh, ja, es, pt, ko, de, fa },
+  fallbackLocale: DEFAULT_LANG,
   persist: true,
   storageKey: 'ran-demo-lang',
   detectNavigator: true,
 });
 
-export const getLang = (): Lang => (useI18n()?.getLocale() === 'zh' ? 'zh' : 'en');
+const isLang = (value: string | undefined): value is Lang => LANGS.some((l) => l.code === value);
+
+export const getLang = (): Lang => {
+  const locale = useI18n()?.getLocale();
+  return isLang(locale) ? locale : DEFAULT_LANG;
+};
 
 export const setLang = (lang: Lang): void => useI18n()?.setLocale(lang);
 
@@ -23,7 +55,12 @@ export const applyLanguage = (lang: Lang): void => {
   const i18n = useI18n();
   if (!i18n) return;
   i18n.setLocale(lang);
-  document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
+
+  const def = LANGS.find((l) => l.code === lang) ?? LANGS[0];
+  document.documentElement.setAttribute('lang', def.htmlLang);
+  // Persian is the only right-to-left language here; `dir` has to be cleared
+  // again on the way back out, or the page stays mirrored after switching away.
+  document.documentElement.setAttribute('dir', 'rtl' in def && def.rtl ? 'rtl' : 'ltr');
 
   const bind = (attr: string, apply: (el: Element, value: string) => void): void => {
     document.querySelectorAll(`[${attr}]`).forEach((el) => {

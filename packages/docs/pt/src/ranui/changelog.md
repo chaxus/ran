@@ -1,6 +1,6 @@
 ---
 title: Registro de alterações do ranui
-description: O que mudou no ranui: adicionado, alterado, corrigido e removido, com o raciocínio, além das notas técnicas datadas por trás de cada lote.
+description: 'O que mudou no ranui: adicionado, alterado, corrigido e removido, com o raciocínio, além das notas técnicas datadas por trás de cada lote.'
 ---
 
 # Registro de alterações

@@ -1,6 +1,6 @@
 ---
 title: ranui 样式令牌
-description: ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称，均从其样式表提取。
+description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称，均从其样式表提取。'
 ---
 
 # 样式令牌与 Part

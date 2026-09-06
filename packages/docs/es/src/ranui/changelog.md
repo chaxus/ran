@@ -1,6 +1,6 @@
 ---
 title: Registro de cambios de ranui
-description: Qué cambió en ranui: lo añadido, lo modificado, lo corregido y lo eliminado, con su razonamiento, además de las notas técnicas fechadas detrás de cada tanda.
+description: 'Qué cambió en ranui: lo añadido, lo modificado, lo corregido y lo eliminado, con su razonamiento, además de las notas técnicas fechadas detrás de cada tanda.'
 ---
 
 # Registro de cambios

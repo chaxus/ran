@@ -278,7 +278,9 @@ export default defineConfig({
       ['meta', { property: 'og:locale', content: locale.ogLocale }],
       ...translated
         .filter((l) => l.dir !== locale.dir)
-        .map((l) => ['meta', { property: 'og:locale:alternate', content: l.ogLocale }] as [string, Record<string, string>]),
+        .map(
+          (l) => ['meta', { property: 'og:locale:alternate', content: l.ogLocale }] as [string, Record<string, string>],
+        ),
       ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
       ['meta', { name: 'twitter:title', content: ogTitle }],
       ['meta', { name: 'twitter:description', content: desc }],
@@ -313,7 +315,8 @@ export default defineConfig({
     // extract and cite them as API documentation. The two library landing pages
     // above already carry SoftwareSourceCode, so they're excluded here.
     const isComponentPage = /^src\/ranui\/[^/]+\/index\.md$/.test(baseRel) && baseRel !== 'src/ranui/index.md';
-    const isUtilPage = baseRel.startsWith('src/ranuts/') && baseRel !== 'src/ranuts/index.md' && baseRel.endsWith('.md');
+    const isUtilPage =
+      baseRel.startsWith('src/ranuts/') && baseRel !== 'src/ranuts/index.md' && baseRel.endsWith('.md');
     if (isComponentPage || isUtilPage) {
       head.push([
         'script',

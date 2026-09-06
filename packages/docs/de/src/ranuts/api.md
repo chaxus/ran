@@ -1,6 +1,6 @@
 ---
 title: ranuts-API-Referenz
-description: Jedes von ranuts exportierte Symbol — 454 Exporte über 8 Entry Points, mit Signatur und Beschreibung.
+description: 'Jedes von ranuts exportierte Symbol — 454 Exporte über 8 Entry Points, mit Signatur und Beschreibung.'
 ---
 
 # ranuts-API (generiert)

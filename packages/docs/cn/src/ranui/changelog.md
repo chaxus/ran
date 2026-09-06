@@ -1,6 +1,6 @@
 ---
 title: ranui 更新日志
-description: ranui 的变更记录——新增、变更、修复与移除及其原因，以及每一批改动背后的工程记录。
+description: 'ranui 的变更记录——新增、变更、修复与移除及其原因，以及每一批改动背后的工程记录。'
 ---
 
 # Changelog 更新日志
