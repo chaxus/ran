@@ -1,6 +1,6 @@
 ---
 title: ranui-Style-Tokens
-description: Die CSS-Custom-Properties und ::part()-Namen, die jedes ranui-Element bereitstellt — aus seinem Stylesheet extrahiert.
+description: 'Die CSS-Custom-Properties und ::part()-Namen, die jedes ranui-Element bereitstellt — aus seinem Stylesheet extrahiert.'
 ---
 
 # Style-Tokens und Parts

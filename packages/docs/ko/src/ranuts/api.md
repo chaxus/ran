@@ -1,29 +1,29 @@
 ---
 title: ranuts API 레퍼런스
-description: ranuts 가 내보내는 모든 심볼 — 8 개 진입점, 총 454 개 export 를 시그니처와 설명과 함께.
+description: 'ranuts가 내보내는 모든 심볼 — 8개 진입점, 총 454개 export를 시그니처와 설명과 함께.'
 ---
 
 # ranuts API (자동 생성)
 
-`bin/generate-api-docs.ts`(`npm run doc:api`) 가 자동 생성합니다. 진입점별로 내보낸 각 심볼의
-시그니처와 한 줄 설명을 정리한 레퍼런스입니다. 설명은 소스 JSDoc 에서 그대로 가져오므로 영어입니다.
-어느 진입점에서 import 할지, 실행 환경 제약, 관례 등 전체 그림은 [CLAUDE.md](https://github.com/chaxus/ran/blob/main/packages/ranuts/CLAUDE.md)를 먼저 읽어 주세요.
+`bin/generate-api-docs.ts`(`npm run doc:api`)가 자동 생성합니다. 진입점별로 내보낸 각 심볼의
+시그니처와 한 줄 설명을 정리한 레퍼런스입니다. 설명은 소스 JSDoc에서 그대로 가져오므로 영어입니다.
+어느 진입점에서 import할지, 실행 환경 제약, 관례 등 전체 그림은 [CLAUDE.md](https://github.com/chaxus/ran/blob/main/packages/ranuts/CLAUDE.md)를 먼저 읽어 주세요.
 
-심볼이 속한 **서브패스**에서 import 하세요. 예: `import { debounce } from
+심볼이 속한 **서브패스**에서 import하세요. 예: `import { debounce } from
 'ranuts/utils'`. 루트 배럴 `ranuts`는 utils + visual 표면을 다시 내보냅니다.
 
-**export 454 개**, 진입점 8 개.
+**export 454개**, 진입점 8개.
 
 ## 진입점
 
-- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 339 개
-- [`ranuts/sw`](#ranuts-sw) — Service Worker 캐싱 전략과 프리캐시 프로토콜 · _service worker 전용_ · export 9 개
-- [`ranuts/node`](#ranuts-node) — Node 서버 유틸리티 (fs / http / ws / 미들웨어) · _node 전용_ · export 26 개
-- [`ranuts/visual`](#ranuts-visual) — 2D 렌더링 엔진 (Canvas / WebGL / WebGPU) · _브라우저 전용_ · export 16 개
-- [`ranuts/i18n`](#ranuts-i18n) — 프레임워크 비종속 i18n 엔진 (ranuts/utils 에서도 다시 내보냄) · _브라우저 + node_ · export 9 개
-- [`ranuts/vnode`](#ranuts-vnode) — Snabbdom 스타일 가상 DOM · _브라우저_ · export 26 개
-- [`ranuts/stream`](#ranuts-stream) — SSE 파싱과 공급자 중립적인 모델 스트림 폴드, 그리고 대화 기록이 언제 더는 들어가지 않는지 판단하는 토큰 예산 · _브라우저 + node_ · export 20 개
-- [`ranuts/conversation`](#ranuts-conversation) — 추가 전용 이벤트 로그를 렌더링 가능한 대화 노드로 투영 · _브라우저 + node_ · export 9 개
+- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 339개
+- [`ranuts/sw`](#ranuts-sw) — Service Worker 캐싱 전략과 프리캐시 프로토콜 · _service worker 전용_ · export 9개
+- [`ranuts/node`](#ranuts-node) — Node 서버 유틸리티 (fs / http / ws / 미들웨어) · _node 전용_ · export 26개
+- [`ranuts/visual`](#ranuts-visual) — 2D 렌더링 엔진 (Canvas / WebGL / WebGPU) · _브라우저 전용_ · export 16개
+- [`ranuts/i18n`](#ranuts-i18n) — 프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄) · _브라우저 + node_ · export 9개
+- [`ranuts/vnode`](#ranuts-vnode) — Snabbdom 스타일 가상 DOM · _브라우저_ · export 26개
+- [`ranuts/stream`](#ranuts-stream) — SSE 파싱과 공급자 중립적인 모델 스트림 폴드, 그리고 대화 기록이 언제 더는 들어가지 않는지 판단하는 토큰 예산 · _브라우저 + node_ · export 20개
+- [`ranuts/conversation`](#ranuts-conversation) — 추가 전용 이벤트 로그를 렌더링 가능한 대화 노드로 투영 · _브라우저 + node_ · export 9개
 
 ## `ranuts/utils`
 
@@ -177,7 +177,7 @@ import { /* … */ } from 'ranuts/utils';
 - `opacity(img: ImgSource, opacity: number) => ImgSource` — Apply an overall opacity to an image, returning an offscreen canvas.
 - `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
 - `paginateText(text: string, box: TextBox, metrics: TextGridMetrics, options?: PaginateOptions) => PaginateResult` — Cut text into pages that fit `box`, given the type metrics.
-- `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic, covering「十五」「二十三」「一百零三」「一千零一」「三万」.
+- `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic, covering 「十五」「二十三」「一百零三」「一千零一」「三万」.
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
 - `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, optionally followed by
@@ -497,7 +497,7 @@ import { /* … */ } from 'ranuts/visual';
 
 ## `ranuts/i18n`
 
-프레임워크 비종속 i18n 엔진 (ranuts/utils 에서도 다시 내보냄) · 실행 환경: **브라우저 + node** · 소스: `src/utils/i18n.ts`
+프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄) · 실행 환경: **브라우저 + node** · 소스: `src/utils/i18n.ts`
 
 ```ts
 import { /* … */ } from 'ranuts/i18n';

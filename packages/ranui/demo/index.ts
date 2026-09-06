@@ -1,7 +1,7 @@
 import './register-icons'; // must run before any component module (see file)
 import message from '@/components/message';
 import { getTheme, initTheme, setTheme } from '@/utils/theme';
-import { applyLanguage, getLang, setLang } from './i18n';
+import { LANGS, applyLanguage, getLang, setLang } from './i18n';
 import type { Lang } from './i18n';
 import '../style';
 import '../index';
@@ -45,6 +45,20 @@ if (langSelect) {
     setLang(value);
     applyLanguage(value);
   });
+
+  // The options are static markup while LANGS is the registry the dictionaries
+  // and `<html lang>` come from. A language added to one and not the other is
+  // invisible — either an option that resolves nothing, or a dictionary nobody
+  // can reach — so say so out loud in dev.
+  if (import.meta.env?.DEV) {
+    const inMarkup = Array.from(langSelect.querySelectorAll('r-option')).map((o) => o.getAttribute('value'));
+    const codes: readonly string[] = LANGS.map((l) => l.code);
+    const missing = codes.filter((c) => !inMarkup.includes(c));
+    const stray = inMarkup.filter((v) => v && !codes.includes(v));
+    if (missing.length || stray.length) {
+      console.warn('[demo] language switcher out of sync with LANGS', { missing, stray });
+    }
+  }
 }
 
 // ── Color palette swatches (read straight from the CSS custom properties) ──

@@ -1,6 +1,6 @@
 ---
 title: ranui-Änderungsprotokoll
-description: Was sich in ranui geändert hat — Hinzugefügtes, Geändertes, Behobenes und Entferntes samt Begründung, dazu die datierten Engineering-Notizen hinter jedem Schub.
+description: 'Was sich in ranui geändert hat — Hinzugefügtes, Geändertes, Behobenes und Entferntes samt Begründung, dazu die datierten Engineering-Notizen hinter jedem Schub.'
 ---
 
 # Änderungsprotokoll

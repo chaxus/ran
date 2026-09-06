@@ -1,6 +1,6 @@
 import { promises as fs, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { API_PAGE_COPY, DOC_LOCALE_DIRS } from './api-page-copy.ts';
+import { API_PAGE_COPY, DOC_LOCALE_DIRS, frontmatterValue } from './api-page-copy.ts';
 import type { DocLocaleDir, Kind, RuntimeKey } from './api-page-copy.ts';
 import { API, SignatureKind, SymbolFlags } from 'typescript/unstable/sync';
 import type { Checker, Symbol as TsSymbol } from 'typescript/unstable/sync';
@@ -445,7 +445,7 @@ async function main(): Promise<void> {
         [
           '---',
           `title: ${copy.title}`,
-          `description: ${copy.description(total, ENTRIES.length)}`,
+          `description: ${frontmatterValue(copy.description(total, ENTRIES.length))}`,
           '---',
           '',
           renderPage(dir, siteClaudeLink),

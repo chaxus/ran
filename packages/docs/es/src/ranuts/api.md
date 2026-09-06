@@ -1,6 +1,6 @@
 ---
 title: Referencia de la API de ranuts
-description: Todos los símbolos que exporta ranuts: 454 exportaciones en 8 puntos de entrada, con firmas y descripciones.
+description: 'Todos los símbolos que exporta ranuts: 454 exportaciones en 8 puntos de entrada, con firmas y descripciones.'
 ---
 
 # API de ranuts (generada)

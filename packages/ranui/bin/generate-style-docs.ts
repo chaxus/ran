@@ -1,6 +1,6 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import { DOC_LOCALE_DIRS, sitePagePath, siteHref } from './doc-site-locales.ts';
+import { DOC_LOCALE_DIRS, frontmatterValue, sitePagePath, siteHref } from './doc-site-locales.ts';
 import { STYLE_PAGE_COPY } from './style-page-copy.ts';
 
 const ROOT = path.resolve(process.cwd());
@@ -385,7 +385,7 @@ async function main(): Promise<void> {
       [
         '---',
         `title: ${copy.title}`,
-        `description: ${copy.description}`,
+        `description: ${frontmatterValue(copy.description)}`,
         '---',
         '',
         `# ${copy.heading}`,

@@ -1,6 +1,6 @@
 ---
 title: ranui スタイルトークン
-description: ranui の各要素が公開する CSS カスタムプロパティと ::part() 名。いずれもスタイルシートから抽出しています。
+description: 'ranui の各要素が公開する CSS カスタムプロパティと ::part() 名。いずれもスタイルシートから抽出しています。'
 ---
 
 # スタイルトークンと Part

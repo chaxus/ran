@@ -1,6 +1,6 @@
 ---
 title: ranui-Element-API
-description: Alle Custom Elements von ranui — 40 Elemente mit ihren Attributen, Eigenschaften, Events, Slots und ::part()-Namen, aus dem Quelltext extrahiert.
+description: 'Alle Custom Elements von ranui — 40 Elemente mit ihren Attributen, Eigenschaften, Events, Slots und ::part()-Namen, aus dem Quelltext extrahiert.'
 ---
 
 # ranui-Element-API (generiert)

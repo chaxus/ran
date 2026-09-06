@@ -310,7 +310,8 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       'ranuts/visual': '2D 렌더링 엔진 (Canvas / WebGL / WebGPU)',
       'ranuts/i18n': '프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄)',
       'ranuts/vnode': 'Snabbdom 스타일 가상 DOM',
-      'ranuts/stream': 'SSE 파싱과 공급자 중립적인 모델 스트림 폴드, 그리고 대화 기록이 언제 더는 들어가지 않는지 판단하는 토큰 예산',
+      'ranuts/stream':
+        'SSE 파싱과 공급자 중립적인 모델 스트림 폴드, 그리고 대화 기록이 언제 더는 들어가지 않는지 판단하는 토큰 예산',
       'ranuts/conversation': '추가 전용 이벤트 로그를 렌더링 가능한 대화 노드로 투영',
     },
   },
@@ -409,3 +410,15 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
     },
   },
 };
+
+/**
+ * A frontmatter value, quoted so YAML reads it back as the sentence it is.
+ *
+ * VitePress parses the frontmatter first, so one unquotable value fails the whole site
+ * build with a YAML stack trace naming a single file. A plain scalar breaks on any `: `
+ * inside it — which is what a translation writes when the English em dash reads better in
+ * that language as a colon ("Todos los símbolos que exporta ranuts: 454 exportaciones").
+ * `packages/ranui/bin/doc-site-locales.ts` carries the same helper; ranuts cannot import
+ * it because it does not depend on ranui.
+ */
+export const frontmatterValue = (value: string): string => `'${value.replaceAll("'", "''")}'`;

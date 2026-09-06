@@ -24,3 +24,18 @@ export const sitePagePath = (ranuiRoot: string, dir: DocLocaleDir, ...segments: 
  * only English and Chinese carry.
  */
 export const siteHref = (dir: DocLocaleDir, link: string): string => (dir ? `/${dir}${link}` : link);
+
+/**
+ * A frontmatter value, quoted so YAML reads it back as the sentence it is.
+ *
+ * VitePress parses the frontmatter before it parses anything else, so one unquotable
+ * value fails the whole site build with a YAML stack trace naming a single file. A plain
+ * scalar breaks on any `: ` inside it — which is exactly what a translator writes when the
+ * English em dash ("What changed in ranui — added, fixed") reads better in their language
+ * as a colon ("Qué cambió en ranui: lo añadido, lo corregido"). Six generated pages broke
+ * that way at once, all of them in the two Romance languages.
+ *
+ * Single quotes, with an internal quote doubled: YAML's one escape inside a single-quoted
+ * scalar, and the form the hand-written pages already use.
+ */
+export const frontmatterValue = (value: string): string => `'${value.replaceAll("'", "''")}'`;

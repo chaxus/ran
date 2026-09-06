@@ -1,6 +1,6 @@
 ---
 title: Tokens de estilo do ranui
-description: As propriedades personalizadas de CSS e os nomes de ::part() que cada elemento do ranui expõe, extraídos da sua folha de estilos.
+description: 'As propriedades personalizadas de CSS e os nomes de ::part() que cada elemento do ranui expõe, extraídos da sua folha de estilos.'
 ---
 
 # Tokens de estilo e partes

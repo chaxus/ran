@@ -1,6 +1,6 @@
 ---
 title: API de elementos de ranui
-description: Todos los custom elements de ranui: 40 elementos con sus atributos, propiedades, eventos, slots y nombres de ::part(), extraídos del código fuente.
+description: 'Todos los custom elements de ranui: 40 elementos con sus atributos, propiedades, eventos, slots y nombres de ::part(), extraídos del código fuente.'
 ---
 
 # API de elementos de ranui (generada)
