@@ -4,20 +4,20 @@ JavaScript が用意していない Promise の道具です。外から決着さ
 
 ## API
 
-| 関数 | 説明 |
-| -------------------------------------------------------- | -------------------------------------------------------- |
-| `deferred<T>()` | `{ promise, resolve, reject }`。外から決着させられます |
-| `withTimeout(promise, ms, options?)` | `ms` 以内に決着しなければ `TimeoutError` で reject します |
-| `withTimeoutFallback(promise, ms, fallback, onTimeout?)` | reject する代わりに `fallback` で resolve します |
-| `delay(ms)` | `ms` 後に resolve します |
-| `TimeoutError` | `withTimeout` が投げるエラーのクラス |
+| 関数                                                     | 説明                                                      |
+| -------------------------------------------------------- | --------------------------------------------------------- |
+| `deferred<T>()`                                          | `{ promise, resolve, reject }`。外から決着させられます    |
+| `withTimeout(promise, ms, options?)`                     | `ms` 以内に決着しなければ `TimeoutError` で reject します |
+| `withTimeoutFallback(promise, ms, fallback, onTimeout?)` | reject する代わりに `fallback` で resolve します          |
+| `delay(ms)`                                              | `ms` 後に resolve します                                  |
+| `TimeoutError`                                           | `withTimeout` が投げるエラーのクラス                      |
 
 ### `withTimeout` options
 
-| オプション | 説明 | 既定値 |
-| ----------- | ----------------------------------------------------------- | ---------------------------------- |
-| `message` | エラーのメッセージ | `operation timed out after {ms}ms` |
-| `onTimeout` | 期限を過ぎたときに呼ばれます。処理を後片づけするためのものです | — |
+| オプション  | 説明                                                           | 既定値                             |
+| ----------- | -------------------------------------------------------------- | ---------------------------------- |
+| `message`   | エラーのメッセージ                                             | `operation timed out after {ms}ms` |
+| `onTimeout` | 期限を過ぎたときに呼ばれます。処理を後片づけするためのものです | —                                  |
 
 ## 使用例
 

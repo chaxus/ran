@@ -4,20 +4,20 @@
 
 ## API
 
-| 함수 | 설명 |
-| -------------------------------------------------------- | -------------------------------------------------------- |
-| `deferred<T>()` | `{ promise, resolve, reject }`. 밖에서 결말을 지을 수 있습니다 |
-| `withTimeout(promise, ms, options?)` | `ms` 안에 결말이 나지 않으면 `TimeoutError`로 거부합니다 |
-| `withTimeoutFallback(promise, ms, fallback, onTimeout?)` | 거부하는 대신 `fallback`으로 이행합니다 |
-| `delay(ms)` | `ms` 뒤에 이행합니다 |
-| `TimeoutError` | `withTimeout`이 던지는 오류 클래스 |
+| 함수                                                     | 설명                                                           |
+| -------------------------------------------------------- | -------------------------------------------------------------- |
+| `deferred<T>()`                                          | `{ promise, resolve, reject }`. 밖에서 결말을 지을 수 있습니다 |
+| `withTimeout(promise, ms, options?)`                     | `ms` 안에 결말이 나지 않으면 `TimeoutError`로 거부합니다       |
+| `withTimeoutFallback(promise, ms, fallback, onTimeout?)` | 거부하는 대신 `fallback`으로 이행합니다                        |
+| `delay(ms)`                                              | `ms` 뒤에 이행합니다                                           |
+| `TimeoutError`                                           | `withTimeout`이 던지는 오류 클래스                             |
 
 ### `withTimeout` options
 
-| 옵션 | 설명 | 기본값 |
-| ----------- | ----------------------------------------------------------- | ---------------------------------- |
-| `message` | 오류 메시지 | `operation timed out after {ms}ms` |
-| `onTimeout` | 기한이 지날 때 불립니다. 하던 일을 거두기 위한 자리입니다 | — |
+| 옵션        | 설명                                                      | 기본값                             |
+| ----------- | --------------------------------------------------------- | ---------------------------------- |
+| `message`   | 오류 메시지                                               | `operation timed out after {ms}ms` |
+| `onTimeout` | 기한이 지날 때 불립니다. 하던 일을 거두기 위한 자리입니다 | —                                  |
 
 ## 예시
 

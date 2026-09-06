@@ -4,20 +4,20 @@ Las piezas de promesas que JavaScript no trae: una promesa que se resuelve desde
 
 ## API
 
-| Función | Descripción |
-| -------------------------------------------------------- | -------------------------------------------------------- |
-| `deferred<T>()` | `{ promise, resolve, reject }`, para resolverla desde fuera |
-| `withTimeout(promise, ms, options?)` | Rechaza con `TimeoutError` si no se ha resuelto en `ms` |
-| `withTimeoutFallback(promise, ms, fallback, onTimeout?)` | Resuelve con `fallback` en vez de rechazar |
-| `delay(ms)` | Se resuelve al cabo de `ms` |
-| `TimeoutError` | La clase de error que lanza `withTimeout` |
+| Función                                                  | Descripción                                                 |
+| -------------------------------------------------------- | ----------------------------------------------------------- |
+| `deferred<T>()`                                          | `{ promise, resolve, reject }`, para resolverla desde fuera |
+| `withTimeout(promise, ms, options?)`                     | Rechaza con `TimeoutError` si no se ha resuelto en `ms`     |
+| `withTimeoutFallback(promise, ms, fallback, onTimeout?)` | Resuelve con `fallback` en vez de rechazar                  |
+| `delay(ms)`                                              | Se resuelve al cabo de `ms`                                 |
+| `TimeoutError`                                           | La clase de error que lanza `withTimeout`                   |
 
 ### `withTimeout` options
 
-| Opción | Descripción | Por defecto |
-| ----------- | ----------------------------------------------------------- | ---------------------------------- |
-| `message` | Mensaje del error | `operation timed out after {ms}ms` |
-| `onTimeout` | Se llama al vencer el plazo, para desmontar la operación | — |
+| Opción      | Descripción                                              | Por defecto                        |
+| ----------- | -------------------------------------------------------- | ---------------------------------- |
+| `message`   | Mensaje del error                                        | `operation timed out after {ms}ms` |
+| `onTimeout` | Se llama al vencer el plazo, para desmontar la operación | —                                  |
 
 ## Ejemplo
 

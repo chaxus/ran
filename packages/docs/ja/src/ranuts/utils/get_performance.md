@@ -8,30 +8,30 @@
 
 #### 戻り値
 
-| 引数 | 説明 | 型 |
-| ------------------------ | -------------------------- | ------------------------ |
+| 引数                     | 説明                                 | 型                       |
+| ------------------------ | ------------------------------------ | ------------------------ |
 | `BasicType \| undefined` | パフォーマンスの計測値のオブジェクト | `BasicType \| undefined` |
 
 #### BasicType
 
-| プロパティ | 説明 | 型 |
-| -------------- | ------------------------------------------------------- | --------------------- |
-| `dnsSearch` | DNS の解決にかかった時間（ミリ秒） | `number` |
-| `tcpConnect` | TCP の接続にかかった時間（ミリ秒） | `number` |
-| `sslConnect` | SSL の安全な接続にかかった時間（ミリ秒） | `number` |
-| `request` | TTFB。ネットワークのリクエストにかかった時間（ミリ秒） | `number` |
-| `response` | データの転送にかかった時間（ミリ秒） | `number` |
-| `parseDomTree` | DOM の解析にかかった時間（ミリ秒） | `number` |
-| `resource` | リソースの読み込みにかかった時間（ミリ秒） | `number` |
-| `domReady` | DOM Ready までの時間（ミリ秒） | `number` |
-| `httpHead` | HTTP ヘッダーの大きさ（バイト） | `number` |
-| `interactive` | 最初に操作できるようになるまでの時間（ミリ秒） | `number` |
-| `complete` | ページが完全に読み込まれるまでの時間（ミリ秒） | `number` |
-| `redirect` | リダイレクトの回数 | `number` |
-| `redirectTime` | リダイレクトにかかった時間（ミリ秒） | `number` |
-| `duration` | リソースの要求にかかった合計時間（ミリ秒） | `number` |
-| `fp` | First Paint までの時間（白い画面が続いた時間、ミリ秒） | `number \| undefined` |
-| `fcp` | First Contentful Paint までの時間（最初の画面が出そろうまで、ミリ秒） | `number \| undefined` |
+| プロパティ     | 説明                                                                  | 型                    |
+| -------------- | --------------------------------------------------------------------- | --------------------- |
+| `dnsSearch`    | DNS の解決にかかった時間（ミリ秒）                                    | `number`              |
+| `tcpConnect`   | TCP の接続にかかった時間（ミリ秒）                                    | `number`              |
+| `sslConnect`   | SSL の安全な接続にかかった時間（ミリ秒）                              | `number`              |
+| `request`      | TTFB。ネットワークのリクエストにかかった時間（ミリ秒）                | `number`              |
+| `response`     | データの転送にかかった時間（ミリ秒）                                  | `number`              |
+| `parseDomTree` | DOM の解析にかかった時間（ミリ秒）                                    | `number`              |
+| `resource`     | リソースの読み込みにかかった時間（ミリ秒）                            | `number`              |
+| `domReady`     | DOM Ready までの時間（ミリ秒）                                        | `number`              |
+| `httpHead`     | HTTP ヘッダーの大きさ（バイト）                                       | `number`              |
+| `interactive`  | 最初に操作できるようになるまでの時間（ミリ秒）                        | `number`              |
+| `complete`     | ページが完全に読み込まれるまでの時間（ミリ秒）                        | `number`              |
+| `redirect`     | リダイレクトの回数                                                    | `number`              |
+| `redirectTime` | リダイレクトにかかった時間（ミリ秒）                                  | `number`              |
+| `duration`     | リソースの要求にかかった合計時間（ミリ秒）                            | `number`              |
+| `fp`           | First Paint までの時間（白い画面が続いた時間、ミリ秒）                | `number \| undefined` |
+| `fcp`          | First Contentful Paint までの時間（最初の画面が出そろうまで、ミリ秒） | `number \| undefined` |
 
 #### パラメーター
 

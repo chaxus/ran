@@ -8,18 +8,18 @@ Un `File` que la persona eligió en la página A no puede viajar a la página B.
 
 ### createHandoff(options)
 
-| Parámetro | Descripción | Tipo | Por defecto |
-| ----------- | -------------------------------------------- | -------- | ----------- |
-| `dbName` | Nombre de la base de datos; ambos lados deben usar el mismo | `string` | Obligatorio |
-| `storeName` | Nombre del almacén de objetos, que se crea al abrir por primera vez | `string` | `'files'` |
-| `key` | Clave bajo la que se guarda el único valor pendiente | `string` | `'pending'` |
+| Parámetro   | Descripción                                                         | Tipo     | Por defecto |
+| ----------- | ------------------------------------------------------------------- | -------- | ----------- |
+| `dbName`    | Nombre de la base de datos; ambos lados deben usar el mismo         | `string` | Obligatorio |
+| `storeName` | Nombre del almacén de objetos, que se crea al abrir por primera vez | `string` | `'files'`   |
+| `key`       | Clave bajo la que se guarda el único valor pendiente                | `string` | `'pending'` |
 
 #### Devuelve
 
-| Método | Descripción |
-| ------------ | -------------------------------------------------------------------- |
+| Método       | Descripción                                                            |
+| ------------ | ---------------------------------------------------------------------- |
 | `put(value)` | Guarda un valor para la página siguiente. `false` si no pudo guardarlo |
-| `take()` | Recoge el valor pendiente y lo borra. `null` si no hay nada pendiente |
+| `take()`     | Recoge el valor pendiente y lo borra. `null` si no hay nada pendiente  |
 
 ## Ejemplo
 

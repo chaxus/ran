@@ -8,18 +8,18 @@ Um `File` que a pessoa escolheu na página A não consegue viajar até a página
 
 ### createHandoff(options)
 
-| Parâmetro | Descrição | Tipo | Padrão |
-| ----------- | -------------------------------------------- | -------- | ----------- |
-| `dbName` | Nome do banco; os dois lados precisam usar o mesmo | `string` | Obrigatório |
-| `storeName` | Nome do repositório de objetos, criado na primeira abertura | `string` | `'files'` |
-| `key` | Chave sob a qual o único valor pendente é guardado | `string` | `'pending'` |
+| Parâmetro   | Descrição                                                   | Tipo     | Padrão      |
+| ----------- | ----------------------------------------------------------- | -------- | ----------- |
+| `dbName`    | Nome do banco; os dois lados precisam usar o mesmo          | `string` | Obrigatório |
+| `storeName` | Nome do repositório de objetos, criado na primeira abertura | `string` | `'files'`   |
+| `key`       | Chave sob a qual o único valor pendente é guardado          | `string` | `'pending'` |
 
 #### Retorna
 
-| Método | Descrição |
-| ------------ | -------------------------------------------------------------------- |
+| Método       | Descrição                                                               |
+| ------------ | ----------------------------------------------------------------------- |
 | `put(value)` | Guarda um valor para a próxima página. `false` se não conseguiu guardar |
-| `take()` | Retira o valor pendente e o apaga. `null` se não houver nada pendente |
+| `take()`     | Retira o valor pendente e o apaga. `null` se não houver nada pendente   |
 
 ## Exemplo
 

@@ -6,24 +6,24 @@
 
 ## API
 
-| 関数 | 説明 |
-| ---------------------------------- | ------------------------------------------------------------------ |
-| `whenIdle(callback, options?)` | ブラウザーが暇になったら実行します。取り消し用の関数を返します |
-| `networkAllowsDownload(options?)` | いま利用者の通信量を使ってよいか |
-| `isUrlCached(url)` | その URL はすでに CacheStorage にあるか |
-| `prefetchUrl(url)` | URL をひとつキャッシュへ引き込みます。すでにあれば飛ばし、失敗しても黙っています |
-| `prefetchUrls(urls, options?)` | 一覧に対して同じことを、**順番に** 行います |
-| `prefetchWhenIdle(urls, options?)` | 3 つを合わせたもの。許可 → 暇 → 順番に先読み。呼び出しを妨げません |
+| 関数                               | 説明                                                                             |
+| ---------------------------------- | -------------------------------------------------------------------------------- |
+| `whenIdle(callback, options?)`     | ブラウザーが暇になったら実行します。取り消し用の関数を返します                   |
+| `networkAllowsDownload(options?)`  | いま利用者の通信量を使ってよいか                                                 |
+| `isUrlCached(url)`                 | その URL はすでに CacheStorage にあるか                                          |
+| `prefetchUrl(url)`                 | URL をひとつキャッシュへ引き込みます。すでにあれば飛ばし、失敗しても黙っています |
+| `prefetchUrls(urls, options?)`     | 一覧に対して同じことを、**順番に** 行います                                      |
+| `prefetchWhenIdle(urls, options?)` | 3 つを合わせたもの。許可 → 暇 → 順番に先読み。呼び出しを妨げません               |
 
 ### オプション
 
-| オプション | 対象 | 説明 | 既定値 |
-| ---------------------- | ----------------- | -------------------------------------------------------------- | ------------------- |
-| `timeout` | `whenIdle` | `requestIdleCallback` を待つ上限（ミリ秒） | `8000` |
-| `fallbackDelay` | `whenIdle` | `requestIdleCallback` がないときの待ち時間（ミリ秒） | `2500` |
-| `optOutKey` | 通信の可否 | localStorage のキー。値が何であれ、利用者が先読みを切ったという意味です | — |
-| `slowTypes` | 通信の可否 | 遅すぎるとみなす `effectiveType` の値 | `['slow-2g', '2g']` |
-| `serviceWorkerMessage` | `prefetchUrls` | 一覧を制御中の SW へ渡すためのメッセージの `type` | — |
+| オプション             | 対象           | 説明                                                                    | 既定値              |
+| ---------------------- | -------------- | ----------------------------------------------------------------------- | ------------------- |
+| `timeout`              | `whenIdle`     | `requestIdleCallback` を待つ上限（ミリ秒）                              | `8000`              |
+| `fallbackDelay`        | `whenIdle`     | `requestIdleCallback` がないときの待ち時間（ミリ秒）                    | `2500`              |
+| `optOutKey`            | 通信の可否     | localStorage のキー。値が何であれ、利用者が先読みを切ったという意味です | —                   |
+| `slowTypes`            | 通信の可否     | 遅すぎるとみなす `effectiveType` の値                                   | `['slow-2g', '2g']` |
+| `serviceWorkerMessage` | `prefetchUrls` | 一覧を制御中の SW へ渡すためのメッセージの `type`                       | —                   |
 
 ## 使用例
 

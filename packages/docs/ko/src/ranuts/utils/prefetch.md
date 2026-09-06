@@ -6,24 +6,24 @@
 
 ## API
 
-| 함수 | 설명 |
-| ---------------------------------- | ------------------------------------------------------------------ |
-| `whenIdle(callback, options?)` | 브라우저가 한가할 때 실행합니다. 취소용 함수를 돌려줍니다 |
-| `networkAllowsDownload(options?)` | 지금 사용자의 데이터를 써도 되는가? |
-| `isUrlCached(url)` | 이 URL이 이미 CacheStorage에 있는가? |
-| `prefetchUrl(url)` | URL 하나를 캐시로 끌어옵니다. 이미 있으면 건너뛰고, 실패해도 잠자코 있습니다 |
-| `prefetchUrls(urls, options?)` | 목록에 대해 같은 일을 **하나씩 차례로** 합니다 |
-| `prefetchWhenIdle(urls, options?)` | 셋을 합친 것. 허용 → 한가함 → 차례로 미리 받기. 호출을 막지 않습니다 |
+| 함수                               | 설명                                                                         |
+| ---------------------------------- | ---------------------------------------------------------------------------- |
+| `whenIdle(callback, options?)`     | 브라우저가 한가할 때 실행합니다. 취소용 함수를 돌려줍니다                    |
+| `networkAllowsDownload(options?)`  | 지금 사용자의 데이터를 써도 되는가?                                          |
+| `isUrlCached(url)`                 | 이 URL이 이미 CacheStorage에 있는가?                                         |
+| `prefetchUrl(url)`                 | URL 하나를 캐시로 끌어옵니다. 이미 있으면 건너뛰고, 실패해도 잠자코 있습니다 |
+| `prefetchUrls(urls, options?)`     | 목록에 대해 같은 일을 **하나씩 차례로** 합니다                               |
+| `prefetchWhenIdle(urls, options?)` | 셋을 합친 것. 허용 → 한가함 → 차례로 미리 받기. 호출을 막지 않습니다         |
 
 ### 옵션
 
-| 옵션 | 적용 대상 | 설명 | 기본값 |
-| ---------------------- | ----------------- | -------------------------------------------------------------- | ------------------- |
-| `timeout` | `whenIdle` | `requestIdleCallback`을 기다리는 한도(ms) | `8000` |
-| `fallbackDelay` | `whenIdle` | `requestIdleCallback`이 없을 때의 기다림(ms) | `2500` |
-| `optOutKey` | 통신 허용 | localStorage의 키. 값이 무엇이든 사용자가 미리 받기를 껐다는 뜻입니다 | — |
-| `slowTypes` | 통신 허용 | 너무 느리다고 보는 `effectiveType` 값 | `['slow-2g', '2g']` |
-| `serviceWorkerMessage` | `prefetchUrls` | 목록을 제어 중인 SW에 넘길 때 쓰는 메시지의 `type` | — |
+| 옵션                   | 적용 대상      | 설명                                                                  | 기본값              |
+| ---------------------- | -------------- | --------------------------------------------------------------------- | ------------------- |
+| `timeout`              | `whenIdle`     | `requestIdleCallback`을 기다리는 한도(ms)                             | `8000`              |
+| `fallbackDelay`        | `whenIdle`     | `requestIdleCallback`이 없을 때의 기다림(ms)                          | `2500`              |
+| `optOutKey`            | 통신 허용      | localStorage의 키. 값이 무엇이든 사용자가 미리 받기를 껐다는 뜻입니다 | —                   |
+| `slowTypes`            | 통신 허용      | 너무 느리다고 보는 `effectiveType` 값                                 | `['slow-2g', '2g']` |
+| `serviceWorkerMessage` | `prefetchUrls` | 목록을 제어 중인 SW에 넘길 때 쓰는 메시지의 `type`                    | —                   |
 
 ## 예시
 

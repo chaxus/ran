@@ -8,30 +8,30 @@ Recolhe as métricas de desempenho da página: resolução de DNS, conexão TCP,
 
 #### Retorna
 
-| Argumento | Descrição | Tipo |
-| ------------------------ | -------------------------- | ------------------------ |
+| Argumento                | Descrição                              | Tipo                     |
+| ------------------------ | -------------------------------------- | ------------------------ |
 | `BasicType \| undefined` | O objeto com as métricas de desempenho | `BasicType \| undefined` |
 
 #### BasicType
 
-| Propriedade | Descrição | Tipo |
-| -------------- | ------------------------------------------------------- | --------------------- |
-| `dnsSearch` | Tempo de resolução de DNS (ms) | `number` |
-| `tcpConnect` | Tempo de conexão TCP (ms) | `number` |
-| `sslConnect` | Tempo da conexão segura SSL (ms) | `number` |
-| `request` | TTFB: tempo da requisição de rede (ms) | `number` |
-| `response` | Tempo de transferência dos dados (ms) | `number` |
-| `parseDomTree` | Tempo de análise do DOM (ms) | `number` |
-| `resource` | Tempo de carregamento dos recursos (ms) | `number` |
-| `domReady` | Tempo até o DOM Ready (ms) | `number` |
-| `httpHead` | Tamanho dos cabeçalhos HTTP (bytes) | `number` |
-| `interactive` | Tempo até dar para interagir (ms) | `number` |
-| `complete` | Tempo até a página carregar por inteiro (ms) | `number` |
-| `redirect` | Número de redirecionamentos | `number` |
-| `redirectTime` | Tempo dos redirecionamentos (ms) | `number` |
-| `duration` | Tempo total das requisições de recursos (ms) | `number` |
-| `fp` | Tempo até a primeira pintura (tela branca, ms) | `number \| undefined` |
-| `fcp` | Tempo até a primeira pintura com conteúdo (fim da primeira tela, ms) | `number \| undefined` |
+| Propriedade    | Descrição                                                            | Tipo                  |
+| -------------- | -------------------------------------------------------------------- | --------------------- |
+| `dnsSearch`    | Tempo de resolução de DNS (ms)                                       | `number`              |
+| `tcpConnect`   | Tempo de conexão TCP (ms)                                            | `number`              |
+| `sslConnect`   | Tempo da conexão segura SSL (ms)                                     | `number`              |
+| `request`      | TTFB: tempo da requisição de rede (ms)                               | `number`              |
+| `response`     | Tempo de transferência dos dados (ms)                                | `number`              |
+| `parseDomTree` | Tempo de análise do DOM (ms)                                         | `number`              |
+| `resource`     | Tempo de carregamento dos recursos (ms)                              | `number`              |
+| `domReady`     | Tempo até o DOM Ready (ms)                                           | `number`              |
+| `httpHead`     | Tamanho dos cabeçalhos HTTP (bytes)                                  | `number`              |
+| `interactive`  | Tempo até dar para interagir (ms)                                    | `number`              |
+| `complete`     | Tempo até a página carregar por inteiro (ms)                         | `number`              |
+| `redirect`     | Número de redirecionamentos                                          | `number`              |
+| `redirectTime` | Tempo dos redirecionamentos (ms)                                     | `number`              |
+| `duration`     | Tempo total das requisições de recursos (ms)                         | `number`              |
+| `fp`           | Tempo até a primeira pintura (tela branca, ms)                       | `number \| undefined` |
+| `fcp`          | Tempo até a primeira pintura com conteúdo (fim da primeira tela, ms) | `number \| undefined` |
 
 #### Parâmetros
 

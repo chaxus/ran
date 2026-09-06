@@ -6,24 +6,24 @@ El dato clave: si un Service Worker atiende los GET del mismo origen dando prior
 
 ## API
 
-| Función | Descripción |
-| ---------------------------------- | ------------------------------------------------------------------ |
-| `whenIdle(callback, options?)` | Ejecuta cuando el navegador está ocioso; devuelve una función para cancelar |
-| `networkAllowsDownload(options?)` | ¿Podemos gastar ahora mismo los datos de quien navega? |
-| `isUrlCached(url)` | ¿Está ya esta URL en CacheStorage? |
-| `prefetchUrl(url)` | Trae una URL a la caché; se la salta si ya está y falla en silencio |
-| `prefetchUrls(urls, options?)` | Lo mismo para una lista, **una detrás de otra** |
-| `prefetchWhenIdle(urls, options?)` | Las tres juntas: permiso → ocio → precarga en serie. No bloquea |
+| Función                            | Descripción                                                                 |
+| ---------------------------------- | --------------------------------------------------------------------------- |
+| `whenIdle(callback, options?)`     | Ejecuta cuando el navegador está ocioso; devuelve una función para cancelar |
+| `networkAllowsDownload(options?)`  | ¿Podemos gastar ahora mismo los datos de quien navega?                      |
+| `isUrlCached(url)`                 | ¿Está ya esta URL en CacheStorage?                                          |
+| `prefetchUrl(url)`                 | Trae una URL a la caché; se la salta si ya está y falla en silencio         |
+| `prefetchUrls(urls, options?)`     | Lo mismo para una lista, **una detrás de otra**                             |
+| `prefetchWhenIdle(urls, options?)` | Las tres juntas: permiso → ocio → precarga en serie. No bloquea             |
 
 ### Opciones
 
-| Opción | Se aplica a | Descripción | Por defecto |
-| ---------------------- | ----------------- | -------------------------------------------------------------- | ------------------- |
-| `timeout` | `whenIdle` | Espera máxima por `requestIdleCallback` (ms) | `8000` |
-| `fallbackDelay` | `whenIdle` | Espera cuando no existe `requestIdleCallback` (ms) | `2500` |
-| `optOutKey` | permiso de red | Clave de localStorage; cualquier valor significa que la persona desactivó la precarga | — |
-| `slowTypes` | permiso de red | Valores de `effectiveType` que se dan por demasiado lentos | `['slow-2g', '2g']` |
-| `serviceWorkerMessage` | `prefetchUrls` | El `type` del mensaje con que se pasa la lista a un SW que controle la página | — |
+| Opción                 | Se aplica a    | Descripción                                                                           | Por defecto         |
+| ---------------------- | -------------- | ------------------------------------------------------------------------------------- | ------------------- |
+| `timeout`              | `whenIdle`     | Espera máxima por `requestIdleCallback` (ms)                                          | `8000`              |
+| `fallbackDelay`        | `whenIdle`     | Espera cuando no existe `requestIdleCallback` (ms)                                    | `2500`              |
+| `optOutKey`            | permiso de red | Clave de localStorage; cualquier valor significa que la persona desactivó la precarga | —                   |
+| `slowTypes`            | permiso de red | Valores de `effectiveType` que se dan por demasiado lentos                            | `['slow-2g', '2g']` |
+| `serviceWorkerMessage` | `prefetchUrls` | El `type` del mensaje con que se pasa la lista a un SW que controle la página         | —                   |
 
 ## Ejemplo
 

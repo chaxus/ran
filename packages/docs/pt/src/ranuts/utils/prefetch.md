@@ -6,24 +6,24 @@ O dado central: se um Service Worker atende os GET da mesma origem dando priorid
 
 ## API
 
-| Função | Descrição |
-| ---------------------------------- | ------------------------------------------------------------------ |
-| `whenIdle(callback, options?)` | Roda quando o navegador está ocioso; devolve uma função para cancelar |
-| `networkAllowsDownload(options?)` | Podemos gastar agora os dados de quem navega? |
-| `isUrlCached(url)` | Esta URL já está no CacheStorage? |
-| `prefetchUrl(url)` | Traz uma URL para o cache; pula se já estiver lá e falha em silêncio |
-| `prefetchUrls(urls, options?)` | O mesmo para uma lista, **uma depois da outra** |
+| Função                             | Descrição                                                                 |
+| ---------------------------------- | ------------------------------------------------------------------------- |
+| `whenIdle(callback, options?)`     | Roda quando o navegador está ocioso; devolve uma função para cancelar     |
+| `networkAllowsDownload(options?)`  | Podemos gastar agora os dados de quem navega?                             |
+| `isUrlCached(url)`                 | Esta URL já está no CacheStorage?                                         |
+| `prefetchUrl(url)`                 | Traz uma URL para o cache; pula se já estiver lá e falha em silêncio      |
+| `prefetchUrls(urls, options?)`     | O mesmo para uma lista, **uma depois da outra**                           |
 | `prefetchWhenIdle(urls, options?)` | As três juntas: permissão → ociosidade → pré-busca em série. Não bloqueia |
 
 ### Opções
 
-| Opção | Aplica-se a | Descrição | Padrão |
-| ---------------------- | ----------------- | -------------------------------------------------------------- | ------------------- |
-| `timeout` | `whenIdle` | Espera máxima pelo `requestIdleCallback` (ms) | `8000` |
-| `fallbackDelay` | `whenIdle` | Espera quando não existe `requestIdleCallback` (ms) | `2500` |
-| `optOutKey` | permissão de rede | Chave do localStorage; qualquer valor quer dizer que a pessoa desligou a pré-busca | — |
-| `slowTypes` | permissão de rede | Valores de `effectiveType` tidos como lentos demais | `['slow-2g', '2g']` |
-| `serviceWorkerMessage` | `prefetchUrls` | O `type` da mensagem com que a lista é passada a um SW que controle a página | — |
+| Opção                  | Aplica-se a       | Descrição                                                                          | Padrão              |
+| ---------------------- | ----------------- | ---------------------------------------------------------------------------------- | ------------------- |
+| `timeout`              | `whenIdle`        | Espera máxima pelo `requestIdleCallback` (ms)                                      | `8000`              |
+| `fallbackDelay`        | `whenIdle`        | Espera quando não existe `requestIdleCallback` (ms)                                | `2500`              |
+| `optOutKey`            | permissão de rede | Chave do localStorage; qualquer valor quer dizer que a pessoa desligou a pré-busca | —                   |
+| `slowTypes`            | permissão de rede | Valores de `effectiveType` tidos como lentos demais                                | `['slow-2g', '2g']` |
+| `serviceWorkerMessage` | `prefetchUrls`    | O `type` da mensagem com que a lista é passada a um SW que controle a página       | —                   |
 
 ## Exemplo
 
