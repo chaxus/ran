@@ -170,8 +170,11 @@ export default defineConfig({
   markdown: {
     // Render ```mermaid fenced blocks as diagrams. We can't use
     // vitepress-plugin-mermaid (it peers on VitePress 1.x; this repo is 2.x-alpha),
-    // so we hand off to the <Mermaid> theme component: base64 the source (so the
-    // diagram syntax survives Vue template compilation) and let it render client-side.
+    // so we hand off to ranui's <r-mermaid>, which loads the mermaid runtime lazily and
+    // already follows the site theme (it watches both `.dark` and `data-ran-theme`).
+    // The source goes through `encodeURIComponent` — which is both what r-mermaid's
+    // `code` getter decodes and, incidentally, what keeps a `{{` in the diagram from
+    // being read as Vue interpolation, since it escapes braces too.
     config(md) {
       const defaultFence =
         md.renderer.rules.fence?.bind(md.renderer.rules) ??
@@ -179,13 +182,13 @@ export default defineConfig({
       md.renderer.rules.fence = (tokens: any, idx: number, options: any, env: any, self: any) => {
         const token = tokens[idx];
         if (token.info.trim().toLowerCase() === 'mermaid') {
-          const code = Buffer.from(token.content, 'utf-8').toString('base64');
-          return `<Mermaid id="mermaid-${idx}" code="${code}"></Mermaid>\n`;
+          // Add `copy download fullscreen` here to opt into r-mermaid's hover toolbar.
+          return `<r-mermaid code="${encodeURIComponent(token.content)}"></r-mermaid>\n`;
         }
         return defaultFence(tokens, idx, options, env, self);
       };
 
-      // Every table is wrapped in a horizontal-scroll container. `doc.less` renders
+      // Every table is wrapped in a horizontal-scroll container. `doc.css` renders
       // tables as a real `display: table` card (VitePress's default is a scrolling
       // `display: block`), and a real table can never be narrower than its widest
       // unbreakable cell — so a long signature used to push the whole table past the
