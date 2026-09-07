@@ -22,8 +22,8 @@
         @pointerdown="startDrag"
       >
         <div class="gp-card">
-          <div class="gp-card-title">Frosted panel</div>
-          <div class="gp-card-sub">drag me · tune the knobs</div>
+          <div class="gp-card-title">{{ t.glass.cardTitle }}</div>
+          <div class="gp-card-sub">{{ t.glass.cardSub }}</div>
         </div>
       </r-glass>
     </div>
@@ -39,13 +39,15 @@
         <div class="gp-row gp-toggles">
           <label class="gp-check"><input type="checkbox" v-model="sheen" /> sheen</label>
           <label class="gp-check"><input type="checkbox" v-model="interactive" /> interactive</label>
-          <button class="gp-reset" @click="reset">Reset</button>
+          <button class="gp-reset" @click="reset">{{ t.glass.reset }}</button>
         </div>
       </div>
 
       <!-- copyable code, reflects the live params -->
       <div class="gp-code">
-        <button class="gp-copy" :class="{ done: copied }" @click="copy">{{ copied ? 'Copied' : 'Copy' }}</button>
+        <button class="gp-copy" :class="{ done: copied }" @click="copy">
+          {{ copied ? t.glass.copied : t.glass.copy }}
+        </button>
         <pre><code>{{ code }}</code></pre>
       </div>
     </div>
@@ -54,6 +56,12 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref, toRefs } from 'vue';
+import { useData } from 'vitepress';
+import { localeFromLang } from '../langs/locales';
+import { demoCopy } from './demo-copy';
+
+const { lang } = useData();
+const t = computed(() => demoCopy(localeFromLang(lang.value || '').dir));
 
 const mounted = ref(false);
 onMounted(() => (mounted.value = true));

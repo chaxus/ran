@@ -82,6 +82,14 @@ export interface HomeStrings {
   startStep2: string;
   copy: string;
   liveLabel: string;
+  /**
+   * Labels on the live demo's three buttons — primary, default, warning — in that order.
+   * They name the button *variants* on show, so they are translated as variant names, not
+   * as whatever action a real application would put on those buttons.
+   */
+  liveButtons: [string, string, string];
+  /** Label beside the live demo's checkbox. */
+  liveCheck: string;
   liveNote: string;
   /** Titles and descriptions for `FEATURE_KINDS`, in that order. */
   features: [Pair2, Pair2, Pair2, Pair2];
@@ -95,7 +103,14 @@ interface Pair3 extends Pair2 {
   more: string;
 }
 
-const STRINGS: Record<string, HomeStrings> = {
+/**
+ * Every language's home copy, keyed by locale directory (`''` for English).
+ *
+ * Exported so `bin/check-langs.ts` can prove each locale in `langs/locales.ts` has an entry
+ * with no blank strings — without that, a newly added language silently renders the whole
+ * home page in English via the fallback in `homeCopy()`.
+ */
+export const HOME_STRINGS: Record<string, HomeStrings> = {
   '': {
     eyebrow: 'Open source · MIT Licensed',
     headline: 'A Web Components UI library and a typed utility library',
@@ -167,6 +182,8 @@ const STRINGS: Record<string, HomeStrings> = {
     startStep2: 'Use anywhere',
     copy: 'Copy install command',
     liveLabel: 'Live',
+    liveButtons: ['Primary', 'Default', 'Warning'],
+    liveCheck: 'Subscribe',
     liveNote: 'Real ranui components, running right on this page.',
     features: [
       { title: 'Works everywhere', desc: 'Standards-based custom elements run in any framework, or none at all.' },
@@ -223,6 +240,8 @@ const STRINGS: Record<string, HomeStrings> = {
     startStep2: '随处使用',
     copy: '复制安装命令',
     liveLabel: '实时',
+    liveButtons: ['主要', '默认', '警告'],
+    liveCheck: '订阅',
     liveNote: '真实的 ranui 组件，就运行在这个页面上。',
     features: [
       { title: '随处可用', desc: '基于标准的自定义元素，在任意框架或无框架下都能运行。' },
@@ -302,6 +321,8 @@ const STRINGS: Record<string, HomeStrings> = {
     startStep2: 'どこでも使う',
     copy: 'インストールコマンドをコピー',
     liveLabel: 'ライブ',
+    liveButtons: ['プライマリ', 'デフォルト', '警告'],
+    liveCheck: '購読する',
     liveNote: '本物の ranui コンポーネントが、このページ上で動いています。',
     features: [
       {
@@ -390,6 +411,8 @@ const STRINGS: Record<string, HomeStrings> = {
     startStep2: 'Usar en cualquier sitio',
     copy: 'Copiar el comando de instalación',
     liveLabel: 'En vivo',
+    liveButtons: ['Principal', 'Predeterminado', 'Aviso'],
+    liveCheck: 'Suscribirme',
     liveNote: 'Componentes ranui reales, funcionando en esta misma página.',
     features: [
       {
@@ -475,6 +498,8 @@ const STRINGS: Record<string, HomeStrings> = {
     startStep2: 'Usar em qualquer lugar',
     copy: 'Copiar o comando de instalação',
     liveLabel: 'Ao vivo',
+    liveButtons: ['Principal', 'Padrão', 'Aviso'],
+    liveCheck: 'Inscrever-me',
     liveNote: 'Componentes ranui reais, rodando nesta própria página.',
     features: [
       {
@@ -554,6 +579,8 @@ const STRINGS: Record<string, HomeStrings> = {
     startStep2: '어디서든 사용',
     copy: '설치 명령 복사',
     liveLabel: '실시간',
+    liveButtons: ['주요', '기본', '경고'],
+    liveCheck: '구독',
     liveNote: '진짜 ranui 컴포넌트가 바로 이 페이지에서 돌아가고 있습니다.',
     features: [
       {
@@ -639,6 +666,8 @@ const STRINGS: Record<string, HomeStrings> = {
     startStep2: 'Überall verwenden',
     copy: 'Installationsbefehl kopieren',
     liveLabel: 'Live',
+    liveButtons: ['Primär', 'Standard', 'Warnung'],
+    liveCheck: 'Abonnieren',
     liveNote: 'Echte ranui-Komponenten, die direkt auf dieser Seite laufen.',
     features: [
       {
@@ -718,6 +747,8 @@ const STRINGS: Record<string, HomeStrings> = {
     startStep2: 'استفاده در هر جا',
     copy: 'رونوشت فرمان نصب',
     liveLabel: 'زنده',
+    liveButtons: ['اصلی', 'پیش‌فرض', 'هشدار'],
+    liveCheck: 'اشتراک',
     liveNote: 'کامپوننت‌های واقعی ranui، همین‌جا روی این صفحه در حال اجرا.',
     features: [
       { title: 'همه‌جا کار می‌کند', desc: 'عناصر سفارشی استاندارد در هر فریم‌ورکی — و بدون فریم‌ورک — اجرا می‌شوند.' },
@@ -736,7 +767,7 @@ const STRINGS: Record<string, HomeStrings> = {
  *            English rather than rendering a page of blanks.
  */
 export const homeCopy = (dir: string) => {
-  const s = STRINGS[dir] ?? STRINGS[''];
+  const s = HOME_STRINGS[dir] ?? HOME_STRINGS[''];
   return {
     eyebrow: s.eyebrow,
     headline: s.headline,
@@ -761,6 +792,8 @@ export const homeCopy = (dir: string) => {
     startStep2: s.startStep2,
     copy: s.copy,
     liveLabel: s.liveLabel,
+    liveButtons: s.liveButtons,
+    liveCheck: s.liveCheck,
     liveNote: s.liveNote,
     features: FEATURE_KINDS.map((kind, i) => ({ kind, ...s.features[i] })),
   };

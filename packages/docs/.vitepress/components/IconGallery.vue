@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useData } from 'vitepress';
+import { localeFromLang } from '../langs/locales';
+import { demoCopy } from './demo-copy';
+
+const { lang } = useData();
+const t = computed(() => demoCopy(localeFromLang(lang.value || '').dir));
 
 // Curated showcase set (all are registered via theme/register-icons.ts).
 const icons = [
@@ -32,7 +38,7 @@ const copy = async (name: string): Promise<void> => {
   try {
     await navigator.clipboard?.writeText?.(`<r-icon name="${name}"></r-icon>`);
   } catch {
-    /* clipboard 不可用时静默降级,仍给出反馈 */
+    /* clipboard 不可用时静默降级，仍给出反馈 */
   }
   copied.value = name;
   clearTimeout(timer);
@@ -48,13 +54,13 @@ const copy = async (name: string): Promise<void> => {
       type="button"
       class="icon-cell"
       :class="{ 'is-copied': copied === name }"
-      :aria-label="`Copy markup for the ${name} icon`"
+      :aria-label="t.icons.copyLabel.replace('{name}', name)"
       @click="copy(name)"
     >
       <span class="icon-cell__glyph">
         <r-icon :name="name" size="26"></r-icon>
       </span>
-      <span class="icon-cell__name">{{ copied === name ? 'Copied!' : name }}</span>
+      <span class="icon-cell__name">{{ copied === name ? t.icons.copied : name }}</span>
     </button>
   </div>
 </template>

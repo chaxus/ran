@@ -1,7 +1,7 @@
 /**
  * Fails the build when a language is incomplete.
  *
- * Three failure modes, all of them silent otherwise:
+ * Six failure modes, all of them silent otherwise:
  *
  * 1. **A missing label key** renders a blank sidebar entry — a row you can click but not
  *    read. VitePress reports nothing.
@@ -18,6 +18,10 @@
  *    (`description: What changed: added, fixed`) makes the value a mapping key, and VitePress
  *    fails the whole build with a YAML stack trace that names one file and lists no others.
  *    Six pages broke this way at once; catching it here names all six in a second.
+ * 6. **A language the component copy never got.** `home-copy.ts` and `demo-copy.ts` fall
+ *    back to English for an unknown locale, so adding a language renders its home page and
+ *    its interactive demos entirely in English — a fallback, not an error, and therefore
+ *    invisible until someone opens the page.
  *
  * `packages/docs/CLAUDE.md` warns that `cn/src/` is a manual mirror of `src/`. With eight
  * languages that warning stops being enough, so it is enforced here instead.
@@ -27,6 +31,8 @@ import { join, relative, resolve } from 'node:path';
 import { LOCALES } from '../.vitepress/langs/locales.ts';
 import { NAV, SIDEBAR } from '../.vitepress/langs/structure.ts';
 import type { SidebarNode } from '../.vitepress/langs/types.ts';
+import { HOME_STRINGS } from '../.vitepress/components/home-copy.ts';
+import { DEMO_STRINGS } from '../.vitepress/components/demo-copy.ts';
 import en from '../.vitepress/langs/messages/en.ts';
 import cn from '../.vitepress/langs/messages/cn.ts';
 import ja from '../.vitepress/langs/messages/ja.ts';
@@ -66,6 +72,42 @@ for (const locale of LOCALES) {
   for (const [key, value] of Object.entries(messages.ui)) {
     if (!value.trim()) fail(`${locale.id}: empty UI string "${key}"`);
   }
+}
+
+/**
+ * Every string inside a copy object, as `key.path -> value` pairs. The records nest
+ * (`pillars[0].title`, `caps.gpu.desc`) and hold non-strings (`splitWords`), so a blank is
+ * only findable by walking them.
+ */
+const strings = (value: unknown, path = ''): [string, string][] => {
+  if (typeof value === 'string') return [[path, value]];
+  if (Array.isArray(value)) return value.flatMap((v, i) => strings(v, `${path}[${i}]`));
+  if (value && typeof value === 'object')
+    return Object.entries(value).flatMap(([k, v]) => strings(v, path ? `${path}.${k}` : k));
+  return [];
+};
+
+/** The component copy records, by the name a reader would grep for. */
+const COPY = {
+  'home-copy.ts': HOME_STRINGS as Record<string, unknown>,
+  'demo-copy.ts': DEMO_STRINGS as Record<string, unknown>,
+};
+
+for (const [file, record] of Object.entries(COPY)) {
+  for (const locale of LOCALES) {
+    const copy = record[locale.dir];
+    if (!copy) {
+      fail(`${locale.id}: ${file} has no entry for "${locale.dir}" — the page falls back to English`);
+      continue;
+    }
+    for (const [key, value] of strings(copy)) {
+      if (!value.trim()) fail(`${locale.id}: ${file} has an empty string at ${key}`);
+    }
+  }
+  const dirs = new Set(LOCALES.map((l) => l.dir));
+  for (const dir of Object.keys(record))
+    if (!dirs.has(dir as (typeof LOCALES)[number]['dir']))
+      fail(`${file}: stray entry "${dir}" (no locale in locales.ts uses it)`);
 }
 
 /** Markdown pages under a directory, relative to it. */
@@ -198,6 +240,7 @@ if (errors.length) {
     ['missing label', (e: string) => e.includes('missing label')],
     ['stray label', (e: string) => e.includes('stray label')],
     ['empty UI string', (e: string) => e.includes('empty UI string')],
+    ['component copy', (e: string) => /-copy\.ts/.test(e)],
     ['structure mismatch', (e: string) => /heading outline|code blocks|<Demo> blocks|backtick/.test(e)],
     ['frontmatter', (e: string) => e.includes('not valid YAML')],
     ['extra page', (e: string) => e.includes('extra page')],

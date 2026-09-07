@@ -72,16 +72,16 @@
         <div class="live-head"><span class="live-dot"></span>{{ t.liveLabel }}</div>
         <div v-if="mounted" class="live-body">
           <div class="live-row">
-            <r-button type="primary">Primary</r-button>
-            <r-button>Default</r-button>
-            <r-button type="warning">Warning</r-button>
+            <r-button type="primary">{{ t.liveButtons[0] }}</r-button>
+            <r-button>{{ t.liveButtons[1] }}</r-button>
+            <r-button type="warning">{{ t.liveButtons[2] }}</r-button>
           </div>
           <div class="live-row">
             <r-progress class="live-progress" percent="66" total="100"></r-progress>
           </div>
           <div class="live-row live-inline">
             <r-loading class="live-loading" name="circle-line"></r-loading>
-            <r-checkbox checked="true">Subscribe</r-checkbox>
+            <r-checkbox checked="true">{{ t.liveCheck }}</r-checkbox>
           </div>
         </div>
         <div v-else class="live-body live-skeleton"><span></span><span></span><span></span></div>
