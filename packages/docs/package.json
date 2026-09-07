@@ -27,8 +27,6 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "catalog:",
-    "less": "catalog:",
-    "mermaid": "11.16.1",
     "typescript": "catalog:"
   },
   "dependencies": {
@@ -36,7 +34,6 @@
     "ranui": "workspace:*",
     "ranuts": "workspace:*",
     "vitepress": "2.0.0-alpha.18",
-    "vue": "3.5.41",
-    "vue-i18n": "11.4.8"
+    "vue": "3.5.41"
   }
 }

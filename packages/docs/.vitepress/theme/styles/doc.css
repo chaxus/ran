@@ -129,6 +129,15 @@
   border-radius: 5px;
 }
 
+/* ---------- mermaid diagrams ---------- *
+ * ```mermaid fences render as <r-mermaid> (see the fence hook in .vitepress/config.ts).
+ * The component centres the diagram and scrolls it horizontally itself; only the block
+ * spacing the old wrapper carried has to be restated here. */
+r-mermaid {
+  display: block;
+  margin: 20px 0;
+}
+
 /* ---------- live demos as soft preview cards ---------- *
  * ranui docs drop bare <r-*> elements (often in an inline-styled flex wrapper)
  * straight into the prose. Frame each demo row as a soft, theme-aware card so

@@ -1,9 +1,0 @@
-{
-  "lang": "Português",
-  "components_totp_1": "Gerar",
-  "components_totp_2": "Digite a chave do 2FA",
-  "components_totp_3": "Você ainda não digitou a chave do 2FA",
-  "components_totp_4": "expira em",
-  "components_totp_5": "A chave informada é inválida",
-  "components_totp_6": "Verificação 2FA"
-}

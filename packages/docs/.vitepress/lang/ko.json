@@ -1,9 +1,0 @@
-{
-  "lang": "한국어",
-  "components_totp_1": "생성",
-  "components_totp_2": "2FA 키를 입력하세요",
-  "components_totp_3": "아직 2FA 키를 입력하지 않았습니다",
-  "components_totp_4": "유효 기간",
-  "components_totp_5": "입력한 키가 올바르지 않습니다",
-  "components_totp_6": "2FA 인증"
-}

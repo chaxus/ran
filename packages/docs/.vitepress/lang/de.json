@@ -1,9 +1,0 @@
-{
-  "lang": "Deutsch",
-  "components_totp_1": "Erzeugen",
-  "components_totp_2": "Bitte den 2FA-Schlüssel eingeben",
-  "components_totp_3": "Es wurde noch kein 2FA-Schlüssel eingegeben",
-  "components_totp_4": "gültig bis",
-  "components_totp_5": "Der eingegebene Schlüssel ist ungültig",
-  "components_totp_6": "2FA-Verifizierung"
-}

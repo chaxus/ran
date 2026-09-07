@@ -1,23 +1,16 @@
-// theme-without-fonts: skip the default theme's bundled Inter — we ship Geist (see styles/fonts.less)
+// theme-without-fonts: skip the default theme's bundled Inter — we ship Geist (see styles/fonts.css)
 import DefaultTheme from 'vitepress/theme-without-fonts';
 import type { EnhanceAppContext, Router } from 'vitepress';
 import { nextTick } from 'vue';
-import { localStorageGetItem } from 'ranuts/utils';
-import env from '../plugins/env';
-import TOTP from '../components/TOTP.vue';
-import Layout from '../components/Layout.vue';
 import Home from '../components/Home.vue';
 import HomeCinematic from '../components/HomeCinematic.vue';
 import GlassPlayground from '../components/GlassPlayground.vue';
-import Mermaid from '../components/Mermaid.vue';
 import IconGallery from '../components/IconGallery.vue';
 import Demo from '../components/Demo.vue';
-import i18n, { loadLanguageAsync } from '../lang';
-import { LANGS_DICT, RAN_CHAXUS_LANG } from '../lib/constant';
-import './styles/fonts.less';
-import './styles/index.less';
-import './styles/doc.less';
-import './styles/vars.less';
+import './styles/fonts.css';
+import './styles/index.css';
+import './styles/doc.css';
+import './styles/vars.css';
 import 'ranui/style';
 
 declare global {
@@ -40,7 +33,7 @@ const syncRanuiTheme = () => {
   const apply = () => {
     const dark = html.classList.contains('dark');
     html.setAttribute('data-ran-theme', dark ? 'dark' : 'light');
-    // 换肤瞬间挂一个 theme-flip 脉冲 class(样式见 index.less):冻结全站 transition,
+    // 换肤瞬间挂一个 theme-flip 脉冲 class(样式见 index.css):冻结全站 transition,
     // 否则导航栏(0.5s)、ranui 组件(0.2s)各按自己的时长淡变,页面切换不同步。
     // MutationObserver 在渲染前回调,class 能赶在本帧绘制前生效,不会闪。
     if (lastDark !== undefined && dark !== lastDark) {
@@ -104,25 +97,13 @@ export default {
       syncRanuiTheme();
       enablePageTransitions(router);
     }
-    app.use(env);
+    // Every component a markdown page may use. Registration is synchronous on purpose:
+    // these render during the SSR pass too, so anything gated behind an await would be
+    // missing there. Per-language copy lives in `home-copy.ts` / `demo-copy.ts`.
     app.component('Home', Home);
     app.component('HomeCinematic', HomeCinematic);
     app.component('GlassPlayground', GlassPlayground);
-    app.component('Mermaid', Mermaid);
     app.component('IconGallery', IconGallery);
     app.component('Demo', Demo);
-    const locale = localStorageGetItem(RAN_CHAXUS_LANG) || LANGS_DICT.EN;
-    loadLanguageAsync(locale)
-      .then(() => {
-        // vue-i18n reads this as a bare global — must be set in both the browser (client
-        // build) and Node (VitePress's SSR render pass), or SSR throws ReferenceError.
-        (globalThis as unknown as { __VUE_PROD_DEVTOOLS__: boolean }).__VUE_PROD_DEVTOOLS__ = false;
-        app.use(i18n);
-        app.component('Layout', Layout);
-        app.component('TOTP', TOTP);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
   },
 };
