@@ -29,6 +29,25 @@ export const pillarName = (slug: string): string => PILLARS.find((p) => p.slug =
 /** Absolute URL for a site-absolute path. `/` → `https://chaxus.com/`. */
 export const absoluteUrl = (path: string): string => `${ORIGIN}${path}`;
 
+/**
+ * Applies the stored theme before first paint.
+ *
+ * ranui's `setTheme()` runs from the client bundle, which is a module script and
+ * therefore deferred — by the time it stamps `data-ran-theme` the browser has already
+ * painted a frame in the other theme. Anyone who chose dark sees a white flash on every
+ * navigation. This runs synchronously in <head> instead, reading the same
+ * localStorage key (`ran-theme`) and writing the same two attributes, so the bundle
+ * later finds the state it would have set.
+ *
+ * `system` (and a first visit, which stores nothing) deliberately writes no attribute:
+ * the stylesheet's `prefers-color-scheme` block handles that case, and stamping a
+ * concrete value would freeze the page against a later OS change.
+ */
+const THEME_BOOTSTRAP = `(function(){try{
+var t=localStorage.getItem('ran-theme');
+if(t==='dark'||t==='light'){var e=document.documentElement;e.setAttribute('data-ran-theme',t);e.setAttribute('theme',t);}
+}catch(e){}})();`;
+
 // ── Fragments ───────────────────────────────────────────────────────────────
 
 const navHtml = (current: string): string => {
@@ -157,6 +176,7 @@ export const renderPage = ({ page, posts, head, assets }: RenderPageOptions): st
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHtml(title)}</title>
 <meta name="description" content="${escapeHtml(page.description)}">
+<script>${THEME_BOOTSTRAP}</script>
 ${head.join('\n')}
 ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
 </head>

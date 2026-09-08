@@ -10,6 +10,7 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { build as viteBuild } from 'vite';
 import { loadContent } from './content.ts';
 import type { Content } from './content.ts';
 import { initHighlighter } from './markdown.ts';
@@ -42,10 +43,13 @@ export const resolveAssets = (distDir: string): Assets => {
   const css: string[] = [];
   const js: string[] = [];
   for (const chunk of Object.values(manifest)) {
-    if (!chunk.isEntry) continue;
-    if (chunk.file.endsWith('.js')) js.push(`/${chunk.file}`);
+    // Two manifest shapes have to be handled, because they depend on a build flag:
+    // with `cssCodeSplit` on, an entry lists its stylesheets in `chunk.css`; with it
+    // off, the single stylesheet is a top-level entry of its own with no `isEntry`.
+    // Keying off `isEntry` alone silently produced pages with no stylesheet at all.
     if (chunk.file.endsWith('.css')) css.push(`/${chunk.file}`);
     for (const sheet of chunk.css ?? []) css.push(`/${sheet}`);
+    if (chunk.isEntry && chunk.file.endsWith('.js')) js.push(`/${chunk.file}`);
   }
   return { css: [...new Set(css)], js: [...new Set(js)] };
 };
@@ -54,6 +58,8 @@ export interface BuildOptions {
   includeDrafts?: boolean;
   /** Skip wiping dist — used by the dev server, which rebuilds constantly. */
   keepDist?: boolean;
+  /** Re-render pages without re-bundling. The dev server's fast path. */
+  skipAssets?: boolean;
 }
 
 export interface BuildResult extends Content {
@@ -70,6 +76,13 @@ export const build = async (options: BuildOptions = {}): Promise<BuildResult> =>
   // public/ first: a generated page must win over a stray file of the same name, so
   // that a typo in public/ can never shadow a real route.
   if (existsSync(PUBLIC_DIR)) cpSync(PUBLIC_DIR, DIST_DIR, { recursive: true });
+
+  // The client bundle runs before the pages, because the pages have to reference its
+  // hashed filenames. It is told not to clear dist — that already happened above, and
+  // doing it twice would delete what was just copied.
+  if (!options.skipAssets) {
+    await viteBuild({ root: ROOT, logLevel: 'warn' });
+  }
 
   const assets = resolveAssets(DIST_DIR);
   const written: string[] = [];
@@ -95,6 +108,10 @@ export const build = async (options: BuildOptions = {}): Promise<BuildResult> =>
     writeFileSync(join(DIST_DIR, name), body);
     written.push(name);
   }
+
+  // vite's manifest is a build artefact, not part of the site. Read above, dropped here
+  // so it is never served.
+  rmSync(join(DIST_DIR, '.vite'), { recursive: true, force: true });
 
   return { ...content, written };
 };
