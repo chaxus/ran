@@ -5,9 +5,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "tsx build/dev.ts",
-    "build": "sh ./bin/build.sh",
-    "serve": "tsx build/serve.ts",
+    "build": "tsx build/build.ts",
     "tsc": "tsc --noEmit"
   },
   "repository": {

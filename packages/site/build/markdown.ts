@@ -40,6 +40,8 @@ export interface RenderedMarkdown {
  * unlisted language is not a silent failure: `highlight()` throws and names it.
  */
 const LANGS = [
+  // `text` doubles as the fallback for a fence with no language, so it must be listed.
+  'text',
   'ts',
   'js',
   'tsx',
