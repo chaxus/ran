@@ -1,0 +1,21 @@
+# Cloudflare Pages response headers.
+#
+# These match the REQUEST path, not the file on disk. Every page here is served at an
+# extensionless URL (`/about`, `/blog/foo`), so a `/*.html` rule would match nothing —
+# the default has to be the broad one, with the specific rules after it. Cloudflare
+# applies every matching rule and the later one wins for a repeated header name.
+
+# HTML carries no content hash, so the edge has to revalidate. Without this a deploy is
+# invisible to anyone still holding the previous copy.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Build output is immutable by construction: the filename changes when the bytes do.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Polled on a schedule. An hour of staleness is free; a day is not.
+/feed.xml
+  Cache-Control: public, max-age=3600

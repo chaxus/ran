@@ -255,6 +255,16 @@ video {
   gap: 56px;
 }
 
+/* The listing pages have no outline rail, so their column is capped to one width that
+   every rule inside them shares. Left at the full 1180px, a section label's underline
+   stopped at the measure while the post separators beneath it ran to the container
+   edge — two horizontal rules a few hundred pixels apart, which reads as a mistake.
+   Post pages keep the wide container: they need the room for the sticky outline. */
+.site-main--home,
+.site-main--archive {
+  max-width: 52em;
+}
+
 .site-footer {
   border-top: 1px solid var(--rule);
   padding: 28px var(--page-pad) 44px;
@@ -555,8 +565,7 @@ video {
   gap: 20px;
 }
 
-.section__label,
-.archive-year__label {
+.section__label {
   margin: 0;
   font-family: var(--font-mono);
   font-size: 12px;
@@ -670,10 +679,25 @@ video {
   border: 1px dashed currentColor;
 }
 
-.archive-year {
+.archive-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  /* Anchored from a post's byline, so it has to clear the sticky header. */
+  scroll-margin-top: 84px;
+}
+.archive-group__name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.archive-group__blurb {
+  margin: 0 0 6px;
+  font-size: 14.5px;
+  color: var(--fg-muted);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
 }
 
 .more,
