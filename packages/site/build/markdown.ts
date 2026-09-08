@@ -207,12 +207,20 @@ const createParser = (slugs: Map<string, number>, toc: TocEntry[]): Marked => {
 const firstParagraph = (tokens: Token[]): string => {
   for (const token of tokens) {
     if (token.type !== 'paragraph') continue;
+    // Inline code is lifted out before HTML tags are stripped and put back after.
+    // Done in the other order, a code span documenting an element — `<r-markdown>` —
+    // looks exactly like a tag and the excerpt silently loses the word the sentence
+    // was about.
+    const spans: string[] = [];
     const text = (token.raw ?? '')
       .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
       .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-      .replace(/`([^`]*)`/g, '$1')
+      .replace(/`([^`]*)`/g, (_, code: string) => `\uE000${spans.push(code) - 1}\uE000`)
       .replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, '$1')
       .replace(/<[^>]+>/g, '')
+      // U+E000 is a private-use character: it cannot occur in markdown source, and
+      // unlike a control character it is not something a regex should be matching.
+      .replace(/\uE000(\d+)\uE000/g, (_, i: string) => spans[Number(i)] ?? '')
       .replace(/\s+/g, ' ')
       .trim();
     if (text) return text;
