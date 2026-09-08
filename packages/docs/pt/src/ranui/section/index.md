@@ -12,7 +12,7 @@ Superfície de seção de página com um título e um subtítulo opcionais acima
 
 ### Uso básico
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="Título da seção" subtitle="Uma linha curta descrevendo esta seção.">
     <p style="margin: 0;">O conteúdo do corpo vai no slot padrão.</p>
   </r-section>
@@ -40,7 +40,7 @@ A linha de cabeçalho (título + subtítulo) fica totalmente oculta quando `head
 
 O título da seção, renderizado como título ARIA de nível 2 (`role="heading"`, `aria-level="2"`). Fica oculto quando vazio.
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="Apenas um título">
     <p style="margin: 0;">Conteúdo do corpo.</p>
   </r-section>
@@ -56,7 +56,7 @@ O título da seção, renderizado como título ARIA de nível 2 (`role="heading"
 
 Uma linha de apoio abaixo do título. Fica oculta quando vazia.
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="Título" subtitle="Texto de subtítulo de apoio.">
     <p style="margin: 0;">Conteúdo do corpo.</p>
   </r-section>
@@ -72,7 +72,7 @@ Uma linha de apoio abaixo do título. Fica oculta quando vazia.
 
 CSS injetado no shadow DOM da seção, seguindo a mesma convenção `sheet` de todos os outros componentes do ranui.
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="Seção com tema" subtitle="Título recolorido pelo sheet." sheet=".ran-section-heading { color: #006bff; }">
     <p style="margin: 0;">Conteúdo do corpo.</p>
   </r-section>

@@ -12,7 +12,7 @@ description: 'سطحی برای یک بخش از صفحه، با عنوان دس
 
 ### استفادهٔ پایه
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="عنوان بخش" subtitle="یک سطر کوتاه در توصیف این بخش.">
     <p style="margin: 0;">محتوای بدنه در اسلات پیش‌فرض قرار می‌گیرد.</p>
   </r-section>
@@ -40,7 +40,7 @@ description: 'سطحی برای یک بخش از صفحه، با عنوان دس
 
 عنوان بخش که به‌صورت عنوان ARIA سطح ۲ (`role="heading"`، `aria-level="2"`) رندر می‌شود. خالی که باشد پنهان است.
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="فقط یک عنوان">
     <p style="margin: 0;">محتوای بدنه.</p>
   </r-section>
@@ -56,7 +56,7 @@ description: 'سطحی برای یک بخش از صفحه، با عنوان دس
 
 سطری پشتیبان زیر عنوان. خالی که باشد پنهان است.
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="عنوان" subtitle="متن زیرعنوان پشتیبان.">
     <p style="margin: 0;">محتوای بدنه.</p>
   </r-section>
@@ -72,7 +72,7 @@ description: 'سطحی برای یک بخش از صفحه، با عنوان دس
 
 کد CSS که به shadow DOM بخش تزریق می‌شود؛ همان قرارداد `sheet` که همهٔ کامپوننت‌های دیگر ranui هم دارند.
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="بخشِ پوسته‌دار" subtitle="رنگ عنوان با sheet عوض شده." sheet=".ran-section-heading { color: #006bff; }">
     <p style="margin: 0;">محتوای بدنه.</p>
   </r-section>
