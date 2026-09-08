@@ -12,11 +12,11 @@ Eine tief liegende Primitive für schwebende Panels: eine abgerundete, angehoben
 
 ### Grundlegende Verwendung
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">Inhalt des schwebenden Panels</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -38,7 +38,7 @@ Eine tief liegende Primitive für schwebende Panels: eine abgerundete, angehoben
 
 Zeichnet einen zeigenden Pfeil an einer Seite des Panels. Lass das Attribut weg, wenn du keinen Pfeil willst.
 
-<Demo column>
+<ran-demo column>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="top"</div>
   </r-dropdown>
@@ -51,7 +51,7 @@ Zeichnet einen zeigenden Pfeil an einer Seite des Panels. Lass das Attribut weg,
   <r-dropdown arrow="right" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="right"</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -76,11 +76,11 @@ Die Klasse lebt genau so lange wie das Attribut: Wer es setzt, entscheidet, wann
 
 `getAnimationTarget()` liefert das Element, auf dem die Animation tatsächlich läuft. Es liegt im Shadow Root, `getAnimations()` am Host meldet also nichts, und `{ subtree: true }` überschreitet die Grenze nicht. Code, der auf das Ende der Panel-Transition wartet, sollte `getAnimationTarget()` aufrufen, statt im Shadow-Baum nach einem Klassennamen zu greifen.
 
-<Demo>
+<ran-demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">Blendet beim Verbinden ein</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown transit="ran-dropdown-down-in">
@@ -126,11 +126,11 @@ r-dropdown::part(dropdown) {
 
 Jede sichtbare Eigenschaft lässt sich über `--ran-dropdown-*`-Tokens überschreiben, etwa `--ran-dropdown-background`, `--ran-dropdown-border-radius`, `--ran-dropdown-box-shadow`, `--ran-dropdown-padding`, `--ran-dropdown-arrow-width` und `--ran-dropdown-host-z-index`. Der Pfeil ist ein Inline-SVG, das über seine eigene `viewBox` skaliert — `--ran-dropdown-arrow-width`/`-height` ändern also die Größe des Dreiecks selbst, nicht die eines leeren Kastens darum herum:
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
     <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```css
 r-dropdown {

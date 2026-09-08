@@ -15,9 +15,9 @@ tabs) in sync.
 
 ### Basic Usage
 
-<Demo>
+<ran-demo>
   <r-theme-switch></r-theme-switch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-theme-switch></r-theme-switch>

@@ -12,11 +12,11 @@ description: 'یک عنصر پایهٔ سطح‌پایین برای پنل شن�
 
 ### استفادهٔ پایه
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">محتوای پنل شناور</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -38,7 +38,7 @@ description: 'یک عنصر پایهٔ سطح‌پایین برای پنل شن�
 
 روی یکی از ضلع‌های پنل پیکانی اشاره‌گر می‌کشد. اگر ویژگی را ندهید پیکانی نمایش نمی‌یابد.
 
-<Demo column>
+<ran-demo column>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="top"</div>
   </r-dropdown>
@@ -51,7 +51,7 @@ description: 'یک عنصر پایهٔ سطح‌پایین برای پنل شن�
   <r-dropdown arrow="right" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="right"</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -76,11 +76,11 @@ description: 'یک عنصر پایهٔ سطح‌پایین برای پنل شن�
 
 `getAnimationTarget()` عنصری را برمی‌گرداند که انیمیشن واقعاً روی آن اجرا می‌شود. آن عنصر درون shadow root است، پس `getAnimations()` روی میزبان چیزی گزارش نمی‌کند و `{ subtree: true }` هم از مرز نمی‌گذرد. کدی که منتظر پایان گذار پنل است باید `getAnimationTarget()` را صدا بزند، نه اینکه در درخت shadow دنبال نام کلاس بگردد.
 
-<Demo>
+<ran-demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">هنگام اتصال با انیمیشن وارد می‌شود</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown transit="ran-dropdown-down-in">
@@ -126,11 +126,11 @@ r-dropdown::part(dropdown) {
 
 هر ویژگی دیداری را می‌توان با توکن‌های `--ran-dropdown-*` بازنویسی کرد؛ برای نمونه `--ran-dropdown-background`، `--ran-dropdown-border-radius`، `--ran-dropdown-box-shadow`، `--ran-dropdown-padding`، `--ran-dropdown-arrow-width` و `--ran-dropdown-host-z-index`. پیکان یک SVG درون‌خطی است که با `viewBox` خودش مقیاس می‌گیرد، پس `--ran-dropdown-arrow-width`/`-height` اندازهٔ خودِ مثلث را عوض می‌کنند، نه جعبهٔ خالی پیرامونش را:
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
     <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```css
 r-dropdown {

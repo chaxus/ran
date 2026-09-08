@@ -14,13 +14,13 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
 
 ### 基础用法
 
-<Demo>
+<ran-demo>
   <r-state-dot state="idle"></r-state-dot>
   <r-state-dot state="running"></r-state-dot>
   <r-state-dot state="success"></r-state-dot>
   <r-state-dot state="warning"></r-state-dot>
   <r-state-dot state="error"></r-state-dot>
-</Demo>
+</ran-demo>
 
 ```html
 <r-state-dot state="idle"></r-state-dot>
@@ -38,7 +38,7 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
 点只用颜色表示状态，不解释颜色代表什么。永远不要让颜色成为区分两行的唯一线索，详见
 [设计规范](/cn/src/ranui/design-guides/#accessibility)。
 
-<Demo column>
+<ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">
     <r-state-dot state="running"></r-state-dot>
     <span>正在跑测试</span>
@@ -47,7 +47,7 @@ description: 'ranui StateDot（<r-state-dot>）是一个 8px 的生命周期指�
     <r-state-dot state="error"></r-state-dot>
     <span>2 个测试失败</span>
   </div>
-</Demo>
+</ran-demo>
 
 ## API 参考
 

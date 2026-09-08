@@ -10,9 +10,9 @@ description: 'ranui Progress（<r-progress>）以进度条展示任务完成度�
 
 ## 快速开始
 
-<Demo>
+<ran-demo>
   <r-progress percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-progress percent="40%"></r-progress>
@@ -36,11 +36,11 @@ description: 'ranui Progress（<r-progress>）以进度条展示任务完成度�
 
 设置当前进度。可以是数字或百分比字符串，且不能超过 `total`。未设置 `total` 时默认值为 `100`（即 `percent` 按 100 的百分比解析）。
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30%"></r-progress>
   <r-progress percent="70%"></r-progress>
   <r-progress percent="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30%"></r-progress>
@@ -52,11 +52,11 @@ description: 'ranui Progress（<r-progress>）以进度条展示任务完成度�
 
 设置 `percent` 的分母。数字和百分比均可，所以 `percent="30" total="1000"` 会让进度条只填充 3%。
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30" total="1000"></r-progress>
   <r-progress percent="70" total="100"></r-progress>
   <r-progress percent="10%" total="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -69,10 +69,10 @@ description: 'ranui Progress（<r-progress>）以进度条展示任务完成度�
 - `primary`：静态进度条。不设置 `type` 时即为默认值。
 - `drag`：可点击、可拖拽的进度条。点击轨道或拖拽手柄会更新 `percent` 并触发 `change` 事件。拖拽手柄需要 `dot="true"`。
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%"></r-progress>
   <r-progress type="primary" percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
@@ -82,10 +82,10 @@ description: 'ranui Progress（<r-progress>）以进度条展示任务完成度�
 
 控制是否展示拖拽手柄。手柄仅在 `dot="true"` **且** `type="drag"` 时才会渲染，在静态的 `primary` 进度条上会被有意省略，因此 `dot` 在其上没有可见效果。
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%" dot="true"></r-progress>
   <r-progress type="drag" percent="30%" dot="false"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%" dot="true"></r-progress>

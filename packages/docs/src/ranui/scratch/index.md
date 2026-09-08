@@ -16,9 +16,9 @@ Experimental scratch-ticket surface that renders a full-size `<canvas>` cover ov
 
 Whatever you put inside `<r-scratch>` is the reveal content (an amount, an image, an `<r-icon>`, several elements), projected through the default slot into the layer beneath the cover, exactly like content projection in any other ranui component.
 
-<Demo>
+<ran-demo>
   <r-scratch style="display: block; width: 240px; height: 120px;">You won 50 coins!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch style="display: block; width: 240px; height: 120px;">You won 50 coins!</r-scratch>
@@ -35,9 +35,9 @@ Whatever you put inside `<r-scratch>` is the reveal content (an amount, an image
 
 ### Disabled State `disabled`
 
-<Demo>
+<ran-demo>
   <r-scratch disabled style="display: block; width: 240px; height: 120px;">You won 50 coins!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch disabled style="display: block; width: 240px; height: 120px;">You won 50 coins!</r-scratch>
@@ -45,9 +45,9 @@ Whatever you put inside `<r-scratch>` is the reveal content (an amount, an image
 
 ### External Styles `sheet`
 
-<Demo>
+<ran-demo>
   <r-scratch sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }" style="display: block; width: 240px; height: 120px;">🎁</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch

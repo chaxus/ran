@@ -15,11 +15,11 @@ disclosure language instead of two.
 
 ### Basic Usage
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Read file" summary="packages/ranui/index.ts" expandable>
     <div style="padding:8px 0">The body appears when the row is open.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Read file" summary="packages/ranui/index.ts" expandable>
@@ -36,10 +36,10 @@ summary drops the separator with it.
 `busy` draws a shimmer sweep across the row. A spinner only indicates that something,
 somewhere, is happening; a sweep over the row identifies which row is still working.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Run tests" summary="2351 passed" busy expandable></r-disclosure-row>
   <r-disclosure-row heading="Run tests" summary="2351 passed" expandable></r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ### With a leading indicator
 
@@ -50,12 +50,12 @@ With nothing slotted into `leading` the chevron stays visible, since it is the o
 telling a reader the row opens. With leading content the chevron appears on hover, on focus
 or while open, and the state indicator is what shows the rest of the time.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Build" summary="failed in 4.2s" tone="error" expandable>
     <r-state-dot slot="leading" state="error"></r-state-dot>
     <div style="padding:8px 0">Bundle exceeds the size limit.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Build" summary="failed in 4.2s" tone="error" expandable>

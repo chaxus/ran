@@ -10,9 +10,9 @@ description: 'ranui Message 以命令式方式展示全局反馈（info/success/
 
 ## 快速开始
 
-<Demo>
+<ran-demo>
   <r-button type="primary" onclick="message.info('这是一条提示')">点击触发全局提示</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" onclick="message.info('这是一条提示')">点击触发全局提示</r-button>
@@ -80,13 +80,13 @@ message.info({
 
 ## 提示类型 `type`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info('这是一条提示')">信息提示</r-button>
   <r-button onclick="message.success('这是一条提示')">成功提示</r-button>
   <r-button onclick="message.warning('这是一条提示')">警告提示</r-button>
   <r-button  onclick="message.error('这是一条提示')">错误提示</r-button>
   <r-button  onclick="message.toast('这是一条提示')">toast 提示</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info('这是一条提示')">信息提示</r-button>
@@ -98,10 +98,10 @@ message.info({
 
 ## 自定义时长 `duration`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: '停留 6 秒', duration: 6000 })">6 秒提示</r-button>
   <r-button onclick="message.info({ content: '停留 1 秒', duration: 1000 })">1 秒提示</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info({ content: '停留 6 秒', duration: 6000 })">6 秒提示</r-button>
@@ -112,9 +112,9 @@ message.info({
 
 `close` 回调会在 toast 从 DOM 中移除后触发。
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.success({ content: '已保存', close: () => message.info('提示已关闭') })">关闭后触发提示</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.success({ content: '已保存', close: () => message.info('提示已关闭') })"
@@ -134,9 +134,9 @@ message.success({
 
 ## 自定义位置 `top` / `zIndex` / `getContainer`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: '向下偏移', top: 120 })">顶部偏移</r-button>
-</Demo>
+</ran-demo>
 
 ```js
 message.info({

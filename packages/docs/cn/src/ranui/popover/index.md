@@ -14,14 +14,14 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 
 触发器放在默认插槽中；浮层内容包裹在嵌套的 `<r-content>` 元素里。
 
-<Demo>
+<ran-demo>
   <r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>这是浮层内容</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover style="display: inline-block;">
@@ -45,7 +45,7 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 
 ### 触发方式 `trigger`
 
-<Demo>
+<ran-demo>
   <r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
@@ -58,7 +58,7 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
       <div>click</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" style="display: inline-block;">
@@ -78,7 +78,7 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 
 ### 位置 `placement`
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
@@ -103,7 +103,7 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
       <div>right</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="top" style="display: inline-block;">
@@ -141,7 +141,7 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 `-center` 或 `-end` 后缀。顶栏右端的菜单要的就是后者：它向内展开，而不是先溢出视口、再被平移推回来。
 后缀会跟着自动翻转一起保留：`bottom-end` 翻转后是 `top-end`，而不是 `top`。
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
@@ -160,7 +160,7 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
       <div style="width: 200px;">bottom-end</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">

@@ -15,13 +15,13 @@ Um indicador de ciclo de vida de 8px: um halo e um núcleo no mesmo elemento, am
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-state-dot state="idle"></r-state-dot>
   <r-state-dot state="running"></r-state-dot>
   <r-state-dot state="success"></r-state-dot>
   <r-state-dot state="warning"></r-state-dot>
   <r-state-dot state="error"></r-state-dot>
-</Demo>
+</ran-demo>
 
 ```html
 <r-state-dot state="idle"></r-state-dot>
@@ -41,7 +41,7 @@ O ponto só codifica o estado pela cor; ele não explica o que a cor significa. 
 cor ser a única coisa que distingue duas linhas. Veja as
 [diretrizes de design](/pt/src/ranui/design-guides/#accessibility).
 
-<Demo column>
+<ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">
     <r-state-dot state="running"></r-state-dot>
     <span>Executando testes</span>
@@ -50,7 +50,7 @@ cor ser a única coisa que distingue duas linhas. Veja as
     <r-state-dot state="error"></r-state-dot>
     <span>2 testes falharam</span>
   </div>
-</Demo>
+</ran-demo>
 
 ## Referência da API
 

@@ -12,9 +12,9 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 ### کاربرد پایه
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="متنی وارد کنید"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="متنی وارد کنید"></r-input>
@@ -45,9 +45,9 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 نوشته‌ای ثابت که بالای فیلد رسم می‌شود: همیشه دیده می‌شود، هرگز روی محتوای کناری نمی‌افتد و با فوکوس، چیدمان را جابه‌جا نمی‌کند (برچسب‌های بالاچین فرم را هم سریع‌تر از برچسب‌های درون‌خطی یا شناور به پایان می‌رسانند؛ [پژوهش ردیابی چشم لوک وروبلوسکی](https://www.lukew.com/ff/entry.asp?504=) را ببینید).
 
-<Demo column>
+<ran-demo column>
   <r-input label="نام کاربری"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="نام کاربری"></r-input>
@@ -57,9 +57,9 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 مثل اتریبیوت بومی `placeholder` رفتار می‌کند.
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="نام کاربری را وارد کنید"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="نام کاربری را وارد کنید"></r-input>
@@ -67,9 +67,9 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 ### مقدار `value`
 
-<Demo column>
+<ran-demo column>
   <r-input value="1234"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input value="1234"></r-input>
@@ -77,9 +77,9 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 ### حالت غیرفعال `disabled`
 
-<Demo column>
+<ran-demo column>
   <r-input label="نام کاربری" disabled></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="نام کاربری" disabled></r-input>
@@ -87,9 +87,9 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 ### آیکن `icon`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="user"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="user"></r-input>
@@ -97,10 +97,10 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 ### انواع ورودی `type`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="lock" type="password" placeholder="گذرواژه"></r-input>
   <r-input type="number" placeholder="عدد"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="lock" type="password" placeholder="گذرواژه"></r-input>
@@ -111,10 +111,10 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 `status` را همیشه با یک `message` همراه کنید تا وضعیت را متن برساند، نه تنها رنگ.
 
-<Demo column>
+<ran-demo column>
   <r-input status="error" label="نام کاربری" message="این فیلد الزامی است"></r-input>
   <r-input status="warning" label="نام کاربری" message="این مقدار را بررسی کنید"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input status="error" label="نام کاربری" message="این فیلد الزامی است"></r-input>
@@ -125,9 +125,9 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 متن راهنما یا اعتبارسنجی را زیر فیلد رسم می‌کند.
 
-<Demo column>
+<ran-demo column>
   <r-input label="ایمیل" message="ایمیل شما را هرگز با کسی در میان نمی‌گذاریم"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="ایمیل" message="ایمیل شما را هرگز با کسی در میان نمی‌گذاریم"></r-input>
@@ -150,9 +150,9 @@ description: 'ورودی ranui (<r-input>) کنترل پایه فرم برای �
 
 ### رویداد ورودی `input`
 
-<Demo column>
+<ran-demo column>
   <r-input oninput="console.log(event.detail.value)" label="نام کاربری"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');
@@ -164,9 +164,9 @@ input.addEventListener('input', (event) => {
 
 ### رویداد تغییر `change`
 
-<Demo column>
+<ran-demo column>
   <r-input onchange="console.log(event.detail.value)" label="نام کاربری"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');

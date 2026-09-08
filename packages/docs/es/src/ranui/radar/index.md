@@ -14,9 +14,9 @@ Gráfico de radar para comparar varias métricas de un mismo conjunto de datos s
 
 Los datos se pasan por el atributo `abilitys` como una **cadena JSON** (un array de objetos). Como los atributos HTML solo pueden contener cadenas, el valor tiene que ser JSON válido; se analiza internamente con `JSON.parse`. El host `<r-radar>` no tiene tamaño propio, así que dale un ancho y un alto explícitos.
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defensa","scoreRate":"20"},{"abilityName":"Maestría elemental","scoreRate":"50"},{"abilityName":"Prob. de crítico","scoreRate":"80"},{"abilityName":"Daño crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -67,9 +67,9 @@ Cada entrada del array `abilitys` admite estas claves:
 
 El estilo de la etiqueta por eje (`backgroundColor`, `fontSize`, `fontColor`) se puede definir en entradas concretas:
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"Vida","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defensa","scoreRate":"20"},{"abilityName":"Maestría elemental","scoreRate":"50"},{"abilityName":"Prob. de crítico","scoreRate":"80"},{"abilityName":"Daño crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -80,9 +80,9 @@ El estilo de la etiqueta por eje (`backgroundColor`, `fontSize`, `fontColor`) se
 
 ### Color de la rejilla `colorPolygon`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorPolygon="green" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defensa","scoreRate":"20"},{"abilityName":"Maestría elemental","scoreRate":"50"},{"abilityName":"Prob. de crítico","scoreRate":"80"},{"abilityName":"Daño crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -94,9 +94,9 @@ El estilo de la etiqueta por eje (`backgroundColor`, `fontSize`, `fontColor`) se
 
 ### Color de los ejes `colorLine`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorLine="blue" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defensa","scoreRate":"20"},{"abilityName":"Maestría elemental","scoreRate":"50"},{"abilityName":"Prob. de crítico","scoreRate":"80"},{"abilityName":"Daño crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -108,9 +108,9 @@ El estilo de la etiqueta por eje (`backgroundColor`, `fontSize`, `fontColor`) se
 
 ### Relleno de la región `fillColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" fillColor="red" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defensa","scoreRate":"20"},{"abilityName":"Maestría elemental","scoreRate":"50"},{"abilityName":"Prob. de crítico","scoreRate":"80"},{"abilityName":"Daño crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -122,9 +122,9 @@ El estilo de la etiqueta por eje (`backgroundColor`, `fontSize`, `fontColor`) se
 
 ### Contorno de la región `strokeColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" strokeColor="blue" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defensa","scoreRate":"20"},{"abilityName":"Maestría elemental","scoreRate":"50"},{"abilityName":"Prob. de crítico","scoreRate":"80"},{"abilityName":"Daño crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar

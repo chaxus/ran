@@ -12,9 +12,9 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 ### 基础用法
 
-<Demo>
+<ran-demo>
   <r-button>Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button>Button</r-button>
@@ -35,12 +35,12 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 按钮支持五种不同的类型，适用于不同的场景
 
-<Demo>
+<ran-demo>
   <r-button type="primary">主要按钮</r-button>
   <r-button type="warning">警告按钮</r-button>
   <r-button type="text">文本按钮</r-button>
   <r-button>默认按钮</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary">主要按钮</r-button>
@@ -55,12 +55,12 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 添加 `disabled` 属性可以让按钮处于不可用状态，同时按钮样式也会相应改变
 
-<Demo>
+<ran-demo>
   <r-button type="primary" disabled>主要按钮</r-button>
   <r-button type="warning" disabled>警告按钮</r-button>
   <r-button type="text" disabled>文本按钮</r-button>
   <r-button disabled>默认按钮</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" disabled>主要按钮</r-button>
@@ -75,10 +75,10 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 > 💡 **提示**：如果需要控制图标的具体位置，建议直接使用 Icon 组件而不是 icon 属性
 
-<Demo>
+<ran-demo>
   <r-button type="default" icon="user">默认按钮</r-button>
   <r-button type="primary" icon="home">主要按钮</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="default" icon="user">默认按钮</r-button> <r-button type="primary" icon="home">主要按钮</r-button>
@@ -89,10 +89,10 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 点击水波纹默认开启。想要纯净的按钮样式，设置 `effect="false"` 关掉它。下面两个按钮只有这一个属性不同，
 分别点一下就能看出区别。水波纹是指针设备上的效果，视口宽度 1024px 以上才会绘制。
 
-<Demo>
+<ran-demo>
   <r-button type="primary" icon="home">默认：有水波纹</r-button>
   <r-button type="primary" icon="home" effect="false">effect="false"：无水波纹</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" icon="home">默认：有水波纹</r-button>

@@ -43,9 +43,9 @@ Los bloques cercados ` ```mermaid ` se convierten en [`<r-mermaid>`](/es/src/ran
 
 ## Inicio rápido
 
-<Demo>
+<ran-demo>
   <r-markdown copy highlight :content.prop="quick"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy highlight content="# Hola ..."></r-markdown>
@@ -72,9 +72,9 @@ container.append(el);
 
 `mode="streaming"` (el valor por defecto) pasa primero el texto por [remend](https://www.npmjs.com/package/remend), el terminador de markdown incompleto extraído de Streamdown: así un `**bold` recibido a medias se dibuja en negrita en vez de mostrar los asteriscos, `[text](https://exa` se ve como texto plano hasta que la URL se cierra, un `- ` no convierte el párrafo anterior en un encabezado, y así con todo. Para documentos ya terminados, pon `mode="static"` y sáltate esa pasada para renderizar de una sola vez.
 
-<Demo>
+<ran-demo>
   <r-markdown caret :content.prop="partial"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown
@@ -90,9 +90,9 @@ container.append(el);
 
 Cada bloque de código recibe una cabecera con el lenguaje y, si lo activas, botones de copiar y descargar. Añade `highlight` para resaltar la sintaxis con [shiki](https://shiki.style) (carga diferida; los lenguajes se cargan bajo demanda; `github-light` / `github-dark` por defecto, siguiendo el tema de la página).
 
-<Demo>
+<ran-demo>
   <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy download line-numbers highlight></r-markdown>
@@ -102,9 +102,9 @@ Cada bloque de código recibe una cabecera con el lenguaje y, si lo activas, bot
 
 ## Mermaid y matemáticas
 
-<Demo>
+<ran-demo>
   <r-markdown :content.prop="rich"></r-markdown>
-</Demo>
+</ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>` (con pantalla completa; `copy` / `download` se reenvían).
 - `$$…$$`, `\[…\]` y ` ```math ` → `<r-math>` en bloque; `\(…\)` → en línea. El dólar simple `$…$` **hay que activarlo** con `inline-math`, porque se confunde con una cantidad de dinero.

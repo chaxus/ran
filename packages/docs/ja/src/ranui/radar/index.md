@@ -14,9 +14,9 @@ description: '一つのデータセットの複数の指標を 2D キャンバ�
 
 データは `abilitys` 属性に **JSON 文字列**（オブジェクトの配列）として渡します。HTML の属性は文字列しか持てないので、値は妥当な JSON である必要があり、内部で `JSON.parse` により解析されます。`<r-radar>` のホストは固有の大きさを持たないので、明示的な幅と高さを与えてください。
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"攻撃","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素熟知","scoreRate":"50"},{"abilityName":"会心率","scoreRate":"80"},{"abilityName":"会心ダメージ","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -67,9 +67,9 @@ chart.append(radar);
 
 ラベルごとのスタイル（`backgroundColor`、`fontSize`、`fontColor`）は、要素ごとに設定できます。
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"HP","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻撃","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素熟知","scoreRate":"50"},{"abilityName":"会心率","scoreRate":"80"},{"abilityName":"会心ダメージ","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -80,9 +80,9 @@ chart.append(radar);
 
 ### 網目多角形の色 `colorPolygon`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorPolygon="green" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"攻撃","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素熟知","scoreRate":"50"},{"abilityName":"会心率","scoreRate":"80"},{"abilityName":"会心ダメージ","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -94,9 +94,9 @@ chart.append(radar);
 
 ### 軸線の色 `colorLine`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorLine="blue" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"攻撃","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素熟知","scoreRate":"50"},{"abilityName":"会心率","scoreRate":"80"},{"abilityName":"会心ダメージ","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -108,9 +108,9 @@ chart.append(radar);
 
 ### 領域の塗りの色 `fillColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" fillColor="red" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"攻撃","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素熟知","scoreRate":"50"},{"abilityName":"会心率","scoreRate":"80"},{"abilityName":"会心ダメージ","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -122,9 +122,9 @@ chart.append(radar);
 
 ### 領域の輪郭の色 `strokeColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" strokeColor="blue" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"攻撃","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素熟知","scoreRate":"50"},{"abilityName":"会心率","scoreRate":"80"},{"abilityName":"会心ダメージ","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar

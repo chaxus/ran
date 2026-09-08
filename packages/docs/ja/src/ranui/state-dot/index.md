@@ -14,13 +14,13 @@ description: 'ranui の StateDot（<r-state-dot>）は、光晕と芯を一つ�
 
 ### 基本的な使い方
 
-<Demo>
+<ran-demo>
   <r-state-dot state="idle"></r-state-dot>
   <r-state-dot state="running"></r-state-dot>
   <r-state-dot state="success"></r-state-dot>
   <r-state-dot state="warning"></r-state-dot>
   <r-state-dot state="error"></r-state-dot>
-</Demo>
+</ran-demo>
 
 ```html
 <r-state-dot state="idle"></r-state-dot>
@@ -39,7 +39,7 @@ description: 'ranui の StateDot（<r-state-dot>）は、光晕と芯を一つ�
 色だけ、という状態には決してしないでください。詳しくは
 [デザインガイドライン](/ja/src/ranui/design-guides/#accessibility)を参照。
 
-<Demo column>
+<ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">
     <r-state-dot state="running"></r-state-dot>
     <span>テストを実行中</span>
@@ -48,7 +48,7 @@ description: 'ranui の StateDot（<r-state-dot>）は、光晕と芯を一つ�
     <r-state-dot state="error"></r-state-dot>
     <span>テストが 2 件失敗</span>
   </div>
-</Demo>
+</ran-demo>
 
 ## API リファレンス
 

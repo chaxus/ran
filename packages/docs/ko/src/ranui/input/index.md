@@ -12,9 +12,9 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 ### 기본 사용법
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="내용을 입력하세요"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="내용을 입력하세요"></r-input>
@@ -45,9 +45,9 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 필드 위에 그려지는 고정 캡션입니다. 언제나 보이고, 옆 내용과 겹치지 않으며, 포커스했다고 레이아웃이 흔들리지 않습니다(위쪽 정렬 레이블은 인라인이나 플로팅 레이블보다 폼을 더 빨리 끝내게 하기도 합니다. [Luke Wroblewski의 시선 추적 연구](https://www.lukew.com/ff/entry.asp?504=)를 보세요).
 
-<Demo column>
+<ran-demo column>
   <r-input label="사용자 이름"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="사용자 이름"></r-input>
@@ -57,9 +57,9 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 네이티브 `placeholder` 어트리뷰트와 똑같이 동작합니다.
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="사용자 이름을 입력하세요"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="사용자 이름을 입력하세요"></r-input>
@@ -67,9 +67,9 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 ### 값 `value`
 
-<Demo column>
+<ran-demo column>
   <r-input value="1234"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input value="1234"></r-input>
@@ -77,9 +77,9 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 ### 비활성 상태 `disabled`
 
-<Demo column>
+<ran-demo column>
   <r-input label="사용자 이름" disabled></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="사용자 이름" disabled></r-input>
@@ -87,9 +87,9 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 ### 아이콘 `icon`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="user"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="user"></r-input>
@@ -97,10 +97,10 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 ### 입력 타입 `type`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="lock" type="password" placeholder="비밀번호"></r-input>
   <r-input type="number" placeholder="숫자"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="lock" type="password" placeholder="비밀번호"></r-input>
@@ -111,10 +111,10 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 `status`는 늘 `message`와 짝지어 쓰세요. 그래야 상태가 색만이 아니라 글로도 전해집니다.
 
-<Demo column>
+<ran-demo column>
   <r-input status="error" label="사용자 이름" message="필수 항목입니다"></r-input>
   <r-input status="warning" label="사용자 이름" message="이 값을 확인하세요"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input status="error" label="사용자 이름" message="필수 항목입니다"></r-input>
@@ -125,9 +125,9 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 필드 아래에 도움말이나 검증 텍스트를 그립니다.
 
-<Demo column>
+<ran-demo column>
   <r-input label="이메일" message="이메일은 절대 공유하지 않습니다"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="이메일" message="이메일은 절대 공유하지 않습니다"></r-input>
@@ -150,9 +150,9 @@ description: 'ranui Input(<r-input>)은 키보드로 입력하는 기본 폼 컨
 
 ### 입력 이벤트 `input`
 
-<Demo column>
+<ran-demo column>
   <r-input oninput="console.log(event.detail.value)" label="사용자 이름"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');
@@ -164,9 +164,9 @@ input.addEventListener('input', (event) => {
 
 ### 변경 이벤트 `change`
 
-<Demo column>
+<ran-demo column>
   <r-input onchange="console.log(event.detail.value)" label="사용자 이름"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');

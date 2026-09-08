@@ -10,9 +10,9 @@ Barra de progresso para mostrar o avanço de uma tarefa, com um puxador arrastá
 
 ## Início rápido
 
-<Demo>
+<ran-demo>
   <r-progress percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="40%"></r-progress>
@@ -36,11 +36,11 @@ Barra de progresso para mostrar o avanço de uma tarefa, com um puxador arrastá
 
 Define o progresso atual. Aceita um número ou uma string de porcentagem e não pode passar de `total`. Quando `total` não é definido, o padrão é `100` (ou seja, `percent` é lido como porcentagem de 100).
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30%"></r-progress>
   <r-progress percent="70%"></r-progress>
   <r-progress percent="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30%"></r-progress>
@@ -52,11 +52,11 @@ Define o progresso atual. Aceita um número ou uma string de porcentagem e não 
 
 Define o denominador de `percent`. Números e porcentagens são aceitos, então `percent="30" total="1000"` preenche a barra em 3%.
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30" total="1000"></r-progress>
   <r-progress percent="70" total="100"></r-progress>
   <r-progress percent="10%" total="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -69,10 +69,10 @@ Define o denominador de `percent`. Números e porcentagens são aceitos, então 
 - `primary`: barra de progresso estática. É o padrão quando `type` não é definido.
 - `drag`: barra clicável e arrastável. Clicar na trilha ou arrastar o puxador atualiza `percent` e dispara um evento `change`. Arrastar o puxador exige `dot="true"`.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%"></r-progress>
   <r-progress type="primary" percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
@@ -82,10 +82,10 @@ Define o denominador de `percent`. Números e porcentagens são aceitos, então 
 
 Liga e desliga o puxador. Ele só é desenhado quando `dot="true"` **e** `type="drag"`; numa barra `primary` estática é omitido de propósito, então ali `dot` não tem efeito visível.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%" dot="true"></r-progress>
   <r-progress type="drag" percent="30%" dot="false"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%" dot="true"></r-progress>

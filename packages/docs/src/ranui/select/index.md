@@ -14,13 +14,13 @@ Dropdown selector for choosing a single value from a list of options, with optio
 
 Options are supplied as slotted `<r-option>` children. Each option's `value` attribute is its value and its text content is the displayed label.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -70,13 +70,13 @@ A static caption rendered above the field: always visible, never overlaps adjace
 content. Uses the same tokens and layout as `r-input`'s `label`, so a labeled select and a
 labeled input placed side by side in a form line up (same height, same top edge).
 
-<Demo>
+<ran-demo>
   <r-select label="Country" style="width: 180px" defaultValue="185">
     <r-option value="185">United States</r-option>
     <r-option value="186">Canada</r-option>
     <r-option value="187">Mexico</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select label="Country" defaultValue="185">
@@ -88,13 +88,13 @@ labeled input placed side by side in a form line up (same height, same top edge)
 
 ### Default Value `defaultValue`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -106,13 +106,13 @@ labeled input placed side by side in a form line up (same height, same top edge)
 
 ### Disabled State `disabled`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
@@ -124,13 +124,13 @@ labeled input placed side by side in a form line up (same height, same top edge)
 
 ### Text Type `type`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
@@ -163,13 +163,13 @@ The suffix only changes anything when the panel is a different width from its tr
 
 Note that the boundary shift outranks the alignment: a trigger close enough to a viewport edge gets its panel nudged back on-screen whatever alignment was asked for.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
@@ -209,13 +209,13 @@ That makes it a supported way to drive the component, and something to style and
 
 ### Search Function `showSearch`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" showSearch="true">
@@ -227,13 +227,13 @@ That makes it a supported way to drive the component, and something to style and
 
 ### Trigger Method `trigger`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" trigger="click,hover">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <!-- Click trigger (default) -->

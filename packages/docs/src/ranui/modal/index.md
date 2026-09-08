@@ -14,7 +14,7 @@ Dialog component for focused interactions on top of the current page, with focus
 
 Modal visibility is controlled by the `open` attribute (or the `open` property). It starts closed and renders nothing until opened, so wire a trigger to toggle it.
 
-<Demo>
+<ran-demo>
   <r-button onclick="document.getElementById('quickstart-modal').open = true">Open Modal</r-button>
   <r-modal id="quickstart-modal" heading="Basic Modal">
     <p>This is the modal content.</p>
@@ -22,7 +22,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
       <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">OK</r-button>
     </div>
   </r-modal>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="modal.open = true">Open Modal</r-button>

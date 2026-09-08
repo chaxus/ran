@@ -12,9 +12,9 @@ Componente de botón para disparar acciones inmediatas, con varios estilos y est
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-button>Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button>Button</r-button>
@@ -33,12 +33,12 @@ Componente de botón para disparar acciones inmediatas, con varios estilos y est
 
 ### Tipos de botón `type`
 
-<Demo>
+<ran-demo>
   <r-button type="primary">Primary Button</r-button>
   <r-button type="warning">Warning Button</r-button>
   <r-button type="text">Text Button</r-button>
   <r-button>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary">Primary Button</r-button>
@@ -51,12 +51,12 @@ Componente de botón para disparar acciones inmediatas, con varios estilos y est
 
 ### Estado deshabilitado `disabled`
 
-<Demo>
+<ran-demo>
   <r-button type="primary" disabled>Primary Button</r-button>
   <r-button type="warning" disabled>Warning Button</r-button>
   <r-button type="text" disabled>Text Button</r-button>
   <r-button disabled>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" disabled>Primary Button</r-button>
@@ -69,10 +69,10 @@ Componente de botón para disparar acciones inmediatas, con varios estilos y est
 
 > 💡 **Consejo**: para colocar el icono con precisión, usa directamente el componente Icon.
 
-<Demo>
+<ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
   <r-button type="primary" icon="home">Primary Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="default" icon="user">Default Button</r-button>
@@ -83,10 +83,10 @@ Componente de botón para disparar acciones inmediatas, con varios estilos y est
 
 La onda al hacer clic viene activada. Define `effect="false"` para un botón liso, sin ella. Los dos botones de abajo solo se diferencian en ese atributo, así que puedes compararlos haciendo clic en cada uno. La onda es un efecto para dispositivos apuntadores y solo se dibuja a partir de un ancho de ventana de 1024px.
 
-<Demo>
+<ran-demo>
   <r-button type="primary" icon="home">Con onda (por defecto)</r-button>
   <r-button type="primary" icon="home" effect="false">Sin onda</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" icon="home">Con onda (por defecto)</r-button>

@@ -12,13 +12,13 @@ Ein strukturierter Inhaltscontainer mit Kopf-, Körper- und Fußbereich, um Zusa
 
 ### Grundlegende Verwendung
 
-<Demo>
+<ran-demo>
   <r-card heading="Kartentitel" description="Optionale Unterzeile" style="max-width: 360px;">
     <span slot="extra" style="font-size: 12px;">tag</span>
     <p style="margin: 0;">Der Inhalt kommt in den Standard-Slot.</p>
     <a slot="footer" href="#">Notizen ansehen</a>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Kartentitel" description="Optionale Unterzeile">
@@ -43,11 +43,11 @@ Ein strukturierter Inhaltscontainer mit Kopf-, Körper- und Fußbereich, um Zusa
 
 Die Überschrift der Karte, oben im Kopfbereich. Leer bedeutet ausgeblendet.
 
-<Demo>
+<ran-demo>
   <r-card heading="Nur ein Titel" style="max-width: 360px;">
     <p style="margin: 0;">Inhalt.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Nur ein Titel">
@@ -59,11 +59,11 @@ Die Überschrift der Karte, oben im Kopfbereich. Leer bedeutet ausgeblendet.
 
 Eine Unterzeile unter dem Titel. Leer bedeutet ausgeblendet. Sind weder `title` noch `description` gesetzt, verschwindet der ganze Kopfbereich.
 
-<Demo>
+<ran-demo>
   <r-card heading="Titel" description="Eine kurze begleitende Unterzeile" style="max-width: 360px;">
     <p style="margin: 0;">Inhalt.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Titel" description="Eine kurze begleitende Unterzeile">
@@ -75,11 +75,11 @@ Eine Unterzeile unter dem Titel. Leer bedeutet ausgeblendet. Sind weder `title` 
 
 Karten reagieren standardmäßig nicht auf das Überfahren. Setze das Attribut `hoverable` nur auf Karten, die wirklich anklickbar sind: Beim Überfahren dunkelt der Rahmen eine Stufe auf der Grauleiter nach (`--ran-color-border` → `--ran-color-border-hover`), und die Fläche bekommt den zurückhaltenden erhobenen Schatten (`--ran-shadow-elevated`).
 
-<Demo>
+<ran-demo>
   <r-card hoverable heading="Karte mit Hover" description="Fahr mich an" style="max-width: 360px; cursor: pointer;">
     <p style="margin: 0;">Der Rahmen dunkelt nach und die Karte hebt sich leicht.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card hoverable heading="Karte mit Hover" description="Fahr mich an">

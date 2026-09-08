@@ -30,9 +30,9 @@ Web Components の上に作られており、`hls.js` / `dashjs` / `mpegts.js` �
 
 ## クイックスタート
 
-<Demo>
+<ran-demo>
   <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-</Demo>
+</ran-demo>
 
 ```html
 <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
@@ -66,9 +66,9 @@ Web Components の上に作られており、`hls.js` / `dashjs` / `mpegts.js` �
 
 ### 動画のソース `src`
 
-<Demo>
+<ran-demo>
   <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-</Demo>
+</ran-demo>
 
 ```html
 <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>

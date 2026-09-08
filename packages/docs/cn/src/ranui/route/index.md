@@ -15,11 +15,11 @@ description: '一个路由出口元素，仅当当前路径匹配其 path 模式
 
 `r-route` 的 `path` 为 `/` 时匹配默认路径，因此它的内容会独立渲染出来：
 
-<Demo>
+<ran-demo>
   <r-route path="/">
     <p>当前路径匹配时显示该内容。</p>
   </r-route>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-route path="/">

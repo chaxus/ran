@@ -10,9 +10,9 @@ description: 'ranui の Progress（<r-progress>）は、タスクの進み具合
 
 ## クイックスタート
 
-<Demo>
+<ran-demo>
   <r-progress percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="40%"></r-progress>
@@ -36,11 +36,11 @@ description: 'ranui の Progress（<r-progress>）は、タスクの進み具合
 
 現在の進捗を設定します。数値でもパーセント文字列でも受け付け、`total` を超えることはできません。`total` を設定していない場合は `100` が既定なので、`percent` は 100 に対するパーセントとして読まれます。
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30%"></r-progress>
   <r-progress percent="70%"></r-progress>
   <r-progress percent="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30%"></r-progress>
@@ -52,11 +52,11 @@ description: 'ranui の Progress（<r-progress>）は、タスクの進み具合
 
 `percent` の分母を設定します。数値もパーセントも使えるので、`percent="30" total="1000"` ならバーは 3% 埋まります。
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30" total="1000"></r-progress>
   <r-progress percent="70" total="100"></r-progress>
   <r-progress percent="10%" total="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -69,10 +69,10 @@ description: 'ranui の Progress（<r-progress>）は、タスクの進み具合
 - `primary`：静的なプログレスバー。`type` を設定しないときの既定です。
 - `drag`：クリックとドラッグができるプログレスバー。トラックをクリックするか、つまみをドラッグすると `percent` が更新され、`change` イベントが発生します。つまみのドラッグには `dot="true"` が必要です。
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%"></r-progress>
   <r-progress type="primary" percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
@@ -82,10 +82,10 @@ description: 'ranui の Progress（<r-progress>）は、タスクの進み具合
 
 つまみの表示を切り替えます。つまみが描画されるのは `dot="true"` **かつ** `type="drag"` のときだけです。静的な `primary` のバーでは意図的に省かれるので、そこでは `dot` に見た目の効果はありません。
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%" dot="true"></r-progress>
   <r-progress type="drag" percent="30%" dot="false"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%" dot="true"></r-progress>

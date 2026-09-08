@@ -12,11 +12,11 @@ description: 'r-popover 와 r-select 가 딛고 선, 위치와 쌓임 순서를 
 
 ### 기본 사용법
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">떠 있는 패널의 내용</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -38,7 +38,7 @@ description: 'r-popover 와 r-select 가 딛고 선, 위치와 쌓임 순서를 
 
 패널 한쪽 변에 가리키는 화살표를 그립니다. 어트리뷰트를 생략하면 화살표가 없습니다.
 
-<Demo column>
+<ran-demo column>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="top"</div>
   </r-dropdown>
@@ -51,7 +51,7 @@ description: 'r-popover 와 r-select 가 딛고 선, 위치와 쌓임 순서를 
   <r-dropdown arrow="right" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="right"</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -76,11 +76,11 @@ description: 'r-popover 와 r-select 가 딛고 선, 위치와 쌓임 순서를 
 
 `getAnimationTarget()`은 애니메이션이 실제로 도는 엘리먼트를 돌려줍니다. 그것은 섀도 루트 안에 있으므로 호스트에 대한 `getAnimations()`는 아무것도 알려 주지 않고 `{ subtree: true }`도 경계를 넘지 않습니다. 패널 전환이 끝나기를 기다리는 코드는 섀도 트리를 뒤져 클래스 이름을 찾는 대신 `getAnimationTarget()`을 부르세요.
 
-<Demo>
+<ran-demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">연결될 때 애니메이션으로 들어옵니다</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown transit="ran-dropdown-down-in">
@@ -126,11 +126,11 @@ r-dropdown::part(dropdown) {
 
 눈에 보이는 모든 성질은 `--ran-dropdown-*` 토큰으로 덮어쓸 수 있습니다. 예를 들어 `--ran-dropdown-background`, `--ran-dropdown-border-radius`, `--ran-dropdown-box-shadow`, `--ran-dropdown-padding`, `--ran-dropdown-arrow-width`, `--ran-dropdown-host-z-index` 입니다. 화살표는 자기 `viewBox`로 크기가 정해지는 인라인 SVG 라서, `--ran-dropdown-arrow-width`/`-height`는 주변의 빈 상자가 아니라 삼각형 자체의 크기를 바꿉니다.
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
     <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```css
 r-dropdown {

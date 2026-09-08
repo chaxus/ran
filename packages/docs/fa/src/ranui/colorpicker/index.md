@@ -12,10 +12,10 @@ description: 'نمونهٔ رنگ فشرده‌ای که پنلی با مهار�
 
 ### استفادهٔ پایه
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff"></r-colorpicker>
   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff"></r-colorpicker> <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
@@ -37,11 +37,11 @@ description: 'نمونهٔ رنگ فشرده‌ای که پنلی با مهار�
 
 رنگ کنونی، به‌شکل رشتهٔ رنگ CSS. در ورودی HEX (`#1677FF`، `#fff`)، `rgb(...)` و `rgba(...)` را می‌پذیرد. در خروجی، مقدار متعارفی که بازخوانده می‌شود اگر رنگ کاملاً مات باشد رشتهٔ HEX شش‌رقمی است و اگر شفافیت کمتر از ۱ باشد رشتهٔ `rgba(...)`.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#00c853"></r-colorpicker>
   <r-colorpicker value="rgb(22, 119, 255)"></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#00c853"></r-colorpicker>
@@ -60,10 +60,10 @@ toolbar.append(picker);
 
 ویژگی `disabled` را بگذارید تا انتخابگر بی‌اثر شود: نمونه دیگر پنل را باز نمی‌کند (نه با ماوس نه با صفحه‌کلید)، از ترتیب tab بیرون می‌رود و روی میزبان `aria-disabled="true"` گذاشته می‌شود. با برداشتن ویژگی، تعامل عادی برمی‌گردد.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff" disabled></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)" disabled></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff" disabled></r-colorpicker>

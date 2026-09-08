@@ -12,9 +12,9 @@ Componente de casilla para alternar una única elección de sí o no, con etique
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-checkbox>Recuérdame</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox>Recuérdame</r-checkbox>
@@ -38,10 +38,10 @@ El contenido del slot por defecto se convierte en la etiqueta de la casilla.
 
 ### Estado marcado `checked`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true">Marcada</r-checkbox>
   <r-checkbox checked="false">Sin marcar</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true">Marcada</r-checkbox> <r-checkbox checked="false">Sin marcar</r-checkbox>
@@ -49,10 +49,10 @@ El contenido del slot por defecto se convierte en la etiqueta de la casilla.
 
 ### Valor `value`
 
-<Demo>
+<ran-demo>
   <r-checkbox value="true">Valor true</r-checkbox>
   <r-checkbox value="false">Valor false</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox value="true">Valor true</r-checkbox> <r-checkbox value="false">Valor false</r-checkbox>
@@ -60,10 +60,10 @@ El contenido del slot por defecto se convierte en la etiqueta de la casilla.
 
 ### Estado deshabilitado `disabled`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" disabled>Marcada</r-checkbox>
   <r-checkbox checked="false" disabled>Sin marcar</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" disabled>Marcada</r-checkbox> <r-checkbox checked="false" disabled>Sin marcar</r-checkbox>
@@ -73,9 +73,9 @@ El contenido del slot por defecto se convierte en la etiqueta de la casilla.
 
 El atributo `sheet` inyecta CSS en el shadow DOM y te permite apuntar a las partes internas por su nombre de clase.
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">Etiqueta con tema</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">Etiqueta con tema</r-checkbox>
@@ -95,9 +95,9 @@ detail: {
 
 Una casilla deshabilitada no dispara `change`.
 
-<Demo>
+<ran-demo>
   <r-checkbox onchange="message.info(this)">Púlsame</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox onchange="handleChange(event)">Púlsame</r-checkbox>

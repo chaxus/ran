@@ -26,7 +26,7 @@ Zieh das Glas über die Bühne, stelle jedes Attribut ein und kopiere das genaue
 
 `<r-glass>` lässt sich zusammensetzen: Verschachtele eines im anderen für geschichtete Materialien (etwa eine gläserne Werkzeugleiste auf einer gläsernen Fläche). Jede Schicht bricht, was hinter ihr liegt.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
     <r-glass radius="26" style="width: 340px;">
       <div style="padding: 26px;">
@@ -37,7 +37,7 @@ Zieh das Glas über die Bühne, stelle jedes Attribut ein und kopiere das genaue
       </div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass radius="26">
@@ -70,12 +70,12 @@ Zieh das Glas über die Bühne, stelle jedes Attribut ein und kopiere das genaue
 
 `displace` steuert die Skala des SVG-`feDisplacementMap`: wie stark sich das Licht durch die Fläche krümmt. Setze es auf `0` für eine schlichte Mattglasscheibe.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
     <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
     <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass displace="0">…flach matt…</r-glass> <r-glass displace="60">…flüssig…</r-glass>
@@ -85,13 +85,13 @@ Zieh das Glas über die Bühne, stelle jedes Attribut ein und kopiere das genaue
 
 `sheen` legt ein wanderndes spekulares Glanzlicht darüber; `interactive` fügt ein Anheben beim Überfahren und ein federndes Drücken hinzu (über das gemeinsame Token `--ran-motion-ease-spring`).
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass sheen interactive displace="36" style="width: 260px;">
       <div style="padding: 20px; color: #fff; font-weight: 600;">Überfahren und drücken</div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass sheen interactive displace="36">
@@ -105,12 +105,12 @@ Zieh das Glas über die Bühne, stelle jedes Attribut ein und kopiere das genaue
 
 Gezeichnet wird zuerst mit WebGL (synchron, läuft praktisch in jedem Browser, sodass der Rand sein eigenes erstes Bild nie verzögert), und im Hintergrund transparent auf WebGPU gehoben, wenn der Browser es hat (gleicher Effekt, pixelgleiche Ausgabe). Ist keine der beiden GPU-APIs verfügbar (sehr alte Browser, abgeschaltet, SSR), greift der reine CSS-Spekulargradient; es gibt keinen kaputten oder leeren Zustand, den das Design abfangen müsste.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">ohne rim</div></r-glass>
     <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass>…nur der CSS-Spekulargradient…</r-glass>

@@ -12,9 +12,9 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Basic Usage
 
-<Demo>
+<ran-demo>
   <r-button>Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button>Button</r-button>
@@ -33,12 +33,12 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Button Types `type`
 
-<Demo>
+<ran-demo>
   <r-button type="primary">Primary Button</r-button>
   <r-button type="warning">Warning Button</r-button>
   <r-button type="text">Text Button</r-button>
   <r-button>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary">Primary Button</r-button>
@@ -51,12 +51,12 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Disabled State `disabled`
 
-<Demo>
+<ran-demo>
   <r-button type="primary" disabled>Primary Button</r-button>
   <r-button type="warning" disabled>Warning Button</r-button>
   <r-button type="text" disabled>Text Button</r-button>
   <r-button disabled>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" disabled>Primary Button</r-button>
@@ -69,10 +69,10 @@ Button component for triggering instant actions with multiple styles and states.
 
 > 💡 **Tip**: For precise icon positioning, use the Icon component directly
 
-<Demo>
+<ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
   <r-button type="primary" icon="home">Primary Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="default" icon="user">Default Button</r-button>
@@ -85,10 +85,10 @@ The click ripple is on by default. Set `effect="false"` for a plain button witho
 buttons below differ only in that attribute, so you can compare them by clicking each. The
 ripple is a pointer-device effect and only renders from a viewport width of 1024px.
 
-<Demo>
+<ran-demo>
   <r-button type="primary" icon="home">Ripple (default)</r-button>
   <r-button type="primary" icon="home" effect="false">No ripple</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" icon="home">Ripple (default)</r-button>

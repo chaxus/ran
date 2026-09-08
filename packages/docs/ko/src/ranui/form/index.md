@@ -12,7 +12,7 @@ ranui 에는 `<form>`을 감싸는 컴포넌트가 없습니다. `r-input`, `r-c
 
 세 가지 필드 모두를 평범한 `<form>`으로 제출합니다. 필드를 바꿔 제출하면 아래에 결과가 나옵니다. 이 데모는 브라우저 자체의 `FormData`/`Object.fromEntries`로 객체를 만듭니다 (import 필요 없음). 다음에 소개할 `serializeForm()`은 같은 일을 하면서 `Object.fromEntries`가 못 하는 일을 하나 더 합니다. 같은 이름이 여러 번 나오면 조용히 마지막 값만 남기는 대신 배열로 돌려줍니다.
 
-<Demo column>
+<ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
     <r-input name="username" label="사용자 이름" placeholder="사용자 이름 입력"></r-input>
     <r-select name="role" label="역할" style="width: 100%" defaultValue="member">
@@ -22,7 +22,7 @@ ranui 에는 `<form>`을 감싸는 컴포넌트가 없습니다. `r-input`, `r-c
     <r-checkbox name="subscribe">뉴스레터 구독</r-checkbox>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">제출</button></r-button>
   </form>
-</Demo>
+</ran-demo>
 
 > 아래 [레이아웃](#layout) 절에서 다루듯이, 필드는 폼 수준의 레이아웃을 스스로 갖고 있지
 > 않습니다. 그래서 이 페이지의 모든 예제 (이것 포함) 가 자기 `<form>`에 CSS 를 지정합니다
@@ -72,13 +72,13 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 필드에는 기본 폼 레이아웃이 없습니다. 여러분의 `<form>`에 평범한 CSS 로 스타일을 주세요.
 
-<Demo column>
+<ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px;">
     <r-input name="first" label="이름"></r-input>
     <r-input name="last" label="성"></r-input>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">계속</button></r-button>
   </form>
-</Demo>
+</ran-demo>
 
 ```html
 <form style="display: flex; flex-direction: column; gap: 16px;">
@@ -92,12 +92,12 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 `r-input`, `r-checkbox`, `r-select`는 모두 `required`(네이티브 필드와 똑같이 제출을 막고 브라우저 기본 검증 말풍선을 띄웁니다) 와 함께 `checkValidity()`, `reportValidity()`, `validity`, `validationMessage`를 지원합니다. 네이티브 `form.reset()`(또는 `<button type="reset">`) 은 `formResetCallback()`을 통해 각 필드를 조작 전 상태로 되돌립니다. 자세한 내용은 각 필드 문서 ([Input](/ko/src/ranui/input/#form-association), [Checkbox](/ko/src/ranui/checkbox/#form-association), [Select](/ko/src/ranui/select/#form-association)) 를 보세요.
 
-<Demo column>
+<ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
     <r-input name="username" label="사용자 이름" required></r-input>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">제출</button></r-button>
   </form>
-</Demo>
+</ran-demo>
 
 ```html
 <form style="display: flex; flex-direction: column; gap: 16px;">

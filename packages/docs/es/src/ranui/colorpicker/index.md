@@ -12,10 +12,10 @@ Una muestra de color compacta que abre un panel emergente con una paleta de satu
 
 ### Uso básico
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff"></r-colorpicker>
   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff"></r-colorpicker> <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
@@ -37,11 +37,11 @@ Haz clic en la muestra (o enfócala y pulsa Intro/Espacio) para abrir el panel. 
 
 El color actual, como cadena de color CSS. A la entrada acepta HEX (`#1677FF`, `#fff`), `rgb(...)` y `rgba(...)`. A la salida, el valor canónico que se lee es una cadena HEX de 6 dígitos cuando el color es totalmente opaco, o una cadena `rgba(...)` cuando la transparencia es menor que 1.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#00c853"></r-colorpicker>
   <r-colorpicker value="rgb(22, 119, 255)"></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#00c853"></r-colorpicker>
@@ -60,10 +60,10 @@ toolbar.append(picker);
 
 Añade el atributo `disabled` para dejar el selector inerte: la muestra ya no abre el panel (ni con ratón ni con teclado), sale del orden de tabulación y el host se marca con `aria-disabled="true"`. Quitar el atributo restaura la interacción normal.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff" disabled></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)" disabled></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff" disabled></r-colorpicker>

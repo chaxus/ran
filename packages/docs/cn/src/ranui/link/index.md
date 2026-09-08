@@ -12,9 +12,9 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 
 ### 基础用法
 
-<Demo>
+<ran-demo>
   <r-link href="/getting-started">开始使用</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/getting-started">开始使用</r-link>
@@ -36,10 +36,10 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 
 内部路径会在应用内路由；绝对 URL 以及 `mailto:` / `tel:` 链接则正常导航。
 
-<Demo>
+<ran-demo>
   <r-link href="/docs">内部链接</r-link>
   <r-link href="https://example.com">外部链接</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs">内部链接</r-link> <r-link href="https://example.com">外部链接</r-link>
@@ -49,9 +49,9 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 
 布尔属性。存在时，应用内导航会替换当前历史记录（`router.replace`），而非新增一条。
 
-<Demo>
+<ran-demo>
   <r-link href="/settings" replace>替换记录</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/settings" replace>替换记录</r-link>
@@ -61,9 +61,9 @@ description: '一个感知路由的锚点，拦截应用内导航，外部链接
 
 注入到链接 Shadow DOM 中的 CSS，遵循与其他所有 ranui 组件一致的 `sheet` 约定。由于可点击的 `<a>` 位于 Shadow Root 内，当你希望宿主样式呈现为按钮或卡片时，请通过 `sheet` 为其赋予盒模型（`display`、`padding`、`width`）。
 
-<Demo>
+<ran-demo>
   <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">带内边距的链接</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; }">带内边距的链接</r-link>

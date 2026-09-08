@@ -12,13 +12,13 @@ Contêiner com abas que alterna entre painéis. Componha `<r-tabs>` como contêi
 
 ### Uso básico
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -66,7 +66,7 @@ Um único painel. Seus atributos são lidos pelo `<r-tabs>` pai para montar o bo
 
 `flat` (padrão) mostra um sublinhado deslizante como indicador; `line` desenha cabeçalhos com borda.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="flat">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -77,7 +77,7 @@ Um único painel. Seus atributos são lidos pelo `<r-tabs>` pai para montar o bo
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="flat">
@@ -97,7 +97,7 @@ Um único painel. Seus atributos são lidos pelo `<r-tabs>` pai para montar o bo
 
 Alinha a fila de cabeçalhos. O padrão é `start`.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="line" align="start">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -113,7 +113,7 @@ Alinha a fila de cabeçalhos. O padrão é `start`.
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="line" align="start"> ... </r-tabs>
@@ -128,13 +128,13 @@ Alinha a fila de cabeçalhos. O padrão é `start`.
 
 Sem chaves explícitas, `active` corresponde ao índice começando em zero:
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="1">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="1">
@@ -146,14 +146,14 @@ Sem chaves explícitas, `active` corresponde ao índice começando em zero:
 
 Com valores `r-key` explícitos (painéis sem chave recaem no índice):
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a">11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -170,14 +170,14 @@ Com valores `r-key` explícitos (painéis sem chave recaem no índice):
 
 Um `<r-tab>` desabilitado não pode ser selecionado e é pulado ao escolher a aba ativa padrão.
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -192,13 +192,13 @@ Um `<r-tab>` desabilitado não pode ser selecionado e é pulado ao escolher a ab
 
 O `<r-tab>` aceita um atributo `icon` (um nome de `r-icon`) desenhado antes do rótulo; `iconSize` define o tamanho dele.
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1" icon="edit">11111</r-tab>
     <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -212,13 +212,13 @@ O `<r-tab>` aceita um atributo `icon` (um nome de `r-icon`) desenhado antes do r
 
 Coloque `effect` no `<r-tabs>` para ligar a ondulação de clique nos botões de cabeçalho. Com `effect` ativo, o sublinhado deslizante fica escondido.
 
-<Demo column>
+<ran-demo column>
   <r-tabs effect="true">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs effect="true">

@@ -43,9 +43,9 @@ Markdown을(**토큰 단위로 오는 AI 출력**까지) 프레임워크에 매�
 
 ## 빠른 시작
 
-<Demo>
+<ran-demo>
   <r-markdown copy highlight :content.prop="quick"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy highlight content="# 안녕하세요 ..."></r-markdown>
@@ -72,9 +72,9 @@ container.append(el);
 
 `mode="streaming"`(기본값)은 텍스트를 먼저 [remend](https://www.npmjs.com/package/remend)에 통과시킵니다. Streamdown에서 뽑아낸, 미완성 markdown을 마무리해 주는 조각입니다. 덕분에 절반만 받은 `**bold`는 별표가 그대로 보이는 대신 굵게 그려지고, `[text](https://exa`는 URL이 닫힐 때까지 평범한 텍스트로 남으며, `- ` 하나가 앞 문단을 제목으로 바꿔 버리는 일도 없습니다. 이미 완성된 문서라면 `mode="static"`으로 이 과정을 건너뛰고 한 번에 그리세요.
 
-<Demo>
+<ran-demo>
   <r-markdown caret :content.prop="partial"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown caret content="쓰다 만 *강조*, `인라인 코드`, 그리고 **아직 도착 중인 굵은 글씨"></r-markdown>
@@ -87,9 +87,9 @@ container.append(el);
 
 모든 코드 블록에는 언어 이름이 담긴 헤더가 붙고, 원한다면 복사·다운로드 버튼도 켤 수 있습니다. [shiki](https://shiki.style)로 문법을 강조하려면 `highlight`를 더하세요(지연 로드되며, 언어도 필요할 때 불러옵니다. 기본 테마는 `github-light` / `github-dark`로 페이지 테마를 따릅니다).
 
-<Demo>
+<ran-demo>
   <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy download line-numbers highlight></r-markdown>
@@ -99,9 +99,9 @@ container.append(el);
 
 ## Mermaid와 수식
 
-<Demo>
+<ran-demo>
   <r-markdown :content.prop="rich"></r-markdown>
-</Demo>
+</ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>`(전체 화면 지원. `copy` / `download`는 그대로 전달됩니다).
 - `$$…$$`, `\[…\]`, ` ```math ` → 블록 `<r-math>`. `\(…\)` → 인라인. 달러 하나짜리 `$…$`는 통화 표기와 헷갈리므로 `inline-math`로 **직접 켜야** 합니다.

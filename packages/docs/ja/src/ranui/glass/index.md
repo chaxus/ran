@@ -26,7 +26,7 @@ description: '背景ぼかし・SVG による光の屈折・スペキュラー�
 
 `<r-glass>` は組み合わせられます。入れ子にすれば素材が重なった表現になります（ガラスのパネルの上にガラスのツールバー、など）。どの層も、その背後にあるものを屈折させます。
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
     <r-glass radius="26" style="width: 340px;">
       <div style="padding: 26px;">
@@ -37,7 +37,7 @@ description: '背景ぼかし・SVG による光の屈折・スペキュラー�
       </div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass radius="26">
@@ -70,12 +70,12 @@ description: '背景ぼかし・SVG による光の屈折・スペキュラー�
 
 `displace` は SVG `feDisplacementMap` のスケール、つまり光が面をどれだけ強く曲がって通るかを決めます。平らなすりガラス板にしたいときは `0` にしてください。
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
     <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
     <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass displace="0">…平らなすりガラス…</r-glass> <r-glass displace="60">…液状…</r-glass>
@@ -85,13 +85,13 @@ description: '背景ぼかし・SVG による光の屈折・スペキュラー�
 
 `sheen` は動くスペキュラーハイライトを、`interactive` はホバーでの浮き上がりとばねのある押し込みを加えます（共有トークン `--ran-motion-ease-spring` を使用）。
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass sheen interactive displace="36" style="width: 260px;">
       <div style="padding: 20px; color: #fff; font-weight: 600;">ホバーして押してみてください</div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass sheen interactive displace="36">
@@ -105,12 +105,12 @@ description: '背景ぼかし・SVG による光の屈折・スペキュラー�
 
 まず WebGL で描画し（同期的で、事実上どのブラウザでも動くので、リムが自分の初回描画を遅らせることはありません）、ブラウザが対応していれば背後で WebGPU へ透過的に切り替わります（効果は同じで、出力はピクセル単位で一致します）。どちらの GPU API も使えないとき（かなり古いブラウザ、無効化、SSR）は CSS のスペキュラーグラデーションへフォールバックするので、壊れた状態や空白の状態を設計で織り込む必要はありません。
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim なし</div></r-glass>
     <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass>…CSS のスペキュラーのみ…</r-glass>

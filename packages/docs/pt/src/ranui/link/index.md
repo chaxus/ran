@@ -12,9 +12,9 @@ description: 'Uma âncora ciente do roteador que intercepta a navegação dentro
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-link href="/getting-started">Primeiros passos</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/getting-started">Primeiros passos</r-link>
@@ -36,10 +36,10 @@ Quando um `href` interno é clicado, o link entrega o caminho ao roteador do ran
 
 Caminhos internos são roteados dentro do app; URLs absolutas e links `mailto:` / `tel:` navegam normalmente.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs">Link interno</r-link>
   <r-link href="https://example.com">Link externo</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs">Link interno</r-link> <r-link href="https://example.com">Link externo</r-link>
@@ -49,9 +49,9 @@ Caminhos internos são roteados dentro do app; URLs absolutas e links `mailto:` 
 
 Atributo booleano. Quando presente, a navegação interna substitui a entrada atual do histórico (`router.replace`) em vez de acrescentar uma nova.
 
-<Demo>
+<ran-demo>
   <r-link href="/settings" replace>Substituir entrada</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/settings" replace>Substituir entrada</r-link>
@@ -61,9 +61,9 @@ Atributo booleano. Quando presente, a navegação interna substitui a entrada at
 
 CSS injetado no shadow DOM do link. Segue a mesma convenção `sheet` de todos os outros componentes do ranui. Como o `<a>` clicável vive dentro do shadow root, use `sheet` para dar a ele um modelo de caixa (`display`, `padding`, `width`) quando quiser que o host pareça um botão ou um cartão.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">Link com espaçamento</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; }">Link com espaçamento</r-link>

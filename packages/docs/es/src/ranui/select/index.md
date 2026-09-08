@@ -14,13 +14,13 @@ Selector desplegable para elegir un único valor de una lista de opciones, con b
 
 Las opciones se dan como hijos `<r-option>` en el slot. El atributo `value` de cada opción es su valor, y su texto es la etiqueta que se muestra.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -68,13 +68,13 @@ Las opciones con etiquetas o valores repetidos registran un `console.warn`.
 
 Un rótulo fijo dibujado encima del campo: siempre visible, nunca se solapa con el contenido contiguo. Usa los mismos tokens y la misma maquetación que el `label` de `r-input`, así que un select con etiqueta y un input con etiqueta puestos uno al lado del otro en un formulario quedan alineados (misma altura, mismo borde superior).
 
-<Demo>
+<ran-demo>
   <r-select label="País" style="width: 180px" defaultValue="185">
     <r-option value="185">Estados Unidos</r-option>
     <r-option value="186">Canadá</r-option>
     <r-option value="187">México</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select label="País" defaultValue="185">
@@ -86,13 +86,13 @@ Un rótulo fijo dibujado encima del campo: siempre visible, nunca se solapa con 
 
 ### Valor inicial `defaultValue`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -104,13 +104,13 @@ Un rótulo fijo dibujado encima del campo: siempre visible, nunca se solapa con 
 
 ### Estado deshabilitado `disabled`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
@@ -122,13 +122,13 @@ Un rótulo fijo dibujado encima del campo: siempre visible, nunca se solapa con 
 
 ### Tipo texto `type`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
@@ -161,13 +161,13 @@ El sufijo solo cambia algo cuando el panel tiene una anchura distinta a la de su
 
 Ten en cuenta que el desplazamiento por el borde manda sobre la alineación: a un disparador lo bastante cerca del borde de la ventana se le empuja el panel de vuelta a la pantalla, sea cual sea la alineación pedida.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
@@ -207,13 +207,13 @@ Eso lo convierte en una forma admitida de gobernar el componente, y en algo a lo
 
 ### Función de búsqueda `showSearch`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" showSearch="true">
@@ -225,13 +225,13 @@ Eso lo convierte en una forma admitida de gobernar el componente, y en algo a lo
 
 ### Forma de abrir `trigger`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" trigger="click,hover">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <!-- Apertura con clic (por defecto) -->

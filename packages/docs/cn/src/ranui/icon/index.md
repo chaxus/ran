@@ -61,11 +61,11 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 ## 代码演示
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="eye" size="50"></r-icon>
   <r-icon name="user" size="50"></r-icon>
-</Demo>
+</ran-demo>
 
 ```xml
  <r-icon name="lock"  ></r-icon>
@@ -79,11 +79,11 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 根据名称选择不同的图标
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="eye" size="50"></r-icon>
   <r-icon name="user" size="50"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock"></r-icon>
@@ -93,11 +93,11 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 ### 尺寸`size`
 
-<Demo align="end">
+<ran-demo align="end">
   <r-icon name="lock" size="30"></r-icon>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="lock" size="70"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock" size="30"></r-icon>
@@ -107,12 +107,12 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 ### 颜色`color`
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50" color="red"></r-icon>
   <r-icon name="lock" size="50" color="#1E90FF"></r-icon>
   <r-icon name="lock" size="50" color="#F44336"></r-icon>
   <r-icon name="lock" size="50" color="#3F51B5"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock" size="50" color="red"></r-icon>
@@ -125,11 +125,11 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 设置 spin 开启旋转，传入数字控制旋转的速度，数字越小旋转越快
 
-<Demo>
+<ran-demo>
   <r-icon name="loading" size="50" color="#1E90FF" spin="0.7"></r-icon>
   <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
   <r-icon name="loading" size="50" color="#1E90FF" spin="5"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="loading" size="50" color="#1E90FF" spin="0.7"></r-icon>

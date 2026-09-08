@@ -10,9 +10,9 @@ description: 'ranui의 Message API는 작업 결과에 대한 전역 알림(info
 
 ## 빠른 시작
 
-<Demo>
+<ran-demo>
   <r-button type="primary" onclick="message.info('안내 메시지입니다')">메시지 띄우기</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" onclick="message.info('안내 메시지입니다')">메시지 띄우기</r-button>
@@ -80,13 +80,13 @@ message.info({
 
 ## 메시지 종류 `type`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info('안내 메시지입니다')">정보 알림</r-button>
   <r-button onclick="message.success('안내 메시지입니다')">성공 알림</r-button>
   <r-button onclick="message.warning('안내 메시지입니다')">경고 알림</r-button>
   <r-button onclick="message.error('안내 메시지입니다')">오류 알림</r-button>
   <r-button onclick="message.toast('안내 메시지입니다')">toast 알림</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info('안내 메시지입니다')">정보 알림</r-button>
@@ -98,10 +98,10 @@ message.info({
 
 ## 표시 시간 `duration`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: '6초 머무릅니다', duration: 6000 })">6초 토스트</r-button>
   <r-button onclick="message.info({ content: '1초 머무릅니다', duration: 1000 })">1초 토스트</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info({ content: '6초 머무릅니다', duration: 6000 })">6초 토스트</r-button>
@@ -112,9 +112,9 @@ message.info({
 
 `close` 콜백은 토스트가 DOM에서 제거된 뒤에 실행됩니다.
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.success({ content: '저장했습니다', close: () => message.info('토스트가 닫혔습니다') })">이어지는 메시지</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.success({ content: '저장했습니다', close: () => message.info('토스트가 닫혔습니다') })"
@@ -134,9 +134,9 @@ message.success({
 
 ## 위치 지정 `top` / `zIndex` / `getContainer`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: '아래로 밀었습니다', top: 120 })">위쪽에서 띄우기</r-button>
-</Demo>
+</ran-demo>
 
 ```js
 message.info({

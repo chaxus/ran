@@ -12,9 +12,9 @@ description: 'کامپوننت Button در ranui (<r-button>) یک وب‌کام
 
 ### استفادهٔ پایه
 
-<Demo>
+<ran-demo>
   <r-button>Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button>Button</r-button>
@@ -33,12 +33,12 @@ description: 'کامپوننت Button در ranui (<r-button>) یک وب‌کام
 
 ### انواع دکمه `type`
 
-<Demo>
+<ran-demo>
   <r-button type="primary">Primary Button</r-button>
   <r-button type="warning">Warning Button</r-button>
   <r-button type="text">Text Button</r-button>
   <r-button>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary">Primary Button</r-button>
@@ -51,12 +51,12 @@ description: 'کامپوننت Button در ranui (<r-button>) یک وب‌کام
 
 ### حالت غیرفعال `disabled`
 
-<Demo>
+<ran-demo>
   <r-button type="primary" disabled>Primary Button</r-button>
   <r-button type="warning" disabled>Warning Button</r-button>
   <r-button type="text" disabled>Text Button</r-button>
   <r-button disabled>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" disabled>Primary Button</r-button>
@@ -69,10 +69,10 @@ description: 'کامپوننت Button در ranui (<r-button>) یک وب‌کام
 
 > 💡 **نکته**: اگر جای‌گذاری دقیق آیکون مهم است، مستقیم از کامپوننت Icon استفاده کنید.
 
-<Demo>
+<ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
   <r-button type="primary" icon="home">Primary Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="default" icon="user">Default Button</r-button>
@@ -83,10 +83,10 @@ description: 'کامپوننت Button در ranui (<r-button>) یک وب‌کام
 
 موجِ کلیک به‌طور پیش‌فرض روشن است. برای دکمه‌ای ساده و بدون آن، `effect="false"` را بگذارید. دو دکمهٔ زیر فقط در همین ویژگی فرق دارند، پس با کلیک روی هرکدام می‌توانید مقایسه کنید. موج جلوه‌ای برای دستگاه‌های اشاره‌گر است و تنها از عرض ۱۰۲۴ پیکسل به بالا ترسیم می‌شود.
 
-<Demo>
+<ran-demo>
   <r-button type="primary" icon="home">با موج (پیش‌فرض)</r-button>
   <r-button type="primary" icon="home" effect="false">بدون موج</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" icon="home">با موج (پیش‌فرض)</r-button>

@@ -15,13 +15,13 @@ description: 'کامپوننت StateDot در ranui (<r-state-dot>) یک نشان
 
 ### استفادهٔ پایه
 
-<Demo>
+<ran-demo>
   <r-state-dot state="idle"></r-state-dot>
   <r-state-dot state="running"></r-state-dot>
   <r-state-dot state="success"></r-state-dot>
   <r-state-dot state="warning"></r-state-dot>
   <r-state-dot state="error"></r-state-dot>
-</Demo>
+</ran-demo>
 
 ```html
 <r-state-dot state="idle"></r-state-dot>
@@ -40,7 +40,7 @@ description: 'کامپوننت StateDot در ranui (<r-state-dot>) یک نشان
 باشد که دو ردیف را از هم جدا می‌کند. [راهنمای طراحی](/fa/src/ranui/design-guides/#accessibility)
 را ببینید.
 
-<Demo column>
+<ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">
     <r-state-dot state="running"></r-state-dot>
     <span>اجرای آزمون‌ها</span>
@@ -49,7 +49,7 @@ description: 'کامپوننت StateDot در ranui (<r-state-dot>) یک نشان
     <r-state-dot state="error"></r-state-dot>
     <span>۲ آزمون ناموفق</span>
   </div>
-</Demo>
+</ran-demo>
 
 ## مرجع API
 

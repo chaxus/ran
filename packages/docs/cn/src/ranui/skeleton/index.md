@@ -14,9 +14,9 @@ description: 'ranui Skeleton（<r-skeleton>）在内容加载时展示带微光�
 
 骨架屏会撑满父元素的宽度，默认高度为 `16px`。
 
-<Demo>
+<ran-demo>
   <r-skeleton></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton></r-skeleton>
@@ -26,7 +26,7 @@ description: 'ranui Skeleton（<r-skeleton>）在内容加载时展示带微光�
 
 因为骨架屏是 `width: 100%`，所以通过调整它所在容器的尺寸来控制长度。
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100px">
     <r-skeleton></r-skeleton>
   </div>
@@ -36,7 +36,7 @@ description: 'ranui Skeleton（<r-skeleton>）在内容加载时展示带微光�
   <div style="width: 100%">
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="width: 100px">
@@ -54,13 +54,13 @@ description: 'ranui Skeleton（<r-skeleton>）在内容加载时展示带微光�
 
 组合多个骨架屏，模拟一段文字或一个段落。
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100%; display: flex; flex-direction: column; gap: 12px">
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="display: flex; flex-direction: column; gap: 12px">
@@ -82,9 +82,9 @@ description: 'ranui Skeleton（<r-skeleton>）在内容加载时展示带微光�
 
 通过 `sheet` 传入一段 CSS，覆盖骨架屏在 shadow DOM 内的外观。
 
-<Demo>
+<ran-demo>
   <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
@@ -102,9 +102,9 @@ description: 'ranui Skeleton（<r-skeleton>）在内容加载时展示带微光�
 | `--ran-skeleton-shimmer-background`         | `linear-gradient(90deg, …)`    | 移动高光的渐变       |
 | `--ran-skeleton-shimmer-animation-duration` | `1.4s`                         | 一次微光扫过的时长   |
 
-<Demo>
+<ran-demo>
   <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>

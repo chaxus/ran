@@ -12,9 +12,9 @@ Componente de botão para disparar ações imediatas, com vários estilos e esta
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-button>Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button>Button</r-button>
@@ -33,12 +33,12 @@ Componente de botão para disparar ações imediatas, com vários estilos e esta
 
 ### Tipos de botão `type`
 
-<Demo>
+<ran-demo>
   <r-button type="primary">Primary Button</r-button>
   <r-button type="warning">Warning Button</r-button>
   <r-button type="text">Text Button</r-button>
   <r-button>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary">Primary Button</r-button>
@@ -51,12 +51,12 @@ Componente de botão para disparar ações imediatas, com vários estilos e esta
 
 ### Estado desabilitado `disabled`
 
-<Demo>
+<ran-demo>
   <r-button type="primary" disabled>Primary Button</r-button>
   <r-button type="warning" disabled>Warning Button</r-button>
   <r-button type="text" disabled>Text Button</r-button>
   <r-button disabled>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" disabled>Primary Button</r-button>
@@ -69,10 +69,10 @@ Componente de botão para disparar ações imediatas, com vários estilos e esta
 
 > 💡 **Dica**: para posicionar o ícone com precisão, use o componente Icon diretamente.
 
-<Demo>
+<ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
   <r-button type="primary" icon="home">Primary Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="default" icon="user">Default Button</r-button>
@@ -83,10 +83,10 @@ Componente de botão para disparar ações imediatas, com vários estilos e esta
 
 A ondulação ao clicar vem ligada. Defina `effect="false"` para um botão simples, sem ela. Os dois botões abaixo diferem apenas nesse atributo, então você pode compará-los clicando em cada um. A ondulação é um efeito para dispositivos apontadores e só é desenhada a partir de uma largura de viewport de 1024px.
 
-<Demo>
+<ran-demo>
   <r-button type="primary" icon="home">Com ondulação (padrão)</r-button>
   <r-button type="primary" icon="home" effect="false">Sem ondulação</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" icon="home">Com ondulação (padrão)</r-button>

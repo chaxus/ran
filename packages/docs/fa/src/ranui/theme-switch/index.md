@@ -15,9 +15,9 @@ description: 'کنترل بخش‌بندی‌شدهٔ سه‌حالته (سیس�
 
 ### استفادهٔ پایه
 
-<Demo>
+<ran-demo>
   <r-theme-switch></r-theme-switch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-theme-switch></r-theme-switch>

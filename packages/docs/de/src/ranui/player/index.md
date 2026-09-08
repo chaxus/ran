@@ -30,9 +30,9 @@ Auf Web Components gebaut, mit `hls.js`/`dashjs`/`mpegts.js`, die für ihr jewei
 
 ## Schnellstart
 
-<Demo>
+<ran-demo>
   <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-</Demo>
+</ran-demo>
 
 ```html
 <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
@@ -66,9 +66,9 @@ Auf Web Components gebaut, mit `hls.js`/`dashjs`/`mpegts.js`, die für ihr jewei
 
 ### Videoquelle `src`
 
-<Demo>
+<ran-demo>
   <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-</Demo>
+</ran-demo>
 
 ```html
 <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>

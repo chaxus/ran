@@ -14,9 +14,9 @@ Gráfico de espaço reservado que ocupa o lugar do conteúdo enquanto ele carreg
 
 O esqueleto se estica para ocupar a largura do elemento pai e tem `16px` de altura por padrão.
 
-<Demo>
+<ran-demo>
   <r-skeleton></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton></r-skeleton>
@@ -26,7 +26,7 @@ O esqueleto se estica para ocupar a largura do elemento pai e tem `16px` de altu
 
 Como o esqueleto é `width: 100%`, controle o comprimento dele dimensionando o contêiner em que ele vive.
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100px">
     <r-skeleton></r-skeleton>
   </div>
@@ -36,7 +36,7 @@ Como o esqueleto é `width: 100%`, controle o comprimento dele dimensionando o c
   <div style="width: 100%">
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="width: 100px">
@@ -54,13 +54,13 @@ Como o esqueleto é `width: 100%`, controle o comprimento dele dimensionando o c
 
 Combine vários esqueletos para imitar um bloco de texto ou um parágrafo.
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100%; display: flex; flex-direction: column; gap: 12px">
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="display: flex; flex-direction: column; gap: 12px">
@@ -82,9 +82,9 @@ Combine vários esqueletos para imitar um bloco de texto ou um parágrafo.
 
 Passe uma string de CSS por `sheet` para sobrescrever a aparência do esqueleto dentro do shadow DOM dele.
 
-<Demo>
+<ran-demo>
   <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
@@ -102,9 +102,9 @@ O esqueleto também expõe propriedades personalizadas de CSS para temas sem `sh
 | `--ran-skeleton-shimmer-background`         | `linear-gradient(90deg, …)`    | Gradiente do reflexo em movimento |
 | `--ran-skeleton-shimmer-animation-duration` | `1.4s`                         | Duração de uma passada do brilho  |
 
-<Demo>
+<ran-demo>
   <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>

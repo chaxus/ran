@@ -14,14 +14,14 @@ Componente de popover que despliega una capa flotante en forma de burbuja cuando
 
 El disparador va en el slot por defecto; el contenido flotante se envuelve en un elemento `<r-content>` anidado.
 
-<Demo>
+<ran-demo>
   <r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>este es el contenido</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover style="display: inline-block;">
@@ -45,7 +45,7 @@ El disparador va en el slot por defecto; el contenido flotante se envuelve en un
 
 ### Modo de apertura `trigger`
 
-<Demo>
+<ran-demo>
   <r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
@@ -58,7 +58,7 @@ El disparador va en el slot por defecto; el contenido flotante se envuelve en un
       <div>click</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" style="display: inline-block;">
@@ -78,7 +78,7 @@ El disparador va en el slot por defecto; el contenido flotante se envuelve en un
 
 ### Posición `placement`
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
@@ -103,7 +103,7 @@ El disparador va en el slot por defecto; el contenido flotante se envuelve en un
       <div>right</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="top" style="display: inline-block;">
@@ -139,7 +139,7 @@ El disparador va en el slot por defecto; el contenido flotante se envuelve en un
 
 Un lado a secas alinea el borde inicial del panel con el del disparador. Añade `-center` o `-end` cuando deba quedar centrado sobre el disparador, o a ras de su borde final: eso es lo que quiere un menú anclado al extremo derecho de una barra superior, que así se abre hacia dentro en vez de salirse y ser empujado de vuelta por el desplazamiento. El sufijo sobrevive a un volteo automático: `bottom-end` se convierte en `top-end`, no en `top`.
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
@@ -158,7 +158,7 @@ Un lado a secas alinea el borde inicial del panel con el del disparador. Añade 
       <div style="width: 200px;">bottom-end</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">

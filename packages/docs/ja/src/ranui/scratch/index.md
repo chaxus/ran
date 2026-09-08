@@ -16,9 +16,9 @@ description: 'Pointer Events API を使い、canvas の覆いをドラッグし�
 
 `<r-scratch>` の中に置いたものが、そのまま現れる内容になります（金額でも、画像でも、`<r-icon>` でも、複数の要素でも）。ranui のほかのコンポーネントとまったく同じように、デフォルトスロットを通して覆いの下の層へ投影されます。
 
-<Demo>
+<ran-demo>
   <r-scratch style="display: block; width: 240px; height: 120px;">50 コイン当たり！</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch style="display: block; width: 240px; height: 120px;">50 コイン当たり！</r-scratch>
@@ -35,9 +35,9 @@ description: 'Pointer Events API を使い、canvas の覆いをドラッグし�
 
 ### 無効状態 `disabled`
 
-<Demo>
+<ran-demo>
   <r-scratch disabled style="display: block; width: 240px; height: 120px;">50 コイン当たり！</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch disabled style="display: block; width: 240px; height: 120px;">50 コイン当たり！</r-scratch>
@@ -45,9 +45,9 @@ description: 'Pointer Events API を使い、canvas の覆いをドラッグし�
 
 ### 外部スタイル `sheet`
 
-<Demo>
+<ran-demo>
   <r-scratch sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }" style="display: block; width: 240px; height: 120px;">🎁</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch

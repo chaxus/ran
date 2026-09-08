@@ -14,11 +14,11 @@ Um elemento de saída de rota. Colocado dentro de um [`r-router`](../router/), e
 
 Um `r-route` cujo `path` é `/` casa com o caminho padrão, então o conteúdo dele aparece sozinho:
 
-<Demo>
+<ran-demo>
   <r-route path="/">
     <p>Este conteúdo aparece quando o caminho atual casa.</p>
   </r-route>
-</Demo>
+</ran-demo>
 
 ```html
 <r-route path="/">

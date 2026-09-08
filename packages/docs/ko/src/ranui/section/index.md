@@ -12,11 +12,11 @@ description: '슬롯 본문 위에 접근성 있는 제목과 부제 (둘 다 �
 
 ### 기본 사용법
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="구역 제목" subtitle="이 구역을 설명하는 짧은 한 줄.">
     <p style="margin: 0;">본문 콘텐츠는 기본 슬롯에 들어갑니다.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="구역 제목" subtitle="이 구역을 설명하는 짧은 한 줄.">
@@ -40,11 +40,11 @@ description: '슬롯 본문 위에 접근성 있는 제목과 부제 (둘 다 �
 
 구역 제목이며 ARIA 2 단계 제목 (`role="heading"`, `aria-level="2"`) 으로 렌더링됩니다. 비어 있으면 숨겨집니다.
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="제목만">
     <p style="margin: 0;">본문 콘텐츠.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="제목만">
@@ -56,11 +56,11 @@ description: '슬롯 본문 위에 접근성 있는 제목과 부제 (둘 다 �
 
 제목 아래에 붙는 보조 한 줄입니다. 비어 있으면 숨겨집니다.
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="제목" subtitle="보조 부제 텍스트.">
     <p style="margin: 0;">본문 콘텐츠.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="제목" subtitle="보조 부제 텍스트.">
@@ -72,11 +72,11 @@ description: '슬롯 본문 위에 접근성 있는 제목과 부제 (둘 다 �
 
 구역의 섀도 DOM 에 주입하는 CSS 로, 다른 모든 ranui 컴포넌트와 같은 `sheet` 관례를 따릅니다.
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="테마를 입힌 구역" subtitle="sheet로 제목 색을 바꿨습니다." sheet=".ran-section-heading { color: #006bff; }">
     <p style="margin: 0;">본문 콘텐츠.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="테마를 입힌 구역" sheet=".ran-section-heading { color: #006bff; }">

@@ -14,14 +14,14 @@ Popover-Komponente, die eine schwebende Sprechblasenkarte einblendet, sobald der
 
 Der Auslöser steht im Default-Slot; der schwebende Inhalt wird in ein verschachteltes `<r-content>`-Element gepackt.
 
-<Demo>
+<ran-demo>
   <r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>das ist der Inhalt</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover style="display: inline-block;">
@@ -45,7 +45,7 @@ Der Auslöser steht im Default-Slot; der schwebende Inhalt wird in ein verschach
 
 ### Auslöseart `trigger`
 
-<Demo>
+<ran-demo>
   <r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
@@ -58,7 +58,7 @@ Der Auslöser steht im Default-Slot; der schwebende Inhalt wird in ein verschach
       <div>click</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" style="display: inline-block;">
@@ -78,7 +78,7 @@ Der Auslöser steht im Default-Slot; der schwebende Inhalt wird in ein verschach
 
 ### Lage `placement`
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
@@ -103,7 +103,7 @@ Der Auslöser steht im Default-Slot; der schwebende Inhalt wird in ein verschach
       <div>right</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="top" style="display: inline-block;">
@@ -139,7 +139,7 @@ Der Auslöser steht im Default-Slot; der schwebende Inhalt wird in ein verschach
 
 Eine Seite allein bringt die vordere Kante der Fläche mit der des Auslösers auf eine Linie. Ergänze `-center` oder `-end`, wenn sie stattdessen mittig über dem Auslöser oder bündig mit dessen hinterer Kante sitzen soll — das will ein Menü am rechten Ende einer Kopfleiste, damit es nach innen aufgeht, statt erst über den Rand hinauszuragen und vom Versatz zurückgeschoben zu werden. Der Zusatz überlebt ein automatisches Umklappen: `bottom-end` wird zu `top-end`, nicht zu `top`.
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
@@ -158,7 +158,7 @@ Eine Seite allein bringt die vordere Kante der Fläche mit der des Auslösers au
       <div style="width: 200px;">bottom-end</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">

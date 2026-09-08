@@ -14,13 +14,13 @@ Aufklappende Auswahl für genau einen Wert aus einer Liste von Optionen, mit opt
 
 Die Optionen kommen als `<r-option>`-Kinder in den Slot. Das Attribut `value` einer Option ist ihr Wert, ihr Textinhalt die angezeigte Beschriftung.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -68,13 +68,13 @@ Doppelte Beschriftungen oder Werte lösen ein `console.warn` aus.
 
 Eine feste Beschriftung über dem Feld: immer sichtbar, überlagert nie den Inhalt daneben. Sie nutzt dieselben Tokens und dasselbe Layout wie `label` bei `r-input`, sodass ein beschriftetes Select und ein beschriftetes Input nebeneinander im Formular bündig sitzen (gleiche Höhe, gleiche Oberkante).
 
-<Demo>
+<ran-demo>
   <r-select label="Land" style="width: 180px" defaultValue="185">
     <r-option value="185">Vereinigte Staaten</r-option>
     <r-option value="186">Kanada</r-option>
     <r-option value="187">Mexiko</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select label="Land" defaultValue="185">
@@ -86,13 +86,13 @@ Eine feste Beschriftung über dem Feld: immer sichtbar, überlagert nie den Inha
 
 ### Anfangswert `defaultValue`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -104,13 +104,13 @@ Eine feste Beschriftung über dem Feld: immer sichtbar, überlagert nie den Inha
 
 ### Deaktivierter Zustand `disabled`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
@@ -122,13 +122,13 @@ Eine feste Beschriftung über dem Feld: immer sichtbar, überlagert nie den Inha
 
 ### Textvariante `type`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
@@ -161,13 +161,13 @@ Der Zusatz ändert nur dann etwas, wenn die Fläche anders breit ist als ihr Aus
 
 Beachte: Der Versatz am Rand sticht die Ausrichtung. Ein Auslöser nahe genug am Rand des Viewports bekommt seine Fläche zurück ins Bild geschoben, welche Ausrichtung auch verlangt war.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
@@ -207,13 +207,13 @@ Damit ist er ein unterstützter Weg, die Komponente zu steuern — und etwas, da
 
 ### Suchfunktion `showSearch`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" showSearch="true">
@@ -225,13 +225,13 @@ Damit ist er ein unterstützter Weg, die Komponente zu steuern — und etwas, da
 
 ### Auslöseart `trigger`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" trigger="click,hover">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <!-- Öffnen per Klick (Standard) -->

@@ -13,10 +13,10 @@ description: '一个紧凑的色块，点击展开面板，包含饱和度/明�
 
 ### 基础用法
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff"></r-colorpicker>
   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff"></r-colorpicker> <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
@@ -40,11 +40,11 @@ description: '一个紧凑的色块，点击展开面板，包含饱和度/明�
 当前颜色，为 CSS 颜色字符串。输入时接受 HEX（`#1677FF`、`#fff`）、`rgb(...)` 与 `rgba(...)`。
 输出时，完全不透明的颜色规范化为 6 位 HEX 字符串，透明度小于 1 时则为 `rgba(...)` 字符串。
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#00c853"></r-colorpicker>
   <r-colorpicker value="rgb(22, 119, 255)"></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#00c853"></r-colorpicker>
@@ -64,10 +64,10 @@ toolbar.append(picker);
 添加 `disabled` 属性可以让选择器处于不可用状态：色块无法通过鼠标或键盘打开面板，
 被移出 Tab 序列，且宿主会被标记为 `aria-disabled="true"`。移除该属性即可恢复正常交互。
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff" disabled></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)" disabled></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff" disabled></r-colorpicker>

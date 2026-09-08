@@ -13,11 +13,11 @@ description: '底层浮层面板原语，是 r-popover 和 r-select 用来定位
 
 ### 基础用法
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">浮层面板内容</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -39,7 +39,7 @@ description: '底层浮层面板原语，是 r-popover 和 r-select 用来定位
 
 在面板某一侧渲染指向箭头。不设置该属性则无箭头。
 
-<Demo column>
+<ran-demo column>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="top"</div>
   </r-dropdown>
@@ -52,7 +52,7 @@ description: '底层浮层面板原语，是 r-popover 和 r-select 用来定位
   <r-dropdown arrow="right" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="right"</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -85,11 +85,11 @@ class，所以在这段窗口里换方向的话，第一个 class 就会永久�
 调 `getAnimations()` 读不到任何东西，`{ subtree: true }` 也不穿透 shadow 边界：需要等面板
 动画结束的代码应该调用 `getAnimationTarget()`，而不是钻进 shadow 树里按 class 名查找。
 
-<Demo>
+<ran-demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">连接后播放入场动画</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown transit="ran-dropdown-down-in">
@@ -140,11 +140,11 @@ r-dropdown::part(dropdown) {
 `viewBox` 缩放的内联 SVG，所以 `--ran-dropdown-arrow-width`/`-height` 改变的是真正的
 三角形大小，而不只是外面那个空盒子：
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
     <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```css
 r-dropdown {

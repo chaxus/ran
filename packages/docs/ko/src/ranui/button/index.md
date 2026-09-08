@@ -12,9 +12,9 @@ description: 'ranui 의 Button(<r-button>) 은 여러 종류·크기와 로딩/�
 
 ### 기본 사용법
 
-<Demo>
+<ran-demo>
   <r-button>Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button>Button</r-button>
@@ -33,12 +33,12 @@ description: 'ranui 의 Button(<r-button>) 은 여러 종류·크기와 로딩/�
 
 ### 버튼 종류 `type`
 
-<Demo>
+<ran-demo>
   <r-button type="primary">Primary Button</r-button>
   <r-button type="warning">Warning Button</r-button>
   <r-button type="text">Text Button</r-button>
   <r-button>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary">Primary Button</r-button>
@@ -51,12 +51,12 @@ description: 'ranui 의 Button(<r-button>) 은 여러 종류·크기와 로딩/�
 
 ### 비활성 상태 `disabled`
 
-<Demo>
+<ran-demo>
   <r-button type="primary" disabled>Primary Button</r-button>
   <r-button type="warning" disabled>Warning Button</r-button>
   <r-button type="text" disabled>Text Button</r-button>
   <r-button disabled>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" disabled>Primary Button</r-button>
@@ -69,10 +69,10 @@ description: 'ranui 의 Button(<r-button>) 은 여러 종류·크기와 로딩/�
 
 > 💡 **팁**: 아이콘 위치를 세밀하게 잡아야 한다면 Icon 컴포넌트를 직접 쓰세요.
 
-<Demo>
+<ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
   <r-button type="primary" icon="home">Primary Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="default" icon="user">Default Button</r-button>
@@ -83,10 +83,10 @@ description: 'ranui 의 Button(<r-button>) 은 여러 종류·크기와 로딩/�
 
 클릭 물결은 기본으로 켜져 있습니다. 물결 없는 밋밋한 버튼을 원하면 `effect="false"`를 지정하세요. 아래 두 버튼은 이 어트리뷰트만 다르므로 각각 눌러 비교해 볼 수 있습니다. 물결은 포인터 장치를 위한 효과이며 뷰포트 너비 1024px 부터만 그려집니다.
 
-<Demo>
+<ran-demo>
   <r-button type="primary" icon="home">물결 있음 (기본)</r-button>
   <r-button type="primary" icon="home" effect="false">물결 없음</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" icon="home">물결 있음 (기본)</r-button>

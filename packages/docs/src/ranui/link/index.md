@@ -12,9 +12,9 @@ Router-aware anchor that renders an `<a>` around its slotted content and interce
 
 ### Basic Usage
 
-<Demo>
+<ran-demo>
   <r-link href="/getting-started">Getting started</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/getting-started">Getting started</r-link>
@@ -36,10 +36,10 @@ When an internal `href` is clicked, the link hands the path to the active ranui 
 
 Internal paths are routed in-app; absolute URLs and `mailto:` / `tel:` links navigate normally.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs">Internal link</r-link>
   <r-link href="https://example.com">External link</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs">Internal link</r-link> <r-link href="https://example.com">External link</r-link>
@@ -49,9 +49,9 @@ Internal paths are routed in-app; absolute URLs and `mailto:` / `tel:` links nav
 
 Boolean attribute. When present, in-app navigation replaces the current history entry (`router.replace`) instead of pushing a new one.
 
-<Demo>
+<ran-demo>
   <r-link href="/settings" replace>Replace entry</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/settings" replace>Replace entry</r-link>
@@ -61,9 +61,9 @@ Boolean attribute. When present, in-app navigation replaces the current history 
 
 CSS injected into the link's shadow DOM. It follows the same `sheet` convention used by every other ranui component. Because the clickable `<a>` lives inside the shadow root, use `sheet` to give it a box model (`display`, `padding`, `width`) when you want the host to read as a button or card.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">Padded link</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; }">Padded link</r-link>

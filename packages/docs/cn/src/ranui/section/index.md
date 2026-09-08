@@ -12,11 +12,11 @@ description: '带有可选无障碍标题与副标题的页面区块容器，标
 
 ### 基础用法
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="区块标题" subtitle="用于描述该区块的一行简短文字。">
     <p style="margin: 0;">主体内容放在默认插槽里。</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-section heading="区块标题" subtitle="用于描述该区块的一行简短文字。">
@@ -40,11 +40,11 @@ description: '带有可选无障碍标题与副标题的页面区块容器，标
 
 区块标题，以 ARIA 二级标题形式渲染（`role="heading"`、`aria-level="2"`）。为空时隐藏。
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="仅有标题">
     <p style="margin: 0;">主体内容。</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-section heading="仅有标题">
@@ -56,11 +56,11 @@ description: '带有可选无障碍标题与副标题的页面区块容器，标
 
 标题下方的辅助文字。为空时隐藏。
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="标题" subtitle="辅助副标题文字。">
     <p style="margin: 0;">主体内容。</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-section heading="标题" subtitle="辅助副标题文字。">
@@ -72,11 +72,11 @@ description: '带有可选无障碍标题与副标题的页面区块容器，标
 
 注入到区块 Shadow DOM 中的 CSS，遵循与其他所有 ranui 组件一致的 `sheet` 约定。
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="自定义主题区块" subtitle="标题颜色通过 sheet 重新着色。" sheet=".ran-section-heading { color: #006bff; }">
     <p style="margin: 0;">主体内容。</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-section heading="自定义主题区块" sheet=".ran-section-heading { color: #006bff; }">

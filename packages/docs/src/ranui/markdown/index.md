@@ -51,9 +51,9 @@ lazy-loaded the first time the content needs it. Output is sanitized with DOMPur
 
 ## Quick Start
 
-<Demo>
+<ran-demo>
   <r-markdown copy highlight :content.prop="quick"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy highlight content="# Hello ..."></r-markdown>
@@ -85,9 +85,9 @@ first (the incomplete-markdown terminator extracted from Streamdown), so a half-
 text until the URL closes, `- ` doesn't turn the previous paragraph into a heading, and so
 on. Set `mode="static"` for finished documents to skip that pass and render in one piece.
 
-<Demo>
+<ran-demo>
   <r-markdown caret :content.prop="partial"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown caret content="Half-typed *emphasis*, `inline code`, and **bold that is still arriving"></r-markdown>
@@ -104,9 +104,9 @@ Every code block gets a header with the language and, opt-in, a copy / download 
 `highlight` to syntax-highlight with [shiki](https://shiki.style) (lazy-loaded; languages
 load on demand; `github-light` / `github-dark` by default, following the page theme).
 
-<Demo>
+<ran-demo>
   <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy download line-numbers highlight></r-markdown>
@@ -116,9 +116,9 @@ load on demand; `github-light` / `github-dark` by default, following the page th
 
 ## Mermaid & math
 
-<Demo>
+<ran-demo>
   <r-markdown :content.prop="rich"></r-markdown>
-</Demo>
+</ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>` (with fullscreen; `copy` / `download` are forwarded).
 - `$$…$$`, `\[…\]` and ` ```math ` → block `<r-math>`; `\(…\)` → inline. Single-dollar

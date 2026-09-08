@@ -15,11 +15,11 @@ How much of the context window a conversation is using.
 
 ### Basic Usage
 
-<Demo column>
+<ran-demo column>
   <r-token-meter limit="65536" used="12800"></r-token-meter>
   <r-token-meter limit="65536" used="54000"></r-token-meter>
   <r-token-meter limit="65536" used="69000"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter limit="65536" used="12800"></r-token-meter>
@@ -59,15 +59,15 @@ this cost me?").
 With `limit` unset or zero the bar disappears and only the counts remain, useful while the
 window size is unknown.
 
-<Demo>
+<ran-demo>
   <r-token-meter used="41200" spent="128431"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ### Relabelling
 
-<Demo>
+<ran-demo>
   <r-token-meter label="上下文" limit="65536" used="41200"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter label="上下文" limit="65536" used="41200"></r-token-meter>

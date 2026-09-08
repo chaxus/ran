@@ -43,9 +43,9 @@ Markdown را (از جمله **خروجی توکن‌به‌توکن هوش مص
 
 ## شروع سریع
 
-<Demo>
+<ran-demo>
   <r-markdown copy highlight :content.prop="quick"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy highlight content="# سلام ..."></r-markdown>
@@ -72,9 +72,9 @@ container.append(el);
 
 `mode="streaming"` (پیش‌فرض) متن را نخست از [remend](https://www.npmjs.com/package/remend) می‌گذراند، همان پایان‌دهنده markdownِ ناتمام که از Streamdown بیرون کشیده شده است. بنابراین یک `**bold`ِ نیمه‌رسیده به‌جای ستاره‌های خام، پررنگ رسم می‌شود، `[text](https://exa` تا بسته‌شدن نشانی به‌صورت متن ساده می‌ماند، یک `- ` بند پیشین را به عنوان تبدیل نمی‌کند، و از این دست. برای سندهای تمام‌شده `mode="static"` بگذارید تا این مرحله رد شود و همه‌چیز یکجا رسم شود.
 
-<Demo>
+<ran-demo>
   <r-markdown caret :content.prop="partial"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown caret content="*تأکیدِ* نیمه‌تایپ‌شده، `کد درون‌خطی` و **پررنگی که هنوز در راه است"></r-markdown>
@@ -87,9 +87,9 @@ container.append(el);
 
 هر بلوک کد یک سربرگ با نام زبان می‌گیرد و در صورت تمایل، دکمه‌های کپی و دانلود. برای برجسته‌سازی نحو با [shiki](https://shiki.style) اتریبیوت `highlight` را اضافه کنید (با تأخیر بارگذاری می‌شود؛ زبان‌ها هنگام نیاز می‌آیند؛ پیش‌فرض `github-light` / `github-dark` که از پوسته صفحه پیروی می‌کند).
 
-<Demo>
+<ran-demo>
   <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy download line-numbers highlight></r-markdown>
@@ -99,9 +99,9 @@ container.append(el);
 
 ## Mermaid و ریاضی
 
-<Demo>
+<ran-demo>
   <r-markdown :content.prop="rich"></r-markdown>
-</Demo>
+</ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>` (با تمام‌صفحه؛ `copy` / `download` پاس داده می‌شوند).
 - `$$…$$`، `\[…\]` و ` ```math ` → `<r-math>` بلوکی؛ `\(…\)` → درون‌خطی. دلار تکی `$…$` چون با واحد پول اشتباه می‌شود، **باید** با `inline-math` **روشن شود**.

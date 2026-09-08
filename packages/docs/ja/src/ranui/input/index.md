@@ -12,9 +12,9 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 ### 基本的な使い方
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="テキストを入力"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="テキストを入力"></r-input>
@@ -45,9 +45,9 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 フィールドの上に描画される固定のキャプションです。常に見えていて、隣の内容と重ならず、フォーカスしてもレイアウトがずれません（上揃えのラベルはインラインやフローティングのラベルより入力完了も速い。[Luke Wroblewski のアイトラッキング調査](https://www.lukew.com/ff/entry.asp?504=)を参照）。
 
-<Demo column>
+<ran-demo column>
   <r-input label="ユーザー名"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="ユーザー名"></r-input>
@@ -57,9 +57,9 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 ネイティブの `placeholder` 属性と同じ挙動です。
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="ユーザー名を入力"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="ユーザー名を入力"></r-input>
@@ -67,9 +67,9 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 ### 値 `value`
 
-<Demo column>
+<ran-demo column>
   <r-input value="1234"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input value="1234"></r-input>
@@ -77,9 +77,9 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 ### 無効状態 `disabled`
 
-<Demo column>
+<ran-demo column>
   <r-input label="ユーザー名" disabled></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="ユーザー名" disabled></r-input>
@@ -87,9 +87,9 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 ### アイコン `icon`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="user"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="user"></r-input>
@@ -97,10 +97,10 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 ### 入力の型 `type`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="lock" type="password" placeholder="パスワード"></r-input>
   <r-input type="number" placeholder="数値"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="lock" type="password" placeholder="パスワード"></r-input>
@@ -111,10 +111,10 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 `status` は必ず `message` と組み合わせてください。状態が色だけでなく文字でも伝わります。
 
-<Demo column>
+<ran-demo column>
   <r-input status="error" label="ユーザー名" message="この項目は必須です"></r-input>
   <r-input status="warning" label="ユーザー名" message="この値を確認してください"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input status="error" label="ユーザー名" message="この項目は必須です"></r-input>
@@ -125,9 +125,9 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 フィールドの下に補助・検証のテキストを描画します。
 
-<Demo column>
+<ran-demo column>
   <r-input label="メールアドレス" message="メールアドレスを共有することはありません"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="メールアドレス" message="メールアドレスを共有することはありません"></r-input>
@@ -150,9 +150,9 @@ description: 'ranui の Input（<r-input>）はキーボード入力のための
 
 ### input イベント `input`
 
-<Demo column>
+<ran-demo column>
   <r-input oninput="console.log(event.detail.value)" label="ユーザー名"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');
@@ -164,9 +164,9 @@ input.addEventListener('input', (event) => {
 
 ### change イベント `change`
 
-<Demo column>
+<ran-demo column>
   <r-input onchange="console.log(event.detail.value)" label="ユーザー名"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');

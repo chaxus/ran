@@ -61,11 +61,11 @@ Du kannst die Registry auch ganz übergehen und rohes SVG-Markup direkt an `name
 
 ## Code-Demo
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="eye" size="50"></r-icon>
   <r-icon name="user" size="50"></r-icon>
-</Demo>
+</ran-demo>
 
 ```xml
  <r-icon name="lock"  ></r-icon>
@@ -79,11 +79,11 @@ Du kannst die Registry auch ganz übergehen und rohes SVG-Markup direkt an `name
 
 Wählt über den Namen ein anderes Icon.
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="eye" size="50"></r-icon>
   <r-icon name="user" size="50"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock"></r-icon>
@@ -93,11 +93,11 @@ Wählt über den Namen ein anderes Icon.
 
 ### `size`
 
-<Demo align="end">
+<ran-demo align="end">
   <r-icon name="lock" size="30"></r-icon>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="lock" size="70"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock" size="30"></r-icon>
@@ -107,12 +107,12 @@ Wählt über den Namen ein anderes Icon.
 
 ### `color`
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50" color="red"></r-icon>
   <r-icon name="lock" size="50" color="#1E90FF"></r-icon>
   <r-icon name="lock" size="50" color="#F44336"></r-icon>
   <r-icon name="lock" size="50" color="#3F51B5"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock" size="50" color="red"></r-icon>
@@ -125,11 +125,11 @@ Wählt über den Namen ein anderes Icon.
 
 Setze spin, um die Drehung einzuschalten, und übergib eine Zahl, um die Drehgeschwindigkeit zu steuern. Je kleiner die Zahl, desto schneller die Drehung.
 
-<Demo>
+<ran-demo>
   <r-icon name="loading" size="50" color="#1E90FF" spin="0.7"></r-icon>
   <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
   <r-icon name="loading" size="50" color="#1E90FF" spin="5"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="loading" size="50" color="#1E90FF" spin="0.7"></r-icon>

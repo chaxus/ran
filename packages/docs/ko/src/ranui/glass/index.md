@@ -26,7 +26,7 @@ description: '배경 블러, 빛을 휘게 하는 SVG 변위, 스페큘러 테�
 
 `<r-glass>`는 겹쳐 쓸 수 있습니다. 하나를 다른 하나 안에 넣으면 재질이 층을 이룹니다(유리 패널 위의 유리 툴바처럼). 각 층은 자기 뒤에 있는 것을 굴절시킵니다.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
     <r-glass radius="26" style="width: 340px;">
       <div style="padding: 26px;">
@@ -37,7 +37,7 @@ description: '배경 블러, 빛을 휘게 하는 SVG 변위, 스페큘러 테�
       </div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass radius="26">
@@ -70,12 +70,12 @@ description: '배경 블러, 빛을 휘게 하는 SVG 변위, 스페큘러 테�
 
 `displace`는 SVG `feDisplacementMap`의 스케일, 즉 빛이 표면을 지나며 얼마나 세게 휘는지를 정합니다. 그냥 간유리판으로 만들려면 `0`으로 두세요.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
     <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
     <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass displace="0">…평평한 간유리…</r-glass> <r-glass displace="60">…액체…</r-glass>
@@ -85,13 +85,13 @@ description: '배경 블러, 빛을 휘게 하는 SVG 변위, 스페큘러 테�
 
 `sheen`은 움직이는 스페큘러 하이라이트를 더하고, `interactive`는 호버 시 떠오름과 탄성 있는 눌림을 더합니다(공용 토큰 `--ran-motion-ease-spring` 사용).
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass sheen interactive displace="36" style="width: 260px;">
       <div style="padding: 20px; color: #fff; font-weight: 600;">올려보고 눌러보세요</div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass sheen interactive displace="36">
@@ -105,12 +105,12 @@ description: '배경 블러, 빛을 휘게 하는 SVG 변위, 스페큘러 테�
 
 먼저 WebGL로 그리고(동기적이며 사실상 모든 브라우저에서 동작하므로 테두리가 자기 첫 페인트를 늦추는 일이 없습니다), 브라우저가 지원하면 배경에서 조용히 WebGPU로 넘어갑니다(효과는 같고 출력은 픽셀 단위로 동일). 두 GPU API가 모두 없을 때(아주 오래된 브라우저, 비활성화, SSR)는 CSS 스페큘러 그러데이션으로 물러나므로, 디자인에서 감안해야 할 깨진 상태나 빈 상태는 없습니다.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim 없음</div></r-glass>
     <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass>…CSS 스페큘러만…</r-glass> <r-glass rim>…GPU 테두리 + 색수차 가장자리(WebGL, WebGPU로 승격)…</r-glass>

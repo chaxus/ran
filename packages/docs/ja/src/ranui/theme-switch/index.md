@@ -14,9 +14,9 @@ ranui の[テーマ API](/ja/src/ranui/theme/) に接続された、3 状態（*
 
 ### 基本的な使い方
 
-<Demo>
+<ran-demo>
   <r-theme-switch></r-theme-switch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-theme-switch></r-theme-switch>

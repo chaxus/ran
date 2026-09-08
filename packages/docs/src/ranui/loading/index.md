@@ -16,9 +16,9 @@ Loading component providing a collection of animated indicators to signal in-pro
 
 ### Basic Usage
 
-<Demo>
+<ran-demo>
   <r-loading name="circle"></r-loading>
-</Demo>
+</ran-demo>
 
 ```html
 <r-loading name="circle"></r-loading>
@@ -37,12 +37,12 @@ Loading component providing a collection of animated indicators to signal in-pro
 
 Set `name` to one of the built-in animation types. Any unknown value renders nothing (only names in the list below are handled).
 
-<Demo>
+<ran-demo>
   <r-loading name="double-bounce"></r-loading>
   <r-loading name="rotate"></r-loading>
   <r-loading name="stretch"></r-loading>
   <r-loading name="cube"></r-loading>
-</Demo>
+</ran-demo>
 
 ```html
 <r-loading name="double-bounce"></r-loading>
@@ -122,10 +122,10 @@ r-loading {
 
 ### Live Examples
 
-<Demo>
+<ran-demo>
   <r-loading name="circle" style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"></r-loading>
   <r-loading name="rotate" style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"></r-loading>
-</Demo>
+</ran-demo>
 
 ```html
 <r-loading

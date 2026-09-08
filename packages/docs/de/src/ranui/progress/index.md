@@ -10,9 +10,9 @@ Fortschrittsbalken für den Stand einer Aufgabe, wahlweise mit ziehbarem Griff.
 
 ## Schnellstart
 
-<Demo>
+<ran-demo>
   <r-progress percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="40%"></r-progress>
@@ -36,11 +36,11 @@ Fortschrittsbalken für den Stand einer Aufgabe, wahlweise mit ziehbarem Griff.
 
 Setzt den aktuellen Fortschritt. Zahl oder Prozent-Zeichenkette, und nie größer als `total`. Ist `total` nicht gesetzt, gilt `100` — `percent` wird also als Prozentwert von 100 gelesen.
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30%"></r-progress>
   <r-progress percent="70%"></r-progress>
   <r-progress percent="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30%"></r-progress>
@@ -52,11 +52,11 @@ Setzt den aktuellen Fortschritt. Zahl oder Prozent-Zeichenkette, und nie größe
 
 Setzt den Nenner für `percent`. Zahlen und Prozentwerte sind erlaubt, `percent="30" total="1000"` füllt den Balken also zu 3 %.
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30" total="1000"></r-progress>
   <r-progress percent="70" total="100"></r-progress>
   <r-progress percent="10%" total="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -69,10 +69,10 @@ Setzt den Nenner für `percent`. Zahlen und Prozentwerte sind erlaubt, `percent=
 - `primary`: statischer Fortschrittsbalken. Der Standard, wenn `type` nicht gesetzt ist.
 - `drag`: klick- und ziehbarer Balken. Ein Klick auf die Schiene oder ein Zug am Griff aktualisiert `percent` und löst ein `change`-Event aus. Das Ziehen des Griffs setzt `dot="true"` voraus.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%"></r-progress>
   <r-progress type="primary" percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
@@ -82,10 +82,10 @@ Setzt den Nenner für `percent`. Zahlen und Prozentwerte sind erlaubt, `percent=
 
 Schaltet den Griff um. Er wird nur gezeichnet, wenn `dot="true"` **und** `type="drag"` gilt; auf einem statischen `primary`-Balken bleibt er absichtlich weg, dort hat `dot` also keine sichtbare Wirkung.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%" dot="true"></r-progress>
   <r-progress type="drag" percent="30%" dot="false"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%" dot="true"></r-progress>

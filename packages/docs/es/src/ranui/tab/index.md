@@ -12,13 +12,13 @@ Contenedor con pestañas que alterna entre paneles. Compón `<r-tabs>` como cont
 
 ### Uso básico
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -66,7 +66,7 @@ Un solo panel. Sus atributos los lee el `<r-tabs>` padre para construir el botó
 
 `flat` (por defecto) muestra un subrayado deslizante como indicador; `line` dibuja cabeceras con borde.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="flat">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -77,7 +77,7 @@ Un solo panel. Sus atributos los lee el `<r-tabs>` padre para construir el botó
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="flat">
@@ -97,7 +97,7 @@ Un solo panel. Sus atributos los lee el `<r-tabs>` padre para construir el botó
 
 Alinea la fila de cabeceras. Por defecto, `start`.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="line" align="start">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -113,7 +113,7 @@ Alinea la fila de cabeceras. Por defecto, `start`.
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="line" align="start"> ... </r-tabs>
@@ -128,13 +128,13 @@ Alinea la fila de cabeceras. Por defecto, `start`.
 
 Sin claves explícitas, `active` coincide con el índice empezando en cero:
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="1">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="1">
@@ -146,14 +146,14 @@ Sin claves explícitas, `active` coincide con el índice empezando en cero:
 
 Con valores `r-key` explícitos (los paneles sin clave recurren a su índice):
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a">11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -170,14 +170,14 @@ Con valores `r-key` explícitos (los paneles sin clave recurren a su índice):
 
 Un `<r-tab>` deshabilitado no se puede seleccionar y se salta al elegir la pestaña activa por defecto.
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -192,13 +192,13 @@ Un `<r-tab>` deshabilitado no se puede seleccionar y se salta al elegir la pesta
 
 `<r-tab>` acepta un atributo `icon` (un nombre de `r-icon`) que se dibuja antes de la etiqueta; `iconSize` fija su tamaño.
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1" icon="edit">11111</r-tab>
     <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -212,13 +212,13 @@ Un `<r-tab>` deshabilitado no se puede seleccionar y se salta al elegir la pesta
 
 Pon `effect` en `<r-tabs>` para activar la onda al hacer clic en los botones de cabecera. Con `effect` activo, el subrayado deslizante queda oculto.
 
-<Demo column>
+<ran-demo column>
   <r-tabs effect="true">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs effect="true">

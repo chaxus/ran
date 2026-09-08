@@ -12,10 +12,10 @@ Ein kompaktes Farbfeld, das ein Popover mit einer Sättigungs-/Helligkeitspalett
 
 ### Grundlegende Verwendung
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff"></r-colorpicker>
   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff"></r-colorpicker> <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
@@ -37,11 +37,11 @@ Klicke auf das Farbfeld (oder fokussiere es und drücke Enter/Leertaste), um das
 
 Die aktuelle Farbe als CSS-Farbzeichenkette. Auf dem Weg hinein werden HEX (`#1677FF`, `#fff`), `rgb(...)` und `rgba(...)` akzeptiert. Auf dem Weg hinaus ist der kanonische Wert eine sechsstellige HEX-Zeichenkette, wenn die Farbe vollständig deckend ist, und eine `rgba(...)`-Zeichenkette, sobald Alpha unter 1 liegt.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#00c853"></r-colorpicker>
   <r-colorpicker value="rgb(22, 119, 255)"></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#00c853"></r-colorpicker>
@@ -60,10 +60,10 @@ toolbar.append(picker);
 
 Setze das Attribut `disabled`, um den Picker untätig zu machen: Das Feld öffnet das Panel nicht mehr (weder per Maus noch per Tastatur), fällt aus der Tabreihenfolge, und der Host wird mit `aria-disabled="true"` ausgezeichnet. Nimmst du das Attribut weg, ist die Bedienung wieder normal.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff" disabled></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)" disabled></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff" disabled></r-colorpicker>

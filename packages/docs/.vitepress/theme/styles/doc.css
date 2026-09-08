@@ -138,6 +138,95 @@ r-mermaid {
   margin: 20px 0;
 }
 
+/* ---------- <ran-demo>: the canonical demo container ---------- *
+ * Component docs wrap live `<r-*>` examples in `<ran-demo>…</ran-demo>` instead of
+ * hand-rolled inline-styled divs, so every demo shares one source of truth for framing,
+ * spacing, wrapping and light/dark theming.
+ *
+ * It is deliberately a *zero-JavaScript* custom element — nothing registers it and it has
+ * no shadow root. Three things fall out of that, all of which a real component would cost
+ * us: the demo markup is in the server-rendered HTML (so it is indexable and it renders
+ * with JS disabled), the page's own rules below still reach the demo's contents (a shadow
+ * boundary would sever them), and there is no upgrade, no hydration and no runtime.
+ * `config.ts` tells the Vue compiler to leave `ran-*` alone, the same way it already does
+ * for ranui's `r-*`. */
+ran-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  margin: 22px 0;
+  padding: 26px 24px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  background: var(--vp-c-bg-soft);
+  /* A demo may embed a component that carries its own elevated z-index (e.g.
+   * r-dropdown's --ran-z-dropdown: 1100) as *content*, not as a real triggered
+   * overlay — just an always-open panel shown for illustration. Without a
+   * stacking context of its own, that z-index would compare directly against
+   * page-level chrome (VitePress's mobile sidebar + its backdrop), painting
+   * the demo panel on top of the dimmed sidebar instead of staying inside its
+   * own box. isolation:isolate contains it, and costs nothing extra: an
+   * isolated box with no z-index/position of its own still paints at the
+   * plain in-flow tier in *its* parent's stacking order, i.e. below
+   * VitePress's nav (z-index:30, see `vitepress/theme-default`'s `vars.css`).
+   * That's why every demo gets isolation unconditionally. */
+  isolation: isolate;
+}
+
+ran-demo[align='start'] {
+  align-items: flex-start;
+}
+ran-demo[align='end'] {
+  align-items: flex-end;
+}
+ran-demo[column] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* `r-modal` demoed inline renders a *real*, fixed-position, page-covering
+ * dialog while open (unlike the always-open-dropdown-as-content case above)
+ * — and isolation traps position:fixed descendants into the box's own
+ * stacking context same as anything else, so without extra priority the
+ * open dialog would render below the nav/sidebar instead of over them.
+ * `:has(r-modal[open])` (native attribute reflection — see r-modal's `open`
+ * accessor) scopes the escape to exactly the moment a nested modal is open,
+ * so a closed demo (the common case) never pays for it: no `position` or
+ * `z-index` sits on the box the rest of the time, so it can never paint over
+ * the sticky nav during ordinary scrolling the way the old *unconditional*
+ * z-index:100 on every demo did — that blanket rule promoted the box itself,
+ * not just its overlay content, above chrome that in-flow page content is
+ * only ever supposed to sit below.
+ * `[closing]` (also reflected by r-modal) covers the ~0.3s fade-and-scale-out
+ * tail: `close()` removes `open` synchronously, but the mask/dialog keep
+ * painting for another `getTransitionTimeout()` while their CSS transition
+ * finishes. Without matching `[closing]` too, this rule stops applying the
+ * instant `open` is gone and the still-fading mask repaints *under* the nav
+ * (z-index 30) for that whole tail — visually, the strip behind the nav
+ * reveals through while the rest of the mask keeps fading normally, reading
+ * as the mask closing "in regions" instead of as one sheet. `[closing]` keeps
+ * the escalation alive for exactly as long as the modal is still visible.
+ * `r-message` needs no such rule: its toasts already portal to
+ * `document.body` (see `components/message/container.ts`), so they're never
+ * descendants of this box to begin with and their own z-index (1200) already
+ * outranks VitePress's whole chrome range on its own.
+ * See `packages/ranui/docs/DESIGN.md` §4 for the component-side z-index
+ * ladder this is bridging into the host page. */
+ran-demo:has(r-modal[open]),
+ran-demo:has(r-modal[closing]) {
+  position: relative;
+  z-index: 100;
+}
+
+/* Markdown may wrap demo lines in a <p>. Collapse it so the items still flow as flex
+ * children — and so the global demo heuristic below can't double-frame it. Kept as a
+ * descendant selector rather than `> p`, which is what the component's `:deep(p)` matched. */
+ran-demo p {
+  display: contents;
+  margin: 0;
+}
+
 /* ---------- live demos as soft preview cards ---------- *
  * ranui docs drop bare <r-*> elements (often in an inline-styled flex wrapper)
  * straight into the prose. Frame each demo row as a soft, theme-aware card so

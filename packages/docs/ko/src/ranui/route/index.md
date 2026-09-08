@@ -14,11 +14,11 @@ description: '현재 경로가 패턴과 맞는 동안에만 슬롯 콘텐츠를
 
 `path`가 `/`인 `r-route`는 기본 경로와 맞으므로, 혼자서도 콘텐츠가 그려집니다.
 
-<Demo>
+<ran-demo>
   <r-route path="/">
     <p>현재 경로가 맞으면 이 콘텐츠가 보입니다.</p>
   </r-route>
-</Demo>
+</ran-demo>
 
 ```html
 <r-route path="/">

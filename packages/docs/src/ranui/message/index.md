@@ -10,9 +10,9 @@ Global feedback component for operation results, invoked imperatively through th
 
 ## Quick Start
 
-<Demo>
+<ran-demo>
   <r-button type="primary" onclick="message.info('This is a hint')">Show message</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" onclick="message.info('This is a hint')">Show message</r-button>
@@ -80,13 +80,13 @@ Each toast is a `<r-message>` custom element. The global API sets these attribut
 
 ## Message Types `type`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info('This is a hint')">Information prompt</r-button>
   <r-button onclick="message.success('This is a hint')">Success tip</r-button>
   <r-button onclick="message.warning('This is a hint')">Warning prompt</r-button>
   <r-button onclick="message.error('This is a hint')">Error prompt</r-button>
   <r-button onclick="message.toast('This is a hint')">Toast tip</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info('This is a hint')">Information prompt</r-button>
@@ -98,10 +98,10 @@ Each toast is a `<r-message>` custom element. The global API sets these attribut
 
 ## Custom Duration `duration`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: 'Stays for 6s', duration: 6000 })">6 second toast</r-button>
   <r-button onclick="message.info({ content: 'Stays for 1s', duration: 1000 })">1 second toast</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info({ content: 'Stays for 6s', duration: 6000 })">6 second toast</r-button>
@@ -112,9 +112,9 @@ Each toast is a `<r-message>` custom element. The global API sets these attribut
 
 The `close` callback runs after the toast is removed from the DOM.
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.success({ content: 'Saved', close: () => message.info('Toast closed') })">Chained message</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.success({ content: 'Saved', close: () => message.info('Toast closed') })"
@@ -134,9 +134,9 @@ message.success({
 
 ## Custom Placement `top` / `zIndex` / `getContainer`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: 'Pushed down', top: 120 })">Offset from top</r-button>
-</Demo>
+</ran-demo>
 
 ```js
 message.info({

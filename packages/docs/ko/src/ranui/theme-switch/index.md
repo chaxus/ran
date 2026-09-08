@@ -14,9 +14,9 @@ ranui 의 [테마 API](/ko/src/ranui/theme/)에 연결된 3 상태 (**시스템 
 
 ### 기본 사용법
 
-<Demo>
+<ran-demo>
   <r-theme-switch></r-theme-switch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-theme-switch></r-theme-switch>

@@ -30,9 +30,9 @@ description: 'ranui Player(<r-player>)는 네이티브 <video>를 하나의 컨�
 
 ## 빠른 시작
 
-<Demo>
+<ran-demo>
   <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-</Demo>
+</ran-demo>
 
 ```html
 <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
@@ -66,9 +66,9 @@ description: 'ranui Player(<r-player>)는 네이티브 <video>를 하나의 컨�
 
 ### 영상 소스 `src`
 
-<Demo>
+<ran-demo>
   <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-</Demo>
+</ran-demo>
 
 ```html
 <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>

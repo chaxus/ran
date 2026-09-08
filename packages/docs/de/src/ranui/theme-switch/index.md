@@ -15,9 +15,9 @@ Seite (und in anderen Tabs) im Gleichklang.
 
 ### Grundlegende Verwendung
 
-<Demo>
+<ran-demo>
   <r-theme-switch></r-theme-switch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-theme-switch></r-theme-switch>

@@ -14,9 +14,9 @@ description: 'نمودار راداری (تارعنکبوتی) برای سنجش
 
 داده از راه ویژگی `abilitys` و به‌شکل **رشتهٔ JSON** (آرایه‌ای از شیءها) داده می‌شود. چون ویژگی‌های HTML تنها رشته نگه می‌دارند، مقدار باید JSON معتبر باشد؛ درون کامپوننت با `JSON.parse` تجزیه می‌شود. میزبان `<r-radar>` اندازهٔ ذاتی ندارد، پس عرض و ارتفاع صریح به آن بدهید.
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"جان","scoreRate":"10"},{"abilityName":"حمله","scoreRate":"90"},{"abilityName":"دفاع","scoreRate":"20"},{"abilityName":"تسلط عنصری","scoreRate":"50"},{"abilityName":"شانس ضربهٔ بحرانی","scoreRate":"80"},{"abilityName":"آسیب بحرانی","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -67,9 +67,9 @@ chart.append(radar);
 
 استایل برچسب هر محور (`backgroundColor`، `fontSize`، `fontColor`) را می‌توان روی مدخل‌های جداگانه تعیین کرد:
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"جان","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"حمله","scoreRate":"90"},{"abilityName":"دفاع","scoreRate":"20"},{"abilityName":"تسلط عنصری","scoreRate":"50"},{"abilityName":"شانس ضربهٔ بحرانی","scoreRate":"80"},{"abilityName":"آسیب بحرانی","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -80,9 +80,9 @@ chart.append(radar);
 
 ### رنگ چندضلعی شبکه `colorPolygon`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorPolygon="green" abilitys='[{"abilityName":"جان","scoreRate":"10"},{"abilityName":"حمله","scoreRate":"90"},{"abilityName":"دفاع","scoreRate":"20"},{"abilityName":"تسلط عنصری","scoreRate":"50"},{"abilityName":"شانس ضربهٔ بحرانی","scoreRate":"80"},{"abilityName":"آسیب بحرانی","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -94,9 +94,9 @@ chart.append(radar);
 
 ### رنگ خط محور `colorLine`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorLine="blue" abilitys='[{"abilityName":"جان","scoreRate":"10"},{"abilityName":"حمله","scoreRate":"90"},{"abilityName":"دفاع","scoreRate":"20"},{"abilityName":"تسلط عنصری","scoreRate":"50"},{"abilityName":"شانس ضربهٔ بحرانی","scoreRate":"80"},{"abilityName":"آسیب بحرانی","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -108,9 +108,9 @@ chart.append(radar);
 
 ### رنگ پرشدگی ناحیه `fillColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" fillColor="red" abilitys='[{"abilityName":"جان","scoreRate":"10"},{"abilityName":"حمله","scoreRate":"90"},{"abilityName":"دفاع","scoreRate":"20"},{"abilityName":"تسلط عنصری","scoreRate":"50"},{"abilityName":"شانس ضربهٔ بحرانی","scoreRate":"80"},{"abilityName":"آسیب بحرانی","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -122,9 +122,9 @@ chart.append(radar);
 
 ### رنگ خط پیرامون ناحیه `strokeColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" strokeColor="blue" abilitys='[{"abilityName":"جان","scoreRate":"10"},{"abilityName":"حمله","scoreRate":"90"},{"abilityName":"دفاع","scoreRate":"20"},{"abilityName":"تسلط عنصری","scoreRate":"50"},{"abilityName":"شانس ضربهٔ بحرانی","scoreRate":"80"},{"abilityName":"آسیب بحرانی","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar

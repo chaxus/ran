@@ -12,13 +12,13 @@ description: '带有页眉、主体和页脚区域的结构化内容容器，Gei
 
 ### 基础用法
 
-<Demo>
+<ran-demo>
   <r-card heading="卡片标题" description="可选的副标题" style="max-width: 360px;">
     <span slot="extra" style="font-size: 12px;">标签</span>
     <p style="margin: 0;">主体内容放在默认插槽里。</p>
     <a slot="footer" href="#">查看说明</a>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-card heading="卡片标题" description="可选的副标题">
@@ -43,11 +43,11 @@ description: '带有页眉、主体和页脚区域的结构化内容容器，Gei
 
 卡片标题，显示在页眉顶部。为空时隐藏。
 
-<Demo>
+<ran-demo>
   <r-card heading="仅有标题" style="max-width: 360px;">
     <p style="margin: 0;">主体内容。</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-card heading="仅有标题">
@@ -59,11 +59,11 @@ description: '带有页眉、主体和页脚区域的结构化内容容器，Gei
 
 渲染在标题下方的副标题。为空时隐藏。当 `title` 和 `description` 都未设置时，整个页眉都会隐藏。
 
-<Demo>
+<ran-demo>
   <r-card heading="标题" description="一段简短的辅助副标题" style="max-width: 360px;">
     <p style="margin: 0;">主体内容。</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-card heading="标题" description="一段简短的辅助副标题">
@@ -75,11 +75,11 @@ description: '带有页眉、主体和页脚区域的结构化内容容器，Gei
 
 卡片默认不响应悬停。为真正可点击的卡片添加 `hoverable` 属性：悬停时边框在灰阶上加深一档（`--ran-color-border` → `--ran-color-border-hover`），同时表面获得轻量的抬升阴影（`--ran-shadow-elevated`）。
 
-<Demo>
+<ran-demo>
   <r-card hoverable heading="可悬停卡片" description="把鼠标移上来" style="max-width: 360px; cursor: pointer;">
     <p style="margin: 0;">边框加深，卡片轻微抬升。</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```xml
 <r-card hoverable heading="可悬停卡片" description="把鼠标移上来">

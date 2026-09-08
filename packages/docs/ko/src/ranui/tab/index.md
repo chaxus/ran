@@ -12,13 +12,13 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 ### 기본 사용법
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -66,7 +66,7 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 `flat`(기본)은 미끄러지는 밑줄 표시자를 보여 주고, `line`은 테두리가 있는 탭 헤더를 그립니다.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="flat">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -77,7 +77,7 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="flat">
@@ -97,7 +97,7 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 헤더 줄을 정렬합니다. 기본값은 `start`입니다.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="line" align="start">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -113,7 +113,7 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="line" align="start"> ... </r-tabs>
@@ -128,13 +128,13 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 키를 명시하지 않으면 `active`는 0부터 시작하는 인덱스와 맞춰집니다.
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="1">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="1">
@@ -146,14 +146,14 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 `r-key` 값을 명시한 경우(키가 없는 패널은 인덱스로 대체됩니다):
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a">11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -170,14 +170,14 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 `disabled`인 `<r-tab>`은 선택할 수 없고, 기본 활성 탭을 고를 때도 건너뜁니다.
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -192,13 +192,13 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 `<r-tab>`은 `icon` 어트리뷰트(`r-icon` 이름)를 받아 레이블 앞에 그립니다. 크기는 `iconSize`로 정합니다.
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1" icon="edit">11111</r-tab>
     <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -212,13 +212,13 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 `<r-tabs>`에 `effect`를 주면 헤더 버튼을 누를 때 물결이 퍼집니다. `effect`가 켜져 있는 동안에는 미끄러지는 밑줄 표시자가 숨겨집니다.
 
-<Demo column>
+<ran-demo column>
   <r-tabs effect="true">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs effect="true">

@@ -16,9 +16,9 @@ página.
 
 ## Inicio rápido
 
-<Demo>
+<ran-demo>
   <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]; C --> D[Respond]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]</r-mermaid>
@@ -42,9 +42,9 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // el setter de la propiedad codifi
 Cada control se activa **explícitamente** con un atributo booleano; un `<r-mermaid>` a secas es un
 diagrama estático y limpio. La barra aparece al pasar el ratón (arriba a la derecha).
 
-<Demo>
+<ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid copy download fullscreen>graph TD; A --> B; B --> C</r-mermaid>

@@ -15,9 +15,9 @@ las instancias de la página (y de otras pestañas).
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-theme-switch></r-theme-switch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-theme-switch></r-theme-switch>

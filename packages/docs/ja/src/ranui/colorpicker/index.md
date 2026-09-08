@@ -12,10 +12,10 @@ description: '彩度・明度、色相、透明度のコントロールと HEX/R
 
 ### 基本的な使い方
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff"></r-colorpicker>
   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff"></r-colorpicker> <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
@@ -37,11 +37,11 @@ description: '彩度・明度、色相、透明度のコントロールと HEX/R
 
 現在の色を CSS の色文字列で表します。入力としては HEX（`#1677FF`、`#fff`）、`rgb(...)`、`rgba(...)` を受け付けます。読み出しの正規形は、完全に不透明なら 6 桁の HEX 文字列、透明度が 1 未満なら `rgba(...)` の文字列です。
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#00c853"></r-colorpicker>
   <r-colorpicker value="rgb(22, 119, 255)"></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#00c853"></r-colorpicker>
@@ -60,10 +60,10 @@ toolbar.append(picker);
 
 `disabled` 属性を付けるとピッカーは反応しなくなります。スウォッチはマウスでもキーボードでもパネルを開かず、タブ順から外れ、ホストに `aria-disabled="true"` が付きます。属性を外せば通常どおりに戻ります。
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff" disabled></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)" disabled></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff" disabled></r-colorpicker>

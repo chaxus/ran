@@ -14,9 +14,9 @@ root, so it's isolated from page styles.
 
 ## Quick Start
 
-<Demo>
+<ran-demo>
   <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]; C --> D[Respond]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]</r-mermaid>
@@ -40,9 +40,9 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // property setter URI-encodes for 
 Every control is **opt-in** via a boolean attribute; a bare `<r-mermaid>` is a clean static
 diagram. The toolbar appears on hover (top-right).
 
-<Demo>
+<ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid copy download fullscreen>graph TD; A --> B; B --> C</r-mermaid>

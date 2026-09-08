@@ -12,9 +12,9 @@ description: 'アプリ内の遷移を横取りし、外部リンクはブラウ
 
 ### 基本的な使い方
 
-<Demo>
+<ran-demo>
   <r-link href="/getting-started">はじめかた</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/getting-started">はじめかた</r-link>
@@ -36,10 +36,10 @@ description: 'アプリ内の遷移を横取りし、外部リンクはブラウ
 
 内部パスはアプリ内で解決され、絶対 URL や `mailto:` / `tel:` は通常どおり遷移します。
 
-<Demo>
+<ran-demo>
   <r-link href="/docs">内部リンク</r-link>
   <r-link href="https://example.com">外部リンク</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs">内部リンク</r-link> <r-link href="https://example.com">外部リンク</r-link>
@@ -49,9 +49,9 @@ description: 'アプリ内の遷移を横取りし、外部リンクはブラウ
 
 真偽値の属性です。付いているとき、アプリ内の遷移は新しい履歴を積むのではなく現在の履歴を置き換えます（`router.replace`）。
 
-<Demo>
+<ran-demo>
   <r-link href="/settings" replace>履歴を置き換える</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/settings" replace>履歴を置き換える</r-link>
@@ -61,9 +61,9 @@ description: 'アプリ内の遷移を横取りし、外部リンクはブラウ
 
 リンクの shadow DOM に注入する CSS です。ranui のどのコンポーネントとも同じ `sheet` の作法に従います。クリックできる `<a>` は shadow root の内側にあるので、ホストをボタンやカードのように見せたいときは `sheet` でボックスモデル（`display`、`padding`、`width`）を与えてください。
 
-<Demo>
+<ran-demo>
   <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">余白のあるリンク</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; }">余白のあるリンク</r-link>

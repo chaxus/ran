@@ -14,9 +14,9 @@ description: 'ranui の Skeleton（<r-skeleton>）は、コンテンツの読み
 
 スケルトンは親要素の幅いっぱいに広がり、高さは既定で `16px` です。
 
-<Demo>
+<ran-demo>
   <r-skeleton></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton></r-skeleton>
@@ -26,7 +26,7 @@ description: 'ranui の Skeleton（<r-skeleton>）は、コンテンツの読み
 
 スケルトンは `width: 100%` なので、長さは中に置いたコンテナの大きさで決めます。
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100px">
     <r-skeleton></r-skeleton>
   </div>
@@ -36,7 +36,7 @@ description: 'ranui の Skeleton（<r-skeleton>）は、コンテンツの読み
   <div style="width: 100%">
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="width: 100px">
@@ -54,13 +54,13 @@ description: 'ranui の Skeleton（<r-skeleton>）は、コンテンツの読み
 
 複数のスケルトンを組み合わせて、文章のかたまりや段落を模します。
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100%; display: flex; flex-direction: column; gap: 12px">
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="display: flex; flex-direction: column; gap: 12px">
@@ -82,9 +82,9 @@ description: 'ranui の Skeleton（<r-skeleton>）は、コンテンツの読み
 
 `sheet` に CSS 文字列を渡すと、shadow DOM の内側でスケルトンの見た目を上書きできます。
 
-<Demo>
+<ran-demo>
   <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
@@ -102,9 +102,9 @@ description: 'ranui の Skeleton（<r-skeleton>）は、コンテンツの読み
 | `--ran-skeleton-shimmer-background`         | `linear-gradient(90deg, …)`    | 動くハイライトのグラデーション |
 | `--ran-skeleton-shimmer-animation-duration` | `1.4s`                         | きらめきが一度通り過ぎる時間   |
 
-<Demo>
+<ran-demo>
   <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>

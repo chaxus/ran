@@ -12,9 +12,9 @@ description: '앱 안의 이동은 가로채고 외부 링크는 브라우저에
 
 ### 기본 사용법
 
-<Demo>
+<ran-demo>
   <r-link href="/getting-started">시작하기</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/getting-started">시작하기</r-link>
@@ -36,10 +36,10 @@ description: '앱 안의 이동은 가로채고 외부 링크는 브라우저에
 
 내부 경로는 앱 안에서 처리되고, 절대 URL 과 `mailto:` / `tel:` 링크는 평소대로 이동합니다.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs">내부 링크</r-link>
   <r-link href="https://example.com">외부 링크</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs">내부 링크</r-link> <r-link href="https://example.com">외부 링크</r-link>
@@ -49,9 +49,9 @@ description: '앱 안의 이동은 가로채고 외부 링크는 브라우저에
 
 불리언 어트리뷰트입니다. 있으면 앱 안의 이동이 새 항목을 쌓지 않고 현재 히스토리 항목을 대체합니다 (`router.replace`).
 
-<Demo>
+<ran-demo>
   <r-link href="/settings" replace>항목 대체</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/settings" replace>항목 대체</r-link>
@@ -61,9 +61,9 @@ description: '앱 안의 이동은 가로채고 외부 링크는 브라우저에
 
 링크의 섀도 DOM 에 주입하는 CSS 로, 다른 모든 ranui 컴포넌트와 같은 `sheet` 관례를 따릅니다. 클릭 대상인 `<a>`가 섀도 루트 안에 있으므로, 호스트를 버튼이나 카드처럼 보이게 하려면 `sheet`로 박스 모델 (`display`, `padding`, `width`) 을 지정하세요.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">여백 있는 링크</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; }">여백 있는 링크</r-link>

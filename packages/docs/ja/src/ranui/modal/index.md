@@ -14,7 +14,7 @@ description: 'ranui の Modal（<r-modal>）は集中した操作のためのダ
 
 モーダルの表示は `open` 属性（または `open` プロパティ）で制御します。初期状態は閉じていて、開くまで何も描画しません。開閉するトリガーを用意してください。
 
-<Demo>
+<ran-demo>
   <r-button onclick="document.getElementById('quickstart-modal').open = true">モーダルを開く</r-button>
   <r-modal id="quickstart-modal" heading="基本のモーダル">
     <p>これがモーダルの内容です。</p>
@@ -22,7 +22,7 @@ description: 'ranui の Modal（<r-modal>）は集中した操作のためのダ
       <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">OK</r-button>
     </div>
   </r-modal>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="modal.open = true">モーダルを開く</r-button>

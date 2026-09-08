@@ -14,11 +14,11 @@ A routing outlet element. Placed inside an [`r-router`](../router/), it shows it
 
 An `r-route` whose `path` is `/` matches the default path, so its content renders on its own:
 
-<Demo>
+<ran-demo>
   <r-route path="/">
     <p>This content is shown when the current path matches.</p>
   </r-route>
-</Demo>
+</ran-demo>
 
 ```html
 <r-route path="/">

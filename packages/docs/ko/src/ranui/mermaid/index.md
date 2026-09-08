@@ -14,9 +14,9 @@ description: 'Mermaid 다이어그램 (플로차트, 시퀀스, 클래스, 상�
 
 ## 빠른 시작
 
-<Demo>
+<ran-demo>
   <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]; C --> D[Respond]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]</r-mermaid>
@@ -40,9 +40,9 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // 프로퍼티 세터가 URI 인�
 모든 컨트롤은 불리언 어트리뷰트로 **직접 켜야** 합니다. 아무것도 붙이지 않은 `<r-mermaid>`는 깔끔한
 정적 다이어그램입니다. 툴바는 마우스를 올리면 오른쪽 위에 나타납니다.
 
-<Demo>
+<ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid copy download fullscreen>graph TD; A --> B; B --> C</r-mermaid>

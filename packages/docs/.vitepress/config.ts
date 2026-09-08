@@ -350,8 +350,12 @@ export default defineConfig({
   vue: {
     template: {
       compilerOptions: {
+        // `r-*` is ranui's namespace; `ran-*` is this site's own zero-JavaScript
+        // presentational elements (see `ran-demo` in theme/styles/doc.css). Neither is a
+        // Vue component, so the compiler must emit them as plain elements instead of
+        // trying — and failing — to resolve them.
         isCustomElement: (tag: string) => {
-          return tag.startsWith('r-');
+          return tag.startsWith('r-') || tag.startsWith('ran-');
         },
       },
     },

@@ -14,14 +14,14 @@ description: 'ranui Popover(<r-popover>)는 트리거에 커서를 올리거나 
 
 트리거는 기본 슬롯에 두고, 떠 있는 내용은 중첩된 `<r-content>` 요소로 감쌉니다.
 
-<Demo>
+<ran-demo>
   <r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>이것이 패널 내용입니다</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover style="display: inline-block;">
@@ -45,7 +45,7 @@ description: 'ranui Popover(<r-popover>)는 트리거에 커서를 올리거나 
 
 ### 여는 방식 `trigger`
 
-<Demo>
+<ran-demo>
   <r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
@@ -58,7 +58,7 @@ description: 'ranui Popover(<r-popover>)는 트리거에 커서를 올리거나 
       <div>click</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" style="display: inline-block;">
@@ -78,7 +78,7 @@ description: 'ranui Popover(<r-popover>)는 트리거에 커서를 올리거나 
 
 ### 위치 `placement`
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
@@ -103,7 +103,7 @@ description: 'ranui Popover(<r-popover>)는 트리거에 커서를 올리거나 
       <div>right</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="top" style="display: inline-block;">
@@ -139,7 +139,7 @@ description: 'ranui Popover(<r-popover>)는 트리거에 커서를 올리거나 
 
 방향만 쓰면 패널의 시작 모서리가 트리거의 시작 모서리에 맞춰집니다. 트리거 가운데에 놓이게 하거나 트리거의 끝 모서리에 맞추고 싶을 때 `-center`나 `-end`를 붙이세요. 헤더 바 오른쪽 끝에 매달린 메뉴가 바로 그런 경우로, 화면 밖으로 나갔다가 이동으로 밀려 들어오는 대신 처음부터 안쪽으로 열립니다. 이 접미사는 자동 뒤집기에도 살아남습니다. `bottom-end`는 `top`이 아니라 `top-end`가 됩니다.
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
@@ -158,7 +158,7 @@ description: 'ranui Popover(<r-popover>)는 트리거에 커서를 올리거나 
       <div style="width: 200px;">bottom-end</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">

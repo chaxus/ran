@@ -12,11 +12,11 @@ A moldura de uma linha `[início] título · resumo` que se expande para revelar
 
 ### Uso básico
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Ler arquivo" summary="packages/ranui/index.ts" expandable>
     <div style="padding:8px 0">O corpo aparece quando a linha está aberta.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Ler arquivo" summary="packages/ranui/index.ts" expandable>
@@ -30,10 +30,10 @@ O **heading é a metade esquerda, de largura fixa**, e o **summary é a metade d
 
 `busy` desenha um brilho que varre a linha. Um giro só indica que algo, em algum lugar, está acontecendo; uma varredura sobre a linha aponta qual linha ainda está trabalhando.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Rodar testes" summary="2351 passaram" busy expandable></r-disclosure-row>
   <r-disclosure-row heading="Rodar testes" summary="2351 passaram" expandable></r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ### Com um indicador no começo
 
@@ -41,12 +41,12 @@ O slot `leading` e a seta compartilham a mesma célula da grade, então trocar u
 
 Sem nada no `leading`, a seta fica sempre à vista, já que ela é a única marca dizendo a quem lê que a linha abre. Com conteúdo no começo, a seta aparece no hover, no foco ou enquanto está aberta, e o resto do tempo quem aparece é o indicador de estado.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Compilar" summary="falhou em 4,2 s" tone="error" expandable>
     <r-state-dot slot="leading" state="error"></r-state-dot>
     <div style="padding:8px 0">O pacote passou do limite de tamanho.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Compilar" summary="falhou em 4,2 s" tone="error" expandable>

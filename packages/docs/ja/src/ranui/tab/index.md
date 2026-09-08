@@ -12,13 +12,13 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 ### 基本的な使い方
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -66,7 +66,7 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 `flat`（既定）はスライドする下線のインジケーターを見せ、`line` は枠線付きのタブヘッダーを描画します。
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="flat">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -77,7 +77,7 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="flat">
@@ -97,7 +97,7 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 ヘッダー行を揃えます。既定は `start` です。
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="line" align="start">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -113,7 +113,7 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="line" align="start"> ... </r-tabs>
@@ -128,13 +128,13 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 キーを明示しない場合、`active` は 0 始まりのインデックスと一致します。
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="1">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="1">
@@ -146,14 +146,14 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 `r-key` を明示した場合（キーのないペインはインデックスにフォールバックします）：
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a">11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -170,14 +170,14 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 `disabled` の `<r-tab>` は選択できず、既定のアクティブタブを決めるときにも飛ばされます。
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -192,13 +192,13 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 `<r-tab>` は `icon` 属性（`r-icon` の名前）を受け取り、ラベルの前に描画します。`iconSize` でその大きさを決めます。
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1" icon="edit">11111</r-tab>
     <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -212,13 +212,13 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 `<r-tabs>` に `effect` を付けると、ヘッダーボタンのクリック時にリップルが出ます。`effect` が有効なあいだ、スライドする下線のインジケーターは隠れます。
 
-<Demo column>
+<ran-demo column>
   <r-tabs effect="true">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs effect="true">

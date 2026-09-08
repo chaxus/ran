@@ -26,7 +26,7 @@ Drag the glass around the stage, adjust every attribute, and copy the exact mark
 
 `<r-glass>` composes: nest one inside another for layered materials (e.g. a glass toolbar on a glass panel). Each layer refracts what's behind it.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
     <r-glass radius="26" style="width: 340px;">
       <div style="padding: 26px;">
@@ -37,7 +37,7 @@ Drag the glass around the stage, adjust every attribute, and copy the exact mark
       </div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass radius="26">
@@ -70,12 +70,12 @@ Drag the glass around the stage, adjust every attribute, and copy the exact mark
 
 `displace` drives the SVG `feDisplacementMap` scale: how strongly light bends through the surface. Set it to `0` for a plain frosted pane.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
     <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
     <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass displace="0">…flat frost…</r-glass> <r-glass displace="60">…liquid…</r-glass>
@@ -85,13 +85,13 @@ Drag the glass around the stage, adjust every attribute, and copy the exact mark
 
 `sheen` adds a moving specular highlight; `interactive` adds a hover lift and a springy press (using the shared `--ran-motion-ease-spring` token).
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass sheen interactive displace="36" style="width: 260px;">
       <div style="padding: 20px; color: #fff; font-weight: 600;">Hover & press me</div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass sheen interactive displace="36">
@@ -105,12 +105,12 @@ Drag the glass around the stage, adjust every attribute, and copy the exact mark
 
 Renders on WebGL first (synchronous, works in effectively every browser, so the rim never delays its own first paint) and transparently upgrades to WebGPU in the background if the browser has it (same effect, pixel-identical output). Falls back to the plain CSS specular gradient when neither GPU API is available (very old browsers, disabled, SSR); there's no broken/blank state to design around.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">no rim</div></r-glass>
     <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass>…plain CSS specular…</r-glass> <r-glass rim>…GPU rim + chromatic edge (WebGL, upgrades to WebGPU)…</r-glass>

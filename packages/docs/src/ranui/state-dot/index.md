@@ -15,13 +15,13 @@ is one colour rule rather than two tokens.
 
 ### Basic Usage
 
-<Demo>
+<ran-demo>
   <r-state-dot state="idle"></r-state-dot>
   <r-state-dot state="running"></r-state-dot>
   <r-state-dot state="success"></r-state-dot>
   <r-state-dot state="warning"></r-state-dot>
   <r-state-dot state="error"></r-state-dot>
-</Demo>
+</ran-demo>
 
 ```html
 <r-state-dot state="idle"></r-state-dot>
@@ -40,7 +40,7 @@ its place in the row.
 The dot only encodes state through colour; it does not explain what the colour means. Never
 let the colour be the only thing that distinguishes two rows. See [design guidelines](/src/ranui/design-guides/#accessibility).
 
-<Demo column>
+<ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">
     <r-state-dot state="running"></r-state-dot>
     <span>Running tests</span>
@@ -49,7 +49,7 @@ let the colour be the only thing that distinguishes two rows. See [design guidel
     <r-state-dot state="error"></r-state-dot>
     <span>2 tests failed</span>
   </div>
-</Demo>
+</ran-demo>
 
 ## API Reference
 

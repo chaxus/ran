@@ -14,9 +14,9 @@ description: 'ranui 의 Skeleton(<r-skeleton>) 은 콘텐츠가 로드되는 동
 
 스켈레톤은 부모 엘리먼트의 너비를 가득 채우며, 높이는 기본값이 `16px` 입니다.
 
-<Demo>
+<ran-demo>
   <r-skeleton></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton></r-skeleton>
@@ -26,7 +26,7 @@ description: 'ranui 의 Skeleton(<r-skeleton>) 은 콘텐츠가 로드되는 동
 
 스켈레톤은 `width: 100%` 이므로, 길이는 그것을 담은 컨테이너의 크기로 조절합니다.
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100px">
     <r-skeleton></r-skeleton>
   </div>
@@ -36,7 +36,7 @@ description: 'ranui 의 Skeleton(<r-skeleton>) 은 콘텐츠가 로드되는 동
   <div style="width: 100%">
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="width: 100px">
@@ -54,13 +54,13 @@ description: 'ranui 의 Skeleton(<r-skeleton>) 은 콘텐츠가 로드되는 동
 
 스켈레톤 여러 개를 조합해 문단이나 텍스트 덩어리를 흉내 냅니다.
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100%; display: flex; flex-direction: column; gap: 12px">
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="display: flex; flex-direction: column; gap: 12px">
@@ -82,9 +82,9 @@ description: 'ranui 의 Skeleton(<r-skeleton>) 은 콘텐츠가 로드되는 동
 
 `sheet`에 CSS 문자열을 넘기면 섀도 DOM 안에서 스켈레톤의 모습을 덮어쓸 수 있습니다.
 
-<Demo>
+<ran-demo>
   <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
@@ -102,9 +102,9 @@ description: 'ranui 의 Skeleton(<r-skeleton>) 은 콘텐츠가 로드되는 동
 | `--ran-skeleton-shimmer-background`         | `linear-gradient(90deg, …)`    | 움직이는 하이라이트 그라디언트 |
 | `--ran-skeleton-shimmer-animation-duration` | `1.4s`                         | 반짝임이 한 번 지나가는 시간   |
 
-<Demo>
+<ran-demo>
   <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>

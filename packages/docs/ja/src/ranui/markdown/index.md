@@ -43,9 +43,9 @@ Markdown（**トークン単位で届く AI の出力**も含めて）を、フ�
 
 ## クイックスタート
 
-<Demo>
+<ran-demo>
   <r-markdown copy highlight :content.prop="quick"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy highlight content="# こんにちは ..."></r-markdown>
@@ -72,9 +72,9 @@ container.append(el);
 
 `mode="streaming"`（既定）は、まずテキストを [remend](https://www.npmjs.com/package/remend)（Streamdown から取り出された、未完成 markdown の終端処理）に通します。そのため受信途中の `**bold` はアスタリスクそのままではなく太字として描画され、`[text](https://exa` は URL が閉じるまで素のテキストのままで、`- ` が直前の段落を見出しに変えてしまうこともありません。完成した文書ではこの処理を飛ばして一気に描画するために `mode="static"` を設定してください。
 
-<Demo>
+<ran-demo>
   <r-markdown caret :content.prop="partial"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown caret content="打ちかけの *強調*、`インラインコード`、そして **まだ届いている途中の太字"></r-markdown>
@@ -87,9 +87,9 @@ container.append(el);
 
 どのコードブロックにも言語名のヘッダーが付き、任意でコピー／ダウンロードのボタンを出せます。[shiki](https://shiki.style) でシンタックスハイライトするには `highlight` を付けてください（遅延読み込み。言語も必要になったときに読み込まれ、既定のテーマは `github-light` / `github-dark` でページのテーマに追随します）。
 
-<Demo>
+<ran-demo>
   <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy download line-numbers highlight></r-markdown>
@@ -99,9 +99,9 @@ container.append(el);
 
 ## Mermaid と数式
 
-<Demo>
+<ran-demo>
   <r-markdown :content.prop="rich"></r-markdown>
-</Demo>
+</ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>`（全画面表示つき。`copy` / `download` はそのまま渡されます）。
 - `$$…$$`、`\[…\]`、` ```math ` → ブロックの `<r-math>`。`\(…\)` → インライン。ドル記号ひとつの `$…$` は通貨と紛らわしいため、`inline-math` による**明示的な有効化**が必要です。

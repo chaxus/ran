@@ -14,7 +14,7 @@ description: 'مودال ranui (<r-modal>) یک دیالوگ برای تعامل
 
 دیده‌شدن مودال را اتریبیوت `open` (یا ویژگی `open`) تعیین می‌کند. در آغاز بسته است و تا باز نشود چیزی رسم نمی‌کند، پس یک محرک برای باز و بسته کردنش سیم‌کشی کنید.
 
-<Demo>
+<ran-demo>
   <r-button onclick="document.getElementById('quickstart-modal').open = true">باز کردن مودال</r-button>
   <r-modal id="quickstart-modal" heading="مودال پایه">
     <p>این محتوای مودال است.</p>
@@ -22,7 +22,7 @@ description: 'مودال ranui (<r-modal>) یک دیالوگ برای تعامل
       <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">تأیید</r-button>
     </div>
   </r-modal>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="modal.open = true">باز کردن مودال</r-button>

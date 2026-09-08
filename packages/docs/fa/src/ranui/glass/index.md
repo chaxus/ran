@@ -26,7 +26,7 @@ description: 'یک سطح شیشه مات سیال که تاری پس‌زمین
 
 `<r-glass>` ترکیب‌پذیر است: یکی را داخل دیگری بگذارید تا متریال لایه‌لایه شود (مثلاً یک نوار ابزار شیشه‌ای روی یک پنل شیشه‌ای). هر لایه آنچه را پشت خودش است می‌شکند.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
     <r-glass radius="26" style="width: 340px;">
       <div style="padding: 26px;">
@@ -37,7 +37,7 @@ description: 'یک سطح شیشه مات سیال که تاری پس‌زمین
       </div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass radius="26">
@@ -70,12 +70,12 @@ description: 'یک سطح شیشه مات سیال که تاری پس‌زمین
 
 `displace` مقیاس `feDisplacementMap` در SVG را می‌راند: اینکه نور با چه شدتی هنگام عبور از سطح خم می‌شود. برای یک شیشه مات ساده آن را `0` بگذارید.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
     <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
     <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass displace="0">…مات صاف…</r-glass> <r-glass displace="60">…سیال…</r-glass>
@@ -85,13 +85,13 @@ description: 'یک سطح شیشه مات سیال که تاری پس‌زمین
 
 `sheen` یک درخشش بازتابی متحرک اضافه می‌کند؛ `interactive` بالا آمدن با هاور و یک فشار فنری می‌افزاید (با توکن مشترک `--ran-motion-ease-spring`).
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass sheen interactive displace="36" style="width: 260px;">
       <div style="padding: 20px; color: #fff; font-weight: 600;">نشانگر را ببرید و فشار دهید</div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass sheen interactive displace="36">
@@ -105,12 +105,12 @@ description: 'یک سطح شیشه مات سیال که تاری پس‌زمین
 
 نخست با WebGL رسم می‌شود (همگام، و عملاً در هر مرورگری کار می‌کند، پس این لبه هیچ‌وقت اولین رسم خودش را عقب نمی‌اندازد) و اگر مرورگر WebGPU داشته باشد، در پس‌زمینه به‌طور نامحسوس به آن ارتقا می‌یابد (همان جلوه، با خروجی پیکسل‌به‌پیکسل یکسان). وقتی هیچ‌کدام از این دو API در دسترس نباشد (مرورگرهای خیلی قدیمی، غیرفعال‌بودن، SSR) به گرادیان بازتابی CSS برمی‌گردد؛ هیچ حالت خراب یا خالی‌ای نیست که لازم باشد در طراحی پیش‌بینی شود.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">بدون rim</div></r-glass>
     <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass>…فقط بازتاب CSS…</r-glass> <r-glass rim>…لبه GPU + حاشیه رنگی (WebGL، با ارتقا به WebGPU)…</r-glass>

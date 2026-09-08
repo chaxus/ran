@@ -14,9 +14,9 @@ Gráfico de radar para comparar várias métricas de um mesmo conjunto de dados 
 
 Os dados vêm pelo atributo `abilitys` como uma **string JSON** (um array de objetos). Como atributos HTML só podem guardar strings, o valor precisa ser JSON válido; ele é analisado internamente com `JSON.parse`. O host `<r-radar>` não tem tamanho próprio, então dê a ele largura e altura explícitas.
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defesa","scoreRate":"20"},{"abilityName":"Maestria elemental","scoreRate":"50"},{"abilityName":"Chance de crítico","scoreRate":"80"},{"abilityName":"Dano crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -67,9 +67,9 @@ Cada entrada do array `abilitys` aceita estas chaves:
 
 O estilo do rótulo por eixo (`backgroundColor`, `fontSize`, `fontColor`) pode ser definido em entradas específicas:
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"Vida","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defesa","scoreRate":"20"},{"abilityName":"Maestria elemental","scoreRate":"50"},{"abilityName":"Chance de crítico","scoreRate":"80"},{"abilityName":"Dano crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -80,9 +80,9 @@ O estilo do rótulo por eixo (`backgroundColor`, `fontSize`, `fontColor`) pode s
 
 ### Cor da grade `colorPolygon`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorPolygon="green" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defesa","scoreRate":"20"},{"abilityName":"Maestria elemental","scoreRate":"50"},{"abilityName":"Chance de crítico","scoreRate":"80"},{"abilityName":"Dano crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -94,9 +94,9 @@ O estilo do rótulo por eixo (`backgroundColor`, `fontSize`, `fontColor`) pode s
 
 ### Cor dos eixos `colorLine`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorLine="blue" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defesa","scoreRate":"20"},{"abilityName":"Maestria elemental","scoreRate":"50"},{"abilityName":"Chance de crítico","scoreRate":"80"},{"abilityName":"Dano crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -108,9 +108,9 @@ O estilo do rótulo por eixo (`backgroundColor`, `fontSize`, `fontColor`) pode s
 
 ### Preenchimento da região `fillColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" fillColor="red" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defesa","scoreRate":"20"},{"abilityName":"Maestria elemental","scoreRate":"50"},{"abilityName":"Chance de crítico","scoreRate":"80"},{"abilityName":"Dano crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -122,9 +122,9 @@ O estilo do rótulo por eixo (`backgroundColor`, `fontSize`, `fontColor`) pode s
 
 ### Contorno da região `strokeColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" strokeColor="blue" abilitys='[{"abilityName":"Vida","scoreRate":"10"},{"abilityName":"Ataque","scoreRate":"90"},{"abilityName":"Defesa","scoreRate":"20"},{"abilityName":"Maestria elemental","scoreRate":"50"},{"abilityName":"Chance de crítico","scoreRate":"80"},{"abilityName":"Dano crítico","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
