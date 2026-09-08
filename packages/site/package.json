@@ -1,0 +1,38 @@
+{
+  "name": "site",
+  "version": "0.1.0",
+  "description": "chaxus.com — personal homepage and blog, built on ranui's own static site generator",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "tsx build/dev.ts",
+    "build": "sh ./bin/build.sh",
+    "serve": "tsx build/serve.ts",
+    "tsc": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaxus/ran",
+    "directory": "packages/site"
+  },
+  "bugs": {
+    "url": "https://github.com/chaxus/ran/issues"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "author": "chaxus",
+  "license": "MIT",
+  "dependencies": {
+    "marked": "18.0.9",
+    "ranui": "workspace:*",
+    "ranuts": "workspace:*",
+    "shiki": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}
