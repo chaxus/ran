@@ -1,0 +1,186 @@
+/**
+ * Per-page `<head>` metadata, plus the three files that are read by machines rather
+ * than people: `sitemap.xml`, `feed.xml`, `llms.txt`.
+ *
+ * The rule this module exists to enforce: **every URL it emits is the URL that is
+ * actually served**. `packages/docs` pointed roughly 214 canonical and sitemap URLs at
+ * `/foo.html` while the host served `/foo` and 308-redirected the other form. Nothing
+ * broke visibly; the canonical signal just quietly pointed at a redirect. Here every
+ * URL comes from `Page.url`, which is also what the driver writes to disk, so the two
+ * cannot disagree.
+ */
+import { ORIGIN, SITE } from './config.ts';
+import type { Page, Post } from './content.ts';
+import { absoluteUrl, escapeHtml } from './page.ts';
+
+/** XML text content. `&` first, or it would double-escape the entities below it. */
+const xml = (s: string): string =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+
+const meta = (attr: 'name' | 'property', key: string, content: string): string =>
+  `<meta ${attr}="${key}" content="${escapeHtml(content)}">`;
+
+/**
+ * The site-wide graph: the site itself and the person who writes it, linked so a search
+ * engine reads the two as one identity rather than as an anonymous domain. This is the
+ * personal-brand half of the site plan expressed in structured data.
+ */
+export const siteJsonLd = (): string =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${ORIGIN}/#website`,
+        url: `${ORIGIN}/`,
+        name: SITE.name,
+        description: SITE.description,
+        inLanguage: SITE.lang,
+        publisher: { '@id': `${ORIGIN}/#person` },
+      },
+      {
+        '@type': 'Person',
+        '@id': `${ORIGIN}/#person`,
+        name: SITE.author,
+        url: `${ORIGIN}/`,
+        sameAs: [SITE.github, SITE.docs],
+        knowsAbout: ['Web Components', 'TypeScript', 'compilers', 'WebAssembly', 'frontend infrastructure'],
+      },
+    ],
+  });
+
+/** A post as a citable article, so an answer engine can attribute it. */
+const postJsonLd = (post: Post): string =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    inLanguage: SITE.lang,
+    url: absoluteUrl(post.url),
+    keywords: post.tags.join(', ') || undefined,
+    author: { '@id': `${ORIGIN}/#person` },
+    publisher: { '@id': `${ORIGIN}/#person` },
+    isPartOf: { '@id': `${ORIGIN}/#website` },
+  });
+
+export const headFor = (page: Page): string[] => {
+  const url = absoluteUrl(page.url);
+  const isHome = page.kind === 'home';
+  const ogTitle = isHome ? `${SITE.name} — ${SITE.title}` : `${page.title} · ${SITE.name}`;
+
+  const head = [
+    `<link rel="canonical" href="${url}">`,
+    meta('name', 'author', SITE.author),
+    // The site ships one language. Saying so explicitly stops a translation proxy's
+    // copy from competing with the original for the same query.
+    `<link rel="alternate" hreflang="${SITE.lang}" href="${url}">`,
+    `<link rel="alternate" hreflang="x-default" href="${url}">`,
+    meta('property', 'og:type', page.kind === 'post' ? 'article' : 'website'),
+    meta('property', 'og:site_name', SITE.name),
+    meta('property', 'og:title', ogTitle),
+    meta('property', 'og:description', page.description),
+    meta('property', 'og:url', url),
+    meta('property', 'og:locale', 'zh_CN'),
+    meta('name', 'twitter:card', 'summary'),
+    meta('name', 'twitter:title', ogTitle),
+    meta('name', 'twitter:description', page.description),
+    `<link rel="alternate" type="application/rss+xml" title="${escapeHtml(SITE.name)}" href="/feed.xml">`,
+    // llms.txt is the curated paragraph a model ingests as "what is this site". The
+    // convention is that agents fetch /llms.txt directly; the tag costs one line and
+    // makes it discoverable to anything that reads <head> instead of guessing.
+    `<link rel="alternate" type="text/markdown" title="llms.txt" href="/llms.txt">`,
+  ];
+
+  if (page.kind === 'post') {
+    const post = page as Post;
+    head.push(
+      meta('property', 'article:published_time', post.date),
+      ...post.tags.map((tag) => meta('property', 'article:tag', tag)),
+      `<script type="application/ld+json">${postJsonLd(post)}</script>`,
+    );
+  } else if (isHome) {
+    head.push(`<script type="application/ld+json">${siteJsonLd()}</script>`);
+  }
+
+  return head;
+};
+
+// ── Machine-readable files ──────────────────────────────────────────────────
+
+export const renderSitemap = (pages: Page[]): string => {
+  const urls = pages
+    .map((page) => {
+      const lastmod = page.kind === 'post' ? `\n    <lastmod>${(page as Post).date}</lastmod>` : '';
+      // The home page is the entry point; posts outrank the archive index.
+      const priority = page.kind === 'home' ? '1.0' : page.kind === 'post' ? '0.8' : '0.5';
+      return `  <url>\n    <loc>${xml(absoluteUrl(page.url))}</loc>${lastmod}\n    <priority>${priority}</priority>\n  </url>`;
+    })
+    .join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+};
+
+/**
+ * RSS 2.0. `pubDate` must be RFC-822 — a reader that gets an ISO date either drops the
+ * item or files it under 1970.
+ */
+const rfc822 = (isoDate: string): string => new Date(`${isoDate}T00:00:00Z`).toUTCString();
+
+export const renderFeed = (posts: Post[]): string => {
+  const items = posts
+    .map(
+      (post) =>
+        `  <item>\n` +
+        `    <title>${xml(post.title)}</title>\n` +
+        `    <link>${xml(absoluteUrl(post.url))}</link>\n` +
+        `    <guid isPermaLink="true">${xml(absoluteUrl(post.url))}</guid>\n` +
+        `    <pubDate>${rfc822(post.date)}</pubDate>\n` +
+        `    <description>${xml(post.description)}</description>\n` +
+        (post.tags.length ? post.tags.map((t) => `    <category>${xml(t)}</category>\n`).join('') : '') +
+        `  </item>`,
+    )
+    .join('\n');
+  const updated = posts[0] ? rfc822(posts[0].date) : new Date().toUTCString();
+  return (
+    `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n` +
+    `  <title>${xml(SITE.name)}</title>\n` +
+    `  <link>${xml(`${ORIGIN}/`)}</link>\n` +
+    `  <description>${xml(SITE.description)}</description>\n` +
+    `  <language>${SITE.lang}</language>\n` +
+    `  <lastBuildDate>${updated}</lastBuildDate>\n` +
+    `  <atom:link href="${xml(`${ORIGIN}/feed.xml`)}" rel="self" type="application/rss+xml"/>\n` +
+    `${items}\n</channel>\n</rss>\n`
+  );
+};
+
+/**
+ * The entry map for LLM crawlers. Hand-shaped rather than a dump: this is the paragraph
+ * a model actually ingests as "what is this site", so it is the highest-leverage prose
+ * here after the home page itself.
+ */
+export const renderLlmsTxt = (posts: Post[]): string =>
+  `# ${SITE.name} — ${SITE.title}\n\n` +
+  `> ${SITE.description}\n\n` +
+  `站点: ${ORIGIN}/\n` +
+  `作者: ${SITE.author} (${SITE.github})\n` +
+  `库文档: ${SITE.docs}\n\n` +
+  `## 项目\n\n` +
+  `- ranui — 基于原生自定义元素的 Web Components 组件库，不绑定框架: ${SITE.docs}/src/ranui/\n` +
+  `- ranuts — TypeScript 工具库 (i18n / zip / IndexedDB / Worker): ${SITE.docs}/src/ranuts/\n\n` +
+  `## 文章\n\n` +
+  (posts.length ? posts.map((p) => `- [${p.title}](${absoluteUrl(p.url)}) — ${p.description}`).join('\n') : '(暂无)') +
+  `\n`;
+
+/**
+ * Training crawlers are allowed on purpose. The site's whole point is that this
+ * material gets read and cited; excluding the crawlers that build the models people
+ * now ask would work against it.
+ */
+export const renderRobotsTxt = (): string =>
+  `User-agent: *\nAllow: /\n\n` +
+  ['GPTBot', 'ClaudeBot', 'Claude-Web', 'Google-Extended', 'CCBot', 'PerplexityBot', 'Bytespider']
+    .map((bot) => `User-agent: ${bot}\nAllow: /\n`)
+    .join('\n') +
+  `\nSitemap: ${ORIGIN}/sitemap.xml\n`;
