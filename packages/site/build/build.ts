@@ -14,6 +14,7 @@ import { loadContent } from './content.ts';
 import type { Content } from './content.ts';
 import { initHighlighter } from './markdown.ts';
 import { renderPage } from './page.ts';
+import { headFor, renderFeed, renderLlmsTxt, renderRobotsTxt, renderSitemap } from './seo.ts';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const CONTENT_DIR = join(ROOT, 'content');
@@ -74,11 +75,25 @@ export const build = async (options: BuildOptions = {}): Promise<BuildResult> =>
   const written: string[] = [];
 
   for (const page of content.pages) {
-    const html = renderPage({ page, posts: content.posts, head: [], assets });
+    const html = renderPage({ page, posts: content.posts, head: headFor(page), assets });
     const out = join(DIST_DIR, page.outFile);
     mkdirSync(dirname(out), { recursive: true });
     writeFileSync(out, html);
     written.push(page.outFile);
+  }
+
+  // Files read by machines rather than people. Written after the pages so their URL
+  // lists come from the same `Page.url` the driver just wrote to disk — the sitemap
+  // cannot advertise a page that was not generated.
+  const generated: Array<[string, string]> = [
+    ['sitemap.xml', renderSitemap(content.pages)],
+    ['feed.xml', renderFeed(content.posts)],
+    ['llms.txt', renderLlmsTxt(content.posts)],
+    ['robots.txt', renderRobotsTxt()],
+  ];
+  for (const [name, body] of generated) {
+    writeFileSync(join(DIST_DIR, name), body);
+    written.push(name);
   }
 
   return { ...content, written };
@@ -89,9 +104,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const includeDrafts = process.argv.includes('--drafts');
   const result = await build({ includeDrafts });
   const drafts = result.posts.filter((p) => p.draft).length;
+  const extras = result.written.length - result.pages.length;
   console.log(
-    `site: ${result.written.length} pages, ${result.posts.length} posts` +
-      (drafts ? ` (${drafts} draft)` : '') +
-      ` → ${result.written.length ? 'dist/' : '(nothing)'}`,
+    `site: ${result.pages.length} pages (${result.posts.length} posts` +
+      (drafts ? `, ${drafts} draft` : '') +
+      `) + ${extras} generated files → dist/`,
   );
 }
