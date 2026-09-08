@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects. First match wins.
+#
+# The generator only ever emits extensionless URLs, so this is purely for links that
+# were typed by hand or predate that choice.
+/*.html /:splat 301

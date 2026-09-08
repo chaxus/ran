@@ -8,15 +8,78 @@ is cheap, before anyone proposes pointing it at the 1,393-page documentation sit
 
 ```
 packages/site/
-├── build/          # the generator: markdown pipeline, page shell, SSG driver
-├── content/        # the site's markdown — index.md, about.md, blog/*.md
-├── client/         # the one client bundle: ranui components + progressive enhancement
+├── build/          # the generator
+│   ├── config.ts       # origin, nav, the three content pillars — one source of truth
+│   ├── frontmatter.ts  # a strict documented subset of YAML, not a YAML parser
+│   ├── markdown.ts     # marked + shiki, anchors, containers, TOC, excerpt
+│   ├── content.ts      # discovery, the page model, validation
+│   ├── page.ts         # the HTML document
+│   ├── seo.ts          # per-page head, sitemap, RSS, llms.txt, robots.txt
+│   ├── build.ts        # the driver
+│   ├── verify.ts       # post-build checks — fails the deploy, not the reader
+│   └── dev.ts          # rebuild-on-change, served the way the host serves
+├── content/        # index.md, about.md, blog/*.md
+├── client/         # the one client bundle
 ├── styles/         # site.css — the whole stylesheet, no preprocessor
-├── public/         # copied verbatim into dist
-└── bin/build.sh    # generate → bundle → verify
+├── public/         # copied verbatim: _headers, _redirects
+└── bin/build.sh    # generate → verify
 ```
 
-Zero third-party dependencies beyond what the monorepo already resolves: `marked` and
-`shiki` are ranui's, `vite`/`tsx`/`typescript` come from the workspace catalog. There is no
-YAML library — frontmatter is a documented strict subset parsed in `build/frontmatter.ts`,
-which fails loudly rather than guessing.
+## Commands
+
+```sh
+pnpm -F site dev      # http://localhost:4173, drafts included, rebuild on change
+pnpm -F site build    # generate into dist/ and verify
+pnpm -F site verify   # re-run the checks against an existing dist/
+```
+
+`build` needs ranui's `dist/` to exist. From a clean checkout, `sh bin/build-site.sh` at
+the repo root builds ranuts → ranui → site in order; that is also the Cloudflare Pages
+build command, with output directory `packages/site/dist`.
+
+## Writing a post
+
+A file in `content/blog/`. Its filename is its URL.
+
+```md
+---
+title: 标题
+date: 2026-09-08
+pillar: from-scratch | internals | practice
+tags: [一个, 两个]
+description: 可选。不写就取正文第一段。
+draft: false
+---
+```
+
+Frontmatter is parsed by `frontmatter.ts`, which supports flat `key: value`, quoted
+strings, `[a, b]` lists and booleans — and **throws on anything else**, naming the file
+and line. That is deliberate: five fields do not justify a YAML dependency, and a real
+YAML parser's willingness to guess is what once turned an em dash typed as a colon into
+a silent build failure on the docs site.
+
+Markdown gets GFM plus `::: note | tip | warning | danger` containers. Code fences must
+use a language listed in `LANGS` in `build/markdown.ts`; an unlisted one fails the build
+rather than quietly rendering as plain text.
+
+## Things that are load-bearing
+
+**Every output file contains only its own page.** ranui's `generateStaticPages()` renders
+a router tree and hides non-matching routes with `hidden`, so their content stays in the
+DOM. Right for an app shell, wrong for a content site — every file would carry every
+other page's prose. `build.ts` emits the matched page alone.
+
+**`verify.ts` runs on every build and fails it.** Dead internal links, a canonical that
+resolves to a different page, a `.html` URL anywhere, a missing description, a built page
+absent from the sitemap. None of these break a page in a browser, which is exactly why
+they need a check. It has already caught one: post bylines linked to `/blog/#practice`
+while the archive was grouped by year, so every one of those anchors was dead.
+
+**The site works with JavaScript disabled.** Content, navigation, styling and theming all
+render without the bundle; `client/main.ts` adds the theme switch and code-copy buttons on
+top. Cross-document view transitions are a CSS at-rule in `site.css`, not the
+`enableMpaViewTransitions()` helper — the helper injects that same rule from script, which
+would mean no transition on the first navigation.
+
+**No web font.** The site is Chinese-primary: a CJK face is megabytes and a third-party
+Latin face is a slow or blocked request for much of the audience.

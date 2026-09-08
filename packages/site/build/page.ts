@@ -95,20 +95,27 @@ const pillarsHtml = (): string =>
   ).join('') +
   `</ul>`;
 
-/** Posts grouped by year, newest year first — the archive's only structure. */
+/**
+ * The archive, grouped by the three declared pillars rather than by year.
+ *
+ * Grouping by year is the reflex, but the pillars are what this site says it is about,
+ * and they are what a post's own byline links to — `/blog/#practice` has to land
+ * somewhere. A year heading answers a question nobody asked of a thirty-post blog.
+ * Posts stay newest-first inside each pillar, and each carries its date.
+ */
 const archiveHtml = (posts: Post[]): string => {
   if (!posts.length) return `<p class="empty">还没有文章。</p>`;
-  const byYear = new Map<string, Post[]>();
-  for (const post of posts) {
-    const year = post.date.slice(0, 4);
-    byYear.set(year, [...(byYear.get(year) ?? []), post]);
-  }
-  return [...byYear.entries()]
-    .map(
-      ([year, group]) =>
-        `<section class="archive-year"><h2 class="archive-year__label">${year}</h2>${postListHtml(group)}</section>`,
-    )
-    .join('');
+  return PILLARS.map((pillar) => {
+    const group = posts.filter((p) => p.pillar === pillar.slug);
+    if (!group.length) return '';
+    return (
+      `<section class="archive-group" id="${escapeHtml(pillar.slug)}">` +
+      `<h2 class="archive-group__name">${escapeHtml(pillar.name)}</h2>` +
+      `<p class="archive-group__blurb">${escapeHtml(pillar.blurb)}</p>` +
+      postListHtml(group) +
+      `</section>`
+    );
+  }).join('');
 };
 
 const tocHtml = (page: Page): string => {
