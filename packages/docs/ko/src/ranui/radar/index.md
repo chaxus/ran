@@ -14,9 +14,9 @@ description: '한 데이터셋의 여러 지표를 2D 캔버스 위에서 견주
 
 데이터는 `abilitys` 어트리뷰트에 **JSON 문자열**(객체 배열)로 넘깁니다. HTML 어트리뷰트는 문자열만 담을 수 있으므로 값은 올바른 JSON이어야 하고, 내부에서 `JSON.parse`로 해석됩니다. `<r-radar>` 호스트는 고유 크기가 없으니 너비와 높이를 명시적으로 주세요.
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"체력","scoreRate":"10"},{"abilityName":"공격력","scoreRate":"90"},{"abilityName":"방어력","scoreRate":"20"},{"abilityName":"원소 마스터리","scoreRate":"50"},{"abilityName":"치명타 확률","scoreRate":"80"},{"abilityName":"치명타 피해","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -67,9 +67,9 @@ chart.append(radar);
 
 축별 레이블 스타일(`backgroundColor`, `fontSize`, `fontColor`)은 항목마다 따로 지정할 수 있습니다.
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"체력","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"공격력","scoreRate":"90"},{"abilityName":"방어력","scoreRate":"20"},{"abilityName":"원소 마스터리","scoreRate":"50"},{"abilityName":"치명타 확률","scoreRate":"80"},{"abilityName":"치명타 피해","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -80,9 +80,9 @@ chart.append(radar);
 
 ### 격자 다각형 색 `colorPolygon`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorPolygon="green" abilitys='[{"abilityName":"체력","scoreRate":"10"},{"abilityName":"공격력","scoreRate":"90"},{"abilityName":"방어력","scoreRate":"20"},{"abilityName":"원소 마스터리","scoreRate":"50"},{"abilityName":"치명타 확률","scoreRate":"80"},{"abilityName":"치명타 피해","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -94,9 +94,9 @@ chart.append(radar);
 
 ### 축선 색 `colorLine`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorLine="blue" abilitys='[{"abilityName":"체력","scoreRate":"10"},{"abilityName":"공격력","scoreRate":"90"},{"abilityName":"방어력","scoreRate":"20"},{"abilityName":"원소 마스터리","scoreRate":"50"},{"abilityName":"치명타 확률","scoreRate":"80"},{"abilityName":"치명타 피해","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -108,9 +108,9 @@ chart.append(radar);
 
 ### 영역 채움 색 `fillColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" fillColor="red" abilitys='[{"abilityName":"체력","scoreRate":"10"},{"abilityName":"공격력","scoreRate":"90"},{"abilityName":"방어력","scoreRate":"20"},{"abilityName":"원소 마스터리","scoreRate":"50"},{"abilityName":"치명타 확률","scoreRate":"80"},{"abilityName":"치명타 피해","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -122,9 +122,9 @@ chart.append(radar);
 
 ### 영역 윤곽선 색 `strokeColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" strokeColor="blue" abilitys='[{"abilityName":"체력","scoreRate":"10"},{"abilityName":"공격력","scoreRate":"90"},{"abilityName":"방어력","scoreRate":"20"},{"abilityName":"원소 마스터리","scoreRate":"50"},{"abilityName":"치명타 확률","scoreRate":"80"},{"abilityName":"치명타 피해","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar

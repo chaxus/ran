@@ -15,9 +15,9 @@ root خودش می‌کشد، پس از استایل‌های صفحه جدا م
 
 ## شروع سریع
 
-<Demo>
+<ran-demo>
   <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]; C --> D[Respond]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]</r-mermaid>
@@ -41,9 +41,9 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // ستِرِ خصیصه، خودش
 هر کنترل با یک ویژگی بولی **به‌خواست خودتان** روشن می‌شود؛ `<r-mermaid>` خالی یک نمودار ایستای تمیز
 است. نوار ابزار با نگه‌داشتن نشانگر (بالا سمت راست) پیدا می‌شود.
 
-<Demo>
+<ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid copy download fullscreen>graph TD; A --> B; B --> C</r-mermaid>

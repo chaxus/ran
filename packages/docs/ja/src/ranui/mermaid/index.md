@@ -14,9 +14,9 @@ description: 'Mermaid の図（フローチャート、シーケンス、クラ�
 
 ## クイックスタート
 
-<Demo>
+<ran-demo>
   <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]; C --> D[Respond]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]</r-mermaid>
@@ -40,9 +40,9 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // プロパティのセッター�
 どのコントロールも真偽値の属性による**オプトイン**です。属性のない `<r-mermaid>` はすっきりした静的な
 図になります。ツールバーはホバー時に右上へ現れます。
 
-<Demo>
+<ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid copy download fullscreen>graph TD; A --> B; B --> C</r-mermaid>

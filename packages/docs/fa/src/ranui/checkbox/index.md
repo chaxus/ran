@@ -12,9 +12,9 @@ description: 'کامپوننت Checkbox در ranui (<r-checkbox>) یک انتخ�
 
 ### استفادهٔ پایه
 
-<Demo>
+<ran-demo>
   <r-checkbox>مرا به خاطر بسپار</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox>مرا به خاطر بسپار</r-checkbox>
@@ -38,10 +38,10 @@ description: 'کامپوننت Checkbox در ranui (<r-checkbox>) یک انتخ�
 
 ### وضعیت تیک `checked`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true">تیک‌خورده</r-checkbox>
   <r-checkbox checked="false">بدون تیک</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true">تیک‌خورده</r-checkbox> <r-checkbox checked="false">بدون تیک</r-checkbox>
@@ -49,10 +49,10 @@ description: 'کامپوننت Checkbox در ranui (<r-checkbox>) یک انتخ�
 
 ### مقدار `value`
 
-<Demo>
+<ran-demo>
   <r-checkbox value="true">مقدار true</r-checkbox>
   <r-checkbox value="false">مقدار false</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox value="true">مقدار true</r-checkbox> <r-checkbox value="false">مقدار false</r-checkbox>
@@ -60,10 +60,10 @@ description: 'کامپوننت Checkbox در ranui (<r-checkbox>) یک انتخ�
 
 ### حالت غیرفعال `disabled`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" disabled>تیک‌خورده</r-checkbox>
   <r-checkbox checked="false" disabled>بدون تیک</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" disabled>تیک‌خورده</r-checkbox> <r-checkbox checked="false" disabled>بدون تیک</r-checkbox>
@@ -73,9 +73,9 @@ description: 'کامپوننت Checkbox در ranui (<r-checkbox>) یک انتخ�
 
 ویژگی `sheet` کد CSS را به shadow DOM تزریق می‌کند تا بتوانید بخش‌های درونی را با نام کلاسشان هدف بگیرید.
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">برچسب پوسته‌دار</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">برچسب پوسته‌دار</r-checkbox>
@@ -95,9 +95,9 @@ detail: {
 
 چک‌باکس غیرفعال رویداد `change` نمی‌فرستد.
 
-<Demo>
+<ran-demo>
   <r-checkbox onchange="message.info(this)">مرا جابه‌جا کن</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox onchange="handleChange(event)">مرا جابه‌جا کن</r-checkbox>

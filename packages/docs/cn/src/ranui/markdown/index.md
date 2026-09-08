@@ -43,9 +43,9 @@ Inline \\(e^{i\\pi} + 1 = 0\\) 与文字同行。`;
 
 ## 快速开始
 
-<Demo>
+<ran-demo>
   <r-markdown copy highlight :content.prop="quick"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy highlight content="# 你好 ..."></r-markdown>
@@ -72,9 +72,9 @@ container.append(el);
 
 `mode="streaming"`（默认）会先用 [remend](https://www.npmjs.com/package/remend)（从 Streamdown 抽出的"未完成 Markdown 补全器"）处理文本：半截的 `**粗体` 渲染成粗体而不是裸星号，`[文字](https://exa` 在 URL 闭合前显示为纯文本，`- ` 不会把上一段变成标题……。已完成的文档可设 `mode="static"` 跳过这一步、整体一次渲染。
 
-<Demo>
+<ran-demo>
   <r-markdown caret :content.prop="partial"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown caret content="半截的 *斜体*、`行内代码`，以及**还在到达中的粗体"></r-markdown>
@@ -87,9 +87,9 @@ container.append(el);
 
 每个代码块都有语言标签头部，可选加复制 / 下载按钮。加 `highlight` 用 [shiki](https://shiki.style) 高亮（懒加载，语言按需加载；默认 `github-light` / `github-dark`，跟随页面主题）。
 
-<Demo>
+<ran-demo>
   <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy download line-numbers highlight></r-markdown>
@@ -99,9 +99,9 @@ container.append(el);
 
 ## Mermaid 与公式
 
-<Demo>
+<ran-demo>
   <r-markdown :content.prop="rich"></r-markdown>
-</Demo>
+</ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>`（带全屏；`copy` / `download` 会透传）。
 - `$$…$$`、`\[…\]` 与 ` ```math ` → 块级 `<r-math>`；`\(…\)` → 行内。单美元 `$…$` 需 **显式开启** `inline-math`，因为它与货币符号歧义。

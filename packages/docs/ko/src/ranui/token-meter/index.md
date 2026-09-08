@@ -14,11 +14,11 @@ description: 'ranui 의 TokenMeter(<r-token-meter>) 는 공급자가 다음 요�
 
 ### 기본 사용법
 
-<Demo column>
+<ran-demo column>
   <r-token-meter limit="65536" used="12800"></r-token-meter>
   <r-token-meter limit="65536" used="54000"></r-token-meter>
   <r-token-meter limit="65536" used="69000"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter limit="65536" used="12800"></r-token-meter>
@@ -54,15 +54,15 @@ r-token-meter[level='warn'] ~ .composer-hint {
 
 `limit`이 지정되지 않았거나 0 이면 막대가 사라지고 숫자만 남습니다. 창 크기를 아직 모를 때 유용합니다.
 
-<Demo>
+<ran-demo>
   <r-token-meter used="41200" spent="128431"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ### 레이블 바꾸기
 
-<Demo>
+<ran-demo>
   <r-token-meter label="컨텍스트" limit="65536" used="41200"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter label="컨텍스트" limit="65536" used="41200"></r-token-meter>

@@ -12,13 +12,13 @@ Un contenedor de contenido estructurado con zonas de cabecera, cuerpo y pie para
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-card heading="Título de la tarjeta" description="Subtítulo opcional" style="max-width: 360px;">
     <span slot="extra" style="font-size: 12px;">tag</span>
     <p style="margin: 0;">El contenido del cuerpo va en el slot por defecto.</p>
     <a slot="footer" href="#">Ver notas</a>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Título de la tarjeta" description="Subtítulo opcional">
@@ -43,11 +43,11 @@ Un contenedor de contenido estructurado con zonas de cabecera, cuerpo y pie para
 
 El encabezado de la tarjeta, mostrado arriba de la cabecera. Se oculta si está vacío.
 
-<Demo>
+<ran-demo>
   <r-card heading="Solo un título" style="max-width: 360px;">
     <p style="margin: 0;">Contenido del cuerpo.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Solo un título">
@@ -59,11 +59,11 @@ El encabezado de la tarjeta, mostrado arriba de la cabecera. Se oculta si está 
 
 Un subtítulo dibujado bajo el título. Se oculta si está vacío. Cuando no defines ni `title` ni `description`, toda la cabecera queda oculta.
 
-<Demo>
+<ran-demo>
   <r-card heading="Título" description="Un breve subtítulo de apoyo" style="max-width: 360px;">
     <p style="margin: 0;">Contenido del cuerpo.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Título" description="Un breve subtítulo de apoyo">
@@ -75,11 +75,11 @@ Un subtítulo dibujado bajo el título. Se oculta si está vacío. Cuando no def
 
 Las tarjetas no reaccionan al ratón por defecto. Añade el atributo `hoverable` a las tarjetas que de verdad se pueden pulsar: al pasar por encima, el borde se oscurece un paso en la escala de grises (`--ran-color-border` → `--ran-color-border-hover`) y la superficie toma la sombra elevada discreta (`--ran-shadow-elevated`).
 
-<Demo>
+<ran-demo>
   <r-card hoverable heading="Tarjeta con hover" description="Pasa el ratón" style="max-width: 360px; cursor: pointer;">
     <p style="margin: 0;">El borde se oscurece y la tarjeta se eleva ligeramente.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card hoverable heading="Tarjeta con hover" description="Pasa el ratón">

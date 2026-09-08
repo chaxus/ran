@@ -14,9 +14,9 @@ description: '一个 system/light/dark 三态分段控件，接入 ranui 主题 
 
 ### 基础用法
 
-<Demo>
+<ran-demo>
   <r-theme-switch label="主题" label-system="跟随系统" label-light="浅色" label-dark="深色"></r-theme-switch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-theme-switch></r-theme-switch>

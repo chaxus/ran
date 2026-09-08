@@ -14,14 +14,14 @@ Componente de popover que revela uma camada flutuante em forma de balão quando 
 
 O gatilho fica no slot padrão; o conteúdo flutuante é envolvido por um elemento `<r-content>` aninhado.
 
-<Demo>
+<ran-demo>
   <r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>este é o conteúdo</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover style="display: inline-block;">
@@ -45,7 +45,7 @@ O gatilho fica no slot padrão; o conteúdo flutuante é envolvido por um elemen
 
 ### Modo de abertura `trigger`
 
-<Demo>
+<ran-demo>
   <r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
@@ -58,7 +58,7 @@ O gatilho fica no slot padrão; o conteúdo flutuante é envolvido por um elemen
       <div>click</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" style="display: inline-block;">
@@ -78,7 +78,7 @@ O gatilho fica no slot padrão; o conteúdo flutuante é envolvido por um elemen
 
 ### Posição `placement`
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
@@ -103,7 +103,7 @@ O gatilho fica no slot padrão; o conteúdo flutuante é envolvido por um elemen
       <div>right</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="top" style="display: inline-block;">
@@ -139,7 +139,7 @@ O gatilho fica no slot padrão; o conteúdo flutuante é envolvido por um elemen
 
 Só o lado alinha a borda inicial do painel com a do gatilho. Acrescente `-center` ou `-end` quando ele precisar ficar centralizado no gatilho ou rente à borda final dele — é o que um menu ancorado à ponta direita de uma barra de topo quer, para abrir para dentro em vez de sair da tela e ser empurrado de volta pelo deslocamento. O sufixo sobrevive a uma inversão automática: `bottom-end` vira `top-end`, não `top`.
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
@@ -158,7 +158,7 @@ Só o lado alinha a borda inicial do painel com a do gatilho. Acrescente `-cente
       <div style="width: 200px;">bottom-end</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">

@@ -10,9 +10,9 @@ Componente de aviso global para resultados de operações, chamado de forma impe
 
 ## Início rápido
 
-<Demo>
+<ran-demo>
   <r-button type="primary" onclick="message.info('Isto é um aviso')">Mostrar mensagem</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" onclick="message.info('Isto é um aviso')">Mostrar mensagem</r-button>
@@ -80,13 +80,13 @@ Cada aviso é um custom element `<r-message>`. A API global define esses atribut
 
 ## Tipos de mensagem `type`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info('Isto é um aviso')">Aviso informativo</r-button>
   <r-button onclick="message.success('Isto é um aviso')">Aviso de sucesso</r-button>
   <r-button onclick="message.warning('Isto é um aviso')">Aviso de advertência</r-button>
   <r-button onclick="message.error('Isto é um aviso')">Aviso de erro</r-button>
   <r-button onclick="message.toast('Isto é um aviso')">Aviso toast</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info('Isto é um aviso')">Aviso informativo</r-button>
@@ -98,10 +98,10 @@ Cada aviso é um custom element `<r-message>`. A API global define esses atribut
 
 ## Duração própria `duration`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: 'Fica 6 s', duration: 6000 })">Aviso de 6 segundos</r-button>
   <r-button onclick="message.info({ content: 'Fica 1 s', duration: 1000 })">Aviso de 1 segundo</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info({ content: 'Fica 6 s', duration: 6000 })">Aviso de 6 segundos</r-button>
@@ -112,9 +112,9 @@ Cada aviso é um custom element `<r-message>`. A API global define esses atribut
 
 O callback `close` roda depois que o aviso é removido do DOM.
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.success({ content: 'Salvo', close: () => message.info('Aviso fechado') })">Mensagem encadeada</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.success({ content: 'Salvo', close: () => message.info('Aviso fechado') })"
@@ -134,9 +134,9 @@ message.success({
 
 ## Posicionamento próprio `top` / `zIndex` / `getContainer`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: 'Empurrado para baixo', top: 120 })">Deslocar do topo</r-button>
-</Demo>
+</ran-demo>
 
 ```js
 message.info({

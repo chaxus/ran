@@ -12,9 +12,9 @@ description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML，
 
 ### 基础用法
 
-<Demo>
+<ran-demo>
   <r-math latex="\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1 \quad (a > b > 0)"></r-math>
-</Demo>
+</ran-demo>
 
 ```html
 <r-math latex="\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1 \quad (a > b > 0)"></r-math>
@@ -39,9 +39,9 @@ description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML，
 
 ### 公式 `latex`
 
-<Demo>
+<ran-demo>
   <r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
-</Demo>
+</ran-demo>
 
 ```html
 <r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
@@ -49,9 +49,9 @@ description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML，
 
 ### 外部样式 `sheet`
 
-<Demo>
+<ran-demo>
   <r-math latex="e^{i\pi} + 1 = 0" sheet=".ran-math { justify-content: flex-start; }"></r-math>
-</Demo>
+</ran-demo>
 
 ```html
 <r-math latex="e^{i\pi} + 1 = 0" sheet=".ran-math { justify-content: flex-start; }"></r-math>

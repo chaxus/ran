@@ -26,7 +26,7 @@ Arrastra el vidrio por el escenario, ajusta cada atributo y copia el marcado exa
 
 `<r-glass>` compone: anida uno dentro de otro para materiales por capas (una barra de vidrio sobre un panel de vidrio, por ejemplo). Cada capa refracta lo que tiene detrás.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
     <r-glass radius="26" style="width: 340px;">
       <div style="padding: 26px;">
@@ -37,7 +37,7 @@ Arrastra el vidrio por el escenario, ajusta cada atributo y copia el marcado exa
       </div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass radius="26">
@@ -70,12 +70,12 @@ Arrastra el vidrio por el escenario, ajusta cada atributo y copia el marcado exa
 
 `displace` gobierna la escala del `feDisplacementMap` SVG: con cuánta fuerza se curva la luz al atravesar la superficie. Ponlo a `0` para un cristal esmerilado sin más.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
     <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
     <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass displace="0">…esmerilado plano…</r-glass> <r-glass displace="60">…líquido…</r-glass>
@@ -85,13 +85,13 @@ Arrastra el vidrio por el escenario, ajusta cada atributo y copia el marcado exa
 
 `sheen` añade un reflejo especular en movimiento; `interactive` añade una elevación al pasar el cursor y una pulsación con rebote (usando el token compartido `--ran-motion-ease-spring`).
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass sheen interactive displace="36" style="width: 260px;">
       <div style="padding: 20px; color: #fff; font-weight: 600;">Pasa el cursor y pulsa</div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass sheen interactive displace="36">
@@ -105,12 +105,12 @@ Arrastra el vidrio por el escenario, ajusta cada atributo y copia el marcado exa
 
 Se dibuja primero con WebGL (síncrono, funciona en prácticamente todos los navegadores, así que el borde nunca retrasa su propio primer pintado) y pasa de forma transparente a WebGPU en segundo plano si el navegador lo tiene (mismo efecto, salida idéntica al píxel). Cae en el degradado especular de CSS cuando no hay ninguna de las dos API de GPU (navegadores muy antiguos, GPU deshabilitada, SSR); no hay ningún estado roto o en blanco que haya que contemplar en el diseño.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">sin rim</div></r-glass>
     <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass>…especular de CSS a secas…</r-glass>

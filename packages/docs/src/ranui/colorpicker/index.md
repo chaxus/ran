@@ -12,10 +12,10 @@ A compact color swatch that opens a popover panel with a saturation/lightness pa
 
 ### Basic Usage
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff"></r-colorpicker>
   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff"></r-colorpicker> <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
@@ -37,11 +37,11 @@ Click the swatch (or focus it and press Enter/Space) to open the panel. The hue 
 
 The current color, as a CSS color string. Accepts HEX (`#1677FF`, `#fff`), `rgb(...)`, and `rgba(...)` on the way in. On the way out, the canonical value read back is a 6-digit HEX string when the color is fully opaque, or an `rgba(...)` string when alpha is below 1.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#00c853"></r-colorpicker>
   <r-colorpicker value="rgb(22, 119, 255)"></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#00c853"></r-colorpicker>
@@ -60,10 +60,10 @@ toolbar.append(picker);
 
 Add the `disabled` attribute to make the picker inert: the swatch no longer opens the panel (via mouse or keyboard), it is taken out of the tab order, and the host is marked `aria-disabled="true"`. Removing the attribute restores normal interaction.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff" disabled></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)" disabled></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff" disabled></r-colorpicker>

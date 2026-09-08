@@ -12,11 +12,11 @@ A low-level floating-panel primitive: a rounded, elevated surface with an option
 
 ### Basic Usage
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">Floating panel content</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -38,7 +38,7 @@ A low-level floating-panel primitive: a rounded, elevated surface with an option
 
 Renders a pointing arrow on one side of the panel. Omit the attribute for no arrow.
 
-<Demo column>
+<ran-demo column>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="top"</div>
   </r-dropdown>
@@ -51,7 +51,7 @@ Renders a pointing arrow on one side of the panel. Omit the attribute for no arr
   <r-dropdown arrow="right" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="right"</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -76,11 +76,11 @@ The class lives exactly as long as the attribute does: whoever sets it decides w
 
 `getAnimationTarget()` returns the element the animation actually runs on. It is inside the shadow root, so `getAnimations()` on the host reports nothing and `{ subtree: true }` does not cross the boundary. Code waiting for the panel's transition to finish should call `getAnimationTarget()` rather than reach through the shadow tree for a class name.
 
-<Demo>
+<ran-demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">Animates in on connect</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown transit="ran-dropdown-down-in">
@@ -126,11 +126,11 @@ r-dropdown::part(dropdown) {
 
 Every visual property is overridable via `--ran-dropdown-*` tokens, for example `--ran-dropdown-background`, `--ran-dropdown-border-radius`, `--ran-dropdown-box-shadow`, `--ran-dropdown-padding`, `--ran-dropdown-arrow-width`, and `--ran-dropdown-host-z-index`. The arrow is an inline SVG scaled by its own `viewBox`, so `--ran-dropdown-arrow-width`/`-height` resize the actual triangle, not just an empty box around it:
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
     <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```css
 r-dropdown {

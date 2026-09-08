@@ -12,11 +12,11 @@ description: 'r-popover と r-select が土台にしている、位置決めと�
 
 ### 基本的な使い方
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">浮遊パネルの中身</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -38,7 +38,7 @@ description: 'r-popover と r-select が土台にしている、位置決めと�
 
 パネルのどれか一辺に、指し示す矢印を描きます。属性を省けば矢印は出ません。
 
-<Demo column>
+<ran-demo column>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="top"</div>
   </r-dropdown>
@@ -51,7 +51,7 @@ description: 'r-popover と r-select が土台にしている、位置決めと�
   <r-dropdown arrow="right" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="right"</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -76,11 +76,11 @@ description: 'r-popover と r-select が土台にしている、位置決めと�
 
 `getAnimationTarget()` は、アニメーションが実際に走っている要素を返します。それは shadow root の内側にあるので、ホストに対する `getAnimations()` は何も報告せず、`{ subtree: true }` も境界を越えません。パネルのトランジション終了を待つコードは、shadow ツリーへ手を伸ばしてクラス名を探すのではなく `getAnimationTarget()` を呼んでください。
 
-<Demo>
+<ran-demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">接続時にアニメーションで現れます</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown transit="ran-dropdown-down-in">
@@ -126,11 +126,11 @@ r-dropdown::part(dropdown) {
 
 見た目に関わるプロパティはすべて `--ran-dropdown-*` のトークンで上書きできます。たとえば `--ran-dropdown-background`、`--ran-dropdown-border-radius`、`--ran-dropdown-box-shadow`、`--ran-dropdown-padding`、`--ran-dropdown-arrow-width`、`--ran-dropdown-host-z-index` です。矢印は自身の `viewBox` で拡縮されるインライン SVG なので、`--ran-dropdown-arrow-width` / `-height` は、周りの空の箱ではなく三角形そのものの大きさを変えます。
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
     <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```css
 r-dropdown {

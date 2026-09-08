@@ -12,11 +12,11 @@ Der einzeilige Rahmen `[Anfang] Titel · Zusammenfassung`, der sich aufklappt un
 
 ### Grundlegende Verwendung
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Datei lesen" summary="packages/ranui/index.ts" expandable>
     <div style="padding:8px 0">Der Rumpf erscheint, wenn die Zeile offen ist.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Datei lesen" summary="packages/ranui/index.ts" expandable>
@@ -30,10 +30,10 @@ Das **heading ist die linke Hälfte mit fester Breite**, die **summary die recht
 
 `busy` zieht einen Schimmer über die Zeile. Ein Ladekreisel zeigt nur an, dass irgendwo etwas passiert; ein Streifen über der Zeile sagt, welche Zeile noch arbeitet.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Tests laufen lassen" summary="2351 bestanden" busy expandable></r-disclosure-row>
   <r-disclosure-row heading="Tests laufen lassen" summary="2351 bestanden" expandable></r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ### Mit einem vorangestellten Indikator
 
@@ -41,12 +41,12 @@ Der Slot `leading` und das Winkelzeichen teilen sich eine Rasterzelle, das Tausc
 
 Steht in `leading` nichts, bleibt das Winkelzeichen sichtbar, denn es ist das einzige Merkmal, das der lesenden Person sagt, dass die Zeile aufgeht. Mit vorangestelltem Inhalt erscheint das Winkelzeichen beim Überfahren, bei Fokus oder solange die Zeile offen ist — die übrige Zeit steht dort der Zustandsindikator.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Bauen" summary="nach 4,2 s fehlgeschlagen" tone="error" expandable>
     <r-state-dot slot="leading" state="error"></r-state-dot>
     <div style="padding:8px 0">Das Bündel überschreitet die Größengrenze.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Bauen" summary="nach 4,2 s fehlgeschlagen" tone="error" expandable>

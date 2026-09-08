@@ -10,9 +10,9 @@ Progress bar for showing task completion, with an optional draggable handle.
 
 ## Quick Start
 
-<Demo>
+<ran-demo>
   <r-progress percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="40%"></r-progress>
@@ -36,11 +36,11 @@ Progress bar for showing task completion, with an optional draggable handle.
 
 Sets the current progress. Accepts a number or a percentage string, and cannot exceed `total`. When `total` is not set it defaults to `100` (i.e. `percent` is read as a percentage of 100).
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30%"></r-progress>
   <r-progress percent="70%"></r-progress>
   <r-progress percent="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30%"></r-progress>
@@ -52,11 +52,11 @@ Sets the current progress. Accepts a number or a percentage string, and cannot e
 
 Sets the denominator for `percent`. Both numbers and percentages are allowed, so `percent="30" total="1000"` fills the bar 3%.
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30" total="1000"></r-progress>
   <r-progress percent="70" total="100"></r-progress>
   <r-progress percent="10%" total="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -69,10 +69,10 @@ Sets the denominator for `percent`. Both numbers and percentages are allowed, so
 - `primary`: a static progress bar. This is the default when `type` is not set.
 - `drag`: a clickable and draggable progress bar. Clicking the track or dragging the handle updates `percent` and fires a `change` event. Dragging the handle requires `dot="true"`.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%"></r-progress>
   <r-progress type="primary" percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
@@ -82,10 +82,10 @@ Sets the denominator for `percent`. Both numbers and percentages are allowed, so
 
 Toggles the drag handle. The handle is only rendered when `dot="true"` **and** `type="drag"`; on a static `primary` bar it is intentionally omitted, so `dot` has no visible effect there.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%" dot="true"></r-progress>
   <r-progress type="drag" percent="30%" dot="false"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%" dot="true"></r-progress>

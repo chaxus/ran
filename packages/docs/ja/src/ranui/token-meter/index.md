@@ -15,11 +15,11 @@ description: 'ranui の TokenMeter（<r-token-meter>）は、プロバイダー�
 
 ### 基本的な使い方
 
-<Demo column>
+<ran-demo column>
   <r-token-meter limit="65536" used="12800"></r-token-meter>
   <r-token-meter limit="65536" used="54000"></r-token-meter>
   <r-token-meter limit="65536" used="69000"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter limit="65536" used="12800"></r-token-meter>
@@ -57,15 +57,15 @@ r-token-meter[level='warn'] ~ .composer-hint {
 `limit` が未設定またはゼロならバーは消え、数だけが残ります。ウィンドウの大きさが分からない
 あいだに便利です。
 
-<Demo>
+<ran-demo>
   <r-token-meter used="41200" spent="128431"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ### ラベルの付け替え
 
-<Demo>
+<ran-demo>
   <r-token-meter label="コンテキスト" limit="65536" used="41200"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter label="コンテキスト" limit="65536" used="41200"></r-token-meter>

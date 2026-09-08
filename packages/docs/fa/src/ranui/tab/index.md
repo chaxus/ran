@@ -12,13 +12,13 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
 
 ### کاربرد پایه
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -66,7 +66,7 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
 
 `flat` (پیش‌فرض) یک زیرخط لغزان به‌عنوان نشانگر نشان می‌دهد؛ `line` سربرگ‌های کادردار رسم می‌کند.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="flat">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -77,7 +77,7 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="flat">
@@ -97,7 +97,7 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
 
 ردیف سربرگ‌ها را هم‌تراز می‌کند. پیش‌فرض `start` است.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="line" align="start">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -113,7 +113,7 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="line" align="start"> ... </r-tabs>
@@ -128,13 +128,13 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
 
 بدون کلیدهای صریح، `active` با اندیسِ از صفر شروع‌شونده تطبیق می‌یابد:
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="1">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="1">
@@ -146,14 +146,14 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
 
 با مقدارهای صریح `r-key` (پنل‌های بدون کلید به اندیس خود برمی‌گردند):
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a">11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -170,14 +170,14 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
 
 یک `<r-tab>` غیرفعال انتخاب نمی‌شود و هنگام برگزیدن تب فعالِ پیش‌فرض هم از قلم می‌افتد.
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -192,13 +192,13 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
 
 `<r-tab>` یک اتریبیوت `icon` (نام یک `r-icon`) می‌گیرد که پیش از برچسب رسم می‌شود؛ `iconSize` اندازه‌اش را تعیین می‌کند.
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1" icon="edit">11111</r-tab>
     <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -212,13 +212,13 @@ description: 'تب‌های ranui (<r-tabs>)، یک وب‌کامپوننت بو
 
 روی `<r-tabs>` مقدار `effect` بگذارید تا موج کلیک روی دکمه‌های سربرگ فعال شود. تا وقتی `effect` روشن است، زیرخط لغزان پنهان می‌ماند.
 
-<Demo column>
+<ran-demo column>
   <r-tabs effect="true">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs effect="true">

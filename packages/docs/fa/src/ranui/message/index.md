@@ -10,9 +10,9 @@ description: 'رابط Message در ranui بازخورد سراسری (info، su
 
 ## شروع سریع
 
-<Demo>
+<ran-demo>
   <r-button type="primary" onclick="message.info('این یک راهنماست')">نمایش پیام</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" onclick="message.info('این یک راهنماست')">نمایش پیام</r-button>
@@ -80,13 +80,13 @@ message.info({
 
 ## گونه‌های پیام `type`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info('این یک راهنماست')">اعلان اطلاعاتی</r-button>
   <r-button onclick="message.success('این یک راهنماست')">اعلان موفقیت</r-button>
   <r-button onclick="message.warning('این یک راهنماست')">اعلان هشدار</r-button>
   <r-button onclick="message.error('این یک راهنماست')">اعلان خطا</r-button>
   <r-button onclick="message.toast('این یک راهنماست')">اعلان toast</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info('این یک راهنماست')">اعلان اطلاعاتی</r-button>
@@ -98,10 +98,10 @@ message.info({
 
 ## مدت دلخواه `duration`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: '۶ ثانیه می‌ماند', duration: 6000 })">اعلان ۶ ثانیه‌ای</r-button>
   <r-button onclick="message.info({ content: '۱ ثانیه می‌ماند', duration: 1000 })">اعلان ۱ ثانیه‌ای</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info({ content: '۶ ثانیه می‌ماند', duration: 6000 })">اعلان ۶ ثانیه‌ای</r-button>
@@ -112,9 +112,9 @@ message.info({
 
 فراخوانی `close` پس از برداشته‌شدن اعلان از DOM اجرا می‌شود.
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.success({ content: 'ذخیره شد', close: () => message.info('اعلان بسته شد') })">پیام زنجیره‌ای</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.success({ content: 'ذخیره شد', close: () => message.info('اعلان بسته شد') })"
@@ -134,9 +134,9 @@ message.success({
 
 ## جای‌گذاری دلخواه `top` / `zIndex` / `getContainer`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: 'به پایین رانده شد', top: 120 })">فاصله از بالا</r-button>
-</Demo>
+</ran-demo>
 
 ```js
 message.info({

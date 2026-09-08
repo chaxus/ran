@@ -14,9 +14,9 @@ description: '在二维画布上对比一份数据集的多项指标的雷达图
 
 数据通过 `abilitys` 属性以 **JSON 字符串**的形式传入（一个对象数组）。由于 HTML 属性只能承载字符串，该值必须是合法的 JSON，内部会用 `JSON.parse` 解析。`<r-radar>` 宿主元素本身没有固有尺寸，需要显式设置宽高。
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -68,9 +68,9 @@ chart.append(radar);
 
 可以为每一项单独设置标签样式（`backgroundColor`、`fontSize`、`fontColor`）：
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"生命","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -82,9 +82,9 @@ chart.append(radar);
 
 ### 多边形网格颜色 `colorPolygon`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display: block;" colorPolygon="green" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -97,9 +97,9 @@ chart.append(radar);
 
 ### 坐标轴线颜色 `colorLine`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display: block;" colorLine="blue" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -110,9 +110,9 @@ chart.append(radar);
 
 ### 区域填充色 `fillColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display: block;" fillColor="red" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -125,9 +125,9 @@ chart.append(radar);
 
 ### 区域描边色 `strokeColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display: block;" strokeColor="blue" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar

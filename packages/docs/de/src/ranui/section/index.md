@@ -12,11 +12,11 @@ Seitenabschnitts-Fläche mit optionaler Überschrift und Unterzeile über einem 
 
 ### Grundlegende Verwendung
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="Abschnittsüberschrift" subtitle="Eine kurze Zeile, die diesen Abschnitt beschreibt.">
     <p style="margin: 0;">Der Inhalt kommt in den Standard-Slot.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="Abschnittsüberschrift" subtitle="Eine kurze Zeile, die diesen Abschnitt beschreibt.">
@@ -40,11 +40,11 @@ Die Kopfzeile (Überschrift + Unterzeile) wird vollständig ausgeblendet, wenn `
 
 Die Abschnittsüberschrift, gerendert als ARIA-Überschrift der Ebene 2 (`role="heading"`, `aria-level="2"`). Leer bedeutet ausgeblendet.
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="Nur eine Überschrift">
     <p style="margin: 0;">Inhalt.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="Nur eine Überschrift">
@@ -56,11 +56,11 @@ Die Abschnittsüberschrift, gerendert als ARIA-Überschrift der Ebene 2 (`role="
 
 Eine begleitende Zeile unter der Überschrift. Leer bedeutet ausgeblendet.
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="Überschrift" subtitle="Begleitender Unterzeilentext.">
     <p style="margin: 0;">Inhalt.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="Überschrift" subtitle="Begleitender Unterzeilentext.">
@@ -72,11 +72,11 @@ Eine begleitende Zeile unter der Überschrift. Leer bedeutet ausgeblendet.
 
 CSS, das in das Shadow DOM des Abschnitts injiziert wird — dieselbe `sheet`-Konvention wie bei jeder anderen ranui-Komponente.
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="Abschnitt mit Theme" subtitle="Überschrift über sheet umgefärbt." sheet=".ran-section-heading { color: #006bff; }">
     <p style="margin: 0;">Inhalt.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="Abschnitt mit Theme" sheet=".ran-section-heading { color: #006bff; }">

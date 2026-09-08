@@ -16,9 +16,9 @@ description: 'Pointer Events API로, 캔버스 덮개를 문질러 지우면 아
 
 `<r-scratch>` 안에 넣은 것이 곧 드러날 콘텐츠입니다(금액이든, 이미지든, `<r-icon>`이든, 여러 엘리먼트든). 다른 ranui 컴포넌트의 콘텐츠 투영과 똑같이, 기본 슬롯을 통해 덮개 아래 층으로 투영됩니다.
 
-<Demo>
+<ran-demo>
   <r-scratch style="display: block; width: 240px; height: 120px;">50코인 당첨!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch style="display: block; width: 240px; height: 120px;">50코인 당첨!</r-scratch>
@@ -35,9 +35,9 @@ description: 'Pointer Events API로, 캔버스 덮개를 문질러 지우면 아
 
 ### 비활성 상태 `disabled`
 
-<Demo>
+<ran-demo>
   <r-scratch disabled style="display: block; width: 240px; height: 120px;">50코인 당첨!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch disabled style="display: block; width: 240px; height: 120px;">50코인 당첨!</r-scratch>
@@ -45,9 +45,9 @@ description: 'Pointer Events API로, 캔버스 덮개를 문질러 지우면 아
 
 ### 외부 스타일 `sheet`
 
-<Demo>
+<ran-demo>
   <r-scratch sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }" style="display: block; width: 240px; height: 120px;">🎁</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch

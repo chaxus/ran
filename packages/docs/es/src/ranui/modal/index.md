@@ -14,7 +14,7 @@ Componente de diálogo para interacciones concentradas sobre la página actual, 
 
 La visibilidad del modal se controla con el atributo `open` (o la propiedad `open`). Empieza cerrado y no dibuja nada hasta que se abre, así que conecta un disparador que lo alterne.
 
-<Demo>
+<ran-demo>
   <r-button onclick="document.getElementById('quickstart-modal').open = true">Abrir modal</r-button>
   <r-modal id="quickstart-modal" heading="Modal básico">
     <p>Este es el contenido del modal.</p>
@@ -22,7 +22,7 @@ La visibilidad del modal se controla con el atributo `open` (o la propiedad `ope
       <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">Aceptar</r-button>
     </div>
   </r-modal>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="modal.open = true">Abrir modal</r-button>

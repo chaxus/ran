@@ -14,11 +14,11 @@ description: 'ranui TokenMeter（<r-token-meter>）显示一段会话占用了�
 
 ### 基础用法
 
-<Demo column>
+<ran-demo column>
   <r-token-meter limit="65536" used="12800"></r-token-meter>
   <r-token-meter limit="65536" used="54000"></r-token-meter>
   <r-token-meter limit="65536" used="69000"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter limit="65536" used="12800"></r-token-meter>
@@ -53,15 +53,15 @@ r-token-meter[level='warn'] ~ .composer-hint {
 
 `limit` 未设置或为 0 时，进度条消失，只保留计数，这在窗口大小未知时很有用。
 
-<Demo>
+<ran-demo>
   <r-token-meter used="41200" spent="128431"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ### 改写标签
 
-<Demo>
+<ran-demo>
   <r-token-meter label="上下文" limit="65536" used="41200"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter label="上下文" limit="65536" used="41200"></r-token-meter>

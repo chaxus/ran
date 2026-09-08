@@ -26,7 +26,7 @@ description: '液态磨砂玻璃表面：backdrop 模糊、SVG 液态光线弯�
 
 `<r-glass>` 可组合：一层套一层做出叠加材质（比如玻璃面板上再放一个玻璃工具条），每一层都会折射它背后的内容。
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
     <r-glass radius="26" style="width: 340px;">
       <div style="padding: 26px;">
@@ -37,7 +37,7 @@ description: '液态磨砂玻璃表面：backdrop 模糊、SVG 液态光线弯�
       </div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass radius="26">
@@ -70,12 +70,12 @@ description: '液态磨砂玻璃表面：backdrop 模糊、SVG 液态光线弯�
 
 `displace` 驱动 SVG `feDisplacementMap` 的 scale，即光线穿过表面时被弯折的强度。设为 `0` 即为纯磨砂平面。
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
     <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
     <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass displace="0">…纯磨砂…</r-glass> <r-glass displace="60">…液态…</r-glass>
@@ -85,13 +85,13 @@ description: '液态磨砂玻璃表面：backdrop 模糊、SVG 液态光线弯�
 
 `sheen` 会添加一道流动的镜面高光；`interactive` 会添加 hover 抬升与富有弹性的按下反馈（使用共享的 `--ran-motion-ease-spring` 令牌）。
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass sheen interactive displace="36" style="width: 260px;">
       <div style="padding: 20px; color: #fff; font-weight: 600;">悬停或按下试试</div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass sheen interactive displace="36">
@@ -105,12 +105,12 @@ description: '液态磨砂玻璃表面：backdrop 模糊、SVG 液态光线弯�
 
 优先用 WebGL 渲染：同步创建，几乎所有浏览器都支持，所以 rim 自己的首次出现不会被拖慢；如果浏览器同时支持 WebGPU，会在后台悄悄升级过去（效果完全一样，像素级一致）。两种 GPU API 都不可用时（很老的浏览器、被禁用、SSR），会静默降级为普通的 CSS 镜面渐变，不存在"坏掉"的中间状态。
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">无 rim</div></r-glass>
     <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass>…普通 CSS 镜面高光…</r-glass> <r-glass rim>…GPU 镜面边缘 + 色散描边（WebGL，可升级到 WebGPU）…</r-glass>

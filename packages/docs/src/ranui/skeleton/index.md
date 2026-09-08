@@ -14,9 +14,9 @@ Placeholder graphic that fills the space of content while it loads, using a shim
 
 The skeleton stretches to fill the width of its parent element and is `16px` tall by default.
 
-<Demo>
+<ran-demo>
   <r-skeleton></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton></r-skeleton>
@@ -26,7 +26,7 @@ The skeleton stretches to fill the width of its parent element and is `16px` tal
 
 Because the skeleton is `width: 100%`, control its length by sizing the container it lives in.
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100px">
     <r-skeleton></r-skeleton>
   </div>
@@ -36,7 +36,7 @@ Because the skeleton is `width: 100%`, control its length by sizing the containe
   <div style="width: 100%">
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="width: 100px">
@@ -54,13 +54,13 @@ Because the skeleton is `width: 100%`, control its length by sizing the containe
 
 Compose several skeletons to mimic a block of text or a paragraph.
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100%; display: flex; flex-direction: column; gap: 12px">
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="display: flex; flex-direction: column; gap: 12px">
@@ -82,9 +82,9 @@ Compose several skeletons to mimic a block of text or a paragraph.
 
 Pass a CSS string through `sheet` to override the skeleton's look inside its shadow DOM.
 
-<Demo>
+<ran-demo>
   <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
@@ -102,9 +102,9 @@ The skeleton also exposes CSS custom properties for theming without `sheet`:
 | `--ran-skeleton-shimmer-background`         | `linear-gradient(90deg, …)`    | The moving highlight gradient |
 | `--ran-skeleton-shimmer-animation-duration` | `1.4s`                         | Duration of one shimmer sweep |
 
-<Demo>
+<ran-demo>
   <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>

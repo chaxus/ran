@@ -12,9 +12,9 @@ Componente de entrada para escribir contenido con el teclado: el control de form
 
 ### Uso básico
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="Escribe algo"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="Escribe algo"></r-input>
@@ -45,9 +45,9 @@ Componente de entrada para escribir contenido con el teclado: el control de form
 
 Un rótulo fijo dibujado encima del campo: siempre visible, nunca se solapa con el contenido contiguo y no descoloca la maquetación al enfocar (las etiquetas alineadas arriba, además, se completan más rápido que las en línea o flotantes; véase [la investigación con seguimiento ocular de Luke Wroblewski](https://www.lukew.com/ff/entry.asp?504=)).
 
-<Demo column>
+<ran-demo column>
   <r-input label="Nombre de usuario"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="Nombre de usuario"></r-input>
@@ -57,9 +57,9 @@ Un rótulo fijo dibujado encima del campo: siempre visible, nunca se solapa con 
 
 Se comporta igual que el atributo `placeholder` nativo.
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="Escribe tu nombre de usuario"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="Escribe tu nombre de usuario"></r-input>
@@ -67,9 +67,9 @@ Se comporta igual que el atributo `placeholder` nativo.
 
 ### Valor `value`
 
-<Demo column>
+<ran-demo column>
   <r-input value="1234"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input value="1234"></r-input>
@@ -77,9 +77,9 @@ Se comporta igual que el atributo `placeholder` nativo.
 
 ### Estado deshabilitado `disabled`
 
-<Demo column>
+<ran-demo column>
   <r-input label="Nombre de usuario" disabled></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="Nombre de usuario" disabled></r-input>
@@ -87,9 +87,9 @@ Se comporta igual que el atributo `placeholder` nativo.
 
 ### Icono `icon`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="user"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="user"></r-input>
@@ -97,10 +97,10 @@ Se comporta igual que el atributo `placeholder` nativo.
 
 ### Tipos de entrada `type`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="lock" type="password" placeholder="Contraseña"></r-input>
   <r-input type="number" placeholder="Número"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="lock" type="password" placeholder="Contraseña"></r-input>
@@ -111,10 +111,10 @@ Se comporta igual que el atributo `placeholder` nativo.
 
 Acompaña siempre `status` de un `message`, para que el estado lo comunique el texto y no solo el color.
 
-<Demo column>
+<ran-demo column>
   <r-input status="error" label="Nombre de usuario" message="Este campo es obligatorio"></r-input>
   <r-input status="warning" label="Nombre de usuario" message="Revisa este valor"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input status="error" label="Nombre de usuario" message="Este campo es obligatorio"></r-input>
@@ -125,9 +125,9 @@ Acompaña siempre `status` de un `message`, para que el estado lo comunique el t
 
 Dibuja texto de ayuda o de validación bajo el campo.
 
-<Demo column>
+<ran-demo column>
   <r-input label="Correo" message="Nunca compartiremos tu correo"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="Correo" message="Nunca compartiremos tu correo"></r-input>
@@ -150,9 +150,9 @@ Ambos eventos se despachan como `CustomEvent` y llevan el valor actual en `detai
 
 ### Evento de escritura `input`
 
-<Demo column>
+<ran-demo column>
   <r-input oninput="console.log(event.detail.value)" label="Nombre de usuario"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');
@@ -164,9 +164,9 @@ input.addEventListener('input', (event) => {
 
 ### Evento de cambio `change`
 
-<Demo column>
+<ran-demo column>
   <r-input onchange="console.log(event.detail.value)" label="Nombre de usuario"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');

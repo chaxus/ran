@@ -14,9 +14,9 @@ Radar chart for comparing several metrics of one dataset on a two-dimensional ca
 
 Data is supplied through the `abilitys` attribute as a **JSON string** (an array of objects). Because HTML attributes can only hold strings, the value must be valid JSON; it is parsed internally with `JSON.parse`. The `<r-radar>` host has no intrinsic size, so give it an explicit width/height.
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -67,9 +67,9 @@ Each entry of the `abilitys` array accepts the following keys:
 
 Per-axis label styling (`backgroundColor`, `fontSize`, `fontColor`) can be set on individual entries:
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"HP","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -80,9 +80,9 @@ Per-axis label styling (`backgroundColor`, `fontSize`, `fontColor`) can be set o
 
 ### Grid Polygon Color `colorPolygon`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorPolygon="green" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -94,9 +94,9 @@ Per-axis label styling (`backgroundColor`, `fontSize`, `fontColor`) can be set o
 
 ### Axis Line Color `colorLine`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorLine="blue" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -108,9 +108,9 @@ Per-axis label styling (`backgroundColor`, `fontSize`, `fontColor`) can be set o
 
 ### Region Fill Color `fillColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" fillColor="red" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -122,9 +122,9 @@ Per-axis label styling (`backgroundColor`, `fontSize`, `fontColor`) can be set o
 
 ### Region Stroke Color `strokeColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" strokeColor="blue" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar

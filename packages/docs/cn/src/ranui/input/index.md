@@ -12,9 +12,9 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 ### 基础用法
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="请输入"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="请输入"></r-input>
@@ -45,9 +45,9 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 渲染在字段上方的静态标签：始终可见，不会与相邻内容重叠，聚焦时也不会引起布局跳动（顶部对齐的标签比内联/浮动标签填写更快，见 [Luke Wroblewski 的眼动研究](https://www.lukew.com/ff/entry.asp?504=)）。
 
-<Demo column>
+<ran-demo column>
   <r-input label="用户名"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="用户名"></r-input>
@@ -57,9 +57,9 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 与原生 `placeholder` 属性一致。
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="请输入用户名"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="请输入用户名"></r-input>
@@ -67,9 +67,9 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 ### 值 `value`
 
-<Demo column>
+<ran-demo column>
   <r-input value="1234"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input value="1234"></r-input>
@@ -77,9 +77,9 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 ### 禁用状态 `disabled`
 
-<Demo column>
+<ran-demo column>
   <r-input label="用户名" disabled></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="用户名" disabled></r-input>
@@ -87,9 +87,9 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 ### 图标 `icon`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="user"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="user"></r-input>
@@ -97,10 +97,10 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 ### 输入类型 `type`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="lock" type="password" placeholder="密码"></r-input>
   <r-input type="number" placeholder="数字"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="lock" type="password" placeholder="密码"></r-input> <r-input type="number" placeholder="数字"></r-input>
@@ -110,10 +110,10 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 把 `status` 和 `message` 配对使用，让状态通过文字而不是单纯的颜色传达。
 
-<Demo column>
+<ran-demo column>
   <r-input status="error" label="用户名" message="该字段为必填项"></r-input>
   <r-input status="warning" label="用户名" message="请检查这个值"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input status="error" label="用户名" message="该字段为必填项"></r-input>
@@ -124,9 +124,9 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 在字段下方渲染辅助/校验文字。
 
-<Demo column>
+<ran-demo column>
   <r-input label="邮箱" message="我们不会公开你的邮箱"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="邮箱" message="我们不会公开你的邮箱"></r-input>
@@ -149,9 +149,9 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 ### `input` 事件
 
-<Demo column>
+<ran-demo column>
   <r-input oninput="console.log(event.detail.value)" label="用户名"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');
@@ -163,9 +163,9 @@ input.addEventListener('input', (event) => {
 
 ### `change` 事件
 
-<Demo column>
+<ran-demo column>
   <r-input onchange="console.log(event.detail.value)" label="用户名"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');

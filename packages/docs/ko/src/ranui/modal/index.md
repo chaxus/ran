@@ -14,7 +14,7 @@ description: 'ranui Modal(<r-modal>)은 집중된 상호작용을 위한 대화 
 
 모달이 보이는지는 `open` 어트리뷰트(또는 `open` 프로퍼티)가 정합니다. 처음에는 닫혀 있고 열리기 전까지 아무것도 그리지 않으니, 열고 닫을 트리거를 연결해 주세요.
 
-<Demo>
+<ran-demo>
   <r-button onclick="document.getElementById('quickstart-modal').open = true">모달 열기</r-button>
   <r-modal id="quickstart-modal" heading="기본 모달">
     <p>이것이 모달의 내용입니다.</p>
@@ -22,7 +22,7 @@ description: 'ranui Modal(<r-modal>)은 집중된 상호작용을 위한 대화 
       <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">확인</r-button>
     </div>
   </r-modal>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="modal.open = true">모달 열기</r-button>

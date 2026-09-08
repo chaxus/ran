@@ -16,9 +16,9 @@ description: '一个实验性的刮刮卡组件：拖动擦除画布覆盖层，
 
 放进 `<r-scratch>` 里的任何内容都是揭晓内容（金额、图片、`<r-icon>`、多个元素都可以），会通过默认插槽投影进刮层下方，跟 ranui 其它组件的内容投影方式完全一致。
 
-<Demo>
+<ran-demo>
   <r-scratch style="display: block; width: 240px; height: 120px;">You won 50 coins!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch style="display: block; width: 240px; height: 120px;">You won 50 coins!</r-scratch>
@@ -35,9 +35,9 @@ description: '一个实验性的刮刮卡组件：拖动擦除画布覆盖层，
 
 ### 禁用态 `disabled`
 
-<Demo>
+<ran-demo>
   <r-scratch disabled style="display: block; width: 240px; height: 120px;">You won 50 coins!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch disabled style="display: block; width: 240px; height: 120px;">You won 50 coins!</r-scratch>
@@ -45,9 +45,9 @@ description: '一个实验性的刮刮卡组件：拖动擦除画布覆盖层，
 
 ### 外部样式 `sheet`
 
-<Demo>
+<ran-demo>
   <r-scratch sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }" style="display: block; width: 240px; height: 120px;">🎁</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch

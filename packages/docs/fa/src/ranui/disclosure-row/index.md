@@ -12,11 +12,11 @@ description: 'DisclosureRow در ranui (<r-disclosure-row>) یک سطر تک‌�
 
 ### کاربرد پایه
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="خواندن فایل" summary="packages/ranui/index.ts" expandable>
     <div style="padding:8px 0">تا وقتی سطر باز است بدنه دیده می‌شود.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="خواندن فایل" summary="packages/ranui/index.ts" expandable>
@@ -30,10 +30,10 @@ description: 'DisclosureRow در ranui (<r-disclosure-row>) یک سطر تک‌�
 
 `busy` نواری از درخشش را روی سطر می‌گذراند. یک چرخنده تنها می‌گوید جایی چیزی در جریان است؛ اما گذر درخشش روی سطر نشان می‌دهد کدام سطر هنوز کار می‌کند.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="اجرای آزمون‌ها" summary="۲۳۵۱ مورد موفق" busy expandable></r-disclosure-row>
   <r-disclosure-row heading="اجرای آزمون‌ها" summary="۲۳۵۱ مورد موفق" expandable></r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ### همراه یک نشانگر آغازین
 
@@ -41,12 +41,12 @@ description: 'DisclosureRow در ranui (<r-disclosure-row>) یک سطر تک‌�
 
 اگر چیزی در `leading` نگذاشته باشید، علامت زاویه همیشه دیده می‌شود، چون تنها نشانه‌ای است که به خواننده می‌گوید این سطر باز می‌شود. با وجود محتوای آغازین، علامت زاویه هنگام هاور، هنگام فوکوس یا تا وقتی سطر باز است پیدا می‌شود و در بقیه اوقات نشانگر وضعیت دیده می‌شود.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="ساخت" summary="در ۴٫۲ ثانیه شکست خورد" tone="error" expandable>
     <r-state-dot slot="leading" state="error"></r-state-dot>
     <div style="padding:8px 0">باندل از سقف حجم گذشته است.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="ساخت" summary="در ۴٫۲ ثانیه شکست خورد" tone="error" expandable>

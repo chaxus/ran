@@ -14,14 +14,14 @@ description: 'ranui の Popover（<r-popover>）は、ホバーやクリック�
 
 トリガーはデフォルトスロットに置き、浮遊する内容は入れ子の `<r-content>` 要素で包みます。
 
-<Demo>
+<ran-demo>
   <r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>これがパネルの内容です</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover style="display: inline-block;">
@@ -45,7 +45,7 @@ description: 'ranui の Popover（<r-popover>）は、ホバーやクリック�
 
 ### トリガーの種類 `trigger`
 
-<Demo>
+<ran-demo>
   <r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
@@ -58,7 +58,7 @@ description: 'ranui の Popover（<r-popover>）は、ホバーやクリック�
       <div>click</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" style="display: inline-block;">
@@ -78,7 +78,7 @@ description: 'ranui の Popover（<r-popover>）は、ホバーやクリック�
 
 ### 表示位置 `placement`
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
@@ -103,7 +103,7 @@ description: 'ranui の Popover（<r-popover>）は、ホバーやクリック�
       <div>right</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="top" style="display: inline-block;">
@@ -139,7 +139,7 @@ description: 'ranui の Popover（<r-popover>）は、ホバーやクリック�
 
 方向だけを指定すると、パネルの先頭側の辺がトリガーの先頭側の辺に揃います。トリガーの中央に置きたいときや、トリガーの末尾側の辺に揃えたいときは `-center` または `-end` を付けます。ヘッダーバーの右端に紐づくメニューがまさにそれで、いったん画面外に出てからシフトで押し戻されるのではなく、最初から内側に開きます。この接尾辞は自動反転のあとも保たれ、`bottom-end` は `top` ではなく `top-end` になります。
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
@@ -158,7 +158,7 @@ description: 'ranui の Popover（<r-popover>）は、ホバーやクリック�
       <div style="width: 200px;">bottom-end</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">

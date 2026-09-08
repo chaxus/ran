@@ -12,11 +12,11 @@ Superficie de sección de página con un encabezado y un subtítulo opcionales s
 
 ### Uso básico
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="Encabezado de la sección" subtitle="Una línea breve que describe esta sección.">
     <p style="margin: 0;">El contenido del cuerpo va en el slot por defecto.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="Encabezado de la sección" subtitle="Una línea breve que describe esta sección.">
@@ -40,11 +40,11 @@ La fila de encabezado (encabezado + subtítulo) se oculta por completo cuando `h
 
 El encabezado de la sección, representado como encabezado ARIA de nivel 2 (`role="heading"`, `aria-level="2"`). Se oculta cuando está vacío.
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="Solo un encabezado">
     <p style="margin: 0;">Contenido del cuerpo.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="Solo un encabezado">
@@ -56,11 +56,11 @@ El encabezado de la sección, representado como encabezado ARIA de nivel 2 (`rol
 
 Una línea de apoyo bajo el encabezado. Se oculta cuando está vacía.
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="Encabezado" subtitle="Texto de subtítulo de apoyo.">
     <p style="margin: 0;">Contenido del cuerpo.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="Encabezado" subtitle="Texto de subtítulo de apoyo.">
@@ -72,11 +72,11 @@ Una línea de apoyo bajo el encabezado. Se oculta cuando está vacía.
 
 CSS inyectado en el shadow DOM de la sección, con la misma convención `sheet` que usan todos los demás componentes de ranui.
 
-<Demo align="stretch">
+<ran-demo align="stretch">
   <r-section heading="Sección con tema" subtitle="Encabezado recoloreado mediante sheet." sheet=".ran-section-heading { color: #006bff; }">
     <p style="margin: 0;">Contenido del cuerpo.</p>
   </r-section>
-</Demo>
+</ran-demo>
 
 ```html
 <r-section heading="Sección con tema" sheet=".ran-section-heading { color: #006bff; }">

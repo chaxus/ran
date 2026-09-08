@@ -15,13 +15,13 @@ ein Zustand ist damit eine Farbregel statt zweier Tokens.
 
 ### Grundlegende Verwendung
 
-<Demo>
+<ran-demo>
   <r-state-dot state="idle"></r-state-dot>
   <r-state-dot state="running"></r-state-dot>
   <r-state-dot state="success"></r-state-dot>
   <r-state-dot state="warning"></r-state-dot>
   <r-state-dot state="error"></r-state-dot>
-</Demo>
+</ran-demo>
 
 ```html
 <r-state-dot state="idle"></r-state-dot>
@@ -41,7 +41,7 @@ Der Punkt kodiert den Zustand allein über Farbe; was die Farbe bedeutet, erklä
 die Farbe niemals das Einzige sein, was zwei Zeilen unterscheidet. Siehe die
 [Designrichtlinien](/de/src/ranui/design-guides/#accessibility).
 
-<Demo column>
+<ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">
     <r-state-dot state="running"></r-state-dot>
     <span>Tests laufen</span>
@@ -50,7 +50,7 @@ die Farbe niemals das Einzige sein, was zwei Zeilen unterscheidet. Siehe die
     <r-state-dot state="error"></r-state-dot>
     <span>2 Tests fehlgeschlagen</span>
   </div>
-</Demo>
+</ran-demo>
 
 ## API-Referenz
 

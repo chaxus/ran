@@ -12,9 +12,9 @@ Temml を使って HTML ページ上に高品質な LaTeX 数式を描画しま�
 
 ### 基本的な使い方
 
-<Demo>
+<ran-demo>
   <r-math latex="\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1 \quad (a > b > 0)"></r-math>
-</Demo>
+</ran-demo>
 
 ```html
 <r-math latex="\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1 \quad (a > b > 0)"></r-math>
@@ -39,9 +39,9 @@ Temml を使って HTML ページ上に高品質な LaTeX 数式を描画しま�
 
 ### 式 `latex`
 
-<Demo>
+<ran-demo>
   <r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
-</Demo>
+</ran-demo>
 
 ```html
 <r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
@@ -49,9 +49,9 @@ Temml を使って HTML ページ上に高品質な LaTeX 数式を描画しま�
 
 ### 外部スタイル `sheet`
 
-<Demo>
+<ran-demo>
   <r-math latex="e^{i\pi} + 1 = 0" sheet=".ran-math { justify-content: flex-start; }"></r-math>
-</Demo>
+</ran-demo>
 
 ```html
 <r-math latex="e^{i\pi} + 1 = 0" sheet=".ran-math { justify-content: flex-start; }"></r-math>

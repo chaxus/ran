@@ -61,11 +61,11 @@ También puedes saltarte el registro por completo pasando el marcado SVG en crud
 
 ## Demostración
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="eye" size="50"></r-icon>
   <r-icon name="user" size="50"></r-icon>
-</Demo>
+</ran-demo>
 
 ```xml
  <r-icon name="lock"  ></r-icon>
@@ -79,11 +79,11 @@ También puedes saltarte el registro por completo pasando el marcado SVG en crud
 
 Selecciona un icono distinto según el nombre.
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="eye" size="50"></r-icon>
   <r-icon name="user" size="50"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock"></r-icon>
@@ -93,11 +93,11 @@ Selecciona un icono distinto según el nombre.
 
 ### `size`
 
-<Demo align="end">
+<ran-demo align="end">
   <r-icon name="lock" size="30"></r-icon>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="lock" size="70"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock" size="30"></r-icon>
@@ -107,12 +107,12 @@ Selecciona un icono distinto según el nombre.
 
 ### `color`
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50" color="red"></r-icon>
   <r-icon name="lock" size="50" color="#1E90FF"></r-icon>
   <r-icon name="lock" size="50" color="#F44336"></r-icon>
   <r-icon name="lock" size="50" color="#3F51B5"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock" size="50" color="red"></r-icon>
@@ -125,11 +125,11 @@ Selecciona un icono distinto según el nombre.
 
 Define spin para activar la rotación y pasa un número para controlar su velocidad. Cuanto menor sea el número, más rápido gira.
 
-<Demo>
+<ran-demo>
   <r-icon name="loading" size="50" color="#1E90FF" spin="0.7"></r-icon>
   <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
   <r-icon name="loading" size="50" color="#1E90FF" spin="5"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="loading" size="50" color="#1E90FF" spin="0.7"></r-icon>

@@ -14,13 +14,13 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 
 選択肢はスロットに入れた `<r-option>` の子要素で与えます。各選択肢の `value` 属性がその値、テキスト内容が表示されるラベルです。
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -68,13 +68,13 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 
 フィールドの上に描画される固定のキャプションです。常に見えていて、隣の内容と重なりません。`r-input` の `label` と同じトークンとレイアウトを使うので、ラベル付きの select とラベル付きの input をフォームで並べたとき、高さも上端も揃います。
 
-<Demo>
+<ran-demo>
   <r-select label="国" style="width: 180px" defaultValue="185">
     <r-option value="185">アメリカ合衆国</r-option>
     <r-option value="186">カナダ</r-option>
     <r-option value="187">メキシコ</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select label="国" defaultValue="185">
@@ -86,13 +86,13 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 
 ### 既定値 `defaultValue`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -104,13 +104,13 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 
 ### 無効状態 `disabled`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
@@ -122,13 +122,13 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 
 ### テキスト型 `type`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
@@ -161,13 +161,13 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 
 なお、境界に収めるためのシフトは揃えより優先されます。トリガーがビューポートの端に十分近ければ、どんな揃えを指定していてもパネルは画面内へ押し戻されます。
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
@@ -207,13 +207,13 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 
 ### 検索機能 `showSearch`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" showSearch="true">
@@ -225,13 +225,13 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 
 ### 開き方 `trigger`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" trigger="click,hover">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <!-- クリックで開く（既定） -->

@@ -10,9 +10,9 @@ description: 'ranui의 Progress(<r-progress>)는 작업 진행도를 막대로 �
 
 ## 빠른 시작
 
-<Demo>
+<ran-demo>
   <r-progress percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="40%"></r-progress>
@@ -36,11 +36,11 @@ description: 'ranui의 Progress(<r-progress>)는 작업 진행도를 막대로 �
 
 현재 진행도를 지정합니다. 숫자나 백분율 문자열을 받으며 `total`을 넘을 수 없습니다. `total`을 지정하지 않으면 기본값이 `100`이므로, `percent`는 100에 대한 백분율로 읽힙니다.
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30%"></r-progress>
   <r-progress percent="70%"></r-progress>
   <r-progress percent="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30%"></r-progress>
@@ -52,11 +52,11 @@ description: 'ranui의 Progress(<r-progress>)는 작업 진행도를 막대로 �
 
 `percent`의 분모를 지정합니다. 숫자와 백분율 모두 쓸 수 있어서 `percent="30" total="1000"`이면 막대가 3% 찹니다.
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30" total="1000"></r-progress>
   <r-progress percent="70" total="100"></r-progress>
   <r-progress percent="10%" total="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -69,10 +69,10 @@ description: 'ranui의 Progress(<r-progress>)는 작업 진행도를 막대로 �
 - `primary`: 정적 진행 막대. `type`을 지정하지 않았을 때의 기본값입니다.
 - `drag`: 클릭하고 끌 수 있는 진행 막대. 트랙을 클릭하거나 손잡이를 끌면 `percent`가 갱신되고 `change` 이벤트가 발생합니다. 손잡이를 끌려면 `dot="true"`가 필요합니다.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%"></r-progress>
   <r-progress type="primary" percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
@@ -82,10 +82,10 @@ description: 'ranui의 Progress(<r-progress>)는 작업 진행도를 막대로 �
 
 손잡이 표시를 켜고 끕니다. 손잡이는 `dot="true"` **이면서** `type="drag"`일 때만 그려집니다. 정적인 `primary` 막대에서는 일부러 빼므로, 거기서는 `dot`이 눈에 보이는 효과를 내지 않습니다.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%" dot="true"></r-progress>
   <r-progress type="drag" percent="30%" dot="false"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%" dot="true"></r-progress>

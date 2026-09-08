@@ -10,9 +10,9 @@ description: 'کامپوننت Progress در ranui (<r-progress>) پیشرفت �
 
 ## شروع سریع
 
-<Demo>
+<ran-demo>
   <r-progress percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="40%"></r-progress>
@@ -36,11 +36,11 @@ description: 'کامپوننت Progress در ranui (<r-progress>) پیشرفت �
 
 پیشرفت کنونی را تعیین می‌کند. عدد یا رشتهٔ درصد می‌پذیرد و نمی‌تواند از `total` بگذرد. اگر `total` تعیین نشده باشد پیش‌فرض آن `100` است، یعنی `percent` به‌عنوان درصدی از ۱۰۰ خوانده می‌شود.
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30%"></r-progress>
   <r-progress percent="70%"></r-progress>
   <r-progress percent="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30%"></r-progress>
@@ -52,11 +52,11 @@ description: 'کامپوننت Progress در ranui (<r-progress>) پیشرفت �
 
 مخرج `percent` را تعیین می‌کند. هم عدد و هم درصد مجاز است، پس `percent="30" total="1000"` نوار را ۳٪ پر می‌کند.
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30" total="1000"></r-progress>
   <r-progress percent="70" total="100"></r-progress>
   <r-progress percent="10%" total="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -69,10 +69,10 @@ description: 'کامپوننت Progress در ranui (<r-progress>) پیشرفت �
 - `primary`: نوار پیشرفت ایستا. وقتی `type` تعیین نشده باشد همین پیش‌فرض است.
 - `drag`: نوار کلیک‌شدنی و کشیدنی. کلیک روی ریل یا کشیدن دستگیره `percent` را به‌روز می‌کند و رویداد `change` می‌فرستد. کشیدن دستگیره به `dot="true"` نیاز دارد.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%"></r-progress>
   <r-progress type="primary" percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
@@ -82,10 +82,10 @@ description: 'کامپوننت Progress در ranui (<r-progress>) پیشرفت �
 
 نمایش دستگیره را روشن و خاموش می‌کند. دستگیره تنها وقتی ترسیم می‌شود که `dot="true"` **و** `type="drag"` باشد؛ روی نوار ایستای `primary` عمداً حذف می‌شود، پس آنجا `dot` اثر دیدنی ندارد.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%" dot="true"></r-progress>
   <r-progress type="drag" percent="30%" dot="false"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%" dot="true"></r-progress>

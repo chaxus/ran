@@ -12,13 +12,13 @@ A structured content container with header, body, and footer zones for grouping 
 
 ### Basic Usage
 
-<Demo>
+<ran-demo>
   <r-card heading="Card title" description="Optional subtitle" style="max-width: 360px;">
     <span slot="extra" style="font-size: 12px;">tag</span>
     <p style="margin: 0;">Body content goes in the default slot.</p>
     <a slot="footer" href="#">View notes</a>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Card title" description="Optional subtitle">
@@ -43,11 +43,11 @@ A structured content container with header, body, and footer zones for grouping 
 
 The card heading, shown at the top of the header. Hidden when empty.
 
-<Demo>
+<ran-demo>
   <r-card heading="Only a title" style="max-width: 360px;">
     <p style="margin: 0;">Body content.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Only a title">
@@ -59,11 +59,11 @@ The card heading, shown at the top of the header. Hidden when empty.
 
 A subtitle rendered below the title. Hidden when empty. When neither `title` nor `description` is set, the whole header is hidden.
 
-<Demo>
+<ran-demo>
   <r-card heading="Title" description="A short supporting subtitle" style="max-width: 360px;">
     <p style="margin: 0;">Body content.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Title" description="A short supporting subtitle">
@@ -75,11 +75,11 @@ A subtitle rendered below the title. Hidden when empty. When neither `title` nor
 
 Cards don't react to hover by default. Add the `hoverable` attribute on cards that are actually clickable: on hover the border darkens one step on the gray ladder (`--ran-color-border` → `--ran-color-border-hover`) and the surface takes the quiet elevated shadow (`--ran-shadow-elevated`).
 
-<Demo>
+<ran-demo>
   <r-card hoverable heading="Hoverable card" description="Hover me" style="max-width: 360px; cursor: pointer;">
     <p style="margin: 0;">The border darkens and the card lifts slightly.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card hoverable heading="Hoverable card" description="Hover me">

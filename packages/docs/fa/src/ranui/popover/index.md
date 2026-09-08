@@ -14,14 +14,14 @@ description: 'پاپ‌اور ranui (<r-popover>) با هاور یا کلیک ر
 
 محرک در اسلات پیش‌فرض می‌نشیند؛ محتوای شناور در یک عنصر `<r-content>` تودرتو پیچیده می‌شود.
 
-<Demo>
+<ran-demo>
   <r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>این محتوای پنل است</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover style="display: inline-block;">
@@ -45,7 +45,7 @@ description: 'پاپ‌اور ranui (<r-popover>) با هاور یا کلیک ر
 
 ### شیوه باز شدن `trigger`
 
-<Demo>
+<ran-demo>
   <r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
@@ -58,7 +58,7 @@ description: 'پاپ‌اور ranui (<r-popover>) با هاور یا کلیک ر
       <div>click</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" style="display: inline-block;">
@@ -78,7 +78,7 @@ description: 'پاپ‌اور ranui (<r-popover>) با هاور یا کلیک ر
 
 ### جایگاه `placement`
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
@@ -103,7 +103,7 @@ description: 'پاپ‌اور ranui (<r-popover>) با هاور یا کلیک ر
       <div>right</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="top" style="display: inline-block;">
@@ -139,7 +139,7 @@ description: 'پاپ‌اور ranui (<r-popover>) با هاور یا کلیک ر
 
 اگر فقط سمت را بنویسید، لبه آغازین پنل با لبه آغازین محرک هم‌تراز می‌شود. وقتی باید روی محرک وسط‌چین باشد یا با لبه پایانی آن هم‌تراز شود، `-center` یا `-end` را اضافه کنید؛ منویی که به انتهای راست یک نوار بالایی چسبیده دقیقاً همین را می‌خواهد، تا رو به داخل باز شود نه اینکه اول از قاب بیرون بزند و بعد با جابه‌جایی به داخل رانده شود. این پسوند از چرخش خودکار جان سالم به در می‌برد: `bottom-end` می‌شود `top-end`، نه `top`.
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
@@ -158,7 +158,7 @@ description: 'پاپ‌اور ranui (<r-popover>) با هاور یا کلیک ر
       <div style="width: 200px;">bottom-end</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">

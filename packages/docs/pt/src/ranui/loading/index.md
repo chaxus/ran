@@ -16,9 +16,9 @@ Componente de carregamento com uma coleção de indicadores animados para sinali
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-loading name="circle"></r-loading>
-</Demo>
+</ran-demo>
 
 ```html
 <r-loading name="circle"></r-loading>
@@ -37,12 +37,12 @@ Componente de carregamento com uma coleção de indicadores animados para sinali
 
 Defina `name` com um dos tipos de animação embutidos. Qualquer valor desconhecido não desenha nada (só os nomes da lista abaixo são tratados).
 
-<Demo>
+<ran-demo>
   <r-loading name="double-bounce"></r-loading>
   <r-loading name="rotate"></r-loading>
   <r-loading name="stretch"></r-loading>
   <r-loading name="cube"></r-loading>
-</Demo>
+</ran-demo>
 
 ```html
 <r-loading name="double-bounce"></r-loading>
@@ -122,10 +122,10 @@ r-loading {
 
 ### Exemplos ao vivo
 
-<Demo>
+<ran-demo>
   <r-loading name="circle" style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"></r-loading>
   <r-loading name="rotate" style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"></r-loading>
-</Demo>
+</ran-demo>
 
 ```html
 <r-loading

@@ -16,9 +16,9 @@ Superficie experimental de rasca y gana que dibuja, dentro de su shadow DOM, un 
 
 Lo que pongas dentro de `<r-scratch>` es el contenido revelado (un importe, una imagen, un `<r-icon>`, varios elementos), proyectado por el slot por defecto a la capa que hay bajo la cubierta, exactamente igual que la proyección de contenido en cualquier otro componente de ranui.
 
-<Demo>
+<ran-demo>
   <r-scratch style="display: block; width: 240px; height: 120px;">¡Has ganado 50 monedas!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch style="display: block; width: 240px; height: 120px;">¡Has ganado 50 monedas!</r-scratch>
@@ -35,9 +35,9 @@ Lo que pongas dentro de `<r-scratch>` es el contenido revelado (un importe, una 
 
 ### Estado deshabilitado `disabled`
 
-<Demo>
+<ran-demo>
   <r-scratch disabled style="display: block; width: 240px; height: 120px;">¡Has ganado 50 monedas!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch disabled style="display: block; width: 240px; height: 120px;">¡Has ganado 50 monedas!</r-scratch>
@@ -45,9 +45,9 @@ Lo que pongas dentro de `<r-scratch>` es el contenido revelado (un importe, una 
 
 ### Estilos externos `sheet`
 
-<Demo>
+<ran-demo>
   <r-scratch sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }" style="display: block; width: 240px; height: 120px;">🎁</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch

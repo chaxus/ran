@@ -12,11 +12,11 @@ Uma primitiva de painel flutuante de baixo nível: uma superfície arredondada e
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">Conteúdo do painel flutuante</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -38,7 +38,7 @@ Uma primitiva de painel flutuante de baixo nível: uma superfície arredondada e
 
 Desenha uma seta apontando a partir de um dos lados do painel. Omita o atributo para não ter seta.
 
-<Demo column>
+<ran-demo column>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="top"</div>
   </r-dropdown>
@@ -51,7 +51,7 @@ Desenha uma seta apontando a partir de um dos lados do painel. Omita o atributo 
   <r-dropdown arrow="right" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="right"</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -76,11 +76,11 @@ A classe vive exatamente o tempo que o atributo vive: quem o define decide quand
 
 `getAnimationTarget()` devolve o elemento em que a animação de fato roda. Ele fica dentro do shadow root, então `getAnimations()` no host não relata nada e `{ subtree: true }` não cruza a fronteira. Código que espera a transição do painel terminar deve chamar `getAnimationTarget()` em vez de vasculhar a árvore do shadow atrás de um nome de classe.
 
-<Demo>
+<ran-demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">Entra animado ao conectar</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown transit="ran-dropdown-down-in">
@@ -126,11 +126,11 @@ r-dropdown::part(dropdown) {
 
 Toda propriedade visual pode ser sobrescrita pelos tokens `--ran-dropdown-*`, por exemplo `--ran-dropdown-background`, `--ran-dropdown-border-radius`, `--ran-dropdown-box-shadow`, `--ran-dropdown-padding`, `--ran-dropdown-arrow-width` e `--ran-dropdown-host-z-index`. A seta é um SVG inline escalado pelo próprio `viewBox`, então `--ran-dropdown-arrow-width`/`-height` mudam o tamanho do triângulo de verdade, não o de uma caixa vazia em volta dele:
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
     <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```css
 r-dropdown {

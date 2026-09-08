@@ -12,9 +12,9 @@ description: 'ranui の Button（<r-button>）は、種類・サイズ・ロー�
 
 ### 基本的な使い方
 
-<Demo>
+<ran-demo>
   <r-button>Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button>Button</r-button>
@@ -33,12 +33,12 @@ description: 'ranui の Button（<r-button>）は、種類・サイズ・ロー�
 
 ### ボタンの種類 `type`
 
-<Demo>
+<ran-demo>
   <r-button type="primary">Primary Button</r-button>
   <r-button type="warning">Warning Button</r-button>
   <r-button type="text">Text Button</r-button>
   <r-button>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary">Primary Button</r-button>
@@ -51,12 +51,12 @@ description: 'ranui の Button（<r-button>）は、種類・サイズ・ロー�
 
 ### 無効状態 `disabled`
 
-<Demo>
+<ran-demo>
   <r-button type="primary" disabled>Primary Button</r-button>
   <r-button type="warning" disabled>Warning Button</r-button>
   <r-button type="text" disabled>Text Button</r-button>
   <r-button disabled>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" disabled>Primary Button</r-button>
@@ -69,10 +69,10 @@ description: 'ranui の Button（<r-button>）は、種類・サイズ・ロー�
 
 > 💡 **ヒント**：アイコンの位置を細かく決めたいときは、Icon コンポーネントを直接使ってください。
 
-<Demo>
+<ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
   <r-button type="primary" icon="home">Primary Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="default" icon="user">Default Button</r-button>
@@ -83,10 +83,10 @@ description: 'ranui の Button（<r-button>）は、種類・サイズ・ロー�
 
 クリック時の波紋は既定で有効です。波紋のない素のボタンにしたいときは `effect="false"` を設定します。下の二つのボタンはその属性だけが違うので、それぞれクリックして見比べられます。波紋はポインターデバイス向けのエフェクトで、ビューポート幅 1024px 以上でのみ描画されます。
 
-<Demo>
+<ran-demo>
   <r-button type="primary" icon="home">波紋あり（既定）</r-button>
   <r-button type="primary" icon="home" effect="false">波紋なし</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" icon="home">波紋あり（既定）</r-button>

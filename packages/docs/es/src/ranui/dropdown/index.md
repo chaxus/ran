@@ -12,11 +12,11 @@ Una primitiva de panel flotante de bajo nivel: una superficie redondeada y eleva
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">Contenido del panel flotante</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -38,7 +38,7 @@ Una primitiva de panel flotante de bajo nivel: una superficie redondeada y eleva
 
 Dibuja una flecha que apunta desde uno de los lados del panel. Omite el atributo para no tener flecha.
 
-<Demo column>
+<ran-demo column>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="top"</div>
   </r-dropdown>
@@ -51,7 +51,7 @@ Dibuja una flecha que apunta desde uno de los lados del panel. Omite el atributo
   <r-dropdown arrow="right" style="display: inline-block; width: 220px; margin: 20px;">
     <div style="padding: 12px;">arrow="right"</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown arrow="top">
@@ -76,11 +76,11 @@ La clase vive exactamente lo que vive el atributo: quien lo pone decide cuándo 
 
 `getAnimationTarget()` devuelve el elemento sobre el que la animación corre de verdad. Está dentro del shadow root, así que `getAnimations()` sobre el host no informa de nada y `{ subtree: true }` no cruza el límite. El código que espera a que termine la transición del panel debe llamar a `getAnimationTarget()` en lugar de hurgar en el árbol del shadow buscando un nombre de clase.
 
-<Demo>
+<ran-demo>
   <r-dropdown transit="ran-dropdown-down-in" style="display: inline-block; width: 220px;">
     <div style="padding: 12px;">Entra animado al conectarse</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-dropdown transit="ran-dropdown-down-in">
@@ -126,11 +126,11 @@ r-dropdown::part(dropdown) {
 
 Cualquier propiedad visual se puede sobrescribir con los tokens `--ran-dropdown-*`, por ejemplo `--ran-dropdown-background`, `--ran-dropdown-border-radius`, `--ran-dropdown-box-shadow`, `--ran-dropdown-padding`, `--ran-dropdown-arrow-width` y `--ran-dropdown-host-z-index`. La flecha es un SVG en línea escalado por su propio `viewBox`, así que `--ran-dropdown-arrow-width`/`-height` cambian el tamaño del triángulo de verdad, no el de una caja vacía a su alrededor:
 
-<Demo>
+<ran-demo>
   <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
     <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
   </r-dropdown>
-</Demo>
+</ran-demo>
 
 ```css
 r-dropdown {

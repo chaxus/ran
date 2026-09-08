@@ -12,10 +12,10 @@ description: '채도/명도, 색상, 투명도 컨트롤과 HEX/RGB 입력을 �
 
 ### 기본 사용법
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff"></r-colorpicker>
   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff"></r-colorpicker> <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
@@ -37,11 +37,11 @@ description: '채도/명도, 색상, 투명도 컨트롤과 HEX/RGB 입력을 �
 
 현재 색을 CSS 색 문자열로 나타냅니다. 입력으로는 HEX(`#1677FF`, `#fff`), `rgb(...)`, `rgba(...)`를 받습니다. 읽어 낼 때의 표준형은 완전히 불투명하면 6 자리 HEX 문자열, 투명도가 1 보다 작으면 `rgba(...)` 문자열입니다.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#00c853"></r-colorpicker>
   <r-colorpicker value="rgb(22, 119, 255)"></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#00c853"></r-colorpicker>
@@ -60,10 +60,10 @@ toolbar.append(picker);
 
 `disabled` 어트리뷰트를 붙이면 피커가 반응하지 않습니다. 견본은 마우스로도 키보드로도 패널을 열지 않고, 탭 순서에서 빠지며, 호스트에 `aria-disabled="true"`가 붙습니다. 어트리뷰트를 빼면 평소대로 돌아옵니다.
 
-<Demo align="start">
+<ran-demo align="start">
   <r-colorpicker value="#006bff" disabled></r-colorpicker>
   <r-colorpicker value="rgba(255, 0, 0, 0.5)" disabled></r-colorpicker>
-</Demo>
+</ran-demo>
 
 ```html
 <r-colorpicker value="#006bff" disabled></r-colorpicker>

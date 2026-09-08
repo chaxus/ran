@@ -12,9 +12,9 @@ Input component for entering content via keyboard, the most basic form control.
 
 ### Basic Usage
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="Enter text"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="Enter text"></r-input>
@@ -47,9 +47,9 @@ A static caption rendered above the field: always visible, never overlaps adjace
 content, and doesn't shift the layout on focus (top-aligned labels also complete forms
 faster than inline/floating ones; see [Luke Wroblewski's eye-tracking research](https://www.lukew.com/ff/entry.asp?504=)).
 
-<Demo column>
+<ran-demo column>
   <r-input label="Username"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="Username"></r-input>
@@ -59,9 +59,9 @@ faster than inline/floating ones; see [Luke Wroblewski's eye-tracking research](
 
 Consistent with the native `placeholder` attribute.
 
-<Demo column>
+<ran-demo column>
   <r-input placeholder="Enter username"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input placeholder="Enter username"></r-input>
@@ -69,9 +69,9 @@ Consistent with the native `placeholder` attribute.
 
 ### Value `value`
 
-<Demo column>
+<ran-demo column>
   <r-input value="1234"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input value="1234"></r-input>
@@ -79,9 +79,9 @@ Consistent with the native `placeholder` attribute.
 
 ### Disabled State `disabled`
 
-<Demo column>
+<ran-demo column>
   <r-input label="Username" disabled></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="Username" disabled></r-input>
@@ -89,9 +89,9 @@ Consistent with the native `placeholder` attribute.
 
 ### Icon `icon`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="user"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="user"></r-input>
@@ -99,10 +99,10 @@ Consistent with the native `placeholder` attribute.
 
 ### Input Types `type`
 
-<Demo column>
+<ran-demo column>
   <r-input icon="lock" type="password" placeholder="Password"></r-input>
   <r-input type="number" placeholder="Number"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input icon="lock" type="password" placeholder="Password"></r-input>
@@ -113,10 +113,10 @@ Consistent with the native `placeholder` attribute.
 
 Pair `status` with a `message` so the state is conveyed by text, not color alone.
 
-<Demo column>
+<ran-demo column>
   <r-input status="error" label="Username" message="This field is required"></r-input>
   <r-input status="warning" label="Username" message="Check this value"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input status="error" label="Username" message="This field is required"></r-input>
@@ -127,9 +127,9 @@ Pair `status` with a `message` so the state is conveyed by text, not color alone
 
 Renders helper / validation text below the field.
 
-<Demo column>
+<ran-demo column>
   <r-input label="Email" message="We will never share your email"></r-input>
-</Demo>
+</ran-demo>
 
 ```html
 <r-input label="Email" message="We will never share your email"></r-input>
@@ -152,9 +152,9 @@ Both events are dispatched as `CustomEvent`s carrying the current value in `deta
 
 ### Input Event `input`
 
-<Demo column>
+<ran-demo column>
   <r-input oninput="console.log(event.detail.value)" label="Username"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');
@@ -166,9 +166,9 @@ input.addEventListener('input', (event) => {
 
 ### Change Event `change`
 
-<Demo column>
+<ran-demo column>
   <r-input onchange="console.log(event.detail.value)" label="Username"></r-input>
-</Demo>
+</ran-demo>
 
 ```javascript
 const input = document.createElement('r-input');

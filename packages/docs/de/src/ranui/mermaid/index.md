@@ -15,9 +15,9 @@ seinen Shadow Root, wodurch es von den Seitenstilen isoliert bleibt.
 
 ## Schnellstart
 
-<Demo>
+<ran-demo>
   <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]; C --> D[Respond]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]</r-mermaid>
@@ -42,9 +42,9 @@ Jedes Bedienelement wird **ausdrücklich** über ein boolesches Attribut eingesc
 `<r-mermaid>` ist ein sauberes statisches Diagramm. Die Leiste erscheint beim Überfahren (oben
 rechts).
 
-<Demo>
+<ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid copy download fullscreen>graph TD; A --> B; B --> C</r-mermaid>

@@ -14,13 +14,13 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 
 선택지는 슬롯에 넣은 `<r-option>` 자식으로 줍니다. 각 선택지의 `value` 어트리뷰트가 값이고, 텍스트 내용이 화면에 보이는 레이블입니다.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -68,13 +68,13 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 
 필드 위에 그려지는 고정 캡션입니다. 언제나 보이고, 옆 내용과 겹치지 않습니다. `r-input`의 `label`과 같은 토큰과 레이아웃을 쓰므로, 레이블 달린 select와 레이블 달린 input을 폼에 나란히 두면 높이와 윗변이 맞습니다.
 
-<Demo>
+<ran-demo>
   <r-select label="국가" style="width: 180px" defaultValue="185">
     <r-option value="185">미국</r-option>
     <r-option value="186">캐나다</r-option>
     <r-option value="187">멕시코</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select label="국가" defaultValue="185">
@@ -86,13 +86,13 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 
 ### 기본값 `defaultValue`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -104,13 +104,13 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 
 ### 비활성 상태 `disabled`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
@@ -122,13 +122,13 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 
 ### 텍스트 형태 `type`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
@@ -161,13 +161,13 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 
 경계에 맞추는 이동은 정렬보다 우선한다는 점을 기억하세요. 트리거가 뷰포트 가장자리에 충분히 가까우면, 어떤 정렬을 요청했든 패널은 화면 안쪽으로 밀려 들어옵니다.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
@@ -207,13 +207,13 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 
 ### 검색 기능 `showSearch`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" showSearch="true">
@@ -225,13 +225,13 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 
 ### 여는 방식 `trigger`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" trigger="click,hover">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <!-- 클릭으로 열기(기본) -->

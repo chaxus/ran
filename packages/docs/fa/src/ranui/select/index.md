@@ -14,13 +14,13 @@ description: 'انتخابگر ranui (<r-select>) یک منوی کشویی بر�
 
 گزینه‌ها به‌صورت فرزندان `<r-option>` در اسلات داده می‌شوند. اتریبیوت `value` هر گزینه مقدار آن است و متن آن، برچسبی که نمایش می‌یابد.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -68,13 +68,13 @@ description: 'انتخابگر ranui (<r-select>) یک منوی کشویی بر�
 
 نوشته‌ای ثابت که بالای فیلد رسم می‌شود: همیشه دیده می‌شود و هرگز روی محتوای کناری نمی‌افتد. همان توکن‌ها و چیدمان `label` در `r-input` را به کار می‌برد، پس یک select برچسب‌دار و یک input برچسب‌دار که کنار هم در فرم گذاشته شوند هم‌تراز درمی‌آیند (هم‌ارتفاع، با لبه بالایی یکسان).
 
-<Demo>
+<ran-demo>
   <r-select label="کشور" style="width: 180px" defaultValue="185">
     <r-option value="185">ایالات متحده</r-option>
     <r-option value="186">کانادا</r-option>
     <r-option value="187">مکزیک</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select label="کشور" defaultValue="185">
@@ -86,13 +86,13 @@ description: 'انتخابگر ranui (<r-select>) یک منوی کشویی بر�
 
 ### مقدار آغازین `defaultValue`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -104,13 +104,13 @@ description: 'انتخابگر ranui (<r-select>) یک منوی کشویی بر�
 
 ### حالت غیرفعال `disabled`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
@@ -122,13 +122,13 @@ description: 'انتخابگر ranui (<r-select>) یک منوی کشویی بر�
 
 ### گونه متنی `type`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
@@ -161,13 +161,13 @@ description: 'انتخابگر ranui (<r-select>) یک منوی کشویی بر�
 
 توجه کنید که جابه‌جایی برای ماندن در مرز، بر هم‌ترازی می‌چربد: محرکی که به‌قدر کافی به لبه قاب دید نزدیک باشد، پنلش را هر هم‌ترازی که خواسته باشید دوباره به درون صفحه هل می‌دهند.
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
@@ -207,13 +207,13 @@ description: 'انتخابگر ranui (<r-select>) یک منوی کشویی بر�
 
 ### قابلیت جست‌وجو `showSearch`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" showSearch="true">
@@ -225,13 +225,13 @@ description: 'انتخابگر ranui (<r-select>) یک منوی کشویی بر�
 
 ### شیوه باز کردن `trigger`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" trigger="click,hover">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <!-- باز شدن با کلیک (پیش‌فرض) -->

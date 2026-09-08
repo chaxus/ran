@@ -15,11 +15,11 @@ Cuánta ventana de contexto está usando una conversación.
 
 ### Uso básico
 
-<Demo column>
+<ran-demo column>
   <r-token-meter limit="65536" used="12800"></r-token-meter>
   <r-token-meter limit="65536" used="54000"></r-token-meter>
   <r-token-meter limit="65536" used="69000"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter limit="65536" used="12800"></r-token-meter>
@@ -59,15 +59,15 @@ costado esto?»).
 Con `limit` sin definir o a cero la barra desaparece y solo quedan los recuentos, útil mientras no
 se conoce el tamaño de la ventana.
 
-<Demo>
+<ran-demo>
   <r-token-meter used="41200" spent="128431"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ### Cambiar la etiqueta
 
-<Demo>
+<ran-demo>
   <r-token-meter label="Contexto" limit="65536" used="41200"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter label="Contexto" limit="65536" used="41200"></r-token-meter>

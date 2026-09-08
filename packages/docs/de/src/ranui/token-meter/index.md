@@ -15,11 +15,11 @@ Wie viel des Kontextfensters eine Konversation belegt.
 
 ### Grundlegende Verwendung
 
-<Demo column>
+<ran-demo column>
   <r-token-meter limit="65536" used="12800"></r-token-meter>
   <r-token-meter limit="65536" used="54000"></r-token-meter>
   <r-token-meter limit="65536" used="69000"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter limit="65536" used="12800"></r-token-meter>
@@ -59,15 +59,15 @@ und „Was hat mich das gekostet?“).
 Ist `limit` nicht gesetzt oder null, verschwindet der Balken und nur die Zahlen bleiben — praktisch,
 solange die Fenstergröße unbekannt ist.
 
-<Demo>
+<ran-demo>
   <r-token-meter used="41200" spent="128431"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ### Neu beschriften
 
-<Demo>
+<ran-demo>
   <r-token-meter label="Kontext" limit="65536" used="41200"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter label="Kontext" limit="65536" used="41200"></r-token-meter>

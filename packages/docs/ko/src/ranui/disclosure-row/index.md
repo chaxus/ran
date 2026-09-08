@@ -12,11 +12,11 @@ description: 'ranui DisclosureRow(<r-disclosure-row>)는 "제목 · 요약"을 �
 
 ### 기본 사용법
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="파일 읽기" summary="packages/ranui/index.ts" expandable>
     <div style="padding:8px 0">행이 열려 있는 동안 본문이 나타납니다.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="파일 읽기" summary="packages/ranui/index.ts" expandable>
@@ -30,10 +30,10 @@ description: 'ranui DisclosureRow(<r-disclosure-row>)는 "제목 · 요약"을 �
 
 `busy`는 행 위로 빛의 띠를 흘려보냅니다. 스피너는 "어딘가에서 무언가가 벌어지고 있다"만 알려 주지만, 행 위를 지나는 빛은 어느 행이 아직 일하고 있는지 짚어 줍니다.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="테스트 실행" summary="2351개 통과" busy expandable></r-disclosure-row>
   <r-disclosure-row heading="테스트 실행" summary="2351개 통과" expandable></r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ### 앞머리 표시자와 함께
 
@@ -41,12 +41,12 @@ description: 'ranui DisclosureRow(<r-disclosure-row>)는 "제목 · 요약"을 �
 
 `leading`에 아무것도 넣지 않으면 꺾쇠는 계속 보입니다. 이 행이 열린다는 것을 읽는 사람에게 알려 주는 표시가 그것뿐이기 때문입니다. 앞머리에 내용이 있으면 꺾쇠는 호버할 때, 포커스가 갔을 때, 그리고 열려 있는 동안 나타나고, 그 밖의 시간에는 상태 표시자가 자리를 지킵니다.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="빌드" summary="4.2초 만에 실패" tone="error" expandable>
     <r-state-dot slot="leading" state="error"></r-state-dot>
     <div style="padding:8px 0">번들이 크기 한도를 넘었습니다.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="빌드" summary="4.2초 만에 실패" tone="error" expandable>

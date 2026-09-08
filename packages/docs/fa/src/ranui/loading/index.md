@@ -16,9 +16,9 @@ import Loading from '../../../../vue/loading.vue'
 
 ### استفادهٔ پایه
 
-<Demo>
+<ran-demo>
   <r-loading name="circle"></r-loading>
-</Demo>
+</ran-demo>
 
 ```html
 <r-loading name="circle"></r-loading>
@@ -37,12 +37,12 @@ import Loading from '../../../../vue/loading.vue'
 
 `name` را روی یکی از انواع انیمیشن درون‌ساخت بگذارید. هر مقدار ناشناخته چیزی نمی‌کشد (تنها نام‌های فهرست زیر پردازش می‌شوند).
 
-<Demo>
+<ran-demo>
   <r-loading name="double-bounce"></r-loading>
   <r-loading name="rotate"></r-loading>
   <r-loading name="stretch"></r-loading>
   <r-loading name="cube"></r-loading>
-</Demo>
+</ran-demo>
 
 ```html
 <r-loading name="double-bounce"></r-loading>
@@ -122,10 +122,10 @@ r-loading {
 
 ### نمونه‌های زنده
 
-<Demo>
+<ran-demo>
   <r-loading name="circle" style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"></r-loading>
   <r-loading name="rotate" style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"></r-loading>
-</Demo>
+</ran-demo>
 
 ```html
 <r-loading

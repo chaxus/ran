@@ -12,7 +12,7 @@ ranui liefert keine Komponente, die `<form>` umschließt. `r-input`, `r-checkbox
 
 Alle drei Feldtypen, abgeschickt mit einem gewöhnlichen `<form>`. Ändere ein Feld und schicke ab, um das Ergebnis unten zu sehen. Diese Demo baut das Objekt mit dem browsereigenen `FormData`/`Object.fromEntries` (kein Import nötig); `serializeForm()`, gleich darunter, macht dasselbe und noch etwas, das `Object.fromEntries` nicht kann: Ein mehrfach vorkommender Feldname kommt als Array zurück, statt still nur den letzten Wert zu behalten.
 
-<Demo column>
+<ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
     <r-input name="username" label="Benutzername" placeholder="Benutzername eingeben"></r-input>
     <r-select name="role" label="Rolle" style="width: 100%" defaultValue="member">
@@ -22,7 +22,7 @@ Alle drei Feldtypen, abgeschickt mit einem gewöhnlichen `<form>`. Ändere ein F
     <r-checkbox name="subscribe">Newsletter abonnieren</r-checkbox>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Absenden</button></r-button>
   </form>
-</Demo>
+</ran-demo>
 
 > Wie der Abschnitt [Layout](#layout) weiter unten erklärt: Felder bringen kein eigenes Layout
 > auf Formularebene mit, deshalb setzt jedes Beispiel auf dieser Seite (auch dieses) eigenes
@@ -73,13 +73,13 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 Felder bringen kein Formular-Layout mit: Gestalte dein eigenes `<form>` mit gewöhnlichem CSS:
 
-<Demo column>
+<ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px;">
     <r-input name="first" label="Vorname"></r-input>
     <r-input name="last" label="Nachname"></r-input>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Weiter</button></r-button>
   </form>
-</Demo>
+</ran-demo>
 
 ```html
 <form style="display: flex; flex-direction: column; gap: 16px;">
@@ -93,12 +93,12 @@ Felder bringen kein Formular-Layout mit: Gestalte dein eigenes `<form>` mit gew�
 
 `r-input`, `r-checkbox` und `r-select` unterstützen alle `required` (blockiert das Absenden und löst die native Validierungsblase des Browsers aus, genau wie ein natives Feld) sowie `checkValidity()`, `reportValidity()`, `validity` und `validationMessage`. Ein natives `form.reset()` (oder ein `<button type="reset">`) stellt über `formResetCallback()` jedes Feld auf seinen Zustand vor der Eingabe zurück. Einzelheiten stehen in der Dokumentation des jeweiligen Feldes ([Input](/de/src/ranui/input/#form-association), [Checkbox](/de/src/ranui/checkbox/#form-association), [Select](/de/src/ranui/select/#form-association)).
 
-<Demo column>
+<ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
     <r-input name="username" label="Benutzername" required></r-input>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Absenden</button></r-button>
   </form>
-</Demo>
+</ran-demo>
 
 ```html
 <form style="display: flex; flex-direction: column; gap: 16px;">

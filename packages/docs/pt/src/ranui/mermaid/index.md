@@ -15,9 +15,9 @@ diagrama no próprio shadow root, ficando isolado dos estilos da página.
 
 ## Início rápido
 
-<Demo>
+<ran-demo>
   <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]; C --> D[Respond]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid>graph LR; A[Request] --> B[Validate]; B --> C[Store]</r-mermaid>
@@ -41,9 +41,9 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // o setter da propriedade codifica
 Cada controle é **opcional** e ligado por um atributo booleano; um `<r-mermaid>` sem nada é um
 diagrama estático e limpo. A barra aparece ao passar o mouse (canto superior direito).
 
-<Demo>
+<ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid copy download fullscreen>graph TD; A --> B; B --> C</r-mermaid>

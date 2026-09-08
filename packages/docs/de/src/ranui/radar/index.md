@@ -14,9 +14,9 @@ Netzdiagramm, um mehrere Kennzahlen eines Datensatzes auf einer zweidimensionale
 
 Die Daten kommen als **JSON-Zeichenkette** (ein Array von Objekten) über das Attribut `abilitys`. Da HTML-Attribute nur Zeichenketten halten können, muss der Wert gültiges JSON sein; intern wird er mit `JSON.parse` gelesen. Der Host `<r-radar>` hat keine eigene Größe — gib ihm also eine ausdrückliche Breite und Höhe.
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"Leben","scoreRate":"10"},{"abilityName":"Angriff","scoreRate":"90"},{"abilityName":"Verteidigung","scoreRate":"20"},{"abilityName":"Elementarkunde","scoreRate":"50"},{"abilityName":"Krit-Chance","scoreRate":"80"},{"abilityName":"Krit-Schaden","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -67,9 +67,9 @@ Jeder Eintrag des `abilitys`-Arrays nimmt diese Schlüssel an:
 
 Das Aussehen einzelner Beschriftungen (`backgroundColor`, `fontSize`, `fontColor`) lässt sich pro Eintrag setzen:
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"Leben","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"Angriff","scoreRate":"90"},{"abilityName":"Verteidigung","scoreRate":"20"},{"abilityName":"Elementarkunde","scoreRate":"50"},{"abilityName":"Krit-Chance","scoreRate":"80"},{"abilityName":"Krit-Schaden","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -80,9 +80,9 @@ Das Aussehen einzelner Beschriftungen (`backgroundColor`, `fontSize`, `fontColor
 
 ### Gitterfarbe `colorPolygon`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorPolygon="green" abilitys='[{"abilityName":"Leben","scoreRate":"10"},{"abilityName":"Angriff","scoreRate":"90"},{"abilityName":"Verteidigung","scoreRate":"20"},{"abilityName":"Elementarkunde","scoreRate":"50"},{"abilityName":"Krit-Chance","scoreRate":"80"},{"abilityName":"Krit-Schaden","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -94,9 +94,9 @@ Das Aussehen einzelner Beschriftungen (`backgroundColor`, `fontSize`, `fontColor
 
 ### Achsenfarbe `colorLine`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" colorLine="blue" abilitys='[{"abilityName":"Leben","scoreRate":"10"},{"abilityName":"Angriff","scoreRate":"90"},{"abilityName":"Verteidigung","scoreRate":"20"},{"abilityName":"Elementarkunde","scoreRate":"50"},{"abilityName":"Krit-Chance","scoreRate":"80"},{"abilityName":"Krit-Schaden","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -108,9 +108,9 @@ Das Aussehen einzelner Beschriftungen (`backgroundColor`, `fontSize`, `fontColor
 
 ### Füllfarbe der Fläche `fillColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" fillColor="red" abilitys='[{"abilityName":"Leben","scoreRate":"10"},{"abilityName":"Angriff","scoreRate":"90"},{"abilityName":"Verteidigung","scoreRate":"20"},{"abilityName":"Elementarkunde","scoreRate":"50"},{"abilityName":"Krit-Chance","scoreRate":"80"},{"abilityName":"Krit-Schaden","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar
@@ -122,9 +122,9 @@ Das Aussehen einzelner Beschriftungen (`backgroundColor`, `fontSize`, `fontColor
 
 ### Umrissfarbe der Fläche `strokeColor`
 
-<Demo>
+<ran-demo>
   <r-radar style="width:300px;height:300px;display:block;" strokeColor="blue" abilitys='[{"abilityName":"Leben","scoreRate":"10"},{"abilityName":"Angriff","scoreRate":"90"},{"abilityName":"Verteidigung","scoreRate":"20"},{"abilityName":"Elementarkunde","scoreRate":"50"},{"abilityName":"Krit-Chance","scoreRate":"80"},{"abilityName":"Krit-Schaden","scoreRate":"50"}]'></r-radar>
-</Demo>
+</ran-demo>
 
 ```html
 <r-radar

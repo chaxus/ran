@@ -12,9 +12,9 @@ Button-Komponente für sofortige Aktionen, mit mehreren Stilen und Zuständen.
 
 ### Grundlegende Verwendung
 
-<Demo>
+<ran-demo>
   <r-button>Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button>Button</r-button>
@@ -33,12 +33,12 @@ Button-Komponente für sofortige Aktionen, mit mehreren Stilen und Zuständen.
 
 ### Button-Typen `type`
 
-<Demo>
+<ran-demo>
   <r-button type="primary">Primary Button</r-button>
   <r-button type="warning">Warning Button</r-button>
   <r-button type="text">Text Button</r-button>
   <r-button>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary">Primary Button</r-button>
@@ -51,12 +51,12 @@ Button-Komponente für sofortige Aktionen, mit mehreren Stilen und Zuständen.
 
 ### Deaktiviert `disabled`
 
-<Demo>
+<ran-demo>
   <r-button type="primary" disabled>Primary Button</r-button>
   <r-button type="warning" disabled>Warning Button</r-button>
   <r-button type="text" disabled>Text Button</r-button>
   <r-button disabled>Default Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" disabled>Primary Button</r-button>
@@ -69,10 +69,10 @@ Button-Komponente für sofortige Aktionen, mit mehreren Stilen und Zuständen.
 
 > 💡 **Tipp**: Für eine präzise Icon-Positionierung nimm die Icon-Komponente direkt.
 
-<Demo>
+<ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
   <r-button type="primary" icon="home">Primary Button</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="default" icon="user">Default Button</r-button>
@@ -83,10 +83,10 @@ Button-Komponente für sofortige Aktionen, mit mehreren Stilen und Zuständen.
 
 Die Klick-Welle ist standardmäßig an. Setze `effect="false"` für einen schlichten Button ohne sie. Die beiden Buttons unten unterscheiden sich nur in diesem Attribut — klicke beide und vergleiche. Die Welle ist ein Effekt für Zeigegeräte und wird erst ab einer Viewport-Breite von 1024px gezeichnet.
 
-<Demo>
+<ran-demo>
   <r-button type="primary" icon="home">Mit Welle (Standard)</r-button>
   <r-button type="primary" icon="home" effect="false">Ohne Welle</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" icon="home">Mit Welle (Standard)</r-button>

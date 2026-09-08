@@ -14,14 +14,14 @@ Popover component that reveals a floating bubble card layer when the trigger is 
 
 The trigger lives in the default slot; the floating content is wrapped in a nested `<r-content>` element.
 
-<Demo>
+<ran-demo>
   <r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>this is content</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover style="display: inline-block;">
@@ -45,7 +45,7 @@ The trigger lives in the default slot; the floating content is wrapped in a nest
 
 ### Trigger Mode `trigger`
 
-<Demo>
+<ran-demo>
   <r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
@@ -58,7 +58,7 @@ The trigger lives in the default slot; the floating content is wrapped in a nest
       <div>click</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" style="display: inline-block;">
@@ -78,7 +78,7 @@ The trigger lives in the default slot; the floating content is wrapped in a nest
 
 ### Placement `placement`
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
@@ -103,7 +103,7 @@ The trigger lives in the default slot; the floating content is wrapped in a nest
       <div>right</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="top" style="display: inline-block;">
@@ -143,7 +143,7 @@ anchored to the right end of a header bar, so that it opens inwards rather than 
 back inside the viewport by the shift. The suffix survives an auto-flip: `bottom-end` becomes
 `top-end`, not `top`.
 
-<Demo column>
+<ran-demo column>
   <r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
@@ -162,7 +162,7 @@ back inside the viewport by the shift. The suffix survives an auto-flip: `bottom
       <div style="width: 200px;">bottom-end</div>
     </r-content>
   </r-popover>
-</Demo>
+</ran-demo>
 
 ```html
 <r-popover trigger="hover" placement="bottom-end" style="display: inline-block;">

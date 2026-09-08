@@ -6,7 +6,6 @@ import Home from '../components/Home.vue';
 import HomeCinematic from '../components/HomeCinematic.vue';
 import GlassPlayground from '../components/GlassPlayground.vue';
 import IconGallery from '../components/IconGallery.vue';
-import Demo from '../components/Demo.vue';
 import './styles/fonts.css';
 import './styles/index.css';
 import './styles/doc.css';
@@ -104,6 +103,5 @@ export default {
     app.component('HomeCinematic', HomeCinematic);
     app.component('GlassPlayground', GlassPlayground);
     app.component('IconGallery', IconGallery);
-    app.component('Demo', Demo);
   },
 };

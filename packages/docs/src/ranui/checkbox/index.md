@@ -12,9 +12,9 @@ Checkbox component for toggling a single on/off choice, with an optional label a
 
 ### Basic Usage
 
-<Demo>
+<ran-demo>
   <r-checkbox>Remember me</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox>Remember me</r-checkbox>
@@ -38,10 +38,10 @@ The default slot content becomes the checkbox label.
 
 ### Checked State `checked`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true">Checked</r-checkbox>
   <r-checkbox checked="false">Unchecked</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true">Checked</r-checkbox> <r-checkbox checked="false">Unchecked</r-checkbox>
@@ -49,10 +49,10 @@ The default slot content becomes the checkbox label.
 
 ### Value `value`
 
-<Demo>
+<ran-demo>
   <r-checkbox value="true">Value true</r-checkbox>
   <r-checkbox value="false">Value false</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox value="true">Value true</r-checkbox> <r-checkbox value="false">Value false</r-checkbox>
@@ -60,10 +60,10 @@ The default slot content becomes the checkbox label.
 
 ### Disabled State `disabled`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" disabled>Checked</r-checkbox>
   <r-checkbox checked="false" disabled>Unchecked</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" disabled>Checked</r-checkbox> <r-checkbox checked="false" disabled>Unchecked</r-checkbox>
@@ -73,9 +73,9 @@ The default slot content becomes the checkbox label.
 
 The `sheet` attribute injects CSS into the shadow DOM, letting you target internal parts by their class names.
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">Themed label</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">Themed label</r-checkbox>
@@ -95,9 +95,9 @@ detail: {
 
 A disabled checkbox does not fire `change`.
 
-<Demo>
+<ran-demo>
   <r-checkbox onchange="message.info(this)">Toggle me</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox onchange="handleChange(event)">Toggle me</r-checkbox>

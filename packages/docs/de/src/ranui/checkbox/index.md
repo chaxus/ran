@@ -12,9 +12,9 @@ Checkbox-Komponente für eine einzelne Ja/Nein-Entscheidung, mit optionaler Besc
 
 ### Grundlegende Verwendung
 
-<Demo>
+<ran-demo>
   <r-checkbox>Angemeldet bleiben</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox>Angemeldet bleiben</r-checkbox>
@@ -38,10 +38,10 @@ Der Inhalt des Standard-Slots wird zur Beschriftung der Checkbox.
 
 ### Zustand `checked`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true">Angehakt</r-checkbox>
   <r-checkbox checked="false">Nicht angehakt</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true">Angehakt</r-checkbox> <r-checkbox checked="false">Nicht angehakt</r-checkbox>
@@ -49,10 +49,10 @@ Der Inhalt des Standard-Slots wird zur Beschriftung der Checkbox.
 
 ### Wert `value`
 
-<Demo>
+<ran-demo>
   <r-checkbox value="true">Wert true</r-checkbox>
   <r-checkbox value="false">Wert false</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox value="true">Wert true</r-checkbox> <r-checkbox value="false">Wert false</r-checkbox>
@@ -60,10 +60,10 @@ Der Inhalt des Standard-Slots wird zur Beschriftung der Checkbox.
 
 ### Deaktiviert `disabled`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" disabled>Angehakt</r-checkbox>
   <r-checkbox checked="false" disabled>Nicht angehakt</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" disabled>Angehakt</r-checkbox>
@@ -74,9 +74,9 @@ Der Inhalt des Standard-Slots wird zur Beschriftung der Checkbox.
 
 Das Attribut `sheet` injiziert CSS ins Shadow DOM und lässt dich interne Teile über ihre Klassennamen ansprechen.
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">Beschriftung mit Theme</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">Beschriftung mit Theme</r-checkbox>
@@ -96,9 +96,9 @@ detail: {
 
 Eine deaktivierte Checkbox löst kein `change` aus.
 
-<Demo>
+<ran-demo>
   <r-checkbox onchange="message.info(this)">Schalt mich um</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox onchange="handleChange(event)">Schalt mich um</r-checkbox>

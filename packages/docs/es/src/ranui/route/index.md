@@ -14,11 +14,11 @@ Un elemento de salida de enrutado. Colocado dentro de un [`r-router`](../router/
 
 Un `r-route` cuyo `path` es `/` coincide con la ruta por defecto, así que su contenido se dibuja por sí solo:
 
-<Demo>
+<ran-demo>
   <r-route path="/">
     <p>Este contenido se muestra cuando la ruta actual coincide.</p>
   </r-route>
-</Demo>
+</ran-demo>
 
 ```html
 <r-route path="/">

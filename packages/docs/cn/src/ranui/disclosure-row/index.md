@@ -14,11 +14,11 @@ description: 'ranui DisclosureRow（<r-disclosure-row>）是一行「标题 · �
 
 ### 基础用法
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Read file" summary="packages/ranui/index.ts" expandable>
     <div style="padding:8px 0">展开后显示的正文。</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Read file" summary="packages/ranui/index.ts" expandable>
@@ -33,10 +33,10 @@ description: 'ranui DisclosureRow（<r-disclosure-row>）是一行「标题 · �
 
 `busy` 会让一道微光扫过该行。转圈只说明「某处有事在发生」，扫过这一行则说明**正是这一行**还在跑。
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Run tests" summary="2351 passed" busy expandable></r-disclosure-row>
   <r-disclosure-row heading="Run tests" summary="2351 passed" expandable></r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ### 带前缀指示
 
@@ -44,12 +44,12 @@ description: 'ranui DisclosureRow（<r-disclosure-row>）是一行「标题 · �
 
 没有 `leading` 内容时，箭头一直显示，它是这一行唯一能表明可展开的标记；有 `leading` 内容时，箭头改为在悬停、聚焦或展开时出现，其余时候显示的是状态点。
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Build" summary="failed in 4.2s" tone="error" expandable>
     <r-state-dot slot="leading" state="error"></r-state-dot>
     <div style="padding:8px 0">产物超过体积上限。</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Build" summary="failed in 4.2s" tone="error" expandable>

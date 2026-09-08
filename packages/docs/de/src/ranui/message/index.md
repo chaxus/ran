@@ -10,9 +10,9 @@ Komponente für globale Rückmeldungen zu Aktionsergebnissen, imperativ über di
 
 ## Schnellstart
 
-<Demo>
+<ran-demo>
   <r-button type="primary" onclick="message.info('Das ist ein Hinweis')">Meldung zeigen</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" onclick="message.info('Das ist ein Hinweis')">Meldung zeigen</r-button>
@@ -80,13 +80,13 @@ Jeder Toast ist ein Custom Element `<r-message>`. Die globale API setzt diese At
 
 ## Meldungsarten `type`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info('Das ist ein Hinweis')">Hinweis</r-button>
   <r-button onclick="message.success('Das ist ein Hinweis')">Erfolg</r-button>
   <r-button onclick="message.warning('Das ist ein Hinweis')">Warnung</r-button>
   <r-button onclick="message.error('Das ist ein Hinweis')">Fehler</r-button>
   <r-button onclick="message.toast('Das ist ein Hinweis')">Toast</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info('Das ist ein Hinweis')">Hinweis</r-button>
@@ -98,10 +98,10 @@ Jeder Toast ist ein Custom Element `<r-message>`. Die globale API setzt diese At
 
 ## Eigene Dauer `duration`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: 'Bleibt 6 s', duration: 6000 })">6-Sekunden-Toast</r-button>
   <r-button onclick="message.info({ content: 'Bleibt 1 s', duration: 1000 })">1-Sekunden-Toast</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info({ content: 'Bleibt 6 s', duration: 6000 })">6-Sekunden-Toast</r-button>
@@ -112,9 +112,9 @@ Jeder Toast ist ein Custom Element `<r-message>`. Die globale API setzt diese At
 
 Das Callback `close` läuft, nachdem der Toast aus dem DOM entfernt wurde.
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.success({ content: 'Gespeichert', close: () => message.info('Toast geschlossen') })">Verkettete Meldung</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.success({ content: 'Gespeichert', close: () => message.info('Toast geschlossen') })"
@@ -134,9 +134,9 @@ message.success({
 
 ## Eigene Platzierung `top` / `zIndex` / `getContainer`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: 'Nach unten geschoben', top: 120 })">Vom oberen Rand versetzen</r-button>
-</Demo>
+</ran-demo>
 
 ```js
 message.info({

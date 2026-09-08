@@ -12,9 +12,9 @@ Componente de caixa de seleção para alternar uma única escolha de sim ou não
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-checkbox>Lembrar de mim</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox>Lembrar de mim</r-checkbox>
@@ -38,10 +38,10 @@ O conteúdo do slot padrão vira o rótulo da caixa.
 
 ### Estado marcado `checked`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true">Marcada</r-checkbox>
   <r-checkbox checked="false">Desmarcada</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true">Marcada</r-checkbox> <r-checkbox checked="false">Desmarcada</r-checkbox>
@@ -49,10 +49,10 @@ O conteúdo do slot padrão vira o rótulo da caixa.
 
 ### Valor `value`
 
-<Demo>
+<ran-demo>
   <r-checkbox value="true">Valor true</r-checkbox>
   <r-checkbox value="false">Valor false</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox value="true">Valor true</r-checkbox> <r-checkbox value="false">Valor false</r-checkbox>
@@ -60,10 +60,10 @@ O conteúdo do slot padrão vira o rótulo da caixa.
 
 ### Estado desabilitado `disabled`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" disabled>Marcada</r-checkbox>
   <r-checkbox checked="false" disabled>Desmarcada</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" disabled>Marcada</r-checkbox> <r-checkbox checked="false" disabled>Desmarcada</r-checkbox>
@@ -73,9 +73,9 @@ O conteúdo do slot padrão vira o rótulo da caixa.
 
 O atributo `sheet` injeta CSS no shadow DOM, deixando você mirar as partes internas pelos nomes de classe.
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">Rótulo com tema</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">Rótulo com tema</r-checkbox>
@@ -95,9 +95,9 @@ detail: {
 
 Uma caixa desabilitada não dispara `change`.
 
-<Demo>
+<ran-demo>
   <r-checkbox onchange="message.info(this)">Alterne-me</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox onchange="handleChange(event)">Alterne-me</r-checkbox>

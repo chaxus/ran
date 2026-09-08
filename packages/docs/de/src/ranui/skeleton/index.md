@@ -14,9 +14,9 @@ Platzhaltergrafik, die den Platz des Inhalts einnimmt, solange dieser lädt — 
 
 Das Skeleton füllt die Breite seines Elternelements und ist standardmäßig `16px` hoch.
 
-<Demo>
+<ran-demo>
   <r-skeleton></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton></r-skeleton>
@@ -26,7 +26,7 @@ Das Skeleton füllt die Breite seines Elternelements und ist standardmäßig `16
 
 Da das Skeleton `width: 100%` ist, steuerst du seine Länge über die Größe des Containers, in dem es liegt.
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100px">
     <r-skeleton></r-skeleton>
   </div>
@@ -36,7 +36,7 @@ Da das Skeleton `width: 100%` ist, steuerst du seine Länge über die Größe de
   <div style="width: 100%">
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="width: 100px">
@@ -54,13 +54,13 @@ Da das Skeleton `width: 100%` ist, steuerst du seine Länge über die Größe de
 
 Setze mehrere Skeletons zusammen, um einen Textblock oder einen Absatz nachzubilden.
 
-<Demo column>
+<ran-demo column>
   <div style="width: 100%; display: flex; flex-direction: column; gap: 12px">
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
     <r-skeleton></r-skeleton>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <div style="display: flex; flex-direction: column; gap: 12px">
@@ -82,9 +82,9 @@ Setze mehrere Skeletons zusammen, um einen Textblock oder einen Absatz nachzubil
 
 Übergib über `sheet` eine CSS-Zeichenkette, um das Aussehen des Skeletons in seinem Shadow DOM zu überschreiben.
 
-<Demo>
+<ran-demo>
   <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton sheet=".ran-skeleton { height: 40px; border-radius: 20px; }"></r-skeleton>
@@ -102,9 +102,9 @@ Für Theming ohne `sheet` stellt das Skeleton außerdem CSS-Custom-Properties be
 | `--ran-skeleton-shimmer-background`         | `linear-gradient(90deg, …)`    | Verlauf des wandernden Glanzes |
 | `--ran-skeleton-shimmer-animation-duration` | `1.4s`                         | Dauer eines Schimmerdurchlaufs |
 
-<Demo>
+<ran-demo>
   <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>
-</Demo>
+</ran-demo>
 
 ```html
 <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>

@@ -12,13 +12,13 @@ description: '머리말·본문·바닥글 영역을 갖춘 구조화된 콘텐�
 
 ### 기본 사용법
 
-<Demo>
+<ran-demo>
   <r-card heading="카드 제목" description="선택적 부제" style="max-width: 360px;">
     <span slot="extra" style="font-size: 12px;">tag</span>
     <p style="margin: 0;">본문 콘텐츠는 기본 슬롯에 들어갑니다.</p>
     <a slot="footer" href="#">메모 보기</a>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="카드 제목" description="선택적 부제">
@@ -43,11 +43,11 @@ description: '머리말·본문·바닥글 영역을 갖춘 구조화된 콘텐�
 
 카드 제목이며 머리말 맨 위에 나옵니다. 비면 숨겨집니다.
 
-<Demo>
+<ran-demo>
   <r-card heading="제목만" style="max-width: 360px;">
     <p style="margin: 0;">본문 콘텐츠.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="제목만">
@@ -59,11 +59,11 @@ description: '머리말·본문·바닥글 영역을 갖춘 구조화된 콘텐�
 
 제목 아래에 그려지는 부제입니다. 비면 숨겨집니다. `title`도 `description`도 지정하지 않으면 머리말 전체가 숨겨집니다.
 
-<Demo>
+<ran-demo>
   <r-card heading="제목" description="짧은 보조 부제" style="max-width: 360px;">
     <p style="margin: 0;">본문 콘텐츠.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="제목" description="짧은 보조 부제">
@@ -75,11 +75,11 @@ description: '머리말·본문·바닥글 영역을 갖춘 구조화된 콘텐�
 
 카드는 기본적으로 마우스에 반응하지 않습니다. 실제로 클릭되는 카드에만 `hoverable` 어트리뷰트를 붙이세요. 마우스를 올리면 테두리가 회색 사다리에서 한 단계 짙어지고 (`--ran-color-border` → `--ran-color-border-hover`) 표면이 조용한 떠오름 그림자 (`--ran-shadow-elevated`) 를 입습니다.
 
-<Demo>
+<ran-demo>
   <r-card hoverable heading="호버되는 카드" description="마우스를 올려 보세요" style="max-width: 360px; cursor: pointer;">
     <p style="margin: 0;">테두리가 짙어지고 카드가 살짝 떠오릅니다.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card hoverable heading="호버되는 카드" description="마우스를 올려 보세요">

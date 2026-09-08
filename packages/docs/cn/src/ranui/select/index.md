@@ -14,13 +14,13 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 
 选项通过插槽里的 `<r-option>` 子元素提供。每个选项的 `value` 属性是它的值，文本内容是显示的标签。
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -69,13 +69,13 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 字段上方的静态标题，始终可见，不会和相邻内容重叠。使用和 `r-input` 的 `label` 相同的
 token 与布局，所以并排放置的带标题 select 和带标题 input 会对齐（同样的高度、同样的顶边）。
 
-<Demo>
+<ran-demo>
   <r-select label="Country" style="width: 180px" defaultValue="185">
     <r-option value="185">United States</r-option>
     <r-option value="186">Canada</r-option>
     <r-option value="187">Mexico</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select label="Country" defaultValue="185">
@@ -87,13 +87,13 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### 默认值 `defaultValue`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
@@ -105,13 +105,13 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### 禁用状态 `disabled`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
@@ -123,13 +123,13 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### 文本类型 `type`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
@@ -162,13 +162,13 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 另外，边界平移的优先级高于对齐：触发器离视口边缘足够近时，无论要求了哪种对齐，面板都会被推回可视区域内。
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
@@ -208,13 +208,13 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### 搜索功能 `showSearch`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <r-select style="width: 120px; height: 40px" showSearch="true">
@@ -226,13 +226,13 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### 触发方式 `trigger`
 
-<Demo>
+<ran-demo>
   <r-select style="width: 120px; height: 40px" trigger="click,hover">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
   </r-select>
-</Demo>
+</ran-demo>
 
 ```html
 <!-- 点击触发（默认） -->

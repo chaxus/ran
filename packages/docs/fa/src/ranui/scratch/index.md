@@ -16,9 +16,9 @@ description: 'سطحی آزمایشی به سبک کارت اسکراچ که ب�
 
 هرچه درون `<r-scratch>` بگذارید همان محتوای آشکارشونده است (یک مبلغ، یک تصویر، یک `<r-icon>`، یا چند عنصر) که از راه اسلات پیش‌فرض به لایهٔ زیر پوشش بازتاب می‌یابد — درست مثل بازتاب محتوا در هر کامپوننت دیگر ranui.
 
-<Demo>
+<ran-demo>
   <r-scratch style="display: block; width: 240px; height: 120px;">۵۰ سکه بردی!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch style="display: block; width: 240px; height: 120px;">۵۰ سکه بردی!</r-scratch>
@@ -35,9 +35,9 @@ description: 'سطحی آزمایشی به سبک کارت اسکراچ که ب�
 
 ### حالت غیرفعال `disabled`
 
-<Demo>
+<ran-demo>
   <r-scratch disabled style="display: block; width: 240px; height: 120px;">۵۰ سکه بردی!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch disabled style="display: block; width: 240px; height: 120px;">۵۰ سکه بردی!</r-scratch>
@@ -45,9 +45,9 @@ description: 'سطحی آزمایشی به سبک کارت اسکراچ که ب�
 
 ### استایل بیرونی `sheet`
 
-<Demo>
+<ran-demo>
   <r-scratch sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }" style="display: block; width: 240px; height: 120px;">🎁</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch

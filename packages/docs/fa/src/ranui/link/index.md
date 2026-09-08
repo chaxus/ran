@@ -12,9 +12,9 @@ description: 'لنگری آگاه از مسیریاب که جابه‌جایی �
 
 ### استفادهٔ پایه
 
-<Demo>
+<ran-demo>
   <r-link href="/getting-started">شروع کنید</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/getting-started">شروع کنید</r-link>
@@ -36,10 +36,10 @@ description: 'لنگری آگاه از مسیریاب که جابه‌جایی �
 
 مسیرهای درونی درون برنامه حل می‌شوند؛ نشانی‌های مطلق و پیوندهای `mailto:` / `tel:` عادی می‌روند.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs">پیوند درونی</r-link>
   <r-link href="https://example.com">پیوند بیرونی</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs">پیوند درونی</r-link> <r-link href="https://example.com">پیوند بیرونی</r-link>
@@ -49,9 +49,9 @@ description: 'لنگری آگاه از مسیریاب که جابه‌جایی �
 
 ویژگی بولی. وقتی باشد، جابه‌جایی درون برنامه به‌جای افزودن مدخل تازه، مدخل کنونی تاریخچه را جایگزین می‌کند (`router.replace`).
 
-<Demo>
+<ran-demo>
   <r-link href="/settings" replace>جایگزینی مدخل</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/settings" replace>جایگزینی مدخل</r-link>
@@ -61,9 +61,9 @@ description: 'لنگری آگاه از مسیریاب که جابه‌جایی �
 
 کد CSS که به shadow DOM پیوند تزریق می‌شود و از همان قرارداد `sheet` پیروی می‌کند که همهٔ کامپوننت‌های دیگر ranui دارند. چون `<a>`ِ کلیک‌شدنی داخل shadow root است، اگر می‌خواهید میزبان مثل دکمه یا کارت دیده شود، مدل جعبه (`display`، `padding`، `width`) را با `sheet` بدهید.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">پیوند با فاصلهٔ داخلی</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; }">پیوند با فاصلهٔ داخلی</r-link>

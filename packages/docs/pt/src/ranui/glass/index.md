@@ -26,7 +26,7 @@ Arraste o vidro pelo palco, ajuste cada atributo e copie a marcação exata. Os 
 
 O `<r-glass>` compõe: aninhe um dentro do outro para materiais em camadas (uma barra de vidro sobre um painel de vidro, por exemplo). Cada camada refrata o que está atrás dela.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
     <r-glass radius="26" style="width: 340px;">
       <div style="padding: 26px;">
@@ -37,7 +37,7 @@ O `<r-glass>` compõe: aninhe um dentro do outro para materiais em camadas (uma 
       </div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass radius="26">
@@ -70,12 +70,12 @@ O `<r-glass>` compõe: aninhe um dentro do outro para materiais em camadas (uma 
 
 `displace` controla a escala do `feDisplacementMap` SVG: com que força a luz entorta ao atravessar a superfície. Coloque `0` para uma chapa fosca sem mais.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
     <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
     <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass displace="0">…fosco plano…</r-glass> <r-glass displace="60">…líquido…</r-glass>
@@ -85,13 +85,13 @@ O `<r-glass>` compõe: aninhe um dentro do outro para materiais em camadas (uma 
 
 `sheen` acrescenta um reflexo especular em movimento; `interactive` acrescenta uma elevação no hover e um toque com mola ao pressionar (usando o token compartilhado `--ran-motion-ease-spring`).
 
-<Demo>
+<ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass sheen interactive displace="36" style="width: 260px;">
       <div style="padding: 20px; color: #fff; font-weight: 600;">Passe o cursor e pressione</div>
     </r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass sheen interactive displace="36">
@@ -105,12 +105,12 @@ O `<r-glass>` compõe: aninhe um dentro do outro para materiais em camadas (uma 
 
 Desenha primeiro em WebGL (síncrono, funciona em praticamente todo navegador, então a borda nunca atrasa a própria primeira pintura) e troca de forma transparente para WebGPU em segundo plano se o navegador tiver (mesmo efeito, saída idêntica no pixel). Recai no gradiente especular de CSS quando nenhuma das duas APIs de GPU existe (navegadores bem antigos, GPU desativada, SSR); não há estado quebrado ou em branco a contornar no design.
 
-<Demo>
+<ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
     <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">sem rim</div></r-glass>
     <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
   </div>
-</Demo>
+</ran-demo>
 
 ```html
 <r-glass>…apenas o especular de CSS…</r-glass>

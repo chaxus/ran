@@ -15,11 +15,11 @@ description: 'کامپوننت TokenMeter در ranui (<r-token-meter>) نشان 
 
 ### استفادهٔ پایه
 
-<Demo column>
+<ran-demo column>
   <r-token-meter limit="65536" used="12800"></r-token-meter>
   <r-token-meter limit="65536" used="54000"></r-token-meter>
   <r-token-meter limit="65536" used="69000"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter limit="65536" used="12800"></r-token-meter>
@@ -58,15 +58,15 @@ r-token-meter[level='warn'] ~ .composer-hint {
 اگر `limit` تعیین نشده یا صفر باشد، نوار ناپدید می‌شود و تنها شمارها می‌مانند؛ وقتی اندازهٔ پنجره
 هنوز معلوم نیست به کار می‌آید.
 
-<Demo>
+<ran-demo>
   <r-token-meter used="41200" spent="128431"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ### تغییر برچسب
 
-<Demo>
+<ran-demo>
   <r-token-meter label="بافتار" limit="65536" used="41200"></r-token-meter>
-</Demo>
+</ran-demo>
 
 ```html
 <r-token-meter label="بافتار" limit="65536" used="41200"></r-token-meter>

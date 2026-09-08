@@ -12,13 +12,13 @@ description: 'نگه‌دارنده‌ای ساختارمند برای محتو�
 
 ### استفادهٔ پایه
 
-<Demo>
+<ran-demo>
   <r-card heading="عنوان کارت" description="زیرعنوان اختیاری" style="max-width: 360px;">
     <span slot="extra" style="font-size: 12px;">tag</span>
     <p style="margin: 0;">محتوای بدنه در اسلات پیش‌فرض قرار می‌گیرد.</p>
     <a slot="footer" href="#">دیدن یادداشت‌ها</a>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="عنوان کارت" description="زیرعنوان اختیاری">
@@ -43,11 +43,11 @@ description: 'نگه‌دارنده‌ای ساختارمند برای محتو�
 
 عنوان کارت که بالای سربرگ نشان داده می‌شود. خالی که باشد پنهان است.
 
-<Demo>
+<ran-demo>
   <r-card heading="فقط یک عنوان" style="max-width: 360px;">
     <p style="margin: 0;">محتوای بدنه.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="فقط یک عنوان">
@@ -59,11 +59,11 @@ description: 'نگه‌دارنده‌ای ساختارمند برای محتو�
 
 زیرعنوانی که زیر عنوان کشیده می‌شود. خالی که باشد پنهان است. اگر نه `title` و نه `description` تعیین شده باشد، کل سربرگ پنهان می‌شود.
 
-<Demo>
+<ran-demo>
   <r-card heading="عنوان" description="زیرعنوانی کوتاه و پشتیبان" style="max-width: 360px;">
     <p style="margin: 0;">محتوای بدنه.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="عنوان" description="زیرعنوانی کوتاه و پشتیبان">
@@ -75,11 +75,11 @@ description: 'نگه‌دارنده‌ای ساختارمند برای محتو�
 
 کارت‌ها به‌طور پیش‌فرض به نشانگر واکنش نشان نمی‌دهند. ویژگی `hoverable` را تنها روی کارت‌هایی بگذارید که واقعاً کلیک‌شدنی‌اند: با نگه‌داشتن نشانگر، حاشیه یک پله روی نردبان خاکستری تیره‌تر می‌شود (`--ran-color-border` ← `--ran-color-border-hover`) و سطح، سایهٔ بلندشدهٔ آرام (`--ran-shadow-elevated`) را می‌گیرد.
 
-<Demo>
+<ran-demo>
   <r-card hoverable heading="کارت با hover" description="نشانگر را روی من ببرید" style="max-width: 360px; cursor: pointer;">
     <p style="margin: 0;">حاشیه تیره‌تر می‌شود و کارت کمی بالا می‌آید.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card hoverable heading="کارت با hover" description="نشانگر را روی من ببرید">

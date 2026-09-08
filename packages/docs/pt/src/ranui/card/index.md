@@ -12,13 +12,13 @@ Um contêiner de conteúdo estruturado com zonas de cabeçalho, corpo e rodapé 
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-card heading="Título do cartão" description="Subtítulo opcional" style="max-width: 360px;">
     <span slot="extra" style="font-size: 12px;">tag</span>
     <p style="margin: 0;">O conteúdo do corpo vai no slot padrão.</p>
     <a slot="footer" href="#">Ver notas</a>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Título do cartão" description="Subtítulo opcional">
@@ -43,11 +43,11 @@ Um contêiner de conteúdo estruturado com zonas de cabeçalho, corpo e rodapé 
 
 O título do cartão, exibido no topo do cabeçalho. Fica oculto quando vazio.
 
-<Demo>
+<ran-demo>
   <r-card heading="Apenas um título" style="max-width: 360px;">
     <p style="margin: 0;">Conteúdo do corpo.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Apenas um título">
@@ -59,11 +59,11 @@ O título do cartão, exibido no topo do cabeçalho. Fica oculto quando vazio.
 
 Um subtítulo desenhado abaixo do título. Fica oculto quando vazio. Quando nem `title` nem `description` estão definidos, o cabeçalho inteiro some.
 
-<Demo>
+<ran-demo>
   <r-card heading="Título" description="Um subtítulo curto de apoio" style="max-width: 360px;">
     <p style="margin: 0;">Conteúdo do corpo.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="Título" description="Um subtítulo curto de apoio">
@@ -75,11 +75,11 @@ Um subtítulo desenhado abaixo do título. Fica oculto quando vazio. Quando nem 
 
 Cartões não reagem ao mouse por padrão. Acrescente o atributo `hoverable` nos cartões que são de fato clicáveis: ao passar o mouse, a borda escurece um passo na escala de cinzas (`--ran-color-border` → `--ran-color-border-hover`) e a superfície ganha a sombra elevada discreta (`--ran-shadow-elevated`).
 
-<Demo>
+<ran-demo>
   <r-card hoverable heading="Cartão com hover" description="Passe o mouse" style="max-width: 360px; cursor: pointer;">
     <p style="margin: 0;">A borda escurece e o cartão sobe um pouco.</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card hoverable heading="Cartão com hover" description="Passe o mouse">

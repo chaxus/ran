@@ -12,11 +12,11 @@ description: 'ranui の DisclosureRow（<r-disclosure-row>）は「タイトル 
 
 ### 基本的な使い方
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="ファイルを読む" summary="packages/ranui/index.ts" expandable>
     <div style="padding:8px 0">行が開いているあいだ、本文が現れます。</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="ファイルを読む" summary="packages/ranui/index.ts" expandable>
@@ -30,10 +30,10 @@ description: 'ranui の DisclosureRow（<r-disclosure-row>）は「タイトル 
 
 `busy` は行の上に光の帯を流します。スピナーは「どこかで何かが起きている」ことしか示しませんが、行の上を流れる光は、どの行がまだ働いているのかを指し示します。
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="テストを実行" summary="2351 件成功" busy expandable></r-disclosure-row>
   <r-disclosure-row heading="テストを実行" summary="2351 件成功" expandable></r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ### 先頭のインジケーターつき
 
@@ -41,12 +41,12 @@ description: 'ranui の DisclosureRow（<r-disclosure-row>）は「タイトル 
 
 `leading` に何も入れていなければ、山形の記号はずっと見えたままです。この行が開くことを読者に伝える印は、それしかないからです。先頭に内容があるときは、山形の記号はホバー時・フォーカス時・開いているあいだに現れ、それ以外のときは状態のインジケーターが見えています。
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="ビルド" summary="4.2 秒で失敗" tone="error" expandable>
     <r-state-dot slot="leading" state="error"></r-state-dot>
     <div style="padding:8px 0">バンドルがサイズ上限を超えました。</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="ビルド" summary="4.2 秒で失敗" tone="error" expandable>

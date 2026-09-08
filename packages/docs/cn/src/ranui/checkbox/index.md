@@ -12,9 +12,9 @@ description: 'ranui Checkbox（<r-checkbox>）用于切换单个开关选项，�
 
 ### 基础用法
 
-<Demo>
+<ran-demo>
   <r-checkbox>记住我</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox>记住我</r-checkbox>
@@ -38,10 +38,10 @@ description: 'ranui Checkbox（<r-checkbox>）用于切换单个开关选项，�
 
 ### 选中状态 `checked`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true">已选中</r-checkbox>
   <r-checkbox checked="false">未选中</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true">已选中</r-checkbox> <r-checkbox checked="false">未选中</r-checkbox>
@@ -49,10 +49,10 @@ description: 'ranui Checkbox（<r-checkbox>）用于切换单个开关选项，�
 
 ### 值 `value`
 
-<Demo>
+<ran-demo>
   <r-checkbox value="true">值为 true</r-checkbox>
   <r-checkbox value="false">值为 false</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox value="true">值为 true</r-checkbox> <r-checkbox value="false">值为 false</r-checkbox>
@@ -60,10 +60,10 @@ description: 'ranui Checkbox（<r-checkbox>）用于切换单个开关选项，�
 
 ### 禁用状态 `disabled`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" disabled>已选中</r-checkbox>
   <r-checkbox checked="false" disabled>未选中</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" disabled>已选中</r-checkbox> <r-checkbox checked="false" disabled>未选中</r-checkbox>
@@ -73,9 +73,9 @@ description: 'ranui Checkbox（<r-checkbox>）用于切换单个开关选项，�
 
 `sheet` 属性向 shadow DOM 注入 CSS，可以通过内部结构的类名定位并覆盖样式。
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">带主题色的标签</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">带主题色的标签</r-checkbox>
@@ -95,9 +95,9 @@ detail: {
 
 禁用状态下的复选框不会触发 `change`。
 
-<Demo>
+<ran-demo>
   <r-checkbox onchange="message.info(this)">点我切换</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox onchange="handleChange(event)">点我切换</r-checkbox>

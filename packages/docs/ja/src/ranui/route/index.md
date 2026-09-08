@@ -14,11 +14,11 @@ description: '現在のパスがパターンに一致しているあいだだけ
 
 `path` が `/` の `r-route` は既定のパスに一致するので、単体でも内容が描画されます。
 
-<Demo>
+<ran-demo>
   <r-route path="/">
     <p>現在のパスが一致するとき、この内容が表示されます。</p>
   </r-route>
-</Demo>
+</ran-demo>
 
 ```html
 <r-route path="/">

@@ -14,13 +14,13 @@ description: 'ranui 의 StateDot(<r-state-dot>) 은 후광과 중심을 한 엘�
 
 ### 기본 사용법
 
-<Demo>
+<ran-demo>
   <r-state-dot state="idle"></r-state-dot>
   <r-state-dot state="running"></r-state-dot>
   <r-state-dot state="success"></r-state-dot>
   <r-state-dot state="warning"></r-state-dot>
   <r-state-dot state="error"></r-state-dot>
-</Demo>
+</ran-demo>
 
 ```html
 <r-state-dot state="idle"></r-state-dot>
@@ -39,7 +39,7 @@ description: 'ranui 의 StateDot(<r-state-dot>) 은 후광과 중심을 한 엘�
 단서가 색뿐인 상황은 절대 만들지 마세요.
 [디자인 가이드](/ko/src/ranui/design-guides/#accessibility)를 참고하세요.
 
-<Demo column>
+<ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">
     <r-state-dot state="running"></r-state-dot>
     <span>테스트 실행 중</span>
@@ -48,7 +48,7 @@ description: 'ranui 의 StateDot(<r-state-dot>) 은 후광과 중심을 한 엘�
     <r-state-dot state="error"></r-state-dot>
     <span>테스트 2 개 실패</span>
   </div>
-</Demo>
+</ran-demo>
 
 ## API 레퍼런스
 

@@ -12,11 +12,11 @@ El marco de una línea `[inicio] título · resumen` que se despliega para mostr
 
 ### Uso básico
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Leer archivo" summary="packages/ranui/index.ts" expandable>
     <div style="padding:8px 0">El cuerpo aparece cuando la fila está abierta.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Leer archivo" summary="packages/ranui/index.ts" expandable>
@@ -30,10 +30,10 @@ El **heading es la mitad izquierda, de ancho fijo**, y el **summary es la mitad 
 
 `busy` dibuja un barrido de destello a lo ancho de la fila. Una ruleta solo indica que algo, en alguna parte, está ocurriendo; un barrido sobre la fila señala qué fila sigue trabajando.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Ejecutar pruebas" summary="2351 superadas" busy expandable></r-disclosure-row>
   <r-disclosure-row heading="Ejecutar pruebas" summary="2351 superadas" expandable></r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ### Con un indicador al principio
 
@@ -41,12 +41,12 @@ El slot `leading` y la punta de flecha comparten una misma celda de la rejilla, 
 
 Sin nada en `leading`, la punta de flecha se queda a la vista, porque es la única marca que le dice a quien lee que la fila se abre. Con contenido al principio, la flecha aparece al pasar el cursor, al recibir el foco o mientras está abierta, y el resto del tiempo es el indicador de estado lo que se ve.
 
-<Demo column>
+<ran-demo column>
   <r-disclosure-row heading="Compilar" summary="falló en 4,2 s" tone="error" expandable>
     <r-state-dot slot="leading" state="error"></r-state-dot>
     <div style="padding:8px 0">El paquete supera el límite de tamaño.</div>
   </r-disclosure-row>
-</Demo>
+</ran-demo>
 
 ```html
 <r-disclosure-row heading="Compilar" summary="falló en 4,2 s" tone="error" expandable>

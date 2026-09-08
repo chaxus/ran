@@ -14,7 +14,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 
 对话框的显示由 `open` attribute（或同名的 `open` property）控制。初始为关闭状态，在打开前不渲染任何内容，因此需要绑定一个触发器来切换它。
 
-<Demo>
+<ran-demo>
   <r-button onclick="document.getElementById('quickstart-modal').open = true">打开对话框</r-button>
   <r-modal id="quickstart-modal" heading="基础对话框">
     <p>这是对话框的内容。</p>
@@ -22,7 +22,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
       <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">确定</r-button>
     </div>
   </r-modal>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="modal.open = true">打开对话框</r-button>

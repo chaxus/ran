@@ -12,13 +12,13 @@ description: 'ヘッダー・本文・フッターの領域を持つ構造化さ
 
 ### 基本的な使い方
 
-<Demo>
+<ran-demo>
   <r-card heading="カードのタイトル" description="任意の副題" style="max-width: 360px;">
     <span slot="extra" style="font-size: 12px;">tag</span>
     <p style="margin: 0;">本文はデフォルトスロットに入ります。</p>
     <a slot="footer" href="#">メモを見る</a>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="カードのタイトル" description="任意の副題">
@@ -43,11 +43,11 @@ description: 'ヘッダー・本文・フッターの領域を持つ構造化さ
 
 カードの見出しで、ヘッダーの上部に出ます。空なら隠れます。
 
-<Demo>
+<ran-demo>
   <r-card heading="見出しだけ" style="max-width: 360px;">
     <p style="margin: 0;">本文。</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="見出しだけ">
@@ -59,11 +59,11 @@ description: 'ヘッダー・本文・フッターの領域を持つ構造化さ
 
 タイトルの下に描かれる副題です。空なら隠れます。`title` も `description` も設定していないときは、ヘッダー全体が隠れます。
 
-<Demo>
+<ran-demo>
   <r-card heading="タイトル" description="短い補足の副題" style="max-width: 360px;">
     <p style="margin: 0;">本文。</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card heading="タイトル" description="短い補足の副題">
@@ -75,11 +75,11 @@ description: 'ヘッダー・本文・フッターの領域を持つ構造化さ
 
 カードは既定ではホバーに反応しません。実際にクリックできるカードにだけ `hoverable` 属性を付けてください。ホバーすると枠線がグレーの段階を一つ濃くし（`--ran-color-border` → `--ran-color-border-hover`）、面は控えめな浮き上がりの影（`--ran-shadow-elevated`）をまといます。
 
-<Demo>
+<ran-demo>
   <r-card hoverable heading="ホバーできるカード" description="マウスを乗せてみてください" style="max-width: 360px; cursor: pointer;">
     <p style="margin: 0;">枠線が濃くなり、カードがわずかに浮き上がります。</p>
   </r-card>
-</Demo>
+</ran-demo>
 
 ```html
 <r-card hoverable heading="ホバーできるカード" description="マウスを乗せてみてください">

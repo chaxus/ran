@@ -12,9 +12,9 @@ Ancla consciente del enrutador que dibuja un `<a>` alrededor de su contenido con
 
 ### Uso básico
 
-<Demo>
+<ran-demo>
   <r-link href="/getting-started">Primeros pasos</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/getting-started">Primeros pasos</r-link>
@@ -36,10 +36,10 @@ Cuando se hace clic en un `href` interno, el enlace entrega la ruta al enrutador
 
 Las rutas internas se enrutan dentro de la app; las URL absolutas y los enlaces `mailto:` / `tel:` navegan con normalidad.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs">Enlace interno</r-link>
   <r-link href="https://example.com">Enlace externo</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs">Enlace interno</r-link> <r-link href="https://example.com">Enlace externo</r-link>
@@ -49,9 +49,9 @@ Las rutas internas se enrutan dentro de la app; las URL absolutas y los enlaces 
 
 Atributo booleano. Cuando está presente, la navegación interna reemplaza la entrada actual del historial (`router.replace`) en lugar de añadir una nueva.
 
-<Demo>
+<ran-demo>
   <r-link href="/settings" replace>Reemplazar entrada</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/settings" replace>Reemplazar entrada</r-link>
@@ -61,9 +61,9 @@ Atributo booleano. Cuando está presente, la navegación interna reemplaza la en
 
 CSS inyectado en el shadow DOM del enlace. Sigue la misma convención `sheet` que usan todos los demás componentes de ranui. Como el `<a>` sobre el que se hace clic vive dentro del shadow root, usa `sheet` para darle un modelo de caja (`display`, `padding`, `width`) cuando quieras que el host se lea como un botón o una tarjeta.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">Enlace con relleno</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; }">Enlace con relleno</r-link>

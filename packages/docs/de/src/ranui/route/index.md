@@ -14,11 +14,11 @@ Ein Routing-Outlet-Element. In einem [`r-router`](../router/) platziert, zeigt e
 
 Ein `r-route`, dessen `path` `/` ist, passt auf den Standardpfad — sein Inhalt rendert also auch allein:
 
-<Demo>
+<ran-demo>
   <r-route path="/">
     <p>Dieser Inhalt erscheint, wenn der aktuelle Pfad passt.</p>
   </r-route>
-</Demo>
+</ran-demo>
 
 ```html
 <r-route path="/">

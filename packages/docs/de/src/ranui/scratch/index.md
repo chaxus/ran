@@ -16,9 +16,9 @@ Experimentelle Rubbellos-Fläche, die in ihrem Shadow DOM ein bildschirmfüllend
 
 Was du in `<r-scratch>` hineinlegst, ist der freigelegte Inhalt (ein Betrag, ein Bild, ein `<r-icon>`, mehrere Elemente) — über den Standard-Slot in die Schicht unter dem Deckblatt projiziert, genau wie die Inhaltsprojektion in jeder anderen ranui-Komponente.
 
-<Demo>
+<ran-demo>
   <r-scratch style="display: block; width: 240px; height: 120px;">Du hast 50 Münzen gewonnen!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch style="display: block; width: 240px; height: 120px;">Du hast 50 Münzen gewonnen!</r-scratch>
@@ -35,9 +35,9 @@ Was du in `<r-scratch>` hineinlegst, ist der freigelegte Inhalt (ein Betrag, ein
 
 ### Deaktiviert `disabled`
 
-<Demo>
+<ran-demo>
   <r-scratch disabled style="display: block; width: 240px; height: 120px;">Du hast 50 Münzen gewonnen!</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch disabled style="display: block; width: 240px; height: 120px;">Du hast 50 Münzen gewonnen!</r-scratch>
@@ -45,9 +45,9 @@ Was du in `<r-scratch>` hineinlegst, ist der freigelegte Inhalt (ein Betrag, ein
 
 ### Externe Styles `sheet`
 
-<Demo>
+<ran-demo>
   <r-scratch sheet=".ran-scratch-ticket-award { align-items: center; justify-content: center; display: flex; }" style="display: block; width: 240px; height: 120px;">🎁</r-scratch>
-</Demo>
+</ran-demo>
 
 ```html
 <r-scratch

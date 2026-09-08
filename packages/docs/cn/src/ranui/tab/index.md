@@ -12,13 +12,13 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 ### 基础用法
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -66,7 +66,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 `flat`（默认）显示一条滑动的下划线指示条；`line` 渲染带边框的标签标题。
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="flat">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -77,7 +77,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="flat">
@@ -97,7 +97,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 设置标题行的对齐方式，默认 `start`。
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="line" align="start">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -113,7 +113,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="line" align="start"> ... </r-tabs>
@@ -128,13 +128,13 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 不显式设置 key 时，`active` 按从零开始的索引匹配：
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="1">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="1">
@@ -146,14 +146,14 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 显式设置 `r-key`（没设置 key 的面板回退到自己的索引）：
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a">11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -170,14 +170,14 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 禁用的 `<r-tab>` 不能被选中，挑选默认激活标签时也会跳过它。
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -192,13 +192,13 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 `<r-tab>` 接受一个 `icon` 属性（`r-icon` 图标名），渲染在标题文字前；`iconSize` 设置它的大小。
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1" icon="edit">11111</r-tab>
     <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -212,13 +212,13 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 在 `<r-tabs>` 上设置 `effect`，开启标题按钮的点击水波纹效果。`effect` 生效时，滑动的下划线指示条会被隐藏。
 
-<Demo column>
+<ran-demo column>
   <r-tabs effect="true">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs effect="true">

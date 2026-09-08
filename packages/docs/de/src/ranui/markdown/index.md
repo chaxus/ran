@@ -43,9 +43,9 @@ Umzäunte ` ```mermaid `-Blöcke werden zu [`<r-mermaid>`](/de/src/ranui/mermaid
 
 ## Schnellstart
 
-<Demo>
+<ran-demo>
   <r-markdown copy highlight :content.prop="quick"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy highlight content="# Hallo ..."></r-markdown>
@@ -72,9 +72,9 @@ container.append(el);
 
 `mode="streaming"` (der Standard) schickt den Text zuerst durch [remend](https://www.npmjs.com/package/remend) — den aus Streamdown herausgelösten Abschluss für unvollständiges Markdown. Ein halb empfangenes `**bold` erscheint dadurch fett statt als Sternchen, `[text](https://exa` bleibt einfacher Text, bis die URL schließt, ein `- ` macht aus dem vorigen Absatz keine Überschrift, und so weiter. Für fertige Dokumente setzt du `mode="static"`, überspringst diesen Durchgang und zeichnest alles in einem Zug.
 
-<Demo>
+<ran-demo>
   <r-markdown caret :content.prop="partial"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown caret content="Halb getippte *Betonung*, `Inline-Code` und **Fettdruck, der noch eintrifft"></r-markdown>
@@ -87,9 +87,9 @@ container.append(el);
 
 Jeder Codeblock bekommt eine Kopfzeile mit der Sprache und, wenn gewünscht, Schaltflächen zum Kopieren und Herunterladen. Ergänze `highlight` für Syntaxhervorhebung mit [shiki](https://shiki.style) (wird nachgeladen; Sprachen kommen bei Bedarf; standardmäßig `github-light` / `github-dark`, dem Seitenthema folgend).
 
-<Demo>
+<ran-demo>
   <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy download line-numbers highlight></r-markdown>
@@ -99,9 +99,9 @@ Jeder Codeblock bekommt eine Kopfzeile mit der Sprache und, wenn gewünscht, Sch
 
 ## Mermaid und Formeln
 
-<Demo>
+<ran-demo>
   <r-markdown :content.prop="rich"></r-markdown>
-</Demo>
+</ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>` (mit Vollbild; `copy` / `download` werden durchgereicht).
 - `$$…$$`, `\[…\]` und ` ```math ` → `<r-math>` als Block; `\(…\)` → im Text. Das einfache Dollarzeichen `$…$` **muss** über `inline-math` **eingeschaltet werden**, weil es sich mit Geldbeträgen überschneidet.

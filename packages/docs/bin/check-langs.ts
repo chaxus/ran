@@ -11,7 +11,7 @@
  *    but nowhere else (a stray file the other languages never got).
  * 3. **A stray label key** is dead weight that survives every rename of the structure.
  * 4. **A translation that lost its shape** — a truncated file, a heading demoted from `###`
- *    to `##`, a code fence or `<Demo>` block dropped in the rewrite. The page still builds
+ *    to `##`, a code fence or `<ran-demo>` block dropped in the rewrite. The page still builds
  *    and still reads like prose, so nothing catches it except comparing the skeleton against
  *    the English original.
  * 5. **Frontmatter that stopped being YAML.** A translator turning an em dash into a colon
@@ -145,7 +145,7 @@ for (const locale of LOCALES) {
 
 /**
  * A page's language-independent skeleton: the heading levels in order, and how many fenced
- * code blocks and `<Demo>` blocks it holds. Translating prose never changes any of these, so
+ * code blocks and `<ran-demo>` blocks it holds. Translating prose never changes any of these, so
  * a mismatch means the translation lost something rather than said it differently.
  */
 /** Backticks outside fenced code blocks — see the parity check below for why that matters. */
@@ -199,7 +199,7 @@ const skeleton = (file: string): { levels: string; fences: number; demos: number
     const heading = /^(#{1,6}) /.exec(line);
     if (heading) levels.push(String(heading[1].length));
   }
-  return { levels: levels.join(''), fences, demos: (text.match(/<Demo\b/g) ?? []).length };
+  return { levels: levels.join(''), fences, demos: (text.match(/<ran-demo\b/g) ?? []).length };
 };
 
 for (const locale of LOCALES) {
@@ -216,7 +216,8 @@ for (const locale of LOCALES) {
         fail(`${locale.id}: ${where} heading outline differs (en ${en.levels}, got ${other.levels})`);
       if (en.fences !== other.fences)
         fail(`${locale.id}: ${where} has ${other.fences} code blocks, en has ${en.fences}`);
-      if (en.demos !== other.demos) fail(`${locale.id}: ${where} has ${other.demos} <Demo> blocks, en has ${en.demos}`);
+      if (en.demos !== other.demos)
+        fail(`${locale.id}: ${where} has ${other.demos} <ran-demo> blocks, en has ${en.demos}`);
       // An odd number of backticks *in prose* means an inline-code span was never closed.
       // Markdown then swallows the rest of the paragraph into `<code>`, which reads as a
       // formatting glitch rather than an error — and it is exactly what an unquoted shell
@@ -241,7 +242,7 @@ if (errors.length) {
     ['stray label', (e: string) => e.includes('stray label')],
     ['empty UI string', (e: string) => e.includes('empty UI string')],
     ['component copy', (e: string) => /-copy\.ts/.test(e)],
-    ['structure mismatch', (e: string) => /heading outline|code blocks|<Demo> blocks|backtick/.test(e)],
+    ['structure mismatch', (e: string) => /heading outline|code blocks|<ran-demo> blocks|backtick/.test(e)],
     ['frontmatter', (e: string) => e.includes('not valid YAML')],
     ['extra page', (e: string) => e.includes('extra page')],
     ['missing page', (e: string) => e.includes('missing page')],

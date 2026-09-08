@@ -12,9 +12,9 @@ description: 'ranui の Checkbox（<r-checkbox>）は、オン／オフの選択
 
 ### 基本的な使い方
 
-<Demo>
+<ran-demo>
   <r-checkbox>ログイン状態を保持する</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox>ログイン状態を保持する</r-checkbox>
@@ -38,10 +38,10 @@ description: 'ranui の Checkbox（<r-checkbox>）は、オン／オフの選択
 
 ### チェック状態 `checked`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true">チェック済み</r-checkbox>
   <r-checkbox checked="false">未チェック</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true">チェック済み</r-checkbox> <r-checkbox checked="false">未チェック</r-checkbox>
@@ -49,10 +49,10 @@ description: 'ranui の Checkbox（<r-checkbox>）は、オン／オフの選択
 
 ### 値 `value`
 
-<Demo>
+<ran-demo>
   <r-checkbox value="true">value は true</r-checkbox>
   <r-checkbox value="false">value は false</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox value="true">value は true</r-checkbox> <r-checkbox value="false">value は false</r-checkbox>
@@ -60,10 +60,10 @@ description: 'ranui の Checkbox（<r-checkbox>）は、オン／オフの選択
 
 ### 無効状態 `disabled`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" disabled>チェック済み</r-checkbox>
   <r-checkbox checked="false" disabled>未チェック</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" disabled>チェック済み</r-checkbox>
@@ -74,9 +74,9 @@ description: 'ranui の Checkbox（<r-checkbox>）は、オン／オフの選択
 
 `sheet` 属性は shadow DOM に CSS を注入し、内部の要素をクラス名で狙えるようにします。
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">色を変えたラベル</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">色を変えたラベル</r-checkbox>
@@ -96,9 +96,9 @@ detail: {
 
 無効なチェックボックスは `change` を発生させません。
 
-<Demo>
+<ran-demo>
   <r-checkbox onchange="message.info(this)">切り替えてみてください</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox onchange="handleChange(event)">切り替えてみてください</r-checkbox>

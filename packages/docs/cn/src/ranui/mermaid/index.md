@@ -10,9 +10,9 @@ description: '以框架无关的 Web Component 渲染 Mermaid 图表（流程图
 
 ## 快速开始
 
-<Demo>
+<ran-demo>
   <r-mermaid>graph LR; A[请求] --> B[校验]; B --> C[存储]; C --> D[响应]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid>graph LR; A[请求] --> B[校验]; B --> C[存储]</r-mermaid>
@@ -33,9 +33,9 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // 属性 setter 会自动 URI 编�
 
 所有控件都通过布尔属性**按需开启**；不加任何控件属性的 `<r-mermaid>` 就是一张干净的静态图，工具栏仅在鼠标悬停时显示（右上角）。
 
-<Demo>
+<ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[开始] --> B[处理]; B --> C[结束]</r-mermaid>
-</Demo>
+</ran-demo>
 
 ```html
 <r-mermaid copy download fullscreen>graph TD; A --> B; B --> C</r-mermaid>

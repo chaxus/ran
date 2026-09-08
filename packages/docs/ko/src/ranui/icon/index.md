@@ -61,11 +61,11 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 ## 코드 데모
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="eye" size="50"></r-icon>
   <r-icon name="user" size="50"></r-icon>
-</Demo>
+</ran-demo>
 
 ```xml
  <r-icon name="lock"  ></r-icon>
@@ -79,11 +79,11 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 이름에 따라 다른 아이콘을 고릅니다.
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="eye" size="50"></r-icon>
   <r-icon name="user" size="50"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock"></r-icon>
@@ -93,11 +93,11 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 ### `size`
 
-<Demo align="end">
+<ran-demo align="end">
   <r-icon name="lock" size="30"></r-icon>
   <r-icon name="lock" size="50"></r-icon>
   <r-icon name="lock" size="70"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock" size="30"></r-icon>
@@ -107,12 +107,12 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 ### `color`
 
-<Demo>
+<ran-demo>
   <r-icon name="lock" size="50" color="red"></r-icon>
   <r-icon name="lock" size="50" color="#1E90FF"></r-icon>
   <r-icon name="lock" size="50" color="#F44336"></r-icon>
   <r-icon name="lock" size="50" color="#3F51B5"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="lock" size="50" color="red"></r-icon>
@@ -125,11 +125,11 @@ registerIcon('star', '<svg viewBox="0 0 24 24">…</svg>');
 
 spin 을 지정하면 회전이 켜지고, 숫자를 넘기면 회전 속도를 조절합니다. 숫자가 작을수록 빠르게 돕니다.
 
-<Demo>
+<ran-demo>
   <r-icon name="loading" size="50" color="#1E90FF" spin="0.7"></r-icon>
   <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
   <r-icon name="loading" size="50" color="#1E90FF" spin="5"></r-icon>
-</Demo>
+</ran-demo>
 
 ```html
 <r-icon name="loading" size="50" color="#1E90FF" spin="0.7"></r-icon>

@@ -10,9 +10,9 @@ Barra de progreso para mostrar el avance de una tarea, con un tirador arrastrabl
 
 ## Inicio rápido
 
-<Demo>
+<ran-demo>
   <r-progress percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="40%"></r-progress>
@@ -36,11 +36,11 @@ Barra de progreso para mostrar el avance de una tarea, con un tirador arrastrabl
 
 Define el progreso actual. Admite un número o una cadena de porcentaje y no puede superar `total`. Cuando `total` no está definido, vale `100` por defecto (es decir, `percent` se lee como porcentaje de 100).
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30%"></r-progress>
   <r-progress percent="70%"></r-progress>
   <r-progress percent="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30%"></r-progress>
@@ -52,11 +52,11 @@ Define el progreso actual. Admite un número o una cadena de porcentaje y no pue
 
 Define el denominador de `percent`. Se admiten tanto números como porcentajes, así que `percent="30" total="1000"` llena la barra al 3%.
 
-<Demo column>
+<ran-demo column>
   <r-progress percent="30" total="1000"></r-progress>
   <r-progress percent="70" total="100"></r-progress>
   <r-progress percent="10%" total="100%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -69,10 +69,10 @@ Define el denominador de `percent`. Se admiten tanto números como porcentajes, 
 - `primary`: barra de progreso estática. Es el valor por defecto si no defines `type`.
 - `drag`: barra clicable y arrastrable. Hacer clic en la pista o arrastrar el tirador actualiza `percent` y dispara un evento `change`. Arrastrar el tirador requiere `dot="true"`.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%"></r-progress>
   <r-progress type="primary" percent="40%"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
@@ -82,10 +82,10 @@ Define el denominador de `percent`. Se admiten tanto números como porcentajes, 
 
 Activa o desactiva el tirador. Solo se dibuja cuando `dot="true"` **y** `type="drag"`; en una barra `primary` estática se omite a propósito, así que allí `dot` no tiene efecto visible.
 
-<Demo column>
+<ran-demo column>
   <r-progress type="drag" percent="30%" dot="true"></r-progress>
   <r-progress type="drag" percent="30%" dot="false"></r-progress>
-</Demo>
+</ran-demo>
 
 ```html
 <r-progress type="drag" percent="30%" dot="true"></r-progress>

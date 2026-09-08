@@ -12,7 +12,7 @@ ranui does not ship a `<form>`-wrapping component. `r-input`, `r-checkbox`, and 
 
 All three field types, submitted with a plain `<form>`. Try changing a field and submitting to see the live result below. This demo builds the object with the browser's own `FormData`/`Object.fromEntries` (no import needed); `serializeForm()`, introduced next, does the same thing plus one thing `Object.fromEntries` can't: a repeated field name comes back as an array instead of silently keeping only the last value.
 
-<Demo column>
+<ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
     <r-input name="username" label="Username" placeholder="Enter username"></r-input>
     <r-select name="role" label="Role" style="width: 100%" defaultValue="member">
@@ -22,7 +22,7 @@ All three field types, submitted with a plain `<form>`. Try changing a field and
     <r-checkbox name="subscribe">Subscribe to newsletter</r-checkbox>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </form>
-</Demo>
+</ran-demo>
 
 > As the [Layout](#layout) section below covers: fields have no default form-level layout of
 > their own, so every example on this page (including this one) sets its own `<form>` CSS
@@ -73,13 +73,13 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 Fields have no default form-level layout: style your own `<form>` with plain CSS:
 
-<Demo column>
+<ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px;">
     <r-input name="first" label="First name"></r-input>
     <r-input name="last" label="Last name"></r-input>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Continue</button></r-button>
   </form>
-</Demo>
+</ran-demo>
 
 ```html
 <form style="display: flex; flex-direction: column; gap: 16px;">
@@ -93,12 +93,12 @@ Fields have no default form-level layout: style your own `<form>` with plain CSS
 
 `r-input`, `r-checkbox`, and `r-select` all support `required` (which blocks submission and triggers the browser's native validation bubble, exactly like a native field) plus `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage`. A native `form.reset()` (or `<button type="reset">`) restores each field to its pre-interaction state via `formResetCallback()`. See each field's own docs ([Input](/src/ranui/input/#form-association), [Checkbox](/src/ranui/checkbox/#form-association), [Select](/src/ranui/select/#form-association)) for details.
 
-<Demo column>
+<ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
     <r-input name="username" label="Username" required></r-input>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </form>
-</Demo>
+</ran-demo>
 
 ```html
 <form style="display: flex; flex-direction: column; gap: 16px;">

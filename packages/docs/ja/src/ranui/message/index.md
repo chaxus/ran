@@ -10,9 +10,9 @@ description: 'ranui の Message API は、操作結果の全体的なフィー�
 
 ## クイックスタート
 
-<Demo>
+<ran-demo>
   <r-button type="primary" onclick="message.info('これはヒントです')">メッセージを出す</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button type="primary" onclick="message.info('これはヒントです')">メッセージを出す</r-button>
@@ -80,13 +80,13 @@ message.info({
 
 ## メッセージの種類 `type`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info('これはヒントです')">情報の通知</r-button>
   <r-button onclick="message.success('これはヒントです')">成功の通知</r-button>
   <r-button onclick="message.warning('これはヒントです')">警告の通知</r-button>
   <r-button onclick="message.error('これはヒントです')">エラーの通知</r-button>
   <r-button onclick="message.toast('これはヒントです')">toast の通知</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info('これはヒントです')">情報の通知</r-button>
@@ -98,10 +98,10 @@ message.info({
 
 ## 表示時間の指定 `duration`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: '6 秒とどまります', duration: 6000 })">6 秒のトースト</r-button>
   <r-button onclick="message.info({ content: '1 秒とどまります', duration: 1000 })">1 秒のトースト</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.info({ content: '6 秒とどまります', duration: 6000 })">6 秒のトースト</r-button>
@@ -112,9 +112,9 @@ message.info({
 
 `close` のコールバックは、トーストが DOM から取り除かれたあとに走ります。
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.success({ content: '保存しました', close: () => message.info('トーストが閉じました') })">連鎖するメッセージ</r-button>
-</Demo>
+</ran-demo>
 
 ```html
 <r-button onclick="message.success({ content: '保存しました', close: () => message.info('トーストが閉じました') })"
@@ -134,9 +134,9 @@ message.success({
 
 ## 位置の指定 `top` / `zIndex` / `getContainer`
 
-<Demo>
+<ran-demo>
   <r-button onclick="message.info({ content: '下へずらしました', top: 120 })">上端からずらす</r-button>
-</Demo>
+</ran-demo>
 
 ```js
 message.info({

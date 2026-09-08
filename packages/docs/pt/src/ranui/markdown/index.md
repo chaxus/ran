@@ -43,9 +43,9 @@ Blocos cercados com ` ```mermaid ` viram [`<r-mermaid>`](/pt/src/ranui/mermaid/)
 
 ## Início rápido
 
-<Demo>
+<ran-demo>
   <r-markdown copy highlight :content.prop="quick"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy highlight content="# Olá ..."></r-markdown>
@@ -72,9 +72,9 @@ container.append(el);
 
 `mode="streaming"` (o padrão) passa o texto primeiro pelo [remend](https://www.npmjs.com/package/remend), o finalizador de markdown incompleto extraído do Streamdown: assim um `**bold` recebido pela metade sai em negrito em vez de mostrar asteriscos, `[text](https://exa` fica como texto simples até a URL fechar, um `- ` não transforma o parágrafo anterior em título, e por aí vai. Para documentos já prontos, use `mode="static"` e pule essa passagem, renderizando tudo de uma vez.
 
-<Demo>
+<ran-demo>
   <r-markdown caret :content.prop="partial"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown caret content="*Ênfase* pela metade, `código em linha` e **negrito que ainda está chegando"></r-markdown>
@@ -87,9 +87,9 @@ container.append(el);
 
 Todo bloco de código ganha um cabeçalho com o nome da linguagem e, se você ativar, botões de copiar e baixar. Acrescente `highlight` para destacar a sintaxe com [shiki](https://shiki.style) (carregado sob demanda; as linguagens chegam conforme o uso; `github-light` / `github-dark` por padrão, seguindo o tema da página).
 
-<Demo>
+<ran-demo>
   <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
-</Demo>
+</ran-demo>
 
 ```html
 <r-markdown copy download line-numbers highlight></r-markdown>
@@ -99,9 +99,9 @@ Todo bloco de código ganha um cabeçalho com o nome da linguagem e, se você at
 
 ## Mermaid e matemática
 
-<Demo>
+<ran-demo>
   <r-markdown :content.prop="rich"></r-markdown>
-</Demo>
+</ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>` (com tela cheia; `copy` / `download` são repassados).
 - `$$…$$`, `\[…\]` e ` ```math ` → `<r-math>` em bloco; `\(…\)` → em linha. O cifrão simples `$…$` **precisa ser ativado** com `inline-math`, porque se confunde com valores em dinheiro.

@@ -12,9 +12,9 @@ description: 'ranui 의 Checkbox(<r-checkbox>) 는 켬/끔 선택 하나를 토�
 
 ### 기본 사용법
 
-<Demo>
+<ran-demo>
   <r-checkbox>로그인 상태 유지</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox>로그인 상태 유지</r-checkbox>
@@ -38,10 +38,10 @@ description: 'ranui 의 Checkbox(<r-checkbox>) 는 켬/끔 선택 하나를 토�
 
 ### 체크 상태 `checked`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true">체크됨</r-checkbox>
   <r-checkbox checked="false">체크 안 됨</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true">체크됨</r-checkbox> <r-checkbox checked="false">체크 안 됨</r-checkbox>
@@ -49,10 +49,10 @@ description: 'ranui 의 Checkbox(<r-checkbox>) 는 켬/끔 선택 하나를 토�
 
 ### 값 `value`
 
-<Demo>
+<ran-demo>
   <r-checkbox value="true">value 는 true</r-checkbox>
   <r-checkbox value="false">value 는 false</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox value="true">value 는 true</r-checkbox> <r-checkbox value="false">value 는 false</r-checkbox>
@@ -60,10 +60,10 @@ description: 'ranui 의 Checkbox(<r-checkbox>) 는 켬/끔 선택 하나를 토�
 
 ### 비활성 상태 `disabled`
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" disabled>체크됨</r-checkbox>
   <r-checkbox checked="false" disabled>체크 안 됨</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" disabled>체크됨</r-checkbox> <r-checkbox checked="false" disabled>체크 안 됨</r-checkbox>
@@ -73,9 +73,9 @@ description: 'ranui 의 Checkbox(<r-checkbox>) 는 켬/끔 선택 하나를 토�
 
 `sheet` 어트리뷰트는 섀도 DOM 에 CSS 를 주입해, 내부 요소를 클래스 이름으로 겨냥할 수 있게 합니다.
 
-<Demo>
+<ran-demo>
   <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">색을 바꾼 레이블</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox checked="true" sheet=".ran-checkbox-label { color: #006bff; }">색을 바꾼 레이블</r-checkbox>
@@ -95,9 +95,9 @@ detail: {
 
 비활성 체크박스는 `change`를 발생시키지 않습니다.
 
-<Demo>
+<ran-demo>
   <r-checkbox onchange="message.info(this)">눌러 보세요</r-checkbox>
-</Demo>
+</ran-demo>
 
 ```html
 <r-checkbox onchange="handleChange(event)">눌러 보세요</r-checkbox>

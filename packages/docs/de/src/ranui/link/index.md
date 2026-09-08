@@ -12,9 +12,9 @@ Routerbewusster Anker, der ein `<a>` um seinen Slot-Inhalt legt und die Navigati
 
 ### Grundlegende Verwendung
 
-<Demo>
+<ran-demo>
   <r-link href="/getting-started">Erste Schritte</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/getting-started">Erste Schritte</r-link>
@@ -36,10 +36,10 @@ Wird ein interner `href` geklickt, übergibt der Link den Pfad an den aktiven ra
 
 Interne Pfade werden in der App geroutet; absolute URLs sowie `mailto:`- und `tel:`-Links navigieren normal.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs">Interner Link</r-link>
   <r-link href="https://example.com">Externer Link</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs">Interner Link</r-link> <r-link href="https://example.com">Externer Link</r-link>
@@ -49,9 +49,9 @@ Interne Pfade werden in der App geroutet; absolute URLs sowie `mailto:`- und `te
 
 Boolesches Attribut. Wenn gesetzt, ersetzt die App-interne Navigation den aktuellen Verlaufseintrag (`router.replace`), statt einen neuen anzulegen.
 
-<Demo>
+<ran-demo>
   <r-link href="/settings" replace>Eintrag ersetzen</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/settings" replace>Eintrag ersetzen</r-link>
@@ -61,9 +61,9 @@ Boolesches Attribut. Wenn gesetzt, ersetzt die App-interne Navigation den aktuel
 
 CSS, das in das Shadow DOM des Links injiziert wird — dieselbe `sheet`-Konvention wie bei jeder anderen ranui-Komponente. Da das klickbare `<a>` im Shadow Root liegt, gib ihm über `sheet` ein Boxmodell (`display`, `padding`, `width`), wenn der Host wie ein Button oder eine Karte wirken soll.
 
-<Demo>
+<ran-demo>
   <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; background: var(--ran-color-bg-muted); }">Link mit Innenabstand</r-link>
-</Demo>
+</ran-demo>
 
 ```html
 <r-link href="/docs" sheet="a { display: inline-block; padding: 8px 16px; }">Link mit Innenabstand</r-link>

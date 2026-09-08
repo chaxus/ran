@@ -12,13 +12,13 @@ Reiter-Container, der zwischen Bereichen umschaltet. Setze `<r-tabs>` als Contai
 
 ### Grundlegende Verwendung
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -66,7 +66,7 @@ Ein einzelner Bereich. Seine Attribute liest das übergeordnete `<r-tabs>`, um d
 
 `flat` (Standard) zeigt eine gleitende Unterstreichung als Markierung; `line` zeichnet Reiter mit Rahmen.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="flat">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -77,7 +77,7 @@ Ein einzelner Bereich. Seine Attribute liest das übergeordnete `<r-tabs>`, um d
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="flat">
@@ -97,7 +97,7 @@ Ein einzelner Bereich. Seine Attribute liest das übergeordnete `<r-tabs>`, um d
 
 Richtet die Kopfzeile aus. Standard ist `start`.
 
-<Demo column>
+<ran-demo column>
   <r-tabs type="line" align="start">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
@@ -113,7 +113,7 @@ Richtet die Kopfzeile aus. Standard ist `start`.
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs type="line" align="start"> ... </r-tabs>
@@ -128,13 +128,13 @@ Richtet die Kopfzeile aus. Standard ist `start`.
 
 Ohne ausdrückliche Schlüssel passt `active` auf den nullbasierten Index:
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="1">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="1">
@@ -146,14 +146,14 @@ Ohne ausdrückliche Schlüssel passt `active` auf den nullbasierten Index:
 
 Mit ausdrücklichen `r-key`-Werten (Bereiche ohne Schlüssel fallen auf ihren Index zurück):
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a">11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -170,14 +170,14 @@ Mit ausdrücklichen `r-key`-Werten (Bereiche ohne Schlüssel fallen auf ihren In
 
 Ein deaktiviertes `<r-tab>` lässt sich nicht wählen und wird auch bei der Wahl des voreingestellten aktiven Reiters übersprungen.
 
-<Demo column>
+<ran-demo column>
   <r-tabs active="c">
     <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
     <r-tab label="tab2" r-key="b">22222</r-tab>
     <r-tab label="tab3" r-key="c">33333</r-tab>
     <r-tab label="tab4">4</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs active="c">
@@ -192,13 +192,13 @@ Ein deaktiviertes `<r-tab>` lässt sich nicht wählen und wird auch bei der Wahl
 
 `<r-tab>` nimmt ein Attribut `icon` (den Namen eines `r-icon`), das vor der Beschriftung gezeichnet wird; `iconSize` legt seine Größe fest.
 
-<Demo column>
+<ran-demo column>
   <r-tabs>
     <r-tab label="tab1" icon="edit">11111</r-tab>
     <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs>
@@ -212,13 +212,13 @@ Ein deaktiviertes `<r-tab>` lässt sich nicht wählen und wird auch bei der Wahl
 
 Setze `effect` auf `<r-tabs>`, damit die Schaltflächen der Kopfzeile beim Klicken eine Welle zeigen. Solange `effect` aktiv ist, bleibt die gleitende Unterstreichung verborgen.
 
-<Demo column>
+<ran-demo column>
   <r-tabs effect="true">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
-</Demo>
+</ran-demo>
 
 ```html
 <r-tabs effect="true">
