@@ -93,6 +93,30 @@
   color-scheme: dark;
 }
 
+/* ── Cross-document view transitions ─────────────────────────────────────── */
+
+/* One at-rule turns every same-origin navigation into a cross-fade. ranui ships
+   `enableMpaViewTransitions()` for this, but that helper injects exactly this rule from
+   script — on a multi-page site the rule belongs here, where it applies before the
+   bundle has been fetched. Browsers without the feature simply navigate. */
+@view-transition {
+  navigation: auto;
+}
+
+/* The header is stable across pages, so it is named and does not cross-fade with the
+   content beneath it. */
+.site-header {
+  view-transition-name: site-header;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 /* ── Reset ───────────────────────────────────────────────────────────────── */
 
 *,
@@ -393,6 +417,43 @@ video {
   text-transform: uppercase;
   color: var(--fg-faint);
   pointer-events: none;
+}
+/* The copy button occupies the same corner, so the language chip steps aside once
+   script has added one. Without JavaScript the chip simply stays. */
+.prose figure.code[data-has-copy]::after {
+  display: none;
+}
+.code-copy {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  padding: 3px 9px;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: var(--bg);
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.6;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+.prose figure.code:hover .code-copy,
+.code-copy:focus-visible {
+  opacity: 1;
+}
+.code-copy:hover {
+  color: var(--fg);
+  border-color: var(--rule-strong);
+}
+.code-copy.is-copied {
+  color: var(--callout-tip);
+  border-color: currentColor;
+  opacity: 1;
 }
 .prose figure.code pre {
   margin: 0;
