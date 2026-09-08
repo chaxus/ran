@@ -44,8 +44,13 @@ markup is in the server-rendered HTML — indexable, and correct with JavaScript
 and the page's own `.vp-doc` rules still reach inside it, which a shadow boundary would
 sever. Reach for a `.vue` file only when a block needs state or event handling.
 
-Note `align="stretch"` appears in the pages but has no rule: those demos fall back to
-`align-items: center`, which they did as a Vue component too.
+`<ran-demo>` takes `column`, `align="start"` and `align="end"`; anything else is the
+default centred row. Note that `align` is the flex **cross** axis, so in the default row it
+controls vertical placement — it can never widen a child. To make a demo's contents span
+the box (a full-width surface like `r-section`), use `column`, which sets
+`flex-direction: column` and therefore stretches horizontally. The section page carried
+`align="stretch"` for exactly that intent and got nothing for it, in every language, for as
+long as the attribute existed.
 
 ---
 

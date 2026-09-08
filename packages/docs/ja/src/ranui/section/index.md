@@ -12,7 +12,7 @@ description: '見出しと副題（いずれも任意）をスロット本文の
 
 ### 基本的な使い方
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="区画の見出し" subtitle="この区画を説明する短い一行。">
     <p style="margin: 0;">本文はデフォルトスロットに入ります。</p>
   </r-section>
@@ -40,7 +40,7 @@ description: '見出しと副題（いずれも任意）をスロット本文の
 
 区画の見出しで、ARIA のレベル 2 見出し（`role="heading"`、`aria-level="2"`）として描画されます。空なら隠れます。
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="見出しだけ">
     <p style="margin: 0;">本文。</p>
   </r-section>
@@ -56,7 +56,7 @@ description: '見出しと副題（いずれも任意）をスロット本文の
 
 見出しの下に添える一行です。空なら隠れます。
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="見出し" subtitle="補足の副題テキスト。">
     <p style="margin: 0;">本文。</p>
   </r-section>
@@ -72,7 +72,7 @@ description: '見出しと副題（いずれも任意）をスロット本文の
 
 区画の shadow DOM に注入する CSS です。ranui のどのコンポーネントとも同じ `sheet` の作法に従います。
 
-<ran-demo align="stretch">
+<ran-demo column>
   <r-section heading="テーマを当てた区画" subtitle="sheet で見出しの色を変えています。" sheet=".ran-section-heading { color: #006bff; }">
     <p style="margin: 0;">本文。</p>
   </r-section>
