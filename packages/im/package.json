@@ -24,7 +24,7 @@
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.11"
   },
   "dependencies": {
     "ranui": "workspace:*",

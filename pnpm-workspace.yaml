@@ -11,7 +11,7 @@ catalog:
   tsx: 4.23.10
   typescript: 7.0.2
   vite: 8.2.1
-  vitest: 4.1.10
+  vitest: 4.1.11
 # Force patched versions of transitively-pulled build tools (Dependabot advisories).
 overrides:
   esbuild: 0.28.1
