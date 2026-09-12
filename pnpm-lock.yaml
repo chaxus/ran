@@ -91,6 +91,9 @@ importers:
       ranuts:
         specifier: workspace:*
         version: link:../ranuts
+      ssg:
+        specifier: workspace:*
+        version: link:../ssg
       vitepress:
         specifier: 2.0.0-alpha.18
         version: 2.0.0-alpha.18(@types/node@26.1.2)(esbuild@0.28.1)(idb-keyval@6.3.0)(less@4.8.1)(postcss@8.5.26)(terser@5.49.2)(tsx@4.23.10)(typescript@7.0.2)
@@ -101,6 +104,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2
+      tsx:
+        specifier: 'catalog:'
+        version: 4.23.10
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
