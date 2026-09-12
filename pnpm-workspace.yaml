@@ -5,13 +5,13 @@ packages:
 # Packages reference these with "catalog:" so every workspace stays on one version.
 catalog:
   '@types/node': 26.1.2
-  '@vitest/coverage-v8': 4.1.10
+  '@vitest/coverage-v8': 4.1.11
   less: 4.8.1
   terser: 5.49.2
   tsx: 4.23.10
   typescript: 7.0.2
   vite: 8.2.1
-  vitest: 4.1.10
+  vitest: 4.1.11
 # Force patched versions of transitively-pulled build tools (Dependabot advisories).
 overrides:
   esbuild: 0.28.1
