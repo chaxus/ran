@@ -10,77 +10,101 @@
  * is the default. Tokens are declared once on bare `:root` and only redefined after.
  */
 
+/*
+ * The palette is ranui's, not a second one.
+ *
+ * These names stay because ~1,000 selectors below use them, but every value now resolves
+ * from `--ran-*`, which ranui's own stylesheet defines and which `setTheme()` already
+ * flips between light and dark. A product with two token systems has two sources of
+ * truth that drift silently — the docs site would keep its own blue while the components
+ * on the same page moved to another.
+ *
+ * The fallbacks are what the site used before ranui's stylesheet loads, and what it
+ * falls back to if that request fails. They are not a second palette; they are the same
+ * values written once.
+ */
 :root {
-  --bg: #ffffff;
-  --bg-soft: #f6f7f9;
-  --bg-code: #f8f9fb;
-  --fg: #1a1d21;
-  --fg-muted: #596270;
-  --fg-faint: #8a929e;
-  --rule: #e3e6ea;
-  --rule-strong: #c9ced6;
-  --accent: #0b5fe0;
-  --accent-hover: #0847ad;
-  --accent-wash: #eaf1fe;
+  --bg: var(--ran-color-bg, #ffffff);
+  --bg-soft: var(--ran-color-bg-subtle, #f6f7f9);
+  --bg-code: var(--ran-color-bg-muted, #f8f9fb);
+  --fg: var(--ran-color-text, #1a1d21);
+  --fg-muted: var(--ran-color-text-secondary, #596270);
+  --fg-faint: var(--ran-color-text-disabled, #8a929e);
+  --rule: var(--ran-color-border-secondary, #e3e6ea);
+  --rule-strong: var(--ran-color-border, #c9ced6);
+  --accent: var(--ran-color-primary, #0b5fe0);
+  --accent-hover: var(--ran-color-primary-hover, #0847ad);
+  --accent-wash: var(--ran-color-bg-hover, #eaf1fe);
+  /*
+   * ranui reserves a blue for links and the focus ring; `--ran-color-primary` is
+   * near-black and means commitment, not prose. Using primary for links made every link
+   * in the body the same colour as the text around it.
+   */
+  --link: var(--ran-color-link, #0b5fe0);
 
-  --callout-note: #4b5563;
-  --callout-tip: #0a7d4f;
-  --callout-warning: #9a6206;
-  --callout-danger: #b23a2f;
+  --callout-note: var(--ran-color-text-secondary, #4b5563);
+  --callout-tip: var(--ran-color-success, #0a7d4f);
+  --callout-warning: var(--ran-color-warning, #9a6206);
+  --callout-danger: var(--ran-color-danger, #b23a2f);
 
-  /* No web font: the site ships eight languages including CJK and Persian, and a face
-     that covers them is megabytes. System stacks render immediately in every one. */
+  /* ranui ships Geist and its own mono; the CJK and Arabic fallbacks are the docs
+     site's own concern — it publishes in eight languages, the component library does
+     not. No web font is loaded for them: a face covering CJK is megabytes. */
   --font-sans:
-    system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans Arabic',
-    sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+    var(--ran-font-family, system-ui), -apple-system, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Noto Sans Arabic', sans-serif;
+  --font-mono: var(--ran-font-mono, ui-monospace), SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
+  /*
+   * Spacing comes from ranui's scale — 4/8/12/16/24/32/40/64/96 — so the page's rhythm
+   * and its components' internal rhythm are the same rhythm. Layout dimensions that are
+   * not spacing (a sidebar width, a header height) stay literal.
+   */
   --header-h: 60px;
   --sidebar-w: 272px;
   --toc-w: 224px;
   --measure: 46em;
-  --pad: 24px;
+  --pad: var(--ran-space-4, 16px);
 
   color-scheme: light;
 }
 
+/*
+ * Dark is ranui's too. `setTheme()` stamps `data-ran-theme` on <html>, ranui's dark
+ * token block answers it, and everything above follows — so only `color-scheme` is
+ * restated here, for the form controls and scrollbars the browser paints itself.
+ */
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']) {
-    --bg: #0b0d10;
-    --bg-soft: #14171c;
-    --bg-code: #121519;
-    --fg: #e3e7ec;
-    --fg-muted: #a0abb9;
-    --fg-faint: #6d7986;
-    --rule: #232830;
-    --rule-strong: #353c47;
-    --accent: #6ba5ff;
-    --accent-hover: #96bfff;
-    --accent-wash: #12203a;
-    --callout-note: #9aa5b4;
-    --callout-tip: #46c08b;
-    --callout-warning: #d9a038;
-    --callout-danger: #e4776a;
+    --bg: var(--ran-color-bg, #0b0d10);
+    --bg-soft: var(--ran-color-bg-subtle, #14171c);
+    --bg-code: var(--ran-color-bg-muted, #121519);
+    --fg: var(--ran-color-text, #e3e7ec);
+    --fg-muted: var(--ran-color-text-secondary, #a0abb9);
+    --fg-faint: var(--ran-color-text-disabled, #6d7986);
+    --rule: var(--ran-color-border-secondary, #232830);
+    --rule-strong: var(--ran-color-border, #353c47);
+    --accent: var(--ran-color-primary, #6ba5ff);
+    --accent-hover: var(--ran-color-primary-hover, #96bfff);
+    --accent-wash: var(--ran-color-bg-hover, #12203a);
+    --link: var(--ran-color-link, #6ba5ff);
     color-scheme: dark;
   }
 }
 
 :root[data-ran-theme='dark'] {
-  --bg: #0b0d10;
-  --bg-soft: #14171c;
-  --bg-code: #121519;
-  --fg: #e3e7ec;
-  --fg-muted: #a0abb9;
-  --fg-faint: #6d7986;
-  --rule: #232830;
-  --rule-strong: #353c47;
-  --accent: #6ba5ff;
-  --accent-hover: #96bfff;
-  --accent-wash: #12203a;
-  --callout-note: #9aa5b4;
-  --callout-tip: #46c08b;
-  --callout-warning: #d9a038;
-  --callout-danger: #e4776a;
+  --bg: var(--ran-color-bg, #0b0d10);
+  --bg-soft: var(--ran-color-bg-subtle, #14171c);
+  --bg-code: var(--ran-color-bg-muted, #121519);
+  --fg: var(--ran-color-text, #e3e7ec);
+  --fg-muted: var(--ran-color-text-secondary, #a0abb9);
+  --fg-faint: var(--ran-color-text-disabled, #6d7986);
+  --rule: var(--ran-color-border-secondary, #232830);
+  --rule-strong: var(--ran-color-border, #353c47);
+  --accent: var(--ran-color-primary, #6ba5ff);
+  --accent-hover: var(--ran-color-primary-hover, #96bfff);
+  --accent-wash: var(--ran-color-bg-hover, #12203a);
+  --link: var(--ran-color-link, #6ba5ff);
   color-scheme: dark;
 }
 
@@ -211,8 +235,9 @@ a {
   background: var(--bg-soft);
 }
 .nav__link[aria-current='page'] {
-  color: var(--accent);
-  background: var(--accent-wash);
+  color: var(--fg);
+  font-weight: 600;
+  background: transparent;
 }
 
 /* Language menu — a <details>, so it opens with no script and closes on Escape. */
@@ -446,7 +471,17 @@ a {
 
 .doc {
   min-width: 0;
-  padding: 36px 0 96px;
+  padding: 32px 0 96px;
+}
+
+/*
+ * The landing page is full-bleed and brings its own vertical rhythm, so the doc column
+ * must not add a second helping. Stacked, the header, this padding and the landing's own
+ * left 280px of empty space above the first line of content.
+ */
+.doc:has(> .landing) {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* ── Sidebar ─────────────────────────────────────────────────────────────── */
@@ -526,10 +561,17 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   color: var(--fg);
   background: var(--bg-soft);
 }
+/*
+ * Selection is persistent state and must read differently from hover, which is transient.
+ * A fill alone is what hover already uses, so the current page is marked with a rule on
+ * the leading edge and a weight change instead.
+ */
 .sb__link[aria-current='page'] {
-  color: var(--accent);
-  background: var(--accent-wash);
+  color: var(--fg);
   font-weight: 600;
+  box-shadow: inset 2px 0 0 var(--ran-color-primary, var(--fg));
+  border-radius: 0;
+  background: transparent;
 }
 .sb__summary {
   list-style: none;
@@ -675,13 +717,13 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 }
 
 .prose a {
-  color: var(--accent);
+  color: var(--link);
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--link) 40%, transparent);
 }
 .prose a:hover {
-  color: var(--accent-hover);
+  color: var(--link);
   text-decoration-color: currentColor;
 }
 
@@ -719,12 +761,18 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 
 /* ── Code ────────────────────────────────────────────────────────────────── */
 
+/*
+ * A code block is a quiet surface, not a card: a fill and a hairline, no border box and
+ * no radius. Both design references land on the same rule — establish structure with
+ * spacing and hairlines before reaching for a container, and do not give every block its
+ * own outline. A reference page alternating bordered demo, bordered code, bordered demo
+ * down its whole length is what makes a documentation page tiring to read.
+ */
 .prose figure.code {
   position: relative;
   background: var(--bg-code);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  overflow: hidden;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
 }
 .prose figure.code::after {
   content: attr(data-lang);
@@ -813,8 +861,9 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 
 .table-wrap {
   overflow-x: auto;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
+  /* The header fill and the row rules already separate it; an outer box is a third
+     boundary doing the same job. */
+  border-top: 1px solid var(--rule);
 }
 /* The table sizes to its own content and the wrapper scrolls, rather than the table
    being forced to 100% and compressing columns until identifiers break mid-word —
@@ -840,7 +889,8 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .prose th {
   font-weight: 600;
   color: var(--fg-muted);
-  background: var(--bg-soft);
+  background: transparent;
+  border-bottom-color: var(--rule-strong);
 }
 .prose tr:last-child td {
   border-bottom: none;
@@ -879,6 +929,25 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
    from here, and because nothing upgrades it the demo markup is in the server-rendered
    HTML. `isolation` contains a demo that embeds something with its own high z-index —
    an always-open dropdown shown as content — so it cannot paint over page chrome. */
+/*
+ * A demo and the fence under it are one thing — the example and its source. They were
+ * two separate boxes with a gap, which doubled the count and said they were unrelated.
+ * Joined into a single framed unit with a hairline between them: half the boxes, and the
+ * relationship is now what the layout expresses.
+ */
+ran-demo:has(+ figure.code) {
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 0;
+}
+ran-demo + figure.code {
+  margin-top: 0;
+  border: 1px solid var(--rule);
+  border-top: 1px solid var(--rule);
+  border-radius: 0 0 8px 8px;
+  background: var(--bg-code);
+}
+
 ran-demo {
   display: flex;
   flex-wrap: wrap;
@@ -929,15 +998,13 @@ ran-demo p {
 .pager__link {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 14px 18px;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
+  gap: 4px;
+  padding: 8px 0;
   text-decoration: none;
   color: var(--fg);
 }
-.pager__link:hover {
-  border-color: var(--accent);
+.pager__link:hover .pager__text {
+  text-decoration: underline;
 }
 .pager__link--next {
   text-align: end;

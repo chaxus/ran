@@ -60,7 +60,12 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: clamp(56px, 9vw, 128px) 24px 112px;
+  /*
+   * Spacing values come from the design system's scale (4/8/12/16/24/32/40/64/96) —
+   * `clamp` between two of them rather than inventing 56/112/128, which were written for
+   * VitePress's full-bleed `layout: page` where nothing above contributed padding.
+   */
+  padding: clamp(32px, 5vw, 64px) 24px 96px;
   isolation: isolate;
 }
 .cine > * {
@@ -111,9 +116,13 @@
 .hero {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(36px, 5vw, 72px);
-  align-items: center;
-  padding-top: clamp(20px, 4vw, 56px);
+  gap: clamp(32px, 4vw, 64px);
+  /*
+   * Top-aligned, not centred. Centring measured the live panel against a column five
+   * headline lines tall and dropped it 170px below the text it belongs beside, which
+   * reads as two unrelated blocks rather than one hero.
+   */
+  align-items: start;
 }
 .eyebrow {
   display: inline-flex;
@@ -138,8 +147,13 @@
 .headline {
   margin: 24px 0 0;
   font-family: var(--vp-font-family-base);
-  font-size: clamp(40px, 6vw, 72px);
-  line-height: 1.02;
+  /*
+   * Sized against the column it sits in, not the viewport. At 72px this headline wrapped
+   * to five lines in a 554px column and pushed everything else below the fold; the ceiling
+   * is the largest size that keeps it to three.
+   */
+  font-size: clamp(32px, 4.2vw, 52px);
+  line-height: 1.08;
   font-weight: 720;
   letter-spacing: -0.035em;
   text-wrap: balance;
@@ -172,7 +186,7 @@
   }
 }
 .subtitle {
-  margin: 22px 0 0;
+  margin: 24px 0 0;
   max-width: 540px;
   font-size: 16px;
   line-height: 1.72;
