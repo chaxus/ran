@@ -9,7 +9,7 @@ import { resolve } from 'node:path';
  */
 export default defineConfig({
   build: {
-    outDir: 'dist-next',
+    outDir: 'dist',
     emptyOutDir: false,
     manifest: true,
     target: 'es2022',

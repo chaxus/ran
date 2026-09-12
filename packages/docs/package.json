@@ -5,12 +5,11 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "vitepress dev",
+    "dev": "tsx build/dev.ts",
     "build": "sh ./bin/build.sh",
+    "verify": "tsx build/verify.ts",
     "tsc": "tsc --noEmit",
-    "check:langs": "node bin/check-langs.ts",
-    "serve": "vitepress serve",
-    "build:next": "tsx build/build.ts"
+    "check:langs": "node bin/check-langs.ts"
   },
   "repository": {
     "type": "git",

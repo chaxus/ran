@@ -9,11 +9,14 @@
  */
 import { readSources } from 'ssg';
 import type { MarkdownRenderer, Section, TocEntry } from 'ssg';
-import { setRenderLocale } from './components.ts';
-import { LOCALES, ROOT_LOCALE } from './config.ts';
+import { setLinkBase, setRenderLocale } from './components.ts';
+import { LOCALES, ROOT_LOCALE, SITE } from './config.ts';
 import type { LocaleDef } from './config.ts';
 
+export type DocKind = 'page' | 'notfound';
+
 export interface DocPage {
+  kind: DocKind;
   /** Source path relative to the package. `cn/src/ranui/index.md`. */
   file: string;
   /** The locale this page is written in. */
@@ -35,6 +38,12 @@ export interface DocPage {
   sections: Section[];
 }
 
+/**
+ * Cloudflare Pages serves `/404.html` from the root for any unmatched path, so the page
+ * has to land there literally rather than at `404/index.html`.
+ */
+const kindFor = (rel: string): DocKind => (rel === '404.md' ? 'notfound' : 'page');
+
 /** `cn/src/ranui/index.md` → the `cn` locale; anything unprefixed is the root locale. */
 const localeOf = (rel: string): LocaleDef => {
   const head = rel.split('/')[0];
@@ -51,7 +60,8 @@ const urlForBase = (baseRel: string, locale: LocaleDef): string => {
 };
 
 /** Always `<dir>/index.html`, so URLs need no extension and no redirect sits between. */
-const outFileFor = (url: string): string => {
+const outFileFor = (url: string, kind: DocKind): string => {
+  if (kind === 'notfound') return '404.html';
   const clean = url.replace(/^\/|\/$/g, '');
   return clean ? `${clean}/index.html` : 'index.html';
 };
@@ -71,6 +81,42 @@ export interface DocContent {
   translations: ReadonlyMap<string, LocaleDef[]>;
 }
 
+/**
+ * Resolve a link written the way markdown sources link to each other.
+ *
+ * Sources address each other as files — `./debounce`, `../utils/index.md`,
+ * `foo.md#anchor` — because that is what they are on disk and what an editor can follow.
+ * The published site addresses them as URLs. VitePress did this translation silently;
+ * emitting the file paths unchanged produces 1,018 dead links that look entirely
+ * ordinary in the markup.
+ *
+ * The rules mirror VitePress's:
+ *
+ * - `.md` is dropped, and a trailing `/index` becomes a directory URL.
+ * - A relative path resolves against the *directory* of the linking page.
+ * - A site-absolute path, an anchor, and anything with a scheme are left alone.
+ */
+export const resolveLinkFrom = (pageUrl: string): ((href: string) => string) => {
+  // `/src/ranui/button/` and `/src/ranui/button` both sit in `/src/ranui/`.
+  const dir = pageUrl.endsWith('/') ? pageUrl : `${pageUrl.slice(0, pageUrl.lastIndexOf('/') + 1)}`;
+  return (href: string): string => {
+    if (!href || /^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('#') || href.startsWith('//')) return href;
+
+    const hash = href.indexOf('#');
+    let path = hash === -1 ? href : href.slice(0, hash);
+    const fragment = hash === -1 ? '' : href.slice(hash);
+    if (!path) return href;
+
+    const absolute = path.startsWith('/');
+    // `new URL` does the `..` walking; the origin is a placeholder and never appears.
+    const resolved = new URL(path, `https://x${absolute ? '' : dir}`).pathname;
+
+    path = resolved.replace(/\.md$/, '');
+    if (path.endsWith('/index')) path = `${path.slice(0, -'index'.length)}`;
+    return `${path}${fragment}`;
+  };
+};
+
 export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent => {
   const pages: DocPage[] = [];
   const seen = new Map<string, string>();
@@ -86,6 +132,7 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
   });
 
   for (const { rel, label, data, content } of sources) {
+    const kind = kindFor(rel);
     const locale = localeOf(rel);
     const baseRel = locale.dir ? rel.slice(locale.dir.length + 1) : rel;
     const url = urlForBase(baseRel, locale);
@@ -94,8 +141,10 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
     if (clash) throw new Error(`${label}: URL ${url} is already produced by ${clash}`);
     seen.set(url, label);
 
-    // The component renderers need to know which language this page is in.
+    // The component renderers need to know which language this page is in, and link
+    // resolution needs to know which page a relative path is relative to.
     setRenderLocale(locale);
+    setLinkBase(url);
     const { html, toc, excerpt, sections } = markdown.render(content);
     const fmTitle = typeof data.title === 'string' ? data.title : '';
     const fmDescription = typeof data.description === 'string' ? data.description : '';
@@ -104,14 +153,18 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
     const heading = toc.find((entry) => entry.level === 2)?.text ?? '';
     const title = fmTitle || /^#\s+(.+)$/m.exec(content)?.[1]?.trim() || heading || 'ran';
 
-    const description = (fmDescription || excerpt).slice(0, MAX_DESCRIPTION);
+    // The home pages are a single component placeholder with no prose to derive from,
+    // so they fall back to the site description rather than shipping an empty one — the
+    // most-linked page on the site is the worst one to leave without a summary.
+    const description = (fmDescription || excerpt || SITE.description).slice(0, MAX_DESCRIPTION);
 
     pages.push({
+      kind,
       file: label,
       locale,
       baseRel,
       url,
-      outFile: outFileFor(url),
+      outFile: outFileFor(url, kind),
       title,
       description,
       html,
