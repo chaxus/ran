@@ -1,5 +1,5 @@
 {
-  "name": "ssg",
+  "name": "ranpress",
   "version": "0.1.0",
   "description": "The static site generator behind chaxus.com and ran.chaxus.com — mechanism only; each site supplies its own policy",
   "type": "module",
@@ -17,7 +17,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chaxus/ran",
-    "directory": "packages/ssg"
+    "directory": "packages/ranpress"
   },
   "engines": {
     "node": ">=24.0.0"

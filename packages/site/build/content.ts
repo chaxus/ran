@@ -16,8 +16,8 @@
  * naming its own file instead of rendering something subtly wrong that nobody reads
  * again.
  */
-import { readBoolean, readList, readSources, readString, truncate } from 'ssg';
-import type { MarkdownRenderer, TocEntry } from 'ssg';
+import { readBoolean, readList, readSources, readString, truncate } from 'ranpress';
+import type { MarkdownRenderer, TocEntry } from 'ranpress';
 import { PILLAR_SLUGS } from './config.ts';
 
 export type PageKind = 'home' | 'archive' | 'post' | 'page' | 'notfound';

@@ -7,8 +7,8 @@
  * not a visible bug — it is a set of hreflang tags pointing at 404s, which nobody
  * notices until a search console says so months later.
  */
-import { readSources } from 'ssg';
-import type { MarkdownRenderer, Section, TocEntry } from 'ssg';
+import { readSources } from 'ranpress';
+import type { MarkdownRenderer, Section, TocEntry } from 'ranpress';
 import { setRenderContext } from './render-context.ts';
 import { LOCALES, ROOT_LOCALE, SITE } from './config.ts';
 import type { LocaleDef } from './config.ts';

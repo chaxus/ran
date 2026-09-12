@@ -36,8 +36,8 @@
   "dependencies": {
     "@ranui/preview": "0.1.0-alpha-2",
     "minisearch": "7.2.0",
+    "ranpress": "workspace:*",
     "ranui": "workspace:*",
-    "ranuts": "workspace:*",
-    "ssg": "workspace:*"
+    "ranuts": "workspace:*"
   }
 }

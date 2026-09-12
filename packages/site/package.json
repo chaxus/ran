@@ -25,9 +25,9 @@
   "author": "chaxus",
   "license": "MIT",
   "dependencies": {
+    "ranpress": "workspace:*",
     "ranui": "workspace:*",
-    "ranuts": "workspace:*",
-    "ssg": "workspace:*"
+    "ranuts": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",

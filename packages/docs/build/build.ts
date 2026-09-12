@@ -8,7 +8,7 @@
  */
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildIndex, createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ssg';
+import { buildIndex, createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ranpress';
 import { LANGS, ORIGIN } from './config.ts';
 import { componentRenderers, resolveCurrentLink } from './components.ts';
 import { loadDocs } from './content.ts';

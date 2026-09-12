@@ -1,6 +1,6 @@
 /**
  * This site's build: wire its own policy — what a page is, what it looks like, what goes
- * in its head — onto the shared generator in `packages/ssg`.
+ * in its head — onto the shared generator in `packages/ranpress`.
  *
  * Everything mechanical lives there. What is left here is the part that is genuinely
  * about chaxus.com.
@@ -8,8 +8,8 @@
 import { join, resolve } from 'node:path';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ssg';
-import type { Assets } from 'ssg';
+import { createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ranpress';
+import type { Assets } from 'ranpress';
 import { LANGS, ORIGIN } from './config.ts';
 import { loadContent } from './content.ts';
 import type { Content } from './content.ts';
