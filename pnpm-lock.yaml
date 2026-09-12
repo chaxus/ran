@@ -110,6 +110,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
+      vite:
+        specifier: 'catalog:'
+        version: 8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10)
 
   packages/im:
     dependencies:

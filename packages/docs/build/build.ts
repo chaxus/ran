@@ -72,17 +72,20 @@ export interface DocsBuildResult {
   written: string[];
 }
 
-export const build = async (): Promise<DocsBuildResult> => {
+export const build = async (options: { skipAssets?: boolean } = {}): Promise<DocsBuildResult> => {
   await markdown.init();
   const content = loadDocs(ROOT, markdown);
 
-  // No client bundle yet — the theme layer lands next. `prepareDist` copying `public/`
-  // and finding no manifest is a valid state, not a broken one.
-  const assets = await prepareDist({ root: ROOT, distDir: DIST_DIR, skipAssets: true });
+  const assets = await prepareDist({
+    root: ROOT,
+    distDir: DIST_DIR,
+    publicDir: join(ROOT, 'public'),
+    skipAssets: options.skipAssets,
+  });
 
   const written: string[] = [];
   for (const page of content.pages) {
-    writeOut(DIST_DIR, page.outFile, renderDoc({ page, head: headFor(page, content), assets }));
+    writeOut(DIST_DIR, page.outFile, renderDoc({ page, head: headFor(page, content), assets, urls: content.urls }));
     written.push(page.outFile);
   }
   for (const [name, body] of generatedFiles(content)) {

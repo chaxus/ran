@@ -1,0 +1,844 @@
+/*
+ * The documentation site's stylesheet.
+ *
+ * Three columns on a wide screen — sidebar, article, outline — collapsing to one with a
+ * drawer on a narrow one. The drawer is a checkbox and a label, not script: navigation
+ * that only exists after a bundle loads is navigation a crawler never sees.
+ *
+ * Theming follows ranui's contract: `setTheme()` stamps `data-ran-theme` on <html> and
+ * leaves it unstamped in "system" mode, so there are three states and the unstamped one
+ * is the default. Tokens are declared once on bare `:root` and only redefined after.
+ */
+
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f6f7f9;
+  --bg-code: #f8f9fb;
+  --fg: #1a1d21;
+  --fg-muted: #596270;
+  --fg-faint: #8a929e;
+  --rule: #e3e6ea;
+  --rule-strong: #c9ced6;
+  --accent: #0b5fe0;
+  --accent-hover: #0847ad;
+  --accent-wash: #eaf1fe;
+
+  --callout-note: #4b5563;
+  --callout-tip: #0a7d4f;
+  --callout-warning: #9a6206;
+  --callout-danger: #b23a2f;
+
+  /* No web font: the site ships eight languages including CJK and Persian, and a face
+     that covers them is megabytes. System stacks render immediately in every one. */
+  --font-sans:
+    system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans Arabic',
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  --header-h: 60px;
+  --sidebar-w: 272px;
+  --toc-w: 224px;
+  --measure: 46em;
+  --pad: 24px;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ran-theme='light']) {
+    --bg: #0b0d10;
+    --bg-soft: #14171c;
+    --bg-code: #121519;
+    --fg: #e3e7ec;
+    --fg-muted: #a0abb9;
+    --fg-faint: #6d7986;
+    --rule: #232830;
+    --rule-strong: #353c47;
+    --accent: #6ba5ff;
+    --accent-hover: #96bfff;
+    --accent-wash: #12203a;
+    --callout-note: #9aa5b4;
+    --callout-tip: #46c08b;
+    --callout-warning: #d9a038;
+    --callout-danger: #e4776a;
+    color-scheme: dark;
+  }
+}
+
+:root[data-ran-theme='dark'] {
+  --bg: #0b0d10;
+  --bg-soft: #14171c;
+  --bg-code: #121519;
+  --fg: #e3e7ec;
+  --fg-muted: #a0abb9;
+  --fg-faint: #6d7986;
+  --rule: #232830;
+  --rule-strong: #353c47;
+  --accent: #6ba5ff;
+  --accent-hover: #96bfff;
+  --accent-wash: #12203a;
+  --callout-note: #9aa5b4;
+  --callout-tip: #46c08b;
+  --callout-warning: #d9a038;
+  --callout-danger: #e4776a;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Anchored headings must clear the sticky header instead of hiding under it. */
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+}
+.skip:focus {
+  left: 16px;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: var(--header-h);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.site-header__inner {
+  height: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.wordmark {
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  text-decoration: none;
+  margin-inline-end: auto;
+}
+
+.nav {
+  display: none;
+  gap: 2px;
+}
+.nav__link {
+  padding: 6px 10px;
+  border-radius: 5px;
+  color: var(--fg-muted);
+  text-decoration: none;
+  font-size: 14.5px;
+  white-space: nowrap;
+}
+.nav__link:hover {
+  color: var(--fg);
+  background: var(--bg-soft);
+}
+.nav__link[aria-current='page'] {
+  color: var(--accent);
+  background: var(--accent-wash);
+}
+
+/* Language menu — a <details>, so it opens with no script and closes on Escape. */
+.langs {
+  position: relative;
+  flex: none;
+}
+.langs__summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+.langs__summary::-webkit-details-marker {
+  display: none;
+}
+.langs__summary:hover {
+  color: var(--fg);
+  background: var(--bg-soft);
+}
+.langs__list {
+  position: absolute;
+  inset-inline-end: 0;
+  top: calc(100% + 6px);
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  min-width: 150px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px -14px rgba(0, 0, 0, 0.4);
+}
+.langs__link {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 5px;
+  color: var(--fg-muted);
+  text-decoration: none;
+  font-size: 14px;
+}
+.langs__link:hover {
+  color: var(--fg);
+  background: var(--bg-soft);
+}
+.langs__link[aria-current='true'] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Drawer (no script) ──────────────────────────────────────────────────── */
+
+.drawer__button {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 34px;
+  height: 34px;
+  padding: 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  flex: none;
+}
+.drawer__button span {
+  display: block;
+  height: 2px;
+  background: var(--fg-muted);
+  border-radius: 1px;
+}
+.drawer__button:hover {
+  background: var(--bg-soft);
+}
+.drawer__scrim {
+  display: none;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 40px;
+  align-items: start;
+}
+
+.doc {
+  min-width: 0;
+  padding: 36px 0 96px;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+
+.sidebar {
+  /* Off-canvas by default; the checkbox slides it in. Width is fixed so the transform
+     is a known distance rather than a percentage of a shifting box. */
+  position: fixed;
+  inset-block: var(--header-h) 0;
+  inset-inline-start: 0;
+  z-index: 25;
+  width: var(--sidebar-w);
+  padding: 20px 18px 64px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  border-inline-end: 1px solid var(--rule);
+  transform: translateX(-100%);
+  transition: transform 0.2s ease;
+}
+[dir='rtl'] .sidebar {
+  transform: translateX(100%);
+}
+.drawer__toggle:checked ~ .layout .sidebar,
+body:has(.drawer__toggle:checked) .sidebar {
+  transform: none;
+}
+body:has(.drawer__toggle:checked) .drawer__scrim {
+  display: block;
+  position: fixed;
+  inset: var(--header-h) 0 0;
+  z-index: 24;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.sb__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sb__list--d1,
+.sb__list--d2 {
+  padding-inline-start: 12px;
+  border-inline-start: 1px solid var(--rule);
+  margin-inline-start: 6px;
+}
+.sb__item {
+  margin: 1px 0;
+}
+.sb__link,
+.sb__label {
+  display: block;
+  padding: 5px 9px;
+  border-radius: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+.sb__label {
+  color: var(--fg-faint);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding-top: 14px;
+}
+.sb__link:hover {
+  color: var(--fg);
+  background: var(--bg-soft);
+}
+.sb__link[aria-current='page'] {
+  color: var(--accent);
+  background: var(--accent-wash);
+  font-weight: 600;
+}
+.sb__summary {
+  list-style: none;
+  cursor: pointer;
+}
+.sb__summary::-webkit-details-marker {
+  display: none;
+}
+/* The disclosure arrow is drawn on the summary rather than left to the UA, which paints
+   it outside the padding and misaligns it with the links above and below. */
+.sb__summary {
+  position: relative;
+}
+.sb__summary::after {
+  content: '';
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 13px;
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid var(--fg-faint);
+  border-bottom: 1.5px solid var(--fg-faint);
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+.sb__details[open] > .sb__summary::after {
+  transform: rotate(-135deg);
+}
+
+/* ── Outline ─────────────────────────────────────────────────────────────── */
+
+.toc {
+  display: none;
+  position: sticky;
+  top: calc(var(--header-h) + 28px);
+  max-height: calc(100vh - var(--header-h) - 56px);
+  overflow-y: auto;
+  padding-inline-start: 16px;
+  border-inline-start: 1px solid var(--rule);
+  font-size: 13.5px;
+}
+.toc__label {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.toc__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.toc__item--h3 {
+  padding-inline-start: 12px;
+}
+.toc__link {
+  display: block;
+  color: var(--fg-muted);
+  text-decoration: none;
+  line-height: 1.5;
+}
+.toc__link:hover {
+  color: var(--accent);
+}
+.toc__link[data-active] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Prose ───────────────────────────────────────────────────────────────── */
+
+.prose {
+  max-width: var(--measure);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1em;
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose figure,
+.prose .table-wrap,
+.prose aside {
+  margin: 0;
+}
+
+.prose h1 {
+  margin: 0 0 0.2em;
+  font-size: clamp(29px, 4vw, 38px);
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin: 0.8em 0 -0.2em;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.prose h2 {
+  font-size: 24px;
+  font-weight: 650;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--rule);
+}
+.prose h3 {
+  font-size: 18.5px;
+  font-weight: 650;
+}
+.prose h4 {
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.prose .anchor {
+  color: inherit;
+  text-decoration: none;
+}
+.prose .anchor::after {
+  content: '#';
+  margin-inline-start: 0.4em;
+  color: var(--fg-faint);
+  opacity: 0;
+  font-weight: 400;
+  transition: opacity 0.15s ease;
+}
+.prose h2:hover .anchor::after,
+.prose h3:hover .anchor::after,
+.prose .anchor:focus-visible::after {
+  opacity: 1;
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.prose a:hover {
+  color: var(--accent-hover);
+  text-decoration-color: currentColor;
+}
+
+.prose ul,
+.prose ol {
+  padding-inline-start: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.prose li::marker {
+  color: var(--fg-faint);
+}
+.prose blockquote {
+  padding-inline-start: 18px;
+  border-inline-start: 2px solid var(--rule-strong);
+  color: var(--fg-muted);
+}
+.prose hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 0.4em 0;
+}
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  background: var(--bg-soft);
+  /* `overflow-wrap`, not `word-break`: this breaks a token only when it genuinely
+     cannot fit, instead of breaking every long identifier mid-word. */
+  overflow-wrap: break-word;
+}
+
+/* ── Code ────────────────────────────────────────────────────────────────── */
+
+.prose figure.code {
+  position: relative;
+  background: var(--bg-code);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.prose figure.code::after {
+  content: attr(data-lang);
+  position: absolute;
+  top: 8px;
+  inset-inline-end: 12px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  pointer-events: none;
+}
+.prose figure.code pre {
+  margin: 0;
+  padding: 18px 20px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.7;
+  background: transparent !important;
+}
+
+/* shiki writes both themes as custom properties per token and, with
+   `defaultColor: false`, no concrete color. Each theme picks its side here, so one copy
+   of the markup serves both and switching repaints without re-rendering. */
+.shiki,
+.shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ran-theme='light']) .shiki,
+  :root:not([data-ran-theme='light']) .shiki span {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+  }
+}
+:root[data-ran-theme='dark'] .shiki,
+:root[data-ran-theme='dark'] .shiki span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
+/* ── Code groups ─────────────────────────────────────────────────────────── */
+
+.code-group {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-code);
+}
+.code-group__tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 6px 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--rule);
+}
+.code-group__tab {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px 5px 0 0;
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.code-group__tab:hover {
+  color: var(--fg);
+}
+.code-group__tab[aria-selected='true'] {
+  color: var(--accent);
+  background: var(--bg);
+  font-weight: 600;
+}
+.code-group__pane figure.code {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* ── Tables & callouts ───────────────────────────────────────────────────── */
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+/* The table sizes to its own content and the wrapper scrolls, rather than the table
+   being forced to 100% and compressing columns until identifiers break mid-word —
+   "disable d", "boolea n". `min-width: 100%` keeps a narrow table filling the card. */
+.prose table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  font-size: 14.5px;
+}
+.prose td code,
+.prose th code {
+  white-space: normal;
+  overflow-wrap: normal;
+}
+.prose th,
+.prose td {
+  text-align: start;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.prose th {
+  font-weight: 600;
+  color: var(--fg-muted);
+  background: var(--bg-soft);
+}
+.prose tr:last-child td {
+  border-bottom: none;
+}
+
+.callout {
+  --callout-color: var(--callout-note);
+  padding: 15px 19px;
+  border-inline-start: 3px solid var(--callout-color);
+  border-radius: 0 6px 6px 0;
+  background: var(--bg-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+.callout--tip {
+  --callout-color: var(--callout-tip);
+}
+.callout--warning {
+  --callout-color: var(--callout-warning);
+}
+.callout--danger {
+  --callout-color: var(--callout-danger);
+}
+.callout__label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--callout-color);
+}
+
+/* ── Demos ───────────────────────────────────────────────────────────────── */
+
+/* `<ran-demo>` is a zero-JavaScript custom element: nothing registers it, it is styled
+   from here, and because nothing upgrades it the demo markup is in the server-rendered
+   HTML. `isolation` contains a demo that embeds something with its own high z-index —
+   an always-open dropdown shown as content — so it cannot paint over page chrome. */
+ran-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  margin: 4px 0;
+  padding: 26px 24px;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--bg-soft);
+  isolation: isolate;
+}
+ran-demo[align='start'] {
+  align-items: flex-start;
+}
+ran-demo[align='end'] {
+  align-items: flex-end;
+}
+ran-demo[column] {
+  flex-direction: column;
+  align-items: stretch;
+}
+/* A real, fixed-position overlay has to escape the isolation — but only while it is
+   actually open, and through the fade-out too: `close()` removes `open` synchronously
+   while the mask keeps painting for the length of its transition, and `r-modal` reflects
+   `closing` for exactly that tail. */
+ran-demo:has(r-modal[open]),
+ran-demo:has(r-modal[closing]) {
+  position: relative;
+  z-index: 100;
+}
+ran-demo p {
+  display: contents;
+  margin: 0;
+}
+
+/* ── Pager ───────────────────────────────────────────────────────────────── */
+
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  max-width: var(--measure);
+}
+.pager__link {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 14px 18px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--fg);
+}
+.pager__link:hover {
+  border-color: var(--accent);
+}
+.pager__link--next {
+  text-align: end;
+  grid-column: 2;
+}
+.pager__dir {
+  font-size: 12px;
+  color: var(--fg-faint);
+}
+.pager__text {
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 14.5px;
+}
+
+/* ── Wide screens ────────────────────────────────────────────────────────── */
+
+@media (min-width: 900px) {
+  .nav {
+    display: flex;
+  }
+  .drawer__button {
+    display: none;
+  }
+  body.has-sidebar .layout {
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  }
+  .sidebar {
+    position: sticky;
+    top: var(--header-h);
+    inset-inline-start: auto;
+    inset-block: auto;
+    height: calc(100vh - var(--header-h));
+    transform: none;
+    background: transparent;
+    border-inline-end: none;
+    padding-inline-start: 0;
+  }
+  body:has(.drawer__toggle:checked) .drawer__scrim {
+    display: none;
+  }
+}
+
+@media (min-width: 1240px) {
+  body.has-sidebar .layout {
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr) var(--toc-w);
+  }
+  .layout:not(:has(.sidebar)) {
+    grid-template-columns: minmax(0, 1fr) var(--toc-w);
+  }
+  .toc {
+    display: block;
+  }
+}
+
+@media (max-width: 620px) {
+  :root {
+    --pad: 16px;
+  }
+  .prose figure.code pre {
+    padding: 15px 16px;
+    font-size: 13px;
+  }
+  .pager {
+    grid-template-columns: 1fr;
+  }
+  .pager__link--next {
+    grid-column: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

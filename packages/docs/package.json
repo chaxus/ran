@@ -29,7 +29,8 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "tsx": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite": "catalog:"
   },
   "dependencies": {
     "@ranui/preview": "0.1.0-alpha-2",
