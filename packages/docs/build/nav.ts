@@ -72,9 +72,9 @@ export const navFor = (locale: LocaleDef): NavLink[] => {
 };
 
 /**
- * The sidebar for a page, matched the way VitePress matches: by path prefix, longest
- * first. A page whose path matches no key has no sidebar, which is correct for the home
- * page and is how a stray page announces itself.
+ * The sidebar for a page: by path prefix, longest first. A page whose path matches no key
+ * has no sidebar, which is correct for the home page and is how a stray page announces
+ * itself.
  */
 export const sidebarFor = (url: string, locale: LocaleDef): SidebarItem[] => {
   const { labels } = messagesFor(locale);

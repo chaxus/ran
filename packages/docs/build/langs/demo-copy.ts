@@ -10,9 +10,10 @@
  * the `<Demo>` examples inside the component pages keep their English labels: each one
  * mirrors the code block printed underneath it.
  *
- * These strings are plain per-locale data rather than vue-i18n entries because both
- * components render during VitePress's SSR pass, where the app's i18n plugin is installed
- * asynchronously (see `theme/index.ts`) and `useI18n()` would therefore not be available.
+ * These strings are plain per-locale data rather than an i18n runtime's entries. vue-i18n
+ * used to be installed here and reached the app only after an `await`, so it was
+ * unavailable during the server pass these render in — which is why the tables exist, and
+ * why adding a runtime back would reintroduce the problem.
  */
 
 interface GlassStrings {

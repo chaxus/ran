@@ -1,18 +1,18 @@
 /**
  * The site's locale registry — the single list every other piece of i18n machinery reads:
- * `config.ts` (VitePress `locales`, hreflang, `og:locale`), the sidebar builder, the
- * language switcher and `bin/build.sh`'s llms-full.txt walk.
+ * `seo.ts` (hreflang, `og:locale`), the sidebar builder, the language switcher and
+ * `bin/build.sh`'s llms-full.txt walk.
  *
  * Adding a language means adding one row here plus one file under `messages/`. Anything
  * that needs a hard-coded list of languages elsewhere is a bug — it will silently miss the
  * next language added.
  */
 
-/** Directory under the VitePress root that holds a locale's pages; `''` is the root locale. */
+/** Directory under the package root that holds a locale's pages; `''` is the root locale. */
 export type LocaleDir = '' | 'cn' | 'ja' | 'es' | 'pt' | 'ko' | 'de' | 'fa';
 
 export interface LocaleDef {
-  /** VitePress locale id — the key in `config.locales`. `root` for the default language. */
+  /** Stable locale id; `root` for the default language. */
   id: string;
   /** Content directory. Also the URL prefix (`/cn/src/...`). */
   dir: LocaleDir;
@@ -26,8 +26,8 @@ export interface LocaleDef {
   rtl?: true;
   /**
    * Content trees mirrored in this locale, as path prefixes of the *unprefixed* path.
-   * A link outside these falls back to the English page instead of pointing at a 404 —
-   * VitePress has no per-page language fallback, a missing page is simply not built.
+   * A link outside these falls back to the English page instead of pointing at a 404:
+   * there is no per-page language fallback, a missing page is simply not built.
    */
   mirrors: readonly string[];
 }
@@ -77,7 +77,7 @@ export const localeFromUrlPath = (pathname: string): LocaleDef => {
   return LOCALES.find((l) => l.dir && l.dir === segment) ?? ROOT_LOCALE;
 };
 
-/** Which locale a BCP-47 tag names, e.g. VitePress's `useData().lang`. */
+/** Which locale a BCP-47 tag names. */
 export const localeFromLang = (lang: string): LocaleDef =>
   LOCALES.find((l) => l.lang.toLowerCase() === lang.toLowerCase()) ??
   LOCALES.find((l) => lang.toLowerCase().startsWith(`${l.lang.toLowerCase()}-`)) ??
@@ -86,8 +86,8 @@ export const localeFromLang = (lang: string): LocaleDef =>
 /**
  * Prefix a site-internal path for a locale — but only when that locale actually mirrors the
  * target. An unmirrored path is returned unchanged so the link lands on the English page
- * rather than a 404: VitePress has no per-page language fallback, a page missing from a
- * locale is simply never built.
+ * rather than a 404: there is no per-page language fallback, a page missing from a locale
+ * is simply never built.
  *
  * External URLs pass through. The home page exists in every locale, so `/` is always
  * prefixed.
