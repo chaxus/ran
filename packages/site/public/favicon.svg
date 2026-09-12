@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="chaxus">
+  <!--
+    The wordmark's shell-prompt motif: `~/` set in a monospace face, which is the one
+    mark this site already uses in its header. Drawn as paths rather than <text> so it
+    renders identically without the font installed — a favicon has no fallback stack
+    worth trusting.
+
+    Theme-aware: an SVG favicon is re-evaluated when the OS theme flips, so the tab icon
+    stays legible on both a light and a dark browser chrome. Default (no media support)
+    is the light pairing.
+  -->
+  <style>
+    .bg { fill: #0b5fe0; }
+    .fg { fill: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #6ba5ff; }
+      .fg { fill: #0b0d10; }
+    }
+  </style>
+  <rect class="bg" width="64" height="64" rx="14"/>
+  <!-- tilde -->
+  <path class="fg" d="M13 30.5c0-4.2 2.5-7.2 6-7.2 2.3 0 3.8 1.1 5.4 2.6 1.3 1.2 2.2 1.9 3.4 1.9 1.6 0 2.7-1.4 2.7-3.5h4.2c0 4.2-2.5 7.2-6 7.2-2.3 0-3.8-1.1-5.4-2.6-1.3-1.2-2.2-1.9-3.4-1.9-1.6 0-2.7 1.4-2.7 3.5z"/>
+  <!-- slash -->
+  <path class="fg" d="M44.6 18.5h4.9L37.8 47.2h-4.9z"/>
+</svg>

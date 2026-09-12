@@ -31,6 +31,20 @@ export const SITE = {
   docs: 'https://ran.chaxus.com',
 } as const;
 
+/**
+ * The social card. A 1200x630 PNG is what every platform crops from; SVG is not
+ * accepted by any of them, which is why this one asset is a raster.
+ *
+ * It is generated from `assets/og.html` rather than drawn by hand — regenerate with
+ * `pnpm -F site og` after changing the wordmark or the tagline.
+ */
+export const OG_IMAGE = {
+  src: '/og.png',
+  width: 1200,
+  height: 630,
+  alt: 'chaxus — 从零手写前端基础设施',
+} as const;
+
 export interface NavItem {
   text: string;
   href: string;

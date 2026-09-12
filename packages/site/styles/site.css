@@ -261,7 +261,8 @@ video {
    edge — two horizontal rules a few hundred pixels apart, which reads as a mistake.
    Post pages keep the wide container: they need the room for the sticky outline. */
 .site-main--home,
-.site-main--archive {
+.site-main--archive,
+.site-main--notfound {
   max-width: 52em;
 }
 
@@ -738,6 +739,32 @@ video {
   letter-spacing: -0.022em;
   text-wrap: balance;
   max-width: 20em;
+}
+
+/* ── 404 ─────────────────────────────────────────────────────────────────── */
+
+.notfound {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  /* Short page: pull it off the top edge so it does not sit alone under the header. */
+  padding: 6vh 0 10vh;
+}
+.notfound__code {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+.notfound__title {
+  margin: 0;
+  font-size: clamp(27px, 4.4vw, 37px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
 }
 
 /* ── Table of contents ───────────────────────────────────────────────────── */
