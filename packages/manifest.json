@@ -3,31 +3,53 @@
   "packages": {
     "ranuts": {
       "status": "product",
-      "checks": ["tsc", "test"]
+      "checks": [
+        "tsc",
+        "test"
+      ]
     },
     "ranui": {
       "status": "product",
-      "checks": ["tsc", "test"]
+      "checks": [
+        "tsc",
+        "test",
+        "verify:design"
+      ]
     },
     "docs": {
       "status": "support",
-      "checks": ["tsc", "test"]
+      "checks": [
+        "tsc",
+        "test",
+        "verify:design"
+      ]
     },
     "ranpress": {
       "status": "support",
-      "checks": ["tsc", "test"]
+      "checks": [
+        "tsc",
+        "test"
+      ]
     },
     "site": {
       "status": "support",
-      "checks": ["tsc"]
+      "checks": [
+        "tsc",
+        "verify:design"
+      ]
     },
     "im": {
       "status": "experimental",
-      "checks": ["tsc", "test"]
+      "checks": [
+        "tsc",
+        "test"
+      ]
     },
     "visual": {
       "status": "experimental",
-      "checks": ["tsc"]
+      "checks": [
+        "tsc"
+      ]
     },
     "ranite": {
       "status": "experimental",

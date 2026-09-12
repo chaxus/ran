@@ -11,7 +11,8 @@
     "verify": "tsx build/verify.ts",
     "tsc": "tsc --noEmit",
     "check:langs": "node bin/check-langs.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:design": "tsx ../ranui/bin/verify-design-rules.ts --roots styles --tokens ../ranui/theme/tokens.less --baseline design-baseline.json"
   },
   "repository": {
     "type": "git",

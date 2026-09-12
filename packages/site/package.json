@@ -10,7 +10,8 @@
     "build": "sh ./bin/build.sh",
     "verify": "tsx build/verify.ts",
     "tsc": "tsc --noEmit",
-    "og": "tsx build/og.ts"
+    "og": "tsx build/og.ts",
+    "verify:design": "tsx ../ranui/bin/verify-design-rules.ts --roots styles --tokens ../ranui/theme/tokens.less --baseline design-baseline.json"
   },
   "repository": {
     "type": "git",
