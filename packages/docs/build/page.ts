@@ -13,7 +13,7 @@ import type { LocaleDef } from './config.ts';
 import type { DocPage } from './content.ts';
 import { navFor, prevNextFor, sidebarFor } from './nav.ts';
 import type { SidebarItem } from './nav.ts';
-import { messagesFor } from '../.vitepress/langs/index.ts';
+import { messagesFor } from './langs/index.ts';
 
 const escapeHtml = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

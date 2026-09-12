@@ -2,10 +2,6 @@
 description: 'کامپوننت Loading در ranui (<r-loading>) تا وقتی محتوا یا کاری در جریان است، نشانگری چرخان نمایش می‌دهد.'
 ---
 
-<script setup>
-import Loading from '../../../../vue/loading.vue'
-</script>
-
 # Loading
 
 کامپوننت بارگذاری با مجموعه‌ای از نشانگرهای متحرک برای اعلام کاری که در جریان است.

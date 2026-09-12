@@ -159,18 +159,29 @@ video {
   border-radius: 2px;
 }
 
+/* Visually hidden until focused. Not `left: -9999px` — in a right-to-left document that
+   extends the scrollable area rather than leaving it. */
 .skip {
   position: absolute;
-  left: -9999px;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip:focus {
+  inset-inline-start: 16px;
   top: 8px;
+  z-index: 100;
+  width: auto;
+  height: auto;
   padding: 10px 16px;
+  overflow: visible;
+  clip-path: none;
   background: var(--bg);
   border: 1px solid var(--accent);
   border-radius: 4px;
-  z-index: 100;
-}
-.skip:focus {
-  left: 16px;
 }
 
 /* ── Header ──────────────────────────────────────────────────────────────── */

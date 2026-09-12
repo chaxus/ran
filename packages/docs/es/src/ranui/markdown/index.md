@@ -2,37 +2,6 @@
 description: 'Web Component que renderiza Markdown pensado para streaming: cierra el markdown a medio llegar, redibuja solo el bloque que cambió e incrusta código (shiki), diagramas Mermaid y matemáticas.'
 ---
 
-<script setup>
-const quick = `# Hola
-
-Algo en **negrita**, algo en *cursiva*, un [enlace](https://github.com/chaxus/ran) y \`código en línea\`.
-
-\`\`\`ts
-const greet = (name: string): string => \`Hi \${name}\`;
-\`\`\`
-
-| Función | Estado |
-| --- | --- |
-| Streaming | ✅ |
-| Mermaid / matemáticas | ✅ |`;
-const partial = '*Énfasis* a medio escribir, `código en línea` y **negrita que todavía está llegando';
-const code = `\`\`\`python
-def fib(n: int) -> int:
-    return n if n < 2 else fib(n - 1) + fib(n - 2)
-
-print(fib(10))
-\`\`\``;
-const rich = `\`\`\`mermaid
-graph LR; A[Prompt] --> B[Model]; B --> C[Tokens]; C --> D[r-markdown]
-\`\`\`
-
-$$
-E = mc^2
-$$
-
-La expresión \\(e^{i\\pi} + 1 = 0\\) fluye con el texto.`;
-</script>
-
 # Markdown
 
 Renderiza Markdown (incluida la **salida de una IA token a token**) como un web component independiente del framework. `<r-markdown>` está modelado sobre [Streamdown](https://streamdown.ai) de Vercel: mientras el texto llega, cierra al vuelo el `**bold`, el `` `code ``, los enlaces y las matemáticas `$$` a medio escribir, parte el documento en bloques y redibuja **solo el bloque que cambió**, de modo que una respuesta larga nunca se vuelve a analizar desde arriba con cada token.
@@ -44,7 +13,7 @@ Los bloques cercados ` ```mermaid ` se convierten en [`<r-mermaid>`](/es/src/ran
 ## Inicio rápido
 
 <ran-demo>
-  <r-markdown copy highlight :content.prop="quick"></r-markdown>
+  <r-markdown copy highlight data-content="%23%20Hola%0A%0AAlgo%20en%20%2A%2Anegrita%2A%2A%2C%20algo%20en%20%2Acursiva%2A%2C%20un%20%5Benlace%5D%28https%3A%2F%2Fgithub.com%2Fchaxus%2Fran%29%20y%20%60c%C3%B3digo%20en%20l%C3%ADnea%60.%0A%0A%60%60%60ts%0Aconst%20greet%20%3D%20%28name%3A%20string%29%3A%20string%20%3D%3E%20%60Hi%20%24%7Bname%7D%60%3B%0A%60%60%60%0A%0A%7C%20Funci%C3%B3n%20%7C%20Estado%20%7C%0A%7C%20---%20%7C%20---%20%7C%0A%7C%20Streaming%20%7C%20%E2%9C%85%20%7C%0A%7C%20Mermaid%20%2F%20matem%C3%A1ticas%20%7C%20%E2%9C%85%20%7C"></r-markdown>
 </ran-demo>
 
 ```html
@@ -73,7 +42,7 @@ container.append(el);
 `mode="streaming"` (el valor por defecto) pasa primero el texto por [remend](https://www.npmjs.com/package/remend), el terminador de markdown incompleto extraído de Streamdown: así un `**bold` recibido a medias se dibuja en negrita en vez de mostrar los asteriscos, `[text](https://exa` se ve como texto plano hasta que la URL se cierra, un `- ` no convierte el párrafo anterior en un encabezado, y así con todo. Para documentos ya terminados, pon `mode="static"` y sáltate esa pasada para renderizar de una sola vez.
 
 <ran-demo>
-  <r-markdown caret :content.prop="partial"></r-markdown>
+  <r-markdown caret data-content="%2A%C3%89nfasis%2A%20a%20medio%20escribir%2C%20%60c%C3%B3digo%20en%20l%C3%ADnea%60%20y%20%2A%2Anegrita%20que%20todav%C3%ADa%20est%C3%A1%20llegando"></r-markdown>
 </ran-demo>
 
 ```html
@@ -91,7 +60,7 @@ container.append(el);
 Cada bloque de código recibe una cabecera con el lenguaje y, si lo activas, botones de copiar y descargar. Añade `highlight` para resaltar la sintaxis con [shiki](https://shiki.style) (carga diferida; los lenguajes se cargan bajo demanda; `github-light` / `github-dark` por defecto, siguiendo el tema de la página).
 
 <ran-demo>
-  <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
+  <r-markdown copy download line-numbers highlight data-content="%60%60%60python%0Adef%20fib%28n%3A%20int%29%20-%3E%20int%3A%0A%20%20%20%20return%20n%20if%20n%20%3C%202%20else%20fib%28n%20-%201%29%20%2B%20fib%28n%20-%202%29%0A%0Aprint%28fib%2810%29%29%0A%60%60%60"></r-markdown>
 </ran-demo>
 
 ```html
@@ -103,7 +72,7 @@ Cada bloque de código recibe una cabecera con el lenguaje y, si lo activas, bot
 ## Mermaid y matemáticas
 
 <ran-demo>
-  <r-markdown :content.prop="rich"></r-markdown>
+  <r-markdown data-content="%60%60%60mermaid%0Agraph%20LR%3B%20A%5BPrompt%5D%20--%3E%20B%5BModel%5D%3B%20B%20--%3E%20C%5BTokens%5D%3B%20C%20--%3E%20D%5Br-markdown%5D%0A%60%60%60%0A%0A%24%24%0AE%20%3D%20mc%5E2%0A%24%24%0A%0ALa%20expresi%C3%B3n%20%5C%28e%5E%7Bi%5Cpi%7D%20%2B%201%20%3D%200%5C%29%20fluye%20con%20el%20texto."></r-markdown>
 </ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>` (con pantalla completa; `copy` / `download` se reenvían).

@@ -2,37 +2,6 @@
 description: 'Streaming-friendly Markdown renderer web component: closes half-streamed markdown, re-renders only the changed block, and embeds code (shiki), Mermaid diagrams and math.'
 ---
 
-<script setup>
-const quick = `# Hello
-
-Some **bold**, some *italic*, a [link](https://github.com/chaxus/ran) and \`inline code\`.
-
-\`\`\`ts
-const greet = (name: string): string => \`Hi \${name}\`;
-\`\`\`
-
-| Feature | Status |
-| --- | --- |
-| Streaming | ✅ |
-| Mermaid / Math | ✅ |`;
-const partial = 'Half-typed *emphasis*, `inline code`, and **bold that is still arriving';
-const code = `\`\`\`python
-def fib(n: int) -> int:
-    return n if n < 2 else fib(n - 1) + fib(n - 2)
-
-print(fib(10))
-\`\`\``;
-const rich = `\`\`\`mermaid
-graph LR; A[Prompt] --> B[Model]; B --> C[Tokens]; C --> D[r-markdown]
-\`\`\`
-
-$$
-E = mc^2
-$$
-
-Inline \\(e^{i\\pi} + 1 = 0\\) flows with text.`;
-</script>
-
 # Markdown
 
 Render Markdown (including **token-by-token AI output**) as a framework-agnostic web
@@ -52,7 +21,7 @@ lazy-loaded the first time the content needs it. Output is sanitized with DOMPur
 ## Quick Start
 
 <ran-demo>
-  <r-markdown copy highlight :content.prop="quick"></r-markdown>
+  <r-markdown copy highlight data-content="%23%20Hello%0A%0ASome%20%2A%2Abold%2A%2A%2C%20some%20%2Aitalic%2A%2C%20a%20%5Blink%5D%28https%3A%2F%2Fgithub.com%2Fchaxus%2Fran%29%20and%20%60inline%20code%60.%0A%0A%60%60%60ts%0Aconst%20greet%20%3D%20%28name%3A%20string%29%3A%20string%20%3D%3E%20%60Hi%20%24%7Bname%7D%60%3B%0A%60%60%60%0A%0A%7C%20Feature%20%7C%20Status%20%7C%0A%7C%20---%20%7C%20---%20%7C%0A%7C%20Streaming%20%7C%20%E2%9C%85%20%7C%0A%7C%20Mermaid%20%2F%20Math%20%7C%20%E2%9C%85%20%7C"></r-markdown>
 </ran-demo>
 
 ```html
@@ -86,7 +55,7 @@ text until the URL closes, `- ` doesn't turn the previous paragraph into a headi
 on. Set `mode="static"` for finished documents to skip that pass and render in one piece.
 
 <ran-demo>
-  <r-markdown caret :content.prop="partial"></r-markdown>
+  <r-markdown caret data-content="Half-typed%20%2Aemphasis%2A%2C%20%60inline%20code%60%2C%20and%20%2A%2Abold%20that%20is%20still%20arriving"></r-markdown>
 </ran-demo>
 
 ```html
@@ -105,7 +74,7 @@ Every code block gets a header with the language and, opt-in, a copy / download 
 load on demand; `github-light` / `github-dark` by default, following the page theme).
 
 <ran-demo>
-  <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
+  <r-markdown copy download line-numbers highlight data-content="%60%60%60python%0Adef%20fib%28n%3A%20int%29%20-%3E%20int%3A%0A%20%20%20%20return%20n%20if%20n%20%3C%202%20else%20fib%28n%20-%201%29%20%2B%20fib%28n%20-%202%29%0A%0Aprint%28fib%2810%29%29%0A%60%60%60"></r-markdown>
 </ran-demo>
 
 ```html
@@ -117,7 +86,7 @@ load on demand; `github-light` / `github-dark` by default, following the page th
 ## Mermaid & math
 
 <ran-demo>
-  <r-markdown :content.prop="rich"></r-markdown>
+  <r-markdown data-content="%60%60%60mermaid%0Agraph%20LR%3B%20A%5BPrompt%5D%20--%3E%20B%5BModel%5D%3B%20B%20--%3E%20C%5BTokens%5D%3B%20C%20--%3E%20D%5Br-markdown%5D%0A%60%60%60%0A%0A%24%24%0AE%20%3D%20mc%5E2%0A%24%24%0A%0AInline%20%5C%28e%5E%7Bi%5Cpi%7D%20%2B%201%20%3D%200%5C%29%20flows%20with%20text."></r-markdown>
 </ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>` (with fullscreen; `copy` / `download` are forwarded).

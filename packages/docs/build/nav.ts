@@ -1,7 +1,7 @@
 /**
  * Resolving the shared navigation tree for one locale and one page.
  *
- * The tree itself lives in `.vitepress/langs/structure.ts` and the label strings in
+ * The tree itself lives in `build/langs/structure.ts` and the label strings in
  * `messages/`, both locale-agnostic and both already the single source the site reads.
  * This module only turns them into the shape this renderer wants: labels assembled,
  * links prefixed, the right sidebar picked, previous/next derived.
@@ -10,10 +10,10 @@
  * the structure file existing at all — the tree used to be copy-pasted per language, two
  * ~500-line files edited in lockstep, which does not survive eight languages.
  */
-import { NAV, SIDEBAR } from '../.vitepress/langs/structure.ts';
-import { localeHref, prefixOf } from '../.vitepress/langs/locales.ts';
-import { messagesFor } from '../.vitepress/langs/index.ts';
-import type { SidebarNode } from '../.vitepress/langs/types.ts';
+import { NAV, SIDEBAR } from './langs/structure.ts';
+import { localeHref, prefixOf } from './langs/locales.ts';
+import { messagesFor } from './langs/index.ts';
+import type { SidebarNode } from './langs/types.ts';
 import type { LocaleDef } from './config.ts';
 
 export interface NavLink {

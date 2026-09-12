@@ -70,9 +70,6 @@ export const App = () => <r-button type="primary">Deploy</r-button>;
   <r-button type="primary" @click="deploy">Deploy</r-button>
 </template>
 
-<script setup>
-import 'ranui';
-</script>
 <!-- Add `r-` to compilerOptions.isCustomElement in your build config. -->
 ```
 

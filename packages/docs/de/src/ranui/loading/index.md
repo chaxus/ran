@@ -2,10 +2,6 @@
 description: 'Das Loading von ranui (<r-loading>) zeigt eine drehende Anzeige, solange Inhalt lädt oder eine Aktion läuft.'
 ---
 
-<script setup>
-import Loading from '../../../../vue/loading.vue'
-</script>
-
 # Loading
 
 Ladekomponente mit einer Sammlung animierter Anzeigen für laufende Arbeit.

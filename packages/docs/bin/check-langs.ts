@@ -28,19 +28,19 @@
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
-import { LOCALES } from '../.vitepress/langs/locales.ts';
-import { NAV, SIDEBAR } from '../.vitepress/langs/structure.ts';
-import type { SidebarNode } from '../.vitepress/langs/types.ts';
-import { HOME_STRINGS } from '../.vitepress/components/home-copy.ts';
-import { DEMO_STRINGS } from '../.vitepress/components/demo-copy.ts';
-import en from '../.vitepress/langs/messages/en.ts';
-import cn from '../.vitepress/langs/messages/cn.ts';
-import ja from '../.vitepress/langs/messages/ja.ts';
-import es from '../.vitepress/langs/messages/es.ts';
-import pt from '../.vitepress/langs/messages/pt.ts';
-import ko from '../.vitepress/langs/messages/ko.ts';
-import de from '../.vitepress/langs/messages/de.ts';
-import fa from '../.vitepress/langs/messages/fa.ts';
+import { LOCALES } from '../build/langs/locales.ts';
+import { NAV, SIDEBAR } from '../build/langs/structure.ts';
+import type { SidebarNode } from '../build/langs/types.ts';
+import { HOME_STRINGS } from '../build/langs/home-copy.ts';
+import { DEMO_STRINGS } from '../build/langs/demo-copy.ts';
+import en from '../build/langs/messages/en.ts';
+import cn from '../build/langs/messages/cn.ts';
+import ja from '../build/langs/messages/ja.ts';
+import es from '../build/langs/messages/es.ts';
+import pt from '../build/langs/messages/pt.ts';
+import ko from '../build/langs/messages/ko.ts';
+import de from '../build/langs/messages/de.ts';
+import fa from '../build/langs/messages/fa.ts';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const MESSAGES = { '': en, cn, ja, es, pt, ko, de, fa } as const;
@@ -62,7 +62,7 @@ for (const nodes of Object.values(SIDEBAR)) collect(nodes);
 for (const locale of LOCALES) {
   const messages = MESSAGES[locale.dir as keyof typeof MESSAGES];
   if (!messages) {
-    fail(`${locale.id}: no message dictionary — add .vitepress/langs/messages/${locale.dir || 'en'}.ts`);
+    fail(`${locale.id}: no message dictionary — add build/langs/messages/${locale.dir || 'en'}.ts`);
     continue;
   }
   const have = new Set(Object.keys(messages.labels));

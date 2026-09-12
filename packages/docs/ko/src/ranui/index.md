@@ -69,9 +69,6 @@ export const App = () => <r-button type="primary">Deploy</r-button>;
   <r-button type="primary" @click="deploy">Deploy</r-button>
 </template>
 
-<script setup>
-import 'ranui';
-</script>
 <!-- 빌드 설정의 compilerOptions.isCustomElement 에 `r-`를 추가하세요. -->
 ```
 
