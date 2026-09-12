@@ -7,7 +7,7 @@
  * theme switch and the code-group tabs. A documentation site that needs JavaScript to
  * show its navigation is a documentation site that shows nothing to a crawler.
  */
-import type { Assets } from 'ssg';
+import type { Assets } from 'ranpress';
 import { LOCALES, SITE } from './config.ts';
 import {
   BD_ANALYSE,

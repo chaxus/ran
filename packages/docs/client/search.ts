@@ -9,8 +9,8 @@
  * languages would make every reader download seven they cannot read.
  */
 import MiniSearch from 'minisearch';
-import { tokenize, SEARCH_FIELDS } from 'ssg/search';
-import type { SearchDoc } from 'ssg/search';
+import { tokenize, SEARCH_FIELDS } from 'ranpress/search';
+import type { SearchDoc } from 'ranpress/search';
 
 type Hit = SearchDoc & { score: number };
 

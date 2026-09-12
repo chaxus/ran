@@ -88,15 +88,15 @@ importers:
       minisearch:
         specifier: 7.2.0
         version: 7.2.0
+      ranpress:
+        specifier: workspace:*
+        version: link:../ranpress
       ranui:
         specifier: workspace:*
         version: link:../ranui
       ranuts:
         specifier: workspace:*
         version: link:../ranuts
-      ssg:
-        specifier: workspace:*
-        version: link:../ssg
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -112,7 +112,7 @@ importers:
         version: 8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10)
       vitest:
         specifier: 'catalog:'
-        version: 4.1.10(@types/node@26.1.2)(@vitest/coverage-v8@4.1.10)(jsdom@30.0.1)(vite@8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10))
+        version: 4.1.11(@types/node@26.1.2)(@vitest/coverage-v8@4.1.11)(jsdom@30.0.1)(vite@8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10))
 
   packages/im:
     dependencies:
@@ -198,6 +198,31 @@ importers:
       tsup:
         specifier: 8.5.1
         version: 8.5.1(postcss@8.5.26)(tsx@4.23.10)(typescript@7.0.2)
+
+  packages/ranpress:
+    dependencies:
+      marked:
+        specifier: 18.0.9
+        version: 18.0.9
+      minisearch:
+        specifier: 7.2.0
+        version: 7.2.0
+      shiki:
+        specifier: 4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 26.1.2
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+      vite:
+        specifier: 'catalog:'
+        version: 8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10)
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.11(@types/node@26.1.2)(@vitest/coverage-v8@4.1.11)(jsdom@30.0.1)(vite@8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10))
 
   packages/ranui:
     dependencies:
@@ -302,15 +327,15 @@ importers:
 
   packages/site:
     dependencies:
+      ranpress:
+        specifier: workspace:*
+        version: link:../ranpress
       ranui:
         specifier: workspace:*
         version: link:../ranui
       ranuts:
         specifier: workspace:*
         version: link:../ranuts
-      ssg:
-        specifier: workspace:*
-        version: link:../ssg
     devDependencies:
       '@playwright/test':
         specifier: 1.62.1
@@ -327,31 +352,6 @@ importers:
       vite:
         specifier: 'catalog:'
         version: 8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10)
-
-  packages/ssg:
-    dependencies:
-      marked:
-        specifier: 18.0.9
-        version: 18.0.9
-      minisearch:
-        specifier: 7.2.0
-        version: 7.2.0
-      shiki:
-        specifier: 4.4.3
-        version: 4.4.3
-    devDependencies:
-      '@types/node':
-        specifier: 'catalog:'
-        version: 26.1.2
-      typescript:
-        specifier: 'catalog:'
-        version: 7.0.2
-      vite:
-        specifier: 'catalog:'
-        version: 8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10)
-      vitest:
-        specifier: 'catalog:'
-        version: 4.1.10(@types/node@26.1.2)(@vitest/coverage-v8@4.1.10)(jsdom@30.0.1)(vite@8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10))
 
   packages/visual:
     dependencies:

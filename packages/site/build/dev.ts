@@ -4,7 +4,7 @@
  */
 import { existsSync, watch } from 'node:fs';
 import { join } from 'node:path';
-import { createDevServer } from 'ssg';
+import { createDevServer } from 'ranpress';
 import { build, CONTENT_DIR, DIST_DIR, ROOT } from './build.ts';
 
 const PORT = Number(process.env.PORT ?? 4173);

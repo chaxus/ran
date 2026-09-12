@@ -7,7 +7,7 @@
  * check is against the set of URLs the build actually produced rather than against the
  * locale registry.
  */
-import { renderSitemap } from 'ssg';
+import { renderSitemap } from 'ranpress';
 import { LOCALES, ORIGIN, ROOT_LOCALE, SITE } from './config.ts';
 import type { DocContent, DocPage } from './content.ts';
 

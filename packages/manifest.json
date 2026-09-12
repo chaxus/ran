@@ -13,7 +13,7 @@
       "status": "support",
       "checks": ["tsc", "test"]
     },
-    "ssg": {
+    "ranpress": {
       "status": "support",
       "checks": ["tsc", "test"]
     },

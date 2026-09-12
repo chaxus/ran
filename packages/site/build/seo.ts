@@ -9,7 +9,7 @@
  * URL comes from `Page.url`, which is also what the driver writes to disk, so the two
  * cannot disagree.
  */
-import { renderFeed, renderRobotsTxt, renderSitemap } from 'ssg';
+import { renderFeed, renderRobotsTxt, renderSitemap } from 'ranpress';
 import { OG_IMAGE, ORIGIN, SITE } from './config.ts';
 import type { Content, Page, Post } from './content.ts';
 import { absoluteUrl, escapeHtml } from './page.ts';
