@@ -184,7 +184,7 @@
     "doc:api:check": "tsx ./bin/generate-component-api.ts --check",
     "doc:changelog": "tsx ./bin/generate-changelog-docs.ts",
     "doc:changelog:check": "tsx ./bin/generate-changelog-docs.ts --check",
-    "verify:design": "tsx ./bin/verify-design-rules.ts"
+    "verify:design": "tsx ./bin/verify-design-rules.ts --ignore components/math/temml.css"
   },
   "files": [
     "dist",

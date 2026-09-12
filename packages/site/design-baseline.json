@@ -1,0 +1,18 @@
+{
+  "$comment": "Known design-rule violations, recorded per file by bin/verify-design-rules.ts. This is a ratchet, not an allowlist: a count that rises fails as a new violation, and a count that falls fails until it is lowered here, so a fix cannot regress later. Do not edit by hand — run `pnpm -F ranui verify:design --update-baseline`. The rules themselves are stated in docs/DESIGN.md and CLAUDE.md.",
+  "rules": {
+    "dark-unsafe-fallback": {},
+    "bare-colour": {
+      "styles/site.css": 48
+    },
+    "spacing-scale": {
+      "styles/site.css": 47
+    },
+    "sizing-scale": {},
+    "mouse-only-drag": {},
+    "hidden-inert": {},
+    "undefined-token-fallback": {},
+    "shadow-mount-outside-constructor": {},
+    "built-then-queried": {}
+  }
+}

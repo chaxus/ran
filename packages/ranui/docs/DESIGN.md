@@ -24,8 +24,19 @@ Conflict resolution order: **user goals → verified evidence → this file → 
 
 ## What is machine-checked
 
-Nine of the rules below are enforced by `pnpm -F ranui verify:design`, which CI runs on
-every pull request. Everything else in this file is still binding — it is simply not
+Nine of the rules below are enforced by `verify:design`, which CI runs on every pull
+request — **for this library and for every surface built on it**. `packages/docs` and
+`packages/site` run the same checker over their own stylesheets:
+
+```sh
+tsx ../ranui/bin/verify-design-rules.ts --roots styles --tokens ../ranui/theme/tokens.less --baseline design-baseline.json
+```
+
+A design system whose rules stop at the library boundary is a design system the product
+does not actually follow. Pointing the checker at the sites found 298 violations that had
+never been looked at — invented spacing values and raw colours in stylesheets written
+against this very system. Vendored third-party CSS is excluded with `--ignore`: its
+metrics are not our debt to clear. Everything else in this file is still binding — it is simply not
 mechanically decidable, so it relies on review and on rendering the result.
 
 | Rule                               | Enforces                                                                                   | Section |
@@ -421,6 +432,134 @@ inside `.controller` isn't part of the token's identity).
 
 This applies to **new** component tokens going forward. See `changelogs/2026-08-08.md` for the
 pass that brought existing components in line with it (0.5.0-alpha.0).
+
+---
+
+## 11. Composition — the page, not the component
+
+Sections 1–10 govern a component. This one governs what happens when many correct
+components are assembled into a surface, which is where this system's most expensive
+mistakes have actually occurred. Every rule below is followed by the failure it prevents,
+and every failure listed is one that shipped.
+
+### Structure before containers
+
+**Reach for spacing, alignment, weight and a hairline before a box.** A container is a
+claim that its contents are a separate object. Most regions need a background, a hairline
+and intentional spacing — nothing more.
+
+> A documentation page alternated a bordered demo, a bordered code block, a bordered demo
+> down its whole length: 16 boxed surfaces on a component page and 37 on the icon page.
+> Nothing was wrong with any single box. The page was exhausting to read because every
+> element claimed to be a separate object.
+
+**A box is for a genuinely separate object** — a live demo stage, an overlay, a panel that
+floats. Not for a code block, a table, a list row, a previous/next link, or a cell in a
+gallery.
+
+**Never nest a box in a box, and never double the padding.** A card inside a padded panel
+does not add another inset.
+
+> Three containers each contributed their own top padding — the page column, the landing
+> wrapper, and the hero — and the first line of content sat 280px below the header. Each
+> value was defensible on its own.
+
+### Emphasis is a budget
+
+**Colour, weight, badges, fills and elevation are scarce.** If everything is emphasised,
+nothing reads as important. Establish priority with structure and proximity first, and
+spend emphasis on the one thing that deserves it.
+
+**Elevation explains stacking, not importance.** Shadows belong to surfaces that genuinely
+float above content — popovers, menus, dialogs, notifications. Do not shadow every card.
+
+### Spacing carries meaning
+
+The scale in §2 is not only a rhythm; each step states a relationship. Choose the step by
+what the gap _means_:
+
+| Relationship                   | Step            | Example                           |
+| ------------------------------ | --------------- | --------------------------------- |
+| Parts of one control           | `--ran-space-1` | an icon and its label             |
+| Closely related controls       | `--ran-space-2` | a button row, dialog actions      |
+| One content group              | `--ran-space-3` | a form row, a list item's lines   |
+| Separate groups in one section | `--ran-space-4` | panel padding, form groups        |
+| Separate sections              | `--ran-space-5` | major blocks on a page            |
+| Major region boundary          | `--ran-space-6` | empty-state breathing room, bands |
+
+**Inside before outside:** a component's own padding is decided before the gap between
+components. **Smaller gap means tighter relationship** — that is the only thing vertical
+rhythm communicates, so do not undo it with a decorative divider.
+
+### Alignment is structure, not polish
+
+**Establish alignment spines and hold them.** Sibling regions share a content inset;
+repeated rows share column geometry; a nested level returns exactly to its parent's spine
+when it ends. A missing optional icon or badge must not move the labels beside it.
+
+**When two edges or gaps are meant to be equal, a one-pixel difference is a defect, not an
+optical approximation.**
+
+### Selection, links and other semantic lies
+
+**Selection is persistent state and must not look like hover.** Hover is transient; if the
+current item is marked with the same fill hover uses, the interface has two names for one
+appearance.
+
+> The current sidebar page was marked with `--ran-color-bg-hover`. It read as "the pointer
+> is here", not "you are here".
+
+**`--ran-color-primary` is commitment; `--ran-color-link` is a link.** Primary is
+near-black in this system, so prose links coloured with it are indistinguishable from the
+text around them.
+
+**A link leaves; a button acts.** Anything that changes application state is a button,
+whatever it looks like. Do not style a command as a link to make it quiet, and do not let
+a button-shaped link keep an underline.
+
+> Every call-to-action on the home page shipped underlined, because the stylesheet assumed
+> a base rule it had never written.
+
+### One product, one token set
+
+**A surface built on this system reads `--ran-*`. It does not define a parallel palette.**
+Two token sets in one product are two sources of truth that drift silently — the site keeps
+its blue while the components on the same page move to another.
+
+A consumer may alias for readability (`--fg: var(--ran-color-text, …)`) provided every
+value resolves from a `--ran-*` token and the fallback is what the surface shows before
+this stylesheet loads. It may not invent a second palette.
+
+### Words are part of the interface
+
+**Let context carry context.** Do not repeat what the surrounding surface already
+establishes — a sidebar destination is `Users`, not `User Management`; a dialog titled
+`Delete "Roadmap"?` does not ask the question again in its body.
+
+**Name the result, not the gesture.** `Save`, `Move`, `Delete` — not `Click to save` or
+`Confirm deletion`. `Cancel` is always the action that leaves without committing.
+
+**Sentence case for English UI.** Reserve ALL CAPS for very short eyebrows, statuses and
+acronyms; never on a button, a heading or a sentence. Labels, buttons and short states take
+no final period; complete explanatory sentences do. Use a single `…` character, and append
+it to any control that opens a dialog or needs more input before it can complete.
+
+### Review checklist for a composed surface
+
+Ask in order. A "no" is a finding, not a preference:
+
+1. Can a new reader recognise the purpose and the primary action without guessing?
+2. Does every control's label, state and result describe one consistent outcome?
+3. Is emphasis scarce — does the core thing get the weight while colour, badges and
+   primary buttons stay rare?
+4. Could this do less: any entry point, option or state removable without weakening the task?
+5. Is the structure exact — shared spines, equal gaps equal to the pixel, no doubled padding?
+6. Does it hold in every state: empty, loading, failure, longest translation, narrow width,
+   dark theme, reduced motion?
+7. Has it been looked at in a real browser, at more than one width, in both themes?
+
+**A screenshot of the happy path is not proof.** Keyboard behaviour, focus, dynamic
+content, themes, resizing and failure states are part of the design.
 
 ---
 

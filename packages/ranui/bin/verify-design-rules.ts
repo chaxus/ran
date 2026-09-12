@@ -19,9 +19,43 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
+/**
+ * The checker is package-agnostic on purpose.
+ *
+ * It began as ranui's own and scanned `components/` only, which meant the two sites
+ * built on ranui's tokens — thousands of lines of stylesheet between them — were
+ * checked by nothing. A design system whose rules stop at the library boundary is a
+ * design system the product does not actually follow.
+ *
+ * A consumer runs the same binary against its own files:
+ *
+ *   tsx ../ranui/bin/verify-design-rules.ts --roots styles --tokens ../ranui/theme/tokens.less
+ */
+const flag = (name: string, fallback: string): string => {
+  const i = process.argv.indexOf(`--${name}`);
+  return i === -1 ? fallback : (process.argv[i + 1] ?? fallback);
+};
+
 const ROOT = path.resolve(process.cwd());
-const BASELINE_FILE = path.join(ROOT, 'docs', 'design-rule-baseline.json');
+const BASELINE_FILE = path.resolve(ROOT, flag('baseline', path.join('docs', 'design-rule-baseline.json')));
+const DEFAULT_ROOTS = flag('roots', 'components')
+  .split(',')
+  .map((r) => r.trim())
+  .filter(Boolean);
 const UPDATE = process.argv.includes('--update-baseline');
+
+/**
+ * Files this package did not author.
+ *
+ * Vendored third-party CSS carries the other project's metrics — temml's `0.5ex` and
+ * `0.05em` are the math renderer's typography, not our spacing scale, and we are never
+ * going to change them. Recording them in the baseline would be worse than ignoring
+ * them: a baseline entry means "debt we intend to clear", and this is not ours to clear.
+ */
+const IGNORED = flag('ignore', '')
+  .split(',')
+  .map((g) => g.trim())
+  .filter(Boolean);
 
 interface Violation {
   file: string;
@@ -66,6 +100,15 @@ const RUNTIME_CHILDREN = /\/\/\s*runtime children:\s*\S/;
 const DEFERRED_MOUNT = /\/\/\s*deferred mount:\s*\S/;
 
 /** Colour literal in any CSS notation. */
+/**
+ * Stylesheet extensions these rules read.
+ *
+ * `.css` is here because the sites built on this design system are written in plain CSS.
+ * Keying the rules to `.less` alone is what let a consumer invent its own spacing values
+ * and raw colours while the library they came from was checked on every commit.
+ */
+const STYLESHEETS = ['.less', '.css'];
+
 const COLOUR = /#[0-9a-fA-F]{3,8}\b|\brgba?\([^()]*\)|\bhsla?\([^()]*\)/g;
 /** `var(--token, fallback)`; the fallback may nest one level of parentheses. */
 const VAR_WITH_FALLBACK = /var\(\s*(--[a-zA-Z0-9-]+)\s*,\s*((?:[^()]|\([^()]*\))*)\)/g;
@@ -95,7 +138,7 @@ function lines(source: string): string[] {
 }
 
 /** Global design tokens, as declared by the theme. */
-const THEME_TOKENS = path.join(ROOT, 'theme', 'tokens.less');
+const THEME_TOKENS = path.resolve(ROOT, flag('tokens', path.join('theme', 'tokens.less')));
 
 /**
  * Every `--ran-*` custom property the theme defines.
@@ -121,7 +164,7 @@ const RULES: Rule[] = [
     id: 'dark-unsafe-fallback',
     summary: "a component token's colour fallback is a light-only literal",
     fix: 'Point the fallback at a token that flips with the theme — `var(--ran-color-text, var(--ran-gray-1000))` — rather than a fixed colour that stays light in dark mode.',
-    extensions: ['.less'],
+    extensions: STYLESHEETS,
     scan(source, file) {
       const out: Violation[] = [];
       lines(source).forEach((line, i) => {
@@ -140,7 +183,7 @@ const RULES: Rule[] = [
     id: 'bare-colour',
     summary: 'a raw colour literal is used outside a token fallback',
     fix: 'Use a semantic token (`--ran-color-*`) so the value follows the theme. A genuinely decorative colour still belongs in a component token with its own fallback.',
-    extensions: ['.less'],
+    extensions: STYLESHEETS,
     scan(source, file) {
       const out: Violation[] = [];
       lines(source).forEach((line, i) => {
@@ -163,7 +206,7 @@ const RULES: Rule[] = [
     id: 'spacing-scale',
     summary: 'spacing uses a literal length instead of the `--ran-space-*` scale',
     fix: 'Use `var(--ran-space-N)`. The scale is 4px-based with nine steps; a one-off inset that is genuinely not shared belongs in a component token with its own fallback.',
-    extensions: ['.less'],
+    extensions: STYLESHEETS,
     scan(source, file) {
       const property = /^\s*(padding|margin|gap|row-gap|column-gap)(-(top|right|bottom|left))?\s*:\s*([^;]+);/;
       const exempt = /^(0|auto|inherit|unset|initial|revert)$/;
@@ -183,7 +226,7 @@ const RULES: Rule[] = [
     id: 'sizing-scale',
     summary: 'an intrinsic dimension is drawn from the spacing scale',
     fix: 'Intrinsic dimensions use `--ran-size-*`. The two scales have different ranges and progressions, so consumers need to retune one without perturbing the other.',
-    extensions: ['.less'],
+    extensions: STYLESHEETS,
     scan(source, file) {
       const property =
         /^\s*(width|height|min-width|min-height|max-width|max-height|font-size|line-height|border-radius)\s*:\s*([^;]+);/;
@@ -215,7 +258,7 @@ const RULES: Rule[] = [
     id: 'hidden-inert',
     summary: 'a `:host` display rule makes the standard `hidden` attribute do nothing',
     fix: "Add `:host([hidden]) { display: none; }`. The UA stylesheet's `[hidden] { display: none }` is a user-agent rule, and any author `display` on `:host` outranks it — so `element.hidden = true` silently leaves the element on screen.",
-    extensions: ['.less'],
+    extensions: STYLESHEETS,
     scan(source, file) {
       const stripped = stripComments(source);
       // Only a `:host` rule with no condition; `:host([open])` and friends are states the
@@ -335,7 +378,7 @@ const RULES: Rule[] = [
  * @param extensions Extensions to include, with the leading dot.
  * @returns Paths relative to the ranui package root, POSIX separators, sorted.
  */
-async function collect(extensions: string[], roots: string[] = ['components']): Promise<string[]> {
+async function collect(extensions: string[], roots: string[] = DEFAULT_ROOTS): Promise<string[]> {
   const out: string[] = [];
   const walk = async (dir: string): Promise<void> => {
     for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
@@ -344,11 +387,19 @@ async function collect(extensions: string[], roots: string[] = ['components']): 
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) await walk(full);
       else if (extensions.includes(path.extname(entry.name)) && !entry.name.endsWith('.test.ts')) {
-        out.push(path.relative(ROOT, full).split(path.sep).join('/'));
+        const rel = path.relative(ROOT, full).split(path.sep).join('/');
+        if (IGNORED.some((frag) => rel.includes(frag))) continue;
+        out.push(rel);
       }
     }
   };
-  for (const root of roots) await walk(path.join(ROOT, root));
+  for (const root of roots) {
+    const dir = path.join(ROOT, root);
+    // A rule may name a directory a given package does not have. That is not an error;
+    // it simply has nothing to scan there.
+    if (!(await fs.stat(dir).catch(() => null))) continue;
+    await walk(dir);
+  }
   return out.sort();
 }
 
