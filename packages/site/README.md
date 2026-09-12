@@ -18,10 +18,11 @@ packages/site/
 │   ├── build.ts        # the driver
 │   ├── verify.ts       # post-build checks — fails the deploy, not the reader
 │   └── dev.ts          # rebuild-on-change, served the way the host serves
-├── content/        # index.md, about.md, blog/*.md
+├── content/        # index.md, about.md, 404.md, blog/*.md
 ├── client/         # the one client bundle
 ├── styles/         # site.css — the whole stylesheet, no preprocessor
-├── public/         # copied verbatim: _headers, _redirects
+├── assets/         # og.html — source for the social card, rendered by `pnpm -F site og`
+├── public/         # copied verbatim: icons, manifest, og.png, _headers, _redirects
 └── bin/build.sh    # generate → verify
 ```
 
@@ -31,7 +32,13 @@ packages/site/
 pnpm -F site dev      # http://localhost:4173, drafts included, rebuild on change
 pnpm -F site build    # generate into dist/ and verify
 pnpm -F site verify   # re-run the checks against an existing dist/
+pnpm -F site og       # regenerate og.png and the PNG icons (needs Chromium)
 ```
+
+`og` is deliberately not part of `build`: the card and the icons change when the
+wordmark or the tagline changes, which is close to never, and making every deploy depend
+on a browser binary is a poor trade. Their outputs are committed — run it after editing
+`assets/og.html` or `public/favicon.svg`.
 
 `build` needs ranui's `dist/` to exist. From a clean checkout, `sh bin/build-site.sh` at
 the repo root builds ranuts → ranui → site in order; that is also the Cloudflare Pages
@@ -74,6 +81,12 @@ resolves to a different page, a `.html` URL anywhere, a missing description, a b
 absent from the sitemap. None of these break a page in a browser, which is exactly why
 they need a check. It has already caught one: post bylines linked to `/blog/#practice`
 while the archive was grouped by year, so every one of those anchors was dead.
+
+**The 404 page is the one page with different rules.** Cloudflare Pages serves
+`/404.html` from the root for any unmatched path, so it is written there literally rather
+than at `404/index.html`. It must not declare a canonical — served from every wrong URL,
+a canonical would claim a different page each time — and must carry `noindex`, and it
+stays out of the sitemap. `verify.ts` enforces all three.
 
 **The site works with JavaScript disabled.** Content, navigation, styling and theming all
 render without the bundle; `client/main.ts` adds the theme switch and code-copy buttons on
