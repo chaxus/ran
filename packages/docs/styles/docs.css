@@ -470,6 +470,42 @@ a {
   }
 }
 
+/*
+ * Package facts — one line, the site's own voice.
+ *
+ * This replaced five shields.io images: the only saturated colour on the page, in a
+ * visual language belonging to nobody, fetched from two external hosts on every view.
+ * Mono at label size, separated by the same hairline the stats row uses, so it reads as
+ * metadata rather than as decoration competing with the title above it.
+ */
+.prose .pkg-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--fg-muted);
+}
+.pkg-facts__item {
+  padding: var(--ran-space-1, 4px) var(--ran-space-3, 12px);
+  border-inline-start: 1px solid var(--rule);
+}
+.pkg-facts__item:first-child {
+  padding-inline-start: 0;
+  border-inline-start: none;
+}
+.prose a.pkg-facts__item {
+  color: var(--fg);
+  text-decoration: none;
+}
+.prose a.pkg-facts__item:hover {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ── Layout ──────────────────────────────────────────────────────────────── */
 
 .layout {
@@ -813,9 +849,18 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
  * own outline. A reference page alternating bordered demo, bordered code, bordered demo
  * down its whole length is what makes a documentation page tiring to read.
  */
+/*
+ * Code sits on the page's alignment spine, and the hairlines are the only boundary.
+ *
+ * The fill was a second delimiter doing the same job as the rules, which is what made a
+ * page of examples read as a stack of grey slabs — and it is the most repeated element on
+ * the site, so it set the tone everywhere. Dropping it also lets the horizontal padding
+ * go, which is what mattered: code was inset 20px while every paragraph and heading
+ * started at 328px, so no code block on the site stood on the same spine as the prose
+ * around it. Mono type and syntax colour distinguish code perfectly well on their own.
+ */
 .prose figure.code {
   position: relative;
-  background: var(--bg-code);
   border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
 }
@@ -823,7 +868,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   content: attr(data-lang);
   position: absolute;
   top: 8px;
-  inset-inline-end: 12px;
+  inset-inline-end: 0;
   font-family: var(--font-mono);
   font-size: 10.5px;
   letter-spacing: 0.08em;
@@ -833,7 +878,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 }
 .prose figure.code pre {
   margin: 0;
-  padding: 18px 20px;
+  padding: 18px 0;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 13.5px;
@@ -990,6 +1035,15 @@ ran-demo:has(+ figure.code) {
    */
   margin-bottom: calc(-1 * var(--prose-gap));
 }
+/* Inside a box, code is inset again — the spine it aligns to is the box's, not the
+   page's. Only a standalone fence stands on the prose spine. */
+/* `.prose figure.code pre` is (0,2,2); these have to out-specify it or the inset silently
+   loses and the code sits flush against the box edge. */
+.prose ran-demo + figure.code pre,
+.prose .code-group figure.code pre {
+  padding-inline: 20px;
+}
+
 ran-demo + figure.code {
   margin-top: 0;
   border: 1px solid var(--rule);

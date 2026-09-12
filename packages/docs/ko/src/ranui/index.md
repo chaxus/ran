@@ -9,14 +9,9 @@ React, Vue, Svelte, Solid, Astro, 혹은 순수 HTML 파일에서 똑같이 동�
 맞춰야 할 프레임워크 버전도 없습니다. TypeScript 타입, 디자인 토큰 기반 라이트/다크 테마,
 Shadow DOM 캡슐화, 서버 렌더링이 기본으로 들어 있습니다.
 
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://unpkg.com/ranui/dist/index.js"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran/tree/main/packages/ranui"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-- **npm**: <a href="https://www.npmjs.com/package/ranui">`ranui`</a> ·
-  **소스**: <a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`packages/ranui`</a>
+<PackageFacts package="ranui" />
+
 - ranui 는 **alpha**입니다. 버전마다 호환성을 깨는 변경이 들어갑니다. 정확한 버전을 고정하고,
   업그레이드 전에 [변경 이력](/ko/src/ranui/changelog)을 읽으세요.
 

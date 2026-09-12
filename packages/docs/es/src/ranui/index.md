@@ -9,14 +9,9 @@ Una biblioteca de UI construida sobre **custom elements nativos**. Cada componen
 No hay adaptador ni versión de framework que hacer coincidir. Incluye tipos TypeScript, tema claro
 y oscuro mediante design tokens, encapsulación con Shadow DOM y renderizado en servidor.
 
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://unpkg.com/ranui/dist/index.js"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran/tree/main/packages/ranui"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-- **npm**: <a href="https://www.npmjs.com/package/ranui">`ranui`</a> ·
-  **código**: <a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`packages/ranui`</a>
+<PackageFacts package="ranui" />
+
 - ranui está en **alfa**: las versiones traen cambios incompatibles. Fija una versión exacta y lee el
   [registro de cambios](/es/src/ranui/changelog) antes de actualizar.
 
