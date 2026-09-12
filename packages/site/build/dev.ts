@@ -10,7 +10,7 @@
  */
 import { createServer } from 'node:http';
 import { existsSync, readFileSync, statSync, watch } from 'node:fs';
-import { extname, join } from 'node:path';
+import { extname, isAbsolute, join, relative, resolve as resolvePath } from 'node:path';
 import { build, CONTENT_DIR, DIST_DIR, ROOT } from './build.ts';
 
 const PORT = Number(process.env.PORT ?? 4173);
@@ -30,13 +30,34 @@ const MIME: Record<string, string> = {
   '.ico': 'image/x-icon',
 };
 
-/** The host's resolution order: exact file, then `<path>/index.html`. */
+/**
+ * The host's resolution order: exact file, then `<path>/index.html`.
+ *
+ * Every returned path is proved to sit inside `dist/` before it is handed back. That is
+ * not paranoia about a local server: `join()` resolves `..`, so a request for
+ * `/../../../../.ssh/id_rsa` reads straight out of the home directory, and any page open
+ * in the browser can make that request while this is running.
+ */
 const resolve = (urlPath: string): string | null => {
-  const clean = decodeURIComponent(urlPath.split('?')[0]);
+  let clean: string;
+  try {
+    clean = decodeURIComponent(urlPath.split('?')[0]);
+  } catch {
+    // `%ZZ` and friends throw. Unhandled, that takes down the request handler rather
+    // than returning a 404 for what is simply a malformed URL.
+    return null;
+  }
+  // A NUL truncates the path at the syscall boundary, so `/x\0.png` would reach `/x`.
+  if (clean.includes('\0')) return null;
+
   const candidates =
     clean === '/' ? ['index.html'] : [clean.replace(/^\//, ''), join(clean.replace(/^\//, ''), 'index.html')];
   for (const candidate of candidates) {
-    const full = join(DIST_DIR, candidate);
+    const full = resolvePath(DIST_DIR, candidate);
+    // `relative` is the containment test: anything outside dist/ starts with `..`, and
+    // an absolute result means the candidate was itself absolute.
+    const inside = relative(DIST_DIR, full);
+    if (inside.startsWith('..') || isAbsolute(inside)) continue;
     if (existsSync(full) && statSync(full).isFile()) return full;
   }
   return null;
