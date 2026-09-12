@@ -25,10 +25,9 @@
   "author": "chaxus",
   "license": "MIT",
   "dependencies": {
-    "marked": "18.0.9",
     "ranui": "workspace:*",
     "ranuts": "workspace:*",
-    "shiki": "4.4.3"
+    "ssg": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",

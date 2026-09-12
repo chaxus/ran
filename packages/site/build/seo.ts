@@ -9,13 +9,10 @@
  * URL comes from `Page.url`, which is also what the driver writes to disk, so the two
  * cannot disagree.
  */
+import { renderFeed, renderRobotsTxt, renderSitemap } from 'ssg';
 import { OG_IMAGE, ORIGIN, SITE } from './config.ts';
-import type { Page, Post } from './content.ts';
+import type { Content, Page, Post } from './content.ts';
 import { absoluteUrl, escapeHtml } from './page.ts';
-
-/** XML text content. `&` first, or it would double-escape the entities below it. */
-const xml = (s: string): string =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 
 const meta = (attr: 'name' | 'property', key: string, content: string): string =>
   `<meta ${attr}="${key}" content="${escapeHtml(content)}">`;
@@ -132,54 +129,6 @@ export const headFor = (page: Page): string[] => {
 
 // ── Machine-readable files ──────────────────────────────────────────────────
 
-export const renderSitemap = (pages: Page[]): string => {
-  // The 404 page is reachable from every wrong URL and indexable from none of them.
-  const urls = pages
-    .filter((page) => page.kind !== 'notfound')
-    .map((page) => {
-      const lastmod = page.kind === 'post' ? `\n    <lastmod>${(page as Post).date}</lastmod>` : '';
-      // The home page is the entry point; posts outrank the archive index.
-      const priority = page.kind === 'home' ? '1.0' : page.kind === 'post' ? '0.8' : '0.5';
-      return `  <url>\n    <loc>${xml(absoluteUrl(page.url))}</loc>${lastmod}\n    <priority>${priority}</priority>\n  </url>`;
-    })
-    .join('\n');
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
-};
-
-/**
- * RSS 2.0. `pubDate` must be RFC-822 — a reader that gets an ISO date either drops the
- * item or files it under 1970.
- */
-const rfc822 = (isoDate: string): string => new Date(`${isoDate}T00:00:00Z`).toUTCString();
-
-export const renderFeed = (posts: Post[]): string => {
-  const items = posts
-    .map(
-      (post) =>
-        `  <item>\n` +
-        `    <title>${xml(post.title)}</title>\n` +
-        `    <link>${xml(absoluteUrl(post.url))}</link>\n` +
-        `    <guid isPermaLink="true">${xml(absoluteUrl(post.url))}</guid>\n` +
-        `    <pubDate>${rfc822(post.date)}</pubDate>\n` +
-        `    <description>${xml(post.description)}</description>\n` +
-        (post.tags.length ? post.tags.map((t) => `    <category>${xml(t)}</category>\n`).join('') : '') +
-        `  </item>`,
-    )
-    .join('\n');
-  const updated = posts[0] ? rfc822(posts[0].date) : new Date().toUTCString();
-  return (
-    `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n` +
-    `  <title>${xml(SITE.name)}</title>\n` +
-    `  <link>${xml(`${ORIGIN}/`)}</link>\n` +
-    `  <description>${xml(SITE.description)}</description>\n` +
-    `  <language>${SITE.lang}</language>\n` +
-    `  <lastBuildDate>${updated}</lastBuildDate>\n` +
-    `  <atom:link href="${xml(`${ORIGIN}/feed.xml`)}" rel="self" type="application/rss+xml"/>\n` +
-    `${items}\n</channel>\n</rss>\n`
-  );
-};
-
 /**
  * The entry map for LLM crawlers. Hand-shaped rather than a dump: this is the paragraph
  * a model actually ingests as "what is this site", so it is the highest-leverage prose
@@ -198,14 +147,43 @@ export const renderLlmsTxt = (posts: Post[]): string =>
   (posts.length ? posts.map((p) => `- [${p.title}](${absoluteUrl(p.url)}) — ${p.description}`).join('\n') : '(暂无)') +
   `\n`;
 
+// ── The files a build emits alongside its pages ─────────────────────────────
+
 /**
- * Training crawlers are allowed on purpose. The site's whole point is that this
- * material gets read and cited; excluding the crawlers that build the models people
- * now ask would work against it.
+ * Everything read by machines rather than people, built from the same page objects the
+ * driver writes to disk so a URL here cannot name a page that was not generated.
  */
-export const renderRobotsTxt = (): string =>
-  `User-agent: *\nAllow: /\n\n` +
-  ['GPTBot', 'ClaudeBot', 'Claude-Web', 'Google-Extended', 'CCBot', 'PerplexityBot', 'Bytespider']
-    .map((bot) => `User-agent: ${bot}\nAllow: /\n`)
-    .join('\n') +
-  `\nSitemap: ${ORIGIN}/sitemap.xml\n`;
+export const generatedFiles = ({ pages, posts }: Content): Array<[string, string]> => [
+  [
+    'sitemap.xml',
+    renderSitemap(
+      pages
+        // The 404 is reachable from every wrong URL and indexable from none of them.
+        .filter((page) => page.kind !== 'notfound')
+        .map((page) => ({
+          loc: absoluteUrl(page.url),
+          lastmod: page.kind === 'post' ? (page as Post).date : undefined,
+          // The home page is the entry point; posts outrank the archive index.
+          priority: page.kind === 'home' ? '1.0' : page.kind === 'post' ? '0.8' : '0.5',
+        })),
+    ),
+  ],
+  [
+    'feed.xml',
+    renderFeed({
+      title: SITE.name,
+      origin: ORIGIN,
+      description: SITE.description,
+      lang: SITE.lang,
+      items: posts.map((post) => ({
+        title: post.title,
+        url: absoluteUrl(post.url),
+        date: post.date,
+        description: post.description,
+        categories: post.tags,
+      })),
+    }),
+  ],
+  ['llms.txt', renderLlmsTxt(posts)],
+  ['robots.txt', renderRobotsTxt(ORIGIN)],
+];

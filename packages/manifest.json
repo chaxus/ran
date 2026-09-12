@@ -13,6 +13,10 @@
       "status": "support",
       "checks": ["tsc"]
     },
+    "ssg": {
+      "status": "support",
+      "checks": ["tsc"]
+    },
     "site": {
       "status": "support",
       "checks": ["tsc"]

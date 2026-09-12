@@ -45,6 +45,32 @@ export const OG_IMAGE = {
   alt: 'chaxus — 从零手写前端基础设施',
 } as const;
 
+/**
+ * Code fence languages this site writes in. shiki loads grammars eagerly and ships ~600
+ * of them, so naming the ones in use is what keeps the build at two seconds. An unlisted
+ * language fails the build by name rather than rendering silently as plain text.
+ */
+export const LANGS = [
+  'text',
+  'ts',
+  'js',
+  'tsx',
+  'jsx',
+  'html',
+  'css',
+  'json',
+  'md',
+  'sh',
+  'bash',
+  'rust',
+  'wasm',
+  'yaml',
+  'toml',
+  'diff',
+  'sql',
+  'python',
+] as const;
+
 export interface NavItem {
   text: string;
   href: string;
