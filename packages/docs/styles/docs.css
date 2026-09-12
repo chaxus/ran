@@ -353,6 +353,14 @@ a {
   background: var(--bg);
 }
 
+/*
+ * `display` belongs on `[open]`, not on the dialog itself.
+ *
+ * A `<dialog>` is `display: none` until opened — a flat `display: flex` here overrides
+ * that, so the closed search panel stayed in the layout at the end of the document. It
+ * added 177px of scroll to every page and appeared, floating and unreachable, below the
+ * footer of any full-page capture.
+ */
 .search {
   width: min(640px, calc(100vw - 32px));
   max-height: min(70vh, 560px);
@@ -364,6 +372,8 @@ a {
   color: var(--fg);
   box-shadow: 0 24px 64px -24px rgba(0, 0, 0, 0.45);
   overflow: hidden;
+}
+.search[open] {
   display: flex;
   flex-direction: column;
 }
