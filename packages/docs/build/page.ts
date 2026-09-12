@@ -158,7 +158,7 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
 <div class="layout">
 ${sb ? `<label class="drawer__scrim" for="drawer"></label><nav class="sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}">${sb}</nav>` : ''}
 <main id="main" class="doc">
-<article class="prose">${page.html}</article>
+<${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div class="landing"' : 'article class="prose"'}>${page.html}</${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div' : 'article'}>
 ${footerNav}
 </main>
 ${tocHtml(page, ui.outline)}

@@ -9,6 +9,7 @@
  */
 import { readSources } from 'ssg';
 import type { MarkdownRenderer, Section, TocEntry } from 'ssg';
+import { setRenderLocale } from './components.ts';
 import { LOCALES, ROOT_LOCALE } from './config.ts';
 import type { LocaleDef } from './config.ts';
 
@@ -93,6 +94,8 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
     if (clash) throw new Error(`${label}: URL ${url} is already produced by ${clash}`);
     seen.set(url, label);
 
+    // The component renderers need to know which language this page is in.
+    setRenderLocale(locale);
     const { html, toc, excerpt, sections } = markdown.render(content);
     const fmTitle = typeof data.title === 'string' ? data.title : '';
     const fmDescription = typeof data.description === 'string' ? data.description : '';

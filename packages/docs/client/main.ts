@@ -7,8 +7,11 @@
  * What is here genuinely cannot be done without it.
  */
 import '../styles/docs.css';
+import '../styles/home.css';
+import '../styles/demos.css';
 import 'ranui/style';
 import { mountSearch } from './search.ts';
+import { mountDemos } from './home.ts';
 
 // Registers every `<r-*>` the pages use. The demos are already in the markup as inert
 // custom elements; this is what upgrades them.
@@ -75,3 +78,4 @@ document.querySelector('.sidebar')?.addEventListener('click', (event) => {
 });
 
 mountSearch();
+mountDemos();
