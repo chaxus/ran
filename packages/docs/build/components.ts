@@ -148,8 +148,7 @@ export const renderHome = (locale: LocaleDef): string => {
     t.pillars
       .map(
         (p, i) =>
-          `<a class="pillar reveal" data-reveal data-tilt ${rd(i)} href="${esc(href(p.link))}">` +
-          `<span class="spotlight" aria-hidden="true"></span>` +
+          `<a class="pillar reveal" data-reveal ${rd(i)} href="${esc(href(p.link))}">` +
           `<span class="pillar-icon" data-kind="${esc(p.kind)}">${icon(p.kind)}</span>` +
           `<h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p>` +
           `<span class="pillar-more">${esc(p.more)} ${ARROW_SM}</span></a>`,
