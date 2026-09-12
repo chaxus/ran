@@ -85,6 +85,9 @@ importers:
       '@ranui/preview':
         specifier: 0.1.0-alpha-2
         version: 0.1.0-alpha-2
+      minisearch:
+        specifier: 7.2.0
+        version: 7.2.0
       ranui:
         specifier: workspace:*
         version: link:../ranui
@@ -333,6 +336,9 @@ importers:
       marked:
         specifier: 18.0.9
         version: 18.0.9
+      minisearch:
+        specifier: 7.2.0
+        version: 7.2.0
       shiki:
         specifier: 4.4.3
         version: 4.4.3

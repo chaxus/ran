@@ -22,11 +22,29 @@ export interface TocEntry {
   slug: string;
 }
 
+/**
+ * One searchable chunk of a page: a heading and the prose under it.
+ *
+ * Sections rather than whole pages, so a search result can link to the part of the page
+ * that matched. On a reference page running to a few thousand words, "this page contains
+ * your term somewhere" is barely an answer.
+ */
+export interface Section {
+  /** Anchor of the heading that opens this section; empty for the lead. */
+  slug: string;
+  /** The heading's text; empty for the lead section. */
+  title: string;
+  /** Prose under it, flattened. Fenced code is left out — see `collectSections`. */
+  text: string;
+}
+
 export interface RenderedMarkdown {
   html: string;
   toc: TocEntry[];
   /** First substantive prose paragraph, cleaned — the meta description fallback. */
   excerpt: string;
+  /** The page split at its headings, for indexing. */
+  sections: Section[];
 }
 
 // ── Syntax highlighting ─────────────────────────────────────────────────────
@@ -121,44 +139,52 @@ export interface MarkdownRenderer {
 // ── Slugs ───────────────────────────────────────────────────────────────────
 
 /**
- * A heading's anchor. CJK is kept verbatim rather than transliterated: a Chinese
- * heading would otherwise slug to the empty string and every anchor on the page would
- * collide into `section-1`, `section-2`… Percent-encoding in the URL is fine, and it
- * is what every Chinese-language site with heading links already does.
+ * A heading's anchor.
+ *
+ * This is deliberately the same algorithm VitePress uses, character for character,
+ * because the documentation site already has thousands of anchors in the wild — in its
+ * own cross-links, in the outline, and in every deep link anyone has ever shared. A
+ * slugifier that is merely *reasonable* would silently change all of them.
+ *
+ * The three rules worth naming:
+ *
+ * - **NFKD then strip combining marks.** `parâmetros` → `parametros`, `wählen` →
+ *   `wahlen`. Accented headings are common in the Spanish, Portuguese and German
+ *   translations.
+ * - **Only this punctuation set becomes a hyphen.** Not "everything that is not a
+ *   letter" — that would eat the zero-width non-joiner that Persian headings need, and
+ *   `شیوه‌ها` would stop matching its own anchor.
+ * - **CJK survives untouched**, because it is neither punctuation nor a combining mark.
+ *   Percent-encoding in the URL is fine and is what every Chinese documentation site
+ *   already does.
  */
+// Matching control characters is the entire purpose of this one: VitePress strips them
+// from headings before slugifying, and a slug that kept them would be a broken id.
+// eslint-disable-next-line no-control-regex
+const R_CONTROL = /[\u0000-\u001f]/g;
+const R_SPECIAL = /[\s~`!@#$%^&*()\-_+=[\]{}|\\;:"'“”‘’<>,.?/]+/g;
+const R_COMBINING = /[\u0300-\u036f]/g;
+
 export const slugify = (text: string): string =>
   text
-    .trim()
-    .toLowerCase()
-    // No tag stripping here: the character filter below drops every `<`, `>` and quote
-    // anyway, so a regex that only *mostly* removes tags would add nothing but the
-    // false impression that this function sanitizes. It takes plain text — see
-    // `plainText()` for how callers get it.
-    .replace(/[\s　]+/g, '-')
-    .replace(/[^\p{Letter}\p{Number}\-_]/gu, '')
+    .normalize('NFKD')
+    .replace(R_COMBINING, '')
+    .replace(R_CONTROL, '')
+    .replace(R_SPECIAL, '-')
     .replace(/-{2,}/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/^-+|-+$/g, '')
+    // An id may not begin with a digit in a CSS selector, so it gets a prefix.
+    .replace(/^(\d)/, '_$1')
+    .toLowerCase();
 
-/**
- * Plain text from an inline token tree.
- *
- * The obvious alternative — render to HTML and strip tags with `/<[^>]+>/g` — is both
- * wrong and a liability. Wrong because it leaves entities behind (`&amp;` stays
- * literal) and because nested constructs like `<scr<b>ipt>` survive a single pass.
- * A liability because a regex that removes *most* tags reads like a sanitizer to every
- * later reader and to every scanner, and is treated as one.
- *
- * The tokens are already the structure, so this reads it directly. `html` tokens —
- * raw markup someone typed into the prose — are dropped, which is the tag removal,
- * done by the parser rather than by a pattern. `codespan` is kept: a heading or an
- * excerpt about `<r-markdown>` has to still contain that word.
- */
+// ── Plain text from tokens ──────────────────────────────────────────────────
+
 /**
  * The entities marked leaves sitting in a `text` token.
  *
  * Token text is the markdown source, so `&amp;` arrives as those five characters. Plain
  * text is what this module hands to `escapeHtml` downstream, which would turn it into
- * `&amp;amp;` and render the entity literally in a meta description or a post card.
+ * `&amp;amp;` and render the entity literally in a meta description or a search result.
  * Decoding here is what makes the value actually plain.
  */
 const ENTITIES: Record<string, string> = {
@@ -167,7 +193,7 @@ const ENTITIES: Record<string, string> = {
   gt: '>',
   quot: '"',
   apos: "'",
-  nbsp: '\u00a0',
+  nbsp: ' ',
 };
 
 const decodeEntities = (text: string): string =>
@@ -182,6 +208,19 @@ const decodeEntities = (text: string): string =>
     return ENTITIES[body.toLowerCase()] ?? whole;
   });
 
+/**
+ * Plain text from an inline token tree.
+ *
+ * The obvious alternative — render to HTML and strip tags with `/<[^>]+>/g` — is both
+ * wrong and a liability. Wrong because it leaves entities behind and because nested
+ * constructs like `<scr<b>ipt>` survive a single pass. A liability because a regex that
+ * removes *most* tags reads like a sanitizer to every later reader and to every scanner,
+ * and gets treated as one.
+ *
+ * `html` tokens — raw markup someone typed into the prose — are dropped, which is the
+ * tag removal, done by the parser rather than by a pattern. `codespan` is kept: a
+ * heading about `<r-markdown>` has to still contain that word.
+ */
 const plainText = (tokens: Token[] | undefined): string => {
   if (!tokens) return '';
   let out = '';
@@ -193,19 +232,29 @@ const plainText = (tokens: Token[] | undefined): string => {
       case 'br':
         out += ' ';
         break;
-      case 'codespan':
-      case 'escape':
-      case 'text':
       default:
-        // A `text` token can itself carry children (inside a link, say); prefer them.
         out +=
           'tokens' in token && token.tokens?.length
-            ? plainText(token.tokens)
+            ? plainText(token.tokens as Token[])
             : decodeEntities((token as Tokens.Text).text ?? '');
     }
   }
   return out;
 };
+
+/**
+ * `## Heading {#custom-id}` — an explicit anchor, the markdown-it convention VitePress
+ * follows.
+ *
+ * It matters more than it looks. The documentation site uses it in 160 headings across
+ * 84 pages, and the reason is translation: `## 服务端渲染 {#server-rendering}` gives the
+ * Chinese page the same anchor as its English counterpart, so one link works for both.
+ * Slugifying the whole heading instead would give every translation a different anchor
+ * and break every deep link that already exists.
+ */
+const CUSTOM_ANCHOR = /\s*\{#([A-Za-z0-9_-]+)\}\s*$/;
+
+export const stripCustomAnchor = (text: string): string => text.replace(CUSTOM_ANCHOR, '');
 
 // ── Custom containers ───────────────────────────────────────────────────────
 
@@ -251,6 +300,7 @@ const escapeHtml = (s: string): string =>
 const createParser = (
   slugs: Map<string, number>,
   toc: TocEntry[],
+  headings: string[],
   highlight: (code: string, lang: string) => string,
   isExternal: (href: string) => boolean,
   container: TokenizerAndRendererExtension,
@@ -270,15 +320,36 @@ const createParser = (
         return `<figure class="code" data-lang="${escapeHtml(language || 'text')}">${highlight(text, language)}</figure>\n`;
       },
       heading({ tokens, depth }: Tokens.Heading): string {
-        const text = this.parser.parseInline(tokens);
-        const plain = plainText(tokens);
-        let slug = slugify(plain) || 'section';
-        // Two headings with the same words are a real thing ("Why", "Why" in different
-        // sections). Suffix rather than collide, so in-page links stay unambiguous.
-        const seen = slugs.get(slug) ?? 0;
-        slugs.set(slug, seen + 1);
-        if (seen) slug = `${slug}-${seen + 1}`;
+        const rawText = this.parser.parseInline(tokens);
+        const rawPlain = plainText(tokens);
+        const explicit = CUSTOM_ANCHOR.exec(rawPlain)?.[1];
+        // The marker is an instruction, not prose — it must not render.
+        const text = explicit ? stripCustomAnchor(rawText) : rawText;
+        const plain = explicit ? stripCustomAnchor(rawPlain) : rawPlain;
+
+        let slug: string;
+        if (explicit) {
+          // Used verbatim. An explicit id that repeats is a content bug worth seeing as
+          // one, not something to paper over with a suffix.
+          slug = explicit;
+          slugs.set(slug, (slugs.get(slug) ?? 0) + 1);
+        } else {
+          slug = slugify(plain) || 'section';
+          // Two headings with the same words are a real thing ("Why", "Why" in different
+          // sections). Suffix rather than collide, so in-page links stay unambiguous.
+          const seen = slugs.get(slug) ?? 0;
+          slugs.set(slug, seen + 1);
+          // markdown-it-anchor numbers repeats from 1, so a heading's *second*
+          // appearance is `slug-1`. Starting at 2 instead would shift every duplicate
+          // anchor on the site by one.
+          if (seen) slug = `${slug}-${seen}`;
+        }
         if (depth === 2 || depth === 3) toc.push({ level: depth, text: plain, slug });
+        // Every heading, at every depth, in document order. `collectSections` walks the
+        // same headings, so consuming this list keeps a section's anchor identical to
+        // the id the page actually carries — including the numeric suffix a repeated
+        // heading got. Re-deriving the slug there instead produced colliding ids.
+        headings.push(slug);
         // The anchor is a real link, and it is the heading itself — not a hover-only
         // pilcrow, which is invisible on touch devices where sharing a section link is
         // most common.
@@ -329,6 +400,50 @@ const firstParagraph = (tokens: Token[]): string => {
   return '';
 };
 
+/**
+ * Split the token stream at its headings.
+ *
+ * Built from tokens, not by stripping tags off the rendered HTML. The parser already
+ * knows the structure; re-deriving it from the output would mean a regex that is wrong
+ * about entities and nested markup, which is exactly the pattern `plainText` exists to
+ * avoid.
+ *
+ * Fenced code is excluded. Indexing it roughly doubles the index for a reference site
+ * while mostly adding tokens that already appear in the surrounding prose, headings and
+ * API tables.
+ */
+const collectSections = (tokens: Token[], nextSlug: () => string): Section[] => {
+  const sections: Section[] = [{ slug: '', title: '', text: '' }];
+  const push = (text: string): void => {
+    if (!text) return;
+    const current = sections[sections.length - 1];
+    current.text = current.text ? `${current.text} ${text}` : text;
+  };
+
+  for (const token of tokens) {
+    if (token.type === 'heading') {
+      const heading = token as Tokens.Heading;
+      const title = stripCustomAnchor(plainText(heading.tokens)).replace(/\s+/g, ' ').trim();
+      sections.push({ slug: nextSlug(), title, text: '' });
+      continue;
+    }
+    if (token.type === 'code' || token.type === 'space' || token.type === 'hr') continue;
+    if (token.type === 'table') {
+      const table = token as Tokens.Table;
+      const cells = [
+        ...table.header.map((cell) => plainText(cell.tokens)),
+        ...table.rows.flat().map((cell) => plainText(cell.tokens)),
+      ];
+      push(cells.join(' ').replace(/\s+/g, ' ').trim());
+      continue;
+    }
+    const inner = 'tokens' in token && token.tokens?.length ? plainText(token.tokens as Token[]) : '';
+    push(inner.replace(/\s+/g, ' ').trim());
+  }
+
+  return sections.filter((section) => section.title || section.text);
+};
+
 /** Trim to `max` characters on a word/CJK boundary, with an ellipsis when cut. */
 export const truncate = (s: string, max = 155): string => {
   if (s.length <= max) return s;
@@ -372,10 +487,18 @@ export const createMarkdown = ({
     },
     render(source: string): RenderedMarkdown {
       const toc: TocEntry[] = [];
-      const marked = createParser(new Map(), toc, highlight, isExternal, container, fences);
+      const headings: string[] = [];
+      const marked = createParser(new Map(), toc, headings, highlight, isExternal, container, fences);
       const tokens = marked.lexer(source);
       const html = marked.parser(tokens) as string;
-      return { html, toc, excerpt: truncate(firstParagraph(tokens)) };
+      let consumed = 0;
+      const nextSlug = (): string => headings[consumed++] ?? '';
+      return {
+        html,
+        toc,
+        excerpt: truncate(firstParagraph(tokens)),
+        sections: collectSections(tokens, nextSlug),
+      };
     },
   };
 };

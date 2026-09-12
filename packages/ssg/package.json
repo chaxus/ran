@@ -11,7 +11,8 @@
     "./driver": "./src/driver.ts",
     "./verify": "./src/verify.ts",
     "./dev": "./src/dev.ts",
-    "./feeds": "./src/feeds.ts"
+    "./feeds": "./src/feeds.ts",
+    "./search": "./src/search.ts"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   },
   "dependencies": {
     "marked": "18.0.9",
+    "minisearch": "7.2.0",
     "shiki": "4.4.3"
   },
   "devDependencies": {

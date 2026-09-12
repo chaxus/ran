@@ -8,7 +8,7 @@
  */
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ssg';
+import { buildIndex, createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ssg';
 import { LANGS, ORIGIN } from './config.ts';
 import { loadDocs } from './content.ts';
 import { renderDoc } from './page.ts';
@@ -90,6 +90,18 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
   }
   for (const [name, body] of generatedFiles(content)) {
     writeOut(DIST_DIR, name, body);
+    written.push(name);
+  }
+
+  // One index per locale, fetched only when a reader opens search. A single index over
+  // all eight languages would make every reader download seven they cannot read.
+  const byLocale = new Map<string, typeof content.pages>();
+  for (const page of content.pages) {
+    byLocale.set(page.locale.lang, [...(byLocale.get(page.locale.lang) ?? []), page]);
+  }
+  for (const [lang, pages] of byLocale) {
+    const name = `search/${lang}.json`;
+    writeOut(DIST_DIR, name, buildIndex(pages));
     written.push(name);
   }
 
