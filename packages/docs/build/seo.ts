@@ -7,7 +7,7 @@
  * check is against the set of URLs the build actually produced rather than against the
  * locale registry.
  */
-import { renderRobotsTxt, renderSitemap } from 'ssg';
+import { renderSitemap } from 'ssg';
 import { LOCALES, ORIGIN, ROOT_LOCALE, SITE } from './config.ts';
 import type { DocContent, DocPage } from './content.ts';
 
@@ -29,6 +29,10 @@ const urlIn = (page: DocPage, dir: string): string => {
 };
 
 export const headFor = (page: DocPage, content: DocContent): string[] => {
+  // Served from every wrong URL there is, so a canonical would claim a different page
+  // each time and a sitemap entry would invite indexing.
+  if (page.kind === 'notfound') return [`<meta name="robots" content="noindex, follow">`];
+
   const url = absoluteUrl(page.url);
   const title = page.url === '/' ? SITE.name : `${page.title} | ${SITE.name}`;
 
@@ -69,11 +73,15 @@ export const generatedFiles = ({ pages }: DocContent): Array<[string, string]> =
   [
     'sitemap.xml',
     renderSitemap(
-      pages.map((page) => ({
-        loc: absoluteUrl(page.url),
-        priority: page.url === '/' ? '1.0' : '0.7',
-      })),
+      pages
+        .filter((page) => page.kind !== 'notfound')
+        .map((page) => ({
+          loc: absoluteUrl(page.url),
+          priority: page.url === '/' ? '1.0' : '0.7',
+        })),
     ),
   ],
-  ['robots.txt', renderRobotsTxt(ORIGIN)],
+  // No robots.txt here: `public/robots.txt` is hand-maintained and carries a considered
+  // policy with its reasoning in comments. Generating one would copy `public/` into the
+  // output and then overwrite it with something blander.
 ];

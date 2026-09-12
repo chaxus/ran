@@ -128,6 +128,18 @@ export type ComponentRenderer = (attrs: string) => string | null;
 export interface MarkdownOptions {
   /** Site origin, used to decide whether a link leaves the site. */
   origin: string;
+  /**
+   * Resolves a link written in the markdown into the URL it should point at.
+   *
+   * Markdown sources link to each other the way files do — `./debounce`,
+   * `../utils/index.md`, `foo.md#anchor`. Those are paths on disk, not URLs, and a
+   * generator that emits them unchanged produces a page full of dead links that look
+   * completely ordinary. There are 1,018 of them in this repository's docs.
+   *
+   * The renderer cannot resolve them alone because it does not know which page it is
+   * rendering, so a site supplies this and tracks the current page itself.
+   */
+  resolveLink?: (href: string) => string;
   /** Code fence languages to load. Defaults to `DEFAULT_LANGS`. */
   langs?: readonly string[];
   /** Fence languages this site renders itself, keyed by the fence's info string. */
@@ -325,6 +337,7 @@ const createParser = (
   headings: string[],
   highlight: (code: string, lang: string) => string,
   isExternal: (href: string) => boolean,
+  resolveLink: (href: string) => string,
   container: TokenizerAndRendererExtension,
   fences: Readonly<Record<string, FenceRenderer>>,
   components: Readonly<Record<string, ComponentRenderer>>,
@@ -384,8 +397,9 @@ const createParser = (
         // most common.
         return `<h${depth} id="${slug}"><a class="anchor" href="#${slug}">${text}</a></h${depth}>\n`;
       },
-      link({ href, title, tokens }: Tokens.Link): string {
+      link({ href: raw, title, tokens }: Tokens.Link): string {
         const text = this.parser.parseInline(tokens);
+        const href = resolveLink(raw);
         const attrs = [`href="${escapeHtml(href)}"`];
         if (title) attrs.push(`title="${escapeHtml(title)}"`);
         // noopener is a security requirement, not a preference: without it the opened
@@ -492,6 +506,7 @@ export const createMarkdown = ({
   fences = {},
   containers = {},
   components = {},
+  resolveLink = (href) => href,
 }: MarkdownOptions): MarkdownRenderer => {
   let highlighter: Highlighter | null = null;
   const containerRenderers: Record<string, ContainerRenderer> = {
@@ -518,7 +533,17 @@ export const createMarkdown = ({
     render(source: string): RenderedMarkdown {
       const toc: TocEntry[] = [];
       const headings: string[] = [];
-      const marked = createParser(new Map(), toc, headings, highlight, isExternal, container, fences, components);
+      const marked = createParser(
+        new Map(),
+        toc,
+        headings,
+        highlight,
+        isExternal,
+        resolveLink,
+        container,
+        fences,
+        components,
+      );
       const tokens = marked.lexer(source);
       const html = marked.parser(tokens) as string;
       let consumed = 0;

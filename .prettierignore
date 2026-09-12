@@ -42,4 +42,4 @@ packages/ranui/docs/style-tokens-public.md
 
 # The next-generation docs build's output, written alongside VitePress's during the
 # migration so the two can be compared. Generated, never edited.
-packages/docs/dist-next
+packages/docs/dist

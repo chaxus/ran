@@ -19,6 +19,7 @@ import { homeCopy } from '../.vitepress/components/home-copy.ts';
 import { demoCopy } from '../.vitepress/components/demo-copy.ts';
 import { localeHref } from '../.vitepress/langs/locales.ts';
 import type { LocaleDef } from './config.ts';
+import { resolveLinkFrom } from './content.ts';
 
 /**
  * Which locale the page currently being rendered is in.
@@ -38,6 +39,20 @@ let current: LocaleDef | null = null;
 export const setRenderLocale = (locale: LocaleDef): void => {
   current = locale;
 };
+
+/**
+ * The URL of the page being rendered, for resolving relative links against.
+ *
+ * Set beside the locale and for the same reason: one renderer serves the whole build, so
+ * per-page context has to be handed to it rather than constructed with it.
+ */
+let linkBase = '/';
+
+export const setLinkBase = (url: string): void => {
+  linkBase = url;
+};
+
+export const resolveCurrentLink = (href: string): string => resolveLinkFrom(linkBase)(href);
 
 const localeOrThrow = (): LocaleDef => {
   if (!current) throw new Error('setRenderLocale() must be called before rendering a page');
