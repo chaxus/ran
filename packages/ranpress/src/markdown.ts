@@ -283,9 +283,17 @@ const plainText = (tokens: Token[] | undefined): string => {
  * Slugifying the whole heading instead would give every translation a different anchor
  * and break every deep link that already exists.
  */
-const CUSTOM_ANCHOR = /\s*\{#([A-Za-z0-9_-]+)\}\s*$/;
+/*
+ * Deliberately does NOT open with `\s*`.
+ *
+ * That leading run is what made this quadratic: on a string of many tabs it would match
+ * the whole run, fail at `{`, restart one character later, and match almost the whole
+ * run again. The separating whitespace is removed with `trimEnd` afterwards instead,
+ * which is linear and produces exactly the same result.
+ */
+const CUSTOM_ANCHOR = /\{#([A-Za-z0-9_-]+)\}[ \t]*$/;
 
-export const stripCustomAnchor = (text: string): string => text.replace(CUSTOM_ANCHOR, '');
+export const stripCustomAnchor = (text: string): string => text.replace(CUSTOM_ANCHOR, '').trimEnd();
 
 // ── Custom containers ───────────────────────────────────────────────────────
 
