@@ -9,6 +9,18 @@
  */
 import type { Assets } from 'ssg';
 import { LOCALES, SITE } from './config.ts';
+import {
+  BD_ANALYSE,
+  GOOGLE_ANALYSE,
+  GTAG,
+  OG_IMAGE,
+  OG_IMAGE_ALT,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
+  PREVIEW_CODE,
+  SERVICE_WORK,
+  SET_FONT_SIZE,
+} from './common/index.ts';
 import type { LocaleDef } from './config.ts';
 import type { DocPage } from './content.ts';
 import { navFor, prevNextFor, sidebarFor } from './nav.ts';
@@ -136,7 +148,24 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
 <meta name="description" content="${escapeHtml(page.description)}">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0d10">
+<link rel="icon" href="/favicon.ico">
+<link rel="manifest" href="/manifest.json">
+<meta name="robots" content="all">
+<meta name="google" content="notranslate">
+<meta property="og:image" content="${OG_IMAGE}">
+<meta property="og:image:width" content="${OG_IMAGE_WIDTH}">
+<meta property="og:image:height" content="${OG_IMAGE_HEIGHT}">
+<meta property="og:image:alt" content="${escapeHtml(OG_IMAGE_ALT)}">
+<meta name="twitter:image" content="${OG_IMAGE}">
+<link rel="alternate" type="text/markdown" href="/llms.txt" title="llms.txt">
+<link rel="alternate" type="text/plain" href="/llms-full.txt" title="llms-full.txt">
 <script>${THEME_BOOTSTRAP}</script>
+<script>${SET_FONT_SIZE}</script>
+<script>${PREVIEW_CODE}</script>
+<script defer src="${GTAG}"></script>
+<script>${GOOGLE_ANALYSE}</script>
+<script>${BD_ANALYSE}</script>
+<script>${SERVICE_WORK}</script>
 ${head.join('\n')}
 ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
 </head>
