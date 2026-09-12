@@ -286,7 +286,15 @@
 }
 
 /* ---------- hero live panel ---------- */
+/*
+ * Stretched, not centred. `.hero` is deliberately `align-items: start` — centring measured
+ * this panel against a five-line headline and dropped it 170px below the text it belongs
+ * beside. But left at its natural 280px in a 516px column it stranded 236px of empty space
+ * under it, which reads as the right half of the hero having given up. Filling the column
+ * keeps the panel's top edge on the headline's and lets `.live-body` centre its contents.
+ */
 .hero-live {
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--hairline);
@@ -331,7 +339,16 @@
   flex-direction: column;
   gap: 22px;
   padding: 30px 24px;
-  justify-content: center;
+  /*
+   * Content at the top, caption at the bottom — the panel is a stage, not a centred
+   * cluster.
+   *
+   * Two other arrangements were measured and rejected. Centring left ~180px empty above
+   * the rows and ~160px below: the dead space the stretch removed from the column, moved
+   * inside a border where it is more obvious. `space-evenly` pushed the three rows so far
+   * apart that the progress bar floated alone and they stopped reading as one demo.
+   */
+  justify-content: flex-start;
 }
 .live-row {
   display: flex;
@@ -670,6 +687,12 @@
 }
 .code-cell + .code-cell {
   border-inline-start: 1px solid var(--rule);
+}
+/* The first column starts on the section's spine; the second is inset past the divider,
+   or its label sits directly on the rule. */
+.code-cell + .code-cell .code-head,
+.code-cell + .code-cell .snippet {
+  padding-inline-start: 30px;
 }
 .code-head {
   padding: 12px 20px 12px 0;

@@ -218,7 +218,16 @@ a {
   letter-spacing: -0.02em;
   color: var(--fg);
   text-decoration: none;
-  margin-inline-end: auto;
+}
+
+/*
+ * The gap goes between the navigation and the controls, not straight after the wordmark.
+ * `margin-inline-end: auto` on the wordmark pushed everything else against the right edge
+ * and left ~800px of nothing beside the logo — the nav read as belonging to the search box
+ * rather than to the site.
+ */
+.search-open {
+  margin-inline-start: auto;
 }
 
 .nav {
@@ -590,6 +599,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 }
 .sb__link,
 .sb__label {
+  position: relative;
   display: block;
   padding: 5px 9px;
   border-radius: 5px;
@@ -618,9 +628,25 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .sb__link[aria-current='page'] {
   color: var(--fg);
   font-weight: 600;
-  box-shadow: inset 2px 0 0 var(--ran-color-primary, var(--fg));
   border-radius: 0;
   background: transparent;
+}
+/*
+ * The marker sits *on* the group rail, not beside it.
+ *
+ * `box-shadow: inset 2px 0 0` drew at the link's own leading edge, 13px inboard of the
+ * rail the group already draws — two vertical lines, 13px apart, both claiming to mark the
+ * same row. Now the selected row simply darkens and thickens the rail where it passes, so
+ * there is one line and one meaning. The offset is the group's `padding-inline-start` plus
+ * its 1px border.
+ */
+.sb__link[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: -13px;
+  width: 2px;
+  background: var(--ran-color-primary, var(--fg));
 }
 .sb__summary {
   list-style: none;
@@ -1153,6 +1179,14 @@ ran-demo p {
 }
 
 @media (min-width: 1240px) {
+  /*
+   * One inset for the header, the sidebar and the outline — they are siblings and §11 asks
+   * siblings to share a content inset. 16px against a 1440px viewport read as flush; this
+   * moves all three together, so the wordmark still lines up with the sidebar exactly.
+   */
+  :root {
+    --pad: var(--ran-space-6, 24px);
+  }
   /*
    * The outline column is reserved only when there is an outline to put in it. `.toc` is
    * rendered per page — the landing has none — and a column declared unconditionally is
