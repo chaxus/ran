@@ -19,53 +19,18 @@ import { homeCopy } from './langs/home-copy.ts';
 import { demoCopy } from './langs/demo-copy.ts';
 import { localeHref } from './langs/locales.ts';
 import type { LocaleDef } from './config.ts';
-import { resolveLinkFrom } from './content.ts';
-
-/**
- * Which locale the page currently being rendered is in.
- *
- * The markdown renderer is one instance for the whole build — creating one per locale
- * would load shiki's grammars eight times, which is the expensive half of the build. So
- * the locale is set here immediately before each page renders, by `content.ts`, and the
- * component renderers read it.
- *
- * Mutable module state is worth being uneasy about; this is safe because rendering is
- * synchronous and single-threaded, and it is written in exactly one place. Making it a
- * parameter would mean threading a locale through the markdown parser itself, which no
- * other site needs.
- */
-let current: LocaleDef | null = null;
-
-export const setRenderLocale = (locale: LocaleDef): void => {
-  current = locale;
-};
-
-/**
- * The URL of the page being rendered, for resolving relative links against.
- *
- * Set beside the locale and for the same reason: one renderer serves the whole build, so
- * per-page context has to be handed to it rather than constructed with it.
- */
-let linkBase = '/';
-
-export const setLinkBase = (url: string): void => {
-  linkBase = url;
-};
-
-export const resolveCurrentLink = (href: string): string => resolveLinkFrom(linkBase)(href);
-
-const localeOrThrow = (): LocaleDef => {
-  if (!current) throw new Error('setRenderLocale() must be called before rendering a page');
-  return current;
-};
+import { currentLinkBase, currentLocale } from './render-context.ts';
+import { resolveLinkFrom } from './links.ts';
 
 /** The component hooks the markdown renderer is configured with. */
 export const componentRenderers = {
-  HomeCinematic: () => renderHome(localeOrThrow()),
-  GlassPlayground: () => renderGlassPlayground(localeOrThrow()),
-  IconGallery: () => renderIconGallery(localeOrThrow()),
+  HomeCinematic: () => renderHome(currentLocale()),
+  GlassPlayground: () => renderGlassPlayground(currentLocale()),
+  IconGallery: () => renderIconGallery(currentLocale()),
   Loading: () => renderLoadingGallery(),
 };
+
+export const resolveCurrentLink = (href: string): string => resolveLinkFrom(currentLinkBase())(href);
 
 const esc = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

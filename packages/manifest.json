@@ -11,11 +11,11 @@
     },
     "docs": {
       "status": "support",
-      "checks": ["tsc"]
+      "checks": ["tsc", "test"]
     },
     "ssg": {
       "status": "support",
-      "checks": ["tsc"]
+      "checks": ["tsc", "test"]
     },
     "site": {
       "status": "support",
