@@ -22,8 +22,11 @@ export type { Assets, PrepareOptions } from './driver.ts';
 export { verifyDist, verifyOrExit } from './verify.ts';
 export type { VerifyOptions, Failure } from './verify.ts';
 
-export { createDevServer } from './dev.ts';
-export type { DevServerOptions } from './dev.ts';
+export { createDevServer, createPreviewServer } from './serve.ts';
+export type { DevServerOptions, ServeOptions, WatchTarget } from './serve.ts';
+
+export { resolveHost, followHost, mimeFor, MIME } from './host.ts';
+export type { HostResolution } from './host.ts';
 
 export { renderSitemap, renderFeed, renderRobotsTxt } from './feeds.ts';
 export type { FeedItem, FeedOptions, SitemapEntry } from './feeds.ts';

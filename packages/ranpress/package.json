@@ -10,7 +10,8 @@
     "./frontmatter": "./src/frontmatter.ts",
     "./driver": "./src/driver.ts",
     "./verify": "./src/verify.ts",
-    "./dev": "./src/dev.ts",
+    "./serve": "./src/serve.ts",
+    "./host": "./src/host.ts",
     "./feeds": "./src/feeds.ts",
     "./search": "./src/search.ts"
   },

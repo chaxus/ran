@@ -11,6 +11,7 @@
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { followHost } from './host.ts';
 
 export interface VerifyOptions {
   distDir: string;
@@ -38,17 +39,8 @@ const walkHtml = (dir: string): string[] => {
   return out;
 };
 
-/** `/about` → `dist/about/index.html`; `/` → `dist/index.html`. Also accepts a real file. */
-const resolveUrlPathIn = (DIST_DIR: string, path: string): string | null => {
-  const clean = path.split('#')[0].split('?')[0];
-  const candidates =
-    clean === '/' ? ['index.html'] : [join(clean.replace(/^\/|\/$/g, ''), 'index.html'), clean.replace(/^\//, '')];
-  for (const candidate of candidates) {
-    const full = join(DIST_DIR, candidate);
-    if (existsSync(full) && statSync(full).isFile()) return full;
-  }
-  return null;
-};
+const resolveUrlPathIn = (DIST_DIR: string, path: string): string | null =>
+  followHost(DIST_DIR, path)?.file ?? null;
 
 const attrValues = (html: string, pattern: RegExp): string[] => {
   const out: string[] = [];
@@ -103,8 +95,14 @@ export const verifyDist = ({ distDir, origin, notFoundFiles = ['404.html'] }: Ve
       if (canonical.endsWith('.html')) fail(rel, `canonical points at a .html URL: ${canonical}`);
       // The canonical must name this very file, or the page is telling search engines
       // to index a different one — the single most expensive thing to get wrong here.
-      const target = resolveUrlPathIn(DIST_DIR, canonical.slice(ORIGIN.length) || '/');
-      if (target !== file) fail(rel, `canonical ${canonical} does not resolve back to this page`);
+      const served = followHost(DIST_DIR, canonical.slice(ORIGIN.length) || '/');
+      if (served?.file !== file) {
+        fail(rel, `canonical ${canonical} does not resolve back to this page`);
+      } else if (served.redirects) {
+        // The page loads, one hop late, under a URL it does not claim. This is how 904
+        // canonicals came to name a redirect without anything looking wrong.
+        fail(rel, `canonical ${canonical} is served only via a redirect to its trailing-slash form`);
+      }
     }
 
     // ── internal links ─────────────────────────────────────────────────────
