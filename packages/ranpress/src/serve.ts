@@ -29,17 +29,58 @@ export interface ServeOptions {
   notFoundFile?: string;
 }
 
+/**
+ * The site's own 404 page, with a 404 status — which is what the host does. A plain text
+ * body here would hide a broken 404 page until production.
+ */
+const notFoundResponder =
+  (distDir: string, notFoundFile: string) =>
+  (res: ServerResponse): void => {
+    const custom = join(distDir, notFoundFile);
+    if (existsSync(custom)) {
+      res.writeHead(404, { 'content-type': MIME['.html'], 'cache-control': 'no-store' });
+      res.end(readFileSync(custom));
+      return;
+    }
+    res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
+    res.end('404');
+  };
+
 const respond =
   (distDir: string, notFoundFile: string) =>
   (req: IncomingMessage, res: ServerResponse): void => {
+    const serveNotFound = notFoundResponder(distDir, notFoundFile);
     const url = req.url ?? '/';
     const result = resolveHost(distDir, url);
 
     if (result.kind === 'redirect') {
-      // Carry the query string across, as the host does; dropping it would make a
-      // redirected URL behave differently from the one it redirects to.
-      const search = url.includes('?') ? `?${url.slice(url.indexOf('?') + 1)}` : '';
-      res.writeHead(308, { location: `${result.to}${search}` });
+      /*
+       * The `Location` is assembled only from values proved safe *here*.
+       *
+       * `resolveHost` already refuses to resolve outside `distDir`, so a redirect target
+       * is always a real path within the output — `//evil.com` is a 404, measured. But
+       * that guarantee lives two modules away, and a redirect header is precisely where a
+       * later change to the resolver would turn into an open redirect without anything
+       * else looking different. Keeping the check local means it cannot be lost by
+       * editing something that does not mention redirects at all.
+       *
+       * Root-relative only: a leading `//` is protocol-relative and would send the reader
+       * to another origin.
+       */
+      const target = result.to;
+      if (!target.startsWith('/') || target.startsWith('//')) {
+        serveNotFound(res);
+        return;
+      }
+      /*
+       * Carry the query string across, as the host does — dropping it would make a
+       * redirected URL behave differently from the one it redirects to. `encodeURI`
+       * leaves `&`, `=` and `?` alone, so the query keeps its meaning, while control
+       * characters become escapes rather than a second header.
+       */
+      const raw = url.includes('?') ? url.slice(url.indexOf('?') + 1) : '';
+      const search = raw ? `?${encodeURI(raw)}` : '';
+      res.writeHead(308, { location: `${target}${search}` });
       res.end();
       return;
     }
@@ -50,16 +91,7 @@ const respond =
       return;
     }
 
-    // The site's own 404 page, with a 404 status — which is what the host does. A plain
-    // text body here would hide a broken 404 page until production.
-    const custom = join(distDir, notFoundFile);
-    if (existsSync(custom)) {
-      res.writeHead(404, { 'content-type': MIME['.html'], 'cache-control': 'no-store' });
-      res.end(readFileSync(custom));
-      return;
-    }
-    res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
-    res.end('404');
+    serveNotFound(res);
   };
 
 /**
