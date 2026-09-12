@@ -100,11 +100,82 @@ export const slugify = (text: string): string =>
   text
     .trim()
     .toLowerCase()
-    .replace(/<[^>]+>/g, '')
+    // No tag stripping here: the character filter below drops every `<`, `>` and quote
+    // anyway, so a regex that only *mostly* removes tags would add nothing but the
+    // false impression that this function sanitizes. It takes plain text — see
+    // `plainText()` for how callers get it.
     .replace(/[\s　]+/g, '-')
     .replace(/[^\p{Letter}\p{Number}\-_]/gu, '')
     .replace(/-{2,}/g, '-')
     .replace(/^-|-$/g, '');
+
+/**
+ * Plain text from an inline token tree.
+ *
+ * The obvious alternative — render to HTML and strip tags with `/<[^>]+>/g` — is both
+ * wrong and a liability. Wrong because it leaves entities behind (`&amp;` stays
+ * literal) and because nested constructs like `<scr<b>ipt>` survive a single pass.
+ * A liability because a regex that removes *most* tags reads like a sanitizer to every
+ * later reader and to every scanner, and is treated as one.
+ *
+ * The tokens are already the structure, so this reads it directly. `html` tokens —
+ * raw markup someone typed into the prose — are dropped, which is the tag removal,
+ * done by the parser rather than by a pattern. `codespan` is kept: a heading or an
+ * excerpt about `<r-markdown>` has to still contain that word.
+ */
+/**
+ * The entities marked leaves sitting in a `text` token.
+ *
+ * Token text is the markdown source, so `&amp;` arrives as those five characters. Plain
+ * text is what this module hands to `escapeHtml` downstream, which would turn it into
+ * `&amp;amp;` and render the entity literally in a meta description or a post card.
+ * Decoding here is what makes the value actually plain.
+ */
+const ENTITIES: Record<string, string> = {
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+  nbsp: '\u00a0',
+};
+
+const decodeEntities = (text: string): string =>
+  text.replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (whole, body: string) => {
+    if (body[0] === '#') {
+      const code = body[1] === 'x' || body[1] === 'X' ? parseInt(body.slice(2), 16) : parseInt(body.slice(1), 10);
+      // Lone surrogates and out-of-range values would throw; leave those as written.
+      return Number.isFinite(code) && code > 0 && code <= 0x10ffff && (code < 0xd800 || code > 0xdfff)
+        ? String.fromCodePoint(code)
+        : whole;
+    }
+    return ENTITIES[body.toLowerCase()] ?? whole;
+  });
+
+const plainText = (tokens: Token[] | undefined): string => {
+  if (!tokens) return '';
+  let out = '';
+  for (const token of tokens) {
+    switch (token.type) {
+      case 'html':
+      case 'image':
+        break; // markup and images are not prose
+      case 'br':
+        out += ' ';
+        break;
+      case 'codespan':
+      case 'escape':
+      case 'text':
+      default:
+        // A `text` token can itself carry children (inside a link, say); prefer them.
+        out +=
+          'tokens' in token && token.tokens?.length
+            ? plainText(token.tokens)
+            : decodeEntities((token as Tokens.Text).text ?? '');
+    }
+  }
+  return out;
+};
 
 // ── Custom containers ───────────────────────────────────────────────────────
 
@@ -160,7 +231,7 @@ const createParser = (slugs: Map<string, number>, toc: TocEntry[]): Marked => {
       },
       heading({ tokens, depth }: Tokens.Heading): string {
         const text = this.parser.parseInline(tokens);
-        const plain = text.replace(/<[^>]+>/g, '');
+        const plain = plainText(tokens);
         let slug = slugify(plain) || 'section';
         // Two headings with the same words are a real thing ("Why", "Why" in different
         // sections). Suffix rather than collide, so in-page links stay unambiguous.
@@ -207,22 +278,12 @@ const createParser = (slugs: Map<string, number>, toc: TocEntry[]): Marked => {
 const firstParagraph = (tokens: Token[]): string => {
   for (const token of tokens) {
     if (token.type !== 'paragraph') continue;
-    // Inline code is lifted out before HTML tags are stripped and put back after.
-    // Done in the other order, a code span documenting an element — `<r-markdown>` —
-    // looks exactly like a tag and the excerpt silently loses the word the sentence
-    // was about.
-    const spans: string[] = [];
-    const text = (token.raw ?? '')
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
-      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-      .replace(/`([^`]*)`/g, (_, code: string) => `\uE000${spans.push(code) - 1}\uE000`)
-      .replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, '$1')
-      .replace(/<[^>]+>/g, '')
-      // U+E000 is a private-use character: it cannot occur in markdown source, and
-      // unlike a control character it is not something a regex should be matching.
-      .replace(/\uE000(\d+)\uE000/g, (_, i: string) => spans[Number(i)] ?? '')
-      .replace(/\s+/g, ' ')
-      .trim();
+    // Built from the paragraph's own inline tokens rather than from its markdown source.
+    // The source version had to lift inline code out behind placeholders before stripping
+    // tags, or a code span documenting an element — `<r-markdown>` — looked exactly like
+    // a tag and the excerpt silently lost the word the sentence was about. Reading the
+    // tokens makes that distinction structural instead of a regex ordering problem.
+    const text = plainText(token.tokens).replace(/\s+/g, ' ').trim();
     if (text) return text;
   }
   return '';
