@@ -39,8 +39,7 @@ const walkHtml = (dir: string): string[] => {
   return out;
 };
 
-const resolveUrlPathIn = (DIST_DIR: string, path: string): string | null =>
-  followHost(DIST_DIR, path)?.file ?? null;
+const resolveUrlPathIn = (DIST_DIR: string, path: string): string | null => followHost(DIST_DIR, path)?.file ?? null;
 
 const attrValues = (html: string, pattern: RegExp): string[] => {
   const out: string[] = [];

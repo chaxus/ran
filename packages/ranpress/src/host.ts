@@ -34,10 +34,7 @@ export const MIME: Record<string, string> = {
 
 export const mimeFor = (file: string): string => MIME[extname(file)] ?? 'application/octet-stream';
 
-export type HostResolution =
-  | { kind: 'file'; file: string }
-  | { kind: 'redirect'; to: string }
-  | { kind: 'notfound' };
+export type HostResolution = { kind: 'file'; file: string } | { kind: 'redirect'; to: string } | { kind: 'notfound' };
 
 /**
  * Resolve inside `distDir` or not at all.

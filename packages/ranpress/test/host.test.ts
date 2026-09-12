@@ -23,9 +23,9 @@ beforeAll(() => {
     writeFileSync(full, rel);
   };
   put('index.html');
-  put('about.html');          // a page: served directly at /about
-  put('blog/index.html');     // a section index: served at /blog/
-  put('sitemap.xml');         // an exact file, no .html sibling
+  put('about.html'); // a page: served directly at /about
+  put('blog/index.html'); // a section index: served at /blog/
+  put('sitemap.xml'); // an exact file, no .html sibling
   put('404.html');
 });
 
@@ -74,11 +74,7 @@ describe('resolveHost', () => {
 
   describe('refuses to read outside the output directory', () => {
     // Any page open in the browser can issue these while the dev server is running.
-    for (const attack of [
-      '/../../../../etc/passwd',
-      '/..%2f..%2f..%2fetc%2fpasswd',
-      '/%2e%2e/%2e%2e/etc/passwd',
-    ]) {
+    for (const attack of ['/../../../../etc/passwd', '/..%2f..%2f..%2fetc%2fpasswd', '/%2e%2e/%2e%2e/etc/passwd']) {
       it(attack, () => expect(resolveHost(dist, attack)).toEqual({ kind: 'notfound' }));
     }
 

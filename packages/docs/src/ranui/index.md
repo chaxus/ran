@@ -9,7 +9,6 @@ in React, Vue, Svelte, Solid, Astro or a plain HTML file the same way. There is 
 no framework version to match. TypeScript types, light/dark theming through design tokens,
 Shadow DOM encapsulation and server rendering are included.
 
-
 <PackageFacts package="ranui" />
 
 - ranui is **alpha**: versions ship breaking changes. Pin an exact version and read the
