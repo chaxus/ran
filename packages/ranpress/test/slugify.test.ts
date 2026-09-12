@@ -58,6 +58,19 @@ describe('stripCustomAnchor', () => {
     expect(stripCustomAnchor('use {#id} inline')).toBe('use {#id} inline');
     expect(stripCustomAnchor('a {not-an-id}')).toBe('a {not-an-id}');
   });
+
+  it('removes the whitespace separating the heading from the marker', () => {
+    expect(stripCustomAnchor('Heading \t {#id}')).toBe('Heading');
+  });
+
+  it('stays linear on a long run of whitespace', () => {
+    // The pattern used to open with `\\s*`, which on this input matched the whole run,
+    // failed at `{`, restarted one character later and matched almost all of it again —
+    // quadratic, and reachable from any caller since this is a library.
+    const started = performance.now();
+    expect(stripCustomAnchor('\t'.repeat(60_000))).toBe('');
+    expect(performance.now() - started).toBeLessThan(500);
+  });
 });
 
 describe('truncate', () => {
