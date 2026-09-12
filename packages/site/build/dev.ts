@@ -1,67 +1,13 @@
 /**
- * Development server: rebuild on change, serve `dist/` the way Cloudflare Pages will.
- *
- * Serving it the same way matters more than it sounds. The production host maps
- * `/about` to `about/index.html` and redirects the `.html` form; a dev server that
- * instead serves files literally lets a link like `/about.html` work locally and 404 in
- * production. So the resolution order here is deliberately the host's, not Node's.
- *
- * Drafts are included — that is the point of a draft.
+ * Development server for this site: rebuild on change, serve through the engine's
+ * host-accurate server. Drafts are included — that is the point of a draft.
  */
-import { createServer } from 'node:http';
-import { existsSync, readFileSync, statSync, watch } from 'node:fs';
-import { extname, isAbsolute, join, relative, resolve as resolvePath } from 'node:path';
+import { existsSync, watch } from 'node:fs';
+import { join } from 'node:path';
+import { createDevServer } from 'ssg';
 import { build, CONTENT_DIR, DIST_DIR, ROOT } from './build.ts';
 
 const PORT = Number(process.env.PORT ?? 4173);
-
-const MIME: Record<string, string> = {
-  '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.xml': 'application/xml; charset=utf-8',
-  '.txt': 'text/plain; charset=utf-8',
-  '.svg': 'image/svg+xml',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.webp': 'image/webp',
-  '.woff2': 'font/woff2',
-  '.ico': 'image/x-icon',
-};
-
-/**
- * The host's resolution order: exact file, then `<path>/index.html`.
- *
- * Every returned path is proved to sit inside `dist/` before it is handed back. That is
- * not paranoia about a local server: `join()` resolves `..`, so a request for
- * `/../../../../.ssh/id_rsa` reads straight out of the home directory, and any page open
- * in the browser can make that request while this is running.
- */
-const resolve = (urlPath: string): string | null => {
-  let clean: string;
-  try {
-    clean = decodeURIComponent(urlPath.split('?')[0]);
-  } catch {
-    // `%ZZ` and friends throw. Unhandled, that takes down the request handler rather
-    // than returning a 404 for what is simply a malformed URL.
-    return null;
-  }
-  // A NUL truncates the path at the syscall boundary, so `/x\0.png` would reach `/x`.
-  if (clean.includes('\0')) return null;
-
-  const candidates =
-    clean === '/' ? ['index.html'] : [clean.replace(/^\//, ''), join(clean.replace(/^\//, ''), 'index.html')];
-  for (const candidate of candidates) {
-    const full = resolvePath(DIST_DIR, candidate);
-    // `relative` is the containment test: anything outside dist/ starts with `..`, and
-    // an absolute result means the candidate was itself absolute.
-    const inside = relative(DIST_DIR, full);
-    if (inside.startsWith('..') || isAbsolute(inside)) continue;
-    if (existsSync(full) && statSync(full).isFile()) return full;
-  }
-  return null;
-};
 
 let building: Promise<unknown> | null = null;
 let pending = false;
@@ -92,8 +38,8 @@ const rebuild = async (reason: string, withAssets: boolean): Promise<void> => {
 
 await rebuild('startup', true);
 
-// Content changes only need pages re-rendered. Styles and client code have to go
-// through vite, which is the slow half, so the two are watched separately.
+// Content changes only need pages re-rendered. Styles and client code have to go through
+// vite, which is the slow half, so the two are watched separately.
 watch(CONTENT_DIR, { recursive: true }, (_event, file) => {
   if (file?.endsWith('.md')) void rebuild(file, false);
 });
@@ -106,18 +52,5 @@ for (const dir of ['styles', 'client']) {
   }
 }
 
-createServer((req, res) => {
-  const file = resolve(req.url ?? '/');
-  if (!file) {
-    res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
-    res.end('404');
-    return;
-  }
-  res.writeHead(200, {
-    'content-type': MIME[extname(file)] ?? 'application/octet-stream',
-    'cache-control': 'no-store',
-  });
-  res.end(readFileSync(file));
-}).listen(PORT, () => {
-  console.log(`\n  site  http://localhost:${PORT}  (drafts included)\n`);
-});
+createDevServer({ distDir: DIST_DIR, port: PORT });
+console.log(`\n  site  http://localhost:${PORT}  (drafts included)\n`);

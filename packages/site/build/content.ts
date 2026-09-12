@@ -16,12 +16,9 @@
  * naming its own file instead of rendering something subtly wrong that nobody reads
  * again.
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { readBoolean, readList, readSources, readString, truncate } from 'ssg';
+import type { MarkdownRenderer, TocEntry } from 'ssg';
 import { PILLAR_SLUGS } from './config.ts';
-import { parseFrontmatter, readBoolean, readList, readString } from './frontmatter.ts';
-import { renderMarkdown, truncate } from './markdown.ts';
-import type { TocEntry } from './markdown.ts';
 
 export type PageKind = 'home' | 'archive' | 'post' | 'page' | 'notfound';
 
@@ -49,17 +46,6 @@ export interface Post extends Page {
 }
 
 export const isPost = (page: Page): page is Post => page.kind === 'post';
-
-/** Every `.md` under `dir`, depth-first, sorted so the build is reproducible. */
-const walk = (dir: string): string[] => {
-  const out: string[] = [];
-  for (const name of readdirSync(dir).sort()) {
-    const full = join(dir, name);
-    if (statSync(full).isDirectory()) out.push(...walk(full));
-    else if (name.endsWith('.md')) out.push(full);
-  }
-  return out;
-};
 
 /**
  * `YYYY-MM-DD`, and a date that actually exists. `2026-02-30` parses happily in most
@@ -116,15 +102,11 @@ export interface Content {
   posts: Post[];
 }
 
-export const loadContent = (contentDir: string, options: LoadOptions = {}): Content => {
-  const files = walk(contentDir);
+export const loadContent = (contentDir: string, markdown: MarkdownRenderer, options: LoadOptions = {}): Content => {
   const pages: Page[] = [];
   const seenUrls = new Map<string, string>();
 
-  for (const full of files) {
-    const rel = relative(contentDir, full).split('\\').join('/');
-    const file = `content/${rel}`;
-    const { data, content } = parseFrontmatter(readFileSync(full, 'utf8'), file);
+  for (const { rel, label: file, data, content } of readSources(contentDir)) {
     const kind = kindFor(rel);
     const url = urlFor(rel);
 
@@ -132,7 +114,7 @@ export const loadContent = (contentDir: string, options: LoadOptions = {}): Cont
     if (clash) throw new Error(`${file}: URL ${url} is already produced by ${clash}`);
     seenUrls.set(url, file);
 
-    const { html, toc, excerpt } = renderMarkdown(content);
+    const { html, toc, excerpt } = markdown.render(content);
     const title = readString(data, 'title', file);
     // A page's own words beat a generated summary, but an empty description is worse
     // than either — a page with no prose at all still needs something in <head>.

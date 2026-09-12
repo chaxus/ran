@@ -15,7 +15,6 @@ import { Marked, Renderer } from 'marked';
 import type { Token, Tokens, TokenizerAndRendererExtension } from 'marked';
 import { createHighlighter } from 'shiki';
 import type { Highlighter } from 'shiki';
-import { ORIGIN } from './config.ts';
 
 export interface TocEntry {
   level: 2 | 3;
@@ -35,11 +34,12 @@ export interface RenderedMarkdown {
 // expensive part; doing it per page turned a 2s build into a 40s one.
 
 /**
- * Languages the site actually writes code in. Shiki loads grammars eagerly, and the
- * full set is ~600 of them — naming the handful in use keeps the build fast. An
- * unlisted language is not a silent failure: `highlight()` throws and names it.
+ * A sensible default whitelist. Shiki loads grammars eagerly and ships ~600 of them, so
+ * naming the ones a site actually uses is what keeps the build at two seconds instead of
+ * forty. A site passes its own list to `createMarkdown`; an unlisted language is not a
+ * silent failure, it throws and names itself.
  */
-const LANGS = [
+export const DEFAULT_LANGS = [
   // `text` doubles as the fallback for a fence with no language, so it must be listed.
   'text',
   'ts',
@@ -69,24 +69,18 @@ const LANGS = [
  */
 const THEMES = { light: 'github-light', dark: 'github-dark' } as const;
 
-let highlighter: Highlighter | null = null;
+export interface MarkdownOptions {
+  /** Site origin, used to decide whether a link leaves the site. */
+  origin: string;
+  /** Code fence languages to load. Defaults to `DEFAULT_LANGS`. */
+  langs?: readonly string[];
+}
 
-export const initHighlighter = async (): Promise<void> => {
-  highlighter ??= await createHighlighter({ themes: [THEMES.light, THEMES.dark], langs: [...LANGS] });
-};
-
-const highlight = (code: string, lang: string): string => {
-  if (!highlighter) throw new Error('initHighlighter() must be awaited before rendering markdown');
-  const known = (LANGS as readonly string[]).includes(lang);
-  if (lang && !known) {
-    throw new Error(`unknown code fence language "${lang}" — add it to LANGS in build/markdown.ts`);
-  }
-  return highlighter.codeToHtml(code, {
-    lang: known ? lang : 'text',
-    themes: THEMES,
-    defaultColor: false,
-  });
-};
+export interface MarkdownRenderer {
+  /** Loads the grammars. Must be awaited before `render`. */
+  init(): Promise<void>;
+  render(source: string): RenderedMarkdown;
+}
 
 // ── Slugs ───────────────────────────────────────────────────────────────────
 
@@ -218,9 +212,12 @@ const escapeHtml = (s: string): string =>
 
 // ── Parser ──────────────────────────────────────────────────────────────────
 
-const isExternal = (href: string): boolean => /^https?:\/\//.test(href) && !href.startsWith(ORIGIN);
-
-const createParser = (slugs: Map<string, number>, toc: TocEntry[]): Marked => {
+const createParser = (
+  slugs: Map<string, number>,
+  toc: TocEntry[],
+  highlight: (code: string, lang: string) => string,
+  isExternal: (href: string) => boolean,
+): Marked => {
   const marked = new Marked({ gfm: true, breaks: false });
   marked.use({
     extensions: [container],
@@ -297,10 +294,35 @@ export const truncate = (s: string, max = 155): string => {
   return `${(space > max * 0.6 ? cut.slice(0, space) : cut).trim()}…`;
 };
 
-export const renderMarkdown = (source: string): RenderedMarkdown => {
-  const toc: TocEntry[] = [];
-  const marked = createParser(new Map(), toc);
-  const tokens = marked.lexer(source);
-  const html = marked.parser(tokens) as string;
-  return { html, toc, excerpt: truncate(firstParagraph(tokens)) };
+/**
+ * One renderer per site. The highlighter it owns is created once — building it loads the
+ * grammars, which is the expensive part, and doing it per page turned a 2s build into a
+ * 40s one.
+ */
+export const createMarkdown = ({ origin, langs = DEFAULT_LANGS }: MarkdownOptions): MarkdownRenderer => {
+  let highlighter: Highlighter | null = null;
+
+  const highlight = (code: string, lang: string): string => {
+    if (!highlighter) throw new Error('init() must be awaited before rendering markdown');
+    const known = langs.includes(lang);
+    if (lang && !known) {
+      throw new Error(`unknown code fence language "${lang}" — add it to this site's \`langs\``);
+    }
+    return highlighter.codeToHtml(code, { lang: known ? lang : 'text', themes: THEMES, defaultColor: false });
+  };
+
+  const isExternal = (href: string): boolean => /^https?:\/\//.test(href) && !href.startsWith(origin);
+
+  return {
+    async init(): Promise<void> {
+      highlighter ??= await createHighlighter({ themes: [THEMES.light, THEMES.dark], langs: [...langs] });
+    },
+    render(source: string): RenderedMarkdown {
+      const toc: TocEntry[] = [];
+      const marked = createParser(new Map(), toc, highlight, isExternal);
+      const tokens = marked.lexer(source);
+      const html = marked.parser(tokens) as string;
+      return { html, toc, excerpt: truncate(firstParagraph(tokens)) };
+    },
+  };
 };

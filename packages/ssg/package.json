@@ -1,0 +1,38 @@
+{
+  "name": "ssg",
+  "version": "0.1.0",
+  "description": "The static site generator behind chaxus.com and ran.chaxus.com — mechanism only; each site supplies its own policy",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./markdown": "./src/markdown.ts",
+    "./frontmatter": "./src/frontmatter.ts",
+    "./driver": "./src/driver.ts",
+    "./verify": "./src/verify.ts",
+    "./dev": "./src/dev.ts",
+    "./feeds": "./src/feeds.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaxus/ran",
+    "directory": "packages/ssg"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "author": "chaxus",
+  "license": "MIT",
+  "scripts": {
+    "tsc": "tsc --noEmit"
+  },
+  "dependencies": {
+    "marked": "18.0.9",
+    "shiki": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}
