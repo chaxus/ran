@@ -44,6 +44,13 @@ export const DEFAULT_LANGS = [
   'text',
   'ts',
   'js',
+  // shiki treats these as distinct ids rather than aliases of ts/js/bash, and a fence
+  // that spells one of them out is a fence that would otherwise fail the build.
+  'typescript',
+  'javascript',
+  'shell',
+  'xml',
+  'java',
   'tsx',
   'jsx',
   'html',
@@ -69,11 +76,40 @@ export const DEFAULT_LANGS = [
  */
 const THEMES = { light: 'github-light', dark: 'github-dark' } as const;
 
+/**
+ * Renders one fenced block itself instead of letting shiki highlight it. Returning
+ * `null` falls through to normal highlighting.
+ *
+ * This is how a site claims a fence language that is not source code at all — a
+ * ```mermaid block is a diagram, and highlighting it as text would be the wrong answer
+ * even if shiki had a grammar for it.
+ */
+export type FenceRenderer = (code: string, info: string) => string | null;
+
+/** Renders a `::: kind` block. `body` is the already-rendered inner markdown. */
+export type ContainerRenderer = (ctx: {
+  kind: string;
+  title: string;
+  /** The inner markdown, rendered. */
+  body: string;
+  /** The inner tokens, for a container whose layout depends on its structure. */
+  tokens: Token[];
+  /** Render a token list — for building bespoke layouts out of the children. */
+  render: (tokens: Token[]) => string;
+}) => string;
+
 export interface MarkdownOptions {
   /** Site origin, used to decide whether a link leaves the site. */
   origin: string;
   /** Code fence languages to load. Defaults to `DEFAULT_LANGS`. */
   langs?: readonly string[];
+  /** Fence languages this site renders itself, keyed by the fence's info string. */
+  fences?: Readonly<Record<string, FenceRenderer>>;
+  /**
+   * Container kinds beyond the built-in note/tip/warning/danger. A site adds the ones
+   * its own prose uses; an unknown kind still fails the build by name.
+   */
+  containers?: Readonly<Record<string, ContainerRenderer>>;
 }
 
 export interface MarkdownRenderer {
@@ -173,39 +209,39 @@ const plainText = (tokens: Token[] | undefined): string => {
 
 // ── Custom containers ───────────────────────────────────────────────────────
 
-const CONTAINER_KINDS = new Set(['note', 'tip', 'warning', 'danger']);
+/** Always available; a site adds to these through `containers`. */
+const BUILTIN_CONTAINERS = ['note', 'tip', 'warning', 'danger'] as const;
+
+const defaultContainer: ContainerRenderer = ({ kind, title, body }) =>
+  `<aside class="callout callout--${kind}"><p class="callout__label">${escapeHtml(title || kind)}</p>${body}</aside>\n`;
 
 /**
- * `::: warning [optional title]` … `:::` → an `<aside>`.
+ * `::: kind [optional title]` … `:::` → whatever the renderer for that kind returns.
  *
  * A block-level marked extension rather than a regex pass over the output, so the body
- * is real markdown (links, code, lists) instead of escaped text.
+ * is real markdown (links, code, lists) instead of escaped text — and so a renderer that
+ * needs the structure, like a tabbed code group, can read the tokens directly.
  */
-const container: TokenizerAndRendererExtension = {
+const createContainer = (renderers: Readonly<Record<string, ContainerRenderer>>): TokenizerAndRendererExtension => ({
   name: 'container',
   level: 'block',
   start: (src: string) => src.match(/^:{3}/m)?.index,
   tokenizer(src: string) {
-    const match = /^:{3}[ \t]*([a-z]+)[ \t]*([^\n]*)\n([\s\S]*?)\n:{3}[ \t]*(?:\n|$)/.exec(src);
+    const match = /^:{3}[ \t]*([a-z][a-z-]*)[ \t]*([^\n]*)\n([\s\S]*?)\n:{3}[ \t]*(?:\n|$)/.exec(src);
     if (!match) return undefined;
     const [raw, kind, title, body] = match;
-    if (!CONTAINER_KINDS.has(kind)) {
-      throw new Error(`unknown container ":::${kind}" — expected one of ${[...CONTAINER_KINDS].join(', ')}`);
+    if (!(kind in renderers)) {
+      throw new Error(`unknown container ":::${kind}" — expected one of ${Object.keys(renderers).join(', ')}`);
     }
-    return {
-      type: 'container',
-      raw,
-      kind,
-      title: title.trim(),
-      tokens: this.lexer.blockTokens(body, []),
-    };
+    return { type: 'container', raw, kind, title: title.trim(), tokens: this.lexer.blockTokens(body, []) };
   },
   renderer(token: Tokens.Generic): string {
-    const body = this.parser.parse(token.tokens ?? []);
-    const label = (token.title as string) || (token.kind as string);
-    return `<aside class="callout callout--${token.kind}"><p class="callout__label">${escapeHtml(label)}</p>${body}</aside>\n`;
+    const kind = token.kind as string;
+    const tokens = (token.tokens ?? []) as Token[];
+    const render = (list: Token[]): string => this.parser.parse(list);
+    return renderers[kind]({ kind, title: (token.title as string) ?? '', body: render(tokens), tokens, render });
   },
-};
+});
 
 const escapeHtml = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -217,13 +253,20 @@ const createParser = (
   toc: TocEntry[],
   highlight: (code: string, lang: string) => string,
   isExternal: (href: string) => boolean,
+  container: TokenizerAndRendererExtension,
+  fences: Readonly<Record<string, FenceRenderer>>,
 ): Marked => {
   const marked = new Marked({ gfm: true, breaks: false });
   marked.use({
     extensions: [container],
     renderer: {
       code({ text, lang }: Tokens.Code): string {
-        const language = (lang ?? '').trim().split(/\s+/)[0] ?? '';
+        const info = (lang ?? '').trim();
+        const language = info.split(/\s+/)[0] ?? '';
+        // A site can claim a fence language outright — a ```mermaid block is a diagram,
+        // not source, and highlighting it would be the wrong answer even with a grammar.
+        const claimed = fences[language]?.(text, info);
+        if (claimed !== undefined && claimed !== null) return claimed;
         return `<figure class="code" data-lang="${escapeHtml(language || 'text')}">${highlight(text, language)}</figure>\n`;
       },
       heading({ tokens, depth }: Tokens.Heading): string {
@@ -299,8 +342,18 @@ export const truncate = (s: string, max = 155): string => {
  * grammars, which is the expensive part, and doing it per page turned a 2s build into a
  * 40s one.
  */
-export const createMarkdown = ({ origin, langs = DEFAULT_LANGS }: MarkdownOptions): MarkdownRenderer => {
+export const createMarkdown = ({
+  origin,
+  langs = DEFAULT_LANGS,
+  fences = {},
+  containers = {},
+}: MarkdownOptions): MarkdownRenderer => {
   let highlighter: Highlighter | null = null;
+  const containerRenderers: Record<string, ContainerRenderer> = {
+    ...Object.fromEntries(BUILTIN_CONTAINERS.map((kind) => [kind, defaultContainer])),
+    ...containers,
+  };
+  const container = createContainer(containerRenderers);
 
   const highlight = (code: string, lang: string): string => {
     if (!highlighter) throw new Error('init() must be awaited before rendering markdown');
@@ -319,7 +372,7 @@ export const createMarkdown = ({ origin, langs = DEFAULT_LANGS }: MarkdownOption
     },
     render(source: string): RenderedMarkdown {
       const toc: TocEntry[] = [];
-      const marked = createParser(new Map(), toc, highlight, isExternal);
+      const marked = createParser(new Map(), toc, highlight, isExternal, container, fences);
       const tokens = marked.lexer(source);
       const html = marked.parser(tokens) as string;
       return { html, toc, excerpt: truncate(firstParagraph(tokens)) };
