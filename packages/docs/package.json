@@ -9,7 +9,8 @@
     "build": "sh ./bin/build.sh",
     "verify": "tsx build/verify.ts",
     "tsc": "tsc --noEmit",
-    "check:langs": "node bin/check-langs.ts"
+    "check:langs": "node bin/check-langs.ts",
+    "test": "vitest run"
   },
   "repository": {
     "type": "git",
@@ -29,7 +30,8 @@
     "@types/node": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "@ranui/preview": "0.1.0-alpha-2",
