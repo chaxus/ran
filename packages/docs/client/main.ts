@@ -8,6 +8,7 @@
  */
 import '../styles/docs.css';
 import 'ranui/style';
+import { mountSearch } from './search.ts';
 
 // Registers every `<r-*>` the pages use. The demos are already in the markup as inert
 // custom elements; this is what upgrades them.
@@ -72,3 +73,5 @@ document.querySelector('.sidebar')?.addEventListener('click', (event) => {
   const toggle = document.querySelector<HTMLInputElement>('#drawer');
   if (toggle) toggle.checked = false;
 });
+
+mountSearch();

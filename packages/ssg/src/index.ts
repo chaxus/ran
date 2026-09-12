@@ -10,7 +10,7 @@
 export { parseFrontmatter, readString, readList, readBoolean } from './frontmatter.ts';
 export type { Frontmatter, FrontmatterValue, ParsedFile } from './frontmatter.ts';
 
-export { createMarkdown, slugify, truncate, DEFAULT_LANGS } from './markdown.ts';
+export { createMarkdown, slugify, stripCustomAnchor, truncate, DEFAULT_LANGS } from './markdown.ts';
 export type { MarkdownOptions, MarkdownRenderer, RenderedMarkdown, TocEntry } from './markdown.ts';
 
 export { readSources, walkMarkdown } from './discover.ts';
@@ -27,3 +27,7 @@ export type { DevServerOptions } from './dev.ts';
 
 export { renderSitemap, renderFeed, renderRobotsTxt } from './feeds.ts';
 export type { FeedItem, FeedOptions, SitemapEntry } from './feeds.ts';
+
+export { buildIndex, createIndex, tokenize, SEARCH_FIELDS } from './search.ts';
+export type { IndexablePage, SearchDoc } from './search.ts';
+export type { Section } from './markdown.ts';

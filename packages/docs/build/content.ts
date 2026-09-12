@@ -8,7 +8,7 @@
  * notices until a search console says so months later.
  */
 import { readSources } from 'ssg';
-import type { MarkdownRenderer, TocEntry } from 'ssg';
+import type { MarkdownRenderer, Section, TocEntry } from 'ssg';
 import { LOCALES, ROOT_LOCALE } from './config.ts';
 import type { LocaleDef } from './config.ts';
 
@@ -30,6 +30,8 @@ export interface DocPage {
   description: string;
   html: string;
   toc: TocEntry[];
+  /** The page split at its headings, for the search index. */
+  sections: Section[];
 }
 
 /** `cn/src/ranui/index.md` → the `cn` locale; anything unprefixed is the root locale. */
@@ -91,7 +93,7 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
     if (clash) throw new Error(`${label}: URL ${url} is already produced by ${clash}`);
     seen.set(url, label);
 
-    const { html, toc, excerpt } = markdown.render(content);
+    const { html, toc, excerpt, sections } = markdown.render(content);
     const fmTitle = typeof data.title === 'string' ? data.title : '';
     const fmDescription = typeof data.description === 'string' ? data.description : '';
     // A page's own H1 is its title when frontmatter does not say otherwise; falling back
@@ -101,7 +103,18 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
 
     const description = (fmDescription || excerpt).slice(0, MAX_DESCRIPTION);
 
-    pages.push({ file: label, locale, baseRel, url, outFile: outFileFor(url), title, description, html, toc });
+    pages.push({
+      file: label,
+      locale,
+      baseRel,
+      url,
+      outFile: outFileFor(url),
+      title,
+      description,
+      html,
+      toc,
+      sections,
+    });
   }
 
   const translations = new Map<string, LocaleDef[]>();

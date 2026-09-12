@@ -147,6 +147,10 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
     ${sb ? `<input type="checkbox" id="drawer" class="drawer__toggle" hidden><label class="drawer__button" for="drawer" aria-label="${escapeHtml(ui.sidebarMenu)}"><span></span><span></span><span></span></label>` : ''}
     <a class="wordmark" href="${escapeHtml(page.locale.dir ? `/${page.locale.dir}/` : '/')}">${escapeHtml(SITE.name)}</a>
     <nav class="nav" aria-label="${escapeHtml(ui.sidebarMenu)}">${navHtml}</nav>
+    <button class="search-open" type="button" aria-label="${escapeHtml(ui.searchButton)}">
+      <span class="search-open__text">${escapeHtml(ui.searchButton)}</span>
+      <kbd class="search-open__kbd">/</kbd>
+    </button>
     ${langMenuHtml(page, urls, ui.langMenu)}
     <r-theme-switch class="theme-switch"></r-theme-switch>
   </div>
@@ -159,6 +163,15 @@ ${footerNav}
 </main>
 ${tocHtml(page, ui.outline)}
 </div>
+<dialog id="search-dialog" class="search" aria-label="${escapeHtml(ui.searchButton)}">
+  <form class="search__form" method="dialog" onsubmit="return false">
+    <input id="search-input" class="search__input" type="search" autocomplete="off" spellcheck="false"
+           placeholder="${escapeHtml(ui.searchPlaceholder)}" aria-label="${escapeHtml(ui.searchButton)}">
+    <button class="search__close" type="submit" value="close" aria-label="${escapeHtml(ui.closeKey)}">esc</button>
+  </form>
+  <p id="search-status" class="search__status" data-loading="${escapeHtml(ui.searchPlaceholder)}" data-empty="${escapeHtml(ui.noResults)}"></p>
+  <ul id="search-results" class="search__results"></ul>
+</dialog>
 ${assets.js.map((src) => `<script type="module" src="${src}"></script>`).join('\n')}
 </body>
 </html>
