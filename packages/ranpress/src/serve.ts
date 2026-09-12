@@ -55,32 +55,29 @@ const respond =
 
     if (result.kind === 'redirect') {
       /*
-       * The `Location` is assembled only from values proved safe *here*.
+       * The `Location` is built through the URL parser against a fixed base, and only its
+       * path and query are emitted — so it cannot name a host or a scheme by construction,
+       * rather than by a string check someone has to keep correct.
        *
        * `resolveHost` already refuses to resolve outside `distDir`, so a redirect target
        * is always a real path within the output — `//evil.com` is a 404, measured. But
        * that guarantee lives two modules away, and a redirect header is precisely where a
        * later change to the resolver would turn into an open redirect without anything
-       * else looking different. Keeping the check local means it cannot be lost by
-       * editing something that does not mention redirects at all.
+       * else looking different.
        *
-       * Root-relative only: a leading `//` is protocol-relative and would send the reader
-       * to another origin.
+       * The query is carried across because dropping it would make a redirected URL
+       * behave differently from the one it redirects to. It reaches the header only as
+       * `URL.search`, i.e. after parsing, so a `\r\n` in the request cannot become a
+       * second header and a `//host` in it cannot become an origin.
        */
-      const target = result.to;
-      if (!target.startsWith('/') || target.startsWith('//')) {
+      const base = 'http://redirect.invalid';
+      const location = new URL(result.to, base);
+      location.search = new URL(url, base).search;
+      if (location.origin !== base) {
         serveNotFound(res);
         return;
       }
-      /*
-       * Carry the query string across, as the host does — dropping it would make a
-       * redirected URL behave differently from the one it redirects to. `encodeURI`
-       * leaves `&`, `=` and `?` alone, so the query keeps its meaning, while control
-       * characters become escapes rather than a second header.
-       */
-      const raw = url.includes('?') ? url.slice(url.indexOf('?') + 1) : '';
-      const search = raw ? `?${encodeURI(raw)}` : '';
-      res.writeHead(308, { location: `${target}${search}` });
+      res.writeHead(308, { location: `${location.pathname}${location.search}` });
       res.end();
       return;
     }
