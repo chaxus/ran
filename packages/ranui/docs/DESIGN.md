@@ -491,6 +491,51 @@ what the gap _means_:
 components. **Smaller gap means tighter relationship** — that is the only thing vertical
 rhythm communicates, so do not undo it with a decorative divider.
 
+### The measure governs text, not the column
+
+**Running text sits at 60–75 characters per line; everything that is not running text does
+not.** A table, a code fence, a demo stage or an image has nothing to gain from a
+comfortable line length and everything to lose from being narrowed to one. Cap the text
+elements, not the column that holds them.
+
+> A documentation column was capped at the measure, so the cap applied to everything
+> inside it. The Properties table wanted 762px inside a 736px cap, silently became a
+> scroll container, and lost 26px off its last column — a sentence ending mid-word, which
+> reads as a rendering bug rather than as a width.
+
+**Declare the measure in `rem`, never `em`.** `em` resolves against the element's own
+font-size, so the larger the type, the longer the line — exactly backwards.
+
+> A deck set one step up from body size inherited a `46em` measure and rendered at 851px
+> against body text's 736px: the biggest type on the page got the longest line to read.
+
+**Build hierarchy out of type before reaching for a box.** One step of size and one step
+down in colour turns a title and its first sentence into a title and a deck, with no new
+container and no new border.
+
+### If the layout says two things are one object, the spacing must agree
+
+**A shared border, a shared radius and a gap between them are a contradiction.** Decide
+whether the elements are one object or two, and make every property say the same thing.
+
+> A demo and the fence documenting it were given joined radii (`8px 8px 0 0` above,
+> `0 0 8px 8px` below) and a hairline between — and then an 18px channel ran between them
+> anyway, because the parent laid its children out with `gap`, which no margin on a child
+> can cancel. The shape claimed one object, the spacing claimed two.
+
+**When a value must equal another value, name it.** A gap that a child has to subtract is
+not a literal in two places; it is one custom property referenced twice.
+
+### Reserve a column only when its content exists
+
+**A column declared unconditionally is still a column, even on the pages that have nothing
+to put in it.** Condition the track on the element actually being there (`:has()`), not on
+a page type you assume implies it.
+
+> The outline column was reserved for every page without a sidebar. The landing page has
+> no outline, so it laid out as `1144px 224px` and carried 280px of dead space down its
+> entire right edge — which read as the whole site being off-centre.
+
 ### Alignment is structure, not polish
 
 **Establish alignment spines and hold them.** Sibling regions share a content inset;
@@ -554,12 +599,37 @@ Ask in order. A "no" is a finding, not a preference:
    primary buttons stay rare?
 4. Could this do less: any entry point, option or state removable without weakening the task?
 5. Is the structure exact — shared spines, equal gaps equal to the pixel, no doubled padding?
-6. Does it hold in every state: empty, loading, failure, longest translation, narrow width,
-   dark theme, reduced motion?
-7. Has it been looked at in a real browser, at more than one width, in both themes?
+6. Is running text between 60 and 75 characters per line, and is everything that is **not**
+   running text free of that cap?
+7. Does every element that looks like part of one object agree — border, radius **and**
+   spacing — and does every reserved column actually have content?
+8. Does it hold in every state: empty, loading, failure, longest translation, narrow width,
+   dark theme, reduced motion, **RTL**?
+9. Has it been looked at in a real browser, at more than one width, in both themes?
 
 **A screenshot of the happy path is not proof.** Keyboard behaviour, focus, dynamic
 content, themes, resizing and failure states are part of the design.
+
+**Measure it; do not look at it.** Every finding in this section was invisible to the eye
+and obvious to `getBoundingClientRect()` — a 26px clip inside a scroll container, an 18px
+channel between two elements drawn as one, 280px of dead column, a deck rendering 115px
+wider than the body text it sits above. Read the numbers out of a real browser:
+
+```js
+// line length in characters, the number this section is actually about
+const cs = getComputedStyle(el);
+const probe = Object.assign(document.createElement('span'), { textContent: '0123456789' });
+probe.style.cssText = `font:${cs.font};visibility:hidden;position:absolute;white-space:pre`;
+document.body.append(probe);
+const ch = el.getBoundingClientRect().width / (probe.getBoundingClientRect().width / 10);
+probe.remove();
+
+// content clipped inside a scroll container — silent by construction
+wrap.scrollWidth - wrap.clientWidth;
+
+// the page is wider than the window (an RTL off-screen offset, a stray fixed element)
+document.documentElement.scrollWidth > innerWidth;
+```
 
 ---
 

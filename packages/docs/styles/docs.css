@@ -63,7 +63,10 @@
   --header-h: 60px;
   --sidebar-w: 272px;
   --toc-w: 224px;
-  --measure: 46em;
+  /* rem, not em: `em` resolves against the element's own font-size, so the 18.5px deck
+     would get a *wider* line than 16px body text — the larger the type, the longer the
+     line, which is backwards. */
+  --measure: 44rem;
   --pad: var(--ran-space-4, 16px);
 
   color-scheme: light;
@@ -648,11 +651,30 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 
 /* ── Prose ───────────────────────────────────────────────────────────────── */
 
+/*
+ * The measure governs running text, not the column.
+ *
+ * Capping `.prose` itself capped everything inside it, including the things that are not
+ * text and gain nothing from a comfortable line length. The Properties table wanted 762px
+ * inside a 736px cap, so it quietly became a scroll container and lost 26px off its last
+ * column — a clipped sentence that looked like a rendering bug rather than a width.
+ * Prose keeps the measure; tables, fences and demo stages get the full column.
+ */
 .prose {
-  max-width: var(--measure);
+  /* Named because it is referenced again: a child that has to cancel this gap must use
+     the same value, and two hand-copied numbers drift. */
+  --prose-gap: 1.1em;
   display: flex;
   flex-direction: column;
-  gap: 1.1em;
+  gap: var(--prose-gap);
+}
+.prose > p,
+.prose > ul,
+.prose > ol,
+.prose > blockquote,
+.prose > aside,
+.prose > dl {
+  max-width: var(--measure);
 }
 .prose > :first-child {
   margin-top: 0;
@@ -665,6 +687,19 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .prose .table-wrap,
 .prose aside {
   margin: 0;
+}
+
+/*
+ * The sentence under the title is the page's deck, and it was set at body size in body
+ * colour — so the title stood alone and the first thing a reader met was an undifferentiated
+ * wall. Giving it one step of size and one step down in colour builds the hierarchy out of
+ * type rather than out of another box, which is what §11 asks for.
+ */
+.prose > h1 + p {
+  font-size: 18.5px;
+  line-height: 1.65;
+  color: var(--fg-muted);
+  text-wrap: pretty;
 }
 
 .prose h1 {
@@ -938,7 +973,12 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 ran-demo:has(+ figure.code) {
   border-bottom: none;
   border-radius: 8px 8px 0 0;
-  margin-bottom: 0;
+  /*
+   * `.prose` spaces its children with `gap`, which no margin on the child can cancel —
+   * so the radii claimed these two were one object while an 18px channel ran between
+   * them saying the opposite. Pull the fence back up by exactly the gap.
+   */
+  margin-bottom: calc(-1 * var(--prose-gap));
 }
 ran-demo + figure.code {
   margin-top: 0;
@@ -1049,10 +1089,16 @@ ran-demo p {
 }
 
 @media (min-width: 1240px) {
-  body.has-sidebar .layout {
+  /*
+   * The outline column is reserved only when there is an outline to put in it. `.toc` is
+   * rendered per page — the landing has none — and a column declared unconditionally is
+   * still a column: the home page laid out as `1144px 224px` and left 280px of dead space
+   * down its whole right edge, which read as the entire site being off-centre.
+   */
+  body.has-sidebar .layout:has(.toc) {
     grid-template-columns: var(--sidebar-w) minmax(0, 1fr) var(--toc-w);
   }
-  .layout:not(:has(.sidebar)) {
+  .layout:not(:has(.sidebar)):has(.toc) {
     grid-template-columns: minmax(0, 1fr) var(--toc-w);
   }
   .toc {
