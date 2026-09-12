@@ -2,7 +2,6 @@
 import DefaultTheme from 'vitepress/theme-without-fonts';
 import type { EnhanceAppContext, Router } from 'vitepress';
 import { nextTick } from 'vue';
-import Home from '../components/Home.vue';
 import HomeCinematic from '../components/HomeCinematic.vue';
 import GlassPlayground from '../components/GlassPlayground.vue';
 import IconGallery from '../components/IconGallery.vue';
@@ -99,7 +98,6 @@ export default {
     // Every component a markdown page may use. Registration is synchronous on purpose:
     // these render during the SSR pass too, so anything gated behind an await would be
     // missing there. Per-language copy lives in `home-copy.ts` / `demo-copy.ts`.
-    app.component('Home', Home);
     app.component('HomeCinematic', HomeCinematic);
     app.component('GlassPlayground', GlassPlayground);
     app.component('IconGallery', IconGallery);
