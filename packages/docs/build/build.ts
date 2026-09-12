@@ -10,6 +10,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildIndex, createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ssg';
 import { LANGS, ORIGIN } from './config.ts';
+import { componentRenderers } from './components.ts';
 import { loadDocs } from './content.ts';
 import { renderDoc } from './page.ts';
 import { generatedFiles, headFor } from './seo.ts';
@@ -25,6 +26,7 @@ export const markdown = createMarkdown({
     // URI-encoded because that is what `<r-mermaid>`'s `code` getter decodes.
     mermaid: (code) => `<r-mermaid code="${encodeURIComponent(code)}"></r-mermaid>\n`,
   },
+  components: componentRenderers,
   containers: {
     note: ({ title, body }) =>
       `<aside class="callout callout--note"><p class="callout__label">${title || 'NOTE'}</p>${body}</aside>\n`,

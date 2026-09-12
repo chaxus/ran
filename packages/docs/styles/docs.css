@@ -119,6 +119,19 @@ video {
   height: auto;
 }
 
+/*
+ * Chrome links are not underlined; prose links are, and say so themselves.
+ *
+ * Without this base the UA default applies and every button-shaped link in the page
+ * furniture renders underlined — which is how the home page's two call-to-action pills
+ * shipped with a line through their labels. The nav, sidebar and pager each used to
+ * turn it off individually, which is the shape of a missing base rule.
+ */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .skip {
   position: absolute;
   left: -9999px;

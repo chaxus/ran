@@ -116,6 +116,15 @@ export type ContainerRenderer = (ctx: {
   render: (tokens: Token[]) => string;
 }) => string;
 
+/**
+ * Renders a component placeholder that a page writes as an HTML tag.
+ *
+ * `attrs` is the raw attribute text, so a renderer can read whatever the page passed.
+ * Returning `null` leaves the tag alone, which is what keeps ordinary inline HTML —
+ * and every `<r-*>` element — untouched.
+ */
+export type ComponentRenderer = (attrs: string) => string | null;
+
 export interface MarkdownOptions {
   /** Site origin, used to decide whether a link leaves the site. */
   origin: string;
@@ -128,6 +137,16 @@ export interface MarkdownOptions {
    * its own prose uses; an unknown kind still fails the build by name.
    */
   containers?: Readonly<Record<string, ContainerRenderer>>;
+  /**
+   * Tags a site renders itself, keyed by tag name (case-sensitive, as written).
+   *
+   * This is how a page keeps a placeholder like `<HomeCinematic />` in its markdown
+   * while the generator decides what that becomes. Matching on the parser's own `html`
+   * token rather than with a pass over the finished output means the substitution can
+   * never fire on a tag inside a code fence, which is the whole reason it is here and
+   * not a regex.
+   */
+  components?: Readonly<Record<string, ComponentRenderer>>;
 }
 
 export interface MarkdownRenderer {
@@ -297,6 +316,9 @@ const escapeHtml = (s: string): string =>
 
 // ── Parser ──────────────────────────────────────────────────────────────────
 
+/** `<HomeCinematic />` or `<IconGallery class="x">` → the tag name and its attributes. */
+const COMPONENT_TAG = /^<([A-Za-z][\w-]*)((?:\s[^>]*?)?)\s*\/?>\s*(?:<\/\1>)?\s*$/;
+
 const createParser = (
   slugs: Map<string, number>,
   toc: TocEntry[],
@@ -305,11 +327,18 @@ const createParser = (
   isExternal: (href: string) => boolean,
   container: TokenizerAndRendererExtension,
   fences: Readonly<Record<string, FenceRenderer>>,
+  components: Readonly<Record<string, ComponentRenderer>>,
 ): Marked => {
   const marked = new Marked({ gfm: true, breaks: false });
   marked.use({
     extensions: [container],
     renderer: {
+      html({ text }: Tokens.HTML | Tokens.Tag): string {
+        const match = COMPONENT_TAG.exec(text.trim());
+        const render = match ? components[match[1]] : undefined;
+        const out = render?.(match?.[2] ?? '');
+        return out ?? text;
+      },
       code({ text, lang }: Tokens.Code): string {
         const info = (lang ?? '').trim();
         const language = info.split(/\s+/)[0] ?? '';
@@ -462,6 +491,7 @@ export const createMarkdown = ({
   langs = DEFAULT_LANGS,
   fences = {},
   containers = {},
+  components = {},
 }: MarkdownOptions): MarkdownRenderer => {
   let highlighter: Highlighter | null = null;
   const containerRenderers: Record<string, ContainerRenderer> = {
@@ -488,7 +518,7 @@ export const createMarkdown = ({
     render(source: string): RenderedMarkdown {
       const toc: TocEntry[] = [];
       const headings: string[] = [];
-      const marked = createParser(new Map(), toc, headings, highlight, isExternal, container, fences);
+      const marked = createParser(new Map(), toc, headings, highlight, isExternal, container, fences, components);
       const tokens = marked.lexer(source);
       const html = marked.parser(tokens) as string;
       let consumed = 0;

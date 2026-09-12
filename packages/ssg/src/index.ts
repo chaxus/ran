@@ -11,7 +11,7 @@ export { parseFrontmatter, readString, readList, readBoolean } from './frontmatt
 export type { Frontmatter, FrontmatterValue, ParsedFile } from './frontmatter.ts';
 
 export { createMarkdown, slugify, stripCustomAnchor, truncate, DEFAULT_LANGS } from './markdown.ts';
-export type { MarkdownOptions, MarkdownRenderer, RenderedMarkdown, TocEntry } from './markdown.ts';
+export type { ComponentRenderer, MarkdownOptions, MarkdownRenderer, RenderedMarkdown, TocEntry } from './markdown.ts';
 
 export { readSources, walkMarkdown } from './discover.ts';
 export type { SourceFile, WalkOptions } from './discover.ts';
