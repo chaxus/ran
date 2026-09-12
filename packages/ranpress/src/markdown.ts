@@ -293,6 +293,25 @@ const plainText = (tokens: Token[] | undefined): string => {
  */
 const CUSTOM_ANCHOR = /\{#([A-Za-z0-9_-]+)\}[ \t]*$/;
 
+/*
+ * A hard-wrapped CJK paragraph must not gain a space where the line broke.
+ *
+ * markdown-it and marked both turn a single newline into a literal `\n`, which the
+ * browser then collapses to a space — fine between two Latin words, wrong between two
+ * Chinese characters, where it renders as `分 就`. Source files that wrap CJK prose at a
+ * sensible column would otherwise be full of stray spaces, and the only workarounds are
+ * to stop wrapping or to proofread the output.
+ *
+ * The break is kept when either side is Latin, a digit, code or punctuation — those
+ * already read as separate words and the source style spaces them. Lookahead rather than
+ * a captured second character, so `甲\n乙\n丙` collapses at both breaks.
+ */
+const CJK =
+  '\\u2e80-\\u2fdf\\u3000-\\u303f\\u3041-\\u30ff\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff\\ufe30-\\ufe4f\\uff00-\\uffef';
+const CJK_SOFTBREAK = new RegExp(`([${CJK}])\\n(?=[${CJK}])`, 'g');
+
+export const collapseCjkSoftbreaks = (text: string): string => text.replace(CJK_SOFTBREAK, '$1');
+
 export const stripCustomAnchor = (text: string): string => text.replace(CUSTOM_ANCHOR, '').trimEnd();
 
 // ── Custom containers ───────────────────────────────────────────────────────
@@ -553,6 +572,22 @@ export const createMarkdown = ({
         components,
       );
       const tokens = marked.lexer(source);
+      /*
+       * Walked here, not registered through `marked.use({ walkTokens })`.
+       *
+       * That hook only runs inside `marked.parse()`. This renderer drives the lexer and
+       * the parser separately — it needs the token tree for the outline, the sections and
+       * the excerpt — so a registered `walkTokens` is silently never called. It was, and
+       * the CJK fix below appeared to do nothing at all.
+       *
+       * Leaf text tokens only: fenced code and inline code are their own token types, so
+       * a newline inside them is never reached from here.
+       */
+      marked.walkTokens(tokens, (token) => {
+        if (token.type === 'text' && !token.tokens) {
+          token.text = collapseCjkSoftbreaks(token.text);
+        }
+      });
       const html = marked.parser(tokens) as string;
       let consumed = 0;
       const nextSlug = (): string => headings[consumed++] ?? '';
