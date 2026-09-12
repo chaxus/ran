@@ -11,9 +11,8 @@
  * markup is in the server-rendered HTML, indexable and correct with no JavaScript, and
  * the script only adds motion and interaction on top.
  *
- * Markdown pages keep writing `<HomeCinematic />` unchanged. The engine's component hook
- * matches the parser's own html token, which means VitePress keeps rendering these pages
- * the old way while this renders them the new way, from one source.
+ * Markdown pages write `<HomeCinematic />` and the engine's component hook matches it as
+ * an html token, so the tag stays ordinary markup and the page stays readable as prose.
  */
 import { homeCopy } from './langs/home-copy.ts';
 import { renderPackageFacts } from './package-facts.ts';

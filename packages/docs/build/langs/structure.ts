@@ -13,7 +13,7 @@ import { EDITOR } from '../common/index.ts';
  * prefix; `buildThemeConfig` adds it, and only for locales that actually mirror the page.
  */
 
-/** Shared by `/src/article/` and `/src/note/` — VitePress matches sidebars by path prefix. */
+/** Shared by `/src/article/` and `/src/note/` — sidebars are matched by path prefix. */
 const articleSidebar: SidebarNode[] = [
   {
     items: [

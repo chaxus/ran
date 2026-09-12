@@ -22,8 +22,8 @@ export const markdown = createMarkdown({
   origin: ORIGIN,
   langs: LANGS,
   fences: {
-    // Same handoff the VitePress fence hook does today: the diagram source is
-    // URI-encoded because that is what `<r-mermaid>`'s `code` getter decodes.
+    // The diagram source is URI-encoded because that is what `<r-mermaid>`'s `code`
+    // getter decodes.
     mermaid: (code) => `<r-mermaid code="${encodeURIComponent(code)}"></r-mermaid>\n`,
   },
   components: componentRenderers,
@@ -38,9 +38,10 @@ export const markdown = createMarkdown({
     danger: ({ title, body }) =>
       `<aside class="callout callout--danger"><p class="callout__label">${title || 'DANGER'}</p>${body}</aside>\n`,
     /**
-     * VitePress's escape hatch for Vue template compilation — it stops `{{` being read
-     * as an interpolation. There is no Vue here, so there is nothing to escape and the
-     * marker is transparent. 25 pages carry it and none of them need a feature built.
+     * Inherited from VitePress, where it stopped `{{` being read as a Vue interpolation.
+     * There is no template compiler here, so there is nothing to escape and the marker is
+     * transparent — 25 pages still carry it and none of them need a feature built. Kept so
+     * those pages render rather than failing on an unknown container.
      */
     'v-pre': ({ body }) => body,
     /**

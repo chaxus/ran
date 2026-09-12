@@ -19,7 +19,7 @@ export type LabelKind =
 
 /** One node of the locale-agnostic sidebar/nav tree. */
 export interface SidebarNode {
-  /** Absent on an unlabelled wrapper group — VitePress renders such a group's items flat. */
+  /** Absent on an unlabelled wrapper group, whose items render flat. */
   kind?: LabelKind;
   /** Key into a locale's message dictionary; absent together with `kind`. */
   key?: string;
@@ -48,7 +48,7 @@ export interface LocaleMessages {
   ui: UiMessages;
 }
 
-/** Strings VitePress's default theme renders itself (it ships English only). */
+/** Chrome the site renders itself, so it needs a translation per locale. */
 export interface UiMessages {
   outline: string;
   returnToTop: string;

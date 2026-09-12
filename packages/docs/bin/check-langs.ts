@@ -4,11 +4,11 @@
  * Six failure modes, all of them silent otherwise:
  *
  * 1. **A missing label key** renders a blank sidebar entry — a row you can click but not
- *    read. VitePress reports nothing.
- * 2. **A missing page** in a mirrored tree is a sidebar link to a 404. VitePress's own
- *    dead-link check catches it during `build`, but only after a full compile; catching it
- *    here is seconds instead of minutes, and it also runs when the page exists in a locale
- *    but nowhere else (a stray file the other languages never got).
+ *    read. Nothing else reports it.
+ * 2. **A missing page** in a mirrored tree is a sidebar link to a 404. `build/verify.ts`
+ *    catches it, but only after a full build; catching it here is seconds instead of
+ *    minutes, and it also runs when the page exists in one locale but nowhere else (a
+ *    stray file the other languages never got).
  * 3. **A stray label key** is dead weight that survives every rename of the structure.
  * 4. **A translation that lost its shape** — a truncated file, a heading demoted from `###`
  *    to `##`, a code fence or `<ran-demo>` block dropped in the rewrite. The page still builds
