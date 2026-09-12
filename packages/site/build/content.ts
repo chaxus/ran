@@ -28,7 +28,7 @@ export interface Page {
   file: string;
   /** Site-absolute URL, extensionless. `/` for the home page. */
   url: string;
-  /** Path within dist. Always `<dir>/index.html` so URLs need no extension. */
+  /** Path within dist, laid out so the host serves `url` directly — see `outFileFor`. */
   outFile: string;
   title: string;
   description: string;
@@ -72,7 +72,15 @@ const urlFor = (rel: string): string => {
 };
 
 /**
- * `/` → `index.html`; `/blog/` → `blog/index.html`; `/about` → `about/index.html`.
+ * `/` → `index.html`; `/blog/` → `blog/index.html`; `/about` → `about.html`.
+ *
+ * The shape of the file decides the shape of the URL the host serves without redirecting,
+ * so this has to agree with the canonical. Cloudflare Pages resolves a request by trying
+ * the exact file, then `<path>.html`, then `<path>/index.html` — and that last case is a
+ * **308 to the trailing-slash form**, not a direct serve. So a page whose canonical is
+ * `/about` must be written to `about.html`; writing it to `about/index.html` publishes a
+ * canonical that names a URL the host immediately redirects away from. A trailing slash in
+ * `url` (the blog index) is a genuine directory and still maps to `index.html`.
  *
  * The 404 page is the exception: Cloudflare Pages serves `/404.html` from the root for
  * any unmatched path, so it must land there literally rather than at `404/index.html`.
@@ -80,7 +88,8 @@ const urlFor = (rel: string): string => {
 const outFileFor = (url: string, kind: PageKind): string => {
   if (kind === 'notfound') return '404.html';
   if (url === '/') return 'index.html';
-  return `${url.replace(/^\/|\/$/g, '')}/index.html`;
+  const clean = url.replace(/^\//, '');
+  return clean.endsWith('/') ? `${clean}index.html` : `${clean}.html`;
 };
 
 const kindFor = (rel: string): PageKind => {

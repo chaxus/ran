@@ -59,11 +59,28 @@ const urlForBase = (baseRel: string, locale: LocaleDef): string => {
   return `${prefix}/${stem}`;
 };
 
-/** Always `<dir>/index.html`, so URLs need no extension and no redirect sits between. */
+/**
+ * Where a page is written, which decides the URL the host actually serves.
+ *
+ * The trailing slash already carries the distinction: `foo/index.md` produced `/foo/`
+ * and `foo.md` produced `/foo`. The file layout has to follow it — `foo.html` for the
+ * second, not `foo/index.html`.
+ *
+ * Getting this wrong does not break a page. Cloudflare Pages serves `foo/index.html` at
+ * `/foo/` and **308s `/foo` to it**, so every canonical and sitemap URL without a
+ * trailing slash — 904 of them — quietly named a redirect instead of a page. That is the
+ * same failure packages/docs hit once before in mirror image, and it is invisible from a
+ * browser: the page loads, just one hop late and under a different URL than the one it
+ * claims to be canonical for.
+ *
+ * Comparing canonicals between the two engines does not catch it either. The strings are
+ * identical; it is the file layout underneath them that changed.
+ */
 const outFileFor = (url: string, kind: DocKind): string => {
   if (kind === 'notfound') return '404.html';
-  const clean = url.replace(/^\/|\/$/g, '');
-  return clean ? `${clean}/index.html` : 'index.html';
+  if (url === '/') return 'index.html';
+  const clean = url.replace(/^\//, '');
+  return clean.endsWith('/') ? `${clean}index.html` : `${clean}.html`;
 };
 
 /**
