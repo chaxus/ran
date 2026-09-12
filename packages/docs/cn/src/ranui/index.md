@@ -8,7 +8,6 @@ description: 'ranui 是基于原生自定义元素（<r-*>）的 Web Components 
 Svelte、Solid、Astro 乃至一个纯 HTML 文件里，用法完全一样：不需要适配层，也不用操心框架版本。
 TypeScript 类型、基于设计令牌的明暗主题、Shadow DOM 封装和服务端渲染都是内置的。
 
-
 <PackageFacts package="ranui" />
 
 - ranui 仍处于 **alpha** 阶段，版本之间可能有破坏性变更。请锁定具体版本号，升级前先读

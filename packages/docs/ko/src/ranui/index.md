@@ -9,7 +9,6 @@ React, Vue, Svelte, Solid, Astro, 혹은 순수 HTML 파일에서 똑같이 동�
 맞춰야 할 프레임워크 버전도 없습니다. TypeScript 타입, 디자인 토큰 기반 라이트/다크 테마,
 Shadow DOM 캡슐화, 서버 렌더링이 기본으로 들어 있습니다.
 
-
 <PackageFacts package="ranui" />
 
 - ranui 는 **alpha**입니다. 버전마다 호환성을 깨는 변경이 들어갑니다. 정확한 버전을 고정하고,

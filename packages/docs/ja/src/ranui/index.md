@@ -10,7 +10,6 @@ React でも Vue でも Svelte でも Solid でも Astro でも、素の HTML �
 デザイントークンによるライト／ダークテーマ、Shadow DOM によるカプセル化、サーバーレンダリングを
 最初から備えています。
 
-
 <PackageFacts package="ranui" />
 
 - ranui は **alpha** です。バージョンには破壊的変更が入ります。バージョンを正確に固定し、

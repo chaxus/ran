@@ -34,8 +34,6 @@ describe('collapseCjkSoftbreaks', () => {
   });
 
   it('leaves text without a break alone', () => {
-    expect(collapseCjkSoftbreaks('一个建立在原生自定义元素之上的组件库')).toBe(
-      '一个建立在原生自定义元素之上的组件库',
-    );
+    expect(collapseCjkSoftbreaks('一个建立在原生自定义元素之上的组件库')).toBe('一个建立在原生自定义元素之上的组件库');
   });
 });

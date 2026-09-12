@@ -10,7 +10,6 @@ Es gibt keinen Adapter und keine Framework-Version, die zusammenpassen müsste. 
 helles und dunkles Theme über Design-Tokens, Kapselung per Shadow DOM und Server-Rendering sind
 enthalten.
 
-
 <PackageFacts package="ranui" />
 
 - ranui ist **Alpha**: Versionen bringen Breaking Changes mit. Pinne eine exakte Version und lies vor

@@ -75,13 +75,13 @@ Because a generic static server resolves files the way Node would, and the produ
 does not. `host.ts` is the difference, and its rules were **measured against Cloudflare
 Pages**, not read off its documentation:
 
-| Request          | On disk             | Response                |
-| ---------------- | ------------------- | ----------------------- |
-| `/about`         | `about.html`        | `200`                   |
-| `/about`         | `about/index.html`  | `308` → `/about/`       |
-| `/about/`        | `about/index.html`  | `200`                   |
-| `/about/`        | `about.html`        | `308` → `/about`        |
-| `/sitemap.xml/`  | `sitemap.xml`       | `404` — no reverse hop  |
+| Request         | On disk            | Response               |
+| --------------- | ------------------ | ---------------------- |
+| `/about`        | `about.html`       | `200`                  |
+| `/about`        | `about/index.html` | `308` → `/about/`      |
+| `/about/`       | `about/index.html` | `200`                  |
+| `/about/`       | `about.html`       | `308` → `/about`       |
+| `/sitemap.xml/` | `sitemap.xml`      | `404` — no reverse hop |
 
 The redirect rows are the reason this file exists. `dev.ts` and `verify.ts` used to carry
 a copy of this logic each, and the copies disagreed: the verifier knew that reaching a

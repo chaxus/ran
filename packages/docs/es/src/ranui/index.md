@@ -9,7 +9,6 @@ Una biblioteca de UI construida sobre **custom elements nativos**. Cada componen
 No hay adaptador ni versión de framework que hacer coincidir. Incluye tipos TypeScript, tema claro
 y oscuro mediante design tokens, encapsulación con Shadow DOM y renderizado en servidor.
 
-
 <PackageFacts package="ranui" />
 
 - ranui está en **alfa**: las versiones traen cambios incompatibles. Fija una versión exacta y lee el

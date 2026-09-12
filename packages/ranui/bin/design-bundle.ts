@@ -329,11 +329,13 @@ foundation(
   'typography.html',
   'Typography',
   'Decide by role — heading, label, copy, button, mono. The role fixes font, size, weight and line-height; never pick a raw px per instance.',
-  ([
-    ['heading', 'Titles'],
-    ['label', 'Single-line, scannable'],
-    ['copy', 'Multi-line body'],
-  ] as const)
+  (
+    [
+      ['heading', 'Titles'],
+      ['label', 'Single-line, scannable'],
+      ['copy', 'Multi-line body'],
+    ] as const
+  )
     .map(
       ([role, use]) => `<section class="ds-sec"><h2>${role} — ${use}</h2>
 ${family(new RegExp(`^--ran-text-${role}-\\d$`))
