@@ -74,6 +74,13 @@ const main = (): void => {
   for (const file of pages) {
     const rel = relative(DIST_DIR, file);
     const html = readFileSync(file, 'utf8');
+    // The 404 page is served from every wrong URL there is. A canonical would claim a
+    // different page each time, and a sitemap entry would invite indexing — so it is
+    // exempt from both, and instead has to prove it says `noindex`.
+    const isNotFound = rel === '404.html';
+    if (isNotFound && !/<meta name="robots" content="noindex/.test(html)) {
+      fail(rel, 'the 404 page must carry a noindex robots meta');
+    }
 
     // ── head essentials ────────────────────────────────────────────────────
     const title = /<title>([^<]*)<\/title>/.exec(html)?.[1] ?? '';
@@ -83,7 +90,9 @@ const main = (): void => {
 
     // ── canonical ──────────────────────────────────────────────────────────
     const canonical = /<link rel="canonical" href="([^"]+)"/.exec(html)?.[1];
-    if (!canonical) {
+    if (isNotFound) {
+      if (canonical) fail(rel, 'the 404 page must not declare a canonical');
+    } else if (!canonical) {
       fail(rel, 'missing canonical');
     } else {
       if (!canonical.startsWith(ORIGIN)) fail(rel, `canonical is not on ${ORIGIN}: ${canonical}`);
@@ -141,6 +150,7 @@ const main = (): void => {
     // The reverse direction matters too: a page nobody links to and the sitemap omits
     // is a page that will not be found.
     for (const file of pages) {
+      if (relative(DIST_DIR, file) === '404.html') continue;
       if (!listed.has(file)) fail(relative(DIST_DIR, file), 'built but absent from sitemap.xml');
     }
   }

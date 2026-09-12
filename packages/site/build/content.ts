@@ -9,6 +9,7 @@
  *     content/index.md        → /              home     (latest posts injected)
  *     content/blog/index.md   → /blog/         archive  (every post injected)
  *     content/blog/<slug>.md  → /blog/<slug>   post     (dated, needs a pillar)
+ *     content/404.md          → /404.html      notfound (served for every unmatched path)
  *     content/<name>.md       → /<name>        page
  *
  * Validation is strict and happens once, here, so a malformed post fails the build
@@ -22,7 +23,7 @@ import { parseFrontmatter, readBoolean, readList, readString } from './frontmatt
 import { renderMarkdown, truncate } from './markdown.ts';
 import type { TocEntry } from './markdown.ts';
 
-export type PageKind = 'home' | 'archive' | 'post' | 'page';
+export type PageKind = 'home' | 'archive' | 'post' | 'page' | 'notfound';
 
 export interface Page {
   kind: PageKind;
@@ -84,14 +85,21 @@ const urlFor = (rel: string): string => {
   return `/${stem}`;
 };
 
-/** `/` → `index.html`; `/blog/` → `blog/index.html`; `/about` → `about/index.html`. */
-const outFileFor = (url: string): string => {
+/**
+ * `/` → `index.html`; `/blog/` → `blog/index.html`; `/about` → `about/index.html`.
+ *
+ * The 404 page is the exception: Cloudflare Pages serves `/404.html` from the root for
+ * any unmatched path, so it must land there literally rather than at `404/index.html`.
+ */
+const outFileFor = (url: string, kind: PageKind): string => {
+  if (kind === 'notfound') return '404.html';
   if (url === '/') return 'index.html';
   return `${url.replace(/^\/|\/$/g, '')}/index.html`;
 };
 
 const kindFor = (rel: string): PageKind => {
   if (rel === 'index.md') return 'home';
+  if (rel === '404.md') return 'notfound';
   if (rel === 'blog/index.md') return 'archive';
   if (rel.startsWith('blog/')) return 'post';
   return 'page';
@@ -130,7 +138,7 @@ export const loadContent = (contentDir: string, options: LoadOptions = {}): Cont
     // than either — a page with no prose at all still needs something in <head>.
     const description = truncate(readString(data, 'description', file, excerpt));
 
-    const base: Page = { kind, file, url, outFile: outFileFor(url), title, description, html, toc };
+    const base: Page = { kind, file, url, outFile: outFileFor(url, kind), title, description, html, toc };
 
     if (kind === 'post') {
       const pillar = readString(data, 'pillar', file);

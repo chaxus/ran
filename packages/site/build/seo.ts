@@ -9,7 +9,7 @@
  * URL comes from `Page.url`, which is also what the driver writes to disk, so the two
  * cannot disagree.
  */
-import { ORIGIN, SITE } from './config.ts';
+import { OG_IMAGE, ORIGIN, SITE } from './config.ts';
 import type { Page, Post } from './content.ts';
 import { absoluteUrl, escapeHtml } from './page.ts';
 
@@ -19,6 +19,16 @@ const xml = (s: string): string =>
 
 const meta = (attr: 'name' | 'property', key: string, content: string): string =>
   `<meta ${attr}="${key}" content="${escapeHtml(content)}">`;
+
+/**
+ * Icons and the manifest. On every page including the 404 — a browser tab with no
+ * favicon is the one piece of chrome a reader notices missing.
+ */
+const ICON_LINKS = [
+  `<link rel="icon" href="/favicon.svg" type="image/svg+xml">`,
+  `<link rel="apple-touch-icon" href="/icon-180.png">`,
+  `<link rel="manifest" href="/manifest.webmanifest">`,
+];
 
 /**
  * The site-wide graph: the site itself and the person who writes it, linked so a search
@@ -66,6 +76,13 @@ const postJsonLd = (post: Post): string =>
   });
 
 export const headFor = (page: Page): string[] => {
+  // The 404 page is served from every wrong URL there is, so it must never claim a
+  // canonical (it would be claiming a different page each time) and must never be
+  // indexed. Everything else in <head> would be actively harmful here.
+  if (page.kind === 'notfound') {
+    return [`<meta name="robots" content="noindex, follow">`, ...ICON_LINKS];
+  }
+
   const url = absoluteUrl(page.url);
   const isHome = page.kind === 'home';
   const ogTitle = isHome ? `${SITE.name} — ${SITE.title}` : `${page.title} · ${SITE.name}`;
@@ -83,7 +100,7 @@ export const headFor = (page: Page): string[] => {
     meta('property', 'og:description', page.description),
     meta('property', 'og:url', url),
     meta('property', 'og:locale', 'zh_CN'),
-    meta('name', 'twitter:card', 'summary'),
+    meta('name', 'twitter:card', 'summary_large_image'),
     meta('name', 'twitter:title', ogTitle),
     meta('name', 'twitter:description', page.description),
     `<link rel="alternate" type="application/rss+xml" title="${escapeHtml(SITE.name)}" href="/feed.xml">`,
@@ -91,6 +108,12 @@ export const headFor = (page: Page): string[] => {
     // convention is that agents fetch /llms.txt directly; the tag costs one line and
     // makes it discoverable to anything that reads <head> instead of guessing.
     `<link rel="alternate" type="text/markdown" title="llms.txt" href="/llms.txt">`,
+    ...ICON_LINKS,
+    meta('property', 'og:image', `${ORIGIN}${OG_IMAGE.src}`),
+    meta('property', 'og:image:width', String(OG_IMAGE.width)),
+    meta('property', 'og:image:height', String(OG_IMAGE.height)),
+    meta('property', 'og:image:alt', OG_IMAGE.alt),
+    meta('name', 'twitter:image', `${ORIGIN}${OG_IMAGE.src}`),
   ];
 
   if (page.kind === 'post') {
@@ -110,7 +133,9 @@ export const headFor = (page: Page): string[] => {
 // ── Machine-readable files ──────────────────────────────────────────────────
 
 export const renderSitemap = (pages: Page[]): string => {
+  // The 404 page is reachable from every wrong URL and indexable from none of them.
   const urls = pages
+    .filter((page) => page.kind !== 'notfound')
     .map((page) => {
       const lastmod = page.kind === 'post' ? `\n    <lastmod>${(page as Post).date}</lastmod>` : '';
       // The home page is the entry point; posts outrank the archive index.

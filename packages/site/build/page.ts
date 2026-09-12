@@ -155,6 +155,14 @@ const bodyFor = (page: Page, posts: Post[]): string => {
         `<div class="prose">${page.html}</div>` +
         `</article>`
       );
+    case 'notfound':
+      return (
+        `<article class="notfound">` +
+        `<p class="notfound__code" aria-hidden="true">404</p>` +
+        `<h1 class="notfound__title">${escapeHtml(page.title)}</h1>` +
+        `<div class="prose">${page.html}</div>` +
+        `</article>`
+      );
     default:
       return `<article class="page"><h1 class="page__title">${escapeHtml(page.title)}</h1>${tocHtml(page)}<div class="prose">${page.html}</div></article>`;
   }
@@ -181,6 +189,8 @@ export const renderPage = ({ page, posts, head, assets }: RenderPageOptions): st
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#fcfcfd">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0d10">
 <title>${escapeHtml(title)}</title>
 <meta name="description" content="${escapeHtml(page.description)}">
 <script>${THEME_BOOTSTRAP}</script>

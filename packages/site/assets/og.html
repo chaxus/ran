@@ -1,0 +1,55 @@
+<!doctype html>
+<!--
+  Source for the 1200x630 social card. Rendered to public/og.png by `pnpm -F site og`.
+
+  Kept as HTML rather than drawn in a design tool so the card stays in sync with the
+  site: same palette, same type stack, same wordmark. Changing the tagline here and
+  re-running the script is the whole update path.
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    width: 1200px; height: 630px;
+    background: #fcfcfd;
+    color: #15181d;
+    font-family: system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 76px 84px;
+    /* A hairline grid, barely there — the card should read as a page, not a poster. */
+    background-image:
+      linear-gradient(#eceff4 1px, transparent 1px),
+      linear-gradient(90deg, #eceff4 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .mark {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 34px; font-weight: 600; letter-spacing: -0.02em;
+  }
+  .mark .dim { color: #8b95a3; font-weight: 400; }
+  h1 {
+    font-size: 82px; line-height: 1.16; font-weight: 700; letter-spacing: -0.035em;
+    max-width: 16em;
+  }
+  .rule { width: 88px; height: 5px; background: #0b5fe0; border-radius: 3px; margin-bottom: 34px; }
+  .foot {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-size: 25px; color: #5a6472;
+  }
+  .foot .libs { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 23px; color: #8b95a3; }
+</style>
+</head>
+<body>
+  <p class="mark"><span class="dim">~/</span>chaxus</p>
+  <div>
+    <div class="rule"></div>
+    <h1>从零手写<br>前端基础设施</h1>
+  </div>
+  <div class="foot">
+    <span>解析器 · 编译器 · WASM · 组件库</span>
+    <span class="libs">ranui &nbsp;/&nbsp; ranuts</span>
+  </div>
+</body>
+</html>
