@@ -215,7 +215,17 @@ ${assets.js.map((src) => `<script type="module" src="${src}"></script>`).join('\
  * documentation site that is a white flash on every single navigation. Writes nothing
  * for "system", leaving `prefers-color-scheme` in charge.
  */
+/*
+ * Runs before first paint: restores the stored theme, and marks that script is running
+ * at all.
+ *
+ * The `js` class is what lets CSS hide something it expects script to bring back. A
+ * scroll-reveal that sets `opacity: 0` unconditionally is a bet that the observer will
+ * always run; when it does not, the content below the fold is simply gone, and a reader
+ * with JavaScript disabled has no way to know there was anything there.
+ */
 const THEME_BOOTSTRAP = `(function(){try{
+document.documentElement.classList.add('js');
 var t=localStorage.getItem('ran-theme');
 if(t==='dark'||t==='light'){var e=document.documentElement;e.setAttribute('data-ran-theme',t);e.setAttribute('theme',t);}
 }catch(e){}})();`;
