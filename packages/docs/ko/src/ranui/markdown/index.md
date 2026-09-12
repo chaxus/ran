@@ -2,37 +2,6 @@
 description: '스트리밍에 강한 Markdown 렌더러 웹 컴포넌트. 절반만 도착한 markdown을 닫고, 바뀐 블록만 다시 그리며, 코드(shiki)·Mermaid 다이어그램·수식을 품습니다.'
 ---
 
-<script setup>
-const quick = `# 안녕하세요
-
-**굵게**, *기울임*, [링크](https://github.com/chaxus/ran), 그리고 \`인라인 코드\`.
-
-\`\`\`ts
-const greet = (name: string): string => \`Hi \${name}\`;
-\`\`\`
-
-| 기능 | 지원 |
-| --- | --- |
-| 스트리밍 | ✅ |
-| Mermaid / 수식 | ✅ |`;
-const partial = '쓰다 만 *강조*, `인라인 코드`, 그리고 **아직 도착 중인 굵은 글씨';
-const code = `\`\`\`python
-def fib(n: int) -> int:
-    return n if n < 2 else fib(n - 1) + fib(n - 2)
-
-print(fib(10))
-\`\`\``;
-const rich = `\`\`\`mermaid
-graph LR; A[Prompt] --> B[Model]; B --> C[Tokens]; C --> D[r-markdown]
-\`\`\`
-
-$$
-E = mc^2
-$$
-
-인라인 \\(e^{i\\pi} + 1 = 0\\) 는 글과 함께 흐릅니다.`;
-</script>
-
 # Markdown
 
 Markdown을(**토큰 단위로 오는 AI 출력**까지) 프레임워크에 매이지 않는 웹 컴포넌트로 그립니다. `<r-markdown>`은 Vercel의 [Streamdown](https://streamdown.ai)을 본떴습니다. 텍스트가 흘러드는 동안 쓰다 만 `**bold`, `` `code ``, 링크, `$$` 수식을 즉석에서 닫고, 문서를 블록으로 쪼개 **바뀐 블록만** 다시 그립니다. 그래서 긴 답변이라도 토큰마다 처음부터 다시 파싱하지 않습니다.
@@ -44,7 +13,7 @@ Markdown을(**토큰 단위로 오는 AI 출력**까지) 프레임워크에 매�
 ## 빠른 시작
 
 <ran-demo>
-  <r-markdown copy highlight :content.prop="quick"></r-markdown>
+  <r-markdown copy highlight data-content="%23%20%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94%0A%0A%2A%2A%EA%B5%B5%EA%B2%8C%2A%2A%2C%20%2A%EA%B8%B0%EC%9A%B8%EC%9E%84%2A%2C%20%5B%EB%A7%81%ED%81%AC%5D%28https%3A%2F%2Fgithub.com%2Fchaxus%2Fran%29%2C%20%EA%B7%B8%EB%A6%AC%EA%B3%A0%20%60%EC%9D%B8%EB%9D%BC%EC%9D%B8%20%EC%BD%94%EB%93%9C%60.%0A%0A%60%60%60ts%0Aconst%20greet%20%3D%20%28name%3A%20string%29%3A%20string%20%3D%3E%20%60Hi%20%24%7Bname%7D%60%3B%0A%60%60%60%0A%0A%7C%20%EA%B8%B0%EB%8A%A5%20%7C%20%EC%A7%80%EC%9B%90%20%7C%0A%7C%20---%20%7C%20---%20%7C%0A%7C%20%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D%20%7C%20%E2%9C%85%20%7C%0A%7C%20Mermaid%20%2F%20%EC%88%98%EC%8B%9D%20%7C%20%E2%9C%85%20%7C"></r-markdown>
 </ran-demo>
 
 ```html
@@ -73,7 +42,7 @@ container.append(el);
 `mode="streaming"`(기본값)은 텍스트를 먼저 [remend](https://www.npmjs.com/package/remend)에 통과시킵니다. Streamdown에서 뽑아낸, 미완성 markdown을 마무리해 주는 조각입니다. 덕분에 절반만 받은 `**bold`는 별표가 그대로 보이는 대신 굵게 그려지고, `[text](https://exa`는 URL이 닫힐 때까지 평범한 텍스트로 남으며, `- ` 하나가 앞 문단을 제목으로 바꿔 버리는 일도 없습니다. 이미 완성된 문서라면 `mode="static"`으로 이 과정을 건너뛰고 한 번에 그리세요.
 
 <ran-demo>
-  <r-markdown caret :content.prop="partial"></r-markdown>
+  <r-markdown caret data-content="%EC%93%B0%EB%8B%A4%20%EB%A7%8C%20%2A%EA%B0%95%EC%A1%B0%2A%2C%20%60%EC%9D%B8%EB%9D%BC%EC%9D%B8%20%EC%BD%94%EB%93%9C%60%2C%20%EA%B7%B8%EB%A6%AC%EA%B3%A0%20%2A%2A%EC%95%84%EC%A7%81%20%EB%8F%84%EC%B0%A9%20%EC%A4%91%EC%9D%B8%20%EA%B5%B5%EC%9D%80%20%EA%B8%80%EC%94%A8"></r-markdown>
 </ran-demo>
 
 ```html
@@ -88,7 +57,7 @@ container.append(el);
 모든 코드 블록에는 언어 이름이 담긴 헤더가 붙고, 원한다면 복사·다운로드 버튼도 켤 수 있습니다. [shiki](https://shiki.style)로 문법을 강조하려면 `highlight`를 더하세요(지연 로드되며, 언어도 필요할 때 불러옵니다. 기본 테마는 `github-light` / `github-dark`로 페이지 테마를 따릅니다).
 
 <ran-demo>
-  <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
+  <r-markdown copy download line-numbers highlight data-content="%60%60%60python%0Adef%20fib%28n%3A%20int%29%20-%3E%20int%3A%0A%20%20%20%20return%20n%20if%20n%20%3C%202%20else%20fib%28n%20-%201%29%20%2B%20fib%28n%20-%202%29%0A%0Aprint%28fib%2810%29%29%0A%60%60%60"></r-markdown>
 </ran-demo>
 
 ```html
@@ -100,7 +69,7 @@ container.append(el);
 ## Mermaid와 수식
 
 <ran-demo>
-  <r-markdown :content.prop="rich"></r-markdown>
+  <r-markdown data-content="%60%60%60mermaid%0Agraph%20LR%3B%20A%5BPrompt%5D%20--%3E%20B%5BModel%5D%3B%20B%20--%3E%20C%5BTokens%5D%3B%20C%20--%3E%20D%5Br-markdown%5D%0A%60%60%60%0A%0A%24%24%0AE%20%3D%20mc%5E2%0A%24%24%0A%0A%EC%9D%B8%EB%9D%BC%EC%9D%B8%20%5C%28e%5E%7Bi%5Cpi%7D%20%2B%201%20%3D%200%5C%29%20%EB%8A%94%20%EA%B8%80%EA%B3%BC%20%ED%95%A8%EA%BB%98%20%ED%9D%90%EB%A6%85%EB%8B%88%EB%8B%A4."></r-markdown>
 </ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>`(전체 화면 지원. `copy` / `download`는 그대로 전달됩니다).

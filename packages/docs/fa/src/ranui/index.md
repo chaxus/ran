@@ -69,9 +69,6 @@ export const App = () => <r-button type="primary">Deploy</r-button>;
   <r-button type="primary" @click="deploy">Deploy</r-button>
 </template>
 
-<script setup>
-import 'ranui';
-</script>
 <!-- در پیکربندی ساخت، `r-` را به compilerOptions.isCustomElement بیفزایید. -->
 ```
 

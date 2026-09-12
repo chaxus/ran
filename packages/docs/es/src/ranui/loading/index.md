@@ -2,10 +2,6 @@
 description: 'El Loading de ranui (<r-loading>) muestra un indicador giratorio mientras hay contenido o una acción en marcha.'
 ---
 
-<script setup>
-import Loading from '../../../../vue/loading.vue'
-</script>
-
 # Loading
 
 Componente de carga con una colección de indicadores animados para señalar trabajo en marcha.

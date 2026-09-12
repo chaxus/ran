@@ -1,5 +1,3 @@
-import type { DefaultTheme } from 'vitepress';
-
 /**
  * How a sidebar/nav label is assembled from an invariant `name` and a translated string.
  *
@@ -73,5 +71,3 @@ export interface UiMessages {
   closeKey: string;
   footerMessage: string;
 }
-
-export type ThemeConfig = DefaultTheme.Config;

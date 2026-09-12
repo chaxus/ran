@@ -2,37 +2,6 @@
 description: 'وب‌کامپوننت رندر Markdown که برای استریم ساخته شده: markdownِ نیمه‌رسیده را می‌بندد، تنها بلوکِ تغییرکرده را دوباره می‌کشد و کد (shiki)، نمودار Mermaid و ریاضی را در خود جای می‌دهد.'
 ---
 
-<script setup>
-const quick = `# سلام
-
-کمی **پررنگ**، کمی *مورب*، یک [پیوند](https://github.com/chaxus/ran) و \`کد درون‌خطی\`.
-
-\`\`\`ts
-const greet = (name: string): string => \`Hi \${name}\`;
-\`\`\`
-
-| قابلیت | وضعیت |
-| --- | --- |
-| استریم | ✅ |
-| Mermaid / ریاضی | ✅ |`;
-const partial = '*تأکیدِ* نیمه‌تایپ‌شده، `کد درون‌خطی` و **پررنگی که هنوز در راه است';
-const code = `\`\`\`python
-def fib(n: int) -> int:
-    return n if n < 2 else fib(n - 1) + fib(n - 2)
-
-print(fib(10))
-\`\`\``;
-const rich = `\`\`\`mermaid
-graph LR; A[Prompt] --> B[Model]; B --> C[Tokens]; C --> D[r-markdown]
-\`\`\`
-
-$$
-E = mc^2
-$$
-
-عبارت درون‌خطی \\(e^{i\\pi} + 1 = 0\\) همراه متن جاری می‌شود.`;
-</script>
-
 # Markdown
 
 Markdown را (از جمله **خروجی توکن‌به‌توکن هوش مصنوعی**) به‌صورت یک وب‌کامپوننتِ مستقل از فریم‌ورک رسم می‌کند. `<r-markdown>` از روی [Streamdown](https://streamdown.ai) شرکت Vercel الگو گرفته است: تا وقتی متن در حال رسیدن است، `**bold`، `` `code ``، پیوندها و ریاضیِ `$$` نیمه‌تایپ‌شده را همان‌جا می‌بندد، سند را به بلوک‌ها می‌شکند و **فقط بلوکی را که تغییر کرده** دوباره می‌کشد؛ پس یک پاسخ بلند هرگز با هر توکن از ابتدا دوباره تحلیل نمی‌شود.
@@ -44,7 +13,7 @@ Markdown را (از جمله **خروجی توکن‌به‌توکن هوش مص
 ## شروع سریع
 
 <ran-demo>
-  <r-markdown copy highlight :content.prop="quick"></r-markdown>
+  <r-markdown copy highlight data-content="%23%20%D8%B3%D9%84%D8%A7%D9%85%0A%0A%DA%A9%D9%85%DB%8C%20%2A%2A%D9%BE%D8%B1%D8%B1%D9%86%DA%AF%2A%2A%D8%8C%20%DA%A9%D9%85%DB%8C%20%2A%D9%85%D9%88%D8%B1%D8%A8%2A%D8%8C%20%DB%8C%DA%A9%20%5B%D9%BE%DB%8C%D9%88%D9%86%D8%AF%5D%28https%3A%2F%2Fgithub.com%2Fchaxus%2Fran%29%20%D9%88%20%60%DA%A9%D8%AF%20%D8%AF%D8%B1%D9%88%D9%86%E2%80%8C%D8%AE%D8%B7%DB%8C%60.%0A%0A%60%60%60ts%0Aconst%20greet%20%3D%20%28name%3A%20string%29%3A%20string%20%3D%3E%20%60Hi%20%24%7Bname%7D%60%3B%0A%60%60%60%0A%0A%7C%20%D9%82%D8%A7%D8%A8%D9%84%DB%8C%D8%AA%20%7C%20%D9%88%D8%B6%D8%B9%DB%8C%D8%AA%20%7C%0A%7C%20---%20%7C%20---%20%7C%0A%7C%20%D8%A7%D8%B3%D8%AA%D8%B1%DB%8C%D9%85%20%7C%20%E2%9C%85%20%7C%0A%7C%20Mermaid%20%2F%20%D8%B1%DB%8C%D8%A7%D8%B6%DB%8C%20%7C%20%E2%9C%85%20%7C"></r-markdown>
 </ran-demo>
 
 ```html
@@ -73,7 +42,7 @@ container.append(el);
 `mode="streaming"` (پیش‌فرض) متن را نخست از [remend](https://www.npmjs.com/package/remend) می‌گذراند، همان پایان‌دهنده markdownِ ناتمام که از Streamdown بیرون کشیده شده است. بنابراین یک `**bold`ِ نیمه‌رسیده به‌جای ستاره‌های خام، پررنگ رسم می‌شود، `[text](https://exa` تا بسته‌شدن نشانی به‌صورت متن ساده می‌ماند، یک `- ` بند پیشین را به عنوان تبدیل نمی‌کند، و از این دست. برای سندهای تمام‌شده `mode="static"` بگذارید تا این مرحله رد شود و همه‌چیز یکجا رسم شود.
 
 <ran-demo>
-  <r-markdown caret :content.prop="partial"></r-markdown>
+  <r-markdown caret data-content="%2A%D8%AA%D8%A3%DA%A9%DB%8C%D8%AF%D9%90%2A%20%D9%86%DB%8C%D9%85%D9%87%E2%80%8C%D8%AA%D8%A7%DB%8C%D9%BE%E2%80%8C%D8%B4%D8%AF%D9%87%D8%8C%20%60%DA%A9%D8%AF%20%D8%AF%D8%B1%D9%88%D9%86%E2%80%8C%D8%AE%D8%B7%DB%8C%60%20%D9%88%20%2A%2A%D9%BE%D8%B1%D8%B1%D9%86%DA%AF%DB%8C%20%DA%A9%D9%87%20%D9%87%D9%86%D9%88%D8%B2%20%D8%AF%D8%B1%20%D8%B1%D8%A7%D9%87%20%D8%A7%D8%B3%D8%AA"></r-markdown>
 </ran-demo>
 
 ```html
@@ -88,7 +57,7 @@ container.append(el);
 هر بلوک کد یک سربرگ با نام زبان می‌گیرد و در صورت تمایل، دکمه‌های کپی و دانلود. برای برجسته‌سازی نحو با [shiki](https://shiki.style) اتریبیوت `highlight` را اضافه کنید (با تأخیر بارگذاری می‌شود؛ زبان‌ها هنگام نیاز می‌آیند؛ پیش‌فرض `github-light` / `github-dark` که از پوسته صفحه پیروی می‌کند).
 
 <ran-demo>
-  <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
+  <r-markdown copy download line-numbers highlight data-content="%60%60%60python%0Adef%20fib%28n%3A%20int%29%20-%3E%20int%3A%0A%20%20%20%20return%20n%20if%20n%20%3C%202%20else%20fib%28n%20-%201%29%20%2B%20fib%28n%20-%202%29%0A%0Aprint%28fib%2810%29%29%0A%60%60%60"></r-markdown>
 </ran-demo>
 
 ```html
@@ -100,7 +69,7 @@ container.append(el);
 ## Mermaid و ریاضی
 
 <ran-demo>
-  <r-markdown :content.prop="rich"></r-markdown>
+  <r-markdown data-content="%60%60%60mermaid%0Agraph%20LR%3B%20A%5BPrompt%5D%20--%3E%20B%5BModel%5D%3B%20B%20--%3E%20C%5BTokens%5D%3B%20C%20--%3E%20D%5Br-markdown%5D%0A%60%60%60%0A%0A%24%24%0AE%20%3D%20mc%5E2%0A%24%24%0A%0A%D8%B9%D8%A8%D8%A7%D8%B1%D8%AA%20%D8%AF%D8%B1%D9%88%D9%86%E2%80%8C%D8%AE%D8%B7%DB%8C%20%5C%28e%5E%7Bi%5Cpi%7D%20%2B%201%20%3D%200%5C%29%20%D9%87%D9%85%D8%B1%D8%A7%D9%87%20%D9%85%D8%AA%D9%86%20%D8%AC%D8%A7%D8%B1%DB%8C%20%D9%85%DB%8C%E2%80%8C%D8%B4%D9%88%D8%AF."></r-markdown>
 </ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>` (با تمام‌صفحه؛ `copy` / `download` پاس داده می‌شوند).

@@ -168,7 +168,30 @@ const mountIconGallery = (): void => {
   });
 };
 
+/**
+ * Hand the markdown samples to `<r-markdown>`.
+ *
+ * The source is URI-encoded in `data-content` rather than written into `content`
+ * directly, because these samples contain fenced code blocks and blank lines — either
+ * would end the surrounding HTML block in the markdown file, and the sample would be
+ * parsed as part of the page instead of reaching the component.
+ *
+ * Needing script here costs nothing that was not already lost: `<r-markdown>` renders in
+ * the browser, so a reader without JavaScript sees no demo either way.
+ */
+const mountMarkdownDemos = (): void => {
+  for (const el of document.querySelectorAll<HTMLElement>('r-markdown[data-content]')) {
+    const encoded = el.dataset.content ?? '';
+    try {
+      (el as HTMLElement & { content: string }).content = decodeURIComponent(encoded);
+    } catch {
+      // Malformed input would throw and take the rest of the page's setup with it.
+    }
+  }
+};
+
 export const mountDemos = (): void => {
+  mountMarkdownDemos();
   mountHome();
   mountGlass();
   mountIconGallery();

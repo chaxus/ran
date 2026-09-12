@@ -2,10 +2,6 @@
 description: 'ranui の Loading（<r-loading>）は、コンテンツや操作が進行中であることを回るインジケーターで示します。'
 ---
 
-<script setup>
-import Loading from '../../../../vue/loading.vue'
-</script>
-
 # Loading
 
 進行中の作業を示すアニメーションのインジケーターを集めたコンポーネントです。

@@ -2,10 +2,6 @@
 description: 'ranui 의 Loading(<r-loading>) 은 콘텐츠나 작업이 진행 중일 때 회전하는 표시를 보여 줍니다.'
 ---
 
-<script setup>
-import Loading from '../../../../vue/loading.vue'
-</script>
-
 # Loading
 
 진행 중인 작업을 알리는 애니메이션 표시를 모아 둔 로딩 컴포넌트입니다.

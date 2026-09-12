@@ -15,9 +15,9 @@
  * matches the parser's own html token, which means VitePress keeps rendering these pages
  * the old way while this renders them the new way, from one source.
  */
-import { homeCopy } from '../.vitepress/components/home-copy.ts';
-import { demoCopy } from '../.vitepress/components/demo-copy.ts';
-import { localeHref } from '../.vitepress/langs/locales.ts';
+import { homeCopy } from './langs/home-copy.ts';
+import { demoCopy } from './langs/demo-copy.ts';
+import { localeHref } from './langs/locales.ts';
 import type { LocaleDef } from './config.ts';
 import { resolveLinkFrom } from './content.ts';
 
@@ -64,6 +64,7 @@ export const componentRenderers = {
   HomeCinematic: () => renderHome(localeOrThrow()),
   GlassPlayground: () => renderGlassPlayground(localeOrThrow()),
   IconGallery: () => renderIconGallery(localeOrThrow()),
+  Loading: () => renderLoadingGallery(),
 };
 
 const esc = (s: string): string =>
@@ -327,6 +328,62 @@ export const renderIconGallery = (locale: LocaleDef): string => {
         `aria-label="${esc(t.copyLabel.replace('{name}', name))}">` +
         `<span class="icon-cell__glyph"><r-icon name="${name}" size="26"></r-icon></span>` +
         `<span class="icon-cell__name">${name}</span></button>`,
+    ).join('') +
+    `</div>`
+  );
+};
+
+// ── Loading gallery ─────────────────────────────────────────────────────────
+
+/** Every animation `<r-loading>` ships, in the order the component defines them. */
+const LOADING_NAMES = [
+  'stretch',
+  'rotate',
+  'double-bounce',
+  'cube',
+  'dot',
+  'triple-bounce',
+  'scale-out',
+  'circle',
+  'circle-line',
+  'square',
+  'pulse',
+  'solar',
+  'cube-fold',
+  'circle-fold',
+  'cube-grid',
+  'circle-turn',
+  'circle-rotate',
+  'circle-spin',
+  'dot-bar',
+  'dot-circle',
+  'line',
+  'dot-pulse',
+  'line-scale',
+  'text',
+  'cube-dim',
+  'dot-line',
+  'arc',
+  'drop',
+  'pacman',
+] as const;
+
+/**
+ * Was a Vue single-file component in `vue/`, imported by eight pages through a
+ * `<script setup>` block. It was a `v-for` over this list and nothing else — the last
+ * template-over-static-data in the site, and the last Vue in the markdown.
+ */
+export const renderLoadingGallery = (): string => {
+  // The heading was hard-coded English in the Vue component and is not in `demo-copy.ts`,
+  // so it renders in English on all eight language pages. Ported as-is rather than
+  // inventing eight translations — that is a content decision, not a migration one.
+  const heading = 'Move the mouse over the icon to see the loading animation';
+  return (
+    `<div class="loading-gallery"><h3 class="loading-gallery__head">${esc(heading)}</h3>` +
+    LOADING_NAMES.map(
+      (name) =>
+        `<div class="loading-cell"><div class="loading-cell__name">${name}</div>` +
+        `<div class="loading-cell__icon"><r-loading name="${name}"></r-loading></div></div>`,
     ).join('') +
     `</div>`
   );

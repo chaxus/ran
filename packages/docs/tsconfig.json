@@ -1,15 +1,6 @@
 {
   "exclude": ["node_modules/**", "**/*/dist/**", "public/**", "dist-next/**", "dist/**"],
-  "include": [
-    "**/*.ts",
-    "**/*.d.ts",
-    ".vitepress/**/*.ts",
-    ".vitepress/**/*.d.ts",
-    "**/*.vue",
-    "build/**/*.ts",
-    "client/**/*.ts",
-    "vite.config.ts"
-  ],
+  "include": ["**/*.ts", "**/*.d.ts"],
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler",

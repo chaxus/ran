@@ -2,37 +2,6 @@
 description: '面向流式输出的 Markdown 渲染 Web Component：自动补全未闭合的 Markdown、只重渲染变化的块，并内嵌代码高亮（shiki）、Mermaid 图表与数学公式。'
 ---
 
-<script setup>
-const quick = `# 你好
-
-一些 **粗体**、*斜体*、[链接](https://github.com/chaxus/ran) 和 \`行内代码\`。
-
-\`\`\`ts
-const greet = (name: string): string => \`Hi \${name}\`;
-\`\`\`
-
-| 特性 | 状态 |
-| --- | --- |
-| 流式渲染 | ✅ |
-| Mermaid / Math | ✅ |`;
-const partial = '半截的 *斜体*、`行内代码`，以及**还在到达中的粗体';
-const code = `\`\`\`python
-def fib(n: int) -> int:
-    return n if n < 2 else fib(n - 1) + fib(n - 2)
-
-print(fib(10))
-\`\`\``;
-const rich = `\`\`\`mermaid
-graph LR; A[提示词] --> B[模型]; B --> C[Token 流]; C --> D[r-markdown]
-\`\`\`
-
-$$
-E = mc^2
-$$
-
-Inline \\(e^{i\\pi} + 1 = 0\\) 与文字同行。`;
-</script>
-
 # Markdown
 
 以框架无关的 Web Component 渲染 Markdown，包括**逐 token 到达的 AI 输出**。`<r-markdown>` 参考 Vercel 的 [Streamdown](https://streamdown.ai) 设计：文本流式到达时会即时闭合半截的 `**粗体`、`` `代码 ``、链接和 `$$` 公式，把文档切成块并 **只重渲染发生变化的那一块**，长回复不会因为每个 token 都从头重新解析。
@@ -44,7 +13,7 @@ Inline \\(e^{i\\pi} + 1 = 0\\) 与文字同行。`;
 ## 快速开始
 
 <ran-demo>
-  <r-markdown copy highlight :content.prop="quick"></r-markdown>
+  <r-markdown copy highlight data-content="%23%20%E4%BD%A0%E5%A5%BD%0A%0A%E4%B8%80%E4%BA%9B%20%2A%2A%E7%B2%97%E4%BD%93%2A%2A%E3%80%81%2A%E6%96%9C%E4%BD%93%2A%E3%80%81%5B%E9%93%BE%E6%8E%A5%5D%28https%3A%2F%2Fgithub.com%2Fchaxus%2Fran%29%20%E5%92%8C%20%60%E8%A1%8C%E5%86%85%E4%BB%A3%E7%A0%81%60%E3%80%82%0A%0A%60%60%60ts%0Aconst%20greet%20%3D%20%28name%3A%20string%29%3A%20string%20%3D%3E%20%60Hi%20%24%7Bname%7D%60%3B%0A%60%60%60%0A%0A%7C%20%E7%89%B9%E6%80%A7%20%7C%20%E7%8A%B6%E6%80%81%20%7C%0A%7C%20---%20%7C%20---%20%7C%0A%7C%20%E6%B5%81%E5%BC%8F%E6%B8%B2%E6%9F%93%20%7C%20%E2%9C%85%20%7C%0A%7C%20Mermaid%20%2F%20Math%20%7C%20%E2%9C%85%20%7C"></r-markdown>
 </ran-demo>
 
 ```html
@@ -73,7 +42,7 @@ container.append(el);
 `mode="streaming"`（默认）会先用 [remend](https://www.npmjs.com/package/remend)（从 Streamdown 抽出的"未完成 Markdown 补全器"）处理文本：半截的 `**粗体` 渲染成粗体而不是裸星号，`[文字](https://exa` 在 URL 闭合前显示为纯文本，`- ` 不会把上一段变成标题……。已完成的文档可设 `mode="static"` 跳过这一步、整体一次渲染。
 
 <ran-demo>
-  <r-markdown caret :content.prop="partial"></r-markdown>
+  <r-markdown caret data-content="%E5%8D%8A%E6%88%AA%E7%9A%84%20%2A%E6%96%9C%E4%BD%93%2A%E3%80%81%60%E8%A1%8C%E5%86%85%E4%BB%A3%E7%A0%81%60%EF%BC%8C%E4%BB%A5%E5%8F%8A%2A%2A%E8%BF%98%E5%9C%A8%E5%88%B0%E8%BE%BE%E4%B8%AD%E7%9A%84%E7%B2%97%E4%BD%93"></r-markdown>
 </ran-demo>
 
 ```html
@@ -88,7 +57,7 @@ container.append(el);
 每个代码块都有语言标签头部，可选加复制 / 下载按钮。加 `highlight` 用 [shiki](https://shiki.style) 高亮（懒加载，语言按需加载；默认 `github-light` / `github-dark`，跟随页面主题）。
 
 <ran-demo>
-  <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
+  <r-markdown copy download line-numbers highlight data-content="%60%60%60python%0Adef%20fib%28n%3A%20int%29%20-%3E%20int%3A%0A%20%20%20%20return%20n%20if%20n%20%3C%202%20else%20fib%28n%20-%201%29%20%2B%20fib%28n%20-%202%29%0A%0Aprint%28fib%2810%29%29%0A%60%60%60"></r-markdown>
 </ran-demo>
 
 ```html
@@ -100,7 +69,7 @@ container.append(el);
 ## Mermaid 与公式
 
 <ran-demo>
-  <r-markdown :content.prop="rich"></r-markdown>
+  <r-markdown data-content="%60%60%60mermaid%0Agraph%20LR%3B%20A%5B%E6%8F%90%E7%A4%BA%E8%AF%8D%5D%20--%3E%20B%5B%E6%A8%A1%E5%9E%8B%5D%3B%20B%20--%3E%20C%5BToken%20%E6%B5%81%5D%3B%20C%20--%3E%20D%5Br-markdown%5D%0A%60%60%60%0A%0A%24%24%0AE%20%3D%20mc%5E2%0A%24%24%0A%0AInline%20%5C%28e%5E%7Bi%5Cpi%7D%20%2B%201%20%3D%200%5C%29%20%E4%B8%8E%E6%96%87%E5%AD%97%E5%90%8C%E8%A1%8C%E3%80%82"></r-markdown>
 </ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>`（带全屏；`copy` / `download` 会透传）。

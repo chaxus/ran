@@ -2,10 +2,6 @@
 description: 'ranui Loading（<r-loading>）在内容或操作进行中展示旋转加载指示。'
 ---
 
-<script setup>
-import Loading from '../../../../vue/loading.vue'
-</script>
-
 # Loading 加载
 
 提供一组动画指示器，用于展示进行中的操作。

@@ -132,18 +132,35 @@ a {
   text-decoration: none;
 }
 
+/*
+ * Visually hidden until focused.
+ *
+ * Not `left: -9999px`: in a right-to-left document the origin flips, so a far-negative
+ * offset extends the scrollable area instead of leaving it — the Persian pages scrolled
+ * 10,000px sideways because of this one rule. Clipping takes it out of the layout in
+ * both directions.
+ */
 .skip {
   position: absolute;
-  left: -9999px;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip:focus {
+  inset-inline-start: 16px;
   top: 8px;
   z-index: 100;
+  width: auto;
+  height: auto;
   padding: 10px 16px;
+  overflow: visible;
+  clip-path: none;
   background: var(--bg);
   border: 1px solid var(--accent);
   border-radius: 4px;
-}
-.skip:focus {
-  left: 16px;
 }
 
 /* ── Header ──────────────────────────────────────────────────────────────── */
@@ -447,11 +464,19 @@ a {
   overscroll-behavior: contain;
   background: var(--bg);
   border-inline-end: 1px solid var(--rule);
-  transform: translateX(-100%);
   transition: transform 0.2s ease;
 }
-[dir='rtl'] .sidebar {
-  transform: translateX(100%);
+/* Off-canvas only where the drawer exists. Declaring the transform unconditionally and
+   resetting it in the wide-screen block does not work: `[dir='rtl'] .sidebar` outranks a
+   bare `.sidebar` no matter which media query it sits in, so the Persian sidebar stayed
+   pushed 272px off the side and the page scrolled horizontally. */
+@media (max-width: 899px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  [dir='rtl'] .sidebar {
+    transform: translateX(100%);
+  }
 }
 .drawer__toggle:checked ~ .layout .sidebar,
 body:has(.drawer__toggle:checked) .sidebar {

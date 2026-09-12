@@ -68,9 +68,6 @@ export const App = () => <r-button type="primary">部署</r-button>;
   <r-button type="primary" @click="deploy">部署</r-button>
 </template>
 
-<script setup>
-import 'ranui';
-</script>
 <!-- 需要在构建配置的 compilerOptions.isCustomElement 里放行 `r-` 前缀。 -->
 ```
 

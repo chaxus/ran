@@ -1,14 +1,14 @@
 /**
  * The documentation site's own settings for the shared generator.
  *
- * Everything language-related is read from `.vitepress/langs/` rather than restated
+ * Everything language-related is read from `build/langs/` rather than restated
  * here. That registry is pure data and it is already the single list the whole site
  * reads; duplicating it during the migration would guarantee the two drift, and the
  * drift would be silent — a locale missing from one list simply stops being built.
  */
-import { LOCALES, ROOT_LOCALE } from '../.vitepress/langs/locales.ts';
-import type { LocaleDef } from '../.vitepress/langs/locales.ts';
-import { DESCRIPTION, GITHUB, HOME } from '../.vitepress/common/index.ts';
+import { LOCALES, ROOT_LOCALE } from './langs/locales.ts';
+import type { LocaleDef } from './langs/locales.ts';
+import { DESCRIPTION, GITHUB, HOME } from './common/index.ts';
 
 export { LOCALES, ROOT_LOCALE };
 export type { LocaleDef };

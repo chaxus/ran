@@ -2,37 +2,6 @@
 description: 'ストリーミングに強い Markdown レンダラーの Web Component。途中まで届いた markdown を閉じ、変わったブロックだけ描き直し、コード（shiki）・Mermaid 図・数式を埋め込みます。'
 ---
 
-<script setup>
-const quick = `# こんにちは
-
-**太字**、*斜体*、[リンク](https://github.com/chaxus/ran)、そして \`インラインコード\`。
-
-\`\`\`ts
-const greet = (name: string): string => \`Hi \${name}\`;
-\`\`\`
-
-| 機能 | 対応 |
-| --- | --- |
-| ストリーミング | ✅ |
-| Mermaid / 数式 | ✅ |`;
-const partial = '打ちかけの *強調*、`インラインコード`、そして **まだ届いている途中の太字';
-const code = `\`\`\`python
-def fib(n: int) -> int:
-    return n if n < 2 else fib(n - 1) + fib(n - 2)
-
-print(fib(10))
-\`\`\``;
-const rich = `\`\`\`mermaid
-graph LR; A[Prompt] --> B[Model]; B --> C[Tokens]; C --> D[r-markdown]
-\`\`\`
-
-$$
-E = mc^2
-$$
-
-インラインの \\(e^{i\\pi} + 1 = 0\\) は文章の中を流れます。`;
-</script>
-
 # Markdown
 
 Markdown（**トークン単位で届く AI の出力**も含めて）を、フレームワークに依存しない Web Component として描画します。`<r-markdown>` は Vercel の [Streamdown](https://streamdown.ai) を手本にしています。テキストが流れ込んでくるあいだ、打ちかけの `**bold`、`` `code ``、リンク、`$$` の数式をその場で閉じ、文書をブロックに分割して**変わったブロックだけ**を描き直します。だから長い回答でも、トークンが届くたびに先頭から読み直すことはありません。
@@ -44,7 +13,7 @@ Markdown（**トークン単位で届く AI の出力**も含めて）を、フ�
 ## クイックスタート
 
 <ran-demo>
-  <r-markdown copy highlight :content.prop="quick"></r-markdown>
+  <r-markdown copy highlight data-content="%23%20%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF%0A%0A%2A%2A%E5%A4%AA%E5%AD%97%2A%2A%E3%80%81%2A%E6%96%9C%E4%BD%93%2A%E3%80%81%5B%E3%83%AA%E3%83%B3%E3%82%AF%5D%28https%3A%2F%2Fgithub.com%2Fchaxus%2Fran%29%E3%80%81%E3%81%9D%E3%81%97%E3%81%A6%20%60%E3%82%A4%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E3%82%B3%E3%83%BC%E3%83%89%60%E3%80%82%0A%0A%60%60%60ts%0Aconst%20greet%20%3D%20%28name%3A%20string%29%3A%20string%20%3D%3E%20%60Hi%20%24%7Bname%7D%60%3B%0A%60%60%60%0A%0A%7C%20%E6%A9%9F%E8%83%BD%20%7C%20%E5%AF%BE%E5%BF%9C%20%7C%0A%7C%20---%20%7C%20---%20%7C%0A%7C%20%E3%82%B9%E3%83%88%E3%83%AA%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%20%7C%20%E2%9C%85%20%7C%0A%7C%20Mermaid%20%2F%20%E6%95%B0%E5%BC%8F%20%7C%20%E2%9C%85%20%7C"></r-markdown>
 </ran-demo>
 
 ```html
@@ -73,7 +42,7 @@ container.append(el);
 `mode="streaming"`（既定）は、まずテキストを [remend](https://www.npmjs.com/package/remend)（Streamdown から取り出された、未完成 markdown の終端処理）に通します。そのため受信途中の `**bold` はアスタリスクそのままではなく太字として描画され、`[text](https://exa` は URL が閉じるまで素のテキストのままで、`- ` が直前の段落を見出しに変えてしまうこともありません。完成した文書ではこの処理を飛ばして一気に描画するために `mode="static"` を設定してください。
 
 <ran-demo>
-  <r-markdown caret :content.prop="partial"></r-markdown>
+  <r-markdown caret data-content="%E6%89%93%E3%81%A1%E3%81%8B%E3%81%91%E3%81%AE%20%2A%E5%BC%B7%E8%AA%BF%2A%E3%80%81%60%E3%82%A4%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E3%82%B3%E3%83%BC%E3%83%89%60%E3%80%81%E3%81%9D%E3%81%97%E3%81%A6%20%2A%2A%E3%81%BE%E3%81%A0%E5%B1%8A%E3%81%84%E3%81%A6%E3%81%84%E3%82%8B%E9%80%94%E4%B8%AD%E3%81%AE%E5%A4%AA%E5%AD%97"></r-markdown>
 </ran-demo>
 
 ```html
@@ -88,7 +57,7 @@ container.append(el);
 どのコードブロックにも言語名のヘッダーが付き、任意でコピー／ダウンロードのボタンを出せます。[shiki](https://shiki.style) でシンタックスハイライトするには `highlight` を付けてください（遅延読み込み。言語も必要になったときに読み込まれ、既定のテーマは `github-light` / `github-dark` でページのテーマに追随します）。
 
 <ran-demo>
-  <r-markdown copy download line-numbers highlight :content.prop="code"></r-markdown>
+  <r-markdown copy download line-numbers highlight data-content="%60%60%60python%0Adef%20fib%28n%3A%20int%29%20-%3E%20int%3A%0A%20%20%20%20return%20n%20if%20n%20%3C%202%20else%20fib%28n%20-%201%29%20%2B%20fib%28n%20-%202%29%0A%0Aprint%28fib%2810%29%29%0A%60%60%60"></r-markdown>
 </ran-demo>
 
 ```html
@@ -100,7 +69,7 @@ container.append(el);
 ## Mermaid と数式
 
 <ran-demo>
-  <r-markdown :content.prop="rich"></r-markdown>
+  <r-markdown data-content="%60%60%60mermaid%0Agraph%20LR%3B%20A%5BPrompt%5D%20--%3E%20B%5BModel%5D%3B%20B%20--%3E%20C%5BTokens%5D%3B%20C%20--%3E%20D%5Br-markdown%5D%0A%60%60%60%0A%0A%24%24%0AE%20%3D%20mc%5E2%0A%24%24%0A%0A%E3%82%A4%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E3%81%AE%20%5C%28e%5E%7Bi%5Cpi%7D%20%2B%201%20%3D%200%5C%29%20%E3%81%AF%E6%96%87%E7%AB%A0%E3%81%AE%E4%B8%AD%E3%82%92%E6%B5%81%E3%82%8C%E3%81%BE%E3%81%99%E3%80%82"></r-markdown>
 </ran-demo>
 
 - ` ```mermaid ` → `<r-mermaid>`（全画面表示つき。`copy` / `download` はそのまま渡されます）。
