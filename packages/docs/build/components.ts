@@ -16,6 +16,7 @@
  * the old way while this renders them the new way, from one source.
  */
 import { homeCopy } from './langs/home-copy.ts';
+import { renderPackageFacts } from './package-facts.ts';
 import { demoCopy } from './langs/demo-copy.ts';
 import { localeHref } from './langs/locales.ts';
 import type { LocaleDef } from './config.ts';
@@ -25,6 +26,7 @@ import { resolveLinkFrom } from './links.ts';
 /** The component hooks the markdown renderer is configured with. */
 export const componentRenderers = {
   HomeCinematic: () => renderHome(currentLocale()),
+  PackageFacts: (attrs: string) => renderPackageFacts(attrs),
   GlassPlayground: () => renderGlassPlayground(currentLocale()),
   IconGallery: () => renderIconGallery(currentLocale()),
   Loading: () => renderLoadingGallery(),

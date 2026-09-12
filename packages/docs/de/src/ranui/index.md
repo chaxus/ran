@@ -10,14 +10,9 @@ Es gibt keinen Adapter und keine Framework-Version, die zusammenpassen müsste. 
 helles und dunkles Theme über Design-Tokens, Kapselung per Shadow DOM und Server-Rendering sind
 enthalten.
 
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://unpkg.com/ranui/dist/index.js"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran/tree/main/packages/ranui"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-- **npm**: <a href="https://www.npmjs.com/package/ranui">`ranui`</a> ·
-  **Quelltext**: <a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`packages/ranui`</a>
+<PackageFacts package="ranui" />
+
 - ranui ist **Alpha**: Versionen bringen Breaking Changes mit. Pinne eine exakte Version und lies vor
   dem Upgrade das [Änderungsprotokoll](/de/src/ranui/changelog).
 

@@ -10,14 +10,9 @@ React でも Vue でも Svelte でも Solid でも Astro でも、素の HTML �
 デザイントークンによるライト／ダークテーマ、Shadow DOM によるカプセル化、サーバーレンダリングを
 最初から備えています。
 
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://unpkg.com/ranui/dist/index.js"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran/tree/main/packages/ranui"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-- **npm**: <a href="https://www.npmjs.com/package/ranui">`ranui`</a> ·
-  **ソース**: <a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`packages/ranui`</a>
+<PackageFacts package="ranui" />
+
 - ranui は **alpha** です。バージョンには破壊的変更が入ります。バージョンを正確に固定し、
   アップグレード前に[更新履歴](/ja/src/ranui/changelog)を読んでください。
 
