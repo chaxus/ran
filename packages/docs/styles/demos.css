@@ -21,7 +21,7 @@
   position: relative;
   min-height: 320px;
   border-radius: 14px;
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--rule);
   overflow: hidden;
   touch-action: none;
 }
@@ -98,9 +98,9 @@
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--rule);
   border-radius: 12px;
-  background: var(--vp-c-bg-soft);
+  background: var(--bg-soft);
 }
 .gp-row {
   display: grid;
@@ -109,18 +109,18 @@
   gap: 10px;
 }
 .gp-label {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
 }
 .gp-row input[type='range'] {
   width: 100%;
-  accent-color: var(--vp-c-brand);
+  accent-color: var(--accent);
 }
 .gp-val {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -130,51 +130,51 @@
   align-items: center;
   grid-template-columns: none;
   padding-top: 4px;
-  border-top: 1px solid var(--vp-c-divider);
+  border-top: 1px solid var(--rule);
 }
 .gp-check {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 12.5px;
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
   cursor: pointer;
 }
 .gp-check input {
-  accent-color: var(--vp-c-brand);
+  accent-color: var(--accent);
 }
 .gp-reset {
   margin-left: auto;
   font-size: 12px;
   padding: 4px 12px;
   border-radius: 7px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--fg-muted);
   cursor: pointer;
 }
 .gp-reset:hover {
-  border-color: var(--vp-c-text-3);
-  color: var(--vp-c-text-1);
+  border-color: var(--fg-faint);
+  color: var(--fg);
 }
 
 /* ---- code ---- */
 .gp-code {
   position: relative;
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--rule);
   border-radius: 12px;
   overflow: hidden;
-  background: var(--vp-c-bg);
+  background: var(--bg);
 }
 .gp-code pre {
   margin: 0;
   padding: 16px 18px;
   overflow-x: auto;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 12.5px;
   line-height: 1.7;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 .gp-copy {
   position: absolute;
@@ -183,9 +183,9 @@
   font-size: 11.5px;
   padding: 4px 12px;
   border-radius: 7px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-2);
+  border: 1px solid var(--rule);
+  background: var(--bg-soft);
+  color: var(--fg-muted);
   cursor: pointer;
 }
 .gp-copy.done {
@@ -217,8 +217,8 @@
 }
 
 .icon-cell:hover {
-  border-color: var(--vp-c-brand-1);
-  background: var(--vp-c-bg);
+  border-color: var(--accent);
+  background: var(--bg);
   transform: translateY(-2px);
   box-shadow: 0 8px 22px -12px rgba(0, 0, 0, 0.35);
 }
@@ -228,12 +228,12 @@
 }
 
 .icon-cell:focus-visible {
-  outline: 2px solid var(--vp-c-brand-1);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 .icon-cell.is-copied {
-  border-color: var(--vp-c-brand-1);
+  border-color: var(--accent);
 }
 
 .icon-cell__glyph {
@@ -241,25 +241,25 @@
   align-items: center;
   justify-content: center;
   height: 34px;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 
 .icon-cell__name {
   max-width: 100%;
-  font-family: var(--vp-font-family-mono, ui-monospace, monospace);
+  font-family: var(--font-mono, ui-monospace, monospace);
   font-size: 12px;
   line-height: 1.2;
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
   text-align: center;
   word-break: break-word;
 }
 
 .icon-cell:hover .icon-cell__name {
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 
 .icon-cell.is-copied .icon-cell__name {
-  color: var(--vp-c-brand-1);
+  color: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {

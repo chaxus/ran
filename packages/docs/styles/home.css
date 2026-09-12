@@ -1,10 +1,11 @@
 /*
- * Compatibility layer for the two stylesheets lifted out of the Vue components.
+ * Landing and gallery surfaces.
  *
- * They were written against VitePress's theme variables — `--vp-c-text-1`, `--ink`,
- * `--hairline` and friends — and there is no VitePress here. Mapping the names onto this
- * site's own tokens is a dozen lines; renaming them through ~1,000 lines of selectors
- * would be a large diff with nothing to show for it and every opportunity to miss one.
+ * These carry three local names — `--ink`, `--surface`, `--hairline` — on top of the
+ * site's palette, which in turn derives from ranui's tokens. There used to be a second
+ * layer here aliasing VitePress's `--vp-c-*` names onto the same values; every rule now
+ * names the site variable directly, so there is one indirection instead of two and no
+ * trace of a theme this site no longer uses.
  *
  * The failure mode when a name is missing is worth recording: `--ink` feeds the
  * headline's `background-clip: text` gradient, so an undefined value made the gradient
@@ -13,17 +14,6 @@
 .cine,
 .gp,
 .icon-gallery {
-  --vp-c-text-1: var(--fg);
-  --vp-c-text-2: var(--fg-muted);
-  --vp-c-text-3: var(--fg-faint);
-  --vp-c-bg: var(--bg);
-  --vp-c-bg-alt: var(--bg-soft);
-  --vp-c-bg-soft: var(--bg-soft);
-  --vp-c-divider: var(--rule);
-  --vp-c-brand: var(--accent);
-  --vp-c-brand-1: var(--accent);
-  --vp-font-family-base: var(--font-sans);
-  --vp-font-family-mono: var(--font-mono);
   --ink: var(--fg);
   --surface: var(--bg-soft);
   --hairline: var(--rule);
@@ -53,10 +43,10 @@
    mode is just the token scale flipping (bright ink text on near-black). */
 .cine {
   --container: 1120px;
-  --hairline: var(--vp-c-divider);
-  --ink: var(--vp-c-text-1);
+  --hairline: var(--rule);
+  --ink: var(--fg);
   /* card surface, lifted one step off the page so dark mode reads clearly */
-  --surface: var(--vp-c-bg-soft);
+  --surface: var(--bg-soft);
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -105,7 +95,7 @@
 .grid {
   position: absolute;
   inset: -10%;
-  background-image: radial-gradient(var(--vp-c-divider) 1px, transparent 1px);
+  background-image: radial-gradient(var(--rule) 1px, transparent 1px);
   background-size: 28px 28px;
   opacity: 0.5;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 72%);
@@ -131,7 +121,7 @@
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.02em;
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
   padding: 6px 14px;
   border: 1px solid var(--hairline);
   border-radius: 999px;
@@ -146,7 +136,7 @@
 }
 .headline {
   margin: 24px 0 0;
-  font-family: var(--vp-font-family-base);
+  font-family: var(--font-sans);
   /*
    * Sized against the column it sits in, not the viewport. At 72px this headline wrapped
    * to five lines in a 554px column and pushed everything else below the fold; the ceiling
@@ -190,7 +180,7 @@
   max-width: 540px;
   font-size: 16px;
   line-height: 1.72;
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
 }
 
 /* hero copy blocks: fade-up with staggered delay */
@@ -218,13 +208,13 @@
   border-radius: 10px;
   border: 1px solid var(--hairline);
   background: var(--surface);
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 13.5px;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 .cmd code::before {
   content: '$ ';
-  color: var(--vp-c-text-3);
+  color: var(--fg-faint);
 }
 .copy {
   flex: 0 0 auto;
@@ -234,15 +224,15 @@
   height: 30px;
   border-radius: 7px;
   border: 1px solid var(--hairline);
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
+  background: var(--bg);
+  color: var(--fg-muted);
   cursor: pointer;
   /* palette props change instantly on hover — never transition color across a
      theme flip, or light/dark switching fades element-by-element */
 }
 .copy:hover {
-  color: var(--vp-c-text-1);
-  border-color: var(--vp-c-text-3);
+  color: var(--fg);
+  border-color: var(--fg-faint);
 }
 .copy.done {
   color: var(--ran-color-success, #28a948);
@@ -286,12 +276,12 @@
   transform: translateX(3px);
 }
 .btn-ghost {
-  color: var(--vp-c-text-1);
+  color: var(--fg);
   border: 1px solid var(--hairline);
   background: var(--surface);
 }
 .btn-ghost:hover {
-  border-color: var(--vp-c-text-3);
+  border-color: var(--fg-faint);
   transform: translateY(-1px);
 }
 
@@ -310,14 +300,13 @@
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 11.5px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--vp-c-text-2);
-  border-bottom: 1px solid var(--hairline);
-  background: var(--vp-c-bg-alt);
+  color: var(--fg-muted);
+  border-bottom: 1px solid var(--rule);
 }
 .live-dot {
   width: 8px;
@@ -356,7 +345,7 @@
 .live-progress {
   width: 100%;
   --ran-progress-track-height: 6px;
-  --ran-progress-fill-background: linear-gradient(90deg, var(--vp-c-text-3), var(--ink));
+  --ran-progress-fill-background: linear-gradient(90deg, var(--fg-faint), var(--ink));
 }
 .live-loading {
   --loading-circle-line-border-width: 22px;
@@ -375,7 +364,7 @@
 .live-skeleton span {
   height: 34px;
   border-radius: 8px;
-  background: linear-gradient(90deg, var(--vp-c-bg-alt), var(--vp-c-divider), var(--vp-c-bg-alt));
+  background: linear-gradient(90deg, var(--bg-soft), var(--rule), var(--bg-soft));
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }
@@ -396,7 +385,7 @@
 .live-note {
   padding: 12px 20px 16px;
   font-size: 12.5px;
-  color: var(--vp-c-text-3);
+  color: var(--fg-faint);
 }
 
 /* ---------- scroll reveal ---------- */
@@ -438,18 +427,18 @@
   border-bottom: 1px solid var(--hairline);
 }
 .stat {
-  background: var(--vp-c-bg);
+  background: var(--bg);
   text-align: center;
   padding: 30px 12px;
 }
 .stat-num {
   display: block;
-  font-family: var(--vp-font-family-base);
+  font-family: var(--font-sans);
   font-size: clamp(30px, 4.4vw, 42px);
   font-weight: 680;
   letter-spacing: -0.02em;
   line-height: 1;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
   font-variant-numeric: tabular-nums;
 }
 .stat-label {
@@ -457,7 +446,7 @@
   margin-top: 8px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--vp-c-text-3);
+  color: var(--fg-faint);
 }
 
 /* ---------- pillars: subtle tilt ---------- */
@@ -466,18 +455,24 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  perspective: 1000px;
 }
+/*
+ * Three ways in, not three cards.
+ *
+ * These are cells in a gallery — §11's example of what a box is *not* for. Bordered and
+ * filled, they read as three separate objects competing with the hero directly above,
+ * and the 3D tilt and hover spotlight spent the page's whole emphasis budget on
+ * navigation furniture. A shared top rule, the column spine, and a link that responds on
+ * hover say the same thing with nothing drawn around it.
+ */
 .pillar {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 30px;
-  border-radius: 14px;
-  border: 1px solid var(--hairline);
-  background: var(--surface);
+  padding: 30px 30px 30px 0;
+  border-top: 1px solid var(--rule);
   overflow: hidden;
-  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+
   /* motion props only — border-color changes instantly on hover; box-shadow
      uses theme-stable rgba so neither drags on a theme flip */
   transition:
@@ -486,40 +481,17 @@
     opacity 0.7s var(--ran-motion-ease-smooth, ease);
   transform-style: preserve-3d;
 }
-.pillar .spotlight {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--ran-motion-duration-base, 0.25s) var(--ran-motion-ease-smooth, ease);
-  background: radial-gradient(
-    240px circle at var(--mx, 50%) var(--my, 0),
-    color-mix(in srgb, var(--ink) 8%, transparent),
-    transparent 60%
-  );
-}
-.pillar:hover {
-  border-color: var(--vp-c-text-3);
-  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.32);
-}
-.pillar:hover .spotlight {
-  opacity: 1;
-}
 .pillar > * {
   position: relative;
-  transform: translateZ(18px);
 }
 .pillar-icon {
-  width: 44px;
-  height: 44px;
+  width: 26px;
+  height: 26px;
   display: grid;
   place-items: center;
-  border-radius: 11px;
-  color: var(--vp-c-text-1);
-  border: 1px solid var(--hairline);
-  background: var(--vp-c-bg);
+  color: var(--fg-muted);
 }
-.pillar-icon :deep(svg) {
+.pillar-icon svg {
   width: 22px;
   height: 22px;
 }
@@ -528,14 +500,14 @@
   font-size: 21px;
   font-weight: 640;
   letter-spacing: -0.01em;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
   border: 0;
 }
 .pillar p {
   margin: 10px 0 0;
   font-size: 14px;
   line-height: 1.65;
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
   flex: 1;
 }
 .pillar-more {
@@ -545,7 +517,7 @@
   gap: 5px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 .pillar-more svg {
   transition: transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, ease);
@@ -565,21 +537,21 @@
 }
 .kicker {
   display: block;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--vp-c-text-3);
+  color: var(--fg-faint);
 }
 .sec-head h2 {
   margin: 12px 0 0;
-  font-family: var(--vp-font-family-base);
+  font-family: var(--font-sans);
   font-size: clamp(26px, 3.6vw, 38px);
   font-weight: 680;
   letter-spacing: -0.025em;
   line-height: 1.16;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
   border: 0;
   padding: 0;
 }
@@ -588,22 +560,25 @@
   max-width: 560px;
   font-size: 15px;
   line-height: 1.65;
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
 }
 
 /* ---------- capabilities bento ---------- */
 .bento {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--hairline);
-  border: 1px solid var(--hairline);
-  border-radius: 14px;
-  overflow: hidden;
+  /* The internal rule is the only boundary these need — the section heading above and
+     the row hairlines inside already say where this starts and how it is divided. An
+     outer frame was a third statement of the same thing. */
+  gap: 0;
+  border-top: 1px solid var(--rule);
 }
 .caps-col {
-  padding: 28px 30px;
-  background: var(--vp-c-bg);
+  padding: 28px 30px 28px 0;
+}
+.caps-col + .caps-col {
+  padding-inline: 30px 0;
+  border-inline-start: 1px solid var(--rule);
 }
 .caps-col-head {
   display: flex;
@@ -614,17 +589,17 @@
   border-bottom: 1px solid var(--hairline);
 }
 .caps-lib {
-  font-family: var(--vp-font-family-base);
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 660;
   letter-spacing: -0.01em;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 .caps-lib-tag {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 11.5px;
   font-weight: 500;
-  color: var(--vp-c-text-3);
+  color: var(--fg-faint);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -646,7 +621,7 @@
   margin-top: 2px;
   width: 20px;
   height: 20px;
-  color: var(--vp-c-text-3);
+  color: var(--fg-faint);
 }
 .caps-ico :deep(svg) {
   width: 20px;
@@ -661,75 +636,76 @@
 .caps-name {
   font-size: 14px;
   font-weight: 600;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 .caps-name code {
   margin-left: 4px;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 11.5px;
   font-weight: 500;
-  color: var(--vp-c-text-3);
-  background: var(--vp-c-bg-alt);
+  color: var(--fg-faint);
+  background: var(--bg-soft);
   padding: 1px 6px;
   border-radius: 5px;
 }
 .caps-desc {
   font-size: 13px;
   line-height: 1.55;
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
 }
 
 /* ---------- get started ---------- */
 .panel {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--hairline);
-  border: 1px solid var(--hairline);
-  border-radius: 14px;
-  overflow: hidden;
+  /* The internal rule is the only boundary these need — the section heading above and
+     the row hairlines inside already say where this starts and how it is divided. An
+     outer frame was a third statement of the same thing. */
+  gap: 0;
+  border-top: 1px solid var(--rule);
 }
 .code-cell {
   display: flex;
   flex-direction: column;
-  background: var(--vp-c-bg);
+}
+.code-cell + .code-cell {
+  border-inline-start: 1px solid var(--rule);
 }
 .code-head {
-  padding: 12px 20px;
-  font-family: var(--vp-font-family-mono);
+  padding: 12px 20px 12px 0;
+  font-family: var(--font-mono);
   font-size: 11.5px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--vp-c-text-2);
-  border-bottom: 1px solid var(--hairline);
-  background: var(--vp-c-bg-alt);
+  color: var(--fg-muted);
+  border-bottom: 1px solid var(--rule);
 }
 .snippet {
   flex: 1;
   margin: 0;
   padding: 20px 22px;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.75;
   overflow-x: auto;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 .snippet .c-com {
-  color: var(--vp-c-text-3);
+  color: var(--fg-faint);
 }
 .snippet .c-kw {
-  color: var(--vp-c-text-1);
+  color: var(--fg);
   font-weight: 600;
 }
 .snippet .c-str {
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
 }
 .snippet .c-tag {
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 .snippet .c-attr {
-  color: var(--vp-c-text-3);
+  color: var(--fg-faint);
 }
 
 /* ---------- feature strip ---------- */
@@ -743,7 +719,7 @@
   border-bottom: 1px solid var(--hairline);
 }
 .feature {
-  background: var(--vp-c-bg);
+  background: var(--bg);
   padding: 24px 24px;
 }
 .feature-head {
@@ -755,7 +731,7 @@
   flex: 0 0 auto;
   width: 18px;
   height: 18px;
-  color: var(--vp-c-text-3);
+  color: var(--fg-faint);
 }
 .feature-icon :deep(svg) {
   width: 18px;
@@ -765,13 +741,13 @@
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: var(--vp-c-text-1);
+  color: var(--fg);
 }
 .feature p {
   margin: 8px 0 0;
   font-size: 13px;
   line-height: 1.55;
-  color: var(--vp-c-text-2);
+  color: var(--fg-muted);
 }
 
 /* ---------- responsive ---------- */

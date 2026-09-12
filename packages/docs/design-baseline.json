@@ -9,12 +9,12 @@
     "bare-colour": {
       "styles/demos.css": 10,
       "styles/docs.css": 4,
-      "styles/home.css": 5
+      "styles/home.css": 4
     },
     "spacing-scale": {
       "styles/demos.css": 23,
       "styles/docs.css": 50,
-      "styles/home.css": 59
+      "styles/home.css": 57
     },
     "sizing-scale": {},
     "mouse-only-drag": {},

@@ -36,23 +36,6 @@ const mountHome = (): void => {
     wireCopy(button, button.dataset.copy ?? '');
   }
 
-  // A subtle 3D tilt that follows the pointer across a card.
-  for (const card of root.querySelectorAll<HTMLElement>('[data-tilt]')) {
-    card.addEventListener('pointermove', (event) => {
-      const r = card.getBoundingClientRect();
-      const mx = event.clientX - r.left;
-      const my = event.clientY - r.top;
-      card.style.setProperty('--mx', `${mx}px`);
-      card.style.setProperty('--my', `${my}px`);
-      card.style.setProperty('--rx', `${((my / r.height) * 2 - 1) * -3}deg`);
-      card.style.setProperty('--ry', `${((mx / r.width) * 2 - 1) * 3}deg`);
-    });
-    card.addEventListener('pointerleave', () => {
-      card.style.setProperty('--rx', '0deg');
-      card.style.setProperty('--ry', '0deg');
-    });
-  }
-
   const reveals = [...root.querySelectorAll<HTMLElement>('[data-reveal]')];
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) {
