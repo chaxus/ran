@@ -2,9 +2,9 @@
 
 Personal homepage and blog, published to **https://chaxus.com**.
 
-Unlike `packages/docs` (VitePress), this site is built by **its own static site generator**
-in `build/`, on top of ranui. It exists to prove that generator at a size where a mistake
-is cheap, before anyone proposes pointing it at the 1,393-page documentation site.
+This site is built by **ranpress**, the generator in `packages/ranpress`, with its policy
+in `build/`. It was the proving ground for that generator at a size where a mistake is
+cheap; `packages/docs` — 1,393 pages, eight languages — now runs on the same engine.
 
 ```
 packages/site/
@@ -17,7 +17,8 @@ packages/site/
 │   ├── seo.ts          # per-page head, sitemap, RSS, llms.txt, robots.txt
 │   ├── build.ts        # the driver
 │   ├── verify.ts       # post-build checks — fails the deploy, not the reader
-│   └── dev.ts          # rebuild-on-change, served the way the host serves
+│   ├── dev.ts          # rebuild-on-change, served the way the host serves
+│   └── preview.ts      # serve the built dist/ exactly as the host will
 ├── content/        # index.md, about.md, 404.md, blog/*.md
 ├── client/         # the one client bundle
 ├── styles/         # site.css — the whole stylesheet, no preprocessor
@@ -31,9 +32,15 @@ packages/site/
 ```sh
 pnpm -F site dev      # http://localhost:4173, drafts included, rebuild on change
 pnpm -F site build    # generate into dist/ and verify
+pnpm -F site preview  # http://localhost:4174, serve the built dist/ — builds nothing
 pnpm -F site verify   # re-run the checks against an existing dist/
 pnpm -F site og       # regenerate og.png and the PNG icons (needs Chromium)
 ```
+
+`dev` and `preview` both resolve URLs the way Cloudflare Pages does, including its
+redirects — see `packages/ranpress/README.md` for the table. `preview` is the one to reach
+for before a deploy: it serves the real built bytes and nothing else, so a page that only
+works because the dev server just rebuilt it has nowhere to hide.
 
 `og` is deliberately not part of `build`: the card and the icons change when the
 wordmark or the tagline changes, which is close to never, and making every deploy depend

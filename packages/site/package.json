@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx build/dev.ts",
+    "preview": "tsx build/preview.ts",
     "build": "sh ./bin/build.sh",
     "verify": "tsx build/verify.ts",
     "tsc": "tsc --noEmit",

@@ -10,6 +10,31 @@ Most of what is non-obvious here is not VitePress — it is the SEO/GEO machiner
 generated pages, and the Service Worker. Read the relevant section before changing any of it;
 each carries a failure mode that is silent.
 
+> **Stale below this line.** This file still describes the VitePress/Vue stack. The site
+> now runs on **ranpress** (`packages/ranpress`) with its policy in `build/`; there is no
+> `.vitepress/`, no Vue and no hydration. The locale registry moved to
+> `build/langs/locales.ts`. Treat any VitePress-specific instruction here as historical
+> until this file is rewritten.
+
+---
+
+## Commands
+
+```sh
+pnpm -F docs dev      # http://localhost:4173 — build, watch the eight prose trees, serve
+pnpm -F docs build    # generate into dist/, then verify
+pnpm -F docs preview  # http://localhost:4174 — serve the built dist/, builds nothing
+```
+
+`dev` and `preview` resolve URLs the way Cloudflare Pages does, **including its redirects**:
+`/src/ranui/button` is a 308 to `/src/ranui/button/` when the page is a directory index, and
+a direct 200 when it is a leaf. That fidelity is the point — a generic static server hides
+exactly the mismatch that once shipped 904 canonicals naming a URL the host bounces. See
+`packages/ranpress/README.md` for the resolution table.
+
+Reach for `preview` before a deploy: it serves the real built bytes and nothing else, so a
+page that only works because the dev server just rebuilt it has nowhere to hide.
+
 ---
 
 ## Layout
