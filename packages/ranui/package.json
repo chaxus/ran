@@ -165,6 +165,7 @@
     "build:bundle": "vite build -c ./build/config.bundle.ts",
     "build:iife": "tsx ./bin/build-iife.ts",
     "prepublish": "npm run build",
+    "design:bundle": "tsx ./bin/design-bundle.ts",
     "test": "sh ./bin/test.sh",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",

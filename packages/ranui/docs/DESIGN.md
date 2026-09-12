@@ -59,6 +59,32 @@ target for every entry is zero.
 
 ---
 
+## Looking at the whole system at once
+
+`pnpm -F ranui design:bundle` builds a browsable design-system bundle — one card per
+component, plus colour, typography, spacing, radius/elevation and motion — for upload to
+[Claude Design](https://claude.ai/design) with the `DesignSync` tool.
+
+```sh
+pnpm -F docs build && pnpm -F docs preview   # terminal 1 — supplies the rendered components
+pnpm -F ranui design:bundle                  # terminal 2 — writes packages/ranui/design-bundle/
+```
+
+**Every card is real rendered output, never a drawing of one.** The docs site is opened in
+Chromium, each component's shadow tree is serialized into a Declarative Shadow DOM
+template, and the stylesheets that tree adopted are inlined beside it — so a card renders
+with JavaScript disabled and without ranui on the page, and cannot claim an appearance the
+component does not have. Token values are read back per theme with `getComputedStyle`
+rather than copied out of the stylesheets, so a swatch cannot show a value the system no
+longer resolves to.
+
+A component whose docs page has no live `<ran-demo>` gets no card, and the script names
+it. Seven currently qualify — `attachments`, `conversation`, `preview`, `reasoning`,
+`router`, `tool-card`, `voice-button` — which is worth fixing in the docs, not in the
+bundler: a component nobody can see rendered is a component nobody can review.
+
+---
+
 ## 1. Color — a state ladder, not a palette
 
 Each hue is a **10-step scale** (`100`–`1000`). Every step has **one fixed job**, so interaction states are decided up front:
