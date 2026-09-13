@@ -215,7 +215,7 @@ const actions = Div()
 
 ## Reactive Primitives (`builder/signal.ts`)
 
-Fine-grained reactivity inspired by SwiftUI's `@Observable` and Solid.js signals. Reading a signal inside `createEffect` or `computed` automatically establishes a dependency — no manual subscription needed. See [`docs/BUILDER.md`](../docs/BUILDER.md) for the full guide (ownership, reactive `ElementBuilder` bindings, MPA/SPA teardown).
+Fine-grained reactivity inspired by SwiftUI's `@Observable` and Solid.js signals. Reading a signal inside `createEffect` or `computed` automatically establishes a dependency — no manual subscription needed. See [`ranvi`](../../ranvi/README.md) for the full guide (ownership, reactive `ElementBuilder` bindings, MPA/SPA teardown).
 
 ```ts
 import {

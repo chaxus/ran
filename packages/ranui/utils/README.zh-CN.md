@@ -215,7 +215,7 @@ const actions = Div()
 
 ## 响应式原语 (`builder/signal.ts`)
 
-细粒度响应式，设计参考 SwiftUI `@Observable` 和 Solid.js signals。在 `createEffect` 或 `computed` 中读取 signal 会自动建立依赖关系，无需手动订阅。完整指南（所有权、`ElementBuilder` 响应式绑定、MPA/SPA 销毁）见 [`docs/BUILDER.md`](../docs/BUILDER.md)。
+细粒度响应式，设计参考 SwiftUI `@Observable` 和 Solid.js signals。在 `createEffect` 或 `computed` 中读取 signal 会自动建立依赖关系，无需手动订阅。完整指南（所有权、`ElementBuilder` 响应式绑定、MPA/SPA 销毁）见 [`ranvi`](../../ranvi/README.md)。
 
 ```ts
 import {
