@@ -308,7 +308,7 @@ window.message?.success({
 
 ### 반응형 부품
 
-`signal`, `createEffect`, `computed`, `batch`, `untrack`과 소유 계층(`createRoot`, `onCleanup`, `getOwner`, `runWithOwner`)이 DOM builder와 나란히 들어 있습니다. 프레임워크 없이 반응하는 화면 조각을 짜기 위한 것입니다. 설계는 SwiftUI의 `@Observable`을 본뜨되 Solid.js식 보장을 갖췄습니다. 이펙트는 다시 돌기 전에 낡은 구독을 알아서 치웁니다. `batch()`는 여러 쓰기를 한 번의 반영으로 모읍니다. `computed`는 **게으르고 값으로 메모**됩니다(아무도 읽지 않는 메모는 한 번도 계산되지 않고, 값이 실제로 달라졌을 때만 딸린 것들을 깨웁니다). 그리고 이펙트와 메모, 바인딩은 모두 자기 범위가 주인이라, `createRoot` 하나를 버리면 거기서 태어난 것이 한 번의 호출로 전부 걷힙니다. 페이지나 라우트를 접는 단위가 바로 이것입니다. `ElementBuilder`의 체이닝 메서드(`text`, `attr`, `class` 등)는 시그널 게터도 받아, 알아서 갱신되는 바인딩이 됩니다. 자세한 안내: [`ranvi`](../ranvi/README.md).
+`signal`, `createEffect`, `computed`, `batch`, `untrack`과 소유 계층(`createRoot`, `onCleanup`, `getOwner`, `runWithOwner`)이 DOM builder와 나란히 들어 있습니다. 프레임워크 없이 반응하는 화면 조각을 짜기 위한 것입니다. 설계는 SwiftUI의 `@Observable`을 본뜨되 Solid.js식 보장을 갖췄습니다. 이펙트는 다시 돌기 전에 낡은 구독을 알아서 치웁니다. `batch()`는 여러 쓰기를 한 번의 반영으로 모읍니다. `computed`는 **게으르고 값으로 메모**됩니다(아무도 읽지 않는 메모는 한 번도 계산되지 않고, 값이 실제로 달라졌을 때만 딸린 것들을 깨웁니다). 그리고 이펙트와 메모, 바인딩은 모두 자기 범위가 주인이라, `createRoot` 하나를 버리면 거기서 태어난 것이 한 번의 호출로 전부 걷힙니다. 페이지나 라우트를 접는 단위가 바로 이것입니다. `ElementBuilder`의 체이닝 메서드(`text`, `attr`, `class` 등)는 시그널 게터도 받아, 알아서 갱신되는 바인딩이 됩니다. 자세한 안내: [`ranview`](../ranview/README.md).
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';

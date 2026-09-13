@@ -1,5 +1,5 @@
 /**
- * The builder now lives in its own package, `ranvi`.
+ * The builder now lives in its own package, `ranview`.
  *
  * This file stays as a re-export so nothing in ranui had to change: 84 modules import
  * `@/utils/builder`, and `ranui/builder` is a published entry point that consumers use.
@@ -11,4 +11,4 @@
  * ranui, and with it a video player, a diagram renderer and a maths typesetter: 242 MB of
  * transitive dependencies for a file that depends on one function.
  */
-export * from 'ranvi';
+export * from 'ranview';

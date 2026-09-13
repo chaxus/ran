@@ -269,7 +269,9 @@ const mountKeyedList = <T>(parent: Node, spec: ForSpec<T>): void => {
       // duplicate — deterministic and leak-free — and warn in dev.
       if (next.has(k)) {
         if (isDev()) {
-          console.error(`[ranvi For] duplicate key "${String(k)}" — keys must be unique; ignoring the duplicate item.`);
+          console.error(
+            `[ranview For] duplicate key "${String(k)}" — keys must be unique; ignoring the duplicate item.`,
+          );
         }
         return;
       }
