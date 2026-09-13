@@ -268,8 +268,8 @@ const mountKeyedList = <T>(parent: Node, spec: ForSpec<T>): void => {
       // would orphan the first (untracked → never removed/disposed). Ignore the
       // duplicate — deterministic and leak-free — and warn in dev.
       if (next.has(k)) {
-        if (import.meta.env.DEV) {
-          console.error(`[ranui For] duplicate key "${String(k)}" — keys must be unique; ignoring the duplicate item.`);
+        if (isDev()) {
+          console.error(`[ranvi For] duplicate key "${String(k)}" — keys must be unique; ignoring the duplicate item.`);
         }
         return;
       }
@@ -457,6 +457,16 @@ const SVG_ONLY_TAGS = new Set([
   'tspan',
   'use',
 ]);
+
+/**
+ * True in a dev build, without needing `vite/client` in the consumer's tsconfig.
+ *
+ * This package exports TypeScript source to workspace consumers, so its types are checked
+ * in *their* project. A bare `import.meta.env.DEV` therefore fails to compile anywhere
+ * that has not declared Vite's ambient types — which is every consumer that does not
+ * happen to use Vite.
+ */
+const isDev = (): boolean => (import.meta as { env?: { DEV?: boolean } }).env?.DEV === true;
 
 export class ElementBuilder<T extends HTMLElement = HTMLElement> {
   private el: T;
@@ -715,12 +725,15 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
 export class ShadowBuilder<T extends HTMLElement = HTMLElement> {
   private root: ShadowRoot;
   private hostEl: T;
-  private options: ShadowRootInit;
 
-  constructor(host: T, root: ShadowRoot, options: ShadowRootInit) {
+  /**
+   * `options` is taken and discarded: `attachShadow` has already consumed it by the time
+   * a builder exists, and nothing ever read the copy this class used to keep. The
+   * parameter stays so the call signature is unchanged.
+   */
+  constructor(host: T, root: ShadowRoot, _options: ShadowRootInit) {
     this.hostEl = host;
     this.root = root;
-    this.options = options;
   }
 
   children(...items: Child[]): this {

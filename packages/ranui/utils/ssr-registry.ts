@@ -1,4 +1,4 @@
-import { isSSR } from './builder/env';
+import { isSSR } from 'ranvi';
 
 const registry = new Map<string, new () => HTMLElement>();
 

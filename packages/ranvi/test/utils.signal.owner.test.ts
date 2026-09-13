@@ -1,5 +1,6 @@
+// @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
-import { signal, createEffect, computed, untrack, createRoot, onCleanup, Div } from '@/utils/builder';
+import { signal, createEffect, computed, untrack, createRoot, onCleanup, Div } from '../src/index.ts';
 
 describe('ownership (createRoot / dispose / onCleanup)', () => {
   it('createRoot dispose stops every effect created inside', () => {

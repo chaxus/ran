@@ -329,7 +329,7 @@ function updateIfNecessary(node: Computation): void {
 
 function runComputation(node: Computation): void {
   if (node.running) {
-    throw new Error('ranui reactivity: cyclic dependency detected (a computation triggered itself).');
+    throw new Error('ranvi reactivity: cyclic dependency detected (a computation triggered itself).');
   }
   cleanNode(node);
 

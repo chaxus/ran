@@ -5,6 +5,10 @@
       "status": "product",
       "checks": ["tsc", "test"]
     },
+    "ranvi": {
+      "status": "product",
+      "checks": ["tsc", "test"]
+    },
     "ranui": {
       "status": "product",
       "checks": ["tsc", "test", "verify:design"]

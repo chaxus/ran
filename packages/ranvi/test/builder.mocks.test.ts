@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { HTMLElementMock, DocumentFragmentMock, ShadowRootMock } from '@/utils/builder/mocks';
+import { HTMLElementMock, DocumentFragmentMock, ShadowRootMock } from '../src/mocks.ts';
 
 // ---------------------------------------------------------------------------
 // HTMLElementMock

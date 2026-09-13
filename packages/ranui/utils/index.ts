@@ -11,7 +11,7 @@ export {
 // load 事件）；这里继续导出同名符号，ranui 的对外 API 不变。
 export { loadScript } from 'ranuts/utils';
 export * from './error';
-export { signal, createEffect, computed, batch } from './builder/signal';
+export { signal, createEffect, computed, batch } from 'ranvi';
 export * from './ssr';
 export * from './video';
 export * from './component';

@@ -1,57 +1,14 @@
-export { isSSR } from './env';
-export { EventManager } from './events';
-export {
-  signal,
-  createEffect,
-  computed,
-  batch,
-  untrack,
-  createRoot,
-  onCleanup,
-  getOwner,
-  runWithOwner,
-} from './signal';
-export type { Getter, Setter, SignalOptions, Owner } from './signal';
-export { escapeHtml, escapeHtmlAttribute } from './escape';
-export { type MockNode, matchSelector, collectMatches } from './selectors';
-export { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './mocks';
-export {
-  type Ref,
-  type Child,
-  type ForOptions,
-  type ForHandle,
-  type IndexOptions,
-  type IndexHandle,
-  type ShowOptions,
-  type SwitchOptions,
-  type MatchClause,
-  createRef,
-  For,
-  Index,
-  Show,
-  Switch,
-  Match,
-  ElementBuilder,
-  ShadowBuilder,
-  SVG_NAMESPACE,
-} from './core';
-export {
-  View,
-  Div,
-  Svg,
-  Span,
-  Slot,
-  ButtonBuilder,
-  InputBuilder,
-  Style,
-  Label,
-  Ul,
-  Li,
-  Section,
-  Article,
-  Nav,
-  Header,
-  Footer,
-  Main,
-  DeclarativeShadow,
-} from './factory';
+/**
+ * The builder now lives in its own package, `ranvi`.
+ *
+ * This file stays as a re-export so nothing in ranui had to change: 84 modules import
+ * `@/utils/builder`, and `ranui/builder` is a published entry point that consumers use.
+ * Both keep resolving here, and here forwards.
+ *
+ * It moved because it had grown into a general-purpose library wearing a component
+ * library's clothes — 1,831 lines, its own 434-line manual, its own test suite, and
+ * exactly one external import. Anyone wanting framework-free reactive DOM had to install
+ * ranui, and with it a video player, a diagram renderer and a maths typesetter: 242 MB of
+ * transitive dependencies for a file that depends on one function.
+ */
+export * from 'ranvi';

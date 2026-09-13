@@ -22,9 +22,9 @@ import {
   Footer,
   Main,
   DeclarativeShadow,
-} from '@/utils/builder/factory';
-import { ElementBuilder } from '@/utils/builder/core';
-import { HTMLElementMock } from '@/utils/builder/mocks';
+} from '../src/factory.ts';
+import { ElementBuilder } from '../src/core.ts';
+import { HTMLElementMock } from '../src/mocks.ts';
 
 // ---------------------------------------------------------------------------
 // View (generic factory)

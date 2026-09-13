@@ -1,6 +1,7 @@
+// @vitest-environment jsdom
 import { describe, it, expect } from 'vitest';
-import { matchSelector, collectMatches } from '@/utils/builder/selectors';
-import { HTMLElementMock } from '@/utils/builder/mocks';
+import { matchSelector, collectMatches } from '../src/selectors.ts';
+import { HTMLElementMock } from '../src/mocks.ts';
 
 // helpers
 function el(tag: string): HTMLElementMock {
