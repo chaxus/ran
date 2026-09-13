@@ -96,6 +96,34 @@ const SNIPPET_USE = `<span class="c-com">&lt;!-- Vue, React, or plain HTML --&gt
 <span class="c-tag">&lt;r-button</span> <span class="c-attr">type</span>=<span class="c-str">"primary"</span><span class="c-tag">&gt;</span>Save<span class="c-tag">&lt;/r-button&gt;</span>
 <span class="c-tag">&lt;r-progress</span> <span class="c-attr">percent</span>=<span class="c-str">"66"</span><span class="c-tag">&gt;&lt;/r-progress&gt;</span>`;
 
+/** `<r-button type="primary">Save</r-button>`, coloured with the landing's own classes. */
+const tag = (name: string, attrs: string, body: string): string =>
+  `<span class="c-tag">&lt;${name}</span>${attrs}<span class="c-tag">&gt;</span>` +
+  `${body}<span class="c-tag">&lt;/${name}&gt;</span>`;
+
+const attr = (name: string, value: string): string =>
+  ` <span class="c-attr">${name}</span>=<span class="c-str">"${value}"</span>`;
+
+/**
+ * The markup for the live panel, kept in step with what `renderHome` renders below it.
+ *
+ * Labels come from the same copy table the rendered components use, so the code a reader
+ * sees is the code that produced the buttons they are looking at, in their language.
+ */
+const liveSource = (t: ReturnType<typeof homeCopy>): string =>
+  [
+    tag('r-button', attr('type', 'primary'), esc(t.liveButtons[0])),
+    tag('r-button', '', esc(t.liveButtons[1])),
+    tag('r-button', attr('type', 'warning'), esc(t.liveButtons[2])),
+    '',
+    tag('r-progress', attr('percent', '66'), ''),
+    '',
+    // The spinner is rendered beside the checkbox below, so it belongs here too — the
+    // panel's whole argument is that this markup is what produced that result.
+    tag('r-loading', attr('name', 'circle-line'), ''),
+    tag('r-checkbox', ' <span class="c-attr">checked</span>', esc(t.liveCheck)),
+  ].join('\n');
+
 export const renderHome = (locale: LocaleDef): string => {
   const t = homeCopy(locale.dir);
   const href = (path: string): string => localeHref(path, locale);
@@ -125,7 +153,18 @@ export const renderHome = (locale: LocaleDef): string => {
     // bundle upgrades them, so this is the markup either way — no skeleton swap, and
     // therefore none of the hydration mismatch the Vue version had to avoid.
     `<div class="hero-live" data-hero ${hd(3 + n)}>` +
-    `<div class="live-head"><span class="live-dot"></span>${esc(t.liveLabel)}</div>` +
+    `<div class="live-head"><span class="live-dot"></span>${esc(t.liveLabel)}` +
+    `<span class="live-lang">html</span></div>` +
+    /*
+     * The source of exactly what is rendered underneath — not an illustration of it.
+     *
+     * The headline claims a component is "just a tag, no build step"; a panel that only
+     * shows the result asks the reader to take that on trust. Showing the markup above
+     * the thing it produces is the claim and the proof in one object, and it is the same
+     * demo-over-fence pairing the component pages use throughout, so the landing speaks
+     * the site's own idiom rather than inventing a second one.
+     */
+    `<pre class="snippet live-code">${liveSource(t)}</pre>` +
     `<div class="live-body">` +
     `<div class="live-row"><r-button type="primary">${esc(t.liveButtons[0])}</r-button>` +
     `<r-button>${esc(t.liveButtons[1])}</r-button>` +
