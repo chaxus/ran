@@ -173,6 +173,7 @@ const cn: LocaleMessages = {
     foundations: '基础能力',
     design_system: '设计系统',
     design_guidelines: '设计规范',
+    information_architecture: '信息架构',
     coding_guidelines: '编码规范',
     theming: 'Theme 主题系统',
     themeswitch: '主题切换',

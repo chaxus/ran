@@ -173,6 +173,7 @@ const de: LocaleMessages = {
     foundations: 'Grundlagen',
     design_system: 'Designsystem',
     design_guidelines: 'Designrichtlinien',
+    information_architecture: 'Informationsarchitektur',
     coding_guidelines: 'Coding-Richtlinien',
     theming: 'Theming',
     themeswitch: 'Theme-Umschalter',

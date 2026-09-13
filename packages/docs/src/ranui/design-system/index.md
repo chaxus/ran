@@ -9,12 +9,13 @@ express it: every global `--ran-*` custom property the library declares, with it
 both themes. Components read these instead of hard-coding values, so overriding one token
 restyles everything that consumes it.
 
-Three pages answer three different questions, and they are deliberately separate:
+Four pages answer four different questions, and they are deliberately separate:
 
 | Page                                           | Answers                                             |
 | ---------------------------------------------- | --------------------------------------------------- |
 | **Design system** (this page)                  | _What_ the tokens are: the vocabulary               |
 | [Design guidelines](/src/ranui/design-guides/) | _How to choose_ between them when building a screen |
+| [Information architecture](/src/ranui/information-architecture/) | _What shape_ the page itself should take |
 | [Theming](/src/ranui/theme/)                   | _How to switch and override_ them at runtime        |
 
 > **Use when** you need the name or the value of a token (a colour role, a spacing step, an

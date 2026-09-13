@@ -8,6 +8,7 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 
 本页讲的是**取舍**：该用哪个令牌、上线前该检查什么。令牌清单本身在
 [设计系统](/cn/src/ranui/design-system/)，运行时切换与覆盖在[主题系统](/cn/src/ranui/theme/)。
+在这一切之前，页面该是什么形状，在[信息架构](/cn/src/ranui/information-architecture/)。
 这些规则的完整、可机器校验版本在仓库里：
 [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md)。
 

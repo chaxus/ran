@@ -262,7 +262,9 @@ disabled meant every landing section below the fold was invisible permanently.
 
 The site is dressed in ranui's design system. `packages/ranui/docs/DESIGN.md` is the spec;
 §11 ("Composition — the page, not the component") is the part that governs pages rather than
-widgets, and every rule in it came from a failure on this site.
+widgets, and every rule in it came from a failure on this site. §12 ("Information
+architecture") sits one level above it: which shape a dense page should take before any of
+§11 arranges it.
 
 `pnpm -F docs verify:design` runs ranui's checker over `styles/` against
 `design-baseline.json`, which is a **ratchet**: a violation count that rises fails as a new

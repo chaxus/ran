@@ -173,6 +173,7 @@ const fa: LocaleMessages = {
     foundations: 'پایه‌ها',
     design_system: 'سیستم طراحی',
     design_guidelines: 'راهنمای طراحی',
+    information_architecture: 'معماری اطلاعات',
     coding_guidelines: 'راهنمای کدنویسی',
     theming: 'پوسته',
     themeswitch: 'تعویض پوسته',

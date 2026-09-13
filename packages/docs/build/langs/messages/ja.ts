@@ -173,6 +173,7 @@ const ja: LocaleMessages = {
     foundations: '基盤',
     design_system: 'デザインシステム',
     design_guidelines: 'デザインガイドライン',
+    information_architecture: '情報アーキテクチャ',
     coding_guidelines: 'コーディング規約',
     theming: 'テーマ',
     themeswitch: 'テーマ切り替え',

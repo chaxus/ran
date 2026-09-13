@@ -6,12 +6,13 @@ description: 'A linguagem de design do ranui e a referência completa dos tokens
 
 A **linguagem de design** com que o ranui é feito, e o catálogo **completo** dos tokens que a expressam: toda propriedade personalizada `--ran-*` global que a biblioteca declara, com o valor dela nos dois temas. Os componentes leem esses tokens em vez de escrever valores na mão, então sobrescrever um deles reestiliza tudo que o consome.
 
-Três páginas respondem a três perguntas diferentes, e são separadas de propósito:
+Quatro páginas respondem a quatro perguntas diferentes, e são separadas de propósito:
 
 | Página                                               | Responde                                                |
 | ---------------------------------------------------- | ------------------------------------------------------- |
 | **Design system** (esta página)                      | _O que_ os tokens são: o vocabulário                    |
 | [Diretrizes de design](/pt/src/ranui/design-guides/) | _Como escolher_ entre eles ao montar uma tela           |
+| [Arquitetura da informação](/pt/src/ranui/information-architecture/) | _Que forma_ a própria página deve ter |
 | [Tematização](/pt/src/ranui/theme/)                  | _Como trocá-los e sobrescrevê-los_ em tempo de execução |
 
 > **Use quando** precisar do nome ou do valor de um token (um papel de cor, um passo de espaço, um tamanho de ícone, um nível de sombra, uma curva de aceleração) ou quiser entender por que as escalas têm o formato que têm.

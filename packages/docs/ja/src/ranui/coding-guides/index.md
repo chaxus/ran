@@ -4,7 +4,7 @@ description: 'ranui で作るためのエンジニアリング規約。エント
 
 # コーディングガイドライン
 
-ranui で_作る_ための手引きです。コンポーネントの契約とは何か、Shadow DOM の境界がどこで慣れたルールを変えてしまうのか、そして踏む前に知っておく価値のある間違いはどれか。
+ranui で**作る**ための手引きです。コンポーネントの契約とは何か、Shadow DOM の境界がどこで慣れたルールを変えてしまうのか、そして踏む前に知っておく価値のある間違いはどれか。
 
 その見た目の側は[デザインガイドライン](/ja/src/ranui/design-guides/)、トークンは[デザインシステム](/ja/src/ranui/design-system/)にあります。
 
@@ -44,7 +44,7 @@ import 'ranui'; // 全部
 
 ## コンポーネントの契約
 
-各要素の正確な属性、プロパティ、イベント（`detail` の形も）、スロット、パーツはソースから生成され、[`COMPONENTS.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/COMPONENTS.md) にまとまっています。以下のルールは、その表が語ら_ない_ことです。
+各要素の正確な属性、プロパティ、イベント（`detail` の形も）、スロット、パーツはソースから生成され、[`COMPONENTS.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/COMPONENTS.md) にまとまっています。以下のルールは、その表が語ら**ない**ことです。
 
 ### 属性は文字列、プロパティは型を持つ
 
@@ -59,7 +59,7 @@ select.showSearch = true; // プロパティ — キャメルケース
 select.setAttribute('showsearch', ''); // 属性 — 小文字
 ```
 
-- **真偽の属性は存在するかどうかで決まります。** ネイティブの `<button>` の `disabled` と同じで、`disabled=""` も `disabled="false"` も_無効_です。切るには属性を取り除く（またはプロパティに `false` を入れる）しかありません。
+- **真偽の属性は存在するかどうかで決まります。** ネイティブの `<button>` の `disabled` と同じで、`disabled=""` も `disabled="false"` も**無効**です。切るには属性を取り除く（またはプロパティに `false` を入れる）しかありません。
 - **豊かな値はプロパティを通します。** 配列、オブジェクト、`File` は属性では生き残れません。たとえば `r-attachments` の `attachments` はプロパティです。
 - **マークアップ中の属性名は大文字小文字を区別しません。** 上の HTML が `showsearch` なのにプロパティが `showSearch` なのはそのためです。JSX では属性の形で書いてください。
 
@@ -75,7 +75,7 @@ select.addEventListener('change', (event) => {
 
 **イベントがバブリングするかどうかはコンポーネントごとの判断なので、コンテナではなく要素に結んでください。** フォームとオーバーレイの中核（`r-input`、`r-checkbox`、`r-select`、`r-modal`）は、意図的に、バブリングしないイベントを自分自身の上で発火します。あなたのフォームの中のセレクトから出た `change` が、フォームからの `change` に見えては困るからです。バブリングするものもあります（そして `composed` なのでシャドウ境界も越えます）：`r-theme-switch`、`r-voice-button`、`r-attachments`、`r-conversation`、`r-tool-card`、`r-markdown`、`r-math`、`r-mermaid`、`r-router`、`r-route`、`r-link`、`r-colorpicker`。
 
-要素に付けたリスナーはどちらの場合でも動きます。祖先での委譲は後者の群でしか動かず、前者では_黙って_失敗します。委譲に頼る前に、ソースか [`COMPONENTS.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/COMPONENTS.md) を確かめてください。
+要素に付けたリスナーはどちらの場合でも動きます。祖先での委譲は後者の群でしか動かず、前者では**黙って**失敗します。委譲に頼る前に、ソースか [`COMPONENTS.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/COMPONENTS.md) を確かめてください。
 
 **`before*` のイベントはキャンセルできます。** `r-modal` は動く前に `beforeopen` / `beforeclose` を発火し、`event.preventDefault()` がその遷移に拒否権を行使します。`open` / `close` / `afteropen` / `afterclose` の組は、すでに起きたことを報告するもので、キャンセルできません。
 
@@ -109,7 +109,7 @@ ranui のコンポーネントはすべて**閉じた**シャドウルートに�
 値ごとに、誰が持つかを決めてください。
 
 - **コンポーネントが持つ**（非制御）：初期値を渡し、変わったらイベントの `detail` から値を読む。いちばん単純で、フォームではこれが既定です。
-- **あなたのアプリが持つ**（制御）：描画のたびにプロパティを設定し、イベントは「あなたの状態を変えてほしいという_要求_」として扱う。あなたのモデルにすでに起きた変化として扱わない。
+- **あなたのアプリが持つ**（制御）：描画のたびにプロパティを設定し、イベントは「あなたの状態を変えてほしいという**要求**」として扱う。あなたのモデルにすでに起きた変化として扱わない。
 
 壊れるのは両方をやることです。コンポーネントの値のコピーを自分の状態に持ち、イベントのたびに書き戻し、その状態からプロパティを設定し直す。素早い入力の下でこのふたつはずれ、イベント中の書き込みはループにもなり得ます。どちらか一方向を選んでください。
 
@@ -162,7 +162,7 @@ const html = await renderHTMLToString(`
 
 ## テスト
 
-**閉じたシャドウルートはテストのロケーターも止めます。** Playwright の `getByRole`、`getByText`、`querySelector` はどれも境界で止まり、_何も_見つけません。だからそれらで書いた仕様は、一度も見ていない要素についてアサートしながら通ってしまいます。このリポジトリでも、誰かが気づく前にふたつのスイートがそう書かれていました。`ranui/testing` が、名前の付いた文書化された継ぎ目です。
+**閉じたシャドウルートはテストのロケーターも止めます。** Playwright の `getByRole`、`getByText`、`querySelector` はどれも境界で止まり、**何も**見つけません。だからそれらで書いた仕様は、一度も見ていない要素についてアサートしながら通ってしまいます。このリポジトリでも、誰かが気づく前にふたつのスイートがそう書かれていました。`ranui/testing` が、名前の付いた文書化された継ぎ目です。
 
 ```js
 import { insideShadow, settlePainted } from 'ranui/testing';

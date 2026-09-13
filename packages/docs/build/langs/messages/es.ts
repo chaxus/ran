@@ -173,6 +173,7 @@ const es: LocaleMessages = {
     foundations: 'Fundamentos',
     design_system: 'Sistema de diseño',
     design_guidelines: 'Guía de diseño',
+    information_architecture: 'Arquitectura de información',
     coding_guidelines: 'Guía de código',
     theming: 'Temas',
     themeswitch: 'Cambio de tema',

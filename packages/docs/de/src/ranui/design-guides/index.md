@@ -6,7 +6,7 @@ description: 'Gestaltungsregeln für Oberflächen mit ranui: eine Rolle wählen 
 
 Die Regeln, denen eine aus ranui-Komponenten gebaute Oberfläche folgen sollte, damit sie sich als **ein System** liest und nicht als Haufen von Teilen.
 
-Auf dieser Seite geht es um **Urteilsvermögen**: zu welchem Token man greift und was vor der Auslieferung zu prüfen ist. Der Tokenkatalog selbst ist das [Designsystem](/de/src/ranui/design-system/); Umschalten und Überschreiben zur Laufzeit ist die [Themengestaltung](/de/src/ranui/theme/). Die vollständige, maschinell durchgesetzte Fassung dieser Regeln liegt im Repository als [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
+Auf dieser Seite geht es um **Urteilsvermögen**: zu welchem Token man greift und was vor der Auslieferung zu prüfen ist. Der Tokenkatalog selbst ist das [Designsystem](/de/src/ranui/design-system/); Umschalten und Überschreiben zur Laufzeit ist die [Themengestaltung](/de/src/ranui/theme/); welche Form die Seite vor alledem annimmt, ist die [Informationsarchitektur](/de/src/ranui/information-architecture/). Die vollständige, maschinell durchgesetzte Fassung dieser Regeln liegt im Repository als [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
 > **Einsetzen, wenn** du eine Seite anlegst oder aus `<r-*>`-Elementen eine Komponente auf Anwendungsebene baust und über eine Farbe, einen Abstand, eine Textgröße, einen Schatten oder eine Bewegungsdauer entscheiden musst. Die kurze Antwort ist immer dieselbe: **Wähle eine Rolle und lass das Token den Wert bestimmen.**
 
