@@ -301,7 +301,9 @@
   border-radius: 14px;
   background: var(--surface);
   overflow: hidden;
-  box-shadow: 0 24px 60px -34px color-mix(in srgb, var(--ink) 45%, transparent);
+  /* One soft, low-contrast lift. The previous 60px blur at 45% read as a drop shadow
+     from a different design language than everything else on the page. */
+  box-shadow: 0 18px 44px -30px color-mix(in srgb, var(--ink) 28%, transparent);
 }
 .live-head {
   display: flex;
@@ -704,6 +706,13 @@
   color: var(--fg-muted);
   border-bottom: 1px solid var(--rule);
 }
+/* See the note in docs.css: code reads left-to-right whatever the page's direction. */
+.snippet,
+.live-code,
+.cmd {
+  direction: ltr;
+  text-align: start;
+}
 .snippet {
   flex: 1;
   margin: 0;
@@ -729,6 +738,32 @@
 }
 .snippet .c-attr {
   color: var(--fg-faint);
+}
+
+/*
+ * Source above, result below, one hairline between them.
+ *
+ * The two halves are one object: the same panel, the same border, a single rule marking
+ * where the markup stops and what it produces begins. A second box around either half
+ * would say they are two things that happen to be adjacent.
+ */
+.live-lang {
+  margin-inline-start: auto;
+  color: var(--fg-faint);
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+}
+.live-code {
+  flex: none;
+  padding: var(--ran-space-4, 16px) var(--ran-space-6, 24px);
+  font-size: 12.5px;
+  line-height: 1.85;
+  border-bottom: 1px solid var(--hairline);
+  white-space: pre;
+  tab-size: 2;
+}
+.live-code .c-tag {
+  color: var(--fg-muted);
 }
 
 /* ---------- feature strip ---------- */

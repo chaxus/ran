@@ -515,6 +515,25 @@ a {
   text-underline-offset: 3px;
 }
 
+/*
+ * Code is left-to-right in every language.
+ *
+ * A Persian page sets `direction: rtl` on the document, and every fence, inline span and
+ * snippet inherits it: bidi then right-aligns the block and reorders any line that mixes
+ * scripts. A tag with a Persian label inside came out as
+ * `<r-button/>اصلی<"r-button type="primary>` — the characters are all there and the markup
+ * is unreadable. Pure-ASCII code merely ends up right-aligned, which is wrong but survives,
+ * so this stayed invisible until a demo put translated text inside a tag.
+ */
+.prose figure.code,
+.prose figure.code pre,
+.prose code,
+.prose kbd,
+.code-group {
+  direction: ltr;
+  text-align: start;
+}
+
 /* ── Layout ──────────────────────────────────────────────────────────────── */
 
 .layout {
