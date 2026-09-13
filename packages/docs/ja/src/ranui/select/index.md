@@ -41,7 +41,7 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 | `defaultValue`        | `string`  | `''`       | 最初に選ばれる値。選択肢の `value` と突き合わせられます                                                                                      |
 | `disabled`            | `boolean` | `false`    | select を無効にするかどうか                                                                                                                  |
 | `type`                | `string`  | `''`       | `text` にすると枠線も背景もなく矢印アイコンもないトリガーになります。それ以外は枠線つきです                                                  |
-| `open`                | `boolean` | `false`    | ドロップダウンが出ているかどうか。これ_が_状態そのもので、設定すればパネルが開閉します                                                       |
+| `open`                | `boolean` | `false`    | ドロップダウンが出ているかどうか。これ**が**状態そのもので、設定すればパネルが開閉します                                                       |
 | `placement`           | `string`  | `'bottom'` | ドロップダウンが開く側と、任意の揃え：`bottom`、`bottom-end`、`top-center` など                                                              |
 | `showSearch`          | `boolean` | `false`    | ラベルで選択肢を絞り込む、内蔵の検索ボックスを出します                                                                                       |
 | `getPopupContainerId` | `string`  | `''`       | ドロップダウンを配置する要素の `id`（既定は `document.body`）                                                                                |

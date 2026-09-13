@@ -6,12 +6,13 @@ description: 'Die Designsprache von ranui und die vollständige Token-Referenz: 
 
 Die **Designsprache**, aus der ranui gebaut ist, und der **vollständige** Katalog der Tokens, die sie ausdrücken: jede globale `--ran-*`-Custom-Property, die die Bibliothek deklariert, samt ihrem Wert in beiden Themes. Komponenten lesen diese Tokens, statt Werte festzuschreiben — ein Token zu überschreiben gestaltet also alles um, was es verwendet.
 
-Drei Seiten beantworten drei verschiedene Fragen, und sie sind bewusst getrennt:
+Vier Seiten beantworten vier verschiedene Fragen, und sie sind bewusst getrennt:
 
 | Seite                                                 | Beantwortet                                            |
 | ----------------------------------------------------- | ------------------------------------------------------ |
 | **Designsystem** (diese Seite)                        | _Was_ die Tokens sind: das Vokabular                   |
 | [Gestaltungsleitlinien](/de/src/ranui/design-guides/) | _Wie man wählt_, wenn man eine Oberfläche baut         |
+| [Informationsarchitektur](/de/src/ranui/information-architecture/) | _Welche Form_ die Seite selbst haben soll |
 | [Themengestaltung](/de/src/ranui/theme/)              | _Wie man sie zur Laufzeit umschaltet und überschreibt_ |
 
 > **Einsetzen, wenn** du den Namen oder den Wert eines Tokens brauchst (eine Farbrolle, eine Abstandsstufe, eine Symbolgröße, eine Schattenstufe, eine Beschleunigungskurve) oder verstehen willst, warum die Skalen so geformt sind, wie sie sind.

@@ -9,7 +9,9 @@ rather than a pile of parts.
 
 This page is about **judgement**: which token to reach for, what to check before shipping.
 The token catalog itself is the [design system](/src/ranui/design-system/); switching and
-overriding at runtime is [theming](/src/ranui/theme/). The full, machine-enforced version of
+overriding at runtime is [theming](/src/ranui/theme/); the shape the
+page takes before any of it is decided is
+[information architecture](/src/ranui/information-architecture/). The full, machine-enforced version of
 these rules lives in the repository as
 [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
