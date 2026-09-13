@@ -1,5 +1,5 @@
 {
-  "name": "@chaxus/ranview",
+  "name": "@alixex/ranview",
   "version": "0.1.0-alpha.0",
   "description": "Framework-free DOM construction with fine-grained reactivity \u2014 build once, update in place, in a browser or to a string",
   "type": "module",
