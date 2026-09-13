@@ -480,7 +480,7 @@
     "mermaid": "11.16.1",
     "mpegts.js": "1.8.1",
     "ranuts": "workspace:*",
-    "@chaxus/ranview": "workspace:*",
+    "@alixex/ranview": "workspace:*",
     "remend": "1.3.0",
     "shiki": "4.4.3",
     "temml": "0.13.4"

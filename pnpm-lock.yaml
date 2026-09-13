@@ -226,7 +226,7 @@ importers:
 
   packages/ranui:
     dependencies:
-      '@chaxus/ranview':
+      '@alixex/ranview':
         specifier: workspace:*
         version: link:../ranview
       dashjs:

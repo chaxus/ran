@@ -16,13 +16,20 @@ import * as ranview from '../src/index.ts';
 const here = dirname(fileURLToPath(import.meta.url));
 const readme = readFileSync(resolve(here, '../README.md'), 'utf8');
 
-/** `import { a, b } from '@chaxus/ranview'` → ['a', 'b'], comments and type-only names removed. */
+/*
+ * The package's own name, read rather than written down.
+ *
+ * This has been renamed three times — ranvi, ranview, @alixex/ranview — and the parser
+ * below had the specifier baked into its regex. After the first rename it matched
+ * nothing, verified an empty set, and passed; only the "enough imports to be worth
+ * checking" assertion noticed. A test for a package should ask the package what it is
+ * called.
+ */
+const self = JSON.parse(readFileSync(resolve(here, '../package.json'), 'utf8')).name as string;
+
+/** `import { a, b } from '<self>'` → ['a', 'b'], comments and type-only names removed. */
 const importedNames = (): string[] => {
   const names = new Set<string>();
-  // The specifier is read from package.json rather than written here: the last two renames
-  // each moved it, and a parser that hard-codes the old one silently matches nothing and
-  // reports success on an empty set. The sanity check below is what caught that.
-  const self = JSON.parse(readFileSync(resolve(here, '../package.json'), 'utf8')).name as string;
   const pattern = new RegExp(`import\\s*\\{([^}]*)\\}\\s*from\\s*'${self.replace('/', '\\/')}'`, 'g');
   for (const block of readme.matchAll(pattern)) {
     for (const raw of block[1].split(',')) {
@@ -48,6 +55,6 @@ describe('README', () => {
     // Types vanish at runtime, so a missing name is only a failure if it is not one.
     const isType = new RegExp(`import\\s+type[^}]*\\b${name}\\b|\\btype\\s+${name}\\b`).test(readme);
     if (isType) return;
-    expect(Object.hasOwn(ranview, name), `README imports { ${name} } from '@chaxus/ranview'`).toBe(true);
+    expect(Object.hasOwn(ranview, name), `README imports { ${name} } from '${self}'`).toBe(true);
   });
 });

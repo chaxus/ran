@@ -13,7 +13,7 @@ require you to install a video player, a diagram renderer and a maths typesetter
 it. `ranui/builder` still re-exports everything here, unchanged.
 
 ```sh
-npm i @chaxus/ranview
+npm i @alixex/ranview
 ```
 
 > **Principle: build once, update in place.** A view function runs once; state
@@ -39,7 +39,7 @@ import {
   getOwner,
   runWithOwner, // ownership
   EventManager, // lifecycle-scoped events
-} from '@chaxus/ranview';
+} from '@alixex/ranview';
 ```
 
 The builder does **not** register custom elements. To use `<r-button>` etc.,
@@ -143,7 +143,7 @@ class** (each component exports it) — then its methods are typed, no cast:
 
 ```ts
 import { Popover } from 'ranui'; // the element class
-import { View, createRef } from '@chaxus/ranview';
+import { View, createRef } from '@alixex/ranview';
 
 const ref = createRef<Popover>();
 View<Popover>('r-popover').attr('trigger', 'click').ref(ref).children(/* … */).build();
@@ -228,7 +228,7 @@ branch updates through its own bindings — the branch is built once. (A raw get
 child, by contrast, tears down and rebuilds on every dependency tick.)
 
 ```ts
-import { Show } from '@chaxus/ranview';
+import { Show } from '@alixex/ranview';
 
 Div().children(
   Show({
@@ -266,7 +266,7 @@ winning branch is memoized, so it rebuilds only when the active branch changes.
 Evaluation short-circuits at the first match.
 
 ```ts
-import { Switch, Match } from '@chaxus/ranview';
+import { Switch, Match } from '@alixex/ranview';
 
 Div().children(
   Switch({
@@ -299,7 +299,7 @@ values and transitions inside surviving rows are preserved (a plain getter child
 would rebuild all of them). Pass the handle straight to `children()`.
 
 ```ts
-import { For } from '@chaxus/ranview';
+import { For } from '@alixex/ranview';
 
 const [rows, setRows] = signal([{ id: 1, title: 'a' }]);
 
@@ -335,7 +335,7 @@ move. Use it when position is the identity (primitive arrays, fixed rows); use
 `For` when items have a stable id and can reorder.
 
 ```ts
-import { Index } from '@chaxus/ranview';
+import { Index } from '@alixex/ranview';
 
 Ul().children(
   Index({
@@ -364,7 +364,7 @@ created it. Disposing a scope disposes everything under it — nested effects,
 bindings, and `onCleanup` callbacks.
 
 ```ts
-import { createRoot, onCleanup } from '@chaxus/ranview';
+import { createRoot, onCleanup } from '@alixex/ranview';
 
 const dispose = createRoot((dispose) => {
   const el = Div().text(msg).build(); // this binding is owned by the root
