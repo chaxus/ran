@@ -173,6 +173,7 @@ const ko: LocaleMessages = {
     foundations: '기반',
     design_system: '디자인 시스템',
     design_guidelines: '디자인 가이드',
+    information_architecture: '정보 구조',
     coding_guidelines: '코딩 가이드',
     theming: '테마',
     themeswitch: '테마 전환',

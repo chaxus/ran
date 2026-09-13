@@ -8,7 +8,8 @@
 > Companion documents: [CODING.md](./CODING.md) is the engineering standard for the same code
 > (architecture, state ownership, events, testing). The consumer-facing versions are published
 > as [Design system](https://ran.chaxus.com/src/ranui/design-system/),
-> [Design guidelines](https://ran.chaxus.com/src/ranui/design-guides/) and
+> [Design guidelines](https://ran.chaxus.com/src/ranui/design-guides/),
+> [Information architecture](https://ran.chaxus.com/src/ranui/information-architecture/) and
 > [Coding guidelines](https://ran.chaxus.com/src/ranui/coding-guides/) — update those when a
 > rule here changes in a way consumers can see.
 
@@ -657,6 +658,115 @@ wrap.scrollWidth - wrap.clientWidth;
 document.documentElement.scrollWidth > innerWidth;
 ```
 
+## 12. Information architecture — the shape before the composition
+
+§11 arranges a page whose shape is already settled. This section settles it, so in practice
+it runs first. It applies to **information-dense surfaces**: a console, a dashboard, an admin
+screen, a workbench, a monitoring page — anywhere the reader has to understand several
+objects, several states and the relations between them and then judge and act. It does not
+apply to landing pages or single-conversion forms.
+
+Complete data is not a designed page. Every field the endpoint returns can be on screen, with
+filters, status tags and bulk actions, and the reader still not know what to look at first.
+Nothing is missing; the order is.
+
+### Answer three questions before naming a component
+
+1. **What must the reader see on arrival?** That is the primary information.
+2. **What else has to be visible for it to make sense?** Related resources, related models,
+   context.
+3. **What do they do next?** Judge, act, or keep thinking.
+
+**A page has exactly one primary model.** Supporting models may help the reader understand or
+operate it; they may not compete for the first screen.
+
+### The shape follows the task, not the payload
+
+**Do not pick a table because the endpoint returned an array, or a detail page because the
+route carries an ID.** The same object takes a different shape under a different task: an
+issue is a collection while searching, a status flow while working it, a discussion thread
+while collaborating, an event sequence while auditing. A date field in the record means the
+data has a date; it does not mean the page is a calendar.
+
+Choose the skeleton that answers the primary question with the fewest mental conversions:
+
+| The reader's question                                    | Skeleton                        |
+| -------------------------------------------------------- | -------------------------------- |
+| Which of these differs, and how                          | Comparison table                |
+| Which one is it, so I can open it                        | List / resource catalog         |
+| Which one is it, and the image tells me                  | Card grid                       |
+| What is this object, and how is it now                   | Sectioned detail                |
+| What does it belong to                                   | Hierarchy tree                  |
+| What depends on it, what breaks if it changes            | Adjacency list                  |
+| Which step am I on, what follows                         | Step flow                       |
+| Which stage is each item in, and moving it _is_ the work  | Kanban                          |
+| Why did it stall                                         | Trace drill-down                |
+| Is it healthy, how far does the damage reach             | Status wall                     |
+| What happened, in what order, by whom                    | Event timeline                  |
+| Who said what, how was it answered                       | Discussion thread               |
+| What changed, before versus after                        | Diff view                       |
+| What is the trend, where is the anomaly                  | Dashboard                       |
+| When is it occupied, does it clash                       | Calendar / scheduling           |
+| What do I work on next                                   | Master-detail workbench         |
+| Which rules apply, what do they affect                   | Configuration form              |
+| What does this text say                                  | Continuous document             |
+| Where is it                                              | Map / canvas                    |
+
+Six pairs get swapped, and each swap is a real bug: **timeline vs. steps** (what happened vs.
+what comes next), **kanban vs. filter** (moving the card must be the action, or the columns are
+a filter that costs a drag), **calendar vs. timeline** (occupancy and collision vs. order),
+**card grid vs. table** (the image is the recognition anchor, or the numbers are), **graph vs.
+adjacency list** (draw the graph only when the path itself is the judgement), **document vs.
+field grid** (prose read in order stays prose).
+
+**Do not ship three views because you can.** Each one is another filter set, another status
+mapping and another set of actions to keep in sync.
+
+### Each kind of information has a place
+
+| Information   | Belongs                                                      | Must not end up                          |
+| ------------- | ------------------------------------------------------------ | ----------------------------------------- |
+| Identity      | Title, object summary                                        | The last column, or behind a tab         |
+| Status        | Title or summary region                                      | Findable only in a detail field          |
+| Attributes    | Detail body, grouped as people think about it                | Flattened in API field order             |
+| Relationships | Own region or tab; ownership, dependency, reference distinct | Mixed into the attribute table           |
+| Changes       | Diff region, timeline                                        | Shown as the new value only              |
+| Evidence      | Beside the judgement, expandable                             | A log page elsewhere                     |
+| Actions       | Primary in the title region, the rest beside their object    | Buried under "more"                      |
+| Feedback      | Beside the action, keeping task context                      | A global toast detached from its subject |
+
+**Every fact has exactly one authoritative location.** Elsewhere shows a summary or an entry
+point that links back to it.
+
+Default reading order — page identity → current status or exception → primary task and primary
+action → the information the judgement needs → relationships, changes, evidence → secondary
+information and low-frequency actions. **One primary action per task region**, and it is the
+most likely next step, not the most destructive one (§11, "Emphasis is a budget", governs how
+much weight it may take).
+
+### Density is effective information, not controls per inch
+
+Tightening spacing raises visual density and leaves effective density where it was. Removing
+irrelevant fields and putting the comparison in one place raises the real thing.
+
+**Use at most two adjacent density levels on one page** — spacious for first use and risky
+confirmation, standard for most lists and details, compact for expert workbenches. Container
+padding and line height may tighten; readable body text, a visible focus ring and pointer
+target size may not (§8).
+
+### Containers do not fix structure
+
+**`r-modal` is not a navigation layer.** Anything needing a copyable link, history, a
+side-by-side comparison, or work that survives a refresh gets a route. Reserve the modal for a
+short confirmation or a single field, `r-popover` / `r-dropdown` for transient context, and
+`r-disclosure-row` for progressive disclosure.
+
+**`r-tabs` carries peer views of one object** — its conversation, its checks, its diff — never
+unrelated modules; that is navigation's job.
+
+**ranui ships no table, tree, calendar, kanban or timeline.** Build one out of the tokens and
+the rules above, not out of a second visual system (§11, "One product, one token set").
+
 ---
 
 ## Verification checklist (before shipping UI)
@@ -671,3 +781,5 @@ document.documentElement.scrollWidth > innerWidth;
 - [ ] Spacing comes from the scale; type uses a role; color uses semantic tokens.
 - [ ] `pnpm -F ranui verify:design` passes — it checks the nine mechanical rules above.
 - [ ] Copy follows §6; nothing signals state by color alone (§7).
+- [ ] For a dense surface: one primary model, the skeleton chosen from the question rather
+      than the payload, and every fact with one authoritative location (§12).

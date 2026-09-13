@@ -540,6 +540,12 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
       items: [
         { kind: 'suffix', key: 'design_system', name: 'Design system', link: '/src/ranui/design-system/' },
         { kind: 'suffix', key: 'design_guidelines', name: 'Design guidelines', link: '/src/ranui/design-guides/' },
+        {
+          kind: 'suffix',
+          key: 'information_architecture',
+          name: 'Information architecture',
+          link: '/src/ranui/information-architecture/',
+        },
         { kind: 'suffix', key: 'coding_guidelines', name: 'Coding guidelines', link: '/src/ranui/coding-guides/' },
         { kind: 'full', key: 'theming', link: '/src/ranui/theme/' },
         { kind: 'suffix', key: 'themeswitch', name: 'ThemeSwitch', link: '/src/ranui/theme-switch/' },

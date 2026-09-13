@@ -6,7 +6,7 @@ description: 'Reglas de diseño para construir pantallas con ranui: elige un rol
 
 Las reglas que debe seguir una pantalla hecha con componentes de ranui para que se lea como **un sistema** y no como un montón de piezas.
 
-Esta página trata del **criterio**: a qué token echar mano, qué comprobar antes de publicar. El catálogo de tokens en sí es el [sistema de diseño](/es/src/ranui/design-system/); cambiar y sobrescribir en tiempo de ejecución es la [tematización](/es/src/ranui/theme/). La versión completa de estas reglas, la que se comprueba automáticamente, vive en el repositorio como [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
+Esta página trata del **criterio**: a qué token echar mano, qué comprobar antes de publicar. El catálogo de tokens en sí es el [sistema de diseño](/es/src/ranui/design-system/); cambiar y sobrescribir en tiempo de ejecución es la [tematización](/es/src/ranui/theme/); qué forma toma la página antes de todo eso es la [arquitectura de información](/es/src/ranui/information-architecture/). La versión completa de estas reglas, la que se comprueba automáticamente, vive en el repositorio como [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
 > **Úsalas cuando** estés maquetando una página o construyendo un componente propio a partir de elementos `<r-*>` y tengas que decidir un color, un espacio, un tamaño de texto, una sombra o una duración de animación. La respuesta corta es siempre la misma: **elige un rol y deja que el token ponga el valor.**
 

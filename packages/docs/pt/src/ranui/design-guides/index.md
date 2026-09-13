@@ -6,7 +6,7 @@ description: 'Regras de design para montar telas com o ranui: escolha um papel e
 
 As regras que uma tela feita de componentes ranui deve seguir para que se leia como **um sistema** e não como um monte de peças.
 
-Esta página trata de **julgamento**: a qual token recorrer, o que conferir antes de publicar. O catálogo de tokens em si é o [design system](/pt/src/ranui/design-system/); trocar e sobrescrever em tempo de execução é a [tematização](/pt/src/ranui/theme/). A versão completa destas regras, a que é verificada por máquina, está no repositório como [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
+Esta página trata de **julgamento**: a qual token recorrer, o que conferir antes de publicar. O catálogo de tokens em si é o [design system](/pt/src/ranui/design-system/); trocar e sobrescrever em tempo de execução é a [tematização](/pt/src/ranui/theme/); que forma a página toma antes de tudo isso é a [arquitetura da informação](/pt/src/ranui/information-architecture/). A versão completa destas regras, a que é verificada por máquina, está no repositório como [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
 > **Use quando** estiver diagramando uma página ou montando um componente da sua aplicação com elementos `<r-*>` e precisar decidir uma cor, um espaço, um tamanho de texto, uma sombra ou uma duração de animação. A resposta curta é sempre a mesma: **escolha um papel e deixe o token dar o valor.**
 
