@@ -1,4 +1,4 @@
-import { isSSR } from 'ranvi';
+import { isSSR } from 'ranview';
 
 const registry = new Map<string, new () => HTMLElement>();
 

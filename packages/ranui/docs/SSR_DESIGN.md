@@ -19,7 +19,7 @@
 
 ### `ShadowRootMock.querySelector` 查询范围错误
 
-**位置**：[ranvi src/mocks.ts:227](../../ranvi/src/mocks.ts#L227)
+**位置**：[ranview src/mocks.ts:227](../../ranview/src/mocks.ts#L227)
 
 ```typescript
 // 当前实现：查询宿主的 childrenList，而不是 shadow root 自身的 childrenList

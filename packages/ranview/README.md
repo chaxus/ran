@@ -1,4 +1,4 @@
-# ranvi — fluent DOM + fine-grained reactivity
+# ranview — fluent DOM + fine-grained reactivity
 
 A framework-free way to build DOM declaratively, with SwiftUI/Solid-style fine-grained
 reactivity. No virtual DOM, no re-render of a whole tree — a signal change updates only
@@ -13,7 +13,7 @@ require you to install a video player, a diagram renderer and a maths typesetter
 it. `ranui/builder` still re-exports everything here, unchanged.
 
 ```sh
-npm i ranvi
+npm i ranview
 ```
 
 > **Principle: build once, update in place.** A view function runs once; state
@@ -39,7 +39,7 @@ import {
   getOwner,
   runWithOwner, // ownership
   EventManager, // lifecycle-scoped events
-} from 'ranvi';
+} from 'ranview';
 ```
 
 The builder does **not** register custom elements. To use `<r-button>` etc.,
@@ -143,7 +143,7 @@ class** (each component exports it) — then its methods are typed, no cast:
 
 ```ts
 import { Popover } from 'ranui'; // the element class
-import { View, createRef } from 'ranvi';
+import { View, createRef } from 'ranview';
 
 const ref = createRef<Popover>();
 View<Popover>('r-popover').attr('trigger', 'click').ref(ref).children(/* … */).build();
@@ -228,7 +228,7 @@ branch updates through its own bindings — the branch is built once. (A raw get
 child, by contrast, tears down and rebuilds on every dependency tick.)
 
 ```ts
-import { Show } from 'ranvi';
+import { Show } from 'ranview';
 
 Div().children(
   Show({
@@ -266,7 +266,7 @@ winning branch is memoized, so it rebuilds only when the active branch changes.
 Evaluation short-circuits at the first match.
 
 ```ts
-import { Switch, Match } from 'ranvi';
+import { Switch, Match } from 'ranview';
 
 Div().children(
   Switch({
@@ -299,7 +299,7 @@ values and transitions inside surviving rows are preserved (a plain getter child
 would rebuild all of them). Pass the handle straight to `children()`.
 
 ```ts
-import { For } from 'ranvi';
+import { For } from 'ranview';
 
 const [rows, setRows] = signal([{ id: 1, title: 'a' }]);
 
@@ -335,7 +335,7 @@ move. Use it when position is the identity (primitive arrays, fixed rows); use
 `For` when items have a stable id and can reorder.
 
 ```ts
-import { Index } from 'ranvi';
+import { Index } from 'ranview';
 
 Ul().children(
   Index({
@@ -364,7 +364,7 @@ created it. Disposing a scope disposes everything under it — nested effects,
 bindings, and `onCleanup` callbacks.
 
 ```ts
-import { createRoot, onCleanup } from 'ranvi';
+import { createRoot, onCleanup } from 'ranview';
 
 const dispose = createRoot((dispose) => {
   const el = Div().text(msg).build(); // this binding is owned by the root
