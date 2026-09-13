@@ -1,5 +1,5 @@
 import { adoptSheetText, adoptStyles } from './style';
-import type { Ref } from './builder/core';
+import type { Ref } from 'ranvi';
 
 const shadowRootCache = new WeakMap<HTMLElement, ShadowRoot>();
 

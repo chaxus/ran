@@ -1,5 +1,6 @@
+// @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
-import { signal, createEffect, computed, batch } from '@/utils/builder';
+import { signal, createEffect, computed, batch } from '../src/index.ts';
 
 describe('signal', () => {
   it('returns the initial value', () => {

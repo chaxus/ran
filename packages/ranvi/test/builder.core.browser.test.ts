@@ -1,10 +1,11 @@
+// @vitest-environment jsdom
 /**
  * Tests for ElementBuilder and ShadowBuilder in browser (jsdom) environment.
  * isSSR === false here, so real DOM APIs are exercised.
  */
 import { describe, it, expect, vi } from 'vitest';
-import { createRef, ElementBuilder, ShadowBuilder, For, Index, Show, Switch, Match } from '@/utils/builder/core';
-import { createRoot, signal } from '@/utils/builder/signal';
+import { createRef, ElementBuilder, ShadowBuilder, For, Index, Show, Switch, Match } from '../src/core.ts';
+import { createRoot, signal } from '../src/signal.ts';
 
 // ---------------------------------------------------------------------------
 // createRef

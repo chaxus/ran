@@ -1,5 +1,6 @@
+// @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
-import { EventManager } from '@/utils/builder';
+import { EventManager } from '../src/index.ts';
 
 /**
  * `EventManager` creates its AbortController on first use rather than up front, so these

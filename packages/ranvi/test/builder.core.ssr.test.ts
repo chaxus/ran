@@ -3,8 +3,8 @@
  * isSSR === true here, so HTMLElementMock / ShadowRootMock code paths are exercised.
  */
 import { describe, it, expect } from 'vitest';
-import { createRef, ElementBuilder, For, Index, Show, Switch, Match } from '@/utils/builder/core';
-import { HTMLElementMock, ShadowRootMock } from '@/utils/builder/mocks';
+import { createRef, ElementBuilder, For, Index, Show, Switch, Match } from '../src/core.ts';
+import { HTMLElementMock, ShadowRootMock } from '../src/mocks.ts';
 
 // ---------------------------------------------------------------------------
 // createRef

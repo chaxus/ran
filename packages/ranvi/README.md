@@ -1,8 +1,20 @@
-# ranui Builder — fluent DOM + fine-grained reactivity
+# ranvi — fluent DOM + fine-grained reactivity
 
-`ranui/builder` is a framework-free way to build DOM declaratively with
-SwiftUI/Solid-style fine-grained reactivity. No virtual DOM, no re-render of a
-whole tree — a signal change updates only the exact node bound to it.
+A framework-free way to build DOM declaratively, with SwiftUI/Solid-style fine-grained
+reactivity. No virtual DOM, no re-render of a whole tree — a signal change updates only
+the exact node bound to it.
+
+It runs in a browser against real elements, and in Node against a mock that serialises to
+HTML, so the same view code renders client-side or to a string.
+
+This is the view layer under [ranui](https://www.npmjs.com/package/ranui)'s 40 components.
+It lived inside that package until it outgrew it: a general-purpose library should not
+require you to install a video player, a diagram renderer and a maths typesetter to use
+it. `ranui/builder` still re-exports everything here, unchanged.
+
+```sh
+npm i ranvi
+```
 
 > **Principle: build once, update in place.** A view function runs once; state
 > changes flow through fine-grained bindings, never by re-running the view. Pick
@@ -27,7 +39,7 @@ import {
   getOwner,
   runWithOwner, // ownership
   EventManager, // lifecycle-scoped events
-} from 'ranui/builder';
+} from 'ranvi';
 ```
 
 The builder does **not** register custom elements. To use `<r-button>` etc.,
@@ -131,7 +143,7 @@ class** (each component exports it) — then its methods are typed, no cast:
 
 ```ts
 import { Popover } from 'ranui'; // the element class
-import { View, createRef } from 'ranui/builder';
+import { View, createRef } from 'ranvi';
 
 const ref = createRef<Popover>();
 View<Popover>('r-popover').attr('trigger', 'click').ref(ref).children(/* … */).build();
@@ -216,7 +228,7 @@ branch updates through its own bindings — the branch is built once. (A raw get
 child, by contrast, tears down and rebuilds on every dependency tick.)
 
 ```ts
-import { Show } from 'ranui/builder';
+import { Show } from 'ranvi';
 
 Div().children(
   Show({
@@ -254,7 +266,7 @@ winning branch is memoized, so it rebuilds only when the active branch changes.
 Evaluation short-circuits at the first match.
 
 ```ts
-import { Switch, Match } from 'ranui/builder';
+import { Switch, Match } from 'ranvi';
 
 Div().children(
   Switch({
@@ -287,7 +299,7 @@ values and transitions inside surviving rows are preserved (a plain getter child
 would rebuild all of them). Pass the handle straight to `children()`.
 
 ```ts
-import { For } from 'ranui/builder';
+import { For } from 'ranvi';
 
 const [rows, setRows] = signal([{ id: 1, title: 'a' }]);
 
@@ -323,7 +335,7 @@ move. Use it when position is the identity (primitive arrays, fixed rows); use
 `For` when items have a stable id and can reorder.
 
 ```ts
-import { Index } from 'ranui/builder';
+import { Index } from 'ranvi';
 
 Ul().children(
   Index({
@@ -352,7 +364,7 @@ created it. Disposing a scope disposes everything under it — nested effects,
 bindings, and `onCleanup` callbacks.
 
 ```ts
-import { createRoot, onCleanup } from 'ranui/builder';
+import { createRoot, onCleanup } from 'ranvi';
 
 const dispose = createRoot((dispose) => {
   const el = Div().text(msg).build(); // this binding is owned by the root

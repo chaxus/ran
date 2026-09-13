@@ -1,0 +1,75 @@
+{
+  "name": "ranvi",
+  "version": "0.1.0-alpha.0",
+  "description": "Framework-free DOM construction with fine-grained reactivity \u2014 build once, update in place, in a browser or to a string",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./signal": "./src/signal.ts",
+    "./mocks": "./src/mocks.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaxus/ran",
+    "directory": "packages/ranview"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "author": "chaxus",
+  "license": "MIT",
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "tsc": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "ranuts": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "jsdom": "30.0.1",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "keywords": [
+    "dom",
+    "reactive",
+    "signals",
+    "fine-grained",
+    "ssr",
+    "no-vdom",
+    "web-components"
+  ],
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs"
+      },
+      "./signal": {
+        "types": "./dist/signal.d.ts",
+        "import": "./dist/signal.js",
+        "require": "./dist/index.cjs"
+      },
+      "./mocks": {
+        "types": "./dist/mocks.d.ts",
+        "import": "./dist/mocks.js",
+        "require": "./dist/index.cjs"
+      }
+    }
+  }
+}

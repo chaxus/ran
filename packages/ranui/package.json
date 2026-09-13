@@ -194,7 +194,6 @@
     "docs/DESIGN.md",
     "docs/CODING.md",
     "docs/COMPONENTS.md",
-    "docs/BUILDER.md",
     "docs/style-tokens-public.md"
   ],
   "keywords": [
@@ -481,6 +480,7 @@
     "mermaid": "11.16.1",
     "mpegts.js": "1.8.1",
     "ranuts": "workspace:*",
+    "ranvi": "workspace:*",
     "remend": "1.3.0",
     "shiki": "4.4.3",
     "temml": "0.13.4"

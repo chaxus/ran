@@ -1,5 +1,6 @@
+// @vitest-environment jsdom
 import { describe, it, expect } from 'vitest';
-import { escapeHtml, escapeHtmlAttribute } from '@/utils/builder/escape';
+import { escapeHtml, escapeHtmlAttribute } from '../src/escape.ts';
 
 describe('escapeHtml', () => {
   it('escapes ampersand', () => {
