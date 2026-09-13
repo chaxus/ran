@@ -308,7 +308,7 @@ window.message?.success({
 
 ### リアクティビティの部品
 
-`signal`、`createEffect`、`computed`、`batch`、`untrack`、それに所有関係の層（`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`）が、DOM の builder と並んで入っています。フレームワークなしで、反応する画面の一部を組み立てるためのものです。設計は SwiftUI の `@Observable` になぞらえつつ、Solid.js 流の保証を備えています。エフェクトは再実行のたびに古い購読を自動で片づけます。`batch()` は複数の書き込みをひとつの反映にまとめます。`computed` は**遅延評価かつ値でメモ化**されます（誰にも読まれないメモは一度も計算されず、値が実際に変わったときだけ依存する側を起こします）。そしてエフェクト・メモ・バインディングはすべてスコープが持ち主なので、`createRoot` を破棄すれば、そこから生まれたものが一度の呼び出しでまとめて片づきます。ページやルートを畳む単位がこれです。`ElementBuilder` のチェーンできるメソッド（`text` / `attr` / `class` など）はシグナルのゲッターも受けつけ、自動で更新されるバインディングになります。詳しくは [`docs/BUILDER.md`](docs/BUILDER.md) を。
+`signal`、`createEffect`、`computed`、`batch`、`untrack`、それに所有関係の層（`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`）が、DOM の builder と並んで入っています。フレームワークなしで、反応する画面の一部を組み立てるためのものです。設計は SwiftUI の `@Observable` になぞらえつつ、Solid.js 流の保証を備えています。エフェクトは再実行のたびに古い購読を自動で片づけます。`batch()` は複数の書き込みをひとつの反映にまとめます。`computed` は**遅延評価かつ値でメモ化**されます（誰にも読まれないメモは一度も計算されず、値が実際に変わったときだけ依存する側を起こします）。そしてエフェクト・メモ・バインディングはすべてスコープが持ち主なので、`createRoot` を破棄すれば、そこから生まれたものが一度の呼び出しでまとめて片づきます。ページやルートを畳む単位がこれです。`ElementBuilder` のチェーンできるメソッド（`text` / `attr` / `class` など）はシグナルのゲッターも受けつけ、自動で更新されるバインディングになります。詳しくは [`ranvi`](../ranvi/README.md) を。
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';

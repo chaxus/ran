@@ -16,7 +16,7 @@
  * Then upload with the DesignSync tool (`finalize_plan` → `write_files`).
  */
 import { chromium } from '@playwright/test';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 

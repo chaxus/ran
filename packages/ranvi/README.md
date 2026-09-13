@@ -442,5 +442,5 @@ disconnectedCallback() { this.events.abort(); } // resets for the next connect
 - **SSR**: builders work under `defineSSR` / `renderToString`; `build()` returns a
   mock node, `serialize()` returns HTML. Reactive bindings run once during SSR.
 - **Components vs builder**: use registered `<r-*>` elements (see
-  [COMPONENTS.md](./COMPONENTS.md)) for rich widgets; use the builder for
-  layout/glue and reactive views. Theme tokens: [DESIGN.md](./DESIGN.md).
+  [ranui's component list](../ranui/docs/COMPONENTS.md)) for rich widgets; use the builder for
+  layout/glue and reactive views. Theme tokens: [ranui's DESIGN.md](../ranui/docs/DESIGN.md).
