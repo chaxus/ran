@@ -13,12 +13,18 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import * as ranview from '../src/index.ts';
 
-const readme = readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../README.md'), 'utf8');
+const here = dirname(fileURLToPath(import.meta.url));
+const readme = readFileSync(resolve(here, '../README.md'), 'utf8');
 
-/** `import { a, b } from 'ranview'` → ['a', 'b'], comments and type-only names removed. */
+/** `import { a, b } from '@chaxus/ranview'` → ['a', 'b'], comments and type-only names removed. */
 const importedNames = (): string[] => {
   const names = new Set<string>();
-  for (const block of readme.matchAll(/import\s*\{([^}]*)\}\s*from\s*'ranview'/g)) {
+  // The specifier is read from package.json rather than written here: the last two renames
+  // each moved it, and a parser that hard-codes the old one silently matches nothing and
+  // reports success on an empty set. The sanity check below is what caught that.
+  const self = JSON.parse(readFileSync(resolve(here, '../package.json'), 'utf8')).name as string;
+  const pattern = new RegExp(`import\\s*\\{([^}]*)\\}\\s*from\\s*'${self.replace('/', '\\/')}'`, 'g');
+  for (const block of readme.matchAll(pattern)) {
     for (const raw of block[1].split(',')) {
       const name = raw
         .replace(/\/\/.*$/gm, '')
@@ -42,6 +48,6 @@ describe('README', () => {
     // Types vanish at runtime, so a missing name is only a failure if it is not one.
     const isType = new RegExp(`import\\s+type[^}]*\\b${name}\\b|\\btype\\s+${name}\\b`).test(readme);
     if (isType) return;
-    expect(Object.hasOwn(ranview, name), `README imports { ${name} } from 'ranview'`).toBe(true);
+    expect(Object.hasOwn(ranview, name), `README imports { ${name} } from '@chaxus/ranview'`).toBe(true);
   });
 });

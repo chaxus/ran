@@ -8,15 +8,25 @@
  * enforces that, by looking for the star token in this file's text — which is why this
  * sentence does not spell it.
  */
-export { isSSR } from 'ranview';
-export { EventManager } from 'ranview';
-export { signal, createEffect, computed, batch, untrack, createRoot, onCleanup, getOwner, runWithOwner } from 'ranview';
-export type { Getter, Setter, SignalOptions, Owner } from 'ranview';
-export { escapeHtml, escapeHtmlAttribute } from 'ranview';
-export { matchSelector, collectMatches } from 'ranview';
-export type { MockNode } from 'ranview';
-export { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from 'ranview';
-export { createRef, For, Index, Show, Switch, Match, ElementBuilder, ShadowBuilder } from 'ranview';
+export { isSSR } from '@chaxus/ranview';
+export { EventManager } from '@chaxus/ranview';
+export {
+  signal,
+  createEffect,
+  computed,
+  batch,
+  untrack,
+  createRoot,
+  onCleanup,
+  getOwner,
+  runWithOwner,
+} from '@chaxus/ranview';
+export type { Getter, Setter, SignalOptions, Owner } from '@chaxus/ranview';
+export { escapeHtml, escapeHtmlAttribute } from '@chaxus/ranview';
+export { matchSelector, collectMatches } from '@chaxus/ranview';
+export type { MockNode } from '@chaxus/ranview';
+export { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from '@chaxus/ranview';
+export { createRef, For, Index, Show, Switch, Match, ElementBuilder, ShadowBuilder } from '@chaxus/ranview';
 export type {
   Ref,
   Child,
@@ -27,7 +37,7 @@ export type {
   ShowOptions,
   SwitchOptions,
   MatchClause,
-} from 'ranview';
+} from '@chaxus/ranview';
 export {
   View,
   Div,
@@ -46,4 +56,4 @@ export {
   Footer,
   Main,
   DeclarativeShadow,
-} from 'ranview';
+} from '@chaxus/ranview';

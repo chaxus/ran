@@ -11,4 +11,4 @@
  * ranui, and with it a video player, a diagram renderer and a maths typesetter: 242 MB of
  * transitive dependencies for a file that depends on one function.
  */
-export * from 'ranview';
+export * from '@chaxus/ranview';

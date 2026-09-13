@@ -1,4 +1,4 @@
-import { isSSR } from 'ranview';
+import { isSSR } from '@chaxus/ranview';
 
 const registry = new Map<string, new () => HTMLElement>();
 
