@@ -690,27 +690,27 @@ data has a date; it does not mean the page is a calendar.
 
 Choose the skeleton that answers the primary question with the fewest mental conversions:
 
-| The reader's question                                    | Skeleton                        |
-| -------------------------------------------------------- | -------------------------------- |
-| Which of these differs, and how                          | Comparison table                |
-| Which one is it, so I can open it                        | List / resource catalog         |
-| Which one is it, and the image tells me                  | Card grid                       |
-| What is this object, and how is it now                   | Sectioned detail                |
-| What does it belong to                                   | Hierarchy tree                  |
-| What depends on it, what breaks if it changes            | Adjacency list                  |
-| Which step am I on, what follows                         | Step flow                       |
-| Which stage is each item in, and moving it _is_ the work  | Kanban                          |
-| Why did it stall                                         | Trace drill-down                |
-| Is it healthy, how far does the damage reach             | Status wall                     |
-| What happened, in what order, by whom                    | Event timeline                  |
-| Who said what, how was it answered                       | Discussion thread               |
-| What changed, before versus after                        | Diff view                       |
-| What is the trend, where is the anomaly                  | Dashboard                       |
-| When is it occupied, does it clash                       | Calendar / scheduling           |
-| What do I work on next                                   | Master-detail workbench         |
-| Which rules apply, what do they affect                   | Configuration form              |
-| What does this text say                                  | Continuous document             |
-| Where is it                                              | Map / canvas                    |
+| The reader's question                                    | Skeleton                |
+| -------------------------------------------------------- | ----------------------- |
+| Which of these differs, and how                          | Comparison table        |
+| Which one is it, so I can open it                        | List / resource catalog |
+| Which one is it, and the image tells me                  | Card grid               |
+| What is this object, and how is it now                   | Sectioned detail        |
+| What does it belong to                                   | Hierarchy tree          |
+| What depends on it, what breaks if it changes            | Adjacency list          |
+| Which step am I on, what follows                         | Step flow               |
+| Which stage is each item in, and moving it _is_ the work | Kanban                  |
+| Why did it stall                                         | Trace drill-down        |
+| Is it healthy, how far does the damage reach             | Status wall             |
+| What happened, in what order, by whom                    | Event timeline          |
+| Who said what, how was it answered                       | Discussion thread       |
+| What changed, before versus after                        | Diff view               |
+| What is the trend, where is the anomaly                  | Dashboard               |
+| When is it occupied, does it clash                       | Calendar / scheduling   |
+| What do I work on next                                   | Master-detail workbench |
+| Which rules apply, what do they affect                   | Configuration form      |
+| What does this text say                                  | Continuous document     |
+| Where is it                                              | Map / canvas            |
 
 Six pairs get swapped, and each swap is a real bug: **timeline vs. steps** (what happened vs.
 what comes next), **kanban vs. filter** (moving the card must be the action, or the columns are
@@ -725,7 +725,7 @@ mapping and another set of actions to keep in sync.
 ### Each kind of information has a place
 
 | Information   | Belongs                                                      | Must not end up                          |
-| ------------- | ------------------------------------------------------------ | ----------------------------------------- |
+| ------------- | ------------------------------------------------------------ | ---------------------------------------- |
 | Identity      | Title, object summary                                        | The last column, or behind a tab         |
 | Status        | Title or summary region                                      | Findable only in a detail field          |
 | Attributes    | Detail body, grouped as people think about it                | Flattened in API field order             |

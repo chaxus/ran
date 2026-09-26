@@ -10,12 +10,12 @@ As outras páginas desta seção respondem perguntas sobre as peças. Esta respo
 antes: com tudo o que a tela precisa carregar, o que a pessoa veio fazer e qual arranjo
 permite que ela faça?
 
-| Página                                                     | Responde                                            |
-| ----------------------------------------------------------- | ---------------------------------------------------- |
-| **Arquitetura da informação** (esta página)                | _Que forma_ a página deve ter                       |
-| [Design system](/pt/src/ranui/design-system/)              | _O que_ são os tokens: o vocabulário                |
-| [Diretrizes de design](/pt/src/ranui/design-guides/)       | _Como escolher_ entre eles ao montar uma tela       |
-| [Temas](/pt/src/ranui/theme/)                              | _Como trocar e sobrescrever_ em tempo de execução   |
+| Página                                               | Responde                                          |
+| ---------------------------------------------------- | ------------------------------------------------- |
+| **Arquitetura da informação** (esta página)          | _Que forma_ a página deve ter                     |
+| [Design system](/pt/src/ranui/design-system/)        | _O que_ são os tokens: o vocabulário              |
+| [Diretrizes de design](/pt/src/ranui/design-guides/) | _Como escolher_ entre eles ao montar uma tela     |
+| [Temas](/pt/src/ranui/theme/)                        | _Como trocar e sobrescrever_ em tempo de execução |
 
 > **Use quando** estiver começando uma tela que precisa carregar vários objetos, vários
 > estados e as relações entre eles: um console, um painel, um backoffice, uma bancada de
@@ -58,27 +58,27 @@ registro ter campo de data diz que há uma data nos dados. Não diz que a págin
 
 Escolha o arranjo que responde à pergunta principal com o menor número de conversões mentais.
 
-| A pergunta diante de quem lê                            | O que precisa ficar junto                             | Esqueleto                   |
-| --------------------------------------------------------- | ------------------------------------------------------ | ---------------------------- |
-| Em que estes diferem?                                   | Os campos comparados, em colunas fixas                | Tabela de comparação        |
-| Qual é, para eu abrir?                                  | Nome, identificador, status                           | Lista / catálogo de recursos |
-| Qual é, se a imagem me diz?                             | A imagem primeiro, nome e campos ao redor             | Grade de cartões            |
-| O que é este objeto e como ele está agora?              | Identidade, status, ação principal e então atributos  | Detalhe em seções           |
-| A que ele pertence?                                     | Caminho, pai, irmãos                                  | Árvore hierárquica          |
-| O que depende disto e o que quebra se mudar?            | Montante e jusante, raio de impacto                   | Lista de adjacência         |
-| Em que passo estou e o que vem depois?                  | Etapa, entrada atual, os passos seguintes             | Fluxo em etapas             |
-| Em que estágio está cada item, se movê-lo _é_ o trabalho | O estágio como coluna, identidade e bloqueios no cartão | Kanban                      |
-| Por que travou?                                         | Resumo da etapa, depois resultado por passo, depois o log bruto | Rastreamento com drill-down |
-| Está saudável e até onde vai o estrago?                 | Nome do objeto, status e o evento que o mudou         | Mural de status             |
-| O que aconteceu, em que ordem e por quem?               | Momento, autor, tipo de evento                        | Linha do tempo de eventos   |
-| Quem disse o quê e como foi respondido?                 | Autor, mensagem, estrutura de respostas               | Thread de discussão         |
-| O que mudou, antes contra depois?                       | As duas versões, lado a lado                          | Visão de diferenças         |
-| Qual é a tendência e onde está a anomalia?              | A métrica, sua linha de base, a entrada para o detalhe | Painel de indicadores       |
-| Quando isto está ocupado e quando conflita?             | Início, fim e duração em um mesmo eixo                | Calendário / agenda         |
-| No que eu trabalho em seguida?                          | A fila de um lado, o item do outro                    | Bancada mestre-detalhe      |
-| Que regras valem e o que elas afetam?                   | O ajuste, seu alcance, sua consequência               | Formulário de configuração  |
-| O que este texto diz?                                   | O corpo em ordem, com um sumário ao lado              | Documento contínuo          |
-| Onde está?                                              | Posição, limites, distribuição                        | Mapa / tela                 |
+| A pergunta diante de quem lê                             | O que precisa ficar junto                                       | Esqueleto                    |
+| -------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------- |
+| Em que estes diferem?                                    | Os campos comparados, em colunas fixas                          | Tabela de comparação         |
+| Qual é, para eu abrir?                                   | Nome, identificador, status                                     | Lista / catálogo de recursos |
+| Qual é, se a imagem me diz?                              | A imagem primeiro, nome e campos ao redor                       | Grade de cartões             |
+| O que é este objeto e como ele está agora?               | Identidade, status, ação principal e então atributos            | Detalhe em seções            |
+| A que ele pertence?                                      | Caminho, pai, irmãos                                            | Árvore hierárquica           |
+| O que depende disto e o que quebra se mudar?             | Montante e jusante, raio de impacto                             | Lista de adjacência          |
+| Em que passo estou e o que vem depois?                   | Etapa, entrada atual, os passos seguintes                       | Fluxo em etapas              |
+| Em que estágio está cada item, se movê-lo _é_ o trabalho | O estágio como coluna, identidade e bloqueios no cartão         | Kanban                       |
+| Por que travou?                                          | Resumo da etapa, depois resultado por passo, depois o log bruto | Rastreamento com drill-down  |
+| Está saudável e até onde vai o estrago?                  | Nome do objeto, status e o evento que o mudou                   | Mural de status              |
+| O que aconteceu, em que ordem e por quem?                | Momento, autor, tipo de evento                                  | Linha do tempo de eventos    |
+| Quem disse o quê e como foi respondido?                  | Autor, mensagem, estrutura de respostas                         | Thread de discussão          |
+| O que mudou, antes contra depois?                        | As duas versões, lado a lado                                    | Visão de diferenças          |
+| Qual é a tendência e onde está a anomalia?               | A métrica, sua linha de base, a entrada para o detalhe          | Painel de indicadores        |
+| Quando isto está ocupado e quando conflita?              | Início, fim e duração em um mesmo eixo                          | Calendário / agenda          |
+| No que eu trabalho em seguida?                           | A fila de um lado, o item do outro                              | Bancada mestre-detalhe       |
+| Que regras valem e o que elas afetam?                    | O ajuste, seu alcance, sua consequência                         | Formulário de configuração   |
+| O que este texto diz?                                    | O corpo em ordem, com um sumário ao lado                        | Documento contínuo           |
+| Onde está?                                               | Posição, limites, distribuição                                  | Mapa / tela                  |
 
 ### Pares que se confundem {#swapped-pairs}
 
@@ -102,16 +102,16 @@ quando o segundo uso for realmente frequente, não por precaução.
 
 ## Onde vai cada tipo de informação {#placement}
 
-| Informação      | Responde                        | Fica em                                                             | Não pode terminar em                          |
-| ---------------- | ------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------- |
-| **Identidade**  | O que é isto?                   | Título, resumo do objeto                                            | A última coluna ou atrás de uma aba           |
-| **Status**      | Como está agora?                | Região de título ou de resumo                                       | Localizável só em um campo de detalhe         |
-| **Atributos**   | Como ele é?                     | Corpo do detalhe, agrupado como as pessoas pensam                   | Achatado na ordem dos campos da API           |
-| **Relações**    | Com o que se conecta?           | Região ou aba própria, com posse, dependência e referência distintas | Misturado na tabela de atributos              |
-| **Mudanças**    | O que difere de antes?          | Região de diferenças, linha do tempo                                | Mostrado apenas como o valor novo             |
-| **Evidência**   | Por que esse julgamento se sustenta? | Ao lado do julgamento, expansível                                   | Uma página de log em outro lugar              |
-| **Ações**       | O que posso fazer agora?        | A principal na região de título, o resto junto ao objeto            | Enterradas em «mais»                          |
-| **Retorno**     | O que aquilo fez?               | Junto à ação, preservando o contexto da tarefa                      | Um aviso global solto do que ele trata        |
+| Informação     | Responde                             | Fica em                                                              | Não pode terminar em                   |
+| -------------- | ------------------------------------ | -------------------------------------------------------------------- | -------------------------------------- |
+| **Identidade** | O que é isto?                        | Título, resumo do objeto                                             | A última coluna ou atrás de uma aba    |
+| **Status**     | Como está agora?                     | Região de título ou de resumo                                        | Localizável só em um campo de detalhe  |
+| **Atributos**  | Como ele é?                          | Corpo do detalhe, agrupado como as pessoas pensam                    | Achatado na ordem dos campos da API    |
+| **Relações**   | Com o que se conecta?                | Região ou aba própria, com posse, dependência e referência distintas | Misturado na tabela de atributos       |
+| **Mudanças**   | O que difere de antes?               | Região de diferenças, linha do tempo                                 | Mostrado apenas como o valor novo      |
+| **Evidência**  | Por que esse julgamento se sustenta? | Ao lado do julgamento, expansível                                    | Uma página de log em outro lugar       |
+| **Ações**      | O que posso fazer agora?             | A principal na região de título, o resto junto ao objeto             | Enterradas em «mais»                   |
+| **Retorno**    | O que aquilo fez?                    | Junto à ação, preservando o contexto da tarefa                       | Um aviso global solto do que ele trata |
 
 **Cada fato tem exatamente um lugar autoritativo.** Nos demais entra um resumo ou uma entrada
 que aponta de volta.
@@ -144,11 +144,11 @@ _utilizável_ alguém leva em um olhar. Apertar o espaçamento sobe a densidade 
 efetiva onde estava; tirar campos irrelevantes e pôr a comparação em um lugar só sobe a de
 verdade.
 
-| Nível         | Onde cabe                                              | O que compra                                                    |
-| -------------- | ------------------------------------------------------ | ---------------------------------------------------------------- |
-| **Folgada**   | Primeiro uso, configuração rara, confirmação arriscada | Espaço para explicar, grupos mais separados, prévia do impacto   |
-| **Padrão**    | A maioria das listas, detalhes e formulários           | O equilíbrio padrão entre varredura e informação por tela        |
-| **Compacta**  | Bancadas de especialistas: monitoramento, operação, auditoria | Larguras de coluna estáveis, textos curtos, eficiência de teclado, visões salvas |
+| Nível        | Onde cabe                                                     | O que compra                                                                     |
+| ------------ | ------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| **Folgada**  | Primeiro uso, configuração rara, confirmação arriscada        | Espaço para explicar, grupos mais separados, prévia do impacto                   |
+| **Padrão**   | A maioria das listas, detalhes e formulários                  | O equilíbrio padrão entre varredura e informação por tela                        |
+| **Compacta** | Bancadas de especialistas: monitoramento, operação, auditoria | Larguras de coluna estáveis, textos curtos, eficiência de teclado, visões salvas |
 
 - Use **no máximo dois níveis vizinhos** em uma página. Uma tabela compacta dentro de uma
   página padrão tudo bem; cada região inventando a própria escala não.
@@ -162,12 +162,12 @@ verdade.
 
 Com o esqueleto escolhido, decida onde mora o conteúdo de apoio:
 
-| Quem lê está…                                          | Dê a ela                                                          |
-| -------------------------------------------------------- | ----------------------------------------------------------------- |
-| Alternando entre objetos ou evidências o tempo todo     | Uma divisão mestre-detalhe: a fila de um lado, o item do outro    |
-| Dando uma olhada em algo leve e passageiro              | Uma linha expansível (`r-disclosure-row`) ou um popover (`r-popover`) |
-| Trabalhando em algo compartilhável ou que precisa de espaço | Uma rota própria                                                  |
-| Confirmando, ou digitando um campo só                   | Um modal (`r-modal`)                                              |
+| Quem lê está…                                               | Dê a ela                                                              |
+| ----------------------------------------------------------- | --------------------------------------------------------------------- |
+| Alternando entre objetos ou evidências o tempo todo         | Uma divisão mestre-detalhe: a fila de um lado, o item do outro        |
+| Dando uma olhada em algo leve e passageiro                  | Uma linha expansível (`r-disclosure-row`) ou um popover (`r-popover`) |
+| Trabalhando em algo compartilhável ou que precisa de espaço | Uma rota própria                                                      |
+| Confirmando, ou digitando um campo só                       | Um modal (`r-modal`)                                                  |
 
 **Um modal não é uma camada de navegação.** Tudo que precisar de link copiável, histórico,
 comparação lado a lado ou trabalho que sobreviva a um recarregamento ganha rota.

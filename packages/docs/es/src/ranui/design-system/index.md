@@ -8,12 +8,12 @@ El **lenguaje de diseño** con el que está hecho ranui, y el catálogo **comple
 
 Cuatro páginas responden a cuatro preguntas distintas, y están separadas a propósito:
 
-| Página                                           | Responde                                                   |
-| ------------------------------------------------ | ---------------------------------------------------------- |
-| **Sistema de diseño** (esta página)              | _Qué_ son los tokens: el vocabulario                       |
-| [Pautas de diseño](/es/src/ranui/design-guides/) | _Cómo elegir_ entre ellos al construir una pantalla        |
-| [Arquitectura de información](/es/src/ranui/information-architecture/) | _Qué forma_ debe tomar la página misma |
-| [Tematización](/es/src/ranui/theme/)             | _Cómo cambiarlos y sobrescribirlos_ en tiempo de ejecución |
+| Página                                                                 | Responde                                                   |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Sistema de diseño** (esta página)                                    | _Qué_ son los tokens: el vocabulario                       |
+| [Pautas de diseño](/es/src/ranui/design-guides/)                       | _Cómo elegir_ entre ellos al construir una pantalla        |
+| [Arquitectura de información](/es/src/ranui/information-architecture/) | _Qué forma_ debe tomar la página misma                     |
+| [Tematización](/es/src/ranui/theme/)                                   | _Cómo cambiarlos y sobrescribirlos_ en tiempo de ejecución |
 
 > **Úsala cuando** necesites el nombre o el valor de un token (un rol de color, un paso de espacio, un tamaño de icono, un nivel de sombra, una curva de aceleración) o quieras entender por qué las escalas tienen la forma que tienen.
 

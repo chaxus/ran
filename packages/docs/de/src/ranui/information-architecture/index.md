@@ -10,12 +10,12 @@ Die übrigen Seiten dieses Abschnitts beantworten Fragen zu den Teilen. Diese be
 Frage davor: Bei allem, was der Bildschirm tragen muss, wozu ist die lesende Person gekommen,
 und welche Anordnung lässt sie das tun?
 
-| Seite                                                     | Beantwortet                                       |
-| ----------------------------------------------------------- | -------------------------------------------------- |
-| **Informationsarchitektur** (diese Seite)                 | _Welche Form_ die Seite haben soll                |
-| [Designsystem](/de/src/ranui/design-system/)              | _Was_ die Tokens sind: das Vokabular              |
-| [Designrichtlinien](/de/src/ranui/design-guides/)         | _Wie man wählt_, wenn man eine Oberfläche baut    |
-| [Themes](/de/src/ranui/theme/)                            | _Wie man zur Laufzeit wechselt und überschreibt_  |
+| Seite                                             | Beantwortet                                      |
+| ------------------------------------------------- | ------------------------------------------------ |
+| **Informationsarchitektur** (diese Seite)         | _Welche Form_ die Seite haben soll               |
+| [Designsystem](/de/src/ranui/design-system/)      | _Was_ die Tokens sind: das Vokabular             |
+| [Designrichtlinien](/de/src/ranui/design-guides/) | _Wie man wählt_, wenn man eine Oberfläche baut   |
+| [Themes](/de/src/ranui/theme/)                    | _Wie man zur Laufzeit wechselt und überschreibt_ |
 
 > **Dann lesen**, wenn eine Oberfläche entsteht, die mehrere Objekte, mehrere Zustände und
 > deren Beziehungen zugleich tragen muss: eine Konsole, ein Dashboard, ein Backoffice, ein
@@ -61,27 +61,27 @@ ein Datum steht. Es sagt nicht, dass die Seite ein Kalender ist.
 Wähle die Anordnung, die die Hauptfrage mit den wenigsten gedanklichen Umrechnungen
 beantwortet.
 
-| Die Frage vor der lesenden Person                        | Was zusammenstehen muss                                | Skelett                    |
-| ---------------------------------------------------------- | ------------------------------------------------------- | --------------------------- |
-| Worin unterscheiden sich diese?                          | Die verglichenen Felder, in festen Spalten             | Vergleichstabelle          |
-| Welches ist es, damit ich es öffnen kann?                | Name, Kennung, Status                                  | Liste / Ressourcenkatalog  |
-| Welches ist es, wenn das Bild es mir sagt?               | Zuerst das Bild, darum Name und Felder                 | Kartenraster               |
-| Was ist dieses Objekt und wie steht es gerade?           | Identität, Status, Hauptaktion, dann Attribute         | Detailseite in Abschnitten |
-| Wozu gehört es?                                          | Pfad, Elternknoten, Geschwister                        | Hierarchiebaum             |
-| Was hängt davon ab, was bricht bei einer Änderung?       | Vorgelagert und nachgelagert, Wirkungsradius           | Nachbarschaftsliste        |
-| In welchem Schritt bin ich und was folgt?                | Stufe, aktuelle Eingabe, die nächsten Schritte         | Schrittfolge               |
-| In welcher Stufe steckt jedes Element, Verschieben _ist_ die Arbeit | Die Stufe als Spalte, Identität und Blocker auf der Karte | Kanban                     |
-| Warum hängt es fest?                                     | Stufenüberblick, dann Ergebnis je Schritt, dann Rohlog | Trace mit Drilldown        |
-| Ist es gesund, und wie weit reicht der Schaden?          | Objektname, Status und das Ereignis, das ihn änderte   | Statuswand                 |
-| Was ist passiert, in welcher Reihenfolge, durch wen?     | Zeitpunkt, Akteur, Ereignisart                         | Ereignis-Zeitleiste        |
-| Wer hat was gesagt und wie wurde geantwortet?            | Verfasser, Beitrag, Antwortstruktur                    | Diskussionsstrang          |
-| Was hat sich geändert, vorher gegen nachher?             | Die beiden Fassungen nebeneinander                     | Diff-Ansicht               |
-| Wie ist der Trend und wo sitzt die Anomalie?             | Die Kennzahl, ihre Bezugslinie, der Weg ins Detail     | Dashboard                  |
-| Wann ist das belegt und wann kollidiert es?              | Beginn, Ende und Dauer auf einer Achse                 | Kalender / Terminplanung   |
-| Was bearbeite ich als Nächstes?                          | Die Warteschlange auf der einen, das Element auf der anderen Seite | Master-Detail-Arbeitsplatz |
-| Welche Regeln greifen und was betreffen sie?             | Die Einstellung, ihr Geltungsbereich, ihre Folge       | Konfigurationsformular     |
-| Was sagt dieser Text?                                    | Der Fließtext der Reihe nach, daneben eine Gliederung  | Fortlaufendes Dokument     |
-| Wo ist es?                                               | Position, Grenzen, Verteilung                          | Karte / Zeichenfläche      |
+| Die Frage vor der lesenden Person                                   | Was zusammenstehen muss                                            | Skelett                    |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------ | -------------------------- |
+| Worin unterscheiden sich diese?                                     | Die verglichenen Felder, in festen Spalten                         | Vergleichstabelle          |
+| Welches ist es, damit ich es öffnen kann?                           | Name, Kennung, Status                                              | Liste / Ressourcenkatalog  |
+| Welches ist es, wenn das Bild es mir sagt?                          | Zuerst das Bild, darum Name und Felder                             | Kartenraster               |
+| Was ist dieses Objekt und wie steht es gerade?                      | Identität, Status, Hauptaktion, dann Attribute                     | Detailseite in Abschnitten |
+| Wozu gehört es?                                                     | Pfad, Elternknoten, Geschwister                                    | Hierarchiebaum             |
+| Was hängt davon ab, was bricht bei einer Änderung?                  | Vorgelagert und nachgelagert, Wirkungsradius                       | Nachbarschaftsliste        |
+| In welchem Schritt bin ich und was folgt?                           | Stufe, aktuelle Eingabe, die nächsten Schritte                     | Schrittfolge               |
+| In welcher Stufe steckt jedes Element, Verschieben _ist_ die Arbeit | Die Stufe als Spalte, Identität und Blocker auf der Karte          | Kanban                     |
+| Warum hängt es fest?                                                | Stufenüberblick, dann Ergebnis je Schritt, dann Rohlog             | Trace mit Drilldown        |
+| Ist es gesund, und wie weit reicht der Schaden?                     | Objektname, Status und das Ereignis, das ihn änderte               | Statuswand                 |
+| Was ist passiert, in welcher Reihenfolge, durch wen?                | Zeitpunkt, Akteur, Ereignisart                                     | Ereignis-Zeitleiste        |
+| Wer hat was gesagt und wie wurde geantwortet?                       | Verfasser, Beitrag, Antwortstruktur                                | Diskussionsstrang          |
+| Was hat sich geändert, vorher gegen nachher?                        | Die beiden Fassungen nebeneinander                                 | Diff-Ansicht               |
+| Wie ist der Trend und wo sitzt die Anomalie?                        | Die Kennzahl, ihre Bezugslinie, der Weg ins Detail                 | Dashboard                  |
+| Wann ist das belegt und wann kollidiert es?                         | Beginn, Ende und Dauer auf einer Achse                             | Kalender / Terminplanung   |
+| Was bearbeite ich als Nächstes?                                     | Die Warteschlange auf der einen, das Element auf der anderen Seite | Master-Detail-Arbeitsplatz |
+| Welche Regeln greifen und was betreffen sie?                        | Die Einstellung, ihr Geltungsbereich, ihre Folge                   | Konfigurationsformular     |
+| Was sagt dieser Text?                                               | Der Fließtext der Reihe nach, daneben eine Gliederung              | Fortlaufendes Dokument     |
+| Wo ist es?                                                          | Position, Grenzen, Verteilung                                      | Karte / Zeichenfläche      |
 
 ### Paare, die verwechselt werden {#swapped-pairs}
 
@@ -109,16 +109,16 @@ muss. Füge die zweite hinzu, wenn die zweite Nutzung wirklich häufig ist, nich
 
 ## Wo welche Information hingehört {#placement}
 
-| Information      | Beantwortet                       | Gehört nach                                                        | Darf nicht landen                                |
-| ----------------- | --------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------- |
-| **Identität**    | Was ist das?                      | Titel, Objektüberblick                                              | In die letzte Spalte oder hinter einen Tab       |
-| **Status**       | Wie steht es gerade?              | Titel- oder Überblicksbereich                                       | Nur in einem Detailfeld auffindbar               |
-| **Attribute**    | Wie ist es beschaffen?            | Detailtext, gruppiert, wie Menschen darüber denken                  | Flach in der Reihenfolge der API-Felder          |
-| **Beziehungen**  | Womit hängt es zusammen?          | Eigener Bereich oder Tab, Besitz, Abhängigkeit und Verweis getrennt | Vermischt in der Attributtabelle                 |
-| **Änderungen**   | Was ist anders als vorher?        | Diff-Bereich, Zeitleiste                                            | Nur als der neue Wert gezeigt                    |
-| **Belege**       | Warum trägt dieses Urteil?        | Direkt neben dem Urteil, aufklappbar                                | Auf einer Logseite anderswo                      |
-| **Aktionen**     | Was kann ich jetzt tun?           | Hauptaktion im Titelbereich, der Rest neben seinem Objekt           | Vergraben unter „mehr“                           |
-| **Rückmeldung**  | Was hat das bewirkt?              | Neben der Aktion, mit erhaltenem Aufgabenkontext                    | Ein globaler Toast ohne Bezug zum Gegenstand     |
+| Information     | Beantwortet                | Gehört nach                                                         | Darf nicht landen                            |
+| --------------- | -------------------------- | ------------------------------------------------------------------- | -------------------------------------------- |
+| **Identität**   | Was ist das?               | Titel, Objektüberblick                                              | In die letzte Spalte oder hinter einen Tab   |
+| **Status**      | Wie steht es gerade?       | Titel- oder Überblicksbereich                                       | Nur in einem Detailfeld auffindbar           |
+| **Attribute**   | Wie ist es beschaffen?     | Detailtext, gruppiert, wie Menschen darüber denken                  | Flach in der Reihenfolge der API-Felder      |
+| **Beziehungen** | Womit hängt es zusammen?   | Eigener Bereich oder Tab, Besitz, Abhängigkeit und Verweis getrennt | Vermischt in der Attributtabelle             |
+| **Änderungen**  | Was ist anders als vorher? | Diff-Bereich, Zeitleiste                                            | Nur als der neue Wert gezeigt                |
+| **Belege**      | Warum trägt dieses Urteil? | Direkt neben dem Urteil, aufklappbar                                | Auf einer Logseite anderswo                  |
+| **Aktionen**    | Was kann ich jetzt tun?    | Hauptaktion im Titelbereich, der Rest neben seinem Objekt           | Vergraben unter „mehr“                       |
+| **Rückmeldung** | Was hat das bewirkt?       | Neben der Aktion, mit erhaltenem Aufgabenkontext                    | Ein globaler Toast ohne Bezug zum Gegenstand |
 
 **Jede Tatsache hat genau einen maßgeblichen Ort.** Überall sonst stehen eine Zusammenfassung
 oder ein Einstieg, der dorthin zurückführt.
@@ -151,11 +151,11 @@ Information ein Blick mitnimmt. Engere Abstände heben die visuelle Dichte und l
 wirksame genau dort, wo sie war; irrelevante Felder zu entfernen und den Vergleich an einen
 Ort zu legen, hebt die echte.
 
-| Stufe        | Wo sie hingehört                                      | Was sie einbringt                                                |
-| ------------- | ----------------------------------------------------- | ----------------------------------------------------------------- |
-| **Großzügig** | Erstnutzung, seltene Konfiguration, riskante Bestätigung | Raum zum Erklären, größere Gruppenabstände, sichtbare Wirkungsvorschau |
-| **Standard** | Die meisten Listen, Details und Formulare             | Das Standardgleichgewicht aus Überfliegbarkeit und Information je Bildschirm |
-| **Kompakt**  | Arbeitsplätze für Profis: Monitoring, Betrieb, Audit  | Stabile Spaltenbreiten, kurze Texte, Tastatureffizienz, gespeicherte Ansichten |
+| Stufe         | Wo sie hingehört                                         | Was sie einbringt                                                              |
+| ------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **Großzügig** | Erstnutzung, seltene Konfiguration, riskante Bestätigung | Raum zum Erklären, größere Gruppenabstände, sichtbare Wirkungsvorschau         |
+| **Standard**  | Die meisten Listen, Details und Formulare                | Das Standardgleichgewicht aus Überfliegbarkeit und Information je Bildschirm   |
+| **Kompakt**   | Arbeitsplätze für Profis: Monitoring, Betrieb, Audit     | Stabile Spaltenbreiten, kurze Texte, Tastatureffizienz, gespeicherte Ansichten |
 
 - Verwende auf einer Seite **höchstens zwei benachbarte Stufen**. Eine kompakte Tabelle in
   einer Standardseite ist in Ordnung; dass jeder Bereich seinen eigenen Maßstab erfindet,
@@ -170,12 +170,12 @@ Ort zu legen, hebt die echte.
 
 Steht das Skelett, wird entschieden, wo der unterstützende Inhalt lebt:
 
-| Die lesende Person…                                     | bekommt                                                           |
-| --------------------------------------------------------- | ------------------------------------------------------------------ |
-| wechselt ständig zwischen Objekten oder Belegen         | eine Master-Detail-Teilung: die Warteschlange links, das Element rechts |
-| wirft einen Blick auf etwas Leichtes und Flüchtiges     | eine aufklappbare Zeile (`r-disclosure-row`) oder ein Popover (`r-popover`) |
-| arbeitet an etwas Teilbarem oder Platzbedürftigem       | eine eigene Route                                                  |
-| bestätigt etwas oder tippt ein einzelnes Feld           | einen Dialog (`r-modal`)                                           |
+| Die lesende Person…                                 | bekommt                                                                     |
+| --------------------------------------------------- | --------------------------------------------------------------------------- |
+| wechselt ständig zwischen Objekten oder Belegen     | eine Master-Detail-Teilung: die Warteschlange links, das Element rechts     |
+| wirft einen Blick auf etwas Leichtes und Flüchtiges | eine aufklappbare Zeile (`r-disclosure-row`) oder ein Popover (`r-popover`) |
+| arbeitet an etwas Teilbarem oder Platzbedürftigem   | eine eigene Route                                                           |
+| bestätigt etwas oder tippt ein einzelnes Feld       | einen Dialog (`r-modal`)                                                    |
 
 **Ein Dialog ist keine Navigationsebene.** Alles, was einen kopierbaren Link, Verlauf, einen
 Vergleich nebeneinander oder Arbeit braucht, die einen Reload übersteht, bekommt eine Route.
