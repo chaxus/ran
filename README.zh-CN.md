@@ -2,7 +2,11 @@
 
 <p align="center">
   <a href="https://ran.chaxus.com/" target="_blank" rel="noopener noreferrer">
-    <img width="180" src="https://ran.chaxus.com/icon.png" alt="ran logo">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./packages/docs/public/icon-dark.png">
+      <source media="(prefers-color-scheme: light)" srcset="./packages/docs/public/icon.png">
+      <img width="180" src="./packages/docs/public/icon.png" alt="ran logo">
+    </picture>
   </a>
 </p>
 
