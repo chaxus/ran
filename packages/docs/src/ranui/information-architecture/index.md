@@ -10,12 +10,12 @@ The other pages in this section answer questions about the parts. This one answe
 question that comes first: given everything a screen has to carry, what is the reader here
 to do, and which arrangement lets them do it?
 
-| Page                                                     | Answers                                             |
-| -------------------------------------------------------- | --------------------------------------------------- |
-| **Information architecture** (this page)                 | _What shape_ the page should take                   |
-| [Design system](/src/ranui/design-system/)               | _What_ the tokens are: the vocabulary               |
-| [Design guidelines](/src/ranui/design-guides/)           | _How to choose_ between them when building a screen |
-| [Theming](/src/ranui/theme/)                             | _How to switch and override_ them at runtime        |
+| Page                                           | Answers                                             |
+| ---------------------------------------------- | --------------------------------------------------- |
+| **Information architecture** (this page)       | _What shape_ the page should take                   |
+| [Design system](/src/ranui/design-system/)     | _What_ the tokens are: the vocabulary               |
+| [Design guidelines](/src/ranui/design-guides/) | _How to choose_ between them when building a screen |
+| [Theming](/src/ranui/theme/)                   | _How to switch and override_ them at runtime        |
 
 > **Use when** you are starting a screen that has to carry several objects, several states
 > and the relationships between them: a console, a dashboard, an admin surface, a workbench,
@@ -58,27 +58,27 @@ date field says there is a date in the data. It does not say the page is a calen
 
 Pick the arrangement that answers the primary question with the fewest mental conversions.
 
-| The question in front of the reader                     | What has to sit together                                    | Skeleton                  |
-| -------------------------------------------------------- | ------------------------------------------------------------ | -------------------------- |
-| Which of these differs, and how?                        | The compared fields, in fixed columns                       | Comparison table          |
-| Which one is it, so I can open it?                      | Name, identifier, status                                    | List / resource catalog   |
-| Which one is it — and the picture tells me              | Image first, name and fields around it                      | Card grid                 |
-| What is this object, and how is it right now?           | Identity, status, primary action, then attributes           | Sectioned detail          |
-| What does it belong to?                                 | Path, parent, siblings                                      | Hierarchy tree            |
-| What depends on this, what breaks if it changes?        | Upstream and downstream, blast radius                       | Adjacency list            |
-| Which step am I on, and what follows?                   | Stage, current input, the steps after it                    | Step flow                 |
-| Which stage is each item in, and moving it _is_ the work | Stage as the column, identity and blockers on the card      | Kanban                    |
-| Why did it stall?                                       | Stage summary, then per-step result, then the raw log       | Trace drill-down          |
-| Is it healthy, and how far does the damage reach?       | Object name, status, then the event that changed it         | Status wall               |
-| What happened, in what order, by whom?                  | Time, actor, event type                                     | Event timeline            |
-| Who said what, and how was it answered?                 | Author, message, reply structure                            | Discussion thread         |
-| What changed, before versus after?                      | The two versions, side by side                              | Diff view                 |
-| What is the trend, and where is the anomaly?            | The metric, its baseline, the way into the detail           | Dashboard                 |
-| When is this occupied, and does it clash?               | Start, end and duration on one axis                         | Calendar / scheduling     |
-| What do I work on next?                                 | The queue on one side, the item on the other                | Master-detail workbench   |
-| Which rules apply, and what do they affect?             | The setting, its scope, its consequence                     | Configuration form        |
-| What does this text say?                                | The body in order, with an outline beside it                | Continuous document       |
-| Where is it?                                            | Position, boundary, distribution                            | Map / canvas              |
+| The question in front of the reader                      | What has to sit together                               | Skeleton                |
+| -------------------------------------------------------- | ------------------------------------------------------ | ----------------------- |
+| Which of these differs, and how?                         | The compared fields, in fixed columns                  | Comparison table        |
+| Which one is it, so I can open it?                       | Name, identifier, status                               | List / resource catalog |
+| Which one is it — and the picture tells me               | Image first, name and fields around it                 | Card grid               |
+| What is this object, and how is it right now?            | Identity, status, primary action, then attributes      | Sectioned detail        |
+| What does it belong to?                                  | Path, parent, siblings                                 | Hierarchy tree          |
+| What depends on this, what breaks if it changes?         | Upstream and downstream, blast radius                  | Adjacency list          |
+| Which step am I on, and what follows?                    | Stage, current input, the steps after it               | Step flow               |
+| Which stage is each item in, and moving it _is_ the work | Stage as the column, identity and blockers on the card | Kanban                  |
+| Why did it stall?                                        | Stage summary, then per-step result, then the raw log  | Trace drill-down        |
+| Is it healthy, and how far does the damage reach?        | Object name, status, then the event that changed it    | Status wall             |
+| What happened, in what order, by whom?                   | Time, actor, event type                                | Event timeline          |
+| Who said what, and how was it answered?                  | Author, message, reply structure                       | Discussion thread       |
+| What changed, before versus after?                       | The two versions, side by side                         | Diff view               |
+| What is the trend, and where is the anomaly?             | The metric, its baseline, the way into the detail      | Dashboard               |
+| When is this occupied, and does it clash?                | Start, end and duration on one axis                    | Calendar / scheduling   |
+| What do I work on next?                                  | The queue on one side, the item on the other           | Master-detail workbench |
+| Which rules apply, and what do they affect?              | The setting, its scope, its consequence                | Configuration form      |
+| What does this text say?                                 | The body in order, with an outline beside it           | Continuous document     |
+| Where is it?                                             | Position, boundary, distribution                       | Map / canvas            |
 
 ### Pairs that get swapped {#swapped-pairs}
 
@@ -102,16 +102,16 @@ usage is genuinely frequent, not in case it might be.
 
 ## Where each kind of information goes {#placement}
 
-| Information       | Answers                          | Belongs                                                                 | Must not end up                                     |
-| ------------------ | -------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------- |
-| **Identity**      | What is this?                    | Title, object summary                                                   | The last column, or behind a tab                    |
-| **Status**        | How is it now?                   | Title or summary region                                                 | Findable only in a detail field                     |
-| **Attributes**    | What is it like?                 | Detail body, grouped the way people think about it                      | Flattened in API field order                        |
-| **Relationships** | What is it connected to?         | Its own region or tab, with ownership, dependency and reference distinct | Mixed into the attribute table                      |
-| **Changes**       | What is different from before?   | Diff region, timeline                                                   | Shown as the new value only                         |
-| **Evidence**      | Why is that judgement safe?      | Next to the judgement, expandable                                       | A log page somewhere else                           |
-| **Actions**       | What can I do now?               | Primary action in the title region, the rest beside the object they act on | Buried under "more"                                 |
-| **Feedback**      | What did that do?                | Next to the action, keeping the task context                            | A global toast detached from what it is about       |
+| Information       | Answers                        | Belongs                                                                    | Must not end up                               |
+| ----------------- | ------------------------------ | -------------------------------------------------------------------------- | --------------------------------------------- |
+| **Identity**      | What is this?                  | Title, object summary                                                      | The last column, or behind a tab              |
+| **Status**        | How is it now?                 | Title or summary region                                                    | Findable only in a detail field               |
+| **Attributes**    | What is it like?               | Detail body, grouped the way people think about it                         | Flattened in API field order                  |
+| **Relationships** | What is it connected to?       | Its own region or tab, with ownership, dependency and reference distinct   | Mixed into the attribute table                |
+| **Changes**       | What is different from before? | Diff region, timeline                                                      | Shown as the new value only                   |
+| **Evidence**      | Why is that judgement safe?    | Next to the judgement, expandable                                          | A log page somewhere else                     |
+| **Actions**       | What can I do now?             | Primary action in the title region, the rest beside the object they act on | Buried under "more"                           |
+| **Feedback**      | What did that do?              | Next to the action, keeping the task context                               | A global toast detached from what it is about |
 
 **Each fact has exactly one authoritative location.** Everywhere else shows a summary or an
 entry point that links back to it.
@@ -143,11 +143,11 @@ in per look. Tightening the spacing raises visual density and leaves effective d
 exactly where it was; removing irrelevant fields and putting the comparison in one place
 raises the real thing.
 
-| Level         | Where it belongs                                       | What it buys                                                     |
-| -------------- | ------------------------------------------------------ | ---------------------------------------------------------------- |
-| **Spacious**  | First use, rare configuration, risky confirmation      | Room for explanation, wider groups, a visible preview of impact  |
-| **Standard**  | Most lists, details and forms                          | The default balance of scannability against information per screen |
-| **Compact**   | Expert workbenches: monitoring, ops, audit             | Stable column widths, short copy, keyboard efficiency, saved views |
+| Level        | Where it belongs                                  | What it buys                                                       |
+| ------------ | ------------------------------------------------- | ------------------------------------------------------------------ |
+| **Spacious** | First use, rare configuration, risky confirmation | Room for explanation, wider groups, a visible preview of impact    |
+| **Standard** | Most lists, details and forms                     | The default balance of scannability against information per screen |
+| **Compact**  | Expert workbenches: monitoring, ops, audit        | Stable column widths, short copy, keyboard efficiency, saved views |
 
 - Use **at most two adjacent levels** on one page. A compact table inside a standard page is
   fine; every region inventing its own scale is not.
@@ -160,12 +160,12 @@ raises the real thing.
 
 Once the skeleton is chosen, decide where the supporting content lives:
 
-| The reader is…                                        | Give them                                                        |
-| ------------------------------------------------------ | ---------------------------------------------------------------- |
-| Switching between objects or evidence repeatedly      | A master-detail split: the queue on one side, the item on the other |
-| Glancing at something light and transient             | An expandable row (`r-disclosure-row`) or a popover (`r-popover`) |
-| Working on something shareable, or that needs room    | Its own route                                                    |
-| Confirming, or typing one field                       | A modal (`r-modal`)                                              |
+| The reader is…                                     | Give them                                                           |
+| -------------------------------------------------- | ------------------------------------------------------------------- |
+| Switching between objects or evidence repeatedly   | A master-detail split: the queue on one side, the item on the other |
+| Glancing at something light and transient          | An expandable row (`r-disclosure-row`) or a popover (`r-popover`)   |
+| Working on something shareable, or that needs room | Its own route                                                       |
+| Confirming, or typing one field                    | A modal (`r-modal`)                                                 |
 
 **A modal is not a navigation layer.** Anything that needs a copyable link, browser history,
 a side-by-side comparison, or work that survives a refresh gets a route.

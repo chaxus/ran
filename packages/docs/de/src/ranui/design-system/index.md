@@ -8,12 +8,12 @@ Die **Designsprache**, aus der ranui gebaut ist, und der **vollständige** Katal
 
 Vier Seiten beantworten vier verschiedene Fragen, und sie sind bewusst getrennt:
 
-| Seite                                                 | Beantwortet                                            |
-| ----------------------------------------------------- | ------------------------------------------------------ |
-| **Designsystem** (diese Seite)                        | _Was_ die Tokens sind: das Vokabular                   |
-| [Gestaltungsleitlinien](/de/src/ranui/design-guides/) | _Wie man wählt_, wenn man eine Oberfläche baut         |
-| [Informationsarchitektur](/de/src/ranui/information-architecture/) | _Welche Form_ die Seite selbst haben soll |
-| [Themengestaltung](/de/src/ranui/theme/)              | _Wie man sie zur Laufzeit umschaltet und überschreibt_ |
+| Seite                                                              | Beantwortet                                            |
+| ------------------------------------------------------------------ | ------------------------------------------------------ |
+| **Designsystem** (diese Seite)                                     | _Was_ die Tokens sind: das Vokabular                   |
+| [Gestaltungsleitlinien](/de/src/ranui/design-guides/)              | _Wie man wählt_, wenn man eine Oberfläche baut         |
+| [Informationsarchitektur](/de/src/ranui/information-architecture/) | _Welche Form_ die Seite selbst haben soll              |
+| [Themengestaltung](/de/src/ranui/theme/)                           | _Wie man sie zur Laufzeit umschaltet und überschreibt_ |
 
 > **Einsetzen, wenn** du den Namen oder den Wert eines Tokens brauchst (eine Farbrolle, eine Abstandsstufe, eine Symbolgröße, eine Schattenstufe, eine Beschleunigungskurve) oder verstehen willst, warum die Skalen so geformt sind, wie sie sind.
 
