@@ -30,6 +30,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "catalog:",
+    "jsdom": "30.0.1",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",

@@ -7,24 +7,21 @@
  * dismissability.
  */
 
-/** Copy to clipboard, with the button saying what happened. */
-const wireCopy = (button: HTMLElement, text: string, doneLabel?: string): void => {
-  button.addEventListener('click', () => {
+import { announceCopy, copyText } from './copy';
+
+/** Feedback changes only after a successful clipboard write. */
+const wireCopy = (button: HTMLElement, text: string | (() => string), doneLabel?: string): void => {
+  button.addEventListener('click', async () => {
+    const success = await copyText(typeof text === 'function' ? text() : text);
+    announceCopy(success);
+    if (!success) return;
     const restore = doneLabel ? button.textContent : null;
-    void navigator.clipboard
-      ?.writeText?.(text)
-      .catch(() => {
-        /* A denied clipboard permission is the reader's choice, not an error to shout
-           about — the button still reports, it just reports the same way. */
-      })
-      .finally(() => {
-        button.classList.add('done');
-        if (doneLabel) button.textContent = doneLabel;
-        window.setTimeout(() => {
-          button.classList.remove('done');
-          if (restore !== null) button.textContent = restore;
-        }, 1600);
-      });
+    button.classList.add('done');
+    if (doneLabel) button.textContent = doneLabel;
+    window.setTimeout(() => {
+      button.classList.remove('done');
+      if (restore !== null) button.textContent = restore;
+    }, 1600);
   });
 };
 
@@ -117,31 +114,21 @@ const mountGlass = (): void => {
   });
 
   const copy = root.querySelector<HTMLElement>('[data-copy-code]');
-  if (copy) {
-    copy.addEventListener('click', () => {
-      void navigator.clipboard?.writeText?.(codeEl?.textContent ?? '').catch(() => {});
-      const done = copy.dataset.done ?? '';
-      const label = copy.dataset.label ?? '';
-      copy.textContent = done;
-      copy.classList.add('done');
-      window.setTimeout(() => {
-        copy.textContent = label;
-        copy.classList.remove('done');
-      }, 1600);
-    });
-  }
+  if (copy) wireCopy(copy, () => codeEl?.textContent ?? '', copy.dataset.done);
 };
 
 const mountIconGallery = (): void => {
   const grid = document.querySelector<HTMLElement>('[data-icon-gallery]');
   if (!grid) return;
   const copiedLabel = grid.dataset.copied ?? 'Copied';
-  grid.addEventListener('click', (event) => {
+  grid.addEventListener('click', async (event) => {
     const cell = (event.target as Element | null)?.closest<HTMLElement>('.icon-cell');
     if (!cell) return;
     const name = cell.dataset.icon ?? '';
     const label = cell.querySelector('.icon-cell__name');
-    void navigator.clipboard?.writeText?.(`<r-icon name="${name}"></r-icon>`).catch(() => {});
+    const success = await copyText(`<r-icon name="${name}"></r-icon>`);
+    announceCopy(success);
+    if (!success) return;
     cell.classList.add('is-copied');
     if (label) label.textContent = copiedLabel;
     window.setTimeout(() => {

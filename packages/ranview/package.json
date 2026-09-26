@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./signal": "./src/signal.ts",
-    "./mocks": "./src/mocks.ts"
+    "./mocks": "./src/mocks.ts",
+    "./static": "./src/static.ts"
   },
   "repository": {
     "type": "git",
@@ -19,11 +20,12 @@
   "author": "chaxus",
   "license": "MIT",
   "scripts": {
-    "build": "vite build && tsc -p tsconfig.build.json",
+    "build": "vite build && tsc -p tsconfig.build.json && node bin/verify-static-build.mjs",
     "tsc": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "bench:ssr": "tsx ./bench/ssr.ts"
   },
   "dependencies": {
     "ranuts": "workspace:*"
@@ -33,7 +35,8 @@
     "jsdom": "30.0.1",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "tsx": "catalog:"
   },
   "keywords": [
     "dom",
@@ -69,6 +72,11 @@
         "types": "./dist/mocks.d.ts",
         "import": "./dist/mocks.js",
         "require": "./dist/index.cjs"
+      },
+      "./static": {
+        "types": "./dist/static.d.ts",
+        "import": "./dist/static.js",
+        "require": "./dist/static.cjs"
       }
     }
   }

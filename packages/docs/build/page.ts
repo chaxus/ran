@@ -26,6 +26,7 @@ import type { DocPage } from './content.ts';
 import { navFor, prevNextFor, sidebarFor } from './nav.ts';
 import type { SidebarItem } from './nav.ts';
 import { messagesFor } from './langs/index.ts';
+import { interactionCopy } from '../client/copy.ts';
 
 const escapeHtml = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -97,7 +98,7 @@ const langMenuHtml = (page: DocPage, urls: ReadonlySet<string>, label: string): 
     .join('');
   return (
     `<details class="langs"><summary class="langs__summary" aria-label="${escapeHtml(label)}">` +
-    `${escapeHtml(page.locale.label)}</summary><ul class="langs__list">${items}</ul></details>`
+    `<span class="langs__current">${escapeHtml(page.locale.label)}</span><svg class="langs__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a17 17 0 0 1 0 18M12 3a17 17 0 0 0 0 18"/></svg></summary><ul class="langs__list">${items}</ul></details>`
   );
 };
 
@@ -110,6 +111,7 @@ export interface RenderDocOptions {
 
 export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): string => {
   const { ui } = messagesFor(page.locale as LocaleDef);
+  const feedback = interactionCopy(page.locale.lang);
   const title = page.url === '/' ? SITE.name : `${page.title} | ${SITE.name}`;
   const nav = navFor(page.locale);
   const sidebar = sidebarFor(page.url, page.locale);
@@ -170,13 +172,14 @@ ${head.join('\n')}
 ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
 </head>
 <body${sb ? ' class="has-sidebar"' : ''}>
-<a class="skip" href="#main">${escapeHtml(ui.returnToTop)}</a>
+<a class="skip" href="#main">${escapeHtml(feedback.skip)}</a>
 <header class="site-header">
   <div class="site-header__inner">
-    ${sb ? `<input type="checkbox" id="drawer" class="drawer__toggle" hidden><label class="drawer__button" for="drawer" aria-label="${escapeHtml(ui.sidebarMenu)}"><span></span><span></span><span></span></label>` : ''}
+    ${sb ? `<input type="checkbox" id="drawer" class="drawer__toggle" hidden><label class="drawer__button" for="drawer" aria-controls="doc-sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}"><span></span><span></span><span></span></label>` : ''}
     <a class="wordmark" href="${escapeHtml(page.locale.dir ? `/${page.locale.dir}/` : '/')}">${escapeHtml(SITE.name)}</a>
     <nav class="nav" aria-label="${escapeHtml(ui.sidebarMenu)}">${navHtml}</nav>
     <button class="search-open" type="button" aria-label="${escapeHtml(ui.searchButton)}">
+      <svg class="search-open__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
       <span class="search-open__text">${escapeHtml(ui.searchButton)}</span>
       <kbd class="search-open__kbd">/</kbd>
     </button>
@@ -185,8 +188,9 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
   </div>
 </header>
 <div class="layout">
-${sb ? `<label class="drawer__scrim" for="drawer"></label><nav class="sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}">${sb}</nav>` : ''}
+${sb ? `<label class="drawer__scrim" for="drawer"></label><nav id="doc-sidebar" class="sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}">${sb}</nav>` : ''}
 <main id="main" class="doc">
+${tocHtml(page, ui.outline) ? `<details class="mobile-toc"><summary>${escapeHtml(ui.outline)}</summary>${tocHtml(page, ui.outline).replace(/<aside[^>]*>|<\/aside>|<p[^>]*>.*?<\/p>/g, '')}</details>` : ''}
 <${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div class="landing"' : 'article class="prose"'}>${page.html}</${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div' : 'article'}>
 ${footerNav}
 </main>
@@ -195,11 +199,12 @@ ${tocHtml(page, ui.outline)}
 <dialog id="search-dialog" class="search" aria-label="${escapeHtml(ui.searchButton)}">
   <form class="search__form" method="dialog" onsubmit="return false">
     <input id="search-input" class="search__input" type="search" autocomplete="off" spellcheck="false"
-           placeholder="${escapeHtml(ui.searchPlaceholder)}" aria-label="${escapeHtml(ui.searchButton)}">
-    <button class="search__close" type="submit" value="close" aria-label="${escapeHtml(ui.closeKey)}">esc</button>
+           placeholder="${escapeHtml(ui.searchPlaceholder)}" aria-label="${escapeHtml(ui.searchButton)}" role="combobox" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list">
+    <button class="search__close" type="button" value="close" aria-label="${escapeHtml(ui.closeKey)}">esc</button>
   </form>
-  <p id="search-status" class="search__status" data-loading="${escapeHtml(ui.searchPlaceholder)}" data-empty="${escapeHtml(ui.noResults)}"></p>
-  <ul id="search-results" class="search__results"></ul>
+  <p id="search-status" class="search__status" role="status" aria-live="polite" data-error="${escapeHtml(feedback.error)}" data-loading="${escapeHtml(feedback.loading)}" data-empty="${escapeHtml(ui.noResults)}"></p>
+  <button class="search__retry" type="button" hidden>${escapeHtml(feedback.retry)}</button>
+  <ul id="search-results" class="search__results" role="listbox" aria-label="${escapeHtml(ui.searchButton)}"></ul>
 </dialog>
 ${assets.js.map((src) => `<script type="module" src="${src}"></script>`).join('\n')}
 </body>

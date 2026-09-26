@@ -12,6 +12,7 @@ import '../styles/demos.css';
 import 'ranui/style';
 import { mountSearch } from './search.ts';
 import { mountDemos } from './home.ts';
+import { mountNavigation, mountCodeCopy } from './interactions.ts';
 
 // Registers every `<r-*>` the pages use. The demos are already in the markup as inert
 // custom elements; this is what upgrades them.
@@ -75,12 +76,8 @@ if (headings.length && links.size) {
   for (const heading of headings) observer.observe(heading);
 }
 
-/** Close the mobile drawer after following a link, or it covers the page just opened. */
-document.querySelector('.sidebar')?.addEventListener('click', (event) => {
-  if (!(event.target as Element | null)?.closest?.('a')) return;
-  const toggle = document.querySelector<HTMLInputElement>('#drawer');
-  if (toggle) toggle.checked = false;
-});
-
 mountSearch();
 mountDemos();
+
+mountNavigation();
+mountCodeCopy();

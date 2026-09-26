@@ -444,3 +444,55 @@ disconnectedCallback() { this.events.abort(); } // resets for the next connect
 - **Components vs builder**: use registered `<r-*>` elements (see
   [ranui's component list](../ranui/docs/COMPONENTS.md)) for rich widgets; use the builder for
   layout/glue and reactive views. Theme tokens: [ranui's DESIGN.md](../ranui/docs/DESIGN.md).
+
+## Static DOM and SSR / SSG snapshots
+
+Use the static entry when nodes will not update after construction:
+
+```ts
+import { Div, Span, For } from '@alixex/ranview/static';
+
+const page = Div()
+  .class('page')
+  .children(
+    Span().text(() => data.title),
+    For({
+      each: () => data.items,
+      key: (item) => item.id,
+      render: (item) => Span().text(item.title),
+    }),
+  );
+
+const element = page.build(); // real DOM in a browser, a mock node in Node
+const html = page.serialize(); // escaped HTML suitable for SSR / SSG
+```
+
+The static entry shares node operations with the default entry but imports no signal
+runtime. Binding and child getters are evaluated when applied, once per occurrence.
+`Show`, `Switch`, `For`, and `Index` return one-shot child getters: there are no effects,
+subscriptions, list reconciliation, or comment markers. `For` accepts the familiar
+`key` option for source compatibility but does not use it to reconcile a snapshot.
+Refs, SVG namespaces, shadow construction, event listeners, and serialization work
+as with the default entry. Static listeners still handle events; static does not mean
+that clicks are disabled. Do not pass reactive `For` / `Index` handles to this entry;
+import the control-flow helpers from the same entry as your factories.
+
+Static getters are ordinary callbacks. If you build a static subtree _inside_ an
+existing reactive effect and read signals, wrap construction in `untrack` from the
+default entry to avoid subscribing that surrounding effect.
+
+The default entry now also treats server rendering as a snapshot: bindings and
+control flow execute without tracking, and subsequent signal writes do not change
+already-built server nodes. Browser bindings from the default entry remain reactive.
+Direct values already avoid effects in both entries, so prefer them when no getter
+is needed. This change does not globally disable `signal`, `computed`, or explicit
+`createEffect` calls in server application code.
+
+Both entries retain an intermediate node tree. There is no hydration or direct HTML
+streaming API added by the static entry; use it when refs, node manipulation, and
+shadow serialization matter.
+
+Run `pnpm -F @alixex/ranview bench:ssr` for build-and-serialize timings covering
+plain values, getters, conditionals and 100-item lists. The benchmark checks output
+equivalence before timing and reports the median of seven warmed batches. Results
+are local microbenchmarks, not end-to-end request latency or a memory measurement.

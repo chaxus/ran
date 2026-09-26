@@ -1,7 +1,6 @@
 import { isSSR } from './env';
-import { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './mocks';
-import type { EventManager } from './events';
-import { computed, createEffect, createRoot, onCleanup, signal, type Getter } from './signal';
+import { ElementBuilder as BaseElementBuilder } from './builder';
+import { computed, createEffect, createRoot, onCleanup, signal, untrack, type Getter } from './signal';
 
 export interface Ref<T extends HTMLElement = HTMLElement> {
   current: T | null;
@@ -29,7 +28,7 @@ const flattenChildren = (arr: unknown[]): unknown[] =>
 /** Resolve one static child to a node (client) / string (SSR); `null` when skippable. */
 const toChildNode = (item: StaticChild): Node | string | null => {
   if (item == null) return null;
-  if (item instanceof ElementBuilder) return item.build() as unknown as Node;
+  if (item instanceof BaseElementBuilder) return item.build() as unknown as Node;
   if (typeof item === 'string') return isSSR ? item : document.createTextNode(item);
   return item as Node;
 };
@@ -156,6 +155,11 @@ export interface ShowOptions<T> {
  * Must be created inside a `createRoot` (it owns a memo + the branch effect).
  */
 export function Show<T>(options: ShowOptions<T>): () => Child {
+  if (isSSR)
+    return () =>
+      untrack(() =>
+        options.when() ? options.children(() => options.when() as NonNullable<T>) : (options.fallback?.() ?? null),
+      );
   const on = computed(() => Boolean(options.when()));
   const value = (): NonNullable<T> => options.when() as NonNullable<T>;
   return () => (on() ? options.children(value) : (options.fallback?.() ?? null));
@@ -199,6 +203,12 @@ export interface SwitchOptions {
  *   })
  */
 export function Switch(options: SwitchOptions): () => Child {
+  if (isSSR)
+    return () =>
+      untrack(() => {
+        const clause = options.children.find((c) => Boolean(c.when()));
+        return clause ? clause.children(() => clause.when() as NonNullable<unknown>) : (options.fallback?.() ?? null);
+      });
   const clauses = options.children;
   const winner = computed(() => clauses.findIndex((c) => Boolean(c.when())));
   return () => {
@@ -392,6 +402,10 @@ const mountIndexList = <T>(parent: Node, spec: IndexSpec<T>): void => {
 
 /** Append mixed static / array / reactive-getter / keyed-list children to a parent node. */
 const appendChildren = (parent: Node, items: Child[]): void => {
+  if (isSSR) untrack(() => appendTrackedChildren(parent, items));
+  else appendTrackedChildren(parent, items);
+};
+const appendTrackedChildren = (parent: Node, items: Child[]): void => {
   flattenChildren(items).forEach((item) => {
     if (isForSpec(item)) {
       mountKeyedList(parent, item);
@@ -410,56 +424,6 @@ const appendChildren = (parent: Node, items: Child[]): void => {
   });
 };
 
-export const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
-
-/**
- * Tags that exist only in SVG, so a builder can create them correctly without
- * being told which namespace they belong to.
- *
- * Deliberately excludes the tags SVG shares with HTML -- `a`, `script`,
- * `style`, `title` -- since guessing wrong there would silently produce the
- * wrong kind of element for the far more common HTML case. Reach for `Svg()`
- * when one of those is meant as SVG.
- */
-const SVG_ONLY_TAGS = new Set([
-  'svg',
-  'circle',
-  'clipPath',
-  'defs',
-  'desc',
-  'ellipse',
-  'feBlend',
-  'feColorMatrix',
-  'feComposite',
-  'feDropShadow',
-  'feFlood',
-  'feGaussianBlur',
-  'feMerge',
-  'feMergeNode',
-  'feOffset',
-  'filter',
-  'foreignObject',
-  'g',
-  'image',
-  'line',
-  'linearGradient',
-  'marker',
-  'mask',
-  'path',
-  'pattern',
-  'polygon',
-  'polyline',
-  'radialGradient',
-  'rect',
-  'stop',
-  'switch',
-  'symbol',
-  'text',
-  'textPath',
-  'tspan',
-  'use',
-]);
-
 /**
  * True in a dev build, without needing `vite/client` in the consumer's tsconfig.
  *
@@ -470,311 +434,24 @@ const SVG_ONLY_TAGS = new Set([
  */
 const isDev = (): boolean => (import.meta as { env?: { DEV?: boolean } }).env?.DEV === true;
 
-export class ElementBuilder<T extends HTMLElement = HTMLElement> {
-  private el: T;
+export { ShadowBuilder, SVG_NAMESPACE } from './builder';
 
-  /**
-   * @param tag element name
-   * @param namespace element namespace; inferred for SVG-only tags, and forced
-   * by `Svg()` for the tags SVG shares with HTML.
-   *
-   * The namespace matters more than it looks. `document.createElement('svg')`
-   * yields an `HTMLUnknownElement`: the browser does not render it as SVG, and
-   * -- because HTML lowercases attribute names -- `viewBox` lands as `viewbox`,
-   * which SVG reads case-sensitively and therefore ignores. An icon built that
-   * way is invisible, with markup that looks right in a serialized page.
-   */
+/** Shared per-entry strategy, never mutated by a request or a builder. */
+const reactiveRuntime = {
+  bind<V>(value: V | Getter<V>, apply: (value: V) => void): void {
+    if (typeof value !== 'function') {
+      apply(value);
+      return;
+    }
+    if (isSSR) untrack(() => apply((value as Getter<V>)()));
+    else createEffect(() => apply((value as Getter<V>)()));
+  },
+  append: appendChildren,
+};
+
+/** Reactive browser builder; SSR bindings are untracked snapshots. */
+export class ElementBuilder<T extends HTMLElement = HTMLElement> extends BaseElementBuilder<T> {
   constructor(tag: string, namespace?: string) {
-    const ns = namespace ?? (SVG_ONLY_TAGS.has(tag) ? SVG_NAMESPACE : undefined);
-    this.el = (isSSR
-      ? new HTMLElementMock(tag)
-      : ns
-        ? document.createElementNS(ns, tag)
-        : document.createElement(tag)) as unknown as T;
-  }
-
-  id(value: string): this {
-    this.el.setAttribute('id', value);
-    return this;
-  }
-
-  /**
-   * Apply a value now, or bind it reactively when a getter is passed.
-   * A getter creates an effect owned by the current reactive scope (createRoot),
-   * so the binding is disposed automatically when that scope is torn down.
-   */
-  private bind<V>(value: V | Getter<V>, apply: (v: V) => void): void {
-    if (typeof value === 'function') createEffect(() => apply((value as Getter<V>)()));
-    else apply(value);
-  }
-
-  /**
-   * Sets the element's class.
-   *
-   * Written through `setAttribute` rather than `className`. On an SVG element `className`
-   * is a read-only `SVGAnimatedString`, so assigning to it throws
-   * `Cannot set property className of [object SVGElement] which has only a getter` — which,
-   * happening inside a custom element's constructor, leaves the element un-upgraded with
-   * no shadow root rather than reporting a styling problem. `setAttribute` is equivalent
-   * for HTML elements and correct for both.
-   */
-  class(name: string | Getter<string>): this {
-    this.bind(name, (n) => {
-      if (isSSR) (this.el as unknown as HTMLElementMock).attributes.set('class', n);
-      else this.el.setAttribute('class', n);
-    });
-    return this;
-  }
-
-  addClass(...names: string[]): this {
-    names.forEach((n) => this.el.classList.add(n));
-    return this;
-  }
-
-  removeClass(...names: string[]): this {
-    names.forEach((n) => this.el.classList.remove(n));
-    return this;
-  }
-
-  attr(name: string, value: string | Getter<string>): this {
-    this.bind(value, (v) => this.el.setAttribute(name, v));
-    return this;
-  }
-
-  attrs(values: Record<string, string | number | boolean | null | undefined>): this {
-    Object.entries(values).forEach(([name, value]) => {
-      if (value == null) return;
-      this.el.setAttribute(name, String(value));
-    });
-    return this;
-  }
-
-  boolAttr(name: string, value: boolean | Getter<boolean>, enabledValue = ''): this {
-    this.bind(value, (v) => {
-      if (v) this.el.setAttribute(name, enabledValue);
-      else this.el.removeAttribute(name);
-    });
-    return this;
-  }
-
-  part(value: string | Getter<string>): this {
-    return this.attr('part', value);
-  }
-
-  data(key: string, value: string | Getter<string>): this {
-    return this.attr(`data-${key}`, value);
-  }
-
-  style(keyOrMap: string | Record<string, string>, value?: string | Getter<string>): this {
-    if (typeof keyOrMap === 'string') {
-      this.bind(value ?? '', (v) => this.el.style.setProperty(keyOrMap, v));
-    } else {
-      Object.entries(keyOrMap).forEach(([k, v]) => this.el.style.setProperty(k, v));
-    }
-    return this;
-  }
-
-  cssVar(name: string, value: string | Getter<string>): this {
-    const property = name.startsWith('--') ? name : `--${name}`;
-    return this.style(property, value);
-  }
-
-  aria(key: string, value: string | Getter<string>): this {
-    return this.attr(`aria-${key}`, value);
-  }
-
-  role(value: string | Getter<string>): this {
-    return this.attr('role', value);
-  }
-
-  tabIndex(value: number): this {
-    return this.attr('tabindex', String(value));
-  }
-
-  label(value: string | Getter<string>): this {
-    return this.aria('label', value);
-  }
-
-  labelledBy(id: string | Getter<string>): this {
-    return this.aria('labelledby', id);
-  }
-
-  describedBy(id: string | Getter<string>): this {
-    return this.aria('describedby', id);
-  }
-
-  ariaHidden(hidden = true): this {
-    return this.aria('hidden', String(hidden));
-  }
-
-  /**
-   * Permanent build-time listener — tied to the element's lifetime.
-   * Use for internal shadow DOM elements created in the constructor.
-   */
-  on<K extends keyof HTMLElementEventMap>(
-    type: K,
-    listener: (this: T, ev: HTMLElementEventMap[K]) => any,
-    options?: boolean | AddEventListenerOptions,
-  ): this {
-    this.el.addEventListener(type, listener as EventListener, options);
-    return this;
-  }
-
-  /**
-   * Lifecycle-managed listener — registered into an EventManager.
-   * Use in connectedCallback when building elements that need cleanup on disconnect.
-   * Call manager.abort() in disconnectedCallback to remove all listeners at once.
-   */
-  listen<K extends keyof HTMLElementEventMap>(
-    manager: EventManager,
-    type: K,
-    handler: (this: T, ev: HTMLElementEventMap[K]) => any,
-    options?: Omit<AddEventListenerOptions, 'signal'>,
-  ): this {
-    manager.on(this.el, type, handler as EventListener, options);
-    return this;
-  }
-
-  /**
-   * Delegated listener — the built element acts as the parent container.
-   * Fires handler only when the event originates from a descendant matching selector.
-   * Registered into an EventManager so it is cleaned up with manager.abort().
-   *
-   *   Div().class('list')
-   *     .children(...)
-   *     .delegate(scope, '.item', 'click', (ev, item) => handleItem(item))
-   *     .build();
-   */
-  delegate<K extends keyof HTMLElementEventMap>(
-    manager: EventManager,
-    selector: string,
-    type: K,
-    handler: (ev: HTMLElementEventMap[K], target: Element) => void,
-    options?: Omit<AddEventListenerOptions, 'signal'>,
-  ): this {
-    manager.delegate(this.el, selector, type, handler, options);
-    return this;
-  }
-
-  children(...items: Child[]): this {
-    appendChildren(this.el, items);
-    return this;
-  }
-
-  replaceChildren(...items: Child[]): this {
-    if (isSSR) {
-      const mock = this.el as unknown as HTMLElementMock | DocumentFragmentMock;
-      mock.childrenList = [];
-    } else {
-      this.el.replaceChildren();
-    }
-    return this.children(...items);
-  }
-
-  text(value: string | Getter<string>): this {
-    this.bind(value, (v) => {
-      this.el.textContent = v;
-    });
-    return this;
-  }
-
-  /**
-   * Set the element's content from a string of markup, without escaping it.
-   *
-   * The counterpart to `text()`, and named for the difference: `text()` escapes,
-   * this does not. Everything handed here is parsed as HTML, so anything that
-   * came from outside the program must be sanitized before it arrives.
-   *
-   * It exists because some content simply *is* HTML, and a builder without this
-   * cannot express it at all: markdown rendered for a page, a fragment assembled
-   * somewhere else, a translated string that carries its own emphasis
-   * (`Local-first · <b>open source</b>`). That gap is why a static-site
-   * generator with markdown in it could not be written against this API and had
-   * to concatenate strings instead.
-   *
-   * Like `textContent`, this replaces whatever content the element had --
-   * including anything set by `text()` or `children()` before it.
-   */
-  unsafeHtml(value: string | Getter<string>): this {
-    this.bind(value, (v) => {
-      this.el.innerHTML = v;
-    });
-    return this;
-  }
-
-  ref(holder: Ref<T>): this {
-    holder.current = this.el;
-    return this;
-  }
-
-  shadow(options: ShadowRootInit = { mode: 'closed' }): ShadowBuilder<T> {
-    const root = this.el.attachShadow(options);
-    return new ShadowBuilder<T>(this.el, root, options);
-  }
-
-  build(): T {
-    return this.el;
-  }
-
-  serialize(): string {
-    if (isSSR) return (this.el as unknown as HTMLElementMock).serialize();
-    const outer = document.createElement('div');
-    outer.appendChild(this.el.cloneNode(true));
-    return outer.innerHTML;
-  }
-}
-
-export class ShadowBuilder<T extends HTMLElement = HTMLElement> {
-  private root: ShadowRoot;
-  private hostEl: T;
-
-  /**
-   * `options` is taken and discarded: `attachShadow` has already consumed it by the time
-   * a builder exists, and nothing ever read the copy this class used to keep. The
-   * parameter stays so the call signature is unchanged.
-   */
-  constructor(host: T, root: ShadowRoot, _options: ShadowRootInit) {
-    this.hostEl = host;
-    this.root = root;
-  }
-
-  children(...items: Child[]): this {
-    appendChildren(this.root, items);
-    return this;
-  }
-
-  adoptSheet(...sheets: CSSStyleSheet[]): this {
-    this.root.adoptedStyleSheets = [...this.root.adoptedStyleSheets, ...sheets];
-    return this;
-  }
-
-  css(cssText: string): this {
-    if (isSSR) {
-      (this.root as unknown as ShadowRootMock).adoptedStyleSheets.push(cssText);
-      return this;
-    }
-    if (typeof CSSStyleSheet !== 'undefined') {
-      try {
-        const sheet = new CSSStyleSheet();
-        sheet.replaceSync(cssText);
-        this.root.adoptedStyleSheets = [...this.root.adoptedStyleSheets, sheet];
-        return this;
-      } catch {
-        // Fallback to style injection when adoptedStyleSheets is unavailable.
-      }
-    }
-    const style = document.createElement('style');
-    style.textContent = cssText;
-    this.root.appendChild(style);
-    return this;
-  }
-
-  done(): { host: T; shadow: ShadowRoot } {
-    return { host: this.hostEl, shadow: this.root };
-  }
-
-  serialize(): string {
-    if (isSSR) return (this.root as unknown as ShadowRootMock).serialize();
-    return (this.root as ShadowRoot).innerHTML;
+    super(tag, namespace, reactiveRuntime);
   }
 }

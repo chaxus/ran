@@ -101,6 +101,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2
+      jsdom:
+        specifier: 30.0.1
+        version: 30.0.1
       tsx:
         specifier: 'catalog:'
         version: 4.23.10
@@ -340,6 +343,9 @@ importers:
       jsdom:
         specifier: 30.0.1
         version: 30.0.1
+      tsx:
+        specifier: 'catalog:'
+        version: 4.23.10
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
