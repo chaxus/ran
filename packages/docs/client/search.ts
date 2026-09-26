@@ -9,6 +9,7 @@
  * languages would make every reader download seven they cannot read.
  */
 import MiniSearch from 'minisearch';
+import { interactionCopy } from './copy';
 import { tokenize, SEARCH_FIELDS } from 'ranpress/search';
 import type { SearchDoc } from 'ranpress/search';
 
@@ -18,6 +19,7 @@ const LIMIT = 30;
 
 let index: MiniSearch<SearchDoc> | null = null;
 let loading: Promise<void> | null = null;
+let failed = false;
 
 const lang = document.documentElement.lang || 'en';
 
@@ -40,6 +42,7 @@ const OPTIONS = {
 
 const loadIndex = async (): Promise<void> => {
   if (index || loading) return loading ?? undefined;
+  failed = false;
   loading = fetch(`/search/${lang}.json`)
     .then((res) => {
       if (!res.ok) throw new Error(`search index ${res.status}`);
@@ -50,6 +53,7 @@ const loadIndex = async (): Promise<void> => {
     })
     .catch((error: unknown) => {
       // A failed index is a search box that says so, not a page that breaks.
+      failed = true;
       console.error('search index failed to load', error);
     })
     .finally(() => {
@@ -93,6 +97,9 @@ export const mountSearch = (): void => {
   const openers = document.querySelectorAll<HTMLButtonElement>('.search-open');
   if (!dialog || !input || !list || !status) return;
 
+  const feedback = interactionCopy(lang);
+  const retry = dialog.querySelector<HTMLButtonElement>('.search__retry');
+  let opener: HTMLElement | null = null;
   let hits: Hit[] = [];
   let active = 0;
 
@@ -101,13 +108,16 @@ export const mountSearch = (): void => {
       .map((hit, i) => {
         const terms = input.value.split(/\s+/).filter(Boolean);
         return (
-          `<li><a class="search-hit" href="${escapeHtml(hit.url)}"${i === active ? ' data-active' : ''}>` +
+          `<li id="search-option-${i}" role="option" aria-selected="${i === active}"><a tabindex="-1" class="search-hit" href="${escapeHtml(hit.url)}"${i === active ? ' data-active' : ''}>` +
           `<span class="search-hit__title">${escapeHtml(hit.title)}</span>` +
-          `<span class="search-hit__page">${escapeHtml(hit.page)}</span>` +
-          `<span class="search-hit__text">${snippet(hit.preview ?? '', terms)}</span></a></li>`
+          `<span class="search-hit__page"><span class="search-hit__kind">${escapeHtml(/\/src\/(ranui|ranuts)\/(api|style-tokens|changelog)(?:[\/#]|$)/.test(hit.url) ? feedback.reference : /\/src\/(ranui|ranuts)\//.test(hit.url) ? feedback.guide : feedback.article)}</span> ${escapeHtml(hit.page)}</span>` +
+          `<span class="search-hit__text">${snippet((hit.preview ?? '').replace(/^(?:源码|Source(?: code)?):[^\n]*(?:\n|$)/i, ''), terms)}</span></a></li>`
         );
       })
       .join('');
+    input.setAttribute('aria-expanded', String(dialog.open && hits.length > 0));
+    if (hits.length) input.setAttribute('aria-activedescendant', `search-option-${active}`);
+    else input.removeAttribute('aria-activedescendant');
   };
 
   const run = (): void => {
@@ -115,32 +125,66 @@ export const mountSearch = (): void => {
     if (!query || !index) {
       hits = [];
       list.innerHTML = '';
-      status.textContent = index ? '' : (status.dataset.loading ?? '');
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
+      status.textContent = index
+        ? ''
+        : failed
+          ? (status.dataset.error ?? feedback.error)
+          : (status.dataset.loading ?? feedback.loading);
+      if (retry) retry.hidden = !failed;
       return;
     }
-    hits = index.search(query).slice(0, LIMIT) as unknown as Hit[];
+    const section = location.pathname.match(/\/src\/(ranui|ranuts|article|note)\//)?.[1];
+    hits = (index.search(query) as unknown as Hit[])
+      .sort((a, b) => {
+        const score = (hit: Hit): number => hit.score * (section && hit.url.includes(`/src/${section}/`) ? 1.15 : 1);
+        return score(b) - score(a);
+      })
+      .slice(0, LIMIT);
+    if (retry) retry.hidden = true;
     active = 0;
-    status.textContent = hits.length ? '' : (status.dataset.empty ?? 'No results');
+    status.textContent = hits.length
+      ? feedback.count.replace('{count}', String(hits.length))
+      : (status.dataset.empty ?? 'No results');
     render();
   };
 
   const open = async (): Promise<void> => {
-    if (!dialog.open) dialog.showModal();
+    if (!dialog.open) {
+      opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      const drawer = document.querySelector<HTMLInputElement>('#drawer');
+      if (drawer?.checked) {
+        drawer.checked = false;
+        drawer.dispatchEvent(new Event('change'));
+      }
+      dialog.showModal();
+    }
     input.focus();
     input.select();
     if (!index) {
       status.textContent = status.dataset.loading ?? 'Loading…';
+      list.setAttribute('aria-busy', 'true');
+      if (retry) retry.hidden = true;
       await loadIndex();
+      list.removeAttribute('aria-busy');
       run();
     }
   };
 
   for (const button of openers) button.addEventListener('click', () => void open());
   input.addEventListener('input', run);
+  retry?.addEventListener('click', () => void open());
+  dialog.querySelector('.search__close')?.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('close', () => {
+    input.setAttribute('aria-expanded', 'false');
+    opener?.focus();
+  });
 
   document.addEventListener('keydown', (event) => {
     // Cmd/Ctrl-K anywhere, or `/` when not already typing into something.
-    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test((event.target as Element)?.tagName ?? '');
+    const target = event.composedPath()[0] as HTMLElement;
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName ?? '') || target?.isContentEditable;
     if ((event.key === 'k' && (event.metaKey || event.ctrlKey)) || (event.key === '/' && !typing)) {
       event.preventDefault();
       void open();
@@ -148,7 +192,7 @@ export const mountSearch = (): void => {
   });
 
   dialog.addEventListener('keydown', (event) => {
-    if (!hits.length) return;
+    if (event.target !== input || !hits.length || event.isComposing) return;
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();
       active = (active + (event.key === 'ArrowDown' ? 1 : hits.length - 1)) % hits.length;

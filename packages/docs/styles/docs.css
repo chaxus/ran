@@ -934,22 +934,26 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 /* shiki writes both themes as custom properties per token and, with
    `defaultColor: false`, no concrete color. Each theme picks its side here, so one copy
    of the markup serves both and switching repaints without re-rendering. */
+/* The enclosing code surface owns its background. Inherited Shiki background
+   variables must not paint individual lines or tokens. */
+.prose figure.code .shiki,
+.prose figure.code .shiki code,
+.prose figure.code .shiki span {
+  background-color: transparent;
+}
 .shiki,
 .shiki span {
   color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']) .shiki,
   :root:not([data-ran-theme='light']) .shiki span {
     color: var(--shiki-dark);
-    background-color: var(--shiki-dark-bg);
   }
 }
 :root[data-ran-theme='dark'] .shiki,
 :root[data-ran-theme='dark'] .shiki span {
   color: var(--shiki-dark);
-  background-color: var(--shiki-dark-bg);
 }
 
 /* ── Code groups ─────────────────────────────────────────────────────────── */
@@ -1247,5 +1251,165 @@ ran-demo p {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Progressive controls: explicit icons on small screens, generous touch areas. */
+.search-open__icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+@media (max-width: 719px) {
+  .search-open__kbd {
+    display: none;
+  }
+  .search-open {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+}
+.drawer__button {
+  width: 44px;
+  height: 44px;
+}
+body.drawer-open {
+  overflow: hidden;
+}
+.mobile-toc {
+  display: none;
+  margin-bottom: var(--ran-space-6, 24px);
+  border-bottom: 1px solid var(--rule);
+}
+.mobile-toc summary {
+  cursor: pointer;
+  padding-block: var(--ran-space-3, 12px);
+  color: var(--fg-muted);
+}
+.mobile-toc .toc__list {
+  padding-bottom: var(--ran-space-4, 16px);
+}
+.mobile-toc .toc__link {
+  padding-block: var(--ran-space-2, 8px);
+}
+@media (max-width: 1239px) {
+  .mobile-toc {
+    display: block;
+  }
+}
+@media (pointer: coarse) {
+  .langs__summary,
+  .langs__link,
+  .sb__link,
+  .search__close {
+    min-height: 44px;
+  }
+  .sb__summary {
+    min-height: 44px;
+  }
+}
+.search__retry {
+  align-self: start;
+  margin-inline: var(--ran-space-4, 16px);
+  margin-bottom: var(--ran-space-4, 16px);
+  padding: var(--ran-space-2, 8px) var(--ran-space-3, 12px);
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-sm, 6px);
+  background: var(--bg-soft);
+  color: var(--fg);
+  font: inherit;
+  cursor: pointer;
+}
+.search-hit__kind {
+  color: var(--fg-muted);
+  font-weight: 600;
+}
+.prose figure.code::after {
+  inset-inline-end: auto;
+  inset-inline-start: 0;
+}
+.prose .code-group figure.code::after,
+.prose ran-demo + figure.code::after {
+  inset-inline-start: 20px;
+}
+.prose figure.code:has(.code-copy) pre {
+  padding-top: var(--ran-space-8, 32px);
+}
+.code-copy {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  min-height: 32px;
+  padding: var(--ran-space-1, 4px) var(--ran-space-2, 8px);
+  border: none;
+  border-radius: var(--ran-radius-sm, 6px);
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.code-copy:hover {
+  color: var(--fg);
+  background: var(--bg-soft);
+}
+.code-copy.done {
+  color: var(--fg);
+}
+@media (pointer: coarse) {
+  .code-copy {
+    min-height: 44px;
+  }
+  .prose figure.code:has(.code-copy) pre {
+    padding-top: var(--ran-space-10, 40px);
+  }
+}
+.copy-status {
+  position: fixed;
+  inset-block-end: var(--ran-space-6, 24px);
+  inset-inline-start: var(--ran-space-4, 16px);
+  z-index: 50;
+  max-width: calc(100vw - 32px);
+  margin: 0;
+  padding: var(--ran-space-3, 12px) var(--ran-space-4, 16px);
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-sm, 6px);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 14px;
+}
+.copy-status:empty {
+  display: none;
+}
+.langs__icon {
+  display: none;
+  width: 18px;
+  height: 18px;
+}
+@media (max-width: 620px) {
+  .site-header__inner {
+    gap: var(--ran-space-2, 8px);
+  }
+}
+@media (max-width: 380px) {
+  .site-header__inner {
+    gap: var(--ran-space-1, 4px);
+    padding-inline: var(--ran-space-2, 8px);
+  }
+  .langs__current {
+    display: none;
+  }
+  .langs__icon {
+    display: block;
+  }
+  .langs__summary {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
   }
 }
