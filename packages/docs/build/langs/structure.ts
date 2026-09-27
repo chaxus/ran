@@ -61,7 +61,6 @@ const articleSidebar: SidebarNode[] = [
 ];
 
 export const NAV: SidebarNode[] = [
-  { kind: 'full', key: 'home', link: '/' },
   { kind: 'full', key: 'ranui', link: '/src/ranui/', activeMatch: '/src/ranui/' },
   { kind: 'full', key: 'ranuts', link: '/src/ranuts/', activeMatch: '/src/ranuts/' },
   { kind: 'full', key: 'articles', link: '/src/article/doc_preview', activeMatch: '/src/(article|note)/' },

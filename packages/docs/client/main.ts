@@ -10,6 +10,7 @@ import '../styles/docs.css';
 import '../styles/home.css';
 import '../styles/demos.css';
 import 'ranui/style';
+import { mountCodeGroups } from './code-groups.ts';
 import { mountSearch } from './search.ts';
 import { mountDemos } from './home.ts';
 import { mountNavigation, mountCodeCopy } from './interactions.ts';
@@ -26,24 +27,7 @@ import('ranui').then(() => {
   if (document.querySelector('r-preview')) void import('@ranui/preview');
 });
 
-/**
- * Code-group tabs. The panes are all in the markup — one is visible and the rest carry
- * `hidden` — so with no script a reader still gets the first example rather than a row
- * of dead buttons and no code.
- */
-document.addEventListener('click', (event) => {
-  const tab = (event.target as Element | null)?.closest?.('.code-group__tab');
-  if (!(tab instanceof HTMLButtonElement)) return;
-  const group = tab.closest('.code-group');
-  if (!group) return;
-  const index = Number(tab.dataset.index ?? 0);
-  for (const [i, button] of [...group.querySelectorAll('.code-group__tab')].entries()) {
-    button.setAttribute('aria-selected', String(i === index));
-  }
-  for (const [i, pane] of [...group.querySelectorAll('.code-group__pane')].entries()) {
-    pane.toggleAttribute('hidden', i !== index);
-  }
-});
+mountCodeGroups();
 
 /**
  * Mark the outline entry for whatever section is on screen.

@@ -960,7 +960,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 
 .code-group {
   border: 1px solid var(--rule);
-  border-radius: 8px;
+  border-radius: var(--ran-radius-sm, 6px);
   overflow: hidden;
   background: var(--bg-code);
 }
@@ -974,7 +974,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .code-group__tab {
   padding: 6px 12px;
   border: none;
-  border-radius: 5px 5px 0 0;
+  border-radius: var(--ran-radius-sm, 6px) var(--ran-radius-sm, 6px) 0 0;
   background: transparent;
   color: var(--fg-muted);
   font: inherit;
@@ -1411,5 +1411,31 @@ body.drawer-open {
     align-items: center;
     justify-content: center;
     padding: 0;
+  }
+}
+
+/* Code examples remain readable before the tab interaction is available. */
+.code-group:not([data-enhanced]) .code-group__tabs {
+  display: none;
+}
+.code-group__fallback {
+  padding: var(--ran-space-3, 12px) var(--ran-space-5, 20px) 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.code-group[data-enhanced] .code-group__fallback {
+  display: none;
+}
+.code-group__tab {
+  min-height: 36px;
+  padding: var(--ran-space-2, 8px) var(--ran-space-3, 12px);
+}
+.code-group__tab:focus-visible,
+.code-group__pane:focus-visible {
+  outline-offset: -3px;
+}
+@media (pointer: coarse) {
+  .code-group__tab {
+    min-height: 44px;
   }
 }

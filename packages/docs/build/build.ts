@@ -53,20 +53,19 @@ export const markdown = createMarkdown({
       if (!blocks.length) return render(tokens);
       const labels = blocks.map((token, i) => {
         const info = (token as { lang?: string }).lang ?? '';
-        return /\[([^\]]+)\]/.exec(info)?.[1] ?? (info.split(/\s+/)[0] || `#${i + 1}`);
+        const label = /\[([^\]]+)\]/.exec(info)?.[1] ?? (info.split(/\s+/)[0] || `#${i + 1}`);
+        return label.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       });
       const tabs = labels
-        .map(
-          (label, i) =>
-            `<button class="code-group__tab" type="button" role="tab" aria-selected="${i === 0}" data-index="${i}">${label}</button>`,
-        )
+        .map((label, i) => `<button class="code-group__tab" type="button" hidden data-index="${i}">${label}</button>`)
         .join('');
       const panes = blocks
         .map(
-          (token, i) => `<div class="code-group__pane" role="tabpanel"${i ? ' hidden' : ''}>${render([token])}</div>`,
+          (token, i) =>
+            `<div class="code-group__pane"><p class="code-group__fallback">${labels[i]}</p>${render([token])}</div>`,
         )
         .join('');
-      return `<div class="code-group"><div class="code-group__tabs" role="tablist">${tabs}</div>${panes}</div>\n`;
+      return `<div class="code-group"><div class="code-group__tabs">${tabs}</div>${panes}</div>\n`;
     },
   },
 });
