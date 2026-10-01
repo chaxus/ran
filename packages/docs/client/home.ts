@@ -44,6 +44,9 @@ const mountHome = (): void => {
   if (!root || root.dataset.enhanced) return;
   root.dataset.enhanced = 'true';
   for (const button of root.querySelectorAll<HTMLElement>('[data-copy]')) wireCopy(button, button.dataset.copy ?? '');
+  for (const button of root.querySelectorAll<HTMLElement>('[data-copy-snippet]')) {
+    wireCopy(button, () => button.closest('.code-cell')?.querySelector('.snippet')?.textContent ?? '');
+  }
   const workbench = root.querySelector<HTMLElement>('[data-playground]');
   if (!workbench) return;
   const t = playgroundCopy(workbench.dataset.lang ?? 'en');

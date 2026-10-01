@@ -26,10 +26,17 @@ export const mountReadingRail = (headings: HTMLElement[]) => {
     .build();
   const path = View('path').attrs({ class: 'reading-rail__path', fill: 'none', 'stroke-width': '1.25' }).build();
   const marker = View('circle').attrs({ class: 'reading-rail__marker', r: '3' }).build();
-  const points = headings
-    .filter((heading, index) => heading.tagName === 'H2' || index === 0)
-    .slice(0, 48)
-    .map(() => View('circle').attrs({ class: 'reading-rail__node', cx: '10', r: '1.5' }).build());
+  const chapters = headings.filter((heading, index) => heading.tagName === 'H2' || index === 0);
+  // Sample the whole document, retaining its first and last chapter, instead of
+  // dropping every chapter after the 48th on long references.
+  const count = Math.min(48, chapters.length);
+  const visible = Array.from(
+    { length: count },
+    (_, index) => chapters[Math.round((index * (chapters.length - 1)) / Math.max(1, count - 1))],
+  );
+  const points = visible.map((heading) =>
+    View('circle').attrs({ class: 'reading-rail__node', cx: '10', r: '1.5', 'data-heading': heading.id }).build(),
+  );
   const svg = View('svg')
     .attrs({ viewBox: '0 0 180 320', preserveAspectRatio: 'none', class: 'reading-rail__svg', 'aria-hidden': 'true' })
     .children(path, ...points, marker)
@@ -66,7 +73,8 @@ export const mountReadingRail = (headings: HTMLElement[]) => {
   setReading(toc.dataset.readingDefault === 'true');
   let frame = 0;
   let latestIndex = -1;
-  let measuredHeight = -1;
+  let geometry = '';
+  let previousTime = 0;
   let disposed = false;
   let displayed = 20;
   let target = 20;
@@ -80,10 +88,14 @@ export const mountReadingRail = (headings: HTMLElement[]) => {
     marker.setAttribute('cy', String(y));
     caption.style.top = `${(y / 320) * 100}%`;
   };
-  const animate = (): void => {
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+  const wide = window.matchMedia?.('(min-width: 1240px)');
+  const animate = (time: number): void => {
     frame = 0;
     if (disposed) return;
-    displayed += (target - displayed) * 0.2;
+    const elapsed = previousTime ? Math.min(64, Math.max(0, time - previousTime)) : 16;
+    previousTime = time;
+    displayed += (target - displayed) * (1 - Math.exp(-elapsed / 75));
     if (Math.abs(target - displayed) < 0.15) displayed = target;
     paint();
     if (displayed !== target) frame = requestAnimationFrame(animate);
@@ -91,29 +103,56 @@ export const mountReadingRail = (headings: HTMLElement[]) => {
   const update = (index: number): void => {
     latestIndex = index;
     const rect = article.getBoundingClientRect();
-    const progress = Math.max(0, Math.min(1, (84 - rect.top) / Math.max(1, rect.height - innerHeight + 84)));
+    const edge = (document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 60) + 24;
+    const distance = Math.max(1, rect.height - innerHeight + edge);
+    const progress = Math.max(0, Math.min(1, (edge - rect.top) / distance));
     target = 20 + progress * 280;
-    if (rect.height !== measuredHeight) {
-      measuredHeight = rect.height;
-      const visible = headings.filter((heading, i) => heading.tagName === 'H2' || i === 0).slice(0, 48);
+    const nextGeometry = `${rect.height}:${innerHeight}:${edge}`;
+    if (nextGeometry !== geometry) {
+      geometry = nextGeometry;
       points.forEach((point, i) => {
         const top = visible[i].getBoundingClientRect().top - rect.top;
-        point.setAttribute('cy', String(20 + Math.max(0, Math.min(1, top / Math.max(1, rect.height))) * 280));
+        point.setAttribute('cy', String(20 + Math.max(0, Math.min(1, top / distance)) * 280));
       });
     }
-    title.textContent = headings[index]?.textContent?.replace(/#$/, '').trim() ?? headings[0]?.textContent ?? '';
-    percent.textContent = `${Math.round(progress * 100)}%`;
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || !toc.hasAttribute('data-reading')) {
+    const heading = headings[index] ?? headings[0];
+    const text = heading
+      ? [...heading.childNodes]
+          .filter((node) => !(node instanceof Element && node.classList.contains('anchor')))
+          .map((node) => node.textContent)
+          .join('')
+          .trim()
+      : '';
+    if (title.textContent !== text) {
+      title.textContent = text;
+      title.title = text;
+    }
+    const progressText = `${Math.round(progress * 100)}%`;
+    if (percent.textContent !== progressText) percent.textContent = progressText;
+    if (
+      reducedMotion?.matches ||
+      wide?.matches === false ||
+      !toc.hasAttribute('data-reading') ||
+      toc.hasAttribute('data-engaged')
+    ) {
       if (frame) cancelAnimationFrame(frame);
       frame = 0;
       displayed = target;
       paint();
-    } else if (!frame) frame = requestAnimationFrame(animate);
+    } else if (!frame) {
+      previousTime = 0;
+      frame = requestAnimationFrame(animate);
+    }
   };
+  const mediaChange = (): void => update(latestIndex);
+  reducedMotion?.addEventListener('change', mediaChange);
+  wide?.addEventListener('change', mediaChange);
   return {
     update,
     dispose: () => {
       disposed = true;
+      reducedMotion?.removeEventListener('change', mediaChange);
+      wide?.removeEventListener('change', mediaChange);
       if (frame) cancelAnimationFrame(frame);
       toggle.removeEventListener('click', click);
       stage.removeEventListener('pointerenter', engage);

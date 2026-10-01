@@ -682,3 +682,32 @@
   color: var(--fg);
   font-weight: 500;
 }
+
+.code-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--ran-space-3, 12px);
+  min-height: 44px;
+}
+.home-code-copy {
+  display: none;
+  min-height: 44px;
+  flex: none;
+  border: 0;
+  border-radius: var(--ran-radius-sm, 6px);
+  padding-inline: var(--ran-space-2, 8px);
+  color: var(--fg-muted);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+.cine[data-enhanced] .home-code-copy {
+  display: inline-flex;
+  align-items: center;
+}
+.home-code-copy:hover,
+.home-code-copy.done {
+  color: var(--fg);
+  background: var(--bg-soft);
+}

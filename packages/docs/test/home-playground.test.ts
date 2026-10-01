@@ -95,3 +95,17 @@ it('clears earlier success feedback when a later clipboard write fails', async (
   await vi.waitFor(() => expect(button.classList.contains('done')).toBe(false));
   expect(button.querySelector('.copy-label')!.textContent).toBe(original);
 });
+
+it('copies runnable registration code with theme styles and without a shell prompt', async () => {
+  const writeText = vi.fn(async (_text: string) => {});
+  Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+  setup();
+  const button = document.querySelector<HTMLButtonElement>('[data-copy-snippet]')!;
+  button.click();
+  await vi.waitFor(() => expect(writeText).toHaveBeenCalled());
+  const source = writeText.mock.calls[0][0];
+  expect(source).toContain("import 'ranui/style'");
+  expect(source).toContain("import 'ranui'");
+  expect(source).not.toContain('$ npm');
+  expect(source).toBe(button.closest('.code-cell')!.querySelector('.snippet')!.textContent);
+});

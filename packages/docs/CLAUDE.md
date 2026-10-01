@@ -265,7 +265,9 @@ and shared assets remain intact.
 
 ## The client bundle
 
-The homepage places quick start before the capability catalogue. The home workbench previews buttons, progress and selection. Keyboard-operated tabs reveal
+The homepage places quick start before the capability catalogue. Installation lives in the
+copyable shell command; registration source includes `ranui/style` and stays valid JavaScript.
+Both quick-start snippets provide copy controls only after enhancement. The home workbench previews buttons, progress and selection. Keyboard-operated tabs reveal
 one example at a time, edits update minimal copyable HTML, and reset restores the current
 example. `client/playground-copy.ts` shares all eight languages of interaction labels with
 the build renderer. Source snippets use ranview mock nodes so registered custom elements
@@ -280,7 +282,9 @@ shows nothing to a crawler, and nothing to a reader on a failed request. What is
 using a binary search over heading positions to handle fast scrolling without scanning every heading.
 `reading-rail.ts` adds a decorative SVG overview and an explicit outline toggle. Articles start in
 reading mode; API pages keep text navigation. Pointer entry or keyboard focus on a link restores
-the outline, and reduced motion updates the rail immediately. The global header uses one frame
+the outline, and reduced motion updates the rail immediately, including live preference changes.
+Long outlines sample chapter markers across the whole article, retaining both ends. Motion uses
+elapsed time and stops on narrow viewports, so refresh rate does not change its pacing. The global header uses one frame
 on every route, and the mobile drawer includes primary navigation on the homepage too.
 Code fences separate a 44px copy toolbar from horizontally scrolling source.
 The theme switch is a ranui element. Landing content stays visible without entrance scripts.

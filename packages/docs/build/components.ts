@@ -231,7 +231,9 @@ const COPY_ICON = () => [
  * across every home page to colour them would cost more than they are worth.
  */
 const installSource = (): Child[] => [
-  el('span', 'c-com', '$ npm i ranui ranuts'),
+  el('span', 'c-kw', 'import'),
+  ' ',
+  el('span', 'c-str', "'ranui/style'"),
   '\n\n',
   el('span', 'c-com', '// register the <r-*> elements once'),
   '\n',
@@ -470,8 +472,34 @@ export const renderHome = (locale: LocaleDef): string => {
       el(
         'div',
         'panel',
-        el('div', 'code-cell', el('div', 'code-head', t.startStep1), el('pre', 'snippet', installSource())),
-        el('div', 'code-cell', el('div', 'code-head', t.startStep2), el('pre', 'snippet', useSource())),
+        el(
+          'div',
+          'code-cell',
+          el(
+            'div',
+            'code-head',
+            el('span', '', t.startStep1),
+            el('button', 'home-code-copy', el('span', 'copy-label', feedback.copy)).attrs({
+              type: 'button',
+              'data-copy-snippet': '',
+            }),
+          ),
+          el('pre', 'snippet', installSource()),
+        ),
+        el(
+          'div',
+          'code-cell',
+          el(
+            'div',
+            'code-head',
+            el('span', '', t.startStep2),
+            el('button', 'home-code-copy', el('span', 'copy-label', feedback.copy)).attrs({
+              type: 'button',
+              'data-copy-snippet': '',
+            }),
+          ),
+          el('pre', 'snippet', useSource()),
+        ),
       ),
     ),
     el(
