@@ -465,6 +465,17 @@ export const renderHome = (locale: LocaleDef): string => {
     ),
     el(
       'section',
+      'section start',
+      el('div', 'sec-head', el('h2', '', t.startTitle), el('p', 'sec-sub', t.startDesc)),
+      el(
+        'div',
+        'panel',
+        el('div', 'code-cell', el('div', 'code-head', t.startStep1), el('pre', 'snippet', installSource())),
+        el('div', 'code-cell', el('div', 'code-head', t.startStep2), el('pre', 'snippet', useSource())),
+      ),
+    ),
+    el(
+      'section',
       'section caps',
       el('div', 'sec-head', el('h2', '', t.capsTitle), el('p', 'sec-sub', t.capsSub)),
       el(
@@ -497,17 +508,6 @@ export const renderHome = (locale: LocaleDef): string => {
             ),
           ),
         ),
-      ),
-    ),
-    el(
-      'section',
-      'section start',
-      el('div', 'sec-head', el('h2', '', t.startTitle), el('p', 'sec-sub', t.startDesc)),
-      el(
-        'div',
-        'panel',
-        el('div', 'code-cell', el('div', 'code-head', t.startStep1), el('pre', 'snippet', installSource())),
-        el('div', 'code-cell', el('div', 'code-head', t.startStep2), el('pre', 'snippet', useSource())),
       ),
     ),
     el(

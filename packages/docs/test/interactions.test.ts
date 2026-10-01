@@ -86,3 +86,26 @@ it('successful code copy uses the full source text', async () => {
   await vi.waitFor(() => expect(document.querySelector('.code-copy')!.classList.contains('done')).toBe(true));
   expect(write).toHaveBeenCalledWith('line one\nline two');
 });
+
+it('keeps copy feedback visible for the latest repeated operation', async () => {
+  vi.useFakeTimers();
+  try {
+    document.body.innerHTML =
+      '<article class="prose"><figure class="code"><pre><code>example</code></pre></figure></article>';
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText: vi.fn().mockResolvedValue(undefined) },
+    });
+    mountCodeCopy();
+    const button = document.querySelector<HTMLButtonElement>('.code-copy')!;
+    button.click();
+    await vi.advanceTimersByTimeAsync(1000);
+    button.click();
+    await vi.advanceTimersByTimeAsync(700);
+    expect(button.classList.contains('done')).toBe(true);
+    await vi.advanceTimersByTimeAsync(900);
+    expect(button.classList.contains('done')).toBe(false);
+  } finally {
+    vi.useRealTimers();
+  }
+});

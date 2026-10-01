@@ -541,13 +541,13 @@ a {
   padding: 0 var(--pad);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 0 40px;
+  gap: 0 var(--ran-space-8, 32px);
   align-items: start;
 }
 
 .doc {
   min-width: 0;
-  padding: 32px 0 96px;
+  padding: var(--ran-space-12, 48px) 0 var(--ran-space-24, 96px);
 }
 
 /*
@@ -619,7 +619,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .sb__label {
   position: relative;
   display: block;
-  padding: 5px 9px;
+  padding: var(--ran-space-2, 8px) var(--ran-space-3, 12px);
   border-radius: 5px;
   font-size: 14px;
   line-height: 1.5;
@@ -811,8 +811,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .prose h2 {
   font-size: 24px;
   font-weight: 650;
-  padding-top: 0.5em;
-  border-top: 1px solid var(--rule);
+  padding-top: 0.75em;
 }
 .prose h3 {
   font-size: 18.5px;
@@ -893,36 +892,30 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
  * own outline. A reference page alternating bordered demo, bordered code, bordered demo
  * down its whole length is what makes a documentation page tiring to read.
  */
-/*
- * Code sits on the page's alignment spine, and the hairlines are the only boundary.
- *
- * The fill was a second delimiter doing the same job as the rules, which is what made a
- * page of examples read as a stack of grey slabs — and it is the most repeated element on
- * the site, so it set the tone everywhere. Dropping it also lets the horizontal padding
- * go, which is what mattered: code was inset 20px while every paragraph and heading
- * started at 328px, so no code block on the site stood on the same spine as the prose
- * around it. Mono type and syntax colour distinguish code perfectly well on their own.
- */
+/* Code has a quiet toolbar, separate from the horizontally scrolling source. */
 .prose figure.code {
   position: relative;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-md, 8px);
+  background: var(--bg-code);
 }
 .prose figure.code::after {
   content: attr(data-lang);
   position: absolute;
-  top: 8px;
-  inset-inline-end: 0;
+  top: 0;
+  inset-inline-start: 16px;
+  height: 44px;
+  display: flex;
+  align-items: center;
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
+  font-size: 11px;
+  color: var(--fg-muted);
   pointer-events: none;
 }
 .prose figure.code pre {
   margin: 0;
-  padding: 18px 0;
+  padding: calc(var(--ran-space-11, 44px) + var(--ran-space-2, 8px)) var(--ran-space-5, 20px) var(--ran-space-5, 20px);
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 13.5px;
@@ -1027,7 +1020,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .prose th {
   font-weight: 600;
   color: var(--fg-muted);
-  background: transparent;
+  background: var(--bg-soft);
   border-bottom-color: var(--rule-strong);
 }
 .prose tr:last-child td {
@@ -1231,7 +1224,7 @@ ran-demo p {
     --pad: 16px;
   }
   .prose figure.code pre {
-    padding: 15px 16px;
+    padding: calc(var(--ran-space-11, 44px) + var(--ran-space-2, 8px)) var(--ran-space-4, 16px) var(--ran-space-4, 16px);
     font-size: 13px;
   }
   .pager {
@@ -1325,23 +1318,13 @@ body.drawer-open {
   color: var(--fg-muted);
   font-weight: 600;
 }
-.prose figure.code::after {
-  inset-inline-end: auto;
-  inset-inline-start: 0;
-}
-.prose .code-group figure.code::after,
-.prose ran-demo + figure.code::after {
-  inset-inline-start: 20px;
-}
-.prose figure.code:has(.code-copy) pre {
-  padding-top: var(--ran-space-8, 32px);
-}
 .code-copy {
   position: absolute;
   top: 0;
-  inset-inline-end: 0;
-  min-height: 32px;
-  padding: var(--ran-space-1, 4px) var(--ran-space-2, 8px);
+  inset-inline-end: 8px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: var(--ran-space-2, 8px) var(--ran-space-3, 12px);
   border: none;
   border-radius: var(--ran-radius-sm, 6px);
   background: transparent;
@@ -1356,14 +1339,6 @@ body.drawer-open {
 }
 .code-copy.done {
   color: var(--fg);
-}
-@media (pointer: coarse) {
-  .code-copy {
-    min-height: 44px;
-  }
-  .prose figure.code:has(.code-copy) pre {
-    padding-top: var(--ran-space-10, 40px);
-  }
 }
 .copy-status {
   position: fixed;
@@ -1460,4 +1435,55 @@ body:has(.landing) .doc {
   text-transform: none;
   letter-spacing: normal;
   color: var(--fg-muted);
+}
+
+/* Keep article hierarchy spacious; navigation stays quieter than the reading column. */
+.prose:not(:has(> .landing)) {
+  --prose-gap: 1.35em;
+}
+.prose:not(:has(> .landing)) > h1 {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.prose h2 {
+  margin-top: 1.4em;
+}
+.toc__link {
+  padding-block: var(--ran-space-1, 4px);
+}
+.toc__link[data-active] {
+  color: var(--fg);
+}
+.sidebar a[aria-current='page'] {
+  background: var(--bg-soft);
+  border-radius: var(--ran-radius-sm, 6px);
+}
+.table-wrap {
+  border-radius: var(--ran-radius-md, 8px);
+  border: 1px solid var(--rule);
+}
+.prose td {
+  line-height: 1.65;
+}
+.pager__link {
+  padding: var(--ran-space-4, 16px);
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-md, 8px);
+}
+.pager__link:hover {
+  background: var(--bg-soft);
+}
+@media (max-width: 899px) {
+  .doc {
+    padding-top: var(--ran-space-6, 24px);
+  }
+  .mobile-toc {
+    border: 1px solid var(--rule);
+    border-radius: var(--ran-radius-md, 8px);
+    padding-inline: var(--ran-space-4, 16px);
+    background: var(--bg-soft);
+  }
+  .mobile-toc summary {
+    min-height: 44px;
+  }
 }

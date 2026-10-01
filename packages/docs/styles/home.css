@@ -411,8 +411,8 @@
 .pillar p {
   margin: 0;
   color: var(--fg-muted);
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 14px;
+  line-height: 1.7;
 }
 .pillar-more {
   display: inline-flex;
@@ -516,8 +516,8 @@
 }
 .caps-desc {
   color: var(--fg-muted);
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 14px;
+  line-height: 1.7;
 }
 .code-cell {
   min-width: 0;
@@ -538,7 +538,7 @@
   margin: 0;
   padding: var(--ran-space-6, 24px) var(--ran-space-8, 32px);
   overflow-x: auto;
-  font: 12px/1.85 var(--font-mono);
+  font: 13px/1.85 var(--font-mono);
   color: var(--fg);
   tab-size: 2;
 }
@@ -596,8 +596,8 @@
 .feature p {
   margin: var(--ran-space-2, 8px) 0 0;
   color: var(--fg-muted);
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 14px;
+  line-height: 1.7;
 }
 @media (max-width: 899px) {
   .hero {
@@ -670,4 +670,15 @@
   .pillar-more svg {
     transition: none;
   }
+}
+
+.start .panel {
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-md, 8px);
+  overflow: hidden;
+  background: var(--bg-code);
+}
+.start .code-head {
+  color: var(--fg);
+  font-weight: 500;
 }

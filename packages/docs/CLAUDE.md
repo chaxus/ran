@@ -265,7 +265,7 @@ and shared assets remain intact.
 
 ## The client bundle
 
-The home workbench previews buttons, progress and selection. Keyboard-operated tabs reveal
+The homepage places quick start before the capability catalogue. The home workbench previews buttons, progress and selection. Keyboard-operated tabs reveal
 one example at a time, edits update minimal copyable HTML, and reset restores the current
 example. `client/playground-copy.ts` shares all eight languages of interaction labels with
 the build renderer. Source snippets use ranview mock nodes so registered custom elements
@@ -276,6 +276,9 @@ Deliberately small. Navigation, sidebar, outline, language menu and the mobile d
 all generated HTML and CSS — a documentation site that needs script to show its navigation
 shows nothing to a crawler, and nothing to a reader on a failed request. What is in
 `client/` genuinely cannot be done without it: search, copy buttons and playground controls.
+`client/outline.ts` synchronizes both outlines with the section above the sticky header,
+using a binary search over heading positions to handle fast scrolling without scanning every heading.
+Code fences separate a 44px copy toolbar from horizontally scrolling source.
 The theme switch is a ranui element. Landing content stays visible without entrance scripts.
 
 **`@ranui/preview` bundles pdf.js — 1.33 MB.** It loads only when the page actually contains

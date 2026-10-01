@@ -1,23 +1,23 @@
 import { announceCopy, copyText, interactionCopy } from './copy';
+import { ButtonBuilder } from '@alixex/ranview/static';
 
 export const mountCodeCopy = (): void => {
   const text = interactionCopy(document.documentElement.lang);
   for (const figure of document.querySelectorAll<HTMLElement>('.prose figure.code')) {
     const code = figure.querySelector('pre code');
     if (!code || figure.querySelector('.code-copy')) continue;
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'code-copy';
-    button.textContent = text.copy;
+    const button = ButtonBuilder().attrs({ type: 'button', class: 'code-copy' }).text(text.copy).build();
     figure.appendChild(button);
+    let timer: number | undefined;
     button.addEventListener('click', async () => {
+      window.clearTimeout(timer);
       button.disabled = true;
       const success = await copyText(code.textContent ?? '');
       button.disabled = false;
       button.classList.toggle('done', success);
       button.textContent = success ? text.copied : text.copy;
       announceCopy(success);
-      window.setTimeout(() => {
+      timer = window.setTimeout(() => {
         button.classList.remove('done');
         button.textContent = text.copy;
       }, 1600);
