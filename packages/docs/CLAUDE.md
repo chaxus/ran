@@ -278,6 +278,10 @@ shows nothing to a crawler, and nothing to a reader on a failed request. What is
 `client/` genuinely cannot be done without it: search, copy buttons and playground controls.
 `client/outline.ts` synchronizes both outlines with the section above the sticky header,
 using a binary search over heading positions to handle fast scrolling without scanning every heading.
+`reading-rail.ts` adds a decorative SVG overview and an explicit outline toggle. Articles start in
+reading mode; API pages keep text navigation. Pointer entry or keyboard focus on a link restores
+the outline, and reduced motion updates the rail immediately. The global header uses one frame
+on every route, and the mobile drawer includes primary navigation on the homepage too.
 Code fences separate a 44px copy toolbar from horizontally scrolling source.
 The theme switch is a ranui element. Landing content stays visible without entrance scripts.
 

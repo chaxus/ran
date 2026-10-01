@@ -62,7 +62,7 @@
 }
 .headline {
   margin: 0;
-  font: 600 clamp(32px, 3.5vw, 48px)/1.12 var(--font-sans);
+  font: 600 clamp(32px, 3.2vw, 42px)/1.18 var(--font-sans);
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
@@ -203,10 +203,10 @@
   color: var(--fg);
 }
 .live-body {
-  padding-block: var(--ran-space-8, 32px);
+  padding-block: var(--ran-space-6, 24px);
 }
 .demo-panel {
-  min-height: 150px;
+  min-height: 124px;
 }
 [data-enhanced] .demo-fallback {
   display: none;
@@ -222,7 +222,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: var(--ran-space-3, 12px);
-  margin-bottom: var(--ran-space-6, 24px);
+  margin-bottom: var(--ran-space-3, 12px);
 }
 .live-row r-button::part(content) {
   min-height: 44px;

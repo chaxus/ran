@@ -1,8 +1,11 @@
+import { mountReadingRail } from './reading-rail';
+
 /** Keep the desktop and mobile outlines in sync, including fast scrolls and hash jumps. */
 export const mountOutline = (): (() => void) => {
   const headings = [...document.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id]')];
   const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc__link')];
   if (!headings.length || !links.length) return () => {};
+  const rail = mountReadingRail(headings);
   let current: string | undefined;
   let pending = false;
   let disposed = false;
@@ -19,6 +22,7 @@ export const mountOutline = (): (() => void) => {
       if (headings[middle].getBoundingClientRect().top <= edge) low = middle + 1;
       else high = middle;
     }
+    rail.update(low - 1);
     const id = headings[low - 1]?.id;
     if (id === current) return;
     current = id;
@@ -49,6 +53,7 @@ export const mountOutline = (): (() => void) => {
   return () => {
     disposed = true;
     observer?.disconnect();
+    rail.dispose();
     window.removeEventListener('scroll', schedule);
     window.removeEventListener('resize', schedule);
     window.removeEventListener('hashchange', schedule);

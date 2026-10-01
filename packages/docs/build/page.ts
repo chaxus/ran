@@ -168,20 +168,21 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
   const sidebar = sidebarFor(page.url, page.locale);
   const { prev, next } = prevNextFor(page.url, sidebar);
   const sb = sidebarTree(sidebar, page.url);
-  const nav = navFor(page.locale).map((item) => {
-    const active = item.activeMatch ? new RegExp(item.activeMatch).test(page.url) : samePath(item.link, page.url);
-    return node(
-      'a',
-      {
-        class: 'nav__link',
-        href: item.link,
-        'aria-current': active ? 'page' : undefined,
-        target: item.external ? '_blank' : undefined,
-        rel: item.external ? 'noopener noreferrer' : undefined,
-      },
-      item.text,
-    );
-  });
+  const nav = () =>
+    navFor(page.locale).map((item) => {
+      const active = item.activeMatch ? new RegExp(item.activeMatch).test(page.url) : samePath(item.link, page.url);
+      return node(
+        'a',
+        {
+          class: 'nav__link',
+          href: item.link,
+          'aria-current': active ? 'page' : undefined,
+          target: item.external ? '_blank' : undefined,
+          rel: item.external ? 'noopener noreferrer' : undefined,
+        },
+        item.text,
+      );
+    });
   const pagerLink = (item: { link: string; text: string } | undefined, direction: 'prev' | 'next', label: string) =>
     item
       ? node(
@@ -250,23 +251,21 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
         node(
           'div',
           { class: 'site-header__inner' },
-          sb ? node('input', { type: 'checkbox', id: 'drawer', class: 'drawer__toggle', hidden: true }) : null,
-          sb
-            ? node(
-                'label',
-                {
-                  class: 'drawer__button',
-                  for: 'drawer',
-                  'aria-controls': 'doc-sidebar',
-                  'aria-label': ui.sidebarMenu,
-                },
-                node('span'),
-                node('span'),
-                node('span'),
-              )
-            : null,
+          node('input', { type: 'checkbox', id: 'drawer', class: 'drawer__toggle', hidden: true }),
+          node(
+            'label',
+            {
+              class: 'drawer__button',
+              for: 'drawer',
+              'aria-controls': 'doc-sidebar',
+              'aria-label': ui.sidebarMenu,
+            },
+            node('span'),
+            node('span'),
+            node('span'),
+          ),
           node('a', { class: 'wordmark', href: page.locale.dir ? `/${page.locale.dir}/` : '/' }, SITE.name),
-          node('nav', { class: 'nav', 'aria-label': ui.sidebarMenu }, nav),
+          node('nav', { class: 'nav', 'aria-label': ui.sidebarMenu }, nav()),
           node(
             'button',
             { class: 'search-open', type: 'button', 'aria-label': ui.searchButton },
@@ -281,8 +280,13 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
       node(
         'div',
         { class: 'layout' },
-        sb ? node('label', { class: 'drawer__scrim', for: 'drawer' }) : null,
-        sb ? node('nav', { id: 'doc-sidebar', class: 'sidebar', 'aria-label': ui.sidebarMenu }, sb) : null,
+        node('label', { class: 'drawer__scrim', for: 'drawer' }),
+        node(
+          'nav',
+          { id: 'doc-sidebar', class: sb ? 'sidebar' : 'sidebar sidebar--global', 'aria-label': ui.sidebarMenu },
+          node('div', { class: 'sidebar__primary' }, nav()),
+          sb,
+        ),
         node(
           'main',
           { id: 'main', class: 'doc' },
@@ -293,7 +297,12 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
           pager,
         ),
         desktopOutline
-          ? node('aside', { class: 'toc' }, node('p', { class: 'toc__label' }, ui.outline), desktopOutline)
+          ? node(
+              'aside',
+              { class: 'toc', 'data-reading-default': /\/src\/(article|note)\//.test(page.url) ? 'true' : undefined },
+              node('p', { class: 'toc__label' }, ui.outline),
+              desktopOutline,
+            )
           : null,
       ),
       node(

@@ -82,3 +82,22 @@ describe('static document rendering', () => {
     expect(doc.querySelector('link')).toBeNull();
   });
 });
+
+it('provides the same primary navigation in the homepage drawer without scripts', () => {
+  const doc = render(pageFor({ url: '/', baseRel: 'index.md', toc: [] }));
+  const desktop = [...doc.querySelectorAll('.nav .nav__link')].map((link) => link.getAttribute('href'));
+  const mobile = [...doc.querySelectorAll('.sidebar__primary .nav__link')].map((link) => link.getAttribute('href'));
+  expect(mobile).toEqual(desktop);
+  expect(doc.querySelector('.drawer__button')?.getAttribute('aria-controls')).toBe('doc-sidebar');
+  expect(doc.querySelector('.sidebar--global')).not.toBeNull();
+  expect(doc.body.classList.contains('has-sidebar')).toBe(false);
+});
+
+it('starts article outlines in reading mode while keeping API outlines expanded', () => {
+  expect(
+    render(pageFor({ url: '/src/article/ai/' }))
+      .querySelector('.toc')
+      ?.getAttribute('data-reading-default'),
+  ).toBe('true');
+  expect(render(pageFor()).querySelector('.toc')?.hasAttribute('data-reading-default')).toBe(false);
+});
