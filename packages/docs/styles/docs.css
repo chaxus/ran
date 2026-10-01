@@ -197,8 +197,7 @@ a {
   top: 0;
   z-index: 30;
   height: var(--header-h);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: saturate(1.4) blur(10px);
+  background: var(--bg);
   border-bottom: 1px solid var(--rule);
 }
 .site-header__inner {
@@ -1438,4 +1437,28 @@ body.drawer-open {
   .code-group__tab {
     min-height: 44px;
   }
+}
+
+/* The landing and reference share a ruled frame and the same theme tokens. */
+body:has(.landing) .site-header__inner {
+  width: calc(100% - 32px);
+  max-width: 960px;
+  border-inline: 1px solid var(--rule);
+}
+body:has(.landing) .layout {
+  max-width: none;
+  padding: 0 var(--ran-space-4, 16px);
+}
+body:has(.landing) .doc {
+  padding: 0;
+}
+.prose > h1 {
+  padding-bottom: var(--ran-space-6, 24px);
+  border-bottom: 1px solid var(--rule);
+}
+.toc__label {
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--fg-muted);
 }

@@ -9,6 +9,7 @@
  * languages would make every reader download seven they cannot read.
  */
 import MiniSearch from 'minisearch';
+import { Li, Span, View } from '@alixex/ranview/static';
 import { interactionCopy } from './copy';
 import { tokenize, SEARCH_FIELDS } from 'ranpress/search';
 import type { SearchDoc } from 'ranpress/search';
@@ -62,15 +63,10 @@ const loadIndex = async (): Promise<void> => {
   return loading;
 };
 
-const escapeHtml = (s: string): string =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-/**
- * A snippet centred on the first match, so a result shows why it matched rather than
- * the first 120 characters of every page.
- */
-const snippet = (text: string, terms: readonly string[]): string => {
-  if (!text) return '';
+/** A snippet centred on its first match, highlighted as literal text nodes. */
+export const searchSnippet = (text: string, terms: readonly string[]): HTMLSpanElement => {
+  const result = Span().attr('class', 'search-hit__text');
+  if (!text) return result.build();
   const lower = text.toLowerCase();
   let at = -1;
   for (const term of terms) {
@@ -80,13 +76,47 @@ const snippet = (text: string, terms: readonly string[]): string => {
   const start = at <= 40 ? 0 : at - 40;
   const slice = text.slice(start, start + 150);
   const body = (start ? '…' : '') + slice + (start + 150 < text.length ? '…' : '');
-  // Terms are highlighted after escaping, so a term containing markup cannot inject it.
-  let html = escapeHtml(body);
-  for (const term of [...terms].sort((a, b) => b.length - a.length)) {
-    if (term.length < 2) continue;
-    html = html.replace(new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'), '<mark>$1</mark>');
+  const alternatives = [...new Set(terms.filter((term) => term.length >= 2))]
+    .sort((a, b) => b.length - a.length)
+    .map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  if (!alternatives.length) return result.text(body).build();
+  // One pass over the original text prevents entity corruption and nested marks.
+  let end = 0;
+  for (const match of body.matchAll(new RegExp(alternatives.join('|'), 'gi'))) {
+    result.children(body.slice(end, match.index), View('mark').text(match[0]).build());
+    end = match.index + match[0].length;
   }
-  return html;
+  return result.children(body.slice(end)).build();
+};
+
+export const searchResult = (
+  hit: Hit,
+  position: number,
+  active: boolean,
+  terms: readonly string[],
+  feedback: ReturnType<typeof interactionCopy>,
+): HTMLLIElement => {
+  const kind = /\/src\/(ranui|ranuts)\/(api|style-tokens|changelog)(?:[/#]|$)/.test(hit.url)
+    ? feedback.reference
+    : /\/src\/(ranui|ranuts)\//.test(hit.url)
+      ? feedback.guide
+      : feedback.article;
+  return Li()
+    .attrs({ id: `search-option-${position}`, role: 'option', 'aria-selected': String(active) })
+    .children(
+      View('a')
+        .attrs({ tabindex: '-1', class: 'search-hit', href: hit.url, 'data-active': active ? '' : undefined })
+        .children(
+          Span().attr('class', 'search-hit__title').text(hit.title).build(),
+          Span()
+            .attr('class', 'search-hit__page')
+            .children(Span().attr('class', 'search-hit__kind').text(kind).build(), ` ${hit.page}`)
+            .build(),
+          searchSnippet((hit.preview ?? '').replace(/^(?:源码|Source(?: code)?):[^\n]*(?:\n|$)/i, ''), terms),
+        )
+        .build(),
+    )
+    .build();
 };
 
 export const mountSearch = (): void => {
@@ -104,17 +134,8 @@ export const mountSearch = (): void => {
   let active = 0;
 
   const render = (): void => {
-    list.innerHTML = hits
-      .map((hit, i) => {
-        const terms = input.value.split(/\s+/).filter(Boolean);
-        return (
-          `<li id="search-option-${i}" role="option" aria-selected="${i === active}"><a tabindex="-1" class="search-hit" href="${escapeHtml(hit.url)}"${i === active ? ' data-active' : ''}>` +
-          `<span class="search-hit__title">${escapeHtml(hit.title)}</span>` +
-          `<span class="search-hit__page"><span class="search-hit__kind">${escapeHtml(/\/src\/(ranui|ranuts)\/(api|style-tokens|changelog)(?:[\/#]|$)/.test(hit.url) ? feedback.reference : /\/src\/(ranui|ranuts)\//.test(hit.url) ? feedback.guide : feedback.article)}</span> ${escapeHtml(hit.page)}</span>` +
-          `<span class="search-hit__text">${snippet((hit.preview ?? '').replace(/^(?:源码|Source(?: code)?):[^\n]*(?:\n|$)/i, ''), terms)}</span></a></li>`
-        );
-      })
-      .join('');
+    const terms = input.value.split(/\s+/).filter(Boolean);
+    list.replaceChildren(...hits.map((hit, i) => searchResult(hit, i, i === active, terms, feedback)));
     input.setAttribute('aria-expanded', String(dialog.open && hits.length > 0));
     if (hits.length) input.setAttribute('aria-activedescendant', `search-option-${active}`);
     else input.removeAttribute('aria-activedescendant');
@@ -124,7 +145,7 @@ export const mountSearch = (): void => {
     const query = input.value.trim();
     if (!query || !index) {
       hits = [];
-      list.innerHTML = '';
+      list.replaceChildren();
       input.setAttribute('aria-expanded', 'false');
       input.removeAttribute('aria-activedescendant');
       status.textContent = index

@@ -9,7 +9,6 @@ import type { LocaleMessages } from '../types.ts';
  */
 const ja: LocaleMessages = {
   labels: {
-    home: 'ホーム',
     ranui: 'ranui',
     ranuts: 'ranuts',
     articles: '記事',

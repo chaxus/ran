@@ -57,6 +57,8 @@ export interface PrepareOptions {
   skipAssets?: boolean;
 }
 
+const builtAssets = new Map<string, Assets>();
+
 /**
  * Clear the output, copy `public/` into it, bundle the client, and report the hashed
  * asset URLs the pages should reference.
@@ -68,16 +70,20 @@ export const prepareDist = async ({
   keepDist,
   skipAssets,
 }: PrepareOptions): Promise<Assets> => {
-  if (!keepDist) rmSync(distDir, { recursive: true, force: true });
+  // Content rebuilds reuse both files and URLs, even after the manifest was removed.
+  const reusable = skipAssets && existsSync(distDir) ? builtAssets.get(distDir) : undefined;
+  if (!keepDist && !reusable) rmSync(distDir, { recursive: true, force: true });
   mkdirSync(distDir, { recursive: true });
 
   // public/ first: a generated page must win over a stray file of the same name, so a
   // typo in public/ can never shadow a real route.
   if (publicDir && existsSync(publicDir)) cpSync(publicDir, distDir, { recursive: true });
 
-  if (!skipAssets) await viteBuild({ root, logLevel: 'warn' });
-
-  return resolveAssets(distDir);
+  if (reusable) return reusable;
+  await viteBuild({ root, logLevel: 'warn' });
+  const assets = resolveAssets(distDir);
+  builtAssets.set(distDir, assets);
+  return assets;
 };
 
 /** Write one file into the output, creating its directory. */

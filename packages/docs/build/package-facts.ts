@@ -11,6 +11,7 @@
  * because no single file is an honest answer for a library whose components load as
  * separate chunks — `dist/index.js` is a re-export shim and `dist/button.js` is 0.1 KB.
  */
+import { View } from '@alixex/ranview/static';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -76,12 +77,13 @@ export const renderPackageFacts = (attrs: string): string => {
   if (!name) throw new Error('<PackageFacts> needs a package="<name>" attribute');
   const f = readPackageFacts(name);
 
-  const items = [
-    `<a class="pkg-facts__item" href="${f.npm}">v${f.version}</a>`,
-    f.license && `<span class="pkg-facts__item">${f.license}</span>`,
-    f.formats.length && `<span class="pkg-facts__item">${f.formats.join(' · ')}</span>`,
-    `<a class="pkg-facts__item" href="${f.source}">packages/${f.name}</a>`,
-  ].filter(Boolean);
-
-  return `<p class="pkg-facts">${items.join('')}</p>`;
+  return View('p')
+    .class('pkg-facts')
+    .children(
+      View('a').class('pkg-facts__item').attr('href', f.npm).text(`v${f.version}`),
+      f.license ? View('span').class('pkg-facts__item').text(f.license) : null,
+      f.formats.length ? View('span').class('pkg-facts__item').text(f.formats.join(' · ')) : null,
+      View('a').class('pkg-facts__item').attr('href', f.source).text(`packages/${f.name}`),
+    )
+    .serialize();
 };

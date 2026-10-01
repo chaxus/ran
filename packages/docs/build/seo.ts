@@ -8,14 +8,16 @@
  * locale registry.
  */
 import { renderSitemap } from 'ranpress';
+import { ElementBuilder } from '@alixex/ranview/static';
 import { LOCALES, ORIGIN, ROOT_LOCALE, SITE } from './config.ts';
 import type { DocContent, DocPage } from './content.ts';
 
-const escapeHtml = (s: string): string =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-const meta = (attr: 'name' | 'property', key: string, content: string): string =>
-  `<meta ${attr}="${key}" content="${escapeHtml(content)}">`;
+const tag = (name: string, attrs: Record<string, string>): string => {
+  const element = new ElementBuilder(name);
+  for (const [key, value] of Object.entries(attrs)) element.attr(key, value);
+  return element.serialize();
+};
+const meta = (attr: 'name' | 'property', key: string, content: string): string => tag('meta', { [attr]: key, content });
 
 export const absoluteUrl = (path: string): string => `${ORIGIN}${path}`;
 
@@ -31,12 +33,12 @@ const urlIn = (page: DocPage, dir: string): string => {
 export const headFor = (page: DocPage, content: DocContent): string[] => {
   // Served from every wrong URL there is, so a canonical would claim a different page
   // each time and a sitemap entry would invite indexing.
-  if (page.kind === 'notfound') return [`<meta name="robots" content="noindex, follow">`];
+  if (page.kind === 'notfound') return [meta('name', 'robots', 'noindex, follow')];
 
   const url = absoluteUrl(page.url);
   const title = page.url === '/' ? SITE.name : `${page.title} | ${SITE.name}`;
 
-  const head = [`<link rel="canonical" href="${url}">`, meta('name', 'author', SITE.author)];
+  const head = [tag('link', { rel: 'canonical', href: url }), meta('name', 'author', SITE.author)];
 
   // Only the locales that actually ship this page. Most languages carry the library
   // reference and nothing else, so most pages have two or three alternates, not eight.
@@ -44,10 +46,10 @@ export const headFor = (page: DocPage, content: DocContent): string[] => {
     const candidate = urlIn(page, locale.dir);
     if (!content.urls.has(candidate)) continue;
     const href = absoluteUrl(candidate);
-    head.push(`<link rel="alternate" hreflang="${locale.lang}" href="${href}">`);
+    head.push(tag('link', { rel: 'alternate', hreflang: locale.lang, href }));
     // x-default follows the language served from the root.
     if (locale.dir === ROOT_LOCALE.dir) {
-      head.push(`<link rel="alternate" hreflang="x-default" href="${href}">`);
+      head.push(tag('link', { rel: 'alternate', hreflang: 'x-default', href }));
     }
   }
 

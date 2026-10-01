@@ -1,219 +1,164 @@
-const CACHE_NAME = 'chaxus_ran_' + VERSION
+/* Startup resources install immediately; the client requests bounded idle batches. */
+const CONTENT_CACHE = 'chaxus_ran_content_v2';
+const STATE_CACHE = 'chaxus_ran_state_v2';
+const STATE_URL = '/__offline_progress__/' + VERSION;
+let queue = Promise.resolve();
 
-const IGNORE_REQUEST_LIST = [
-  // google 上报不需要缓存
-  'google',
-  // 插件请求不用缓存
-  'chrome-extension',
-  // 百度的请求不用缓存
-  'baidu.com',
-  'blob:',
-  'www.google-analytics.com',
-  // Cloudflare Web Analytics 的 beacon，和上面几个同理：分析脚本没有离线价值，
-  // 缓存它只会把某个版本钉死
-  'cloudflareinsights.com'
-]
-
-// 请求方法
-const REQUEST_METHOD = {
-  GET: 'GET'
-}
-// 响应状态码
-const RESPONSE_STATUS = {
-  SUCCESS: 200
-}
-// service worker 可监听的事件
-const SERVICE_WORK = {
-  INSTALL: 'install',
-  FETCH: 'fetch',
-  ACTIVATE: 'activate',
-  MESSAGE: 'message',
-  SYNC: 'sync',
-  PUSH: 'push'
-}
-/**
- * @description: 更新缓存
- * @param {*} fetchedResponse
- * @param {*} request
- * @return {*}
- */
-const updateCache = (fetchedResponse, request) => {
-  const { url } = request
-  const { status } = fetchedResponse
-  // 只缓存状态码为 200 的请求
-  if (status !== RESPONSE_STATUS.SUCCESS) return
-  if (!filterRequest(request)) return
-  // 只有 fetch 来的响应才有 clone；从 cache 里取出的没有
-  if (!fetchedResponse?.clone) return
-
-  // **必须在这里同步 clone**，不能放进下面 caches.open 的 .then 里。
-  //
-  // 调用方是 `const r = await fetch(req); updateCache(r, req); return r;` —— caches.open()
-  // 的回调要等到微任务才执行，而那时 return 已经把响应交给浏览器、body 正在被读取，
-  // 再 clone() 就会抛 "Failed to execute 'clone' on 'Response': Response body is already used"。
-  // 一个响应体只能读一次，所以要在交出去之前先复制一份。
-  const copy = fetchedResponse.clone()
-  caches.open(CACHE_NAME).then(cache => {
-    cache.put(url, copy);
-  }).catch(error => {
-    console.log('service worker update cache error:', error, request)
-  })
-}
-/**
- * @description: 忽略 IGNORE_REQUEST_LIST 列表中的请求和非 GET 方法的请求
- * @param {*} request
- * @return {*}
- */
-const filterRequest = (request) => {
-  const { url, method } = request
-  return !IGNORE_REQUEST_LIST.some(item => url.includes(item)) && method === REQUEST_METHOD.GET
+async function parallel(items, action) {
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(2, items.length) }, async () => {
+      while (next < items.length) await action(items[next++]);
+    }),
+  );
 }
 
-/**
- * 缓存优先
- * @param {*} request
- * @returns
- */
-const cacheFirst = async (request) => {
-  // 从缓存中读取 respondWith 表示拦截请求并返回自定义的响应
+async function download(url) {
+  const controller = typeof AbortController === 'function' ? new AbortController() : null;
+  let expired = false;
+  let timer;
   try {
-    const { url } = request
-    const responseFromCache = await caches.match(url);
-    // 如果缓存中有，返回已经缓存的资源
-    if (responseFromCache) return responseFromCache
-    // 如果缓存中没有，就从网络中请求，并更新到缓存中
-    const responseFromServer = await fetch(request);
-    updateCache(responseFromServer, request)
-    return responseFromServer
-  } catch (error) {
-    // 当缓存中也没有，请求也不可用的时候
-    // 始终需要一个一个响应
-    // 甚至可以设置回落的请求，在 catch 中继续发起请求
-    console.log('service worker cacheFirst error:', error, request)
-    return new Response("Network error happened", {
-      status: 408,
-      headers: { "Content-Type": "text/plain" },
-    });
+    await Promise.race([
+      (async () => {
+        const options = { cache: 'no-cache', priority: 'low' };
+        if (controller) options.signal = controller.signal;
+        const response = await fetch(url, options);
+        if (expired) throw new Error(`Offline cache timeout: ${url}`);
+        if (!response.ok) throw new Error(`Offline cache: ${url} (${response.status})`);
+        await (await caches.open(CONTENT_CACHE)).put(url, response);
+      })(),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => {
+          expired = true;
+          if (controller) controller.abort();
+          reject(new Error(`Offline cache timeout: ${url}`));
+        }, 30000);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
   }
 }
 
+addEventListener('install', (event) => {
+  event.waitUntil(parallel(SERVICE_WORK_CACHE_FILE_PATHS, download).then(() => skipWaiting()));
+});
+addEventListener('activate', (event) => {
+  // Preserve the previous version until the complete replacement is available.
+  event.waitUntil(clients.claim());
+});
 
-const deleteCache = async (key) => {
-  try {
-    await caches.delete(key);
-  } catch (error) {
-    console.log('service worker deleteCache error:', error, key)
+async function cacheBatch() {
+  const content = await caches.open(CONTENT_CACHE);
+  const manifestResponse = await content.match('/offline-manifest.json');
+  const manifest = await (manifestResponse || (await fetch('/offline-manifest.json'))).json();
+  const stateCache = await caches.open(STATE_CACHE);
+  const saved = await stateCache.match(STATE_URL);
+  const state = saved ? await saved.json() : { revisions: {}, cursor: 0 };
+  if (!saved) {
+    // Reuse unchanged resources across deployments without sharing a writable cursor.
+    for (const request of await stateCache.keys()) {
+      const response = await stateCache.match(request);
+      if (response) Object.assign(state.revisions, (await response.json()).revisions);
+    }
   }
-};
-
-const deleteOldCaches = async () => {
-  const cacheKeepList = [CACHE_NAME];
-  try {
-    const keyList = await caches.keys();
-    const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
-    await Promise.all(cachesToDelete.map(deleteCache));
-  } catch (error) {
-    console.log('service worker deleteOldCaches error:', deleteOldCaches, cacheKeepList)
+  const cachedURLs = new Set((await content.keys()).map((request) => new URL(request.url, location.origin).pathname));
+  const pending = [];
+  for (const file of manifest.files) {
+    if (state.revisions[file.url] !== file.revision || !cachedURLs.has(file.url)) pending.push(file);
   }
-
-};
-
-this.addEventListener(SERVICE_WORK.INSTALL, function (event) {
-  // 装好就顶上，不在 waiting 里排队。
-  //
-  // 默认行为是新 worker 一直等到该源下所有标签页都关掉才接管——刷新不算，关掉才算。
-  // 对文档站来说这意味着一次部署可能好几天都到不了常开着标签页的读者那里；更糟的是
-  // `deleteOldCaches()` 只在 activate 里跑，所以在它接管之前，**旧缓存里任何一份坏数据
-  // 都清不掉**。上一个 bug（把 404 的 HTML 当样式表缓存下来）正是因此扛过了反复刷新。
-  //
-  // 中途换 controller 的代价在这里是可控的：构建产物都带内容哈希，而 VitePress 的路由
-  // 在页面 chunk 取不到时会重新拉 hashmap.json 再按新哈希重试（见其 router 的 "retry on
-  // fetch fail: ... a new deploy happened while the page is open"），所以已经打开的旧页面
-  // 会自己收敛到新构建，而不是卡在 404。
-  this.skipWaiting();
-  // 确保 Service Worker 不会在 waitUntil() 里面的代码执行完毕之前安装完成
+  // Rotate failures so a missing resource does not starve the rest of the site.
+  const offset = pending.length ? state.cursor % pending.length : 0;
+  const batch = [...pending.slice(offset), ...pending.slice(0, offset)].slice(0, 20);
+  let failures = 0;
+  await parallel(batch, async (file) => {
+    try {
+      await download(file.url);
+      state.revisions[file.url] = file.revision;
+    } catch (error) {
+      failures++;
+      console.warn(error);
+    }
+  });
+  state.cursor = offset + batch.length;
+  const complete = pending.length === batch.length && failures === 0;
+  await stateCache.put(
+    STATE_URL,
+    new Response(JSON.stringify(state), { headers: { 'Content-Type': 'application/json' } }),
+  );
+  if (complete) {
+    // Shared content may already contain a newer install's assets. Do not prune
+    // individual entries using this worker's potentially superseded inventory.
+    const latest = await content.match('/offline-manifest.json');
+    if (!latest || (await latest.json()).version !== manifest.version) return { complete: false, failures: 0 };
+    for (const name of await caches.keys()) {
+      if (name.startsWith('chaxus_ran_') && name !== CONTENT_CACHE && name !== STATE_CACHE) await caches.delete(name);
+    }
+  }
+  return {
+    complete,
+    cached: manifest.files.length - pending.length + batch.length - failures,
+    total: manifest.files.length,
+    failures,
+  };
+}
+addEventListener('message', (event) => {
+  if ((event.data && event.data.type) !== 'CACHE_OFFLINE_BATCH') return;
+  queue = queue.catch(() => {}).then(cacheBatch);
   event.waitUntil(
-    // 创建了叫做 chaxus_ran 的新缓存
-    caches.open(CACHE_NAME).then(function (cache) {
-      // SERVICE_WORK_CACHE_FILE_PATHS 从 bin/build.sh 中生成注入，会去缓存所有的资源
-      // 不用 cache.addAll 避免一个请求失败，全部缓存失败，类似 Promise.all
-      // 可以使用 cache.add 但 Cache.add/Cache.addAll 不会缓存 Response.status 值不在 200 范围内的响应，
-      // 而 cache.put 允许你存储任何请求/响应对。因此，Cache.add/Cache.addAll 不能用于不透明的响应，而 Cache.put 可以。
-      return SERVICE_WORK_CACHE_FILE_PATHS.map(url =>
-        fetch(url).then(response => {
-          // **失败的响应必须丢掉，不能写进缓存。**
-          //
-          // 上面那句"cache.put 允许你存储任何请求/响应对"是这里选用 put 的理由，
-          // 但它同时意味着 put 不会替你挡住 404 —— 这个检查原先只打了一行日志就
-          // 继续 put，于是失败的响应照样进了缓存。
-          //
-          // 后果不是少缓存一个文件，而是整站白页：部署尚未完全生效时装 SW，
-          // /assets/style.<hash>.css 拿到的是 Cloudflare 的 HTML 404 页面，被存进
-          // 缓存后，cacheFirst 每次都命中它并把 HTML 当样式表返回，浏览器报
-          // "Refused to apply style ... MIME type ('text/html')"。资源本身早就正常了，
-          // 而缓存里那份坏的会一直用下去。宁可不缓存，让它回落到网络。
-          if (!response.ok) {
-            console.log('service worker precache skipped (not ok):', response.status, url)
-            return
-          }
-          // 将响应添加到缓存
-          return cache.put(url, response);
-        }).catch(error => {
-          console.log('service worker self installed error:', url, error);
-        })
-      )
-    })
+    queue.then(
+      (progress) => event.ports && event.ports[0] && event.ports[0].postMessage(progress),
+      () => event.ports && event.ports[0] && event.ports[0].postMessage({ complete: false, failures: 1 }),
+    ),
   );
 });
 
-/**
- * 网络优先，失败回落到缓存。
- * 给 HTML 导航用：文档站的正文必须是最新的，缓存只作为离线兜底。
- */
-const networkFirst = async (request) => {
+async function cached(request) {
   try {
-    const responseFromServer = await fetch(request);
-    updateCache(responseFromServer, request)
-    return responseFromServer
-  } catch (error) {
-    const responseFromCache = await caches.match(request.url);
-    if (responseFromCache) return responseFromCache
-    console.log('service worker networkFirst error:', error, request)
-    return new Response("Network error happened", {
-      status: 408,
-      headers: { "Content-Type": "text/plain" },
-    });
+    const current = await (await caches.open(CONTENT_CACHE)).match(request);
+    if (current) return current;
+    for (const name of await caches.keys()) {
+      if (name.startsWith('chaxus_ran_') && name !== STATE_CACHE && name !== CONTENT_CACHE) {
+        const response = await (await caches.open(name)).match(request);
+        if (response) return response;
+      }
+    }
+  } catch {
+    // Storage restrictions must not prevent online reading.
+    return undefined;
   }
 }
 
-// 这个处理器**必须是同步函数**：respondWith 只能在事件派发的同步阶段调用，
-// 包成 async 之后第一个 await 就已经让出了控制权，浏览器会认为没人拦截。
-//
-// 之前这里是 `async (event) => { cacheFirst(event.request) }` —— 既没调
-// respondWith，函数本身又是 async。两个原因叠加，结果是整个 Service Worker
-// 从不拦截任何请求：install 时辛苦预缓存的资源一次都没被读过，用户白白付了
-// 安装时的下载成本，离线也不可用。
-this.addEventListener(SERVICE_WORK.FETCH, (event) => {
-  const { request } = event
-  // 非 GET（POST 表单、上报等）交回浏览器，缓存里也不该有它们
-  if (request.method !== REQUEST_METHOD.GET) return
-  if (!filterRequest(request)) return
-  // HTML 导航走网络优先，其余（构建产物带内容哈希，天然不可变）走缓存优先
-  if (request.mode === 'navigate') {
-    event.respondWith(networkFirst(request));
-    return
-  }
-  event.respondWith(cacheFirst(request));
+addEventListener('fetch', (event) => {
+  const request = event.request;
+  const url = new URL(request.url);
+  if (request.method !== 'GET' || url.origin !== location.origin || url.pathname === '/offline-manifest.json') return;
+  const networkFirst = request.mode === 'navigate' || /\.(?:json|xml|txt)$/.test(url.pathname);
+  let write = Promise.resolve();
+  const response = (async () => {
+    if (!networkFirst) {
+      const hit = await cached(request);
+      if (hit) return hit;
+    }
+    try {
+      const fresh = await fetch(request);
+      if (fresh.ok) {
+        const copy = fresh.clone();
+        write = caches
+          .open(CONTENT_CACHE)
+          .then((cache) => cache.put(request, copy))
+          .catch(() => {});
+      }
+      return fresh;
+    } catch (error) {
+      const hit = await cached(request);
+      if (hit) return hit;
+      return new Response(
+        'This page is not available offline yet. Reconnect to finish downloading the documentation.',
+        { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
+      );
+    }
+  })();
+  event.respondWith(response);
+  event.waitUntil(response.then(() => write));
 });
-
-this.addEventListener(SERVICE_WORK.ACTIVATE, (event) => {
-  // **先清旧缓存，再接管**，顺序不能反。
-  //
-  // cacheFirst 用的是 `caches.match(url)`——CacheStorage 上的那个，它会遍历**所有**缓存，
-  // 而不只是 CACHE_NAME。所以只要上一版的缓存还在，claim 过来的页面就可能从旧缓存里读到
-  // 陈旧（甚至是坏掉）的资源。先 delete 再 claim，被接管的客户端看到的就只有这一版。
-  event.waitUntil(deleteOldCaches().then(() => this.clients.claim()));
-});
-
-
-

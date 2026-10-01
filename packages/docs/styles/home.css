@@ -1,30 +1,11 @@
-/*
- * Landing and gallery surfaces.
- *
- * These carry three local names — `--ink`, `--surface`, `--hairline` — on top of the
- * site's palette, which in turn derives from ranui's tokens. There used to be a second
- * layer here aliasing VitePress's `--vp-c-*` names onto the same values; every rule now
- * names the site variable directly, so there is one indirection instead of two and no
- * trace of a theme this site no longer uses.
- *
- * The failure mode when a name is missing is worth recording: `--ink` feeds the
- * headline's `background-clip: text` gradient, so an undefined value made the gradient
- * transparent and the entire home page headline simply did not appear. Nothing errored.
- */
+/* A continuous, ruled catalogue. All surfaces follow the ranui theme. */
 .cine,
 .gp,
 .icon-gallery {
   --ink: var(--fg);
   --surface: var(--bg-soft);
   --hairline: var(--rule);
-  --container: 1180px;
 }
-
-/*
- * The copy button holds both icons and swaps them with CSS. The Vue original used
- * `v-if`/`v-else`; server-rendered markup has to carry both and hide one, which is also
- * what makes the swap instant instead of a re-render.
- */
 .copy .copy-done,
 .copy.done .copy-idle {
   display: none;
@@ -33,594 +14,321 @@
   display: block;
 }
 
-/*
- * The home page's stylesheet, lifted verbatim from HomeCinematic.vue's scoped
- * <style> block. It was already plain CSS; what it lost in the move is Vue's scoping
- * attribute, which nothing here relied on — every selector is under `.cine`.
- */
-/* Vercel / Geist monochrome home: ink carries all hierarchy, surfaces ride the
-   gray ladder, hairlines weld panels. No colored accent, no heavy blur — dark
-   mode is just the token scale flipping (bright ink text on near-black). */
 .cine {
-  --container: 1120px;
-  --hairline: var(--rule);
-  --ink: var(--fg);
-  /* card surface, lifted one step off the page so dark mode reads clearly */
-  --surface: var(--bg-soft);
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  /*
-   * Spacing values come from the design system's scale (4/8/12/16/24/32/40/64/96) —
-   * `clamp` between two of them rather than inventing 56/112/128, which were written for
-   * VitePress's full-bleed `layout: page` where nothing above contributed padding.
-   */
-  padding: clamp(32px, 5vw, 64px) 24px 96px;
-  isolation: isolate;
+  max-width: 960px;
+  margin-inline: auto;
+  border-inline: 1px solid var(--rule);
+  color: var(--fg);
 }
-.cine > * {
-  max-width: var(--container);
-  margin-left: auto;
-  margin-right: auto;
+.cine > * + * {
+  border-top: 1px solid var(--rule);
 }
-
-/* ---------- minimal ambient ---------- */
-.bg {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  max-width: none;
-  overflow: hidden;
+.home-identity {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ran-space-4, 16px);
+  padding: var(--ran-space-6, 24px) var(--ran-space-8, 32px);
 }
-/* one soft neutral glow at the top — a radial gradient (inherently soft, no
-   filter:blur, so it never trips dark-mode compositing) */
-.glow {
-  position: absolute;
-  top: -180px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(1000px, 120vw);
-  height: 620px;
-  background: radial-gradient(
-    ellipse 50% 50% at 50% 50%,
-    color-mix(in srgb, var(--ink) 5%, transparent),
-    transparent 70%
-  );
-  opacity: 0.55;
-}
-:global(.dark) .glow {
-  background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255, 255, 255, 0.06), transparent 70%);
-  opacity: 0.8;
-}
-.grid {
-  position: absolute;
-  inset: -10%;
-  background-image: radial-gradient(var(--rule) 1px, transparent 1px);
-  background-size: 28px 28px;
-  opacity: 0.5;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 72%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 72%);
-}
-
-/* ---------- hero ---------- */
-.hero {
+.home-monogram {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(32px, 4vw, 64px);
-  /*
-   * Top-aligned, not centred. Centring measured the live panel against a column five
-   * headline lines tall and dropped it 170px below the text it belongs beside, which
-   * reads as two unrelated blocks rather than one hero.
-   */
-  align-items: start;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--ran-radius-md, 8px);
+  background: var(--bg-soft);
+  font: 600 32px/1 var(--font-mono);
+}
+.home-name {
+  display: block;
+  font-size: 24px;
+  font-weight: 600;
+}
+.home-packages {
+  color: var(--fg-muted);
+  font: 12px/1.6 var(--font-mono);
 }
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  gap: var(--ran-space-2, 8px);
+  margin-inline-start: auto;
   color: var(--fg-muted);
-  padding: 6px 14px;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  background: var(--surface);
+  font-size: 12px;
 }
-.eyebrow .dot {
-  width: 7px;
-  height: 7px;
+.dot,
+.live-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: var(--ran-color-success, #28a948);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ran-color-success, #28a948) 25%, transparent);
+  background: var(--ran-color-success);
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: stretch;
+}
+.hero-copy {
+  padding: var(--ran-space-8, 32px);
+  min-width: 0;
 }
 .headline {
-  margin: 24px 0 0;
-  font-family: var(--font-sans);
-  /*
-   * Sized against the column it sits in, not the viewport. At 72px this headline wrapped
-   * to five lines in a 554px column and pushed everything else below the fold; the ceiling
-   * is the largest size that keeps it to three.
-   */
-  font-size: clamp(32px, 4.2vw, 52px);
-  line-height: 1.08;
-  font-weight: 720;
-  letter-spacing: -0.035em;
+  margin: 0;
+  font: 600 clamp(24px, 3vw, 32px)/1.25 var(--font-sans);
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
-.headline .line {
-  display: block;
-}
-.headline .word {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
-  padding-bottom: 0.16em;
-  margin-right: 0.26em;
-}
-.headline .word-in {
-  display: inline-block;
-  transform: translateY(115%);
-  opacity: 0;
-  background: linear-gradient(180deg, var(--ink) 46%, color-mix(in srgb, var(--ink) 55%, transparent) 130%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: word-rise 0.8s cubic-bezier(0.16, 0.84, 0.24, 1) forwards;
-  animation-delay: var(--hd, 0ms);
-}
-@keyframes word-rise {
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 .subtitle {
-  margin: 24px 0 0;
-  max-width: 540px;
-  font-size: 16px;
-  line-height: 1.72;
+  margin: var(--ran-space-4, 16px) 0 var(--ran-space-6, 24px);
   color: var(--fg-muted);
+  font-size: 14px;
+  line-height: 1.75;
+  text-wrap: pretty;
 }
-
-/* hero copy blocks: fade-up with staggered delay */
-[data-hero] {
-  opacity: 0;
-  transform: translateY(18px);
-  animation: hero-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
-  animation-delay: var(--hd, 0ms);
-}
-@keyframes hero-in {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 .cmd {
-  margin: 28px 0 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  max-width: 340px;
-  padding: 10px 10px 10px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--hairline);
-  background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 13.5px;
-  color: var(--fg);
+  gap: var(--ran-space-2, 8px);
+  padding: var(--ran-space-2, 8px) var(--ran-space-3, 12px);
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-sm, 6px);
+  background: var(--bg-soft);
 }
-.cmd code::before {
-  content: '$ ';
-  color: var(--fg-faint);
+.cmd code {
+  font: 12px/1.6 var(--font-mono);
+  white-space: nowrap;
 }
 .copy {
-  flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-  border: 1px solid var(--hairline);
-  background: var(--bg);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--ran-radius-sm, 6px);
   color: var(--fg-muted);
+  background: transparent;
   cursor: pointer;
-  /* palette props change instantly on hover — never transition color across a
-     theme flip, or light/dark switching fades element-by-element */
 }
 .copy:hover {
   color: var(--fg);
-  border-color: var(--fg-faint);
+  background: var(--bg);
 }
 .copy.done {
-  color: var(--ran-color-success, #28a948);
-  border-color: color-mix(in srgb, var(--ran-color-success, #28a948) 45%, transparent);
+  color: var(--ran-color-success);
 }
-
 .cta {
-  margin-top: 24px;
   display: flex;
-  gap: 12px;
   flex-wrap: wrap;
+  gap: var(--ran-space-3, 12px);
+  margin-top: var(--ran-space-4, 16px);
 }
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  border-radius: 999px;
-  font-size: 14.5px;
-  font-weight: 600;
-  /* motion props only (transform / shadow) — color/bg/border change instantly
-     on hover so a theme flip never fades button-by-button. Shadow uses a
-     theme-stable rgba (not color-mix on --ink) so it doesn't animate on flip. */
+  justify-content: center;
+  gap: var(--ran-space-2, 8px);
+  min-height: 40px;
+  padding: var(--ran-space-2, 8px) var(--ran-space-3, 12px);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--ran-radius-sm, 6px);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
   transition:
-    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, ease),
-    box-shadow var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, ease);
+    background 0.15s ease,
+    color 0.15s ease;
 }
 .btn svg {
-  transition: transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, ease);
+  flex: none;
 }
 .btn-primary {
-  color: var(--ran-color-primary-text, var(--ran-background-100, #fff));
-  background: var(--ran-color-primary, var(--ran-gray-1000, #171717));
+  background: var(--ran-color-primary);
+  border-color: var(--ran-color-primary);
+  color: var(--ran-color-primary-text);
 }
 .btn-primary:hover {
-  background: var(--ran-color-primary-hover, #383838);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.28);
-}
-.btn-primary:hover svg {
-  transform: translateX(3px);
+  background: var(--ran-color-primary-hover);
 }
 .btn-ghost {
+  background: var(--bg);
   color: var(--fg);
-  border: 1px solid var(--hairline);
-  background: var(--surface);
 }
 .btn-ghost:hover {
-  border-color: var(--fg-faint);
-  transform: translateY(-1px);
+  background: var(--bg-soft);
 }
-
-/* ---------- hero live panel ---------- */
-/*
- * Stretched, not centred. `.hero` is deliberately `align-items: start` — centring measured
- * this panel against a five-line headline and dropped it 170px below the text it belongs
- * beside. But left at its natural 280px in a 516px column it stranded 236px of empty space
- * under it, which reads as the right half of the hero having given up. Filling the column
- * keeps the panel's top edge on the headline's and lets `.live-body` centre its contents.
- */
 .hero-live {
-  align-self: stretch;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--hairline);
-  border-radius: 14px;
-  background: var(--surface);
-  overflow: hidden;
-  /* One soft, low-contrast lift. The previous 60px blur at 45% read as a drop shadow
-     from a different design language than everything else on the page. */
-  box-shadow: 0 18px 44px -30px color-mix(in srgb, var(--ink) 28%, transparent);
+  min-width: 0;
+  border-inline-start: 1px solid var(--rule);
+  background: var(--bg-soft);
 }
 .live-head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
+  gap: var(--ran-space-2, 8px);
+  padding: var(--ran-space-3, 12px) var(--ran-space-6, 24px);
   border-bottom: 1px solid var(--rule);
+  color: var(--fg-muted);
+  font-size: 12px;
 }
-.live-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--ran-color-success, #28a948);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ran-color-success, #28a948) 22%, transparent);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ran-color-success, #28a948) 22%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--ran-color-success, #28a948) 8%, transparent);
-  }
+.live-lang {
+  margin-inline-start: auto;
+  font-family: var(--font-mono);
 }
 .live-body {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 22px;
-  padding: 30px 24px;
-  /*
-   * Content at the top, caption at the bottom — the panel is a stage, not a centred
-   * cluster.
-   *
-   * Two other arrangements were measured and rejected. Centring left ~180px empty above
-   * the rows and ~160px below: the dead space the stretch removed from the column, moved
-   * inside a border where it is more obvious. `space-evenly` pushed the three rows so far
-   * apart that the progress bar floated alone and they stopped reading as one demo.
-   */
-  justify-content: flex-start;
+  justify-content: center;
+  gap: var(--ran-space-4, 16px);
+  padding: var(--ran-space-6, 24px);
 }
 .live-row {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
   align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ran-space-3, 12px);
 }
 .live-inline {
-  gap: 18px;
+  justify-content: space-between;
 }
 .live-progress {
   width: 100%;
-  --ran-progress-track-height: 6px;
-  --ran-progress-fill-background: linear-gradient(90deg, var(--fg-faint), var(--ink));
 }
 .live-loading {
-  --loading-circle-line-border-width: 22px;
-  --loading-circle-line-border-height: 22px;
-  --loading-circle-line-border-padding: 2.5px;
-  --loading-circle-line-border-background: linear-gradient(
-    0deg,
-    color-mix(in srgb, var(--ink) 12%, transparent) 33%,
-    var(--ink) 100%
-  );
-  --loading-circle-line-core-background: var(--surface);
-}
-.live-skeleton {
-  gap: 14px;
-}
-.live-skeleton span {
-  height: 34px;
-  border-radius: 8px;
-  background: linear-gradient(90deg, var(--bg-soft), var(--rule), var(--bg-soft));
-  background-size: 200% 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
-}
-.live-skeleton span:nth-child(2) {
-  width: 70%;
-}
-.live-skeleton span:nth-child(3) {
-  width: 45%;
-}
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+  width: 24px;
+  height: 24px;
 }
 .live-note {
-  padding: 12px 20px 16px;
-  font-size: 12.5px;
-  color: var(--fg-faint);
+  padding: 0 var(--ran-space-6, 24px) var(--ran-space-4, 16px);
+  color: var(--fg-muted);
+  font-size: 12px;
 }
-
-/* ---------- scroll reveal ---------- */
-/*
- * Hidden only where script is running to reveal it again.
- *
- * `.reveal { opacity: 0 }` on its own is a bet that the IntersectionObserver always runs.
- * When it does not — JavaScript disabled, a bundle that 404s, an error earlier in the
- * file — every section below the fold stays invisible permanently. Measured: with JS off,
- * the closing strip was `opacity: 0` and unreachable. The `js` class is set before first
- * paint by the theme bootstrap, so there is no flash of the un-hidden state either.
- */
-:root.js .reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition:
-    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
-    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-:root.js .reveal.in {
-  opacity: 1;
-  transform: none;
-}
-.reveal .stat,
-.reveal.pillar,
-.reveal .caps-list li,
-.reveal .feature {
-  transition-delay: var(--rd, 0ms);
-}
-
-/* ---------- stats ---------- */
 .stats {
-  margin-top: clamp(64px, 9vw, 104px);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--hairline);
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  flex-wrap: wrap;
 }
 .stat {
-  background: var(--bg);
-  text-align: center;
-  padding: 30px 12px;
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--ran-space-2, 8px);
+  padding: var(--ran-space-3, 12px);
+}
+.stat + .stat {
+  border-inline-start: 1px solid var(--rule);
 }
 .stat-num {
-  display: block;
-  font-family: var(--font-sans);
-  font-size: clamp(30px, 4.4vw, 42px);
-  font-weight: 680;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  color: var(--fg);
-  font-variant-numeric: tabular-nums;
+  font: 500 14px/1.5 var(--font-mono);
 }
 .stat-label {
-  display: block;
-  margin-top: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--fg-faint);
+  color: var(--fg-muted);
+  font-size: 12px;
 }
-
-/* ---------- pillars: subtle tilt ---------- */
 .pillars {
-  margin-top: clamp(72px, 10vw, 120px);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-/*
- * Three ways in, not three cards.
- *
- * These are cells in a gallery — §11's example of what a box is *not* for. Bordered and
- * filled, they read as three separate objects competing with the hero directly above,
- * and the 3D tilt and hover spotlight spent the page's whole emphasis budget on
- * navigation furniture. A shared top rule, the column spine, and a link that responds on
- * hover say the same thing with nothing drawn around it.
- */
-.pillar {
-  position: relative;
   display: flex;
   flex-direction: column;
-  padding: 30px 30px 30px 0;
-  border-top: 1px solid var(--rule);
-  overflow: hidden;
-
-  /* motion props only — border-color changes instantly on hover; box-shadow
-     uses theme-stable rgba so neither drags on a theme flip */
-  transition:
-    box-shadow var(--ran-motion-duration-slow, 0.35s) var(--ran-motion-ease-spring, ease),
-    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, ease),
-    opacity 0.7s var(--ran-motion-ease-smooth, ease);
-  transform-style: preserve-3d;
 }
-.pillar > * {
-  position: relative;
+.pillar {
+  display: grid;
+  grid-template-columns: 24px 100px 1fr auto;
+  align-items: center;
+  gap: var(--ran-space-4, 16px);
+  padding: var(--ran-space-6, 24px) var(--ran-space-8, 32px);
+  color: var(--fg);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.pillar + .pillar {
+  border-top: 1px solid var(--rule);
+}
+.pillar:hover {
+  background: var(--bg-soft);
 }
 .pillar-icon {
-  width: 26px;
-  height: 26px;
-  display: grid;
-  place-items: center;
+  display: flex;
   color: var(--fg-muted);
 }
 .pillar-icon svg {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
 }
 .pillar h3 {
-  margin: 18px 0 0;
-  font-size: 21px;
-  font-weight: 640;
-  letter-spacing: -0.01em;
-  color: var(--fg);
-  border: 0;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
 }
 .pillar p {
-  margin: 10px 0 0;
-  font-size: 14px;
-  line-height: 1.65;
+  margin: 0;
   color: var(--fg-muted);
-  flex: 1;
+  font-size: 13px;
+  line-height: 1.65;
 }
 .pillar-more {
-  margin-top: 18px;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--fg);
+  gap: var(--ran-space-2, 8px);
+  font-size: 12px;
 }
 .pillar-more svg {
-  transition: transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, ease);
+  flex: none;
+  transition: transform 0.15s ease;
 }
 .pillar:hover .pillar-more svg {
   transform: translateX(3px);
 }
-
-/* ---------- section head ---------- */
-.section {
-  margin-top: clamp(80px, 11vw, 128px);
+[dir='rtl'] .pillar:hover .pillar-more svg {
+  transform: translateX(-3px);
 }
 .sec-head {
-  border-top: 1px solid var(--hairline);
-  padding-top: 30px;
-  margin-bottom: 34px;
-}
-.kicker {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
+  padding: var(--ran-space-6, 24px) var(--ran-space-8, 32px);
+  border-bottom: 1px solid var(--rule);
 }
 .sec-head h2 {
-  margin: 12px 0 0;
-  font-family: var(--font-sans);
-  font-size: clamp(26px, 3.6vw, 38px);
-  font-weight: 680;
-  letter-spacing: -0.025em;
-  line-height: 1.16;
-  color: var(--fg);
-  border: 0;
-  padding: 0;
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 .sec-sub {
-  margin: 10px 0 0;
-  max-width: 560px;
-  font-size: 15px;
+  margin: var(--ran-space-2, 8px) 0 0;
+  font-size: 14px;
   line-height: 1.65;
   color: var(--fg-muted);
 }
-
-/* ---------- capabilities bento ---------- */
-.bento {
+.bento,
+.panel {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  /* The internal rule is the only boundary these need — the section heading above and
-     the row hairlines inside already say where this starts and how it is divided. An
-     outer frame was a third statement of the same thing. */
-  gap: 0;
-  border-top: 1px solid var(--rule);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .caps-col {
-  padding: 28px 30px 28px 0;
+  min-width: 0;
 }
-.caps-col + .caps-col {
-  padding-inline: 30px 0;
+.caps-col + .caps-col,
+.code-cell + .code-cell {
   border-inline-start: 1px solid var(--rule);
 }
 .caps-col-head {
   display: flex;
   align-items: baseline;
-  gap: 10px;
-  padding-bottom: 16px;
-  margin-bottom: 8px;
-  border-bottom: 1px solid var(--hairline);
+  gap: var(--ran-space-2, 8px);
+  padding: var(--ran-space-4, 16px) var(--ran-space-8, 32px);
+  border-bottom: 1px solid var(--rule);
 }
 .caps-lib {
-  font-family: var(--font-sans);
-  font-size: 18px;
-  font-weight: 660;
-  letter-spacing: -0.01em;
-  color: var(--fg);
+  font-size: 16px;
+  font-weight: 600;
 }
 .caps-lib-tag {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 500;
-  color: var(--fg-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  color: var(--fg-muted);
+  font-size: 12px;
 }
 .caps-list {
   list-style: none;
@@ -629,84 +337,52 @@
 }
 .caps-list li {
   display: flex;
-  gap: 12px;
-  padding: 14px 0;
+  gap: var(--ran-space-3, 12px);
+  padding: var(--ran-space-4, 16px) var(--ran-space-8, 32px);
 }
 .caps-list li + li {
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--rule);
 }
 .caps-ico {
-  flex: 0 0 auto;
-  margin-top: 2px;
-  width: 20px;
-  height: 20px;
-  color: var(--fg-faint);
+  flex: none;
+  display: flex;
+  padding-top: var(--ran-space-1, 4px);
+  color: var(--fg-muted);
 }
-.caps-ico :deep(svg) {
+.caps-ico svg {
   width: 20px;
   height: 20px;
 }
 .caps-text {
   display: flex;
   flex-direction: column;
-  gap: 3px;
   min-width: 0;
+  gap: var(--ran-space-1, 4px);
 }
 .caps-name {
   font-size: 14px;
-  font-weight: 600;
-  color: var(--fg);
+  font-weight: 500;
 }
 .caps-name code {
-  margin-left: 4px;
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 500;
-  color: var(--fg-faint);
-  background: var(--bg-soft);
-  padding: 1px 6px;
-  border-radius: 5px;
+  display: block;
+  font: 12px/1.6 var(--font-mono);
+  color: var(--fg-muted);
+  overflow-wrap: anywhere;
 }
 .caps-desc {
-  font-size: 13px;
-  line-height: 1.55;
   color: var(--fg-muted);
-}
-
-/* ---------- get started ---------- */
-.panel {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  /* The internal rule is the only boundary these need — the section heading above and
-     the row hairlines inside already say where this starts and how it is divided. An
-     outer frame was a third statement of the same thing. */
-  gap: 0;
-  border-top: 1px solid var(--rule);
+  font-size: 13px;
+  line-height: 1.65;
 }
 .code-cell {
-  display: flex;
-  flex-direction: column;
-}
-.code-cell + .code-cell {
-  border-inline-start: 1px solid var(--rule);
-}
-/* The first column starts on the section's spine; the second is inset past the divider,
-   or its label sits directly on the rule. */
-.code-cell + .code-cell .code-head,
-.code-cell + .code-cell .snippet {
-  padding-inline-start: 30px;
+  min-width: 0;
 }
 .code-head {
-  padding: 12px 20px 12px 0;
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
+  padding: var(--ran-space-3, 12px) var(--ran-space-8, 32px);
   border-bottom: 1px solid var(--rule);
+  color: var(--fg-muted);
+  font-size: 12px;
 }
-/* See the note in docs.css: code reads left-to-right whatever the page's direction. */
 .snippet,
 .live-code,
 .cmd {
@@ -714,153 +390,146 @@
   text-align: start;
 }
 .snippet {
-  flex: 1;
   margin: 0;
-  padding: 20px 22px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  line-height: 1.75;
+  padding: var(--ran-space-6, 24px) var(--ran-space-8, 32px);
   overflow-x: auto;
+  font: 12px/1.85 var(--font-mono);
   color: var(--fg);
+  tab-size: 2;
 }
-.snippet .c-com {
-  color: var(--fg-faint);
+.snippet .c-com,
+.snippet .c-attr {
+  color: var(--fg-muted);
 }
 .snippet .c-kw {
   color: var(--fg);
   font-weight: 600;
 }
 .snippet .c-str {
-  color: var(--fg-muted);
+  color: var(--link);
 }
 .snippet .c-tag {
   color: var(--fg);
 }
-.snippet .c-attr {
-  color: var(--fg-faint);
-}
-
-/*
- * Source above, result below, one hairline between them.
- *
- * The two halves are one object: the same panel, the same border, a single rule marking
- * where the markup stops and what it produces begins. A second box around either half
- * would say they are two things that happen to be adjacent.
- */
-.live-lang {
-  margin-inline-start: auto;
-  color: var(--fg-faint);
-  text-transform: lowercase;
-  letter-spacing: 0.06em;
-}
 .live-code {
-  flex: none;
   padding: var(--ran-space-4, 16px) var(--ran-space-6, 24px);
-  font-size: 12.5px;
-  line-height: 1.85;
-  border-bottom: 1px solid var(--hairline);
-  white-space: pre;
-  tab-size: 2;
+  border-bottom: 1px solid var(--rule);
+  font-size: 12px;
 }
-.live-code .c-tag {
-  color: var(--fg-muted);
-}
-
-/* ---------- feature strip ---------- */
 .strip {
-  margin-top: clamp(80px, 11vw, 128px);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--hairline);
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .feature {
-  background: var(--bg);
-  padding: 24px 24px;
+  min-width: 0;
+  padding: var(--ran-space-6, 24px) var(--ran-space-8, 32px);
+}
+.feature:nth-child(even) {
+  border-inline-start: 1px solid var(--rule);
+}
+.feature:nth-child(n + 3) {
+  border-top: 1px solid var(--rule);
 }
 .feature-head {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: var(--ran-space-2, 8px);
 }
 .feature-icon {
-  flex: 0 0 auto;
-  width: 18px;
-  height: 18px;
-  color: var(--fg-faint);
+  display: flex;
+  color: var(--fg-muted);
 }
-.feature-icon :deep(svg) {
-  width: 18px;
-  height: 18px;
+.feature-icon svg {
+  width: 20px;
+  height: 20px;
 }
 .feature h4 {
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: var(--fg);
 }
 .feature p {
-  margin: 8px 0 0;
-  font-size: 13px;
-  line-height: 1.55;
+  margin: var(--ran-space-2, 8px) 0 0;
   color: var(--fg-muted);
+  font-size: 13px;
+  line-height: 1.65;
 }
-
-/* ---------- responsive ---------- */
-@media (max-width: 900px) {
-  .hero {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .pillars {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 719px) {
+  .hero,
   .bento,
-  .panel,
-  .strip {
-    grid-template-columns: 1fr;
+  .panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-live,
+  .caps-col + .caps-col,
+  .code-cell + .code-cell {
+    border-inline-start: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .pillar {
+    grid-template-columns: 24px 1fr auto;
+  }
+  .pillar p {
+    grid-column: 2 / -1;
+  }
+  .pillar-more {
+    grid-column: 3;
+    grid-row: 1;
   }
 }
-@media (max-width: 520px) {
-  .stats {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 479px) {
+  .home-identity,
+  .hero-copy,
+  .pillar,
+  .sec-head,
+  .caps-col-head,
+  .caps-list li,
+  .code-head,
+  .snippet,
+  .feature {
+    padding: var(--ran-space-4, 16px);
   }
-  .cta {
-    flex-direction: column;
+  .eyebrow {
+    width: 100%;
+    margin-inline-start: 0;
   }
-  .btn {
-    justify-content: center;
+  .stat {
+    flex-basis: calc(50% - 1px);
+    justify-content: start;
+    padding-inline: var(--ran-space-4, 16px);
   }
-  .cmd {
-    max-width: none;
+  .stat:nth-child(3) {
+    border-inline-start: 0;
+  }
+  .stat:nth-child(n + 3) {
+    border-top: 1px solid var(--rule);
+  }
+  .pillar-more {
+    font-size: 0;
+  }
+  .strip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .feature:nth-child(even) {
+    border-inline-start: 0;
+  }
+  .feature + .feature {
+    border-top: 1px solid var(--rule);
   }
 }
-@media (max-width: 900px) and (min-width: 521px) {
-  .strip {
-    grid-template-columns: repeat(2, 1fr);
+@media (pointer: coarse) {
+  .btn,
+  .copy {
+    min-height: 44px;
+  }
+  .copy {
+    min-width: 44px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .live-dot {
-    animation: none;
-  }
-  .word-in {
-    animation: none;
-    transform: none;
-    opacity: 1;
-  }
-  [data-hero] {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
-  .live-skeleton span {
-    animation: none;
+  .btn,
+  .pillar,
+  .pillar-more svg {
+    transition: none;
   }
 }

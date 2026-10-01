@@ -6,7 +6,9 @@
  * canonicals, every hreflang set and all 17,216 heading anchors identical before
  * anything was switched. This is the build that ships.
  */
+import { View } from '@alixex/ranview/static';
 import { dirname, join, resolve } from 'node:path';
+import { rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { buildIndex, createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ranpress';
 import { LANGS, ORIGIN } from './config.ts';
@@ -14,9 +16,22 @@ import { componentRenderers, resolveCurrentLink } from './components.ts';
 import { loadDocs } from './content.ts';
 import { renderDoc } from './page.ts';
 import { generatedFiles, headFor } from './seo.ts';
+import { writeServiceWorker } from './service-worker.ts';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const DIST_DIR = join(ROOT, 'dist');
+
+/** The body is HTML already produced by the markdown renderer. */
+const callout = (kind: string, title: string, body: string): string =>
+  View('aside')
+    .class(`callout callout--${kind}`)
+    .unsafeHtml(
+      View('p')
+        .class('callout__label')
+        .text(title || kind.toUpperCase())
+        .serialize() + body,
+    )
+    .serialize() + '\n';
 
 export const markdown = createMarkdown({
   origin: ORIGIN,
@@ -24,19 +39,15 @@ export const markdown = createMarkdown({
   fences: {
     // The diagram source is URI-encoded because that is what `<r-mermaid>`'s `code`
     // getter decodes.
-    mermaid: (code) => `<r-mermaid code="${encodeURIComponent(code)}"></r-mermaid>\n`,
+    mermaid: (code) => View('r-mermaid').attr('code', encodeURIComponent(code)).serialize() + '\n',
   },
   components: componentRenderers,
   resolveLink: resolveCurrentLink,
   containers: {
-    note: ({ title, body }) =>
-      `<aside class="callout callout--note"><p class="callout__label">${title || 'NOTE'}</p>${body}</aside>\n`,
-    tip: ({ title, body }) =>
-      `<aside class="callout callout--tip"><p class="callout__label">${title || 'TIP'}</p>${body}</aside>\n`,
-    warning: ({ title, body }) =>
-      `<aside class="callout callout--warning"><p class="callout__label">${title || 'WARNING'}</p>${body}</aside>\n`,
-    danger: ({ title, body }) =>
-      `<aside class="callout callout--danger"><p class="callout__label">${title || 'DANGER'}</p>${body}</aside>\n`,
+    note: ({ title, body }) => callout('note', title, body),
+    tip: ({ title, body }) => callout('tip', title, body),
+    warning: ({ title, body }) => callout('warning', title, body),
+    danger: ({ title, body }) => callout('danger', title, body),
     /**
      * Inherited from VitePress, where it stopped `{{` being read as a Vue interpolation.
      * There is no template compiler here, so there is nothing to escape and the marker is
@@ -54,18 +65,22 @@ export const markdown = createMarkdown({
       const labels = blocks.map((token, i) => {
         const info = (token as { lang?: string }).lang ?? '';
         const label = /\[([^\]]+)\]/.exec(info)?.[1] ?? (info.split(/\s+/)[0] || `#${i + 1}`);
-        return label.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return label;
       });
-      const tabs = labels
-        .map((label, i) => `<button class="code-group__tab" type="button" hidden data-index="${i}">${label}</button>`)
-        .join('');
-      const panes = blocks
-        .map(
-          (token, i) =>
-            `<div class="code-group__pane"><p class="code-group__fallback">${labels[i]}</p>${render([token])}</div>`,
-        )
-        .join('');
-      return `<div class="code-group"><div class="code-group__tabs">${tabs}</div>${panes}</div>\n`;
+      const tabs = View('div')
+        .class('code-group__tabs')
+        .children(
+          labels.map((label, i) =>
+            View('button').class('code-group__tab').attrs({ type: 'button', hidden: '', 'data-index': i }).text(label),
+          ),
+        );
+      const panes = blocks.map((token, i) =>
+        View('div')
+          .class('code-group__pane')
+          // Highlighted markdown is already HTML; the fallback label is escaped by text().
+          .unsafeHtml(View('p').class('code-group__fallback').text(labels[i]).serialize() + render([token])),
+      );
+      return View('div').class('code-group').children(tabs, panes).serialize() + '\n';
     },
   },
 });
@@ -74,6 +89,8 @@ export interface DocsBuildResult {
   pages: number;
   written: string[];
 }
+
+let previousFiles: string[] = [];
 
 export const build = async (options: { skipAssets?: boolean } = {}): Promise<DocsBuildResult> => {
   await markdown.init();
@@ -108,6 +125,13 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
     written.push(name);
   }
 
+  // Retain bundled assets while removing pages deleted or renamed during development.
+  if (options.skipAssets) {
+    const currentFiles = new Set(written);
+    for (const file of previousFiles) if (!currentFiles.has(file)) rmSync(join(DIST_DIR, file), { force: true });
+  }
+  previousFiles = written;
+  writeServiceWorker(ROOT, DIST_DIR, assets);
   dropViteManifest(DIST_DIR);
   return { pages: content.pages.length, written };
 };

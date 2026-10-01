@@ -29,6 +29,9 @@ pnpm -F docs check:langs  # every locale has every page, and every copy table ha
 pnpm -F docs verify:design # the ranui design rules, over this site's stylesheets
 ```
 
+`dev` restarts when build policy changes and rebuilds when prose, styles, client code or
+public assets change. Markdown rebuilds preserve hashed assets and their URL mapping.
+
 `dev` and `preview` resolve URLs the way Cloudflare Pages does, **including its redirects**.
 That fidelity is the point: a generic static server hides exactly the mismatch that once
 shipped 904 canonicals naming a URL the host bounces. The resolution table is in
@@ -58,7 +61,7 @@ packages/docs/
 ├── styles/                  # docs.css, home.css, demos.css — no preprocessor
 ├── src/ · cn/src/ · …       # the eight prose trees
 ├── public/                  # copied verbatim: sw.js, llms.txt, robots.txt, _headers, fonts
-└── bin/build.sh             # build → verify → llms-full.txt → Service Worker assembly
+└── bin/build.sh             # build (including Service Worker) → verify → llms-full.txt
 ```
 
 ---
@@ -195,12 +198,33 @@ ranuts that predated i18n, zip, IndexedDB, Worker and bridge support.
 
 ## Service Worker (`public/sw.js`)
 
-Assembled at build time: `bin/build.sh` prepends the precache manifest and
-`const VERSION = "<timestamp>"` to the file, and `CACHE_NAME = 'chaxus_ran_' + VERSION`.
+Assembled by `build/service-worker.ts` during both production and development builds.
+It prepends the startup shell list and a content-derived version. The complete
+`offline-manifest.json` inventories canonical document URLs, search indexes, all chunks,
+fonts and public media with content hashes. `bin/build.sh` refreshes it after generating
+`llms-full.txt`.
 
-Four rules, each of which was previously broken:
+Installation waits for startup resources only. `client/offline.ts` requests batches of
+20 resources, with at most two simultaneous downloads, after load and during idle time.
+Hidden tabs, offline devices, Save-Data and 2G connections pause this work. Progress is
+persisted; failures remain pending and later visits resume downloads. Complete offline
+coverage becomes available after these batches finish, subject to browser storage quota.
 
-**1. The URL stays `/sw.js`. Never put the version in the filename.**
+Optional APIs are feature-detected. Without `requestIdleCallback`, a delayed timer waits
+for a quiet second after input before starting each batch; this approximates idle time.
+Without Network Information, only online/visibility checks apply; connection changes
+resume supported devices. Without Service Worker or MessageChannel, background caching
+is skipped. The worker uses the Response constructor instead of static Response.json;
+AbortController is optional and download deadlines remain active without it. Storage
+access failures fall back to the network and must not break online reading.
+
+Content and progress use stable site-specific caches. Old version caches remain readable
+until every replacement resource is cached; only then are this site's legacy version
+caches removed. Shared cached assets are retained to avoid races with concurrent updates. HTML and mutable JSON use network-first with offline fallback;
+other assets use cache-first. A deployment resets completion when the worker changes.
+HTML generation uses `@alixex/ranview/static`; text and attributes are escaped by builders,
+with raw HTML reserved for already-rendered Markdown and trusted inline script sources.
+
 The browser updates a Service Worker by re-fetching **the same URL** and byte-comparing.
 When the filename carried the timestamp, a returning visitor's registered `sw<old>.js` no
 longer existed on the server, so every update check 404'd — the only remaining update path
@@ -233,9 +257,9 @@ the body is being consumed, so `clone()` throws `Failed to execute 'clone' on 'R
 Response body is already used`. This stayed invisible while the fetch handler was broken
 (nothing consumed the response); it surfaced the moment interception started working.
 
-`activate` runs `deleteOldCaches()`, which keeps only the current `CACHE_NAME` — that is
-what actually evicts the previous deploy's assets, and it is driven by the version inside
-the file.
+Activation claims clients while retaining old offline content. Completed background
+caching removes only this site's legacy version caches; unrelated applications' caches
+and shared assets remain intact.
 
 ---
 
@@ -244,17 +268,15 @@ the file.
 Deliberately small. Navigation, sidebar, outline, language menu and the mobile drawer are
 all generated HTML and CSS — a documentation site that needs script to show its navigation
 shows nothing to a crawler, and nothing to a reader on a failed request. What is in
-`client/` genuinely cannot be done without it: search, the theme switch, copy buttons, the
-scroll-reveal on the landing.
+`client/` genuinely cannot be done without it: search, copy buttons and playground controls.
+The theme switch is a ranui element. Landing content stays visible without entrance scripts.
 
 **`@ranui/preview` bundles pdf.js — 1.33 MB.** It loads only when the page actually contains
 an `<r-preview>`, checked with `document.querySelector` before the dynamic import. It used
 to load unconditionally, which was over half of everything a page downloaded, on every page.
 
-**CSS may hide something only when script is there to bring it back.** `.reveal` sets
-`opacity: 0` and an IntersectionObserver adds `.in`; the rule is gated on a `js` class set
-before first paint by the theme bootstrap in `page.ts`. Without that gate, JavaScript
-disabled meant every landing section below the fold was invisible permanently.
+**Landing content is always visible.** The ruled catalogue uses hover feedback only,
+with reduced-motion alternatives; it never depends on an observer to reveal its content.
 
 ---
 

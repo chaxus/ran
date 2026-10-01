@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx build/dev.ts",
+    "dev": "tsx watch --include \"build/**/*.ts\" --include \"vite.config.ts\" build/dev.ts",
     "preview": "tsx build/preview.ts",
     "build": "sh ./bin/build.sh",
     "verify": "tsx build/verify.ts",
@@ -37,6 +37,7 @@
     "vitest": "catalog:"
   },
   "dependencies": {
+    "@alixex/ranview": "workspace:*",
     "@ranui/preview": "0.1.0-alpha-2",
     "minisearch": "7.2.0",
     "ranpress": "workspace:*",

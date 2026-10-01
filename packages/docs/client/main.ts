@@ -10,6 +10,7 @@ import '../styles/docs.css';
 import '../styles/home.css';
 import '../styles/demos.css';
 import 'ranui/style';
+import { mountOfflineCache } from './offline.ts';
 import { mountCodeGroups } from './code-groups.ts';
 import { mountSearch } from './search.ts';
 import { mountDemos } from './home.ts';
@@ -65,3 +66,5 @@ mountDemos();
 
 mountNavigation();
 mountCodeCopy();
+
+mountOfflineCache();

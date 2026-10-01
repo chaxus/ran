@@ -82,6 +82,9 @@ importers:
 
   packages/docs:
     dependencies:
+      '@alixex/ranview':
+        specifier: workspace:*
+        version: link:../ranview
       '@ranui/preview':
         specifier: 0.1.0-alpha-2
         version: 0.1.0-alpha-2
