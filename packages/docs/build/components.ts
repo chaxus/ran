@@ -15,6 +15,8 @@
  * an html token, so the tag stays ordinary markup and the page stays readable as prose.
  */
 import { View, type Child } from '@alixex/ranview/static';
+import { playgroundCopy } from '../client/playground-copy.ts';
+import { interactionCopy } from '../client/copy.ts';
 import { homeCopy } from './langs/home-copy.ts';
 import { renderPackageFacts } from './package-facts.ts';
 import { demoCopy } from './langs/demo-copy.ts';
@@ -289,30 +291,42 @@ const liveSource = (t: ReturnType<typeof homeCopy>): Child[] => [
   '\n\n',
   tag('r-progress', attr('percent', '66'), ''),
   '\n\n',
-  tag('r-loading', attr('name', 'circle-line'), ''),
-  '\n',
   tag('r-checkbox', [' ', el('span', 'c-attr', 'checked')], t.liveCheck),
 ];
 
+const CAPABILITY_LINKS: Record<string, string> = {
+  bridge: '/src/ranuts/bridge/',
+  gpu: '/src/ranuts/visual/',
+  vdom: '/src/ranuts/vnode/',
+  totp: '/src/ranuts/utils/totp',
+  mime: '/src/ranuts/mime_type/mime_type',
+  player: '/src/ranui/player/',
+  droplet: '/src/ranui/colorpicker/',
+  radar: '/src/ranui/radar/',
+  sigma: '/src/ranui/math/',
+  scratch: '/src/ranui/scratch/',
+};
+
 export const renderHome = (locale: LocaleDef): string => {
   const t = homeCopy(locale.dir);
+  const demo = playgroundCopy(locale.lang);
+  const feedback = interactionCopy(locale.lang);
   const href = (path: string): string => localeHref(path, locale);
   return el(
     'div',
     'cine',
-    el(
-      'div',
-      'home-identity',
-      el('span', 'home-monogram', 'r.').attr('aria-hidden', 'true'),
-      el('div', '', el('span', 'home-name', 'ran'), el('span', 'home-packages', 'ranui / ranuts')),
-      el('span', 'eyebrow', el('span', 'dot'), t.eyebrow),
-    ),
     el(
       'header',
       'hero',
       el(
         'div',
         'hero-copy',
+        el(
+          'div',
+          'home-identity',
+          el('span', 'home-monogram', 'r.').attr('aria-hidden', 'true'),
+          el('span', 'home-packages', 'ranui / ranuts'),
+        ),
         el('h1', 'headline', t.headline),
         el('p', 'subtitle', t.subtitle),
         el(
@@ -337,30 +351,98 @@ export const renderHome = (locale: LocaleDef): string => {
         ),
       ),
       el(
-        'div',
+        'section',
         'hero-live',
-        el('div', 'live-head', el('span', 'live-dot'), t.liveLabel, el('span', 'live-lang', 'html')),
-        el('pre', 'snippet live-code', liveSource(t)),
+        el('div', 'live-head', el('h2', '', demo.title), el('span', 'live-badge', el('span', 'live-dot'), t.liveLabel)),
+        el('p', 'live-hint', demo.hint),
+        el(
+          'div',
+          'demo-tabs',
+          ...['buttons', 'progress', 'selection'].map((key) =>
+            el('button', 'demo-tab', demo[key as 'buttons' | 'progress' | 'selection']).attrs({
+              type: 'button',
+              hidden: '',
+              'data-demo-tab': key,
+            }),
+          ),
+        ),
         el(
           'div',
           'live-body',
           el(
             'div',
-            'live-row',
-            el('r-button', '', t.liveButtons[0]).attr('type', 'primary'),
-            el('r-button', '', t.liveButtons[1]),
-            el('r-button', '', t.liveButtons[2]).attr('type', 'warning'),
-          ),
-          el('div', 'live-row', el('r-progress', 'live-progress').attrs({ percent: '66', total: '100' })),
+            'demo-panel',
+            el('h3', 'demo-fallback', demo.buttons),
+            el(
+              'div',
+              'live-row',
+              ...t.liveButtons.map((label, i) =>
+                el('r-button', '', label).attrs({ type: ['primary', '', 'warning'][i] }),
+              ),
+            ),
+            el(
+              'label',
+              'demo-control demo-enhancement',
+              el('input').attrs({ type: 'checkbox', 'data-demo-disabled': '' }),
+              demo.disabled,
+            ),
+            el('p', 'demo-feedback', '').attrs({ 'data-demo-clicked': '', role: 'status', 'aria-live': 'polite' }),
+          ).attrs({ id: 'demo-buttons', 'data-demo-panel': 'buttons' }),
           el(
             'div',
-            'live-row live-inline',
-            el('r-loading', 'live-loading').attr('name', 'circle-line'),
+            'demo-panel',
+            el('h3', 'demo-fallback', demo.progress),
+            el('r-progress', 'live-progress').attrs({ percent: '66', total: '100' }),
+            el(
+              'label',
+              'demo-control demo-range demo-enhancement',
+              el('span', '', demo.percent),
+              el('output', '', '66%').attrs({ for: 'demo-percent', 'data-demo-value': '' }),
+              el('input').attrs({
+                id: 'demo-percent',
+                type: 'range',
+                min: '0',
+                max: '100',
+                value: '66',
+                'data-demo-percent': '',
+                'aria-label': demo.percent,
+              }),
+            ),
+          ).attrs({ id: 'demo-progress', 'data-demo-panel': 'progress' }),
+          el(
+            'div',
+            'demo-panel',
+            el('h3', 'demo-fallback', demo.selection),
             el('r-checkbox', '', t.liveCheck).attr('checked', 'true'),
-          ),
+            el('p', 'demo-feedback', demo.selected).attrs({ 'data-demo-selection': '', role: 'status' }),
+          ).attrs({ id: 'demo-selection', 'data-demo-panel': 'selection' }),
         ),
-        el('span', 'live-note', t.liveNote),
-      ),
+        el(
+          'div',
+          'demo-footer demo-enhancement',
+          el('a', '', t.pillars[0].more, ARROW_SM()).attrs({ href: href('/src/ranui/button/'), 'data-demo-doc': '' }),
+          el('button', 'demo-reset', demo.reset).attrs({ type: 'button', 'data-demo-reset': '' }),
+        ),
+        el(
+          'details',
+          'demo-source',
+          el('summary', '', demo.code, el('span', 'live-lang', 'HTML')),
+          el(
+            'div',
+            'demo-code-toolbar demo-enhancement',
+            el('button', 'copy demo-copy', COPY_ICON(), el('span', 'copy-label', feedback.copy)).attrs({
+              type: 'button',
+              'data-demo-copy': '',
+              'aria-label': feedback.copy,
+            }),
+          ),
+          el('pre', 'snippet live-code', el('code', '', ...liveSource(t))).attrs({
+            'data-demo-code': '',
+            dir: 'ltr',
+            tabindex: '0',
+          }),
+        ),
+      ).attrs({ 'data-playground': '', 'data-lang': locale.lang }),
     ),
     el(
       'section',
@@ -404,7 +486,10 @@ export const renderHome = (locale: LocaleDef): string => {
                   el(
                     'div',
                     'caps-text',
-                    el('span', 'caps-name', item.name, ' ', el('code', '', item.api)),
+                    el('a', 'caps-name', item.name, ' ', el('code', '', item.api)).attr(
+                      'href',
+                      href(CAPABILITY_LINKS[item.kind]),
+                    ),
                     el('span', 'caps-desc', item.desc),
                   ),
                 ),

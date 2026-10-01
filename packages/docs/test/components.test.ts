@@ -27,7 +27,6 @@ describe('static documentation components', () => {
         '',
         '<r-progress percent="66"></r-progress>',
         '',
-        '<r-loading name="circle-line"></r-loading>',
         `<r-checkbox checked>${copy.liveCheck}</r-checkbox>`,
       ].join('\n'),
     );

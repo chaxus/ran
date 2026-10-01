@@ -265,6 +265,13 @@ and shared assets remain intact.
 
 ## The client bundle
 
+The home workbench previews buttons, progress and selection. Keyboard-operated tabs reveal
+one example at a time, edits update minimal copyable HTML, and reset restores the current
+example. `client/playground-copy.ts` shares all eight languages of interaction labels with
+the build renderer. Source snippets use ranview mock nodes so registered custom elements
+cannot inject internal attributes into copied examples. Without JavaScript, examples and
+native code disclosures remain readable; non-working enhancement controls stay hidden.
+
 Deliberately small. Navigation, sidebar, outline, language menu and the mobile drawer are
 all generated HTML and CSS — a documentation site that needs script to show its navigation
 shows nothing to a crawler, and nothing to a reader on a failed request. What is in
@@ -275,7 +282,7 @@ The theme switch is a ranui element. Landing content stays visible without entra
 an `<r-preview>`, checked with `document.querySelector` before the dynamic import. It used
 to load unconditionally, which was over half of everything a page downloaded, on every page.
 
-**Landing content is always visible.** The ruled catalogue uses hover feedback only,
+**Landing content is always visible.** The product workbench enhances existing markup with accessible tabs and editable previews,
 with reduced-motion alternatives; it never depends on an observer to reveal its content.
 
 ---
