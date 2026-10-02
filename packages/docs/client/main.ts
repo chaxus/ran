@@ -10,6 +10,7 @@ import '../styles/docs.css';
 import '../styles/home.css';
 import '../styles/demos.css';
 import 'ranui/style';
+import '../styles/studio.css';
 import { mountOfflineCache } from './offline.ts';
 import { mountCodeGroups } from './code-groups.ts';
 import { mountOutline } from './outline.ts';

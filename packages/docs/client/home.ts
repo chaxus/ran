@@ -47,6 +47,43 @@ const mountHome = (): void => {
   for (const button of root.querySelectorAll<HTMLElement>('[data-copy-snippet]')) {
     wireCopy(button, () => button.closest('.code-cell')?.querySelector('.snippet')?.textContent ?? '');
   }
+  const palettes = [...root.querySelectorAll<HTMLButtonElement>('[data-preview-palette]')];
+  palettes.forEach((button) => {
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      root.querySelector<HTMLElement>('[data-playground]')!.dataset.palette = button.dataset.previewPalette;
+      palettes.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+    });
+  });
+  const search = root.querySelector<HTMLInputElement>('[data-catalog-search]');
+  const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-catalog-filter]')];
+  const entries = [...root.querySelectorAll<HTMLElement>('[data-catalog-entry]')];
+  let library = 'all';
+  const filterCatalogue = (): void => {
+    const query = search?.value.trim().toLocaleLowerCase() ?? '';
+    entries.forEach((entry) => {
+      entry.hidden =
+        (library !== 'all' && entry.dataset.library !== library) ||
+        !(entry.dataset.catalogEntry ?? '').toLocaleLowerCase().includes(query);
+    });
+    for (const group of root.querySelectorAll<HTMLElement>('[data-catalog-group]')) {
+      group.hidden = !entries.some((entry) => !entry.hidden && entry.dataset.library === group.dataset.catalogGroup);
+    }
+    const count = entries.filter((entry) => !entry.hidden).length;
+    root.querySelector<HTMLElement>('[data-catalog-empty]')!.hidden = count !== 0;
+  };
+  if (search) {
+    search.hidden = false;
+    search.addEventListener('input', filterCatalogue);
+    filters.forEach((button) => {
+      button.hidden = false;
+      button.addEventListener('click', () => {
+        library = button.dataset.catalogFilter ?? 'all';
+        filters.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        filterCatalogue();
+      });
+    });
+  }
   const workbench = root.querySelector<HTMLElement>('[data-playground]');
   if (!workbench) return;
   const t = playgroundCopy(workbench.dataset.lang ?? 'en');

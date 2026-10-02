@@ -109,3 +109,31 @@ it('copies runnable registration code with theme styles and without a shell prom
   expect(source).not.toContain('$ npm');
   expect(source).toBe(button.closest('.code-cell')!.querySelector('.snippet')!.textContent);
 });
+
+it('changes the live palette without changing the document theme or selected example', () => {
+  setup();
+  const theme = document.documentElement.getAttribute('data-ran-theme');
+  document.querySelector<HTMLButtonElement>('[data-demo-tab="progress"]')!.click();
+  document.querySelector<HTMLButtonElement>('[data-preview-palette="moss"]')!.click();
+  expect(document.querySelector('[data-playground]')!.getAttribute('data-palette')).toBe('moss');
+  expect(document.querySelector('[data-preview-palette="moss"]')!.getAttribute('aria-pressed')).toBe('true');
+  expect(document.querySelector('[data-preview-palette="clay"]')!.getAttribute('aria-pressed')).toBe('false');
+  expect(document.querySelector('[data-demo-tab="progress"]')!.getAttribute('aria-selected')).toBe('true');
+  expect(document.documentElement.getAttribute('data-ran-theme')).toBe(theme);
+});
+
+it('combines catalogue search and library filters, and recovers from an empty result', () => {
+  setup();
+  const input = document.querySelector<HTMLInputElement>('[data-catalog-search]')!;
+  const visible = () => [...document.querySelectorAll<HTMLElement>('[data-catalog-entry]')].filter((el) => !el.hidden);
+  input.value = 'r-math';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  expect(visible()).toHaveLength(1);
+  document.querySelector<HTMLButtonElement>('[data-catalog-filter="ranuts"]')!.click();
+  expect(visible()).toHaveLength(0);
+  expect(document.querySelector<HTMLElement>('[data-catalog-empty]')!.hidden).toBe(false);
+  input.value = '';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  expect(visible()).toHaveLength(5);
+  expect(document.querySelector<HTMLElement>('[data-catalog-empty]')!.hidden).toBe(true);
+});

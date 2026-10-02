@@ -17,6 +17,7 @@
 import { View, type Child } from '@alixex/ranview/static';
 import { playgroundCopy } from '../client/playground-copy.ts';
 import { interactionCopy } from '../client/copy.ts';
+import { studioCopy } from '../client/studio-copy.ts';
 import { homeCopy } from './langs/home-copy.ts';
 import { renderPackageFacts } from './package-facts.ts';
 import { demoCopy } from './langs/demo-copy.ts';
@@ -313,6 +314,7 @@ export const renderHome = (locale: LocaleDef): string => {
   const t = homeCopy(locale.dir);
   const demo = playgroundCopy(locale.lang);
   const feedback = interactionCopy(locale.lang);
+  const studio = studioCopy(locale.lang);
   const href = (path: string): string => localeHref(path, locale);
   return el(
     'div',
@@ -328,9 +330,17 @@ export const renderHome = (locale: LocaleDef): string => {
           'home-identity',
           el('span', 'home-monogram', 'r.').attr('aria-hidden', 'true'),
           el('span', 'home-packages', 'ranui / ranuts'),
+          el('span', 'home-open', t.eyebrow),
         ),
         el('h1', 'headline', t.headline),
         el('p', 'subtitle', t.subtitle),
+        el(
+          'div',
+          'cta',
+          el('a', 'btn btn-primary', t.ctaPrimary, ARROW()).attr('href', href('/src/ranui/')),
+          el('a', 'btn btn-ghost', t.pillars[1].more, ARROW()).attr('href', href('/src/ranuts/')),
+        ),
+        el('span', 'install-label', studio.install),
         el(
           'div',
           'cmd',
@@ -341,20 +351,29 @@ export const renderHome = (locale: LocaleDef): string => {
             'aria-label': t.copy,
           }),
         ),
-        el(
-          'div',
-          'cta',
-          el('a', 'btn btn-primary', t.ctaPrimary, ARROW()).attr('href', href('/src/ranui/')),
-          el('a', 'btn btn-ghost', GITHUB_MARK(), t.ctaSecondary).attrs({
-            href: 'https://github.com/chaxus/ran',
-            target: '_blank',
-            rel: 'noreferrer',
-          }),
-        ),
       ),
       el(
         'section',
         'hero-live',
+        el(
+          'div',
+          'preview-toolbar',
+          el('span', 'preview-name', 'ranui / playground'),
+          el(
+            'div',
+            'preview-palettes',
+            ...['clay', 'moss', 'ink'].map((palette, i) =>
+              el('button', 'preview-palette', el('span', 'palette-swatch')).attrs({
+                type: 'button',
+                hidden: '',
+                'data-preview-palette': palette,
+                'aria-label': `${studio.palette}: ${studio.palettes[i]}`,
+                title: studio.palettes[i],
+                'aria-pressed': String(i === 0),
+              }),
+            ),
+          ).attrs({ role: 'group', 'aria-label': studio.palette }),
+        ),
         el('div', 'live-head', el('h2', '', demo.title), el('span', 'live-badge', el('span', 'live-dot'), t.liveLabel)),
         el('p', 'live-hint', demo.hint),
         el(
@@ -444,7 +463,7 @@ export const renderHome = (locale: LocaleDef): string => {
             tabindex: '0',
           }),
         ),
-      ).attrs({ 'data-playground': '', 'data-lang': locale.lang }),
+      ).attrs({ 'data-playground': '', 'data-lang': locale.lang, 'data-palette': 'clay' }),
     ),
     el(
       'section',
@@ -505,7 +524,31 @@ export const renderHome = (locale: LocaleDef): string => {
     el(
       'section',
       'section caps',
-      el('div', 'sec-head', el('h2', '', t.capsTitle), el('p', 'sec-sub', t.capsSub)),
+      el('div', 'sec-head', el('h2', '', studio.catalogue), el('p', 'sec-sub', t.capsSub)),
+      el(
+        'div',
+        'catalog-controls',
+        el(
+          'div',
+          'catalog-filters',
+          ...['all', 'ranui', 'ranuts'].map((filter, i) =>
+            el('button', 'catalog-filter', [studio.all, studio.components, studio.utilities][i]).attrs({
+              type: 'button',
+              hidden: '',
+              'data-catalog-filter': filter,
+              'aria-pressed': String(i === 0),
+            }),
+          ),
+        ).attrs({ role: 'group', 'aria-label': studio.catalogue }),
+        el('input', 'catalog-search').attrs({
+          type: 'search',
+          hidden: '',
+          'data-catalog-search': '',
+          placeholder: studio.search,
+          'aria-label': studio.search,
+        }),
+      ),
+      el('p', 'catalog-empty', studio.empty).attrs({ 'data-catalog-empty': '', hidden: '', role: 'status' }),
       el(
         'div',
         'bento',
@@ -531,10 +574,10 @@ export const renderHome = (locale: LocaleDef): string => {
                     ),
                     el('span', 'caps-desc', item.desc),
                   ),
-                ),
+                ).attrs({ 'data-catalog-entry': `${item.name} ${item.api} ${item.desc}`, 'data-library': col.lib }),
               ),
             ),
-          ),
+          ).attr('data-catalog-group', col.lib),
         ),
       ),
     ),
@@ -549,6 +592,17 @@ export const renderHome = (locale: LocaleDef): string => {
           el('p', '', f.desc),
         ),
       ),
+    ),
+    el(
+      'footer',
+      'home-footer',
+      el('a', 'home-footer-brand', 'ran.').attr('href', href('/')),
+      el('span', '', t.eyebrow),
+      el('a', '', 'GitHub', ARROW_SM()).attrs({
+        href: 'https://github.com/chaxus/ran',
+        target: '_blank',
+        rel: 'noreferrer',
+      }),
     ),
   ).serialize();
 };

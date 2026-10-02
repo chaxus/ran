@@ -205,6 +205,9 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
   const script = (source: string) => node('script').unsafeHtml(source);
   const meta = (attrs: Record<string, string>) => node('meta', attrs);
   const landing = page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url);
+  const currentSection = navFor(page.locale).find(
+    (item) => item.activeMatch && new RegExp(item.activeMatch).test(page.url),
+  );
   const mobileOutline = tocList(page);
   const desktopOutline = tocList(page);
   const document = node(
@@ -292,6 +295,15 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
           { id: 'main', class: 'doc' },
           mobileOutline
             ? node('details', { class: 'mobile-toc' }, node('summary', {}, ui.outline), mobileOutline)
+            : null,
+          !landing && currentSection
+            ? node(
+                'div',
+                { class: 'doc-context' },
+                node('a', { href: currentSection.link }, currentSection.text),
+                node('span', { 'aria-hidden': 'true' }, '/'),
+                node('span', {}, page.title),
+              )
             : null,
           node(landing ? 'div' : 'article', { class: landing ? 'landing' : 'prose' }).unsafeHtml(page.html),
           pager,

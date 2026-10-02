@@ -113,10 +113,10 @@ interface Pair3 extends Pair2 {
 export const HOME_STRINGS: Record<string, HomeStrings> = {
   '': {
     eyebrow: 'Open source · MIT Licensed',
-    headline: 'A Web Components UI library and a typed utility library',
+    headline: 'Native Web Components.\nTypeScript utilities.',
     splitWords: true,
     subtitle:
-      'ranui ships 40 framework-agnostic r- elements; ranuts packs 90+ tree-shakeable TypeScript helpers. Use them in Vue, React, or plain HTML, with no build step required.',
+      '40 framework-agnostic components. 90+ typed utilities. Use them in Vue, React, or plain HTML; import only what you need.',
     ctaPrimary: 'Explore Components',
     ctaSecondary: 'Star on GitHub',
     statLabels: ['Components', 'Utilities', 'Languages', 'Licensed'],
@@ -194,10 +194,9 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   cn: {
     eyebrow: '开源 · MIT 协议',
-    headline: 'Web Components 组件库与 TypeScript 工具集',
+    headline: '原生 Web 组件。\nTypeScript 工具。',
     splitWords: false,
-    subtitle:
-      'ranui 提供 40 个框架无关的 r- 元素，ranuts 收录 90+ 个可 Tree-shaking 的类型化工具函数，在 Vue、React 或纯 HTML 中直接使用，无需构建步骤。',
+    subtitle: '40 个跨框架组件，90+ 个类型化工具函数。在 Vue、React 或纯 HTML 中使用，按需引入。',
     ctaPrimary: '浏览组件',
     ctaSecondary: '前往 GitHub',
     statLabels: ['组件', '工具函数', '语言', '协议'],
@@ -252,7 +251,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   ja: {
     eyebrow: 'オープンソース · MIT ライセンス',
-    headline: 'Web Components の UI ライブラリと型付きユーティリティ',
+    headline: 'ネイティブ Web Components。\n型付きユーティリティ。',
     splitWords: false,
     subtitle:
       'ranui はフレームワークに依存しない r- 要素を 40 個、ranuts は tree-shaking 可能な型付きユーティリティを 90 以上そろえています。Vue でも React でも素の HTML でも、ビルド工程なしでそのまま使えます。',
@@ -339,7 +338,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   es: {
     eyebrow: 'Código abierto · Licencia MIT',
-    headline: 'Una biblioteca de UI en Web Components y utilidades tipadas',
+    headline: 'Web Components nativos.\nUtilidades TypeScript.',
     splitWords: true,
     subtitle:
       'ranui trae 40 elementos r- independientes de cualquier framework; ranuts reúne más de 90 utilidades TypeScript compatibles con tree-shaking. Úsalos en Vue, en React o en HTML puro, sin ningún paso de compilación.',
@@ -426,7 +425,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   pt: {
     eyebrow: 'Código aberto · Licença MIT',
-    headline: 'Uma biblioteca de UI em Web Components e utilitários tipados',
+    headline: 'Web Components nativos.\nUtilitários TypeScript.',
     splitWords: true,
     subtitle:
       'O ranui traz 40 elementos r- independentes de framework; o ranuts reúne mais de 90 utilitários TypeScript compatíveis com tree-shaking. Use-os no Vue, no React ou em HTML puro, sem nenhuma etapa de build.',
@@ -513,7 +512,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   ko: {
     eyebrow: '오픈소스 · MIT 라이선스',
-    headline: '웹 컴포넌트 UI 라이브러리와 타입이 붙은 유틸리티',
+    headline: '네이티브 웹 컴포넌트.\nTypeScript 유틸리티.',
     splitWords: true,
     subtitle:
       'ranui는 프레임워크에 얽매이지 않는 r- 엘리먼트 40개를, ranuts는 트리 셰이킹이 되는 타입 유틸리티 90여 개를 제공합니다. Vue에서도 React에서도 순수 HTML에서도 빌드 단계 없이 그대로 씁니다.',
@@ -594,7 +593,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   de: {
     eyebrow: 'Open Source · MIT-Lizenz',
-    headline: 'Eine Web-Components-UI-Bibliothek und typisierte Utilities',
+    headline: 'Native Web Components.\nTypeScript-Utilities.',
     splitWords: true,
     subtitle:
       'ranui liefert 40 frameworkunabhängige r--Elemente, ranuts über 90 tree-shaking-fähige TypeScript-Helfer. Nutzbar in Vue, in React oder in reinem HTML — ganz ohne Build-Schritt.',
@@ -681,7 +680,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   fa: {
     eyebrow: 'متن‌باز · مجوز MIT',
-    headline: 'کتابخانهٔ رابط کاربری وب‌کامپوننت و ابزارهای تایپ‌شده',
+    headline: 'وب‌کامپوننت‌های بومی.\nابزارهای TypeScript.',
     splitWords: false,
     subtitle:
       'ranui چهل عنصر ‎r-‎ مستقل از فریم‌ورک دارد و ranuts بیش از ۹۰ ابزار تایپ‌شده با پشتیبانی از tree-shaking. در Vue، React یا HTML ساده و بدون هیچ مرحلهٔ ساخت به کار می‌روند.',
