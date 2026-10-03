@@ -50,6 +50,20 @@ const makeScope = (options: { network?: (url: string) => Response | Promise<Resp
 const req = (url: string, method = 'GET'): Request => ({ url, method }) as Request;
 
 describe('cacheFirst', () => {
+  it('still serves the network when cache storage is unavailable', async () => {
+    const h = makeScope();
+    h.scope.caches.open = async () => {
+      throw new Error('storage unavailable');
+    };
+    const response = await cacheFirst(req('/a.js'), { cacheName: 'assets', scope: h.scope });
+    expect(await response.text()).toBe('net');
+  });
+  it('does not serve a copy from another cache version', async () => {
+    const h = makeScope();
+    h.seed('old-assets', '/a.js', 'stale');
+    const response = await cacheFirst(req('/a.js'), { cacheName: 'assets', scope: h.scope });
+    expect(await response.text()).toBe('net');
+  });
   it('serves the cached copy without touching the network', async () => {
     const h = makeScope();
     h.seed('assets', '/a.js', 'cached');
@@ -101,6 +115,16 @@ describe('cacheFirst', () => {
 });
 
 describe('networkFirst', () => {
+  it('does not fall back to a different cache when offline', async () => {
+    const h = makeScope({
+      network: () => {
+        throw new Error('offline');
+      },
+    });
+    h.seed('old-pages', '/', 'stale');
+    const response = await networkFirst(req('/'), { cacheName: 'pages', scope: h.scope });
+    expect(response.status).toBe(408);
+  });
   it('prefers the network and refreshes the cache', async () => {
     const h = makeScope();
     h.seed('pages', '/', 'stale');

@@ -1,6 +1,12 @@
 import { resolveProvider } from '@/app/lib/provider';
 import type { LiveProvider } from '@/app/lib/provider';
 import type { Context } from '@/app/types/index';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import type { ReadableStream as NodeReadableStream } from 'node:stream/web';
+import { allowedUrl } from '@/app/lib/public-url';
+import { fetchPublicPage } from '@/app/lib/public-fetch';
+export { allowedUrl } from '@/app/lib/public-url';
 
 /** One turn of the conversation, as the client sends it and the provider expects it. */
 interface ChatMessage {
@@ -93,10 +99,13 @@ async function streamProvider(
   messages: ChatMessage[],
   tools: unknown[] | undefined,
 ): Promise<void> {
-  const { res, req } = ctx;
+  const { res } = ctx;
   const send = sender((chunk) => res.write(chunk));
   const abort = new AbortController();
-  req.on('close', () => abort.abort());
+  const disconnect = (): void => {
+    if (!res.writableEnded) abort.abort();
+  };
+  res.on('close', disconnect);
 
   try {
     const upstream = await fetch(`${provider.baseURL}/chat/completions`, {
@@ -128,23 +137,18 @@ async function streamProvider(
       return;
     }
 
-    const reader = upstream.body.getReader();
-    const decoder = new TextDecoder();
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      res.write(decoder.decode(value, { stream: true }));
-    }
-    res.end();
+    // Preserve bytes and honor downstream backpressure instead of buffering a slow client.
+    await pipeline(Readable.fromWeb(upstream.body as unknown as NodeReadableStream), res, { signal: abort.signal });
   } catch (error) {
     // An abort is the reader closing the tab, not a failure to report.
-    if (abort.signal.aborted) {
-      res.end();
+    if (abort.signal.aborted || res.destroyed) {
       return;
     }
     send({ error: { status: 0, message: error instanceof Error ? error.message : String(error) } });
     send('[DONE]');
     res.end();
+  } finally {
+    res.off('close', disconnect);
   }
 }
 
@@ -200,7 +204,7 @@ export function demoShouldCallTool(messages: readonly ChatMessage[], tools: unkn
 }
 
 function streamDemo(ctx: Context): void {
-  const { res, req } = ctx;
+  const { res } = ctx;
   const send = sender((chunk) => res.write(chunk));
   const id = `demo-${Date.now()}`;
   let sent = 0;
@@ -215,6 +219,7 @@ function streamDemo(ctx: Context): void {
 
     if (sent < POEM.length) return;
     clearInterval(timer);
+    res.off('close', disconnect);
     send({
       id,
       object: 'chat.completion.chunk',
@@ -225,10 +230,10 @@ function streamDemo(ctx: Context): void {
     res.end();
   }, INTERVAL_MS);
 
-  req.on('close', () => {
+  const disconnect = (): void => {
     clearInterval(timer);
-    res.end();
-  });
+  };
+  res.on('close', disconnect);
 }
 
 /** How much of a fetched page is worth returning; a model reads text, not a whole site. */
@@ -288,44 +293,6 @@ export function readableText(html: string): string {
   );
 }
 
-/**
- * Whether a URL is one this server will fetch on a model's behalf.
- *
- * The model chooses this address, and the server reaches it with the server's own network
- * access — which on a developer machine includes localhost and whatever else is on the LAN.
- * Restricting the scheme and refusing an obviously internal host is the difference between a
- * fetch tool and a request forwarder pointed at the inside of the network.
- *
- * @param raw The address the model asked for.
- * @returns The parsed URL, or the reason it was refused.
- */
-export function allowedUrl(raw: string): { url: URL } | { error: string } {
-  let url: URL;
-  try {
-    url = new URL(raw);
-  } catch {
-    return { error: '不是合法的地址' };
-  }
-  if (url.protocol !== 'http:' && url.protocol !== 'https:') return { error: '只支持 http 和 https' };
-  const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, '');
-  if (
-    host === 'localhost' ||
-    host.endsWith('.localhost') ||
-    host === '::1' ||
-    host.startsWith('127.') ||
-    host.startsWith('10.') ||
-    host.startsWith('192.168.') ||
-    // The only one that stays a regex: 172.16–172.31 is a range, not a prefix.
-    /^172\.(1[6-9]|2\d|3[01])\./.test(host) ||
-    host.startsWith('169.254.') ||
-    host.startsWith('fc') ||
-    host.startsWith('fd')
-  ) {
-    return { error: '不允许访问内网地址' };
-  }
-  return { url };
-}
-
 export default class IMController {
   /**
    * Fetches one page for the client's `fetch_url` tool.
@@ -351,17 +318,7 @@ export default class IMController {
     }
 
     try {
-      const response = await globalThis.fetch(checked.url, {
-        headers: { 'user-agent': 'ran-im/1.0 (+tool fetch_url)', accept: 'text/html,text/plain;q=0.9,*/*;q=0.5' },
-        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-        redirect: 'follow',
-      });
-      if (!response.ok) {
-        reply(200, { error: `${response.status} ${response.statusText}` });
-        return;
-      }
-      const body = (await response.text()).slice(0, FETCH_LIMIT);
-      const type = response.headers.get('content-type') ?? '';
+      const { body, type } = await fetchPublicPage(checked.url, AbortSignal.timeout(FETCH_TIMEOUT_MS), FETCH_LIMIT);
       reply(200, { text: type.includes('html') ? readableText(body) : body });
     } catch (error) {
       reply(200, { error: error instanceof Error ? error.message : String(error) });
@@ -382,7 +339,7 @@ export default class IMController {
    * @param ctx Request context.
    */
   dialog(ctx: Context): void {
-    const { res, req } = ctx;
+    const { res } = ctx;
     const body = ctx.request.body as { messages?: ChatMessage[]; question?: string; tools?: unknown[] };
     const messages: ChatMessage[] =
       body.messages ?? (body.question === undefined ? [] : [{ role: 'user', content: body.question }]);
@@ -410,8 +367,5 @@ export default class IMController {
       return;
     }
     void streamProvider(ctx, provider, messages, body.tools);
-    req.on('close', () => {
-      res.end();
-    });
   }
 }

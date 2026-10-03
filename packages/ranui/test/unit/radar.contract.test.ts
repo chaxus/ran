@@ -29,6 +29,39 @@ const sampleAbilitys = JSON.stringify([
 ]);
 
 describe('r-radar contract', () => {
+  it('resumes resize updates after removal and reconnection', () => {
+    const targets = new Set<Element>();
+    let notify!: () => void;
+    const original = globalThis.ResizeObserver;
+    globalThis.ResizeObserver = class {
+      constructor(callback: ResizeObserverCallback) {
+        notify = () => callback([], this as ResizeObserver);
+      }
+      observe(target: Element) {
+        targets.add(target);
+      }
+      unobserve(target: Element) {
+        targets.delete(target);
+      }
+      disconnect() {
+        targets.clear();
+      }
+    } as typeof ResizeObserver;
+    try {
+      const radar = document.createElement('r-radar');
+      const refresh = vi.spyOn(radar, 'refreshData').mockImplementation(() => {});
+      document.body.appendChild(radar);
+      radar.remove();
+      expect(targets.size).toBe(0);
+      document.body.appendChild(radar);
+      refresh.mockClear();
+      if (targets.size) notify();
+      expect(refresh).toHaveBeenCalledOnce();
+      radar.remove();
+    } finally {
+      globalThis.ResizeObserver = original;
+    }
+  });
   beforeEach(() => {
     document.body.innerHTML = '';
   });
@@ -141,6 +174,26 @@ describe('r-radar contract', () => {
     setLineDash: vi.fn(),
     measureText: vi.fn().mockReturnValue({ width: 40 }),
     getBoundingClientRect: vi.fn().mockReturnValue({ width: 40, height: 20 }),
+  });
+
+  it('balances canvas state while drawing the outline', () => {
+    const radar = mount();
+    radar.mRadius = 100;
+    radar.mCount = 3;
+    radar.mCenter = 150;
+    radar.mAngle = (Math.PI * 2) / 3;
+    let depth = 0;
+    const ctx = {
+      ...makeCtx(),
+      save() {
+        depth++;
+      },
+      restore() {
+        depth--;
+      },
+    };
+    radar.drawSide(ctx);
+    expect(depth).toBe(0);
   });
 
   it('refreshData does not throw when abilitys is set', () => {

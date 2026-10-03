@@ -30,6 +30,8 @@ function runServer(question: string): { body: string; status: number; headers: R
         body += chunk;
       },
       end() {},
+      on() {},
+      off() {},
     },
     req: { on() {} },
   } as unknown as Context;
