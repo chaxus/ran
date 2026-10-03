@@ -10,22 +10,14 @@ import '../styles/docs.css';
 import '../styles/home.css';
 import '../styles/demos.css';
 import 'ranui/style';
+import { mountOfflineCache } from './offline.ts';
+import { mountComponents } from './components.ts';
 import { mountCodeGroups } from './code-groups.ts';
 import { mountSearch } from './search.ts';
 import { mountDemos } from './home.ts';
 import { mountNavigation, mountCodeCopy } from './interactions.ts';
 
-// Registers every `<r-*>` the pages use. The demos are already in the markup as inert
-// custom elements; this is what upgrades them.
-import('ranui').then(() => {
-  /*
-   * `@ranui/preview` bundles pdf.js — 1.33 MB, which is over half of everything a page
-   * downloads. It defines `<r-preview>`, which appears on a handful of pages out of
-   * 1,393. Loading it unconditionally (as the VitePress theme also did) charged every
-   * reader for a component almost none of them would see.
-   */
-  if (document.querySelector('r-preview')) void import('@ranui/preview');
-});
+mountComponents();
 
 mountCodeGroups();
 
@@ -65,3 +57,5 @@ mountDemos();
 
 mountNavigation();
 mountCodeCopy();
+
+mountOfflineCache();

@@ -13,7 +13,8 @@
     "./serve": "./src/serve.ts",
     "./host": "./src/host.ts",
     "./feeds": "./src/feeds.ts",
-    "./search": "./src/search.ts"
+    "./search": "./src/search.ts",
+    "./search-shared": "./src/search-shared.ts"
   },
   "repository": {
     "type": "git",
