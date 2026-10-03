@@ -10,6 +10,8 @@ it('serves query-string assets and refuses traversal and escaping symlinks', asy
   const root = mkdtempSync(join(tmpdir(), 'ran-static-'));
   const publicDir = join(root, 'public');
   mkdirSync(publicDir);
+  mkdirSync(join(root, 'public-sibling'));
+  writeFileSync(join(root, 'public-sibling', 'secret.txt'), 'sibling secret');
   writeFileSync(join(publicDir, 'asset.txt'), 'asset');
   writeFileSync(join(root, 'private.txt'), 'private');
   symlinkSync(join(root, 'private.txt'), join(publicDir, 'escape.txt'));
@@ -37,7 +39,14 @@ it('serves query-string assets and refuses traversal and escaping symlinks', asy
         .end();
     });
   try {
-    for (const path of ['/../private.txt', '/%2e%2e/private.txt', '/escape.txt', '/%ZZ']) {
+    for (const path of [
+      '/../private.txt',
+      '/%2e%2e/private.txt',
+      '/escape.txt',
+      '/../public-sibling/secret.txt',
+      '/%2e%2e%2fpublic-sibling/secret.txt',
+      '/%ZZ',
+    ]) {
       expect(await get(path)).toEqual({ status: 404, body: 'missing' });
     }
     expect(await get('/asset.txt?version=1')).toEqual({ status: 200, body: 'asset' });
