@@ -8,10 +8,10 @@
  * Only the current locale's index is ever fetched. A single index over all eight
  * languages would make every reader download seven they cannot read.
  */
-import MiniSearch from 'minisearch';
+import type MiniSearch from 'minisearch';
 import { interactionCopy } from './copy';
-import { tokenize, SEARCH_FIELDS } from 'ranpress/search';
-import type { SearchDoc } from 'ranpress/search';
+import { tokenize, SEARCH_FIELDS } from 'ranpress/search-shared';
+import type { SearchDoc } from 'ranpress/search-shared';
 
 type Hit = SearchDoc & { score: number };
 
@@ -43,13 +43,15 @@ const OPTIONS = {
 const loadIndex = async (): Promise<void> => {
   if (index || loading) return loading ?? undefined;
   failed = false;
-  loading = fetch(`/search/${lang}.json`)
-    .then((res) => {
+  loading = Promise.all([
+    import('minisearch'),
+    fetch(`/search/${lang}.json`).then((res) => {
       if (!res.ok) throw new Error(`search index ${res.status}`);
       return res.text();
-    })
-    .then((json) => {
-      index = MiniSearch.loadJSON<SearchDoc>(json, OPTIONS);
+    }),
+  ])
+    .then(([{ default: Search }, json]) => {
+      index = Search.loadJSON<SearchDoc>(json, OPTIONS);
     })
     .catch((error: unknown) => {
       // A failed index is a search box that says so, not a page that breaks.
@@ -110,7 +112,7 @@ export const mountSearch = (): void => {
         return (
           `<li id="search-option-${i}" role="option" aria-selected="${i === active}"><a tabindex="-1" class="search-hit" href="${escapeHtml(hit.url)}"${i === active ? ' data-active' : ''}>` +
           `<span class="search-hit__title">${escapeHtml(hit.title)}</span>` +
-          `<span class="search-hit__page"><span class="search-hit__kind">${escapeHtml(/\/src\/(ranui|ranuts)\/(api|style-tokens|changelog)(?:[\/#]|$)/.test(hit.url) ? feedback.reference : /\/src\/(ranui|ranuts)\//.test(hit.url) ? feedback.guide : feedback.article)}</span> ${escapeHtml(hit.page)}</span>` +
+          `<span class="search-hit__page"><span class="search-hit__kind">${escapeHtml(/\/src\/(ranui|ranuts)\/(api|style-tokens|changelog)(?:[/#]|$)/.test(hit.url) ? feedback.reference : /\/src\/(ranui|ranuts)\//.test(hit.url) ? feedback.guide : feedback.article)}</span> ${escapeHtml(hit.page)}</span>` +
           `<span class="search-hit__text">${snippet((hit.preview ?? '').replace(/^(?:源码|Source(?: code)?):[^\n]*(?:\n|$)/i, ''), terms)}</span></a></li>`
         );
       })

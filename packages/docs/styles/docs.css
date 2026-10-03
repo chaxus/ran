@@ -1439,3 +1439,41 @@ body.drawer-open {
     min-height: 44px;
   }
 }
+
+/* A quiet, in-flow status: installing the app and finishing its downloads differ. */
+.offline-cache {
+  margin-block-start: var(--ran-space-8, 32px);
+  padding-block: var(--ran-space-5, 20px);
+  border-block-start: 1px solid var(--ran-color-border-secondary);
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-copy-2);
+}
+.offline-cache__title {
+  margin-block: 0 var(--ran-space-2, 8px);
+  font-weight: var(--ran-text-label-weight);
+  color: var(--ran-color-text);
+}
+.offline-cache__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ran-space-3, 12px);
+}
+.offline-cache progress {
+  flex: 1 1 100px;
+  max-width: 180px;
+  accent-color: var(--ran-color-primary);
+}
+.offline-cache button {
+  min-height: 44px;
+  padding-inline: var(--ran-space-3, 12px);
+  border: 1px solid var(--ran-color-border-secondary);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg);
+  color: var(--ran-color-text);
+  font: inherit;
+  cursor: pointer;
+}
+.offline-cache__scope {
+  margin-block: var(--ran-space-2, 8px) 0;
+}

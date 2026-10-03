@@ -75,22 +75,14 @@ echo "llms-full.txt generated: $llms_full"
 target="$dir/sw.js"
 tmpfile=$(mktemp)
 # 只预缓存 app shell，排除大体积媒体（HLS 分片、GIF/视频、其它二进制），避免 SW 安装时
-# 强行下载整个 dist 撑爆离线缓存配额。媒体交给运行时按需缓存。
+# 强行下载整个 dist 撑爆离线缓存配额。媒体交给浏览器正常下载。
 #
 # 搜索索引（search/*.json）同样排除：每种语言约 1 MB，而读者只会用到自己那一门，
 # 它本来就是按需 fetch 的。
+# Precache the entry, styles, fonts and brand icons. Other chunks and visited pages
+# are cached on demand; installing the worker must not download every document/demo.
 find "$dir" -type f \
-  -not -path "*/hls/*" \
-  -not -path "*/search/*" \
-  -not -name "*.ts" \
-  -not -name "*.gif" \
-  -not -name "*.mp4" \
-  -not -name "*.webm" \
-  -not -name "*.m3u8" \
-  -not -name "*.jpg" \
-  -not -name "*.jpeg" \
-  -not -name "*.txt" \
-  -not -name "*.DS_Store" \
+  \( -name 'docs.*.js' -o -name '*.css' -o -name '*.woff2' -o -name 'icon*.png' \) \
   > "$tmpfile"
 
 SERVICE_WORK_VARABLE="$dir/sw-file.js"
@@ -107,8 +99,12 @@ rm "$tmpfile"
 
 tmpfile=$(mktemp)
 cat "$SERVICE_WORK_VARABLE" >> "$tmpfile"
+printf 'const OFFLINE_MANIFEST = ' >> "$tmpfile"
+cat "$dir/offline-manifest.json" >> "$tmpfile"
+printf ';\n' >> "$tmpfile"
 cat "$target" >> "$tmpfile"
+cat "$dir/offline-worker.js" >> "$tmpfile"
 mv "$tmpfile" "$target"
-rm "$SERVICE_WORK_VARABLE"
+rm "$SERVICE_WORK_VARABLE" "$dir/offline-worker.js"
 
 echo "service work file paths have been generate for $target"

@@ -85,7 +85,7 @@ Pages use custom elements, not components, for anything that is not genuinely in
 
 | Prefix  | What                                                                                                                        |
 | ------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `r-*`   | Real ranui components, registered by `import('ranui')` in `client/main.ts`.                                                 |
+| `r-*`   | Real ranui components, loaded by public subpath on demand from `client/components.ts`.                                      |
 | `ran-*` | This site's own **zero-JavaScript** presentational elements. Styled from `styles/`, nothing registers them, no shadow root. |
 
 `<ran-demo>` is the one that matters: it wraps every live example in the component docs
@@ -233,9 +233,45 @@ the body is being consumed, so `clone()` throws `Failed to execute 'clone' on 'R
 Response body is already used`. This stayed invisible while the fetch handler was broken
 (nothing consumed the response); it surfaced the moment interception started working.
 
-`activate` runs `deleteOldCaches()`, which keeps only the current `CACHE_NAME` — that is
-what actually evicts the previous deploy's assets, and it is driven by the version inside
-the file.
+Installation precaches only the entry bundle, styles, fonts and brand icons, using at most
+four concurrent downloads. Further offline coverage is prepared in page-driven idle batches;
+large media and external services remain online-only. Only same-origin GET responses are
+cached; range/media requests pass through without caching.
+
+HTML lives in the stable `chaxus_ran_documents` cache. Content-hashed `/assets/` resources
+live in `chaxus_ran_assets`, so historical documents retain their matching CSS and JS. Installation and activation warm
+currently open pages, including uncontrolled clients, so the first visit can reload offline.
+Activation removes only this application's outdated asset caches, preserving the document
+and hashed asset caches and unrelated applications' caches, then claims clients. Cache writes are attached to
+`event.waitUntil()` so the worker remains alive until they finish.
+
+### Idle offline preparation
+
+`build/offline.ts` generates `offline-manifest.json` with canonical page URLs per locale,
+each locale’s search index, and shared local component chunks/styles/fonts/images. The
+build embeds this manifest and `public/offline-worker.js` into the fixed `/sw.js`, keeping
+the list and worker version consistent without an additional manifest fetch.
+
+`client/offline.ts` schedules after 1.6 seconds without interaction using
+`requestIdleCallback` (timer fallback where unavailable). Each batch downloads serially,
+up to three files with a soft 1 MiB response-size budget; a single larger file is allowed.
+Current-page resources and the current language’s search index are prioritized. The worker
+accepts only one batch across all clients, persists completed URLs after each file in the
+versioned cache, and reuses already-cached content-hashed assets. HTML and search refresh
+once per version. Foreground traffic interrupts the batch and readable response bodies or
+cache writes keep new batches waiting until the foreground request finishes.
+
+Hidden pages, offline/data-saver/2G/3G connections, interaction, and the reader’s Pause
+button suspend preparation. Pause preferences synchronize across tabs. Network failures
+retry after 30 seconds; download timeouts prevent a stalled request blocking the queue;
+low storage or quota failures pause until the reader frees space and resumes. Closing the
+app stops scheduling: progress resumes next time an online page is open and idle.
+
+The in-flow, localized status distinguishes installation from offline readiness, exposes
+completed/total counts, and explains videos/external services/online demos need a connection.
+`OFFLINE_STATUS` reads persisted progress without downloading, including on offline reopen.
+Only finishing the full current-language queue displays “ready”; unvisited routes use the
+same document cache and component/search chunks as runtime requests.
 
 ---
 

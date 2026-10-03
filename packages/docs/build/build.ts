@@ -13,6 +13,7 @@ import { LANGS, ORIGIN } from './config.ts';
 import { componentRenderers, resolveCurrentLink } from './components.ts';
 import { loadDocs } from './content.ts';
 import { renderDoc } from './page.ts';
+import { createOfflineManifest } from './offline.ts';
 import { generatedFiles, headFor } from './seo.ts';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -108,6 +109,8 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
     written.push(name);
   }
 
+  writeOut(DIST_DIR, 'offline-manifest.json', JSON.stringify(createOfflineManifest(DIST_DIR, content.pages)));
+  written.push('offline-manifest.json');
   dropViteManifest(DIST_DIR);
   return { pages: content.pages.length, written };
 };
