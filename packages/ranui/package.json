@@ -139,6 +139,9 @@
       ],
       "*": [
         "./dist/index.d.ts"
+      ],
+      "glass": [
+        "./dist/components/glass/index.d.ts"
       ]
     }
   },
@@ -457,6 +460,11 @@
       "types": "./dist/*",
       "import": "./dist/*",
       "require": "./dist/*"
+    },
+    "./glass": {
+      "types": "./dist/components/glass/index.d.ts",
+      "import": "./dist/glass.js",
+      "require": "./dist/index.cjs"
     }
   },
   "devDependencies": {

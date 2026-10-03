@@ -107,6 +107,42 @@ describe('networkAllowsDownload', () => {
 });
 
 describe('prefetch', () => {
+  it('finishes reading one response before starting the next download', async () => {
+    const order: string[] = [];
+    let finish!: () => void;
+    const body = new ReadableStream<Uint8Array>({
+      start(controller) {
+        finish = () => controller.close();
+      },
+    });
+    restore = stub({
+      caches: { match: async () => undefined },
+      fetch: async (url: string) => {
+        order.push(url);
+        return new Response(url === '/slow' ? body : 'done');
+      },
+    });
+    const pending = prefetchUrls(['/slow', '/next']);
+    await vi.waitFor(() => expect(order.length).toBeGreaterThan(0));
+    const beforeFinish = [...order];
+    finish();
+    await pending;
+    expect(beforeFinish).toEqual(['/slow']);
+    expect(order).toEqual(['/slow', '/next']);
+  });
+
+  it('shares concurrent downloads of the same uncached URL', async () => {
+    let downloads = 0;
+    restore = stub({
+      caches: { match: async () => undefined },
+      fetch: async () => {
+        downloads++;
+        return new Response('asset');
+      },
+    });
+    await Promise.all([prefetchUrl('/shared'), prefetchUrl('/shared')]);
+    expect(downloads).toBe(1);
+  });
   it('reports uncached when CacheStorage is unavailable', async () => {
     restore = stub({ window: {} });
     await expect(isUrlCached('/a.bin')).resolves.toBe(false);

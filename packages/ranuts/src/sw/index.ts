@@ -79,7 +79,10 @@ export const cacheFirst = async (request: Request, options: CacheStrategyOptions
   const scope = options.scope ?? globalScope();
   const shouldCache = options.shouldCache ?? defaultShouldCache;
   try {
-    const cached = await scope.caches.match(request.url);
+    const cached = await scope.caches
+      .open(options.cacheName)
+      .then((cache) => cache.match(request.url))
+      .catch(() => undefined);
     if (cached) return cached;
     const response = await scope.fetch(request);
     if (shouldCache(request, response)) void putClone(scope, options.cacheName, request, response);
@@ -106,7 +109,10 @@ export const networkFirst = async (request: Request, options: CacheStrategyOptio
     if (shouldCache(request, response)) void putClone(scope, options.cacheName, request, response);
     return response;
   } catch {
-    const cached = await scope.caches.match(request.url).catch(() => undefined);
+    const cached = await scope.caches
+      .open(options.cacheName)
+      .then((cache) => cache.match(request.url))
+      .catch(() => undefined);
     return cached ?? offlineResponse();
   }
 };

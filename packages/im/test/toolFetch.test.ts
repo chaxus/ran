@@ -30,6 +30,10 @@ describe('the URL a model may ask the server to fetch', () => {
       'http://[fd00::1]/',
       // Both halves of the unique-local range: fc00::/8 and fd00::/8.
       'http://[fc00::1]/',
+      'http://[::ffff:127.0.0.1]/',
+      'http://[::ffff:192.168.1.1]/',
+      'http://[fe80::1]/',
+      'http://0.0.0.0/',
     ]) {
       expect(allowedUrl(host)).toMatchObject({ error: '不允许访问内网地址' });
     }
@@ -38,7 +42,7 @@ describe('the URL a model may ask the server to fetch', () => {
   it('does not mistake a public address for a private one', () => {
     // `172.32.` is outside the private range that ends at `172.31.`, and a prefix test that
     // matched it would refuse real sites.
-    for (const raw of ['http://172.32.0.1/', 'http://11.0.0.1/', 'http://193.168.0.1/']) {
+    for (const raw of ['http://172.32.0.1/', 'http://11.0.0.1/', 'http://193.168.0.1/', 'https://fcs.example.org/']) {
       expect(allowedUrl(raw)).toHaveProperty('url');
     }
   });

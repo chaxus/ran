@@ -97,6 +97,8 @@ export const isUrlCached = async (url: string): Promise<boolean> => {
   }
 };
 
+const downloads = new Map<string, Promise<void>>();
+
 /**
  * @description: Pull a single URL into the cache; skipped when already cached. Failures are
  * silent — a failed prefetch only means the later load performs a real download, it must not
@@ -104,13 +106,28 @@ export const isUrlCached = async (url: string): Promise<boolean> => {
  * @param {string} url
  * @return {Promise<void>}
  */
-export const prefetchUrl = async (url: string): Promise<void> => {
-  try {
-    if (await isUrlCached(url)) return;
-    await fetch(url, { cache: 'force-cache' });
-  } catch {
-    // ignored
-  }
+export const prefetchUrl = (url: string): Promise<void> => {
+  const existing = downloads.get(url);
+  if (existing) return existing;
+  const download = (async () => {
+    try {
+      if (await isUrlCached(url)) return;
+      const response = await fetch(url, { cache: 'force-cache' });
+      const reader = response.body?.getReader();
+      if (!reader) return;
+      try {
+        while (!(await reader.read()).done) {
+          /* Drain without retaining the asset in memory. */
+        }
+      } finally {
+        reader.releaseLock();
+      }
+    } catch {
+      // A prefetch failure must never interrupt the foreground flow.
+    }
+  })().finally(() => downloads.delete(url));
+  downloads.set(url, download);
+  return download;
 };
 
 export interface PrefetchOptions {

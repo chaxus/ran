@@ -56,7 +56,6 @@ export class RadarChart extends RanElement {
     this.abilityRadarChartContainer = container;
     this.abilityRadarChart = radarChart;
     this.resizeObserver = new ResizeObserver(this.resize);
-    this.resizeObserver.observe(this.abilityRadarChartContainer);
   }
   resize = (): void => {
     this.refreshData();
@@ -145,6 +144,7 @@ export class RadarChart extends RanElement {
   drawSide(ctx: CanvasRenderingContext2D) {
     if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle) return;
     ctx.save();
+    ctx.beginPath();
     ctx.strokeStyle = this.colorLine;
     const r = this.mRadius;
     for (let j = 0; j < this.mCount; j++) {
@@ -154,6 +154,7 @@ export class RadarChart extends RanElement {
     }
     ctx.closePath();
     ctx.stroke();
+    ctx.restore();
   }
   drawPolygon(ctx: CanvasRenderingContext2D) {
     if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle) return;
@@ -319,6 +320,7 @@ export class RadarChart extends RanElement {
     ctx.restore();
   }
   connectedCallback() {
+    this.resizeObserver.observe(this.abilityRadarChartContainer);
     this.handlerExternalCss();
     this.refreshData();
   }
