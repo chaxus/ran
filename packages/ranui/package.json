@@ -482,7 +482,7 @@
   },
   "dependencies": {
     "dashjs": "5.2.0",
-    "dompurify": "3.4.13",
+    "dompurify": "3.4.16",
     "hls.js": "1.6.17",
     "marked": "18.0.9",
     "mermaid": "11.16.1",
