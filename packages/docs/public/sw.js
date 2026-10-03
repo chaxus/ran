@@ -3,6 +3,18 @@ const DOCUMENT_CACHE_NAME = 'chaxus_ran_documents'
 const ASSET_CACHE_NAME = 'chaxus_ran_assets'
 const assetCacheName = url => new URL(url, location.origin).pathname.startsWith('/assets/') ? ASSET_CACHE_NAME : CACHE_NAME
 
+// Stamp only the stored copy. Network responses retain their URL/redirect semantics.
+const storeDocument = (cache, url, response) => cache.put(url, new Response(response.body, {
+  status: response.status,
+  statusText: response.statusText,
+  headers: { ...Object.fromEntries(response.headers), 'X-Ran-Docs-Version': VERSION }
+}))
+
+const removeDocument = async url => {
+  await (await caches.open(DOCUMENT_CACHE_NAME)).delete(url);
+  if (typeof forgetOfflineDocument !== 'undefined') await forgetOfflineDocument(url);
+}
+
 const IGNORE_REQUEST_LIST = [
   // google 上报不需要缓存
   'google',
@@ -43,9 +55,16 @@ const SERVICE_WORK = {
 const updateCache = async (fetchedResponse, request) => {
   const { url } = request
   const { status } = fetchedResponse
+  // A removed or redirected route must stop serving its previous cached document.
+  if (request.mode === 'navigate' && (fetchedResponse.redirected || status === 404 || status === 410)) {
+    try { await removeDocument(url); } catch { /* Optional storage. */ }
+    return
+  }
   // 只缓存状态码为 200 的请求
   if (status !== RESPONSE_STATUS.SUCCESS) return
   if (!filterRequest(request)) return
+  if (request.mode === 'navigate' && (fetchedResponse.redirected ||
+    !fetchedResponse.headers.get('content-type')?.includes('text/html'))) return
   // 只有 fetch 来的响应才有 clone；从 cache 里取出的没有
   if (!fetchedResponse?.clone) return
 
@@ -57,7 +76,7 @@ const updateCache = async (fetchedResponse, request) => {
   // 一个响应体只能读一次，所以要在交出去之前先复制一份。
   const copy = fetchedResponse.clone()
   return caches.open(request.mode === 'navigate' ? DOCUMENT_CACHE_NAME : assetCacheName(url)).then(cache => {
-    return cache.put(url, copy);
+    return request.mode === 'navigate' ? storeDocument(cache, url, copy) : cache.put(url, copy);
   }).catch(error => {
     console.log('service worker update cache error:', error, request)
   })
@@ -139,8 +158,8 @@ const cacheOpenDocuments = async () => {
     for (const url of urls) {
       try {
         const response = await fetch(url, { cache: 'no-store' });
-        if (response.ok && response.headers.get('content-type')?.includes('text/html')) {
-          await cache.put(url, response);
+        if (response.ok && !response.redirected && response.headers.get('content-type')?.includes('text/html')) {
+          await storeDocument(cache, url, response);
         }
       } catch (error) {
         console.log('service worker document cache skipped:', url, error);
@@ -178,24 +197,36 @@ this.addEventListener(SERVICE_WORK.INSTALL, function (event) {
 });
 
 /**
- * 网络优先，失败回落到缓存。
- * 给 HTML 导航用：文档站的正文必须是最新的，缓存只作为离线兜底。
+ * Current-deploy documents render immediately and refresh in the background.
+ * Older documents give the network 800ms, then fall back while refresh continues.
+ * An unvisited page still waits for its network response.
  */
-const networkFirst = async (request, event) => {
+const navigationResponse = async (request, event) => {
+  const network = fetch(request).then(response => {
+    const stored = updateCache(response, request);
+    return { response, stored };
+  }).catch(() => null);
+  // Register before yielding, so even an immediate cache hit keeps refresh alive.
+  event.waitUntil(network.then(result => result?.stored));
+  let cached;
   try {
-    const responseFromServer = await fetch(request);
-    event.waitUntil(updateCache(responseFromServer, request))
-    return responseFromServer
-  } catch (error) {
     const cache = await caches.open(DOCUMENT_CACHE_NAME);
-    const responseFromCache = await cache.match(request.url);
-    if (responseFromCache) return responseFromCache
-    console.log('service worker networkFirst error:', error, request)
-    return new Response("Network error happened", {
+    cached = await cache.match(request.url);
+  } catch {
+    // Disabled or full storage must not prevent network navigation.
+  }
+  if (cached?.headers.get('X-Ran-Docs-Version') === String(VERSION)) return cached;
+  let timer;
+  const result = cached ? await Promise.race([
+    network,
+    new Promise(resolve => { timer = setTimeout(() => resolve(null), 800); })
+  ]) : await network;
+  clearTimeout(timer);
+  if (result && (!cached || result.response.status < 500)) return result.response;
+  return cached || new Response("Network error happened", {
       status: 408,
       headers: { "Content-Type": "text/plain" },
-    });
-  }
+  });
 }
 
 // 这个处理器**必须是同步函数**：respondWith 只能在事件派发的同步阶段调用，
@@ -212,17 +243,15 @@ this.addEventListener(SERVICE_WORK.FETCH, event => {
     // Any foreground request interrupts an idle batch. Track downloads to completion
     // so the next idle callback cannot steal bandwidth from a still-streaming body.
     const load = tracked => allowed
-      ? request.mode === 'navigate' ? networkFirst(request, tracked) : cacheFirst(request, tracked)
+      ? request.mode === 'navigate' ? navigationResponse(request, tracked) : cacheFirst(request, tracked)
       : fetch(request);
     event.respondWith(offlineForeground(event, load, !allowed));
     return;
   }
   if (!allowed) return;
-  event.respondWith(request.mode === 'navigate' ? networkFirst(request, event) : cacheFirst(request, event));
+  event.respondWith(request.mode === 'navigate' ? navigationResponse(request, event) : cacheFirst(request, event));
 });
 
 this.addEventListener(SERVICE_WORK.ACTIVATE, (event) => {
   event.waitUntil(cacheOpenDocuments().then(deleteOldCaches).then(() => this.clients.claim()));
 });
-
-

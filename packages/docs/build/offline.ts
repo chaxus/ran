@@ -7,6 +7,10 @@ interface OfflinePage {
   kind: string;
 }
 
+// The docs use system fonts: no stylesheet references these shipped font files.
+// Keep them available at their public URLs, but do not download them for offline use.
+const unusedAssets = new Set(['/fonts/geist-variable.woff2', '/fonts/geist-mono-variable.woff2']);
+
 /** Canonical routes, not .html output paths: the cache must match browser navigation. */
 export const createOfflineManifest = (dist: string, pages: readonly OfflinePage[]) => {
   const shared: string[] = [];
@@ -16,6 +20,7 @@ export const createOfflineManifest = (dist: string, pages: readonly OfflinePage[
       if (entry.isDirectory()) walk(join(dir, entry.name), path);
       else if (
         /\.(?:js|css|woff2?|png|jpe?g|svg|ico)$/i.test(entry.name) &&
+        !unusedAssets.has(path) &&
         !/^\/(?:sw|offline-worker)\.js$/.test(path)
       ) {
         shared.push(path);

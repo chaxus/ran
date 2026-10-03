@@ -7,10 +7,13 @@ it('uses canonical document URLs and includes component chunks while excluding l
   const dist = mkdtempSync(join(tmpdir(), 'ran-offline-'));
   try {
     mkdirSync(join(dist, 'assets'));
+    mkdirSync(join(dist, 'fonts'));
     for (const file of [
       'assets/button.hash.js',
       'assets/diagram.hash.js',
       'assets/font.woff2',
+      'fonts/geist-variable.woff2',
+      'fonts/geist-mono-variable.woff2',
       'logo.svg',
       'movie.mp4',
       'clip.gif',

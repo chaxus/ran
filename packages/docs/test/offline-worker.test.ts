@@ -4,7 +4,7 @@ import { expect, it } from 'vitest';
 
 const origin = 'https://ran.test';
 const manifest = {
-  shared: ['/assets/button.hash.js', '/assets/search.hash.js'],
+  shared: ['/assets/button.hash.js', '/assets/search.hash.js', '/assets/unused-heavy.hash.js'],
   locales: { en: ['/', '/guide', '/search/en.json'], zh: ['/cn/', '/search/zh.json'] },
 };
 const harness = (storage = new Map<string, Map<string, Response>>()) => {
@@ -15,6 +15,7 @@ const harness = (storage = new Map<string, Map<string, Response>>()) => {
   let slow = false;
   let peak = 0;
   let active = 0;
+  let guideResponse: (() => Response) | undefined;
   const sw = readFileSync(new URL('../public/sw.js', import.meta.url), 'utf8');
   const workerPath = new URL('../public/offline-worker.js', import.meta.url);
   runInNewContext(sw + (existsSync(workerPath) ? readFileSync(workerPath, 'utf8') : ''), {
@@ -43,6 +44,7 @@ const harness = (storage = new Map<string, Map<string, Response>>()) => {
             cache.set(new URL(key, origin).href, response.clone());
           },
           match: async (key: string) => cache.get(new URL(key, origin).href)?.clone(),
+          delete: async (key: string) => cache.delete(new URL(key, origin).href),
         };
       },
     },
@@ -64,7 +66,16 @@ const harness = (storage = new Map<string, Map<string, Response>>()) => {
               { once: true },
             );
           });
-        return new Response(url.endsWith('.js') ? 'export {}' : url.endsWith('.json') ? '{}' : '<h1>Guide</h1>');
+        if (new URL(url, origin).pathname === '/guide' && guideResponse) return guideResponse();
+        return new Response(url.endsWith('.js') ? 'export {}' : url.endsWith('.json') ? '{}' : '<h1>Guide</h1>', {
+          headers: {
+            'Content-Type': url.endsWith('.js')
+              ? 'text/javascript'
+              : url.endsWith('.json')
+                ? 'application/json'
+                : 'text/html',
+          },
+        });
       } finally {
         active--;
       }
@@ -120,6 +131,9 @@ const harness = (storage = new Map<string, Map<string, Response>>()) => {
     setFull: () => {
       failStorage = true;
     },
+    setGuideResponse: (response: () => Response) => {
+      guideResponse = response;
+    },
   };
 };
 
@@ -135,6 +149,15 @@ it('downloads bounded batches serially, covering unvisited pages and locale sear
   expect(worker.downloaded).not.toContain('/search/zh.json');
   worker.setOffline();
   expect(await (await worker.navigate('/')).text()).toBe('<h1>Guide</h1>');
+});
+
+it('prepares unvisited language documents before unrelated heavy chunks', async () => {
+  const worker = harness();
+  await worker.send('OFFLINE_BATCH');
+  expect(worker.downloaded).toEqual(['/guide', '/search/en.json', '/']);
+  await worker.send('OFFLINE_BATCH');
+  expect(worker.downloaded).toContain('/assets/unused-heavy.hash.js');
+  expect((await worker.send('OFFLINE_STATUS'))?.state).toBe('ready');
 });
 
 it('resumes after worker restart without downloading completed files again', async () => {
@@ -205,3 +228,68 @@ it('reports cached readiness after reopening offline without starting a download
   expect((await reopened.send('OFFLINE_STATUS'))?.state).toBe('ready');
   expect(reopened.downloaded).toHaveLength(0);
 });
+
+it('marks documents prepared in idle batches as current-deploy navigation cache', async () => {
+  const worker = harness();
+  await worker.send('OFFLINE_BATCH');
+  const saved = worker.storage.get('chaxus_ran_documents')?.get(`${origin}/guide`);
+  expect(saved?.headers.get('X-Ran-Docs-Version')).toBe('test');
+});
+
+it('reuses current-deploy documents already saved by foreground navigation', async () => {
+  const worker = harness();
+  await worker.navigate('/guide');
+  await worker.waitForForeground();
+  await worker.send('OFFLINE_BATCH');
+  expect(worker.downloaded.filter((url) => url === '/guide')).toHaveLength(1);
+});
+
+it.each(['redirect', 'non-html', '404', '410'])(
+  'does not prepare an invalid %s document as current HTML',
+  async (kind) => {
+    const storage = new Map([
+      [
+        'chaxus_ran_documents',
+        new Map([
+          [
+            `${origin}/guide`,
+            new Response('old', {
+              headers: { 'Content-Type': 'text/html', 'X-Ran-Docs-Version': 'previous' },
+            }),
+          ],
+        ]),
+      ],
+    ]);
+    const worker = harness(storage);
+    worker.setGuideResponse(() => {
+      const response = new Response('invalid document', {
+        status: kind === '404' || kind === '410' ? Number(kind) : 200,
+        headers: { 'Content-Type': kind === 'non-html' ? 'application/json' : 'text/html' },
+      });
+      if (kind === 'redirect') Object.defineProperty(response, 'redirected', { value: true });
+      return response;
+    });
+    expect((await worker.send('OFFLINE_BATCH'))?.state).toBe('network');
+    expect(storage.get('chaxus_ran_documents')!.has(`${origin}/guide`)).toBe(false);
+  },
+);
+
+it.each(['redirect', '404', '410'])(
+  'invalidates offline completion when a saved document becomes %s, including after restart',
+  async (kind) => {
+    const worker = harness();
+    await worker.send('OFFLINE_BATCH');
+    await worker.send('OFFLINE_BATCH');
+    expect((await worker.send('OFFLINE_STATUS'))?.state).toBe('ready');
+    worker.setGuideResponse(() => {
+      const response = new Response('removed', { status: kind === 'redirect' ? 200 : Number(kind) });
+      if (kind === 'redirect') Object.defineProperty(response, 'redirected', { value: true });
+      return response;
+    });
+    await worker.navigate('/guide');
+    await worker.waitForForeground();
+    expect((await worker.send('OFFLINE_STATUS'))?.state).toBe('working');
+    const restarted = harness(worker.storage);
+    expect((await restarted.send('OFFLINE_STATUS'))?.state).toBe('working');
+  },
+);

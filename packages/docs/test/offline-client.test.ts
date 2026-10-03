@@ -52,6 +52,7 @@ afterEach(() => {
   unmount?.();
   unmount = undefined;
   vi.useRealTimers();
+  vi.restoreAllMocks();
   vi.unstubAllGlobals();
   delete (navigator as any).serviceWorker;
   delete (navigator as any).connection;
@@ -136,4 +137,25 @@ it('shows saved readiness when reopening offline, without requesting a batch', a
   await vi.advanceTimersByTimeAsync(3000);
   expect(document.querySelector('[data-offline-state="ready"]')).not.toBeNull();
   expect(requests.filter((type) => type === 'OFFLINE_BATCH')).toHaveLength(0);
+});
+
+it('prepares local top navigation destinations before unrelated component assets', async () => {
+  document.body.innerHTML = `<nav class="nav">
+    <a href="/src/ranui/">ranui</a>
+    <a href="/cn/src/ranuts/">ranuts</a>
+    <a href="https://edit.chaxus.com/">editor</a>
+  </nav><main class="doc"></main>`;
+  vi.spyOn(performance, 'getEntriesByType').mockReturnValue([
+    { name: new URL('/assets/button.hash.js', location.href).href } as PerformanceEntry,
+    { name: 'https://external.test/analytics.js' } as PerformanceEntry,
+  ]);
+  let priority: string[] | undefined;
+  const send = serviceWorker.controller.postMessage;
+  serviceWorker.controller.postMessage = (message, ports) => {
+    if (message.type === 'OFFLINE_BATCH') priority = message.priority;
+    send(message, ports);
+  };
+  await mount();
+  await vi.advanceTimersByTimeAsync(3000);
+  expect(priority).toEqual(['/src/ranui/', '/cn/src/ranuts/', '/assets/button.hash.js']);
 });

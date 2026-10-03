@@ -40,30 +40,89 @@ const loaders: Record<string, () => Promise<unknown>> = {
   'r-preview': () => import('@ranui/preview'),
 };
 const selector = Object.keys(loaders).join(',');
+// Registration upgrades every instance of a tag. Defer a heavy module until at least
+// one instance is near the viewport; controls and the theme switch remain eager.
+const deferred = new Set(['r-markdown', 'r-math', 'r-mermaid', 'r-player']);
 
 export const mountComponents = (): (() => void) => {
   const pending = new Set<string>();
+  const observed = new Set<Element>();
+  let disposed = false;
+  let viewport: IntersectionObserver | undefined;
   const load = (element: Element): void => {
     const tag = element.localName;
-    if (!loaders[tag] || pending.has(tag) || customElements.get(tag)) return;
+    if (disposed || !element.isConnected || !loaders[tag] || pending.has(tag) || customElements.get(tag)) return;
     pending.add(tag);
-    void loaders[tag]().catch((error: unknown) => {
-      pending.delete(tag);
-      console.error(`Failed to load ${tag}`, error);
-    });
+    void loaders[tag]()
+      .then(() => {
+        for (const target of observed) {
+          if (target.localName !== tag) continue;
+          viewport?.unobserve(target);
+          observed.delete(target);
+        }
+      })
+      .catch((error: unknown) => {
+        pending.delete(tag);
+        console.error(`Failed to load ${tag}`, error);
+      });
+  };
+  if (typeof IntersectionObserver !== 'undefined') {
+    viewport = new IntersectionObserver(
+      (entries) => {
+        if (disposed) return;
+        for (const entry of entries) {
+          if (!entry.target.isConnected) {
+            viewport?.unobserve(entry.target);
+            observed.delete(entry.target);
+          } else if (entry.isIntersecting) load(entry.target);
+        }
+      },
+      { rootMargin: '400px 0px' },
+    );
+  }
+  const prepare = (element: Element): void => {
+    const tag = element.localName;
+    if (!loaders[tag]) return;
+    if (tag === 'r-markdown' && element.hasAttribute('data-content') && !element.hasAttribute('content')) {
+      // Attributes survive delayed upgrades without creating an own property that
+      // shadows the component's content setter. Also covers dynamically added demos.
+      try {
+        element.setAttribute('content', decodeURIComponent(element.getAttribute('data-content')!));
+      } catch {
+        /* A malformed example must not break page setup. */
+      }
+    }
+    if (viewport && deferred.has(tag) && !pending.has(tag) && !customElements.get(tag)) {
+      if (!observed.has(element)) {
+        observed.add(element);
+        viewport.observe(element);
+      }
+    } else load(element);
   };
   const scan = (root: ParentNode): void => {
-    if (root instanceof Element) load(root);
-    root.querySelectorAll(selector).forEach(load);
+    if (root instanceof Element) prepare(root);
+    root.querySelectorAll(selector).forEach(prepare);
   };
   const observer = new MutationObserver((records) => {
     for (const record of records) {
       for (const node of record.addedNodes) {
         if (node instanceof Element) scan(node);
       }
+      for (const node of record.removedNodes) {
+        for (const target of observed) {
+          if (target.isConnected || !node.contains(target)) continue;
+          viewport?.unobserve(target);
+          observed.delete(target);
+        }
+      }
     }
   });
   observer.observe(document.documentElement, { childList: true, subtree: true });
   scan(document);
-  return () => observer.disconnect();
+  return () => {
+    disposed = true;
+    observer.disconnect();
+    viewport?.disconnect();
+    observed.clear();
+  };
 };

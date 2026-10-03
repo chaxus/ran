@@ -127,12 +127,17 @@ export const mountOfflineCache = (): (() => void) => {
       const timeout = window.setTimeout(() => close({ state: 'network' }), 35000);
       cancelRequest = () => close(null);
       channel.port1.onmessage = (event) => close(event.data as Progress);
-      const priority = performance
+      const resources = performance
         .getEntriesByType('resource')
         .map((entry) => new URL(entry.name, location.href))
         .filter((url) => url.origin === location.origin)
         .map((url) => url.pathname)
         .slice(-100);
+      const destinations = [...document.querySelectorAll<HTMLAnchorElement>('.nav a[href]')]
+        .map((link) => new URL(link.href, location.href))
+        .filter((url) => url.origin === location.origin)
+        .map((url) => url.pathname);
+      const priority = [...new Set([...destinations, ...resources])];
       try {
         controller.postMessage({ type, lang, current: location.pathname, priority }, [channel.port2]);
       } catch {

@@ -751,6 +751,21 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
  * column — a clipped sentence that looked like a rendering bug rather than a width.
  * Prose keeps the measure; tables, fences and demo stages get the full column.
  */
+/* Give undefined heavy demo elements a box for viewport observation. The component
+   owns its layout after registration; inline formulas keep their inline placement. */
+.prose :is(r-markdown, r-mermaid, r-player):not(:defined) {
+  display: block;
+  min-height: 96px;
+}
+.prose r-math:not(:defined) {
+  display: inline-block;
+  min-width: 1em;
+  min-height: 1.5em;
+}
+.prose r-math:not(:defined):not([display='inline']) {
+  display: block;
+}
+
 .prose {
   /* Named because it is referenced again: a child that has to cancel this gap must use
      the same value, and two hand-copied numbers drift. */

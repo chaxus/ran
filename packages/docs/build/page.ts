@@ -164,7 +164,7 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
 <script>${THEME_BOOTSTRAP}</script>
 <script>${SET_FONT_SIZE}</script>
 <script>${PREVIEW_CODE}</script>
-<script defer src="${GTAG}"></script>
+<script async src="${GTAG}"></script>
 <script>${GOOGLE_ANALYSE}</script>
 <script>${BD_ANALYSE}</script>
 <script>${SERVICE_WORK}</script>

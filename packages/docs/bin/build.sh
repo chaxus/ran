@@ -79,19 +79,22 @@ tmpfile=$(mktemp)
 #
 # 搜索索引（search/*.json）同样排除：每种语言约 1 MB，而读者只会用到自己那一门，
 # 它本来就是按需 fetch 的。
-# Precache the entry, styles, fonts and brand icons. Other chunks and visited pages
+# Precache the entry, styles, used fonts and brand icons. Other chunks and visited pages
 # are cached on demand; installing the worker must not download every document/demo.
-find "$dir" -type f \
-  \( -name 'docs.*.js' -o -name '*.css' -o -name '*.woff2' -o -name 'icon*.png' \) \
-  > "$tmpfile"
+# Read the filtered offline manifest so installation and idle batches agree about
+# unused assets. The manifest already carries canonical public URLs.
+node --input-type=module - "$dir/offline-manifest.json" > "$tmpfile" <<'NODE'
+import { readFileSync } from 'node:fs';
+const { shared } = JSON.parse(readFileSync(process.argv[2], 'utf8'));
+for (const url of shared) {
+  if (/(?:^|\/)docs\.[^/]+\.js$|\.css$|\.woff2$|(?:^|\/)icon[^/]*\.png$/.test(url)) console.log(url);
+}
+NODE
 
 SERVICE_WORK_VARABLE="$dir/sw-file.js"
 echo "const SERVICE_WORK_CACHE_FILE_PATHS = [" > "$SERVICE_WORK_VARABLE"
-# 根路径（部署在 ran.chaxus.com 根域名，没有 /ran 前缀）
-ran=""
 while read -r file; do
-  str="${file##./dist}"
-  echo "\"$ran$str\"," >> "$SERVICE_WORK_VARABLE"
+  echo "\"$file\"," >> "$SERVICE_WORK_VARABLE"
 done < "$tmpfile"
 echo "];" >> "$SERVICE_WORK_VARABLE"
 echo "const VERSION = \"$version\";" >> "$SERVICE_WORK_VARABLE"
