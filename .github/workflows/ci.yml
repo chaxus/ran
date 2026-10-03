@@ -4,10 +4,26 @@ on:
     branches: [main]
     paths:
       - "packages/**"
+      - "bin/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/**"
+      - ".npmrc"
+      - ".oxlintrc.json"
+      - ".prettier*"
   push:
     branches: [main]
     paths:
       - "packages/**"
+      - "bin/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/**"
+      - ".npmrc"
+      - ".oxlintrc.json"
+      - ".prettier*"
 
 permissions:
   contents: read

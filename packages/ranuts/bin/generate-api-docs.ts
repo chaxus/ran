@@ -35,7 +35,7 @@ const REPO_BLOB = 'https://github.com/chaxus/ran/blob/main/packages/ranuts';
 const DOCS_ROOT = path.join(ROOT, '..', 'docs');
 // One locale-agnostic tree drives every language's sidebar, so there is a single file to
 // read — and checking it once now covers all eight languages instead of two.
-const SIDEBAR_FILE = path.join(DOCS_ROOT, '.vitepress', 'langs', 'structure.ts');
+const SIDEBAR_FILE = path.join(DOCS_ROOT, 'build', 'langs', 'structure.ts');
 
 interface Entry {
   subpath: string;
@@ -262,12 +262,7 @@ function collectEntry(checker: Checker, sourceFile: SourceFile): ApiSymbol[] {
 async function collectSidebarLinks(): Promise<string[]> {
   // `structure.ts` holds links without a locale prefix; the builder adds one per language.
   const linkPattern = /link:\s*['"](\/src\/ranuts\/[^'"]*)['"]/g;
-  let text: string;
-  try {
-    text = await fs.readFile(SIDEBAR_FILE, 'utf8');
-  } catch {
-    return [];
-  }
+  const text = await fs.readFile(SIDEBAR_FILE, 'utf8');
   return [...text.matchAll(linkPattern)].map((m) => m[1]);
 }
 
@@ -327,7 +322,7 @@ async function checkDocsDrift(): Promise<void> {
   const orphans = allDocs.filter((f) => !linkedFiles.has(f) && !f.endsWith(`${path.sep}api.md`));
 
   if (orphans.length) {
-    console.warn(`[api-docs] ${orphans.length} doc page(s) exist but are not linked from either sidebar:`);
+    console.warn(`[api-docs] ${orphans.length} doc page(s) exist but are not linked from the shared sidebar:`);
     for (const o of orphans) console.warn(`  - ${path.relative(DOCS_ROOT, o)}`);
   }
   if (broken.length) {
