@@ -1,12 +1,7 @@
 import { readFile, realpath, stat } from 'node:fs/promises';
-import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
+import { extname, resolve, sep } from 'node:path';
 import { MIME_TYPES } from './constant';
 import type { Context } from '../types/index';
-
-const inside = (root: string, file: string): boolean => {
-  const path = relative(root, file);
-  return path !== '..' && !path.startsWith(`..${sep}`) && !isAbsolute(path);
-};
 
 /** Decode once, enforce the real filesystem boundary, then serve only regular files. */
 export const createStaticServer =
@@ -25,13 +20,14 @@ export const createStaticServer =
           return;
         }
         const root = await realpath(dir);
+        const boundary = root.endsWith(sep) ? root : `${root}${sep}`;
         const candidate = resolve(root, `.${pathname}`);
-        if (!inside(root, candidate)) {
+        if (!candidate.startsWith(boundary)) {
           next();
           return;
         }
         const file = await realpath(candidate);
-        if (!inside(root, file) || !(await stat(file)).isFile()) {
+        if (!file.startsWith(boundary) || !(await stat(file)).isFile()) {
           next();
           return;
         }
