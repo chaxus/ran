@@ -61,17 +61,28 @@ const saveOfflineState = async done => {
     headers: { 'Content-Type': 'application/json' }
   }));
 };
-const offlineTarget = url => {
-  const document = Object.values(OFFLINE_MANIFEST.locales).some(urls => urls.includes(url) && !url.startsWith('/search/'));
-  return document ? DOCUMENT_CACHE_NAME : assetCacheName(url);
+const forgetOfflineDocument = async url => {
+  const done = await readOfflineState();
+  if (done.delete(new URL(url, location.origin).pathname)) await saveOfflineState(done);
+};
+const offlineDocuments = new Set(Object.values(OFFLINE_MANIFEST.locales).flat().filter(url => !url.startsWith('/search/')));
+const offlineTarget = url => offlineDocuments.has(url) ? DOCUMENT_CACHE_NAME : assetCacheName(url);
+const offlinePlans = new Map();
+const offlinePlan = lang => {
+  if (!offlinePlans.has(lang)) {
+    const urls = [...new Set([...OFFLINE_MANIFEST.shared, ...OFFLINE_MANIFEST.locales[lang]])];
+    offlinePlans.set(lang, { urls, allowed: new Set(urls) });
+  }
+  return offlinePlans.get(lang);
 };
 const runOfflineBatch = async (data, controller) => {
   const done = await readOfflineState();
   const locale = OFFLINE_MANIFEST.locales[data.lang];
-  const all = [...new Set([...OFFLINE_MANIFEST.shared, ...locale])];
-  const preferred = Array.isArray(data.priority) ? data.priority.filter(url => all.includes(url)) : [];
+  const { urls: all, allowed } = offlinePlan(data.lang);
+  const preferred = Array.isArray(data.priority) ? data.priority.filter(url => allowed.has(url)) : [];
   const current = locale.includes(data.current) ? [data.current] : [];
-  const queue = [...new Set([...preferred, ...current, `/search/${data.lang}.json`, ...all])].filter(url => all.includes(url));
+  // Prepare this language's reading paths before rarely used demo/highlighter chunks.
+  const queue = [...new Set([...preferred, ...current, `/search/${data.lang}.json`, ...locale, ...OFFLINE_MANIFEST.shared])].filter(url => allowed.has(url));
   const progress = state => ({ state, lang: data.lang, completed: all.filter(url => done.has(url)).length, total: all.length });
   let files = 0;
   let bytes = 0;
@@ -81,20 +92,30 @@ const runOfflineBatch = async (data, controller) => {
     for (const url of queue) {
       controller.signal.throwIfAborted();
       if (done.has(url)) continue;
-      const cache = await caches.open(offlineTarget(url));
+      const target = offlineTarget(url);
+      const cache = await caches.open(target);
       // Content-hashed assets are shared across versions. Documents and indexes must
       // be refreshed once per deploy; a previous version's cached HTML is not ready.
-      let response = url.startsWith('/assets/') ? await cache.match(new URL(url, location.origin).href) : undefined;
+      let response = url.startsWith('/assets/') || target === DOCUMENT_CACHE_NAME
+        ? await cache.match(new URL(url, location.origin).href) : undefined;
+      if (target === DOCUMENT_CACHE_NAME && response?.headers.get('X-Ran-Docs-Version') !== String(VERSION)) response = undefined;
       if (!response) {
         if (files >= 3 || bytes >= 1024 * 1024) break;
         const timer = setTimeout(() => controller.abort(new DOMException('Download timed out', 'TimeoutError')), 8000);
         try {
           response = await fetch(url, { signal: controller.signal, cache: 'no-cache', credentials: 'same-origin' });
+          if (target === DOCUMENT_CACHE_NAME && (response.redirected || response.status === 404 || response.status === 410 ||
+            (response.ok && !response.headers.get('content-type')?.includes('text/html')))) {
+            await removeDocument(new URL(url, location.origin).href);
+            throw new Error('Offline document unavailable');
+          }
           if (!response.ok || (response.url && new URL(response.url).origin !== location.origin)) throw new Error('Offline resource unavailable');
           controller.signal.throwIfAborted();
           // Cache.put consumes the entire body before the next download starts.
           const size = Number(response.headers.get('content-length'));
-          await cache.put(new URL(url, location.origin).href, response);
+          const key = new URL(url, location.origin).href;
+          if (target === DOCUMENT_CACHE_NAME) await storeDocument(cache, key, response);
+          else await cache.put(key, response);
           files++;
           bytes += size > 0 ? size : 0;
         } finally { clearTimeout(timer); }
@@ -123,7 +144,7 @@ this.addEventListener('message', event => {
   if (!Object.hasOwn(OFFLINE_MANIFEST.locales, data.lang)) { port.postMessage({ state: 'network' }); return; }
   if (data.type === 'OFFLINE_STATUS') {
     event.waitUntil(readOfflineState().then(done => {
-      const all = [...new Set([...OFFLINE_MANIFEST.shared, ...OFFLINE_MANIFEST.locales[data.lang]])];
+      const all = offlinePlan(data.lang).urls;
       const completed = all.filter(url => done.has(url)).length;
       port.postMessage({ state: completed === all.length ? 'ready' : 'working', completed, total: all.length });
     }).catch(error => port.postMessage({ state: error.name === 'QuotaExceededError' ? 'storage' : 'network' })));

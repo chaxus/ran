@@ -124,6 +124,8 @@ it('keeps the initially opened document available offline across worker updates'
     const listeners = new Map<string, (event: any) => void>();
     runInNewContext(readFileSync(new URL('../public/sw.js', import.meta.url), 'utf8'), {
       VERSION: version,
+      setTimeout,
+      clearTimeout,
       SERVICE_WORK_CACHE_FILE_PATHS: [],
       addEventListener: (type: string, listener: (event: any) => void) => listeners.set(type, listener),
       skipWaiting() {},

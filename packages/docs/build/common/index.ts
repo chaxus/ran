@@ -5,10 +5,18 @@ export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];functi
 export const BD_ANALYSE = `
 ;var _hmt = _hmt || [];
 (function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?3bc20bd8070ce614078a36c686209456";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
+  function load() {
+    var hm = document.createElement("script");
+    hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?3bc20bd8070ce614078a36c686209456";
+    document.head.appendChild(hm);
+  }
+  function schedule() {
+    if (window.requestIdleCallback) window.requestIdleCallback(load, { timeout: 2000 });
+    else window.setTimeout(load, 0);
+  }
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule, { once: true });
 })();
 `;
 
