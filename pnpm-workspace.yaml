@@ -25,6 +25,10 @@ overrides:
   'undici@8': 8.10.2
   # less pulls probe-image-size 7.3.x, whose SVG parser is vulnerable to ReDoS.
   probe-image-size: 7.4.0
+  # Protect build/test source-map consumers against malicious indexed offsets.
+  source-map-js: 1.2.2
+  # Mermaid still requests vulnerable KaTeX 0.16.x; patch its formula renderer.
+  'mermaid>katex': 0.18.2
   # @ranui/preview (split out of this repo) pins old published ranui/ranuts,
   # which would drag tesseract.js back into the lockfile — use the workspace code.
   '@ranui/preview>ranui': 'workspace:*'
