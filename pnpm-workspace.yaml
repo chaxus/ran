@@ -20,9 +20,11 @@ overrides:
   # "security_update_not_possible"), so pin the first non-vulnerable 3.x here.
   nanoid: 3.3.18
   '@babel/core': 7.29.7
-  # jsdom@29 (ranuts) pulls a vulnerable undici 7.x; jsdom@30 (ranui) already
-  # resolves undici 8.x which is unaffected, so scope the fix to jsdom@29's chain.
-  'jsdom@29.1.1>undici': 7.29.0
+  # Keep jsdom's undici dependencies on patched releases within their major versions.
+  'undici@7': 7.29.1
+  'undici@8': 8.10.2
+  # less pulls probe-image-size 7.3.x, whose SVG parser is vulnerable to ReDoS.
+  probe-image-size: 7.4.0
   # @ranui/preview (split out of this repo) pins old published ranui/ranuts,
   # which would drag tesseract.js back into the lockfile — use the workspace code.
   '@ranui/preview>ranui': 'workspace:*'
