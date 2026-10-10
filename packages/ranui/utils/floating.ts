@@ -170,6 +170,8 @@ export class FloatingController {
    * would only have guessed at the same thing.
    */
   private generation = 0;
+  /** Last positioned side, including viewport flips and subsequent repositioning. */
+  private resolvedSide: PlacementSide | undefined;
 
   constructor(options: FloatingOptions) {
     this.options = options;
@@ -201,6 +203,7 @@ export class FloatingController {
     const generation = ++this.generation;
 
     if (open) {
+      this.resolvedSide = undefined;
       host.dispatchEvent(new CustomEvent('show'));
       panel.style.setProperty('display', 'block');
       this.attachReposition();
@@ -221,7 +224,7 @@ export class FloatingController {
     // were registered, so the class is on the panel before anything looks for
     // an animation. `getAnimations()` forces the style recalculation that makes
     // it visible.
-    panel.setAttribute('transit', TRANSIT[this.side()].exit);
+    panel.setAttribute('transit', TRANSIT[this.resolvedSide ?? this.side()].exit);
     settleAnimations(panel, () => {
       if (generation !== this.generation) return;
       panel.style.setProperty('display', 'none');
@@ -313,6 +316,7 @@ export class FloatingController {
       position.left = override.left;
     }
 
+    this.resolvedSide = position.side;
     panel.style.setProperty('position', 'absolute');
     panel.style.setProperty('inset', `${position.top}px auto auto ${position.left}px`);
     panel.style.setProperty('--ran-x', `${position.left}px`);

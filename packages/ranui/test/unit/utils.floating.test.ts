@@ -226,4 +226,23 @@ describe('FloatingController', () => {
     expect(position.side).toBe('top');
     expect(position.align).toBe('center');
   });
+  it('closes toward the resolved side after automatic flipping', async () => {
+    const { host, panel } = mount();
+    const rect = (top: number, height: number) =>
+      ({ top, bottom: top + height, left: 20, right: 120, width: 100, height, x: 20, y: top, toJSON() {} }) as DOMRect;
+    vi.spyOn(host, 'getBoundingClientRect').mockReturnValue(rect(window.innerHeight - 30, 20));
+    vi.spyOn(panel, 'getBoundingClientRect').mockReturnValue(rect(0, 120));
+    const transit: string[] = [];
+    const write = panel.setAttribute.bind(panel);
+    vi.spyOn(panel, 'setAttribute').mockImplementation((name, value) => {
+      if (name === 'transit') transit.push(value);
+      write(name, value);
+    });
+    const controller = controllerFor(host, panel);
+    controller.apply(true);
+    await nextFrame();
+    controller.apply(false);
+    expect(transit).toEqual(['ran-dropdown-up-in', 'ran-dropdown-up-out']);
+    controller.destroy();
+  });
 });
