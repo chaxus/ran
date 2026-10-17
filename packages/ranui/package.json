@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.5.0-alpha.7",
+  "version": "0.5.0-rc.0",
   "description": "A framework-agnostic Web Components UI library built on native custom elements, with TypeScript types, light/dark theming, SSR and PWA support.",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -167,7 +167,6 @@
     "build:es": "vite build -c ./build/config.es.ts",
     "build:bundle": "vite build -c ./build/config.bundle.ts",
     "build:iife": "tsx ./bin/build-iife.ts",
-    "prepublish": "npm run build",
     "design:bundle": "tsx ./bin/design-bundle.ts",
     "test": "sh ./bin/test.sh",
     "test:unit": "vitest run",
@@ -188,7 +187,8 @@
     "doc:api:check": "tsx ./bin/generate-component-api.ts --check",
     "doc:changelog": "tsx ./bin/generate-changelog-docs.ts",
     "doc:changelog:check": "tsx ./bin/generate-changelog-docs.ts --check",
-    "verify:design": "tsx ./bin/verify-design-rules.ts --ignore components/math/temml.css"
+    "verify:design": "tsx ./bin/verify-design-rules.ts --ignore components/math/temml.css",
+    "prepack": "pnpm run build"
   },
   "files": [
     "dist",

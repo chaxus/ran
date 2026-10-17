@@ -24,7 +24,12 @@
     "verify:consumers": "pnpm -F ranuts verify:package && node bin/verify-package-consumers.mjs",
     "verify:links": "node bin/verify-md-links.mjs",
     "publint": "pnpm exec publint packages/ranui && pnpm exec publint packages/ranuts && pnpm exec publint packages/ranview",
-    "verify:scripts": "node --test bin/test/*.test.mjs"
+    "verify:scripts": "node --test bin/test/*.test.mjs",
+    "release:check": "node bin/release.mjs check",
+    "release:prepare": "node bin/release.mjs prepare",
+    "release:dry-run": "node bin/release.mjs dry-run",
+    "release:publish": "node bin/release.mjs publish",
+    "verify:release": "node bin/verify-release-install.mjs"
   },
   "homepage": "https://ran.chaxus.com/",
   "keywords": [],
