@@ -73,17 +73,46 @@ test.describe('r-disclosure-row', () => {
     expect(await controlShape('r-disclosure-row')).toEqual({ role: 'button', tabindex: '0', expanded: 'false' });
   });
 
-  test('opens on a click anywhere on the row and reveals its body', async ({ page }) => {
+  test('opens and closes on a click anywhere on the row and reveals its body', async ({ page }) => {
     // The whole row is the control, which is why the click lands on the host rather than on
     // a target inside it.
     await mount(
       page,
       `<r-disclosure-row expandable heading="Read" summary="a.ts"><p id="body">contents</p></r-disclosure-row>`,
     );
-    await expect(page.locator('#body')).toBeHidden();
-    await page.locator('r-disclosure-row').click();
-    await expect(page.locator('#body')).toBeVisible();
-    await expect(page.locator('r-disclosure-row')).toHaveAttribute('open', '');
+    const row = page.locator('r-disclosure-row');
+    const body = page.locator('#body');
+    const expectCollapsed = async () => {
+      // Playwright skips native checkVisibility in WebKit, whose fallback only sees the
+      // slotted paragraph's nonzero box and misses its shadow ancestor's content-visibility.
+      // Ask the browser whether it renders, then also verify layout and accessibility.
+      await expect.poll(() => body.evaluate((element) => element.checkVisibility())).toBe(false);
+      expect(
+        await insideShadow(page, 'r-disclosure-row', (root) => {
+          const panel = root.querySelector<HTMLElement>('[part="body"]')!;
+          const control = root.querySelector<HTMLElement>('[part="row"]')!;
+          return {
+            bodyHeight: panel.getBoundingClientRect().height,
+            rowOnly: root.host.getBoundingClientRect().height === control.getBoundingClientRect().height,
+            inert: panel.querySelector('[inert]') !== null,
+          };
+        }),
+      ).toEqual({ bodyHeight: 0, rowOnly: true, inert: true });
+    };
+
+    await expectCollapsed();
+    await row.click();
+    await expect(body).toBeVisible();
+    await expect.poll(() => body.evaluate((element) => element.checkVisibility())).toBe(true);
+    await expect(row).toHaveAttribute('open', '');
+    expect(
+      await insideShadow(page, 'r-disclosure-row', (root) => root.querySelector('[part="body"] [inert]') === null),
+    ).toBe(true);
+
+    // Once open, the host's center can be in the body; keep this click on its summary row.
+    await row.click({ position: { x: 8, y: 8 } });
+    await expect(row).not.toHaveAttribute('open', '');
+    await expectCollapsed();
   });
 
   test('does not open a row with nothing inside, however hard it is clicked', async ({ page }) => {

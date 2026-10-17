@@ -28,7 +28,11 @@ export default defineConfig({
     // is the media query ranui ships inside each root. See ranui's playwright.config.ts.
     contextOptions: { reducedMotion: 'reduce' },
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+  ],
   webServer: {
     // No key in the environment: the app answers from its built-in sample, which is the
     // point — see the note above.

@@ -26,7 +26,8 @@ test.describe('r-reasoning', () => {
       block.content = Array.from({ length: 40 }, (_, i) => `推理的第 ${i} 行，写得相当长一些以便撑开宽度`).join('\n');
     });
     const height = (await page.locator('r-reasoning').boundingBox())?.height ?? 0;
-    expect(height).toBeLessThanOrEqual(28);
+    const maxRowHeight = await page.evaluate(() => (matchMedia('(pointer: coarse)').matches ? 32 : 28));
+    expect(height).toBeLessThanOrEqual(maxRowHeight);
   });
 
   test('opens while thinking and closes when it stops, unless the reader intervenes', async ({ page }) => {

@@ -71,7 +71,8 @@ test.describe('r-tool-card', () => {
     );
     // Every collapsed call is the same single line, and that line is a line — not a card.
     expect(new Set(heights).size).toBe(1);
-    expect(heights[0]).toBeLessThanOrEqual(28);
+    const maxRowHeight = await page.evaluate(() => (matchMedia('(pointer: coarse)').matches ? 32 : 28));
+    expect(heights[0]).toBeLessThanOrEqual(maxRowHeight);
   });
 
   test('starts collapsed and opens onto an IN/OUT body', async ({ page }) => {
