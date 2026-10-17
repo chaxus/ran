@@ -525,8 +525,8 @@ export class Select extends RanElement {
     optionElement.setAttribute('active', value);
     optionElement.setAttribute('aria-selected', 'true');
     this.syncActiveState();
-    this.setSelectDropdownDisplayNone();
     if (shouldDispatch) {
+      this.setSelectDropdownDisplayNone();
       this.dispatchEvent(new CustomEvent('change', { detail: { value, label } }));
     }
   };
@@ -847,8 +847,8 @@ export class Select extends RanElement {
           selectOptionItem.setAttribute('disabled', '');
           selectOptionItem.setAttribute('aria-disabled', 'true');
         }
-        const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
-        if (defaultValue === value) {
+        const selectedValue = this.value || this.defaultValue;
+        if (selectedValue === value) {
           selectOptionItem.setAttribute('active', value);
           this._activeOption = selectOptionItem;
         } else {
@@ -858,8 +858,9 @@ export class Select extends RanElement {
       }
     });
     this._activeIndex = this.getDropdownOptions().findIndex((item) => item === this._activeOption);
-    this.syncActiveState();
-    this.setDefaultValue();
+    // Rendering reflects the current value, without applying defaults again or closing.
+    if (this._activeOption) this.selectOptionElement(this._activeOption, false);
+    else this.syncActiveState();
   };
   setDefaultValue = (): void => {
     const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');

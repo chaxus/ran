@@ -68,3 +68,43 @@ test('host typeahead selects once with a nonbubbling change; composing Enter doe
     await page.evaluate(() => ({ changes: (window as any).changes, delegated: (window as any).delegated })),
   ).toEqual({ changes: [{ value: 'b', label: 'Beta' }], delegated: 0 });
 });
+
+for (const attribute of ['value', 'defaultvalue']) {
+  test(`matching search preserves preselected ${attribute} and accepts replacement`, async ({ page }) => {
+    await page.locator('#select').evaluate((host, name) => host.setAttribute(name, 'a'), attribute);
+    const box = await insideShadow(page, '#select', (root) => {
+      const input = root.querySelector<HTMLInputElement>('input')!;
+      const rect = input.getBoundingClientRect();
+      return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+    });
+    await page.mouse.click(box.x, box.y);
+    await expect(page.locator('#select')).toHaveAttribute('open');
+    await page.keyboard.type('a');
+    await expect(page.locator('#select')).toHaveAttribute('open');
+    await expect(page.locator('r-dropdown-item')).toHaveText(['Alpha', 'Beta', 'Beta two']);
+    expect(
+      await insideShadow(page, '#select', (root) => ({
+        query: root.querySelector<HTMLInputElement>('input')!.value,
+        focused: root.activeElement?.tagName,
+      })),
+    ).toEqual({ query: 'a', focused: 'INPUT' });
+    await expect(page.locator('#select')).toHaveAttribute('value', 'a');
+    await page.keyboard.press('ControlOrMeta+A');
+    await page.keyboard.press('Backspace');
+    await expect(page.locator('#select')).toHaveAttribute('open');
+    await expect(page.locator('#select')).toHaveAttribute('value', 'a');
+    expect(await insideShadow(page, '#select', (root) => root.activeElement?.tagName)).toBe('INPUT');
+    await page.keyboard.type('Beta');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#select')).toHaveAttribute('value', 'b');
+    await expect(page.locator('#select')).not.toHaveAttribute('open');
+    await page.mouse.click(box.x, box.y);
+    await page.keyboard.type('b');
+    await expect(page.locator('#select')).toHaveAttribute('open');
+    await expect(page.locator('#select')).toHaveAttribute('value', 'b');
+    expect(
+      await insideShadow(page, '#select', (root) => root.querySelector('[part="selection-item"]')?.textContent),
+    ).toBe('Beta');
+  });
+}

@@ -92,4 +92,37 @@ describe('r-select accessibility keyboard contract', () => {
     expect(delegated).not.toHaveBeenCalled();
     document.body.removeEventListener('change', delegated);
   });
+  it.each(['value', 'defaultValue'])(
+    'keeps %s selection stable during matching search and clear until explicit replacement',
+    async (attribute) => {
+      const select = await createSelect();
+      select.setAttribute('showSearch', '');
+      select.setAttribute(attribute, '1');
+      select.open = true;
+      select._search.focus();
+      const changes = vi.fn();
+      select.addEventListener('change', changes);
+      select._search.value = 'a';
+      select._search.dispatchEvent(new Event('input', { bubbles: true }));
+      expect(select.open).toBe(true);
+      expect(select._search.value).toBe('a');
+      expect(select._shadowDom.activeElement).toBe(select._search);
+      expect(select.value).toBe('1');
+      select._search.value = '';
+      select._search.dispatchEvent(new Event('input', { bubbles: true }));
+      expect(select.open).toBe(true);
+      expect(select.value).toBe('1');
+      expect(changes).not.toHaveBeenCalled();
+      select.selectOptionElement(select.getDropdownOptions()[1]);
+      expect(select.value).toBe('2');
+      expect(select.open).toBe(false);
+      select.open = true;
+      select._search.value = 'b';
+      select._search.dispatchEvent(new Event('input', { bubbles: true }));
+      expect(select.open).toBe(true);
+      expect(select.value).toBe('2');
+      expect(select._text.textContent).toBe('Beta');
+      expect(changes).toHaveBeenCalledOnce();
+    },
+  );
 });
