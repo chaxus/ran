@@ -692,7 +692,7 @@ export class Select extends RanElement {
     // and no longer tracks `value=`, so setting the attribute leaves the search box filled.
     if (this._search.value) {
       this._search.value = '';
-      if (this.showSearch) this.changeSearch(e);
+      if (this.hasAttribute('showsearch')) this.changeSearch(e);
     }
     if (this.trigger.includes('hover') && !isMobile()) {
       clearTimeout(this.removeTimeId);
@@ -951,13 +951,13 @@ export class Select extends RanElement {
   /**
    * (Re)wire the search-box listeners to match the current `showSearch` value.
    * Reactive: abort any previously-registered search listeners first, then
-   * re-register only while `showSearch` is truthy. Safe to call on connect and
+   * re-register while the `showSearch` attribute is present. Safe to call on connect and
    * on every `showSearch` attribute change.
    */
   _applyShowSearch = (): void => {
     this._searchEvents.abort();
     this._composing = false;
-    if (this.showSearch) {
+    if (this.hasAttribute('showsearch')) {
       this.onSearch = this.changeSearch;
       this._searchEvents
         .on(this._search, 'keydown', (event) => {
