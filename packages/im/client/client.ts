@@ -69,7 +69,7 @@ const mic = document.querySelector('#mic') as HTMLElement & { listening: boolean
 const attachments = document.querySelector('#attachments') as HTMLElement & {
   attachments: readonly Attachment[];
   add: (files: Iterable<File>) => Attachment[];
-  clear: () => void;
+  detach: (id: string) => boolean;
 };
 const picker = document.querySelector('#picker') as HTMLInputElement;
 const attach = document.querySelector('#attach') as HTMLElement;
@@ -191,6 +191,9 @@ const MAX_STEPS = 6;
  */
 async function ask(text: string): Promise<void> {
   const staged = [...attachments.attachments];
+  // Elements upgrade before IndexedDB opens. Preserve early input until the
+  // stored session has been restored rather than reading uninitialized state.
+  await sessionReady;
   const content = await buildContent(text, staged);
   chat.push({
     type: 'turn/start',
@@ -206,7 +209,8 @@ async function ask(text: string): Promise<void> {
   // Named from the first thing said in it, once: a conversation renamed on every turn is a
   // list entry that keeps moving under the reader.
   if (current.messages.length === 1) current.title = titleFrom(content);
-  attachments.clear();
+  // Keep files added for the next draft while initialization or file reads wait.
+  for (const attachment of staged) attachments.detach(attachment.id);
   await persist();
   await renderSessions();
 
@@ -874,7 +878,8 @@ async function deleteSession(id: string): Promise<void> {
   await renderSessions();
 }
 
-newSession.addEventListener('click', () => {
+newSession.addEventListener('click', async () => {
+  await sessionReady;
   inFlight?.close();
   current = blankSession();
   store.setCurrentId(current.id);
@@ -1052,4 +1057,4 @@ async function boot(): Promise<void> {
   renderMeter();
 }
 
-void boot();
+const sessionReady = boot();
