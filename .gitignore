@@ -32,3 +32,6 @@ coverage
 .env
 .env.*
 !.env.example
+
+# Verified release tarballs and receipts
+.release/

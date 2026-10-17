@@ -1,6 +1,6 @@
 {
   "name": "ranuts",
-  "version": "0.4.1-alpha.2",
+  "version": "0.5.0-rc.0",
   "description": "Tree-shakeable TypeScript utility library: DOM/BOM helpers, string/object/number/color utils, debounce/throttle/compose, a 2D rendering engine and a virtual DOM.",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -70,7 +70,7 @@
     "dev": "vite --host",
     "doc:api": "tsx ./bin/generate-api-docs.ts",
     "doc:api:check": "tsx ./bin/generate-api-docs.ts --check",
-    "prepublish": "npm run build"
+    "prepack": "pnpm run build"
   },
   "keywords": [
     "ranuts",
