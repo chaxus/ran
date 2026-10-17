@@ -187,17 +187,18 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `checkbox`
 
-- Tokens: 44
+- Tokens: 47
 - Parts: 5
 
 ### Tokens
-<!-- layers: semantic: 7 · skin: 1 · component: 32 · internal: 4 -->
+<!-- layers: semantic: 8 · skin: 1 · component: 33 · internal: 5 -->
 - `--ran-checkbox-border-radius`
 - `--ran-checkbox-checked-background-color`
 - `--ran-checkbox-checked-background-image`
 - `--ran-checkbox-checked-border`
 - `--ran-checkbox-color`
 - `--ran-checkbox-disabled-opacity`
+- `--ran-checkbox-disabled-tick-color`
 - `--ran-checkbox-focus-border-color`
 - `--ran-checkbox-focus-box-shadow`
 - `--ran-checkbox-font-family`
@@ -229,7 +230,9 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-color-border`
 - `--ran-color-primary`
 - `--ran-color-text`
+- `--ran-color-text-disabled`
 - `--ran-focus-ring`
+- `--ran-gray-600`
 - `--ran-motion-duration-base`
 - `--ran-motion-ease-bouncy`
 - `--ran-size-1`

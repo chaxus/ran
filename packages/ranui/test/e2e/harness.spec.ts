@@ -11,6 +11,12 @@ test('demo screenshot fixtures exclude the live stream before components upgrade
   });
   await demoSetup(page, 'r-player');
   await expect(page.locator('#component-player r-player')).not.toHaveAttribute('src', /.+/);
+  const fits = await page.locator('#component-input').evaluate((card) => {
+    const input = card.querySelector('r-input[status="error"]') as HTMLElement & { _shadowDom: ShadowRoot };
+    const message = input._shadowDom.querySelector('.ran-input-message')!;
+    return message.getBoundingClientRect().bottom <= card.getBoundingClientRect().bottom;
+  });
+  expect(fits).toBe(true);
   expect(external).toEqual([]);
 });
 

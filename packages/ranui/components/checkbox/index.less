@@ -19,14 +19,15 @@
       &::after {
         cursor: not-allowed;
         pointer-events: none;
-        opacity: var(--ran-checkbox-tick-checked-opacity, 1);
+        opacity: var(--ran-checkbox-tick-opacity, 0);
+        border-color: var(--ran-checkbox-disabled-tick-color, var(--ran-color-text-disabled, var(--ran-gray-600)));
       }
     }
     .ran-checkbox-checked {
       .ran-checkbox-inner {
         background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-bg-muted, #f2f2f2));
         &::after {
-          opacity: var(--ran-checkbox-tick-checked-opacity, 0);
+          opacity: var(--ran-checkbox-tick-checked-opacity, 1);
         }
       }
     }
