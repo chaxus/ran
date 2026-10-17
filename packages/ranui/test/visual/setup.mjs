@@ -25,9 +25,19 @@ export default async function setup(config) {
   if (config.updateSnapshots !== 'none' && process.env.RANUI_VISUAL_UPDATE !== '1') {
     throw new Error('Baseline updates require the explicit test:update command.');
   }
-  const browser = await chromium.launch({ args: ['--use-angle=swiftshader'] });
+  const browser = await chromium.launch();
   const browserVersion = browser.version();
+  const session = await browser.newBrowserCDPSession();
+  const { gpu } = await session.send('SystemInfo.getInfo');
+  const graphics = {
+    compositing: gpu.featureStatus.gpu_compositing,
+    rasterization: gpu.featureStatus.rasterization,
+  };
+  await session.detach();
   await browser.close();
+  if (Object.values(graphics).some((status) => status !== 'disabled_software')) {
+    throw new Error('Canonical screenshots require the container software compositor and rasterizer.');
+  }
   if (browserVersion !== environment.chromium) throw new Error(`Unexpected screenshot browser ${browserVersion}`);
   const fonts = [
     ...new Set(execFileSync('fc-list', ['--format', '%{file}\n'], { encoding: 'utf8' }).trim().split('\n')),
@@ -62,6 +72,7 @@ export default async function setup(config) {
   }
   const actual = {
     ...environment,
+    graphics,
     systemFontsSha256: hash.digest('hex'),
     systemFontFiles: fonts.length,
     localFontsSha256: localFonts.digest('hex'),
