@@ -106,5 +106,13 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.node_version == 24
         run: pnpm run publint
 
+      - name: Verify packed ranuts consumers and import budget
+        if: matrix.os == 'ubuntu-latest' && matrix.node_version == 24
+        run: pnpm run verify:consumers
+
       - name: Test
         run: pnpm run test
+
+      - name: Check ranui coverage thresholds
+        if: matrix.os == 'ubuntu-latest' && matrix.node_version == 24
+        run: pnpm -F ranui test:unit:coverage
