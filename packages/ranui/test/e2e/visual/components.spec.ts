@@ -120,7 +120,7 @@ test('modal closed state', async ({ page }) => {
   await expect(section).toHaveScreenshot('modal-closed.png');
 });
 
-test('modal opens from the demo trigger', async ({ page }) => {
+test('modal opens from the demo trigger', async ({ page, hasTouch }) => {
   // Functional only — deliberately no screenshot.
   //
   // The dialog is `position: fixed` inside r-modal's *closed* shadow root, so no page locator
@@ -130,7 +130,10 @@ test('modal opens from the demo trigger', async ({ page }) => {
   // one is not worth it: the modal's appearance is already covered deterministically by
   // `modal — open` in test/e2e/modal.spec.ts, which mounts it in an isolated body.
   const host = page.locator('#demo-modal');
-  await page.locator('#component-modal r-button[type="primary"]').click();
-  await page.waitForTimeout(100);
+  const trigger = page.locator('#component-modal r-button[type="primary"]');
+  // Use the device's native input: synthetic mouse focus on mobile WebKit can
+  // resize text above the trigger between pointerdown and pointerup.
+  if (hasTouch) await trigger.tap();
+  else await trigger.click();
   await expect(host).toHaveAttribute('open', '');
 });
