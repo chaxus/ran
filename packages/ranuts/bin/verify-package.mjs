@@ -6,6 +6,8 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gzipSync } from 'node:zlib';
+import { build } from 'vite';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(import.meta.url);
@@ -103,6 +105,23 @@ assert.equal(typeof new Server().listen, 'function');
   run(process.execPath, ['-e', "require('node:assert/strict').equal(require('ranuts').rgbToHex(1,2,3),'#010203')"]);
   console.log('ranuts tarball: ESM and CommonJS runtime imports passed');
 
+  // Measure a real consumer import, with the consumer bundler's default tree shaking.
+  await writeFile(join(fixture, 'entry.mjs'), "import { rgbToHex } from 'ranuts'; console.log(rgbToHex(1,2,3));");
+  const result = await build({
+    configFile: false,
+    logLevel: 'error',
+    root: fixture,
+    build: { write: false, minify: 'esbuild', lib: { entry: join(fixture, 'entry.mjs'), formats: ['es'] } },
+  });
+  const outputs = Array.isArray(result) ? result : [result];
+  const code = outputs
+    .flatMap((output) => output.output)
+    .filter((output) => output.type === 'chunk')
+    .map((output) => output.code)
+    .join('\n');
+  const gzipBytes = gzipSync(code).length;
+  assert.ok(gzipBytes <= 1024, `rgbToHex import exceeds 1 KiB gzip budget: ${gzipBytes} bytes`);
+  console.log(`ranuts rgbToHex import: ${Buffer.byteLength(code)} bytes, ${gzipBytes} bytes gzip (budget 1024)`);
   // Ensure the input was the packed package, rather than a workspace source alias.
   assert.equal(JSON.parse(await readFile(join(installed, 'package.json'), 'utf8')).name, 'ranuts');
 } catch (error) {

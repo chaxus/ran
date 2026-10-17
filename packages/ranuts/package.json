@@ -5,6 +5,9 @@
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
   "type": "module",
+  "sideEffects": [
+    "./dist/umd/**"
+  ],
   "types": "dist/index.d.ts",
   "engines": {
     "node": ">=23.10.0"
