@@ -15,7 +15,7 @@ Web Components, DOM builders and TypeScript utilities in one workspace.
 
 **English** | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> Alpha: APIs and package formats can change. Pin an exact version and read the migration guide before upgrading.
+> Pre-release: APIs and package formats can change. Pin an exact version and read the migration guide before upgrading.
 
 ## Packages
 
@@ -94,6 +94,8 @@ Workspace status and CI checks are declared in [packages/manifest.json](packages
 ## Contributing
 
 Read [AGENTS.md](AGENTS.md) for the ownership and verification map. Keep examples and documentation aligned with public exports, and run the checks relevant to your change.
+
+[Release guide](docs/RELEASING.md)
 
 ## License
 

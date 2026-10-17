@@ -8,7 +8,7 @@ ESM · IIFE · TypeScript
 
 **English** | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> Alpha: APIs and package formats can change. Pin an exact version and read the migration guide before upgrading.
+> Pre-release: APIs and package formats can change. Pin an exact version and read the migration guide before upgrading.
 
 ## Quick start
 

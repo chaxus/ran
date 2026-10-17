@@ -8,14 +8,22 @@ description: 'ranui 的变更记录——新增、变更、修复与移除及其
 由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.zh-CN.md` 生成，与英文版一同维护，
 因此本页与 npm 包内的副本不会出现分歧。
 
-::: warning ranui 处于 alpha 阶段
-版本以 `0.x-alpha` 发布，**其中会包含破坏性变更**——现阶段优先把设计做对，而不是保住 API 形状。
-请锁定确切版本，并在升级前先读本页。
+::: warning ranui 处于预发布阶段
+Alpha、Beta 和 RC 版本可能包含破坏性变更。请锁定确切版本，并在升级前阅读本页。
 :::
 
 ::: v-pre
 
-## [Unreleased]
+## [0.5.0-rc.0] — 2026-10-17
+
+待发布的 Release Candidate，尚未上传 npm。
+
+### 发布准备
+
+- 所有工作区统一要求 Node 24+，固定 pnpm 11.6.0。
+- 联动 ranuts 0.5.0-rc.0 和 @alixex/ranview 0.2.0-rc.0，打包后的内部依赖指向这些确切版本。
+- 仅发布 ESM 模块，保留独立 IIFE。已移除的 alpha API 和模块格式见[迁移指南](https://ran.chaxus.com/cn/src/ranuts/migration/)。
+- 使用 prepack 构建并验证 tarball 的真实安装，随后对同一批 SHA-512 校验产物预演或发布。见[发布指南](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md)。
 
 ### Added
 

@@ -15,7 +15,7 @@
 
 [English](./README.md) | **中文** | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> Alpha 阶段：API 和包格式可能变化。请锁定具体版本，升级前阅读迁移指南。
+> 预发布阶段：API 和包格式可能变化。请锁定具体版本，升级前阅读迁移指南。
 
 ## 项目包
 
@@ -94,6 +94,8 @@ pnpm clean
 ## 参与贡献
 
 先阅读 [AGENTS.md](AGENTS.md) 中的职责和验证入口。示例、文档应与公共导出一致，并运行与改动相关的检查。
+
+[发布指南](docs/RELEASING.md)
 
 ## 许可证
 

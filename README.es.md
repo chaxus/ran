@@ -15,7 +15,7 @@ Web Components, constructores DOM y utilidades TypeScript en un mismo espacio de
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | **Español** | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> En fase alpha: las APIs y los formatos pueden cambiar. Fija una versión exacta y consulta la guía de migración antes de actualizar.
+> Versión preliminar: las APIs y los formatos pueden cambiar. Fija una versión exacta y consulta la guía de migración antes de actualizar.
 
 ## Paquetes
 
@@ -94,6 +94,8 @@ El estado de los proyectos y las comprobaciones CI se declaran en [packages/mani
 ## Contribuir
 
 Consulta [AGENTS.md](AGENTS.md) para encontrar responsables y verificaciones. Mantén los ejemplos alineados con las exportaciones públicas y ejecuta las comprobaciones de tu cambio.
+
+[Guía de publicación](docs/RELEASING.md)
 
 ## Licencia
 

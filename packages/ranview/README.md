@@ -11,7 +11,7 @@ The DOM builder and reactive primitives behind [ranui](https://www.npmjs.com/pac
 Use it on its own for application views; `ranui/builder` exposes the builder APIs for
 ranui consumers. It does not register custom elements.
 
-**Alpha · ESM-only · TypeScript.** Pin an exact version. Use Node 24+ for server rendering;
+**Pre-release · ESM-only · TypeScript.** Pin an exact version. Use Node 24+ for server rendering;
 browser reactivity requires a browser DOM. There is no hydration API.
 
 ## Quick start

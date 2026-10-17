@@ -8,7 +8,7 @@ ESM · IIFE · TypeScript
 
 [English](./README.md) | **中文** | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> Alpha 阶段：API 和包格式可能变化。请锁定具体版本，升级前阅读迁移指南。
+> 预发布阶段：API 和包格式可能变化。请锁定具体版本，升级前阅读迁移指南。
 
 ## 快速开始
 

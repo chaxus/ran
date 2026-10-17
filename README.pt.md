@@ -15,7 +15,7 @@ Web Components, construtores DOM e utilitários TypeScript no mesmo workspace.
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | **Português** | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> Em fase alpha: APIs e formatos podem mudar. Fixe uma versão exata e leia o guia de migração antes de atualizar.
+> Pré-lançamento: APIs e formatos podem mudar. Fixe uma versão exata e leia o guia de migração antes de atualizar.
 
 ## Pacotes
 
@@ -94,6 +94,8 @@ O estado do workspace e as verificações CI estão em [packages/manifest.json](
 ## Contribuir
 
 Consulte [AGENTS.md](AGENTS.md) para responsabilidades e verificações. Mantenha exemplos alinhados às exportações públicas e execute as verificações do seu ajuste.
+
+[Guia de publicação](docs/RELEASING.md)
 
 ## Licença
 
