@@ -42,3 +42,17 @@ Skripte werden anhand des exakten Typs und Inhalts dedupliziert, ohne Hashing od
 Die eigenständigen Pakete `visual` und `ranite` wurden entfernt. Verwenden Sie die gepflegte Engine `ranuts/visual` und die vorhandenen Vite-Entwicklungsskripte.
 
 Aufrufer von `visual` müssen die öffentliche API anpassen: mit `await Application.create(options)` initialisieren, `Graphics` / `Container` zu `app.stage` hinzufügen und `app.render()` oder `app.start()` aufrufen. Für `Bar`, `Line`, `Pie` und das unfertige `Sankey` gibt es keinen Ersatz. Alte interne Geometrie- und Ereignisklassen sind keine öffentlichen Exporte; ein geänderter Importname allein reicht nicht.
+
+## Pakete nur mit ESM
+
+ranuts, ranui und @alixex/ranview veröffentlichen nur noch ESM-Module. Ersetze require() und nach CommonJS umgewandelte Importe durch natives ESM. Ältere Loader und Testwerkzeuge müssen ESM aktivieren oder dynamisches import() verwenden; CommonJS-Builds und .d.cts-Deklarationen entfallen. Eigenständige IIFEs für klassische script-Tags bleiben erhalten.
+
+```ts
+import { rgbToHex } from 'ranuts';
+import { h } from 'ranui/ssr';
+```
+
+- `ranuts/dist/umd/index.umd.cjs` → `ranuts/dist/iife/index.iife.js` (`ranuts`)
+- `ranuts/dist/umd/utils/utils.umd.cjs` → `ranuts/dist/iife/utils.iife.js` (`ranuts_utils`)
+- `ranui/dist/umd/index.umd.cjs` → `ranui/dist/index.iife.js` (`ranui`)
+- `ranui/dist/iife/<name>.iife.js` → `ranui/dist/iife/<name>.iife.js`

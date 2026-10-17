@@ -8,7 +8,7 @@ Web Components를 바탕으로 한 실험적인 UI 컴포넌트 라이브러리�
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
+<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-esm%2C%20iife-green.svg" alt="module formats: esm, iife"></a>
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | **한국어** | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
@@ -179,10 +179,10 @@ import 'ranui';
 import 'ranui/button';
 ```
 
-UMD, IIFE, CJS:
+IIFE:
 
 ```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
+<script src="./ranui/dist/index.iife.js"></script>
 ```
 
 ### 번들러 없이(정적 페이지나 CDN)
@@ -228,7 +228,7 @@ RanUI의 컴포넌트는 Web Components라, 프레임워크마다의 감싸개 �
 ### html
 
 ```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
+<script src="./ranui/dist/index.iife.js"></script>
 
 <body>
   <r-button>Button</r-button>

@@ -8,7 +8,7 @@ Uma biblioteca experimental de componentes de interface montada sobre Web Compon
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
+<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-esm%2C%20iife-green.svg" alt="module formats: esm, iife"></a>
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | **Português** | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
@@ -179,10 +179,10 @@ ou então:
 import 'ranui/button';
 ```
 
-UMD, IIFE, CJS:
+IIFE:
 
 ```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
+<script src="./ranui/dist/index.iife.js"></script>
 ```
 
 ### Sem empacotador (páginas estáticas ou CDN)
@@ -228,7 +228,7 @@ Exemplos:
 ### html
 
 ```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
+<script src="./ranui/dist/index.iife.js"></script>
 
 <body>
   <r-button>Button</r-button>

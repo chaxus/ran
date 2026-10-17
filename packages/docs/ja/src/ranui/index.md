@@ -23,7 +23,7 @@ npm install ranui
 
 ```html
 <!-- CDN からでも。ビルド工程は不要 -->
-<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
+<script src="https://unpkg.com/ranui/dist/index.iife.js"></script>
 ```
 
 ## 使い方
@@ -45,7 +45,7 @@ import 'ranui/button'; // 一つだけでも
 ::: code-group
 
 ```html [HTML]
-<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
+<script src="https://unpkg.com/ranui/dist/index.iife.js"></script>
 
 <body>
   <r-button>Button</r-button>

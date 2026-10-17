@@ -22,7 +22,7 @@ npm install ranui
 
 ```html
 <!-- ou de uma CDN, sem etapa de build -->
-<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
+<script src="https://unpkg.com/ranui/dist/index.iife.js"></script>
 ```
 
 ## Como usar
@@ -44,7 +44,7 @@ que as [diretrizes de código](/pt/src/ranui/coding-guides/#framework-integratio
 ::: code-group
 
 ```html [HTML]
-<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
+<script src="https://unpkg.com/ranui/dist/index.iife.js"></script>
 
 <body>
   <r-button>Button</r-button>

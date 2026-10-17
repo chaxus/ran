@@ -8,7 +8,7 @@ Biblioteca experimental de utilidades, con las funciones y herramientas de siemp
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranuts.svg" alt="npm-v"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranuts.svg" alt="npm-d"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
+<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-esm%2C%20iife-green.svg" alt="module formats: esm, iife"></a>
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | **Español** | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
@@ -78,19 +78,19 @@ const onResize = debounce(() => {
 window.addEventListener('resize', onResize);
 ```
 
-- UMD, IIFE, CJS
+- IIFE
 
 ```html
-<script src="./ranuts/dist/umd/index.umd.cjs"></script>
+<script src="./ranuts/dist/iife/index.iife.js"></script>
 
 <script>
-    const { debounce } = require('ranuts')
-    const onResize = debounce(() => {
-      console.log('window resized');
-    }, 200);
+  const { debounce } = ranuts;
+  const onResize = debounce(() => {
+    console.log('window resized');
+  }, 200);
 
-    window.addEventListener('resize', onResize);
-<script>
+  window.addEventListener('resize', onResize);
+</script>
 ```
 
 ## Cómo contribuir

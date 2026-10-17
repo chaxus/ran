@@ -224,9 +224,8 @@ After creating `components/mycomp/index.ts`:
 3. **`package.json`** — add export:
    ```json
    "./mycomp": {
-     "types": "./dist/index.d.ts",
-     "import": "./dist/mycomp.js",
-     "require": "./dist/index.cjs"
+     "types": "./dist/components/mycomp/index.d.ts",
+     "import": "./dist/mycomp.js"
    }
    ```
 
@@ -1360,7 +1359,7 @@ less: {
 
 ### ES build output
 
-Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.js` includes all components. CJS + IIFE bundle at `dist/index.cjs`.
+Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.js` includes all components. The full IIFE is `dist/index.iife.js`; standalone components are `dist/iife/<name>.iife.js`. All package imports use ESM.
 
 ---
 
@@ -1412,11 +1411,11 @@ Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.j
 
 Build-only Vite and asset declarations live in `assets.d.ts`; the public `typings.d.ts`
 contains browser augmentations only. Emitted relative imports are normalized for NodeNext.
-CommonJS `.d.cts` entry files forward to the canonical declarations so mixed ESM/CommonJS
-projects share global and private-class identities. Supported Node engines provide native require(ESM).
+The package publishes ESM only; no CommonJS builds, require conditions or `.d.cts`
+forwarding declarations are generated. Keep full and per-component IIFEs for classic script tags.
 
 `pnpm verify:consumers` packs ranui, ranuts and ranview with published workspace metadata,
-then checks strict ESM, CommonJS, mixed and browser consumers without repository aliases
-or skipLibCheck. It also executes CommonJS builder, SSR and testing helpers, including
-a registered-component SSR round trip. Component require() aliases retain the main
-CommonJS barrel; helper paths use their own entry points in the shared CommonJS graph.
+then checks strict NodeNext/Bundler ESM and browser consumers without repository aliases
+or skipLibCheck. It executes ESM builder, SSR and testing helpers, including a registered-component
+SSR round trip, and rejects CommonJS artifacts in the packed libraries. IIFE scripts are parsed as
+classic scripts and exercised in the browser suite (`test/e2e/package-iife.spec.ts`).

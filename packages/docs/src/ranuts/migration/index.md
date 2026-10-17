@@ -42,3 +42,17 @@ Script loading now de-duplicates the exact type and content, without hashing or 
 The standalone `visual` and `ranite` packages have been removed. Use the maintained `ranuts/visual` engine and the existing Vite-based development scripts.
 
 `visual` consumers must adapt to the current public API: initialize with `await Application.create(options)`, add `Graphics`/`Container` nodes to `app.stage`, then call `app.render()` or `app.start()`. The old `Bar`, `Line`, `Pie` and unfinished `Sankey` have no replacement in ranuts. Old geometry/event internals are not public exports; changing only the import name is insufficient.
+
+## ESM-only packages
+
+ranuts, ranui and @alixex/ranview now publish ESM modules only. Replace require() calls and CommonJS-transformed imports with native ESM imports. Older loaders and test runners must enable ESM or use dynamic import(); no CommonJS compatibility build or .d.cts declarations are shipped. Classic browser script tags still use standalone IIFEs.
+
+```ts
+import { rgbToHex } from 'ranuts';
+import { h } from 'ranui/ssr';
+```
+
+- `ranuts/dist/umd/index.umd.cjs` → `ranuts/dist/iife/index.iife.js` (`ranuts`)
+- `ranuts/dist/umd/utils/utils.umd.cjs` → `ranuts/dist/iife/utils.iife.js` (`ranuts_utils`)
+- `ranui/dist/umd/index.umd.cjs` → `ranui/dist/index.iife.js` (`ranui`)
+- `ranui/dist/iife/<name>.iife.js` → `ranui/dist/iife/<name>.iife.js`
