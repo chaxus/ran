@@ -1,0 +1,67 @@
+/* Teaching illustrations are schematics, not new component surfaces or density defaults. */
+.ran-design-illustrations {
+  margin-block: var(--ran-space-8);
+}
+.ran-design-illustrations .ran-design-note {
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-copy-2);
+}
+.ran-design-illustrations .ran-design-figure {
+  margin: 0;
+  margin-block: var(--ran-space-8);
+}
+.ran-design-illustrations figcaption h3 {
+  margin-block: 0 var(--ran-space-2);
+}
+.ran-design-illustrations figcaption p {
+  margin-block: 0 var(--ran-space-4);
+}
+.ran-design-illustrations figcaption code {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  margin-block-end: var(--ran-space-4);
+}
+.ran-design-illustrations .ran-design-canvas {
+  overflow-x: auto;
+}
+.ran-design-illustrations .ran-design-svg {
+  display: block;
+  width: 100%;
+  min-width: 320px;
+  height: auto;
+  max-height: 320px;
+}
+.ran-design-illustrations .ran-design-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ran-space-4);
+  margin-block-start: var(--ran-space-2);
+  font-size: var(--ran-text-label-2);
+}
+.ran-design-illustrations .ran-design-tools button {
+  min-block-size: var(--ran-size-7);
+  border: 0;
+  border-radius: var(--ran-radius-sm);
+  padding: var(--ran-space-1) var(--ran-space-2);
+  background: transparent;
+  color: var(--ran-color-text);
+  font: inherit;
+  cursor: pointer;
+}
+.ran-design-illustrations .ran-design-tools button:hover:enabled {
+  background: var(--ran-color-bg-hover);
+}
+.ran-design-illustrations .ran-design-tools button:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
+}
+.ran-design-illustrations .ran-design-tools button:disabled {
+  color: var(--ran-color-text-secondary);
+  cursor: default;
+}
+.ran-design-illustrations .ran-design-tools button[hidden] {
+  display: none;
+}

@@ -135,3 +135,5 @@ Escolha verificações para a superfície afetada e o comportamento alterado; a 
 - [ ] Espaços da escala, tipografia por papel, cor de tokens semânticos.
 - [ ] Nenhuma propriedade da paleta numa `transition`; nenhum `transition: all`.
 - [ ] O texto e o contexto esclarecem a ação e o objeto; nada sinaliza estado só com cor.
+
+<DesignIllustrations />

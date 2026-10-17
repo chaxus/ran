@@ -191,3 +191,5 @@ display 规则、引用未声明令牌的兜底、组件查询自己的 shadow �
 - [ ] 间距取自尺度、排版按角色、颜色用语义令牌。
 - [ ] `transition` 里没有调色属性；没有 `transition: all`。
 - [ ] 文案与上下文共同明确操作及对象；没有任何状态只靠颜色表达。
+
+<DesignIllustrations />

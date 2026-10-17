@@ -135,3 +135,5 @@ Wähle Prüfungen für die betroffene Oberfläche und das geänderte Verhalten; 
 - [ ] Abstände aus der Skala, Schrift nach Rolle, Farbe aus semantischen Tokens.
 - [ ] Keine Paletteneigenschaft in einer `transition`; kein `transition: all`.
 - [ ] Text und Kontext machen Aktion und Objekt klar; nichts signalisiert einen Zustand allein über Farbe.
+
+<DesignIllustrations />

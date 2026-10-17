@@ -33,6 +33,7 @@ import { NAV, SIDEBAR } from '../build/langs/structure.ts';
 import type { SidebarNode } from '../build/langs/types.ts';
 import { HOME_STRINGS } from '../build/langs/home-copy.ts';
 import { DEMO_STRINGS } from '../build/langs/demo-copy.ts';
+import { DESIGN_ILLUSTRATION_STRINGS } from '../build/langs/design-illustrations-copy.ts';
 import en from '../build/langs/messages/en.ts';
 import cn from '../build/langs/messages/cn.ts';
 import ja from '../build/langs/messages/ja.ts';
@@ -91,6 +92,7 @@ const strings = (value: unknown, path = ''): [string, string][] => {
 const COPY = {
   'home-copy.ts': HOME_STRINGS as Record<string, unknown>,
   'demo-copy.ts': DEMO_STRINGS as Record<string, unknown>,
+  'design-illustrations-copy.ts': DESIGN_ILLUSTRATION_STRINGS as Record<string, unknown>,
 };
 
 for (const [file, record] of Object.entries(COPY)) {

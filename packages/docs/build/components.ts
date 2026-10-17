@@ -16,6 +16,7 @@
  */
 import { homeCopy } from './langs/home-copy.ts';
 import { renderPackageFacts } from './package-facts.ts';
+import { renderDesignIllustrations } from './design-illustrations.ts';
 import { demoCopy } from './langs/demo-copy.ts';
 import { localeHref } from './langs/locales.ts';
 import type { LocaleDef } from './config.ts';
@@ -29,6 +30,7 @@ export const componentRenderers = {
   GlassPlayground: () => renderGlassPlayground(currentLocale()),
   IconGallery: () => renderIconGallery(currentLocale()),
   Loading: () => renderLoadingGallery(),
+  DesignIllustrations: () => renderDesignIllustrations(currentLocale()),
 };
 
 export const resolveCurrentLink = (href: string): string => resolveLinkFrom(currentLinkBase())(href);
