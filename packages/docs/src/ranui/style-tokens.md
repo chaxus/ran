@@ -1301,11 +1301,11 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 
 ## `player`
 
-- Tokens: 165
+- Tokens: 167
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 5 · component: 149 · internal: 11 -->
+<!-- layers: semantic: 5 · component: 151 · internal: 11 -->
 - `--ran-color-`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -1354,6 +1354,8 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 - `--ran-player-loading-animation`
 - `--ran-player-loading-background-repeat`
 - `--ran-player-loading-background-size`
+- `--ran-player-loading-border`
+- `--ran-player-loading-color`
 - `--ran-player-loading-filter`
 - `--ran-player-loading-mask-backdrop-filter`
 - `--ran-player-loading-mask-background`

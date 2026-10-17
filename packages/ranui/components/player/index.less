@@ -1,21 +1,11 @@
 @import url('../../base.less');
 
-@number: 49;
-
+// Shared by the legacy standalone affordance and the buffering overlay.
+// The ring paints without animation, including under reduced motion.
 @keyframes loading {
-  .circle(@index) when (@index < @number) {
-    @i: @index+1;
-    @x: round((@i / @number) * 100, 2);
-    @selector: e('@{x}%');
-
-    @{selector} {
-      background-image: url('../../assets/image/loading/1_@{i}.png');
-    }
-
-    .circle(@i);
+  to {
+    transform: rotate(1turn);
   }
-
-  .circle(0);
 }
 
 .video-speed-dropdown {
@@ -87,7 +77,12 @@
   background-position: var(--video-control-loading-background-position, center);
   background-repeat: var(--video-control-loading-background-repeat, no-repeat);
   background-size: var(--video-control-loading-background-size, contain);
-  animation: var(--video-control-loading-animation, loading 1s infinite);
+  box-sizing: border-box;
+  color: var(--video-control-loading-color, var(--ran-focus-ring-inverse-color, #fff));
+  border: var(--video-control-loading-border, 4px solid color-mix(in srgb, currentColor 25%, transparent));
+  border-top-color: currentColor;
+  border-radius: var(--ran-radius-full, 9999px);
+  animation: var(--video-control-loading-animation, loading 1s linear infinite);
 }
 
 // Shared "icon control" chrome — the box model, hover pill, and
@@ -251,7 +246,12 @@
     background-position: var(--ran-player-loading-background-position, center);
     background-repeat: var(--ran-player-loading-background-repeat, no-repeat);
     background-size: var(--ran-player-loading-background-size, contain);
-    animation: var(--ran-player-loading-animation, loading 1s steps(1) infinite);
+    box-sizing: border-box;
+    color: var(--ran-player-loading-color, var(--ran-focus-ring-inverse-color, #fff));
+    border: var(--ran-player-loading-border, 4px solid color-mix(in srgb, currentColor 25%, transparent));
+    border-top-color: currentColor;
+    border-radius: var(--ran-radius-full, 9999px);
+    animation: var(--ran-player-loading-animation, loading 1s linear infinite);
     filter: var(--ran-player-loading-filter, drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6)));
     pointer-events: none;
   }
@@ -1120,5 +1120,12 @@
         }
       }
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-control_loading,
+  .ran-player.ran-player-buffering::after {
+    animation: none;
   }
 }
