@@ -29,15 +29,6 @@
       "status": "experimental",
       "checks": ["tsc", "test"]
     },
-    "visual": {
-      "status": "experimental",
-      "checks": ["tsc"]
-    },
-    "ranite": {
-      "status": "experimental",
-      "checks": [],
-      "reason": "Does not typecheck yet: 9 errors remain after adding the missing @types, including a real ModuleNode | undefined assignment in ModuleGraph.ts and an unindexable command table in cli.ts. Fixing them is a decision about this package's own semantics, not a config change. Its tsconfig was repaired here so `pnpm -F ranite tsc` reports those errors instead of failing on a removed compiler option."
-    },
     "cpro": {
       "status": "stub",
       "checks": [],

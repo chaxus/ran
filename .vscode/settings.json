@@ -62,7 +62,6 @@
     "pthread",
     "PTHREADS",
     "RAII",
-    "ranite",
     "rankey",
     "ranloadedmetadata",
     "ranlog",

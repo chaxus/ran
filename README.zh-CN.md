@@ -51,9 +51,9 @@
 - 🛠️ **工具库**: TypeScript 工具函数
 - 🤖 **机器学习**: 基础的 ML 工具和实验
 - 📱 **Web 应用**: IM 聊天应用（原型）
-- 🔧 **开发工具**: 构建工具和调试工具
+- 🔧 **开发工具**: 调试工具
 - 🌐 **Web3**: 智能合约实验
-- 🎯 **可视化工具**: 数据可视化实验
+- 🎯 **可视化工具**: 通过 `ranuts/visual` 提供 Canvas、WebGL 和 WebGPU 二维渲染
 
 ## 📦 项目包
 
@@ -71,8 +71,6 @@
 | 包名                                    | 描述             |
 | --------------------------------------- | ---------------- |
 | [im](packages/im)                       | 聊天应用原型     |
-| [visual](packages/visual)               | 数据可视化实验   |
-| [ranite](packages/ranite)               | 开发工具实验     |
 | [debug](packages/debug)                 | 调试工具         |
 | [image-process](packages/image-process) | 图像处理实验     |
 | [cpro](packages/cpro)                   | C/C++ 学习与实验 |

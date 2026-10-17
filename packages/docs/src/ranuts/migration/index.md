@@ -36,3 +36,9 @@ formatDate returns formatted text. Use new Date(timestamp) when you need a Date 
 MD5 compatibility requires a dedicated implementation (node:crypto on Node). SHA-256 produces a different digest; neither is a password-storage algorithm.
 
 Script loading now de-duplicates the exact type and content, without hashing or normalizing line endings.
+
+## Retired experimental workspaces
+
+The standalone `visual` and `ranite` packages have been removed. Use the maintained `ranuts/visual` engine and the existing Vite-based development scripts.
+
+`visual` consumers must adapt to the current public API: initialize with `await Application.create(options)`, add `Graphics`/`Container` nodes to `app.stage`, then call `app.render()` or `app.start()`. The old `Bar`, `Line`, `Pie` and unfinished `Sankey` have no replacement in ranuts. Old geometry/event internals are not public exports; changing only the import name is insufficient.

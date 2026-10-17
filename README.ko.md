@@ -51,9 +51,9 @@
 - 🛠️ **유틸리티 라이브러리**: TypeScript 유틸리티
 - 🤖 **머신러닝**: 기본적인 ML 도구와 실험
 - 📱 **웹 애플리케이션**: IM 채팅 앱 (프로토타입)
-- 🔧 **개발 도구**: 빌드 도구와 디버깅 유틸리티
+- 🔧 **개발 도구**: 디버깅 유틸리티
 - 🌐 **Web3**: 스마트 컨트랙트 실험
-- 🎯 **시각화 도구**: 데이터 시각화 실험
+- 🎯 **시각화 도구**: `ranuts/visual`을 통한 Canvas, WebGL, WebGPU 2D 렌더링
 
 ## 📦 패키지
 
@@ -71,8 +71,6 @@
 | 패키지                                  | 설명               |
 | --------------------------------------- | ------------------ |
 | [im](packages/im)                       | 채팅 앱 프로토타입 |
-| [visual](packages/visual)               | 데이터 시각화 실험 |
-| [ranite](packages/ranite)               | 개발 도구 실험     |
 | [debug](packages/debug)                 | 디버깅 유틸리티    |
 | [image-process](packages/image-process) | 이미지 처리 실험   |
 | [cpro](packages/cpro)                   | C/C++ 학습과 실험  |

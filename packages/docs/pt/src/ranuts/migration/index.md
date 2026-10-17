@@ -36,3 +36,9 @@ formatDate retorna texto. Use new Date(timestamp) para um objeto Date. once guar
 Para compatibilidade MD5 use uma implementação específica (node:crypto no Node). SHA-256 gera outro resumo; nenhum deles é um algoritmo de armazenamento de senhas.
 
 Scripts são deduplicados por tipo e conteúdo exatos, sem hashes nem normalização de quebras de linha.
+
+## Workspaces experimentais removidos
+
+Os pacotes independentes `visual` e `ranite` foram removidos. Use o motor mantido `ranuts/visual` e os scripts de desenvolvimento existentes baseados em Vite.
+
+A migração de `visual` exige adaptar a API: inicialize com `await Application.create(options)`, adicione nós `Graphics` / `Container` a `app.stage` e chame `app.render()` ou `app.start()`. Os antigos `Bar`, `Line`, `Pie` e o `Sankey` incompleto não têm substitutos. Classes internas de geometria e eventos não são exports públicos; alterar apenas o import não basta.

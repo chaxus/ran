@@ -36,3 +36,9 @@ formatDate は文字列を返します。Date オブジェクトには new Date(
 MD5 互換性が必要なら専用実装（Node では node:crypto）を使います。SHA-256 は異なるダイジェストです。どちらもパスワード保存用アルゴリズムではありません。
 
 スクリプトは type と内容の完全一致で重複を除きます。ハッシュ計算や改行の正規化は行いません。
+
+## 廃止した実験ワークスペース
+
+独立した `visual` と `ranite` パッケージを削除しました。描画には保守中の `ranuts/visual`、開発には既存の Vite スクリプトを使用してください。
+
+`visual` の移行では公開 API への適応が必要です。`await Application.create(options)` で初期化し、`Graphics` / `Container` を `app.stage` に追加して `app.render()` または `app.start()` を呼びます。旧 `Bar`、`Line`、`Pie`、未完成の `Sankey` に対応する API はありません。旧ジオメトリとイベントの内部クラスも公開されていないため、import 名の変更だけでは移行できません。

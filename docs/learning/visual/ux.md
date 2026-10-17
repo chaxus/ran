@@ -29,7 +29,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-red.jpg)
+![](./assets/image/ux-red.jpg)
 
 现在我们默认颜色的第 3 个值是 0，只看前 2 个值。可以看到 x 坐标从左边开始是黑色，值是 (0,0)，到最右边是纯红色，值是 (1,0)，而中间则是分布在 (0,1) 之间的值。从整体上看，我们得到了一个横向的渐变图案。
 
@@ -42,7 +42,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-green.jpg)
+![](./assets/image/ux-green.jpg)
 
 可以看到 y 坐标从底下开始是黑色，值是 (0,0)，到最上面是纯绿色，值是 (0,1)，而中间则是分布在 (0,1) 之间的值。从整体上看，我们得到了一个纵向的渐变图案。
 
@@ -55,7 +55,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-gr.jpg)
+![](./assets/image/ux-gr.jpg)
 
 左下角原点是黑色，值是 (0,0)，右下角是红色，值是 (1,0)，左上角是绿色，值是 (0,1)，右上角是黄色，值是 (1,1)，中间的所有值在 (0,0) 到 (1,1) 这 2 个区间分布。从整体上看，我们得到了一个有多种颜色的渐变图案。
 
@@ -77,7 +77,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-gray.jpg)
+![](./assets/image/ux-gray.jpg)
 
 简单解释一下吧：左下角原点是黑色，值是 (0,0)，从原点向右上方向辐射的径向渐变，上面每个点的值代表的就是该点到原点的距离，越靠近原点距离越小，越接近黑色，反之越远离原点距离越大，越接近白色。
 
@@ -98,7 +98,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 > 注意：以后凡是有不理解的步骤，都可以像这样直接把结果输出到画布上，这是一种最简单有效的调试方式。
 
-![](../assets/image/ux-gray-circle.jpg)
+![](./assets/image/ux-gray-circle.jpg)
 
 可以看到图形确实被挪到了中间。
 
@@ -116,7 +116,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-gray-cir.jpg)
+![](./assets/image/ux-gray-cir.jpg)
 
 到目前为止，我们得到了一个完整的圆形径向渐变，但我们要的并不是渐变，而是实实在在的圆形。
 
@@ -135,7 +135,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-gray-str.jpg)
+![](./assets/image/ux-gray-str.jpg)
 
 中间确实出现了纯黑色的圆形区域，然后我们只需把周围的渐变给消除，就能得到真正的圆形。
 
@@ -163,7 +163,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 这个内置函数是 step 函数，也被称作“阶梯函数”，是因为它的图像是阶梯的形状，如下图所示：
 
-![](../assets/image/ux-step.jpg)
+![](./assets/image/ux-step.jpg)
 
 它的代码表示形式是这样的：
 
@@ -195,7 +195,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 我们再来认识一个 GLSL 的内置函数——smoothstep 函数，它也被称作“平滑阶梯函数”，是因为它的函数图像是一个平滑过的阶梯的形状，如下图所示：
 
-![](../assets/image/ux-smoothstep.jpg)
+![](./assets/image/ux-smoothstep.jpg)
 
 它的代码表示形式是这样的：
 
@@ -243,7 +243,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-smooth-circle.jpg)
+![](./assets/image/ux-smooth-circle.jpg)
 
 随着渐变区域的扩大，圆形的边缘变得模糊了起来，这是因为两个边界值的差变大了，渐变的区域也就随着变大了，这样就营造出了一种模糊的效果。
 
@@ -262,11 +262,11 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-circle.jpg)
+![](./assets/image/ux-circle.jpg)
 
 画面上出现了一个美丽的光球，它是怎么形成的呢？看下图：
 
-![](../assets/image/ux-circle-smooth.jpg)
+![](./assets/image/ux-circle-smooth.jpg)
 
 这是个反比例函数的图像，目前我们的输入值范围是 (0.,1.)，在这段范围内，输入值位于 (0.,.25) 时，输出值都大于 1，Shader 中比 1 大的值输出的还是白色，因此我们能看到中间的白色圆形部分；输入值位于 (.25,1.) 时，输出的值开始变成了比 1 小的值，而且是逐渐变化的，因此会产生一种渐变的效果。
 
@@ -288,11 +288,11 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-smooth-white.jpg)
+![](./assets/image/ux-smooth-white.jpg)
 
 为了理解这一步，依旧来看图：
 
-![](../assets/image/ux-smooth.jpg)
+![](./assets/image/ux-smooth.jpg)
 
 函数图像比之前要往下“躺”了一些，输出值总体变小了，这样光的辐射也稍微缩小了一点。
 
@@ -333,7 +333,7 @@ SDF 函数，中文译作“符号距离函数”，它用于描述这么一个�
 
 下图是圆形 SDF 函数的可视化图，可以更形象地理解它的意义：
 
-![](../assets/image/ux-sdf-circle.jpg)
+![](./assets/image/ux-sdf-circle.jpg)
 
 > 图形学大咖 Inigo Quilez（后文简称 iq）的博客上有篇文章把常用的 2D 图形的 SDF 函数都列了出来，如果有需要可以随时查阅：https://iquilezles.org/articles/distfunctions2d/
 
@@ -359,7 +359,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 上面的代码画出了一个半尺寸长为 0.6、宽为 0.3（实际长为 1.2、宽为 0.6）的长方形。
 
-![](../assets/image/ux-arc.jpg)
+![](./assets/image/ux-arc.jpg)
 
 ## UV 变换
 
@@ -376,7 +376,7 @@ uv.x+=.2;
 uv.y+=.4;
 ```
 
-![](../assets/image/ux-arc-transction.jpg)
+![](./assets/image/ux-arc-transction.jpg)
 
 有人可能会疑惑：明明是给坐标加上了值，为什么图形的坐标并未朝右上移动，而是朝相反的左下方向移动了呢？
 
@@ -386,7 +386,7 @@ uv.y+=.4;
 fragColor=vec4(uv,0.,1.);
 ```
 
-![](../assets/image/ux-transcion.jpg)
+![](./assets/image/ux-transcion.jpg)
 
 之前位于中间的原点值是 (0,0)，现在则变成了 (0.2,0.4)，那么上一个 (0,0) 哪去了呢？可以看到它移动到了当前中间点的左下方，而 SDF 函数输入的坐标值的原点值是 (0,0)，正好对应左下方的那个点，因此图形才会整体往左下方移动。
 
@@ -411,7 +411,7 @@ uv.y-=.4;
 uv-=vec2(.2,.4);
 ```
 
-![](../assets/image/ux-transaction.jpg)
+![](./assets/image/ux-transaction.jpg)
 
 ### 缩放
 
@@ -421,11 +421,11 @@ uv-=vec2(.2,.4);
 uv*=vec2(2.,2.);
 ```
 
-![](../assets/image/ux-sacle.jpg)
+![](./assets/image/ux-sacle.jpg)
 
 果不其然，图形并非扩大，而是缩小了相应的倍数。
 
-![](../assets/image/ux-sacle-circle.jpg)
+![](./assets/image/ux-sacle-circle.jpg)
 
 为什么呢？依旧来看图：之前的图形用黑色的虚线标了出来，它的左上方顶点由于乘上了 2，值就从 (0.6,0.3) 变成了 (1.2,0.6)，那么之前的顶点呢？它自然会遵循倍数的变化规律，移动到右下方，也就是那个小长方形的左上方的顶点。
 
@@ -435,7 +435,7 @@ uv*=vec2(2.,2.);
 uv/=vec2(2.,2.);
 ```
 
-![](../assets/image/ux-sacle-big.jpg)
+![](./assets/image/ux-sacle-big.jpg)
 
 ### 翻转
 
@@ -460,7 +460,7 @@ float sdEquilateralTriangle(in vec2 p,in float r)
 float d=sdEquilateralTriangle(uv,.5);
 ```
 
-![](../assets/image/ux-trangle.jpg)
+![](./assets/image/ux-trangle.jpg)
 
 目前的三角形沿 x 轴方向是对称的，如果想按 x 轴翻转，给 UV 的 y 坐标乘上 -1 即可。
 
@@ -468,11 +468,11 @@ float d=sdEquilateralTriangle(uv,.5);
 uv.y*=-1.;
 ```
 
-![](../assets/image/ux-square-sq.jpg)
+![](./assets/image/ux-square-sq.jpg)
 
 这个比较符合我们的直觉，也用图来说明下吧：
 
-![](../assets/image/ux-square-sacle.jpg)
+![](./assets/image/ux-square-sacle.jpg)
 
 之前的虚线三角形的上顶点是 (0.,0.5)，乘上 -1 后就变成了 (0.,-0.5)，也就变成了实际三角形的下顶点。
 
@@ -508,7 +508,7 @@ const float PI=3.14159265359;
 uv=rotate(uv,PI/2.);
 ```
 
-![](../assets/image/ux-spin.jpg)
+![](./assets/image/ux-spin.jpg)
 
 还记得之前提到过的 iTime 时间变量吗，我们可以用它来实现一个旋转的动画。
 
@@ -516,7 +516,7 @@ uv=rotate(uv,PI/2.);
 uv=rotate(uv,iTime);
 ```
 
-![](../assets/image/ux-spin-animation.webp)
+![](./assets/image/ux-spin-animation.webp)
 
 ### 重复
 
@@ -542,13 +542,13 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-repeat.jpg)
+![](./assets/image/ux-repeat.jpg)
 
 可以看到 UV 坐标分裂成了 4 个小的 UV 坐标。
 
 依旧来观察值的变化：
 
-![](../assets/image/ux-repeat-position.jpg)
+![](./assets/image/ux-repeat-position.jpg)
 
 先将坐标的值整体乘以 2，标记出了几个关键点的值，然后再应用 fract 函数取小数部分，有几个不小于 1 的关键点的值被蓝色的线划掉了，取而代之的是它的小数部分值，这样 UV 便达成了重复的效果。
 
@@ -569,7 +569,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-repeat-sq.jpg)
+![](./assets/image/ux-repeat-sq.jpg)
 
 我们得到了 4 个重复的小三角。
 
@@ -581,7 +581,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 来观察它的函数图像吧：
 
-![](../assets/image/ux-mirror.jpg)
+![](./assets/image/ux-mirror.jpg)
 
 可以看到它将原来函数 y=x 的图像的左下部分给翻转了上去，并且翻转的部分跟原来的部分关于 x 轴对称，由此可以看出 abs 这个函数具有“对称性”。
 
@@ -600,7 +600,7 @@ fragColor=vec4(uv,0.,1.);
 
 把它和之前的 UV 坐标比对下：
 
-![](../assets/image/ux-mirror-color.jpg)
+![](./assets/image/ux-mirror-color.jpg)
 
 原本的 UV 坐标的左下部分值是负数，由于绝对值的作用都变成了正数，并且大小跟它关于 x 轴对称的值相同。
 
@@ -611,7 +611,7 @@ fragColor=vec4(vec3(c),1.);
 // fragColor=vec4(uv,0.,1.);
 ```
 
-![](../assets/image/ux-mirror-demo.jpg)
+![](./assets/image/ux-mirror-demo.jpg)
 
 可以看到图形沿着 x 轴镜像出了下面的另一部分。
 
@@ -637,7 +637,7 @@ opRound 是“圆角”操作，能让图形的角变成圆角。
 d=opRound(d,.1);
 ```
 
-![](../assets/image/ux-onround.jpg)
+![](./assets/image/ux-onround.jpg)
 
 opOnion 是“镂空”操作，能挖空图形中间的部分。
 
@@ -645,7 +645,7 @@ opOnion 是“镂空”操作，能挖空图形中间的部分。
 d=opOnion(d,.1);
 ```
 
-![](../assets/image/ux-onoption.jpg)
+![](./assets/image/ux-onoption.jpg)
 
 ## SDF 布尔运算
 
@@ -692,7 +692,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 “并”操作：它能取 2 个图形的所有部分，对应函数是 opUnion。
 
-![](../assets/image/ux-opunion.jpg)
+![](./assets/image/ux-opunion.jpg)
 
 “交”操作：它能取 2 个图形的相交部分，对应函数是 opIntersection。
 
@@ -700,7 +700,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 d=opIntersection(d1,d2);
 ```
 
-![](../assets/image/ux-opIntersection.jpg)
+![](./assets/image/ux-opIntersection.jpg)
 
 “差”操作：它能取一个图形扣去另一个图形的部分，对应函数是 opSubtraction。注意这个函数的参数是讲究顺序的，是参数 2 的图形部分减去参数 1 的图形部分。
 
@@ -710,7 +710,7 @@ d=opIntersection(d1,d2);
 d=opSubtraction(d1,d2);
 ```
 
-![](../assets/image/ux-opsub.jpg)
+![](./assets/image/ux-opsub.jpg)
 
 再试试圆形减去长方形：
 
@@ -718,7 +718,7 @@ d=opSubtraction(d1,d2);
 d=opSubtraction(d2,d1);
 ```
 
-![](../assets/image/ux-opsubsq.jpg)
+![](./assets/image/ux-opsubsq.jpg)
 
 ### 平滑版
 
@@ -751,7 +751,7 @@ float opSmoothIntersection(float d1,float d2,float k){
 d=opSmoothUnion(d1,d2,.1);
 ```
 
-![](../assets/image/ux-sm-union.jpg)
+![](./assets/image/ux-sm-union.jpg)
 
 平滑交，对应的函数是 opSmoothIntersection。
 
@@ -759,7 +759,7 @@ d=opSmoothUnion(d1,d2,.1);
 d=opSmoothIntersection(d1,d2,.1);
 ```
 
-![](../assets/image/ux-smIntersection.jpg)
+![](./assets/image/ux-smIntersection.jpg)
 
 平滑差，对应的函数是 opSmoothSubtraction，和普通版函数一样也讲究顺序，是参数 2 的图形部分减去参数 1 的图形部分。
 
@@ -769,7 +769,7 @@ d=opSmoothIntersection(d1,d2,.1);
 d=opSmoothSubtraction(d1,d2,.1);
 ```
 
-![](../assets/image/ux-smsub.jpg)
+![](./assets/image/ux-smsub.jpg)
 
 再试试圆形减去长方形：
 
@@ -777,7 +777,7 @@ d=opSmoothSubtraction(d1,d2,.1);
 d=opSmoothSubtraction(d2,d1,.1);
 ```
 
-![](../assets/image/ux-smsubarc.jpg)
+![](./assets/image/ux-smsubarc.jpg)
 
 ## mix 函数
 
@@ -812,7 +812,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 指定 2 个颜色 col1 和 col2，用 mix 函数将它们混合起来，混合程度就用 UV 坐标的 x 轴。
 
-![](../assets/image/ux-mixcolor.jpg)
+![](./assets/image/ux-mixcolor.jpg)
 
 我们得到了一个沿着 x 轴变换的渐变色。
 
@@ -834,7 +834,7 @@ vec3 col=mix(colInner,colOuter,c);
 fragColor=vec4(col,1.);
 ```
 
-![](../assets/image/ux-mixred.jpg)
+![](./assets/image/ux-mixred.jpg)
 
 我们得到了一个染上红色的长方形。
 
@@ -855,7 +855,7 @@ float c=smoothstep(0.,.02,d);
 fragColor=vec4(vec3(c),1.);
 ```
 
-![](../assets/image/ux-mixanima.webp)
+![](./assets/image/ux-mixanima.webp)
 
 我们得到了一个在圆形和长方形之间“反复横跳”的奇特图形。
 
@@ -872,7 +872,7 @@ vec3 c=vec3(step(.5,uv.x));
 fragColor=vec4(c,1.);
 ```
 
-![](../assets/image/ux-repeatline.jpg)
+![](./assets/image/ux-repeatline.jpg)
 
 用 fract 函数来重复 UV，注意这一行要写在绘制线条之前。
 
@@ -880,7 +880,7 @@ fragColor=vec4(c,1.);
 uv=fract(uv*16.);
 ```
 
-![](../assets/image/ux-repeine.jpg)
+![](./assets/image/ux-repeine.jpg)
 
 ### 波浪
 
@@ -897,7 +897,7 @@ vec3 c=vec3(step(.5,uv.y));
 uv.y+=sin(uv.x);
 ```
 
-![](../assets/image/ux-repeatsc.jpg)
+![](./assets/image/ux-repeatsc.jpg)
 
 有一点弯曲，但并不明显，我们要调节下 sin 函数，直到感觉合适为止。
 
@@ -905,7 +905,7 @@ uv.y+=sin(uv.x);
 uv.y+=sin(uv.x*6.)*.4;
 ```
 
-![](../assets/image/ux-repeatsc.jpg)
+![](./assets/image/ux-repeatsc.jpg)
 
 ### 网格
 
@@ -924,7 +924,7 @@ vec3 c=vec3(step(.25,uv.x));
 fragColor=vec4(c,1.);
 ```
 
-![](../assets/image/ux-repeatround.jpg)
+![](./assets/image/ux-repeatround.jpg)
 
 绘制出沿 y 轴分布的条纹。
 
@@ -933,7 +933,7 @@ vec3 c=vec3(step(.25,uv.y));
 fragColor=vec4(c,1.);
 ```
 
-![](../assets/image/ux-repeatyline.jpg)
+![](./assets/image/ux-repeatyline.jpg)
 
 用布尔运算里的“并”操作，将这 2 种图形合并。
 
@@ -942,7 +942,7 @@ vec3 c=vec3(opUnion(step(.25,uv.x),step(.25,uv.y)));
 fragColor=vec4(c,1.);
 ```
 
-![](../assets/image/ux-repeatgrid.jpg)
+![](./assets/image/ux-repeatgrid.jpg)
 
 由于画布长宽并不相等，我们可以修正下比例（写在 fract 函数前）：
 
@@ -950,7 +950,7 @@ fragColor=vec4(c,1.);
 uv.x*=iResolution.x/iResolution.y;
 ```
 
-![](../assets/image/ux-repeatgridright.jpg)
+![](./assets/image/ux-repeatgridright.jpg)
 
 ### 波纹
 
@@ -969,19 +969,19 @@ fragColor=vec4(c,1.);
 
 这里我们就不用 fract 函数了，用 sin 函数来重复 SDF 距离 d，注意这一行要放在 smoothstep 函数之前。
 
-![](../assets/image/ux-repeatcircle.jpg)
+![](./assets/image/ux-repeatcircle.jpg)
 
 ```glsl
 d=sin(d*40.);
 ```
 
-![](../assets/image/ux-repeatcirc.jpg)
+![](./assets/image/ux-repeatcirc.jpg)
 
 ## 极坐标
 
 目前我们 Shader 的默认坐标系是笛卡尔坐标系（也就是直角坐标系），除了这种坐标系外，还有另一种坐标系，叫做极坐标系，用这种坐标系能够画出一些基于圆的图案来。
 
-![](../assets/image/ux-polar.jpg)
+![](./assets/image/ux-polar.jpg)
 
 如上图所示，极坐标系的坐标由 2 个维度组成：极角φ和半径 r。
 
@@ -1029,7 +1029,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](../assets/image/ux-polarcolor.jpg)
+![](./assets/image/ux-polarcolor.jpg)
 
 用极坐标配合其他函数（如 sin 函数），我们能画出各种形状。
 
@@ -1042,7 +1042,7 @@ float c=sin(uv.x*12.);
 fragColor=vec4(vec3(c),1.);
 ```
 
-![](../assets/image/ux-polarradiate.jpg)
+![](./assets/image/ux-polarradiate.jpg)
 
 ### 螺旋形
 
@@ -1053,4 +1053,4 @@ float c=sin(uv.y*20.+uv.x);
 fragColor=vec4(vec3(c),1.);
 ```
 
-![](../assets/image/ux-polarflag.jpg)
+![](./assets/image/ux-polarflag.jpg)

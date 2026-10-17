@@ -51,9 +51,9 @@
 - 🛠️ **Utility Libraries**: TypeScript utilities
 - 🤖 **Machine Learning**: Basic ML tools and experiments
 - 📱 **Web Applications**: IM chat app (prototype)
-- 🔧 **Development Tools**: Build tools and debug utilities
+- 🔧 **Development Tools**: Debug utilities
 - 🌐 **Web3**: Smart contract experiments
-- 🎯 **Visual Tools**: Data visualization experiments
+- 🎯 **Visual Tools**: 2D rendering through `ranuts/visual` (Canvas, WebGL and WebGPU)
 
 ## 📦 Packages
 
@@ -68,15 +68,13 @@ This monorepo contains various experimental packages:
 
 ### Experimental Projects
 
-| Package                                 | Description                     |
-| --------------------------------------- | ------------------------------- |
-| [im](packages/im)                       | Chat application prototype      |
-| [visual](packages/visual)               | Data visualization experiments  |
-| [ranite](packages/ranite)               | Development tooling experiments |
-| [debug](packages/debug)                 | Debug utilities                 |
-| [image-process](packages/image-process) | Image processing experiments    |
-| [cpro](packages/cpro)                   | C/C++ learning & experiments    |
-| [rust](packages/rust)                   | Rust learning & experiments     |
+| Package                                 | Description                  |
+| --------------------------------------- | ---------------------------- |
+| [im](packages/im)                       | Chat application prototype   |
+| [debug](packages/debug)                 | Debug utilities              |
+| [image-process](packages/image-process) | Image processing experiments |
+| [cpro](packages/cpro)                   | C/C++ learning & experiments |
+| [rust](packages/rust)                   | Rust learning & experiments  |
 
 Which of these CI actually checks is declared in [packages/manifest.json](packages/manifest.json), and that file is executable rather than descriptive: `bin/run-checks.mjs` runs a check across the packages that declare it, so a package listed there as checked really is, and one that is not says why. `pnpm run verify:packages` fails when a directory under `packages/` is missing from it, so a new package cannot arrive without someone deciding whether it is checked.
 
