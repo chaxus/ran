@@ -26,12 +26,11 @@ const inset = px('--ran-space-1');
 const innerRadius = px('--ran-radius-md');
 if (outerRadius - inset !== innerRadius)
   throw new Error('Update the radius illustration: foundation radii no longer share the inset center');
-const control = px('--ran-size-7');
-const padding = px('--ran-space-2');
-const target = control + 2 * padding;
+const control = px('--ran-size-1');
+const target = px('--ran-size-7');
 const copyFor = (locale: LocaleDef) => {
   const copy = DESIGN_ILLUSTRATION_STRINGS[locale.dir];
-  const values: Record<string, number> = { outer: outerRadius, inset, inner: innerRadius, control, target, padding };
+  const values: Record<string, number> = { outer: outerRadius, inset, inner: innerRadius, control, target };
   const format = new Intl.NumberFormat(locale.lang, { useGrouping: false });
   return {
     ...copy,
@@ -53,8 +52,7 @@ const standaloneTheme = (): string => {
     '--ran-color-text-secondary',
     '--ran-color-border',
     '--ran-color-link',
-    '--ran-color-primary',
-    '--ran-color-primary-text',
+    '--ran-motion-ease-standard',
     '--ran-font-family',
     '--ran-text-label-1',
   ]);
@@ -74,22 +72,18 @@ const svgStyles = `
 .ran-design-svg .di-line{stroke:currentColor;stroke-width:2;stroke-linecap:round;fill:none}
 .ran-design-svg .di-muted{stroke:var(--ran-color-text-secondary);stroke-width:1;fill:none}
 .ran-design-svg .di-guide{stroke:var(--ran-color-link);stroke-width:1;stroke-dasharray:3 4;fill:none}
-.ran-design-svg .di-control{fill:var(--ran-color-primary)}
-.ran-design-svg .di-ink{stroke:var(--ran-color-primary-text);stroke-width:2;fill:none;stroke-linecap:round}
+.ran-design-svg .di-ink{stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
 .ran-design-svg text{fill:var(--ran-color-text-secondary);font-size:var(--ran-text-label-1);text-anchor:middle}
 .ran-design-figure:is([data-state=playing],[data-state=paused],[data-state=finished]) .di-motion,
-.ran-design-svg[data-autoplay] .di-motion{animation-name:var(--di-animation);animation-duration:4s;animation-fill-mode:both;animation-timing-function:ease-in-out;animation-iteration-count:1}
+.ran-design-svg[data-autoplay] .di-motion{animation-name:var(--di-animation);animation-duration:4s;animation-fill-mode:both;animation-timing-function:var(--ran-motion-ease-standard);animation-iteration-count:1}
 .ran-design-figure[data-state=paused] .di-motion,.ran-design-figure[data-state=finished] .di-motion{animation-play-state:paused}
 .ran-design-svg .di-optional{--di-animation:ran-design-optional}
-.ran-design-svg .di-corner{--di-animation:ran-design-corner}
-.ran-design-svg .di-target{--di-animation:ran-design-target}
-@keyframes ran-design-optional{0%,20%{opacity:0;transform:translateY(-4px)}45%,100%{opacity:1;transform:translateY(0)}}
-@keyframes ran-design-corner{0%,20%{rx:${px('--ran-radius-sm')}px}50%,100%{rx:${innerRadius}px}}
-@keyframes ran-design-target{0%,20%{opacity:0;transform:scale(${control / target})}50%,100%{opacity:1;transform:scale(1)}}
+@keyframes ran-design-optional{0%,20%{opacity:0}50%,100%{opacity:1}}
 @media(prefers-reduced-motion: reduce){.ran-design-svg .di-motion{animation:none!important}}
 `;
 
-const geometry = (kind: (typeof kinds)[number]): string => {
+const geometry = (kind: (typeof kinds)[number], locale: LocaleDef): string => {
+  const number = (value: number) => new Intl.NumberFormat(locale.lang, { useGrouping: false }).format(value);
   if (kind === 'alignment')
     return `<path class="di-muted" d="M24 80H296M24 144H296"/>
     <line data-alignment-spine="" class="di-guide" x1="56" x2="56" y1="24" y2="180"/><path class="di-guide" d="M280 24V180"/>
@@ -104,16 +98,15 @@ const geometry = (kind: (typeof kinds)[number]): string => {
       .join('')}`;
   if (kind === 'radius')
     return `<rect data-radius-outer="" class="di-surface" x="64" y="32" width="192" height="128" rx="${outerRadius}"/>
-    <rect data-radius-inner="" class="di-surface di-motion di-corner" x="${64 + inset}" y="${32 + inset}" width="${192 - 2 * inset}" height="${128 - 2 * inset}" rx="${innerRadius}"/>
-    <circle class="di-guide" cx="${64 + outerRadius}" cy="${32 + outerRadius}" r="${outerRadius}"/>
+    <rect data-radius-inner="" class="di-surface" x="${64 + inset}" y="${32 + inset}" width="${192 - 2 * inset}" height="${128 - 2 * inset}" rx="${innerRadius}"/>
+    <g data-radius-guides="" class="di-motion di-optional"><circle class="di-guide" cx="${64 + outerRadius}" cy="${32 + outerRadius}" r="${outerRadius}"/>
     <circle class="di-guide" cx="${64 + outerRadius}" cy="${32 + outerRadius}" r="${innerRadius}"/>
-    <path class="di-line" d="M${60 + outerRadius} ${32 + outerRadius}h8m-4-4v8"/>
-    <text x="160" y="100">${outerRadius} − ${inset} = ${innerRadius}</text>`;
-  return `<rect data-density-target="" class="di-guide di-motion di-target" style="transform-origin:160px 96px" x="${160 - target / 2}" y="${96 - target / 2}" width="${target}" height="${target}" rx="${outerRadius}"/>
-    <rect data-density-visible="" class="di-control" x="${160 - control / 2}" y="${96 - control / 2}" width="${control}" height="${control}" rx="${px('--ran-radius-sm')}"/>
-    <path class="di-ink" d="M160 103V89m-5 5 5-5 5 5"/>
-    <path class="di-muted" d="M${160 - control / 2} 136v8h${control}v-8"/><text x="160" y="164">${control}px</text>
-    <g class="di-motion di-optional"><path class="di-guide" d="M${160 - target / 2} 56V48h${target}v8"/><text x="160" y="36">${target}px</text></g>`;
+    <path class="di-line" d="M${60 + outerRadius} ${32 + outerRadius}h8m-4-4v8"/></g>
+    <text x="160" y="100">${number(outerRadius)} − ${number(inset)} = ${number(innerRadius)}</text>`;
+  return `<rect data-density-target="" class="di-guide di-motion di-optional" x="${160 - target / 2}" y="${96 - target / 2}" width="${target}" height="${target}" rx="${px('--ran-radius-sm')}"/>
+    <svg data-density-visible="" x="${160 - control / 2}" y="${96 - control / 2}" width="${control}" height="${control}" viewBox="0 0 16 16"><path class="di-ink" d="M1 8h14M8 1v14"/></svg>
+    <path class="di-muted" d="M${160 - control / 2} 136v8h${control}v-8"/><text x="160" y="164">${number(control)}px</text>
+    <g class="di-motion di-optional"><path class="di-guide" d="M${160 - target / 2} 56V48h${target}v8"/><text x="160" y="36">${number(target)}px</text></g>`;
 };
 
 const svg = (kind: (typeof kinds)[number], locale: LocaleDef, standalone = false): string => {
@@ -121,17 +114,20 @@ const svg = (kind: (typeof kinds)[number], locale: LocaleDef, standalone = false
   const index = kinds.indexOf(kind);
   return `<svg xmlns="http://www.w3.org/2000/svg" class="ran-design-svg" viewBox="0 0 320 200"${standalone ? '' : ' width="320" height="200"'} role="img" direction="ltr" lang="${locale.lang}" aria-label="${esc(`${copy.titles[index]}. ${copy.descriptions[index]}`)}"${standalone ? ' data-autoplay=""' : ''}>
     <title>${esc(copy.titles[index])}</title><desc>${esc(copy.descriptions[index])}</desc>
-    <style>${standalone ? standaloneTheme() : ''}${svgStyles}</style>${geometry(kind)}</svg>`;
+    <style>${standalone ? standaloneTheme() : ''}${svgStyles}</style>${geometry(kind, locale)}</svg>`;
 };
 
 export const renderDesignIllustrations = (locale: LocaleDef): string => {
   const copy = copyFor(locale);
-  return `<div class="ran-design-illustrations"><p class="ran-design-note">${esc(copy.note)}</p>${kinds
+  return `<div id="design-illustrations" class="ran-design-illustrations"><p class="ran-design-note">${esc(copy.note)}</p>${kinds
     .map(
-      (kind, index) => `<figure class="ran-design-figure" data-design-illustration data-state="idle">
-    <figcaption><h3>${esc(copy.titles[index])}</h3><p>${esc(copy.descriptions[index])}</p>${index === 1 ? '<code dir="ltr">--ran-radius-lg − --ran-space-1 = --ran-radius-md</code>' : index === 2 ? '<code dir="ltr">--ran-size-7 + 2 × --ran-space-2</code>' : ''}</figcaption>
+      (
+        kind,
+        index,
+      ) => `<figure id="design-illustration-${kind}" class="ran-design-figure" data-design-illustration data-state="idle">
+    <figcaption><h3 id="design-illustration-${kind}-title">${esc(copy.titles[index])}</h3><p>${esc(copy.descriptions[index])}</p>${index === 1 ? '<code dir="ltr">--ran-radius-lg − --ran-space-1 = --ran-radius-md</code>' : index === 2 ? '<code dir="ltr">--ran-size-1 · --ran-size-7</code>' : ''}</figcaption>
     <div class="ran-design-canvas">${svg(kind, locale)}</div>
-    <div class="ran-design-tools"><button type="button" hidden data-play="${esc(copy.play)}" data-pause="${esc(copy.pause)}" data-resume="${esc(copy.resume)}" data-replay="${esc(copy.replay)}" data-reduced="${esc(copy.reduced)}">${esc(copy.play)}</button><a href="/illustrations/${locale.lang}/${kind}.svg" download>${esc(copy.download)}</a></div>
+    <div class="ran-design-tools"><button type="button" hidden aria-describedby="design-illustration-${kind}-title" data-play="${esc(copy.play)}" data-pause="${esc(copy.pause)}" data-resume="${esc(copy.resume)}" data-replay="${esc(copy.replay)}" data-reduced="${esc(copy.reduced)}">${[copy.play, copy.pause, copy.resume, copy.replay].map((label) => `<span aria-hidden="true">${esc(label)}</span>`).join('')}<span data-play-label>${esc(copy.play)}</span></button><span data-reduced-note hidden tabindex="-1">${esc(copy.reduced)}</span><a href="/illustrations/${locale.lang}/${kind}.svg" download>${esc(copy.download)}</a></div>
     </figure>`,
     )
     .join('')}</div>`;

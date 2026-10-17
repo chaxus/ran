@@ -19,7 +19,7 @@ export const DESIGN_ILLUSTRATION_STRINGS: Record<LocaleDir, IllustrationCopy> = 
     descriptions: [
       'Optional row content appears without moving the text spine or the action column. Shared columns belong to the layout, not to each row’s content.',
       'When an inset is a necessary separate object: outer radius {outer} − inset {inset} = inner radius {inner}. Their corner centers meet. Remove redundant surfaces before tuning radii.',
-      'A host example: a {control}px visible control inside a {target}px target, using an {padding}px inset. Keep adjacent targets separate. This is not a new density or a universal target size.',
+      'A host example from DESIGN: a {control}px glyph inside a {target}px native command. Keep adjacent targets separate. This is not a new density or a universal target size.',
     ],
     play: 'Play',
     pause: 'Pause',
@@ -34,7 +34,7 @@ export const DESIGN_ILLUSTRATION_STRINGS: Record<LocaleDir, IllustrationCopy> = 
     descriptions: [
       '可选内容出现时，文本起点与操作列保持不变。共同列由布局控制，不随单行内容漂移。',
       '仅在内层确实是独立对象时：外圆角 {outer} − 内缩 {inset} = 内圆角 {inner}，两者共享圆心。先移除多余背景，再调整圆角。',
-      '宿主示例：{control}px 可见控件，向外扩展 {padding}px 得到 {target}px 点击区域。相邻区域应互不重叠；这不是新增密度或通用目标尺寸。',
+      '沿用 DESIGN 的宿主示例：{control}px 图标位于 {target}px 原生按钮内。相邻点击区域应互不重叠；这不是新增密度或通用目标尺寸。',
     ],
     play: '播放',
     pause: '暂停',
@@ -49,7 +49,7 @@ export const DESIGN_ILLUSTRATION_STRINGS: Record<LocaleDir, IllustrationCopy> = 
     descriptions: [
       '任意の行の内容が現れても、テキストの開始位置と操作列は動きません。列の位置は各行の内容ではなくレイアウトで決まります。',
       '内側が独立した対象として必要な場合のみ、外側の半径 {outer} − 余白 {inset} = 内側の半径 {inner} とし、角の中心を揃えます。不要な面を先に取り除きます。',
-      'ホスト側の例：{control}px の見た目に {padding}px の余白を加え、{target}px の操作領域を確保します。隣接領域は重ねません。新しい密度や共通の目標寸法ではありません。',
+      'DESIGN のホスト側の例：{control}px のアイコンを {target}px のネイティブボタン内に配置します。隣接する操作領域は重ねません。新しい密度や共通の目標寸法ではありません。',
     ],
     play: '再生',
     pause: '一時停止',
@@ -64,7 +64,7 @@ export const DESIGN_ILLUSTRATION_STRINGS: Record<LocaleDir, IllustrationCopy> = 
     descriptions: [
       'El contenido opcional aparece sin desplazar el inicio del texto ni la columna de acciones. Las columnas compartidas dependen del diseño, no del contenido de cada fila.',
       'Solo si el interior es un objeto independiente necesario: radio exterior {outer} − margen {inset} = radio interior {inner}. Los centros coinciden. Elimina primero las superficies redundantes.',
-      'Ejemplo del anfitrión: control visible de {control}px dentro de un área activa de {target}px, con margen de {padding}px. Evita solapar áreas adyacentes. No es una nueva densidad ni una medida universal.',
+      'Ejemplo del anfitrión en DESIGN: icono de {control}px dentro de un botón nativo de {target}px. Evita solapar áreas adyacentes. No es una nueva densidad ni una medida universal.',
     ],
     play: 'Reproducir',
     pause: 'Pausar',
@@ -79,7 +79,7 @@ export const DESIGN_ILLUSTRATION_STRINGS: Record<LocaleDir, IllustrationCopy> = 
     descriptions: [
       'O conteúdo opcional surge sem mover o início do texto ou a coluna de ações. Colunas compartilhadas pertencem ao layout, não ao conteúdo de cada linha.',
       'Apenas quando o interior é um objeto separado necessário: raio externo {outer} − recuo {inset} = raio interno {inner}. Os centros coincidem. Remova primeiro superfícies redundantes.',
-      'Exemplo do anfitrião: controle visível de {control}px em uma área de {target}px, com recuo de {padding}px. Não sobreponha áreas vizinhas. Não é uma nova densidade nem um tamanho universal.',
+      'Exemplo do anfitrião em DESIGN: ícone de {control}px dentro de um botão nativo de {target}px. Não sobreponha áreas vizinhas. Não é uma nova densidade nem um tamanho universal.',
     ],
     play: 'Reproduzir',
     pause: 'Pausar',
@@ -94,7 +94,7 @@ export const DESIGN_ILLUSTRATION_STRINGS: Record<LocaleDir, IllustrationCopy> = 
     descriptions: [
       '선택적인 내용이 나타나도 텍스트 시작점과 작업 열은 움직이지 않습니다. 공통 열은 개별 행의 내용이 아닌 레이아웃이 결정합니다.',
       '안쪽이 별도 객체로 꼭 필요한 경우에만 바깥 반경 {outer} − 안쪽 여백 {inset} = 안쪽 반경 {inner}로 중심을 맞춥니다. 불필요한 표면부터 제거합니다.',
-      '호스트 예시: 보이는 {control}px 컨트롤에 {padding}px 여백을 두어 {target}px 조작 영역을 만듭니다. 인접 영역은 겹치지 않아야 합니다. 새 밀도나 보편적인 목표 크기가 아닙니다.',
+      'DESIGN의 호스트 예시: {target}px 네이티브 버튼 안에 {control}px 아이콘을 배치합니다. 인접 조작 영역은 겹치지 않아야 합니다. 새 밀도나 보편적인 목표 크기가 아닙니다.',
     ],
     play: '재생',
     pause: '일시 정지',
@@ -109,7 +109,7 @@ export const DESIGN_ILLUSTRATION_STRINGS: Record<LocaleDir, IllustrationCopy> = 
     descriptions: [
       'Optionale Inhalte erscheinen, ohne Textbeginn und Aktionsspalte zu verschieben. Gemeinsame Spalten gehören zum Layout, nicht zum Inhalt einzelner Zeilen.',
       'Nur wenn innen ein eigenes Objekt erforderlich ist: Außenradius {outer} − Einzug {inset} = Innenradius {inner}. Die Eckmittelpunkte stimmen überein. Überflüssige Flächen zuerst entfernen.',
-      'Ein Beispiel der Host-Anwendung: sichtbares {control}px-Element in einer {target}px-Zielfläche mit {padding}px Einzug. Benachbarte Ziele nicht überlappen. Keine neue Dichte oder universelle Zielgröße.',
+      'Host-Beispiel aus DESIGN: {control}px-Symbol in einer nativen {target}px-Schaltfläche. Benachbarte Ziele nicht überlappen. Keine neue Dichte oder universelle Zielgröße.',
     ],
     play: 'Abspielen',
     pause: 'Pause',
@@ -124,7 +124,7 @@ export const DESIGN_ILLUSTRATION_STRINGS: Record<LocaleDir, IllustrationCopy> = 
     descriptions: [
       'با نمایش محتوای اختیاری، ابتدای متن و ستون عملیات جابه‌جا نمی‌شوند. ستون مشترک به چیدمان تعلق دارد، نه محتوای هر ردیف.',
       'فقط وقتی بخش داخلی یک شیء مستقل ضروری است: شعاع بیرونی {outer} منهای فاصلهٔ {inset} برابر شعاع داخلی {inner} است؛ مرکز گوشه‌ها مشترک می‌شود. ابتدا سطوح اضافی را حذف کنید.',
-      'نمونه‌ای برای برنامهٔ میزبان: کنترل قابل‌دیدن {control} پیکسلی با فاصلهٔ {padding} پیکسلی در هدف {target} پیکسلی قرار می‌گیرد. هدف‌های مجاور نباید هم‌پوشانی داشته باشند. این چگالی تازه یا اندازه‌ای همگانی نیست.',
+      'نمونهٔ میزبان از DESIGN: نماد {control} پیکسلی در دکمهٔ بومی {target} پیکسلی قرار می‌گیرد. هدف‌های مجاور نباید هم‌پوشانی داشته باشند. این چگالی تازه یا اندازه‌ای همگانی نیست.',
     ],
     play: 'پخش',
     pause: 'مکث',
