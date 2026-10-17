@@ -30,19 +30,14 @@
       "checks": ["tsc", "test"]
     },
     "cpro": {
-      "status": "stub",
+      "status": "non-js",
       "checks": [],
-      "reason": "Placeholder: no source yet, and the test script is still the npm-init one that fails on purpose."
-    },
-    "debug": {
-      "status": "stub",
-      "checks": [],
-      "reason": "Placeholder: a single file and no build, tsconfig, or entry point to check."
+      "reason": "C/C++ and WebAssembly learning sources with no package.json; use the native tools described in its README, not the JavaScript workspace."
     },
     "image-process": {
-      "status": "stub",
+      "status": "non-js",
       "checks": [],
-      "reason": "Placeholder: a single file and no build, tsconfig, or entry point to check."
+      "reason": "Native C image-processing experiment with CMake, Make and Conan configuration; no package.json or JavaScript entry point."
     },
     "precss": {
       "status": "non-js",

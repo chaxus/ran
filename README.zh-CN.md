@@ -71,7 +71,7 @@
 | 包名                                    | 描述             |
 | --------------------------------------- | ---------------- |
 | [im](packages/im)                       | 聊天应用原型     |
-| [debug](packages/debug)                 | 调试工具         |
+| [debug](docs/learning/debug/README.md)  | 调试学习笔记     |
 | [image-process](packages/image-process) | 图像处理实验     |
 | [cpro](packages/cpro)                   | C/C++ 学习与实验 |
 | [rust](packages/rust)                   | Rust 学习与实验  |

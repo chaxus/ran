@@ -71,7 +71,7 @@
 | بسته                                    | توضیح                         |
 | --------------------------------------- | ----------------------------- |
 | [im](packages/im)                       | نمونهٔ اولیهٔ برنامهٔ گفت‌وگو |
-| [debug](packages/debug)                 | ابزارهای اشکال‌زدایی          |
+| [debug](docs/learning/debug/README.md)  | یادداشت‌های اشکال‌زدایی       |
 | [image-process](packages/image-process) | آزمایش‌های پردازش تصویر       |
 | [cpro](packages/cpro)                   | یادگیری و آزمودن C/C++        |
 | [rust](packages/rust)                   | یادگیری و آزمودن Rust         |

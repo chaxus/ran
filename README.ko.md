@@ -71,7 +71,7 @@
 | 패키지                                  | 설명               |
 | --------------------------------------- | ------------------ |
 | [im](packages/im)                       | 채팅 앱 프로토타입 |
-| [debug](packages/debug)                 | 디버깅 유틸리티    |
+| [debug](docs/learning/debug/README.md)  | 디버깅 학습 노트   |
 | [image-process](packages/image-process) | 이미지 처리 실험   |
 | [cpro](packages/cpro)                   | C/C++ 학습과 실험  |
 | [rust](packages/rust)                   | Rust 학습과 실험   |
