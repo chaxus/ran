@@ -1,0 +1,17 @@
+{
+  "installationBytes": 75000000,
+  "packages": {
+    "ranuts": {
+      "archiveBytes": 600000,
+      "unpackedBytes": 1900000
+    },
+    "@alixex/ranview": {
+      "archiveBytes": 65000,
+      "unpackedBytes": 200000
+    },
+    "ranui": {
+      "archiveBytes": 12000000,
+      "unpackedBytes": 42000000
+    }
+  }
+}
