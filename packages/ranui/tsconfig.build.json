@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["./typings.d.ts", "node"]
+  },
+  "include": ["*.ts", "components/**/*.ts", "utils/**/*.ts"],
+  "exclude": [
+    "node_modules/**",
+    "dist/**",
+    "test/**",
+    "demo/**",
+    "bin/**",
+    "build/**",
+    "plugins/**",
+    "vite.config.ts",
+    "vitest.config*.ts",
+    "playwright.config.ts"
+  ]
+}

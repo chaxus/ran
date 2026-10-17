@@ -23,8 +23,7 @@ for (const [path, svg] of Object.entries(modules)) {
     .split('/')
     .pop()
     ?.replace(/\.svg$/, '');
-  // `sprite.svg` is a combined sheet, not an individually named icon.
-  if (name && name !== 'sprite') builtinIcons[name] = svg;
+  if (name) builtinIcons[name] = svg;
 }
 
 /** Registered names available after {@link registerBuiltinIcons} runs. */

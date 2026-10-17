@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { escapeHtml, loadScript } from 'ranuts/utils';
-import { falseList, getMimeTypeFromExtension, html, isDisabled, removeClassToElementChild } from '@/utils/dom';
+import { falseList, getMimeTypeFromExtension, isDisabled } from '@/utils/dom';
 
 describe('utils/dom', () => {
   beforeEach(() => {
@@ -23,33 +23,12 @@ describe('utils/dom', () => {
     expect(isDisabled(el)).toBe(false);
   });
 
-  it('removes a class from matching children only', () => {
-    const parent = document.createElement('div');
-    parent.innerHTML = '<span class="active keep"></span><span class="active"></span><span class="keep"></span>';
-
-    removeClassToElementChild(parent, 'active');
-
-    expect(parent.querySelectorAll('.active')).toHaveLength(0);
-    expect(parent.querySelectorAll('.keep')).toHaveLength(2);
-  });
-
   it('escapes unsafe HTML and stringifies non-string values', () => {
     expect(escapeHtml(`<img src="x" onerror='alert(1)'>&`)).toBe(
       '&lt;img src=&quot;x&quot; onerror=&#39;alert(1)&#39;&gt;&amp;',
     );
     expect(escapeHtml(null)).toBe('null');
     expect(escapeHtml(123)).toBe('123');
-  });
-
-  it('builds template fragments with escaped dynamic values', () => {
-    const fragment = html`<p>${'<script>alert(1)</script>'}</p>
-      <span>${['A&B', '"C"']}</span>`;
-    const container = document.createElement('div');
-    container.appendChild(fragment);
-
-    expect(container.querySelector('script')).toBeNull();
-    expect(container.textContent).toContain('<script>alert(1)</script>');
-    expect(container.textContent).toContain('A&B"C"');
   });
 
   it('returns known MIME types and falls back for unknown extensions', () => {

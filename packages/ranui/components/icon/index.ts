@@ -80,8 +80,7 @@ for (const [filePath, loader] of Object.entries(builtinIconLoaders)) {
     .split('/')
     .pop()
     ?.replace(/\.svg$/, '');
-  // `sprite.svg` is a combined sheet, not an individually named icon.
-  if (name && name !== 'sprite') builtinIconLoaderByName[name] = loader;
+  if (name) builtinIconLoaderByName[name] = loader;
 }
 
 /**
