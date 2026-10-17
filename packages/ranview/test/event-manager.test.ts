@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
 import { EventManager } from '../src/index.ts';
+import { EventManager as OwnerEventManager } from 'ranuts/utils';
 
 /**
  * `EventManager` creates its AbortController on first use rather than up front, so these
@@ -9,6 +10,10 @@ import { EventManager } from '../src/index.ts';
  * aborted controller would leave every later listener dead on arrival with nothing thrown.
  */
 describe('EventManager', () => {
+  it('shares the listener runtime with ranuts', () => {
+    expect(EventManager).toBe(OwnerEventManager);
+  });
+
   it('registers a listener and removes it on abort', () => {
     const target = document.createElement('div');
     const handler = vi.fn();
