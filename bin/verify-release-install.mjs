@@ -44,6 +44,19 @@ try {
     const manifest = JSON.parse(await readFile(join(installed, 'package.json'), 'utf8'));
     assert.equal(manifest.version, pkg.version);
     assert.equal(manifest.engines.node, '>=24.0.0');
+    if (pkg.name === 'ranuts') {
+      const license = await readFile(join(installed, 'dist/third-party/jschardet/LICENSE.txt'), 'utf8');
+      const notice = await readFile(join(installed, 'dist/third-party/jschardet/NOTICE.txt'), 'utf8');
+      const dependency = JSON.parse(await readFile(join(fixture, 'node_modules/jschardet/package.json'), 'utf8'));
+      assert.equal(license, await readFile(join(fixture, 'node_modules/jschardet/LICENSE'), 'utf8'));
+      assert.ok(notice.includes(`jschardet@${dependency.version}`));
+      assert.ok(notice.includes('Netscape Communications Corporation'));
+      for (const name of ['index', 'utils']) {
+        const bundle = await readFile(join(installed, `dist/iife/${name}.iife.js`), 'utf8');
+        assert.ok(bundle.startsWith(`/*! Bundled dependency: jschardet@${dependency.version}`));
+        assert.ok(bundle.includes('../third-party/jschardet/NOTICE.txt'));
+      }
+    }
     if (pkg.name === 'ranui') {
       for (const name of ['dashjs', 'mpegts.js']) {
         assert.ok(

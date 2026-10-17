@@ -8,3 +8,4 @@ $bin/vite build -c ./build/build.iife.ts
 $bin/vite build -c ./build/build.iife.utils.ts
 $bin/tsc --declaration --emitDeclarationOnly --outDir ./dist --project tsconfig.build.json
 node ../../bin/prepare-declarations.mjs dist src
+node ./bin/copy-bundled-notices.mjs

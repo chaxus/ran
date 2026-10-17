@@ -1,7 +1,7 @@
 /** Verify the tarball in a consumer with no repository paths or skipLibCheck. Build first. */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from 'node:fs/promises';
+import { access, mkdtemp, mkdir, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -19,6 +19,15 @@ try {
   const installed = join(fixture, 'node_modules', 'ranuts');
   await mkdir(installed, { recursive: true });
   run('tar', ['-xzf', join(fixture, packed.filename), '--strip-components=1', '-C', installed]);
+  for (const file of ['LICENSE.txt', 'NOTICE.txt']) {
+    const target = join(installed, 'dist/third-party/jschardet', file);
+    await assert.doesNotReject(access(target), `Packed IIFEs must include upstream ${file}`);
+    const text = await readFile(target, 'utf8');
+    assert.match(
+      text,
+      file === 'LICENSE.txt' ? /GNU LESSER GENERAL PUBLIC LICENSE/ : /Netscape Communications Corporation/,
+    );
+  }
   await symlink(join(root, 'node_modules', 'jschardet'), join(fixture, 'node_modules', 'jschardet'), 'junction');
   await symlink(join(root, 'node_modules', '@types'), join(fixture, 'node_modules', '@types'), 'junction');
   await writeFile(join(fixture, 'package.json'), '{"type":"module"}');
