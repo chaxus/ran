@@ -1,27 +1,39 @@
 /* Teaching illustrations are schematics, not new component surfaces or density defaults. */
 .ran-design-illustrations {
-  margin-block: var(--ran-space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-6);
+  margin: 0;
 }
 .ran-design-illustrations .ran-design-note {
+  margin: 0;
   color: var(--ran-color-text-secondary);
   font-size: var(--ran-text-copy-2);
 }
 .ran-design-illustrations .ran-design-figure {
+  display: grid;
+  /* Artwork and caption wrap by their available column, not the viewport. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  align-items: center;
+  gap: var(--ran-space-6);
   margin: 0;
-  margin-block: var(--ran-space-8);
 }
 .ran-design-illustrations figcaption h3 {
   margin-block: 0 var(--ran-space-2);
 }
 .ran-design-illustrations figcaption p {
-  margin-block: 0 var(--ran-space-4);
+  margin-block: 0 var(--ran-space-3);
 }
 .ran-design-illustrations figcaption code {
   display: block;
-  width: fit-content;
   max-width: 100%;
-  overflow-wrap: anywhere;
-  margin-block-end: var(--ran-space-4);
+  padding: 0;
+  background: none;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-2);
+}
+.ran-design-illustrations figcaption code span {
+  white-space: nowrap;
 }
 .ran-design-illustrations .ran-design-canvas {
   min-width: 0;
@@ -30,44 +42,4 @@
   display: block;
   width: 100%;
   height: auto;
-  max-height: 320px;
-}
-.ran-design-illustrations .ran-design-tools {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--ran-space-4);
-  margin-block-start: var(--ran-space-2);
-  font-size: var(--ran-text-label-2);
-}
-.ran-design-illustrations .ran-design-tools button {
-  display: inline-grid;
-  min-block-size: var(--ran-size-7);
-  border: 0;
-  border-radius: var(--ran-radius-sm);
-  padding: var(--ran-space-1) var(--ran-space-2);
-  background: transparent;
-  color: var(--ran-color-text);
-  font: inherit;
-  cursor: pointer;
-}
-.ran-design-illustrations .ran-design-tools button:hover:enabled {
-  background: var(--ran-color-bg-hover);
-}
-.ran-design-illustrations .ran-design-tools button:focus-visible {
-  outline: 2px solid var(--ran-color-link);
-  outline-offset: 2px;
-}
-/* All normal labels share one intrinsic grid cell; only the current label is visible. */
-.ran-design-illustrations .ran-design-tools button span {
-  grid-area: 1 / 1;
-}
-.ran-design-illustrations .ran-design-tools button [aria-hidden] {
-  visibility: hidden;
-}
-.ran-design-illustrations [data-reduced-note] {
-  color: var(--ran-color-text-secondary);
-}
-.ran-design-illustrations .ran-design-tools button[hidden] {
-  display: none;
 }

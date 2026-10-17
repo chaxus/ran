@@ -6,9 +6,10 @@ editor does not need queues, account connections or version history by default.
 [CODING.md](./CODING.md) owns component engineering. These are host application decisions,
 not additional ranui APIs, storage guarantees or bundled services.
 
-For each selected recipe, establish the host contract before choosing controls. Views project state
-and dispatch commands; keep job lifecycle, configuration, source context and revisions owned rather
-than duplicating service clients and request flags in each panel.
+For each selected recipe, establish what the application supports before choosing controls. Keep
+the state for jobs, configuration, selected sources and revisions in their existing owners. Views
+read that state and dispatch commands instead of duplicating service clients and request flags
+in each panel.
 
 ## 1. Batch work and queues
 

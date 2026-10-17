@@ -269,7 +269,7 @@ transition: var(--ran-input-transition, none);
 
 - **Buttons:** name the outcome. Include the object when context does not establish it: "Deploy project", "Delete member". In a clearly named object or dialog, "Save" or "Delete" is sufficient; avoid generic "OK". See [contextual wording](#words-are-part-of-the-interface).
 - **Errors:** say **what happened**, then **how to fix it**. ✅ "Build failed: the bundle exceeds the size limit. Reduce it or raise the limit." ❌ "Operation failed, please try again."
-- **Confirmations / toasts:** state the **change**, not "success". ✅ "Project deleted". ❌ "Successfully deleted" (the toast appearing already implies success).
+- **Confirmations / toasts:** state the completed **change**. ✅ "Project deleted". ❌ "Operation successful". Show completion feedback only after the operation is confirmed.
 - Be specific; every sentence should remove guesswork, not add it.
 
 ---
@@ -621,9 +621,10 @@ can sit within a larger native button. Measure the actual clickable box, focus r
 Choose target sizes for the product's input and accessibility needs; do not copy one application's
 control dimensions into every library component.
 
-Where repeated roles warrant a density layer, define host-owned semantic aliases once, derived from
-real foundation tokens. This native-command example is application CSS, not an extra `--ran-*` API
-or a universal target-size prescription. Style custom elements through generated variables/parts.
+When the same control role repeats, an application can define a shared semantic alias derived from
+foundation tokens. The example below uses `--ran-size-7` (32px) for a native button’s clickable area.
+A touch interface may need a larger value. These `--app-*` aliases belong to the application.
+For ranui components, use the variables and parts listed in their generated API.
 
 ```css
 .workspace {

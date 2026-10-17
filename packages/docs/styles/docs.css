@@ -63,9 +63,7 @@
   --header-h: 60px;
   --sidebar-w: 272px;
   --toc-w: 224px;
-  /* rem, not em: `em` resolves against the element's own font-size, so the 18.5px deck
-     would get a *wider* line than 16px body text — the larger the type, the longer the
-     line, which is backwards. */
+  /* A shared reading measure stays independent of each text role’s font size. */
   --measure: 44rem;
   --pad: var(--ran-space-4, 16px);
 
@@ -700,20 +698,18 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .toc {
   display: none;
   position: sticky;
-  top: calc(var(--header-h) + 28px);
+  top: calc(var(--header-h) + var(--ran-space-8));
   max-height: calc(100vh - var(--header-h) - 56px);
   overflow-y: auto;
-  padding-inline-start: 16px;
+  padding-inline-start: var(--ran-space-4);
   border-inline-start: 1px solid var(--rule);
-  font-size: 13.5px;
+  font-size: var(--ran-text-label-2);
 }
 .toc__label {
-  margin: 0 0 8px;
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
+  margin: 0 0 var(--ran-space-2);
+  font-size: var(--ran-text-label-3);
+  font-weight: var(--ran-text-label-weight);
+  color: var(--fg-muted);
 }
 .toc__list {
   list-style: none;
@@ -721,10 +717,10 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--ran-space-1);
 }
 .toc__item--h3 {
-  padding-inline-start: 12px;
+  padding-inline-start: var(--ran-space-3);
 }
 .toc__link {
   display: block;
@@ -769,7 +765,9 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .prose {
   /* Named because it is referenced again: a child that has to cancel this gap must use
      the same value, and two hand-copied numbers drift. */
-  --prose-gap: 1.1em;
+  --prose-gap: var(--ran-space-4);
+  font-size: var(--ran-text-copy-1);
+  font-weight: var(--ran-text-copy-weight);
   display: flex;
   flex-direction: column;
   gap: var(--prose-gap);
@@ -795,48 +793,40 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   margin: 0;
 }
 
-/*
- * The sentence under the title is the page's deck, and it was set at body size in body
- * colour — so the title stood alone and the first thing a reader met was an undifferentiated
- * wall. Giving it one step of size and one step down in colour builds the hierarchy out of
- * type rather than out of another box, which is what §11 asks for.
- */
+/* The deck introduces the topic quietly; section rhythm comes from type and space. */
 .prose > h1 + p {
-  font-size: 18.5px;
-  line-height: 1.65;
   color: var(--fg-muted);
   text-wrap: pretty;
 }
 
 .prose h1 {
-  margin: 0 0 0.2em;
-  font-size: clamp(29px, 4vw, 38px);
-  font-weight: 700;
-  line-height: 1.22;
-  letter-spacing: -0.022em;
+  margin: 0;
+  font-size: clamp(var(--ran-text-heading-2), 4vw, var(--ran-text-heading-1));
+  font-weight: var(--ran-text-heading-weight);
+  line-height: 1.25;
+  letter-spacing: var(--ran-text-heading-tracking);
   text-wrap: balance;
 }
 .prose h2,
 .prose h3,
 .prose h4 {
-  margin: 0.8em 0 -0.2em;
+  margin: 0;
+  font-weight: var(--ran-text-heading-weight);
   line-height: 1.35;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ran-text-heading-tracking);
   text-wrap: balance;
 }
 .prose h2 {
-  font-size: 24px;
-  font-weight: 650;
-  padding-top: 0.5em;
-  border-top: 1px solid var(--rule);
+  margin-block-start: var(--ran-space-6);
+  font-size: var(--ran-text-heading-2);
 }
 .prose h3 {
-  font-size: 18.5px;
-  font-weight: 650;
+  margin-block-start: var(--ran-space-4);
+  font-size: var(--ran-text-heading-3);
 }
 .prose h4 {
-  font-size: 16px;
-  font-weight: 650;
+  margin-block-start: var(--ran-space-2);
+  font-size: var(--ran-text-heading-4);
 }
 
 .prose .anchor {
@@ -892,9 +882,6 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .prose :not(pre) > code {
   font-family: var(--font-mono);
   font-size: 0.875em;
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
-  background: var(--bg-soft);
   /* `overflow-wrap`, not `word-break`: this breaks a token only when it genuinely
      cannot fit, instead of breaking every long identifier mid-word. */
   overflow-wrap: break-word;
@@ -930,7 +917,8 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   top: 8px;
   inset-inline-end: 0;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: var(--ran-text-label-3);
+  font-weight: var(--ran-text-label-weight);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fg-faint);
@@ -938,10 +926,12 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 }
 .prose figure.code pre {
   margin: 0;
-  padding: 18px 0;
+  /* The language label exists before JavaScript adds the copy command. */
+  padding: var(--ran-space-8) 0 var(--ran-space-4);
   overflow-x: auto;
   font-family: var(--font-mono);
-  font-size: 13.5px;
+  font-size: var(--ran-text-copy-2);
+  font-weight: var(--ran-text-mono-weight-regular);
   line-height: 1.7;
   background: transparent !important;
 }
@@ -1026,7 +1016,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   border-collapse: collapse;
   width: max-content;
   min-width: 100%;
-  font-size: 14.5px;
+  font-size: var(--ran-text-copy-2);
 }
 .prose td code,
 .prose th code {
@@ -1036,12 +1026,18 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .prose th,
 .prose td {
   text-align: start;
-  padding: 10px 16px;
+  padding: var(--ran-space-2) var(--ran-space-4);
   border-bottom: 1px solid var(--rule);
   vertical-align: top;
 }
+.prose :is(th, td):first-child {
+  padding-inline-start: 0;
+}
+.prose :is(th, td):last-child {
+  padding-inline-end: 0;
+}
 .prose th {
-  font-weight: 600;
+  font-weight: var(--ran-text-label-weight);
   color: var(--fg-muted);
   background: transparent;
   border-bottom-color: var(--rule-strong);
@@ -1105,6 +1101,7 @@ ran-demo:has(+ figure.code) {
    loses and the code sits flush against the box edge. */
 .prose ran-demo + figure.code pre,
 .prose .code-group figure.code pre {
+  padding-block-start: var(--ran-space-4);
   padding-inline: 20px;
 }
 
@@ -1244,11 +1241,7 @@ ran-demo p {
 
 @media (max-width: 620px) {
   :root {
-    --pad: 16px;
-  }
-  .prose figure.code pre {
-    padding: 15px 16px;
-    font-size: 13px;
+    --pad: var(--ran-space-4);
   }
   .pager {
     grid-template-columns: 1fr;
@@ -1347,7 +1340,8 @@ body.drawer-open {
 }
 .prose .code-group figure.code::after,
 .prose ran-demo + figure.code::after {
-  inset-inline-start: 20px;
+  /* Source already belongs to its demo or named code-group pane. */
+  content: none;
 }
 .prose figure.code:has(.code-copy) pre {
   padding-top: var(--ran-space-8, 32px);

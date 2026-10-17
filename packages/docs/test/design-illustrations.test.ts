@@ -20,7 +20,7 @@ it('renders meaningful static schematics using foundation geometry, with no scri
   expect(document.querySelectorAll('figure')).toHaveLength(3);
   expect(document.querySelectorAll('script, r-button, r-input')).toHaveLength(0);
   for (const svg of document.querySelectorAll('svg[role="img"]')) expect(svg.getAttribute('aria-label')).toBeTruthy();
-  for (const button of document.querySelectorAll('button')) expect(button.hidden).toBe(true);
+  expect(document.querySelectorAll('button, a, input, [tabindex], [data-reduced-note]')).toHaveLength(0);
   const outer = document.querySelector('[data-radius-outer]')!;
   const inner = document.querySelector('[data-radius-inner]')!;
   expect(Number(outer.getAttribute('rx'))).toBe(px('--ran-radius-lg'));
@@ -35,8 +35,6 @@ it('renders meaningful static schematics using foundation geometry, with no scri
   expect(
     [...document.querySelectorAll('[data-alignment-text]')].every((line) => line.getAttribute('x1') === spine),
   ).toBe(true);
-  expect(document.body.textContent).toContain('separate object');
-  expect(document.body.textContent).toContain('host example');
 });
 
 it('covers every locale and exports three self-contained themed SVGs per language', () => {
@@ -45,9 +43,16 @@ it('covers every locale and exports three self-contained themed SVGs per languag
   for (const locale of LOCALES) {
     document.body.innerHTML = renderDesignIllustrations(locale);
     expect(document.querySelectorAll('figure')).toHaveLength(3);
-    expect(document.querySelector('button')!.dataset.play).toBeTruthy();
-    expect(document.querySelector('button')!.dataset.reduced).toBeTruthy();
-    expect(document.querySelectorAll('a[download]')).toHaveLength(3);
+    expect(document.querySelectorAll('button, a, [tabindex], [data-reduced-note]')).toHaveLength(0);
+    expect(document.querySelector('#design-illustrations')).toBeTruthy();
+    const ids = new Set<string>();
+    for (const figure of document.querySelectorAll('figure')) {
+      expect(figure.id).toMatch(/^design-illustration-(alignment|radius|density)$/);
+      const heading = figure.querySelector('h3')!;
+      expect(heading.id).toBe(`${figure.id}-title`);
+      expect(ids.has(heading.id)).toBe(false);
+      ids.add(heading.id);
+    }
   }
   for (const [name, svg] of files) {
     const parsed = new DOMParser().parseFromString(svg, 'image/svg+xml');
@@ -59,107 +64,114 @@ it('covers every locale and exports three self-contained themed SVGs per languag
     expect(svg).toContain('prefers-color-scheme: dark');
     expect(svg).toContain('prefers-reduced-motion: reduce');
     expect(svg).toContain('--ran-color-text:');
-    expect(svg).not.toMatch(/<script|https?:\/\/(?!www\.w3\.org)|animation[^;}]*infinite/);
+    expect(svg).not.toMatch(/<script|https?:\/\/(?!www\.w3\.org)/);
+    expect(svg).toContain('animation-iteration-count:infinite');
   }
 });
 
-const setup = (reduced = false) => {
-  vi.useFakeTimers();
+const setup = (reduced = false, supported = true) => {
   const motion = new EventTarget() as MediaQueryList;
   Object.defineProperty(motion, 'matches', { value: reduced, writable: true });
   vi.stubGlobal('matchMedia', () => motion);
+  const observe = vi.fn();
+  const disconnect = vi.fn();
+  let notify!: IntersectionObserverCallback;
+  const observer = { observe, disconnect } as unknown as IntersectionObserver;
+  const createObserver = vi.fn(function (callback: IntersectionObserverCallback) {
+    notify = callback;
+    return observer;
+  });
+  vi.stubGlobal('IntersectionObserver', supported ? createObserver : undefined);
   document.body.innerHTML = renderDesignIllustrations(rootLocale);
   const stop = mountDesignIllustrations();
-  const figure = document.querySelector<HTMLElement>('figure')!;
-  const button = figure.querySelector<HTMLButtonElement>('button')!;
-  return { figure, button, motion, stop };
+  const figures = [...document.querySelectorAll<HTMLElement>('figure')];
+  const canvases = figures.map((figure) => figure.querySelector('.ran-design-canvas')!);
+  const enter = (index: number, isIntersecting = true, intersectionRatio = 1) =>
+    notify([{ target: canvases[index], isIntersecting, intersectionRatio } as IntersectionObserverEntry], observer);
+  return { figures, canvases, motion, stop, enter, observe, disconnect, createObserver };
+};
+const setReduced = (motion: MediaQueryList, reduced: boolean) => {
+  Object.defineProperty(motion, 'matches', { value: reduced });
+  motion.dispatchEvent(new Event('change'));
 };
 
-it('is opt-in, pauses and resumes the same finite sequence, then offers replay', () => {
-  const { figure, button, stop } = setup();
-  expect(button.hidden).toBe(false);
-  expect(figure.dataset.state).toBe('idle');
-  button.focus();
-  button.click();
-  expect(figure.dataset.state).toBe('playing');
-  expect(button.querySelector('[data-play-label]')!.textContent).toBe(button.dataset.pause);
-  vi.advanceTimersByTime(1500);
-  button.click();
-  expect(figure.dataset.state).toBe('paused');
-  vi.advanceTimersByTime(5000);
-  figure.querySelector('.di-motion')!.dispatchEvent(new Event('animationend', { bubbles: true }));
-  expect(figure.dataset.state).toBe('paused');
-  button.click();
-  vi.advanceTimersByTime(4000);
-  expect(figure.dataset.state).toBe('playing');
-  figure.querySelector('.di-motion')!.dispatchEvent(new Event('animationend', { bubbles: true }));
-  expect(figure.dataset.state).toBe('finished');
-  expect(button.querySelector('[data-play-label]')!.textContent).toBe(button.dataset.replay);
-  expect(document.activeElement).toBe(button);
-  button.click();
-  expect(figure.dataset.state).toBe('playing');
-  stop();
-  expect(vi.getTimerCount()).toBe(0);
-});
-
-it('uses static text for reduced motion and restores focus only when the hidden command owned it', () => {
-  const { figure, button, motion, stop } = setup(true);
-  const note = figure.querySelector<HTMLElement>('[data-reduced-note]')!;
-  expect(button.hidden).toBe(true);
-  expect(note.hidden).toBe(false);
-  expect(note.textContent).toBeTruthy();
-  Object.defineProperty(motion, 'matches', { value: false });
-  motion.dispatchEvent(new Event('change'));
-  expect(button.hidden).toBe(false);
-  expect(note.hidden).toBe(true);
-  expect(document.activeElement).not.toBe(button);
-  button.focus();
-  button.click();
-  Object.defineProperty(motion, 'matches', { value: true });
-  motion.dispatchEvent(new Event('change'));
-  expect(figure.dataset.state).toBe('idle');
-  expect(button.hidden).toBe(true);
-  expect(document.activeElement).toBe(note);
-  figure.querySelector('.di-motion')!.dispatchEvent(new Event('animationend', { bubbles: true }));
-  expect(figure.dataset.state).toBe('idle');
-  Object.defineProperty(motion, 'matches', { value: false });
-  motion.dispatchEvent(new Event('change'));
-  expect(document.activeElement).toBe(button);
-  const link = figure.querySelector('a')!;
-  link.focus();
-  Object.defineProperty(motion, 'matches', { value: true });
-  motion.dispatchEvent(new Event('change'));
-  expect(document.activeElement).toBe(link);
+it('runs independent instructional loops in view and pauses them outside the viewport', () => {
+  const { figures, canvases, enter, observe, createObserver, stop } = setup();
+  expect(createObserver).toHaveBeenCalledTimes(1);
+  expect(observe.mock.calls.map(([element]) => element)).toEqual(canvases);
+  expect(figures.every((figure) => figure.dataset.state !== 'playing')).toBe(true);
+  enter(0, false);
+  expect(figures[0].dataset.state).toBeUndefined();
+  enter(0);
+  expect(figures[0].dataset.state).toBe('playing');
+  expect(figures[1].dataset.state).toBeUndefined();
+  enter(0, false);
+  expect(figures[0].dataset.state).toBe('paused');
+  enter(1);
+  expect(figures[1].dataset.state).toBe('playing');
+  expect(figures[2].dataset.state).toBeUndefined();
+  enter(0);
+  enter(0);
+  expect(figures[0].dataset.state).toBe('playing');
+  enter(1, false);
+  expect(figures[1].dataset.state).toBe('paused');
   stop();
 });
 
-it('keeps a contextual native command with intrinsic reservations for every localized playback label', () => {
-  for (const locale of LOCALES) {
-    document.body.innerHTML = renderDesignIllustrations(locale);
-    expect(document.querySelector('#design-illustrations')).toBeTruthy();
-    const ids = new Set<string>();
-    for (const figure of document.querySelectorAll('figure')) {
-      expect(figure.id).toMatch(/^design-illustration-(alignment|radius|density)$/);
-      const button = figure.querySelector('button')!;
-      const description = document.getElementById(button.getAttribute('aria-describedby')!);
-      expect(description).toBe(figure.querySelector('h3'));
-      expect(ids.has(description!.id)).toBe(false);
-      ids.add(description!.id);
-      expect([...button.querySelectorAll('[aria-hidden="true"]')].map((span) => span.textContent)).toEqual([
-        button.dataset.play,
-        button.dataset.pause,
-        button.dataset.resume,
-        button.dataset.replay,
-      ]);
-      expect(button.querySelectorAll('[data-play-label]')).toHaveLength(1);
-    }
-  }
-  const { button, stop } = setup();
-  const reserves = [...button.querySelectorAll('[aria-hidden="true"]')];
-  button.click();
-  button.click();
-  expect([...button.querySelectorAll('[aria-hidden="true"]')]).toEqual(reserves);
+it('shows the complete static diagram for reduced motion and follows visibility when restored', () => {
+  const { figures, motion, enter, stop } = setup(true);
+  enter(0);
+  expect(figures[0].dataset.state).toBeUndefined();
+  setReduced(motion, false);
+  expect(figures[0].dataset.state).toBe('playing');
+  enter(1);
+  expect(figures[1].dataset.state).toBe('playing');
+  setReduced(motion, true);
+  expect(figures.every((figure) => figure.dataset.state === undefined)).toBe(true);
+  enter(0, false);
+  setReduced(motion, false);
+  expect(figures[0].dataset.state).toBeUndefined();
+  expect(figures[1].dataset.state).toBe('playing');
+  expect(figures[2].dataset.state).toBeUndefined();
   stop();
+});
+
+it('preserves complete static diagrams when observation is unavailable', () => {
+  const { figures, createObserver, stop } = setup(false, false);
+  expect(createObserver).not.toHaveBeenCalled();
+  expect(figures.every((figure) => figure.dataset.state !== 'playing')).toBe(true);
+  expect(document.querySelectorAll('.di-motion')).toHaveLength(4);
+  stop();
+});
+
+it('does not duplicate observers or steal focus and disposes pending callbacks', () => {
+  const { figures, enter, motion, createObserver, disconnect, stop } = setup();
+  const focus = document.createElement('button');
+  document.body.append(focus);
+  focus.focus();
+  const secondStop = mountDesignIllustrations();
+  expect(createObserver).toHaveBeenCalledTimes(1);
+  enter(0);
+  secondStop();
+  expect(figures[0].dataset.state).toBe('playing');
+  setReduced(motion, true);
+  setReduced(motion, false);
+  expect(document.activeElement).toBe(focus);
+  stop();
+  expect(disconnect).toHaveBeenCalledOnce();
+  expect(figures.every((figure) => figure.dataset.state === undefined)).toBe(true);
+  enter(1);
+  expect(figures[1].dataset.state).toBeUndefined();
+  setReduced(motion, true);
+  expect(document.activeElement).toBe(focus);
+  const remountStop = mountDesignIllustrations();
+  enter(0);
+  expect(figures[0].dataset.state).toBeUndefined();
+  setReduced(motion, false);
+  expect(figures[0].dataset.state).toBe('playing');
+  stop();
+  expect(figures[0].dataset.state).toBe('playing');
+  remountStop();
 });
 
 it('keeps instructional geometry constant while revealing guides through the existing easing token', () => {
@@ -207,29 +219,14 @@ it('keeps captions and geometry aligned with changed source tokens and ignores c
     );
     document.body.innerHTML = html;
     expect(document.querySelector('[data-radius-outer]')!.getAttribute('rx')).toBe('20');
-    expect(document.body.textContent).toContain('outer radius 20 − inset 4 = inner radius 16');
+    expect(document.body.textContent).toContain('20 − 4 = 16');
     expect(document.querySelector('[data-density-visible]')!.getAttribute('width')).toBe('18');
     expect(document.querySelector('[data-density-target]')!.getAttribute('width')).toBe('34');
-    expect(document.body.textContent).toContain('18px glyph inside a 34px native command');
+    expect(document.body.textContent).toContain('18px');
+    expect(document.body.textContent).toContain('34px');
     expect(standalone).toContain('--ran-blue-900:#47a8ff;');
     expect(standalone).toContain('font-size:var(--ran-text-label-1)');
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
-});
-
-it('does not duplicate event handlers and restores static fallback on cleanup', () => {
-  const { figure, button, stop } = setup();
-  const secondStop = mountDesignIllustrations();
-  button.click();
-  expect(figure.dataset.state).toBe('playing');
-  expect(vi.getTimerCount()).toBe(0);
-  secondStop();
-  stop();
-  expect(button.hidden).toBe(true);
-  expect(figure.dataset.state).toBe('idle');
-  button.click();
-  figure.querySelector('.di-motion')!.dispatchEvent(new Event('animationend', { bubbles: true }));
-  expect(figure.dataset.state).toBe('idle');
-  expect(vi.getTimerCount()).toBe(0);
 });

@@ -1,57 +1,40 @@
-/** Enhance only existing teaching figures; static diagrams remain the no-script default. */
+/** Diagrams explain themselves in view; the unenhanced default is always complete and static. */
 export const mountDesignIllustrations = (): (() => void) => {
   const figures = [...document.querySelectorAll<HTMLElement>('[data-design-illustration]:not([data-enhanced])')];
-  if (!figures.length) return () => {};
+  if (!figures.length || typeof IntersectionObserver === 'undefined') return () => {};
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  const cleanups = figures.map((figure) => {
-    const button = figure.querySelector<HTMLButtonElement>('button')!;
-    const label = button.querySelector<HTMLElement>('[data-play-label]')!;
-    const note = figure.querySelector<HTMLElement>('[data-reduced-note]')!;
-    const state = (next: string): void => {
-      figure.dataset.state = next;
-      label.textContent =
-        button.dataset[
-          next === 'playing' ? 'pause' : next === 'paused' ? 'resume' : next === 'finished' ? 'replay' : 'play'
-        ]!;
-    };
-    const reset = (): void => {
-      const focused = document.activeElement;
-      state('idle');
-      button.hidden = motion.matches;
-      note.hidden = !motion.matches;
-      if (motion.matches && focused === button) note.focus();
-      else if (!motion.matches && focused === note) button.focus();
-    };
-    const click = (): void => {
-      if (motion.matches) return;
-      if (figure.dataset.state === 'playing') state('paused');
-      else {
-        if (figure.dataset.state !== 'paused') {
-          state('idle');
-          // Commit the static state so Replay restarts the finite CSS animation.
-          figure.getBoundingClientRect();
-        }
-        state('playing');
-      }
-    };
-    const end = (event: Event): void => {
-      if (figure.dataset.state === 'playing' && event.target instanceof Element && event.target.matches('.di-motion'))
-        state('finished');
-    };
-    figure.dataset.enhanced = 'true';
-    reset();
-    button.addEventListener('click', click);
-    figure.addEventListener('animationend', end);
-    motion.addEventListener('change', reset);
-    return () => {
-      state('idle');
-      button.hidden = true;
-      note.hidden = true;
-      delete figure.dataset.enhanced;
-      button.removeEventListener('click', click);
-      figure.removeEventListener('animationend', end);
-      motion.removeEventListener('change', reset);
-    };
+  const canvases = new Map(
+    figures.map((figure) => [figure.querySelector('.ran-design-canvas')!, { figure, visible: false }]),
+  );
+  let active = true;
+  const update = (): void => {
+    for (const { figure, visible } of canvases.values()) {
+      if (motion.matches) delete figure.dataset.state;
+      else if (visible) figure.dataset.state = 'playing';
+      else if (figure.dataset.state) figure.dataset.state = 'paused';
+    }
+  };
+  const observer = new IntersectionObserver((entries) => {
+    if (!active) return;
+    for (const entry of entries) {
+      const canvas = canvases.get(entry.target);
+      if (canvas) canvas.visible = entry.isIntersecting;
+    }
+    update();
   });
-  return () => cleanups.forEach((stop) => stop());
+  for (const [canvas, { figure }] of canvases) {
+    figure.dataset.enhanced = 'true';
+    observer.observe(canvas);
+  }
+  motion.addEventListener('change', update);
+  return () => {
+    if (!active) return;
+    active = false;
+    observer.disconnect();
+    motion.removeEventListener('change', update);
+    for (const figure of figures) {
+      delete figure.dataset.state;
+      delete figure.dataset.enhanced;
+    }
+  };
 };

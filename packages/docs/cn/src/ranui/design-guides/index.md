@@ -1,55 +1,52 @@
 ---
-description: '用 ranui 做界面的设计规范：先定角色再由令牌给值，把每一个可达状态都设计到，并以渲染结果验证。'
+description: '使用 ranui 构建界面：根据元素的用途选择设计令牌，覆盖交互状态，并在浏览器中验证实际效果。'
 ---
 
 # Design guidelines 设计规范
 
-用 ranui 组件搭出来的界面，要遵循哪些规则才能读起来像**一套系统**，而不是一堆零件。
+先明确元素的用途和交互状态，再选择对应的设计令牌（token），让颜色、间距和排版保持一致。
 
-本页讲的是**取舍**：该用哪个令牌、上线前该检查什么。令牌清单本身在
-[设计系统](/cn/src/ranui/design-system/)，运行时切换与覆盖在[主题系统](/cn/src/ranui/theme/)。
-在这一切之前，页面该是什么形状，在[信息架构](/cn/src/ranui/information-architecture/)。
-这些规则的完整、可机器校验版本在仓库里：
-[`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md)。
+[设计系统](/cn/src/ranui/design-system/)提供令牌，[主题系统](/cn/src/ranui/theme/)说明运行时覆盖，
+[信息架构](/cn/src/ranui/information-architecture/)负责页面结构。
+本页是统一维护的 [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) 的摘要。
 
-其他问题从简短的
-[界面规范索引](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md) 按职责查阅：
-[交互规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md) 负责可观察的行为，
-[可选工作流模式](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md) 仅用于相关宿主任务。
-视觉规则由统一维护的 [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) 负责；本页仅作摘要，不另建标准。工程规则保留在 CODING。安装后可从 `node_modules/ranui/docs/` 读取这些统一维护的文档，本页不重复规则。
+需要其他方面的规则时，从[界面规范索引](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md)进入：
+输入、焦点和反馈见 [INTERACTION](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md)，
+组件实现见 [CODING](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/CODING.md)。
+只有涉及队列、账号连接等任务时，才需参考[可选工作流模式](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md)。
+安装后也可从 `node_modules/ranui/docs/` 读取这些文档。
 
-> **适用场景**：在用 `<r-*>` 元素排版页面或搭业务组件，需要决定一个颜色、一段间距、一个字号、
-> 一层投影或一个动效时长时。答案永远是同一句：**先确定角色，值交给令牌。**
+> **适用场景**：为 `<r-*>` 界面选择颜色、间距、排版、纵深或动效。
 
 ## 原则
 
-1. **清晰优先于个性。** 主任务和主操作必须一眼可辨，其余才谈得上。
-2. **组合，而不是重造。** 先找 `r-button`、`r-input`、`r-select`、`r-modal`，再考虑用 `div` 拼
-   基础件。组件已经带好了焦点、键盘和 ARIA 行为，自己造就得全部重来一遍。
+1. **清晰优先。** 让用户一眼看懂页面的主要任务，以及下一步该做什么。
+2. **复用已有控件。** 优先使用原生控件，或满足需求的 `r-button`、`r-input`、`r-select`、`r-modal`。
+   保留它们已有的表单、键盘和无障碍行为，避免仅为外观而重新实现。
 3. **只用令牌，不用裸值。** 一个 hex、一个 `20px` 间距、一层手挑的投影，都是不会跟随主题的决定。
-4. **按角色和状态判断，不靠眼睛。**「这段文字是什么角色？」（heading / label / copy / button）有
-   答案；「多大看着舒服？」没有。
+4. **先确定用途，再选择样式。** 先判断是标题、标签、正文还是按钮，再从对应的排版令牌中选择；
+   避免每处都单独试字号和字重。
 5. **把每个可达状态都设计到。** 默认、悬停、激活、聚焦、禁用、加载、空、错误：默认态只是八个状态里
    的一个。
-6. **验证渲染结果。** 浅色**和**暗色、窄屏**和**宽屏、鼠标**和**触摸。代码评审是看不出一层根本没
-   显示出来的投影的。
+6. **在浏览器中验证。** 检查浅色与暗色、窄屏与宽屏、鼠标与触摸。只读代码无法确认投影是否可见，
+   也无法确认控件是否容易操作。
 
 规则冲突时的优先级：**用户目标 → 已验证的证据 → 本规范 → 已落地的模式 → 通用经验。**
 
 ## 选颜色
 
-颜色按**角色与状态**分配，不靠眼睛挑。[状态阶梯](/cn/src/ranui/design-system/#the-ladder)已经
-固定了悬停和激活长什么样，你要做的是说清角色。
+先确定颜色用于背景、文字、操作还是状态，再选择对应的语义令牌。
+[状态阶梯](/cn/src/ranui/design-system/#the-ladder)提供悬停和按下状态的取值。
 
-| 这个元素是……           | 用                                                             |
-| ---------------------- | -------------------------------------------------------------- |
-| 页面或表面的背景       | `--ran-color-bg` / `-bg-subtle` / `-bg-elevated` / `-bg-muted` |
-| 指针悬停 / 正在按下    | `--ran-color-bg-hover` / `-bg-active`                          |
-| 文字                   | `--ran-color-text` / `-text-secondary` / `-text-disabled`      |
-| 边框                   | `--ran-color-border` / `-hover` / `-active`                    |
-| 这个界面存在的那个操作 | `--ran-color-primary`（其上文字用 `--ran-color-primary-text`） |
-| 状态                   | `--ran-color-success` / `-warning` / `-danger`                 |
-| 链接                   | `--ran-color-link`                                             |
+| 这个元素是……        | 用                                                             |
+| ------------------- | -------------------------------------------------------------- |
+| 页面或表面的背景    | `--ran-color-bg` / `-bg-subtle` / `-bg-elevated` / `-bg-muted` |
+| 指针悬停 / 正在按下 | `--ran-color-bg-hover` / `-bg-active`                          |
+| 文字                | `--ran-color-text` / `-text-secondary` / `-text-disabled`      |
+| 边框                | `--ran-color-border` / `-hover` / `-active`                    |
+| 页面主操作          | `--ran-color-primary`（其上文字用 `--ran-color-primary-text`） |
+| 状态                | `--ran-color-success` / `-warning` / `-danger`                 |
+| 链接                | `--ran-color-link`                                             |
 
 **每个色彩语义只有一个含义。** 主操作是无彩色的（浅色主题黑底白字，暗色主题白底黑字），所以别拿
 蓝色当主色，蓝色属于链接和聚焦环。绿色是成功、琥珀是警告、红色是危险；红色一旦用作强调，就没法
@@ -72,16 +69,16 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 - 组与组之间 **16px**。
 - 区块之间 **32–40px**。
 
-不要自创 `20px`、`28px`。档位有限才有节奏，一处越界就破坏了它。跨区域保持共享的「基线」（对齐的
-边缘、基线和栏位），并用渲染出来的像素去核对，而不是靠肉眼。
+不要自创 `20px`、`28px`。档位有限才有节奏，一处越界就破坏了它。跨区域也应保持文字起点、内容边缘和操作列对齐，
+并在浏览器中检查实际位置。
 
 ## 选排版
 
 先问这段文字是什么**角色**（heading、label、copy、button、mono），字体、字号、字重、行高就从
 [排版尺度](/cn/src/ranui/design-system/#typography)里跟着定了，不要逐处挑 px。
 
-角色是工具而非法条：真正一次性的装饰文字（播放器手势闪烁提示、激活链接的字重微调）与其硬塞进最接近
-的角色，不如给它一个自己的组件令牌。
+现有排版角色无法表达的特殊用途，如播放器的短暂手势提示，可以使用独立的组件令牌。
+先确认确有差异，再添加例外。
 
 ## 纵深：投影与层级
 
@@ -129,15 +126,15 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 悬停 → `bg-hover` / `border-hover`；激活 → `bg-active`；禁用 → 禁用语义令牌；仅在需要且仍清晰可读时降低不透明度；
 聚焦 → 聚焦环。
 
-不可交互的东西不能长得像可交互。`r-card` 只有加了 `hoverable` 才响应悬停，不能点击的卡片就别加。
+不可点击的内容不应显示点击反馈。`r-card` 仅在可交互时使用 `hoverable`，避免悬停效果误导用户。
 
 文案同样是系统的一部分：
 
 - **按钮**说明操作结果。上下文未明确对象时写「删除成员」；已点明对象的对话框可用「删除」，避免含糊的「确定」。
 - **错误**先说发生了什么，再说怎么办。✅「构建失败：产物超过体积上限。请精简产物或调高上限。」
   ❌「操作失败，请重试。」
-- **确认与提示**陈述变化，而不是「成功」。✅「项目已删除」 ❌「删除成功」。提示能弹出来本身就说明
-  成功了。
+- **确认与提示**说明已完成的变化。✅「项目已删除」 ❌「操作成功」。只有确认操作已完成后，
+  才能展示完成提示。
 - 让上下文消除冗余：标题已经是「删除项目」的对话框，按钮不需要再叫「永久删除该项目」。
 
 ## 无障碍 {#accessibility}
@@ -175,8 +172,12 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 display 规则、引用未声明令牌的兜底、组件查询自己的 shadow 树、以及在构造函数之外构建 shadow 树。
 已知的违例记录在基线文件里并单向收紧：新增会失败，修好后再被悄悄改回去也会失败。
 
-这道闸门覆盖的是组件库而不是你的应用；但它抓的那些失效方式（兜底引用了不存在的令牌、颜色只在浅色
-下成立）恰恰是评审时看起来完全正常的那些，所以同样值得用在你自己的 CSS 上。
+这些检查只扫描命令配置的源码范围，不会自动检查使用 ranui 的外部应用。本仓库的文档站等页面另有对应检查。
+应用开发者仍需使用自己项目的检查命令，并在浏览器中确认布局、主题和交互是否正确。
+
+## 设计图解 {#design-examples}
+
+<DesignIllustrations />
 
 ## 上线前的检查清单
 
@@ -187,9 +188,7 @@ display 规则、引用未声明令牌的兜底、组件查询自己的 shadow �
 - [ ] **鼠标与触摸**都可用；任何悬停触发都有点按兜底。
 - [ ] 受影响的状态都验证过：悬停、激活、聚焦、禁用、加载、空、错误。
 - [ ] 键盘与焦点验证过；焦点处处可见。
-- [ ] 边界情况：长文本、大数字、宿主支持的语言。
+- [ ] 边界情况：长文本、大数字、应用支持的语言。
 - [ ] 间距取自尺度、排版按角色、颜色用语义令牌。
 - [ ] `transition` 里没有调色属性；没有 `transition: all`。
 - [ ] 文案与上下文共同明确操作及对象；没有任何状态只靠颜色表达。
-
-<DesignIllustrations />

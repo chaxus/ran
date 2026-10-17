@@ -6,14 +6,14 @@ description: 'Regras de design para montar telas com o ranui: escolha um papel e
 
 As regras que uma tela feita de componentes ranui deve seguir para que se leia como **um sistema** e não como um monte de peças.
 
-Esta página trata de **julgamento**: a qual token recorrer, o que conferir antes de publicar. O catálogo de tokens em si é o [design system](/pt/src/ranui/design-system/); trocar e sobrescrever em tempo de execução é a [tematização](/pt/src/ranui/theme/); que forma a página toma antes de tudo isso é a [arquitetura da informação](/pt/src/ranui/information-architecture/). A versão completa destas regras, a que é verificada por máquina, está no repositório como [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
+Esta página trata de **julgamento**: a qual token recorrer, o que conferir antes de publicar. O catálogo de tokens em si é o [design system](/pt/src/ranui/design-system/); trocar e sobrescrever em tempo de execução é a [tematização](/pt/src/ranui/theme/); que forma a página toma antes de tudo isso é a [arquitetura da informação](/pt/src/ranui/information-architecture/). As regras completas estão no repositório em [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
 > **Use quando** estiver diagramando uma página ou montando um componente da sua aplicação com elementos `<r-*>` e precisar decidir uma cor, um espaço, um tamanho de texto, uma sombra ou uma duração de animação. A resposta curta é sempre a mesma: **escolha um papel e deixe o token dar o valor.**
 
 ## Princípios
 
 1. **Clareza antes de personalidade.** A tarefa principal e a ação principal precisam ser inconfundíveis antes de qualquer outra consideração.
-2. **Componha, não reinvente.** Recorra a `r-button`, `r-input`, `r-select` e `r-modal` antes de montar uma primitiva com `div`: esses componentes já trazem o foco, o teclado e o comportamento ARIA que você teria de deduzir de novo.
+2. **Reutilize os controles existentes.** Prefira controles nativos semânticos ou componentes compatíveis como `r-button`, `r-input`, `r-select` e `r-modal` quando atenderem à necessidade. Preserve o comportamento de formulário, teclado e acessibilidade em vez de recriá-lo apenas para mudar a aparência.
 3. **Tokens, nunca valores crus.** Um código hexadecimal, um espaço de `20px` ou uma sombra escolhida a dedo são decisões que não vão acompanhar o tema.
 4. **Decida por papel e estado, não a olho.** "O que é este texto?" (título / rótulo / corpo / botão) tem resposta; "que tamanho fica bom?" não tem.
 5. **Projete todos os estados alcançáveis.** Padrão, hover, ativo, foco, desabilitado, carregando, vazio, erro: o estado padrão é um entre oito.
@@ -95,7 +95,7 @@ O texto também é parte do sistema:
 
 - **Os botões** nomeiam o resultado. Inclua o objeto quando o contexto não o estabelece: "Excluir membro". Um diálogo com objeto claro pode usar "Excluir"; evite "OK" genérico.
 - **Os erros** dizem o que aconteceu e depois como resolver. ✅ "A compilação falhou: o pacote passou do limite de tamanho. Reduza-o ou aumente o limite." ❌ "A operação falhou, tente de novo."
-- **Confirmações e avisos** enunciam a mudança, não o sucesso. ✅ "Projeto excluído" ❌ "Excluído com sucesso" (o aviso aparecer já diz que deu certo).
+- **Confirmações e avisos** descrevem a mudança concluída. ✅ "Projeto excluído" ❌ "Operação bem-sucedida". Mostre a confirmação somente após verificar que a operação foi concluída.
 - Deixe o contexto tirar a redundância: um diálogo intitulado "Excluir projeto" não precisa de um botão escrito "Excluir o projeto permanentemente, para sempre".
 
 ## Acessibilidade {#accessibility}
@@ -120,7 +120,11 @@ Nem a forma de apontar nem o tamanho da janela é o alvo secundário.
 
 Nove destas regras são conferidas pelo `pnpm -F ranui verify:design`, que a CI roda sobre o código do próprio ranui: valores reserva de cor inseguros no escuro, literais de cor crus, a escala de espaços, a escala de tamanhos, laços de arrasto só para mouse, regras de `display` em `:host` que quebram o `hidden`, valores reserva que nomeiam tokens não declarados, componentes que consultam a própria árvore shadow e árvores shadow construídas fora do construtor. As violações conhecidas ficam travadas num arquivo de referência, então não dá para acrescentar uma nova nem desfazer uma correção em silêncio.
 
-Essa checagem cobre a biblioteca, não o seu aplicativo, mas os defeitos que ela pega (um valor reserva nomeando um token inexistente; uma cor que só funciona no modo claro) são exatamente os que parecem bem numa revisão, então vale aplicar as mesmas regras ao seu próprio CSS.
+Estas verificações analisam apenas os diretórios de código configurados no comando; não inspecionam automaticamente os aplicativos que usam ranui. Este repositório tem verificações separadas para superfícies como a documentação. Use as verificações do seu aplicativo e confirme layout, temas e interação no navegador.
+
+## Exemplos de design {#design-examples}
+
+<DesignIllustrations />
 
 ## Lista antes de publicar interface
 
@@ -135,5 +139,3 @@ Escolha verificações para a superfície afetada e o comportamento alterado; a 
 - [ ] Espaços da escala, tipografia por papel, cor de tokens semânticos.
 - [ ] Nenhuma propriedade da paleta numa `transition`; nenhum `transition: all`.
 - [ ] O texto e o contexto esclarecem a ação e o objeto; nada sinaliza estado só com cor.
-
-<DesignIllustrations />
