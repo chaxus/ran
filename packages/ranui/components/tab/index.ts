@@ -105,10 +105,7 @@ export class Tabs extends RanElement {
   }
   set active(value: string | null) {
     if (value) {
-      this.setAttribute('active', value);
-      this.setTabLine(value);
-      this.setTabContent(value);
-      this.syncTabsAria();
+      this.activateKey(value);
     } else {
       this.removeAttribute('active');
     }
@@ -242,12 +239,19 @@ export class Tabs extends RanElement {
   /** Select a tab by key: move the indicator, slide content, update classes + ARIA. */
   activateKey = (key: string): void => {
     this.setAttribute('active', key);
-    this.setTabLine(key);
-    this.setTabContent(key);
-    const navItems = this._nav.querySelectorAll('.active');
-    navItems.forEach((item) => item.classList.remove('active'));
-    const index = this.tabHeaderKeyMapIndex[key];
-    this._nav.children[index]?.classList.add('active');
+    this._syncActiveTab();
+  };
+
+  private _syncActiveTab = (): void => {
+    const key = this.active;
+    const valid = key !== null && Object.hasOwn(this.tabHeaderKeyMapIndex, key);
+    const index = valid ? this.tabHeaderKeyMapIndex[key] : -1;
+    [...this._nav.children].forEach((item, position) => item.classList.toggle('active', position === index));
+    if (valid) {
+      // Line tabs change border geometry with selection; measure after styling.
+      this.setTabLine(key);
+      this.setTabContent(key);
+    }
     this.syncTabsAria();
   };
 
@@ -402,6 +406,24 @@ export class Tabs extends RanElement {
               .reverse()
               .find((header) => !isDisabled(header)));
       if (target && this._shadowDom.activeElement !== target) this.tabFocusable(target).focus();
+      if (!target) {
+        // A change listener may already have handed focus to another control.
+        let root = this.getRootNode() as Document | ShadowRoot;
+        let owner: Element | undefined;
+        let focusAvailable = true;
+        while (focusAvailable) {
+          const activeElement = root.activeElement;
+          focusAvailable =
+            !activeElement || activeElement === (owner ?? this) || activeElement === this.ownerDocument.body;
+          if (!focusAvailable || !('host' in root)) break;
+          owner = root.host;
+          root = owner.getRootNode() as Document | ShadowRoot;
+        }
+        if (focusAvailable) {
+          if (!this.hasAttribute('tabindex')) this.tabIndex = -1;
+          this.focus();
+        }
+      }
     }
     if (this.align === 'center') this.initTabLineAlignCenter();
     if (this.align === 'end') this.initTabLineAlignEnd();
@@ -449,11 +471,7 @@ export class Tabs extends RanElement {
       });
     }
     if (name === 'active') {
-      if (newValue && Object.hasOwn(this.tabHeaderKeyMapIndex, newValue)) {
-        this.setTabLine(newValue);
-        this.setTabContent(newValue);
-      }
-      this.syncTabsAria();
+      this._syncActiveTab();
     }
     if (name === 'sheet') {
       this.handlerExternalCss();

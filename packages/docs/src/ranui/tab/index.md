@@ -33,6 +33,10 @@ Each `<r-tab>` becomes one pane; its `label` is rendered as the header button, a
 For dynamic panes, give each `<r-tab>` a unique, stable `r-key`. Adding or reordering panes
 keeps the active key and focused header. If the active pane is removed or disabled, selection
 moves to the next enabled pane, then the previous one; no available pane clears the selection.
+Changing the `active` attribute or property updates header styling, the indicator, panels and
+ARIA together without moving focus. Removing the last focused header focuses the `<r-tabs>`
+host, adding `tabindex="-1"` only when absent. An existing `tabindex` or an explicit focus
+handoff to another control is preserved.
 
 ## API Reference
 
