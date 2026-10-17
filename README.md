@@ -82,6 +82,14 @@ Which of these CI actually checks is declared in [packages/manifest.json](packag
 
 ## 🚀 Quick Start
 
+### Design and agent guidance
+
+Start from [AGENTS.md](AGENTS.md) for the ownership and verification map. The
+[ranui design standard](packages/ranui/docs/DESIGN.md) governs UI composition and tokens;
+the [AI interface guide](packages/ranui/docs/AI_INTERFACES.md) applies it to composers,
+queues, model settings, connectors and artifacts without adding application services to the library.
+Both library guides ship with the npm package for use by consuming agents.
+
 ### Installation
 
 ```bash

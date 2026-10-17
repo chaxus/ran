@@ -21,6 +21,10 @@
 - Design **all reachable states** (default, hover, active, focus, disabled, loading, empty, error), not just the happy path.
 - **Verify the rendered result**, in light and dark, at narrow and wide widths — code review alone is not enough.
 
+For AI workspaces, read [AI_INTERFACES.md](./AI_INTERFACES.md) after §§11–12: composer/queue
+semantics, recoverable failures, capability-aware settings, connectors, artifacts and regression
+evidence. It applies this standard to host applications without adding library APIs or defaults.
+
 Conflict resolution order: **user goals → verified evidence → this file → repo guidance (`CLAUDE.md`) → shipped patterns → general heuristics.**
 
 ## What is machine-checked
@@ -511,8 +515,8 @@ what the gap _means_:
 | Closely related controls       | `--ran-space-2` | a button row, dialog actions      |
 | One content group              | `--ran-space-3` | a form row, a list item's lines   |
 | Separate groups in one section | `--ran-space-4` | panel padding, form groups        |
-| Separate sections              | `--ran-space-5` | major blocks on a page            |
-| Major region boundary          | `--ran-space-6` | empty-state breathing room, bands |
+| Related subsections            | `--ran-space-6` | compact content blocks            |
+| Major region boundary          | `--ran-space-8` | empty-state breathing room, bands |
 
 **Inside before outside:** a component's own padding is decided before the gap between
 components. **Smaller gap means tighter relationship** — that is the only thing vertical

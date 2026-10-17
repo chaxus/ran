@@ -12,6 +12,12 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 这些规则的完整、可机器校验版本在仓库里：
 [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md)。
 
+构建 AI 工作区时，继续阅读统一维护的
+[AI 交互指南](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/AI_INTERFACES.md)：
+紧凑的输入框与队列、可恢复的错误、按能力展示的模型设置、连接器、成果预览与应用，以及回归矩阵。
+该指南明确区分宿主应用职责和 ranui API，安装后也可从
+`node_modules/ranui/docs/AI_INTERFACES.md` 读取，避免多份规则各自漂移。
+
 > **适用场景**：在用 `<r-*>` 元素排版页面或搭业务组件，需要决定一个颜色、一段间距、一个字号、
 > 一层投影或一个动效时长时。答案永远是同一句：**先确定角色，值交给令牌。**
 

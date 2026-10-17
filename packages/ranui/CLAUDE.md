@@ -10,6 +10,11 @@ Two companion standards sit above this file. **[docs/DESIGN.md](docs/DESIGN.md)*
 
 **[docs/DESIGN.md](docs/DESIGN.md) is the authoritative, executable design standard.** Follow it whenever your work changes what a user sees. It is based on the Geist design system (light/dark only).
 
+For AI applications, use **[docs/AI_INTERFACES.md](docs/AI_INTERFACES.md)** after DESIGN's
+composition and information architecture sections. It covers composers, queues, errors,
+capability-aware settings, connectors/artifacts and host/component ownership; consult the
+generated references below for exact APIs. This guide ships with the npm package.
+
 Nine of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, mouse-only drag loops, `:host` display rules that disable `hidden`, token fallbacks naming undeclared tokens, components searching their own shadow tree for elements they built, and shadow trees built outside the constructor. Known violations are ratcheted in [docs/design-rule-baseline.json](docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
 
 For each element's **attributes / properties / events / slots / `::part()`**, consult **[docs/COMPONENTS.md](docs/COMPONENTS.md)** (generated — run `npm run doc:api` after changing any component's API; CI fails if you forget) and **[docs/style-tokens-public.md](docs/style-tokens-public.md)** for its CSS variables. The non-negotiables:

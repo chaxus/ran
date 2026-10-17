@@ -15,6 +15,12 @@ page takes before any of it is decided is
 these rules lives in the repository as
 [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
+For an AI workspace, continue with the canonical
+[AI interface guide](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/AI_INTERFACES.md):
+compact composers and queues, recoverable failures, capability-aware model settings, connectors,
+artifact review and the regression matrix. It separates host application responsibilities from
+ranui APIs and is also installed at `node_modules/ranui/docs/AI_INTERFACES.md`.
+
 > **Use when** you are laying out a page or building an app-level component out of `<r-*>`
 > elements and have to decide a color, a gap, a text size, a shadow or a motion duration. The
 > short answer is always the same: **pick a role, and let the token supply the value.**
