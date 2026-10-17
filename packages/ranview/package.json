@@ -54,49 +54,25 @@
   ],
   "publishConfig": {
     "access": "public",
-    "main": "./dist/index.cjs",
+    "main": "./dist/index.js",
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
       ".": {
-        "import": {
-          "types": "./dist/index.d.ts",
-          "default": "./dist/index.js"
-        },
-        "require": {
-          "types": "./dist/cjs-types/index.d.cts",
-          "default": "./dist/index.cjs"
-        }
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
       },
       "./signal": {
-        "import": {
-          "types": "./dist/signal.d.ts",
-          "default": "./dist/signal.js"
-        },
-        "require": {
-          "types": "./dist/cjs-types/index.d.cts",
-          "default": "./dist/index.cjs"
-        }
+        "types": "./dist/signal.d.ts",
+        "import": "./dist/signal.js"
       },
       "./mocks": {
-        "import": {
-          "types": "./dist/mocks.d.ts",
-          "default": "./dist/mocks.js"
-        },
-        "require": {
-          "types": "./dist/cjs-types/index.d.cts",
-          "default": "./dist/index.cjs"
-        }
+        "types": "./dist/mocks.d.ts",
+        "import": "./dist/mocks.js"
       },
       "./static": {
-        "import": {
-          "types": "./dist/static.d.ts",
-          "default": "./dist/static.js"
-        },
-        "require": {
-          "types": "./dist/cjs-types/static.d.cts",
-          "default": "./dist/static.cjs"
-        }
+        "types": "./dist/static.d.ts",
+        "import": "./dist/static.js"
       }
     }
   }

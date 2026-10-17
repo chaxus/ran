@@ -19,25 +19,27 @@ const chunkOptimization: Partial<BuildOptions> = {
   minify: 'terser',
 };
 
-export const umd: BuildOptions = {
+export const iife: BuildOptions = {
   ...chunkOptimization,
-  outDir: resolve(__dirname, 'dist/umd'),
+  outDir: resolve(__dirname, 'dist/iife'),
+  emptyOutDir: false,
   lib: {
     entry: resolve(__dirname, 'index.ts'),
     name: 'ranuts',
     fileName: 'index',
-    formats: ['umd'],
+    formats: ['iife'],
   },
 };
 
-export const umdUtil: BuildOptions = {
+export const iifeUtil: BuildOptions = {
   ...chunkOptimization,
-  outDir: resolve(__dirname, 'dist/umd/utils'),
+  outDir: resolve(__dirname, 'dist/iife'),
+  emptyOutDir: false,
   lib: {
     entry: resolve(__dirname, 'src/utils/index.ts'),
     name: 'ranuts_utils',
     fileName: 'utils',
-    formats: ['umd'],
+    formats: ['iife'],
   },
 };
 

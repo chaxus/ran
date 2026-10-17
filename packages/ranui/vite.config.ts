@@ -44,9 +44,8 @@ const FRAMEWORK_EXTERNAL = ['react', 'react-dom', 'vue'];
  * library they already depend on. shiki made the cost visible (~600 grammar modules
  * fanning out into ranui's tarball), but the problem was never shiki-specific.
  *
- * Standalone IIFE outputs stay self-contained for direct script tags. The CommonJS
- * graph shares its helpers and registry while resolving ranuts/ranview through Node.
- * Both use `singleFileResolve`, which swaps shiki for its smaller web bundle.
+ * Standalone IIFE outputs stay self-contained for direct script tags. They use
+ * `singleFileResolve`, which swaps shiki for its smaller web bundle.
  */
 const RUNTIME_DEPENDENCIES = Object.keys(
   (createRequire(import.meta.url)('./package.json') as { dependencies?: Record<string, string> }).dependencies ?? {},
@@ -88,7 +87,7 @@ const pathAlias: Record<string, string> = {
 };
 
 /**
- * Resolution for bundled outputs (the CommonJS graph and standalone IIFEs).
+ * Resolution for standalone IIFE outputs.
  * IIFE cannot code-split, so a plain shiki import would inline all its grammars.
  * Bundled outputs use the same web grammar subset for consistent highlighting.
  *
@@ -106,6 +105,9 @@ export const singleFileResolve = {
 
 export const bundle: BuildOptions = {
   ...chunkOptimization,
+  // esbuild currently emits invalid syntax for the full IIFE dependency graph.
+  // Terser preserves a valid classic script; smaller component bundles stay fast.
+  minify: minifyMode === 'esbuild' ? 'terser' : minifyMode,
   outDir: resolve(__dirname, 'dist'),
   emptyOutDir: false,
   lib: {

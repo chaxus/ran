@@ -2,7 +2,7 @@
   "name": "ranui",
   "version": "0.5.0-alpha.7",
   "description": "A framework-agnostic Web Components UI library built on native custom elements, with TypeScript types, light/dark theming, SSR and PWA support.",
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -223,484 +223,201 @@
   ],
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./style": "./dist/ranui.css",
     "./fonts": "./dist/fonts/fonts.css",
     "./builder": {
-      "import": {
-        "types": "./dist/builder.d.ts",
-        "default": "./dist/builder.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/builder.d.cts",
-        "default": "./dist/builder.cjs"
-      }
+      "types": "./dist/builder.d.ts",
+      "import": "./dist/builder.js"
     },
     "./ssr": {
-      "import": {
-        "types": "./dist/ssr.d.ts",
-        "default": "./dist/ssr.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/ssr.d.cts",
-        "default": "./dist/ssr.cjs"
-      }
+      "types": "./dist/ssr.d.ts",
+      "import": "./dist/ssr.js"
     },
     "./ssr-stream": {
-      "import": {
-        "types": "./dist/ssr-stream.d.ts",
-        "default": "./dist/ssr-stream.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/ssr-stream.d.cts",
-        "default": "./dist/ssr-stream.cjs"
-      }
+      "types": "./dist/ssr-stream.d.ts",
+      "import": "./dist/ssr-stream.js"
     },
     "./theme": {
-      "import": {
-        "types": "./dist/theme.d.ts",
-        "default": "./dist/theme.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/theme.d.cts",
-        "default": "./dist/theme.cjs"
-      }
+      "types": "./dist/theme.d.ts",
+      "import": "./dist/theme.js"
     },
     "./testing": {
-      "import": {
-        "types": "./dist/testing.d.ts",
-        "default": "./dist/testing.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/testing.d.cts",
-        "default": "./dist/testing.cjs"
-      }
+      "types": "./dist/testing.d.ts",
+      "import": "./dist/testing.js"
     },
     "./i18n": {
-      "import": {
-        "types": "./dist/i18n.d.ts",
-        "default": "./dist/i18n.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/i18n.d.cts",
-        "default": "./dist/i18n.cjs"
-      }
+      "types": "./dist/i18n.d.ts",
+      "import": "./dist/i18n.js"
     },
     "./button": {
-      "import": {
-        "types": "./dist/components/button/index.d.ts",
-        "default": "./dist/button.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/button/index.d.ts",
+      "import": "./dist/button.js"
     },
     "./icon": {
-      "import": {
-        "types": "./dist/components/icon/index.d.ts",
-        "default": "./dist/icon.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/icon/index.d.ts",
+      "import": "./dist/icon.js"
     },
     "./icons": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/icons.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/index.d.ts",
+      "import": "./dist/icons.js"
     },
     "./image": {
-      "import": {
-        "types": "./dist/components/image/index.d.ts",
-        "default": "./dist/image.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/image/index.d.ts",
+      "import": "./dist/image.js"
     },
     "./input": {
-      "import": {
-        "types": "./dist/components/input/index.d.ts",
-        "default": "./dist/input.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/input/index.d.ts",
+      "import": "./dist/input.js"
     },
     "./message": {
-      "import": {
-        "types": "./dist/components/message/index.d.ts",
-        "default": "./dist/message.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/message/index.d.ts",
+      "import": "./dist/message.js"
     },
     "./skeleton": {
-      "import": {
-        "types": "./dist/components/skeleton/index.d.ts",
-        "default": "./dist/skeleton.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/skeleton/index.d.ts",
+      "import": "./dist/skeleton.js"
     },
     "./tab": {
-      "import": {
-        "types": "./dist/components/tab/index.d.ts",
-        "default": "./dist/tab.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/tab/index.d.ts",
+      "import": "./dist/tab.js"
     },
     "./tabpane": {
-      "import": {
-        "types": "./dist/components/tabpane/index.d.ts",
-        "default": "./dist/tabpane.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/tabpane/index.d.ts",
+      "import": "./dist/tabpane.js"
     },
     "./radar": {
-      "import": {
-        "types": "./dist/components/radar/index.d.ts",
-        "default": "./dist/radar.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/radar/index.d.ts",
+      "import": "./dist/radar.js"
     },
     "./modal": {
-      "import": {
-        "types": "./dist/components/modal/index.d.ts",
-        "default": "./dist/modal.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/modal/index.d.ts",
+      "import": "./dist/modal.js"
     },
     "./select": {
-      "import": {
-        "types": "./dist/components/select/index.d.ts",
-        "default": "./dist/select.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/select/index.d.ts",
+      "import": "./dist/select.js"
     },
     "./progress": {
-      "import": {
-        "types": "./dist/components/progress/index.d.ts",
-        "default": "./dist/progress.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/progress/index.d.ts",
+      "import": "./dist/progress.js"
     },
     "./player": {
-      "import": {
-        "types": "./dist/components/player/index.d.ts",
-        "default": "./dist/player.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/player/index.d.ts",
+      "import": "./dist/player.js"
     },
     "./popover": {
-      "import": {
-        "types": "./dist/components/popover/index.d.ts",
-        "default": "./dist/popover.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/popover/index.d.ts",
+      "import": "./dist/popover.js"
     },
     "./dropdown": {
-      "import": {
-        "types": "./dist/components/dropdown/index.d.ts",
-        "default": "./dist/dropdown.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/dropdown/index.d.ts",
+      "import": "./dist/dropdown.js"
     },
     "./content": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/content.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/index.d.ts",
+      "import": "./dist/content.js"
     },
     "./loading": {
-      "import": {
-        "types": "./dist/components/loading/index.d.ts",
-        "default": "./dist/loading.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/loading/index.d.ts",
+      "import": "./dist/loading.js"
     },
     "./colorpicker": {
-      "import": {
-        "types": "./dist/components/colorpicker/index.d.ts",
-        "default": "./dist/colorpicker.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/colorpicker/index.d.ts",
+      "import": "./dist/colorpicker.js"
     },
     "./math": {
-      "import": {
-        "types": "./dist/components/math/index.d.ts",
-        "default": "./dist/math.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/math/index.d.ts",
+      "import": "./dist/math.js"
     },
     "./mermaid": {
-      "import": {
-        "types": "./dist/components/mermaid/index.d.ts",
-        "default": "./dist/mermaid.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/mermaid/index.d.ts",
+      "import": "./dist/mermaid.js"
     },
     "./markdown": {
-      "import": {
-        "types": "./dist/components/markdown/index.d.ts",
-        "default": "./dist/markdown.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/markdown/index.d.ts",
+      "import": "./dist/markdown.js"
     },
     "./checkbox": {
-      "import": {
-        "types": "./dist/components/checkbox/index.d.ts",
-        "default": "./dist/checkbox.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/checkbox/index.d.ts",
+      "import": "./dist/checkbox.js"
     },
     "./card": {
-      "import": {
-        "types": "./dist/components/card/index.d.ts",
-        "default": "./dist/card.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/card/index.d.ts",
+      "import": "./dist/card.js"
     },
     "./conversation": {
-      "import": {
-        "types": "./dist/components/conversation/index.d.ts",
-        "default": "./dist/conversation.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/conversation/index.d.ts",
+      "import": "./dist/conversation.js"
     },
     "./reasoning": {
-      "import": {
-        "types": "./dist/components/reasoning/index.d.ts",
-        "default": "./dist/reasoning.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/reasoning/index.d.ts",
+      "import": "./dist/reasoning.js"
     },
     "./attachments": {
-      "import": {
-        "types": "./dist/components/attachments/index.d.ts",
-        "default": "./dist/attachments.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/attachments/index.d.ts",
+      "import": "./dist/attachments.js"
     },
     "./voice-button": {
-      "import": {
-        "types": "./dist/components/voice-button/index.d.ts",
-        "default": "./dist/voice-button.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/voice-button/index.d.ts",
+      "import": "./dist/voice-button.js"
     },
     "./tool-card": {
-      "import": {
-        "types": "./dist/components/tool-card/index.d.ts",
-        "default": "./dist/tool-card.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/tool-card/index.d.ts",
+      "import": "./dist/tool-card.js"
     },
     "./token-meter": {
-      "import": {
-        "types": "./dist/components/token-meter/index.d.ts",
-        "default": "./dist/token-meter.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/token-meter/index.d.ts",
+      "import": "./dist/token-meter.js"
     },
     "./state-dot": {
-      "import": {
-        "types": "./dist/components/state-dot/index.d.ts",
-        "default": "./dist/state-dot.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/state-dot/index.d.ts",
+      "import": "./dist/state-dot.js"
     },
     "./disclosure-row": {
-      "import": {
-        "types": "./dist/components/disclosure-row/index.d.ts",
-        "default": "./dist/disclosure-row.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/disclosure-row/index.d.ts",
+      "import": "./dist/disclosure-row.js"
     },
     "./scratch": {
-      "import": {
-        "types": "./dist/components/scratch/index.d.ts",
-        "default": "./dist/scratch.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/scratch/index.d.ts",
+      "import": "./dist/scratch.js"
     },
     "./section": {
-      "import": {
-        "types": "./dist/components/section/index.d.ts",
-        "default": "./dist/section.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/section/index.d.ts",
+      "import": "./dist/section.js"
     },
     "./router": {
-      "import": {
-        "types": "./dist/components/router/index.d.ts",
-        "default": "./dist/router.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/router/index.d.ts",
+      "import": "./dist/router.js"
     },
     "./route": {
-      "import": {
-        "types": "./dist/components/route/index.d.ts",
-        "default": "./dist/route.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/route/index.d.ts",
+      "import": "./dist/route.js"
     },
     "./link": {
-      "import": {
-        "types": "./dist/components/link/index.d.ts",
-        "default": "./dist/link.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/link/index.d.ts",
+      "import": "./dist/link.js"
     },
     "./theme-switch": {
-      "import": {
-        "types": "./dist/components/theme-switch/index.d.ts",
-        "default": "./dist/theme-switch.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/theme-switch/index.d.ts",
+      "import": "./dist/theme-switch.js"
     },
     "./type": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./typings": {
       "types": "./dist/typings.d.ts"
     },
     "./dist/*": {
       "types": "./dist/*",
-      "import": "./dist/*",
-      "require": "./dist/*"
+      "import": "./dist/*"
     },
     "./glass": {
-      "import": {
-        "types": "./dist/components/glass/index.d.ts",
-        "default": "./dist/glass.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/components/glass/index.d.ts",
+      "import": "./dist/glass.js"
     }
   },
   "devDependencies": {
