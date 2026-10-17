@@ -1,5 +1,6 @@
 import type { Stats } from 'node:fs';
 import fs from '@/node/fs';
+import type { Identification } from '@/node/fs';
 
 /**
  * @description: Stat a file — typically to tell a file from a directory via data.isDirectory()
@@ -7,7 +8,7 @@ import fs from '@/node/fs';
  * @return {Promise}
  */
 
-const queryFileInfo = (path: string): Promise<Ranuts.Identification> =>
+const queryFileInfo = (path: string): Promise<Identification> =>
   new Promise((resolve, reject) => {
     fs.stat(path, (err, data: Stats) => {
       if (err) {
