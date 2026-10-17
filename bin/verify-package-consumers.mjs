@@ -1,16 +1,31 @@
 /** Exercise actual packed artifacts, including pnpm's published workspace metadata. Build first. */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Script } from 'node:vm';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const fixture = await mkdtemp(join(tmpdir(), 'ran-packages-'));
 const run = (command, args, cwd = fixture) => execFileSync(command, args, { cwd, stdio: 'pipe' });
 const packs = ['ranuts', 'ranview', 'ranui'];
+async function assertESMOnly(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    assert.ok(!/\.(?:cjs|cts)(?:\.map)?$/.test(entry.name), `Unexpected CommonJS artifact: ${entry.name}`);
+    assert.ok(!['umd', 'cjs-types'].includes(entry.name), `Unexpected compatibility directory: ${entry.name}`);
+    if (entry.isDirectory()) await assertESMOnly(join(directory, entry.name));
+    else if (entry.name.endsWith('.iife.js'))
+      new Script(await readFile(join(directory, entry.name), 'utf8'), { filename: entry.name });
+  }
+}
+function assertNoRequire(exports) {
+  if (!exports || typeof exports !== 'object') return;
+  assert.ok(!Object.hasOwn(exports, 'require'), 'Published exports must not retain require conditions');
+  for (const value of Object.values(exports)) assertNoRequire(value);
+}
 const manifests = new Map();
 try {
   await mkdir(join(fixture, 'node_modules'), { recursive: true });
@@ -23,6 +38,9 @@ try {
     await mkdir(installed, { recursive: true });
     run('tar', ['-xzf', tarball, '--strip-components=1', '-C', installed]);
     const packed = JSON.parse(await readFile(join(installed, 'package.json'), 'utf8'));
+    assertNoRequire(packed.exports);
+    assert.equal(packed.type, 'module');
+    await assertESMOnly(join(installed, 'dist'));
     manifests.set(manifest.name, packed);
     assert.ok(
       !JSON.stringify(packed.dependencies ?? {}).includes('workspace:'),
@@ -42,14 +60,12 @@ try {
   await symlink(join(root, 'packages/ranui/node_modules/@types'), join(fixture, 'node_modules/@types'), 'junction');
   await writeFile(join(fixture, 'package.json'), '{"type":"module"}');
   const imports = [];
-  const cjsImports = [];
   let count = 0;
   for (const [name, manifest] of manifests) {
     for (const [entry, conditions] of Object.entries(manifest.exports)) {
       if (typeof conditions !== 'object' || entry.includes('*')) continue;
       const specifier = name + (entry === '.' ? '' : entry.slice(1));
       if (conditions.import) imports.push(`import * as p${count} from '${specifier}'; void p${count};`);
-      if (conditions.require) cjsImports.push(`import p${count} = require('${specifier}'); void p${count};`);
       count++;
     }
   }
@@ -74,10 +90,12 @@ const button: Button = new Button();
 void [pixel, badPixel, binaryContracts, current, button];
 `;
   await writeFile(join(fixture, 'consumer.mts'), imports.join('\n') + contracts);
-  await writeFile(join(fixture, 'consumer.cts'), cjsImports.join('\n') + contracts);
   const require = createRequire(join(root, 'packages/ranui/package.json'));
   const tsc = join(dirname(require.resolve('typescript/package.json')), 'bin/tsc');
-  for (const files of [['consumer.mts'], ['consumer.cts'], ['consumer.mts', 'consumer.cts']]) {
+  for (const [module, resolution] of [
+    ['NodeNext', 'NodeNext'],
+    ['ESNext', 'Bundler'],
+  ]) {
     run(process.execPath, [
       tsc,
       '--noEmit',
@@ -87,14 +105,14 @@ void [pixel, badPixel, binaryContracts, current, button];
       '--target',
       'ES2022',
       '--module',
-      'NodeNext',
+      module,
       '--moduleResolution',
-      'NodeNext',
+      resolution,
       '--types',
       'node',
-      ...files,
+      'consumer.mts',
     ]);
-    console.log(`Packed libraries: strict NodeNext ${files.join('+')} consumer passed`);
+    console.log(`Packed libraries: strict ${resolution} ESM consumer passed`);
   }
   await writeFile(join(fixture, 'browser.mts'), imports.join('\n') + contracts);
   await writeFile(
@@ -142,31 +160,30 @@ void [prompt, invalid];
   console.log('Packed libraries: standalone browser augmentations need no Vite or Node types');
 
   await writeFile(
-    join(fixture, 'runtime.cjs'),
+    join(fixture, 'runtime.mjs'),
     `
-async function main() {
-const assert = require('node:assert/strict');
-const { Div, signal } = require('ranui/builder');
-const { h, renderToString } = require('ranui/ssr');
-const { renderHTMLToString } = require('ranui/ssr-stream');
-const { insideShadow } = require('ranui/testing');
+import assert from 'node:assert/strict';
+import { Div, signal } from 'ranui/builder';
+import { h, renderToString } from 'ranui/ssr';
+import { renderHTMLToString } from 'ranui/ssr-stream';
+import { insideShadow } from 'ranui/testing';
+import { Button } from 'ranui';
+import { Button as ButtonEntry } from 'ranui/button';
+import { Div as StaticDiv } from '@alixex/ranview/static';
+import { rgbToHex } from 'ranuts';
 assert.equal(typeof Div, 'function');
 assert.equal(signal(3)[0](), 3);
 assert.equal(h('div', {}, 'hello'), '<div>hello</div>');
-const { Button } = require('ranui');
+assert.equal(Button, ButtonEntry);
 assert.match(renderToString(new Button()), /<r-button/);
 assert.match(await renderHTMLToString('<r-button>test</r-button>'), /shadowrootmode/);
-assert.equal(typeof renderHTMLToString, 'function');
 assert.equal(typeof insideShadow, 'function');
-assert.equal(typeof require('ranui/button').Button, 'function');
-assert.equal(typeof require('@alixex/ranview/static').Div, 'function');
-assert.equal(require('ranuts').rgbToHex(1,2,3), '#010203');
-}
-main().catch((error) => { console.error(error); process.exitCode = 1; });
+assert.equal(typeof StaticDiv, 'function');
+assert.equal(rgbToHex(1,2,3), '#010203');
 `,
   );
-  run(process.execPath, ['runtime.cjs']);
-  console.log('Packed libraries: CommonJS helper entry points execute their advertised functions');
+  run(process.execPath, ['runtime.mjs']);
+  console.log('Packed libraries: ESM helpers, component identity and SSR round trips passed');
 } catch (error) {
   if (error.stdout) process.stderr.write(error.stdout);
   if (error.stderr) process.stderr.write(error.stderr);
