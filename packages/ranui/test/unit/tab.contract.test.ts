@@ -479,7 +479,6 @@ describe('r-tabs and r-tab contract', () => {
 
     // Manually set parent so updateAttribute is reachable
     tabPane.parent = tabs;
-    tabs.tabHeaderKeyMapIndex = { k1: 0 };
     const tab1 = document.createElement('r-tab');
     tab1.setAttribute('label', 'A');
     tab1.setAttribute('r-key', 'k1');
