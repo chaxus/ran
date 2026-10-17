@@ -4,36 +4,28 @@ description: 'Design rules for building screens with ranui: pick a role and let 
 
 # Design guidelines
 
-The rules a screen built out of ranui components should follow so it reads as **one system**
-rather than a pile of parts.
+Build a coherent interface with ranui: choose roles and states, then let tokens supply the values.
 
-This page is about **judgement**: which token to reach for, what to check before shipping.
-The token catalog itself is the [design system](/src/ranui/design-system/); switching and
-overriding at runtime is [theming](/src/ranui/theme/); the shape the
-page takes before any of it is decided is
-[information architecture](/src/ranui/information-architecture/). The full, machine-enforced version of
-these rules lives in the repository as
-[`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
+Use the [design system](/src/ranui/design-system/) for tokens,
+[theming](/src/ranui/theme/) for runtime overrides, and
+[information architecture](/src/ranui/information-architecture/) for page structure.
+This page summarizes the canonical [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
-For other decisions, the short
-[interface index](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md)
-routes to the [interaction standard](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md)
-for observable behavior and [optional workflow patterns](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md)
-for relevant host tasks. Visual rules are owned by the canonical [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md);
-this page is a summary, not a second standard. Engineering stays in CODING.
-These references ship under `node_modules/ranui/docs/` rather than duplicating their rules here.
+The [interface index](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md)
+routes behavior to [INTERACTION](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md),
+engineering to [CODING](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/CODING.md), and relevant host tasks to
+[optional workflow patterns](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md).
+These references also ship under `node_modules/ranui/docs/`.
 
-> **Use when** you are laying out a page or building an app-level component out of `<r-*>`
-> elements and have to decide a color, a gap, a text size, a shadow or a motion duration. The
-> short answer is always the same: **pick a role, and let the token supply the value.**
+> **Use when** choosing color, spacing, type, depth or motion for a screen built with `<r-*>` elements.
 
 ## Principles
 
 1. **Clarity before personality.** The primary task and the primary action must be
    unmistakable before anything else is considered.
-2. **Compose, don't re-invent.** Reach for `r-button`, `r-input`, `r-select`, `r-modal` before
-   building a primitive out of `div`s: the components already carry the focus, keyboard and
-   ARIA behaviour you would otherwise have to re-derive.
+2. **Reuse existing controls.** Prefer semantic native controls or supported ranui primitives
+   such as `r-button`, `r-input`, `r-select` and `r-modal` when their contracts fit. Preserve
+   their form, keyboard and accessibility behavior rather than rebuilding it for styling.
 3. **Tokens, never raw values.** A hex code, a `20px` gap or a hand-picked shadow is a decision
    that will not follow the theme.
 4. **Decide by role and state, not by eye.** "What is this text?" (heading / label / copy /
@@ -162,7 +154,7 @@ Copy is part of the system too:
 - **Errors** say what happened, then how to fix it. ✅ "Build failed: the bundle exceeds the
   size limit. Reduce it or raise the limit." ❌ "Operation failed, please try again."
 - **Confirmations and toasts** state the change, not the success. ✅ "Project deleted"
-  ❌ "Successfully deleted" (the toast appearing already says it succeeded).
+  ❌ "Operation successful". Show completion feedback only after the operation is confirmed.
 - Let context remove redundancy: a dialog titled "Delete project" does not need a button
   labelled "Delete project permanently, forever".
 
@@ -205,9 +197,14 @@ tokens, components querying their own shadow tree, and shadow trees built outsid
 constructor. Known violations are ratcheted in a baseline file, so a new one cannot be added
 and a fix cannot be silently undone.
 
-That gate covers the library, not your application, but the failure modes it catches (a
-fallback naming a token that does not exist; a color that only works in light mode) are exactly
-the ones that look fine in review, so the same rules are worth applying to your own CSS.
+These checks scan only the source roots configured for the command; they do not automatically
+inspect applications that use ranui. This repository has separate checks for surfaces such as
+the documentation site. Application developers use their own checks and verify layout, themes
+and interaction in the browser.
+
+## Design examples {#design-examples}
+
+<DesignIllustrations />
 
 ## Checklist before shipping UI
 
@@ -222,5 +219,3 @@ Choose checks for the affected surface and changed behavior; repository CI still
 - [ ] Spacing from the scale, type by role, color from semantic tokens.
 - [ ] No palette property in a `transition`; no `transition: all`.
 - [ ] Copy makes the action and its object clear from context; nothing signals state by color alone.
-
-<DesignIllustrations />

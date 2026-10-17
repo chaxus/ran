@@ -6,14 +6,14 @@ description: 'Gestaltungsregeln für Oberflächen mit ranui: eine Rolle wählen 
 
 Die Regeln, denen eine aus ranui-Komponenten gebaute Oberfläche folgen sollte, damit sie sich als **ein System** liest und nicht als Haufen von Teilen.
 
-Auf dieser Seite geht es um **Urteilsvermögen**: zu welchem Token man greift und was vor der Auslieferung zu prüfen ist. Der Tokenkatalog selbst ist das [Designsystem](/de/src/ranui/design-system/); Umschalten und Überschreiben zur Laufzeit ist die [Themengestaltung](/de/src/ranui/theme/); welche Form die Seite vor alledem annimmt, ist die [Informationsarchitektur](/de/src/ranui/information-architecture/). Die vollständige, maschinell durchgesetzte Fassung dieser Regeln liegt im Repository als [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
+Auf dieser Seite geht es um **Urteilsvermögen**: zu welchem Token man greift und was vor der Auslieferung zu prüfen ist. Der Tokenkatalog selbst ist das [Designsystem](/de/src/ranui/design-system/); Umschalten und Überschreiben zur Laufzeit ist die [Themengestaltung](/de/src/ranui/theme/); welche Form die Seite vor alledem annimmt, ist die [Informationsarchitektur](/de/src/ranui/information-architecture/). Die vollständigen Designregeln stehen im Repository unter [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
 > **Einsetzen, wenn** du eine Seite anlegst oder aus `<r-*>`-Elementen eine Komponente auf Anwendungsebene baust und über eine Farbe, einen Abstand, eine Textgröße, einen Schatten oder eine Bewegungsdauer entscheiden musst. Die kurze Antwort ist immer dieselbe: **Wähle eine Rolle und lass das Token den Wert bestimmen.**
 
 ## Grundsätze
 
 1. **Klarheit vor Eigenart.** Die Hauptaufgabe und die Hauptaktion müssen unverkennbar sein, bevor irgendetwas anderes erwogen wird.
-2. **Zusammensetzen statt neu erfinden.** Greif zu `r-button`, `r-input`, `r-select` und `r-modal`, bevor du aus `div`s eine Primitive baust: Diese Komponenten bringen Fokus-, Tastatur- und ARIA-Verhalten schon mit, das du sonst wieder herleiten müsstest.
+2. **Bestehende Steuerelemente wiederverwenden.** Semantische native Elemente oder passende ranui-Komponenten wie `r-button`, `r-input`, `r-select` und `r-modal` bevorzugen. Formular-, Tastatur- und Barrierefreiheitsverhalten erhalten, statt es nur für die Gestaltung neu zu bauen.
 3. **Tokens, niemals rohe Werte.** Ein Hex-Code, ein Abstand von `20px` oder ein von Hand gewählter Schatten sind Entscheidungen, die dem Theme nicht folgen werden.
 4. **Nach Rolle und Zustand entscheiden, nicht nach Augenmaß.** „Was ist dieser Text?“ (Überschrift / Beschriftung / Fließtext / Schaltfläche) hat eine Antwort; „welche Größe sieht richtig aus?“ hat keine.
 5. **Entwirf jeden erreichbaren Zustand.** Normal, Überfahren, Gedrückt, Fokus, Deaktiviert, Ladend, Leer, Fehler: Der Normalfall ist einer von acht.
@@ -95,7 +95,7 @@ Auch Texte gehören zum System:
 
 - **Schaltflächen** benennen das Ergebnis. Nenne das Objekt, wenn es aus dem Kontext nicht hervorgeht: „Mitglied löschen“. Ein eindeutig benannter Dialog darf „Löschen“ verwenden; vermeide ein allgemeines „OK“.
 - **Fehler** sagen, was passiert ist, und dann, wie man es behebt. ✅ „Bauen fehlgeschlagen: Das Bündel überschreitet die Größengrenze. Verkleinere es oder erhöhe die Grenze.“ ❌ „Vorgang fehlgeschlagen, bitte erneut versuchen.“
-- **Bestätigungen und Hinweise** benennen die Änderung, nicht den Erfolg. ✅ „Projekt gelöscht“ ❌ „Erfolgreich gelöscht“ (dass der Hinweis erscheint, sagt den Erfolg schon).
+- **Bestätigungen und Hinweise** benennen die abgeschlossene Änderung. ✅ „Projekt gelöscht“ ❌ „Vorgang erfolgreich“. Den Abschluss erst anzeigen, nachdem er bestätigt wurde.
 - Lass den Zusammenhang das Überflüssige wegnehmen: Ein Dialog mit dem Titel „Projekt löschen“ braucht keine Schaltfläche „Projekt endgültig und für immer löschen“.
 
 ## Barrierefreiheit {#accessibility}
@@ -120,7 +120,11 @@ Weder die Eingabeart noch die Fenstergröße ist das zweitrangige Ziel.
 
 Neun dieser Regeln prüft `pnpm -F ranui verify:design`, das die CI auf ranuis eigenem Quelltext ausführt: im Dunkeln unsichere Farb-Rückfallwerte, rohe Farbliterale, die Abstandsskala, die Größenskala, nur mausgesteuerte Ziehschleifen, `:host`-display-Regeln, die `hidden` brechen, Rückfallwerte auf nicht deklarierte Tokens, Komponenten, die ihren eigenen Shadow-Baum abfragen, und Shadow-Bäume, die außerhalb des Konstruktors entstehen. Bekannte Verstöße sind in einer Basisdatei festgeschrieben, sodass kein neuer hinzukommen und keine Korrektur stillschweigend rückgängig gemacht werden kann.
 
-Dieses Tor deckt die Bibliothek ab, nicht deine Anwendung — aber die Fehlerarten, die es fängt (ein Rückfallwert auf ein Token, das es nicht gibt; eine Farbe, die nur im Hellen funktioniert), sind genau die, die in einer Durchsicht in Ordnung aussehen. Es lohnt sich also, dieselben Regeln auf dein eigenes CSS anzuwenden.
+Diese Prüfungen untersuchen nur die für den Befehl konfigurierten Quellpfade, nicht automatisch alle Anwendungen mit ranui. Das Repository hat eigene Prüfungen für Oberflächen wie die Dokumentation. Anwendungen nutzen ihre eigenen Prüfungen und kontrollieren Layout, Themes und Interaktion im Browser.
+
+## Gestaltungsbeispiele {#design-examples}
+
+<DesignIllustrations />
 
 ## Prüfliste vor der Auslieferung
 
@@ -135,5 +139,3 @@ Wähle Prüfungen für die betroffene Oberfläche und das geänderte Verhalten; 
 - [ ] Abstände aus der Skala, Schrift nach Rolle, Farbe aus semantischen Tokens.
 - [ ] Keine Paletteneigenschaft in einer `transition`; kein `transition: all`.
 - [ ] Text und Kontext machen Aktion und Objekt klar; nichts signalisiert einen Zustand allein über Farbe.
-
-<DesignIllustrations />

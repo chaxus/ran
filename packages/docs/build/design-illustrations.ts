@@ -74,11 +74,11 @@ const svgStyles = `
 .ran-design-svg .di-guide{stroke:var(--ran-color-link);stroke-width:1;stroke-dasharray:3 4;fill:none}
 .ran-design-svg .di-ink{stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
 .ran-design-svg text{fill:var(--ran-color-text-secondary);font-size:var(--ran-text-label-1);text-anchor:middle}
-.ran-design-figure:is([data-state=playing],[data-state=paused],[data-state=finished]) .di-motion,
-.ran-design-svg[data-autoplay] .di-motion{animation-name:var(--di-animation);animation-duration:4s;animation-fill-mode:both;animation-timing-function:var(--ran-motion-ease-standard);animation-iteration-count:1}
-.ran-design-figure[data-state=paused] .di-motion,.ran-design-figure[data-state=finished] .di-motion{animation-play-state:paused}
+.ran-design-figure:is([data-state=playing],[data-state=paused]) .di-motion,
+.ran-design-svg[data-autoplay] .di-motion{animation-name:var(--di-animation);animation-duration:6s;animation-fill-mode:both;animation-timing-function:var(--ran-motion-ease-standard);animation-iteration-count:infinite}
+.ran-design-figure[data-state=paused] .di-motion{animation-play-state:paused}
 .ran-design-svg .di-optional{--di-animation:ran-design-optional}
-@keyframes ran-design-optional{0%,20%{opacity:0}50%,100%{opacity:1}}
+@keyframes ran-design-optional{0%,10%,100%{opacity:0}25%,85%{opacity:1}}
 @media(prefers-reduced-motion: reduce){.ran-design-svg .di-motion{animation:none!important}}
 `;
 
@@ -121,13 +121,9 @@ export const renderDesignIllustrations = (locale: LocaleDef): string => {
   const copy = copyFor(locale);
   return `<div id="design-illustrations" class="ran-design-illustrations"><p class="ran-design-note">${esc(copy.note)}</p>${kinds
     .map(
-      (
-        kind,
-        index,
-      ) => `<figure id="design-illustration-${kind}" class="ran-design-figure" data-design-illustration data-state="idle">
-    <figcaption><h3 id="design-illustration-${kind}-title">${esc(copy.titles[index])}</h3><p>${esc(copy.descriptions[index])}</p>${index === 1 ? '<code dir="ltr">--ran-radius-lg − --ran-space-1 = --ran-radius-md</code>' : index === 2 ? '<code dir="ltr">--ran-size-1 · --ran-size-7</code>' : ''}</figcaption>
+      (kind, index) => `<figure id="design-illustration-${kind}" class="ran-design-figure" data-design-illustration>
+    <figcaption><h3 id="design-illustration-${kind}-title">${esc(copy.titles[index])}</h3><p>${esc(copy.descriptions[index])}</p>${index === 1 ? '<code dir="ltr"><span>--ran-radius-lg</span> − <span>--ran-space-1</span> = <span>--ran-radius-md</span></code>' : index === 2 ? '<code dir="ltr"><span>--ran-size-1</span> · <span>--ran-size-7</span></code>' : ''}</figcaption>
     <div class="ran-design-canvas">${svg(kind, locale)}</div>
-    <div class="ran-design-tools"><button type="button" hidden aria-describedby="design-illustration-${kind}-title" data-play="${esc(copy.play)}" data-pause="${esc(copy.pause)}" data-resume="${esc(copy.resume)}" data-replay="${esc(copy.replay)}" data-reduced="${esc(copy.reduced)}">${[copy.play, copy.pause, copy.resume, copy.replay].map((label) => `<span aria-hidden="true">${esc(label)}</span>`).join('')}<span data-play-label>${esc(copy.play)}</span></button><span data-reduced-note hidden tabindex="-1">${esc(copy.reduced)}</span><a href="/illustrations/${locale.lang}/${kind}.svg" download>${esc(copy.download)}</a></div>
     </figure>`,
     )
     .join('')}</div>`;
