@@ -56,6 +56,25 @@ describe('r-select contract', () => {
     }
   });
 
+  it('keeps a search draft when focus returns before a pending blur close', async () => {
+    const select = await createSelectWithOptions();
+    select.setAttribute('showsearch', '');
+    vi.useFakeTimers();
+    try {
+      select.show();
+      select.selectBlur(new FocusEvent('blur'));
+      select._search.focus();
+      select._search.value = 'Option 2';
+      select._search.dispatchEvent(new Event('input'));
+      vi.advanceTimersByTime(350);
+      expect(select.open).toBe(true);
+      expect(select._search.value).toBe('Option 2');
+      expect(select.getDropdownOptions().map((option) => option.textContent)).toEqual(['Option 2']);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('reflects disabled property to attributes and selection', async () => {
     const select = await createSelectWithOptions();
     // @ts-ignore - access private _shadowDom because mode is closed
