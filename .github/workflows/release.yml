@@ -1,0 +1,132 @@
+name: Release libraries
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: npm channel (must match all three package versions)
+        type: choice
+        options: [rc, beta, alpha, latest]
+        default: rc
+      publish:
+        description: Upload the verified archives to npm (main only)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.repository == 'chaxus/ran'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+    steps:
+      - name: Reject publication from another branch
+        if: inputs.publish && github.ref != 'refs/heads/main'
+        run: exit 1
+
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.6.0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Pin the npm publication client
+        run: npm install --global npm@11.20.0
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Validate versions, Node baseline and npm availability
+        run: pnpm release:check --tag "$RELEASE_TAG" --registry
+
+      - name: Build and pack libraries in dependency order
+        run: pnpm release:prepare --tag "$RELEASE_TAG"
+
+      - name: Verify repository scripts
+        run: pnpm verify:scripts
+
+      - name: Check source and documentation
+        run: |
+          pnpm lint:es
+          pnpm lint:prettier
+          pnpm verify:docs
+          pnpm verify:links
+          pnpm -F docs check:langs
+          pnpm verify:design
+          node bin/run-checks.mjs tsc
+
+      - name: Test libraries and applications
+        run: pnpm test
+
+      - name: Check package metadata and consumer contracts
+        run: |
+          pnpm publint
+          pnpm verify:consumers
+
+      - name: Install the exact archives outside the workspace
+        run: pnpm verify:release "$RELEASE_TAG"
+
+      - name: Preview npm publication of the verified bytes
+        run: pnpm release:dry-run --tag "$RELEASE_TAG"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-${{ github.sha }}
+          path: .release/
+          include-hidden-files: true
+          retention-days: 14
+
+  publish:
+    if: inputs.publish && github.ref == 'refs/heads/main'
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - run: npm install --global npm@11.20.0
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-${{ github.sha }}
+          path: .release/
+
+      - name: Publish verified tarballs using npm trusted publishing
+        run: node bin/release.mjs publish --tag "$RELEASE_TAG" --confirm
+
+      - name: Preserve partial or complete publication results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: publication-${{ github.sha }}-${{ github.run_attempt }}
+          path: .release/published.json
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 30

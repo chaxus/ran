@@ -52,6 +52,9 @@ jobs:
       - name: Verify repository scripts
         run: pnpm run verify:scripts
 
+      - name: Verify coordinated release metadata
+        run: pnpm release:check
+
       - name: Format check
         run: pnpm run lint:prettier
 
@@ -112,6 +115,12 @@ jobs:
       - name: Verify packed library consumers and import budget
         if: matrix.os == 'ubuntu-latest' && matrix.node_version == 24
         run: pnpm run verify:consumers
+
+      - name: Verify real installation of release archives
+        if: matrix.os == 'ubuntu-latest' && matrix.node_version == 24
+        run: |
+          pnpm release:prepare
+          pnpm verify:release
 
       - name: Test
         run: pnpm run test
