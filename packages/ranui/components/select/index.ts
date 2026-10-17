@@ -104,6 +104,7 @@ export class Select extends RanElement {
   // WAI-ARIA combobox type-ahead: accumulated recently-typed characters, reset
   // after a pause between keystrokes.
   _composing = false;
+  private _lastSearchValue?: string;
   _typeaheadBuffer = '';
   _typeaheadTimeId?: ReturnType<typeof setTimeout>;
   static get observedAttributes(): string[] {
@@ -880,6 +881,10 @@ export class Select extends RanElement {
   changeSearch = (e: Event): void => {
     if (this._composing || (e as InputEvent).isComposing) return;
     const value = (e as CustomEvent<{ value?: string }>).detail?.value ?? this._search.value;
+    // Native blur commits the same text after input already filtered the list.
+    // Replacing the options here would detach a pointer's pending click target.
+    if (e.type === 'change' && value === this._lastSearchValue) return;
+    this._lastSearchValue = value;
     const query = value.toLowerCase();
     this.dispatchEvent(
       new CustomEvent('search', {
@@ -958,6 +963,7 @@ export class Select extends RanElement {
   _applyShowSearch = (): void => {
     this._searchEvents.abort();
     this._composing = false;
+    this._lastSearchValue = undefined;
     if (this.hasAttribute('showsearch')) {
       this.onSearch = this.changeSearch;
       this._searchEvents

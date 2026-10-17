@@ -212,6 +212,8 @@ That makes it a supported way to drive the component, and something to style and
 A bare `showSearch` attribute also enables search. Typing filters options immediately; clearing
 the field restores them. Native text editing is preserved, and Enter during IME composition
 does not select an option. Without search, typing on the focused selector still locates options.
+Typing alone does not commit a value. Choose a filtered option with the pointer or Enter;
+the selection emits one `change` event and returns focus to the selector.
 
 <ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
@@ -306,7 +308,7 @@ Fired when an option is selected. `event.detail` is `{ value, label }`, where `v
 
 ### `search`
 
-Fired only when `showSearch` is enabled, as the user types in the search box (throttled). `event.detail` is `{ value }`, the current search text. The component also filters the visible options by label internally.
+Fired only when `showSearch` is enabled, as the user edits the search box or commits IME composition. `event.detail` is `{ value }`, the current search text. The component also filters the visible options by label internally. Blurring with unchanged text does not repeat the search.
 
 ```html
 <r-select showSearch="true" id="searchable">
