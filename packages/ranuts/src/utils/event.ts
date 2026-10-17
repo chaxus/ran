@@ -36,14 +36,12 @@
  *   }
  */
 export class EventManager {
-  private ac: AbortController;
-
-  constructor() {
-    this.ac = new AbortController();
-  }
+  /** Unused scopes and repeated cleanup never allocate a controller. */
+  private ac: AbortController | null = null;
 
   /** The underlying AbortSignal — pass it straight to addEventListener's options when needed. */
   get signal(): AbortSignal {
+    this.ac ??= new AbortController();
     return this.ac.signal;
   }
 
@@ -65,7 +63,7 @@ export class EventManager {
     handler: EventListenerOrEventListenerObject,
     options?: Omit<AddEventListenerOptions, 'signal'>,
   ): this {
-    target.addEventListener(type, handler, { ...options, signal: this.ac.signal });
+    target.addEventListener(type, handler, { ...options, signal: this.signal });
     return this;
   }
 
@@ -92,18 +90,18 @@ export class EventManager {
         const target = (ev.target as Element | null)?.closest(selector);
         if (target && parent.contains(target)) handler(ev as HTMLElementEventMap[K], target);
       },
-      { ...options, signal: this.ac.signal },
+      { ...options, signal: this.signal },
     );
     return this;
   }
 
   /**
-   * @description: Remove every registered listener and reset the internal AbortController.
-   * Safe to call repeatedly; later on() / delegate() calls start from a clean scope.
+   * @description: Remove every registered listener and release the internal AbortController.
+   * Safe to call repeatedly; the next signal read or listener starts a clean scope.
    */
   abort(): void {
-    this.ac.abort();
-    this.ac = new AbortController();
+    this.ac?.abort();
+    this.ac = null;
   }
 }
 
