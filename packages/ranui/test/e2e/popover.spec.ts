@@ -25,18 +25,21 @@ test('popover — closed', async ({ page }) => {
   await expect(page.locator('div').first()).toHaveScreenshot('popover-closed.png');
 });
 
-test('popover — open on hover', async ({ page }) => {
+test('popover — opens by hover or the touch fallback', async ({ page }) => {
   await mount(page, POPOVER_HTML);
   const trigger = page.locator('r-button');
   await expect(trigger).toBeVisible();
-  await trigger.hover();
+  const hover = await page.evaluate(() => matchMedia('(hover: hover)').matches);
+  if (hover) await trigger.hover();
+  else await trigger.tap();
+  await expect(page.locator('.ran-popover-dropdown')).toHaveCSS('display', 'block');
   await page.waitForTimeout(200);
   // Popup is appended to body outside the component — capture full viewport
   await expect(page).toHaveScreenshot('popover-open.png');
 });
 
 test('popover — open on click', async ({ page }) => {
-  await mount(page, POPOVER_HTML);
+  await mount(page, POPOVER_HTML.replace('hover,click', 'click'));
   const trigger = page.locator('r-button');
   await expect(trigger).toBeVisible();
   await trigger.click();
@@ -45,7 +48,7 @@ test('popover — open on click', async ({ page }) => {
 });
 
 test('popover — click trigger again closes it', async ({ page }) => {
-  await mount(page, POPOVER_HTML);
+  await mount(page, POPOVER_HTML.replace('hover,click', 'click'));
   const trigger = page.locator('r-button');
   const content = page.locator('.ran-popover-dropdown');
   await trigger.click();
@@ -55,7 +58,7 @@ test('popover — click trigger again closes it', async ({ page }) => {
 });
 
 test('popover — removing the host while open also removes the portaled panel', async ({ page }) => {
-  await mount(page, `<div id="host-wrap">${POPOVER_HTML}</div>`);
+  await mount(page, `<div id="host-wrap">${POPOVER_HTML.replace('hover,click', 'click')}</div>`);
   const trigger = page.locator('r-button');
   await trigger.click();
   await expect(page.locator('.ran-popover-dropdown')).toHaveCSS('display', 'block');

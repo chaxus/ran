@@ -373,6 +373,12 @@ export class Popover extends RanElement {
   clickPopover = (e: Event): void => {
     e.stopPropagation();
     e.preventDefault();
+    // A queued hover must not overwrite the latest explicit click/tap.
+    this.setDropdownDisplayBlock.cancel();
+    this.setDropdownDisplayNone.cancel();
+    this.blur.cancel();
+    clearTimeout(this.removeTimeId);
+    this.removeTimeId = undefined;
     this.toggle();
   };
   keydownPopover = (e: KeyboardEvent): void => {
@@ -395,7 +401,7 @@ export class Popover extends RanElement {
         this._events.on(element, 'change', this.watchContent);
       }
     }
-    if (this.trigger.includes('hover')) {
+    if (this.trigger.includes('hover') && !isMobile()) {
       this._events.on(this, 'mouseenter', this.hoverPopover);
       this._events.on(this, 'mouseleave', this.blur);
     }

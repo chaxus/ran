@@ -46,6 +46,48 @@ describe('r-popover contract', () => {
     expect(popover.getAttribute('trigger')).toBe('hover');
   });
 
+  it('ignores synthesized mobile hover so each tap toggles exactly once', async () => {
+    const ua = vi.spyOn(window.navigator, 'userAgent', 'get').mockReturnValue('Mozilla/5.0 (iPhone)');
+    try {
+      const popover = document.createElement('r-popover') as Popover;
+      popover.trigger = 'hover,click';
+      popover.innerHTML = '<button>Open</button><r-content>Details</r-content>';
+      document.body.appendChild(popover);
+      popover.dispatchEvent(new MouseEvent('mouseenter'));
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      popover.click();
+      expect(popover.open).toBe(true);
+      popover.click();
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      expect(popover.open).toBe(false);
+    } finally {
+      ua.mockRestore();
+    }
+  });
+
+  it('keeps the latest click when an earlier hover is still queued', async () => {
+    const popover = document.createElement('r-popover') as Popover;
+    popover.trigger = 'hover,click';
+    popover.innerHTML = '<button>Open</button><r-content>Details</r-content>';
+    document.body.appendChild(popover);
+    popover.dispatchEvent(new MouseEvent('mouseenter'));
+    popover.click();
+    popover.click();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(popover.open).toBe(false);
+  });
+
+  it('keeps a trigger click after an older background click queued a close', async () => {
+    const popover = document.createElement('r-popover') as Popover;
+    popover.trigger = 'click';
+    popover.innerHTML = '<button>Open</button><r-content>Details</r-content>';
+    document.body.appendChild(popover);
+    document.body.click();
+    popover.click();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(popover.open).toBe(true);
+  });
+
   it('toggles visibility on hover trigger', async () => {
     const sleep = (ms = 50) => new Promise((r) => setTimeout(r, ms));
     const popover = document.createElement('r-popover') as any;
