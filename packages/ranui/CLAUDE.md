@@ -10,10 +10,10 @@ Two companion standards sit above this file. **[docs/DESIGN.md](docs/DESIGN.md)*
 
 **[docs/DESIGN.md](docs/DESIGN.md) is the authoritative, executable design standard.** Follow it whenever your work changes what a user sees. It is based on the Geist design system (light/dark only).
 
-For AI applications, use **[docs/AI_INTERFACES.md](docs/AI_INTERFACES.md)** after DESIGN's
-composition and information architecture sections. It covers composers, queues, errors,
-capability-aware settings, connectors/artifacts and host/component ownership; consult the
-generated references below for exact APIs. This guide ships with the npm package.
+For composed interfaces, use **[docs/INTERFACE_GUIDE.md](docs/INTERFACE_GUIDE.md)** after DESIGN's
+composition and information architecture sections. It applies the standard to forms, search,
+async work, settings, external data and reviewable outputs, with craft decisions and acceptance
+evidence. Consult the generated references below for exact APIs. This guide ships with the npm package.
 
 Nine of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, mouse-only drag loops, `:host` display rules that disable `hidden`, token fallbacks naming undeclared tokens, components searching their own shadow tree for elements they built, and shadow trees built outside the constructor. Known violations are ratcheted in [docs/design-rule-baseline.json](docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
 

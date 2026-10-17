@@ -12,11 +12,11 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 这些规则的完整、可机器校验版本在仓库里：
 [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md)。
 
-构建 AI 工作区时，继续阅读统一维护的
-[AI 交互指南](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/AI_INTERFACES.md)：
-紧凑的输入框与队列、可恢复的错误、按能力展示的模型设置、连接器、成果预览与应用，以及回归矩阵。
-该指南明确区分宿主应用职责和 ranui API，安装后也可从
-`node_modules/ranui/docs/AI_INTERFACES.md` 读取，避免多份规则各自漂移。
+组合页面时，继续阅读统一维护的
+[界面实践指南](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md)：
+表单与草稿、搜索、异步任务、可恢复的错误、按能力展示的设置、外部数据、可审阅的结果，以及细节打磨与验收。
+这些规范广泛适用于导入、编辑、设置和内容页面，明确区分宿主应用职责与 ranui API。安装后也可从
+`node_modules/ranui/docs/INTERFACE_GUIDE.md` 读取，避免多份规则各自漂移。
 
 > **适用场景**：在用 `<r-*>` 元素排版页面或搭业务组件，需要决定一个颜色、一段间距、一个字号、
 > 一层投影或一个动效时长时。答案永远是同一句：**先确定角色，值交给令牌。**
@@ -113,8 +113,9 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 
 ## 动效 {#motion}
 
-变化越大，给的时间就越长；不够大就别动。悬停与激活反馈约 150ms，菜单约 200ms，对话框约 300ms，本来
-就一目了然的变化给 0ms。尊重 `prefers-reduced-motion`。
+根据目的和使用频率决定是否需要动效。高频的悬停、聚焦和键盘反馈默认即时响应。只有动效能解释变化时，
+才使用已有动效令牌：小幅过渡约 150ms、菜单约 200ms、对话框约 300ms，都是可选参考，而非必须等待的时长。
+动效应能被新操作打断，并尊重 `prefers-reduced-motion`。
 
 **绝不要让调色属性参与过渡。** CSS 分不清颜色**为什么**变了，所以给 `background-color`、`color`、
 `border-color`、`box-shadow`、`fill`、`stroke` 加的 `transition`，在**主题**翻转时同样会触发：每个

@@ -15,11 +15,11 @@ page takes before any of it is decided is
 these rules lives in the repository as
 [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
-For an AI workspace, continue with the canonical
-[AI interface guide](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/AI_INTERFACES.md):
-compact composers and queues, recoverable failures, capability-aware model settings, connectors,
-artifact review and the regression matrix. It separates host application responsibilities from
-ranui APIs and is also installed at `node_modules/ranui/docs/AI_INTERFACES.md`.
+For composed pages, continue with the canonical
+[interface guide](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md):
+forms and drafts, search, async work, recoverable failures, capability-aware settings, external data,
+reviewable outputs and interface craft. It separates host application responsibilities from ranui APIs
+and is also installed at `node_modules/ranui/docs/INTERFACE_GUIDE.md`.
 
 > **Use when** you are laying out a page or building an app-level component out of `<r-*>`
 > elements and have to decide a color, a gap, a text size, a shadow or a motion duration. The
@@ -133,9 +133,10 @@ transition after `open` is removed.
 
 ## Motion {#motion}
 
-The bigger the change, the more time it gets; below that threshold, don't animate. Hover and
-active feedback is ~150ms, menus ~200ms, dialogs ~300ms, and a change that is already obvious
-gets 0ms. Respect `prefers-reduced-motion`.
+Purpose and frequency decide whether to animate. Frequent hover, focus and keyboard feedback
+is immediate by default. Use existing motion tokens only when motion explains a change: a small
+transition may take ~150ms, menus ~200ms and dialogs ~300ms. These are optional examples, not
+required delays. Keep motion interruptible and respect `prefers-reduced-motion`.
 
 **Never let a palette property transition.** CSS cannot tell _why_ a color changed, so a
 `transition` on `background-color`, `color`, `border-color`, `box-shadow`, `fill` or `stroke`

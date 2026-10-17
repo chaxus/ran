@@ -13,7 +13,7 @@ const missing = (text: string): string[] => references(text).filter((token) => !
 const cssExamples = (text: string): string[] =>
   [...text.matchAll(/^```css\r?\n([\s\S]*?)^```/gm)].map((match) => match[1]);
 
-describe('executable AI interface guidance', () => {
+describe('executable interface guidance', () => {
   it.each(['\n', '\r\n'])('checks CSS examples with %j line endings', (newline) => {
     const css = 'padding: var(--ran-space-5, var(--ran-space-6));';
     const examples = cssExamples(['```css', css, '```'].join(newline));
@@ -22,7 +22,7 @@ describe('executable AI interface guidance', () => {
   });
 
   it('uses declared foundation tokens in every CSS example, including fallbacks', () => {
-    const examples = cssExamples(read('docs/AI_INTERFACES.md'));
+    const examples = cssExamples(read('docs/INTERFACE_GUIDE.md'));
     expect(examples.length).toBeGreaterThan(0);
     for (const example of examples) {
       expect(references(example).length).toBeGreaterThan(0);
@@ -57,8 +57,8 @@ describe('executable AI interface guidance', () => {
     ) as Record<string, { files: Array<{ path: string }> }> | Array<{ files: Array<{ path: string }> }>;
     // npm versions return either an array or a package-name keyed object.
     const files = new Set(Object.values(packed)[0].files.map((file) => file.path));
-    expect(files.has('docs/AI_INTERFACES.md')).toBe(true);
-    for (const [, target] of read('docs/AI_INTERFACES.md').matchAll(/\[[^\]]+\]\((\.\.?\/[^)#]+)(?:#[^)]*)?\)/g)) {
+    expect(files.has('docs/INTERFACE_GUIDE.md')).toBe(true);
+    for (const [, target] of read('docs/INTERFACE_GUIDE.md').matchAll(/\[[^\]]+\]\((\.\.?\/[^)#]+)(?:#[^)]*)?\)/g)) {
       const relative = target.startsWith('../') ? target.slice(3) : `docs/${target.slice(2)}`;
       expect(files.has(relative), `published guide links to missing ${relative}`).toBe(true);
     }

@@ -81,7 +81,7 @@ Ein pauschaler `z-index` auf der Hülle hebt _alles_ darin (auch völlig statisc
 
 ## Bewegung {#motion}
 
-Je größer die Änderung, desto mehr Zeit bekommt sie; unterhalb dieser Schwelle wird gar nicht animiert. Rückmeldung beim Überfahren und Drücken liegt bei rund 150ms, Menüs bei 200ms, Dialoge bei 300ms, und eine ohnehin offensichtliche Änderung bekommt 0ms. Achte auf `prefers-reduced-motion`.
+Zweck und Nutzungshäufigkeit entscheiden, ob Bewegung sinnvoll ist. Häufiges Hover-, Fokus- und Tastaturfeedback erfolgt standardmäßig sofort. Nutze vorhandene Bewegungstokens nur, wenn sie eine Änderung erklären: kleine Übergänge etwa 150ms, Menüs 200ms und Dialoge 300ms sind optionale Beispiele, keine Pflichtverzögerungen. Bewegung muss unterbrechbar bleiben und `prefers-reduced-motion` beachten.
 
 **Lass niemals eine Paletteneigenschaft animieren.** CSS kann nicht wissen, _warum_ sich eine Farbe geändert hat, also feuert eine `transition` auf `background-color`, `color`, `border-color`, `box-shadow`, `fill` oder `stroke` auch beim Wechsel des **Themes** — jedes Element blendet in seinem eigenen Tempo über, während der Rest der Seite längst umgeschaltet hat. Animiere stattdessen Bewegungseigenschaften (`transform`, `opacity`, Geometrie). `transition: all` und nackte Kurzformen wie `transition: 0.2s` bedeuten _alles_, Paletteneigenschaften eingeschlossen; beides ist in ranuis eigenen Stilen verboten und in deinen eine schlechte Idee.
 

@@ -1,5 +1,10 @@
 # Agent AI design guidance
 
+> Historical proposal, superseded by the user's general-interface direction. Follow the
+> [universal interface spec](../specs/2026-10-17-universal-interface-guidance-design.md) and
+> [implementation plan](../plans/2026-10-17-universal-interface-guidance.md). AI-specific categories
+> and paths below record earlier work; they do not govern current guidance.
+
 ## Goal and scope
 
 The user requests that the design lessons from the Document AI workspace be integrated into ran's existing design system, usable by agents, delivered as one PR with multiple commits allowed. Preserve library APIs and defaults. This is documentation and documentation validation, not a new AI application or token scale.
