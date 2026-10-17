@@ -454,22 +454,24 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `input`
 
-- Tokens: 86
+- Tokens: 88
 - Parts: 4
 
 #### Tokens
-<!-- layers: semantic: 12 · skin: 1 · component: 61 · internal: 12 -->
+<!-- layers: semantic: 14 · skin: 1 · component: 61 · internal: 12 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-muted`
 - `--ran-color-border`
 - `--ran-color-border-hover`
 - `--ran-color-danger`
+- `--ran-color-danger-foreground`
 - `--ran-color-link`
 - `--ran-color-primary`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
 - `--ran-color-warning`
+- `--ran-color-warning-foreground`
 - `--ran-focus-ring`
 - `--ran-input-active-border-color`
 - `--ran-input-active-box-shadow`

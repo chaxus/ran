@@ -23,10 +23,10 @@
 // .ran-input-label`, which would require the label to come *after*
 // `.ran-input` in DOM order (it comes before, being the field's caption).
 :host([status='error']) .ran-input-label {
-  color: var(--ran-input-label-error-color, var(--ran-color-danger, #ff4d4f));
+  color: var(--ran-input-label-error-color, var(--ran-color-danger-foreground, #d8001b));
 }
 :host([status='warning']) .ran-input-label {
-  color: var(--ran-input-label-warning-color, var(--ran-color-warning, #faad14));
+  color: var(--ran-input-label-warning-color, var(--ran-color-warning-foreground, #aa4d00));
 }
 :host([disabled]) .ran-input-label {
   color: var(--ran-input-label-disabled-color, var(--ran-color-text-disabled, #999));
@@ -225,8 +225,8 @@
   }
 }
 :host([status='error']) .ran-input-message {
-  color: var(--ran-input-message-error-color, var(--ran-color-danger, #ff4d4f));
+  color: var(--ran-input-message-error-color, var(--ran-color-danger-foreground, #d8001b));
 }
 :host([status='warning']) .ran-input-message {
-  color: var(--ran-input-message-warning-color, var(--ran-color-warning, #faad14));
+  color: var(--ran-input-message-warning-color, var(--ran-color-warning-foreground, #aa4d00));
 }
