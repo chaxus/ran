@@ -1,428 +1,98 @@
 # ranui
 
-基于 `Web Components` 的实验性组件库。组件使用 Shadow DOM 封装、CSS Token 主题体系，并提供 SSR / Declarative Shadow DOM 支持。
+框架无关的 Web Components，提供 Shadow DOM、主题 Token 和 SSR 工具。
 
----
+[![npm](https://img.shields.io/npm/v/ranui.svg)](https://www.npmjs.com/package/ranui) · [MIT](./LICENSE)
 
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-esm%2C%20iife-green.svg" alt="module formats: esm, iife"></a>
+ESM · IIFE · TypeScript
 
 [English](./README.md) | **中文** | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-## ⚠️ 重要说明
+> Alpha 阶段：API 和包格式可能变化。请锁定具体版本，升级前阅读迁移指南。
 
-这是一个**实验性 UI 库**，处于早期开发阶段。虽然功能可用，但主要用于学习和实验。
+## 快速开始
 
-**关键要点：**
-
-- 🚧 **早期开发**: 功能仍在开发和完善中
-- 🧪 **实验性**: API 可能会频繁变化
-- 📚 **学习导向**: 主要用于学习 Web Components 和 UI 开发
-
-## 特点
-
-1. **跨框架兼容：** 与 React, Vue, Preact, SolidJS, Svelte 等兼容。可以和遵循 W3C 标准的任何 JavaScript 项目集成。
-2. **原生体验：** 易于入门，像使用原生 HTML 标签一样使用 `<r-button>`、`<r-modal>` 等自定义元素。
-3. **模块化设计：** 可选导入和全量导入，以增强可维护性和可伸缩性。
-4. **Shadow DOM 封装：** 组件内部样式默认隔离，并通过 CSS Token、`::part()` 和 `sheet` 属性开放可控的样式覆盖能力。
-5. **支持类型校验：** 基于 TypeScript 构建，具有类型支持，确保代码的健壮性和可维护性。
-6. **SSR 友好：** 通过 `defineSSR`、`renderToString` 和 Declarative Shadow DOM 支持服务端渲染场景。
-7. **无障碍：** ARIA 角色/状态、完整键盘导航、表单参与控件（`<r-checkbox>`/`<r-input>`/`<r-select>` 可被原生 `FormData` 收集）、live-region 提示，并尊重 `prefers-reduced-motion`。
-
-## 安装
-
-使用 npm:
-
-```console
-npm install ranui --save
+```sh
+npm install ranui
 ```
 
-## 文档和示例
-
-[See components and use examples](https://ran.chaxus.com/cn/src/ranui/)
-
-### 样式定制文档
-
-当前样式系统已统一为 CSS Token 与 `::part()` 规范。
-
-- 样式覆盖规范：[docs/style-override.md · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-override.md)
-- 完整 Token/Part 清单（自动生成）: [docs/style-tokens-parts.md · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-parts.md)
-- 面向使用方的公开样式 API（自动生成）: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
-- 公开 Token 过滤配置：[docs/style-token-filter.json · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-token-filter.json)
-
-仓库源码贡献者可通过以下命令刷新样式文档：
-
-```bash
-pnpm doc:style
-```
-
-CI 会在仓库根目录运行 `pnpm run verify:docs`，当自动生成的文档与源码不一致时构建失败。
-
-### 主题
-
-RanUI 采用 [Geist 设计体系](https://vercel.com/geist) 的状态阶梯，并提供可选的 **Geist Sans / Geist Mono** 字体。主题 API 支持 `light`、`dark`、`system`，不提供主题包。保留宿主已有的主题管理，或按需使用 ranui 的持久化模式。运行时调用支持 SSR：
-
-```ts
-import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui/theme';
-import 'ranui/style';
-
-initTheme(); // 页面加载时恢复上次的选择
-setTheme('system'); // 'light' | 'dark' | 'system'
-setThemeToken('--ran-color-primary', '#6c47ff');
-setThemeTokens({ '--ran-radius-md': '10px' });
-```
-
-`ranui/theme` 入口只包含主题引擎，不会注册任何自定义元素——只需要 Token / 暗色模式时它不会把组件带进你的包体。这些 API 同样从 `ranui` 主入口重新导出。
-
-暗色模式会更新基础色阶，并显式覆盖部分表面、主操作悬停/按下状态及阴影。使用语义 Token；视觉规则以 [DESIGN.md](./docs/DESIGN.md) 为准，[主题架构](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md) 说明仓库中的实现。
-
-### 国际化
-
-框架无关的 i18n 引擎作为独立的 `ranui/i18n` 入口提供，与 `ranui/theme` 一样不注册任何自定义元素：
-
-```ts
-import { createI18n, useI18n } from 'ranui/i18n';
-
-createI18n({
-  // 每种语言是扁平字典——key 原样使用（不做嵌套）
-  messages: { en: { 'hero.title': 'Hi {name}' }, zh: { 'hero.title': '你好 {name}' } },
-  fallbackLocale: 'en',
-  persist: true, // 记住选择（localStorage）
-  detectNavigator: true, // 按浏览器语言初始化
-});
-
-useI18n()!.t('hero.title', { name: 'Ada' }); // → "Hi Ada"
-useI18n()!.setLocale('zh'); // 持久化并通知订阅者
-```
-
-`t()` 依次回退到 fallback locale、再到 key 本身；`{param}` 占位符会被插值。核心逻辑 SSR 安全。
-
-## 引入方式
-
-支持按需导入，以显著减少包体积大小
+包导入采用 ESM。在构建工具中按组件导入，并在应用入口导入一次公共样式。
 
 ```js
 import 'ranui/button';
-```
-
-非组件入口单独打包对应的工具引擎，可以只引入需要的部分，而不注册全部元素：
-
-```js
-import { initTheme } from 'ranui/theme'; // 仅主题
-import { createI18n } from 'ranui/i18n'; // 仅 i18n
-```
-
-如果遇到样式问题，可以选择手动导入样式文件
-
-```js
+import 'ranui/input';
 import 'ranui/style';
 ```
 
-如果遇到类型问题，可以选择手动导入类型文件
-
-```ts
-import 'ranui/typings';
-// 或者
-import 'ranui/dist/index.d.ts';
-// 或者
-import 'ranui/type';
-// 或者
-import 'ranui/dist/typings';
-```
-
-并不是都要，选一个能生效的就行
-
-也支持全量导入
-
-```ts
-import 'ranui';
-```
-
-- ES module
-
-```js
-import 'ranui';
-```
-
-或者
-
-```js
-import 'ranui/button';
-```
-
-- IIFE
+在 HTML 中使用自定义元素：
 
 ```html
-<script src="./ranui/dist/index.iife.js"></script>
+<r-input name="email" type="email" label="Email"></r-input> <r-button type="primary">Save</r-button>
 ```
 
-### 无构建工具场景（静态页 / CDN）
+## IIFE / CDN
 
-按页面用到的组件数量选择分发方式：
-
-| 场景                         | 推荐方式                                | 原因                                      |
-| ---------------------------- | --------------------------------------- | ----------------------------------------- |
-| 只用 1–2 个组件，一行 script | 按组件 IIFE：`dist/iife/<name>.iife.js` | 自包含，无需模块语法                      |
-| 用多个组件                   | 按组件 ES 模块：`dist/<name>.js`        | 共享 runtime chunk 由浏览器模块图自动去重 |
-| 全都要                       | 全量包：`dist/index.iife.js`            | 一个文件注册所有组件                      |
-| 项目里有构建工具             | npm 引入：`import 'ranui/<name>'`       | 可摇树，共享一份 runtime                  |
-
-按组件 IIFE——一行引入、零构建：
+普通浏览器 script 标签可加载独立 IIFE。将 VERSION 替换为已发布版本，无需构建工具或模块加载器。
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranui/dist/iife/select.iife.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ranui@VERSION/dist/iife/button.iife.js" defer></script>
+<r-button type="primary">Save</r-button>
 ```
 
-每个 IIFE 内联了自己的内部依赖（如 `select` 内含 `icon`）；元素注册有守卫，多个文件共享依赖时同时加载是安全的——但每个文件都带一份共享 runtime。页面需要多个组件时，建议改用 ES 模块，浏览器会自动去重：
+完整 IIFE 位于 `dist/index.iife.js`。同一页面请选择完整包或单组件包，避免混用两者。
 
-```html
-<script type="module">
-  import 'https://cdn.jsdelivr.net/npm/ranui/dist/button.js';
-  import 'https://cdn.jsdelivr.net/npm/ranui/dist/select.js';
-</script>
-```
+## TypeScript
 
-## 使用方式
-
-它是基于`Web Components`的组件，你可以不用关注框架就可以使用它。
-
-在大多数情况下，您可以像使用本地 `div` 标签一样使用它
-
-下面是一些例子：
-
-- html
-- js
-- jsx
-- vue
-- tsx
-
-### html
-
-```html
-<script src="./ranui/dist/index.iife.js"></script>
-
-<body>
-  <r-button>Button</r-button>
-</body>
-```
-
-### js
-
-```js
-import 'ranui';
-
-const Button = document.createElement('r-button');
-Button.textContent = 'this is button text';
-document.body.appendChild(Button);
-```
-
-### jsx
-
-```jsx
-import 'ranui';
-
-const App = () => {
-  return (
-    <>
-      <r-button>Button</r-button>
-    </>
-  );
-};
-```
-
-### vue
-
-```vue
-<template>
-  <r-button></r-button>
-</template>
-<script>
-import 'ranui';
-</script>
-```
-
-### tsx
-
-```tsx
-import 'ranui/button';
-
-const Button = () => {
-  return (
-    <div>
-      <r-button type="primary">button</r-button>
-    </div>
-  );
-};
-```
-
-### Message 位置与容器配置
-
-`window.message` 现已支持自定义顶部偏移、层级和挂载容器：
+每个入口都附带类型。需要可选的浏览器全局和 JSX 声明时，使用仅类型导入：
 
 ```ts
-import 'ranui/message';
-
-const customRoot = document.getElementById('custom-message-root');
-
-window.message?.success({
-  content: '保存成功',
-  duration: 2000,
-  top: 24,
-  zIndex: 3000,
-  getContainer: () => customRoot,
-});
+import type {} from 'ranui/typings';
 ```
 
-`top` 支持 `number | string`（`24` 会转成 `24px`，`'2rem'` 会保留原单位）。
-
-`zIndex` 支持 `number | string`。
-
-`getContainer` 需要返回 `HTMLElement`；未传时默认挂载到 `document.body`。
-
-### 响应式原语
-
-`signal`、`createEffect`、`computed`、`batch`、`untrack` 以及所有权层（`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`）与 DOM builder 一起提供，用于在无框架依赖的情况下构建响应式页面区块。设计参考 SwiftUI 的 `@Observable`，并采用 Solid.js 风格的保证：effect 重新执行前自动清理过期订阅；`batch()` 将多次写入合并为一次 flush；`computed` 是**惰性 + 按值记忆化**的（未被读取的 memo 从不计算，且仅当值真正改变时才唤醒依赖）；每个 effect/memo/绑定都归其作用域所有，销毁一个 `createRoot` 即可一次性拆除其派生的一切 —— 这是页面/路由的销毁单元。`ElementBuilder` 链式方法（`text`/`attr`/`class`/…）也接受 signal getter 作为自动更新的绑定。完整指南见 [`ranview` · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md)。
+如果 TypeScript 检查 CSS 副作用导入，请在应用的 `assets.d.ts` 中声明样式入口：
 
 ```ts
-import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';
-
-function initCounter(container: HTMLElement) {
-  const [count, setCount] = signal(0);
-  const [step, setStep] = signal(1);
-  const doubled = computed(() => count() * 2);
-  const scope = new EventManager();
-
-  const label = Div().build();
-  const view = Div()
-    .children(
-      label,
-      ButtonBuilder()
-        .text('+')
-        .listen(scope, 'click', () => setCount((n) => n + step())),
-      ButtonBuilder()
-        .text('重置')
-        .listen(
-          scope,
-          'click',
-          () =>
-            batch(() => {
-              setCount(0);
-              setStep(1);
-            }), // 两次写入 → 一次 flush
-        ),
-    )
-    .build();
-
-  const dispose = createEffect(() => {
-    label.textContent = `${count()} (×2 = ${doubled()})`;
-  });
-
-  container.appendChild(view);
-  return () => {
-    dispose();
-    scope.abort();
-  }; // 区块销毁时清理
-}
+declare module 'ranui/style';
 ```
 
-详细 API 请参考 [工具文档 · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.zh-CN.md)。
+## SSR
 
-### 路由
-
-RanUI 内置客户端路由，提供声明式组件和 JavaScript API 两种方式。
-
-**声明式组件：**
-
-```html
-<r-router>
-  <nav>
-    <r-link href="/">首页</r-link>
-    <r-link href="/about">关于</r-link>
-  </nav>
-
-  <r-route path="/" exact><h2>首页</h2></r-route>
-  <r-route path="/about"><h2>关于</h2></r-route>
-  <r-route path="/users/:id"><h2>用户详情</h2></r-route>
-</r-router>
-```
-
-**JavaScript API，含导航守卫：**
+以下服务端示例使用 Node 24+。组件导入会注册对应的 SSR 序列化器，结果包含声明式 Shadow DOM。
 
 ```ts
-import { createRouter } from 'ranui';
+import { Button } from 'ranui/button';
+import { renderToString } from 'ranui/ssr';
 
-const router = createRouter({
-  mode: 'history',
-  routes: [
-    { path: '/', exact: true, meta: { title: '首页' } },
-    { path: '/users/:id', meta: { requiresAuth: true } },
-  ],
-  viewTransition: 'spa', // 'spa' | 'mpa' | 'both'
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.meta?.requiresAuth && !isLoggedIn()) next('/login');
-  else next();
-});
-
-router.push('/users/42');
+const html = renderToString(new Button());
+console.log(html);
 ```
 
-纯 MPA 站点（无需 JS router）可使用 `enableMpaViewTransitions()` 注入 `@view-transition { navigation: auto }`。共享元素过渡动画通过标准 `view-transition-name` CSS 属性实现。
+## Theme
+
+主题模式需要主动启用。通过公共 Token 和 part 定制样式，完整规则与 API 见下方链接。
 
 ```ts
-import { enableMpaViewTransitions } from 'ranui';
-enableMpaViewTransitions();
+import { initTheme, setTheme } from 'ranui/theme';
+
+initTheme();
+setTheme('system');
 ```
 
-完整 API（守卫、`onPageSwap`/`onPageReveal`、元素级动画命名）请参考 [路由文档](https://ran.chaxus.com/cn/src/ranui/router/)。
+## 文档
 
-### SSR & Builder (推荐)
+[ranui](https://ran.chaxus.com/cn/src/ranui/)
 
-对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，RanUI 内部使用 `builder`、SSR registry 与 Declarative Shadow DOM。组件通过 `ensureShadowRoot` 复用已有 Shadow Root，并在 constructor 里构建自己的树。服务端渲染出的树只负责首帧绘制，随后会被替换：组件挂的是 **closed** shadow root，而 `attachShadow` 会清空声明式 shadow root 的子节点，因此客户端总是重建。
+- [组件 API](./docs/COMPONENTS.md)
+- [样式与 Token](./docs/style-tokens-public.md)
+- [设计与交互](./docs/DESIGN.md) · [Interaction](./docs/INTERACTION.md)
+- [DOM 构建器与信号](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md)
+- [维护者与 Agent 参考](./CLAUDE.md)
+- [迁移指南](https://ran.chaxus.com/cn/src/ranuts/migration/)
 
-源码内的 SSR 渲染示例：
+## 参与贡献
 
-```ts
-import { Button } from '@/components/button';
-import { renderToString } from '@/utils/ssr';
+[维护者与 Agent 参考](./CLAUDE.md) · [CODING](./docs/CODING.md) · [AGENTS.md](https://github.com/chaxus/ran/blob/main/AGENTS.md)
 
-const button = new Button();
-button.setAttribute('effect', 'true');
+## 许可证
 
-// 输出包含 Declarative Shadow DOM 的 HTML 字符串
-const html = renderToString(button);
-```
-
-更多细节请查看 [Utility Documentation · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md)。
-
-## 组件开发约定
-
-新增或维护组件时请遵循当前包内约定：
-
-- 组件继承 `RanElement`，不要直接继承浏览器环境下的 `HTMLElement`。
-- 使用 `ensureShadowRoot` 创建或复用 Shadow Root，不要直接调用 `attachShadow`。
-- 在 constructor 里构建 Shadow DOM 子树，别的地方不要建。
-- 构建时用 `.ref()` 捕获元素，再用 `shadowPart` 取回；不要用 `querySelector` 去查组件自己建出来的东西。
-- `observedAttributes` 包含 `sheet`，并通过 `syncSheetAttribute` 同步组件级样式覆盖。
-- `attributeChangedCallback` 首行使用 `if (old === next) return;` 避免重复同步。
-- 使用 `defineSSR('r-name', Component)` 注册组件，而不是直接调用 `customElements.define`。
-- 在 `index.ts` 中同时添加类型导出和副作用导入；在 `vite.config.ts`、`package.json` 中补齐独立入口与导出。
-- 在 `connectedCallback` 中使用 `@/utils/builder` 导出的 `EventManager` 管理生命周期事件；在 `disconnectedCallback` 中调用 `manager.abort()` 一次清理所有监听器，不要逐个调用 `removeEventListener`。
-
-## 贡献
-
-我们欢迎学习者和开发者的贡献！这是一个实验性项目，请对开发过程保持耐心。
-
-## 贡献者
-
-<a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" />
-</a>
-
-## Meta
-
-[LICENSE (MIT)](./LICENSE)
+[MIT](./LICENSE)

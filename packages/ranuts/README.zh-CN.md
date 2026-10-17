@@ -1,118 +1,65 @@
 # ranuts
 
-实验性工具函数库，包含常用的函数和工具
+覆盖浏览器 API、数据处理、流和二维渲染的 TypeScript 工具。
 
----
+[![npm](https://img.shields.io/npm/v/ranuts.svg)](https://www.npmjs.com/package/ranuts) · [MIT](./LICENSE)
 
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranuts.svg" alt="npm-v"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranuts.svg" alt="npm-d"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-esm%2C%20iife-green.svg" alt="module formats: esm, iife"></a>
+ESM · IIFE · TypeScript
 
 [English](./README.md) | **中文** | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
----
+> Alpha 阶段：API 和包格式可能变化。请锁定具体版本，升级前阅读迁移指南。
 
-## ⚠️ 重要说明
+## 快速开始
 
-这是一个**实验性工具函数库**，处于早期开发阶段。虽然功能可用，但主要用于学习和实验。
-
-**关键要点：**
-
-- 🚧 **早期开发**: 功能仍在开发和完善中
-- 🧪 **实验性**: API 可能会频繁变化
-- 📚 **学习导向**: 主要用于学习 JavaScript/TypeScript 工具函数
-
-## 安装
-
-使用 npm:
-
-```console
-npm install ranuts@latest --save
+```sh
+npm install ranuts
 ```
 
-## 文档
+```ts
+import { rgbToHex } from 'ranuts/utils';
 
-[一些常用的函数和工具](https://ran.chaxus.com/cn/src/ranuts/)
-
-**面向 AI / 大模型：** 从 [CLAUDE.md](./CLAUDE.md)（入口点、运行时约束、代码约定）和
-[docs/API.md](./docs/API.md)（自动生成的 API 参考，含每个导出符号的签名与说明，用
-`npm run doc:api` 重新生成）开始。
-
-也可以从 `ran` 插件市场安装现成的 **Claude Code skill**，它会把导入映射、`ranuts/utils`
-清单、用法示例和代码约定交给助手，并指向包内附带的 API 参考：
-
-```bash
-/plugin marketplace add chaxus/ran
-/plugin install ranuts@ran
+console.log(rgbToHex(1, 2, 3)); // #010203
 ```
 
-装好后 Claude 会自动使用（也可以手动调用 `/ranuts:ranuts`）。
+## ESM
 
-## 使用方式
+按运行环境和用途选择入口。部分工具依赖浏览器全局对象；可以导入包不代表所有工具都能在服务端运行。
 
-按需导入。您可以选择：
+| 包                    | 用途                                    |
+| --------------------- | --------------------------------------- |
+| `ranuts/utils`        | DOM/BOM、颜色、二进制、存储等工具       |
+| `ranuts/i18n`         | 独立国际化引擎                          |
+| `ranuts/stream`       | SSE 解析与流式响应状态                  |
+| `ranuts/conversation` | 会话事件日志投影                        |
+| `ranuts/visual`       | 二维渲染；浏览器                        |
+| `ranuts/vnode`        | 虚拟 DOM；浏览器                        |
+| `ranuts/sw`           | Service Worker 缓存策略；Service Worker |
 
-- `ranuts/utils` —— DOM/BOM、字符串、对象、数字、颜色、时间、存储、二进制/zip、
-  Worker/IndexedDB、i18n 等工具
-- `ranuts/visual` —— 2D 渲染引擎（Canvas / WebGL / WebGPU，**仅浏览器**）
-- `ranuts/sw` —— 缓存策略 + 预缓存协议的 Service Worker 一侧（**仅 Service Worker**）
-- `ranuts/vnode` —— Snabbdom 风格的虚拟 DOM
-- `ranuts/stream` —— Server-Sent Events 解析、对流式模型响应的厂商中立折叠，以及判断历史何时装不下的 token 预算
-- `ranuts/conversation` —— 将只追加的事件日志投影为可渲染的对话节点
-- `ranuts/i18n` —— 单独的 i18n 引擎，不牵入 `utils` 的其余部分
+## IIFE / CDN
 
-```js
-import { debounce } from 'ranuts/utils';
-import { createI18n } from 'ranuts/i18n';
-```
-
-全量导入（全量导入会引入许多不必要的模块，建议按需导入）
-
-- ESM
-
-```js
-import { debounce } from 'ranuts';
-
-const onResize = debounce(() => {
-  console.log('窗口尺寸发生变化');
-}, 200);
-
-window.addEventListener('resize', onResize);
-```
-
-- IIFE
+普通浏览器 script 标签可加载独立 IIFE。将 VERSION 替换为已发布版本，无需构建工具或模块加载器。
 
 ```html
-<script src="./ranuts/dist/iife/index.iife.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/ranuts@VERSION/dist/iife/utils.iife.js"></script>
 <script>
-  const { debounce } = ranuts;
-  const onResize = debounce(() => {
-    console.log('窗口尺寸发生变化');
-  }, 200);
-
-  window.addEventListener('resize', onResize);
+  console.log(ranuts_utils.rgbToHex(1, 2, 3));
 </script>
 ```
 
-## 贡献
+工具 IIFE 暴露 `ranuts_utils`；完整 `dist/iife/index.iife.js` 暴露 `ranuts`。请将 VERSION 替换为已发布版本。
 
-我们欢迎学习者和开发者的贡献！这是一个实验性项目，请对开发过程保持耐心。
+## 文档
 
-## 贡献者
+- [ranuts](https://ran.chaxus.com/cn/src/ranuts/)
+- [API](./docs/API.md)
+- [维护者与 Agent 参考](./CLAUDE.md)
+- [迁移指南](https://ran.chaxus.com/cn/src/ranuts/migration/)
 
-<a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" />
-</a>
+## 参与贡献
 
-## 访问统计
+[维护者与 Agent 参考](./CLAUDE.md) · [AGENTS.md](https://github.com/chaxus/ran/blob/main/AGENTS.md)
 
-![](http://profile-counter.glitch.me/chaxus-ranuts/count.svg)
+## 许可证
 
-## Meta
-
-[LICENSE (MIT)](/LICENSE)
-
-[Alpha migration](https://ran.chaxus.com/src/ranuts/migration/)
+[MIT](./LICENSE)
