@@ -22,10 +22,12 @@ describe('executable interface guidance', () => {
   });
 
   it('uses declared foundation tokens in every CSS example, including fallbacks', () => {
-    const examples = cssExamples(read('docs/INTERFACE_GUIDE.md'));
+    const examples = ['DESIGN', 'INTERACTION', 'WORKFLOW_PATTERNS'].flatMap((owner) =>
+      cssExamples(read(`docs/${owner}.md`)),
+    );
     expect(examples.length).toBeGreaterThan(0);
+    expect(references(examples.join('\n')).length).toBeGreaterThanOrEqual(6);
     for (const example of examples) {
-      expect(references(example).length).toBeGreaterThan(0);
       expect(missing(example)).toEqual([]);
     }
   });
@@ -57,10 +59,13 @@ describe('executable interface guidance', () => {
     ) as Record<string, { files: Array<{ path: string }> }> | Array<{ files: Array<{ path: string }> }>;
     // npm versions return either an array or a package-name keyed object.
     const files = new Set(Object.values(packed)[0].files.map((file) => file.path));
-    expect(files.has('docs/INTERFACE_GUIDE.md')).toBe(true);
-    for (const [, target] of read('docs/INTERFACE_GUIDE.md').matchAll(/\[[^\]]+\]\((\.\.?\/[^)#]+)(?:#[^)]*)?\)/g)) {
-      const relative = target.startsWith('../') ? target.slice(3) : `docs/${target.slice(2)}`;
-      expect(files.has(relative), `published guide links to missing ${relative}`).toBe(true);
+    for (const owner of ['INTERFACE_GUIDE', 'INTERACTION', 'WORKFLOW_PATTERNS']) {
+      const path = `docs/${owner}.md`;
+      expect(files.has(path), `package omits ${path}`).toBe(true);
+      for (const [, target] of read(path).matchAll(/\[[^\]]+\]\((\.\.?\/[^)#]+)(?:#[^)]*)?\)/g)) {
+        const relative = target.startsWith('../') ? target.slice(3) : `docs/${target.slice(2)}`;
+        expect(files.has(relative), `published ${owner} links to missing ${relative}`).toBe(true);
+      }
     }
     expect(files.has('CLAUDE.md')).toBe(true);
     const plugin = read('../../plugins/ranui/skills/ranui/SKILL.md');

@@ -40,10 +40,19 @@
 
 ## Chunk 3: Responsibility-based organization (latest user correction)
 
-- [ ] Replace the 297-line INTERFACE_GUIDE with a short 35–60-line reading index; move content, do not duplicate it.
-- [ ] Create INTERACTION.md for general input/focus/keyboard/draft/feedback/loading/error/recovery outcomes. Create WORKFLOW_PATTERNS.md for optional queue/batch/settings/account/source/revision recipes, each with applicability and a host-contract caveat. Do not invent a new AI category.
-- [ ] Move density/CSS and source-informed visual craft to appropriate DESIGN sections; add only necessary async identity/cleanup engineering guidance to CODING §3. Keep workflow recipes out of DESIGN.
-- [ ] Update AGENTS, CLAUDE, plugin, README and EN/CN thin routes to distinguish the owners. Add both new leaf docs to package files.
-- [ ] Adapt existing test to inspect executable CSS in visual/interaction/pattern docs (allow zero token refs in a geometry-only example, but require a meaningful token-bearing corpus). Keep LF/CRLF and masked-token negative fixtures. Verify actual npm package contents and index/new-leaf direct local dependencies.
+- [x] Replace the 297-line INTERFACE_GUIDE with a short 35–60-line reading index; move content, do not duplicate it.
+- [x] Create INTERACTION.md for general input/focus/keyboard/draft/feedback/loading/error/recovery outcomes. Create WORKFLOW_PATTERNS.md for optional queue/batch/settings/account/source/revision recipes, each with applicability and a host-contract caveat. Do not invent a new AI category.
+- [x] Move density/CSS and source-informed visual craft to appropriate DESIGN sections; add only necessary async identity/cleanup engineering guidance to CODING §3. Keep workflow recipes out of DESIGN.
+- [x] Update AGENTS, CLAUDE, plugin, README and EN/CN thin routes to distinguish the owners. Add both new leaf docs to package files.
+- [x] Adapt existing test to inspect executable CSS in visual/interaction/pattern docs (allow zero token refs in a geometry-only example, but require a meaningful token-bearing corpus). Keep LF/CRLF and masked-token negative fixtures. Verify actual npm package contents and index/new-leaf direct local dependencies.
 - [ ] Run RED before new packaged leaves exist, then GREEN related tests, links, generated docs, design rules, locale check and format/lint/diff checks. Independent spec and quality review verify boundaries and discovery, not prose keywords.
 - [ ] Commit and push to the same #421, rewrite its description around final responsibilities, confirm latest CI, then final review. No merge.
+
+## Chunk 3 implementation evidence
+
+- RED before new leaves: 2 failed / 4 passed. CSS-owner traversal reported missing INTERACTION and actual npm packing reported it absent.
+- GREEN: 206 related tests across 4 documentation suites, including actual npm pack contents and index/new-leaf direct local reading dependencies. CSS validation reads DESIGN/INTERACTION/WORKFLOW_PATTERNS, permits geometry-only examples and requires a meaningful token-bearing corpus; LF/CRLF and invalid fallback fixtures remain.
+- The index is 41 lines; INTERACTION is 114 lines; optional WORKFLOW_PATTERNS is 106 lines. The recipe file is shorter than the planning estimate because general focus/cancel/feedback rules are linked to their owner instead of repeated.
+- DESIGN owns the moved density CSS and source → decision → evidence craft mapping; CODING §3 owns asynchronous intent/lifecycle mechanisms. INTERACTION states observable stale-response outcomes and links the engineering owner. No workflow state tables were added to DESIGN.
+- AGENTS, package CLAUDE, plugin, README and EN/CN public pages now route by responsibility. Both leaves ship in npm. Earlier eight-locale motion synchronization and unused-label cleanup remain intact.
+- Fresh links, generated API/token/changelog checks, design verification, 67 documentation-site tests, locale parity (8 languages / 236 labels) and docs tsc passed. Full repository Prettier, explicit plugin Prettier, targeted test oxlint and diff checks also passed. Independent spec/quality review follows before root delivery; no runtime, dependency, foundation-token or baseline edits.

@@ -51,3 +51,12 @@ Untouched: runtime components, theme values, root demo DESIGN, dependencies/lock
 ## Discovered locale-check prerequisite
 
 The actual `pnpm -F docs check:langs` gate reported eight unused `home` label keys, one per language. Root reproduced those identical failures from an isolated `origin/main` archive before this change. The navigation structure no longer requests the key; `navFor`/`sidebarFor` read labels only through that structure, and page rendering reads the separate `ui` record. Remove only the eight unused keys, retaining navigation behavior, and route agents to the documentation-site owner and the real locale gate. This small cleanup is a prerequisite exposed by the requested eight-language verification, not a runtime or navigation redesign. The existing gate supplies the regression; no prose-presence test or new framework is needed.
+
+## Responsibility split implementation note
+
+The final reading index is 41 lines, observable interaction rules 114 lines, and optional workflow
+recipes 106 lines. The latter is intentionally shorter than the estimate: general focus, cancel and
+feedback rules are linked rather than copied into each recipe. The package check validates the actual
+npm manifest for the index, both leaves and their direct local reading dependencies. Geometry-only CSS
+examples need no artificial token reference; the combined executable CSS corpus still has to exercise
+real foundation tokens. Independent review and root delivery remain required.
