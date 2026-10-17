@@ -7,14 +7,56 @@ the exact node bound to it.
 It runs in a browser against real elements, and in Node against a mock that serialises to
 HTML, so the same view code renders client-side or to a string.
 
-This is the view layer under [ranui](https://www.npmjs.com/package/ranui)'s 40 components.
-It lived inside that package until it outgrew it: a general-purpose library should not
-require you to install a video player, a diagram renderer and a maths typesetter to use
-it. `ranui/builder` still re-exports everything here, unchanged.
+The DOM builder and reactive primitives behind [ranui](https://www.npmjs.com/package/ranui).
+Use it on its own for application views; `ranui/builder` exposes the builder APIs for
+ranui consumers. It does not register custom elements.
+
+**Alpha · ESM-only · TypeScript.** Pin an exact version. Use Node 24+ for server rendering;
+browser reactivity requires a browser DOM. There is no hydration API.
+
+## Quick start
 
 ```sh
-npm i @alixex/ranview
+npm install @alixex/ranview
 ```
+
+```ts
+import { Div, Span, ButtonBuilder, signal, createRoot } from '@alixex/ranview';
+
+const dispose = createRoot((dispose) => {
+  const [count, setCount] = signal(0);
+  const view = Div()
+    .children(
+      Span().text(() => `Count: ${count()}`),
+      ButtonBuilder()
+        .text('+1')
+        .on('click', () => setCount((value) => value + 1)),
+    )
+    .build();
+  document.body.appendChild(view);
+  return () => {
+    view.remove();
+    dispose();
+  };
+});
+// Call dispose() when the page is unmounted.
+```
+
+For a static server snapshot, import from `@alixex/ranview/static`:
+
+```ts
+import { Div } from '@alixex/ranview/static';
+
+console.log(Div().text('Hello').serialize()); // <div>Hello</div>
+```
+
+## Guide
+
+- [Elements](#1-elements) — factories, SVG, attributes and events
+- [Reactivity](#2-reactivity) — signals, bindings and control flow
+- [Ownership](#3-ownership--the-key-to-leak-free-apps-and-mpas) — disposal and page scopes
+- [EventManager](#4-web-component-listeners--eventmanager) — listener lifecycle
+- [Static DOM and SSR](#static-dom-and-ssr--ssg-snapshots) — one-shot snapshots
 
 > **Principle: build once, update in place.** A view function runs once; state
 > changes flow through fine-grained bindings, never by re-running the view. Pick
@@ -23,27 +65,7 @@ npm i @alixex/ranview
 > [`For`](#keyed-lists--for) / [`Index`](#index-lists--index). A raw getter child
 > is the coarse fallback (rebuilds its whole region on any read).
 
-```ts
-import {
-  View,
-  Div,
-  Span,
-  ButtonBuilder, // element factories
-  signal,
-  computed,
-  createEffect,
-  batch,
-  untrack, // reactivity
-  createRoot,
-  onCleanup,
-  getOwner,
-  runWithOwner, // ownership
-  EventManager, // lifecycle-scoped events
-} from '@alixex/ranview';
-```
-
-The builder does **not** register custom elements. To use `<r-button>` etc.,
-also import the component subpath once: `import 'ranui/button'`.
+To use `<r-button>` etc., import the component subpath once: `import 'ranui/button'`.
 
 ---
 
