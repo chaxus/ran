@@ -53,6 +53,8 @@ npm install ranui --save
 
 コンポーネントの API を変えたら、次で作り直してください。
 
+以下のドキュメント再生成コマンドは、リポジトリで作業する貢献者向けです。
+
 ```bash
 pnpm doc:api
 ```
@@ -74,10 +76,10 @@ CI はリポジトリのルートで `pnpm run verify:docs` を走らせます�
 
 スタイルのしくみは CSS トークンと `::part()` に統一されています。
 
-- スタイル上書きの手引き：[docs/style-override.md](./docs/style-override.md)
-- トークンと Part の完全な一覧（自動生成）：[docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
+- スタイル上書きの手引き：[docs/style-override.md · リポジトリのソース](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-override.md)
+- トークンと Part の完全な一覧（自動生成）：[docs/style-tokens-parts.md · リポジトリのソース](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-parts.md)
 - 利用者向けの公開スタイル API（自動生成）：[docs/style-tokens-public.md](./docs/style-tokens-public.md)
-- 公開トークンの絞り込み設定：[docs/style-token-filter.json](./docs/style-token-filter.json)
+- 公開トークンの絞り込み設定：[docs/style-token-filter.json · リポジトリのソース](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-token-filter.json)
 
 スタイルのドキュメントは次で更新します。
 
@@ -87,7 +89,7 @@ pnpm doc:style
 
 ### テーマ
 
-ranui のトークン体系はひとつだけで、[Geist デザインシステム](https://vercel.com/geist)（Vercel が公開しているデザイン言語）を土台にしています。そこでは色は**状態のはしご**です。どの階調も 100 から 1000 まで進み、一段ごとに役目がひとつ決まっています（背景 → ホバー → 枠線 → べた塗り → 文字）。ranui はそのはしごと **Geist Sans / Geist Mono** を取り入れているので、ダークモードでは基礎の階調を定義し直すだけで、意味のトークンはすべて自動で切り替わります。モードは `light`・`dark`・`system` の三つだけで、テーマパックはありません。実行時にモードを切り替えたり、どのトークンでも上書きしたりできます（SSR でも安全です）。
+ranui は [Geist デザインシステム](https://vercel.com/geist) の状態階調と、任意で使える **Geist Sans / Geist Mono** を提供します。テーマ API は `light`・`dark`・`system` に対応し、テーマパックはありません。既存のホスト側テーマ管理を維持するか、ranui の永続化モードを選択します。実行時の操作は SSR に対応しています：
 
 ```ts
 import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui/theme';
@@ -101,7 +103,7 @@ setThemeTokens({ '--ran-radius-md': '10px' });
 
 `ranui/theme` のエントリーにはテーマのエンジンしか入っていません。カスタム要素は何も登録されないので、トークンとダークモードだけが欲しいならバンドルに余計なものが入りません。同じ API は `ranui` のバレルからも再 export されています。
 
-ダークモードで定義し直すのは基礎の色階調だけです。意味のトークン（`--ran-color-*`）はそれを参照しているので、自動で切り替わります。[docs/THEME_STYLE_SYSTEM_DESIGN.md](./docs/THEME_STYLE_SYSTEM_DESIGN.md) と [docs/DESIGN.md](./docs/DESIGN.md) を参照してください。
+ダークモードは基礎の階調に加え、一部のサーフェス、主要操作のホバー・押下状態、影を明示的に上書きします。意味トークンを使い、視覚規則は [DESIGN.md](./docs/DESIGN.md)、リポジトリの実装は [テーマ構成](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md) を参照してください。
 
 ### 多言語対応
 
@@ -308,7 +310,7 @@ window.message?.success({
 
 ### リアクティビティの部品
 
-`signal`、`createEffect`、`computed`、`batch`、`untrack`、それに所有関係の層（`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`）が、DOM の builder と並んで入っています。フレームワークなしで、反応する画面の一部を組み立てるためのものです。設計は SwiftUI の `@Observable` になぞらえつつ、Solid.js 流の保証を備えています。エフェクトは再実行のたびに古い購読を自動で片づけます。`batch()` は複数の書き込みをひとつの反映にまとめます。`computed` は**遅延評価かつ値でメモ化**されます（誰にも読まれないメモは一度も計算されず、値が実際に変わったときだけ依存する側を起こします）。そしてエフェクト・メモ・バインディングはすべてスコープが持ち主なので、`createRoot` を破棄すれば、そこから生まれたものが一度の呼び出しでまとめて片づきます。ページやルートを畳む単位がこれです。`ElementBuilder` のチェーンできるメソッド（`text` / `attr` / `class` など）はシグナルのゲッターも受けつけ、自動で更新されるバインディングになります。詳しくは [`ranview`](../ranview/README.md) を。
+`signal`、`createEffect`、`computed`、`batch`、`untrack`、それに所有関係の層（`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`）が、DOM の builder と並んで入っています。フレームワークなしで、反応する画面の一部を組み立てるためのものです。設計は SwiftUI の `@Observable` になぞらえつつ、Solid.js 流の保証を備えています。エフェクトは再実行のたびに古い購読を自動で片づけます。`batch()` は複数の書き込みをひとつの反映にまとめます。`computed` は**遅延評価かつ値でメモ化**されます（誰にも読まれないメモは一度も計算されず、値が実際に変わったときだけ依存する側を起こします）。そしてエフェクト・メモ・バインディングはすべてスコープが持ち主なので、`createRoot` を破棄すれば、そこから生まれたものが一度の呼び出しでまとめて片づきます。ページやルートを畳む単位がこれです。`ElementBuilder` のチェーンできるメソッド（`text` / `attr` / `class` など）はシグナルのゲッターも受けつけ、自動で更新されるバインディングになります。詳しくは [`ranview` · リポジトリのソース](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md) を。
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';
@@ -352,7 +354,7 @@ function initCounter(container: HTMLElement) {
 }
 ```
 
-API の全体は[ユーティリティのドキュメント](./utils/README.md)を参照してください。
+API の全体は[ユーティリティのドキュメント · リポジトリのソース](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md)を参照してください。
 
 ### ルーティング
 
@@ -421,7 +423,7 @@ button.setAttribute('effect', 'true');
 const html = renderToString(button);
 ```
 
-詳しくは[ユーティリティのドキュメント](./utils/README.md)を参照してください。
+詳しくは[ユーティリティのドキュメント · リポジトリのソース](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md)を参照してください。
 
 ## コンポーネントを書くときの決めごと
 
@@ -449,4 +451,4 @@ const html = renderToString(button);
 
 ## その他
 
-[ライセンス（MIT）](/LICENSE)
+[ライセンス（MIT）](./LICENSE)

@@ -19,7 +19,8 @@ For other decisions, the short
 [interface index](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md)
 routes to the [interaction standard](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md)
 for observable behavior and [optional workflow patterns](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md)
-for relevant host tasks. Visual rules stay here; engineering stays in CODING.
+for relevant host tasks. Visual rules are owned by the canonical [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md);
+this page is a summary, not a second standard. Engineering stays in CODING.
 These references ship under `node_modules/ranui/docs/` rather than duplicating their rules here.
 
 > **Use when** you are laying out a page or building an app-level component out of `<r-*>`

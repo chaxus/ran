@@ -2,9 +2,12 @@
 
 Web Components library built with TypeScript. All components use Shadow DOM encapsulation, CSS variable theming, and SSR support.
 
+Component skeletons, internal imports and repository commands below are for library contributors.
+Consumers start with the installed public API and their host application's existing conventions.
+
 ---
 
-## Standards — read before building or changing anything
+## Standards — choose the relevant owner
 
 Two companion standards sit above this file. **[docs/DESIGN.md](docs/DESIGN.md)** governs what a component looks like; **[docs/CODING.md](docs/CODING.md)** governs how it is built — layering, state ownership, the event contract, SSR, testing and the antipatterns. This file is the _reference_ they assume: the canonical skeleton, the utility APIs and the per-component notes. When a rule and a snippet disagree, the rule wins.
 
@@ -27,10 +30,10 @@ For each element's **attributes / properties / events / slots / `::part()`**, co
 - **Typography:** choose a role (heading / label / copy / button / mono), not a raw px size — each role is backed by real `--ran-text-*` tokens (`--ran-text-heading-1..4`, `-label-1..3`, `-copy-1..2`, `-button-size`, plus matching `-weight` tokens), see DESIGN.md §3. Text that doesn't map to any role (a one-off emphasis state) keeps its own component token rather than being forced in.
 - **Elevation = role.** Pick the shadow by what the element _is_: in-flow surface (card/section) → `--ran-shadow-elevated`; floating overlay (dropdown, select, popover, toast/message) → `--ran-shadow-menu`; blocking dialog → `--ran-shadow-modal`. A floating overlay must never fall back to the card tier (`elevated`) — it looks flat.
 - **Radius/motion:** use the tokens; prefer no motion (0ms) and keep what remains quick (150/200/300ms); respect `prefers-reduced-motion`.
-- **Copy:** buttons = action + object ("Deploy project"); errors = what + how; toasts state the change ("Project deleted").
+- **Copy:** [DESIGN §6](docs/DESIGN.md#6-content--copy-is-part-of-the-system) owns contextual action labels, errors and confirmation wording; do not add a second wording rule here.
 - **Accessibility:** WCAG AA contrast; never signal state by color alone (pair an icon/label); visible focus ring on every interactive element; icon-only controls need an `aria-label`; full keyboard nav.
 - **Mobile and desktop, both.** Any drag/slider/gesture uses Pointer Events (`pointerdown/move/up/cancel`), never mouse-only, matched by `touch-action: none` on the exact drag surface. Any `trigger="hover"` overlay degrades to click/tap on touch (`isMobile()` gate — see `r-select`/`r-popover`). Prefer viewport-relative sizing (`%`, `min()`, `clamp()`, `vw`/`vh`) over inventing a one-off `@media` breakpoint. See DESIGN.md §8.
-- **Verify rendered output** in light _and_ dark, at narrow _and_ wide widths, with mouse _and_ touch input, across the materially changed states — code review alone is not enough.
+- **Verify rendered output** for affected surfaces, relevant widths/themes and materially changed input/state paths; code review alone does not prove geometry or interaction. Library CI still runs its complete gates.
 
 ---
 
@@ -521,7 +524,7 @@ setThemeTokens(tokens: Record<string, string | number | null | undefined>, targe
 
 localStorage key: `'ran-theme'`. SSR-safe (all `document`/`localStorage` access guarded).
 
-Dark mode is a single source of truth: `theme/dark.less` redefines only the base scale via the `.ran-theme-dark()` mixin; semantic tokens reference the scale and flip automatically.
+Theme declarations live in `theme/tokens.less` and `theme/dark.less`: the dark mixin updates base scales and explicit surface, primary hover/active and shadow overrides. See [DESIGN §1](docs/DESIGN.md#1-color--a-state-ladder-not-a-palette); do not infer values from a copied summary.
 
 **Dark-mode activation signals** (any one turns on dark tokens on `:root`):
 
@@ -638,58 +641,15 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 
 ### CSS variable naming tiers
 
+Use [DESIGN's token roles](docs/DESIGN.md#10-component-token-naming) and the generated
+[public token catalog](docs/style-tokens-public.md), rather than a second value snapshot.
+Foundation declarations are in `theme/tokens.less` and `theme/dark.less` in a source checkout;
+installed readers can inspect `node_modules/ranui/dist/ranui.css`. Primary actions are monochrome;
+links and focus use their semantic roles. Product brand overrides remain host decisions.
+Component-scoped overrides fall back to a real foundation token, for example:
+
 ```less
-/* Global semantic tokens (provided by theme + theme packs) */
---ran-color-primary        /* #2563eb default */
---ran-color-success
---ran-color-warning
---ran-color-danger
---ran-color-bg             /* page background */
---ran-color-bg-elevated    /* card/surface */
---ran-color-bg-muted       /* subtle surface */
---ran-color-text
---ran-color-text-secondary
---ran-color-text-disabled
---ran-color-border
---ran-color-border-secondary
---ran-color-link
-
---ran-radius-sm 6 | --ran-radius-md 12 | --ran-radius-lg 16 | --ran-radius-full
---ran-space-1..24          /* 4 8 12 16 24 32 40 64 96 */
---ran-size-1..7            /* 16 18 20 24 28 30 32 — element dimensions (icons, controls), separate from Spacing */
---ran-text-heading-1..4 (32/24/20/16) | -label-1..3 (14/13/12) | -copy-1..2 (16/14) | -button-size (14)
---ran-text-heading-weight 600 | -label-weight 500 | -copy-weight 400 | -button-weight 500 | -mono-weight-regular/medium 400/500
---ran-shadow-elevated | --ran-shadow-menu | --ran-shadow-modal | --ran-focus-ring
---ran-z-modal 1000 | --ran-z-dropdown 1100 | --ran-z-message 1200   /* overlay stacking ladder; see DESIGN.md §4 */
-
-/* Geist base scales (rarely used directly; semantic tokens map onto them) */
---ran-gray-100..1000 | --ran-gray-alpha-100..1000
---ran-blue/red/amber/green-100..1000 | --ran-background-100/200
-
-/* Skin layer — only these four remain (pack-only ones were removed) */
---ran-skin-font-family
---ran-skin-border-width
---ran-skin-border-style
---ran-skin-raised-shadow
-
---ran-motion-duration-fast | --ran-motion-duration-base
-
-/* Component-scoped tokens (always provide fallback) */
---ran-card-gap, var(--ran-space-4, 16px)
---ran-card-padding, var(--ran-space-4, 16px)
---ran-card-radius, var(--ran-radius-md)
---ran-card-background, var(--ran-color-bg-muted)
---ran-card-shadow, none
---ran-card-min-height, 0
---ran-card-title-color, var(--ran-color-text)
---ran-card-title-font-size, var(--ran-text-heading-4, 16px)
---ran-card-title-font-weight, var(--ran-text-heading-weight, 600)
---ran-card-description-color, var(--ran-color-text-secondary)
---ran-card-description-font-size, var(--ran-text-copy-2, 14px)
-
-/* Button example */
---ran-btn-background, var(--ran-color-primary, #1890ff)
---ran-btn-color, #fff
+padding: var(--ran-card-padding, var(--ran-space-4, 16px));
 ```
 
 ### LESS template for a new component

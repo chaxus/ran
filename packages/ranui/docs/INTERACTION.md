@@ -111,4 +111,5 @@ Choose evidence by the defect, rather than requiring every possible test for a s
 
 Include offline/failure paths when the task depends on external work. Static audits cannot prove
 focus restoration, the winning cascade or preserved reading position. Report the tested commit and
-remaining external prerequisites; see [CODING's checklist](./CODING.md#checklist-before-opening-a-pull-request).
+remaining external prerequisites. Library contributors use [CODING's checklist](./CODING.md#checklist-before-opening-a-pull-request);
+consumer applications use the host's relevant commands, not ranui's source-checkout commands.

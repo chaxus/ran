@@ -53,6 +53,8 @@ npm install ranui --save
 
 컴포넌트의 API를 바꿨다면 이것으로 다시 만드세요.
 
+아래 문서 재생성 명령은 저장소에서 작업하는 기여자용입니다.
+
 ```bash
 pnpm doc:api
 ```
@@ -74,10 +76,10 @@ CI는 저장소 루트에서 `pnpm run verify:docs`를 돌리며, 생성된 레�
 
 스타일 체계는 CSS 토큰과 `::part()`를 중심으로 한 갈래로 모여 있습니다.
 
-- 스타일 덮어쓰기 안내: [docs/style-override.md](./docs/style-override.md)
-- 토큰과 part의 전체 목록(자동 생성): [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
+- 스타일 덮어쓰기 안내: [docs/style-override.md · 저장소 소스](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-override.md)
+- 토큰과 part의 전체 목록(자동 생성): [docs/style-tokens-parts.md · 저장소 소스](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-parts.md)
 - 쓰는 쪽을 위한 공개 스타일 API(자동 생성): [docs/style-tokens-public.md](./docs/style-tokens-public.md)
-- 공개 토큰 거르기 설정: [docs/style-token-filter.json](./docs/style-token-filter.json)
+- 공개 토큰 거르기 설정: [docs/style-token-filter.json · 저장소 소스](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-token-filter.json)
 
 스타일 문서는 이것으로 새로 만듭니다.
 
@@ -87,7 +89,7 @@ pnpm doc:style
 
 ### 테마
 
-ranui의 토큰 체계는 하나뿐이며, Vercel이 공개한 디자인 언어인 [Geist 디자인 시스템](https://vercel.com/geist)을 바탕으로 합니다. 거기서 색은 **상태의 사다리**입니다. 각 단계는 100에서 1000까지 오르고, 한 칸마다 맡은 일이 하나씩 정해져 있습니다(배경 → hover → 테두리 → 꽉 찬 색 → 글자). ranui는 그 사다리와 **Geist Sans·Geist Mono**를 함께 들여왔으므로, 어두운 모드는 바탕 단계만 다시 정의하면 되고 의미 토큰은 모두 알아서 넘어갑니다. 모드는 `light`, `dark`, `system` 셋뿐이고 테마 팩은 없습니다. 실행 중에 모드를 바꾸거나 어떤 토큰이든 덮어쓸 수 있습니다(SSR에서도 안전합니다).
+ranui는 [Geist 디자인 시스템](https://vercel.com/geist)의 상태 단계와 선택적으로 사용할 수 있는 **Geist Sans / Geist Mono** 글꼴을 제공합니다. 테마 API는 `light`, `dark`, `system`을 지원하며 테마 팩은 없습니다. 호스트의 기존 테마 관리를 유지하거나 ranui의 영구 저장 모드를 선택하세요. 실행 중 호출은 SSR에서도 안전합니다:
 
 ```ts
 import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui/theme';
@@ -101,7 +103,7 @@ setThemeTokens({ '--ran-radius-md': '10px' });
 
 `ranui/theme` 진입점에는 테마 엔진만 들어 있습니다. 사용자 정의 요소는 하나도 등록되지 않으므로, 토큰과 어두운 모드만 원한다면 번들에 군더더기가 끼지 않습니다. 같은 API는 `ranui` 배럴에서도 다시 내보냅니다.
 
-어두운 모드가 다시 정의하는 것은 바탕 색 단계뿐입니다. 의미 토큰(`--ran-color-*`)은 그것을 가리키므로 알아서 넘어갑니다. [docs/THEME_STYLE_SYSTEM_DESIGN.md](./docs/THEME_STYLE_SYSTEM_DESIGN.md)와 [docs/DESIGN.md](./docs/DESIGN.md)를 보세요.
+어두운 모드는 기본 색 단계뿐 아니라 일부 표면, 기본 작업의 hover/활성 상태, 그림자도 명시적으로 재정의합니다. 의미 토큰을 사용하세요. 시각 규칙은 [DESIGN.md](./docs/DESIGN.md)가 소유하며, 저장소 구현은 [테마 구조](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md)를 참고하세요.
 
 ### 국제화
 
@@ -308,7 +310,7 @@ window.message?.success({
 
 ### 반응형 부품
 
-`signal`, `createEffect`, `computed`, `batch`, `untrack`과 소유 계층(`createRoot`, `onCleanup`, `getOwner`, `runWithOwner`)이 DOM builder와 나란히 들어 있습니다. 프레임워크 없이 반응하는 화면 조각을 짜기 위한 것입니다. 설계는 SwiftUI의 `@Observable`을 본뜨되 Solid.js식 보장을 갖췄습니다. 이펙트는 다시 돌기 전에 낡은 구독을 알아서 치웁니다. `batch()`는 여러 쓰기를 한 번의 반영으로 모읍니다. `computed`는 **게으르고 값으로 메모**됩니다(아무도 읽지 않는 메모는 한 번도 계산되지 않고, 값이 실제로 달라졌을 때만 딸린 것들을 깨웁니다). 그리고 이펙트와 메모, 바인딩은 모두 자기 범위가 주인이라, `createRoot` 하나를 버리면 거기서 태어난 것이 한 번의 호출로 전부 걷힙니다. 페이지나 라우트를 접는 단위가 바로 이것입니다. `ElementBuilder`의 체이닝 메서드(`text`, `attr`, `class` 등)는 시그널 게터도 받아, 알아서 갱신되는 바인딩이 됩니다. 자세한 안내: [`ranview`](../ranview/README.md).
+`signal`, `createEffect`, `computed`, `batch`, `untrack`과 소유 계층(`createRoot`, `onCleanup`, `getOwner`, `runWithOwner`)이 DOM builder와 나란히 들어 있습니다. 프레임워크 없이 반응하는 화면 조각을 짜기 위한 것입니다. 설계는 SwiftUI의 `@Observable`을 본뜨되 Solid.js식 보장을 갖췄습니다. 이펙트는 다시 돌기 전에 낡은 구독을 알아서 치웁니다. `batch()`는 여러 쓰기를 한 번의 반영으로 모읍니다. `computed`는 **게으르고 값으로 메모**됩니다(아무도 읽지 않는 메모는 한 번도 계산되지 않고, 값이 실제로 달라졌을 때만 딸린 것들을 깨웁니다). 그리고 이펙트와 메모, 바인딩은 모두 자기 범위가 주인이라, `createRoot` 하나를 버리면 거기서 태어난 것이 한 번의 호출로 전부 걷힙니다. 페이지나 라우트를 접는 단위가 바로 이것입니다. `ElementBuilder`의 체이닝 메서드(`text`, `attr`, `class` 등)는 시그널 게터도 받아, 알아서 갱신되는 바인딩이 됩니다. 자세한 안내: [`ranview` · 저장소 소스](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md).
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';
@@ -352,7 +354,7 @@ function initCounter(container: HTMLElement) {
 }
 ```
 
-API 전체는 [유틸리티 문서](./utils/README.md)를 보세요.
+API 전체는 [유틸리티 문서 · 저장소 소스](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md)를 보세요.
 
 ### 라우팅
 
@@ -421,7 +423,7 @@ button.setAttribute('effect', 'true');
 const html = renderToString(button);
 ```
 
-자세한 것은 [유틸리티 문서](./utils/README.md)를 보세요.
+자세한 것은 [유틸리티 문서 · 저장소 소스](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md)를 보세요.
 
 ## 컴포넌트를 쓸 때의 약속
 
@@ -449,4 +451,4 @@ const html = renderToString(button);
 
 ## 그 밖에
 
-[라이선스(MIT)](/LICENSE)
+[라이선스(MIT)](./LICENSE)

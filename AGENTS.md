@@ -13,15 +13,20 @@ Start with the owner of the change; do not load every reference or introduce a s
 | Public documentation or localized prose                           | [documentation site reference](packages/docs/CLAUDE.md)                                                                                             |
 | Repository landing/demo identity                                  | [root DESIGN.md](DESIGN.md), scoped to that surface                                                                                                 |
 
-`packages/ranui/theme/` owns foundation tokens. Product semantic aliases may derive from them;
+`packages/ranui/theme/tokens.less` and `packages/ranui/theme/dark.less` own foundation tokens. Product semantic aliases may derive from them;
 do not create a parallel palette or copy one application's dimensions into library defaults.
 The index routes decisions; workflow recipes describe host responsibilities, not extra ranui APIs.
 
-Run checks appropriate to the change and report evidence, not assumptions:
+Read only applicable owner sections; reuse existing controls and local token mappings. Stop when
+the contract, smallest patch and evidence are clear. Optional recipes do not require new infrastructure.
+
+Run affected-package checks appropriate to the change and report evidence, not assumptions.
+The local scope below does not weaken the complete repository CI gates:
 
 - Documentation: `pnpm verify:links`, `pnpm verify:docs`, and changed-file Prettier checks.
 - Localized documentation: `pnpm -F docs check:langs` checks labels, mirrored page structure and copy coverage.
-- Design: `pnpm verify:design`; this gate does not prove rendered layout or keyboard behaviour.
+- Design: `pnpm -F ranui verify:design` for ranui changes (or the affected package's existing gate);
+  root CI runs `pnpm verify:design` across its configured packages. Static gates do not prove layout or keyboard behaviour.
 - Guide/token/package examples: `pnpm -F ranui exec vitest run test/unit/docs.interface-guidance.test.ts`.
 - Library behaviour: follow [CODING's verification checklist](packages/ranui/docs/CODING.md#checklist-before-opening-a-pull-request),
   including relevant unit, integration, SSR and real-browser checks. Regenerate API/token docs from source.

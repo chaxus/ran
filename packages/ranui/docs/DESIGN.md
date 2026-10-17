@@ -132,7 +132,7 @@ Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layer
 
 **Accent meaning:** the **primary action is monochrome** — `--ran-color-primary` is black-on-white in light, white-on-black in dark (matching Vercel's brand tone), and text/icons on it use `--ran-color-primary-text` (the inverse, which flips too). **Blue** is reserved for **links (`--ran-color-link`) and the focus ring** only · green = success · amber = warning · red = danger/error. There is no separate "contrast" token — primary _is_ the highest-contrast monochrome action.
 
-**Light & dark:** same token name, different value. `gray-1000` is `#171717` in light and `#ededed` in dark. Components reference the _semantic name_; dark mode only redefines the base scale (one mixin), and everything re-resolves.
+**Light & dark:** same token name, different value. `gray-1000` is `#171717` in light and `#ededed` in dark. Components reference the _semantic name_. The dark mixin redefines the base scales plus explicit surface, primary hover/active and shadow overrides; read the theme declarations rather than assuming every semantic value follows one scale step.
 
 **Rules**
 
@@ -161,13 +161,13 @@ Fonts: `--ran-font-family` (Geist Sans, UI & prose), `--ran-font-mono` (Geist Mo
 
 Decide by **role**; the role fixes font, size, weight, line-height. Each row is backed by real tokens in `theme/tokens.less` — reference them (`var(--ran-{component}-…, var(--ran-text-{role}…, fallback))`), don't hand-copy the px/weight number:
 
-| Role    | Use                    | Weight                                            | Size tokens                               | Notes                                                           |
-| ------- | ---------------------- | ------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------- |
-| heading | Titles                 | `--ran-text-heading-weight` (600)                 | `--ran-text-heading-1..4` (32/24/20/16px) | Tight tracking `--ran-text-heading-tracking` (≈ -0.03em)        |
-| label   | Single-line, scannable | `--ran-text-label-weight` (500)                   | `--ran-text-label-1..3` (14/13/12px)      | No wrapping                                                     |
-| copy    | Multi-line body        | `--ran-text-copy-weight` (400)                    | `--ran-text-copy-1..2` (16/14px)          | line-height ~1.55 (`--ran-line-height`)                         |
-| button  | Button text            | `--ran-text-button-weight` (500)                  | `--ran-text-button-size` (14px)           | `--ran-text-button-line-height: 1` for crisp vertical centering |
-| mono    | Code, data, eyebrows   | `--ran-text-mono-weight-regular/medium` (400/500) | borrows label/copy size tiers             | `--ran-font-mono`                                               |
+| Role    | Use                           | Weight                                            | Size tokens                               | Notes                                                           |
+| ------- | ----------------------------- | ------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------- |
+| heading | Titles                        | `--ran-text-heading-weight` (600)                 | `--ran-text-heading-1..4` (32/24/20/16px) | Tight tracking `--ran-text-heading-tracking` (≈ -0.03em)        |
+| label   | Scannable field/action labels | `--ran-text-label-weight` (500)                   | `--ran-text-label-1..3` (14/13/12px)      | Compact action labels stay on one line; field labels may wrap   |
+| copy    | Multi-line body               | `--ran-text-copy-weight` (400)                    | `--ran-text-copy-1..2` (16/14px)          | line-height ~1.55 (`--ran-line-height`)                         |
+| button  | Button text                   | `--ran-text-button-weight` (500)                  | `--ran-text-button-size` (14px)           | `--ran-text-button-line-height: 1` for crisp vertical centering |
+| mono    | Code, data, eyebrows          | `--ran-text-mono-weight-regular/medium` (400/500) | borrows label/copy size tiers             | `--ran-font-mono`                                               |
 
 **Rule:** ask "what role is this text?" (heading / label / copy / button) — the style follows. Don't pick raw px per instance.
 
@@ -267,7 +267,7 @@ transition: var(--ran-input-transition, none);
 
 ## 6. Content — copy is part of the system
 
-- **Buttons:** an action **plus** an object. ✅ "Deploy project", "Delete member". ❌ "Deploy", "OK", "Delete".
+- **Buttons:** name the outcome. Include the object when context does not establish it: "Deploy project", "Delete member". In a clearly named object or dialog, "Save" or "Delete" is sufficient; avoid generic "OK". See [contextual wording](#words-are-part-of-the-interface).
 - **Errors:** say **what happened**, then **how to fix it**. ✅ "Build failed: the bundle exceeds the size limit. Reduce it or raise the limit." ❌ "Operation failed, please try again."
 - **Confirmations / toasts:** state the **change**, not "success". ✅ "Project deleted". ❌ "Successfully deleted" (the toast appearing already implies success).
 - Be specific; every sentence should remove guesswork, not add it.
@@ -334,12 +334,12 @@ that only works on one.
 
 ## 9. Components — how to apply the system
 
-- Use the semantic ranui components (`r-button`, `r-input`, `r-select`, `r-card`, `r-modal`, …) rather than re-building primitives.
+- Reuse existing semantic native controls or supported ranui primitives; do not rebuild them merely for styling. Choose a ranui component when its contract fits; preserve native form and keyboard semantics, including supported native controls in overlay slots ([INTERACTION §2](./INTERACTION.md#2-reachable-controls-and-predictable-focus)).
 - Theme through **CSS variables**, **`::part()`**, or the **`sheet`** attribute (escape hatch). CSS variables cross Shadow DOM; selectors do not.
 - Component tokens default to semantic tokens: `var(--ran-btn-background, var(--ran-color-primary, #171717))`.
-- Map states to the color ladder: default → `bg`/`text`; hover → `bg-hover` / `border-hover` / `primary-hover`; active → `bg-active` / `primary-active`; disabled → `text-disabled` + reduced opacity; focus → focus ring.
+- Map states to the color ladder: default → `bg`/`text`; hover → `bg-hover` / `border-hover` / `primary-hover`; active → `bg-active` / `primary-active`; disabled → appropriate disabled tokens, with opacity only when needed and still legible; focus → focus ring.
 - **Interactive cards opt in**: `r-card` only reacts to hover with the `hoverable` attribute (border 400 → 500 + elevated shadow). Non-interactive cards must stay inert — never add hover feedback to something that isn't clickable.
-- **Theme switching UI is a component**: use `<r-theme-switch>` (system / light / dark segmented pill, wired to `setTheme`/localStorage, syncs across instances and updates `theme-color` metas) instead of hand-rolling toggles. Localize with `label` / `label-system` / `label-light` / `label-dark`.
+- **When the host needs ranui theme switching UI**, use `<r-theme-switch>` (system / light / dark segmented pill, wired to `setTheme`/localStorage, syncs across instances and updates `theme-color` metas) instead of hand-rolling equivalent toggles. Preserve an existing host theme authority; this does not require adding a theme switch. Localize with `label` / `label-system` / `label-light` / `label-dark`.
 - **Typography ships with the system**: `import 'ranui/fonts'` (or link `dist/fonts/fonts.css`) self-hosts Geist Sans + Geist Mono (variable, OFL-licensed) — the canonical faces behind `--ran-font-family` / `--ran-font-mono`. Without it the stacks fall back to system fonts.
 - See [THEME_STYLE_SYSTEM_DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md) for the repository-only token architecture reference and [style-tokens-public.md](./style-tokens-public.md) for the generated per-component token list.
 
@@ -703,7 +703,7 @@ establishes — a sidebar destination is `Users`, not `User Management`; a dialo
 `Delete "Roadmap"?` does not ask the question again in its body.
 
 **Name the result, not the gesture.** `Save`, `Move`, `Delete` — not `Click to save` or
-`Confirm deletion`. `Cancel` is always the action that leaves without committing.
+`Confirm deletion`. Apply the [context rule in §6](#6-content--copy-is-part-of-the-system) when deciding whether to include the object. `Cancel` is always the action that leaves without committing.
 
 **Sentence case for English UI.** Reserve ALL CAPS for very short eyebrows, statuses and
 acronyms; never on a button, a heading or a sentence. Labels, buttons and short states take
@@ -712,7 +712,8 @@ it to any control that opens a dialog or needs more input before it can complete
 
 ### Review checklist for a composed surface
 
-Ask in order. A "no" is a finding, not a preference:
+Apply these questions to the affected surface and reachable changed states. Skip irrelevant variants;
+a small patch does not require redesigning unrelated pages. A "no" within scope is a finding:
 
 1. Can a new reader recognise the purpose and the primary action without guessing?
 2. Does every control's label, state and result describe one consistent outcome?
@@ -724,9 +725,10 @@ Ask in order. A "no" is a finding, not a preference:
    everything that is **not** running text free of that measure cap?
 7. Does every element that looks like part of one object agree — border, radius **and**
    spacing — and does every reserved column actually have content?
-8. Does it hold in every state: empty, loading, failure, longest translation, narrow width,
-   dark theme, reduced motion, **RTL**?
-9. Has it been looked at in a real browser, at more than one width, in both themes?
+8. Does it hold in relevant changed states: empty, loading, failure, long translations, narrow
+   width, supported themes, reduced motion and **RTL**, where affected?
+9. For layout or interaction changes, has the affected surface been checked in a real browser
+   at the relevant widths and themes?
 
 **A screenshot of the happy path is not proof.** Keyboard behaviour, focus, dynamic
 content, themes, resizing and failure states are part of the design.
@@ -868,15 +870,18 @@ the rules above, not out of a second visual system (§11, "One product, one toke
 
 ## Verification checklist (before shipping UI)
 
+Select checks for the affected surface, supported variants and changed behavior; do not create
+unrelated flows merely to satisfy the list. Repository CI still runs its complete gates.
+
 - [ ] Primary task and primary action are unmistakable.
-- [ ] Works in **light and dark**, at **narrow and wide** widths.
+- [ ] Affected layout/theme changes work at relevant **narrow and wide** widths and supported themes.
 - [ ] Works with **mouse and touch** — any drag/gesture uses Pointer Events, not mouse-only; any
       `trigger="hover"` has a tap fallback.
 - [ ] All changed **states** exercised (hover, active, focus, disabled, loading, empty, error).
 - [ ] **Keyboard / focus** behavior verified; visible focus everywhere.
-- [ ] Edge cases: long text, large numbers, both locales (en / zh).
+- [ ] Relevant edge cases: long text, large numbers and the host's supported scripts/locales.
 - [ ] Spacing comes from the scale; type uses a role; color uses semantic tokens.
-- [ ] `pnpm -F ranui verify:design` passes — it checks the nine mechanical rules above.
+- [ ] Library contributors run `pnpm -F ranui verify:design` (nine mechanical rules); consumer applications run the host's applicable checks.
 - [ ] Copy follows §6; nothing signals state by color alone (§7).
 - [ ] For a dense surface: one primary model, the skeleton chosen from the question rather
       than the payload, and every fact with one authoritative location (§12).

@@ -53,6 +53,8 @@ Für jedes Element werden Attribute, Eigenschaften, **Ereignisse (samt dem Aufba
 
 Nach einer Änderung an der API einer Komponente neu erzeugen mit:
 
+Die folgenden Befehle zur Neuerzeugung richten sich an Mitwirkende im Repository.
+
 ```bash
 pnpm doc:api
 ```
@@ -74,10 +76,10 @@ Einmal installiert, greift Claude von selbst darauf zu, sobald du mit ranui arbe
 
 Die Gestaltung läuft einheitlich über CSS-Tokens und `::part()`.
 
-- Anleitung zum Überschreiben von Stilen: [docs/style-override.md](./docs/style-override.md)
-- Vollständige Liste der Tokens und Parts, selbst erzeugt: [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
+- Anleitung zum Überschreiben von Stilen: [docs/style-override.md · Repository-Quelltext](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-override.md)
+- Vollständige Liste der Tokens und Parts, selbst erzeugt: [docs/style-tokens-parts.md · Repository-Quelltext](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-parts.md)
 - Die öffentliche Gestaltungs-API für Anwender, selbst erzeugt: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
-- Konfiguration des Filters für öffentliche Tokens: [docs/style-token-filter.json](./docs/style-token-filter.json)
+- Konfiguration des Filters für öffentliche Tokens: [docs/style-token-filter.json · Repository-Quelltext](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-token-filter.json)
 
 Die Gestaltungsdokumentation aktualisierst du mit:
 
@@ -87,7 +89,7 @@ pnpm doc:style
 
 ### Themen
 
-ranui bringt ein einziges Token-System mit, aufgebaut auf dem [Geist-Designsystem](https://vercel.com/geist) – Vercels offener Designsprache, in der Farbe eine **Leiter von Zuständen** ist: Jede Skala läuft von 100 bis 1000, und jede Stufe hat genau eine Aufgabe (Hintergrund → Hover → Rahmen → vollflächige Füllung → Text). ranui übernimmt diese Leiter samt **Geist Sans und Geist Mono**, deshalb definiert der dunkle Modus bloß die Grundskala neu, und alle semantischen Tokens kippen von selbst mit. Drei Modi – `light`, `dark`, `system` – und keine Themenpakete. Den Modus umschalten oder jeden Token zur Laufzeit überschreiben (auch im SSR sicher):
+ranui verwendet die Zustandsleiter des [Geist-Designsystems](https://vercel.com/geist) und bietet **Geist Sans / Geist Mono** optional an. Die Themen-API unterstützt `light`, `dark` und `system`, ohne Themenpakete. Behalte die vorhandene Themenverwaltung des Hosts bei oder wähle den persistenten Modus von ranui. Laufzeitaufrufe sind SSR-sicher:
 
 ```ts
 import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui/theme';
@@ -101,7 +103,7 @@ setThemeTokens({ '--ran-radius-md': '10px' });
 
 Der Einstiegspunkt `ranui/theme` bringt nur die Themen-Maschine mit – es werden keine Custom Elements eingetragen, es bleibt also aus deinem Bundle heraus, wenn du bloß Tokens und den dunklen Modus willst. Dieselben APIs werden auch aus dem Sammelmodul `ranui` erneut exportiert.
 
-Der dunkle Modus definiert allein die Grundskala der Farben neu; die semantischen Tokens (`--ran-color-*`) verweisen darauf und kippen von selbst mit. Siehe [docs/THEME_STYLE_SYSTEM_DESIGN.md](./docs/THEME_STYLE_SYSTEM_DESIGN.md) und [docs/DESIGN.md](./docs/DESIGN.md).
+Der dunkle Modus aktualisiert die Grundskalen und überschreibt bestimmte Flächen, Hover-/Aktivzustände der Hauptaktion sowie Schatten ausdrücklich. Verwende semantische Tokens; [DESIGN.md](./docs/DESIGN.md) definiert die visuellen Regeln, die [Themenarchitektur](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md) erklärt die Repository-Implementierung.
 
 ### Mehrsprachigkeit
 
@@ -308,7 +310,7 @@ window.message?.success({
 
 ### Reaktive Bausteine
 
-`signal`, `createEffect`, `computed`, `batch`, `untrack` und eine Schicht für Besitzverhältnisse (`createRoot`, `onCleanup`, `getOwner`, `runWithOwner`) kommen zusammen mit dem DOM-Builder – für reaktive Seitenteile ohne Framework. Der Entwurf lehnt sich an SwiftUIs `@Observable` an, mit Zusicherungen nach Art von Solid.js: Effekte räumen vor jedem erneuten Lauf ihre veralteten Abonnements selbst auf; `batch()` fasst mehrere Schreibvorgänge zu einem einzigen Durchlauf zusammen; `computed` ist **träge und merkt sich den Wert** (ein ungelesenes Memo rechnet nie, und es weckt seine Abhängigen erst, wenn sich sein Wert wirklich ändert); und jeder Effekt, jedes Memo und jede Bindung gehört seinem Geltungsbereich, sodass das Verwerfen eines `createRoot` mit einem Aufruf alles abbaut, was darin entstanden ist – die Einheit, mit der eine Seite oder Route abgeräumt wird. Die verkettbaren Methoden von `ElementBuilder` (`text`, `attr`, `class`, …) nehmen zudem einen Signal-Getter an, dann aktualisiert sich die Bindung von selbst. Ausführlich: [`ranview`](../ranview/README.md).
+`signal`, `createEffect`, `computed`, `batch`, `untrack` und eine Schicht für Besitzverhältnisse (`createRoot`, `onCleanup`, `getOwner`, `runWithOwner`) kommen zusammen mit dem DOM-Builder – für reaktive Seitenteile ohne Framework. Der Entwurf lehnt sich an SwiftUIs `@Observable` an, mit Zusicherungen nach Art von Solid.js: Effekte räumen vor jedem erneuten Lauf ihre veralteten Abonnements selbst auf; `batch()` fasst mehrere Schreibvorgänge zu einem einzigen Durchlauf zusammen; `computed` ist **träge und merkt sich den Wert** (ein ungelesenes Memo rechnet nie, und es weckt seine Abhängigen erst, wenn sich sein Wert wirklich ändert); und jeder Effekt, jedes Memo und jede Bindung gehört seinem Geltungsbereich, sodass das Verwerfen eines `createRoot` mit einem Aufruf alles abbaut, was darin entstanden ist – die Einheit, mit der eine Seite oder Route abgeräumt wird. Die verkettbaren Methoden von `ElementBuilder` (`text`, `attr`, `class`, …) nehmen zudem einen Signal-Getter an, dann aktualisiert sich die Bindung von selbst. Ausführlich: [`ranview` · Repository-Quelltext](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md).
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';
@@ -352,7 +354,7 @@ function initCounter(container: HTMLElement) {
 }
 ```
 
-Die vollständige API steht in der [Dokumentation der Hilfsmittel](./utils/README.md).
+Die vollständige API steht in der [Dokumentation der Hilfsmittel · Repository-Quelltext](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md).
 
 ### Routing
 
@@ -421,7 +423,7 @@ button.setAttribute('effect', 'true');
 const html = renderToString(button);
 ```
 
-Einzelheiten stehen in der [Dokumentation der Hilfsmittel](./utils/README.md).
+Einzelheiten stehen in der [Dokumentation der Hilfsmittel · Repository-Quelltext](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md).
 
 ## Konventionen beim Schreiben von Komponenten
 
@@ -449,4 +451,4 @@ Beiträge sind willkommen, ob du zum Lernen kommst oder zum Entwickeln. Das Proj
 
 ## Sonstiges
 
-[Lizenz (MIT)](/LICENSE)
+[Lizenz (MIT)](./LICENSE)

@@ -53,6 +53,8 @@ npm install ranui --save
 
 پس از تغییر API یک مؤلفه، با این دستور از نو بساز:
 
+فرمان‌های بازتولید زیر برای مشارکت‌کنندگان در نسخهٔ محلی مخزن هستند.
+
 ```bash
 pnpm doc:api
 ```
@@ -74,10 +76,10 @@ CI از ریشهٔ مخزن `pnpm run verify:docs` را اجرا می‌کند �
 
 سامانهٔ آراستن، همه‌اش گرد توکن‌های CSS و `::part()` یکدست شده است.
 
-- راهنمای بازنویسی سبک‌ها: [docs/style-override.md](./docs/style-override.md)
-- سیاههٔ کامل توکن‌ها و partها، که خودکار ساخته می‌شود: [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
+- راهنمای بازنویسی سبک‌ها: [docs/style-override.md · کد مخزن](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-override.md)
+- سیاههٔ کامل توکن‌ها و partها، که خودکار ساخته می‌شود: [docs/style-tokens-parts.md · کد مخزن](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-parts.md)
 - API عمومی آراستن برای مصرف‌کننده، که خودکار ساخته می‌شود: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
-- پیکربندی پالایهٔ توکن‌های عمومی: [docs/style-token-filter.json](./docs/style-token-filter.json)
+- پیکربندی پالایهٔ توکن‌های عمومی: [docs/style-token-filter.json · کد مخزن](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-token-filter.json)
 
 مستندات آراستن را با این دستور تازه کن:
 
@@ -87,7 +89,7 @@ pnpm doc:style
 
 ### پوسته‌ها
 
-ranui تنها یک سامانهٔ توکن دارد که بر [سامانهٔ طراحی Geist](https://vercel.com/geist) بنا شده است؛ همان زبان طراحی متن‌باز Vercel که در آن رنگ یک **نردبان حالت‌ها** است: هر پله از ۱۰۰ تا ۱۰۰۰ بالا می‌رود و هر پله تنها یک کار دارد (پس‌زمینه، سپس گذر نشانگر، سپس حاشیه، سپس پُرکن یکدست، سپس متن). ranui همان نردبان را به‌همراه **Geist Sans و Geist Mono** برگرفته است، پس حالت تیره تنها پله‌های پایه را از نو تعریف می‌کند و همهٔ توکن‌های معنایی خودبه‌خود می‌چرخند. سه حالت هست — `light`، `dark`، `system` — و هیچ بستهٔ پوسته‌ای در کار نیست. می‌توانی در زمان اجرا حالت را عوض کنی یا هر توکنی را بازنویسی کنی (در SSR هم امن است):
+ranui از نردبان حالت‌های [سامانهٔ طراحی Geist](https://vercel.com/geist) استفاده می‌کند و قلم‌های **Geist Sans / Geist Mono** را به‌صورت اختیاری ارائه می‌دهد. API پوسته از `light`، `dark` و `system` پشتیبانی می‌کند و بستهٔ پوسته‌ای ندارد. مدیریت پوستهٔ موجود در میزبان را نگه دارید یا حالت ماندگار ranui را انتخاب کنید. فراخوانی‌های زمان اجرا در SSR امن هستند:
 
 ```ts
 import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui/theme';
@@ -101,7 +103,7 @@ setThemeTokens({ '--ran-radius-md': '10px' });
 
 نقطهٔ ورود `ranui/theme` تنها موتور پوسته را دارد؛ هیچ عنصر سفارشی ثبت نمی‌شود، پس اگر فقط توکن‌ها و حالت تیره را می‌خواهی، بستهٔ تو سنگین نمی‌شود. همین APIها از بشکهٔ `ranui` هم دوباره صادر می‌شوند.
 
-حالت تیره تنها پله‌های پایهٔ رنگ را از نو تعریف می‌کند؛ توکن‌های معنایی (`--ran-color-*`) به همان‌ها اشاره دارند و خودبه‌خود می‌چرخند. [docs/THEME_STYLE_SYSTEM_DESIGN.md](./docs/THEME_STYLE_SYSTEM_DESIGN.md) و [docs/DESIGN.md](./docs/DESIGN.md) را ببین.
+حالت تیره علاوه بر طیف‌های پایه، برخی سطح‌ها، حالت‌های گذر نشانگر و فعالِ کنش اصلی و سایه‌ها را صریحاً بازنویسی می‌کند. از توکن‌های معنایی استفاده کنید؛ [DESIGN.md](./docs/DESIGN.md) مرجع قواعد بصری است و [معماری پوسته](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md) پیاده‌سازی مخزن را توضیح می‌دهد.
 
 ### بومی‌سازی
 
@@ -308,7 +310,7 @@ window.message?.success({
 
 ### قطعه‌های واکنشی
 
-`signal`، `createEffect`، `computed`، `batch`، `untrack` و لایه‌ای برای مالکیت (`createRoot`، `onCleanup`، `getOwner`، `runWithOwner`) در کنار سازندهٔ DOM می‌آیند تا بتوانی بخش‌های واکنشی صفحه را بی‌نیاز از چارچوب بسازی. طرح کار به `@Observable` در SwiftUI می‌ماند، با تضمین‌هایی به سبک Solid.js: اثرها پیش از هر اجرای دوباره، اشتراک‌های کهنهٔ خود را خودکار پاک می‌کنند؛ `batch()` چند نوشتن را در یک بازتاب جمع می‌کند؛ `computed` **تنبل است و بر پایهٔ مقدار به خاطر می‌سپارد** (یادداشتی که کسی نخواندش هرگز محاسبه نمی‌شود و تنها وقتی وابستگانش را بیدار می‌کند که مقدارش واقعاً عوض شده باشد)؛ و هر اثر و یادداشت و اتصال، از آنِ دامنهٔ خودش است، پس دور انداختن یک `createRoot` هرچه را در آن زاده شده با یک فراخوان برمی‌چیند — همان یکایی که با آن یک صفحه یا یک مسیر را جمع می‌کنی. متدهای زنجیره‌پذیر `ElementBuilder` (`text`، `attr`، `class` و…) گیرندهٔ سیگنال را هم می‌پذیرند و اتصال خودبه‌خود به‌روز می‌شود. راهنمای کامل: [`ranview`](../ranview/README.md).
+`signal`، `createEffect`، `computed`، `batch`، `untrack` و لایه‌ای برای مالکیت (`createRoot`، `onCleanup`، `getOwner`، `runWithOwner`) در کنار سازندهٔ DOM می‌آیند تا بتوانی بخش‌های واکنشی صفحه را بی‌نیاز از چارچوب بسازی. طرح کار به `@Observable` در SwiftUI می‌ماند، با تضمین‌هایی به سبک Solid.js: اثرها پیش از هر اجرای دوباره، اشتراک‌های کهنهٔ خود را خودکار پاک می‌کنند؛ `batch()` چند نوشتن را در یک بازتاب جمع می‌کند؛ `computed` **تنبل است و بر پایهٔ مقدار به خاطر می‌سپارد** (یادداشتی که کسی نخواندش هرگز محاسبه نمی‌شود و تنها وقتی وابستگانش را بیدار می‌کند که مقدارش واقعاً عوض شده باشد)؛ و هر اثر و یادداشت و اتصال، از آنِ دامنهٔ خودش است، پس دور انداختن یک `createRoot` هرچه را در آن زاده شده با یک فراخوان برمی‌چیند — همان یکایی که با آن یک صفحه یا یک مسیر را جمع می‌کنی. متدهای زنجیره‌پذیر `ElementBuilder` (`text`، `attr`، `class` و…) گیرندهٔ سیگنال را هم می‌پذیرند و اتصال خودبه‌خود به‌روز می‌شود. راهنمای کامل: [`ranview` · کد مخزن](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md).
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';
@@ -352,7 +354,7 @@ function initCounter(container: HTMLElement) {
 }
 ```
 
-API کامل را در [مستندات ابزارها](./utils/README.md) ببین.
+API کامل را در [مستندات ابزارها · کد مخزن](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md) ببین.
 
 ### مسیریابی
 
@@ -421,7 +423,7 @@ button.setAttribute('effect', 'true');
 const html = renderToString(button);
 ```
 
-جزئیات در [مستندات ابزارها](./utils/README.md) آمده است.
+جزئیات در [مستندات ابزارها · کد مخزن](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md) آمده است.
 
 ## قراردادهای نوشتن مؤلفه
 
@@ -449,4 +451,4 @@ const html = renderToString(button);
 
 ## دیگر موارد
 
-[پروانه (MIT)](/LICENSE)
+[پروانه (MIT)](./LICENSE)

@@ -6,17 +6,18 @@ workflow recipes apply only when a task needs them.
 
 ## Choose the reference
 
-| Decision                                                                                    | Owner                                                                     |
-| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Visual hierarchy, composition, type, spacing, density, color and motion                     | [DESIGN.md](./DESIGN.md), especially §§11–12                              |
-| Observable input, focus, keyboard, drafts, feedback, progress and recovery                  | [INTERACTION.md](./INTERACTION.md)                                        |
-| Optional batches/queues, capability-aware settings, account/data access or result revisions | [WORKFLOW_PATTERNS.md](./WORKFLOW_PATTERNS.md)                            |
-| Component architecture, state ownership, events, async lifecycle and tests                  | [CODING.md](./CODING.md)                                                  |
-| Exact attributes, events, slots and parts                                                   | [COMPONENTS.md](./COMPONENTS.md), generated from source                   |
-| Available component CSS variables                                                           | [style-tokens-public.md](./style-tokens-public.md), generated from source |
-| Component implementation recipes                                                            | [CLAUDE.md](../CLAUDE.md)                                                 |
+| Decision                                                                                    | Owner                                                                                                                                                                                                      |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Visual hierarchy, composition, type, spacing, density, color and motion                     | [DESIGN.md](./DESIGN.md), [composition](./DESIGN.md#11-composition--the-page-not-the-component) and [density](./DESIGN.md#density-follows-control-roles)                                                   |
+| Observable input, focus, keyboard, drafts, feedback, progress and recovery                  | [INTERACTION.md](./INTERACTION.md#1-inputs-drafts-and-intent) (inputs), [focus](./INTERACTION.md#2-reachable-controls-and-predictable-focus), [recovery](./INTERACTION.md#4-progress-failure-and-recovery) |
+| Optional batches/queues, capability-aware settings, account/data access or result revisions | [WORKFLOW_PATTERNS.md](./WORKFLOW_PATTERNS.md)                                                                                                                                                             |
+| Component architecture, state ownership, events, async lifecycle and tests                  | [CODING.md](./CODING.md)                                                                                                                                                                                   |
+| Exact attributes, events, slots and parts                                                   | [COMPONENTS.md](./COMPONENTS.md), generated from source                                                                                                                                                    |
+| Available component CSS variables                                                           | [style-tokens-public.md](./style-tokens-public.md), generated from source                                                                                                                                  |
+| Component implementation recipes                                                            | [CLAUDE.md](../CLAUDE.md)                                                                                                                                                                                  |
 
-Foundation values belong to the theme; product aliases derive from real tokens.
+Read installed foundation declarations in `node_modules/ranui/dist/ranui.css`; product aliases derive from them.
+Source contributors edit `theme/tokens.less` and `theme/dark.less`, not the built CSS.
 Jobs, credentials, persistence and document mutation belong to the host application.
 A recipe does not add ranui APIs or require every interface to have accounts or queues.
 
@@ -24,7 +25,9 @@ A recipe does not add ranui APIs or require every interface to have accounts or 
 
 Identify the task, affected object, destination and observable outcome. Read only the relevant
 owners above. Establish host capabilities before offering an action, and verify its public API.
-Select the smallest composition that makes the task and current state clear.
+Reuse existing semantic controls, framework and local token mappings. Read only applicable sections;
+stop when the public contract, smallest patch and regression evidence are clear. A simple spacing fix
+does not require a density abstraction, queue, account flow or revision model.
 
 ## Verification brief
 
@@ -37,5 +40,6 @@ Select the smallest composition that makes the task and current state clear.
 > Tested commit, CI results and unverified external prerequisites: …
 
 Static token/link audits cannot prove that CSS won the cascade or an action is reachable.
-Use [CODING's verification checklist](./CODING.md#checklist-before-opening-a-pull-request)
-for engineering checks, and collect browser evidence for geometry, focus and interaction.
+Library contributors use [CODING's checklist](./CODING.md#checklist-before-opening-a-pull-request);
+consumer applications use their host's commands. Check affected surfaces/states and collect browser
+evidence when geometry, focus or interaction changes; repository CI gates remain unchanged.
