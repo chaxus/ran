@@ -211,6 +211,7 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 不带值的 `showSearch` 属性也会启用搜索。输入时立即过滤选项，清空后恢复全部选项；
 保留原生文本编辑行为，输入法组合期间按 Enter 不会选中选项。未启用搜索时，
 在聚焦的选择器上打字仍可快捷定位选项。
+仅输入文本不会提交值；通过指针或 Enter 选中筛选结果后，触发一次 `change` 事件并将焦点交回选择器。
 
 <ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
@@ -305,7 +306,7 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### `search`
 
-只有开启 `showSearch` 时才会触发，用户在搜索框输入时触发（节流过的）。`event.detail` 是 `{ value }`，也就是当前的搜索文本。组件内部也会按标签过滤可见选项。
+只有开启 `showSearch` 时才会触发，在编辑搜索框或提交输入法组合时触发。`event.detail` 是 `{ value }`，也就是当前的搜索文本。组件内部也会按标签过滤可见选项。文本未改变时，失焦不会重复触发搜索。
 
 ```html
 <r-select showSearch="true" id="searchable">

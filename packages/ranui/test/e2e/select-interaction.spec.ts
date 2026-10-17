@@ -108,3 +108,56 @@ for (const attribute of ['value', 'defaultvalue']) {
     ).toBe('Beta');
   });
 }
+
+for (const initial of ['empty', 'value', 'defaultvalue']) {
+  for (const composing of [false, true]) {
+    test(`typed ${composing ? 'composition commit' : 'search'} commits pointer selection from ${initial}`, async ({
+      page,
+      hasTouch,
+    }) => {
+      const host = page.locator('#select');
+      if (initial !== 'empty') await host.evaluate((node, name) => node.setAttribute(name, 'a'), initial);
+      await host.evaluate((node) => {
+        const state = window as unknown as Window & { selectionChanges: Array<{ value: string; label: string }> };
+        state.selectionChanges = [];
+        node.addEventListener('change', (event) => state.selectionChanges.push((event as CustomEvent).detail));
+      });
+      const point = await insideShadow(page, '#select', (root) => {
+        const rect = root.querySelector<HTMLInputElement>('[part="search"]')!.getBoundingClientRect();
+        return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+      });
+      if (hasTouch) await page.touchscreen.tap(point.x, point.y);
+      else await page.mouse.click(point.x, point.y);
+      if (composing) {
+        // Exercise the composition guard with native typing; this is not an OS IME emulator.
+        await host.evaluate((node) => {
+          (node as HTMLElement & { _search: HTMLInputElement })._search.dispatchEvent(
+            new CompositionEvent('compositionstart', { bubbles: true }),
+          );
+        });
+      }
+      await page.keyboard.type('Beta');
+      if (composing) {
+        await host.evaluate((node) => {
+          (node as HTMLElement & { _search: HTMLInputElement })._search.dispatchEvent(
+            new CompositionEvent('compositionend', { bubbles: true }),
+          );
+        });
+      }
+      await expect(page.locator('r-dropdown-item')).toHaveText(['Beta', 'Beta two']);
+      const option = page.locator('r-dropdown-item').filter({ hasText: /^Beta$/ });
+      if (hasTouch) await option.tap();
+      else await option.click();
+      await expect(host).toHaveAttribute('value', 'b');
+      await expect(host).not.toHaveAttribute('open');
+      await expect(host).toBeFocused();
+      expect(
+        await page.evaluate(
+          () =>
+            (window as unknown as Window & { selectionChanges: Array<{ value: string; label: string }> })
+              .selectionChanges,
+        ),
+      ).toEqual([{ value: 'b', label: 'Beta' }]);
+    });
+  }
+}
