@@ -122,6 +122,7 @@ it('keeps captions and geometry aligned with changed source tokens and ignores c
   const { tmpdir } = await import('node:os');
   const { join, resolve } = await import('node:path');
   const { execFileSync } = await import('node:child_process');
+  const { pathToFileURL } = await import('node:url');
   const dir = mkdtempSync(join(tmpdir(), 'ran-design-illustrations-'));
   try {
     writeFileSync(join(dir, 'package.json'), JSON.stringify({ type: 'module' }));
@@ -137,7 +138,7 @@ it('keeps captions and geometry aligned with changed source tokens and ignores c
       join(dir, 'ranui/theme/dark.less'),
       readFileSync('../ranui/theme/dark.less', 'utf8') + '\n--ran-color-link: var(--ran-blue-900);',
     );
-    const script = `import {renderDesignIllustrations,designIllustrationFiles} from ${JSON.stringify(join(dir, 'docs/build/design-illustrations.ts'))}; import {ROOT_LOCALE} from ${JSON.stringify(join(dir, 'docs/build/langs/locales.ts'))}; console.log(JSON.stringify([renderDesignIllustrations(ROOT_LOCALE),designIllustrationFiles()[0][1]]));`;
+    const script = `import {renderDesignIllustrations,designIllustrationFiles} from ${JSON.stringify(pathToFileURL(join(dir, 'docs/build/design-illustrations.ts')).href)}; import {ROOT_LOCALE} from ${JSON.stringify(pathToFileURL(join(dir, 'docs/build/langs/locales.ts')).href)}; console.log(JSON.stringify([renderDesignIllustrations(ROOT_LOCALE),designIllustrationFiles()[0][1]]));`;
     const [html, standalone] = JSON.parse(
       execFileSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8' }),
     );
