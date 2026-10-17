@@ -183,7 +183,7 @@ export default MyComponent;
 
 Some components lazy-load a heavy third-party library and render its output into the shadow root. Follow this specialized recipe (repository-only evaluation + enrichment roadmap in [`docs/RENDERER_COMPONENTS.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/RENDERER_COMPONENTS.md) — read it before building or enriching one, so it isn't re-analyzed):
 
-- **Dependency**: the lib is a regular `dependency` (auto-installs with ranui — peerDependency is wrong here: yarn classic never auto-installs peers), reached only via a **dynamic `import()` inside `render()`**, so it lands as an async chunk only when the component actually renders. The ES build externalizes everything in `dependencies` (`RUNTIME_DEPENDENCIES` in `vite.config.ts`), so the lib resolves from the consumer's node_modules instead of being copied into `dist/`; only the CJS/IIFE single-file outputs inline it. Verify nothing static leaks into `index.js` (for `r-mermaid`: `dist/mermaid.js` is a 91-byte stub; the lib is a separate `mermaid.core-*` chunk. For `r-math`: `dist/math.js` is an 80-byte stub; `temml`, the Latin Modern font, and the script font are three separate lazy chunks). `r-math` uses **Temml → native MathML** (not KaTeX): Temml compiles LaTeX to MathML the browser lays out itself.
+- **Dependency**: the lib is a regular `dependency` (auto-installs with ranui — peerDependency is wrong here: yarn classic never auto-installs peers), reached only via a **dynamic `import()` inside `render()`**, so it lands as an async chunk only when the component actually renders. The ES build externalizes everything in `dependencies` (`RUNTIME_DEPENDENCIES` in `vite.config.ts`), so the lib resolves from the consumer's node_modules instead of being copied into `dist/`; standalone IIFE outputs inline it. Private media/diagram engines (`dashjs`, `hls.js`, `mpegts.js`, `mermaid`) are the explicit exception: build dependencies bundled into separate lazy ESM chunks, because their upstream npm distributions install large collections of source, debug builds and source maps. They remain automatically available; no public declaration may reference their types. Keep upstream notices in `dist/THIRD_PARTY_LICENSES.md` and `dist/IIFE-LICENSES.md` and run `pnpm verify:release` to check the real installed footprint. Verify nothing static leaks into `index.js` (for `r-mermaid`: `dist/mermaid.js` is a 91-byte stub; the lib is a separate `mermaid.core-*` chunk. For `r-math`: `dist/math.js` is an 80-byte stub; `temml`, the Latin Modern font, and the script font are three separate lazy chunks). `r-math` uses **Temml → native MathML** (not KaTeX): Temml compiles LaTeX to MathML the browser lays out itself.
 - **Source**: a URI-encoded attribute (`code` / `latex`, so multiline / `<|--` / `$$` survive HTML parsing) **or** `this.textContent.trim()`.
 - **Errors → DOM, not console**: render an `::part(error)` box + dispatch an `error` CustomEvent (`bubbles+composed`). Both `r-mermaid` and `r-math` do this.
 - **Theme**: `r-mermaid` uses `theme=auto|light|dark` with a `MutationObserver` on `documentElement` (disconnected in `disconnectedCallback`) because it bakes colors into its SVG and must re-render. `r-math` needs **none of that** — native MathML inherits `color` via `currentColor`, so `:host { color: var(--ran-color-text) }` flips light/dark in the same paint with zero JS.
@@ -1061,7 +1061,7 @@ npm run test:unit:coverage # with coverage report
 ### E2E (Playwright)
 
 ```bash
-npm run test:e2e           # provisions the browser, then runs the suite
+npm run test:e2e           # provisions Chromium/Firefox/WebKit, then runs the suite
 npm run e2e:install        # provision only (idempotent — a no-op once installed)
 npm run test:update        # refresh screenshot snapshots
 npm run test:report        # open the last HTML report
@@ -1076,7 +1076,7 @@ cannot happen; `playwright install` exits immediately when the browser is alread
 the guard costs nothing on repeat runs.
 
 The `chromium` and `Mobile Chrome` projects both use Playwright's bundled Chromium, which
-`e2e:install` provides. The **`Google Chrome` project uses `channel: 'chrome'`** — the real,
+`e2e:install` provides. It also installs Firefox and WebKit; desktop projects cover all three engines, and `Mobile Safari` adds an emulated WebKit mobile viewport. WebKit is the Playwright engine, not a real Safari/iOS device certification. The **`Google Chrome` project uses `channel: 'chrome'`** — the real,
 system-installed Google Chrome. It is deliberately not part of `e2e:install` (installing a
 branded browser touches the OS, not `node_modules`); install Chrome normally, or run
 `npx playwright install chrome`.
@@ -1099,9 +1099,9 @@ matching the runner and committed alongside the macOS one — 128 more binaries 
 step. That is the open option if visual regressions start slipping through; until then this is
 recorded as a known gap rather than papered over.
 
-**Re-record with `npm run test:update`, never with `--project`.** Every spec runs under three
+**Re-record with `npm run test:update`, never with `--project`.** Visual comparison is maintained under three
 projects — `chromium`, `Google Chrome`, `Mobile Chrome` — so each screenshot has three baselines.
-Refreshing one project leaves the other two holding a picture of the old component, and nothing
+The Firefox, WebKit and Mobile Safari projects run functional checks only (`ignoreSnapshots: true`), so they do not create or approve new screenshot baselines. Refreshing one visual project leaves the other two holding a picture of the old component, and nothing
 reports it: CI ignores snapshots, and locally you only see it if you run the whole suite and read
 past the failures you expected. Eleven baselines were stale this way, across three separate
 changes, each of which refreshed `chromium` alone — including one commit that says so in its own

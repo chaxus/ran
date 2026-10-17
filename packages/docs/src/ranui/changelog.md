@@ -20,6 +20,10 @@ Release candidate prepared for publication; npm upload is pending.
 
 ### Release preparation
 
+- Fix mobile popover hover/click races and cancel stale hover timers when the user explicitly toggles a panel.
+
+- Run Chromium, Firefox and WebKit functional CI, including built ESM and IIFE execution. Measure and gate real installation size; private media/Mermaid engines remain automatic lazy chunks while their large upstream development distributions no longer install separately. Preserve dependency notices. See the [validation report](https://github.com/chaxus/ran/blob/main/docs/RELEASE_VALIDATION.md).
+
 - Require Node 24+ across all workspaces and pin pnpm 11.6.0.
 - Coordinate ranuts 0.5.0-rc.0 and @alixex/ranview 0.2.0-rc.0 with this candidate; packed dependencies resolve to these exact versions.
 - Publish ESM modules and retain standalone IIFEs. See the [migration guide](https://ran.chaxus.com/src/ranuts/migration/) for removed alpha APIs and formats.
