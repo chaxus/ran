@@ -1,6 +1,6 @@
 import fs from '@/node/fs';
 import readFile from '@/node/readFile';
-import type { Error } from '@/node/fs';
+import type { Error, Identification } from '@/node/fs';
 
 /**
  * @description: Append content to an existing file
@@ -9,13 +9,13 @@ import type { Error } from '@/node/fs';
  * @return {Promise}
  */
 
-export const appendFile = (path: string, content: string): Promise<Ranuts.Identification> =>
+export const appendFile = (path: string, content: string): Promise<Identification> =>
   new Promise((resolve, reject) => {
     fs.appendFile(path, content, (err: Error) => {
       if (err) {
         reject({ success: false, _identification: false, data: err });
       } else {
-        readFile(path).then((result: Ranuts.Identification | PromiseLike<Ranuts.Identification>) => {
+        readFile(path).then((result) => {
           resolve(result);
         });
       }

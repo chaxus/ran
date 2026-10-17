@@ -1,5 +1,6 @@
 import type { Stats } from 'node:fs';
 import fs from '@/node/fs';
+import type { Identification } from '@/node/fs';
 
 /**
  * @description: Watch a file for changes and report its status
@@ -8,7 +9,7 @@ import fs from '@/node/fs';
  * @return {Promise}
  */
 
-const watchFile = (path: string, interval: number = 20): Promise<Ranuts.Identification> =>
+const watchFile = (path: string, interval: number = 20): Promise<Identification> =>
   new Promise((resolve) => {
     fs.watchFile(path, { interval }, (curr: Stats, prev: Stats) => {
       if (curr.mtime !== prev.mtime) {

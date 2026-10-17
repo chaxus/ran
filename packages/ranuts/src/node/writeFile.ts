@@ -1,4 +1,5 @@
 import fs from '@/node/fs';
+import type { Identification } from '@/node/fs';
 
 type Error = NodeJS.ErrnoException | null;
 
@@ -9,7 +10,7 @@ type Error = NodeJS.ErrnoException | null;
  * @return {Promise}
  */
 
-const writeFile = (path: string, content: string): Promise<Ranuts.Identification> =>
+const writeFile = (path: string, content: string): Promise<Identification> =>
   new Promise((resolve, reject) => {
     fs.writeFile(
       path,

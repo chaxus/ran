@@ -420,14 +420,14 @@ import { /* … */ } from 'ranuts/node';
 
 ### 函数
 
-- `appendFile(path: string, content: string) => Promise<Ranuts.Identification>` — Append content to an existing file
+- `appendFile(path: string, content: string) => Promise<Identification>` — Append content to an existing file
 - `bodyMiddleware(options?: Partial<ServerBody>) => MiddlewareFunction`
 - `connect(connectMiddleware: ConnectMiddleware) => MiddlewareFunction`
 - `get({ url }: Request) => Promise<Response>`
 - `getIPAdress() => string | undefined`
 - `default(req: Req) => ParseUrl | undefined` — Parse an IncomingMessage's request URL; the return type is always ParseUrl
 - `prompt({ message, stream, defaultResponse }: PromptOption) => Promise<boolean>`
-- `queryFileInfo(path: string) => Promise<Ranuts.Identification>` — Stat a file — typically to tell a file from a directory via data.isDirectory()
+- `queryFileInfo(path: string) => Promise<Identification>` — Stat a file — typically to tell a file from a directory via data.isDirectory()
 - `readDir(options: Options) => Array<string>`
 - `readFile(path: string, format?: BufferEncoding) => FilePromiseResult` — Read a file, returning a status code and the content on success
 - `readStream(option: ReadOption) => ReadStream`
@@ -437,8 +437,8 @@ import { /* … */ } from 'ranuts/node';
 - `taskEnd(symbol: symbol) => number | bigint`
 - `traverse(dir: string, callback: Caller, pre?: string) => Promise<any>` — Walk every directory recursively, running a function for each file found
 - `traverseSync(dir: string, callback: Caller, pre?: string) => void` — Synchronous: walk every directory recursively, running a function for each file found
-- `watchFile(path: string, interval?: number) => Promise<Ranuts.Identification>` — Watch a file for changes and report its status
-- `writeFile(path: string, content: string) => Promise<Ranuts.Identification>` — Write a file at the given path, truncating it if it exists and creating it if it does not
+- `watchFile(path: string, interval?: number) => Promise<Identification>` — Watch a file for changes and report its status
+- `writeFile(path: string, content: string) => Promise<Identification>` — Write a file at the given path, truncating it if it exists and creating it if it does not
 - `writeStream(option: WriteOption) => WriteStream`
 - `WSS(this: any, server: http.Server) => void` — Create a WebSocket Server
 
