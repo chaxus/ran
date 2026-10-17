@@ -54,9 +54,9 @@ class Server {
   listen(...args: any): http.Server {
     const fn = compose(this.middleware);
     const server = http.createServer((req, res) => {
-      this.ctx.req = req;
-      this.ctx.res = res;
-      fn(this.ctx).catch(onerror);
+      // ctx holds application defaults; middleware state belongs to this request only.
+      const ctx: Context = { ...this.ctx, req, res };
+      fn(ctx).catch(onerror);
     });
     return server.listen(...args);
   }
