@@ -67,6 +67,22 @@ const loadIndex = async (): Promise<void> => {
 const escapeHtml = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+/** Match original text once; neither inserted tags nor escaped entities are searchable. */
+const highlight = (text: string, terms: readonly string[]): string => {
+  const alternatives = [...new Set(terms)]
+    .filter(Boolean)
+    .sort((a, b) => b.length - a.length)
+    .map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  if (!alternatives.length) return escapeHtml(text);
+  let html = '';
+  let at = 0;
+  for (const match of text.matchAll(new RegExp(alternatives.join('|'), 'giu'))) {
+    html += escapeHtml(text.slice(at, match.index)) + `<mark>${escapeHtml(match[0])}</mark>`;
+    at = match.index + match[0].length;
+  }
+  return html + escapeHtml(text.slice(at));
+};
+
 /**
  * A snippet centred on the first match, so a result shows why it matched rather than
  * the first 120 characters of every page.
@@ -82,13 +98,7 @@ const snippet = (text: string, terms: readonly string[]): string => {
   const start = at <= 40 ? 0 : at - 40;
   const slice = text.slice(start, start + 150);
   const body = (start ? '…' : '') + slice + (start + 150 < text.length ? '…' : '');
-  // Terms are highlighted after escaping, so a term containing markup cannot inject it.
-  let html = escapeHtml(body);
-  for (const term of [...terms].sort((a, b) => b.length - a.length)) {
-    if (term.length < 2) continue;
-    html = html.replace(new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'), '<mark>$1</mark>');
-  }
-  return html;
+  return highlight(body, terms);
 };
 
 export const mountSearch = (): void => {
@@ -111,7 +121,7 @@ export const mountSearch = (): void => {
         const terms = input.value.split(/\s+/).filter(Boolean);
         return (
           `<li id="search-option-${i}" role="option" aria-selected="${i === active}"><a tabindex="-1" class="search-hit" href="${escapeHtml(hit.url)}"${i === active ? ' data-active' : ''}>` +
-          `<span class="search-hit__title">${escapeHtml(hit.title)}</span>` +
+          `<span class="search-hit__title">${highlight(hit.title, terms)}</span>` +
           `<span class="search-hit__page"><span class="search-hit__kind">${escapeHtml(/\/src\/(ranui|ranuts)\/(api|style-tokens|changelog)(?:[/#]|$)/.test(hit.url) ? feedback.reference : /\/src\/(ranui|ranuts)\//.test(hit.url) ? feedback.guide : feedback.article)}</span> ${escapeHtml(hit.page)}</span>` +
           `<span class="search-hit__text">${snippet((hit.preview ?? '').replace(/^(?:源码|Source(?: code)?):[^\n]*(?:\n|$)/i, ''), terms)}</span></a></li>`
         );
