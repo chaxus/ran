@@ -19,7 +19,6 @@ export default defineConfig({
     locale: 'en-US',
     timezoneId: 'UTC',
     colorScheme: 'light',
-    launchOptions: { args: ['--use-angle=swiftshader'] },
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
