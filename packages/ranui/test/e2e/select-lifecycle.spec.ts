@@ -1,10 +1,25 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, insideShadow, mount } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-select');
 });
+
+async function clickSearch(page: Page): Promise<void> {
+  // Target coordinates relative to the host so Playwright can wait for layout
+  // stability and follow scrolling. WebKit retargets closed-root hit tests to
+  // the host, so a direct input-handle click cannot pass its actionability check.
+  const position = await insideShadow(page, '#select', (root) => {
+    const input = root.querySelector('input')!.getBoundingClientRect();
+    const host = root.host.getBoundingClientRect();
+    return { x: input.x + input.width / 2 - host.x, y: input.y + input.height / 2 - host.y };
+  });
+  await page.locator('#select').click({ position });
+  await expect
+    .poll(() => insideShadow(page, '#select', (root) => root.activeElement === root.querySelector('input')))
+    .toBe(true);
+}
 
 for (const method of ['property', 'attribute', 'remove']) {
   for (const defaultValue of [false, true]) {
@@ -97,11 +112,7 @@ for (const initiallyOpen of [false, true]) {
         const scope = customContainer ? page.locator('#portal') : page.locator('body');
         await expect(scope.locator('r-dropdown')).toHaveCount(1);
         await expect(scope.locator('r-dropdown-item')).toHaveText(['Alpha', 'Beta', 'Gamma']);
-        const point = await insideShadow(page, '#select', (root) => {
-          const rect = root.querySelector('input')!.getBoundingClientRect();
-          return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
-        });
-        await page.mouse.click(point.x, point.y);
+        await clickSearch(page);
         await page.keyboard.type(cycle === 0 ? 'Beta' : 'Gamma');
         const label = cycle === 0 ? 'Beta' : 'Gamma';
         await expect(scope.locator('r-dropdown-item')).toHaveText([label]);
@@ -148,11 +159,7 @@ test('reconnected searchable select preserves its draft filter without committin
     '<r-select id="select" showsearch value="a" style="width:240px"><r-option value="a">Alpha</r-option><r-option value="b">Beta</r-option></r-select>',
   );
   const select = page.locator('#select');
-  const point = await insideShadow(page, '#select', (root) => {
-    const rect = root.querySelector('input')!.getBoundingClientRect();
-    return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
-  });
-  await page.mouse.click(point.x, point.y);
+  await clickSearch(page);
   await page.keyboard.type('Beta');
   await expect(page.locator('r-dropdown-item')).toHaveText(['Beta']);
   await select.evaluate((node) => {
