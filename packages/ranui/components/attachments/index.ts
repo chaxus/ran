@@ -65,6 +65,7 @@ export class Attachments extends RanElement {
   _list!: HTMLElement;
 
   private _attachments: Attachment[] = [];
+  private _rows = new Map<string, { row: HTMLElement; remove: HTMLButtonElement; thumb?: HTMLImageElement }>();
 
   static get observedAttributes(): string[] {
     return ['sheet'];
@@ -167,24 +168,36 @@ export class Attachments extends RanElement {
   detach(id: string): boolean {
     const at = this._attachments.findIndex((attachment) => attachment.id === id);
     if (at === -1) return false;
+    const focused = this._shadowDom.activeElement === this._rows.get(id)?.remove;
     const [removed] = this._attachments.splice(at, 1);
     this._release(removed);
-    this._render();
+    this._render(focused ? at : undefined);
     return true;
   }
 
   /** Removes everything and releases every preview — what sending should call. */
   clear(): void {
     if (this._attachments.length === 0) return;
+    const focused = [...this._rows.values()].some(({ remove }) => remove === this._shadowDom.activeElement);
     for (const attachment of this._attachments) this._release(attachment);
     this._attachments = [];
-    this._render();
+    this._render(focused ? 0 : undefined);
   }
 
   // ── Lifecycle ──────────────────────────────────────────────────────────
 
   connectedCallback(): void {
     this.handlerExternalCss();
+    for (const attachment of this._attachments) {
+      if (attachment.previewUrl === null && attachment.type.startsWith('image/')) {
+        attachment.previewUrl = URL.createObjectURL(attachment.file);
+      }
+    }
+    this._events.on(this._list, 'click', (event) => {
+      const remove = (event.target as Element).closest('button');
+      const entry = [...this._rows.entries()].find(([, row]) => row.remove === remove);
+      if (entry) this.detach(entry[0]);
+    });
     this._render();
   }
 
@@ -207,7 +220,10 @@ export class Attachments extends RanElement {
   // ── Internals ──────────────────────────────────────────────────────────
 
   private _release(attachment: Attachment): void {
-    if (attachment.previewUrl !== null) URL.revokeObjectURL(attachment.previewUrl);
+    if (attachment.previewUrl !== null) {
+      URL.revokeObjectURL(attachment.previewUrl);
+      attachment.previewUrl = null;
+    }
   }
 
   private _emit(type: string, detail: unknown): void {
@@ -252,16 +268,25 @@ export class Attachments extends RanElement {
     });
   }
 
-  private _render(): void {
-    this._events.abort();
-    this._list.replaceChildren();
-
+  private _render(focusIndex?: number): void {
+    const ids = new Set(this._attachments.map((attachment) => attachment.id));
+    for (const [id, entry] of this._rows) {
+      if (ids.has(id)) continue;
+      entry.row.remove();
+      this._rows.delete(id);
+    }
     for (const attachment of this._attachments) {
+      const existing = this._rows.get(attachment.id);
+      if (existing) {
+        if (existing.thumb && attachment.previewUrl !== null) existing.thumb.src = attachment.previewUrl;
+        continue;
+      }
       const row = Div().class('ran-attachment').attr('part', 'attachment').attr('role', 'listitem').build();
       row.dataset.id = attachment.id;
 
+      let thumb: HTMLImageElement | undefined;
       if (attachment.previewUrl !== null) {
-        const thumb = View('img').class('ran-attachment-thumb').attr('part', 'thumb').build() as HTMLImageElement;
+        thumb = View('img').class('ran-attachment-thumb').attr('part', 'thumb').build() as HTMLImageElement;
         thumb.src = attachment.previewUrl;
         // The name, not "image": a screen reader reading "image" for each of four
         // attachments has told the reader nothing about which is which.
@@ -286,8 +311,8 @@ export class Attachments extends RanElement {
         .attr('aria-label', `Remove ${attachment.name}`)
         .children(View('r-icon').attr('name', 'close').build())
         .build();
-      this._events.on(remove, 'click', () => this.detach(attachment.id));
       row.appendChild(remove);
+      this._rows.set(attachment.id, { row, remove: remove as HTMLButtonElement, thumb });
 
       this._list.appendChild(row);
     }
@@ -297,6 +322,16 @@ export class Attachments extends RanElement {
     setStringAttribute(this, 'count', this._attachments.length === 0 ? null : String(this._attachments.length), {
       removeEmpty: true,
     });
+    if (focusIndex !== undefined) {
+      const next = this._attachments[Math.min(focusIndex, this._attachments.length - 1)];
+      if (next) this._rows.get(next.id)?.remove.focus();
+      else {
+        // A stable handoff without adding a sequential tab stop. The empty list is hidden.
+        if (!this.hasAttribute('tabindex')) this.tabIndex = -1;
+        this.focus();
+      }
+    }
+    // Consumers may use the existing event to hand empty-strip focus to their composer.
     this._emit('attachmentschange', { attachments: this.attachments });
   }
 }

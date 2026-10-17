@@ -216,4 +216,66 @@ describe('r-attachments contract', () => {
     const { strip } = mount();
     expect(strip.detach('attachment-nope')).toBe(false);
   });
+  it('preserves the same focused remove action while other rows change', () => {
+    const { strip, shadow, list } = mount();
+    const [first] = strip.add([makeFile('a.pdf', 'application/pdf'), makeFile('b.pdf', 'application/pdf')]);
+    const button = list.querySelectorAll<HTMLButtonElement>('button')[1];
+    button.focus();
+    strip.add([makeFile('c.pdf', 'application/pdf')]);
+    expect(shadow.activeElement).toBe(button);
+    strip.detach(first.id);
+    expect(shadow.activeElement).toBe(button);
+    expect(list.querySelector('button')).toBe(button);
+  });
+
+  it('moves removed-row focus next, then previous, then to the host without a tab stop', () => {
+    const { strip, shadow, list } = mount();
+    strip.add([
+      makeFile('a.pdf', 'application/pdf'),
+      makeFile('b.pdf', 'application/pdf'),
+      makeFile('c.pdf', 'application/pdf'),
+    ]);
+    list.querySelectorAll<HTMLButtonElement>('button')[1].focus();
+    (shadow.activeElement as HTMLButtonElement).click();
+    expect(shadow.activeElement?.getAttribute('aria-label')).toBe('Remove c.pdf');
+    (shadow.activeElement as HTMLButtonElement).click();
+    expect(shadow.activeElement?.getAttribute('aria-label')).toBe('Remove a.pdf');
+    (shadow.activeElement as HTMLButtonElement).click();
+    expect(document.activeElement).toBe(strip);
+    expect(strip.tabIndex).toBe(-1);
+    expect(strip.attachments).toHaveLength(0);
+  });
+
+  it('does not steal external focus and lets the host handle the empty change', () => {
+    const { strip, list } = mount();
+    const input = document.createElement('input');
+    document.body.append(input);
+    input.focus();
+    const [attachment] = strip.add([makeFile('a.pdf', 'application/pdf')]);
+    strip.detach(attachment.id);
+    expect(document.activeElement).toBe(input);
+    strip.add([makeFile('b.pdf', 'application/pdf')]);
+    list.querySelector<HTMLButtonElement>('button')!.focus();
+    strip.addEventListener('attachmentschange', () => {
+      if (!strip.attachments.length) input.focus();
+    });
+    list.querySelector<HTMLButtonElement>('button')!.click();
+    expect(document.activeElement).toBe(input);
+  });
+
+  it('reconnects preserved rows with one listener and restores released previews', () => {
+    const { strip, list } = mount();
+    strip.add([makeFile('a.png', 'image/png')]);
+    strip.remove();
+    expect(revoked).toHaveLength(1);
+    document.body.append(strip);
+    expect(created).toHaveLength(2);
+    expect(list.querySelector('img')?.src).toBe(created[1]);
+    const changes = vi.fn();
+    strip.addEventListener('attachmentschange', changes);
+    list.querySelector<HTMLButtonElement>('button')!.click();
+    expect(changes).toHaveBeenCalledOnce();
+    expect(revoked).toHaveLength(2);
+    expect(new Set(revoked).size).toBe(2);
+  });
 });
