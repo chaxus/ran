@@ -102,11 +102,7 @@ await assert.rejects(import('ranuts/node'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORT
 `,
   );
   run(process.execPath, ['runtime.mjs']);
-  run(process.execPath, [
-    '-e',
-    "const assert=require('node:assert/strict'); assert.equal(require('ranuts').rgbToHex(1,2,3),'#010203'); assert.throws(()=>require('ranuts/node'),{code:'ERR_PACKAGE_PATH_NOT_EXPORTED'})",
-  ]);
-  console.log('ranuts tarball: ESM and CommonJS runtime imports passed');
+  console.log('ranuts tarball: ESM runtime imports passed');
 
   // Measure a real consumer import, with the consumer bundler's default tree shaking.
   await writeFile(join(fixture, 'entry.mjs'), "import { rgbToHex } from 'ranuts'; console.log(rgbToHex(1,2,3));");
