@@ -36,11 +36,6 @@ formatDuration(NaN); // ''
 The empty string for `NaN` is deliberate: a player asks for `video.duration` before metadata
 has loaded and gets `NaN`, and a blank label reads better there than `NaN:NaN`.
 
-::: tip Renamed
-This function used to be called `timeFormat`. That name stays as a deprecated alias and
-behaves identically, but it said nothing about _which_ of the three time formats it produced.
-:::
-
 ## formatRelative
 
 Describes a point in time relative to another: "3 days ago", "in 2 hours".

@@ -1,24 +1,23 @@
 ---
-description: 'ranuts 工具函数总览：函数式工具（debounce、throttle、memoize、compose）以及字符串、对象、数字、颜色等实用函数。'
+description: 'ranuts 工具函数总览：函数式工具（debounce、throttle、once、compose）以及字符串、对象、数字、颜色等实用函数。'
 ---
 
 # 工具函数
 
 ## 函数式编程
 
-| 方法     | 说明           | 详细内容                  |
-| -------- | -------------- | ------------------------- |
-| debounce | 防抖函数       | [debounce](./debounce.md) |
-| throttle | 节流函数       | [throttle](./throttle.md) |
-| memoize  | 记忆化函数     | [memoize](./memoize.md)   |
-| noop     | 空函数         | [noop](./noop.md)         |
-| compose  | 组合中间件函数 | [compose](./compose.md)   |
+| 方法                | 说明                        | 详细内容                            |
+| ------------------- | --------------------------- | ----------------------------------- |
+| debounce            | 防抖函数                    | [debounce](./debounce.md)           |
+| throttle            | 节流函数                    | [throttle](./throttle.md)           |
+| once / singleFlight | 只执行一次 / 共享异步初始化 | [once / singleFlight](./memoize.md) |
+| noop                | 空函数                      | [noop](./noop.md)                   |
+| compose             | 组合中间件函数              | [compose](./compose.md)             |
 
 ## 字符串处理
 
 | 方法                           | 说明                                  | 详细内容                                            |
 | ------------------------------ | ------------------------------------- | --------------------------------------------------- |
-| md5                            | MD5 哈希函数                          | [md5](./md5.md)                                     |
 | randomString / getRandomString | 生成随机字符串                        | [randomString](./random_string.md)                  |
 | clearBr                        | 清除字符串中的空格、HTML 标签和换行符 | [clearBr](./clear_br.md)                            |
 | clearStr                       | 去除字符串首尾的空格、URL 编码和引号  | [clearStr](./clear_str.md)                          |
@@ -64,13 +63,12 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 
 ## 时间处理
 
-| 方法                                  | 说明                             | 详细内容                                  |
-| ------------------------------------- | -------------------------------- | ----------------------------------------- |
-| formatDuration                        | 将时间秒数转换为格式化字符串     | [formatDuration](./time_format.md)        |
-| formatRelative                        | 描述相对当前的时间（「3 天前」） | [formatRelative](./time_format.md)        |
-| parseVttTimestamp / parseVttCueTiming | 解析 WebVTT 字幕时间行           | [parseVttTimestamp](./time_format.md)     |
-| timestampToTime                       | 将时间戳转换为 Date 对象         | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime                       | 获取高精度时间戳                 | [performanceTime](./performance_time.md)  |
+| 方法                                  | 说明                             | 详细内容                                 |
+| ------------------------------------- | -------------------------------- | ---------------------------------------- |
+| formatDuration                        | 将时间秒数转换为格式化字符串     | [formatDuration](./time_format.md)       |
+| formatRelative                        | 描述相对当前的时间（「3 天前」） | [formatRelative](./time_format.md)       |
+| parseVttTimestamp / parseVttCueTiming | 解析 WebVTT 字幕时间行           | [parseVttTimestamp](./time_format.md)    |
+| performanceTime                       | 获取高精度时间戳                 | [performanceTime](./performance_time.md) |
 
 ## 设备检测
 
@@ -78,7 +76,6 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | ------------- | ------------------------ | ------------------------------------ |
 | isMobile      | 判断是否为移动端设备     | [isMobile](./is_mobile.md)           |
 | isWeiXin      | 判断是否为微信浏览器     | [isWeiXin](./is_weixin.md)           |
-| isClient      | 判断是否为客户端环境     | [isClient](./is_client.md)           |
 | isSafari      | 判断是否为 Safari 浏览器 | [isSafari](./is_safari.md)           |
 | currentDevice | 获取当前设备类型         | [currentDevice](./current_device.md) |
 

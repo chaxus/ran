@@ -29,7 +29,6 @@ import {
   getMatchingSentences,
   getRandomString,
   isString,
-  md5,
   randomString,
   strParse,
   toFullWidth,
@@ -126,7 +125,7 @@ import {
   roundRectByArc,
 } from './canvas';
 import { ADOPTED_SHEET_MARKER, ADOPTED_STYLE_MARKER, adoptSheetText, adoptStyles } from './style';
-import { memoize, once, singleFlight } from './memoize';
+import { once, singleFlight } from './memoize';
 import type { SingleFlight } from './memoize';
 import { WebDB, createHandoff } from './idb';
 import type { Handoff, HandoffOptions, IDBCollection, IDBResult, IDBStoreSchema, WebDBOptions } from './idb';
@@ -215,24 +214,13 @@ import {
   parseVttCueTiming,
   parseVttTimestamp,
   performanceTime,
-  timeFormat,
-  timestampToTime,
 } from './time';
 import type { DateInput, FormatRelativeOptions, RelativeStyle } from './time';
 import type { CurrentDevice } from './device';
-import {
-  MOBILE_MEDIA_QUERY,
-  currentDevice,
-  isClient,
-  isMobile,
-  isWeiXin,
-  matchMediaQuery,
-  watchMediaQuery,
-} from './device';
+import { MOBILE_MEDIA_QUERY, currentDevice, isMobile, isWeiXin, matchMediaQuery, watchMediaQuery } from './device';
 import {
   Color,
   ColorScheme,
-  FMT,
   HEX_COLOR_REGEX,
   Hsl,
   Hsla,
@@ -278,8 +266,6 @@ export {
   diffLines,
   formatBytes,
   performanceTime,
-  timeFormat,
-  timestampToTime,
   throttle,
   SyncHook,
   clearBr,
@@ -318,7 +304,6 @@ export {
   getExtensions,
   setMime,
   getMime,
-  memoize,
   once,
   isImageSize,
   convertImageToBase64,
@@ -327,7 +312,6 @@ export {
   removeClassToElement,
   createDocumentFragment,
   escapeHtml,
-  isClient,
   isWeiXin,
   isMobile,
   debounce,
@@ -335,7 +319,6 @@ export {
   handleConsole,
   compose,
   Color,
-  FMT,
   Hsl,
   Hsla,
   Rgb,
@@ -391,7 +374,6 @@ export {
   checkEncoding,
   transformText,
   isSafari,
-  md5,
   getRandomString,
   bridgeManager,
   Client,

@@ -8,13 +8,12 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**454 exports** across 8 entry points.
+**422 exports** across 7 entry points.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 339 exports
+- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 333 exports
 - [`ranuts/sw`](#ranuts-sw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
-- [`ranuts/node`](#ranuts-node) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranuts-visual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 16 exports
 - [`ranuts/i18n`](#ranuts-i18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 9 exports
 - [`ranuts/vnode`](#ranuts-vnode) — Snabbdom-style virtual DOM · _browser_ · 26 exports
@@ -161,8 +160,6 @@ import { /* … */ } from 'ranuts/utils';
 - `luma(r: number, g: number, b: number) => number` — Perceived brightness (luma) of an RGB colour using Rec. 601 weights. Channels may be 0..1 or 0..255 — the result keeps that scale.
 - `matchMediaQuery(query: string) => boolean` — Read whether a media query currently matches, synchronously. Returns false under SSR.
 - `mathjs(a: number, type: string, b: number) => ComputeNumberResult`
-- `md5(str: string) => string` — MD5 hash function implementation
-- `memoize<T extends Func>(fn: T | unknown) => ((...args: Parameters<T>) => ReturnType<T>)` — Former name of `once`. The name is misleading — it does not cache per
 - `merge(a: Obj, b?: Obj) => Obj` — Merge objects
 - `mergeExports(obj: Record<string, string>, exports: Record<string, string>) => Record<string, string>` — Copy an exports object onto `obj`, then freeze it
 - `navigatorLanguage() => TextLanguage` — Map the browser UI language into the same buckets (the default when there is
@@ -226,8 +223,6 @@ import { /* … */ } from 'ranuts/utils';
 - `srgbToLinear(c: number) => number` — Convert one sRGB channel (0..1) to linear-light (IEC 61966-2-1 transfer function).
 - `strParse(str?: string, sep?: string | RegExp, eq?: string | RegExp) => Record<string, string>` — Parse a delimited string into an object, e.g.
 - `throttle<T extends (...args: any[]) => any>(fn: T, delay?: number) => Throttled<T>` — Throttle — under a burst of calls, run at a fixed interval: the first call
-- `timeFormat(time: number) => string` — Format a number of seconds as a colon-separated duration
-- `timestampToTime(timestamp?: number | string) => Date & { format?: Function; }` — Turn a timestamp into a `Date` carrying a `format` method.
 - `toFullWidth(value: string) => string` — Convert half-width characters to full-width (the inverse of `toHalfWidth`)
 - `toHalfWidth(value: string) => string` — Convert full-width characters to half-width (digits, letters, punctuation and
 - `toString(value: string | number) => string`
@@ -364,9 +359,7 @@ import { /* … */ } from 'ranuts/utils';
 - `const cubic: SpeedType`
 - `const DEFAULT_CHANNEL: "default"`
 - `const expo: SpeedType`
-- `const FMT: Record<string, string[]>`
 - `const HEX_COLOR_REGEX: RegExp` — `#rgb` / `#rrggbb` (the `#` is required)
-- `const isClient: boolean` — Whether a `window` existed **when this module was first imported**.
 - `const MessageCodec: { encode(data: any): string; decode<T = any>(encodedStr: string): T | null; encodeFile(file: File): Promise<string>; decodeFile(encoded: st…` — Message codec.
 - `const MimeType: Map<string, string>`
 - `const MOBILE_MEDIA_QUERY: "(max-width: 768px)"` — Viewport breakpoint, matching where the mobile layout takes over
@@ -405,55 +398,6 @@ import { /* … */ } from 'ranuts/sw';
 - `interface PrecacheMessageEvent` — The bit of `ExtendableMessageEvent` used here, declared locally rather than pulled from
 - `interface ServePrecacheOptions`
 - `interface SWScope` — Minimal view of the SW global the helpers touch, so they can be unit-tested with a stub.
-
-## `ranuts/node`
-
-Node server utilities (fs / http / ws / middleware) · runtime: **node only** · source: `src/node/index.ts`
-
-```ts
-import { /* … */ } from 'ranuts/node';
-```
-
-### Functions
-
-- `appendFile(path: string, content: string) => Promise<Identification>` — Append content to an existing file
-- `bodyMiddleware(options?: Partial<ServerBody>) => MiddlewareFunction`
-- `connect(connectMiddleware: ConnectMiddleware) => MiddlewareFunction`
-- `get({ url }: Request) => Promise<Response>`
-- `getIPAdress() => string | undefined`
-- `default(req: Req) => ParseUrl | undefined` — Parse an IncomingMessage's request URL; the return type is always ParseUrl
-- `prompt({ message, stream, defaultResponse }: PromptOption) => Promise<boolean>`
-- `queryFileInfo(path: string) => Promise<Identification>` — Stat a file — typically to tell a file from a directory via data.isDirectory()
-- `readDir(options: Options) => Array<string>`
-- `readFile(path: string, format?: BufferEncoding) => FilePromiseResult` — Read a file, returning a status code and the content on success
-- `readStream(option: ReadOption) => ReadStream`
-- `runCommand(command: string, args: string[]) => Promise<void>`
-- `startTask() => symbol`
-- `staticMiddleware(option?: Partial<Option>) => MiddlewareFunction`
-- `taskEnd(symbol: symbol) => number | bigint`
-- `traverse(dir: string, callback: Caller, pre?: string) => Promise<any>` — Walk every directory recursively, running a function for each file found
-- `traverseSync(dir: string, callback: Caller, pre?: string) => void` — Synchronous: walk every directory recursively, running a function for each file found
-- `watchFile(path: string, interval?: number) => Promise<Identification>` — Watch a file for changes and report its status
-- `writeFile(path: string, content: string) => Promise<Identification>` — Write a file at the given path, truncating it if it exists and creating it if it does not
-- `writeStream(option: WriteOption) => WriteStream`
-- `WSS(this: any, server: http.Server) => void` — Create a WebSocket Server
-
-### Classes
-
-- `class Router`
-- `class Server`
-
-### Interfaces
-
-- `interface Context`
-
-### Constants
-
-- `const isColorSupported: boolean`
-
-### Other
-
-- `default`
 
 ## `ranuts/visual`
 

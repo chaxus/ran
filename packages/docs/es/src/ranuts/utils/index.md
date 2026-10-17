@@ -1,24 +1,23 @@
 ---
-description: 'Panorama de las funciones de utilidad de ranuts: ayudas funcionales (debounce, throttle, memoize, compose) más utilidades de cadenas, objetos, números y color.'
+description: 'Panorama de las funciones de utilidad de ranuts: ayudas funcionales (debounce, throttle, once, compose) más utilidades de cadenas, objetos, números y color.'
 ---
 
 # Funciones de utilidad
 
 ## Programación funcional
 
-| Método   | Descripción                            | Detalle                   |
-| -------- | -------------------------------------- | ------------------------- |
-| debounce | Función de rebote (debounce)           | [debounce](./debounce.md) |
-| throttle | Función de estrangulamiento (throttle) | [throttle](./throttle.md) |
-| memoize  | Función de memoización                 | [memoize](./memoize.md)   |
-| noop     | Función que no hace nada               | [noop](./noop.md)         |
-| compose  | Compone funciones de middleware        | [compose](./compose.md)   |
+| Método              | Descripción                                           | Detalle                             |
+| ------------------- | ----------------------------------------------------- | ----------------------------------- |
+| debounce            | Función de rebote (debounce)                          | [debounce](./debounce.md)           |
+| throttle            | Función de estrangulamiento (throttle)                | [throttle](./throttle.md)           |
+| once / singleFlight | Ejecutar una vez / compartir inicialización asíncrona | [once / singleFlight](./memoize.md) |
+| noop                | Función que no hace nada                              | [noop](./noop.md)                   |
+| compose             | Compone funciones de middleware                       | [compose](./compose.md)             |
 
 ## Cadenas de texto
 
 | Método                         | Descripción                                                                  | Detalle                                             |
 | ------------------------------ | ---------------------------------------------------------------------------- | --------------------------------------------------- |
-| md5                            | Función hash MD5                                                             | [md5](./md5.md)                                     |
 | randomString / getRandomString | Genera una cadena aleatoria                                                  | [randomString](./random_string.md)                  |
 | clearBr                        | Quita espacios, etiquetas HTML y saltos de línea de una cadena               | [clearBr](./clear_br.md)                            |
 | clearStr                       | Quita espacios de los extremos, codificación de URL y comillas de una cadena | [clearStr](./clear_str.md)                          |
@@ -64,13 +63,12 @@ description: 'Panorama de las funciones de utilidad de ranuts: ayudas funcionale
 
 ## Tiempo
 
-| Método                                | Descripción                                               | Detalle                                   |
-| ------------------------------------- | --------------------------------------------------------- | ----------------------------------------- |
-| formatDuration                        | Convierte un tiempo en segundos en una cadena con formato | [formatDuration](./time_format.md)        |
-| formatRelative                        | Describe un momento respecto de ahora («hace 3 días»)     | [formatRelative](./time_format.md)        |
-| parseVttTimestamp / parseVttCueTiming | Interpreta las líneas de tiempos de subtítulos WebVTT     | [parseVttTimestamp](./time_format.md)     |
-| timestampToTime                       | Convierte una marca de tiempo en un objeto Date           | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime                       | Obtiene una marca de tiempo de alta precisión             | [performanceTime](./performance_time.md)  |
+| Método                                | Descripción                                               | Detalle                                  |
+| ------------------------------------- | --------------------------------------------------------- | ---------------------------------------- |
+| formatDuration                        | Convierte un tiempo en segundos en una cadena con formato | [formatDuration](./time_format.md)       |
+| formatRelative                        | Describe un momento respecto de ahora («hace 3 días»)     | [formatRelative](./time_format.md)       |
+| parseVttTimestamp / parseVttCueTiming | Interpreta las líneas de tiempos de subtítulos WebVTT     | [parseVttTimestamp](./time_format.md)    |
+| performanceTime                       | Obtiene una marca de tiempo de alta precisión             | [performanceTime](./performance_time.md) |
 
 ## Detección de dispositivo
 
@@ -78,7 +76,6 @@ description: 'Panorama de las funciones de utilidad de ranuts: ayudas funcionale
 | ------------- | ------------------------------------- | ------------------------------------ |
 | isMobile      | Dice si el dispositivo es móvil       | [isMobile](./is_mobile.md)           |
 | isWeiXin      | Dice si el navegador es el de WeChat  | [isWeiXin](./is_weixin.md)           |
-| isClient      | Dice si el entorno es el del cliente  | [isClient](./is_client.md)           |
 | isSafari      | Dice si el navegador es Safari        | [isSafari](./is_safari.md)           |
 | currentDevice | Obtiene el tipo de dispositivo actual | [currentDevice](./current_device.md) |
 

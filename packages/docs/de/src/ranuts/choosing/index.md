@@ -30,8 +30,6 @@ ranuts will die Standardbibliothek nicht ersetzen. Greif zuerst zur Plattform un
 | Dass es **genau einmal** läuft, ein Leben lang (eine Initialisierung, eine einmalige Warnung) | `once(fn)`         | Der erste Aufruf rechnet, jeder spätere gibt genau dieses Ergebnis zurück.                     |
 | Dass gleichzeitige Aufrufer sich **eine laufende Anfrage teilen**                             | `singleFlight(fn)` | Die asynchrone Spielart von once: Solange ein Aufruf noch aussteht, hängen sich weitere daran. |
 
-**`memoize` ist der frühere Name von `once`** und tut genau dasselbe: Es legt kein Ergebnis je Argument ab, was der Name nahelegt. Neuer Code sollte `once` schreiben.
-
 Der Unterschied, auf den es ankommt: Mit `debounce` an einem Tastatur-Handler läuft nichts, solange getippt wird; mit `throttle` läuft die ganze Zeit etwas, nur eben nicht bei jedem Anschlag. Ein Suchvorschlag will `debounce`, ein Zähler für „verbleibende Zeichen“ will `throttle`.
 
 ## Asynchrone Arbeit im Zaum halten
@@ -103,15 +101,12 @@ Jeder Unterpfad ist ein eigenständiges Sammelmodul, aus dem sich Ungenutztes en
 | --------------------- | ----------------------------------------------------------------- | ------------------ |
 | `ranuts`              | Sammelmodul der Wurzel: die Werkzeuge und die visual-Oberfläche   | Browser + Node     |
 | `ranuts/utils`        | DOM/BOM, Zeichenketten, Objekte, Zahlen, Farbe, Zeit, Speicher, … | Browser + Node\*   |
-| `ranuts/node`         | HTTP-Server, Router, WebSocket, fs, Streams, Middleware           | **nur Node**       |
 | `ranuts/visual`       | Die 2D-Rendermaschine (Canvas / WebGL / WebGPU)                   | **nur Browser**    |
 | `ranuts/i18n`         | Die Übersetzungsmaschine, ohne DOM                                | Browser + Node     |
 | `ranuts/sw`           | Cache-Strategien und die Worker-Hälfte des Vorab-Cache-Protokolls | **Service Worker** |
 | `ranuts/vnode`        | Virtuelles DOM nach Art von Snabbdom                              | Browser            |
 | `ranuts/stream`       | SSE lesen, Modellstrom falten, Token-Budget                       | Browser + Node     |
 | `ranuts/conversation` | Vom Ereignisprotokoll zu darstellbaren Gesprächsknoten            | Browser + Node     |
-
-\* `ranuts/utils` ist breit: Das meiste ist auf den Browser hin gedacht, aber die reinen Helfer (Zeichenketten, Objekte, Zahlen, `compose`, `cloneDeep`, …) laufen überall. **Importiere `ranuts/node` nicht in Browser-Code.** Es zieht `fs`, `http` und `child_process` herein.
 
 ## Immer noch unschlüssig?
 

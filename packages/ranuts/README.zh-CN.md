@@ -56,7 +56,6 @@ npm install ranuts@latest --save
 
 - `ranuts/utils` —— DOM/BOM、字符串、对象、数字、颜色、时间、存储、二进制/zip、
   Worker/IndexedDB、i18n 等工具
-- `ranuts/node` —— HTTP 服务、路由、ws、fs、流、中间件（**仅 Node**）
 - `ranuts/visual` —— 2D 渲染引擎（Canvas / WebGL / WebGPU，**仅浏览器**）
 - `ranuts/sw` —— 缓存策略 + 预缓存协议的 Service Worker 一侧（**仅 Service Worker**）
 - `ranuts/vnode` —— Snabbdom 风格的虚拟 DOM
@@ -66,7 +65,6 @@ npm install ranuts@latest --save
 
 ```js
 import { debounce } from 'ranuts/utils';
-import { readFile } from 'ranuts/node';
 import { createI18n } from 'ranuts/i18n';
 ```
 
@@ -116,3 +114,5 @@ window.addEventListener('resize', onResize);
 ## Meta
 
 [LICENSE (MIT)](/LICENSE)
+
+[Alpha migration](https://ran.chaxus.com/src/ranuts/migration/)

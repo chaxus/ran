@@ -12,7 +12,7 @@ tree-shakeable collection: DOM/BOM and string/object/number/colour helpers, debo
 throttle, storage (guarded localStorage, IndexedDB), a Web Worker client, a postMessage
 bridge, ZIP read/write, prefetching, i18n, scoped event management, microphone audio
 recording and Web Speech API speech-to-text, a 2D rendering engine (Canvas/WebGL/WebGPU),
-a virtual DOM, and Node server tooling.
+and a virtual DOM.
 
 ## Docs
 
@@ -34,7 +34,7 @@ a virtual DOM, and Node server tooling.
 Both packages are multi-entry so consumers import only what they use:
 
 - `ranui` (all components), `ranui/<component>`, `ranui/builder`, `ranui/theme`, `ranui/i18n`, `ranui/ssr`
-- `ranuts` (root barrel), `ranuts/utils`, `ranuts/node` (Node only), `ranuts/visual` (browser only), `ranuts/vnode`, `ranuts/i18n`, `ranuts/sw` (service worker only)
+- `ranuts` (root barrel), `ranuts/utils`, `ranuts/visual` (browser only), `ranuts/vnode`, `ranuts/i18n`, `ranuts/sw` (service worker only)
 
 ## Reference
 
@@ -52,3 +52,5 @@ installed can read them from `node_modules` without fetching anything.
 ## Optional
 
 - [简体中文文档 (Simplified Chinese docs)](https://ran.chaxus.com/cn/)
+
+Alpha migration: https://ran.chaxus.com/src/ranuts/migration/

@@ -52,7 +52,6 @@ Claude greift danach von selbst darauf zu (oder du rufst sie mit `/ranuts:ranuts
 Importier nur, was du brauchst. Zur Wahl stehen:
 
 - `ranuts/utils` — DOM/BOM, Zeichenketten, Objekte, Zahlen, Farbe, Zeit, Speicher, Binärdaten und ZIP, Worker und IndexedDB, Helfer für Mehrsprachigkeit
-- `ranuts/node` — HTTP-Server, Router, WebSocket, fs, Streams, Middleware (**nur Node**)
 - `ranuts/visual` — 2D-Rendermaschine (Canvas / WebGL / WebGPU, **nur Browser**)
 - `ranuts/sw` — Cache-Strategien und die Service-Worker-Hälfte des Vorab-Cache-Protokolls (**nur Service Worker**)
 - `ranuts/vnode` — virtuelles DOM nach Art von Snabbdom
@@ -62,7 +61,6 @@ Importier nur, was du brauchst. Zur Wahl stehen:
 
 ```js
 import { debounce } from 'ranuts/utils';
-import { readFile } from 'ranuts/node';
 import { createI18n } from 'ranuts/i18n';
 ```
 
@@ -112,3 +110,5 @@ Beiträge sind willkommen, ob du zum Lernen kommst oder zum Entwickeln. Das Proj
 ## Sonstiges
 
 [Lizenz (MIT)](/LICENSE)
+
+[Alpha migration](https://ran.chaxus.com/src/ranuts/migration/)

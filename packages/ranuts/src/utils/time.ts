@@ -73,22 +73,6 @@ export const formatDate = (value?: DateInput, pattern: string = 'YYYY-MM-DD HH:m
 };
 
 /**
- * @description: Turn a timestamp into a `Date` carrying a `format` method.
- * @deprecated Use [`formatDate`](#formatdate). This returns a `Date` with an extra method
- * bolted onto the instance, which does not survive serialization, breaks `instanceof`-based
- * type narrowing on the extra property, and is untypeable beyond `Function`. Its `format`
- * now delegates to `formatDate`, so the token handling is fixed here too.
- * @param {number | string} timestamp omit for the current time
- * @return {Date & { format?: Function }}
- */
-export function timestampToTime(timestamp?: number | string): Date & { format?: Function } {
-  const date = timestamp ? new Date(timestamp) : new Date();
-  (date as Date & { format?: Function }).format = (pattern = 'YYYY-MM-DD HH:mm:ss'): string =>
-    formatDate(date, pattern);
-  return date;
-}
-
-/**
  * @description: Format an elapsed number of **seconds** as a colon-separated clock duration,
  * the shape media players use for a playhead: `mm:ss`, widening to `hh:mm:ss` past an hour.
  *
@@ -115,16 +99,6 @@ export const formatDuration = (seconds: number): string => {
   const second = pad(total % 60);
   return hour === 0 ? `${pad(minute)}:${second}` : `${pad(hour)}:${pad(minute)}:${second}`;
 };
-
-/**
- * @description: Format a number of seconds as a colon-separated duration
- * @deprecated Renamed to [`formatDuration`](#formatduration) — `timeFormat` said nothing about
- * *which* of the three time formats it was, and read backwards from its `formatDate` sibling.
- * This alias stays for compatibility and behaves identically.
- * @param {number} time
- * @return {string}
- */
-export const timeFormat = (time: number): string => formatDuration(time);
 
 const VTT_TIMESTAMP = /(?:(\d{2,}):)?(\d{2}):(\d{2})\.(\d{3})/;
 

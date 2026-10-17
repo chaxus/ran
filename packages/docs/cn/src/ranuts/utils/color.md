@@ -1,6 +1,6 @@
 # Color
 
-一套基于类的颜色系统，配套用于处理 RGB、RGBA、HSL、HSLA、HSB/HSV 与十六进制颜色的转换辅助函数。它提供了功能丰富的 `Color` 类、值对象类（`Rgb`、`Rgba`、`Hsl`、`Hsla`）、调色板生成器 `ColorScheme`、一组独立的转换函数，以及终端 ANSI 样式映射 `FMT`。
+颜色工具包括 `Color`、值对象（`Rgb`、`Rgba`、`Hsl`、`Hsla`）、`ColorScheme` 调色板，以及 RGB、RGBA、HSL、HSLA、HSB/HSV 和十六进制颜色的独立转换函数。
 
 > 更简单的辅助函数 `hexToRgb`、`rgbToHex` 和 `randomColor` 有各自独立的文档页：[hexToRgb](./hex_to_rgb.md)、[rgbToHex](./rgb_to_hex.md)、[randomColor](./random_color.md)。它们从同一模块中重新导出。
 
@@ -252,16 +252,6 @@ const backToSrgb = linearToSrgb(linear); // ≈ 0.5
 | `RGB_REGEX`       | `rgb(r,g,b)`                               |
 | `RGBA_REGEX`      | `rgba(r,g,b,a)`                            |
 
-### FMT
-
-一个记录终端 ANSI 转义码对的对象，用于文本样式和着色。每个条目都是 `[open, close]` 元组，用于包裹字符串以为终端输出添加样式。
-
-```ts
-const FMT: Record<string, Array<string>>;
-```
-
-可用的键：`bold`、`dim`、`reset`、`italic`、`underline`、`inverse`、`hidden`、`strikethrough`、`black`、`red`、`green`、`yellow`、`blue`、`magenta`、`cyan`、`white`、`gray`，以及背景变体 `bgBlack`、`bgRed`、`bgGreen`、`bgYellow`、`bgBlue`、`bgMagenta`、`bgCyan`、`bgWhite`。
-
 ## Example
 
 ### 创建 Color
@@ -333,22 +323,9 @@ console.log(componentToHex(255)); // 'ff'
 console.log(rgbToHsl([0, 128, 255])); // [h, s, l]
 ```
 
-### 使用 FMT 为终端输出添加样式
-
-```js
-import { FMT } from 'ranuts';
-
-const [open, close] = FMT.green;
-console.log(`${open}success${close}`); // 在终端中显示绿色的 "success"
-
-const bold = FMT.bold;
-console.log(`${bold[0]}important${bold[1]}`);
-```
-
 ## 注意事项
 
 1. **即时计算**：`Color` 在构造函数中计算出所有表示形式，因此 `hex`、`rgb`、`rgba`、`hsl` 与 `hsla` 在构造时总是保持同步。
 2. **HSL setter 会重算 RGB**：`setHue` / `setSat` / `setLum` 会更新 HSL，然后通过 `updateFromHsl` 重新推导 RGB 与 hex；`setAlpha` 只影响 `rgba` 与 `hsla`。
 3. **数组或通道两种入参**：若干转换函数（`rgbToHex`、`rgbToHsl`、`hslToRgb`）既接受三个通道参数，也接受把单个数组作为第一个参数。
 4. **HSV 与 HSB**：`hsvToRgb` 是 `hsbToRgb` 的别名，`hsvToHsl` 是 HSB→HSL 转换的别名，此处 HSV 与 HSB 指同一模型。
-5. **FMT 仅限终端**：这些 ANSI 转义序列只有在支持它们的终端中才会呈现为样式；在浏览器控制台中会显示为原始控制字符。

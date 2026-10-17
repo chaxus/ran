@@ -1,6 +1,6 @@
 # Color
 
-클래스를 바탕으로 한 색 체계입니다. RGB, RGBA, HSL, HSLA, HSB/HSV, 16진수 색을 다루는 변환 도우미가 갖추어져 있습니다. 손이 넉넉한 `Color` 클래스, 바뀌지 않는 값 클래스(`Rgb`, `Rgba`, `Hsl`, `Hsla`), 팔레트 생성기 `ColorScheme`, 홀로 쓸 수 있는 변환 함수 묶음, 그리고 터미널용 ANSI 스타일 표 `FMT`가 들어 있습니다.
+색상 도구는 `Color`, 값 클래스(`Rgb`, `Rgba`, `Hsl`, `Hsla`), `ColorScheme` 팔레트와 RGB, RGBA, HSL, HSLA, HSB/HSV, 16진수 변환 함수를 제공합니다.
 
 > 더 단순한 도우미인 `hexToRgb`, `rgbToHex`, `randomColor`에는 저마다 따로 문서가 있습니다. [hexToRgb](./hex_to_rgb.md), [rgbToHex](./rgb_to_hex.md), [randomColor](./random_color.md)입니다. 모두 같은 모듈에서 다시 내보냅니다.
 
@@ -252,16 +252,6 @@ const backToSrgb = linearToSrgb(linear); // ≈ 0.5
 | `RGB_REGEX`       | `rgb(r,g,b)`                                                            |
 | `RGBA_REGEX`      | `rgba(r,g,b,a)`                                                         |
 
-### FMT
-
-글자를 꾸미고 물들이는 데 쓰는, 터미널용 ANSI 이스케이프 코드 짝을 모은 레코드입니다. 각 항목은 `[여는 코드, 닫는 코드]` 튜플이고, 문자열을 이것으로 감싸면 터미널 출력에 꾸밈이 붙습니다.
-
-```ts
-const FMT: Record<string, Array<string>>;
-```
-
-쓸 수 있는 키는 `bold`, `dim`, `reset`, `italic`, `underline`, `inverse`, `hidden`, `strikethrough`, `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`, `gray`, 그리고 바탕색 판인 `bgBlack`, `bgRed`, `bgGreen`, `bgYellow`, `bgBlue`, `bgMagenta`, `bgCyan`, `bgWhite`입니다.
-
 ## 예시
 
 ### Color 만들기
@@ -333,22 +323,9 @@ console.log(componentToHex(255)); // 'ff'
 console.log(rgbToHsl([0, 128, 255])); // [h, s, l]
 ```
 
-### FMT로 터미널 출력 꾸미기
-
-```js
-import { FMT } from 'ranuts';
-
-const [open, close] = FMT.green;
-console.log(`${open}success${close}`); // 터미널에서는 "success"가 초록으로 나옵니다
-
-const bold = FMT.bold;
-console.log(`${bold[0]}important${bold[1]}`);
-```
-
 ## 참고
 
 1. **한꺼번에 미리 계산합니다**: `Color`는 생성자에서 모든 표현을 계산해 두므로, 만들어지는 순간부터 `hex`, `rgb`, `rgba`, `hsl`, `hsla`가 서로 어긋나지 않습니다.
 2. **HSL 설정자는 RGB를 다시 계산합니다**: `setHue`, `setSat`, `setLum`은 HSL을 고친 다음 `updateFromHsl`로 RGB와 16진수를 다시 뽑아냅니다. `setAlpha`가 건드리는 것은 `rgba`와 `hsla`뿐입니다.
 3. **배열로도 채널로도 받습니다**: 몇몇 변환 함수(`rgbToHex`, `rgbToHsl`, `hslToRgb`)는 채널 셋을 따로 받아도 되고, 첫 인자에 배열 하나를 받아도 됩니다.
 4. **HSV와 HSB**: `hsvToRgb`는 `hsbToRgb`의 다른 이름이고, `hsvToHsl`은 HSB에서 HSL로 가는 변환의 다른 이름입니다. 여기서 HSV와 HSB는 같은 모형을 가리킵니다.
-5. **FMT는 터미널 전용입니다**: ANSI 이스케이프 열이 꾸밈으로 보이는 것은 그것을 알아듣는 터미널 안에서뿐입니다. 브라우저 콘솔에서는 제어 문자가 그대로 드러납니다.

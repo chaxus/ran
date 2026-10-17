@@ -1,24 +1,23 @@
 ---
-description: 'Overview of ranuts utility functions: functional helpers (debounce, throttle, memoize, compose) plus string, object, number and color utilities.'
+description: 'Overview of ranuts utility functions: functional helpers (debounce, throttle, once, compose) plus string, object, number and color utilities.'
 ---
 
 # Utility Functions
 
 ## Functional Programming
 
-| Method   | Description                  | Detail                    |
-| -------- | ---------------------------- | ------------------------- |
-| debounce | Debounce function            | [debounce](./debounce.md) |
-| throttle | Throttle function            | [throttle](./throttle.md) |
-| memoize  | Memoization function         | [memoize](./memoize.md)   |
-| noop     | No-op function               | [noop](./noop.md)         |
-| compose  | Compose middleware functions | [compose](./compose.md)   |
+| Method              | Description                           | Detail                              |
+| ------------------- | ------------------------------------- | ----------------------------------- |
+| debounce            | Debounce function                     | [debounce](./debounce.md)           |
+| throttle            | Throttle function                     | [throttle](./throttle.md)           |
+| once / singleFlight | Run once / share async initialization | [once / singleFlight](./memoize.md) |
+| noop                | No-op function                        | [noop](./noop.md)                   |
+| compose             | Compose middleware functions          | [compose](./compose.md)             |
 
 ## String Processing
 
 | Method                         | Description                                                          | Detail                                              |
 | ------------------------------ | -------------------------------------------------------------------- | --------------------------------------------------- |
-| md5                            | MD5 hash function                                                    | [md5](./md5.md)                                     |
 | randomString / getRandomString | Generate random string                                               | [randomString](./random_string.md)                  |
 | clearBr                        | Remove spaces, HTML tags, and line breaks from string                | [clearBr](./clear_br.md)                            |
 | clearStr                       | Remove leading/trailing spaces, URL encoding, and quotes from string | [clearStr](./clear_str.md)                          |
@@ -64,23 +63,21 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 
 ## Time Processing
 
-| Method                                | Description                                    | Detail                                    |
-| ------------------------------------- | ---------------------------------------------- | ----------------------------------------- |
-| formatDuration                        | Convert time in seconds to formatted string    | [formatDuration](./time_format.md)        |
-| formatRelative                        | Describe a time relative to now ("3 days ago") | [formatRelative](./time_format.md)        |
-| parseVttTimestamp / parseVttCueTiming | Parse WebVTT subtitle timing lines             | [parseVttTimestamp](./time_format.md)     |
-| timestampToTime                       | Convert timestamp to Date object               | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime                       | Get high-precision timestamp                   | [performanceTime](./performance_time.md)  |
+| Method                                | Description                                    | Detail                                   |
+| ------------------------------------- | ---------------------------------------------- | ---------------------------------------- |
+| formatDuration                        | Convert time in seconds to formatted string    | [formatDuration](./time_format.md)       |
+| formatRelative                        | Describe a time relative to now ("3 days ago") | [formatRelative](./time_format.md)       |
+| parseVttTimestamp / parseVttCueTiming | Parse WebVTT subtitle timing lines             | [parseVttTimestamp](./time_format.md)    |
+| performanceTime                       | Get high-precision timestamp                   | [performanceTime](./performance_time.md) |
 
 ## Device Detection
 
-| Method        | Description                        | Detail                               |
-| ------------- | ---------------------------------- | ------------------------------------ |
-| isMobile      | Determine if device is mobile      | [isMobile](./is_mobile.md)           |
-| isWeiXin      | Determine if browser is WeChat     | [isWeiXin](./is_weixin.md)           |
-| isClient      | Determine if environment is client | [isClient](./is_client.md)           |
-| isSafari      | Determine if browser is Safari     | [isSafari](./is_safari.md)           |
-| currentDevice | Get current device type            | [currentDevice](./current_device.md) |
+| Method        | Description                    | Detail                               |
+| ------------- | ------------------------------ | ------------------------------------ |
+| isMobile      | Determine if device is mobile  | [isMobile](./is_mobile.md)           |
+| isWeiXin      | Determine if browser is WeChat | [isWeiXin](./is_weixin.md)           |
+| isSafari      | Determine if browser is Safari | [isSafari](./is_safari.md)           |
+| currentDevice | Get current device type        | [currentDevice](./current_device.md) |
 
 ## DOM Manipulation
 

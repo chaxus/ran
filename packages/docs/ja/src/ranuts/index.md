@@ -19,19 +19,16 @@ import { debounce } from 'ranuts/utils';
 
 ## エントリーポイント
 
-| import                                                | 中身                                                             | 実行環境            |
-| ----------------------------------------------------- | ---------------------------------------------------------------- | ------------------- |
-| `ranuts`                                              | ルートのバレル：utils と visual をまとめたもの                   | ブラウザー + Node   |
-| [`ranuts/utils`](/ja/src/ranuts/utils/)               | DOM / BOM、文字列、オブジェクト、数値、色、時間、ストレージ…     | ブラウザー + Node\* |
-| [`ranuts/node`](/ja/src/ranuts/node/)                 | HTTP サーバー、ルーター、WebSocket、fs、ストリーム、ミドルウェア | **Node 専用**       |
-| [`ranuts/visual`](/ja/src/ranuts/visual/)             | 2D レンダリングエンジン（Canvas / WebGL / WebGPU）               | **ブラウザー専用**  |
-| [`ranuts/i18n`](/ja/src/ranuts/i18n/)                 | 翻訳エンジン：フラットな辞書、実行時の切り替え                   | ブラウザー + Node   |
-| [`ranuts/sw`](/ja/src/ranuts/sw/)                     | キャッシュ戦略と、プリキャッシュ規約のワーカー側                 | **Service Worker**  |
-| [`ranuts/vnode`](/ja/src/ranuts/vnode/)               | Snabbdom 風の仮想 DOM                                            | ブラウザー          |
-| [`ranuts/stream`](/ja/src/ranuts/stream/)             | SSE の解析、モデルストリームの畳み込み、トークンの予算           | ブラウザー + Node   |
-| [`ranuts/conversation`](/ja/src/ranuts/conversation/) | イベントログ → 描画できる会話のノード                            | ブラウザー + Node   |
-
-\* `ranuts/utils` は間口が広く、大半はブラウザー向けですが、純粋なヘルパーはどこでも動きます。**ブラウザーのコードで `ranuts/node` を import しないでください。** `fs` / `http` / `child_process` を引き込みます。
+| import                                                | 中身                                                         | 実行環境            |
+| ----------------------------------------------------- | ------------------------------------------------------------ | ------------------- |
+| `ranuts`                                              | ルートのバレル：utils と visual をまとめたもの               | ブラウザー + Node   |
+| [`ranuts/utils`](/ja/src/ranuts/utils/)               | DOM / BOM、文字列、オブジェクト、数値、色、時間、ストレージ… | ブラウザー + Node\* |
+| [`ranuts/visual`](/ja/src/ranuts/visual/)             | 2D レンダリングエンジン（Canvas / WebGL / WebGPU）           | **ブラウザー専用**  |
+| [`ranuts/i18n`](/ja/src/ranuts/i18n/)                 | 翻訳エンジン：フラットな辞書、実行時の切り替え               | ブラウザー + Node   |
+| [`ranuts/sw`](/ja/src/ranuts/sw/)                     | キャッシュ戦略と、プリキャッシュ規約のワーカー側             | **Service Worker**  |
+| [`ranuts/vnode`](/ja/src/ranuts/vnode/)               | Snabbdom 風の仮想 DOM                                        | ブラウザー          |
+| [`ranuts/stream`](/ja/src/ranuts/stream/)             | SSE の解析、モデルストリームの畳み込み、トークンの予算       | ブラウザー + Node   |
+| [`ranuts/conversation`](/ja/src/ranuts/conversation/) | イベントログ → 描画できる会話のノード                        | ブラウザー + Node   |
 
 ## 何が入っているか
 
@@ -46,7 +43,7 @@ import { debounce } from 'ranuts/utils';
 [数値の整形と解析](/ja/src/ranuts/utils/parse_number) ·
 [色の変換と混合](/ja/src/ranuts/utils/color)
 
-**テキスト**：[md5](/ja/src/ranuts/utils/md5) · [truncate](/ja/src/ranuts/utils/truncate) ·
+**テキスト**：[truncate](/ja/src/ranuts/utils/truncate) ·
 [detectLanguage](/ja/src/ranuts/utils/detect_language) ·
 [resolveLocale](/ja/src/ranuts/utils/resolve_locale) ·
 [segmentByRanges](/ja/src/ranuts/utils/segment) · [paginate](/ja/src/ranuts/utils/paginate) ·
@@ -66,10 +63,6 @@ import { debounce } from 'ranuts/utils';
 **描画**：[2D エンジン](/ja/src/ranuts/visual/) · [仮想 DOM](/ja/src/ranuts/vnode/) ·
 [canvas のヘルパー](/ja/src/ranuts/utils/canvas) · [tween](/ja/src/ranuts/utils/tween)
 
-**Node**：[HTTP サーバーとルーター](/ja/src/ranuts/node/) ·
-[ファイル操作](/ja/src/ranuts/file/write_file) ·
-[MIME タイプ](/ja/src/ranuts/mime_type/mime_type)
-
 これは一部です。[API リファレンス](/ja/src/ranuts/api)には**すべての** export がシグネチャと説明つきで載っており、ソースから生成されているのでずれることがありません。
 
 ## 次に読むもの
@@ -83,3 +76,5 @@ import { debounce } from 'ranuts/utils';
 | その上に UI を作る                               | [ranui](/ja/src/ranui/)                                                         |
 
 どちらのパッケージも npm の tarball の中に `CLAUDE.md` を同梱しています。コーディングエージェント向けの案内で、ネットワークなしに `node_modules` からそのまま読めます。
+
+[Alpha 移行ガイド](/ja/src/ranuts/migration/)

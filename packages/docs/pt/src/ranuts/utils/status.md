@@ -45,4 +45,3 @@ status.retry[503]; // true
 
 1. **`getStatus` lança uma exceção com código ou mensagem desconhecidos**: `TypeError` se o argumento não for `number` nem `string`, e `Error` nos demais casos. Envolva em `try`/`catch` (ou confira antes `status.codes.includes(n)`) quando a entrada não vier garantida, como um código de estado lido da rede.
 2. **`status.redirect`, `empty` e `retry` são objetos comuns, não `Set`**: confira a presença com `status.retry[code]`, e não com `.has()`.
-3. Roda tanto no navegador quanto no Node (`ranuts/utils`), então no cliente você tem o mesmo mapeamento código↔mensagem que um manipulador de `ranuts/node` usaria no servidor.

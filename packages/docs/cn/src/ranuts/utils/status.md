@@ -45,4 +45,3 @@ status.retry[503]; // true
 
 1. **`getStatus` 在状态码/消息未知时会抛出异常**：参数既不是 `number` 也不是 `string` 时抛 `TypeError`，其他未知情况抛普通 `Error`。如果输入不能保证一定合法（比如从网络上读到的状态码），用 `try`/`catch` 包一下，或者先检查 `status.codes.includes(n)`。
 2. **`status.redirect` / `empty` / `retry` 是普通对象，不是 `Set`**：判断是否命中要用 `status.retry[code]`，不是 `.has()`。
-3. 浏览器和 Node 都能跑（`ranuts/utils`），所以客户端也能用它做和服务端 `ranuts/node` 一样的状态码↔消息映射。

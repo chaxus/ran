@@ -57,7 +57,6 @@ Import as required. You can select:
 
 - `ranuts/utils` — DOM/BOM, string, object, number, colour, time, storage, binary/zip,
   worker/IndexedDB, i18n helpers
-- `ranuts/node` — HTTP server, router, ws, fs, streams, middleware (**Node only**)
 - `ranuts/visual` — 2D rendering engine (Canvas / WebGL / WebGPU, **browser only**)
 - `ranuts/sw` — cache strategies + the precache protocol's service-worker half (**service worker only**)
 - `ranuts/vnode` — Snabbdom-style virtual DOM
@@ -67,7 +66,6 @@ Import as required. You can select:
 
 ```js
 import { debounce } from 'ranuts/utils';
-import { readFile } from 'ranuts/node';
 import { createI18n } from 'ranuts/i18n';
 ```
 
@@ -117,3 +115,5 @@ We welcome contributions from learners and developers! This is an experimental p
 ## Meta
 
 [LICENSE (MIT)](/LICENSE)
+
+[Alpha migration](https://ran.chaxus.com/src/ranuts/migration/)

@@ -33,10 +33,6 @@ formatDuration(NaN); // ''
 
 Die leere Zeichenkette bei `NaN` ist Absicht: Ein Player fragt `video.duration` ab, bevor die Metadaten geladen sind, und bekommt `NaN` – an dieser Stelle liest sich eine leere Beschriftung besser als `NaN:NaN`.
 
-::: tip Umbenannt
-Diese Funktion hieß früher `timeFormat`. Der Name bleibt als veralteter Zweitname erhalten und verhält sich genauso, sagte aber nicht, _welches_ der drei Zeitformate er erzeugt.
-:::
-
 ## formatRelative
 
 Beschreibt einen Zeitpunkt im Verhältnis zu einem anderen: „vor 3 Tagen“, „in 2 Stunden“.

@@ -32,7 +32,6 @@ Each subpath is an independent, tree-shakeable barrel. Import from the subpath, 
 | --------------------- | --------------------------- | --------------------------------------------------------------- | ------------------ |
 | `ranuts`              | `index.ts`                  | Root barrel — re-exports the utils + visual surface             | browser + node     |
 | `ranuts/utils`        | `src/utils/index.ts`        | DOM/BOM, string, object, number, color, time, etc.              | browser + node\*   |
-| `ranuts/node`         | `src/node/index.ts`         | HTTP server, router, ws, fs, streams, middleware                | **node only**      |
 | `ranuts/visual`       | `src/utils/visual/index.ts` | 2D rendering engine (Canvas / WebGL / WebGPU)                   | **browser only**   |
 | `ranuts/i18n`         | `src/utils/i18n.ts`         | `I18nCore` / `createI18n` / `useI18n` — DOM-free                | browser + node     |
 | `ranuts/sw`           | `src/sw/index.ts`           | Cache strategies + the precache protocol's SW half              | **service worker** |
@@ -43,8 +42,7 @@ Each subpath is an independent, tree-shakeable barrel. Import from the subpath, 
 \* `ranuts/utils` is broad: most functions are browser-oriented (touch `window`/`document`),
 but pure helpers (`str`, `obj`, `number`, `compose`, `cloneDeep`, …) run anywhere. Functions
 that read browser globals generally guard with `typeof window/document !== 'undefined'`; do
-the same for any new code. **Do not import `ranuts/node` in browser code** — it pulls in
-`fs`/`http`/`child_process` (these are marked external in the build).
+the same for any new code.
 
 ---
 
@@ -80,7 +78,6 @@ packages/ranuts/
 │   │   ├── diff.ts           # diffLines — line-level diff as unified-style hunks
 │   │   ├── visual/           # ranuts/visual — 2D rendering engine (see below)
 │   │   └── totp/             # TOTP + hand-rolled SHA
-│   ├── node/                 # ranuts/node — mini HTTP framework
 │   ├── vnode/                # ranuts/vnode — virtual DOM
 │   ├── stream/               # ranuts/stream — SSE + StreamChunk + accumulator + budget
 │   └── conversation/         # ranuts/conversation — event log → nodes, with publication cadence
@@ -297,16 +294,12 @@ Then `npm run doc:api`.
 
 - Guard every `window`/`document`/`localStorage`/`navigator` access with `typeof … !== 'undefined'`
   in code reachable from `ranuts/utils` (it's imported in node too).
-- **Guard at call time, not module load.** `isClient` is a module-level constant evaluated when
-  the module is first imported, so it is `false` forever in any SSR-then-hydrate or
-  import-early/call-later flow — and it cannot be stubbed in tests. New code checks
-  `typeof window === 'undefined'` inside the function. `isClient` stays exported for
-  compatibility but should not be used for new branches.
+- **Guard at call time, not module load.** Check `typeof window === 'undefined'` inside
+  the function, so SSR and delayed browser access use the current environment.
 - Never call `window.setTimeout` / `window.setInterval`. The bare globals work in Node, Web
   Workers and the browser alike; the `window.`-prefixed ones throw `ReferenceError` outside a
   document. (This is what made `throttle` unusable in SSR before 0.3.)
-- Keep `ranuts/node` server-only; never import it from browser-facing modules. Same for
-  `ranuts/sw`: it runs in a `ServiceWorkerGlobalScope` with no `window`/`document`, which is
+- Keep `ranuts/sw` separate: it runs in a `ServiceWorkerGlobalScope` with no `window`/`document`, which is
   why it is its own entry rather than part of the utils barrel.
 
 ### Ship both halves of a protocol, or neither
@@ -374,7 +367,6 @@ npm run doc:api:check  # verify it is fresh without writing (what CI runs)
 | Pitfall                                                                          | Fix                                                                                                                                                     |
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Importing from a deep source path or `@/…`                                       | Import from the public subpath (`ranuts/utils`, `ranuts/visual`, …). `@/…` is build-internal only.                                                      |
-| Importing `ranuts/node` in browser code                                          | It externalizes `fs`/`http`/`child_process` — server-only. Use `ranuts/utils` for browser helpers.                                                      |
 | `new Application()` then `render()` with WebGPU                                  | Device init is async — use `await Application.create(...)`, then `app.start()`.                                                                         |
 | Hand-editing `docs/API.md`                                                       | It's generated. Edit the source JSDoc and run `npm run doc:api`.                                                                                        |
 | Adding an export but it's missing from `docs/API.md`                             | Re-export it from the module's `index.ts` barrel, then `npm run doc:api`.                                                                               |
@@ -382,14 +374,12 @@ npm run doc:api:check  # verify it is fresh without writing (what CI runs)
 | `console.log` left in a function that a test calls                               | `vitest.config.ts` `onConsoleLog` throws — remove it or the test fails.                                                                                 |
 | Assuming a GPU/Canvas test can run in CI                                         | Test env is node (no DOM/GPU). Test pure logic; gate visual checks behind a browser demo.                                                               |
 | Passing a non-`#rrggbb` color to the GPU backend and expecting it to fail        | It won't — `getRgb` resolves any CSS color via the browser parser, matching the Canvas backend.                                                         |
-| Branching on `isClient` in new code                                              | It's a module-load-time constant — wrong after SSR, unstubbable in tests. Check `typeof window === 'undefined'` inside the function.                    |
 | Reaching for `randomString` / `getRandomString` to make a token or code          | Both are `Math.random()` based and predictable. Use `secureRandomString` / `secureToken` from `secure.ts` for anything an attacker would want to guess. |
 | Comparing a secret with `===`                                                    | Returns early at the first differing byte, leaking the shared prefix through timing. Use `safeEqual`.                                                   |
 | Asserting a distribution drawn from the real CSPRNG                              | The window that catches the bias also fires on sampling noise. Script the bytes with `withBytes` (`test/utils/secure.test.ts`) and assert an equality.  |
 | Decoding chunked text per chunk                                                  | A multi-byte character straddling a boundary becomes replacement characters. `concatBytes` first, decode once.                                          |
 | `window.setTimeout` in a `ranuts/utils` module                                   | Throws outside a document. Use the bare `setTimeout`.                                                                                                   |
 | A module-level factory that keeps mutable state shared by everything it produces | Give each produced function its own state (this is why `generateThrottle` was removed).                                                                 |
-| Reaching for `memoize` expecting per-argument caching                            | It only runs once and ignores later arguments. Use `once` (its new name), `singleFlight` for async, or a `Map` for real keyed caching.                  |
 | Assuming `createSignal` deep-compares                                            | It uses `Object.is` since 0.3. Pass `{ equals: isEqual }` when you want deep comparison.                                                                |
 | Testing a boolean URL flag with `getAllQueryString(url).embed`                   | `?embed` (no value) is the usual spelling and reads as `''`, which is falsy. Use `queryFlag('embed')`.                                                  |
 | `Promise.race([task, timeoutPromise])` for a deadline                            | Leaks the timer when the task wins. Use `withTimeout` / `withTimeoutFallback` — they always clear it.                                                   |
@@ -407,7 +397,7 @@ Each fixed a defect rather than changing a preference.
 | Symbol                                                                                | Change                                                                                                                                                                                                                                                                 | Migration                                                                      |
 | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | `generateThrottle`                                                                    | **Removed.** The factory's generated functions shared one timer and one timestamp, so unrelated throttled functions suppressed each other.                                                                                                                             | `const f = throttle(fn, delay)`                                                |
-| `memoize`                                                                             | Renamed to `once`, kept as a deprecated alias. The old type declared zero arguments while forwarding them.                                                                                                                                                             | Prefer `once`; use `singleFlight` for the async case.                          |
+| `memoize`                                                                             | Removed. Use `once`; per-argument caching requires its own key map.                                                                                                                                                                                                    |
 | `createSignal`                                                                        | `{ equals: true }` used to freeze the signal (it meant "always equal"); every write ran `cloneDeep` + `isEqual`, which overrode `equals` and put an O(size) copy on the write path.                                                                                    | Pass `{ equals: isEqual }` if you relied on deep comparison.                   |
 | `QuestQueue`                                                                          | Rewritten. `add()` never started anything, it popped LIFO, one promise carried unrelated tasks' results, and `allSettled` was off by one. The `total` constructor option is gone.                                                                                      | Use `await queue.add(task)`, `queue.allSettled(tasks)`, `queue.onIdle()`.      |
 | `report`                                                                              | Return type narrowed to `boolean`; the image fallback is now reachable; **no default endpoint**.                                                                                                                                                                       | `setReportUrl(url)` once, or pass `report({ url })`.                           |
@@ -415,7 +405,7 @@ Each fixed a defect rather than changing a preference.
 | `getHost`                                                                             | **Removed.** Built a URL from a domain baked into this repo, and a stale edit had reduced its output to the unreachable literal `'//log.'`.                                                                                                                            | `setReportUrl` / `report({ url })`.                                            |
 | `createData`                                                                          | No longer reads a hard-coded `chaxus_prod` cookie; `userId` appears only when configured.                                                                                                                                                                              | `setReportUrl({ userIdCookie })`.                                              |
 | `formatJson`                                                                          | Now `JSON.stringify` with lenient parsing in front. The old hand-rolled formatter corrupted braces/commas **inside string values** and mis-handled escaped quotes. Gained an `indent` param.                                                                           | Output spacing now matches `JSON.stringify`.                                   |
-| `timestampToTime`                                                                     | Deprecated in favour of `formatDate`. Chained case-insensitive `.replace()` calls made lowercase patterns like `yyyy-mm-dd` render as year-minute-day.                                                                                                                 | `formatDate(value, pattern)`.                                                  |
+| `timestampToTime`                                                                     | Removed. Use `formatDate` for strings, or `new Date(timestamp)` for a date object.                                                                                                                                                                                     |
 | `replaceOld`                                                                          | Returns a restore function instead of `void`.                                                                                                                                                                                                                          | Additive; keep the returned function.                                          |
 | `handleConsole` / `handleFetchHook` / `handleXhrHook` / `handleError` / `handleClick` | Return a teardown function instead of `void`.                                                                                                                                                                                                                          | Additive; call it on teardown.                                                 |
 | `Monitor`                                                                             | No longer auto-starts from the constructor (it was gated on a global `window.ranlog`, so a second instance silently did nothing). Takes `{ url, channels, … }`; `start()` returns `stop()`. `createData()` is now evaluated per event, not captured at install time.   | `new Monitor({ url }).start()`.                                                |
@@ -449,3 +439,9 @@ page. Removed rather than deprecated, per the same `0.x`-experimental rationale 
 in-repo consumers found (`isBangDevice` for an unused `$env.isBang` field, `setAttributeByGlobal`
 for a one-line `window.__VUE_PROD_DEVTOOLS__ = false`) — both inlined rather than kept as a
 reason to preserve the library export.
+
+## Alpha removals
+
+The `ranuts/node` subpath and the `memoize`, `timeFormat`, `timestampToTime`, `isClient`,
+`md5`, `FMT` exports have been removed. Use platform Node APIs and the maintained utility names.
+See the [migration guide](https://ran.chaxus.com/src/ranuts/migration/) before upgrading.

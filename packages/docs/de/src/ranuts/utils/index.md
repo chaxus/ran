@@ -1,24 +1,23 @@
 ---
-description: 'Überblick über die Hilfsfunktionen von ranuts: funktionale Helfer (debounce, throttle, memoize, compose) sowie Werkzeuge für Zeichenketten, Objekte, Zahlen und Farbe.'
+description: 'Überblick über die Hilfsfunktionen von ranuts: funktionale Helfer (debounce, throttle, once, compose) sowie Werkzeuge für Zeichenketten, Objekte, Zahlen und Farbe.'
 ---
 
 # Hilfsfunktionen
 
 ## Funktionale Programmierung
 
-| Methode  | Beschreibung                         | Details                   |
-| -------- | ------------------------------------ | ------------------------- |
-| debounce | Entprellende Funktion (debounce)     | [debounce](./debounce.md) |
-| throttle | Drosselnde Funktion (throttle)       | [throttle](./throttle.md) |
-| memoize  | Funktion zum Merken von Ergebnissen  | [memoize](./memoize.md)   |
-| noop     | Funktion, die nichts tut             | [noop](./noop.md)         |
-| compose  | Setzt Middleware-Funktionen zusammen | [compose](./compose.md)   |
+| Methode             | Beschreibung                                         | Details                             |
+| ------------------- | ---------------------------------------------------- | ----------------------------------- |
+| debounce            | Entprellende Funktion (debounce)                     | [debounce](./debounce.md)           |
+| throttle            | Drosselnde Funktion (throttle)                       | [throttle](./throttle.md)           |
+| once / singleFlight | Einmal ausführen / asynchrone Initialisierung teilen | [once / singleFlight](./memoize.md) |
+| noop                | Funktion, die nichts tut                             | [noop](./noop.md)                   |
+| compose             | Setzt Middleware-Funktionen zusammen                 | [compose](./compose.md)             |
 
 ## Zeichenketten
 
 | Methode                        | Beschreibung                                                                                    | Details                                             |
 | ------------------------------ | ----------------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| md5                            | MD5-Hashfunktion                                                                                | [md5](./md5.md)                                     |
 | randomString / getRandomString | Erzeugt eine zufällige Zeichenkette                                                             | [randomString](./random_string.md)                  |
 | clearBr                        | Entfernt Leerzeichen, HTML-Tags und Zeilenumbrüche aus einer Zeichenkette                       | [clearBr](./clear_br.md)                            |
 | clearStr                       | Entfernt Leerzeichen an den Rändern, URL-Kodierung und Anführungszeichen aus einer Zeichenkette | [clearStr](./clear_str.md)                          |
@@ -64,23 +63,21 @@ description: 'Überblick über die Hilfsfunktionen von ranuts: funktionale Helfe
 
 ## Zeit
 
-| Methode                               | Beschreibung                                                      | Details                                   |
-| ------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------- |
-| formatDuration                        | Wandelt eine Zeit in Sekunden in eine formatierte Zeichenkette um | [formatDuration](./time_format.md)        |
-| formatRelative                        | Beschreibt einen Zeitpunkt im Verhältnis zu jetzt („vor 3 Tagen“) | [formatRelative](./time_format.md)        |
-| parseVttTimestamp / parseVttCueTiming | Liest die Zeitzeilen von WebVTT-Untertiteln                       | [parseVttTimestamp](./time_format.md)     |
-| timestampToTime                       | Wandelt einen Zeitstempel in ein Date-Objekt um                   | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime                       | Liefert einen hochauflösenden Zeitstempel                         | [performanceTime](./performance_time.md)  |
+| Methode                               | Beschreibung                                                      | Details                                  |
+| ------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------- |
+| formatDuration                        | Wandelt eine Zeit in Sekunden in eine formatierte Zeichenkette um | [formatDuration](./time_format.md)       |
+| formatRelative                        | Beschreibt einen Zeitpunkt im Verhältnis zu jetzt („vor 3 Tagen“) | [formatRelative](./time_format.md)       |
+| parseVttTimestamp / parseVttCueTiming | Liest die Zeitzeilen von WebVTT-Untertiteln                       | [parseVttTimestamp](./time_format.md)    |
+| performanceTime                       | Liefert einen hochauflösenden Zeitstempel                         | [performanceTime](./performance_time.md) |
 
 ## Geräteerkennung
 
-| Methode       | Beschreibung                              | Details                              |
-| ------------- | ----------------------------------------- | ------------------------------------ |
-| isMobile      | Sagt, ob das Gerät mobil ist              | [isMobile](./is_mobile.md)           |
-| isWeiXin      | Sagt, ob der Browser der von WeChat ist   | [isWeiXin](./is_weixin.md)           |
-| isClient      | Sagt, ob die Umgebung die des Clients ist | [isClient](./is_client.md)           |
-| isSafari      | Sagt, ob der Browser Safari ist           | [isSafari](./is_safari.md)           |
-| currentDevice | Liefert die aktuelle Geräteart            | [currentDevice](./current_device.md) |
+| Methode       | Beschreibung                            | Details                              |
+| ------------- | --------------------------------------- | ------------------------------------ |
+| isMobile      | Sagt, ob das Gerät mobil ist            | [isMobile](./is_mobile.md)           |
+| isWeiXin      | Sagt, ob der Browser der von WeChat ist | [isWeiXin](./is_weixin.md)           |
+| isSafari      | Sagt, ob der Browser Safari ist         | [isSafari](./is_safari.md)           |
+| currentDevice | Liefert die aktuelle Geräteart          | [currentDevice](./current_device.md) |
 
 ## Arbeiten mit dem DOM
 

@@ -28,10 +28,6 @@ Returns a wrapped function plus:
 | `reset()` | Discard the cached result so the next call runs `fn` again | `() => void` |
 | `started` | Whether it has a result or is currently running            | `boolean`    |
 
-### memoize(fn)
-
-Deprecated alias of `once`. See the warning below.
-
 ## Example
 
 ```js
@@ -58,9 +54,3 @@ await Promise.all([ready(), ready(), ready()]); // opens once
 4. **Concurrent `singleFlight` callers share the in-flight promise**, so `fn` runs once even
    when N callers race. This is the fix for the classic "init() returns void, so callers can't
    await it, so early writes fail" bug.
-
-::: warning Renamed in 0.3
-`memoize` was a misleading name: it never cached by argument, it just ran once. It is now an
-alias of `once` and is deprecated. The type signature was also wrong before (declared as
-zero-argument while it forwarded arguments); it now infers from `fn`.
-:::

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { createSignal, isEqual, memoize, once, subscribers } from '@/utils';
+import { createSignal, isEqual, once, subscribers } from '@/utils';
 
 describe('createSignal', () => {
   it('reads and writes', () => {
@@ -98,9 +98,5 @@ describe('once', () => {
     lazy();
     lazy();
     expect(fn).toHaveBeenCalledTimes(1);
-  });
-
-  it('is what memoize now aliases', () => {
-    expect(memoize).toBe(once);
   });
 });

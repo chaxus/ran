@@ -1,24 +1,23 @@
 ---
-description: 'نمای کلی توابع کمکی ranuts: یاری‌رسان‌های تابعی (debounce، throttle، memoize، compose) به‌همراه ابزارهای رشته، شیء، عدد و رنگ.'
+description: 'نمای کلی توابع کمکی ranuts: یاری‌رسان‌های تابعی (debounce، throttle، once، compose) به‌همراه ابزارهای رشته، شیء، عدد و رنگ.'
 ---
 
 # توابع کمکی
 
 ## برنامه‌نویسی تابعی
 
-| متد      | توضیح                     | جزئیات                    |
-| -------- | ------------------------- | ------------------------- |
-| debounce | تابع کاهش پرش (debounce)  | [debounce](./debounce.md) |
-| throttle | تابع مهار نرخ (throttle)  | [throttle](./throttle.md) |
-| memoize  | تابع به‌خاطرسپاری نتیجه   | [memoize](./memoize.md)   |
-| noop     | تابعی که هیچ کاری نمی‌کند | [noop](./noop.md)         |
-| compose  | ترکیب توابع میان‌افزار    | [compose](./compose.md)   |
+| متد                 | توضیح                                        | جزئیات                              |
+| ------------------- | -------------------------------------------- | ----------------------------------- |
+| debounce            | تابع کاهش پرش (debounce)                     | [debounce](./debounce.md)           |
+| throttle            | تابع مهار نرخ (throttle)                     | [throttle](./throttle.md)           |
+| once / singleFlight | یک بار اجرا / اشتراک مقداردهی اولیهٔ ناهمگام | [once / singleFlight](./memoize.md) |
+| noop                | تابعی که هیچ کاری نمی‌کند                    | [noop](./noop.md)                   |
+| compose             | ترکیب توابع میان‌افزار                       | [compose](./compose.md)             |
 
 ## کار با رشته
 
 | متد                            | توضیح                                                   | جزئیات                                              |
 | ------------------------------ | ------------------------------------------------------- | --------------------------------------------------- |
-| md5                            | تابع درهم‌ساز MD5                                       | [md5](./md5.md)                                     |
 | randomString / getRandomString | ساختن رشتهٔ تصادفی                                      | [randomString](./random_string.md)                  |
 | clearBr                        | برداشتن فاصله‌ها، برچسب‌های HTML و شکست خط از رشته      | [clearBr](./clear_br.md)                            |
 | clearStr                       | برداشتن فاصله‌های دو سر، رمزگذاری نشانی و گیومه از رشته | [clearStr](./clear_str.md)                          |
@@ -64,23 +63,21 @@ description: 'نمای کلی توابع کمکی ranuts: یاری‌رسان‌
 
 ## کار با زمان
 
-| متد                                   | توضیح                                     | جزئیات                                    |
-| ------------------------------------- | ----------------------------------------- | ----------------------------------------- |
-| formatDuration                        | تبدیل زمانِ برحسب ثانیه به رشته‌ای آراسته | [formatDuration](./time_format.md)        |
-| formatRelative                        | توصیف یک زمان نسبت به اکنون («۳ روز پیش») | [formatRelative](./time_format.md)        |
-| parseVttTimestamp / parseVttCueTiming | خواندن خط‌های زمان‌بندی زیرنویس WebVTT    | [parseVttTimestamp](./time_format.md)     |
-| timestampToTime                       | تبدیل مهر زمانی به شیء Date               | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime                       | گرفتن مهر زمانی با دقت بالا               | [performanceTime](./performance_time.md)  |
+| متد                                   | توضیح                                     | جزئیات                                   |
+| ------------------------------------- | ----------------------------------------- | ---------------------------------------- |
+| formatDuration                        | تبدیل زمانِ برحسب ثانیه به رشته‌ای آراسته | [formatDuration](./time_format.md)       |
+| formatRelative                        | توصیف یک زمان نسبت به اکنون («۳ روز پیش») | [formatRelative](./time_format.md)       |
+| parseVttTimestamp / parseVttCueTiming | خواندن خط‌های زمان‌بندی زیرنویس WebVTT    | [parseVttTimestamp](./time_format.md)    |
+| performanceTime                       | گرفتن مهر زمانی با دقت بالا               | [performanceTime](./performance_time.md) |
 
 ## تشخیص دستگاه
 
-| متد           | توضیح                                     | جزئیات                               |
-| ------------- | ----------------------------------------- | ------------------------------------ |
-| isMobile      | تشخیص اینکه دستگاه همراه است یا نه        | [isMobile](./is_mobile.md)           |
-| isWeiXin      | تشخیص اینکه مرورگر وی‌چت است یا نه        | [isWeiXin](./is_weixin.md)           |
-| isClient      | تشخیص اینکه محیط اجرا سمت کاربر است یا نه | [isClient](./is_client.md)           |
-| isSafari      | تشخیص اینکه مرورگر سافاری است یا نه       | [isSafari](./is_safari.md)           |
-| currentDevice | گرفتن نوع دستگاه کنونی                    | [currentDevice](./current_device.md) |
+| متد           | توضیح                               | جزئیات                               |
+| ------------- | ----------------------------------- | ------------------------------------ |
+| isMobile      | تشخیص اینکه دستگاه همراه است یا نه  | [isMobile](./is_mobile.md)           |
+| isWeiXin      | تشخیص اینکه مرورگر وی‌چت است یا نه  | [isWeiXin](./is_weixin.md)           |
+| isSafari      | تشخیص اینکه مرورگر سافاری است یا نه | [isSafari](./is_safari.md)           |
+| currentDevice | گرفتن نوع دستگاه کنونی              | [currentDevice](./current_device.md) |
 
 ## کار با DOM
 

@@ -1,4 +1,4 @@
-# formatDate / timestampToTime
+# formatDate
 
 按模板格式化日期。
 
@@ -21,10 +21,6 @@
 
 无法解析时返回 `'Invalid Date'`。
 
-### timestampToTime(timestamp?)
-
-已废弃。返回一个实例上挂了 `format` 方法的 `Date`。
-
 ## 示例
 
 ```js
@@ -41,11 +37,3 @@ formatDate('not a date'); // 'Invalid Date'
 1. **大小写有意义**。`MM` 是月、`mm` 是分；`HH` 是 24 小时制、`hh` 是 12 小时制。
 2. **模板一次性替换完成**，刚写入的值不会被后面的占位符再次命中。
 3. **原样文本用 `[]` 包起来**，避免其中的字母被当成占位符。
-
-::: warning 0.3 修复并提供替代
-旧实现链式调用六次 `.replace()` 且带忽略大小写标志，导致两个问题：后一个模式可能命中前一步刚写入的
-数字，`/M+/g`、`/m+/g`、`/D+/gi` 又互相重叠，所以小写模板 `yyyy-mm-dd` 会输出「年-分钟-日」。
-
-`timestampToTime` 已废弃，请改用 `formatDate`：往 `Date` 实例上挂方法在序列化后会丢失，
-类型也只能标成 `Function`。它的 `format` 现在委托给 `formatDate`，老调用方也能享受修复后的占位符处理。
-:::

@@ -45,4 +45,3 @@ status.retry[503]; // true
 
 1. **知らないコードやメッセージを渡すと `getStatus` は例外を投げます。** `number` でも `string` でもない引数なら `TypeError`、それ以外は `Error` です。通信から読み取ったステータスコードのように、正しさが保証されない入力には `try`/`catch` を付けるか、先に `status.codes.includes(n)` で確かめてください。
 2. **`status.redirect` / `empty` / `retry` は `Set` ではなくただのオブジェクトです。** 含まれるかどうかは `.has()` ではなく `status.retry[code]` で調べてください。
-3. ブラウザーでも Node でも動くので（`ranuts/utils`）、サーバー側の `ranuts/node` のハンドラーが使うのと同じコードとメッセージの対応を、クライアントでもそのまま使えます。

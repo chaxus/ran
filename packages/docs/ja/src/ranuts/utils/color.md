@@ -1,6 +1,6 @@
 # Color
 
-クラスを土台にした色のしくみです。RGB、RGBA、HSL、HSLA、HSB/HSV、16 進表記を扱うための変換ヘルパーがそろっています。中身は、機能の厚い `Color` クラス、変更できない値クラス（`Rgb`、`Rgba`、`Hsl`、`Hsla`）、パレット生成の `ColorScheme`、単独で使える変換関数の一式、そしてターミナル用の ANSI スタイル表 `FMT` です。
+色のツールには `Color`、値クラス（`Rgb`、`Rgba`、`Hsl`、`Hsla`）、`ColorScheme` パレット、RGB、RGBA、HSL、HSLA、HSB/HSV、16 進色の変換関数があります。
 
 > もっと簡単なヘルパーである `hexToRgb`、`rgbToHex`、`randomColor` には、それぞれ専用のページがあります。[hexToRgb](./hex_to_rgb.md)、[rgbToHex](./rgb_to_hex.md)、[randomColor](./random_color.md) です。いずれも同じモジュールから再 export されています。
 
@@ -252,16 +252,6 @@ const backToSrgb = linearToSrgb(linear); // ≈ 0.5
 | `RGB_REGEX`       | `rgb(r,g,b)`                                               |
 | `RGBA_REGEX`      | `rgba(r,g,b,a)`                                            |
 
-### FMT
-
-文字の装飾と色づけに使う、ターミナル向け ANSI エスケープコードの組を集めたレコードです。各項目は `[開始, 終了]` のタプルで、文字列をこれで挟むとターミナルの出力に装飾がつきます。
-
-```ts
-const FMT: Record<string, Array<string>>;
-```
-
-使えるキーは `bold`、`dim`、`reset`、`italic`、`underline`、`inverse`、`hidden`、`strikethrough`、`black`、`red`、`green`、`yellow`、`blue`、`magenta`、`cyan`、`white`、`gray`、それに背景色版の `bgBlack`、`bgRed`、`bgGreen`、`bgYellow`、`bgBlue`、`bgMagenta`、`bgCyan`、`bgWhite` です。
-
 ## 使用例
 
 ### Color を作る
@@ -333,22 +323,9 @@ console.log(componentToHex(255)); // 'ff'
 console.log(rgbToHsl([0, 128, 255])); // [h, s, l]
 ```
 
-### FMT でターミナルの出力を飾る
-
-```js
-import { FMT } from 'ranuts';
-
-const [open, close] = FMT.green;
-console.log(`${open}success${close}`); // ターミナルでは "success" が緑になります
-
-const bold = FMT.bold;
-console.log(`${bold[0]}important${bold[1]}`);
-```
-
 ## 補足
 
 1. **その場で全部計算します**: `Color` はコンストラクターですべての表現を計算するので、生成した時点で `hex`、`rgb`、`rgba`、`hsl`、`hsla` は必ずそろっています。
 2. **HSL のセッターは RGB を計算し直します**: `setHue` / `setSat` / `setLum` は HSL を更新したあと、`updateFromHsl` で RGB と hex を導き直します。`setAlpha` が触るのは `rgba` と `hsla` だけです。
 3. **配列でもチャンネルでも渡せます**: いくつかの変換関数（`rgbToHex`、`rgbToHsl`、`hslToRgb`）は、チャンネル三つでも、最初の引数に配列ひとつでも受け取ります。
 4. **HSV と HSB について**: `hsvToRgb` は `hsbToRgb` の別名、`hsvToHsl` は HSB から HSL への変換の別名です。ここでは HSV と HSB は同じモデルを指しています。
-5. **FMT はターミナル専用です**: ANSI のエスケープ列が装飾として見えるのは、それに対応したターミナルの中だけです。ブラウザーのコンソールでは、制御文字がそのまま見えてしまいます。

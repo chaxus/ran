@@ -32,9 +32,6 @@ ranuts 不打算替代标准库。优先用平台能力，只有当工具函数�
 | 它**这辈子只跑一次**（初始化、一次性警告）         | `once(fn)`         | 第一次求值，之后每次都返回同一个结果。            |
 | 并发调用者**共享同一个进行中的请求**               | `singleFlight(fn)` | once 的异步版本：有调用在飞行中时，后来者加入它。 |
 
-**`memoize` 是 `once` 的旧名字**，行为完全相同，它并不会按参数缓存，只是名字容易让人以为会。新代码请写
-`once`。
-
 真正重要的差别：给按键处理加 `debounce`，用户打字期间什么都不会跑；加 `throttle`，则全程都在跑，只是
 不是每一次按键都跑。搜索建议要 `debounce`，「还可以输入 N 字」的计数要 `throttle`。
 
@@ -115,17 +112,13 @@ worker 要「回答问题」时就该用 `WorkerClient`：没有请求 id，两�
 | 引入                  | 内容                                            | 运行环境              |
 | --------------------- | ----------------------------------------------- | --------------------- |
 | `ranuts`              | 根 barrel（utils + visual 的全部导出）          | 浏览器 + node         |
-| `ranuts/utils`        | DOM/BOM、字符串、对象、数字、颜色、时间、存储…… | 浏览器 + node\*       |
-| `ranuts/node`         | HTTP server、路由、WebSocket、fs、流、中间件    | **仅 node**           |
+| `ranuts/utils`        | DOM/BOM、字符串、对象、数字、颜色、时间、存储…… | 浏览器 + node         |
 | `ranuts/visual`       | 2D 渲染引擎（Canvas / WebGL / WebGPU）          | **仅浏览器**          |
 | `ranuts/i18n`         | 翻译引擎，不依赖 DOM                            | 浏览器 + node         |
 | `ranuts/sw`           | 缓存策略与预缓存协议的 worker 一侧              | **仅 service worker** |
 | `ranuts/vnode`        | Snabbdom 风格的虚拟 DOM                         | 浏览器                |
 | `ranuts/stream`       | SSE 解析、模型流折叠、token 预算                | 浏览器 + node         |
 | `ranuts/conversation` | 事件日志 → 可渲染的会话节点                     | 浏览器 + node         |
-
-\* `ranuts/utils` 很宽：大部分面向浏览器，但纯函数（字符串、对象、数字、`compose`、`cloneDeep` 等）在哪
-都能跑。**不要在浏览器代码里引入 `ranuts/node`**，它会带进 `fs` / `http` / `child_process`。
 
 ## 还是拿不准？
 

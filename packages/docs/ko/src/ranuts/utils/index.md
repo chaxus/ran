@@ -1,24 +1,23 @@
 ---
-description: 'ranuts 유틸리티 함수 한눈에 보기. 함수형 도우미(debounce, throttle, memoize, compose)와 문자열·객체·숫자·색 유틸리티.'
+description: 'ranuts 유틸리티 함수 한눈에 보기. 함수형 도우미(debounce, throttle, once, compose)와 문자열·객체·숫자·색 유틸리티.'
 ---
 
 # 유틸리티 함수
 
 ## 함수형 프로그래밍
 
-| 메서드   | 설명                     | 자세히                    |
-| -------- | ------------------------ | ------------------------- |
-| debounce | 디바운스 함수            | [debounce](./debounce.md) |
-| throttle | 스로틀 함수              | [throttle](./throttle.md) |
-| memoize  | 메모이제이션 함수        | [memoize](./memoize.md)   |
-| noop     | 아무 일도 하지 않는 함수 | [noop](./noop.md)         |
-| compose  | 미들웨어 함수를 합성     | [compose](./compose.md)   |
+| 메서드              | 설명                            | 자세히                              |
+| ------------------- | ------------------------------- | ----------------------------------- |
+| debounce            | 디바운스 함수                   | [debounce](./debounce.md)           |
+| throttle            | 스로틀 함수                     | [throttle](./throttle.md)           |
+| once / singleFlight | 한 번 실행 / 비동기 초기화 공유 | [once / singleFlight](./memoize.md) |
+| noop                | 아무 일도 하지 않는 함수        | [noop](./noop.md)                   |
+| compose             | 미들웨어 함수를 합성            | [compose](./compose.md)             |
 
 ## 문자열 다루기
 
 | 메서드                         | 설명                                              | 자세히                                              |
 | ------------------------------ | ------------------------------------------------- | --------------------------------------------------- |
-| md5                            | MD5 해시 함수                                     | [md5](./md5.md)                                     |
 | randomString / getRandomString | 무작위 문자열 만들기                              | [randomString](./random_string.md)                  |
 | clearBr                        | 문자열에서 공백·HTML 태그·줄바꿈 없애기           | [clearBr](./clear_br.md)                            |
 | clearStr                       | 문자열에서 앞뒤 공백·URL 인코딩·따옴표 없애기     | [clearStr](./clear_str.md)                          |
@@ -64,23 +63,21 @@ description: 'ranuts 유틸리티 함수 한눈에 보기. 함수형 도우미(d
 
 ## 시간 다루기
 
-| 메서드                                | 설명                                         | 자세히                                    |
-| ------------------------------------- | -------------------------------------------- | ----------------------------------------- |
-| formatDuration                        | 초 단위 시간을 다듬은 문자열로 바꾸기        | [formatDuration](./time_format.md)        |
-| formatRelative                        | 어떤 시각을 지금에 견주어 말하기(「3일 전」) | [formatRelative](./time_format.md)        |
-| parseVttTimestamp / parseVttCueTiming | WebVTT 자막의 시각 줄 해석                   | [parseVttTimestamp](./time_format.md)     |
-| timestampToTime                       | 타임스탬프를 Date 객체로 바꾸기              | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime                       | 정밀한 타임스탬프 얻기                       | [performanceTime](./performance_time.md)  |
+| 메서드                                | 설명                                         | 자세히                                   |
+| ------------------------------------- | -------------------------------------------- | ---------------------------------------- |
+| formatDuration                        | 초 단위 시간을 다듬은 문자열로 바꾸기        | [formatDuration](./time_format.md)       |
+| formatRelative                        | 어떤 시각을 지금에 견주어 말하기(「3일 전」) | [formatRelative](./time_format.md)       |
+| parseVttTimestamp / parseVttCueTiming | WebVTT 자막의 시각 줄 해석                   | [parseVttTimestamp](./time_format.md)    |
+| performanceTime                       | 정밀한 타임스탬프 얻기                       | [performanceTime](./performance_time.md) |
 
 ## 기기 판별
 
-| 메서드        | 설명                            | 자세히                               |
-| ------------- | ------------------------------- | ------------------------------------ |
-| isMobile      | 기기가 모바일인지 판별          | [isMobile](./is_mobile.md)           |
-| isWeiXin      | 브라우저가 위챗인지 판별        | [isWeiXin](./is_weixin.md)           |
-| isClient      | 실행 환경이 클라이언트인지 판별 | [isClient](./is_client.md)           |
-| isSafari      | 브라우저가 사파리인지 판별      | [isSafari](./is_safari.md)           |
-| currentDevice | 지금 기기의 종류 얻기           | [currentDevice](./current_device.md) |
+| 메서드        | 설명                       | 자세히                               |
+| ------------- | -------------------------- | ------------------------------------ |
+| isMobile      | 기기가 모바일인지 판별     | [isMobile](./is_mobile.md)           |
+| isWeiXin      | 브라우저가 위챗인지 판별   | [isWeiXin](./is_weixin.md)           |
+| isSafari      | 브라우저가 사파리인지 판별 | [isSafari](./is_safari.md)           |
+| currentDevice | 지금 기기의 종류 얻기      | [currentDevice](./current_device.md) |
 
 ## DOM 다루기
 

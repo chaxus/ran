@@ -18,11 +18,6 @@
       "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
-    "./node": {
-      "types": "./dist/src/node/index.d.ts",
-      "import": "./dist/src/node/index.js",
-      "require": "./dist/umd/node/node.umd.cjs"
-    },
     "./utils": {
       "types": "./dist/src/utils/index.d.ts",
       "import": "./dist/src/utils/index.js",

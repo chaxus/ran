@@ -33,9 +33,6 @@ utility when it genuinely adds something:
 | It to run **exactly once**, ever (an init, a one-time warning)         | `once(fn)`         | First call evaluates, every later call returns that same result.    |
 | Concurrent callers to **share one in-flight request**                  | `singleFlight(fn)` | The async flavour of once: while a call is pending, others join it. |
 
-**`memoize` is the former name of `once`** and does the same thing: it does not cache per
-argument, which is what the name suggests. New code should say `once`.
-
 The difference that matters: `debounce` on a keystroke handler means nothing runs while the user
 is typing; `throttle` means something runs the whole time, just not on every key. A search
 suggestion wants `debounce`; a "characters remaining" counter wants `throttle`.
@@ -128,18 +125,13 @@ symbol, never from a deep source path.
 | Import                | Contains                                                  | Runtime            |
 | --------------------- | --------------------------------------------------------- | ------------------ |
 | `ranuts`              | Root barrel: the utils + visual surface                   | browser + node     |
-| `ranuts/utils`        | DOM/BOM, string, object, number, colour, time, storage, … | browser + node\*   |
-| `ranuts/node`         | HTTP server, router, WebSocket, fs, streams, middleware   | **node only**      |
+| `ranuts/utils`        | DOM/BOM, string, object, number, colour, time, storage, … | browser + node     |
 | `ranuts/visual`       | The 2D rendering engine (Canvas / WebGL / WebGPU)         | **browser only**   |
 | `ranuts/i18n`         | The translation engine, DOM-free                          | browser + node     |
 | `ranuts/sw`           | Cache strategies and the precache protocol's worker half  | **service worker** |
 | `ranuts/vnode`        | Snabbdom-style virtual DOM                                | browser            |
 | `ranuts/stream`       | SSE parsing, model-stream fold, token budget              | browser + node     |
 | `ranuts/conversation` | Event log → renderable conversation nodes                 | browser + node     |
-
-\* `ranuts/utils` is broad: most of it is browser-oriented, but the pure helpers (string,
-object, number, `compose`, `cloneDeep`, …) run anywhere. **Do not import `ranuts/node` in
-browser code.** It pulls in `fs` / `http` / `child_process`.
 
 ## Still not sure?
 

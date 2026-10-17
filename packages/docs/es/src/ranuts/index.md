@@ -22,16 +22,13 @@ import { debounce } from 'ranuts/utils';
 | Importación                                           | Contiene                                                                      | Entorno            |
 | ----------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
 | `ranuts`                                              | El barril raíz: la superficie de utils y visual                               | navegador + node   |
-| [`ranuts/utils`](/es/src/ranuts/utils/)               | DOM/BOM, cadenas, objetos, números, color, tiempo, almacenamiento, …          | navegador + node\* |
-| [`ranuts/node`](/es/src/ranuts/node/)                 | Servidor HTTP, enrutador, WebSocket, fs, streams, middleware                  | **solo node**      |
+| [`ranuts/utils`](/es/src/ranuts/utils/)               | DOM/BOM, cadenas, objetos, números, color, tiempo, almacenamiento, …          | navegador + node   |
 | [`ranuts/visual`](/es/src/ranuts/visual/)             | Motor de dibujado 2D (Canvas / WebGL / WebGPU)                                | **solo navegador** |
 | [`ranuts/i18n`](/es/src/ranuts/i18n/)                 | Motor de traducción: diccionarios planos, cambio en caliente                  | navegador + node   |
 | [`ranuts/sw`](/es/src/ranuts/sw/)                     | Estrategias de caché y la mitad del protocolo de precaché que va en el worker | **service worker** |
 | [`ranuts/vnode`](/es/src/ranuts/vnode/)               | DOM virtual al estilo de Snabbdom                                             | navegador          |
 | [`ranuts/stream`](/es/src/ranuts/stream/)             | Análisis de SSE, plegado de flujos de modelos, presupuesto de tokens          | navegador + node   |
 | [`ranuts/conversation`](/es/src/ranuts/conversation/) | Registro de eventos → nodos de conversación dibujables                        | navegador + node   |
-
-\* `ranuts/utils` es amplio: casi todo apunta al navegador, pero las ayudas puras corren en cualquier sitio. **No importes `ranuts/node` en código de navegador.** Arrastra `fs` / `http` / `child_process`.
 
 ## Qué hay dentro
 
@@ -46,7 +43,7 @@ import { debounce } from 'ranuts/utils';
 [dar formato a números y analizarlos](/es/src/ranuts/utils/parse_number) ·
 [conversión y mezcla de color](/es/src/ranuts/utils/color)
 
-**Texto**: [md5](/es/src/ranuts/utils/md5) · [truncate](/es/src/ranuts/utils/truncate) ·
+**Texto**: [truncate](/es/src/ranuts/utils/truncate) ·
 [detectLanguage](/es/src/ranuts/utils/detect_language) ·
 [resolveLocale](/es/src/ranuts/utils/resolve_locale) ·
 [segmentByRanges](/es/src/ranuts/utils/segment) · [paginate](/es/src/ranuts/utils/paginate) ·
@@ -66,10 +63,6 @@ import { debounce } from 'ranuts/utils';
 **Dibujado**: [motor 2D](/es/src/ranuts/visual/) · [DOM virtual](/es/src/ranuts/vnode/) ·
 [ayudas para canvas](/es/src/ranuts/utils/canvas) · [tween](/es/src/ranuts/utils/tween)
 
-**Node**: [servidor HTTP y enrutador](/es/src/ranuts/node/) ·
-[operaciones con archivos](/es/src/ranuts/file/write_file) ·
-[tipos MIME](/es/src/ranuts/mime_type/mime_type)
-
 Esto es una selección. La [referencia de la API](/es/src/ranuts/api) tiene **todas** las exportaciones con su firma y su descripción, generadas desde el código para que no puedan quedarse atrás.
 
 ## A dónde ir después
@@ -83,3 +76,5 @@ Esto es una selección. La [referencia de la API](/es/src/ranuts/api) tiene **to
 | Construir interfaz encima                                 | [ranui](/es/src/ranui/)                                                         |
 
 Los dos paquetes incluyen un `CLAUDE.md` dentro del tarball de npm: orientación para agentes de código, legible directamente desde `node_modules` y sin acceso a la red.
+
+[Migración alpha](/es/src/ranuts/migration/)
