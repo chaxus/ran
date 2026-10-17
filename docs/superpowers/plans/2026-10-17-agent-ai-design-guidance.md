@@ -15,12 +15,12 @@
 Files to create: `AGENTS.md`, `packages/ranui/docs/AI_INTERFACES.md`, `packages/ranui/test/unit/docs.ai-interfaces.test.ts`.
 Files to modify: `packages/ranui/docs/DESIGN.md`, `packages/ranui/CLAUDE.md`, `packages/ranui/package.json`, `plugins/ranui/skills/ranui/SKILL.md`, `README.md`, `packages/docs/src/ranui/design-guides/index.md`, `packages/docs/cn/src/ranui/design-guides/index.md`.
 
-- [ ] Read the spec, DESIGN §§2/7–12, CODING, public component API and actual theme declarations. Keep root demo DESIGN separate. Before any skill edit, read writing-skills and keep this change a thin reference, not a second instruction body.
-- [ ] Write a focused regression test checking tokens in the new guide's CSS examples and all token references in DESIGN's spacing relationship table against actual theme declarations, plus the package's inclusion of AI_INTERFACES. Run before docs implementation; expect missing guide and invented spacing step failure.
-- [ ] Write the focused guide (target roughly 200–300 lines, concise and skimmable). Include retrieval map, composer/queue/results, failure/capability/settings, connectors/artifacts, token ownership with a valid CSS example, host/component architecture, regression evidence and copyable agent brief. Differentiate recommendations from library guarantees.
-- [ ] Fix the spacing relationship table; route repo, package, plugin and public English/Chinese readers to the canonical guide with meaningful links. Correct any touched inaccurate plugin shipping statement.
-- [ ] Run focused Vitest, `pnpm run verify:links`, changed-file Prettier, `pnpm run verify:design`, `pnpm run verify:docs`; install frozen dependencies if needed. Do not write keyword-presence tests that merely mirror prose.
-- [ ] Self-review token/API names against source; record results and commit logically, no push yet.
+- [x] Read the spec, DESIGN §§2/7–12, CODING, public component API and actual theme declarations. Keep root demo DESIGN separate. Before any skill edit, read writing-skills and keep this change a thin reference, not a second instruction body.
+- [x] Write a focused regression test checking tokens in the new guide's CSS examples and all token references in DESIGN's spacing relationship table against actual theme declarations, plus the package's inclusion of AI_INTERFACES. Run before docs implementation; expect missing guide and invented spacing step failure.
+- [x] Write the focused guide (target roughly 200–300 lines, concise and skimmable). Include retrieval map, composer/queue/results, failure/capability/settings, connectors/artifacts, token ownership with a valid CSS example, host/component architecture, regression evidence and copyable agent brief. Differentiate recommendations from library guarantees.
+- [x] Fix the spacing relationship table; route repo, package, plugin and public English/Chinese readers to the canonical guide with meaningful links. Correct any touched inaccurate plugin shipping statement.
+- [x] Run focused Vitest, `pnpm run verify:links`, changed-file Prettier, `pnpm run verify:design`, `pnpm run verify:docs`; install frozen dependencies if needed. Do not write keyword-presence tests that merely mirror prose.
+- [x] Self-review token/API names against source; record results and commit logically, no push yet.
 
 ## Chunk 2: Review and delivery
 
