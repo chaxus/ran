@@ -20,8 +20,8 @@ export default defineConfig({
         mocks: resolve(__dirname, 'src/mocks.ts'),
         static: resolve(__dirname, 'src/static.ts'),
       },
-      formats: ['es', 'cjs'],
-      fileName: (format, name) => `${name}.${format === 'es' ? 'js' : 'cjs'}`,
+      formats: ['es'],
+      fileName: (_format, name) => `${name}.js`,
     },
     rollupOptions: {
       external: (id: string): boolean => id === 'ranuts' || id.startsWith('ranuts/'),

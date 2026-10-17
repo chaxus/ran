@@ -1,5 +1,5 @@
-/** Normalize emitted declarations for NodeNext ESM and CommonJS consumers. */
-import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+/** Normalize emitted declarations for NodeNext ESM consumers. */
+import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -9,7 +9,6 @@ const assets = /\.(?:css|less|scss|sass|styl|svg|png|jpe?g|gif|webp|avif|ico|wof
 async function declarations(directory) {
   const files = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
-    if (entry.name === 'cjs-types') continue;
     const path = join(directory, entry.name);
     if (entry.isDirectory()) files.push(...(await declarations(path)));
     else if (entry.isFile() && entry.name.endsWith('.d.ts')) files.push(path);
@@ -20,7 +19,6 @@ async function declarations(directory) {
 function moduleReferences(source, { createScanner, SyntaxKind }) {
   const scanner = createScanner(false, undefined, source);
   const references = [];
-  const tokens = [];
   let previous;
   let beforePrevious;
   for (let kind = scanner.scan(); kind !== SyntaxKind.EndOfFile; kind = scanner.scan()) {
@@ -52,43 +50,8 @@ function moduleReferences(source, { createScanner, SyntaxKind }) {
     if (kind === SyntaxKind.StringLiteral && isModule) references.push({ start, end, value: scanner.getTokenValue() });
     beforePrevious = previous;
     previous = { kind, text, value: kind === SyntaxKind.StringLiteral ? scanner.getTokenValue() : text };
-    tokens.push(previous);
   }
-  return { references, hasDefault: hasDefaultExport(tokens, SyntaxKind) };
-}
-
-function hasDefaultExport(tokens, kinds) {
-  let depth = 0;
-  for (let index = 0; index < tokens.length; index += 1) {
-    const token = tokens[index];
-    if (depth === 0 && token.kind === kinds.ExportKeyword) {
-      let next = index + 1;
-      if (tokens[next]?.kind === kinds.TypeKeyword) next += 1;
-      if (tokens[next]?.kind === kinds.DefaultKeyword) return true;
-      if (
-        tokens[next]?.kind === kinds.AsteriskToken &&
-        tokens[next + 1]?.kind === kinds.AsKeyword &&
-        tokens[next + 2]?.value === 'default'
-      )
-        return true;
-      if (tokens[next]?.kind === kinds.OpenBraceToken) {
-        // The last name in each export specifier is its public name. This also
-        // handles type-only exports and string-literal export names.
-        let exported;
-        for (let item = next + 1; item < tokens.length; item += 1) {
-          const entry = tokens[item];
-          if (entry.kind === kinds.CommaToken || entry.kind === kinds.CloseBraceToken) {
-            if (exported === 'default') return true;
-            exported = undefined;
-            if (entry.kind === kinds.CloseBraceToken) break;
-          } else exported = entry.value;
-        }
-      }
-    }
-    if (token.kind === kinds.OpenBraceToken) depth += 1;
-    if (token.kind === kinds.CloseBraceToken) depth -= 1;
-  }
-  return false;
+  return references;
 }
 
 function relativeSpecifier(from, target) {
@@ -114,7 +77,7 @@ export async function prepareDeclarations({ dist, aliasRoot = dist }) {
   const outputs = [];
   for (const file of files) {
     const source = await readFile(file, 'utf8');
-    const { references, hasDefault } = moduleReferences(source, ast);
+    const references = moduleReferences(source, ast);
     const esm = [];
     for (const reference of references) {
       const { value, path } = reference;
@@ -126,26 +89,15 @@ export async function prepareDeclarations({ dist, aliasRoot = dist }) {
       const specifier = relativeSpecifier(file, target);
       esm.push({ ...reference, text: JSON.stringify(path ? specifier : specifier.replace(/\.d\.ts$/, '.js')) });
     }
-    outputs.push({ file, esm: applyEdits(source, esm), hasDefault });
+    outputs.push({ file, esm: applyEdits(source, esm) });
   }
   // Resolve every reference first: a dangling import must not leave a partial tree.
-  const commonjs = join(dist, 'cjs-types');
-  await rm(commonjs, { recursive: true, force: true });
-  for (const output of outputs) {
-    await writeFile(output.file, output.esm);
-    const destination = join(commonjs, relative(dist, output.file).replace(/\.d\.ts$/, '.d.cts'));
-    await mkdir(dirname(destination), { recursive: true });
-    const canonical = JSON.stringify(relativeSpecifier(destination, output.file.replace(/\.d\.ts$/, '.js')));
-    // Keep globals and nominal class identities in one canonical declaration graph.
-    const forwarding =
-      `export * from ${canonical};\n` + (output.hasDefault ? `export { default } from ${canonical};\n` : '');
-    await writeFile(destination, forwarding);
-  }
+  for (const output of outputs) await writeFile(output.file, output.esm);
   return { declarations: outputs.length };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const dist = resolve(process.argv[2] ?? 'dist');
   const result = await prepareDeclarations({ dist, aliasRoot: resolve(dist, process.argv[3] ?? '.') });
-  console.log(`Prepared ${result.declarations} ESM and CommonJS declarations.`);
+  console.log(`Prepared ${result.declarations} ESM declarations.`);
 }

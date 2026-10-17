@@ -7,9 +7,8 @@ dist=./dist
 
 # build es (split per component, cleans dist/)
 $bin/vite build -c ./build/config.es.ts
-# build the standalone full IIFE and the CommonJS graph (append to dist/)
+# build the standalone full IIFE (append to dist/)
 $bin/vite build -c ./build/config.bundle.ts
-$bin/vite build -c ./build/config.cjs.ts
 # build standalone per-component iife bundles (dist/iife/<name>.iife.js)
 $bin/tsx ./bin/build-iife.ts
 
@@ -31,5 +30,5 @@ cp fonts/fonts.css fonts/Geist-Variable.woff2 fonts/GeistMono-Variable.woff2 fon
 # Load public browser augmentations once. Build-only asset declarations stay private.
 printf "\nimport './typings.js';\n" >> "$dist/index.d.ts"
 
-# Normalize ESM declarations and emit CommonJS forwarding declarations.
+# Normalize ESM declaration imports for consumers.
 node ../../bin/prepare-declarations.mjs dist .

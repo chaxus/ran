@@ -2,11 +2,11 @@
   "name": "ranuts",
   "version": "0.4.1-alpha.2",
   "description": "Tree-shakeable TypeScript utility library: DOM/BOM helpers, string/object/number/color utils, debounce/throttle/compose, a 2D rendering engine and a virtual DOM.",
-  "main": "dist/umd/index.umd.cjs",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "type": "module",
   "sideEffects": [
-    "./dist/umd/**"
+    "./dist/iife/**"
   ],
   "types": "dist/index.d.ts",
   "engines": {
@@ -14,24 +14,12 @@
   },
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/index.d.cts",
-        "default": "./dist/umd/index.umd.cjs"
-      }
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./utils": {
-      "import": {
-        "types": "./dist/src/utils/index.d.ts",
-        "default": "./dist/src/utils/index.js"
-      },
-      "require": {
-        "types": "./dist/cjs-types/src/utils/index.d.cts",
-        "default": "./dist/umd/utils/utils.umd.cjs"
-      }
+      "types": "./dist/src/utils/index.d.ts",
+      "import": "./dist/src/utils/index.js"
     },
     "./visual": {
       "types": "./dist/src/utils/visual/index.d.ts",
