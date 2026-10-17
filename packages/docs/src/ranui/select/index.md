@@ -37,7 +37,7 @@ Options are supplied as slotted `<r-option>` children. Each option's `value` att
 | Property              | Type      | Default    | Description                                                                                                                       |
 | --------------------- | --------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `label`               | `string`  | `''`       | Static caption above the field (same pattern as `r-input`'s `label`), so a labeled select lines up with a labeled input in a form |
-| `value`               | `string`  | `''`       | Selected value. Setting it updates the closed-state label; ignored while `disabled`                                               |
+| `value`               | `string`  | `''`       | Selected value. Programmatic updates work while disabled; an empty value clears the label, option selection and submitted value   |
 | `defaultValue`        | `string`  | `''`       | Initial selected value, matched against option `value`                                                                            |
 | `disabled`            | `boolean` | `false`    | Whether the select is disabled                                                                                                    |
 | `type`                | `string`  | `''`       | `text` renders a borderless, transparent trigger with no arrow icon; otherwise bordered                                           |
@@ -51,6 +51,12 @@ Options are supplied as slotted `<r-option>` children. Each option's `value` att
 | `sheet`               | `string`  | `''`       | CSS injected into the shadow DOM                                                                                                  |
 
 > **Note:** `defaultValue` and `showSearch` are reactive: changing them after the element has connected is re-processed (alongside `value`, `disabled`, and `sheet`) in `attributeChangedCallback`. Updating `defaultValue` re-applies the matching selection; toggling `showSearch` wires or unwires the inline search box.
+
+Setting `value = ''`, setting an empty `value` attribute, or removing it clears the selection.
+The cleared state survives filtering and reconnection; `form.reset()` still restores `defaultValue`.
+The same element can be detached and reinserted: its dropdown, current options and search
+listeners reconnect without duplicate selection events or delayed closes from its previous mount.
+Search drafts and the popup's open/closed state survive reconnection; keyboard selection remains available.
 
 ### Option Properties
 
@@ -267,6 +273,8 @@ the selection emits one `change` event and returns focus to the selector.
 ### Container Mount `getPopupContainerId`
 
 The dropdown is portaled to `document.body` by default. Pass the `id` of another element to mount it there instead.
+Use a positioned container (for example, `position: relative`) so its local coordinates match
+the popup placement. Disconnecting removes the portal; reconnecting restores it in the configured container.
 
 ```html
 <r-select getPopupContainerId="my-container">

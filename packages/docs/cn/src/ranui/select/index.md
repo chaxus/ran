@@ -37,7 +37,7 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 | 属性                  | 类型      | 默认值     | 说明                                                                         |
 | --------------------- | --------- | ---------- | ---------------------------------------------------------------------------- |
 | `label`               | `string`  | `''`       | 字段上方的静态标题，和 `r-input` 的 `label` 用法一致，方便和输入框对齐       |
-| `value`               | `string`  | `''`       | 选中的值。设置它会更新收起状态下的显示文本；`disabled` 时忽略                |
+| `value`               | `string`  | `''`       | 选中的值。禁用时仍可编程赋值；空值会清除显示文本、选项状态和表单提交值       |
 | `defaultValue`        | `string`  | `''`       | 初始选中的值，与选项的 `value` 匹配                                          |
 | `disabled`            | `boolean` | `false`    | 是否禁用选择器                                                               |
 | `type`                | `string`  | `''`       | `text` 渲染成无边框、透明背景、不带箭头图标的触发器；否则带边框              |
@@ -51,6 +51,12 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 | `sheet`               | `string`  | `''`       | 注入 shadow DOM 的自定义样式                                                 |
 
 > **注意**：`defaultValue` 和 `showSearch` 是响应式的：元素连接后再修改它们，也会在 `attributeChangedCallback` 里重新处理（和 `value`、`disabled`、`sheet` 一样）。更新 `defaultValue` 会重新应用匹配的选中项；切换 `showSearch` 会装配或卸载内联搜索框。
+
+设置 `value = ''`、设置空 `value` attribute 或移除该 attribute 都会清空选择。
+筛选或重新连接不会恢复已清空的默认选项；`form.reset()` 仍会恢复 `defaultValue`。
+同一个元素移除后可以重新插入：下拉层、当前选项和搜索监听会恢复，不会重复触发选择事件，
+也不会被上次挂载遗留的失焦定时器关闭。
+搜索草稿和弹层开关状态会保留，重新连接后仍可使用键盘选择。
 
 ### Option 属性
 
@@ -265,6 +271,8 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 ### 挂载容器 `getPopupContainerId`
 
 下拉框默认挂载到 `document.body`。传入另一个元素的 `id`，可以改为挂载到那个元素内。
+容器应具有定位上下文（例如 `position: relative`），以便弹层坐标与容器一致。
+断开连接时移除弹层，重新连接时恢复到配置的容器中。
 
 ```html
 <r-select getPopupContainerId="my-container">
