@@ -4,7 +4,7 @@
 
 **Goal:** Follow the user's correction: make #421 a general interface standard with no separate AI design category, including carefully adopted craft lessons.
 
-**Architecture:** DESIGN remains authoritative; one INTERFACE_GUIDE supplies applied decisions by general interface problem. Existing AI content is generalized and integrated, not duplicated into a second guide. Runtime APIs/defaults stay unchanged.
+**Architecture:** Final user correction requires responsibility-based layers: DESIGN (visual), INTERACTION (observable behavior), WORKFLOW_PATTERNS (optional recipes), CODING (engineering), and a short INTERFACE_GUIDE index. Earlier all-in-one organization below records completed work and is superseded by Chunk 3. Runtime APIs/defaults stay unchanged.
 
 **Tech Stack:** Markdown, package metadata, existing Vitest documentation contracts.
 
@@ -37,3 +37,13 @@
 - [x] Trace message consumers and remove only the eight unused `home` label keys; add documentation ownership and `check:langs` routing to AGENTS.
 - [x] Verify the existing locale gate turns GREEN: 8 languages / 236 labels, all pages present and structurally matched. Navigation and all sidebar trees are byte-identical before/after (8 locales / 32 nav items / 32 sidebar trees).
 - [x] Full docs tests: 67 passed across 11 files; docs `tsc`, full Prettier, links, targeted message-table oxlint and diff checks passed. Initial docs test/type attempts could not resolve unbuilt workspace package outputs; building ranuts then ranui through their existing scripts supplied those prerequisites, after which both checks passed without configuration or runtime-source changes.
+
+## Chunk 3: Responsibility-based organization (latest user correction)
+
+- [ ] Replace the 297-line INTERFACE_GUIDE with a short 35–60-line reading index; move content, do not duplicate it.
+- [ ] Create INTERACTION.md for general input/focus/keyboard/draft/feedback/loading/error/recovery outcomes. Create WORKFLOW_PATTERNS.md for optional queue/batch/settings/account/source/revision recipes, each with applicability and a host-contract caveat. Do not invent a new AI category.
+- [ ] Move density/CSS and source-informed visual craft to appropriate DESIGN sections; add only necessary async identity/cleanup engineering guidance to CODING §3. Keep workflow recipes out of DESIGN.
+- [ ] Update AGENTS, CLAUDE, plugin, README and EN/CN thin routes to distinguish the owners. Add both new leaf docs to package files.
+- [ ] Adapt existing test to inspect executable CSS in visual/interaction/pattern docs (allow zero token refs in a geometry-only example, but require a meaningful token-bearing corpus). Keep LF/CRLF and masked-token negative fixtures. Verify actual npm package contents and index/new-leaf direct local dependencies.
+- [ ] Run RED before new packaged leaves exist, then GREEN related tests, links, generated docs, design rules, locale check and format/lint/diff checks. Independent spec and quality review verify boundaries and discovery, not prose keywords.
+- [ ] Commit and push to the same #421, rewrite its description around final responsibilities, confirm latest CI, then final review. No merge.

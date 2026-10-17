@@ -15,29 +15,37 @@ DesEngs is a curated index, not itself a normative standard: https://desengs.com
 - Gustavo Fior's published Craft entries: https://craft.gustavofior.com/tabular-numbers , https://craft.gustavofior.com/optical-alignment , https://craft.gustavofior.com/interruptibility , https://craft.gustavofior.com/hover-restraint . The index labels other topics Soon and warns unpublished repo content is placeholder material; do not cite those as established guidance.
 - Butterick, https://practicaltypography.com/typography-in-ten-minutes.html : evaluate body text through type, line spacing and measure. Do not import print values, font shopping prescriptions or Latin-only assumptions into ran defaults.
 
-## User correction and final structure
+## User corrections and final structure
 
-The user explicitly rejects a dedicated AI design standard or category: standards should be general and widely applicable. This supersedes the earlier AI-specific guide split and the proposed separate craft guide.
+The user rejects both a dedicated AI design category and putting all workflow/business topics into the design guide. Universal standards need clear responsibilities and optional examples, not one growing document.
 
-DESIGN remains the authoritative foundation/composition standard. Replace `docs/AI_INTERFACES.md` with one `docs/INTERFACE_GUIDE.md`, organizing applied guidance by universal problems: task scope and inputs; drafts/forms; asynchronous jobs and optional queues; progress/errors/recovery; capability-aware settings; external data and authorization; reviewable/versioned outputs; typographic/optical/motion craft; verification. Examples may include assistants, but equally cover uploads, imports, search, editing and exports. Merely renaming AI headings without broadening the recommendations does not satisfy the correction.
+The earlier all-in-one INTERFACE_GUIDE is superseded by this final ownership map:
 
-Integrate the primary-source craft lessons into this universal guide rather than adding another topical standard. Target about 280–330 skimmable lines, with short decision/state/evidence tables and original wording. Do not duplicate DESIGN's foundation tables or the AI component inventory.
+| Document                   | Responsibility                                                                                                                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DESIGN.md                  | Visual hierarchy, type, space, colour, density, motion and visual craft                                                                                                               |
+| INTERACTION.md (new)       | Universal observable input, focus, keyboard, draft, feedback, loading, error, cancel/retry and recovery behavior                                                                      |
+| WORKFLOW_PATTERNS.md (new) | Optional task recipes: batch/queues, capability-aware settings, account/data access and revision/result review; host contracts and applicable examples, not requirements for every UI |
+| CODING.md                  | Existing engineering owner: state, events, lifecycle, asynchronous identity/cleanup and verification                                                                                  |
+| INTERFACE_GUIDE.md         | Short reading index (roughly 35–60 lines), decision-to-owner routing and concise verification brief; no repeated scenario tables                                                      |
 
-Keep DESIGN authoritative. Clarify §5 so frequent hover/focus/keyboard feedback defaults to immediate, with purposeful motion optional rather than a universal duration rule. Preserve no-palette-transition and existing tokens. Synchronize the old 150ms hover paragraph across all eight public locales. Clarify §11: mechanical alignment spines remain exact; asymmetric glyph optical correction is documented/reused in the asset/component, never arbitrary layout nudging.
+Move content to its owner rather than copy it. Target INTERACTION around 100–150 lines and WORKFLOW_PATTERNS around 120–180 lines; choose clarity over filling a line budget. No AI-specific category. Forms, uploads, imports, search, editors and content pages remain valid contexts; optional patterns are loaded only for relevant tasks.
 
-Remove the separate AI guide/category from active agent/public/package routes. Package and plugin readers see the same general guide as repository readers. Earlier implementation plans are historical evidence, marked superseded by this user correction; they do not govern current docs.
+Move product-semantic density and its valid native-command CSS example to DESIGN's visual section. Integrate source-to-decision-to-evidence craft guidance into DESIGN (a focused subsection); do not copy workflow state tables into it. Existing typography/colour/layout rules stay authoritative. Preserve the updated frequency-aware motion and exact-layout/optical distinction and the eight-locale synchronization.
+
+Add a concise async-intent/late-response paragraph to CODING §3 if needed, matching its component-engineering scope. Observable stale-response outcomes belong to INTERACTION; implementation mechanisms belong to CODING. Keep package/agent/plugin/public entry points as thin routes. Ship the index and both new leaf documents together.
 
 ## Scope lock
 
-May touch: replace AI guide with INTERFACE_GUIDE; this spec/plan and superseded notes in earlier task plans; DESIGN, CLAUDE, AGENTS, README; package files; thin plugin routing; EN/CN guide entry paragraphs; motion paragraphs across all eight locales; rename existing guide/package test to `docs.interface-guidance.test.ts` and update executable references.
+May touch: INTERFACE_GUIDE index, new INTERACTION.md and WORKFLOW_PATTERNS.md, DESIGN visual sections, a concise CODING §3 paragraph, existing spec/plan and superseded notes, CLAUDE, AGENTS, README, package files, plugin routing, EN/CN entry paragraphs, guide/package tests. The completed locale paragraph sync and unused-label cleanup remain intact.
 
-Untouched: runtime components, theme values, root demo DESIGN, dependencies/lock files, generated API catalogs, design baselines. No new general-purpose skill or separate AI standard/category.
+Untouched: runtime components, theme values, root demo DESIGN, dependencies/lock files, generated catalogs, design baselines. No new skill, separate AI standard or required queue/account/revision infrastructure.
 
 ## Acceptance and verification
 
-- Guidance is organized by general interface problems, applies beyond IM/AI, and contains source-to-rule-to-evidence mapping. No claims that a resource is universally best or that effects equal quality.
-- Published package includes the universal guide and its direct local dependencies; repo/plugin/public routes remain valid.
-- Existing documentation regression checks inspect CSS examples in the universal guide, if present, and actual npm package contents. Preserve LF/CRLF and hidden-invalid-token fixtures. Do not add wording-presence assertions for prose.
+- Design contains visual standards; interaction contains general behavior; optional workflow recipes remain separate. The short index routes agents without loading all content. Source-to-rule-to-evidence craft mapping stays with visual guidance. No claims that a resource is universally best or that effects equal quality.
+- Published package includes the index, interaction/workflow references and their direct reading dependencies; repo/plugin/public routes remain valid.
+- Existing documentation regression checks inspect CSS examples in the visual/interaction/pattern documents, if present, and actual npm package contents. Preserve LF/CRLF and hidden-invalid-token fixtures. Do not add wording-presence assertions for prose.
 - Fresh related tests, links, formatting, generated docs and design rules pass. Independent spec/quality reviews resolve findings; push to existing #421 and confirm its latest CI.
 
 ## Discovered locale-check prerequisite
