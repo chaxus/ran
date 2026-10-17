@@ -95,6 +95,13 @@ rules it encodes:
   `scroll` (capture phase, for portaled panels), or through a `ResizeObserver` on the element
   that actually drives the measurement.
 
+**Async work belongs to an intent and a lifecycle.** If a component starts asynchronous work,
+associate completion with the initiating input/context and current connection. Cancel obsolete work
+where supported and reject late completions after replacement or disconnection; cancellation alone
+is not a stale-result guard. Release timers, observers, listeners and owned resources on cleanup,
+and verify reconnect behavior. Host jobs and persistence remain outside component ownership;
+[INTERACTION.md](./INTERACTION.md) defines the observable outcome.
+
 ## 4. Events
 
 Events are the outward half of the contract, so treat a change to one as a breaking change.

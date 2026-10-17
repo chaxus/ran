@@ -21,9 +21,9 @@
 - Design **all reachable states** (default, hover, active, focus, disabled, loading, empty, error), not just the happy path.
 - **Verify the rendered result**, in light and dark, at narrow and wide widths — code review alone is not enough.
 
-For composed interfaces, read [INTERFACE_GUIDE.md](./INTERFACE_GUIDE.md) after §§11–12: forms,
-search, async work, recovery, capability-aware settings, external data, reviewable outputs and craft.
-It applies this standard to host applications without adding library APIs or defaults.
+For observable behavior, read [INTERACTION.md](./INTERACTION.md). The short
+[interface index](./INTERFACE_GUIDE.md) routes other decisions to their owner; optional task
+recipes live separately in [WORKFLOW_PATTERNS.md](./WORKFLOW_PATTERNS.md).
 
 Conflict resolution order: **user goals → verified evidence → this file → repo guidance (`CLAUDE.md`) → shipped patterns → general heuristics.**
 
@@ -609,6 +609,89 @@ its blue while the components on the same page move to another.
 A consumer may alias for readability (`--fg: var(--ran-color-text, …)`) provided every
 value resolves from a `--ran-*` token and the fallback is what the surface shows before
 this stylesheet loads. It may not invent a second palette.
+
+### Density follows control roles
+
+Spacing, intrinsic dimensions and pointer targets solve different problems. A visually small icon
+can sit within a larger native button. Measure the actual clickable box, focus ring and adjacent gap.
+Choose target sizes for the product's input and accessibility needs; do not copy one application's
+control dimensions into every library component.
+
+Where repeated roles warrant a density layer, define host-owned semantic aliases once, derived from
+real foundation tokens. This native-command example is application CSS, not an extra `--ran-*` API
+or a universal target-size prescription. Style custom elements through generated variables/parts.
+
+```css
+.workspace {
+  --app-command-target: var(--ran-size-7);
+  --app-command-gap: var(--ran-space-2);
+  color: var(--ran-color-text);
+}
+.workspace-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--app-command-gap);
+}
+.workspace-command {
+  min-inline-size: var(--app-command-target);
+  min-block-size: var(--app-command-target);
+  border: 0;
+  border-radius: var(--ran-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.workspace-command:enabled:hover {
+  background: var(--ran-color-bg-hover);
+}
+.workspace-command:focus-visible {
+  box-shadow: var(--ran-focus-ring);
+}
+.workspace-command:disabled {
+  color: var(--ran-color-text-disabled);
+}
+```
+
+Name icon-only buttons accessibly. Verify larger targets where needed for coarse input; do not enlarge
+every glyph or leave layout gaps for `hidden` controls. Document legitimate viewport, hairline, artwork
+and optical geometry exceptions instead of disguising them as spacing values.
+
+### Evaluate craft through evidence
+
+Polish follows task clarity; it is not a preset of rounded cards, blur and animated entrances.
+Evaluate the smallest intervention against the actual content, language, device and frequency of use.
+These references inform decisions; DESIGN's accessibility, tokens and platform contracts take priority.
+
+| Primary reference                                                                             | Adaptation for ran applications                                                                   | Evidence to collect                                                                   |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [Lightspark: limit details](https://design.lightspark.com/limit-the-number-of-details)        | Remove redundant controls/states; spend attention on remaining interactions                       | Complete the task with fewer interruptions and no lost route                          |
+| [Butterick: typography](https://practicaltypography.com/typography-in-ten-minutes.html)       | Evaluate body type, leading and measure together; retain role tokens and script-appropriate fonts | Read realistic long text in each supported script and zoom level                      |
+| [Craft: tabular numbers](https://craft.gustavofior.com/tabular-numbers)                       | Consider tabular figures for changing counts, timers and aligned numeric columns                  | Exercise narrow/wide digits and digit-count changes without adjacent controls jumping |
+| [Craft: optical alignment](https://craft.gustavofior.com/optical-alignment)                   | Correct asymmetric glyph weight inside the reusable asset/component, not arbitrary page margins   | Compare the glyph at actual sizes while layout edges remain exact                     |
+| [Jakub: interface details](https://jakub.kr/writing/details-that-make-interfaces-feel-better) | Coordinate nested radii with inset; remove an unnecessary nested surface first                    | Inspect real border thickness, inset and clipping at narrow and wide sizes            |
+| [Rauno: interfaces](https://interfaces.rauno.me/)                                             | Associate feedback with the acted-on object and preserve familiar input behavior                  | Repeat actions using keyboard/touch; confirm what changed without hunting for status  |
+| [Emil: animation restraint](https://emilkowal.ski/ui/you-dont-need-animations)                | Prefer immediate high-frequency feedback; retain motion only when it explains a change            | Repeat the workflow, including reduced motion, rather than judging one entrance       |
+| [Craft: interruptibility](https://craft.gustavofior.com/interruptibility)                     | New intent can reverse/retarget a transition without waiting for decoration                       | Open/close/reopen rapidly; focus, hit testing and final state stay synchronized       |
+
+For a short multiline heading, consider progressive enhancement with
+[`text-wrap: balance`](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap).
+Keep normal wrapping as the fallback; do not insert manual line breaks that fail in another locale.
+`pretty` may be useful for body copy, but its cost and support require checking with realistic content;
+it is not a blanket setting for long live-updating logs. Do not clip text to preserve a screenshot.
+
+[`font-variant-numeric: tabular-nums`](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-numeric)
+depends on font support. It aligns digit advances but does not reserve the extra space when 99 becomes 100. Where stability matters, reserve an appropriate column/minimum width without truncating values.
+
+Keep mechanical alignment spines exact. An optical glyph correction belongs to a documented reusable
+asset/component; it does not excuse unequal sibling gaps. Derive nested corner geometry from the real
+inset where relevant, preserving DESIGN's radius roles rather than adding a parallel radius scale.
+
+For motion, use existing tokens only when the transition has a job; frequent focus, hover and keyboard
+feedback defaults to immediate. Preserve reduced motion and instant theme changes. Do not import blog
+recipes as mandates for springs, global font smoothing, disabled autocomplete or mouse-only actions.
+Optional delight must remain responsive under repeated use; pause offscreen decoration and profile
+realistic content before adopting costly effects. It must not delay typing or obscure status.
+[DesEngs](https://desengs.com/) is a discovery index; cite published primary material, not placeholder topics.
 
 ### Words are part of the interface
 

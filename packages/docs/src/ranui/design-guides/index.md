@@ -15,11 +15,12 @@ page takes before any of it is decided is
 these rules lives in the repository as
 [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
-For composed pages, continue with the canonical
-[interface guide](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md):
-forms and drafts, search, async work, recoverable failures, capability-aware settings, external data,
-reviewable outputs and interface craft. It separates host application responsibilities from ranui APIs
-and is also installed at `node_modules/ranui/docs/INTERFACE_GUIDE.md`.
+For other decisions, the short
+[interface index](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md)
+routes to the [interaction standard](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md)
+for observable behavior and [optional workflow patterns](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md)
+for relevant host tasks. Visual rules stay here; engineering stays in CODING.
+These references ship under `node_modules/ranui/docs/` rather than duplicating their rules here.
 
 > **Use when** you are laying out a page or building an app-level component out of `<r-*>`
 > elements and have to decide a color, a gap, a text size, a shadow or a motion duration. The

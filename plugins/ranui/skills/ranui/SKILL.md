@@ -20,9 +20,12 @@ When `ranui` is installed in a project, its docs ship inside the package:
   source repo via `npm run doc:api`.
 - **`node_modules/ranui/docs/DESIGN.md`** — design system rules (color states,
   spacing, motion, accessibility §7, pre-ship checklist).
-- **`node_modules/ranui/docs/INTERFACE_GUIDE.md`** — applied decisions for forms,
-  search, async work, recovery, settings, external data, reviewable outputs and craft.
-  Read after DESIGN §§11–12; host responsibilities are distinguished from library APIs.
+- **`node_modules/ranui/docs/INTERFACE_GUIDE.md`** — short decision-to-owner index.
+- **`node_modules/ranui/docs/INTERACTION.md`** — observable input, focus, keyboard,
+  drafts, feedback, progress and recovery; read for behavior changes.
+- **`node_modules/ranui/docs/WORKFLOW_PATTERNS.md`** — optional batch/queue, settings,
+  account/data and revision recipes. Load only for a relevant task; these are host
+  responsibilities, not additional library APIs. Visual craft remains in DESIGN.
 - **`node_modules/ranui/docs/style-tokens-public.md`** — the CSS variable (theming
   token) catalog.
 

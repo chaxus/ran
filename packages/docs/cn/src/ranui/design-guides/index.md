@@ -12,11 +12,11 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 这些规则的完整、可机器校验版本在仓库里：
 [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md)。
 
-组合页面时，继续阅读统一维护的
-[界面实践指南](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md)：
-表单与草稿、搜索、异步任务、可恢复的错误、按能力展示的设置、外部数据、可审阅的结果，以及细节打磨与验收。
-这些规范广泛适用于导入、编辑、设置和内容页面，明确区分宿主应用职责与 ranui API。安装后也可从
-`node_modules/ranui/docs/INTERFACE_GUIDE.md` 读取，避免多份规则各自漂移。
+其他问题从简短的
+[界面规范索引](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md) 按职责查阅：
+[交互规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md) 负责可观察的行为，
+[可选工作流模式](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md) 仅用于相关宿主任务。
+视觉规则保留在设计规范，工程规则保留在 CODING。安装后可从 `node_modules/ranui/docs/` 读取这些统一维护的文档，本页不重复规则。
 
 > **适用场景**：在用 `<r-*>` 元素排版页面或搭业务组件，需要决定一个颜色、一段间距、一个字号、
 > 一层投影或一个动效时长时。答案永远是同一句：**先确定角色，值交给令牌。**

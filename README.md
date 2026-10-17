@@ -86,9 +86,10 @@ Which of these CI actually checks is declared in [packages/manifest.json](packag
 
 Start from [AGENTS.md](AGENTS.md) for the ownership and verification map. The
 [ranui design standard](packages/ranui/docs/DESIGN.md) governs UI composition and tokens;
-the [interface guide](packages/ranui/docs/INTERFACE_GUIDE.md) applies it to forms, search,
-async work, settings, reviewable outputs and interface craft without adding application services to the library.
-Both library guides ship with the npm package for use by consuming agents.
+the short [interface index](packages/ranui/docs/INTERFACE_GUIDE.md) routes to the
+[interaction standard](packages/ranui/docs/INTERACTION.md) for observable behavior and
+[optional workflow patterns](packages/ranui/docs/WORKFLOW_PATTERNS.md) for relevant host tasks.
+Engineering remains in CODING. These canonical references ship with the npm package.
 
 ### Installation
 
