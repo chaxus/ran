@@ -11,6 +11,17 @@ describe('r-select contract', () => {
     document.body.innerHTML = '';
   });
 
+  it('keeps updated labels as text rather than interpreting HTML', () => {
+    const select = document.createElement('r-select') as Select;
+    document.body.append(select);
+    select.label = 'Initial';
+    const label = '<img src=x onerror="alert(1)">';
+    select.label = label;
+    const caption = select._shadowDom.querySelector('label');
+    expect(caption?.textContent).toBe(label);
+    expect(caption?.querySelector('img')).toBeNull();
+  });
+
   const createSelectWithOptions = async () => {
     const select = document.createElement('r-select') as Select;
 

@@ -1,6 +1,6 @@
 import { RanElement, falseList, isDisabled } from '@/utils/index';
 import { createRef, Div, EventManager, InputBuilder, Label, View } from '@/utils/builder';
-import { checkInternalsValidity, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
+import { checkInternalsValidity, reportInternalsValidity } from '@/utils/a11y';
 import '@/components/icon/index';
 import {
   ensureShadowRoot,
@@ -113,16 +113,11 @@ export class Input extends RanElement {
     // assignment. Gating this on `!isDisabled(this)` used to silently drop
     // formResetCallback's restore whenever the field happened to be disabled
     // at reset time.
-    if (value) {
-      this.setAttribute('value', value);
-      this._input.setAttribute('value', value);
-    } else {
-      this.removeAttribute('value');
-      this._input.removeAttribute('value');
-    }
-    // Relay to the form on every value change (guarded — jsdom omits setFormValue).
-    this._internals?.setFormValue?.(this.getAttribute('value') ?? '');
-    this._updateValidity();
+    // A programmatic assignment also clears native editing state, even if the
+    // reflected value is already empty (for example after typing '-' into a number).
+    this._inputContent.value = value;
+    setStringAttribute(this, 'value', value, { removeEmpty: true });
+    this._syncValue();
   }
   /**
    * @description: 获取 input 的占位字符
@@ -333,15 +328,44 @@ export class Input extends RanElement {
    * reportValidity()/:invalid 感知到。disabled 的控件永远不参与校验，与原生一致。
    */
   private _updateValidity = (): void => {
-    updateRequiredValidity(this, this._internals, {
-      disabled: this.disabled,
-      required: this.required,
-      isEmpty: !this.value,
-      anchor: this._inputContent,
-      // aria-required/aria-invalid must land on the real, closed-shadow <input> — it's
-      // the node assistive tech actually focuses and reports on, not the host element.
-      ariaTarget: this._inputContent,
-    });
+    const control = this._inputContent;
+    if (this.required) control.setAttribute('aria-required', 'true');
+    else control.removeAttribute('aria-required');
+    const validity = control.validity;
+    const invalid = !this.disabled && (validity ? !validity.valid : this.required && !this.value);
+    if (invalid) {
+      control.setAttribute('aria-invalid', 'true');
+      const flags: ValidityStateFlags = {};
+      for (const flag of [
+        'badInput',
+        'customError',
+        'patternMismatch',
+        'rangeOverflow',
+        'rangeUnderflow',
+        'stepMismatch',
+        'tooLong',
+        'tooShort',
+        'typeMismatch',
+        'valueMissing',
+      ] as const) {
+        if (validity?.[flag]) flags[flag] = true;
+      }
+      if (!validity) flags.valueMissing = true;
+      this._internals?.setValidity?.(flags, control.validationMessage || 'Please fill out this field.', control);
+    } else {
+      control.removeAttribute('aria-invalid');
+      this._internals?.setValidity?.({});
+    }
+  };
+
+  private _syncValue = (): void => {
+    const value = this.value;
+    // Avoid resetting the native editing state (including badInput) on each keystroke.
+    if (this._inputContent.value !== value) this._inputContent.value = value;
+    if (value) this._input.setAttribute('value', value);
+    else this._input.removeAttribute('value');
+    this._internals?.setFormValue?.(this._inputContent.value);
+    this._updateValidity();
   };
   /**
    * @description: 原生表单参与方法：form.checkValidity()/reportValidity() 的宿主入口
@@ -372,7 +396,9 @@ export class Input extends RanElement {
     event.stopPropagation();
     event.preventDefault();
     const { target, data = '' } = event as InputEvent;
-    this.value = (target as HTMLInputElement)?.value || data || '';
+    setStringAttribute(this, 'value', (target as HTMLInputElement)?.value ?? data ?? '', { removeEmpty: true });
+    // An invalid numeric edit can leave value="" unchanged while badInput changes.
+    this._syncValue();
     // 默认 input 事件（每次输入都触发，与原生一致）
     this.dispatchEvent(
       new CustomEvent('input', {
@@ -396,7 +422,8 @@ export class Input extends RanElement {
    * @description: change 事件——与原生一致，在失焦（提交）时触发，而非每次输入
    */
   customChange = (): void => {
-    this.value = this._inputContent?.value ?? this.value;
+    setStringAttribute(this, 'value', this._inputContent?.value ?? this.value, { removeEmpty: true });
+    this._syncValue();
     this.dispatchEvent(
       new CustomEvent('change', {
         detail: {
@@ -428,7 +455,7 @@ export class Input extends RanElement {
     if (name === 'label' && this._inputContent) {
       if (value != null) {
         if (this._label) {
-          this._label.innerHTML = value;
+          this._label.textContent = value;
         } else {
           this._label = Label().class('ran-input-label').part('label').text(value).build();
           // Associate the label with the control so screen readers announce it and
@@ -455,16 +482,17 @@ export class Input extends RanElement {
    * @param {string} name
    * @param {string} value
    */
-  listenType = (name: string, value: string): void => {
+  listenType = (name: string, value: string | null): void => {
     if (name === 'type' && this._inputContent) {
       if (value) {
         this._inputContent.setAttribute('type', value);
       } else {
         this._inputContent.removeAttribute('type');
-        this._inputContent.removeAttribute('min');
-        this._inputContent.removeAttribute('max');
-        this._inputContent.removeAttribute('step');
       }
+      for (const constraint of ['min', 'max', 'step']) {
+        this.listenNumericConstraint(constraint, this.getAttribute(constraint));
+      }
+      this._syncValue();
     }
   };
   /**
@@ -512,13 +540,14 @@ export class Input extends RanElement {
    * @param {string} name
    * @param {string} value
    */
-  listenNumericConstraint = (name: string, value: string): void => {
+  listenNumericConstraint = (name: string, value: string | null): void => {
     if ((name === 'min' || name === 'max' || name === 'step') && this._inputContent) {
       if (this.type === 'number' && value != null) {
         this._inputContent.setAttribute(name, value);
       } else {
         this._inputContent.removeAttribute(name);
       }
+      this._updateValidity();
     }
   };
   /**
@@ -545,6 +574,7 @@ export class Input extends RanElement {
     if (name === 'disabled' && this._input) {
       if (falseList.includes(value)) {
         this._input.removeAttribute('disabled');
+        this._inputContent.removeAttribute('disabled');
       } else {
         this._input.setAttribute('disabled', '');
         this._inputContent.setAttribute('disabled', '');
@@ -583,6 +613,7 @@ export class Input extends RanElement {
    * @param {string} newValue
    */
   listenEvent = (name: string, oldValue: string, newValue: string): void => {
+    this.listenType(name, newValue);
     this.listenPlaceholder(name, newValue);
     this.listenLabel(name, newValue);
     this.listenStatus(name, newValue);
@@ -592,8 +623,7 @@ export class Input extends RanElement {
     this.listenDisabled(name, newValue);
     this.listenIcon(name, newValue, oldValue);
     if (name === 'value' && oldValue !== newValue) {
-      this._inputContent.value = newValue;
-      this._input.setAttribute('value', newValue);
+      this._syncValue();
     }
   };
   connectedCallback(): void {
@@ -632,7 +662,7 @@ export class Input extends RanElement {
     if (this.required) {
       this._inputContent.setAttribute('required', '');
     }
-    this._updateValidity();
+    this._syncValue();
     this._events.on(this._inputContent, 'input', this.customInput);
     // 原生 change 在失焦/提交时触发，这里转发为组件的 change 事件
     this._events.on(this._inputContent, 'change', this.customChange);

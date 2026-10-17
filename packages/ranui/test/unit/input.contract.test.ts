@@ -7,6 +7,48 @@ describe('r-input contract', () => {
     document.body.innerHTML = '';
   });
 
+  it('keeps updated labels as text rather than interpreting HTML', () => {
+    const input = document.createElement('r-input') as Input;
+    document.body.append(input);
+    input.label = 'Initial';
+    const label = '<img src=x onerror="alert(1)">';
+    input.label = label;
+    expect(input._label?.textContent).toBe(label);
+    expect(input._label?.querySelector('img')).toBeNull();
+  });
+
+  it('changes the native type after connection and restores text when removed', () => {
+    const input = document.createElement('r-input') as Input;
+    document.body.append(input);
+    input.type = 'password';
+    expect(input._inputContent.type).toBe('password');
+    input.removeAttribute('type');
+    expect(input._inputContent.type).toBe('text');
+  });
+
+  it('re-enables the native control when the disabled attribute is removed', () => {
+    const input = document.createElement('r-input') as Input;
+    document.body.append(input);
+    input.setAttribute('disabled', '');
+    input.removeAttribute('disabled');
+    expect(input._inputContent.disabled).toBe(false);
+  });
+
+  it('reapplies numeric constraints when changing between text and number', () => {
+    const input = document.createElement('r-input') as Input;
+    input.setAttribute('min', '10');
+    input.setAttribute('max', '20');
+    input.setAttribute('step', '2');
+    document.body.append(input);
+    input.type = 'number';
+    expect(input._inputContent.type).toBe('number');
+    expect(input._inputContent.min).toBe('10');
+    expect(input._inputContent.max).toBe('20');
+    expect(input._inputContent.step).toBe('2');
+    input.type = 'text';
+    expect(input._inputContent.hasAttribute('min')).toBe(false);
+  });
+
   it('renders input wrapper and inner input correctly via ElementBuilder', () => {
     const input = document.createElement('r-input');
     document.body.appendChild(input);
