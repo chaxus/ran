@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { formatDuration, formatRelative, parseVttCueTiming, parseVttTimestamp, timeFormat } from '@/utils';
+import { formatDuration, formatRelative, parseVttCueTiming, parseVttTimestamp } from '@/utils';
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -29,11 +29,6 @@ describe('formatDuration', () => {
 
   it('clamps negatives to zero', () => {
     expect(formatDuration(-5)).toBe('00:00');
-  });
-
-  it('is aliased by the deprecated timeFormat', () => {
-    expect(timeFormat(3661)).toBe(formatDuration(3661));
-    expect(timeFormat(0)).toBe('00:00');
   });
 });
 

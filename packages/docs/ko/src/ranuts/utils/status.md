@@ -45,4 +45,3 @@ status.retry[503]; // true
 
 1. **모르는 코드나 메시지를 주면 `getStatus`는 예외를 던집니다.** 인자가 `number`도 `string`도 아니면 `TypeError`, 그 밖에는 `Error`입니다. 통신에서 읽어 온 상태 코드처럼 올바름이 보장되지 않는 입력이라면 `try`/`catch`로 감싸거나 먼저 `status.codes.includes(n)`으로 확인하세요.
 2. **`status.redirect`, `empty`, `retry`는 `Set`이 아니라 그냥 객체입니다.** 들어 있는지는 `.has()`가 아니라 `status.retry[code]`로 확인하세요.
-3. 브라우저와 Node 양쪽에서 돕니다(`ranuts/utils`). 그래서 서버 쪽 `ranuts/node` 핸들러가 쓰는 것과 같은 코드↔메시지 대응을 클라이언트에서도 그대로 쓸 수 있습니다.

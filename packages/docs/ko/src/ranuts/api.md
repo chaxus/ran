@@ -1,6 +1,6 @@
 ---
 title: ranuts API 레퍼런스
-description: 'ranuts가 내보내는 모든 심볼 — 8개 진입점, 총 454개 export를 시그니처와 설명과 함께.'
+description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 422개 export를 시그니처와 설명과 함께.'
 ---
 
 # ranuts API (자동 생성)
@@ -12,13 +12,12 @@ description: 'ranuts가 내보내는 모든 심볼 — 8개 진입점, 총 454�
 심볼이 속한 **서브패스**에서 import하세요. 예: `import { debounce } from
 'ranuts/utils'`. 루트 배럴 `ranuts`는 utils + visual 표면을 다시 내보냅니다.
 
-**export 454개**, 진입점 8개.
+**export 422개**, 진입점 7개.
 
 ## 진입점
 
-- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 339개
+- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 333개
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 캐싱 전략과 프리캐시 프로토콜 · _service worker 전용_ · export 9개
-- [`ranuts/node`](#ranuts-node) — Node 서버 유틸리티 (fs / http / ws / 미들웨어) · _node 전용_ · export 26개
 - [`ranuts/visual`](#ranuts-visual) — 2D 렌더링 엔진 (Canvas / WebGL / WebGPU) · _브라우저 전용_ · export 16개
 - [`ranuts/i18n`](#ranuts-i18n) — 프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄) · _브라우저 + node_ · export 9개
 - [`ranuts/vnode`](#ranuts-vnode) — Snabbdom 스타일 가상 DOM · _브라우저_ · export 26개
@@ -165,8 +164,6 @@ import { /* … */ } from 'ranuts/utils';
 - `luma(r: number, g: number, b: number) => number` — Perceived brightness (luma) of an RGB colour using Rec. 601 weights. Channels may be 0..1 or 0..255 — the result keeps that scale.
 - `matchMediaQuery(query: string) => boolean` — Read whether a media query currently matches, synchronously. Returns false under SSR.
 - `mathjs(a: number, type: string, b: number) => ComputeNumberResult`
-- `md5(str: string) => string` — MD5 hash function implementation
-- `memoize<T extends Func>(fn: T | unknown) => ((...args: Parameters<T>) => ReturnType<T>)` — Former name of `once`. The name is misleading — it does not cache per
 - `merge(a: Obj, b?: Obj) => Obj` — Merge objects
 - `mergeExports(obj: Record<string, string>, exports: Record<string, string>) => Record<string, string>` — Copy an exports object onto `obj`, then freeze it
 - `navigatorLanguage() => TextLanguage` — Map the browser UI language into the same buckets (the default when there is
@@ -230,8 +227,6 @@ import { /* … */ } from 'ranuts/utils';
 - `srgbToLinear(c: number) => number` — Convert one sRGB channel (0..1) to linear-light (IEC 61966-2-1 transfer function).
 - `strParse(str?: string, sep?: string | RegExp, eq?: string | RegExp) => Record<string, string>` — Parse a delimited string into an object, e.g.
 - `throttle<T extends (...args: any[]) => any>(fn: T, delay?: number) => Throttled<T>` — Throttle — under a burst of calls, run at a fixed interval: the first call
-- `timeFormat(time: number) => string` — Format a number of seconds as a colon-separated duration
-- `timestampToTime(timestamp?: number | string) => Date & { format?: Function; }` — Turn a timestamp into a `Date` carrying a `format` method.
 - `toFullWidth(value: string) => string` — Convert half-width characters to full-width (the inverse of `toHalfWidth`)
 - `toHalfWidth(value: string) => string` — Convert full-width characters to half-width (digits, letters, punctuation and
 - `toString(value: string | number) => string`
@@ -368,9 +363,7 @@ import { /* … */ } from 'ranuts/utils';
 - `const cubic: SpeedType`
 - `const DEFAULT_CHANNEL: "default"`
 - `const expo: SpeedType`
-- `const FMT: Record<string, string[]>`
 - `const HEX_COLOR_REGEX: RegExp` — `#rgb` / `#rrggbb` (the `#` is required)
-- `const isClient: boolean` — Whether a `window` existed **when this module was first imported**.
 - `const MessageCodec: { encode(data: any): string; decode<T = any>(encodedStr: string): T | null; encodeFile(file: File): Promise<string>; decodeFile(encoded: st…` — Message codec.
 - `const MimeType: Map<string, string>`
 - `const MOBILE_MEDIA_QUERY: "(max-width: 768px)"` — Viewport breakpoint, matching where the mobile layout takes over
@@ -409,55 +402,6 @@ import { /* … */ } from 'ranuts/sw';
 - `interface PrecacheMessageEvent` — The bit of `ExtendableMessageEvent` used here, declared locally rather than pulled from
 - `interface ServePrecacheOptions`
 - `interface SWScope` — Minimal view of the SW global the helpers touch, so they can be unit-tested with a stub.
-
-## `ranuts/node`
-
-Node 서버 유틸리티 (fs / http / ws / 미들웨어) · 실행 환경: **node 전용** · 소스: `src/node/index.ts`
-
-```ts
-import { /* … */ } from 'ranuts/node';
-```
-
-### 함수
-
-- `appendFile(path: string, content: string) => Promise<Identification>` — Append content to an existing file
-- `bodyMiddleware(options?: Partial<ServerBody>) => MiddlewareFunction`
-- `connect(connectMiddleware: ConnectMiddleware) => MiddlewareFunction`
-- `get({ url }: Request) => Promise<Response>`
-- `getIPAdress() => string | undefined`
-- `default(req: Req) => ParseUrl | undefined` — Parse an IncomingMessage's request URL; the return type is always ParseUrl
-- `prompt({ message, stream, defaultResponse }: PromptOption) => Promise<boolean>`
-- `queryFileInfo(path: string) => Promise<Identification>` — Stat a file — typically to tell a file from a directory via data.isDirectory()
-- `readDir(options: Options) => Array<string>`
-- `readFile(path: string, format?: BufferEncoding) => FilePromiseResult` — Read a file, returning a status code and the content on success
-- `readStream(option: ReadOption) => ReadStream`
-- `runCommand(command: string, args: string[]) => Promise<void>`
-- `startTask() => symbol`
-- `staticMiddleware(option?: Partial<Option>) => MiddlewareFunction`
-- `taskEnd(symbol: symbol) => number | bigint`
-- `traverse(dir: string, callback: Caller, pre?: string) => Promise<any>` — Walk every directory recursively, running a function for each file found
-- `traverseSync(dir: string, callback: Caller, pre?: string) => void` — Synchronous: walk every directory recursively, running a function for each file found
-- `watchFile(path: string, interval?: number) => Promise<Identification>` — Watch a file for changes and report its status
-- `writeFile(path: string, content: string) => Promise<Identification>` — Write a file at the given path, truncating it if it exists and creating it if it does not
-- `writeStream(option: WriteOption) => WriteStream`
-- `WSS(this: any, server: http.Server) => void` — Create a WebSocket Server
-
-### 클래스
-
-- `class Router`
-- `class Server`
-
-### 인터페이스
-
-- `interface Context`
-
-### 상수
-
-- `const isColorSupported: boolean`
-
-### 기타
-
-- `default`
 
 ## `ranuts/visual`
 

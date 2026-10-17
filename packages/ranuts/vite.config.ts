@@ -7,66 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-const external = [
-  'react',
-  'os',
-  'fs',
-  'child_process',
-  'http',
-  'https',
-  'tty',
-  'process',
-  'path',
-  'net',
-  'stream',
-  'util',
-  'crypto',
-  'events',
-  'buffer',
-  'readline',
-  'node:os',
-  'node:fs',
-  'node:child_process',
-  'node:http',
-  'node:https',
-  'node:tty',
-  'node:process',
-  'node:path',
-  'node:net',
-  'node:stream',
-  'node:util',
-  'node:crypto',
-  'node:events',
-  'node:buffer',
-  'node:readline',
-];
-
-const list2map = (list: string[]): Record<string, string> => {
-  return list.reduce((acc: Record<string, string>, cur) => {
-    acc[cur] = cur;
-    return acc;
-  }, {});
-};
-
-interface chunkOptimization {
-  assetsInlineLimit: number;
-  chunkSizeWarningLimit: number;
-  reportCompressedSize: boolean;
-  rollupOptions: NonNullable<BuildOptions['rollupOptions']>;
-  minify: boolean | 'terser' | 'esbuild' | undefined;
-}
-
-const chunkOptimization: Partial<chunkOptimization> = {
+const chunkOptimization: Partial<BuildOptions> = {
   chunkSizeWarningLimit: 500,
   assetsInlineLimit: 1024,
   reportCompressedSize: false,
   rollupOptions: {
-    external,
-    output: {
-      globals: {
-        ...list2map(external),
-      },
-    },
     treeshake: {
       manualPureFunctions: ['console.log'],
     },
@@ -96,23 +41,18 @@ export const umdUtil: BuildOptions = {
   },
 };
 
-export const umdNode: BuildOptions = {
-  ...chunkOptimization,
-  outDir: resolve(__dirname, 'dist/umd/node'),
-  lib: {
-    entry: resolve(__dirname, 'src/node/index.ts'),
-    name: 'ranuts_node',
-    fileName: 'node',
-    formats: ['umd'],
-  },
-};
-
 export const es: BuildOptions = {
   ...chunkOptimization,
+  // Keep unrelated initialization in separate modules so consumer tree shaking
+  // does not depend on how many public entry points happen to share a chunk.
+  minify: 'esbuild',
+  rollupOptions: {
+    ...chunkOptimization.rollupOptions,
+    output: { preserveModules: true, preserveModulesRoot: __dirname },
+  },
   lib: {
     entry: {
       utils: resolve(__dirname, 'src/utils/index.ts'),
-      node: resolve(__dirname, 'src/node/index.ts'),
       index: resolve(__dirname, 'index.ts'),
       'utils/visual': resolve(__dirname, 'src/utils/visual/index.ts'),
       // Its own entry so `ranuts/i18n` costs only the i18n engine and its two helpers,
@@ -129,7 +69,7 @@ export const es: BuildOptions = {
       conversation: resolve(__dirname, 'src/conversation/index.ts'),
     },
     fileName: (_: string, name: string): string => {
-      if (name === 'index') {
+      if (name === 'index' || name.startsWith('src/')) {
         return `${name}.js`;
       }
       return `src/${name}/index.js`;

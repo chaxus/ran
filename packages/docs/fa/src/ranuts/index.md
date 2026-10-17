@@ -19,19 +19,16 @@ import { debounce } from 'ranuts/utils';
 
 ## نقاط ورودی
 
-| import                                                | چه دارد                                                  | محیط اجرا       |
-| ----------------------------------------------------- | -------------------------------------------------------- | --------------- |
-| `ranuts`                                              | بسته ریشه: سطحِ utils به‌همراه visual                    | مرورگر + Node   |
-| [`ranuts/utils`](/fa/src/ranuts/utils/)               | DOM/BOM، رشته، شیء، عدد، رنگ، زمان، ذخیره‌سازی …         | مرورگر + Node\* |
-| [`ranuts/node`](/fa/src/ranuts/node/)                 | سرور HTTP، مسیریاب، WebSocket، fs، استریم‌ها، میان‌افزار | **فقط Node**    |
-| [`ranuts/visual`](/fa/src/ranuts/visual/)             | موتور رسم دوبعدی (Canvas / WebGL / WebGPU)               | **فقط مرورگر**  |
-| [`ranuts/i18n`](/fa/src/ranuts/i18n/)                 | موتور ترجمه: واژه‌نامه‌های تخت، تعویض در زمان اجرا       | مرورگر + Node   |
-| [`ranuts/sw`](/fa/src/ranuts/sw/)                     | راهبردهای کش و نیمهٔ ورکرِ قرارداد پیش‌کش                | **سرویس‌ورکر**  |
-| [`ranuts/vnode`](/fa/src/ranuts/vnode/)               | DOM مجازی به سبک Snabbdom                                | مرورگر          |
-| [`ranuts/stream`](/fa/src/ranuts/stream/)             | تحلیل SSE، تاکردن جریان مدل، بودجه توکن                  | مرورگر + Node   |
-| [`ranuts/conversation`](/fa/src/ranuts/conversation/) | گزارش رویدادها ← گره‌های گفت‌وگوی قابل رسم               | مرورگر + Node   |
-
-\* دامنه `ranuts/utils` گسترده است: بیشترش رو به مرورگر دارد، اما کمک‌کننده‌های خالص همه‌جا کار می‌کنند. **`ranuts/node` را در کد مرورگر وارد نکنید.** `fs` / `http` / `child_process` را با خود می‌آورد.
+| import                                                | چه دارد                                            | محیط اجرا       |
+| ----------------------------------------------------- | -------------------------------------------------- | --------------- |
+| `ranuts`                                              | بسته ریشه: سطحِ utils به‌همراه visual              | مرورگر + Node   |
+| [`ranuts/utils`](/fa/src/ranuts/utils/)               | DOM/BOM، رشته، شیء، عدد، رنگ، زمان، ذخیره‌سازی …   | مرورگر + Node\* |
+| [`ranuts/visual`](/fa/src/ranuts/visual/)             | موتور رسم دوبعدی (Canvas / WebGL / WebGPU)         | **فقط مرورگر**  |
+| [`ranuts/i18n`](/fa/src/ranuts/i18n/)                 | موتور ترجمه: واژه‌نامه‌های تخت، تعویض در زمان اجرا | مرورگر + Node   |
+| [`ranuts/sw`](/fa/src/ranuts/sw/)                     | راهبردهای کش و نیمهٔ ورکرِ قرارداد پیش‌کش          | **سرویس‌ورکر**  |
+| [`ranuts/vnode`](/fa/src/ranuts/vnode/)               | DOM مجازی به سبک Snabbdom                          | مرورگر          |
+| [`ranuts/stream`](/fa/src/ranuts/stream/)             | تحلیل SSE، تاکردن جریان مدل، بودجه توکن            | مرورگر + Node   |
+| [`ranuts/conversation`](/fa/src/ranuts/conversation/) | گزارش رویدادها ← گره‌های گفت‌وگوی قابل رسم         | مرورگر + Node   |
 
 ## چه چیزهایی در آن هست
 
@@ -46,7 +43,7 @@ import { debounce } from 'ranuts/utils';
 [قالب‌بندی و تحلیل عدد](/fa/src/ranuts/utils/parse_number) ·
 [تبدیل و آمیختن رنگ](/fa/src/ranuts/utils/color)
 
-**متن**: [md5](/fa/src/ranuts/utils/md5) · [truncate](/fa/src/ranuts/utils/truncate) ·
+**متن**: [truncate](/fa/src/ranuts/utils/truncate) ·
 [detectLanguage](/fa/src/ranuts/utils/detect_language) ·
 [resolveLocale](/fa/src/ranuts/utils/resolve_locale) ·
 [segmentByRanges](/fa/src/ranuts/utils/segment) · [paginate](/fa/src/ranuts/utils/paginate) ·
@@ -66,10 +63,6 @@ import { debounce } from 'ranuts/utils';
 **رسم**: [موتور دوبعدی](/fa/src/ranuts/visual/) · [DOM مجازی](/fa/src/ranuts/vnode/) ·
 [کمک‌کننده‌های canvas](/fa/src/ranuts/utils/canvas) · [tween](/fa/src/ranuts/utils/tween)
 
-**Node**: [سرور HTTP و مسیریاب](/fa/src/ranuts/node/) ·
-[کار با فایل](/fa/src/ranuts/file/write_file) ·
-[نوع‌های MIME](/fa/src/ranuts/mime_type/mime_type)
-
 این‌ها گزیده‌اند. [مرجع API](/fa/src/ranuts/api) **همه** خروجی‌ها را با امضا و توضیحشان دارد و چون از روی سورس تولید می‌شود نمی‌تواند از واقعیت فاصله بگیرد.
 
 ## بعد کجا برویم
@@ -83,3 +76,5 @@ import { debounce } from 'ranuts/utils';
 | رابط کاربری روی آن بسازید                | [ranui](/fa/src/ranui/)                                                         |
 
 هر دو بسته یک `CLAUDE.md` را درون تاربال npm همراه دارند: راهنمای آغازین برای عامل‌های کدنویس، که بی‌نیاز از شبکه مستقیم از `node_modules` خواندنی است.
+
+[مهاجرت آلفا](/fa/src/ranuts/migration/)

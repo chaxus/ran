@@ -87,11 +87,6 @@ const ENTRIES: Entry[] = [
     runtime: 'service worker only',
   },
   {
-    subpath: 'ranuts/node',
-    file: 'src/node/index.ts',
-    runtime: 'node only',
-  },
-  {
     subpath: 'ranuts/visual',
     file: 'src/utils/visual/index.ts',
     runtime: 'browser only',

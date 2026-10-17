@@ -34,13 +34,6 @@ export const once = <T extends Func>(fn: T | unknown): ((...args: Parameters<T>)
   };
 };
 
-/**
- * @description: Former name of `once`. The name is misleading — it does not cache per
- * argument, it simply runs once.
- * @deprecated Use [`once`](#once) instead; for the async case use [`singleFlight`](#singleflight).
- */
-export const memoize = once;
-
 export interface SingleFlight<T> {
   (): Promise<T>;
   /** Drop the cached result so the next call runs again (connection lost, logout, forced refresh) */
@@ -52,7 +45,7 @@ export interface SingleFlight<T> {
 /**
  * @description: The async flavour of "run once": concurrent callers share one in-flight
  * promise, later callers reuse the resolved result, and **a rejection clears the cache**
- * so it can be retried (this is where it differs from `memoize` — caching a rejected
+ * so it can be retried (this is where it differs from `once` — caching a rejected
  * promise turns one flaky network blip into a permanent failure).
  *
  * The typical use is a resource that is initialised once but awaited by everyone: opening

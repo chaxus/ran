@@ -17,7 +17,7 @@ export type DocLocaleDir = (typeof DOC_LOCALE_DIRS)[number];
 export type Kind = 'function' | 'class' | 'interface' | 'type' | 'enum' | 'const' | 'namespace' | 'other';
 
 /** The canonical (English) runtime strings, used as keys into each language's map. */
-export type RuntimeKey = 'browser + node' | 'service worker only' | 'node only' | 'browser only' | 'browser';
+export type RuntimeKey = 'browser + node' | 'service worker only' | 'browser only' | 'browser';
 
 export interface ApiPageCopy {
   title: string;
@@ -69,14 +69,12 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
     runtimes: {
       'browser + node': 'browser + node',
       'service worker only': 'service worker only',
-      'node only': 'node only',
       'browser only': 'browser only',
       browser: 'browser',
     },
     blurbs: {
       'ranuts/utils': 'Browser and general-purpose utilities',
       'ranuts/sw': 'Service Worker caching strategies and the precache protocol',
-      'ranuts/node': 'Node server utilities (fs / http / ws / middleware)',
       'ranuts/visual': '2D rendering engine (Canvas / WebGL / WebGPU)',
       'ranuts/i18n': 'Framework-agnostic i18n engine (also re-exported from ranuts/utils)',
       'ranuts/vnode': 'Snabbdom-style virtual DOM',
@@ -114,14 +112,12 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
     runtimes: {
       'browser + node': '浏览器 + node',
       'service worker only': '仅 service worker',
-      'node only': '仅 node',
       'browser only': '仅浏览器',
       browser: '浏览器',
     },
     blurbs: {
       'ranuts/utils': '浏览器与通用工具函数',
       'ranuts/sw': 'Service Worker 缓存策略与预缓存协议',
-      'ranuts/node': 'Node 服务端工具（fs / http / ws / 中间件）',
       'ranuts/visual': '2D 渲染引擎（Canvas / WebGL / WebGPU）',
       'ranuts/i18n': '框架无关的 i18n 引擎（也从 ranuts/utils 再导出）',
       'ranuts/vnode': 'Snabbdom 风格的虚拟 DOM',
@@ -160,14 +156,12 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
     runtimes: {
       'browser + node': 'ブラウザ + node',
       'service worker only': 'service worker のみ',
-      'node only': 'node のみ',
       'browser only': 'ブラウザのみ',
       browser: 'ブラウザ',
     },
     blurbs: {
       'ranuts/utils': 'ブラウザ向けおよび汎用のユーティリティ',
       'ranuts/sw': 'Service Worker のキャッシュ戦略とプリキャッシュのプロトコル',
-      'ranuts/node': 'Node サーバー向けユーティリティ（fs / http / ws / ミドルウェア）',
       'ranuts/visual': '2D レンダリングエンジン（Canvas / WebGL / WebGPU）',
       'ranuts/i18n': 'フレームワーク非依存の i18n エンジン（ranuts/utils からも再エクスポート）',
       'ranuts/vnode': 'Snabbdom 風の仮想 DOM',
@@ -206,14 +200,12 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
     runtimes: {
       'browser + node': 'navegador + node',
       'service worker only': 'solo service worker',
-      'node only': 'solo node',
       'browser only': 'solo navegador',
       browser: 'navegador',
     },
     blurbs: {
       'ranuts/utils': 'Utilidades para el navegador y de propósito general',
       'ranuts/sw': 'Estrategias de caché del Service Worker y el protocolo de precarga',
-      'ranuts/node': 'Utilidades de servidor Node (fs / http / ws / middleware)',
       'ranuts/visual': 'Motor de renderizado 2D (Canvas / WebGL / WebGPU)',
       'ranuts/i18n': 'Motor de i18n independiente de framework (también reexportado desde ranuts/utils)',
       'ranuts/vnode': 'DOM virtual al estilo de Snabbdom',
@@ -253,14 +245,12 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
     runtimes: {
       'browser + node': 'navegador + node',
       'service worker only': 'apenas service worker',
-      'node only': 'apenas node',
       'browser only': 'apenas navegador',
       browser: 'navegador',
     },
     blurbs: {
       'ranuts/utils': 'Utilitários para o navegador e de uso geral',
       'ranuts/sw': 'Estratégias de cache do Service Worker e o protocolo de pré-cache',
-      'ranuts/node': 'Utilitários de servidor Node (fs / http / ws / middleware)',
       'ranuts/visual': 'Motor de renderização 2D (Canvas / WebGL / WebGPU)',
       'ranuts/i18n': 'Motor de i18n independente de framework (também reexportado de ranuts/utils)',
       'ranuts/vnode': 'DOM virtual no estilo do Snabbdom',
@@ -299,14 +289,12 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
     runtimes: {
       'browser + node': '브라우저 + node',
       'service worker only': 'service worker 전용',
-      'node only': 'node 전용',
       'browser only': '브라우저 전용',
       browser: '브라우저',
     },
     blurbs: {
       'ranuts/utils': '브라우저용 및 범용 유틸리티',
       'ranuts/sw': 'Service Worker 캐싱 전략과 프리캐시 프로토콜',
-      'ranuts/node': 'Node 서버 유틸리티 (fs / http / ws / 미들웨어)',
       'ranuts/visual': '2D 렌더링 엔진 (Canvas / WebGL / WebGPU)',
       'ranuts/i18n': '프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄)',
       'ranuts/vnode': 'Snabbdom 스타일 가상 DOM',
@@ -346,14 +334,12 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
     runtimes: {
       'browser + node': 'Browser + node',
       'service worker only': 'nur Service Worker',
-      'node only': 'nur node',
       'browser only': 'nur Browser',
       browser: 'Browser',
     },
     blurbs: {
       'ranuts/utils': 'Browser- und Allzweck-Utilities',
       'ranuts/sw': 'Caching-Strategien des Service Workers und das Precache-Protokoll',
-      'ranuts/node': 'Utilities für den Node-Server (fs / http / ws / Middleware)',
       'ranuts/visual': '2D-Rendering-Engine (Canvas / WebGL / WebGPU)',
       'ranuts/i18n': 'Frameworkunabhängige i18n-Engine (auch aus ranuts/utils reexportiert)',
       'ranuts/vnode': 'Virtuelles DOM im Stil von Snabbdom',
@@ -393,14 +379,12 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
     runtimes: {
       'browser + node': 'مرورگر + node',
       'service worker only': 'فقط service worker',
-      'node only': 'فقط node',
       'browser only': 'فقط مرورگر',
       browser: 'مرورگر',
     },
     blurbs: {
       'ranuts/utils': 'ابزارهای مرورگر و ابزارهای عمومی',
       'ranuts/sw': 'راهبردهای حافظهٔ نهان Service Worker و پروتکل پیش‌بارگذاری',
-      'ranuts/node': 'ابزارهای سرور Node (fs / http / ws / میان‌افزار)',
       'ranuts/visual': 'موتور رندر دوبعدی (Canvas / WebGL / WebGPU)',
       'ranuts/i18n': 'موتور i18n مستقل از فریم‌ورک (از ranuts/utils هم دوباره صادر می‌شود)',
       'ranuts/vnode': 'DOM مجازی به سبک Snabbdom',

@@ -1,6 +1,6 @@
 # Color
 
-سامانه‌ای رنگی بر پایهٔ کلاس، با یاری‌رسان‌های تبدیل برای کار با RGB، RGBA، HSL، HSLA، HSB/HSV و رنگ‌های شانزده‌شانزدهی. در آن یک کلاس پرتوان `Color`، کلاس‌های مقدارِ تغییرناپذیر (`Rgb`، `Rgba`، `Hsl`، `Hsla`)، سازندهٔ پالت `ColorScheme`، دسته‌ای تابع تبدیل مستقل، و `FMT` یعنی نقشهٔ سبک‌های ANSI برای پایانه آمده است.
+ابزارهای رنگ شامل `Color`، کلاس‌های مقدار (`Rgb`، `Rgba`، `Hsl`، `Hsla`)، پالت‌های `ColorScheme` و توابع مستقل تبدیل RGB، RGBA،HSL، HSLA،HSB/HSV و رنگ شانزده‌شانزدهی است.
 
 > یاری‌رسان‌های ساده‌تر یعنی `hexToRgb`، `rgbToHex` و `randomColor` صفحهٔ خودشان را دارند: [hexToRgb](./hex_to_rgb.md)، [rgbToHex](./rgb_to_hex.md)، [randomColor](./random_color.md). هر سه از همین ماژول دوباره صادر می‌شوند.
 
@@ -252,16 +252,6 @@ const backToSrgb = linearToSrgb(linear); // ≈ 0.5
 | `RGB_REGEX`       | `rgb(r,g,b)`                                                                   |
 | `RGBA_REGEX`      | `rgba(r,g,b,a)`                                                                |
 
-### FMT
-
-دفتری از جفت‌های کد گریز ANSI پایانه، برای آراستن و رنگ کردن متن. هر مدخل یک چندتایی `[بازکننده، بندنده]` است که رشته را در آن می‌پیچی تا خروجی پایانه آراسته شود.
-
-```ts
-const FMT: Record<string, Array<string>>;
-```
-
-کلیدهای در دسترس: `bold`، `dim`، `reset`، `italic`، `underline`، `inverse`، `hidden`، `strikethrough`، `black`، `red`، `green`، `yellow`، `blue`، `magenta`، `cyan`، `white`، `gray`، و گونه‌های پس‌زمینه‌ای `bgBlack`، `bgRed`، `bgGreen`، `bgYellow`، `bgBlue`، `bgMagenta`، `bgCyan`، `bgWhite`.
-
 ## نمونه
 
 ### ساختن یک Color
@@ -333,22 +323,9 @@ console.log(componentToHex(255)); // 'ff'
 console.log(rgbToHsl([0, 128, 255])); // [h, s, l]
 ```
 
-### آراستن خروجی پایانه با FMT
-
-```js
-import { FMT } from 'ranuts';
-
-const [open, close] = FMT.green;
-console.log(`${open}success${close}`); // در پایانه، "success" به رنگ سبز
-
-const bold = FMT.bold;
-console.log(`${bold[0]}important${bold[1]}`);
-```
-
 ## یادداشت‌ها
 
 1. **همه چیز از همان اول حساب می‌شود**: `Color` همهٔ بازنمایی‌ها را در سازنده حساب می‌کند، پس `hex`، `rgb`، `rgba`، `hsl` و `hsla` از لحظهٔ ساخته شدن با هم هم‌خوان‌اند.
 2. **تنظیم‌کننده‌های HSL، RGB را از نو حساب می‌کنند**: `setHue`، `setSat` و `setLum` نخست HSL را به‌روز می‌کنند و سپس با `updateFromHsl` دوباره RGB و شانزده‌شانزدهی را بیرون می‌کشند. `setAlpha` تنها به `rgba` و `hsla` دست می‌زند.
 3. **ورودی چه آرایه چه کانال**: چند تابع تبدیل (`rgbToHex`، `rgbToHsl`، `hslToRgb`) هم سه کانال جدا می‌پذیرند و هم یک آرایهٔ تنها در آرگومان نخست.
 4. **HSV در برابر HSB**: `hsvToRgb` نام دیگری برای `hsbToRgb` است و `hsvToHsl` نام دیگری برای تبدیل HSB به HSL. اینجا HSV و HSB به یک مدل اشاره دارند.
-5. **FMT فقط در پایانه معنا دارد**: دنباله‌های گریز ANSI تنها در پایانه‌ای که آن‌ها را می‌فهمد به شکل آرایش دیده می‌شوند؛ در کنسول مرورگر همان نویسه‌های کنترلی خام به چشم می‌آیند.

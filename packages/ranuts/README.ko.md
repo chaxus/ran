@@ -52,7 +52,6 @@ npm install ranuts@latest --save
 필요한 것만 가져오세요. 고를 수 있는 것은 이렇습니다.
 
 - `ranuts/utils` — DOM/BOM, 문자열, 객체, 숫자, 색, 시간, 저장소, 바이너리와 zip, 워커와 IndexedDB, 다국어 도우미
-- `ranuts/node` — HTTP 서버, 라우터, 웹소켓, fs, 스트림, 미들웨어(**Node 전용**)
 - `ranuts/visual` — 2D 렌더링 엔진(Canvas / WebGL / WebGPU, **브라우저 전용**)
 - `ranuts/sw` — 캐시 전략과 프리캐시 규약의 서비스 워커 쪽 절반(**서비스 워커 전용**)
 - `ranuts/vnode` — Snabbdom 식 가상 DOM
@@ -62,7 +61,6 @@ npm install ranuts@latest --save
 
 ```js
 import { debounce } from 'ranuts/utils';
-import { readFile } from 'ranuts/node';
 import { createI18n } from 'ranuts/i18n';
 ```
 
@@ -112,3 +110,5 @@ window.addEventListener('resize', onResize);
 ## 그 밖에
 
 [라이선스(MIT)](/LICENSE)
+
+[Alpha migration](https://ran.chaxus.com/src/ranuts/migration/)

@@ -25,10 +25,6 @@ Devolve uma função embrulhada, mais:
 | `reset()` | Descarta o resultado guardado para que a próxima chamada rode `fn` de novo | `() => void` |
 | `started` | Se já tem um resultado ou está rodando agora                               | `boolean`    |
 
-### memoize(fn)
-
-Apelido obsoleto de `once`. Veja o aviso abaixo.
-
 ## Exemplo
 
 ```js
@@ -50,7 +46,3 @@ await Promise.all([ready(), ready(), ready()]); // abre uma só vez
 2. **`once` solta `fn` depois de avaliar**, então o que aquela função segurava pode ser coletado.
 3. **`singleFlight` não guarda rejeições.** Uma tentativa que falha limpa o cache, de modo que uma oscilação passageira da rede continua repetível. Guardar uma promessa rejeitada tornaria permanente um tropeço momentâneo.
 4. **Chamadas concorrentes a `singleFlight` compartilham a promessa em andamento**, então `fn` roda uma vez mesmo com N chamadas disputando. Esta é a correção do clássico «init() devolve void, então quem chama não consegue esperar e as escritas antecipadas falham».
-
-::: warning Renomeado na 0.3
-`memoize` era um nome enganoso: ele nunca guardou nada por argumento, apenas rodava uma vez. Agora é apelido de `once` e está obsoleto. A assinatura de tipos também estava errada antes (declarada sem argumentos embora os repassasse); agora é inferida de `fn`.
-:::

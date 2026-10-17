@@ -19,19 +19,16 @@ import { debounce } from 'ranuts/utils';
 
 ## 진입점
 
-| import                                                | 담긴 것                                            | 실행 환경         |
-| ----------------------------------------------------- | -------------------------------------------------- | ----------------- |
-| `ranuts`                                              | 최상위 배럴: utils와 visual을 아우르는 면          | 브라우저 + Node   |
-| [`ranuts/utils`](/ko/src/ranuts/utils/)               | DOM/BOM, 문자열, 객체, 숫자, 색, 시간, 스토리지 …  | 브라우저 + Node\* |
-| [`ranuts/node`](/ko/src/ranuts/node/)                 | HTTP 서버, 라우터, WebSocket, fs, 스트림, 미들웨어 | **Node 전용**     |
-| [`ranuts/visual`](/ko/src/ranuts/visual/)             | 2D 렌더링 엔진(Canvas / WebGL / WebGPU)            | **브라우저 전용** |
-| [`ranuts/i18n`](/ko/src/ranuts/i18n/)                 | 번역 엔진: 평평한 사전, 실행 중 전환               | 브라우저 + Node   |
-| [`ranuts/sw`](/ko/src/ranuts/sw/)                     | 캐시 전략과 프리캐시 규약의 워커 쪽 절반           | **서비스 워커**   |
-| [`ranuts/vnode`](/ko/src/ranuts/vnode/)               | Snabbdom 풍의 가상 DOM                             | 브라우저          |
-| [`ranuts/stream`](/ko/src/ranuts/stream/)             | SSE 파싱, 모델 스트림 접기, 토큰 예산              | 브라우저 + Node   |
-| [`ranuts/conversation`](/ko/src/ranuts/conversation/) | 이벤트 로그 → 그릴 수 있는 대화 노드               | 브라우저 + Node   |
-
-\* `ranuts/utils`는 폭이 넓습니다. 대부분은 브라우저를 향하지만, 순수한 헬퍼는 어디서나 돕니다. **브라우저 코드에서 `ranuts/node`를 import하지 마세요.** `fs` / `http` / `child_process`를 끌어옵니다.
+| import                                                | 담긴 것                                           | 실행 환경         |
+| ----------------------------------------------------- | ------------------------------------------------- | ----------------- |
+| `ranuts`                                              | 최상위 배럴: utils와 visual을 아우르는 면         | 브라우저 + Node   |
+| [`ranuts/utils`](/ko/src/ranuts/utils/)               | DOM/BOM, 문자열, 객체, 숫자, 색, 시간, 스토리지 … | 브라우저 + Node\* |
+| [`ranuts/visual`](/ko/src/ranuts/visual/)             | 2D 렌더링 엔진(Canvas / WebGL / WebGPU)           | **브라우저 전용** |
+| [`ranuts/i18n`](/ko/src/ranuts/i18n/)                 | 번역 엔진: 평평한 사전, 실행 중 전환              | 브라우저 + Node   |
+| [`ranuts/sw`](/ko/src/ranuts/sw/)                     | 캐시 전략과 프리캐시 규약의 워커 쪽 절반          | **서비스 워커**   |
+| [`ranuts/vnode`](/ko/src/ranuts/vnode/)               | Snabbdom 풍의 가상 DOM                            | 브라우저          |
+| [`ranuts/stream`](/ko/src/ranuts/stream/)             | SSE 파싱, 모델 스트림 접기, 토큰 예산             | 브라우저 + Node   |
+| [`ranuts/conversation`](/ko/src/ranuts/conversation/) | 이벤트 로그 → 그릴 수 있는 대화 노드              | 브라우저 + Node   |
 
 ## 무엇이 들어 있나
 
@@ -46,7 +43,7 @@ import { debounce } from 'ranuts/utils';
 [숫자 서식과 파싱](/ko/src/ranuts/utils/parse_number) ·
 [색 변환과 혼합](/ko/src/ranuts/utils/color)
 
-**텍스트**: [md5](/ko/src/ranuts/utils/md5) · [truncate](/ko/src/ranuts/utils/truncate) ·
+**텍스트**: [truncate](/ko/src/ranuts/utils/truncate) ·
 [detectLanguage](/ko/src/ranuts/utils/detect_language) ·
 [resolveLocale](/ko/src/ranuts/utils/resolve_locale) ·
 [segmentByRanges](/ko/src/ranuts/utils/segment) · [paginate](/ko/src/ranuts/utils/paginate) ·
@@ -66,10 +63,6 @@ import { debounce } from 'ranuts/utils';
 **렌더링**: [2D 엔진](/ko/src/ranuts/visual/) · [가상 DOM](/ko/src/ranuts/vnode/) ·
 [canvas 헬퍼](/ko/src/ranuts/utils/canvas) · [tween](/ko/src/ranuts/utils/tween)
 
-**Node**: [HTTP 서버와 라우터](/ko/src/ranuts/node/) ·
-[파일 작업](/ko/src/ranuts/file/write_file) ·
-[MIME 타입](/ko/src/ranuts/mime_type/mime_type)
-
 여기 있는 것은 일부입니다. [API 레퍼런스](/ko/src/ranuts/api)에는 **모든** export가 시그니처와 설명과 함께 실려 있고, 소스에서 생성되므로 어긋날 수 없습니다.
 
 ## 다음에 볼 곳
@@ -83,3 +76,5 @@ import { debounce } from 'ranuts/utils';
 | 그 위에 UI 만들기                                | [ranui](/ko/src/ranui/)                                                         |
 
 두 패키지 모두 npm 타르볼 안에 `CLAUDE.md`를 함께 싣습니다. 코딩 에이전트를 위한 길잡이이며, 네트워크 없이 `node_modules`에서 바로 읽을 수 있습니다.
+
+[Alpha 마이그레이션](/ko/src/ranuts/migration/)

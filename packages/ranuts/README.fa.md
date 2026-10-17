@@ -52,7 +52,6 @@ npm install ranuts@latest --save
 فقط آنچه لازم دارید را وارد کنید. از میان این‌ها می‌توانید برگزینید:
 
 - `ranuts/utils` — DOM/BOM، رشته، شیء، عدد، رنگ، زمان، حافظه، داده‌های دودویی و zip، کارگر و IndexedDB، یاری‌رسان‌های چندزبانی
-- `ranuts/node` — کارساز HTTP، مسیریاب، وب‌سوکت، fs، جریان‌ها، میان‌افزار (**فقط Node**)
 - `ranuts/visual` — موتور رسم دوبعدی (Canvas / WebGL / WebGPU، **فقط مرورگر**)
 - `ranuts/sw` — راهبردهای کش و نیمهٔ سرویس‌ورکرِ قرارداد پیش‌کش (**فقط سرویس‌ورکر**)
 - `ranuts/vnode` — DOM مجازی به سبک Snabbdom
@@ -62,7 +61,6 @@ npm install ranuts@latest --save
 
 ```js
 import { debounce } from 'ranuts/utils';
-import { readFile } from 'ranuts/node';
 import { createI18n } from 'ranuts/i18n';
 ```
 
@@ -112,3 +110,5 @@ window.addEventListener('resize', onResize);
 ## دیگر موارد
 
 [پروانه (MIT)](/LICENSE)
+
+[Alpha migration](https://ran.chaxus.com/src/ranuts/migration/)

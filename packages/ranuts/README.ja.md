@@ -52,7 +52,6 @@ npm install ranuts@latest --save
 必要なものだけ import してください。選べるのは次のとおりです。
 
 - `ranuts/utils` — DOM/BOM、文字列、オブジェクト、数値、色、時間、ストレージ、バイナリと zip、Worker と IndexedDB、多言語まわりのヘルパー
-- `ranuts/node` — HTTP サーバー、ルーター、WebSocket、fs、ストリーム、ミドルウェア（**Node 専用**）
 - `ranuts/visual` — 2D の描画エンジン（Canvas / WebGL / WebGPU。**ブラウザー専用**）
 - `ranuts/sw` — キャッシュ戦略と、プリキャッシュ手順の Service Worker 側（**Service Worker 専用**）
 - `ranuts/vnode` — Snabbdom 流の仮想 DOM
@@ -62,7 +61,6 @@ npm install ranuts@latest --save
 
 ```js
 import { debounce } from 'ranuts/utils';
-import { readFile } from 'ranuts/node';
 import { createI18n } from 'ranuts/i18n';
 ```
 
@@ -112,3 +110,5 @@ window.addEventListener('resize', onResize);
 ## その他
 
 [ライセンス（MIT）](/LICENSE)
+
+[Alpha migration](https://ran.chaxus.com/src/ranuts/migration/)

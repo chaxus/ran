@@ -7,8 +7,7 @@ of URLs at once (routing `.css` through a `<link>` tag), while this one handles 
 supports an inline body, and guarantees the same script is evaluated only once — injecting a
 third-party SDK twice usually means its initialisation side effects ran twice.
 
-The de-duplication key is the md5 of `type + content`, so a URL and an identically named inline
-script cannot be confused.
+Script loading now de-duplicates the exact type and content, without hashing or normalizing line endings.
 
 ## Usage
 

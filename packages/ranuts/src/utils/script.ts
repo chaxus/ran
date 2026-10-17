@@ -1,6 +1,4 @@
-import { md5 } from '@/utils/str';
-
-/** Fingerprints of already-injected scripts, so the same code is never evaluated twice */
+/** Exact keys of already-injected scripts, so the same code is never evaluated twice */
 const loadedScripts = new Set<string>();
 
 export interface LoadScriptOptions {
@@ -18,14 +16,14 @@ export interface LoadScriptOptions {
  * and **guarantees the same script is evaluated only once** — injecting a third-party SDK
  * twice usually means its initialisation side effects ran twice.
  *
- * The de-duplication key is the md5 of `type + content`, so a URL and an identically named inline script cannot be confused.
+ * The key includes the type and exact content, so distinct sources and URL/inline scripts stay separate.
  *
  * @param {LoadScriptOptions} options
  * @return {Promise<{ success: boolean }>} rejects with `{ success: false, error }` on failure
  */
 export const loadScript = ({ type, content }: LoadScriptOptions): Promise<{ success: boolean }> => {
   return new Promise((resolve, reject) => {
-    const scriptKey = md5(`${type}:${content}`);
+    const scriptKey = `${type}:${content}`;
 
     // Already loaded — short-circuit rather than inserting a second tag
     if (loadedScripts.has(scriptKey)) {

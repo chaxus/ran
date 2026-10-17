@@ -1,6 +1,6 @@
 # Color
 
-Un sistema de color basado en clases, con ayudas de conversión para trabajar con RGB, RGBA, HSL, HSLA, HSB/HSV y colores hexadecimales. Trae una clase `Color` bien surtida, clases de valor inmutables (`Rgb`, `Rgba`, `Hsl`, `Hsla`), el generador de paletas `ColorScheme`, un juego de funciones de conversión sueltas y `FMT`, el mapa de estilos ANSI para la terminal.
+Herramientas de color con `Color`, clases de valor (`Rgb`, `Rgba`, `Hsl`, `Hsla`), paletas `ColorScheme` y conversiones independientes de RGB, RGBA, HSL, HSLA, HSB/HSV y hexadecimal.
 
 > Las ayudas más sencillas —`hexToRgb`, `rgbToHex` y `randomColor`— tienen página propia: [hexToRgb](./hex_to_rgb.md), [rgbToHex](./rgb_to_hex.md), [randomColor](./random_color.md). Se reexportan desde este mismo módulo.
 
@@ -252,16 +252,6 @@ Expresiones regulares para validar cadenas de color. `RGB_REGEX` y `RGBA_REGEX` 
 | `RGB_REGEX`       | `rgb(r,g,b)`                                                       |
 | `RGBA_REGEX`      | `rgba(r,g,b,a)`                                                    |
 
-### FMT
-
-Un registro de pares de códigos de escape ANSI para dar estilo y color al texto de la terminal. Cada entrada es una tupla `[abrir, cerrar]` con la que envuelves una cadena para darle estilo en la salida.
-
-```ts
-const FMT: Record<string, Array<string>>;
-```
-
-Claves disponibles: `bold`, `dim`, `reset`, `italic`, `underline`, `inverse`, `hidden`, `strikethrough`, `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`, `gray`, y las variantes de fondo `bgBlack`, `bgRed`, `bgGreen`, `bgYellow`, `bgBlue`, `bgMagenta`, `bgCyan`, `bgWhite`.
-
 ## Ejemplo
 
 ### Crear un Color
@@ -333,22 +323,9 @@ console.log(componentToHex(255)); // 'ff'
 console.log(rgbToHsl([0, 128, 255])); // [h, s, l]
 ```
 
-### Dar estilo a la salida de la terminal con FMT
-
-```js
-import { FMT } from 'ranuts';
-
-const [open, close] = FMT.green;
-console.log(`${open}success${close}`); // en una terminal, "success" en verde
-
-const bold = FMT.bold;
-console.log(`${bold[0]}important${bold[1]}`);
-```
-
 ## Notas
 
 1. **Todo se calcula de entrada**: un `Color` calcula todas sus representaciones en el constructor, así que `hex`, `rgb`, `rgba`, `hsl` y `hsla` están de acuerdo desde el momento en que se crea.
 2. **Los setters de HSL recalculan el RGB**: `setHue`, `setSat` y `setLum` actualizan el HSL y luego vuelven a derivar el RGB y el hexadecimal con `updateFromHsl`. `setAlpha` solo toca `rgba` y `hsla`.
 3. **Entrada por array o por canales**: varias funciones de conversión (`rgbToHex`, `rgbToHsl`, `hslToRgb`) aceptan tanto tres canales sueltos como un único array en el primer argumento.
 4. **HSV frente a HSB**: `hsvToRgb` es otro nombre de `hsbToRgb`, y `hsvToHsl` otro nombre de la conversión de HSB a HSL. Aquí HSV y HSB se refieren al mismo modelo.
-5. **FMT solo sirve en la terminal**: las secuencias de escape ANSI se ven como estilo únicamente en una terminal que las admita; en la consola del navegador aparecen como caracteres de control en crudo.

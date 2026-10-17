@@ -1,4 +1,4 @@
-# formatDate / timestampToTime
+# formatDate
 
 Format a date with a token pattern.
 
@@ -21,10 +21,6 @@ Format a date with a token pattern.
 
 Returns `'Invalid Date'` when the input cannot be parsed.
 
-### timestampToTime(timestamp?)
-
-Deprecated. Returns a `Date` with a `format` method attached to the instance.
-
 ## Example
 
 ```js
@@ -42,13 +38,3 @@ formatDate('not a date'); // 'Invalid Date'
 2. **The pattern is substituted in one pass**, so a value just written can never be matched
    again by a later token.
 3. **Wrap literals in `[]`** to keep letters out of the substitution.
-
-::: warning Fixed and superseded in 0.3
-The old formatter chained six `.replace()` calls with case-insensitive flags. Two consequences:
-a later pattern could match digits an earlier one had just written, and `/M+/g` vs `/m+/g` vs
-`/D+/gi` overlapped — so a lowercase pattern like `yyyy-mm-dd` produced year-minute-day.
-
-`timestampToTime` is deprecated in favour of `formatDate`: bolting a method onto a `Date`
-instance does not survive serialization and cannot be typed beyond `Function`. Its `format`
-now delegates to `formatDate`, so existing callers get the fixed token handling.
-:::

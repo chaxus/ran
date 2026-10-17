@@ -1,6 +1,6 @@
 # packages/docs — the documentation site
 
-Published to **https://ran.chaxus.com** via Cloudflare Pages. 1,393 pages, eight languages:
+Published to **https://ran.chaxus.com** via Cloudflare Pages. Eight languages:
 English under `src/`, every other locale under `<dir>/src/` (`cn`, `ja`, `es`, `pt`, `ko`,
 `de`, `fa`), mirrored page for page. `build/langs/locales.ts` is the registry — adding a
 language means a row there, not a new hard-coded list somewhere else, and

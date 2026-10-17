@@ -33,10 +33,6 @@ formatDuration(NaN); // ''
 
 Devolver cadena vacía ante `NaN` es a propósito: un reproductor pide `video.duration` antes de que carguen los metadatos y recibe `NaN`, y ahí un hueco en blanco se lee mejor que `NaN:NaN`.
 
-::: tip Cambió de nombre
-Esta función se llamaba `timeFormat`. Ese nombre sigue como alias obsoleto y se comporta igual, pero no decía _cuál_ de los tres formatos de tiempo producía.
-:::
-
 ## formatRelative
 
 Describe un momento respecto de otro: «hace 3 días», «dentro de 2 horas».

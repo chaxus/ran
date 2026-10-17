@@ -1,4 +1,4 @@
-# formatDate / timestampToTime
+# formatDate
 
 Da formato a una fecha con un patrón de tokens.
 
@@ -21,10 +21,6 @@ Da formato a una fecha con un patrón de tokens.
 
 Devuelve `'Invalid Date'` cuando la entrada no se puede interpretar.
 
-### timestampToTime(timestamp?)
-
-En desuso. Devuelve un `Date` con un método `format` colgado de la instancia.
-
 ## Ejemplo
 
 ```js
@@ -41,9 +37,3 @@ formatDate('not a date'); // 'Invalid Date'
 1. **Las mayúsculas cuentan.** `MM` es el mes y `mm` el minuto; `HH` va en 24 horas y `hh` en 12.
 2. **El patrón se sustituye en una sola pasada**, de modo que un valor recién escrito nunca lo puede volver a capturar un token posterior.
 3. **Encierra el texto literal entre `[]`** para que sus letras queden fuera de la sustitución.
-
-::: warning Corregido y sustituido en la 0.3
-El formateador antiguo encadenaba seis llamadas a `.replace()` con la bandera de ignorar mayúsculas. De ahí dos consecuencias: un patrón posterior podía capturar los dígitos que otro anterior acababa de escribir, y `/M+/g`, `/m+/g` y `/D+/gi` se solapaban, así que un patrón en minúsculas como `yyyy-mm-dd` daba año-minuto-día.
-
-`timestampToTime` queda en desuso en favor de `formatDate`: colgar un método de una instancia de `Date` no sobrevive a la serialización y no se puede tipar más allá de `Function`. Su `format` ahora delega en `formatDate`, así que quien ya lo usaba recibe el tratamiento de tokens ya corregido.
-:::

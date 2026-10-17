@@ -30,8 +30,6 @@ ranuts no pretende sustituir a la biblioteca estándar. Recurre primero a la pla
 | Que corra **exactamente una vez** en toda su vida (una inicialización, un aviso único)             | `once(fn)`         | La primera llamada evalúa; todas las siguientes devuelven ese mismo resultado.                |
 | Que quienes llamen a la vez **compartan una sola petición en curso**                               | `singleFlight(fn)` | La versión asíncrona de once: mientras una llamada está pendiente, las demás se suben a ella. |
 
-**`memoize` es el antiguo nombre de `once`** y hace exactamente lo mismo: no guarda un resultado por argumento, que es lo que el nombre da a entender. En código nuevo, escribe `once`.
-
 La diferencia que cuenta: con `debounce` en un manejador de teclas no se ejecuta nada mientras la persona escribe; con `throttle` algo se ejecuta todo el rato, solo que no en cada tecla. Una sugerencia de búsqueda quiere `debounce`; un contador de «caracteres restantes» quiere `throttle`.
 
 ## Llevar el trabajo asíncrono con riendas
@@ -102,16 +100,13 @@ Cada subruta es un barril independiente del que se puede podar lo no usado. Impo
 | Importación           | Contiene                                                                        | Dónde corre        |
 | --------------------- | ------------------------------------------------------------------------------- | ------------------ |
 | `ranuts`              | Barril raíz: las utilidades más la superficie visual                            | navegador + node   |
-| `ranuts/utils`        | DOM/BOM, cadenas, objetos, números, color, tiempo, almacenamiento, …            | navegador + node\* |
-| `ranuts/node`         | Servidor HTTP, enrutador, WebSocket, fs, flujos, middleware                     | **solo node**      |
+| `ranuts/utils`        | DOM/BOM, cadenas, objetos, números, color, tiempo, almacenamiento, …            | navegador + node   |
 | `ranuts/visual`       | El motor de dibujo 2D (Canvas / WebGL / WebGPU)                                 | **solo navegador** |
 | `ranuts/i18n`         | El motor de traducción, sin DOM                                                 | navegador + node   |
 | `ranuts/sw`           | Estrategias de caché y la mitad del protocolo de precarga que vive en el worker | **service worker** |
 | `ranuts/vnode`        | DOM virtual al estilo de Snabbdom                                               | navegador          |
 | `ranuts/stream`       | Lectura de SSE, plegado del flujo del modelo, presupuesto de tokens             | navegador + node   |
 | `ranuts/conversation` | Del registro de eventos a nodos de conversación dibujables                      | navegador + node   |
-
-\* `ranuts/utils` es ancho: la mayor parte mira al navegador, pero las ayudas puras (cadenas, objetos, números, `compose`, `cloneDeep`, …) corren en cualquier sitio. **No importes `ranuts/node` en código de navegador.** Arrastra `fs`, `http` y `child_process`.
 
 ## ¿Sigues con dudas?
 

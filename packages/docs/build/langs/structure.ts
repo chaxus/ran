@@ -70,8 +70,9 @@ export const NAV: SidebarNode[] = [
 export const SIDEBAR: Record<string, SidebarNode[]> = {
   '/src/ranuts/': [
     { kind: 'full', key: 'overview', link: '/src/ranuts/' },
-    { kind: 'full', key: 'api_reference_all_454_exports', link: '/src/ranuts/api' },
+    { kind: 'full', key: 'api_reference', link: '/src/ranuts/api' },
     { kind: 'full', key: 'choosing_a_utility', link: '/src/ranuts/choosing/' },
+    { kind: 'full', key: 'alpha_migration', link: '/src/ranuts/migration/' },
     {
       kind: 'full',
       key: 'utility_functions',
@@ -102,7 +103,6 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
           key: 'string_processing',
           collapsed: true,
           items: [
-            { kind: 'dash', key: 'md5', name: 'md5', link: '/src/ranuts/utils/md5' },
             {
               kind: 'dash',
               key: 'randomstring_getrandomstring',
@@ -225,7 +225,6 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
           items: [
             { kind: 'dash', key: 'ismobile', name: 'isMobile', link: '/src/ranuts/utils/is_mobile' },
             { kind: 'dash', key: 'isweixin', name: 'isWeiXin', link: '/src/ranuts/utils/is_weixin' },
-            { kind: 'dash', key: 'isclient', name: 'isClient', link: '/src/ranuts/utils/is_client' },
             { kind: 'dash', key: 'issafari', name: 'isSafari', link: '/src/ranuts/utils/is_safari' },
             { kind: 'dash', key: 'currentdevice', name: 'currentDevice', link: '/src/ranuts/utils/current_device' },
             {
@@ -446,22 +445,8 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
               name: 'durationHandler',
               link: '/src/ranuts/utils/duration_handler',
             },
-            { kind: 'dash', key: 'task', name: 'task', link: '/src/ranuts/utils/task' },
           ],
         },
-      ],
-    },
-    {
-      kind: 'full',
-      key: 'file_operations',
-      collapsed: true,
-      items: [
-        { kind: 'dash', key: 'writefile', name: 'writeFile', link: '/src/ranuts/file/write_file' },
-        { kind: 'dash', key: 'readfile', name: 'readFile', link: '/src/ranuts/file/read_file' },
-        { kind: 'dash', key: 'readdir', name: 'readDir', link: '/src/ranuts/file/read_dir' },
-        { kind: 'dash', key: 'watchfile', name: 'watchFile', link: '/src/ranuts/file/watch_file' },
-        { kind: 'dash', key: 'queryfileinfo', name: 'queryFileInfo', link: '/src/ranuts/file/file_info' },
-        { kind: 'dash', key: 'appendfile', name: 'appendFile', link: '/src/ranuts/file/append_file' },
       ],
     },
     {
@@ -514,12 +499,6 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
       key: 'service_worker_sw',
       collapsed: true,
       items: [{ kind: 'full', key: 'caching_precache', link: '/src/ranuts/sw/' }],
-    },
-    {
-      kind: 'full',
-      key: 'node_server',
-      collapsed: true,
-      items: [{ kind: 'full', key: 'http_server_router', link: '/src/ranuts/node/' }],
     },
     {
       kind: 'full',

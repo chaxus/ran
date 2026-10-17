@@ -26,7 +26,6 @@ try {
     `
 import { rgbToHex, type RGB } from 'ranuts';
 import { debounce } from 'ranuts/utils';
-import { Server, Router, writeFile } from 'ranuts/node';
 import { I18nCore } from 'ranuts/i18n';
 import * as stream from 'ranuts/stream';
 import * as conversation from 'ranuts/conversation';
@@ -37,7 +36,7 @@ const pixel: RGB = [1, 2, 3];
 const result: string = rgbToHex(...pixel);
 // @ts-expect-error Published color types must not degrade to any.
 const invalid: RGB = 42;
-void [result, invalid, debounce, Server, Router, writeFile, I18nCore, stream, conversation, sw, vnode, visual];
+void [result, invalid, debounce, I18nCore, stream, conversation, sw, vnode, visual];
 `,
   );
   const tsc = join(dirname(require.resolve('typescript/package.json')), 'bin', 'tsc');
@@ -96,13 +95,17 @@ void [result, visual, vnode];
     `
 import assert from 'node:assert/strict';
 import { rgbToHex } from 'ranuts';
-import { Server } from 'ranuts/node';
+import { I18nCore } from 'ranuts/i18n';
 assert.equal(rgbToHex(1, 2, 3), '#010203');
-assert.equal(typeof new Server().listen, 'function');
+assert.equal(typeof I18nCore, 'function');
+await assert.rejects(import('ranuts/node'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' });
 `,
   );
   run(process.execPath, ['runtime.mjs']);
-  run(process.execPath, ['-e', "require('node:assert/strict').equal(require('ranuts').rgbToHex(1,2,3),'#010203')"]);
+  run(process.execPath, [
+    '-e',
+    "const assert=require('node:assert/strict'); assert.equal(require('ranuts').rgbToHex(1,2,3),'#010203'); assert.throws(()=>require('ranuts/node'),{code:'ERR_PACKAGE_PATH_NOT_EXPORTED'})",
+  ]);
   console.log('ranuts tarball: ESM and CommonJS runtime imports passed');
 
   // Measure a real consumer import, with the consumer bundler's default tree shaking.

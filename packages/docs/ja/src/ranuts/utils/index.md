@@ -1,24 +1,23 @@
 ---
-description: 'ranuts のユーティリティ関数の一覧。関数型のヘルパー（debounce、throttle、memoize、compose）に加え、文字列・オブジェクト・数値・色のユーティリティ。'
+description: 'ranuts のユーティリティ関数の一覧。関数型のヘルパー（debounce、throttle、once、compose）に加え、文字列・オブジェクト・数値・色のユーティリティ。'
 ---
 
 # ユーティリティ関数
 
 ## 関数型プログラミング
 
-| メソッド | 説明                   | 詳細                      |
-| -------- | ---------------------- | ------------------------- |
-| debounce | デバウンス関数         | [debounce](./debounce.md) |
-| throttle | スロットル関数         | [throttle](./throttle.md) |
-| memoize  | メモ化関数             | [memoize](./memoize.md)   |
-| noop     | 何もしない関数         | [noop](./noop.md)         |
-| compose  | ミドルウェア関数の合成 | [compose](./compose.md)   |
+| メソッド            | 説明                              | 詳細                                |
+| ------------------- | --------------------------------- | ----------------------------------- |
+| debounce            | デバウンス関数                    | [debounce](./debounce.md)           |
+| throttle            | スロットル関数                    | [throttle](./throttle.md)           |
+| once / singleFlight | 一度だけ実行 / 非同期初期化の共有 | [once / singleFlight](./memoize.md) |
+| noop                | 何もしない関数                    | [noop](./noop.md)                   |
+| compose             | ミドルウェア関数の合成            | [compose](./compose.md)             |
 
 ## 文字列の処理
 
 | メソッド                       | 説明                                                   | 詳細                                                |
 | ------------------------------ | ------------------------------------------------------ | --------------------------------------------------- |
-| md5                            | MD5 ハッシュ関数                                       | [md5](./md5.md)                                     |
 | randomString / getRandomString | ランダムな文字列を生成                                 | [randomString](./random_string.md)                  |
 | clearBr                        | 文字列から空白・HTML タグ・改行を取り除く              | [clearBr](./clear_br.md)                            |
 | clearStr                       | 文字列から前後の空白・URL エンコード・引用符を取り除く | [clearStr](./clear_str.md)                          |
@@ -64,23 +63,21 @@ description: 'ranuts のユーティリティ関数の一覧。関数型のヘ�
 
 ## 時間の処理
 
-| メソッド                              | 説明                                           | 詳細                                      |
-| ------------------------------------- | ---------------------------------------------- | ----------------------------------------- |
-| formatDuration                        | 秒数を整形した文字列に変換                     | [formatDuration](./time_format.md)        |
-| formatRelative                        | ある時点を今から見て言い表す（「3 日前」など） | [formatRelative](./time_format.md)        |
-| parseVttTimestamp / parseVttCueTiming | WebVTT 字幕のタイミング行を解釈                | [parseVttTimestamp](./time_format.md)     |
-| timestampToTime                       | タイムスタンプを Date オブジェクトに変換       | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime                       | 高精度のタイムスタンプを取得                   | [performanceTime](./performance_time.md)  |
+| メソッド                              | 説明                                           | 詳細                                     |
+| ------------------------------------- | ---------------------------------------------- | ---------------------------------------- |
+| formatDuration                        | 秒数を整形した文字列に変換                     | [formatDuration](./time_format.md)       |
+| formatRelative                        | ある時点を今から見て言い表す（「3 日前」など） | [formatRelative](./time_format.md)       |
+| parseVttTimestamp / parseVttCueTiming | WebVTT 字幕のタイミング行を解釈                | [parseVttTimestamp](./time_format.md)    |
+| performanceTime                       | 高精度のタイムスタンプを取得                   | [performanceTime](./performance_time.md) |
 
 ## 端末の判定
 
-| メソッド      | 説明                                 | 詳細                                 |
-| ------------- | ------------------------------------ | ------------------------------------ |
-| isMobile      | 端末がモバイルかどうかを判定         | [isMobile](./is_mobile.md)           |
-| isWeiXin      | ブラウザーが WeChat かどうかを判定   | [isWeiXin](./is_weixin.md)           |
-| isClient      | 実行環境がクライアントかどうかを判定 | [isClient](./is_client.md)           |
-| isSafari      | ブラウザーが Safari かどうかを判定   | [isSafari](./is_safari.md)           |
-| currentDevice | 現在の端末の種類を取得               | [currentDevice](./current_device.md) |
+| メソッド      | 説明                               | 詳細                                 |
+| ------------- | ---------------------------------- | ------------------------------------ |
+| isMobile      | 端末がモバイルかどうかを判定       | [isMobile](./is_mobile.md)           |
+| isWeiXin      | ブラウザーが WeChat かどうかを判定 | [isWeiXin](./is_weixin.md)           |
+| isSafari      | ブラウザーが Safari かどうかを判定 | [isSafari](./is_safari.md)           |
+| currentDevice | 現在の端末の種類を取得             | [currentDevice](./current_device.md) |
 
 ## DOM の操作
 

@@ -1,4 +1,4 @@
-# formatDate / timestampToTime
+# formatDate
 
 Formatiert ein Datum mit einem Muster aus Token.
 
@@ -21,10 +21,6 @@ Formatiert ein Datum mit einem Muster aus Token.
 
 Gibt `'Invalid Date'` zurück, wenn sich die Eingabe nicht deuten lässt.
 
-### timestampToTime(timestamp?)
-
-Veraltet. Gibt ein `Date` zurück, dem eine `format`-Methode an die Instanz gehängt wurde.
-
 ## Beispiel
 
 ```js
@@ -41,9 +37,3 @@ formatDate('not a date'); // 'Invalid Date'
 1. **Groß- und Kleinschreibung zählt.** `MM` ist der Monat, `mm` die Minute; `HH` zählt bis 24, `hh` bis 12.
 2. **Das Muster wird in einem Durchgang ersetzt**, ein gerade geschriebener Wert kann also von einem späteren Token nie noch einmal erwischt werden.
 3. **Setze wörtlichen Text in `[]`**, damit seine Buchstaben von der Ersetzung verschont bleiben.
-
-::: warning In 0.3 behoben und abgelöst
-Der alte Formatierer reihte sechs `.replace()`-Aufrufe mit dem Flag für Groß-/Kleinschreibung aneinander. Zwei Folgen: Ein späteres Muster konnte Ziffern erwischen, die ein früheres gerade geschrieben hatte, und `/M+/g`, `/m+/g` und `/D+/gi` überschnitten sich — ein kleingeschriebenes Muster wie `yyyy-mm-dd` ergab also Jahr-Minute-Tag.
-
-`timestampToTime` ist veraltet, nimm `formatDate`: Eine Methode an eine `Date`-Instanz zu schrauben übersteht keine Serialisierung und lässt sich nicht feiner als `Function` typisieren. Sein `format` reicht jetzt an `formatDate` weiter, sodass auch bestehende Aufrufer die korrigierte Token-Behandlung bekommen.
-:::

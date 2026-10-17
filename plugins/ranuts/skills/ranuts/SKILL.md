@@ -1,6 +1,6 @@
 ---
 name: ranuts
-description: Use when working with the ranuts utility library — DOM/BOM/string/object/number/color/time helpers and reactivity from `ranuts/utils` (e.g. createSignal, throttle/debounce, cloneDeep, escapeHtml, getMime, MessageCodec, localStorage helpers), the node-only server toolkit `ranuts/node`, the 2D rendering engine `ranuts/visual`, or the `ranuts/vnode` virtual DOM. Covers the import map, inventory, conventions, and where the full function reference lives.
+description: Use when working with the ranuts utility library — DOM/BOM/string/object/number/color/time helpers and reactivity from `ranuts/utils` (e.g. createSignal, throttle/debounce, cloneDeep, escapeHtml, getMime, MessageCodec, localStorage helpers), the 2D rendering engine `ranuts/visual`, or the `ranuts/vnode` virtual DOM. Covers the import map, inventory, conventions, and where the full function reference lives.
 ---
 
 # ranuts — utility library
@@ -23,15 +23,13 @@ When `ranuts` is installed, its docs ship inside the package:
 | --------------- | ---------------------------------------------------------- | ---------------- |
 | `ranuts`        | Root barrel — re-exports utils + visual surface            | browser + node   |
 | `ranuts/utils`  | DOM/BOM, string, object, number, color, time, reactivity   | browser + node\* |
-| `ranuts/node`   | HTTP server, router, ws, fs, streams, middleware           | **node only**    |
 | `ranuts/visual` | 2D rendering engine (Canvas / WebGL / WebGPU)              | **browser only** |
 | `ranuts/vnode`  | Snabbdom-style virtual DOM (`h`, `init`, modules)          | browser          |
 | `ranuts/stream` | SSE parsing + provider-neutral streamed-response fold      | browser + node   |
 | `ranuts/conversation` | Event log → renderable conversation nodes           | browser + node   |
 
 \* Most `ranuts/utils` functions are browser-oriented (touch `window`/`document`) but
-guard with `typeof window/document !== 'undefined'`; pure helpers run anywhere. **Never
-import `ranuts/node` in browser code** — it pulls in `fs`/`http`/`child_process`.
+guard with `typeof window/document !== 'undefined'`; pure helpers run anywhere.
 
 ## `ranuts/utils` — frequently used
 
@@ -119,6 +117,9 @@ cloneDeep({ a: { b: 1 } }); // deep copy, handles cycles
 - Import from the subpath (`ranuts/utils`), not `ranuts/dist/...` or `@/...`.
 - Guard browser globals (`typeof window !== 'undefined'`) in any code that might run
   under SSR/node.
-- `ranuts/node` is node-only and marked external in builds — keep it out of browser
-  bundles.
+
 - `ranuts/visual` is browser-only (needs Canvas/WebGL/WebGPU).
+
+`ranuts/node` and the obsolete `memoize`, `timeFormat`, `timestampToTime`, `isClient`, `md5`, `FMT`
+exports have been removed. Use the maintained names and native Node APIs; see the
+[migration guide](https://ran.chaxus.com/src/ranuts/migration/).

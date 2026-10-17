@@ -23,15 +23,12 @@ import { debounce } from 'ranuts/utils';
 | ----------------------------------------------------- | ----------------------------------------------------------------- | ------------------ |
 | `ranuts`                                              | Das Wurzel-Barrel: die Fläche aus utils und visual                | Browser + Node     |
 | [`ranuts/utils`](/de/src/ranuts/utils/)               | DOM/BOM, Zeichenketten, Objekte, Zahlen, Farbe, Zeit, Speicher, … | Browser + Node\*   |
-| [`ranuts/node`](/de/src/ranuts/node/)                 | HTTP-Server, Router, WebSocket, fs, Streams, Middleware           | **nur Node**       |
 | [`ranuts/visual`](/de/src/ranuts/visual/)             | 2D-Zeichen-Engine (Canvas / WebGL / WebGPU)                       | **nur Browser**    |
 | [`ranuts/i18n`](/de/src/ranuts/i18n/)                 | Übersetzungs-Engine: flache Wörterbücher, Umschalten zur Laufzeit | Browser + Node     |
 | [`ranuts/sw`](/de/src/ranuts/sw/)                     | Cache-Strategien und die Worker-Hälfte des Precache-Protokolls    | **Service Worker** |
 | [`ranuts/vnode`](/de/src/ranuts/vnode/)               | Virtuelles DOM im Stil von Snabbdom                               | Browser            |
 | [`ranuts/stream`](/de/src/ranuts/stream/)             | SSE-Auswertung, Falten von Modellströmen, Token-Budget            | Browser + Node     |
 | [`ranuts/conversation`](/de/src/ranuts/conversation/) | Ereignisprotokoll → darstellbare Gesprächsknoten                  | Browser + Node     |
-
-\* `ranuts/utils` ist breit: Das meiste ist auf den Browser hin gebaut, aber die reinen Helfer laufen überall. **Importiere `ranuts/node` nicht in Browser-Code.** Es zieht `fs` / `http` / `child_process` mit.
 
 ## Was drin ist
 
@@ -46,7 +43,7 @@ import { debounce } from 'ranuts/utils';
 [Zahlen formatieren und einlesen](/de/src/ranuts/utils/parse_number) ·
 [Farbumrechnung und -mischung](/de/src/ranuts/utils/color)
 
-**Text**: [md5](/de/src/ranuts/utils/md5) · [truncate](/de/src/ranuts/utils/truncate) ·
+**Text**: [truncate](/de/src/ranuts/utils/truncate) ·
 [detectLanguage](/de/src/ranuts/utils/detect_language) ·
 [resolveLocale](/de/src/ranuts/utils/resolve_locale) ·
 [segmentByRanges](/de/src/ranuts/utils/segment) · [paginate](/de/src/ranuts/utils/paginate) ·
@@ -66,10 +63,6 @@ import { debounce } from 'ranuts/utils';
 **Zeichnen**: [2D-Engine](/de/src/ranuts/visual/) · [virtuelles DOM](/de/src/ranuts/vnode/) ·
 [Canvas-Helfer](/de/src/ranuts/utils/canvas) · [tween](/de/src/ranuts/utils/tween)
 
-**Node**: [HTTP-Server und Router](/de/src/ranuts/node/) ·
-[Dateioperationen](/de/src/ranuts/file/write_file) ·
-[MIME-Typen](/de/src/ranuts/mime_type/mime_type)
-
 Das ist eine Auswahl. Die [API-Referenz](/de/src/ranuts/api) führt **jeden** Export mit Signatur und Beschreibung auf, aus dem Quelltext erzeugt, damit sie nicht auseinanderlaufen kann.
 
 ## Wohin als Nächstes
@@ -83,3 +76,5 @@ Das ist eine Auswahl. Die [API-Referenz](/de/src/ranuts/api) führt **jeden** Ex
 | eine Oberfläche darauf bauen willst                                 | [ranui](/de/src/ranui/)                                                         |
 
 Beide Pakete liefern im npm-Tarball ein `CLAUDE.md` mit: eine Orientierung für Coding-Agenten, direkt aus `node_modules` lesbar, ohne Netzzugang.
+
+[Alpha-Migration](/de/src/ranuts/migration/)

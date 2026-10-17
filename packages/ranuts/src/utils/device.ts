@@ -22,16 +22,6 @@ export const currentDevice = (): CurrentDevice => {
   return 'pc';
 };
 
-/**
- * @description: Whether a `window` existed **when this module was first imported**.
- *
- * @deprecated Evaluated once at module load, so it is stuck at `false` for the life of the
- * process in any SSR-then-hydrate flow, and cannot be stubbed in a test. New code checks
- * `typeof window === 'undefined'` inside the function that needs it. Kept exported so
- * existing callers keep compiling.
- */
-export const isClient = typeof window !== 'undefined';
-
 /** Resolved per call, which is what makes the checks below correct after hydration. */
 const hasWindow = (): boolean => typeof window !== 'undefined';
 

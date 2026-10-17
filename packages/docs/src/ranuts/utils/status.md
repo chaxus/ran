@@ -45,11 +45,3 @@ back to a message lookup if it isn't a known code). Throws if the input matches 
 | `retry`    | Codes worth retrying (`502`, `503`, `504`)                            | `Record<number, true>` |
 
 ## Notes
-
-1. **`getStatus` throws on an unknown code or message**: `TypeError` for a non-`number`/
-   `string` argument, `Error` otherwise. Wrap it in `try`/`catch` (or check `status.codes.includes(n)`
-   first) when the input isn't guaranteed valid, e.g. a status code read off the wire.
-2. **`status.redirect` / `empty` / `retry` are plain objects, not `Set`s**: check membership
-   with `status.retry[code]`, not `.has()`.
-3. Runs in both browser and Node (`ranuts/utils`), so it's usable on the client for the same
-   code↔message mapping a server-side `ranuts/node` handler would use.

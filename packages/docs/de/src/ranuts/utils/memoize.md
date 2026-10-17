@@ -25,10 +25,6 @@ Zurück kommt eine umhüllte Funktion, dazu:
 | `reset()` | Verwirft das gemerkte Ergebnis, damit der nächste Aufruf `fn` erneut ausführt | `() => void` |
 | `started` | Ob ein Ergebnis vorliegt oder gerade gearbeitet wird                          | `boolean`    |
 
-### memoize(fn)
-
-Veralteter Zweitname von `once`. Siehe die Warnung unten.
-
 ## Beispiel
 
 ```js
@@ -50,7 +46,3 @@ await Promise.all([ready(), ready(), ready()]); // öffnet einmal
 2. **`once` gibt `fn` nach dem Auswerten frei**, sodass alles, was diese Funktion festhielt, eingesammelt werden kann.
 3. **`singleFlight` merkt sich keine Ablehnungen.** Ein fehlgeschlagener Versuch löscht den Speicher, damit ein kurzes Zucken des Netzes wiederholbar bleibt. Ein abgelehntes Promise zu merken würde einen Augenblicksfehler dauerhaft machen.
 4. **Gleichzeitige Aufrufer von `singleFlight` teilen sich das laufende Promise**, `fn` läuft also auch dann einmal, wenn N Aufrufer sich drängeln. Das ist die Antwort auf den Klassiker „init() gibt void zurück, die Aufrufer können also nicht darauf warten, und frühe Schreibvorgänge scheitern“.
-
-::: warning In 0.3 umbenannt
-`memoize` war ein irreführender Name: Es hat nie je Argument gemerkt, es lief bloß einmal. Jetzt ist es ein Zweitname von `once` und gilt als veraltet. Auch die Typsignatur war früher falsch (als argumentlos deklariert, obwohl sie Argumente durchreichte); jetzt wird sie aus `fn` abgeleitet.
-:::

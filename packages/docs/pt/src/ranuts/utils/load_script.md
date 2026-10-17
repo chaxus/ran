@@ -4,7 +4,7 @@ Injeta um único `<script>` em tempo de execução, sem repetir o mesmo conteúd
 
 No que difere de [`scriptOnLoad`](/pt/src/ranuts/utils/script_on_load): aquela carrega **um lote** de URLs de uma vez (mandando os `.css` por uma tag `<link>`), enquanto esta cuida de **um único** script, aceita um corpo em linha e garante que o mesmo script seja avaliado uma só vez — injetar duas vezes o SDK de um terceiro costuma significar que os efeitos da inicialização rodaram duas vezes.
 
-A chave para não repetir é o md5 de `type + content`, então uma URL e um script em linha de mesmo nome não podem ser confundidos.
+Scripts são deduplicados por tipo e conteúdo exatos, sem hashes nem normalização de quebras de linha.
 
 ## Uso
 

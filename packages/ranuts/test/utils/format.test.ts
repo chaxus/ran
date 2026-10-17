@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { formatDate, formatJson, timestampToTime } from '@/utils';
+import { formatDate, formatJson } from '@/utils';
 
 // A fixed instant: 2026-07-25 14:05:09.042 local time
 const SAMPLE = new Date(2026, 6, 25, 14, 5, 9, 42);
@@ -58,15 +58,6 @@ describe('formatDate', () => {
 
   it('reports an unparseable input instead of emitting NaN', () => {
     expect(formatDate('not a date')).toBe('Invalid Date');
-  });
-});
-
-describe('timestampToTime', () => {
-  it('still returns a Date whose format method now delegates to formatDate', () => {
-    const date = timestampToTime(SAMPLE.getTime());
-    expect(date).toBeInstanceOf(Date);
-    expect(date.format?.('YYYY-MM-DD')).toBe('2026-07-25');
-    expect(date.format?.('MM mm')).toBe('07 05');
   });
 });
 
