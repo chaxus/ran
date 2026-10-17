@@ -10,10 +10,19 @@ const references = (text: string): string[] => [
   ...new Set([...text.matchAll(/--ran-[\w-]+/g)].map((match) => match[0])),
 ];
 const missing = (text: string): string[] => references(text).filter((token) => !declared.has(token));
+const cssExamples = (text: string): string[] =>
+  [...text.matchAll(/^```css\r?\n([\s\S]*?)^```/gm)].map((match) => match[1]);
 
 describe('executable AI interface guidance', () => {
+  it.each(['\n', '\r\n'])('checks CSS examples with %j line endings', (newline) => {
+    const css = 'padding: var(--ran-space-5, var(--ran-space-6));';
+    const examples = cssExamples(['```css', css, '```'].join(newline));
+    expect(examples).toEqual([`${css}${newline}`]);
+    expect(missing(examples[0])).toEqual(['--ran-space-5']);
+  });
+
   it('uses declared foundation tokens in every CSS example, including fallbacks', () => {
-    const examples = [...read('docs/AI_INTERFACES.md').matchAll(/^```css\n([\s\S]*?)^```/gm)].map((match) => match[1]);
+    const examples = cssExamples(read('docs/AI_INTERFACES.md'));
     expect(examples.length).toBeGreaterThan(0);
     for (const example of examples) {
       expect(references(example).length).toBeGreaterThan(0);
