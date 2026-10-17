@@ -16,7 +16,7 @@ For other decisions, use the short **[interface index](docs/INTERFACE_GUIDE.md)*
 Visual craft stays in DESIGN; engineering stays in CODING. Read only relevant owners and use
 the generated references below for exact APIs. The index and both references ship in npm.
 
-Nine of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, mouse-only drag loops, `:host` display rules that disable `hidden`, token fallbacks naming undeclared tokens, components searching their own shadow tree for elements they built, and shadow trees built outside the constructor. Known violations are ratcheted in [docs/design-rule-baseline.json](docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
+Nine of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, mouse-only drag loops, `:host` display rules that disable `hidden`, token fallbacks naming undeclared tokens, components searching their own shadow tree for elements they built, and shadow trees built outside the constructor. Known source-checkout violations are ratcheted in [docs/design-rule-baseline.json](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
 
 For each element's **attributes / properties / events / slots / `::part()`**, consult **[docs/COMPONENTS.md](docs/COMPONENTS.md)** (generated — run `npm run doc:api` after changing any component's API; CI fails if you forget) and **[docs/style-tokens-public.md](docs/style-tokens-public.md)** for its CSS variables. The non-negotiables:
 
@@ -178,7 +178,7 @@ export default MyComponent;
 
 ### Async external-lib renderer components (`r-mermaid`, `r-math`, `r-markdown`)
 
-Some components lazy-load a heavy third-party library and render its output into the shadow root. Follow this specialized recipe (full evaluation + enrichment roadmap in [`docs/RENDERER_COMPONENTS.md`](docs/RENDERER_COMPONENTS.md) — read it before building or enriching one, so it isn't re-analyzed):
+Some components lazy-load a heavy third-party library and render its output into the shadow root. Follow this specialized recipe (repository-only evaluation + enrichment roadmap in [`docs/RENDERER_COMPONENTS.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/RENDERER_COMPONENTS.md) — read it before building or enriching one, so it isn't re-analyzed):
 
 - **Dependency**: the lib is a regular `dependency` (auto-installs with ranui — peerDependency is wrong here: yarn classic never auto-installs peers), reached only via a **dynamic `import()` inside `render()`**, so it lands as an async chunk only when the component actually renders. The ES build externalizes everything in `dependencies` (`RUNTIME_DEPENDENCIES` in `vite.config.ts`), so the lib resolves from the consumer's node_modules instead of being copied into `dist/`; only the CJS/IIFE single-file outputs inline it. Verify nothing static leaks into `index.js` (for `r-mermaid`: `dist/mermaid.js` is a 91-byte stub; the lib is a separate `mermaid.core-*` chunk. For `r-math`: `dist/math.js` is an 80-byte stub; `temml`, the Latin Modern font, and the script font are three separate lazy chunks). `r-math` uses **Temml → native MathML** (not KaTeX): Temml compiles LaTeX to MathML the browser lays out itself.
 - **Source**: a URI-encoded attribute (`code` / `latex`, so multiline / `<|--` / `$$` survive HTML parsing) **or** `this.textContent.trim()`.
@@ -500,7 +500,7 @@ export const RanElement = HTMLElementSSR()!;
 
 ### `utils/theme.ts`
 
-Light/dark only — **there are no theme packs** (they were removed; `setThemePack`/`getThemePack`/`RanThemePackName` no longer exist). The token system is Geist-based; see [docs/DESIGN.md](docs/DESIGN.md) and [docs/THEME_STYLE_SYSTEM_DESIGN.md](docs/THEME_STYLE_SYSTEM_DESIGN.md).
+Light/dark only — **there are no theme packs** (they were removed; `setThemePack`/`getThemePack`/`RanThemePackName` no longer exist). The token system is Geist-based; see [docs/DESIGN.md](docs/DESIGN.md) and the repository architecture reference [docs/THEME_STYLE_SYSTEM_DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md).
 
 Exported from the `ranui` barrel **and** from the dedicated **`ranui/theme`** subpath entry
 (`theme.ts` → built to `dist/theme.js`), which registers no custom elements — consumers who
@@ -783,7 +783,7 @@ view pinned to its floor without fighting the reader, and reconciling rows again
 list. What a message or a tool call _looks like_ is a registered view, not the element's
 business.
 
-The projection is [`ranuts/conversation`](../ranuts/CLAUDE.md); bottom-follow is
+The projection is [`ranuts/conversation`](https://github.com/chaxus/ran/blob/main/packages/ranuts/CLAUDE.md); bottom-follow is
 `createBottomFollower` from `ranuts/utils`. Read those before writing a view — the rules
 about cadence and scroll ownership live there.
 

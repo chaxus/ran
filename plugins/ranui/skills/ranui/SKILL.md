@@ -1,6 +1,6 @@
 ---
 name: ranui
-description: Use when building UI with the ranui web-component library (elements like `<r-button>`, `<r-modal>`, `<r-select>`, `<r-input>`, `<r-message>`) or its fluent DOM builder (`ranui/builder` — Div/View/Span/signal/createEffect/EventManager). Covers the import map, the full element inventory, conventions, accessibility, and where the authoritative API reference lives.
+description: Use when building UI with the ranui web-component library (elements like `<r-button>`, `<r-modal>`, `<r-select>`, `<r-input>`, `<r-message>`) or its fluent DOM builder (`ranui/builder` — Div/View/Span/signal/createEffect/EventManager). Covers common import examples, conventions, accessibility, and where the authoritative API and export references live.
 ---
 
 # ranui — web component library
@@ -46,9 +46,10 @@ import 'ranui/message'; // also exposes an imperative message API
 import 'ranui/checkbox';
 ```
 
-Available element subpaths: `button icon image input message skeleton tab tabpane
+Common element subpaths (examples, not a complete inventory): `button icon image input message skeleton tab tabpane
 radar modal select progress player popover dropdown content loading colorpicker math
-checkbox card router route link`.
+checkbox card router route link`. For all supported subpaths, read `exports` in the
+installed `node_modules/ranui/package.json`; use COMPONENTS.md for element contracts.
 
 The fluent DOM builder + reactivity (no custom-element registration):
 
@@ -56,17 +57,26 @@ The fluent DOM builder + reactivity (no custom-element registration):
 import { Div, View, Span, Label, ButtonBuilder, signal, createEffect, EventManager, Style } from 'ranui/builder';
 ```
 
-SSR helpers: `import { defineSSR } from 'ranui/ssr-registry'` (source) / `ranui/ssr`,
-`ranui/ssr-stream`. Types: `ranui/typings`.
+Consumer SSR rendering helpers are public exports:
+
+```ts
+import { HTMLElementSSR, RanElement, h, renderToString } from 'ranui/ssr';
+```
+
+Streaming rendering uses `ranui/ssr-stream`; types use `ranui/typings`. `defineSSR`
+is an internal registration helper at `@/utils/ssr-registry` in the ranui source
+checkout. It is not exported from `ranui/ssr` or a consumer registration subpath.
 
 ## Elements at a glance
 
-- **Forms**: `r-input`, `r-checkbox`, `r-select` (+ `r-option`, `r-dropdown-item`),
-  `r-colorpicker`. These are **form-associated custom elements**
+- **Forms**: `r-input`, `r-checkbox`, `r-select` (+ `r-option`, `r-dropdown-item` as
+  options). The three field elements are **form-associated custom elements**
   (`attachInternals()` + `ElementInternals.setFormValue()`) — their values are
   collected by `new FormData(form)` when they're real descendants of a native
   `<form>`, same as any native field — no wrapper component required. Use
   `serializeForm(form)` (from `ranui`) to turn a submit into a plain object.
+  `r-colorpicker` is not form-associated: read its `value` / `change` event
+  (`detail.value`) and explicitly include it in the host's submitted data when needed.
 - **Feedback/overlay**: `r-message` (toasts), `r-modal`, `r-popover`, `r-loading`,
   `r-skeleton`, `r-progress`.
 - **Layout/content**: `r-card`, `r-section`, `r-tab`/`r-tabs`, `r-icon`, `r-img`,
@@ -164,8 +174,10 @@ For custom UI you build, follow DESIGN.md §7 (keyboard nav, visible focus, ARIA
 
 ## Conventions & gotchas
 
-- Register elements with `defineSSR('r-name', Component)`, not
-  `customElements.define` directly (keeps SSR working).
+- In the ranui source checkout, component authors register with the internal
+  `defineSSR('r-name', Component)` helper (keeps SSR working). Consumers register
+  shipped elements through their public side-effect imports; the internal helper is
+  not an installed-package API.
 - Shadow DOM isolates styles: external `<label for>` / `aria-labelledby` do NOT cross
   into a component's shadow root — use the component's own `label` attribute/slot.
 - Component CSS uses CSS variables with dark-safe fallbacks; theme via tokens, not by

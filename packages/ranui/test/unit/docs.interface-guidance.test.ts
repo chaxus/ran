@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { posix, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const RANUI = resolve(__dirname, '../..');
@@ -12,6 +12,53 @@ const references = (text: string): string[] => [
 const missing = (text: string): string[] => references(text).filter((token) => !declared.has(token));
 const cssExamples = (text: string): string[] =>
   [...text.matchAll(/^```css\r?\n([\s\S]*?)^```/gm)].map((match) => match[1]);
+
+const proseWithoutFences = (text: string): string => {
+  let fence = '';
+  return text
+    .split(/\r?\n/)
+    .filter((line) => {
+      const boundary = line.match(/^ {0,3}(`{3,}|~{3,})/);
+      if (boundary) {
+        if (!fence) fence = boundary[1];
+        else if (boundary[1][0] === fence[0] && boundary[1].length >= fence.length) fence = '';
+        return false;
+      }
+      return !fence;
+    })
+    .join('\n');
+};
+const localReadingDependencies = (text: string, owner: string): string[] => {
+  const links = proseWithoutFences(text).matchAll(/\[[^\]]*\]\((?:<([^>]+)>|([^\s)]+))(?:\s+["'][^)]*)?\)/g);
+  return [
+    ...new Set(
+      [...links].flatMap((match) => {
+        const target = match[1] || match[2];
+        if (/^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(target)) return [];
+        const path = target.split(/[?#]/)[0];
+        return path ? [posix.normalize(posix.join(posix.dirname(owner), path))] : [];
+      }),
+    ),
+  ];
+};
+const exampleImports = (text: string): string[] => {
+  // Read executable fenced/inline examples, not surrounding source-path prose.
+  const fenced = [...text.matchAll(/^```[^\r\n]*\r?\n([\s\S]*?)^```/gm)].map((match) => match[1]);
+  const inline = [...proseWithoutFences(text).matchAll(/`([^`\r\n]+)`/g)].map((match) => match[1]);
+  const examples = [...fenced, ...inline].join('\n');
+  return [...examples.matchAll(/\bimport\s+(?:(?:type\s+)?[^;'"\n]*?\s+from\s*)?['"](ranui(?:\/[^'"]+)?)['"]/g)].map(
+    (match) => match[1],
+  );
+};
+const packageExports = Object.keys(JSON.parse(read('package.json')).exports) as string[];
+const isPublicImport = (specifier: string): boolean => {
+  const subpath = specifier === 'ranui' ? '.' : `.${specifier.slice('ranui'.length)}`;
+  return packageExports.some(
+    (entry) =>
+      entry === subpath ||
+      (entry.includes('*') && subpath.startsWith(entry.split('*')[0]) && subpath.endsWith(entry.split('*')[1])),
+  );
+};
 
 describe('executable interface guidance', () => {
   it.each(['\n', '\r\n'])('checks CSS examples with %j line endings', (newline) => {
@@ -46,7 +93,45 @@ describe('executable interface guidance', () => {
     expect(missing('height: var(--ran-size-8, var(--ran-size-7));')).toEqual(['--ran-size-8']);
   });
 
-  it('ships the guide and its local reading dependencies in the actual npm package', () => {
+  it.each(['\n', '\r\n'])('resolves installed reading links with %j line endings', (newline) => {
+    const markdown = [
+      '[bare](docs/DESIGN.md#visual)',
+      '[sibling](./INTERACTION.md)',
+      '[parent](../CLAUDE.md)',
+      '[normalized](../docs/../docs/CODING.md)',
+      '[external](https://example.com/guide)',
+      '[section](#feedback)',
+      '```md',
+      '[example](./not-a-reading-dependency.md)',
+      '```',
+      '~~~md',
+      '[example](./also-not-a-dependency.md)',
+      '~~~',
+    ].join(newline);
+    expect(localReadingDependencies(markdown, 'docs/INDEX.md')).toEqual([
+      'docs/docs/DESIGN.md',
+      'docs/INTERACTION.md',
+      'CLAUDE.md',
+      'docs/CODING.md',
+    ]);
+    expect(localReadingDependencies('[bare](docs/DESIGN.md)', 'CLAUDE.md')).toEqual(['docs/DESIGN.md']);
+  });
+
+  it('checks executable plugin imports against public package exports', () => {
+    expect(
+      exampleImports(
+        "Source registration lives at `@/utils/ssr-registry`. `import { defineSSR } from 'ranui/ssr-registry'`",
+      ),
+    ).toEqual(['ranui/ssr-registry']);
+    expect(isPublicImport('ranui/ssr-registry')).toBe(false);
+    expect(isPublicImport('ranui/ssr')).toBe(true);
+    const imports = exampleImports(read('../../plugins/ranui/skills/ranui/SKILL.md'));
+    expect(imports).toContain('ranui/button');
+    expect(imports).toContain('ranui/builder');
+    expect(imports.filter((specifier) => !isPublicImport(specifier))).toEqual([]);
+  });
+
+  it('ships canonical docs and all their local reading dependencies in the actual npm package', () => {
     const packed = JSON.parse(
       execFileSync('npm', ['pack', '--dry-run', '--ignore-scripts', '--json', '--workspaces=false'], {
         cwd: RANUI,
@@ -60,13 +145,15 @@ describe('executable interface guidance', () => {
     // npm versions return either an array or a package-name keyed object.
     const files = new Set(Object.values(packed)[0].files.map((file) => file.path));
     for (const owner of ['INTERFACE_GUIDE', 'INTERACTION', 'WORKFLOW_PATTERNS']) {
-      const path = `docs/${owner}.md`;
-      expect(files.has(path), `package omits ${path}`).toBe(true);
-      for (const [, target] of read(path).matchAll(/\[[^\]]+\]\((\.\.?\/[^)#]+)(?:#[^)]*)?\)/g)) {
-        const relative = target.startsWith('../') ? target.slice(3) : `docs/${target.slice(2)}`;
-        expect(files.has(relative), `published ${owner} links to missing ${relative}`).toBe(true);
-      }
+      expect(files.has(`docs/${owner}.md`), `package omits docs/${owner}.md`).toBe(true);
     }
+    const canonical = [...files].filter((path) => path === 'CLAUDE.md' || /^docs\/[^/]+\.md$/.test(path));
+    const omitted = canonical.flatMap((owner) =>
+      localReadingDependencies(read(owner), owner)
+        .filter((target) => !files.has(target))
+        .map((target) => `${owner} -> ${target}`),
+    );
+    expect(omitted).toEqual([]);
     expect(files.has('CLAUDE.md')).toBe(true);
     const plugin = read('../../plugins/ranui/skills/ranui/SKILL.md');
     for (const [, target] of plugin.matchAll(/`node_modules\/ranui\/([^`]+)`/g)) {
