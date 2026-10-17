@@ -22,7 +22,7 @@ npm install ranui
 
 ```html
 <!-- 또는 CDN 에서, 빌드 단계 없이 -->
-<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
+<script src="https://unpkg.com/ranui/dist/index.iife.js"></script>
 ```
 
 ## 사용법
@@ -44,7 +44,7 @@ import 'ranui/button'; // 또는 하나만
 ::: code-group
 
 ```html [HTML]
-<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
+<script src="https://unpkg.com/ranui/dist/index.iife.js"></script>
 
 <body>
   <r-button>Button</r-button>

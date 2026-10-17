@@ -42,3 +42,17 @@ MD5 互換性が必要なら専用実装（Node では node:crypto）を使い�
 独立した `visual` と `ranite` パッケージを削除しました。描画には保守中の `ranuts/visual`、開発には既存の Vite スクリプトを使用してください。
 
 `visual` の移行では公開 API への適応が必要です。`await Application.create(options)` で初期化し、`Graphics` / `Container` を `app.stage` に追加して `app.render()` または `app.start()` を呼びます。旧 `Bar`、`Line`、`Pie`、未完成の `Sankey` に対応する API はありません。旧ジオメトリとイベントの内部クラスも公開されていないため、import 名の変更だけでは移行できません。
+
+## ESM のみのパッケージ
+
+ranuts、ranui、@alixex/ranview は ESM モジュールのみを公開します。require() や CommonJS に変換されるインポートをネイティブ ESM に変更してください。旧ローダーとテストツールでは ESM を有効にするか動的 import() を使用します。CommonJS ビルドと .d.cts 宣言は提供しません。通常の script タグ用の独立 IIFE は引き続き利用できます。
+
+```ts
+import { rgbToHex } from 'ranuts';
+import { h } from 'ranui/ssr';
+```
+
+- `ranuts/dist/umd/index.umd.cjs` → `ranuts/dist/iife/index.iife.js` (`ranuts`)
+- `ranuts/dist/umd/utils/utils.umd.cjs` → `ranuts/dist/iife/utils.iife.js` (`ranuts_utils`)
+- `ranui/dist/umd/index.umd.cjs` → `ranui/dist/index.iife.js` (`ranui`)
+- `ranui/dist/iife/<name>.iife.js` → `ranui/dist/iife/<name>.iife.js`

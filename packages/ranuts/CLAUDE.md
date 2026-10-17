@@ -453,6 +453,7 @@ selects Blob, string or Document/null; JSON and a fully dynamic mode yield unkno
 validated. `onProgress` observes download progress; the wrapper does not expose cancellation.
 `createObjectURL` also accepts existing string URLs and returns them unchanged.
 
-The declaration build uses the shared `bin/prepare-declarations.mjs` normalizer. CommonJS
-entry declarations forward to the canonical type graph for supported modern Node engines.
-The packed consumer gate verifies both module systems, including a mixed TypeScript project.
+The declaration build uses the shared `bin/prepare-declarations.mjs` normalizer to resolve
+aliases and add NodeNext-compatible relative specifiers. Packages publish ESM only; no
+CommonJS builds or `.d.cts` forwarding declarations are generated. Browser script tags can
+load `dist/iife/index.iife.js` (`ranuts`) or `dist/iife/utils.iife.js` (`ranuts_utils`).

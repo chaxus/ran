@@ -23,7 +23,7 @@ npm install ranui
 
 ```html
 <!-- oder von einem CDN, ohne Build-Schritt -->
-<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
+<script src="https://unpkg.com/ranui/dist/index.iife.js"></script>
 ```
 
 ## Verwendung
@@ -46,7 +46,7 @@ vollständig:
 ::: code-group
 
 ```html [HTML]
-<script src="https://unpkg.com/ranui/dist/umd/index.umd.cjs"></script>
+<script src="https://unpkg.com/ranui/dist/index.iife.js"></script>
 
 <body>
   <r-button>Button</r-button>

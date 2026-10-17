@@ -42,3 +42,17 @@ formatDate متن برمی‌گرداند. برای شیء Date از new Date(ti
 بسته‌های مستقل `visual` و `ranite` حذف شده‌اند. از موتور نگهداری‌شدهٔ `ranuts/visual` و اسکریپت‌های توسعهٔ موجود مبتنی بر Vite استفاده کنید.
 
 مصرف‌کنندگان `visual` باید با API عمومی فعلی سازگار شوند: با `await Application.create(options)` مقداردهی کنند، گره‌های `Graphics` / `Container` را به `app.stage` بیفزایند و `app.render()` یا `app.start()` را فراخوانی کنند. برای `Bar`، `Line`، `Pie` و `Sankey` ناتمام جایگزینی وجود ندارد. کلاس‌های داخلی هندسه و رویداد نیز خروجی عمومی نیستند؛ تغییر نام import کافی نیست.
+
+## بسته‌های فقط ESM
+
+بسته‌های ranuts، ranui و @alixex/ranview فقط ماژول ESM منتشر می‌کنند. فراخوانی require() و واردکردن تبدیل‌شده به CommonJS را با ESM بومی جایگزین کنید. بارگذارها و ابزارهای آزمون قدیمی باید ESM را فعال کنند یا از import() پویا استفاده کنند؛ ساخت CommonJS و اعلان .d.cts دیگر ارائه نمی‌شود. IIFE مستقل برای تگ script معمولی مرورگر حفظ می‌شود.
+
+```ts
+import { rgbToHex } from 'ranuts';
+import { h } from 'ranui/ssr';
+```
+
+- `ranuts/dist/umd/index.umd.cjs` → `ranuts/dist/iife/index.iife.js` (`ranuts`)
+- `ranuts/dist/umd/utils/utils.umd.cjs` → `ranuts/dist/iife/utils.iife.js` (`ranuts_utils`)
+- `ranui/dist/umd/index.umd.cjs` → `ranui/dist/index.iife.js` (`ranui`)
+- `ranui/dist/iife/<name>.iife.js` → `ranui/dist/iife/<name>.iife.js`

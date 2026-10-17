@@ -42,3 +42,17 @@ MD5 호환성이 필요하면 전용 구현(Node에서는 node:crypto)을 사용
 독립 `visual`과 `ranite` 패키지를 제거했습니다. 유지 관리되는 `ranuts/visual` 엔진과 기존 Vite 개발 스크립트를 사용하세요.
 
 `visual` 사용 코드는 공개 API에 맞춰 수정해야 합니다. `await Application.create(options)`로 초기화하고 `Graphics` / `Container` 노드를 `app.stage`에 추가한 뒤 `app.render()` 또는 `app.start()`를 호출하세요. 이전 `Bar`, `Line`, `Pie`, 미완성 `Sankey`의 대체 API는 없습니다. 기존 기하 및 이벤트 내부 클래스도 공개되지 않으므로 import 이름만 바꾸면 안 됩니다.
+
+## ESM 전용 패키지
+
+ranuts, ranui 및 @alixex/ranview는 ESM 모듈만 배포합니다. require()와 CommonJS로 변환되는 가져오기를 네이티브 ESM으로 바꾸세요. 이전 로더와 테스트 도구는 ESM을 활성화하거나 동적 import()를 사용해야 합니다. CommonJS 빌드와 .d.cts 선언은 제공하지 않습니다. 일반 script 태그용 독립 IIFE는 유지됩니다.
+
+```ts
+import { rgbToHex } from 'ranuts';
+import { h } from 'ranui/ssr';
+```
+
+- `ranuts/dist/umd/index.umd.cjs` → `ranuts/dist/iife/index.iife.js` (`ranuts`)
+- `ranuts/dist/umd/utils/utils.umd.cjs` → `ranuts/dist/iife/utils.iife.js` (`ranuts_utils`)
+- `ranui/dist/umd/index.umd.cjs` → `ranui/dist/index.iife.js` (`ranui`)
+- `ranui/dist/iife/<name>.iife.js` → `ranui/dist/iife/<name>.iife.js`
