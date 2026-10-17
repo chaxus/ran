@@ -1,192 +1,100 @@
-# ran — Web Components UI ライブラリ（ranui）と TypeScript ユーティリティ（ranuts）
+# ran
 
 <p align="center">
-  <a href="https://ran.chaxus.com/" target="_blank" rel="noopener noreferrer">
+  <a href="https://ran.chaxus.com/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="./packages/docs/public/icon-dark.png">
-      <source media="(prefers-color-scheme: light)" srcset="./packages/docs/public/icon.png">
-      <img width="180" src="./packages/docs/public/icon.png" alt="ran logo">
+      <img width="120" src="./packages/docs/public/icon.png" alt="ran">
     </picture>
   </a>
 </p>
 
-<p align="center">
-  <strong>ネイティブの custom elements の上に組み立てた、フレームワークに依存しない Web Components UI ライブラリ（ranui）と、tree-shaking の効く TypeScript ユーティリティライブラリ（ranuts）。その周辺のツールと英中バイリンガルのドキュメントも含みます。</strong>
-</p>
+Web Components、DOM ビルダー、TypeScript ユーティリティをまとめたワークスペース。
 
-<p align="center">
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
-  </a>
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
-  </a>
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status">
-  </a>
-  <img src="https://badgen.net/npm/types/ranui" alt="Types Included">
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/github/forks/chaxus/ran" alt="forks">
-  </a>
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/github/stars/chaxus/ran" alt="stars">
-  </a>
-</p>
-
-<p align="center">
-  <a href="#-特徴">特徴</a> •
-  <a href="#-パッケージ">パッケージ</a> •
-  <a href="#-クイックスタート">クイックスタート</a> •
-  <a href="#-ドキュメント">ドキュメント</a> •
-  <a href="#-コントリビュート">コントリビュート</a>
-</p>
-
----
+[![CI](https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml)](https://github.com/chaxus/ran/actions/workflows/ci.yml) · [MIT](./LICENSE)
 
 [English](./README.md) | [中文](./README.zh-CN.md) | **日本語** | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-## ✨ 特徴
+> Alpha 段階です。API とパッケージ形式は変更される場合があります。バージョンを固定し、更新前に移行ガイドを確認してください。
 
-- 🎨 **UI ライブラリ**: Web Components
-- 🛠️ **ユーティリティライブラリ**: TypeScript のユーティリティ関数
-- 🤖 **機械学習**: 基本的な ML ツールと実験
-- 📱 **Web アプリケーション**: IM チャットアプリ（プロトタイプ）
-- 🔧 **開発ツール**: デバッグ用ユーティリティ
-- 🌐 **Web3**: スマートコントラクトの実験
-- 🎯 **ビジュアルツール**: `ranuts/visual` による Canvas・WebGL・WebGPU の 2D 描画
+## パッケージ
 
-## 📦 パッケージ
+| パッケージ                                    | 用途                                                                                      |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| [ranui](packages/ranui/README.ja.md)          | Shadow DOM、テーマトークン、SSR ヘルパーを備えたフレームワーク非依存の Web Components。   |
+| [ranuts](packages/ranuts/README.ja.md)        | ブラウザー API、データ処理、ストリーム、2D 描画向け TypeScript ユーティリティ。           |
+| [@alixex/ranview](packages/ranview/README.md) | コンポーネントライブラリから独立した DOM ビルダー、シグナル、静的 HTML スナップショット。 |
 
-このモノレポにはさまざまな実験的パッケージが入っています。
+## クイックスタート
 
-### コアライブラリ（アルファ段階）
+```sh
+npm install ranui
+```
 
-| パッケージ                | バージョン                                                                                           | ダウンロード数                                                                             | 説明                      |
-| ------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------- |
-| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/README.ja.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | Web Components ライブラリ |
-| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/README.ja.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | ユーティリティライブラリ  |
+```js
+import 'ranui/button';
+import 'ranui/style';
+```
 
-### 実験的プロジェクト
+HTML にカスタム要素を配置します：
 
-| パッケージ                              | 説明                         |
-| --------------------------------------- | ---------------------------- |
-| [im](packages/im)                       | チャットアプリのプロトタイプ |
-| [debug](docs/learning/debug/README.md)  | デバッグの学習ノート         |
-| [image-process](packages/image-process) | 画像処理の実験               |
-| [cpro](packages/cpro)                   | C/C++ の学習と実験           |
-| [rust](packages/rust)                   | Rust の学習と実験            |
+```html
+<r-button type="primary">Hello</r-button>
+```
 
-CI が実際にどのパッケージを検査するかは [packages/manifest.json](packages/manifest.json) に宣言されています。このファイルは説明ではなく実行されるものです。`bin/run-checks.mjs` はある検査を宣言したパッケージすべてに対してそれを走らせるので、そこで「検査される」と書かれたパッケージは本当に検査され、されないものはその理由が書かれています。`packages/` の下にマニフェストへ載っていないディレクトリがあると `pnpm run verify:packages` は失敗します。つまり、検査するかどうかを誰かが決めないまま新しいパッケージが増えることはありません。
+## ドキュメント
 
-## 🚀 クイックスタート
+- [ranui](https://ran.chaxus.com/ja/src/ranui/)
+- [ranuts](https://ran.chaxus.com/ja/src/ranuts/)
+- [@alixex/ranview](packages/ranview/README.md)
+- [移行ガイド](https://ran.chaxus.com/ja/src/ranuts/migration/)
 
-### インストール
+## リポジトリ開発
 
-```bash
-# リポジトリをクローンする
+Node 24+ と pnpm を使用し、リポジトリのルートで実行します：
+
+```sh
 git clone https://github.com/chaxus/ran.git
 cd ran
-
-# 依存関係をインストールする
-pnpm install
-
-# すべてのパッケージをビルドする
+pnpm install --frozen-lockfile
 pnpm build
+pnpm --filter ranui dev
 ```
 
-### コアパッケージを使う
+その他の開発コマンド：
 
-```bash
-# ranui（Web Components）をインストールする
-npm install ranui
-
-# ユーティリティをインストールする
-npm install ranuts
-```
-
-### 開発
-
-```bash
-# 開発サーバーを起動する
-pnpm dev
-
-# テストを実行する
+```sh
+pnpm --filter docs dev
 pnpm test
-
-# 特定のパッケージをビルドする
-pnpm --filter ranui build
+pnpm lint
+pnpm verify:docs
+pnpm clean
 ```
 
-## 📚 ドキュメント
+`pnpm clean` は生成物のみを削除し、ソース、インストール済み依存関係、ロックファイルを保持します。
 
-- **📖 ブログと記事**: [Web ドキュメントプレビュー](https://ran.chaxus.com/src/article/doc_preview)
-- **🎨 RanUI のドキュメント**: [UI ライブラリガイド](https://ran.chaxus.com/src/ranui/)
-- **🛠️ RanUTS のドキュメント**: [ユーティリティライブラリガイド](https://ran.chaxus.com/src/ranuts/)
-- **📝 プロジェクトのドキュメント**: [docs](packages/docs)
+## その他のプロジェクトと学習資料
 
-## 🤖 AI / Claude Code
+ドキュメントツール：[docs](packages/docs)、[ranpress](packages/ranpress)、[site](packages/site)。[im](packages/im) は実験的なチャットアプリです。
 
-このリポジトリは Claude Code のプラグイン marketplace を同梱しています。AI アシスタントがソースを掘り返さずにライブラリを読んで使えるようにするためのものです。marketplace を追加してから、使うライブラリを入れてください。
+ネイティブコード例：[C/C++](packages/cpro)、[画像処理](packages/image-process)、[Rust](packages/rust)。学習資料：[Shader](docs/learning/visual/README.md)、[Koa/Nginx](docs/learning/debug/README.md)。
 
-```bash
+ワークスペースの状態と CI 検査は [packages/manifest.json](packages/manifest.json) に定義しています。
+
+## AI / Claude Code
+
+[メンテナーと Agent 向け資料](packages/ranui/CLAUDE.md) · [ranuts](packages/ranuts/CLAUDE.md)
+
+```text
 /plugin marketplace add chaxus/ran
-/plugin install ranui@ran      # ranui — Web Components
-/plugin install ranuts@ran     # ranuts — ユーティリティ
+/plugin install ranui@ran
+/plugin install ranuts@ran
 ```
 
-各 skill は import map、一覧、使用例、規約を扱い、そのパッケージに同梱された API リファレンスを指し示します。詳しくは各ライブラリの節を参照してください：[ranui](packages/ranui/README.ja.md)、[ranuts](packages/ranuts/README.ja.md)。
+## 貢献
 
-## ⚠️ 重要なお知らせ
+担当範囲と検証手順は [AGENTS.md](AGENTS.md) を確認してください。例とドキュメントを公開 API に合わせ、変更に応じた検査を実行してください。
 
-これは初期開発段階にある**技術探求と学習のためのプロジェクト**です。ほとんどのパッケージはアルファ段階か実験段階にあります。
+## ライセンス
 
-**要点：**
-
-- 🚧 **初期開発**: ほとんどの機能はまだ作っている途中です
-- 🧪 **実験的**: API は頻繁に変わる可能性があります
-- 📚 **学習が主眼**: 主に学習と実験のためのものです
-
-## 🤝 コントリビュート
-
-学習者にも開発者にも参加してほしいと思っています。手伝い方は次のとおりです。
-
-1. リポジトリを **Fork** する
-2. 機能ブランチを **作成** する（`git checkout -b feature/amazing-feature`）
-3. 変更を **コミット** する（`git commit -m 'Add amazing feature'`）
-4. ブランチへ **プッシュ** する（`git push origin feature/amazing-feature`）
-5. プルリクエストを **開く**
-
-### 開発の指針
-
-- 既存のコードスタイルに合わせる
-- 可能なら新機能にテストを添える
-- 必要に応じてドキュメントを更新する
-- 実験的な機能には気長に付き合う
-
-## 🌟 なぜオープンソースにするのか
-
-オープンソースには学習と革新を加速する力があると考えています。開発者としての道のりで、私は数えきれないほどのオープンソースプロジェクトに助けられてきました。この実験的なコードを公開することで、次のことを願っています。
-
-- 学びの経験をコミュニティと分かち合うこと
-- ほかの人がこのコードから学び、試せるようにすること
-- 協働と知識の共有を促すこと
-- 学び続け、良くし続けるための場をつくること
-
-## 📊 プロジェクトの統計
-
-<a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="Contributors" />
-</a>
-
-![](http://profile-counter.glitch.me/chaxus-ran/count.svg)
-
-## 📄 ライセンス
-
-このプロジェクトは MIT ライセンスの下で公開されています。詳しくは [LICENSE](LICENSE) を参照してください。
-
----
-
-<div align="center">
-  <p>Ran コミュニティが ❤️ を込めて作りました</p>
-  <p>学習の役に立ったら、⭐️ をいただけると嬉しいです</p>
-</div>
+[MIT](./LICENSE)

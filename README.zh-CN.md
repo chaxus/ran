@@ -1,195 +1,100 @@
-# ran — Web Components 组件库（ranui）与 TypeScript 工具库（ranuts）
+# ran
 
 <p align="center">
-  <a href="https://ran.chaxus.com/" target="_blank" rel="noopener noreferrer">
+  <a href="https://ran.chaxus.com/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="./packages/docs/public/icon-dark.png">
-      <source media="(prefers-color-scheme: light)" srcset="./packages/docs/public/icon.png">
-      <img width="180" src="./packages/docs/public/icon.png" alt="ran logo">
+      <img width="120" src="./packages/docs/public/icon.png" alt="ran">
     </picture>
   </a>
 </p>
 
-<p align="center">
-  <strong>ranui —— 基于原生 custom elements、框架无关的 Web Components 组件库；ranuts —— 可 tree-shaking 的 TypeScript 工具库；外加围绕它们的工具链与中英双语文档。</strong>
-</p>
+一个工作区中的 Web Components、DOM 构建器与 TypeScript 工具库。
 
-<p align="center">
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
-  </a>
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
-  </a>
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status">
-  </a>
-  <img src="https://badgen.net/npm/types/ranui" alt="Types Included">
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/github/forks/chaxus/ran" alt="forks">
-  </a>
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/github/stars/chaxus/ran" alt="stars">
-  </a>
-</p>
-
-<p align="center">
-  <a href="#-功能特性">功能特性</a> •
-  <a href="#-项目包">项目包</a> •
-  <a href="#-快速开始">快速开始</a> •
-  <a href="#-文档">文档</a> •
-  <a href="#-贡献指南">贡献指南</a>
-</p>
-
----
+[![CI](https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml)](https://github.com/chaxus/ran/actions/workflows/ci.yml) · [MIT](./LICENSE)
 
 [English](./README.md) | **中文** | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-## ✨ 功能特性
+> Alpha 阶段：API 和包格式可能变化。请锁定具体版本，升级前阅读迁移指南。
 
-- 🎨 **UI 库**: WebComponent 组件
-- 🛠️ **工具库**: TypeScript 工具函数
-- 🤖 **机器学习**: 基础的 ML 工具和实验
-- 📱 **Web 应用**: IM 聊天应用（原型）
-- 🔧 **开发工具**: 调试工具
-- 🌐 **Web3**: 智能合约实验
-- 🎯 **可视化工具**: 通过 `ranuts/visual` 提供 Canvas、WebGL 和 WebGPU 二维渲染
+## 项目包
 
-## 📦 项目包
+| 包                                            | 用途                                                                 |
+| --------------------------------------------- | -------------------------------------------------------------------- |
+| [ranui](packages/ranui/README.zh-CN.md)       | 框架无关的 Web Components，提供 Shadow DOM、主题 Token 和 SSR 工具。 |
+| [ranuts](packages/ranuts/README.zh-CN.md)     | 覆盖浏览器 API、数据处理、流和二维渲染的 TypeScript 工具。           |
+| [@alixex/ranview](packages/ranview/README.md) | DOM 构建器、信号和静态 HTML 快照，可独立于组件库使用。               |
 
-这个单仓库项目包含各种实验性包：
+## 快速开始
 
-### 核心库（Alpha 阶段）
+```sh
+npm install ranui
+```
 
-| 包名                      | 版本                                                                                                    | 下载量                                                                                     | 描述       |
-| ------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------- |
-| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/README.zh-CN.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | Web 组件库 |
-| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/README.zh-CN.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | 工具函数库 |
+```js
+import 'ranui/button';
+import 'ranui/style';
+```
 
-### 实验性项目
+在 HTML 中使用自定义元素：
 
-| 包名                                    | 描述             |
-| --------------------------------------- | ---------------- |
-| [im](packages/im)                       | 聊天应用原型     |
-| [debug](docs/learning/debug/README.md)  | 调试学习笔记     |
-| [image-process](packages/image-process) | 图像处理实验     |
-| [cpro](packages/cpro)                   | C/C++ 学习与实验 |
-| [rust](packages/rust)                   | Rust 学习与实验  |
+```html
+<r-button type="primary">Hello</r-button>
+```
 
-CI 实际检查哪些包，声明在 [packages/manifest.json](packages/manifest.json) 里。这份清单是**可执行的**而不是描述性的：`bin/run-checks.mjs` 会对声明了某项检查的包逐一运行它，因此清单里写着「被检查」的包就真的被检查，没被检查的则写明原因。`pnpm run verify:packages` 会在 `packages/` 下出现清单里没有的目录时失败——新包无法在没人决定「查不查」的情况下悄悄加入。
+## 文档
 
-## 🚀 快速开始
+- [ranui](https://ran.chaxus.com/cn/src/ranui/)
+- [ranuts](https://ran.chaxus.com/cn/src/ranuts/)
+- [@alixex/ranview](packages/ranview/README.md)
+- [迁移指南](https://ran.chaxus.com/cn/src/ranuts/migration/)
 
-### 安装
+## 仓库开发
 
-```bash
-# 克隆仓库
+使用 Node 24+ 和 pnpm，在仓库根目录执行：
+
+```sh
 git clone https://github.com/chaxus/ran.git
 cd ran
-
-# 安装依赖
-pnpm install
-
-# 构建所有包
+pnpm install --frozen-lockfile
 pnpm build
+pnpm --filter ranui dev
 ```
 
-### 使用核心包
+其他开发命令：
 
-```bash
-# 安装 ranui (Web 组件)
-npm install ranui
-
-# 安装工具函数
-npm install ranuts
-```
-
-### 开发
-
-```bash
-# 启动开发服务器
-pnpm dev
-
-# 运行测试
+```sh
+pnpm --filter docs dev
 pnpm test
-
-# 构建特定包
-pnpm --filter ranui build
+pnpm lint
+pnpm verify:docs
+pnpm clean
 ```
 
-## 📚 文档
+`pnpm clean` 仅删除生成产物，保留源码、已安装依赖和锁文件。
 
-- **📖 博客和文章**: [Web 文档预览](https://ran.chaxus.com/cn/src/article/doc_preview)
-- **🎨 RanUI 文档**: [UI 库指南](https://ran.chaxus.com/cn/src/ranui/)
-- **🛠️ RanUTS 文档**: [工具函数库指南](https://ran.chaxus.com/cn/src/ranuts/)
-- **📝 项目文档**: [docs](packages/docs)
+## 其他项目与学习资料
 
-## 🤖 AI / Claude Code
+文档工具链：[docs](packages/docs)、[ranpress](packages/ranpress) 和 [site](packages/site)。[im](packages/im) 是实验性聊天应用。
 
-本仓库自带一个 Claude Code 插件 marketplace，让 AI 助手无需翻源码即可读懂并使用这些库。
-先添加 marketplace，再按需安装你用到的库：
+原生示例：[C/C++](packages/cpro)、[图像处理](packages/image-process) 和 [Rust](packages/rust)。保留的学习资料：[Shader](docs/learning/visual/README.md) 与 [Koa/Nginx](docs/learning/debug/README.md)。
 
-```bash
+工作区状态和 CI 检查项声明在 [packages/manifest.json](packages/manifest.json)。
+
+## AI / Claude Code
+
+[维护者与 Agent 参考](packages/ranui/CLAUDE.md) · [ranuts](packages/ranuts/CLAUDE.md)
+
+```text
 /plugin marketplace add chaxus/ran
-/plugin install ranui@ran      # ranui —— Web 组件
-/plugin install ranuts@ran     # ranuts —— 工具函数
+/plugin install ranui@ran
+/plugin install ranuts@ran
 ```
 
-每个 skill 覆盖 import map、清单、用法示例与约定，并指向该包随 npm 发布的 API 文档。
-详见各库 README 里的 skill 小节：[ranui](packages/ranui/README.zh-CN.md)、
-[ranuts](packages/ranuts/README.zh-CN.md)。
+## 参与贡献
 
-## ⚠️ 重要说明
+先阅读 [AGENTS.md](AGENTS.md) 中的职责和验证入口。示例、文档应与公共导出一致，并运行与改动相关的检查。
 
-这是一个**技术探索和学习项目**，处于早期开发阶段。大多数包都处于 alpha 阶段或实验阶段。
+## 许可证
 
-**关键要点：**
-
-- 🚧 **早期开发**: 大多数功能仍在开发中
-- 🧪 **实验性**: API 可能会频繁变化
-- 📚 **学习导向**: 主要用于学习和实验
-
-## 🤝 贡献指南
-
-我们欢迎学习者和开发者的贡献！以下是您可以帮助的方式：
-
-1. **Fork** 这个仓库
-2. **创建** 功能分支 (`git checkout -b feature/amazing-feature`)
-3. **提交** 您的更改 (`git commit -m '添加很棒的功能'`)
-4. **推送** 到分支 (`git push origin feature/amazing-feature`)
-5. **打开** Pull Request
-
-### 开发指南
-
-- 遵循现有的代码风格
-- 尽可能为新功能添加测试
-- 根据需要更新文档
-- 对实验性功能保持耐心
-
-## 🌟 为什么开源？
-
-我相信开源的力量能够加速学习和创新。在我的开发学习过程中，我受到了无数开源项目的极大影响和帮助。通过开源这些实验性代码，我希望：
-
-- 与社区分享学习经验
-- 让其他人能够学习和实验这些代码
-- 促进协作和知识分享
-- 创建一个持续学习和改进的平台
-
-## 📊 项目统计
-
-<a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="贡献者" />
-</a>
-
-![](http://profile-counter.glitch.me/chaxus-ran/count.svg)
-
-## 📄 开源协议
-
-本项目采用 MIT 协议 - 查看 [LICENSE](LICENSE) 文件了解详情。
-
----
-
-<div align="center">
-  <p>由 Ran 社区用 ❤️ 制作</p>
-  <p>如果这个项目对您的学习有帮助，请给它一个 ⭐️</p>
-</div>
+[MIT](./LICENSE)
