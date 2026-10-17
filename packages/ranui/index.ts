@@ -74,44 +74,8 @@ export type { SSGPage } from '@/utils/ssg';
 export { I18nCore, createI18n, useI18n } from '@/utils/i18n';
 export type { I18nConfig, MessageDict, LocaleMessages, TranslateParams, LocaleChangeHandler } from '@/utils/i18n';
 
-// Side effects for registration
-import '@/components/button';
-import '@/components/icon';
-import '@/components/image';
-import '@/components/input';
-import '@/components/message';
-import '@/components/skeleton';
-import '@/components/tabpane';
-import '@/components/tab';
-import '@/components/radar';
-import '@/components/player';
-import '@/components/modal';
-import '@/components/select';
-import '@/components/progress';
-import '@/components/checkbox';
-import '@/components/colorpicker';
-import '@/components/loading';
-import '@/components/math';
-import '@/components/mermaid';
-import '@/components/markdown';
-import '@/components/popover';
-import '@/components/dropdown';
+// Scratch registers through the barrel without exposing a named constructor.
 import '@/components/scratch';
-import '@/components/card';
-import '@/components/conversation';
-import '@/components/reasoning';
-import '@/components/token-meter';
-import '@/components/state-dot';
-import '@/components/disclosure-row';
-import '@/components/tool-card';
-import '@/components/attachments';
-import '@/components/voice-button';
-import '@/components/glass';
-import '@/components/section';
-import '@/components/router';
-import '@/components/route';
-import '@/components/link';
-import '@/components/theme-switch';
 
 // ── Typed custom elements ───────────────────────────────────────────────────
 // Augment the DOM tag map so `document.querySelector('r-select')` and

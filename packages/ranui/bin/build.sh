@@ -5,23 +5,6 @@ set -e
 bin=./node_modules/.bin
 dist=./dist
 
-MODE=''
-ENV=''
-
-while getopts "m:e:p:s:" arg
-do
-    case $arg in
-        m)
-            MODE=$OPTARG
-            ;;
-        e)
-            ENV=$OPTARG
-            ;;
-        ?)
-            echo "unknown argument"
-    esac
-done
-
 # build es (split per component, cleans dist/)
 $bin/vite build -c ./build/config.es.ts
 # build cjs + iife (single bundle, appends to dist/)
@@ -29,7 +12,7 @@ $bin/vite build -c ./build/config.bundle.ts
 # build standalone per-component iife bundles (dist/iife/<name>.iife.js)
 $bin/tsx ./bin/build-iife.ts
 
-$bin/tsc --declaration --emitDeclarationOnly --outDir ./dist --project tsconfig.json
+$bin/tsc --declaration --emitDeclarationOnly --outDir ./dist --project tsconfig.build.json
 
 # tsc emits the `@/` aliases verbatim — a declaration file carries no `paths`, so a
 # consumer resolving them against their own config finds nothing and every published type

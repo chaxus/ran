@@ -79,6 +79,32 @@ describe('I18nCore — translation', () => {
   });
 });
 
+describe('I18nCore — literal braces', () => {
+  const brace = (text: string) => new I18nCore({ messages: { en: { k: text } }, locale: 'en' });
+
+  it('preserves JSON, spaced braces, and unmatched braces', () => {
+    expect(brace('css .a { color: red }').t('k', { color: 'x' })).toBe('css .a { color: red }');
+    expect(brace('json {"a":1}').t('k')).toBe('json {"a":1}');
+    expect(brace('a { b } c').t('k')).toBe('a { b } c');
+    expect(brace('open { only').t('k')).toBe('open { only');
+  });
+
+  it('unescapes doubled pairs without interpolating their contents', () => {
+    expect(brace('use {{ and }}').t('k')).toBe('use { and }');
+    expect(brace('{{name}}').t('k', { name: 'Ada' })).toBe('{name}');
+    expect(brace('{{}}').t('k')).toBe('{}');
+  });
+
+  it('wraps an interpolated value in doubled outer braces', () => {
+    expect(brace('{{{name}}}').t('k', { name: 'Ada' })).toBe('{Ada}');
+  });
+
+  it('unescapes identically with and without params', () => {
+    expect(brace('a {{ b').t('k')).toBe('a { b');
+    expect(brace('a {{ b').t('k', { x: 1 })).toBe('a { b');
+  });
+});
+
 describe('I18nCore — locale management', () => {
   it('switches locale and notifies subscribers', () => {
     const i18n = new I18nCore({ messages: MESSAGES, locale: 'en' });

@@ -5,9 +5,9 @@ import { Icon, RAN_ICON_NAMES } from '@/components/icon/index';
 import { BUILTIN_ICON_NAMES, registerBuiltinIcons } from '@/components/icon/builtin';
 import '@/components/icon/index';
 
-// Actual SVG file stems shipped in assets/icons (excluding the combined sprite).
+// Actual individually named SVG file stems shipped in assets/icons.
 const assetNames = readdirSync(resolve(__dirname, '../../assets/icons'))
-  .filter((f) => f.endsWith('.svg') && f !== 'sprite.svg')
+  .filter((f) => f.endsWith('.svg'))
   .map((f) => f.replace(/\.svg$/, ''))
   .sort();
 
