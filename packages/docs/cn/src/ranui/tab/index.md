@@ -35,6 +35,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 修改 `active` attribute 或 property 会同步标题样式、指示条、面板和 ARIA，不会移动焦点。
 移除最后一个已聚焦标题时，焦点交给 `<r-tabs>` 宿主，仅在未提供时添加 `tabindex="-1"`。
 已有 `tabindex` 和页面显式交给其他控件的焦点会保留。
+移除或禁用当前聚焦标签后，即使仍有其他可用标题，也会优先保留 `change` 监听器显式移交的焦点。
 
 ## API 参考
 
