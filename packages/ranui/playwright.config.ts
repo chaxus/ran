@@ -7,21 +7,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  /**
-   * Screenshot comparison is a **macOS-local** check. CI runs the functional assertions only.
-   *
-   * Baselines are committed under `test/e2e/*.spec.ts-snapshots/`, but Playwright puts the
-   * platform in the filename — every one of them is `…-darwin.png`. The CI runner is Ubuntu, so
-   * it would look for `…-linux.png`, find nothing, fail the first attempt with "A snapshot
-   * doesn't exist, writing actual", then pass on retry against the file it just wrote. The job
-   * would go green having compared each screenshot with itself; a gate that cannot fail is worse
-   * than no gate, because it looks like one.
-   *
-   * Turning visual regression into a real CI gate needs a Linux-rendered baseline set —
-   * generated in a container matching the runner and committed alongside the macOS one. That is
-   * deliberately not done here; see CLAUDE.md ("Visual regression is local-only, on purpose").
-   */
-  ignoreSnapshots: !!process.env.CI,
+  // Functional coverage runs on every host. Reviewed screenshot comparison uses
+  // playwright.visual.config.ts in the pinned container, including on CI.
+  ignoreSnapshots: true,
   reporter: [['html']],
   use: {
     baseURL: DEV_SERVER,
@@ -53,7 +41,7 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    // New engines run functional assertions; no reviewed screenshot baselines exist yet.
+    // Cross-engine functional coverage; canonical visuals use pinned Chromium.
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { DEV_SERVER } from '../../build/config';
 
-test('button', async ({ page }) => {
+test('button', { tag: '@visual' }, async ({ page }) => {
   await page.goto(DEV_SERVER, { waitUntil: 'load' });
   await expect(page).toHaveTitle(/ranui/);
   await page.waitForFunction(() => customElements.get('r-button'));

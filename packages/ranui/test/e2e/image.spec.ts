@@ -15,7 +15,7 @@ test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-img');
 });
 
-test('image — single', async ({ page }) => {
+test('image — single', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -28,7 +28,7 @@ test('image — single', async ({ page }) => {
   await expect(el).toHaveScreenshot('image-single.png');
 });
 
-test('image — multiple side by side', async ({ page }) => {
+test('image — multiple side by side', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `

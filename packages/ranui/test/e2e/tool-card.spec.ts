@@ -104,7 +104,7 @@ test.describe('r-tool-card', () => {
     await expect(page.locator('r-tool-card')).not.toHaveAttribute('open', '');
   });
 
-  test('renders each lifecycle state', async ({ page }) => {
+  test('renders each lifecycle state', { tag: '@visual' }, async ({ page }) => {
     await mountCards(page, [
       { call: { card: 'generic', title: '读取当前时间', summary: 'Asia/Shanghai' }, status: 'running' },
       {
@@ -121,7 +121,7 @@ test.describe('r-tool-card', () => {
     await expect(page.locator('#column')).toHaveScreenshot('tool-card-states.png');
   });
 
-  test('renders a diff body', async ({ page }) => {
+  test('renders a diff body', { tag: '@visual' }, async ({ page }) => {
     await mountCards(page, [
       {
         call: {

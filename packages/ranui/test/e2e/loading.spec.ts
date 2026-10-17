@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 for (const name of ['rotate', 'stretch', 'dot', 'circle-line'] as const) {
-  test(`loading — ${name}`, async ({ page }) => {
+  test(`loading — ${name}`, { tag: '@visual' }, async ({ page }) => {
     await mount(page, `<r-loading name="${name}"></r-loading>`);
     const el = page.locator('r-loading');
     await expect(el).toBeVisible();
@@ -20,7 +20,7 @@ for (const name of ['rotate', 'stretch', 'dot', 'circle-line'] as const) {
   });
 }
 
-test('loading — all types row', async ({ page }) => {
+test('loading — all types row', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `

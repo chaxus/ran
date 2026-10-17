@@ -50,7 +50,7 @@ test.describe('r-reasoning', () => {
     await expect(page.locator('r-reasoning')).toHaveAttribute('open', '');
   });
 
-  test('renders', async ({ page }) => {
+  test('renders', { tag: '@visual' }, async ({ page }) => {
     await mount(page, `<div id="column" style="width: 420px; display: flex; flex-direction: column; gap: 12px"></div>`);
     await page.evaluate(() => {
       const column = document.getElementById('column')!;

@@ -8,21 +8,21 @@ test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-skeleton');
 });
 
-test('skeleton — default', async ({ page }) => {
+test('skeleton — default', { tag: '@visual' }, async ({ page }) => {
   await mount(page, `<r-skeleton style="width: 400px"></r-skeleton>`);
   const el = page.locator('r-skeleton');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('skeleton-default.png');
 });
 
-test('skeleton — custom height', async ({ page }) => {
+test('skeleton — custom height', { tag: '@visual' }, async ({ page }) => {
   await mount(page, `<r-skeleton style="width: 400px; height: 24px"></r-skeleton>`);
   const el = page.locator('r-skeleton');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('skeleton-custom-height.png');
 });
 
-test('skeleton — stacked', async ({ page }) => {
+test('skeleton — stacked', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `

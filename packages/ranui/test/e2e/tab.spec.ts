@@ -28,7 +28,7 @@ const indicatorPlaced = (root: ShadowRoot): boolean => {
   return line !== null && Number.parseFloat(line.style.width) > 0;
 };
 
-test('tab — first tab active (default)', async ({ page }) => {
+test('tab — first tab active (default)', { tag: '@visual' }, async ({ page }) => {
   await mount(page, TABS_HTML);
   const el = page.locator('#tabs');
   await expect(el).toBeVisible();
@@ -36,7 +36,7 @@ test('tab — first tab active (default)', async ({ page }) => {
   await expect(el).toHaveScreenshot('tab-first-active.png');
 });
 
-test('tab — second tab active', async ({ page }) => {
+test('tab — second tab active', { tag: '@visual' }, async ({ page }) => {
   await mount(page, TABS_HTML);
   const el = page.locator('#tabs');
   await expect(el).toBeVisible();
@@ -45,7 +45,7 @@ test('tab — second tab active', async ({ page }) => {
   await expect(el).toHaveScreenshot('tab-second-active.png');
 });
 
-test('tab — disabled tab appearance', async ({ page }) => {
+test('tab — disabled tab appearance', { tag: '@visual' }, async ({ page }) => {
   await mount(page, TABS_HTML);
   const el = page.locator('#tabs');
   await expect(el).toBeVisible();
