@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { demoSetup } from '../helpers';
+import { activeTabPainted, clickTabHeader, demoSetup, popupCaptureBounds, settlePainted } from '../helpers';
 
 test.beforeEach(async ({ page }) => {
   await demoSetup(page, 'r-button');
@@ -34,8 +34,14 @@ test('select open dropdown', { tag: '@visual' }, async ({ page }) => {
   await expect(section).toBeVisible();
   // Click the first select to open its dropdown
   await section.locator('r-select').first().click();
-  await page.waitForTimeout(100);
-  await expect(section).toHaveScreenshot('select-open.png');
+  const popup = `#${await section.locator('r-select').first().getAttribute('aria-controls')}`;
+  await expect(page.locator(popup)).toBeVisible();
+  await expect(page.locator(popup).locator('r-dropdown-item')).toHaveCount(3);
+  await expect(page.locator(popup).locator('r-dropdown-item').last()).toBeVisible();
+  await expect(page).toHaveScreenshot('select-open.png', {
+    fullPage: true,
+    clip: await popupCaptureBounds(page, '#component-select', popup),
+  });
 });
 
 test('checkbox variants', { tag: '@visual' }, async ({ page }) => {
@@ -67,14 +73,16 @@ test('skeleton variants', { tag: '@visual' }, async ({ page }) => {
 test('tabs default state', { tag: '@visual' }, async ({ page }) => {
   const section = page.locator('#component-tabs');
   await expect(section).toBeVisible();
+  await settlePainted(page, '#component-tabs r-tabs', activeTabPainted);
   await expect(section).toHaveScreenshot('tabs-default.png');
 });
 
 test('tabs second tab active', { tag: '@visual' }, async ({ page }) => {
   const section = page.locator('#component-tabs');
   await expect(section).toBeVisible();
-  await section.locator('r-tab[r-key="api"]').click();
-  await page.waitForTimeout(100);
+  await clickTabHeader(page, '#component-tabs r-tabs', 'api');
+  await expect(section.locator('r-tabs')).toHaveAttribute('active', 'api');
+  await settlePainted(page, '#component-tabs r-tabs', activeTabPainted);
   await expect(section).toHaveScreenshot('tabs-api-active.png');
 });
 
@@ -84,12 +92,19 @@ test('popover closed', { tag: '@visual' }, async ({ page }) => {
   await expect(section).toHaveScreenshot('popover-closed.png');
 });
 
-test('popover open on hover', { tag: '@visual' }, async ({ page }) => {
+test('popover opens by hover or touch', { tag: '@visual' }, async ({ page, hasTouch }) => {
   const section = page.locator('#component-popover');
   await expect(section).toBeVisible();
-  await section.locator('r-button').hover();
-  await page.waitForTimeout(150);
-  await expect(section).toHaveScreenshot('popover-open.png');
+  const trigger = section.locator('r-button');
+  if (hasTouch) await trigger.tap();
+  else await trigger.hover();
+  await expect(section.locator('r-popover')).toHaveAttribute('open', '');
+  const popup = '.ran-popover-dropdown:not([style*="display: none"])';
+  await expect(page.locator(popup)).toBeVisible();
+  await expect(page).toHaveScreenshot('popover-open.png', {
+    fullPage: true,
+    clip: await popupCaptureBounds(page, '#component-popover', popup),
+  });
 });
 
 test('math rendering', { tag: '@visual' }, async ({ page }) => {

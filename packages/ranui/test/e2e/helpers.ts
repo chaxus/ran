@@ -84,7 +84,62 @@ export async function demoSetup(page: Page, waitForTag: string, options: { liveM
   await page.goto(`${DEV_SERVER}components`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction((tag) => !!customElements.get(tag), waitForTag);
   await page.evaluate(() => document.fonts.ready.then(() => undefined));
-  await page.addStyleTag({ content: FREEZE_ANIMATIONS });
+  // Keep page chrome in normal flow so automatic screenshot scrolling cannot
+  // paint the sticky header over tall component sections. No component is hidden.
+  await page.addStyleTag({ content: FREEZE_ANIMATIONS + '\n.topbar { position: static; }' });
+}
+
+/** Click a real tab header across the closed-root boundary, never its offscreen pane. */
+export async function clickTabHeader(page: Page, selector: string, key: string): Promise<void> {
+  await page.locator(selector).scrollIntoViewIfNeeded();
+  const point = await page.evaluate(
+    ({ selector, key }) => {
+      const host = document.querySelector(selector) as HTMLElement & { _shadowDom: ShadowRoot };
+      const header = [...host._shadowDom.querySelectorAll('.tab-header-nav-item')].find(
+        (node) => node.getAttribute('r-key') === key,
+      );
+      if (!header) throw new Error(`Missing tab header: ${key}`);
+      const rect = header.getBoundingClientRect();
+      return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+    },
+    { selector, key },
+  );
+  await page.mouse.click(point.x, point.y);
+}
+
+/** The selected header, indicator and visible panel must agree before capture. */
+export const activeTabPainted = (root: ShadowRoot): boolean => {
+  const host = root.host;
+  const header = [...root.querySelectorAll('.tab-header-nav-item')].find(
+    (node) => node.getAttribute('r-key') === host.getAttribute('active'),
+  );
+  const line = root.querySelector('.ran-tab-header-line');
+  if (!header || !line) return false;
+  const a = header.getBoundingClientRect();
+  const b = line.getBoundingClientRect();
+  return a.width > 0 && Math.abs(a.left - b.left) < 1 && Math.abs(a.width - b.width) < 1;
+};
+
+/** Include a portaled popup in the same capture as its trigger, without clipping its options. */
+export async function popupCaptureBounds(page: Page, section: string, popup: string) {
+  return page.evaluate(
+    ({ section, popup }) => {
+      const rects = [section, popup].map((selector) => {
+        const node = document.querySelector(selector);
+        if (!node) throw new Error(`Missing capture target: ${selector}`);
+        return node.getBoundingClientRect();
+      });
+      const x = Math.floor(Math.min(...rects.map((rect) => rect.left)) + scrollX);
+      const y = Math.floor(Math.min(...rects.map((rect) => rect.top)) + scrollY);
+      return {
+        x,
+        y,
+        width: Math.ceil(Math.max(...rects.map((rect) => rect.right)) + scrollX) - x,
+        height: Math.ceil(Math.max(...rects.map((rect) => rect.bottom)) + scrollY) - y,
+      };
+    },
+    { section, popup },
+  );
 }
 
 /**

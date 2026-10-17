@@ -3,6 +3,8 @@ import { DEV_SERVER } from './build/config';
 
 export default defineConfig({
   testDir: './test/e2e',
+  // Keep functional cleanup away from visual candidates and review artifacts.
+  outputDir: './test-results/functional',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
