@@ -37,12 +37,13 @@ export class Tabs extends RanElement {
   _tabsId: number;
   tabHeaderKeyMapIndex: Record<string, number>;
   _navResizeObserver?: ResizeObserver;
+  _paneObserver?: MutationObserver;
 
   constructor() {
     super();
     this._tabsId = ++tabsSeq;
     this._shadowDom = ensureShadowRoot(this, tabCss);
-    this.tabHeaderKeyMapIndex = {};
+    this.tabHeaderKeyMapIndex = Object.create(null);
     const headerRef = createRef<HTMLDivElement>();
     const navRef = createRef<HTMLDivElement>();
     const lineRef = createRef<HTMLDivElement>();
@@ -136,8 +137,7 @@ export class Tabs extends RanElement {
   };
 
   initTabHeaderKeyMapIndex = (key: string, index: number): void => {
-    const value = this.tabHeaderKeyMapIndex[key];
-    if (value) {
+    if (Object.hasOwn(this.tabHeaderKeyMapIndex, key)) {
       throw new Error('tab 组件的 key 值存在重复，或者某个 tab 组件缺少 key 属性');
     } else {
       this.tabHeaderKeyMapIndex[key] = index;
@@ -190,6 +190,7 @@ export class Tabs extends RanElement {
     if (key) {
       const index = this.tabHeaderKeyMapIndex[key];
       const TabHeader = this._nav.children[index];
+      if (!TabHeader) return;
       const { width = 0 } = TabHeader.getBoundingClientRect();
       this._line.style.setProperty('width', `${width}px`);
       let distance = 0;
@@ -231,7 +232,8 @@ export class Tabs extends RanElement {
 
   clickTabHead = (e: Event): void => {
     // Events crossing the header r-button's shadow boundary retarget to the host.
-    const tabHeader = (e.currentTarget as Element) ?? (e.target as Element);
+    const tabHeader = (e.target as Element)?.closest?.('.tab-header-nav-item') ?? (e.currentTarget as Element);
+    if (!tabHeader || tabHeader === this._nav) return;
     const key = tabHeader.getAttribute('r-key');
     const disabled = isDisabled(tabHeader);
     if (!disabled && key) this.activateKey(key);
@@ -313,61 +315,118 @@ export class Tabs extends RanElement {
 
   updateAttribute = (key: string, attribute: string, value: string | null = ''): void => {
     const index = this.tabHeaderKeyMapIndex[key];
+    const focused = this._shadowDom.activeElement === this._nav.children[index];
     if (key && value && this._nav.children[index]) {
       this._nav.children[index]?.setAttribute(attribute, value);
     } else {
       this._nav.children[index]?.removeAttribute(attribute);
     }
+    if (attribute === 'disabled') {
+      this.initActive(index);
+      this.syncTabsAria();
+      const active = this.active ? this._nav.children[this.tabHeaderKeyMapIndex[this.active]] : undefined;
+      if (focused && active && isDisabled(this._nav.children[index])) this.tabFocusable(active).focus();
+    }
   };
 
-  initActive = (): void => {
-    const tabHeaderList = [...this._nav.children];
-    const initTabList = tabHeaderList.filter((item) => !isDisabled(item));
-    let initTabHeader: Element | undefined;
-    if (this.active != null) {
-      initTabHeader = initTabList.find((item) => item.getAttribute('r-key') === this.active);
-      initTabHeader?.setAttribute('r-key', this.active);
-    }
-    if (!initTabHeader) {
-      initTabHeader = initTabList.shift();
-    }
-    if (!initTabHeader) return;
-    const index = tabHeaderList.findIndex((item) => item === initTabHeader);
-    const key = initTabHeader?.getAttribute('r-key') || `${index}`;
-    if (key != null) {
-      this.setAttribute('active', `${key}`);
-      initTabHeader.classList.add('active');
-      this.setTabContent(key);
-      setTimeout(() => {
-        this.setTabLine(key);
-      }, 200);
+  initActive = (fallbackIndex = 0): void => {
+    const headers = [...this._nav.children];
+    const enabled = headers.filter((item) => !isDisabled(item));
+    const current = enabled.find((item) => item.getAttribute('r-key') === this.active);
+    // Keep the active key; otherwise prefer the next position, then work backwards.
+    const next =
+      current ??
+      headers.slice(fallbackIndex).find((item) => !isDisabled(item)) ??
+      headers
+        .slice(0, fallbackIndex)
+        .reverse()
+        .find((item) => !isDisabled(item));
+    if (next) {
+      this.activateKey(next.getAttribute('r-key')!);
+    } else {
+      this.removeAttribute('active');
+      headers.forEach((item) => item.classList.remove('active'));
+      this._line.style.setProperty('width', '0px');
+      this._wrap.style.removeProperty('transform');
+      this.syncTabsAria();
     }
   };
 
   listenSlotChange = (): void => {
     const slots = this._slot.assignedElements();
-    slots.forEach((item, index) => {
-      const tabPane = this.createTabHeader(item, index);
-      this._nav.appendChild(tabPane);
-      tabPane.addEventListener('click', this.clickTabHead);
+    const previous = [...this._nav.children];
+    const focused = previous.find((header) => header === this._shadowDom.activeElement);
+    const focusedIndex = focused ? previous.indexOf(focused) : -1;
+    const activeIndex = this.active ? (this.tabHeaderKeyMapIndex[this.active] ?? 0) : 0;
+    const keys = slots.map((pane, index) => pane.getAttribute('r-key') || `${index}`);
+    const seen = new Set<string>();
+    // Validate before touching the existing DOM: an invalid duplicate must stay loud.
+    keys.forEach((key) => {
+      if (seen.has(key)) throw new Error('tab 组件的 key 值存在重复，或者某个 tab 组件缺少 key 属性');
+      seen.add(key);
     });
-    this.initActive();
+    const existing = new Map(previous.map((header) => [header.getAttribute('r-key'), header]));
+    this.tabHeaderKeyMapIndex = Object.create(null);
+    const headers = slots.map((pane, index) => {
+      const key = keys[index];
+      let header = existing.get(key);
+      if (!header) header = this.createTabHeader(pane, index);
+      else this.initTabHeaderKeyMapIndex(key, index);
+      const label = pane.getAttribute('label') || '';
+      if (header.textContent !== label) header.textContent = label;
+      for (const name of ['icon', 'iconsize', 'type']) {
+        const value = pane.getAttribute(name) || (name === 'type' ? 'text' : null);
+        if (value === null) header.removeAttribute(name);
+        else if (header.getAttribute(name) !== value) header.setAttribute(name, value);
+      }
+      if (isDisabled(pane)) header.setAttribute('disabled', '');
+      else header.removeAttribute('disabled');
+      return header;
+    });
+    previous.forEach((header) => {
+      if (!headers.includes(header)) header.remove();
+    });
+    headers.forEach((header, index) => {
+      // Leave an unaffected focused header connected in its original place.
+      if (this._nav.children[index] !== header) this._nav.insertBefore(header, this._nav.children[index] ?? null);
+    });
+    if (headers.length || previous.length) this.initActive(activeIndex);
     this.syncTabsAria();
-    if (this.align) {
-      if (this.align === 'center') this.initTabLineAlignCenter();
-      if (this.align === 'end') this.initTabLineAlignEnd();
+    if (focused) {
+      const target =
+        headers.includes(focused) && !isDisabled(focused)
+          ? focused
+          : (headers.slice(focusedIndex).find((header) => !isDisabled(header)) ??
+            headers
+              .slice(0, focusedIndex)
+              .reverse()
+              .find((header) => !isDisabled(header)));
+      if (target && this._shadowDom.activeElement !== target) this.tabFocusable(target).focus();
     }
+    if (this.align === 'center') this.initTabLineAlignCenter();
+    if (this.align === 'end') this.initTabLineAlignEnd();
   };
 
   connectedCallback(): void {
     this.handlerExternalCss();
     this._events.on(this._slot, 'slotchange', this.listenSlotChange);
-    this._events.on(this._nav, 'keydown', this.onNavKeydown as EventListener);
+    this._events.on(this._nav, 'keydown', this.onNavKeydown as EventListener).on(this._nav, 'click', this.clickTabHead);
+    this._paneObserver = new MutationObserver((records) => {
+      if (records.some((record) => record.target.parentNode === this)) this.listenSlotChange();
+    });
+    this._paneObserver.observe(this, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['disabled', 'label', 'r-key', 'icon', 'iconsize', 'type'],
+    });
+    this.listenSlotChange();
     this._attachNavResizeObserver();
   }
 
   disconnectedCallback(): void {
     this._events.abort();
+    this._paneObserver?.disconnect();
+    this._paneObserver = undefined;
     this._navResizeObserver?.disconnect();
     this._navResizeObserver = undefined;
   }
@@ -390,7 +449,11 @@ export class Tabs extends RanElement {
       });
     }
     if (name === 'active') {
-      this.setAttribute(name, newValue);
+      if (newValue && Object.hasOwn(this.tabHeaderKeyMapIndex, newValue)) {
+        this.setTabLine(newValue);
+        this.setTabContent(newValue);
+      }
+      this.syncTabsAria();
     }
     if (name === 'sheet') {
       this.handlerExternalCss();
