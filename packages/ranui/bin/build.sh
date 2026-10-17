@@ -32,3 +32,6 @@ printf "\nimport './typings.js';\n" >> "$dist/index.d.ts"
 
 # Normalize ESM declaration imports for consumers.
 node ../../bin/prepare-declarations.mjs dist .
+
+# Include attributions embedded inside upstream media prebundles.
+node ./bin/copy-bundled-notices.mjs

@@ -25,7 +25,7 @@ const inflight = new Map<string, Promise<void>>();
 const JS_ENGINE_HIGHLIGHTER = (): Promise<Highlighter> => {
   if (highlighterPromise) return highlighterPromise;
   // The engine comes from its own subpath so the IIFE build can alias `shiki` to the
-  // smaller `shiki/bundle/web` (which doesn't re-export the engine).
+  // web facade (which does not re-export the engine).
   highlighterPromise = Promise.all([import('shiki'), import('shiki/engine/javascript')]).then(async ([mod, eng]) => {
     shikiModule = mod;
     const hl = await mod.createHighlighter({

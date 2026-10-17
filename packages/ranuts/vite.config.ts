@@ -50,6 +50,8 @@ export const es: BuildOptions = {
   minify: 'esbuild',
   rollupOptions: {
     ...chunkOptimization.rollupOptions,
+    // The declared dependency is installed once; IIFEs still inline it for script tags.
+    external: (id: string): boolean => id === 'jschardet' || id.startsWith('jschardet/'),
     output: { preserveModules: true, preserveModulesRoot: __dirname },
   },
   lib: {

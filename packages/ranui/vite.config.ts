@@ -33,19 +33,12 @@ const enableAnalyze = process.env.RANUI_ANALYZE === 'true';
 const FRAMEWORK_EXTERNAL = ['react', 'react-dom', 'vue'];
 
 /**
- * Every entry in `dependencies`, read from package.json so the two cannot drift.
- *
- * These are left **unbundled in the ES build**, which is what declaring them as
- * dependencies was always supposed to mean. Inlining them instead made every consumer pay
- * for each one twice: once as a copy inside `dist/`, and again as the npm install that
- * copy shadowed and that nothing ever loaded — around 240 MB of node_modules (dashjs,
- * mermaid, hls.js…) that no import could reach. Leaving the specifier bare also hands
- * chunking back to the consumer's own bundler, which knows their target and can dedupe a
- * library they already depend on. shiki made the cost visible (~600 grammar modules
- * fanning out into ranui's tarball), but the problem was never shiki-specific.
- *
- * Standalone IIFE outputs stay self-contained for direct script tags. They use
- * `singleFileResolve`, which swaps shiki for its smaller web bundle.
+ * Shared libraries in `dependencies` stay external in ESM, so consumers can dedupe them.
+ * Private media/diagram engines live in devDependencies and are bundled as separate lazy chunks.
+ * Their published packages contain large debug/source/map distributions (dashjs alone
+ * installs about 130 MB). Adapters expose only our own types, so consumers need neither
+ * those development distributions nor their declarations. Playback and diagrams still load on demand.
+ * IIFEs remain self-contained for classic script tags.
  */
 const RUNTIME_DEPENDENCIES = Object.keys(
   (createRequire(import.meta.url)('./package.json') as { dependencies?: Record<string, string> }).dependencies ?? {},
@@ -88,8 +81,8 @@ const pathAlias: Record<string, string> = {
 
 /**
  * Resolution for standalone IIFE outputs.
- * IIFE cannot code-split, so a plain shiki import would inline all its grammars.
- * Bundled outputs use the same web grammar subset for consistent highlighting.
+ * IIFE cannot code-split, so its facade keeps the web grammar/theme catalog and
+ * constructs only the JavaScript engine already used by the component, omitting unused WASM.
  *
  * The per-component **ES** build does not use this: there `shiki` stays whole and every
  * language becomes its own lazy chunk, so a consumer downloads only what a code fence
@@ -98,13 +91,14 @@ const pathAlias: Record<string, string> = {
 export const singleFileResolve = {
   alias: [
     ...Object.entries(pathAlias).map(([find, replacement]) => ({ find, replacement })),
-    { find: /^shiki$/, replacement: 'shiki/bundle/web' },
+    { find: /^shiki$/, replacement: resolve(__dirname, 'build/shiki-web.ts') },
   ],
   extensions: RESOLVE_EXTENSIONS,
 };
 
 export const bundle: BuildOptions = {
   ...chunkOptimization,
+  license: { fileName: 'IIFE-LICENSES.md' },
   // esbuild currently emits invalid syntax for the full IIFE dependency graph.
   // Terser preserves a valid classic script; smaller component bundles stay fast.
   minify: minifyMode === 'esbuild' ? 'terser' : minifyMode,
@@ -164,6 +158,7 @@ export const componentEntries: Record<string, string> = {
 
 export const es: BuildOptions = {
   ...chunkOptimization,
+  license: { fileName: 'THIRD_PARTY_LICENSES.md' },
   rollupOptions: {
     ...chunkOptimization.rollupOptions,
     external: (id: string): boolean => FRAMEWORK_EXTERNAL.includes(id) || isRuntimeDependency(id),

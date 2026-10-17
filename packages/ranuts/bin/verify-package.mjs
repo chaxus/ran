@@ -19,6 +19,7 @@ try {
   const installed = join(fixture, 'node_modules', 'ranuts');
   await mkdir(installed, { recursive: true });
   run('tar', ['-xzf', join(fixture, packed.filename), '--strip-components=1', '-C', installed]);
+  await symlink(join(root, 'node_modules', 'jschardet'), join(fixture, 'node_modules', 'jschardet'), 'junction');
   await symlink(join(root, 'node_modules', '@types'), join(fixture, 'node_modules', '@types'), 'junction');
   await writeFile(join(fixture, 'package.json'), '{"type":"module"}');
   await writeFile(
@@ -94,9 +95,10 @@ void [result, visual, vnode];
     join(fixture, 'runtime.mjs'),
     `
 import assert from 'node:assert/strict';
-import { rgbToHex } from 'ranuts';
+import { rgbToHex, arrayBufferToString } from 'ranuts';
 import { I18nCore } from 'ranuts/i18n';
 assert.equal(rgbToHex(1, 2, 3), '#010203');
+assert.equal(arrayBufferToString(new TextEncoder().encode('Hello')), 'Hello');
 assert.equal(typeof I18nCore, 'function');
 await assert.rejects(import('ranuts/node'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' });
 `,
@@ -105,7 +107,10 @@ await assert.rejects(import('ranuts/node'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORT
   console.log('ranuts tarball: ESM runtime imports passed');
 
   // Measure a real consumer import, with the consumer bundler's default tree shaking.
-  await writeFile(join(fixture, 'entry.mjs'), "import { rgbToHex } from 'ranuts'; console.log(rgbToHex(1,2,3));");
+  await writeFile(
+    join(fixture, 'entry.mjs'),
+    "import { rgbToHex, arrayBufferToString } from 'ranuts'; console.log(rgbToHex(1,2,3));",
+  );
   const result = await build({
     configFile: false,
     logLevel: 'error',
