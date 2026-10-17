@@ -6,7 +6,7 @@ test.beforeEach(async ({ page, baseURL }) => {
   await isolatedSetup(page, baseURL ?? DEV_SERVER, 'r-select');
   await mount(
     page,
-    `<r-select id="select" showsearch="true" style="width:240px">
+    `<r-select id="select" showsearch style="width:240px">
     <r-option value="a">Alpha</r-option><r-option value="b">Beta</r-option>
     <r-option value="bb">Beta two</r-option></r-select>`,
   );
@@ -28,13 +28,25 @@ test('search keeps real keyboard text editing, live filtering and clearing', asy
   await page.keyboard.type('x');
   await page.keyboard.press('End');
   await page.keyboard.press('Backspace');
-  expect(await insideShadow(page, '#select', (root) => root.querySelector<HTMLInputElement>('input')!.value)).toBe(
-    'xBeta tw',
-  );
+  const edited = await insideShadow(page, '#select', (root) => root.querySelector<HTMLInputElement>('input')!.value);
   await page.keyboard.press('ControlOrMeta+A');
   await page.keyboard.press('Backspace');
   await expect(page.locator('r-dropdown-item')).toHaveText(['Alpha', 'Beta', 'Beta two']);
   expect(await insideShadow(page, '#select', (root) => root.activeElement?.tagName)).toBe('INPUT');
+  // Home/End follow each engine's native macOS editing conventions.
+  await page.evaluate(() => {
+    const native = document.createElement('input');
+    native.id = 'native';
+    native.type = 'search';
+    document.body.append(native);
+  });
+  await page.locator('#native').fill('Beta two');
+  await page.keyboard.press('End');
+  await page.keyboard.press('Home');
+  await page.keyboard.type('x');
+  await page.keyboard.press('End');
+  await page.keyboard.press('Backspace');
+  expect(edited).toBe(await page.locator('#native').inputValue());
 });
 
 test('host typeahead selects once with a nonbubbling change; composing Enter does not select', async ({ page }) => {

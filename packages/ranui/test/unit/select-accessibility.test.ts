@@ -49,7 +49,7 @@ describe('r-select accessibility keyboard contract', () => {
   });
   it('leaves native search editing keys alone and filters native input and change', async () => {
     const select = await createSelect();
-    select.showSearch = 'true';
+    select.setAttribute('showSearch', '');
     for (const key of ['b', ' ', 'Home', 'End', 'Backspace']) {
       const event = new KeyboardEvent('keydown', { key, bubbles: true, composed: true, cancelable: true });
       select._search.dispatchEvent(event);
