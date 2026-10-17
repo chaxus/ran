@@ -490,8 +490,9 @@ and intentional spacing — nothing more.
 floats. Not for a code block, a table, a list row, a previous/next link, or a cell in a
 gallery.
 
-**Never nest a box in a box, and never double the padding.** A card inside a padded panel
-does not add another inset.
+**Avoid redundant nested containers and doubled padding.** A card inside a padded panel
+does not need another decorative frame or inset. Keep functionally required nested controls or
+surfaces, and coordinate their radii with the actual inset; containment alone is not a reason to add a box.
 
 > Three containers each contributed their own top padding — the page column, the landing
 > wrapper, and the hero — and the first line of content sat 280px below the header. Each
