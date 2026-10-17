@@ -28,5 +28,12 @@
 - RED before guide creation: 2 failures / 4 passes. The new guide path did not exist and the actual npm package omitted it.
 - GREEN: related documentation suites passed, 204 tests across 4 files; includes actual npm pack contents, plugin routes, foundation tokens and LF/CRLF/fallback fixtures.
 - `pnpm verify:links`, `pnpm verify:docs`, `pnpm verify:design`, full `pnpm lint:prettier`, explicit plugin Prettier and targeted test oxlint passed; `git diff --check` clean.
-- Reviewed all eight locale motion paragraphs, retaining reduced motion and the unchanged palette-transition ban. No runtime, theme, dependency or lock changes; no active old-guide routes outside historical task docs.
+- Manually reviewed all eight locale motion paragraphs, retaining reduced motion and the unchanged palette-transition ban; this paragraph review was not the full `check:langs` gate. No runtime, theme, dependency or lock changes; no active old-guide routes outside historical task docs.
 - The canonical guide is 297 lines; independently review general applicability, source adaptations and publication paths in Chunk 2 before delivery.
+
+## Discovered locale-check cleanup
+
+- [x] Run the actual `pnpm -F docs check:langs` gate: RED, eight unused `home` labels. Root reproduced the same failures in an isolated `origin/main` archive (`work/ran-universal-baseline-langs.log`, workspace evidence outside the repository).
+- [x] Trace message consumers and remove only the eight unused `home` label keys; add documentation ownership and `check:langs` routing to AGENTS.
+- [x] Verify the existing locale gate turns GREEN: 8 languages / 236 labels, all pages present and structurally matched. Navigation and all sidebar trees are byte-identical before/after (8 locales / 32 nav items / 32 sidebar trees).
+- [x] Full docs tests: 67 passed across 11 files; docs `tsc`, full Prettier, links, targeted message-table oxlint and diff checks passed. Initial docs test/type attempts could not resolve unbuilt workspace package outputs; building ranuts then ranui through their existing scripts supplied those prerequisites, after which both checks passed without configuration or runtime-source changes.
