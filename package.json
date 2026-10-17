@@ -21,9 +21,10 @@
     "verify:docs": "pnpm -F ranui doc:api:check && pnpm -F ranui doc:style:check && pnpm -F ranui doc:changelog:check && pnpm -F ranuts doc:api:check",
     "verify:design": "node bin/run-checks.mjs verify:design",
     "verify:packages": "node bin/verify-packages.mjs",
-    "verify:consumers": "pnpm -F ranuts verify:package",
+    "verify:consumers": "pnpm -F ranuts verify:package && node bin/verify-package-consumers.mjs",
     "verify:links": "node bin/verify-md-links.mjs",
-    "publint": "pnpm exec publint packages/ranui && pnpm exec publint packages/ranuts"
+    "publint": "pnpm exec publint packages/ranui && pnpm exec publint packages/ranuts && pnpm exec publint packages/ranview",
+    "verify:scripts": "node --test bin/test/*.test.mjs"
   },
   "homepage": "https://ran.chaxus.com/",
   "keywords": [],

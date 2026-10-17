@@ -16,6 +16,13 @@ import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import { getMessageContainer, type MessageRenderOptions } from './container';
 
+/** Options accepted by the message API, shared with the optional browser globals. */
+export interface MessagePrompt extends MessageRenderOptions {
+  content: string;
+  duration?: number;
+  close?: () => void;
+}
+
 const AnimationTime = 300;
 const defaultDuration = 3000;
 
@@ -49,7 +56,7 @@ export class CustomMessage extends RanElement {
   _icon?: HTMLElement;
   _span: HTMLSpanElement;
   _shadowDom: ShadowRoot;
-  timeId?: NodeJS.Timeout;
+  timeId?: ReturnType<typeof setTimeout>;
   close?: () => void;
   static get observedAttributes() {
     return ['type', 'content', 'sheet'];
@@ -150,17 +157,17 @@ function initMessageApi() {
   if (typeof window === 'undefined') return null;
 
   const commonPrompt = (type: string) => {
-    return (options: Ran.Prompt | string | undefined | null) => {
+    return (options: MessagePrompt | string | undefined | null) => {
       const renderOptions: MessageRenderOptions = {};
       const message = View('r-message').class('message').build() as HTMLElement & {
-        timeId?: NodeJS.Timeout;
+        timeId?: ReturnType<typeof setTimeout>;
       };
       if (message.timeId) {
         clearTimeout(message.timeId);
       }
       message.setAttribute('type', type);
       let duration = defaultDuration;
-      let close: Ran.Prompt['close'];
+      let close: MessagePrompt['close'];
       if (!options) return;
       if (typeof options === 'string') {
         message.setAttribute('content', options);

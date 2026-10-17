@@ -54,7 +54,7 @@ export class Select extends RanElement {
   // Search listeners are (re)wired reactively as `showSearch` toggles, so they
   // live in their own manager that can be aborted independently of _events.
   _searchEvents = new EventManager();
-  removeTimeId?: NodeJS.Timeout;
+  removeTimeId?: ReturnType<typeof setTimeout>;
   _listboxId: string;
   _activeIndex: number;
   _slot: HTMLSlotElement;
@@ -104,7 +104,7 @@ export class Select extends RanElement {
   // WAI-ARIA combobox type-ahead: accumulated recently-typed characters, reset
   // after a pause between keystrokes.
   _typeaheadBuffer = '';
-  _typeaheadTimeId?: NodeJS.Timeout;
+  _typeaheadTimeId?: ReturnType<typeof setTimeout>;
   static get observedAttributes(): string[] {
     return [
       'disabled',

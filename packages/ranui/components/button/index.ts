@@ -13,7 +13,7 @@ export class Button extends RanElement {
   _slot!: HTMLSlotElement;
   _shadowDom!: ShadowRoot;
   _events = new EventManager();
-  debounceTimeId?: NodeJS.Timeout;
+  debounceTimeId?: ReturnType<typeof setTimeout>;
 
   static get observedAttributes(): string[] {
     return ['disabled', 'icon', 'effect', 'iconSize', 'type', 'aria-label', 'sheet'];

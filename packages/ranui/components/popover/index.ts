@@ -67,7 +67,7 @@ export class Popover extends RanElement {
   popoverInner?: HTMLDivElement;
   popoverInnerBlock?: HTMLDivElement;
   _shadowDom: ShadowRoot;
-  removeTimeId?: NodeJS.Timeout;
+  removeTimeId?: ReturnType<typeof setTimeout>;
   _repositionBound = false;
   /**
    * Positioning, portalling, scroll-following, the enter/exit animation and the

@@ -44,9 +44,9 @@ const FRAMEWORK_EXTERNAL = ['react', 'react-dom', 'vue'];
  * library they already depend on. shiki made the cost visible (~600 grammar modules
  * fanning out into ranui's tarball), but the problem was never shiki-specific.
  *
- * Deliberately **not** applied to the CJS/IIFE outputs: those exist to be dropped in via
- * `<script src>` with no resolver, so they must stay self-contained. They use
- * `singleFileResolve`, which additionally swaps shiki for its smaller web bundle.
+ * Standalone IIFE outputs stay self-contained for direct script tags. The CommonJS
+ * graph shares its helpers and registry while resolving ranuts/ranview through Node.
+ * Both use `singleFileResolve`, which swaps shiki for its smaller web bundle.
  */
 const RUNTIME_DEPENDENCIES = Object.keys(
   (createRequire(import.meta.url)('./package.json') as { dependencies?: Record<string, string> }).dependencies ?? {},
@@ -88,11 +88,9 @@ const pathAlias: Record<string, string> = {
 };
 
 /**
- * Resolution for the **single-file** outputs (CJS + IIFE bundles, and the standalone
- * per-component IIFE files). These formats cannot code-split, so an import of `shiki`
- * would inline its entire grammar set — ~600 languages, tens of megabytes — into one
- * file. The web bundle carries the ~50 most common languages instead, which is what
- * makes a `<script src>` drop-in viable at all.
+ * Resolution for bundled outputs (the CommonJS graph and standalone IIFEs).
+ * IIFE cannot code-split, so a plain shiki import would inline all its grammars.
+ * Bundled outputs use the same web grammar subset for consistent highlighting.
  *
  * The per-component **ES** build does not use this: there `shiki` stays whole and every
  * language becomes its own lazy chunk, so a consumer downloads only what a code fence
@@ -114,7 +112,7 @@ export const bundle: BuildOptions = {
     entry: resolve(__dirname, 'index.ts'),
     name: 'ranui',
     fileName: 'index',
-    formats: ['cjs', 'iife'],
+    formats: ['iife'],
   },
 };
 

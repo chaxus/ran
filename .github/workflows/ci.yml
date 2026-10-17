@@ -49,6 +49,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify repository scripts
+        run: pnpm run verify:scripts
+
       - name: Format check
         run: pnpm run lint:prettier
 
@@ -106,7 +109,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.node_version == 24
         run: pnpm run publint
 
-      - name: Verify packed ranuts consumers and import budget
+      - name: Verify packed library consumers and import budget
         if: matrix.os == 'ubuntu-latest' && matrix.node_version == 24
         run: pnpm run verify:consumers
 
