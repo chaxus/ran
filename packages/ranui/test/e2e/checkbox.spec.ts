@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { DEV_SERVER } from '../../build/config';
-import { isolatedSetup, mount } from './helpers';
+import { isolatedSetup, insideShadow, mount } from './helpers';
 
 test.use({ viewport: { width: 600, height: 200 } });
 
@@ -26,6 +26,13 @@ test('checkbox — disabled unchecked', { tag: '@visual' }, async ({ page }) => 
   await mount(page, `<r-checkbox disabled>Disabled</r-checkbox>`);
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
+  expect(
+    await insideShadow(
+      page,
+      'r-checkbox',
+      (root) => getComputedStyle(root.querySelector('.ran-checkbox-inner')!, '::after').opacity,
+    ),
+  ).toBe('0');
   await expect(el).toHaveScreenshot('checkbox-disabled-unchecked.png');
 });
 
@@ -33,6 +40,13 @@ test('checkbox — disabled checked', { tag: '@visual' }, async ({ page }) => {
   await mount(page, `<r-checkbox disabled checked="true">Disabled checked</r-checkbox>`);
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
+  expect(
+    await insideShadow(
+      page,
+      'r-checkbox',
+      (root) => getComputedStyle(root.querySelector('.ran-checkbox-inner')!, '::after').opacity,
+    ),
+  ).toBe('1');
   await expect(el).toHaveScreenshot('checkbox-disabled-checked.png');
 });
 

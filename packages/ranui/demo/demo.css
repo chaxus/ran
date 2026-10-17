@@ -611,6 +611,12 @@ section > p.lead {
   box-shadow: var(--ran-shadow-menu);
 }
 
+/* Grid items have a definite row height. Let the field row size to its content
+   so labels and validation messages remain inside their card. */
+#component-input {
+  --ran-input-height: auto;
+}
+
 .demo-card h3 {
   display: flex;
   align-items: center;
