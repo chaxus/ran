@@ -51,9 +51,9 @@
 - 🛠️ **Bibliotecas de utilidades**: utilidades en TypeScript
 - 🤖 **Aprendizaje automático**: herramientas básicas de ML y experimentos
 - 📱 **Aplicaciones web**: aplicación de chat IM (prototipo)
-- 🔧 **Herramientas de desarrollo**: herramientas de compilación y depuración
+- 🔧 **Herramientas de desarrollo**: utilidades de depuración
 - 🌐 **Web3**: experimentos con contratos inteligentes
-- 🎯 **Herramientas visuales**: experimentos de visualización de datos
+- 🎯 **Herramientas visuales**: renderizado 2D con `ranuts/visual` (Canvas, WebGL y WebGPU)
 
 ## 📦 Paquetes
 
@@ -71,8 +71,6 @@ Este monorepo reúne varios paquetes experimentales:
 | Paquete                                 | Descripción                             |
 | --------------------------------------- | --------------------------------------- |
 | [im](packages/im)                       | Prototipo de aplicación de chat         |
-| [visual](packages/visual)               | Experimentos de visualización de datos  |
-| [ranite](packages/ranite)               | Experimentos con herramientas de build  |
 | [debug](packages/debug)                 | Utilidades de depuración                |
 | [image-process](packages/image-process) | Experimentos de procesamiento de imagen |
 | [cpro](packages/cpro)                   | Aprendizaje y experimentos en C/C++     |

@@ -51,9 +51,9 @@
 - 🛠️ **Hilfsbibliotheken**: Hilfsmittel in TypeScript
 - 🤖 **Maschinelles Lernen**: einfache ML-Werkzeuge und Versuche
 - 📱 **Webanwendungen**: IM-Chat-Anwendung (Prototyp)
-- 🔧 **Entwicklungswerkzeuge**: Build-Werkzeuge und Hilfen zum Debuggen
+- 🔧 **Entwicklungswerkzeuge**: Hilfen zum Debuggen
 - 🌐 **Web3**: Versuche mit Smart Contracts
-- 🎯 **Visuelle Werkzeuge**: Versuche zur Datenvisualisierung
+- 🎯 **Visuelle Werkzeuge**: 2D-Rendering mit `ranuts/visual` (Canvas, WebGL und WebGPU)
 
 ## 📦 Pakete
 
@@ -68,15 +68,13 @@ Dieses Monorepo versammelt verschiedene experimentelle Pakete:
 
 ### Experimentelle Projekte
 
-| Paket                                   | Beschreibung                        |
-| --------------------------------------- | ----------------------------------- |
-| [im](packages/im)                       | Prototyp einer Chat-Anwendung       |
-| [visual](packages/visual)               | Versuche zur Datenvisualisierung    |
-| [ranite](packages/ranite)               | Versuche mit Entwicklungswerkzeugen |
-| [debug](packages/debug)                 | Hilfen zum Debuggen                 |
-| [image-process](packages/image-process) | Versuche zur Bildverarbeitung       |
-| [cpro](packages/cpro)                   | Lernen und Ausprobieren in C/C++    |
-| [rust](packages/rust)                   | Lernen und Ausprobieren in Rust     |
+| Paket                                   | Beschreibung                     |
+| --------------------------------------- | -------------------------------- |
+| [im](packages/im)                       | Prototyp einer Chat-Anwendung    |
+| [debug](packages/debug)                 | Hilfen zum Debuggen              |
+| [image-process](packages/image-process) | Versuche zur Bildverarbeitung    |
+| [cpro](packages/cpro)                   | Lernen und Ausprobieren in C/C++ |
+| [rust](packages/rust)                   | Lernen und Ausprobieren in Rust  |
 
 Welche davon die CI tatsächlich prüft, steht in [packages/manifest.json](packages/manifest.json), und diese Datei wird ausgeführt, statt bloß zu beschreiben: `bin/run-checks.mjs` führt eine Prüfung über alle Pakete aus, die sie deklarieren. Ein Paket, das dort als geprüft geführt wird, ist es also wirklich, und bei einem ungeprüften steht der Grund dabei. `pnpm run verify:packages` schlägt fehl, sobald unter `packages/` ein Verzeichnis auftaucht, das im Manifest fehlt — ein neues Paket kann somit nicht ankommen, ohne dass jemand entscheidet, ob es geprüft wird.
 

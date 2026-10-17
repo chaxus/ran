@@ -2,9 +2,7 @@
  * Keeps packages/manifest.json honest against what is on disk.
  *
  * The manifest decides which packages CI checks, so a package missing from it is a package
- * nobody decided about — which is how `visual` ended up with 48 TypeScript files that
- * typechecked cleanly and were run by nothing, and how `ranite` kept a tsconfig option
- * TypeScript had removed.
+ * nobody decided about. Declaring its status and checks makes that decision explicit.
  */
 import {
   NEEDS_REASON,

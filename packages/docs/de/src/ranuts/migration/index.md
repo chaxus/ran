@@ -36,3 +36,9 @@ formatDate liefert Text. Für ein Date-Objekt verwenden Sie new Date(timestamp).
 Für MD5-Kompatibilität ist eine eigene Implementierung nötig (node:crypto in Node). SHA-256 erzeugt einen anderen Hash; beide sind keine Verfahren zur Passwortspeicherung.
 
 Skripte werden anhand des exakten Typs und Inhalts dedupliziert, ohne Hashing oder Normalisierung von Zeilenumbrüchen.
+
+## Entfernte experimentelle Workspaces
+
+Die eigenständigen Pakete `visual` und `ranite` wurden entfernt. Verwenden Sie die gepflegte Engine `ranuts/visual` und die vorhandenen Vite-Entwicklungsskripte.
+
+Aufrufer von `visual` müssen die öffentliche API anpassen: mit `await Application.create(options)` initialisieren, `Graphics` / `Container` zu `app.stage` hinzufügen und `app.render()` oder `app.start()` aufrufen. Für `Bar`, `Line`, `Pie` und das unfertige `Sankey` gibt es keinen Ersatz. Alte interne Geometrie- und Ereignisklassen sind keine öffentlichen Exporte; ein geänderter Importname allein reicht nicht.

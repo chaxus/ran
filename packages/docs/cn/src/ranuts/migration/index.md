@@ -36,3 +36,9 @@ formatDate 返回格式化文本；需要 Date 对象时使用 new Date(timestam
 必须兼容 MD5 时使用专门的实现（Node 中使用 node:crypto）。SHA-256 的摘要不同，不能直接替换已有摘要；二者都不是密码存储算法。
 
 脚本加载现在按完整 type 和内容去重，不再计算哈希或归一化换行。
+
+## 移除的实验性工作区
+
+独立的 `visual` 和 `ranite` 包已移除。二维渲染统一使用维护中的 `ranuts/visual`，开发服务使用已有的 Vite 脚本。
+
+`visual` 调用方需要适配当前公开 API：使用 `await Application.create(options)` 初始化，将 `Graphics` / `Container` 节点加入 `app.stage`，再调用 `app.render()` 或 `app.start()`。旧 `Bar`、`Line`、`Pie` 和未完成的 `Sankey` 在 ranuts 中没有替代接口。旧几何和事件内部类也不属于公开导出，不能只修改导入名称。

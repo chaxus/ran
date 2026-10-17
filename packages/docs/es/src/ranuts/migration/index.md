@@ -36,3 +36,9 @@ formatDate devuelve texto. Use new Date(timestamp) para obtener un objeto Date. 
 Para compatibilidad MD5 use una implementación específica (node:crypto en Node). SHA-256 produce otro resumen; ninguno es un algoritmo de almacenamiento de contraseñas.
 
 Los scripts se deduplican por tipo y contenido exactos, sin hashes ni normalización de saltos de línea.
+
+## Workspaces experimentales retirados
+
+Se han eliminado los paquetes independientes `visual` y `ranite`. Use el motor mantenido `ranuts/visual` y los scripts de desarrollo existentes basados en Vite.
+
+La migración de `visual` exige adaptar la API: inicialice con `await Application.create(options)`, añada nodos `Graphics` / `Container` a `app.stage` y llame a `app.render()` o `app.start()`. Los antiguos `Bar`, `Line`, `Pie` y el `Sankey` incompleto no tienen sustituto. Las clases internas de geometría y eventos tampoco son exportaciones públicas; cambiar solo el import no basta.
