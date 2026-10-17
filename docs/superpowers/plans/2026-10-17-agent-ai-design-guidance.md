@@ -1,5 +1,10 @@
 # Agent AI design guidance implementation plan
 
+> Historical proposal, superseded by the user's general-interface direction. Follow the
+> [universal interface spec](../specs/2026-10-17-universal-interface-guidance-design.md) and
+> [implementation plan](../plans/2026-10-17-universal-interface-guidance.md). AI-specific categories
+> and paths below record earlier work; they do not govern current guidance.
+
 > **For agentic workers:** REQUIRED: Use subagent-driven-development to implement this plan. Steps use checkbox syntax for tracking.
 
 **Goal:** Make the session's verified AI UI lessons discoverable and actionable within ran's existing design system.
@@ -12,7 +17,7 @@
 
 ### Task 1: Integrate the canonical guide and verification
 
-Files to create: `AGENTS.md`, `packages/ranui/docs/AI_INTERFACES.md`, `packages/ranui/test/unit/docs.ai-interfaces.test.ts`.
+Files to create: `AGENTS.md`, `packages/ranui/docs/AI_INTERFACES.md`, `packages/ranui/test/unit/docs.interface-guidance.test.ts`.
 Files to modify: `packages/ranui/docs/DESIGN.md`, `packages/ranui/CLAUDE.md`, `packages/ranui/package.json`, `plugins/ranui/skills/ranui/SKILL.md`, `README.md`, `packages/docs/src/ranui/design-guides/index.md`, `packages/docs/cn/src/ranui/design-guides/index.md`.
 
 - [x] Read the spec, DESIGN §§2/7–12, CODING, public component API and actual theme declarations. Keep root demo DESIGN separate. Before any skill edit, read writing-skills and keep this change a thin reference, not a second instruction body.

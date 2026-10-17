@@ -21,9 +21,9 @@
 - Design **all reachable states** (default, hover, active, focus, disabled, loading, empty, error), not just the happy path.
 - **Verify the rendered result**, in light and dark, at narrow and wide widths — code review alone is not enough.
 
-For AI workspaces, read [AI_INTERFACES.md](./AI_INTERFACES.md) after §§11–12: composer/queue
-semantics, recoverable failures, capability-aware settings, connectors, artifacts and regression
-evidence. It applies this standard to host applications without adding library APIs or defaults.
+For composed interfaces, read [INTERFACE_GUIDE.md](./INTERFACE_GUIDE.md) after §§11–12: forms,
+search, async work, recovery, capability-aware settings, external data, reviewable outputs and craft.
+It applies this standard to host applications without adding library APIs or defaults.
 
 Conflict resolution order: **user goals → verified evidence → this file → repo guidance (`CLAUDE.md`) → shipped patterns → general heuristics.**
 
@@ -230,14 +230,16 @@ The mistake to avoid: **don't promote the wrapper unconditionally to fix that.**
 
 Durations: `--ran-motion-duration-fast` `0.15s`, `--ran-motion-duration-base` `0.2s`.
 
-| Duration | Use                                                |
-| -------- | -------------------------------------------------- |
-| 0ms      | A change that is already obvious — apply instantly |
-| ~150ms   | Hover / active state transitions                   |
-| ~200ms   | Popovers & menus appearing                         |
-| ~300ms   | Modals & dialogs                                   |
+| Duration | Use                                                                     |
+| -------- | ----------------------------------------------------------------------- |
+| 0ms      | Frequent hover, focus and keyboard feedback; changes already understood |
+| ~150ms   | Optional, purposeful small motion, not a mandatory hover delay          |
+| ~200ms   | Menu/popover motion when it clarifies the layer change                  |
+| ~300ms   | Dialog motion when orientation benefits from it                         |
 
-**Principle:** the bigger the change, the more time it earns. Otherwise: don't animate. Keep motion quick, light, and restrained. Respect `prefers-reduced-motion`.
+**Principle:** purpose and frequency determine whether motion earns time. Repeated interaction defaults
+to immediate feedback; a larger change is not automatically a reason to animate. Use existing tokens
+for purposeful motion, keep it quick and interruptible, and respect `prefers-reduced-motion`.
 
 **Never animate a theme switch.** Transitions are for _interaction_ (hover / focus / press), not for flipping light↔dark. CSS cannot tell _why_ a property changed: any palette prop listed in a `transition` will also fade when the theme flips its token — each component at its own duration, while the host page has already switched. A general-purpose library must not impose that on its consumers. Rules:
 
@@ -573,8 +575,10 @@ a page type you assume implies it.
 repeated rows share column geometry; a nested level returns exactly to its parent's spine
 when it ends. A missing optional icon or badge must not move the labels beside it.
 
-**When two edges or gaps are meant to be equal, a one-pixel difference is a defect, not an
-optical approximation.**
+**When two layout edges or gaps are meant to be equal, a one-pixel difference is a defect.**
+Optical correction for an asymmetric glyph is a separate, documented asset/component decision:
+reuse the correction at supported sizes while preserving exact sibling gaps, baselines and alignment
+spines. It is not permission to nudge page margins until a screenshot looks balanced.
 
 ### Selection, links and other semantic lies
 

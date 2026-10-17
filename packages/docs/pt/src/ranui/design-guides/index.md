@@ -81,7 +81,7 @@ Um `z-index` geral no invólucro eleva _tudo_ que há dentro (inclusive conteúd
 
 ## Movimento {#motion}
 
-Quanto maior a mudança, mais tempo ela recebe; abaixo desse limiar, não anime. A resposta ao hover e ao estado ativo fica em torno de 150ms, os menus em 200ms, os diálogos em 300ms, e uma mudança que já é óbvia recebe 0ms. Respeite `prefers-reduced-motion`.
+O propósito e a frequência de uso determinam se é preciso movimento. O feedback frequente de hover, foco e teclado é imediato por padrão. Use os tokens existentes apenas quando o movimento explicar uma mudança: cerca de 150ms para pequenas transições, 200ms para menus e 300ms para diálogos são exemplos opcionais, não atrasos obrigatórios. Permita interromper o movimento e respeite `prefers-reduced-motion`.
 
 **Nunca deixe uma propriedade da paleta fazer transição.** O CSS não sabe _por que_ uma cor mudou, então uma `transition` em `background-color`, `color`, `border-color`, `box-shadow`, `fill` ou `stroke` também dispara quando o **tema** vira, com cada elemento desbotando no próprio ritmo enquanto o resto da página já trocou. Anime propriedades de movimento (`transform`, `opacity`, geometria) em vez disso. `transition: all` e atalhos pelados como `transition: 0.2s` significam _tudo_, propriedades da paleta incluídas; ambos são proibidos nos estilos do próprio ranui e são má ideia nos seus.
 
