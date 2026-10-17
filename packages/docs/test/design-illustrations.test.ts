@@ -51,11 +51,16 @@ it('covers every locale and exports three self-contained themed SVGs per languag
     expect(document.querySelectorAll('a[download]')).toHaveLength(3);
   }
   for (const [name, svg] of files) {
+    const parsed = new DOMParser().parseFromString(svg, 'image/svg+xml');
+    expect(parsed.querySelector('parsererror'), name).toBeNull();
+    expect(parsed.documentElement.namespaceURI, name).toBe('http://www.w3.org/2000/svg');
+    expect(parsed.documentElement.hasAttribute('width'), name).toBe(false);
+    expect(parsed.documentElement.hasAttribute('height'), name).toBe(false);
     expect(name).toMatch(/^illustrations\/[\w-]+\/(alignment|radius|density)\.svg$/);
     expect(svg).toContain('prefers-color-scheme: dark');
     expect(svg).toContain('prefers-reduced-motion: reduce');
     expect(svg).toContain('--ran-color-text:');
-    expect(svg).not.toMatch(/<script|https?:\/\/(?!www.w3.org)|animation[^;}]*infinite/);
+    expect(svg).not.toMatch(/<script|https?:\/\/(?!www\.w3\.org)|animation[^;}]*infinite/);
   }
 });
 
