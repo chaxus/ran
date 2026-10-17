@@ -71,7 +71,7 @@
 | パッケージ                              | 説明                         |
 | --------------------------------------- | ---------------------------- |
 | [im](packages/im)                       | チャットアプリのプロトタイプ |
-| [debug](packages/debug)                 | デバッグ用ユーティリティ     |
+| [debug](docs/learning/debug/README.md)  | デバッグの学習ノート         |
 | [image-process](packages/image-process) | 画像処理の実験               |
 | [cpro](packages/cpro)                   | C/C++ の学習と実験           |
 | [rust](packages/rust)                   | Rust の学習と実験            |

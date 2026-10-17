@@ -71,7 +71,7 @@ Este monorepo reúne varios paquetes experimentales:
 | Paquete                                 | Descripción                             |
 | --------------------------------------- | --------------------------------------- |
 | [im](packages/im)                       | Prototipo de aplicación de chat         |
-| [debug](packages/debug)                 | Utilidades de depuración                |
+| [debug](docs/learning/debug/README.md)  | Notas de aprendizaje sobre depuración   |
 | [image-process](packages/image-process) | Experimentos de procesamiento de imagen |
 | [cpro](packages/cpro)                   | Aprendizaje y experimentos en C/C++     |
 | [rust](packages/rust)                   | Aprendizaje y experimentos en Rust      |

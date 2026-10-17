@@ -71,7 +71,7 @@ Dieses Monorepo versammelt verschiedene experimentelle Pakete:
 | Paket                                   | Beschreibung                     |
 | --------------------------------------- | -------------------------------- |
 | [im](packages/im)                       | Prototyp einer Chat-Anwendung    |
-| [debug](packages/debug)                 | Hilfen zum Debuggen              |
+| [debug](docs/learning/debug/README.md)  | Lernnotizen zum Debuggen         |
 | [image-process](packages/image-process) | Versuche zur Bildverarbeitung    |
 | [cpro](packages/cpro)                   | Lernen und Ausprobieren in C/C++ |
 | [rust](packages/rust)                   | Lernen und Ausprobieren in Rust  |

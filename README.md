@@ -71,7 +71,7 @@ This monorepo contains various experimental packages:
 | Package                                 | Description                  |
 | --------------------------------------- | ---------------------------- |
 | [im](packages/im)                       | Chat application prototype   |
-| [debug](packages/debug)                 | Debug utilities              |
+| [debug](docs/learning/debug/README.md)  | Debugging learning notes     |
 | [image-process](packages/image-process) | Image processing experiments |
 | [cpro](packages/cpro)                   | C/C++ learning & experiments |
 | [rust](packages/rust)                   | Rust learning & experiments  |
