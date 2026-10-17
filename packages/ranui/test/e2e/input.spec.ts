@@ -47,6 +47,10 @@ test('input — focused', { tag: '@visual' }, async ({ page }) => {
   await el.evaluate((host) => (host as HTMLElement).focus());
   await expect.poll(() => insideShadow(page, '#inp', (root) => root.activeElement?.tagName)).toBe('INPUT');
   expect(await insideShadow(page, '#inp', (root) => root.activeElement?.matches(':focus-visible'))).toBe(true);
+  // Screenshot caret hiding cannot enter this closed root; keep focus, hide only the blink.
+  await insideShadow(page, '#inp', (root) => {
+    root.querySelector<HTMLInputElement>('input')!.style.caretColor = 'transparent';
+  });
   // Include the complete outer focus ring, rather than cropping it to the host.
   await expect(page.locator('#focus-frame')).toHaveScreenshot('input-focused.png');
 });

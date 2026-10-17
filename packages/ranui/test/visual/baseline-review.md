@@ -70,6 +70,13 @@ Screenshots alone do not certify numerical contrast, physical devices or real me
 
 ## Acceptance evidence
 
+The release-review follow-up hides only the blinking native caret inside the focused-input
+fixture's closed shadow root, after verifying actual input focus and `:focus-visible`.
+The two reviewed desktop/mobile focused-input PNGs change exactly 16 pixels each in the
+caret's one-pixel column; labels, placeholder, complete focus ring and dimensions are intact.
+The other 140 PNGs retain their reviewed SHA-256 hashes. The harness fingerprint is refreshed;
+renderer/font pins and all screenshot tolerances remain unchanged.
+
 Candidate generation and two fresh strict comparisons use:
 
 ```sh
