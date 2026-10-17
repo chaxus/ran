@@ -6,6 +6,7 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { currentTag, readPlan, ROOT, verifyArtifacts } from './release.mjs';
+import { assertSizeBudgets, measureInstallation } from './package-size.mjs';
 
 const tag = process.argv[2] ?? (await currentTag());
 const plan = await readPlan(ROOT, tag);
@@ -18,6 +19,7 @@ try {
   run('npm', [
     'install',
     '--ignore-scripts',
+    '--omit=dev',
     '--engine-strict',
     '--no-audit',
     '--no-fund',
@@ -26,6 +28,12 @@ try {
     '--registry=https://registry.npmjs.org/',
     ...receipt.packages.map((pkg) => join(artifacts, pkg.archive)),
   ]);
+  const sizes = await measureInstallation(fixture, artifacts, receipt);
+  await writeFile(join(artifacts, 'size-report.json'), `${JSON.stringify(sizes, null, 2)}\n`);
+  assertSizeBudgets(sizes, JSON.parse(await readFile(join(ROOT, 'bin/package-size-budgets.json'), 'utf8')));
+  console.log(
+    `Production installation: ${sizes.installation.bytes} bytes in ${sizes.installation.files} files (size budgets passed)`,
+  );
   const imports = [];
   for (const pkg of plan) {
     const installed = join(fixture, 'node_modules', pkg.name);
@@ -36,6 +44,21 @@ try {
     const manifest = JSON.parse(await readFile(join(installed, 'package.json'), 'utf8'));
     assert.equal(manifest.version, pkg.version);
     assert.equal(manifest.engines.node, '>=24.0.0');
+    if (pkg.name === 'ranui') {
+      for (const name of ['dashjs', 'mpegts.js']) {
+        assert.ok(
+          (await readFile(join(installed, 'dist/third-party', name, 'LICENSE.txt'), 'utf8')).length > 100,
+          `${name}: missing prebundle notices`,
+        );
+      }
+      for (const file of ['THIRD_PARTY_LICENSES.md', 'IIFE-LICENSES.md']) {
+        const notices = await readFile(join(installed, 'dist', file), 'utf8');
+        for (const name of ['dashjs', 'hls.js', 'mpegts.js', 'mermaid']) {
+          assert.ok(notices.includes(`## ${name} - `), `${file}: missing ${name} notice`);
+          assert.ok(!manifest.dependencies?.[name], `${name} must be bundled without a second production install`);
+        }
+      }
+    }
     for (const [path, conditions] of Object.entries(manifest.exports)) {
       if (typeof conditions !== 'object' || !conditions.import || path.includes('*')) continue;
       const name = pkg.name + (path === '.' ? '' : path.slice(1));
@@ -87,9 +110,10 @@ import { Button as BarrelButton } from 'ranui';
 import { renderToString } from 'ranui/ssr';
 import { renderHTMLToString } from 'ranui/ssr-stream';
 import { Div } from '@alixex/ranview/static';
-import { rgbToHex } from 'ranuts';
+import { rgbToHex, arrayBufferToString } from 'ranuts';
 assert.equal(Button, BarrelButton);
 assert.equal(rgbToHex(1,2,3), '#010203');
+assert.equal(arrayBufferToString(new TextEncoder().encode('Hello')), 'Hello');
 assert.equal(Div().text('Hello').serialize(), '<div>Hello</div>');
 assert.match(renderToString(new Button()), /<r-button/);
 assert.match(await renderHTMLToString('<r-button>Ready</r-button>'), /shadowrootmode/);
@@ -100,7 +124,10 @@ assert.match(await renderHTMLToString('<r-button>Ready</r-button>'), /shadowroot
     join(fixture, 'index.html'),
     '<html><body><r-button>Ready</r-button><script type="module" src="/main.js"></script></body></html>',
   );
-  await writeFile(join(fixture, 'main.js'), "import 'ranui/button'; import 'ranui/input'; import 'ranui/style';");
+  await writeFile(
+    join(fixture, 'main.js'),
+    "import 'ranui/button'; import 'ranui/input'; import 'ranui/player'; import 'ranui/mermaid'; import 'ranui/style';",
+  );
   const { build } = require('vite');
   const result = await build({ root: fixture, configFile: false, logLevel: 'error', build: { write: false } });
   const outputs = (Array.isArray(result) ? result : [result]).flatMap((item) => item.output);
