@@ -22,6 +22,27 @@ export const FREEZE_ANIMATIONS = `
 `;
 
 const BASE_BODY_STYLE = 'margin: 0; padding: 24px; background: #ffffff; box-sizing: border-box;';
+/** Remove the demo's live media input before custom elements can start a network load.
+ * Aborting HLS requests is insufficient: its delayed error dialog can outlive body clearing
+ * and intercept an unrelated control. This changes only fetched demo HTML, never player code
+ * or media fixtures subsequently mounted by a test.
+ */
+async function withoutLiveDemoMedia(page: Page, target: string): Promise<void> {
+  const origin = new URL(target).origin;
+  await page.route(
+    (url) => url.origin === origin && ['/', '/components'].includes(url.pathname),
+    async (route) => {
+      if (route.request().resourceType() !== 'document') {
+        await route.fallback();
+        return;
+      }
+      const response = await route.fetch();
+      const html = await response.text();
+      const body = html.replace(/<r-player\b[^>]*>/gi, (tag) => tag.replace(/\s+src=(["']).*?\1/gi, ''));
+      await route.fulfill({ response, body });
+    },
+  );
+}
 
 /**
  * Navigate to the dev server, wait for a custom element tag to register,
@@ -34,6 +55,7 @@ const BASE_BODY_STYLE = 'margin: 0; padding: 24px; background: #ffffff; box-sizi
  * anyway.
  */
 export async function isolatedSetup(page: Page, url: string, waitForTag: string): Promise<void> {
+  await withoutLiveDemoMedia(page, url);
   await page.goto(url, { waitUntil: 'load' });
   await page.waitForFunction((tag) => !!customElements.get(tag), waitForTag);
   // Components that measure their own layout (r-tab's sliding indicator, for one) read label
@@ -57,7 +79,8 @@ export async function isolatedSetup(page: Page, url: string, waitForTag: string)
  * it the formula is measured against fallback metrics and the screenshot lands a hundred-odd
  * pixels off, differently each run.
  */
-export async function demoSetup(page: Page, waitForTag: string): Promise<void> {
+export async function demoSetup(page: Page, waitForTag: string, options: { liveMedia?: boolean } = {}): Promise<void> {
+  if (!options.liveMedia) await withoutLiveDemoMedia(page, DEV_SERVER);
   await page.goto(`${DEV_SERVER}components`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction((tag) => !!customElements.get(tag), waitForTag);
   await page.evaluate(() => document.fonts.ready.then(() => undefined));

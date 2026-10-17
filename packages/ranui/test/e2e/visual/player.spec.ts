@@ -1,11 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { demoSetup } from '../helpers';
 
-test.beforeEach(async ({ page }) => {
-  await demoSetup(page, 'r-player');
-});
-
 test('player initial UI (no video loaded)', { tag: '@visual' }, async ({ page }) => {
+  await demoSetup(page, 'r-player');
   // Inject a standalone player with no src so the video area is deterministic
   await page.evaluate(() => {
     const container = document.createElement('div');
@@ -26,6 +23,7 @@ test('player initial UI (no video loaded)', { tag: '@visual' }, async ({ page })
 });
 
 test('player control bar layout', { tag: '@visual' }, async ({ page }) => {
+  await demoSetup(page, 'r-player');
   // Inject player and let it partially initialize, then screenshot just the controls
   await page.evaluate(() => {
     const container = document.createElement('div');
@@ -47,6 +45,7 @@ test('player control bar layout', { tag: '@visual' }, async ({ page }) => {
 });
 
 test('player with live stream src mounts in the demo', async ({ page }) => {
+  await demoSetup(page, 'r-player', { liveMedia: true });
   // Functional only — deliberately no screenshot. This section holds the demo's live HLS
   // stream, and a decoding <video> never yields two identical frames, so the old
   // `toHaveScreenshot` here could only ever fail with "Failed to take two consecutive stable
@@ -55,4 +54,5 @@ test('player with live stream src mounts in the demo', async ({ page }) => {
   const section = page.locator('#component-player');
   await expect(section).toBeVisible();
   await expect(section.locator('r-player')).toHaveCount(1);
+  await expect(section.locator('r-player')).toHaveAttribute('src', 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8');
 });
