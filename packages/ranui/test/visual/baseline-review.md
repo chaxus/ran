@@ -105,3 +105,16 @@ form submission repeated across those engines passed **9/9**. Ranui type/declara
 **1,567** unit tests, **76** SSR tests, design rules (no new violations), packed ESM consumers,
 generated docs, eight-language structure and **9** guide tests passed. The built container
 contains no Playwright configuration declarations in `dist`. See the PR for final CI status.
+
+### Popover capture timing and reduced-motion follow-up
+
+The mobile demo Popover capture intermittently measured 127px against the reviewed 130px
+image. Container probes showed the surrounding demo card moving 3px after the popup was
+positioned: later hover declarations overrode the earlier reduced-motion transform rule.
+Keep the existing reduced-motion preference authoritative, with browser regressions for all
+five hover surfaces and both motion preferences. Also register the public `after-show`
+listener before hover/tap and wait for it before calculating capture bounds.
+
+All 142 PNG hashes, renderer/font fingerprints, screenshot assertions and comparison
+tolerances remain unchanged; only the owning harness fingerprint is refreshed to include
+the reviewed fixture change. No PNG baseline is regenerated.

@@ -95,12 +95,19 @@ test('popover closed', { tag: '@visual' }, async ({ page }) => {
 test('popover opens by hover or touch', { tag: '@visual' }, async ({ page, hasTouch }) => {
   const section = page.locator('#component-popover');
   await expect(section).toBeVisible();
+  const popover = section.locator('r-popover');
+  await popover.evaluate((node) => {
+    node.addEventListener('after-show', () => node.setAttribute('data-test-after-show', ''), { once: true });
+  });
   const trigger = section.locator('r-button');
   if (hasTouch) await trigger.tap();
   else await trigger.hover();
-  await expect(section.locator('r-popover')).toHaveAttribute('open', '');
+  await expect(popover).toHaveAttribute('open', '');
   const popup = '.ran-popover-dropdown:not([style*="display: none"])';
   await expect(page.locator(popup)).toBeVisible();
+  // Visibility precedes the positioning frame and entrance transform. Measure
+  // the capture only after the component reports its final painted geometry.
+  await expect(popover).toHaveAttribute('data-test-after-show', '');
   await expect(page).toHaveScreenshot('popover-open.png', {
     fullPage: true,
     clip: await popupCaptureBounds(page, '#component-popover', popup),
