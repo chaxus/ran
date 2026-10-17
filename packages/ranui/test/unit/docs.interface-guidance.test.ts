@@ -147,7 +147,9 @@ describe('executable interface guidance', () => {
     for (const owner of ['INTERFACE_GUIDE', 'INTERACTION', 'WORKFLOW_PATTERNS']) {
       expect(files.has(`docs/${owner}.md`), `package omits docs/${owner}.md`).toBe(true);
     }
-    const canonical = [...files].filter((path) => path === 'CLAUDE.md' || /^docs\/[^/]+\.md$/.test(path));
+    const canonical = [...files].filter(
+      (path) => path === 'CLAUDE.md' || /^README(?:\.[^/]+)?\.md$/.test(path) || /^docs\/.+\.md$/.test(path),
+    );
     const omitted = canonical.flatMap((owner) =>
       localReadingDependencies(read(owner), owner)
         .filter((target) => !files.has(target))

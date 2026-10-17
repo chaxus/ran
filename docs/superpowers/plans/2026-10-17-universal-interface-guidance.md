@@ -68,7 +68,7 @@ The user authorized another overall review and fixes in the same PR. Previous de
 - [x] Repair the installed plugin's unexported `ranui/ssr-registry` import recommendation. Distinguish consumer rendering exports from source-only component registration. Avoid claiming a stale short component list is a complete inventory; check executable plugin import examples against real package exports. Correct the same plugin's form contract: colorpicker does not participate in native FormData; the host handles value/change when submitting it.
 - [x] Make the prose measure script-aware: 60–75 is an initial Latin heuristic, not a CJK mandate. Label the digits-only browser probe as an approximation and require real-text review.
 - [x] Demonstrate RED on missing packaged dependencies and invalid plugin import, then GREEN relevant docs tests, links/generated/design, docs tests/locale/types, formatting and targeted lint. Independent spec review precedes quality review.
-- [ ] Push reviewed commits to #421, update final evidence, wait for latest-head CI and review again. No merge, npm release or runtime/dependency/baseline changes.
+- [x] Push reviewed commits to #421, update final evidence, wait for latest-head CI and review again. Delivered `cac52917`: all 11 checks passed, open/mergeable, not merged.
 
 ## Chunk 4 implementation evidence
 
@@ -78,3 +78,34 @@ The user authorized another overall review and fixes in the same PR. Previous de
 - Plugin examples now use public SSR rendering exports and distinguish internal source registration. Its short subpath list is examples, with package exports as inventory; colorpicker's value/change contract is separate from the three form-associated fields. Executable import examples are checked against package exports rather than prohibited-word matching.
 - DESIGN's measure and checklist account for actual scripts/fonts/zoom, and its digit-width probe no longer claims to count rendered characters. The linked WCAG explanation is identified as Level AAA, not a universal library requirement.
 - 67 documentation-site tests across 11 files, locale parity (8 languages / 236 labels), docs tsc, links, generated references and all design verification gates passed. Full repository Prettier, explicit plugin Prettier, targeted test oxlint and diff checks passed. Independent spec/quality review follows before delivery. No runtime, dependency, lock, foundation-token or baseline changes.
+
+## Chunk 5: Agent task walkthroughs (latest user request)
+
+Three agents without conversation history exercised the existing native toolbar, app search,
+and a simple settings form in an actual extracted npm package. They found the optional
+recipes avoid new business infrastructure, but bootstrap retrieval, stale summaries and
+consumer/library verification boundaries still create friction. No new guide category is needed.
+
+### Task A: Reading and application boundaries
+
+- [x] Add short task/section anchors and an explicit stopping rule to the existing index; retain its small routing role. Point exact installed foundation lookup at shipped `dist/ranui.css` and source contributors at existing theme files, not a duplicate value table.
+- [x] Give the plugin a minimal style/fonts/theme/component bootstrap. Explain native submit versus r-button visual type, reuse of existing controls/frameworks and optional recipes; do not introduce a form framework or compact-button API/example subsystem.
+- [x] Resolve documented conflicts: native controls versus rebuilding primitives, wrapping translated field labels, contextual short action labels versus unconditional action+object, optional disabled opacity, and affected-surface verification. Keep broad CI gates unchanged and identify library-only checks at their links; public summaries defer to DESIGN.
+- [x] Remove stale blue-primary/theme-pack and base-scale-only claims from CLAUDE/README summaries. Broaden the actual-pack reader check to all auto-shipped README variants and nested docs; keep local links only for installed targets and explicitly link source-only material to the repository. Synchronize the affected theme clarification in eight READMEs.
+- [x] Show RED for real README reading dead ends, then GREEN guidance/reference/package tests plus links/generated/design/format/lint/locale/types. Record the exercise findings and deferred source-level API catalog enhancements; no new generic audit framework or normative document.
+
+### Task A implementation evidence
+
+- Three history-free walkthroughs used an existing native toolbar, app search and a small settings form in an extracted npm package. The fixes preserve native controls/frameworks, existing local tokens and theme authority; optional queues/accounts/revisions remain conditional. No extra form guide, density preset, state framework or business infrastructure was introduced.
+- RED: broadening the actual npm-pack reading closure from CLAUDE/root docs to all shipped `README*.md` and nested `docs/**/*.md` produced 1 failure / 8 passes and 49 unique omitted README reading targets. GREEN: 9 guidance tests and all 209 related documentation tests across 4 suites. LF/CRLF link fixtures and masked-token negatives remain.
+- Source-only style guides, full/filter token references, theme architecture, utils and sibling-package guides now use explicit repository URLs. All eight auto-included README variants remain locally linked; LICENSE uses its actual installed relative location. No source tree was added to package files.
+- The existing index is 45 lines, with owner-section anchors, a stopping rule and the installed path to shipped foundation CSS. The plugin supplies only the minimal style/button/input bootstrap, optional fonts/theme initialization and native-submit boundary; public exports and installed declaration routes remain authoritative. Public API catalog enhancements discovered during the walkthrough are deferred rather than silently invented.
+- DESIGN resolves native primitive reuse, translated field-label wrapping, contextual action labels, optional disabled opacity and affected-surface verification. CLAUDE removes its stale blue-primary/theme-pack value snapshot and defers wording to DESIGN. Eight README theme summaries now acknowledge explicit dark overrides; root repository CI gates are unchanged.
+- GREEN: 67 documentation-site tests / 11 files, 8 languages / 236 labels, docs tsc, link/generated/design checks, full repository Prettier, explicit plugin Prettier, targeted test oxlint and diff checks. Independent spec/quality review and latest-head CI follow at root delivery. Task B's reproduced search defect remains a separate implementation and commit.
+
+### Task B: Apply the rule to the evidenced search defect
+
+- [ ] Regress actual docs search highlighter via DOM interaction: overlapping `remark`/`mark` terms corrupt inserted mark tags; `amp` matches an escaped entity; `A&B` is not highlighted literally. Root independently reproduced the changed visible text. Also cover literal regex/markup characters and unchanged input/focus/IME behavior.
+- [ ] Highlight original plain text once and escape each unmatched/matched segment safely; reuse for title and snippet without searching generated markup. Keep existing result structure, local index, draft/input and keyboard wiring. No new request cancellation layer, queue, component or shared state package.
+- [ ] Run affected and full docs tests/types/build, inspect real-browser search and all affected guide gates. Independent spec then quality review; commit separately from guidance fixes.
+- [ ] Repack and repeat relevant consumer reading paths after fixes, push both reviewed commits to #421, wait for all latest-head CI checks and review once more. No merge or npm release. Runtime scope is limited to the reproduced docs search highlighting defect; foundation tokens, dependencies and baselines remain unchanged.

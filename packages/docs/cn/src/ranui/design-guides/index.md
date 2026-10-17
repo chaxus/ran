@@ -16,7 +16,7 @@ description: '用 ranui 做界面的设计规范：先定角色再由令牌给�
 [界面规范索引](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md) 按职责查阅：
 [交互规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md) 负责可观察的行为，
 [可选工作流模式](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md) 仅用于相关宿主任务。
-视觉规则保留在设计规范，工程规则保留在 CODING。安装后可从 `node_modules/ranui/docs/` 读取这些统一维护的文档，本页不重复规则。
+视觉规则由统一维护的 [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) 负责；本页仅作摘要，不另建标准。工程规则保留在 CODING。安装后可从 `node_modules/ranui/docs/` 读取这些统一维护的文档，本页不重复规则。
 
 > **适用场景**：在用 `<r-*>` 元素排版页面或搭业务组件，需要决定一个颜色、一段间距、一个字号、
 > 一层投影或一个动效时长时。答案永远是同一句：**先确定角色，值交给令牌。**

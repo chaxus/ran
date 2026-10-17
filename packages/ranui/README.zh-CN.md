@@ -48,12 +48,12 @@ npm install ranui --save
 
 当前样式系统已统一为 CSS Token 与 `::part()` 规范。
 
-- 样式覆盖规范：[docs/style-override.md](./docs/style-override.md)
-- 完整 Token/Part 清单（自动生成）: [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
+- 样式覆盖规范：[docs/style-override.md · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-override.md)
+- 完整 Token/Part 清单（自动生成）: [docs/style-tokens-parts.md · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-parts.md)
 - 面向使用方的公开样式 API（自动生成）: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
-- 公开 Token 过滤配置：[docs/style-token-filter.json](./docs/style-token-filter.json)
+- 公开 Token 过滤配置：[docs/style-token-filter.json · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-token-filter.json)
 
-可通过以下命令刷新样式文档：
+仓库源码贡献者可通过以下命令刷新样式文档：
 
 ```bash
 pnpm doc:style
@@ -63,7 +63,7 @@ CI 会在仓库根目录运行 `pnpm run verify:docs`，当自动生成的文档
 
 ### 主题
 
-RanUI 基于 [Geist 设计体系](https://vercel.com/geist) 提供统一的 CSS Token 主题体系——Geist 是 Vercel 的开源设计语言，其核心是把颜色组织成一条**状态阶梯**（每条色阶 100→1000，每档一个固定职责：背景 → 悬停 → 边框 → 实心填充 → 文字）。RanUI 采用这套阶梯并搭配 **Geist Sans / Geist Mono**，因此暗色模式只需重定义基础色阶，所有语义 Token 自动翻转。支持 `light`、`dark`、`system` 三种模式（已不再提供主题包）。可在运行时切换模式或覆盖任意 Token（SSR 安全）：
+RanUI 采用 [Geist 设计体系](https://vercel.com/geist) 的状态阶梯，并提供可选的 **Geist Sans / Geist Mono** 字体。主题 API 支持 `light`、`dark`、`system`，不提供主题包。保留宿主已有的主题管理，或按需使用 ranui 的持久化模式。运行时调用支持 SSR：
 
 ```ts
 import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui/theme';
@@ -77,7 +77,7 @@ setThemeTokens({ '--ran-radius-md': '10px' });
 
 `ranui/theme` 入口只包含主题引擎，不会注册任何自定义元素——只需要 Token / 暗色模式时它不会把组件带进你的包体。这些 API 同样从 `ranui` 主入口重新导出。
 
-暗色模式只重定义基础色阶，语义 Token（`--ran-color-*`）引用色阶后自动翻转。详见 [docs/THEME_STYLE_SYSTEM_DESIGN.md](./docs/THEME_STYLE_SYSTEM_DESIGN.md) 与 [docs/DESIGN.md](./docs/DESIGN.md)。
+暗色模式会更新基础色阶，并显式覆盖部分表面、主操作悬停/按下状态及阴影。使用语义 Token；视觉规则以 [DESIGN.md](./docs/DESIGN.md) 为准，[主题架构](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md) 说明仓库中的实现。
 
 ### 国际化
 
@@ -284,7 +284,7 @@ window.message?.success({
 
 ### 响应式原语
 
-`signal`、`createEffect`、`computed`、`batch`、`untrack` 以及所有权层（`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`）与 DOM builder 一起提供，用于在无框架依赖的情况下构建响应式页面区块。设计参考 SwiftUI 的 `@Observable`，并采用 Solid.js 风格的保证：effect 重新执行前自动清理过期订阅；`batch()` 将多次写入合并为一次 flush；`computed` 是**惰性 + 按值记忆化**的（未被读取的 memo 从不计算，且仅当值真正改变时才唤醒依赖）；每个 effect/memo/绑定都归其作用域所有，销毁一个 `createRoot` 即可一次性拆除其派生的一切 —— 这是页面/路由的销毁单元。`ElementBuilder` 链式方法（`text`/`attr`/`class`/…）也接受 signal getter 作为自动更新的绑定。完整指南见 [`ranview`](../ranview/README.md)。
+`signal`、`createEffect`、`computed`、`batch`、`untrack` 以及所有权层（`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`）与 DOM builder 一起提供，用于在无框架依赖的情况下构建响应式页面区块。设计参考 SwiftUI 的 `@Observable`，并采用 Solid.js 风格的保证：effect 重新执行前自动清理过期订阅；`batch()` 将多次写入合并为一次 flush；`computed` 是**惰性 + 按值记忆化**的（未被读取的 memo 从不计算，且仅当值真正改变时才唤醒依赖）；每个 effect/memo/绑定都归其作用域所有，销毁一个 `createRoot` 即可一次性拆除其派生的一切 —— 这是页面/路由的销毁单元。`ElementBuilder` 链式方法（`text`/`attr`/`class`/…）也接受 signal getter 作为自动更新的绑定。完整指南见 [`ranview` · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md)。
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';
@@ -328,7 +328,7 @@ function initCounter(container: HTMLElement) {
 }
 ```
 
-详细 API 请参考 [工具文档](./utils/README.zh-CN.md)。
+详细 API 请参考 [工具文档 · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.zh-CN.md)。
 
 ### 路由
 
@@ -397,7 +397,7 @@ button.setAttribute('effect', 'true');
 const html = renderToString(button);
 ```
 
-更多细节请查看 [Utility Documentation](./utils/README.md)。
+更多细节请查看 [Utility Documentation · 仓库源码](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md)。
 
 ## 组件开发约定
 
@@ -425,4 +425,4 @@ const html = renderToString(button);
 
 ## Meta
 
-[LICENSE (MIT)](/LICENSE)
+[LICENSE (MIT)](./LICENSE)

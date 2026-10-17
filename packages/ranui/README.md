@@ -51,7 +51,7 @@ Every element's attributes, properties, **events (with `detail` shapes)**, slots
 - Per-element API: [docs/COMPONENTS.md](./docs/COMPONENTS.md)
 - Design standard (color/spacing/typography/motion/a11y): [docs/DESIGN.md](./docs/DESIGN.md)
 
-Regenerate after changing a component's API with:
+In a repository checkout, contributors regenerate the reference after changing a component's API:
 
 ```bash
 pnpm doc:api
@@ -79,10 +79,10 @@ reference shipped in the package ([docs/COMPONENTS.md](./docs/COMPONENTS.md)).
 
 The styling system is unified around CSS Tokens and `::part()`.
 
-- Style override guide: [docs/style-override.md](./docs/style-override.md)
-- Complete Token/Part list, generated automatically: [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
+- Style override guide: [docs/style-override.md · repository source](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-override.md)
+- Complete Token/Part list, generated automatically: [docs/style-tokens-parts.md · repository source](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-parts.md)
 - Public styling API for consumers, generated automatically: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
-- Public token filter config: [docs/style-token-filter.json](./docs/style-token-filter.json)
+- Public token filter config: [docs/style-token-filter.json · repository source](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-token-filter.json)
 
 Refresh the styling docs with:
 
@@ -92,7 +92,7 @@ pnpm doc:style
 
 ### Theming
 
-ranui ships a single token system based on the [Geist design system](https://vercel.com/geist) — Vercel's open-source design language, where color is a **state ladder** (each scale runs 100→1000, one job per step: background → hover → border → solid fill → text). ranui adopts that ladder plus **Geist Sans / Geist Mono**, so dark mode just redefines the base scale and every semantic token flips automatically. Three modes — `light`, `dark`, `system` — and no theme packs. Switch the mode or override any token at runtime (SSR-safe):
+ranui uses the [Geist design system](https://vercel.com/geist) state ladder and optional **Geist Sans / Geist Mono** fonts. The theme API supports `light`, `dark` and `system`; there are no theme packs. Preserve the host's existing theme authority, or opt into ranui's persisted mode. Runtime changes are SSR-safe:
 
 ```ts
 import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui/theme';
@@ -108,7 +108,7 @@ The `ranui/theme` entry ships only the theming engine — no custom elements are
 registered, so it stays out of your bundle if you just want tokens/dark mode.
 The same APIs are also re-exported from the `ranui` barrel.
 
-Dark mode redefines only the base color scale; semantic tokens (`--ran-color-*`) reference it and flip automatically. See [docs/THEME_STYLE_SYSTEM_DESIGN.md](./docs/THEME_STYLE_SYSTEM_DESIGN.md) and [docs/DESIGN.md](./docs/DESIGN.md).
+Dark mode updates base scales plus explicit surface, primary hover/active and shadow overrides. Use semantic tokens; [DESIGN.md](./docs/DESIGN.md) owns visual rules, while [theme architecture](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md) explains the repository implementation.
 
 ### Internationalization
 
@@ -318,7 +318,7 @@ window.message?.success({
 
 ### Reactive Primitives
 
-`signal`, `createEffect`, `computed`, `batch`, `untrack`, and an ownership layer (`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`) ship alongside the DOM builder for building reactive page sections without a framework. The design mirrors SwiftUI's `@Observable` with Solid.js-style guarantees: effects auto-clean stale subscriptions before each re-run; `batch()` coalesces writes into one flush; `computed` is **lazy + value-memoized** (an unread memo never computes, and it wakes dependents only when its value actually changes); and every effect/memo/binding is owned by its scope, so disposing a `createRoot` tears down everything it spawned in one call — the teardown unit for a page/route. `ElementBuilder` chainables (`text`/`attr`/`class`/…) also accept a signal getter for auto-updating bindings. Full guide: [`ranview`](../ranview/README.md).
+`signal`, `createEffect`, `computed`, `batch`, `untrack`, and an ownership layer (`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`) ship alongside the DOM builder for building reactive page sections without a framework. The design mirrors SwiftUI's `@Observable` with Solid.js-style guarantees: effects auto-clean stale subscriptions before each re-run; `batch()` coalesces writes into one flush; `computed` is **lazy + value-memoized** (an unread memo never computes, and it wakes dependents only when its value actually changes); and every effect/memo/binding is owned by its scope, so disposing a `createRoot` tears down everything it spawned in one call — the teardown unit for a page/route. `ElementBuilder` chainables (`text`/`attr`/`class`/…) also accept a signal getter for auto-updating bindings. Full guide: [`ranview` · repository source](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md).
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';
@@ -362,7 +362,7 @@ function initCounter(container: HTMLElement) {
 }
 ```
 
-See [Utility Documentation](./utils/README.md) for the full API.
+See [Utility Documentation · repository source](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md) for the full API.
 
 ### Routing
 
@@ -431,7 +431,7 @@ button.setAttribute('effect', 'true');
 const html = renderToString(button);
 ```
 
-See [Utility Documentation](./utils/README.md) for details.
+See [Utility Documentation · repository source](https://github.com/chaxus/ran/blob/main/packages/ranui/utils/README.md) for details.
 
 ## Component Development Conventions
 
@@ -459,4 +459,4 @@ Contributions from learners and developers are welcome. This is an experimental 
 
 ## Meta
 
-[LICENSE (MIT)](/LICENSE)
+[LICENSE (MIT)](./LICENSE)

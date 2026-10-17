@@ -29,11 +29,32 @@ When `ranui` is installed in a project, its docs ship inside the package:
 - **`node_modules/ranui/docs/style-tokens-public.md`** — the CSS variable (theming
   token) catalog.
 
+If a generated contract omits a detail, check the element's declaration through the
+installed package's `exports` → `types` target before inspecting repository source.
+
 **`node_modules/ranui/docs/CODING.md`** and **`node_modules/ranui/CLAUDE.md`** also
 ship with the package: engineering rules and the detailed implementation reference
 (architecture, builder, LESS conventions, testing). Source copies live in `packages/ranui`.
 
 ## Import map
+
+Start with the host's existing controls, framework and theme authority; a small fix does not
+require a new component or state layer. Read only applicable owner sections, then stop when
+the supported contract, patch and evidence are clear. Foundation declarations ship in
+`node_modules/ranui/dist/ranui.css`; component overrides are in the generated token catalog.
+
+Minimal bootstrap (once in the host entry):
+
+```ts
+import 'ranui/style'; // foundation tokens and shared styles
+import 'ranui/button';
+import 'ranui/input';
+```
+
+Add `import 'ranui/fonts'` only when the host wants bundled Geist fonts. If the host opts
+into ranui's persisted light/dark/system mode, use `import { initTheme } from 'ranui/theme'`
+and call `initTheme()` once. Preserve an existing host theme authority; do not add a switch
+or another persistence owner merely to use the components.
 
 Per-component, tree-shakeable side-effect imports register the custom element:
 
@@ -75,6 +96,9 @@ checkout. It is not exported from `ranui/ssr` or a consumer registration subpath
   collected by `new FormData(form)` when they're real descendants of a native
   `<form>`, same as any native field — no wrapper component required. Use
   `serializeForm(form)` (from `ranui`) to turn a submit into a plain object.
+  `r-button`'s `type` chooses visual appearance, not native form submission. Use a native
+  `<button type="submit">` when submit semantics are needed, or explicitly call
+  `form.requestSubmit()` from the host action; do not assume `type="submit"` on `r-button` submits.
   `r-colorpicker` is not form-associated: read its `value` / `change` event
   (`detail.value`) and explicitly include it in the host's submitted data when needed.
 - **Feedback/overlay**: `r-message` (toasts), `r-modal`, `r-popover`, `r-loading`,
