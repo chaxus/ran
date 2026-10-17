@@ -110,6 +110,10 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 把 `status` 和 `message` 配对使用，让状态通过文字而不是单纯的颜色传达。
 
+状态标签和提示文字使用 `--ran-color-warning-foreground` 与 `--ran-color-danger-foreground`，
+随浅色、深色主题切换文字色阶；`--ran-color-warning` 和 `--ran-color-danger` 继续用于实体填充。
+已有的组件标签、提示文字颜色覆盖令牌仍然有效。
+
 <ran-demo column>
   <r-input status="error" label="用户名" message="该字段为必填项"></r-input>
   <r-input status="warning" label="用户名" message="请检查这个值"></r-input>

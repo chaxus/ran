@@ -11,6 +11,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 基于 Web Components 构建，`hls.js`/`dashjs`/`mpegts.js` 按各自格式按需懒加载，所以同一个播放器能在各框架间不做改动直接运行。源码里实际具备的能力：
 
 - 带缓冲指示和悬停时间提示的可拖拽进度条
+- CSS 绘制的缓冲指示器；减少动态效果时保留可见的静态圆环。可用 `--ran-player-loading-color` 和 `--ran-player-loading-border` 自定义。
 - 音量控制与静音切换
 - 播放倍速选择
 - 全屏切换（`Esc` 退出）

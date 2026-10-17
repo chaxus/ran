@@ -209,6 +209,10 @@ That makes it a supported way to drive the component, and something to style and
 
 ### Search Function `showSearch`
 
+A bare `showSearch` attribute also enables search. Typing filters options immediately; clearing
+the field restores them. Native text editing is preserved, and Enter during IME composition
+does not select an option. Without search, typing on the focused selector still locates options.
+
 <ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>

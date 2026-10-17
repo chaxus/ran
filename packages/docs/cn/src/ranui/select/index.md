@@ -208,6 +208,10 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 ### 搜索功能 `showSearch`
 
+不带值的 `showSearch` 属性也会启用搜索。输入时立即过滤选项，清空后恢复全部选项；
+保留原生文本编辑行为，输入法组合期间按 Enter 不会选中选项。未启用搜索时，
+在聚焦的选择器上打字仍可快捷定位选项。
+
 <ran-demo>
   <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>

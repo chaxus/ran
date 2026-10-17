@@ -11,6 +11,7 @@ A native `<r-player>` media element that wraps a `<video>` with a unified contro
 Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on demand for their respective formats, so the same player runs unchanged across frameworks. Capabilities driven from source:
 
 - Draggable progress bar with buffered indicator and a time tooltip on hover
+- Buffering indicator drawn with CSS; reduced-motion mode keeps a visible static ring. Customize it with `--ran-player-loading-color` and `--ran-player-loading-border`.
 - Volume control and mute toggle
 - Playback speed selection
 - Fullscreen toggle (and `Esc` to exit)

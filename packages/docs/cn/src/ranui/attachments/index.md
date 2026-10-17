@@ -43,13 +43,8 @@ composer.append(strip);
 ```
 
 附件条为每个文件渲染一行：缩略图（图片）、文件名、大小和一个移除按钮。`count` 会反射到宿主元素上，
-并且在为空时**移除属性**而不是写成 `0`，因此空的附件条可以完全不占空间：
-
-```css
-r-attachments:not([count]) {
-  display: none;
-}
-```
+并且在为空时**移除属性**而不是写成 `0`。组件已自动收起空列表；保留宿主元素，
+才能在移除最后一项时维持键盘位置。
 
 ### 发送
 
@@ -151,6 +146,17 @@ type AttachmentRejection = 'too-large' | 'type-not-accepted' | 'too-many' | 'dup
 
 缩略图的 alt 是**文件名**，不是「图片」：四个附件都念成「图片」，等于什么都没告诉读者。移除按钮同理，
 各自以文件命名。
+
+移除当前聚焦的附件后，焦点会先移到下一个移除按钮，再回退到前一个。移除最后一项时，
+组件宿主保留键盘位置，不增加 Tab 停靠点；后台更新列表不会抢走当前焦点。
+如果应用会隐藏整个空附件条，应通过已有的 `attachmentschange` 监听器先把焦点交给可见的输入控件，再隐藏宿主：
+
+```js
+strip.addEventListener('attachmentschange', () => {
+  if (strip.files.length === 0 && document.activeElement === strip) input.focus();
+  strip.hidden = strip.files.length === 0;
+});
+```
 
 ## 自定义样式
 

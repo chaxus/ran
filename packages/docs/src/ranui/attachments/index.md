@@ -45,14 +45,9 @@ composer.append(strip);
 ```
 
 The strip renders one row per file with a thumbnail (images), the name, the size and a remove
-button. `count` is reflected onto the host, and **removed** when the strip is empty rather
-than set to `0`, so an empty strip can take no space:
-
-```css
-r-attachments:not([count]) {
-  display: none;
-}
-```
+button. `count` is reflected onto the host and **removed** when the strip is empty rather
+than set to `0`. The component already collapses its empty list; keep the host present so it
+can preserve the keyboard position after the final removal.
 
 ### Sending
 
@@ -157,6 +152,18 @@ hold `previewUrl` past the attachment's life.
 A thumbnail's alt text is **the file name**, not "image": four attachments all announced as
 "image" have told the reader nothing about which is which. Each remove button is named after
 its file for the same reason.
+
+Removing a focused attachment moves focus to the next remove button, then the previous one.
+After the final focused removal, the host keeps the keyboard position without adding a Tab stop.
+Background list updates preserve the current focus. If your app hides the entire empty strip,
+use its existing `attachmentschange` listener to move focus before hiding the host:
+
+```js
+strip.addEventListener('attachmentschange', () => {
+  if (strip.files.length === 0 && document.activeElement === strip) input.focus();
+  strip.hidden = strip.files.length === 0;
+});
+```
 
 ## Styling
 
