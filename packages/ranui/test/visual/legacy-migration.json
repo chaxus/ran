@@ -1,0 +1,282 @@
+[
+  {
+    "old": "test/e2e/conversation.spec.ts-snapshots/conversation-Google-Chrome-darwin.png",
+    "new": "conversation.spec.ts/chromium/conversation.png",
+    "oldSha256": "d08f63ab5a721894b8dd26b3584d38a3c48fa3c8769aecffbc6e5b945eb95f9c",
+    "newSha256": "22c4937894f560f6de0fe558276bf78fd06921b9aa6ec99eb337d8278b2685a6",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/conversation.spec.ts-snapshots/conversation-Mobile-Chrome-darwin.png",
+    "new": "conversation.spec.ts/Mobile-Chrome/conversation.png",
+    "oldSha256": "b22e75c4301c6d91d9e00289b5664d0d0d3cd9e7041764fb5e6ede2f50a7642b",
+    "newSha256": "f20997a503e575d89a216fa3cd835ebed1497e0473f9cb288942f0f130cf2c4c",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/conversation.spec.ts-snapshots/conversation-chromium-darwin.png",
+    "new": "conversation.spec.ts/chromium/conversation.png",
+    "oldSha256": "52db0e6ea59f345288e93d6c8cc2a781322384eee8246fe4cfc9062ba6476d0c",
+    "newSha256": "22c4937894f560f6de0fe558276bf78fd06921b9aa6ec99eb337d8278b2685a6",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/disclosure-row.spec.ts-snapshots/disclosure-row-Google-Chrome-darwin.png",
+    "new": "disclosure-row.spec.ts/chromium/disclosure-row.png",
+    "oldSha256": "a8bbf09904068215342c9724a0740bc4e87466f9641a73b9f82f79ced95a3a27",
+    "newSha256": "f635049e36c91085551147c4fa712c08e3f571bbb6ab8aee0371940eed4bcd6d",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/disclosure-row.spec.ts-snapshots/disclosure-row-Mobile-Chrome-darwin.png",
+    "new": "disclosure-row.spec.ts/Mobile-Chrome/disclosure-row.png",
+    "oldSha256": "2b40af1854908917c1b31c6b1e9c917f4d66e1d716d412f25711572b381459c4",
+    "newSha256": "6d2e595b5824323f99f73cf9eb730cfa64b456b2e281ddc9e94761766246bb32",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/disclosure-row.spec.ts-snapshots/disclosure-row-chromium-darwin.png",
+    "new": "disclosure-row.spec.ts/chromium/disclosure-row.png",
+    "oldSha256": "2d8c3c10e3daefac73120727c1af7fdc52b596496074e0d26a69bad2be43048b",
+    "newSha256": "f635049e36c91085551147c4fa712c08e3f571bbb6ab8aee0371940eed4bcd6d",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/reasoning.spec.ts-snapshots/reasoning-Google-Chrome-darwin.png",
+    "new": "reasoning.spec.ts/chromium/reasoning.png",
+    "oldSha256": "e347926f8cbeac420858694cdd66d6fc4b0ab5e343b59dec1a8e01c1b2e7e538",
+    "newSha256": "5754404694aa3141171c6b3783996b201e56dc38bda327a264c270350ac8d527",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/reasoning.spec.ts-snapshots/reasoning-Mobile-Chrome-darwin.png",
+    "new": "reasoning.spec.ts/Mobile-Chrome/reasoning.png",
+    "oldSha256": "e0eb73048ecb2e70d83d655b1b5837fae8ced1d9ee9015fee3368ee07117e7fd",
+    "newSha256": "a22e1e4b86a88dd0e743aae2e468669213ec9d1e59d141d6ac4df406d73e3860",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/reasoning.spec.ts-snapshots/reasoning-chromium-darwin.png",
+    "new": "reasoning.spec.ts/chromium/reasoning.png",
+    "oldSha256": "b470592344e50030b5aa71d6aa16179b540488db254102e54bf63dd161af07d4",
+    "newSha256": "5754404694aa3141171c6b3783996b201e56dc38bda327a264c270350ac8d527",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/section.spec.ts-snapshots/section-Google-Chrome-darwin.png",
+    "new": "section.spec.ts/chromium/section.png",
+    "oldSha256": "51542bc9d48c98ff9c94db6ba10de276c245178cb26b1f6fb70a958b9d45a451",
+    "newSha256": "ee7e2f0109556846cee13e4c038bccae7cd4781438356ae668d35e00a1361912",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/section.spec.ts-snapshots/section-Mobile-Chrome-darwin.png",
+    "new": "section.spec.ts/Mobile-Chrome/section.png",
+    "oldSha256": "864cc979e079468cb615ff77d9d4262b19f0235410e4acb795e4ad43e4072a0d",
+    "newSha256": "887cbbd31415003cb9613bb4754c2aed4a3316fff17d9b33b3fc6bb546968db8",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/section.spec.ts-snapshots/section-chromium-darwin.png",
+    "new": "section.spec.ts/chromium/section.png",
+    "oldSha256": "e06f962249e0e792559b38d2db906aeb9c1d2c7c50f9e5563d8255ee5f9b96d6",
+    "newSha256": "ee7e2f0109556846cee13e4c038bccae7cd4781438356ae668d35e00a1361912",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/tool-card.spec.ts-snapshots/tool-card-diff-Google-Chrome-darwin.png",
+    "new": "tool-card.spec.ts/chromium/tool-card-diff.png",
+    "oldSha256": "318f90790bf15283ae44863c79b3444a08e10db6c03e370cd578c89d8b08f8a6",
+    "newSha256": "9e7cd265791a7ac64d2cbe6907542612a08e22c9f7a52001b0642e45d57697f0",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/tool-card.spec.ts-snapshots/tool-card-diff-Mobile-Chrome-darwin.png",
+    "new": "tool-card.spec.ts/Mobile-Chrome/tool-card-diff.png",
+    "oldSha256": "0d9bf8d616cdccb10adfbaf36a1a69c209808f3cbcfe3e0ca63913d0a022bfd1",
+    "newSha256": "a909d4bb10cb51c3af56ec752ea4061b53f5301586d6434290fbe5a8113c5138",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/tool-card.spec.ts-snapshots/tool-card-diff-chromium-darwin.png",
+    "new": "tool-card.spec.ts/chromium/tool-card-diff.png",
+    "oldSha256": "1e3aa138d8c6e5d4a4fdd3620ff5e864269a011e2ca6d435af7a00937cb34c69",
+    "newSha256": "9e7cd265791a7ac64d2cbe6907542612a08e22c9f7a52001b0642e45d57697f0",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/tool-card.spec.ts-snapshots/tool-card-states-Google-Chrome-darwin.png",
+    "new": "tool-card.spec.ts/chromium/tool-card-states.png",
+    "oldSha256": "f6032b195a41e1121a1a4a303972838442f9daf4dc26668a16f39142edd8cc23",
+    "newSha256": "1dc534d3620e5a1aa4a48d832535d162d6e989d14e2c422339ee5d94c77936e1",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/tool-card.spec.ts-snapshots/tool-card-states-Mobile-Chrome-darwin.png",
+    "new": "tool-card.spec.ts/Mobile-Chrome/tool-card-states.png",
+    "oldSha256": "75fd073a0f75255ff05842103e3453f25f94705e74d4a0b8ee01e7e88ef312dd",
+    "newSha256": "62c02da552ffbdda899b17c4b7fdd3db39787b69367ad7a3a9e76b9624ef144c",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/tool-card.spec.ts-snapshots/tool-card-states-chromium-darwin.png",
+    "new": "tool-card.spec.ts/chromium/tool-card-states.png",
+    "oldSha256": "133830d18986fcaac035bf4f3cf4f96ddc7dbd2aa287d036d962f639f4870713",
+    "newSha256": "1dc534d3620e5a1aa4a48d832535d162d6e989d14e2c422339ee5d94c77936e1",
+    "review": "Readable CJK glyphs and content/status/diff rows preserved; open chevrons captured after settling."
+  },
+  {
+    "old": "test/e2e/visual/colorpicker.spec.ts-snapshots/colorpicker-default-Mobile-Chrome-darwin.png",
+    "new": "visual/colorpicker.spec.ts/Mobile-Chrome/colorpicker-default.png",
+    "oldSha256": "3370aa634aec5f9a0766e8f0a813d88b45342d1eeb109cb048517d2999128c1e",
+    "newSha256": "9951a82a9b6a7985e247b771b33ce9e5e5ec5070ec1b047656b87fc82783c408",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/colorpicker.spec.ts-snapshots/colorpicker-panel-open-Mobile-Chrome-darwin.png",
+    "new": "visual/colorpicker.spec.ts/Mobile-Chrome/colorpicker-panel-open.png",
+    "oldSha256": "a12d597829509b21db56573851f8b708af4bd630dd8f2637a2e204ee3b01b6ba",
+    "newSha256": "aa4cfddbadd4e949377084fa3dfe7d60b273eff22887a518b71a05af0396df28",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/colorpicker.spec.ts-snapshots/colorpicker-rgba-Mobile-Chrome-darwin.png",
+    "new": "visual/colorpicker.spec.ts/Mobile-Chrome/colorpicker-rgba.png",
+    "oldSha256": "23442911daa50dc2c70e99259a8c72453dd1bd9ce775de36727369b181124721",
+    "newSha256": "11ba3a5624b4086c81ed3f1d0a8ab5ae6529b303ee27bb2d034dfcce58209f47",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/button-variants-Google-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/chromium/button-variants.png",
+    "oldSha256": "bbe576c928601f72cb40352ff1088e896ecbc0b79f97ddf540ee3a8876319ed4",
+    "newSha256": "be78a45502fe90e7bcf155684e792f03ca1e1bfa71eed982ae025bcfefd7fa1f",
+    "review": "Renderer/font-dependent wrapping; all button labels and states preserved."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/button-variants-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/button-variants.png",
+    "oldSha256": "8ee8bce6255ccbe6212bd69bf56aa479b88e0ddac0274d4cb13b63e587dc9a6e",
+    "newSha256": "fee33bdcac8435137882f80436f63b9940e3d23caec3dfe48b71ba7beb83488d",
+    "review": "Renderer/font-dependent wrapping; all button labels and states preserved."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/button-variants-chromium-darwin.png",
+    "new": "visual/components.spec.ts/chromium/button-variants.png",
+    "oldSha256": "6e64baa9ec05edf2e850cfa30bb97f92867b0d76d0376fe660d4bc92ee41c4dd",
+    "newSha256": "be78a45502fe90e7bcf155684e792f03ca1e1bfa71eed982ae025bcfefd7fa1f",
+    "review": "Renderer/font-dependent wrapping; all button labels and states preserved."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/checkbox-variants-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/checkbox-variants.png",
+    "oldSha256": "7c2650006b264705862a3b1cc94cb27719765694be4b2d608e0662b61085caee",
+    "newSha256": "f9a308c0499900e5b97990071869dade307d853e9c0bcf20fd1feb7bda76e4c6",
+    "review": "Correct disabled unchecked tick visibility; other states and labels preserved."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/form-layout-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/form-layout.png",
+    "oldSha256": "5e26b9c6fec78d20564ca8b07ba9603aa1de6c6a8eba0e27ea842ac7a68069a4",
+    "newSha256": "95c58bc1e54a09d70d59faf30cf95515ae56ff7e1485150bd40b58d96b0e0537",
+    "review": "Corrected demo field flow; complete labels, validation text and header-free form capture."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/icon-variants-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/icon-variants.png",
+    "oldSha256": "c6c51449922b833168f07717ff2cfb04308eae046f1691c9f58382c9d0bd26f3",
+    "newSha256": "3cc8c59a5c5b95c47582b60a2fcdb916ea188a13053802655443d789bad4c97c",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/input-variants-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/input-variants.png",
+    "oldSha256": "d074535750dc327bd9a246b23d856df687e1a5f501c23da648466f78581151e9",
+    "newSha256": "e77f76ed40dc96af982d4749bc1b7140ab3cf35f6129d58c67f06c3c07f4cf7b",
+    "review": "Corrected demo field flow; complete labels, validation text and header-free form capture."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/loading-variants-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/loading-variants.png",
+    "oldSha256": "5a477b646b3931958412bf00fac0cec7edb84d097d406daff286cc4c849c7b10",
+    "newSha256": "066b5086f321a51509e195daabac697800d1003c73b737014d38e7ff40a37513",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/math-rendering-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/math-rendering.png",
+    "oldSha256": "615c03a762047297d5f2b39dfa0bc9458f3b3c49390c12ade818fd93d65dd3ab",
+    "newSha256": "0ee023a2fd99cc816c6b6ab935127ce732906a014ccf4df9561763accad274ec",
+    "review": "Fractions, radical, superscripts and inline math preserved with pinned fonts."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/modal-closed-Google-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/chromium/modal-closed.png",
+    "oldSha256": "5c4ea9fe4eb5a55e9dbcdf24f3571ef8c0cc233c50ce78ebe0db90af53069cfb",
+    "newSha256": "09e0de89fb777bfb1f817ef934ee3c7281baeedb0238d5d2016f94780180d1e3",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/modal-closed-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/modal-closed.png",
+    "oldSha256": "80a21429d5f9c7f64f97e5b1e1cc3b38760cbc1ef5e3d45a4e42b327179d27e1",
+    "newSha256": "83c31e241d8887747d2e2cd2664948a61433462620c6c2fe55c771bad52581cd",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/modal-closed-chromium-darwin.png",
+    "new": "visual/components.spec.ts/chromium/modal-closed.png",
+    "oldSha256": "b5c65928208f4697a800d7370a85abb37570305cfe457f201132a951c08a086b",
+    "newSha256": "09e0de89fb777bfb1f817ef934ee3c7281baeedb0238d5d2016f94780180d1e3",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/popover-closed-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/popover-closed.png",
+    "oldSha256": "27a35de52df56aa320056a61a8516f6faf470630b38f6497b7829f3b6bbda645",
+    "newSha256": "72fd96ad381d51399d42d238b66f943367add1f1a2f54f9f5336a10af927c983",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/popover-open-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/popover-open.png",
+    "oldSha256": "834f9ad7fba552ac9a49c9fb87b6bb57174cd30288341e6ee455caf3092bb9e8",
+    "newSha256": "316c3412e82f08f467f46cc588b299677b275a5a7b09e60786f53cb631302f9f",
+    "review": "Actual touch open state with complete popup and trigger bounds."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/progress-variants-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/progress-variants.png",
+    "oldSha256": "ccd46dad307c341bd2e5389b9d4a1e08f4435a6384f50313b997aef5bffcd459",
+    "newSha256": "e4e7adf0715db93362ee716405b761775eb69b03c3febe076c3e6bd4768ed1dd",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/radar-chart-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/radar-chart.png",
+    "oldSha256": "c8d5d241eb7bbde76c2d9717ab650b752b947dd9956e500950f2748e12794a11",
+    "newSha256": "5eb254e9935b25a049551dd7a5565bcab0e45fe6a8d6750c86c1e3cd5adefff6",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/select-closed-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/select-closed.png",
+    "oldSha256": "c37ed5146cda8df90aa6321067494c7d897786091aa08a9ecf308207b777155b",
+    "newSha256": "8313178f90abefdab0e5b64c362514fda3850fbd06de001179c2e7e632fabe89",
+    "review": "Preserved closed select; adjacent error message is contained in its own card."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/select-open-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/select-open.png",
+    "oldSha256": "ecf49494d5e6df9593d96ada4c4d3da20cf51a978816f0c9d05dfb8cdb5c2cc0",
+    "newSha256": "d8765d0117deca2bc5550404d9318b4df57e0eb8dc43a2252a73a8f54567ed5d",
+    "review": "Complete three-option popup and trigger; adjacent validation text no longer overflows."
+  },
+  {
+    "old": "test/e2e/visual/components.spec.ts-snapshots/skeleton-variants-Mobile-Chrome-darwin.png",
+    "new": "visual/components.spec.ts/Mobile-Chrome/skeleton-variants.png",
+    "oldSha256": "77b6f1a236e2ba6d8b24dca639a7f6e7d95007177e6a68734d88aa6b6b647bd3",
+    "newSha256": "f431fde9d90d227da3d45a8c7c40f060b5a0cee66e8676b991149794f9a14e6d",
+    "review": "Content and intended state preserved after fixed-renderer review."
+  }
+]
