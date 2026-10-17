@@ -77,3 +77,18 @@ Never use `--force` to bypass a version conflict. If the released bytes need to 
 ## Stable releases
 
 Remove prerelease suffixes, choose new unpublished versions and use `tag=latest`. Update the migration guide and release notes before repeating the complete verification flow. Removing the suffix alone does not establish API stability or browser support: retain the documented compatibility scope and require the main CI/browser checks to pass.
+
+## Browser and installation-size gates
+
+PR CI runs the complete functional ranui and assembled `im` suites on **Chromium, Firefox and WebKit** in separate jobs. Locally, install the three engines with `pnpm -F ranui e2e:install`, then run:
+
+```sh
+CI=1 pnpm -F ranui exec playwright test --project=chromium --project=firefox --project=webkit
+CI=1 pnpm -F im exec playwright test --project=chromium --project=firefox --project=webkit
+```
+
+`CI=1` disables screenshot comparison; these commands still assert interactions, focus, forms, layout, transitions, SSR-independent browser execution and package bundles. Reviewed macOS screenshot baselines remain available for the original Chromium/Chrome projects. Firefox, WebKit and the supplemental `Mobile Safari` viewport use functional assertions only. Playwright WebKit and mobile emulation do not certify real Safari/iOS hardware, codecs, DRM or network streaming.
+
+`verify:release` also measures the real npm installation and writes `.release/size-report.json`, included in the release artifact. The report separates compressed library archive bytes, unpacked library bytes and the complete production `node_modules` tree. These are logical regular-file bytes, not filesystem allocation, pnpm store size or browser transfer size. It skips symlinks and fails when any limit in `bin/package-size-budgets.json` is exceeded. The combined production install limit is 75 MB; individual archive/unpacked limits are maintained separately.
+
+Private DASH/HLS/FLV and Mermaid engines are bundled as lazy ESM chunks, including upstream notices; consumers do not install their development distributions separately. Public entries and automatic engine loading remain available. Shared libraries, including Shiki's language/theme catalog, remain runtime dependencies. A larger ranui archive can therefore coexist with a much smaller total installation. See [the measured comparison and coverage limits](./RELEASE_VALIDATION.md).

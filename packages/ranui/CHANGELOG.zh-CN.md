@@ -8,6 +8,10 @@
 
 ### 发布准备
 
+- 修复移动端浮层的模拟悬停与点击竞争，显式切换时取消旧悬停任务。
+
+- 补齐 Chromium、Firefox、WebKit 功能验证及 ESM/IIFE 产物执行检查，测量并限制真实安装体积。媒体和 Mermaid 引擎继续自动懒加载，改为随包发布所需构建，避免安装上游整套开发产物；保留第三方声明。见[验证报告](https://github.com/chaxus/ran/blob/main/docs/RELEASE_VALIDATION.md)。
+
 - 所有工作区统一要求 Node 24+，固定 pnpm 11.6.0。
 - 联动 ranuts 0.5.0-rc.0 和 @alixex/ranview 0.2.0-rc.0，打包后的内部依赖指向这些确切版本。
 - 仅发布 ESM 模块，保留独立 IIFE。已移除的 alpha API 和模块格式见[迁移指南](https://ran.chaxus.com/cn/src/ranuts/migration/)。
