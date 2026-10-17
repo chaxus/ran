@@ -174,7 +174,7 @@ Alpha、Beta 和 RC 版本可能包含破坏性变更。请锁定确切版本，
 
 | 日期 | 仓库整体 |
 | ---- | ------- |
-| 2026-10-17 | [ranui](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-17.md) |
+| 2026-10-17 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-17.md) |
 | 2026-07-25 | [补齐：现有模块的缺口](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-25.md) |
 | 2026-07-19 | [builder：`children()` 支持响应式 getter（reactive children）](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-19.md) |
 | 2026-07-11 | [Geist contrast action + bordered card default](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-11.md) |
