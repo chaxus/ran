@@ -32,7 +32,11 @@ jobs:
     if: github.repository == 'chaxus/ran'
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    name: "E2E (Chromium)"
+    name: "E2E (${{ matrix.browser }})"
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v7
         with:
@@ -53,7 +57,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers
-        run: pnpm --filter ranui exec playwright install chromium --with-deps
+        run: pnpm --filter ranui exec playwright install ${{ matrix.browser }} --with-deps
 
       - name: Build ranuts
         run: pnpm --filter ranuts run build
@@ -69,18 +73,21 @@ jobs:
       # committed baselines are macOS-rendered (`*-darwin.png`) and a Linux runner would
       # regenerate rather than compare them. See packages/ranui/CLAUDE.md.
       - name: Run E2E tests
-        run: pnpm --filter ranui exec playwright test --project=chromium
+        run: pnpm --filter ranui exec playwright test --project=${{ matrix.browser }}
 
       # im is the assembled application, and its defects have all been integration-level —
       # what the browser draws once the pieces are wired together, which no unit test sees.
       # The suite runs keyless against the built-in sample answer, so it needs no secret.
       - name: Run im E2E tests
-        run: pnpm --filter im exec playwright test --project=chromium
+        run: pnpm --filter im exec playwright test --project=${{ matrix.browser }}
 
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report
-          path: packages/ranui/playwright-report/
+          name: playwright-report-${{ matrix.browser }}
+          path: |
+            packages/ranui/playwright-report/
+            packages/ranui/test-results/
+            packages/im/test-results/
           retention-days: 7

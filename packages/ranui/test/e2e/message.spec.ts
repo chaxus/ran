@@ -74,43 +74,40 @@ test.describe('message', () => {
     await expect(page.locator('#custom-message-root-2 r-message')).toHaveCount(2);
   });
 
-  test('leave animation ends faded out, not bounced back to full opacity', async ({ page }) => {
-    await page.goto(DEV_SERVER, { waitUntil: 'load' });
-    await page.waitForFunction(() => typeof (window as any).message?.info === 'function');
+  test.describe('exit motion', () => {
+    test.use({ contextOptions: { reducedMotion: 'no-preference' } });
+    test('leave animation holds its faded end state after completion', async ({ page }) => {
+      await page.goto(DEV_SERVER, { waitUntil: 'load' });
+      await page.waitForFunction(() => !!customElements.get('r-message'));
+      // Retain registration while removing demo rendering and resource work from the fixture.
+      await page.setContent('<html><body></body></html>');
 
-    // `MessageMoveOut`'s keyframes need `animation-fill-mode: forwards` to hold
-    // their end state — see index.less. Without it the element visually snaps
-    // back to full opacity/height for the tail of the leave window because the
-    // CSS animation's natural completion and the JS removal `setTimeout` (see
-    // `AnimationTime`/duration math in index.ts) run on independent clocks and
-    // drift apart. Sample the host's computed opacity right up to removal —
-    // the reverted state (opacity ~1) would show up in the final samples.
-    const samples = await page.evaluate(async () => {
-      (window as any).message.info({ content: 'bounce test', duration: 500 });
-      const results: Array<{ opacity: string; exists: boolean }> = [];
-      const start = performance.now();
-      return await new Promise<typeof results>((resolve) => {
-        const sample = () => {
-          const el = document.querySelector('r-message.message') as HTMLElement | null;
-          if (el) {
-            results.push({ opacity: getComputedStyle(el).opacity, exists: true });
-          } else {
-            results.push({ opacity: 'n/a', exists: false });
-          }
-          if (performance.now() - start < 700) {
-            requestAnimationFrame(sample);
-          } else {
-            resolve(results);
-          }
-        };
-        requestAnimationFrame(sample);
+      const result = await page.evaluate(async () => {
+        const message = document.createElement('r-message');
+        message.setAttribute('content', 'fade completion test');
+        message.style.setProperty('--ran-message-leave-animation-duration', '0.1s');
+        document.body.appendChild(message);
+        message.classList.add('message-leave');
+
+        // Force style resolution before capturing the actual CSS animations. Hold the
+        // leave class after completion, so API removal timers cannot race the assertion.
+        const animationName = getComputedStyle(message).animationName;
+        const animations = message.getAnimations();
+        await Promise.all(animations.map((animation) => animation.finished));
+        const opacities: number[] = [];
+        for (let frame = 0; frame < 3; frame++) {
+          await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+          opacities.push(parseFloat(getComputedStyle(message).opacity));
+        }
+        return { animationName, animationCount: animations.length, opacities };
       });
-    });
 
-    const lastFew = samples.filter((s) => s.exists).slice(-3);
-    expect(lastFew.length).toBeGreaterThan(0);
-    for (const s of lastFew) {
-      expect(parseFloat(s.opacity)).toBeLessThan(0.5);
-    }
+      expect(result.animationName).toBe('MessageMoveOut');
+      expect(result.animationCount).toBeGreaterThan(0);
+      expect(result.opacities).toHaveLength(3);
+      for (const opacity of result.opacities) {
+        expect(opacity).toBeLessThan(0.5);
+      }
+    });
   });
 });
