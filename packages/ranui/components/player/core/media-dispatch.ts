@@ -1,4 +1,4 @@
-import { batch } from '@/utils/index';
+import { batch } from '@/utils/builder';
 import { syncCenterPlayVisibility, shouldSetLoadingOnSeeking, shouldSetLoadingOnWaiting } from './events';
 import { describeMediaError } from './error';
 import { maybeClearResumePosition, maybeSaveResumePosition, resolveResumeTarget } from './resume';

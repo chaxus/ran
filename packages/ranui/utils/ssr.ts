@@ -1,4 +1,4 @@
-import { HTMLElementMock } from './builder';
+import { HTMLElementMock } from '@alixex/ranview/mocks';
 import { getSSRRegistry } from './ssr-registry';
 
 // ─── SSR/Node Compatibility ───────────────────────────────────────────────────

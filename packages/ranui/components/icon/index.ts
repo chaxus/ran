@@ -1,5 +1,5 @@
 import iconCss from './index.less?inline';
-import { RanElement } from '@/utils/index';
+import { RanElement } from '@/utils/ssr';
 import { Div, EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';

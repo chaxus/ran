@@ -1,5 +1,5 @@
 import { formatDuration, range } from 'ranuts/utils';
-import { batch } from '@/utils/index';
+import { batch } from '@/utils/builder';
 import { sliderStepFromKeydown } from '@/utils/a11y';
 import { getBufferedPercentage, normalizeProgress } from './progress';
 import { resolveSeekDuration } from './playback';

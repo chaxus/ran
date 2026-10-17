@@ -32,7 +32,7 @@ import { findThumbnailCue, loadThumbnailCues, type ThumbnailCue } from './core/t
 import { type PlayerTrackConfig } from './core/tracks';
 import { ensurePlayerView } from './core/view';
 import { EventManager, View } from '@/utils/builder';
-import { RanElement } from '@/utils/index';
+import { RanElement } from '@/utils/ssr';
 import { registerIcon } from '@/components/icon';
 import pipIcon from '@/assets/icons/pip.svg?raw';
 import castIcon from '@/assets/icons/cast.svg?raw';

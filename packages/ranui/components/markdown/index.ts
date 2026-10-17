@@ -1,4 +1,4 @@
-import { RanElement } from '@/utils/index';
+import { RanElement } from '@/utils/ssr';
 import { Div, View, createRef } from '@/utils/builder';
 import {
   ensureShadowRoot,

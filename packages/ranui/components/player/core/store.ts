@@ -1,4 +1,4 @@
-import { signal } from '@/utils/index';
+import { signal } from '@/utils/builder';
 
 export interface Signal<T> {
   getter: () => T;
