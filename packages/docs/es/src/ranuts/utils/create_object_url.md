@@ -85,7 +85,7 @@ Trae el contenido de una URL como bytes en bruto mediante `XMLHttpRequest`. Esos
 ```js
 import { requestUrlToBuffer, createObjectURL } from 'ranuts/utils';
 
-const result = await requestUrlToBuffer('/assets/clip.webm', {});
+const result = await requestUrlToBuffer('/assets/clip.webm');
 if (result.success) {
   const url = await createObjectURL(new Blob([result.data]));
   video.src = url;
@@ -97,13 +97,25 @@ if (result.success) {
 | Parámetro | Descripción                                                                   | Tipo                                     | Por defecto |
 | --------- | ----------------------------------------------------------------------------- | ---------------------------------------- | ----------- |
 | `src`     | La URL que se descarga                                                        | `string`                                 | Obligatorio |
-| `options` | `method` (por defecto `'GET'`) y `responseType` (por defecto `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | Obligatorio |
+| `options` | `method` (por defecto `'GET'`) y `responseType` (por defecto `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | `{}`        |
 
 #### Devuelve
 
 Una `Promise` que se resuelve con `{ success: true, data, message: '' }` ante un HTTP 200, y que **se rechaza** con `{ success: false, data: status, message }` en cualquier otro caso. Una petición fallida es un rechazo, no una promesa resuelta con `success: false`, así que un `.then()` a secas sin `.catch()` lo sacará a la luz como un rechazo sin gestionar.
 
-::: tip Para código nuevo, mejor `fetch`
-Esto viene de antes de que `fetch` estuviera disponible en todas partes y por dentro usa `XMLHttpRequest`. Si no necesitas XHR en concreto (eventos de progreso de subida, `abort()`), `fetch(url).then(r =>
-r.arrayBuffer())` hace lo mismo con la forma de rechazo propia de las promesas.
-:::
+### Tipos de respuesta
+
+El modo predeterminado y el vacío devuelven ArrayBuffer; blob y text devuelven sus tipos correspondientes. JSON y los modos dinámicos devuelven unknown y requieren validación. El progreso corresponde a la descarga; este wrapper no expone cancelación.
+
+| `responseType`                 | `data`             |
+| ------------------------------ | ------------------ |
+| omitted / `arraybuffer` / `''` | `ArrayBuffer`      |
+| `blob`                         | `Blob`             |
+| `text`                         | `string`           |
+| `document`                     | `Document \| null` |
+| `json` / dynamic               | `unknown`          |
+
+```ts
+const bytes = (await requestUrlToBuffer('/file')).data; // ArrayBuffer
+const blob = (await requestUrlToBuffer('/file', { responseType: 'blob' })).data; // Blob
+```

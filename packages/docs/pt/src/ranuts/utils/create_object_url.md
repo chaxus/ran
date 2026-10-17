@@ -85,7 +85,7 @@ Traz o conteúdo de uma URL como bytes crus, via `XMLHttpRequest`. Esses bytes c
 ```js
 import { requestUrlToBuffer, createObjectURL } from 'ranuts/utils';
 
-const result = await requestUrlToBuffer('/assets/clip.webm', {});
+const result = await requestUrlToBuffer('/assets/clip.webm');
 if (result.success) {
   const url = await createObjectURL(new Blob([result.data]));
   video.src = url;
@@ -97,13 +97,25 @@ if (result.success) {
 | Parâmetro | Descrição                                                           | Tipo                                     | Padrão      |
 | --------- | ------------------------------------------------------------------- | ---------------------------------------- | ----------- |
 | `src`     | A URL que será buscada                                              | `string`                                 | Obrigatório |
-| `options` | `method` (padrão `'GET'`) e `responseType` (padrão `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | Obrigatório |
+| `options` | `method` (padrão `'GET'`) e `responseType` (padrão `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | `{}`        |
 
 #### Retorna
 
 Uma `Promise` que resolve com `{ success: true, data, message: '' }` num HTTP 200 e que **rejeita** com `{ success: false, data: status, message }` nos demais casos. Uma requisição que falha é uma rejeição, não uma promessa resolvida com `success: false`, então um `.then()` sozinho, sem `.catch()`, vai fazer isso aparecer como rejeição não tratada.
 
-::: tip Para código novo, prefira `fetch`
-Isto é anterior à época em que `fetch` passou a existir em todo lugar e por dentro usa `XMLHttpRequest`. Se você não precisa de XHR especificamente (eventos de progresso de envio, `abort()`), `fetch(url).then(r =>
-r.arrayBuffer())` faz o mesmo com a forma de rejeição nativa das promessas.
-:::
+### Tipos de resposta
+
+O modo padrão e o vazio retornam ArrayBuffer; blob e text retornam os tipos correspondentes. JSON e modos dinâmicos retornam unknown e exigem validação. O progresso é de download; este wrapper não expõe cancelamento.
+
+| `responseType`                 | `data`             |
+| ------------------------------ | ------------------ |
+| omitted / `arraybuffer` / `''` | `ArrayBuffer`      |
+| `blob`                         | `Blob`             |
+| `text`                         | `string`           |
+| `document`                     | `Document \| null` |
+| `json` / dynamic               | `unknown`          |
+
+```ts
+const bytes = (await requestUrlToBuffer('/file')).data; // ArrayBuffer
+const blob = (await requestUrlToBuffer('/file', { responseType: 'blob' })).data; // Blob
+```

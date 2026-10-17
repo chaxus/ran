@@ -16,18 +16,28 @@ export const getCookie = (objName: string): string => {
   return '';
 };
 
-export interface RequestUrlToArraybufferOption {
-  responseType: XMLHttpRequestResponseType;
+export interface RequestUrlToArraybufferOption<T extends XMLHttpRequestResponseType = XMLHttpRequestResponseType> {
+  responseType: T;
   method: string;
   withCredentials: boolean;
   headers: Record<string, string>;
   body: string;
-  onProgress?: Function;
+  onProgress?: (event: ProgressEvent) => void;
 }
 
-export interface requestUrlToArraybufferReturn extends BaseReturn {
-  data: Blob;
+export interface requestUrlToArraybufferReturn<T = ArrayBuffer> extends BaseReturn {
+  data: T;
 }
+
+type RequestUrlResponse<T extends XMLHttpRequestResponseType> = T extends '' | 'arraybuffer'
+  ? ArrayBuffer
+  : T extends 'blob'
+    ? Blob
+    : T extends 'text'
+      ? string
+      : T extends 'document'
+        ? Document | null
+        : unknown;
 
 export interface BaseReturn {
   success: boolean;
@@ -35,15 +45,28 @@ export interface BaseReturn {
 }
 
 /**
- * @description: Fetch a URL as an ArrayBuffer
+ * @description: Fetch a URL as an ArrayBuffer by default, or as the requested XHR response type
+ * An empty responseType also uses ArrayBuffer. JSON responses require validation before use.
  * @param {string} src
  * @param {RequestUrlToArraybufferOption} options
  * @return {*}
  */
-export const requestUrlToBuffer = (
+export function requestUrlToBuffer(
   src: string,
-  options: Partial<RequestUrlToArraybufferOption>,
-): Promise<requestUrlToArraybufferReturn> => {
+  options?: Partial<RequestUrlToArraybufferOption<'' | 'arraybuffer'>>,
+): Promise<requestUrlToArraybufferReturn>;
+export function requestUrlToBuffer<T extends XMLHttpRequestResponseType>(
+  src: string,
+  options: Partial<RequestUrlToArraybufferOption<T>> & { responseType: T },
+): Promise<requestUrlToArraybufferReturn<RequestUrlResponse<T>>>;
+export function requestUrlToBuffer<T extends XMLHttpRequestResponseType>(
+  src: string,
+  options: Partial<RequestUrlToArraybufferOption<T>>,
+): Promise<requestUrlToArraybufferReturn<RequestUrlResponse<T | 'arraybuffer'>>>;
+export function requestUrlToBuffer(
+  src: string,
+  options: Partial<RequestUrlToArraybufferOption> = {},
+): Promise<requestUrlToArraybufferReturn<unknown>> {
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest();
     xhr.open(options.method || 'GET', src, true);
@@ -77,7 +100,7 @@ export const requestUrlToBuffer = (
     }
     xhr.send(options.body);
   });
-};
+}
 
 export interface Context {
   backingStorePixelRatio: number;
@@ -105,7 +128,7 @@ export const getPixelRatio = (context: CanvasRenderingContext2D & Partial<Contex
   return (devicePixelRatio || 1) / backingStore;
 };
 
-export const createObjectURL = async (src: Blob | ArrayBuffer | Response): Promise<string> => {
+export const createObjectURL = async (src: string | Blob | ArrayBuffer | Response): Promise<string> => {
   if (typeof src === 'string') {
     return src;
   } else if (src instanceof Blob) {

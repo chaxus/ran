@@ -73,7 +73,7 @@ import { /* … */ } from 'ranuts/utils';
 - `createHandoff<T>({ dbName, storeName, key }: HandoffOptions) => Handoff<T>` — A one-shot value handoff between two pages of the same origin, backed by
 - `createI18n<TDict extends StringValues<TDict> = MessageDict>(config?: I18nConfig<TDict>) => I18nCore<TDict>` — Create and register the global i18n singleton.
 - `createLocalePath(config: LocalePathConfig) => LocalePath` — Create the set of locale path conversion functions.
-- `createObjectURL(src: Blob | ArrayBuffer | Response) => Promise<string>`
+- `createObjectURL(src: string | Blob | ArrayBuffer | Response) => Promise<string>`
 - `createPortBridge(port: MessagePort) => PortBridge` — Build a bridge on any MessagePort (a Web Worker, a SharedWorker, or a port from a completed handshake).
 - `createRaceGuard() => RaceGuard` — Bump-and-compare guard against a stale async response overwriting a newer
 - `createSignal<T = unknown>(value: T, options?: SignalOptions<T>) => [() => T, (newValue: T) => void]` — Create a minimal signal with optional event broadcasting, returned as
@@ -199,7 +199,7 @@ import { /* … */ } from 'ranuts/utils';
 - `removeClassToElement(element: Element, removeClass: string) => void` — Remove a class from an element
 - `replaceOld(source: any, name: string, replacement: (...args: unknown[]) => unknown, isForced?: boolean) => () => void` — Replace a property on an object, wrapping whatever was there before.
 - `report({ url, type, payload }: BeaconPayload) => boolean` — Send a telemetry beacon. Prefers `navigator.sendBeacon` (does not block
-- `requestUrlToBuffer(src: string, options: Partial<RequestUrlToArraybufferOption>) => Promise<requestUrlToArraybufferReturn>` — Fetch a URL as an ArrayBuffer
+- `requestUrlToBuffer{ (src: string, options?: Partial<RequestUrlToArraybufferOption<'' | 'arraybuffer'>>): Promise<requestUrlToArraybufferReturn>; <T extends XML… (+2 overloads)` — Fetch a URL as an ArrayBuffer by default, or as the requested XHR response type
 - `resolveLocale(options: ResolveLocaleOptions) => string` — Resolve which of your supported locales to use, from the usual chain:
 - `rewriteZip(bytes: Uint8Array, options?: RewriteZipOptions) => Promise<Uint8Array>` — Rebuild an archive with some entries replaced and/or new entries appended.
 - `rgbaString(r: number, g: number, b: number, a: number) => string` — Build a CSS `rgba()` string. Alpha is 0–100 rather than 0–1, matching the
