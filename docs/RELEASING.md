@@ -61,6 +61,13 @@ Before the first actual upload, the package owner must configure the npm **trust
 - Repository: `chaxus/ran`
 - Workflow filename: `release.yml`
 - GitHub environment: `npm`
+- Allowed actions: explicitly enable **`npm publish`** (direct publishing) for all three packages.
+
+New trusted-publisher configurations default to allowing staged publication. This workflow
+uses direct `npm publish`, so staging permission alone is insufficient. Verify the allowed
+action on each package's npm settings before the first upload; local dry-runs do not validate
+OIDC publication authorization. This workflow does not require dist-tag management permission
+for a separate `npm dist-tag` command.
 
 Create the matching GitHub `npm` environment and configure its protection/approval rules as appropriate. No long-lived npm token is required by this workflow. Local preview works without these publication settings. See [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/) for account-side setup.
 

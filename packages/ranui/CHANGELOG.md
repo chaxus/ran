@@ -8,6 +8,10 @@ Release candidate prepared for publication; npm upload is pending.
 
 ### Release preparation
 
+- Preserve explicit focus handoffs when tab removal or disabling selects a replacement header, including nested shadow roots.
+- Clear Select labels, active options and form state together; keep explicit empty values through filtering/reconnection while preserving form reset defaults.
+- Restore Select portals, search drafts and open/closed state after reconnect, without duplicated listeners or stale blur-close timers; reset keyboard typeahead between mounts.
+
 - Preserve pointer selection after native search input or IME composition; ignore unchanged blur commits without removing change-only filtering support.
 - Synchronize controlled tab styling with panels and ARIA; focus the host after removing its final focused header, preserving explicit focus handoffs and supplied tabindex.
 - Correct the release guide to require the separate pinned Linux arm64 visual gate alongside cross-browser functional tests.
