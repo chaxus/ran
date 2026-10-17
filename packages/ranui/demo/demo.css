@@ -36,7 +36,8 @@ html {
   r-card:hover,
   .cta:hover,
   .swatch:hover {
-    transform: none;
+    /* Keep the accessibility preference above the later hover declarations. */
+    transform: none !important;
   }
 }
 
