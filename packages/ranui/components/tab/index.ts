@@ -215,9 +215,13 @@ export class Tabs extends RanElement {
   };
 
   _attachNavResizeObserver = (): void => {
-    if (this._navResizeObserver || typeof ResizeObserver === 'undefined') return;
-    this._navResizeObserver = new ResizeObserver(this._onNavResize);
+    if (typeof ResizeObserver === 'undefined') return;
+    this._navResizeObserver ??= new ResizeObserver(this._onNavResize);
+    this._navResizeObserver.disconnect();
     this._navResizeObserver.observe(this._nav);
+    // A selected line header can resize without changing the full-width nav.
+    // Observe the reconciled headers too, and release removed ones.
+    [...this._nav.children].forEach((header) => this._navResizeObserver!.observe(header, { box: 'border-box' }));
   };
 
   setTabContent = (key: string): void => {
@@ -427,6 +431,7 @@ export class Tabs extends RanElement {
     }
     if (this.align === 'center') this.initTabLineAlignCenter();
     if (this.align === 'end') this.initTabLineAlignEnd();
+    this._attachNavResizeObserver();
   };
 
   connectedCallback(): void {
@@ -442,7 +447,6 @@ export class Tabs extends RanElement {
       attributeFilter: ['disabled', 'label', 'r-key', 'icon', 'iconsize', 'type'],
     });
     this.listenSlotChange();
-    this._attachNavResizeObserver();
   }
 
   disconnectedCallback(): void {
