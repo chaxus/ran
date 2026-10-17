@@ -5,64 +5,51 @@ export const mountDesignIllustrations = (): (() => void) => {
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const cleanups = figures.map((figure) => {
     const button = figure.querySelector<HTMLButtonElement>('button')!;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let remaining = 4000;
-    let started = 0;
-    const clear = (): void => {
-      clearTimeout(timer);
-      timer = undefined;
-    };
+    const label = button.querySelector<HTMLElement>('[data-play-label]')!;
+    const note = figure.querySelector<HTMLElement>('[data-reduced-note]')!;
     const state = (next: string): void => {
       figure.dataset.state = next;
-      button.textContent =
+      label.textContent =
         button.dataset[
-          motion.matches
-            ? 'reduced'
-            : next === 'playing'
-              ? 'pause'
-              : next === 'paused'
-                ? 'resume'
-                : next === 'finished'
-                  ? 'replay'
-                  : 'play'
+          next === 'playing' ? 'pause' : next === 'paused' ? 'resume' : next === 'finished' ? 'replay' : 'play'
         ]!;
     };
     const reset = (): void => {
-      clear();
-      remaining = 4000;
+      const focused = document.activeElement;
       state('idle');
-      button.disabled = motion.matches;
+      button.hidden = motion.matches;
+      note.hidden = !motion.matches;
+      if (motion.matches && focused === button) note.focus();
+      else if (!motion.matches && focused === note) button.focus();
     };
     const click = (): void => {
       if (motion.matches) return;
-      if (figure.dataset.state === 'playing') {
-        remaining -= Date.now() - started;
-        clear();
-        state('paused');
-      } else {
+      if (figure.dataset.state === 'playing') state('paused');
+      else {
         if (figure.dataset.state !== 'paused') {
-          reset();
-          // Commit the static state so Replay restarts CSS animations, not just its timer.
+          state('idle');
+          // Commit the static state so Replay restarts the finite CSS animation.
           figure.getBoundingClientRect();
         }
         state('playing');
-        started = Date.now();
-        timer = setTimeout(() => {
-          timer = undefined;
-          state('finished');
-        }, remaining);
       }
     };
+    const end = (event: Event): void => {
+      if (figure.dataset.state === 'playing' && event.target instanceof Element && event.target.matches('.di-motion'))
+        state('finished');
+    };
     figure.dataset.enhanced = 'true';
-    button.hidden = false;
     reset();
     button.addEventListener('click', click);
+    figure.addEventListener('animationend', end);
     motion.addEventListener('change', reset);
     return () => {
-      reset();
+      state('idle');
       button.hidden = true;
+      note.hidden = true;
       delete figure.dataset.enhanced;
       button.removeEventListener('click', click);
+      figure.removeEventListener('animationend', end);
       motion.removeEventListener('change', reset);
     };
   });
