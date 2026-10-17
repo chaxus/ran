@@ -40,6 +40,22 @@ describe('r-select contract', () => {
     return select;
   };
 
+  it('cancels a pending blur close when the same instance reconnects', async () => {
+    const select = await createSelectWithOptions();
+    vi.useFakeTimers();
+    try {
+      select.selectBlur(new Event('blur'));
+      select.remove();
+      document.body.append(select);
+      select.show();
+      vi.advanceTimersByTime(350);
+      expect(select.open).toBe(true);
+      expect(select.getAttribute('aria-expanded')).toBe('true');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('reflects disabled property to attributes and selection', async () => {
     const select = await createSelectWithOptions();
     // @ts-ignore - access private _shadowDom because mode is closed

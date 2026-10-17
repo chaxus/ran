@@ -26,6 +26,18 @@ describe('r-select accessibility keyboard contract', () => {
     vi.restoreAllMocks();
   });
 
+  it('starts fresh keyboard typeahead after reconnect', async () => {
+    const select = await createSelect();
+    select.dispatchEvent(new KeyboardEvent('keydown', { key: 'b' }));
+    select.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(select.value).toBe('2');
+    select.remove();
+    document.body.append(select);
+    select.dispatchEvent(new KeyboardEvent('keydown', { key: 'g' }));
+    select.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(select.value).toBe('3');
+  });
+
   it('opens, tracks active descendant, selects, and closes from keyboard events', async () => {
     const select = await createSelect();
     vi.useFakeTimers();

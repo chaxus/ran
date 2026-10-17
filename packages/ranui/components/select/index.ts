@@ -105,6 +105,8 @@ export class Select extends RanElement {
   // after a pause between keystrokes.
   _composing = false;
   private _lastSearchValue?: string;
+  // Defaults may wait for asynchronous options, but must not undo an explicit clear.
+  private _pendingDefaultValue = true;
   _typeaheadBuffer = '';
   _typeaheadTimeId?: ReturnType<typeof setTimeout>;
   static get observedAttributes(): string[] {
@@ -198,12 +200,14 @@ export class Select extends RanElement {
     // only blocks *user* interaction, not assignment. Gating this on
     // `!isDisabled(this)` used to silently drop formResetCallback's restore
     // whenever the field happened to be disabled at reset time.
+    this._pendingDefaultValue = false;
     if (value) {
       this.setAttribute('value', value);
     } else {
       this.removeAttribute('value');
     }
-    this.syncFormValue();
+    if (!value) this._clearSelection();
+    else this.syncFormValue();
   }
   // Relay the selected value to the associated form (guarded — jsdom omits it).
   syncFormValue = (): void => {
@@ -297,17 +301,24 @@ export class Select extends RanElement {
       return;
     }
     this.removeAttribute('value');
+    this._clearSelection();
+  }
+
+  private _clearSelection = (): void => {
+    this._pendingDefaultValue = false;
     this._text.textContent = '';
     this._text.removeAttribute('title');
+    this._search.removeAttribute('placeholder');
     if (this._activeOption) {
       this._activeOption.removeAttribute('active');
       this._activeOption.setAttribute('aria-selected', 'false');
       this._activeOption = undefined;
     }
     this._activeIndex = -1;
+    this.getDropdownOptions().forEach((option) => option.removeAttribute('active'));
     this.syncActiveState();
     this.syncFormValue();
-  }
+  };
   get defaultValue(): string {
     return this.getAttribute('defaultValue') || '';
   }
@@ -740,12 +751,12 @@ export class Select extends RanElement {
    * @return {*}
    */
   createOption = (): void => {
+    const root = this.getRootNode() as ShadowRoot | Document;
+    const container =
+      (root.getElementById ? root.getElementById(this.getPopupContainerId) : null) ||
+      document.getElementById(this.getPopupContainerId) ||
+      document.body;
     if (!this._selectDropdown) {
-      const root = this.getRootNode() as ShadowRoot | Document;
-      const container =
-        (root.getElementById ? root.getElementById(this.getPopupContainerId) : null) ||
-        document.getElementById(this.getPopupContainerId) ||
-        document.body;
       this._selectDropdown = Div()
         .style('-webkit-tap-highlight-color', 'transparent')
         .style('outline', '0')
@@ -767,28 +778,15 @@ export class Select extends RanElement {
         this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);
       }
       this._selectDropdown.appendChild(this._selectionDropdown);
-      container.appendChild(this._selectDropdown);
     }
+    if (this._selectDropdown.parentNode !== container) container.appendChild(this._selectDropdown);
   };
   /**
    * @description: 移除选项下拉框
    * @return {*}
    */
   removeSelectDropdown = (): void => {
-    try {
-      if (this._selectDropdown) {
-        const root = this.getRootNode() as ShadowRoot | Document;
-        const container =
-          (root.getElementById ? root.getElementById(this.getPopupContainerId) : null) ||
-          document.getElementById(this.getPopupContainerId) ||
-          document.body;
-        if (container && this._selectDropdown.parentNode === container) {
-          container.removeChild(this._selectDropdown);
-        }
-      }
-    } catch (error) {
-      console.error('removeSelectDropdown error', error);
-    }
+    this._selectDropdown?.remove();
   };
   /**
    * @description: 当 select 中有 option 元素的时候，给 dropdown 添加元素
@@ -814,7 +812,12 @@ export class Select extends RanElement {
       this._optionLabelMapValue.set(label, value);
       this._optionValueMapLabel.set(value, label);
     });
-    this.createSelectDropdownContent(this._optionList);
+    const query = this.hasAttribute('showsearch')
+      ? this._composing
+        ? (this._lastSearchValue ?? '')
+        : this._search.value
+      : '';
+    this._renderOptionsForSearch(query);
     // Options populated asynchronously (e.g. after a fetch) can arrive while
     // the dropdown is already open. placementPosition()'s flip decision reads
     // `_selectionDropdown.clientHeight`, which was 0 (no options yet) the
@@ -848,7 +851,7 @@ export class Select extends RanElement {
           selectOptionItem.setAttribute('disabled', '');
           selectOptionItem.setAttribute('aria-disabled', 'true');
         }
-        const selectedValue = this.value || this.defaultValue;
+        const selectedValue = this.value || (this._pendingDefaultValue ? this.defaultValue : '');
         if (selectedValue === value) {
           selectOptionItem.setAttribute('active', value);
           this._activeOption = selectOptionItem;
@@ -884,31 +887,19 @@ export class Select extends RanElement {
     // Native blur commits the same text after input already filtered the list.
     // Replacing the options here would detach a pointer's pending click target.
     if (e.type === 'change' && value === this._lastSearchValue) return;
+    this.dispatchEvent(new CustomEvent('search', { detail: { value } }));
+    this._renderOptionsForSearch(value);
+  };
+
+  private _renderOptionsForSearch = (value: string): void => {
     this._lastSearchValue = value;
     const query = value.toLowerCase();
-    this.dispatchEvent(
-      new CustomEvent('search', {
-        detail: { value },
-      }),
-    );
-    if (this._selectionDropdown) {
-      this._selectionDropdown.innerHTML = '';
-    }
-    if (value.length > 0) {
-      const options = this._optionList
-        .map((item) => {
-          const { label } = item;
-          if (`${label}`.toLowerCase().includes(query)) {
-            return { label, value: item.value, disabled: item.disabled };
-          }
-          return undefined;
-        })
-        .filter((item) => item);
-      this.createSelectDropdownContent(options as Option[]);
-    } else {
-      this.createSelectDropdownContent(this._optionList);
-    }
+    const options = value
+      ? this._optionList.filter((item) => `${item.label}`.toLowerCase().includes(query))
+      : this._optionList;
+    this.createSelectDropdownContent(options);
   };
+
   clickRemoveSelect = (e: Event): void => {
     e.stopPropagation();
     this.setSelectDropdownDisplayNone();
@@ -916,6 +907,8 @@ export class Select extends RanElement {
   connectedCallback(): void {
     this.handlerExternalCss();
     this.createOption();
+    this._applyShowSearch();
+    this.addOptionToSlot();
     this.initAria();
     this.syncFormValue(); // seed the form value from any initial selection
     this._events
@@ -928,7 +921,6 @@ export class Select extends RanElement {
     if (this.trigger.includes('click')) {
       this._events.on(this, 'click', this.selectMouseDown).on(this, 'blur', this.selectBlur);
     }
-    this._applyShowSearch();
     // SSR / declarative shadow DOM: the `value` attribute is already present at
     // upgrade time, so `syncSelectedFromValue` ran *before* this callback — with
     // no layout and no dropdown built yet. Re-apply it here, now that the element
@@ -991,7 +983,12 @@ export class Select extends RanElement {
     this._events.abort();
     this._searchEvents.abort();
     this._composing = false;
+    clearTimeout(this.removeTimeId);
+    this.removeTimeId = undefined;
     this._floating.destroy();
+    this._selectionDropdown?.style.setProperty('display', 'none');
+    this._selectionDropdown?.removeAttribute('transit');
+    this._typeaheadBuffer = '';
     this.removeSelectDropdown();
     clearTimeout(this._typeaheadTimeId);
   }
@@ -1021,7 +1018,10 @@ export class Select extends RanElement {
     // Reactive: `defaultValue` and `showSearch` used to apply only on first
     // connect. Re-run the same effect their initial-connect code performs when
     // they change afterwards.
-    if (name === 'defaultvalue') this.setDefaultValue();
+    if (name === 'defaultvalue') {
+      this._pendingDefaultValue = true;
+      this.setDefaultValue();
+    }
     if (name === 'showsearch' && this._search) this._applyShowSearch();
     if (name === 'open') this._applyOpen();
   }
@@ -1032,7 +1032,11 @@ export class Select extends RanElement {
    * selection without the consumer having to "nudge" the active option.
    */
   syncSelectedFromValue = (value: string): void => {
-    if (!value) return;
+    this._pendingDefaultValue = false;
+    if (!value) {
+      this._clearSelection();
+      return;
+    }
     // Already reflected (e.g. the change came from selectOptionElement itself).
     if (this._activeOption?.getAttribute('value') === value) return;
     const option = Array.from(this.querySelectorAll('r-option')).find(
