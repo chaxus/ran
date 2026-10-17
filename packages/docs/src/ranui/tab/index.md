@@ -30,6 +30,10 @@ Tabbed container that switches between panes. Compose `<r-tabs>` as the containe
 
 Each `<r-tab>` becomes one pane; its `label` is rendered as the header button, and its slotted content is the pane body. Selecting a header slides the corresponding pane into view.
 
+For dynamic panes, give each `<r-tab>` a unique, stable `r-key`. Adding or reordering panes
+keeps the active key and focused header. If the active pane is removed or disabled, selection
+moves to the next enabled pane, then the previous one; no available pane clears the selection.
+
 ## API Reference
 
 ### `r-tabs` Properties

@@ -113,6 +113,11 @@ Consistent with the native `placeholder` attribute.
 
 Pair `status` with a `message` so the state is conveyed by text, not color alone.
 
+Status labels and helper text use `--ran-color-warning-foreground` and
+`--ran-color-danger-foreground`. These follow the text color scale in both themes, while
+`--ran-color-warning` and `--ran-color-danger` retain their solid-fill roles. Existing
+component label/message color overrides still apply.
+
 <ran-demo column>
   <r-input status="error" label="Username" message="This field is required"></r-input>
   <r-input status="warning" label="Username" message="Check this value"></r-input>

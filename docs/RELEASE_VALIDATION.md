@@ -4,6 +4,8 @@ Measured on macOS arm64 with Node 26.12.0 and npm 11.20.0 for the coordinated `r
 
 ## Installation footprint
 
+The table records the first installation reduction at commit `6ad7c48`; subsequent component changes are covered below and by each release receipt.
+
 The baseline installs all three actual archives with npm in a new project outside the workspace, with scripts disabled and production dependencies only. No workspace dependency links are supplied. The optimized archives use the same procedure, also enforced by `pnpm verify:release`.
 
 | Metric (decimal MB)                |        Before | After (rounded) |
@@ -23,6 +25,16 @@ This deliberately increases ranui's own archive while reducing the combined inst
 ESM and IIFE outputs include generated dependency license lists. Upstream media prebundle companion notices are copied separately because a bundler cannot discover the nested Webpack modules' notices from package metadata.
 
 The final exact measurements are written to `.release/size-report.json` with each verified release. Budgets in `bin/package-size-budgets.json` reject archive, unpacked or complete-install growth. These numbers count logical regular-file bytes, not physical disk allocation. Registry transitive resolutions and npm/platform metadata can vary between installations; budgets allow limited headroom. Installation size is also different from page download cost: ESM engines remain lazy, component imports remain separate, and the single-helper ranuts budget is checked independently.
+
+## Component interaction and payload checks
+
+Search tests exercise real native editing, live filtering with existing/default selections, clearing and explicit replacement. Dynamic tabs preserve selected keys and keyboard focus, while attachment removal moves focus next, then previous, then to the host. A host that hides the entire empty strip must transfer focus before hiding it. IME guards are tested with synthetic composition events; physical OS input methods remain a separate manual check.
+
+Input warning/error labels and helper text use foreground scale aliases independently of solid status fills. Browser checks require at least 4.5:1 contrast against shipped semantic surfaces and the actual field surface in both themes at 375px and 1280px. Consumer color overrides require their own contrast checks.
+
+The player uses a CSS ring instead of 49 embedded PNG frames; all 50 loading-only source images are removed. Pixel checks verify visible indicators in ordinary and reduced motion, static paint in reduced motion, animation otherwise, and clearing on the existing media-ready event. These checks use controlled media events and do not claim real streaming/codec coverage.
+
+Internal component and SSR imports now reference their owners instead of retaining unrelated exports through a runtime barrel namespace. The packed consumer check builds Button, Markdown and Player with Vite's default tree shaking and enforces raw/gzip budgets on each entry's static JavaScript closure. Shared chunks are counted once; lazy chunks, fonts and global styles are excluded from this initial-JavaScript metric. Printed measurements are consumer-build estimates, not browser network or whole-install measurements. A separate local esbuild comparison against the same before/after tarballs cross-checks retention with a second bundler; the automated consumer gate uses Vite.
 
 ## Browser coverage
 

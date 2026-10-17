@@ -178,29 +178,31 @@ Success.
 The layer components actually read. Everything here resolves through the scales above, so it
 flips with the theme on its own.
 
-| Token                          | Resolves to                                                                                                                              | Role                            |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `--ran-color-bg`               | `--ran-background-100`                                                                                                                   | Page background                 |
-| `--ran-color-bg-subtle`        | `--ran-background-200`                                                                                                                   | Subtle page zones               |
-| `--ran-color-bg-elevated`      | `--ran-background-100` · gray-100 (dark)                                                                                                 | Cards, surfaces                 |
-| `--ran-color-bg-muted`         | `--ran-gray-100`                                                                                                                         | Inset / muted fills             |
-| `--ran-color-bg-hover`         | `--ran-gray-200`                                                                                                                         | Hover surface                   |
-| `--ran-color-bg-active`        | `--ran-gray-300`                                                                                                                         | Active (pressed) surface        |
-| `--ran-color-text`             | `--ran-gray-1000`                                                                                                                        | Primary text                    |
-| `--ran-color-text-secondary`   | `--ran-gray-900`                                                                                                                         | Secondary text                  |
-| `--ran-color-text-disabled`    | `--ran-gray-700`                                                                                                                         | Disabled text                   |
-| `--ran-color-border`           | `--ran-gray-400`                                                                                                                         | Default border                  |
-| `--ran-color-border-secondary` | `--ran-gray-300`                                                                                                                         | Subtler border                  |
-| `--ran-color-border-hover`     | `--ran-gray-500`                                                                                                                         | Hover border                    |
-| `--ran-color-border-active`    | `--ran-gray-600`                                                                                                                         | Active border                   |
-| `--ran-color-primary`          | `--ran-gray-1000`                                                                                                                        | The primary action (monochrome) |
-| `--ran-color-primary-hover`    | <span class="swatch" style="--swatch:#383838"></span> `#383838` · <span class="swatch" style="--swatch:#cccccc"></span> `#cccccc` (dark) | Primary hover                   |
-| `--ran-color-primary-active`   | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` · <span class="swatch" style="--swatch:#b3b3b3"></span> `#b3b3b3` (dark) | Primary pressed                 |
-| `--ran-color-primary-text`     | `--ran-background-100`                                                                                                                   | Ink **on** a primary surface    |
-| `--ran-color-success`          | `--ran-green-700`                                                                                                                        | Success                         |
-| `--ran-color-warning`          | `--ran-amber-700`                                                                                                                        | Warning                         |
-| `--ran-color-danger`           | `--ran-red-700`                                                                                                                          | Danger / error                  |
-| `--ran-color-link`             | `--ran-blue-700`                                                                                                                         | Links                           |
+| Token                            | Resolves to                                                                                                                              | Role                            |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `--ran-color-bg`                 | `--ran-background-100`                                                                                                                   | Page background                 |
+| `--ran-color-bg-subtle`          | `--ran-background-200`                                                                                                                   | Subtle page zones               |
+| `--ran-color-bg-elevated`        | `--ran-background-100` · gray-100 (dark)                                                                                                 | Cards, surfaces                 |
+| `--ran-color-bg-muted`           | `--ran-gray-100`                                                                                                                         | Inset / muted fills             |
+| `--ran-color-bg-hover`           | `--ran-gray-200`                                                                                                                         | Hover surface                   |
+| `--ran-color-bg-active`          | `--ran-gray-300`                                                                                                                         | Active (pressed) surface        |
+| `--ran-color-text`               | `--ran-gray-1000`                                                                                                                        | Primary text                    |
+| `--ran-color-text-secondary`     | `--ran-gray-900`                                                                                                                         | Secondary text                  |
+| `--ran-color-text-disabled`      | `--ran-gray-700`                                                                                                                         | Disabled text                   |
+| `--ran-color-border`             | `--ran-gray-400`                                                                                                                         | Default border                  |
+| `--ran-color-border-secondary`   | `--ran-gray-300`                                                                                                                         | Subtler border                  |
+| `--ran-color-border-hover`       | `--ran-gray-500`                                                                                                                         | Hover border                    |
+| `--ran-color-border-active`      | `--ran-gray-600`                                                                                                                         | Active border                   |
+| `--ran-color-primary`            | `--ran-gray-1000`                                                                                                                        | The primary action (monochrome) |
+| `--ran-color-primary-hover`      | <span class="swatch" style="--swatch:#383838"></span> `#383838` · <span class="swatch" style="--swatch:#cccccc"></span> `#cccccc` (dark) | Primary hover                   |
+| `--ran-color-primary-active`     | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` · <span class="swatch" style="--swatch:#b3b3b3"></span> `#b3b3b3` (dark) | Primary pressed                 |
+| `--ran-color-primary-text`       | `--ran-background-100`                                                                                                                   | Ink **on** a primary surface    |
+| `--ran-color-success`            | `--ran-green-700`                                                                                                                        | Success                         |
+| `--ran-color-warning`            | `--ran-amber-700`                                                                                                                        | Warning                         |
+| `--ran-color-danger`             | `--ran-red-700`                                                                                                                          | Danger / error                  |
+| `--ran-color-warning-foreground` | `--ran-amber-900`                                                                                                                        | Warning text                    |
+| `--ran-color-danger-foreground`  | `--ran-red-900`                                                                                                                          | Danger / error text             |
+| `--ran-color-link`               | `--ran-blue-700`                                                                                                                         | Links                           |
 
 `--ran-color-primary-hover` / `-active` are the two literals in the semantic layer: they step
 toward the page background rather than along a scale, so dark mode redefines them directly.

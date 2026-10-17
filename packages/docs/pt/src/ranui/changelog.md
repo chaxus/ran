@@ -21,6 +21,14 @@ Release candidate prepared for publication; npm upload is pending.
 
 ### Release preparation
 
+- Import component utilities from their owners so small ESM consumers avoid unrelated MIME catalogs; gate actual packed Button, Markdown and Player initial JavaScript size.
+
+- Preserve native searchable-select editing and IME composition; filter live without closing or resetting an existing selection.
+- Reconcile dynamic tab headers by stable key and preserve selection/focus across add, reorder, removal and disabled updates.
+- Preserve attachment row focus, hand off after removal, and recreate owned image previews on reconnect.
+- Use theme-aware warning/error foreground tokens for readable input labels and helper messages; keep existing component overrides.
+- Replace the player's PNG-frame loading animation with a CSS ring that remains visible with reduced motion; remove 50 unused loading images.
+
 - Fix mobile popover hover/click races and cancel stale hover timers when the user explicitly toggles a panel.
 
 - Run Chromium, Firefox and WebKit functional CI, including built ESM and IIFE execution. Measure and gate real installation size; private media/Mermaid engines remain automatic lazy chunks while their large upstream development distributions no longer install separately. Preserve dependency notices. See the [validation report](https://github.com/chaxus/ran/blob/main/docs/RELEASE_VALIDATION.md).
