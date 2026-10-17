@@ -190,7 +190,9 @@ input.addEventListener('change', (event) => {
 
 **Reset**: a native `form.reset()` (or `<button type="reset">`) restores the value the field had when it first connected, implemented via `formResetCallback()`, one of the lifecycle hooks the browser calls automatically on a form-associated custom element.
 
-**Validation**: setting `required` makes an empty field invalid via `ElementInternals.setValidity()`; `form.checkValidity()`/`form.reportValidity()` see it, and submitting shows the browser's native validation bubble anchored on the field. `disabled` fields never block validation, matching native `<input>`. `r-input` also exposes the usual native-field methods/properties: `checkValidity()`, `reportValidity()`, `validity`, `validationMessage`.
+**Validation**: the native control's validity is relayed through `ElementInternals.setValidity()`, including `required`, email format and number `min`/`max`/`step` constraints. `form.checkValidity()`/`form.reportValidity()` see it, and submitting shows the browser's native validation bubble anchored on the field. `disabled` fields never block validation, matching native `<input>`. `r-input` also exposes the usual native-field methods/properties: `checkValidity()`, `reportValidity()`, `validity`, `validationMessage`.
+
+Changing or removing `value`, `type`, `disabled` and numeric constraint attributes after mounting updates the native control and form state. The `label` is always plain text, including when updated.
 
 ```html
 <form>

@@ -187,7 +187,9 @@ input.addEventListener('change', (event) => {
 
 **重置**：原生的 `form.reset()`（或 `<button type="reset">`）会把字段恢复到它首次连接时的值，这是通过浏览器自动调用的生命周期钩子 `formResetCallback()` 实现的。
 
-**校验**：设置 `required` 后，空字段会通过 `ElementInternals.setValidity()` 变为无效状态，`form.checkValidity()`/`form.reportValidity()` 能感知到，提交时会显示浏览器原生的校验提示，锚定在该字段上。`disabled` 的字段永远不会阻塞校验，与原生 `<input>` 语义一致。`r-input` 也暴露了原生字段常见的方法/属性：`checkValidity()`、`reportValidity()`、`validity`、`validationMessage`。
+**校验**：内部原生控件的有效性通过 `ElementInternals.setValidity()` 同步到表单，包括 `required`、邮箱格式以及数字的 `min`/`max`/`step` 约束。`form.checkValidity()`/`form.reportValidity()` 能感知到，提交时会显示浏览器原生的校验提示，锚定在该字段上。`disabled` 的字段永远不会阻塞校验，与原生 `<input>` 语义一致。`r-input` 也暴露了原生字段常见的方法/属性：`checkValidity()`、`reportValidity()`、`validity`、`validationMessage`。
+
+挂载后修改或移除 `value`、`type`、`disabled` 和数字约束属性，会同步更新原生控件及表单状态。`label` 始终按纯文本处理，后续更新也不会解析 HTML。
 
 ```html
 <form>

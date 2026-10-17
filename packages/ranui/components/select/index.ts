@@ -241,7 +241,7 @@ export class Select extends RanElement {
   private _syncLabel = (value: string | null): void => {
     if (value != null) {
       if (this._label) {
-        this._label.innerHTML = value;
+        this._label.textContent = value;
       } else {
         if (!this.id) this.id = `ran-select-${++selectIdSeq}`;
         this._label = Label().class('ran-select-label').part('label').text(value).build() as HTMLLabelElement;
