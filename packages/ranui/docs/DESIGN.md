@@ -57,7 +57,7 @@ mechanically decidable, so it relies on review and on rendering the result.
 | `shadow-mount-outside-constructor` | a component's shadow tree is built in its constructor, once                                | §9      |
 
 Existing violations are recorded per file in
-[design-rule-baseline.json](./design-rule-baseline.json) and act as a **ratchet**: a count
+[design-rule-baseline.json](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/design-rule-baseline.json) (repository checkout only) and act as a **ratchet**: a count
 that rises fails as a new violation, and a count that falls fails until it is lowered, so a
 fix cannot silently regress later. The baseline is a record of debt, not permission — the
 target for every entry is zero.
@@ -341,7 +341,7 @@ that only works on one.
 - **Interactive cards opt in**: `r-card` only reacts to hover with the `hoverable` attribute (border 400 → 500 + elevated shadow). Non-interactive cards must stay inert — never add hover feedback to something that isn't clickable.
 - **Theme switching UI is a component**: use `<r-theme-switch>` (system / light / dark segmented pill, wired to `setTheme`/localStorage, syncs across instances and updates `theme-color` metas) instead of hand-rolling toggles. Localize with `label` / `label-system` / `label-light` / `label-dark`.
 - **Typography ships with the system**: `import 'ranui/fonts'` (or link `dist/fonts/fonts.css`) self-hosts Geist Sans + Geist Mono (variable, OFL-licensed) — the canonical faces behind `--ran-font-family` / `--ran-font-mono`. Without it the stacks fall back to system fonts.
-- See [THEME_STYLE_SYSTEM_DESIGN.md](./THEME_STYLE_SYSTEM_DESIGN.md) for the token architecture and [style-tokens-public.md](./style-tokens-public.md) for the generated per-component token list.
+- See [THEME_STYLE_SYSTEM_DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md) for the repository-only token architecture reference and [style-tokens-public.md](./style-tokens-public.md) for the generated per-component token list.
 
 ---
 
@@ -526,10 +526,13 @@ rhythm communicates, so do not undo it with a decorative divider.
 
 ### The measure governs text, not the column
 
-**Running text sits at 60–75 characters per line; everything that is not running text does
-not.** A table, a code fence, a demo stage or an image has nothing to gain from a
-comfortable line length and everything to lose from being narrowed to one. Cap the text
-elements, not the column that holds them.
+**Choose a readable measure for the actual script and font.** For Latin prose, 60–75
+characters per line is a starting heuristic, not a universal range for every writing system.
+Review realistic text at supported widths, zoom levels and font fallbacks; CJK and mixed-script
+text need their own judgment. [WCAG visual presentation](https://www.w3.org/WAI/WCAG22/Understanding/visual-presentation.html)
+also distinguishes CJK in its Level AAA criterion; it is not a mandatory library default.
+A table, code fence, demo stage or image should retain the width its content needs.
+Cap the text elements, not the column that holds them.
 
 > A documentation column was capped at the measure, so the cap applied to everything
 > inside it. The Properties table wanted 762px inside a 736px cap, silently became a
@@ -717,8 +720,8 @@ Ask in order. A "no" is a finding, not a preference:
    primary buttons stay rare?
 4. Could this do less: any entry point, option or state removable without weakening the task?
 5. Is the structure exact — shared spines, equal gaps equal to the pixel, no doubled padding?
-6. Is running text between 60 and 75 characters per line, and is everything that is **not**
-   running text free of that cap?
+6. Is running text comfortable in its actual scripts, fonts and zoom levels, and is
+   everything that is **not** running text free of that measure cap?
 7. Does every element that looks like part of one object agree — border, radius **and**
    spacing — and does every reserved column actually have content?
 8. Does it hold in every state: empty, loading, failure, longest translation, narrow width,
@@ -734,12 +737,12 @@ channel between two elements drawn as one, 280px of dead column, a deck renderin
 wider than the body text it sits above. Read the numbers out of a real browser:
 
 ```js
-// line length in characters, the number this section is actually about
+// Approximate width in average digit advances; this is NOT a rendered character count.
 const cs = getComputedStyle(el);
 const probe = Object.assign(document.createElement('span'), { textContent: '0123456789' });
 probe.style.cssText = `font:${cs.font};visibility:hidden;position:absolute;white-space:pre`;
 document.body.append(probe);
-const ch = el.getBoundingClientRect().width / (probe.getBoundingClientRect().width / 10);
+const approximateDigitAdvances = el.getBoundingClientRect().width / (probe.getBoundingClientRect().width / 10);
 probe.remove();
 
 // content clipped inside a scroll container — silent by construction
@@ -748,6 +751,9 @@ wrap.scrollWidth - wrap.clientWidth;
 // the page is wider than the window (an RTL off-screen offset, a stray fixed element)
 document.documentElement.scrollWidth > innerWidth;
 ```
+
+The digit probe cannot validate CJK or proportional prose: glyph widths, shaping, fallback
+fonts and line breaks differ. Read real text in the browser to judge its measure.
 
 ## 12. Information architecture — the shape before the composition
 

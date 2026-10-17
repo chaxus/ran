@@ -19,9 +19,9 @@
 
 ## Chunk 2: Review and delivery
 
-- [ ] Independent spec review confirms universal organization, actual broadened examples and source-to-rule adaptations; quality review confirms no conflicts, misleading APIs or broken package routes.
-- [ ] Root final verification; push to existing #421 and rewrite its title/body around the final universal scope, preserving multiple commits.
-- [ ] Confirm latest-head CI and final review; do not merge.
+- [x] Independent spec review confirms universal organization, actual broadened examples and source-to-rule adaptations; quality review confirms no conflicts, misleading APIs or broken package routes.
+- [x] Root final verification; push to existing #421 and rewrite its title/body around the final universal scope, preserving multiple commits.
+- [x] Confirm latest-head CI and final review; do not merge.
 
 ## Chunk 1 evidence
 
@@ -45,8 +45,8 @@
 - [x] Move density/CSS and source-informed visual craft to appropriate DESIGN sections; add only necessary async identity/cleanup engineering guidance to CODING §3. Keep workflow recipes out of DESIGN.
 - [x] Update AGENTS, CLAUDE, plugin, README and EN/CN thin routes to distinguish the owners. Add both new leaf docs to package files.
 - [x] Adapt existing test to inspect executable CSS in visual/interaction/pattern docs (allow zero token refs in a geometry-only example, but require a meaningful token-bearing corpus). Keep LF/CRLF and masked-token negative fixtures. Verify actual npm package contents and index/new-leaf direct local dependencies.
-- [ ] Run RED before new packaged leaves exist, then GREEN related tests, links, generated docs, design rules, locale check and format/lint/diff checks. Independent spec and quality review verify boundaries and discovery, not prose keywords.
-- [ ] Commit and push to the same #421, rewrite its description around final responsibilities, confirm latest CI, then final review. No merge.
+- [x] Run RED before new packaged leaves exist, then GREEN related tests, links, generated docs, design rules, locale check and format/lint/diff checks. Independent spec and quality review verify boundaries and discovery, not prose keywords.
+- [x] Commit and push to the same #421, rewrite its description around final responsibilities, confirm latest CI, then final review. No merge.
 
 ## Chunk 3 implementation evidence
 
@@ -56,3 +56,25 @@
 - DESIGN owns the moved density CSS and source → decision → evidence craft mapping; CODING §3 owns asynchronous intent/lifecycle mechanisms. INTERACTION states observable stale-response outcomes and links the engineering owner. No workflow state tables were added to DESIGN.
 - AGENTS, package CLAUDE, plugin, README and EN/CN public pages now route by responsibility. Both leaves ship in npm. Earlier eight-locale motion synchronization and unused-label cleanup remain intact.
 - Fresh links, generated API/token/changelog checks, design verification, 67 documentation-site tests, locale parity (8 languages / 236 labels) and docs tsc passed. Full repository Prettier, explicit plugin Prettier, targeted test oxlint and diff checks also passed. Independent spec/quality review follows before root delivery; no runtime, dependency, foundation-token or baseline edits.
+
+## Chunk 4: Overall review follow-up
+
+The user authorized another overall review and fixes in the same PR. Previous delivery at
+`f5cf51e8` passed all 11 remote checks and independent spec/quality reviews.
+
+- [x] Close installed-reader dead ends: inspect every shipped canonical Markdown file, not only the index/new leaves. Keep repository-only baselines, renderer roadmap and sibling-package sources as explicitly identified repository links rather than inflating the runtime package with source files.
+- [x] Broaden the existing actual-npm-pack regression to all shipped canonical docs, including bare relative paths and normalized parent paths. Keep LF/CRLF and fallback-token checks; use meaningful path fixtures, not prose snapshots.
+- [x] Repair the linked theme architecture reference against theme/runtime/button source: monochrome primary plus inverse ink, blue link/focus roles, dark overrides, valid HTML alternatives and truthful runtime signatures/behavior. Reduce duplicated token snapshots; mark custom brand values as host overrides. Do not change runtime tokens or add another standard.
+- [x] Repair the installed plugin's unexported `ranui/ssr-registry` import recommendation. Distinguish consumer rendering exports from source-only component registration. Avoid claiming a stale short component list is a complete inventory; check executable plugin import examples against real package exports. Correct the same plugin's form contract: colorpicker does not participate in native FormData; the host handles value/change when submitting it.
+- [x] Make the prose measure script-aware: 60–75 is an initial Latin heuristic, not a CJK mandate. Label the digits-only browser probe as an approximation and require real-text review.
+- [x] Demonstrate RED on missing packaged dependencies and invalid plugin import, then GREEN relevant docs tests, links/generated/design, docs tests/locale/types, formatting and targeted lint. Independent spec review precedes quality review.
+- [ ] Push reviewed commits to #421, update final evidence, wait for latest-head CI and review again. No merge, npm release or runtime/dependency/baseline changes.
+
+## Chunk 4 implementation evidence
+
+- RED: 2 failures / 7 passes in the expanded executable guidance suite, detecting the actual unexported `ranui/ssr-registry` recommendation and six missing installed reading targets across CLAUDE/DESIGN. LF/CRLF fixtures cover bare/sibling/parent/normalized paths and exclude external, anchor and fenced examples; existing CSS fallback checks remain.
+- GREEN: 209 related tests across 4 files, including actual npm packing of every shipped canonical doc's local reading dependencies. Repository-only baseline/renderer/theme/sibling-package references now use explicit repository URLs; no source trees or baselines were added to package contents.
+- Theme architecture is a reduced repository reference tied to tokens/dark/button/runtime source: monochrome primary and inverse ink, blue shared focus/link roles, component focus differences, explicit dark overrides/selectors, correct argument types, two attribute writes, one system subscription and best-effort storage. Host branding examples are explicitly host-scoped; DESIGN remains authoritative.
+- Plugin examples now use public SSR rendering exports and distinguish internal source registration. Its short subpath list is examples, with package exports as inventory; colorpicker's value/change contract is separate from the three form-associated fields. Executable import examples are checked against package exports rather than prohibited-word matching.
+- DESIGN's measure and checklist account for actual scripts/fonts/zoom, and its digit-width probe no longer claims to count rendered characters. The linked WCAG explanation is identified as Level AAA, not a universal library requirement.
+- 67 documentation-site tests across 11 files, locale parity (8 languages / 236 labels), docs tsc, links, generated references and all design verification gates passed. Full repository Prettier, explicit plugin Prettier, targeted test oxlint and diff checks passed. Independent spec/quality review follows before delivery. No runtime, dependency, lock, foundation-token or baseline changes.
