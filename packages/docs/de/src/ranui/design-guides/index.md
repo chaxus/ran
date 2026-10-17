@@ -87,13 +87,13 @@ Zweck und Nutzungshäufigkeit entscheiden, ob Bewegung sinnvoll ist. Häufiges H
 
 ## Zustände und Texte
 
-Jeder erreichbare Zustand gehört zum Entwurf: **Überfahren, Gedrückt, Fokus, Deaktiviert, Ladend, Leer, Fehler**. Bilde sie auf die Leiter ab: Überfahren → `bg-hover` / `border-hover`; Gedrückt → `bg-active`; Deaktiviert → `text-disabled` plus verringerte Deckkraft; Fokus → der Fokusring.
+Jeder erreichbare Zustand gehört zum Entwurf: **Überfahren, Gedrückt, Fokus, Deaktiviert, Ladend, Leer, Fehler**. Bilde sie auf die Leiter ab: Überfahren → `bg-hover` / `border-hover`; Gedrückt → `bg-active`; Deaktiviert → Deaktiviert-Tokens; Deckkraft nur bei Bedarf und erhaltener Lesbarkeit verringern; Fokus → der Fokusring.
 
 Nichts Nicht-Interaktives darf interaktiv aussehen. `r-card` reagiert nur mit dem Attribut `hoverable` auf das Überfahren; lass es bei Karten weg, die man nicht anklickt.
 
 Auch Texte gehören zum System:
 
-- **Schaltflächen** nennen eine Handlung **und** ein Objekt. ✅ „Mitglied löschen“ ❌ „Löschen“, „OK“.
+- **Schaltflächen** benennen das Ergebnis. Nenne das Objekt, wenn es aus dem Kontext nicht hervorgeht: „Mitglied löschen“. Ein eindeutig benannter Dialog darf „Löschen“ verwenden; vermeide ein allgemeines „OK“.
 - **Fehler** sagen, was passiert ist, und dann, wie man es behebt. ✅ „Bauen fehlgeschlagen: Das Bündel überschreitet die Größengrenze. Verkleinere es oder erhöhe die Grenze.“ ❌ „Vorgang fehlgeschlagen, bitte erneut versuchen.“
 - **Bestätigungen und Hinweise** benennen die Änderung, nicht den Erfolg. ✅ „Projekt gelöscht“ ❌ „Erfolgreich gelöscht“ (dass der Hinweis erscheint, sagt den Erfolg schon).
 - Lass den Zusammenhang das Überflüssige wegnehmen: Ein Dialog mit dem Titel „Projekt löschen“ braucht keine Schaltfläche „Projekt endgültig und für immer löschen“.
@@ -124,12 +124,14 @@ Dieses Tor deckt die Bibliothek ab, nicht deine Anwendung — aber die Fehlerart
 
 ## Prüfliste vor der Auslieferung
 
+Wähle Prüfungen für die betroffene Oberfläche und das geänderte Verhalten; die Repository-CI führt weiterhin alle Prüfungen aus.
+
 - [ ] Hauptaufgabe und Hauptaktion sind unverkennbar.
 - [ ] Funktioniert in **Hell und Dunkel**, bei **schmalen und breiten** Fenstern.
 - [ ] Funktioniert mit **Maus und Finger**; jeder Hover-Auslöser hat eine Tipp-Alternative.
-- [ ] Alle Zustände durchgespielt: Überfahren, Gedrückt, Fokus, Deaktiviert, Ladend, Leer, Fehler.
+- [ ] Betroffene Zustände durchgespielt: Überfahren, Gedrückt, Fokus, Deaktiviert, Ladend, Leer, Fehler.
 - [ ] Tastatur und Fokus geprüft; der Fokus ist überall sichtbar.
-- [ ] Randfälle: lange Texte, große Zahlen, beide Sprachen.
+- [ ] Randfälle: lange Texte, große Zahlen, unterstützte Sprachen.
 - [ ] Abstände aus der Skala, Schrift nach Rolle, Farbe aus semantischen Tokens.
 - [ ] Keine Paletteneigenschaft in einer `transition`; kein `transition: all`.
-- [ ] Der Text benennt das Objekt; nichts signalisiert einen Zustand allein über Farbe.
+- [ ] Text und Kontext machen Aktion und Objekt klar; nichts signalisiert einen Zustand allein über Farbe.

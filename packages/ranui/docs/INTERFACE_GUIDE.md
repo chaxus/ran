@@ -16,7 +16,7 @@ workflow recipes apply only when a task needs them.
 | Available component CSS variables                                                           | [style-tokens-public.md](./style-tokens-public.md), generated from source                                                                                                                                  |
 | Component implementation recipes                                                            | [CLAUDE.md](../CLAUDE.md)                                                                                                                                                                                  |
 
-Read installed foundation declarations in `node_modules/ranui/dist/ranui.css`; product aliases derive from them.
+Read installed foundation declarations in the installed package’s `dist/ranui.css`; product aliases derive from them.
 Source contributors edit `theme/tokens.less` and `theme/dark.less`, not the built CSS.
 Jobs, credentials, persistence and document mutation belong to the host application.
 A recipe does not add ranui APIs or require every interface to have accounts or queues.

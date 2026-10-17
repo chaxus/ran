@@ -41,7 +41,7 @@ ship with the package: engineering rules and the detailed implementation referen
 Start with the host's existing controls, framework and theme authority; a small fix does not
 require a new component or state layer. Read only applicable owner sections, then stop when
 the supported contract, patch and evidence are clear. Foundation declarations ship in
-`node_modules/ranui/dist/ranui.css`; component overrides are in the generated token catalog.
+the installed package’s `dist/ranui.css`; component overrides are in the generated token catalog.
 
 Minimal bootstrap (once in the host entry):
 

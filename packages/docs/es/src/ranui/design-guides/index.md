@@ -87,13 +87,13 @@ El propósito y la frecuencia de uso deciden si hace falta movimiento. La respue
 
 ## Estados y textos
 
-Todo estado alcanzable forma parte del diseño: **hover, activo, foco, deshabilitado, cargando, vacío, error**. Trasládalos a la escalera: hover → `bg-hover` / `border-hover`; activo → `bg-active`; deshabilitado → `text-disabled` más opacidad reducida; foco → el anillo de foco.
+Todo estado alcanzable forma parte del diseño: **hover, activo, foco, deshabilitado, cargando, vacío, error**. Trasládalos a la escalera: hover → `bg-hover` / `border-hover`; activo → `bg-active`; deshabilitado → tokens de deshabilitado; reducir la opacidad solo cuando haga falta y siga siendo legible; foco → el anillo de foco.
 
 Nada que no sea interactivo puede parecerlo. `r-card` solo reacciona al hover con el atributo `hoverable`; déjalo sin poner en las tarjetas que no se pulsan.
 
 El texto también es parte del sistema:
 
-- **Los botones** llevan una acción **y** un objeto. ✅ «Eliminar miembro» ❌ «Eliminar», «Aceptar».
+- **Los botones** nombran el resultado. Incluye el objeto si el contexto no lo establece: «Eliminar miembro». Un diálogo con el objeto claro puede usar «Eliminar»; evita «Aceptar» sin contexto.
 - **Los errores** dicen qué pasó y luego cómo arreglarlo. ✅ «La compilación falló: el paquete supera el límite de tamaño. Redúcelo o sube el límite.» ❌ «La operación falló, inténtalo de nuevo.»
 - **Las confirmaciones y los avisos** enuncian el cambio, no el éxito. ✅ «Proyecto eliminado» ❌ «Eliminado con éxito» (que el aviso aparezca ya dice que salió bien).
 - Deja que el contexto quite lo redundante: un diálogo titulado «Eliminar proyecto» no necesita un botón que diga «Eliminar el proyecto permanentemente, para siempre».
@@ -124,12 +124,14 @@ Esa verificación cubre la biblioteca, no tu aplicación, pero los fallos que at
 
 ## Lista antes de publicar interfaz
 
+Elige comprobaciones para la superficie afectada y el comportamiento cambiado; CI mantiene todas sus verificaciones.
+
 - [ ] La tarea principal y la acción principal son inconfundibles.
 - [ ] Funciona en **claro y oscuro**, con anchos **estrechos y amplios**.
 - [ ] Funciona con **ratón y dedo**; todo disparador por hover tiene alternativa táctil.
-- [ ] Todos los estados probados: hover, activo, foco, deshabilitado, cargando, vacío, error.
+- [ ] Estados afectados probados: hover, activo, foco, deshabilitado, cargando, vacío, error.
 - [ ] Teclado y foco verificados; el foco se ve en todas partes.
-- [ ] Casos límite: textos largos, números grandes, ambos idiomas.
+- [ ] Casos límite: textos largos, números grandes, idiomas admitidos.
 - [ ] Espacios de la escala, tipografía por rol, color de tokens semánticos.
 - [ ] Ninguna propiedad de la paleta en una `transition`; ningún `transition: all`.
-- [ ] El texto nombra el objeto; nada señala un estado solo con color.
+- [ ] El texto y el contexto aclaran la acción y el objeto; nada señala un estado solo con color.

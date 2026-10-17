@@ -644,7 +644,7 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 Use [DESIGN's token roles](docs/DESIGN.md#10-component-token-naming) and the generated
 [public token catalog](docs/style-tokens-public.md), rather than a second value snapshot.
 Foundation declarations are in `theme/tokens.less` and `theme/dark.less` in a source checkout;
-installed readers can inspect `node_modules/ranui/dist/ranui.css`. Primary actions are monochrome;
+installed readers can inspect the installed package’s `dist/ranui.css`. Primary actions are monochrome;
 links and focus use their semantic roles. Product brand overrides remain host decisions.
 Component-scoped overrides fall back to a real foundation token, for example:
 
