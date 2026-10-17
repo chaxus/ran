@@ -93,6 +93,10 @@
   --ran-color-success: var(--ran-green-700);
   --ran-color-warning: var(--ran-amber-700);
   --ran-color-danger: var(--ran-red-700);
+  /* Small status text uses the foreground scale; solid fills keep step 700.
+     The scale overrides in dark.less also resolve these aliases in dark mode. */
+  --ran-color-warning-foreground: var(--ran-amber-900);
+  --ran-color-danger-foreground: var(--ran-red-900);
 
   --ran-color-bg: var(--ran-background-100);
   --ran-color-bg-subtle: var(--ran-background-200);
