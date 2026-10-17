@@ -39,3 +39,7 @@ Untouched: runtime components, theme values, root demo DESIGN, dependencies/lock
 - Published package includes the universal guide and its direct local dependencies; repo/plugin/public routes remain valid.
 - Existing documentation regression checks inspect CSS examples in the universal guide, if present, and actual npm package contents. Preserve LF/CRLF and hidden-invalid-token fixtures. Do not add wording-presence assertions for prose.
 - Fresh related tests, links, formatting, generated docs and design rules pass. Independent spec/quality reviews resolve findings; push to existing #421 and confirm its latest CI.
+
+## Discovered locale-check prerequisite
+
+The actual `pnpm -F docs check:langs` gate reported eight unused `home` label keys, one per language. Root reproduced those identical failures from an isolated `origin/main` archive before this change. The navigation structure no longer requests the key; `navFor`/`sidebarFor` read labels only through that structure, and page rendering reads the separate `ui` record. Remove only the eight unused keys, retaining navigation behavior, and route agents to the documentation-site owner and the real locale gate. This small cleanup is a prerequisite exposed by the requested eight-language verification, not a runtime or navigation redesign. The existing gate supplies the regression; no prose-presence test or new framework is needed.
