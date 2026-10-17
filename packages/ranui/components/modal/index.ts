@@ -1,5 +1,6 @@
 import modalCss from './index.less?inline';
-import { RanElement, falseList } from '@/utils/index';
+import { RanElement } from '@/utils/ssr';
+import { falseList } from '@/utils/dom';
 import { ButtonBuilder, Div, EventManager, Slot, View } from '@/utils/builder';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';

@@ -1,7 +1,8 @@
 import { currentDevice } from 'ranuts/utils';
 import buttonCss from './index.less?inline';
-import { Div, RanElement, Slot, isDisabled } from '@/utils/index';
-import { createRef, EventManager, View } from '@/utils/builder';
+import { Div, Slot, createRef, EventManager, View } from '@/utils/builder';
+import { RanElement } from '@/utils/ssr';
+import { isDisabled } from '@/utils/dom';
 import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowRoot, shadowPart, syncSheetAttribute } from '@/utils/component';
 import { isActivationKey } from '@/utils/a11y';

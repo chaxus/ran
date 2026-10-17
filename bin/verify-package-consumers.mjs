@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Script } from 'node:vm';
+import { verifyComponentBundles } from './component-bundle-size.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const fixture = await mkdtemp(join(tmpdir(), 'ran-packages-'));
@@ -59,6 +60,7 @@ try {
   }
   await symlink(join(root, 'packages/ranui/node_modules/@types'), join(fixture, 'node_modules/@types'), 'junction');
   await writeFile(join(fixture, 'package.json'), '{"type":"module"}');
+  await verifyComponentBundles(fixture, root);
   const imports = [];
   let count = 0;
   for (const [name, manifest] of manifests) {

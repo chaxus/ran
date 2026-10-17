@@ -1,5 +1,5 @@
 import { formatDuration } from 'ranuts/utils';
-import { createEffect } from '@/utils/index';
+import { createEffect } from '@/utils/builder';
 import { syncPlayButtonState } from './events';
 import { normalizeProgress } from './progress';
 import type { PlayerVisualSignals } from './store';
