@@ -1,7 +1,7 @@
 {
   "name": "@alixex/ranview",
   "version": "0.1.0-alpha.0",
-  "description": "Framework-free DOM construction with fine-grained reactivity \u2014 build once, update in place, in a browser or to a string",
+  "description": "Framework-free DOM construction with fine-grained reactivity — build once, update in place, in a browser or to a string",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
@@ -20,7 +20,7 @@
   "author": "chaxus",
   "license": "MIT",
   "scripts": {
-    "build": "vite build && tsc -p tsconfig.build.json && node bin/verify-static-build.mjs",
+    "build": "vite build && tsc -p tsconfig.build.json && node ../../bin/prepare-declarations.mjs dist . && node bin/verify-static-build.mjs",
     "tsc": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -59,24 +59,44 @@
     "types": "./dist/index.d.ts",
     "exports": {
       ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "require": "./dist/index.cjs"
+        "import": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/index.js"
+        },
+        "require": {
+          "types": "./dist/cjs-types/index.d.cts",
+          "default": "./dist/index.cjs"
+        }
       },
       "./signal": {
-        "types": "./dist/signal.d.ts",
-        "import": "./dist/signal.js",
-        "require": "./dist/index.cjs"
+        "import": {
+          "types": "./dist/signal.d.ts",
+          "default": "./dist/signal.js"
+        },
+        "require": {
+          "types": "./dist/cjs-types/index.d.cts",
+          "default": "./dist/index.cjs"
+        }
       },
       "./mocks": {
-        "types": "./dist/mocks.d.ts",
-        "import": "./dist/mocks.js",
-        "require": "./dist/index.cjs"
+        "import": {
+          "types": "./dist/mocks.d.ts",
+          "default": "./dist/mocks.js"
+        },
+        "require": {
+          "types": "./dist/cjs-types/index.d.cts",
+          "default": "./dist/index.cjs"
+        }
       },
       "./static": {
-        "types": "./dist/static.d.ts",
-        "import": "./dist/static.js",
-        "require": "./dist/static.cjs"
+        "import": {
+          "types": "./dist/static.d.ts",
+          "default": "./dist/static.js"
+        },
+        "require": {
+          "types": "./dist/cjs-types/static.d.cts",
+          "default": "./dist/static.cjs"
+        }
       }
     }
   }

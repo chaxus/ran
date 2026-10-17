@@ -7,8 +7,9 @@ dist=./dist
 
 # build es (split per component, cleans dist/)
 $bin/vite build -c ./build/config.es.ts
-# build cjs + iife (single bundle, appends to dist/)
+# build the standalone full IIFE and the CommonJS graph (append to dist/)
 $bin/vite build -c ./build/config.bundle.ts
+$bin/vite build -c ./build/config.cjs.ts
 # build standalone per-component iife bundles (dist/iife/<name>.iife.js)
 $bin/tsx ./bin/build-iife.ts
 
@@ -17,7 +18,6 @@ $bin/tsc --declaration --emitDeclarationOnly --outDir ./dist --project tsconfig.
 # tsc emits the `@/` aliases verbatim — a declaration file carries no `paths`, so a
 # consumer resolving them against their own config finds nothing and every published type
 # degrades to `any`. Rewrite them to relative specifiers.
-$bin/tsx ./bin/rewrite-dts-aliases.ts
 
 cp tsconfig.json ./dist
 cp typings.d.ts ./dist
@@ -28,25 +28,8 @@ cp typings.d.ts ./dist
 mkdir -p $dist/fonts
 cp fonts/fonts.css fonts/Geist-Variable.woff2 fonts/GeistMono-Variable.woff2 fonts/OFL-LICENSE.txt $dist/fonts/
 
-# 获取脚本所在的目录
-SCRIPT_DIR=$(cd $(dirname $0) && pwd)
+# Load public browser augmentations once. Build-only asset declarations stay private.
+printf "\nimport './typings.js';\n" >> "$dist/index.d.ts"
 
-# 定义源文件和目标文件的绝对路径
-source_file="$SCRIPT_DIR/../dist/typings.d.ts"
-target_file="$SCRIPT_DIR/../dist/index.d.ts"
-
-# 检查源文件是否存在且路径正确
-if [ ! -f "$source_file" ]; then
-    echo "Error: Source file '$source_file' does not exist or path is incorrect."
-    exit 1
-fi
-
-# 检查目标文件目录是否存在
-target_dir=$(dirname "$target_file")
-if [ ! -d "$target_dir" ]; then
-    echo "Error: Target directory '$target_dir' does not exist."
-    exit 1
-fi
-
-# 追加源文件内容到目标文件
-cat "$source_file" >> "$target_file"
+# Normalize ESM declarations and emit CommonJS forwarding declarations.
+node ../../bin/prepare-declarations.mjs dist .
