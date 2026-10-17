@@ -1,114 +1,65 @@
 # ranuts
 
-자주 쓰는 함수와 도구를 모은, 실험적인 유틸리티 라이브러리입니다
+브라우저 API, 데이터 처리, 스트림, 2D 렌더링을 위한 TypeScript 유틸리티.
 
----
+[![npm](https://img.shields.io/npm/v/ranuts.svg)](https://www.npmjs.com/package/ranuts) · [MIT](./LICENSE)
 
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranuts.svg" alt="npm-v"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranuts.svg" alt="npm-d"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-esm%2C%20iife-green.svg" alt="module formats: esm, iife"></a>
+ESM · IIFE · TypeScript
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | **한국어** | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
----
+> Alpha 단계입니다. API와 패키지 형식이 변경될 수 있습니다. 정확한 버전을 고정하고 업데이트 전에 마이그레이션 가이드를 확인하세요.
 
-## ⚠️ 먼저 읽어 주세요
+## 빠른 시작
 
-아직 초기 단계에 있는 **실험적인 유틸리티 라이브러리**입니다. 돌아가기는 하지만, 무엇보다 배우고 이것저것 해 보려고 만들었습니다.
-
-**요점:**
-
-- 🚧 **초기 단계**: 기능은 아직 만들고 다듬는 중입니다
-- 🧪 **실험적**: API가 자주 바뀔 수 있습니다
-- 📚 **배움이 먼저**: 자바스크립트와 타입스크립트 유틸리티를 익히는 데 중점을 두었습니다
-
-## 설치
-
-npm을 쓴다면:
-
-```console
-npm install ranuts@latest --save
+```sh
+npm install ranuts
 ```
 
-## 문서
+```ts
+import { rgbToHex } from 'ranuts/utils';
 
-[자주 쓰는 함수와 도구 몇 가지](https://ran.chaxus.com/ko/src/ranuts/)
-
-**AI 에이전트와 LLM에게:** 먼저 [CLAUDE.md](./CLAUDE.md)(전체 지형도. 진입점, 실행 환경의 제약, 관례)를 읽고, 이어서 [docs/API.md](./docs/API.md)(내보낸 모든 심벌을 시그니처와 설명과 함께 뽑아 둔 레퍼런스. 새로 만들려면 `npm run doc:api`)를 보세요.
-
-아니면 `ran` 플러그인 마켓플레이스에서 이미 만들어 둔 **Claude Code 스킬**을 설치하세요. 가져오기 대응표와 `ranuts/utils` 목록, 사용 예, 관례를 어시스턴트에게 건네고, 패키지에 함께 실려 오는 API 레퍼런스로 이끌어 줍니다.
-
-```bash
-/plugin marketplace add chaxus/ran
-/plugin install ranuts@ran
+console.log(rgbToHex(1, 2, 3)); // #010203
 ```
 
-그다음부터는 Claude가 알아서 씁니다(`/ranuts:ranuts`로 직접 불러도 됩니다).
+## ESM
 
-## 쓰는 법
+실행 환경과 작업에 맞는 진입점을 선택하세요. 일부 함수는 브라우저 전역 객체가 필요하며 모든 함수가 서버에서 작동하는 것은 아닙니다.
 
-필요한 것만 가져오세요. 고를 수 있는 것은 이렇습니다.
+| 패키지                | 용도                               |
+| --------------------- | ---------------------------------- |
+| `ranuts/utils`        | DOM/BOM, 색상, 바이너리, 저장소 등 |
+| `ranuts/i18n`         | 독립 국제화 엔진                   |
+| `ranuts/stream`       | SSE 파싱과 스트리밍 응답 상태      |
+| `ranuts/conversation` | 대화 이벤트 로그 투영              |
+| `ranuts/visual`       | 2D 렌더링; 브라우저                |
+| `ranuts/vnode`        | 가상 DOM; 브라우저                 |
+| `ranuts/sw`           | Service Worker 캐시 전략           |
 
-- `ranuts/utils` — DOM/BOM, 문자열, 객체, 숫자, 색, 시간, 저장소, 바이너리와 zip, 워커와 IndexedDB, 다국어 도우미
-- `ranuts/visual` — 2D 렌더링 엔진(Canvas / WebGL / WebGPU, **브라우저 전용**)
-- `ranuts/sw` — 캐시 전략과 프리캐시 규약의 서비스 워커 쪽 절반(**서비스 워커 전용**)
-- `ranuts/vnode` — Snabbdom 식 가상 DOM
-- `ranuts/stream` — Server-Sent Events 해석, 제공자를 가리지 않는 모델 스트림 응답 접기, 그리고 대화 기록이 더는 들어가지 않는 지점을 정하는 토큰 예산
-- `ranuts/conversation` — 덧붙이기만 하는 이벤트 로그를 그릴 수 있는 대화 노드에 비춥니다
-- `ranuts/i18n` — `utils`의 나머지 없이 i18n 엔진만
+## IIFE / CDN
 
-```js
-import { debounce } from 'ranuts/utils';
-import { createI18n } from 'ranuts/i18n';
-```
-
-통째로 가져오기(통째로 가져오면 쓰지도 않는 모듈이 잔뜩 딸려 옵니다. 필요한 것만 가져오기를 권합니다)
-
-- ESM
-
-```js
-import { debounce } from 'ranuts';
-
-const onResize = debounce(() => {
-  console.log('window resized');
-}, 200);
-
-window.addEventListener('resize', onResize);
-```
-
-- IIFE
+일반 script 태그에서는 독립 IIFE를 사용하세요. VERSION을 배포된 버전으로 바꾸면 번들러나 모듈 로더 없이 사용할 수 있습니다.
 
 ```html
-<script src="./ranuts/dist/iife/index.iife.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/ranuts@VERSION/dist/iife/utils.iife.js"></script>
 <script>
-  const { debounce } = ranuts;
-  const onResize = debounce(() => {
-    console.log('window resized');
-  }, 200);
-
-  window.addEventListener('resize', onResize);
+  console.log(ranuts_utils.rgbToHex(1, 2, 3));
 </script>
 ```
 
-## 함께 만들기
+유틸리티 IIFE는 `ranuts_utils`, 전체 `dist/iife/index.iife.js`는 `ranuts`를 노출합니다. VERSION을 배포된 버전으로 바꾸세요.
 
-배우러 오신 분도, 개발자도 모두 환영합니다. 실험적인 프로젝트라 개발이 더딜 수 있으니 너그럽게 봐주세요.
+## 문서
 
-## 함께해 주신 분들
+- [ranuts](https://ran.chaxus.com/ko/src/ranuts/)
+- [API](./docs/API.md)
+- [유지 관리자와 Agent 참고](./CLAUDE.md)
+- [마이그레이션 가이드](https://ran.chaxus.com/ko/src/ranuts/migration/)
 
-<a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" />
-</a>
+## 기여
 
-## 방문자 수
+[유지 관리자와 Agent 참고](./CLAUDE.md) · [AGENTS.md](https://github.com/chaxus/ran/blob/main/AGENTS.md)
 
-![](http://profile-counter.glitch.me/chaxus-ranuts/count.svg)
+## 라이선스
 
-## 그 밖에
-
-[라이선스(MIT)](/LICENSE)
-
-[Alpha migration](https://ran.chaxus.com/src/ranuts/migration/)
+[MIT](./LICENSE)

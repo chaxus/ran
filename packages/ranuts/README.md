@@ -1,119 +1,65 @@
 # ranuts
 
-Experimental utility library with commonly used functions and tools
+TypeScript utilities for browser APIs, data processing, streams and 2D rendering.
 
----
+[![npm](https://img.shields.io/npm/v/ranuts.svg)](https://www.npmjs.com/package/ranuts) · [MIT](./LICENSE)
 
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranuts.svg" alt="npm-v"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranuts.svg" alt="npm-d"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-esm%2C%20iife-green.svg" alt="module formats: esm, iife"></a>
+ESM · IIFE · TypeScript
 
 **English** | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
----
+> Alpha: APIs and package formats can change. Pin an exact version and read the migration guide before upgrading.
 
-## ⚠️ Important Notice
+## Quick start
 
-This is an **experimental utility library** in early development. While functional, it's primarily designed for learning and experimentation.
-
-**Key points:**
-
-- 🚧 **Early Development**: Features are still being developed and refined
-- 🧪 **Experimental**: APIs may change frequently
-- 📚 **Learning Focus**: Primarily for learning JavaScript/TypeScript utilities
-
-## Install
-
-Using npm:
-
-```console
-npm install ranuts@latest --save
+```sh
+npm install ranuts
 ```
 
-## Document
+```ts
+import { rgbToHex } from 'ranuts/utils';
 
-[Some commonly used functions and tools](https://ran.chaxus.com/src/ranuts/)
-
-**For AI agents / LLMs:** start from [CLAUDE.md](./CLAUDE.md) (orientation: entry points,
-runtime constraints, conventions) and [docs/API.md](./docs/API.md) (generated reference of
-every exported symbol with signatures + descriptions, run `npm run doc:api` to refresh).
-
-Or install the ready-made **Claude Code skill** from the `ran` plugin marketplace — it
-gives assistants the import map, `ranuts/utils` inventory, usage examples, and conventions,
-and points to the API reference shipped in the package:
-
-```bash
-/plugin marketplace add chaxus/ran
-/plugin install ranuts@ran
+console.log(rgbToHex(1, 2, 3)); // #010203
 ```
 
-Claude then uses it automatically (or invoke it as `/ranuts:ranuts`).
+## ESM
 
-## Usage
+Choose an entry by runtime and task. Individual utilities may require browser globals; importing a package does not make every helper server-compatible.
 
-Import as required. You can select:
+| Package               | Use for                                           |
+| --------------------- | ------------------------------------------------- |
+| `ranuts/utils`        | DOM/BOM, color, binary, storage and other helpers |
+| `ranuts/i18n`         | Internationalization without the utility barrel   |
+| `ranuts/stream`       | SSE parsing and streamed-response state           |
+| `ranuts/conversation` | Conversation event-log projection                 |
+| `ranuts/visual`       | 2D rendering; browser                             |
+| `ranuts/vnode`        | Virtual DOM; browser                              |
+| `ranuts/sw`           | Service-worker cache strategies; service worker   |
 
-- `ranuts/utils` — DOM/BOM, string, object, number, colour, time, storage, binary/zip,
-  worker/IndexedDB, i18n helpers
-- `ranuts/visual` — 2D rendering engine (Canvas / WebGL / WebGPU, **browser only**)
-- `ranuts/sw` — cache strategies + the precache protocol's service-worker half (**service worker only**)
-- `ranuts/vnode` — Snabbdom-style virtual DOM
-- `ranuts/stream` — Server-Sent Events parsing, a provider-neutral fold of a streamed model response, and the token budget that decides when a history stops fitting
-- `ranuts/conversation` — project an append-only event log into renderable conversation nodes
-- `ranuts/i18n` — the i18n engine on its own, without the rest of `utils`
+## IIFE / CDN
 
-```js
-import { debounce } from 'ranuts/utils';
-import { createI18n } from 'ranuts/i18n';
-```
-
-Full import,(Full import will introduce many unnecessary modules. You are advised to import them on demand)
-
-- ESM
-
-```js
-import { debounce } from 'ranuts';
-
-const onResize = debounce(() => {
-  console.log('window resized');
-}, 200);
-
-window.addEventListener('resize', onResize);
-```
-
-- IIFE
+For a classic browser script tag, use a standalone IIFE. Replace VERSION with a published version; no bundler or module loader is needed.
 
 ```html
-<script src="./ranuts/dist/iife/index.iife.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/ranuts@VERSION/dist/iife/utils.iife.js"></script>
 <script>
-  const { debounce } = ranuts;
-  const onResize = debounce(() => {
-    console.log('window resized');
-  }, 200);
-
-  window.addEventListener('resize', onResize);
+  console.log(ranuts_utils.rgbToHex(1, 2, 3));
 </script>
 ```
 
+The utility IIFE exposes `ranuts_utils`; the full `dist/iife/index.iife.js` exposes `ranuts`. Replace VERSION with a published version.
+
+## Documentation
+
+- [ranuts](https://ran.chaxus.com/src/ranuts/)
+- [API](./docs/API.md)
+- [Maintainer and agent reference](./CLAUDE.md)
+- [Migration guide](https://ran.chaxus.com/src/ranuts/migration/)
+
 ## Contributing
 
-We welcome contributions from learners and developers! This is an experimental project, so please be patient with the development process.
+[Maintainer and agent reference](./CLAUDE.md) · [AGENTS.md](https://github.com/chaxus/ran/blob/main/AGENTS.md)
 
-## Contributors
+## License
 
-<a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" />
-</a>
-
-## Visitors
-
-![](http://profile-counter.glitch.me/chaxus-ranuts/count.svg)
-
-## Meta
-
-[LICENSE (MIT)](/LICENSE)
-
-[Alpha migration](https://ran.chaxus.com/src/ranuts/migration/)
+[MIT](./LICENSE)
