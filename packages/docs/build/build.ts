@@ -13,6 +13,7 @@ import { LANGS, ORIGIN } from './config.ts';
 import { componentRenderers, resolveCurrentLink } from './components.ts';
 import { loadDocs } from './content.ts';
 import { renderDoc } from './page.ts';
+import { designIllustrationFiles } from './design-illustrations.ts';
 import { createOfflineManifest } from './offline.ts';
 import { generatedFiles, headFor } from './seo.ts';
 
@@ -106,6 +107,11 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
   for (const [lang, pages] of byLocale) {
     const name = `search/${lang}.json`;
     writeOut(DIST_DIR, name, buildIndex(pages));
+    written.push(name);
+  }
+
+  for (const [name, body] of designIllustrationFiles()) {
+    writeOut(DIST_DIR, name, body);
     written.push(name);
   }
 

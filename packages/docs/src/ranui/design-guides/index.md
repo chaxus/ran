@@ -222,3 +222,5 @@ Choose checks for the affected surface and changed behavior; repository CI still
 - [ ] Spacing from the scale, type by role, color from semantic tokens.
 - [ ] No palette property in a `transition`; no `transition: all`.
 - [ ] Copy makes the action and its object clear from context; nothing signals state by color alone.
+
+<DesignIllustrations />

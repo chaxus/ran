@@ -9,10 +9,12 @@
 import '../styles/docs.css';
 import '../styles/home.css';
 import '../styles/demos.css';
+import '../styles/design-illustrations.css';
 import 'ranui/style';
 import { mountOfflineCache } from './offline.ts';
 import { mountComponents } from './components.ts';
 import { mountCodeGroups } from './code-groups.ts';
+import { mountDesignIllustrations } from './design-illustrations.ts';
 import { mountSearch } from './search.ts';
 import { mountDemos } from './home.ts';
 import { mountNavigation, mountCodeCopy } from './interactions.ts';
@@ -20,6 +22,7 @@ import { mountNavigation, mountCodeCopy } from './interactions.ts';
 mountComponents();
 
 mountCodeGroups();
+mountDesignIllustrations();
 
 /**
  * Mark the outline entry for whatever section is on screen.
