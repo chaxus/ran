@@ -172,7 +172,7 @@ test.describe('r-conversation', () => {
     expect(atFloor).toBe(true);
   });
 
-  test('renders', async ({ page }) => {
+  test('renders', { tag: '@visual' }, async ({ page }) => {
     await conversation(page, ['帮我看一下这段代码', '好的，我来看看。', '谢谢']);
     await expect(page.locator('#chat')).toHaveScreenshot('conversation.png');
   });

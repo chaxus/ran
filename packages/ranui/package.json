@@ -179,7 +179,7 @@
     "test:e2e": "npm run e2e:install && playwright test",
     "test:report": "playwright show-report",
     "test:ui": "npm run e2e:install && playwright test --ui",
-    "test:update": "npm run e2e:install && playwright test --update-snapshots",
+    "test:update": "node ./bin/visual.mjs update",
     "tsc": "tsc --noEmit",
     "doc:style": "tsx ./bin/generate-style-docs.ts",
     "doc:style:check": "tsx ./bin/generate-style-docs.ts --check",
@@ -188,7 +188,8 @@
     "doc:changelog": "tsx ./bin/generate-changelog-docs.ts",
     "doc:changelog:check": "tsx ./bin/generate-changelog-docs.ts --check",
     "verify:design": "tsx ./bin/verify-design-rules.ts --ignore components/math/temml.css",
-    "prepack": "pnpm run build"
+    "prepack": "pnpm run build",
+    "test:visual": "node ./bin/visual.mjs check"
   },
   "files": [
     "dist",

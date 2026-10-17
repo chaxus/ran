@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-input');
 });
 
-test('input — default with label', async ({ page }) => {
+test('input — default with label', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -20,7 +20,7 @@ test('input — default with label', async ({ page }) => {
   await expect(el).toHaveScreenshot('input-default.png');
 });
 
-test('input — with icon', async ({ page }) => {
+test('input — with icon', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -32,7 +32,7 @@ test('input — with icon', async ({ page }) => {
   await expect(el).toHaveScreenshot('input-with-icon.png');
 });
 
-test('input — focused', async ({ page }) => {
+test('input — focused', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -50,7 +50,7 @@ test('input — focused', async ({ page }) => {
   await expect(el).toHaveScreenshot('input-focused.png');
 });
 
-test('input — disabled', async ({ page }) => {
+test('input — disabled', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `

@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 
 // ── with value ──────────────────────────────────────────────────────────────
 
-test('select — with value', async ({ page }) => {
+test('select — with value', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -56,7 +56,7 @@ test('select — with value', async ({ page }) => {
 
 // ── placeholder (no value) ──────────────────────────────────────────────────
 
-test('select — placeholder', async ({ page }) => {
+test('select — placeholder', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -74,7 +74,7 @@ test('select — placeholder', async ({ page }) => {
 
 // ── showSearch ───────────────────────────────────────────────────────────────
 
-test('select — showSearch', async ({ page }) => {
+test('select — showSearch', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -93,7 +93,7 @@ test('select — showSearch', async ({ page }) => {
 
 // ── disabled ─────────────────────────────────────────────────────────────────
 
-test('select — disabled', async ({ page }) => {
+test('select — disabled', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -129,7 +129,7 @@ test('select — selecting an option with the mouse keeps focus on the host', as
   await expect(page.locator('#sel')).toBeFocused();
 });
 
-test('select — open dropdown', async ({ page }) => {
+test('select — open dropdown', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `

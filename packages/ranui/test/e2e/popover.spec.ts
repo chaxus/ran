@@ -19,13 +19,13 @@ test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-popover');
 });
 
-test('popover — closed', async ({ page }) => {
+test('popover — closed', { tag: '@visual' }, async ({ page }) => {
   await mount(page, POPOVER_HTML);
   await expect(page.locator('r-button')).toBeVisible();
   await expect(page.locator('div').first()).toHaveScreenshot('popover-closed.png');
 });
 
-test('popover — opens by hover or the touch fallback', async ({ page }) => {
+test('popover — opens by hover or the touch fallback', { tag: '@visual' }, async ({ page }) => {
   await mount(page, POPOVER_HTML);
   const trigger = page.locator('r-button');
   await expect(trigger).toBeVisible();
@@ -38,7 +38,7 @@ test('popover — opens by hover or the touch fallback', async ({ page }) => {
   await expect(page).toHaveScreenshot('popover-open.png');
 });
 
-test('popover — open on click', async ({ page }) => {
+test('popover — open on click', { tag: '@visual' }, async ({ page }) => {
   await mount(page, POPOVER_HTML.replace('hover,click', 'click'));
   const trigger = page.locator('r-button');
   await expect(trigger).toBeVisible();

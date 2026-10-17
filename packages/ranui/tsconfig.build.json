@@ -14,6 +14,6 @@
     "plugins/**",
     "vite.config.ts",
     "vitest.config*.ts",
-    "playwright.config.ts"
+    "playwright*.config.ts"
   ]
 }

@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-radar');
 });
 
-test('radar — default dataset', async ({ page }) => {
+test('radar — default dataset', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -32,7 +32,7 @@ test('radar — default dataset', async ({ page }) => {
   await expect(el).toHaveScreenshot('radar-default.png');
 });
 
-test('radar — uniform scores', async ({ page }) => {
+test('radar — uniform scores', { tag: '@visual' }, async ({ page }) => {
   const uniform = JSON.stringify([
     { abilityName: 'A', scoreRate: '50' },
     { abilityName: 'B', scoreRate: '50' },

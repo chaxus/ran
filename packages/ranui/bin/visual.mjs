@@ -1,0 +1,108 @@
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const root = resolve(packageRoot, '../..');
+const environment = JSON.parse(readFileSync(join(packageRoot, 'test/visual/environment.json')));
+const mode = process.argv[2];
+if (!['check', 'update'].includes(mode) || process.argv.length !== 3) {
+  throw new Error('Usage: node bin/visual.mjs check|update (no arbitrary Playwright overrides)');
+}
+if (mode === 'update' && process.env.CI) throw new Error('CI may compare baselines, but must never update them.');
+const baseline = join(packageRoot, 'test/e2e/__screenshots__');
+const artifacts = join(packageRoot, 'test-results/visual');
+if (mode === 'check' && !existsSync(join(baseline, 'manifest.json')))
+  throw new Error('Reviewed screenshot manifest is missing.');
+mkdirSync(baseline, { recursive: true });
+mkdirSync(artifacts, { recursive: true });
+const temp = mkdtempSync(join(tmpdir(), 'ranui-visual-'));
+const candidates = mode === 'update' ? mkdtempSync(join(artifacts, 'candidates-')) : baseline;
+function run(args) {
+  const result = spawnSync('docker', args, { cwd: root, stdio: 'inherit' });
+  if (result.error) throw result.error;
+  if (result.status !== 0) throw new Error(`Visual container command failed (${result.status})`);
+}
+try {
+  const pnpm = JSON.parse(readFileSync(join(root, 'package.json'))).packageManager.replace('pnpm@', '');
+  const iid = join(temp, 'image-id');
+  run([
+    'build',
+    '--platform',
+    environment.platform,
+    '--file',
+    'packages/ranui/test/visual/Dockerfile',
+    '--build-arg',
+    `PLAYWRIGHT_IMAGE=${environment.image}`,
+    '--build-arg',
+    `PNPM_VERSION=${pnpm}`,
+    '--iidfile',
+    iid,
+    '.',
+  ]);
+  const image = readFileSync(iid, 'utf8').trim();
+  run([
+    'run',
+    '--rm',
+    '--init',
+    '--ipc=host',
+    '--platform',
+    environment.platform,
+    '--mount',
+    `type=bind,source=${candidates},target=/workspace/packages/ranui/test/e2e/__screenshots__`,
+    '--mount',
+    `type=bind,source=${artifacts},target=/workspace/packages/ranui/test-results/visual`,
+    '--env',
+    `RANUI_VISUAL_IMAGE=${environment.image}`,
+    '--env',
+    `RANUI_VISUAL_UPDATE=${mode === 'update' ? '1' : '0'}`,
+    image,
+    'pnpm',
+    'exec',
+    'playwright',
+    'test',
+    '--config=playwright.visual.config.ts',
+    `--update-snapshots=${mode === 'update' ? 'all' : 'none'}`,
+  ]);
+  if (mode === 'update') {
+    const files = readdirSync(join(candidates, 'linux-arm64'), { recursive: true })
+      .filter((file) => file.endsWith('.png'))
+      .sort();
+    const snapshots = Object.fromEntries(
+      files.map((file) => [
+        file.replaceAll('\\', '/'),
+        createHash('sha256')
+          .update(readFileSync(join(candidates, 'linux-arm64', file)))
+          .digest('hex'),
+      ]),
+    );
+    const metadata = { environment: JSON.parse(readFileSync(join(artifacts, 'environment.json'))), image, snapshots };
+    writeFileSync(join(candidates, 'manifest.json'), JSON.stringify(metadata, null, 2) + '\n');
+    // A failed generation leaves reviewed baselines intact. Successful replacement
+    // starts from an empty candidate directory, so removed tests leave no orphans.
+    const previous = join(artifacts, `previous-${Date.now()}`);
+    renameSync(baseline, previous);
+    try {
+      renameSync(candidates, baseline);
+    } catch (error) {
+      renameSync(previous, baseline);
+      throw error;
+    }
+    rmSync(previous, { recursive: true });
+    console.log(`Generated ${files.length} candidate baselines. Review every image before committing.`);
+  }
+} finally {
+  rmSync(temp, { recursive: true, force: true });
+}

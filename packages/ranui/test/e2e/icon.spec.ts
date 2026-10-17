@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-icon');
 });
 
-test('icon — size variants', async ({ page }) => {
+test('icon — size variants', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -27,7 +27,7 @@ test('icon — size variants', async ({ page }) => {
   await expect(el).toHaveScreenshot('icon-sizes.png');
 });
 
-test('icon — custom color', async ({ page }) => {
+test('icon — custom color', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
@@ -43,7 +43,7 @@ test('icon — custom color', async ({ page }) => {
   await expect(el).toHaveScreenshot('icon-colors.png');
 });
 
-test('icon — spin', async ({ page }) => {
+test('icon — spin', { tag: '@visual' }, async ({ page }) => {
   await mount(page, `<r-icon name="loading" size="32" spin></r-icon>`);
   const el = page.locator('r-icon');
   await expect(el).toBeVisible();

@@ -8,35 +8,35 @@ test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-checkbox');
 });
 
-test('checkbox — unchecked', async ({ page }) => {
+test('checkbox — unchecked', { tag: '@visual' }, async ({ page }) => {
   await mount(page, `<r-checkbox>Unchecked</r-checkbox>`);
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-unchecked.png');
 });
 
-test('checkbox — checked', async ({ page }) => {
+test('checkbox — checked', { tag: '@visual' }, async ({ page }) => {
   await mount(page, `<r-checkbox checked="true">Checked</r-checkbox>`);
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-checked.png');
 });
 
-test('checkbox — disabled unchecked', async ({ page }) => {
+test('checkbox — disabled unchecked', { tag: '@visual' }, async ({ page }) => {
   await mount(page, `<r-checkbox disabled>Disabled</r-checkbox>`);
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-disabled-unchecked.png');
 });
 
-test('checkbox — disabled checked', async ({ page }) => {
+test('checkbox — disabled checked', { tag: '@visual' }, async ({ page }) => {
   await mount(page, `<r-checkbox disabled checked="true">Disabled checked</r-checkbox>`);
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-disabled-checked.png');
 });
 
-test('checkbox — all variants row', async ({ page }) => {
+test('checkbox — all variants row', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `

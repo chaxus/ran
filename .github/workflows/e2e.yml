@@ -65,13 +65,7 @@ jobs:
       - name: Build ranui
         run: pnpm --filter ranui run build
 
-      # The whole suite, not just test/e2e/visual/ — the functional assertions (element
-      # presence, text content, geometry, keyboard behaviour) all run on Linux and are what
-      # this job actually gates on.
-      #
-      # Screenshot comparison is skipped here: `ignoreSnapshots` is on when CI=1, because the
-      # committed baselines are macOS-rendered (`*-darwin.png`) and a Linux runner would
-      # regenerate rather than compare them. See packages/ranui/CLAUDE.md.
+      # Engine assertions remain independent from the canonical screenshot gate below.
       - name: Run E2E tests
         run: pnpm --filter ranui exec playwright test --project=${{ matrix.browser }}
 
@@ -90,4 +84,26 @@ jobs:
             packages/ranui/playwright-report/
             packages/ranui/test-results/
             packages/im/test-results/
+          retention-days: 7
+
+  visual:
+    if: github.repository == 'chaxus/ran'
+    name: Visual (Linux arm64)
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      # The launcher installs/builds the three required workspaces inside the same
+      # digest-pinned renderer used for local baseline updates. Missing PNGs fail.
+      - name: Compare reviewed screenshot baselines
+        run: node packages/ranui/bin/visual.mjs check
+      - name: Upload visual differences and environment
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: visual-linux-arm64
+          path: packages/ranui/test-results/visual/
           retention-days: 7

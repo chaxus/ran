@@ -8,8 +8,8 @@ import { insideShadow, isolatedSetup, mount } from './helpers';
  * truncates instead of wrapping, and a control that is only a control when there is
  * something to open.
  *
- * The geometric assertions matter more than the screenshot — visual comparison is
- * macOS-local (see `playwright.config.ts`), while these run everywhere including CI.
+ * Geometry runs across engines; visual comparison uses the pinned container
+ * (see `playwright.visual.config.ts`) on both local machines and CI.
  *
  * Everything the element draws is inside a closed shadow root, so Playwright's locators
  * find none of it; assertions go through {@link insideShadow} or through the host's own box.
@@ -131,7 +131,7 @@ test.describe('r-disclosure-row', () => {
     expect(insideTitle).toBe(true);
   });
 
-  test('renders', async ({ page }) => {
+  test('renders', { tag: '@visual' }, async ({ page }) => {
     await mount(
       page,
       `<div id="column" style="width: 420px; display: flex; flex-direction: column; gap: 4px">

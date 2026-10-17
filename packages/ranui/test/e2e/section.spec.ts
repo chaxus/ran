@@ -40,7 +40,7 @@ test.describe('r-section', () => {
     expect(boxes.heading!).toBeLessThan(boxes.body!);
   });
 
-  test('renders', async ({ page }) => {
+  test('renders', { tag: '@visual' }, async ({ page }) => {
     await mount(
       page,
       '<div style="width: 380px"><r-section id="s" heading="Heading" subtitle="Subtitle">Body copy.</r-section></div>',

@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }) => {
   await demoSetup(page, 'r-player');
 });
 
-test('player initial UI (no video loaded)', async ({ page }) => {
+test('player initial UI (no video loaded)', { tag: '@visual' }, async ({ page }) => {
   // Inject a standalone player with no src so the video area is deterministic
   await page.evaluate(() => {
     const container = document.createElement('div');
@@ -25,7 +25,7 @@ test('player initial UI (no video loaded)', async ({ page }) => {
   await expect(container).toHaveScreenshot('player-no-src.png');
 });
 
-test('player control bar layout', async ({ page }) => {
+test('player control bar layout', { tag: '@visual' }, async ({ page }) => {
   // Inject player and let it partially initialize, then screenshot just the controls
   await page.evaluate(() => {
     const container = document.createElement('div');

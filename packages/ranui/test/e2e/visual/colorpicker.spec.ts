@@ -11,14 +11,14 @@ const swatchPainted = (root: ShadowRoot): boolean => {
   return swatch !== null && swatch.style.background !== '';
 };
 
-test('colorpicker default appearance', async ({ page }) => {
+test('colorpicker default appearance', { tag: '@visual' }, async ({ page }) => {
   const section = page.locator('#component-colorpicker');
   await expect(section).toBeVisible();
   await settlePainted(page, '#component-colorpicker r-colorpicker', swatchPainted);
   await expect(section).toHaveScreenshot('colorpicker-default.png');
 });
 
-test('colorpicker panel open', async ({ page }) => {
+test('colorpicker panel open', { tag: '@visual' }, async ({ page }) => {
   // Click the first colorpicker swatch to open the panel
   await page.locator('#component-colorpicker r-colorpicker').first().click();
   await page.waitForTimeout(300);
@@ -34,7 +34,7 @@ test('colorpicker panel open', async ({ page }) => {
   await expect(panel).toHaveScreenshot('colorpicker-panel-open.png', { maxDiffPixels: 200 });
 });
 
-test('colorpicker rgba value', async ({ page }) => {
+test('colorpicker rgba value', { tag: '@visual' }, async ({ page }) => {
   const pickers = page.locator('#component-colorpicker r-colorpicker');
   // Second colorpicker has value="rgba(255,0,0,0.5)"
   const second = pickers.nth(1);

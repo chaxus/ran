@@ -21,7 +21,7 @@ test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-modal');
 });
 
-test('modal — closed (trigger only)', async ({ page }) => {
+test('modal — closed (trigger only)', { tag: '@visual' }, async ({ page }) => {
   await mount(page, MODAL_HTML);
   await expect(page.locator('#open-btn')).toBeVisible();
   // A couple of pixels of tolerance on the trigger's antialiased edge. Text rasterisation
@@ -31,7 +31,7 @@ test('modal — closed (trigger only)', async ({ page }) => {
   await expect(page.locator('div').first()).toHaveScreenshot('modal-closed.png', { maxDiffPixels: 8 });
 });
 
-test('modal — open', async ({ page }) => {
+test('modal — open', { tag: '@visual' }, async ({ page }) => {
   await mount(page, MODAL_HTML);
   await page.locator('#open-btn').click();
   await page.waitForTimeout(150);
