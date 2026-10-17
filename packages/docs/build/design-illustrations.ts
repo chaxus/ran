@@ -92,25 +92,25 @@ const svgStyles = `
 const geometry = (kind: (typeof kinds)[number]): string => {
   if (kind === 'alignment')
     return `<path class="di-muted" d="M24 80H296M24 144H296"/>
-    <line data-alignment-spine class="di-guide" x1="56" x2="56" y1="24" y2="180"/><path class="di-guide" d="M280 24V180"/>
+    <line data-alignment-spine="" class="di-guide" x1="56" x2="56" y1="24" y2="180"/><path class="di-guide" d="M280 24V180"/>
     ${[48, 112, 176]
       .map(
         (y, index) => `<circle class="di-muted" cx="32" cy="${y - 8}" r="8"/>
-    <line data-alignment-text class="di-line" x1="56" x2="${index === 1 ? 176 : 208}" y1="${y - 8}" y2="${y - 8}"/>
+    <line data-alignment-text="" class="di-line" x1="56" x2="${index === 1 ? 176 : 208}" y1="${y - 8}" y2="${y - 8}"/>
     <path class="di-muted" d="M56 ${y + 4}H${index === 1 ? 136 : 160}"/>
     <path class="di-line" d="M276 ${y - 12}l4 4-4 4"/>
     ${index === 1 ? `<g class="di-motion di-optional"><rect class="di-surface" x="192" y="92" width="48" height="24" rx="${px('--ran-radius-sm')}"/><path class="di-muted" d="M204 104h24"/></g>` : ''}`,
       )
       .join('')}`;
   if (kind === 'radius')
-    return `<rect data-radius-outer class="di-surface" x="64" y="32" width="192" height="128" rx="${outerRadius}"/>
-    <rect data-radius-inner class="di-surface di-motion di-corner" x="${64 + inset}" y="${32 + inset}" width="${192 - 2 * inset}" height="${128 - 2 * inset}" rx="${innerRadius}"/>
+    return `<rect data-radius-outer="" class="di-surface" x="64" y="32" width="192" height="128" rx="${outerRadius}"/>
+    <rect data-radius-inner="" class="di-surface di-motion di-corner" x="${64 + inset}" y="${32 + inset}" width="${192 - 2 * inset}" height="${128 - 2 * inset}" rx="${innerRadius}"/>
     <circle class="di-guide" cx="${64 + outerRadius}" cy="${32 + outerRadius}" r="${outerRadius}"/>
     <circle class="di-guide" cx="${64 + outerRadius}" cy="${32 + outerRadius}" r="${innerRadius}"/>
     <path class="di-line" d="M${60 + outerRadius} ${32 + outerRadius}h8m-4-4v8"/>
     <text x="160" y="100">${outerRadius} − ${inset} = ${innerRadius}</text>`;
-  return `<rect data-density-target class="di-guide di-motion di-target" style="transform-origin:160px 96px" x="${160 - target / 2}" y="${96 - target / 2}" width="${target}" height="${target}" rx="${outerRadius}"/>
-    <rect data-density-visible class="di-control" x="${160 - control / 2}" y="${96 - control / 2}" width="${control}" height="${control}" rx="${px('--ran-radius-sm')}"/>
+  return `<rect data-density-target="" class="di-guide di-motion di-target" style="transform-origin:160px 96px" x="${160 - target / 2}" y="${96 - target / 2}" width="${target}" height="${target}" rx="${outerRadius}"/>
+    <rect data-density-visible="" class="di-control" x="${160 - control / 2}" y="${96 - control / 2}" width="${control}" height="${control}" rx="${px('--ran-radius-sm')}"/>
     <path class="di-ink" d="M160 103V89m-5 5 5-5 5 5"/>
     <path class="di-muted" d="M${160 - control / 2} 136v8h${control}v-8"/><text x="160" y="164">${control}px</text>
     <g class="di-motion di-optional"><path class="di-guide" d="M${160 - target / 2} 56V48h${target}v8"/><text x="160" y="36">${target}px</text></g>`;
@@ -119,7 +119,7 @@ const geometry = (kind: (typeof kinds)[number]): string => {
 const svg = (kind: (typeof kinds)[number], locale: LocaleDef, standalone = false): string => {
   const copy = copyFor(locale);
   const index = kinds.indexOf(kind);
-  return `<svg xmlns="http://www.w3.org/2000/svg" class="ran-design-svg" viewBox="0 0 320 200" width="320" height="200" role="img" direction="ltr" lang="${locale.lang}" aria-label="${esc(`${copy.titles[index]}. ${copy.descriptions[index]}`)}"${standalone ? ' data-autoplay=""' : ''}>
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="ran-design-svg" viewBox="0 0 320 200"${standalone ? '' : ' width="320" height="200"'} role="img" direction="ltr" lang="${locale.lang}" aria-label="${esc(`${copy.titles[index]}. ${copy.descriptions[index]}`)}"${standalone ? ' data-autoplay=""' : ''}>
     <title>${esc(copy.titles[index])}</title><desc>${esc(copy.descriptions[index])}</desc>
     <style>${standalone ? standaloneTheme() : ''}${svgStyles}</style>${geometry(kind)}</svg>`;
 };
