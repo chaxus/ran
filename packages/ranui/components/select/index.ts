@@ -1,4 +1,4 @@
-import { isMobile, range, throttle } from 'ranuts/utils';
+import { isMobile, range } from 'ranuts/utils';
 import selectCss from './index.less?inline';
 import chevronDownIcon from '@/assets/icons/chevron-down.svg?raw';
 import { RanElement, isDisabled } from '@/utils/index';
@@ -103,6 +103,7 @@ export class Select extends RanElement {
   onSearch?: (this: HTMLElement, ev: Event) => unknown;
   // WAI-ARIA combobox type-ahead: accumulated recently-typed characters, reset
   // after a pause between keystrokes.
+  _composing = false;
   _typeaheadBuffer = '';
   _typeaheadTimeId?: ReturnType<typeof setTimeout>;
   static get observedAttributes(): string[] {
@@ -555,7 +556,10 @@ export class Select extends RanElement {
   };
 
   keydownSelect = (e: KeyboardEvent): void => {
-    if (this.disabled) return;
+    if (this.disabled || e.isComposing || this._composing) return;
+    // A key from the native search field keeps platform text-editing semantics.
+    const editing = e.composedPath().includes(this._search);
+    if (editing && !['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(e.key)) return;
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
       if (!this.isDropdownOpen()) {
@@ -686,7 +690,10 @@ export class Select extends RanElement {
     e.stopPropagation();
     // The property, not the attribute: once the user has typed, the input's value is dirty
     // and no longer tracks `value=`, so setting the attribute leaves the search box filled.
-    this._search.value = '';
+    if (this._search.value) {
+      this._search.value = '';
+      if (this.showSearch) this.changeSearch(e);
+    }
     if (this.trigger.includes('hover') && !isMobile()) {
       clearTimeout(this.removeTimeId);
       this.removeTimeId = undefined;
@@ -870,7 +877,9 @@ export class Select extends RanElement {
     }
   };
   changeSearch = (e: Event): void => {
-    const value = (e as CustomEvent).detail.value || '';
+    if (this._composing || (e as InputEvent).isComposing) return;
+    const value = (e as CustomEvent<{ value?: string }>).detail?.value ?? this._search.value;
+    const query = value.toLowerCase();
     this.dispatchEvent(
       new CustomEvent('search', {
         detail: { value },
@@ -883,7 +892,7 @@ export class Select extends RanElement {
       const options = this._optionList
         .map((item) => {
           const { label } = item;
-          if (`${label}`.toLowerCase().includes(value)) {
+          if (`${label}`.toLowerCase().includes(query)) {
             return { label, value: item.value, disabled: item.disabled };
           }
           return undefined;
@@ -947,16 +956,34 @@ export class Select extends RanElement {
    */
   _applyShowSearch = (): void => {
     this._searchEvents.abort();
+    this._composing = false;
     if (this.showSearch) {
-      this.onSearch = throttle(this.changeSearch);
-      if (this.onSearch) {
-        this._searchEvents.on(this._search, 'change', this.onSearch).on(this._search, 'click', this.onSearch);
-      }
+      this.onSearch = this.changeSearch;
+      this._searchEvents
+        .on(this._search, 'keydown', (event) => {
+          // Handle inside the closed root, before event retargeting hides its origin.
+          event.stopPropagation();
+          this.keydownSelect(event as KeyboardEvent);
+        })
+        .on(this._search, 'input', this.onSearch)
+        .on(this._search, 'change', this.onSearch)
+        .on(this._search, 'compositionstart', () => {
+          this._composing = true;
+        })
+        .on(this._search, 'compositionend', (event) => {
+          this._composing = false;
+          this.changeSearch(event);
+        })
+        .on(this._search, 'click', (event) => {
+          event.stopPropagation();
+          if (!this.open) this.selectMouseDown(event);
+        });
     }
   };
   disconnectedCallback(): void {
     this._events.abort();
     this._searchEvents.abort();
+    this._composing = false;
     this._floating.destroy();
     this.removeSelectDropdown();
     clearTimeout(this._typeaheadTimeId);
