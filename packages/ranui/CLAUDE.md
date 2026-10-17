@@ -1060,64 +1060,50 @@ npm run test:unit:coverage # with coverage report
 
 ### E2E (Playwright)
 
+From a source checkout:
+
 ```bash
-npm run test:e2e           # provisions Chromium/Firefox/WebKit, then runs the suite
-npm run e2e:install        # provision only (idempotent — a no-op once installed)
-npm run test:update        # refresh screenshot snapshots
-npm run test:report        # open the last HTML report
+pnpm -F ranui e2e:install    # Chromium, Firefox and WebKit functional browsers
+pnpm -F ranui test:e2e      # functional assertions; host screenshots are ignored
+pnpm -F ranui test:visual   # strict reviewed screenshots in the pinned container
+pnpm -F ranui test:update   # generate candidate baselines for visual review
+pnpm -F ranui test:report   # ordinary E2E HTML report
 ```
 
-`@playwright/test` being a devDependency only installs the **library** — the browser binaries
-live outside `node_modules`, in `~/Library/Caches/ms-playwright`, and are not provisioned by
-`pnpm install`. A fresh clone therefore used to fail every e2e test with
-`browserType.launch: Executable doesn't exist`, which reads like a broken suite rather than a
-missing download. `test:e2e` / `test:ui` / `test:update` now run `e2e:install` first, so that
-cannot happen; `playwright install` exits immediately when the browser is already present, so
-the guard costs nothing on repeat runs.
+The functional suite retains Chromium, Firefox, WebKit and mobile viewports. The optional
+`Google Chrome` project uses the system Chrome channel; install Chrome separately or select
+an installed project. Browser installation is separate from installing JavaScript dependencies.
+Playwright WebKit and mobile emulation do not certify installed Safari or real iOS devices.
 
-The `chromium` and `Mobile Chrome` projects both use Playwright's bundled Chromium, which
-`e2e:install` provides. It also installs Firefox and WebKit; desktop projects cover all three engines, and `Mobile Safari` adds an emulated WebKit mobile viewport. WebKit is the Playwright engine, not a real Safari/iOS device certification. The **`Google Chrome` project uses `channel: 'chrome'`** — the real,
-system-installed Google Chrome. It is deliberately not part of `e2e:install` (installing a
-branded browser touches the OS, not `node_modules`); install Chrome normally, or run
-`npx playwright install chrome`.
+#### Canonical visual regression
 
-#### Visual regression is local-only, on purpose
+Local baseline updates and CI comparisons use the **same Linux arm64 container**, selected
+by an immutable image digest. It pins Playwright 1.62.1, bundled Chromium 151.0.7922.34,
+Node 24.18.1 and system font binaries. No host browser, font installation or native
+`node_modules` enters that image. Desktop and Pixel 5 viewports use explicit English/UTC,
+light color scheme, reduced motion and software rendering settings. The existing ordinary
+motion tests explicitly opt back into motion.
 
-`toHaveScreenshot` baselines are the 128 PNGs committed next to each spec under
-`test/e2e/*.spec.ts-snapshots/`. Playwright puts the platform in the filename, so every one of
-them ends in `-darwin.png`.
+Only tests tagged `@visual` enter the visual job. Every screenshot assertion must retain
+that tag; the independent functional suite still runs the complete tests on three engines.
+Baselines live in one platform-qualified tree under `test/e2e/__screenshots__/linux-arm64/`.
+The old macOS/platform and auto-updating Chrome duplicates are retired.
 
-**There is no visual gate on CI, and that is a deliberate choice, not an oversight.** The Ubuntu
-runner would look for `-linux.png`, find nothing, fail the first attempt with "A snapshot doesn't
-exist, writing actual", then pass on retry against the file it just wrote — going green having
-compared each screenshot with itself. A gate that cannot fail is worse than no gate, because it
-looks like one. `ignoreSnapshots: !!process.env.CI` therefore turns screenshot comparison off
-there, and `e2e.yml` gates on the **functional** assertions, which run identically on Linux.
+`test:visual` compares with snapshot updates disabled and zero retries. A missing image,
+changed image hash, changed renderer/configuration/font fingerprint or mismatched manifest
+fails; CI cannot silently create a golden and then compare against its own output.
+The CI job uploads its HTML report, differences and measured environment.
 
-Making it a real CI gate needs a second, Linux-rendered baseline set, generated in a container
-matching the runner and committed alongside the macOS one — 128 more binaries and a container
-step. That is the open option if visual regressions start slipping through; until then this is
-recorded as a known gap rather than papered over.
+`test:update` requires Docker and is rejected on CI. It starts with an empty candidate
+directory, so removed assertions cannot retain orphan PNGs. Only a successful run replaces
+the baseline directory and writes a manifest containing the environment and SHA-256 of every
+PNG. **Generation is not visual approval:** inspect every changed old/new image and relevant
+diff, check clipping, focus/state, typography and intended color changes, then run
+`test:visual` twice without updates before committing. Do not increase tolerances to hide
+layout differences. The colorpicker panel retains its existing 200-pixel canvas allowance.
 
-**Re-record with `npm run test:update`, never with `--project`.** Visual comparison is maintained under three
-projects — `chromium`, `Google Chrome`, `Mobile Chrome` — so each screenshot has three baselines.
-The Firefox, WebKit and Mobile Safari projects run functional checks only (`ignoreSnapshots: true`), so they do not create or approve new screenshot baselines. Refreshing one visual project leaves the other two holding a picture of the old component, and nothing
-reports it: CI ignores snapshots, and locally you only see it if you run the whole suite and read
-past the failures you expected. Eleven baselines were stale this way, across three separate
-changes, each of which refreshed `chromium` alone — including one commit that says so in its own
-message. After re-recording, open the new PNGs. A baseline is a claim about what the component
-looks like, and a screenshot taken before the component finished rendering makes that claim
-wrongly while still passing forever after.
-
-> A hosted service (Argos) was wired in for exactly this and has been **removed**. Its token was
-> never configured, so `if (process.env.ARGOS_TOKEN)` was always false: 77 `argosScreenshot`
-> calls across 15 specs uploaded nothing, and the workflow named "Visual Regression" gated on
-> nothing. An inert dependency that looks like coverage is worse than none. The `visual/` specs'
-> assertions were converted to `toHaveScreenshot`, so no coverage was lost locally.
-
-**`npm run test:update` rewrites tracked files.** It overwrites all 128 baselines and your next
-commit carries them. Review that diff — a wholesale refresh silently absorbs a real regression
-into the new baseline.
+See the [visual test procedures](https://github.com/chaxus/ran/blob/main/packages/ranui/test/visual/README.md)
+for environment upgrades, artifacts, negative checks and the reviewed migration inventory.
 
 #### What cannot be screenshotted deterministically
 
@@ -1137,8 +1123,8 @@ now asserted functionally instead — don't reintroduce a screenshot for them:
 `<canvas>` rasterisation is not bit-identical run to run either (~100px on the colorpicker
 panel); that one assertion carries a `maxDiffPixels: 200` allowance rather than a mask.
 
-**Residual flake: roughly 1 test in 3–4 full runs**, and not the same one twice — small
-sub-pixel diffs on `r-tab`'s indicator and similar. Re-run before assuming a real regression.
+A visual failure must be investigated using the uploaded environment and actual/diff PNGs.
+The canonical job has no retry that can turn a newly written baseline into a passing check.
 
 #### Determinism rules for visual specs
 

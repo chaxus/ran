@@ -21,6 +21,9 @@ Release candidate prepared for publication; npm upload is pending.
 
 ### Release preparation
 
+- Correct disabled checkbox check marks, retain readable disabled tick styling, and keep demo input validation messages within their cards.
+- Pin the screenshot renderer and review desktop/mobile baselines; verify actual focus/tab/popup states and capture complete form/overlay content.
+
 - Import component utilities from their owners so small ESM consumers avoid unrelated MIME catalogs; gate actual packed Button, Markdown and Player initial JavaScript size.
 
 - Preserve native searchable-select editing and IME composition; filter live without closing or resetting an existing selection.
