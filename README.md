@@ -1,206 +1,100 @@
-# ran — Web Components UI Library (ranui) & TypeScript Utilities (ranuts)
+# ran
 
 <p align="center">
-  <a href="https://ran.chaxus.com/" target="_blank" rel="noopener noreferrer">
+  <a href="https://ran.chaxus.com/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="./packages/docs/public/icon-dark.png">
-      <source media="(prefers-color-scheme: light)" srcset="./packages/docs/public/icon.png">
-      <img width="180" src="./packages/docs/public/icon.png" alt="ran logo">
+      <img width="120" src="./packages/docs/public/icon.png" alt="ran">
     </picture>
   </a>
 </p>
 
-<p align="center">
-  <strong>A framework-agnostic Web Components UI library built on native custom elements (ranui) and a tree-shakeable TypeScript utility library (ranuts) — plus the tooling and bilingual docs around them.</strong>
-</p>
+Web Components, DOM builders and TypeScript utilities in one workspace.
 
-<p align="center">
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
-  </a>
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
-  </a>
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status">
-  </a>
-  <img src="https://badgen.net/npm/types/ranui" alt="Types Included">
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/github/forks/chaxus/ran" alt="forks">
-  </a>
-  <a href="https://github.com/chaxus/ran">
-    <img src="https://img.shields.io/github/stars/chaxus/ran" alt="stars">
-  </a>
-</p>
-
-<p align="center">
-  <a href="#-features">Features</a> •
-  <a href="#-packages">Packages</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-documentation">Documentation</a> •
-  <a href="#-contributing">Contributing</a>
-</p>
-
----
+[![CI](https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml)](https://github.com/chaxus/ran/actions/workflows/ci.yml) · [MIT](./LICENSE)
 
 **English** | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-## ✨ Features
+> Alpha: APIs and package formats can change. Pin an exact version and read the migration guide before upgrading.
 
-- 🎨 **UI Libraries**: web components
-- 🛠️ **Utility Libraries**: TypeScript utilities
-- 🤖 **Machine Learning**: Basic ML tools and experiments
-- 📱 **Web Applications**: IM chat app (prototype)
-- 🔧 **Development Tools**: Debug utilities
-- 🌐 **Web3**: Smart contract experiments
-- 🎯 **Visual Tools**: 2D rendering through `ranuts/visual` (Canvas, WebGL and WebGPU)
+## Packages
 
-## 📦 Packages
+| Package                                       | Use for                                                                             |
+| --------------------------------------------- | ----------------------------------------------------------------------------------- |
+| [ranui](packages/ranui/README.md)             | Framework-independent Web Components with Shadow DOM, theme tokens and SSR helpers. |
+| [ranuts](packages/ranuts/README.md)           | TypeScript utilities for browser APIs, data processing, streams and 2D rendering.   |
+| [@alixex/ranview](packages/ranview/README.md) | DOM builders, signals and static HTML snapshots without a component library.        |
 
-This monorepo contains various experimental packages:
+## Quick start
 
-### Core Libraries (Alpha Stage)
+```sh
+npm install ranui
+```
 
-| Package                   | Version                                                                                           | Downloads                                                                                  | Description           |
-| ------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------- |
-| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/README.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | web component library |
-| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/README.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | Utility library       |
+```js
+import 'ranui/button';
+import 'ranui/style';
+```
 
-### Experimental Projects
+Place the custom element in your HTML:
 
-| Package                                 | Description                  |
-| --------------------------------------- | ---------------------------- |
-| [im](packages/im)                       | Chat application prototype   |
-| [debug](docs/learning/debug/README.md)  | Debugging learning notes     |
-| [image-process](packages/image-process) | Image processing experiments |
-| [cpro](packages/cpro)                   | C/C++ learning & experiments |
-| [rust](packages/rust)                   | Rust learning & experiments  |
+```html
+<r-button type="primary">Hello</r-button>
+```
 
-Which of these CI actually checks is declared in [packages/manifest.json](packages/manifest.json), and that file is executable rather than descriptive: `bin/run-checks.mjs` runs a check across the packages that declare it, so a package listed there as checked really is, and one that is not says why. `pnpm run verify:packages` fails when a directory under `packages/` is missing from it, so a new package cannot arrive without someone deciding whether it is checked.
+## Documentation
 
-## 🚀 Quick Start
+- [ranui](https://ran.chaxus.com/src/ranui/)
+- [ranuts](https://ran.chaxus.com/src/ranuts/)
+- [@alixex/ranview](packages/ranview/README.md)
+- [Migration guide](https://ran.chaxus.com/src/ranuts/migration/)
 
-### Design and agent guidance
+## Repository development
 
-Start from [AGENTS.md](AGENTS.md) for the ownership and verification map. The
-[ranui design standard](packages/ranui/docs/DESIGN.md) governs UI composition and tokens;
-the short [interface index](packages/ranui/docs/INTERFACE_GUIDE.md) routes to the
-[interaction standard](packages/ranui/docs/INTERACTION.md) for observable behavior and
-[optional workflow patterns](packages/ranui/docs/WORKFLOW_PATTERNS.md) for relevant host tasks.
-Engineering remains in CODING. These canonical references ship with the npm package.
+Use Node 24+ and pnpm. Run the following from the repository root:
 
-### Installation
-
-```bash
-# Clone the repository
+```sh
 git clone https://github.com/chaxus/ran.git
 cd ran
-
-# Install dependencies
-pnpm install
-
-# Build all packages
+pnpm install --frozen-lockfile
 pnpm build
+pnpm --filter ranui dev
 ```
 
-### Using Core Packages
+Other development commands:
 
-```bash
-# Install ranui (web components)
-npm install ranui
-
-# Install utilities
-npm install ranuts
-```
-
-### Development
-
-```bash
-# Start development server
-pnpm dev
-
-# Run tests
+```sh
+pnpm --filter docs dev
 pnpm test
-
-# Build specific package
-pnpm --filter ranui build
+pnpm lint
+pnpm verify:docs
+pnpm clean
 ```
 
-## 📚 Documentation
+`pnpm clean` removes generated artifacts and preserves source, installed dependencies and lockfiles.
 
-- **📖 Blog & Articles**: [Web Document Preview](https://ran.chaxus.com/src/article/doc_preview)
-- **🎨 RanUI Documentation**: [UI Library Guide](https://ran.chaxus.com/src/ranui/)
-- **🛠️ RanUTS Documentation**: [Utility Library Guide](https://ran.chaxus.com/src/ranuts/)
-- **📝 Project Documentation**: [docs](packages/docs)
+## Other projects and learning notes
 
-## 🤖 AI / Claude Code
+Documentation tooling: [docs](packages/docs), [ranpress](packages/ranpress) and [site](packages/site). [im](packages/im) is an experimental chat application.
 
-This repo ships a Claude Code plugin marketplace so AI assistants can read and use the
-libraries without spelunking the source. Add the marketplace, then install whichever
-library you use:
+Native examples: [C/C++](packages/cpro), [image processing](packages/image-process) and [Rust](packages/rust). Retained notes: [Shader](docs/learning/visual/README.md) and [Koa/Nginx](docs/learning/debug/README.md).
 
-```bash
+Workspace status and CI checks are declared in [packages/manifest.json](packages/manifest.json).
+
+## AI / Claude Code
+
+[Maintainer and agent reference](packages/ranui/CLAUDE.md) · [ranuts](packages/ranuts/CLAUDE.md)
+
+```text
 /plugin marketplace add chaxus/ran
-/plugin install ranui@ran      # ranui — web components
-/plugin install ranuts@ran     # ranuts — utilities
+/plugin install ranui@ran
+/plugin install ranuts@ran
 ```
 
-Each skill covers the import map, an inventory, usage examples, and conventions, and
-points to the API reference shipped in that package. See the per-library sections in
-[ranui](packages/ranui/README.md#ai--claude-code-skill) and
-[ranuts](packages/ranuts/README.md).
+## Contributing
 
-## ⚠️ Important Notice
+Read [AGENTS.md](AGENTS.md) for the ownership and verification map. Keep examples and documentation aligned with public exports, and run the checks relevant to your change.
 
-This is a **technology exploration and learning project** in early development. Most packages are in alpha stage or experimental phase.
+## License
 
-**Key points:**
-
-- 🚧 **Early Development**: Most features are still being developed
-- 🧪 **Experimental**: APIs may change frequently
-- 📚 **Learning Focus**: Primarily for learning and experimentation
-
-## 🤝 Contributing
-
-We welcome contributions from learners and developers! Here's how you can help:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-### Development Guidelines
-
-- Follow the existing code style
-- Add tests for new features when possible
-- Update documentation as needed
-- Be patient with experimental features
-
-## 🌟 Why Open Source?
-
-I believe in the power of open source to accelerate learning and innovation. Throughout my development journey, I've been greatly influenced by countless open-source projects. By open-sourcing this experimental code, I hope to:
-
-- Share learning experiences with the community
-- Enable others to learn from and experiment with this code
-- Foster collaboration and knowledge sharing
-- Create a platform for continuous learning and improvement
-
-## 📊 Project Stats
-
-<a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="Contributors" />
-</a>
-
-![](http://profile-counter.glitch.me/chaxus-ran/count.svg)
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-  <p>Made with ❤️ by the Ran community</p>
-  <p>If this project helps you learn, please give it a ⭐️</p>
-</div>
+[MIT](./LICENSE)
