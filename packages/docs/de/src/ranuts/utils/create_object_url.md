@@ -85,7 +85,7 @@ Holt den Inhalt einer URL als rohe Bytes über `XMLHttpRequest`. Diese Bytes wan
 ```js
 import { requestUrlToBuffer, createObjectURL } from 'ranuts/utils';
 
-const result = await requestUrlToBuffer('/assets/clip.webm', {});
+const result = await requestUrlToBuffer('/assets/clip.webm');
 if (result.success) {
   const url = await createObjectURL(new Blob([result.data]));
   video.src = url;
@@ -97,13 +97,25 @@ if (result.success) {
 | Parameter | Beschreibung                                                                        | Typ                                      | Standard     |
 | --------- | ----------------------------------------------------------------------------------- | ---------------------------------------- | ------------ |
 | `src`     | Die abzurufende URL                                                                 | `string`                                 | Erforderlich |
-| `options` | `method` (standardmäßig `'GET'`) und `responseType` (standardmäßig `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | Erforderlich |
+| `options` | `method` (standardmäßig `'GET'`) und `responseType` (standardmäßig `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | `{}`         |
 
 #### Rückgabe
 
 Ein `Promise`, das bei HTTP 200 mit `{ success: true, data, message: '' }` erfüllt wird und sonst mit `{ success: false, data: status, message }` **abgelehnt** wird. Eine gescheiterte Anfrage ist eine Ablehnung, kein erfülltes `success: false`; ein blankes `.then()` ohne `.catch()` lässt sie also als unbehandelte Ablehnung auftauchen.
 
-::: tip Für neuen Code lieber `fetch`
-Dies stammt aus der Zeit, bevor `fetch` überall verfügbar war, und benutzt darunter `XMLHttpRequest`. Brauchst du nicht ausdrücklich XHR (Fortschrittsereignisse beim Hochladen, `abort()`), erledigt `fetch(url).then(r =>
-r.arrayBuffer())` dieselbe Arbeit mit der Ablehnungsform, die Promises von Haus aus haben.
-:::
+### Antworttypen
+
+Standardmodus und leerer Modus liefern ArrayBuffer; blob und text liefern die passenden Typen. JSON und dynamische Modi liefern unknown und müssen geprüft werden. Der Fortschritt betrifft den Download; dieser Wrapper stellt keine Abbruchfunktion bereit.
+
+| `responseType`                 | `data`             |
+| ------------------------------ | ------------------ |
+| omitted / `arraybuffer` / `''` | `ArrayBuffer`      |
+| `blob`                         | `Blob`             |
+| `text`                         | `string`           |
+| `document`                     | `Document \| null` |
+| `json` / dynamic               | `unknown`          |
+
+```ts
+const bytes = (await requestUrlToBuffer('/file')).data; // ArrayBuffer
+const blob = (await requestUrlToBuffer('/file', { responseType: 'blob' })).data; // Blob
+```

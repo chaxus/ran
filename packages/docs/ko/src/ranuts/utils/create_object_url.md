@@ -85,7 +85,7 @@ async function previewImage(file) {
 ```js
 import { requestUrlToBuffer, createObjectURL } from 'ranuts/utils';
 
-const result = await requestUrlToBuffer('/assets/clip.webm', {});
+const result = await requestUrlToBuffer('/assets/clip.webm');
 if (result.success) {
   const url = await createObjectURL(new Blob([result.data]));
   video.src = url;
@@ -97,13 +97,25 @@ if (result.success) {
 | 매개변수  | 설명                                                          | 타입                                     | 기본값 |
 | --------- | ------------------------------------------------------------- | ---------------------------------------- | ------ |
 | `src`     | 가져올 URL                                                    | `string`                                 | 필수   |
-| `options` | `method`(기본 `'GET'`)와 `responseType`(기본 `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | 필수   |
+| `options` | `method`(기본 `'GET'`)와 `responseType`(기본 `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | `{}`   |
 
 #### 반환값
 
 HTTP 200이면 `{ success: true, data, message: '' }`로 이행하고, 그 밖에는 `{ success: false, data: status, message }`로 **거부하는** `Promise`입니다. 실패한 요청은 거부이지 `success: false`로 이행한 것이 아니므로, `.catch()` 없이 `.then()`만 쓰면 처리되지 않은 거부로 드러납니다.
 
-::: tip 새로 짠다면 `fetch`를
-이것은 `fetch`가 어디서나 쓰이게 되기 전부터 있던 것이라 속으로 `XMLHttpRequest`를 씁니다. XHR이 꼭 필요한 사정(업로드 진행 이벤트, `abort()`)이 없다면 `fetch(url).then(r =>
-r.arrayBuffer())`가 같은 일을, 프로미스 본래의 거부 모양으로 해냅니다.
-:::
+### 응답 타입
+
+기본 모드와 빈 모드는 ArrayBuffer를 반환하고 blob과 text는 각각의 타입을 반환합니다. JSON과 동적 모드는 unknown이므로 검증이 필요합니다. 진행 콜백은 다운로드용이며 이 래퍼는 취소 API를 제공하지 않습니다.
+
+| `responseType`                 | `data`             |
+| ------------------------------ | ------------------ |
+| omitted / `arraybuffer` / `''` | `ArrayBuffer`      |
+| `blob`                         | `Blob`             |
+| `text`                         | `string`           |
+| `document`                     | `Document \| null` |
+| `json` / dynamic               | `unknown`          |
+
+```ts
+const bytes = (await requestUrlToBuffer('/file')).data; // ArrayBuffer
+const blob = (await requestUrlToBuffer('/file', { responseType: 'blob' })).data; // Blob
+```

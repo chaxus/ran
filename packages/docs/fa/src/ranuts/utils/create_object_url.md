@@ -85,7 +85,7 @@ async function previewImage(file) {
 ```js
 import { requestUrlToBuffer, createObjectURL } from 'ranuts/utils';
 
-const result = await requestUrlToBuffer('/assets/clip.webm', {});
+const result = await requestUrlToBuffer('/assets/clip.webm');
 if (result.success) {
   const url = await createObjectURL(new Blob([result.data]));
   video.src = url;
@@ -97,13 +97,25 @@ if (result.success) {
 | پارامتر   | توضیح                                                                 | نوع                                      | پیش‌فرض |
 | --------- | --------------------------------------------------------------------- | ---------------------------------------- | ------- |
 | `src`     | نشانی‌ای که گرفته می‌شود                                              | `string`                                 | الزامی  |
-| `options` | `method` (پیش‌فرض `'GET'`) و `responseType` (پیش‌فرض `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | الزامی  |
+| `options` | `method` (پیش‌فرض `'GET'`) و `responseType` (پیش‌فرض `'arraybuffer'`) | `Partial<RequestUrlToArraybufferOption>` | `{}`    |
 
 #### بازگشت
 
 `Promise`ای که در HTTP 200 با `{ success: true, data, message: '' }` برآورده می‌شود و در غیر آن با `{ success: false, data: status, message }` **رد** می‌شود. درخواست ناکام یک رد است، نه برآورده‌شدنی با `success: false`؛ پس `.then()`ِ تنها و بدون `.catch()` آن را همچون ردِ رسیدگی‌نشده آشکار می‌کند.
 
-::: tip برای کد تازه، `fetch` بهتر است
-این از روزگاری مانده که هنوز `fetch` همه‌جا در دسترس نبود و در درون از `XMLHttpRequest` بهره می‌برد. اگر به‌طور مشخص به XHR نیاز ندارید (رویدادهای پیشرفت بارگذاری، `abort()`)، `fetch(url).then(r =>
-r.arrayBuffer())` همان کار را با شکل ردِ بومیِ Promise انجام می‌دهد.
-:::
+### نوع پاسخ
+
+حالت پیش‌فرض و خالی ArrayBuffer برمی‌گردانند؛ blob و text نوع متناظر را دارند. JSON و حالت پویا unknown هستند و به اعتبارسنجی نیاز دارند. پیشرفت مربوط به دانلود است؛ این پوشش رابط لغو ندارد.
+
+| `responseType`                 | `data`             |
+| ------------------------------ | ------------------ |
+| omitted / `arraybuffer` / `''` | `ArrayBuffer`      |
+| `blob`                         | `Blob`             |
+| `text`                         | `string`           |
+| `document`                     | `Document \| null` |
+| `json` / dynamic               | `unknown`          |
+
+```ts
+const bytes = (await requestUrlToBuffer('/file')).data; // ArrayBuffer
+const blob = (await requestUrlToBuffer('/file', { responseType: 'blob' })).data; // Blob
+```
