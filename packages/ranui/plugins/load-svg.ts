@@ -1,5 +1,5 @@
 import type { Plugin } from 'vite';
-import { readFile } from 'ranuts/node';
+import { readFile } from 'node:fs/promises';
 
 interface Options {
   defaultImport?: string;
