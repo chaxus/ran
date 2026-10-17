@@ -1,8 +1,4 @@
+#!/bin/sh
+set -eu
 
-rm -rf $(pnpm store path)
-rm -rf node_modules
-rm -rf packages/ranui/node_modules/
-rm -rf packages/ranuts/node_modules/
-rm -rf packages/docs/node_modules/
-npm cache clean --force
-rm -rf pnpm-lock.yaml
+exec node "$(dirname "$0")/clean.mjs"
