@@ -97,7 +97,8 @@ test.describe('modal — closing attribute lifecycle', () => {
     // Immediately after close(), the fade transition is still in flight.
     expect(await hasClosingAttr()).toBe(true);
 
-    await page.waitForTimeout(500);
-    expect(await hasClosingAttr()).toBe(false);
+    // Backgrounded WebKit pages can defer timers beyond the CSS duration.
+    // Observe completion while retaining the immediate transition-tail check.
+    await expect.poll(hasClosingAttr).toBe(false);
   });
 });

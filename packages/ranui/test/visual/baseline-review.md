@@ -118,3 +118,9 @@ listener before hover/tap and wait for it before calculating capture bounds.
 All 142 PNG hashes, renderer/font fingerprints, screenshot assertions and comparison
 tolerances remain unchanged; only the owning harness fingerprint is refreshed to include
 the reviewed fixture change. No PNG baseline is regenerated.
+
+The Button fixture also uses the shared isolated setup so the demo's live media cannot
+inert or replace its mounted control; it retains the same Submit button and screenshot
+assertion. The Modal functional lifecycle case now observes closing-state completion rather
+than sleeping 500ms, while preserving its assertion that closing is set immediately.
+These fixture changes refresh only the harness fingerprint; PNGs and tolerances stay intact.
