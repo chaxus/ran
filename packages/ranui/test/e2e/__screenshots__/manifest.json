@@ -12,9 +12,9 @@
     "systemFontsSha256": "c339750d748e2a442eec2756219b1e49e9601fe3a6927100deea37040547d226",
     "systemFontFiles": 48,
     "localFontsSha256": "a95cd2bae45daa40ee591ea0ed3affc47db95cc32c42eb2f2f6f23c46f7b237e",
-    "harnessSha256": "8ba213e7630ff01fb178d626d85069a13280858211169a9b75d093dcfb61e18d"
+    "harnessSha256": "0ffd85391bf853fb2a77910ccf8720874a12cd630562d71f97ce9d0021b9a28e"
   },
-  "image": "sha256:e1443c9aba9cce8368aab5c36b770a933962215d8dc23212e00163a74ff29d83",
+  "image": "sha256:bc98b66229174ae71636131e3a7d21063c68d4c965497ad505e5a79871e3c628",
   "snapshots": {
     "button.spec.ts/Mobile-Chrome/button.png": "3b4b6ba3280a12f8b1645fc970c864dfe6f0d548ad01281aba96452d5c49ac34",
     "button.spec.ts/chromium/button.png": "eab068eb0d14e78f141496b02c218e5c0fff686ab301644c69d77b747871d8ef",
@@ -44,11 +44,11 @@
     "image.spec.ts/chromium/image-single.png": "d67b30332f7902f4d6a637ec175fff7aa6e3522ef5e7f05378d7025873686f03",
     "input.spec.ts/Mobile-Chrome/input-default.png": "b48510bc8af31e5dd808e8c27f60b519b83aa8ddf84b2232dd1b07d2f3cac68d",
     "input.spec.ts/Mobile-Chrome/input-disabled.png": "60353bb5706103b3b9dcb2eac5a343b337dd5e8b8a08cb50af3859bb9c340fba",
-    "input.spec.ts/Mobile-Chrome/input-focused.png": "7788e688fd64f721960dbcfb554c2f7d676e116bebbb04fa0d19316c845e8749",
+    "input.spec.ts/Mobile-Chrome/input-focused.png": "be1263fe776b7c419f54df107a0fa0877771c1a126e05f2648bd134e6c32f7ff",
     "input.spec.ts/Mobile-Chrome/input-with-icon.png": "0e56266a88d40446caab2edc0d0c991a662b607067f2c34a329285fd52efb936",
     "input.spec.ts/chromium/input-default.png": "7afe75c336d8fbb3f48c0ccf433e36d3a6382a324aa0f55940c7ed7957ea330c",
     "input.spec.ts/chromium/input-disabled.png": "a9df376d16bfd16dc708fc6e6bac52b72c5d1c85fc3184d8f4109d7d77eb6988",
-    "input.spec.ts/chromium/input-focused.png": "c0b6ec35b236d11512ea4de5b9584dbbdedeed7a70c9e5ba634cf12b12c31717",
+    "input.spec.ts/chromium/input-focused.png": "2795c67c0efa8c888117e88a27dcf55fcbadabe78d37f0b333ca5a2c467be01b",
     "input.spec.ts/chromium/input-with-icon.png": "0e56266a88d40446caab2edc0d0c991a662b607067f2c34a329285fd52efb936",
     "loading.spec.ts/Mobile-Chrome/loading-all.png": "f134fb0121bfada5056857d3928057877e5473dcd74c29e68de968bef1a823e6",
     "loading.spec.ts/Mobile-Chrome/loading-circle-line.png": "620f65b30ab131afd39a36f8cbc1d5278892cbd29ee19ae8ccd6143398913187",
