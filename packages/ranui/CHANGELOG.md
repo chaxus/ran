@@ -8,6 +8,10 @@ Release candidate prepared for publication; npm upload is pending.
 
 ### Release preparation
 
+- Preserve pointer selection after native search input or IME composition; ignore unchanged blur commits without removing change-only filtering support.
+- Synchronize controlled tab styling with panels and ARIA; focus the host after removing its final focused header, preserving explicit focus handoffs and supplied tabindex.
+- Correct the release guide to require the separate pinned Linux arm64 visual gate alongside cross-browser functional tests.
+
 - Correct disabled checkbox check marks, retain readable disabled tick styling, and keep demo input validation messages within their cards.
 - Pin the screenshot renderer and review desktop/mobile baselines; verify actual focus/tab/popup states and capture complete form/overlay content.
 

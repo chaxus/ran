@@ -83,11 +83,12 @@ Remove prerelease suffixes, choose new unpublished versions and use `tag=latest`
 PR CI runs the complete functional ranui and assembled `im` suites on **Chromium, Firefox and WebKit** in separate jobs. Locally, install the three engines with `pnpm -F ranui e2e:install`, then run:
 
 ```sh
-CI=1 pnpm -F ranui exec playwright test --project=chromium --project=firefox --project=webkit
-CI=1 pnpm -F im exec playwright test --project=chromium --project=firefox --project=webkit
+pnpm -F ranui exec playwright test --project=chromium --project=firefox --project=webkit
+pnpm -F im exec playwright test --project=chromium --project=firefox --project=webkit
+pnpm -F ranui test:visual
 ```
 
-`CI=1` disables screenshot comparison; these commands still assert interactions, focus, forms, layout, transitions, SSR-independent browser execution and package bundles. Reviewed macOS screenshot baselines remain available for the original Chromium/Chrome projects. Firefox, WebKit and the supplemental `Mobile Safari` viewport use functional assertions only. Playwright WebKit and mobile emulation do not certify real Safari/iOS hardware, codecs, DRM or network streaming.
+The functional projects always skip screenshot comparisons, independently of `CI`; they assert interactions, focus, forms, layout, transitions, SSR-independent browser execution and package bundles. `test:visual` separately compares the reviewed baselines in the pinned Linux arm64 renderer, including desktop and mobile viewports. See the [visual regression guide](../packages/ranui/test/visual/README.md) for Docker prerequisites and baseline review. Firefox, WebKit and the supplemental `Mobile Safari` viewport use functional assertions only. Playwright WebKit and mobile emulation do not certify real Safari/iOS hardware, codecs, DRM or network streaming.
 
 `verify:release` also measures the real npm installation and writes `.release/size-report.json`, included in the release artifact. The report separates compressed library archive bytes, unpacked library bytes and the complete production `node_modules` tree. These are logical regular-file bytes, not filesystem allocation, pnpm store size or browser transfer size. It skips symlinks and fails when any limit in `bin/package-size-budgets.json` is exceeded. The combined production install limit is 75 MB; individual archive/unpacked limits are maintained separately.
 

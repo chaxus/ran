@@ -20,6 +20,10 @@ Release candidate prepared for publication; npm upload is pending.
 
 ### Release preparation
 
+- Preserve pointer selection after native search input or IME composition; ignore unchanged blur commits without removing change-only filtering support.
+- Synchronize controlled tab styling with panels and ARIA; focus the host after removing its final focused header, preserving explicit focus handoffs and supplied tabindex.
+- Correct the release guide to require the separate pinned Linux arm64 visual gate alongside cross-browser functional tests.
+
 - Correct disabled checkbox check marks, retain readable disabled tick styling, and keep demo input validation messages within their cards.
 - Pin the screenshot renderer and review desktop/mobile baselines; verify actual focus/tab/popup states and capture complete form/overlay content.
 
@@ -203,7 +207,7 @@ summarised here. They are the reasoning behind the entries above.
 
 | Date | Repository-wide |
 | ---- | ------- |
-| 2026-10-17 | [ranui](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-17.md) |
+| 2026-10-17 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-17.md) |
 | 2026-07-25 | [补齐：现有模块的缺口](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-25.md) |
 | 2026-07-19 | [builder：`children()` 支持响应式 getter（reactive children）](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-19.md) |
 | 2026-07-11 | [Geist contrast action + bordered card default](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-11.md) |
