@@ -47,4 +47,49 @@ describe('r-select accessibility keyboard contract', () => {
     expect(select.getAttribute('aria-expanded')).toBe('false');
     expect(changes).toEqual([{ value: '1', label: 'Alpha' }]);
   });
+  it('leaves native search editing keys alone and filters native input and change', async () => {
+    const select = await createSelect();
+    select.showSearch = 'true';
+    for (const key of ['b', ' ', 'Home', 'End', 'Backspace']) {
+      const event = new KeyboardEvent('keydown', { key, bubbles: true, composed: true, cancelable: true });
+      select._search.dispatchEvent(event);
+      expect(event.defaultPrevented, key).toBe(false);
+    }
+    select._search.value = 'BE';
+    select._search.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(select.getDropdownOptions().map((option) => option.textContent)).toEqual(['Beta']);
+    select._search.value = '';
+    select._search.dispatchEvent(new Event('change'));
+    expect(select.getDropdownOptions()).toHaveLength(3);
+  });
+
+  it('ignores composing Enter and filters the final composition commit', async () => {
+    const select = await createSelect();
+    select.showSearch = 'true';
+    select.open = true;
+    select.setActiveOptionByIndex(0);
+    const changes = vi.fn();
+    select.addEventListener('change', changes);
+    select._search.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true }));
+    select._search.value = 'Beta';
+    select._search.dispatchEvent(new InputEvent('input', { bubbles: true, isComposing: true }));
+    select._search.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, composed: true }));
+    expect(select.open).toBe(true);
+    expect(changes).not.toHaveBeenCalled();
+    select._search.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true }));
+    expect(select.getDropdownOptions().map((option) => option.textContent)).toEqual(['Beta']);
+    select.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', isComposing: true, bubbles: true }));
+    expect(changes).not.toHaveBeenCalled();
+  });
+
+  it('keeps host typeahead and nonbubbling selection changes', async () => {
+    const select = await createSelect();
+    const delegated = vi.fn();
+    document.body.addEventListener('change', delegated, { once: true });
+    select.dispatchEvent(new KeyboardEvent('keydown', { key: 'b', bubbles: true }));
+    select.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(select.value).toBe('2');
+    expect(delegated).not.toHaveBeenCalled();
+    document.body.removeEventListener('change', delegated);
+  });
 });
