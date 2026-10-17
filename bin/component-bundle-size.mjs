@@ -10,7 +10,7 @@ import { gzipSync } from 'node:zlib';
 export const componentBundleBudgets = {
   button: { bytes: 40_000, gzipBytes: 13_000 },
   markdown: { bytes: 60_000, gzipBytes: 20_000 },
-  player: { bytes: 385_000, gzipBytes: 170_000 },
+  player: { bytes: 300_000, gzipBytes: 80_000 },
 };
 
 export function initialJavaScriptSize(output, entryName = 'consumer') {
