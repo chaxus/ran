@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { DEV_SERVER } from '../../build/config';
-import { isolatedSetup, mount } from './helpers';
+import { isolatedSetup, insideShadow, mount } from './helpers';
 
 test.use({ viewport: { width: 600, height: 300 } });
 
@@ -36,18 +36,19 @@ test('input — focused', { tag: '@visual' }, async ({ page }) => {
   await mount(
     page,
     `
-    <r-input id="inp" style="width: 240px" label="Email" placeholder="you@example.com"></r-input>
+    <div id="focus-frame" style="display: inline-block; padding: 4px">
+      <r-input id="inp" style="width: 240px" label="Email" placeholder="you@example.com"></r-input>
+    </div>
   `,
   );
   const el = page.locator('#inp');
   await expect(el).toBeVisible();
-  // Click the native input inside shadow DOM to trigger focus styles
-  await page.evaluate(() => {
-    const host = document.querySelector('#inp') as any;
-    host?.shadowRoot?.querySelector('input')?.focus();
-  });
-  await page.waitForTimeout(50);
-  await expect(el).toHaveScreenshot('input-focused.png');
+  // Public focus() forwards into the closed root; host.shadowRoot is always null.
+  await el.evaluate((host) => (host as HTMLElement).focus());
+  await expect.poll(() => insideShadow(page, '#inp', (root) => root.activeElement?.tagName)).toBe('INPUT');
+  expect(await insideShadow(page, '#inp', (root) => root.activeElement?.matches(':focus-visible'))).toBe(true);
+  // Include the complete outer focus ring, rather than cropping it to the host.
+  await expect(page.locator('#focus-frame')).toHaveScreenshot('input-focused.png');
 });
 
 test('input — disabled', { tag: '@visual' }, async ({ page }) => {
