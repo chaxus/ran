@@ -37,6 +37,8 @@ Changing the `active` attribute or property updates header styling, the indicato
 ARIA together without moving focus. Removing the last focused header focuses the `<r-tabs>`
 host, adding `tabindex="-1"` only when absent. An existing `tabindex` or an explicit focus
 handoff to another control is preserved.
+This also applies when removing or disabling a focused tab leaves another enabled header:
+a `change` listener's explicit focus handoff takes precedence over automatic header recovery.
 
 ## API Reference
 

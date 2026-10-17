@@ -321,6 +321,28 @@ export class Tabs extends RanElement {
     }
   };
 
+  private _restoreFocus = (target?: Element): void => {
+    // A change listener may already have handed focus to another control.
+    let root = this.getRootNode() as Document | ShadowRoot;
+    let owner: Element | undefined;
+    let focusAvailable = true;
+    while (focusAvailable) {
+      const activeElement = root.activeElement;
+      focusAvailable = !activeElement || activeElement === (owner ?? this) || activeElement === this.ownerDocument.body;
+      if (!focusAvailable || !('host' in root)) break;
+      owner = root.host;
+      root = owner.getRootNode() as Document | ShadowRoot;
+    }
+    if (focusAvailable) {
+      if (target) {
+        if (this._shadowDom.activeElement !== target) this.tabFocusable(target).focus();
+      } else {
+        if (!this.hasAttribute('tabindex')) this.tabIndex = -1;
+        this.focus();
+      }
+    }
+  };
+
   updateAttribute = (key: string, attribute: string, value: string | null = ''): void => {
     const index = this.tabHeaderKeyMapIndex[key];
     const focused = this._shadowDom.activeElement === this._nav.children[index];
@@ -333,7 +355,7 @@ export class Tabs extends RanElement {
       this.initActive(index);
       this.syncTabsAria();
       const active = this.active ? this._nav.children[this.tabHeaderKeyMapIndex[this.active]] : undefined;
-      if (focused && active && isDisabled(this._nav.children[index])) this.tabFocusable(active).focus();
+      if (focused && isDisabled(this._nav.children[index])) this._restoreFocus(active);
     }
   };
 
@@ -409,25 +431,7 @@ export class Tabs extends RanElement {
               .slice(0, focusedIndex)
               .reverse()
               .find((header) => !isDisabled(header)));
-      if (target && this._shadowDom.activeElement !== target) this.tabFocusable(target).focus();
-      if (!target) {
-        // A change listener may already have handed focus to another control.
-        let root = this.getRootNode() as Document | ShadowRoot;
-        let owner: Element | undefined;
-        let focusAvailable = true;
-        while (focusAvailable) {
-          const activeElement = root.activeElement;
-          focusAvailable =
-            !activeElement || activeElement === (owner ?? this) || activeElement === this.ownerDocument.body;
-          if (!focusAvailable || !('host' in root)) break;
-          owner = root.host;
-          root = owner.getRootNode() as Document | ShadowRoot;
-        }
-        if (focusAvailable) {
-          if (!this.hasAttribute('tabindex')) this.tabIndex = -1;
-          this.focus();
-        }
-      }
+      this._restoreFocus(target);
     }
     if (this.align === 'center') this.initTabLineAlignCenter();
     if (this.align === 'end') this.initTabLineAlignEnd();

@@ -168,3 +168,62 @@ for (const outside of [false, true]) {
     }
   });
 }
+
+for (const nested of [false, true]) {
+  for (const action of ['remove', 'disable']) {
+    test(`replacement tabs preserve explicit outside focus (${action}, ${nested ? 'nested' : 'document'})`, async ({
+      page,
+    }) => {
+      await isolatedSetup(page, DEV_SERVER, 'r-tabs');
+      await mount(page, '<div id="container"></div><button id="outside">Outside</button>');
+      await page.locator('#container').evaluate((container, nested) => {
+        const root = nested ? container.attachShadow({ mode: 'open' }) : container;
+        root.innerHTML =
+          '<r-tabs id="tabs"><r-tab r-key="a" label="A">A</r-tab><r-tab r-key="b" label="B">B</r-tab></r-tabs>';
+      }, nested);
+      const tabs = page.locator('#container').locator('r-tabs');
+      await tabs.evaluate((node) => {
+        const root = (node as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom;
+        (root.querySelector('[part="nav"]')!.firstElementChild as HTMLElement & { _btn: HTMLElement })._btn.focus();
+        node.addEventListener('change', () => document.querySelector<HTMLButtonElement>('#outside')!.focus());
+      });
+      await tabs.evaluate((node, action) => {
+        const pane = node.querySelector('r-tab')!;
+        if (action === 'remove') pane.remove();
+        else pane.setAttribute('disabled', '');
+      }, action);
+      await expect(tabs).toHaveAttribute('active', 'b');
+      await expect(page.locator('#outside')).toBeFocused();
+      await expect(tabs).not.toHaveAttribute('tabindex');
+    });
+  }
+}
+
+for (const handoff of [false, true]) {
+  test(`static tabs disabled reaction ${handoff ? 'respects outside handoff' : 'recovers header focus'}`, async ({
+    page,
+  }) => {
+    await page.route('**/static-tab-regression', (route) =>
+      route.fulfill({
+        contentType: 'text/html',
+        body: `<!doctype html><html><body><r-tabs id="tabs"><r-tab r-key="a" label="A">A</r-tab><r-tab r-key="b" label="B">B</r-tab></r-tabs><button id="outside">Outside</button><script type="module">import '/index.ts';</script></body></html>`,
+      }),
+    );
+    await page.goto(`${DEV_SERVER}/static-tab-regression`);
+    await page.waitForFunction(
+      () =>
+        (document.querySelector('r-tab') as HTMLElement & { parent?: HTMLElement })?.parent ===
+        document.querySelector('#tabs'),
+    );
+    await page.locator('#tabs').evaluate((node, handoff) => {
+      const root = (node as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom;
+      (root.querySelector('[part="nav"]')!.firstElementChild as HTMLElement & { _btn: HTMLElement })._btn.focus();
+      if (handoff)
+        node.addEventListener('change', () => document.querySelector<HTMLButtonElement>('#outside')!.focus());
+      node.querySelector('r-tab')!.setAttribute('disabled', 'true');
+    }, handoff);
+    await expect(page.locator('#tabs')).toHaveAttribute('active', 'b');
+    if (handoff) await expect(page.locator('#outside')).toBeFocused();
+    else expect(await insideShadow(page, '#tabs', (root) => root.activeElement?.getAttribute('r-key'))).toBe('b');
+  });
+}
