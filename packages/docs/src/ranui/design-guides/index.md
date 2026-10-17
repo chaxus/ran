@@ -151,14 +151,14 @@ properties included; both are banned in ranui's own styles and are a bad idea in
 
 Every reachable state is part of the design: **hover, active, focus, disabled, loading, empty,
 error**. Map them onto the ladder: hover → `bg-hover` / `border-hover`; active → `bg-active`;
-disabled → `text-disabled` plus reduced opacity; focus → the focus ring.
+disabled → disabled tokens; reduce opacity only when needed and still legible; focus → the focus ring.
 
 Nothing non-interactive may look interactive. `r-card` only reacts to hover with the
 `hoverable` attribute; leave it off for cards that don't click.
 
 Copy is part of the system too:
 
-- **Buttons** take an action **and** an object. ✅ "Delete member" ❌ "Delete", "OK".
+- **Buttons** name the outcome. Include the object when context does not establish it: "Delete member". A clearly named dialog may use "Delete"; avoid generic "OK".
 - **Errors** say what happened, then how to fix it. ✅ "Build failed: the bundle exceeds the
   size limit. Reduce it or raise the limit." ❌ "Operation failed, please try again."
 - **Confirmations and toasts** state the change, not the success. ✅ "Project deleted"
@@ -211,12 +211,14 @@ the ones that look fine in review, so the same rules are worth applying to your 
 
 ## Checklist before shipping UI
 
+Choose checks for the affected surface and changed behavior; repository CI still runs its complete gates.
+
 - [ ] Primary task and primary action are unmistakable.
 - [ ] Works in **light and dark**, at **narrow and wide** widths.
 - [ ] Works with **mouse and touch**; any hover trigger has a tap fallback.
-- [ ] All states exercised: hover, active, focus, disabled, loading, empty, error.
+- [ ] Affected states exercised: hover, active, focus, disabled, loading, empty, error.
 - [ ] Keyboard and focus verified; focus visible everywhere.
-- [ ] Edge cases: long text, large numbers, both locales.
+- [ ] Edge cases: long text, large numbers, supported locales.
 - [ ] Spacing from the scale, type by role, color from semantic tokens.
 - [ ] No palette property in a `transition`; no `transition: all`.
-- [ ] Copy names the object; nothing signals state by color alone.
+- [ ] Copy makes the action and its object clear from context; nothing signals state by color alone.

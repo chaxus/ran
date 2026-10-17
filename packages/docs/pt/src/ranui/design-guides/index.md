@@ -87,13 +87,13 @@ O propósito e a frequência de uso determinam se é preciso movimento. O feedba
 
 ## Estados e textos
 
-Todo estado alcançável faz parte do design: **hover, ativo, foco, desabilitado, carregando, vazio, erro**. Mapeie-os na escada: hover → `bg-hover` / `border-hover`; ativo → `bg-active`; desabilitado → `text-disabled` mais opacidade reduzida; foco → o anel de foco.
+Todo estado alcançável faz parte do design: **hover, ativo, foco, desabilitado, carregando, vazio, erro**. Mapeie-os na escada: hover → `bg-hover` / `border-hover`; ativo → `bg-active`; desabilitado → tokens de desabilitado; reduzir a opacidade apenas quando necessário e ainda legível; foco → o anel de foco.
 
 Nada que não seja interativo pode parecer interativo. O `r-card` só reage ao hover com o atributo `hoverable`; deixe-o de fora nos cartões que não são clicáveis.
 
 O texto também é parte do sistema:
 
-- **Os botões** levam uma ação **e** um objeto. ✅ "Excluir membro" ❌ "Excluir", "OK".
+- **Os botões** nomeiam o resultado. Inclua o objeto quando o contexto não o estabelece: "Excluir membro". Um diálogo com objeto claro pode usar "Excluir"; evite "OK" genérico.
 - **Os erros** dizem o que aconteceu e depois como resolver. ✅ "A compilação falhou: o pacote passou do limite de tamanho. Reduza-o ou aumente o limite." ❌ "A operação falhou, tente de novo."
 - **Confirmações e avisos** enunciam a mudança, não o sucesso. ✅ "Projeto excluído" ❌ "Excluído com sucesso" (o aviso aparecer já diz que deu certo).
 - Deixe o contexto tirar a redundância: um diálogo intitulado "Excluir projeto" não precisa de um botão escrito "Excluir o projeto permanentemente, para sempre".
@@ -124,12 +124,14 @@ Essa checagem cobre a biblioteca, não o seu aplicativo, mas os defeitos que ela
 
 ## Lista antes de publicar interface
 
+Escolha verificações para a superfície afetada e o comportamento alterado; a CI mantém todas as suas verificações.
+
 - [ ] Tarefa principal e ação principal são inconfundíveis.
 - [ ] Funciona no **claro e no escuro**, em larguras **estreitas e amplas**.
 - [ ] Funciona com **mouse e toque**; todo gatilho por hover tem alternativa de toque.
-- [ ] Todos os estados exercitados: hover, ativo, foco, desabilitado, carregando, vazio, erro.
+- [ ] Estados afetados exercitados: hover, ativo, foco, desabilitado, carregando, vazio, erro.
 - [ ] Teclado e foco verificados; o foco aparece em todo lugar.
-- [ ] Casos-limite: textos longos, números grandes, os dois idiomas.
+- [ ] Casos-limite: textos longos, números grandes, idiomas suportados.
 - [ ] Espaços da escala, tipografia por papel, cor de tokens semânticos.
 - [ ] Nenhuma propriedade da paleta numa `transition`; nenhum `transition: all`.
-- [ ] O texto nomeia o objeto; nada sinaliza estado só com cor.
+- [ ] O texto e o contexto esclarecem a ação e o objeto; nada sinaliza estado só com cor.
