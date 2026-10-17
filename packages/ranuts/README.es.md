@@ -8,7 +8,7 @@ ESM · IIFE · TypeScript
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | **Español** | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> En fase alpha: las APIs y los formatos pueden cambiar. Fija una versión exacta y consulta la guía de migración antes de actualizar.
+> Versión preliminar: las APIs y los formatos pueden cambiar. Fija una versión exacta y consulta la guía de migración antes de actualizar.
 
 ## Inicio rápido
 

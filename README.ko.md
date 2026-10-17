@@ -15,7 +15,7 @@ Web Components, DOM 빌더, TypeScript 유틸리티를 한 워크스페이스에
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | **한국어** | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> Alpha 단계입니다. API와 패키지 형식이 변경될 수 있습니다. 정확한 버전을 고정하고 업데이트 전에 마이그레이션 가이드를 확인하세요.
+> 사전 출시 단계입니다. API와 패키지 형식이 변경될 수 있습니다. 정확한 버전을 고정하고 업데이트 전에 마이그레이션 가이드를 확인하세요.
 
 ## 패키지
 
@@ -94,6 +94,8 @@ pnpm clean
 ## 기여
 
 담당 범위와 검증 절차는 [AGENTS.md](AGENTS.md)를 확인하세요. 예제와 문서를 공개 내보내기와 일치시키고 변경에 맞는 검사를 실행하세요.
+
+[릴리스 가이드](docs/RELEASING.md)
 
 ## 라이선스
 

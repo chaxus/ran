@@ -15,7 +15,7 @@ Web Components、DOM ビルダー、TypeScript ユーティリティをまとめ
 
 [English](./README.md) | [中文](./README.zh-CN.md) | **日本語** | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> Alpha 段階です。API とパッケージ形式は変更される場合があります。バージョンを固定し、更新前に移行ガイドを確認してください。
+> プレリリース段階です。API とパッケージ形式は変更される場合があります。バージョンを固定し、更新前に移行ガイドを確認してください。
 
 ## パッケージ
 
@@ -94,6 +94,8 @@ pnpm clean
 ## 貢献
 
 担当範囲と検証手順は [AGENTS.md](AGENTS.md) を確認してください。例とドキュメントを公開 API に合わせ、変更に応じた検査を実行してください。
+
+[リリースガイド](docs/RELEASING.md)
 
 ## ライセンス
 

@@ -8,7 +8,7 @@ ESM · IIFE · TypeScript
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | **فارسی**
 
-> مرحله alpha است؛ API و قالب بسته ممکن است تغییر کند. نسخه دقیق را ثابت کنید و پیش از ارتقا راهنمای مهاجرت را بخوانید.
+> مرحله پیش‌انتشار است؛ API و قالب بسته ممکن است تغییر کند. نسخه دقیق را ثابت کنید و پیش از ارتقا راهنمای مهاجرت را بخوانید.
 
 ## شروع سریع
 

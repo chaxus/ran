@@ -8,15 +8,22 @@ description: 'What changed in ranui — added, changed, fixed and removed, with 
 Generated from `packages/ranui/CHANGELOG.md` by `pnpm -F ranui doc:changelog`, so this page
 and the copy inside the npm tarball cannot disagree.
 
-::: warning ranui is alpha
-Versions are published as `0.x-alpha`, and **breaking changes ship in them**. The design is
-still being improved in preference to preserving an API shape, so pin an exact version and
-read this page before upgrading.
+::: warning ranui is pre-release
+Alpha, beta and RC versions may include breaking changes. Pin an exact version and read this page before upgrading.
 :::
 
 ::: v-pre
 
-## [Unreleased]
+## [0.5.0-rc.0] — 2026-10-17
+
+Release candidate prepared for publication; npm upload is pending.
+
+### Release preparation
+
+- Require Node 24+ across all workspaces and pin pnpm 11.6.0.
+- Coordinate ranuts 0.5.0-rc.0 and @alixex/ranview 0.2.0-rc.0 with this candidate; packed dependencies resolve to these exact versions.
+- Publish ESM modules and retain standalone IIFEs. See the [migration guide](https://ran.chaxus.com/src/ranuts/migration/) for removed alpha APIs and formats.
+- Build with prepack, verify real tarball installation, then preview or publish the same SHA-512-checked archives. See the [release guide](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md).
 
 ### Added
 

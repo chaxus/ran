@@ -32,11 +32,9 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     heading: 'Changelog',
     generatedNote: () =>
       'Generated from `packages/ranui/CHANGELOG.md` by `pnpm -F ranui doc:changelog`, so this page\nand the copy inside the npm tarball cannot disagree.',
-    alphaTitle: 'ranui is alpha',
+    alphaTitle: 'ranui is pre-release',
     alphaBody: [
-      'Versions are published as `0.x-alpha`, and **breaking changes ship in them**. The design is',
-      'still being improved in preference to preserving an API shape, so pin an exact version and',
-      'read this page before upgrading.',
+      'Alpha, beta and RC versions may include breaking changes. Pin an exact version and read this page before upgrading.',
     ],
     notesHeading: 'Engineering notes',
     notesIntro: [
@@ -57,11 +55,8 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
       translated
         ? '由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.zh-CN.md` 生成，与英文版一同维护，\n因此本页与 npm 包内的副本不会出现分歧。'
         : '由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.md` 生成，因此本页与 npm 包内的\n副本不会出现分歧。条目内容直接取自源文件，保持英文。',
-    alphaTitle: 'ranui 处于 alpha 阶段',
-    alphaBody: [
-      '版本以 `0.x-alpha` 发布，**其中会包含破坏性变更**——现阶段优先把设计做对，而不是保住 API 形状。',
-      '请锁定确切版本，并在升级前先读本页。',
-    ],
+    alphaTitle: 'ranui 处于预发布阶段',
+    alphaBody: ['Alpha、Beta 和 RC 版本可能包含破坏性变更。请锁定确切版本，并在升级前阅读本页。'],
     notesHeading: '工程记录',
     notesIntro: ['每一批改动为什么发生的长文记录，与代码放在一起，不在此处摘要。它们是上面这些条目背后的推理过程。'],
     tableHeaders: ['日期', 'ranui', '仓库整体'],
@@ -73,11 +68,9 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     heading: '更新履歴',
     generatedNote: () =>
       '`pnpm -F ranui doc:changelog` が `packages/ranui/CHANGELOG.md` から生成しているため、このページと\nnpm パッケージ内の写しが食い違うことはありません。項目は原文をそのまま載せているので英語です。',
-    alphaTitle: 'ranui は alpha 段階です',
+    alphaTitle: 'ranui はプレリリース段階です',
     alphaBody: [
-      'バージョンは `0.x-alpha` として公開しており、**破壊的変更もその中で入ります**。API の形を保つことより',
-      '設計を良くすることを優先している段階なので、バージョンは正確に固定し、アップグレード前にこのページを',
-      '読んでください。',
+      'Alpha、Beta、RC には破壊的変更が含まれる場合があります。バージョンを固定し、更新前にこのページを確認してください。',
     ],
     notesHeading: '技術メモ',
     notesIntro: [
@@ -97,11 +90,9 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     heading: 'Registro de cambios',
     generatedNote: () =>
       'Generado desde `packages/ranui/CHANGELOG.md` por `pnpm -F ranui doc:changelog`, de modo que esta\npágina y la copia del paquete npm no pueden contradecirse. Las entradas se toman tal cual del\norigen, así que están en inglés.',
-    alphaTitle: 'ranui está en alfa',
+    alphaTitle: 'ranui está en fase de prelanzamiento',
     alphaBody: [
-      'Las versiones se publican como `0.x-alpha`, y **los cambios incompatibles llegan en ellas**. Se',
-      'sigue mejorando el diseño antes que preservar la forma de la API, así que fija una versión',
-      'exacta y lee esta página antes de actualizar.',
+      'Las versiones alpha, beta y RC pueden incluir cambios incompatibles. Fija una versión exacta y lee esta página antes de actualizar.',
     ],
     notesHeading: 'Notas técnicas',
     notesIntro: [
@@ -121,11 +112,9 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     heading: 'Registro de alterações',
     generatedNote: () =>
       'Gerado a partir de `packages/ranui/CHANGELOG.md` por `pnpm -F ranui doc:changelog`, de modo que\nesta página e a cópia dentro do pacote npm não podem divergir. As entradas vêm direto da fonte,\nportanto estão em inglês.',
-    alphaTitle: 'o ranui está em alfa',
+    alphaTitle: 'ranui está em pré-lançamento',
     alphaBody: [
-      'As versões são publicadas como `0.x-alpha`, e **mudanças incompatíveis chegam nelas**. O design',
-      'ainda está sendo melhorado em vez de preservar o formato da API, então fixe uma versão exata e',
-      'leia esta página antes de atualizar.',
+      'Versões alpha, beta e RC podem incluir mudanças incompatíveis. Fixe uma versão exata e leia esta página antes de atualizar.',
     ],
     notesHeading: 'Notas técnicas',
     notesIntro: [
@@ -145,11 +134,9 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     heading: '변경 이력',
     generatedNote: () =>
       '`pnpm -F ranui doc:changelog`가 `packages/ranui/CHANGELOG.md`에서 생성하므로 이 페이지와 npm\n패키지 안의 사본이 어긋날 수 없습니다. 항목은 원문 그대로라서 영어입니다.',
-    alphaTitle: 'ranui는 alpha 단계입니다',
+    alphaTitle: 'ranui는 사전 출시 단계입니다',
     alphaBody: [
-      '버전은 `0.x-alpha`로 배포되며 **호환성을 깨는 변경도 그 안에 들어갑니다**. API 모양을 지키기보다',
-      '설계를 더 낫게 만드는 쪽을 우선하는 단계이니, 정확한 버전을 고정하고 업그레이드 전에 이 페이지를',
-      '읽어 주세요.',
+      'Alpha, Beta, RC 버전에는 호환성을 깨는 변경이 포함될 수 있습니다. 정확한 버전을 고정하고 업데이트 전에 이 페이지를 확인하세요.',
     ],
     notesHeading: '엔지니어링 노트',
     notesIntro: [
@@ -169,11 +156,9 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     heading: 'Änderungsprotokoll',
     generatedNote: () =>
       'Von `pnpm -F ranui doc:changelog` aus `packages/ranui/CHANGELOG.md` erzeugt — diese Seite und\ndie Kopie im npm-Paket können sich also nicht widersprechen. Die Einträge stammen unverändert\naus der Quelle und sind deshalb englisch.',
-    alphaTitle: 'ranui ist Alpha',
+    alphaTitle: 'ranui ist eine Vorabversion',
     alphaBody: [
-      'Versionen erscheinen als `0.x-alpha`, und **Breaking Changes kommen darin vor**. Das Design wird',
-      'weiterhin verbessert, statt eine API-Form zu konservieren — pinne also eine exakte Version und',
-      'lies diese Seite vor einem Upgrade.',
+      'Alpha-, Beta- und RC-Versionen können inkompatible Änderungen enthalten. Fixiere eine genaue Version und lies diese Seite vor Updates.',
     ],
     notesHeading: 'Engineering-Notizen',
     notesIntro: [
@@ -193,11 +178,9 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     heading: 'تغییرات',
     generatedNote: () =>
       '`pnpm -F ranui doc:changelog` این صفحه را از `packages/ranui/CHANGELOG.md` می‌سازد، بنابراین این\nصفحه و نسخهٔ درون بستهٔ npm نمی‌توانند با هم اختلاف داشته باشند. مدخل‌ها مستقیم از منبع برداشته\nمی‌شوند و به همین دلیل انگلیسی‌اند.',
-    alphaTitle: 'ranui در مرحلهٔ alpha است',
+    alphaTitle: 'ranui در مرحله پیش‌انتشار است',
     alphaBody: [
-      'نسخه‌ها با برچسب `0.x-alpha` منتشر می‌شوند و **تغییرات ناسازگار هم در همین‌ها می‌آیند**. در این',
-      'مرحله بهتر شدن طراحی بر حفظ شکل API اولویت دارد؛ پس نسخهٔ دقیق را قفل کنید و پیش از ارتقا این',
-      'صفحه را بخوانید.',
+      'نسخه‌های alpha، beta و RC ممکن است تغییر ناسازگار داشته باشند. نسخه دقیق را ثابت کنید و پیش از ارتقا این صفحه را بخوانید.',
     ],
     notesHeading: 'یادداشت‌های فنی',
     notesIntro: [

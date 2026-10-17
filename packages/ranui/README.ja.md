@@ -8,7 +8,7 @@ ESM · IIFE · TypeScript
 
 [English](./README.md) | [中文](./README.zh-CN.md) | **日本語** | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> Alpha 段階です。API とパッケージ形式は変更される場合があります。バージョンを固定し、更新前に移行ガイドを確認してください。
+> プレリリース段階です。API とパッケージ形式は変更される場合があります。バージョンを固定し、更新前に移行ガイドを確認してください。
 
 ## クイックスタート
 

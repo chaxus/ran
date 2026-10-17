@@ -8,15 +8,22 @@ description: 'ranui에서 무엇이 바뀌었는지 — 추가·변경·수정·
 `pnpm -F ranui doc:changelog`가 `packages/ranui/CHANGELOG.md`에서 생성하므로 이 페이지와 npm
 패키지 안의 사본이 어긋날 수 없습니다. 항목은 원문 그대로라서 영어입니다.
 
-::: warning ranui는 alpha 단계입니다
-버전은 `0.x-alpha`로 배포되며 **호환성을 깨는 변경도 그 안에 들어갑니다**. API 모양을 지키기보다
-설계를 더 낫게 만드는 쪽을 우선하는 단계이니, 정확한 버전을 고정하고 업그레이드 전에 이 페이지를
-읽어 주세요.
+::: warning ranui는 사전 출시 단계입니다
+Alpha, Beta, RC 버전에는 호환성을 깨는 변경이 포함될 수 있습니다. 정확한 버전을 고정하고 업데이트 전에 이 페이지를 확인하세요.
 :::
 
 ::: v-pre
 
-## [Unreleased]
+## [0.5.0-rc.0] — 2026-10-17
+
+Release candidate prepared for publication; npm upload is pending.
+
+### Release preparation
+
+- Require Node 24+ across all workspaces and pin pnpm 11.6.0.
+- Coordinate ranuts 0.5.0-rc.0 and @alixex/ranview 0.2.0-rc.0 with this candidate; packed dependencies resolve to these exact versions.
+- Publish ESM modules and retain standalone IIFEs. See the [migration guide](https://ran.chaxus.com/src/ranuts/migration/) for removed alpha APIs and formats.
+- Build with prepack, verify real tarball installation, then preview or publish the same SHA-512-checked archives. See the [release guide](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md).
 
 ### Added
 
