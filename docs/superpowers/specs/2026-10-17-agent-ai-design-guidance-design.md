@@ -38,7 +38,7 @@ The user requests that the design lessons from the Document AI workspace be inte
 
 ## Acceptance
 
-- Every new token reference resolves; corrected spacing means 24px sections and 32px major boundaries using real steps, with no invented step 5.
+- Every new token reference resolves; corrected spacing means 24px related subsections and 32px major boundaries using real steps, with no invented step 5. Major section rhythm remains the DESIGN §2 32–40px range.
 - A consuming agent can find this guide from repo, installed package and plugin paths, without loading the entire repository.
 - Fresh docs links, formatting, generated docs, design checks and focused unit tests pass. Existing CI remains enabled and is inspected on the PR.
 - Independent spec and quality reviews approve; report exact checks and any external CI limitation honestly.

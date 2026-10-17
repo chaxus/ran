@@ -20,22 +20,26 @@ When `ranui` is installed in a project, its docs ship inside the package:
   source repo via `npm run doc:api`.
 - **`node_modules/ranui/docs/DESIGN.md`** — design system rules (color states,
   spacing, motion, accessibility §7, pre-ship checklist).
+- **`node_modules/ranui/docs/AI_INTERFACES.md`** — application decisions for AI
+  composers, queues, failures, model settings, connectors and artifacts. Read after
+  DESIGN §§11–12; host responsibilities are distinguished from library APIs.
 - **`node_modules/ranui/docs/style-tokens-public.md`** — the CSS variable (theming
   token) catalog.
 
-In the source repo (`packages/ranui`) there is also a deep `CLAUDE.md` (architecture,
-builder internals, LESS conventions, testing) — not shipped in the npm package.
+**`node_modules/ranui/docs/CODING.md`** and **`node_modules/ranui/CLAUDE.md`** also
+ship with the package: engineering rules and the detailed implementation reference
+(architecture, builder, LESS conventions, testing). Source copies live in `packages/ranui`.
 
 ## Import map
 
 Per-component, tree-shakeable side-effect imports register the custom element:
 
 ```ts
-import 'ranui/button';   // then use <r-button>
+import 'ranui/button'; // then use <r-button>
 import 'ranui/modal';
 import 'ranui/select';
 import 'ranui/input';
-import 'ranui/message';  // also exposes an imperative message API
+import 'ranui/message'; // also exposes an imperative message API
 import 'ranui/checkbox';
 ```
 
@@ -133,8 +137,13 @@ import { Div, ButtonBuilder, signal, createEffect } from 'ranui/builder';
 
 const [count, setCount] = signal(0);
 const label = Div().build();
-createEffect(() => { label.textContent = `Count: ${count()}`; }); // re-runs on change
-const btn = ButtonBuilder().text('inc').on('click', () => setCount(count() + 1)).build();
+createEffect(() => {
+  label.textContent = `Count: ${count()}`;
+}); // re-runs on change
+const btn = ButtonBuilder()
+  .text('inc')
+  .on('click', () => setCount(count() + 1))
+  .build();
 document.body.append(label, btn);
 ```
 
