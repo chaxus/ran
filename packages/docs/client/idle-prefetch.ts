@@ -126,7 +126,7 @@ export const mountIdlePrefetch = (): (() => void) => {
     }
   };
   const pause = (): void => {
-    if (inFlight) worker.controller?.postMessage({ type: 'OFFLINE_PAUSE' });
+    worker.controller?.postMessage({ type: 'OFFLINE_PAUSE' });
     cancelRequest?.();
     clearSchedule();
   };

@@ -276,3 +276,12 @@ it.each(['activity', 'hidden', 'offline', 'save-data', 'slow', 'disposed'])(
     }
   },
 );
+
+it.each(['busy', 'ready'])('pauses another window’s batch after this page reports %s', async (state) => {
+  reply = state;
+  mount();
+  await vi.advanceTimersByTimeAsync(2000);
+  const before = requests.filter((type) => type === 'OFFLINE_PAUSE').length;
+  window.dispatchEvent(new Event('pointerdown'));
+  expect(requests.filter((type) => type === 'OFFLINE_PAUSE')).toHaveLength(before + 1);
+});
