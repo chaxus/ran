@@ -68,6 +68,14 @@ jobs:
       - name: Generated docs are fresh and every locale is complete
         run: pnpm run verify:docs
 
+      # Every relative link in the repository's Markdown resolves. Like `check:langs`
+      # above, this gate already existed but ran only in the release workflow, so a
+      # rename could leave a dead link in prose and every PR stayed green until someone
+      # cut a release. A dead link is silent damage: the reader clicks, gets a 404, and
+      # concludes the docs are stale.
+      - name: Every Markdown link resolves
+        run: pnpm run verify:links
+
       # The executable half of docs/DESIGN.md. Prose rules only hold while whoever
       # edits a component has read the paragraph; this ratchets the known violations
       # so no new one lands and no fix silently regresses.
