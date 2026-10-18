@@ -115,7 +115,7 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
     written.push(name);
   }
 
-  writeOut(DIST_DIR, 'offline-manifest.json', JSON.stringify(createOfflineManifest(DIST_DIR)));
+  writeOut(DIST_DIR, 'offline-manifest.json', JSON.stringify(createOfflineManifest(DIST_DIR, content.pages)));
   written.push('offline-manifest.json');
   dropViteManifest(DIST_DIR);
   return { pages: content.pages.length, written };

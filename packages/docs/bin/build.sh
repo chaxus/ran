@@ -75,7 +75,7 @@ echo "llms-full.txt generated: $llms_full"
 target="$dir/sw.js"
 tmpfile=$(mktemp)
 # Precache only the entry's static imports, shared styles and brand icons.
-# Pages, search and lazy components are cached when the reader requests them.
+# Remaining assets and current-language pages/search are prepared later in idle batches.
 node --input-type=module - "$dir/offline-manifest.json" > "$tmpfile" <<'NODE'
 import { readFileSync } from 'node:fs';
 const { shared } = JSON.parse(readFileSync(process.argv[2], 'utf8'));
@@ -93,8 +93,12 @@ rm "$tmpfile"
 
 tmpfile=$(mktemp)
 cat "$SERVICE_WORK_VARABLE" >> "$tmpfile"
+printf 'const OFFLINE_MANIFEST = ' >> "$tmpfile"
+cat "$dir/offline-manifest.json" >> "$tmpfile"
+printf ';\n' >> "$tmpfile"
 cat "$target" >> "$tmpfile"
+cat "$dir/offline-worker.js" >> "$tmpfile"
 mv "$tmpfile" "$target"
-rm "$SERVICE_WORK_VARABLE" "$dir/offline-manifest.json"
+rm "$SERVICE_WORK_VARABLE" "$dir/offline-manifest.json" "$dir/offline-worker.js"
 
 echo "service work file paths have been generate for $target"
