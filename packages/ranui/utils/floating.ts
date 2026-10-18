@@ -1,3 +1,4 @@
+import type { EventManager } from '@/utils/builder';
 import {
   alignCrossAxis,
   computePlacement,
@@ -38,8 +39,9 @@ const TRANSIT: Record<PlacementSide, { enter: string; exit: string }> = {
   right: { enter: 'ran-dropdown-right-in', exit: 'ran-dropdown-right-out' },
 };
 
-// Portaled children keep their logical owner even outside its DOM subtree.
-const panelOwners = new WeakMap<Node, HTMLElement>();
+// A node-owned symbol also works across independently loaded component bundles.
+const PANEL_OWNER = Symbol.for('ranui.floating.panel-owner');
+type OwnedPanel = Node & { [PANEL_OWNER]?: HTMLElement };
 
 /** Everything a positioning pass worked out, handed to the hooks. */
 export interface FloatingPosition {
@@ -153,6 +155,7 @@ const settleAnimations = (panel: HTMLElement, done: () => void): void => {
 export class FloatingController {
   private options: FloatingOptions;
   private repositionBound = false;
+  private outsideBinding = 0;
   /**
    * Whether the panel is meant to be showing.
    *
@@ -194,10 +197,59 @@ export class FloatingController {
       while (node && !visited.has(node)) {
         if (node === this.options.host || node === panel) return true;
         visited.add(node);
-        node = panelOwners.get(node) ?? node.parentNode ?? (node instanceof ShadowRoot ? node.host : null);
+        node = (node as OwnedPanel)[PANEL_OWNER] ?? node.parentNode ?? (node instanceof ShadowRoot ? node.host : null);
       }
       return false;
     });
+  }
+
+  /** Classify outside clicks before targets can stop propagation. */
+  bindOutside(events: Pick<EventManager, 'on'>, close: (event: Event) => void): void {
+    const { host } = this.options;
+    const root = host.getRootNode();
+    const ownerDocument = host.ownerDocument;
+    const binding = ++this.outsideBinding;
+    const classifiedLocally = new WeakSet<Event>();
+    if (root !== ownerDocument) {
+      // Only this root's listener can see nodes hidden by a closed shadow root.
+      events.on(
+        root,
+        'click',
+        (event: Event) => {
+          classifiedLocally.add(event);
+          if (this.opened && !this.containsEvent(event)) close(event);
+        },
+        { capture: true },
+      );
+    }
+    events.on(
+      ownerDocument,
+      'click',
+      (event: Event) => {
+        if (!this.opened) return;
+        const inside = this.containsEvent(event);
+        const generation = this.generation;
+        if (root === ownerDocument) {
+          if (!inside) close(event);
+          return;
+        }
+        // Capture reaches document first. Wait for dispatch to finish: browsers
+        // may run microtasks between listeners during a trusted click. The local
+        // root must classify hidden nodes before the document fallback can close.
+        setTimeout(() => {
+          if (
+            binding === this.outsideBinding &&
+            generation === this.generation &&
+            host.isConnected &&
+            this.opened &&
+            !classifiedLocally.has(event) &&
+            !inside
+          )
+            close(event);
+        }, 0);
+      },
+      { capture: true },
+    );
   }
 
   /**
@@ -221,7 +273,7 @@ export class FloatingController {
     const generation = ++this.generation;
 
     if (open) {
-      panelOwners.set(panel, host);
+      (panel as OwnedPanel)[PANEL_OWNER] = host;
       this.resolvedSide = undefined;
       host.dispatchEvent(new CustomEvent('show'));
       panel.style.setProperty('display', 'block');
@@ -235,7 +287,7 @@ export class FloatingController {
       return;
     }
 
-    panelOwners.delete(panel);
+    delete (panel as OwnedPanel)[PANEL_OWNER];
     this.detachReposition();
     host.dispatchEvent(new CustomEvent('hide'));
     // The exit class is set synchronously, so the wait can begin right away. On
@@ -384,9 +436,10 @@ export class FloatingController {
   /** Drop the listeners. Call from `disconnectedCallback`. */
   destroy = (): void => {
     this.generation++;
+    this.outsideBinding++;
     this.opened = false;
     const panel = this.options.panel();
-    if (panel) panelOwners.delete(panel);
+    if (panel) delete (panel as OwnedPanel)[PANEL_OWNER];
     if (this.repositionFrame && typeof cancelAnimationFrame === 'function') {
       cancelAnimationFrame(this.repositionFrame);
       this.repositionFrame = 0;

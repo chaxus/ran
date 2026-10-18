@@ -902,8 +902,7 @@ export class Select extends RanElement {
   };
 
   clickRemoveSelect = (e: Event): void => {
-    e.stopPropagation();
-    this.setSelectDropdownDisplayNone();
+    if (!this._floating.containsEvent(e)) this.setSelectDropdownDisplayNone();
   };
   connectedCallback(): void {
     this.handlerExternalCss();
@@ -920,8 +919,8 @@ export class Select extends RanElement {
         // blur close without clearing the draft or rebuilding pointer targets.
         clearTimeout(this.removeTimeId);
         this.removeTimeId = undefined;
-      })
-      .on(document, 'click', this.clickRemoveSelect);
+      });
+    this._floating.bindOutside(this._events, this.clickRemoveSelect);
     if (this.trigger.includes('hover') && !isMobile()) {
       this._events.on(this, 'mouseenter', this.selectMouseDown).on(this, 'mouseleave', this.selectBlur);
     }
