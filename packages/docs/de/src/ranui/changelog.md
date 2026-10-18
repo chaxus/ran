@@ -9,10 +9,6 @@ Von `pnpm -F ranui doc:changelog` aus `packages/ranui/CHANGELOG.md` erzeugt — 
 die Kopie im npm-Paket können sich also nicht widersprechen. Die Einträge stammen unverändert
 aus der Quelle und sind deshalb englisch.
 
-::: warning ranui ist eine Vorabversion
-Alpha-, Beta- und RC-Versionen können inkompatible Änderungen enthalten. Fixiere eine genaue Version und lies diese Seite vor Updates.
-:::
-
 ::: v-pre
 
 ## [0.5.0-rc.0] — 2026-10-17

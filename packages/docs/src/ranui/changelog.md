@@ -8,10 +8,6 @@ description: 'What changed in ranui — added, changed, fixed and removed, with 
 Generated from `packages/ranui/CHANGELOG.md` by `pnpm -F ranui doc:changelog`, so this page
 and the copy inside the npm tarball cannot disagree.
 
-::: warning ranui is pre-release
-Alpha, beta and RC versions may include breaking changes. Pin an exact version and read this page before upgrading.
-:::
-
 ::: v-pre
 
 ## [0.5.0-rc.0] — 2026-10-17

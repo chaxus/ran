@@ -8,7 +8,7 @@ import { CHANGELOG_PAGE_COPY } from './changelog-page-copy.ts';
 //
 // The changelog existed only in the repository and in the npm tarball, so a reader on the
 // documentation site had no way to find out what changed — which matters more here than in
-// most libraries, because ranui is alpha and does ship breaking changes. Generating the page
+// most libraries, because pre-release versions can ship breaking changes. Generating the page
 // rather than copying it keeps the site and the tarball from disagreeing about a release.
 
 const ROOT = path.resolve(process.cwd());
@@ -133,6 +133,7 @@ function toBody(changelog: string): string {
 }
 
 async function main(): Promise<void> {
+  const { version } = JSON.parse(await fs.readFile(path.join(ROOT, 'package.json'), 'utf8')) as { version: string };
   const changelog = await fs.readFile(CHANGELOG_FILE, 'utf8');
   const cnChangelog = await fs.readFile(CN_CHANGELOG_FILE, 'utf8').catch(() => '');
   const body = toBody(changelog);
@@ -159,10 +160,7 @@ async function main(): Promise<void> {
         '',
         copy.generatedNote(translated),
         '',
-        `::: warning ${copy.alphaTitle}`,
-        ...copy.alphaBody,
-        ':::',
-        '',
+        ...(version.includes('-') ? [`::: warning ${copy.alphaTitle}`, ...copy.alphaBody, ':::', ''] : []),
         translated ? cnBody : body,
         '',
         `## ${copy.notesHeading}`,

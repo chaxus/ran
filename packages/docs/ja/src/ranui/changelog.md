@@ -8,10 +8,6 @@ description: 'ranui の変更点——追加・変更・修正・削除とその
 `pnpm -F ranui doc:changelog` が `packages/ranui/CHANGELOG.md` から生成しているため、このページと
 npm パッケージ内の写しが食い違うことはありません。項目は原文をそのまま載せているので英語です。
 
-::: warning ranui はプレリリース段階です
-Alpha、Beta、RC には破壊的変更が含まれる場合があります。バージョンを固定し、更新前にこのページを確認してください。
-:::
-
 ::: v-pre
 
 ## [0.5.0-rc.0] — 2026-10-17
