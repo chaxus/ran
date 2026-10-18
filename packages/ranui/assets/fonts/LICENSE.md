@@ -20,3 +20,7 @@ registered once at the document level.
   prime glyphs.
 - **Source:** The Temml distribution (https://github.com/ronkok/Temml).
 - **License:** MIT (inherited from KaTeX's fonts).
+
+The complete upstream documents and byte-level provenance are retained in
+[licenses/NOTICE.md](./licenses/NOTICE.md). The build copies this material to
+`dist/third-party/math-fonts/` and links it from both generated license summaries.
