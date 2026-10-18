@@ -91,6 +91,9 @@ const PAGE_SIZE = 80;
 const DEMO_NOTICE =
   '演示模式：未配置 API key，回答来自内置示例。设置 IM_API_KEY（可选 IM_BASE_URL、IM_MODEL）后重启即可对接真实模型。';
 
+// Provider configuration survives navigation; conversation warnings do not.
+let providerNotice = document.querySelector('main')?.dataset.mode === 'demo' ? DEMO_NOTICE : '';
+
 // Every view registers before the first push; the projection is built once, and the
 // element throws rather than silently missing events a later registration never saw.
 // The rows live in the conversation's shadow tree, where a page stylesheet cannot reach
@@ -181,6 +184,7 @@ function invalidateExchange(): number {
   inFlight = null;
   pendingBranch = null;
   setRunning(false);
+  setNotice(providerNotice);
   return sessionRevision;
 }
 
@@ -632,7 +636,8 @@ function sendRound(step: number): Promise<void> {
           if (revision !== sessionRevision) return;
           // Confirms what the server already stamped into the page, and corrects it if the
           // server was restarted with a key while this tab stayed open.
-          setNotice(server.mode === 'demo' ? DEMO_NOTICE : '');
+          providerNotice = server.mode === 'demo' ? DEMO_NOTICE : '';
+          setNotice(providerNotice);
           contextLimit = server.contextLimit;
           renderMeter();
         },
@@ -1140,7 +1145,7 @@ initTheme();
 
 // The server knows which mode it is in and says so in the markup, so the notice is on screen
 // at first paint — someone should know they are talking to a canned answer before they type.
-if ((document.querySelector('main')?.dataset.mode ?? '') === 'demo') setNotice(DEMO_NOTICE);
+setNotice(providerNotice);
 
 setRunning(false);
 
