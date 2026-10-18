@@ -12,6 +12,8 @@ export const mountIdlePrefetch = (): (() => void) => {
   let disposed = false;
   let ready = false;
   let blocked = false;
+  const updateInterval = 5 * 60 * 1000;
+  let nextUpdate = Date.now() + updateInterval;
   let inFlight = false;
   let suspended = false;
   let lastActivity = Date.now();
@@ -21,7 +23,6 @@ export const mountIdlePrefetch = (): (() => void) => {
   const allowed = (): boolean =>
     !disposed &&
     !suspended &&
-    !blocked &&
     navigator.onLine &&
     document.visibilityState === 'visible' &&
     !connection?.saveData &&
@@ -33,7 +34,8 @@ export const mountIdlePrefetch = (): (() => void) => {
   };
   const schedule = (delay = 1600): void => {
     clearSchedule();
-    if (ready || !allowed()) return;
+    if (!allowed()) return;
+    if (ready || blocked) delay = Math.max(delay, nextUpdate - Date.now());
     timer = window.setTimeout(() => {
       if ('requestIdleCallback' in window) {
         idle = window.requestIdleCallback(() => {
@@ -83,7 +85,7 @@ export const mountIdlePrefetch = (): (() => void) => {
       }
     });
   const run = async (): Promise<void> => {
-    if (inFlight || ready || !allowed()) return;
+    if (inFlight || !allowed()) return;
     const quiet = Date.now() - lastActivity;
     if (quiet < 1600) {
       schedule(1600 - quiet);
@@ -94,12 +96,34 @@ export const mountIdlePrefetch = (): (() => void) => {
       return;
     }
     inFlight = true;
-    const reply = await request();
-    inFlight = false;
-    if (disposed || !reply) return;
-    ready = reply.state === 'ready';
-    blocked = reply.state === 'storage';
-    schedule(reply.state === 'network' ? 30000 : 1600);
+    let delay = 1600;
+    try {
+      if (Date.now() >= nextUpdate) {
+        try {
+          const registration = await worker.getRegistration();
+          if (!allowed() || Date.now() - lastActivity < 1600) return;
+          nextUpdate = Date.now() + updateInterval;
+          await registration?.update();
+        } catch {
+          delay = 30000;
+          nextUpdate = Date.now() + delay;
+          return;
+        }
+      }
+      // A new worker can claim this page while update() is pending. Recheck both
+      // readiness and user activity before granting its next download batch.
+      if (ready || !allowed() || Date.now() - lastActivity < 1600) return;
+      blocked = false;
+      const reply = await request();
+      if (disposed || !reply) return;
+      ready = reply.state === 'ready';
+      blocked = reply.state === 'storage';
+      if (blocked) nextUpdate = Date.now() + updateInterval;
+      delay = reply.state === 'network' ? 30000 : 1600;
+    } finally {
+      inFlight = false;
+      schedule(delay);
+    }
   };
   const pause = (): void => {
     if (inFlight) worker.controller?.postMessage({ type: 'OFFLINE_PAUSE' });
@@ -119,6 +143,7 @@ export const mountIdlePrefetch = (): (() => void) => {
     pause();
     ready = false;
     blocked = false;
+    nextUpdate = Date.now() + updateInterval;
     schedule();
   };
   const pageHidden = (event: PageTransitionEvent): void => {
