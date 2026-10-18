@@ -112,3 +112,17 @@ test.describe('a tool call, end to end', () => {
     expect(replayed).toBe('success');
   });
 });
+
+test('regeneration creates a fresh exchange for tool calls', async ({ page }) => {
+  await freshApp(page);
+  await send(page, '现在几点');
+  await expect(page.locator('#send')).not.toHaveAttribute('disabled');
+  const requested = page.waitForRequest('**/api/im/dialog');
+  await insideShadow(page, '#chat', (root) => {
+    (root.querySelector('.turn-action[data-action="regenerate"]') as HTMLButtonElement).click();
+    return null;
+  });
+  await requested;
+  await expect(page.locator('#send')).not.toHaveAttribute('disabled');
+  expect((await rows(page)).map((row) => row.kind)).toEqual(['turn', 'turn', 'tool', 'turn']);
+});

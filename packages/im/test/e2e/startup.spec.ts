@@ -176,3 +176,39 @@ for (const fail of [false, true]) {
     expect((await rows(page)).map((row) => row.kind)).toEqual(['turn', 'turn', 'tool', 'turn']);
   });
 }
+
+for (const order of ['send-then-new', 'new-then-send'] as const) {
+  test(`early navigation owns pending initialization: ${order}`, async ({ page }) => {
+    await page.route('**/api/im/dialog', (route) =>
+      route.fulfill({
+        contentType: 'text/event-stream',
+        body: 'data: {"choices":[{"index":0,"delta":{"content":"owned answer"}}]}\n\ndata: [DONE]\n\n',
+      }),
+    );
+    const requests: unknown[] = [];
+    page.on('request', (request) => {
+      if (request.url().endsWith('/api/im/dialog') && request.method() === 'POST')
+        requests.push(request.postDataJSON());
+    });
+    await page.evaluate((order) => {
+      const submit = () => {
+        (document.querySelector('#question') as HTMLElement & { value: string }).value = 'early owned prompt';
+        (document.querySelector('#composer') as HTMLFormElement).requestSubmit();
+      };
+      if (order === 'send-then-new') submit();
+      (document.querySelector('#new-session') as HTMLElement).click();
+      if (order === 'new-then-send') submit();
+      (window as unknown as { releaseSessionStore(): void }).releaseSessionStore();
+    }, order);
+    await expect(page.locator('#send')).not.toHaveAttribute('disabled');
+    if (order === 'send-then-new') {
+      await send(page, 'current owned prompt');
+      expect(JSON.stringify(requests)).not.toContain('early owned prompt');
+      expect((await rows(page))[0].text).toContain('current owned prompt');
+    } else {
+      await expect.poll(async () => (await rows(page)).length).toBeGreaterThanOrEqual(2);
+      expect((await rows(page))[0].text).toContain('early owned prompt');
+      expect(requests).toHaveLength(1);
+    }
+  });
+}

@@ -106,6 +106,10 @@ let current: Session;
 let inFlight: DialogStream | null = null;
 // Own submission before storage, file reads or persistence can yield.
 let submitting = false;
+// Async work belongs to the navigation/exchange intent that started it.
+let sessionRevision = 0;
+let sessionNavigation: Promise<void> = Promise.resolve();
+let openingSession: string | undefined;
 /**
  * Cancels the exchange in flight — the request *and* whatever its tools are waiting on.
  *
@@ -167,6 +171,19 @@ function setRunning(running: boolean): void {
   elapsedTimer = setInterval(tick, 100);
 }
 
+/** Revoke old preparation, streams and tool continuations before changing context. */
+function invalidateExchange(): number {
+  sessionRevision += 1;
+  openingSession = undefined;
+  submitting = false;
+  cancelExchange?.abort();
+  inFlight?.close();
+  inFlight = null;
+  pendingBranch = null;
+  setRunning(false);
+  return sessionRevision;
+}
+
 /**
  * Shows the one-line notice above the conversation.
  *
@@ -193,6 +210,7 @@ const MAX_STEPS = 6;
  */
 async function ask(text: string): Promise<void> {
   if (submitting || inFlight !== null) return;
+  const revision = sessionRevision;
   submitting = true;
   send.disabled = true;
   let appended = false;
@@ -201,7 +219,10 @@ async function ask(text: string): Promise<void> {
     // Elements upgrade before IndexedDB opens. Preserve early input until the
     // stored session has been restored rather than reading uninitialized state.
     await sessionReady;
+    await sessionNavigation;
+    if (revision !== sessionRevision) return;
     const content = await buildContent(text, staged);
+    if (revision !== sessionRevision) return;
     chat.push({
       type: 'turn/start',
       id: nodeId(current.messages.length),
@@ -220,19 +241,24 @@ async function ask(text: string): Promise<void> {
     // Keep files added for the next draft while initialization or file reads wait.
     for (const attachment of staged) attachments.detach(attachment.id);
     await persist();
+    if (revision !== sessionRevision) return;
     await renderSessions();
+    if (revision !== sessionRevision) return;
 
     setRunning(true);
     cancelExchange = new AbortController();
     await runStep(0);
   } catch {
+    if (revision !== sessionRevision) return;
     // File/storage preparation can fail before there is a transcript row. Keep
     // its input available for retry without overwriting a newer draft.
     if (!appended && question.value === '') question.value = text;
     message?.error('发送失败，请重试。');
   } finally {
-    submitting = false;
-    setRunning(inFlight !== null);
+    if (revision === sessionRevision) {
+      submitting = false;
+      setRunning(inFlight !== null);
+    }
   }
 }
 
@@ -293,13 +319,14 @@ function cutAt(index: number): StoredMessage[] {
 async function editAt(index: number): Promise<void> {
   const message = current.messages[index];
   if (message === undefined || message.role !== 'user') return;
-  inFlight?.close();
+  const revision = invalidateExchange();
   question.value = textOf(message.content);
   cutAt(index);
   // Rebuilt rather than trimmed: the rows below the cut are gone, but the ones above may
   // have gained or lost a branch switcher, and the history is the only thing that knows.
   renderSession(current);
   await persist();
+  if (revision !== sessionRevision) return;
   renderMeter();
   // The cut shrank the transcript, and the follower reads that as the reader having
   // scrolled up. It was not the reader — they asked for this, and what they want to see is
@@ -316,7 +343,7 @@ async function editAt(index: number): Promise<void> {
 async function regenerateAt(index: number): Promise<void> {
   const from = replyStart(current.messages, index);
   if (from >= current.messages.length) return;
-  inFlight?.close();
+  const revision = invalidateExchange();
   const previous = cutAt(from);
 
   const existing = (current.branches ?? []).find((branch) => branch.at === from);
@@ -328,11 +355,21 @@ async function regenerateAt(index: number): Promise<void> {
   }
   pendingBranch = from;
 
-  renderSession(current);
-  await persist();
-  chat.scrollToBottom();
+  submitting = true;
   setRunning(true);
-  await runStep(0);
+  cancelExchange = new AbortController();
+  try {
+    renderSession(current);
+    await persist();
+    if (revision !== sessionRevision) return;
+    chat.scrollToBottom();
+    await runStep(0);
+  } finally {
+    if (revision === sessionRevision) {
+      submitting = false;
+      setRunning(inFlight !== null);
+    }
+  }
 }
 
 /**
@@ -342,6 +379,7 @@ async function regenerateAt(index: number): Promise<void> {
  * tool calls is one alternative, not three.
  */
 async function closeBranch(): Promise<void> {
+  const revision = sessionRevision;
   const at = pendingBranch;
   pendingBranch = null;
   if (at === null) return;
@@ -351,6 +389,7 @@ async function closeBranch(): Promise<void> {
   branch.active = branch.tails.length - 1;
   renderSession(current);
   await persist();
+  if (revision !== sessionRevision) return;
   renderMeter();
 }
 
@@ -366,7 +405,7 @@ async function switchBranch(index: number, delta: number): Promise<void> {
   const next = branch.active + delta;
   const tail = branch.tails[next];
   if (tail === undefined) return;
-  inFlight?.close();
+  const revision = invalidateExchange();
   // What is on screen is written back first: it is the alternative being left, and it may
   // have grown since it was recorded.
   branch.tails[branch.active] = current.messages.slice(branch.at);
@@ -379,6 +418,7 @@ async function switchBranch(index: number, delta: number): Promise<void> {
   renderSession(current);
   chat.restoreAnchor();
   await persist();
+  if (revision !== sessionRevision) return;
   renderMeter();
 }
 
@@ -447,10 +487,11 @@ function transcriptOf(messages: readonly StoredMessage[]): string {
  *   history alone, which is worse than compacting and far better than losing it.
  */
 function summarize(carried: string | null, messages: readonly StoredMessage[]): Promise<string | null> {
+  const revision = sessionRevision;
   return new Promise((resolve) => {
     // No tools: this call produces prose, and offering it a clock or a fetcher only invites
     // a round trip that cannot help.
-    streamDialog(
+    inFlight = streamDialog(
       '/api/im/dialog',
       {
         messages: [
@@ -463,6 +504,11 @@ function summarize(carried: string | null, messages: readonly StoredMessage[]): 
       {
         onUpdate: () => {},
         onEnd: (snapshot, error) => {
+          if (revision !== sessionRevision) {
+            resolve(null);
+            return;
+          }
+          inFlight = null;
           if (snapshot.usage !== undefined) current.usage = addUsage(current.usage, snapshot.usage);
           const text = snapshot.blocks.reduce((out, b) => (b.type === 'text' ? out + b.text : out), '');
           resolve(error !== undefined || text.trim() === '' ? null : text);
@@ -498,6 +544,7 @@ function renderMeter(): void {
 }
 
 async function compactIfNeeded(): Promise<void> {
+  const revision = sessionRevision;
   const active = activeCompaction(current.compactions ?? []);
   const from = active?.at ?? 0;
   // Budgeted over the tail alone, with the standing summary charged against the limit
@@ -525,6 +572,7 @@ async function compactIfNeeded(): Promise<void> {
   // The standing summary goes in with them: a second compaction that summarised only the
   // new messages would drop everything the first one was holding.
   const summary = await summarize(active?.summary ?? null, folded);
+  if (revision !== sessionRevision) return;
   if (summary === null) {
     setNotice('压缩摘要失败，历史保持原样。如果接下来请求被拒绝，请新建对话。');
     return;
@@ -537,11 +585,14 @@ async function compactIfNeeded(): Promise<void> {
   // rebuilding it from the stored conversation is the one way the two cannot drift apart.
   renderSession(current);
   await persist();
+  if (revision !== sessionRevision) return;
   renderMeter();
 }
 
 async function runStep(step: number): Promise<void> {
+  const revision = sessionRevision;
   await compactIfNeeded();
+  if (revision !== sessionRevision || cancelExchange?.signal.aborted) return;
   return sendRound(step);
 }
 
@@ -552,6 +603,7 @@ async function runStep(step: number): Promise<void> {
  * @returns Once this round has ended, whether by an answer, a failure, or tools.
  */
 function sendRound(step: number): Promise<void> {
+  const revision = sessionRevision;
   // Where this round's assistant message will land. Each round gets its own row, which is
   // what makes a multi-step exchange readable rather than one row that keeps being rewritten.
   const at = current.messages.length;
@@ -567,6 +619,7 @@ function sendRound(step: number): Promise<void> {
       { messages: requestMessages(current.messages, current.compactions ?? []), tools: toolsForRequest() },
       {
         onOpen: (server) => {
+          if (revision !== sessionRevision) return;
           // Confirms what the server already stamped into the page, and corrects it if the
           // server was restarted with a key while this tab stayed open.
           setNotice(server.mode === 'demo' ? DEMO_NOTICE : '');
@@ -574,6 +627,7 @@ function sendRound(step: number): Promise<void> {
           renderMeter();
         },
         onUpdate: (snapshot) => {
+          if (revision !== sessionRevision) return;
           const next = eventsFromSnapshot(round, snapshot, emitted, Date.now());
           emitted = next.emitted;
           for (const event of next.events) {
@@ -582,6 +636,10 @@ function sendRound(step: number): Promise<void> {
           }
         },
         onEnd: (snapshot, error) => {
+          if (revision !== sessionRevision) {
+            resolve();
+            return;
+          }
           inFlight = null;
           // Counted even on a failure: a response that died halfway was still billed for
           // what it produced. The meter is redrawn after the message is stored, not here —
@@ -609,8 +667,12 @@ function sendRound(step: number): Promise<void> {
             renderMeter();
             setRunning(false);
             void persist()
-              .then(renderSessions)
-              .then(closeBranch)
+              .then(() => {
+                if (revision === sessionRevision) return renderSessions();
+              })
+              .then(() => {
+                if (revision === sessionRevision) return closeBranch();
+              })
               .then(() => resolve());
             return;
           }
@@ -641,6 +703,7 @@ async function continueWithTools(
   text: string,
   calls: readonly { id: string; name: string; arguments: string }[],
 ): Promise<void> {
+  const revision = sessionRevision;
   const wire: WireToolCall[] = calls.map((call, ordinal) => ({
     // A provider that streamed no id — some do for a single call — still needs one to
     // correlate the result, and it only has to be unique within this exchange.
@@ -654,6 +717,8 @@ async function continueWithTools(
   // would make two independent lookups cost the sum of their latencies for no reason.
   const signal = cancelExchange?.signal ?? new AbortController().signal;
   const outcomes = await Promise.all(calls.map((call) => runTool(call.name, parseToolArgs(call.arguments), signal)));
+
+  if (revision !== sessionRevision) return;
 
   // Stopped while the tools ran. Their results belong to an exchange the reader ended, and
   // feeding them back would start another round they did not ask for.
@@ -674,7 +739,9 @@ async function continueWithTools(
   });
 
   await persist();
+  if (revision !== sessionRevision) return;
   await renderSessions();
+  if (revision !== sessionRevision) return;
   renderMeter();
 
   if (step + 1 >= MAX_STEPS) {
@@ -814,7 +881,9 @@ function textOf(content: MessageContent): string {
 
 /** Redraws the conversation list. */
 async function renderSessions(): Promise<void> {
+  const revision = sessionRevision;
   const all = await store.list();
+  if (revision !== sessionRevision) return;
   sessionList.replaceChildren();
 
   for (const session of all) {
@@ -843,15 +912,21 @@ async function renderSessions(): Promise<void> {
     remove.setAttribute('aria-label', `删除对话：${session.title}`);
     remove.addEventListener('click', (event) => {
       event.stopPropagation();
-      void deleteSession(session.id);
+      if (session.id === current.id || session.id === openingSession) sessionNavigation = deleteSession(session.id);
+      else void deleteSession(session.id);
     });
 
     row.append(title, time, remove);
-    row.addEventListener('click', () => void openSession(session.id));
+    const open = (): void => {
+      // Clicking the still-visible current row must not replace a pending delete
+      // barrier with a resolved no-op.
+      if (session.id !== current.id || openingSession !== undefined) sessionNavigation = openSession(session.id);
+    };
+    row.addEventListener('click', open);
     row.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
-      void openSession(session.id);
+      open();
     });
     sessionList.appendChild(row);
   }
@@ -863,29 +938,29 @@ async function renderSessions(): Promise<void> {
  * @param id The conversation to open.
  */
 async function openSession(id: string): Promise<void> {
-  if (id === current.id) return;
-  // An answer still arriving belongs to the conversation being left, and following it into
-  // another one would write it into the wrong history.
-  inFlight?.close();
+  if (id === current.id) {
+    if (openingSession !== undefined) invalidateExchange();
+    return;
+  }
+  const revision = invalidateExchange();
+  openingSession = id;
   const session = await store.get(id);
-  if (session === null) return;
+  if (revision === sessionRevision) openingSession = undefined;
+  if (session === null || revision !== sessionRevision) return;
   current = session;
   store.setCurrentId(session.id);
   shown = PAGE_SIZE;
   renderSession(session);
   await renderSessions();
-  renderMeter();
+  if (revision === sessionRevision) renderMeter();
 }
 
-/**
- * Deletes a conversation, opening a blank one when it was the open one.
- *
- * @param id The conversation to delete.
- */
+/** Deletes a record, revoking pending work before deleting the active session. */
 async function deleteSession(id: string): Promise<void> {
+  const revision = id === current.id || id === openingSession ? invalidateExchange() : sessionRevision;
   await store.remove(id);
+  if (revision !== sessionRevision) return;
   if (id === current.id) {
-    inFlight?.close();
     current = blankSession();
     store.setCurrentId(current.id);
     shown = PAGE_SIZE;
@@ -895,15 +970,18 @@ async function deleteSession(id: string): Promise<void> {
   await renderSessions();
 }
 
-newSession.addEventListener('click', async () => {
-  await sessionReady;
-  inFlight?.close();
-  current = blankSession();
-  store.setCurrentId(current.id);
-  shown = PAGE_SIZE;
-  renderSession(current);
-  renderMeter();
-  void renderSessions();
+newSession.addEventListener('click', () => {
+  const revision = invalidateExchange();
+  sessionNavigation = (async () => {
+    await sessionReady;
+    if (revision !== sessionRevision) return;
+    current = blankSession();
+    store.setCurrentId(current.id);
+    shown = PAGE_SIZE;
+    renderSession(current);
+    renderMeter();
+    await renderSessions();
+  })();
 });
 
 // ── Attachments ────────────────────────────────────────────────────────────
