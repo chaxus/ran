@@ -400,10 +400,8 @@ export class Popover extends RanElement {
       this._events.on(this, 'mouseenter', this.hoverPopover);
       this._events.on(this, 'mouseleave', this.blur);
     }
-    this._events
-      .on(this, 'click', this.clickPopover)
-      .on(this, 'keydown', this.keydownPopover)
-      .on(document, 'click', this.clickRemovePopover, { capture: true });
+    this._events.on(this, 'click', this.clickPopover).on(this, 'keydown', this.keydownPopover);
+    this._floating.bindOutside(this._events, this.clickRemovePopover);
   };
   hoverRemovePopover = (e: Event): void => {
     if (!this._floating.containsEvent(e)) this.setDropdownDisplayNone();

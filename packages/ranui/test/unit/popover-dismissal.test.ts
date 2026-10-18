@@ -71,4 +71,37 @@ describe('popover outside dismissal', () => {
     expect(nested.open).toBe(true);
     expect(el.open).toBe(true);
   });
+
+  it('keeps a closed-shadow local popup open when its content is clicked', async () => {
+    const shell = document.createElement('div');
+    const root = shell.attachShadow({ mode: 'closed' });
+    const container = document.createElement('div');
+    container.id = 'local-popup';
+    const el = document.createElement('r-popover') as Popover;
+    el.trigger = 'click';
+    el.getPopupContainerId = 'local-popup';
+    el.innerHTML = '<button>Open</button><r-content><button>Panel action</button></r-content>';
+    root.append(container, el);
+    document.body.append(shell);
+    el.show();
+    el.popoverContent!.querySelector('button')!.click();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(el.open).toBe(true);
+    const outside = document.createElement('button');
+    outside.addEventListener('click', (event) => event.stopPropagation());
+    root.append(outside);
+    outside.click();
+    await vi.waitFor(() => expect(el.open).toBe(false));
+  });
+
+  it('closes a sibling Select when a popover trigger is clicked', async () => {
+    const select = document.createElement('r-select') as Select;
+    select.innerHTML = '<r-option value="one">One</r-option>';
+    document.body.append(select);
+    const el = popover();
+    select.show();
+    el.querySelector('button')!.click();
+    await vi.waitFor(() => expect(select.open).toBe(false));
+    expect(el.open).toBe(true);
+  });
 });
