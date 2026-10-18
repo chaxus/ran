@@ -1,7 +1,7 @@
 {
-  "image": "mcr.microsoft.com/playwright@sha256:941cc91e5022880ac1d14ae90b476b624deb6399dbbc28d612d5d5bd7928fcbd",
+  "image": "mcr.microsoft.com/playwright@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf",
   "platform": "linux/arm64",
-  "playwright": "1.62.1",
-  "chromium": "151.0.7922.34",
-  "node": "v24.18.1"
+  "playwright": "1.64.1",
+  "chromium": "156.0.8078.4",
+  "node": "v24.21.0"
 }
