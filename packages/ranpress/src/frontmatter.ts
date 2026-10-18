@@ -96,7 +96,11 @@ export const parseFrontmatter = (raw: string, file: string): ParsedFile => {
   // Strip a UTF-8 BOM: it would make the first line `﻿---`, which matches nothing,
   // and the frontmatter would be silently rendered into the page as prose.
   const text = raw.charCodeAt(0) === 0xfeff ? raw.slice(1) : raw;
-  const lines = text.split('\n');
+  // Split on \r?\n, not \n. A Windows checkout (core.autocrlf) turns every line into
+  // "...\r"; the delimiter regex and every "key: value" line would then carry a trailing
+  // \r, match nothing, and the whole block would be read as an empty frontmatter — which
+  // surfaces much later as "missing required title" on the first file read.
+  const lines = text.split(/\r?\n/);
   if (!DELIMITER.test(lines[0] ?? '')) return { data: {}, content: text };
 
   const end = lines.findIndex((line, i) => i > 0 && DELIMITER.test(line));

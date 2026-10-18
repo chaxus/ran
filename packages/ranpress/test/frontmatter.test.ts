@@ -40,6 +40,15 @@ describe('parseFrontmatter', () => {
     expect(parse('﻿---\ntitle: x\n---\nbody').data.title).toBe('x');
   });
 
+  it('reads frontmatter from a CRLF working tree', () => {
+    // Windows checkouts (core.autocrlf) rewrite every line ending. Before this, the
+    // delimiter carried a trailing \r, matched nothing, and the block was silently
+    // treated as body — the site build then failed on "missing required title".
+    const { data, content } = parse('---\r\ntitle: x\r\ntags: [a, b]\r\n---\r\nbody');
+    expect(data).toEqual({ title: 'x', tags: ['a', 'b'] });
+    expect(content).toBe('body');
+  });
+
   it.each([
     ['an unterminated block', '---\ntitle: x\n'],
     ['an indented key', '---\n  title: x\n---\n'],
