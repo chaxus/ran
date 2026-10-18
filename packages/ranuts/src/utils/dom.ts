@@ -157,7 +157,6 @@ export const setFontSize2html = (designWidth: number = 375): void => {
   window.addEventListener(
     'orientationchange',
     function () {
-      console.log('device orientation changed');
       setFontSize();
     },
     false,
