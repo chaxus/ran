@@ -249,6 +249,9 @@ grants small batches only after interaction settles on a visible, online page wi
 or slow-connection signal. `public/offline-worker.js` prepares the current language's documents,
 search index and deferred local assets, serially and at most three new files per grant. It persists
 completed URLs for resumption; interaction and foreground requests interrupt background work.
+After completion the same idle gates permit a native worker update check about every five minutes;
+controller changes resume the new deploy's plan without re-downloading unchanged hashed assets.
+Failed checks back off; storage exhaustion uses a long cooldown rather than stopping permanently.
 Installation still uses only the small static precache, not the full language plan.
 
 ---
