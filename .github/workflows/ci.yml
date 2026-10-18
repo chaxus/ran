@@ -42,6 +42,10 @@ jobs:
     if: github.repository == 'chaxus/ran'
     runs-on: ubuntu-latest
     name: "Lint & Type-check"
+    # Every other job in this repository is bounded; this one was not, so a step that
+    # hung would hold a runner for the default 360 minutes. The job normally finishes
+    # in a few minutes, so 20 is generous rather than tight.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
 
