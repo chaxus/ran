@@ -80,5 +80,3 @@ signature and description, generated from source so it cannot drift.
 
 Both packages ship `CLAUDE.md` inside the npm tarball: orientation for coding agents, readable
 straight from `node_modules` with no network access.
-
-[Alpha migration](/src/ranuts/migration/)

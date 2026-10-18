@@ -76,5 +76,3 @@ Esto es una selección. La [referencia de la API](/es/src/ranuts/api) tiene **to
 | Construir interfaz encima                                 | [ranui](/es/src/ranui/)                                                         |
 
 Los dos paquetes incluyen un `CLAUDE.md` dentro del tarball de npm: orientación para agentes de código, legible directamente desde `node_modules` y sin acceso a la red.
-
-[Migración alpha](/es/src/ranuts/migration/)

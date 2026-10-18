@@ -8,8 +8,6 @@ ESM · IIFE · TypeScript
 
 [English](./README.md) | [中文](./README.zh-CN.md) | **日本語** | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> プレリリース段階です。API とパッケージ形式は変更される場合があります。バージョンを固定し、更新前に移行ガイドを確認してください。
-
 ## クイックスタート
 
 ```sh
@@ -54,7 +52,6 @@ console.log(rgbToHex(1, 2, 3)); // #010203
 - [ranuts](https://ran.chaxus.com/ja/src/ranuts/)
 - [API](./docs/API.md)
 - [メンテナーと Agent 向け資料](./CLAUDE.md)
-- [移行ガイド](https://ran.chaxus.com/ja/src/ranuts/migration/)
 
 ## 貢献
 

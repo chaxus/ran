@@ -1,29 +1,22 @@
-# ran
-
 <p align="center">
-  <a href="https://ran.chaxus.com/">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./packages/docs/public/icon-dark.png">
-      <img width="120" src="./packages/docs/public/icon.png" alt="ran">
-    </picture>
-  </a>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./packages/docs/public/icon-dark.png">
+    <img width="72" src="./packages/docs/public/icon.png" alt="ran">
+  </picture>
 </p>
 
-Web Components, construtores DOM e utilitários TypeScript no mesmo workspace.
-
-[![CI](https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml)](https://github.com/chaxus/ran/actions/workflows/ci.yml) · [MIT](./LICENSE)
-
-[English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | **Português** | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
-
-> Pré-lançamento: APIs e formatos podem mudar. Fixe uma versão exata e leia o guia de migração antes de atualizar.
+<h1 align="center">ran</h1>
+<p align="center">Web Components, construtores DOM e utilitários TypeScript.</p>
+<p align="center"><a href="https://ran.chaxus.com/pt/">Documentação</a> · <a href="https://github.com/chaxus/ran/actions/workflows/ci.yml">CI</a></p>
+<p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">中文</a> · <a href="./README.ja.md">日本語</a> · <a href="./README.es.md">Español</a> · <b>Português</b> · <a href="./README.ko.md">한국어</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.fa.md">فارسی</a></p>
 
 ## Pacotes
 
-| Pacote                                        | Uso                                                                                         |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| [ranui](packages/ranui/README.pt.md)          | Web Components independentes de framework com Shadow DOM, tokens de tema e ferramentas SSR. |
-| [ranuts](packages/ranuts/README.pt.md)        | Utilitários TypeScript para APIs do navegador, dados, streams e renderização 2D.            |
-| [@alixex/ranview](packages/ranview/README.md) | Construtores DOM, sinais e snapshots HTML sem a biblioteca de componentes.                  |
+| Pacote                                          | Uso                                                  |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| [ranui](https://ran.chaxus.com/pt/src/ranui/)   | Componentes de UI independentes de framework.        |
+| [ranuts](https://ran.chaxus.com/pt/src/ranuts/) | Utilitários para navegador e processamento de dados. |
+| [@alixex/ranview](packages/ranview/README.md)   | Construtores DOM e sinais reativos.                  |
 
 ## Início rápido
 
@@ -36,67 +29,19 @@ import 'ranui/button';
 import 'ranui/style';
 ```
 
-Coloque o elemento personalizado no HTML:
-
 ```html
 <r-button type="primary">Hello</r-button>
 ```
 
-## Documentação
+## Desenvolvimento
 
-- [ranui](https://ran.chaxus.com/pt/src/ranui/)
-- [ranuts](https://ran.chaxus.com/pt/src/ranuts/)
-- [@alixex/ranview](packages/ranview/README.md)
-- [Guia de migração](https://ran.chaxus.com/pt/src/ranuts/migration/)
-
-## Desenvolvimento do repositório
-
-Use Node 24+ e pnpm. Execute na raiz do repositório:
+Node 24+ · pnpm 11.6.0
 
 ```sh
-git clone https://github.com/chaxus/ran.git
-cd ran
 pnpm install --frozen-lockfile
 pnpm build
-pnpm --filter ranui dev
-```
-
-Outros comandos de desenvolvimento:
-
-```sh
-pnpm --filter docs dev
+pnpm -F docs dev
 pnpm test
-pnpm lint
-pnpm verify:docs
-pnpm clean
 ```
 
-`pnpm clean` remove arquivos gerados e preserva o código, as dependências instaladas e o arquivo de lock.
-
-## Outros projetos e material de estudo
-
-Ferramentas de documentação: [docs](packages/docs), [ranpress](packages/ranpress) e [site](packages/site). [im](packages/im) é um aplicativo de chat experimental.
-
-Exemplos nativos: [C/C++](packages/cpro), [processamento de imagens](packages/image-process) e [Rust](packages/rust). Material preservado: [Shader](docs/learning/visual/README.md) e [Koa/Nginx](docs/learning/debug/README.md).
-
-O estado do workspace e as verificações CI estão em [packages/manifest.json](packages/manifest.json).
-
-## AI / Claude Code
-
-[Referência para mantenedores e agentes](packages/ranui/CLAUDE.md) · [ranuts](packages/ranuts/CLAUDE.md)
-
-```text
-/plugin marketplace add chaxus/ran
-/plugin install ranui@ran
-/plugin install ranuts@ran
-```
-
-## Contribuir
-
-Consulte [AGENTS.md](AGENTS.md) para responsabilidades e verificações. Mantenha exemplos alinhados às exportações públicas e execute as verificações do seu ajuste.
-
-[Guia de publicação](docs/RELEASING.md)
-
-## Licença
-
-[MIT](./LICENSE)
+[Contribuir](./AGENTS.md) · [MIT](./LICENSE)

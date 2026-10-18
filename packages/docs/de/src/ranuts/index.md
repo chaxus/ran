@@ -76,5 +76,3 @@ Das ist eine Auswahl. Die [API-Referenz](/de/src/ranuts/api) führt **jeden** Ex
 | eine Oberfläche darauf bauen willst                                 | [ranui](/de/src/ranui/)                                                         |
 
 Beide Pakete liefern im npm-Tarball ein `CLAUDE.md` mit: eine Orientierung für Coding-Agenten, direkt aus `node_modules` lesbar, ohne Netzzugang.
-
-[Alpha-Migration](/de/src/ranuts/migration/)

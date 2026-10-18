@@ -82,5 +82,3 @@ import { debounce } from 'ranuts/utils';
 
 两个包都会把 `CLAUDE.md` 打进 npm 包里，那是给编码智能体看的导览文件，可以直接从 `node_modules` 读，
 不需要联网。
-
-[Alpha 迁移指南](/cn/src/ranuts/migration/)

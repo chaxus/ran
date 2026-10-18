@@ -76,5 +76,3 @@ import { debounce } from 'ranuts/utils';
 | 그 위에 UI 만들기                                | [ranui](/ko/src/ranui/)                                                         |
 
 두 패키지 모두 npm 타르볼 안에 `CLAUDE.md`를 함께 싣습니다. 코딩 에이전트를 위한 길잡이이며, 네트워크 없이 `node_modules`에서 바로 읽을 수 있습니다.
-
-[Alpha 마이그레이션](/ko/src/ranuts/migration/)

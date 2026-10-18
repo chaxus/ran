@@ -50,7 +50,7 @@ Release candidate prepared for publication; npm upload is pending.
 
 - Require Node 24+ across all workspaces and pin pnpm 11.6.0.
 - Coordinate ranuts 0.5.0-rc.0 and @alixex/ranview 0.2.0-rc.0 with this candidate; packed dependencies resolve to these exact versions.
-- Publish ESM modules and retain standalone IIFEs. See the [migration guide](https://ran.chaxus.com/src/ranuts/migration/) for removed alpha APIs and formats.
+- Publish ESM modules and retain standalone IIFEs.
 - Build with prepack, verify real tarball installation, then preview or publish the same SHA-512-checked archives. See the [release guide](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md).
 
 ### Added

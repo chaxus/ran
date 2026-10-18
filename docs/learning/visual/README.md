@@ -5,7 +5,7 @@ the retired standalone `visual` workspace. This directory has no build or runtim
 
 The maintained engine is [`ranuts/visual`](../../../packages/docs/src/ranuts/visual/index.md).
 The old standalone package is not a drop-in alias: chart stubs and internal geometry exports
-are not part of that public API. See the [alpha migration guide](../../../packages/docs/src/ranuts/migration/index.md).
+are not part of that public API.
 
 ## Notes
 

@@ -76,5 +76,3 @@ import { debounce } from 'ranuts/utils';
 | その上に UI を作る                               | [ranui](/ja/src/ranui/)                                                         |
 
 どちらのパッケージも npm の tarball の中に `CLAUDE.md` を同梱しています。コーディングエージェント向けの案内で、ネットワークなしに `node_modules` からそのまま読めます。
-
-[Alpha 移行ガイド](/ja/src/ranuts/migration/)

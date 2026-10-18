@@ -34,7 +34,7 @@ Alpha、Beta 和 RC 版本可能包含破坏性变更。请锁定确切版本，
 
 - 所有工作区统一要求 Node 24+，固定 pnpm 11.6.0。
 - 联动 ranuts 0.5.0-rc.0 和 @alixex/ranview 0.2.0-rc.0，打包后的内部依赖指向这些确切版本。
-- 仅发布 ESM 模块，保留独立 IIFE。已移除的 alpha API 和模块格式见[迁移指南](https://ran.chaxus.com/cn/src/ranuts/migration/)。
+- 仅发布 ESM 模块，保留独立 IIFE。
 - 使用 prepack 构建并验证 tarball 的真实安装，随后对同一批 SHA-512 校验产物预演或发布。见[发布指南](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md)。
 
 ### Added

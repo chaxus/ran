@@ -8,8 +8,6 @@ ESM · IIFE · TypeScript
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | **한국어** | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> 사전 출시 단계입니다. API와 패키지 형식이 변경될 수 있습니다. 정확한 버전을 고정하고 업데이트 전에 마이그레이션 가이드를 확인하세요.
-
 ## 빠른 시작
 
 ```sh
@@ -87,7 +85,6 @@ setTheme('system');
 - [디자인과 상호작용](./docs/DESIGN.md) · [Interaction](./docs/INTERACTION.md)
 - [DOM 빌더와 시그널](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md)
 - [유지 관리자와 Agent 참고](./CLAUDE.md)
-- [마이그레이션 가이드](https://ran.chaxus.com/ko/src/ranuts/migration/)
 
 ## 기여
 

@@ -83,7 +83,7 @@ Never use `--force` to bypass a version conflict. If the released bytes need to 
 
 ## Stable releases
 
-Remove prerelease suffixes, choose new unpublished versions and use `tag=latest`. Update the migration guide and release notes before repeating the complete verification flow. Removing the suffix alone does not establish API stability or browser support: retain the documented compatibility scope and require the main CI/browser checks to pass.
+Remove prerelease suffixes, choose new unpublished versions and use `tag=latest`. Update the release notes before repeating the complete verification flow. Removing the suffix alone does not establish API stability or browser support: retain the documented compatibility scope and require the main CI/browser checks to pass.
 
 ## Browser and installation-size gates
 
