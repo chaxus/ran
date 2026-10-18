@@ -1,18 +1,10 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "esModuleInterop": true,
-    "target": "ESNext",
     "outDir": "dist",
-    "moduleResolution": "bundler",
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
     "isolatedModules": false,
-    "strict": true,
-    "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
-    "skipLibCheck": true,
     "experimentalDecorators": true,
     "paths": {
       "@/app/*": ["./app/*"],
