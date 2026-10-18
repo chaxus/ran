@@ -28,7 +28,8 @@ export async function freshApp(page: Page): Promise<void> {
  * Waits for the transcript to grow by two rows *and* the stop button to go inert. Waiting on
  * the button alone does not work: it is already inert before anything is sent, so the wait
  * returns immediately and the assertions run against a transcript with no answer in it. The
- * row count is what says the answer actually arrived; the button is what says it finished.
+ * row count is what says the answer actually arrived; the buttons confirm the exchange
+ * and its persistence have finished.
  *
  * No fixed timeout anywhere — the demo answer takes as long as it takes, and a sleep is a
  * flake waiting for a slower machine.
@@ -46,7 +47,9 @@ export async function send(page: Page, text: string): Promise<void> {
     (target) => {
       const chat = document.querySelector('#chat') as (HTMLElement & { _shadowDom?: ShadowRoot }) | null;
       const drawn = chat?._shadowDom?.querySelectorAll('.ran-conversation-row').length ?? 0;
-      const idle = (document.querySelector('#stop') as HTMLButtonElement | null)?.disabled === true;
+      const idle =
+        (document.querySelector('#stop') as HTMLButtonElement | null)?.disabled === true &&
+        (document.querySelector('#send') as HTMLButtonElement | null)?.disabled === false;
       return drawn >= target && idle;
     },
     before + 2,
