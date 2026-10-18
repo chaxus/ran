@@ -244,8 +244,12 @@ Activation removes only this application's outdated asset caches, preserving the
 and hashed asset caches and unrelated applications' caches, then claims clients. Cache writes are attached to
 `event.waitUntil()` so the worker remains alive until they finish.
 
-There is no offline progress panel or whole-language download queue. Reading and search
-stay the primary UI; the Service Worker caches requested content without reader controls.
+There is no offline progress panel, status copy or reader control. `client/idle-prefetch.ts`
+grants small batches only after interaction settles on a visible, online page with no data-saver
+or slow-connection signal. `public/offline-worker.js` prepares the current language's documents,
+search index and deferred local assets, serially and at most three new files per grant. It persists
+completed URLs for resumption; interaction and foreground requests interrupt background work.
+Installation still uses only the small static precache, not the full language plan.
 
 ---
 

@@ -13,6 +13,7 @@ import '../styles/design-illustrations.css';
 import 'ranui/style';
 import { mountComponents } from './components.ts';
 import { cacheVisitedAssets } from './visited-assets.ts';
+import { mountIdlePrefetch } from './idle-prefetch.ts';
 import { mountCodeGroups } from './code-groups.ts';
 import { mountDesignIllustrations } from './design-illustrations.ts';
 import { mountSearch } from './search.ts';
@@ -61,3 +62,5 @@ mountDemos();
 
 mountNavigation();
 mountCodeCopy();
+
+mountIdlePrefetch();
