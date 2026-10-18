@@ -698,6 +698,10 @@ export class Select extends RanElement {
     this.removeDropDownTimeId(e);
     this.open = !this.open;
   };
+  private _cancelDropdownClose = (): void => {
+    clearTimeout(this.removeTimeId);
+    this.removeTimeId = undefined;
+  };
   removeDropDownTimeId = (e: Event): void => {
     e.stopPropagation();
     // The property, not the attribute: once the user has typed, the input's value is dirty
@@ -706,10 +710,7 @@ export class Select extends RanElement {
       this._search.value = '';
       if (this.hasAttribute('showsearch')) this.changeSearch(e);
     }
-    if (this.trigger.includes('hover') && !isMobile()) {
-      clearTimeout(this.removeTimeId);
-      this.removeTimeId = undefined;
-    }
+    if (this.trigger.includes('hover') && !isMobile()) this._cancelDropdownClose();
   };
   /**
    * @description: 焦点移除的情况，需要移除 select 下拉框
@@ -775,7 +776,7 @@ export class Select extends RanElement {
       }
       if (this.trigger.includes('hover') && !isMobile()) {
         this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
-        this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);
+        this._selectDropdown.addEventListener('mouseenter', this._cancelDropdownClose);
       }
       this._selectDropdown.appendChild(this._selectionDropdown);
     }
