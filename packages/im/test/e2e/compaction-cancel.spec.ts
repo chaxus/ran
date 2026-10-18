@@ -3,15 +3,35 @@ import type { AddressInfo } from 'node:net';
 import { expect, test as base } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { freshApp, send } from './helpers';
+import { observeSummary } from './observe-summary';
 
 type DialogRequest = { messages: { role: string; content: string }[] };
-type Dialog = { requests: DialogRequest[]; summary: 'empty' | 'partial' | 'complete' };
+type Dialog = {
+  requests: DialogRequest[];
+  summary: 'empty' | 'partial' | 'complete';
+  deliveryDelay: number;
+  consumed: Promise<void>;
+};
 const sse = (content: string) => `data: ${JSON.stringify({ choices: [{ index: 0, delta: { content } }] })}\n\n`;
 const previous = [{ at: 4, summary: 'previous complete summary' }];
 const test = base.extend<{ dialog: Dialog }>({
   dialog: async ({ page }, use, testInfo) => {
-    const dialog: Dialog = { requests: [], summary: 'partial' };
+    let consumed!: () => void;
+    const dialog: Dialog = {
+      requests: [],
+      summary: 'partial',
+      deliveryDelay: 0,
+      consumed: new Promise<void>((resolve) => {
+        consumed = resolve;
+      }),
+    };
     const serverEvents: { phase: string; at: number; bytes?: number }[] = [];
+    await page.exposeBinding('__summaryConsumed', (_source, progress: { complete: boolean }) => {
+      if (progress.complete) {
+        serverEvents.push({ phase: 'consumer-accepted-usage', at: Date.now() });
+        consumed();
+      }
+    });
     const server = createServer((request, response) => {
       response.setHeader('Access-Control-Allow-Origin', 'http://localhost:30102');
       response.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -47,9 +67,20 @@ const test = base.extend<{ dialog: Dialog }>({
             const payload =
               sse('INCOMPLETE SUMMARY') +
               'data: {"usage":{"prompt_tokens":42,"completion_tokens":3,"total_tokens":45}}\n\n';
-            response.write(payload, () => {
-              serverEvents.push({ phase: 'payload-written', at: Date.now(), bytes: Buffer.byteLength(payload) });
-            });
+            const write = () => {
+              // WebKit can retain the tail of a small write on a held-open HTTP
+              // response. Later SSE comments keep transport delivery progressing
+              // without completing the summary or changing its text/usage.
+              const heartbeat = setInterval(() => response.write(': heartbeat\n\n'), 50);
+              response.on('close', () => clearInterval(heartbeat));
+              response.write(payload, () => {
+                serverEvents.push({ phase: 'payload-written', at: Date.now(), bytes: Buffer.byteLength(payload) });
+              });
+            };
+            if (dialog.deliveryDelay) {
+              const timer = setTimeout(write, dialog.deliveryDelay);
+              response.on('close', () => clearTimeout(timer));
+            } else write();
           }
         }
       });
@@ -57,43 +88,7 @@ const test = base.extend<{ dialog: Dialog }>({
     await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
     const target = `http://127.0.0.1:${(server.address() as AddressInfo).port}/api/im/dialog`;
     await page.route('**/api/im/dialog', (route) => route.continue({ url: target }));
-    // Observe real stream consumption without replacing the framing/accumulator.
-    await page.addInitScript(() => {
-      let received = '';
-      const reads: { path: string; type: string; bytes?: number; at: number }[] = [];
-      Reflect.set(window, '__compactionStreamProbe', () => ({ received, reads }));
-      const observe = (value: unknown, path: string): void => {
-        reads.push({
-          path,
-          type: Object.prototype.toString.call(value),
-          bytes: ArrayBuffer.isView(value) ? value.byteLength : undefined,
-          at: performance.now(),
-        });
-        if (value instanceof Uint8Array) {
-          received += new TextDecoder().decode(value);
-          if (received.includes('"total_tokens":45'))
-            document.documentElement.setAttribute('data-summary-consumed', '');
-        }
-      };
-      const read = ReadableStreamDefaultReader.prototype.read;
-      ReadableStreamDefaultReader.prototype.read = function () {
-        return read.call(this).then((chunk) => {
-          observe(chunk.value, 'reader');
-          return chunk;
-        });
-      };
-      const streams = ReadableStream.prototype as unknown as {
-        [Symbol.asyncIterator]?: () => AsyncIterableIterator<Uint8Array>;
-      };
-      const iterate = streams[Symbol.asyncIterator];
-      if (iterate)
-        streams[Symbol.asyncIterator] = async function* () {
-          for await (const chunk of iterate.call(this)) {
-            observe(chunk, 'iterator');
-            yield chunk;
-          }
-        };
-    });
+    await page.addInitScript(observeSummary);
     try {
       await use(dialog);
     } finally {
@@ -159,10 +154,13 @@ const stored = (page: Page) =>
     return session;
   });
 
-for (const mode of ['empty', 'partial', 'previous'] as const) {
+for (const mode of ['empty', 'partial', 'previous', 'delayed'] as const) {
   test(`stopping ${mode} compaction preserves history through reload`, async ({ page, dialog }) => {
     const original = mode === 'previous' ? previous : [];
     dialog.summary = mode === 'empty' ? 'empty' : 'partial';
+    // Deliberate transport latency beyond the default DOM assertion budget.
+    // This is fault injection, not a sleep used to guess when the UI is ready.
+    dialog.deliveryDelay = mode === 'delayed' ? 5500 : 0;
     await seed(page, original);
     await send(page, 'prime context limit');
     await page.evaluate(() => {
@@ -170,7 +168,9 @@ for (const mode of ['empty', 'partial', 'previous'] as const) {
       (document.querySelector('#composer') as HTMLFormElement).requestSubmit();
     });
     await expect.poll(() => dialog.requests.length).toBe(2);
-    if (mode !== 'empty') await expect(page.locator('html')).toHaveAttribute('data-summary-consumed', '');
+    // Network progress uses an explicit consumption signal and the enclosing test
+    // deadline, rather than the unrelated five-second DOM assertion timeout.
+    if (mode !== 'empty') await test.step('wait for accepted summary usage', () => dialog.consumed);
     await page.locator('#stop').click();
     await expect(page.locator('#send')).not.toHaveAttribute('disabled');
     const saved = await stored(page);
