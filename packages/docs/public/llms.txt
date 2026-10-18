@@ -52,5 +52,3 @@ installed can read them from `node_modules` without fetching anything.
 ## Optional
 
 - [简体中文文档 (Simplified Chinese docs)](https://ran.chaxus.com/cn/)
-
-Alpha migration: https://ran.chaxus.com/src/ranuts/migration/

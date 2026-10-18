@@ -444,7 +444,6 @@ reason to preserve the library export.
 
 The `ranuts/node` subpath and the `memoize`, `timeFormat`, `timestampToTime`, `isClient`,
 `md5`, `FMT` exports have been removed. Use platform Node APIs and the maintained utility names.
-See the [migration guide](https://ran.chaxus.com/src/ranuts/migration/) before upgrading.
 
 ## Binary response types
 

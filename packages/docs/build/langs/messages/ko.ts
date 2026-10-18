@@ -9,7 +9,6 @@ import type { LocaleMessages } from '../types.ts';
  */
 const ko: LocaleMessages = {
   labels: {
-    alpha_migration: 'Alpha 마이그레이션',
     ranui: 'ranui',
     ranuts: 'ranuts',
     articles: '아티클',

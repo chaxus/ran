@@ -8,8 +8,6 @@ ESM · IIFE · TypeScript
 
 [English](./README.md) | **中文** | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> 预发布阶段：API 和包格式可能变化。请锁定具体版本，升级前阅读迁移指南。
-
 ## 快速开始
 
 ```sh
@@ -54,7 +52,6 @@ console.log(rgbToHex(1, 2, 3)); // #010203
 - [ranuts](https://ran.chaxus.com/cn/src/ranuts/)
 - [API](./docs/API.md)
 - [维护者与 Agent 参考](./CLAUDE.md)
-- [迁移指南](https://ran.chaxus.com/cn/src/ranuts/migration/)
 
 ## 参与贡献
 

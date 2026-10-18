@@ -8,8 +8,6 @@ ESM · IIFE · TypeScript
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | **Português** | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [فارسی](./README.fa.md)
 
-> Pré-lançamento: APIs e formatos podem mudar. Fixe uma versão exata e leia o guia de migração antes de atualizar.
-
 ## Início rápido
 
 ```sh
@@ -54,7 +52,6 @@ O IIFE de utilitários expõe `ranuts_utils`; o completo `dist/iife/index.iife.j
 - [ranuts](https://ran.chaxus.com/pt/src/ranuts/)
 - [API](./docs/API.md)
 - [Referência para mantenedores e agentes](./CLAUDE.md)
-- [Guia de migração](https://ran.chaxus.com/pt/src/ranuts/migration/)
 
 ## Contribuir
 

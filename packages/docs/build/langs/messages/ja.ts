@@ -9,7 +9,6 @@ import type { LocaleMessages } from '../types.ts';
  */
 const ja: LocaleMessages = {
   labels: {
-    alpha_migration: 'Alpha 移行ガイド',
     ranui: 'ranui',
     ranuts: 'ranuts',
     articles: '記事',

@@ -72,7 +72,6 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
     { kind: 'full', key: 'overview', link: '/src/ranuts/' },
     { kind: 'full', key: 'api_reference', link: '/src/ranuts/api' },
     { kind: 'full', key: 'choosing_a_utility', link: '/src/ranuts/choosing/' },
-    { kind: 'full', key: 'alpha_migration', link: '/src/ranuts/migration/' },
     {
       kind: 'full',
       key: 'utility_functions',

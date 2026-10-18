@@ -121,5 +121,4 @@ cloneDeep({ a: { b: 1 } }); // deep copy, handles cycles
 - `ranuts/visual` is browser-only (needs Canvas/WebGL/WebGPU).
 
 `ranuts/node` and the obsolete `memoize`, `timeFormat`, `timestampToTime`, `isClient`, `md5`, `FMT`
-exports have been removed. Use the maintained names and native Node APIs; see the
-[migration guide](https://ran.chaxus.com/src/ranuts/migration/).
+exports have been removed. Use the maintained names and native Node APIs.

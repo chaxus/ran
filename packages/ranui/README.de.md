@@ -8,8 +8,6 @@ ESM · IIFE · TypeScript
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Español](./README.es.md) | [Português](./README.pt.md) | [한국어](./README.ko.md) | **Deutsch** | [فارسی](./README.fa.md)
 
-> Vorabversion: APIs und Paketformate können sich ändern. Fixiere eine konkrete Version und lies vor Updates den Migrationsleitfaden.
-
 ## Schnellstart
 
 ```sh
@@ -87,7 +85,6 @@ setTheme('system');
 - [Design und Interaktion](./docs/DESIGN.md) · [Interaction](./docs/INTERACTION.md)
 - [DOM-Builder und Signale](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md)
 - [Referenz für Maintainer und Agents](./CLAUDE.md)
-- [Migrationsleitfaden](https://ran.chaxus.com/de/src/ranuts/migration/)
 
 ## Mitwirken
 

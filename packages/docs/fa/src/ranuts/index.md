@@ -76,5 +76,3 @@ import { debounce } from 'ranuts/utils';
 | رابط کاربری روی آن بسازید                | [ranui](/fa/src/ranui/)                                                         |
 
 هر دو بسته یک `CLAUDE.md` را درون تاربال npm همراه دارند: راهنمای آغازین برای عامل‌های کدنویس، که بی‌نیاز از شبکه مستقیم از `node_modules` خواندنی است.
-
-[مهاجرت آلفا](/fa/src/ranuts/migration/)
