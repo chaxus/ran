@@ -38,6 +38,9 @@ const TRANSIT: Record<PlacementSide, { enter: string; exit: string }> = {
   right: { enter: 'ran-dropdown-right-in', exit: 'ran-dropdown-right-out' },
 };
 
+// Portaled children keep their logical owner even outside its DOM subtree.
+const panelOwners = new WeakMap<Node, HTMLElement>();
+
 /** Everything a positioning pass worked out, handed to the hooks. */
 export interface FloatingPosition {
   /** Viewport coordinates for the panel's top-left corner. */
@@ -182,6 +185,21 @@ export class FloatingController {
     return this.options.anchor?.() ?? this.options.host;
   }
 
+  /** Include nested portaled panels when deciding whether a click is inside. */
+  containsEvent(event: Event): boolean {
+    const panel = this.options.panel();
+    return event.composedPath().some((target) => {
+      let node: Node | null = target instanceof Node ? target : null;
+      const visited = new Set<Node>();
+      while (node && !visited.has(node)) {
+        if (node === this.options.host || node === panel) return true;
+        visited.add(node);
+        node = panelOwners.get(node) ?? node.parentNode ?? (node instanceof ShadowRoot ? node.host : null);
+      }
+      return false;
+    });
+  }
+
   /**
    * Drive the panel to `open`.
    *
@@ -203,6 +221,7 @@ export class FloatingController {
     const generation = ++this.generation;
 
     if (open) {
+      panelOwners.set(panel, host);
       this.resolvedSide = undefined;
       host.dispatchEvent(new CustomEvent('show'));
       panel.style.setProperty('display', 'block');
@@ -216,6 +235,7 @@ export class FloatingController {
       return;
     }
 
+    panelOwners.delete(panel);
     this.detachReposition();
     host.dispatchEvent(new CustomEvent('hide'));
     // The exit class is set synchronously, so the wait can begin right away. On
@@ -365,6 +385,8 @@ export class FloatingController {
   destroy = (): void => {
     this.generation++;
     this.opened = false;
+    const panel = this.options.panel();
+    if (panel) panelOwners.delete(panel);
     if (this.repositionFrame && typeof cancelAnimationFrame === 'function') {
       cancelAnimationFrame(this.repositionFrame);
       this.repositionFrame = 0;

@@ -363,13 +363,8 @@ export class Popover extends RanElement {
   clickContent = (e: Event): void => {
     e.stopPropagation();
   };
-  // Toggle, not just open — a click trigger's document-level close listener
-  // (see popoverTrigger) is blocked from ever firing on the trigger's own
-  // click (this handler calls stopPropagation first), so re-clicking the
-  // trigger was previously the one action that couldn't close it: it only
-  // ever called setDropdownDisplayBlock, whose "already open" guard then
-  // made the second click a no-op. Outside-click/Escape still worked, but a
-  // click-triggered panel that its own trigger can't dismiss reads as stuck.
+  // The outside listener excludes this trigger. Re-clicking it must explicitly
+  // toggle rather than leave an already-open click disclosure stuck open.
   clickPopover = (e: Event): void => {
     e.stopPropagation();
     e.preventDefault();
@@ -408,11 +403,10 @@ export class Popover extends RanElement {
     this._events
       .on(this, 'click', this.clickPopover)
       .on(this, 'keydown', this.keydownPopover)
-      .on(document, 'click', this.clickRemovePopover);
+      .on(document, 'click', this.clickRemovePopover, { capture: true });
   };
   hoverRemovePopover = (e: Event): void => {
-    e.stopPropagation();
-    this.setDropdownDisplayNone();
+    if (!this._floating.containsEvent(e)) this.setDropdownDisplayNone();
   };
   changePlacement = debounce((): void => {
     // While open in the body-portal (flip-capable) path, placementPosition()'s
