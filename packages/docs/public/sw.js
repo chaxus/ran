@@ -156,7 +156,9 @@ const cacheOpenDocuments = async () => {
     for (const url of urls) {
       try {
         const response = await fetch(url, { cache: 'no-store' });
-        if (response.ok && !response.redirected && response.headers.get('content-type')?.includes('text/html')) {
+        if (response.redirected || response.status === 404 || response.status === 410) {
+          await removeDocument(url);
+        } else if (response.ok && response.headers.get('content-type')?.includes('text/html')) {
           await storeDocument(cache, url, response);
         }
       } catch (error) {
