@@ -9,10 +9,6 @@ Generado desde `packages/ranui/CHANGELOG.md` por `pnpm -F ranui doc:changelog`, 
 página y la copia del paquete npm no pueden contradecirse. Las entradas se toman tal cual del
 origen, así que están en inglés.
 
-::: warning ranui está en fase de prelanzamiento
-Las versiones alpha, beta y RC pueden incluir cambios incompatibles. Fija una versión exacta y lee esta página antes de actualizar.
-:::
-
 ::: v-pre
 
 ## [0.5.0-rc.0] — 2026-10-17

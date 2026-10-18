@@ -8,10 +8,6 @@ description: 'ranui 的变更记录——新增、变更、修复与移除及其
 由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.zh-CN.md` 生成，与英文版一同维护，
 因此本页与 npm 包内的副本不会出现分歧。
 
-::: warning ranui 处于预发布阶段
-Alpha、Beta 和 RC 版本可能包含破坏性变更。请锁定确切版本，并在升级前阅读本页。
-:::
-
 ::: v-pre
 
 ## [0.5.0-rc.0] — 2026-10-17
