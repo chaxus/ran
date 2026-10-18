@@ -1,3 +1,4 @@
+import { writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { expect, test as base } from '@playwright/test';
@@ -99,10 +100,9 @@ const test = base.extend<{ dialog: Dialog }>({
     } finally {
       if (testInfo.status !== testInfo.expectedStatus) {
         const browser = await page.evaluate(() => Reflect.get(window, '__compactionStreamProbe')()).catch(String);
-        await testInfo.attach('compaction-stream.json', {
-          body: JSON.stringify({ serverEvents, browser }),
-          contentType: 'application/json',
-        });
+        const diagnostics = testInfo.outputPath('compaction-stream.json');
+        await writeFile(diagnostics, JSON.stringify({ serverEvents, browser }));
+        await testInfo.attach('compaction-stream.json', { path: diagnostics, contentType: 'application/json' });
       }
       server.closeAllConnections();
       await new Promise<void>((resolve) => server.close(() => resolve()));
