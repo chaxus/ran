@@ -146,9 +146,12 @@ jobs:
           pnpm release:prepare
           pnpm verify:release
 
+      # `pnpm run test` reaches ranui through `run-checks.mjs`, which runs the package's
+      # own `test` script. That script runs `vitest run`; the coverage gate used to be a
+      # separate step that ran `vitest run --coverage` afterwards, executing the same
+      # suite a second time to produce one report. Asking for coverage up front makes the
+      # single pass both the test run and the threshold check.
       - name: Test
         run: pnpm run test
-
-      - name: Check ranui coverage thresholds
-        if: matrix.os == 'ubuntu-latest' && matrix.node_version == 24
-        run: pnpm -F ranui test:unit:coverage
+        env:
+          RANUI_COVERAGE: ${{ matrix.os == 'ubuntu-latest' && matrix.node_version == 24 && '1' || '0' }}
