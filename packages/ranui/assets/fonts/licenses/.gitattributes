@@ -1,0 +1,2 @@
+# Keep original upstream license bytes, whitespace and line endings.
+*.txt -text whitespace=-trailing-space

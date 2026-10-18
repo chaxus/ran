@@ -1,5 +1,6 @@
 /** Install verified tarballs with npm outside the workspace, without dependency symlinks. */
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -58,6 +59,29 @@ try {
       }
     }
     if (pkg.name === 'ranui') {
+      const fontSource = join(ROOT, 'packages/ranui/assets/fonts');
+      for (const name of [
+        'NOTICE.md',
+        'GUST-FONT-LICENSE.txt',
+        'LPPL-1.3c.txt',
+        'KaTeX-LICENSE.txt',
+        'Temml-LICENSE.txt',
+        'MANIFEST-Latin-Modern-Math.txt',
+        'README-Latin-Modern-Math.txt',
+      ]) {
+        assert.deepEqual(
+          await readFile(join(installed, 'dist/third-party/math-fonts', name)),
+          await readFile(join(fontSource, 'licenses', name)),
+          `${name}: packed font material differs from its upstream source`,
+        );
+      }
+      const fontNotice = await readFile(join(installed, 'dist/third-party/math-fonts/NOTICE.md'), 'utf8');
+      for (const name of ['latinmodernmath.woff2', 'Temml.woff2']) {
+        const hash = createHash('sha256')
+          .update(await readFile(join(fontSource, name)))
+          .digest('hex');
+        assert.ok(fontNotice.includes(hash), `${name}: font changed without updated provenance`);
+      }
       for (const name of ['dashjs', 'mpegts.js']) {
         assert.ok(
           (await readFile(join(installed, 'dist/third-party', name, 'LICENSE.txt'), 'utf8')).length > 100,
@@ -66,6 +90,7 @@ try {
       }
       for (const file of ['THIRD_PARTY_LICENSES.md', 'IIFE-LICENSES.md']) {
         const notices = await readFile(join(installed, 'dist', file), 'utf8');
+        assert.ok(notices.includes('./third-party/math-fonts/NOTICE.md'), `${file}: missing font attribution link`);
         for (const name of ['dashjs', 'hls.js', 'mpegts.js', 'mermaid']) {
           assert.ok(notices.includes(`## ${name} - `), `${file}: missing ${name} notice`);
           assert.ok(!manifest.dependencies?.[name], `${name} must be bundled without a second production install`);
