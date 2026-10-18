@@ -5,6 +5,9 @@ RUN npm install --global pnpm@${PNPM_VERSION}
 WORKDIR /workspace
 ENV CI=1
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Every package tsconfig extends this; without it the build fails with
+# "Tsconfig not found /workspace/tsconfig.base.json".
+COPY tsconfig.base.json ./tsconfig.base.json
 COPY packages/ranuts/package.json ./packages/ranuts/package.json
 COPY packages/ranview/package.json ./packages/ranview/package.json
 COPY packages/ranui/package.json ./packages/ranui/package.json
