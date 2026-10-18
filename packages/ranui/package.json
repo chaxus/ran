@@ -142,6 +142,12 @@
       ],
       "glass": [
         "./dist/components/glass/index.d.ts"
+      ],
+      "icons": [
+        "./dist/components/icon/builtin.d.ts"
+      ],
+      "content": [
+        "./dist/components/popover/content/index.d.ts"
       ]
     }
   },
@@ -262,7 +268,7 @@
       "import": "./dist/icon.js"
     },
     "./icons": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/icon/builtin.d.ts",
       "import": "./dist/icons.js"
     },
     "./image": {
@@ -318,7 +324,7 @@
       "import": "./dist/dropdown.js"
     },
     "./content": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/popover/content/index.d.ts",
       "import": "./dist/content.js"
     },
     "./loading": {
