@@ -12,7 +12,6 @@ const storeDocument = (cache, url, response) => cache.put(url, new Response(resp
 
 const removeDocument = async url => {
   await (await caches.open(DOCUMENT_CACHE_NAME)).delete(url);
-  if (typeof forgetOfflineDocument !== 'undefined') await forgetOfflineDocument(url);
 }
 
 const IGNORE_REQUEST_LIST = [
@@ -41,10 +40,7 @@ const RESPONSE_STATUS = {
 const SERVICE_WORK = {
   INSTALL: 'install',
   FETCH: 'fetch',
-  ACTIVATE: 'activate',
-  MESSAGE: 'message',
-  SYNC: 'sync',
-  PUSH: 'push'
+  ACTIVATE: 'activate'
 }
 /**
  * @description: 更新缓存
@@ -239,15 +235,6 @@ const navigationResponse = async (request, event) => {
 this.addEventListener(SERVICE_WORK.FETCH, event => {
   const { request } = event;
   const allowed = request.method === REQUEST_METHOD.GET && filterRequest(request);
-  if (typeof offlineForeground !== 'undefined') {
-    // Any foreground request interrupts an idle batch. Track downloads to completion
-    // so the next idle callback cannot steal bandwidth from a still-streaming body.
-    const load = tracked => allowed
-      ? request.mode === 'navigate' ? navigationResponse(request, tracked) : cacheFirst(request, tracked)
-      : fetch(request);
-    event.respondWith(offlineForeground(event, load, !allowed));
-    return;
-  }
   if (!allowed) return;
   event.respondWith(request.mode === 'navigate' ? navigationResponse(request, event) : cacheFirst(request, event));
 });

@@ -1,39 +1,34 @@
-import { readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-interface OfflinePage {
-  url: string;
-  locale: { lang: string };
-  kind: string;
+interface Chunk {
+  file: string;
+  isEntry?: boolean;
+  imports?: string[];
+  css?: string[];
+  assets?: string[];
 }
 
-// The docs use system fonts: no stylesheet references these shipped font files.
-// Keep them available at their public URLs, but do not download them for offline use.
-const unusedAssets = new Set(['/fonts/geist-variable.woff2', '/fonts/geist-mono-variable.woff2']);
-
-/** Canonical routes, not .html output paths: the cache must match browser navigation. */
-export const createOfflineManifest = (dist: string, pages: readonly OfflinePage[]) => {
-  const shared: string[] = [];
-  const walk = (dir: string, prefix = ''): void => {
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      const path = `${prefix}/${entry.name}`;
-      if (entry.isDirectory()) walk(join(dir, entry.name), path);
-      else if (
-        /\.(?:js|css|woff2?|png|jpe?g|svg|ico)$/i.test(entry.name) &&
-        !unusedAssets.has(path) &&
-        !/^\/(?:sw|offline-worker)\.js$/.test(path)
-      ) {
-        shared.push(path);
-      }
+/** Only the initial static graph is precached; other resources follow actual visits. */
+export const createOfflineManifest = (dist: string) => {
+  const shared = new Set<string>();
+  const path = join(dist, '.vite/manifest.json');
+  if (existsSync(path)) {
+    const manifest: Record<string, Chunk> = JSON.parse(readFileSync(path, 'utf8'));
+    const visited = new Set<string>();
+    const visit = (key: string): void => {
+      if (visited.has(key)) return;
+      visited.add(key);
+      const chunk = manifest[key];
+      if (!chunk) throw new Error(`Missing static precache dependency: ${key}`);
+      for (const file of [chunk.file, ...(chunk.css ?? []), ...(chunk.assets ?? [])]) shared.add(`/${file}`);
+      for (const dependency of chunk.imports ?? []) visit(dependency);
+    };
+    for (const [key, chunk] of Object.entries(manifest)) {
+      if (chunk.isEntry) visit(key);
+      if (chunk.file.endsWith('.css')) shared.add(`/${chunk.file}`);
     }
-  };
-  walk(dist);
-  const locales: Record<string, string[]> = {};
-  for (const page of pages) {
-    if (page.kind === 'page') (locales[page.locale.lang] ??= []).push(page.url);
   }
-  for (const [lang, urls] of Object.entries(locales)) {
-    locales[lang] = [...new Set(urls)].sort().concat(`/search/${lang}.json`);
-  }
-  return { shared: shared.sort(), locales };
+  for (const file of readdirSync(dist)) if (/^icon[^/]*\.png$/.test(file)) shared.add(`/${file}`);
+  return { shared: [...shared].sort() };
 };
