@@ -2,6 +2,27 @@
 
 All notable changes to `ranui` will be documented in this file.
 
+## [0.5.1] — 2026-10-18
+
+### Fixed
+
+- Ship `tsconfig.base.json` into the visual regression container (Dockerfile whitelist was missing the new shared config).
+- Show release warnings only for prerelease versions in docs.
+
+### Changed
+
+- Collect coverage in the test run that already executes the suite (`RANUI_COVERAGE=1` replaces the separate `test:unit:coverage` pass, cutting ~90s from the ubuntu/node-24 matrix leg).
+- Share compiler options through `tsconfig.base.json` instead of repeating them in six packages.
+
+### CI & Infrastructure
+
+- Check Markdown links on every pull request (`verify:links` moved from release-only to lint job).
+- Cancel superseded runs on the same ref (`concurrency` added to `ci.yml`, `e2e.yml`, `semantic-pull-request.yml`).
+- Bound the lint job's runtime (`timeout-minutes: 20`).
+- Clone shallow in E2E where nothing reads git history (saves ~690 MB per browser job).
+- Serialize gh-pages publishes (prevents race conditions between consecutive merges).
+- Ignore local debris without tracked content in `verify-packages`.
+
 ## [0.5.0] — 2026-10-18
 
 Stable release prepared for publication; no npm upload has been performed.
