@@ -488,6 +488,7 @@ function transcriptOf(messages: readonly StoredMessage[]): string {
  */
 function summarize(carried: string | null, messages: readonly StoredMessage[]): Promise<string | null> {
   const revision = sessionRevision;
+  const signal = cancelExchange?.signal;
   return new Promise((resolve) => {
     // No tools: this call produces prose, and offering it a clock or a fetcher only invites
     // a round trip that cannot help.
@@ -511,7 +512,7 @@ function summarize(carried: string | null, messages: readonly StoredMessage[]): 
           inFlight = null;
           if (snapshot.usage !== undefined) current.usage = addUsage(current.usage, snapshot.usage);
           const text = snapshot.blocks.reduce((out, b) => (b.type === 'text' ? out + b.text : out), '');
-          resolve(error !== undefined || text.trim() === '' ? null : text);
+          resolve(signal?.aborted || error !== undefined || text.trim() === '' ? null : text);
         },
       },
     );
@@ -545,6 +546,7 @@ function renderMeter(): void {
 
 async function compactIfNeeded(): Promise<void> {
   const revision = sessionRevision;
+  const signal = cancelExchange?.signal;
   const active = activeCompaction(current.compactions ?? []);
   const from = active?.at ?? 0;
   // Budgeted over the tail alone, with the standing summary charged against the limit
@@ -573,6 +575,14 @@ async function compactIfNeeded(): Promise<void> {
   // new messages would drop everything the first one was holding.
   const summary = await summarize(active?.summary ?? null, folded);
   if (revision !== sessionRevision) return;
+  if (signal?.aborted) {
+    // A stopped summary is incomplete. Preserve the original context and any
+    // reported usage, without recording a replacement boundary or failure notice.
+    setNotice('');
+    await persist();
+    if (revision === sessionRevision) renderMeter();
+    return;
+  }
   if (summary === null) {
     setNotice('压缩摘要失败，历史保持原样。如果接下来请求被拒绝，请新建对话。');
     return;
