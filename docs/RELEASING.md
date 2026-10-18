@@ -2,13 +2,13 @@
 
 The release set is **ranuts → @alixex/ranview → ranui**, in dependency order. Other workspaces are not published by this workflow. All workspaces and the published libraries require **Node 24+**. Use pnpm **11.6.0**, pinned in the root `packageManager` field; the release workflow pins npm **11.20.0** for registry operations.
 
-## Current candidate
+## Current release preparation
 
-| Package         | Version    | npm tag |
-| --------------- | ---------- | ------- |
-| ranuts          | 0.5.0-rc.0 | rc      |
-| @alixex/ranview | 0.2.0-rc.0 | rc      |
-| ranui           | 0.5.0-rc.0 | rc      |
+| Package         | Version | npm tag |
+| --------------- | ------- | ------- |
+| ranuts          | 0.5.0   | latest  |
+| @alixex/ranview | 0.2.0   | latest  |
+| ranui           | 0.5.0   | latest  |
 
 These versions are prepared for publication; this table is not a publication receipt. Confirm the registry state with `pnpm release:check --registry`.
 
@@ -36,17 +36,17 @@ The `.release/` directory is ignored by Git. Dirty working trees are allowed for
 Channels are inferred from the versions, or can be selected explicitly:
 
 ```sh
-pnpm release:check --tag rc --registry
-pnpm release:prepare --tag rc
-pnpm verify:release rc
-pnpm release:dry-run --tag rc
+pnpm release:check --tag latest --registry
+pnpm release:prepare --tag latest
+pnpm verify:release latest
+pnpm release:dry-run --tag latest
 ```
 
 `alpha`, `beta` and `rc` require matching prerelease versions in all three packages. `latest` requires versions without prerelease suffixes. A release candidate cannot accidentally become the default installation through these commands.
 
 ## GitHub Actions
 
-The [Release libraries workflow](../.github/workflows/release.yml) is manually dispatched. It becomes available from the Actions page after the workflow is merged to the default branch.
+The [Release libraries workflow](../.github/workflows/release.yml) is manually dispatched. It becomes available from the Actions page after the workflow is merged to the default branch. The default channel is `latest`; the default `publish=false` performs verification only.
 
 1. First ensure the PR/main CI checks are green, including browser tests. Merge the release commits to `main`.
 2. Run **Release libraries** with `publish=false` (the default) and the matching channel. The workflow builds, tests, checks types/docs, verifies a real installation and previews npm publication. Download `release-<commit>` to inspect the exact archives and receipts.
@@ -71,7 +71,7 @@ for a separate `npm dist-tag` command.
 
 Create the matching GitHub `npm` environment and configure its protection/approval rules as appropriate. No long-lived npm token is required by this workflow. Local preview works without these publication settings. See [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/) for account-side setup.
 
-Actual publication uses `node bin/release.mjs publish --tag rc --confirm` in the workflow. That explicit command uploads packages; use `release:dry-run` for inspection.
+Actual publication uses `node bin/release.mjs publish --tag latest --confirm` in the workflow. That explicit command uploads packages; use `release:dry-run` for inspection.
 
 ## Failed or partial publication
 
