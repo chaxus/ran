@@ -104,6 +104,8 @@ chat.register(toolView);
 let store: SessionStore;
 let current: Session;
 let inFlight: DialogStream | null = null;
+// Own submission before storage, file reads or persistence can yield.
+let submitting = false;
 /**
  * Cancels the exchange in flight — the request *and* whatever its tools are waiting on.
  *
@@ -147,7 +149,7 @@ let elapsedTimer: ReturnType<typeof setInterval> | null = null;
  * @param running Whether a request is in flight.
  */
 function setRunning(running: boolean): void {
-  send.disabled = running;
+  send.disabled = running || submitting;
   stop.disabled = !running;
 
   if (elapsedTimer !== null) clearInterval(elapsedTimer);
@@ -190,33 +192,48 @@ const MAX_STEPS = 6;
  * @param text What the user typed.
  */
 async function ask(text: string): Promise<void> {
-  const staged = [...attachments.attachments];
-  // Elements upgrade before IndexedDB opens. Preserve early input until the
-  // stored session has been restored rather than reading uninitialized state.
-  await sessionReady;
-  const content = await buildContent(text, staged);
-  chat.push({
-    type: 'turn/start',
-    id: nodeId(current.messages.length),
-    role: 'user',
-    text,
-    // The transcript shows what was attached, because a message that reads "看看这个" with no
-    // sign of the four screenshots beside it is a message nobody can reconstruct later.
-    images: imagesOf(content),
-  });
-  chat.push({ type: 'turn/end', id: nodeId(current.messages.length) });
-  current.messages.push({ role: 'user', content });
-  // Named from the first thing said in it, once: a conversation renamed on every turn is a
-  // list entry that keeps moving under the reader.
-  if (current.messages.length === 1) current.title = titleFrom(content);
-  // Keep files added for the next draft while initialization or file reads wait.
-  for (const attachment of staged) attachments.detach(attachment.id);
-  await persist();
-  await renderSessions();
+  if (submitting || inFlight !== null) return;
+  submitting = true;
+  send.disabled = true;
+  let appended = false;
+  try {
+    const staged = [...attachments.attachments];
+    // Elements upgrade before IndexedDB opens. Preserve early input until the
+    // stored session has been restored rather than reading uninitialized state.
+    await sessionReady;
+    const content = await buildContent(text, staged);
+    chat.push({
+      type: 'turn/start',
+      id: nodeId(current.messages.length),
+      role: 'user',
+      text,
+      // The transcript shows what was attached, because a message that reads "看看这个" with no
+      // sign of the four screenshots beside it is a message nobody can reconstruct later.
+      images: imagesOf(content),
+    });
+    chat.push({ type: 'turn/end', id: nodeId(current.messages.length) });
+    current.messages.push({ role: 'user', content });
+    appended = true;
+    // Named from the first thing said in it, once: a conversation renamed on every turn is a
+    // list entry that keeps moving under the reader.
+    if (current.messages.length === 1) current.title = titleFrom(content);
+    // Keep files added for the next draft while initialization or file reads wait.
+    for (const attachment of staged) attachments.detach(attachment.id);
+    await persist();
+    await renderSessions();
 
-  setRunning(true);
-  cancelExchange = new AbortController();
-  await runStep(0);
+    setRunning(true);
+    cancelExchange = new AbortController();
+    await runStep(0);
+  } catch {
+    // File/storage preparation can fail before there is a transcript row. Keep
+    // its input available for retry without overwriting a newer draft.
+    if (!appended && question.value === '') question.value = text;
+    message?.error('发送失败，请重试。');
+  } finally {
+    submitting = false;
+    setRunning(inFlight !== null);
+  }
 }
 
 /**
@@ -1017,7 +1034,7 @@ composer.addEventListener('submit', (event) => {
   if (mic.listening) mic.stop();
   const text = question.value.trim();
   // Attachments alone are a message: "look at this" is often the whole point of sending one.
-  if ((text === '' && attachments.attachments.length === 0) || inFlight !== null) return;
+  if ((text === '' && attachments.attachments.length === 0) || submitting || inFlight !== null) return;
   question.value = '';
   void ask(text);
 });
