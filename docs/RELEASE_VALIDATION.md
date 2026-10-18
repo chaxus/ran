@@ -14,6 +14,12 @@ The coordinated `ranuts@0.5.0`, `@alixex/ranview@0.2.0` and `ranui@0.5.0` archiv
 
 The combined production installation contains **60,495,834 logical bytes in 3,447 files**, below the 75 MB budget. Archive and unpacked-file measurements also pass their individual budgets. Exact SHA-512 values and the source commit are recorded in the local `.release/` receipts; the final main commit must be prepared and verified again before publication. Dry-run does not establish npm trusted-publisher authorization.
 
+## WebKit compaction regression — 2026-10-18
+
+The intermittent cancellation timeout was reproduced in the held-open HTTP/SSE test fixture: the server wrote 152 bytes while WebKit delivered only 124. A longer assertion deadline, bypassing the Playwright URL rewrite and padding the same write did not resolve that reproduction. Periodic standard SSE comment heartbeats restored delivery; timers are cleared when the response closes. This identifies a fixture transport boundary, without claiming a specific upstream WebKit defect.
+
+Cancellation tests now await consumption of the real summary usage frame through a per-response observer with no prefetch, within the unchanged overall test deadline. They retain real HTTP, the application SSE decoder and exact history, usage, reload and earlier-summary assertions. Coverage includes an empty response, a held partial summary, an earlier valid summary, a 5.5-second body delay, one-byte UTF-8 fragmentation and the native reader fallback. Completed fragmented summaries must still preserve their full Chinese text. Failures attach transport diagnostics; these tests disable retries and CI repeats the complete file five times per browser before the full suites.
+
 ## Installation footprint
 
 The table records the first installation reduction at commit `6ad7c48`; subsequent component changes are covered below and by each release receipt.
