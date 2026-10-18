@@ -11,6 +11,12 @@ permissions:
   pull-requests: write
   contents: read
 
+# Editing a title twice in a row started two runs that both post a status check.
+# The newest title is the only one that matters, so the older run is cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   main:
     if: github.repository == 'chaxus/ran'
