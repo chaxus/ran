@@ -256,7 +256,7 @@ class WebmBase<T> {
   ) {}
 
   updateBySource() {
-    console.log('updateBySource');
+    // Overridable hook: subclasses derive state from the new source.
   }
 
   setSource(source: Uint8Array) {
@@ -265,7 +265,7 @@ class WebmBase<T> {
   }
 
   updateByData() {
-    console.log('updateByData');
+    // Overridable hook: subclasses derive state from the new value.
   }
 
   setData(data: T) {
@@ -564,7 +564,7 @@ export class AudioRecorder {
         this.init(stream);
       })
       .catch((error) => {
-        console.log('AudioRecorder init error', error);
+        console.error('AudioRecorder init error', error);
       });
   }
   private init(stream: MediaStream) {
