@@ -9,8 +9,9 @@ type Dialog = { requests: DialogRequest[]; summary: 'empty' | 'partial' | 'compl
 const sse = (content: string) => `data: ${JSON.stringify({ choices: [{ index: 0, delta: { content } }] })}\n\n`;
 const previous = [{ at: 4, summary: 'previous complete summary' }];
 const test = base.extend<{ dialog: Dialog }>({
-  dialog: async ({ page }, use) => {
+  dialog: async ({ page }, use, testInfo) => {
     const dialog: Dialog = { requests: [], summary: 'partial' };
+    const serverEvents: { phase: string; at: number; bytes?: number }[] = [];
     const server = createServer((request, response) => {
       response.setHeader('Access-Control-Allow-Origin', 'http://localhost:30102');
       response.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -36,15 +37,20 @@ const test = base.extend<{ dialog: Dialog }>({
           'x-im-context-limit': '6000',
         });
         const summary = data.messages[0].content.startsWith('下面是一段对话的早期部分');
+        serverEvents.push({ phase: summary ? 'summary-request' : 'answer-request', at: Date.now() });
         if (!summary) response.end(sse('complete answer') + 'data: [DONE]\n\n');
         else if (dialog.summary === 'complete') response.end(sse('complete replacement summary') + 'data: [DONE]\n\n');
         else {
           response.flushHeaders();
-          if (dialog.summary === 'partial')
-            response.write(
+          serverEvents.push({ phase: 'headers-flushed', at: Date.now() });
+          if (dialog.summary === 'partial') {
+            const payload =
               sse('INCOMPLETE SUMMARY') +
-                'data: {"usage":{"prompt_tokens":42,"completion_tokens":3,"total_tokens":45}}\n\n',
-            );
+              'data: {"usage":{"prompt_tokens":42,"completion_tokens":3,"total_tokens":45}}\n\n';
+            response.write(payload, () => {
+              serverEvents.push({ phase: 'payload-written', at: Date.now(), bytes: Buffer.byteLength(payload) });
+            });
+          }
         }
       });
     });
@@ -54,7 +60,15 @@ const test = base.extend<{ dialog: Dialog }>({
     // Observe real stream consumption without replacing the framing/accumulator.
     await page.addInitScript(() => {
       let received = '';
-      const observe = (value: unknown): void => {
+      const reads: { path: string; type: string; bytes?: number; at: number }[] = [];
+      Reflect.set(window, '__compactionStreamProbe', () => ({ received, reads }));
+      const observe = (value: unknown, path: string): void => {
+        reads.push({
+          path,
+          type: Object.prototype.toString.call(value),
+          bytes: ArrayBuffer.isView(value) ? value.byteLength : undefined,
+          at: performance.now(),
+        });
         if (value instanceof Uint8Array) {
           received += new TextDecoder().decode(value);
           if (received.includes('"total_tokens":45'))
@@ -64,7 +78,7 @@ const test = base.extend<{ dialog: Dialog }>({
       const read = ReadableStreamDefaultReader.prototype.read;
       ReadableStreamDefaultReader.prototype.read = function () {
         return read.call(this).then((chunk) => {
-          observe(chunk.value);
+          observe(chunk.value, 'reader');
           return chunk;
         });
       };
@@ -75,7 +89,7 @@ const test = base.extend<{ dialog: Dialog }>({
       if (iterate)
         streams[Symbol.asyncIterator] = async function* () {
           for await (const chunk of iterate.call(this)) {
-            observe(chunk);
+            observe(chunk, 'iterator');
             yield chunk;
           }
         };
@@ -83,11 +97,20 @@ const test = base.extend<{ dialog: Dialog }>({
     try {
       await use(dialog);
     } finally {
+      if (testInfo.status !== testInfo.expectedStatus) {
+        const browser = await page.evaluate(() => Reflect.get(window, '__compactionStreamProbe')()).catch(String);
+        await testInfo.attach('compaction-stream.json', {
+          body: JSON.stringify({ serverEvents, browser }),
+          contentType: 'application/json',
+        });
+      }
       server.closeAllConnections();
       await new Promise<void>((resolve) => server.close(() => resolve()));
     }
   },
 });
+// This regression must fail visibly rather than turn green on a later attempt.
+test.describe.configure({ retries: 0 });
 
 async function seed(page: Page, compactions: typeof previous = []): Promise<void> {
   await freshApp(page);

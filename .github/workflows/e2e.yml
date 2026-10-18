@@ -65,6 +65,9 @@ jobs:
       - name: Build ranui
         run: pnpm --filter ranui run build
 
+      - name: Exercise compaction cancellation without retries
+        run: pnpm --filter im exec playwright test test/e2e/compaction-cancel.spec.ts --project=${{ matrix.browser }} --repeat-each=5 --retries=0
+
       # Engine assertions remain independent from the canonical screenshot gate below.
       - name: Run E2E tests
         run: pnpm --filter ranui exec playwright test --project=${{ matrix.browser }}
