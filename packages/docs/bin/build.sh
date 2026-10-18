@@ -74,21 +74,12 @@ echo "llms-full.txt generated: $llms_full"
 # 时默认绕过 HTTP 缓存（updateViaCache 默认 'imports'）。
 target="$dir/sw.js"
 tmpfile=$(mktemp)
-# 只预缓存 app shell，排除大体积媒体（HLS 分片、GIF/视频、其它二进制），避免 SW 安装时
-# 强行下载整个 dist 撑爆离线缓存配额。媒体交给浏览器正常下载。
-#
-# 搜索索引（search/*.json）同样排除：每种语言约 1 MB，而读者只会用到自己那一门，
-# 它本来就是按需 fetch 的。
-# Precache the entry, styles, used fonts and brand icons. Other chunks and visited pages
-# are cached on demand; installing the worker must not download every document/demo.
-# Read the filtered offline manifest so installation and idle batches agree about
-# unused assets. The manifest already carries canonical public URLs.
+# Precache only the entry's static imports, shared styles and brand icons.
+# Pages, search and lazy components are cached when the reader requests them.
 node --input-type=module - "$dir/offline-manifest.json" > "$tmpfile" <<'NODE'
 import { readFileSync } from 'node:fs';
 const { shared } = JSON.parse(readFileSync(process.argv[2], 'utf8'));
-for (const url of shared) {
-  if (/(?:^|\/)docs\.[^/]+\.js$|\.css$|\.woff2$|(?:^|\/)icon[^/]*\.png$/.test(url)) console.log(url);
-}
+for (const url of shared) console.log(url);
 NODE
 
 SERVICE_WORK_VARABLE="$dir/sw-file.js"
@@ -102,12 +93,8 @@ rm "$tmpfile"
 
 tmpfile=$(mktemp)
 cat "$SERVICE_WORK_VARABLE" >> "$tmpfile"
-printf 'const OFFLINE_MANIFEST = ' >> "$tmpfile"
-cat "$dir/offline-manifest.json" >> "$tmpfile"
-printf ';\n' >> "$tmpfile"
 cat "$target" >> "$tmpfile"
-cat "$dir/offline-worker.js" >> "$tmpfile"
 mv "$tmpfile" "$target"
-rm "$SERVICE_WORK_VARABLE" "$dir/offline-worker.js"
+rm "$SERVICE_WORK_VARABLE" "$dir/offline-manifest.json"
 
 echo "service work file paths have been generate for $target"
