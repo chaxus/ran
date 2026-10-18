@@ -50,3 +50,37 @@
 - `node packages/ranui/bin/visual.mjs check`：容器内 148 张截图全部通过
 - `pnpm -F ranpress test`：81 个用例通过（含新增 CRLF 用例）
 - PR 的 14 项 CI 检查全部通过，含 Linux / macOS / Windows 三平台构建、三浏览器 E2E 与 Cloudflare Pages
+
+## 第二轮：门禁缺口与 CI 成本
+
+第一轮修的是「已经坏了的地方」。第二轮看的是「没人看着、正在慢慢变坏的地方」：哪条门禁只挂在发版流程上，哪段流水线在重复做同一件事。
+
+| #   | 问题                                                                                                                                                | 修法                                                                |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 10  | `verify:links` 只在 `release.yml` 里跑。改个文件名，散文里的相对链接就断，而所有 PR 一直是绿的，直到有人切版本——和 `check:langs` 当初的处境完全一样 | 加进 `ci.yml` 的 lint job                                           |
+| 11  | `ci.yml`、`e2e.yml`、`semantic-pull-request.yml` 都没有 `concurrency`。同一个 PR 连推三次会起三套完整流水线，而且三套都跑完                         | 按 `workflow + ref` 分组，`cancel-in-progress: true`                |
+| 12  | `pages-build-site.yml` 每次 push main 都往 gh-pages 发布。两个合并挨得近时两个 publish 竞争，旧的可能后结束，把分支写回上一个提交的内容             | 按 `pages-redirect` 串行，**不**取消（写一半更糟）                  |
+| 13  | lint job 没有 `timeout-minutes`，默认 360 分钟。挂住的步骤要烧六小时才有人知道                                                                      | 设 20 分钟                                                          |
+| 14  | ubuntu/node-24 这一条矩阵腿上，ranui 单测跑两遍：`pnpm run test` 已经 `vitest run`，随后 `test:unit:coverage` 再跑一次同样的套件只为拿一份报告      | 包脚本接受 `RANUI_COVERAGE=1`，一次运行同时产出测试结果与覆盖率门禁 |
+| 15  | E2E 三个浏览器 job 都用 `fetch-depth: 0`。仓库历史数百 MB，而 spec、两个 Playwright 配置、ranui 构建全部只读工作树                                  | 改浅克隆（`build-test` 保留，它要跑 `release:prepare`）             |
+
+## 第二轮：看了但没改
+
+1. **`compaction-cancel.spec.ts` 每个浏览器跑 6 遍**：`--repeat-each=5` 一次，随后的全量 `--project` 又一次。想去掉重复只能按标题 `--grep-invert`，而这个 spec 的标题是模板拼出来的（`stopping ${mode} compaction …`）。一旦以后有人在别处加了带 "compaction" 的用例，会被静默跳过——省下的那 1/6 不值得换一个静默失效的开关。
+
+2. **`pnpm -F ranuts build` 在同一个 job 里跑三次**（`pnpm run build`、`bin/test.sh`、`ranui/bin/test.sh`）。实测单次 4.3 秒，两次冗余约 9 秒/job。要用环境变量传「已经构建过」的标记，复杂度换不回这点时间。
+
+3. **`cpd` 从未接入任何 workflow**，且 `.jscpd.json` 的 `threshold: 10` 相对实测的 2.40% 形同虚设。接入要先把阈值调到 3.0 形成棘轮，属于新增门禁，不是修正，单独排期。
+
+4. **全仓没有任何无障碍断言**：没装 `axe-core` / `vitest-axe`，`packages/ranui/test` 与 `packages/im/test` 里 0 处 `toHaveNoViolations`。ranui 是 60+ 个自定义元素的组件库，这是它最大的一块无覆盖回归面，但它是新能力线，不是流水线修补。
+
+5. **`packages/docs` 声明了 `ranuts` 却没有任何 `.ts` 源码 import 它**，只有 200+ 个 `.md` 里的示例代码写着 `import … from 'ranuts'`。需要先确认 docs 构建是否真的消费它，再决定降级还是移除。
+
+6. **`packages/docs/public/hls` 8.6 MB 的 HLS 分片提交在仓库里**，`dist` 累计 117 MB。分片属于产物不属于源码，但迁到 CDN 是部署决策。
+
+## 第二轮验证记录
+
+- `pnpm run verify:links`：通过
+- `packages/ranui/bin/test.sh` 分支选择：用桩程序确认 `RANUI_COVERAGE=1` → `test:unit:coverage`，未设/`=0` → `test:unit`
+- 四个 workflow 的 `concurrency` 块：位置在 `jobs:` 之前，缩进 2 空格，`prettier --check` 通过
+- `bash -n packages/ranui/bin/test.sh`：通过
