@@ -1,6 +1,6 @@
 {
   "name": "@alixex/ranview",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Framework-free DOM construction with fine-grained reactivity — build once, update in place, in a browser or to a string",
   "type": "module",
   "exports": {
@@ -75,5 +75,9 @@
         "import": "./dist/static.js"
       }
     }
+  },
+  "homepage": "https://ran.chaxus.com/src/ranview/",
+  "bugs": {
+    "url": "https://github.com/chaxus/ran/issues"
   }
 }
