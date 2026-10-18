@@ -6,8 +6,8 @@ on:
       tag:
         description: npm channel (must match all three package versions)
         type: choice
-        options: [rc, beta, alpha, latest]
-        default: rc
+        options: [latest, rc, beta, alpha]
+        default: latest
       publish:
         description: Upload the verified archives to npm (main only)
         type: boolean
