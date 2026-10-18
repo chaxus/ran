@@ -184,3 +184,26 @@ test('reconnected searchable select preserves its draft filter without committin
     ),
   ).toEqual(['change']);
 });
+
+test('hovering filtered search results preserves the query and pointer target', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'Hover triggers apply to desktop pointers.');
+  await mount(
+    page,
+    '<r-select id="select" trigger="hover" showsearch style="width:240px"><r-option value="a">Alpha</r-option><r-option value="b">Beta</r-option><r-option value="c">Gamma</r-option></r-select>',
+  );
+  await clickSearch(page);
+  await page.keyboard.type('Beta');
+  await expect(page.locator('r-dropdown-item')).toHaveText(['Beta']);
+  const beta = page.locator('r-dropdown-item');
+  const bounds = await beta.boundingBox();
+  expect(bounds).not.toBeNull();
+  const point = { x: bounds!.x + bounds!.width / 2, y: bounds!.y + bounds!.height / 2 };
+  // Keep the original pointer coordinates: resolving a fresh locator after the
+  // hover could silently follow Beta after a broken handler replaces the list.
+  await page.mouse.move(point.x, point.y);
+  await expect.poll(() => insideShadow(page, '#select', (root) => root.querySelector('input')!.value)).toBe('Beta');
+  await expect(page.locator('r-dropdown-item')).toHaveText(['Beta']);
+  await page.mouse.click(point.x, point.y);
+  await expect(page.locator('#select')).toHaveAttribute('value', 'b');
+  await expect(page.locator('#select')).not.toHaveAttribute('open');
+});
