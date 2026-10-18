@@ -3,13 +3,14 @@ import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { expect, test as base } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { freshApp, send } from './helpers';
+import { freshApp, rows, send } from './helpers';
 import { observeSummary } from './observe-summary';
 
 type DialogRequest = { messages: { role: string; content: string }[] };
 type Dialog = {
   requests: DialogRequest[];
   summary: 'empty' | 'partial' | 'complete';
+  mode: 'live' | 'demo';
   deliveryDelay: number;
   unicode: boolean;
   consumed: Promise<void>;
@@ -22,6 +23,7 @@ const test = base.extend<{ dialog: Dialog }>({
     const dialog: Dialog = {
       requests: [],
       summary: 'partial',
+      mode: 'live',
       deliveryDelay: 0,
       unicode: false,
       consumed: new Promise<void>((resolve) => {
@@ -56,7 +58,7 @@ const test = base.extend<{ dialog: Dialog }>({
         response.writeHead(200, {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-store',
-          'x-im-mode': 'live',
+          'x-im-mode': dialog.mode,
           'x-im-context-limit': '6000',
         });
         const summary = data.messages[0].content.startsWith('下面是一段对话的早期部分');
@@ -227,4 +229,82 @@ for (const fragmented of [false, true]) {
     expect(saved.compactions[0].at).toBeGreaterThan(0);
     expect(dialog.requests.at(-1)!.messages[0]).toEqual({ role: 'system', content: summary });
   });
+}
+
+for (const action of ['new', 'open', 'delete'] as const) {
+  for (const mode of ['live', 'demo'] as const) {
+    test(`${action} session clears a cancelled compaction notice (${mode})`, async ({ page, dialog }) => {
+      dialog.mode = mode;
+      await seed(page);
+      if (action === 'open') {
+        await page.evaluate(async () => {
+          const db = await new Promise<IDBDatabase>((resolve) => {
+            const open = indexedDB.open('ran-im');
+            open.onsuccess = () => resolve(open.result);
+          });
+          await new Promise<void>((resolve) => {
+            const tx = db.transaction('sessions', 'readwrite');
+            tx.objectStore('sessions').put({
+              id: 'destination-regression',
+              title: 'destination conversation',
+              createdAt: 3,
+              updatedAt: 4,
+              messages: [
+                { role: 'user', content: 'destination question' },
+                { role: 'assistant', content: 'destination answer' },
+              ],
+            });
+            tx.oncomplete = () => resolve();
+          });
+          db.close();
+        });
+        await page.reload({ waitUntil: 'load' });
+      }
+      await send(page, 'prime context limit');
+      await page.evaluate(() => {
+        (document.querySelector('#question') as HTMLElement & { value: string }).value = 'trigger summary';
+        (document.querySelector('#composer') as HTMLFormElement).requestSubmit();
+      });
+      await test.step('wait for accepted summary usage', () => dialog.consumed);
+      await expect(page.locator('#notice')).toContainText('正在把最早的');
+      if (action === 'new') await page.locator('#new-session').click();
+      if (action === 'open') await page.locator('.session-title', { hasText: 'destination conversation' }).click();
+      if (action === 'delete') {
+        const session = page
+          .locator('.session')
+          .filter({ has: page.locator('.session-title', { hasText: 'long conversation' }) });
+        await session.hover();
+        await session.locator('.session-delete').click();
+      }
+      await expect(page.locator('#send')).not.toHaveAttribute('disabled');
+      await expect
+        .poll(async () => (await rows(page)).map((row) => row.text))
+        .toEqual(action === 'open' ? ['destination question', 'destination answer'] : []);
+      const assertNotice = async () => {
+        if (mode === 'demo') {
+          await expect(page.locator('#notice')).toBeVisible();
+          await expect(page.locator('#notice')).toHaveText(/^演示模式：未配置 API key/);
+        } else await expect(page.locator('#notice')).toBeHidden();
+      };
+      await assertNotice();
+      expect(dialog.requests).toHaveLength(2);
+      if (action === 'delete') expect(await stored(page)).toBeUndefined();
+      else {
+        const original = await stored(page);
+        expect(original.compactions).toEqual([]);
+        expect(original.messages).toHaveLength(43);
+      }
+      // A completed request on the new owner also gives stale abort callbacks a
+      // chance to settle; they must not restore the old notice or history.
+      await send(page, 'new session request');
+      await assertNotice();
+      const next = dialog.requests.at(-1)!;
+      expect(JSON.stringify(next)).not.toContain('INCOMPLETE SUMMARY');
+      expect(JSON.stringify(next)).not.toContain('original user');
+      await page.reload({ waitUntil: 'load' });
+      await expect.poll(async () => (await rows(page)).at(-2)?.text).toBe('new session request');
+      expect(JSON.stringify(await rows(page))).not.toContain('INCOMPLETE SUMMARY');
+      await expect(page.locator('#notice')).not.toContainText('正在把最早的');
+    });
+  }
 }
