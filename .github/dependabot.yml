@@ -9,3 +9,31 @@ updates:
     labels:
       - scope:dependency
     target-branch: "main"
+
+  # Workspace dependencies were the one surface nothing watched: every advisory fixed in
+  # pnpm-workspace.yaml's `overrides` was found by hand. Patch and minor updates arrive as
+  # one grouped PR, so the weekly noise is a single branch rather than thirty.
+  #
+  # Majors are ignored on purpose. They are migrations (mermaid 12, shiki 5, vite 9), and
+  # this repo pins exact versions plus targeted `overrides` for advisories — an automated
+  # major bump would land without the code changes that make it true.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: sunday
+      time: "01:00"
+    labels:
+      - scope:dependency
+    target-branch: "main"
+    versioning-strategy: increase
+    groups:
+      npm-minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
