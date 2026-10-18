@@ -1,22 +1,14 @@
 {
+  "extends": "../../tsconfig.base.json",
   "exclude": ["node_modules/**", "**/*/dist/**", "public/**", "dist-next/**", "dist/**"],
   "include": ["**/*.ts", "**/*.d.ts"],
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "esModuleInterop": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "target": "ESNext",
     "declaration": true,
     "outDir": "dist",
     "rootDir": ".",
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
     "isolatedModules": false,
-    "strict": true,
-    "skipLibCheck": true,
-    "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
     "experimentalDecorators": true
