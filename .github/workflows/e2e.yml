@@ -45,9 +45,11 @@ jobs:
       matrix:
         browser: [chromium, firefox, webkit]
     steps:
+      # Shallow clone on purpose. This repository's history is hundreds of megabytes, and
+      # nothing in this job reads it: the specs, both Playwright configs and the ranui
+      # build all work off the working tree. `build-test` keeps `fetch-depth: 0` because
+      # it runs `release:prepare`, which does read git.
       - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
 
       - uses: pnpm/action-setup@v6
         name: Install pnpm
