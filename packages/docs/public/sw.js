@@ -100,12 +100,13 @@ const filterRequest = (request) => {
 const cacheFirst = async (request, event) => {
   // 从缓存中读取 respondWith 表示拦截请求并返回自定义的响应
   try {
-    const { url } = request
-    const cache = await caches.open(assetCacheName(url));
-    const responseFromCache = await cache.match(url);
-    // 如果缓存中有，返回已经缓存的资源
+    const cache = await caches.open(assetCacheName(request.url));
+    const responseFromCache = await cache.match(request.url);
     if (responseFromCache) return responseFromCache
-    // 如果缓存中没有，就从网络中请求，并更新到缓存中
+  } catch {
+    // Optional storage must not turn a healthy network request into an error.
+  }
+  try {
     const responseFromServer = await fetch(request);
     event.waitUntil(updateCache(responseFromServer, request))
     return responseFromServer
