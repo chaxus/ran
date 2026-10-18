@@ -27,6 +27,13 @@ on:
 permissions:
   contents: read
 
+# E2E is the longest job in the repository: three browsers, each rebuilding ranuts
+# and ranui. A superseded run has nothing left to tell us, so a new commit on the
+# same ref cancels it instead of letting both finish.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   e2e:
     if: github.repository == 'chaxus/ran'

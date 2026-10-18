@@ -29,6 +29,14 @@ permissions:
   contents: read
   pull-requests: read
 
+# Pushing a fixup three times in a row used to start three complete pipelines —
+# build-test alone is four os/node combinations — and all three ran to completion.
+# Only the newest commit's result can still be acted on, so the older runs are
+# cancelled the moment a new one starts for the same ref.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     if: github.repository == 'chaxus/ran'
