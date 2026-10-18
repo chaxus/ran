@@ -14,6 +14,14 @@ permissions:
   pages: write
   id-token: write
 
+# Two merges landing close together used to publish to gh-pages concurrently, and the
+# older run could finish last and leave the branch serving the previous commit's stub.
+# Serialize rather than cancel: a publish already writing must be allowed to finish, or
+# gh-pages is left half-written.
+concurrency:
+  group: pages-redirect
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
