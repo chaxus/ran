@@ -75,6 +75,15 @@ try {
 import { requestUrlToBuffer, createObjectURL, type RGB } from 'ranuts';
 import { signal } from 'ranui/builder';
 import { Button } from 'ranui/button';
+import Content, { Content as NamedContent } from 'ranui/content';
+import { registerBuiltinIcons, BUILTIN_ICON_NAMES } from 'ranui/icons';
+// @ts-expect-error The icon catalog does not export component constructors.
+import type { Button as IconButton } from 'ranui/icons';
+// @ts-expect-error The content entry does not export unrelated components.
+import type { Button as ContentButton } from 'ranui/content';
+const content: NamedContent = new Content();
+const iconNames: string[] = BUILTIN_ICON_NAMES;
+void [content, registerBuiltinIcons, iconNames];
 const pixel: RGB = [1, 2, 3];
 // @ts-expect-error A real tuple type must reject invalid input.
 const badPixel: RGB = 42;
@@ -165,6 +174,12 @@ void [prompt, invalid];
     join(fixture, 'runtime.mjs'),
     `
 import assert from 'node:assert/strict';
+import Content, { Content as NamedContent } from 'ranui/content';
+import * as icons from 'ranui/icons';
+assert.equal(Content, NamedContent);
+assert.equal(typeof icons.registerBuiltinIcons, 'function');
+assert.ok(icons.BUILTIN_ICON_NAMES.includes('check'));
+assert.equal('Button' in icons, false);
 import { Div, signal } from 'ranui/builder';
 import { h, renderToString } from 'ranui/ssr';
 import { renderHTMLToString } from 'ranui/ssr-stream';
