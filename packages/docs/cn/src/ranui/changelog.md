@@ -10,6 +10,14 @@ description: 'ranui 的变更记录——新增、变更、修复与移除及其
 
 ::: v-pre
 
+## [0.5.0] — 2026-10-18
+
+正式版本已准备，尚未上传 npm。
+
+- 联动 `ranuts@0.5.0` 和 `@alixex/ranview@0.2.0`，打包后的内部依赖使用这些确切版本；发布验证频道为 `latest`。
+- 包含下方 RC 准备记录中的交互、类型声明、数学字体材料及安装体积修复。继续支持 Node 24+、ESM 模块和独立 IIFE。
+- 正式版更新日志页不再显示预发布警告，Alpha、Beta 和 RC 构建仍保留提示。验证与发布步骤见[发布指南](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md)。
+
 ## [0.5.0-rc.0] — 2026-10-17
 
 待发布的 Release Candidate，尚未上传 npm。
@@ -170,7 +178,7 @@ description: 'ranui 的变更记录——新增、变更、修复与移除及其
 
 | 日期 | 仓库整体 |
 | ---- | ------- |
-| 2026-10-18 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-18.md) |
+| 2026-10-18 | [Stable release preparation](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-18.md) |
 | 2026-10-17 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-17.md) |
 | 2026-07-25 | [补齐：现有模块的缺口](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-25.md) |
 | 2026-07-19 | [builder：`children()` 支持响应式 getter（reactive children）](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-19.md) |

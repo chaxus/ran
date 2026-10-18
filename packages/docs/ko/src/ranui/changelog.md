@@ -10,6 +10,14 @@ description: 'ranui에서 무엇이 바뀌었는지 — 추가·변경·수정·
 
 ::: v-pre
 
+## [0.5.0] — 2026-10-18
+
+Stable release prepared for publication; no npm upload has been performed.
+
+- Coordinate `ranuts@0.5.0` and `@alixex/ranview@0.2.0`; packed internal dependencies resolve to these exact versions. Use the `latest` channel for release verification.
+- Include the interaction, declaration, font-license and installation-size corrections documented in the RC preparation below. Node 24+, ESM modules and standalone IIFEs remain the supported distribution.
+- Remove the pre-release warning from stable-version changelog pages; retain it for Alpha, Beta and RC builds. See the [release guide](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md) for verification and publication steps.
+
 ## [0.5.0-rc.0] — 2026-10-17
 
 Release candidate prepared for publication; npm upload is pending.
@@ -211,7 +219,7 @@ Release candidate prepared for publication; npm upload is pending.
 
 | 날짜 | 저장소 전체 |
 | ---- | ------- |
-| 2026-10-18 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-18.md) |
+| 2026-10-18 | [Stable release preparation](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-18.md) |
 | 2026-10-17 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-17.md) |
 | 2026-07-25 | [补齐：现有模块的缺口](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-25.md) |
 | 2026-07-19 | [builder：`children()` 支持响应式 getter（reactive children）](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-19.md) |

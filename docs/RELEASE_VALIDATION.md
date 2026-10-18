@@ -1,6 +1,18 @@
 # Browser and installation validation
 
-Measured on macOS arm64 with Node 26.12.0 and npm 11.20.0 for the coordinated `ranuts@0.5.0-rc.0`, `@alixex/ranview@0.2.0-rc.0` and `ranui@0.5.0-rc.0` candidates on 2026-10-17. These results describe release preparation, not an npm publication.
+The original optimization measurements below describe the coordinated RC candidates on 2026-10-17. The stable preparation was revalidated on 2026-10-18. These records describe release preparation, not an npm publication.
+
+## Stable preflight — 2026-10-18
+
+The coordinated `ranuts@0.5.0`, `@alixex/ranview@0.2.0` and `ranui@0.5.0` archives were prepared and installed with real registry dependencies on macOS arm64, Node 26.12.0 and npm 11.20.0. Strict NodeNext/Bundler declarations, ESM/SSR execution, browser production builds, exact internal dependency versions and installation-size budgets passed. The `latest` publication dry-run passed without uploading packages or changing dist-tags.
+
+| Package         | Compressed archive (bytes) | Unpacked files (bytes) |
+| --------------- | -------------------------: | ---------------------: |
+| ranuts          |                    577,058 |              1,755,827 |
+| @alixex/ranview |                     55,634 |                180,069 |
+| ranui           |                  9,899,695 |             38,010,764 |
+
+The combined production installation contains **60,495,834 logical bytes in 3,447 files**, below the 75 MB budget. Archive and unpacked-file measurements also pass their individual budgets. Exact SHA-512 values and the source commit are recorded in the local `.release/` receipts; the final main commit must be prepared and verified again before publication. Dry-run does not establish npm trusted-publisher authorization.
 
 ## Installation footprint
 
