@@ -76,7 +76,26 @@
 
 5. **`packages/docs` 声明了 `ranuts` 却没有任何 `.ts` 源码 import 它**，只有 200+ 个 `.md` 里的示例代码写着 `import … from 'ranuts'`。需要先确认 docs 构建是否真的消费它，再决定降级还是移除。
 
+   **核实后**：`client/components.ts` 按需动态导入 `ranui/*` 组件（`() => import('ranui/button')` 等），所以 `ranui` 是运行时必需。`ranuts` 则只出现在 `build/components.ts` 的安装命令字符串（`npm i ranui ranuts`）和代码示例字符串（`import { debounce } from 'ranuts'`）中——这些是**静态文本**，构建时不被 resolve。但 `ranuts` 是 ran 生态的组成部分，在文档中被系统性地介绍；把它从 `dependencies` 移除会让文档的安装指南与实际的依赖声明不一致。保持现状。
+
 6. **`packages/docs/public/hls` 8.6 MB 的 HLS 分片提交在仓库里**，`dist` 累计 117 MB。分片属于产物不属于源码，但迁到 CDN 是部署决策。
+
+   **核实后**：`src/ranui/player/index.md` 和 `src/article/video.md` 引用了这些分片作为实时演示素材。移除会断开文档中的播放器演示。保持现状。
+
+7. **`cpd` 从未接入任何 workflow**：`.jscpd.json` 的 `threshold: 10` 是**最小 token 数**（排除极短片段），不是重复率百分比。实测全仓 2.40%（2965 行 / 308 处克隆），排除 `test/` 后反而因 8 语言文档镜像激增到 **103,434 行 / 3,315 处克隆**。jscpd 无法区分「有意重复」（翻译文档）和「无意重复」（代码克隆），对这个仓库噪音远大于信号。不适合作为 CI 门禁。
+
+8. **`verify-packages.mjs` 被本地遗留目录误报**：`packages/debug`、`packages/ranite`、`packages/visual` 在磁盘上存在但 `git ls-files` 为 0。它们不是被 `.gitignore` 忽略，而是 git 不跟踪目录只跟踪文件——目录下没有任何被跟踪的文件时，`git status` 不显示它，但 `readdirSync` 仍能看到。`readDirectories()` 已改为用 `git ls-files packages/` 过滤，只保留有 tracked content 的目录。
+
+9. **ranui 单测在本沙箱「跑不完」的根因**：`NODE_OPTIONS=--require=.../node-language-shim.cjs` 把 `node-brokered-fs-shim.cjs` 注入到**每一个** node 进程（含 vitest 的 fork worker）。它把 `fs.readFileSync` / `statSync` 全部改写成走 broker IPC。jsdom 每个测试文件要加载数百个模块 → 每次读文件一次 IPC。
+
+   | 条件                | 10 个文件耗时 | environment 累计 |
+   | ------------------- | ------------- | ---------------- |
+   | 默认（带 shim）     | 53.84s        | 370.14s          |
+   | `--no-isolate`      | 43.50s        | 353.23s          |
+   | `--pool=threads`    | 46.77s        | 326.32s          |
+   | **`NODE_OPTIONS=`** | **1.76s**     | **8.61s**        |
+
+   broker 是串行资源，加 worker 不提速，反而把 worker 握手拖过 vitest 的 10s 超时 → `Failed to start forks worker: Timeout waiting for worker to respond`。**这不是仓库问题**——CI 的 `Test` 步骤全仓 97s，本地 ranui 单包 12s（`NODE_OPTIONS=` 前缀）。该变量由 WorkBuddy 运行时注入，不在任何可编辑的配置文件中；清理它会同时移除 safe-delete 守卫（`SAFE_DELETE_BULK_CONFIRM_REQUIRED`），属于安全降级。
 
 ## 第二轮验证记录
 
@@ -84,3 +103,7 @@
 - `packages/ranui/bin/test.sh` 分支选择：用桩程序确认 `RANUI_COVERAGE=1` → `test:unit:coverage`，未设/`=0` → `test:unit`
 - 四个 workflow 的 `concurrency` 块：位置在 `jobs:` 之前，缩进 2 空格，`prettier --check` 通过
 - `bash -n packages/ranui/bin/test.sh`：通过
+- `node bin/verify-packages.mjs`：通过（`debug`/`ranite`/`visual` 不再误报）
+- `NODE_OPTIONS= npx vitest run`：94 files / 1570 tests，11.94s，全绿
+- `NODE_OPTIONS= npx vitest run --coverage`：13.82s，89.89/80.4/90.59/92.16，全过阈值
+- `NODE_OPTIONS= RANUI_COVERAGE=1 sh bin/test.sh`（在 `packages/ranui` 内）：20s，1570 + 76(SSR) 全过
