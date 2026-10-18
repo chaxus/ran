@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 /** Repository root, relative to this file's directory. */
 export const ROOT = process.cwd();
@@ -24,13 +25,34 @@ export function readManifest() {
 /**
  * Lists the directories actually present under `packages/`.
  *
+ * Filters out directories that have no tracked content in git — build artifacts,
+ * abandoned experiments, or nested node_modules left behind by an earlier setup.
+ * Git does not track directories, only files; a directory whose contents are all
+ * ignored or absent is invisible to `git status` but still visible to `readdirSync`.
+ *
  * @returns Directory names, sorted.
  */
 export function readDirectories() {
-  return readdirSync(join(ROOT, 'packages'), { withFileTypes: true })
+  const dirs = readdirSync(join(ROOT, 'packages'), { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && entry.name !== 'node_modules')
-    .map((entry) => entry.name)
-    .sort();
+    .map((entry) => entry.name);
+
+  try {
+    const out = execFileSync('git', ['ls-files', 'packages/'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    });
+    const tracked = new Set();
+    for (const line of out.split(/\r?\n/)) {
+      if (!line) continue;
+      const name = line.split('/')[1];
+      if (name) tracked.add(name);
+    }
+    return dirs.filter((name) => tracked.has(name)).sort();
+  } catch {
+    // Git may be absent (e.g. tarball checkout); keep the unfiltered list.
+    return dirs.sort();
+  }
 }
 
 /**
