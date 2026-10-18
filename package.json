@@ -7,7 +7,6 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "pre": "sh ./bin/preinstall.sh",
     "preinstall": "npx only-allow pnpm",
     "clean": "sh ./bin/clean.sh",
     "build": "sh ./bin/build.sh",
