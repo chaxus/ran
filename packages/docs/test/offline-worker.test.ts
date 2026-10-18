@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 
 const origin = 'https://ran.test';
 const manifest = {
@@ -30,6 +30,7 @@ const harness = (storage = new Map<string, Map<string, Response>>()) => {
     URL,
     AbortController,
     DOMException,
+    Date,
     console,
     setTimeout,
     clearTimeout,
@@ -296,3 +297,22 @@ it.each(['redirect', '404', '410'])(
     expect(restarted.downloaded).toContain('/guide');
   },
 );
+
+it('shares an interaction quiet period across windows, including when no batch is active', async () => {
+  vi.useFakeTimers();
+  try {
+    const worker = harness();
+    await worker.send('OFFLINE_PAUSE', 'en', 'two');
+    expect((await worker.send('OFFLINE_BATCH', 'en', 'one'))?.state).toBe('busy');
+    await vi.advanceTimersByTimeAsync(1500);
+    await worker.send('OFFLINE_PAUSE', 'en', 'two');
+    await vi.advanceTimersByTimeAsync(1500);
+    expect((await worker.send('OFFLINE_BATCH', 'en', 'one'))?.state).toBe('busy');
+    expect(worker.downloaded).toEqual([]);
+    await vi.advanceTimersByTimeAsync(100);
+    expect((await worker.send('OFFLINE_BATCH', 'en', 'one'))?.state).toBe('working');
+    expect(worker.downloaded).toHaveLength(3);
+  } finally {
+    vi.useRealTimers();
+  }
+});

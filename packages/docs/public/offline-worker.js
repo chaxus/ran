@@ -4,6 +4,7 @@ const OFFLINE_STATE_URL = new URL('/__offline__/state.json', location.origin).hr
 let offlineJob = null;
 let offlineState = null;
 let foregroundRequests = 0;
+let quietUntil = 0;
 
 const offlineForeground = async (event, load, streamBody) => {
   offlineJob?.controller.abort();
@@ -135,6 +136,7 @@ this.addEventListener('message', event => {
   const data = event.data;
   if (!event.source?.url || new URL(event.source.url).origin !== location.origin) return;
   if (data?.type === 'OFFLINE_PAUSE') {
+    quietUntil = Date.now() + 1600;
     offlineJob?.controller.abort();
     return;
   }
@@ -142,7 +144,7 @@ this.addEventListener('message', event => {
   const port = event.ports?.[0];
   if (!port) return;
   if (!Object.hasOwn(OFFLINE_MANIFEST.locales, data.lang)) return;
-  if (offlineJob || foregroundRequests) {
+  if (offlineJob || foregroundRequests || Date.now() < quietUntil) {
     port.postMessage({ state: 'busy' });
     return;
   }
