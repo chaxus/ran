@@ -285,3 +285,54 @@ it.each(['busy', 'ready'])('pauses another window’s batch after this page repo
   window.dispatchEvent(new Event('pointerdown'));
   expect(requests.filter((type) => type === 'OFFLINE_PAUSE')).toHaveLength(before + 1);
 });
+
+it.each(['registration', 'update'])(
+  'bounds a stalled %s check without blocking unfinished downloads',
+  async (stage) => {
+    let finish!: () => void;
+    const held = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    const acquire = vi.fn(async () => {
+      if (stage === 'registration') await held;
+      return { update };
+    });
+    worker.getRegistration = acquire;
+    if (stage === 'update') update.mockImplementation(() => held);
+    reply = 'working';
+    mount();
+    await vi.advanceTimersByTimeAsync(302000);
+    const before = batches();
+    await vi.advanceTimersByTimeAsync(10000);
+    expect(batches()).toBeGreaterThan(before);
+    await vi.advanceTimersByTimeAsync(stage === 'update' ? 31000 : 2000);
+    if (stage === 'update') expect(update).toHaveBeenCalledOnce();
+    else expect(update).not.toHaveBeenCalled();
+    finish();
+    await vi.advanceTimersByTimeAsync(1);
+    if (stage === 'registration') expect(update).not.toHaveBeenCalled();
+    worker.getRegistration = async () => ({ update });
+    reply = 'ready';
+    await vi.advanceTimersByTimeAsync(33000);
+    expect(update).toHaveBeenCalledTimes(stage === 'update' ? 2 : 1);
+  },
+);
+
+it('releases a cancelled update wait and ignores its late registration', async () => {
+  let finish!: (value: { update: typeof update }) => void;
+  worker.getRegistration = () =>
+    new Promise((resolve) => {
+      finish = resolve;
+    });
+  mount();
+  await vi.advanceTimersByTimeAsync(300100);
+  worker.dispatchEvent(new Event('controllerchange'));
+  await vi.advanceTimersByTimeAsync(2000);
+  expect(batches()).toBe(2);
+  finish({ update });
+  await vi.advanceTimersByTimeAsync(1);
+  expect(update).not.toHaveBeenCalled();
+  stop?.();
+  await vi.advanceTimersByTimeAsync(600000);
+  expect(batches()).toBe(2);
+});

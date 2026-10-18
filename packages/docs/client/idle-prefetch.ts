@@ -20,6 +20,8 @@ export const mountIdlePrefetch = (): (() => void) => {
   let timer = 0;
   let idle: number | undefined;
   let cancelRequest: (() => void) | undefined;
+  let cancelUpdate: (() => void) | undefined;
+  let pendingUpdate: { valid: boolean; started: boolean } | undefined;
   const allowed = (): boolean =>
     !disposed &&
     !suspended &&
@@ -84,6 +86,42 @@ export const mountIdlePrefetch = (): (() => void) => {
         close({ state: 'network' });
       }
     });
+  // Native update promises cannot be aborted. Bound our wait, retain at most one
+  // started check, and revoke late registration results before they can start IO.
+  const checkUpdate = async (): Promise<'updated' | 'retry' | 'cancelled'> => {
+    if (pendingUpdate?.started) return 'retry';
+    const attempt = { valid: true, started: false };
+    pendingUpdate = attempt;
+    let deadline = 0;
+    const interrupted = new Promise<'retry' | 'cancelled'>((resolve) => {
+      const cancel = (result: 'retry' | 'cancelled'): void => {
+        attempt.valid = false;
+        if (!attempt.started && pendingUpdate === attempt) pendingUpdate = undefined;
+        resolve(result);
+      };
+      deadline = window.setTimeout(() => cancel('retry'), 8000);
+      cancelUpdate = () => cancel('cancelled');
+    });
+    const operation = (async (): Promise<'updated' | 'retry' | 'cancelled'> => {
+      try {
+        const registration = await worker.getRegistration();
+        if (!attempt.valid || !allowed() || Date.now() - lastActivity < 1600) return 'cancelled';
+        attempt.started = true;
+        await registration?.update();
+        return 'updated';
+      } catch {
+        return 'retry';
+      } finally {
+        if (pendingUpdate === attempt) pendingUpdate = undefined;
+      }
+    })();
+    try {
+      return await Promise.race([operation, interrupted]);
+    } finally {
+      window.clearTimeout(deadline);
+      cancelUpdate = undefined;
+    }
+  };
   const run = async (): Promise<void> => {
     if (inFlight || !allowed()) return;
     const quiet = Date.now() - lastActivity;
@@ -99,16 +137,9 @@ export const mountIdlePrefetch = (): (() => void) => {
     let delay = 1600;
     try {
       if (Date.now() >= nextUpdate) {
-        try {
-          const registration = await worker.getRegistration();
-          if (!allowed() || Date.now() - lastActivity < 1600) return;
-          nextUpdate = Date.now() + updateInterval;
-          await registration?.update();
-        } catch {
-          delay = 30000;
-          nextUpdate = Date.now() + delay;
-          return;
-        }
+        const result = await checkUpdate();
+        if (result === 'cancelled') return;
+        nextUpdate = Date.now() + (result === 'retry' ? 30000 : updateInterval);
       }
       // A new worker can claim this page while update() is pending. Recheck both
       // readiness and user activity before granting its next download batch.
@@ -127,6 +158,7 @@ export const mountIdlePrefetch = (): (() => void) => {
   };
   const pause = (): void => {
     worker.controller?.postMessage({ type: 'OFFLINE_PAUSE' });
+    cancelUpdate?.();
     cancelRequest?.();
     clearSchedule();
   };
