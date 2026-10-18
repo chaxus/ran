@@ -21,6 +21,10 @@ Release candidate prepared for publication; npm upload is pending.
 
 ### Release preparation
 
+- Preserve the search query and filtered option identity when a hover-triggered Select popup is entered, so pointer selection commits the intended value.
+- Align `ranui/icons` and `ranui/content` declarations with their named/default runtime exports; verify named and invalid imports against real archives.
+- Retain exact mathematical-font licenses, copyright/source documents and font hashes in published archives, linked from both dependency-license summaries.
+
 - Preserve explicit focus handoffs when tab removal or disabling selects a replacement header, including nested shadow roots.
 - Clear Select labels, active options and form state together; keep explicit empty values through filtering/reconnection while preserving form reset defaults.
 - Restore Select portals, search drafts and open/closed state after reconnect, without duplicated listeners or stale blur-close timers; reset keyboard typeahead between mounts.
@@ -212,6 +216,7 @@ de resumidas aqui. São o raciocínio por trás das entradas acima.
 
 | Data | Todo o repositório |
 | ---- | ------- |
+| 2026-10-18 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-18.md) |
 | 2026-10-17 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-17.md) |
 | 2026-07-25 | [补齐：现有模块的缺口](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-25.md) |
 | 2026-07-19 | [builder：`children()` 支持响应式 getter（reactive children）](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-19.md) |
