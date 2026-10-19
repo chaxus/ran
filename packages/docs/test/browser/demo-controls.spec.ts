@@ -42,7 +42,11 @@ test('live forms submit with one native button and preserve the documentation UR
   const validation = forms.last();
   await validation.locator('button[type="submit"]').click();
   await expect(validation.locator('output')).toBeEmpty();
-  await validation.locator('r-input').evaluate((element) => element.setAttribute('value', 'Ada'));
+  // Edit through the public focus API and native keyboard input. Setting an
+  // attribute leaves Firefox's native validation UI active over the next click.
+  await validation.locator('r-input').focus();
+  await page.keyboard.type('Ada');
+  await expect(validation.locator('r-input')).toHaveAttribute('value', 'Ada');
   await validation.locator('button[type="submit"]').click();
   await expect(validation.locator('output')).toContainText('"username":"Ada"');
   expect(page.url()).toBe(before);
