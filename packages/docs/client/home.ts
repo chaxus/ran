@@ -11,14 +11,20 @@ import { announceCopy, copyText } from './copy';
 
 /** Feedback changes only after a successful clipboard write. */
 const wireCopy = (button: HTMLElement, text: string | (() => string), doneLabel?: string): void => {
+  const restore = doneLabel ? button.textContent : null;
+  let timer: number | undefined;
+  let pending = false;
   button.addEventListener('click', async () => {
+    if (pending) return;
+    pending = true;
     const success = await copyText(typeof text === 'function' ? text() : text);
+    pending = false;
     announceCopy(success);
     if (!success) return;
-    const restore = doneLabel ? button.textContent : null;
+    window.clearTimeout(timer);
     button.classList.add('done');
     if (doneLabel) button.textContent = doneLabel;
-    window.setTimeout(() => {
+    timer = window.setTimeout(() => {
       button.classList.remove('done');
       if (restore !== null) button.textContent = restore;
     }, 1600);
@@ -35,7 +41,7 @@ const mountHome = (): void => {
 
   const reveals = [...root.querySelectorAll<HTMLElement>('[data-reveal]')];
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) {
+  if (reduce || typeof IntersectionObserver === 'undefined') {
     // Reduced motion means the end state, immediately — not "no animation, and also
     // never visible", which is what skipping the observer would have produced.
     for (const el of reveals) el.classList.add('in');
@@ -74,12 +80,59 @@ const mountHome = (): void => {
     { threshold: 0.18, rootMargin: '0px 0px -8% 0px' },
   );
   for (const el of reveals) observer.observe(el);
+  // The head bootstrap alone cannot prove the client can reveal hidden content.
+  root.dataset.revealReady = 'true';
 };
 
 const mountGlass = (): void => {
   const root = document.querySelector<HTMLElement>('[data-glass]');
   const glass = root?.querySelector<HTMLElement>('.gp-glass');
-  if (!root || !glass) return;
+  const stage = root?.querySelector<HTMLElement>('.gp-stage');
+  if (!root || !glass || !stage) return;
+
+  let x = 0;
+  let y = 0;
+  let drag: { pointer: number; x: number; y: number } | undefined;
+  const move = (nextX = x, nextY = y): void => {
+    x = Math.max(0, Math.min(nextX, stage.clientWidth - glass.offsetWidth));
+    y = Math.max(0, Math.min(nextY, stage.clientHeight - glass.offsetHeight));
+    glass.style.left = `${x}px`;
+    glass.style.top = `${y}px`;
+  };
+  glass.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 || drag) return;
+    drag = { pointer: event.pointerId, x: event.clientX - x, y: event.clientY - y };
+    glass.setPointerCapture(event.pointerId);
+    stage.focus({ preventScroll: true });
+  });
+  glass.addEventListener('pointermove', (event) => {
+    if (drag?.pointer === event.pointerId) move(event.clientX - drag.x, event.clientY - drag.y);
+  });
+  const endDrag = (event: PointerEvent): void => {
+    if (drag?.pointer !== event.pointerId) return;
+    drag = undefined;
+  };
+  glass.addEventListener('pointerup', endDrag);
+  glass.addEventListener('pointercancel', endDrag);
+  glass.addEventListener('lostpointercapture', endDrag);
+  stage.addEventListener('keydown', (event) => {
+    const step = event.shiftKey ? 50 : 10;
+    const delta: Record<string, [number, number]> = {
+      ArrowLeft: [-step, 0],
+      ArrowRight: [step, 0],
+      ArrowUp: [0, -step],
+      ArrowDown: [0, step],
+    };
+    const offset = delta[event.key];
+    if (!offset) return;
+    event.preventDefault();
+    move(x + offset[0], y + offset[1]);
+  });
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(() => move());
+    observer.observe(stage);
+    observer.observe(glass);
+  } else window.addEventListener('resize', () => move());
 
   const codeEl = root.querySelector('.gp-code code');
   const read = (param: string): string => root.querySelector<HTMLInputElement>(`[data-param="${param}"]`)?.value ?? '';
@@ -97,10 +150,12 @@ const mountGlass = (): void => {
     for (const box of root.querySelectorAll<HTMLInputElement>('[data-flag]')) {
       glass.toggleAttribute(box.dataset.flag ?? '', box.checked);
     }
+    move();
     if (codeEl) {
       codeEl.textContent =
         `<r-glass blur="${read('blur')}" saturate="${read('saturate')}" ` +
-        `displace="${read('displace')}" radius="${read('radius')}">\n  …\n</r-glass>`;
+        `displace="${read('displace')}" radius="${read('radius')}" style="width:${read('width')}px"` +
+        `${glass.hasAttribute('sheen') ? ' sheen' : ''}${glass.hasAttribute('interactive') ? ' interactive' : ''}>\n  …\n</r-glass>`;
     }
   };
 
@@ -110,6 +165,7 @@ const mountGlass = (): void => {
       input.value = input.defaultValue;
     }
     for (const box of root.querySelectorAll<HTMLInputElement>('[data-flag]')) box.checked = false;
+    x = y = 0;
     sync();
   });
 

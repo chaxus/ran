@@ -276,9 +276,10 @@ width on desktop WebKit. Browser regressions exercise the built site with
 `pnpm -F docs test:preview`; build the workspace libraries and docs first.
 
 **CSS may hide something only when script is there to bring it back.** `.reveal` sets
-`opacity: 0` and an IntersectionObserver adds `.in`; the rule is gated on a `js` class set
-before first paint by the theme bootstrap in `page.ts`. Without that gate, JavaScript
-disabled meant every landing section below the fold was invisible permanently.
+`opacity: 0` and an IntersectionObserver adds `.in`; the rule is gated on the landing's
+`data-reveal-ready` marker, set only after the client installs its observer. The head's
+`js` class alone cannot prove that the client loaded. Disabled JavaScript, a failed client
+request or an unavailable observer must leave every server-rendered section visible.
 
 ---
 

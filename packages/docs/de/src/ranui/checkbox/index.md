@@ -97,7 +97,7 @@ detail: {
 Eine deaktivierte Checkbox löst kein `change` aus.
 
 <ran-demo>
-  <r-checkbox onchange="message.info(this)">Schalt mich um</r-checkbox>
+  <r-checkbox onchange="message.info('checked: ' + event.detail.checked)">Schalt mich um</r-checkbox>
 </ran-demo>
 
 ```html

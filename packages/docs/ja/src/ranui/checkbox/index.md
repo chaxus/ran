@@ -97,7 +97,7 @@ detail: {
 無効なチェックボックスは `change` を発生させません。
 
 <ran-demo>
-  <r-checkbox onchange="message.info(this)">切り替えてみてください</r-checkbox>
+  <r-checkbox onchange="message.info('checked: ' + event.detail.checked)">切り替えてみてください</r-checkbox>
 </ran-demo>
 
 ```html

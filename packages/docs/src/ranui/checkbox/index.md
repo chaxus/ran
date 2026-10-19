@@ -96,7 +96,7 @@ detail: {
 A disabled checkbox does not fire `change`.
 
 <ran-demo>
-  <r-checkbox onchange="message.info(this)">Toggle me</r-checkbox>
+  <r-checkbox onchange="message.info('checked: ' + event.detail.checked)">Toggle me</r-checkbox>
 </ran-demo>
 
 ```html

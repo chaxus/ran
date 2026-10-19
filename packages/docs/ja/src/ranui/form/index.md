@@ -13,14 +13,15 @@ ranui には `<form>` を包むコンポーネントがありません。`r-inpu
 3 種類のフィールドすべてを、素の `<form>` で送信します。フィールドを変えて送信すると、下に結果が出ます。このデモはブラウザ自身の `FormData` / `Object.fromEntries` でオブジェクトを組み立てています（import は不要）。次に紹介する `serializeForm()` は同じことをしたうえで、`Object.fromEntries` にできないことを一つ足します。同じ名前が繰り返し現れたとき、黙って最後の値だけを残すのではなく配列として返すのです。
 
 <ran-demo column>
-  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
     <r-input name="username" label="ユーザー名" placeholder="ユーザー名を入力"></r-input>
     <r-select name="role" label="ロール" style="width: 100%" defaultValue="member">
       <r-option value="member">メンバー</r-option>
       <r-option value="admin">管理者</r-option>
     </r-select>
     <r-checkbox name="subscribe">ニュースレターを購読する</r-checkbox>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">送信</button></r-button>
+    <button class="demo-submit" type="submit">送信</button>
+    <output class="demo-result"></output>
   </form>
 </ran-demo>
 
@@ -73,10 +74,11 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 フィールドはフォーム全体のレイアウトを自前では持ちません。あなたの `<form>` に普通の CSS でスタイルを当ててください。
 
 <ran-demo column>
-  <form style="display: flex; flex-direction: column; gap: 16px;">
+  <form style="display: flex; flex-direction: column; gap: 16px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
     <r-input name="first" label="名"></r-input>
     <r-input name="last" label="姓"></r-input>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">次へ</button></r-button>
+    <button class="demo-submit" type="submit">次へ</button>
+    <output class="demo-result"></output>
   </form>
 </ran-demo>
 
@@ -93,9 +95,10 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 `r-input`、`r-checkbox`、`r-select` はいずれも `required`（ネイティブのフィールドとまったく同じように送信を止め、ブラウザ標準の検証バブルを出します）に加えて、`checkValidity()`、`reportValidity()`、`validity`、`validationMessage` に対応しています。ネイティブの `form.reset()`（または `<button type="reset">`）は `formResetCallback()` を通じて各フィールドを操作前の状態に戻します。詳しくは各フィールドのドキュメント（[Input](/ja/src/ranui/input/#form-association)、[Checkbox](/ja/src/ranui/checkbox/#form-association)、[Select](/ja/src/ranui/select/#form-association)）を参照してください。
 
 <ran-demo column>
-  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
     <r-input name="username" label="ユーザー名" required></r-input>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">送信</button></r-button>
+    <button class="demo-submit" type="submit">送信</button>
+    <output class="demo-result"></output>
   </form>
 </ran-demo>
 

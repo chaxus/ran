@@ -19,7 +19,7 @@ description: 'ranui Modal(<r-modal>)은 집중된 상호작용을 위한 대화 
   <r-modal id="quickstart-modal" heading="기본 모달">
     <p>이것이 모달의 내용입니다.</p>
     <div slot="footer">
-      <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">확인</r-button>
+      <button tabindex="0" class="demo-submit" type="button" onclick="document.getElementById('quickstart-modal').open = false">확인</button>
     </div>
   </r-modal>
 </ran-demo>
@@ -30,7 +30,7 @@ description: 'ranui Modal(<r-modal>)은 집중된 상호작용을 위한 대화 
 <r-modal id="modal" heading="기본 모달">
   <p>이것이 모달의 내용입니다.</p>
   <div slot="footer">
-    <r-button type="primary" onclick="modal.open = false">확인</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">확인</button>
   </div>
 </r-modal>
 ```
@@ -69,7 +69,7 @@ description: 'ranui Modal(<r-modal>)은 집중된 상호작용을 위한 대화 
 <r-modal open heading="약관" closable="false">
   <p>계속하려면 약관에 동의해야 합니다.</p>
   <div slot="footer">
-    <r-button type="primary">동의</r-button>
+    <button tabindex="0" type="button">동의</button>
   </div>
 </r-modal>
 ```
@@ -129,8 +129,8 @@ description: 'ranui Modal(<r-modal>)은 집중된 상호작용을 위한 대화 
 <r-modal open heading="확인">
   <p>본문 내용은 기본 슬롯에 들어갑니다.</p>
   <div slot="footer">
-    <r-button onclick="modal.open = false">취소</r-button>
-    <r-button type="primary">확인</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">취소</button>
+    <button tabindex="0" type="button">확인</button>
   </div>
 </r-modal>
 ```

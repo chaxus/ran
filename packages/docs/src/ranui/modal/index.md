@@ -19,7 +19,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
   <r-modal id="quickstart-modal" heading="Basic Modal">
     <p>This is the modal content.</p>
     <div slot="footer">
-      <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">OK</r-button>
+      <button tabindex="0" class="demo-submit" type="button" onclick="document.getElementById('quickstart-modal').open = false">OK</button>
     </div>
   </r-modal>
 </ran-demo>
@@ -30,7 +30,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 <r-modal id="modal" heading="Basic Modal">
   <p>This is the modal content.</p>
   <div slot="footer">
-    <r-button type="primary" onclick="modal.open = false">OK</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">OK</button>
   </div>
 </r-modal>
 ```
@@ -69,7 +69,7 @@ Hides the header close button so the modal can only be dismissed through your ow
 <r-modal open heading="Terms" closable="false">
   <p>You must accept the terms to continue.</p>
   <div slot="footer">
-    <r-button type="primary">Accept</r-button>
+    <button tabindex="0" type="button">Accept</button>
   </div>
 </r-modal>
 ```
@@ -129,8 +129,8 @@ Drops the title bar and its border entirely, leaving only a floating close butto
 <r-modal open heading="Confirm">
   <p>Body content goes in the default slot.</p>
   <div slot="footer">
-    <r-button onclick="modal.open = false">Cancel</r-button>
-    <r-button type="primary">Confirm</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">Cancel</button>
+    <button tabindex="0" type="button">Confirm</button>
   </div>
 </r-modal>
 ```

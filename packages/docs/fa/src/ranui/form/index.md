@@ -13,14 +13,15 @@ ranui هیچ کامپوننتی برای دربرگرفتن `<form>` ندارد.
 هر سه نوع فیلد، ارسال‌شده با یک `<form>` ساده. فیلدی را تغییر دهید و ارسال کنید تا نتیجه را پایین ببینید. این نمونه شیء را با `FormData`/`Object.fromEntries` خودِ مرورگر می‌سازد (بدون هیچ import). تابع `serializeForm()` که در ادامه معرفی می‌شود همین کار را می‌کند، به‌علاوهٔ کاری که `Object.fromEntries` نمی‌تواند: نامِ فیلدی که تکرار شده باشد به‌جای اینکه بی‌صدا فقط آخرین مقدار را نگه دارد، به‌صورت آرایه برمی‌گردد.
 
 <ran-demo column>
-  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
     <r-input name="username" label="نام کاربری" placeholder="نام کاربری را وارد کنید"></r-input>
     <r-select name="role" label="نقش" style="width: 100%" defaultValue="member">
       <r-option value="member">عضو</r-option>
       <r-option value="admin">مدیر</r-option>
     </r-select>
     <r-checkbox name="subscribe">اشتراک خبرنامه</r-checkbox>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">ارسال</button></r-button>
+    <button class="demo-submit" type="submit">ارسال</button>
+    <output class="demo-result"></output>
   </form>
 </ran-demo>
 
@@ -73,10 +74,11 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 فیلدها چیدمان پیش‌فرضی در سطح فرم ندارند: `<form>` خودتان را با CSS معمولی استایل بدهید:
 
 <ran-demo column>
-  <form style="display: flex; flex-direction: column; gap: 16px;">
+  <form style="display: flex; flex-direction: column; gap: 16px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
     <r-input name="first" label="نام"></r-input>
     <r-input name="last" label="نام خانوادگی"></r-input>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">ادامه</button></r-button>
+    <button class="demo-submit" type="submit">ادامه</button>
+    <output class="demo-result"></output>
   </form>
 </ran-demo>
 
@@ -93,9 +95,10 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 `r-input`، `r-checkbox` و `r-select` هر سه `required` را پشتیبانی می‌کنند (که دقیقاً مثل فیلد بومی جلوی ارسال را می‌گیرد و حباب اعتبارسنجی بومی مرورگر را می‌آورد) و افزون بر آن `checkValidity()`، `reportValidity()`، `validity` و `validationMessage` را دارند. `form.reset()` بومی (یا `<button type="reset">`) هر فیلد را از راه `formResetCallback()` به وضعیت پیش از تعامل برمی‌گرداند. برای جزئیات، مستندات خود هر فیلد را ببینید: [Input](/fa/src/ranui/input/#form-association)، [Checkbox](/fa/src/ranui/checkbox/#form-association)، [Select](/fa/src/ranui/select/#form-association).
 
 <ran-demo column>
-  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
     <r-input name="username" label="نام کاربری" required></r-input>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">ارسال</button></r-button>
+    <button class="demo-submit" type="submit">ارسال</button>
+    <output class="demo-result"></output>
   </form>
 </ran-demo>
 

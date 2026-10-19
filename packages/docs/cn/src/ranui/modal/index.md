@@ -19,7 +19,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
   <r-modal id="quickstart-modal" heading="基础对话框">
     <p>这是对话框的内容。</p>
     <div slot="footer">
-      <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">确定</r-button>
+      <button tabindex="0" class="demo-submit" type="button" onclick="document.getElementById('quickstart-modal').open = false">确定</button>
     </div>
   </r-modal>
 </ran-demo>
@@ -30,7 +30,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 <r-modal id="modal" heading="基础对话框">
   <p>这是对话框的内容。</p>
   <div slot="footer">
-    <r-button type="primary" onclick="modal.open = false">确定</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">确定</button>
   </div>
 </r-modal>
 ```
@@ -69,7 +69,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 <r-modal open heading="条款" closable="false">
   <p>你必须接受条款才能继续。</p>
   <div slot="footer">
-    <r-button type="primary">接受</r-button>
+    <button tabindex="0" type="button">接受</button>
   </div>
 </r-modal>
 ```
@@ -129,8 +129,8 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 <r-modal open heading="确认">
   <p>主体内容放在默认插槽中。</p>
   <div slot="footer">
-    <r-button onclick="modal.open = false">取消</r-button>
-    <r-button type="primary">确认</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">取消</button>
+    <button tabindex="0" type="button">确认</button>
   </div>
 </r-modal>
 ```

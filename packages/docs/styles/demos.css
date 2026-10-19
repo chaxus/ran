@@ -6,7 +6,7 @@
 /* ── Glass playground ─────────────────────────────────────────────────────── */
 .gp {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: 16px;
   margin: 22px 0;
 }
@@ -23,7 +23,10 @@
   border-radius: 14px;
   border: 1px solid var(--rule);
   overflow: hidden;
-  touch-action: none;
+}
+.gp-stage:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 .gp-bg {
   position: absolute;
@@ -67,6 +70,7 @@
   position: absolute;
   cursor: grab;
   touch-action: none;
+  max-width: 100%;
 }
 .gp-glass:active {
   cursor: grabbing;
@@ -104,7 +108,7 @@
 }
 .gp-row {
   display: grid;
-  grid-template-columns: 74px 1fr 52px;
+  grid-template-columns: 74px minmax(0, 1fr) 52px;
   align-items: center;
   gap: 10px;
 }
@@ -115,6 +119,7 @@
 }
 .gp-row input[type='range'] {
   width: 100%;
+  min-width: 0;
   accent-color: var(--accent);
 }
 .gp-val {
@@ -126,6 +131,7 @@
 }
 .gp-toggles {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   align-items: center;
   grid-template-columns: none;
@@ -213,7 +219,6 @@
   color: var(--fg);
   font: inherit;
   cursor: pointer;
-  transition: background-color 0.15s ease;
 }
 
 .icon-cell:hover {
@@ -292,6 +297,17 @@
   gap: 10px;
   padding: 16px 8px;
 }
+/* These variants depict a word and a 3D object rather than a small icon.
+   Give them a full row and size them through their supported host variables. */
+.loading-cell:has(r-loading:is([name='text'], [name='cube-dim'], [name='solar'])) {
+  grid-column: 1 / -1;
+}
+.loading-cell r-loading[name='text'] {
+  --loading-text-font-size: var(--ran-text-heading-1);
+}
+.loading-cell r-loading[name='cube-dim'] {
+  font-size: 0.5em;
+}
 .loading-cell__name {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -310,4 +326,27 @@
    parent width so percentage-sized placeholders retain their aspect ratio. */
 .r-preview-mask .r-preview-context {
   width: 100%;
+}
+
+/* A native submit action must keep its form behavior and remain one focus stop. */
+.demo-submit {
+  min-height: 44px;
+  padding: var(--ran-space-2) var(--ran-space-4);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--ran-radius-sm);
+  background: var(--accent);
+  color: var(--ran-color-primary-text);
+  font: inherit;
+  cursor: pointer;
+}
+.demo-submit:hover {
+  background: var(--accent-hover);
+}
+.demo-result {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--fg-muted);
+}
+.demo-result:empty {
+  display: none;
 }

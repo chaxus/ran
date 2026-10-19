@@ -40,6 +40,8 @@ const loaders: Record<string, () => Promise<unknown>> = {
   'r-preview': () => import('@ranui/preview'),
 };
 const selector = Object.keys(loaders).join(',');
+// Imperative examples create their first toast only after the reader acts.
+const messageHandlers = ['onclick', 'onchange', 'onsubmit'].map((name) => `[${name}*="message."]`).join(',');
 // Registration upgrades every instance of a tag. Defer a heavy module until at least
 // one instance is near the viewport; controls and the theme switch remain eager.
 const deferred = new Set(['r-markdown', 'r-math', 'r-mermaid', 'r-player']);
@@ -49,9 +51,8 @@ export const mountComponents = (): (() => void) => {
   const observed = new Set<Element>();
   let disposed = false;
   let viewport: IntersectionObserver | undefined;
-  const load = (element: Element): void => {
-    const tag = element.localName;
-    if (disposed || !element.isConnected || !loaders[tag] || pending.has(tag) || customElements.get(tag)) return;
+  const loadTag = (tag: string): void => {
+    if (disposed || !loaders[tag] || pending.has(tag) || customElements.get(tag)) return;
     pending.add(tag);
     void loaders[tag]()
       .then(() => {
@@ -65,6 +66,9 @@ export const mountComponents = (): (() => void) => {
         pending.delete(tag);
         console.error(`Failed to load ${tag}`, error);
       });
+  };
+  const load = (element: Element): void => {
+    if (element.isConnected) loadTag(element.localName);
   };
   if (typeof IntersectionObserver !== 'undefined') {
     viewport = new IntersectionObserver(
@@ -81,6 +85,7 @@ export const mountComponents = (): (() => void) => {
     );
   }
   const prepare = (element: Element): void => {
+    if (element.matches(messageHandlers)) loadTag('r-message');
     const tag = element.localName;
     if (!loaders[tag]) return;
     if (tag === 'r-markdown' && element.hasAttribute('data-content') && !element.hasAttribute('content')) {
@@ -101,7 +106,7 @@ export const mountComponents = (): (() => void) => {
   };
   const scan = (root: ParentNode): void => {
     if (root instanceof Element) prepare(root);
-    root.querySelectorAll(selector).forEach(prepare);
+    root.querySelectorAll(`${selector},${messageHandlers}`).forEach(prepare);
   };
   const observer = new MutationObserver((records) => {
     for (const record of records) {

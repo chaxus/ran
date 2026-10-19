@@ -46,7 +46,7 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
   '': {
     glass: {
       cardTitle: 'Frosted panel',
-      cardSub: 'drag me · tune the knobs',
+      cardSub: 'drag or use arrow keys · tune the knobs',
       reset: 'Reset',
       copy: 'Copy',
       copied: 'Copied',
@@ -56,7 +56,7 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
   cn: {
     glass: {
       cardTitle: '毛玻璃面板',
-      cardSub: '拖动它 · 调节参数',
+      cardSub: '拖动或用方向键移动 · 调节参数',
       reset: '重置',
       copy: '复制',
       copied: '已复制',
@@ -66,7 +66,7 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
   ja: {
     glass: {
       cardTitle: 'すりガラスのパネル',
-      cardSub: 'ドラッグして · つまみで調整',
+      cardSub: 'ドラッグまたは矢印キーで移動 · 値を調整',
       reset: 'リセット',
       copy: 'コピー',
       copied: 'コピーしました',
@@ -76,7 +76,7 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
   es: {
     glass: {
       cardTitle: 'Panel esmerilado',
-      cardSub: 'arrástralo · ajusta los controles',
+      cardSub: 'arrastra o usa las flechas · ajusta los controles',
       reset: 'Restablecer',
       copy: 'Copiar',
       copied: 'Copiado',
@@ -86,7 +86,7 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
   pt: {
     glass: {
       cardTitle: 'Painel fosco',
-      cardSub: 'arraste-o · ajuste os controles',
+      cardSub: 'arraste ou use as setas · ajuste os controles',
       reset: 'Redefinir',
       copy: 'Copiar',
       copied: 'Copiado',
@@ -96,7 +96,7 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
   ko: {
     glass: {
       cardTitle: '반투명 유리 패널',
-      cardSub: '드래그해 보세요 · 값을 조절해 보세요',
+      cardSub: '드래그하거나 방향키로 이동 · 값 조절',
       reset: '초기화',
       copy: '복사',
       copied: '복사됨',
@@ -106,7 +106,7 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
   de: {
     glass: {
       cardTitle: 'Milchglas-Panel',
-      cardSub: 'zieh es · dreh an den Reglern',
+      cardSub: 'ziehen oder Pfeiltasten nutzen · Regler einstellen',
       reset: 'Zurücksetzen',
       copy: 'Kopieren',
       copied: 'Kopiert',
@@ -116,7 +116,7 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
   fa: {
     glass: {
       cardTitle: 'پنل شیشه‌ای مات',
-      cardSub: 'بکشیدش · تنظیم‌ها را تغییر دهید',
+      cardSub: 'بکشید یا با کلیدهای جهت حرکت دهید · تنظیم‌ها را تغییر دهید',
       reset: 'بازنشانی',
       copy: 'کپی',
       copied: 'کپی شد',

@@ -96,7 +96,7 @@ detail: {
 Una casilla deshabilitada no dispara `change`.
 
 <ran-demo>
-  <r-checkbox onchange="message.info(this)">Púlsame</r-checkbox>
+  <r-checkbox onchange="message.info('checked: ' + event.detail.checked)">Púlsame</r-checkbox>
 </ran-demo>
 
 ```html

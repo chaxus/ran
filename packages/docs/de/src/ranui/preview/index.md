@@ -24,7 +24,7 @@ npm install ranui
 
 ### Grundlegende Verwendung
 
-<div style="width: 100px; margin-top:10px">
+<div>
     <r-preview id="preview-demo"></r-preview>
     <r-button type="primary" data-preview-upload="preview-demo">Datei für die Vorschau wählen</r-button>
 </div>
