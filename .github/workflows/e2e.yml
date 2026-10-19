@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "packages/docs/**"
       - "packages/ranui/**"
       - "packages/ranuts/**"
       - "packages/ranview/**"
@@ -15,6 +16,7 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - "packages/docs/**"
       - "packages/ranui/**"
       - "packages/ranuts/**"
       - "packages/ranview/**"
@@ -74,6 +76,12 @@ jobs:
       - name: Build ranui
         run: pnpm --filter ranui run build
 
+      - name: Build documentation preview integration
+        run: pnpm --filter docs run build
+
+      - name: Verify standalone preview compatibility in the built documentation site
+        run: pnpm --filter docs run test:preview --project=${{ matrix.browser }}
+
       - name: Exercise compaction cancellation without retries
         run: pnpm --filter im exec playwright test test/e2e/compaction-cancel.spec.ts --project=${{ matrix.browser }} --repeat-each=5 --retries=0
 
@@ -96,6 +104,7 @@ jobs:
             packages/ranui/playwright-report/
             packages/ranui/test-results/
             packages/im/test-results/
+            .temp/docs-preview-results/
           retention-days: 7
 
   visual:
