@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeAll, beforeEach, vi } from 'vitest';
+import { describe, expect, it, beforeAll, beforeEach, afterAll, vi } from 'vitest';
 import type { Markdown } from '@/components/markdown';
 
 // shiki is heavy and pulls WASM-free grammars lazily; stub it so the highlight path
@@ -46,6 +46,13 @@ describe('r-markdown contract', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
+
+  afterAll(async () => {
+    document.body.innerHTML = '';
+    // Markdown rendering schedules embedded Math/Mermaid imports independently
+    // of _pending. Let their module graphs finish before jsdom is torn down.
+    await vi.dynamicImportSettled();
+  }, 30_000);
 
   it('renders shadow DOM structure under ::part(markdown)', async () => {
     const el = await mount({}, '# Hello');
