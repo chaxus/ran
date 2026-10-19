@@ -72,7 +72,7 @@ it('code copy reports failure rather than a false success', async () => {
   });
   mountCodeCopy();
   document.querySelector<HTMLButtonElement>('.code-copy')!.click();
-  await vi.waitFor(() => expect(document.querySelector('.copy-status')!.textContent).toMatch(/failed/i));
+  await vi.waitFor(() => expect(document.querySelector('.code-copy__status')!.textContent).toMatch(/failed/i));
   expect(document.querySelector('.code-copy')!.classList.contains('done')).toBe(false);
 });
 
