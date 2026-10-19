@@ -20,12 +20,26 @@
   visibility: hidden;
   transition:
     opacity 0.3s,
-    visibility 0.3s;
+    visibility 0s linear 0.3s;
 }
 
 .ran-modal-root[open] {
   opacity: 1;
   visibility: visible;
+  /* Focus runs on the first frame: visibility must already be visible then.
+     Keep only the exit delay so the closing fade can finish before hiding. */
+  transition-property: opacity;
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ran-modal-root,
+  .ran-modal-root * {
+    /* A global tiny duration also animates inherited visibility on descendants,
+       leaving controls hidden at the autofocus frame. No transition is needed. */
+    transition-property: none !important;
+    transition-delay: 0s;
+  }
 }
 
 .ran-modal-mask {
