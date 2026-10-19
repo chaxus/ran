@@ -16,18 +16,18 @@ Cada paquete se puede instalar por separado. El [sitio de documentación](./pack
 
 ## Elige un paquete
 
-| Paquete                                         | Qué puedes crear                                                                                                                                                                    |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ranui](./packages/ranui/README.es.md)          | Interfaces con elementos HTML personalizados: entradas, selectores, diálogos, tablas, Markdown y reproductores multimedia. Incluye temas y herramientas de renderizado en servidor. |
-| [ranuts](./packages/ranuts/README.es.md)        | Flujos de navegador y datos: conversiones de color y datos binarios, almacenamiento, análisis SSE y estado de respuestas en streaming.                                              |
-| [@alixex/ranview](./packages/ranview/README.md) | Vistas DOM con constructores encadenables y señales reactivas; instantáneas HTML estáticas para renderizado en servidor.                                                            |
+| Paquete                                               | Qué puedes crear                                                                                                                                                                    |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [ranui@0.5.0](./packages/ranui/README.es.md)          | Interfaces con elementos HTML personalizados: entradas, selectores, diálogos, tablas, Markdown y reproductores multimedia. Incluye temas y herramientas de renderizado en servidor. |
+| [ranuts@0.5.0](./packages/ranuts/README.es.md)        | Flujos de navegador y datos: conversiones de color y datos binarios, almacenamiento, análisis SSE y estado de respuestas en streaming.                                              |
+| [@alixex/ranview@0.2.0](./packages/ranview/README.md) | Vistas DOM con constructores encadenables y señales reactivas; instantáneas HTML estáticas para renderizado en servidor.                                                            |
 
 ## Prueba ranui
 
 Instálalo en una aplicación de navegador con un empaquetador compatible con ESM:
 
 ```sh
-npm install ranui
+npm install ranui@0.5.0
 ```
 
 Añade esto a la entrada JavaScript de la aplicación. Crea un botón que responde al clic:

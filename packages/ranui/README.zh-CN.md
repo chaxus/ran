@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## 快速开始
 
 ```sh
-npm install ranui
+npm install ranui@0.5.0
 ```
 
 包导入采用 ESM。在构建工具中按组件导入，并在应用入口导入一次公共样式。
@@ -30,10 +30,10 @@ import 'ranui/style';
 
 ## IIFE / CDN
 
-普通浏览器 script 标签可加载独立 IIFE。将 VERSION 替换为已发布版本，无需构建工具或模块加载器。
+普通浏览器 script 标签可直接加载已发布的独立 IIFE，无需构建工具或模块加载器。
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranui@VERSION/dist/iife/button.iife.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ranui@0.5.0/dist/iife/button.iife.js" defer></script>
 <r-button type="primary">Save</r-button>
 ```
 

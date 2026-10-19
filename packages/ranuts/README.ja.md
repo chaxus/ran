@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## クイックスタート
 
 ```sh
-npm install ranuts
+npm install ranuts@0.5.0
 ```
 
 ```ts
@@ -36,16 +36,16 @@ console.log(rgbToHex(1, 2, 3)); // #010203
 
 ## IIFE / CDN
 
-通常の script タグでは独立 IIFE を使用します。VERSION を公開済みバージョンに置き換えてください。バンドラーやモジュールローダーは不要です。
+通常の script タグでは公開済みの独立 IIFE を使用します。バンドラーやモジュールローダーは不要です。
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranuts@VERSION/dist/iife/utils.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ranuts@0.5.0/dist/iife/utils.iife.js"></script>
 <script>
   console.log(ranuts_utils.rgbToHex(1, 2, 3));
 </script>
 ```
 
-ユーティリティ IIFE のグローバル名は `ranuts_utils`、完全版 `dist/iife/index.iife.js` は `ranuts` です。VERSION を公開済みバージョンに置き換えてください。
+ユーティリティ IIFE のグローバル名は `ranuts_utils`、完全版 `dist/iife/index.iife.js` は `ranuts` です。
 
 ## ドキュメント
 

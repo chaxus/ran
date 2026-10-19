@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## クイックスタート
 
 ```sh
-npm install ranui
+npm install ranui@0.5.0
 ```
 
 パッケージのインポートは ESM です。バンドラーではコンポーネント単位で読み込み、共有 CSS はアプリの入口で一度だけ読み込んでください。
@@ -30,10 +30,10 @@ HTML にカスタム要素を配置します：
 
 ## IIFE / CDN
 
-通常の script タグでは独立 IIFE を使用します。VERSION を公開済みバージョンに置き換えてください。バンドラーやモジュールローダーは不要です。
+通常の script タグでは公開済みの独立 IIFE を使用します。バンドラーやモジュールローダーは不要です。
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranui@VERSION/dist/iife/button.iife.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ranui@0.5.0/dist/iife/button.iife.js" defer></script>
 <r-button type="primary">Save</r-button>
 ```
 

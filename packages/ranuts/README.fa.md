@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## شروع سریع
 
 ```sh
-npm install ranuts
+npm install ranuts@0.5.0
 ```
 
 ```ts
@@ -36,16 +36,16 @@ console.log(rgbToHex(1, 2, 3)); // #010203
 
 ## IIFE / CDN
 
-برای تگ script معمولی از IIFE مستقل استفاده کنید. VERSION را با نسخه منتشرشده جایگزین کنید؛ نیازی به ابزار ساخت یا بارگذار ماژول نیست.
+برای تگ script معمولی از IIFE مستقل منتشرشده استفاده کنید؛ نیازی به ابزار ساخت یا بارگذار ماژول نیست.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranuts@VERSION/dist/iife/utils.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ranuts@0.5.0/dist/iife/utils.iife.js"></script>
 <script>
   console.log(ranuts_utils.rgbToHex(1, 2, 3));
 </script>
 ```
 
-IIFE ابزارها `ranuts_utils` و بسته کامل `dist/iife/index.iife.js` نام `ranuts` را ارائه می‌کند. VERSION را با نسخه منتشرشده جایگزین کنید.
+IIFE ابزارها `ranuts_utils` و بسته کامل `dist/iife/index.iife.js` نام `ranuts` را ارائه می‌کند.
 
 ## مستندات
 

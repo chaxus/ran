@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## 快速开始
 
 ```sh
-npm install ranuts
+npm install ranuts@0.5.0
 ```
 
 ```ts
@@ -36,16 +36,16 @@ console.log(rgbToHex(1, 2, 3)); // #010203
 
 ## IIFE / CDN
 
-普通浏览器 script 标签可加载独立 IIFE。将 VERSION 替换为已发布版本，无需构建工具或模块加载器。
+普通浏览器 script 标签可直接加载已发布的独立 IIFE，无需构建工具或模块加载器。
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranuts@VERSION/dist/iife/utils.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ranuts@0.5.0/dist/iife/utils.iife.js"></script>
 <script>
   console.log(ranuts_utils.rgbToHex(1, 2, 3));
 </script>
 ```
 
-工具 IIFE 暴露 `ranuts_utils`；完整 `dist/iife/index.iife.js` 暴露 `ranuts`。请将 VERSION 替换为已发布版本。
+工具 IIFE 暴露 `ranuts_utils`；完整 `dist/iife/index.iife.js` 暴露 `ranuts`。
 
 ## 文档
 

@@ -17,7 +17,7 @@ browser reactivity requires a browser DOM. There is no hydration API.
 ## Quick start
 
 ```sh
-npm install @alixex/ranview
+npm install @alixex/ranview@0.2.0
 ```
 
 ```ts

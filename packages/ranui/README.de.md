@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## Schnellstart
 
 ```sh
-npm install ranui
+npm install ranui@0.5.0
 ```
 
 Paketimporte verwenden ESM. Importiere mit einem Bundler einzelne Komponenten und lade das gemeinsame Stylesheet einmal im Anwendungseinstieg.
@@ -30,10 +30,10 @@ Platziere das Custom Element im HTML:
 
 ## IIFE / CDN
 
-Für ein klassisches script-Tag steht ein eigenständiges IIFE bereit. Ersetze VERSION durch eine veröffentlichte Version; ein Bundler oder Modullader ist nicht nötig.
+Für ein klassisches script-Tag steht das veröffentlichte eigenständige IIFE bereit; ein Bundler oder Modullader ist nicht nötig.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranui@VERSION/dist/iife/button.iife.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ranui@0.5.0/dist/iife/button.iife.js" defer></script>
 <r-button type="primary">Save</r-button>
 ```
 

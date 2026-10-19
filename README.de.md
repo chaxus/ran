@@ -16,18 +16,18 @@ Jedes Paket lässt sich einzeln installieren. Die [Dokumentationswebsite](./pack
 
 ## Ein Paket auswählen
 
-| Paket                                           | Was sich damit bauen lässt                                                                                                                                        |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ranui](./packages/ranui/README.de.md)          | Oberflächen aus eigenen HTML-Elementen: Eingaben, Auswahllisten, Dialoge, Tabellen, Markdown und Mediaplayer. Mit Themes und Hilfen für serverseitiges Rendering. |
-| [ranuts](./packages/ranuts/README.de.md)        | Browser- und Datenabläufe: Farb- und Binärkonvertierung, Speicherzugriff, SSE-Verarbeitung und Zustände gestreamter Antworten.                                    |
-| [@alixex/ranview](./packages/ranview/README.md) | DOM-Ansichten mit verkettbaren Buildern und reaktiven Signalen; statische HTML-Ausgaben für serverseitiges Rendering.                                             |
+| Paket                                                 | Was sich damit bauen lässt                                                                                                                                        |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [ranui@0.5.0](./packages/ranui/README.de.md)          | Oberflächen aus eigenen HTML-Elementen: Eingaben, Auswahllisten, Dialoge, Tabellen, Markdown und Mediaplayer. Mit Themes und Hilfen für serverseitiges Rendering. |
+| [ranuts@0.5.0](./packages/ranuts/README.de.md)        | Browser- und Datenabläufe: Farb- und Binärkonvertierung, Speicherzugriff, SSE-Verarbeitung und Zustände gestreamter Antworten.                                    |
+| [@alixex/ranview@0.2.0](./packages/ranview/README.md) | DOM-Ansichten mit verkettbaren Buildern und reaktiven Signalen; statische HTML-Ausgaben für serverseitiges Rendering.                                             |
 
 ## ranui ausprobieren
 
 In einer Browseranwendung mit einem ESM-kompatiblen Bundler installieren:
 
 ```sh
-npm install ranui
+npm install ranui@0.5.0
 ```
 
 Diesen Code im JavaScript-Einstiegspunkt der Anwendung ergänzen. Er erzeugt einen Button, der auf einen Klick reagiert:

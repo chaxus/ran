@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## Quick start
 
 ```sh
-npm install ranuts
+npm install ranuts@0.5.0
 ```
 
 ```ts
@@ -36,16 +36,16 @@ Choose an entry by runtime and task. Individual utilities may require browser gl
 
 ## IIFE / CDN
 
-For a classic browser script tag, use a standalone IIFE. Replace VERSION with a published version; no bundler or module loader is needed.
+For a classic browser script tag, use the published standalone IIFE; no bundler or module loader is needed.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranuts@VERSION/dist/iife/utils.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ranuts@0.5.0/dist/iife/utils.iife.js"></script>
 <script>
   console.log(ranuts_utils.rgbToHex(1, 2, 3));
 </script>
 ```
 
-The utility IIFE exposes `ranuts_utils`; the full `dist/iife/index.iife.js` exposes `ranuts`. Replace VERSION with a published version.
+The utility IIFE exposes `ranuts_utils`; the full `dist/iife/index.iife.js` exposes `ranuts`.
 
 ## Documentation
 

@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## 빠른 시작
 
 ```sh
-npm install ranuts
+npm install ranuts@0.5.0
 ```
 
 ```ts
@@ -36,16 +36,16 @@ console.log(rgbToHex(1, 2, 3)); // #010203
 
 ## IIFE / CDN
 
-일반 script 태그에서는 독립 IIFE를 사용하세요. VERSION을 배포된 버전으로 바꾸면 번들러나 모듈 로더 없이 사용할 수 있습니다.
+일반 script 태그에서는 배포된 독립 IIFE를 번들러나 모듈 로더 없이 사용할 수 있습니다.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranuts@VERSION/dist/iife/utils.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ranuts@0.5.0/dist/iife/utils.iife.js"></script>
 <script>
   console.log(ranuts_utils.rgbToHex(1, 2, 3));
 </script>
 ```
 
-유틸리티 IIFE는 `ranuts_utils`, 전체 `dist/iife/index.iife.js`는 `ranuts`를 노출합니다. VERSION을 배포된 버전으로 바꾸세요.
+유틸리티 IIFE는 `ranuts_utils`, 전체 `dist/iife/index.iife.js`는 `ranuts`를 노출합니다.
 
 ## 문서
 

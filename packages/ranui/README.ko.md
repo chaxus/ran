@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## 빠른 시작
 
 ```sh
-npm install ranui
+npm install ranui@0.5.0
 ```
 
 패키지 가져오기는 ESM을 사용합니다. 번들러에서는 컴포넌트별로 가져오고 앱 진입점에서 공통 스타일을 한 번 불러오세요.
@@ -30,10 +30,10 @@ HTML에 사용자 정의 요소를 배치하세요:
 
 ## IIFE / CDN
 
-일반 script 태그에서는 독립 IIFE를 사용하세요. VERSION을 배포된 버전으로 바꾸면 번들러나 모듈 로더 없이 사용할 수 있습니다.
+일반 script 태그에서는 배포된 독립 IIFE를 번들러나 모듈 로더 없이 사용할 수 있습니다.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranui@VERSION/dist/iife/button.iife.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ranui@0.5.0/dist/iife/button.iife.js" defer></script>
 <r-button type="primary">Save</r-button>
 ```
 
