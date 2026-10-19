@@ -14,7 +14,10 @@ export const mountPreviewDemo = (): (() => void) => {
   observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['src'] });
   const chooseFile = (event: MouseEvent): void => {
     const button = event.target instanceof Element ? event.target.closest('[data-preview-upload]') : null;
-    const preview = document.getElementById(button?.getAttribute('data-preview-upload') ?? '');
+    // Only custom preview elements may receive file URLs; a data attribute must
+    // never turn this helper into a generic iframe/script source setter.
+    const target = button?.getAttribute('data-preview-upload');
+    const preview = Array.from(document.querySelectorAll('r-preview')).find((element) => element.id === target);
     if (!preview) return;
     const input = document.createElement('input');
     input.type = 'file';
