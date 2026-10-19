@@ -40,7 +40,6 @@ overrides:
   probe-image-size: 7.4.0
   source-map-js: 1.2.2
   mermaid>katex: 0.18.2
-  '@ranui/preview>ranui': workspace:*
   '@ranui/preview>ranuts': workspace:*
 
 importers:
@@ -63,8 +62,8 @@ importers:
   packages/docs:
     dependencies:
       '@ranui/preview':
-        specifier: 0.1.0-alpha-2
-        version: 0.1.0-alpha-2
+        specifier: 0.3.0
+        version: 0.3.0
       minisearch:
         specifier: 7.2.0
         version: 7.2.0
@@ -78,6 +77,9 @@ importers:
         specifier: workspace:*
         version: link:../ranuts
     devDependencies:
+      '@playwright/test':
+        specifier: 1.62.1
+        version: 1.62.1
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2
@@ -733,9 +735,9 @@ packages:
     resolution: {integrity: sha512-4EDEmvxWtgsCnnVeBvtFIFZtUhPPt1+bA9JrSwU4Sa//6oKtzCSlGGXYJr44OD9aGISymbieJ4mCKHUygUDU+g==}
     engines: {node: '>=18'}
 
-  '@ranui/preview@0.1.0-alpha-2':
-    resolution: {integrity: sha512-wSQhddqebWOymwyluba5Q+gih3jk6F928QNiiGTSWnJjP6yympEyAYyzsDj5uZCaCTQbwfWPiWh9IeSPlIUwjw==}
-    engines: {node: '>=23.10.0'}
+  '@ranui/preview@0.3.0':
+    resolution: {integrity: sha512-/B1grkcrqt9jduLm07my/fUrJ1pslEgfhxmmb5slPkGFYa+O7wUFc3lK/A8C4ewzsPnoJJ235SyQyebekcmmlg==}
+    engines: {node: '>=24'}
 
   '@rolldown/binding-android-arm64@1.2.3':
     resolution: {integrity: sha512-zrJtHDcaZJ1Fp7xf4hNl+7seH9Cn/N5TwLYkhgXREtBwAd/jaqW3uqeHxpDugJLVICWg4eW44kOQEGJ1r6jCGw==}
@@ -2804,9 +2806,8 @@ snapshots:
     dependencies:
       tinyexec: 1.3.0
 
-  '@ranui/preview@0.1.0-alpha-2':
+  '@ranui/preview@0.3.0':
     dependencies:
-      ranui: link:packages/ranui
       ranuts: link:packages/ranuts
 
   '@rolldown/binding-android-arm64@1.2.3':

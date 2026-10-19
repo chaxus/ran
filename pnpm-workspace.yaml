@@ -29,9 +29,7 @@ overrides:
   source-map-js: 1.2.2
   # Mermaid still requests vulnerable KaTeX 0.16.x; patch its formula renderer.
   'mermaid>katex': 0.18.2
-  # @ranui/preview (split out of this repo) pins old published ranui/ranuts,
-  # which would drag tesseract.js back into the lockfile — use the workspace code.
-  '@ranui/preview>ranui': 'workspace:*'
+  # Keep the standalone preview package on this monorepo's ranuts implementation.
   '@ranui/preview>ranuts': 'workspace:*'
 allowBuilds:
   esbuild: true
