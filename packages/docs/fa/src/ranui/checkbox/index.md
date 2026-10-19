@@ -96,7 +96,7 @@ detail: {
 چک‌باکس غیرفعال رویداد `change` نمی‌فرستد.
 
 <ran-demo>
-  <r-checkbox onchange="message.info(this)">مرا جابه‌جا کن</r-checkbox>
+  <r-checkbox onchange="message.info('checked: ' + event.detail.checked)">مرا جابه‌جا کن</r-checkbox>
 </ran-demo>
 
 ```html

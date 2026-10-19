@@ -13,14 +13,15 @@ ranui liefert keine Komponente, die `<form>` umschließt. `r-input`, `r-checkbox
 Alle drei Feldtypen, abgeschickt mit einem gewöhnlichen `<form>`. Ändere ein Feld und schicke ab, um das Ergebnis unten zu sehen. Diese Demo baut das Objekt mit dem browsereigenen `FormData`/`Object.fromEntries` (kein Import nötig); `serializeForm()`, gleich darunter, macht dasselbe und noch etwas, das `Object.fromEntries` nicht kann: Ein mehrfach vorkommender Feldname kommt als Array zurück, statt still nur den letzten Wert zu behalten.
 
 <ran-demo column>
-  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
     <r-input name="username" label="Benutzername" placeholder="Benutzername eingeben"></r-input>
     <r-select name="role" label="Rolle" style="width: 100%" defaultValue="member">
       <r-option value="member">Mitglied</r-option>
       <r-option value="admin">Administrator</r-option>
     </r-select>
     <r-checkbox name="subscribe">Newsletter abonnieren</r-checkbox>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Absenden</button></r-button>
+    <button class="demo-submit" type="submit">Absenden</button>
+    <output class="demo-result"></output>
   </form>
 </ran-demo>
 
@@ -74,10 +75,11 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 Felder bringen kein Formular-Layout mit: Gestalte dein eigenes `<form>` mit gewöhnlichem CSS:
 
 <ran-demo column>
-  <form style="display: flex; flex-direction: column; gap: 16px;">
+  <form style="display: flex; flex-direction: column; gap: 16px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
     <r-input name="first" label="Vorname"></r-input>
     <r-input name="last" label="Nachname"></r-input>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Weiter</button></r-button>
+    <button class="demo-submit" type="submit">Weiter</button>
+    <output class="demo-result"></output>
   </form>
 </ran-demo>
 
@@ -94,9 +96,10 @@ Felder bringen kein Formular-Layout mit: Gestalte dein eigenes `<form>` mit gew�
 `r-input`, `r-checkbox` und `r-select` unterstützen alle `required` (blockiert das Absenden und löst die native Validierungsblase des Browsers aus, genau wie ein natives Feld) sowie `checkValidity()`, `reportValidity()`, `validity` und `validationMessage`. Ein natives `form.reset()` (oder ein `<button type="reset">`) stellt über `formResetCallback()` jedes Feld auf seinen Zustand vor der Eingabe zurück. Einzelheiten stehen in der Dokumentation des jeweiligen Feldes ([Input](/de/src/ranui/input/#form-association), [Checkbox](/de/src/ranui/checkbox/#form-association), [Select](/de/src/ranui/select/#form-association)).
 
 <ran-demo column>
-  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
     <r-input name="username" label="Benutzername" required></r-input>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Absenden</button></r-button>
+    <button class="demo-submit" type="submit">Absenden</button>
+    <output class="demo-result"></output>
   </form>
 </ran-demo>
 

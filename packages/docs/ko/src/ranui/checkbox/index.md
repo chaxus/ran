@@ -96,7 +96,7 @@ detail: {
 비활성 체크박스는 `change`를 발생시키지 않습니다.
 
 <ran-demo>
-  <r-checkbox onchange="message.info(this)">눌러 보세요</r-checkbox>
+  <r-checkbox onchange="message.info('checked: ' + event.detail.checked)">눌러 보세요</r-checkbox>
 </ran-demo>
 
 ```html

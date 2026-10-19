@@ -96,7 +96,7 @@ detail: {
 禁用状态下的复选框不会触发 `change`。
 
 <ran-demo>
-  <r-checkbox onchange="message.info(this)">点我切换</r-checkbox>
+  <r-checkbox onchange="message.info('checked: ' + event.detail.checked)">点我切换</r-checkbox>
 </ran-demo>
 
 ```html

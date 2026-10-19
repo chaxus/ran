@@ -19,7 +19,7 @@ description: 'ranui の Modal（<r-modal>）は集中した操作のためのダ
   <r-modal id="quickstart-modal" heading="基本のモーダル">
     <p>これがモーダルの内容です。</p>
     <div slot="footer">
-      <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">OK</r-button>
+      <button tabindex="0" class="demo-submit" type="button" onclick="document.getElementById('quickstart-modal').open = false">OK</button>
     </div>
   </r-modal>
 </ran-demo>
@@ -30,7 +30,7 @@ description: 'ranui の Modal（<r-modal>）は集中した操作のためのダ
 <r-modal id="modal" heading="基本のモーダル">
   <p>これがモーダルの内容です。</p>
   <div slot="footer">
-    <r-button type="primary" onclick="modal.open = false">OK</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">OK</button>
   </div>
 </r-modal>
 ```
@@ -69,7 +69,7 @@ description: 'ranui の Modal（<r-modal>）は集中した操作のためのダ
 <r-modal open heading="利用規約" closable="false">
   <p>続けるには規約に同意する必要があります。</p>
   <div slot="footer">
-    <r-button type="primary">同意する</r-button>
+    <button tabindex="0" type="button">同意する</button>
   </div>
 </r-modal>
 ```
@@ -129,8 +129,8 @@ description: 'ranui の Modal（<r-modal>）は集中した操作のためのダ
 <r-modal open heading="確認">
   <p>本文はデフォルトスロットに入ります。</p>
   <div slot="footer">
-    <r-button onclick="modal.open = false">キャンセル</r-button>
-    <r-button type="primary">確定</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">キャンセル</button>
+    <button tabindex="0" type="button">確定</button>
   </div>
 </r-modal>
 ```

@@ -96,7 +96,7 @@ detail: {
 Uma caixa desabilitada não dispara `change`.
 
 <ran-demo>
-  <r-checkbox onchange="message.info(this)">Alterne-me</r-checkbox>
+  <r-checkbox onchange="message.info('checked: ' + event.detail.checked)">Alterne-me</r-checkbox>
 </ran-demo>
 
 ```html

@@ -263,18 +263,18 @@ export const renderGlassPlayground = (locale: LocaleDef): string => {
   const t = demoCopy(locale.dir).glass;
   const d = GLASS_DEFAULTS;
   const code =
-    `<r-glass blur="${d.blur}" saturate="${d.saturate}" displace="${d.displace}" radius="${d.radius}">\n` +
+    `<r-glass blur="${d.blur}" saturate="${d.saturate}" displace="${d.displace}" radius="${d.radius}" style="width:${d.width}px">\n` +
     `  …\n</r-glass>`;
 
   return (
     `<div class="gp" data-glass>` +
-    `<div class="gp-stage"><div class="gp-bg" aria-hidden="true"><span>Aa</span><b>ranui</b><i>glass</i></div>` +
+    `<div class="gp-stage" tabindex="0" role="group" aria-label="${esc(t.cardTitle)}" aria-describedby="gp-instructions"><div class="gp-bg" aria-hidden="true"><span>Aa</span><b>ranui</b><i>glass</i></div>` +
     // The element is in the markup with its defaults already applied, so a reader with
     // no JavaScript still sees the effect — just not the sliders moving it.
     `<r-glass class="gp-glass" style="left:0px;top:0px;width:${d.width}px" blur="${d.blur}" ` +
     `saturate="${d.saturate}" displace="${d.displace}" radius="${d.radius}">` +
     `<div class="gp-card"><div class="gp-card-title">${esc(t.cardTitle)}</div>` +
-    `<div class="gp-card-sub">${esc(t.cardSub)}</div></div></r-glass></div>` +
+    `<div class="gp-card-sub" id="gp-instructions">${esc(t.cardSub)}</div></div></r-glass></div>` +
     `<div class="gp-panel"><div class="gp-rows">` +
     GLASS_SLIDERS.map(
       (s) =>

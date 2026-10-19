@@ -19,7 +19,7 @@ Ob das Modal sichtbar ist, steuert das Attribut `open` (oder die Eigenschaft `op
   <r-modal id="quickstart-modal" heading="Einfaches Modal">
     <p>Das ist der Inhalt des Modals.</p>
     <div slot="footer">
-      <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">OK</r-button>
+      <button tabindex="0" class="demo-submit" type="button" onclick="document.getElementById('quickstart-modal').open = false">OK</button>
     </div>
   </r-modal>
 </ran-demo>
@@ -30,7 +30,7 @@ Ob das Modal sichtbar ist, steuert das Attribut `open` (oder die Eigenschaft `op
 <r-modal id="modal" heading="Einfaches Modal">
   <p>Das ist der Inhalt des Modals.</p>
   <div slot="footer">
-    <r-button type="primary" onclick="modal.open = false">OK</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">OK</button>
   </div>
 </r-modal>
 ```
@@ -69,7 +69,7 @@ Blendet die Schließen-Schaltfläche in der Kopfzeile aus, sodass sich das Modal
 <r-modal open heading="Bedingungen" closable="false">
   <p>Du musst die Bedingungen annehmen, um fortzufahren.</p>
   <div slot="footer">
-    <r-button type="primary">Annehmen</r-button>
+    <button tabindex="0" type="button">Annehmen</button>
   </div>
 </r-modal>
 ```
@@ -129,8 +129,8 @@ Lässt die Titelleiste samt Trennlinie ganz weg und behält nur eine schwebende 
 <r-modal open heading="Bestätigen">
   <p>Der Textkörper gehört in den Default-Slot.</p>
   <div slot="footer">
-    <r-button onclick="modal.open = false">Abbrechen</r-button>
-    <r-button type="primary">Bestätigen</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">Abbrechen</button>
+    <button tabindex="0" type="button">Bestätigen</button>
   </div>
 </r-modal>
 ```

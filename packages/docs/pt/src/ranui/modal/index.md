@@ -19,7 +19,7 @@ A visibilidade do modal é controlada pelo atributo `open` (ou pela propriedade 
   <r-modal id="quickstart-modal" heading="Modal básico">
     <p>Este é o conteúdo do modal.</p>
     <div slot="footer">
-      <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">OK</r-button>
+      <button tabindex="0" class="demo-submit" type="button" onclick="document.getElementById('quickstart-modal').open = false">OK</button>
     </div>
   </r-modal>
 </ran-demo>
@@ -30,7 +30,7 @@ A visibilidade do modal é controlada pelo atributo `open` (ou pela propriedade 
 <r-modal id="modal" heading="Modal básico">
   <p>Este é o conteúdo do modal.</p>
   <div slot="footer">
-    <r-button type="primary" onclick="modal.open = false">OK</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">OK</button>
   </div>
 </r-modal>
 ```
@@ -69,7 +69,7 @@ Esconde o botão de fechar do cabeçalho, de modo que o modal só possa ser disp
 <r-modal open heading="Termos" closable="false">
   <p>Você precisa aceitar os termos para continuar.</p>
   <div slot="footer">
-    <r-button type="primary">Aceitar</r-button>
+    <button tabindex="0" type="button">Aceitar</button>
   </div>
 </r-modal>
 ```
@@ -129,8 +129,8 @@ Elimina a barra de título e sua borda por inteiro, deixando só um botão de fe
 <r-modal open heading="Confirmar">
   <p>O conteúdo do corpo vai no slot padrão.</p>
   <div slot="footer">
-    <r-button onclick="modal.open = false">Cancelar</r-button>
-    <r-button type="primary">Confirmar</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">Cancelar</button>
+    <button tabindex="0" type="button">Confirmar</button>
   </div>
 </r-modal>
 ```

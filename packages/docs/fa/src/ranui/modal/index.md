@@ -19,7 +19,7 @@ description: 'مودال ranui (<r-modal>) یک دیالوگ برای تعامل
   <r-modal id="quickstart-modal" heading="مودال پایه">
     <p>این محتوای مودال است.</p>
     <div slot="footer">
-      <r-button type="primary" onclick="document.getElementById('quickstart-modal').open = false">تأیید</r-button>
+      <button tabindex="0" class="demo-submit" type="button" onclick="document.getElementById('quickstart-modal').open = false">تأیید</button>
     </div>
   </r-modal>
 </ran-demo>
@@ -30,7 +30,7 @@ description: 'مودال ranui (<r-modal>) یک دیالوگ برای تعامل
 <r-modal id="modal" heading="مودال پایه">
   <p>این محتوای مودال است.</p>
   <div slot="footer">
-    <r-button type="primary" onclick="modal.open = false">تأیید</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">تأیید</button>
   </div>
 </r-modal>
 ```
@@ -69,7 +69,7 @@ description: 'مودال ranui (<r-modal>) یک دیالوگ برای تعامل
 <r-modal open heading="شرایط" closable="false">
   <p>برای ادامه باید شرایط را بپذیرید.</p>
   <div slot="footer">
-    <r-button type="primary">می‌پذیرم</r-button>
+    <button tabindex="0" type="button">می‌پذیرم</button>
   </div>
 </r-modal>
 ```
@@ -129,8 +129,8 @@ description: 'مودال ranui (<r-modal>) یک دیالوگ برای تعامل
 <r-modal open heading="تأیید">
   <p>محتوای بدنه در اسلات پیش‌فرض می‌نشیند.</p>
   <div slot="footer">
-    <r-button onclick="modal.open = false">انصراف</r-button>
-    <r-button type="primary">تأیید</r-button>
+    <button tabindex="0" type="button" onclick="modal.open = false">انصراف</button>
+    <button tabindex="0" type="button">تأیید</button>
   </div>
 </r-modal>
 ```
