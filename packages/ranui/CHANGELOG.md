@@ -2,17 +2,17 @@
 
 All notable changes to `ranui` will be documented in this file.
 
-## [0.5.0] — 2026-10-18
+## [0.5.0] — 2026-10-19
 
-Stable release prepared for publication; no npm upload has been performed.
+Published to npm as [ranui@0.5.0](https://www.npmjs.com/package/ranui/v/0.5.0) on the `latest` tag.
 
-- Coordinate `ranuts@0.5.0` and `@alixex/ranview@0.2.0`; packed internal dependencies resolve to these exact versions. Use the `latest` channel for release verification.
+- Coordinate `ranuts@0.5.0` and `@alixex/ranview@0.2.0`; packed internal dependencies resolve to these exact versions. All three packages are published on the `latest` tag.
 - Include the interaction, declaration, font-license and installation-size corrections documented in the RC preparation below. Node 24+, ESM modules and standalone IIFEs remain the supported distribution.
 - Remove the pre-release warning from stable-version changelog pages; retain it for Alpha, Beta and RC builds. See the [release guide](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md) for verification and publication steps.
 
 ## [0.5.0-rc.0] — 2026-10-17
 
-Release candidate prepared for publication; npm upload is pending.
+Unpublished verification candidate; its changes are included in the stable 0.5.0 release.
 
 ### Release preparation
 

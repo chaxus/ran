@@ -2,17 +2,17 @@
 
 `ranui` 的所有重要变更都记录在本文件中。
 
-## [0.5.0] — 2026-10-18
+## [0.5.0] — 2026-10-19
 
-正式版本已准备，尚未上传 npm。
+[ranui@0.5.0](https://www.npmjs.com/package/ranui/v/0.5.0) 已正式发布到 npm 的 `latest` 标签。
 
-- 联动 `ranuts@0.5.0` 和 `@alixex/ranview@0.2.0`，打包后的内部依赖使用这些确切版本；发布验证频道为 `latest`。
+- 联动 `ranuts@0.5.0` 和 `@alixex/ranview@0.2.0`，打包后的内部依赖使用这些确切版本；三个包均已发布到 `latest` 标签。
 - 包含下方 RC 准备记录中的交互、类型声明、数学字体材料及安装体积修复。继续支持 Node 24+、ESM 模块和独立 IIFE。
 - 正式版更新日志页不再显示预发布警告，Alpha、Beta 和 RC 构建仍保留提示。验证与发布步骤见[发布指南](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md)。
 
 ## [0.5.0-rc.0] — 2026-10-17
 
-待发布的 Release Candidate，尚未上传 npm。
+未发布的验证候选版本，其变更已包含在正式版 0.5.0 中。
 
 ### 发布准备
 

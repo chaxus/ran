@@ -30,8 +30,7 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     description:
       'What changed in ranui — added, changed, fixed and removed, with the reasoning, plus the dated engineering notes behind each batch.',
     heading: 'Changelog',
-    generatedNote: () =>
-      'Generated from `packages/ranui/CHANGELOG.md` by `pnpm -F ranui doc:changelog`, so this page\nand the copy inside the npm tarball cannot disagree.',
+    generatedNote: () => 'Generated from the repository changelog, `packages/ranui/CHANGELOG.md`.',
     alphaTitle: 'ranui is pre-release',
     alphaBody: [
       'Alpha, beta and RC versions may include breaking changes. Pin an exact version and read this page before upgrading.',
@@ -53,8 +52,8 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     heading: 'Changelog 更新日志',
     generatedNote: (translated) =>
       translated
-        ? '由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.zh-CN.md` 生成，与英文版一同维护，\n因此本页与 npm 包内的副本不会出现分歧。'
-        : '由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.md` 生成，因此本页与 npm 包内的\n副本不会出现分歧。条目内容直接取自源文件，保持英文。',
+        ? '内容来自仓库中的 `packages/ranui/CHANGELOG.zh-CN.md`，与英文版一同维护。'
+        : '内容来自仓库中的 `packages/ranui/CHANGELOG.md`，条目保留英文。',
     alphaTitle: 'ranui 处于预发布阶段',
     alphaBody: ['Alpha、Beta 和 RC 版本可能包含破坏性变更。请锁定确切版本，并在升级前阅读本页。'],
     notesHeading: '工程记录',
@@ -66,8 +65,7 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     title: 'ranui 更新履歴',
     description: 'ranui の変更点——追加・変更・修正・削除とその理由、そして各バッチの背景にある日付つきの技術メモ。',
     heading: '更新履歴',
-    generatedNote: () =>
-      '`pnpm -F ranui doc:changelog` が `packages/ranui/CHANGELOG.md` から生成しているため、このページと\nnpm パッケージ内の写しが食い違うことはありません。項目は原文をそのまま載せているので英語です。',
+    generatedNote: () => 'リポジトリの `packages/ranui/CHANGELOG.md` から生成しています。項目は英語の原文です。',
     alphaTitle: 'ranui はプレリリース段階です',
     alphaBody: [
       'Alpha、Beta、RC には破壊的変更が含まれる場合があります。バージョンを固定し、更新前にこのページを確認してください。',
@@ -89,7 +87,7 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
       'Qué cambió en ranui: lo añadido, lo modificado, lo corregido y lo eliminado, con su razonamiento, además de las notas técnicas fechadas detrás de cada tanda.',
     heading: 'Registro de cambios',
     generatedNote: () =>
-      'Generado desde `packages/ranui/CHANGELOG.md` por `pnpm -F ranui doc:changelog`, de modo que esta\npágina y la copia del paquete npm no pueden contradecirse. Las entradas se toman tal cual del\norigen, así que están en inglés.',
+      'Generado desde `packages/ranui/CHANGELOG.md` del repositorio. Las entradas conservan el original en inglés.',
     alphaTitle: 'ranui está en fase de prelanzamiento',
     alphaBody: [
       'Las versiones alpha, beta y RC pueden incluir cambios incompatibles. Fija una versión exacta y lee esta página antes de actualizar.',
@@ -111,7 +109,7 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
       'O que mudou no ranui: adicionado, alterado, corrigido e removido, com o raciocínio, além das notas técnicas datadas por trás de cada lote.',
     heading: 'Registro de alterações',
     generatedNote: () =>
-      'Gerado a partir de `packages/ranui/CHANGELOG.md` por `pnpm -F ranui doc:changelog`, de modo que\nesta página e a cópia dentro do pacote npm não podem divergir. As entradas vêm direto da fonte,\nportanto estão em inglês.',
+      'Gerado a partir de `packages/ranui/CHANGELOG.md` do repositório. As entradas mantêm o original em inglês.',
     alphaTitle: 'ranui está em pré-lançamento',
     alphaBody: [
       'Versões alpha, beta e RC podem incluir mudanças incompatíveis. Fixe uma versão exata e leia esta página antes de atualizar.',
@@ -132,8 +130,7 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
     description:
       'ranui에서 무엇이 바뀌었는지 — 추가·변경·수정·제거와 그 이유, 그리고 각 묶음 뒤에 있는 날짜별 엔지니어링 노트.',
     heading: '변경 이력',
-    generatedNote: () =>
-      '`pnpm -F ranui doc:changelog`가 `packages/ranui/CHANGELOG.md`에서 생성하므로 이 페이지와 npm\n패키지 안의 사본이 어긋날 수 없습니다. 항목은 원문 그대로라서 영어입니다.',
+    generatedNote: () => '저장소의 `packages/ranui/CHANGELOG.md`에서 생성합니다. 항목은 영어 원문을 유지합니다.',
     alphaTitle: 'ranui는 사전 출시 단계입니다',
     alphaBody: [
       'Alpha, Beta, RC 버전에는 호환성을 깨는 변경이 포함될 수 있습니다. 정확한 버전을 고정하고 업데이트 전에 이 페이지를 확인하세요.',
@@ -155,7 +152,7 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
       'Was sich in ranui geändert hat — Hinzugefügtes, Geändertes, Behobenes und Entferntes samt Begründung, dazu die datierten Engineering-Notizen hinter jedem Schub.',
     heading: 'Änderungsprotokoll',
     generatedNote: () =>
-      'Von `pnpm -F ranui doc:changelog` aus `packages/ranui/CHANGELOG.md` erzeugt — diese Seite und\ndie Kopie im npm-Paket können sich also nicht widersprechen. Die Einträge stammen unverändert\naus der Quelle und sind deshalb englisch.',
+      'Aus `packages/ranui/CHANGELOG.md` im Repository erzeugt. Die Einträge bleiben im englischen Original.',
     alphaTitle: 'ranui ist eine Vorabversion',
     alphaBody: [
       'Alpha-, Beta- und RC-Versionen können inkompatible Änderungen enthalten. Fixiere eine genaue Version und lies diese Seite vor Updates.',
@@ -177,7 +174,7 @@ export const CHANGELOG_PAGE_COPY: Record<DocLocaleDir, ChangelogPageCopy> = {
       'چه چیزی در ranui تغییر کرد — افزوده، تغییریافته، اصلاح‌شده و حذف‌شده به همراه دلیل آن، و یادداشت‌های فنی تاریخ‌دار پشت هر دسته تغییر.',
     heading: 'تغییرات',
     generatedNote: () =>
-      '`pnpm -F ranui doc:changelog` این صفحه را از `packages/ranui/CHANGELOG.md` می‌سازد، بنابراین این\nصفحه و نسخهٔ درون بستهٔ npm نمی‌توانند با هم اختلاف داشته باشند. مدخل‌ها مستقیم از منبع برداشته\nمی‌شوند و به همین دلیل انگلیسی‌اند.',
+      'از `packages/ranui/CHANGELOG.md` مخزن ساخته شده است. مدخل‌ها به زبان انگلیسی اصلی باقی می‌مانند.',
     alphaTitle: 'ranui در مرحله پیش‌انتشار است',
     alphaBody: [
       'نسخه‌های alpha، beta و RC ممکن است تغییر ناسازگار داشته باشند. نسخه دقیق را ثابت کنید و پیش از ارتقا این صفحه را بخوانید.',

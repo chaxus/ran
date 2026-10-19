@@ -5,22 +5,21 @@ description: 'ranui 的变更记录——新增、变更、修复与移除及其
 
 # Changelog 更新日志
 
-由 `pnpm -F ranui doc:changelog` 从 `packages/ranui/CHANGELOG.zh-CN.md` 生成，与英文版一同维护，
-因此本页与 npm 包内的副本不会出现分歧。
+内容来自仓库中的 `packages/ranui/CHANGELOG.zh-CN.md`，与英文版一同维护。
 
 ::: v-pre
 
-## [0.5.0] — 2026-10-18
+## [0.5.0] — 2026-10-19
 
-正式版本已准备，尚未上传 npm。
+[ranui@0.5.0](https://www.npmjs.com/package/ranui/v/0.5.0) 已正式发布到 npm 的 `latest` 标签。
 
-- 联动 `ranuts@0.5.0` 和 `@alixex/ranview@0.2.0`，打包后的内部依赖使用这些确切版本；发布验证频道为 `latest`。
+- 联动 `ranuts@0.5.0` 和 `@alixex/ranview@0.2.0`，打包后的内部依赖使用这些确切版本；三个包均已发布到 `latest` 标签。
 - 包含下方 RC 准备记录中的交互、类型声明、数学字体材料及安装体积修复。继续支持 Node 24+、ESM 模块和独立 IIFE。
 - 正式版更新日志页不再显示预发布警告，Alpha、Beta 和 RC 构建仍保留提示。验证与发布步骤见[发布指南](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md)。
 
 ## [0.5.0-rc.0] — 2026-10-17
 
-待发布的 Release Candidate，尚未上传 npm。
+未发布的验证候选版本，其变更已包含在正式版 0.5.0 中。
 
 ### 发布准备
 
@@ -178,6 +177,7 @@ description: 'ranui 的变更记录——新增、变更、修复与移除及其
 
 | 日期 | 仓库整体 |
 | ---- | ------- |
+| 2026-10-19 | [Stable npm release](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-19.md) |
 | 2026-10-18 | [Stable release preparation](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-18.md) |
 | 2026-10-17 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-17.md) |
 | 2026-07-25 | [补齐：现有模块的缺口](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-25.md) |
