@@ -35,20 +35,23 @@ mountDesignIllustrations();
  * heading actually crosses the line, instead of on every frame of every scroll.
  */
 const headings = [...document.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id]')];
-const links = new Map<string, HTMLAnchorElement>();
+const links = new Map<string, HTMLAnchorElement[]>();
 for (const link of document.querySelectorAll<HTMLAnchorElement>('.toc__link')) {
-  links.set(decodeURIComponent(link.hash.slice(1)), link);
+  const hash = decodeURIComponent(link.hash.slice(1));
+  const copies = links.get(hash) ?? [];
+  copies.push(link);
+  links.set(hash, copies);
 }
 if (headings.length && links.size) {
-  let current: HTMLAnchorElement | undefined;
+  let current: HTMLAnchorElement[] | undefined;
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         const link = links.get(entry.target.id);
         if (!link || link === current) continue;
-        current?.removeAttribute('data-active');
-        link.setAttribute('data-active', '');
+        current?.forEach((copy) => copy.removeAttribute('data-active'));
+        link.forEach((copy) => copy.setAttribute('data-active', ''));
         current = link;
       }
     },

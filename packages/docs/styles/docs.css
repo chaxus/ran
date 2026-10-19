@@ -279,6 +279,9 @@ a {
   padding: 6px;
   list-style: none;
   min-width: 150px;
+  max-height: calc(100dvh - var(--header-h) - var(--pad));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--bg);
   border: 1px solid var(--rule);
   border-radius: 8px;
@@ -303,6 +306,30 @@ a {
 
 /* ── Drawer (no script) ──────────────────────────────────────────────────── */
 
+.drawer__toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.drawer__toggle:focus-visible + .drawer__button {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.mobile-nav {
+  display: grid;
+  gap: var(--ran-space-1);
+  padding-block-end: var(--ran-space-4);
+  margin-block-end: var(--ran-space-4);
+  border-block-end: 1px solid var(--rule);
+}
+.mobile-nav .nav__link {
+  display: block;
+  min-height: 44px;
+}
 .drawer__button {
   display: inline-flex;
   flex-direction: column;
@@ -407,6 +434,10 @@ a {
 }
 .search__input::-webkit-search-cancel-button {
   display: none;
+}
+.search__input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 .search__close {
   flex: none;
@@ -602,6 +633,7 @@ a {
 @media (max-width: 899px) {
   .sidebar {
     transform: translateX(-100%);
+    visibility: hidden;
   }
   [dir='rtl'] .sidebar {
     transform: translateX(100%);
@@ -610,6 +642,7 @@ a {
 .drawer__toggle:checked ~ .layout .sidebar,
 body:has(.drawer__toggle:checked) .sidebar {
   transform: none;
+  visibility: visible;
 }
 body:has(.drawer__toggle:checked) .drawer__scrim {
   display: block;
@@ -790,6 +823,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   display: flex;
   flex-direction: column;
   gap: var(--prose-gap);
+  overflow-wrap: anywhere;
 }
 .prose > p,
 .prose > ul,
@@ -1213,6 +1247,11 @@ ran-demo p {
   .drawer__button {
     display: none;
   }
+  .drawer__toggle,
+  .mobile-nav,
+  .sidebar--mobile-only {
+    display: none;
+  }
   body.has-sidebar .layout {
     grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
   }
@@ -1251,7 +1290,7 @@ ran-demo p {
   body.has-sidebar .layout:has(.toc) {
     grid-template-columns: var(--sidebar-w) minmax(0, 1fr) var(--toc-w);
   }
-  .layout:not(:has(.sidebar)):has(.toc) {
+  body:not(.has-sidebar) .layout:has(.toc) {
     grid-template-columns: minmax(0, 1fr) var(--toc-w);
   }
   .toc {
@@ -1278,7 +1317,7 @@ ran-demo p {
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
+    transition-duration: 0s !important;
   }
 }
 
@@ -1386,6 +1425,18 @@ body.drawer-open {
 }
 .code-copy.done {
   color: var(--fg);
+}
+.code-copy[aria-disabled='true'] {
+  cursor: wait;
+}
+.code-copy__status {
+  display: block;
+  padding-block: var(--ran-space-2);
+  color: var(--fg-muted);
+  font-size: var(--ran-text-label-2);
+}
+.code-copy__status:empty {
+  display: none;
 }
 @media (pointer: coarse) {
   .code-copy {
