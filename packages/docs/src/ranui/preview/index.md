@@ -26,7 +26,7 @@ npm install ranui
 
 <div style="width: 100px; margin-top:10px">
     <r-preview id="preview-demo"></r-preview>
-    <r-button type="primary" onclick="uploadFile('preview-demo')">Choose File to Preview</r-button>
+    <r-button type="primary" data-preview-upload="preview-demo">Choose File to Preview</r-button>
 </div>
 
 ```html
@@ -34,22 +34,27 @@ npm install ranui
 <r-button type="primary" onclick="uploadFile()">Choose File to Preview</r-button>
 
 <script>
+  let selectedUrl;
   const uploadFile = () => {
     const preview = document.getElementById('preview-demo');
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx');
+    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx,.xls');
     input.click();
 
     input.onchange = (e) => {
       const { files = [] } = input;
       if (files.length > 0) {
         const file = files[0];
-        const url = URL.createObjectURL(file);
-        preview.setAttribute('src', url);
+        if (selectedUrl) URL.revokeObjectURL(selectedUrl);
+        selectedUrl = URL.createObjectURL(file);
+        preview.setAttribute('src', selectedUrl);
       }
     };
   };
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted && selectedUrl) URL.revokeObjectURL(selectedUrl);
+  });
 </script>
 ```
 
@@ -57,11 +62,14 @@ npm install ranui
 
 ### Properties
 
-| Property    | Type      | Default                     | Description                                                  |
-| ----------- | --------- | --------------------------- | ------------------------------------------------------------ |
-| `src`       | `string`  | `''`                        | File preview URL, automatically opens preview modal when set |
-| `closeable` | `boolean` | `true`                      | Whether to show the close button                             |
-| `baseUrl`   | `string`  | `'https://edit.chaxus.com'` | Custom document preview service URL                          |
+| Attribute / property   | Type      | Default                   | Description                                                      |
+| ---------------------- | --------- | ------------------------- | ---------------------------------------------------------------- |
+| `src`                  | `string`  | —                         | File URL; setting it opens the dialog                            |
+| `closeable`            | `string`  | —                         | Set the string false to hide the close button and disable Escape |
+| `baseUrl` / `baseurl`  | `string`  | `https://edit.chaxus.com` | Office editor page URL                                           |
+| `readonly`             | `boolean` | `false`                   | Opt-in Office read-only mode                                     |
+| `pdf-mode` / `pdfMode` | `string`  | `eager`                   | PDF mode: eager or virtual                                       |
+| `label`                | `string`  | `Preview file`            | Accessible name of the trigger                                   |
 
 ### File Source `src`
 
@@ -92,6 +100,17 @@ When you need to customize the document preview service, you can specify the ser
 ```
 
 > 💡 **Tip**: Defaults to the hosted preview service at `https://edit.chaxus.com`. To self-host it, see [OnlyOffice Web Local](https://github.com/ranuts/document).
+
+## 0.3.0 compatibility
+
+Version 0.3.0 keeps automatic registration and editable Office defaults. In default `eager` mode, PDF `load` fires after every page is painted. Set `pdf-mode="virtual"` (JavaScript: `pdfMode = 'virtual'`) for viewport rendering: `load` then means the first viewport and buffer are ready. Its worker stays active until close, source replacement or disconnection. Changing `readonly` or `closeable` preserves the open Office editor and unsaved edits.
+
+```html
+<r-preview pdf-mode="virtual" src="/reports/long.pdf"></r-preview>
+<r-preview readonly src="/reports/annual.docx"></r-preview>
+```
+
+PDFs render locally. Office files are passed to the configured editor iframe, which can access their contents. Use your own `baseUrl` deployment for private or intranet documents.
 
 ## Migration Guide
 

@@ -264,9 +264,16 @@ shows nothing to a crawler, and nothing to a reader on a failed request. What is
 `client/` genuinely cannot be done without it: search, the theme switch, copy buttons, the
 scroll-reveal on the landing.
 
-**`@ranui/preview` bundles pdf.js — 1.33 MB.** It loads only when the page actually contains
-an `<r-preview>`, checked with `document.querySelector` before the dynamic import. It used
-to load unconditionally, which was over half of everything a page downloaded, on every page.
+**`@ranui/preview` loads only on pages containing `<r-preview>`.** Its PDF engine is
+loaded only when a PDF opens. `build/preview-assets.ts` deploys the installed package's
+fonts, cMaps, WASM and licence beside the PDF chunk, under a package-versioned path.
+Keep that relative layout: moving only the JavaScript breaks PDF assets, and reusing
+an unversioned path would leave old files in the persistent asset cache.
+
+The preview demo uses `client/preview.ts` to own its selected file URLs. Its small
+width rule in `styles/demos.css` gives virtual page placeholders a definite parent
+width on desktop WebKit. Browser regressions exercise the built site with
+`pnpm -F docs test:preview`; build the workspace libraries and docs first.
 
 **CSS may hide something only when script is there to bring it back.** `.reveal` sets
 `opacity: 0` and an IntersectionObserver adds `.in`; the rule is gated on a `js` class set

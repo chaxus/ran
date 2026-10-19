@@ -26,7 +26,7 @@ npm install ranui
 
 <div style="width: 100px; margin-top:10px">
     <r-preview id="preview-demo"></r-preview>
-    <r-button type="primary" onclick="uploadFile('preview-demo')">انتخاب فایل برای پیش‌نمایش</r-button>
+    <r-button type="primary" data-preview-upload="preview-demo">انتخاب فایل برای پیش‌نمایش</r-button>
 </div>
 
 ```html
@@ -34,22 +34,27 @@ npm install ranui
 <r-button type="primary" onclick="uploadFile()">انتخاب فایل برای پیش‌نمایش</r-button>
 
 <script>
+  let selectedUrl;
   const uploadFile = () => {
     const preview = document.getElementById('preview-demo');
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx');
+    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx,.xls');
     input.click();
 
     input.onchange = (e) => {
       const { files = [] } = input;
       if (files.length > 0) {
         const file = files[0];
-        const url = URL.createObjectURL(file);
-        preview.setAttribute('src', url);
+        if (selectedUrl) URL.revokeObjectURL(selectedUrl);
+        selectedUrl = URL.createObjectURL(file);
+        preview.setAttribute('src', selectedUrl);
       }
     };
   };
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted && selectedUrl) URL.revokeObjectURL(selectedUrl);
+  });
 </script>
 ```
 
@@ -57,11 +62,14 @@ npm install ranui
 
 ### خصیصه‌ها
 
-| خصیصه       | نوع       | پیش‌فرض                     | توضیح                                                      |
-| ----------- | --------- | --------------------------- | ---------------------------------------------------------- |
-| `src`       | `string`  | `''`                        | نشانی فایل؛ با تعیین آن پنجرهٔ پیش‌نمایش خودکار باز می‌شود |
-| `closeable` | `boolean` | `true`                      | اینکه دکمهٔ بستن نمایش داده شود یا نه                      |
-| `baseUrl`   | `string`  | `'https://edit.chaxus.com'` | نشانی سرویس پیش‌نمایش سند                                  |
+| ویژگی                  | نوع       | پیش‌فرض                   | توضیح                                             |
+| ---------------------- | --------- | ------------------------- | ------------------------------------------------- |
+| `src`                  | `string`  | —                         | نشانی فایل؛ تنظیم آن پنجره را باز می‌کند          |
+| `closeable`            | `string`  | —                         | رشتهٔ false دکمهٔ بستن و Escape را غیرفعال می‌کند |
+| `baseUrl` / `baseurl`  | `string`  | `https://edit.chaxus.com` | نشانی صفحهٔ ویرایشگر Office                       |
+| `readonly`             | `boolean` | `false`                   | حالت اختیاری فقط‌خواندنی Office                   |
+| `pdf-mode` / `pdfMode` | `string`  | `eager`                   | حالت PDF: eager یا virtual                        |
+| `label`                | `string`  | `Preview file`            | نام دسترس‌پذیر کنترل بازکردن                      |
 
 ### منبع فایل `src`
 
@@ -92,6 +100,17 @@ npm install ranui
 ```
 
 > 💡 **نکته**: به‌طور پیش‌فرض از سرویس میزبانی‌شده روی `https://edit.chaxus.com` استفاده می‌شود. برای میزبانی خودتان [OnlyOffice Web Local](https://github.com/ranuts/document) را ببینید.
+
+## سازگاری با 0.3.0
+
+نسخهٔ 0.3.0 ثبت خودکار و ویرایش پیش‌فرض Office را حفظ می‌کند. در حالت پیش‌فرض PDF یعنی `eager`، رویداد `load` پس از رسم همهٔ صفحه‌ها رخ می‌دهد. با `pdf-mode="virtual"` (در JavaScript: `pdfMode = 'virtual'`) ناحیهٔ قابل‌مشاهده رسم می‌شود و `load` آماده‌بودن نخستین نما و حاشیهٔ آن را نشان می‌دهد. worker تا بستن، تغییر منبع یا حذف عنصر فعال می‌ماند. تغییر `readonly` یا `closeable` ویرایشگر Office و تغییرات ذخیره‌نشده را حفظ می‌کند.
+
+```html
+<r-preview pdf-mode="virtual" src="/reports/long.pdf"></r-preview>
+<r-preview readonly src="/reports/annual.docx"></r-preview>
+```
+
+PDF به‌صورت محلی رسم می‌شود. فایل Office به iframe ویرایشگر تنظیم‌شده داده می‌شود و آن صفحه می‌تواند به محتوای فایل دسترسی داشته باشد. برای اسناد خصوصی یا درون‌شبکه‌ای از استقرار `baseUrl` خود استفاده کنید.
 
 ## راهنمای کوچ
 

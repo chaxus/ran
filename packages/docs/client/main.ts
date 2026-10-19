@@ -11,6 +11,7 @@ import '../styles/home.css';
 import '../styles/demos.css';
 import '../styles/design-illustrations.css';
 import 'ranui/style';
+import { mountPreviewDemo } from './preview.ts';
 import { mountComponents } from './components.ts';
 import { cacheVisitedAssets } from './visited-assets.ts';
 import { mountIdlePrefetch } from './idle-prefetch.ts';
@@ -22,6 +23,7 @@ import { mountNavigation, mountCodeCopy } from './interactions.ts';
 
 cacheVisitedAssets();
 mountComponents();
+mountPreviewDemo();
 
 mountCodeGroups();
 mountDesignIllustrations();

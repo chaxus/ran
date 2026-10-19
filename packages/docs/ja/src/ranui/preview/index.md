@@ -26,7 +26,7 @@ npm install ranui
 
 <div style="width: 100px; margin-top:10px">
     <r-preview id="preview-demo"></r-preview>
-    <r-button type="primary" onclick="uploadFile('preview-demo')">プレビューするファイルを選ぶ</r-button>
+    <r-button type="primary" data-preview-upload="preview-demo">プレビューするファイルを選ぶ</r-button>
 </div>
 
 ```html
@@ -34,22 +34,27 @@ npm install ranui
 <r-button type="primary" onclick="uploadFile()">プレビューするファイルを選ぶ</r-button>
 
 <script>
+  let selectedUrl;
   const uploadFile = () => {
     const preview = document.getElementById('preview-demo');
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx');
+    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx,.xls');
     input.click();
 
     input.onchange = (e) => {
       const { files = [] } = input;
       if (files.length > 0) {
         const file = files[0];
-        const url = URL.createObjectURL(file);
-        preview.setAttribute('src', url);
+        if (selectedUrl) URL.revokeObjectURL(selectedUrl);
+        selectedUrl = URL.createObjectURL(file);
+        preview.setAttribute('src', selectedUrl);
       }
     };
   };
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted && selectedUrl) URL.revokeObjectURL(selectedUrl);
+  });
 </script>
 ```
 
@@ -57,11 +62,14 @@ npm install ranui
 
 ### プロパティ
 
-| プロパティ  | 型        | 既定値                      | 説明                                                         |
-| ----------- | --------- | --------------------------- | ------------------------------------------------------------ |
-| `src`       | `string`  | `''`                        | プレビューするファイルの URL。設定するとモーダルが自動で開く |
-| `closeable` | `boolean` | `true`                      | 閉じるボタンを表示するか                                     |
-| `baseUrl`   | `string`  | `'https://edit.chaxus.com'` | ドキュメントプレビューサービスの URL                         |
+| 属性 / プロパティ      | 型        | 既定値                    | 説明                                          |
+| ---------------------- | --------- | ------------------------- | --------------------------------------------- |
+| `src`                  | `string`  | —                         | ファイル URL。設定するとダイアログを開く      |
+| `closeable`            | `string`  | —                         | 文字列 false で閉じるボタンと Escape を無効化 |
+| `baseUrl` / `baseurl`  | `string`  | `https://edit.chaxus.com` | Office エディターのページ URL                 |
+| `readonly`             | `boolean` | `false`                   | Office の読み取り専用モードを有効化           |
+| `pdf-mode` / `pdfMode` | `string`  | `eager`                   | PDF モード：eager または virtual              |
+| `label`                | `string`  | `Preview file`            | トリガーのアクセシブルな名前                  |
 
 ### ファイルの場所 `src`
 
@@ -92,6 +100,17 @@ npm install ranui
 ```
 
 > 💡 **ヒント**：既定ではホスティング済みのプレビューサービス `https://edit.chaxus.com` を使います。自前でホストする方法は [OnlyOffice Web Local](https://github.com/ranuts/document) を参照してください。
+
+## 0.3.0 の互換性
+
+0.3.0 は自動登録と Office の既定の編集可能な動作を維持します。PDF の既定の `eager` モードは全ページの描画後に `load` を発火します。`pdf-mode="virtual"`（JavaScript: `pdfMode = 'virtual'`）では表示領域を描画し、最初の表示領域とバッファーの準備後に `load` を発火します。worker は閉じる、ソースの置換、要素の削除まで保持されます。`readonly` や `closeable` の変更は、Office エディターと未保存の編集を維持します。
+
+```html
+<r-preview pdf-mode="virtual" src="/reports/long.pdf"></r-preview>
+<r-preview readonly src="/reports/annual.docx"></r-preview>
+```
+
+PDF はローカルで描画します。Office ファイルは設定されたエディター iframe に渡され、そのページは内容にアクセスできます。非公開・イントラネット文書には独自の `baseUrl` を使用してください。
 
 ## 移行ガイド
 

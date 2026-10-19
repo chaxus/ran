@@ -26,7 +26,7 @@ npm install ranui
 
 <div style="width: 100px; margin-top:10px">
     <r-preview id="preview-demo"></r-preview>
-    <r-button type="primary" onclick="uploadFile('preview-demo')">미리 볼 파일 선택</r-button>
+    <r-button type="primary" data-preview-upload="preview-demo">미리 볼 파일 선택</r-button>
 </div>
 
 ```html
@@ -34,22 +34,27 @@ npm install ranui
 <r-button type="primary" onclick="uploadFile()">미리 볼 파일 선택</r-button>
 
 <script>
+  let selectedUrl;
   const uploadFile = () => {
     const preview = document.getElementById('preview-demo');
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx');
+    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx,.xls');
     input.click();
 
     input.onchange = (e) => {
       const { files = [] } = input;
       if (files.length > 0) {
         const file = files[0];
-        const url = URL.createObjectURL(file);
-        preview.setAttribute('src', url);
+        if (selectedUrl) URL.revokeObjectURL(selectedUrl);
+        selectedUrl = URL.createObjectURL(file);
+        preview.setAttribute('src', selectedUrl);
       }
     };
   };
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted && selectedUrl) URL.revokeObjectURL(selectedUrl);
+  });
 </script>
 ```
 
@@ -57,11 +62,14 @@ npm install ranui
 
 ### 프로퍼티
 
-| 프로퍼티    | 타입      | 기본값                      | 설명                                                    |
-| ----------- | --------- | --------------------------- | ------------------------------------------------------- |
-| `src`       | `string`  | `''`                        | 파일 URL. 값을 넣으면 미리보기 모달이 자동으로 열립니다 |
-| `closeable` | `boolean` | `true`                      | 닫기 버튼을 보일지 여부                                 |
-| `baseUrl`   | `string`  | `'https://edit.chaxus.com'` | 문서 미리보기 서비스 URL                                |
+| 속성 / 프로퍼티        | 타입      | 기본값                    | 설명                                         |
+| ---------------------- | --------- | ------------------------- | -------------------------------------------- |
+| `src`                  | `string`  | —                         | 파일 URL을 설정하면 대화 상자가 열림         |
+| `closeable`            | `string`  | —                         | 문자열 false로 닫기 버튼과 Escape를 비활성화 |
+| `baseUrl` / `baseurl`  | `string`  | `https://edit.chaxus.com` | Office 편집기 페이지 URL                     |
+| `readonly`             | `boolean` | `false`                   | Office 읽기 전용 모드 활성화                 |
+| `pdf-mode` / `pdfMode` | `string`  | `eager`                   | PDF 모드: eager 또는 virtual                 |
+| `label`                | `string`  | `Preview file`            | 트리거의 접근성 이름                         |
 
 ### 파일 위치 `src`
 
@@ -92,6 +100,17 @@ npm install ranui
 ```
 
 > 💡 **팁**: 기본값은 호스팅된 미리보기 서비스 `https://edit.chaxus.com` 입니다. 직접 호스팅하려면 [OnlyOffice Web Local](https://github.com/ranuts/document)을 참고하세요.
+
+## 0.3.0 호환성
+
+0.3.0은 자동 등록과 기본 편집 가능한 Office 동작을 유지합니다. PDF의 기본 `eager` 모드는 모든 페이지를 그린 뒤 `load`를 발생시킵니다. `pdf-mode="virtual"`(JavaScript: `pdfMode = 'virtual'`)은 보이는 영역을 렌더링하며, 첫 화면과 버퍼가 준비되면 `load`를 발생시킵니다. worker는 닫기, 소스 교체 또는 요소 제거까지 유지됩니다. `readonly`나 `closeable` 변경은 현재 Office 편집기와 저장하지 않은 편집을 보존합니다.
+
+```html
+<r-preview pdf-mode="virtual" src="/reports/long.pdf"></r-preview>
+<r-preview readonly src="/reports/annual.docx"></r-preview>
+```
+
+PDF는 로컬에서 렌더링됩니다. Office 파일은 설정된 편집기 iframe으로 전달되어 해당 페이지가 내용에 접근할 수 있습니다. 비공개 또는 내부망 문서에는 자체 `baseUrl` 배포를 사용하세요.
 
 ## 마이그레이션 안내
 

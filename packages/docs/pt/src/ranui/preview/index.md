@@ -26,7 +26,7 @@ npm install ranui
 
 <div style="width: 100px; margin-top:10px">
     <r-preview id="preview-demo"></r-preview>
-    <r-button type="primary" onclick="uploadFile('preview-demo')">Escolher arquivo para pré-visualizar</r-button>
+    <r-button type="primary" data-preview-upload="preview-demo">Escolher arquivo para pré-visualizar</r-button>
 </div>
 
 ```html
@@ -34,22 +34,27 @@ npm install ranui
 <r-button type="primary" onclick="uploadFile()">Escolher arquivo para pré-visualizar</r-button>
 
 <script>
+  let selectedUrl;
   const uploadFile = () => {
     const preview = document.getElementById('preview-demo');
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx');
+    input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx,.xls');
     input.click();
 
     input.onchange = (e) => {
       const { files = [] } = input;
       if (files.length > 0) {
         const file = files[0];
-        const url = URL.createObjectURL(file);
-        preview.setAttribute('src', url);
+        if (selectedUrl) URL.revokeObjectURL(selectedUrl);
+        selectedUrl = URL.createObjectURL(file);
+        preview.setAttribute('src', selectedUrl);
       }
     };
   };
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted && selectedUrl) URL.revokeObjectURL(selectedUrl);
+  });
 </script>
 ```
 
@@ -57,11 +62,14 @@ npm install ranui
 
 ### Propriedades
 
-| Propriedade | Tipo      | Padrão                      | Descrição                                                       |
-| ----------- | --------- | --------------------------- | --------------------------------------------------------------- |
-| `src`       | `string`  | `''`                        | URL do arquivo; ao defini-la o diálogo de pré-visualização abre |
-| `closeable` | `boolean` | `true`                      | Se o botão de fechar é exibido                                  |
-| `baseUrl`   | `string`  | `'https://edit.chaxus.com'` | URL do serviço de pré-visualização de documentos                |
+| Atributo / propriedade | Tipo      | Padrão                    | Descrição                                          |
+| ---------------------- | --------- | ------------------------- | -------------------------------------------------- |
+| `src`                  | `string`  | —                         | URL do arquivo; ao defini-la, abre o diálogo       |
+| `closeable`            | `string`  | —                         | A string false desativa o botão de fechar e Escape |
+| `baseUrl` / `baseurl`  | `string`  | `https://edit.chaxus.com` | URL da página do editor do Office                  |
+| `readonly`             | `boolean` | `false`                   | Modo opcional de somente leitura para Office       |
+| `pdf-mode` / `pdfMode` | `string`  | `eager`                   | Modo PDF: eager ou virtual                         |
+| `label`                | `string`  | `Preview file`            | Nome acessível do acionador                        |
 
 ### Origem do arquivo `src`
 
@@ -92,6 +100,17 @@ Quando quiser usar o seu próprio serviço de pré-visualização de documentos,
 ```
 
 > 💡 **Dica**: por padrão usa-se o serviço hospedado em `https://edit.chaxus.com`. Para hospedá-lo você mesmo, veja [OnlyOffice Web Local](https://github.com/ranuts/document).
+
+## Compatibilidade com 0.3.0
+
+0.3.0 mantém o registro automático e a edição de Office por padrão. No modo PDF padrão `eager`, `load` ocorre após todas as páginas serem desenhadas. Com `pdf-mode="virtual"` (JavaScript: `pdfMode = 'virtual'`), a área visível é renderizada; `load` indica que a primeira visualização e seu buffer estão prontos. O worker permanece ativo até fechar, trocar a origem ou remover o elemento. Alterar `readonly` ou `closeable` preserva o editor de Office e as edições não salvas.
+
+```html
+<r-preview pdf-mode="virtual" src="/reports/long.pdf"></r-preview>
+<r-preview readonly src="/reports/annual.docx"></r-preview>
+```
+
+Os PDFs são renderizados localmente. Os arquivos de Office são enviados ao iframe do editor configurado, cuja página pode acessar o conteúdo. Use sua própria implantação `baseUrl` para documentos privados ou de intranet.
 
 ## Guia de migração
 
