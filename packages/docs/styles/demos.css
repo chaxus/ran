@@ -305,3 +305,9 @@
   justify-content: center;
   min-height: 40px;
 }
+
+/* Preview 0.3.0 virtual pages have no intrinsic width. Give WebKit a definite
+   parent width so percentage-sized placeholders retain their aspect ratio. */
+.r-preview-mask .r-preview-context {
+  width: 100%;
+}

@@ -12,7 +12,8 @@
     "tsc": "tsc --noEmit",
     "check:langs": "node bin/check-langs.ts",
     "test": "vitest run",
-    "verify:design": "tsx ../ranui/bin/verify-design-rules.ts --roots styles --tokens ../ranui/theme/tokens.less --baseline design-baseline.json"
+    "verify:design": "tsx ../ranui/bin/verify-design-rules.ts --roots styles --tokens ../ranui/theme/tokens.less --baseline design-baseline.json",
+    "test:preview": "playwright test"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
   "author": "chaxus",
   "license": "MIT",
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "@types/node": "catalog:",
     "jsdom": "30.0.1",
     "tsx": "catalog:",
@@ -37,7 +39,7 @@
     "vitest": "catalog:"
   },
   "dependencies": {
-    "@ranui/preview": "0.1.0-alpha-2",
+    "@ranui/preview": "0.3.0",
     "minisearch": "7.2.0",
     "ranpress": "workspace:*",
     "ranui": "workspace:*",
