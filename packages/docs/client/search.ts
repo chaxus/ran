@@ -114,6 +114,7 @@ export const mountSearch = (): void => {
   let opener: HTMLElement | null = null;
   let hits: Hit[] = [];
   let active = 0;
+  let composing = false;
 
   const render = (): void => {
     list.innerHTML = hits
@@ -170,6 +171,7 @@ export const mountSearch = (): void => {
         drawer.checked = false;
         drawer.dispatchEvent(new Event('change'));
       }
+      if (opener?.closest('[inert]')) opener = document.querySelector<HTMLElement>('.drawer__button');
       dialog.showModal();
     }
     input.focus();
@@ -181,19 +183,28 @@ export const mountSearch = (): void => {
       await loadIndex();
       list.removeAttribute('aria-busy');
       run();
-    }
+    } else render();
   };
 
   for (const button of openers) button.addEventListener('click', () => void open());
   input.addEventListener('input', run);
+  input.addEventListener('compositionstart', () => {
+    composing = true;
+  });
+  input.addEventListener('compositionend', () => {
+    composing = false;
+  });
   retry?.addEventListener('click', () => void open());
   dialog.querySelector('.search__close')?.addEventListener('click', () => dialog.close());
   dialog.addEventListener('close', () => {
     input.setAttribute('aria-expanded', 'false');
-    opener?.focus();
+    const target =
+      opener?.isConnected && !opener.closest('[inert]') ? opener : document.querySelector<HTMLElement>('.search-open');
+    target?.focus();
   });
 
   document.addEventListener('keydown', (event) => {
+    if (composing || event.isComposing) return;
     // Cmd/Ctrl-K anywhere, or `/` when not already typing into something.
     const target = event.composedPath()[0] as HTMLElement;
     const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName ?? '') || target?.isContentEditable;
@@ -204,7 +215,15 @@ export const mountSearch = (): void => {
   });
 
   dialog.addEventListener('keydown', (event) => {
-    if (event.target !== input || !hits.length || event.isComposing) return;
+    if (composing || event.isComposing) return;
+    // Native search fields consume the first Escape to clear their value. The dialog's
+    // close action instead preserves the query for the next visit.
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      dialog.close();
+      return;
+    }
+    if (event.target !== input || !hits.length) return;
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();
       active = (active + (event.key === 'ArrowDown' ? 1 : hits.length - 1)) % hits.length;
@@ -219,7 +238,7 @@ export const mountSearch = (): void => {
     }
   });
 
-  // Clicking the backdrop closes it. `<dialog>` already handles Escape.
+  // Clicking the backdrop closes it.
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) dialog.close();
   });

@@ -175,7 +175,7 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
 <a class="skip" href="#main">${escapeHtml(feedback.skip)}</a>
 <header class="site-header">
   <div class="site-header__inner">
-    ${sb ? `<input type="checkbox" id="drawer" class="drawer__toggle" hidden><label class="drawer__button" for="drawer" aria-controls="doc-sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}"><span></span><span></span><span></span></label>` : ''}
+    <input type="checkbox" id="drawer" class="drawer__toggle" aria-controls="doc-sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}"><label class="drawer__button" for="drawer" aria-controls="doc-sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}"><span></span><span></span><span></span></label>
     <a class="wordmark" href="${escapeHtml(page.locale.dir ? `/${page.locale.dir}/` : '/')}">${escapeHtml(SITE.name)}</a>
     <nav class="nav" aria-label="${escapeHtml(ui.sidebarMenu)}">${navHtml}</nav>
     <button class="search-open" type="button" aria-label="${escapeHtml(ui.searchButton)}">
@@ -188,7 +188,7 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
   </div>
 </header>
 <div class="layout">
-${sb ? `<label class="drawer__scrim" for="drawer"></label><nav id="doc-sidebar" class="sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}">${sb}</nav>` : ''}
+<label class="drawer__scrim" for="drawer"></label><nav id="doc-sidebar" class="sidebar${sb ? '' : ' sidebar--mobile-only'}" aria-label="${escapeHtml(ui.sidebarMenu)}"><div class="mobile-nav">${navHtml}</div>${sb}</nav>
 <main id="main" class="doc">
 ${tocHtml(page, ui.outline) ? `<details class="mobile-toc"><summary>${escapeHtml(ui.outline)}</summary>${tocHtml(page, ui.outline).replace(/<aside[^>]*>|<\/aside>|<p[^>]*>.*?<\/p>/g, '')}</details>` : ''}
 <${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div class="landing"' : 'article class="prose"'}>${page.html}</${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div' : 'article'}>
