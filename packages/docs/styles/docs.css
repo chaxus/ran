@@ -571,10 +571,29 @@ a {
   width: var(--sidebar-w);
   padding: 20px 18px 64px;
   overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--fg-muted) var(--bg-soft);
   overscroll-behavior: contain;
   background: var(--bg);
   border-inline-end: 1px solid var(--rule);
   transition: transform 0.2s ease;
+}
+/* Use a persistent track in browsers with overlay scrollbars so overflowing
+   navigation remains discoverable even before the pointer enters the column. */
+@supports selector(::-webkit-scrollbar) {
+  .sidebar {
+    scrollbar-color: auto;
+  }
+  .sidebar::-webkit-scrollbar {
+    width: 8px;
+  }
+  .sidebar::-webkit-scrollbar-track {
+    background: var(--bg-soft);
+  }
+  .sidebar::-webkit-scrollbar-thumb {
+    background: var(--fg-muted);
+    border-radius: var(--ran-radius-full);
+  }
 }
 /* Off-canvas only where the drawer exists. Declaring the transform unconditionally and
    resetting it in the wide-screen block does not work: `[dir='rtl'] .sidebar` outranks a
@@ -1199,9 +1218,10 @@ ran-demo p {
   }
   .sidebar {
     position: sticky;
-    top: var(--header-h);
     inset-inline-start: auto;
-    inset-block: auto;
+    /* Keep the block-start inset: resetting both block insets to auto disables
+       sticky positioning and lets the navigation leave a blank column on scroll. */
+    inset-block: var(--header-h) auto;
     height: calc(100vh - var(--header-h));
     transform: none;
     background: transparent;
