@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## Inicio rápido
 
 ```sh
-npm install ranuts
+npm install ranuts@0.5.0
 ```
 
 ```ts
@@ -36,16 +36,16 @@ Elige una entrada según el entorno y la tarea. Algunas utilidades necesitan obj
 
 ## IIFE / CDN
 
-Para una etiqueta script clásica, usa un IIFE independiente. Sustituye VERSION por una versión publicada; no necesitas bundler ni cargador de módulos.
+Para una etiqueta script clásica, usa el IIFE independiente publicado; no necesitas bundler ni cargador de módulos.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranuts@VERSION/dist/iife/utils.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ranuts@0.5.0/dist/iife/utils.iife.js"></script>
 <script>
   console.log(ranuts_utils.rgbToHex(1, 2, 3));
 </script>
 ```
 
-El IIFE de utilidades expone `ranuts_utils`; el completo `dist/iife/index.iife.js` expone `ranuts`. Sustituye VERSION por una versión publicada.
+El IIFE de utilidades expone `ranuts_utils`; el completo `dist/iife/index.iife.js` expone `ranuts`.
 
 ## Documentación
 

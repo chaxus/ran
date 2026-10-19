@@ -1,6 +1,20 @@
 # Browser and installation validation
 
-The original optimization measurements below describe the coordinated RC candidates on 2026-10-17. The stable preparation was revalidated on 2026-10-18. These records describe release preparation, not an npm publication.
+The published npm artifacts were verified on 2026-10-19. Earlier dated sections preserve the RC optimization measurements from 2026-10-17 and the stable preflight from 2026-10-18; their archive measurements describe those preparation runs.
+
+## Published npm artifacts — 2026-10-19
+
+All three versions are available on npm's `latest` tag. Their registry metadata and downloaded tarball SHA-512 integrity values were checked on 2026-10-19 (Asia/Shanghai).
+
+| Published package                                                              | Compressed archive (bytes) | Unpacked files (bytes) | Files |
+| ------------------------------------------------------------------------------ | -------------------------: | ---------------------: | ----: |
+| [ranuts@0.5.0](https://www.npmjs.com/package/ranuts/v/0.5.0)                   |                    578,225 |              1,755,965 |   276 |
+| [@alixex/ranview@0.2.0](https://www.npmjs.com/package/@alixex/ranview/v/0.2.0) |                     55,941 |                180,032 |    38 |
+| [ranui@0.5.0](https://www.npmjs.com/package/ranui/v/0.5.0)                     |                  9,917,743 |             38,016,972 |   488 |
+
+A fresh installation from the registry on macOS arm64 with Node 26.12.0 and npm 11.20.0 passed the documented ESM utility, static DOM-view and ranui SSR examples. Installation used production dependencies only, disabled lifecycle scripts and enforced Node engine requirements. Exact internal dependency versions were confirmed.
+
+The combined production installation contains **60,502,007 logical bytes in 3,447 files**, below the 75 MB budget. All individual archive and unpacked-file budgets passed. These measurements describe the actual published distributions.
 
 ## Stable preflight — 2026-10-18
 
@@ -12,7 +26,7 @@ The coordinated `ranuts@0.5.0`, `@alixex/ranview@0.2.0` and `ranui@0.5.0` archiv
 | @alixex/ranview |                     55,634 |                180,069 |
 | ranui           |                  9,899,695 |             38,010,764 |
 
-The combined production installation contains **60,495,834 logical bytes in 3,447 files**, below the 75 MB budget. Archive and unpacked-file measurements also pass their individual budgets. Exact SHA-512 values and the source commit are recorded in the local `.release/` receipts; the final main commit must be prepared and verified again before publication. Dry-run does not establish npm trusted-publisher authorization.
+The combined production installation contained **60,495,834 logical bytes in 3,447 files**, below the 75 MB budget. Archive and unpacked-file measurements also passed their individual budgets. Exact SHA-512 values and the source commit were recorded in local `.release/` preparation receipts. Those receipts and the dry-run did not establish npm publication or trusted-publisher authorization; the published artifact measurements are recorded above.
 
 ## WebKit compaction regression — 2026-10-18
 

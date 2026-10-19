@@ -9,7 +9,7 @@ import { CHANGELOG_PAGE_COPY } from './changelog-page-copy.ts';
 // The changelog existed only in the repository and in the npm tarball, so a reader on the
 // documentation site had no way to find out what changed — which matters more here than in
 // most libraries, because pre-release versions can ship breaking changes. Generating the page
-// rather than copying it keeps the site and the tarball from disagreeing about a release.
+// rather than copying it keeps the site aligned with the current repository changelog.
 
 const ROOT = path.resolve(process.cwd());
 const CHANGELOG_FILE = path.join(ROOT, 'CHANGELOG.md');

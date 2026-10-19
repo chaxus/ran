@@ -16,18 +16,18 @@ Cada pacote pode ser instalado separadamente. O [site de documentação](./packa
 
 ## Escolha um pacote
 
-| Pacote                                          | O que você pode criar                                                                                                                                                         |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ranui](./packages/ranui/README.pt.md)          | Interfaces com elementos HTML personalizados: campos, seletores, diálogos, tabelas, Markdown e reprodutores de mídia. Inclui temas e ferramentas de renderização no servidor. |
-| [ranuts](./packages/ranuts/README.pt.md)        | Fluxos de navegador e dados: conversões de cores e dados binários, armazenamento, análise de SSE e estado de respostas em streaming.                                          |
-| [@alixex/ranview](./packages/ranview/README.md) | Interfaces DOM com construtores encadeáveis e sinais reativos; HTML estático para renderização no servidor.                                                                   |
+| Pacote                                                | O que você pode criar                                                                                                                                                         |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [ranui@0.5.0](./packages/ranui/README.pt.md)          | Interfaces com elementos HTML personalizados: campos, seletores, diálogos, tabelas, Markdown e reprodutores de mídia. Inclui temas e ferramentas de renderização no servidor. |
+| [ranuts@0.5.0](./packages/ranuts/README.pt.md)        | Fluxos de navegador e dados: conversões de cores e dados binários, armazenamento, análise de SSE e estado de respostas em streaming.                                          |
+| [@alixex/ranview@0.2.0](./packages/ranview/README.md) | Interfaces DOM com construtores encadeáveis e sinais reativos; HTML estático para renderização no servidor.                                                                   |
 
 ## Experimente ranui
 
 Instale em uma aplicação de navegador com um bundler compatível com ESM:
 
 ```sh
-npm install ranui
+npm install ranui@0.5.0
 ```
 
 Adicione isto à entrada JavaScript da aplicação. O código cria um botão que responde ao clique:

@@ -5,22 +5,21 @@ description: 'ranui에서 무엇이 바뀌었는지 — 추가·변경·수정·
 
 # 변경 이력
 
-`pnpm -F ranui doc:changelog`가 `packages/ranui/CHANGELOG.md`에서 생성하므로 이 페이지와 npm
-패키지 안의 사본이 어긋날 수 없습니다. 항목은 원문 그대로라서 영어입니다.
+저장소의 `packages/ranui/CHANGELOG.md`에서 생성합니다. 항목은 영어 원문을 유지합니다.
 
 ::: v-pre
 
-## [0.5.0] — 2026-10-18
+## [0.5.0] — 2026-10-19
 
-Stable release prepared for publication; no npm upload has been performed.
+Published to npm as [ranui@0.5.0](https://www.npmjs.com/package/ranui/v/0.5.0) on the `latest` tag.
 
-- Coordinate `ranuts@0.5.0` and `@alixex/ranview@0.2.0`; packed internal dependencies resolve to these exact versions. Use the `latest` channel for release verification.
+- Coordinate `ranuts@0.5.0` and `@alixex/ranview@0.2.0`; packed internal dependencies resolve to these exact versions. All three packages are published on the `latest` tag.
 - Include the interaction, declaration, font-license and installation-size corrections documented in the RC preparation below. Node 24+, ESM modules and standalone IIFEs remain the supported distribution.
 - Remove the pre-release warning from stable-version changelog pages; retain it for Alpha, Beta and RC builds. See the [release guide](https://github.com/chaxus/ran/blob/main/docs/RELEASING.md) for verification and publication steps.
 
 ## [0.5.0-rc.0] — 2026-10-17
 
-Release candidate prepared for publication; npm upload is pending.
+Unpublished verification candidate; its changes are included in the stable 0.5.0 release.
 
 ### Release preparation
 
@@ -219,6 +218,7 @@ Release candidate prepared for publication; npm upload is pending.
 
 | 날짜 | 저장소 전체 |
 | ---- | ------- |
+| 2026-10-19 | [Stable npm release](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-19.md) |
 | 2026-10-18 | [Stable release preparation](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-18.md) |
 | 2026-10-17 | [Release review corrections](https://github.com/chaxus/ran/blob/main/changelogs/2026-10-17.md) |
 | 2026-07-25 | [补齐：现有模块的缺口](https://github.com/chaxus/ran/blob/main/changelogs/2026-07-25.md) |

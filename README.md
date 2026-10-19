@@ -16,18 +16,18 @@ Each package can be installed on its own. The [documentation site](./packages/do
 
 ## Choose a package
 
-| Package                                         | What you can build                                                                                                                                |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ranui](./packages/ranui/README.md)             | Interfaces made from custom elements: inputs, selects, dialogs, tables, Markdown and media players. Includes themes and server-rendering helpers. |
-| [ranuts](./packages/ranuts/README.md)           | Browser and data workflows: color and binary conversions, storage helpers, SSE parsing and streamed-response state.                               |
-| [@alixex/ranview](./packages/ranview/README.md) | DOM views composed with chainable builders and reactive signals; static HTML snapshots for server rendering.                                      |
+| Package                                               | What you can build                                                                                                                                |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [ranui@0.5.0](./packages/ranui/README.md)             | Interfaces made from custom elements: inputs, selects, dialogs, tables, Markdown and media players. Includes themes and server-rendering helpers. |
+| [ranuts@0.5.0](./packages/ranuts/README.md)           | Browser and data workflows: color and binary conversions, storage helpers, SSE parsing and streamed-response state.                               |
+| [@alixex/ranview@0.2.0](./packages/ranview/README.md) | DOM views composed with chainable builders and reactive signals; static HTML snapshots for server rendering.                                      |
 
 ## Try ranui
 
 Install it in a browser application that uses an ESM-compatible bundler:
 
 ```sh
-npm install ranui
+npm install ranui@0.5.0
 ```
 
 Add this to the application's JavaScript entry. It creates a button that responds to a click:

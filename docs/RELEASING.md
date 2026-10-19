@@ -2,7 +2,7 @@
 
 The release set is **ranuts → @alixex/ranview → ranui**, in dependency order. Other workspaces are not published by this workflow. All workspaces and the published libraries require **Node 24+**. Use pnpm **11.6.0**, pinned in the root `packageManager` field; the release workflow pins npm **11.20.0** for registry operations.
 
-## Current release preparation
+## Published stable release — 2026-10-19
 
 | Package         | Version | npm tag |
 | --------------- | ------- | ------- |
@@ -10,13 +10,20 @@ The release set is **ranuts → @alixex/ranview → ranui**, in dependency order
 | @alixex/ranview | 0.2.0   | latest  |
 | ranui           | 0.5.0   | latest  |
 
-These versions are prepared for publication; this table is not a publication receipt. Confirm the registry state with `pnpm release:check --registry`.
+All three versions are published to npm on `latest`, verified against the [registry release record](../changelogs/2026-10-19.md). Install them directly:
+
+```sh
+npm install ranui@0.5.0
+# Or install the utility or DOM-view library separately:
+npm install ranuts@0.5.0
+npm install @alixex/ranview@0.2.0
+```
 
 Change all affected package versions together before preparing a release. Keep internal dependencies as `workspace:*`: pnpm materializes the exact corresponding versions in the archives, and verification rejects old or unresolved internal versions. Update the lockfile if needed and commit the version/changelog changes before preparing the final artifacts.
 
-## Local preview
+## Prepare the next release
 
-From the repository root, with Node 24+:
+Choose new, unpublished versions and update the changelog before running these commands from the repository root with Node 24+. The already-published versions above cannot be reused; `--registry` deliberately rejects them.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -46,7 +53,7 @@ pnpm release:dry-run --tag latest
 
 ## GitHub Actions
 
-The [Release libraries workflow](../.github/workflows/release.yml) is manually dispatched. It becomes available from the Actions page after the workflow is merged to the default branch. The default channel is `latest`; the default `publish=false` performs verification only.
+The [Release libraries workflow](../.github/workflows/release.yml) is manually dispatched. Run it from `main` on the Actions page. The default channel is `latest`; the default `publish=false` performs verification only.
 
 1. First ensure the PR/main CI checks are green, including browser tests. Merge the release commits to `main`.
 2. Run **Release libraries** with `publish=false` (the default) and the matching channel. The workflow builds, tests, checks types/docs, verifies a real installation and previews npm publication. Download `release-<commit>` to inspect the exact archives and receipts.
@@ -56,7 +63,7 @@ The publish job downloads the prepared archives; it installs no workspace depend
 
 ### One-time registry configuration
 
-Before the first actual upload, the package owner must configure the npm **trusted publisher** for each of the three packages:
+Before publishing through GitHub Actions, verify the npm **trusted publisher** configuration for each of the three packages:
 
 - Repository: `chaxus/ran`
 - Workflow filename: `release.yml`

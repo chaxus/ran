@@ -11,7 +11,7 @@ ESM · IIFE · TypeScript
 ## شروع سریع
 
 ```sh
-npm install ranui
+npm install ranui@0.5.0
 ```
 
 واردکردن بسته‌ها با ESM است. در ابزار ساخت، هر مؤلفه را جداگانه وارد کنید و CSS مشترک را یک بار در ورودی برنامه بارگذاری کنید.
@@ -30,10 +30,10 @@ import 'ranui/style';
 
 ## IIFE / CDN
 
-برای تگ script معمولی از IIFE مستقل استفاده کنید. VERSION را با نسخه منتشرشده جایگزین کنید؛ نیازی به ابزار ساخت یا بارگذار ماژول نیست.
+برای تگ script معمولی از IIFE مستقل منتشرشده استفاده کنید؛ نیازی به ابزار ساخت یا بارگذار ماژول نیست.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ranui@VERSION/dist/iife/button.iife.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ranui@0.5.0/dist/iife/button.iife.js" defer></script>
 <r-button type="primary">Save</r-button>
 ```
 
