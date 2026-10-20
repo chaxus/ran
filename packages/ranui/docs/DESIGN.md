@@ -786,7 +786,16 @@ restoring it must pass. Human prose needs review, not tests that grep for prescr
 
 The repository's [browser acceptance example](https://github.com/chaxus/ran/blob/main/packages/ranui/test/e2e/layout-contract.spec.ts)
 uses test-only utilities and real DOM/shadow geometry; consumers adapt its relationships to their
-own page contract. Run it from a source checkout with `pnpm -F ranui exec playwright test layout-contract.spec.ts --project=chromium`.
+own page contract. In a source checkout, install frozen dependencies, build ranuts and install the
+Playwright browser first (the example's adjacent `layout-contract.md` records the commands). Run it with `pnpm -F ranui exec playwright test layout-contract.spec.ts --project=chromium`.
+The source-only `geometry(page, selector, 'text')` helper reads a text Range; omit the third
+argument for a frame. `sameSpine(actual, expected)` rejects differences over half a CSS pixel,
+and `compactHitZone(hitWidth, labelContentWidth, padding)` bounds the hit surface independently
+of filler. Its spec also uses `insideShadow` from `ranui/testing` to read documented button/content
+parts. These measurement helpers stay in test tooling and are not package exports. Declare an
+independent expected content edge as well as sibling relationships, so all siblings drifting together
+cannot pass. Confirm each deliberate mutation won the cascade before measuring its failure.
+
 Read numbers from a real browser, for example:
 
 ```js
