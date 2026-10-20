@@ -494,6 +494,23 @@ gallery.
 does not need another decorative frame or inset. Keep functionally required nested controls or
 surfaces, and coordinate their radii with the actual inset; containment alone is not a reason to add a box.
 
+**Every persistent boundary needs a distinct job.** Start with headings, alignment and proximity
+to group content. Add a border, surface fill or elevation only when that structure leaves a real
+boundary unclear. Do not repeat the same grouping with a panel frame, a nested card, row rules
+and another inset at the same time. Faint lines are still extra hierarchy; reducing their contrast
+or shortening them does not justify a redundant enclosure.
+
+| Boundary                | Keep when it communicates                                               | Remove when it only repeats                                           |
+| ----------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Field/control frame     | Where values can be entered or a selection made                         | A decorative wrapper around already legible commands                  |
+| Region frame or divider | An independent viewport, resize boundary or major change of task        | A title and gap that already make the same group clear                |
+| Nested surface          | A distinct floating layer, preview, drop target or interaction boundary | Another container inside an established settings pane                 |
+| Focus/selection outline | Keyboard focus or persistent selection state                            | Never remove this state cue merely to make the resting layout quieter |
+
+Review the full pane or page, not only the cropped group. For every remaining stable outline,
+fill or separator, name the relationship or interaction it communicates and check what becomes
+ambiguous if it is removed. A frame is optional; a reachable, recognisable control is not.
+
 > Three containers each contributed their own top padding — the page column, the landing
 > wrapper, and the hero — and the first line of content sat 280px below the header. Each
 > value was defensible on its own.
@@ -639,19 +656,23 @@ a button-shaped link keep an underline.
 
 ### Command hierarchy in constrained panes
 
-A visible action does not require a separate outlined box. Related settings commands may
-share one framed surface with full-width native button rows, aligned icons and labels,
-and quiet separators. The whole row is clickable; hover, press, disabled and keyboard
-focus still need clear states. Long translated row labels may wrap inside the row rather
-than pushing commands into a ragged horizontal button cloud. Do not add navigation chevrons
-to commands that act immediately.
+A visible action does not require a separate outlined box. **Inside an established settings
+pane, default to flat native button rows.** Aligned icons, explicit verb labels, consistent row
+targets and proximity establish the command group. Use spacing between routine and destructive
+commands. Do not automatically add an enclosing card, a muted group fill or rules between every
+row. A framed group is an exception that must pass the distinct-boundary test above, not the
+default recipe for making commands discoverable.
+
+The whole row is clickable; hover, press, disabled and keyboard focus still need clear states.
+Long translated row labels may wrap inside the row rather than pushing commands into a ragged
+horizontal button cloud. Do not add navigation chevrons to commands that act immediately.
 
 Separate destructive commands from recovery and transfer actions. A danger label and icon
 can communicate intent without a large red outline on every resting command; reserve the
 strongest danger fill for the explicit confirmation. Keep the existing confirmation,
-cancellation, focus return and busy guards. Acceptance measures the shared surface,
-individual row targets, label clipping, contrast and interaction states rather than
-requiring every command to have its own border. Reuse foundation roles and coarse-input
+cancellation, focus return and busy guards. Acceptance measures the full-pane boundary hierarchy,
+individual row targets, label clipping, contrast and interaction states rather than requiring
+a group or command to have its own border. Reuse foundation roles and coarse-input
 target requirements; this pattern does not introduce new component defaults.
 
 ### One product, one token set
@@ -777,7 +798,8 @@ a small patch does not require redesigning unrelated pages. A "no" within scope 
 6. Is running text comfortable in its actual scripts, fonts and zoom levels, and is
    everything that is **not** running text free of that measure cap?
 7. Does every element that looks like part of one object agree — border, radius **and**
-   spacing — and does every reserved column actually have content?
+   spacing — and does every reserved column actually have content? Does each persistent frame,
+   fill or divider communicate a distinct boundary instead of nesting the same group again?
 8. Does it hold in relevant changed states: empty, loading, failure, long translations, narrow
    width, supported themes, reduced motion and **RTL**, where affected?
 9. For layout or interaction changes, has the affected surface been checked in a real browser
