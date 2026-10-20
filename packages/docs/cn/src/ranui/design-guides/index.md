@@ -77,6 +77,12 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 [权威对齐规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#alignment-is-structure-not-polish)
 维护完整规则及可运行的浏览器验收示例。
 
+分组先用标题、对齐和间距。已有明确边界的设置面板内，操作默认采用平面列表；不要让内层卡片、
+整组底色和逐行分隔线重复表达同一个分组。输入控件的功能性边框、键盘焦点框继续保留。
+验收应查看完整面板，并说明每条边框、底色和分隔线的独立用途；
+[权威组合规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#11-composition--the-page-not-the-component)
+维护例外及验收条件。
+
 ## 选排版
 
 先问这段文字是什么**角色**（heading、label、copy、button、mono），字体、字号、字重、行高就从
