@@ -637,6 +637,23 @@ a button-shaped link keep an underline.
 > Every call-to-action on the home page shipped underlined, because the stylesheet assumed
 > a base rule it had never written.
 
+### Command hierarchy in constrained panes
+
+A visible action does not require a separate outlined box. Related settings commands may
+share one framed surface with full-width native button rows, aligned icons and labels,
+and quiet separators. The whole row is clickable; hover, press, disabled and keyboard
+focus still need clear states. Long translated row labels may wrap inside the row rather
+than pushing commands into a ragged horizontal button cloud. Do not add navigation chevrons
+to commands that act immediately.
+
+Separate destructive commands from recovery and transfer actions. A danger label and icon
+can communicate intent without a large red outline on every resting command; reserve the
+strongest danger fill for the explicit confirmation. Keep the existing confirmation,
+cancellation, focus return and busy guards. Acceptance measures the shared surface,
+individual row targets, label clipping, contrast and interaction states rather than
+requiring every command to have its own border. Reuse foundation roles and coarse-input
+target requirements; this pattern does not introduce new component defaults.
+
 ### One product, one token set
 
 **A surface built on this system reads `--ran-*`. It does not define a parallel palette.**
