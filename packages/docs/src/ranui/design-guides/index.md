@@ -88,10 +88,13 @@ filler, count nested padding, and preserve the same spine in empty states. Produ
 local choices. The [canonical alignment contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#alignment-is-structure-not-polish)
 owns these rules and the runnable browser acceptance example.
 
-Group with headings, alignment and spacing first. Inside an established settings pane,
-default to flat command rows; a nested card, group fill and row separators must not repeat
-the same boundary. Retain functional field frames and keyboard focus outlines. Inspect the
-whole pane and explain the distinct purpose of each remaining border, fill or divider;
+Group with headings, alignment and spacing first. Removing redundant enclosures must not
+erase action affordance: standalone commands may need their own restrained button surface,
+visible before hover in both themes and on touch screens. Flat rows suit recognizable
+menu/list contexts; do not mandate them everywhere. A nested card, group fill and row
+separators must not repeat the same boundary. Declare shared icon/checkbox and text columns
+across adjacent controls. Retain functional field frames and keyboard focus outlines. Inspect
+the resting whole pane and explain the distinct purpose of each remaining border, fill or divider;
 the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#11-composition--the-page-not-the-component)
 own the exceptions and acceptance criteria.
 
