@@ -59,7 +59,10 @@ testing configuration and show what each action accomplished.
 
 Reveal settings for the chosen path. A local conversion path may need cache/download/device controls;
 a remote path may need endpoint/account controls. Hide irrelevant fields **and their stale status
-messages**. Preserve other modes' configuration and keep the route back discoverable. Explain the
+messages**. Settings headers, field groups, account rows and unavailable/empty states retain the
+named content and navigation spines from [DESIGN's alignment contract](./DESIGN.md#alignment-is-structure-not-polish).
+Keep a title/menu command content-hugging; a separate track absorbs header filler. Count nested
+panel and control padding through to visible labels before declaring regions aligned. Preserve other modes' configuration and keep the route back discoverable. Explain the
 data destination before disclosure; do not confuse an API endpoint with an authorized account.
 
 Offline, retain saved content, drafts, previews, editing and exports when their data and implementation
