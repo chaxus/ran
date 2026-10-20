@@ -81,6 +81,12 @@ distance carry meaning:
 Don't invent `20px` or `28px`. The limited set is what produces the page's rhythm; one
 off-scale gap is what breaks it. Keep shared spines across regions (edges, baselines and
 columns that line up) and verify alignment against the rendered pixels rather than by eye.
+Name the shared content spine and any intentional navigation/title column. Measure outer frames,
+inner content edges, rendered text Ranges, icon viewports and actual hit areas separately: a stable
+button frame can hide an inset label. Keep title/menu triggers content-hugging with separate layout
+filler, count nested padding, and preserve the same spine in empty states. Product target sizes remain
+local choices. The [canonical alignment contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#alignment-is-structure-not-polish)
+owns these rules and the runnable browser acceptance example.
 
 ## Choosing type
 
@@ -201,6 +207,10 @@ These checks scan only the source roots configured for the command; they do not 
 inspect applications that use ranui. This repository has separate checks for surfaces such as
 the documentation site. Application developers use their own checks and verify layout, themes
 and interaction in the browser.
+Wait for fonts and component content before measuring DOM text and documented shadow parts. Check
+long translations, empty states, coarse input and relevant zoom as well as themes and widths.
+Prove the assertions detect text-only drift inside an unchanged frame, an oversized title hit zone
+and a shifted sibling region; restore each mutation and confirm the checks pass.
 
 ## Design examples {#design-examples}
 

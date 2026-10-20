@@ -575,9 +575,42 @@ a page type you assume implies it.
 
 ### Alignment is structure, not polish
 
-**Establish alignment spines and hold them.** Sibling regions share a content inset;
-repeated rows share column geometry; a nested level returns exactly to its parent's spine
-when it ends. A missing optional icon or badge must not move the labels beside it.
+**Name each alignment spine and the geometry it aligns.** A page content spine, navigation
+column and nested form-label spine can differ intentionally. State which siblings share each one;
+include headers, body copy, rows, actions and empty/loading/error content. A back button plus gap
+may establish a separate title column: do not silently treat that title as aligned to body text.
+A missing optional icon or badge must not move labels out of their declared column. A nested level
+returns exactly to its parent's spine when it ends.
+
+Compare the right boxes. These are separate measurements, even when they happen to coincide:
+
+| Geometry      | What to measure                                                                                   |
+| ------------- | ------------------------------------------------------------------------------------------------- |
+| Frame         | The wrapper/host border box from `getBoundingClientRect()`                                        |
+| Content       | The inner edge after the actual border and padding, including nested wrappers                     |
+| Text          | A DOM `Range` around the rendered label's text nodes; use first/last line rectangles for wrapping |
+| Icon viewport | The SVG/viewbox or image box; painted glyph ink may be asymmetric inside it                       |
+| Hit area      | The actual event target and its hover/focus surface; verify points near its edges                 |
+
+A button frame aligned with a paragraph does not prove its text is aligned: internal padding can
+move the label while the frame stays fixed. `Range` gives typographic geometry, not exact glyph ink;
+inspect optical glyph corrections separately. For ranui, measure the host and relevant documented
+shadow parts as well as slotted light-DOM text. Use the existing `ranui/testing` seam for closed roots
+in browser tests; do not add production shadow queries or assume document CSS crosses the boundary.
+
+**Keep a header command's hit zone separate from layout filler.** A title/menu trigger should hug
+its content plus deliberate padding, bounded by the available width. Let a separate flex/grid track
+absorb remaining space. Define truncation/wrapping and adjacent action behavior for long translations.
+Do not make an entire unused header strip clickable merely by giving the title button `flex: 1`.
+A row that intentionally selects its whole width is a different role; record that contract explicitly.
+Coarse-pointer targets may grow without stretching the hover fill across unrelated content.
+
+**Count every inset from the shared ancestor to the visible text.** Parent padding, nested panel
+padding, a control's internal padding, borders and navigation columns all contribute. Remove a
+redundant inset at its owner instead of cancelling it with an unexplained negative margin. Empty
+states retain their region's content spine and width; extra breathing room must not introduce a
+second left edge or make a compact action fill the region. Product-specific insets and target sizes
+remain application aliases, not new foundation values or universal component defaults.
 
 **When two layout edges or gaps are meant to be equal, a one-pixel difference is a defect.**
 Optical correction for an asymmetric glyph is a separate, documented asset/component decision:
@@ -722,7 +755,8 @@ a small patch does not require redesigning unrelated pages. A "no" within scope 
 3. Is emphasis scarce — does the core thing get the weight while colour, badges and
    primary buttons stay rare?
 4. Could this do less: any entry point, option or state removable without weakening the task?
-5. Is the structure exact — shared spines, equal gaps equal to the pixel, no doubled padding?
+5. Are named spines exact at the visible text/content layer, including nested and empty states,
+   with intentional navigation columns and no doubled padding? Are title hit zones content-hugging?
 6. Is running text comfortable in its actual scripts, fonts and zoom levels, and is
    everything that is **not** running text free of that measure cap?
 7. Does every element that looks like part of one object agree — border, radius **and**
@@ -735,10 +769,25 @@ a small patch does not require redesigning unrelated pages. A "no" within scope 
 **A screenshot of the happy path is not proof.** Keyboard behaviour, focus, dynamic
 content, themes, resizing and failure states are part of the design.
 
-**Measure it; do not look at it.** Every finding in this section was invisible to the eye
-and obvious to `getBoundingClientRect()` — a 26px clip inside a scroll container, an 18px
-channel between two elements drawn as one, 280px of dead column, a deck rendering 115px
-wider than the body text it sits above. Read the numbers out of a real browser:
+**Measure the layer of the defect.** A frame rectangle catches clipping and dead columns, but
+can miss label drift inside a stable button. Wait for custom-element registration, pending content,
+`document.fonts.ready` and a rendered frame before reading geometry. Resolve each node explicitly
+and fail on missing or zero-sized targets. Compare relationships in CSS pixels with a documented
+subpixel rounding tolerance; a tolerance large enough to hide a full pixel defeats exact spines.
+
+Collect frame/content, text `Range`, icon viewport and actual hit-area evidence for affected regions.
+Check narrow and wide layouts (including resizing), supported light/dark themes, long translations,
+coarse input and relevant zoom/reflow. Browser CSS zoom is a useful automated stress case, but does
+not replace native browser zoom or text-size checks where the product supports them. Keep controls
+reachable and inspect clipping, wrapping and overlap. Reverse-check the assertions by deliberately
+moving only label text by 8px while its outer frame remains unchanged, expanding a title hit zone
+into filler, and shifting one sibling region. Each mutation must fail the corresponding relationship;
+restoring it must pass. Human prose needs review, not tests that grep for prescribed wording.
+
+The repository's [browser acceptance example](https://github.com/chaxus/ran/blob/main/packages/ranui/test/e2e/layout-contract.spec.ts)
+uses test-only utilities and real DOM/shadow geometry; consumers adapt its relationships to their
+own page contract. Run it from a source checkout with `pnpm -F ranui exec playwright test layout-contract.spec.ts --project=chromium`.
+Read numbers from a real browser, for example:
 
 ```js
 // Approximate width in average digit advances; this is NOT a rendered character count.
