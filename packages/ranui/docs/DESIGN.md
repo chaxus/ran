@@ -656,24 +656,33 @@ a button-shaped link keep an underline.
 
 ### Command hierarchy in constrained panes
 
-A visible action does not require a separate outlined box. **Inside an established settings
-pane, default to flat native button rows.** Aligned icons, explicit verb labels, consistent row
-targets and proximity establish the command group. Use spacing between routine and destructive
-commands. Do not automatically add an enclosing card, a muted group fill or rules between every
-row. A framed group is an exception that must pass the distinct-boundary test above, not the
-default recipe for making commands discoverable.
+**Remove redundant group enclosures without erasing control affordance.** Headings,
+alignment and proximity establish groups inside a settings pane; they do not automatically
+make an icon and label look clickable. Do not require flat rows in every context. Use them
+when a recognizable menu/list pattern already conveys action. Standalone commands may need
+their own restrained button surface or functional stroke, visible before hover in every
+supported theme. A button's own shape identifies its target; an enclosing card, muted group
+fill and row rules must still pass the distinct-boundary test above.
 
-The whole row is clickable; hover, press, disabled and keyboard focus still need clear states.
-Long translated row labels may wrap inside the row rather than pushing commands into a ragged
-horizontal button cloud. Do not add navigation chevrons to commands that act immediately.
+Do not rely on hover, pointer cursors, verb labels or keyboard focus alone for initial
+discovery. Inspect the resting full pane with the pointer away, including touch use. Keep
+hover, press, disabled and keyboard focus distinguishable after the control is discovered.
+Long translated labels may wrap inside a single command column rather than creating a
+ragged horizontal button cloud. Do not add navigation chevrons to immediate commands.
+
+Declare which visible columns are shared with adjacent checkboxes or controls: measure
+icon/checkbox edges and text Ranges, not only button rectangles or alignment within the
+command group. A hit target may extend into an owned gutter to preserve those columns;
+name the extension, keep it inside its pane and verify non-overlap and focus visibility.
 
 Separate destructive commands from recovery and transfer actions. A danger label and icon
 can communicate intent without a large red outline on every resting command; reserve the
-strongest danger fill for the explicit confirmation. Keep the existing confirmation,
-cancellation, focus return and busy guards. Acceptance measures the full-pane boundary hierarchy,
-individual row targets, label clipping, contrast and interaction states rather than requiring
-a group or command to have its own border. Reuse foundation roles and coarse-input
-target requirements; this pattern does not introduce new component defaults.
+strongest danger fill for explicit confirmation. Keep confirmation, cancellation, focus
+return and busy guards. Acceptance covers resting discoverability, declared shared columns,
+full-pane boundary hierarchy, target bounds, label clipping, contrast and interaction states.
+An automated surface-difference check catches invisible control fills but does not prove
+that users recognize the action: inspect the actual render as well. Reuse foundation roles
+and coarse-input target requirements; this guidance changes no component defaults.
 
 ### One product, one token set
 
@@ -794,7 +803,8 @@ a small patch does not require redesigning unrelated pages. A "no" within scope 
    primary buttons stay rare?
 4. Could this do less: any entry point, option or state removable without weakening the task?
 5. Are named spines exact at the visible text/content layer, including nested and empty states,
-   with intentional navigation columns and no doubled padding? Are title hit zones content-hugging?
+   with intentional navigation columns and no doubled padding? Do adjacent controls share their declared
+   icon/text columns? Are title hit zones content-hugging?
 6. Is running text comfortable in its actual scripts, fonts and zoom levels, and is
    everything that is **not** running text free of that measure cap?
 7. Does every element that looks like part of one object agree — border, radius **and**
@@ -803,7 +813,8 @@ a small patch does not require redesigning unrelated pages. A "no" within scope 
 8. Does it hold in relevant changed states: empty, loading, failure, long translations, narrow
    width, supported themes, reduced motion and **RTL**, where affected?
 9. For layout or interaction changes, has the affected surface been checked in a real browser
-   at the relevant widths and themes?
+   at the relevant widths and themes? Are standalone actions recognizable before hover, including
+   touch use, without redundant group enclosures?
 
 **A screenshot of the happy path is not proof.** Keyboard behaviour, focus, dynamic
 content, themes, resizing and failure states are part of the design.
