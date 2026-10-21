@@ -218,7 +218,7 @@ export class Reasoning extends RanElement {
     // Sub-second thinking is noise; a reader cares that it was fast, not that it was 340ms.
     const meta = duration === null || duration < 1000 ? '' : `${(duration / 1000).toFixed(1)}s`;
     this._row.heading = meta === '' ? this.label : `${this.label} · ${meta}`;
-    this._row.summary = summaryOf(this._content, streaming);
+    this._row.summary = this.open ? '' : summaryOf(this._content, streaming);
   }
 }
 

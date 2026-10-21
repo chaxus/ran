@@ -897,6 +897,7 @@ disclosure language rather than two. What is specific to it:
   line — a reader watching a model think wants to see where it has got to, and the opening
   sentence stopped being news several paragraphs ago. Once it stops, the _first_ line,
   because that is where the block starts and the reader is now deciding whether to open it.
+  While expanded, the header omits the summary because the body already shows that content.
 - **It expands while streaming and collapses when that clears — until the reader touches
   it.** After their own gesture the automatic behaviour stops for good, the same ownership
   rule `createBottomFollower` applies to scrolling. Setting `open` from script counts as

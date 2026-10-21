@@ -47,6 +47,8 @@ buttons in its supported slot; do not patch private shadow roots or add misleadi
 
 A collapsed region must still identify its contents and state; disclosure must not hide an
 unresolved actionable error. Collapsing a region containing focus returns focus to its toggle.
+Use the collapsed summary to help readers decide whether to expand. When the expanded body
+already displays that content, omit the repeated summary and keep the title and state visible.
 Removing the focused object moves focus to the next meaningful action or a stable parent control.
 Do not move focus merely because a background request completed.
 
