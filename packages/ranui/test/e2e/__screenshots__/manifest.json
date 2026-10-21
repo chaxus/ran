@@ -12,9 +12,9 @@
     "systemFontsSha256": "c339750d748e2a442eec2756219b1e49e9601fe3a6927100deea37040547d226",
     "systemFontFiles": 48,
     "localFontsSha256": "a95cd2bae45daa40ee591ea0ed3affc47db95cc32c42eb2f2f6f23c46f7b237e",
-    "harnessSha256": "07e77a57646cafc5da00e1e39f113f165c672d18fddc492359e5a71a768df315"
+    "harnessSha256": "fc9fa95baeeb9b38c58ab50a99d2a66bc91ce4c3ba8b01f3f5edda2f8ba83e88"
   },
-  "image": "sha256:bc98b66229174ae71636131e3a7d21063c68d4c965497ad505e5a79871e3c628",
+  "image": "sha256:307110f3bbc7c3b0ecb32b788bae193a729c2e9226d5cef63d89f662b8e94b9a",
   "snapshots": {
     "button.spec.ts/Mobile-Chrome/button.png": "3b4b6ba3280a12f8b1645fc970c864dfe6f0d548ad01281aba96452d5c49ac34",
     "button.spec.ts/chromium/button.png": "eab068eb0d14e78f141496b02c218e5c0fff686ab301644c69d77b747871d8ef",
@@ -84,8 +84,8 @@
     "radar.spec.ts/Mobile-Chrome/radar-uniform.png": "c290b416f2d73c076af98e6e3f2c82a206e8ba295382e2b34a38282cbfb048fb",
     "radar.spec.ts/chromium/radar-default.png": "c05be2be65627ba516f68a19a0b82230ff9e9f518d67ec6f55874fa7ef827810",
     "radar.spec.ts/chromium/radar-uniform.png": "96b8279c5786934ce6a19998ffc7fd08292147909a181c49111a9f917c318568",
-    "reasoning.spec.ts/Mobile-Chrome/reasoning.png": "a22e1e4b86a88dd0e743aae2e468669213ec9d1e59d141d6ac4df406d73e3860",
-    "reasoning.spec.ts/chromium/reasoning.png": "5754404694aa3141171c6b3783996b201e56dc38bda327a264c270350ac8d527",
+    "reasoning.spec.ts/Mobile-Chrome/reasoning.png": "f83c4e0659dd66f7f620f3de8fe56753ff333d346bed713ea155ffe79a8fb2bf",
+    "reasoning.spec.ts/chromium/reasoning.png": "dcd2520e6ace181ebe5262cacaf5284cde4d4334ad786ffb654885fabd083fd4",
     "section.spec.ts/Mobile-Chrome/section.png": "887cbbd31415003cb9613bb4754c2aed4a3316fff17d9b33b3fc6bb546968db8",
     "section.spec.ts/chromium/section.png": "ee7e2f0109556846cee13e4c038bccae7cd4781438356ae668d35e00a1361912",
     "select.spec.ts/Mobile-Chrome/select-disabled.png": "c2ad1530f0792e6f90a5c101446e1a20172e5b1bac7ea03a28bf209773f3e966",
