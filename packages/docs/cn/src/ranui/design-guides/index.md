@@ -85,6 +85,12 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 [权威组合规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#11-composition--the-page-not-the-component)
 维护例外及验收条件。
 
+纵向间距按元素关系统一：标题与说明、字段与提示可用 8px，组间 16px，相关子区块间 24px。
+每一处间距只由一层布局负责；先计入子元素 margin、已有内边距和行内控件的基线留白，再决定是否增加间隔。
+换行、提示隐藏和错误出现后，都要在浏览器中实测。
+[权威纵向节奏规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+维护例外与可运行的反向校验，不改变组件默认值。
+
 ## 选排版
 
 先问这段文字是什么**角色**（heading、label、copy、button、mono），字体、字号、字重、行高就从

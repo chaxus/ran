@@ -542,6 +542,55 @@ what the gap _means_:
 components. **Smaller gap means tighter relationship** — that is the only thing vertical
 rhythm communicates, so do not undo it with a decorative divider.
 
+### Vertical rhythm across sibling views
+
+**Repeat the relationship, not every distance.** Sibling settings, list and detail views
+share a spacing vocabulary; they do not need equal-height headers, descriptions or empty
+states. For a compact application pane, a useful composition is:
+
+| Relationship                                                             | Starting point                               |
+| ------------------------------------------------------------------------ | -------------------------------------------- |
+| Title and its description; field label, control and associated hint      | `--ran-space-2` (8px)                        |
+| Introductory group to first control/action group; successive form groups | `--ran-space-4` (16px)                       |
+| Related subsections in a compact pane                                    | `--ran-space-6` (24px)                       |
+| Separate major regions                                                   | `--ran-space-8` / `--ran-space-10` (32/40px) |
+
+These are composition choices using the existing scale, not new component defaults.
+Keep the preceding table's 12px content-group role where it fits. A heading without a
+description leads straight into the next group; it does not need a vacant description row.
+Let translated or multiline copy grow naturally while the gap after its final line box
+retains the same relationship. Do not fix text heights or add manual breaks to align views.
+
+**One owner per gap.** Let a parent stack own sibling separation, or let an explicit child
+margin own it. Avoid a parent's `gap` plus a child's default paragraph/heading margin at
+the same boundary. Reset margins locally in authored composition, not across every library
+component. Account for collapsing margins and the line-box space left by inline controls;
+an explicit block/flex/grid composition can remove an accidental baseline gap. Do not
+compensate with a transform, negative margin or a smaller font.
+
+Place a hint with the field or action it explains. Count padding already inside an unframed
+label/target before adding more outside space: a zero outer margin is not necessarily a
+zero visible gap. Conversely, a framed button followed immediately by a hint may still
+need separation. Hidden optional content should leave no unexplained row or gap. A reserved
+async-status line is legitimate when its stability has a stated purpose and bounds.
+
+**Measure the composed result in both axes.** For horizontal writing, the frame gap is
+`next.top - previous.bottom`, after fonts, custom elements and pending content settle.
+Name the measured layers: control frame, line box and text Range answer different questions.
+Keep line-height leading, owned padding and hairlines distinct from inter-group space;
+16px of padding plus a 1px rule is not an invented 17px spacing token. Inspect actual text
+alongside frame measurements rather than forcing glyph edges to match a frame-gap value.
+
+Use independently declared expected gaps, not only equality between siblings. Exercise
+wrapping, resizing, helper/error visibility and relevant input densities. Reverse-check a
+doubled child margin while horizontal spines stay correct, a hidden helper that leaves a
+phantom gap, and text-only vertical drift inside unchanged frames. Each affected assertion
+must reject its mutation and pass after restoration. Confirm that mutated and restored
+styles have settled before measuring; reduced motion can still retain a short transition.
+The source-only
+[browser layout example](https://github.com/chaxus/ran/blob/main/packages/ranui/test/e2e/layout-contract.spec.ts)
+demonstrates these checks; human review still judges the complete pane's rhythm.
+
 ### The measure governs text, not the column
 
 **Choose a readable measure for the actual script and font.** For Latin prose, 60–75
@@ -804,7 +853,8 @@ a small patch does not require redesigning unrelated pages. A "no" within scope 
 4. Could this do less: any entry point, option or state removable without weakening the task?
 5. Are named spines exact at the visible text/content layer, including nested and empty states,
    with intentional navigation columns and no doubled padding? Do adjacent controls share their declared
-   icon/text columns? Are title hit zones content-hugging?
+   icon/text columns? Are title hit zones content-hugging? Do repeated vertical relationships use
+   consistent gaps with one owner, including wrapped copy and hidden helper/error content?
 6. Is running text comfortable in its actual scripts, fonts and zoom levels, and is
    everything that is **not** running text free of that measure cap?
 7. Does every element that looks like part of one object agree — border, radius **and**
