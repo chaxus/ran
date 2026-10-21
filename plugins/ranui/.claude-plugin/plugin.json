@@ -1,8 +1,8 @@
 {
   "name": "ranui",
   "displayName": "ranui",
-  "version": "1.0.0",
-  "description": "Reference skill for the ranui web-component library: import map, element inventory, builder/reactivity, accessibility, and pointers to the API docs shipped in the npm package.",
+  "version": "1.1.0",
+  "description": "Build, review and polish ranui interfaces using task-focused canonical guidance, public APIs and actual browser acceptance.",
   "author": {
     "name": "chaxus",
     "url": "https://github.com/chaxus/ran"

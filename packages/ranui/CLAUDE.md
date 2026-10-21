@@ -19,21 +19,14 @@ For other decisions, use the short **[interface index](docs/INTERFACE_GUIDE.md)*
 Visual craft stays in DESIGN; engineering stays in CODING. Read only relevant owners and use
 the generated references below for exact APIs. The index and both references ship in npm.
 
-Nine of the non-negotiables below are machine-checked by `pnpm -F ranui verify:design`, which CI runs on every pull request: dark-unsafe colour fallbacks, raw colour literals, the spacing scale, the sizing scale, mouse-only drag loops, `:host` display rules that disable `hidden`, token fallbacks naming undeclared tokens, components searching their own shadow tree for elements they built, and shadow trees built outside the constructor. Known source-checkout violations are ratcheted in [docs/design-rule-baseline.json](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/design-rule-baseline.json) — you cannot add one, and you cannot silently undo a fix. The remaining rules are no less binding; they just are not mechanically decidable, so verify them by rendering the result.
+For exact attributes, properties, events, slots and parts, use generated
+[COMPONENTS.md](docs/COMPONENTS.md); component variables live in
+[style-tokens-public.md](docs/style-tokens-public.md). Regenerate these when their source contracts change.
 
-For each element's **attributes / properties / events / slots / `::part()`**, consult **[docs/COMPONENTS.md](docs/COMPONENTS.md)** (generated — run `npm run doc:api` after changing any component's API; CI fails if you forget) and **[docs/style-tokens-public.md](docs/style-tokens-public.md)** for its CSS variables. The non-negotiables:
-
-- **Color is a state ladder, not a palette.** Each scale step 100→1000 has one fixed job: 100 default bg · 200 hover bg · 300 active bg · 400 border · 500 hover border · 600 active border · 700 solid · 800 solid hover · 900 secondary text · 1000 primary text. Use the **semantic tokens** (`--ran-color-*`), never raw hex, in components.
-- **Dark-safe fallbacks.** A component token's fallback must point at a token that _flips_ (`var(--ran-color-text, …)`, `var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`) — never a light-only literal like `rgba(0,0,0,.06)` or `#e6f7ff`, which breaks in dark mode.
-- **Spacing:** the `--ran-space-*` scale only (4px base, 9 values). 8 within a group, 16 between groups, 32–40 between sections.
-- **Sizing:** element intrinsic dimensions (icon size, control height, small square/rect controls) use the separate `--ran-size-*` scale (16/18/20/24/28/30/32), never `--ran-space-*` — spacing and sizing have different ranges/progressions and consumers need to retune one without perturbing the other. A one-off dimension that isn't shared across components (e.g. a menu's `min-width`) stays a plain component token with its own literal fallback instead of forcing a scale step.
-- **Typography:** choose a role (heading / label / copy / button / mono), not a raw px size — each role is backed by real `--ran-text-*` tokens (`--ran-text-heading-1..4`, `-label-1..3`, `-copy-1..2`, `-button-size`, plus matching `-weight` tokens), see DESIGN.md §3. Text that doesn't map to any role (a one-off emphasis state) keeps its own component token rather than being forced in.
-- **Elevation = role.** Pick the shadow by what the element _is_: in-flow surface (card/section) → `--ran-shadow-elevated`; floating overlay (dropdown, select, popover, toast/message) → `--ran-shadow-menu`; blocking dialog → `--ran-shadow-modal`. A floating overlay must never fall back to the card tier (`elevated`) — it looks flat.
-- **Radius/motion:** use the tokens; prefer no motion (0ms) and keep what remains quick (150/200/300ms); respect `prefers-reduced-motion`.
-- **Copy:** [DESIGN §6](docs/DESIGN.md#6-content--copy-is-part-of-the-system) owns contextual action labels, errors and confirmation wording; do not add a second wording rule here.
-- **Accessibility:** WCAG AA contrast; never signal state by color alone (pair an icon/label); visible focus ring on every interactive element; icon-only controls need an `aria-label`; full keyboard nav.
-- **Mobile and desktop, both.** Any drag/slider/gesture uses Pointer Events (`pointerdown/move/up/cancel`), never mouse-only, matched by `touch-action: none` on the exact drag surface. Any `trigger="hover"` overlay degrades to click/tap on touch (`isMobile()` gate — see `r-select`/`r-popover`). Prefer viewport-relative sizing (`%`, `min()`, `clamp()`, `vw`/`vh`) over inventing a one-off `@media` breakpoint. See DESIGN.md §8.
-- **Verify rendered output** for affected surfaces, relevant widths/themes and materially changed input/state paths; code review alone does not prove geometry or interaction. Library CI still runs its complete gates.
+For visual changes, use the [UI task lookup](docs/INTERFACE_GUIDE.md#ui-task-lookup) and
+[verification brief](docs/INTERFACE_GUIDE.md#verification-brief). DESIGN owns visual rules,
+[mechanical checks](docs/DESIGN.md#what-is-machine-checked) and rendered acceptance;
+the implementation recipes below do not establish a second visual standard.
 
 ---
 
@@ -683,6 +676,18 @@ padding: var(--ran-card-padding, var(--ran-space-4, 16px));
 
 ## Component Reference
 
+### Form integration
+
+`r-input`, `r-checkbox` and `r-select` are form-associated custom elements. Named, enabled
+controls inside a native form contribute through `ElementInternals` to `new FormData(form)`;
+normal checked/value submission rules still apply despite their internal shadow controls.
+`r-colorpicker` is not form-associated: include its `value` explicitly in the host's submitted
+data, or track its `change` event's `detail.value`. Confirm event contracts in COMPONENTS.
+
+`r-button`'s `type` chooses appearance, not native submit behavior. Use a native submit button
+or connect the command to the intended form's `requestSubmit()`; do not bypass native validation
+with `form.submit()` or add a second keyboard activation handler.
+
 ### r-card
 
 A structured content container with header, body, and footer zones.
@@ -899,6 +904,17 @@ disclosure language rather than two. What is specific to it:
 - **`duration` under a second is not shown.** A reader cares that it was fast, not that it
   was 340ms.
 
+```ts
+const reasoning = document.querySelector('r-reasoning')!;
+reasoning.streaming = true; // expands
+reasoning.content += delta; // grows while visible
+reasoning.duration = 4200; // "4.2s" beside the label
+reasoning.streaming = false; // collapses, unless the reader intervened
+```
+
+The default slot replaces the rendered text, for callers using `<r-markdown>` in the body.
+Feed `ranuts/stream`'s `reasoning-delta` blocks from `snapshot().blocks` into this view.
+
 ### r-tool-card
 
 Renders a tool call and its result from a **declared intent** rather than from markup.
@@ -938,33 +954,6 @@ Use it as a `mount` target from an `r-conversation` view: the tool-call node's `
 assigns `call`, `result` and `status`.
 
 ---
-
-### r-reasoning
-
-A collapsible chain of thought.
-
-Reasoning is the one part of a response a reader wants to watch while it happens and almost
-never wants to keep afterwards, so the element expands while `streaming` is set and
-collapses when it clears.
-
-**Until the reader touches it.** Once they expand or collapse it themselves — or a caller
-sets `open` from script — the automatic behaviour stops for good. That is the same
-ownership rule `createBottomFollower` applies to scrolling, for the same reason: an
-interface that keeps re-deciding something the reader already decided is worse than one
-that never decided at all.
-
-```ts
-const reasoning = document.querySelector('r-reasoning')!;
-reasoning.streaming = true; // expands
-reasoning.content += delta; // grows while visible
-reasoning.duration = 4200; // "4.2s" beside the label
-reasoning.streaming = false; // collapses, unless the reader intervened
-```
-
-Sub-second durations render as nothing: a reader cares that it was fast, not that it was
-340ms. The default slot replaces the rendered text, for a caller that wants `<r-markdown>`
-in the body. `ranuts/stream` already separates `reasoning-delta` from `text-delta`, so a
-conversation view can feed this directly from `snapshot().blocks`.
 
 ### r-attachments
 
