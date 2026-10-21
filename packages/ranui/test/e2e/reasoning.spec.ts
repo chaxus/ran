@@ -50,6 +50,31 @@ test.describe('r-reasoning', () => {
     await expect(page.locator('r-reasoning')).toHaveAttribute('open', '');
   });
 
+  test('keeps the open header quiet and restores the summary on collapse', async ({ page }) => {
+    await mount(page, '<div style="width:320px"><r-reasoning></r-reasoning></div>');
+    await page.evaluate(() => {
+      const block = document.querySelector('r-reasoning') as HTMLElement & { content: string; streaming: boolean };
+      block.streaming = true;
+      block.content = 'Checking the notes.\nSeparating progress and risks.';
+    });
+    const summary = () =>
+      insideShadow(
+        page,
+        'r-reasoning',
+        (root) => (root.querySelector('r-disclosure-row') as HTMLElement & { summary: string }).summary,
+      );
+    expect(await summary()).toBe('');
+    await page.locator('r-reasoning').click({ position: { x: 32, y: 12 } });
+    expect(await summary()).toBe('Separating progress and risks.');
+    await page.locator('r-reasoning').click({ position: { x: 32, y: 12 } });
+    expect(await summary()).toBe('');
+    await page.evaluate(() => {
+      (document.querySelector('r-reasoning') as HTMLElement & { streaming: boolean }).streaming = false;
+    });
+    await expect(page.locator('r-reasoning')).toHaveAttribute('open', '');
+    expect(await summary()).toBe('');
+  });
+
   test('renders', { tag: '@visual' }, async ({ page }) => {
     await mount(page, `<div id="column" style="width: 420px; display: flex; flex-direction: column; gap: 12px"></div>`);
     await page.evaluate(() => {

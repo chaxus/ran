@@ -49,11 +49,32 @@ describe('r-reasoning contract', () => {
     // ago; deciding whether to open it afterwards, the first line is where it starts.
     const { block, row } = mount();
     block.streaming = true;
+    toggle(row, false);
     block.content = '先看小数部分\n0.9 比 0.11 大\n所以 9.9 更大';
     expect(row.summary).toBe('所以 9.9 更大');
 
     block.streaming = false;
     expect(row.summary).toBe('先看小数部分');
+  });
+
+  it('shows the summary only while collapsed, without duplicating the open body', () => {
+    const { block, row, shadow } = mount();
+    block.streaming = true;
+    block.content = 'First line\nLatest line';
+    expect(block.open).toBe(true);
+    expect(row.summary).toBe('');
+    expect(shadow.querySelector('.ran-reasoning-text')?.textContent).toBe('First line\nLatest line');
+    toggle(row, false);
+    expect(row.summary).toBe('Latest line');
+    block.content += '\nNew line';
+    expect(row.summary).toBe('New line');
+    toggle(row, true);
+    expect(row.summary).toBe('');
+    block.streaming = false;
+    expect(block.open).toBe(true);
+    expect(row.summary).toBe('');
+    toggle(row, false);
+    expect(row.summary).toBe('First line');
   });
 
   it('says nothing on the collapsed line before any reasoning has arrived', () => {
