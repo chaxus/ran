@@ -124,3 +124,21 @@ inert or replace its mounted control; it retains the same Submit button and scre
 assertion. The Modal functional lifecycle case now observes closing-state completion rather
 than sleeping 500ms, while preserving its assertion that closing is set immediately.
 These fixture changes refresh only the harness fingerprint; PNGs and tolerances stay intact.
+
+### Expanded reasoning header — 2026-10-21
+
+Expanded reasoning now keeps its label in the header and its text in the body; the summary
+remains visible only while collapsed. Independent review approved the desktop Chromium and
+Mobile Chrome reasoning replacements: only the redundant header summary disappears, while
+body text, the collapsed second row and geometry remain intact.
+
+The pinned container generated 142 candidate PNGs with **148/148 tests passing**. The reviewer
+also inspected ten unrelated candidate pairs with small edge-pixel differences. Their existing
+reviewed PNG bytes are retained; only the two intentional reasoning images change. Snapshot
+hashes are computed from that final reviewed tree. The new reasoning regression changes the
+owning harness fingerprint; measured browser, platform, fonts and graphics metadata are
+unchanged. The derived image ID is informational.
+
+Two fresh canonical comparisons of the final reviewed tree passed **148/148 each** (2.8 and
+2.1 minutes), with zero retries, updates disabled and all existing screenshot tolerances
+unchanged. This refresh follows inspection of the actual images, not a relaxed assertion.
