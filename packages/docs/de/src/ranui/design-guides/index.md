@@ -53,6 +53,14 @@ Nimm jeden Abstand aus der [neunstufigen Skala](/de/src/ranui/design-system/#spa
 
 Erfinde kein `20px` oder `28px`. Den Rhythmus einer Seite erzeugt gerade die begrenzte Auswahl; ein einziger Abstand außerhalb der Skala bricht ihn. Halte gemeinsame Achsen über Bereiche hinweg (Kanten, Grundlinien und Spalten, die fluchten) und prüfe die Ausrichtung an den gezeichneten Pixeln statt nach Augenmaß.
 
+Vertikale Abstände folgen der Beziehung: Titel/Beschreibung und Feld/Hinweis können 8px,
+getrennte Gruppen 16px und zusammengehörige Unterabschnitte 24px verwenden. Jeder Abstand
+hat genau einen Verantwortlichen; berücksichtigen Sie Kind-Margins, Innenabstände und
+Grundlinienraum bei Inline-Steuerelementen. Prüfen Sie Zeilenumbrüche sowie ausgeblendete
+Hinweise und Fehlerzustände im Browser. Die
+[verbindlichen Regeln zum vertikalen Rhythmus](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+enthalten Ausnahmen und ausführbare Gegenproben, ohne Komponentenvorgaben zu ändern.
+
 ## Schrift wählen
 
 Frag, welche **Rolle** der Text spielt (Überschrift, Beschriftung, Fließtext, Schaltfläche, dicktengleich), und Schriftart, Größe, Stärke und Zeilenhöhe ergeben sich alle aus der [Schriftskala](/de/src/ranui/design-system/#typography). Wähl keine rohen Pixelwerte je Einzelfall.

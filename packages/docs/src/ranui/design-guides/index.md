@@ -98,6 +98,13 @@ the resting whole pane and explain the distinct purpose of each remaining border
 the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#11-composition--the-page-not-the-component)
 own the exceptions and acceptance criteria.
 
+Keep vertical rhythm consistent by relationship: title/description and field/hint pairs can
+use 8px, separate groups 16px, and related subsections 24px. Give each gap one owner;
+count child margins, existing padding and inline baseline space before adding another gap.
+Verify wrapped copy and hidden helper/error states in the browser. The
+[canonical vertical-rhythm guidance](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+owns the exceptions and runnable reverse checks, without changing component defaults.
+
 ## Choosing type
 
 Ask what **role** the text plays (heading, label, copy, button, mono) and the font, size,

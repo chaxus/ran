@@ -53,6 +53,14 @@ Toma cada espacio de la [escala de nueve valores](/es/src/ranui/design-system/#s
 
 No inventes `20px` ni `28px`. El conjunto limitado es lo que produce el ritmo de la página; un solo espacio fuera de la escala es lo que lo rompe. Mantén ejes compartidos entre regiones (bordes, líneas base y columnas que se alinean) y comprueba la alineación contra los píxeles dibujados, no a ojo.
 
+El ritmo vertical depende de la relación: título/descripción y campo/ayuda pueden usar 8px,
+los grupos separados 16px y las subsecciones relacionadas 24px. Cada separación debe tener
+un solo responsable; cuente los márgenes de los hijos, el relleno existente y el espacio de
+línea base de los controles en línea. Compruebe los saltos de línea, la ayuda oculta y los
+errores en el navegador. Las
+[reglas canónicas de ritmo vertical](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+incluyen excepciones y pruebas inversas ejecutables, sin cambiar los valores predeterminados de los componentes.
+
 ## Elegir la tipografía
 
 Pregunta qué **rol** cumple el texto (título, etiqueta, cuerpo, botón, monoespaciado) y la fuente, el tamaño, el grosor y la altura de línea salen todos de la [escala tipográfica](/es/src/ranui/design-system/#typography). No elijas píxeles crudos caso por caso.
