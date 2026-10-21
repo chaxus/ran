@@ -47,6 +47,30 @@ document.body.append(button);
 
 组件使用浏览器原生的自定义元素和标准事件，无需 React 或 Vue 运行时。其他组件通过各自入口引入，例如 `ranui/input`。在[组件示例](https://ran.chaxus.com/cn/src/ranui/)中查看标签、事件和定制方式；不使用构建工具时，可参考[独立脚本示例](./packages/ranui/README.zh-CN.md#iife--cdn)。
 
+## 与 agent 一起使用
+
+[ranui skill](./plugins/ranui/skills/ranui/SKILL.md) 用于界面实现、视觉审查和浏览器验收。
+它按需读取宿主项目已安装的 ranui 规范，不会安装组件库，也不包含工具、hooks 或外部服务。
+
+**Claude Code 插件**：添加本仓库的 marketplace，再安装 ranui：
+
+```sh
+claude plugin marketplace add chaxus/ran
+claude plugin install ranui@ran
+```
+
+新会话中使用 `/ranui:ranui`。同一 marketplace 也提供用于工具函数任务的 `ranuts`。
+
+**Codex skill**：克隆本仓库后，将 `plugins/ranui/skills/ranui/` 复制到宿主项目的
+`.agents/skills/ranui/`，新建任务后使用 `$ranui`。两者使用同一份 skill 正文；
+`.claude-plugin` 清单用于 Claude 的插件安装。
+参见 [Codex skill 发现规则](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills)。
+
+使用示例：“按 ranui 规范优化这个设置侧栏，收拢相关文案、对齐控件文字，
+并用明暗主题、窄宽屏的实际截图验收。”
+[UI 任务索引](./packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup) 将这些问题直接对应到
+权威规则和验收简表。修改 ran 源码时先读 [AGENTS.md](./AGENTS.md)。
+
 ## 参与开发
 
 使用 Node 24+ 和 pnpm 11.6.0。

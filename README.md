@@ -47,6 +47,31 @@ document.body.append(button);
 
 Components use custom elements and standard browser events, so no React or Vue runtime is required. Import other components through their own entries, such as `ranui/input`. See the [component examples](https://ran.chaxus.com/src/ranui/) for markup, events and customization, or a [standalone script example](./packages/ranui/README.md#iife--cdn) for use without a bundler.
 
+## Use with an agent
+
+The [ranui skill](./plugins/ranui/skills/ranui/SKILL.md) guides UI implementation, visual
+review and browser acceptance. It reads the host's installed ranui references on demand;
+it does not install the library or add tools, hooks or external services.
+
+**Claude Code plugin** — add this repository's marketplace, then install ranui:
+
+```sh
+claude plugin marketplace add chaxus/ran
+claude plugin install ranui@ran
+```
+
+Invoke `/ranui:ranui` in a new session. The same marketplace also offers `ranuts` for utility work.
+
+**Codex skill** — after cloning this repository, copy `plugins/ranui/skills/ranui/` into
+your host project's `.agents/skills/ranui/`. Start a new task and invoke `$ranui`.
+This uses the same skill body; the `.claude-plugin` manifest is the Claude installation route.
+See [Codex skill discovery](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills).
+
+Example task: “Use ranui to polish this settings pane: keep related text together, align
+control labels, and verify actual screenshots in light/dark at narrow/wide widths.”
+The [UI task lookup](./packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup) maps these
+requests to canonical rules and an evidence brief. Source contributors start with [AGENTS.md](./AGENTS.md).
+
 ## Work on the repository
 
 Use Node 24+ and pnpm 11.6.0.

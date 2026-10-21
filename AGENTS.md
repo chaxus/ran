@@ -17,6 +17,8 @@ Start with the owner of the change; do not load every reference or introduce a s
 do not create a parallel palette or copy one application's dimensions into library defaults.
 The index routes decisions; workflow recipes describe host responsibilities, not extra ranui APIs.
 
+For visual changes, use the [UI task lookup](packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup)
+to find exact owner sections and an evidence brief.
 Read only applicable owner sections; reuse existing controls and local token mappings. Stop when
 the contract, smallest patch and evidence are clear. Optional recipes do not require new infrastructure.
 

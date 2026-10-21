@@ -12,14 +12,18 @@
     {
       "name": "ranui",
       "source": "./plugins/ranui",
-      "description": "ranui web-component library: import map, element inventory, builder/reactivity, accessibility, conventions.",
-      "author": { "name": "chaxus" }
+      "description": "Build, review and polish ranui UI: task-to-rule lookup, public contracts and browser acceptance.",
+      "author": {
+        "name": "chaxus"
+      }
     },
     {
       "name": "ranuts",
       "source": "./plugins/ranuts",
       "description": "ranuts utility library: import map (utils/node/visual/vnode), ranuts/utils inventory, conventions.",
-      "author": { "name": "chaxus" }
+      "author": {
+        "name": "chaxus"
+      }
     }
   ]
 }
