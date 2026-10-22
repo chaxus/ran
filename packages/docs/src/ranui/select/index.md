@@ -187,7 +187,7 @@ Note that the boundary shift outranks the alignment: a trigger close enough to a
 
 ### Open State `open`
 
-`open` is the dropdown's state, reflected as an attribute the way `<details open>` and `<dialog open>` are. Nothing infers the state from the panel's `display` (that trails the state by the length of the exit animation), so the attribute, `aria-expanded`, and what is on screen cannot disagree.
+`open` is the dropdown's interaction state, reflected like `<details open>` and `<dialog open>`. It stays aligned with `aria-expanded` even while a closed panel's exit animation is still visible. After selecting an option, Arrow keys, Home/End, Enter, Space or typeahead can reopen immediately; the earlier exit cannot hide the reopened panel.
 
 That makes it a supported way to drive the component, and something to style and to assert against:
 

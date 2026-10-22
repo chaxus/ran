@@ -544,8 +544,8 @@ export class Select extends RanElement {
   };
 
   isDropdownOpen = (): boolean => {
-    if (!this._selectionDropdown) return false;
-    return this._selectionDropdown.style.display === 'block';
+    // The exit animation may still paint a panel whose open intent is false.
+    return this.open;
   };
 
   /**
