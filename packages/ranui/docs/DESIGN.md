@@ -503,13 +503,26 @@ viewport, hairline, artwork and optical geometry exceptions.
 
 ### Evaluate craft through evidence
 
-Polish follows task clarity, not a preset of cards, blur or entrances. Evaluate the smallest
-intervention against real content, language, device and repeated use. Primary references answer
+Polish follows task clarity, not a preset of cards, blur or entrances. Choose a deliberate
+visual direction using realistic objects, copy and states; a generic empty shell cannot establish
+product quality. Working interfaces need sustained reading and frequent actions; marketing pages
+may need a different composition. Evaluate the smallest intervention against real content, language,
+device and repeated use. Primary references answer
 specific questions: [Linear hierarchy](https://linear.app/now/behind-the-latest-design-refresh),
 [Geist typography](https://vercel.com/geist/typography),
 [optical alignment](https://craft.gustavofior.com/optical-alignment) and
 [interruptibility](https://craft.gustavofior.com/interruptibility). Adapt their principles with
 ran's tokens and actual capabilities; do not copy a product's pixel sizes or import recipes as rules.
+[Don't Make Me Think](https://sensible.com/dont-make-me-think/) informs scanning, hierarchy and
+clear choices; [taste-skill](https://github.com/leonxlnx/taste-skill) informs deliberate direction
+and critique; [ryugi](https://github.com/Innei/ryugi) informs executable work and fresh evidence.
+These references inform decisions, not additional instruction sets. A stylistic preference needs
+context; a requirement must identify the task or observable contract it protects.
+
+Choose references by the job they support: logo/app identity, marketing composition and frequent
+working interactions solve different problems. Record the observed pattern and its adaptation;
+verify the result with real content. The optional [research index](./REFERENCE_RESEARCH.md) maps
+sources to questions and demonstrates this translation without adding another rule set.
 
 When direction is unresolved, compare two small real-ran variants with the same content, width
 and theme, changing one dimension at a time. Explain what each difference does for the task.
@@ -587,7 +600,9 @@ their own task structure rather than a dense-console template.
 3. **What do they do next?** Judge, act, or keep thinking.
 
 **A page has exactly one primary model.** Supporting models may help the reader understand or
-operate it; they may not compete for the first screen.
+operate it; they may not compete for the first screen. Prefer a clear, unambiguous next choice
+over an arbitrary click budget. Test whether readers recognize the next action, not merely
+whether the destination is reachable.
 
 ### The shape follows the task, not the payload
 

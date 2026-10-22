@@ -48,6 +48,21 @@ contains runnable commands and geometry utilities. Consumers adapt its relations
 host; these helpers are not new ranui exports. CSS zoom stress does not establish native browser
 zoom or text-size accessibility support. Say which paths remain unverified.
 
+## Walk through the task
+
+For a changed workflow or composition, start with a realistic goal expressed without naming the
+control to use. Complete it from the actual entry point through result, recovery and return, as
+relevant. Record the first choice, any ambiguous label, hesitation or backtracking, and whether
+the result makes the next step clear. A shorter click path is not useful if the choices are unclear.
+Use realistic content, including a representative long or failing case, rather than a polished
+empty state alone. Fix task structure and content hierarchy before adding decorative effects.
+
+Report the most consequential observed problems (up to three), with the state and evidence that
+show each one; do not invent findings to fill a quota. Repeat the affected path after correction.
+An agent walkthrough can expose defects but is not a human usability study. When observing a real
+participant, let them attempt the goal before explaining the interface; preserve that distinction
+in the results below.
+
 ## Bind evidence to what actually ran
 
 For each reviewed state, retain a compact record of:
