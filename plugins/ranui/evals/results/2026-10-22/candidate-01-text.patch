@@ -1,0 +1,13 @@
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -2,10 +2,6 @@
+ .setting h2,
+ .setting p {
+   width: 100%;
+-}
+-.setting .description-text {
+-  position: relative;
+-  left: 8px;
+ }
+ .detail-nav {
+   display: flex;

@@ -1,0 +1,19 @@
+{
+  "name": "ran",
+  "interface": {
+    "displayName": "ran"
+  },
+  "plugins": [
+    {
+      "name": "ranui",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ranui"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

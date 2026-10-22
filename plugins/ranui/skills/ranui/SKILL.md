@@ -1,50 +1,51 @@
 ---
 name: ranui
-description: Use when building, reviewing, or polishing interfaces with ranui web components or ranui/builder, including cluttered hierarchy, uneven spacing, oversized controls, and UI changes that need browser acceptance.
+description: Use when building, reviewing, or polishing products with ranui web components or ranui/builder, including weak hierarchy, clutter, spacing, alignment, motion, and UI changes needing browser evidence.
 ---
 
 # ranui
 
-Build on the host's existing framework, controls and theme. Keep the patch scoped to the
-user's task; a spacing fix does not require a new design system or state layer.
+Use the host's framework, controls and theme. A small correction needs a small patch.
 
-## Find the owner
+## Read the owner
 
-Read references from the **host project root**, not this skill's installation directory.
-Use `node_modules/ranui/` below; in a ran source checkout, use `packages/ranui/` instead.
-If the installed version lacks a reference, use the matching source checkout and report the
-version gap. Do not assume the plugin cache contains the library or silently install/upgrade it.
+Resolve `node_modules/ranui/` from the **host project**, not the plugin cache.
+In a ran checkout, substitute `packages/ranui/`. If a reference is missing, use matching
+source and report the version gap; do not silently install or upgrade the library.
 
-| Task | Read only the applicable owner |
-| --- | --- |
-| Visual polish, spacing, alignment, density or motion | `node_modules/ranui/docs/INTERFACE_GUIDE.md` → **UI task lookup**, then its linked DESIGN sections |
-| Input, keyboard, focus, feedback or recovery | `node_modules/ranui/docs/INTERACTION.md` |
-| Exact attributes, events, slots or parts | `node_modules/ranui/docs/COMPONENTS.md`; confirm exports/types in the installed package |
-| Theme variables or component overrides | `node_modules/ranui/docs/style-tokens-public.md`; foundation declarations in `dist/ranui.css` |
-| Library internals, lifecycle or SSR implementation | `node_modules/ranui/docs/CODING.md`, then relevant `CLAUDE.md` sections |
-| Batches, settings, account/data or result revisions | `node_modules/ranui/docs/WORKFLOW_PATTERNS.md`, only for a relevant host task |
+| Task                                                                  | Read only the relevant owner                                                                  |
+| --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Structure, visual polish, spacing, alignment, density, copy or motion | `node_modules/ranui/docs/INTERFACE_GUIDE.md` → UI task lookup → linked DESIGN sections        |
+| Input, keyboard, focus, copy, streamed content or recovery            | `node_modules/ranui/docs/INTERACTION.md`                                                      |
+| Browser proof, stale captures or review status                        | `node_modules/ranui/docs/ACCEPTANCE.md`                                                       |
+| Attributes, events, slots or parts                                    | `node_modules/ranui/docs/COMPONENTS.md`; verify installed exports/types                       |
+| Theme overrides                                                       | `node_modules/ranui/docs/style-tokens-public.md`; foundation declarations in `dist/ranui.css` |
+| Internals/lifecycle/SSR                                               | `node_modules/ranui/docs/CODING.md`, then applicable `CLAUDE.md` sections                     |
+| Batches, settings, accounts or revisions                              | `node_modules/ranui/docs/WORKFLOW_PATTERNS.md`, only when needed                              |
 
-DESIGN owns visual rules; generated references own APIs. Do not copy their catalogs into this
-skill or infer a contract from an example. Stop reading when the relevant contract is clear.
+Stop reading once the contract, smallest patch and proof are clear. Do not duplicate token/API
+catalogs, create a parallel design system or infer supported APIs from an example.
 
-## Work on the real surface
+## Build and prove
 
-1. Identify the user outcome, affected views and current defect in the host. Use the index's
-   **Verification brief** to record a small, independent acceptance contract before editing.
-2. Read the applicable owner sections. For requests such as “premium” or “like Linear”, use
-   DESIGN's **Evaluate craft through evidence** to choose concrete improvements within ran's tokens.
-3. Implement the smallest change using supported controls and public contracts. Keep layout,
-   text/icon alignment and pointer hit areas distinct; inspect the composed pane, not isolated controls.
-4. For changed geometry or interaction, render the actual host and inspect screenshots at the
-   affected widths/themes/states. Follow DESIGN's browser acceptance guidance; static checks and
-   changed assertions do not establish visual quality. A runnable fixture demonstrates a technique,
-   not acceptance of the host application.
-5. Run the host's relevant checks and deliver the tested commit, observed result, screenshot and
-   measurement locations, and any unverified state. Update a PR only within the user's authorization.
+1. State the outcome, affected views/states and independent expectations before editing.
+   The index's Verification brief routes evidence to ACCEPTANCE.
+2. Fix task structure and hierarchy before decoration. For “premium” or a product reference,
+   use DESIGN's Evaluate craft through evidence. Remove copy that repeats obvious structure;
+   preserve useful labels, errors and constraints.
+3. Implement with supported controls. Distinguish frame, visible text/icon and actual hit geometry;
+   inspect the composed pane and the full route/return path.
+4. Render the actual host at relevant widths/themes/states. Inspect screenshots and the changed
+   interaction. Bind evidence to runtime/media/scope; shared style/component changes invalidate
+   affected old captures and reviews. Static checks or changed assertions do not prove visual quality;
+   a fixture does not establish acceptance of another application.
+5. Run relevant checks. Deliver actual runtime, evidence, observed results and limits. Separate
+   automation, agent visual review and real human decisions. Never call self-review user acceptance.
+   Complete authorized PR updates; ACCEPTANCE adds no blanket human approval gate.
 
-## Minimal public imports
+## Public imports
 
-Only bootstrap what the host does not already provide:
+Bootstrap only what the host lacks:
 
 ```ts
 import 'ranui/style';
@@ -52,22 +53,13 @@ import 'ranui/button';
 import 'ranui/input';
 ```
 
-For a host already using the fluent builder:
+For an existing builder integration:
 
 ```ts
 import { Div, signal, createEffect } from 'ranui/builder';
 ```
 
-Other registrations and SSR exports come from the installed `package.json` exports and API
-reference. Add fonts or persisted theme initialization only when the host needs them; preserve
-its existing theme authority. A consumer does not import source-only `@/...` helpers.
-
-## Integration traps
-
-- Shadow DOM boundaries matter: confirm the component's supported label, slot and part contracts;
-  an external label does not automatically label an internal shadow control.
-- Before wiring native forms, read **Form integration** in `node_modules/ranui/CLAUDE.md`: appearance
-  variants, FormData participation and submission behavior are separate contracts.
-
-- Built-in accessibility does not prove the host integration: verify the changed keyboard path,
-  focus and touch behavior in the real composition.
+Other entries come from installed exports. Preserve host theme authority; add fonts only when
+needed. Consumers do not import source-only `@/...` helpers. Shadow labels/slots/parts and native
+FormData/submission are separate contracts: read Form integration in `node_modules/ranui/CLAUDE.md`
+when relevant. Built-in accessibility still needs host keyboard/focus/touch verification.

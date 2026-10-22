@@ -11,6 +11,7 @@ workflow recipes apply only when a task needs them.
 | Visual hierarchy, composition, type, spacing, density, color and motion                     | [DESIGN.md](./DESIGN.md), [composition](./DESIGN.md#11-composition--the-page-not-the-component) and [density](./DESIGN.md#density-follows-control-roles)                                                   |
 | Observable input, focus, keyboard, drafts, feedback, progress and recovery                  | [INTERACTION.md](./INTERACTION.md#1-inputs-drafts-and-intent) (inputs), [focus](./INTERACTION.md#2-reachable-controls-and-predictable-focus), [recovery](./INTERACTION.md#4-progress-failure-and-recovery) |
 | Optional batches/queues, capability-aware settings, account/data access or result revisions | [WORKFLOW_PATTERNS.md](./WORKFLOW_PATTERNS.md)                                                                                                                                                             |
+| Actual browser proof, evidence freshness and review authority                               | [ACCEPTANCE.md](./ACCEPTANCE.md)                                                                                                                                                                           |
 | Component architecture, state ownership, events, async lifecycle and tests                  | [CODING.md](./CODING.md)                                                                                                                                                                                   |
 | Exact attributes, events, slots and parts                                                   | [COMPONENTS.md](./COMPONENTS.md), generated from source                                                                                                                                                    |
 | Available component CSS variables                                                           | [style-tokens-public.md](./style-tokens-public.md), generated from source                                                                                                                                  |
@@ -46,22 +47,8 @@ does not require a density abstraction, queue, account flow or revision model.
 
 ## Verification brief
 
-Fill only fields affected by the task. Keep this as a short work note or PR evidence, not a new
-configuration file. Declare expectations before deriving measurements from the implementation.
-
-> Outcome and affected views/states: …
-> Applicable owner sections, public contracts and host capability limits: …
-> Composition: task/action hierarchy, distinct frame purposes, token roles and density: …
-> Geometry contract: named content/text/icon spines, hit bounds, vertical relationships and independently expected helper/error state: …
-> Browser evidence: before/after actual host captures, theme/width/locale/input/state, measurements and rejected/restored mutations relevant to the defect: …
-> Validation: tested commit, commands/results, CI and unverified variants or prerequisites: …
-
-A 12px declaration rendering as 17px calls for inspecting the line box, margins, padding and
-borders before changing a token. A hidden error row must be checked against an independently
-expected state; reading its actual visibility back as the expected value can validate the defect.
-Keep screenshot proposals, browser examples and implemented host changes explicitly distinguished.
-
-Static token/link audits cannot prove that CSS won the cascade or an action is reachable.
-Library contributors use [CODING's checklist](./CODING.md#checklist-before-opening-a-pull-request);
-consumer applications use their host's commands. Check affected surfaces/states and collect browser
-evidence when geometry, focus or interaction changes; repository CI gates remain unchanged.
+State the task, relevant owners/public contracts, independently expected geometry/behavior and
+supported states before editing. Keep it in a short work note, not a new configuration file.
+[ACCEPTANCE](./ACCEPTANCE.md) owns the browser procedure, runtime/media binding, stale-evidence
+rules and separate automated/agent/human results. Include the actual runtime, capture locations,
+observed checks and unverified scope in delivery. Static source audits do not prove rendered quality.

@@ -62,15 +62,28 @@ claude plugin install ranui@ran
 
 Invoke `/ranui:ranui` in a new session. The same marketplace also offers `ranuts` for utility work.
 
-**Codex skill** — after cloning this repository, copy `plugins/ranui/skills/ranui/` into
-your host project's `.agents/skills/ranui/`. Start a new task and invoke `$ranui`.
-This uses the same skill body; the `.claude-plugin` manifest is the Claude installation route.
-See [Codex skill discovery](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills).
+**Codex plugin** — register the repository marketplace and install the same skill:
+
+```sh
+codex plugin marketplace add chaxus/ran
+codex plugin add ranui@ran
+```
+
+Start a new task and invoke `$ranui`. For a local checkout, use `codex plugin marketplace add .`
+from the repository root. The portable [plugin manifest](./plugins/ranui/plugin.json) and
+[Codex marketplace](./.agents/plugins/marketplace.json) follow the
+[official packaging format](https://developers.openai.com/plugins/build/plugins).
+Both installation routes load the same skill body; no MCP server, account or hook is needed.
 
 Example task: “Use ranui to polish this settings pane: keep related text together, align
 control labels, and verify actual screenshots in light/dark at narrow/wide widths.”
-The [UI task lookup](./packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup) maps these
-requests to canonical rules and an evidence brief. Source contributors start with [AGENTS.md](./AGENTS.md).
+The [UI task lookup](./packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup) routes to one owner:
+[design](./packages/ranui/docs/DESIGN.md), [interaction](./packages/ranui/docs/INTERACTION.md),
+[public API](./packages/ranui/docs/COMPONENTS.md), or [evidence and decisions](./packages/ranui/docs/ACCEPTANCE.md).
+The plugin starts with a short task contract, preserves the host's product decisions and requires
+actual rendered evidence for UI claims. Automated checks, agent inspection and human acceptance
+remain distinct. [Six opt-in live scenarios](./plugins/ranui/evals/README.md) test the guidance's
+behavior separately from its token/API checks. Source contributors start with [AGENTS.md](./AGENTS.md).
 
 ## Work on the repository
 

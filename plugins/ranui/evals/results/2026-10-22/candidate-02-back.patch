@@ -1,0 +1,94 @@
+--- a/surface/app.js
++++ b/surface/app.js
+@@ -2,9 +2,10 @@
+ import { scenario, payload, streamPayload } from '../runtime.js';
+ const app = document.querySelector('#app');
+ const back = '<a data-return="project" href="#project">Back to project</a>';
+-function render() {
++function render(moveFocus = false) {
+   if (location.hash === '#project' || location.hash === '#workspace') {
+-    app.innerHTML = `<main>${location.hash === '#project' ? '<nav><a href="#workspace">Back to workspace</a></nav>' : ''}<h1>${location.hash === '#project' ? 'Project' : 'Workspace'}</h1><a href="#detail">Open settings</a></main>`;
++    app.innerHTML = `<main>${location.hash === '#project' ? '<nav><a href="#workspace">Back to workspace</a></nav>' : ''}<h1>${location.hash === '#project' ? 'Project' : 'Workspace'}</h1><a data-open-detail href="#detail">Open settings</a></main>`;
++    if (moveFocus && scenario === '02-back') app.querySelector('[data-open-detail]').focus();
+     return;
+   }
+   let content = '';
+@@ -12,7 +13,7 @@
+     content =
+       '<h1>Settings</h1><section class="setting"><div><h2><span class="heading-text">Notifications</span></h2><p><span class="description-text">Choose how you hear from us.</span></p></div><r-button>Manage</r-button></section>';
+   if (scenario === '02-back')
+-    content = `<nav><a data-return="workspace" href="#workspace">Back to workspace</a></nav><h1>Project settings</h1><nav class="detail-nav">${back}${back}</nav><p>Manage the project configuration.</p>`;
++    content = `<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="#workspace">Workspace</a></li><li><span aria-hidden="true">/</span> Project</li></ol></nav><nav class="detail-nav" aria-label="Return">${back}</nav><h1 id="detail-title" tabindex="-1">Project settings</h1><p>Manage the project configuration.</p>`;
+   if (scenario === '03-label')
+     content =
+       '<nav><a data-return="project" href="#project"><span class="return-label">Zurück zu Projekteinstellungen</span></a></nav><h1>Benachrichtigungen</h1><p>Einstellungen für dieses Projekt.</p>';
+@@ -26,6 +27,7 @@
+     content =
+       '<h1>Quick start</h1><section class="code-frame"><button id="copy">Copy code</button><button id="stream">Receive update</button><pre tabindex="0"><code id="source"></code></pre></section>';
+   app.innerHTML = `<main>${content}</main>`;
++  if (moveFocus && scenario === '02-back') app.querySelector('#detail-title').focus();
+   if (scenario === '06-code') {
+     let raw = payload;
+     const source = document.querySelector('#source');
+@@ -40,5 +42,5 @@
+     };
+   }
+ }
+-window.addEventListener('hashchange', render);
++window.addEventListener('hashchange', () => render(true));
+ render();
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -9,6 +9,52 @@
+ }
+ .detail-nav {
+   display: flex;
++  margin-bottom: 0;
++}
++.breadcrumbs {
++  margin-bottom: 24px;
++}
++.breadcrumbs ol {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: baseline;
++  gap: 8px;
++  padding: 0;
++  margin: 0;
++  list-style: none;
++}
++.breadcrumbs li {
++  min-width: 0;
++  overflow-wrap: anywhere;
++}
++.breadcrumbs li:last-child {
++  color: #54585e;
++}
++.breadcrumbs li span {
++  margin-right: 8px;
++}
++.detail-nav a,
++.breadcrumbs a {
++  display: inline-flex;
++  align-items: center;
++  min-height: 32px;
++  max-width: 100%;
++  overflow-wrap: anywhere;
++}
++a:focus-visible {
++  outline: 2px solid currentColor;
++  outline-offset: 3px;
++  border-radius: 2px;
++}
++@media (pointer: coarse) {
++  .detail-nav a,
++  .breadcrumbs a,
++  [data-open-detail],
++  nav > a {
++    display: inline-flex;
++    align-items: center;
++    min-height: 44px;
++  }
+ }
+ .return-label {
+   display: block;

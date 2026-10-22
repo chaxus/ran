@@ -213,3 +213,10 @@ display 规则、引用未声明令牌的兜底、组件查询自己的 shadow �
 - [ ] 间距取自尺度、排版按角色、颜色用语义令牌。
 - [ ] `transition` 里没有调色属性；没有 `transition: all`。
 - [ ] 文案与上下文共同明确操作及对象；没有任何状态只靠颜色表达。
+
+## 证据与验收 {#evidence-and-acceptance}
+
+[验收契约](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/ACCEPTANCE.md)
+统一维护实际浏览器验证、运行版本与截图的新鲜度，以及自动检查、agent 视觉审查和用户决定的区别。
+共享样式变化后，应更新受影响的证据；agent 自检不等于用户验收。
+删除没有信息增量的次级标签和说明，让布局解释显而易见的关系；保留无障碍名称、有用的字段标签、单位、错误和风险说明。

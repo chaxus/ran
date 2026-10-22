@@ -147,3 +147,7 @@ Escolha verificações para a superfície afetada e o comportamento alterado; a 
 - [ ] Espaços da escala, tipografia por papel, cor de tokens semânticos.
 - [ ] Nenhuma propriedade da paleta numa `transition`; nenhum `transition: all`.
 - [ ] O texto e o contexto esclarecem a ação e o objeto; nada sinaliza estado só com cor.
+
+## Evidências e aceitação {#evidence-and-acceptance}
+
+[O contrato de aceitação](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/ACCEPTANCE.md) define a verificação real no navegador, a validade das capturas e a separação entre verificações automáticas, revisão visual do agente e decisão do usuário. Após alterar estilos compartilhados, atualize as evidências afetadas; a revisão do agente não é aceitação do usuário. Evite rótulos secundários e descrições sem informação nova: deixe o layout explicar relações evidentes. Preserve nomes acessíveis, rótulos úteis, unidades, erros e riscos.

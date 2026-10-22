@@ -1,0 +1,24 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ranui",
+  "version": "1.2.0",
+  "description": "Design, build and review ranui products with focused guidance and verifiable browser evidence.",
+  "author": {
+    "name": "chaxus",
+    "url": "https://github.com/chaxus/ran"
+  },
+  "repository": "https://github.com/chaxus/ran",
+  "license": "MIT",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "ranui",
+        "shortDescription": "Design and verify products with ranui",
+        "developerName": "chaxus",
+        "defaultPrompt": [
+          "Use ranui to improve this product, verify the actual browser result and report the evidence."
+        ]
+      }
+    }
+  }
+}

@@ -246,3 +246,11 @@ Choose checks for the affected surface and changed behavior; repository CI still
 - [ ] Spacing from the scale, type by role, color from semantic tokens.
 - [ ] No palette property in a `transition`; no `transition: all`.
 - [ ] Copy makes the action and its object clear from context; nothing signals state by color alone.
+
+## Evidence and acceptance {#evidence-and-acceptance}
+
+[The acceptance contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/ACCEPTANCE.md)
+owns actual browser proof, runtime/capture freshness and separate automated, agent and human
+results. Changed shared styles require fresh affected evidence; an agent review is not user acceptance.
+Avoid unnecessary secondary labels and descriptions: let layout explain the obvious, while retaining
+accessible names, useful field labels, units, errors and risks.

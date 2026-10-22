@@ -1,0 +1,23 @@
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -1,4 +1,11 @@
+ /* Host styles: task-specific polish belongs here. */
++.setting {
++  padding: 16px;
++  column-gap: 16px;
++}
++.setting p {
++  margin-bottom: 0;
++}
+ .setting h2,
+ .setting p {
+   width: 100%;
+--- a/surface/shared.css
++++ b/surface/shared.css
+@@ -73,3 +73,6 @@
+     padding: 16px;
+   }
+ }
++
++/* Shared style follow-up after prior review. */
++.setting { padding: 24px; }

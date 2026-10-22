@@ -1,0 +1,122 @@
+--- a/surface/app.js
++++ b/surface/app.js
+@@ -24,19 +24,45 @@
+       '<h1>Workspace settings</h1><section class="setting"><div><h2>Activity</h2><p>Workspace updates and notifications.</p></div><r-button>Manage</r-button></section>';
+   if (scenario === '06-code')
+     content =
+-      '<h1>Quick start</h1><section class="code-frame"><button id="copy">Copy code</button><button id="stream">Receive update</button><pre tabindex="0"><code id="source"></code></pre></section>';
++      '<h1>Quick start</h1><section class="code-frame" aria-label="Code sample"><div class="code-actions"><button id="copy" type="button">Copy code</button><button id="stream" type="button">Receive update</button><output id="copy-status" role="status"></output></div><pre tabindex="0" aria-label="Code sample; scroll to read long lines"><code id="source"></code></pre><button id="latest" type="button" hidden>Jump to latest</button></section>';
+   app.innerHTML = `<main>${content}</main>`;
+   if (scenario === '06-code') {
+     let raw = payload;
+     const source = document.querySelector('#source');
+-    const display = () => {
+-      source.textContent = raw.replace(/\t/g, '  ').trim();
++    const pane = source.parentElement;
++    const status = document.querySelector('#copy-status');
++    const latest = document.querySelector('#latest');
++    let copyRequest = 0;
++    source.textContent = raw;
++    document.querySelector('#copy').onclick = async () => {
++      const snapshot = raw;
++      const request = ++copyRequest;
++      status.textContent = '';
++      try {
++        await navigator.clipboard.writeText(snapshot);
++        if (request === copyRequest && snapshot === raw) status.textContent = 'Copied';
++      } catch {
++        if (request === copyRequest && snapshot === raw)
++          status.textContent = 'Copy failed. Try again or select the code to copy.';
++      }
+     };
+-    display();
+-    document.querySelector('#copy').onclick = () => navigator.clipboard.writeText(source.textContent);
++    latest.onclick = () => {
++      pane.scrollTop = pane.scrollHeight;
++      latest.hidden = true;
++      pane.focus({ preventScroll: true });
++    };
++    pane.addEventListener('scroll', () => {
++      if (pane.scrollHeight - pane.clientHeight - pane.scrollTop < 2) latest.hidden = true;
++    });
+     document.querySelector('#stream').onclick = () => {
++      const following = pane.scrollHeight - pane.clientHeight - pane.scrollTop < 2;
++      const horizontalPosition = pane.scrollLeft;
+       raw += streamPayload;
+-      display();
++      source.append(document.createTextNode(streamPayload));
++      status.textContent = '';
++      if (following) pane.scrollTop = pane.scrollHeight;
++      else latest.hidden = false;
++      pane.scrollLeft = horizontalPosition;
+     };
+   }
+ }
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -32,8 +32,62 @@
+   box-shadow: 0 8px 22px #1a29442b;
+   background: #ffffffb8;
+ }
+-pre {
+-  white-space: pre-wrap;
++.code-frame {
++  padding: 0;
+   overflow: hidden;
+-  user-select: none;
++  border-color: var(--ran-color-border, #ddd);
++  border-radius: var(--ran-radius-sm, 6px);
+ }
++.code-actions {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  gap: var(--ran-space-2, 8px);
++  padding: var(--ran-space-4, 16px);
++  border-bottom: 1px solid var(--ran-color-border, #ddd);
++}
++.code-frame button {
++  min-height: 36px;
++  padding: 7px 12px;
++  border: 1px solid var(--ran-color-border, #ddd);
++  border-radius: var(--ran-radius-sm, 6px);
++  background: var(--ran-color-bg-elevated, white);
++  color: var(--ran-color-text, #202124);
++  font-size: var(--ran-text-label-1, 14px);
++  font-weight: var(--ran-text-label-weight, 500);
++}
++.code-frame button:hover {
++  background: var(--ran-color-bg-hover, #f0f1f3);
++}
++.code-frame :focus-visible {
++  outline: 2px solid var(--ran-color-primary, #202124);
++  outline-offset: -3px;
++}
++.code-frame pre {
++  margin: 0;
++  padding: var(--ran-space-4, 16px);
++  max-height: 320px;
++  white-space: pre;
++  overflow: auto;
++  overflow-anchor: none;
++  user-select: text;
++  tab-size: 2;
++  font-family: var(--ran-font-mono, ui-monospace, monospace);
++  font-size: var(--ran-text-label-1, 14px);
++  line-height: 1.7;
++}
++.code-frame code {
++  font: inherit;
++}
++#copy-status {
++  font-size: var(--ran-text-label-2, 13px);
++  color: var(--ran-color-text-secondary, #54585e);
++}
++#latest {
++  margin: 0 16px 16px;
++}
++@media (pointer: coarse) {
++  .code-frame button {
++    min-height: 44px;
++  }
++}
