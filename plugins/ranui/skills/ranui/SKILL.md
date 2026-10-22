@@ -28,10 +28,12 @@ catalogs, create a parallel design system or infer supported APIs from an exampl
 
 ## Build and prove
 
-1. State the outcome, affected views/states and independent expectations before editing.
-   The index's Verification brief routes evidence to ACCEPTANCE.
-2. Fix task structure and hierarchy before decoration. For “premium” or a product reference,
-   use DESIGN's Evaluate craft through evidence. Remove copy that repeats obvious structure;
+1. State the realistic task, next decision, affected views/states and independent expectations
+   before editing. The index routes visual and component tasks to their owners; ACCEPTANCE
+   includes the task walkthrough and evidence contract.
+2. Fix task structure and hierarchy with real content before decoration. For “premium” or a product reference,
+   use DESIGN's Evaluate craft through evidence and, when needed, the index's reference research.
+   Learn the relationship served by a reference, then verify its adaptation in the host. Remove copy that repeats obvious structure;
    preserve useful labels, errors and constraints.
 3. Implement with supported controls. Distinguish frame, visible text/icon and actual hit geometry;
    inspect the composed pane and the full route/return path.

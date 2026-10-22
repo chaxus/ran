@@ -37,6 +37,24 @@ These links route to existing rules; they introduce no additional standard or de
 | Redundant navigation or misplaced actions                           | [information architecture](./DESIGN.md#12-information-architecture--the-shape-before-the-composition)                                                                                                                                                                                                                                 | Complete the route and return path; verify labels, action placement and focus against INTERACTION                      |
 | Add animation or subtle effects                                     | [motion](./DESIGN.md#5-motion--prefer-none), [craft](./DESIGN.md#evaluate-craft-through-evidence)                                                                                                                                                                                                                                     | Repeat and interrupt the action; inspect reduced motion and theme switching                                            |
 
+For deliberate visual exploration, use the optional [reference research index](./REFERENCE_RESEARCH.md)
+to choose material by question and turn an observed pattern into a host-specific decision. It is
+not a requirement to browse inspiration galleries for routine fixes.
+
+## Component task lookup
+
+Route behavior to its existing owner, then verify the public component contract. These are
+regression starting points, not a requirement to use every component in every product.
+
+| Task                                     | Component contract                                                                                                | Independent browser proof                                                                                             |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Enter or dictate a draft                 | `r-input`, `r-button`, `r-voice-button`; [input intent](./INTERACTION.md#1-inputs-drafts-and-intent)              | Label with an icon, disabled pointer activation, pending voice cancellation, retained draft                           |
+| Open a nested choice or collapse details | `r-popover`, `r-select`, `r-disclosure-row`; [focus](./INTERACTION.md#2-reachable-controls-and-predictable-focus) | Same-field Escape closes one layer at a time; collapse returns focus; interrupted close stays closed                  |
+| Read and copy a streamed answer          | `r-markdown`, `r-conversation`; [reading position](./INTERACTION.md#3-feedback-and-reading-position)              | Exact clipboard source and local failure, native selection and horizontal position, explicit follow-off during growth |
+
+Read exact APIs in [COMPONENTS](./COMPONENTS.md); source-only browser tests demonstrate these
+contracts in `packages/ranui/test/e2e`, not acceptance of an application that was not rendered.
+
 ## Before implementing
 
 Identify the task, affected object, destination and observable outcome. Read only the relevant

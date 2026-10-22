@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ranui",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Design, build and review ranui products with focused guidance and verifiable browser evidence.",
   "author": {
     "name": "chaxus",

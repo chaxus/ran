@@ -19,5 +19,5 @@ actual media review and PR delivery. Do not build shared outputs concurrently.
       relevant unit/integration/SSR/browser, design, docs, links and formatting checks.
 - [x] Inspect source-bound before/after screenshots and continuous normal/reduced-motion flows
       at applicable widths/themes, then independent code and visual review. Correct findings.
-- [ ] Update ran PR with actual outcomes and limits. Only then resume Document integration;
+- [x] Update ran PR with actual outcomes and limits. Only then resume Document integration;
       its draft PR remains a reviewable snapshot, without final product acceptance claims.
