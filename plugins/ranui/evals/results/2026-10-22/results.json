@@ -1,0 +1,509 @@
+{
+  "date": "2026-10-22",
+  "protocol": {
+    "preparedAt": "2026-10-22T03:28:34.724Z",
+    "conditions": {
+      "baseline": "7544bce098586809cca783f21c70297b162aa260",
+      "candidate": "working-tree guidance hash 93e05fd5ebbb8db72162926c17c22e043fb301e5feb8e9713a2d8c9f1455cfd3"
+    },
+    "harness": "native collaboration; fork_turns=none for each task",
+    "modelSettings": "Inherited same parent model/settings; no override; concrete model ID not exposed by this harness",
+    "sample": "one fresh session per scenario per condition; not a model-wide reliability estimate",
+    "pilotRunsExcluded": true,
+    "guidanceHash": {
+      "baseline": "141d699756d92f571998ccdcf073dc05182fae1b0f015db1824d7639d6606a82",
+      "candidate": "93e05fd5ebbb8db72162926c17c22e043fb301e5feb8e9713a2d8c9f1455cfd3"
+    },
+    "toolsHash": "7e86a872c7e8072d35ad1047d6f7b45a9e2e9d2b5a2eb3080ee526e72702cc48",
+    "fixtureHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+    "rubricHash": "f0f4d6ce434c6ee1d321644d5aecff72a69549d2111a28d939ae12d870324a40",
+    "followUpBase": "dc92cb482d29f8f7ca4b3469e78600a0c3fa8ae4",
+    "baselineAndMainTreesIdentical": true,
+    "interruptedRunsExcluded": [
+      "First baseline01 and02 sessions were interrupted by a new user turn; their partial artifacts are retained separately. Restarted with original frozen inputs in fresh sessions."
+    ],
+    "refinements": {
+      "refined": {
+        "guidanceHash": "fccd5fcab22420bed598e56f3f5d28c66e18a3d8dcb8258918cb97d481f4bc54",
+        "toolsHash": "7e86a872c7e8072d35ad1047d6f7b45a9e2e9d2b5a2eb3080ee526e72702cc48",
+        "cases": ["02-back"],
+        "purpose": "Fresh original-input rerun after concrete independent finding; not a replacement for first-phase results."
+      },
+      "refined-code": {
+        "guidanceHash": "1c7062fe962c81566fcaafb94ce4f3262eb7c560dbcc98222f4f61516c663d5e",
+        "toolsHash": "7e86a872c7e8072d35ad1047d6f7b45a9e2e9d2b5a2eb3080ee526e72702cc48",
+        "cases": ["06-code"],
+        "purpose": "Fresh original-input rerun after concrete independent finding; not a replacement for first-phase results."
+      }
+    }
+  },
+  "samples": [
+    {
+      "condition": "baseline",
+      "scenario": "01-text",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "75fc3be12ba088bfd757ce4c6e82387685d973b50ca87b04b972b921eda6982b",
+      "guidanceHash": "141d699756d92f571998ccdcf073dc05182fae1b0f015db1824d7639d6606a82",
+      "initialInput": {
+        "id": "01-text",
+        "promptHash": "007a171a9a7c0d2ae9874131b5257a98de087aa9f3d088326ada4309e8fbcfc3",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "baseline-01-text.png",
+        "sha256": "f397d91bc72f0c02d0c35cf3edf735e554b56c91387113de0f345464eea0b7f6"
+      },
+      "sourcePatch": {
+        "file": "baseline-01-text.patch",
+        "sha256": "b6d1c1629cf529b162dbf88e25698920c5d91efbc6e7ceec1ca1701d06b010aa"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "baseline",
+      "scenario": "02-back",
+      "mechanicalPassV1": false,
+      "independentResult": "changes required",
+      "findingOrLimit": "Two equal contextual return levels remain.",
+      "runtimeHash": "ed9e2662f8e8ea5d029d3d4ccb2be444f3cdd0f8fc0b8fed2a4a4754e6c54c07",
+      "guidanceHash": "141d699756d92f571998ccdcf073dc05182fae1b0f015db1824d7639d6606a82",
+      "initialInput": {
+        "id": "02-back",
+        "promptHash": "92b2fef739a5e08b2f99d8359c4e2ff037e2a5f332a8c46f4baa58b49040e4cc",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "baseline-02-back.png",
+        "sha256": "898aeb58c1b3b21877771189abb627d1197ca61c1668abe3135ce78d714b5f05"
+      },
+      "sourcePatch": {
+        "file": "baseline-02-back.patch",
+        "sha256": "4410761b81acaa8dd96ed164e4c3212396f651cf75fb4cdca396bb2dce8b9c45"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "baseline",
+      "scenario": "03-label",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Mobile clipping fixed; destination pages remain English and wording consistency is limited.",
+      "runtimeHash": "ae899e94284379c28830fe446584418cb99b109b1cb773ba627cd53bd0f25a3d",
+      "guidanceHash": "141d699756d92f571998ccdcf073dc05182fae1b0f015db1824d7639d6606a82",
+      "initialInput": {
+        "id": "03-label",
+        "promptHash": "1668a351201510a77454109650e96f05f11a26c650e761c437011482573161d6",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "baseline-03-label.png",
+        "sha256": "0eac939c69f59425028c1dcd96e82a2b49e377a1b7ebd990af65fec7f47aec20"
+      },
+      "sourcePatch": {
+        "file": "baseline-03-label.patch",
+        "sha256": "967165c5d13110ad97c533be7e32517d9bda07de77a1a214b1f6f31f29a481df"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "baseline",
+      "scenario": "04-effects",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "d1c7179c6a56389112b26a4ec32ee805ffc50c9633f2a5973c0a3e724395835a",
+      "guidanceHash": "141d699756d92f571998ccdcf073dc05182fae1b0f015db1824d7639d6606a82",
+      "initialInput": {
+        "id": "04-effects",
+        "promptHash": "5d85b4c696e1f64c25a88bae8556238cbad211f390174d94b1c09d1d0b6430fb",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "baseline-04-effects.png",
+        "sha256": "7b5f4071f34060d3f0a417c262725a9cd37a7e38195f0767fe5ed52b9a79e1d3"
+      },
+      "sourcePatch": {
+        "file": "baseline-04-effects.patch",
+        "sha256": "a651671cd815d0f5f56bb7d3764ac3fe22a08bd0ddfd12312602b67607a908be"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "baseline",
+      "scenario": "05-freshness",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "72f4235d9fcce936d38e34dad47b89daeccd5735b38265a96e9737ac49a1d402",
+      "guidanceHash": "141d699756d92f571998ccdcf073dc05182fae1b0f015db1824d7639d6606a82",
+      "initialInput": {
+        "id": "05-freshness",
+        "promptHash": "b55b35f82cb355dcae7667292d5db162e489fb25244e1a83758d684442425c5d",
+        "surfaceHash": "75312c0b7a63d43693f0990423581e62803445703fa06917d3080d760c57a57d",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "priorEvidenceHash": "0c773412af521df947b4640a75316e24cddb57f09398f2317dca8ca4a52174da"
+      },
+      "screenshot": {
+        "file": "baseline-05-freshness.png",
+        "sha256": "d70f8294e788958ef51c788b7ff657baf82dfbbb0f085e2d7624f35736c6db59"
+      },
+      "sourcePatch": {
+        "file": "baseline-05-freshness.patch",
+        "sha256": "b800dca81ffa6517fb6cd367afe75b0beab913c5772b2ff50737d66ff58ee34b"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "baseline",
+      "scenario": "06-code",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "1d6e454b6085e2950920f98ee861ceb03c8d5bb8d7dbfd988ced0656a8277c9b",
+      "guidanceHash": "141d699756d92f571998ccdcf073dc05182fae1b0f015db1824d7639d6606a82",
+      "initialInput": {
+        "id": "06-code",
+        "promptHash": "22e61b62beb7b9ee815ac1df554f19da4a599774ddeb6d2f15d52931d0ab5480",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "baseline-06-code.png",
+        "sha256": "504db02c55a35606eb9e2b52315e82cf335bf977308e598bba4995d604416531"
+      },
+      "sourcePatch": {
+        "file": "baseline-06-code.patch",
+        "sha256": "e39094ed573a67e79124f9aad69ac1e3c18b68b5e3f05461a391a1307917c1f6"
+      },
+      "humanDecision": "not requested / not inferred",
+      "supplementalFeedback": [
+        {
+          "outcome": "success",
+          "sourceChanged": true,
+          "writeCapturedInitialSnapshot": true,
+          "clipboardMatchesInitial": true,
+          "clipboardMatchesCurrent": false,
+          "visibleStatuses": [],
+          "media": {
+            "file": "baseline-06-code-feedback-success.png",
+            "sha256": "4114c4b22b755c0a3dd2113bfcaecdff3d21de4712dbb3f8e3be295759f808d8"
+          }
+        },
+        {
+          "outcome": "failure",
+          "sourceChanged": true,
+          "writeCapturedInitialSnapshot": true,
+          "clipboardMatchesInitial": null,
+          "clipboardMatchesCurrent": null,
+          "visibleStatuses": [],
+          "media": {
+            "file": "baseline-06-code-feedback-failure.png",
+            "sha256": "4114c4b22b755c0a3dd2113bfcaecdff3d21de4712dbb3f8e3be295759f808d8"
+          }
+        }
+      ]
+    },
+    {
+      "condition": "candidate",
+      "scenario": "01-text",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "f7dbb8bcbdcdb8fa253b7a740aa7af9ccc7e846d65d284a831ed81b6ba198bd8",
+      "guidanceHash": "93e05fd5ebbb8db72162926c17c22e043fb301e5feb8e9713a2d8c9f1455cfd3",
+      "initialInput": {
+        "id": "01-text",
+        "promptHash": "007a171a9a7c0d2ae9874131b5257a98de087aa9f3d088326ada4309e8fbcfc3",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "candidate-01-text.png",
+        "sha256": "5f707bd702407b0837d5887e55f33567fade8657b7dbe5be5277d75ff56e9990"
+      },
+      "sourcePatch": {
+        "file": "candidate-01-text.patch",
+        "sha256": "4490142caaf2ae1d46bb9b50bce0c6e8d0a67a6634e6e41b44c300c32b80c7b6"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "candidate",
+      "scenario": "02-back",
+      "mechanicalPassV1": true,
+      "independentResult": "changes required",
+      "findingOrLimit": "Inert Project breadcrumb repeats the immediate-parent return context.",
+      "runtimeHash": "9c913f7beb9086e7fe062ffca503c46751c23fa4d13cef3d2932074e9698cadf",
+      "guidanceHash": "93e05fd5ebbb8db72162926c17c22e043fb301e5feb8e9713a2d8c9f1455cfd3",
+      "initialInput": {
+        "id": "02-back",
+        "promptHash": "92b2fef739a5e08b2f99d8359c4e2ff037e2a5f332a8c46f4baa58b49040e4cc",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "candidate-02-back.png",
+        "sha256": "39151ccc64b553be0cbf7f8370b7ac741512690f2d43e183e9a1f1e24f742852"
+      },
+      "sourcePatch": {
+        "file": "candidate-02-back.patch",
+        "sha256": "79e70192c230035a2ec0bb47d6f37170c7c100b1f75f16dc7cc6b965fe0f1128"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "candidate",
+      "scenario": "03-label",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "870dfdd9eb449303d55962ad4d83a2d00576303d08c95f5532f8a188654fa9ba",
+      "guidanceHash": "93e05fd5ebbb8db72162926c17c22e043fb301e5feb8e9713a2d8c9f1455cfd3",
+      "initialInput": {
+        "id": "03-label",
+        "promptHash": "1668a351201510a77454109650e96f05f11a26c650e761c437011482573161d6",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "candidate-03-label.png",
+        "sha256": "0eac939c69f59425028c1dcd96e82a2b49e377a1b7ebd990af65fec7f47aec20"
+      },
+      "sourcePatch": {
+        "file": "candidate-03-label.patch",
+        "sha256": "cc13bd631c1114fb5bbac1a9db866396404c345c62915e92001bb79b56e5b3d3"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "candidate",
+      "scenario": "04-effects",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "df2448782052ade5e807295698281b6f0b2d0abde4048f2569d979d5505ed766",
+      "guidanceHash": "93e05fd5ebbb8db72162926c17c22e043fb301e5feb8e9713a2d8c9f1455cfd3",
+      "initialInput": {
+        "id": "04-effects",
+        "promptHash": "5d85b4c696e1f64c25a88bae8556238cbad211f390174d94b1c09d1d0b6430fb",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "candidate-04-effects.png",
+        "sha256": "75a2c3bd381791c419894961eccd5d9db347585f79a4c6992aee07f3b8f4a6f1"
+      },
+      "sourcePatch": {
+        "file": "candidate-04-effects.patch",
+        "sha256": "3b88f56a3f6bc6b4c6d93a45484a349bfa596db1576a875792b76201354bba74"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "candidate",
+      "scenario": "05-freshness",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "507e4173c6050475039415db2f38015eb27922e653c9f46f18e2044f96b036bb",
+      "guidanceHash": "93e05fd5ebbb8db72162926c17c22e043fb301e5feb8e9713a2d8c9f1455cfd3",
+      "initialInput": {
+        "id": "05-freshness",
+        "promptHash": "b55b35f82cb355dcae7667292d5db162e489fb25244e1a83758d684442425c5d",
+        "surfaceHash": "75312c0b7a63d43693f0990423581e62803445703fa06917d3080d760c57a57d",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "priorEvidenceHash": "16884e7fd6c315a083fd46def68f2363d3dc2f952dcb8a826bea4dd4ddd1d8cf"
+      },
+      "screenshot": {
+        "file": "candidate-05-freshness.png",
+        "sha256": "d70f8294e788958ef51c788b7ff657baf82dfbbb0f085e2d7624f35736c6db59"
+      },
+      "sourcePatch": {
+        "file": "candidate-05-freshness.patch",
+        "sha256": "3aa1c9fe9f2d280462e7edcc5b59fba53690d1a85bcf98f32c789a8a3290bbc8"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "candidate",
+      "scenario": "06-code",
+      "mechanicalPassV1": true,
+      "independentResult": "changes required",
+      "findingOrLimit": "Delayed earlier Copy shows stale feedback after source update; separate real-browser observation.",
+      "runtimeHash": "a0da6458088ecc043759b68be774e1ab5a2b1bfd390eb0efdec679ca1feee51e",
+      "guidanceHash": "93e05fd5ebbb8db72162926c17c22e043fb301e5feb8e9713a2d8c9f1455cfd3",
+      "initialInput": {
+        "id": "06-code",
+        "promptHash": "22e61b62beb7b9ee815ac1df554f19da4a599774ddeb6d2f15d52931d0ab5480",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "candidate-06-code.png",
+        "sha256": "a8b363ab4aea6ddf217b9619a380371cfa2c7e736d1888c57e1039c7aa9d5454"
+      },
+      "sourcePatch": {
+        "file": "candidate-06-code.patch",
+        "sha256": "2be3f132c51d6eb0502e6a6e8d58918b6e89d4c135c48f24ce91216d73de0752"
+      },
+      "humanDecision": "not requested / not inferred",
+      "supplementalFeedback": [
+        {
+          "outcome": "success",
+          "sourceChanged": true,
+          "writeCapturedInitialSnapshot": true,
+          "clipboardMatchesInitial": true,
+          "clipboardMatchesCurrent": false,
+          "visibleStatuses": ["Copied"],
+          "media": {
+            "file": "candidate-06-code-feedback-success.png",
+            "sha256": "8990ff2666c6133c05563088204e495fa692e64065174340e1a4508ae794003e"
+          }
+        },
+        {
+          "outcome": "failure",
+          "sourceChanged": true,
+          "writeCapturedInitialSnapshot": true,
+          "clipboardMatchesInitial": null,
+          "clipboardMatchesCurrent": null,
+          "visibleStatuses": ["Copy failed. Try again or select the code."],
+          "media": {
+            "file": "candidate-06-code-feedback-failure.png",
+            "sha256": "f03293b714e5048423e34d4b3285c9b7ed23def77f5d6d4c04d33004a7e34c3a"
+          }
+        }
+      ]
+    },
+    {
+      "condition": "refined",
+      "scenario": "02-back",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "94245d20a5182188b0c1e2887aad654e7365f3491a232aaaf69470b99cec3191",
+      "guidanceHash": "fccd5fcab22420bed598e56f3f5d28c66e18a3d8dcb8258918cb97d481f4bc54",
+      "initialInput": {
+        "id": "02-back",
+        "promptHash": "92b2fef739a5e08b2f99d8359c4e2ff037e2a5f332a8c46f4baa58b49040e4cc",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "refined-02-back.png",
+        "sha256": "0e0df22d0009fe7b4f81bab7b2c5876d2431992edb4b296d34679fbe74d4fc06"
+      },
+      "sourcePatch": {
+        "file": "refined-02-back.patch",
+        "sha256": "2dbc99b67f5a1d76b73b7bf6c415e6800f09590789fdafe728eb79db3133d201"
+      },
+      "humanDecision": "not requested / not inferred"
+    },
+    {
+      "condition": "refined-code",
+      "scenario": "06-code",
+      "mechanicalPassV1": true,
+      "independentResult": "pass",
+      "findingOrLimit": "Pass in independently inspected scope; see limits.",
+      "runtimeHash": "45648ee809cb6d629a733a4c2826cf9394cc6474be441d78851c0a0761bb355f",
+      "guidanceHash": "1c7062fe962c81566fcaafb94ce4f3262eb7c560dbcc98222f4f61516c663d5e",
+      "initialInput": {
+        "id": "06-code",
+        "promptHash": "22e61b62beb7b9ee815ac1df554f19da4a599774ddeb6d2f15d52931d0ab5480",
+        "surfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821",
+        "initialSurfaceHash": "258a13a581aefad14d8561dac6957b05ba2bfb0acb5f61514a169a9124a6e821"
+      },
+      "screenshot": {
+        "file": "refined-code-06-code.png",
+        "sha256": "83fd79c7d2ef52b2620acb2b8f54e8761cf3fd3cc7fa8e4a2538805f4de188c9"
+      },
+      "sourcePatch": {
+        "file": "refined-code-06-code.patch",
+        "sha256": "8be4bb400c5bbd4b207864c778c1868f42aec8d0ce9967cf1055a2b7d81321cf"
+      },
+      "humanDecision": "not requested / not inferred",
+      "supplementalFeedback": [
+        {
+          "outcome": "success",
+          "sourceChanged": true,
+          "writeCapturedInitialSnapshot": true,
+          "clipboardMatchesInitial": true,
+          "clipboardMatchesCurrent": false,
+          "visibleStatuses": [],
+          "media": {
+            "file": "refined-code-06-code-feedback-success.png",
+            "sha256": "62c24a72df4501bb9209103378fa46183f4e1b09eb1ce41d57ab5e26ee47aa18"
+          }
+        },
+        {
+          "outcome": "failure",
+          "sourceChanged": true,
+          "writeCapturedInitialSnapshot": true,
+          "clipboardMatchesInitial": null,
+          "clipboardMatchesCurrent": null,
+          "visibleStatuses": [],
+          "media": {
+            "file": "refined-code-06-code-feedback-failure.png",
+            "sha256": "62c24a72df4501bb9209103378fa46183f4e1b09eb1ce41d57ab5e26ee47aa18"
+          }
+        }
+      ]
+    }
+  ],
+  "recordings": [
+    {
+      "target": "refined/02-back",
+      "runtimeHash": "94245d20a5182188b0c1e2887aad654e7365f3491a232aaaf69470b99cec3191",
+      "viewport": [760, 640],
+      "browser": "151.0.7922.34",
+      "capturedAt": "2026-10-22T04:13:10.068Z",
+      "checks": ["pointer detail \u2192 parent", "parent \u2192 ancestor", "keyboard detail \u2192 parent"],
+      "automated": "passed",
+      "media": {
+        "file": "refined-02-back.webm",
+        "sha256": "d8d5e75c2df0d2f90505761a44ff16140ad439de10e4ead17c9dc8947e0635c4"
+      },
+      "review": "Agent inspected 0.6s/1.8s/3.0s decoded frames and fresh browser checks; not a claim of human playback."
+    },
+    {
+      "target": "refined-code/06-code",
+      "runtimeHash": "45648ee809cb6d629a733a4c2826cf9394cc6474be441d78851c0a0761bb355f",
+      "viewport": [760, 640],
+      "browser": "151.0.7922.34",
+      "capturedAt": "2026-10-22T04:14:58.866Z",
+      "checks": [
+        "exact initial clipboard including tabs/blank lines/final newline",
+        "native keyboard horizontal scroll",
+        "actual mouse selection",
+        "exact accumulated stream payload",
+        "exact streamed clipboard"
+      ],
+      "automated": "passed",
+      "media": {
+        "file": "refined-code-06-code.webm",
+        "sha256": "bd016fcf05834594da34059b96b4cd55a4b8a7133819f091f3f9d20395a933fc"
+      },
+      "review": "Agent inspected 0.6s/1.8s/3.0s decoded frames and fresh browser checks; not a claim of human playback."
+    }
+  ],
+  "installation": {
+    "version": "1.2.0",
+    "sourceSkillHash": "622cdca4c730bc6ee1ff60c021e1d4d307b65b72c15d06e94c4459f582538513",
+    "installedSkillHash": "622cdca4c730bc6ee1ff60c021e1d4d307b65b72c15d06e94c4459f582538513",
+    "sameBytes": true
+  },
+  "limits": [
+    "One fresh native agent session per condition/case, plus two separate refinements; no model-wide effect estimate.",
+    "Same inherited model/settings; concrete native model identifier unavailable; no Opus/Astra comparison.",
+    "Fixtures render actual ranui source; these are not Document application acceptance.",
+    "Chromium-focused independent checks; emulated touch is not physical device testing.",
+    "Native full agent tool transcripts remain in this chat; retained exact prompts, outputs, reports and independent observations are not claimed as a complete transcript export.",
+    "Human acceptance is not inferred."
+  ],
+  "postRunToolCleanup": "Removed two unused imports in evidence.mjs after frozen runs; no logic/threshold/rubric changes. Supplemental feedback observation is explicitly separate from v1."
+}

@@ -1,0 +1,77 @@
+--- a/surface/app.js
++++ b/surface/app.js
+@@ -18,7 +18,7 @@
+       '<nav><a data-return="project" href="#project"><span class="return-label">Zurück zu Projekteinstellungen</span></a></nav><h1>Benachrichtigungen</h1><p>Einstellungen für dieses Projekt.</p>';
+   if (scenario === '04-effects')
+     content =
+-      '<div class="premium"><div class="frame"><h1>Recent activity</h1><div class="frame"><h2>Project updated</h2><div class="frame"><p>Mia changed the workspace description.</p><r-button>View activity</r-button></div></div></div></div>';
++      '<section class="premium" aria-labelledby="activity-title"><h1 id="activity-title">Recent activity</h1><article class="activity-entry"><div class="activity-copy"><h2>Project updated</h2><p>Mia changed the workspace description.</p></div><r-button>View activity</r-button></article></section>';
+   if (scenario === '05-freshness')
+     content =
+       '<h1>Workspace settings</h1><section class="setting"><div><h2>Activity</h2><p>Workspace updates and notifications.</p></div><r-button>Manage</r-button></section>';
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -17,20 +17,50 @@
+   text-overflow: ellipsis;
+   white-space: nowrap;
+ }
+-.premium {
+-  padding: 24px;
+-  border: 1px solid #bcc5d0;
+-  border-radius: 20px;
+-  box-shadow: 0 12px 30px #1a294433;
+-  background: linear-gradient(140deg, #fff, #e6ecfa);
++.premium h1 {
++  margin: 0 0 var(--ran-space-8, 32px);
++  font-size: var(--ran-text-heading-2, 24px);
++  font-weight: var(--ran-text-heading-weight, 600);
++  letter-spacing: var(--ran-text-heading-tracking, -0.03em);
++  text-wrap: balance;
+ }
+-.premium .frame {
+-  padding: 20px;
+-  margin: 12px 0;
+-  border: 1px solid #bcc5d0;
+-  border-radius: 16px;
+-  box-shadow: 0 8px 22px #1a29442b;
+-  background: #ffffffb8;
++.activity-entry {
++  display: flex;
++  align-items: flex-start;
++  justify-content: space-between;
++  gap: var(--ran-space-6, 24px);
++}
++.activity-copy {
++  min-width: 0;
++}
++.activity-entry h2 {
++  margin: 0 0 var(--ran-space-2, 8px);
++  font-size: var(--ran-text-heading-4, 16px);
++  font-weight: var(--ran-text-heading-weight, 600);
++}
++.activity-entry p {
++  margin: 0;
++  max-width: 46ch;
++  font-size: 14px;
++  color: #54585e;
++}
++.activity-entry r-button {
++  flex: none;
++  --ran-btn-padding: var(--ran-space-4, 16px);
++}
++.activity-entry r-button:focus-within {
++  outline: 2px solid #1755a2;
++  outline-offset: 4px;
++  border-radius: var(--ran-radius-sm, 6px);
++}
++@media (max-width: 500px) {
++  .premium {
++    padding-top: var(--ran-space-6, 24px);
++  }
++  .activity-entry {
++    flex-direction: column;
++    gap: var(--ran-space-4, 16px);
++  }
+ }
+ pre {
+   white-space: pre-wrap;

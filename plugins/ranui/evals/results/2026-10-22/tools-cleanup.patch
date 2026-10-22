@@ -1,0 +1,11 @@
+--- a/evidence.mjs
++++ b/evidence.mjs
+@@ -1,7 +1,6 @@
+ import { createRequire } from 'node:module';
+-import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
++import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+ import path from 'node:path';
+-import { fileURLToPath } from 'node:url';
+ import { hash, treeHash } from './hash.mjs';
+ import { serve } from './serve.mjs';
+ export function browserTools(dir) {

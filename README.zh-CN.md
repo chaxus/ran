@@ -61,15 +61,25 @@ claude plugin install ranui@ran
 
 新会话中使用 `/ranui:ranui`。同一 marketplace 也提供用于工具函数任务的 `ranuts`。
 
-**Codex skill**：克隆本仓库后，将 `plugins/ranui/skills/ranui/` 复制到宿主项目的
-`.agents/skills/ranui/`，新建任务后使用 `$ranui`。两者使用同一份 skill 正文；
-`.claude-plugin` 清单用于 Claude 的插件安装。
-参见 [Codex skill 发现规则](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills)。
+**Codex 插件**：注册仓库的 marketplace，安装同一份 skill：
 
-使用示例：“按 ranui 规范优化这个设置侧栏，收拢相关文案、对齐控件文字，
-并用明暗主题、窄宽屏的实际截图验收。”
-[UI 任务索引](./packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup) 将这些问题直接对应到
-权威规则和验收简表。修改 ran 源码时先读 [AGENTS.md](./AGENTS.md)。
+```sh
+codex plugin marketplace add chaxus/ran
+codex plugin add ranui@ran
+```
+
+新任务中使用 `$ranui`。本地检出仓库时，在仓库根目录执行 `codex plugin marketplace add .`。
+[插件清单](./plugins/ranui/plugin.json)和 [Codex marketplace](./.agents/plugins/marketplace.json)
+遵循[官方打包格式](https://developers.openai.com/plugins/build/plugins)。
+两种安装入口使用同一份 skill 正文，不需要 MCP 服务、额外账号或 hook。
+
+使用示例：“用 ranui 优化这个设置侧栏，保留任务和交互，用相关主题、宽度的实际截图验证。”
+[UI 任务索引](./packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup)按任务进入唯一规则来源：
+[设计](./packages/ranui/docs/DESIGN.md)、[交互](./packages/ranui/docs/INTERACTION.md)、
+[公开 API](./packages/ranui/docs/COMPONENTS.md)和[证据与验收](./packages/ranui/docs/ACCEPTANCE.md)。
+插件先明确简短的任务契约，再保留宿主产品已有决策，并用实际渲染证据支撑界面结论。
+自动检查、agent 视觉审查和用户验收分别记录；[六个可选 agent 场景](./plugins/ranui/evals/README.md)
+验证指引的实际执行效果，不用 token/API 检查冒充行为验证。源码贡献者先读 [AGENTS.md](./AGENTS.md)。
 
 ## 参与开发
 

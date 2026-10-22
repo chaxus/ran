@@ -1,0 +1,64 @@
+--- a/surface/app.js
++++ b/surface/app.js
+@@ -2,9 +2,10 @@
+ import { scenario, payload, streamPayload } from '../runtime.js';
+ const app = document.querySelector('#app');
+ const back = '<a data-return="project" href="#project">Back to project</a>';
+-function render() {
++function render(moveFocus = false) {
+   if (location.hash === '#project' || location.hash === '#workspace') {
+-    app.innerHTML = `<main>${location.hash === '#project' ? '<nav><a href="#workspace">Back to workspace</a></nav>' : ''}<h1>${location.hash === '#project' ? 'Project' : 'Workspace'}</h1><a href="#detail">Open settings</a></main>`;
++    app.innerHTML = `<main>${location.hash === '#project' ? '<nav><a href="#workspace">Back to workspace</a></nav>' : ''}<h1 tabindex="-1">${location.hash === '#project' ? 'Project' : 'Workspace'}</h1><a href="#detail">Open settings</a></main>`;
++    if (moveFocus) app.querySelector('h1').focus();
+     return;
+   }
+   let content = '';
+@@ -12,7 +13,7 @@
+     content =
+       '<h1>Settings</h1><section class="setting"><div><h2><span class="heading-text">Notifications</span></h2><p><span class="description-text">Choose how you hear from us.</span></p></div><r-button>Manage</r-button></section>';
+   if (scenario === '02-back')
+-    content = `<nav><a data-return="workspace" href="#workspace">Back to workspace</a></nav><h1>Project settings</h1><nav class="detail-nav">${back}${back}</nav><p>Manage the project configuration.</p>`;
++    content = `<nav class="detail-nav" aria-label="Return navigation">${back}<a data-return="workspace" href="#workspace">Back to workspace</a></nav><h1 tabindex="-1">Project settings</h1><p>Manage the project configuration.</p>`;
+   if (scenario === '03-label')
+     content =
+       '<nav><a data-return="project" href="#project"><span class="return-label">Zurück zu Projekteinstellungen</span></a></nav><h1>Benachrichtigungen</h1><p>Einstellungen für dieses Projekt.</p>';
+@@ -26,6 +27,7 @@
+     content =
+       '<h1>Quick start</h1><section class="code-frame"><button id="copy">Copy code</button><button id="stream">Receive update</button><pre tabindex="0"><code id="source"></code></pre></section>';
+   app.innerHTML = `<main>${content}</main>`;
++  if (moveFocus) app.querySelector('h1').focus();
+   if (scenario === '06-code') {
+     let raw = payload;
+     const source = document.querySelector('#source');
+@@ -40,5 +42,5 @@
+     };
+   }
+ }
+-window.addEventListener('hashchange', render);
++window.addEventListener('hashchange', () => render(true));
+ render();
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -9,6 +9,22 @@
+ }
+ .detail-nav {
+   display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  gap: 8px 24px;
++  margin-bottom: 16px;
++}
++.detail-nav a {
++  display: inline-flex;
++  align-items: center;
++  min-height: 44px;
++  padding-block: 10px;
++  text-underline-offset: 3px;
++}
++.detail-nav a:focus-visible,
++h1:focus-visible {
++  outline: 2px solid var(--ran-color-link, currentColor);
++  outline-offset: 3px;
+ }
+ .return-label {
+   display: block;

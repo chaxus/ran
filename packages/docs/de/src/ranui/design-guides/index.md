@@ -147,3 +147,7 @@ Wähle Prüfungen für die betroffene Oberfläche und das geänderte Verhalten; 
 - [ ] Abstände aus der Skala, Schrift nach Rolle, Farbe aus semantischen Tokens.
 - [ ] Keine Paletteneigenschaft in einer `transition`; kein `transition: all`.
 - [ ] Text und Kontext machen Aktion und Objekt klar; nichts signalisiert einen Zustand allein über Farbe.
+
+## Nachweise und Abnahme {#evidence-and-acceptance}
+
+[Der Abnahmevertrag](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/ACCEPTANCE.md) regelt echte Browserprüfungen, die Aktualität von Laufzeit und Aufnahmen sowie getrennte Ergebnisse für automatische Prüfungen, visuelle Agentenprüfung und Nutzerentscheidung. Änderungen an gemeinsamen Stilen erfordern neue betroffene Nachweise; Agentenprüfung ist keine Nutzerabnahme. Vermeide zusätzliche Beschriftungen und Beschreibungen ohne Informationsgewinn; die Anordnung soll offensichtliche Beziehungen erklären. Erhalte zugängliche Namen, hilfreiche Feldbeschriftungen, Einheiten, Fehler und Risikohinweise.

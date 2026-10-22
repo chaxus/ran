@@ -58,6 +58,9 @@ Associate feedback with the object acted on. A “Copied” acknowledgment besid
 to associate than an unrelated global notification. Show it only after clipboard success; handle
 rejection locally, preserving button geometry and focus. Use a toast for changes beyond the current
 object or when local feedback would not be noticed. Do not announce every streamed character.
+Bind async feedback to the operation's source snapshot. If code changes while Copy is pending,
+the older completion must not mark the new content “Copied”; clear or identify stale feedback.
+Verify delayed success and failure across an intervening stream update, not just an isolated delay.
 
 For live logs or streaming results, follow only while the reader is at the latest content. Scrolling
 away suspends following; a “Jump to latest” action restores it without stealing reading position.

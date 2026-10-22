@@ -1,0 +1,68 @@
+--- a/surface/index.html
++++ b/surface/index.html
+@@ -1,9 +1,9 @@
+ <!doctype html>
+-<html lang="en">
++<html lang="de">
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width,initial-scale=1" />
+-    <title>Workspace settings</title>
++    <title>Benachrichtigungen – Projekteinstellungen</title>
+     <link rel="stylesheet" href="/surface/shared.css" />
+     <link rel="stylesheet" href="/surface/style.css" />
+   </head>
+--- a/surface/app.js
++++ b/surface/app.js
+@@ -4,7 +4,9 @@
+ const back = '<a data-return="project" href="#project">Back to project</a>';
+ function render() {
+   if (location.hash === '#project' || location.hash === '#workspace') {
+-    app.innerHTML = `<main>${location.hash === '#project' ? '<nav><a href="#workspace">Back to workspace</a></nav>' : ''}<h1>${location.hash === '#project' ? 'Project' : 'Workspace'}</h1><a href="#detail">Open settings</a></main>`;
++    const german = scenario === '03-label';
++    const project = location.hash === '#project';
++    app.innerHTML = `<main>${project ? `<nav><a href="#workspace">${german ? 'Zurück zum Arbeitsbereich' : 'Back to workspace'}</a></nav>` : ''}<h1>${project ? (german ? 'Projekteinstellungen' : 'Project') : (german ? 'Arbeitsbereich' : 'Workspace')}</h1><a href="#detail">${german ? 'Benachrichtigungen öffnen' : 'Open settings'}</a></main>`;
+     return;
+   }
+   let content = '';
+@@ -40,5 +42,10 @@
+     };
+   }
+ }
+-window.addEventListener('hashchange', render);
++window.addEventListener('hashchange', () => {
++  render();
++  const heading = app.querySelector('h1');
++  heading.tabIndex = -1;
++  heading.focus();
++});
+ render();
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -12,10 +12,22 @@
+ }
+ .return-label {
+   display: block;
+-  max-width: 160px;
+-  overflow: hidden;
+-  text-overflow: ellipsis;
+-  white-space: nowrap;
++  white-space: normal;
++}
++nav a,
++main > a {
++  display: inline-flex;
++  align-items: center;
++  min-height: 44px;
++  max-width: 100%;
++  overflow-wrap: anywhere;
++}
++nav {
++  flex-wrap: wrap;
++}
++a:focus-visible {
++  outline: 2px solid currentColor;
++  outline-offset: 2px;
+ }
+ .premium {
+   padding: 24px;

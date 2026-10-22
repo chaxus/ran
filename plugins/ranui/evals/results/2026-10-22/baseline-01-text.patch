@@ -1,0 +1,27 @@
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -1,11 +1,19 @@
+ /* Host styles: task-specific polish belongs here. */
++.setting {
++  align-items: center;
++  gap: 16px;
++  padding-inline: 0;
++}
++.setting > r-button {
++  align-self: center;
++}
++.setting > div {
++  display: grid;
++  gap: 8px;
++}
+ .setting h2,
+ .setting p {
+-  width: 100%;
+-}
+-.setting .description-text {
+-  position: relative;
+-  left: 8px;
++  margin: 0;
+ }
+ .detail-nav {
+   display: flex;

@@ -1,0 +1,39 @@
+/* Host styles: task-specific polish belongs here. */
+.setting h2,
+.setting p {
+  width: 100%;
+}
+.setting .description-text {
+  position: relative;
+  left: 8px;
+}
+.detail-nav {
+  display: flex;
+}
+.return-label {
+  display: block;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.premium {
+  padding: 24px;
+  border: 1px solid #bcc5d0;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px #1a294433;
+  background: linear-gradient(140deg, #fff, #e6ecfa);
+}
+.premium .frame {
+  padding: 20px;
+  margin: 12px 0;
+  border: 1px solid #bcc5d0;
+  border-radius: 16px;
+  box-shadow: 0 8px 22px #1a29442b;
+  background: #ffffffb8;
+}
+pre {
+  white-space: pre-wrap;
+  overflow: hidden;
+  user-select: none;
+}

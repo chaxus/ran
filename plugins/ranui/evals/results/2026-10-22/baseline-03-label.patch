@@ -1,0 +1,42 @@
+--- a/surface/index.html
++++ b/surface/index.html
+@@ -1,9 +1,9 @@
+ <!doctype html>
+-<html lang="en">
++<html lang="de">
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width,initial-scale=1" />
+-    <title>Workspace settings</title>
++    <title>Benachrichtigungen</title>
+     <link rel="stylesheet" href="/surface/shared.css" />
+     <link rel="stylesheet" href="/surface/style.css" />
+   </head>
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -12,10 +12,21 @@
+ }
+ .return-label {
+   display: block;
+-  max-width: 160px;
+-  overflow: hidden;
+-  text-overflow: ellipsis;
+-  white-space: nowrap;
++  white-space: normal;
++  overflow-wrap: anywhere;
++}
++nav a:has(.return-label) {
++  display: inline-flex;
++  align-items: center;
++  min-width: 0;
++  min-height: 44px;
++}
++a:focus-visible {
++  outline: 2px solid currentColor;
++  outline-offset: 2px;
++}
++h1 {
++  overflow-wrap: anywhere;
+ }
+ .premium {
+   padding: 24px;

@@ -1,0 +1,114 @@
+--- a/surface/app.js
++++ b/surface/app.js
+@@ -24,19 +24,31 @@
+       '<h1>Workspace settings</h1><section class="setting"><div><h2>Activity</h2><p>Workspace updates and notifications.</p></div><r-button>Manage</r-button></section>';
+   if (scenario === '06-code')
+     content =
+-      '<h1>Quick start</h1><section class="code-frame"><button id="copy">Copy code</button><button id="stream">Receive update</button><pre tabindex="0"><code id="source"></code></pre></section>';
++      '<h1>Quick start</h1><section class="code-frame" aria-label="Quick start code"><div class="code-actions"><button id="copy">Copy code</button><button id="stream">Receive update</button><span id="copy-status" role="status"></span></div><pre tabindex="0" aria-label="Code sample"><code id="source"></code></pre></section>';
+   app.innerHTML = `<main>${content}</main>`;
+   if (scenario === '06-code') {
+     let raw = payload;
+     const source = document.querySelector('#source');
+-    const display = () => {
+-      source.textContent = raw.replace(/\t/g, '  ').trim();
++    const text = document.createTextNode(raw);
++    source.append(text);
++    const copy = document.querySelector('#copy');
++    const status = document.querySelector('#copy-status');
++    copy.onclick = async () => {
++      copy.disabled = true;
++      status.textContent = '';
++      try {
++        await navigator.clipboard.writeText(raw);
++        status.textContent = 'Copied';
++      } catch {
++        status.textContent = 'Copy failed. Try again or select the code.';
++      } finally {
++        copy.disabled = false;
++      }
+     };
+-    display();
+-    document.querySelector('#copy').onclick = () => navigator.clipboard.writeText(source.textContent);
+     document.querySelector('#stream').onclick = () => {
+       raw += streamPayload;
+-      display();
++      text.appendData(streamPayload);
++      status.textContent = '';
+     };
+   }
+ }
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -32,8 +32,67 @@
+   box-shadow: 0 8px 22px #1a29442b;
+   background: #ffffffb8;
+ }
+-pre {
+-  white-space: pre-wrap;
+-  overflow: hidden;
+-  user-select: none;
++.code-frame {
++  padding: 0;
++  border: 0;
++  border-radius: 0;
++  background: transparent;
+ }
++.code-actions {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  gap: var(--ran-space-2, 8px);
++  margin-bottom: var(--ran-space-3, 12px);
++}
++.code-actions button {
++  min-height: 40px;
++  padding: 8px 12px;
++  border: 1px solid #bcc5d0;
++  border-radius: var(--ran-radius-sm, 6px);
++  color: inherit;
++  background: white;
++  font-size: var(--ran-text-button-size, 14px);
++  font-weight: var(--ran-text-button-weight, 500);
++  line-height: 1;
++}
++.code-actions button:hover {
++  background: #f0f2f5;
++}
++.code-actions button:disabled {
++  cursor: wait;
++  opacity: 0.6;
++}
++#copy-status {
++  flex-basis: 100%;
++  color: #54585e;
++  font-size: var(--ran-text-label-2, 13px);
++}
++#copy-status:empty {
++  display: none;
++}
++.code-frame pre {
++  margin: 0;
++  padding: var(--ran-space-4, 16px);
++  max-height: 60vh;
++  white-space: pre;
++  overflow: auto;
++  user-select: text;
++  tab-size: 4;
++  background: white;
++  font-family: var(--ran-font-mono, ui-monospace, SFMono-Regular, Consolas, monospace);
++  font-size: var(--ran-text-label-1, 14px);
++  line-height: 1.6;
++}
++.code-frame code {
++  font: inherit;
++}
++.code-frame :focus-visible {
++  outline: 2px solid #1755a2;
++  outline-offset: 2px;
++}
++@media (pointer: coarse) {
++  .code-actions button {
++    min-height: 44px;
++  }
++}

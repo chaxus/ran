@@ -1,0 +1,24 @@
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -37,3 +37,12 @@
+   overflow: hidden;
+   user-select: none;
+ }
++
++/* Compact settings row: the row owns its inset and the final text gap. */
++.setting {
++  padding: var(--ran-space-4, 16px);
++  column-gap: var(--ran-space-4, 16px);
++}
++.setting p {
++  margin-bottom: 0;
++}
+--- a/surface/shared.css
++++ b/surface/shared.css
+@@ -73,3 +73,6 @@
+     padding: 16px;
+   }
+ }
++
++/* Shared style follow-up after prior review. */
++.setting { padding: 24px; }

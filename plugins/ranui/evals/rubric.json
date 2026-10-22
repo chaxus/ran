@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "frozenBeforeRuns": true,
+  "01-text": "Nonzero visible heading and description text Ranges each align within 0.5 CSS pixels of the independent main/row content inset origin; content/actions retained. Hiding or drifting both siblings fails.",
+  "02-back": "At most one contextual return command is visible in detail; distinguish breadcrumbs with explicit semantics. Both destinations remain reachable through the route hierarchy. Pointer and keyboard activation reach project then workspace and return to detail.",
+  "03-label": "At 320 CSS pixels meaningful destination wording has nonzero visible glyph rectangles inside the viewport and horizontal/vertical ancestor clips, without page overflow. Pointer and keyboard navigation round trips work. Shortened wording requires independent semantic review.",
+  "04-effects": "Nested decorative frames and redundant shadows are removed. Mechanical count supplies evidence, with independent visual judgment required for calm hierarchy and justified remaining effects.",
+  "05-freshness": "Capture current runtime after prior capture then shared-style mutation. Machine checks independently verify runtime/media/scope binding, including alternative per-file and actual loaded-resource hashes. Independent report review separates automation, agent judgment and observed human acceptance; no prescribed prose is scored.",
+  "06-code": "Clipboard and underlying selected Range preserve tabs, blank lines and final newline before and after streamed append. Native mouse selection works without selection-disabled ancestors; Chromium may omit one terminal newline from Selection.toString(). Long source lines scroll inside code without viewport overflow."
+}

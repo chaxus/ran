@@ -5,6 +5,7 @@ Start with the owner of the change; do not load every reference or introduce a s
 | Work                                                              | Read first                                                                                                                                          |
 | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Visual hierarchy, composition, tokens and craft                   | [ranui design standard](packages/ranui/docs/DESIGN.md)                                                                                              |
+| Browser proof, evidence freshness and acceptance status           | [acceptance contract](packages/ranui/docs/ACCEPTANCE.md)                                                                                            |
 | Input, focus, drafts, feedback and recovery                       | [interaction standard](packages/ranui/docs/INTERACTION.md)                                                                                          |
 | Optional batch/queue, settings, account/data or revision workflow | [workflow patterns](packages/ranui/docs/WORKFLOW_PATTERNS.md), only when relevant                                                                   |
 | Unsure which reference owns a decision                            | Short [interface index](packages/ranui/docs/INTERFACE_GUIDE.md)                                                                                     |
@@ -16,6 +17,11 @@ Start with the owner of the change; do not load every reference or introduce a s
 `packages/ranui/theme/tokens.less` and `packages/ranui/theme/dark.less` own foundation tokens. Product semantic aliases may derive from them;
 do not create a parallel palette or copy one application's dimensions into library defaults.
 The index routes decisions; workflow recipes describe host responsibilities, not extra ranui APIs.
+
+Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
+Keep copy that adds a decision, constraint or consequence; preserve accessible names, field labels,
+units, errors and risk disclosures. [DESIGN's wording rules](packages/ranui/docs/DESIGN.md#words-are-part-of-the-interface)
+own this principle; do not remove useful guidance merely to make a screenshot quieter.
 
 For visual changes, use the [UI task lookup](packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup)
 to find exact owner sections and an evidence brief.

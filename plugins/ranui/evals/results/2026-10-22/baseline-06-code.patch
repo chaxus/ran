@@ -1,0 +1,99 @@
+--- a/surface/app.js
++++ b/surface/app.js
+@@ -24,19 +24,31 @@
+       '<h1>Workspace settings</h1><section class="setting"><div><h2>Activity</h2><p>Workspace updates and notifications.</p></div><r-button>Manage</r-button></section>';
+   if (scenario === '06-code')
+     content =
+-      '<h1>Quick start</h1><section class="code-frame"><button id="copy">Copy code</button><button id="stream">Receive update</button><pre tabindex="0"><code id="source"></code></pre></section>';
++      '<h1>Quick start</h1><section class="code-frame" aria-label="Quick start code"><div class="code-actions"><button id="copy" type="button">Copy code</button><button id="stream" type="button">Receive update</button><span id="copy-status" role="status"></span></div><pre tabindex="0" aria-label="Code sample, scroll horizontally for long lines"><code id="source"></code></pre></section>';
+   app.innerHTML = `<main>${content}</main>`;
+   if (scenario === '06-code') {
+     let raw = payload;
+     const source = document.querySelector('#source');
+-    const display = () => {
+-      source.textContent = raw.replace(/\t/g, '  ').trim();
++    const text = document.createTextNode(raw);
++    source.append(text);
++    const status = document.querySelector('#copy-status');
++    let copyAttempt = 0;
++    document.querySelector('#copy').onclick = async () => {
++      const attempt = ++copyAttempt;
++      status.textContent = '';
++      try {
++        await navigator.clipboard.writeText(raw);
++        if (attempt === copyAttempt) status.textContent = 'Copied';
++      } catch {
++        if (attempt === copyAttempt)
++          status.textContent = 'Copy failed. Select the code and copy manually.';
++      }
+     };
+-    display();
+-    document.querySelector('#copy').onclick = () => navigator.clipboard.writeText(source.textContent);
+     document.querySelector('#stream').onclick = () => {
++      copyAttempt++;
+       raw += streamPayload;
+-      display();
++      text.appendData(streamPayload);
++      status.textContent = '';
+     };
+   }
+ }
+--- a/surface/style.css
++++ b/surface/style.css
+@@ -32,8 +32,53 @@
+   box-shadow: 0 8px 22px #1a29442b;
+   background: #ffffffb8;
+ }
+-pre {
+-  white-space: pre-wrap;
++.code-frame {
++  padding: 0;
++  border-color: var(--ran-color-border, #ddd);
+   overflow: hidden;
+-  user-select: none;
+ }
++.code-actions {
++  display: flex;
++  align-items: center;
++  flex-wrap: wrap;
++  gap: var(--ran-space-2, 8px);
++  padding: var(--ran-space-4, 16px);
++  border-bottom: 1px solid var(--ran-color-border, #ddd);
++}
++.code-actions button {
++  min-height: 44px;
++  padding: 8px 12px;
++  border: 1px solid var(--ran-color-border, #ccc);
++  border-radius: var(--ran-radius-sm, 6px);
++  background: var(--ran-color-bg-elevated, #fff);
++  color: inherit;
++  font-size: var(--ran-text-button-size, 14px);
++  font-weight: var(--ran-text-button-weight, 500);
++}
++.code-actions button:hover {
++  background: var(--ran-color-bg-hover, #f2f3f5);
++}
++.code-actions button:active {
++  background: var(--ran-color-bg-subtle, #e9ebee);
++}
++#copy-status {
++  color: var(--ran-color-text-secondary, #54585e);
++  font-size: var(--ran-text-copy-2, 14px);
++}
++.code-frame pre {
++  margin: 0;
++  padding: var(--ran-space-4, 16px);
++  white-space: pre;
++  overflow: auto;
++  user-select: text;
++  tab-size: 2;
++  font-family: var(--ran-font-mono, ui-monospace, SFMono-Regular, Consolas, monospace);
++  font-size: var(--ran-text-copy-2, 14px);
++  line-height: var(--ran-line-height, 1.6);
++  background: var(--ran-color-bg-subtle, #fafbfc);
++}
++.code-actions button:focus-visible,
++.code-frame pre:focus-visible {
++  outline: 2px solid var(--ran-color-primary, #1755a2);
++  outline-offset: -3px;
++}

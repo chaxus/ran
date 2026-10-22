@@ -6,6 +6,8 @@ on:
     paths:
       - "packages/docs/**"
       - "packages/ranui/**"
+      - "plugins/ranui/**"
+      - ".agents/plugins/**"
       - "packages/ranuts/**"
       - "packages/ranview/**"
       - "packages/im/**"
@@ -18,6 +20,8 @@ on:
     paths:
       - "packages/docs/**"
       - "packages/ranui/**"
+      - "plugins/ranui/**"
+      - ".agents/plugins/**"
       - "packages/ranuts/**"
       - "packages/ranview/**"
       - "packages/im/**"
@@ -72,6 +76,10 @@ jobs:
 
       - name: Build ranuts
         run: pnpm --filter ranuts run build
+
+      - name: Verify agent-evaluation browser oracles (no model calls)
+        if: matrix.browser == 'chromium'
+        run: pnpm verify:agent-evals
 
       - name: Build ranui
         run: pnpm --filter ranui run build

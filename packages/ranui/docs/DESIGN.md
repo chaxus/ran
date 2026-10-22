@@ -29,66 +29,21 @@ Conflict resolution order: **user goals → verified evidence → this file → 
 
 ## What is machine-checked
 
-Nine of the rules below are enforced by `verify:design`, which CI runs on every pull
-request — **for this library and for every surface built on it**. `packages/docs` and
-`packages/site` run the same checker over their own stylesheets:
-
-```sh
-tsx ../ranui/bin/verify-design-rules.ts --roots styles --tokens ../ranui/theme/tokens.less --baseline design-baseline.json
-```
-
-A design system whose rules stop at the library boundary is a design system the product
-does not actually follow. Pointing the checker at the sites found 298 violations that had
-never been looked at — invented spacing values and raw colours in stylesheets written
-against this very system. Vendored third-party CSS is excluded with `--ignore`: its
-metrics are not our debt to clear. Everything else in this file is still binding — it is simply not
-mechanically decidable, so it relies on review and on rendering the result.
-
-| Rule                               | Enforces                                                                                   | Section |
-| ---------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
-| `dark-unsafe-fallback`             | a component token's colour fallback points at a token that flips, not a light-only literal | §1      |
-| `bare-colour`                      | raw colour literals do not appear outside a token fallback                                 | §1      |
-| `spacing-scale`                    | `padding` / `margin` / `gap` come from `--ran-space-*`                                     | §2      |
-| `sizing-scale`                     | intrinsic dimensions never borrow from the spacing scale                                   | §2      |
-| `mouse-only-drag`                  | a drag loop has a Pointer Events path, so it works on touch                                | §8      |
-| `hidden-inert`                     | a `:host` display rule does not silently disable the `hidden` attribute                    | §9      |
-| `undefined-token-fallback`         | a component token's fallback names a token the theme actually declares                     | §1      |
-| `built-then-queried`               | a component holds the elements it built, instead of searching its own shadow tree for them | §9      |
-| `shadow-mount-outside-constructor` | a component's shadow tree is built in its constructor, once                                | §9      |
-
-Existing violations are recorded per file in
-[design-rule-baseline.json](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/design-rule-baseline.json) (repository checkout only) and act as a **ratchet**: a count
-that rises fails as a new violation, and a count that falls fails until it is lowered, so a
-fix cannot silently regress later. The baseline is a record of debt, not permission — the
-target for every entry is zero.
-
----
+`pnpm -F ranui verify:design` enforces nine source rules: dark-safe and declared token
+fallbacks, semantic colors, spacing/sizing scales, Pointer Events, working `hidden`,
+held builder references and constructor-only shadow mounting. Repository CI also checks its
+configured consumer surfaces. Its per-file baseline is a debt ratchet, never permission to
+add violations. Static checks do not prove composition or interaction.
+See [CODING](./CODING.md#what-is-machine-checked) for engineering checks and
+[ACCEPTANCE](./ACCEPTANCE.md) for actual browser evidence and decision authority.
 
 ## Looking at the whole system at once
 
-`pnpm -F ranui design:bundle` builds a browsable design-system bundle — one card per
-component, plus colour, typography, spacing, radius/elevation and motion — for upload to
-[Claude Design](https://claude.ai/design) with the `DesignSync` tool.
-
-```sh
-pnpm -F docs build && pnpm -F docs preview   # terminal 1 — supplies the rendered components
-pnpm -F ranui design:bundle                  # terminal 2 — writes packages/ranui/design-bundle/
-```
-
-**Every card is real rendered output, never a drawing of one.** The docs site is opened in
-Chromium, each component's shadow tree is serialized into a Declarative Shadow DOM
-template, and the stylesheets that tree adopted are inlined beside it — so a card renders
-with JavaScript disabled and without ranui on the page, and cannot claim an appearance the
-component does not have. Token values are read back per theme with `getComputedStyle`
-rather than copied out of the stylesheets, so a swatch cannot show a value the system no
-longer resolves to.
-
-A component whose docs page has no live `<ran-demo>` gets no card, and the script names
-it. Seven currently qualify — `attachments`, `conversation`, `preview`, `reasoning`,
-`router`, `tool-card`, `voice-button` — which is worth fixing in the docs, not in the
-bundler: a component nobody can see rendered is a component nobody can review.
-
----
+`pnpm -F ranui design:bundle` captures live documentation components and resolved light/dark
+tokens into a browsable bundle. Start the docs preview first (`pnpm -F docs build` then
+`pnpm -F docs preview`). Cards are rendered ranui output, not drawings of imagined APIs.
+The command reports components missing a live demo. Use the matching installed version;
+a reference bundle is not evidence that the host application passed acceptance.
 
 ## 1. Color — a state ladder, not a palette
 
@@ -139,8 +94,6 @@ Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layer
 - Never hard-code a hex/rgb in a component for a value that should follow the theme.
 - A component token's fallback must point at a **token that flips** (`var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`, `var(--ran-color-text, …)`), never a light-only literal — otherwise it breaks in dark mode.
 
----
-
 ## 2. Spacing — a limited, rhythmic scale
 
 A **4px base unit** with **nine values** only: `--ran-space-1..24` → `4, 8, 12, 16, 24, 32, 40, 64, 96`px.
@@ -152,8 +105,6 @@ A **4px base unit** with **nine values** only: `--ran-space-1..24` → `4, 8, 12
 - `32–40px` between sections.
 
 **Rule:** pick a value from the scale. Don't invent `20px`/`28px` — a limited set is what creates the page's rhythm.
-
----
 
 ## 3. Typography — choose a role, not a size
 
@@ -172,8 +123,6 @@ Decide by **role**; the role fixes font, size, weight, line-height. Each row is 
 **Rule:** ask "what role is this text?" (heading / label / copy / button) — the style follows. Don't pick raw px per instance.
 
 **A role is a tool, not a law.** Transient/decorative UI that doesn't map to any role (an active-link weight bump, a player gesture-flash overlay) keeps its own one-off component token instead of being forced into the nearest role — see `r-link`'s `--ran-link-active-font-weight` and `r-player`'s `--ran-player-gesture-flash-font-weight`.
-
----
 
 ## 4. Radius & elevation
 
@@ -201,30 +150,12 @@ A floating overlay must **never** fall back to `--ran-shadow-elevated` (the card
 
 Override a tier globally (set `--ran-z-dropdown` on `:root`) or per component (`--ran-dropdown-host-z-index`, `--ran-modal-root-z-index`, `--ran-message-z-index`) — never reach for `!important`. An overlay open while the page scrolls must re-run its placement on `scroll`/`resize` so it tracks its trigger (e.g. inside a sticky header).
 
-**Consuming a ranui overlay inside your own page chrome.** The ladder (1000–1200) is deliberately chosen to sit far above any realistic host-page chrome (nav bars, sidebars, backdrops are typically in the tens — VitePress's own is nav:30/backdrop:50/sidebar:60). Two component-side facts follow from that gap, and change what a host page needs to do:
-
-- **A portaled overlay never needs the host's help.** `r-message` and any panel that moves itself to `document.body` (`r-select`, `r-popover` — see the portaling pitfall above) compares its own z-index directly against the host's root-level chrome. Since 1000+ already beats anything in the tens, it wins with zero extra CSS on the host's side.
-- **A non-portaled fixed overlay (`r-modal`'s dialog stays inside its own shadow DOM) only escapes as far as its nearest ancestor stacking context.** If a host wraps embedded content in anything that creates one — `isolation: isolate`, `opacity < 1`, `transform`, `filter`, `will-change` — a `position: fixed` descendant is trapped inside it for stacking purposes (its _layout_ still escapes to the viewport; only _paint order_ is trapped). The wrapper then needs its own elevated `z-index` for the trapped content to climb back out.
-
-The mistake to avoid: **don't promote the wrapper unconditionally to fix that.** Giving a wrapper `position: relative; z-index: <high>` at all times elevates _everything in it_ — including static, non-overlay content — above the host's own chrome for its entire scroll lifetime, not just while an overlay is actually open. On a scrollable page that reliably paints ordinary content over a sticky nav/header the moment their boxes happen to overlap (ranui's own docs site shipped exactly this: every `<Demo>` wrapper carried a blanket `z-index: 100` "just in case," so a 100%-static example — no overlay in it at all — painted over the sticky nav on ordinary scroll). Scope the elevation to exactly when it's needed instead:
-
-```css
-/* Isolate unconditionally (cheap — no z-index/position means no promotion
-   of its own, so it costs nothing while nothing inside is elevated) */
-.host-wrapper {
-  isolation: isolate;
-}
-/* Escalate only while a real overlay is actually open, via a live selector
-   on its reflected attribute — never a blanket rule "in case" one might open */
-.host-wrapper:has(r-modal[open]) {
-  position: relative;
-  z-index: 100; /* comfortably above the host's own chrome range */
-}
-```
-
-`:has()` works here specifically because `open` is a real reflected HTML attribute (`hasAttribute`/`setAttribute`, not just a JS property) — check the same for any other component before relying on it in a selector.
-
----
+**Host stacking contexts:** a body-portaled overlay compares directly with root chrome;
+it usually needs no wrapper elevation. A non-portaled fixed overlay remains trapped in its
+ancestor stacking context (`isolation`, `transform`, `opacity`, `filter`, `will-change`).
+Raise an enclosing wrapper only while that overlay actually paints, including its closing
+transition. A blanket elevated wrapper promotes ordinary content above sticky chrome too.
+Verify reflected open/closing attributes against the component API before using selectors.
 
 ## 5. Motion — prefer none
 
@@ -263,16 +194,12 @@ transition: var(--ran-checkbox-tick-transition, transform 0.1s cubic-bezier(0.71
 transition: var(--ran-input-transition, none);
 ```
 
----
-
 ## 6. Content — copy is part of the system
 
 - **Buttons:** name the outcome. Include the object when context does not establish it: "Deploy project", "Delete member". In a clearly named object or dialog, "Save" or "Delete" is sufficient; avoid generic "OK". See [contextual wording](#words-are-part-of-the-interface).
 - **Errors:** say **what happened**, then **how to fix it**. ✅ "Build failed: the bundle exceeds the size limit. Reduce it or raise the limit." ❌ "Operation failed, please try again."
 - **Confirmations / toasts:** state the completed **change**. ✅ "Project deleted". ❌ "Operation successful". Show completion feedback only after the operation is confirmed.
 - Be specific; every sentence should remove guesswork, not add it.
-
----
 
 ## 7. Accessibility — the system serves everyone
 
@@ -282,55 +209,20 @@ transition: var(--ran-input-transition, none);
 - **Full keyboard navigation** — nothing is mouse-only.
 - Respect `prefers-reduced-motion` and `prefers-color-scheme`.
 
----
-
 ## 8. Input & viewport — mobile and desktop, both
 
-Every interactive component must work with a mouse **and** with touch, at a narrow phone
-width **and** a wide desktop width. Neither is a secondary target — do not ship a component
-that only works on one.
-
-- **Drag/slider/gesture interaction uses Pointer Events, never mouse-only.** Bind
-  `pointerdown`/`pointermove`/`pointerup`(`/pointercancel`) — never `mousedown`/`mousemove`/`mouseup`
-  alone — so the same handler drives mouse, touch, and pen. Pair it with `touch-action: none` in
-  CSS on the exact drag surface (not a larger wrapper) so the browser doesn't also try to scroll
-  the page underneath the drag. If the CSS sets `touch-action: none` on an element, that element
-  **must** have a pointer/touch handler wired to it — CSS signaling touch support with no JS behind
-  it is a broken component, not a harmless no-op (this was shipped and fixed once already, see
-  `changelogs/` around `r-colorpicker`/`r-progress`). Canonical references: `components/player/core/gestures.ts`
-  (touch-only gestures scoped via `pointerType === 'touch'`), `components/mermaid/index.ts` (pan/zoom),
-  `components/scratch/index.ts`, `components/colorpicker/index.ts`, `components/progress/index.ts`.
-- **A hover-only affordance needs a tap fallback.** `trigger="hover"` on an overlay must degrade to
-  click/tap on a touch device — see `r-select` / `r-popover`'s `.includes('hover') && !isMobile()`
-  gate (`isMobile()` from `ranuts/utils`). Never ship an interaction that is reachable only via
-  `:hover` or `mouseenter` with no click/tap equivalent.
-- **Prefer viewport-relative sizing over inventing a breakpoint.** `%`, `min()`, `max()`, `clamp()`,
-  `vw`/`vh` (e.g. `r-modal`'s `min(560px, calc(100vw - 32px))`) let a component self-adapt to a
-  narrow screen without a `@media` query at all — reach for these first. There is currently **no
-  shared breakpoint token** in `theme/tokens.less`; the one existing viewport `@media` query
-  (`components/button/index.less`, gating the sticky `:hover` state behind `min-width: 1024px` so
-  touch devices don't get a stuck hover) is a local, hardcoded literal. If a component genuinely
-  needs a hard breakpoint, don't silently invent another one-off px value — flag it so a shared
-  token can be introduced instead of every component picking its own number.
-- **Never hide the only way to do something on mobile** — see the "Hiding navigation/affordances
-  on mobile" pitfall below; reflow instead of `display:none`.
-- **A measured position/size is only correct until the next reflow.** Anything computed from
-  `getBoundingClientRect()` — a portaled panel's coordinates, a sliding indicator's offset — goes
-  stale on a resize, a container reflow, or (for a portaled panel) a scroll, none of which are the
-  interaction that originally triggered the measurement. A body-portaled panel needs `scroll`
-  (capture phase, for nested scroll containers) + `resize` listeners while open (both `r-select`
-  and `r-popover` get them from `FloatingController`, which is where that lives now); an in-flow
-  element needs a
-  `ResizeObserver` on the container that actually drives the measurement, not a plain `window`
-  `resize` (`r-tabs`'s `_navResizeObserver` on `_nav`, re-running `setTabLine`). Narrow-viewport
-  testing (see the checklist) exercises the _initial_ layout at that width — it does not exercise
-  _resizing into_ it, which is where this class of bug actually shows up.
-- **Verify on both inputs before shipping**, not just both color schemes: click-drag with a mouse
-  _and_ touch-drag (or the Chrome DevTools device toolbar's touch emulation) on anything with
-  `touch-action` in its CSS; tab/click through anything with `trigger="hover"`; drag the browser
-  window narrower/wider (not just load at a fixed width) on anything with a measured position.
-
----
+- Support mouse, keyboard and touch at narrow and wide widths. Reflow controls instead of
+  hiding the only route to an action. A hover affordance needs a click/tap alternative.
+- Drags use Pointer Events including cancellation; scope `touch-action` to the actual drag
+  surface and pair it with a real handler. Preserve ordinary scrolling elsewhere.
+- Prefer content/viewport-relative bounds (`min()`, `max()`, `clamp()`) to arbitrary
+  breakpoints. The foundation currently declares no shared breakpoint token; introduce
+  a justified shared role if repeated library needs emerge.
+- A measured position becomes stale after resize, container reflow or scroll. Exercise
+  resizing into a narrow layout, not only loading there. Overlay placement must track its
+  trigger while open. [CODING](./CODING.md#3-state-and-ownership) owns lifecycle mechanics.
+- Test actual pointer/touch gestures, hover fallback and keyboard routes where affected;
+  checking two color schemes does not establish input parity.
 
 ## 9. Components — how to apply the system
 
@@ -343,148 +235,45 @@ that only works on one.
 - **Typography ships with the system**: `import 'ranui/fonts'` (or link `dist/fonts/fonts.css`) self-hosts Geist Sans + Geist Mono (variable, OFL-licensed) — the canonical faces behind `--ran-font-family` / `--ran-font-mono`. Without it the stacks fall back to system fonts.
 - See [THEME_STYLE_SYSTEM_DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/THEME_STYLE_SYSTEM_DESIGN.md) for the repository-only token architecture reference and [style-tokens-public.md](./style-tokens-public.md) for the generated per-component token list.
 
----
-
 ### A fallback must name a token that exists
 
-`var(--ran-component-thing, var(--ran-color-error))` looks correct and does nothing:
-`--ran-color-error` was never declared — the danger colour is `--ran-color-danger`. A `var()`
-naming an undeclared property resolves to _nothing_, the whole declaration is dropped, and
-the element silently keeps whatever it inherited. For a colour that is usually the body text
-colour, which looks almost right, so nothing ever looks broken enough to investigate.
-
-Four error states shipped invisible this way before `verify:design` grew the rule, and it
-immediately found three more (`--ran-text-copy-3`, which does not exist either — the 12px
-step is `--ran-text-label-3`).
-
-The rule reads the declared names out of `theme/tokens.less`, so adding a token needs no
-edit here.
+Check declared tokens, including fallbacks, against the installed theme. For example,
+`--ran-color-danger` exists; a plausible `--ran-color-error` does not. An undefined `var()`
+can silently discard the entire declaration. [CODING §5](./CODING.md#5-styles) owns enforcement.
 
 ### `hidden` must keep working
 
-A component that sets `display` on `:host` **must** also carry:
-
-```less
-:host([hidden]) {
-  display: none;
-}
-```
-
-`[hidden] { display: none }` is a **user-agent** rule, and any author `display` on `:host`
-outranks it. Without the guard, `element.hidden = true` leaves the element on screen and
-nothing reports an error — which is how nineteen components in this library shipped with
-`hidden` doing nothing at all. `verify:design` enforces it because the failure is silent.
+An author `:host` display rule must preserve `:host([hidden]) { display: none; }`.
+See [CODING §5](./CODING.md#5-styles); hiding optional content must also remove accidental gaps.
 
 ### Hold what you build
 
-A component builds its shadow tree once, in the constructor. Every element in it comes back
-from the builder, so capture it there:
-
-```ts
-const body = createRef<HTMLDivElement>();
-this._shadowDom.appendChild(Div().class('ran-thing').children(Div().class('ran-thing-body').ref(body)).build());
-this._body = shadowPart(body, 'body');
-```
-
-Not `root.querySelector('.ran-thing-body')!`. The query re-derives what the builder already
-returned, and it re-derives it through a **string**: rename the class in `index.less` and the
-builder and the query drift apart with nothing to catch it. `querySelector` then returns
-`null`, the `!` waves it through, and the failure surfaces later as a property read on
-nothing — far from the rename that caused it. `shadowPart` throws at construction instead,
-naming the field.
-
-This holds because the tree is built **once, in the constructor**, which `verify:design`
-also enforces. `appendChild` is unconditional: a second mount from `connectedCallback` would
-add a second copy on every reconnect, and its refs would replace the ones the component is
-already driving.
-
-It is fair to ask why the tree is not reused from the server-rendered markup instead. It
-cannot be. Server rendering does emit a declarative shadow root — the `im` demo page ships
-nine of them — but every component attaches a **closed** one, so `host.shadowRoot` is `null`,
-`ensureShadowRoot` reaches `attachShadow`, and attaching to an element that already has a
-declarative shadow root **removes that root's children**. Measured in a browser:
-
-| `shadowrootmode` | `host.shadowRoot` | children after `attachShadow` |
-| ---------------- | ----------------- | ----------------------------- |
-| `open`           | the root          | kept                          |
-| `closed`         | `null`            | **cleared**                   |
-
-So the server-rendered tree paints the first frame and is then replaced by an identical
-client-built one. Reuse would require `mode: 'open'`, and with it the queries this section
-exists to remove — refs cannot capture markup the component did not build. Closed shadow
-roots are the deliberate choice here, so the factory always runs and the refs are always
-filled.
-
-The exception is a container whose children arrive **after** the build — options rendered
-from data, nodes a third-party library injects. No ref could have captured those, so the live
-query is the only source. Mark it on the line above and say what puts them there:
-
-```ts
-// runtime children: r-dropdown-item elements are appended from `options` as it changes.
-return Array.from(this._dropdown.querySelectorAll('r-dropdown-item'));
-```
-
-The marker needs a reason after the colon; an empty one does not silence the rule.
-
----
+Build shadow structure once and retain its references; do not rediscover it through selectors.
+[CODING §2](./CODING.md#2-the-component-skeleton) owns construction, runtime-child exceptions
+and SSR implementation. These are engineering requirements, not extra visual recipes.
 
 ## 10. Component token naming
 
-Component-scoped CSS custom properties (the `var(--ran-{component}-…, fallback)` hooks in each
-`index.less`) must follow:
+Use `--ran-{component}-{element}[-{state}]-{property}`. Keep the existing component prefix;
+name the most specific distinct UI part, not its full DOM/BEM path. Keep track/fill as
+separate parts; drop wrapper/position segments that add no identity. State is optional and
+must correspond to an independently overridable interaction state. Property names retain
+their CSS meaning. Aim for at most four semantic segments after `ran`, without collapsing
+distinct override points merely to shorten a name.
 
-```
---ran-{component}-{element}[-{state}]-{property}
-```
-
-- `component` — the existing prefix (`btn`, `select`, `player`, …), unchanged.
-- `element` — the single most specific **named UI part** (`progress`, `volume`, `tip`, `dot`,
-  `speed`). Drop segments that only describe **position/layout inside an already-named parent**
-  and add no new identity (`bottom`, `left`, `right`, `align`, `content` as a bare wrapper). Keep
-  a segment when it names a genuinely distinct visual layer — e.g. progress's track vs fill are
-  two different things, so they keep two different element names (`track` / `fill`), just short
-  ones instead of `wrap` / `wrap-value`.
-- `state` — optional, only for a real, independently-toggleable interaction state (`hover`,
-  `active`, `focus`, `disabled`, `warning`). Don't invent a state segment that doesn't already
-  exist as a distinct override point.
-- `property` — the CSS property family being overridden (`background`, `color`, `border-color`,
-  `font-size`, `width`, …), as-is.
-
-**Soft ceiling: aim for ≤4 hyphenated segments after `ran`** (component, element, optional state,
-property). This is a principle applied by reading the component's structure, not a mechanical
-truncation — two genuinely different override points must never collapse into the same name. Do
-not encode the full DOM/BEM nesting path into the token name (e.g.
-`--ran-player-controller-bottom-right-align-volume-icon-mute-background` is wrong — the position
-inside `.controller` isn't part of the token's identity).
-
-| Avoid (full DOM path)                                           | Prefer                                    |
-| --------------------------------------------------------------- | ----------------------------------------- |
-| `--ran-select-selection-search-input-active-border-right-width` | `--ran-select-search-active-border-width` |
-| `--ran-btn-content-hover-background-color`                      | `--ran-btn-hover-background`              |
-| `--ran-progress-wrap-value-background`                          | `--ran-progress-fill-background`          |
-
-This applies to **new** component tokens going forward. See `changelogs/2026-08-08.md` for the
-pass that brought existing components in line with it (0.5.0-alpha.0).
-
----
+For example, `--ran-progress-fill-background` names a part; `--ran-progress-wrap-value-background`
+encodes implementation nesting. The generated [public catalog](./style-tokens-public.md)
+owns available names. This section owns naming; do not hand-maintain another catalog.
 
 ## 11. Composition — the page, not the component
 
-Sections 1–10 govern a component. This one governs what happens when many correct
-components are assembled into a surface, which is where this system's most expensive
-mistakes have actually occurred. Every rule below is followed by the failure it prevents,
-and every failure listed is one that shipped.
+Choose the page structure in §12 first; then compose its components with these rules.
 
 ### Structure before containers
 
 **Reach for spacing, alignment, weight and a hairline before a box.** A container is a
 claim that its contents are a separate object. Most regions need a background, a hairline
 and intentional spacing — nothing more.
-
-> A documentation page alternated a bordered demo, a bordered code block, a bordered demo
-> down its whole length: 16 boxed surfaces on a component page and 37 on the icon page.
-> Nothing was wrong with any single box. The page was exhausting to read because every
-> element claimed to be a separate object.
 
 **A box is for a genuinely separate object** — a live demo stage, an overlay, a panel that
 floats. Not for a code block, a table, a list row, a previous/next link, or a cell in a
@@ -510,10 +299,6 @@ or shortening them does not justify a redundant enclosure.
 Review the full pane or page, not only the cropped group. For every remaining stable outline,
 fill or separator, name the relationship or interaction it communicates and check what becomes
 ambiguous if it is removed. A frame is optional; a reachable, recognisable control is not.
-
-> Three containers each contributed their own top padding — the page column, the landing
-> wrapper, and the hero — and the first line of content sat 280px below the header. Each
-> value was defensible on its own.
 
 ### Emphasis is a budget
 
@@ -544,52 +329,23 @@ rhythm communicates, so do not undo it with a decorative divider.
 
 ### Vertical rhythm across sibling views
 
-**Repeat the relationship, not every distance.** Sibling settings, list and detail views
-share a spacing vocabulary; they do not need equal-height headers, descriptions or empty
-states. For a compact application pane, a useful composition is:
+Repeat relationships, not fixed heights. In compact panes, title/description and field/hint
+pairs can start at `--ran-space-2` (8px), separate groups at `--ran-space-4` (16px), related
+subsections at `--ran-space-6` (24px), major regions at `--ran-space-8`/`--ran-space-10`
+(32/40px). These are host choices, not component defaults; retain the table's 12px content-group
+role where it fits. Translations grow naturally; missing descriptions leave no vacant row.
 
-| Relationship                                                             | Starting point                               |
-| ------------------------------------------------------------------------ | -------------------------------------------- |
-| Title and its description; field label, control and associated hint      | `--ran-space-2` (8px)                        |
-| Introductory group to first control/action group; successive form groups | `--ran-space-4` (16px)                       |
-| Related subsections in a compact pane                                    | `--ran-space-6` (24px)                       |
-| Separate major regions                                                   | `--ran-space-8` / `--ran-space-10` (32/40px) |
+Give each gap one owner: parent stack or explicit child margin. Reset authored local heading/
+paragraph margins rather than adding them to the parent's gap. Account for owned control padding,
+collapsing margins and inline baseline space; do not compensate with transforms or smaller type.
+Place hints with the field/action they explain. Hidden helpers leave no accidental gap; a reserved
+async status line needs a stated purpose and bounds.
 
-These are composition choices using the existing scale, not new component defaults.
-Keep the preceding table's 12px content-group role where it fits. A heading without a
-description leads straight into the next group; it does not need a vacant description row.
-Let translated or multiline copy grow naturally while the gap after its final line box
-retains the same relationship. Do not fix text heights or add manual breaks to align views.
-
-**One owner per gap.** Let a parent stack own sibling separation, or let an explicit child
-margin own it. Avoid a parent's `gap` plus a child's default paragraph/heading margin at
-the same boundary. Reset margins locally in authored composition, not across every library
-component. Account for collapsing margins and the line-box space left by inline controls;
-an explicit block/flex/grid composition can remove an accidental baseline gap. Do not
-compensate with a transform, negative margin or a smaller font.
-
-Place a hint with the field or action it explains. Count padding already inside an unframed
-label/target before adding more outside space: a zero outer margin is not necessarily a
-zero visible gap. Conversely, a framed button followed immediately by a hint may still
-need separation. Hidden optional content should leave no unexplained row or gap. A reserved
-async-status line is legitimate when its stability has a stated purpose and bounds.
-
-**Measure the composed result in both axes.** For horizontal writing, the frame gap is
-`next.top - previous.bottom`, after fonts, custom elements and pending content settle.
-Name the measured layers: control frame, line box and text Range answer different questions.
-Keep line-height leading, owned padding and hairlines distinct from inter-group space;
-16px of padding plus a 1px rule is not an invented 17px spacing token. Inspect actual text
-alongside frame measurements rather than forcing glyph edges to match a frame-gap value.
-
-Use independently declared expected gaps, not only equality between siblings. Exercise
-wrapping, resizing, helper/error visibility and relevant input densities. Reverse-check a
-doubled child margin while horizontal spines stay correct, a hidden helper that leaves a
-phantom gap, and text-only vertical drift inside unchanged frames. Each affected assertion
-must reject its mutation and pass after restoration. Confirm that mutated and restored
-styles have settled before measuring; reduced motion can still retain a short transition.
-The source-only
-[browser layout example](https://github.com/chaxus/ran/blob/main/packages/ranui/test/e2e/layout-contract.spec.ts)
-demonstrates these checks; human review still judges the complete pane's rhythm.
+Measure both axes after content settles. `next.top - previous.bottom` measures frame separation,
+not glyph/line-box space. Keep leading, padding and hairlines distinct: 16px padding plus a 1px
+rule is not a 17px spacing token. Use independent expectations and exercise wrapping, resizing,
+helper/error visibility and relevant density. [ACCEPTANCE](./ACCEPTANCE.md#browser-proof) owns
+settling and mutation checks for doubled margins, phantom rows and text-only drift.
 
 ### The measure governs text, not the column
 
@@ -601,16 +357,8 @@ also distinguishes CJK in its Level AAA criterion; it is not a mandatory library
 A table, code fence, demo stage or image should retain the width its content needs.
 Cap the text elements, not the column that holds them.
 
-> A documentation column was capped at the measure, so the cap applied to everything
-> inside it. The Properties table wanted 762px inside a 736px cap, silently became a
-> scroll container, and lost 26px off its last column — a sentence ending mid-word, which
-> reads as a rendering bug rather than as a width.
-
 **Declare the measure in `rem`, never `em`.** `em` resolves against the element's own
 font-size, so the larger the type, the longer the line — exactly backwards.
-
-> A deck set one step up from body size inherited a `46em` measure and rendered at 851px
-> against body text's 736px: the biggest type on the page got the longest line to read.
 
 **Build hierarchy out of type before reaching for a box.** One step of size and one step
 down in colour turns a title and its first sentence into a title and a deck, with no new
@@ -621,11 +369,6 @@ container and no new border.
 **A shared border, a shared radius and a gap between them are a contradiction.** Decide
 whether the elements are one object or two, and make every property say the same thing.
 
-> A demo and the fence documenting it were given joined radii (`8px 8px 0 0` above,
-> `0 0 8px 8px` below) and a hairline between — and then an 18px channel ran between them
-> anyway, because the parent laid its children out with `gap`, which no margin on a child
-> can cancel. The shape claimed one object, the spacing claimed two.
-
 **When a value must equal another value, name it.** A gap that a child has to subtract is
 not a literal in two places; it is one custom property referenced twice.
 
@@ -634,10 +377,6 @@ not a literal in two places; it is one custom property referenced twice.
 **A column declared unconditionally is still a column, even on the pages that have nothing
 to put in it.** Condition the track on the element actually being there (`:has()`), not on
 a page type you assume implies it.
-
-> The outline column was reserved for every page without a sidebar. The landing page has
-> no outline, so it laid out as `1144px 224px` and carried 280px of dead space down its
-> entire right edge — which read as the whole site being off-centre.
 
 ### Alignment is structure, not polish
 
@@ -689,9 +428,6 @@ spines. It is not permission to nudge page margins until a screenshot looks bala
 current item is marked with the same fill hover uses, the interface has two names for one
 appearance.
 
-> The current sidebar page was marked with `--ran-color-bg-hover`. It read as "the pointer
-> is here", not "you are here".
-
 **`--ran-color-primary` is commitment; `--ran-color-link` is a link.** Primary is
 near-black in this system, so prose links coloured with it are indistinguishable from the
 text around them.
@@ -699,9 +435,6 @@ text around them.
 **A link leaves; a button acts.** Anything that changes application state is a button,
 whatever it looks like. Do not style a command as a link to make it quiet, and do not let
 a button-shaped link keep an underline.
-
-> Every call-to-action on the home page shipped underlined, because the stylesheet assumed
-> a base rule it had never written.
 
 ### Command hierarchy in constrained panes
 
@@ -745,103 +478,68 @@ this stylesheet loads. It may not invent a second palette.
 
 ### Density follows control roles
 
-Spacing, intrinsic dimensions and pointer targets solve different problems. A visually small icon
-can sit within a larger native button. Measure the actual clickable box, focus ring and adjacent gap.
-Choose target sizes for the product's input and accessibility needs; do not copy one application's
-control dimensions into every library component.
-
-When the same control role repeats, an application can define a shared semantic alias derived from
-foundation tokens. The example below uses `--ran-size-7` (32px) for a native button’s clickable area.
-A touch interface may need a larger value. These `--app-*` aliases belong to the application.
-For ranui components, use the variables and parts listed in their generated API.
+Spacing, intrinsic dimensions and hit targets solve different problems. A small glyph can have
+a larger native button target. Measure actual hit bounds, focus and adjacent gaps; derive repeated
+host aliases from foundation tokens, not one application's dimensions copied across the library.
 
 ```css
 .workspace {
   --app-command-target: var(--ran-size-7);
   --app-command-gap: var(--ran-space-2);
   color: var(--ran-color-text);
-}
-.workspace-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--app-command-gap);
+  background: var(--ran-color-bg);
+  font-family: var(--ran-font-family);
 }
 .workspace-command {
-  min-inline-size: var(--app-command-target);
   min-block-size: var(--app-command-target);
-  border: 0;
   border-radius: var(--ran-radius-sm);
-  background: transparent;
-  color: inherit;
-  font: inherit;
-}
-.workspace-command:enabled:hover {
-  background: var(--ran-color-bg-hover);
-}
-.workspace-command:focus-visible {
-  box-shadow: var(--ran-focus-ring);
-}
-.workspace-command:disabled {
-  color: var(--ran-color-text-disabled);
 }
 ```
 
-Name icon-only buttons accessibly. Verify larger targets where needed for coarse input; do not enlarge
-every glyph or leave layout gaps for `hidden` controls. Document legitimate viewport, hairline, artwork
-and optical geometry exceptions instead of disguising them as spacing values.
+This illustrates a host's 32px starting target, not a universal minimum. Choose larger coarse-input
+bounds where needed; do not enlarge every glyph or reserve space for hidden controls. Use generated
+public variables/parts for ranui overrides. Name icon-only controls accessibly and document legitimate
+viewport, hairline, artwork and optical geometry exceptions.
 
 ### Evaluate craft through evidence
 
-Polish follows task clarity; it is not a preset of rounded cards, blur and animated entrances.
-Evaluate the smallest intervention against the actual content, language, device and frequency of use.
-These references inform decisions; DESIGN's accessibility, tokens and platform contracts take priority.
+Polish follows task clarity, not a preset of cards, blur or entrances. Evaluate the smallest
+intervention against real content, language, device and repeated use. Primary references answer
+specific questions: [Linear hierarchy](https://linear.app/now/behind-the-latest-design-refresh),
+[Geist typography](https://vercel.com/geist/typography),
+[optical alignment](https://craft.gustavofior.com/optical-alignment) and
+[interruptibility](https://craft.gustavofior.com/interruptibility). Adapt their principles with
+ran's tokens and actual capabilities; do not copy a product's pixel sizes or import recipes as rules.
 
-| Primary reference                                                                             | Adaptation for ran applications                                                                   | Evidence to collect                                                                   |
-| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| [Linear: calmer interfaces](https://linear.app/now/behind-the-latest-design-refresh)          | Let supporting navigation recede; keep headers and action positions predictable                   | Compare sibling views with real content and their full surrounding chrome             |
-| [Geist: typography](https://vercel.com/geist/typography)                                      | Apply ran's existing text roles as combinations of size, weight, tracking and leading             | Read actual labels, hints and wrapped copy; do not copy another product's pixel sizes |
-| [Lightspark: limit details](https://design.lightspark.com/limit-the-number-of-details)        | Remove redundant controls/states; spend attention on remaining interactions                       | Complete the task with fewer interruptions and no lost route                          |
-| [Butterick: typography](https://practicaltypography.com/typography-in-ten-minutes.html)       | Evaluate body type, leading and measure together; retain role tokens and script-appropriate fonts | Read realistic long text in each supported script and zoom level                      |
-| [Craft: tabular numbers](https://craft.gustavofior.com/tabular-numbers)                       | Consider tabular figures for changing counts, timers and aligned numeric columns                  | Exercise narrow/wide digits and digit-count changes without adjacent controls jumping |
-| [Craft: optical alignment](https://craft.gustavofior.com/optical-alignment)                   | Correct asymmetric glyph weight inside the reusable asset/component, not arbitrary page margins   | Compare the glyph at actual sizes while layout edges remain exact                     |
-| [Jakub: interface details](https://jakub.kr/writing/details-that-make-interfaces-feel-better) | Coordinate nested radii with inset; remove an unnecessary nested surface first                    | Inspect real border thickness, inset and clipping at narrow and wide sizes            |
-| [Rauno: interfaces](https://interfaces.rauno.me/)                                             | Associate feedback with the acted-on object and preserve familiar input behavior                  | Repeat actions using keyboard/touch; confirm what changed without hunting for status  |
-| [Emil: animation restraint](https://emilkowal.ski/ui/you-dont-need-animations)                | Prefer immediate high-frequency feedback; retain motion only when it explains a change            | Repeat the workflow, including reduced motion, rather than judging one entrance       |
-| [Craft: interruptibility](https://craft.gustavofior.com/interruptibility)                     | New intent can reverse/retarget a transition without waiting for decoration                       | Open/close/reopen rapidly; focus, hit testing and final state stay synchronized       |
+When direction is unresolved, compare two small real-ran variants with the same content, width
+and theme, changing one dimension at a time. Explain what each difference does for the task.
+A clear direction or small correction proceeds directly; there is no mandatory approval ritual.
 
-For a short multiline heading, consider progressive enhancement with
-[`text-wrap: balance`](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap).
-Keep normal wrapping as the fallback; do not insert manual line breaks that fail in another locale.
-`pretty` may be useful for body copy, but its cost and support require checking with realistic content;
-it is not a blanket setting for long live-updating logs. Do not clip text to preserve a screenshot.
-
-[`font-variant-numeric: tabular-nums`](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-numeric)
-depends on font support. It aligns digit advances but does not reserve the extra space when 99 becomes 100. Where stability matters, reserve an appropriate column/minimum width without truncating values.
-
-Keep mechanical alignment spines exact. An optical glyph correction belongs to a documented reusable
-asset/component; it does not excuse unequal sibling gaps. Derive nested corner geometry from the real
-inset where relevant, preserving DESIGN's radius roles rather than adding a parallel radius scale.
-
-For motion, use existing tokens only when the transition has a job; frequent focus, hover and keyboard
-feedback defaults to immediate. Preserve reduced motion and instant theme changes. Do not import blog
-recipes as mandates for springs, global font smoothing, disabled autocomplete or mouse-only actions.
-Optional delight must remain responsive under repeated use; pause offscreen decoration and profile
-realistic content before adopting costly effects. It must not delay typing or obscure status.
-[DesEngs](https://desengs.com/) is a discovery index; cite published primary material, not placeholder topics.
+- Balance short headings progressively with `text-wrap: balance`, preserving normal wrapping.
+  Do not insert locale-dependent manual breaks or clip text to preserve a screenshot. Check cost
+  and support before using `pretty` on long live content.
+- Tabular figures stabilize digit advances if the font supports them; reserve a meaningful
+  column for digit-count changes such as 99 → 100 without truncating values.
+- Correct asymmetric glyphs in a reusable asset/component, preserving exact layout spines.
+  Derive nested corner geometry from actual inset; remove an unnecessary nested surface first.
+- Motion needs a job: immediate frequent feedback, interruptible transitions, reduced motion and
+  instant themes. Optional delight must not delay typing or obscure status. Pause offscreen
+  decoration and profile realistic content before adopting costly effects. See §5.
 
 ### Words are part of the interface
 
-**Let context carry context.** Do not repeat what the surrounding surface already
-establishes — a sidebar destination is `Users`, not `User Management`; a dialog titled
-`Delete "Roadmap"?` does not ask the question again in its body.
+Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
+A heading, grouping, proximity or obvious control should not need another sentence repeating
+its purpose. Remove copy with no new decision, constraint or consequence; do not replace it
+with a decorative badge or tooltip. Preserve accessible names, field labels, units, errors,
+risk disclosures and useful first-use guidance. Test whether the task remains understandable.
 
-**Name the result, not the gesture.** `Save`, `Move`, `Delete` — not `Click to save` or
-`Confirm deletion`. Apply the [context rule in §6](#6-content--copy-is-part-of-the-system) when deciding whether to include the object. `Cancel` is always the action that leaves without committing.
-
-**Sentence case for English UI.** Reserve ALL CAPS for very short eyebrows, statuses and
-acronyms; never on a button, a heading or a sentence. Labels, buttons and short states take
-no final period; complete explanatory sentences do. Use a single `…` character, and append
-it to any control that opens a dialog or needs more input before it can complete.
+Let context carry context: `Users` rather than `User Management`; do not repeat a dialog's
+question in its body. Name results (`Save`, `Move`, `Delete`), not gestures (`Click to save`).
+Include the object only when context does not establish it. `Cancel` leaves without committing.
+Use sentence case, no period on short labels, and a period on explanatory sentences.
+Use one `…` when an action needs more input before completing; reserve ALL CAPS for short
+statuses, eyebrows and acronyms.
 
 ### Review checklist for a composed surface
 
@@ -868,68 +566,18 @@ a small patch does not require redesigning unrelated pages. A "no" within scope 
    at the relevant widths and themes? Are standalone actions recognizable before hover, including
    touch use, without redundant group enclosures?
 
-**A screenshot of the happy path is not proof.** Keyboard behaviour, focus, dynamic
-content, themes, resizing and failure states are part of the design.
-
-**Measure the layer of the defect.** A frame rectangle catches clipping and dead columns, but
-can miss label drift inside a stable button. Wait for custom-element registration, pending content,
-`document.fonts.ready` and a rendered frame before reading geometry. Resolve each node explicitly
-and fail on missing or zero-sized targets. Compare relationships in CSS pixels with a documented
-subpixel rounding tolerance; a tolerance large enough to hide a full pixel defeats exact spines.
-
-Collect frame/content, text `Range`, icon viewport and actual hit-area evidence for affected regions.
-Check narrow and wide layouts (including resizing), supported light/dark themes, long translations,
-coarse input and relevant zoom/reflow. Browser CSS zoom is a useful automated stress case, but does
-not replace native browser zoom or text-size checks where the product supports them. Keep controls
-reachable and inspect clipping, wrapping and overlap. Reverse-check the assertions by deliberately
-moving only label text by 8px while its outer frame remains unchanged, expanding a title hit zone
-into filler, and shifting one sibling region. Each mutation must fail the corresponding relationship;
-restoring it must pass. Human prose needs review, not tests that grep for prescribed wording.
-
-The repository's [browser acceptance example](https://github.com/chaxus/ran/blob/main/packages/ranui/test/e2e/layout-contract.spec.ts)
-uses test-only utilities and real DOM/shadow geometry; consumers adapt its relationships to their
-own page contract. In a source checkout, install frozen dependencies, build ranuts and install the
-Playwright browser first (the example's adjacent `layout-contract.md` records the commands). Run it with `pnpm -F ranui exec playwright test layout-contract.spec.ts --project=chromium`.
-The source-only `geometry(page, selector, 'text')` helper reads a text Range; omit the third
-argument for a frame. `sameSpine(actual, expected)` rejects differences over half a CSS pixel,
-and `compactHitZone(hitWidth, labelContentWidth, padding)` bounds the hit surface independently
-of filler. Its spec also uses `insideShadow` from `ranui/testing` to read documented button/content
-parts. These measurement helpers stay in test tooling and are not package exports. Declare an
-independent expected content edge as well as sibling relationships, so all siblings drifting together
-cannot pass. Confirm each deliberate mutation won the cascade before measuring its failure.
-
-Read numbers from a real browser, for example:
-
-```js
-// Approximate width in average digit advances; this is NOT a rendered character count.
-const cs = getComputedStyle(el);
-const probe = Object.assign(document.createElement('span'), { textContent: '0123456789' });
-probe.style.cssText = `font:${cs.font};visibility:hidden;position:absolute;white-space:pre`;
-document.body.append(probe);
-const approximateDigitAdvances = el.getBoundingClientRect().width / (probe.getBoundingClientRect().width / 10);
-probe.remove();
-
-// content clipped inside a scroll container — silent by construction
-wrap.scrollWidth - wrap.clientWidth;
-
-// the page is wider than the window (an RTL off-screen offset, a stray fixed element)
-document.documentElement.scrollWidth > innerWidth;
-```
-
-The digit probe cannot validate CJK or proportional prose: glyph widths, shaping, fallback
-fonts and line breaks differ. Read real text in the browser to judge its measure.
+A happy-path screenshot does not prove keyboard behavior, focus, dynamic content,
+resizing or failure recovery. Follow [ACCEPTANCE](./ACCEPTANCE.md) for independent expectations,
+actual runtime/capture identity, browser measurements and separate automated, agent and human
+results. The source-only [browser example](https://github.com/chaxus/ran/blob/main/packages/ranui/test/e2e/layout-contract.md)
+contains setup commands and test utility details; they are not public package APIs.
 
 ## 12. Information architecture — the shape before the composition
 
-§11 arranges a page whose shape is already settled. This section settles it, so in practice
-it runs first. It applies to **information-dense surfaces**: a console, a dashboard, an admin
-screen, a workbench, a monitoring page — anywhere the reader has to understand several
-objects, several states and the relations between them and then judge and act. It does not
-apply to landing pages or single-conversion forms.
-
-Complete data is not a designed page. Every field the endpoint returns can be on screen, with
-filters, status tags and bulk actions, and the reader still not know what to look at first.
-Nothing is missing; the order is.
+Choose structure before composition for information-dense consoles, dashboards and workbenches.
+Complete API data is not a page design: the reader still needs a clear order for understanding
+objects, their state and relationships, then acting. Single-conversion and landing pages need
+their own task structure rather than a dense-console template.
 
 ### Answer three questions before naming a component
 
@@ -943,45 +591,24 @@ operate it; they may not compete for the first screen.
 
 ### The shape follows the task, not the payload
 
-**Do not pick a table because the endpoint returned an array, or a detail page because the
-route carries an ID.** The same object takes a different shape under a different task: an
-issue is a collection while searching, a status flow while working it, a discussion thread
-while collaborating, an event sequence while auditing. A date field in the record means the
-data has a date; it does not mean the page is a calendar.
+Choose a skeleton from the reader's question, not an API array or route ID:
 
-Choose the skeleton that answers the primary question with the fewest mental conversions:
+| Task                                          | Useful shape                                             |
+| --------------------------------------------- | -------------------------------------------------------- |
+| Compare values/differences                    | Table or diff                                            |
+| Recognize/open a resource                     | List; image grid only when images identify it            |
+| Understand one object's current state         | Sectioned detail                                         |
+| Understand ownership/dependencies             | Tree or adjacency list; graph only when the path matters |
+| Plan the next step / move work through stages | Step flow / kanban when moving is the actual work        |
+| Audit what happened, when and by whom         | Timeline or trace drill-down                             |
+| Discuss or read continuous text               | Thread or document                                       |
+| Judge health, trends or anomalies             | Status wall or dashboard                                 |
+| Find occupancy/conflicts or location          | Calendar or map/canvas                                   |
+| Work on the next item / change rules          | Master-detail workbench / configuration form             |
 
-| The reader's question                                    | Skeleton                |
-| -------------------------------------------------------- | ----------------------- |
-| Which of these differs, and how                          | Comparison table        |
-| Which one is it, so I can open it                        | List / resource catalog |
-| Which one is it, and the image tells me                  | Card grid               |
-| What is this object, and how is it now                   | Sectioned detail        |
-| What does it belong to                                   | Hierarchy tree          |
-| What depends on it, what breaks if it changes            | Adjacency list          |
-| Which step am I on, what follows                         | Step flow               |
-| Which stage is each item in, and moving it _is_ the work | Kanban                  |
-| Why did it stall                                         | Trace drill-down        |
-| Is it healthy, how far does the damage reach             | Status wall             |
-| What happened, in what order, by whom                    | Event timeline          |
-| Who said what, how was it answered                       | Discussion thread       |
-| What changed, before versus after                        | Diff view               |
-| What is the trend, where is the anomaly                  | Dashboard               |
-| When is it occupied, does it clash                       | Calendar / scheduling   |
-| What do I work on next                                   | Master-detail workbench |
-| Which rules apply, what do they affect                   | Configuration form      |
-| What does this text say                                  | Continuous document     |
-| Where is it                                              | Map / canvas            |
-
-Six pairs get swapped, and each swap is a real bug: **timeline vs. steps** (what happened vs.
-what comes next), **kanban vs. filter** (moving the card must be the action, or the columns are
-a filter that costs a drag), **calendar vs. timeline** (occupancy and collision vs. order),
-**card grid vs. table** (the image is the recognition anchor, or the numbers are), **graph vs.
-adjacency list** (draw the graph only when the path itself is the judgement), **document vs.
-field grid** (prose read in order stays prose).
-
-**Do not ship three views because you can.** Each one is another filter set, another status
-mapping and another set of actions to keep in sync.
+Do not confuse historical events with future steps, a filter with kanban, or ordered prose
+with a field grid. A date alone does not justify a calendar. Ship multiple views only when
+each serves a distinct task worth its filter/state/action maintenance.
 
 ### Each kind of information has a place
 
@@ -1017,6 +644,16 @@ target size may not (§8).
 
 ### Containers do not fix structure
 
+**One contextual return per view.** Do not show an outer “Back to chat” and an inner
+“Back to artifacts” together. The detail view returns to its immediate parent; ancestors remain
+reachable through the route hierarchy or clearly named breadcrumbs. Verify the full journey,
+including focus return and long translated destination names. If text does not fit, reflow or
+use a meaningful shorter destination; an ellipsis or tooltip must not hide the only destination cue.
+Choose one composition for the parent context. Do not add a breadcrumb merely to relabel a
+redundant return shortcut, or repeat that parent as an inert crumb above its return command.
+When returning through the parent already reaches the ancestor, that journey preserves access
+without adding another detail-header row. Use breadcrumbs when the hierarchy itself helps the task.
+
 **`r-modal` is not a navigation layer.** Anything needing a copyable link, history, a
 side-by-side comparison, or work that survives a refresh gets a route. Reserve the modal for a
 short confirmation or a single field, `r-popover` / `r-dropdown` for transient context, and
@@ -1027,8 +664,6 @@ unrelated modules; that is navigation's job.
 
 **ranui ships no table, tree, calendar, kanban or timeline.** Build one out of the tokens and
 the rules above, not out of a second visual system (§11, "One product, one token set").
-
----
 
 ## Verification checklist (before shipping UI)
 
