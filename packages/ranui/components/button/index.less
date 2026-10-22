@@ -68,9 +68,11 @@
     }
   }
 
-  &(:focus-visible) {
-    outline: var(--ran-btn-focus-outline, 2px solid var(--ran-color-primary));
-    outline-offset: var(--ran-btn-focus-outline-offset, 2px);
+  // The keyboard target is inside the closed root, so the host does not match
+  // :focus-visible. Keep its ring inset: the host clips ripple overflow.
+  .ran-btn:focus-visible {
+    outline: var(--ran-btn-focus-outline, 2px solid var(--ran-color-link));
+    outline-offset: var(--ran-btn-focus-outline-offset, -2px);
   }
 
   /* Primary = the monochrome action (Vercel/Geist): black-on-white ↔ white-on-black.

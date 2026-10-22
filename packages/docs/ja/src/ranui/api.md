@@ -275,7 +275,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 
 ソース: `components/markdown/index.ts`
 
-- **属性（attribute）**: `caret: string`, `content: string`, `copy`, `download`, `highlight: string | null`, `inline-math`, `line-numbers`, `link-target`, `mode: string`, `sheet: string`, `theme: string`
+- **属性（attribute）**: `caret: string`, `content: string`, `copy`, `download`, `highlight: string | null`, `inline-math`, `label-copy-error`, `line-numbers`, `link-target`, `mode: string`, `sheet: string`, `theme: string`
 - **プロパティ（property）**:
   - `caret: string`
   - `content: string` — Markdown source. Resolution order: the `content` property (set via JS, not
@@ -294,7 +294,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ blocks, changed }`
 - **スロット**: —
-- **Part**: `block`, `body`, `error`, `markdown`
+- **Part**: `block`, `body`, `button`, `code`, `code-actions`, `code-header`, `code-lang`, `copy-status`, `error`, `markdown`, `table`
 
 ## `<r-math>`
 
@@ -627,7 +627,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 
 - **属性（attribute）**: `active-label`, `cancel-hint`, `cancelling`, `disabled: boolean`, `hold-hint`, `holding`, `label: string`, `listening: boolean`, `sheet: string`
 - **プロパティ（property）**:
-  - `activeLabel: string` — Accessible name while listening; the name has to change, not only the icon.
+  - `activeLabel: string` — Accessible cancel/stop name while capture is pending or listening.
   - `cancelHint: string` — Replaces {@link holdHint} once the finger has slid far enough to discard.
   - `continuous: boolean` — Keep listening across pauses instead of stopping at the first one.
   - `disabled: boolean`

@@ -614,6 +614,7 @@ export class Select extends RanElement {
       return;
     }
     if (e.key === 'Escape') {
+      if (!this.isDropdownOpen()) return;
       e.preventDefault();
       this.setSelectDropdownDisplayNone();
       return;

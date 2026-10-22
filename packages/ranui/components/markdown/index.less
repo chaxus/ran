@@ -186,7 +186,7 @@ img {
   margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
   border: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
     var(--ran-markdown-code-border, var(--ran-color-border, #eaeaea));
-  border-radius: var(--ran-markdown-code-radius, var(--ran-radius-md, 12px));
+  border-radius: var(--ran-markdown-code-radius, var(--ran-radius-sm, 6px));
   background: var(--ran-markdown-code-bg, var(--ran-color-bg-muted, #fafafa));
   overflow: hidden;
   /* Off-screen blocks skip layout/paint — long answers stay cheap. */
@@ -199,7 +199,7 @@ img {
   justify-content: space-between;
   gap: var(--ran-space-2, 8px);
   min-height: var(--ran-markdown-code-header-height, var(--ran-size-7, 32px));
-  padding: 0 var(--ran-space-2, 8px) 0 var(--ran-space-3, 12px);
+  padding: var(--ran-space-1, 4px) var(--ran-space-2, 8px) var(--ran-space-1, 4px) var(--ran-space-4, 16px);
   border-bottom: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
     var(--ran-markdown-code-border, var(--ran-color-border, #eaeaea));
   background: var(--ran-markdown-code-header-bg, transparent);
@@ -212,16 +212,18 @@ img {
   text-transform: lowercase;
 }
 .ran-md-code-actions {
+  min-width: 0;
   display: inline-flex;
   align-items: center;
   gap: var(--ran-space-1, 4px);
 }
 .ran-md-btn {
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--ran-markdown-button-size, var(--ran-size-4, 24px));
-  height: var(--ran-markdown-button-size, var(--ran-size-4, 24px));
+  width: var(--ran-markdown-button-size, var(--ran-size-7, 32px));
+  height: var(--ran-markdown-button-size, var(--ran-size-7, 32px));
   padding: 0;
   border: none;
   border-radius: var(--ran-radius-sm, 6px);
@@ -229,12 +231,16 @@ img {
   color: var(--ran-markdown-button-color, var(--ran-color-text-secondary, #666));
   cursor: pointer;
 }
-.ran-md-btn:hover {
+.ran-md-btn:hover:not([aria-disabled='true']) {
   background: var(--ran-markdown-button-hover-background, var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.06)));
   color: var(--ran-markdown-button-hover-color, var(--ran-color-text, #171717));
 }
+.ran-md-btn[aria-disabled='true'] {
+  color: var(--ran-color-text-disabled);
+  cursor: default;
+}
 .ran-md-btn:focus-visible {
-  outline: var(--ran-focus-ring, 2px solid var(--ran-color-primary, #0070f3));
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 1px;
 }
 
@@ -245,7 +251,7 @@ img {
   background: transparent !important; /* shiki's theme bg is dropped in favour of the token above */
   color: var(--ran-markdown-code-color, var(--ran-color-text, #171717));
   font-family: var(--ran-markdown-mono-font, var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace));
-  font-size: var(--ran-markdown-code-font-size, var(--ran-text-label-2, 13px));
+  font-size: var(--ran-markdown-code-font-size, var(--ran-text-copy-2, 14px));
   line-height: var(--ran-markdown-code-line-height, 1.6);
   tab-size: 2;
 }
@@ -294,9 +300,7 @@ img {
 /* ── Tables ────────────────────────────────────────────────────────────────── */
 .ran-md-table-wrap {
   margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
-  border: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
-    var(--ran-markdown-table-border, var(--ran-color-border, #eaeaea));
-  border-radius: var(--ran-markdown-table-radius, var(--ran-radius-md, 12px));
+  border-radius: var(--ran-markdown-table-radius, 0);
   overflow-x: auto;
 }
 table {
@@ -313,11 +317,41 @@ td {
   vertical-align: top;
 }
 th {
-  background: var(--ran-markdown-table-header-bg, var(--ran-color-bg-muted, #fafafa));
+  background: var(--ran-markdown-table-header-bg, transparent);
   color: var(--ran-markdown-table-header-color, var(--ran-color-text-secondary, #666));
   font-weight: var(--ran-text-label-weight, 500);
   white-space: nowrap;
 }
+th[align='right'],
+td[align='right'] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+th[align='center'],
+td[align='center'] {
+  text-align: center;
+}
+.ran-md-pre:focus-visible,
+.ran-md-table-wrap:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: -2px;
+}
+.ran-md-copy-status {
+  min-width: 0;
+  color: var(--ran-color-danger);
+  font-size: var(--ran-text-copy-2, 14px);
+  line-height: 1.4;
+}
+.ran-md-copy-status[hidden] {
+  display: none;
+}
+@media (pointer: coarse) {
+  .ran-md-btn {
+    min-width: var(--ran-markdown-button-touch-size, 44px);
+    min-height: var(--ran-markdown-button-touch-size, 44px);
+  }
+}
+
 tr:last-child td {
   border-bottom: 0;
 }

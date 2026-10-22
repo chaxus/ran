@@ -101,6 +101,7 @@ export class Conversation extends RanElement {
   private _engine: ConversationEngine<unknown> | null = null;
   private _unsubscribe: (() => void) | null = null;
   private _follower: BottomFollower | null = null;
+  private _reportedPinned = true;
   /** Row element per node key, so a publication patches rather than rebuilds. */
   private _rows = new Map<string, HTMLElement>();
   private _emptyRow: HTMLElement | null = null;
@@ -198,7 +199,7 @@ export class Conversation extends RanElement {
 
   /** Whether the view is currently following new content. */
   get pinned(): boolean {
-    return this._follower?.pinned ?? true;
+    return this.follow && (this._follower?.pinned ?? true);
   }
 
   // ── Public API ─────────────────────────────────────────────────────────
@@ -263,6 +264,7 @@ export class Conversation extends RanElement {
 
   /** Scrolls to the floor and resumes following, whatever the reader did. */
   scrollToBottom(): void {
+    this.follow = true;
     this._follower?.toBottom();
   }
 
@@ -301,11 +303,10 @@ export class Conversation extends RanElement {
       // The list grows without appending a node whenever a row streams; the footer
       // resizes outside the list when a composer grows.
       observe: [this._list, this._footer],
-      onPinnedChange: (pinned) => {
-        this.dispatchEvent(new CustomEvent('pinnedchange', { detail: { pinned }, bubbles: true, composed: true }));
-      },
+      enabled: () => this.follow,
+      onPinnedChange: () => this._reportPinned(),
     });
-    if (!this.follow) this._follower.releaseAnchor();
+    this._reportedPinned = this.pinned;
   }
 
   disconnectedCallback(): void {
@@ -323,6 +324,10 @@ export class Conversation extends RanElement {
     if (name === 'sheet') this.handlerExternalCss();
     if (name === 'empty') this._syncEmpty();
     if (name === 'older' || name === 'loading-older') this._syncOlder();
+    if (name === 'follow') {
+      this._reportPinned();
+      if (this.follow) this._follower?.follow();
+    }
   }
 
   handlerExternalCss = (): void => {
@@ -330,6 +335,13 @@ export class Conversation extends RanElement {
   };
 
   // ── Internals ──────────────────────────────────────────────────────────
+
+  private _reportPinned(): void {
+    const pinned = this.pinned;
+    if (!this.isConnected || pinned === this._reportedPinned) return;
+    this._reportedPinned = pinned;
+    this.dispatchEvent(new CustomEvent('pinnedchange', { detail: { pinned }, bubbles: true, composed: true }));
+  }
 
   private _ensureEngine(): ConversationEngine<unknown> {
     if (this._engine !== null) return this._engine;

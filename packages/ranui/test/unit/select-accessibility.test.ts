@@ -96,6 +96,25 @@ describe('r-select accessibility keyboard contract', () => {
       select.remove();
     },
   );
+  it('lets a closed select leave Escape available to its owning popup', async () => {
+    const select = await createSelect();
+    const escape = () =>
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, composed: true, cancelable: true });
+    const closedEscape = escape();
+    select.dispatchEvent(closedEscape);
+    expect(closedEscape.defaultPrevented).toBe(false);
+
+    select.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    const openEscape = escape();
+    select.dispatchEvent(openEscape);
+    expect(select.open).toBe(false);
+    expect(openEscape.defaultPrevented).toBe(true);
+
+    const secondEscape = escape();
+    select.dispatchEvent(secondEscape);
+    expect(secondEscape.defaultPrevented).toBe(false);
+  });
+
   it('leaves native search editing keys alone and filters native input and change', async () => {
     const select = await createSelect();
     select.setAttribute('showSearch', '');

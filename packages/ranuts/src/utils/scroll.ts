@@ -51,6 +51,8 @@ export interface BottomFollowerOptions {
   observe?: readonly HTMLElement[];
   /** Distance from the floor still counted as pinned. Defaults to 24. */
   threshold?: number;
+  /** Current intent for automatic following; explicit navigation remains available. */
+  enabled?: () => boolean;
   /**
    * Called when the pinned state flips, so a caller can show or hide a "jump to latest"
    * affordance. Never called for a change the caller itself just made synchronously.
@@ -161,7 +163,7 @@ export function createBottomFollower(options: BottomFollowerOptions): BottomFoll
     const movedByReader = Math.abs(scrollport.scrollTop - Math.min(observedTop, floor)) > 0.5;
     if (!movedByReader) {
       // Not the reader: if we are following, the floor moved under us — catch up.
-      if (pinned) toBottom();
+      if (pinned && options.enabled?.() !== false) toBottom();
       else observedTop = scrollport.scrollTop;
       return;
     }
@@ -174,7 +176,7 @@ export function createBottomFollower(options: BottomFollowerOptions): BottomFoll
   let observer: ResizeObserver | null = null;
   if (observe.length > 0 && typeof ResizeObserver !== 'undefined') {
     observer = new ResizeObserver(() => {
-      if (pinned && !destroyed) writeTop(scrollport.scrollHeight);
+      if (pinned && !destroyed && options.enabled?.() !== false) writeTop(scrollport.scrollHeight);
     });
     for (const element of observe) observer.observe(element);
   }
@@ -187,7 +189,7 @@ export function createBottomFollower(options: BottomFollowerOptions): BottomFoll
     toBottom,
 
     follow() {
-      if (pinned) writeTop(scrollport.scrollHeight);
+      if (pinned && !destroyed && options.enabled?.() !== false) writeTop(scrollport.scrollHeight);
     },
 
     captureAnchor(row) {

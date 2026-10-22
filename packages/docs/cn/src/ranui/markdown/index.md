@@ -50,7 +50,8 @@ container.append(el);
 ```
 
 - **光标**：`caret` 在最后一块后显示闪烁的 `▋`，`caret="circle"` 显示 `●`。当代码围栏尚未闭合或最后一块是表格时自动隐藏。
-- **未闭合的代码围栏** 在闭合前保持纯文本（不会高亮闪烁、不会渲染半个图表），期间容器带 `data-incomplete`。
+- **未闭合的代码围栏** 在文本到达时保留同一个代码视口；图表在围栏闭合前仍显示为代码，期间容器带 `data-incomplete`。
+- 代码和表格更新会保留滚动视口及未变化的前缀文本节点。选中代码期间，待处理的高亮会延后，取消选区后再完成。
 
 ## 代码块
 
@@ -66,6 +67,8 @@ container.append(el);
 <r-markdown highlight="vitesse-light vitesse-dark"></r-markdown>
 ```
 
+复制和下载使用围栏内的源文本，保留制表符、空行与末尾换行。每个代码块独立显示复制成功状态；剪贴板拒绝时在代码块内显示可重试的提示，可通过 `label-copy-error` 覆盖。内容发生变化或组件断开连接后，迟到的剪贴板或高亮结果不会更新它。代码和表格视口支持键盘聚焦。
+
 ## Mermaid 与公式
 
 <ran-demo>
@@ -79,20 +82,20 @@ container.append(el);
 
 ### 属性
 
-| 属性           | 类型                           | 默认值        | 说明                                                                                                 |
-| -------------- | ------------------------------ | ------------- | ---------------------------------------------------------------------------------------------------- |
-| `content`      | `string`                       | —             | Markdown 源。`content` **property** 优先且不反射；否则回退到元素文本内容。                           |
-| `mode`         | `'streaming' \| 'static'`      | `'streaming'` | `streaming` 补全未闭合 Markdown 并按块 diff；`static` 原样整体渲染一次。                             |
-| `caret`        | boolean / `'circle'`           | 关            | 最后一块后的闪烁光标（`▋`，`circle` 时为 `●`）。                                                     |
-| `copy`         | boolean                        | 关            | 代码块复制按钮（也透传给内嵌的 `<r-mermaid>`）。                                                     |
-| `download`     | boolean                        | 关            | 代码块下载按钮（按语言生成 `code.<ext>`）。                                                          |
-| `line-numbers` | boolean                        | 关            | 代码块行号。                                                                                         |
-| `highlight`    | boolean / `"亮色 暗色"` 主题名 | 关            | shiki 语法高亮。空值 → `github-light github-dark`；一个名字 → 两者相同；两个名字 → 亮色 / 暗色。     |
-| `inline-math`  | boolean                        | 关            | 把 `$…$` 当作行内公式（`\(…\)` 始终是）。                                                            |
-| `link-target`  | `string`                       | `'_blank'`    | 外部链接的 `target`（附带 `rel="noopener noreferrer"`）。`_self` 不处理链接。页内 `#锚点` 永远不加。 |
-| `theme`        | `'auto' \| 'light' \| 'dark'`  | `'auto'`      | 高亮 / 图表主题。`auto` 跟随页面（`.dark`、`[data-ran-theme]`，否则 `prefers-color-scheme`）。       |
-| `sheet`        | `string`                       | —             | 注入 shadow root 的额外 CSS。                                                                        |
-| `label-*`      | `string`                       | 英文          | 覆盖控件文案：`label-copy`、`label-download`。                                                       |
+| 属性           | 类型                           | 默认值        | 说明                                                                                                    |
+| -------------- | ------------------------------ | ------------- | ------------------------------------------------------------------------------------------------------- |
+| `content`      | `string`                       | —             | Markdown 源。`content` **property** 优先且不反射；否则回退到元素文本内容。                              |
+| `mode`         | `'streaming' \| 'static'`      | `'streaming'` | `streaming` 补全未闭合 Markdown 并按块 diff；`static` 原样整体渲染一次。                                |
+| `caret`        | boolean / `'circle'`           | 关            | 最后一块后的闪烁光标（`▋`，`circle` 时为 `●`）。                                                        |
+| `copy`         | boolean                        | 关            | 代码块复制按钮（也透传给内嵌的 `<r-mermaid>`）。                                                        |
+| `download`     | boolean                        | 关            | 代码块下载按钮（按语言生成 `code.<ext>`）。                                                             |
+| `line-numbers` | boolean                        | 关            | 代码块行号。                                                                                            |
+| `highlight`    | boolean / `"亮色 暗色"` 主题名 | 关            | shiki 语法高亮。空值 → `github-light github-dark`；一个名字 → 两者相同；两个名字 → 亮色 / 暗色。        |
+| `inline-math`  | boolean                        | 关            | 把 `$…$` 当作行内公式（`\(…\)` 始终是）。                                                               |
+| `link-target`  | `string`                       | `'_blank'`    | 外部链接的 `target`（附带 `rel="noopener noreferrer"`）。`_self` 不处理链接。页内 `#锚点` 永远不加。    |
+| `theme`        | `'auto' \| 'light' \| 'dark'`  | `'auto'`      | 高亮 / 图表主题。`auto` 跟随页面（`.dark`、`[data-ran-theme]`，否则 `prefers-color-scheme`）。          |
+| `sheet`        | `string`                       | —             | 注入 shadow root 的额外 CSS。                                                                           |
+| `label-*`      | `string`                       | 英文          | 覆盖控件文案：`label-copy`、`label-download`、`label-copy-error`（默认 “Could not copy. Try again.”）。 |
 
 对应的 property：`content`、`mode`、`caret`、`copyable`、`downloadable`、`lineNumbers`、`highlight`、`inlineMath`、`linkTarget`、`theme`、`sheet`。
 
@@ -109,18 +112,19 @@ container.append(el);
 
 ## CSS Parts
 
-| Part           | 说明                    |
-| -------------- | ----------------------- |
-| `markdown`     | 最外层容器。            |
-| `body`         | 块容器。                |
-| `block`        | 每个渲染出的块。        |
-| `code`         | 代码块容器。            |
-| `code-header`  | 代码块的语言 / 操作栏。 |
-| `code-lang`    | 语言标签。              |
-| `code-actions` | 操作按钮组。            |
-| `button`       | 每个复制 / 下载按钮。   |
-| `table`        | 可横向滚动的表格外层。  |
-| `error`        | 渲染失败时的错误框。    |
+| Part           | 说明                       |
+| -------------- | -------------------------- |
+| `markdown`     | 最外层容器。               |
+| `body`         | 块容器。                   |
+| `block`        | 每个渲染出的块。           |
+| `code`         | 代码块容器。               |
+| `code-header`  | 代码块的语言 / 操作栏。    |
+| `code-lang`    | 语言标签。                 |
+| `code-actions` | 操作按钮组。               |
+| `button`       | 每个复制 / 下载按钮。      |
+| `copy-status`  | 就地显示的剪贴板失败提示。 |
+| `table`        | 可横向滚动的表格外层。     |
+| `error`        | 渲染失败时的错误框。       |
 
 ```css
 r-markdown::part(code) {
@@ -137,7 +141,7 @@ r-markdown::part(code) {
 `--ran-markdown-code-radius`、`--ran-markdown-code-font-size`、`--ran-markdown-mono-font`、
 `--ran-markdown-blockquote-border`、`--ran-markdown-table-border`、
 `--ran-markdown-table-header-bg`、`--ran-markdown-caret`、`--ran-markdown-caret-color`、
-`--ran-markdown-button-color`、`--ran-markdown-error-color`。
+`--ran-markdown-button-touch-size`、`--ran-markdown-button-color`、`--ran-markdown-error-color`。
 
 ## 说明
 

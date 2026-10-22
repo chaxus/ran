@@ -1,5 +1,5 @@
 import { RanElement } from '@/utils/ssr';
-import { Div, View, createRef } from '@/utils/builder';
+import { Div, View, createRef, EventManager } from '@/utils/builder';
 import {
   ensureShadowRoot,
   getStringAttribute,
@@ -15,6 +15,7 @@ import markdownCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
 type RenderModule = typeof import('./render');
+type CodeCopyControl = import('./render').CodeCopyControl;
 
 interface BlockState {
   /** The block's diff key (source + the document's link definitions). */
@@ -110,7 +111,8 @@ export class Markdown extends RanElement {
   _renderModule: RenderModule | null = null;
   _themeObserver?: MutationObserver;
   _lightDomObserver?: MutationObserver;
-  _copyResetTimer?: number;
+  private _readerEvents = new EventManager();
+  private _copies = new Map<HTMLButtonElement, { control: CodeCopyControl; busy: boolean; timer?: number }>();
   _error?: HTMLElement;
 
   static get observedAttributes(): string[] {
@@ -125,6 +127,7 @@ export class Markdown extends RanElement {
       'highlight',
       'inline-math',
       'link-target',
+      'label-copy-error',
       'sheet',
     ];
   }
@@ -280,7 +283,9 @@ export class Markdown extends RanElement {
         if (token !== this._renderToken) return;
         this.renderWith(mod, source, token);
       })
-      .catch((err: Error) => this.showError(err?.message || String(err)));
+      .catch((err: Error) => {
+        if (token === this._renderToken && this.isConnected) this.showError(err?.message || String(err));
+      });
   }
 
   private renderWith(mod: RenderModule, source: string, token: number): void {
@@ -301,6 +306,7 @@ export class Markdown extends RanElement {
         theme: this.theme,
         labels: { copy: this.label('copy', 'Copy code'), download: this.label('download', 'Download') },
         onCopy: this.copyCode,
+        resetCopy: this.resetCopy,
         onDownload: this.downloadCode,
       };
       let changed = 0;
@@ -309,8 +315,10 @@ export class Markdown extends RanElement {
         const prev = this._blocks[i];
         if (prev && prev.key === block.key && prev.incomplete === incomplete) return;
         const el = prev ? prev.el : this.createBlockElement();
-        el.replaceChildren(doc.render(block));
-        const { themed } = mod.enhance(el, { ...ctxBase, incomplete });
+        const { themed } = mod.renderBlock(el, doc.render(block), {
+          ...ctxBase,
+          incomplete,
+        });
         // The caret hides while a fence is still open or the block is a table (it would
         // land inside the code/table box and look like content).
         el.toggleAttribute('data-no-caret', incomplete || block.hasTable);
@@ -326,6 +334,7 @@ export class Markdown extends RanElement {
       });
       while (this._blocks.length > blocks.length) {
         const dropped = this._blocks.pop();
+        if (dropped) mod.releaseReaders(dropped.el);
         dropped?.el.remove();
         changed += 1;
       }
@@ -344,7 +353,10 @@ export class Markdown extends RanElement {
   }
 
   private showError(message: string): void {
-    this._blocks.forEach((b) => b.el.remove());
+    this._blocks.forEach((b) => {
+      this._renderModule?.releaseReaders(b.el);
+      b.el.remove();
+    });
     this._blocks = [];
     if (!this._error) {
       this._error = View('pre').class('ran-markdown-error').part('error').build();
@@ -357,7 +369,10 @@ export class Markdown extends RanElement {
 
   /** Force a full re-render (e.g. after toggling controls). */
   private rerender(): void {
-    this._blocks.forEach((b) => b.el.remove());
+    this._blocks.forEach((b) => {
+      this._renderModule?.releaseReaders(b.el);
+      b.el.remove();
+    });
     this._blocks = [];
     this.render();
   }
@@ -365,15 +380,52 @@ export class Markdown extends RanElement {
   // ── Code-block toolbar ────────────────────────────────────────────────────
   // Bound to each button when enhance() builds it, so the code and language arrive as
   // arguments rather than being read back out of the rendered DOM at click time.
-  private copyCode = (icon: HTMLElement | null, code: string, language: string): void => {
-    if (!navigator.clipboard) return;
-    navigator.clipboard.writeText(code).then(() => {
-      this.emit('copied', { kind: 'code', language, code });
-      if (!icon) return;
-      icon.setAttribute('name', 'check');
-      window.clearTimeout(this._copyResetTimer);
-      this._copyResetTimer = window.setTimeout(() => icon.setAttribute('name', 'copy'), 1200);
-    });
+  private resetCopy = (control: CodeCopyControl): void => {
+    const pending = this._copies.get(control.button);
+    if (pending?.timer) window.clearTimeout(pending.timer);
+    this._copies.delete(control.button);
+    control.button.removeAttribute('aria-busy');
+    control.button.removeAttribute('aria-disabled');
+    control.icon?.setAttribute('name', 'copy');
+    control.status.textContent = '';
+    control.status.hidden = true;
+  };
+
+  private copyCode = (control: CodeCopyControl, code: string, language: string, sourceCurrent: () => boolean): void => {
+    if (this._copies.get(control.button)?.busy) return;
+    this.resetCopy(control);
+    const pending = { control, busy: true, timer: undefined as number | undefined };
+    this._copies.set(control.button, pending);
+    control.button.setAttribute('aria-busy', 'true');
+    control.button.setAttribute('aria-disabled', 'true');
+    const current = () => this.isConnected && sourceCurrent() && this._copies.get(control.button) === pending;
+    void (async () => {
+      try {
+        if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+        await navigator.clipboard.writeText(code);
+        if (!current()) return;
+        this.emit('copied', { kind: 'code', language, code });
+        if (!current()) return;
+        control.icon?.setAttribute('name', 'check');
+        pending.timer = window.setTimeout(() => {
+          if (current()) this.resetCopy(control);
+        }, 1200);
+      } catch {
+        if (!current()) return;
+        control.status.textContent = this.label('copy-error', 'Could not copy. Try again.');
+        control.status.hidden = false;
+      } finally {
+        if (current()) {
+          pending.busy = false;
+          control.button.removeAttribute('aria-busy');
+          control.button.removeAttribute('aria-disabled');
+        }
+      }
+    })();
+  };
+
+  private settleReader = (): void => {
+    for (const block of this._blocks) this._renderModule?.settleHighlights(block.el);
   };
 
   private downloadCode = (code: string, language: string): void => {
@@ -392,6 +444,9 @@ export class Markdown extends RanElement {
   connectedCallback(): void {
     this.handlerExternalCss();
     this.observeTheme();
+    this._readerEvents.on(document, 'selectionchange', this.settleReader);
+    this._readerEvents.on(document, 'pointerup', this.settleReader);
+    this._readerEvents.on(document, 'keyup', this.settleReader);
     // Hand-authored / streamed light-DOM text: re-render when it changes, unless the
     // property or attribute is the source of truth.
     if (typeof MutationObserver !== 'undefined' && !this._lightDomObserver) {
@@ -401,19 +456,27 @@ export class Markdown extends RanElement {
       this._lightDomObserver.observe(this, { childList: true, characterData: true, subtree: true });
     }
     this.render();
+    for (const block of this._blocks) this._renderModule?.resumeReaders(block.el);
   }
   disconnectedCallback(): void {
+    ++this._renderToken;
+    this._readerEvents.abort();
+    for (const block of this._blocks) this._renderModule?.releaseReaders(block.el);
+    for (const pending of this._copies.values()) this.resetCopy(pending.control);
     this._themeObserver?.disconnect();
     this._themeObserver = undefined;
     this._lightDomObserver?.disconnect();
     this._lightDomObserver = undefined;
-    window.clearTimeout(this._copyResetTimer);
   }
   attributeChangedCallback(k: string, o: string | null, n: string | null): void {
     if (o === n) return;
     if (k === 'sheet') this.handlerExternalCss();
     else if (k === 'content') this.render();
-    else if (k === 'theme') {
+    else if (k === 'label-copy-error') {
+      for (const { control } of this._copies.values()) {
+        if (!control.status.hidden) control.status.textContent = this.label('copy-error', 'Could not copy. Try again.');
+      }
+    } else if (k === 'theme') {
       this.observeTheme();
       this.syncTheme();
     } else if (k === 'caret') {

@@ -63,11 +63,11 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `button`
 
-- Tokens: 65
+- Tokens: 66
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 14 · skin: 2 · component: 43 · internal: 6 -->
+<!-- layers: semantic: 15 · skin: 2 · component: 43 · internal: 6 -->
 - `--ran-btn-active-background`
 - `--ran-btn-active-border-color`
 - `--ran-btn-active-transform`
@@ -115,6 +115,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-color-border`
 - `--ran-color-border-hover`
 - `--ran-color-danger`
+- `--ran-color-link`
 - `--ran-color-primary`
 - `--ran-color-primary-active`
 - `--ran-color-primary-hover`
@@ -999,11 +1000,11 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `markdown`
 
-- Tokens: 78
+- Tokens: 76
 - Parts: 4
 
 ### Tokens
-<!-- layers: semantic: 13 · skin: 1 · internal: 64 -->
+<!-- layers: semantic: 12 · skin: 1 · internal: 63 -->
 - `--ran-color-bg-muted`
 - `--ran-color-border`
 - `--ran-color-border-secondary`
@@ -1013,7 +1014,6 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
-- `--ran-focus-ring`
 - `--ran-font-family`
 - `--ran-font-mono`
 - `--ran-gray-alpha-200`
@@ -1024,6 +1024,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-markdown-button-hover-background`
 - `--ran-markdown-button-hover-color`
 - `--ran-markdown-button-size`
+- `--ran-markdown-button-touch-size`
 - `--ran-markdown-caret`
 - `--ran-markdown-caret-color`
 - `--ran-markdown-code-bg`
@@ -1060,10 +1061,8 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-markdown-table-header-bg`
 - `--ran-markdown-table-header-color`
 - `--ran-markdown-table-radius`
-- `--ran-radius-md`
 - `--ran-radius-sm`
 - `--ran-red-100`
-- `--ran-size-4`
 - `--ran-size-7`
 - `--ran-skin-border-style`
 - `--ran-space-1`

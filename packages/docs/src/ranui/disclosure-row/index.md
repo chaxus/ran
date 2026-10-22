@@ -146,6 +146,10 @@ A collapsed body is clipped rather than removed, so that it can animate. It is a
 `inert` and its contents are skipped with `content-visibility: hidden`, which keeps it out
 of the tab order and off the render path while it is closed.
 
+If focus is inside the body when it closes, focus returns to the row before the body becomes
+inert, including programmatic and grouped collapse. Focus elsewhere is preserved. With leading
+content, keyboard focus swaps its icon for the chevron just like hover, without painting both.
+
 The row is 24px tall, which is the WCAG 2.5.8 minimum exactly, and rows stack with no gap.
 On a coarse pointer the default height goes to 32px, because the hit area cannot be grown
 past the row without overlapping the row above it, which trades a small target for a wrong

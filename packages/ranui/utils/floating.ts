@@ -320,9 +320,11 @@ export class FloatingController {
   position = (applyEntranceTransit = false): void => {
     const panel = this.options.panel();
     if (!panel) return;
+    const generation = this.generation;
     const run = (): void => {
       const current = this.options.panel();
-      if (current) this.write(current, applyEntranceTransit);
+      if (current === panel && (!applyEntranceTransit || (this.opened && generation === this.generation)))
+        this.write(current, applyEntranceTransit);
     };
     if (applyEntranceTransit && typeof requestAnimationFrame === 'function') requestAnimationFrame(run);
     else run();

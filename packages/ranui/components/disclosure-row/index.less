@@ -112,6 +112,7 @@
    hover, on focus, or while open. Sharing the cell means the swap costs no layout, so the
    title never shifts under the pointer. */
 :host([expandable]) .has-leading .ran-disclosure-row:hover .ran-disclosure-icon,
+:host([expandable]) .has-leading .ran-disclosure-row:focus-visible .ran-disclosure-icon,
 :host([expandable][open]) .has-leading .ran-disclosure-icon {
   opacity: 0;
 }

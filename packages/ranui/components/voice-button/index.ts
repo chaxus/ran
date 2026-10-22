@@ -152,7 +152,7 @@ export class VoiceButton extends RanElement {
     setStringAttribute(this, 'label', value);
   }
 
-  /** Accessible name while listening; the name has to change, not only the icon. */
+  /** Accessible cancel/stop name while capture is pending or listening. */
   get activeLabel(): string {
     return getStringAttribute(this, 'active-label', 'Stop voice input');
   }
@@ -189,6 +189,7 @@ export class VoiceButton extends RanElement {
   start(): void {
     if (this.disabled) return;
     this._ensureRecognizer().start();
+    this._syncButton();
   }
 
   /** Ends the capture, keeping what was recognized. */
@@ -224,9 +225,10 @@ export class VoiceButton extends RanElement {
     this._events.on(this._button, 'pointermove', this._onPointerMove as EventListener);
     this._events.on(this._button, 'pointerup', this._onPointerUp as EventListener);
     this._events.on(this._button, 'pointercancel', this._onPointerCancel as EventListener);
-    // Escape while listening discards the capture. A speaker who realises mid-sentence that
-    // they said the wrong thing wants the text gone, not committed to the box.
-    this._events.on(this, 'keydown', this._onKeydown as EventListener);
+    // Safari pointer activation need not focus a button. Capture intent still owns an
+    // unhandled Escape while pending or listening; observe bubbling keys without stealing
+    // those already consumed by a focused editor, composition, or another disclosure.
+    this._events.on(this.ownerDocument, 'keydown', this._onKeydown as EventListener);
     this._syncButton();
     // Hidden rather than disabled: disabled says "not now", absent says "not here", and on
     // a browser with no speech recognition the second one is true.
@@ -312,7 +314,7 @@ export class VoiceButton extends RanElement {
   }
 
   private _onKeydown = (event: KeyboardEvent): void => {
-    if (event.key !== 'Escape' || !this.listening) return;
+    if (event.key !== 'Escape' || event.isComposing || event.defaultPrevented || !this._recognizer?.active) return;
     event.stopPropagation();
     this.abort();
   };
@@ -346,12 +348,13 @@ export class VoiceButton extends RanElement {
   }
 
   private _syncButton(): void {
-    const listening = this.listening;
+    const active = this._recognizer?.active ?? false;
+    this._button.setAttribute('aria-busy', String(active && !this.listening));
     this._button.disabled = this.disabled;
-    this._button.setAttribute('aria-pressed', listening ? 'true' : 'false');
+    this._button.setAttribute('aria-pressed', active ? 'true' : 'false');
     // The name changes with the state, not just the icon: a screen reader reads the name.
-    this._button.setAttribute('aria-label', listening ? this.activeLabel : this.label);
-    this._icon.setAttribute('name', listening ? 'mic-off' : 'mic');
+    this._button.setAttribute('aria-label', active ? this.activeLabel : this.label);
+    this._icon.setAttribute('name', active ? 'mic-off' : 'mic');
     this._hint.textContent = this.hasAttribute('cancelling') ? this.cancelHint : this.holdHint;
   }
 }

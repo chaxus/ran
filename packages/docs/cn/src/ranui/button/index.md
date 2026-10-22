@@ -53,6 +53,10 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 ### 禁用状态 `disabled`
 
+禁用按钮会阻止指针、键盘和程序化 `click()` 激活；重新启用后保留原控件及其可访问名称。
+
+`focus(options?: FocusOptions)` 会聚焦可用的键盘操作区域，并转发原生聚焦选项。浮层可在关闭后调用它恢复触发按钮的焦点；禁用按钮不会获得焦点。
+
 添加 `disabled` 属性可以让按钮处于不可用状态，同时按钮样式也会相应改变
 
 <ran-demo>

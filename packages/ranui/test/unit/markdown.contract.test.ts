@@ -203,7 +203,7 @@ describe('r-markdown contract', () => {
     btn.click();
     await Promise.resolve();
     await Promise.resolve();
-    expect(writeText).toHaveBeenCalledWith('print(1)');
+    expect(writeText).toHaveBeenCalledWith('print(1)\n');
     expect((copied.mock.calls[0][0] as CustomEvent).detail).toMatchObject({ kind: 'code', language: 'py' });
     expect(btn.querySelector('r-icon')?.getAttribute('name')).toBe('check');
   });

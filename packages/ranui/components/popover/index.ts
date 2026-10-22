@@ -69,6 +69,7 @@ export class Popover extends RanElement {
   _shadowDom: ShadowRoot;
   removeTimeId?: ReturnType<typeof setTimeout>;
   _repositionBound = false;
+  private _returnFocus?: HTMLElement;
   /**
    * Positioning, portalling, scroll-following, the enter/exit animation and the
    * show/hide events are the shared controller's — r-select drives the same one.
@@ -265,6 +266,7 @@ export class Popover extends RanElement {
         .cssVar('ran-dropdown-padding', contentPadding)
         .build() as HTMLElement;
       this.popoverContent?.addEventListener('click', this.stopPropagation);
+      this._events.on(this.popoverContent, 'keydown', this._dismissFromKeyboard);
 
       const div = Div().children(this.popoverContent).build() as HTMLDivElement;
       this.popoverInner = div;
@@ -287,7 +289,7 @@ export class Popover extends RanElement {
     if (this.popoverContent && content.length > 0) {
       this.popoverContent.innerHTML = '';
       const Fragment = document.createDocumentFragment();
-      for (const child of content) {
+      for (const child of Array.from(content)) {
         Fragment.appendChild(child);
       }
       this.popoverContent.appendChild(Fragment);
@@ -374,17 +376,46 @@ export class Popover extends RanElement {
     this.blur.cancel();
     clearTimeout(this.removeTimeId);
     this.removeTimeId = undefined;
+    const opening = !this.open;
     this.toggle();
+    if (opening) {
+      // WebKit can focus the host when a native child button is clicked. The
+      // activation path identifies the opener independently of that browser policy.
+      this._returnFocus =
+        (e
+          .composedPath()
+          .find(
+            (target) =>
+              target instanceof HTMLElement && target !== this && this.contains(target) && target.tabIndex >= 0,
+          ) as HTMLElement | undefined) ??
+        (Array.from(this.children).find((child) => child.tagName !== 'R-CONTENT') as HTMLElement) ??
+        this;
+    }
   };
   keydownPopover = (e: KeyboardEvent): void => {
+    if (e.defaultPrevented || e.isComposing || e.keyCode === 229) return;
+    if (e.key === 'Escape') {
+      this.setDropdownDisplayBlock.cancel();
+      this._dismissFromKeyboard(e);
+      return;
+    }
     if (isActivationKey(e)) {
       e.preventDefault();
       this.setDropdownDisplayBlock();
     }
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      this.setDropdownDisplayNone();
-    }
+  };
+  private _dismissFromKeyboard = (event: KeyboardEvent): void => {
+    if (event.key !== 'Escape' || event.defaultPrevented || event.isComposing || event.keyCode === 229 || !this.open)
+      return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.setDropdownDisplayBlock.cancel();
+    this.setDropdownDisplayNone.cancel();
+    this.blur.cancel();
+    clearTimeout(this.removeTimeId);
+    this.removeTimeId = undefined;
+    this.hide();
+    if (this._returnFocus?.isConnected) this._returnFocus.focus({ preventScroll: true });
   };
   clickRemovePopover = (e: Event): void => {
     this.hoverRemovePopover(e);
@@ -401,6 +432,15 @@ export class Popover extends RanElement {
       this._events.on(this, 'mouseleave', this.blur);
     }
     this._events.on(this, 'click', this.clickPopover).on(this, 'keydown', this.keydownPopover);
+    this._events.on(this, 'show', () => {
+      const root = this.getRootNode() as Document | ShadowRoot;
+      const active = root.activeElement;
+      this._returnFocus =
+        active instanceof HTMLElement && (active === this || this.contains(active))
+          ? active
+          : ((Array.from(this.children).find((child) => child.tagName !== 'R-CONTENT') as HTMLElement) ?? this);
+    });
+    if (this.popoverContent) this._events.on(this.popoverContent, 'keydown', this._dismissFromKeyboard);
     this._floating.bindOutside(this._events, this.clickRemovePopover);
   };
   hoverRemovePopover = (e: Event): void => {
@@ -446,6 +486,10 @@ export class Popover extends RanElement {
     this._floating.destroy();
     clearTimeout(this.removeTimeId);
     this.removeTimeId = undefined;
+    // The portal borrows authored nodes. Return them before removing its wrapper
+    // so reconnecting the same element preserves control identity and local state.
+    const content = Array.from(this.children).find((child) => child.tagName === 'R-CONTENT');
+    if (content && this.popoverContent) content.append(...Array.from(this.popoverContent.childNodes));
     this.popoverInner?.remove();
     this.popoverInner = undefined;
     this.popoverContent = undefined;

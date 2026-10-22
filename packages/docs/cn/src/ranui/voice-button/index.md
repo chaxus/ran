@@ -62,9 +62,11 @@ Firefox 不提供语音识别，任何缺少该 API 的浏览器也一样。不�
 
 ### 无障碍
 
-**可访问名称随状态改变**，而不只是图标变化，`aria-pressed` 承载切换态：屏幕阅读器读出的是「停止语音输入，已按下」，而不是一个图标。**Esc 放弃**当前录音而不是提交它，这正是说到一半意识到说错了的人想要的。
+**可访问名称随状态改变**，而不只是图标变化，`aria-pressed` 承载当前采集意图：屏幕阅读器读出的是「停止语音输入，已按下」，而不是一个图标。**Esc 放弃**当前录音而不是提交它，这正是说到一半意识到说错了的人想要的。
 
 监听状态由边框、填充**和**光环共同表达，不依赖颜色单独传达。光环是唯一的动效且属于装饰，`prefers-reduced-motion` 下直接去掉，不损失任何信息。
+
+等待麦克风权限时，按钮使用已有且可覆盖的 `active-label` 命名取消操作，设置 `aria-busy="true"`，并支持 Esc 取消。只有平台报告录音已经开始后，`listening` 才变为 true，因此等待权限时不会显示录音光环。
 
 ### 语言跟随页面
 
@@ -80,7 +82,7 @@ Firefox 不提供语音识别，任何缺少该 API 的浏览器也一样。不�
 | `continuous`  | `boolean` | `true`                | 跨停顿持续监听，而不是在第一次停顿时结束。                                   |
 | `disabled`    | `boolean` | `false`               | 禁用按钮：`start()` 会被忽略，内部按钮也一并禁用；不会中止已经在进行的录音。 |
 | `label`       | `string`  | `'Start voice input'` | 空闲时的可访问名称。                                                         |
-| `activeLabel` | `string`  | `'Stop voice input'`  | 监听时的可访问名称。                                                         |
+| `activeLabel` | `string`  | `'Stop voice input'`  | 等待权限或监听时的取消／停止操作名称。                                       |
 | `listening`   | `boolean` | `false`               | 只读并反射，可用 `:host([listening])` 设样式。                               |
 | `supported`   | `boolean` | —                     | 只读。当前平台能否识别语音。                                                 |
 | `sheet`       | `string`  | `''`                  | 注入元素 Shadow DOM 的 CSS。                                                 |

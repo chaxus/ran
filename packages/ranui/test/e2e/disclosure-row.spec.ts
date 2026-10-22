@@ -131,6 +131,50 @@ test.describe('r-disclosure-row', () => {
     expect(insideTitle).toBe(true);
   });
 
+  test('swaps the leading icon for a chevron during keyboard focus', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await mount(
+      page,
+      '<button id="start">Start</button><r-disclosure-row expandable heading="Details"><span slot="leading">●</span><p>Body</p></r-disclosure-row>',
+    );
+    await page.mouse.move(500, 500);
+    await page.locator('#start').focus();
+    await page.keyboard.press('Tab');
+    const paint = () =>
+      insideShadow(page, 'r-disclosure-row', (root) => ({
+        focused: root.querySelector('[part="row"]')!.matches(':focus-visible'),
+        icon: getComputedStyle(root.querySelector('.ran-disclosure-icon')!).opacity,
+        chevron: getComputedStyle(root.querySelector('.ran-disclosure-chevron')!).opacity,
+      }));
+    await expect.poll(paint).toEqual({ focused: true, icon: '0', chevron: '1' });
+    await page.locator('#start').focus();
+    await expect.poll(paint).toEqual({ focused: false, icon: '1', chevron: '0' });
+  });
+
+  for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+    test(`returns body focus before programmatic or grouped collapse (${reducedMotion})`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion });
+      await mount(
+        page,
+        '<r-disclosure-row id="a" expandable open name="focus" heading="Draft"><input id="draft" value="Retained"></r-disclosure-row><r-disclosure-row id="b" expandable name="focus" heading="Other"><p>Other</p></r-disclosure-row><button id="outside">Outside</button>',
+      );
+      const draft = page.locator('#draft');
+      const focusedToggle = () =>
+        insideShadow(page, '#a', (root) => root.activeElement === root.querySelector('[part="row"]'));
+      await draft.focus();
+      await page.locator('#a').evaluate((node: HTMLElement & { open: boolean }) => (node.open = false));
+      await expect.poll(focusedToggle).toBe(true);
+      await expect(draft).toHaveValue('Retained');
+      await page.locator('#a').evaluate((node: HTMLElement & { open: boolean }) => (node.open = true));
+      await draft.focus();
+      await page.locator('#b').evaluate((node: HTMLElement & { open: boolean }) => (node.open = true));
+      await expect.poll(focusedToggle).toBe(true);
+      await page.locator('#outside').focus();
+      await page.locator('#a').evaluate((node: HTMLElement & { open: boolean }) => (node.open = false));
+      await expect(page.locator('#outside')).toBeFocused();
+    });
+  }
+
   test('renders', { tag: '@visual' }, async ({ page }) => {
     await mount(
       page,

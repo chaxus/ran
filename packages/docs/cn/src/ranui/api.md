@@ -273,7 +273,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/markdown/index.ts`
 
-- **属性（attribute）**: `caret: string`, `content: string`, `copy`, `download`, `highlight: string | null`, `inline-math`, `line-numbers`, `link-target`, `mode: string`, `sheet: string`, `theme: string`
+- **属性（attribute）**: `caret: string`, `content: string`, `copy`, `download`, `highlight: string | null`, `inline-math`, `label-copy-error`, `line-numbers`, `link-target`, `mode: string`, `sheet: string`, `theme: string`
 - **属性值（property）**:
   - `caret: string`
   - `content: string` — Markdown source. Resolution order: the `content` property (set via JS, not
@@ -292,7 +292,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ blocks, changed }`
 - **插槽**: —
-- **Part**: `block`, `body`, `error`, `markdown`
+- **Part**: `block`, `body`, `button`, `code`, `code-actions`, `code-header`, `code-lang`, `copy-status`, `error`, `markdown`, `table`
 
 ## `<r-math>`
 
@@ -625,7 +625,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 - **属性（attribute）**: `active-label`, `cancel-hint`, `cancelling`, `disabled: boolean`, `hold-hint`, `holding`, `label: string`, `listening: boolean`, `sheet: string`
 - **属性值（property）**:
-  - `activeLabel: string` — Accessible name while listening; the name has to change, not only the icon.
+  - `activeLabel: string` — Accessible cancel/stop name while capture is pending or listening.
   - `cancelHint: string` — Replaces {@link holdHint} once the finger has slid far enough to discard.
   - `continuous: boolean` — Keep listening across pauses instead of stopping at the first one.
   - `disabled: boolean`

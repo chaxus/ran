@@ -470,7 +470,9 @@ export class DisclosureRow extends RanElement {
     // A collapsed body is clipped, not removed, so that it can animate. Clipped content is
     // still focusable and still read out, so it is made inert instead — the previous
     // `display: none` did that for free.
-    this._bodyInner.inert = !(expandable && open);
+    const collapsed = !(expandable && open);
+    if (collapsed && this._bodyInner.matches(':focus-within')) this._row.focus({ preventScroll: true });
+    this._bodyInner.inert = collapsed;
   }
 }
 

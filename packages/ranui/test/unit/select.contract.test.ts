@@ -274,9 +274,10 @@ describe('r-select contract', () => {
     expect(select.hasAttribute('aria-activedescendant')).toBe(false);
   });
 
-  it('keydownSelect Escape key calls setSelectDropdownDisplayNone', async () => {
+  it('keydownSelect Escape closes an open dropdown', async () => {
     const select = await createSelectWithOptions();
     select.createOption();
+    select.setSelectDropdownDisplayBlock();
     const spy = vi.spyOn(select, 'setSelectDropdownDisplayNone');
     const event = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
     select.keydownSelect(event);
