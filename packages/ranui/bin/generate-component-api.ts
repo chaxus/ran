@@ -566,10 +566,14 @@ async function main(): Promise<void> {
     await Promise.all(utilFiles.map((file) => fs.readFile(file, 'utf8'))),
   );
   const elements: ElementApi[] = [];
+  const sources = new Map(
+    await Promise.all(files.map(async (file) => [file, await fs.readFile(file, 'utf8')] as const)),
+  );
+  const registration = /defineSSR\(\s*['"`]([^'"`]+)['"`]/;
 
   for (const file of files) {
-    const src = await fs.readFile(file, 'utf8');
-    const tagMatch = src.match(/defineSSR\(\s*['"`]([^'"`]+)['"`]/);
+    const src = sources.get(file)!;
+    const tagMatch = src.match(registration);
     if (!tagMatch) continue;
     const { defaultSlot, namedSlots } = extractSlots(src);
     elements.push({
@@ -578,7 +582,17 @@ async function main(): Promise<void> {
       attributes: extractAttributes(src),
       properties: extractProperties(src),
       events: extractEvents(src, sharedEventFlags),
-      parts: extractParts(src),
+      // Lazy renderer helpers can mount public parts in the owner's existing root.
+      // Registered neighbors own their own shadow roots and must not leak into this API.
+      parts: extractParts(
+        [...sources]
+          .filter(
+            ([candidate, source]) =>
+              path.dirname(candidate) === path.dirname(file) && (candidate === file || !registration.test(source)),
+          )
+          .map(([, source]) => source)
+          .join('\n'),
+      ),
       defaultSlot,
       namedSlots,
     });

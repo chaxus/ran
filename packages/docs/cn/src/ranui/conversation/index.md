@@ -65,7 +65,7 @@ chat.addEventListener('pinnedchange', (e) => {
 });
 ```
 
-`follow="false"` 让用户从一开始就掌握控制权；`scrollToBottom()` 把控制权收回。加载更早的内容时，在前插之前调用 `captureAnchor()`、之后调用 `restoreAnchor()`，用户就会一直看着他们正在看的那一行。
+`follow="false"` 从首次挂载到重新连接都会禁用自动跟随，包括内容和底部区域尺寸变化。显式禁用时，`pinned` 返回 `false`；切换 `follow` 导致有效状态变化时触发 `pinnedchange`。`scrollToBottom()` 显式跳到最新内容，并把 `follow` 恢复为 `true`。加载更早的内容时，在前插之前调用 `captureAnchor()`、之后调用 `restoreAnchor()`，用户就会一直看着他们正在看的那一行。
 
 ## API 参考
 

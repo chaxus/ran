@@ -11,6 +11,19 @@ describe('r-button contract', () => {
     document.body.innerHTML = '';
   });
 
+  it('forwards public focus and options to the enabled keyboard surface only', () => {
+    const btn = document.createElement('r-button') as Button;
+    document.body.append(btn);
+    const focus = vi.spyOn(btn._btn, 'focus');
+    btn.focus({ preventScroll: true });
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(btn._shadowDom.activeElement).toBe(btn._btn);
+    btn.disabled = true;
+    focus.mockClear();
+    btn.focus();
+    expect(focus).not.toHaveBeenCalled();
+  });
+
   it('reflects disabled property to attributes', () => {
     const btn = document.createElement('r-button') as Button;
     document.body.appendChild(btn);
@@ -380,4 +393,49 @@ describe('r-button accessible name', () => {
     const inner = (button as unknown as { _shadowDom: ShadowRoot })._shadowDom.querySelector('.ran-btn')!;
     expect(inner.hasAttribute('aria-label')).toBe(false);
   });
+});
+
+describe('r-button disabled dispatch', () => {
+  beforeEach(() => {
+    document.body.replaceChildren();
+  });
+
+  it.each(['surface', 'slot', 'host'] as const)(
+    'blocks disabled %s activation and restores it when re-enabled',
+    (target) => {
+      const button = document.createElement('r-button') as Button;
+      const content = document.createElement('span');
+      content.textContent = 'Save settings';
+      button.append(content);
+      document.body.append(button);
+      const clicked = vi.fn();
+      button.addEventListener('click', clicked);
+      const activate = () => {
+        if (target === 'surface') button._btn.click();
+        else if (target === 'slot') content.click();
+        else button.click();
+      };
+      button.disabled = true;
+      activate();
+      expect(clicked).not.toHaveBeenCalled();
+      button.disabled = false;
+      activate();
+      expect(clicked).toHaveBeenCalledOnce();
+    },
+  );
+});
+
+it('keeps disabled dispatch guarded after disconnect and reconnect without duplicating enabled clicks', () => {
+  const button = document.createElement('r-button') as Button;
+  document.body.append(button);
+  const clicked = vi.fn();
+  button.addEventListener('click', clicked);
+  button.remove();
+  document.body.append(button);
+  button.disabled = true;
+  button._btn.click();
+  expect(clicked).not.toHaveBeenCalled();
+  button.disabled = false;
+  button._btn.click();
+  expect(clicked).toHaveBeenCalledOnce();
 });

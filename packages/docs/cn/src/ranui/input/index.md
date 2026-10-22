@@ -53,6 +53,8 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 <r-input label="用户名"></r-input>
 ```
 
+标签、输入控件和提示文案各占一行。显式设置宿主高度时，输入控件填满标签和提示文案之外的剩余空间，并保留自身的最小高度。
+
 ### 占位提示 `placeholder`
 
 与原生 `placeholder` 属性一致。
@@ -86,6 +88,8 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 ```
 
 ### 图标 `icon`
+
+前置图标可以与静态 `label` 同时使用。添加或更改 `icon` 会保留可见标签及其与原生输入框的关联。
 
 <ran-demo column>
   <r-input icon="user"></r-input>

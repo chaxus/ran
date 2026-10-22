@@ -82,7 +82,10 @@ chat.addEventListener('pinnedchange', (e) => {
 });
 ```
 
-`follow="false"` leaves the reader in control from the start; `scrollToBottom()` takes it back.
+`follow="false"` disables automatic following, including content/footer resize, from first mount
+and after reconnect. `pinned` reports `false` while following is explicitly disabled. Changing
+`follow` emits `pinnedchange` when the effective state changes. `scrollToBottom()` explicitly
+scrolls to the latest content and sets `follow` back to `true`.
 For paging in older content, call `captureAnchor()` before the prepend and `restoreAnchor()`
 after, so the reader keeps looking at what they were looking at.
 

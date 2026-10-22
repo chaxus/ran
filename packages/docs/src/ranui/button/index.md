@@ -51,6 +51,10 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Disabled State `disabled`
 
+Disabled buttons reject pointer, keyboard and programmatic `click()` activation. Re-enabling restores the same control and its accessible name.
+
+`focus(options?: FocusOptions)` focuses the enabled keyboard surface and forwards native focus options. Overlays can call it to restore their trigger after dismissal; a disabled button does not receive focus.
+
 <ran-demo>
   <r-button type="primary" disabled>Primary Button</r-button>
   <r-button type="warning" disabled>Warning Button</r-button>

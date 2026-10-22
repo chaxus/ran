@@ -277,7 +277,7 @@ Código-fonte: `components/loading/index.ts`
 
 Código-fonte: `components/markdown/index.ts`
 
-- **Atributos**: `caret: string`, `content: string`, `copy`, `download`, `highlight: string | null`, `inline-math`, `line-numbers`, `link-target`, `mode: string`, `sheet: string`, `theme: string`
+- **Atributos**: `caret: string`, `content: string`, `copy`, `download`, `highlight: string | null`, `inline-math`, `label-copy-error`, `line-numbers`, `link-target`, `mode: string`, `sheet: string`, `theme: string`
 - **Propriedades**:
   - `caret: string`
   - `content: string` — Markdown source. Resolution order: the `content` property (set via JS, not
@@ -296,7 +296,7 @@ Código-fonte: `components/markdown/index.ts`
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ blocks, changed }`
 - **Slots**: —
-- **Partes**: `block`, `body`, `error`, `markdown`
+- **Partes**: `block`, `body`, `button`, `code`, `code-actions`, `code-header`, `code-lang`, `copy-status`, `error`, `markdown`, `table`
 
 ## `<r-math>`
 
@@ -629,7 +629,7 @@ Código-fonte: `components/voice-button/index.ts`
 
 - **Atributos**: `active-label`, `cancel-hint`, `cancelling`, `disabled: boolean`, `hold-hint`, `holding`, `label: string`, `listening: boolean`, `sheet: string`
 - **Propriedades**:
-  - `activeLabel: string` — Accessible name while listening; the name has to change, not only the icon.
+  - `activeLabel: string` — Accessible cancel/stop name while capture is pending or listening.
   - `cancelHint: string` — Replaces {@link holdHint} once the finger has slid far enough to discard.
   - `continuous: boolean` — Keep listening across pauses instead of stopping at the first one.
   - `disabled: boolean`

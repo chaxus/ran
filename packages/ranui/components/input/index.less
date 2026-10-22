@@ -1,6 +1,7 @@
 :host {
   position: var(--ran-input-host-position, relative);
-  display: var(--ran-input-host-display, block);
+  display: var(--ran-input-host-display, flex);
+  flex-direction: column;
   box-sizing: var(--ran-input-host-box-sizing, border-box);
 }
 // A static caption above the field (Luke Wroblewski's/NN·g's top-aligned-label
@@ -12,6 +13,7 @@
 // content the way an absolutely-positioned floating label could.
 .ran-input-label {
   display: var(--ran-input-label-display, block);
+  flex: none;
   margin-bottom: var(--ran-input-label-margin-bottom, var(--ran-space-1, 4px));
   font-size: var(--ran-input-label-font-size, var(--ran-text-label-1, 14px));
   font-weight: var(--ran-input-label-font-weight, var(--ran-text-label-weight, 500));
@@ -40,11 +42,11 @@
   // on :host) keeps icon + input + suffix vertically centred instead of top-aligned.
   align-items: var(--ran-input-align-items, center);
   width: var(--ran-input-width, 100%);
-  // Fill the host height (was `auto`, which left this flex row at its 32px
-  // min-height, top-aligned in a taller host → content rode high). With 100%
-  // the row stretches to the host; when the host height is auto, 100% collapses
-  // back to content height, so both fixed-height and content-sized hosts stay centred.
-  height: var(--ran-input-height, 100%);
+  // The host stacks caption, control and helper. Only the control takes the
+  // remaining fixed height; 100% of the whole host would count the caption twice.
+  // An automatic-height field retains the same native 32px control minimum.
+  flex: 1 1 auto;
+  height: var(--ran-input-height, auto);
   min-width: var(--ran-input-min-width, 0);
   padding: var(--ran-input-padding, 0px 0px 0px 4px);
   color: var(--ran-input-color, var(--ran-color-text, #000000d9));
@@ -215,6 +217,7 @@
 /* Helper / validation message below the field — a text cue for status
    (DESIGN.md §7). Hidden when empty. */
 .ran-input-message {
+  flex: none;
   margin-top: var(--ran-input-message-margin-top, 4px);
   font-size: var(--ran-input-message-font-size, var(--ran-text-label-3, 12px));
   font-weight: var(--ran-input-message-font-weight, var(--ran-text-label-weight, 500));
@@ -225,8 +228,10 @@
   }
 }
 :host([status='error']) .ran-input-message {
+  flex: none;
   color: var(--ran-input-message-error-color, var(--ran-color-danger-foreground, #d8001b));
 }
 :host([status='warning']) .ran-input-message {
+  flex: none;
   color: var(--ran-input-message-warning-color, var(--ran-color-warning-foreground, #aa4d00));
 }

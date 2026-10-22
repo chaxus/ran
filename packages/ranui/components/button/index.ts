@@ -127,6 +127,22 @@ export class Button extends RanElement {
 
   // ── Methods ────────────────────────────────────────────────────────────────
 
+  /** Focus the enabled keyboard surface, including when an overlay restores its trigger. */
+  focus(options?: FocusOptions): void {
+    if (!isDisabled(this)) this._btn.focus(options);
+  }
+
+  /** Match native disabled buttons for programmatic activation as well as user input. */
+  click(): void {
+    if (!isDisabled(this)) super.click();
+  }
+
+  private _guardDisabledClick = (event: Event): void => {
+    if (!isDisabled(this)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  };
+
   /**
    * @description: 设置 button 的 icon
    */
@@ -227,6 +243,7 @@ export class Button extends RanElement {
     this.syncA11yState();
     this.syncAriaLabel();
     this._events
+      .on(this, 'click', this._guardDisabledClick, { capture: true })
       .on(this._btn, 'mousedown', this.mousedown)
       .on(this._btn, 'mouseup', this.mouseup)
       .on(this._btn, 'keydown', this.keydown);

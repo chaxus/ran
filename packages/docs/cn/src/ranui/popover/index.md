@@ -218,6 +218,11 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 - **打开**：`mouseenter`（当 `trigger` 包含 `hover` 时）、`click`，或聚焦时按下 `Enter` / `Space`。
 - **关闭**：`mouseleave`（hover 模式）、按下 `Escape`，或点击文档中的其他位置。
 
+焦点位于传送后的面板控件内时，Escape 同样能关闭面板，并把焦点还给打开它的触发器。
+嵌套弹层先处理自己的 Escape；已被处理的 Escape 或输入法组合输入不会关闭父弹层。
+立即关闭会取消排队中的入场工作，包括首个绘制帧之前。Tab 顺序与模态焦点约束仍由组合界面
+负责；Popover 不是模态对话框。
+
 在内部，配套的 `<r-content>` 元素会用 `MutationObserver` 监视自身子树，并派发一个 `change` `CustomEvent`（`detail: { type, value: { content, mutation } }`），popover 消费这个事件以保持面板同步。这是一个实现细节，而非公开 API。
 
 无障碍访问是自动接好的：host 元素会带上 `tabindex="0"`、`aria-haspopup="dialog"`，以及会随面板开关在 `"false"` 和 `"true"` 之间切换的 `aria-expanded`。

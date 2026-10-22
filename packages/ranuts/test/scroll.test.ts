@@ -103,7 +103,7 @@ function fakeRow(
  * @param options Threshold and pinned-change spy.
  * @returns The scroller, the follower, and the spy.
  */
-function setup(options: { threshold?: number } = {}) {
+function setup(options: { threshold?: number; enabled?: () => boolean } = {}) {
   const scroller = new FakeScroller();
   const onPinnedChange = vi.fn();
   const follower = createBottomFollower({
@@ -118,6 +118,25 @@ describe('createBottomFollower', () => {
   it('starts pinned, which is what a reload of an append-only view wants', () => {
     const { follower } = setup();
     expect(follower.pinned).toBe(true);
+  });
+
+  it('gates automatic writes on current intent while explicit navigation remains available', () => {
+    let enabled = false;
+    const { scroller, follower } = setup({ enabled: () => enabled });
+    follower.follow();
+    expect(scroller.scrollTop).toBe(0);
+    scroller.grow(600);
+    expect(scroller.scrollTop).toBe(0);
+    enabled = true;
+    follower.follow();
+    expect(scroller.scrollTop).toBe(scroller.floor);
+    const retained = scroller.scrollTop;
+    enabled = false;
+    scroller.grow(500);
+    expect(scroller.scrollTop).toBe(retained);
+    follower.toBottom();
+    expect(scroller.scrollTop).toBe(scroller.floor);
+    follower.destroy();
   });
 
   it('follows the floor while pinned', () => {
@@ -297,6 +316,23 @@ describe('createBottomFollower resize observation', () => {
     expect(observed).toEqual([column]);
 
     scroller.scrollHeight = 3000;
+    trigger?.();
+    expect(scroller.scrollTop).toBe(scroller.floor);
+    follower.destroy();
+  });
+
+  it('does not follow observed growth while the current intent is disabled', () => {
+    let enabled = false;
+    const scroller = new FakeScroller();
+    const follower = createBottomFollower({
+      scrollport: scroller as unknown as HTMLElement,
+      observe: [{} as HTMLElement],
+      enabled: () => enabled,
+    });
+    scroller.scrollHeight = 3000;
+    trigger?.();
+    expect(scroller.scrollTop).toBe(0);
+    enabled = true;
     trigger?.();
     expect(scroller.scrollTop).toBe(scroller.floor);
     follower.destroy();

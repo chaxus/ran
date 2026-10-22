@@ -528,3 +528,25 @@ describe('r-input contract', () => {
     expect(input.validationMessage).toBe('Please fill out this field.');
   });
 });
+
+describe('r-input label and leading icon', () => {
+  it.each(['label-first', 'icon-first'] as const)('keeps its native label with %s attribute order', (order) => {
+    const input = document.createElement('r-input') as Input;
+    if (order === 'label-first') {
+      input.label = 'Provider endpoint';
+      input.icon = 'link';
+    } else {
+      input.icon = 'link';
+      input.label = 'Provider endpoint';
+    }
+    document.body.append(input);
+    expect(input.label).toBe('Provider endpoint');
+    expect(input._label?.textContent).toBe('Provider endpoint');
+    expect([...input._inputContent.labels!]).toContain(input._label);
+    input.icon = 'lock';
+    expect(input.label).toBe('Provider endpoint');
+    expect(input._label?.textContent).toBe('Provider endpoint');
+    input.icon = '';
+    expect(input._label?.textContent).toBe('Provider endpoint');
+  });
+});

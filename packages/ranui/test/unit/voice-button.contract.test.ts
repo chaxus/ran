@@ -377,3 +377,94 @@ describe('r-voice-button push-to-talk, under a finger', () => {
     expect(hint()).toBe('松开取消');
   });
 });
+
+describe('r-voice-button pending capture intent', () => {
+  beforeEach(() => {
+    document.body.replaceChildren();
+    instances = [];
+    suppressStartEvent = true;
+    installSpeech();
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it.each(['click', 'start'] as const)(
+    'exposes an overridable cancel action while %s awaits microphone permission',
+    (entry) => {
+      const { mic, button, shadow } = mount();
+      mic.activeLabel = 'Cancel voice request';
+      if (entry === 'click') button.click();
+      else mic.start();
+      expect(mic.listening).toBe(false);
+      expect(button.getAttribute('aria-pressed')).toBe('true');
+      expect(button.getAttribute('aria-busy')).toBe('true');
+      expect(button.getAttribute('aria-label')).toBe('Cancel voice request');
+      expect(shadow.querySelector('r-icon')?.getAttribute('name')).toBe('mic-off');
+      const abort = vi.spyOn(instances.at(-1)!, 'abort');
+      const ended = vi.fn();
+      mic.addEventListener('voiceend', ended);
+      mic.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      expect(abort).toHaveBeenCalledOnce();
+      expect(ended).toHaveBeenCalledOnce();
+      expect(button.getAttribute('aria-busy')).toBe('false');
+      expect(button.getAttribute('aria-pressed')).toBe('false');
+      expect(button.getAttribute('aria-label')).toBe(mic.label);
+    },
+  );
+
+  it('cancels an active request when pointer activation leaves keyboard focus elsewhere', () => {
+    const { mic, button } = mount();
+    const editor = document.createElement('input');
+    document.body.append(editor);
+    editor.focus();
+    button.click();
+    expect(document.activeElement).toBe(editor);
+    const abort = vi.spyOn(instances.at(-1)!, 'abort');
+    editor.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(abort).toHaveBeenCalledOnce();
+    expect(button.getAttribute('aria-busy')).toBe('false');
+    mic.remove();
+    const callsAfterDisconnect = abort.mock.calls.length;
+    editor.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(abort).toHaveBeenCalledTimes(callsAfterDisconnect);
+  });
+
+  it('keeps listening tied to the actual start event while clearing pending feedback', () => {
+    const { mic, button } = mount();
+    button.click();
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    instances.at(-1)!.onstart?.();
+    expect(mic.listening).toBe(true);
+    expect(button.getAttribute('aria-busy')).toBe('false');
+    expect(button.getAttribute('aria-pressed')).toBe('true');
+    mic.stop();
+    expect(mic.listening).toBe(false);
+    expect(button.getAttribute('aria-pressed')).toBe('false');
+  });
+});
+
+it.each(['composition', 'handled'] as const)('leaves a %s Escape with its current owner while capturing', (owner) => {
+  document.body.replaceChildren();
+  instances = [];
+  suppressStartEvent = false;
+  installSpeech();
+  try {
+    const { mic, button } = mount();
+    button.click();
+    const abort = vi.spyOn(instances.at(-1)!, 'abort');
+    const event = new KeyboardEvent('keydown', {
+      key: 'Escape',
+      bubbles: true,
+      cancelable: true,
+      isComposing: owner === 'composition',
+    });
+    if (owner === 'handled') event.preventDefault();
+    mic.dispatchEvent(event);
+    expect(abort).not.toHaveBeenCalled();
+    expect(mic.listening).toBe(true);
+    mic.abort();
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});

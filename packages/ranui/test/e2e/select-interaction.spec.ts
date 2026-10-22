@@ -79,16 +79,32 @@ for (const key of ['ArrowDown', 'Home', 'Enter', 'g']) {
       host.addEventListener('change', (event) =>
         (window as unknown as { selectionChanges: unknown[] }).selectionChanges.push((event as CustomEvent).detail),
       );
+      host.addEventListener(
+        'keydown',
+        () => {
+          if ((window as unknown as { selectionChanges: unknown[] }).selectionChanges.length !== 1) return;
+          // Observe the actual reopening key before the component handles it, without
+          // spending the short exit animation on intervening automation round trips.
+          (window as unknown as { beforeReopen: unknown }).beforeReopen = {
+            open: host.hasAttribute('open'),
+            expanded: host.getAttribute('aria-expanded'),
+            display: (document.querySelector('r-dropdown') as HTMLElement).style.display,
+          };
+        },
+        { capture: true },
+      );
     });
     await select.focus();
     await page.keyboard.press('End');
     await page.keyboard.press('Enter');
-    // Prove the closing visual still exists before reopening; never wait out the defect.
-    expect(await select.getAttribute('open')).toBeNull();
-    const panel = page.locator('r-dropdown');
-    expect(await panel.evaluate((node) => (node as HTMLElement).style.display)).toBe('block');
-    expect(await select.getAttribute('aria-expanded')).toBe('false');
     await page.keyboard.press(key);
+    // Prove this key arrived during exit; never wait out the defect.
+    expect(await page.evaluate(() => (window as unknown as { beforeReopen: unknown }).beforeReopen)).toEqual({
+      open: false,
+      expanded: 'false',
+      display: 'block',
+    });
+    const panel = page.locator('r-dropdown');
     await expect(select).toHaveAttribute('open');
     await expect(select).toHaveAttribute('aria-expanded', 'true');
     await expect(select).toHaveAttribute('value', 'bb');

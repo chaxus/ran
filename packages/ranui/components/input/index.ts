@@ -589,7 +589,6 @@ export class Input extends RanElement {
    */
   listenIcon = (name: string, value: string, oldValue: string): void => {
     if (name === 'icon' && value && value !== oldValue) {
-      this.removeAttribute('label');
       this.setAttribute('icon', value);
       this.dealIcon();
     }

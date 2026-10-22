@@ -189,6 +189,32 @@ describe('r-conversation contract', () => {
     expect(chat.pinned).toBe(true);
   });
 
+  it('reports explicit follow intent once and resumes through the public jump action', () => {
+    const { chat } = mount();
+    const states: boolean[] = [];
+    chat.addEventListener('pinnedchange', (event) => states.push((event as CustomEvent).detail.pinned));
+    chat.follow = false;
+    expect(chat.pinned).toBe(false);
+    chat.follow = false;
+    expect(states).toEqual([false]);
+    chat.scrollToBottom();
+    expect(chat.follow).toBe(true);
+    expect(chat.pinned).toBe(true);
+    expect(states).toEqual([false, true]);
+  });
+
+  it('preserves explicit follow-off when disconnected and reconnected', () => {
+    const chat = document.createElement('r-conversation') as Conversation;
+    chat.follow = false;
+    expect(chat.pinned).toBe(false);
+    document.body.append(chat);
+    expect(chat.pinned).toBe(false);
+    chat.remove();
+    expect(chat.pinned).toBe(false);
+    document.body.append(chat);
+    expect(chat.pinned).toBe(false);
+  });
+
   it('emits pinnedchange when bottom-follow is lost', () => {
     const { chat, shadow } = mount();
     const listener = vi.fn();

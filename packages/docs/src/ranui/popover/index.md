@@ -220,6 +220,12 @@ It is otherwise driven by standard DOM interaction:
 - **Open**: `mouseenter` (when `trigger` includes `hover`), `click`, or pressing `Enter` / `Space` while focused.
 - **Close**: `mouseleave` (hover mode), pressing `Escape`, or a `click` elsewhere in the document.
 
+Escape also works from interactive content in the portaled panel and returns focus to its
+opening trigger. A nested popup handles its own Escape first; an already handled Escape or
+IME composition does not dismiss the parent. An immediate close cancels queued entrance
+work, including before the first painted frame. Tab order and modal focus trapping remain
+the composed interface's responsibility; a popover is not a modal dialog.
+
 Internally, the companion `<r-content>` element watches its own subtree with a `MutationObserver` and emits a `change` `CustomEvent` (`detail: { type, value: { content, mutation } }`) that the popover consumes to keep the panel in sync. This is an implementation detail rather than a public API.
 
 Accessibility is wired automatically: the host receives `tabindex="0"`, `aria-haspopup="dialog"`, and an `aria-expanded` that toggles between `"false"` and `"true"` as the panel opens and closes.

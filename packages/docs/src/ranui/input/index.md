@@ -55,6 +55,8 @@ faster than inline/floating ones; see [Luke Wroblewski's eye-tracking research](
 <r-input label="Username"></r-input>
 ```
 
+The label, control and helper occupy separate rows. When the host has an explicit height, the control fills the space left by its label and helper while retaining its minimum height.
+
 ### Placeholder `placeholder`
 
 Consistent with the native `placeholder` attribute.
@@ -88,6 +90,8 @@ Consistent with the native `placeholder` attribute.
 ```
 
 ### Icon `icon`
+
+A leading icon composes with the static `label`. Adding or changing `icon` keeps the visible caption and native label association.
 
 <ran-demo column>
   <r-input icon="user"></r-input>

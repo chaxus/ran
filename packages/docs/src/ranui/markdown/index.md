@@ -64,8 +64,10 @@ on. Set `mode="static"` for finished documents to skip that pass and render in o
 
 - **caret**: `caret` shows a blinking `▋`, `caret="circle"` a `●`, after the last block.
   It hides automatically while a code fence is still open or the last block is a table.
-- **incomplete code fences** stay plain (no highlighting flash, no half-rendered diagram)
-  until the closing fence arrives; the container carries `data-incomplete` meanwhile.
+- **incomplete code fences** retain their code viewport as text arrives; diagrams stay code
+  until the closing fence arrives. The container carries `data-incomplete` meanwhile.
+- Code and table updates retain their scroll viewport and unchanged prefix text nodes.
+  A pending highlight waits while code is selected, then settles after the selection is released.
 
 ## Code blocks
 
@@ -82,6 +84,11 @@ load on demand; `github-light` / `github-dark` by default, following the page th
 <!-- pick themes: light dark -->
 <r-markdown highlight="vitesse-light vitesse-dark"></r-markdown>
 ```
+
+Copy and download use the fenced source body, including tabs, blank lines and its final
+newline. Copy success is local to each code block; clipboard rejection shows a local retry
+message, overridable with `label-copy-error`. Late clipboard or highlight completion cannot
+update content that changed or disconnected. Code and table viewports are keyboard-focusable.
 
 ## Mermaid & math
 
@@ -110,7 +117,7 @@ load on demand; `github-light` / `github-dark` by default, following the page th
 | `link-target`  | `string`                             | `'_blank'`    | `target` for external links (`rel="noopener noreferrer"` added). `_self` leaves links untouched. In-page `#anchors` never get it. |
 | `theme`        | `'auto' \| 'light' \| 'dark'`        | `'auto'`      | Highlight / diagram theme. `auto` follows the page (`.dark`, `[data-ran-theme]`, else `prefers-color-scheme`).                    |
 | `sheet`        | `string`                             | —             | Extra CSS injected into the shadow root.                                                                                          |
-| `label-*`      | `string`                             | English       | Override control labels: `label-copy`, `label-download`.                                                                          |
+| `label-*`      | `string`                             | English       | Override control labels: `label-copy`, `label-download`, `label-copy-error` (default: “Could not copy. Try again.”).              |
 
 Property aliases: `content`, `mode`, `caret`, `copyable`, `downloadable`, `lineNumbers`,
 `highlight`, `inlineMath`, `linkTarget`, `theme`, `sheet`.
@@ -138,6 +145,7 @@ All events bubble and cross the shadow boundary (`composed`).
 | `code-lang`    | The language label.                         |
 | `code-actions` | The action-button group.                    |
 | `button`       | Each copy / download button.                |
+| `copy-status`  | Local clipboard failure feedback.           |
 | `table`        | The horizontally scrolling table wrapper.   |
 | `error`        | The error box (on render failure).          |
 
@@ -156,7 +164,7 @@ Override on the element (each falls back to a semantic token, then a literal):
 `--ran-markdown-code-radius`, `--ran-markdown-code-font-size`, `--ran-markdown-mono-font`,
 `--ran-markdown-blockquote-border`, `--ran-markdown-table-border`,
 `--ran-markdown-table-header-bg`, `--ran-markdown-caret`, `--ran-markdown-caret-color`,
-`--ran-markdown-button-color`, `--ran-markdown-error-color`.
+`--ran-markdown-button-color`, `--ran-markdown-button-touch-size`, `--ran-markdown-error-color`.
 
 ## Notes
 

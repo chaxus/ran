@@ -77,9 +77,14 @@ them would show an error after every ordinary capture, not just real failures.
 ### Accessibility
 
 The accessible **name changes with the state**, not only the icon, and `aria-pressed`
-carries the toggle: a screen reader announces "Stop voice input, pressed", not an icon.
+carries the active capture intent: a screen reader announces "Stop voice input, pressed", not an icon.
 **Escape discards** a capture rather than committing it, which is what a speaker who
 realises mid-sentence that they said the wrong thing wants.
+
+While microphone permission is pending, the button uses the existing overridable
+`active-label` as its cancel action, sets `aria-busy="true"`, and accepts Escape.
+`listening` stays false until the platform reports that recording actually started;
+the recording ring therefore does not appear during permission waiting.
 
 The listening state is carried by border, fill _and_ a ring, so it does not rely on colour
 alone. The ring is the only motion and it is decoration; `prefers-reduced-motion` drops it
@@ -100,7 +105,7 @@ locale mid-session dictates in the language it is showing.
 | `continuous`  | `boolean` | `true`                | Keep listening across pauses instead of stopping at the first.                                                           |
 | `disabled`    | `boolean` | `false`               | Disables the button: `start()` is ignored and the inner button is disabled. Does not stop a capture already in progress. |
 | `label`       | `string`  | `'Start voice input'` | Accessible name while idle.                                                                                              |
-| `activeLabel` | `string`  | `'Stop voice input'`  | Accessible name while listening.                                                                                         |
+| `activeLabel` | `string`  | `'Stop voice input'`  | Accessible cancel/stop name while permission is pending or capture is listening.                                         |
 | `listening`   | `boolean` | `false`               | Read-only, reflected: style with `:host([listening])`.                                                                   |
 | `supported`   | `boolean` | —                     | Read-only. Whether this platform can recognize speech.                                                                   |
 | `sheet`       | `string`  | `''`                  | CSS injected into the element's shadow DOM.                                                                              |

@@ -18,7 +18,7 @@
  * rather than from matching the text again, and cross-block state the lexer resolved —
  * link reference definitions, for one — survives into the rendered block.
  */
-import { Marked } from 'marked';
+import { Marked, Renderer } from 'marked';
 import type { Token, TokenizerAndRendererExtension, Tokens } from 'marked';
 import DOMPurify from 'dompurify';
 import type { Config as PurifyConfig } from 'dompurify';
@@ -28,6 +28,7 @@ import { ButtonBuilder, Div, Span, View, createRef } from '@/utils/builder';
 import { splitTokens, hasIncompleteCodeFence } from './blocks';
 import { highlight, parseThemes } from './highlight';
 import type { HighlightThemes } from './highlight';
+import { hasReaderSelection, reconcileReader, syncReaderAttributes } from './reader';
 
 export { remend };
 
@@ -134,13 +135,28 @@ const inlineMathExtension = (dollar: boolean): TokenizerAndRendererExtension => 
 // ── Parser instances ─────────────────────────────────────────────────────────
 
 const parsers = new Map<string, Marked>();
+const codeRenderer = new Renderer();
+const fenceBodies = new WeakMap<Element, string>();
+// Only the synchronous marked → DOMPurify pass can create trusted fence metadata.
+let renderingFences: Map<string, string> | undefined;
 
 const getParser = (inlineDollarMath: boolean): Marked => {
   const key = inlineDollarMath ? 'dollar' : 'default';
   let p = parsers.get(key);
   if (!p) {
     p = new Marked({ gfm: true, breaks: false, async: false });
-    p.use({ extensions: [blockMath, inlineMathExtension(inlineDollarMath)] });
+    p.use({
+      extensions: [blockMath, inlineMathExtension(inlineDollarMath)],
+      renderer: {
+        code(token) {
+          // Keep marked's renderer, with inert source metadata for its exact fence body.
+          // This also distinguishes parser fences from a user-authored HTML <pre>.
+          const key = [...crypto.getRandomValues(new Uint32Array(4))].join('-');
+          renderingFences?.set(key, codeSource(token));
+          return codeRenderer.code(token).replace('<pre>', `<pre data-ran-code-source="${key}">`);
+        },
+      },
+    });
     parsers.set(key, p);
   }
   return p;
@@ -186,6 +202,20 @@ export interface MarkdownBlock {
   incompleteCode: boolean;
 }
 
+const codeSource = (token: Tokens.Code): string => {
+  const opening = /^( {0,3})(`{3,}|~{3,})[^\n]*(?:\n|$)/.exec(token.raw);
+  if (!opening) return token.text;
+  const body = token.raw.slice(opening[0].length);
+  let offset = 0;
+  for (const line of body.split('\n')) {
+    const closing = /^ {0,3}(`+|~+)[ \t]*$/.exec(line);
+    if (closing && closing[1][0] === opening[2][0] && closing[1].length >= opening[2].length)
+      return body.slice(0, offset);
+    offset += line.length + 1;
+  }
+  return body;
+};
+
 export interface MarkdownDocument {
   blocks: MarkdownBlock[];
   /** Render one of this document's blocks to a sanitized DOM fragment. */
@@ -215,8 +245,25 @@ const toBlock = (tokens: Token[], defs: string): MarkdownBlock => {
 /** Lex `markdown` once and group its tokens into independently renderable blocks. */
 export const parseDocument = (markdown: string, options: RenderOptions = {}): MarkdownDocument => {
   const parser = getParser(!!options.inlineMath);
-  const render = (block: MarkdownBlock): DocumentFragment =>
-    DOMPurify.sanitize(parser.parser(block.tokens), PURIFY_CONFIG);
+  const render = (block: MarkdownBlock): DocumentFragment => {
+    const sources = new Map<string, string>();
+    const previous = renderingFences;
+    renderingFences = sources;
+    let fragment: DocumentFragment;
+    try {
+      fragment = DOMPurify.sanitize(parser.parser(block.tokens), PURIFY_CONFIG);
+    } finally {
+      renderingFences = previous;
+    }
+    const walker = document.createTreeWalker(fragment, NodeFilter.SHOW_ELEMENT);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const element = node as Element;
+      const key = element.getAttribute('data-ran-code-source');
+      if (key && sources.has(key)) fenceBodies.set(element, sources.get(key)!);
+      element.removeAttribute('data-ran-code-source');
+    }
+    return fragment;
+  };
   if (!markdown.trim()) return { blocks: [], render };
   const tokens = parser.lexer(markdown);
   let defs = '';
@@ -239,9 +286,16 @@ export interface EnhanceContext {
   theme: string;
   labels: { copy: string; download: string };
   /** Copy pressed on a code block. `icon` is the button's <r-icon>, for the tick state. */
-  onCopy(icon: HTMLElement | null, code: string, lang: string): void;
+  onCopy(control: CodeCopyControl, code: string, lang: string, current: () => boolean): void;
+  resetCopy(control: CodeCopyControl): void;
   /** Download pressed on a code block. */
   onDownload(code: string, lang: string): void;
+}
+
+export interface CodeCopyControl {
+  button: HTMLButtonElement;
+  icon: HTMLElement | null;
+  status: HTMLElement;
 }
 
 export interface EnhanceResult {
@@ -263,9 +317,10 @@ const LANG_CLASS_PREFIX = 'language-';
 const readCodeBlock = (codeEl: Element): { lang: string; code: string } => {
   const langClass = Array.from(codeEl.classList).find((c) => c.startsWith(LANG_CLASS_PREFIX));
   const text = codeEl.textContent || '';
+  const source = codeEl.parentElement ? fenceBodies.get(codeEl.parentElement) : undefined;
   return {
     lang: langClass ? langClass.slice(LANG_CLASS_PREFIX.length).toLowerCase() : '',
-    code: text.endsWith('\n') ? text.slice(0, -1) : text,
+    code: source ?? (text.endsWith('\n') ? text.slice(0, -1) : text),
   };
 };
 
@@ -297,43 +352,87 @@ const iconButton = (
 const codeLines = (code: string): HTMLElement[] => {
   const lines = code.split('\n');
   if (lines.length > 1 && lines[lines.length - 1] === '') lines.pop();
-  return lines.flatMap((l, i) => {
+  const nodes = lines.flatMap((l, i) => {
     const line = Span().class('line').text(l).build();
     return i === 0 ? [line] : [document.createTextNode('\n') as unknown as HTMLElement, line];
   });
+  if (code.endsWith('\n')) nodes.push(document.createTextNode('\n') as unknown as HTMLElement);
+  return nodes;
 };
 
 /** A `<pre class="ran-md-pre"><code>` holding the plain (un-highlighted) code. */
 const plainPre = (code: string): HTMLPreElement =>
   View<HTMLPreElement>('pre')
     .class('ran-md-pre')
+    .attr('tabindex', '0')
     .children(View('code').children(...codeLines(code)))
     .build();
 
-const applyHighlight = (
-  container: HTMLElement,
-  slot: { pre: HTMLElement },
-  code: string,
-  lang: string,
-  themes: HighlightThemes,
-  token: number,
-): void => {
-  const result = highlight(code, lang, themes);
+interface CodeView {
+  container: HTMLElement;
+  pre: HTMLElement;
+  code: HTMLElement;
+  language: string;
+  source: string;
+  revision: number;
+  ctx: EnhanceContext;
+  copy?: CodeCopyControl;
+  pendingHighlight?: string;
+}
+const codeViews = new WeakMap<HTMLElement, CodeView>();
+const blockReaders = new WeakMap<HTMLElement, CodeView[]>();
+
+const applyHighlight = (view: CodeView, html: string): void => {
+  if (hasReaderSelection(view.code)) {
+    view.pendingHighlight = html;
+    return;
+  }
+  view.pendingHighlight = undefined;
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  const pre = template.content.firstElementChild;
+  const code = pre?.firstElementChild;
+  if (
+    !(pre instanceof HTMLElement) ||
+    pre.tagName !== 'PRE' ||
+    !(code instanceof HTMLElement) ||
+    code.tagName !== 'CODE'
+  )
+    return;
+  pre.classList.add('ran-md-pre');
+  pre.removeAttribute('style');
+  pre.setAttribute('tabindex', '0');
+  syncReaderAttributes(view.pre, pre);
+  reconcileReader(view.code, code);
+};
+
+const requestHighlight = (view: CodeView): void => {
+  if (!view.ctx.highlight) return;
+  const revision = view.revision;
   const apply = (html: string | null): void => {
-    // The block may have been re-rendered (streaming) or removed while shiki loaded.
-    if (!html || !container.isConnected || Number(container.dataset.renderToken) !== token) return;
-    const tpl = document.createElement('template');
-    tpl.innerHTML = html;
-    const shikiPre = tpl.content.firstElementChild as HTMLElement | null;
-    if (!shikiPre || shikiPre.tagName !== 'PRE') return;
-    shikiPre.classList.add('ran-md-pre');
-    shikiPre.removeAttribute('style');
-    shikiPre.removeAttribute('tabindex');
-    slot.pre.replaceWith(shikiPre);
-    slot.pre = shikiPre;
+    if (!html || !view.container.isConnected || view.revision !== revision) return;
+    applyHighlight(view, html);
   };
+  const result = highlight(view.source, view.language, view.ctx.highlight);
   if (typeof result === 'string') apply(result);
-  else result.then(apply);
+  else void result.then(apply, () => {});
+};
+
+export const settleHighlights = (root: HTMLElement): void => {
+  for (const view of blockReaders.get(root) ?? [])
+    if (view.container.isConnected && view.pendingHighlight) applyHighlight(view, view.pendingHighlight);
+};
+
+export const releaseReaders = (root: HTMLElement): void => {
+  for (const view of blockReaders.get(root) ?? []) {
+    ++view.revision;
+    view.pendingHighlight = undefined;
+    if (view.copy) view.ctx.resetCopy(view.copy);
+  }
+};
+
+export const resumeReaders = (root: HTMLElement): void => {
+  for (const view of blockReaders.get(root) ?? []) requestHighlight(view);
 };
 
 let renderSeq = 0;
@@ -352,10 +451,12 @@ const mathElement = (latex: string, display: 'block' | 'inline'): HTMLElement =>
   View('r-math').attr('latex', encodeURIComponent(latex)).attr('display', display).build();
 
 /** Rewrites one `<pre>`; returns an embedded renderer to retheme, if it made one. */
-const enhanceCodeBlock = (pre: HTMLPreElement, ctx: EnhanceContext): HTMLElement | null => {
+const enhanceCodeBlock = (pre: HTMLPreElement, ctx: EnhanceContext): { themed?: HTMLElement; reader?: CodeView } => {
   const codeEl = pre.firstElementChild;
-  if (!codeEl || codeEl.tagName !== 'CODE') return null;
-  const { lang, code } = readCodeBlock(codeEl);
+  if (!codeEl || codeEl.tagName !== 'CODE') return {};
+  const parsed = readCodeBlock(codeEl);
+  const lang = parsed.lang,
+    code = parsed.code;
 
   // ```mermaid → <r-mermaid> once the fence is closed (a half-streamed diagram is
   // never valid; keep it as a plain code block until then).
@@ -363,22 +464,35 @@ const enhanceCodeBlock = (pre: HTMLPreElement, ctx: EnhanceContext): HTMLElement
     void import('@/components/mermaid');
     const diagram = mermaidElement(code, ctx);
     pre.replaceWith(diagram);
-    return diagram;
+    return { themed: diagram };
   }
   // ```math / ```latex → block <r-math> (GitHub convention).
   if ((lang === 'math' || lang === 'latex') && !ctx.incomplete) {
     void import('@/components/math');
     pre.replaceWith(mathElement(code.trim(), 'block'));
-    return null;
+    return {};
   }
 
   const token = ++renderSeq;
   const actions: HTMLElement[] = [];
+  let view!: CodeView;
+  let copy: CodeCopyControl | undefined;
   if (ctx.copy) {
-    actions.push(iconButton('copy', 'copy', ctx.labels.copy, (icon) => ctx.onCopy(icon, code, lang)));
+    const status = Span().class('ran-md-copy-status').part('copy-status').attr('role', 'status').build();
+    status.hidden = true;
+    const button = iconButton('copy', 'copy', ctx.labels.copy, (icon) => {
+      if (!copy) return;
+      copy.icon = icon;
+      const revision = view.revision;
+      view.ctx.onCopy(copy, view.source, view.language, () => view.container.isConnected && view.revision === revision);
+    });
+    copy = { button, icon: null, status };
+    actions.push(status, button);
   }
   if (ctx.download) {
-    actions.push(iconButton('download', 'download', ctx.labels.download, () => ctx.onDownload(code, lang)));
+    actions.push(
+      iconButton('download', 'download', ctx.labels.download, () => view.ctx.onDownload(view.source, view.language)),
+    );
   }
   const header =
     lang || actions.length
@@ -406,8 +520,19 @@ const enhanceCodeBlock = (pre: HTMLPreElement, ctx: EnhanceContext): HTMLElement
   if (ctx.lineNumbers) container.dataset.lineNumbers = '';
   pre.replaceWith(container);
 
-  if (ctx.highlight) applyHighlight(container, slot, code, lang, ctx.highlight, token);
-  return null;
+  view = {
+    container,
+    pre: slot.pre,
+    code: slot.pre.firstElementChild as HTMLElement,
+    language: lang,
+    source: code,
+    revision: token,
+    ctx,
+    copy,
+  };
+  codeViews.set(container, view);
+  requestHighlight(view);
+  return { reader: view };
 };
 
 /**
@@ -505,10 +630,13 @@ export const enhance = (root: HTMLElement, ctx: EnhanceContext): EnhanceResult =
   }
 
   const themed: HTMLElement[] = [];
+  const readers: CodeView[] = [];
   for (const pre of pres) {
-    const el = enhanceCodeBlock(pre, ctx);
-    if (el) themed.push(el);
+    const result = enhanceCodeBlock(pre, ctx);
+    if (result.reader) readers.push(result.reader);
+    if (result.themed) themed.push(result.themed);
   }
+  blockReaders.set(root, readers);
 
   if (maths.length > 0) {
     void import('@/components/math');
@@ -534,7 +662,7 @@ export const enhance = (root: HTMLElement, ctx: EnhanceContext): EnhanceResult =
   }
 
   for (const table of tables) {
-    const wrap = Div().class('ran-md-table-wrap').part('table').build();
+    const wrap = Div().class('ran-md-table-wrap').part('table').attr('tabindex', '0').build();
     table.replaceWith(wrap);
     wrap.appendChild(table);
   }
@@ -544,6 +672,53 @@ export const enhance = (root: HTMLElement, ctx: EnhanceContext): EnhanceResult =
   }
 
   return { themed };
+};
+
+/** Reuse the code/table reading object when the corresponding source block grows. */
+export const renderBlock = (root: HTMLElement, fragment: DocumentFragment, ctx: EnhanceContext): EnhanceResult => {
+  const old = root.childElementCount === 1 ? root.firstElementChild : null;
+  const next = fragment.childElementCount === 1 ? fragment.firstElementChild : null;
+  if (old instanceof HTMLElement && next instanceof HTMLPreElement) {
+    const view = codeViews.get(old);
+    const code = next.firstElementChild;
+    if (view && code?.tagName === 'CODE') {
+      const parsed = readCodeBlock(code);
+      if (parsed.lang === view.language && !(['mermaid', 'math', 'latex'].includes(parsed.lang) && !ctx.incomplete)) {
+        const source = parsed.code;
+        if (source !== view.source) {
+          ++view.revision;
+          view.pendingHighlight = undefined;
+          if (view.copy) view.ctx.resetCopy(view.copy);
+        }
+        view.source = source;
+        view.ctx = ctx;
+        view.container.toggleAttribute('data-incomplete', ctx.incomplete);
+        const plain = plainPre(source).firstElementChild!;
+        const selecting = hasReaderSelection(view.code);
+        reconcileReader(view.code, plain, selecting);
+        if (!selecting) view.pre.classList.remove('shiki');
+        requestHighlight(view);
+        return { themed: [] };
+      }
+    }
+  }
+  if (
+    old instanceof HTMLElement &&
+    old.getAttribute('part') === 'table' &&
+    old.firstElementChild instanceof HTMLTableElement &&
+    next instanceof HTMLTableElement
+  ) {
+    // Reconcile the same enhanced tree used on first render, so math, safe links
+    // and lazy images retain their contracts when table rows stream in.
+    const incoming = Div().build();
+    incoming.appendChild(next);
+    const result = enhance(incoming, ctx);
+    reconcileReader(old.firstElementChild, next);
+    return result;
+  }
+  releaseReaders(root);
+  root.replaceChildren(fragment);
+  return enhance(root, ctx);
 };
 
 export { parseThemes };

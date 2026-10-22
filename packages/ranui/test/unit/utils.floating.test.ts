@@ -111,6 +111,27 @@ describe('FloatingController', () => {
     expect(panel.style.display).toBe('none');
   });
 
+  it('rejects an entrance frame queued before immediate close', async () => {
+    const { host, panel } = mount();
+    const controller = controllerFor(host, panel);
+    controller.apply(true);
+    controller.apply(false);
+    await nextFrame();
+    expect(panel.style.display).toBe('none');
+    expect(panel.hasAttribute('transit')).toBe(false);
+    expect(host.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('rejects queued positioning after the controller is destroyed', async () => {
+    const { host, panel } = mount();
+    const controller = controllerFor(host, panel);
+    controller.apply(true);
+    controller.destroy();
+    await nextFrame();
+    expect(panel.hasAttribute('transit')).toBe(false);
+    expect(panel.style.getPropertyValue('--ran-x')).toBe('');
+  });
+
   it('still reports the state when there is no panel yet', () => {
     // Components build their panel lazily; the attribute can be set first.
     const host = document.createElement('div');
