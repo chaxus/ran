@@ -59,6 +59,43 @@ describe('r-select accessibility keyboard contract', () => {
     expect(select.getAttribute('aria-expanded')).toBe('false');
     expect(changes).toEqual([{ value: '1', label: 'Alpha' }]);
   });
+
+  it.each(['ArrowDown', 'ArrowUp', 'Home', 'End', 'Enter', ' ', 'g'])(
+    'reopens with %s immediately after selection while the previous panel is exiting',
+    async (key) => {
+      const select = await createSelect();
+      vi.useFakeTimers();
+      select.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+      const changes = vi.fn();
+      select.addEventListener('change', changes);
+      const panel = select._selectionDropdown as HTMLElement & { getAnimationTarget(): Element };
+      let finishExit!: () => void;
+      const finished = new Promise<void>((resolve) => (finishExit = resolve));
+      // Keep the actual floating exit pending, as it is with normal browser motion.
+      Object.defineProperty(panel.getAnimationTarget(), 'getAnimations', {
+        configurable: true,
+        value: () => [{ finished }],
+      });
+      select.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      vi.advanceTimersToNextFrame();
+      expect(select.open).toBe(false);
+      expect(panel.style.display).toBe('block');
+      expect(changes).toHaveBeenCalledOnce();
+
+      select.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+      expect(select.open).toBe(true);
+      expect(select.getAttribute('aria-expanded')).toBe('true');
+      expect(select.value).toBe('1');
+      expect(changes).toHaveBeenCalledOnce();
+      finishExit();
+      await Promise.resolve();
+      await Promise.resolve();
+      vi.advanceTimersToNextFrame();
+      expect(select.open).toBe(true);
+      expect(panel.style.display).toBe('block');
+      select.remove();
+    },
+  );
   it('leaves native search editing keys alone and filters native input and change', async () => {
     const select = await createSelect();
     select.setAttribute('showSearch', '');

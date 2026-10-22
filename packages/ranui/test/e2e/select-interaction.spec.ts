@@ -69,6 +69,39 @@ test('host typeahead selects once with a nonbubbling change; composing Enter doe
   ).toEqual({ changes: [{ value: 'b', label: 'Beta' }], delegated: 0 });
 });
 
+for (const key of ['ArrowDown', 'Home', 'Enter', 'g']) {
+  test(`normal-motion selection immediately reopens with ${key} during its exit`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    const select = page.locator('#select');
+    await select.evaluate((host) => {
+      host.removeAttribute('showsearch');
+      (window as unknown as { selectionChanges: unknown[] }).selectionChanges = [];
+      host.addEventListener('change', (event) =>
+        (window as unknown as { selectionChanges: unknown[] }).selectionChanges.push((event as CustomEvent).detail),
+      );
+    });
+    await select.focus();
+    await page.keyboard.press('End');
+    await page.keyboard.press('Enter');
+    // Prove the closing visual still exists before reopening; never wait out the defect.
+    expect(await select.getAttribute('open')).toBeNull();
+    const panel = page.locator('r-dropdown');
+    expect(await panel.evaluate((node) => (node as HTMLElement).style.display)).toBe('block');
+    expect(await select.getAttribute('aria-expanded')).toBe('false');
+    await page.keyboard.press(key);
+    await expect(select).toHaveAttribute('open');
+    await expect(select).toHaveAttribute('aria-expanded', 'true');
+    await expect(select).toHaveAttribute('value', 'bb');
+    expect(await page.evaluate(() => (window as unknown as { selectionChanges: unknown[] }).selectionChanges)).toEqual([
+      { value: 'bb', label: 'Beta two' },
+    ]);
+    // The old exit completion cannot hide the newly opened panel.
+    await expect(panel).not.toHaveAttribute('transit');
+    await expect(panel).toBeVisible();
+    await expect(select).toHaveAttribute('open');
+  });
+}
+
 for (const attribute of ['value', 'defaultvalue']) {
   test(`matching search preserves preselected ${attribute} and accepts replacement`, async ({ page }) => {
     await page.locator('#select').evaluate((host, name) => host.setAttribute(name, 'a'), attribute);
