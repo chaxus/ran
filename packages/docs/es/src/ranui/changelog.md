@@ -9,6 +9,18 @@ Generado desde `packages/ranui/CHANGELOG.md` del repositorio. Las entradas conse
 
 ::: v-pre
 
+## [0.5.1] — 2026-10-23
+
+Release preparation; npm publication is pending verification.
+
+- Preserve icon-input labels, field geometry, disabled-button behavior and visible keyboard focus, including focus returned from a popup.
+- Keep nested dismissal, reconnect identity and immediate Select reopening consistent across input methods.
+- Preserve exact fenced-code copy, local failure/retry feedback, native text selection, table enhancement and scroll intent during streamed content.
+- Refine code/table typography, insets, focus and coarse-pointer targets; keep application layout with the host.
+- Keep expanded reasoning headers quiet and respect explicit conversation follow-off.
+- Ship canonical design/interaction/acceptance references and the thin agent plugin with task-based routing and scoped research examples.
+- Coordinate `ranuts@0.5.1` and `@alixex/ranview@0.2.1`; packed internal dependencies resolve to those exact versions. Node 24+, ESM and standalone IIFEs remain supported.
+
 ## [0.5.0] — 2026-10-19
 
 Published to npm as [ranui@0.5.0](https://www.npmjs.com/package/ranui/v/0.5.0) on the `latest` tag.
