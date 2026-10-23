@@ -1,5 +1,5 @@
 /**
- * Post-build checks, run as part of `pnpm -F site build`.
+ * Post-build checks, run as part of the consuming application's build.
  *
  * Every check here corresponds to a failure that is invisible in a browser. A dead
  * internal link, a canonical naming a URL that redirects, a page with no description —

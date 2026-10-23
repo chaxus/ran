@@ -1,12 +1,12 @@
 # ranpress
 
-The static site generator behind **chaxus.com** and **ran.chaxus.com**.
+The static site generator behind **ran.chaxus.com**.
 
 It is mechanism, not policy. It knows how to parse frontmatter, render markdown to
 documentation-grade HTML, walk a content tree, put bytes on disk in the right order, serve
 them the way the host will, and refuse to publish output that contradicts itself. It has
 no opinion about what a page is, what URL it gets, or what it looks like — those live in
-each site, which is why a personal blog and a 1,393-page multilingual reference share it.
+the consuming application. The ran website supplies its navigation, locales and page layouts.
 
 ```
 src/

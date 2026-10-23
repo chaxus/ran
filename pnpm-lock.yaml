@@ -293,34 +293,6 @@ importers:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@26.1.2)(@vitest/coverage-v8@4.1.11)(jsdom@30.0.1)(vite@8.2.4(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10))
 
-  packages/site:
-    dependencies:
-      ranpress:
-        specifier: workspace:*
-        version: link:../ranpress
-      ranui:
-        specifier: workspace:*
-        version: link:../ranui
-      ranuts:
-        specifier: workspace:*
-        version: link:../ranuts
-    devDependencies:
-      '@playwright/test':
-        specifier: 1.62.1
-        version: 1.62.1
-      '@types/node':
-        specifier: 'catalog:'
-        version: 26.1.2
-      tsx:
-        specifier: 'catalog:'
-        version: 4.23.10
-      typescript:
-        specifier: 'catalog:'
-        version: 7.0.2
-      vite:
-        specifier: 'catalog:'
-        version: 8.2.4(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10)
-
 packages:
 
   '@antfu/install-pkg@1.1.0':

@@ -1,7 +1,7 @@
 /**
  * The documentation site's page model.
  *
- * The shape that matters here and does not exist on chaxus.com is **the locale**. Every
+ * Each page model includes **the locale**. Every
  * page belongs to one, its URL carries that locale's prefix, and the same page in
  * another language is a sibling reached by swapping the prefix. Getting that wrong is
  * not a visible bug — it is a set of hreflang tags pointing at 404s, which nobody

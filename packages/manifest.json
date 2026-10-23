@@ -21,10 +21,6 @@
       "status": "support",
       "checks": ["tsc", "test"]
     },
-    "site": {
-      "status": "support",
-      "checks": ["tsc", "verify:design"]
-    },
     "im": {
       "status": "experimental",
       "checks": ["tsc", "test"]
