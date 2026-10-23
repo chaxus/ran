@@ -38,50 +38,6 @@ const mountHome = (): void => {
   for (const button of root.querySelectorAll<HTMLElement>('[data-copy]')) {
     wireCopy(button, button.dataset.copy ?? '');
   }
-
-  const reveals = [...root.querySelectorAll<HTMLElement>('[data-reveal]')];
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || typeof IntersectionObserver === 'undefined') {
-    // Reduced motion means the end state, immediately — not "no animation, and also
-    // never visible", which is what skipping the observer would have produced.
-    for (const el of reveals) el.classList.add('in');
-    return;
-  }
-
-  /** Count a numeric stat up from zero. Non-numeric values ("MIT") are left alone. */
-  const countUp = (el: HTMLElement): void => {
-    const match = /^(\d+)(.*)$/.exec(el.textContent ?? '');
-    if (!match) return;
-    const target = Number(match[1]);
-    const suffix = match[2];
-    const duration = 1100;
-    let start = 0;
-    const tick = (now: number): void => {
-      start ||= now;
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - (1 - p) ** 3;
-      el.textContent = `${Math.round(target * eased)}${suffix}`;
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add('in');
-        if (entry.target.classList.contains('stats')) {
-          entry.target.querySelectorAll<HTMLElement>('[data-count]').forEach(countUp);
-        }
-        observer.unobserve(entry.target);
-      }
-    },
-    { threshold: 0.18, rootMargin: '0px 0px -8% 0px' },
-  );
-  for (const el of reveals) observer.observe(el);
-  // The head bootstrap alone cannot prove the client can reveal hidden content.
-  root.dataset.revealReady = 'true';
 };
 
 const mountGlass = (): void => {

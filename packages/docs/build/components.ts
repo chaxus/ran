@@ -6,7 +6,7 @@
  * and stay exactly where they are. A template over static data does not need a framework
  * or a runtime; it needs to be run once, at build time, which is what happens here.
  *
- * The behaviour that *is* real — clipboard, hover tilt, scroll reveal, count-up, the
+ * The behaviour that *is* real — clipboard, theme selection, the
  * glass sliders, icon copy — moves to `client/home.ts` as progressive enhancement. So the
  * markup is in the server-rendered HTML, indexable and correct with no JavaScript, and
  * the script only adds motion and interaction on top.
@@ -71,8 +71,6 @@ const ICONS: Record<string, string> = {
 const icon = (kind: string): string => ICONS[kind] ?? '';
 
 /** Staggered entrance delay, as a CSS custom property on the element. */
-const hd = (i: number): string => `style="--hd:${i * 55}ms"`;
-const rd = (i: number): string => `style="--rd:${i * 60}ms"`;
 
 const ARROW =
   '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -129,32 +127,31 @@ const liveSource = (t: ReturnType<typeof homeCopy>): string =>
 export const renderHome = (locale: LocaleDef): string => {
   const t = homeCopy(locale.dir);
   const href = (path: string): string => localeHref(path, locale);
-  // Languages that opt out of word splitting — the CJK headlines and Persian — rise as
+  // Languages that opt out of word splitting — the CJK headlines and Persian — render as
   // one segment: word units either do not exist there or are not worth reordering an
   // RTL line for.
   const words = t.splitWords ? t.headline.split(/\s+/) : [t.headline];
-  const n = words.length;
 
   return (
     `<div class="cine">` +
     `<div class="bg" aria-hidden="true"><span class="glow"></span><span class="grid"></span></div>` +
     // ── hero ──
     `<header class="hero"><div class="hero-copy">` +
-    `<span class="eyebrow" data-hero ${hd(0)}><span class="dot"></span>${esc(t.eyebrow)}</span>` +
+    `<span class="eyebrow"><span class="dot"></span>${esc(t.eyebrow)}</span>` +
     `<h1 class="headline"><span class="line">` +
-    words.map((w, i) => `<span class="word" ${hd(2 + i)}><span class="word-in">${esc(w)}</span></span>`).join('') +
+    words.map((w) => `<span class="word"><span class="word-in">${esc(w)}</span></span>`).join('') +
     `</span></h1>` +
-    `<p class="subtitle" data-hero ${hd(2 + n)}>${esc(t.subtitle)}</p>` +
-    `<div class="cmd" data-hero ${hd(3 + n)}><code>npm&nbsp;i&nbsp;ranui&nbsp;ranuts</code>` +
+    `<p class="subtitle">${esc(t.subtitle)}</p>` +
+    `<div class="cmd"><code>npm&nbsp;i&nbsp;ranui&nbsp;ranuts</code>` +
     `<button class="copy" type="button" data-copy="npm i ranui ranuts" aria-label="${esc(t.copy)}">${COPY_ICON}</button></div>` +
-    `<div class="cta" data-hero ${hd(4 + n)}>` +
-    `<a class="btn btn-primary" href="${esc(href('/src/ranui/'))}">${esc(t.ctaPrimary)}${ARROW}</a>` +
+    `<div class="cta">` +
+    `<a class="btn btn-primary" href="${esc(href('/src/agents/'))}">${esc(t.ctaPrimary)}${ARROW}</a>` +
     `<a class="btn btn-ghost" href="https://github.com/chaxus/ran" target="_blank" rel="noreferrer">${GITHUB_MARK}${esc(t.ctaSecondary)}</a>` +
     `</div></div>` +
     // The live panel holds real ranui elements. They are inert custom elements until the
     // bundle upgrades them, so this is the markup either way — no skeleton swap, and
     // therefore none of the hydration mismatch the Vue version had to avoid.
-    `<div class="hero-live" data-hero ${hd(3 + n)}>` +
+    `<div class="hero-live">` +
     `<div class="live-head"><span class="live-dot"></span>${esc(t.liveLabel)}` +
     `<span class="live-lang">html</span></div>` +
     /*
@@ -176,11 +173,11 @@ export const renderHome = (locale: LocaleDef): string => {
     `<r-checkbox checked="true">${esc(t.liveCheck)}</r-checkbox></div>` +
     `</div><span class="live-note">${esc(t.liveNote)}</span></div></header>` +
     // ── stats ──
-    `<section class="stats reveal" data-reveal>` +
+    `<section class="stats reveal">` +
     t.stats
       .map(
         (s, i) =>
-          `<div class="stat" ${rd(i)}><span class="stat-num" data-count>${esc(s.num)}</span>` +
+          `<div class="stat"><span class="stat-num">${esc(s.num)}</span>` +
           `<span class="stat-label">${esc(s.label)}</span></div>`,
       )
       .join('') +
@@ -190,7 +187,7 @@ export const renderHome = (locale: LocaleDef): string => {
     t.pillars
       .map(
         (p, i) =>
-          `<a class="pillar reveal" data-reveal ${rd(i)} href="${esc(href(p.link))}">` +
+          `<a class="pillar reveal" href="${esc(href(p.link))}">` +
           `<span class="pillar-icon" data-kind="${esc(p.kind)}">${icon(p.kind)}</span>` +
           `<h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p>` +
           `<span class="pillar-more">${esc(p.more)} ${ARROW_SM}</span></a>`,
@@ -198,9 +195,9 @@ export const renderHome = (locale: LocaleDef): string => {
       .join('') +
     `</section>` +
     // ── capabilities ──
-    `<section class="section caps"><div class="sec-head reveal" data-reveal>` +
+    `<section class="section caps"><div class="sec-head reveal">` +
     `<span class="kicker">${esc(t.capsKicker)}</span><h2>${esc(t.capsTitle)}</h2>` +
-    `<p class="sec-sub">${esc(t.capsSub)}</p></div><div class="bento reveal" data-reveal>` +
+    `<p class="sec-sub">${esc(t.capsSub)}</p></div><div class="bento reveal">` +
     t.caps
       .map(
         (col) =>
@@ -210,7 +207,7 @@ export const renderHome = (locale: LocaleDef): string => {
           col.items
             .map(
               (item, ii) =>
-                `<li ${rd(ii)}><span class="caps-ico">${icon(item.kind)}</span><div class="caps-text">` +
+                `<li><span class="caps-ico">${icon(item.kind)}</span><div class="caps-text">` +
                 `<span class="caps-name">${esc(item.name)} <code>${esc(item.api)}</code></span>` +
                 `<span class="caps-desc">${esc(item.desc)}</span></div></li>`,
             )
@@ -220,19 +217,19 @@ export const renderHome = (locale: LocaleDef): string => {
       .join('') +
     `</div></section>` +
     // ── get started ──
-    `<section class="section start"><div class="sec-head reveal" data-reveal>` +
+    `<section class="section start"><div class="sec-head reveal">` +
     `<span class="kicker">${esc(t.startKicker)}</span><h2>${esc(t.startTitle)}</h2>` +
     `<p class="sec-sub">${esc(t.startDesc)}</p></div>` +
-    `<div class="panel reveal" data-reveal>` +
+    `<div class="panel reveal">` +
     `<div class="code-cell"><div class="code-head">${esc(t.startStep1)}</div><pre class="snippet">${SNIPPET_INSTALL}</pre></div>` +
     `<div class="code-cell"><div class="code-head">${esc(t.startStep2)}</div><pre class="snippet">${SNIPPET_USE}</pre></div>` +
     `</div></section>` +
     // ── feature strip ──
-    `<section class="strip reveal" data-reveal>` +
+    `<section class="strip reveal">` +
     t.features
       .map(
         (f, i) =>
-          `<div class="feature" ${rd(i)}><span class="feature-head">` +
+          `<div class="feature"><span class="feature-head">` +
           `<span class="feature-icon">${icon(f.kind)}</span><h4>${esc(f.title)}</h4></span>` +
           `<p>${esc(f.desc)}</p></div>`,
       )

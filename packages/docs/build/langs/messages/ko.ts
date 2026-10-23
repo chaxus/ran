@@ -9,6 +9,8 @@ import type { LocaleMessages } from '../types.ts';
  */
 const ko: LocaleMessages = {
   labels: {
+    ran_design: '디자인',
+    agents: '에이전트',
     ranui: 'ranui',
     ranuts: 'ranuts',
     articles: '아티클',

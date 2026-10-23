@@ -33,9 +33,9 @@ export interface LocaleDef {
 }
 
 /** Every content tree — what a fully mirrored locale carries. */
-const ALL = ['/src/ranui/', '/src/ranuts/', '/src/article/', '/src/note/'] as const;
+const ALL = ['/src/design/', '/src/agents/', '/src/ranui/', '/src/ranuts/', '/src/article/', '/src/note/'] as const;
 /** The library reference only; articles and notes stay English. */
-const LIBS = ['/src/ranui/', '/src/ranuts/'] as const;
+const LIBS = ['/src/design/', '/src/agents/', '/src/ranui/', '/src/ranuts/'] as const;
 
 /**
  * Menu order is deliberate: Chinese and English first (the two fully mirrored languages,
