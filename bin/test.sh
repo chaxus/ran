@@ -5,4 +5,4 @@ set -e
 pnpm -F ranuts build
 
 # Every package declaring the `test` check in packages/manifest.json.
-node bin/run-checks.mjs test
+node bin/run-checks.ts test

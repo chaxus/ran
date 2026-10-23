@@ -1,4 +1,4 @@
 #!/bin/sh
 set -eu
 
-exec node "$(dirname "$0")/clean.mjs"
+exec node "$(dirname "$0")/clean.ts"

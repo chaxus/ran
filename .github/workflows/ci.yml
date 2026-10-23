@@ -5,6 +5,8 @@ on:
     paths:
       - "packages/**"
       - "bin/**"
+      - "tsconfig.tooling.json"
+      - "plugins/ranui/evals/**"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
@@ -17,6 +19,8 @@ on:
     paths:
       - "packages/**"
       - "bin/**"
+      - "tsconfig.tooling.json"
+      - "plugins/ranui/evals/**"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
@@ -60,6 +64,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Type-check repository tooling
+        run: pnpm typecheck:tooling
 
       - name: Verify repository scripts
         run: pnpm run verify:scripts
@@ -146,7 +153,7 @@ jobs:
           pnpm release:prepare
           pnpm verify:release
 
-      # `pnpm run test` reaches ranui through `run-checks.mjs`, which runs the package's
+      # `pnpm run test` reaches ranui through `run-checks.ts`, which runs the package's
       # own `test` script. That script runs `vitest run`; the coverage gate used to be a
       # separate step that ran `vitest run --coverage` afterwards, executing the same
       # suite a second time to produce one report. Asking for coverage up front makes the

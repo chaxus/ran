@@ -1,6 +1,14 @@
 {
   "include": ["components", "plugins", "utils", "test", "shadowless", "**/*.ts", "typing.d.ts"],
-  "exclude": ["node_modules/**", "dist/**", "assets", "public"],
+  "exclude": [
+    "node_modules/**",
+    "dist/**",
+    "assets",
+    "public",
+    "bin/visual.ts",
+    "bin/copy-bundled-notices.ts",
+    "test/visual/setup.ts"
+  ],
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler",

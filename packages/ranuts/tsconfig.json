@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "include": ["src", "test", "plugins", "**/*.ts"],
-  "exclude": ["dist"],
+  "exclude": ["dist", "bin/verify-package.ts", "bin/copy-bundled-notices.ts"],
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "outDir": "dist",

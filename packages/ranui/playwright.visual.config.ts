@@ -10,7 +10,7 @@ export default defineConfig({
   workers: 2,
   ignoreSnapshots: false,
   updateSnapshots: 'none',
-  globalSetup: './test/visual/setup.mjs',
+  globalSetup: './test/visual/setup.ts',
   outputDir: './test-results/visual/results',
   reporter: [['html', { outputFolder: './test-results/visual/report', open: 'never' }], ['line']],
   snapshotPathTemplate: '{testDir}/__screenshots__/linux-arm64/{testFilePath}/{projectName}/{arg}{ext}',

@@ -86,7 +86,7 @@ for a separate `npm dist-tag` command.
 
 Create the matching GitHub `npm` environment and configure its protection/approval rules as appropriate. No long-lived npm token is required by this workflow. Local preview works without these publication settings. See [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/) for account-side setup.
 
-Actual publication uses `node bin/release.mjs publish --tag latest --confirm` in the workflow. That explicit command uploads packages; use `release:dry-run` for inspection.
+Actual publication uses `node bin/release.ts publish --tag latest --confirm` in the workflow. That explicit command uploads packages; use `release:dry-run` for inspection.
 
 ## Failed or partial publication
 

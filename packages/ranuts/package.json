@@ -65,7 +65,7 @@
     "build": "sh ./bin/build.sh",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "verify:package": "node bin/verify-package.mjs",
+    "verify:package": "node bin/verify-package.ts",
     "tsc": "tsc --noEmit",
     "dev": "vite --host",
     "doc:api": "tsx ./bin/generate-api-docs.ts",
