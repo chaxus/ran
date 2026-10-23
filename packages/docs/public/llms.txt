@@ -1,9 +1,6 @@
 # ran
 
-> ran is an open-source front-end ecosystem by chaxus: **ranui**, a Web Components UI
-> library, and **ranuts**, a utility library — plus low-level web-infrastructure
-> experiments (a JS parser, a JSX compiler, a WASM/2D rendering engine). This site
-> documents ranui and ranuts.
+> ran provides three independent pillars: Ran Design for product design and acceptance, ranui for native Web Components, and ranuts for typed utilities. The unified ran agent plugin routes tasks to design, ranui and ranuts skills.
 
 ranui is built on native Custom Elements (`<r-*>` tags), so it works in any framework
 or plain HTML. It ships first-class TypeScript types, light/dark theming via Geist-based
@@ -15,6 +12,9 @@ recording and Web Speech API speech-to-text, a 2D rendering engine (Canvas/WebGL
 and a virtual DOM.
 
 ## Docs
+
+- [Ran Design](https://ran.chaxus.com/src/design/): design methodology and canonical references
+- [Agents](https://ran.chaxus.com/src/agents/): unified plugin skills, installation and publication status
 
 - [ranui — Web Components UI library](https://ran.chaxus.com/src/ranui/): button, input, select, checkbox, radio, card, tabs, modal, popover, dropdown, progress, message, icon, and more `<r-*>` elements, with theming, i18n, routing and SSR
 - [ranui design system](https://ran.chaxus.com/src/ranui/design-system/): the Geist-based token catalog — colour ladder, semantic tokens, spacing, typography, radius, elevation, stacking, motion

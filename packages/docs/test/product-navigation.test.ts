@@ -1,0 +1,42 @@
+// @vitest-environment jsdom
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { expect, it } from 'vitest';
+import { LOCALES, localeHref } from '../build/langs/locales.ts';
+import { navFor } from '../build/nav.ts';
+import { renderHome } from '../build/components.ts';
+
+it.each(LOCALES)('makes all three pillars and agent guidance reachable in $lang without JavaScript', (locale) => {
+  document.body.innerHTML = renderHome(locale);
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('a[href]')].map((link) => link.getAttribute('href'));
+  const navigation = navFor(locale);
+  const pillars = [...document.querySelectorAll<HTMLAnchorElement>('.pillar')].map((link) => ({
+    title: link.querySelector('h3')?.textContent,
+    href: link.getAttribute('href'),
+  }));
+  expect(pillars).toEqual([
+    { title: 'ranui', href: localeHref('/src/ranui/', locale) },
+    { title: 'ranuts', href: localeHref('/src/ranuts/', locale) },
+    { title: 'Ran Design', href: localeHref('/src/design/', locale) },
+  ]);
+  for (const section of ['design', 'ranui', 'ranuts', 'agents']) {
+    const path = localeHref(`/src/${section}/`, locale);
+    expect(links, `${locale.lang}: home → ${section}`).toContain(path);
+    const entry = navigation.find((item) => item.link === path);
+    expect(entry?.text.trim(), `${locale.lang}: navigation → ${section}`).toBeTruthy();
+    expect(new RegExp(entry!.activeMatch!).test(path)).toBe(true);
+    expect(existsSync(resolve(import.meta.dirname, '..', locale.dir, 'src', section, 'index.md'))).toBe(true);
+  }
+});
+
+it('keeps the installation guide explicit about checkout previews and release commands', () => {
+  const guide = readFileSync(resolve(import.meta.dirname, '../src/agents/index.md'), 'utf8');
+  expect(guide).toContain('After publication');
+  expect(guide).toContain('codex plugin marketplace add .');
+  expect(guide).toContain('claude plugin marketplace add .');
+  expect(guide).toContain('codex plugin add ran@ran');
+  expect(guide).toContain('claude plugin install ran@ran');
+  expect(guide).toContain('`$design`');
+  expect(guide).toContain('`/ran:design`');
+  expect(guide).not.toContain('ranui@ran');
+});

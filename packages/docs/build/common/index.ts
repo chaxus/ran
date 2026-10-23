@@ -41,7 +41,7 @@ export const PREVIEW_CODE = `
 `;
 
 export const DESCRIPTION =
-  'ran is an open-source front-end ecosystem by chaxus: ranui, a native Web Components UI library, and ranuts, a tree-shakeable TypeScript utility library, plus low-level web-infrastructure experiments.';
+  'ran provides product design methods, native Web Components through ranui, and typed utilities through ranuts, with guidance for developers and agents.';
 
 export const HOME = 'https://ran.chaxus.com/';
 

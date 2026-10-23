@@ -1,0 +1,257 @@
+{
+  "browser": "151.0.7922.34",
+  "builtResources": {
+    "/": "1622bbeabb74a6ba70f6523f1e63b3a95f15c52b5b3b2f4d2c1d03443ae4d24f",
+    "/assets/a11y-ZSlIUH9B-CUY7Y1Pq.js": "dc188b3626497ccfe93875021ce96ca74ad02dc4c4f1fd84cf59294d68e4b629",
+    "/assets/button-D-C_6yVg.js": "10b78ca5965bafcfca47743b05593ffdf62308491acd51f4c5c658f96993d872",
+    "/assets/checkbox-COk0-sbp.js": "859da73e7f90428d132c952bf698eada70b55ce7f8c769444635d94029ff7ef6",
+    "/assets/circle-line-yVEnHOHI-Cixf5vtF.js": "2775431cab96192f8e6555084633901fd88d4963de6e2ce6870a16d7f8a3e245",
+    "/assets/device-BOlBFrLy.js": "b5922be34ee5a20a3757b9ee7ece74bf28a6cb13dc5cb37e60e98ef50561e9f9",
+    "/assets/docs.BASKAuWv.js": "88b849cd7064dd1448312553a6789a9658abf2d72c75a8d1e2bf98d88cc32d80",
+    "/assets/dom-CAbnYqPn-Bym6hqUt.js": "2094a7d02a162dded9939ea8addc15555fb8121f53c0d894023382b77edc2498",
+    "/assets/loading-sy3gto2W.js": "8a64fee19e7782656af5dc3461130a7bc7bd5d35c4a5972bdc10b460f0d604f7",
+    "/assets/number-_lj8_wBv.js": "4eaf9e8a600d590ab3ec95d7b67ba1bcac2a0cb11fcedab5796e5ceb9c8588b0",
+    "/assets/progress-C9czd53_.js": "1bc7ba0fe5d52bba14918458878192e7e2850749b7450bfd431adfbedb71d2eb",
+    "/assets/progress-F98vpLKq-COk0Kdvh.js": "15011c1244423310a066c4b4f69ae7dc311f631d91c90d3f6a9a15d6786926ff",
+    "/assets/rolldown-runtime-DK3Fl9T5.js": "a526d1bb3288ef04d001028843220a24b0867a4edf8c685b69506d6525af36ff",
+    "/assets/ssr-Dp7Ga_qy-DarS3i1S.js": "0099442bef3916c41c7ad3cf1e8e343ffb49866eec69388f87f7580af205c9cd",
+    "/assets/style.CMaDS7xg.css": "7c3338b9fd5a88df7a79a0d08fbbf963fa690d49ab5cda18f1f84a691ff9e102",
+    "/assets/theme-switch-DmdVX5Ha.js": "5f1e5527a0827de1ceb7870f43e4c33be022cb84faf232b05686c852a8073a8c",
+    "/assets/utils-Bleb5QYE-ugYmJC3k.js": "b7cc02df63dd04388e773a1ab27346f878653b2a90d7110402fe7fe0462590c9",
+    "/cn/": "2f5f1d8742f5b7ea495e7e127ee733315c40f9df8994ed09dd34f5509d919bc3",
+    "/cn/src/agents/": "3a74347c1cbda79bc7c4505aa869740ec633d012078c98a6f6e5d6ecf01ade09",
+    "/fa/": "1187793499ad685a31c9a9f8de3de8c2b2fd4bbad156b82764ea08d79963c0b1",
+    "/fa/src/design/": "bc1d1a4d3d8ae751bf9e0ccdbacaeeb8bf7c2b203dab74a1a1312616db30b284",
+    "/src/agents/": "10230237af34049aedb5c8176dd5bd9ed65342c14189786ccdcca7f82df3fdf1",
+    "/src/design/": "ca49c470068583acddf73e3d5833fdfda06fc14e458ee7607d57d6381607caf5"
+  },
+  "records": [
+    {
+      "kind": "static",
+      "path": "/",
+      "width": 1280,
+      "theme": "light",
+      "motion": "reduce",
+      "geometry": {
+        "width": 1280,
+        "scroll": 1280,
+        "h1": "Designmethods,componentsandtools",
+        "heading": {
+          "x": 80,
+          "y": 184.75,
+          "width": 587.84375,
+          "height": 128.9375,
+          "top": 184.75,
+          "right": 667.84375,
+          "bottom": 313.6875,
+          "left": 80
+        }
+      },
+      "file": "home-wide.png",
+      "sha256": "9d4f77189688a40ff29f93d34aecc7ae91e35a0fe50d730b12788962d03a3f77"
+    },
+    {
+      "kind": "static",
+      "path": "/",
+      "width": 900,
+      "theme": "light",
+      "motion": "reduce",
+      "geometry": {
+        "width": 900,
+        "scroll": 900,
+        "h1": "Designmethods,componentsandtools",
+        "heading": {
+          "x": 40,
+          "y": 165.75,
+          "width": 820,
+          "height": 46.84375,
+          "top": 165.75,
+          "right": 860,
+          "bottom": 212.59375,
+          "left": 40
+        }
+      },
+      "file": "home-medium.png",
+      "sha256": "c0deb59021280e9ad1e7ee02fe1af1112b9b9ba249e76869291b771bd357036d"
+    },
+    {
+      "kind": "static",
+      "path": "/cn/",
+      "width": 360,
+      "theme": "dark",
+      "motion": "reduce",
+      "geometry": {
+        "width": 360,
+        "scroll": 360,
+        "h1": "设计方法、组件与工具",
+        "heading": {
+          "x": 40,
+          "y": 152.75,
+          "width": 280,
+          "height": 81.875,
+          "top": 152.75,
+          "right": 320,
+          "bottom": 234.625,
+          "left": 40
+        }
+      },
+      "file": "home-cn.png",
+      "sha256": "9c52740438bd6898fefe2724ca8a6abac12f2585d6f5a68df4208a7bc75bce49"
+    },
+    {
+      "kind": "static",
+      "path": "/fa/",
+      "width": 360,
+      "theme": "light",
+      "motion": "reduce",
+      "geometry": {
+        "width": 360,
+        "scroll": 360,
+        "h1": "روش‌های طراحی، مؤلفه‌ها و ابزارها",
+        "heading": {
+          "x": 40,
+          "y": 152.75,
+          "width": 280,
+          "height": 74.1875,
+          "top": 152.75,
+          "right": 320,
+          "bottom": 226.9375,
+          "left": 40
+        }
+      },
+      "file": "home-rtl.png",
+      "sha256": "df3ebc5590259f75a07a5b654705ebd1955c94a88f06cd3a09d6e77b4ca9630f"
+    },
+    {
+      "kind": "static",
+      "path": "/src/design/",
+      "width": 1280,
+      "theme": "light",
+      "motion": "reduce",
+      "geometry": {
+        "width": 1280,
+        "scroll": 1280,
+        "h1": "Ran Design",
+        "heading": {
+          "x": 24,
+          "y": 92,
+          "width": 1232,
+          "height": 40,
+          "top": 92,
+          "right": 1256,
+          "bottom": 132,
+          "left": 24
+        }
+      },
+      "file": "design-wide.png",
+      "sha256": "6fb248fd6d7b521af74c125974821c131b6d7d1ba65bd90590b64319395ccb86"
+    },
+    {
+      "kind": "static",
+      "path": "/src/agents/",
+      "width": 1280,
+      "theme": "dark",
+      "motion": "reduce",
+      "geometry": {
+        "width": 1280,
+        "scroll": 1280,
+        "h1": "Agents",
+        "heading": {
+          "x": 24,
+          "y": 92,
+          "width": 968,
+          "height": 40,
+          "top": 92,
+          "right": 992,
+          "bottom": 132,
+          "left": 24
+        }
+      },
+      "file": "agents-wide.png",
+      "sha256": "80a6649db7a37e02c8349618feb7e67319983b73679f7fdd15045a0c7f0a3f5a"
+    },
+    {
+      "kind": "static",
+      "path": "/cn/src/agents/",
+      "width": 360,
+      "theme": "dark",
+      "motion": "reduce",
+      "geometry": {
+        "width": 360,
+        "scroll": 360,
+        "h1": "Agents",
+        "heading": {
+          "x": 16,
+          "y": 169,
+          "width": 328,
+          "height": 30,
+          "top": 169,
+          "right": 344,
+          "bottom": 199,
+          "left": 16
+        }
+      },
+      "file": "agents-cn.png",
+      "sha256": "7db50b73d744c4daf4e01a93a2ee5176a366056a73b8d5709f298182a035400b"
+    },
+    {
+      "kind": "static",
+      "path": "/fa/src/design/",
+      "width": 360,
+      "theme": "light",
+      "motion": "reduce",
+      "geometry": {
+        "width": 360,
+        "scroll": 360,
+        "h1": "Ran Design",
+        "heading": {
+          "x": 16,
+          "y": 92,
+          "width": 328,
+          "height": 30,
+          "top": 92,
+          "right": 344,
+          "bottom": 122,
+          "left": 16
+        }
+      },
+      "file": "design-rtl.png",
+      "sha256": "32511cb27db413b2c6dc74598ad8c8c43e57e9d1723c688ed2d0f3714526ec0c"
+    },
+    {
+      "kind": "continuous",
+      "width": 1280,
+      "motion": "no-preference",
+      "steps": [
+        "home",
+        "keyboard Design",
+        "home",
+        "keyboard Agents",
+        "dark",
+        "light",
+        "home"
+      ],
+      "file": "video/wide-motion.webm",
+      "sha256": "313c651ee3918e749135ab5656d4c3630528692fb3ef8fcc6ade2c6fa5421a11"
+    },
+    {
+      "kind": "continuous",
+      "width": 360,
+      "motion": "reduce",
+      "steps": [
+        "home",
+        "keyboard Design",
+        "home",
+        "keyboard Agents",
+        "dark",
+        "light",
+        "home",
+        "drawer open",
+        "drawer reverse"
+      ],
+      "file": "video/narrow-reduced.webm",
+      "sha256": "a634f63664b21eb5150e9b2c1f11956445e894204b9bcc9d68355d08d6b65061"
+    }
+  ],
+  "scope": "Built ran product website; no app/component-wide visual acceptance claim"
+}

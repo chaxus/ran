@@ -1,7 +1,7 @@
 /**
  * Home page copy, per language.
  *
- * It lives outside `HomeCinematic.vue` because eight languages of hero, pillars,
+ * It lives outside the home renderer because eight languages of hero, pillars,
  * capabilities and features is more prose than component — and because the invariant half
  * (which capability sits in which column, what its API signature is, where a pillar links)
  * must not be retyped per language, where it would drift.
@@ -42,7 +42,7 @@ const STAT_NUMS = ['40', '90+', '8', 'MIT'] as const;
 const PILLAR_STRUCTURE = [
   { kind: 'ui', link: '/src/ranui/' },
   { kind: 'utils', link: '/src/ranuts/' },
-  { kind: 'article', link: '/src/article/doc_preview' },
+  { kind: 'article', link: '/src/design/' },
 ] as const;
 const FEATURE_KINDS = ['agnostic', 'typed', 'pwa', 'i18n'] as const;
 
@@ -66,7 +66,7 @@ export interface HomeStrings {
   ctaSecondary: string;
   /** Labels under `STAT_NUMS`, in that order. */
   statLabels: [string, string, string, string];
-  /** `{ title, desc, more }` for ranui, ranuts and the articles pillar, in that order. */
+  /** `{ title, desc, more }` for ranui, ranuts and the Ran Design pillar, in that order. */
   pillars: [Pair3, Pair3, Pair3];
   capsKicker: string;
   capsTitle: string;
@@ -113,11 +113,11 @@ interface Pair3 extends Pair2 {
 export const HOME_STRINGS: Record<string, HomeStrings> = {
   '': {
     eyebrow: 'Open source · MIT Licensed',
-    headline: 'A Web Components UI library and a typed utility library',
+    headline: 'Design methods, components and tools',
     splitWords: true,
     subtitle:
-      'ranui ships 40 framework-agnostic r- elements; ranuts packs 90+ tree-shakeable TypeScript helpers. Use them in Vue, React, or plain HTML, with no build step required.',
-    ctaPrimary: 'Explore Components',
+      'Build products with Ran Design, ranui components and ranuts utilities. Use each independently, with guidance for developers and agents.',
+    ctaPrimary: 'Build with agents',
     ctaSecondary: 'Star on GitHub',
     statLabels: ['Components', 'Utilities', 'Languages', 'Licensed'],
     pillars: [
@@ -132,9 +132,9 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'Read the docs',
       },
       {
-        title: 'Articles',
-        desc: 'Longer write-ups on rendering engines, functional programming, sorting algorithms and the web platform.',
-        more: 'Start reading',
+        title: 'Ran Design',
+        desc: 'Methods for layout, interaction, motion and evidence-based review, independent of any component library.',
+        more: 'Explore design',
       },
     ],
     capsKicker: 'Capabilities',
@@ -194,11 +194,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   cn: {
     eyebrow: '开源 · MIT 协议',
-    headline: 'Web Components 组件库与 TypeScript 工具集',
+    headline: '设计方法、组件与工具',
     splitWords: false,
-    subtitle:
-      'ranui 提供 40 个框架无关的 r- 元素，ranuts 收录 90+ 个可 Tree-shaking 的类型化工具函数，在 Vue、React 或纯 HTML 中直接使用，无需构建步骤。',
-    ctaPrimary: '浏览组件',
+    subtitle: '使用 Ran Design、ranui 组件和 ranuts 工具构建产品。三者可独立使用，为开发者和 agent 提供指引。',
+    ctaPrimary: '使用 agent 构建',
     ctaSecondary: '前往 GitHub',
     statLabels: ['组件', '工具函数', '语言', '协议'],
     pillars: [
@@ -209,10 +208,14 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       {
         title: 'ranuts',
-        desc: '90+ 个带类型的工具函数，覆盖字符串、对象、颜色、时间、文件与 DOM。支持 Tree-shaking，零依赖。',
-        more: '阅读文档',
+        desc: '提供字符串、对象、颜色、时间、文件与 DOM 等 TypeScript 工具，支持按需引入。',
+        more: '查看工具',
       },
-      { title: '文章', desc: '关于渲染引擎、函数式编程、排序算法与 Web 平台的长文。', more: '开始阅读' },
+      {
+        title: 'Ran Design',
+        desc: '涵盖布局、交互、动效和实际验收的方法，不依赖特定组件库。',
+        more: '探索设计方法',
+      },
     ],
     capsKicker: '特色能力',
     capsTitle: '多数库没有的能力',
@@ -252,11 +255,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   ja: {
     eyebrow: 'オープンソース · MIT ライセンス',
-    headline: 'Web Components の UI ライブラリと型付きユーティリティ',
+    headline: '設計方法、コンポーネント、ツール',
     splitWords: false,
-    subtitle:
-      'ranui はフレームワークに依存しない r- 要素を 40 個、ranuts は tree-shaking 可能な型付きユーティリティを 90 以上そろえています。Vue でも React でも素の HTML でも、ビルド工程なしでそのまま使えます。',
-    ctaPrimary: 'コンポーネントを見る',
+    subtitle: 'Ran Design、ranui、ranuts で製品を構築。各機能を独立して使い、開発者とエージェントを支援します。',
+    ctaPrimary: 'エージェントで構築',
     ctaSecondary: 'GitHub でスターする',
     statLabels: ['コンポーネント', 'ユーティリティ', '言語', 'ライセンス'],
     pillars: [
@@ -271,9 +273,9 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'ドキュメントを読む',
       },
       {
-        title: '記事',
-        desc: 'レンダリングエンジン、関数型プログラミング、ソートアルゴリズム、Web プラットフォームについての長文。',
-        more: '読みはじめる',
+        title: 'Ran Design',
+        desc: 'レイアウト、操作、モーション、実際の検証を扱う、ライブラリに依存しない設計方法。',
+        more: '設計方法を見る',
       },
     ],
     capsKicker: '特色ある機能',
@@ -339,11 +341,11 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   es: {
     eyebrow: 'Código abierto · Licencia MIT',
-    headline: 'Una biblioteca de UI en Web Components y utilidades tipadas',
+    headline: 'Métodos de diseño, componentes y herramientas',
     splitWords: true,
     subtitle:
-      'ranui trae 40 elementos r- independientes de cualquier framework; ranuts reúne más de 90 utilidades TypeScript compatibles con tree-shaking. Úsalos en Vue, en React o en HTML puro, sin ningún paso de compilación.',
-    ctaPrimary: 'Ver los componentes',
+      'Crea productos con Ran Design, ranui y ranuts. Úsalos por separado, con orientación para desarrolladores y agentes.',
+    ctaPrimary: 'Crear con agentes',
     ctaSecondary: 'Dar una estrella en GitHub',
     statLabels: ['Componentes', 'Utilidades', 'Idiomas', 'Licencia'],
     pillars: [
@@ -358,9 +360,9 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'Leer la documentación',
       },
       {
-        title: 'Artículos',
-        desc: 'Textos largos sobre motores de renderizado, programación funcional, algoritmos de ordenación y la plataforma web.',
-        more: 'Empezar a leer',
+        title: 'Ran Design',
+        desc: 'Métodos de composición, interacción, movimiento y revisión con evidencia, independientes de una biblioteca.',
+        more: 'Explorar diseño',
       },
     ],
     capsKicker: 'Capacidades',
@@ -426,11 +428,11 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   pt: {
     eyebrow: 'Código aberto · Licença MIT',
-    headline: 'Uma biblioteca de UI em Web Components e utilitários tipados',
+    headline: 'Métodos de design, componentes e ferramentas',
     splitWords: true,
     subtitle:
-      'O ranui traz 40 elementos r- independentes de framework; o ranuts reúne mais de 90 utilitários TypeScript compatíveis com tree-shaking. Use-os no Vue, no React ou em HTML puro, sem nenhuma etapa de build.',
-    ctaPrimary: 'Ver os componentes',
+      'Crie produtos com Ran Design, ranui e ranuts. Use cada um de forma independente, com orientação para desenvolvedores e agentes.',
+    ctaPrimary: 'Criar com agentes',
     ctaSecondary: 'Dar uma estrela no GitHub',
     statLabels: ['Componentes', 'Utilitários', 'Idiomas', 'Licença'],
     pillars: [
@@ -445,9 +447,9 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'Ler a documentação',
       },
       {
-        title: 'Artigos',
-        desc: 'Textos longos sobre motores de renderização, programação funcional, algoritmos de ordenação e a plataforma web.',
-        more: 'Começar a ler',
+        title: 'Ran Design',
+        desc: 'Métodos de composição, interação, movimento e revisão com evidências, independentes de bibliotecas.',
+        more: 'Explorar design',
       },
     ],
     capsKicker: 'Recursos',
@@ -513,11 +515,11 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   ko: {
     eyebrow: '오픈소스 · MIT 라이선스',
-    headline: '웹 컴포넌트 UI 라이브러리와 타입이 붙은 유틸리티',
+    headline: '디자인 방법, 컴포넌트와 도구',
     splitWords: true,
     subtitle:
-      'ranui는 프레임워크에 얽매이지 않는 r- 엘리먼트 40개를, ranuts는 트리 셰이킹이 되는 타입 유틸리티 90여 개를 제공합니다. Vue에서도 React에서도 순수 HTML에서도 빌드 단계 없이 그대로 씁니다.',
-    ctaPrimary: '컴포넌트 둘러보기',
+      'Ran Design, ranui, ranuts로 제품을 만드세요. 개발자와 에이전트를 위한 지침과 함께 각각 독립적으로 사용할 수 있습니다.',
+    ctaPrimary: '에이전트로 만들기',
     ctaSecondary: 'GitHub에서 스타 주기',
     statLabels: ['컴포넌트', '유틸리티', '언어', '라이선스'],
     pillars: [
@@ -532,9 +534,9 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: '문서 읽기',
       },
       {
-        title: '아티클',
-        desc: '렌더링 엔진, 함수형 프로그래밍, 정렬 알고리즘, 웹 플랫폼을 다루는 긴 글.',
-        more: '읽기 시작하기',
+        title: 'Ran Design',
+        desc: '특정 라이브러리에 종속되지 않는 레이아웃, 상호작용, 모션 및 실제 검증 방법입니다.',
+        more: '디자인 살펴보기',
       },
     ],
     capsKicker: '주요 기능',
@@ -594,11 +596,11 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   de: {
     eyebrow: 'Open Source · MIT-Lizenz',
-    headline: 'Eine Web-Components-UI-Bibliothek und typisierte Utilities',
+    headline: 'Designmethoden, Komponenten und Werkzeuge',
     splitWords: true,
     subtitle:
-      'ranui liefert 40 frameworkunabhängige r--Elemente, ranuts über 90 tree-shaking-fähige TypeScript-Helfer. Nutzbar in Vue, in React oder in reinem HTML — ganz ohne Build-Schritt.',
-    ctaPrimary: 'Komponenten ansehen',
+      'Produkte mit Ran Design, ranui und ranuts entwickeln. Unabhängig nutzbar, mit Anleitungen für Entwickler und Agenten.',
+    ctaPrimary: 'Mit Agenten entwickeln',
     ctaSecondary: 'Auf GitHub mit Stern versehen',
     statLabels: ['Komponenten', 'Utilities', 'Sprachen', 'Lizenz'],
     pillars: [
@@ -613,9 +615,9 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'Dokumentation lesen',
       },
       {
-        title: 'Artikel',
-        desc: 'Längere Texte über Rendering-Engines, funktionale Programmierung, Sortieralgorithmen und die Web-Plattform.',
-        more: 'Zu lesen beginnen',
+        title: 'Ran Design',
+        desc: 'Bibliotheksunabhängige Methoden für Layout, Interaktion, Bewegung und Prüfung anhand konkreter Ergebnisse.',
+        more: 'Design erkunden',
       },
     ],
     capsKicker: 'Fähigkeiten',
@@ -681,11 +683,11 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
   },
   fa: {
     eyebrow: 'متن‌باز · مجوز MIT',
-    headline: 'کتابخانهٔ رابط کاربری وب‌کامپوننت و ابزارهای تایپ‌شده',
+    headline: 'روش\u200cهای طراحی، مؤلفه\u200cها و ابزارها',
     splitWords: false,
     subtitle:
-      'ranui چهل عنصر ‎r-‎ مستقل از فریم‌ورک دارد و ranuts بیش از ۹۰ ابزار تایپ‌شده با پشتیبانی از tree-shaking. در Vue، React یا HTML ساده و بدون هیچ مرحلهٔ ساخت به کار می‌روند.',
-    ctaPrimary: 'دیدن کامپوننت‌ها',
+      'با Ran Design، ranui و ranuts محصول بسازید. هر بخش به\u200cصورت مستقل با راهنمای توسعه\u200cدهندگان و عامل\u200cها قابل استفاده است.',
+    ctaPrimary: 'ساخت با عامل\u200cها',
     ctaSecondary: 'ستاره دادن در گیت‌هاب',
     statLabels: ['کامپوننت', 'ابزار', 'زبان', 'مجوز'],
     pillars: [
@@ -700,9 +702,9 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'خواندن مستندات',
       },
       {
-        title: 'مقاله‌ها',
-        desc: 'نوشته‌های بلند دربارهٔ موتورهای رندر، برنامه‌نویسی تابعی، الگوریتم‌های مرتب‌سازی و بستر وب.',
-        more: 'شروع خواندن',
+        title: 'Ran Design',
+        desc: 'روش\u200cهای چیدمان، تعامل، حرکت و ارزیابی با شواهد، مستقل از کتابخانهٔ مؤلفه\u200cها.',
+        more: 'کاوش طراحی',
       },
     ],
     capsKicker: 'توانمندی‌ها',

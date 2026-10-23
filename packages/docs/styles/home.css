@@ -148,6 +148,12 @@
   letter-spacing: -0.035em;
   text-wrap: balance;
 }
+/* CJK fallback fonts need a taller line box than the Latin display face. */
+.headline:lang(zh),
+.headline:lang(ja),
+.headline:lang(ko) {
+  line-height: 1.2;
+}
 .headline .line {
   display: block;
 }
@@ -155,25 +161,16 @@
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
-  padding-bottom: 0.16em;
+  /* Preserve the total allowance while accommodating ascenders as well as descenders. */
+  padding-block: 0.08em;
   margin-right: 0.26em;
 }
 .headline .word-in {
   display: inline-block;
-  transform: translateY(115%);
-  opacity: 0;
   background: linear-gradient(180deg, var(--ink) 46%, color-mix(in srgb, var(--ink) 55%, transparent) 130%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: word-rise 0.8s cubic-bezier(0.16, 0.84, 0.24, 1) forwards;
-  animation-delay: var(--hd, 0ms);
-}
-@keyframes word-rise {
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 .subtitle {
   margin: 24px 0 0;
@@ -181,20 +178,6 @@
   font-size: 16px;
   line-height: 1.72;
   color: var(--fg-muted);
-}
-
-/* hero copy blocks: fade-up with staggered delay */
-[data-hero] {
-  opacity: 0;
-  transform: translateY(18px);
-  animation: hero-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
-  animation-delay: var(--hd, 0ms);
-}
-@keyframes hero-in {
-  to {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 .cmd {
@@ -405,33 +388,6 @@
   padding: 12px 20px 16px;
   font-size: 12.5px;
   color: var(--fg-faint);
-}
-
-/* ---------- scroll reveal ---------- */
-/*
- * Hidden only where script is running to reveal it again.
- *
- * `.reveal { opacity: 0 }` on its own is a bet that the IntersectionObserver always runs.
- * When it does not — JavaScript disabled, a bundle that 404s, an error earlier in the
- * file — every section below the fold stays invisible permanently. Only the observer's
- * ready marker may enable hiding; the head bootstrap cannot prove the client loaded.
- */
-.cine[data-reveal-ready] .reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition:
-    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
-    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.cine[data-reveal-ready] .reveal.in {
-  opacity: 1;
-  transform: none;
-}
-.reveal .stat,
-.reveal.pillar,
-.reveal .caps-list li,
-.reveal .feature {
-  transition-delay: var(--rd, 0ms);
 }
 
 /* ---------- stats ---------- */
@@ -844,20 +800,6 @@
 @media (prefers-reduced-motion: reduce) {
   .live-dot {
     animation: none;
-  }
-  .word-in {
-    animation: none;
-    transform: none;
-    opacity: 1;
-  }
-  [data-hero] {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
   }
   .live-skeleton span {
     animation: none;

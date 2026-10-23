@@ -1,9 +1,8 @@
 {
   "name": "docs",
   "version": "1.0.0",
-  "description": "chaxus document",
+  "description": "ran.chaxus.com \u2014 product website, design methods and library documentation",
   "type": "module",
-  "main": "index.js",
   "scripts": {
     "dev": "tsx build/dev.ts",
     "preview": "tsx build/preview.ts",
@@ -44,5 +43,6 @@
     "ranpress": "workspace:*",
     "ranui": "workspace:*",
     "ranuts": "workspace:*"
-  }
+  },
+  "private": true
 }

@@ -29,9 +29,27 @@ test.describe('native global navigation', () => {
       await expect(toggle).toBeChecked();
       const navigation = page.locator('.sidebar .mobile-nav');
       await expect(navigation).toBeVisible();
-      await expect(navigation.locator('a')).toHaveCount(4);
-      for (const link of await navigation.locator('a').all()) await expect(link).toBeInViewport();
+      const articlePrefix = ['', '/cn'].includes(prefix) ? prefix : '';
+      const destinations = [
+        `${prefix}/src/design/`,
+        `${prefix}/src/ranui/`,
+        `${prefix}/src/ranuts/`,
+        `${articlePrefix}/src/article/doc_preview`,
+        `${prefix}/src/agents/`,
+        'https://edit.chaxus.com/',
+      ];
+      expect(
+        await navigation.locator('a').evaluateAll((links) => links.map((link) => link.getAttribute('href'))),
+      ).toEqual(destinations);
+      await navigation.locator('a').first().focus();
+      for (const destination of destinations) {
+        const link = navigation.locator(`a[href="${destination}"]`);
+        await expect(link).toBeFocused();
+        await expect(link).toBeInViewport();
+        await page.keyboard.press('Tab');
+      }
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+      await toggle.focus();
       await page.keyboard.press('Space');
       await expect(toggle).not.toBeChecked();
       await language.focus();
@@ -112,3 +130,31 @@ test('a failed client request leaves the complete landing content readable', asy
   await page.keyboard.press('Space');
   await expect(page.locator('.sidebar .mobile-nav')).toBeVisible();
 });
+
+for (const motion of ['reduce', 'no-preference'] as const) {
+  test(`headline remains readable without decorative entrance motion (${motion})`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: motion });
+    await page.setViewportSize({ width: 1280, height: 800 });
+    for (const path of ['/', '/cn/', '/fa/']) {
+      await page.goto(path);
+      const words = await page.locator('.headline .word-in').evaluateAll((elements) =>
+        elements.map((element) => {
+          const style = getComputedStyle(element);
+          const range = document.createRange();
+          range.selectNodeContents(element);
+          const text = range.getBoundingClientRect();
+          const clip = element.parentElement!.getBoundingClientRect();
+          return {
+            animation: style.animationName,
+            opacity: style.opacity,
+            transform: style.transform,
+            visible: text.width > 0 && text.height > 0 && text.top >= clip.top - 1 && text.bottom <= clip.bottom + 1,
+          };
+        }),
+      );
+      expect(words.length).toBeGreaterThan(0);
+      for (const word of words)
+        expect(word).toEqual({ animation: 'none', opacity: '1', transform: 'none', visible: true });
+    }
+  });
+}

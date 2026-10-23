@@ -36,12 +36,12 @@ Removal verification: root `pnpm build` passed and generated 1,321 website pages
 
 ## Chunk 2: Neutral design owner and portable plugin
 
-- [ ] Extract general sections of `packages/ranui/docs/{DESIGN,INTERACTION,ACCEPTANCE,WORKFLOW_PATTERNS,REFERENCE_RESEARCH}.md` into `design/`; keep library-specific tokens and contracts with ranui. Inventory all callers before moving sections.
-- [ ] Replace duplicated prose with focused links in `AGENTS.md`, package guides and public pages; retain original reference URLs, adaptation notes and evidence limitations.
-- [ ] Create one `plugins/ran/` distribution with design, ranui and ranuts skills. Update both marketplace entries and installation instructions together.
-- [ ] Bundle needed references from canonical owners with deterministic typed tooling and provenance. An installed plugin must work outside this checkout: no unresolved links to `../../design`, repository-only symlinks or dependence on another plugin's presence.
+- [x] Extract general sections of `packages/ranui/docs/{DESIGN,INTERACTION,ACCEPTANCE,WORKFLOW_PATTERNS,REFERENCE_RESEARCH}.md` into `design/`; keep library-specific tokens and contracts with ranui. Inventory all callers before moving sections.
+- [x] Replace duplicated prose with focused links in `AGENTS.md`, package guides and public pages; retain original reference URLs, adaptation notes and evidence limitations.
+- [x] Create one `plugins/ran/` distribution with design, ranui and ranuts skills. Update both marketplace entries and installation instructions together.
+- [x] Bundle needed references from canonical owners with deterministic typed tooling and provenance. An installed plugin must work outside this checkout: no unresolved links to `../../design`, repository-only symlinks or dependence on another plugin's presence.
 - [ ] Record the exact npm package version and source provenance for bundled API/token references; match guidance to the host's installed version. Do not describe an unpublished component API as available to users.
-- [ ] Move the six existing eval scenarios with their actual provenance, update root scripts and CI paths, and run packaging plus behavior checks. Historical screenshots remain historical.
+- [x] Move the six existing eval scenarios with their actual provenance, update root scripts and CI paths, and run packaging plus behavior checks. Historical screenshots remain historical.
 - [ ] Test the plugin from an isolated installation directory, including a non-ranui host and a host using the published ranui version.
 
 ## Chunk 3: One website for the three pillars
@@ -77,3 +77,19 @@ Target routes (implementation pending):
 ## Completion criteria
 
 The website identifies and links all three pillars; its build remains self-contained after personal-site removal. Each skill can resolve its own references after installation. Generic design guidance works without ranui; ranui guidance matches the chosen version. Fresh screenshots and recordings demonstrate the changed website and components. A passing structural test alone does not constitute visual acceptance.
+
+## Implemented review checkpoint — 2026-10-23
+
+The unified plugin and neutral owners are committed in `6113e2a`; design-before-implementation
+brief/routing refinements are in `5a8a530`. Canonical references remain independently editable only
+in design/ and ranui adapters. Both generated distributions pass freshness and portable-link checks.
+The installed-package skills resolve the host's real package version rather than bundle unpublished
+API facts. Isolated directory tests pass; no actual Codex/Claude plugin installation or new live
+six-agent trial is claimed. Six deterministic evaluator groups pass, with historical live evidence
+retained under its original provenance.
+
+The website has localized Design and Agents entries in all eight languages and the three-pillar
+homepage. Existing /src/ public paths remain; clean-route remapping and the complete examples
+section are deliberately pending. The website evidence is in
+[the production-page review](../../../packages/docs/test/evidence/2026-10-23-product-site/README.md).
+This checkpoint is a bounded implementation, not completion of every architecture item above.
