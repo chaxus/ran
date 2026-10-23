@@ -1,0 +1,41 @@
+[
+  {
+    "width": 1280,
+    "geometry": [
+      {
+        "height": 32,
+        "text": "🟡 Medium priority"
+      },
+      {
+        "height": 32,
+        "text": "Pick a teammate"
+      }
+    ]
+  },
+  {
+    "width": 900,
+    "geometry": [
+      {
+        "height": 32,
+        "text": "🟡 Medium priority"
+      },
+      {
+        "height": 32,
+        "text": "Pick a teammate"
+      }
+    ]
+  },
+  {
+    "width": 360,
+    "geometry": [
+      {
+        "height": 32,
+        "text": "🟡 Medium priority"
+      },
+      {
+        "height": 32,
+        "text": "Pick a teammate"
+      }
+    ]
+  }
+]
