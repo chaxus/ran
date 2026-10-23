@@ -198,9 +198,9 @@ Código-fonte: `components/icon/index.ts`
 - **Slots**: —
 - **Partes**: `ran-icon`
 
-> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs
-> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`
-> is registered. Register once, in the browser, before the first `<r-icon>` connects:
+> **Bundled icons are loaded on demand.** `<r-icon name="lock">` works without registration:
+> its SVG is fetched on first use and cached. To register the entire bundled set eagerly,
+> optionally call the following in the browser before the first `<r-icon>` connects:
 >
 > ```ts
 > import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'
@@ -215,7 +215,7 @@ Código-fonte: `components/icon/index.ts`
 
 Código-fonte: `components/image/index.ts`
 
-- **Atributos**: —
+- **Atributos**: `alt`, `fallback`, `sheet`, `src`
 - **Propriedades**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
@@ -310,7 +310,7 @@ Código-fonte: `components/math/index.ts`
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **Slots**: —
-- **Partes**: `button`, `error`, `math`, `menu`, `render`, `toolbar`
+- **Partes**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
 
 ## `<r-mermaid>`
 
@@ -325,13 +325,13 @@ Código-fonte: `components/mermaid/index.ts`
   - `fullscreenchange` · bubbles, composed · detail `{ open }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **Slots**: —
-- **Partes**: `button`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
+- **Partes**: `button`, `copy-status`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
 
 ## `<r-message>`
 
 Código-fonte: `components/message/index.ts`
 
-- **Atributos**: —
+- **Atributos**: `content: string | null`, `sheet: string`, `type: string | null`
 - **Propriedades**: `content: string | null`, `sheet: string`, `type: string | null`
 - **Eventos**: —
 - **Slots**: —
@@ -366,7 +366,7 @@ Código-fonte: `components/modal/index.ts`
 
 Código-fonte: `components/select/option/index.ts`
 
-- **Atributos**: —
+- **Atributos**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **Propriedades**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **Eventos**: —
 - **Slots**: `padrão`
@@ -423,7 +423,7 @@ Código-fonte: `components/popover/index.ts`
 
 Código-fonte: `components/progress/index.ts`
 
-- **Atributos**: `drag`, `primary`
+- **Atributos**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **Propriedades**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **Eventos**:
   - `change` · element-only · detail `{ percent, total, value }`
@@ -434,7 +434,7 @@ Código-fonte: `components/progress/index.ts`
 
 Código-fonte: `components/radar/index.ts`
 
-- **Atributos**: —
+- **Atributos**: `abilitys`, `colorline`, `colorpolygon`, `fillcolor`, `sheet`, `strokecolor`
 - **Propriedades**: `abilitys`, `colorLine`, `colorPolygon`, `fillColor`, `fontColor`, `sheet`, `strokeColor`
 - **Eventos**: —
 - **Slots**: —
@@ -487,11 +487,11 @@ Código-fonte: `components/router/index.ts`
 
 Código-fonte: `components/scratch/index.ts`
 
-- **Atributos**: `disabled: boolean`, `sheet: string`
-- **Propriedades**: `disabled: boolean`, `sheet: string`
+- **Atributos**: `disabled: boolean`, `reveal-label`, `revealed-label`, `sheet: string`
+- **Propriedades**: `disabled: boolean`, `revealedLabel: string`, `revealLabel: string`, `sheet: string`
 - **Eventos**: —
 - **Slots**: `padrão`
-- **Partes**: `award`
+- **Partes**: `award`, `reveal-button`
 
 ## `<r-section>`
 
@@ -561,7 +561,7 @@ Código-fonte: `components/state-dot/index.ts`
 
 Código-fonte: `components/tabpane/index.ts`
 
-- **Atributos**: —
+- **Atributos**: `disabled`, `effect`, `icon`, `iconsize`, `key`, `label`, `sheet`
 - **Propriedades**: `disabled`, `effect`, `icon`, `iconSize`, `key`, `label`, `sheet`
 - **Eventos**: —
 - **Slots**: `padrão`
@@ -582,7 +582,7 @@ Código-fonte: `components/tab/index.ts`
 
 Código-fonte: `components/theme-switch/index.ts`
 
-- **Atributos**: `label-dark`, `label-light`, `label-system`, `sheet: string`
+- **Atributos**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **Propriedades**:
   - `sheet: string`
   - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.

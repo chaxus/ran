@@ -196,9 +196,9 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 - **スロット**: —
 - **Part**: `ran-icon`
 
-> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs
-> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`
-> is registered. Register once, in the browser, before the first `<r-icon>` connects:
+> **Bundled icons are loaded on demand.** `<r-icon name="lock">` works without registration:
+> its SVG is fetched on first use and cached. To register the entire bundled set eagerly,
+> optionally call the following in the browser before the first `<r-icon>` connects:
 >
 > ```ts
 > import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'
@@ -213,7 +213,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 
 ソース: `components/image/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `alt`, `fallback`, `sheet`, `src`
 - **プロパティ（property）**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
@@ -308,7 +308,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **スロット**: —
-- **Part**: `button`, `error`, `math`, `menu`, `render`, `toolbar`
+- **Part**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
 
 ## `<r-mermaid>`
 
@@ -323,13 +323,13 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
   - `fullscreenchange` · bubbles, composed · detail `{ open }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **スロット**: —
-- **Part**: `button`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
+- **Part**: `button`, `copy-status`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
 
 ## `<r-message>`
 
 ソース: `components/message/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `content: string | null`, `sheet: string`, `type: string | null`
 - **プロパティ（property）**: `content: string | null`, `sheet: string`, `type: string | null`
 - **イベント**: —
 - **スロット**: —
@@ -364,7 +364,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 
 ソース: `components/select/option/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **プロパティ（property）**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **イベント**: —
 - **スロット**: `デフォルトスロット`
@@ -421,7 +421,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 
 ソース: `components/progress/index.ts`
 
-- **属性（attribute）**: `drag`, `primary`
+- **属性（attribute）**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **プロパティ（property）**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **イベント**:
   - `change` · element-only · detail `{ percent, total, value }`
@@ -432,7 +432,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 
 ソース: `components/radar/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `abilitys`, `colorline`, `colorpolygon`, `fillcolor`, `sheet`, `strokecolor`
 - **プロパティ（property）**: `abilitys`, `colorLine`, `colorPolygon`, `fillColor`, `fontColor`, `sheet`, `strokeColor`
 - **イベント**: —
 - **スロット**: —
@@ -485,11 +485,11 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 
 ソース: `components/scratch/index.ts`
 
-- **属性（attribute）**: `disabled: boolean`, `sheet: string`
-- **プロパティ（property）**: `disabled: boolean`, `sheet: string`
+- **属性（attribute）**: `disabled: boolean`, `reveal-label`, `revealed-label`, `sheet: string`
+- **プロパティ（property）**: `disabled: boolean`, `revealedLabel: string`, `revealLabel: string`, `sheet: string`
 - **イベント**: —
 - **スロット**: `デフォルトスロット`
-- **Part**: `award`
+- **Part**: `award`, `reveal-button`
 
 ## `<r-section>`
 
@@ -559,7 +559,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 
 ソース: `components/tabpane/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `disabled`, `effect`, `icon`, `iconsize`, `key`, `label`, `sheet`
 - **プロパティ（property）**: `disabled`, `effect`, `icon`, `iconSize`, `key`, `label`, `sheet`
 - **イベント**: —
 - **スロット**: `デフォルトスロット`
@@ -580,7 +580,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 
 ソース: `components/theme-switch/index.ts`
 
-- **属性（attribute）**: `label-dark`, `label-light`, `label-system`, `sheet: string`
+- **属性（attribute）**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **プロパティ（property）**:
   - `sheet: string`
   - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.

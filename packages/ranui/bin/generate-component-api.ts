@@ -64,12 +64,69 @@ function uniqSorted(values: string[]): string[] {
   return Array.from(new Set(values)).sort((a, b) => a.localeCompare(b));
 }
 
-/** Strings inside the `observedAttributes` return array (comments tolerated). */
+/**
+ * Read inline arrays or same-file module const arrays, with or without return types.
+ * This bounded lexer skips comments and keeps strings whole; it does not evaluate
+ * expressions, resolve imports/spreads or infer attributes from runtime calls.
+ */
 function extractAttributes(src: string): string[] {
-  const block = src.match(/observedAttributes\s*\([^)]*\)\s*:\s*string\[\]\s*\{[\s\S]*?return\s*\[([\s\S]*?)\]/);
-  if (!block) return [];
-  const items = block[1].match(/['"`]([^'"`]+)['"`]/g) || [];
-  return uniqSorted(items.map((s) => s.slice(1, -1)));
+  const tokens = (
+    src.match(/\/\/[^\n]*|\/\*[\s\S]*?\*\/|'(?:\\[\s\S]|[^'\\])*'|"(?:\\[\s\S]|[^"\\])*"|`(?:\\[\s\S]|[^`\\])*`|[A-Za-z_$][\w$]*|[^\s]/g) ?? []
+  ).filter((token) => !token.startsWith('//') && !token.startsWith('/*'));
+  const arrayAt = (start: number): { values: string[]; end: number } | undefined => {
+    if (tokens[start] !== '[') return;
+    const values: string[] = [];
+    let cursor = start + 1;
+    while (tokens[cursor] !== ']') {
+      // Escapes and interpolated templates require more than literal-name extraction.
+      const literal = /^(['"`])([^\\]*?)\1$/s.exec(tokens[cursor] ?? '');
+      if (!literal || (literal[1] === '`' && literal[2].includes('${'))) return;
+      values.push(literal[2]);
+      cursor++;
+      if (tokens[cursor] === ']') break;
+      if (tokens[cursor++] !== ',') return;
+    }
+    return { values, end: cursor + 1 };
+  };
+  const constants = new Map<string, string[]>();
+  let depth = 0;
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    if (token === '{') depth++;
+    if (token === '}') depth--;
+    if (depth !== 0 || token !== 'const' || !/^[A-Za-z_$][\w$]*$/.test(tokens[i + 1] ?? '')) continue;
+    let cursor = i + 2;
+    // The repository uses unannotated or string[] module constants. Do not cross
+    // a statement/block while looking through an optional type annotation.
+    if (tokens[cursor] === ':') {
+      while (cursor < tokens.length && !['=', ';', '{', '}'].includes(tokens[cursor])) cursor++;
+    }
+    if (tokens[cursor++] !== '=') continue;
+    const array = arrayAt(cursor);
+    if (!array) continue;
+    cursor = array.end;
+    if (tokens[cursor] === 'as' && tokens[cursor + 1] === 'const') cursor += 2;
+    if (tokens[cursor] === ';') constants.set(tokens[i + 1], array.values);
+  }
+  for (let i = 0; i < tokens.length; i++) {
+    if (tokens.slice(i, i + 5).join(' ') !== 'static get observedAttributes ( )') continue;
+    let cursor = i + 5;
+    if (tokens[cursor] === ':') {
+      while (cursor < tokens.length && !['{', ';', '}'].includes(tokens[cursor])) cursor++;
+    }
+    if (tokens[cursor++] !== '{' || tokens[cursor++] !== 'return') {
+      throw new Error('observedAttributes must directly return a literal array or same-file const array');
+    }
+    const array = arrayAt(cursor);
+    const values = array?.values ?? constants.get(tokens[cursor]);
+    cursor = array?.end ?? cursor + 1;
+    if (tokens[cursor] === ';') cursor++;
+    if (!values || tokens[cursor] !== '}') {
+      throw new Error('observedAttributes must directly return a literal array or same-file const array');
+    }
+    return uniqSorted(values);
+  }
+  return [];
 }
 
 /** Resolve same-file `enum X { K = 'v' }` and `type X = …` to readable types,
@@ -392,9 +449,9 @@ function renderInline(values: string[]): string {
  * extracted API surface can't convey — e.g. required setup calls). */
 const ELEMENT_NOTES: Record<string, string> = {
   'r-icon': [
-    '> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs',
-    '> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`',
-    '> is registered. Register once, in the browser, before the first `<r-icon>` connects:',
+    '> **Bundled icons are loaded on demand.** `<r-icon name="lock">` works without registration:',
+    '> its SVG is fetched on first use and cached. To register the entire bundled set eagerly,',
+    '> optionally call the following in the browser before the first `<r-icon>` connects:',
     '>',
     '> ```ts',
     "> import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'",
