@@ -254,3 +254,9 @@
     }
   }
 }
+
+// An empty hint must remain distinct from a selected value, including on focus.
+:host(:not([value])) .ran-select .selection .selection-item,
+:host([value='']) .ran-select .selection .selection-item {
+  color: var(--ran-color-text-secondary);
+}

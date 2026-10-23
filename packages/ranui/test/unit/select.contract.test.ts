@@ -40,6 +40,28 @@ describe('r-select contract', () => {
     return select;
   };
 
+  it('reflects placeholder text without changing selection, field name or form value', async () => {
+    const select = await createSelectWithOptions();
+    select.label = 'Teammate';
+    const change = vi.fn();
+    select.addEventListener('change', change);
+    select.setAttribute('placeholder', 'Pick a teammate');
+    expect(select._text.textContent).toBe('Pick a teammate');
+    expect(select._search.placeholder).toBe('Pick a teammate');
+    expect(select.value).toBe('');
+    expect(select.getAttribute('aria-label')).toBe('Teammate');
+    select.value = '2';
+    select.setAttribute('placeholder', 'Choose another teammate');
+    expect(select._text.textContent).toBe('Option 2');
+    select.value = '';
+    expect(select._text.textContent).toBe('Choose another teammate');
+    expect(select._search.placeholder).toBe('Choose another teammate');
+    select.removeAttribute('placeholder');
+    expect(select._text.textContent).toBe('');
+    expect(select._search.placeholder).toBe('');
+    expect(change).not.toHaveBeenCalled();
+  });
+
   it('cancels a pending blur close when the same instance reconnects', async () => {
     const select = await createSelectWithOptions();
     vi.useFakeTimers();

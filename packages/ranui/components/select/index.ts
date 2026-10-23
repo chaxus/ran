@@ -4,6 +4,7 @@ import chevronDownIcon from '@/assets/icons/chevron-down.svg?raw';
 import { RanElement, isDisabled } from '@/utils/index';
 import '@/components/select/option';
 import '@/components/dropdown';
+import type { Dropdown } from '@/components/dropdown';
 import '@/components/select/dropdown-item';
 import { registerIcon } from '@/components/icon';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -117,6 +118,7 @@ export class Select extends RanElement {
       'type',
       'value',
       'label',
+      'placeholder',
       // Attribute names are lowercased by the DOM, so these MUST be lowercase to
       // be observed — the previous camelCase entries never fired (which is why
       // defaultValue/showSearch used to apply only on first connect).
@@ -306,9 +308,8 @@ export class Select extends RanElement {
 
   private _clearSelection = (): void => {
     this._pendingDefaultValue = false;
-    this._text.textContent = '';
+    this._syncPlaceholder();
     this._text.removeAttribute('title');
-    this._search.removeAttribute('placeholder');
     if (this._activeOption) {
       this._activeOption.removeAttribute('active');
       this._activeOption.setAttribute('aria-selected', 'false');
@@ -318,6 +319,18 @@ export class Select extends RanElement {
     this.getDropdownOptions().forEach((option) => option.removeAttribute('active'));
     this.syncActiveState();
     this.syncFormValue();
+  };
+  /** Empty-field hint; the field's accessible name remains its label. */
+  get placeholder(): string {
+    return this.getAttribute('placeholder') || '';
+  }
+  set placeholder(value: string) {
+    setStringAttribute(this, 'placeholder', value);
+  }
+  private _syncPlaceholder = (): void => {
+    if (this.value || !this._text) return;
+    this._text.textContent = this.placeholder;
+    this._search.placeholder = this.placeholder;
   };
   get defaultValue(): string {
     return this.getAttribute('defaultValue') || '';
@@ -494,7 +507,17 @@ export class Select extends RanElement {
     const activeValue = next.getAttribute('value') || '';
     next.setAttribute('active', activeValue);
     next.setAttribute('aria-selected', 'true');
-    next.scrollIntoView({ block: 'nearest' });
+    // A portaled option may still be in its pre-positioned opening layout.
+    // scrollIntoView also scrolls the page, losing the field's reading position.
+    // Move only the owned list surface when the consumer constrains its height.
+    const surface = (this._selectionDropdown as Dropdown | undefined)?.dropdown;
+    if (surface && surface.clientHeight > 0 && surface.scrollHeight > surface.clientHeight) {
+      const itemRect = next.getBoundingClientRect();
+      const listRect = surface.getBoundingClientRect();
+      const scale = listRect.height / surface.offsetHeight || 1;
+      if (itemRect.top < listRect.top) surface.scrollTop += (itemRect.top - listRect.top) / scale;
+      else if (itemRect.bottom > listRect.bottom) surface.scrollTop += (itemRect.bottom - listRect.bottom) / scale;
+    }
     this.syncActiveState();
   };
 
@@ -944,6 +967,7 @@ export class Select extends RanElement {
     // no layout and no dropdown built yet. Re-apply it here, now that the element
     // is connected, so the closed-state label and the active option are correct.
     this.reapplyValueAfterConnect();
+    this._syncPlaceholder();
     // `<r-select open>` in markup: the attribute was set before the dropdown
     // existed, so its attributeChangedCallback had nothing to act on.
     if (this.open) this._applyOpen();
@@ -1037,6 +1061,7 @@ export class Select extends RanElement {
       }
     }
     if (name === 'value') this.syncSelectedFromValue(newValue);
+    if (name === 'placeholder') this._syncPlaceholder();
     if (name === 'required' || name === 'disabled') this._updateValidity();
     if (name === 'sheet' && this._shadowDom) this.handlerExternalCss();
     if (name === 'label' && this._shadowDom) this._syncLabel(newValue);
