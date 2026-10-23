@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { DEV_SERVER } from '../../build/config';
-import { isolatedSetup, mount } from './helpers';
+import { insideShadow, isolatedSetup, mount } from './helpers';
 
 test.use({ viewport: { width: 600, height: 400 } });
 
@@ -13,6 +13,40 @@ const LIGHT_SVG =
 
 test.beforeEach(async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-img');
+});
+
+test('loaded image remains singular and keeps its accessible text through reconnect', async ({ page }) => {
+  await mount(page, `<r-img id="photo" src="${BLUE_SVG}" alt="Mountain landscape"></r-img>`);
+  const imageState = () =>
+    insideShadow(page, '#photo', (root) => {
+      const images = [...root.querySelectorAll('img')];
+      return images.map((image) => ({ ready: image.complete && image.naturalWidth > 0, alt: image.alt }));
+    });
+  await expect.poll(imageState).toEqual([{ ready: true, alt: 'Mountain landscape' }]);
+  await page.locator('#photo').evaluate((host) => {
+    host.remove();
+    document.body.append(host);
+  });
+  await expect.poll(imageState).toEqual([{ ready: true, alt: 'Mountain landscape' }]);
+});
+
+test('an explicitly sized image fits its host without overflowing the page', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 500 });
+  await mount(page, `<r-img id="photo" style="display:block;width:200px;height:120px" src="${BLUE_SVG}"></r-img>`);
+  await expect.poll(() => insideShadow(page, '#photo', (root) => root.querySelector('img')?.complete)).toBe(true);
+  const sizes = await insideShadow(page, '#photo', (root) => {
+    const host = root.host.getBoundingClientRect();
+    const image = root.querySelector('img')!.getBoundingClientRect();
+    return {
+      host: { left: host.left, right: host.right, top: host.top, bottom: host.bottom },
+      image: { left: image.left, right: image.right, top: image.top, bottom: image.bottom },
+      viewport: document.documentElement.clientWidth,
+      scroll: document.documentElement.scrollWidth,
+    };
+  });
+  expect(sizes.image.right).toBeLessThanOrEqual(sizes.host.right);
+  expect(sizes.image.bottom).toBeLessThanOrEqual(sizes.host.bottom);
+  expect(sizes.scroll).toBe(sizes.viewport);
 });
 
 test('image — single', { tag: '@visual' }, async ({ page }) => {

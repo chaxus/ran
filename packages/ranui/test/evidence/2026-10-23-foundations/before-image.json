@@ -1,0 +1,32 @@
+{
+  "scope": "Actual registered r-img detach/reattach once. No source edits. No human acceptance.",
+  "runtime": {
+    "url": "http://localhost:5273/",
+    "browser": "151.0.7922.34",
+    "sourceSha256": "716fda39d7e8429793ef04187d8ce0593b5b131d4991ce6371d32db396091fa0"
+  },
+  "before": {
+    "count": 1
+  },
+  "after": {
+    "count": 2,
+    "images": [
+      {
+        "alt": "Workspace cover preview",
+        "naturalWidth": 194,
+        "naturalHeight": 195,
+        "loaded": true,
+        "usesDataSource": true
+      },
+      {
+        "alt": "Workspace cover preview",
+        "naturalWidth": 194,
+        "naturalHeight": 195,
+        "loaded": true,
+        "usesDataSource": true
+      }
+    ]
+  },
+  "screenshot": "image-reconnect.png",
+  "sha256": "377957e1716b10f18361a305b1725d9fa704a49917afe9f30ccf102bacc1631c"
+}
