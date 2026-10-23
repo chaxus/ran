@@ -434,6 +434,10 @@ export class Select extends RanElement {
 
   /** Drive the panel from `open`. Everything below it is the controller's. */
   _applyOpen = (): void => {
+    if (this.open && this.disabled) {
+      this.open = false;
+      return;
+    }
     this._floating.apply(this.open);
   };
 
@@ -719,6 +723,7 @@ export class Select extends RanElement {
    */
   selectBlur = (e: Event): void => {
     e.stopPropagation();
+    if (this.disabled) return;
     if (this.removeTimeId) {
       this.removeDropDownTimeId(e);
     }
@@ -734,6 +739,12 @@ export class Select extends RanElement {
    */
   clickOption = (e: MouseEvent): void => {
     e.stopPropagation();
+    // A portaled option can still receive the pointerup/click of a press
+    // that disabled the control while the exit animation is painted.
+    if (this.disabled) {
+      e.preventDefault();
+      return;
+    }
     const element = (e.target as Element).closest('r-dropdown-item') as HTMLElement | null;
     // Disabled options are non-selectable, matching native <select> semantics.
     if (element && isDisabled(element)) {
@@ -884,7 +895,7 @@ export class Select extends RanElement {
     }
   };
   changeSearch = (e: Event): void => {
-    if (this._composing || (e as InputEvent).isComposing) return;
+    if (this.disabled || this._composing || (e as InputEvent).isComposing) return;
     const value = (e as CustomEvent<{ value?: string }>).detail?.value ?? this._search.value;
     // Native blur commits the same text after input already filtered the list.
     // Replacing the options here would detach a pointer's pending click target.
@@ -1011,10 +1022,17 @@ export class Select extends RanElement {
         this._selection.setAttribute('disabled', '');
         this.setAttribute('aria-disabled', 'true');
         this.tabIndex = -1;
+        this._search.disabled = true;
+        this.hide();
+        this._cancelDropdownClose();
+        clearTimeout(this._typeaheadTimeId);
+        this._typeaheadBuffer = '';
+        if (typeof document !== 'undefined' && document.activeElement === this) this.blur();
       } else {
         this._select.removeAttribute('disabled');
         this._selection.removeAttribute('disabled');
         this.removeAttribute('aria-disabled');
+        this._search.disabled = false;
         if (this.tabIndex < 0 || !this.hasAttribute('tabindex')) this.tabIndex = 0;
       }
     }

@@ -41,7 +41,7 @@
       }
       &-item {
         cursor: var(--ran-select-item-hover-cursor, pointer);
-        color: var(--ran-select-item-hover-color, var(--ran-color-text-disabled, #bfbfbf));
+        color: var(--ran-select-item-hover-color, var(--ran-color-text, #171717));
       }
     }
   }
@@ -57,17 +57,21 @@
   /* :focus-visible (not :focus) so the ring shows for keyboard navigation only —
      a mouse click that opens the dropdown shouldn't also draw a focus halo,
      matching r-button's convention. */
-  &(:not([disabled],[type="text"]):focus-visible) {
+  &(:not([disabled]):focus-visible) {
     .selection {
-      border: var(--ran-select-focus-border, 1px solid @theme-color);
       box-shadow: var(--ran-select-focus-box-shadow, var(--ran-focus-ring));
       &-search {
         cursor: var(--ran-select-search-focus-cursor, pointer);
       }
       &-item {
         cursor: var(--ran-select-item-focus-cursor, pointer);
-        color: var(--ran-select-item-focus-color, var(--ran-color-text-disabled, #bfbfbf));
+        color: var(--ran-select-item-focus-color, var(--ran-color-text, #171717));
       }
+    }
+  }
+  &(:not([disabled],[type="text"]):focus-visible) {
+    .selection {
+      border: var(--ran-select-focus-border, 1px solid @theme-color);
     }
   }
   .selection-search {
