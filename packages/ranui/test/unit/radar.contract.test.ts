@@ -153,6 +153,7 @@ describe('r-radar contract', () => {
   });
 
   const makeCtx = () => ({
+    translate: vi.fn(),
     save: vi.fn(),
     restore: vi.fn(),
     beginPath: vi.fn(),
@@ -174,6 +175,82 @@ describe('r-radar contract', () => {
     setLineDash: vi.fn(),
     measureText: vi.fn().mockReturnValue({ width: 40 }),
     getBoundingClientRect: vi.fn().mockReturnValue({ width: 40, height: 20 }),
+  });
+
+  it('fits and centers the plot within a non-square drawing buffer', () => {
+    const radar = mount();
+    const ctx = makeCtx();
+    vi.spyOn(radar.abilityRadarChart, 'getContext').mockReturnValue(ctx as any);
+    Object.defineProperty(radar.abilityRadarChartContainer, 'clientWidth', { value: 320, configurable: true });
+    Object.defineProperty(radar.abilityRadarChartContainer, 'clientHeight', { value: 180, configurable: true });
+    radar.abilitys = sampleAbilitys;
+    radar.refreshData();
+    expect(radar.mCenter + radar.mRadius).toBeLessThanOrEqual(180);
+    expect(ctx.translate).toHaveBeenLastCalledWith(70, 0);
+  });
+
+  it('redraws on a theme change, detaches while removed and resumes once on reconnect', async () => {
+    const radar = mount();
+    const refresh = vi.spyOn(radar, 'refreshData').mockImplementation(() => {});
+    document.documentElement.setAttribute('data-ran-theme', 'dark');
+    await Promise.resolve();
+    expect(refresh).toHaveBeenCalledOnce();
+    radar.remove();
+    refresh.mockClear();
+    document.documentElement.setAttribute('data-ran-theme', 'light');
+    await Promise.resolve();
+    expect(refresh).not.toHaveBeenCalled();
+    document.body.appendChild(radar);
+    refresh.mockClear();
+    document.documentElement.setAttribute('data-ran-theme', 'dark');
+    await Promise.resolve();
+    expect(refresh).toHaveBeenCalledOnce();
+    radar.remove();
+    document.documentElement.removeAttribute('data-ran-theme');
+  });
+
+  it('observes system theme changes only while connected', () => {
+    const detach = vi.fn();
+    let listener: (() => void) | undefined;
+    const matchMedia = vi.spyOn(window, 'matchMedia').mockReturnValue({
+      matches: false,
+      media: '(prefers-color-scheme: dark)',
+      addEventListener: (_name: string, callback: () => void) => {
+        listener = callback;
+      },
+      removeEventListener: detach,
+    } as unknown as MediaQueryList);
+    try {
+      const radar = mount();
+      const refresh = vi.spyOn(radar, 'refreshData').mockImplementation(() => {});
+      listener?.();
+      expect(refresh).toHaveBeenCalledOnce();
+      radar.remove();
+      expect(detach).toHaveBeenCalledOnce();
+    } finally {
+      matchMedia.mockRestore();
+    }
+  });
+
+  it('uses readable theme typography and preserves numeric or px item font overrides', () => {
+    const radar = mount();
+    const ctx = makeCtx();
+    const fonts: string[] = [];
+    Object.defineProperty(ctx, 'font', { set: (font: string) => fonts.push(font), get: () => fonts.at(-1) ?? '' });
+    vi.spyOn(radar.abilityRadarChart, 'getContext').mockReturnValue(ctx as any);
+    Object.defineProperty(radar.abilityRadarChartContainer, 'clientWidth', { value: 320, configurable: true });
+    Object.defineProperty(radar.abilityRadarChartContainer, 'clientHeight', { value: 180, configurable: true });
+    radar.style.setProperty('--ran-text-label-3', '12px');
+    radar.style.setProperty('--ran-font-family', 'Geist Sans');
+    radar.abilitys = [
+      { abilityName: 'Default', scoreRate: 60 },
+      { abilityName: 'Explicit px', scoreRate: 70, fontSize: '14px', fontFamily: 'Arial' },
+      { abilityName: 'Explicit number', scoreRate: 80, fontSize: 18, fontFamily: 'serif' },
+    ];
+    expect(fonts).toContain('12px Geist Sans');
+    expect(fonts).toContain('14px Arial');
+    expect(fonts).toContain('18px serif');
+    expect(fonts.some((font) => font.includes('pxpx'))).toBe(false);
   });
 
   it('balances canvas state while drawing the outline', () => {

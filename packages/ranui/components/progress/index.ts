@@ -80,24 +80,19 @@ export class Progress extends RanElement {
   }
 
   get percent(): string {
-    const percentAttr = this.getAttribute('percent') || '0';
-    const num = parsePercentLike(percentAttr);
-    const totalNum = Number(this.total);
-    if (num > totalNum) {
-      // ⚠️ Keep it silent or cap it, console.error is too loud for dev
-      return String(totalNum);
-    }
-    return String(num);
+    const value = parsePercentLike(this.getAttribute('percent'));
+    return String(range(Number.isFinite(value) ? value : 0, 0, Number(this.total)));
   }
   set percent(value: string) {
     this.setAttribute('percent', value || '0');
-    this.setAttribute('aria-valuenow', value || '0');
+    this.setAttribute('aria-valuenow', this.percent);
   }
 
   get total(): string {
     const total = this.getAttribute('total');
     if (!total) return '100'; // 💡 Better default for "percent" context
-    return `${parsePercentLike(total)}`;
+    const value = parsePercentLike(total);
+    return String(Number.isFinite(value) && value >= 0 ? value : 100);
   }
   set total(value: string) {
     this.setAttribute('total', value || '100');
@@ -243,14 +238,11 @@ export class Progress extends RanElement {
   };
 
   updateUI = (percentage: number): void => {
-    this.style.setProperty('--progress-percent', String(percentage));
+    this.style.setProperty('--progress-percent', String(range(Number.isFinite(percentage) ? percentage : 0, 0, 1)));
   };
 
   _preSerialize(): void {
-    const percent = parsePercentLike(this.getAttribute('percent') || '0');
-    const total = parsePercentLike(this.getAttribute('total') || '100');
-    const fraction = range(percent / total, 0, 1);
-    this.style.setProperty('--progress-percent', String(fraction));
+    this.updateCurrentProgress();
   }
 
   change = (): void => {
@@ -282,7 +274,7 @@ export class Progress extends RanElement {
   updateCurrentProgress = (): void => {
     if (!this._progress) return;
     const total = Number(this.total);
-    const percent = Number(this.percent) / total;
+    const percent = total > 0 ? Number(this.percent) / total : 0;
     this.updateUI(percent);
   };
 

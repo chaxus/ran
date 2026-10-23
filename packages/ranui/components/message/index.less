@@ -1,3 +1,7 @@
+:host([hidden]) {
+  display: none;
+}
+
 :host {
   // A bare custom element defaults to `display: inline`, which silently drops
   // `transform` entirely (it only applies to block/inline-block/etc. boxes) —
@@ -11,7 +15,8 @@
         text-align: var(--ran-message-notice-toast-text-align, center);
         max-width: var(--ran-message-notice-toast-max-width, 90%);
         margin: var(--ran-message-notice-toast-margin, 0 auto);
-        word-break: var(--ran-message-notice-toast-word-break, break-all);
+        word-break: var(--ran-message-notice-toast-word-break, normal);
+        overflow-wrap: anywhere;
         &-content {
           display: var(--ran-message-content-toast-display, inline-block);
           padding: var(--ran-message-content-toast-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px));
@@ -50,7 +55,8 @@
     text-align: var(--ran-message-notice-text-align, center);
     max-width: var(--ran-message-notice-max-width, 90%);
     margin: var(--ran-message-notice-margin, 0 auto);
-    word-break: var(--ran-message-notice-word-break, break-all);
+    word-break: var(--ran-message-notice-word-break, normal);
+    overflow-wrap: anywhere;
     &-content {
       display: var(--ran-message-content-display, inline-block);
       padding: var(--ran-message-content-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px));

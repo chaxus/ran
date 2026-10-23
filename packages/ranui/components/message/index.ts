@@ -191,7 +191,7 @@ function initMessageApi() {
 
       message.timeId = setTimeout(() => {
         message.classList.remove('message-leave');
-        div.removeChild(message);
+        if (message.parentNode === div) div.removeChild(message);
         if (close) close();
       }, duration);
 

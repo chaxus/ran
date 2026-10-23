@@ -1,4 +1,4 @@
-import { getPixelRatio, roundRectByArc } from 'ranuts/utils';
+import { getPixelRatio, roundRectByArc, watchMediaQuery } from 'ranuts/utils';
 import radarCss from './index.less?inline';
 import { createRef, Div, RanElement, View } from '@/utils/index';
 import {
@@ -14,7 +14,7 @@ interface AbilityTags {
   abilityName: string;
   scoreRate: number;
   backgroundColor: string;
-  fontSize: string;
+  fontSize: string | number;
   fontFamily: string;
   fontColor: string;
 }
@@ -23,7 +23,7 @@ const BACKGROUND_COLOR = 'rgba(0,0,0,0)';
 const FONT_COLOR = 'rgba(0,0,0,1)';
 const POLYGON_COLOR = '#e6e6e6';
 const LINE_COLOR = '#e6e6e6';
-const FONT_FAMILY = '黑体';
+const FONT_FAMILY = 'sans-serif';
 const FILL_COLOR = 'rgba(255,121,35,0.60)';
 const STROKE_COLOR = 'rgba(255,121,35,0.60)';
 
@@ -42,6 +42,8 @@ export class RadarChart extends RanElement {
   _iconElement?: HTMLElement;
   _shadowDom: ShadowRoot;
   resizeObserver: ResizeObserver;
+  private _themeObserver?: MutationObserver;
+  private _detachThemeMedia?: () => void;
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, radarCss);
@@ -128,11 +130,14 @@ export class RadarChart extends RanElement {
     const height = this.abilityRadarChartContainer.clientHeight * radio;
     this.abilityRadarChart.width = width;
     this.abilityRadarChart.height = height;
-    this.mW = width;
+    // Fit the circular plot in the shorter dimension, with a centered origin.
+    const size = Math.min(width, height);
+    ctx.translate((width - size) / 2, (height - size) / 2);
+    this.mW = size;
     this.mData = this.abilitys;
     this.mCount = this.mData?.length || 1;
     this.mCenter = this.mW / 2;
-    this.mRadius = this.mCenter - 50 * radio;
+    this.mRadius = Math.max(0, this.mCenter - 50 * radio);
     this.mAngle = (Math.PI * 2) / this.mCount;
     this.drawPolygon(ctx);
     this.drawSide(ctx);
@@ -193,14 +198,17 @@ export class RadarChart extends RanElement {
     if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle || !this.mData) return;
     ctx.save();
     const radio = getPixelRatio(ctx);
-    const defaultFontSize = this.mCenter / 12;
+    const labelSize = Number.parseFloat(this._cssVar('--ran-text-label-3'));
+    const defaultFontSize = (Number.isFinite(labelSize) && labelSize > 0 ? labelSize : 12) * radio;
+    const defaultFontFamily = this._cssVar('--ran-font-family') || FONT_FAMILY;
     for (let i = 0; i < this.mCount; i++) {
       const x = this.mCenter + this.mRadius * Math.sin(this.mAngle * i);
       const y = this.mCenter + this.mRadius * Math.cos(this.mAngle * i);
       const backgroundColor = this.mData[i]?.backgroundColor || BACKGROUND_COLOR;
       const fontColor = this.mData[i]?.fontColor || this.fontColor;
-      const fontFamily = this.mData[i]?.fontFamily || FONT_FAMILY;
-      const fontSize = this.mData[i]?.fontSize || defaultFontSize;
+      const fontFamily = this.mData[i]?.fontFamily || defaultFontFamily;
+      const itemFontSize = Number.parseFloat(String(this.mData[i]?.fontSize ?? ''));
+      const fontSize = Number.isFinite(itemFontSize) && itemFontSize > 0 ? itemFontSize * radio : defaultFontSize;
       ctx.font = `${fontSize}px ${fontFamily}`;
       if (this.mAngle * i >= 0 && this.mAngle * i < Math.PI / 2) {
         this.drawButton(
@@ -322,10 +330,19 @@ export class RadarChart extends RanElement {
   connectedCallback() {
     this.resizeObserver.observe(this.abilityRadarChartContainer);
     this.handlerExternalCss();
-    this.refreshData();
+    this._themeObserver = new MutationObserver(() => this.refreshData());
+    this._themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-ran-theme', 'theme', 'class', 'style'],
+    });
+    this._detachThemeMedia = watchMediaQuery('(prefers-color-scheme: dark)', () => this.refreshData());
   }
   disconnectedCallback() {
     this.resizeObserver.disconnect();
+    this._themeObserver?.disconnect();
+    this._themeObserver = undefined;
+    this._detachThemeMedia?.();
+    this._detachThemeMedia = undefined;
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue === newValue) return;

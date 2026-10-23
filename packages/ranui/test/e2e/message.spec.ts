@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { DEV_SERVER } from '../../build/config';
+import { isolatedSetup, mount } from './helpers';
 
 test.describe('message', () => {
   test('supports top, zIndex and getContainer', async ({ page }) => {
@@ -110,4 +111,43 @@ test.describe('message', () => {
       }
     });
   });
+});
+
+test('message respects hidden and safely expires after caller removal', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await isolatedSetup(page, DEV_SERVER, 'r-message');
+  await mount(page, '<r-message hidden type="success" content="Saved"></r-message>');
+  await expect(page.locator('r-message')).toBeHidden();
+  await page.evaluate(() => {
+    (window as any).message.success({ content: 'Temporary', duration: 400 });
+    document.querySelector('[data-ranui-message-host="true"] r-message')!.remove();
+  });
+  await page.waitForTimeout(500);
+  expect(errors).toEqual([]);
+});
+
+test('message wraps ordinary words between words and contains long unbroken text', async ({ page }) => {
+  await isolatedSetup(page, DEV_SERVER, 'r-message');
+  await mount(
+    page,
+    '<r-message style="width:312px" type="error" content="Export failed. Your file is unchanged. Retry the export."></r-message>',
+  );
+  const message = page.locator('r-message');
+  const fragments = await message.evaluate((node) => {
+    const span = (node as HTMLElement & { _span: HTMLSpanElement })._span;
+    const text = span.firstChild!;
+    const start = text.textContent!.indexOf('unchanged');
+    const range = document.createRange();
+    range.setStart(text, start);
+    range.setEnd(text, start + 'unchanged'.length);
+    return range.getClientRects().length;
+  });
+  expect(fragments).toBe(1);
+  await message.evaluate((node) => node.setAttribute('content', 'x'.repeat(180)));
+  const bounds = await message.evaluate((node) => {
+    const span = (node as HTMLElement & { _span: HTMLSpanElement })._span;
+    return { width: span.clientWidth, scrollWidth: span.scrollWidth };
+  });
+  expect(bounds.scrollWidth).toBeLessThanOrEqual(bounds.width + 1);
 });

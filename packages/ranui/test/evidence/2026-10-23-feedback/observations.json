@@ -1,0 +1,432 @@
+{
+  "scope": "message/progress/radar source-registered actual components only; other families retain their separate pending findings",
+  "views": [
+    {
+      "width": 1280,
+      "theme": "light",
+      "resolved": {
+        "bg": "rgb(255, 255, 255)",
+        "text": "rgb(23, 23, 23)"
+      },
+      "hidden": {
+        "display": "none",
+        "width": 0,
+        "height": 0
+      },
+      "progress": [
+        {
+          "raw": "-20",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "150",
+          "percent": "100",
+          "total": "100",
+          "aria": "100",
+          "max": "100",
+          "fraction": "1"
+        },
+        {
+          "raw": "bad",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "Infinity",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "50",
+          "percent": "0",
+          "total": "0",
+          "aria": "0",
+          "max": "0",
+          "fraction": "0"
+        },
+        {
+          "raw": "50",
+          "percent": "50",
+          "total": "100",
+          "aria": "50",
+          "max": "100",
+          "fraction": "0.5"
+        },
+        {
+          "raw": "50",
+          "percent": "50",
+          "total": "100",
+          "aria": "50",
+          "max": "100",
+          "fraction": "0.5"
+        }
+      ],
+      "drag": {
+        "value": "33",
+        "focus": true
+      },
+      "themeRepaint": true,
+      "rect": {
+        "canvas": [
+          320,
+          180
+        ],
+        "center": 90,
+        "radius": 40,
+        "textSize": 12
+      },
+      "errors": [],
+      "system": {
+        "theme": "dark",
+        "text": "rgb(237, 237, 237)"
+      },
+      "recording": "page@83c8a1ead5b519931c09e7a58e97f328.webm",
+      "recordingSha256": "8a26828ec2b5172c5f47683bd6689b201700e4b4e07b341bc713d62277c95c9e"
+    },
+    {
+      "width": 1280,
+      "theme": "dark",
+      "resolved": {
+        "bg": "rgb(0, 0, 0)",
+        "text": "rgb(237, 237, 237)"
+      },
+      "hidden": {
+        "display": "none",
+        "width": 0,
+        "height": 0
+      },
+      "progress": [
+        {
+          "raw": "-20",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "150",
+          "percent": "100",
+          "total": "100",
+          "aria": "100",
+          "max": "100",
+          "fraction": "1"
+        },
+        {
+          "raw": "bad",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "Infinity",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "50",
+          "percent": "0",
+          "total": "0",
+          "aria": "0",
+          "max": "0",
+          "fraction": "0"
+        },
+        {
+          "raw": "50",
+          "percent": "50",
+          "total": "100",
+          "aria": "50",
+          "max": "100",
+          "fraction": "0.5"
+        },
+        {
+          "raw": "50",
+          "percent": "50",
+          "total": "100",
+          "aria": "50",
+          "max": "100",
+          "fraction": "0.5"
+        }
+      ],
+      "drag": {
+        "value": "33",
+        "focus": true
+      },
+      "themeRepaint": true,
+      "rect": {
+        "canvas": [
+          320,
+          180
+        ],
+        "center": 90,
+        "radius": 40,
+        "textSize": 12
+      },
+      "errors": [],
+      "system": {
+        "theme": "light",
+        "text": "rgb(23, 23, 23)"
+      },
+      "recording": "page@f7c9db65b532c5b60d10b7f4c837b3ff.webm",
+      "recordingSha256": "c0ca82e51c7554c1bcc9d00bca1c9f239988984f55e936f63ff8845b72ad1d76"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "resolved": {
+        "bg": "rgb(255, 255, 255)",
+        "text": "rgb(23, 23, 23)"
+      },
+      "hidden": {
+        "display": "none",
+        "width": 0,
+        "height": 0
+      },
+      "progress": [
+        {
+          "raw": "-20",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "150",
+          "percent": "100",
+          "total": "100",
+          "aria": "100",
+          "max": "100",
+          "fraction": "1"
+        },
+        {
+          "raw": "bad",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "Infinity",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "50",
+          "percent": "0",
+          "total": "0",
+          "aria": "0",
+          "max": "0",
+          "fraction": "0"
+        },
+        {
+          "raw": "50",
+          "percent": "50",
+          "total": "100",
+          "aria": "50",
+          "max": "100",
+          "fraction": "0.5"
+        },
+        {
+          "raw": "50",
+          "percent": "50",
+          "total": "100",
+          "aria": "50",
+          "max": "100",
+          "fraction": "0.5"
+        }
+      ],
+      "drag": {
+        "value": "33",
+        "focus": true
+      },
+      "themeRepaint": true,
+      "rect": {
+        "canvas": [
+          312,
+          180
+        ],
+        "center": 90,
+        "radius": 40,
+        "textSize": 12
+      },
+      "errors": [],
+      "system": {
+        "theme": "dark",
+        "text": "rgb(237, 237, 237)"
+      },
+      "recording": "page@5e08e39db3135ebb6fedf59f364e9ba7.webm",
+      "recordingSha256": "f857edd3a11c6c636135e5c2774b0ec48fe0577b452096c4a20bc2be2b40d9d8"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "resolved": {
+        "bg": "rgb(0, 0, 0)",
+        "text": "rgb(237, 237, 237)"
+      },
+      "hidden": {
+        "display": "none",
+        "width": 0,
+        "height": 0
+      },
+      "progress": [
+        {
+          "raw": "-20",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "150",
+          "percent": "100",
+          "total": "100",
+          "aria": "100",
+          "max": "100",
+          "fraction": "1"
+        },
+        {
+          "raw": "bad",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "Infinity",
+          "percent": "0",
+          "total": "100",
+          "aria": "0",
+          "max": "100",
+          "fraction": "0"
+        },
+        {
+          "raw": "50",
+          "percent": "0",
+          "total": "0",
+          "aria": "0",
+          "max": "0",
+          "fraction": "0"
+        },
+        {
+          "raw": "50",
+          "percent": "50",
+          "total": "100",
+          "aria": "50",
+          "max": "100",
+          "fraction": "0.5"
+        },
+        {
+          "raw": "50",
+          "percent": "50",
+          "total": "100",
+          "aria": "50",
+          "max": "100",
+          "fraction": "0.5"
+        }
+      ],
+      "drag": {
+        "value": "33",
+        "focus": true
+      },
+      "themeRepaint": true,
+      "rect": {
+        "canvas": [
+          312,
+          180
+        ],
+        "center": 90,
+        "radius": 40,
+        "textSize": 12
+      },
+      "errors": [],
+      "system": {
+        "theme": "light",
+        "text": "rgb(23, 23, 23)"
+      },
+      "recording": "page@6b61edf68e374f69db98fe05eb15fccc.webm",
+      "recordingSha256": "e0985ed03e8d639530fd7adbc74f60516d1d4a360bc65a7291cd04c47e0af295"
+    }
+  ],
+  "sourceStart": {
+    "packages/ranui/components/message/index.ts": "56744ec3bf26fc23955177f0d1d24207c5cee0c6e5cb8671478e3cd2eb546720",
+    "packages/ranui/components/message/index.less": "0d8c4297c9d02e1d7040f1aceac226197bb557aeafeec48e156aed4505d9cbf7",
+    "packages/ranui/components/progress/index.ts": "8bc7b74f4361233ddf6a948078da88b0c017828016d82b728e323b1284b49fed",
+    "packages/ranui/components/progress/index.less": "60912797c3d06d2011c98b7f60ffd09f4c54b45da561d8d7eb683e67ad56f43c",
+    "packages/ranui/components/radar/index.ts": "4ce8cba08832411205a02924aece9b761339050ca31252b6cac9fe8e95cdc004",
+    "packages/ranui/components/radar/index.less": "996cc23d0f02f215bba01552fe9cd445b6aeeb6b47836f9aebc8922135cf8fcb",
+    "packages/ranui/utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+    "packages/ranui/theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+    "packages/ranui/theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360",
+    "packages/ranui/base.less": "c8643433f9148208938940dd1a3eee3dfc7f257d803f69d0db6320e918cd3b88"
+  },
+  "sourceEnd": {
+    "packages/ranui/components/message/index.ts": "56744ec3bf26fc23955177f0d1d24207c5cee0c6e5cb8671478e3cd2eb546720",
+    "packages/ranui/components/message/index.less": "0d8c4297c9d02e1d7040f1aceac226197bb557aeafeec48e156aed4505d9cbf7",
+    "packages/ranui/components/progress/index.ts": "8bc7b74f4361233ddf6a948078da88b0c017828016d82b728e323b1284b49fed",
+    "packages/ranui/components/progress/index.less": "60912797c3d06d2011c98b7f60ffd09f4c54b45da561d8d7eb683e67ad56f43c",
+    "packages/ranui/components/radar/index.ts": "4ce8cba08832411205a02924aece9b761339050ca31252b6cac9fe8e95cdc004",
+    "packages/ranui/components/radar/index.less": "996cc23d0f02f215bba01552fe9cd445b6aeeb6b47836f9aebc8922135cf8fcb",
+    "packages/ranui/utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+    "packages/ranui/theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+    "packages/ranui/theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360",
+    "packages/ranui/base.less": "c8643433f9148208938940dd1a3eee3dfc7f257d803f69d0db6320e918cd3b88"
+  },
+  "browser": "151.0.7922.34",
+  "media": [
+    {
+      "file": "feedback-1280-dark.png",
+      "sha256": "f6ed8436ff86468014554dafb553c9c99f341ef57c8f6318c88491ca39ac49a3"
+    },
+    {
+      "file": "feedback-1280-light.png",
+      "sha256": "3ea63c9e1e24547a303c7920c37f12397842edc1df05906336b66f9314d33eec"
+    },
+    {
+      "file": "feedback-360-dark.png",
+      "sha256": "2204cfc2d3031933068049b1473b29dda5e24cd05975c1a0812f214a1c88486a"
+    },
+    {
+      "file": "feedback-360-light.png",
+      "sha256": "a2b922af33ad0e38bd4d9a0ada0a93798962de01128fa3dca290b9a9eb622295"
+    },
+    {
+      "file": "radar-system-switch-1280-dark.png",
+      "sha256": "c8d872b06c24f3f750d6099b97ce679108ba775b4cbb7965d639f4b2e0965e24"
+    },
+    {
+      "file": "radar-system-switch-1280-light.png",
+      "sha256": "154a4342b30e0340f1fb647d4d65c8fff0a118e95895b6f6904c6a679955d570"
+    },
+    {
+      "file": "radar-system-switch-360-dark.png",
+      "sha256": "942a10ddde02977e84e690ab81dffe75462e0f75be4c4002867d63aab31066b8"
+    },
+    {
+      "file": "radar-system-switch-360-light.png",
+      "sha256": "b457e790d469bb8d9661bf19532c07a3d749ec2b2460338f310cf3ccf77b2604"
+    }
+  ]
+}
