@@ -4,8 +4,11 @@
 
 .ran-loading {
   .dot-line {
+    max-width: var(--loading-dot-line-max-width, 70%);
+    aspect-ratio: 1;
+    margin-inline: var(--loading-dot-line-margin-inline, auto);
     width: var(--loading-dot-line-width, 20em);
-    height: var(--loading-dot-line-height, 20em);
+    height: var(--loading-dot-line-height, auto);
     font-size: var(--loading-dot-line-font-size, 10px);
     position: var(--loading-dot-line-position, relative);
     display: var(--loading-dot-line-display, flex);

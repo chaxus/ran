@@ -4,7 +4,7 @@ description: 'An experimental scratch-ticket surface where dragging a canvas cov
 
 # Scratch
 
-Experimental scratch-ticket surface that renders a full-size `<canvas>` cover over a reveal layer inside its shadow DOM. Dragging across the canvas erases the covering with `destination-out` compositing along the actual path your pointer traces, and scratching away enough area reveals what sits underneath. The host is `display: block`, so give it an explicit width and height.
+Experimental scratch-ticket surface that renders a `<canvas>` cover over a reveal layer, with a separate quiet action row above the surface inside its shadow DOM. Dragging across the canvas erases the covering with `destination-out` compositing along the actual path your pointer traces, and scratching away enough area reveals what sits underneath. The host is `display: block`, so give it an explicit width and height. Its height includes the action row (32px minimum, 44px on coarse pointers) and an 8px gap; the remaining height belongs to the canvas and reward. The completion button never overlays reward content.
 
 > **Use when** you need an experimental scratch-ticket surface where dragging erases a cover canvas to reveal arbitrary content beneath. Works with mouse, touch, and pen alike via the Pointer Events API.
 
@@ -28,10 +28,14 @@ Whatever you put inside `<r-scratch>` is the reveal content (an amount, an image
 
 ### Properties
 
-| Property   | Type      | Default | Description                                                                                                      |
-| ---------- | --------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
-| `disabled` | `boolean` | `false` | Disables scratch interaction (`pointer-events: none` on the cover canvas, plus a guard in the pointer handlers). |
-| `sheet`    | `string`  | `''`    | CSS injected into the component's shadow DOM.                                                                    |
+| Property         | Type      | Default    | Description                                                                                  |
+| ---------------- | --------- | ---------- | -------------------------------------------------------------------------------------------- |
+| `disabled`       | `boolean` | `false`    | Disables pointer scratching and the native Reveal action while preserving existing progress. |
+| `sheet`          | `string`  | `''`       | CSS injected into the component's shadow DOM.                                                |
+| `reveal-label`   | `string`  | `Reveal`   | Localized reveal action text.                                                                |
+| `revealed-label` | `string`  | `Revealed` | Localized completion button and status text.                                                 |
+
+Keyboard users can focus the native Reveal button and press Enter or Space for a complete reveal. Localize it with `reveal-label` (default `Reveal`) and `revealed-label` (default `Revealed`). Until revealed, the default slot is inert so covered links cannot receive early Tab focus. Completion restores content interaction and announces status; the same button retains its current focus while leaving subsequent Tab order, so the next Tab can enter the revealed content. Disabling, cancelling a gesture and reconnecting at the same dimensions preserve erased pixels; an actual resize still resets the cover. If revealed content owns focus during that reset, focus returns to Reveal without scrolling; focus outside this component stays unchanged.
 
 ### Disabled State `disabled`
 
@@ -64,7 +68,7 @@ The component does **not** dispatch any custom events: there is nothing to bind 
 
 - `pointerdown`: arms scratching and erases a small dab right where the pointer landed (so even a tap without a drag reveals something).
 - `pointermove`: while armed, strokes a **connected line** (not isolated dabs) from the previous point to the current one with `globalCompositeOperation = 'destination-out'`, so a fast drag reveals a continuous trail instead of a dotted one, and accumulates the scratched area as it goes.
-- `pointerup` / `pointercancel`: disarms scratching; once the accumulated area exceeds **35% of the canvas pixel area**, the whole cover is cleared with `clearRect`, fully revealing the layer beneath (a deliberately generous "scratch a bit, then it finishes itself" threshold, a common scratch-card UX rather than requiring the entire cover to be manually cleared).
+- `pointerup`: disarms scratching; once the accumulated area exceeds **35% of the canvas pixel area**, the whole cover is cleared with `clearRect`, fully revealing the layer beneath (a deliberately generous "scratch a bit, then it finishes itself" threshold, a common scratch-card UX rather than requiring the entire cover to be manually cleared).
 
 Pointer coordinates are mapped through the canvas's actual drawing-buffer resolution (see below), so scratching tracks correctly under your finger/cursor regardless of the element's CSS size or the screen's device pixel ratio. All handlers no-op while `disabled` is set, and `touch-action: none` on the canvas keeps a touch drag from also scrolling the page.
 

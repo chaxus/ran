@@ -253,13 +253,13 @@ describe('r-scratch contract', () => {
     expect(mockCtx.stroke.mock.calls.length).toBe(strokesBefore);
   });
 
-  it('attributeChangedCallback appends container and calls drawScratchTicket when value changes', () => {
+  it('disabled changes preserve the existing cover and partial progress', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
 
     const drawSpy = vi.spyOn(scratch, 'drawScratchTicket');
     scratch.attributeChangedCallback('disabled', null, 'true');
-    expect(drawSpy).toHaveBeenCalled();
+    expect(drawSpy).not.toHaveBeenCalled();
   });
 
   it('attributeChangedCallback skips work when old === next', () => {
@@ -280,9 +280,9 @@ describe('r-scratch contract', () => {
     expect(addSpy).toHaveBeenCalledWith('pointerdown', scratch.onScratchPointerDown, expect.any(Object));
     expect(addSpy).toHaveBeenCalledWith('pointermove', scratch.onScratchPointerMove, expect.any(Object));
     expect(addSpy).toHaveBeenCalledWith('pointerup', scratch.onScratchPointerUp, expect.any(Object));
-    expect(addSpy).toHaveBeenCalledWith('pointercancel', scratch.onScratchPointerUp, expect.any(Object));
+    expect(addSpy).toHaveBeenCalledWith('pointercancel', scratch.onScratchPointerCancel, expect.any(Object));
     // A device/OS can reclaim pointer capture mid-gesture without ever firing `pointerup`.
-    expect(addSpy).toHaveBeenCalledWith('lostpointercapture', scratch.onScratchPointerUp, expect.any(Object));
+    expect(addSpy).toHaveBeenCalledWith('lostpointercapture', scratch.onScratchPointerCancel, expect.any(Object));
   });
 
   it('drawScratchTicket paints an opaque cover instead of leaving the canvas blank', () => {
@@ -396,6 +396,110 @@ describe('r-scratch contract', () => {
     scratch.attributeChangedCallback('disabled', null, 'true');
 
     expect(scratch._shadowDom.contains(scratch.scratchTicketContainer)).toBe(true);
-    expect(drawSpy).toHaveBeenCalled();
+    expect(drawSpy).not.toHaveBeenCalled();
   });
+});
+
+describe('r-scratch accessible reveal and interruption', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+  it('provides a native localized reveal action and keeps its identity and focus after completion', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    scratch.setAttribute('reveal-label', '揭晓');
+    scratch.setAttribute('revealed-label', '已揭晓');
+    document.body.append(scratch);
+    const button = scratch._shadowDom.querySelector('button') as HTMLButtonElement;
+    expect(button).not.toBeNull();
+    expect(button.textContent).toBe('揭晓');
+    const ctx = mockDrawingContext();
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(ctx);
+    button.focus();
+    button.click();
+    expect(ctx.clearRect).toHaveBeenCalled();
+    expect(scratch._shadowDom.activeElement).toBe(button);
+    expect(button.textContent).toBe('已揭晓');
+    expect(button.getAttribute('aria-disabled')).toBe('true');
+    expect(button.disabled).toBe(false);
+    expect(button.tabIndex).toBe(-1);
+    ctx.clearRect.mockClear();
+    button.click();
+    expect(ctx.clearRect).not.toHaveBeenCalled();
+  });
+  it('does not reveal via the native action when disabled', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    scratch.disabled = true;
+    document.body.append(scratch);
+    const button = scratch._shadowDom.querySelector('button') as HTMLButtonElement;
+    expect(button).not.toBeNull();
+    expect(button.disabled).toBe(true);
+    const ctx = mockDrawingContext();
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(ctx);
+    button.click();
+    expect(ctx.clearRect).not.toHaveBeenCalled();
+  });
+  it('cancels an active pointer on disconnect and allows the next gesture after reconnect', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.append(scratch);
+    const ctx = mockDrawingContext();
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(ctx);
+    scratch.onScratchPointerDown(pointer('pointerdown', { clientX: 10, clientY: 10 }));
+    const area = scratch.state.scratchedArea;
+    scratch.remove();
+    expect(scratch.state.isScratching).toBe(false);
+    expect(scratch.state.activePointerId).toBeUndefined();
+    document.body.append(scratch);
+    expect(scratch.state.scratchedArea).toBe(area);
+    scratch.onScratchPointerDown(pointer('pointerdown', { pointerId: 2, clientX: 12, clientY: 12 }));
+    expect(scratch.state.activePointerId).toBe(2);
+  });
+  it('disabled interrupts a pointer without repainting or losing accumulated progress', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.append(scratch);
+    const ctx = mockDrawingContext();
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(ctx);
+    scratch.onScratchPointerDown(pointer('pointerdown', { clientX: 20, clientY: 20 }));
+    const area = scratch.state.scratchedArea;
+    scratch.disabled = true;
+    scratch.disabled = false;
+    expect(scratch.state.isScratching).toBe(false);
+    expect(scratch.state.activePointerId).toBeUndefined();
+    expect(scratch.state.scratchedArea).toBe(area);
+    expect(ctx.fillRect).not.toHaveBeenCalled();
+  });
+  it('sheet changes do not repaint already erased pixels', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.append(scratch);
+    const draw = vi.spyOn(scratch, 'drawScratchTicket');
+    scratch.sheet = ':host { border-radius: 6px; }';
+    expect(draw).not.toHaveBeenCalled();
+  });
+});
+
+it('a cancelled gesture preserves partial progress without auto-revealing or staying armed', () => {
+  const scratch = document.createElement('r-scratch') as any;
+  document.body.append(scratch);
+  const ctx = mockDrawingContext();
+  vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(ctx);
+  scratch.state.activePointerId = 7;
+  scratch.state.isScratching = true;
+  scratch.state.scratchedArea = 30000;
+  scratch.scratchTicket.dispatchEvent(pointer('pointercancel', { pointerId: 7 }));
+  expect(scratch.state.isScratching).toBe(false);
+  expect(scratch.state.activePointerId).toBeUndefined();
+  expect(scratch.state.scratchedArea).toBe(30000);
+  expect(ctx.clearRect).not.toHaveBeenCalled();
+});
+
+it('initializes the opaque cover when CSS dimensions equal the native 300 by 150 canvas buffer', () => {
+  const scratch = document.createElement('r-scratch') as any;
+  vi.spyOn(scratch.scratchTicketContainer, 'getBoundingClientRect').mockReturnValue({
+    width: 300,
+    height: 150,
+  } as DOMRect);
+  Object.defineProperty(window, 'devicePixelRatio', { value: 1, configurable: true });
+  const ctx = mockDrawingContext();
+  vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(ctx);
+  document.body.append(scratch);
+  expect(ctx.fillRect).toHaveBeenCalledWith(0, 0, 300, 150);
 });
