@@ -93,6 +93,9 @@ toolbar.append(themeSwitch);
   background so the browser/PWA chrome matches; choosing `system` restores each meta's original
   (possibly media-qualified) content.
 
+The group and button localization labels also update when their attributes change after mounting.
+Choice buttons retain a compact 28px size for fine pointers and a minimum 44px target for coarse pointers.
+
 ## CSS Parts
 
 | Part                        | Description                                                                    |

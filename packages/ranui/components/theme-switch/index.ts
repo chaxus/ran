@@ -28,7 +28,7 @@ const SYNC_EVENT = 'ran-theme-switch-sync';
  */
 export class ThemeSwitch extends RanElement {
   static get observedAttributes(): string[] {
-    return ['label-system', 'label-light', 'label-dark', 'sheet'];
+    return ['label', 'label-system', 'label-light', 'label-dark', 'sheet'];
   }
 
   _events = new EventManager();

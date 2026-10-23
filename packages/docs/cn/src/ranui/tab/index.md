@@ -299,3 +299,5 @@ Part：`content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 - **对齐**：在宽容器里用 `align="center"` 或 `align="end"` 重新定位标题行。
 - **禁用面板**：用 `disabled` 标记不可用的面板；它们会同时跳过点击选择和默认选中逻辑。
 - **键盘导航**：标题行是一个 WAI-ARIA tablist，方向键在标签间移动（配合 `Home`/`End`），只有激活的标签在 tab 顺序里。
+
+- **长标签**：标题栏横向滚动，保留完整标签；键盘切换会显示当前选项，不改变页面滚动位置。

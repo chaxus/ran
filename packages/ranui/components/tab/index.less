@@ -16,17 +16,25 @@
   }
   &-header {
     position: relative;
-    overflow: hidden;
-    scroll-behavior: smooth;
+    // Scroll only the header when labels outgrow it; keep complete labels.
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: var(--ran-tab-header-focus-inset, 2px);
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     &-nav {
       display: flex;
+      width: max-content;
+      min-width: 100%;
       flex-flow: row nowrap;
       justify-content: flex-start;
       align-items: center;
       &::-webkit-scrollbar {
         display: none;
       }
-      &-item {
+      .tab-header-nav-item {
         flex-shrink: 0;
       }
       .active {
@@ -76,9 +84,6 @@
   .ran-tab {
     &-header {
       &-nav {
-        &-item {
-          border: solid 1px transparent;
-        }
         .active {
           color: @lineColor;
           border: solid 1px transparent;

@@ -302,3 +302,5 @@ The full list is in [style tokens](/src/ranui/style-tokens#tab); which token to 
 - **Alignment**: Use `align="center"` or `align="end"` to reposition the header row within wide containers.
 - **Disabled panes**: Mark unavailable panes with `disabled`; they are skipped for both clicks and default selection.
 - **Keyboard navigation**: The header row is a WAI-ARIA tablist: arrow keys move between tabs (with `Home`/`End`), and only the active tab is in the tab order.
+
+- **Long labels**: The header scrolls horizontally instead of clipping labels. Keyboard selection reveals the active header without changing the page scroll position.

@@ -1,0 +1,2143 @@
+{
+  "runtime": "151.0.7922.34",
+  "url": "http://localhost:5273/",
+  "scope": "Actual registered component fixtures; demo external live media src removed only. No physical device or human acceptance claimed.",
+  "hashes": {
+    "packages/ranui/components/link/index.ts": "3f998428b6c9286c8245c3a5e7bdb4abd67cf48b1c05dabb7c82d93742deb285",
+    "packages/ranui/components/link/index.less": "ad8fea27a8c20b0f25a0832b1ce71c0f4f6b4016b2d3054620fb6ac9203cf10a",
+    "packages/ranui/components/theme-switch/index.ts": "82e7c18adfe56e87576b5958712871dbe8894e99570722a467e6530e8342f55a",
+    "packages/ranui/components/theme-switch/index.less": "66051547dbbdffdc6afe1f0160a12271c55ebe7b59477db061c50c1ae092f276",
+    "packages/ranui/components/glass/index.ts": "15f3670c175b802798cebc4783e179535d38b4ad6b35583f1f8c8b576e2af123",
+    "packages/ranui/components/glass/index.less": "76fe4ac60d816d221246bf3bedb32d790fbe9701147e57bd8df669d041db3f5e",
+    "packages/ranui/components/tab/index.ts": "390dfbaa7a45c0c23b91e2464afa5fb519da5662cc7a3e32d1c7a3836bc21aec",
+    "packages/ranui/components/tab/index.less": "34fa1cc01767ad4f8187e6fd2c8a92a70996a9a4d0f40fa31cb75ee2c917006a",
+    "packages/ranui/components/tabpane/index.ts": "47eb7c17252c2063affb5eb1614949e38f45cfdf7258188266b9da43f20296fc",
+    "packages/ranui/components/tabpane/index.less": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "packages/ranui/components/router/index.ts": "1ee5c726aeead2a7bfe815c32a154f11e191c8f8c037a6d9d8964154c28866ab",
+    "packages/ranui/components/router/index.less": "146c4f586679c4b5a1348f76bed270fe6ca83fe591214a808082bb0523d21e7a",
+    "packages/ranui/components/route/index.ts": "96fd21500b0b11acf23da53f56948c4cd078f69239e3315c74de443254d4f0c0",
+    "packages/ranui/components/route/index.less": "b5348a2d1f3407cd34fc2338f5f0e1880de9a82971673b78fd1cab90ff3acc8c",
+    "packages/ranui/components/modal/index.ts": "d66b4f98077ed8f7e455371a7f37a95a74eed77a1135762705dd083e8b42d711",
+    "packages/ranui/components/modal/index.less": "48cb7cccf866145a8af233aa51dd5a316b3018f1b2d3ba4a96847b54fffc4150",
+    "packages/ranui/components/button/index.ts": "80b49ea359fa64b607654508de9a926970297fcb89bcda20db13cf9a3d78e903",
+    "packages/ranui/components/button/index.less": "4ec4930135a66437c75e3395aba08c7364dbc14716d48a44567874eb72690121",
+    "packages/ranui/components/input/index.ts": "a67d4052e959eab36ddc9fb1fa3771ca68cfe32d7574fdc908aead4fb9befc6c",
+    "packages/ranui/components/input/index.less": "bdd1f48c45f7b8c2764fbdab7d1a0e61430ea535c95ab11d512b4febec27dc06",
+    "packages/ranui/components/checkbox/index.ts": "a54da10ccf8c4f5fd1b019fb5fe4c0ea8f06960ecdf81ed5209226f7f43b0ebf",
+    "packages/ranui/components/checkbox/index.less": "f58195d8edbe5133c228cfe485d5008e8d5b26c2f22b440d18ce9866014e3381",
+    "packages/ranui/components/section/index.ts": "1951f159d140177ac385bea3b7d9a83280c8ce6d7a818e37753b7306d744dfc4",
+    "packages/ranui/components/section/index.less": "3304dc792cd2df2193b7a2d790678bd4a953a5d87e70823716dca480ea54ab61",
+    "packages/ranui/components/icon/index.ts": "54f45c52bd661e2451796d4b77fb1e430ef9cfcccc3d4630fcec86d182265c95",
+    "packages/ranui/components/icon/index.less": "9f85fe3709f1a203af051467e16c94292ac98b68908f58f9297b78e69f7275a7",
+    "packages/ranui/utils/a11y.ts": "a74c4da559fad3ec18d18d9bbd3fd36cff717b42eba3682f97902c1978d13345",
+    "packages/ranui/utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+    "packages/ranui/utils/dom.ts": "557d4b55f43c9116b1f67b719dd4cd4404247a8c51c6d733d41cfe114ea4785e",
+    "packages/ranui/utils/floating.ts": "1556ced74d3d29fc1e98d3234965895565128b1f636e86a0ac422e7a26941a06",
+    "packages/ranui/utils/form.ts": "7118e4b2ab3d9f83b2c5ccf065ea57dfdd645e389faf2f48b7091f18752d9223",
+    "packages/ranui/utils/index.ts": "5d21efb3c179519011a05949ae1eba398813a887977c4844398935685d021317",
+    "packages/ranui/utils/placement.ts": "0d9b0816dfd6d1056491b30b92b2972e1acc784dbfe895b24bd2142a5c8f67b0",
+    "packages/ranui/utils/ssg.ts": "58bb9dbb4eb08f3c9885f217c5454e10fa9454632719404bd936736f458daa56",
+    "packages/ranui/utils/ssr-registry.ts": "1bb93971e9c5298203ea6261995a922b6efb8508a6d0b6280e77685940763c7d",
+    "packages/ranui/utils/ssr-stream.ts": "790059ac7bbb5dd8652a973d2d0caf8370748d1f6f8cb1a86dec8429af2ca14b",
+    "packages/ranui/utils/ssr.ts": "8d3c02dc38263f22f683bc5c8c7b4870a1e026d2ba1eda5c8a2d86f5a51eede8",
+    "packages/ranui/utils/style.ts": "2c48cf06306142b168046338022eb5d3086612924560d54ffa24d08f21c28514",
+    "packages/ranui/utils/theme.ts": "271ddfc509e2d2d70d3b1ad4186ef5f9a8a17dbeec55d85d07638a4a164a42d5",
+    "packages/ranui/utils/builder/index.ts": "5db5ae7cfba147bb169c74e94142021894fe25724551ad77d92d59b4099e6b94",
+    "packages/ranui/utils/i18n/index.ts": "e28842f410b41e5f59f2a03325fdcd0c0c40c291319fbb2c7df6494cd781a61d",
+    "packages/ranui/utils/router/index.ts": "699e8f822eef6ddce3fb0ac59645d94e891173d03a4389ea7c3ac71a0120a0da",
+    "packages/ranui/theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360",
+    "packages/ranui/theme/font.less": "17a0d26ba50619789fba0237264f5fcb38e5ffb91141d37e04e016459cc162fd",
+    "packages/ranui/theme/index.less": "fcf36f042e74c517c2193f6695d7e177369c967c29e3b3fe497970f1f7f06c05",
+    "packages/ranui/theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+    "packages/ranui/base.less": "c8643433f9148208938940dd1a3eee3dfc7f257d803f69d0db6320e918cd3b88",
+    "packages/ranui/style.ts": "5834e0b1c474befe6cbe9f2f4fb3129b9e18cc933808f9244ce288775b39b71d",
+    "packages/ranui/components/glass/rim.ts": "cabe99091061f0dc189a68de48a8df0b13a7c41025e68397613b8ac8af112f70",
+    "packages/ranui/components/glass/rim-webgpu.ts": "5253ec621af9e3fc6d7c6b424cecf48048afcbcf388af617aabd951f30a80771",
+    "pnpm-lock.yaml": "935b3c4add7944f76cd60645a55415ed4f4971e0f5d8f5a27543c9465e8258eb"
+  },
+  "after": {
+    "packages/ranui/components/link/index.ts": "3f998428b6c9286c8245c3a5e7bdb4abd67cf48b1c05dabb7c82d93742deb285",
+    "packages/ranui/components/link/index.less": "ad8fea27a8c20b0f25a0832b1ce71c0f4f6b4016b2d3054620fb6ac9203cf10a",
+    "packages/ranui/components/theme-switch/index.ts": "82e7c18adfe56e87576b5958712871dbe8894e99570722a467e6530e8342f55a",
+    "packages/ranui/components/theme-switch/index.less": "66051547dbbdffdc6afe1f0160a12271c55ebe7b59477db061c50c1ae092f276",
+    "packages/ranui/components/glass/index.ts": "15f3670c175b802798cebc4783e179535d38b4ad6b35583f1f8c8b576e2af123",
+    "packages/ranui/components/glass/index.less": "76fe4ac60d816d221246bf3bedb32d790fbe9701147e57bd8df669d041db3f5e",
+    "packages/ranui/components/tab/index.ts": "390dfbaa7a45c0c23b91e2464afa5fb519da5662cc7a3e32d1c7a3836bc21aec",
+    "packages/ranui/components/tab/index.less": "34fa1cc01767ad4f8187e6fd2c8a92a70996a9a4d0f40fa31cb75ee2c917006a",
+    "packages/ranui/components/tabpane/index.ts": "47eb7c17252c2063affb5eb1614949e38f45cfdf7258188266b9da43f20296fc",
+    "packages/ranui/components/tabpane/index.less": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "packages/ranui/components/router/index.ts": "1ee5c726aeead2a7bfe815c32a154f11e191c8f8c037a6d9d8964154c28866ab",
+    "packages/ranui/components/router/index.less": "146c4f586679c4b5a1348f76bed270fe6ca83fe591214a808082bb0523d21e7a",
+    "packages/ranui/components/route/index.ts": "96fd21500b0b11acf23da53f56948c4cd078f69239e3315c74de443254d4f0c0",
+    "packages/ranui/components/route/index.less": "b5348a2d1f3407cd34fc2338f5f0e1880de9a82971673b78fd1cab90ff3acc8c",
+    "packages/ranui/components/modal/index.ts": "d66b4f98077ed8f7e455371a7f37a95a74eed77a1135762705dd083e8b42d711",
+    "packages/ranui/components/modal/index.less": "48cb7cccf866145a8af233aa51dd5a316b3018f1b2d3ba4a96847b54fffc4150",
+    "packages/ranui/components/button/index.ts": "80b49ea359fa64b607654508de9a926970297fcb89bcda20db13cf9a3d78e903",
+    "packages/ranui/components/button/index.less": "4ec4930135a66437c75e3395aba08c7364dbc14716d48a44567874eb72690121",
+    "packages/ranui/components/input/index.ts": "a67d4052e959eab36ddc9fb1fa3771ca68cfe32d7574fdc908aead4fb9befc6c",
+    "packages/ranui/components/input/index.less": "bdd1f48c45f7b8c2764fbdab7d1a0e61430ea535c95ab11d512b4febec27dc06",
+    "packages/ranui/components/checkbox/index.ts": "a54da10ccf8c4f5fd1b019fb5fe4c0ea8f06960ecdf81ed5209226f7f43b0ebf",
+    "packages/ranui/components/checkbox/index.less": "f58195d8edbe5133c228cfe485d5008e8d5b26c2f22b440d18ce9866014e3381",
+    "packages/ranui/components/section/index.ts": "1951f159d140177ac385bea3b7d9a83280c8ce6d7a818e37753b7306d744dfc4",
+    "packages/ranui/components/section/index.less": "3304dc792cd2df2193b7a2d790678bd4a953a5d87e70823716dca480ea54ab61",
+    "packages/ranui/components/icon/index.ts": "54f45c52bd661e2451796d4b77fb1e430ef9cfcccc3d4630fcec86d182265c95",
+    "packages/ranui/components/icon/index.less": "9f85fe3709f1a203af051467e16c94292ac98b68908f58f9297b78e69f7275a7",
+    "packages/ranui/utils/a11y.ts": "a74c4da559fad3ec18d18d9bbd3fd36cff717b42eba3682f97902c1978d13345",
+    "packages/ranui/utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+    "packages/ranui/utils/dom.ts": "557d4b55f43c9116b1f67b719dd4cd4404247a8c51c6d733d41cfe114ea4785e",
+    "packages/ranui/utils/floating.ts": "1556ced74d3d29fc1e98d3234965895565128b1f636e86a0ac422e7a26941a06",
+    "packages/ranui/utils/form.ts": "7118e4b2ab3d9f83b2c5ccf065ea57dfdd645e389faf2f48b7091f18752d9223",
+    "packages/ranui/utils/index.ts": "5d21efb3c179519011a05949ae1eba398813a887977c4844398935685d021317",
+    "packages/ranui/utils/placement.ts": "0d9b0816dfd6d1056491b30b92b2972e1acc784dbfe895b24bd2142a5c8f67b0",
+    "packages/ranui/utils/ssg.ts": "58bb9dbb4eb08f3c9885f217c5454e10fa9454632719404bd936736f458daa56",
+    "packages/ranui/utils/ssr-registry.ts": "1bb93971e9c5298203ea6261995a922b6efb8508a6d0b6280e77685940763c7d",
+    "packages/ranui/utils/ssr-stream.ts": "790059ac7bbb5dd8652a973d2d0caf8370748d1f6f8cb1a86dec8429af2ca14b",
+    "packages/ranui/utils/ssr.ts": "8d3c02dc38263f22f683bc5c8c7b4870a1e026d2ba1eda5c8a2d86f5a51eede8",
+    "packages/ranui/utils/style.ts": "2c48cf06306142b168046338022eb5d3086612924560d54ffa24d08f21c28514",
+    "packages/ranui/utils/theme.ts": "271ddfc509e2d2d70d3b1ad4186ef5f9a8a17dbeec55d85d07638a4a164a42d5",
+    "packages/ranui/utils/builder/index.ts": "5db5ae7cfba147bb169c74e94142021894fe25724551ad77d92d59b4099e6b94",
+    "packages/ranui/utils/i18n/index.ts": "e28842f410b41e5f59f2a03325fdcd0c0c40c291319fbb2c7df6494cd781a61d",
+    "packages/ranui/utils/router/index.ts": "699e8f822eef6ddce3fb0ac59645d94e891173d03a4389ea7c3ac71a0120a0da",
+    "packages/ranui/theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360",
+    "packages/ranui/theme/font.less": "17a0d26ba50619789fba0237264f5fcb38e5ffb91141d37e04e016459cc162fd",
+    "packages/ranui/theme/index.less": "fcf36f042e74c517c2193f6695d7e177369c967c29e3b3fe497970f1f7f06c05",
+    "packages/ranui/theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+    "packages/ranui/base.less": "c8643433f9148208938940dd1a3eee3dfc7f257d803f69d0db6320e918cd3b88",
+    "packages/ranui/style.ts": "5834e0b1c474befe6cbe9f2f4fb3129b9e18cc933808f9244ce288775b39b71d",
+    "packages/ranui/components/glass/rim.ts": "cabe99091061f0dc189a68de48a8df0b13a7c41025e68397613b8ac8af112f70",
+    "packages/ranui/components/glass/rim-webgpu.ts": "5253ec621af9e3fc6d7c6b424cecf48048afcbcf388af617aabd951f30a80771",
+    "pnpm-lock.yaml": "935b3c4add7944f76cd60645a55415ed4f4971e0f5d8f5a27543c9465e8258eb"
+  },
+  "results": [
+    {
+      "width": 360,
+      "theme": "light",
+      "themes": [
+        {
+          "choice": "dark",
+          "attr": "dark",
+          "background": "rgb(0, 0, 0)",
+          "switches": [
+            {
+              "value": "dark",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "true"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            },
+            {
+              "value": "dark",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "true"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choice": "light",
+          "attr": "light",
+          "background": "rgb(255, 255, 255)",
+          "switches": [
+            {
+              "value": "light",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "true"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            },
+            {
+              "value": "light",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "true"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choice": "system",
+          "attr": "light",
+          "background": "rgb(255, 255, 255)",
+          "switches": [
+            {
+              "value": "system",
+              "pressed": [
+                [
+                  "system",
+                  "true"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            },
+            {
+              "value": "system",
+              "pressed": [
+                [
+                  "system",
+                  "true"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "endTab": {
+        "active": "sources",
+        "headerWidth": 312,
+        "headerScrollWidth": 591,
+        "headerScroll": 279,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": -253,
+              "y": 286.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 286.859375,
+              "right": -159.328125,
+              "bottom": 316.859375,
+              "left": -253
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": -159.328125,
+              "y": 286.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 248.015625,
+              "bottom": 316.859375,
+              "left": -159.328125
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 248.015625,
+              "y": 286.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 333.875,
+              "bottom": 316.859375,
+              "left": 248.015625
+            },
+            "focused": true,
+            "selected": "true"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "longHeader": {
+        "width": 407.34375,
+        "contentWidth": 407
+      },
+      "touchScroll": {
+        "active": "sources",
+        "headerWidth": 312,
+        "headerScrollWidth": 591,
+        "headerScroll": 5,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": 21,
+              "y": 286.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 286.859375,
+              "right": 114.671875,
+              "bottom": 316.859375,
+              "left": 21
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": 114.671875,
+              "y": 286.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 522.015625,
+              "bottom": 316.859375,
+              "left": 114.671875
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 522.015625,
+              "y": 286.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 607.875,
+              "bottom": 316.859375,
+              "left": 522.015625
+            },
+            "focused": true,
+            "selected": "true"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "homeTab": {
+        "active": "overview",
+        "headerWidth": 312,
+        "headerScrollWidth": 591,
+        "headerScroll": 0,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": 26,
+              "y": 286.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 286.859375,
+              "right": 119.671875,
+              "bottom": 316.859375,
+              "left": 26
+            },
+            "focused": true,
+            "selected": "true"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": 119.671875,
+              "y": 286.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 527.015625,
+              "bottom": 316.859375,
+              "left": 119.671875
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 527.015625,
+              "y": 286.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 612.875,
+              "bottom": 316.859375,
+              "left": 527.015625
+            },
+            "focused": false,
+            "selected": "false"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "forwardFocus": [
+        {
+          "tag": "R-TAB",
+          "label": null,
+          "rect": {
+            "x": 25,
+            "y": 327.859375,
+            "width": 310,
+            "height": 74.390625,
+            "top": 327.859375,
+            "right": 335,
+            "bottom": 402.25,
+            "left": 25
+          }
+        },
+        {
+          "tag": "R-GLASS",
+          "label": null,
+          "rect": {
+            "x": 40,
+            "y": 439.25,
+            "width": 214.453125,
+            "height": 106.78125,
+            "top": 439.25,
+            "right": 254.453125,
+            "bottom": 546.03125,
+            "left": 40
+          }
+        },
+        {
+          "tag": "R-GLASS",
+          "label": null,
+          "rect": {
+            "x": 40,
+            "y": 562.03125,
+            "width": 197.328125,
+            "height": 106.78125,
+            "top": 562.03125,
+            "right": 237.328125,
+            "bottom": 668.8125,
+            "left": 40
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "label": null,
+          "rect": {
+            "x": 24,
+            "y": 705.8125,
+            "width": 113.8125,
+            "height": 21,
+            "top": 705.8125,
+            "right": 137.8125,
+            "bottom": 726.8125,
+            "left": 24
+          }
+        }
+      ],
+      "modalOpen": {
+        "overflow": "hidden",
+        "mainInert": false,
+        "dialog": {
+          "x": 16,
+          "y": 303.90625,
+          "width": 328,
+          "height": 184.171875,
+          "top": 303.90625,
+          "right": 344,
+          "bottom": 488.078125,
+          "left": 16
+        }
+      },
+      "nestedEscape": {
+        "outer": true,
+        "inner": false,
+        "focused": "nested-open"
+      },
+      "finalModal": {
+        "outer": false,
+        "focused": "open",
+        "overflow": ""
+      },
+      "glass": {
+        "webgpuExposed": true,
+        "adapter": false,
+        "glasses": [
+          {
+            "id": "glass",
+            "role": "button",
+            "tabindex": 0,
+            "filter": "blur(16px) saturate(1.8) brightness(1.05) url(\"#ran-glass-1\")",
+            "canvases": []
+          },
+          {
+            "id": "rim",
+            "role": "button",
+            "tabindex": 0,
+            "filter": "blur(16px) saturate(1.8) brightness(1.05) url(\"#ran-glass-2\")",
+            "canvases": [
+              {
+                "width": 163,
+                "height": 73,
+                "display": "block"
+              }
+            ]
+          }
+        ]
+      },
+      "secondary": {
+        "themeLabel": "Workspace appearance",
+        "inactiveInput": true,
+        "inactiveTabIndex": 0
+      },
+      "glassKeys": 2,
+      "errors": []
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "themes": [
+        {
+          "choice": "dark",
+          "attr": "dark",
+          "background": "rgb(0, 0, 0)",
+          "switches": [
+            {
+              "value": "dark",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "true"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            },
+            {
+              "value": "dark",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "true"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choice": "light",
+          "attr": "light",
+          "background": "rgb(255, 255, 255)",
+          "switches": [
+            {
+              "value": "light",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "true"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            },
+            {
+              "value": "light",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "true"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choice": "system",
+          "attr": "dark",
+          "background": "rgb(0, 0, 0)",
+          "switches": [
+            {
+              "value": "system",
+              "pressed": [
+                [
+                  "system",
+                  "true"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            },
+            {
+              "value": "system",
+              "pressed": [
+                [
+                  "system",
+                  "true"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                },
+                {
+                  "width": 44,
+                  "height": 44
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "endTab": {
+        "active": "sources",
+        "headerWidth": 312,
+        "headerScrollWidth": 591,
+        "headerScroll": 279,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": -253,
+              "y": 286.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 286.859375,
+              "right": -159.328125,
+              "bottom": 316.859375,
+              "left": -253
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": -159.328125,
+              "y": 286.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 248.015625,
+              "bottom": 316.859375,
+              "left": -159.328125
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 248.015625,
+              "y": 286.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 333.875,
+              "bottom": 316.859375,
+              "left": 248.015625
+            },
+            "focused": true,
+            "selected": "true"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "longHeader": {
+        "width": 407.34375,
+        "contentWidth": 407
+      },
+      "touchScroll": {
+        "active": "sources",
+        "headerWidth": 312,
+        "headerScrollWidth": 591,
+        "headerScroll": 23,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": 3,
+              "y": 286.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 286.859375,
+              "right": 96.671875,
+              "bottom": 316.859375,
+              "left": 3
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": 96.671875,
+              "y": 286.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 504.015625,
+              "bottom": 316.859375,
+              "left": 96.671875
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 504.015625,
+              "y": 286.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 589.875,
+              "bottom": 316.859375,
+              "left": 504.015625
+            },
+            "focused": true,
+            "selected": "true"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "homeTab": {
+        "active": "overview",
+        "headerWidth": 312,
+        "headerScrollWidth": 591,
+        "headerScroll": 0,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": 26,
+              "y": 286.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 286.859375,
+              "right": 119.671875,
+              "bottom": 316.859375,
+              "left": 26
+            },
+            "focused": true,
+            "selected": "true"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": 119.671875,
+              "y": 286.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 527.015625,
+              "bottom": 316.859375,
+              "left": 119.671875
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 527.015625,
+              "y": 286.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 286.859375,
+              "right": 612.875,
+              "bottom": 316.859375,
+              "left": 527.015625
+            },
+            "focused": false,
+            "selected": "false"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "forwardFocus": [
+        {
+          "tag": "R-TAB",
+          "label": null,
+          "rect": {
+            "x": 25,
+            "y": 327.859375,
+            "width": 310,
+            "height": 74.390625,
+            "top": 327.859375,
+            "right": 335,
+            "bottom": 402.25,
+            "left": 25
+          }
+        },
+        {
+          "tag": "R-GLASS",
+          "label": null,
+          "rect": {
+            "x": 40,
+            "y": 439.25,
+            "width": 214.453125,
+            "height": 106.78125,
+            "top": 439.25,
+            "right": 254.453125,
+            "bottom": 546.03125,
+            "left": 40
+          }
+        },
+        {
+          "tag": "R-GLASS",
+          "label": null,
+          "rect": {
+            "x": 40,
+            "y": 562.03125,
+            "width": 197.328125,
+            "height": 106.78125,
+            "top": 562.03125,
+            "right": 237.328125,
+            "bottom": 668.8125,
+            "left": 40
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "label": null,
+          "rect": {
+            "x": 24,
+            "y": 705.8125,
+            "width": 113.8125,
+            "height": 21,
+            "top": 705.8125,
+            "right": 137.8125,
+            "bottom": 726.8125,
+            "left": 24
+          }
+        }
+      ],
+      "modalOpen": {
+        "overflow": "hidden",
+        "mainInert": false,
+        "dialog": {
+          "x": 16,
+          "y": 303.90625,
+          "width": 328,
+          "height": 184.171875,
+          "top": 303.90625,
+          "right": 344,
+          "bottom": 488.078125,
+          "left": 16
+        }
+      },
+      "nestedEscape": {
+        "outer": true,
+        "inner": false,
+        "focused": "nested-open"
+      },
+      "finalModal": {
+        "outer": false,
+        "focused": "open",
+        "overflow": ""
+      },
+      "glass": {
+        "webgpuExposed": true,
+        "adapter": false,
+        "glasses": [
+          {
+            "id": "glass",
+            "role": "button",
+            "tabindex": 0,
+            "filter": "blur(16px) saturate(1.8) brightness(1.05) url(\"#ran-glass-1\")",
+            "canvases": []
+          },
+          {
+            "id": "rim",
+            "role": "button",
+            "tabindex": 0,
+            "filter": "blur(16px) saturate(1.8) brightness(1.05) url(\"#ran-glass-2\")",
+            "canvases": [
+              {
+                "width": 163,
+                "height": 73,
+                "display": "block"
+              }
+            ]
+          }
+        ]
+      },
+      "secondary": {
+        "themeLabel": "Workspace appearance",
+        "inactiveInput": true,
+        "inactiveTabIndex": 0
+      },
+      "glassKeys": 2,
+      "errors": []
+    },
+    {
+      "width": 1280,
+      "theme": "light",
+      "themes": [
+        {
+          "choice": "dark",
+          "attr": "dark",
+          "background": "rgb(0, 0, 0)",
+          "switches": [
+            {
+              "value": "dark",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "true"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            },
+            {
+              "value": "dark",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "true"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choice": "light",
+          "attr": "light",
+          "background": "rgb(255, 255, 255)",
+          "switches": [
+            {
+              "value": "light",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "true"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            },
+            {
+              "value": "light",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "true"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choice": "system",
+          "attr": "light",
+          "background": "rgb(255, 255, 255)",
+          "switches": [
+            {
+              "value": "system",
+              "pressed": [
+                [
+                  "system",
+                  "true"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            },
+            {
+              "value": "system",
+              "pressed": [
+                [
+                  "system",
+                  "true"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "endTab": {
+        "active": "sources",
+        "headerWidth": 832,
+        "headerScrollWidth": 832,
+        "headerScroll": 0,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": 226,
+              "y": 200.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 200.859375,
+              "right": 319.671875,
+              "bottom": 230.859375,
+              "left": 226
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": 319.671875,
+              "y": 200.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 200.859375,
+              "right": 727.015625,
+              "bottom": 230.859375,
+              "left": 319.671875
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 727.015625,
+              "y": 200.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 200.859375,
+              "right": 812.875,
+              "bottom": 230.859375,
+              "left": 727.015625
+            },
+            "focused": true,
+            "selected": "true"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "longHeader": {
+        "width": 407.34375,
+        "contentWidth": 2037
+      },
+      "touchScroll": null,
+      "homeTab": {
+        "active": "overview",
+        "headerWidth": 832,
+        "headerScrollWidth": 832,
+        "headerScroll": 0,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": 226,
+              "y": 200.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 200.859375,
+              "right": 319.671875,
+              "bottom": 230.859375,
+              "left": 226
+            },
+            "focused": true,
+            "selected": "true"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": 319.671875,
+              "y": 200.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 200.859375,
+              "right": 727.015625,
+              "bottom": 230.859375,
+              "left": 319.671875
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 727.015625,
+              "y": 200.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 200.859375,
+              "right": 812.875,
+              "bottom": 230.859375,
+              "left": 727.015625
+            },
+            "focused": false,
+            "selected": "false"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "forwardFocus": [
+        {
+          "tag": "R-TAB",
+          "label": null,
+          "rect": {
+            "x": 225,
+            "y": 241.859375,
+            "width": 830,
+            "height": 74.390625,
+            "top": 241.859375,
+            "right": 1055,
+            "bottom": 316.25,
+            "left": 225
+          }
+        },
+        {
+          "tag": "R-GLASS",
+          "label": null,
+          "rect": {
+            "x": 240,
+            "y": 353.25,
+            "width": 214.453125,
+            "height": 106.78125,
+            "top": 353.25,
+            "right": 454.453125,
+            "bottom": 460.03125,
+            "left": 240
+          }
+        },
+        {
+          "tag": "R-GLASS",
+          "label": null,
+          "rect": {
+            "x": 470.453125,
+            "y": 353.25,
+            "width": 197.328125,
+            "height": 106.78125,
+            "top": 353.25,
+            "right": 667.78125,
+            "bottom": 460.03125,
+            "left": 470.453125
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "label": null,
+          "rect": {
+            "x": 224,
+            "y": 497.03125,
+            "width": 113.8125,
+            "height": 21,
+            "top": 497.03125,
+            "right": 337.8125,
+            "bottom": 518.03125,
+            "left": 224
+          }
+        }
+      ],
+      "modalOpen": {
+        "overflow": "hidden",
+        "mainInert": false,
+        "dialog": {
+          "x": 360,
+          "y": 315.109375,
+          "width": 560,
+          "height": 161.78125,
+          "top": 315.109375,
+          "right": 920,
+          "bottom": 476.890625,
+          "left": 360
+        }
+      },
+      "nestedEscape": {
+        "outer": true,
+        "inner": false,
+        "focused": "nested-open"
+      },
+      "finalModal": {
+        "outer": false,
+        "focused": "open",
+        "overflow": ""
+      },
+      "glass": {
+        "webgpuExposed": true,
+        "adapter": false,
+        "glasses": [
+          {
+            "id": "glass",
+            "role": "button",
+            "tabindex": 0,
+            "filter": "blur(16px) saturate(1.8) brightness(1.05) url(\"#ran-glass-1\")",
+            "canvases": []
+          },
+          {
+            "id": "rim",
+            "role": "button",
+            "tabindex": 0,
+            "filter": "blur(16px) saturate(1.8) brightness(1.05) url(\"#ran-glass-2\")",
+            "canvases": [
+              {
+                "width": 163,
+                "height": 73,
+                "display": "block"
+              }
+            ]
+          }
+        ]
+      },
+      "secondary": {
+        "themeLabel": "Workspace appearance",
+        "inactiveInput": true,
+        "inactiveTabIndex": 0
+      },
+      "glassKeys": 2,
+      "errors": []
+    },
+    {
+      "width": 1280,
+      "theme": "dark",
+      "themes": [
+        {
+          "choice": "dark",
+          "attr": "dark",
+          "background": "rgb(0, 0, 0)",
+          "switches": [
+            {
+              "value": "dark",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "true"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            },
+            {
+              "value": "dark",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "true"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choice": "light",
+          "attr": "light",
+          "background": "rgb(255, 255, 255)",
+          "switches": [
+            {
+              "value": "light",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "true"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            },
+            {
+              "value": "light",
+              "pressed": [
+                [
+                  "system",
+                  "false"
+                ],
+                [
+                  "light",
+                  "true"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choice": "system",
+          "attr": "dark",
+          "background": "rgb(0, 0, 0)",
+          "switches": [
+            {
+              "value": "system",
+              "pressed": [
+                [
+                  "system",
+                  "true"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            },
+            {
+              "value": "system",
+              "pressed": [
+                [
+                  "system",
+                  "true"
+                ],
+                [
+                  "light",
+                  "false"
+                ],
+                [
+                  "dark",
+                  "false"
+                ]
+              ],
+              "sizes": [
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "width": 28,
+                  "height": 28
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "endTab": {
+        "active": "sources",
+        "headerWidth": 832,
+        "headerScrollWidth": 832,
+        "headerScroll": 0,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": 226,
+              "y": 200.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 200.859375,
+              "right": 319.671875,
+              "bottom": 230.859375,
+              "left": 226
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": 319.671875,
+              "y": 200.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 200.859375,
+              "right": 727.015625,
+              "bottom": 230.859375,
+              "left": 319.671875
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 727.015625,
+              "y": 200.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 200.859375,
+              "right": 812.875,
+              "bottom": 230.859375,
+              "left": 727.015625
+            },
+            "focused": true,
+            "selected": "true"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "longHeader": {
+        "width": 407.34375,
+        "contentWidth": 2037
+      },
+      "touchScroll": null,
+      "homeTab": {
+        "active": "overview",
+        "headerWidth": 832,
+        "headerScrollWidth": 832,
+        "headerScroll": 0,
+        "tabs": [
+          {
+            "key": "overview",
+            "rect": {
+              "x": 226,
+              "y": 200.859375,
+              "width": 93.671875,
+              "height": 30,
+              "top": 200.859375,
+              "right": 319.671875,
+              "bottom": 230.859375,
+              "left": 226
+            },
+            "focused": true,
+            "selected": "true"
+          },
+          {
+            "key": "chat",
+            "rect": {
+              "x": 319.671875,
+              "y": 200.859375,
+              "width": 407.34375,
+              "height": 30,
+              "top": 200.859375,
+              "right": 727.015625,
+              "bottom": 230.859375,
+              "left": 319.671875
+            },
+            "focused": false,
+            "selected": "false"
+          },
+          {
+            "key": "sources",
+            "rect": {
+              "x": 727.015625,
+              "y": 200.859375,
+              "width": 85.859375,
+              "height": 30,
+              "top": 200.859375,
+              "right": 812.875,
+              "bottom": 230.859375,
+              "left": 727.015625
+            },
+            "focused": false,
+            "selected": "false"
+          }
+        ],
+        "panes": [
+          {
+            "key": "overview",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "chat",
+            "inert": false,
+            "hidden": false
+          },
+          {
+            "key": "sources",
+            "inert": false,
+            "hidden": false
+          }
+        ]
+      },
+      "forwardFocus": [
+        {
+          "tag": "R-TAB",
+          "label": null,
+          "rect": {
+            "x": 225,
+            "y": 241.859375,
+            "width": 830,
+            "height": 74.390625,
+            "top": 241.859375,
+            "right": 1055,
+            "bottom": 316.25,
+            "left": 225
+          }
+        },
+        {
+          "tag": "R-GLASS",
+          "label": null,
+          "rect": {
+            "x": 240,
+            "y": 353.25,
+            "width": 214.453125,
+            "height": 106.78125,
+            "top": 353.25,
+            "right": 454.453125,
+            "bottom": 460.03125,
+            "left": 240
+          }
+        },
+        {
+          "tag": "R-GLASS",
+          "label": null,
+          "rect": {
+            "x": 470.453125,
+            "y": 353.25,
+            "width": 197.328125,
+            "height": 106.78125,
+            "top": 353.25,
+            "right": 667.78125,
+            "bottom": 460.03125,
+            "left": 470.453125
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "label": null,
+          "rect": {
+            "x": 224,
+            "y": 497.03125,
+            "width": 113.8125,
+            "height": 21,
+            "top": 497.03125,
+            "right": 337.8125,
+            "bottom": 518.03125,
+            "left": 224
+          }
+        }
+      ],
+      "modalOpen": {
+        "overflow": "hidden",
+        "mainInert": false,
+        "dialog": {
+          "x": 360,
+          "y": 315.109375,
+          "width": 560,
+          "height": 161.78125,
+          "top": 315.109375,
+          "right": 920,
+          "bottom": 476.890625,
+          "left": 360
+        }
+      },
+      "nestedEscape": {
+        "outer": true,
+        "inner": false,
+        "focused": "nested-open"
+      },
+      "finalModal": {
+        "outer": false,
+        "focused": "open",
+        "overflow": ""
+      },
+      "glass": {
+        "webgpuExposed": true,
+        "adapter": false,
+        "glasses": [
+          {
+            "id": "glass",
+            "role": "button",
+            "tabindex": 0,
+            "filter": "blur(16px) saturate(1.8) brightness(1.05) url(\"#ran-glass-1\")",
+            "canvases": []
+          },
+          {
+            "id": "rim",
+            "role": "button",
+            "tabindex": 0,
+            "filter": "blur(16px) saturate(1.8) brightness(1.05) url(\"#ran-glass-2\")",
+            "canvases": [
+              {
+                "width": 163,
+                "height": 73,
+                "display": "block"
+              }
+            ]
+          }
+        ]
+      },
+      "secondary": {
+        "themeLabel": "Workspace appearance",
+        "inactiveInput": true,
+        "inactiveTabIndex": 0
+      },
+      "glassKeys": 2,
+      "errors": []
+    }
+  ]
+}
