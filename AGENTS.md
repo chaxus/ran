@@ -2,6 +2,9 @@
 
 Start with the owner of the change; do not load every reference or introduce a second standard.
 
+For product positioning and website ownership, start with [PRODUCT.md](PRODUCT.md).
+`packages/docs` owns ran.chaxus.com; `packages/ranpress` owns its build mechanism.
+
 | Work                                                              | Read first                                                                                                                                          |
 | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Visual hierarchy, composition, tokens and craft                   | [ranui design standard](packages/ranui/docs/DESIGN.md)                                                                                              |
