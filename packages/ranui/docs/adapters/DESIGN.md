@@ -13,6 +13,19 @@
 > [Coding guidelines](https://ran.chaxus.com/src/ranui/coding-guides/) — update those when a
 > rule here changes in a way consumers can see.
 
+## ranui default visual direction
+
+The default is a quiet, content-first working interface: neutral semantic surfaces, restrained
+emphasis and compact desktop controls with reachable touch targets. Distinction comes from
+clear typography, proportions and complete states, not a decorative effect on every component.
+Use existing token roles to choose exact dimensions; do not introduce a second "premium" scale.
+Glass and expressive demonstrations are explicit surface/theme choices, not default text/control
+backgrounds. Preserve reading contrast and the same interaction semantics across themes.
+
+Apply the shared [style brief](../DESIGN.md#style-coherence-across-components-and-pages) before
+changing a family. Review it in a realistic composed page with neighboring controls; a polished
+isolated component does not establish a coherent product.
+
 ## How to use this file
 
 - Prefer **semantic tokens** (`--ran-color-*`, `--ran-space-*`, …) over raw scales or hex.
