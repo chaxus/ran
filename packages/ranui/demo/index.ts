@@ -11,7 +11,11 @@ import '../index';
 initTheme();
 
 // ── Light / dark toggle ───────────────────────────────────────────────
-const currentTheme = (): 'light' | 'dark' => (getTheme() === 'dark' ? 'dark' : 'light');
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+const currentTheme = (): 'light' | 'dark' => {
+  const theme = getTheme();
+  return theme === 'light' || theme === 'dark' ? theme : systemTheme.matches ? 'dark' : 'light';
+};
 
 const syncToggle = (): void => {
   const btn = document.getElementById('theme-toggle');
@@ -23,6 +27,19 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
   syncToggle();
 });
 syncToggle();
+// Other theme controls and system changes share the same resolved action label.
+const themeObserver = new MutationObserver(syncToggle);
+themeObserver.observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ['data-ran-theme', 'theme'],
+});
+systemTheme.addEventListener('change', syncToggle);
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    themeObserver.disconnect();
+    systemTheme.removeEventListener('change', syncToggle);
+  });
+}
 
 // ── Language switch via <r-select> ─────────────────────────────────────
 type DemoSelect = HTMLElement & {
@@ -239,7 +256,7 @@ document.getElementById('open-modal')?.addEventListener('click', () => {
 // ── Router chrome: link box model, active link, lazy radar render ───────
 const LINK_SHEETS: Record<string, string> = {
   'route-link':
-    'a{display:flex;align-items:center;padding:6px 12px;color:inherit;text-decoration:none;border-radius:inherit}',
+    'a{display:flex;align-items:center;padding:6px var(--demo-nav-padding-inline,var(--ran-space-3));color:inherit;text-decoration:none;border-radius:inherit}',
   cta: 'a{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;padding:0 22px;line-height:1;box-sizing:border-box;color:inherit;text-decoration:none;border-radius:inherit}',
   'home-card':
     'a{display:flex;flex-direction:column;gap:8px;height:100%;padding:24px;color:inherit;text-decoration:none;border-radius:inherit}',

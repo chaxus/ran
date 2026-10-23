@@ -26,14 +26,12 @@ html {
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
+    transition-duration: 0s !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
   }
   .home-card:hover,
-  .demo-card:hover,
-  r-card:hover,
   .cta:hover,
   .swatch:hover {
     /* Keep the accessibility preference above the later hover declarations. */
@@ -49,9 +47,6 @@ body {
   color: var(--ran-color-text);
   background: var(--ran-color-bg);
   -webkit-font-smoothing: antialiased;
-  transition:
-    background var(--ran-motion-duration-base),
-    color var(--ran-motion-duration-base);
 }
 
 /* Subtle dotted grid backdrop, fading out down the page. */
@@ -86,6 +81,7 @@ body::before {
   display: flex;
   align-items: baseline;
   gap: var(--ran-space-3);
+  white-space: nowrap;
 }
 
 .brand strong {
@@ -112,9 +108,6 @@ body::before {
   border-radius: var(--ran-radius-sm);
   font-size: 14px;
   cursor: pointer;
-  transition:
-    color var(--ran-motion-duration-base),
-    background var(--ran-motion-duration-base);
 }
 
 .route-link:hover {
@@ -141,7 +134,6 @@ body::before {
   text-decoration: none;
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
-  transition: color var(--ran-motion-duration-base);
 }
 
 .nav-link:hover {
@@ -158,7 +150,6 @@ body::before {
   display: inline-flex;
   align-items: center;
   color: var(--ran-color-text-secondary);
-  transition: color var(--ran-motion-duration-base);
 }
 
 .lang-switch:hover {
@@ -209,13 +200,12 @@ body::before {
   cursor: pointer;
   font: inherit;
   font-size: 13px;
-  min-width: 52px;
+  min-width: 6.5em;
   color: var(--ran-color-text);
   background: var(--ran-color-bg-elevated);
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-full);
   padding: var(--ran-space-2) var(--ran-space-4);
-  transition: all var(--ran-motion-duration-base);
 }
 
 #theme-toggle:hover {
@@ -595,22 +585,16 @@ section > p.lead {
 /* ── Component cards ────────────────────────────────────────────────── */
 .demo-card {
   display: grid;
+  /* Stages share a content spine; taller neighbors do not distribute spare space into controls. */
+  align-content: start;
   gap: var(--ran-space-4);
   padding: var(--ran-space-6);
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-md);
   background: var(--ran-color-bg-elevated);
-  transition:
-    transform var(--ran-motion-duration-base),
-    border-color var(--ran-motion-duration-base),
-    box-shadow var(--ran-motion-duration-base);
 }
 
-.demo-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--ran-color-text-disabled);
-  box-shadow: var(--ran-shadow-menu);
-}
+/* A component stage contains actions; it is not itself an action. */
 
 /* Grid items have a definite row height. Let the field row size to its content
    so labels and validation messages remain inside their card. */
@@ -633,14 +617,6 @@ section > p.lead {
   height: 6px;
   border-radius: var(--ran-radius-full);
   background: var(--ran-color-primary);
-}
-
-r-card {
-  transition: transform var(--ran-motion-duration-base);
-}
-
-r-card:hover {
-  transform: translateY(-3px);
 }
 
 .task {
@@ -845,11 +821,20 @@ footer a {
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────── */
-@media (max-width: 820px) {
+@media (max-width: 1100px) {
   /* Keep route navigation reachable — drop it to its own full-width row
      rather than hiding it. */
   .topbar {
     flex-wrap: wrap;
+    padding-inline: var(--ran-space-3);
+    gap: var(--ran-space-2);
+  }
+  .topbar-actions {
+    gap: var(--ran-space-1);
+    flex-shrink: 0;
+  }
+  .nav-link {
+    padding-inline: var(--ran-space-2);
   }
   .brand span {
     display: none;
@@ -858,6 +843,8 @@ footer a {
     display: none;
   }
   .route-nav {
+    --demo-nav-padding-inline: var(--ran-space-2);
+    flex-wrap: wrap;
     order: 3;
     width: 100%;
     justify-content: center;

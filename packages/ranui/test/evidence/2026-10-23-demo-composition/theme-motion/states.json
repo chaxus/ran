@@ -1,0 +1,12 @@
+[
+  {
+    "reducedMotion": "no-preference",
+    "initial": "system dark",
+    "path": "explicit light → explicit dark → public system → OS light → OS dark → explicit light"
+  },
+  {
+    "reducedMotion": "reduce",
+    "initial": "system dark",
+    "path": "explicit light → explicit dark → public system → OS light → OS dark → explicit light"
+  }
+]

@@ -1,0 +1,43 @@
+{
+  "runtime": "Vite localhost:5273/components, host Chromium",
+  "source": {
+    "packages/ranui/demo/demo.css": "a994732603649ce06e428b3b21d1c0549d2544e9d1a65781cb41e63c9c07c532",
+    "packages/ranui/demo/index.ts": "771b2a0b8a65b8316fcc16f2c0e4b41bdf1682f1bd93daebc7ad7fcda36c2369",
+    "packages/ranui/demo/index.html": "0b85649033ea7bbad50d222e6ef8c182a1227cd10a22a182cc1634aa7a76f35d",
+    "packages/ranui/utils/theme.ts": "271ddfc509e2d2d70d3b1ad4186ef5f9a8a17dbeec55d85d07638a4a164a42d5"
+  },
+  "media": {
+    "final-verified-light/360.png": "7c0672490688021a4c7009eda3cf80d04e3e53f293e90196033da0577acba11f",
+    "final-verified-light/1280.png": "f1302fb0ec27fdd7da6a541d9d2dbbae7d92e1828092d1145742735a77f81396",
+    "final-verified-light/900.png": "355e5c953564b64ce0acb16b31481306fbb7898a1cb0a77fe28211e9b17a8f7f",
+    "final-verified-dark/360.png": "ca4528289baaf7e2ac218e5e87b74ac677588eb4897a1ec630d30c70de7add18",
+    "final-verified-dark/1280.png": "ee25e9eb5c6d662d5448f362370d43d68649391f3ff82ef13dcc0e568eff2535",
+    "final-verified-dark/900.png": "7553d5203d0ead59aad95135e8dc384623e7bc8d3e440ec382132b6ccc2a08da",
+    "theme-motion/page@6febe76bfa46ceb84c283346588bf8ca.webm": "5f56503cd2ca99fabb5795be432e8cbb9c42b3723a8a98773ca619967dacf896",
+    "theme-motion/reduce.webm": "4716efb2c5498a6fa3afb8220bf51ac66f05ba0243d886d3eb6cf83ed7ed3da9",
+    "theme-motion/page@2d4dc649fb0f79f8cec521a5a5803176.webm": "4716efb2c5498a6fa3afb8220bf51ac66f05ba0243d886d3eb6cf83ed7ed3da9",
+    "theme-motion/no-preference.webm": "5f56503cd2ca99fabb5795be432e8cbb9c42b3723a8a98773ca619967dacf896",
+    "theme-motion/reduced-timeline.png": "e2ade9ea19b486e4c7c630b2d11403618497b705738011d729e93e126456eaba"
+  },
+  "stills": {
+    "widths": [
+      1280,
+      900,
+      360
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "reducedMotion": "reduce"
+  },
+  "video": {
+    "width": 900,
+    "height": 900,
+    "motion": [
+      "no-preference",
+      "reduce"
+    ],
+    "sequence": "system dark \u2192 explicit light \u2192 explicit dark \u2192 public system \u2192 OS light \u2192 OS dark \u2192 explicit light"
+  }
+}
