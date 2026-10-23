@@ -1,0 +1,2659 @@
+{
+  "sourceStart": {
+    "packages/ranui/components/loading/index.ts": "2788d6b1582ae16d7c02d84f7c02aee82ba276b915b692aaee550ba328c27889",
+    "packages/ranui/components/loading/types.ts": "9f6457633ee3f2c4a11b1b14f437c858e61bb5f764531f6f64a1e3c531c66141",
+    "packages/ranui/components/loading/variants/arc/index.less": "3c2118a665ee8e35a87c74878db6ca76ddb6612bf2dc4efe8229d5df05d052d6",
+    "packages/ranui/components/loading/variants/arc/index.ts": "6bf163ffe3ce60ba38d4710b5609eb9088380aa60630542f075df59742cbd188",
+    "packages/ranui/components/loading/variants/circle/index.less": "6b605e8e9ba6b71b3bc90de0238d6d7062c04eedeec5a29ac0e58702c59ca517",
+    "packages/ranui/components/loading/variants/circle/index.ts": "82935e0fa7597215e5c929b2ba46c81cdcc7ed1dd5c990693ca07dc480a22e4a",
+    "packages/ranui/components/loading/variants/circle-fold/index.less": "9ea6616abc55a98570a995005dc555ab3d79674b4ccd1a8190dd76d87bb78aea",
+    "packages/ranui/components/loading/variants/circle-fold/index.ts": "e21f5dd3969b765727101fc18bd8e6e8bd869280d8e5f556445b079432f09128",
+    "packages/ranui/components/loading/variants/circle-line/index.less": "9f227cbd6bcfe5f8f3ce6108b2317ef2dee34b0d5977848bac331b7fc40599ef",
+    "packages/ranui/components/loading/variants/circle-line/index.ts": "80eac8185f43957837a77cc5185ae19dc95ffe724d72cbb1edbd7ce5ca3ec339",
+    "packages/ranui/components/loading/variants/circle-rotate/index.less": "e9cbd47bb0b6d1bcc17b438ca936823cc4c9828e30bae6c6a5cb8a6d4d8894fa",
+    "packages/ranui/components/loading/variants/circle-rotate/index.ts": "f19cb78c19d86578b602c12b816ef589af366b8b1bab77db828c4b90c4a0bb04",
+    "packages/ranui/components/loading/variants/circle-spin/index.less": "030b5ca30970a0c6a9015fdf99ff3817d506167c90a6fd54efe9599f29bae8b5",
+    "packages/ranui/components/loading/variants/circle-spin/index.ts": "1d2293c3a768e523fca05b150efe48e5aa01759719cc3711f67271e101055bb5",
+    "packages/ranui/components/loading/variants/circle-turn/index.less": "f36ec9b1d8b7a61fe609fb3ed64f7cc6c5e4cc11cb87dedd403da4cdb41ed680",
+    "packages/ranui/components/loading/variants/circle-turn/index.ts": "9c6bed00b5b426aae41b8a25a50338858a22468c68b4024bd1543294e3120693",
+    "packages/ranui/components/loading/variants/cube/index.less": "9d9e3f7ec606f93bdc397225e8f54abf842741f517ec8ff984b7ef21f12460ab",
+    "packages/ranui/components/loading/variants/cube/index.ts": "fa328e260277a9124109d7014db13b29b7fa6cb99b4c8efb740d87da0f44541a",
+    "packages/ranui/components/loading/variants/cube-dim/index.less": "0e3528952ce418b99f0d797bb857762e6860f6e715dd4d7dbf5ac9408d9b3ed1",
+    "packages/ranui/components/loading/variants/cube-dim/index.ts": "123000dfdd43a4f9dbd9d6fd35fbafed0e01cbe5c294dd0ac0e8e35dda486368",
+    "packages/ranui/components/loading/variants/cube-fold/index.less": "5249381841b52187716c94444ad044d1205e72e4600bb1ff8af5d36f00916f7e",
+    "packages/ranui/components/loading/variants/cube-fold/index.ts": "2975e64d6092b40cfa0ca928ad54304995fd73077c90d2a117355dea014f0566",
+    "packages/ranui/components/loading/variants/cube-grid/index.less": "93546ae0ff409054dbadfdfd15a93454f9f1329e4d1cc0592fb37b527d186ef7",
+    "packages/ranui/components/loading/variants/cube-grid/index.ts": "759b60810b7a0d24c83153377a2f0533994f47a2296d5d3caf5c74f1c88954b4",
+    "packages/ranui/components/loading/variants/dot/index.less": "0e6edec08aad6024ec9edbe368d43c5e809f87db597fed201982599d84056120",
+    "packages/ranui/components/loading/variants/dot/index.ts": "b80c15564fc0b7c384a8fee2e7c77ad47c59874c05ecb019665441a1c3eecb80",
+    "packages/ranui/components/loading/variants/dot-bar/index.less": "9d5c4f897286131941fac8a94ee8d442284c916eeac1ea291e4a5a9a6c8bafad",
+    "packages/ranui/components/loading/variants/dot-bar/index.ts": "62df1a9c6d5dbf8a788dd765a851af14a82abce85fcd4e842889d68781bdc32c",
+    "packages/ranui/components/loading/variants/dot-circle/index.less": "760fe5ce22c338b127b75c688e5ff10a12a5e5c1d09acadf70f90e20b713ea87",
+    "packages/ranui/components/loading/variants/dot-circle/index.ts": "fb5fa2f7998f3c46e4ce3b818f5a6205305b7c239745cb23e2a15766e77a5dbc",
+    "packages/ranui/components/loading/variants/dot-line/index.less": "478d3a9313f7fbdc0bcd1f054b2e052cc10eba66fc0579db246e2a1b7d0d84ef",
+    "packages/ranui/components/loading/variants/dot-line/index.ts": "77e065c268b31277fa25ac5e82d870989911ac3098601a6f0895e046b5798bb5",
+    "packages/ranui/components/loading/variants/dot-pulse/index.less": "f0b76ebdd9f2a0ce488458cac5d74de2ce4b4e5bc135c7ffddf7950220fc4ccb",
+    "packages/ranui/components/loading/variants/dot-pulse/index.ts": "85d4d78f2bd579859445bdc4cdaa558c70fa063aeceb8dee44edc853036a5f7a",
+    "packages/ranui/components/loading/variants/double-bounce/index.less": "420bed433be2d2b37758ad77aaa2252377e8bbda53f5ed59f25844f5f84b660a",
+    "packages/ranui/components/loading/variants/double-bounce/index.ts": "11c9f8076d55e4c4d06c994bfc3a91b9e7f17cb38039923fcb40fdbc89c1046c",
+    "packages/ranui/components/loading/variants/drop/index.less": "154ab61d31a70c45a48d71b58ae54f9118b56ae8f2700af0c7de1be0d41475e8",
+    "packages/ranui/components/loading/variants/drop/index.ts": "49a4755cc598c4b3af311cedb990333b9f0a50ebb713903651f6ea5008b5c07c",
+    "packages/ranui/components/loading/variants/line/index.less": "73fdf7fa5ec0a80b5ebf65f540e0b5eebe41fb41f536065575c4f55e546ad283",
+    "packages/ranui/components/loading/variants/line/index.ts": "fc4ceecbd947f8b1e8db7dedebdcc29897c0ec1b78c344f0e23bcda9678b63a7",
+    "packages/ranui/components/loading/variants/line-scale/index.less": "74cc073b3c11abb4ccf56f67dc2fbadb1ca4648be4766a915bbe762eae7524a8",
+    "packages/ranui/components/loading/variants/line-scale/index.ts": "450d36c961d9260cdcc8c2e72d23ea99bfd96629c79774781eb4386ee2d30c0b",
+    "packages/ranui/components/loading/variants/pacman/index.less": "df7f7082cd72dd246542c1600ffa1b46e842f31b95a7c3c3456f15c3d0ed18c5",
+    "packages/ranui/components/loading/variants/pacman/index.ts": "f09bd78986546e2517cf5eebb874ef77f77634d09c9c3df181b03b9e985d2616",
+    "packages/ranui/components/loading/variants/pulse/index.less": "4722bed471f688ff2ae98523eec6bd661931653e4cd104f17a05a8f5edb82093",
+    "packages/ranui/components/loading/variants/pulse/index.ts": "fddfc4e2c4201a0e38fc1775bf6acb5bd534ec6dac781193b82beaf0d43a94d5",
+    "packages/ranui/components/loading/variants/rotate/index.less": "559a16384698bcdfcd4005907d51fc902847c284f08e788f6c8409a06a1c5c54",
+    "packages/ranui/components/loading/variants/rotate/index.ts": "e886a5c1773b2cf81833df23ba96e5aba11e3dd44c836366227f43e5159bb6b0",
+    "packages/ranui/components/loading/variants/scale-out/index.less": "cd2d533053ccefd23e3fd3df660532a57c959460e650381c59a6a6b1891bb7cb",
+    "packages/ranui/components/loading/variants/scale-out/index.ts": "7c78e4c2049dbc66eeee37501f048b8444d24fd113bdc5af59344be62d7d34a7",
+    "packages/ranui/components/loading/variants/solar/index.less": "3ab001ffcb2b98476f070f029389e83577253c464d26c04909bd610f6f2e9c30",
+    "packages/ranui/components/loading/variants/solar/index.ts": "cec7c6aff9fcac662120ed3ed7fa5962f40d5be202244b938ad378bbb577f783",
+    "packages/ranui/components/loading/variants/square/index.less": "142cf961c757363bd86ee9ed334c256181921d0cacdbb629e0d3b82a740c90c7",
+    "packages/ranui/components/loading/variants/square/index.ts": "66e1115e001ac2b40ad666af082acf547346a7c3f790ca1b32c8f3578981f46b",
+    "packages/ranui/components/loading/variants/stretch/index.less": "5b3d25570c08222bc8b481e7ee9cb8382a374e550a79e0352ecf7cd068a258c5",
+    "packages/ranui/components/loading/variants/stretch/index.ts": "0b4a63ad96fb0406404d92eb84dfc80190a70b644ccef8ab7cef558854dcd9cd",
+    "packages/ranui/components/loading/variants/text/index.less": "3925b9584023eaa39570ac73d96f7fbbc3a6d1fe76418a05761087f51e02ba4d",
+    "packages/ranui/components/loading/variants/text/index.ts": "105b8eeab3412ed9ea8dc6af9a0be65c6e0456bc32c2d754136c77f70c693174",
+    "packages/ranui/components/loading/variants/triple-bounce/index.less": "2e5efa363a0a57eb018500e8c3460bf702150c617b44f9268388f0bc2424544a",
+    "packages/ranui/components/loading/variants/triple-bounce/index.ts": "e712ce31ea48afd46bee09e71b3cd4ae06d63ccedd336086d2f4b57aba4dd1f6",
+    "packages/ranui/components/scratch/index.less": "22850ccb25dadc0577feda90943ae92f602baa7b11f9fa69435e67fdc73d5ada",
+    "packages/ranui/components/scratch/index.ts": "87921ecf202c65a1189ba065a77121192a3f4a6ab7d1fb1307e68471de75a48e"
+  },
+  "views": [
+    {
+      "width": 1280,
+      "theme": "light",
+      "normal": [
+        {
+          "name": "arc",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 0,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "circle",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 326.4020080566406,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-fold",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-line",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 957.7775268554688,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-rotate",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-spin",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-turn",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "cube",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-dim",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-fold",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-grid",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "dot",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 954.7326049804688,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-bar",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-circle",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-line",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-pulse",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "double-bounce",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "drop",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "line",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "line-scale",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "pacman",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 23.95821189880371,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "pulse",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "rotate",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 650.5255737304688,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "scale-out",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "solar",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "square",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 326.40203857421875,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "stretch",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "text",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "triple-bounce",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        }
+      ],
+      "reduced": [
+        {
+          "name": "arc",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-fold",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-rotate",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-spin",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-turn",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-dim",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-fold",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-grid",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-bar",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-circle",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-pulse",
+          "animations": [
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            }
+          ],
+          "rendered": 1
+        },
+        {
+          "name": "double-bounce",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "drop",
+          "animations": [
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            }
+          ],
+          "rendered": 1
+        },
+        {
+          "name": "line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "line-scale",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "pacman",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "pulse",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "rotate",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "scale-out",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "solar",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "square",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "stretch",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "text",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "triple-bounce",
+          "animations": [],
+          "rendered": 1
+        }
+      ],
+      "keyboard": {
+        "focus": true,
+        "label": "Reward revealed",
+        "aria": "true",
+        "nativeDisabled": false,
+        "inert": false,
+        "pixel": 0
+      },
+      "nextFocus": true,
+      "cornerAction": "Claimed",
+      "resetFocus": true,
+      "externalFocus": true,
+      "pointer": {
+        "kind": "native mouse",
+        "partial": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": true,
+          "pointer": 1
+        },
+        "disabledFlip": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": false
+        },
+        "reconnected": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": false
+        }
+      },
+      "errors": [],
+      "recording": "page@e4c13c9ab38fcc0e7bf7222913f8f33f.webm"
+    },
+    {
+      "width": 1280,
+      "theme": "dark",
+      "normal": [
+        {
+          "name": "arc",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 0,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "circle",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 326.4020080566406,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-fold",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-line",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 963.1123657226562,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-rotate",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-spin",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-turn",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "cube",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-dim",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-fold",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-grid",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "dot",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 958.306396484375,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-bar",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-circle",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-line",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-pulse",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "double-bounce",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "drop",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "line",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "line-scale",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "pacman",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 23.971641540527344,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "pulse",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 338,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "rotate",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 645.4790649414062,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "scale-out",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "solar",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        },
+        {
+          "name": "square",
+          "parent": {
+            "left": 338,
+            "right": 628,
+            "width": 290
+          },
+          "ink": {
+            "left": 326.40203857421875,
+            "right": 628
+          },
+          "children": 1
+        },
+        {
+          "name": "stretch",
+          "parent": {
+            "left": 652,
+            "right": 942,
+            "width": 290
+          },
+          "ink": {
+            "left": 652,
+            "right": 942
+          },
+          "children": 1
+        },
+        {
+          "name": "text",
+          "parent": {
+            "left": 966,
+            "right": 1256,
+            "width": 290
+          },
+          "ink": {
+            "left": 966,
+            "right": 1256
+          },
+          "children": 1
+        },
+        {
+          "name": "triple-bounce",
+          "parent": {
+            "left": 24,
+            "right": 314,
+            "width": 290
+          },
+          "ink": {
+            "left": 24,
+            "right": 314
+          },
+          "children": 1
+        }
+      ],
+      "reduced": [
+        {
+          "name": "arc",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-fold",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-rotate",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-spin",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-turn",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-dim",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-fold",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-grid",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-bar",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-circle",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-pulse",
+          "animations": [
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            }
+          ],
+          "rendered": 1
+        },
+        {
+          "name": "double-bounce",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "drop",
+          "animations": [
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            }
+          ],
+          "rendered": 1
+        },
+        {
+          "name": "line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "line-scale",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "pacman",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "pulse",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "rotate",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "scale-out",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "solar",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "square",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "stretch",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "text",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "triple-bounce",
+          "animations": [],
+          "rendered": 1
+        }
+      ],
+      "keyboard": {
+        "focus": true,
+        "label": "Reward revealed",
+        "aria": "true",
+        "nativeDisabled": false,
+        "inert": false,
+        "pixel": 0
+      },
+      "nextFocus": true,
+      "cornerAction": "Claimed",
+      "resetFocus": true,
+      "externalFocus": true,
+      "pointer": {
+        "kind": "native mouse",
+        "partial": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": true,
+          "pointer": 1
+        },
+        "disabledFlip": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": false
+        },
+        "reconnected": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": false
+        }
+      },
+      "errors": [],
+      "recording": "page@cee698b513eab0c04b6d6700033c2e00.webm"
+    },
+    {
+      "width": 360,
+      "theme": "light",
+      "normal": [
+        {
+          "name": "arc",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 0,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 12.402020454406738,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-fold",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-line",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 16.813758850097656,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-rotate",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-spin",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-turn",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "cube",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-dim",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-fold",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-grid",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 16.943099975585938,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-bar",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-circle",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-line",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-pulse",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "double-bounce",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "drop",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "line",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "line-scale",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "pacman",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 23.948579788208008,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "pulse",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "rotate",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 17.84164047241211,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "scale-out",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "solar",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "square",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 12.402032852172852,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "stretch",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "text",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "triple-bounce",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        }
+      ],
+      "reduced": [
+        {
+          "name": "arc",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-fold",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-rotate",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-spin",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-turn",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-dim",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-fold",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-grid",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-bar",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-circle",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-pulse",
+          "animations": [
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            }
+          ],
+          "rendered": 1
+        },
+        {
+          "name": "double-bounce",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "drop",
+          "animations": [
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            }
+          ],
+          "rendered": 1
+        },
+        {
+          "name": "line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "line-scale",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "pacman",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "pulse",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "rotate",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "scale-out",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "solar",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "square",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "stretch",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "text",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "triple-bounce",
+          "animations": [],
+          "rendered": 1
+        }
+      ],
+      "keyboard": {
+        "focus": true,
+        "label": "Reward revealed",
+        "aria": "true",
+        "nativeDisabled": false,
+        "inert": false,
+        "pixel": 0
+      },
+      "nextFocus": true,
+      "cornerAction": "Claimed",
+      "resetFocus": true,
+      "externalFocus": true,
+      "pointer": {
+        "kind": "CDP native touch",
+        "partial": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": true,
+          "pointer": 3
+        },
+        "disabledFlip": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": false
+        },
+        "reconnected": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": false
+        }
+      },
+      "errors": [],
+      "recording": "page@56d0ba768ab3ac62813763b523a417d1.webm"
+    },
+    {
+      "width": 360,
+      "theme": "dark",
+      "normal": [
+        {
+          "name": "arc",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 0,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 12.402020454406738,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-fold",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-line",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 12.67168140411377,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-rotate",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-spin",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "circle-turn",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "cube",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-dim",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-fold",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "cube-grid",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 19.91965103149414,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-bar",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-circle",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-line",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "dot-pulse",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "double-bounce",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "drop",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "line",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "line-scale",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "pacman",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 23.83893394470215,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "pulse",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "rotate",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 15.751799583435059,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "scale-out",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "solar",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "square",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 12.402138710021973,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "stretch",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "text",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        },
+        {
+          "name": "triple-bounce",
+          "parent": {
+            "left": 24,
+            "right": 336,
+            "width": 312
+          },
+          "ink": {
+            "left": 24,
+            "right": 336
+          },
+          "children": 1
+        }
+      ],
+      "reduced": [
+        {
+          "name": "arc",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-fold",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-rotate",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-spin",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "circle-turn",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-dim",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-fold",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "cube-grid",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-bar",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-circle",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "dot-pulse",
+          "animations": [
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            }
+          ],
+          "rendered": 1
+        },
+        {
+          "name": "double-bounce",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "drop",
+          "animations": [
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            },
+            {
+              "playState": "finished",
+              "duration": 0.01
+            }
+          ],
+          "rendered": 1
+        },
+        {
+          "name": "line",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "line-scale",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "pacman",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "pulse",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "rotate",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "scale-out",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "solar",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "square",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "stretch",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "text",
+          "animations": [],
+          "rendered": 1
+        },
+        {
+          "name": "triple-bounce",
+          "animations": [],
+          "rendered": 1
+        }
+      ],
+      "keyboard": {
+        "focus": true,
+        "label": "Reward revealed",
+        "aria": "true",
+        "nativeDisabled": false,
+        "inert": false,
+        "pixel": 0
+      },
+      "nextFocus": true,
+      "cornerAction": "Claimed",
+      "resetFocus": true,
+      "externalFocus": true,
+      "pointer": {
+        "kind": "CDP native touch",
+        "partial": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": true,
+          "pointer": 3
+        },
+        "disabledFlip": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": false
+        },
+        "reconnected": {
+          "alpha": 9031224,
+          "area": 1428,
+          "active": false
+        }
+      },
+      "errors": [],
+      "recording": "page@d0e2f6ca764ab0e13554109a12539c84.webm"
+    }
+  ],
+  "provenance": "Actual source-registered ran components in disclosed isolated fixtures; not Document acceptance. macOS Chromium. Screen reader software not exercised; native focus, inert, role/status and pixel behavior are measured.",
+  "browser": "151.0.7922.34",
+  "sourceEnd": {
+    "packages/ranui/components/loading/index.ts": "2788d6b1582ae16d7c02d84f7c02aee82ba276b915b692aaee550ba328c27889",
+    "packages/ranui/components/loading/types.ts": "9f6457633ee3f2c4a11b1b14f437c858e61bb5f764531f6f64a1e3c531c66141",
+    "packages/ranui/components/loading/variants/arc/index.less": "3c2118a665ee8e35a87c74878db6ca76ddb6612bf2dc4efe8229d5df05d052d6",
+    "packages/ranui/components/loading/variants/arc/index.ts": "6bf163ffe3ce60ba38d4710b5609eb9088380aa60630542f075df59742cbd188",
+    "packages/ranui/components/loading/variants/circle/index.less": "6b605e8e9ba6b71b3bc90de0238d6d7062c04eedeec5a29ac0e58702c59ca517",
+    "packages/ranui/components/loading/variants/circle/index.ts": "82935e0fa7597215e5c929b2ba46c81cdcc7ed1dd5c990693ca07dc480a22e4a",
+    "packages/ranui/components/loading/variants/circle-fold/index.less": "9ea6616abc55a98570a995005dc555ab3d79674b4ccd1a8190dd76d87bb78aea",
+    "packages/ranui/components/loading/variants/circle-fold/index.ts": "e21f5dd3969b765727101fc18bd8e6e8bd869280d8e5f556445b079432f09128",
+    "packages/ranui/components/loading/variants/circle-line/index.less": "9f227cbd6bcfe5f8f3ce6108b2317ef2dee34b0d5977848bac331b7fc40599ef",
+    "packages/ranui/components/loading/variants/circle-line/index.ts": "80eac8185f43957837a77cc5185ae19dc95ffe724d72cbb1edbd7ce5ca3ec339",
+    "packages/ranui/components/loading/variants/circle-rotate/index.less": "e9cbd47bb0b6d1bcc17b438ca936823cc4c9828e30bae6c6a5cb8a6d4d8894fa",
+    "packages/ranui/components/loading/variants/circle-rotate/index.ts": "f19cb78c19d86578b602c12b816ef589af366b8b1bab77db828c4b90c4a0bb04",
+    "packages/ranui/components/loading/variants/circle-spin/index.less": "030b5ca30970a0c6a9015fdf99ff3817d506167c90a6fd54efe9599f29bae8b5",
+    "packages/ranui/components/loading/variants/circle-spin/index.ts": "1d2293c3a768e523fca05b150efe48e5aa01759719cc3711f67271e101055bb5",
+    "packages/ranui/components/loading/variants/circle-turn/index.less": "f36ec9b1d8b7a61fe609fb3ed64f7cc6c5e4cc11cb87dedd403da4cdb41ed680",
+    "packages/ranui/components/loading/variants/circle-turn/index.ts": "9c6bed00b5b426aae41b8a25a50338858a22468c68b4024bd1543294e3120693",
+    "packages/ranui/components/loading/variants/cube/index.less": "9d9e3f7ec606f93bdc397225e8f54abf842741f517ec8ff984b7ef21f12460ab",
+    "packages/ranui/components/loading/variants/cube/index.ts": "fa328e260277a9124109d7014db13b29b7fa6cb99b4c8efb740d87da0f44541a",
+    "packages/ranui/components/loading/variants/cube-dim/index.less": "0e3528952ce418b99f0d797bb857762e6860f6e715dd4d7dbf5ac9408d9b3ed1",
+    "packages/ranui/components/loading/variants/cube-dim/index.ts": "123000dfdd43a4f9dbd9d6fd35fbafed0e01cbe5c294dd0ac0e8e35dda486368",
+    "packages/ranui/components/loading/variants/cube-fold/index.less": "5249381841b52187716c94444ad044d1205e72e4600bb1ff8af5d36f00916f7e",
+    "packages/ranui/components/loading/variants/cube-fold/index.ts": "2975e64d6092b40cfa0ca928ad54304995fd73077c90d2a117355dea014f0566",
+    "packages/ranui/components/loading/variants/cube-grid/index.less": "93546ae0ff409054dbadfdfd15a93454f9f1329e4d1cc0592fb37b527d186ef7",
+    "packages/ranui/components/loading/variants/cube-grid/index.ts": "759b60810b7a0d24c83153377a2f0533994f47a2296d5d3caf5c74f1c88954b4",
+    "packages/ranui/components/loading/variants/dot/index.less": "0e6edec08aad6024ec9edbe368d43c5e809f87db597fed201982599d84056120",
+    "packages/ranui/components/loading/variants/dot/index.ts": "b80c15564fc0b7c384a8fee2e7c77ad47c59874c05ecb019665441a1c3eecb80",
+    "packages/ranui/components/loading/variants/dot-bar/index.less": "9d5c4f897286131941fac8a94ee8d442284c916eeac1ea291e4a5a9a6c8bafad",
+    "packages/ranui/components/loading/variants/dot-bar/index.ts": "62df1a9c6d5dbf8a788dd765a851af14a82abce85fcd4e842889d68781bdc32c",
+    "packages/ranui/components/loading/variants/dot-circle/index.less": "760fe5ce22c338b127b75c688e5ff10a12a5e5c1d09acadf70f90e20b713ea87",
+    "packages/ranui/components/loading/variants/dot-circle/index.ts": "fb5fa2f7998f3c46e4ce3b818f5a6205305b7c239745cb23e2a15766e77a5dbc",
+    "packages/ranui/components/loading/variants/dot-line/index.less": "478d3a9313f7fbdc0bcd1f054b2e052cc10eba66fc0579db246e2a1b7d0d84ef",
+    "packages/ranui/components/loading/variants/dot-line/index.ts": "77e065c268b31277fa25ac5e82d870989911ac3098601a6f0895e046b5798bb5",
+    "packages/ranui/components/loading/variants/dot-pulse/index.less": "f0b76ebdd9f2a0ce488458cac5d74de2ce4b4e5bc135c7ffddf7950220fc4ccb",
+    "packages/ranui/components/loading/variants/dot-pulse/index.ts": "85d4d78f2bd579859445bdc4cdaa558c70fa063aeceb8dee44edc853036a5f7a",
+    "packages/ranui/components/loading/variants/double-bounce/index.less": "420bed433be2d2b37758ad77aaa2252377e8bbda53f5ed59f25844f5f84b660a",
+    "packages/ranui/components/loading/variants/double-bounce/index.ts": "11c9f8076d55e4c4d06c994bfc3a91b9e7f17cb38039923fcb40fdbc89c1046c",
+    "packages/ranui/components/loading/variants/drop/index.less": "154ab61d31a70c45a48d71b58ae54f9118b56ae8f2700af0c7de1be0d41475e8",
+    "packages/ranui/components/loading/variants/drop/index.ts": "49a4755cc598c4b3af311cedb990333b9f0a50ebb713903651f6ea5008b5c07c",
+    "packages/ranui/components/loading/variants/line/index.less": "73fdf7fa5ec0a80b5ebf65f540e0b5eebe41fb41f536065575c4f55e546ad283",
+    "packages/ranui/components/loading/variants/line/index.ts": "fc4ceecbd947f8b1e8db7dedebdcc29897c0ec1b78c344f0e23bcda9678b63a7",
+    "packages/ranui/components/loading/variants/line-scale/index.less": "74cc073b3c11abb4ccf56f67dc2fbadb1ca4648be4766a915bbe762eae7524a8",
+    "packages/ranui/components/loading/variants/line-scale/index.ts": "450d36c961d9260cdcc8c2e72d23ea99bfd96629c79774781eb4386ee2d30c0b",
+    "packages/ranui/components/loading/variants/pacman/index.less": "df7f7082cd72dd246542c1600ffa1b46e842f31b95a7c3c3456f15c3d0ed18c5",
+    "packages/ranui/components/loading/variants/pacman/index.ts": "f09bd78986546e2517cf5eebb874ef77f77634d09c9c3df181b03b9e985d2616",
+    "packages/ranui/components/loading/variants/pulse/index.less": "4722bed471f688ff2ae98523eec6bd661931653e4cd104f17a05a8f5edb82093",
+    "packages/ranui/components/loading/variants/pulse/index.ts": "fddfc4e2c4201a0e38fc1775bf6acb5bd534ec6dac781193b82beaf0d43a94d5",
+    "packages/ranui/components/loading/variants/rotate/index.less": "559a16384698bcdfcd4005907d51fc902847c284f08e788f6c8409a06a1c5c54",
+    "packages/ranui/components/loading/variants/rotate/index.ts": "e886a5c1773b2cf81833df23ba96e5aba11e3dd44c836366227f43e5159bb6b0",
+    "packages/ranui/components/loading/variants/scale-out/index.less": "cd2d533053ccefd23e3fd3df660532a57c959460e650381c59a6a6b1891bb7cb",
+    "packages/ranui/components/loading/variants/scale-out/index.ts": "7c78e4c2049dbc66eeee37501f048b8444d24fd113bdc5af59344be62d7d34a7",
+    "packages/ranui/components/loading/variants/solar/index.less": "3ab001ffcb2b98476f070f029389e83577253c464d26c04909bd610f6f2e9c30",
+    "packages/ranui/components/loading/variants/solar/index.ts": "cec7c6aff9fcac662120ed3ed7fa5962f40d5be202244b938ad378bbb577f783",
+    "packages/ranui/components/loading/variants/square/index.less": "142cf961c757363bd86ee9ed334c256181921d0cacdbb629e0d3b82a740c90c7",
+    "packages/ranui/components/loading/variants/square/index.ts": "66e1115e001ac2b40ad666af082acf547346a7c3f790ca1b32c8f3578981f46b",
+    "packages/ranui/components/loading/variants/stretch/index.less": "5b3d25570c08222bc8b481e7ee9cb8382a374e550a79e0352ecf7cd068a258c5",
+    "packages/ranui/components/loading/variants/stretch/index.ts": "0b4a63ad96fb0406404d92eb84dfc80190a70b644ccef8ab7cef558854dcd9cd",
+    "packages/ranui/components/loading/variants/text/index.less": "3925b9584023eaa39570ac73d96f7fbbc3a6d1fe76418a05761087f51e02ba4d",
+    "packages/ranui/components/loading/variants/text/index.ts": "105b8eeab3412ed9ea8dc6af9a0be65c6e0456bc32c2d754136c77f70c693174",
+    "packages/ranui/components/loading/variants/triple-bounce/index.less": "2e5efa363a0a57eb018500e8c3460bf702150c617b44f9268388f0bc2424544a",
+    "packages/ranui/components/loading/variants/triple-bounce/index.ts": "e712ce31ea48afd46bee09e71b3cd4ae06d63ccedd336086d2f4b57aba4dd1f6",
+    "packages/ranui/components/scratch/index.less": "22850ccb25dadc0577feda90943ae92f602baa7b11f9fa69435e67fdc73d5ada",
+    "packages/ranui/components/scratch/index.ts": "87921ecf202c65a1189ba065a77121192a3f4a6ab7d1fb1307e68471de75a48e"
+  },
+  "media": [
+    {
+      "file": "all-1280-dark-normal.png",
+      "sha256": "81de526ef401f11b9ac882fee273efa639a37a13d64e8e1f2e5d6b0224d3532c"
+    },
+    {
+      "file": "all-1280-dark-reduced.png",
+      "sha256": "51713abbbcbe51ff99f3712b02f7a7e89cc5e8c118cc3df9f1cc9193281f37b3"
+    },
+    {
+      "file": "all-1280-light-normal.png",
+      "sha256": "545726e0f48994fcdf6a29f5cbea5463893bf7c9254b9bf8aa280128764a86c6"
+    },
+    {
+      "file": "all-1280-light-reduced.png",
+      "sha256": "72dd115171993d0f0ca82d12ccdb2e5d142270cf70aa6de1b096ed7729474b7b"
+    },
+    {
+      "file": "all-360-dark-normal.png",
+      "sha256": "ef93d96abdac01223430b3d132d3035baaa4505e6098ad73adb9f60efd3ed1b2"
+    },
+    {
+      "file": "all-360-dark-reduced.png",
+      "sha256": "7d60605c67cbb962ebeff0681f872f960f835a4f6d6650c6f0ba0eb7778f53d3"
+    },
+    {
+      "file": "all-360-light-normal.png",
+      "sha256": "b4696f840c3baee6eeb85c3a2221d9a4bb31c74544ba1ef94e058dbe874e0890"
+    },
+    {
+      "file": "all-360-light-reduced.png",
+      "sha256": "303adef300951551db4f5e24d52963b53dec9b44799b63699c62e524679e2588"
+    },
+    {
+      "file": "detail-1280-dark-reduced.png",
+      "sha256": "683d1a8474b15d9ff5a189471e010d472d7ee994341db8f70a312eb1ec791a9e"
+    },
+    {
+      "file": "detail-1280-light-reduced.png",
+      "sha256": "3bbce5861288df5808fdfa69b09ba74570d03c17be184a4e4d8721c87fba60b6"
+    },
+    {
+      "file": "detail-360-dark-reduced.png",
+      "sha256": "1b425880b975ea1641ac2cdc2de0d153cd7cd22246177e1ce722c039305e877c"
+    },
+    {
+      "file": "detail-360-light-reduced.png",
+      "sha256": "f08d7e5614f5b8871136dd1110830f00cc906440d860f56b65b175d0248b241f"
+    },
+    {
+      "file": "page@56d0ba768ab3ac62813763b523a417d1.webm",
+      "sha256": "11208122ed22671aad43fb6244aee1132c904fc47ce76e18214bddd787cc32bb"
+    },
+    {
+      "file": "page@cee698b513eab0c04b6d6700033c2e00.webm",
+      "sha256": "8bcdcca78d31c5dafe406afe7490e3b08101eeb52672832c14ad1db0356d7f64"
+    },
+    {
+      "file": "page@d0e2f6ca764ab0e13554109a12539c84.webm",
+      "sha256": "b1dafe212fb192a9bd8f8ca864f68c735ccbc6f458707379e3d53f30fd23e99c"
+    },
+    {
+      "file": "page@e4c13c9ab38fcc0e7bf7222913f8f33f.webm",
+      "sha256": "35945771a6b86ba819f2c6eeb0f1aea375f4ac13f4579c5ba31476ee8cb57792"
+    },
+    {
+      "file": "scratch-focus-1280-dark.png",
+      "sha256": "e5700af1cfc87093ff2befc5cbd327d3235b63a32ee8495cc01f2ebe7974d0f1"
+    },
+    {
+      "file": "scratch-focus-1280-light.png",
+      "sha256": "9003c7bbbcb2e73838fb37073111715b65a0bcdf6fb342887660abd2c4bfd681"
+    },
+    {
+      "file": "scratch-focus-360-dark.png",
+      "sha256": "42e4dbec76e6b68e901927f14ae932d6d5481a2d6e7990b4c6f0ebfc0b37da45"
+    },
+    {
+      "file": "scratch-focus-360-light.png",
+      "sha256": "726bf830b1af895e7717caba390e772415848150a94fa552ba999b51b20a374f"
+    },
+    {
+      "file": "scratch-pointer-1280-dark.png",
+      "sha256": "ebd53e1c68ee8a4067e99d1efd93e370061471406a56bb043de40a1fbaa3e3af"
+    },
+    {
+      "file": "scratch-pointer-1280-light.png",
+      "sha256": "597c28ca0db0932377204582c8fbad84b5aaf86d15549a6abf782eee23939376"
+    },
+    {
+      "file": "scratch-pointer-360-dark.png",
+      "sha256": "9c1c3860702c09ee6264e654472474572cb4dea3b71d16ec6a7265043ca5ed6f"
+    },
+    {
+      "file": "scratch-pointer-360-light.png",
+      "sha256": "64eeeee999683f5645f305b7bf80728d558fe58c9edc6508310d187303e82f56"
+    },
+    {
+      "file": "scratch-reset-1280-dark.png",
+      "sha256": "a8c9dd61f4359f6bd15878af99bcfb940e99b7547c296d7d594adb4b316bd7f0"
+    },
+    {
+      "file": "scratch-reset-1280-light.png",
+      "sha256": "bd387670a50363198a3326d703945ce8cdebe2683f1cc7351ea75bb385e997b4"
+    },
+    {
+      "file": "scratch-reset-360-dark.png",
+      "sha256": "f4558e44634e27c03af1e130c0c97f0c3bca7f870ab5e556d8e55793deb17de7"
+    },
+    {
+      "file": "scratch-reset-360-light.png",
+      "sha256": "eef3cc55ec43e77e1590d770435454aa08f6e947d8040faea08d75d5ce6f26d9"
+    },
+    {
+      "file": "scratch-revealed-1280-dark.png",
+      "sha256": "1e3c2b894845b580a31c8fc8b50b6c44146dd78b0186214c2f7820ba64b1c71d"
+    },
+    {
+      "file": "scratch-revealed-1280-light.png",
+      "sha256": "073cfba8fa3419e7137a0915dc8fe375da1f947237ac20b71330dc8c131db673"
+    },
+    {
+      "file": "scratch-revealed-360-dark.png",
+      "sha256": "3185597302509d0a2961bc1ca3b2adccdd38c6bb0c6539d0b0fbf9c7c7eb1d34"
+    },
+    {
+      "file": "scratch-revealed-360-light.png",
+      "sha256": "9e217c80f7c83085c42e0bcd4cc6884f4b347e39318626081adf57dfd7325010"
+    }
+  ],
+  "additionalReviewArtifacts": [
+    {
+      "file": "accessibility.json",
+      "sha256": "e4c82020c7a54c7e486fb08fa2d97434711a046cedf25c28ea1db221ad5c65bd",
+      "purpose": "Actual Chromium AX tree before/after reveal, same current owner hashes; no screen-reader software claim."
+    }
+  ]
+}

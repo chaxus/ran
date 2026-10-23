@@ -21,6 +21,10 @@ class ScratchTicket extends RanElement {
     activePointerId?: number;
   };
   scratchAward: HTMLDivElement;
+  private revealButton: HTMLButtonElement;
+  private revealStatus: HTMLDivElement;
+  private revealed = false;
+  private coverInitialized = false;
   _shadowDom: ShadowRoot;
   _events = new EventManager();
   // `icon`/`effect`/`iconSize` used to be observed here with nothing reading them —
@@ -28,13 +32,14 @@ class ScratchTicket extends RanElement {
   // elements), not a single named icon, so it belongs in the default slot below
   // rather than a narrow name+size attribute pair. See docs/src/ranui/scratch.
   static get observedAttributes(): string[] {
-    return ['disabled', 'sheet'];
+    return ['disabled', 'sheet', 'reveal-label', 'revealed-label'];
   }
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, scratchCss);
     const scratchTicket = View('canvas')
       .class('ran-scratch-ticket-canvas')
+      .attr('aria-hidden', 'true')
       .style('width', '100%')
       .style('height', '100%')
       .build() as HTMLCanvasElement;
@@ -49,7 +54,16 @@ class ScratchTicket extends RanElement {
       .class('ran-scratch-ticket')
       .children(scratchTicket, scratchAward)
       .build() as HTMLDivElement;
-    this._shadowDom.appendChild(scratchTicketContainer);
+    const revealButton = View('button')
+      .class('ran-scratch-reveal')
+      .part('reveal-button')
+      .attr('type', 'button')
+      .build() as HTMLButtonElement;
+    const revealStatus = Div().class('ran-scratch-status').attr('role', 'status').build() as HTMLDivElement;
+    const scratchRoot = Div().class('ran-scratch').children(revealButton, scratchTicketContainer, revealStatus).build();
+    this.revealButton = revealButton;
+    this.revealStatus = revealStatus;
+    this._shadowDom.appendChild(scratchRoot);
 
     this.scratchTicketContainer = scratchTicketContainer;
     this.scratchAward = scratchAward;
@@ -76,11 +90,50 @@ class ScratchTicket extends RanElement {
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
   }
+  get revealLabel(): string {
+    return getStringAttribute(this, 'reveal-label') || 'Reveal';
+  }
+  set revealLabel(value: string) {
+    setStringAttribute(this, 'reveal-label', value);
+  }
+  get revealedLabel(): string {
+    return getStringAttribute(this, 'revealed-label') || 'Revealed';
+  }
+  set revealedLabel(value: string) {
+    setStringAttribute(this, 'revealed-label', value);
+  }
+  private syncReveal = (): void => {
+    this.revealButton.textContent = this.revealed ? this.revealedLabel : this.revealLabel;
+    this.revealButton.disabled = this.disabled;
+    this.revealButton.setAttribute('aria-disabled', String(this.disabled || this.revealed));
+    this.revealButton.tabIndex = this.revealed ? -1 : 0;
+    this.scratchAward.inert = !this.revealed;
+    this.scratchTicket.style.pointerEvents = this.revealed ? 'none' : '';
+  };
+  private cancelScratch = (): void => {
+    const id = this.state.activePointerId;
+    this.state.isScratching = false;
+    this.state.activePointerId = undefined;
+    if (id !== undefined && this.scratchTicket.hasPointerCapture?.(id)) this.scratchTicket.releasePointerCapture(id);
+  };
+  private reveal = (): void => {
+    if (this.disabled || this.revealed) return;
+    const ctx = this.scratchTicket.getContext('2d');
+    if (!ctx) return;
+    this.cancelScratch();
+    ctx.clearRect(0, 0, this.scratchTicket.width, this.scratchTicket.height);
+    this.state.scratchedArea = 0;
+    this.revealed = true;
+    this.syncReveal();
+    this.revealStatus.textContent = this.revealedLabel;
+  };
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   syncDisabled = (): void => {
     this.setAttribute('aria-disabled', this.disabled ? 'true' : 'false');
+    if (this.disabled) this.cancelScratch();
+    this.syncReveal();
   };
   /**
    * Radius (canvas-space px) of the "coin" doing the scratching — scaled to the
@@ -137,7 +190,7 @@ class ScratchTicket extends RanElement {
    *   ends (`pointerup`/`pointercancel`/`lostpointercapture`).
    */
   onScratchPointerDown = (e: PointerEvent): void => {
-    if (this.disabled) return;
+    if (this.disabled || this.revealed) return;
     if (this.state.isScratching) return; // a second touch/pointer mid-stroke — ignore it
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     // Stops the page from scrolling under a touch drag on the scratch surface, and
@@ -170,9 +223,11 @@ class ScratchTicket extends RanElement {
     const ctx = this.scratchTicket.getContext('2d');
     if (!ctx) return;
     if (this.state.scratchedArea > width * height * AUTO_REVEAL_THRESHOLD) {
-      this.state.scratchedArea = 0;
-      ctx.clearRect(0, 0, width, height);
+      this.reveal();
     }
+  };
+  onScratchPointerCancel = (e: PointerEvent): void => {
+    if (e.pointerId === this.state.activePointerId) this.cancelScratch();
   };
   drawScratchTicket = (): void => {
     const ctx = this.scratchTicket.getContext('2d');
@@ -182,6 +237,7 @@ class ScratchTicket extends RanElement {
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = coverColor || '#6b6b6b';
     ctx.fillRect(0, 0, width, height);
+    this.coverInitialized = true;
   };
   /**
    * Matches the canvas's internal drawing-buffer resolution to its actual rendered
@@ -198,10 +254,22 @@ class ScratchTicket extends RanElement {
     const dpr = window.devicePixelRatio || 1;
     const width = Math.max(1, Math.round(rect.width * dpr));
     const height = Math.max(1, Math.round(rect.height * dpr));
-    if (this.scratchTicket.width === width && this.scratchTicket.height === height) return;
+    if (this.scratchTicket.width === width && this.scratchTicket.height === height) {
+      if (!this.coverInitialized) this.drawScratchTicket();
+      return;
+    }
+    // A real resize resets the cover. If its reward currently owns focus,
+    // return focus to the now-relevant action when making the slot inert.
+    const active = (this.getRootNode() as Document | ShadowRoot).activeElement;
+    const restoreFocus = this.revealed && !!active && this.contains(active) && !this.disabled;
     this.scratchTicket.width = width;
     this.scratchTicket.height = height;
+    this.cancelScratch();
     this.state.scratchedArea = 0;
+    this.revealed = false;
+    this.revealStatus.textContent = '';
+    this.syncReveal();
+    if (restoreFocus) this.revealButton.focus({ preventScroll: true });
     this.drawScratchTicket();
   };
   private onWindowResize = (): void => {
@@ -211,26 +279,29 @@ class ScratchTicket extends RanElement {
     this.handlerExternalCss();
     this.syncDisabled();
     this._events
+      .on(this.revealButton, 'click', this.reveal)
+
       .on(this.scratchTicket, 'pointerdown', this.onScratchPointerDown as EventListener, { passive: false })
       .on(this.scratchTicket, 'pointermove', this.onScratchPointerMove as EventListener)
       .on(this.scratchTicket, 'pointerup', this.onScratchPointerUp as EventListener)
-      .on(this.scratchTicket, 'pointercancel', this.onScratchPointerUp as EventListener)
+      .on(this.scratchTicket, 'pointercancel', this.onScratchPointerCancel as EventListener)
       // A device/OS can reclaim pointer capture mid-gesture without ever firing
       // `pointerup` (seen on some Android WebViews when a system gesture — e.g. the
       // back-swipe edge — interrupts it). Without this, `isScratching` sticks `true`
       // forever and the *next* unrelated pointer motion silently keeps scratching.
-      .on(this.scratchTicket, 'lostpointercapture', this.onScratchPointerUp as EventListener)
+      .on(this.scratchTicket, 'lostpointercapture', this.onScratchPointerCancel as EventListener)
       .on(window, 'resize', this.onWindowResize);
     this.syncCanvasResolution();
   }
   disconnectedCallback(): void {
+    this.cancelScratch();
     this._events.abort();
   }
   attributeChangedCallback(name: string, old: string, next: string): void {
     if (old === next) return;
     if (name === 'disabled') this.syncDisabled();
     if (name === 'sheet') this.handlerExternalCss();
-    this.drawScratchTicket();
+    if (name === 'reveal-label' || name === 'revealed-label') this.syncReveal();
   }
 }
 

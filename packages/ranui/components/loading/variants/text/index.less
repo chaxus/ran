@@ -1,40 +1,19 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .text {
     text-align: var(--loading-text-text-align, center);
     text-transform: var(--loading-text-text-transform, uppercase);
-    font-family: var(--loading-text-font-family, 'Nunito', sans-serif);
-    font-size: var(--loading-text-font-size, 4em);
-    color: var(--loading-text-color, transparent);
-    letter-spacing: var(--loading-text-letter-spacing, 0.4em);
+    font-family: var(--loading-text-font-family, var(--ran-font-family, sans-serif));
+    font-size: var(--loading-text-font-size, var(--ran-text-label-1, 14px));
+    color: var(--loading-text-color, var(--ran-color-text, #171717));
+    letter-spacing: var(--loading-text-letter-spacing, 0.04em);
     @keyframes letters {
       to {
-        text-shadow: var(
-          --loading-text-keyframes-to-text-shadow,
-          0 0 2px rgba(204, 208, 212, 0.2),
-          0 0 3px rgba(0, 0, 0, 0.02),
-          0 0 0 rgba(0, 0, 0, 0),
-          0 0 0 rgba(255, 255, 255, 0),
-          0 0 0 rgba(0, 0, 0, 0),
-          0 0 0 rgba(255, 255, 255, 0),
-          0 0 0 rgba(255, 255, 255, 0)
-        );
+        text-shadow: var(--loading-text-keyframes-to-text-shadow, none);
+        opacity: 0.65;
       }
     }
     &-item {
-      text-shadow: var(
-        --loading-text-item-text-shadow,
-        0 0 2px rgba(22, 22, 22, 0.9),
-        0 15px 25px rgba(0, 0, 0, 0.3),
-        0 -2px 3px rgba(0, 0, 0, 0.1),
-        0 -5px 10px rgba(22, 22, 22, 0.5),
-        0 5px 10px rgba(0, 0, 0, 0.3),
-        0 3px 4px rgba(22, 22, 22, 0.2),
-        0 0 20px rgba(22, 22, 22, 0.45)
-      );
+      text-shadow: var(--loading-text-item-text-shadow, none);
       animation: var(--loading-text-item-animation, letters 0.85s ease-in-out infinite alternate);
       animation-play-state: var(--loading-text-item-animation-play-state, running);
       animation-delay: var(--loading-text-item-animation-delay, 0);
@@ -57,5 +36,11 @@
         animation-delay: var(--loading-text-item-nth-child-7-animation-delay, 0.9s);
       }
     }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ran-loading .text-item {
+    animation: none;
+    opacity: 1;
   }
 }

@@ -3,7 +3,10 @@
 @gray-1: var(--ran-color-text, #333);
 
 .ran-loading {
+  container-type: inline-size;
   .cube-dim {
+    font-size: var(--loading-cube-dim-font-size, min(1em, 4.5cqi));
+    margin-inline: var(--loading-cube-dim-margin-inline, auto);
     height: var(--loading-cube-dim-height, 9em);
     width: var(--loading-cube-dim-width, 9em);
     padding: var(--loading-cube-dim-padding, 3em);
