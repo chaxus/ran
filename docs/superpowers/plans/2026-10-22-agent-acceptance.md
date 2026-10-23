@@ -30,4 +30,4 @@
 
 ## Observed follow-ups
 
-The first candidate failed independent review for redundant parent context (02) and stale delayed Copy feedback after a stream update (06), despite mechanical passes. Preserve both failures; scoped owner clarifications and two fresh original-input sessions separately resolve them. The frozen v1 rubric remains unchanged. A supplemental real-browser delayed-success/rejection probe has its own negative/restored control. See [the live evidence record](../../../plugins/ranui/evals/results/2026-10-22/README.md) for scope and limits.
+The first candidate failed independent review for redundant parent context (02) and stale delayed Copy feedback after a stream update (06), despite mechanical passes. Preserve both failures; scoped owner clarifications and two fresh original-input sessions separately resolve them. The frozen v1 rubric remains unchanged. A supplemental real-browser delayed-success/rejection probe has its own negative/restored control. See [the live evidence record](../../../plugins/ran/evals/results/2026-10-22/README.md) for scope and limits.

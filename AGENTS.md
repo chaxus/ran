@@ -7,11 +7,11 @@ For product positioning and website ownership, start with [PRODUCT.md](PRODUCT.m
 
 | Work                                                              | Read first                                                                                                                                          |
 | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Visual hierarchy, composition, tokens and craft                   | [ranui design standard](packages/ranui/docs/DESIGN.md)                                                                                              |
-| Browser proof, evidence freshness and acceptance status           | [acceptance contract](packages/ranui/docs/ACCEPTANCE.md)                                                                                            |
-| Input, focus, drafts, feedback and recovery                       | [interaction standard](packages/ranui/docs/INTERACTION.md)                                                                                          |
-| Optional batch/queue, settings, account/data or revision workflow | [workflow patterns](packages/ranui/docs/WORKFLOW_PATTERNS.md), only when relevant                                                                   |
-| Unsure which reference owns a decision                            | Short [interface index](packages/ranui/docs/INTERFACE_GUIDE.md)                                                                                     |
+| Visual hierarchy, composition, tokens and craft                   | [portable design methods](design/DESIGN.md), then [ranui implementation adapter](packages/ranui/docs/adapters/DESIGN.md)                            |
+| Browser proof, evidence freshness and acceptance status           | [acceptance contract](design/ACCEPTANCE.md)                                                                                                         |
+| Input, focus, drafts, feedback and recovery                       | [interaction standard](design/INTERACTION.md)                                                                                                       |
+| Optional batch/queue, settings, account/data or revision workflow | [workflow patterns](design/WORKFLOW_PATTERNS.md), only when relevant                                                                                |
+| Unsure which reference owns a decision                            | Short [interface index](design/INTERFACE_GUIDE.md)                                                                                                  |
 | Component state, events, lifecycle or SSR                         | [engineering standard](packages/ranui/docs/CODING.md), then [implementation reference](packages/ranui/CLAUDE.md)                                    |
 | Exact attributes, events, slots, parts or theme variables         | Generated [component API](packages/ranui/docs/COMPONENTS.md) and [public tokens](packages/ranui/docs/style-tokens-public.md); verify against source |
 | Public documentation or localized prose                           | [documentation site reference](packages/docs/CLAUDE.md)                                                                                             |
@@ -23,7 +23,7 @@ The index routes decisions; workflow recipes describe host responsibilities, not
 
 Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
 Keep copy that adds a decision, constraint or consequence; preserve accessible names, field labels,
-units, errors and risk disclosures. [DESIGN's wording rules](packages/ranui/docs/DESIGN.md#words-are-part-of-the-interface)
+units, errors and risk disclosures. [DESIGN's wording rules](design/DESIGN.md#words-are-part-of-the-interface)
 own this principle; do not remove useful guidance merely to make a screenshot quieter.
 
 For visual changes, use the [UI task lookup](packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup)
@@ -44,3 +44,8 @@ The local scope below does not weaken the complete repository CI gates:
 
 Public ranui guidance has English and Chinese entry points under `packages/docs/src/ranui/`
 and `packages/docs/cn/src/ranui/`. Link to canonical owners instead of duplicating long rules.
+
+Shared methods are edited in `design/`; ranui-specific guidance in `packages/ranui/docs/adapters/`.
+Run `pnpm sync:design` and `pnpm sync:agent-plugin` after changing them. Generated npm guides
+and bundled plugin references are checked distributions, not additional rule owners.
+The unified `plugins/ran` entry has three skills; read only the one relevant to the task.

@@ -43,3 +43,6 @@ packages/ranui/docs/style-tokens-public.md
 # The next-generation docs build's output, written alongside VitePress's during the
 # migration so the two can be compared. Generated, never edited.
 packages/docs/dist
+
+# Agent reference bytes are generated from formatted canonical design sources and hash-bound.
+plugins/ran/skills/design/references/

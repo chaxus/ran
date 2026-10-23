@@ -6,7 +6,8 @@ on:
     paths:
       - "packages/docs/**"
       - "packages/ranui/**"
-      - "plugins/ranui/**"
+      - "plugins/ran/**"
+      - "design/**"
       - ".agents/plugins/**"
       - "packages/ranuts/**"
       - "packages/ranview/**"
@@ -20,7 +21,8 @@ on:
     paths:
       - "packages/docs/**"
       - "packages/ranui/**"
-      - "plugins/ranui/**"
+      - "plugins/ran/**"
+      - "design/**"
       - ".agents/plugins/**"
       - "packages/ranuts/**"
       - "packages/ranview/**"

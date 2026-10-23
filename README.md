@@ -6,7 +6,7 @@
 </p>
 
 <h1 align="center">ran</h1>
-<p align="center">UI components and TypeScript tools for web applications.</p>
+<p align="center">Design methods, UI components and TypeScript tools for web products.</p>
 <p align="center"><a href="https://ran.chaxus.com/">Documentation</a> · <a href="https://github.com/chaxus/ran/actions/workflows/ci.yml">CI</a></p>
 <p align="center"><b>English</b> · <a href="./README.zh-CN.md">中文</a> · <a href="./README.ja.md">日本語</a> · <a href="./README.es.md">Español</a> · <a href="./README.pt.md">Português</a> · <a href="./README.ko.md">한국어</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.fa.md">فارسی</a></p>
 
@@ -49,31 +49,37 @@ Components use custom elements and standard browser events, so no React or Vue r
 
 ## Use with an agent
 
-The [ranui skill](./plugins/ranui/skills/ranui/SKILL.md) guides UI implementation, visual
-review and browser acceptance. It reads the host's installed ranui references on demand;
-it does not install the library or add tools, hooks or external services.
+The unified **ran** plugin contains [design](./plugins/ran/skills/design/SKILL.md),
+[ranui](./plugins/ran/skills/ranui/SKILL.md) and [ranuts](./plugins/ran/skills/ranuts/SKILL.md)
+skills. Design guidance works with the host's existing stack, including projects without ranui.
+Library skills read the host's installed package version and public contracts. The plugin bundles
+its design references; it needs no MCP server, account or hook.
 
-**Claude Code plugin** — add this repository's marketplace, then install ranui:
+For this checkout, register the local marketplace with `codex plugin marketplace add .`
+or `claude plugin marketplace add .`, then install `ran@ran`. The remote instructions below
+apply once the unified plugin is available on the repository's default branch.
+
+**Claude Code plugin** — add this repository's marketplace, then install ran:
 
 ```sh
 claude plugin marketplace add chaxus/ran
-claude plugin install ranui@ran
+claude plugin install ran@ran
 ```
 
-Invoke `/ranui:ranui` in a new session. The same marketplace also offers `ranuts` for utility work.
+In a new session, use `/ran:design`, `/ran:ranui` or `/ran:ranuts` for the relevant task.
 
 **Codex plugin** — register the repository marketplace and install the same skill:
 
 ```sh
 codex plugin marketplace add chaxus/ran
-codex plugin add ranui@ran
+codex plugin add ran@ran
 ```
 
-Start a new task and invoke `$ranui`. For a local checkout, use `codex plugin marketplace add .`
-from the repository root. The portable [plugin manifest](./plugins/ranui/plugin.json) and
+Start a new task and invoke `$design`, `$ranui` or `$ranuts`. For a local checkout, use `codex plugin marketplace add .`
+from the repository root. The portable [plugin manifest](./plugins/ran/plugin.json) and
 [Codex marketplace](./.agents/plugins/marketplace.json) follow the
 [official packaging format](https://developers.openai.com/plugins/build/plugins).
-Both installation routes load the same skill body; no MCP server, account or hook is needed.
+Both installation routes load the same three skill bodies and bundled design references.
 
 Example task: “Use ranui to polish this settings pane: keep related text together, align
 control labels, and verify actual screenshots in light/dark at narrow/wide widths.”
@@ -82,7 +88,7 @@ The [UI task lookup](./packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup) ro
 [public API](./packages/ranui/docs/COMPONENTS.md), or [evidence and decisions](./packages/ranui/docs/ACCEPTANCE.md).
 The plugin starts with a short task contract, preserves the host's product decisions and requires
 actual rendered evidence for UI claims. Automated checks, agent inspection and human acceptance
-remain distinct. [Six opt-in live scenarios](./plugins/ranui/evals/README.md) test the guidance's
+remain distinct. [Six opt-in live scenarios](./plugins/ran/evals/README.md) test the guidance's
 behavior separately from its token/API checks. Source contributors start with [AGENTS.md](./AGENTS.md).
 
 ## Work on the repository

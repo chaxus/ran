@@ -20,6 +20,6 @@
     "packages/ranuts/bin/copy-bundled-notices.ts",
     "packages/ranview/bin/verify-static-build.ts",
     "packages/ranui/test/visual/setup.ts",
-    "plugins/ranui/evals/*.ts"
+    "plugins/ran/evals/*.ts"
   ]
 }

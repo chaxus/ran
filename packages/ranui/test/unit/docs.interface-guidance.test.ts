@@ -80,8 +80,8 @@ describe('executable interface guidance', () => {
   });
 
   it('keeps the authoritative spacing relationship table on the real scale', () => {
-    const table = read('docs/DESIGN.md')
-      .split('### Spacing carries meaning')[1]
+    const table = read('docs/adapters/DESIGN.md')
+      .split('### ranui spacing relationships')[1]
       ?.split('**Inside before outside:**')[0];
     expect(table, 'the spacing relationship table must remain discoverable').toBeDefined();
     expect(references(table!).length).toBeGreaterThanOrEqual(6);
@@ -125,7 +125,7 @@ describe('executable interface guidance', () => {
     ).toEqual(['ranui/ssr-registry']);
     expect(isPublicImport('ranui/ssr-registry')).toBe(false);
     expect(isPublicImport('ranui/ssr')).toBe(true);
-    const imports = exampleImports(read('../../plugins/ranui/skills/ranui/SKILL.md'));
+    const imports = exampleImports(read('../../plugins/ran/skills/ranui/SKILL.md'));
     expect(imports).toContain('ranui/button');
     expect(imports).toContain('ranui/builder');
     expect(imports.filter((specifier) => !isPublicImport(specifier))).toEqual([]);
@@ -157,8 +157,13 @@ describe('executable interface guidance', () => {
     );
     expect(omitted).toEqual([]);
     expect(files.has('CLAUDE.md')).toBe(true);
-    const plugin = read('../../plugins/ranui/skills/ranui/SKILL.md');
-    for (const [, target] of plugin.matchAll(/`node_modules\/ranui\/([^`]+)`/g)) {
+    const plugin = read('../../plugins/ran/skills/ranui/SKILL.md');
+    const targets = new Set([...plugin.matchAll(/`((?:docs\/[^`]+\.md|CLAUDE\.md))`/g)].map((match) => match[1]));
+    expect(
+      targets.size,
+      'the installed reference table must be exercised, not silently skipped',
+    ).toBeGreaterThanOrEqual(4);
+    for (const target of targets) {
       expect(files.has(target), `installed plugin routes to missing ${target}`).toBe(true);
     }
   }, 35_000);

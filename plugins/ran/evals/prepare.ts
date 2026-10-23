@@ -7,14 +7,25 @@ import path from 'node:path';
 import { scenarios, codePayload, streamPayload } from './scenarios.ts';
 export const repo = path.resolve(fileURLToPath(new URL('../../../', import.meta.url)));
 import { hash, treeHash } from './hash.ts';
-const guidanceFiles = [
+const guidancePaths = [
   'AGENTS.md',
-  'plugins/ranui/skills/ranui/SKILL.md',
-  ...readdirSync(path.join(repo, 'packages/ranui/docs'))
-    .filter((x) => x.endsWith('.md'))
-    .map((x) => `packages/ranui/docs/${x}`),
+  'design',
+  'plugins/ran/skills',
+  'plugins/ranui/skills',
+  'packages/ranui/docs',
   'packages/ranui/CLAUDE.md',
 ];
+function workingGuidance(folder: string): string[] {
+  if (!existsSync(path.join(repo, folder))) return [];
+  if (folder.endsWith('.md')) return [folder];
+  return readdirSync(path.join(repo, folder), { withFileTypes: true }).flatMap((entry) =>
+    entry.isDirectory()
+      ? workingGuidance(`${folder}/${entry.name}`)
+      : entry.name.endsWith('.md') || entry.name === 'manifest.json'
+        ? [`${folder}/${entry.name}`]
+        : [],
+  );
+}
 export function prepare({
   out,
   label,
@@ -31,8 +42,8 @@ export function prepare({
     });
   const available =
     guidanceRef === 'working-tree'
-      ? guidanceFiles
-      : execFileSync('git', ['ls-tree', '-r', '--name-only', guidanceRef, '--', ...guidanceFiles], {
+      ? guidancePaths.flatMap(workingGuidance)
+      : execFileSync('git', ['ls-tree', '-r', '--name-only', guidanceRef, '--', ...guidancePaths], {
           cwd: repo,
           encoding: 'utf8',
         })

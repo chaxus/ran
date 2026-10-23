@@ -4,23 +4,15 @@
     "name": "chaxus",
     "url": "https://github.com/chaxus/ran"
   },
-  "description": "Skills for the ran monorepo libraries — ranui (web components) and ranuts (utilities) — so AI can read and use them without spelunking the source. Install whichever you use.",
+  "description": "Product design methods and version-aware ranui and ranuts skills in one plugin.",
   "metadata": {
     "pluginRoot": "./plugins"
   },
   "plugins": [
     {
-      "name": "ranui",
-      "source": "./plugins/ranui",
-      "description": "Build, review and polish ranui UI: task-to-rule lookup, public contracts and browser acceptance.",
-      "author": {
-        "name": "chaxus"
-      }
-    },
-    {
-      "name": "ranuts",
-      "source": "./plugins/ranuts",
-      "description": "ranuts utility library: import map (utils/node/visual/vnode), ranuts/utils inventory, conventions.",
+      "name": "ran",
+      "source": "./plugins/ran",
+      "description": "Product design methods and version-aware ranui and ranuts skills in one plugin.",
       "author": {
         "name": "chaxus"
       }

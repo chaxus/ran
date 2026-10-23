@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "ranui",
+      "name": "ran",
       "source": {
         "source": "local",
-        "path": "./plugins/ranui"
+        "path": "./plugins/ran"
       },
       "policy": {
         "installation": "AVAILABLE"
