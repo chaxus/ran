@@ -5,8 +5,8 @@ This source-only scaffold exercises six real host surfaces. It is not shipped in
 Prepare baseline and candidate in separate directories outside the repository:
 
 ```sh
-node plugins/ranui/evals/prepare.mjs --out /absolute/outside/repository --label baseline --guidance-ref 7544bce
-node plugins/ranui/evals/prepare.mjs --out /absolute/outside/repository --label candidate --guidance-ref working-tree
+node plugins/ranui/evals/prepare.ts --out /absolute/outside/repository --label baseline --guidance-ref 7544bce
+node plugins/ranui/evals/prepare.ts --out /absolute/outside/repository --label candidate --guidance-ref working-tree
 ```
 
 Each label contains immutable guidance files, a manifest, and six scenario directories. Each scenario has `TASK.md`, `run-tools.md`, `runtime.js`, and editable `surface/`. Only guidance varies between a pair. Retain the exact fixture/task/tool/rubric hashes and identical model/settings. Use a fresh agent session for each scenario and condition, without previous solution, assessor, or other run context. Retain agent transcripts separately; this runner does not claim to invoke a model.
@@ -18,9 +18,9 @@ The task asks for source work and evidence, without the oracle's threshold or a 
 Start or assess one scenario:
 
 ```sh
-node plugins/ranui/evals/serve.mjs /absolute/run/baseline/01-text
-node plugins/ranui/evals/assess.mjs /absolute/run/baseline/01-text
-node --test plugins/ranui/evals/prepare.test.mjs plugins/ranui/evals/controls.test.mjs
+node plugins/ranui/evals/serve.ts /absolute/run/baseline/01-text
+node plugins/ranui/evals/assess.ts /absolute/run/baseline/01-text
+node --test plugins/ranui/evals/prepare.test.ts plugins/ranui/evals/controls.test.ts
 ```
 
 The assessor writes `assessment.json` and `evidence/assessor.png`. Its mechanical checks measure actual visible text `Range` positions, contextual return commands and real pointer/keyboard navigation, every translated glyph against viewport/ancestor clipping, computed decorative surfaces, current runtime/media binding, actual clipboard reads, native selection, horizontal scrolling, and streamed updates. The six negative controls run seeded defects then independent source/CSS repairs. Freshness also rechecks after a real additional runtime mutation and after media corruption.
@@ -37,6 +37,6 @@ A single paired sample is evidence about these tasks, not a statistical reliabil
 
 ## Supplemental concurrency observation
 
-`node plugins/ranui/evals/feedback.mjs /absolute/run/candidate/06-code` delays a real clipboard write, updates the source, then resolves or rejects the older operation. It records the requested snapshot, current content identity, actual clipboard equality, visible status and captures. An independent reviewer decides whether feedback truthfully identifies its snapshot; no required prose is scored. `feedback.test.mjs` proves this probe exposes both stale success and stale failure and distinguishes an independently guarded control. This additional interleaving does not rewrite the original frozen rubric or retrospectively turn an earlier run into a pass.
+`node plugins/ranui/evals/feedback.ts /absolute/run/candidate/06-code` delays a real clipboard write, updates the source, then resolves or rejects the older operation. It records the requested snapshot, current content identity, actual clipboard equality, visible status and captures. An independent reviewer decides whether feedback truthfully identifies its snapshot; no required prose is scored. `feedback.test.ts` proves this probe exposes both stale success and stale failure and distinguishes an independently guarded control. This additional interleaving does not rewrite the original frozen rubric or retrospectively turn an earlier run into a pass.
 
 The [2026-10-22 live record](./results/2026-10-22/README.md) retains actual initial failures, scoped fresh refinements, unchanged screenshots, source patches and continuous recordings. It is evidence of these tasks, not a guarantee that a model will follow the guidance.

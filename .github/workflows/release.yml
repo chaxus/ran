@@ -67,7 +67,8 @@ jobs:
           pnpm verify:links
           pnpm -F docs check:langs
           pnpm verify:design
-          node bin/run-checks.mjs tsc
+          pnpm typecheck:tooling
+          node bin/run-checks.ts tsc
 
       - name: Test libraries and applications
         run: pnpm test
@@ -119,7 +120,7 @@ jobs:
           path: .release/
 
       - name: Publish verified tarballs using npm trusted publishing
-        run: node bin/release.mjs publish --tag "$RELEASE_TAG" --confirm
+        run: node bin/release.ts publish --tag "$RELEASE_TAG" --confirm
 
       - name: Preserve partial or complete publication results
         if: always()

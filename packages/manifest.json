@@ -1,5 +1,5 @@
 {
-  "$comment": "Every directory under packages/ is declared here, with the checks it runs in CI. This file is executable, not descriptive: bin/run-checks.mjs runs a check across the packages that declare it, so a package listed here as checked really is checked, and one that is not says why. bin/verify-packages.mjs keeps it honest against what is on disk. Order is the order checks run in.",
+  "$comment": "Every directory under packages/ is declared here, with the checks it runs in CI. This file is executable, not descriptive: bin/run-checks.ts runs a check across the packages that declare it, so a package listed here as checked really is checked, and one that is not says why. bin/verify-packages.ts keeps it honest against what is on disk. Order is the order checks run in.",
   "packages": {
     "ranuts": {
       "status": "product",

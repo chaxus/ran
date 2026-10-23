@@ -128,7 +128,7 @@ jobs:
       # The launcher installs/builds the three required workspaces inside the same
       # digest-pinned renderer used for local baseline updates. Missing PNGs fail.
       - name: Compare reviewed screenshot baselines
-        run: node packages/ranui/bin/visual.mjs check
+        run: node packages/ranui/bin/visual.ts check
       - name: Upload visual differences and environment
         if: always()
         uses: actions/upload-artifact@v7

@@ -18,18 +18,19 @@
     "format": "prettier --write --cache .",
     "cpd": "jscpd ./packages",
     "verify:docs": "pnpm -F ranui doc:api:check && pnpm -F ranui doc:style:check && pnpm -F ranui doc:changelog:check && pnpm -F ranuts doc:api:check && pnpm -F docs check:langs",
-    "verify:design": "node bin/run-checks.mjs verify:design",
-    "verify:packages": "node bin/verify-packages.mjs",
-    "verify:consumers": "pnpm -F ranuts verify:package && node bin/verify-package-consumers.mjs",
-    "verify:links": "node bin/verify-md-links.mjs",
+    "verify:design": "node bin/run-checks.ts verify:design",
+    "verify:packages": "node bin/verify-packages.ts",
+    "verify:consumers": "pnpm -F ranuts verify:package && node bin/verify-package-consumers.ts",
+    "verify:links": "node bin/verify-md-links.ts",
     "publint": "pnpm exec publint packages/ranui && pnpm exec publint packages/ranuts && pnpm exec publint packages/ranview",
-    "verify:agent-evals": "node --test plugins/ranui/evals/*.test.mjs",
-    "verify:scripts": "node --test bin/test/*.test.mjs",
-    "release:check": "node bin/release.mjs check",
-    "release:prepare": "node bin/release.mjs prepare",
-    "release:dry-run": "node bin/release.mjs dry-run",
-    "release:publish": "node bin/release.mjs publish",
-    "verify:release": "node bin/verify-release-install.mjs"
+    "verify:agent-evals": "node --test --test-concurrency=1 plugins/ranui/evals/*.test.ts",
+    "verify:scripts": "node --test bin/test/*.test.ts",
+    "release:check": "node bin/release.ts check",
+    "release:prepare": "node bin/release.ts prepare",
+    "release:dry-run": "node bin/release.ts dry-run",
+    "release:publish": "node bin/release.ts publish",
+    "verify:release": "node bin/verify-release-install.ts",
+    "typecheck:tooling": "tsc --project tsconfig.tooling.json"
   },
   "homepage": "https://ran.chaxus.com/",
   "keywords": [],
@@ -39,7 +40,11 @@
     "jscpd": "5.0.14",
     "oxlint": "1.77.0",
     "prettier": "3.9.6",
-    "publint": "0.3.24"
+    "publint": "0.3.24",
+    "typescript": "catalog:",
+    "@types/node": "catalog:",
+    "@playwright/test": "1.62.1",
+    "vite": "catalog:"
   },
   "packageManager": "pnpm@11.6.0"
 }

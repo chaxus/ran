@@ -20,7 +20,7 @@
   "author": "chaxus",
   "license": "MIT",
   "scripts": {
-    "build": "vite build && tsc -p tsconfig.build.json && node ../../bin/prepare-declarations.mjs dist . && node bin/verify-static-build.mjs",
+    "build": "vite build && tsc -p tsconfig.build.json && node ../../bin/prepare-declarations.ts dist . && node bin/verify-static-build.ts",
     "tsc": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

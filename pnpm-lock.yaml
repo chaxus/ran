@@ -46,6 +46,12 @@ importers:
 
   .:
     devDependencies:
+      '@playwright/test':
+        specifier: 1.62.1
+        version: 1.62.1
+      '@types/node':
+        specifier: 'catalog:'
+        version: 26.1.2
       jscpd:
         specifier: 5.0.14
         version: 5.0.14
@@ -58,6 +64,12 @@ importers:
       publint:
         specifier: 0.3.24
         version: 0.3.24
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+      vite:
+        specifier: 'catalog:'
+        version: 8.2.4(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10)
 
   packages/docs:
     dependencies:
