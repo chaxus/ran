@@ -71,7 +71,9 @@ function uniqSorted(values: string[]): string[] {
  */
 function extractAttributes(src: string): string[] {
   const tokens = (
-    src.match(/\/\/[^\n]*|\/\*[\s\S]*?\*\/|'(?:\\[\s\S]|[^'\\])*'|"(?:\\[\s\S]|[^"\\])*"|`(?:\\[\s\S]|[^`\\])*`|[A-Za-z_$][\w$]*|[^\s]/g) ?? []
+    src.match(
+      /\/\/[^\n]*|\/\*[\s\S]*?\*\/|'(?:\\[\s\S]|[^'\\])*'|"(?:\\[\s\S]|[^"\\])*"|`(?:\\[\s\S]|[^`\\])*`|[A-Za-z_$][\w$]*|[^\s]/g,
+    ) ?? []
   ).filter((token) => !token.startsWith('//') && !token.startsWith('/*'));
   const arrayAt = (start: number): { values: string[]; end: number } | undefined => {
     if (tokens[start] !== '[') return;

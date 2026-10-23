@@ -40,7 +40,7 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // el setter de la propiedad codifi
 ## Controles
 
 Cada control se activa **explícitamente** con un atributo booleano; un `<r-mermaid>` a secas es un
-diagrama estático y limpio. La barra aparece al pasar el ratón (arriba a la derecha).
+diagrama estático y limpio. Los controles activados permanecen visibles sobre el diagrama.
 
 <ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
@@ -88,7 +88,7 @@ Todos los eventos burbujean y cruzan el límite del shadow (`composed`).
 | --------- | -------------------------------------------- |
 | `mermaid` | El envoltorio exterior.                      |
 | `diagram` | El contenedor del diagrama renderizado.      |
-| `toolbar` | La barra de controles que aparece al pasar.  |
+| `toolbar` | La fila de acciones visible.                 |
 | `button`  | Cada botón de icono de la barra.             |
 | `error`   | El cuadro de error (cuando falla el render). |
 
@@ -115,3 +115,7 @@ Sobrescríbelas en el elemento (cada una recurre a un token semántico y luego a
 - **Exportar a PNG**: los diagramas con etiquetas HTML (`htmlLabels` de mermaid) se dibujan con
   `<foreignObject>`, lo que puede contaminar el canvas y hacer fallar la exportación a PNG; en ese
   caso se despacha un evento `error`. Exportar SVG y el origen siempre funciona.
+
+### Copiar y pantallas estrechas
+
+Los controles activados permanecen visibles en una fila discreta sobre el contenido: objetivos de 32px con puntero preciso, 44px con entrada táctil y una separación de 8px. Sin controles no se reserva espacio. Copiar conserva el foco e impide escrituras duplicadas mientras están pendientes. Los errores o la falta de acceso al portapapeles se muestran localmente en `::part(copy-status)` (`role="status"`), traducible con `label-copy-error`; el reintento usa el mismo botón. `copied` solo se emite tras copiar el contenido actual. Cambiar la fuente o el destino de copia invalida las respuestas anteriores. Al cambiar la fuente, el botón conserva el foco y permite copiar la nueva fuente de inmediato.

@@ -86,3 +86,9 @@ La lista completa está en [tokens de estilo](/es/src/ranui/style-tokens#math); 
 - **Escapa las barras invertidas en JavaScript**: al asignar `latex` desde una cadena JS, recuerda que `\` debe escaparse (por ejemplo `'\\frac{1}{2}'`).
 - **Gestiona los fallos de análisis**: escucha `error` (o mira el cuadro `::part(error)` renderizado) en lugar de dar por hecho que toda fórmula es LaTeX válido.
 - **Maquetación propia con `sheet`**: usa el atributo `sheet` para sobrescribir la disposición interna de `.ran-math` cuando haga falta.
+
+### Copiar y pantallas estrechas
+
+Los controles activados permanecen visibles en una fila discreta sobre el contenido: objetivos de 32px con puntero preciso, 44px con entrada táctil y una separación de 8px. Sin controles no se reserva espacio. Copiar conserva el foco e impide escrituras duplicadas mientras están pendientes. Los errores o la falta de acceso al portapapeles se muestran localmente en `::part(copy-status)` (`role="status"`), traducible con `label-copy-error`; el reintento usa el mismo botón. `copied` solo se emite tras copiar el contenido actual. Cambiar la fuente o el destino de copia invalida las respuestas anteriores. Al cambiar la fuente, el botón conserva el foco y permite copiar la nueva fuente de inmediato.
+
+Las ecuaciones anchas se desplazan horizontalmente dentro de `::part(render)`, sin ensanchar la página ni mover la barra.

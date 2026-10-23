@@ -8,6 +8,8 @@ Dropdown selector for choosing a single value from a list of options, with optio
 
 > **Use when** you need a single-value dropdown selector built from `<r-option>` children, with optional search and native form participation. `<r-select>` handles opening, filtering, and `FormData` reporting.
 
+Use `placeholder="Pick a teammate"` for the empty-field hint and `label="Teammate"` for its accessible name. Changing the hint preserves the selected value; clearing `value` restores the hint. Placeholder text is not a field label.
+
 ## Quick Start
 
 ### Basic Usage

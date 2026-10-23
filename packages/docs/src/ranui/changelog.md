@@ -15,6 +15,11 @@ Release preparation; npm publication is pending verification.
 
 - Preserve icon-input labels, field geometry, disabled-button behavior and visible keyboard focus, including focus returned from a popup.
 - Keep nested dismissal, reconnect identity and immediate Select reopening consistent across input methods.
+- Show empty Select hints without changing field names or values, and keep keyboard option navigation from scrolling the surrounding page.
+- Preserve compact composed controls, wrapped checkbox alignment, selected contrast, reachable overflowing tabs and dynamic theme controls.
+- Keep Math and Mermaid actions reachable through content changes, copy failures and narrow layouts; anchor export menus below the actual action row.
+- Keep loading indicators readable with reduced motion and scratch-card recovery available to keyboard and coarse-pointer users.
+- Release Glass renderers on removal and failed initialization; isolate stale Route imports and canceled WHEP sessions from their replacements.
 - Preserve exact fenced-code copy, local failure/retry feedback, native text selection, table enhancement and scroll intent during streamed content.
 - Refine code/table typography, insets, focus and coarse-pointer targets; keep application layout with the host.
 - Keep expanded reasoning headers quiet and respect explicit conversation follow-off.

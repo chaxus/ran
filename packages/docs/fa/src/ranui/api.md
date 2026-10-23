@@ -504,7 +504,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 
 کد منبع: `components/select/index.ts`
 
-- **ویژگی‌ها (attribute)**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placement: Placement`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
+- **ویژگی‌ها (attribute)**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placeholder: string`, `placement: Placement`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
 - **خصیصه‌ها (property)**:
   - `defaultValue: string`
   - `disabled: boolean`
@@ -512,6 +512,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
   - `getPopupContainerId: string`
   - `label: string` — 字段上方的静态说明文字（label）。
   - `open: boolean` — Whether the dropdown is showing.
+  - `placeholder: string` — Empty-field hint; the field's accessible name remains its label.
   - `placement: Placement` — Which side of the trigger the panel opens on, with an optional alignment.
   - `required: boolean`
   - `sheet: string`

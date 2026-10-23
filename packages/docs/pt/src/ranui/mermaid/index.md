@@ -39,7 +39,7 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // o setter da propriedade codifica
 ## Controles
 
 Cada controle é **opcional** e ligado por um atributo booleano; um `<r-mermaid>` sem nada é um
-diagrama estático e limpo. A barra aparece ao passar o mouse (canto superior direito).
+diagrama estático e limpo. Os controles ativados permanecem visíveis acima do diagrama.
 
 <ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
@@ -87,7 +87,7 @@ Todos os eventos borbulham e cruzam a fronteira do shadow (`composed`).
 | --------- | ------------------------------------------- |
 | `mermaid` | O invólucro externo.                        |
 | `diagram` | O contêiner do diagrama renderizado.        |
-| `toolbar` | A barra de controles que aparece ao passar. |
+| `toolbar` | A linha de ações visível.                   |
 | `button`  | Cada botão de ícone da barra.               |
 | `error`   | A caixa de mensagem de erro (quando falha). |
 
@@ -114,3 +114,7 @@ Sobrescreva no elemento (cada uma recorre a um token semântico e depois a um li
 - **Exportar PNG**: diagramas que usam rótulos HTML (`htmlLabels` do mermaid) são desenhados com
   `<foreignObject>`, o que pode contaminar o canvas e fazer a exportação PNG falhar; nesse caso um
   evento `error` é despachado. Exportar SVG e a fonte sempre funciona.
+
+### Copiar e telas estreitas
+
+Os controles ativados permanecem visíveis em uma linha discreta acima do conteúdo: alvos de 32px para ponteiros precisos, 44px para toque e intervalo de 8px. Sem controles, nenhum espaço é reservado. Copiar mantém o foco e impede gravações duplicadas enquanto há uma pendente. Falhas ou indisponibilidade da área de transferência aparecem em `::part(copy-status)` (`role="status"`), traduzível com `label-copy-error`; a nova tentativa usa o mesmo botão. `copied` só é emitido após copiar o conteúdo atual com sucesso. Alterar a fonte ou o destino da cópia invalida respostas anteriores. Ao alterar a fonte, o botão mantém o foco e permite copiar a nova fonte imediatamente.

@@ -35,7 +35,7 @@ Render high-quality LaTeX math formulas in HTML pages using Temml, compiled stra
 | `download` | `boolean` | `false`   | Shows a download button/menu for the source (`.tex`) and/or MathML (`.mml`).                          |
 | `sheet`    | `string`  | `''`      | CSS injected into the component's shadow DOM.                                                         |
 
-> 💡 **Note**: The `latex` property getter decodes its value with `decodeURIComponent`, so URI-encoded formulas are decoded before rendering. Providing the formula as slotted text content has no effect; only the `latex` attribute is rendered.
+> 💡 **Note**: The `latex` property getter decodes its value with `decodeURIComponent`, so URI-encoded formulas are decoded before rendering. When the attribute is absent, the element’s text content supplies the formula.
 
 ### Formula `latex`
 
@@ -87,3 +87,9 @@ The full list is in [style tokens](/src/ranui/style-tokens#math); which token to
 - **Escape backslashes in JavaScript**: When assigning `latex` from a JS string literal, remember that `\` must be escaped (e.g. `'\\frac{1}{2}'`).
 - **Handle parse failures**: Listen for `error` (or check the rendered `::part(error)` box) rather than assuming every formula is valid LaTeX.
 - **Custom layout via `sheet`**: Use the `sheet` attribute to override the internal `.ran-math` layout when needed.
+
+### Copy and narrow screens
+
+Enabled controls stay visible in a quiet row above the content: 32px targets for fine pointers, 44px for touch, with an 8px gap. Without controls, no row space is reserved. Copy keeps focus and prevents duplicate writes while pending. Clipboard rejection or unavailability appears locally in `::part(copy-status)` (`role="status"`), localized with `label-copy-error`; retry uses the same button. `copied` fires only after the current content reaches the clipboard. A source or copy-target change invalidates feedback from older requests. A source-only update preserves the focused button and allows copying the new source immediately.
+
+Wide equations scroll horizontally inside `::part(render)` without widening the page or moving the toolbar.
