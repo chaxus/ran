@@ -226,3 +226,117 @@ describe('core/adapters/webrtc createWebrtcAdapter (WHEP)', () => {
     expect(adapter.reloadsOnQualityChange).toBe(false);
   });
 });
+
+describe('WHEP session lifecycle', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+  it('resolves relative endpoints and releases only its attached stream on destroy', async () => {
+    const peers = installMockPeerConnection();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({
+        ok: true,
+        headers: new Headers({ Location: '/session/current' }),
+        text: async () => 'answer',
+      });
+    vi.stubGlobal('fetch', fetchMock);
+    const adapter = createWebrtcAdapter();
+    const errors = vi.fn();
+    adapter.on('error', errors);
+    const video = document.createElement('video');
+    await adapter.load(video, '/whep/live');
+    expect(errors).not.toHaveBeenCalled();
+    peers[0].emitTrack({} as MediaStream);
+    adapter.destroy();
+    expect(video.srcObject).toBeNull();
+    expect(fetchMock).toHaveBeenLastCalledWith(new URL('/session/current', document.baseURI).href, {
+      method: 'DELETE',
+    });
+  });
+  it('aborts replaced requests and ignores late tracks, errors and answers, cleaning late sessions', async () => {
+    const peers = installMockPeerConnection();
+    let resolveOld!: (value: unknown) => void;
+    const pending = new Promise((resolve) => {
+      resolveOld = resolve;
+    });
+    const fetchMock = vi
+      .fn()
+      .mockImplementation((_url, init) => (init.method === 'POST' ? pending : Promise.resolve({ ok: true })));
+    vi.stubGlobal('fetch', fetchMock);
+    const adapter = createWebrtcAdapter();
+    const errors = vi.fn();
+    adapter.on('error', errors);
+    const video = document.createElement('video');
+    const oldLoad = adapter.load(video, 'https://example.com/whep/old');
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const signal = fetchMock.mock.calls[0][1].signal as AbortSignal;
+    const remote = vi.spyOn(peers[0], 'setRemoteDescription');
+    adapter.destroy();
+    expect(signal?.aborted).toBe(true);
+    peers[0].emitTrack({} as MediaStream);
+    peers[0].emitConnectionStateChange('failed');
+    resolveOld({ ok: true, headers: new Headers({ Location: '/session/old' }), text: async () => 'old answer' });
+    await oldLoad;
+    expect(video.srcObject).toBeFalsy();
+    expect(errors).not.toHaveBeenCalled();
+    expect(remote).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenLastCalledWith('https://example.com/session/old', { method: 'DELETE' });
+  });
+  it('replacement preserves the new stream and rejects an obsolete SDP body', async () => {
+    const peers = installMockPeerConnection();
+    let answerOld!: (value: string) => void;
+    const oldBody = new Promise<string>((resolve) => {
+      answerOld = resolve;
+    });
+    const readOldBody = vi.fn(() => oldBody);
+    const fetchMock = vi.fn().mockImplementation((url, init) =>
+      Promise.resolve({
+        ok: true,
+        headers: new Headers({ Location: url.endsWith('/old') ? '/session/old' : '/session/new' }),
+        text: init.method === 'POST' && url.endsWith('/old') ? readOldBody : async () => 'new answer',
+      }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    const adapter = createWebrtcAdapter();
+    const video = document.createElement('video');
+    const oldLoad = adapter.load(video, 'https://example.com/old');
+    await vi.waitFor(() => expect(readOldBody).toHaveBeenCalled());
+    const oldRemote = vi.spyOn(peers[0], 'setRemoteDescription');
+    await adapter.load(video, 'https://example.com/new');
+    const currentStream = {} as MediaStream;
+    peers[1].emitTrack(currentStream);
+    peers[0].emitTrack({} as MediaStream);
+    answerOld('stale answer');
+    await oldLoad;
+    expect(oldRemote).not.toHaveBeenCalled();
+    expect(peers[0].closed).toBe(true);
+    expect(peers[1].closed).toBe(false);
+    expect(video.srcObject).toBe(currentStream);
+    expect(fetchMock).toHaveBeenCalledWith('https://example.com/session/old', { method: 'DELETE' });
+    adapter.destroy();
+    expect(video.srcObject).toBeNull();
+  });
+
+  it('cancels ICE gathering promptly and preserves a stream installed by another owner', async () => {
+    const peers = installMockPeerConnection();
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    const adapter = createWebrtcAdapter();
+    const video = document.createElement('video');
+    const load = adapter.load(video, 'https://example.com/ice');
+    peers[0].iceGatheringState = 'gathering';
+    const add = vi.spyOn(peers[0], 'addEventListener');
+    const remove = vi.spyOn(peers[0], 'removeEventListener');
+    await vi.waitFor(() => expect(add).toHaveBeenCalledWith('icegatheringstatechange', expect.any(Function)));
+    peers[0].emitTrack({} as MediaStream);
+    const externalStream = {} as MediaStream;
+    video.srcObject = externalStream;
+    adapter.destroy();
+    await load;
+    expect(remove).toHaveBeenCalledWith('icegatheringstatechange', expect.any(Function));
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(video.srcObject).toBe(externalStream);
+  });
+});
