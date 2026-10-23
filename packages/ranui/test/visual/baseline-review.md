@@ -142,3 +142,34 @@ unchanged. The derived image ID is informational.
 Two fresh canonical comparisons of the final reviewed tree passed **148/148 each** (2.8 and
 2.1 minutes), with zero retries, updates disabled and all existing screenshot tolerances
 unchanged. This refresh follows inspection of the actual images, not a relaxed assertion.
+
+### Input labels and interaction foundation — 2026-10-23
+
+The fixed Linux arm64 container generated all 142 candidates with **148/148 tests passing**.
+All 16 changed candidate pairs were inspected. Only two intentional input PNGs are replaced:
+`input-with-icon.png` on desktop Chromium and Mobile Chrome now include the authored
+Password label above the 32px control. The crop grows from 240×32 to 240×58; this preserves
+content rather than compressing a field to fit the old image.
+
+The other 14 pairs showed raster/edge differences in image, tabs, checkbox, form and popup
+fixtures without a reviewed component geometry/content change. Their previous reviewed bytes
+are retained. All other 140 final PNG hashes therefore remain unchanged. Input/form pairs also
+received independent image review. A preliminary candidate comparison failed mobile-form
+stabilization; it is not reported as a pass or used as evidence of a particular historical cause.
+The final tree was compared afresh after retaining the reviewed unrelated goldens.
+
+The harness fingerprint changes for the reviewed interaction regression specs. Browser, Node,
+platform, system/repository fonts and software graphics fingerprints remain unchanged; the
+manifest hashes are generated from the final reviewed PNG tree. No screenshot assertion,
+comparison tolerance, control text or component visibility was weakened.
+
+Two subsequent comparisons of this final tree passed **148/148 each** (5.3 and 2.5 minutes),
+with retries and updates disabled. The first was concurrent with separate browser proof;
+these durations are observed run times, not a performance comparison.
+
+Firefox CI separately caught invisible focus after pointer opening followed by Escape.
+The source now requests native visible focus on keyboard return. The unchanged browser
+focus assertion failed before the correction and passed afterward; 14 Firefox input checks
+and 54 popup/capture cases across Chromium, Firefox and WebKit passed without retries.
+See the [source-bound screenshots and continuous recordings](../evidence/2026-10-23-focus-return/README.md).
+This component proof does not establish Document application or human acceptance.

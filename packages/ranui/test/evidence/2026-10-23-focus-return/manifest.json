@@ -1,0 +1,80 @@
+{
+  "sourceBase": "d8df2f07fcf526222873d7c4be3e19ff1f96e7b5",
+  "sourceInputs": {
+    "packages/ranui/components/input/index.ts": "a67d4052e959eab36ddc9fb1fa3771ca68cfe32d7574fdc908aead4fb9befc6c",
+    "packages/ranui/components/input/index.less": "bdd1f48c45f7b8c2764fbdab7d1a0e61430ea535c95ab11d512b4febec27dc06",
+    "packages/ranui/components/button/index.ts": "80b49ea359fa64b607654508de9a926970297fcb89bcda20db13cf9a3d78e903",
+    "packages/ranui/components/button/index.less": "4ec4930135a66437c75e3395aba08c7364dbc14716d48a44567874eb72690121",
+    "packages/ranui/components/attachments/index.ts": "a7bbabdae525a8fc2823455ceef21cb4eaeaba322c59f79120e4c63bcdb91e46",
+    "packages/ranui/components/attachments/index.less": "1680ca7fa9f6062cf239dfdfa79580628b02a6ddc4ad444f4328dadebb3a4375",
+    "packages/ranui/components/voice-button/index.ts": "c9ff74522300dbaaed8a67b74ff0e25c750260c832abc7ab44d9952e0814c341",
+    "packages/ranui/components/voice-button/index.less": "4d608ab399bd00141b93459826d5628b10bed4127a4d2a3b41cac27d2d8a3998",
+    "packages/ranui/theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+    "packages/ranui/theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360",
+    "packages/ranui/base.less": "c8643433f9148208938940dd1a3eee3dfc7f257d803f69d0db6320e918cd3b88",
+    "packages/ranui/demo/index.ts": "1960314bceee32fad8c81533ce83e898231825adb8c3794260f083119cb2422e",
+    "packages/ranui/demo/index.html": "16ee130e52f9ab26c773925edc880df116af2b1e33ba09ab2d472b2dd3845b2a",
+    "packages/ranui/components/popover/index.ts": "9ffde73f2eefd734d03ab44558a0a83209c78c0df4dbd0e67851f15631b5cf8a",
+    "packages/ranui/components/popover/index.less": "40ceddfd095b10a732379370d84f8c1991c9cf5ef8b2c6b0da5c9714fc201f6d",
+    "packages/ranui/components/disclosure-row/index.ts": "de188c5b0fdf78c5b5d6002299e41c4d0d17c8fd6f4fc075e18aee9d40b14fae",
+    "packages/ranui/components/disclosure-row/index.less": "663b54beec8f5238d157d1ce2de46e070d551820ab355e686cefc85e17849de6",
+    "packages/ranui/components/select/index.ts": "bbdbaeca589dd70a41446d66840034c9a788e0ba30913b9254b49817e4cb55e7",
+    "packages/ranui/components/dropdown/index.less": "3c7540b0abf43191e90a2db0ee927bef045de1128462cb7ccb3c74f011b8439f",
+    "packages/ranui/utils/floating.ts": "1556ced74d3d29fc1e98d3234965895565128b1f636e86a0ac422e7a26941a06",
+    "packages/ranui/utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+    "packages/ranui/demo/demo.css": "92b2fc3a0b99dc30c8ac248e62525ef3b269226bc96cfb1d04d9518176d157a9",
+    "packages/ranui/style.ts": "5834e0b1c474befe6cbe9f2f4fb3129b9e18cc933808f9244ce288775b39b71d",
+    "packages/ranui/theme/index.less": "fcf36f042e74c517c2193f6695d7e177369c967c29e3b3fe497970f1f7f06c05",
+    "packages/ranui/components/select/index.less": "4f7652a5f7ca87efb70b26e0045d59603a2217b9f390cddca2beb517df7dbd47",
+    "packages/ranui/components/state-dot/index.ts": "ee8f4c1c9b2befe62ef8fb635be742cccd77d17e04cb8db66d7048860fd80068",
+    "packages/ranui/components/state-dot/index.less": "ed30e255e4f81213eb7b237720a67dc82bc2bc22b162ee9b9163191f43922029",
+    "packages/ranui/components/markdown/index.ts": "aec9f31dbefb97ece2d2fb6350a8442a3075951b682557df06ab7c8ed1ebd296",
+    "packages/ranui/components/markdown/render.ts": "b1a0b025b6967625d098d1f6949b5bb75e766ebb167877b7b87218a489f9a246",
+    "packages/ranui/components/markdown/reader.ts": "2e4d35716635c9e8e2e103ea4885c4b3489f42fbe6907b700041876c5c303066",
+    "packages/ranui/components/markdown/index.less": "7263d0a4b8c4bf3428c3f781a2af0591db687e7196a3ccd5f9c493e19d0df700",
+    "packages/ranui/components/conversation/index.ts": "15e0209973b1e2bbb8c62209bc66c4964bb6c931e8655f13172b12f1b70e707e",
+    "packages/ranui/components/conversation/index.less": "49b520191de08dd2b11e84200dfc9e2cd6a2b80aa34479f8add4a5ed3ac75af1",
+    "packages/ranuts/src/utils/scroll.ts": "e2f758edbf2ec83b817c4167c2a637bcee31ba834da18862abe883ae2a8639c3",
+    "packages/ranuts/dist/src/utils/scroll.js": "183dc0390efb92ac7e9b40047ea2d88f0d60e7fe0cfe179367d430172c8b1023",
+    "pnpm-lock.yaml": "f01313b83944d35e8792dc3ede62bbd34d15c595aeca88337ba6ec8010bfe985"
+  },
+  "captureSpecSha256": "8981c65d7ecef9f0d5cfe680ffb01499f26efd99d847380caee58f62111ad978",
+  "containerBaseImage": "mcr.microsoft.com/playwright@sha256:941cc91e5022880ac1d14ae90b476b624deb6399dbbc28d612d5d5bd7928fcbd",
+  "scope": "Isolated registered source components in Linux arm64. Complete recorded navigation warmup retained. Narrow pages are 360x360; wide pages are 840x360. Video canvas is 840x360; WebKit PNGs use device scale factor 2. Dark component tokens are shown on the helper-owned white fixture background, not a complete dark application surface.",
+  "media": [
+    {
+      "file": "chromium-wide-light-normal.png",
+      "sha256": "91517f030b6b25701c8e3b1e9acab38be7d9ec267a013cd3cdedb22fa1e5ebef"
+    },
+    {
+      "file": "chromium-narrow-dark-reduced.png",
+      "sha256": "ff92723fff270796c13e6ce50dded95df5f6696b51ba00f5e8fd8eab35233ed4"
+    },
+    {
+      "file": "firefox-wide-light-normal.png",
+      "sha256": "ed18fc5d916826a09ad862f8cdc9ce0f0f7d27c2d1e3bd587f2369036b03c81a"
+    },
+    {
+      "file": "firefox-wide-light-normal.webm",
+      "sha256": "0f35e7c1db91c5e95f55553203264e49a67b9ab4157868a375a00360e6a5bf61"
+    },
+    {
+      "file": "firefox-narrow-dark-reduced.png",
+      "sha256": "1e19625ab8a76048db7f35568c2e016dad4298921485e911d21213ac56651584"
+    },
+    {
+      "file": "webkit-wide-light-normal.png",
+      "sha256": "8ec6cd1bfe9c20c288bca56a329117621b12642a21cafbb08ebbb09672fa74fe"
+    },
+    {
+      "file": "webkit-narrow-dark-reduced.png",
+      "sha256": "2e01280751c4f71a86d621354620111ec30355955856adf67d5c1719683f16f0"
+    },
+    {
+      "file": "webkit-narrow-dark-reduced.webm",
+      "sha256": "40f6a9ddc106a0c505cc325792eb180d345eee548080e3f95102b256125b7aeb"
+    }
+  ],
+  "checks": "14 Firefox input cases and 54 Chromium/Firefox/WebKit popup/capture cases passed with retries disabled. Existing native focus-visible and outline assertions retained.",
+  "review": "All six restored-focus PNGs and decoded continuous-recording samples inspected. Human/product acceptance not established."
+}
