@@ -35,6 +35,8 @@ catalogs, create a parallel design system or infer supported APIs from an exampl
    use DESIGN's Evaluate craft through evidence and, when needed, the index's reference research.
    Learn the relationship served by a reference, then verify its adaptation in the host. Remove copy that repeats obvious structure;
    preserve useful labels, errors and constraints.
+   For changed motion, read DESIGN's Functional motion contract and ACCEPTANCE's Review motion
+   over time. Specify trigger/state/destination; verify interruption and reversal in a continuous recording.
 3. Implement with supported controls. Distinguish frame, visible text/icon and actual hit geometry;
    inspect the composed pane and the full route/return path.
 4. Render the actual host at relevant widths/themes/states. Inspect screenshots and the changed

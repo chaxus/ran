@@ -172,6 +172,21 @@ Durations: `--ran-motion-duration-fast` `0.15s`, `--ran-motion-duration-base` `0
 to immediate feedback; a larger change is not automatically a reason to animate. Use existing tokens
 for purposeful motion, keep it quick and interruptible, and respect `prefers-reduced-motion`.
 
+### Functional motion contract
+
+Specify the trigger, state change and destination before choosing an effect. Preserve unrelated
+content, drafts and reading position. Sibling components with the same interaction meaning should
+share a motion language; consistency does not require every component to animate.
+
+When motion is useful, allow a new intent to interrupt or reverse it from the current presentation,
+without a jump, stale completion or duplicate activation. Keep feedback immediate; animation is not
+an input lock. During insertion/removal, avoid visibly squeezing text or passing exiting controls
+across live actions; coordinate opacity and layout so the result stays readable. Reduced motion
+must retain a visible, understandable final state. A spring is optional and need not overshoot.
+
+See the optional [component craft research](./REFERENCE_RESEARCH.md#component-craft-设计垂点--wxaddesign)
+for examples and limits, and [temporal acceptance](./ACCEPTANCE.md#review-motion-over-time) for proof.
+
 **Never animate a theme switch.** Transitions are for _interaction_ (hover / focus / press), not for flipping light↔dark. CSS cannot tell _why_ a property changed: any palette prop listed in a `transition` will also fade when the theme flips its token — each component at its own duration, while the host page has already switched. A general-purpose library must not impose that on its consumers. Rules:
 
 - **Palette props never get a default transition.** `background` / `background-color`, `color`, `border-color`, `box-shadow`, `fill`, `stroke` — none of them, on any element that carries a theme-driven color. Hover/focus feedback on these props snaps.

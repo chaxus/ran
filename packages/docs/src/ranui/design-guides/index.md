@@ -155,6 +155,12 @@ is immediate by default. Use existing motion tokens only when motion explains a 
 transition may take ~150ms, menus ~200ms and dialogs ~300ms. These are optional examples, not
 required delays. Keep motion interruptible and respect `prefers-reduced-motion`.
 
+For changed motion, describe its trigger, state and destination. New input may interrupt or
+reverse it without stale completion or duplicate activation. Preserve drafts and reading position;
+avoid squeezing visible text during insertion/removal. Inspect a continuous action and its return
+path at normal speed, then replay discontinuities slowly. Check that reduced motion still leaves a
+visible final state. Optional effects should form a consistent language across related components.
+
 **Never let a palette property transition.** CSS cannot tell _why_ a color changed, so a
 `transition` on `background-color`, `color`, `border-color`, `box-shadow`, `fill` or `stroke`
 also fires when the **theme** flips, with every element fading at its own pace while the rest

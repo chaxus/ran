@@ -55,3 +55,34 @@ A small focus or status treatment can then communicate current intent. An ambien
 contextual visual choice: compare its benefit against distraction during typing and reading. Verify
 interruption, keyboard focus, touch, reduced motion and rendering cost in the actual host; do not
 copy the loop or import a motion library merely because the source has one.
+
+## Component craft: 设计垂点 / wxad.design
+
+Reviewed 2026-10-23. These are the author's design explorations, not an official universal
+standard. Read the relevant article, not the whole archive.
+
+| Question                                                       | Original source                                                           | Adaptation for ran                                                                                                                                                                              |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| What should motion communicate?                                | [Functional Motion](https://wxad.design/abc/functional-motion)            | Use movement to connect a cause, a state and its destination. Shared semantics deserve consistent motion; repeated actions should stay quick. A spring need not visibly bounce.                 |
+| What makes an overlay complete?                                | [“发芽” components](https://wxad.design/abc/spross)                       | Check nested scrolling, edge placement and available height together. A floating panel should remain attached to its trigger and keep its actions reachable.                                    |
+| How should AI animation work be refined?                       | [AI interaction advice](https://wxad.design/abc/interactive-design-in-ai) | Describe the element, trigger, observed frame and expected result; replay continuous recordings slowly to locate discontinuities. Preserve a small reproducible case when a revision regresses. |
+| Why do individually polished controls still feel inconsistent? | [Quality of UI](https://wxad.design/abc/quality-of-ui)                    | Review experience, refinement and coverage across a family. One polished demo does not establish a coherent product.                                                                            |
+| Where does component quality become reusable?                  | [AD UI retrospective](https://wxad.design/abc/adui)                       | Treat typography, interaction, keyboard access and engineering workflow as connected responsibilities; keep their rules with existing owners.                                                   |
+
+### Decisions and limits
+
+- Adopt continuity and functional feedback. For adjacent navigation choices, compare a shared
+  surface with independent popups only when they represent the same navigation context.
+  This is not permission to merge unrelated dialogs or add a new global overlay manager.
+- Keep spatial relationships legible without sacrificing text size. The author's dialog scaling
+  and click-origin effects are contextual experiments: prefer responsive layout and internal
+  scrolling for reading/editing surfaces. Do not shrink text to make a dialog fit.
+- Long-press treatment, stacked notifications, glass and playful effects need a real use case.
+  Do not copy a 200ms hold threshold into normal click activation or hide recovery behind hover.
+- Existing ran rules still apply: explicit transition properties, instant theme palettes,
+  reachable keyboard/touch actions and a visible reduced-motion result. Do not copy article CSS
+  verbatim or infer current browser support from historical compatibility notes.
+
+Owner rules: [motion](./DESIGN.md#functional-motion-contract) and
+[temporal acceptance](./ACCEPTANCE.md#review-motion-over-time). These additions guide ongoing
+component review; they do not claim that ran has implemented or passed every reference pattern.
