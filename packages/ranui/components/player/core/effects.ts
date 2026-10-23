@@ -13,6 +13,7 @@ export interface PlayerVisualEffectRefs {
   progressBuffer: HTMLElement;
   timeCurrent: HTMLElement;
   timeDuration: HTMLElement;
+  timeDivide: HTMLElement;
   volumeIconGlyph: HTMLElement;
   volumeProgress: HTMLElement;
 }
@@ -44,9 +45,12 @@ export function createPlaybackVisualEffects(
       refs.progressDot.style.setProperty('transform', `translateX(${percentage * refs.progress.offsetWidth}px)`);
       refs.progressBuffer.style.setProperty('transform', `scaleX(${normalizeProgress(buffered)})`);
       refs.progress.setAttribute('aria-valuenow', String(Math.round(percentage * 100)));
-      refs.progress.setAttribute('aria-valuetext', formatDuration(percentage * duration));
+      refs.progress.setAttribute('aria-valuetext', formatDuration(currentTime));
       refs.timeCurrent.innerText = formatDuration(currentTime);
-      refs.timeDuration.innerText = formatDuration(duration);
+      refs.timeDuration.innerText = hasDuration ? formatDuration(duration) : '';
+      refs.timeDuration.hidden = !hasDuration;
+      refs.timeDivide.innerText = hasDuration ? '/' : '';
+      refs.timeDivide.hidden = !hasDuration;
     }),
     // Volume icon mute/unmute + slider percent — was duplicated between
     // changePlayerVolume (mute toggle) and changeVolumeProgress (drag).

@@ -93,6 +93,19 @@ describe('r-player media event handlers', () => {
     expect(player._playerControllerBottomTimeDuration.innerText).toBe('02:00');
   });
 
+  it('shows a duration pair only when the total becomes finite and positive', () => {
+    const player = makePlayer();
+    for (const duration of [Infinity, NaN, 0, 120, Infinity]) {
+      Object.defineProperty(player._video, 'duration', { value: duration, configurable: true });
+      player._video.dispatchEvent(new Event('loadeddata'));
+      const known = Number.isFinite(duration) && duration > 0;
+      expect(player._playerControllerBottomTimeDivide.hidden).toBe(!known);
+      expect(player._playerControllerBottomTimeDuration.hidden).toBe(!known);
+      expect(player._playerControllerBottomTimeDuration.innerText).toBe(known ? '02:00' : '');
+      expect(player._playerControllerBottomTimeDivide.innerText).toBe(known ? '/' : '');
+    }
+  });
+
   it('updates loading and control state across play, playing, pause and waiting events', () => {
     const player = makePlayer();
     Object.defineProperty(player._video, 'paused', { value: false, configurable: true });

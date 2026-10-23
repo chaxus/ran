@@ -238,6 +238,7 @@ export class RanPlayer extends RanElement {
       progressBuffer: this._progressWrapBuffer,
       timeCurrent: this._playerControllerBottomTimeCurrent,
       timeDuration: this._playerControllerBottomTimeDuration,
+      timeDivide: this._playerControllerBottomTimeDivide,
       volumeIconGlyph: this._playControllerBottomVolumeIconGlyph,
       volumeProgress: this._playControllerBottomVolumeProgress,
     };
