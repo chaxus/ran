@@ -224,6 +224,11 @@
      fixed-dark surface it's meant for. */
   --ran-focus-ring-inverse-color: #fff;
 
+  /* Media uses a fixed dark canvas beneath white playback controls in both page
+     themes. Deliberately not redefined in dark.less: letterboxing belongs to
+     the media surface rather than the surrounding page background. */
+  --ran-media-background: #000;
+
   /* ── Motion ─────────────────────────────────────────────────────── */
   --ran-motion-duration-fast: 0.15s;
   --ran-motion-duration-base: 0.2s;

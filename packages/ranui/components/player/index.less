@@ -219,6 +219,8 @@
 }
 
 .ran-player {
+  // The media canvas stays dark beneath the fixed white controls in either page theme.
+  background: var(--ran-player-background, var(--ran-media-background));
   display: var(--ran-player-display, block);
   height: var(--ran-player-height, 100%);
   width: var(--ran-player-width, 100%);

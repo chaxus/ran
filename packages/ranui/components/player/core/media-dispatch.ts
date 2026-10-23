@@ -170,7 +170,6 @@ export function createMediaEventHandlers(deps: PlayerMediaDispatchDeps): PlayerM
         visualSignals.duration.setter(duration);
         visualSignals.currentTime.setter(currentTimeWhenSwitching);
       });
-      refs.timeDivide.innerText = '/';
       deps.change('loadeddata', e);
     },
     onTimeupdate: (e: Event): void => {
