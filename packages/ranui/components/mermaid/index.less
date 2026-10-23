@@ -23,35 +23,32 @@
   height: auto;
 }
 
-/* Hover-revealed control bar (opt-in via copy/download/fullscreen attributes). */
+/* Opt-in actions remain visible in normal flow; absent controls take no space. */
 .ran-mermaid-toolbar {
-  position: absolute;
-  top: var(--ran-mermaid-toolbar-top, 8px);
-  right: var(--ran-mermaid-toolbar-right, 8px);
+  position: relative;
+  top: var(--ran-mermaid-toolbar-top, 0);
+  right: var(--ran-mermaid-toolbar-right, 0);
   display: none;
-  gap: var(--ran-mermaid-toolbar-gap, 4px);
-  padding: var(--ran-mermaid-toolbar-padding, var(--ran-space-1, 4px));
-  border-radius: var(--ran-radius-md, 8px);
-  background: var(--ran-mermaid-toolbar-background, var(--ran-color-bg-elevated, #fff));
-  box-shadow: var(--ran-mermaid-toolbar-shadow, var(--ran-shadow-menu, 0 2px 8px rgba(0, 0, 0, 0.12)));
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  pointer-events: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ran-mermaid-toolbar-gap, var(--ran-space-1, 4px));
+  padding: var(--ran-mermaid-toolbar-padding, 0);
+  margin-bottom: var(--ran-space-2, 8px);
+  background: var(--ran-mermaid-toolbar-background, transparent);
+  box-shadow: var(--ran-mermaid-toolbar-shadow, none);
 }
 .ran-mermaid.has-controls .ran-mermaid-toolbar {
   display: flex;
-}
-.ran-mermaid:hover .ran-mermaid-toolbar,
-.ran-mermaid-toolbar:focus-within {
-  opacity: 1;
-  pointer-events: auto;
 }
 .ran-mermaid-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--ran-mermaid-button-size, var(--ran-size-5, 28px));
-  height: var(--ran-mermaid-button-size, var(--ran-size-5, 28px));
+  width: var(--ran-mermaid-button-size, 32px);
+  height: var(--ran-mermaid-button-size, 32px);
+  min-width: 32px;
+  min-height: 32px;
+  flex-shrink: 0;
   padding: 0;
   border: none;
   border-radius: var(--ran-radius-sm, 6px);
@@ -70,7 +67,7 @@
 /* Download format menu (shown when the download attribute lists >1 format). */
 .ran-mermaid-menu {
   position: absolute;
-  top: var(--ran-mermaid-menu-top, 44px);
+  top: var(--ran-mermaid-menu-top, calc(100% + var(--ran-space-2, 8px)));
   right: var(--ran-mermaid-toolbar-right, 8px);
   display: flex;
   flex-direction: column;
@@ -103,4 +100,23 @@
   white-space: pre-wrap;
   font-size: var(--ran-mermaid-error-font-size, var(--ran-text-label-2, 13px));
   font-weight: var(--ran-mermaid-error-font-weight, var(--ran-text-label-weight, 500));
+}
+
+.ran-mermaid-copy-status {
+  flex: 1;
+  min-width: 0;
+  color: var(--ran-color-danger);
+  font-size: var(--ran-text-label-2, 13px);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+@media (hover: none), (pointer: coarse) {
+  .ran-mermaid-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .ran-mermaid-menu-item {
+    min-height: 44px;
+  }
 }

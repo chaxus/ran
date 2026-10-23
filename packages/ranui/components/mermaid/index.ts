@@ -33,6 +33,9 @@ export class Mermaid extends RanElement {
   _toolbar: HTMLElement;
   _themeObserver?: MutationObserver;
   _copyResetTimer?: number;
+  private _copyStatus?: HTMLElement;
+  private _copyRevision = 0;
+  private _copyPending?: { button: HTMLButtonElement };
   _fullscreenClose?: () => void;
   _downloadMenu?: HTMLElement;
   static get observedAttributes(): string[] {
@@ -47,8 +50,8 @@ export class Mermaid extends RanElement {
       .class('ran-mermaid')
       .part('mermaid')
       .children(
-        Div().class('ran-mermaid-diagram').ref(diagramRef).part('diagram'),
         Div().class('ran-mermaid-toolbar').ref(toolbarRef).part('toolbar'),
+        Div().class('ran-mermaid-diagram').ref(diagramRef).part('diagram'),
       )
       .build();
     this._shadowDom.appendChild(this._wrap);
@@ -113,6 +116,7 @@ export class Mermaid extends RanElement {
   };
   // ── Rendering ─────────────────────────────────────────────────────────────
   render(): void {
+    this.invalidateCopy();
     const graph = this.code;
     if (!graph) return;
     const id = `ran-mermaid-${seq++}`;
@@ -124,16 +128,27 @@ export class Mermaid extends RanElement {
           theme: this.resolveTheme(),
           fontFamily: 'inherit',
         });
+        // Mermaid measures an SVG in its temporary document-level #d{id} div.
+        // A host's universal reduced-motion duration can otherwise create tiny
+        // transform transitions during that measurement and inflate the viewBox.
+        // Keep this throwaway tree out of paint/accessibility while preserving
+        // layout and getBBox measurement. The displayed SVG remains visible and
+        // keeps the component's normal/reduced-motion treatment.
+        const measurementStyle = View('style').build();
+        measurementStyle.textContent = `#d${id}, #d${id} * { visibility: hidden !important; transition: none !important; }`;
+        document.head.appendChild(measurementStyle);
         try {
           const { svg } = await mermaid.render(id, graph);
           this._diagram.innerHTML = svg;
-          this.buildToolbar();
+          if (!this._toolbar.querySelector('button')) this.buildToolbar();
           this.emit('render', { ok: true });
         } catch (err) {
           // On failure mermaid leaves a "bomb" error graphic appended to <body> — drop it.
           document.getElementById(`d${id}`)?.remove();
           document.getElementById(id)?.remove();
           this.showError(String((err as Error)?.message || err));
+        } finally {
+          measurementStyle.remove();
         }
       })
       .catch((err: Error) => this.showError(err.message));
@@ -160,7 +175,18 @@ export class Mermaid extends RanElement {
     this._events.on(btn, 'click', onClick);
     return btn;
   }
+  private invalidateCopy(): void {
+    this._copyRevision++;
+    this._copyPending?.button.removeAttribute('aria-busy');
+    this._copyPending = undefined;
+    window.clearTimeout(this._copyResetTimer);
+    this._copyStatus?.remove();
+    this._copyStatus = undefined;
+    if (this.copyable) this._toolbar.querySelector('button r-icon')?.setAttribute('name', 'copy');
+  }
   private buildToolbar(): void {
+    this.invalidateCopy();
+    this.closeDownloadMenu();
     this._toolbar.innerHTML = '';
     const buttons: HTMLElement[] = [];
     if (this.copyable) buttons.push(this.iconButton('copy', this.label('copy', 'Copy source'), this.copySource));
@@ -171,18 +197,48 @@ export class Mermaid extends RanElement {
     buttons.forEach((b) => this._toolbar.appendChild(b));
     this._wrap.classList.toggle('has-controls', buttons.length > 0);
   }
-  private copySource = (): void => {
+  private copySource = async (): Promise<void> => {
+    const button = this._toolbar.querySelector<HTMLButtonElement>('button');
+    if (!button || this._copyPending?.button === button) return;
+    const target = 'source';
+    const text = this.code;
+    if (!text) return;
     const source = this.code;
-    if (!source || !navigator.clipboard) return;
-    navigator.clipboard.writeText(source).then(() => {
-      this.emit('copied', { kind: 'source' });
-      const icon = this._toolbar.querySelector('r-icon[name="copy"]');
-      if (icon) {
-        icon.setAttribute('name', 'check');
-        window.clearTimeout(this._copyResetTimer);
-        this._copyResetTimer = window.setTimeout(() => icon.setAttribute('name', 'copy'), 1200);
+    const revision = this._copyRevision;
+    const current = (): boolean =>
+      this.isConnected &&
+      revision === this._copyRevision &&
+      this.code === source &&
+      this._toolbar.querySelector('button') === button;
+    const operation = { button };
+    this._copyPending = operation;
+    button.setAttribute('aria-busy', 'true');
+    window.clearTimeout(this._copyResetTimer);
+    this._copyStatus?.remove();
+    this._copyStatus = undefined;
+    const icon = button.querySelector('r-icon');
+    icon?.setAttribute('name', 'copy');
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(text);
+      if (!current()) return;
+      this.emit('copied', { kind: target });
+      icon?.setAttribute('name', 'check');
+      this._copyResetTimer = window.setTimeout(() => {
+        if (current()) icon?.setAttribute('name', 'copy');
+      }, 1200);
+    } catch {
+      if (!current()) return;
+      const status = Div().class('ran-mermaid-copy-status').part('copy-status').attr('role', 'status').build();
+      status.textContent = this.label('copy-error', 'Could not copy. Try again.');
+      this._copyStatus = status;
+      this._toolbar.prepend(status);
+    } finally {
+      if (this._copyPending === operation) {
+        button.removeAttribute('aria-busy');
+        this._copyPending = undefined;
       }
-    });
+    }
   };
   private currentSvg(): SVGSVGElement | null {
     return this._diagram.querySelector('svg');
@@ -289,7 +345,7 @@ export class Mermaid extends RanElement {
       });
       menu.appendChild(item);
     });
-    this._wrap.appendChild(menu);
+    this._toolbar.appendChild(menu);
     this._downloadMenu = menu;
   }
   private closeDownloadMenu = (): void => {
@@ -420,6 +476,8 @@ export class Mermaid extends RanElement {
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   connectedCallback(): void {
     this.handlerExternalCss();
+    // Rebind toolbar listeners after reconnect; source updates preserve its focus.
+    this.buildToolbar();
     this.render();
     // Close the download menu when the pointer leaves the diagram (the toolbar hides too).
     this._events.on(this._wrap, 'mouseleave', this.closeDownloadMenu);
@@ -432,6 +490,7 @@ export class Mermaid extends RanElement {
     }
   }
   disconnectedCallback(): void {
+    this.invalidateCopy();
     this._events.abort();
     this._themeObserver?.disconnect();
     this._themeObserver = undefined;

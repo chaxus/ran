@@ -4,6 +4,8 @@
   display: var(--ran-math-display, block);
   color: var(--ran-math-color, var(--ran-color-text, inherit));
   position: var(--ran-math-position, relative);
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* `hidden` is how a caller hides an element, and the UA rule that implements it is a
@@ -18,6 +20,7 @@
 }
 
 .ran-math {
+  min-width: 0;
   position: relative;
   text-align: var(--ran-math-align, center);
 }
@@ -40,35 +43,37 @@
   text-align: left;
 }
 
-/* ── Toolbar (opt-in via `copy`) — hover-revealed, top-right ─────────────── */
+.ran-math-render {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Opt-in actions remain visible in normal flow; absent controls take no space. */
 .ran-math-toolbar {
-  position: absolute;
-  top: var(--ran-math-toolbar-top, 6px);
-  right: var(--ran-math-toolbar-right, 6px);
+  position: relative;
+  top: var(--ran-math-toolbar-top, 0);
+  right: var(--ran-math-toolbar-right, 0);
   display: none;
-  gap: var(--ran-math-toolbar-gap, 4px);
-  padding: var(--ran-math-toolbar-padding, var(--ran-space-1, 4px));
-  border-radius: var(--ran-radius-md, 8px);
-  background: var(--ran-math-toolbar-background, var(--ran-color-bg-elevated, #fff));
-  box-shadow: var(--ran-math-toolbar-shadow, var(--ran-shadow-menu, 0 2px 8px rgba(0, 0, 0, 0.12)));
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  pointer-events: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ran-math-toolbar-gap, var(--ran-space-1, 4px));
+  padding: var(--ran-math-toolbar-padding, 0);
+  margin-bottom: var(--ran-space-2, 8px);
+  background: var(--ran-math-toolbar-background, transparent);
+  box-shadow: var(--ran-math-toolbar-shadow, none);
 }
 .ran-math.has-controls .ran-math-toolbar {
   display: flex;
-}
-.ran-math:hover .ran-math-toolbar,
-.ran-math-toolbar:focus-within {
-  opacity: 1;
-  pointer-events: auto;
 }
 .ran-math-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--ran-math-button-size, var(--ran-size-5, 28px));
-  height: var(--ran-math-button-size, var(--ran-size-5, 28px));
+  width: var(--ran-math-button-size, 32px);
+  height: var(--ran-math-button-size, 32px);
+  min-width: 32px;
+  min-height: 32px;
+  flex-shrink: 0;
   padding: 0;
   border: none;
   border-radius: var(--ran-radius-sm, 6px);
@@ -88,7 +93,7 @@
 /* Download format menu (shown when `download` lists >1 format). */
 .ran-math-menu {
   position: absolute;
-  top: var(--ran-math-menu-top, 40px);
+  top: var(--ran-math-menu-top, calc(100% + var(--ran-space-2, 8px)));
   right: var(--ran-math-toolbar-right, 6px);
   display: flex;
   flex-direction: column;
@@ -115,8 +120,22 @@
 .ran-math-menu-item:hover {
   background: var(--ran-math-button-hover-background, var(--ran-color-bg-muted, rgba(0, 0, 0, 0.06)));
 }
-@media (prefers-reduced-motion: reduce) {
-  .ran-math-toolbar {
-    transition: none;
+
+.ran-math-copy-status {
+  flex: 1;
+  min-width: 0;
+  color: var(--ran-color-danger);
+  font-size: var(--ran-text-label-2, 13px);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+@media (hover: none), (pointer: coarse) {
+  .ran-math-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .ran-math-menu-item {
+    min-height: 44px;
   }
 }
