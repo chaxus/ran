@@ -99,9 +99,10 @@ export class Route extends RanElement {
       this.appendChild(this._pageHost);
     }
     try {
-      this._module ??= (await import(/* @vite-ignore */ this.src)) as { default?: PageRender };
+      const module = this._module ?? ((await import(/* @vite-ignore */ this.src)) as { default?: PageRender });
       if (token !== this._mountToken) return; // superseded by a later unmount/mount while importing
-      const render = this._module.default;
+      this._module = module;
+      const render = module.default;
       if (typeof render !== 'function') {
         console.error(`[r-route] "${this.src}" has no default export (host) => void`);
         return;
@@ -113,6 +114,7 @@ export class Route extends RanElement {
         return dispose;
       });
     } catch (error) {
+      if (token !== this._mountToken) return;
       this._mounted = false;
       console.error(`[r-route] failed to load "${this.src}":`, error);
     }

@@ -1,4 +1,3 @@
-import { withTimeoutFallback } from 'ranuts/utils';
 import { createAdapterEmitter, type EngineAdapter } from './types';
 
 /**
@@ -15,8 +14,7 @@ import { createAdapterEmitter, type EngineAdapter } from './types';
  * `format="webrtc"` attribute (`core/adapters/detect.ts`).
  *
  * Scope, deliberately kept modest: non-trickle ICE (waits for gathering to
- * finish, capped at `ICE_GATHERING_TIMEOUT_MS` via `ranuts/utils`'s
- * `withTimeoutFallback` — proceed with whatever candidates it has rather than
+ * finish, capped at `ICE_GATHERING_TIMEOUT_MS` — proceed with whatever candidates it has rather than
  * fail) rather than the WHEP PATCH-based trickle mechanism, and no
  * `Link: rel="ice-server"` header parsing for server-supplied STUN/TURN
  * hints — both are real WHEP spec features, left out because they add
@@ -28,80 +26,107 @@ import { createAdapterEmitter, type EngineAdapter } from './types';
  */
 const ICE_GATHERING_TIMEOUT_MS = 3000;
 
-function waitForIceGatheringComplete(pc: RTCPeerConnection, timeoutMs = ICE_GATHERING_TIMEOUT_MS): Promise<void> {
-  if (pc.iceGatheringState === 'complete') return Promise.resolve();
-  let onChange: (() => void) | undefined;
-  const cleanup = (): void => {
-    if (onChange) pc.removeEventListener('icegatheringstatechange', onChange);
-  };
-  const gathering = new Promise<void>((resolve) => {
-    onChange = (): void => {
-      if (pc.iceGatheringState !== 'complete') return;
-      cleanup();
+function waitForIceGatheringComplete(pc: RTCPeerConnection, signal: AbortSignal): Promise<void> {
+  if (pc.iceGatheringState === 'complete' || signal.aborted) return Promise.resolve();
+  return new Promise((resolve) => {
+    const finish = (): void => {
+      clearTimeout(timer);
+      pc.removeEventListener('icegatheringstatechange', onChange);
+      signal.removeEventListener('abort', finish);
       resolve();
     };
+    const onChange = (): void => {
+      if (pc.iceGatheringState === 'complete') finish();
+    };
+    const timer = setTimeout(finish, ICE_GATHERING_TIMEOUT_MS);
     pc.addEventListener('icegatheringstatechange', onChange);
+    signal.addEventListener('abort', finish, { once: true });
   });
-  return withTimeoutFallback(gathering, timeoutMs, undefined, cleanup);
 }
 
 export function createWebrtcAdapter(): EngineAdapter {
   const emitter = createAdapterEmitter();
-  let peerConnection: RTCPeerConnection | undefined;
-  let resourceUrl: string | undefined;
+  type Session = {
+    pc: RTCPeerConnection;
+    abort: AbortController;
+    video: HTMLVideoElement;
+    stream?: MediaStream;
+    resourceUrl?: string;
+  };
+  let session: Session | undefined;
+  const deleteResource = (url: string): void => {
+    void fetch(url, { method: 'DELETE' }).catch(() => undefined);
+  };
+  const destroy = (): void => {
+    const previous = session;
+    session = undefined;
+    if (!previous) return;
+    previous.abort.abort();
+    previous.pc.ontrack = null;
+    previous.pc.onconnectionstatechange = null;
+    previous.pc.close();
+    if (previous.stream && previous.video.srcObject === previous.stream) previous.video.srcObject = null;
+    if (previous.resourceUrl) deleteResource(previous.resourceUrl);
+  };
 
   return {
     reloadsOnQualityChange: false,
     load: async (video, src) => {
+      destroy();
       if (!src) return;
       const pc = new RTCPeerConnection();
-      peerConnection = pc;
-      // `recvonly` — this is a playback-only adapter, never publishing.
+      const current: Session = { pc, video, abort: new AbortController() };
+      session = current;
+      const isCurrent = (): boolean => session === current;
       pc.addTransceiver('video', { direction: 'recvonly' });
       pc.addTransceiver('audio', { direction: 'recvonly' });
       pc.ontrack = (event) => {
+        if (!isCurrent()) return;
         const [stream] = event.streams;
-        if (stream) video.srcObject = stream;
+        if (stream) {
+          current.stream = stream;
+          video.srcObject = stream;
+        }
       };
       pc.onconnectionstatechange = () => {
-        if (pc.connectionState === 'failed') {
+        if (isCurrent() && pc.connectionState === 'failed') {
           emitter.emit('error', { fatal: true, detail: { connectionState: pc.connectionState } });
         }
       };
       try {
+        const endpoint = new URL(src, video.ownerDocument.baseURI).href;
         const offer = await pc.createOffer();
+        if (!isCurrent()) return;
         await pc.setLocalDescription(offer);
-        await waitForIceGatheringComplete(pc);
-        const response = await fetch(src, {
+        if (!isCurrent()) return;
+        await waitForIceGatheringComplete(pc, current.abort.signal);
+        if (!isCurrent()) return;
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/sdp' },
           body: pc.localDescription?.sdp,
+          signal: current.abort.signal,
         });
         if (!response.ok) {
-          emitter.emit('error', { fatal: true, detail: { status: response.status } });
+          if (isCurrent()) emitter.emit('error', { fatal: true, detail: { status: response.status } });
           return;
         }
-        // The WHEP session's resource URL — DELETE this on destroy() to tell the
-        // server playback has ended. Resolved against `src` since servers may
-        // return a relative path.
+        // Redirected endpoints and relative session locations use the actual response URL.
         const location = response.headers.get('Location');
-        resourceUrl = location ? new URL(location, src).href : undefined;
+        const resourceUrl = location ? new URL(location, response.url || endpoint).href : undefined;
+        if (!isCurrent()) {
+          if (resourceUrl) deleteResource(resourceUrl);
+          return;
+        }
+        current.resourceUrl = resourceUrl;
         const answerSdp = await response.text();
+        if (!isCurrent()) return;
         await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
       } catch (error) {
-        emitter.emit('error', { fatal: true, detail: error });
+        if (isCurrent()) emitter.emit('error', { fatal: true, detail: error });
       }
     },
-    destroy: () => {
-      if (resourceUrl) {
-        // Best-effort session teardown — the server should also time out the
-        // session on its own once the PeerConnection actually closes.
-        fetch(resourceUrl, { method: 'DELETE' }).catch(() => undefined);
-      }
-      peerConnection?.close();
-      peerConnection = undefined;
-      resourceUrl = undefined;
-    },
+    destroy,
     getQualityLevels: () => [],
     setQuality: () => undefined,
     on: emitter.on,
