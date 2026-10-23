@@ -61,6 +61,9 @@ for examples and limits, and [temporal acceptance](./ACCEPTANCE.md#review-motion
 
 Theme palettes should settle coherently. Avoid implicit palette fades or `transition: all`;
 explicitly opt in only where the host intends and verifies a coordinated effect.
+Do not replay decorative title entrances or animate factual counts on each return to a working
+surface. Keep readable content and actual values available immediately. A loading demonstration
+may move to demonstrate loading; a decorative status pulse must not imply live activity.
 
 ## 6. Content — copy is part of the system
 
@@ -97,11 +100,24 @@ Choose the page structure in §12 first; then compose its components with these 
 
 ### Style coherence across components and pages
 
-Before extending a surface, state a short style brief using the existing system: type roles and
-line heights, control density, radius/inset relationships, surface/elevation roles, semantic accent
-usage and motion character. Reuse these decisions across sibling components and docs chrome;
-change emphasis according to the task. Uniformity does not mean equal-sized controls or boxed
-sections everywhere. An expressive demo must remain visibly distinct from its documentation chrome.
+Before implementation, record a short design brief in the existing task note or product design
+owner. Use the existing system; a small fix only needs the affected decisions. "Premium", "modern"
+or "like Claude" is a direction to investigate, not an implementable specification.
+
+| Decision           | What the brief must settle                                                                                                     |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| Task and hierarchy | The real content, primary action and first reading focus; what can recede or disappear.                                        |
+| Proportion         | Type roles/line heights, text measure, control density, icon weight and alignment spines using host tokens.                    |
+| Surface language   | Which regions need containment, nested radius/inset relationships, semantic accent and elevation roles.                        |
+| State composition  | A representative default plus long content, pending/failure and narrow input paths; include combined states.                   |
+| Motion             | The state change it explains, trigger and frequency, interruption/reverse behavior and reduced-motion result; "none" is valid. |
+| Reference decision | Where a reference is used, link its source, the principle adopted and the adaptation required by the host task.                |
+| Acceptance         | The observable result and actual views/recordings that can demonstrate or reject it.                                           |
+
+Reuse the brief across sibling components and docs chrome; change emphasis according to the task.
+Uniformity does not mean equal-sized controls or boxed sections everywhere. An expressive demo
+must remain visibly distinct from its documentation chrome. Update the brief before changing the
+visual direction; do not silently rewrite the standard to justify an implementation that failed review.
 
 Compare a representative composed still with different real content before animating it. Then
 inspect the state change and return path at normal speed. A shared color alone cannot reconcile
@@ -531,6 +547,19 @@ unrelated flows merely to satisfy the list. Repository CI still runs its complet
 > [Information architecture](https://ran.chaxus.com/src/ranui/information-architecture/) and
 > [Coding guidelines](https://ran.chaxus.com/src/ranui/coding-guides/) — update those when a
 > rule here changes in a way consumers can see.
+
+## ranui default visual direction
+
+The default is a quiet, content-first working interface: neutral semantic surfaces, restrained
+emphasis and compact desktop controls with reachable touch targets. Distinction comes from
+clear typography, proportions and complete states, not a decorative effect on every component.
+Use existing token roles to choose exact dimensions; do not introduce a second "premium" scale.
+Glass and expressive demonstrations are explicit surface/theme choices, not default text/control
+backgrounds. Preserve reading contrast and the same interaction semantics across themes.
+
+Apply the shared [style brief](./DESIGN.md#style-coherence-across-components-and-pages) before
+changing a family. Review it in a realistic composed page with neighboring controls; a polished
+isolated component does not establish a coherent product.
 
 ## How to use this file
 

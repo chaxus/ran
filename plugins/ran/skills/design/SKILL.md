@@ -9,7 +9,9 @@ Use the host's product goals, framework and visual language. This skill needs no
 
 Start with the [design index](references/README.md) and read only the owner relevant to the task.
 For a small correction, keep the scope small. For a redesign, establish real content, primary tasks,
-shared proportions and interaction states before decoration. Compare composed screens before adding motion.
+shared proportions and interaction states before decoration. Before implementation, record the
+[style brief](references/DESIGN.md#style-coherence-across-components-and-pages) in the existing task
+note; update that brief before changing direction. Compare composed screens before adding motion.
 
 Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
 Preserve accessible names, useful constraints, errors and consequences.

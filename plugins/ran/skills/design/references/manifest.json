@@ -4,15 +4,15 @@
   "sources": [
     {
       "source": "design/ACCEPTANCE.md",
-      "sha256": "a329a4dd280c5b045af3e52847c2968c235019729e2eaf8990695fe52571318e",
+      "sha256": "27981d3f8ecc8edab6b17a5a47f1ec0b7ef1d0868dffbd1526fc6e9472396cec",
       "output": "ACCEPTANCE.md",
-      "outputSha256": "32be6a87fe20254b5a8bea33e5a8afcc9b2d60dc5ad04c1776c5649a236c06a2"
+      "outputSha256": "ea4da86a81b3cc81f42f15a852d253d5cbc97db3c0f1176472a9e0b41421cf3c"
     },
     {
       "source": "design/DESIGN.md",
-      "sha256": "d364d2aaf08aeb71d1c95af9f983e1cc08350105e811eb2d584ae9dd0ae57433",
+      "sha256": "e155cd85297c6024c201dfce74c3f48b2fc21082a8255c1dda3542e5ab601b6f",
       "output": "DESIGN.md",
-      "outputSha256": "38dce4e72027b10d7b091ac21b28eaacc3640eee634696bbcb394e35958a1931"
+      "outputSha256": "7cd2d4cfa1ee38930fccc2528164a845c6c1326fad0c1f3671475d9c04ed716d"
     },
     {
       "source": "design/INTERACTION.md",

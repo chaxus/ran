@@ -8,11 +8,16 @@ The [interface index](./INTERFACE_GUIDE.md) routes the task. Read only applicabl
 
 ## Agree on the observable result
 
-Before editing, state the affected task, views/states and independent expectations in a short
-work note. Name the relevant owner, supported public API and host capability limits. Select
+Before editing, settle the [design brief](./DESIGN.md#style-coherence-across-components-and-pages),
+and state the affected task, views/states and independent expectations in that same note. Name the relevant owner, supported public API and host capability limits. Select
 widths, themes, languages and input paths from the actual change; do not invent unrelated work.
 For composition, state content/text/icon spines, intentional navigation columns, hit bounds
 and vertical relationships. Do not derive the expected value from the implementation under test.
+
+Review in order: task/hierarchy, static composition, reachable combined states, then motion.
+Do not add animation to compensate for unresolved proportions or unclear navigation. When a review
+changes the intended design, update the existing brief first and identify the evidence that prompted it.
+This is a decision record, not a new approval ceremony for work the user already authorized.
 
 Keep one rule owner. An API/token check verifies source contracts; an image comparison verifies
 pixels; an agent run verifies whether guidance was followed. None substitutes for the others.
