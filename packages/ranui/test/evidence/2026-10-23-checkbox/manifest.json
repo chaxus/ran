@@ -1,0 +1,890 @@
+{
+  "scope": "Actual registered Checkbox and Section in disclosed isolated fixture. Continuous videos include source/demo loading. No provider, application, physical-device or human acceptance. Captured against shared source server; unrelated component owners may change. Declared target dependencies hashed before and after; not every transitively imported demo owner is certified.",
+  "capturedAt": "2026-10-23T05:55:27.275Z",
+  "browser": "Chromium151",
+  "sourceHashesBefore": {
+    "components/checkbox/index.ts": "88ae1a6dd51c5dd0ae08563287b1878abe44cb683149075a88c0e6d6cc96505a",
+    "components/checkbox/index.less": "e4b42006282bc81057881f2a3b9381efd1549364df88b3a2607444043edc49b2",
+    "components/section/index.ts": "1951f159d140177ac385bea3b7d9a83280c8ce6d7a818e37753b7306d744dfc4",
+    "components/section/index.less": "3304dc792cd2df2193b7a2d790678bd4a953a5d87e70823716dca480ea54ab61",
+    "utils/index.ts": "5d21efb3c179519011a05949ae1eba398813a887977c4844398935685d021317",
+    "utils/builder/index.ts": "5db5ae7cfba147bb169c74e94142021894fe25724551ad77d92d59b4099e6b94",
+    "utils/dom.ts": "557d4b55f43c9116b1f67b719dd4cd4404247a8c51c6d733d41cfe114ea4785e",
+    "utils/a11y.ts": "a74c4da559fad3ec18d18d9bbd3fd36cff717b42eba3682f97902c1978d13345",
+    "utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+    "utils/ssr-registry.ts": "1bb93971e9c5298203ea6261995a922b6efb8508a6d0b6280e77685940763c7d",
+    "utils/ssr.ts": "8d3c02dc38263f22f683bc5c8c7b4870a1e026d2ba1eda5c8a2d86f5a51eede8",
+    "utils/form.ts": "7118e4b2ab3d9f83b2c5ccf065ea57dfdd645e389faf2f48b7091f18752d9223",
+    "utils/theme.ts": "271ddfc509e2d2d70d3b1ad4186ef5f9a8a17dbeec55d85d07638a4a164a42d5",
+    "theme/index.less": "fcf36f042e74c517c2193f6695d7e177369c967c29e3b3fe497970f1f7f06c05",
+    "theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+    "theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360",
+    "theme/font.less": "17a0d26ba50619789fba0237264f5fcb38e5ffb91141d37e04e016459cc162fd",
+    "base.less": "c8643433f9148208938940dd1a3eee3dfc7f257d803f69d0db6320e918cd3b88",
+    "style.ts": "5834e0b1c474befe6cbe9f2f4fb3129b9e18cc933808f9244ce288775b39b71d",
+    "fonts/fonts.css": "db66cb230e5692993d86361dc8676d056f7f0d6ba9fe2f6b7d30ad3dc323f36c",
+    "fonts/Geist-Variable.woff2": "a369fcf5628ea2aa4e1b9e2ec6a5b3624e365bda588e1f0f2f12b564f728fbb8",
+    "demo/index.ts": "1960314bceee32fad8c81533ce83e898231825adb8c3794260f083119cb2422e",
+    "demo/index.html": "0b85649033ea7bbad50d222e6ef8c182a1227cd10a22a182cc1634aa7a76f35d",
+    "demo/demo.css": "92b2fc3a0b99dc30c8ac248e62525ef3b269226bc96cfb1d04d9518176d157a9"
+  },
+  "sourceHashesAfter": {
+    "components/checkbox/index.ts": "88ae1a6dd51c5dd0ae08563287b1878abe44cb683149075a88c0e6d6cc96505a",
+    "components/checkbox/index.less": "e4b42006282bc81057881f2a3b9381efd1549364df88b3a2607444043edc49b2",
+    "components/section/index.ts": "1951f159d140177ac385bea3b7d9a83280c8ce6d7a818e37753b7306d744dfc4",
+    "components/section/index.less": "3304dc792cd2df2193b7a2d790678bd4a953a5d87e70823716dca480ea54ab61",
+    "utils/index.ts": "5d21efb3c179519011a05949ae1eba398813a887977c4844398935685d021317",
+    "utils/builder/index.ts": "5db5ae7cfba147bb169c74e94142021894fe25724551ad77d92d59b4099e6b94",
+    "utils/dom.ts": "557d4b55f43c9116b1f67b719dd4cd4404247a8c51c6d733d41cfe114ea4785e",
+    "utils/a11y.ts": "a74c4da559fad3ec18d18d9bbd3fd36cff717b42eba3682f97902c1978d13345",
+    "utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+    "utils/ssr-registry.ts": "1bb93971e9c5298203ea6261995a922b6efb8508a6d0b6280e77685940763c7d",
+    "utils/ssr.ts": "8d3c02dc38263f22f683bc5c8c7b4870a1e026d2ba1eda5c8a2d86f5a51eede8",
+    "utils/form.ts": "7118e4b2ab3d9f83b2c5ccf065ea57dfdd645e389faf2f48b7091f18752d9223",
+    "utils/theme.ts": "271ddfc509e2d2d70d3b1ad4186ef5f9a8a17dbeec55d85d07638a4a164a42d5",
+    "theme/index.less": "fcf36f042e74c517c2193f6695d7e177369c967c29e3b3fe497970f1f7f06c05",
+    "theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+    "theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360",
+    "theme/font.less": "17a0d26ba50619789fba0237264f5fcb38e5ffb91141d37e04e016459cc162fd",
+    "base.less": "c8643433f9148208938940dd1a3eee3dfc7f257d803f69d0db6320e918cd3b88",
+    "style.ts": "5834e0b1c474befe6cbe9f2f4fb3129b9e18cc933808f9244ce288775b39b71d",
+    "fonts/fonts.css": "db66cb230e5692993d86361dc8676d056f7f0d6ba9fe2f6b7d30ad3dc323f36c",
+    "fonts/Geist-Variable.woff2": "a369fcf5628ea2aa4e1b9e2ec6a5b3624e365bda588e1f0f2f12b564f728fbb8",
+    "demo/index.ts": "1960314bceee32fad8c81533ce83e898231825adb8c3794260f083119cb2422e",
+    "demo/index.html": "0b85649033ea7bbad50d222e6ef8c182a1227cd10a22a182cc1634aa7a76f35d",
+    "demo/demo.css": "92b2fc3a0b99dc30c8ac248e62525ef3b269226bc96cfb1d04d9518176d157a9"
+  },
+  "scriptHash": "599da31b6aa6c4e795b9863aee0e9482b6a7ff55f08c94b6d58776a1491d0e89",
+  "cases": [
+    {
+      "name": "360-dark-normal",
+      "width": 360,
+      "theme": "dark",
+      "motion": "no-preference",
+      "touch": true,
+      "shots": [
+        {
+          "state": "keyboard-focus",
+          "file": "360-dark-normal-keyboard-focus.png",
+          "sha256": "e3300bf669fb35680478891f37032096b6811b82bba17140eb4effeb1a2bd76e",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 0,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "keyboard-checked",
+          "file": "360-dark-normal-keyboard-checked.png",
+          "sha256": "3d4ea3cb3e0d5fd09ad07c4b7760337d480882acfeab9d28e9eb90f673cf7ba7",
+          "observed": {
+            "checked": true,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(237, 237, 237)",
+              "opacity": "0.412038"
+            },
+            "disabled": false,
+            "aria": "true",
+            "changes": 1,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "disabled",
+          "file": "360-dark-normal-disabled.png",
+          "sha256": "b1b064c8642d1729364a98d4c2112b77ef445332597e23268b9e58ce8d2be6ef",
+          "observed": {
+            "checked": true,
+            "mark": {
+              "color": "rgb(143, 143, 143)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "1"
+            },
+            "disabled": true,
+            "aria": "true",
+            "changes": 1,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "reenabled-false",
+          "file": "360-dark-normal-reenabled-false.png",
+          "sha256": "68a0fae44a759fe10391a2de21b051c9059fe43f24f0acbcfe309d91942b919a",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0.928837"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "subtitle-only",
+          "file": "360-dark-normal-subtitle-only.png",
+          "sha256": "d56c19cdea0487d7eee60c98f6c32c306c6850746b9ebdeb850e72a72bccc44e",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 163,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "empty-header",
+          "file": "360-dark-normal-empty-header.png",
+          "sha256": "285fd49ed6e33e137708078327834edd646d3741a476fb573cfe19433ba0f757",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "none",
+            "bodyTop": 97,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "header-restored",
+          "file": "360-dark-normal-header-restored.png",
+          "sha256": "24324cd45d418940c4e9b070e9a5773ae1f5d2effb03bc110895ca65d26c6bd4",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        }
+      ],
+      "video": "360-dark-normal.webm"
+    },
+    {
+      "name": "360-light-reduced",
+      "width": 360,
+      "theme": "light",
+      "motion": "reduce",
+      "touch": true,
+      "shots": [
+        {
+          "state": "keyboard-focus",
+          "file": "360-light-reduced-keyboard-focus.png",
+          "sha256": "f5327a214fa638cd08900bcc8a70a05d1b66cadda29c4158b660c0ca91cffecf",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 0,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "keyboard-checked",
+          "file": "360-light-reduced-keyboard-checked.png",
+          "sha256": "53bb4a2bcc5ad6d2e16c42c6c4eeaa435ee6554b5c23dd2b80c7eaee0e35d148",
+          "observed": {
+            "checked": true,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(23, 23, 23)",
+              "opacity": "1"
+            },
+            "disabled": false,
+            "aria": "true",
+            "changes": 1,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "disabled",
+          "file": "360-light-reduced-disabled.png",
+          "sha256": "dc1182a6efe21179b7b0999fb3295748a3a868cdc672235b9b78fe9a829d7c9c",
+          "observed": {
+            "checked": true,
+            "mark": {
+              "color": "rgb(143, 143, 143)",
+              "surface": "rgb(242, 242, 242)",
+              "opacity": "1"
+            },
+            "disabled": true,
+            "aria": "true",
+            "changes": 1,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "reenabled-false",
+          "file": "360-light-reduced-reenabled-false.png",
+          "sha256": "c540393d9f2ac017a0b352237db5a96db917e108521fc704a9fc83c0eadca6f6",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "subtitle-only",
+          "file": "360-light-reduced-subtitle-only.png",
+          "sha256": "02f311a148be2d49cbb20073d0fb6ca93da8f81e1343e75d1c7630d5f003eb5e",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 163,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "empty-header",
+          "file": "360-light-reduced-empty-header.png",
+          "sha256": "771c4c54a02504e8f0e05b2efab7ab95e7817d8cb9bffbbac8660c827d01bec0",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "none",
+            "bodyTop": 97,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "header-restored",
+          "file": "360-light-reduced-header-restored.png",
+          "sha256": "c3391880615fd34b2812453152b73c3ae0c19a210ba17585fa0761303fc55295",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 201,
+            "pageWidth": 360,
+            "viewport": 360,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        }
+      ],
+      "video": "360-light-reduced.webm"
+    },
+    {
+      "name": "1280-light-normal",
+      "width": 1280,
+      "theme": "light",
+      "motion": "no-preference",
+      "touch": false,
+      "shots": [
+        {
+          "state": "keyboard-focus",
+          "file": "1280-light-normal-keyboard-focus.png",
+          "sha256": "400a0bf7d5f2c9374b9dfc0d40b10b930312e982fa2c0956ef16811bfb84aebc",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 0,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "keyboard-checked",
+          "file": "1280-light-normal-keyboard-checked.png",
+          "sha256": "fa071f5105093218dfc1d6009a1ee075528d50cf165e2d02d81a0a09c020736a",
+          "observed": {
+            "checked": true,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(23, 23, 23)",
+              "opacity": "0.40745"
+            },
+            "disabled": false,
+            "aria": "true",
+            "changes": 1,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "disabled",
+          "file": "1280-light-normal-disabled.png",
+          "sha256": "6324e199a279c4c738cd4e22e2740e2e092ed3a996e9b1db8de8d435d4aaafd2",
+          "observed": {
+            "checked": true,
+            "mark": {
+              "color": "rgb(143, 143, 143)",
+              "surface": "rgb(242, 242, 242)",
+              "opacity": "1"
+            },
+            "disabled": true,
+            "aria": "true",
+            "changes": 1,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "reenabled-false",
+          "file": "1280-light-normal-reenabled-false.png",
+          "sha256": "c9781265bdb6ac23658514a17ea82f2c7fc51d7adf35e24104abebea8598fad2",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0.409142"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "subtitle-only",
+          "file": "1280-light-normal-subtitle-only.png",
+          "sha256": "13a5ec269e40d07d12bb47c44bdebe425f609551b8917df7f305756c927d99e6",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 142,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "empty-header",
+          "file": "1280-light-normal-empty-header.png",
+          "sha256": "3bbee25e2fb93266389130e005e44904fd3ff12b8f6e1c949e049035fb3d40e1",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "none",
+            "bodyTop": 97,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "header-restored",
+          "file": "1280-light-normal-header-restored.png",
+          "sha256": "b1e743af5231e39bfa04ee3ea051e79da442d61a144758587d6698fee69817a6",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(255, 255, 255)",
+              "surface": "rgb(255, 255, 255)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        }
+      ],
+      "video": "1280-light-normal.webm"
+    },
+    {
+      "name": "1280-dark-reduced",
+      "width": 1280,
+      "theme": "dark",
+      "motion": "reduce",
+      "touch": false,
+      "shots": [
+        {
+          "state": "keyboard-focus",
+          "file": "1280-dark-reduced-keyboard-focus.png",
+          "sha256": "f8f98e0bbe91424bba219979bc9c3669edd078fa30b142e54a0f16663e99dab0",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 0,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "keyboard-checked",
+          "file": "1280-dark-reduced-keyboard-checked.png",
+          "sha256": "5fa7da8b2d3aa6cd16fedafc5cd6089ee48aef39e80ee72ee083c6a6304ea340",
+          "observed": {
+            "checked": true,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(237, 237, 237)",
+              "opacity": "1"
+            },
+            "disabled": false,
+            "aria": "true",
+            "changes": 1,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "disabled",
+          "file": "1280-dark-reduced-disabled.png",
+          "sha256": "1da24e9acdb4cb2db93775a98ee5984fe5d8b6b7cca51a3861793aec1aa745ff",
+          "observed": {
+            "checked": true,
+            "mark": {
+              "color": "rgb(143, 143, 143)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "1"
+            },
+            "disabled": true,
+            "aria": "true",
+            "changes": 1,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "reenabled-false",
+          "file": "1280-dark-reduced-reenabled-false.png",
+          "sha256": "5939d67b4a9f0844e30837235f68b1a1851a98d7d286a94ba852ee134f64e436",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": true,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "subtitle-only",
+          "file": "1280-dark-reduced-subtitle-only.png",
+          "sha256": "581f4b292949da5f7a9441f1dec81d9081ecba35c521c9e0cee49bb7cf11a078",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 142,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "empty-header",
+          "file": "1280-dark-reduced-empty-header.png",
+          "sha256": "c26dd45cd1bdd74fc59f56fdc8f2cd02b9cfeaeae2b59f9dc6819be4df781412",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "none",
+            "bodyTop": 97,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        },
+        {
+          "state": "header-restored",
+          "file": "1280-dark-reduced-header-restored.png",
+          "sha256": "c24964a7f584f320b71924dd47b5a0454317f3397cb3e69bd1a86d956b7a6268",
+          "observed": {
+            "checked": false,
+            "mark": {
+              "color": "rgb(0, 0, 0)",
+              "surface": "rgb(26, 26, 26)",
+              "opacity": "0"
+            },
+            "disabled": false,
+            "aria": "false",
+            "changes": 2,
+            "focused": false,
+            "square": {
+              "width": 16,
+              "height": 16
+            },
+            "headerDisplay": "grid",
+            "bodyTop": 180,
+            "pageWidth": 1280,
+            "viewport": 1280,
+            "falseDisabled": false,
+            "falseOpacity": "1"
+          }
+        }
+      ],
+      "video": "1280-dark-reduced.webm"
+    }
+  ],
+  "media": {
+    "1280-dark-reduced-disabled.png": "1da24e9acdb4cb2db93775a98ee5984fe5d8b6b7cca51a3861793aec1aa745ff",
+    "1280-dark-reduced-empty-header.png": "c26dd45cd1bdd74fc59f56fdc8f2cd02b9cfeaeae2b59f9dc6819be4df781412",
+    "1280-dark-reduced-header-restored.png": "c24964a7f584f320b71924dd47b5a0454317f3397cb3e69bd1a86d956b7a6268",
+    "1280-dark-reduced-keyboard-checked.png": "5fa7da8b2d3aa6cd16fedafc5cd6089ee48aef39e80ee72ee083c6a6304ea340",
+    "1280-dark-reduced-keyboard-focus.png": "f8f98e0bbe91424bba219979bc9c3669edd078fa30b142e54a0f16663e99dab0",
+    "1280-dark-reduced-reenabled-false.png": "5939d67b4a9f0844e30837235f68b1a1851a98d7d286a94ba852ee134f64e436",
+    "1280-dark-reduced-subtitle-only.png": "581f4b292949da5f7a9441f1dec81d9081ecba35c521c9e0cee49bb7cf11a078",
+    "1280-dark-reduced.webm": "fb05d995e636c258d4bdf1e59820c18f581f0f5d0e1b04c432bae06400e62dd8",
+    "1280-light-normal-disabled.png": "6324e199a279c4c738cd4e22e2740e2e092ed3a996e9b1db8de8d435d4aaafd2",
+    "1280-light-normal-empty-header.png": "3bbee25e2fb93266389130e005e44904fd3ff12b8f6e1c949e049035fb3d40e1",
+    "1280-light-normal-header-restored.png": "b1e743af5231e39bfa04ee3ea051e79da442d61a144758587d6698fee69817a6",
+    "1280-light-normal-keyboard-checked.png": "fa071f5105093218dfc1d6009a1ee075528d50cf165e2d02d81a0a09c020736a",
+    "1280-light-normal-keyboard-focus.png": "400a0bf7d5f2c9374b9dfc0d40b10b930312e982fa2c0956ef16811bfb84aebc",
+    "1280-light-normal-reenabled-false.png": "c9781265bdb6ac23658514a17ea82f2c7fc51d7adf35e24104abebea8598fad2",
+    "1280-light-normal-subtitle-only.png": "13a5ec269e40d07d12bb47c44bdebe425f609551b8917df7f305756c927d99e6",
+    "1280-light-normal.webm": "54b12f08634c6d7756189cf0665a61ea96bb108ffd0472fe62cff979d5aac449",
+    "360-dark-normal-disabled.png": "b1b064c8642d1729364a98d4c2112b77ef445332597e23268b9e58ce8d2be6ef",
+    "360-dark-normal-empty-header.png": "285fd49ed6e33e137708078327834edd646d3741a476fb573cfe19433ba0f757",
+    "360-dark-normal-header-restored.png": "24324cd45d418940c4e9b070e9a5773ae1f5d2effb03bc110895ca65d26c6bd4",
+    "360-dark-normal-keyboard-checked.png": "3d4ea3cb3e0d5fd09ad07c4b7760337d480882acfeab9d28e9eb90f673cf7ba7",
+    "360-dark-normal-keyboard-focus.png": "e3300bf669fb35680478891f37032096b6811b82bba17140eb4effeb1a2bd76e",
+    "360-dark-normal-reenabled-false.png": "68a0fae44a759fe10391a2de21b051c9059fe43f24f0acbcfe309d91942b919a",
+    "360-dark-normal-subtitle-only.png": "d56c19cdea0487d7eee60c98f6c32c306c6850746b9ebdeb850e72a72bccc44e",
+    "360-dark-normal.webm": "90fc4fc57e8197e696b65919664ec8c3d05ce9dab7ffaf61bbfb98270b9c3848",
+    "360-light-reduced-disabled.png": "dc1182a6efe21179b7b0999fb3295748a3a868cdc672235b9b78fe9a829d7c9c",
+    "360-light-reduced-empty-header.png": "771c4c54a02504e8f0e05b2efab7ab95e7817d8cb9bffbbac8660c827d01bec0",
+    "360-light-reduced-header-restored.png": "c3391880615fd34b2812453152b73c3ae0c19a210ba17585fa0761303fc55295",
+    "360-light-reduced-keyboard-checked.png": "53bb4a2bcc5ad6d2e16c42c6c4eeaa435ee6554b5c23dd2b80c7eaee0e35d148",
+    "360-light-reduced-keyboard-focus.png": "f5327a214fa638cd08900bcc8a70a05d1b66cadda29c4158b660c0ca91cffecf",
+    "360-light-reduced-reenabled-false.png": "c540393d9f2ac017a0b352237db5a96db917e108521fc704a9fc83c0eadca6f6",
+    "360-light-reduced-subtitle-only.png": "02f311a148be2d49cbb20073d0fb6ca93da8f81e1343e75d1c7630d5f003eb5e",
+    "360-light-reduced.webm": "846ee25a2c210725e8f2ecca9157256259872d145edb91a78ed2b1b1b89eb395"
+  }
+}
