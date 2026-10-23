@@ -415,7 +415,8 @@ export class Popover extends RanElement {
     clearTimeout(this.removeTimeId);
     this.removeTimeId = undefined;
     this.hide();
-    if (this._returnFocus?.isConnected) this._returnFocus.focus({ preventScroll: true });
+    // Keyboard dismissal must reveal the restored target even after a pointer opening.
+    if (this._returnFocus?.isConnected) this._returnFocus.focus({ preventScroll: true, focusVisible: true });
   };
   clickRemovePopover = (e: Event): void => {
     this.hoverRemovePopover(e);

@@ -4,6 +4,10 @@ Actual registered ranui components, captured from the source preview. The [manif
 binds selected media and 36 runtime/dependency inputs to SHA-256, including the base revision and
 dirty source. These are isolated component fixtures. Document application review remains pending.
 
+The [2026-10-23 follow-up](../2026-10-23-focus-return/README.md) records the subsequent
+Firefox keyboard-focus correction and current source fingerprints. The evidence below
+retains this earlier iteration's bytes and verification scope.
+
 ## Inspected states
 
 | Scope                       | Before / current evidence                                                                                                                   | Observed result                                                                                                                         |

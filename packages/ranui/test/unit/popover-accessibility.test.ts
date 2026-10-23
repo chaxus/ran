@@ -63,10 +63,12 @@ describe('r-popover accessibility contract', () => {
     popover.show();
     const action = popover.popoverContent!.querySelector('button')!;
     action.focus();
+    const restoreFocus = vi.spyOn(trigger, 'focus');
     const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
     action.dispatchEvent(escape);
     expect(popover.open).toBe(false);
     expect(document.activeElement).toBe(trigger);
+    expect(restoreFocus).toHaveBeenCalledWith({ preventScroll: true, focusVisible: true });
     expect(escape.defaultPrevented).toBe(true);
   });
 

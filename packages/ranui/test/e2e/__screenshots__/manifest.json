@@ -12,9 +12,9 @@
     "systemFontsSha256": "c339750d748e2a442eec2756219b1e49e9601fe3a6927100deea37040547d226",
     "systemFontFiles": 48,
     "localFontsSha256": "a95cd2bae45daa40ee591ea0ed3affc47db95cc32c42eb2f2f6f23c46f7b237e",
-    "harnessSha256": "fc9fa95baeeb9b38c58ab50a99d2a66bc91ce4c3ba8b01f3f5edda2f8ba83e88"
+    "harnessSha256": "e9ed406ca86d360a61ab7fbeaa79690ebcf2ec87b887dbdfb546e3447e6231b1"
   },
-  "image": "sha256:307110f3bbc7c3b0ecb32b788bae193a729c2e9226d5cef63d89f662b8e94b9a",
+  "image": "sha256:45a50b97c54e69b0b4bdb159a0b7fc6147848e0b5f93b31e31c66db8be7b4f4d",
   "snapshots": {
     "button.spec.ts/Mobile-Chrome/button.png": "3b4b6ba3280a12f8b1645fc970c864dfe6f0d548ad01281aba96452d5c49ac34",
     "button.spec.ts/chromium/button.png": "eab068eb0d14e78f141496b02c218e5c0fff686ab301644c69d77b747871d8ef",
@@ -45,11 +45,11 @@
     "input.spec.ts/Mobile-Chrome/input-default.png": "b48510bc8af31e5dd808e8c27f60b519b83aa8ddf84b2232dd1b07d2f3cac68d",
     "input.spec.ts/Mobile-Chrome/input-disabled.png": "60353bb5706103b3b9dcb2eac5a343b337dd5e8b8a08cb50af3859bb9c340fba",
     "input.spec.ts/Mobile-Chrome/input-focused.png": "be1263fe776b7c419f54df107a0fa0877771c1a126e05f2648bd134e6c32f7ff",
-    "input.spec.ts/Mobile-Chrome/input-with-icon.png": "0e56266a88d40446caab2edc0d0c991a662b607067f2c34a329285fd52efb936",
+    "input.spec.ts/Mobile-Chrome/input-with-icon.png": "3cb6d3cf3f5554409202a20fa4df028d6f5efcd9d246d9b7a6019419e5287036",
     "input.spec.ts/chromium/input-default.png": "7afe75c336d8fbb3f48c0ccf433e36d3a6382a324aa0f55940c7ed7957ea330c",
     "input.spec.ts/chromium/input-disabled.png": "a9df376d16bfd16dc708fc6e6bac52b72c5d1c85fc3184d8f4109d7d77eb6988",
     "input.spec.ts/chromium/input-focused.png": "2795c67c0efa8c888117e88a27dcf55fcbadabe78d37f0b333ca5a2c467be01b",
-    "input.spec.ts/chromium/input-with-icon.png": "0e56266a88d40446caab2edc0d0c991a662b607067f2c34a329285fd52efb936",
+    "input.spec.ts/chromium/input-with-icon.png": "0647778f86e54a78232d024446caf7ee86441152b84c34d5df128fba48f46c0d",
     "loading.spec.ts/Mobile-Chrome/loading-all.png": "f134fb0121bfada5056857d3928057877e5473dcd74c29e68de968bef1a823e6",
     "loading.spec.ts/Mobile-Chrome/loading-circle-line.png": "620f65b30ab131afd39a36f8cbc1d5278892cbd29ee19ae8ccd6143398913187",
     "loading.spec.ts/Mobile-Chrome/loading-dot.png": "26c04433f8c762936bda463cf85e59642c8bebced939e4c9dc6766ee6db8e965",
