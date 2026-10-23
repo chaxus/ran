@@ -164,39 +164,38 @@ export class Tabs extends RanElement {
   }
 
   initTabLineAlignCenter = (): void => {
-    const { length } = this._nav.children;
-    let left = 0;
-    for (let i = 0; i < length; i++) {
-      const { width = 0 } = this._nav.children[i].getBoundingClientRect();
-      left += width;
-    }
-    this._line.style.setProperty('left', `calc(50% - ${left / 2}px)`);
+    if (this.active) this.setTabLine(this.active);
+    else this._line.style.setProperty('left', '50%');
   };
 
   initTabLineAlignEnd = (): void => {
-    const { length } = this._nav.children;
-    let left = 0;
-    for (let i = 0; i < length; i++) {
-      const { width = 0 } = this._nav.children[i].getBoundingClientRect();
-      left += width;
-    }
-    this._line.style.setProperty('left', `calc(100% - ${left}px)`);
+    if (this.active) this.setTabLine(this.active);
+    else this._line.style.setProperty('left', '100%');
   };
 
   setTabLine = (key: string): void => {
-    if (key) {
-      const index = this.tabHeaderKeyMapIndex[key];
-      const TabHeader = this._nav.children[index];
-      if (!TabHeader) return;
-      const { width = 0 } = TabHeader.getBoundingClientRect();
-      this._line.style.setProperty('width', `${width}px`);
-      let distance = 0;
-      for (let i = 0; i < index; i++) {
-        const item = this._nav.children[i];
-        const { width = 0 } = item.getBoundingClientRect();
-        distance += width;
-      }
-      this._line.style.setProperty('transform', `translateX(${distance}px)`);
+    const header = this._nav.children[this.tabHeaderKeyMapIndex[key]];
+    if (!header) return;
+    const bounds = header.getBoundingClientRect();
+    const viewport = this._header.getBoundingClientRect();
+    // Use the header's own scroll coordinates; alignment and overflow share
+    // the same geometry and never require scrolling the document.
+    const distance = [...this._nav.children]
+      .slice(0, this.tabHeaderKeyMapIndex[key])
+      .reduce((offset, item) => offset + item.getBoundingClientRect().width, 0);
+    this._line.style.setProperty('width', `${bounds.width}px`);
+    this._line.style.setProperty('left', `${bounds.left - viewport.left + this._header.scrollLeft - distance}px`);
+    this._line.style.setProperty('transform', `translateX(${distance}px)`);
+  };
+
+  private _revealHeader = (header: Element): void => {
+    const bounds = header.getBoundingClientRect();
+    const viewport = this._header.getBoundingClientRect();
+    const inset = Number.parseFloat(getComputedStyle(this._header).paddingInlineStart) || 2;
+    if (bounds.width > this._header.clientWidth - inset * 2 || bounds.left < viewport.left + inset) {
+      this._header.scrollLeft += bounds.left - viewport.left - inset;
+    } else if (bounds.right > viewport.right - inset) {
+      this._header.scrollLeft += bounds.right - viewport.right + inset;
     }
   };
 
@@ -255,6 +254,7 @@ export class Tabs extends RanElement {
       // Line tabs change border geometry with selection; measure after styling.
       this.setTabLine(key);
       this.setTabContent(key);
+      this._revealHeader(this._nav.children[index]);
     }
     this.syncTabsAria();
   };
@@ -317,7 +317,7 @@ export class Tabs extends RanElement {
     const key = headers[next].getAttribute('r-key');
     if (key) {
       this.activateKey(key);
-      this.tabFocusable(headers[next]).focus();
+      this.tabFocusable(headers[next]).focus({ preventScroll: true });
     }
   };
 

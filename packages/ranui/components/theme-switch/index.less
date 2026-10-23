@@ -59,3 +59,10 @@
   width: var(--ran-theme-switch-icon-size, var(--ran-size-1, 16px));
   height: var(--ran-theme-switch-icon-size, var(--ran-size-1, 16px));
 }
+
+@media (pointer: coarse) {
+  .ran-theme-switch button {
+    min-width: var(--ran-theme-switch-touch-size, 44px);
+    min-height: var(--ran-theme-switch-touch-size, 44px);
+  }
+}
