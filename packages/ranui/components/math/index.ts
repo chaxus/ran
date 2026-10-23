@@ -76,6 +76,9 @@ export class Math extends RanElement {
   contain: HTMLElement;
   _toolbar: HTMLElement;
   _copyResetTimer?: number;
+  private _copyStatus?: HTMLElement;
+  private _copyRevision = 0;
+  private _copyPending?: { button: HTMLButtonElement };
   _downloadMenu?: HTMLElement;
   // The lazy temml + font-face imports inside render() are deliberately
   // fire-and-forget for callers — but tests need a way to know when a render
@@ -95,8 +98,8 @@ export class Math extends RanElement {
       .class('ran-math')
       .part('math')
       .children(
-        Div().class('ran-math-render').ref(containRef).part('render'),
         Div().class('ran-math-toolbar').ref(toolbarRef).part('toolbar'),
+        Div().class('ran-math-render').ref(containRef).part('render'),
       )
       .build();
     this._shadowDom.appendChild(this._wrap);
@@ -197,6 +200,7 @@ export class Math extends RanElement {
   }
   // ── Rendering ─────────────────────────────────────────────────────────────
   render(): void {
+    this.invalidateCopy();
     const latex = this.latex;
     if (!latex) {
       this.contain.innerHTML = '';
@@ -228,7 +232,7 @@ export class Math extends RanElement {
           const wrap = this.wrap;
           if (wrap) options.wrap = wrap;
           this.contain.innerHTML = temml.renderToString(latex, options);
-          this.buildToolbar();
+          if (!this._toolbar.querySelector('button')) this.buildToolbar();
           this.emit('render', { ok: true });
         } catch (err) {
           this.showError(String((err as Error)?.message || err));
@@ -250,7 +254,17 @@ export class Math extends RanElement {
     this._events.on(btn, 'click', onClick);
     return btn;
   }
+  private invalidateCopy(): void {
+    this._copyRevision++;
+    this._copyPending?.button.removeAttribute('aria-busy');
+    this._copyPending = undefined;
+    window.clearTimeout(this._copyResetTimer);
+    this._copyStatus?.remove();
+    this._copyStatus = undefined;
+    if (this.copyable) this._toolbar.querySelector('button r-icon')?.setAttribute('name', 'copy');
+  }
   private buildToolbar(): void {
+    this.invalidateCopy();
     this.closeDownloadMenu();
     this._toolbar.innerHTML = '';
     const buttons: HTMLElement[] = [];
@@ -268,19 +282,53 @@ export class Math extends RanElement {
     return math ? math.outerHTML : '';
   }
   // Copy the source (default) or the rendered MathML, per the `copy` attribute value.
-  private copyContent = (): void => {
+  private copyContent = async (): Promise<void> => {
+    const button = this._toolbar.querySelector<HTMLButtonElement>('button');
+    if (!button || this._copyPending?.button === button) return;
     const target = this.copyTarget;
-    const text = target === 'mathml' ? this.currentMathML() : this.latex;
-    if (!text || !navigator.clipboard) return;
-    navigator.clipboard.writeText(text).then(() => {
+    const source = this.latex;
+    if (!source) return;
+    const revision = this._copyRevision;
+    const current = (): boolean =>
+      this.isConnected &&
+      revision === this._copyRevision &&
+      this.latex === source &&
+      this._toolbar.querySelector('button') === button;
+    const operation = { button };
+    this._copyPending = operation;
+    button.setAttribute('aria-busy', 'true');
+    window.clearTimeout(this._copyResetTimer);
+    this._copyStatus?.remove();
+    this._copyStatus = undefined;
+    const icon = button.querySelector('r-icon');
+    icon?.setAttribute('name', 'copy');
+    try {
+      // MathML belongs to the rendered source, not the previous frame. Wait for
+      // this render without replacing the focused control or copying stale DOM.
+      if (target === 'mathml') await this._pending;
+      if (!current()) return;
+      const text = target === 'mathml' ? this.currentMathML() : source;
+      if (!text) return;
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(text);
+      if (!current()) return;
       this.emit('copied', { kind: target });
-      const icon = this._toolbar.querySelector('r-icon[name="copy"]');
-      if (icon) {
-        icon.setAttribute('name', 'check');
-        window.clearTimeout(this._copyResetTimer);
-        this._copyResetTimer = window.setTimeout(() => icon.setAttribute('name', 'copy'), 1200);
+      icon?.setAttribute('name', 'check');
+      this._copyResetTimer = window.setTimeout(() => {
+        if (current()) icon?.setAttribute('name', 'copy');
+      }, 1200);
+    } catch {
+      if (!current()) return;
+      const status = Div().class('ran-math-copy-status').part('copy-status').attr('role', 'status').build();
+      status.textContent = this.label('copy-error', 'Could not copy. Try again.');
+      this._copyStatus = status;
+      this._toolbar.prepend(status);
+    } finally {
+      if (this._copyPending === operation) {
+        button.removeAttribute('aria-busy');
+        this._copyPending = undefined;
       }
-    });
+    }
   };
   // ── Download (opt-in) — source (.tex) / MathML (.mml) ─────────────────────
   // `download` (bare) offers both via a menu; restrict with `download="mathml"` or
@@ -341,7 +389,7 @@ export class Math extends RanElement {
       });
       menu.appendChild(item);
     });
-    this._wrap.appendChild(menu);
+    this._toolbar.appendChild(menu);
     this._downloadMenu = menu;
   }
   private closeDownloadMenu = (): void => {
@@ -351,11 +399,14 @@ export class Math extends RanElement {
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   connectedCallback(): void {
     this.handlerExternalCss();
+    // Rebind toolbar listeners after reconnect; source updates preserve its focus.
+    this.buildToolbar();
     this.render();
     // Close the download menu when the pointer leaves (the toolbar hides too).
     this._events.on(this._wrap, 'mouseleave', this.closeDownloadMenu);
   }
   disconnectedCallback(): void {
+    this.invalidateCopy();
     this._events.abort();
     window.clearTimeout(this._copyResetTimer);
     this.closeDownloadMenu();

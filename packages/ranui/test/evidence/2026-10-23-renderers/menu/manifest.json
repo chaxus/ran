@@ -1,0 +1,29 @@
+{
+  "sourceSha256": {
+    "packages/ranui/components/math/index.ts": "51930e4d24fb73dcad6facf4a7f6c881aaa70b18f1893d2db9bf4724427c616e",
+    "packages/ranui/components/math/index.less": "2d6eb4141acad45c3982e7f8ac2245ed1ab67ada5ed325eb957eac7a8e763c79",
+    "packages/ranui/components/mermaid/index.ts": "e20285d384e52a0b1db4e7df0233da47ffbc20288a961078dc1cb1be0354b664",
+    "packages/ranui/components/mermaid/index.less": "bb4c3822f0e06b2ea48f7d88eaffd74e3f7d457e7f3029fd37ca5300b3aee8a7",
+    "packages/ranui/test/e2e/renderer-controls.spec.ts": "fb72aa6a4bc80f6157ba9db66af041134046773fcc12db8c398ceaf94e9aced9"
+  },
+  "mediaSha256": {
+    "before/renderer-controls-download-25152-low-the-expanded-action-row-chromium/wrapped-error-download.png": "b22edc7bd6061b23b926378bc9073c9acd5f61d7b34645e255e9958ef6f1bb80",
+    "before/renderer-controls-download-4a942-low-the-expanded-action-row-chromium/wrapped-error-download.png": "abe6656eda28111016f64eeec5b0657bbe56dc7cb44845976232bf54501caea7",
+    "before/renderer-controls-download-778eb-low-the-expanded-action-row-chromium/wrapped-error-download.png": "1bac730f47d70112093b8c21b9cef83080d23239a9f07e642a67808cdcfe92b1",
+    "before/renderer-controls-download-de8f2-low-the-expanded-action-row-chromium/wrapped-error-download.png": "2b595aa109977f3401ec45895615616823ebb13864c78c7ed87026e4e9aa7faa",
+    "after/renderer-controls-download-25152-low-the-expanded-action-row-chromium/wrapped-error-download.png": "59e1f689c3af74473448f5dfd48fad6603dc0b2ca319c570ab03685daf20a5f6",
+    "after/renderer-controls-download-4a942-low-the-expanded-action-row-chromium/wrapped-error-download.png": "d3107aecb6b5a9344444c2b4767963ddc1e23f198e1edf8419c122c894205774",
+    "after/renderer-controls-download-778eb-low-the-expanded-action-row-chromium/wrapped-error-download.png": "f826688bc6a34ec64dd9913e3867bc161adfc1b73804788f454df7d9f4736861",
+    "after/renderer-controls-download-de8f2-low-the-expanded-action-row-chromium/wrapped-error-download.png": "43e92adebf11c45fc911b0260a3a7e01eedcd31d8697ddcfa058d67cd1587c43"
+  },
+  "verification": {
+    "before": "4/4 failed at real menu/action-row geometry",
+    "afterChromium": "18/18 passed",
+    "unit": "52/52 passed"
+  },
+  "limitations": [
+    "Host Chromium only in this subtask",
+    "No recording produced",
+    "Existing snapshot baselines not updated"
+  ]
+}

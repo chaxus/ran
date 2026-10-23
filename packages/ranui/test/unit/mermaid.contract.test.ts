@@ -245,4 +245,123 @@ describe('r-mermaid contract', () => {
     document.body.appendChild(mermaid);
     expect(() => document.body.removeChild(mermaid)).not.toThrow();
   });
+  it('keeps copy pending focus, rejects locally, and permits retry without duplicate writes', async () => {
+    let reject!: (error: Error) => void;
+    const writeText = vi
+      .fn()
+      .mockImplementationOnce(
+        () =>
+          new Promise<void>((_, fail) => {
+            reject = fail;
+          }),
+      )
+      .mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    const element = document.createElement('r-mermaid') as any;
+    element.setAttribute('copy', '');
+    element.setAttribute('label-copy-error', 'Copy failed. Try again.');
+    document.body.appendChild(element);
+    element.code = 'graph TD; A-->B;';
+    await sleep();
+    const copied = vi.fn();
+    element.addEventListener('copied', copied);
+    const button = element._toolbar.querySelector('button') as HTMLButtonElement;
+    button.focus();
+    button.click();
+    button.click();
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    expect(button.disabled).toBe(false);
+    reject(new Error('denied'));
+    await sleep();
+    expect(copied).not.toHaveBeenCalled();
+    expect(element._wrap.querySelector('[part="copy-status"]')?.textContent).toBe('Copy failed. Try again.');
+    expect(button.hasAttribute('aria-busy')).toBe(false);
+    button.click();
+    await sleep();
+    expect(copied).toHaveBeenCalledTimes(1);
+  });
+  it('ignores a completed copy after its source and toolbar are replaced', async () => {
+    let resolve!: () => void;
+    const writeText = vi.fn(
+      () =>
+        new Promise<void>((done) => {
+          resolve = done;
+        }),
+    );
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    const element = document.createElement('r-mermaid') as any;
+    element.setAttribute('copy', '');
+    document.body.appendChild(element);
+    element.code = 'graph TD; A-->B;';
+    await sleep();
+    const copied = vi.fn();
+    element.addEventListener('copied', copied);
+    element._toolbar.querySelector('button').click();
+    element.code = 'graph TD; A-->B; + newer';
+    await sleep();
+    resolve();
+    await sleep();
+    expect(copied).not.toHaveBeenCalled();
+    expect(element._toolbar.querySelector('r-icon')?.getAttribute('name')).toBe('copy');
+  });
+
+  it('copies a changed source while the previous write is pending without releasing the newer write', async () => {
+    const finish: Array<() => void> = [];
+    const writeText = vi.fn((_text: string) => new Promise<void>((resolve) => finish.push(resolve)));
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    const element = document.createElement('r-mermaid') as any;
+    element.setAttribute('copy', '');
+    document.body.appendChild(element);
+    element.code = 'graph TD; A-->B;';
+    await sleep();
+    const copied = vi.fn();
+    element.addEventListener('copied', copied);
+    const button = element._toolbar.querySelector('button') as HTMLButtonElement;
+    button.focus();
+    button.click();
+    element.code = 'graph TD; B-->C;';
+    await sleep();
+    button.click();
+    expect(writeText.mock.calls.map((args) => args[0])).toEqual(['graph TD; A-->B;', 'graph TD; B-->C;']);
+    expect(element._toolbar.querySelector('button')).toBe(button);
+    expect(element._shadowDom.activeElement).toBe(button);
+    finish[0]();
+    await sleep();
+    expect(copied).not.toHaveBeenCalled();
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    button.click();
+    expect(writeText).toHaveBeenCalledTimes(2);
+    finish[1]();
+    await sleep();
+    expect(copied).toHaveBeenCalledTimes(1);
+    expect(button.hasAttribute('aria-busy')).toBe(false);
+    expect(button.querySelector('r-icon')?.getAttribute('name')).toBe('check');
+  });
+
+  it('keeps a download-only toolbar icon when its source changes', async () => {
+    const element = document.createElement('r-mermaid') as any;
+    element.setAttribute('download', 'source');
+    document.body.appendChild(element);
+    element.code = 'graph TD; A-->B;';
+    await sleep();
+    element.code = 'graph TD; B-->C;';
+    await sleep();
+    expect(element._toolbar.querySelector('button r-icon')?.getAttribute('name')).toBe('download');
+  });
+
+  it('reports unavailable clipboard locally without claiming success', async () => {
+    Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true });
+    const element = document.createElement('r-mermaid') as any;
+    element.setAttribute('copy', '');
+    document.body.appendChild(element);
+    element.code = 'graph LR; A-->B;';
+    await sleep();
+    const copied = vi.fn();
+    element.addEventListener('copied', copied);
+    element._toolbar.querySelector('button').click();
+    await sleep();
+    expect(element._wrap.querySelector('[part="copy-status"]')?.textContent).toBe('Could not copy. Try again.');
+    expect(copied).not.toHaveBeenCalled();
+  });
 });
