@@ -186,6 +186,22 @@ describe('r-message component', () => {
     expect(closeSpy).toHaveBeenCalled();
   });
 
+  it('expiry tolerates a message removed early without losing its close callback', () => {
+    const close = vi.fn();
+    message?.success({ content: 'Saved', duration: 500, close });
+    document.querySelector('.ranui-message r-message')!.remove();
+    expect(() => vi.advanceTimersByTime(500)).not.toThrow();
+    expect(close).toHaveBeenCalledOnce();
+  });
+
+  it('expiry does not remove a message adopted by another owner', () => {
+    message?.info({ content: 'Moved', duration: 500 });
+    const msg = document.querySelector('.ranui-message r-message')!;
+    document.body.appendChild(msg);
+    expect(() => vi.advanceTimersByTime(500)).not.toThrow();
+    expect(msg.parentNode).toBe(document.body);
+  });
+
   it('message.info ignores null/undefined options', () => {
     expect(() => message?.info(null)).not.toThrow();
     expect(() => message?.info(undefined)).not.toThrow();

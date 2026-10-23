@@ -57,6 +57,44 @@ describe('r-progress contract', () => {
     expect(Number(progress.percent)).toBeLessThanOrEqual(100);
   });
 
+  it.each([
+    ['-20', '100', '0', '100', '0'],
+    ['150', '100', '100', '100', '1'],
+    ['not-a-number', '100', '0', '100', '0'],
+    ['Infinity', '100', '0', '100', '0'],
+    ['50', '0', '0', '0', '0'],
+    ['50', '-100', '50', '100', '0.5'],
+    ['50', 'not-a-number', '50', '100', '0.5'],
+    ['50', 'Infinity', '50', '100', '0.5'],
+  ])(
+    'normalizes percent=%s / total=%s consistently without overwriting raw inputs',
+    (percent, total, value, maximum, fraction) => {
+      const progress = document.createElement('r-progress') as Progress;
+      document.body.appendChild(progress);
+      progress.total = total;
+      progress.percent = percent;
+      expect(progress.getAttribute('percent')).toBe(percent);
+      expect(progress.getAttribute('total')).toBe(total);
+      expect(progress.percent).toBe(value);
+      expect(progress.total).toBe(maximum);
+      expect(progress.getAttribute('aria-valuenow')).toBe(value);
+      expect(progress.getAttribute('aria-valuemax')).toBe(maximum);
+      expect(progress.style.getPropertyValue('--progress-percent')).toBe(fraction);
+      progress._preSerialize();
+      expect(progress.style.getPropertyValue('--progress-percent')).toBe(fraction);
+    },
+  );
+
+  it('keeps a zero-total slider finite after keyboard input', () => {
+    const progress = document.createElement('r-progress') as Progress;
+    progress.type = 'drag';
+    progress.total = '0';
+    document.body.appendChild(progress);
+    progress.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    expect(progress.percent).toBe('0');
+    expect(progress.style.getPropertyValue('--progress-percent')).toBe('0');
+  });
+
   it('type defaults to primary', () => {
     const progress = document.createElement('r-progress') as Progress;
     document.body.appendChild(progress);
