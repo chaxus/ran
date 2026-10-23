@@ -49,27 +49,32 @@ document.body.append(button);
 
 ## 与 agent 一起使用
 
-[ranui skill](./plugins/ranui/skills/ranui/SKILL.md) 用于界面实现、视觉审查和浏览器验收。
-它按需读取宿主项目已安装的 ranui 规范，不会安装组件库，也不包含工具、hooks 或外部服务。
+统一的 **ran 插件**包含 [design](./plugins/ran/skills/design/SKILL.md)、
+[ranui](./plugins/ran/skills/ranui/SKILL.md) 和 [ranuts](./plugins/ran/skills/ranuts/SKILL.md)
+三个 skill。设计方法适用于现有技术栈，无需安装 ranui；库相关指引读取宿主实际安装版本的公开契约。
+插件自带设计参考文件，无需 MCP 服务、账号或 hook。
+
+测试当前分支时，在仓库根目录运行 `codex plugin marketplace add .` 或
+`claude plugin marketplace add .`，再安装 `ran@ran`。下面的远程安装方式在统一插件进入默认分支后适用。
 
 **Claude Code 插件**：添加本仓库的 marketplace，再安装 ranui：
 
 ```sh
 claude plugin marketplace add chaxus/ran
-claude plugin install ranui@ran
+claude plugin install ran@ran
 ```
 
-新会话中使用 `/ranui:ranui`。同一 marketplace 也提供用于工具函数任务的 `ranuts`。
+新会话中按任务使用 `/ran:design`、`/ran:ranui` 或 `/ran:ranuts`。
 
 **Codex 插件**：注册仓库的 marketplace，安装同一份 skill：
 
 ```sh
 codex plugin marketplace add chaxus/ran
-codex plugin add ranui@ran
+codex plugin add ran@ran
 ```
 
-新任务中使用 `$ranui`。本地检出仓库时，在仓库根目录执行 `codex plugin marketplace add .`。
-[插件清单](./plugins/ranui/plugin.json)和 [Codex marketplace](./.agents/plugins/marketplace.json)
+新任务中使用 `$design`、`$ranui` 或 `$ranuts`。本地检出仓库时，在仓库根目录执行 `codex plugin marketplace add .`。
+[插件清单](./plugins/ran/plugin.json)和 [Codex marketplace](./.agents/plugins/marketplace.json)
 遵循[官方打包格式](https://developers.openai.com/plugins/build/plugins)。
 两种安装入口使用同一份 skill 正文，不需要 MCP 服务、额外账号或 hook。
 
@@ -78,7 +83,7 @@ codex plugin add ranui@ran
 [设计](./packages/ranui/docs/DESIGN.md)、[交互](./packages/ranui/docs/INTERACTION.md)、
 [公开 API](./packages/ranui/docs/COMPONENTS.md)和[证据与验收](./packages/ranui/docs/ACCEPTANCE.md)。
 插件先明确简短的任务契约，再保留宿主产品已有决策，并用实际渲染证据支撑界面结论。
-自动检查、agent 视觉审查和用户验收分别记录；[六个可选 agent 场景](./plugins/ranui/evals/README.md)
+自动检查、agent 视觉审查和用户验收分别记录；[六个可选 agent 场景](./plugins/ran/evals/README.md)
 验证指引的实际执行效果，不用 token/API 检查冒充行为验证。源码贡献者先读 [AGENTS.md](./AGENTS.md)。
 
 ## 参与开发

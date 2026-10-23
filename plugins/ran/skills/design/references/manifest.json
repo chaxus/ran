@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "generator": "bin/sync-agent-plugin.ts",
+  "sources": [
+    {
+      "source": "design/ACCEPTANCE.md",
+      "sha256": "a329a4dd280c5b045af3e52847c2968c235019729e2eaf8990695fe52571318e",
+      "output": "ACCEPTANCE.md",
+      "outputSha256": "32be6a87fe20254b5a8bea33e5a8afcc9b2d60dc5ad04c1776c5649a236c06a2"
+    },
+    {
+      "source": "design/DESIGN.md",
+      "sha256": "d364d2aaf08aeb71d1c95af9f983e1cc08350105e811eb2d584ae9dd0ae57433",
+      "output": "DESIGN.md",
+      "outputSha256": "38dce4e72027b10d7b091ac21b28eaacc3640eee634696bbcb394e35958a1931"
+    },
+    {
+      "source": "design/INTERACTION.md",
+      "sha256": "539cdaa4527eca61cfe6098f2759d63396ec17215a7bfc444518cb8981c41b95",
+      "output": "INTERACTION.md",
+      "outputSha256": "677d911bbd22abc1214d25360d36809e3e1ad3c57f079d9c0b080ac5fa91eac7"
+    },
+    {
+      "source": "design/INTERFACE_GUIDE.md",
+      "sha256": "0dec552801694c9bdeae3e01350918280b76dfb525dcf095905ade560fdc1323",
+      "output": "INTERFACE_GUIDE.md",
+      "outputSha256": "c6f12d12178a9ff015161d5e294e402d5dcca7eaa88ab230c56de064c34f9aa0"
+    },
+    {
+      "source": "design/README.md",
+      "sha256": "18071bb2be15f839ccfb1a1ffe46f5d4725faeadb0f5d2040cb1fe4a65381926",
+      "output": "README.md",
+      "outputSha256": "08cbaf0b5bee3bd92dfc4804ff90c2df1f74f562d813a4494cf26dd03c19677a"
+    },
+    {
+      "source": "design/REFERENCE_RESEARCH.md",
+      "sha256": "29048e7043a37d6fe08e9f15f9d40b2d34b058eefcaf5997b00404e62ddb6607",
+      "output": "REFERENCE_RESEARCH.md",
+      "outputSha256": "815f6889cb4838b2f1eaf09031e8b75ef1b8109672657068700fc7f780fe58b0"
+    },
+    {
+      "source": "design/WORKFLOW_PATTERNS.md",
+      "sha256": "ae519b57ea95ca0c5ea27481df7e62bdda90cd6b55872bcb3c02a9ff7b72e0e3",
+      "output": "WORKFLOW_PATTERNS.md",
+      "outputSha256": "b163aa489e0cce0ee8ea113bbae9ddbe997c16b9426bdb23cc1727d34c14f076"
+    }
+  ]
+}

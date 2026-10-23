@@ -2,7 +2,7 @@ import { evaluationManifest } from './data.ts';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { treeHash } from './hash.ts';
 import { join } from 'node:path';
@@ -27,6 +27,12 @@ test('prepare creates paired source-only runs with identical tasks and pinned gu
     const manifest = evaluationManifest(join(root, 'baseline', 'manifest.json'));
     assert.equal(manifest.scenarios.length, 6);
     assert.equal(manifest.guidanceRef, 'HEAD');
+    assert.ok(
+      ['plugins/ranui/skills/ranui/SKILL.md', 'plugins/ran/skills/ranui/SKILL.md'].some((file) =>
+        existsSync(join(root, 'baseline/guidance', file)),
+      ),
+      'baseline must retain its original versioned skill',
+    );
     assert.ok(manifest.fixtureHash);
     const freshness = manifest.scenarios.find((x) => x.id === '05-freshness');
     assert.ok(freshness);

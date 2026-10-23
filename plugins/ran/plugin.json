@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ran",
+  "version": "2.0.0",
+  "description": "Design, build and verify products with portable design guidance and version-aware ranui and ranuts skills.",
+  "author": {
+    "name": "chaxus",
+    "url": "https://github.com/chaxus/ran"
+  },
+  "repository": "https://github.com/chaxus/ran",
+  "license": "MIT",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "ran",
+        "shortDescription": "Design products and use ran libraries",
+        "developerName": "chaxus",
+        "defaultPrompt": ["Use ran to improve this product and verify the actual result."]
+      }
+    }
+  }
+}
