@@ -39,14 +39,17 @@
 
   &-header {
     display: flex;
+    flex-wrap: wrap;
+    min-width: 0;
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--ran-card-header-gap, var(--ran-space-4, 16px));
   }
 
   &-title-area {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   &-title {
@@ -81,8 +84,4 @@
   &-footer {
     min-width: 0;
   }
-}
-
-:host(:not([title]):not([description])) .ran-card-header {
-  display: none;
 }

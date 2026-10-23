@@ -1,0 +1,514 @@
+{
+  "scope": "Before fix. Actual browser reproduction, no component behavior disabled. Source hashes captured before run. No human acceptance.",
+  "runtime": {
+    "url": "http://localhost:5273/",
+    "browser": "151.0.7922.34",
+    "platform": "darwin",
+    "head": "83bd9bf1631229dbe62ae359bbe9344db3a81db5",
+    "inputs": {
+      "components/card/index.ts": "dbf6c44a9e49937874d5b3e57410890ab2ebe2ab4ada8b3ad88f30d08e66a517",
+      "components/card/index.less": "69fd207e8315e04745b7cc386884001d286a5a3dc3a40fb0e3047d35575af19c",
+      "utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+      "theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+      "theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360"
+    }
+  },
+  "results": [
+    {
+      "name": "wide-light",
+      "width": 840,
+      "height": 740,
+      "theme": "light",
+      "cards": [
+        {
+          "id": "only",
+          "header": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "title": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "description": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "body": {
+            "text": "",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 111,
+              "y": 173,
+              "width": 618,
+              "height": 21
+            }
+          },
+          "titleTextBox": {
+            "left": 0,
+            "right": 0,
+            "width": 0,
+            "height": 0
+          },
+          "extra": {
+            "text": "Manage members",
+            "visible": false,
+            "left": 0,
+            "right": 0,
+            "width": 0,
+            "height": 0
+          }
+        },
+        {
+          "id": "empty",
+          "header": {
+            "text": "",
+            "display": "flex",
+            "visible": true,
+            "box": {
+              "x": 111,
+              "y": 289,
+              "width": 618,
+              "height": 0
+            }
+          },
+          "title": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "description": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "body": {
+            "text": "",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 111,
+              "y": 305,
+              "width": 618,
+              "height": 21
+            }
+          },
+          "titleTextBox": {
+            "left": 0,
+            "right": 0,
+            "width": 0,
+            "height": 0
+          },
+          "extra": null
+        },
+        {
+          "id": "plain",
+          "header": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "title": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "description": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "body": {
+            "text": "",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 111,
+              "y": 421,
+              "width": 618,
+              "height": 21
+            }
+          },
+          "titleTextBox": {
+            "left": 0,
+            "right": 0,
+            "width": 0,
+            "height": 0
+          },
+          "extra": null
+        },
+        {
+          "id": "described",
+          "header": {
+            "text": "Workspace access and security controlsMembers can read and update shared documents.",
+            "display": "flex",
+            "visible": true,
+            "box": {
+              "x": 111,
+              "y": 537,
+              "width": 618,
+              "height": 45.796875
+            }
+          },
+          "title": {
+            "text": "Workspace access and security controls",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 111,
+              "y": 537,
+              "width": 392.0625,
+              "height": 20.796875
+            }
+          },
+          "description": {
+            "text": "Members can read and update shared documents.",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 111,
+              "y": 561.796875,
+              "width": 392.0625,
+              "height": 21
+            }
+          },
+          "body": {
+            "text": "",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 111,
+              "y": 598.796875,
+              "width": 618,
+              "height": 21
+            }
+          },
+          "titleTextBox": {
+            "left": 111,
+            "right": 397.9375,
+            "width": 286.9375,
+            "height": 18
+          },
+          "extra": {
+            "text": "Review pending invitations",
+            "visible": true,
+            "left": 519.0625,
+            "right": 729,
+            "width": 209.9375,
+            "height": 32
+          }
+        }
+      ],
+      "firstTab": {
+        "id": "described-action",
+        "tag": "R-BUTTON"
+      },
+      "screenshot": "card-wide-light.png",
+      "screenshotSha256": "1e5b225df093ec94de35e6346ce305c3fbf3d308cef5ad65a4d5f552fd0b692c",
+      "pageTheme": {
+        "dataTheme": "light",
+        "bg": "rgba(255, 255, 255, 0.992)"
+      }
+    },
+    {
+      "name": "narrow-dark",
+      "width": 360,
+      "height": 900,
+      "theme": "dark",
+      "cards": [
+        {
+          "id": "only",
+          "header": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "title": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "description": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "body": {
+            "text": "",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 41,
+              "y": 194,
+              "width": 278,
+              "height": 42
+            }
+          },
+          "titleTextBox": {
+            "left": 0,
+            "right": 0,
+            "width": 0,
+            "height": 0
+          },
+          "extra": {
+            "text": "Manage members",
+            "visible": false,
+            "left": 0,
+            "right": 0,
+            "width": 0,
+            "height": 0
+          }
+        },
+        {
+          "id": "empty",
+          "header": {
+            "text": "",
+            "display": "flex",
+            "visible": true,
+            "box": {
+              "x": 41,
+              "y": 331,
+              "width": 278,
+              "height": 0
+            }
+          },
+          "title": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "description": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "body": {
+            "text": "",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 41,
+              "y": 347,
+              "width": 278,
+              "height": 42
+            }
+          },
+          "titleTextBox": {
+            "left": 0,
+            "right": 0,
+            "width": 0,
+            "height": 0
+          },
+          "extra": null
+        },
+        {
+          "id": "plain",
+          "header": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "title": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "description": {
+            "text": "",
+            "display": "none",
+            "visible": false,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          },
+          "body": {
+            "text": "",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 41,
+              "y": 484,
+              "width": 278,
+              "height": 42
+            }
+          },
+          "titleTextBox": {
+            "left": 0,
+            "right": 0,
+            "width": 0,
+            "height": 0
+          },
+          "extra": null
+        },
+        {
+          "id": "described",
+          "header": {
+            "text": "Workspace access and security controlsMembers can read and update shared documents.",
+            "display": "flex",
+            "visible": true,
+            "box": {
+              "x": 41,
+              "y": 621,
+              "width": 306.1875,
+              "height": 212.984375
+            }
+          },
+          "title": {
+            "text": "Workspace access and security controls",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 41,
+              "y": 621,
+              "width": 80.25,
+              "height": 103.984375
+            }
+          },
+          "description": {
+            "text": "Members can read and update shared documents.",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 41,
+              "y": 728.984375,
+              "width": 80.25,
+              "height": 105
+            }
+          },
+          "body": {
+            "text": "",
+            "display": "block",
+            "visible": true,
+            "box": {
+              "x": 41,
+              "y": 849.984375,
+              "width": 306.1875,
+              "height": 42
+            }
+          },
+          "titleTextBox": {
+            "left": 41,
+            "right": 121.25,
+            "width": 80.25,
+            "height": 101.1875
+          },
+          "extra": {
+            "text": "Review pending invitations",
+            "visible": true,
+            "left": 137.25,
+            "right": 347.1875,
+            "width": 209.9375,
+            "height": 32
+          }
+        }
+      ],
+      "firstTab": {
+        "id": "described-action",
+        "tag": "R-BUTTON"
+      },
+      "screenshot": "card-narrow-dark.png",
+      "screenshotSha256": "bb4d926a305e3c0a1d82e85483db5511932672145b549a2a113e6cb23e653f35",
+      "pageTheme": {
+        "dataTheme": "dark",
+        "bg": "rgba(0, 0, 0, 0.973)"
+      }
+    }
+  ]
+}

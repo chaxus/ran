@@ -1,0 +1,352 @@
+{
+  "scope": "Actual source component fixtures; not Document, physical-device or human acceptance. Only demo live media and Vite hot reload disabled.",
+  "runtime": {
+    "browser": "151.0.7922.34",
+    "platform": "darwin",
+    "url": "http://localhost:5273/components",
+    "head": "28e46c6ca8eece0385fe8171f7ed9e5be3701cae",
+    "inputs": {
+      "packages/ranui/components/card/index.ts": "0c85ac7f31406aeb55ffe71596473c7ae5a84fa29e6b40015ac4f17a7be0dabd",
+      "packages/ranui/components/card/index.less": "13e5dda60a5988ac6170f04bd417d5a21fcf0e391d118f58c802fe03290cd236",
+      "packages/ranui/components/image/index.ts": "35cd01c737ab912e350582dfc4a6b76e071eca0312662bdaa8b33a0fcc866d94",
+      "packages/ranui/components/image/index.less": "5edf6864125edd57965d3d028503856580e0a723d3f0a8513ff82a61d4eceb89",
+      "packages/ranui/components/button/index.ts": "80b49ea359fa64b607654508de9a926970297fcb89bcda20db13cf9a3d78e903",
+      "packages/ranui/components/button/index.less": "4ec4930135a66437c75e3395aba08c7364dbc14716d48a44567874eb72690121",
+      "packages/ranui/utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+      "packages/ranui/base.less": "c8643433f9148208938940dd1a3eee3dfc7f257d803f69d0db6320e918cd3b88",
+      "packages/ranui/theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+      "packages/ranui/theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360"
+    },
+    "worktree": "Candidate source: identify exact inputs by the SHA-256 map, not HEAD alone."
+  },
+  "observations": [
+    {
+      "name": "wide-light",
+      "width": 1280,
+      "theme": "light",
+      "motion": "no-preference",
+      "record": true,
+      "state": {
+        "bodyBackground": "rgb(255, 255, 255)",
+        "theme": "light",
+        "viewport": {
+          "width": 1280,
+          "height": 1000
+        },
+        "scrollWidth": 1280,
+        "focus": "manage",
+        "card": {
+          "x": 304,
+          "y": 118.59375,
+          "width": 672,
+          "height": 153.796875,
+          "right": 976,
+          "bottom": 272.390625
+        },
+        "heading": {
+          "x": 321,
+          "y": 135.59375,
+          "width": 412.0625,
+          "height": 20.796875,
+          "right": 733.0625,
+          "bottom": 156.390625
+        },
+        "action": {
+          "x": 749.0625,
+          "y": 135.59375,
+          "width": 209.9375,
+          "height": 32,
+          "right": 959,
+          "bottom": 167.59375
+        },
+        "body": {
+          "x": 321,
+          "y": 197.390625,
+          "width": 638,
+          "height": 21,
+          "right": 959,
+          "bottom": 218.390625
+        },
+        "image": {
+          "x": 475,
+          "y": 346.1875,
+          "width": 330,
+          "height": 180,
+          "right": 805,
+          "bottom": 526.1875
+        },
+        "imageHost": {
+          "x": 321,
+          "y": 346.1875,
+          "width": 638,
+          "height": 180,
+          "right": 959,
+          "bottom": 526.1875
+        },
+        "imageCount": 1
+      },
+      "after": {
+        "imageCount": 1,
+        "fallbackLoaded": true,
+        "focus": "extra"
+      },
+      "errors": [],
+      "screenshot": "foundation-wide-light.png",
+      "screenshotSha256": "2ec19d720f1b80105ac0f33b08c0f2f2339eb359908dd031ed925c8adf8ca4f3",
+      "recording": "foundation-wide-light.webm",
+      "recordingSha256": "d67a50475e5bcda6b44241e7dcf1ee89de3a026b3284d175c736546f1b439bb8"
+    },
+    {
+      "name": "narrow-dark",
+      "width": 360,
+      "theme": "dark",
+      "motion": "no-preference",
+      "record": true,
+      "state": {
+        "bodyBackground": "rgb(0, 0, 0)",
+        "theme": "dark",
+        "viewport": {
+          "width": 360,
+          "height": 1000
+        },
+        "scrollWidth": 360,
+        "focus": "manage",
+        "card": {
+          "x": 20,
+          "y": 101.796875,
+          "width": 320,
+          "height": 264.59375,
+          "right": 340,
+          "bottom": 366.390625
+        },
+        "heading": {
+          "x": 37,
+          "y": 118.796875,
+          "width": 286,
+          "height": 41.59375,
+          "right": 323,
+          "bottom": 160.390625
+        },
+        "action": {
+          "x": 37,
+          "y": 222.390625,
+          "width": 209.9375,
+          "height": 32,
+          "right": 246.9375,
+          "bottom": 254.390625
+        },
+        "body": {
+          "x": 37,
+          "y": 270.390625,
+          "width": 286,
+          "height": 42,
+          "right": 323,
+          "bottom": 312.390625
+        },
+        "image": {
+          "x": 37,
+          "y": 448.1875,
+          "width": 286,
+          "height": 156,
+          "right": 323,
+          "bottom": 604.1875
+        },
+        "imageHost": {
+          "x": 37,
+          "y": 436.1875,
+          "width": 286,
+          "height": 180,
+          "right": 323,
+          "bottom": 616.1875
+        },
+        "imageCount": 1
+      },
+      "after": {
+        "imageCount": 1,
+        "fallbackLoaded": true,
+        "focus": "extra"
+      },
+      "errors": [],
+      "screenshot": "foundation-narrow-dark.png",
+      "screenshotSha256": "7545ee79681e657bb12dde71bef76922191675abb4af229f64713ca3757b99c6",
+      "recording": "foundation-narrow-dark.webm",
+      "recordingSha256": "df3dcb3d66b7f2aee0a0bbeb8dc33710494e10d92a81156e700fbbbb1b9ae665"
+    },
+    {
+      "name": "wide-dark",
+      "width": 1280,
+      "theme": "dark",
+      "motion": "reduce",
+      "record": false,
+      "state": {
+        "bodyBackground": "rgb(0, 0, 0)",
+        "theme": "dark",
+        "viewport": {
+          "width": 1280,
+          "height": 1000
+        },
+        "scrollWidth": 1280,
+        "focus": "manage",
+        "card": {
+          "x": 304,
+          "y": 118.59375,
+          "width": 672,
+          "height": 153.796875,
+          "right": 976,
+          "bottom": 272.390625
+        },
+        "heading": {
+          "x": 321,
+          "y": 135.59375,
+          "width": 412.0625,
+          "height": 20.796875,
+          "right": 733.0625,
+          "bottom": 156.390625
+        },
+        "action": {
+          "x": 749.0625,
+          "y": 135.59375,
+          "width": 209.9375,
+          "height": 32,
+          "right": 959,
+          "bottom": 167.59375
+        },
+        "body": {
+          "x": 321,
+          "y": 197.390625,
+          "width": 638,
+          "height": 21,
+          "right": 959,
+          "bottom": 218.390625
+        },
+        "image": {
+          "x": 475,
+          "y": 346.1875,
+          "width": 330,
+          "height": 180,
+          "right": 805,
+          "bottom": 526.1875
+        },
+        "imageHost": {
+          "x": 321,
+          "y": 346.1875,
+          "width": 638,
+          "height": 180,
+          "right": 959,
+          "bottom": 526.1875
+        },
+        "imageCount": 1
+      },
+      "after": {
+        "imageCount": 1,
+        "fallbackLoaded": true,
+        "focus": "extra"
+      },
+      "errors": [],
+      "screenshot": "foundation-wide-dark.png",
+      "screenshotSha256": "1ca3ff5666d77585b78631170c5aa561b94d8fc286591ed8ac3cf423960084ff"
+    },
+    {
+      "name": "narrow-light",
+      "width": 360,
+      "theme": "light",
+      "motion": "reduce",
+      "record": false,
+      "state": {
+        "bodyBackground": "rgb(255, 255, 255)",
+        "theme": "light",
+        "viewport": {
+          "width": 360,
+          "height": 1000
+        },
+        "scrollWidth": 360,
+        "focus": "manage",
+        "card": {
+          "x": 20,
+          "y": 101.796875,
+          "width": 320,
+          "height": 264.59375,
+          "right": 340,
+          "bottom": 366.390625
+        },
+        "heading": {
+          "x": 37,
+          "y": 118.796875,
+          "width": 286,
+          "height": 41.59375,
+          "right": 323,
+          "bottom": 160.390625
+        },
+        "action": {
+          "x": 37,
+          "y": 222.390625,
+          "width": 209.9375,
+          "height": 32,
+          "right": 246.9375,
+          "bottom": 254.390625
+        },
+        "body": {
+          "x": 37,
+          "y": 270.390625,
+          "width": 286,
+          "height": 42,
+          "right": 323,
+          "bottom": 312.390625
+        },
+        "image": {
+          "x": 37,
+          "y": 448.1875,
+          "width": 286,
+          "height": 156,
+          "right": 323,
+          "bottom": 604.1875
+        },
+        "imageHost": {
+          "x": 37,
+          "y": 436.1875,
+          "width": 286,
+          "height": 180,
+          "right": 323,
+          "bottom": 616.1875
+        },
+        "imageCount": 1
+      },
+      "after": {
+        "imageCount": 1,
+        "fallbackLoaded": true,
+        "focus": "extra"
+      },
+      "errors": [],
+      "screenshot": "foundation-narrow-light.png",
+      "screenshotSha256": "884bbc297163b6988c24eb51249adbece4aee5c7b5e09bc43c42eb83d9009cb4"
+    }
+  ],
+  "review": {
+    "automated": "passed for the stated fixtures; separate Linux three-engine run: 30/30; image unit:16/16; card unit:25/25; existing component SSR:37/37 with four documented exemptions",
+    "agent": "Current four after screenshots and decoded continuous recordings inspected. Geometry, native keyboard focus, singular image reconnection and actual fallback load preserved. Not a whole-library result.",
+    "human": "not requested",
+    "limits": [
+      "Source component fixtures, not Document application acceptance.",
+      "macOS Firefox startup hit sandbox/graphics timeout; Linux Chromium/Firefox/WebKit passed instead.",
+      "Recordings begin during demo boot, followed by the disclosed isolated fixture. Only Vite hot reload and demo live media are disabled.",
+      "No physical touch-device or animation-performance claim."
+    ]
+  },
+  "historicalBeforeMedia": [
+    {
+      "file": "before-card-narrow-dark.png",
+      "sha256": "8f89c2a12fe77596caca5e7bc1ac429780c9f5a2a191e0023c7b933364c5b701",
+      "scope": "Preserved actual pre-fix reproduction; not current after evidence."
+    },
+    {
+      "file": "before-card-edge-narrow-dark.png",
+      "sha256": "bb4d926a305e3c0a1d82e85483db5511932672145b549a2a113e6cb23e653f35",
+      "scope": "Preserved actual pre-fix reproduction; not current after evidence."
+    },
+    {
+      "file": "before-image-reconnect.png",
+      "sha256": "377957e1716b10f18361a305b1725d9fa704a49917afe9f30ccf102bacc1631c",
+      "scope": "Preserved actual pre-fix reproduction; not current after evidence."
+    }
+  ]
+}

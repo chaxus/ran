@@ -1,5 +1,6 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import '@/components/image';
+import type { ImageElement } from '@/components/image';
 
 describe('r-img contract', () => {
   const sleep = (ms = 10) => new Promise((r) => setTimeout(r, ms));
@@ -54,6 +55,33 @@ describe('r-img contract', () => {
     await sleep(10);
 
     expect(container.contains(innerImg)).toBe(true);
+  });
+
+  it('keeps the same loaded image through reconnect without duplicating content', () => {
+    const host = document.createElement('r-img') as ImageElement;
+    host.setAttribute('src', 'https://example.com/photo.jpg');
+    document.body.append(host);
+    const image = host._image!;
+    image.dispatchEvent(new Event('load'));
+    host.remove();
+    document.body.append(host);
+    host._image!.dispatchEvent(new Event('load'));
+    expect(host._image).toBe(image);
+    expect(host._container.children).toHaveLength(1);
+    expect(host._container.firstElementChild).toBe(image);
+  });
+
+  it('does not repeatedly reload a fallback that also fails', () => {
+    const host = document.createElement('r-img') as ImageElement;
+    host.setAttribute('src', 'https://example.com/broken.jpg');
+    host.fallback = 'https://example.com/fallback.jpg';
+    document.body.append(host);
+    const image = host._image!;
+    const setSource = vi.spyOn(image, 'src', 'set');
+    image.dispatchEvent(new Event('error'));
+    image.dispatchEvent(new Event('error'));
+    expect(setSource).toHaveBeenCalledTimes(1);
+    expect(image.src).toBe(host.fallback);
   });
 
   it('replaces src with fallback on error', async () => {

@@ -16,6 +16,7 @@ export class Card extends RanElement {
   _descriptionEl!: HTMLElement;
   _headerEl!: HTMLElement;
   _footerEl!: HTMLElement;
+  private _extraSlot!: HTMLSlotElement;
 
   static get observedAttributes(): string[] {
     return ['heading', 'description', 'sheet', 'hoverable'];
@@ -29,6 +30,7 @@ export class Card extends RanElement {
     const descriptionElRef = createRef<HTMLDivElement>();
     const footerElRef = createRef<HTMLDivElement>();
     const footerSlotRef = createRef<HTMLSlotElement>();
+    const extraSlotRef = createRef<HTMLSlotElement>();
 
     const card = Div()
       .class('ran-card')
@@ -45,7 +47,7 @@ export class Card extends RanElement {
                 Div().class('ran-card-title').ref(titleElRef).attr('part', 'title'),
                 Div().class('ran-card-description').ref(descriptionElRef).attr('part', 'description'),
               ),
-            Slot().attr('name', 'extra').attr('part', 'extra'),
+            Slot().attr('name', 'extra').attr('part', 'extra').ref(extraSlotRef),
           ),
         Div().class('ran-card-body').attr('part', 'body').children(Slot()),
         Div()
@@ -61,6 +63,8 @@ export class Card extends RanElement {
     this._titleEl = shadowPart(titleElRef, 'title');
     this._descriptionEl = shadowPart(descriptionElRef, 'description');
     this._footerEl = shadowPart(footerElRef, 'footer');
+    this._extraSlot = shadowPart(extraSlotRef, 'slot[name="extra"]');
+    this._extraSlot.addEventListener('slotchange', () => this._syncHeader());
 
     // Hide footer until content is slotted
     this._footerEl.style.display = 'none';
@@ -117,10 +121,20 @@ export class Card extends RanElement {
 
   private _syncTitle(): void {
     this._titleEl.textContent = this.getAttribute('heading') ?? '';
+    this._syncHeader();
   }
 
   private _syncDescription(): void {
     this._descriptionEl.textContent = this.getAttribute('description') ?? '';
+    this._syncHeader();
+  }
+
+  private _syncHeader(): void {
+    const hasContent =
+      this._titleEl.textContent?.trim() ||
+      this._descriptionEl.textContent?.trim() ||
+      this._extraSlot.assignedElements().length > 0;
+    this._headerEl.style.display = hasContent ? '' : 'none';
   }
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────

@@ -67,20 +67,23 @@ export class ImageElement extends RanElement {
   };
   connectedCallback() {
     this.handlerExternalCss();
-    this._image = new Image();
+    // Keep the actual image and its handlers when a keyed view is reattached.
+    // Recreating it leaves the previous loaded image in the container.
+    if (!this._image) {
+      const image = new Image();
+      image.addEventListener('error', () => {
+        const fallback = this.fallback;
+        // A failing custom fallback must stop here rather than request itself forever.
+        if (fallback && image.getAttribute('src') !== fallback) image.src = fallback;
+      });
+      image.addEventListener('load', () => {
+        if (!this._container.contains(image)) this._container.appendChild(image);
+      });
+      this._image = image;
+    }
     // Always give the inner <img> an alt (empty = decorative) so it is never
     // announced by its URL.
     this._image.alt = this.alt;
-    this._image.addEventListener('error', () => {
-      if (this._image && this.fallback) {
-        this._image.src = this.fallback;
-      }
-    });
-    this._image.addEventListener('load', () => {
-      if (this._image) {
-        this._container.appendChild(this._image);
-      }
-    });
     this.updateSrc();
   }
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
