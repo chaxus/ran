@@ -54,7 +54,11 @@
 }
 
 .ran-token-meter-text {
-  flex: none;
+  /* Labels and counts remain readable when the composer narrows. The track keeps its
+     minimum, while this readout wraps inside the remaining column instead of widening it. */
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
 }
 

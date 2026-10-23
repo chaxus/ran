@@ -447,6 +447,7 @@ export class DisclosureRow extends RanElement {
     // as one of the two, which is why this asks the slot rather than only the attribute.
     const hasHeading = heading !== '' || slotFilled(this._headingSlot);
     const hasSummary = summary !== '' || slotFilled(this._summarySlot);
+    this._root.classList.toggle('has-summary', hasSummary);
     this._sep.hidden = !hasHeading || !hasSummary;
     // Only a row with something to open is a control. Without a body it carries no role,
     // no tab stop and no expanded state: it is a line of text, and announcing it as a

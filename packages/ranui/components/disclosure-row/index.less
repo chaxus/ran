@@ -124,7 +124,9 @@
 }
 
 .ran-disclosure-title {
-  flex: none;
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-weight: var(--ran-disclosure-title-weight, 400);
   /* Slotted markup must not push the line taller than the row it sits on. */
   min-width: 0;
@@ -142,12 +144,19 @@
 }
 
 .ran-disclosure-summary {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
   overflow: hidden;
   color: var(--ran-disclosure-summary-color, var(--ran-color-text-secondary));
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* A long tool name must not consume the outcome. Reserve a short readable phrase
+   for an existing summary, bounded by half the row. Short titles still hug their text,
+   and title-only rows keep the full available measure. Both texts retain their complete accessible content. */
+.has-summary .ran-disclosure-summary {
+  min-width: min(50%, 16ch);
 }
 
 :host([tone='error']) .ran-disclosure-summary {
