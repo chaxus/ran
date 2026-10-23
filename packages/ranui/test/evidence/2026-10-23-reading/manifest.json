@@ -1,0 +1,312 @@
+{
+  "scope": "Actual registered components; disclosed isolated fixture; no provider requests or production workflow. Vite HMR socket closed to avoid unrelated concurrent source edits replacing the fixture. Demo live-player src omitted before mount. Viewport-only screenshots preserve recording dimensions. Agent review only; human not requested.",
+  "runtime": {
+    "head": "28e46c6ca8eece0385fe8171f7ed9e5be3701cae",
+    "browser": "151.0.7922.34",
+    "platform": "darwin",
+    "inputs": {
+      "components/token-meter/index.ts": "bed33b0b302328accf95bf1007df78c1fb1ce614c7be3e31faed7ca9294b083e",
+      "components/token-meter/index.less": "d61dda15495f6cf186f149c58de9ddcb62c3dd26ab4c47defe87c21dee9f52bd",
+      "components/disclosure-row/index.ts": "445eb043e93542c178ac9de9b5fec59e7f288f561fb34d105611a6e86b73f846",
+      "components/disclosure-row/index.less": "73c8bdd1e2748644165b06e224c0bcc8f9fc817c532c86735dcb348f319a9ff1",
+      "components/reasoning/index.ts": "7b9c554106e1e83b6ffbfa91e1a8c1b11425eedf6e5bbc7e39fa308f21184a91",
+      "components/reasoning/index.less": "d94b8d7ec91746ccd441cdb57da34760e1716673a731fcef634764a4afa10c08",
+      "components/tool-card/index.ts": "bc50715ec34109513ce2ab04c325300e9c865ea67327bdf6c78db00563592eab",
+      "components/tool-card/index.less": "d81187f52e815e2a85d12a035a5985bb8f1352d4862d66edaebc35b4c9881dab",
+      "components/state-dot/index.ts": "ee8f4c1c9b2befe62ef8fb635be742cccd77d17e04cb8db66d7048860fd80068",
+      "components/state-dot/index.less": "ed30e255e4f81213eb7b237720a67dc82bc2bc22b162ee9b9163191f43922029",
+      "components/progress/index.ts": "8bc7b74f4361233ddf6a948078da88b0c017828016d82b728e323b1284b49fed",
+      "components/progress/index.less": "60912797c3d06d2011c98b7f60ffd09f4c54b45da561d8d7eb683e67ad56f43c",
+      "utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+      "theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+      "theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360"
+    },
+    "inputChanges": []
+  },
+  "results": [
+    {
+      "width": 360,
+      "height": 800,
+      "theme": "dark",
+      "motion": "no-preference",
+      "touch": true,
+      "frames": [
+        {
+          "state": "collapsed",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-dark-no-preference-collapsed.png",
+          "sha256": "ea7f590b316f8a38fb2d6cb9dc559fd1cd0959a615601131f16716c7e4b62ad5",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "state": "expanded",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-dark-no-preference-expanded.png",
+          "sha256": "f96b09530c4a37eca261c5c3abe297cdf334c0a67bb08dfa03d1d347da3a28d2",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "state": "focus-returned",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-dark-no-preference-focus-returned.png",
+          "sha256": "37efb29d38b2a86554537662e97ec0a448be26496a023db1cdf9f7da47d9fcfe",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "state": "streaming",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-dark-no-preference-streaming.png",
+          "sha256": "d8deaf570e79542834b36f330f6a72ee00de83b8397c93ab4d650c67e90937fa",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "state": "reader-controlled",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-dark-no-preference-reader-controlled.png",
+          "sha256": "ac29f48c6cd02814b17e130180bfd5bde90db9fa78df0bc73dc65f43bff7e30c",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(0, 0, 0)"
+          }
+        }
+      ],
+      "bodyFocused": true,
+      "focusReturned": true,
+      "readerOwns": true,
+      "touchToggle": {
+        "opened": true,
+        "closed": true,
+        "height": 32
+      },
+      "video": "<workspace>/outputs/ran-all-components/reading-final/page@bcdfa58d78c4c2117436bd107481e8b3.webm"
+    },
+    {
+      "width": 360,
+      "height": 800,
+      "theme": "light",
+      "motion": "reduce",
+      "touch": true,
+      "frames": [
+        {
+          "state": "collapsed",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-light-reduce-collapsed.png",
+          "sha256": "5747d3be485c2da223f58bed91e1eab5b723eba7e9387fe95d9839ac9ec3f94d",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(255, 255, 255)"
+          }
+        },
+        {
+          "state": "expanded",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-light-reduce-expanded.png",
+          "sha256": "68658050f99550e23e5daaea96dec7e8c26e80d424f01999f8284edb61d34faa",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(255, 255, 255)"
+          }
+        },
+        {
+          "state": "focus-returned",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-light-reduce-focus-returned.png",
+          "sha256": "ed3e64637ea99b2c1b442ca305f4f93f22218ac4754cd1d643a9d32cf336ab51",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(255, 255, 255)"
+          }
+        },
+        {
+          "state": "streaming",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-light-reduce-streaming.png",
+          "sha256": "dbbca176e6b2e5f391703ec009b993da00504be259c200c2bb2e44d182d3b25c",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(255, 255, 255)"
+          }
+        },
+        {
+          "state": "reader-controlled",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/360-light-reduce-reader-controlled.png",
+          "sha256": "4f6b28c24aa340f8a36c34ed7f23e776aa4f851a67a2b6dcff1d0f0a813f97bd",
+          "geometry": {
+            "width": 360,
+            "height": 800,
+            "scroll": 360,
+            "background": "rgb(255, 255, 255)"
+          }
+        }
+      ],
+      "bodyFocused": true,
+      "focusReturned": true,
+      "readerOwns": true,
+      "touchToggle": {
+        "opened": true,
+        "closed": true,
+        "height": 32
+      },
+      "video": null
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "motion": "no-preference",
+      "touch": false,
+      "frames": [
+        {
+          "state": "collapsed",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-light-no-preference-collapsed.png",
+          "sha256": "889096a82a9571ae856dc9591b6528b04eacba58ef6dda56c94c661efd9f24a2",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(255, 255, 255)"
+          }
+        },
+        {
+          "state": "expanded",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-light-no-preference-expanded.png",
+          "sha256": "3a62b2342b07bc08df8c02485a9e8eaa4ed63176cbb97b0f57e73a912e570c46",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(255, 255, 255)"
+          }
+        },
+        {
+          "state": "focus-returned",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-light-no-preference-focus-returned.png",
+          "sha256": "a374d535a6f55e11fa6976900e9531485352a8bc83f81d7a4719f0ba4f811774",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(255, 255, 255)"
+          }
+        },
+        {
+          "state": "streaming",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-light-no-preference-streaming.png",
+          "sha256": "622a2998739b7f99e7ff3bc39dda2e8eccc0b09c3896b23979be255a68ecadee",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(255, 255, 255)"
+          }
+        },
+        {
+          "state": "reader-controlled",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-light-no-preference-reader-controlled.png",
+          "sha256": "567bf1531bf75e70ac0538ab855a000d332a80e5308cc640dca32fcf1bd661de",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(255, 255, 255)"
+          }
+        }
+      ],
+      "bodyFocused": true,
+      "focusReturned": true,
+      "readerOwns": true,
+      "touchToggle": null,
+      "video": null
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "motion": "reduce",
+      "touch": false,
+      "frames": [
+        {
+          "state": "collapsed",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-dark-reduce-collapsed.png",
+          "sha256": "1d665e3b30abd2b4e65c0b9d741f3401d99eeda93f0bdde2cd6059ecafa5e269",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "state": "expanded",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-dark-reduce-expanded.png",
+          "sha256": "a527c3e326475361a2628f7eb20891ff462d658d6b617868bd362d49c1b71eb2",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "state": "focus-returned",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-dark-reduce-focus-returned.png",
+          "sha256": "132b9500d41c86f564445d0adf07ea68a490d66093e7f01de7a50395599c12d5",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "state": "streaming",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-dark-reduce-streaming.png",
+          "sha256": "adea00b61baa4b4c6302f6af937bb846b1d3a3fdab807c080746f47c7c1b2e40",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "state": "reader-controlled",
+          "path": "<workspace>/outputs/ran-all-components/reading-final/1280-dark-reduce-reader-controlled.png",
+          "sha256": "57dbad56b2e8f1953333a31f56c6c702e5ee644e354339f7991380080cbf1baf",
+          "geometry": {
+            "width": 1280,
+            "height": 800,
+            "scroll": 1280,
+            "background": "rgb(0, 0, 0)"
+          }
+        }
+      ],
+      "bodyFocused": true,
+      "focusReturned": true,
+      "readerOwns": true,
+      "touchToggle": null,
+      "video": null
+    }
+  ]
+}
