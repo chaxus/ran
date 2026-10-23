@@ -48,6 +48,19 @@ contains runnable commands and geometry utilities. Consumers adapt its relations
 host; these helpers are not new ranui exports. CSS zoom stress does not establish native browser
 zoom or text-size accessibility support. Say which paths remain unverified.
 
+### Review motion over time
+
+For changed motion, inspect a continuous action at normal speed, then replay slowly where a
+transition breaks. Include activation, intermediate state, completion and the reverse path; repeat
+or reverse input before completion. Verify the final state, focus, event count and reading position
+independently of the animation. A slow replay helps diagnose discontinuity; it is not a frame-rate
+benchmark. Reduced motion needs its own visible-state check, not just a shorter recording.
+
+Report a temporal defect as `element → input → observed frame/state → expected continuity`.
+Use one representative real task across affected siblings to detect inconsistent motion language;
+check the full composition again after local fixes. Preserve failed iterations as diagnostics,
+separate from accepted captures. These checks complement the existing evidence binding below.
+
 ## Walk through the task
 
 For a changed workflow or composition, start with a realistic goal expressed without naming the
