@@ -195,9 +195,9 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 - **اسلات‌ها**: —
 - **Part‌ها**: `ran-icon`
 
-> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs
-> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`
-> is registered. Register once, in the browser, before the first `<r-icon>` connects:
+> **Bundled icons are loaded on demand.** `<r-icon name="lock">` works without registration:
+> its SVG is fetched on first use and cached. To register the entire bundled set eagerly,
+> optionally call the following in the browser before the first `<r-icon>` connects:
 >
 > ```ts
 > import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'
@@ -212,7 +212,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 
 کد منبع: `components/image/index.ts`
 
-- **ویژگی‌ها (attribute)**: —
+- **ویژگی‌ها (attribute)**: `alt`, `fallback`, `sheet`, `src`
 - **خصیصه‌ها (property)**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
@@ -307,7 +307,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **اسلات‌ها**: —
-- **Part‌ها**: `button`, `error`, `math`, `menu`, `render`, `toolbar`
+- **Part‌ها**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
 
 ## `<r-mermaid>`
 
@@ -322,13 +322,13 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
   - `fullscreenchange` · bubbles, composed · detail `{ open }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **اسلات‌ها**: —
-- **Part‌ها**: `button`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
+- **Part‌ها**: `button`, `copy-status`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
 
 ## `<r-message>`
 
 کد منبع: `components/message/index.ts`
 
-- **ویژگی‌ها (attribute)**: —
+- **ویژگی‌ها (attribute)**: `content: string | null`, `sheet: string`, `type: string | null`
 - **خصیصه‌ها (property)**: `content: string | null`, `sheet: string`, `type: string | null`
 - **رویدادها**: —
 - **اسلات‌ها**: —
@@ -363,7 +363,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 
 کد منبع: `components/select/option/index.ts`
 
-- **ویژگی‌ها (attribute)**: —
+- **ویژگی‌ها (attribute)**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **خصیصه‌ها (property)**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **رویدادها**: —
 - **اسلات‌ها**: `پیش‌فرض`
@@ -420,7 +420,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 
 کد منبع: `components/progress/index.ts`
 
-- **ویژگی‌ها (attribute)**: `drag`, `primary`
+- **ویژگی‌ها (attribute)**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **خصیصه‌ها (property)**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **رویدادها**:
   - `change` · element-only · detail `{ percent, total, value }`
@@ -431,7 +431,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 
 کد منبع: `components/radar/index.ts`
 
-- **ویژگی‌ها (attribute)**: —
+- **ویژگی‌ها (attribute)**: `abilitys`, `colorline`, `colorpolygon`, `fillcolor`, `sheet`, `strokecolor`
 - **خصیصه‌ها (property)**: `abilitys`, `colorLine`, `colorPolygon`, `fillColor`, `fontColor`, `sheet`, `strokeColor`
 - **رویدادها**: —
 - **اسلات‌ها**: —
@@ -484,11 +484,11 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 
 کد منبع: `components/scratch/index.ts`
 
-- **ویژگی‌ها (attribute)**: `disabled: boolean`, `sheet: string`
-- **خصیصه‌ها (property)**: `disabled: boolean`, `sheet: string`
+- **ویژگی‌ها (attribute)**: `disabled: boolean`, `reveal-label`, `revealed-label`, `sheet: string`
+- **خصیصه‌ها (property)**: `disabled: boolean`, `revealedLabel: string`, `revealLabel: string`, `sheet: string`
 - **رویدادها**: —
 - **اسلات‌ها**: `پیش‌فرض`
-- **Part‌ها**: `award`
+- **Part‌ها**: `award`, `reveal-button`
 
 ## `<r-section>`
 
@@ -558,7 +558,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 
 کد منبع: `components/tabpane/index.ts`
 
-- **ویژگی‌ها (attribute)**: —
+- **ویژگی‌ها (attribute)**: `disabled`, `effect`, `icon`, `iconsize`, `key`, `label`, `sheet`
 - **خصیصه‌ها (property)**: `disabled`, `effect`, `icon`, `iconSize`, `key`, `label`, `sheet`
 - **رویدادها**: —
 - **اسلات‌ها**: `پیش‌فرض`
@@ -579,7 +579,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 
 کد منبع: `components/theme-switch/index.ts`
 
-- **ویژگی‌ها (attribute)**: `label-dark`, `label-light`, `label-system`, `sheet: string`
+- **ویژگی‌ها (attribute)**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **خصیصه‌ها (property)**:
   - `sheet: string`
   - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.

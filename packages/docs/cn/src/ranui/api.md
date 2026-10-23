@@ -194,9 +194,9 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 - **插槽**: —
 - **Part**: `ran-icon`
 
-> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs
-> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`
-> is registered. Register once, in the browser, before the first `<r-icon>` connects:
+> **Bundled icons are loaded on demand.** `<r-icon name="lock">` works without registration:
+> its SVG is fetched on first use and cached. To register the entire bundled set eagerly,
+> optionally call the following in the browser before the first `<r-icon>` connects:
 >
 > ```ts
 > import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'
@@ -211,7 +211,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/image/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `alt`, `fallback`, `sheet`, `src`
 - **属性值（property）**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
@@ -306,7 +306,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **插槽**: —
-- **Part**: `button`, `error`, `math`, `menu`, `render`, `toolbar`
+- **Part**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
 
 ## `<r-mermaid>`
 
@@ -321,13 +321,13 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
   - `fullscreenchange` · bubbles, composed · detail `{ open }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **插槽**: —
-- **Part**: `button`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
+- **Part**: `button`, `copy-status`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
 
 ## `<r-message>`
 
 源码: `components/message/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `content: string | null`, `sheet: string`, `type: string | null`
 - **属性值（property）**: `content: string | null`, `sheet: string`, `type: string | null`
 - **事件**: —
 - **插槽**: —
@@ -362,7 +362,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/select/option/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **属性值（property）**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **事件**: —
 - **插槽**: `默认插槽`
@@ -419,7 +419,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/progress/index.ts`
 
-- **属性（attribute）**: `drag`, `primary`
+- **属性（attribute）**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **属性值（property）**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **事件**:
   - `change` · element-only · detail `{ percent, total, value }`
@@ -430,7 +430,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/radar/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `abilitys`, `colorline`, `colorpolygon`, `fillcolor`, `sheet`, `strokecolor`
 - **属性值（property）**: `abilitys`, `colorLine`, `colorPolygon`, `fillColor`, `fontColor`, `sheet`, `strokeColor`
 - **事件**: —
 - **插槽**: —
@@ -483,11 +483,11 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/scratch/index.ts`
 
-- **属性（attribute）**: `disabled: boolean`, `sheet: string`
-- **属性值（property）**: `disabled: boolean`, `sheet: string`
+- **属性（attribute）**: `disabled: boolean`, `reveal-label`, `revealed-label`, `sheet: string`
+- **属性值（property）**: `disabled: boolean`, `revealedLabel: string`, `revealLabel: string`, `sheet: string`
 - **事件**: —
 - **插槽**: `默认插槽`
-- **Part**: `award`
+- **Part**: `award`, `reveal-button`
 
 ## `<r-section>`
 
@@ -557,7 +557,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/tabpane/index.ts`
 
-- **属性（attribute）**: —
+- **属性（attribute）**: `disabled`, `effect`, `icon`, `iconsize`, `key`, `label`, `sheet`
 - **属性值（property）**: `disabled`, `effect`, `icon`, `iconSize`, `key`, `label`, `sheet`
 - **事件**: —
 - **插槽**: `默认插槽`
@@ -578,7 +578,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 
 源码: `components/theme-switch/index.ts`
 
-- **属性（attribute）**: `label-dark`, `label-light`, `label-system`, `sheet: string`
+- **属性（attribute）**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **属性值（property）**:
   - `sheet: string`
   - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.

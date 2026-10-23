@@ -196,9 +196,9 @@ Source: `components/icon/index.ts`
 - **Slots**: —
 - **Parts**: `ran-icon`
 
-> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs
-> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`
-> is registered. Register once, in the browser, before the first `<r-icon>` connects:
+> **Bundled icons are loaded on demand.** `<r-icon name="lock">` works without registration:
+> its SVG is fetched on first use and cached. To register the entire bundled set eagerly,
+> optionally call the following in the browser before the first `<r-icon>` connects:
 >
 > ```ts
 > import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'
@@ -213,7 +213,7 @@ Source: `components/icon/index.ts`
 
 Source: `components/image/index.ts`
 
-- **Attributes**: —
+- **Attributes**: `alt`, `fallback`, `sheet`, `src`
 - **Properties**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
@@ -308,7 +308,7 @@ Source: `components/math/index.ts`
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **Slots**: —
-- **Parts**: `button`, `error`, `math`, `menu`, `render`, `toolbar`
+- **Parts**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
 
 ## `<r-mermaid>`
 
@@ -323,13 +323,13 @@ Source: `components/mermaid/index.ts`
   - `fullscreenchange` · bubbles, composed · detail `{ open }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **Slots**: —
-- **Parts**: `button`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
+- **Parts**: `button`, `copy-status`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
 
 ## `<r-message>`
 
 Source: `components/message/index.ts`
 
-- **Attributes**: —
+- **Attributes**: `content: string | null`, `sheet: string`, `type: string | null`
 - **Properties**: `content: string | null`, `sheet: string`, `type: string | null`
 - **Events**: —
 - **Slots**: —
@@ -364,7 +364,7 @@ Source: `components/modal/index.ts`
 
 Source: `components/select/option/index.ts`
 
-- **Attributes**: —
+- **Attributes**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **Properties**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **Events**: —
 - **Slots**: `default`
@@ -421,7 +421,7 @@ Source: `components/popover/index.ts`
 
 Source: `components/progress/index.ts`
 
-- **Attributes**: `drag`, `primary`
+- **Attributes**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **Properties**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **Events**:
   - `change` · element-only · detail `{ percent, total, value }`
@@ -432,7 +432,7 @@ Source: `components/progress/index.ts`
 
 Source: `components/radar/index.ts`
 
-- **Attributes**: —
+- **Attributes**: `abilitys`, `colorline`, `colorpolygon`, `fillcolor`, `sheet`, `strokecolor`
 - **Properties**: `abilitys`, `colorLine`, `colorPolygon`, `fillColor`, `fontColor`, `sheet`, `strokeColor`
 - **Events**: —
 - **Slots**: —
@@ -485,11 +485,11 @@ Source: `components/router/index.ts`
 
 Source: `components/scratch/index.ts`
 
-- **Attributes**: `disabled: boolean`, `sheet: string`
-- **Properties**: `disabled: boolean`, `sheet: string`
+- **Attributes**: `disabled: boolean`, `reveal-label`, `revealed-label`, `sheet: string`
+- **Properties**: `disabled: boolean`, `revealedLabel: string`, `revealLabel: string`, `sheet: string`
 - **Events**: —
 - **Slots**: `default`
-- **Parts**: `award`
+- **Parts**: `award`, `reveal-button`
 
 ## `<r-section>`
 
@@ -559,7 +559,7 @@ Source: `components/state-dot/index.ts`
 
 Source: `components/tabpane/index.ts`
 
-- **Attributes**: —
+- **Attributes**: `disabled`, `effect`, `icon`, `iconsize`, `key`, `label`, `sheet`
 - **Properties**: `disabled`, `effect`, `icon`, `iconSize`, `key`, `label`, `sheet`
 - **Events**: —
 - **Slots**: `default`
@@ -580,7 +580,7 @@ Source: `components/tab/index.ts`
 
 Source: `components/theme-switch/index.ts`
 
-- **Attributes**: `label-dark`, `label-light`, `label-system`, `sheet: string`
+- **Attributes**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **Properties**:
   - `sheet: string`
   - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.

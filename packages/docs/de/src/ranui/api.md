@@ -198,9 +198,9 @@ Quelltext: `components/icon/index.ts`
 - **Slots**: —
 - **Parts**: `ran-icon`
 
-> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs
-> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`
-> is registered. Register once, in the browser, before the first `<r-icon>` connects:
+> **Bundled icons are loaded on demand.** `<r-icon name="lock">` works without registration:
+> its SVG is fetched on first use and cached. To register the entire bundled set eagerly,
+> optionally call the following in the browser before the first `<r-icon>` connects:
 >
 > ```ts
 > import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'
@@ -215,7 +215,7 @@ Quelltext: `components/icon/index.ts`
 
 Quelltext: `components/image/index.ts`
 
-- **Attribute**: —
+- **Attribute**: `alt`, `fallback`, `sheet`, `src`
 - **Eigenschaften**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
@@ -310,7 +310,7 @@ Quelltext: `components/math/index.ts`
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **Slots**: —
-- **Parts**: `button`, `error`, `math`, `menu`, `render`, `toolbar`
+- **Parts**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
 
 ## `<r-mermaid>`
 
@@ -325,13 +325,13 @@ Quelltext: `components/mermaid/index.ts`
   - `fullscreenchange` · bubbles, composed · detail `{ open }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **Slots**: —
-- **Parts**: `button`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
+- **Parts**: `button`, `copy-status`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
 
 ## `<r-message>`
 
 Quelltext: `components/message/index.ts`
 
-- **Attribute**: —
+- **Attribute**: `content: string | null`, `sheet: string`, `type: string | null`
 - **Eigenschaften**: `content: string | null`, `sheet: string`, `type: string | null`
 - **Events**: —
 - **Slots**: —
@@ -366,7 +366,7 @@ Quelltext: `components/modal/index.ts`
 
 Quelltext: `components/select/option/index.ts`
 
-- **Attribute**: —
+- **Attribute**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **Eigenschaften**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **Events**: —
 - **Slots**: `Standard`
@@ -423,7 +423,7 @@ Quelltext: `components/popover/index.ts`
 
 Quelltext: `components/progress/index.ts`
 
-- **Attribute**: `drag`, `primary`
+- **Attribute**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **Eigenschaften**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **Events**:
   - `change` · element-only · detail `{ percent, total, value }`
@@ -434,7 +434,7 @@ Quelltext: `components/progress/index.ts`
 
 Quelltext: `components/radar/index.ts`
 
-- **Attribute**: —
+- **Attribute**: `abilitys`, `colorline`, `colorpolygon`, `fillcolor`, `sheet`, `strokecolor`
 - **Eigenschaften**: `abilitys`, `colorLine`, `colorPolygon`, `fillColor`, `fontColor`, `sheet`, `strokeColor`
 - **Events**: —
 - **Slots**: —
@@ -487,11 +487,11 @@ Quelltext: `components/router/index.ts`
 
 Quelltext: `components/scratch/index.ts`
 
-- **Attribute**: `disabled: boolean`, `sheet: string`
-- **Eigenschaften**: `disabled: boolean`, `sheet: string`
+- **Attribute**: `disabled: boolean`, `reveal-label`, `revealed-label`, `sheet: string`
+- **Eigenschaften**: `disabled: boolean`, `revealedLabel: string`, `revealLabel: string`, `sheet: string`
 - **Events**: —
 - **Slots**: `Standard`
-- **Parts**: `award`
+- **Parts**: `award`, `reveal-button`
 
 ## `<r-section>`
 
@@ -561,7 +561,7 @@ Quelltext: `components/state-dot/index.ts`
 
 Quelltext: `components/tabpane/index.ts`
 
-- **Attribute**: —
+- **Attribute**: `disabled`, `effect`, `icon`, `iconsize`, `key`, `label`, `sheet`
 - **Eigenschaften**: `disabled`, `effect`, `icon`, `iconSize`, `key`, `label`, `sheet`
 - **Events**: —
 - **Slots**: `Standard`
@@ -582,7 +582,7 @@ Quelltext: `components/tab/index.ts`
 
 Quelltext: `components/theme-switch/index.ts`
 
-- **Attribute**: `label-dark`, `label-light`, `label-system`, `sheet: string`
+- **Attribute**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **Eigenschaften**:
   - `sheet: string`
   - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.

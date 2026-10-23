@@ -195,9 +195,9 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 - **슬롯**: —
 - **Part**: `ran-icon`
 
-> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs
-> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`
-> is registered. Register once, in the browser, before the first `<r-icon>` connects:
+> **Bundled icons are loaded on demand.** `<r-icon name="lock">` works without registration:
+> its SVG is fetched on first use and cached. To register the entire bundled set eagerly,
+> optionally call the following in the browser before the first `<r-icon>` connects:
 >
 > ```ts
 > import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'
@@ -212,7 +212,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 
 소스: `components/image/index.ts`
 
-- **어트리뷰트**: —
+- **어트리뷰트**: `alt`, `fallback`, `sheet`, `src`
 - **프로퍼티**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
@@ -307,7 +307,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
   - `error` · bubbles, composed · detail `{ message }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **슬롯**: —
-- **Part**: `button`, `error`, `math`, `menu`, `render`, `toolbar`
+- **Part**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
 
 ## `<r-mermaid>`
 
@@ -322,13 +322,13 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
   - `fullscreenchange` · bubbles, composed · detail `{ open }`
   - `render` · bubbles, composed · detail `{ ok }`
 - **슬롯**: —
-- **Part**: `button`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
+- **Part**: `button`, `copy-status`, `diagram`, `error`, `menu`, `mermaid`, `toolbar`
 
 ## `<r-message>`
 
 소스: `components/message/index.ts`
 
-- **어트리뷰트**: —
+- **어트리뷰트**: `content: string | null`, `sheet: string`, `type: string | null`
 - **프로퍼티**: `content: string | null`, `sheet: string`, `type: string | null`
 - **이벤트**: —
 - **슬롯**: —
@@ -363,7 +363,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 
 소스: `components/select/option/index.ts`
 
-- **어트리뷰트**: —
+- **어트리뷰트**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **프로퍼티**: `disabled: boolean | string | undefined | null`, `sheet`, `value`
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`
@@ -420,7 +420,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 
 소스: `components/progress/index.ts`
 
-- **어트리뷰트**: `drag`, `primary`
+- **어트리뷰트**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **프로퍼티**: `dot: string`, `percent: string`, `sheet: string`, `total: string`, `type: string`
 - **이벤트**:
   - `change` · element-only · detail `{ percent, total, value }`
@@ -431,7 +431,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 
 소스: `components/radar/index.ts`
 
-- **어트리뷰트**: —
+- **어트리뷰트**: `abilitys`, `colorline`, `colorpolygon`, `fillcolor`, `sheet`, `strokecolor`
 - **프로퍼티**: `abilitys`, `colorLine`, `colorPolygon`, `fillColor`, `fontColor`, `sheet`, `strokeColor`
 - **이벤트**: —
 - **슬롯**: —
@@ -484,11 +484,11 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 
 소스: `components/scratch/index.ts`
 
-- **어트리뷰트**: `disabled: boolean`, `sheet: string`
-- **프로퍼티**: `disabled: boolean`, `sheet: string`
+- **어트리뷰트**: `disabled: boolean`, `reveal-label`, `revealed-label`, `sheet: string`
+- **프로퍼티**: `disabled: boolean`, `revealedLabel: string`, `revealLabel: string`, `sheet: string`
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`
-- **Part**: `award`
+- **Part**: `award`, `reveal-button`
 
 ## `<r-section>`
 
@@ -558,7 +558,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 
 소스: `components/tabpane/index.ts`
 
-- **어트리뷰트**: —
+- **어트리뷰트**: `disabled`, `effect`, `icon`, `iconsize`, `key`, `label`, `sheet`
 - **프로퍼티**: `disabled`, `effect`, `icon`, `iconSize`, `key`, `label`, `sheet`
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`
@@ -579,7 +579,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 
 소스: `components/theme-switch/index.ts`
 
-- **어트리뷰트**: `label-dark`, `label-light`, `label-system`, `sheet: string`
+- **어트리뷰트**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **프로퍼티**:
   - `sheet: string`
   - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.
