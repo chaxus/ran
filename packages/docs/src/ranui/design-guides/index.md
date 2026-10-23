@@ -148,6 +148,12 @@ content) over your sticky header for its whole scroll lifetime. That bug shipped
 site once. Match `closing` as well as `open`: the mask keeps painting for the length of its
 transition after `open` is removed.
 
+Keep one visual language across related components and documentation chrome: coordinated type
+roles, control density, radius/inset relationships, semantic accents and motion. Preserve differences
+that communicate role or priority. Compare composed states with different real content before adding
+effects; a shared color cannot compensate for inconsistent proportions. Source observations and
+validation limits live in the [reference index](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/REFERENCE_RESEARCH.md).
+
 ## Motion {#motion}
 
 Purpose and frequency decide whether to animate. Frequent hover, focus and keyboard feedback

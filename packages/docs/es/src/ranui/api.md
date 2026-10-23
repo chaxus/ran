@@ -507,7 +507,7 @@ Código fuente: `components/section/index.ts`
 
 Código fuente: `components/select/index.ts`
 
-- **Atributos**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placement: Placement`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
+- **Atributos**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placeholder: string`, `placement: Placement`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
 - **Propiedades**:
   - `defaultValue: string`
   - `disabled: boolean`
@@ -515,6 +515,7 @@ Código fuente: `components/select/index.ts`
   - `getPopupContainerId: string`
   - `label: string` — 字段上方的静态说明文字（label）。
   - `open: boolean` — Whether the dropdown is showing.
+  - `placeholder: string` — Empty-field hint; the field's accessible name remains its label.
   - `placement: Placement` — Which side of the trigger the panel opens on, with an optional alignment.
   - `required: boolean`
   - `sheet: string`

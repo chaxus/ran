@@ -94,17 +94,17 @@ describe('component API source extraction', () => {
     expect(attributes(document, 'r-absent')).toEqual([]);
   });
 
-  it.each([
-    `return makeAttributes('not-an-attribute');`,
-    `return ['sheet', dynamicAttribute];`,
-  ])('rejects attributes that require runtime evaluation: %s', (body) => {
-    expect(() =>
-      generate({
-        computed: `class Computed { static get observedAttributes() { ${body} } }
+  it.each([`return makeAttributes('not-an-attribute');`, `return ['sheet', dynamicAttribute];`])(
+    'rejects attributes that require runtime evaluation: %s',
+    (body) => {
+      expect(() =>
+        generate({
+          computed: `class Computed { static get observedAttributes() { ${body} } }
         defineSSR('r-computed', Computed);`,
-      }),
-    ).toThrow(/observedAttributes/);
-  });
+        }),
+      ).toThrow(/observedAttributes/);
+    },
+  );
 
   it('describes lazy bundled icons and optional eager or custom registration', () => {
     const section = document.split('## `<r-icon>`')[1].split('\n## ')[0];

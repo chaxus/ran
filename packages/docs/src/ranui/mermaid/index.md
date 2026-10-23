@@ -38,7 +38,7 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // property setter URI-encodes for 
 ## Controls
 
 Every control is **opt-in** via a boolean attribute; a bare `<r-mermaid>` is a clean static
-diagram. The toolbar appears on hover (top-right).
+diagram. Enabled controls remain visible above the diagram.
 
 <ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
@@ -86,7 +86,7 @@ All events bubble and cross the shadow boundary (`composed`).
 | --------- | ------------------------------------------ |
 | `mermaid` | The outer wrapper.                         |
 | `diagram` | The rendered-diagram container.            |
-| `toolbar` | The hover control bar.                     |
+| `toolbar` | The visible action row.                    |
 | `button`  | Each toolbar icon button.                  |
 | `error`   | The error message box (on render failure). |
 
@@ -112,3 +112,7 @@ Override on the element (each falls back to a semantic token, then a literal):
 - **PNG export**: diagrams that use HTML labels (mermaid `htmlLabels`) render via
   `<foreignObject>`, which can taint the canvas and make PNG export fail; an `error` event
   is dispatched in that case. SVG and source export always work.
+
+### Copy and narrow screens
+
+Enabled controls stay visible in a quiet row above the content: 32px targets for fine pointers, 44px for touch, with an 8px gap. Without controls, no row space is reserved. Copy keeps focus and prevents duplicate writes while pending. Clipboard rejection or unavailability appears locally in `::part(copy-status)` (`role="status"`), localized with `label-copy-error`; retry uses the same button. `copied` fires only after the current content reaches the clipboard. A source or copy-target change invalidates feedback from older requests. A source-only update preserves the focused button and allows copying the new source immediately.

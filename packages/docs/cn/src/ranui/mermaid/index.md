@@ -31,7 +31,7 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // 属性 setter 会自动 URI 编�
 
 ## 控件
 
-所有控件都通过布尔属性**按需开启**；不加任何控件属性的 `<r-mermaid>` 就是一张干净的静态图，工具栏仅在鼠标悬停时显示（右上角）。
+所有控件都通过布尔属性**按需开启**；不加任何控件属性的 `<r-mermaid>` 就是一张干净的静态图，已开启的工具栏在图表上方保持可见。
 
 <ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[开始] --> B[处理]; B --> C[结束]</r-mermaid>
@@ -77,7 +77,7 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // 属性 setter 会自动 URI 编�
 | --------- | ------------------------ |
 | `mermaid` | 最外层容器。             |
 | `diagram` | 渲染图表的容器。         |
-| `toolbar` | hover 显示的控件栏。     |
+| `toolbar` | 保持可见的操作栏。       |
 | `button`  | 每个工具栏图标按钮。     |
 | `error`   | 渲染失败时的错误信息框。 |
 
@@ -99,3 +99,7 @@ r-mermaid::part(toolbar) {
 - **懒加载**：mermaid（以及全屏功能用到的 r-modal）都是动态 import，只有在图表渲染或打开全屏时，才会作为独立的 async chunk 加载。
 - **渲染保真**：`<r-mermaid>` 直接使用 mermaid 自身的渲染逻辑，支持全部图表类型与主题。
 - **PNG 导出**：使用 HTML label（mermaid 的 `htmlLabels`）的图表会通过 `<foreignObject>` 渲染，可能污染 canvas，导致 PNG 导出失败，此时会派发 `error` 事件。SVG 与源码导出不受影响，始终可用。
+
+### 复制与窄屏
+
+已开启的控件在内容上方保持可见：精细指针目标为 32px，触屏为 44px，与内容间隔 8px；未开启控件时不预留工具条空间。复制期间保留焦点并阻止重复请求；拒绝或不可用时在局部 `::part(copy-status)`（`role="status"`）显示错误，可用 `label-copy-error` 本地化，原按钮可立即重试。只有当前内容成功写入剪贴板才发出 `copied`；内容或复制目标更改后，旧请求不会再报告成功。 仅更新内容时保留原按钮及焦点，新内容可立即复制。

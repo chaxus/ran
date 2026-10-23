@@ -39,8 +39,7 @@ el.code = 'classDiagram\n  Dog --|> Animal'; // der Property-Setter kodiert für
 ## Bedienelemente
 
 Jedes Bedienelement wird **ausdrücklich** über ein boolesches Attribut eingeschaltet; ein nacktes
-`<r-mermaid>` ist ein sauberes statisches Diagramm. Die Leiste erscheint beim Überfahren (oben
-rechts).
+`<r-mermaid>` ist ein sauberes statisches Diagramm. Aktivierte Bedienelemente bleiben über dem Diagramm sichtbar.
 
 <ran-demo>
   <r-mermaid copy download fullscreen>graph TD; A[Start] --> B[Do work]; B --> C[End]</r-mermaid>
@@ -89,7 +88,7 @@ Alle Events bubbeln und überschreiten die Shadow-Grenze (`composed`).
 | --------- | ---------------------------------------------------- |
 | `mermaid` | Der äußere Wrapper.                                  |
 | `diagram` | Der Container des gerenderten Diagramms.             |
-| `toolbar` | Die beim Überfahren erscheinende Bedienleiste.       |
+| `toolbar` | Die sichtbare Aktionszeile.                          |
 | `button`  | Jede Icon-Schaltfläche der Leiste.                   |
 | `error`   | Die Fehlermeldungsbox (bei fehlgeschlagenem Render). |
 
@@ -115,3 +114,7 @@ zurück): `--ran-mermaid-padding`, `--ran-mermaid-toolbar-background`, `--ran-me
 - **PNG-Export**: Diagramme mit HTML-Beschriftungen (mermaids `htmlLabels`) werden über
   `<foreignObject>` gezeichnet, was das Canvas verunreinigen und den PNG-Export scheitern lassen
   kann; in dem Fall wird ein `error`-Event ausgelöst. SVG- und Quell-Export funktionieren immer.
+
+### Kopieren und schmale Ansichten
+
+Aktivierte Bedienelemente bleiben in einer ruhigen Zeile über dem Inhalt sichtbar: 32px für präzise Zeiger, 44px für Touch und 8px Abstand zum Inhalt. Ohne Bedienelemente wird kein Platz reserviert. Kopieren behält den Fokus und verhindert doppelte ausstehende Schreibvorgänge. Ablehnung oder fehlende Zwischenablage erscheint lokal in `::part(copy-status)` (`role="status"`); `label-copy-error` lokalisiert den Hinweis. Ein erneuter Versuch nutzt denselben Button. `copied` wird nur nach erfolgreichem Kopieren des aktuellen Inhalts ausgelöst. Änderungen an Quelle oder Kopierziel verwerfen Rückmeldungen älterer Anfragen. Bei Quellenänderungen bleibt der fokussierte Button erhalten; die neue Quelle kann sofort kopiert werden.

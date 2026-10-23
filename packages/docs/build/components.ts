@@ -176,7 +176,7 @@ export const renderHome = (locale: LocaleDef): string => {
     `<section class="stats reveal">` +
     t.stats
       .map(
-        (s, i) =>
+        (s) =>
           `<div class="stat"><span class="stat-num">${esc(s.num)}</span>` +
           `<span class="stat-label">${esc(s.label)}</span></div>`,
       )
@@ -186,7 +186,7 @@ export const renderHome = (locale: LocaleDef): string => {
     `<section class="pillars">` +
     t.pillars
       .map(
-        (p, i) =>
+        (p) =>
           `<a class="pillar reveal" href="${esc(href(p.link))}">` +
           `<span class="pillar-icon" data-kind="${esc(p.kind)}">${icon(p.kind)}</span>` +
           `<h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p>` +
@@ -206,7 +206,7 @@ export const renderHome = (locale: LocaleDef): string => {
           `<ul class="caps-list">` +
           col.items
             .map(
-              (item, ii) =>
+              (item) =>
                 `<li><span class="caps-ico">${icon(item.kind)}</span><div class="caps-text">` +
                 `<span class="caps-name">${esc(item.name)} <code>${esc(item.api)}</code></span>` +
                 `<span class="caps-desc">${esc(item.desc)}</span></div></li>`,
@@ -228,7 +228,7 @@ export const renderHome = (locale: LocaleDef): string => {
     `<section class="strip reveal">` +
     t.features
       .map(
-        (f, i) =>
+        (f) =>
           `<div class="feature"><span class="feature-head">` +
           `<span class="feature-icon">${icon(f.kind)}</span><h4>${esc(f.title)}</h4></span>` +
           `<p>${esc(f.desc)}</p></div>`,

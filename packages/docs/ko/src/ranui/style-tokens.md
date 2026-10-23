@@ -190,11 +190,11 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `checkbox`
 
-- Tokens: 47
+- Tokens: 48
 - Parts: 5
 
 ### Tokens
-<!-- layers: semantic: 8 · skin: 1 · component: 33 · internal: 5 -->
+<!-- layers: semantic: 9 · skin: 1 · component: 33 · internal: 5 -->
 - `--ran-checkbox-border-radius`
 - `--ran-checkbox-checked-background-color`
 - `--ran-checkbox-checked-background-image`
@@ -232,6 +232,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-color-bg-muted`
 - `--ran-color-border`
 - `--ran-color-primary`
+- `--ran-color-primary-text`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-focus-ring`
@@ -978,10 +979,10 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
+<!-- layers: semantic: 2 · internal: 1 -->
 - `--ran-color-text`
+- `--ran-font-family`
+- `--ran-text-label-1`
 
 ### Parts
 - `text`
@@ -1092,11 +1093,11 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `math`
 
-- Tokens: 34
-- Parts: 6
+- Tokens: 33
+- Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 10 · component: 16 · internal: 8 -->
+<!-- layers: semantic: 10 · component: 16 · internal: 7 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-muted`
 - `--ran-color-danger`
@@ -1124,7 +1125,6 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-radius-md`
 - `--ran-radius-sm`
 - `--ran-shadow-menu`
-- `--ran-size-5`
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-3`
@@ -1134,6 +1134,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ### Parts
 - `button`
+- `copy-status`
 - `error`
 - `math`
 - `menu`
@@ -1143,12 +1144,13 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 ## `mermaid`
 
 - Tokens: 27
-- Parts: 6
+- Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 8 · internal: 19 -->
+<!-- layers: semantic: 9 · internal: 18 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-muted`
+- `--ran-color-danger`
 - `--ran-color-primary`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
@@ -1168,7 +1170,6 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-radius-md`
 - `--ran-radius-sm`
 - `--ran-shadow-menu`
-- `--ran-size-5`
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-3`
@@ -1177,6 +1178,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ### Parts
 - `button`
+- `copy-status`
 - `diagram`
 - `error`
 - `menu`
@@ -1303,11 +1305,11 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `player`
 
-- Tokens: 167
+- Tokens: 168
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 5 · component: 151 · internal: 11 -->
+<!-- layers: semantic: 5 · component: 152 · internal: 11 -->
 - `--ran-color-`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -1322,6 +1324,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-dropdown-option-item-content-text-align`
 - `--ran-dropdown-option-item-hover-background-color`
 - `--ran-focus-ring-inverse-color`
+- `--ran-player-background`
 - `--ran-player-clarity-border-radius`
 - `--ran-player-clarity-color`
 - `--ran-player-clarity-font-family`
@@ -1606,19 +1609,35 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `scratch`
 
-- Tokens: 5
-- Parts: 1
+- Tokens: 20
+- Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 2 · component: 3 -->
+<!-- layers: semantic: 8 · component: 3 · internal: 9 -->
+- `--ran-background-100`
+- `--ran-color-bg`
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-hover`
+- `--ran-color-border`
+- `--ran-color-link`
+- `--ran-color-text`
 - `--ran-color-text-secondary`
+- `--ran-gray-1000`
+- `--ran-gray-200`
+- `--ran-gray-400`
+- `--ran-gray-900`
+- `--ran-radius-sm`
 - `--ran-scratch-award-background`
 - `--ran-scratch-cover-background`
 - `--ran-scratch-disabled-opacity`
+- `--ran-size-7`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-button-size`
 
 ### Parts
 - `award`
+- `reveal-button`
 
 ## `section`
 
@@ -1660,16 +1679,17 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `select`
 
-- Tokens: 62
+- Tokens: 63
 - Parts: 6
 
 ### Tokens
-<!-- layers: semantic: 6 · skin: 1 · component: 47 · internal: 8 -->
+<!-- layers: semantic: 7 · skin: 1 · component: 47 · internal: 8 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-primary`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
+- `--ran-color-text-secondary`
 - `--ran-focus-ring`
 - `--ran-radius-sm`
 - `--ran-select-background-color`
@@ -1738,13 +1758,14 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `select/dropdown-item`
 
-- Tokens: 19
+- Tokens: 20
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 2 · component: 15 · internal: 2 -->
+<!-- layers: semantic: 3 · component: 15 · internal: 2 -->
 - `--ran-blue-100`
 - `--ran-color-text`
+- `--ran-color-text-disabled`
 - `--ran-dropdown-option-active-background-color`
 - `--ran-dropdown-option-active-font-weight`
 - `--ran-dropdown-option-active-hover-background-color`
@@ -1866,11 +1887,11 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `theme-switch`
 
-- Tokens: 21
+- Tokens: 22
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 6 · skin: 1 · internal: 14 -->
+<!-- layers: semantic: 6 · skin: 1 · internal: 15 -->
 - `--ran-color-bg-hover`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -1892,6 +1913,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-theme-switch-gap`
 - `--ran-theme-switch-icon-size`
 - `--ran-theme-switch-radius`
+- `--ran-theme-switch-touch-size`
 
 ### Parts
 - `button ${choice}`

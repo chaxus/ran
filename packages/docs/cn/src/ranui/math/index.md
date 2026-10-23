@@ -35,7 +35,7 @@ description: '使用 Temml 把 LaTeX 数学公式直接编译为原生 MathML，
 | `download` | `boolean` | `false`   | 显示下载按钮/菜单，用于下载源码（`.tex`）和/或 MathML（`.mml`）。              |
 | `sheet`    | `string`  | `''`      | 注入组件 shadow DOM 的 CSS。                                                   |
 
-> 💡 **提示**：`latex` 属性的 getter 会用 `decodeURIComponent` 解码后再渲染，因此支持传入 URI 编码后的公式。以 slotted 文本内容传入公式不会生效，只有 `latex` 属性的内容才会渲染。
+> 💡 **提示**：`latex` 属性的 getter 会用 `decodeURIComponent` 解码后再渲染，因此支持传入 URI 编码后的公式。没有该属性时，会使用元素的文本内容作为公式。
 
 ### 公式 `latex`
 
@@ -87,3 +87,9 @@ Part：`button` · `error` · `math` · `menu` · `render` · `toolbar`
 - **在 JavaScript 中转义反斜杠**：从 JS 字符串字面量赋值 `latex` 时，记得转义 `\`（如 `'\\frac{1}{2}'`）。
 - **处理解析失败**：监听 `error` 事件（或检查渲染出的 `::part(error)` 区块），不要假设每个公式都是合法的 LaTeX。
 - **通过 `sheet` 自定义布局**：需要覆盖内部 `.ran-math` 布局时使用 `sheet` 属性。
+
+### 复制与窄屏
+
+已开启的控件在内容上方保持可见：精细指针目标为 32px，触屏为 44px，与内容间隔 8px；未开启控件时不预留工具条空间。复制期间保留焦点并阻止重复请求；拒绝或不可用时在局部 `::part(copy-status)`（`role="status"`）显示错误，可用 `label-copy-error` 本地化，原按钮可立即重试。只有当前内容成功写入剪贴板才发出 `copied`；内容或复制目标更改后，旧请求不会再报告成功。 仅更新内容时保留原按钮及焦点，新内容可立即复制。
+
+宽公式在 `::part(render)` 内独立横向滚动，不会撑宽页面；工具条不随公式滚动。

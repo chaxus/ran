@@ -86,3 +86,9 @@ Die vollständige Liste steht in den [Style-Tokens](/de/src/ranui/style-tokens#m
 - **Backslashes in JavaScript maskieren**: Weist du `latex` aus einem JS-String zu, denk daran, dass `\` maskiert werden muss (z. B. `'\\frac{1}{2}'`).
 - **Parse-Fehler behandeln**: Höre auf `error` (oder prüfe die gerenderte `::part(error)`-Box), statt anzunehmen, jede Formel sei gültiges LaTeX.
 - **Eigenes Layout über `sheet`**: Nutze das Attribut `sheet`, um das interne Layout von `.ran-math` bei Bedarf zu überschreiben.
+
+### Kopieren und schmale Ansichten
+
+Aktivierte Bedienelemente bleiben in einer ruhigen Zeile über dem Inhalt sichtbar: 32px für präzise Zeiger, 44px für Touch und 8px Abstand zum Inhalt. Ohne Bedienelemente wird kein Platz reserviert. Kopieren behält den Fokus und verhindert doppelte ausstehende Schreibvorgänge. Ablehnung oder fehlende Zwischenablage erscheint lokal in `::part(copy-status)` (`role="status"`); `label-copy-error` lokalisiert den Hinweis. Ein erneuter Versuch nutzt denselben Button. `copied` wird nur nach erfolgreichem Kopieren des aktuellen Inhalts ausgelöst. Änderungen an Quelle oder Kopierziel verwerfen Rückmeldungen älterer Anfragen. Bei Quellenänderungen bleibt der fokussierte Button erhalten; die neue Quelle kann sofort kopiert werden.
+
+Breite Formeln scrollen innerhalb von `::part(render)` horizontal, ohne die Seite zu verbreitern oder die Werkzeugleiste zu verschieben.
