@@ -178,7 +178,7 @@ export function createRimRenderer(container: HTMLElement): RimRenderer {
     return canvas;
   };
 
-  const glCanvas = makeCanvas();
+  let glCanvas = makeCanvas();
   let gl: RimBackend | null = createWebGlRim(glCanvas);
   let gpu: RimBackend | null = null;
   let gpuCanvas: HTMLCanvasElement | null = null;
@@ -194,6 +194,7 @@ export function createRimRenderer(container: HTMLElement): RimRenderer {
   };
 
   const redraw = (): void => {
+    if (destroyed) return;
     const { width, height, dpr } = currentSize();
     (gpu ?? gl)?.draw(width, height, radius, dpr);
   };
@@ -227,6 +228,16 @@ export function createRimRenderer(container: HTMLElement): RimRenderer {
       glCanvas.remove();
       (gpuCanvas as HTMLCanvasElement).style.display = '';
       redraw();
+      void handle.lost?.then(() => {
+        if (destroyed || gpu !== handle) return;
+        handle.destroy();
+        gpu = null;
+        gpuCanvas?.remove();
+        gpuCanvas = null;
+        glCanvas = makeCanvas();
+        gl = createWebGlRim(glCanvas);
+        redraw();
+      });
     });
   }
 
@@ -236,6 +247,7 @@ export function createRimRenderer(container: HTMLElement): RimRenderer {
       redraw();
     },
     destroy() {
+      if (destroyed) return;
       destroyed = true;
       resizeObserver?.disconnect();
       gpu?.destroy();

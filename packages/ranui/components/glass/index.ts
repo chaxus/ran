@@ -166,13 +166,11 @@ export class Glass extends RanElement {
    * Lazily create the rim renderer — only while `rim` is set, so a page that
    * never uses it never spends one of the browser's limited WebGL/WebGPU
    * context slots. `createRimRenderer` owns its own canvas(es) and resize
-   * tracking (see `rim.ts`) — this just mounts it into the specular layer and
-   * keeps it alive across disconnect/reconnect, same as the SVG displacement
-   * filter above; only `_teardownRim` frees it, when `rim` is explicitly
-   * turned back off.
+   * tracking (see `rim.ts`). Release those resources on disconnect and create
+   * a fresh renderer on reconnect; detached panes never allocate a backend.
    */
   private _ensureRim(): void {
-    if (this._rimRenderer || typeof document === 'undefined') return;
+    if (!this.isConnected || this._rimRenderer || typeof document === 'undefined') return;
     this._rimRenderer = createRimRenderer(this._specular);
     this._rimRenderer.setRadius(Number(this.radius) || 20);
   }
@@ -266,6 +264,7 @@ export class Glass extends RanElement {
 
   disconnectedCallback(): void {
     this._events.abort();
+    this._teardownRim();
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {

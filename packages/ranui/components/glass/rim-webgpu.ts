@@ -103,6 +103,8 @@ fn fs_main(@builtin(position) fragCoord: vec4<f32>) -> @location(0) vec4<f32> {
 `;
 
 export interface RimBackend {
+  /** Resolves when an active device is lost; renderer restores its fallback. */
+  lost?: Promise<unknown>;
   /** Draws once at the given backing-store size (already dpr-scaled) plus CSS-px radius and dpr. */
   draw(width: number, height: number, radius: number, dpr: number): void;
   /** Frees the GPU device — browsers cap how many WebGPU/WebGL contexts can be live at once. */
@@ -123,16 +125,31 @@ export async function createWebGpuRim(canvas: HTMLCanvasElement): Promise<RimBac
   const gpu = (navigator as unknown as { gpu?: GPU }).gpu;
   if (!gpu) return null;
 
+  let device: GPUDevice | undefined;
+  let context: GPUCanvasContext | null = null;
+  let uniformBuffer: GPUBuffer | undefined;
+  let destroyed = false;
+  const destroy = (): void => {
+    if (destroyed) return;
+    destroyed = true;
+    context?.unconfigure();
+    uniformBuffer?.destroy();
+    device?.destroy();
+  };
+
   try {
     const adapter = await gpu.requestAdapter();
-    const device = await adapter?.requestDevice();
+    device = await adapter?.requestDevice();
     if (!device) return null;
 
     // No canvas-specific `getContext("webgpu")` overload in every lib.dom.d.ts
     // snapshot either — the generic `getContext(id: string)` fallback types the
     // result as the full `RenderingContext` union, so this narrows it back down.
-    const context = canvas.getContext('webgpu') as GPUCanvasContext | null;
-    if (!context) return null;
+    context = canvas.getContext('webgpu') as GPUCanvasContext | null;
+    if (!context) {
+      destroy();
+      return null;
+    }
 
     const format = gpu.getPreferredCanvasFormat();
     context.configure({ device, format, alphaMode: 'premultiplied' });
@@ -161,7 +178,7 @@ export async function createWebGpuRim(canvas: HTMLCanvasElement): Promise<RimBac
 
     // vec2<f32> resolution (8B, align 8) + f32 radius (4B) + f32 dpr (4B) = 16B,
     // already a multiple of the largest member's alignment — no padding needed.
-    const uniformBuffer = device.createBuffer({
+    uniformBuffer = device.createBuffer({
       size: 16,
       usage: BUFFER_USAGE_UNIFORM | BUFFER_USAGE_COPY_DST,
     });
@@ -171,19 +188,23 @@ export async function createWebGpuRim(canvas: HTMLCanvasElement): Promise<RimBac
     });
     const uniformData = new Float32Array(4);
 
+    const activeDevice = device;
+    const activeContext = context;
+    const activeBuffer = uniformBuffer;
     return {
+      lost: device.lost,
       draw(width, height, radius, dpr) {
-        if (width <= 0 || height <= 0) return;
+        if (destroyed || width <= 0 || height <= 0) return;
         canvas.width = width;
         canvas.height = height;
         uniformData.set([width, height, radius * dpr, dpr]);
-        device.queue.writeBuffer(uniformBuffer, 0, uniformData);
+        activeDevice.queue.writeBuffer(activeBuffer, 0, uniformData);
 
-        const encoder = device.createCommandEncoder();
+        const encoder = activeDevice.createCommandEncoder();
         const pass = encoder.beginRenderPass({
           colorAttachments: [
             {
-              view: context.getCurrentTexture().createView(),
+              view: activeContext.getCurrentTexture().createView(),
               clearValue: { r: 0, g: 0, b: 0, a: 0 },
               loadOp: 'clear',
               storeOp: 'store',
@@ -194,13 +215,12 @@ export async function createWebGpuRim(canvas: HTMLCanvasElement): Promise<RimBac
         pass.setBindGroup(0, bindGroup);
         pass.draw(3);
         pass.end();
-        device.queue.submit([encoder.finish()]);
+        activeDevice.queue.submit([encoder.finish()]);
       },
-      destroy() {
-        device.destroy();
-      },
+      destroy,
     };
   } catch {
+    destroy();
     // Adapter/device negotiation can reject for reasons with no actionable
     // recovery here (GPU process crashed, driver blocklisted, out of memory) —
     // every one of them means the same thing: stay on the WebGL rim.
