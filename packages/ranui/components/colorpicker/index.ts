@@ -199,6 +199,19 @@ export class ColorPicker extends RanElement {
     }
     this.colorpicker?.setAttribute('aria-disabled', disabled ? 'true' : 'false');
     this.colorpicker?.setAttribute('tabindex', disabled ? '-1' : '0');
+    if (disabled) {
+      this.onPointerUp();
+      const active = this._shadowDom.activeElement ?? this.ownerDocument?.activeElement;
+      if (active && (this._shadowDom.contains(active) || this.colorPickerInner?.contains(active)))
+        (active as HTMLElement).blur?.();
+      // Close each owner through its reflected state; the nested Select owns a
+      // separate portal, outside the panel made inert below.
+      this.colorPickerFormatSelect?.removeAttribute('open');
+      this.popoverBlock.removeAttribute('open');
+    }
+    if (this.colorPickerInner) this.colorPickerInner.inert = disabled;
+    this.colorPickerFormatSelect?.toggleAttribute('disabled', disabled);
+    this.colorPickerValueInput?.toggleAttribute('disabled', disabled);
   };
 
   /** Capture-phase guard: swallow clicks/keydowns on the swatch while disabled. */
@@ -298,6 +311,7 @@ export class ColorPicker extends RanElement {
 
   /** Sync the `value` attribute to the live color and emit a `change` event. */
   emitChange = (): void => {
+    if (isDisabled(this)) return;
     const value = this.currentValue();
     const { r, g, b, a } = this.currentRgba();
     this.context?.value.setter(value);
@@ -322,12 +336,14 @@ export class ColorPicker extends RanElement {
   // `touch-action: none` already set on the palette/sliders in panel.less, and
   // the `r-player`/`r-mermaid` pointer-drag idiom documented in CLAUDE.md.
   palettePointerDown = (e: PointerEvent): void => {
+    if (isDisabled(this)) return;
     e.preventDefault();
     this.colorPickerPaletteSelect = true;
     this.updatePaletteFromEvent(e);
   };
 
   updatePaletteFromEvent = (e: PointerEvent): void => {
+    if (isDisabled(this)) return;
     if (!this.colorPickerPalette) return;
     const { left, top, width, height } = this.colorPickerPalette.getBoundingClientRect();
     if (!width || !height) return;
@@ -341,12 +357,14 @@ export class ColorPicker extends RanElement {
   sliderPointerDown =
     (kind: 'hue' | 'alpha') =>
     (e: PointerEvent): void => {
+      if (isDisabled(this)) return;
       e.preventDefault();
       this._activeSlider = kind;
       this.updateSliderFromEvent(kind, e);
     };
 
   updateSliderFromEvent = (kind: 'hue' | 'alpha', e: PointerEvent): void => {
+    if (isDisabled(this)) return;
     const el = kind === 'hue' ? this.colorPickerHueSlider : this.colorPickerAlphaSlider;
     if (!el) return;
     const { left, width } = el.getBoundingClientRect();
@@ -389,6 +407,7 @@ export class ColorPicker extends RanElement {
   sliderKeydown =
     (kind: 'hue' | 'alpha') =>
     (e: KeyboardEvent): void => {
+      if (isDisabled(this)) return;
       const max = kind === 'hue' ? HUE : 100;
       const sig = kind === 'hue' ? this.context.hue : this.context.transparency;
       const next = sliderStepFromKeydown(e, { current: sig.getter(), min: 0, max, step: 1 });
@@ -414,6 +433,7 @@ export class ColorPicker extends RanElement {
 
   // ── Input row ─────────────────────────────────────────────────────────────
   onValueInput = (e: Event): void => {
+    if (isDisabled(this)) return;
     const target = e.target as HTMLElement & { value?: string };
     const next = (e as CustomEvent<{ value?: string }>).detail?.value ?? target?.value;
     if (typeof next !== 'string') return;
@@ -424,6 +444,7 @@ export class ColorPicker extends RanElement {
   };
 
   onFormatChange = (e: Event): void => {
+    if (isDisabled(this)) return;
     const value = (e as CustomEvent<{ value?: string }>).detail?.value;
     this._format = value === 'RGB' ? 'RGB' : 'HEX';
     this.syncValueInput();

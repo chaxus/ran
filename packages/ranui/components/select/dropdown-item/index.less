@@ -11,7 +11,7 @@
     transition: var(--ran-dropdown-option-item-transition, none);
     border-radius: var(--ran-dropdown-option-item-border-radius, var(--ran-radius-sm, 6px));
     cursor: var(--ran-dropdown-option-item-cursor, pointer);
-    &:hover {
+    :host(:not([disabled])) &:hover {
       background-color: var(
         --ran-dropdown-option-item-hover-background-color,
         var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.04))
@@ -34,8 +34,18 @@
   &-option-active {
     background-color: var(--ran-dropdown-option-active-background-color, var(--ran-blue-100, #e6f7ff));
     font-weight: var(--ran-dropdown-option-active-font-weight, bold);
-    &:hover {
+    :host(:not([disabled])) &:hover {
       background-color: var(--ran-dropdown-option-active-hover-background-color, var(--ran-blue-100, #e6f7ff));
     }
+  }
+}
+
+:host([disabled]) {
+  .ranui-dropdown-option-item {
+    cursor: not-allowed;
+    color: var(--ran-color-text-disabled);
+  }
+  .ranui-dropdown-option-item-content {
+    color: var(--ran-color-text-disabled);
   }
 }

@@ -1,0 +1,142 @@
+{
+  "revision": "a9248acd5c1e40add7bb874a7ebfbfd3d80f76ee",
+  "sourceHashes": {
+    "components/colorpicker/index.ts": "df91d80b9eddf36cd73d8f5ed4d2257d85696ffe0c64992e95d4c17ae114b4c9",
+    "components/colorpicker/index.less": "3219fcec225d58e00833b4930744184c41b2dc61a8828e6a411878aada8ffb4c",
+    "components/colorpicker/panel.less": "72dc1126567f49679c5eb031bd6d75d78266655653fd4b566d7e43e1da3a6219",
+    "components/popover/index.ts": "9ffde73f2eefd734d03ab44558a0a83209c78c0df4dbd0e67851f15631b5cf8a",
+    "components/popover/index.less": "40ceddfd095b10a732379370d84f8c1991c9cf5ef8b2c6b0da5c9714fc201f6d",
+    "components/popover/content/index.ts": "4617f2b15231cc1efb7377edf1f9b2641abdb315c59736d766de5e4e18f7cb8f",
+    "components/dropdown/index.ts": "965e4755439140ec997023c36225fed2baa48ea0769570ef1999106bb4ae9555",
+    "components/dropdown/index.less": "3c7540b0abf43191e90a2db0ee927bef045de1128462cb7ccb3c74f011b8439f",
+    "components/select/index.ts": "f9cb825fb0b745f7c8e2d70fa75f2d72d975271b40ca38c9c2e4c61c28e1a8f1",
+    "components/select/index.less": "f90aab6d05e48af7cdce6316f3a684d0af2b4444ee6ce6e9e270f1a002584180",
+    "components/select/dropdown-item/index.ts": "b2a49bf1c9fa17201b105f0cb1837c0a20733a26ad3ab621e1a7c07f7fdaa979",
+    "components/select/dropdown-item/index.less": "2ccc490dec931ff8473dca5dc01b0a0cf965544d66128903b450d13b67e73754",
+    "components/select/option/index.ts": "c66d4296b14d4b13a3a7a5a4e5124dc9dcedb290e09a29879a1acb23fb485c78",
+    "components/input/index.ts": "a67d4052e959eab36ddc9fb1fa3771ca68cfe32d7574fdc908aead4fb9befc6c",
+    "components/input/index.less": "bdd1f48c45f7b8c2764fbdab7d1a0e61430ea535c95ab11d512b4febec27dc06",
+    "utils/floating.ts": "1556ced74d3d29fc1e98d3234965895565128b1f636e86a0ac422e7a26941a06",
+    "utils/component.ts": "5fc3d16275d42865cb0bb7077f595bc41138e10d6be17bd0ead83234d8b61d53",
+    "utils/a11y.ts": "a74c4da559fad3ec18d18d9bbd3fd36cff717b42eba3682f97902c1978d13345",
+    "utils/dom.ts": "557d4b55f43c9116b1f67b719dd4cd4404247a8c51c6d733d41cfe114ea4785e",
+    "theme/index.less": "fcf36f042e74c517c2193f6695d7e177369c967c29e3b3fe497970f1f7f06c05",
+    "theme/tokens.less": "f4e2d2375a1224f0fa97d8726ab94f08f68d9694a9c6fb2d247b5e48ebedaf24",
+    "theme/dark.less": "aa8befaa2d7738012a628f9aa4820cd70da8db3fc007ff2717bd481595149360",
+    "base.less": "c8643433f9148208938940dd1a3eee3dfc7f257d803f69d0db6320e918cd3b88",
+    "style.ts": "5834e0b1c474befe6cbe9f2f4fb3129b9e18cc933808f9244ce288775b39b71d",
+    "demo/index.ts": "1960314bceee32fad8c81533ce83e898231825adb8c3794260f083119cb2422e",
+    "demo/index.html": "0b85649033ea7bbad50d222e6ef8c182a1227cd10a22a182cc1634aa7a76f35d",
+    "demo/demo.css": "92b2fc3a0b99dc30c8ac248e62525ef3b269226bc96cfb1d04d9518176d157a9"
+  },
+  "runtime": "Actual registered components on shared source preview http://127.0.0.1:5273",
+  "scope": "Real mouse and keyboard; application-driven disabled/value state transitions. Component fixture only; no application or human acceptance.",
+  "cases": [
+    {
+      "name": "light-wide-normal",
+      "width": 1280,
+      "theme": "light",
+      "motion": "no-preference",
+      "states": {
+        "disabled": {
+          "value": "#ff0000",
+          "changes": 0,
+          "disabled": true,
+          "open": false,
+          "paletteDrag": false,
+          "sliderDrag": null
+        },
+        "reenabled": {
+          "value": "#00ff04",
+          "changes": 1,
+          "disabled": false,
+          "open": true,
+          "paletteDrag": false,
+          "sliderDrag": null
+        },
+        "dragCancelled": {
+          "value": "#00ff66",
+          "changes": 2,
+          "disabled": true,
+          "open": false,
+          "paletteDrag": false,
+          "sliderDrag": null
+        },
+        "nestedDisabled": {
+          "value": "#00ff66",
+          "changes": 2,
+          "disabled": true,
+          "open": false,
+          "paletteDrag": false,
+          "sliderDrag": null
+        }
+      },
+      "themePaint": {
+        "attribute": "light",
+        "bodyBackground": "rgb(255, 255, 255)",
+        "swatch": "rgb(0, 255, 102)"
+      }
+    },
+    {
+      "name": "dark-narrow-reduced",
+      "width": 360,
+      "theme": "dark",
+      "motion": "reduce",
+      "states": {
+        "disabled": {
+          "value": "#ff0000",
+          "changes": 0,
+          "disabled": true,
+          "open": false,
+          "paletteDrag": false,
+          "sliderDrag": null
+        },
+        "reenabled": {
+          "value": "#00ff04",
+          "changes": 1,
+          "disabled": false,
+          "open": true,
+          "paletteDrag": false,
+          "sliderDrag": null
+        },
+        "dragCancelled": {
+          "value": "#00ff66",
+          "changes": 2,
+          "disabled": true,
+          "open": false,
+          "paletteDrag": false,
+          "sliderDrag": null
+        },
+        "nestedDisabled": {
+          "value": "#00ff66",
+          "changes": 2,
+          "disabled": true,
+          "open": false,
+          "paletteDrag": false,
+          "sliderDrag": null
+        }
+      },
+      "themePaint": {
+        "attribute": "dark",
+        "bodyBackground": "rgb(0, 0, 0)",
+        "swatch": "rgb(0, 255, 102)"
+      }
+    }
+  ],
+  "browser": "151.0.7922.34",
+  "scriptHash": "67b456cfbaa33b394f43a248749636cd9169411f25b2623e0fd614d9b4cac59c",
+  "media": {
+    "dark-narrow-reduced-disabled-retained.png": "170997ca8edcdb854076091260afd6a0489c1962970adfd46bee0919cd1ca9d3",
+    "dark-narrow-reduced-nested-disabled.png": "25185d0b6fe5da0318b144917f676f069822ad15378f7435451ce429a53f046e",
+    "dark-narrow-reduced-nested-format-open.png": "aa5f393a2a12cff9d56f39980f833a3e14d26e0029b10dc345babb32c6a243c7",
+    "dark-narrow-reduced-open-keyboard.png": "696e1978c749ea089425365f726dbdbf565d6cfbb67bb4d4594d1836050f3239",
+    "dark-narrow-reduced-reenabled-keyboard.png": "3f50b4294ce7e5e09c9bbaff77fad3308899afeeecf8e6aedcddfd0f1ea4ce72",
+    "dark-narrow-reduced.webm": "5f33072f34da1eb4651b0a62f61159668aa8ccbccd6cac2553d84450ef27f001",
+    "light-wide-normal-disabled-retained.png": "d28bdff05baf36121d32a06f31823186869e92589486987b38188d7ddffbcc57",
+    "light-wide-normal-nested-disabled.png": "b2d22623ab6d854aecf9c4987fcf70c9e14ca9cc3fd07bbfe8e1a065aae75d3a",
+    "light-wide-normal-nested-format-open.png": "bd6c8f1c63c398707a27f1310c43a5ef55d725adab1de9d7b67b2c563cb22aac",
+    "light-wide-normal-open-keyboard.png": "415d4e512cc95288a02b4f881704880e80bc708093d93d58bd9e89e784e3c731",
+    "light-wide-normal-reenabled-keyboard.png": "d58e37e419f5c057d680125a30793abfd202595057718683493543cdaf4c47de",
+    "light-wide-normal.webm": "7315bf0caf37bff550fa234cb1c77faa855b65d782137b87c428c1ab1f3846e4"
+  }
+}
