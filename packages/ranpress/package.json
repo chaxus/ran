@@ -1,7 +1,7 @@
 {
   "name": "ranpress",
   "version": "0.1.0",
-  "description": "The static site generator behind chaxus.com and ran.chaxus.com — mechanism only; each site supplies its own policy",
+  "description": "The static site generator behind ran.chaxus.com \u2014 mechanism only; the site supplies its own policy",
   "type": "module",
   "private": true,
   "exports": {

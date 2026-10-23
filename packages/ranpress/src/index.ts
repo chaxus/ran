@@ -1,11 +1,11 @@
 /**
- * The static site generator behind chaxus.com and, in time, ran.chaxus.com.
+ * The static site generator behind ran.chaxus.com.
  *
  * It is mechanism, not policy. It knows how to parse frontmatter, render markdown to
  * documentation-grade HTML, walk a content tree, put bytes on disk in the right order,
  * serve them the way the host will, and refuse to publish output that contradicts
  * itself. It has no opinion about what a page is, what URL it gets, or what it looks
- * like — those live in each site, which is why two very different sites can share this.
+ * like — those live in the consuming application.
  */
 export { parseFrontmatter, readString, readList, readBoolean } from './frontmatter.ts';
 export type { Frontmatter, FrontmatterValue, ParsedFile } from './frontmatter.ts';
