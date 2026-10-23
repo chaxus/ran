@@ -245,6 +245,13 @@ export class Checkbox extends RanElement {
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return;
+    // Native form-associated elements treat any disabled attribute as disabled,
+    // even the string "false". Normalize the public false value so pointer
+    // activation and the browser's form state agree with our accessor and ARIA.
+    if (name === 'disabled' && newValue === 'false') {
+      this.removeAttribute('disabled');
+      return;
+    }
     if (name === 'checked') {
       this.checked = newValue;
       this.value = newValue;

@@ -7,7 +7,7 @@
   padding: var(--ran-checkbox-host-padding, 0);
   box-sizing: var(--ran-checkbox-host-box-sizing, border-box);
   list-style: var(--ran-checkbox-host-list-style, none);
-  &([disabled]) {
+  &([disabled]:not([disabled='false'])) {
     .ran-checkbox-input {
       cursor: var(--ran-checkbox-disabled-cursor, not-allowed);
       pointer-events: var(--ran-checkbox-disabled-pointer-events, all);
@@ -42,11 +42,27 @@
 }
 
 .ran-checkbox-wrapper {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ran-checkbox-label-gap, 8px);
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  // The first row is one label line; the label spans any remaining lines.
+  // Center the square in that row, never against the whole paragraph.
+  grid-template-rows: 1lh auto;
+  column-gap: var(--ran-checkbox-label-gap, 8px);
+  max-width: 100%;
   cursor: pointer;
-  line-height: 1;
+  font-size: var(--ran-checkbox-label-font-size, var(--ran-text-label-1, 14px));
+  line-height: var(--ran-checkbox-label-line-height, 1.5);
+}
+
+.ran-checkbox-wrapper > .ran-checkbox {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+}
+
+.ran-checkbox-wrapper > .ran-checkbox-label {
+  grid-column: 2;
+  grid-row: 1 / span 2;
 }
 
 .ran-checkbox-label {
@@ -105,7 +121,7 @@
       display: var(--ran-checkbox-tick-display, table);
       width: var(--ran-checkbox-tick-width, calc(16px / 14 * 5));
       height: var(--ran-checkbox-tick-height, calc(16px / 14 * 8));
-      border: var(--ran-checkbox-tick-border, 2px solid #fff);
+      border: var(--ran-checkbox-tick-border, 2px solid var(--ran-color-primary-text, #fff));
       border-top: var(--ran-checkbox-tick-border-top, 0);
       border-inline-start: var(--ran-checkbox-tick-border-inline-start, 0);
       opacity: var(--ran-checkbox-tick-opacity, 0);
