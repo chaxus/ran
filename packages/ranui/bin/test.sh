@@ -2,7 +2,8 @@
 set -e
 
 pnpm -F ranuts build
-npm run tsc
+# Type-checking is the lint job's `run-checks.ts tsc`; its result does not depend on the
+# OS or Node version, so the four build-test legs no longer repeat it here.
 
 # CI enforces coverage thresholds and used to do it by running `vitest run` here and
 # then `vitest run --coverage` in a second step — the same suite twice for one report.
