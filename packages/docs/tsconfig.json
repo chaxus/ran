@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "exclude": ["node_modules/**", "**/*/dist/**", "public/**", "dist-next/**", "dist/**"],
+  "exclude": ["node_modules/**", "**/*/dist/**", "public/**", "dist/**"],
   "include": ["**/*.ts", "**/*.d.ts"],
   "compilerOptions": {
     "noEmit": true,

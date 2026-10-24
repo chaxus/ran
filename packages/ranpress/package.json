@@ -27,12 +27,12 @@
   "dependencies": {
     "marked": "18.0.9",
     "minisearch": "7.2.0",
-    "shiki": "4.4.3"
+    "shiki": "4.4.3",
+    "vite": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:",
     "vitest": "catalog:"
   }
 }

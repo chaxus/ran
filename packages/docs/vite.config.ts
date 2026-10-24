@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { isPreviewPdfChunk, previewAssetDirectory, previewAssets } from './build/preview-assets.ts';
 
 /**
- * Bundles the documentation site's one client entry into `dist-next/assets/`.
+ * Bundles the documentation site's one client entry into `dist/assets/`.
  *
  * `emptyOutDir: false` because the generator owns the output and clears it once, before
  * calling this — vite clearing it again would delete what was already copied in.
