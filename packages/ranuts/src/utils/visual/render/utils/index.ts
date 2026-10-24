@@ -1,5 +1,8 @@
 // Colour parse cache: each colour is parsed once (named colours and rgb() go through a canvas, which is expensive)
 const colorCache = new Map<string, [number, number, number]>();
+// Bounded so a scene that builds a new rgb() string every frame cannot grow it forever. Far
+// above the distinct colours a scene draws with; past it the oldest entry is dropped.
+const COLOR_CACHE_LIMIT = 1024;
 
 // One reused 1x1 offscreen canvas, borrowing the browser's own CSS colour parser as a fallback
 let resolverCtx: CanvasRenderingContext2D | null | undefined;
@@ -41,6 +44,7 @@ export const getRgb = (color: string): [number, number, number] => {
     rgb = resolveCssColor(color);
   }
 
+  if (colorCache.size >= COLOR_CACHE_LIMIT) colorCache.delete(colorCache.keys().next().value!);
   colorCache.set(color, rgb);
   return rgb;
 };
