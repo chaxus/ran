@@ -28,7 +28,7 @@
       &:nth-child(1) {
         width: var(--loading-dot-line-item-nth-child-1-width, 100%);
         height: var(--loading-dot-line-item-nth-child-1-height, 100%);
-        color: var(--loading-dot-line-item-nth-child-1-color, gold);
+        color: var(--loading-dot-line-item-nth-child-1-color, var(--ran-color-text));
         border-color: var(
           --loading-dot-line-item-nth-child-1-border-color,
           currentColor transparent transparent currentColor
@@ -40,7 +40,7 @@
       &:nth-child(2) {
         width: var(--loading-dot-line-item-nth-child-2-width, 70%);
         height: var(--loading-dot-line-item-nth-child-2-height, 70%);
-        color: var(--loading-dot-line-item-nth-child-2-color, lime);
+        color: var(--loading-dot-line-item-nth-child-2-color, var(--ran-color-text-secondary));
         border-color: var(
           --loading-dot-line-item-nth-child-2-border-color,
           currentColor currentColor transparent transparent
@@ -67,15 +67,7 @@
           height: var(--loading-dot-line-item-circle-before-height, 1em);
           background-color: var(--loading-dot-line-item-circle-before-background-color, currentColor);
           border-radius: var(--loading-dot-line-item-circle-before-border-radius, 50%);
-          box-shadow: var(
-            --loading-dot-line-item-circle-before-box-shadow,
-            0 0 2em,
-            0 0 4em,
-            0 0 6em,
-            0 0 8em,
-            0 0 10em,
-            0 0 0 0.5em rgba(255, 255, 0, 0.1)
-          );
+          box-shadow: var(--loading-dot-line-item-circle-before-box-shadow, none);
         }
       }
     }

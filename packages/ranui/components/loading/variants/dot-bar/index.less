@@ -18,8 +18,11 @@
       }
     }
     &-item {
-      background-color: var(--loading-dot-bar-item-background-color, #8aff51);
-      background-image: var(--loading-dot-bar-item-background-image, linear-gradient(45deg, #8aff51 25%, #f1ffea));
+      background-color: var(--loading-dot-bar-item-background-color, var(--ran-color-text));
+      background-image: var(
+        --loading-dot-bar-item-background-image,
+        linear-gradient(45deg, var(--ran-color-text) 25%, var(--ran-color-text-secondary))
+      );
       width: var(--loading-dot-bar-item-width, 10px);
       height: var(--loading-dot-bar-item-height, 10px);
       float: var(--loading-dot-bar-item-float, left);

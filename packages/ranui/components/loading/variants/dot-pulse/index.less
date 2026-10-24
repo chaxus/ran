@@ -105,3 +105,14 @@
     }
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .ran-loading .dot-pulse-item-dot {
+    animation: none;
+    transform: scale(1);
+  }
+  .ran-loading .dot-pulse-item-ball {
+    animation: none;
+    transform: scale(0);
+  }
+}

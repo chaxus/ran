@@ -22,7 +22,7 @@
       border-radius: var(--loading-circle-line-border-border-radius, 50%);
       background: var(
         --loading-circle-line-border-background,
-        linear-gradient(0deg, rgba(63, 249, 220, 0.1) 33%, rgba(63, 249, 220, 1) 100%)
+        linear-gradient(0deg, var(--ran-color-text-secondary) 33%, var(--ran-color-text) 100%)
       );
       animation: var(--loading-circle-line-border-animation, circle-line 0.8s linear 0s infinite);
       animation-play-state: var(--loading-circle-line-border-animation-play-state, running);
@@ -30,7 +30,7 @@
     &-core {
       width: var(--loading-circle-line-core-width, 100%);
       height: var(--loading-circle-line-core-height, 100%);
-      background: var(--loading-circle-line-core-background, #fff);
+      background: var(--loading-circle-line-core-background, var(--ran-color-bg));
       border-radius: var(--loading-circle-line-core-border-radius, 50%);
     }
   }
