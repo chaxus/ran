@@ -24,26 +24,6 @@
     "im": {
       "status": "experimental",
       "checks": ["tsc", "test"]
-    },
-    "cpro": {
-      "status": "non-js",
-      "checks": [],
-      "reason": "C/C++ and WebAssembly learning sources with no package.json; use the native tools described in its README, not the JavaScript workspace."
-    },
-    "image-process": {
-      "status": "non-js",
-      "checks": [],
-      "reason": "Native C image-processing experiment with CMake, Make and Conan configuration; no package.json or JavaScript entry point."
-    },
-    "precss": {
-      "status": "non-js",
-      "checks": [],
-      "reason": "CSS sources with no package.json; nothing in the JavaScript toolchain applies."
-    },
-    "rust": {
-      "status": "non-js",
-      "checks": [],
-      "reason": "Rust sources with no package.json; built and tested by cargo, not by this workspace."
     }
   }
 }
