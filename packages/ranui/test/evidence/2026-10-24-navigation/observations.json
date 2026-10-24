@@ -1,0 +1,56 @@
+{
+  "states": [
+    {
+      "label": "initial",
+      "path": "/first",
+      "visible": [
+        "First page"
+      ],
+      "length": 2
+    },
+    {
+      "label": "keyboard activation",
+      "path": "/second",
+      "visible": [
+        "Second page"
+      ],
+      "length": 3
+    },
+    {
+      "label": "replace",
+      "path": "/third",
+      "visible": [
+        "Third page"
+      ],
+      "length": 3
+    },
+    {
+      "label": "browser back after replace",
+      "path": "/first",
+      "visible": [
+        "First page"
+      ],
+      "length": 3
+    },
+    {
+      "label": "browser forward",
+      "path": "/third",
+      "visible": [
+        "Third page"
+      ],
+      "length": 3
+    },
+    {
+      "label": "reconnect click",
+      "path": "/second",
+      "visible": [
+        "Second page"
+      ],
+      "length": 4
+    }
+  ],
+  "errors": [],
+  "recording": "/Users/ranzhouhang/Documents/Codex/2026-10-21/https-github-com-ranuts-document-pull/outputs/ran-all-components/navigation-final-v2/recordings/page@f7e38009dd24ab3fb226a848fe64122a.webm",
+  "sha256": "d8cb50a94fb671b6da4b2cbac7038f7ad3deb2d90b93736684cf15dcf042aacd",
+  "scope": "Actual Chromium DOM and history navigation; keyboard Enter, pointer click, replace, browser back/forward, disconnect/reconnect. No RouterCore configured. Lazy Route races are covered separately by real-import unit regressions."
+}
