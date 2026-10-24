@@ -5,6 +5,7 @@ on:
     paths:
       - "packages/**"
       - "bin/**"
+      - "tsconfig.base.json"
       - "tsconfig.tooling.json"
       - "plugins/**"
       - "design/**"
@@ -17,11 +18,15 @@ on:
       - ".npmrc"
       - ".oxlintrc.json"
       - ".prettier*"
+      # bin/lint.sh checks every relative link in the repository's Markdown, not only
+      # the files under packages/.
+      - "**/*.md"
   push:
     branches: [main]
     paths:
       - "packages/**"
       - "bin/**"
+      - "tsconfig.base.json"
       - "tsconfig.tooling.json"
       - "plugins/**"
       - "design/**"
@@ -34,6 +39,9 @@ on:
       - ".npmrc"
       - ".oxlintrc.json"
       - ".prettier*"
+      # bin/lint.sh checks every relative link in the repository's Markdown, not only
+      # the files under packages/.
+      - "**/*.md"
 
 permissions:
   contents: read
