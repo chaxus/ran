@@ -318,6 +318,9 @@ export class FloatingController {
     const generation = ++this.generation;
 
     if (open) {
+      // Apply the managed layer before the panel becomes visible, including
+      // the first frame before asynchronous positioning has completed.
+      panel.style.setProperty('z-index', 'var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100))');
       registerPanel(panel, host);
       this.resolvedSide = undefined;
       host.dispatchEvent(new CustomEvent('show'));
@@ -437,7 +440,6 @@ export class FloatingController {
 
     this.resolvedSide = position.side;
     panel.style.setProperty('position', 'absolute');
-    panel.style.setProperty('z-index', 'var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100))');
     panel.style.setProperty('inset', `${position.top}px auto auto ${position.left}px`);
     panel.style.setProperty('--ran-x', `${position.left}px`);
     panel.style.setProperty('--ran-y', `${position.top}px`);
