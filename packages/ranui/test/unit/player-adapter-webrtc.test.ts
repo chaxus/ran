@@ -234,13 +234,11 @@ describe('WHEP session lifecycle', () => {
   });
   it('resolves relative endpoints and releases only its attached stream on destroy', async () => {
     const peers = installMockPeerConnection();
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue({
-        ok: true,
-        headers: new Headers({ Location: '/session/current' }),
-        text: async () => 'answer',
-      });
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      headers: new Headers({ Location: '/session/current' }),
+      text: async () => 'answer',
+    });
     vi.stubGlobal('fetch', fetchMock);
     const adapter = createWebrtcAdapter();
     const errors = vi.fn();
