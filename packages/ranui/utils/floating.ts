@@ -41,7 +41,8 @@ const TRANSIT: Record<PlacementSide, { enter: string; exit: string }> = {
 
 // A node-owned symbol also works across independently loaded component bundles.
 const PANEL_OWNER = Symbol.for('ranui.floating.panel-owner');
-type OwnedPanel = Node & { [PANEL_OWNER]?: HTMLElement };
+const PANEL_ESCAPE = Symbol.for('ranui.floating.panel-escape');
+type OwnedPanel = Node & { [PANEL_OWNER]?: HTMLElement; [PANEL_ESCAPE]?: (event: KeyboardEvent) => void };
 const ACTIVE_PANELS = Symbol.for('ranui.floating.active-panels');
 type FloatingDocument = Document & { [ACTIVE_PANELS]?: Set<HTMLElement> };
 export const FLOATING_CHANGE = 'ranui-floating-change';
@@ -66,6 +67,12 @@ export const floatingPanelsWithin = (owner: HTMLElement): HTMLElement[] =>
     (panel) => panel.isConnected && isFloatingDescendant(panel, owner),
   );
 
+/** Give an unconsumed key outside a popup to its latest logical child layer. */
+export const dismissFloatingPanelWithin = (owner: HTMLElement, event: KeyboardEvent): void => {
+  const panel = floatingPanelsWithin(owner).at(-1) as OwnedPanel | undefined;
+  panel?.[PANEL_ESCAPE]?.(event);
+};
+
 export const closeFloatingPanelsWithin = (owner: HTMLElement, preserveAncestorOf?: Node): void => {
   for (const panel of floatingPanelsWithin(owner).reverse()) {
     if (preserveAncestorOf && isFloatingDescendant(preserveAncestorOf, panel)) continue;
@@ -76,13 +83,15 @@ export const closeFloatingPanelsWithin = (owner: HTMLElement, preserveAncestorOf
   }
 };
 
-const registerPanel = (panel: HTMLElement, owner?: HTMLElement): void => {
+const registerPanel = (panel: HTMLElement, owner?: HTMLElement, onEscape?: (event: KeyboardEvent) => void): void => {
   const document = panel.ownerDocument as FloatingDocument;
   if (owner) {
     (panel as OwnedPanel)[PANEL_OWNER] = owner;
+    (panel as OwnedPanel)[PANEL_ESCAPE] = onEscape;
     (document[ACTIVE_PANELS] ??= new Set()).add(panel);
   } else {
     delete (panel as OwnedPanel)[PANEL_OWNER];
+    delete (panel as OwnedPanel)[PANEL_ESCAPE];
     document[ACTIVE_PANELS]?.delete(panel);
   }
   document.dispatchEvent(new Event(FLOATING_CHANGE));
@@ -106,6 +115,8 @@ export interface FloatingPosition {
 }
 
 export interface FloatingOptions {
+  /** Preserve the consumer's dismissal and focus behavior for an owning modal. */
+  onEscape?: (event: KeyboardEvent) => void;
   /** The element that owns the panel: holds `open`, and receives the events. */
   host: HTMLElement;
   /** The panel. Read every time, because components build theirs lazily. */
@@ -321,7 +332,7 @@ export class FloatingController {
       // Apply the managed layer before the panel becomes visible, including
       // the first frame before asynchronous positioning has completed.
       panel.style.setProperty('z-index', 'var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100))');
-      registerPanel(panel, host);
+      registerPanel(panel, host, this.options.onEscape);
       this.resolvedSide = undefined;
       host.dispatchEvent(new CustomEvent('show'));
       panel.style.setProperty('display', 'block');

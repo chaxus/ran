@@ -20,3 +20,9 @@ The fix distinguishes managed portals from inline dropdowns, follows logical own
 ## First-frame follow-up
 
 The full Linux run exposed a first-frame race: the managed panel became visible before its deferred position pass assigned its layer. The layer is now assigned synchronously before visibility. The same six layer cases and Select composition/lifecycle checks passed in a 28-case focused run; the recordings and source manifest were refreshed after this correction. Empty Selects without an authored hint now remove the internal placeholder instead of leaving an empty attribute. Existing clearing assertions were kept unchanged.
+
+## Final nested focus follow-up
+
+See [final ownership evidence](final-ownership/README.md) for the refreshed source-bound
+recordings, editor priority, sibling-field dismissal and nested Popover recovery. Earlier
+media above remains historical evidence of its recorded source, not the final focus patch.

@@ -19,7 +19,7 @@ import {
 } from '@/utils/component';
 import popoverCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
-import { FloatingController } from '@/utils/floating';
+import { FloatingController, floatingPanelsWithin, dismissFloatingPanelWithin } from '@/utils/floating';
 import type { Placement, PlacementSide } from '@/utils/placement';
 import { isActivationKey } from '@/utils/a11y';
 
@@ -77,6 +77,7 @@ export class Popover extends RanElement {
    * and where its arrow has to point afterwards.
    */
   _floating = new FloatingController({
+    onEscape: (event) => this._dismissFromKeyboard(event),
     host: this,
     panel: () => this.popoverContent,
     // The *trigger*, not the host. The host is `display: block` and stretches to
@@ -407,6 +408,10 @@ export class Popover extends RanElement {
   private _dismissFromKeyboard = (event: KeyboardEvent): void => {
     if (event.key !== 'Escape' || event.defaultPrevented || event.isComposing || event.keyCode === 229 || !this.open)
       return;
+    if (floatingPanelsWithin(this).some((panel) => panel !== this.popoverContent)) {
+      dismissFloatingPanelWithin(this, event);
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     this.setDropdownDisplayBlock.cancel();

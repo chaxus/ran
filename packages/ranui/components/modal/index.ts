@@ -2,6 +2,7 @@ import modalCss from './index.less?inline';
 import {
   FLOATING_CHANGE,
   floatingPanelsWithin,
+  dismissFloatingPanelWithin,
   isFloatingDescendant,
   closeFloatingPanelsWithin,
 } from '@/utils/floating';
@@ -476,7 +477,9 @@ export class Modal extends RanElement {
     this.clearAfterTimers();
     this.emitAfterOpen();
     requestAnimationFrame(() => {
-      if (!this.autoFocus) return;
+      if (!this.autoFocus || !this.open || Modal.getTopModal() !== this) return;
+      // An opener or user may already have focused a field before this frame.
+      if (document.activeElement && isFloatingDescendant(document.activeElement, this)) return;
       const focusables = this.getFocusableElements();
       (focusables[0] || this._dialog).focus();
     });
@@ -530,7 +533,10 @@ export class Modal extends RanElement {
     if (!this.open) return;
     if (Modal.getTopModal() !== this) return;
     if (event.defaultPrevented) return;
-    if (event.key === 'Escape' && floatingPanelsWithin(this).length) return;
+    if (event.key === 'Escape' && floatingPanelsWithin(this).length) {
+      dismissFloatingPanelWithin(this, event);
+      return;
+    }
     if (event.key === 'Escape' && this.closeOnEsc) {
       event.preventDefault();
       this.close('escape');
