@@ -46,7 +46,7 @@
     "publint": "0.3.24",
     "typescript": "catalog:",
     "@types/node": "catalog:",
-    "@playwright/test": "1.62.1",
+    "@playwright/test": "catalog:",
     "vite": "catalog:"
   },
   "packageManager": "pnpm@11.6.0"

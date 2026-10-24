@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@playwright/test':
+      specifier: 1.62.1
+      version: 1.62.1
     '@types/node':
       specifier: 26.1.2
       version: 26.1.2
@@ -46,7 +49,7 @@ importers:
   .:
     devDependencies:
       '@playwright/test':
-        specifier: 1.62.1
+        specifier: 'catalog:'
         version: 1.62.1
       '@types/node':
         specifier: 'catalog:'
@@ -89,7 +92,7 @@ importers:
         version: link:../ranuts
     devDependencies:
       '@playwright/test':
-        specifier: 1.62.1
+        specifier: 'catalog:'
         version: 1.62.1
       '@types/node':
         specifier: 'catalog:'
@@ -120,7 +123,7 @@ importers:
         version: link:../ranuts
     devDependencies:
       '@playwright/test':
-        specifier: 1.62.1
+        specifier: 'catalog:'
         version: 1.62.1
       '@types/node':
         specifier: 'catalog:'
@@ -188,7 +191,7 @@ importers:
         version: 0.13.4
     devDependencies:
       '@playwright/test':
-        specifier: 1.62.1
+        specifier: 'catalog:'
         version: 1.62.1
       '@types/node':
         specifier: 'catalog:'

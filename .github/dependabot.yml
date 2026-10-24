@@ -37,3 +37,10 @@ updates:
       - dependency-name: "*"
         update-types:
           - version-update:semver-major
+      # The visual-regression container pins Playwright together with its image digest,
+      # Chromium and Node, and checks that the installed driver matches. A bump that only
+      # touches package.json turns that job red, so Playwright is upgraded by hand
+      # (packages/ranui/test/visual/README.md, "Updating the renderer").
+      - dependency-name: "@playwright/test"
+      - dependency-name: "playwright"
+      - dependency-name: "playwright-core"
