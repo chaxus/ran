@@ -105,7 +105,7 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "@webgpu/types": "0.1.71",
+    "@webgpu/types": "0.1.74",
     "jsdom": "29.1.1",
     "terser": "catalog:",
     "tsx": "catalog:",

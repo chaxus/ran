@@ -29,7 +29,7 @@
   "author": "chaxus",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "1.62.1",
+    "@playwright/test": "1.64.1",
     "@types/node": "catalog:",
     "jsdom": "30.0.1",
     "tsx": "catalog:",
