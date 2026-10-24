@@ -7,7 +7,7 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
+    "preinstall": "node -e \"if (!/^pnpm\\//.test(process.env.npm_config_user_agent ?? '')) { console.error('Install with pnpm: this repository pins it in packageManager.'); process.exit(1); }\"",
     "clean": "sh ./bin/clean.sh",
     "build": "sh ./bin/build.sh",
     "test": "sh ./bin/test.sh",
