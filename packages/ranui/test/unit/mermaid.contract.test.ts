@@ -212,14 +212,71 @@ describe('r-mermaid contract', () => {
     expect(mermaid._wrap.querySelector('.ran-mermaid-menu')).toBeNull();
   });
 
-  it('attributeChangedCallback calls render on code and theme change', () => {
+  it('renders a diagram built attribute by attribute once, with the final values', async () => {
     const mermaid = document.createElement('r-mermaid') as any;
+    mermaid.setAttribute('code', encodeURIComponent('graph TD; A-->B;'));
+    mermaid.setAttribute('theme', 'dark');
     document.body.appendChild(mermaid);
+    mermaid.setAttribute('code', encodeURIComponent('graph TD; A-->C;'));
+    await sleep();
 
-    const renderSpy = vi.spyOn(mermaid, 'render');
-    mermaid.attributeChangedCallback('code', '', 'graph TD;');
-    mermaid.attributeChangedCallback('theme', 'auto', 'dark');
-    expect(renderSpy).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render).toHaveBeenCalledWith(expect.any(String), 'graph TD; A-->C;');
+    expect(initialize).toHaveBeenLastCalledWith(expect.objectContaining({ theme: 'dark' }));
+  });
+
+  it('keeps the newest diagram when an older render finishes last', async () => {
+    let releaseFirst!: () => void;
+    render.mockImplementationOnce(
+      (id: string) =>
+        new Promise((resolve) => {
+          releaseFirst = () => resolve({ svg: `<svg id="${id}" data-old></svg>` });
+        }) as any,
+    );
+    const mermaid = document.createElement('r-mermaid') as any;
+    mermaid.code = 'graph TD; A-->B;';
+    document.body.appendChild(mermaid);
+    await sleep();
+    mermaid.code = 'graph TD; A-->C;';
+    await sleep();
+    releaseFirst();
+    await sleep();
+
+    expect(mermaid._diagram.querySelector('[data-old]')).toBeNull();
+    expect(mermaid._diagram.querySelector('svg')).not.toBeNull();
+  });
+
+  it('does not redraw when the document theme changes without changing the resolved theme', async () => {
+    const mermaid = document.createElement('r-mermaid') as any;
+    mermaid.code = 'graph TD; A-->B;';
+    document.body.appendChild(mermaid);
+    await sleep();
+    render.mockClear();
+
+    document.documentElement.classList.add('some-unrelated-class');
+    await sleep();
+    expect(render).not.toHaveBeenCalled();
+
+    document.documentElement.classList.add('dark');
+    await sleep();
+    expect(render).toHaveBeenCalledTimes(1);
+    document.documentElement.classList.remove('some-unrelated-class', 'dark');
+  });
+
+  it('starts following the document theme when switched to auto while connected', async () => {
+    const mermaid = document.createElement('r-mermaid') as any;
+    mermaid.theme = 'light';
+    mermaid.code = 'graph TD; A-->B;';
+    document.body.appendChild(mermaid);
+    mermaid.theme = 'auto';
+    await sleep();
+    render.mockClear();
+
+    document.documentElement.classList.add('dark');
+    await sleep();
+    expect(initialize).toHaveBeenLastCalledWith(expect.objectContaining({ theme: 'dark' }));
+    expect(render).toHaveBeenCalledTimes(1);
+    document.documentElement.classList.remove('dark');
   });
 
   it('attributeChangedCallback calls handlerExternalCss on sheet change', () => {
