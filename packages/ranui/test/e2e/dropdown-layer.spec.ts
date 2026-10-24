@@ -143,19 +143,21 @@ test('a child editor consumes Escape before the modal dismisses on the next unha
 
 for (const kind of ['popover', 'select']) {
   test(`Escape from a sibling field dismisses ${kind} before its modal`, async ({ page }) => {
-    await page.locator('#modal').evaluate((modal) => {
+    await page.locator('#modal').evaluate((modal, kind) => {
       const input = document.createElement('input');
       input.id = 'sibling';
-      modal.append(input);
+      // Put the field immediately after the tested trigger, so native Tab
+      // does not visit the unrelated Popover host and its native trigger first.
+      if (kind === 'select') modal.querySelector('#choice')!.after(input);
+      else modal.append(input);
       modal.setAttribute('open', '');
-    });
+    }, kind);
     const trigger = page.locator(kind === 'popover' ? '#help-trigger' : '#choice');
     const owner = page.locator(kind === 'popover' ? '#help' : '#choice');
     await trigger.click();
     await expect(owner).toHaveAttribute('open');
     await trigger.focus();
     await page.keyboard.press('Tab');
-    if (kind === 'select') await page.keyboard.press('Tab');
     await expect(page.locator('#sibling')).toBeFocused();
     await page.keyboard.press('Escape');
     await expect(owner).not.toHaveAttribute('open');

@@ -18,3 +18,5 @@ and inspected across its three contact sheets. Entry/exit and inner-layer dismis
 retain the correct parent, without a detached popup tail after modal close. This is behavioral composition evidence, not a frame-rate benchmark.
 Source and fixture fingerprints are in manifest.json; final cross-engine and canonical
 results are recorded in the complete-component review ledger.
+
+Final focused layer regression:30/30 across Chromium, Firefox and WebKit. The new Select sibling fixture places the field immediately after Select, instead of assuming two Tab presses skip the unrelated focusable Popover host and its button. Native Tab, popup cancellation, modal preservation and trigger focus assertions remain intact.
