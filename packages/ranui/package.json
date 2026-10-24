@@ -433,26 +433,26 @@
     "@playwright/test": "catalog:",
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "jsdom": "30.0.1",
+    "jsdom": "30.1.3",
     "less": "catalog:",
-    "rollup-plugin-visualizer": "7.0.1",
+    "rollup-plugin-visualizer": "7.1.1",
     "terser": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "dashjs": "5.2.0",
-    "hls.js": "1.6.17",
-    "mpegts.js": "1.8.1",
-    "mermaid": "11.16.1"
+    "dashjs": "5.2.1",
+    "hls.js": "1.7.3",
+    "mpegts.js": "1.8.2",
+    "mermaid": "11.17.2"
   },
   "dependencies": {
-    "dompurify": "3.4.16",
-    "marked": "18.0.9",
+    "dompurify": "3.4.17",
+    "marked": "18.1.1",
     "ranuts": "workspace:*",
     "@alixex/ranview": "workspace:*",
-    "remend": "1.3.0",
-    "shiki": "4.4.3",
-    "temml": "0.13.4"
+    "remend": "1.4.0",
+    "shiki": "4.5.0",
+    "temml": "0.14.0"
   }
 }
