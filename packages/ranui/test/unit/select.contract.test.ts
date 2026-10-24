@@ -117,6 +117,29 @@ describe('r-select contract', () => {
     expect(item('Option 2')).toBe(second);
   });
 
+  it('keeps option ids unique when options arrive while a search is active', async () => {
+    const select = document.createElement('r-select') as Select;
+    select.setAttribute('showsearch', '');
+    document.body.appendChild(select);
+    select.show();
+    const search = (value: string) => {
+      select._search.value = value;
+      select._search.dispatchEvent(new Event('input'));
+    };
+    search('Option 2');
+    for (const value of ['1', '2']) {
+      const option = document.createElement('r-option');
+      option.setAttribute('value', value);
+      option.textContent = `Option ${value}`;
+      select.appendChild(option);
+    }
+    await sleep(20);
+    search('');
+    const ids = select.getDropdownOptions().map((option) => option.id);
+    expect(ids).toHaveLength(2);
+    expect(new Set(ids).size).toBe(2);
+  });
+
   it('reflects disabled property to attributes and selection', async () => {
     const select = await createSelectWithOptions();
     // @ts-ignore - access private _shadowDom because mode is closed

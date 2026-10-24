@@ -105,6 +105,8 @@ export class Select extends RanElement {
    * instead of constructing a custom element (and its shadow root) per option per keystroke.
    */
   private _optionItems = new WeakMap<Option, HTMLElement>();
+  /** Item ids follow the item, not its position, because a filtered render reorders them. */
+  private _optionSeq = 0;
   _optionLabelMapValue: Map<string, string>;
   _optionValueMapLabel: Map<string, string>;
   _activeOption?: HTMLElement;
@@ -889,6 +891,7 @@ export class Select extends RanElement {
           .attr('role', 'option')
           .attr('value', `${value}`)
           .attr('title', `${label}`)
+          .attr('id', `${this._listboxId}-option-${this._optionSeq++}`)
           .text(`${label}`)
           .build() as HTMLElement;
         // Carry the disabled state onto the rendered item so click/keyboard
