@@ -2,29 +2,30 @@
 
 The release set is **ranuts → @alixex/ranview → ranui**, in dependency order. Other workspaces are not published by this workflow. All workspaces and the published libraries require **Node 24+**. Use pnpm **11.6.0**, pinned in the root `packageManager` field; the release workflow pins npm **11.20.0** for registry operations.
 
-## Patch candidate — 2026-10-23
+## Patch candidate — 2026-10-24
 
-The next release set is `ranuts@0.5.1` → `@alixex/ranview@0.2.1` → `ranui@0.5.1`.
-These versions are prepared for verification, **not yet published**. They contain the input,
-focus, portal and streamed-reading corrections plus the agent design guidance. The DOM-view
-package advances one patch to consume the matching utility version. Current published
-installation examples below remain valid until the registry confirms the new release.
+The next release set is `ranuts@0.5.2` → `@alixex/ranview@0.2.2` → `ranui@0.5.2`.
+These versions are prepared for verification, **not yet published**. They keep content a
+component hides or replaces off the page until its definition arrives, and bound the visual
+engine's colour cache. The DOM-view package advances one patch to consume the matching utility
+version. The published installation examples below remain valid until the registry confirms the
+new release.
 
-## Published stable release — 2026-10-19
+## Published stable release — 2026-10-24
 
 | Package         | Version | npm tag |
 | --------------- | ------- | ------- |
-| ranuts          | 0.5.0   | latest  |
-| @alixex/ranview | 0.2.0   | latest  |
-| ranui           | 0.5.0   | latest  |
+| ranuts          | 0.5.1   | latest  |
+| @alixex/ranview | 0.2.1   | latest  |
+| ranui           | 0.5.1   | latest  |
 
-All three versions are published to npm on `latest`, verified against the [registry release record](../changelogs/2026-10-19.md). Install them directly:
+All three versions are published to npm on `latest` by the Release libraries workflow on 2026-10-24; the registry reports each as its `latest` dist-tag. Install them directly:
 
 ```sh
-npm install ranui@0.5.0
+npm install ranui@0.5.1
 # Or install the utility or DOM-view library separately:
-npm install ranuts@0.5.0
-npm install @alixex/ranview@0.2.0
+npm install ranuts@0.5.1
+npm install @alixex/ranview@0.2.1
 ```
 
 Change all affected package versions together before preparing a release. Keep internal dependencies as `workspace:*`: pnpm materializes the exact corresponding versions in the archives, and verification rejects old or unresolved internal versions. Update the lockfile if needed and commit the version/changelog changes before preparing the final artifacts.
