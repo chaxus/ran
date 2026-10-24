@@ -1,4 +1,4 @@
-import { adoptSheetText, adoptStyles } from './style';
+import { adoptStyles, replaceSheetText } from './style';
 import type { Ref } from '@alixex/ranview';
 
 const shadowRootCache = new WeakMap<HTMLElement, ShadowRoot>();
@@ -108,7 +108,5 @@ export const syncSheetAttribute = (
   newValue: string | null,
 ): void => {
   if (name !== 'sheet' || oldValue === newValue) return;
-  const sheet = host.getAttribute('sheet') || '';
-  if (!sheet) return;
-  adoptSheetText(root, sheet);
+  replaceSheetText(root, host.getAttribute('sheet') || '');
 };
