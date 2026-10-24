@@ -26,7 +26,8 @@ const page = (canonical: string, body: string): string =>
 const mediaFailures = (): string[] =>
   verifyDist({ distDir: dist, origin: ORIGIN })
     .filter((f) => /^(missing|malformed) media/.test(f.message))
-    .map((f) => `${f.file}: ${f.message}`);
+    // `file` is a native relative path, so Windows reports `src\\article\\post.html`.
+    .map((f) => `${f.file.replaceAll('\\', '/')}: ${f.message}`);
 
 afterEach(() => rmSync(dist, { recursive: true, force: true }));
 
