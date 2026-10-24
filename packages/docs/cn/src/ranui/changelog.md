@@ -11,7 +11,7 @@ description: 'ranui 的变更记录——新增、变更、修复与移除及其
 
 ## [0.5.2] — 2026-10-24
 
-发布准备版本；通过验证后再发布到 npm。
+[ranui@0.5.2](https://www.npmjs.com/package/ranui/v/0.5.2) 已正式发布到 npm 的 `latest` 标签。
 
 - 组件注册之前，不再露出它注册后会隐藏、移走或替换的内容。`ranui.css`（`ranui/style`）新增 `:not(:defined)` 规则，覆盖 `r-popover` 浮层、`r-select` 选项、`r-tabs` 第一个以外的面板、`r-modal`、`r-reasoning`、`r-route` 路由内容、`r-markdown`/`r-math`/`r-mermaid` 的原始源码，以及 `r-scratch` 的奖品内容。注册后的行为不变。
 - `<r-content hidden>` 和 `<r-option hidden>`（或 `popover`）让浏览器自己隐藏浮层内容，没有加载 `ranui.css` 的页面也不会露出来；组件注册后会接管显示。

@@ -11,7 +11,7 @@ Generado desde `packages/ranui/CHANGELOG.md` del repositorio. Las entradas conse
 
 ## [0.5.2] — 2026-10-24
 
-Release preparation; npm publication is pending verification.
+Published to npm as [ranui@0.5.2](https://www.npmjs.com/package/ranui/v/0.5.2) on the `latest` tag.
 
 - Keep content a component hides, portals or replaces off the page until its definition arrives. `ranui.css` (`ranui/style`) carries `:not(:defined)` rules for the `r-popover` panel, `r-select` options, every `r-tabs` pane after the first, `r-modal`, `r-reasoning`, `r-route` outlets, the raw source of `r-markdown`/`r-math`/`r-mermaid`, and the `r-scratch` prize. Upgraded behaviour is unchanged.
 - `<r-content hidden>` and `<r-option hidden>` (or `popover`) let the browser hide overlay content even on pages that do not load `ranui.css`; the components take over once defined.
