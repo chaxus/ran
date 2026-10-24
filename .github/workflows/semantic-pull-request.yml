@@ -7,8 +7,11 @@ on:
       - edited
       - synchronize
 
-# The check authenticates with RAN_ACTIONS_TOKEN, so the job's own token needs nothing.
-permissions: {}
+# The check only reads the PR title. The job's own token is enough for that, and it keeps a
+# personal access token out of a pull_request_target job, which runs with secrets for PRs
+# from forks.
+permissions:
+  pull-requests: read
 
 # Editing a title twice in a row started two runs that both post a status check.
 # The newest title is the only one that matters, so the older run is cancelled.
@@ -28,4 +31,4 @@ jobs:
       - name: Validate PR title
         uses: amannn/action-semantic-pull-request@v6
         env:
-          GITHUB_TOKEN: ${{ secrets.RAN_ACTIONS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
