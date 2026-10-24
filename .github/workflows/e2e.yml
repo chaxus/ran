@@ -84,12 +84,18 @@ jobs:
 
       # The browser download is keyed by the lockfile, which pins Playwright. System
       # packages are not cacheable this way, so a hit still installs those.
+      # Playwright ships browser builds per distribution, so a runner image moving to a new
+      # Ubuntu release must not restore the previous one's.
+      - name: Read runner image
+        id: runner-image
+        run: echo "os=$ImageOS" >> "$GITHUB_OUTPUT"
+
       - name: Cache Playwright browsers
         id: playwright-cache
         uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ matrix.browser }}-${{ hashFiles('pnpm-lock.yaml') }}
+          key: playwright-${{ steps.runner-image.outputs.os }}-${{ matrix.browser }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
