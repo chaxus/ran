@@ -24,6 +24,9 @@ await createDevServer({
   watch: [
     // `src/` for the root locale, `<dir>/src/` for every other one.
     ...LOCALES.map((locale) => ({ dir: join(ROOT, locale.dir, 'src'), match: isMarkdown })),
+    // Article media is copied into the output on every rebuild, so a new image needs no
+    // bundle — only the copy.
+    { dir: join(ROOT, 'assets') },
     { dir: join(ROOT, 'styles'), full: true },
     { dir: join(ROOT, 'client'), full: true },
   ],
