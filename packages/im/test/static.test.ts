@@ -2,7 +2,7 @@ import { createServer, request } from 'node:http';
 import { mkdtempSync, mkdirSync, writeFileSync, symlinkSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { createStaticServer } from '@/app/lib/static';
 import type { Context } from '@/app/types/index';
 
@@ -52,6 +52,26 @@ it('serves query-string assets and refuses traversal and escaping symlinks', asy
     expect(await get('/asset.txt?version=1')).toEqual({ status: 200, body: 'asset' });
   } finally {
     await new Promise<void>((resolve) => server.close(() => resolve()));
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+it('hands a request downstream once even when the next handler throws', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'ran-static-next-'));
+  const serve = createStaticServer(root);
+  const failure = new Error('downstream failed');
+  let calls = 0;
+  const logged = vi.spyOn(console, 'error').mockImplementation(() => {});
+  try {
+    serve({ req: { method: 'GET', url: '/missing.txt' }, res: {} } as unknown as Context, () => {
+      calls++;
+      throw failure;
+    });
+    await vi.waitFor(() => expect(logged).toHaveBeenCalled());
+    expect(calls).toBe(1);
+    expect(logged).toHaveBeenCalledWith('static: the next handler failed', failure);
+  } finally {
+    logged.mockRestore();
     rmSync(root, { recursive: true, force: true });
   }
 });
