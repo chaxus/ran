@@ -4,6 +4,9 @@ import { DEV_SERVER } from '../../build/config';
 /**
  * Freezes animations in the **light DOM** only — page chrome, demo scaffolding, anything the
  * specs mount directly into `<body>`.
+ * Zero transition duration matters: a tiny positive duration creates transitions on
+ * otherwise static elements (the initial transition-property is all), so geometry,
+ * theme colors and layer overrides can still be sampled before their next frame.
  *
  * It cannot reach inside a component: this is injected as a document-level `<style>`, and
  * document stylesheets do not cascade into a shadow tree. Components are frozen instead by
@@ -16,7 +19,7 @@ export const FREEZE_ANIMATIONS = `
     animation-duration: 0.001ms !important;
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-duration: 0s !important;
     transition-delay: 0ms !important;
   }
 `;
@@ -129,14 +132,25 @@ export async function popupCaptureBounds(page: Page, section: string, popup: str
         if (!node) throw new Error(`Missing capture target: ${selector}`);
         return node.getBoundingClientRect();
       });
-      const x = Math.floor(Math.min(...rects.map((rect) => rect.left)) + scrollX);
-      const y = Math.floor(Math.min(...rects.map((rect) => rect.top)) + scrollY);
-      return {
+      // Capture the real viewport. Mobile full-page capture can temporarily resize
+      // it, repositioning a live portal after its document-space crop was measured.
+      // Round in document space first, preserving the reviewed pixel origin even
+      // when a mobile/zoomed page has a fractional scroll offset.
+      const documentX = Math.floor(Math.min(...rects.map((rect) => rect.left)) + scrollX);
+      const documentY = Math.floor(Math.min(...rects.map((rect) => rect.top)) + scrollY);
+      const x = documentX - scrollX;
+      const y = documentY - scrollY;
+      const bounds = {
         x,
         y,
-        width: Math.ceil(Math.max(...rects.map((rect) => rect.right)) + scrollX) - x,
-        height: Math.ceil(Math.max(...rects.map((rect) => rect.bottom)) + scrollY) - y,
+        width: Math.ceil(Math.max(...rects.map((rect) => rect.right)) + scrollX) - documentX,
+        height: Math.ceil(Math.max(...rects.map((rect) => rect.bottom)) + scrollY) - documentY,
       };
+      if (x < 0 || y < 0 || x + bounds.width > innerWidth || y + bounds.height > innerHeight)
+        throw new Error(
+          `Popup and trigger must fit inside the viewport: ${JSON.stringify({ bounds, width: innerWidth, height: innerHeight })}`,
+        );
+      return bounds;
     },
     { section, popup },
   );

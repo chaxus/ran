@@ -1,0 +1,145 @@
+[WebServer] $ vite --host --host 0.0.0.0 --port 5273 --strictPort
+
+
+Running 111 tests using 2 workers
+
+[1/111] [chromium] › test/e2e/input-primitives.spec.ts:10:5 › input primitives with no-preference motion › disabled buttons reject actual pointer activation and recover when re-enabled
+[2/111] [chromium] › test/e2e/dropdown-layer.spec.ts:13:1 › an inline dropdown grid item does not claim the floating layer above a modal
+[3/111] [chromium] › test/e2e/dropdown-layer.spec.ts:21:1 › Select and Popover managed portals remain above their modal and pointer operable
+[4/111] [chromium] › test/e2e/input-primitives.spec.ts:31:5 › input primitives with no-preference motion › Tab exposes a visible focus indicator on the button keyboard surface
+[5/111] [chromium] › test/e2e/input-primitives.spec.ts:59:5 › input primitives with no-preference motion › popover dismissal restores the documented r-button trigger keyboard surface
+[6/111] [chromium] › test/e2e/dropdown-layer.spec.ts:36:1 › the public host layer override applies to inline and managed dropdowns
+[7/111] [chromium] › test/e2e/input-primitives.spec.ts:89:5 › input primitives with no-preference motion › a leading icon preserves the visible clickable native input label and form value
+[8/111] [chromium] › test/e2e/dropdown-layer.spec.ts:49:1 › modal keeps owned portal focus, dismisses one layer, and restores background inert on close
+[9/111] [chromium] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with no-preference motion › labelled fields contain their control and helper with automatic height
+[10/111] [chromium] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with no-preference motion › labelled fields contain their control and helper with fixed height
+[11/111] [chromium] › test/e2e/dropdown-layer.spec.ts:73:1 › opening a second modal dismisses the first modal floating controls
+[12/111] [chromium] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with no-preference motion › pending microphone permission offers a cancellable action without claiming to listen
+[13/111] [chromium] › test/e2e/input-primitives.spec.ts:10:5 › input primitives with reduce motion › disabled buttons reject actual pointer activation and recover when re-enabled
+[14/111] [chromium] › test/e2e/dropdown-layer.spec.ts:96:1 › a modal opened from inside a portal keeps its ancestor mounted and remains operable
+[15/111] [chromium] › test/e2e/input-primitives.spec.ts:31:5 › input primitives with reduce motion › Tab exposes a visible focus indicator on the button keyboard surface
+[16/111] [chromium] › test/e2e/input-primitives.spec.ts:59:5 › input primitives with reduce motion › popover dismissal restores the documented r-button trigger keyboard surface
+[17/111] [chromium] › test/e2e/loading-variants.spec.ts:7:1 › arc keeps its loading label visible and in flow with reduced motion in both themes
+[18/111] [chromium] › test/e2e/input-primitives.spec.ts:89:5 › input primitives with reduce motion › a leading icon preserves the visible clickable native input label and form value
+[19/111] [chromium] › test/e2e/loading-variants.spec.ts:32:1 › dot-pulse shows all five static dots immediately in reduced motion
+[20/111] [chromium] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with reduce motion › labelled fields contain their control and helper with automatic height
+[21/111] [chromium] › test/e2e/loading-variants.spec.ts:49:1 › status marks contrast with both surfaces and drop text stays outside its animated fill
+[22/111] [chromium] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with reduce motion › labelled fields contain their control and helper with fixed height
+[23/111] [chromium] › test/e2e/select-interaction.spec.ts:15:1 › search keeps real keyboard text editing, live filtering and clearing
+[24/111] [chromium] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with reduce motion › pending microphone permission offers a cancellable action without claiming to listen
+[25/111] [chromium] › test/e2e/select-interaction.spec.ts:52:1 › host typeahead selects once with a nonbubbling change; composing Enter does not select
+[26/111] [chromium] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with ArrowDown during its exit
+[27/111] [firefox] › test/e2e/dropdown-layer.spec.ts:13:1 › an inline dropdown grid item does not claim the floating layer above a modal
+[28/111] [chromium] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with Home during its exit
+[29/111] [firefox] › test/e2e/dropdown-layer.spec.ts:21:1 › Select and Popover managed portals remain above their modal and pointer operable
+[30/111] [chromium] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with Enter during its exit
+[31/111] [firefox] › test/e2e/dropdown-layer.spec.ts:36:1 › the public host layer override applies to inline and managed dropdowns
+[32/111] [chromium] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with g during its exit
+[33/111] [firefox] › test/e2e/dropdown-layer.spec.ts:49:1 › modal keeps owned portal focus, dismisses one layer, and restores background inert on close
+[34/111] [chromium] › test/e2e/select-interaction.spec.ts:122:3 › matching search preserves preselected value and accepts replacement
+[35/111] [chromium] › test/e2e/select-interaction.spec.ts:122:3 › matching search preserves preselected defaultvalue and accepts replacement
+[36/111] [firefox] › test/e2e/dropdown-layer.spec.ts:73:1 › opening a second modal dismisses the first modal floating controls
+[37/111] [chromium] › test/e2e/select-interaction.spec.ts:163:5 › typed search commits pointer selection from empty
+[38/111] [chromium] › test/e2e/select-interaction.spec.ts:163:5 › typed composition commit commits pointer selection from empty
+[39/111] [chromium] › test/e2e/select-interaction.spec.ts:163:5 › typed search commits pointer selection from value
+[40/111] [firefox] › test/e2e/dropdown-layer.spec.ts:96:1 › a modal opened from inside a portal keeps its ancestor mounted and remains operable
+[41/111] [chromium] › test/e2e/select-interaction.spec.ts:163:5 › typed composition commit commits pointer selection from value
+[42/111] [chromium] › test/e2e/select-interaction.spec.ts:163:5 › typed search commits pointer selection from defaultvalue
+[43/111] [firefox] › test/e2e/input-primitives.spec.ts:10:5 › input primitives with no-preference motion › disabled buttons reject actual pointer activation and recover when re-enabled
+[44/111] [chromium] › test/e2e/select-interaction.spec.ts:163:5 › typed composition commit commits pointer selection from defaultvalue
+[45/111] [firefox] › test/e2e/input-primitives.spec.ts:31:5 › input primitives with no-preference motion › Tab exposes a visible focus indicator on the button keyboard surface
+[46/111] [firefox] › test/e2e/loading-variants.spec.ts:7:1 › arc keeps its loading label visible and in flow with reduced motion in both themes
+[47/111] [firefox] › test/e2e/input-primitives.spec.ts:59:5 › input primitives with no-preference motion › popover dismissal restores the documented r-button trigger keyboard surface
+[48/111] [firefox] › test/e2e/loading-variants.spec.ts:32:1 › dot-pulse shows all five static dots immediately in reduced motion
+[49/111] [firefox] › test/e2e/input-primitives.spec.ts:89:5 › input primitives with no-preference motion › a leading icon preserves the visible clickable native input label and form value
+[50/111] [firefox] › test/e2e/loading-variants.spec.ts:49:1 › status marks contrast with both surfaces and drop text stays outside its animated fill
+[51/111] [firefox] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with no-preference motion › labelled fields contain their control and helper with automatic height
+[52/111] [firefox] › test/e2e/select-interaction.spec.ts:15:1 › search keeps real keyboard text editing, live filtering and clearing
+[53/111] [firefox] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with no-preference motion › labelled fields contain their control and helper with fixed height
+[54/111] [firefox] › test/e2e/select-interaction.spec.ts:52:1 › host typeahead selects once with a nonbubbling change; composing Enter does not select
+[55/111] [firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with no-preference motion › pending microphone permission offers a cancellable action without claiming to listen
+[56/111] [firefox] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with ArrowDown during its exit
+[57/111] [firefox] › test/e2e/input-primitives.spec.ts:10:5 › input primitives with reduce motion › disabled buttons reject actual pointer activation and recover when re-enabled
+[58/111] [firefox] › test/e2e/input-primitives.spec.ts:31:5 › input primitives with reduce motion › Tab exposes a visible focus indicator on the button keyboard surface
+[59/111] [firefox] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with Home during its exit
+[60/111] [firefox] › test/e2e/input-primitives.spec.ts:59:5 › input primitives with reduce motion › popover dismissal restores the documented r-button trigger keyboard surface
+[61/111] [firefox] › test/e2e/input-primitives.spec.ts:89:5 › input primitives with reduce motion › a leading icon preserves the visible clickable native input label and form value
+[62/111] [firefox] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with Enter during its exit
+[63/111] [firefox] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with reduce motion › labelled fields contain their control and helper with automatic height
+[64/111] [firefox] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with reduce motion › labelled fields contain their control and helper with fixed height
+[65/111] [firefox] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with g during its exit
+[66/111] [firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with reduce motion › pending microphone permission offers a cancellable action without claiming to listen
+[67/111] [firefox] › test/e2e/select-interaction.spec.ts:122:3 › matching search preserves preselected value and accepts replacement
+[68/111] [webkit] › test/e2e/dropdown-layer.spec.ts:13:1 › an inline dropdown grid item does not claim the floating layer above a modal
+[69/111] [firefox] › test/e2e/select-interaction.spec.ts:122:3 › matching search preserves preselected defaultvalue and accepts replacement
+[70/111] [webkit] › test/e2e/dropdown-layer.spec.ts:21:1 › Select and Popover managed portals remain above their modal and pointer operable
+[71/111] [firefox] › test/e2e/select-interaction.spec.ts:163:5 › typed search commits pointer selection from empty
+[72/111] [firefox] › test/e2e/select-interaction.spec.ts:163:5 › typed composition commit commits pointer selection from empty
+[73/111] [firefox] › test/e2e/select-interaction.spec.ts:163:5 › typed search commits pointer selection from value
+[74/111] [webkit] › test/e2e/dropdown-layer.spec.ts:36:1 › the public host layer override applies to inline and managed dropdowns
+[75/111] [firefox] › test/e2e/select-interaction.spec.ts:163:5 › typed composition commit commits pointer selection from value
+[76/111] [firefox] › test/e2e/select-interaction.spec.ts:163:5 › typed search commits pointer selection from defaultvalue
+[77/111] [webkit] › test/e2e/dropdown-layer.spec.ts:49:1 › modal keeps owned portal focus, dismisses one layer, and restores background inert on close
+[78/111] [firefox] › test/e2e/select-interaction.spec.ts:163:5 › typed composition commit commits pointer selection from defaultvalue
+[79/111] [webkit] › test/e2e/input-primitives.spec.ts:10:5 › input primitives with no-preference motion › disabled buttons reject actual pointer activation and recover when re-enabled
+[80/111] [webkit] › test/e2e/dropdown-layer.spec.ts:73:1 › opening a second modal dismisses the first modal floating controls
+[81/111] [webkit] › test/e2e/input-primitives.spec.ts:31:5 › input primitives with no-preference motion › Tab exposes a visible focus indicator on the button keyboard surface
+[82/111] [webkit] › test/e2e/dropdown-layer.spec.ts:96:1 › a modal opened from inside a portal keeps its ancestor mounted and remains operable
+[83/111] [webkit] › test/e2e/loading-variants.spec.ts:7:1 › arc keeps its loading label visible and in flow with reduced motion in both themes
+[84/111] [webkit] › test/e2e/input-primitives.spec.ts:59:5 › input primitives with no-preference motion › popover dismissal restores the documented r-button trigger keyboard surface
+[85/111] [webkit] › test/e2e/loading-variants.spec.ts:32:1 › dot-pulse shows all five static dots immediately in reduced motion
+[86/111] [webkit] › test/e2e/loading-variants.spec.ts:49:1 › status marks contrast with both surfaces and drop text stays outside its animated fill
+[87/111] [webkit] › test/e2e/input-primitives.spec.ts:89:5 › input primitives with no-preference motion › a leading icon preserves the visible clickable native input label and form value
+[88/111] [webkit] › test/e2e/select-interaction.spec.ts:15:1 › search keeps real keyboard text editing, live filtering and clearing
+[89/111] [webkit] › test/e2e/select-interaction.spec.ts:52:1 › host typeahead selects once with a nonbubbling change; composing Enter does not select
+[90/111] [webkit] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with no-preference motion › labelled fields contain their control and helper with automatic height
+[91/111] [webkit] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with no-preference motion › labelled fields contain their control and helper with fixed height
+[92/111] [webkit] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with no-preference motion › pending microphone permission offers a cancellable action without claiming to listen
+[93/111] [webkit] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with ArrowDown during its exit
+[94/111] [webkit] › test/e2e/input-primitives.spec.ts:10:5 › input primitives with reduce motion › disabled buttons reject actual pointer activation and recover when re-enabled
+[95/111] [webkit] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with Home during its exit
+[96/111] [webkit] › test/e2e/input-primitives.spec.ts:31:5 › input primitives with reduce motion › Tab exposes a visible focus indicator on the button keyboard surface
+  1) [webkit] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with Home during its exit 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "display": "block",
+    +   "display": "none",
+        "expanded": "false",
+        "open": false,
+      }
+
+      100 |     await page.keyboard.press(key);
+      101 |     // Prove this key arrived during exit; never wait out the defect.
+    > 102 |     expect(await page.evaluate(() => (window as unknown as { beforeReopen: unknown }).beforeReopen)).toEqual({
+          |                                                                                                      ^
+      103 |       open: false,
+      104 |       expanded: 'false',
+      105 |       display: 'block',
+        at /workspace/packages/ranui/test/e2e/select-interaction.spec.ts:102:102
+
+    Error Context: ../../../proof/results/select-interaction-normal--b2ed0-s-with-Home-during-its-exit-webkit/error-context.md
+
+
+[97/111] [webkit] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with Enter during its exit
+[98/111] [webkit] › test/e2e/input-primitives.spec.ts:59:5 › input primitives with reduce motion › popover dismissal restores the documented r-button trigger keyboard surface
+[99/111] [webkit] › test/e2e/input-primitives.spec.ts:89:5 › input primitives with reduce motion › a leading icon preserves the visible clickable native input label and form value
+[100/111] [webkit] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with g during its exit
+[101/111] [webkit] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with reduce motion › labelled fields contain their control and helper with automatic height
+[102/111] [webkit] › test/e2e/select-interaction.spec.ts:122:3 › matching search preserves preselected value and accepts replacement
+[103/111] [webkit] › test/e2e/input-primitives.spec.ts:125:7 › input primitives with reduce motion › labelled fields contain their control and helper with fixed height
+[104/111] [webkit] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with reduce motion › pending microphone permission offers a cancellable action without claiming to listen
+[105/111] [webkit] › test/e2e/select-interaction.spec.ts:122:3 › matching search preserves preselected defaultvalue and accepts replacement
+[106/111] [webkit] › test/e2e/select-interaction.spec.ts:163:5 › typed search commits pointer selection from empty
+[107/111] [webkit] › test/e2e/select-interaction.spec.ts:163:5 › typed composition commit commits pointer selection from empty
+[108/111] [webkit] › test/e2e/select-interaction.spec.ts:163:5 › typed search commits pointer selection from value
+[109/111] [webkit] › test/e2e/select-interaction.spec.ts:163:5 › typed composition commit commits pointer selection from value
+[110/111] [webkit] › test/e2e/select-interaction.spec.ts:163:5 › typed search commits pointer selection from defaultvalue
+[111/111] [webkit] › test/e2e/select-interaction.spec.ts:163:5 › typed composition commit commits pointer selection from defaultvalue
+  1 failed
+    [webkit] › test/e2e/select-interaction.spec.ts:73:3 › normal-motion selection immediately reopens with Home during its exit 
+  110 passed (1.4m)

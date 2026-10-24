@@ -1,0 +1,303 @@
+1
+
+[WebServer] $ vite --host --host 0.0.0.0 --port 5273 --strictPort
+
+Running 8 tests using 1 worker
+
+[1/8] [firefox] › test/e2e/dropdown-layer.spec.ts:36:1 › the public host layer override applies to inline and managed dropdowns
+[firefox] › test/e2e/dropdown-layer.spec.ts:36:1 › the public host layer override applies to inline and managed dropdowns
+LAYER 0 {
+  css: 'display: block; position: absolute; --ran-dropdown-padding: 12px; z-index: var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100)); --ran-dropdown-host-z-index: 1400; inset: 295.3px auto auto 376px; --ran-x: 376px; --ran-y: 295.29998779296875px; --ran-dropdown-arrow-anchor-width: 95.51666259765625px; --ran-dropdown-arrow-anchor-height: 23px; --ran-dropdown-min-width: 126.05000305175781px; --ran-dropdown-min-height: 49px; --ran-dropdown-arrow-anchor-offset: -15.266670227050781px; --ran-dropdown-arrow-anchor-offset-y: 57px;',
+  token: '1400',
+  z: '1400',
+  animations: [ { state: 'running', frames: [Array] } ]
+}
+
+LAYER 1 {
+  css: 'display: block; position: absolute; --ran-dropdown-padding: 12px; z-index: var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100)); --ran-dropdown-host-z-index: 1400; inset: 295.3px auto auto 376px; --ran-x: 376px; --ran-y: 295.29998779296875px; --ran-dropdown-arrow-anchor-width: 95.51666259765625px; --ran-dropdown-arrow-anchor-height: 23px; --ran-dropdown-min-width: 126.05000305175781px; --ran-dropdown-min-height: 49px; --ran-dropdown-arrow-anchor-offset: -15.266670227050781px; --ran-dropdown-arrow-anchor-offset-y: 57px;',
+  token: '1400',
+  z: '1400',
+  animations: []
+}
+
+LAYER 2 {
+  css: 'display: block; position: absolute; --ran-dropdown-padding: 12px; z-index: var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100)); --ran-dropdown-host-z-index: 1400; inset: 295.3px auto auto 376px; --ran-x: 376px; --ran-y: 295.29998779296875px; --ran-dropdown-arrow-anchor-width: 95.51666259765625px; --ran-dropdown-arrow-anchor-height: 23px; --ran-dropdown-min-width: 126.05000305175781px; --ran-dropdown-min-height: 49px; --ran-dropdown-arrow-anchor-offset: -15.266670227050781px; --ran-dropdown-arrow-anchor-offset-y: 57px;',
+  token: '1400',
+  z: '1400',
+  animations: []
+}
+
+LAYER 3 {
+  css: 'display: block; position: absolute; --ran-dropdown-padding: 12px; z-index: var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100)); --ran-dropdown-host-z-index: 1400; inset: 295.3px auto auto 376px; --ran-x: 376px; --ran-y: 295.29998779296875px; --ran-dropdown-arrow-anchor-width: 95.51666259765625px; --ran-dropdown-arrow-anchor-height: 23px; --ran-dropdown-min-width: 126.05000305175781px; --ran-dropdown-min-height: 49px; --ran-dropdown-arrow-anchor-offset: -15.266670227050781px; --ran-dropdown-arrow-anchor-offset-y: 57px;',
+  token: '1400',
+  z: '1400',
+  animations: []
+}
+
+[2/8] [firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with no-preference motion › pending microphone permission offers a cancellable action without claiming to listen
+[firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with no-preference motion › pending microphone permission offers a cancellable action without claiming to listen
+BEFORE {
+  rect: {
+    x: 0,
+    y: 0,
+    width: 32,
+    height: 32,
+    top: 0,
+    right: 32,
+    bottom: 32,
+    left: 0
+  },
+  hidden: false,
+  hit: 'R-VOICE-BUTTON'
+}
+
+AFTER {
+  events: [
+    [ 'pointerdown', 'BODY' ],
+    [ 'pointerup', 'BODY' ],
+    [ 'click', 'BODY' ]
+  ],
+  starts: 0,
+  active: 'BODY',
+  inner: undefined,
+  rect: {
+    x: 24,
+    y: 24,
+    width: 32,
+    height: 32,
+    top: 24,
+    right: 56,
+    bottom: 56,
+    left: 24
+  }
+}
+
+  1) [firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with no-preference motion › pending microphone permission offers a cancellable action without claiming to listen 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 3
+
+      Array [
+    -   "Cancel voice request",
+    -   "true",
+    -   "true",
+    +   "Start voice input",
+    +   "false",
+    +   "false",
+      ]
+
+      229 |           ];
+      230 |         }),
+    > 231 |       ).toEqual(['Cancel voice request', 'true', 'true']);
+          |         ^
+      232 |       await test.info().attach('pointer-activation-focus', {
+      233 |         body: JSON.stringify(
+      234 |           await page.evaluate(() => ({
+        at /workspace/packages/ranui/test/e2e/input-primitives.spec.ts:231:9
+
+    Error Context: ../../../proof/results/input-primitives-input-pri-eb877--without-claiming-to-listen-firefox/error-context.md
+
+
+[3/8] [firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with reduce motion › pending microphone permission offers a cancellable action without claiming to listen
+[firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with reduce motion › pending microphone permission offers a cancellable action without claiming to listen
+BEFORE {
+  rect: {
+    x: 0,
+    y: 0,
+    width: 32,
+    height: 32,
+    top: 0,
+    right: 32,
+    bottom: 32,
+    left: 0
+  },
+  hidden: false,
+  hit: 'R-VOICE-BUTTON'
+}
+
+AFTER {
+  events: [
+    [ 'pointerdown', 'BODY' ],
+    [ 'pointerup', 'BODY' ],
+    [ 'click', 'BODY' ]
+  ],
+  starts: 0,
+  active: 'BODY',
+  inner: undefined,
+  rect: {
+    x: 24,
+    y: 24,
+    width: 32,
+    height: 32,
+    top: 24,
+    right: 56,
+    bottom: 56,
+    left: 24
+  }
+}
+
+  2) [firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with reduce motion › pending microphone permission offers a cancellable action without claiming to listen 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 3
+
+      Array [
+    -   "Cancel voice request",
+    -   "true",
+    -   "true",
+    +   "Start voice input",
+    +   "false",
+    +   "false",
+      ]
+
+      229 |           ];
+      230 |         }),
+    > 231 |       ).toEqual(['Cancel voice request', 'true', 'true']);
+          |         ^
+      232 |       await test.info().attach('pointer-activation-focus', {
+      233 |         body: JSON.stringify(
+      234 |           await page.evaluate(() => ({
+        at /workspace/packages/ranui/test/e2e/input-primitives.spec.ts:231:9
+
+    Error Context: ../../../proof/results/input-primitives-input-pri-71bc8--without-claiming-to-listen-firefox/error-context.md
+
+
+[4/8] [firefox] › test/e2e/loading-variants.spec.ts:7:1 › arc keeps its loading label visible and in flow with reduced motion in both themes
+[firefox] › test/e2e/loading-variants.spec.ts:7:1 › arc keeps its loading label visible and in flow with reduced motion in both themes
+COLOR light {
+  display: 'inline',
+  color: 'rgb(23, 23, 23)',
+  weight: 400,
+  expected: 'rgb(23, 23, 23)',
+  contained: true
+} {
+  html: '<html lang="en" dir="ltr" data-ran-theme="light"><head>\n' +
+    '    <script type="module" src="/@vite/client"></script>\n' +
+    '\n' +
+    '    <meta charset="UTF-8">\n' +
+    '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+    '    <title>ranui — Geist-based Web Components</title>\n' +
+    '    <link rel="stylesheet" href',
+  bodyStyle: 'margin: 0px; padding: 24px; background: rgb(255, 255, 255); box-sizing: border-box;',
+  bodyColor: 'rgb(23, 23, 23)',
+  token: '#171717'
+}
+
+COLOR dark {
+  display: 'inline',
+  color: 'rgb(237, 237, 237)',
+  weight: 400,
+  expected: 'rgb(23, 23, 23)',
+  contained: true
+} {
+  html: '<html lang="en" dir="ltr" data-ran-theme="dark"><head>\n' +
+    '    <script type="module" src="/@vite/client"></script>\n' +
+    '\n' +
+    '    <meta charset="UTF-8">\n' +
+    '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+    '    <title>ranui — Geist-based Web Components</title>\n' +
+    '    <link rel="stylesheet" href=',
+  bodyStyle: 'margin: 0px; padding: 24px; background: rgb(255, 255, 255); box-sizing: border-box;',
+  bodyColor: 'rgb(23, 23, 23)',
+  token: '#ededed'
+}
+
+  3) [firefox] › test/e2e/loading-variants.spec.ts:7:1 › arc keeps its loading label visible and in flow with reduced motion in both themes 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "rgb(23, 23, 23)"
+    Received: "rgb(237, 237, 237)"
+
+      26 |     expect(result.weight).toBeGreaterThanOrEqual(400);
+      27 |     console.log('COLOR',theme,result,await page.evaluate(()=>({html:document.documentElement.outerHTML.slice(0,300),bodyStyle:document.body.style.cssText,bodyColor:getComputedStyle(document.body).color,token:getComputedStyle(document.body).getPropertyValue('--ran-color-text')})));
+    > 28 |     expect(result.color).toBe(result.expected);
+         |                          ^
+      29 |     expect(result.contained).toBe(true);
+      30 |   }
+      31 | });
+        at /workspace/packages/ranui/test/e2e/loading-variants.spec.ts:28:26
+
+    Error Context: ../../../proof/results/loading-variants-arc-keeps-21452-duced-motion-in-both-themes-firefox/error-context.md
+
+
+[5/8] [firefox] › test/e2e/select-interaction.spec.ts:15:1 › search keeps real keyboard text editing, live filtering and clearing
+[firefox] › test/e2e/select-interaction.spec.ts:15:1 › search keeps real keyboard text editing, live filtering and clearing
+BEFORE {
+  rect: {
+    x: 12,
+    y: 1,
+    width: 216,
+    height: 30,
+    top: 1,
+    right: 228,
+    bottom: 31,
+    left: 12
+  },
+  hidden: false,
+  hit: 'R-SELECT'
+}
+
+AFTER {
+  events: [ [ 'pointerdown', 'R-SELECT' ], [ 'pointerup', 'R-SELECT' ] ],
+  starts: undefined,
+  active: 'R-SELECT',
+  inner: 'INPUT',
+  rect: {
+    x: 12,
+    y: 1,
+    width: 216,
+    height: 30,
+    top: 1,
+    right: 228,
+    bottom: 31,
+    left: 12
+  }
+}
+
+[6/8] [firefox] › test/e2e/select-interaction.spec.ts:172:5 › typed composition commit commits pointer selection from empty
+[7/8] [firefox] › test/e2e/select-interaction.spec.ts:172:5 › typed composition commit commits pointer selection from value
+[8/8] [firefox] › test/e2e/select-interaction.spec.ts:172:5 › typed composition commit commits pointer selection from defaultvalue
+  4) [firefox] › test/e2e/select-interaction.spec.ts:172:5 › typed composition commit commits pointer selection from defaultvalue 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: locator('r-dropdown-item')
+    Timeout: 5000ms
+    - Expected  - 0
+    + Received  + 1
+
+      Array [
+    +   "Alpha",
+        "Beta",
+        "Beta two",
+      ]
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for locator('r-dropdown-item')
+        14 × locator resolved to 3 elements
+
+
+      203 |         });
+      204 |       }
+    > 205 |       await expect(page.locator('r-dropdown-item')).toHaveText(['Beta', 'Beta two']);
+          |                                                     ^
+      206 |       const option = page.locator('r-dropdown-item').filter({ hasText: /^Beta$/ });
+      207 |       if (hasTouch) await option.tap();
+      208 |       else await option.click();
+        at /workspace/packages/ranui/test/e2e/select-interaction.spec.ts:205:53
+
+    Error Context: ../../../proof/results/select-interaction-typed-c-65633-selection-from-defaultvalue-firefox/error-context.md
+
+
+  4 failed
+    [firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with no-preference motion › pending microphone permission offers a cancellable action without claiming to listen 
+    [firefox] › test/e2e/input-primitives.spec.ts:188:5 › input primitives with reduce motion › pending microphone permission offers a cancellable action without claiming to listen 
+    [firefox] › test/e2e/loading-variants.spec.ts:7:1 › arc keeps its loading label visible and in flow with reduced motion in both themes 
+    [firefox] › test/e2e/select-interaction.spec.ts:172:5 › typed composition commit commits pointer selection from defaultvalue 
+  4 passed (19.2s)

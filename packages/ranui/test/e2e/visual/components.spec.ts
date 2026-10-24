@@ -32,14 +32,18 @@ test('select closed state', { tag: '@visual' }, async ({ page }) => {
 test('select open dropdown', { tag: '@visual' }, async ({ page }) => {
   const section = page.locator('#component-select');
   await expect(section).toBeVisible();
-  // Click the first select to open its dropdown
-  await section.locator('r-select').first().click();
-  const popup = `#${await section.locator('r-select').first().getAttribute('aria-controls')}`;
+  await section.evaluate((node) => node.scrollIntoView({ block: 'center', behavior: 'instant' }));
+  const select = section.locator('r-select').first();
+  await select.evaluate((node) => {
+    node.addEventListener('after-show', () => node.setAttribute('data-test-after-show', ''), { once: true });
+  });
+  await select.click();
+  const popup = `#${await select.getAttribute('aria-controls')}`;
   await expect(page.locator(popup)).toBeVisible();
   await expect(page.locator(popup).locator('r-dropdown-item')).toHaveCount(3);
   await expect(page.locator(popup).locator('r-dropdown-item').last()).toBeVisible();
+  await expect(select).toHaveAttribute('data-test-after-show', '');
   await expect(page).toHaveScreenshot('select-open.png', {
-    fullPage: true,
     clip: await popupCaptureBounds(page, '#component-select', popup),
   });
 });
@@ -95,6 +99,7 @@ test('popover closed', { tag: '@visual' }, async ({ page }) => {
 test('popover opens by hover or touch', { tag: '@visual' }, async ({ page, hasTouch }) => {
   const section = page.locator('#component-popover');
   await expect(section).toBeVisible();
+  await section.evaluate((node) => node.scrollIntoView({ block: 'center', behavior: 'instant' }));
   const popover = section.locator('r-popover');
   await popover.evaluate((node) => {
     node.addEventListener('after-show', () => node.setAttribute('data-test-after-show', ''), { once: true });
@@ -108,10 +113,19 @@ test('popover opens by hover or touch', { tag: '@visual' }, async ({ page, hasTo
   // Visibility precedes the positioning frame and entrance transform. Measure
   // the capture only after the component reports its final painted geometry.
   await expect(popover).toHaveAttribute('data-test-after-show', '');
+  await page.evaluate(() => {
+    // A screenshot must not resize the viewport and invalidate its own portal crop.
+    document.documentElement.dataset.captureResizes = '0';
+    window.addEventListener('resize', () => {
+      document.documentElement.dataset.captureResizes = String(
+        Number(document.documentElement.dataset.captureResizes) + 1,
+      );
+    });
+  });
   await expect(page).toHaveScreenshot('popover-open.png', {
-    fullPage: true,
     clip: await popupCaptureBounds(page, '#component-popover', popup),
   });
+  await expect(page.locator('html')).toHaveAttribute('data-capture-resizes', '0');
 });
 
 test('math rendering', { tag: '@visual' }, async ({ page }) => {

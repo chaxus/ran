@@ -69,54 +69,59 @@ test('host typeahead selects once with a nonbubbling change; composing Enter doe
   ).toEqual({ changes: [{ value: 'b', label: 'Beta' }], delegated: 0 });
 });
 
-for (const key of ['ArrowDown', 'Home', 'Enter', 'g']) {
-  test(`normal-motion selection immediately reopens with ${key} during its exit`, async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: 'no-preference' });
-    const select = page.locator('#select');
-    await select.evaluate((host) => {
-      host.removeAttribute('showsearch');
-      (window as unknown as { selectionChanges: unknown[] }).selectionChanges = [];
-      host.addEventListener('change', (event) =>
-        (window as unknown as { selectionChanges: unknown[] }).selectionChanges.push((event as CustomEvent).detail),
-      );
-      host.addEventListener(
-        'keydown',
-        () => {
-          if ((window as unknown as { selectionChanges: unknown[] }).selectionChanges.length !== 1) return;
-          // Observe the actual reopening key before the component handles it, without
-          // spending the short exit animation on intervening automation round trips.
-          (window as unknown as { beforeReopen: unknown }).beforeReopen = {
-            open: host.hasAttribute('open'),
-            expanded: host.getAttribute('aria-expanded'),
-            display: (document.querySelector('r-dropdown') as HTMLElement).style.display,
-          };
-        },
-        { capture: true },
-      );
+test.describe('normal-motion exit interruption', () => {
+  // Set the preference before sheets are adopted; changing emulation after mount
+  // can leave WebKit media rules at the preceding reduced-motion value.
+  test.use({ contextOptions: { reducedMotion: 'no-preference' } });
+
+  for (const key of ['ArrowDown', 'Home', 'Enter', 'g']) {
+    test(`normal-motion selection immediately reopens with ${key} during its exit`, async ({ page }) => {
+      const select = page.locator('#select');
+      await select.evaluate((host) => {
+        host.removeAttribute('showsearch');
+        (window as unknown as { selectionChanges: unknown[] }).selectionChanges = [];
+        host.addEventListener('change', (event) =>
+          (window as unknown as { selectionChanges: unknown[] }).selectionChanges.push((event as CustomEvent).detail),
+        );
+        host.addEventListener(
+          'keydown',
+          () => {
+            if ((window as unknown as { selectionChanges: unknown[] }).selectionChanges.length !== 1) return;
+            // Observe the actual reopening key before the component handles it, without
+            // spending the short exit animation on intervening automation round trips.
+            (window as unknown as { beforeReopen: unknown }).beforeReopen = {
+              open: host.hasAttribute('open'),
+              expanded: host.getAttribute('aria-expanded'),
+              display: (document.querySelector('r-dropdown') as HTMLElement).style.display,
+            };
+          },
+          { capture: true },
+        );
+      });
+      await select.focus();
+      await page.keyboard.press('End');
+      await page.keyboard.press('Enter');
+      await page.keyboard.press(key);
+      // Prove this key arrived during exit; never wait out the defect.
+      expect(await page.evaluate(() => (window as unknown as { beforeReopen: unknown }).beforeReopen)).toEqual({
+        open: false,
+        expanded: 'false',
+        display: 'block',
+      });
+      const panel = page.locator('r-dropdown');
+      await expect(select).toHaveAttribute('open');
+      await expect(select).toHaveAttribute('aria-expanded', 'true');
+      await expect(select).toHaveAttribute('value', 'bb');
+      expect(
+        await page.evaluate(() => (window as unknown as { selectionChanges: unknown[] }).selectionChanges),
+      ).toEqual([{ value: 'bb', label: 'Beta two' }]);
+      // The old exit completion cannot hide the newly opened panel.
+      await expect(panel).not.toHaveAttribute('transit');
+      await expect(panel).toBeVisible();
+      await expect(select).toHaveAttribute('open');
     });
-    await select.focus();
-    await page.keyboard.press('End');
-    await page.keyboard.press('Enter');
-    await page.keyboard.press(key);
-    // Prove this key arrived during exit; never wait out the defect.
-    expect(await page.evaluate(() => (window as unknown as { beforeReopen: unknown }).beforeReopen)).toEqual({
-      open: false,
-      expanded: 'false',
-      display: 'block',
-    });
-    const panel = page.locator('r-dropdown');
-    await expect(select).toHaveAttribute('open');
-    await expect(select).toHaveAttribute('aria-expanded', 'true');
-    await expect(select).toHaveAttribute('value', 'bb');
-    expect(await page.evaluate(() => (window as unknown as { selectionChanges: unknown[] }).selectionChanges)).toEqual([
-      { value: 'bb', label: 'Beta two' },
-    ]);
-    // The old exit completion cannot hide the newly opened panel.
-    await expect(panel).not.toHaveAttribute('transit');
-    await expect(panel).toBeVisible();
-    await expect(select).toHaveAttribute('open');
-  });
-}
+  }
+});
 
 for (const attribute of ['value', 'defaultvalue']) {
   test(`matching search preserves preselected ${attribute} and accepts replacement`, async ({ page }) => {

@@ -173,3 +173,48 @@ focus assertion failed before the correction and passed afterward; 14 Firefox in
 and 54 popup/capture cases across Chromium, Firefox and WebKit passed without retries.
 See the [source-bound screenshots and continuous recordings](../evidence/2026-10-23-focus-return/README.md).
 This component proof does not establish Document application or human acceptance.
+
+### Mobile portal capture remains in the real viewport — 2026-10-23
+
+The subsequent `0.5.1` candidate CI exposed a capture race despite the two local comparison
+passes above. Its mobile popup image clipped the content after the live portal moved below
+the previously calculated document-space crop. The failure is retained; no golden or tolerance
+is replaced to accommodate it.
+
+A separate macOS Chromium/Pixel 5 probe recorded geometry during eight captures. Full-page
+capture emitted resize events in all eight; seven temporarily reduced `innerHeight` from
+727px to 4px. The native floating controller correctly reacted to that temporary viewport,
+so a crop measured before capture could become stale. The same eight actions using a
+viewport crop produced no resize events and preserved the popup's position and scrolling.
+These probe measurements diagnose the capture path, not physical Android behavior.
+
+The shared popup capture helper now calculates viewport coordinates and rejects a crop unless
+both the complete popup and its trigger section fit. Select and Popover bring that section
+into view before opening and capture it without `fullPage`. The existing content/image checks
+remain, and Popover additionally rejects screenshot-induced viewport resize events. No product
+positioning, theme, content, visibility or animation behavior is altered by this fixture fix.
+
+## 2026-10-24 integrated candidate review (delivery still pending)
+
+Reviewed the 53 first-candidate differences across eleven comparison sheets, retaining the
+seven unrelated raster-only originals (single images, reasoning, desktop color-picker panel,
+mobile Popover open and desktop input variants). Intentional differences follow the Image
+containment, Radar typography, tab/control spacing, Select placeholder, renderer actions,
+media canvas and viewport-capture fixes. The subsequent Loading contrast and explicit demo
+media load changes were reviewed separately, including both mobile Loading captures.
+
+The current candidate retains 142 images. Its first fresh pinned Linux arm64 comparison
+passed all 148 cases with updates and retries disabled (image `19c9e05cf1de`). This is one
+strict pass, not the required final pair. The complete functional suite exposed cross-engine
+failures; it must not be represented as a successful release acceptance. The following modal
+Escape correction also requires final cross-engine confirmation. No pixel tolerances changed.
+
+The zero-duration fixture repair changes only `harnessSha256` in the captured environment.
+The strict preflight correctly rejected that mismatch before comparison. After reviewing
+the change, that harness fingerprint was advanced; all 142 PNG bytes and all pixel tolerances
+remain unchanged. A new strict run is required against this recorded harness.
+
+The corrected harness and final nested-focus source passed two fresh strict pinned runs:
+148/148 in60.0s and148/148 in55.5s, with updates/retries disabled, using image
+`0c8624c5eaeb`. The new1035-case three-engine functional run is tracked separately; these
+visual results do not replace it or certify dynamic OS preference changes.

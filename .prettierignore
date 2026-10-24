@@ -50,3 +50,6 @@ plugins/ran/skills/design/references/
 # Captured evidence JSON is an immutable measurement record. Some manifests hash
 # neighboring JSON byte-for-byte; formatting those records would invalidate provenance.
 packages/*/test/evidence/**/*.json
+
+# Preserve raw Playwright failure snapshots, including the original whitespace.
+packages/*/test/evidence/**/error-context.md
