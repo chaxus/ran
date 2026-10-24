@@ -10,7 +10,7 @@
  * publishing.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { followHost } from './host.ts';
 
 export interface VerifyOptions {
@@ -131,6 +131,20 @@ export const verifyDist = ({ distDir, origin, notFoundFiles = ['404.html'] }: Ve
     ]) {
       if (/^https?:/.test(src)) continue;
       if (!existsSync(join(DIST_DIR, src.replace(/^\//, '')))) fail(rel, `missing asset: ${src}`);
+    }
+
+    // ── embedded media ─────────────────────────────────────────────────────
+    // Markdown writes images relative to its source file, and the output mirrors the
+    // source tree, so a relative src resolves against the page's own directory. A broken
+    // image still renders the page, which is how every article screenshot came to 404.
+    for (const src of [
+      ...attrValues(html, /<(?:img|video|audio|source|track)\b[^>]*?\ssrc="([^"]+)"/g),
+      ...attrValues(html, /<video\b[^>]*?\sposter="([^"]+)"/g),
+    ]) {
+      if (/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(src)) continue;
+      const path = decodeURI(src.split(/[?#]/)[0]);
+      const target = path.startsWith('/') ? join(DIST_DIR, path) : join(dirname(file), path);
+      if (!existsSync(target)) fail(rel, `missing media: ${src}`);
     }
   }
 
