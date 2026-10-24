@@ -305,6 +305,15 @@ describe('r-math contract', () => {
     expect(math._wrap.querySelector('.ran-math-menu')).toBeNull();
   });
 
+  it('settles _pending when the element is removed before its queued render runs', async () => {
+    const math = document.createElement('r-math') as any;
+    document.body.appendChild(math);
+    math.latex = 'x^2';
+    math.remove();
+    await expect(math._pending).resolves.toBeUndefined();
+    expect(renderToString).not.toHaveBeenCalled();
+  });
+
   it('renders an equation built attribute by attribute once, with the final values', async () => {
     const math = document.createElement('r-math') as any;
     math.setAttribute('latex', encodeURIComponent('a^2'));
