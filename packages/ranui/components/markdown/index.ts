@@ -108,6 +108,13 @@ export class Markdown extends RanElement {
   /** In-flight render, so tests (and consumers) can `await el._pending`. */
   _pending: Promise<void> = Promise.resolve();
   _renderToken = 0;
+  /**
+   * Streaming throttle for `content`: the first update in a frame renders at once, later ones
+   * in the same frame fold into one render on the next. Every update re-lexes the whole
+   * source, so a chunk-per-task stream used to cost O(n) per chunk however fast it arrived.
+   */
+  private _frameOpen = false;
+  private _frameRender?: { done: () => void };
   _renderModule: RenderModule | null = null;
   _themeObserver?: MutationObserver;
   _lightDomObserver?: MutationObserver;
@@ -160,7 +167,7 @@ export class Markdown extends RanElement {
     const next = value == null ? '' : String(value);
     if (this._content === next) return;
     this._content = next;
-    this.render();
+    this.renderThrottled();
   }
   get mode(): string {
     return getStringAttribute(this, 'mode') || 'streaming';
@@ -269,6 +276,42 @@ export class Markdown extends RanElement {
   }
 
   // ── Rendering ─────────────────────────────────────────────────────────────
+  private renderThrottled(): void {
+    if (typeof requestAnimationFrame === 'undefined') {
+      this.render();
+      return;
+    }
+    if (this._frameOpen) {
+      // The shown source is already stale; copy feedback must not vouch for it until the
+      // deferred render lands.
+      for (const pending of this._copies.values()) this.resetCopy(pending.control);
+      if (!this._frameRender) {
+        let done!: () => void;
+        this._pending = new Promise<void>((resolve) => (done = resolve));
+        this._frameRender = { done };
+      }
+      return;
+    }
+    this.render();
+    this.openFrame();
+  }
+  private openFrame(): void {
+    this._frameOpen = true;
+    requestAnimationFrame(() => {
+      this._frameOpen = false;
+      const queued = this._frameRender;
+      if (!queued) return;
+      this._frameRender = undefined;
+      // Detached: connectedCallback renders the latest content when it comes back.
+      if (!this.isConnected) return queued.done();
+      const waiting = this._pending;
+      this.render();
+      // render() replaces `_pending` only while the parser chunk is still loading.
+      if (this._pending === waiting) queued.done();
+      else void this._pending.then(queued.done);
+      this.openFrame();
+    });
+  }
   render(): void {
     if (typeof document === 'undefined') return;
     const token = ++this._renderToken;
