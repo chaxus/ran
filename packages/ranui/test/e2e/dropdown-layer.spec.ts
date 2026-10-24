@@ -113,3 +113,30 @@ test('a modal opened from inside a portal keeps its ancestor mounted and remains
   await expect(page.locator('#nested')).not.toHaveAttribute('open');
   await expect(page.locator('#modal')).toHaveAttribute('open');
 });
+
+test('a child editor consumes Escape before the modal dismisses on the next unhandled Escape', async ({ page }) => {
+  await page.locator('#modal').evaluate((modal) => {
+    const input = document.createElement('input');
+    input.id = 'editor';
+    input.value = 'Unsaved draft';
+    input.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      },
+      { once: true },
+    );
+    modal.append(input);
+    modal.setAttribute('open', '');
+  });
+  await page.locator('#editor').focus();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#modal')).toHaveAttribute('open');
+  await expect(page.locator('#editor')).toBeFocused();
+  await expect(page.locator('#editor')).toHaveValue('Unsaved draft');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#modal')).not.toHaveAttribute('open');
+});

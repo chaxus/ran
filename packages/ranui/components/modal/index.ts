@@ -553,7 +553,10 @@ export class Modal extends RanElement {
     this._events
       .on(this._mask, 'click', this.onMaskClick)
       .on(this._closeBtn, 'click', this.onCloseButtonClick)
-      .on(document, 'keydown', this.onKeydown as EventListener, { capture: true })
+      // A target editor gets first refusal; the modal host then handles Escape
+      // before an ancestor portal, with document fallback for owned body portals.
+      .on(this, 'keydown', this.onKeydown as EventListener)
+      .on(document, 'keydown', this.onKeydown as EventListener)
       .on(document, 'focusin', this.onDocumentFocusIn as EventListener)
       .on(document, FLOATING_CHANGE, Modal.syncBackgroundInert)
       .on(this._footerSlot, 'slotchange', this.syncFooter);
