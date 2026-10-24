@@ -16,6 +16,7 @@ Release preparation; npm publication is pending verification.
 - Keep content a component hides, portals or replaces off the page until its definition arrives. `ranui.css` (`ranui/style`) carries `:not(:defined)` rules for the `r-popover` panel, `r-select` options, every `r-tabs` pane after the first, `r-modal`, `r-reasoning`, `r-route` outlets, the raw source of `r-markdown`/`r-math`/`r-mermaid`, and the `r-scratch` prize. Upgraded behaviour is unchanged.
 - `<r-content hidden>` and `<r-option hidden>` (or `popover`) let the browser hide overlay content even on pages that do not load `ranui.css`; the components take over once defined.
 - Stop shipping ranuts' full MIME table (about 30 kB, 7 kB gzip) with components that never use it: the unused internal `getMimeTypeFromExtension` helper kept it in every bundle that reached ranui's shared utilities, including `ranui/input` and `ranui/message`.
+- Require DOMPurify 3.4.17, which fixes a critical `SAFE_FOR_TEMPLATES` bypass and a high-severity `IN_PLACE` issue in 3.4.16. ranui pins it as a runtime dependency of `r-markdown`, so installing 0.5.1 resolves the vulnerable version.
 - Coordinate `ranuts@0.5.2`, which bounds the visual engine's colour parse cache, and `@alixex/ranview@0.2.2`; packed internal dependencies resolve to those exact versions. Node 24+, ESM and standalone IIFEs remain supported.
 
 ## [0.5.1] — 2026-10-24

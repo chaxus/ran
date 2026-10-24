@@ -9,6 +9,7 @@
 - 组件注册之前，不再露出它注册后会隐藏、移走或替换的内容。`ranui.css`（`ranui/style`）新增 `:not(:defined)` 规则，覆盖 `r-popover` 浮层、`r-select` 选项、`r-tabs` 第一个以外的面板、`r-modal`、`r-reasoning`、`r-route` 路由内容、`r-markdown`/`r-math`/`r-mermaid` 的原始源码，以及 `r-scratch` 的奖品内容。注册后的行为不变。
 - `<r-content hidden>` 和 `<r-option hidden>`（或 `popover`）让浏览器自己隐藏浮层内容，没有加载 `ranui.css` 的页面也不会露出来；组件注册后会接管显示。
 - 不再把 ranuts 的完整 MIME 表（约 30 kB，gzip 后约 7 kB）打进用不到它的组件：内部一个没人调用的 `getMimeTypeFromExtension` 辅助函数，让所有用到 ranui 公共工具函数的包都带上了这张表，包括 `ranui/input` 和 `ranui/message`。
+- 依赖 DOMPurify 3.4.17。它修复了 3.4.16 中一个严重级别的 `SAFE_FOR_TEMPLATES` 绕过问题和一个高危的 `IN_PLACE` 问题。ranui 把它锁定为 `r-markdown` 的运行时依赖，安装 0.5.1 会装上有漏洞的版本。
 - 联动 `ranuts@0.5.2`（为可视化引擎的颜色解析缓存加了上限）和 `@alixex/ranview@0.2.2`，打包后的内部依赖使用这些确切版本。继续支持 Node 24+、ESM 和独立 IIFE。
 
 ## [0.5.1] — 2026-10-24
