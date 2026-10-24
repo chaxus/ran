@@ -16,23 +16,20 @@ export class Content extends RanElement {
     this._slot = slot;
     this.observer = new MutationObserver(this.callback);
   }
+  /**
+   * One `change` per observer batch, not per record: the popover rebuilds its panel on each
+   * event, so inserting K nodes in one task used to rebuild it K times. `type` is
+   * `childList` when any record in the batch was one; `mutations` carries them all.
+   */
   callback = (mutations: MutationRecord[]): void => {
-    for (const mutation of mutations) {
-      if (mutation.type === 'childList') {
-        // A child node has been added or removed.
-        this.onChange(mutation);
-      } else if (mutation.type === 'attributes') {
-        // "The " + mutation.attributeName + " attribute was modified."
-        this.onChange(mutation);
-      }
-    }
-  };
-  onChange = (mutation: MutationRecord): void => {
+    const relevant = mutations.filter((m) => m.type === 'childList' || m.type === 'attributes');
+    if (!relevant.length) return;
+    const mutation = relevant[relevant.length - 1];
     this.dispatchEvent(
       new CustomEvent('change', {
         detail: {
-          type: mutation.type,
-          value: { content: this.children, mutation },
+          type: relevant.some((m) => m.type === 'childList') ? 'childList' : 'attributes',
+          value: { content: this.children, mutation, mutations: relevant },
         },
       }),
     );

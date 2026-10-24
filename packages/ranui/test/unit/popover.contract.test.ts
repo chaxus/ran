@@ -148,6 +148,25 @@ describe('r-popover contract', () => {
     expect((changes[0] as CustomEvent).detail.type).toBe('attributes');
   });
 
+  it('r-content reports a batch of insertions as one change', async () => {
+    const content = document.createElement('r-content') as any;
+    document.body.appendChild(content);
+    const changes: CustomEvent[] = [];
+    content.addEventListener('change', (e: Event) => changes.push(e as CustomEvent));
+
+    for (const text of ['a', 'b', 'c']) {
+      const child = document.createElement('span');
+      child.textContent = text;
+      content.appendChild(child);
+    }
+    content.setAttribute('data-batch', '1');
+
+    await new Promise<void>((resolve) => setTimeout(resolve, 50));
+    expect(changes).toHaveLength(1);
+    expect(changes[0].detail.type).toBe('childList');
+    expect(changes[0].detail.value.mutations).toHaveLength(4);
+  });
+
   it('r-content disconnectedCallback disconnects observer', () => {
     const content = document.createElement('r-content') as any;
     document.body.appendChild(content);
