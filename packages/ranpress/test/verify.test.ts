@@ -25,7 +25,7 @@ const page = (canonical: string, body: string): string =>
 
 const mediaFailures = (): string[] =>
   verifyDist({ distDir: dist, origin: ORIGIN })
-    .filter((f) => f.message.startsWith('missing media'))
+    .filter((f) => /^(missing|malformed) media/.test(f.message))
     .map((f) => `${f.file}: ${f.message}`);
 
 afterEach(() => rmSync(dist, { recursive: true, force: true }));
@@ -57,5 +57,15 @@ describe('verifyDist media', () => {
     dist = mkdtempSync(join(tmpdir(), 'ranpress-verify-'));
     put('src/a.html', page('/src/a', '<video controls><source src="../assets/gone.mp4" type="video/mp4"></video>'));
     expect(mediaFailures()).toEqual(['src/a.html: missing media: ../assets/gone.mp4']);
+  });
+
+  it('reads HTML-escaped ampersands and reports a malformed URL instead of throwing', () => {
+    dist = mkdtempSync(join(tmpdir(), 'ranpress-verify-'));
+    put('assets/a&b.png');
+    put(
+      'src/a.html',
+      page('/src/a', '<img src="../assets/a&amp;b.png" alt=""><img src=\'../assets/%E0%A4%A.png\' alt="">'),
+    );
+    expect(mediaFailures()).toEqual(['src/a.html: malformed media URL: ../assets/%E0%A4%A.png']);
   });
 });
