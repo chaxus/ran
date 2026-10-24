@@ -12,6 +12,12 @@ on:
       - "packages/ranuts/**"
       - "packages/ranview/**"
       - "packages/im/**"
+      # The docs build is ranpress; the ranui and ranview builds run
+      # bin/prepare-declarations.ts; every package extends tsconfig.base.json.
+      - "packages/ranpress/**"
+      - "bin/**"
+      - "tsconfig.base.json"
+      - ".npmrc"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - "package.json"
@@ -27,6 +33,12 @@ on:
       - "packages/ranuts/**"
       - "packages/ranview/**"
       - "packages/im/**"
+      # The docs build is ranpress; the ranui and ranview builds run
+      # bin/prepare-declarations.ts; every package extends tsconfig.base.json.
+      - "packages/ranpress/**"
+      - "bin/**"
+      - "tsconfig.base.json"
+      - ".npmrc"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - "package.json"
