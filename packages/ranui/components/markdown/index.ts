@@ -13,6 +13,8 @@ import {
 import '@/components/icon';
 import markdownCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { observeDocumentTheme, resolveDocumentTheme, THEME_SIGNAL_ATTRIBUTES } from '@/utils/theme';
+import type { DocumentTheme } from '@/utils/theme';
 
 type RenderModule = typeof import('./render');
 type CodeCopyControl = import('./render').CodeCopyControl;
@@ -116,7 +118,7 @@ export class Markdown extends RanElement {
   private _frameOpen = false;
   private _frameRender?: { done: () => void };
   _renderModule: RenderModule | null = null;
-  _themeObserver?: MutationObserver;
+  _detachTheme?: () => void;
   _lightDomObserver?: MutationObserver;
   private _readerEvents = new EventManager();
   private _copies = new Map<HTMLButtonElement, { control: CodeCopyControl; busy: boolean; timer?: number }>();
@@ -241,14 +243,10 @@ export class Markdown extends RanElement {
   };
 
   // ── Theme ─────────────────────────────────────────────────────────────────
-  private resolveTheme(): 'light' | 'dark' | 'system' {
+  private resolveTheme(): DocumentTheme {
     const t = this.theme;
     if (t === 'dark' || t === 'light') return t;
-    const root = document.documentElement;
-    const attr = root.getAttribute('data-ran-theme') || root.getAttribute('theme');
-    if (attr === 'dark' || root.classList.contains('dark')) return 'dark';
-    if (attr === 'light' || root.classList.contains('light')) return 'light';
-    return 'system';
+    return resolveDocumentTheme();
   }
   private syncTheme(): void {
     const t = this.resolveTheme();
@@ -263,15 +261,13 @@ export class Markdown extends RanElement {
   }
   private observeTheme(): void {
     if (this.theme !== 'auto') {
-      this._themeObserver?.disconnect();
-      this._themeObserver = undefined;
+      this._detachTheme?.();
+      this._detachTheme = undefined;
       return;
     }
-    if (this._themeObserver || typeof MutationObserver === 'undefined') return;
-    this._themeObserver = new MutationObserver(() => this.syncTheme());
-    this._themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class', 'data-ran-theme', 'theme'],
+    if (this._detachTheme) return;
+    this._detachTheme = observeDocumentTheme((changed) => {
+      if (THEME_SIGNAL_ATTRIBUTES.some((name) => changed.has(name))) this.syncTheme();
     });
   }
 
@@ -506,8 +502,8 @@ export class Markdown extends RanElement {
     this._readerEvents.abort();
     for (const block of this._blocks) this._renderModule?.releaseReaders(block.el);
     for (const pending of this._copies.values()) this.resetCopy(pending.control);
-    this._themeObserver?.disconnect();
-    this._themeObserver = undefined;
+    this._detachTheme?.();
+    this._detachTheme = undefined;
     this._lightDomObserver?.disconnect();
     this._lightDomObserver = undefined;
   }

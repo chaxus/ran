@@ -263,6 +263,34 @@ describe('r-mermaid contract', () => {
     document.documentElement.classList.remove('some-unrelated-class', 'dark');
   });
 
+  it('resolves theme "auto" with the same document signals as the rest of the library', async () => {
+    document.documentElement.setAttribute('theme', 'dark');
+    const mermaid = document.createElement('r-mermaid') as any;
+    mermaid.code = 'graph TD; A-->B;';
+    document.body.appendChild(mermaid);
+    await sleep();
+    expect(initialize).toHaveBeenLastCalledWith(expect.objectContaining({ theme: 'dark' }));
+    document.documentElement.removeAttribute('theme');
+  });
+
+  it('follows the system preference when the document sets no theme', async () => {
+    const matchMedia = vi.spyOn(window, 'matchMedia').mockReturnValue({
+      matches: true,
+      media: '(prefers-color-scheme: dark)',
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    } as unknown as MediaQueryList);
+    try {
+      const mermaid = document.createElement('r-mermaid') as any;
+      mermaid.code = 'graph TD; A-->B;';
+      document.body.appendChild(mermaid);
+      await sleep();
+      expect(initialize).toHaveBeenLastCalledWith(expect.objectContaining({ theme: 'dark' }));
+    } finally {
+      matchMedia.mockRestore();
+    }
+  });
+
   it('starts following the document theme when switched to auto while connected', async () => {
     const mermaid = document.createElement('r-mermaid') as any;
     mermaid.theme = 'light';
