@@ -69,4 +69,17 @@ describe('verifyDist media', () => {
     );
     expect(mediaFailures()).toEqual(['src/a.html: malformed media URL: ../assets/%E0%A4%A.png']);
   });
+
+  it('checks every candidate in a srcset', () => {
+    dist = mkdtempSync(join(tmpdir(), 'ranpress-verify-'));
+    put('assets/shot.webp');
+    put(
+      'src/a.html',
+      page(
+        '/src/a',
+        '<img src="../assets/shot.webp" srcset="../assets/shot.webp 1x, ../assets/shot@2x.webp 2x" alt="">',
+      ),
+    );
+    expect(mediaFailures()).toEqual(['src/a.html: missing media: ../assets/shot@2x.webp']);
+  });
 });
