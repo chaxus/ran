@@ -115,9 +115,9 @@ jobs:
       fail-fast: false
     name: "Build&Test: node-${{ matrix.node_version }}, ${{ matrix.os }}"
     steps:
+      # Shallow: release:prepare reads only HEAD, the porcelain status and the branch
+      # name, and release.yml already runs it on a shallow checkout.
       - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
 
       - uses: pnpm/action-setup@v6
         with:
