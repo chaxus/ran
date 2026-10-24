@@ -305,14 +305,16 @@ describe('r-math contract', () => {
     expect(math._wrap.querySelector('.ran-math-menu')).toBeNull();
   });
 
-  it('attributeChangedCallback calls render on latex and display change', () => {
+  it('renders an equation built attribute by attribute once, with the final values', async () => {
     const math = document.createElement('r-math') as any;
+    math.setAttribute('latex', encodeURIComponent('a^2'));
+    math.setAttribute('display', 'block');
     document.body.appendChild(math);
+    math.setAttribute('display', 'inline');
+    await math._pending;
 
-    const renderSpy = vi.spyOn(math, 'render');
-    math.attributeChangedCallback('latex', '', 'a^2');
-    math.attributeChangedCallback('display', 'block', 'inline');
-    expect(renderSpy).toHaveBeenCalledTimes(2);
+    expect(renderToString).toHaveBeenCalledTimes(1);
+    expect(renderToString).toHaveBeenCalledWith('a^2', expect.objectContaining({ displayMode: false }));
   });
 
   it('attributeChangedCallback calls handlerExternalCss on sheet change', () => {

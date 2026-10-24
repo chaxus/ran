@@ -86,6 +86,8 @@ export class Math extends RanElement {
   // and flaked in CI on a slower runner). Same idiom as r-loading/r-icon's
   // `_pending` for their own lazy variant loads.
   _pending?: Promise<void>;
+  /** Coalesces the attribute writes and the connect that a first mount makes into one render. */
+  private _renderQueued = false;
   static get observedAttributes(): string[] {
     return ['latex', 'display', 'font', 'macros', 'wrap', 'copy', 'download', 'sheet'];
   }
@@ -199,8 +201,30 @@ export class Math extends RanElement {
     this.emit('error', { message });
   }
   // ── Rendering ─────────────────────────────────────────────────────────────
+  /**
+   * Render once the current task's attribute writes settle, and only while connected.
+   * `_pending` is replaced at once, so awaiting it right after a write waits for that render.
+   */
+  requestRender = (): void => {
+    if (!this.isConnected) return;
+    // The source just changed: a copy started now must not deliver the old output.
+    this.invalidateCopy();
+    if (this._renderQueued) return;
+    this._renderQueued = true;
+    this._pending = new Promise<void>((resolve) =>
+      queueMicrotask(() => {
+        this._renderQueued = false;
+        if (this.isConnected) this.renderSource();
+        resolve(this._pending);
+      }),
+    );
+  };
   render(): void {
     this.invalidateCopy();
+    this.renderSource();
+  }
+  /** requestRender has already invalidated pending copies when the source changed. */
+  private renderSource(): void {
     const latex = this.latex;
     if (!latex) {
       this.contain.innerHTML = '';
@@ -401,7 +425,7 @@ export class Math extends RanElement {
     this.handlerExternalCss();
     // Rebind toolbar listeners after reconnect; source updates preserve its focus.
     this.buildToolbar();
-    this.render();
+    this.requestRender();
     // Close the download menu when the pointer leaves (the toolbar hides too).
     this._events.on(this._wrap, 'mouseleave', this.closeDownloadMenu);
   }
@@ -413,7 +437,7 @@ export class Math extends RanElement {
   }
   attributeChangedCallback(k: string, o: string | null, n: string | null): void {
     if (o === n) return;
-    if (k === 'latex' || k === 'display' || k === 'font' || k === 'macros' || k === 'wrap') this.render();
+    if (k === 'latex' || k === 'display' || k === 'font' || k === 'macros' || k === 'wrap') this.requestRender();
     else if (k === 'copy' || k === 'download') this.buildToolbar();
     else if (k === 'sheet') this.handlerExternalCss();
   }

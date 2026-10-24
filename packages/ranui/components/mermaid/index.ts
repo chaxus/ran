@@ -32,6 +32,11 @@ export class Mermaid extends RanElement {
   _diagram: HTMLElement;
   _toolbar: HTMLElement;
   _themeObserver?: MutationObserver;
+  /** Coalesces the attribute writes and the connect that a first mount makes into one render. */
+  private _renderQueued = false;
+  /** Bumped per render; a completion carrying an older token is a superseded diagram. */
+  private _renderToken = 0;
+  private _renderedTheme?: 'dark' | 'default';
   _copyResetTimer?: number;
   private _copyStatus?: HTMLElement;
   private _copyRevision = 0;
@@ -115,17 +120,37 @@ export class Mermaid extends RanElement {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   // ── Rendering ─────────────────────────────────────────────────────────────
+  /** Render once the current task's attribute writes settle, and only while connected. */
+  requestRender = (): void => {
+    if (!this.isConnected) return;
+    // The source just changed: a copy started now must not deliver the old output.
+    this.invalidateCopy();
+    if (this._renderQueued) return;
+    this._renderQueued = true;
+    queueMicrotask(() => {
+      this._renderQueued = false;
+      if (this.isConnected) this.renderSource();
+    });
+  };
   render(): void {
     this.invalidateCopy();
+    this.renderSource();
+  }
+  /** requestRender has already invalidated pending copies when the source changed. */
+  private renderSource(): void {
+    const token = ++this._renderToken;
     const graph = this.code;
     if (!graph) return;
     const id = `ran-mermaid-${seq++}`;
+    const theme = this.resolveTheme();
+    this._renderedTheme = theme;
     import('mermaid')
       .then(async ({ default: mermaid }) => {
+        if (token !== this._renderToken) return;
         mermaid.initialize({
           startOnLoad: false,
           securityLevel: 'loose',
-          theme: this.resolveTheme(),
+          theme,
           fontFamily: 'inherit',
         });
         // Mermaid measures an SVG in its temporary document-level #d{id} div.
@@ -139,6 +164,7 @@ export class Mermaid extends RanElement {
         document.head.appendChild(measurementStyle);
         try {
           const { svg } = await mermaid.render(id, graph);
+          if (token !== this._renderToken) return;
           this._diagram.innerHTML = svg;
           if (!this._toolbar.querySelector('button')) this.buildToolbar();
           this.emit('render', { ok: true });
@@ -146,12 +172,30 @@ export class Mermaid extends RanElement {
           // On failure mermaid leaves a "bomb" error graphic appended to <body> — drop it.
           document.getElementById(`d${id}`)?.remove();
           document.getElementById(id)?.remove();
-          this.showError(String((err as Error)?.message || err));
+          if (token === this._renderToken) this.showError(String((err as Error)?.message || err));
         } finally {
           measurementStyle.remove();
         }
       })
-      .catch((err: Error) => this.showError(err.message));
+      .catch((err: Error) => {
+        if (token === this._renderToken) this.showError(err.message);
+      });
+  }
+  /** Follow the document theme only for `theme="auto"`, and redraw only when it resolves differently. */
+  private syncThemeObserver(): void {
+    if (this.theme !== 'auto' || !this.isConnected) {
+      this._themeObserver?.disconnect();
+      this._themeObserver = undefined;
+      return;
+    }
+    if (this._themeObserver) return;
+    this._themeObserver = new MutationObserver(() => {
+      if (this.resolveTheme() !== this._renderedTheme) this.requestRender();
+    });
+    this._themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-ran-theme'],
+    });
   }
   private showError(message: string): void {
     this._diagram.innerHTML = '';
@@ -478,29 +522,25 @@ export class Mermaid extends RanElement {
     this.handlerExternalCss();
     // Rebind toolbar listeners after reconnect; source updates preserve its focus.
     this.buildToolbar();
-    this.render();
+    this.requestRender();
     // Close the download menu when the pointer leaves the diagram (the toolbar hides too).
     this._events.on(this._wrap, 'mouseleave', this.closeDownloadMenu);
-    if (this.theme === 'auto' && !this._themeObserver) {
-      this._themeObserver = new MutationObserver(() => this.render());
-      this._themeObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class', 'data-ran-theme'],
-      });
-    }
+    this.syncThemeObserver();
   }
   disconnectedCallback(): void {
     this.invalidateCopy();
     this._events.abort();
     this._themeObserver?.disconnect();
     this._themeObserver = undefined;
+    this._renderToken++;
     window.clearTimeout(this._copyResetTimer);
     this.closeDownloadMenu();
     this._fullscreenClose?.();
   }
   attributeChangedCallback(k: string, o: string | null, n: string | null): void {
     if (o === n) return;
-    if (k === 'code' || k === 'theme') this.render();
+    if (k === 'theme') this.syncThemeObserver();
+    if (k === 'code' || k === 'theme') this.requestRender();
     else if (k === 'copy' || k === 'download' || k === 'fullscreen') this.buildToolbar();
     else if (k === 'sheet') this.handlerExternalCss();
   }
