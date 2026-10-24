@@ -16,8 +16,8 @@ vite.config.ts.timestamp*
 config.ts.timestamp*
 dist
 # ranui
-/test-results/
-/playwright-report/
+test-results/
+playwright-report/
 /playwright/.cache/
 # jscpd
 report
