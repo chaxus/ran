@@ -311,7 +311,7 @@ describe('r-markdown contract', () => {
     document.documentElement.classList.remove('dark');
     el.setAttribute('theme', 'dark');
     expect(wrap.classList.contains('is-dark')).toBe(true);
-    expect((el as unknown as { _themeObserver?: unknown })._themeObserver).toBeUndefined();
+    expect((el as unknown as { _detachTheme?: unknown })._detachTheme).toBeUndefined();
   });
 
   it('property accessors reflect to attributes', async () => {
@@ -427,11 +427,11 @@ describe('r-markdown contract', () => {
 
   it('cleans up observers and listeners on disconnect', async () => {
     const el = await mount({}, 'x');
-    const priv = el as unknown as { _themeObserver?: MutationObserver; _lightDomObserver?: MutationObserver };
-    expect(priv._themeObserver).toBeDefined();
+    const priv = el as unknown as { _detachTheme?: () => void; _lightDomObserver?: MutationObserver };
+    expect(priv._detachTheme).toBeDefined();
     expect(priv._lightDomObserver).toBeDefined();
     el.remove();
-    expect(priv._themeObserver).toBeUndefined();
+    expect(priv._detachTheme).toBeUndefined();
     expect(priv._lightDomObserver).toBeUndefined();
   });
 });

@@ -13,6 +13,8 @@ import {
 import '@/components/icon';
 import mermaidCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { observeDocumentTheme, resolveDocumentTheme, THEME_SIGNAL_ATTRIBUTES } from '@/utils/theme';
+import { watchMediaQuery } from 'ranuts/utils';
 
 let seq = 0;
 
@@ -31,7 +33,7 @@ export class Mermaid extends RanElement {
   _wrap: HTMLElement;
   _diagram: HTMLElement;
   _toolbar: HTMLElement;
-  _themeObserver?: MutationObserver;
+  _detachTheme?: () => void;
   /** Coalesces the attribute writes and the connect that a first mount makes into one render. */
   private _renderQueued = false;
   /** Bumped per render; a completion carrying an older token is a superseded diagram. */
@@ -109,9 +111,12 @@ export class Mermaid extends RanElement {
     const t = this.theme;
     if (t === 'dark') return 'dark';
     if (t === 'light') return 'default';
-    const root = document.documentElement;
-    const dark = root.classList.contains('dark') || root.getAttribute('data-ran-theme') === 'dark';
-    return dark ? 'dark' : 'default';
+    const doc = resolveDocumentTheme();
+    if (doc === 'system') {
+      const prefersDark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+      return prefersDark ? 'dark' : 'default';
+    }
+    return doc === 'dark' ? 'dark' : 'default';
   }
   private emit(name: string, detail: Record<string, unknown>): void {
     this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
@@ -184,18 +189,22 @@ export class Mermaid extends RanElement {
   /** Follow the document theme only for `theme="auto"`, and redraw only when it resolves differently. */
   private syncThemeObserver(): void {
     if (this.theme !== 'auto' || !this.isConnected) {
-      this._themeObserver?.disconnect();
-      this._themeObserver = undefined;
+      this._detachTheme?.();
+      this._detachTheme = undefined;
       return;
     }
-    if (this._themeObserver) return;
-    this._themeObserver = new MutationObserver(() => {
+    if (this._detachTheme) return;
+    const follow = (): void => {
       if (this.resolveTheme() !== this._renderedTheme) this.requestRender();
+    };
+    const detachDocument = observeDocumentTheme((changed) => {
+      if (THEME_SIGNAL_ATTRIBUTES.some((name) => changed.has(name))) follow();
     });
-    this._themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class', 'data-ran-theme'],
-    });
+    const detachMedia = watchMediaQuery('(prefers-color-scheme: dark)', follow);
+    this._detachTheme = () => {
+      detachDocument();
+      detachMedia();
+    };
   }
   private showError(message: string): void {
     this._diagram.innerHTML = '';
@@ -530,8 +539,8 @@ export class Mermaid extends RanElement {
   disconnectedCallback(): void {
     this.invalidateCopy();
     this._events.abort();
-    this._themeObserver?.disconnect();
-    this._themeObserver = undefined;
+    this._detachTheme?.();
+    this._detachTheme = undefined;
     this._renderToken++;
     window.clearTimeout(this._copyResetTimer);
     this.closeDownloadMenu();

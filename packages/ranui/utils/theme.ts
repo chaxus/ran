@@ -87,3 +87,50 @@ export const initTheme = (target?: ThemeTarget): void => {
     setTheme(storedTheme, target);
   }
 };
+
+export type DocumentTheme = 'light' | 'dark' | 'system';
+
+/**
+ * 文档级主题：`data-ran-theme` / `theme` 属性优先，其次 `.dark` / `.light` 类，都没有就是跟随系统。
+ * 组件的 `theme="auto"` 都按这一份规则解析，免得各自读出不同结果。
+ */
+export const resolveDocumentTheme = (): DocumentTheme => {
+  if (typeof document === 'undefined') return 'system';
+  const root = document.documentElement;
+  const attr = root.getAttribute('data-ran-theme') || root.getAttribute('theme');
+  if (attr === 'dark' || root.classList.contains('dark')) return 'dark';
+  if (attr === 'light' || root.classList.contains('light')) return 'light';
+  return 'system';
+};
+
+/** 这些属性的变化可能改变 resolveDocumentTheme 的结果；`style` 只承载 token 覆盖 */
+export const THEME_SIGNAL_ATTRIBUTES: readonly string[] = ['class', 'data-ran-theme', 'theme'];
+
+type DocumentThemeListener = (changed: ReadonlySet<string>) => void;
+const documentThemeListeners = new Set<DocumentThemeListener>();
+let documentThemeObserver: MutationObserver | null = null;
+
+/**
+ * 订阅 `<html>` 上主题相关属性（含承载 token 的 `style`）的变化，返回取消订阅函数。
+ * 所有组件实例共用一个 MutationObserver，最后一个订阅者退出时断开。
+ */
+export const observeDocumentTheme = (listener: DocumentThemeListener): (() => void) => {
+  if (typeof document === 'undefined' || typeof MutationObserver === 'undefined') return () => {};
+  documentThemeListeners.add(listener);
+  if (!documentThemeObserver) {
+    documentThemeObserver = new MutationObserver((records) => {
+      const changed = new Set(records.map((record) => record.attributeName ?? ''));
+      for (const notify of [...documentThemeListeners]) notify(changed);
+    });
+    documentThemeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: [...THEME_SIGNAL_ATTRIBUTES, 'style'],
+    });
+  }
+  return () => {
+    documentThemeListeners.delete(listener);
+    if (documentThemeListeners.size) return;
+    documentThemeObserver?.disconnect();
+    documentThemeObserver = null;
+  };
+};

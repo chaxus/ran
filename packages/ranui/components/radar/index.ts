@@ -9,6 +9,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
+import { observeDocumentTheme } from '@/utils/theme';
 
 interface AbilityTags {
   abilityName: string;
@@ -42,7 +43,7 @@ export class RadarChart extends RanElement {
   _iconElement?: HTMLElement;
   _shadowDom: ShadowRoot;
   resizeObserver: ResizeObserver;
-  private _themeObserver?: MutationObserver;
+  private _detachDocumentTheme?: () => void;
   private _detachThemeMedia?: () => void;
   /** Pending coalesced redraw; resize, theme and token writes in one frame draw once. */
   private _frame = 0;
@@ -357,19 +358,16 @@ export class RadarChart extends RanElement {
   connectedCallback() {
     this.resizeObserver.observe(this.abilityRadarChartContainer);
     this.handlerExternalCss();
-    this._themeObserver = new MutationObserver(this.scheduleRefresh);
-    this._themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-ran-theme', 'theme', 'class', 'style'],
-    });
+    // Every signal, `style` included: token overrides change the colors it paints.
+    this._detachDocumentTheme = observeDocumentTheme(this.scheduleRefresh);
     this._detachThemeMedia = watchMediaQuery('(prefers-color-scheme: dark)', this.scheduleRefresh);
   }
   disconnectedCallback() {
     if (this._frame) cancelAnimationFrame(this._frame);
     this._frame = 0;
     this.resizeObserver.disconnect();
-    this._themeObserver?.disconnect();
-    this._themeObserver = undefined;
+    this._detachDocumentTheme?.();
+    this._detachDocumentTheme = undefined;
     this._detachThemeMedia?.();
     this._detachThemeMedia = undefined;
   }

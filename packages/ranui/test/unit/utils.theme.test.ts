@@ -1,5 +1,14 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { clearThemeToken, getTheme, initTheme, setTheme, setThemeToken, setThemeTokens } from '@/utils/theme';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  clearThemeToken,
+  getTheme,
+  initTheme,
+  observeDocumentTheme,
+  resolveDocumentTheme,
+  setTheme,
+  setThemeToken,
+  setThemeTokens,
+} from '@/utils/theme';
 
 describe('utils/theme', () => {
   beforeEach(() => {
@@ -95,5 +104,37 @@ describe('utils/theme', () => {
     initTheme();
 
     expect(document.documentElement.hasAttribute('data-ran-theme')).toBe(false);
+  });
+});
+
+describe('document theme', () => {
+  it('reads attributes before classes and falls back to system', () => {
+    const root = document.documentElement;
+    expect(resolveDocumentTheme()).toBe('system');
+    root.classList.add('light');
+    expect(resolveDocumentTheme()).toBe('light');
+    root.setAttribute('theme', 'dark');
+    expect(resolveDocumentTheme()).toBe('dark');
+    root.removeAttribute('theme');
+    root.classList.remove('light');
+  });
+
+  it('shares one observer and stops notifying after every subscriber leaves', async () => {
+    const first = vi.fn();
+    const second = vi.fn();
+    const leaveFirst = observeDocumentTheme(first);
+    const leaveSecond = observeDocumentTheme(second);
+    document.documentElement.setAttribute('data-ran-theme', 'dark');
+    await Promise.resolve();
+    expect(first).toHaveBeenCalledWith(new Set(['data-ran-theme']));
+    expect(second).toHaveBeenCalledTimes(1);
+
+    leaveFirst();
+    leaveSecond();
+    document.documentElement.setAttribute('data-ran-theme', 'light');
+    await Promise.resolve();
+    expect(first).toHaveBeenCalledTimes(1);
+    expect(second).toHaveBeenCalledTimes(1);
+    document.documentElement.removeAttribute('data-ran-theme');
   });
 });
