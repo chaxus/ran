@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { packedFilename } from '../../packages/ranuts/bin/pack-result.ts';
+import { packedFilename } from '../pack-result.ts';
 
 const archive = { name: 'ranuts', filename: 'ranuts-0.5.1.tgz' };
 test('reads npm 10/11 single-archive output', () => {
