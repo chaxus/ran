@@ -45,8 +45,22 @@ try {
     'packageManager',
   ).replace('pnpm@', '');
   const iid = join(temp, 'image-id');
+  // CI opts into BuildKit's GitHub Actions cache so the dependency-install layer, keyed by
+  // the lockfile, is reused across runs. Local runs build with the plain daemon.
+  const cache =
+    process.env.RANUI_VISUAL_CACHE === 'gha'
+      ? [
+          'buildx',
+          'build',
+          '--load',
+          '--cache-from',
+          'type=gha,scope=ranui-visual',
+          '--cache-to',
+          'type=gha,mode=max,scope=ranui-visual',
+        ]
+      : ['build'];
   run([
-    'build',
+    ...cache,
     '--platform',
     environment.platform,
     '--file',
