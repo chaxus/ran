@@ -1,4 +1,5 @@
-import { packageManifest, printCommandError, object, text } from '../../../bin/tooling-json.ts';
+import { packedFilename } from './pack-result.ts';
+import { packageManifest, printCommandError } from '../../../bin/tooling-json.ts';
 /** Verify the tarball in a consumer with no repository paths or skipLibCheck. Build first. */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
@@ -20,8 +21,7 @@ try {
   const packResult: unknown = JSON.parse(
     run('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', fixture], root),
   );
-  assert.ok(Array.isArray(packResult) && packResult.length === 1, 'npm pack must return one archive');
-  const packed = { filename: text(object(packResult[0], 'npm pack result').filename, 'packed filename') };
+  const packed = { filename: packedFilename(packResult) };
   const installed = join(fixture, 'node_modules', 'ranuts');
   await mkdir(installed, { recursive: true });
   run('tar', ['-xzf', join(fixture, packed.filename), '--strip-components=1', '-C', installed]);
