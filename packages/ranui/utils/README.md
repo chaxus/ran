@@ -23,7 +23,7 @@ import {
 | `getStringAttribute(element, name, fallback?)`             | Read an attribute with a string fallback.                                                               |
 | `setStringAttribute(element, name, value, options?)`       | Set a string attribute; `removeEmpty: true` removes empty values.                                       |
 | `setBooleanAttribute(element, name, value, options?)`      | Set or remove a boolean attribute, optionally mirroring to `aria-*`.                                    |
-| `syncSheetAttribute(host, root, name, oldValue, newValue)` | Apply the `sheet` attribute through `adoptSheetText` when it changes.                                   |
+| `syncSheetAttribute(host, root, name, oldValue, newValue)` | Replace the root's `sheet` stylesheet with the attribute's current text when it changes.                |
 
 Component conventions:
 

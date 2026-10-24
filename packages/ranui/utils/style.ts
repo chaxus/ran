@@ -29,7 +29,7 @@ export const adoptStyles = (shadowRoot: ShadowRoot, cssText: string): void =>
 
 /** 每个 shadowRoot 当前占着 `sheet` 槽位的内容；`sheet` 为空表示走的是 <style> 降级 */
 const slots = new WeakMap<ShadowRoot, { text: string; sheet?: CSSStyleSheet }>();
-/** 相同 cssText 在多个实例间共享一个 CSSStyleSheet；没有实例再用时释放，避免按运行时字符串无限增长 */
+/** 相同 cssText 在多个实例间共享一个 CSSStyleSheet；`sheet` 改值或清空时释放引用，最后一个引用释放后删除。元素带着 `sheet` 被移除不会释放 */
 const sharedSheets = new Map<string, { sheet: CSSStyleSheet; users: number }>();
 
 const acquireShared = (cssText: string): CSSStyleSheet | undefined => {
