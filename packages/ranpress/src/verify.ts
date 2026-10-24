@@ -137,9 +137,17 @@ export const verifyDist = ({ distDir, origin, notFoundFiles = ['404.html'] }: Ve
     // Markdown writes images relative to its source file, and the output mirrors the
     // source tree, so a relative src resolves against the page's own directory. A broken
     // image still renders the page, which is how every article screenshot came to 404.
+    // srcset is a comma-separated list of `url descriptor` candidates.
+    const srcsetUrls = attrValues(html, /<(?:img|source)\b[^>]*?\ssrcset=["']([^"']+)["']/g).flatMap((set) =>
+      set
+        .split(',')
+        .map((candidate) => candidate.trim().split(/\s+/)[0])
+        .filter(Boolean),
+    );
     for (const raw of [
       ...attrValues(html, /<(?:img|video|audio|source|track)\b[^>]*?\ssrc=["']([^"']+)["']/g),
       ...attrValues(html, /<video\b[^>]*?\sposter=["']([^"']+)["']/g),
+      ...srcsetUrls,
     ]) {
       const src = raw.replace(/&amp;/g, '&');
       if (/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(src)) continue;
