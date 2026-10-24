@@ -7,9 +7,8 @@ on:
       - edited
       - synchronize
 
-permissions:
-  pull-requests: write
-  contents: read
+# The check authenticates with RAN_ACTIONS_TOKEN, so the job's own token needs nothing.
+permissions: {}
 
 # Editing a title twice in a row started two runs that both post a status check.
 # The newest title is the only one that matters, so the older run is cancelled.
@@ -23,6 +22,7 @@ jobs:
   main:
     if: github.repository == 'chaxus/ran'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     name: Semantic Pull Request
     steps:
       - name: Validate PR title
