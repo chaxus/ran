@@ -82,4 +82,17 @@ describe('verifyDist media', () => {
     );
     expect(mediaFailures()).toEqual(['src/a.html: missing media: ../assets/shot@2x.webp']);
   });
+
+  it('does not split a data: URI inside a srcset', () => {
+    dist = mkdtempSync(join(tmpdir(), 'ranpress-verify-'));
+    put('assets/shot.webp');
+    put(
+      'src/a.html',
+      page(
+        '/src/a',
+        '<img src="../assets/shot.webp" srcset="data:image/png;base64,AAAA 1x, ../assets/shot.webp 2x" alt="">',
+      ),
+    );
+    expect(mediaFailures()).toEqual([]);
+  });
 });
