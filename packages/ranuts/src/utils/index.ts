@@ -22,8 +22,6 @@ import {
 } from './number';
 import {
   MessageCodec,
-  arrayBufferToString,
-  checkEncoding,
   clearBr,
   clearStr,
   getMatchingSentences,
@@ -34,7 +32,6 @@ import {
   toFullWidth,
   toHalfWidth,
   toString,
-  transformText,
   truncate,
   truncateWithMarker,
   fenceCode,
@@ -43,7 +40,9 @@ import {
 } from './str';
 import type { BottomFollower, BottomFollowerOptions } from './scroll';
 import type { DiffHunk, DiffLine, DiffLineKind, DiffOptions } from './diff';
-import type { TransformText, TruncateOptions, TruncatePosition } from './str';
+import type { TruncateOptions, TruncatePosition } from './str';
+import { arrayBufferToString, checkEncoding, transformText } from './charset';
+import type { TransformText } from './charset';
 import { createSpeechRecognizer, isSpeechRecognitionSupported } from './speech';
 import type { SpeechError, SpeechErrorKind, SpeechRecognizer, SpeechRecognizerOptions } from './speech';
 import {
