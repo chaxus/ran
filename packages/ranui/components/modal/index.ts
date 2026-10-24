@@ -1,4 +1,10 @@
 import modalCss from './index.less?inline';
+import {
+  FLOATING_CHANGE,
+  floatingPanelsWithin,
+  isFloatingDescendant,
+  closeFloatingPanelsWithin,
+} from '@/utils/floating';
 import { RanElement } from '@/utils/ssr';
 import { falseList } from '@/utils/dom';
 import { ButtonBuilder, Div, EventManager, Slot, View } from '@/utils/builder';
@@ -279,7 +285,10 @@ export class Modal extends RanElement {
   getFocusableElements = (): HTMLElement[] => {
     const dialogFocusable = Array.from(this._dialog.querySelectorAll(FOCUSABLE_SELECTOR)) as HTMLElement[];
     const slottedFocusable = Array.from(this.querySelectorAll(FOCUSABLE_SELECTOR)) as HTMLElement[];
-    return [...dialogFocusable, ...slottedFocusable].filter((item) => {
+    const portalFocusable = floatingPanelsWithin(this).flatMap((panel) =>
+      Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)),
+    );
+    return [...dialogFocusable, ...slottedFocusable, ...portalFocusable].filter((item) => {
       if (item.hasAttribute('disabled')) return false;
       const element = item as HTMLElement;
       return element.offsetParent !== null || element.getClientRects().length > 0;
@@ -319,12 +328,15 @@ export class Modal extends RanElement {
 
     if (Modal._openStack.length === 0) return;
     const openModalHosts = Modal._openStack.map((item) => item as HTMLElement);
+    const topModal = Modal.getTopModal();
+    const activePanels = topModal ? floatingPanelsWithin(topModal) : [];
     const bodyChildren = Array.from(body.children) as HTMLElement[];
 
     bodyChildren.forEach((child) => {
       // Keep the full ancestor branch interactive for every open modal host.
       const containsOpenModal = openModalHosts.some((host) => child === host || child.contains(host));
-      if (containsOpenModal) return;
+      const containsOwnedPanel = activePanels.some((panel) => child === panel || child.contains(panel));
+      if (containsOpenModal || containsOwnedPanel) return;
       Modal._inertSnapshot.set(child, {
         inert: child.inert,
         ariaHidden: child.getAttribute('aria-hidden'),
@@ -445,6 +457,8 @@ export class Modal extends RanElement {
       return;
     }
     this._previousActiveElement = document.activeElement;
+    const previousModal = Modal.getTopModal();
+    if (previousModal) closeFloatingPanelsWithin(previousModal, this);
     Modal.pushOpenModal(this);
     Modal.syncBackgroundInert();
     if (this.lockScroll) {
@@ -474,6 +488,7 @@ export class Modal extends RanElement {
       this._dialog.setAttribute('aria-hidden', 'true');
       return;
     }
+    closeFloatingPanelsWithin(this);
     this._isDialogOpen = false;
     Modal.removeOpenModal(this);
     Modal.syncBackgroundInert();
@@ -514,6 +529,8 @@ export class Modal extends RanElement {
   onKeydown = (event: KeyboardEvent): void => {
     if (!this.open) return;
     if (Modal.getTopModal() !== this) return;
+    if (event.defaultPrevented) return;
+    if (event.key === 'Escape' && floatingPanelsWithin(this).length) return;
     if (event.key === 'Escape' && this.closeOnEsc) {
       event.preventDefault();
       this.close('escape');
@@ -526,7 +543,7 @@ export class Modal extends RanElement {
     if (!this.open) return;
     if (Modal.getTopModal() !== this) return;
     const path = event.composedPath();
-    if (path.includes(this) || path.includes(this._dialog)) return;
+    if (path.some((target) => target instanceof Node && isFloatingDescendant(target, this))) return;
     const focusables = this.getFocusableElements();
     (focusables[0] || this._dialog).focus();
   };
@@ -536,8 +553,9 @@ export class Modal extends RanElement {
     this._events
       .on(this._mask, 'click', this.onMaskClick)
       .on(this._closeBtn, 'click', this.onCloseButtonClick)
-      .on(document, 'keydown', this.onKeydown as EventListener)
+      .on(document, 'keydown', this.onKeydown as EventListener, { capture: true })
       .on(document, 'focusin', this.onDocumentFocusIn as EventListener)
+      .on(document, FLOATING_CHANGE, Modal.syncBackgroundInert)
       .on(this._footerSlot, 'slotchange', this.syncFooter);
     this.syncTitle();
     this.syncClosable();

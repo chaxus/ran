@@ -42,6 +42,51 @@ const TRANSIT: Record<PlacementSide, { enter: string; exit: string }> = {
 // A node-owned symbol also works across independently loaded component bundles.
 const PANEL_OWNER = Symbol.for('ranui.floating.panel-owner');
 type OwnedPanel = Node & { [PANEL_OWNER]?: HTMLElement };
+const ACTIVE_PANELS = Symbol.for('ranui.floating.active-panels');
+type FloatingDocument = Document & { [ACTIVE_PANELS]?: Set<HTMLElement> };
+export const FLOATING_CHANGE = 'ranui-floating-change';
+
+/** Follow the same logical ancestry used for nested outside-click dismissal. */
+export const isFloatingDescendant = (node: Node, owner: Node): boolean => {
+  const visited = new Set<Node>();
+  let current: Node | null = node;
+  while (current && !visited.has(current)) {
+    if (current === owner) return true;
+    visited.add(current);
+    current =
+      (current as OwnedPanel)[PANEL_OWNER] ??
+      current.parentNode ??
+      (current instanceof ShadowRoot ? current.host : null);
+  }
+  return false;
+};
+
+export const floatingPanelsWithin = (owner: HTMLElement): HTMLElement[] =>
+  [...((owner.ownerDocument as FloatingDocument)[ACTIVE_PANELS] ?? [])].filter(
+    (panel) => panel.isConnected && isFloatingDescendant(panel, owner),
+  );
+
+export const closeFloatingPanelsWithin = (owner: HTMLElement, preserveAncestorOf?: Node): void => {
+  for (const panel of floatingPanelsWithin(owner).reverse()) {
+    if (preserveAncestorOf && isFloatingDescendant(preserveAncestorOf, panel)) continue;
+    (panel as OwnedPanel)[PANEL_OWNER]?.removeAttribute('open');
+    // A modal handoff must not leave a higher popup exit tail over the new dialog.
+    // Ordinary Select/Popover dismissal still uses its normal exit animation.
+    panel.style.setProperty('display', 'none');
+  }
+};
+
+const registerPanel = (panel: HTMLElement, owner?: HTMLElement): void => {
+  const document = panel.ownerDocument as FloatingDocument;
+  if (owner) {
+    (panel as OwnedPanel)[PANEL_OWNER] = owner;
+    (document[ACTIVE_PANELS] ??= new Set()).add(panel);
+  } else {
+    delete (panel as OwnedPanel)[PANEL_OWNER];
+    document[ACTIVE_PANELS]?.delete(panel);
+  }
+  document.dispatchEvent(new Event(FLOATING_CHANGE));
+};
 
 /** Everything a positioning pass worked out, handed to the hooks. */
 export interface FloatingPosition {
@@ -273,7 +318,7 @@ export class FloatingController {
     const generation = ++this.generation;
 
     if (open) {
-      (panel as OwnedPanel)[PANEL_OWNER] = host;
+      registerPanel(panel, host);
       this.resolvedSide = undefined;
       host.dispatchEvent(new CustomEvent('show'));
       panel.style.setProperty('display', 'block');
@@ -287,7 +332,7 @@ export class FloatingController {
       return;
     }
 
-    delete (panel as OwnedPanel)[PANEL_OWNER];
+    registerPanel(panel);
     this.detachReposition();
     host.dispatchEvent(new CustomEvent('hide'));
     // The exit class is set synchronously, so the wait can begin right away. On
@@ -392,6 +437,7 @@ export class FloatingController {
 
     this.resolvedSide = position.side;
     panel.style.setProperty('position', 'absolute');
+    panel.style.setProperty('z-index', 'var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100))');
     panel.style.setProperty('inset', `${position.top}px auto auto ${position.left}px`);
     panel.style.setProperty('--ran-x', `${position.left}px`);
     panel.style.setProperty('--ran-y', `${position.top}px`);
@@ -441,7 +487,7 @@ export class FloatingController {
     this.outsideBinding++;
     this.opened = false;
     const panel = this.options.panel();
-    if (panel) delete (panel as OwnedPanel)[PANEL_OWNER];
+    if (panel) registerPanel(panel);
     if (this.repositionFrame && typeof cancelAnimationFrame === 'function') {
       cancelAnimationFrame(this.repositionFrame);
       this.repositionFrame = 0;

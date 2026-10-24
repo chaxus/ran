@@ -156,10 +156,9 @@
 
 :host {
   text-align: var(--ran-dropdown-host-text-align, left);
-  /* The host is positioned by the consumer (select/popover) and portaled to
-     <body>, so it must carry the overlay z-index itself — the inner element's
-     z-index is trapped in the host's stacking context. */
-  z-index: var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100));
+  /* Inline dropdowns stay in document order, including when used as grid items.
+     FloatingController owns the layer for managed Select/Popover portals. */
+  z-index: var(--ran-dropdown-host-z-index, auto);
 }
 
 /* `hidden` is how a caller hides an element, and the UA rule that implements it is a

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { FloatingController } from '@/utils/floating';
+import { FloatingController, floatingPanelsWithin } from '@/utils/floating';
 
 /**
  * The controller r-select and r-popover both position through.
@@ -265,5 +265,28 @@ describe('FloatingController', () => {
     controller.apply(false);
     expect(transit).toEqual(['ran-dropdown-up-in', 'ran-dropdown-up-out']);
     controller.destroy();
+  });
+});
+
+describe('logical floating ownership', () => {
+  it('tracks nested panels across DOM portals and releases only the closing owner', () => {
+    const modal = document.createElement('section');
+    const first = mount();
+    const second = mount();
+    document.body.append(modal);
+    modal.append(first.host);
+    first.panel.append(second.host);
+    const outer = controllerFor(first.host, first.panel);
+    const inner = controllerFor(second.host, second.panel);
+    outer.apply(true);
+    inner.apply(true);
+    expect(floatingPanelsWithin(modal)).toEqual([first.panel, second.panel]);
+    inner.destroy();
+    expect(floatingPanelsWithin(modal)).toEqual([first.panel]);
+    inner.apply(true);
+    expect(floatingPanelsWithin(modal)).toEqual([first.panel, second.panel]);
+    inner.apply(false);
+    outer.destroy();
+    expect(floatingPanelsWithin(modal)).toEqual([]);
   });
 });
