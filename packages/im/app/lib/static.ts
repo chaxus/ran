@@ -36,6 +36,8 @@ export const createStaticServer =
         next();
       } catch (error) {
         console.error('static: the next handler failed', error);
+        if (!res.headersSent) res.writeHead(500);
+        if (!res.writableEnded) res.end();
       }
     })();
   };
