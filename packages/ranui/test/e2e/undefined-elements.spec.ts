@@ -166,7 +166,9 @@ test.describe('natively marked overlay content, without ranui.css', () => {
       await expect.poll(() => page.locator('r-dropdown-item').count()).toBe(6);
       await expect(page.locator('r-dropdown-item').last()).toBeVisible();
       await page.locator('r-dropdown-item').nth(2).click();
-      await expect.poll(() => page.locator('r-select').evaluate((node) => (node as HTMLElement & { value: string }).value)).toBe('2');
+      await expect
+        .poll(() => page.locator('r-select').evaluate((node) => (node as HTMLElement & { value: string }).value))
+        .toBe('2');
     });
   }
 });
