@@ -6,13 +6,6 @@
   "private": true,
   "exports": {
     ".": "./src/index.ts",
-    "./markdown": "./src/markdown.ts",
-    "./frontmatter": "./src/frontmatter.ts",
-    "./driver": "./src/driver.ts",
-    "./verify": "./src/verify.ts",
-    "./serve": "./src/serve.ts",
-    "./host": "./src/host.ts",
-    "./feeds": "./src/feeds.ts",
     "./search": "./src/search.ts",
     "./search-shared": "./src/search-shared.ts"
   },

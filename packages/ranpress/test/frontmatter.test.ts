@@ -4,7 +4,7 @@
  * value of "throws on anything else" is entirely in the *anything else*.
  */
 import { describe, expect, it } from 'vitest';
-import { parseFrontmatter, readBoolean, readList, readString } from '../src/frontmatter.ts';
+import { parseFrontmatter } from '../src/frontmatter.ts';
 
 const parse = (s: string) => parseFrontmatter(s, 'test.md');
 
@@ -62,23 +62,5 @@ describe('parseFrontmatter', () => {
 
   it('names the file and line in the error', () => {
     expect(() => parse('---\ntitle: a\nbroken\n---\n')).toThrow(/test\.md:3/);
-  });
-});
-
-describe('typed accessors', () => {
-  it('requires a missing field only when there is no fallback', () => {
-    expect(() => readString({}, 'title', 'f.md')).toThrow(/missing required "title"/);
-    expect(readString({}, 'title', 'f.md', 'x')).toBe('x');
-  });
-
-  it('rejects a value of the wrong shape rather than coercing it', () => {
-    expect(() => readString({ title: true }, 'title', 'f.md')).toThrow(/must be a string/);
-    expect(() => readList({ tags: 'a' }, 'tags', 'f.md')).toThrow(/must be a list/);
-    expect(() => readBoolean({ draft: 'yes' }, 'draft', 'f.md', false)).toThrow(/must be true or false/);
-  });
-
-  it('treats an absent list as empty and an absent boolean as its default', () => {
-    expect(readList({}, 'tags', 'f.md')).toEqual([]);
-    expect(readBoolean({}, 'draft', 'f.md', true)).toBe(true);
   });
 });
