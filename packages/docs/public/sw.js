@@ -1,7 +1,11 @@
 const CACHE_NAME = 'chaxus_ran_' + VERSION
 const DOCUMENT_CACHE_NAME = 'chaxus_ran_documents'
 const ASSET_CACHE_NAME = 'chaxus_ran_assets'
-const assetCacheName = url => new URL(url, location.origin).pathname.startsWith('/assets/') ? ASSET_CACHE_NAME : CACHE_NAME
+// Only bundler output is content-hashed: files directly in /assets/ and the versioned
+// preview-<version>/ tree. Article media copied to /assets/<section>/ keeps its source
+// name, so it stays in the per-deploy cache and is refetched when a deploy replaces it.
+const isHashedAsset = url => /^\/assets\/(?:[^/]+$|preview-)/.test(new URL(url, 'https://sw.invalid').pathname)
+const assetCacheName = url => isHashedAsset(url) ? ASSET_CACHE_NAME : CACHE_NAME
 
 // Stamp only the stored copy. Network responses retain their URL/redirect semantics.
 const storeDocument = (cache, url, response) => cache.put(url, new Response(response.body, {
@@ -182,7 +186,7 @@ this.addEventListener(SERVICE_WORK.INSTALL, function (event) {
           try {
             const response = await fetch(url);
             if (response.ok) {
-              const target = url.startsWith('/assets/') ? await caches.open(ASSET_CACHE_NAME) : cache;
+              const target = isHashedAsset(url) ? await caches.open(ASSET_CACHE_NAME) : cache;
               await target.put(url, response);
             }
           } catch (error) {

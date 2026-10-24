@@ -188,3 +188,43 @@ it('keeps the initially opened document available offline across worker updates'
     expect((await asset).status).toBe(200);
   }
 });
+
+it('keeps only content-hashed bundle output in the cross-deploy asset cache', async () => {
+  const listeners = new Map<string, (event: unknown) => void>();
+  const stored: Array<[string, string]> = [];
+  runInNewContext(readFileSync(new URL('../public/sw.js', import.meta.url), 'utf8'), {
+    VERSION: 'test',
+    SERVICE_WORK_CACHE_FILE_PATHS: [
+      '/assets/docs.abc123.js',
+      '/assets/preview-0.3.0/pdfjs/worker.js',
+      '/assets/article/docPreview/kkfile.webp',
+    ],
+    addEventListener: (type: string, listener: (event: unknown) => void) => listeners.set(type, listener),
+    skipWaiting() {},
+    clients: { matchAll: async () => [] },
+    location: { origin: 'https://ran.test' },
+    caches: {
+      open: async (name: string) => ({
+        put: async (url: string) => {
+          stored.push([url, name]);
+        },
+      }),
+    },
+    fetch: async () => new Response('asset'),
+    Response,
+    URL,
+    console,
+  });
+  let installing!: Promise<void>;
+  listeners.get('install')!({
+    waitUntil: (promise: Promise<void>) => {
+      installing = promise;
+    },
+  });
+  await installing;
+  expect(Object.fromEntries(stored)).toEqual({
+    '/assets/docs.abc123.js': 'chaxus_ran_assets',
+    '/assets/preview-0.3.0/pdfjs/worker.js': 'chaxus_ran_assets',
+    '/assets/article/docPreview/kkfile.webp': 'chaxus_ran_test',
+  });
+});
