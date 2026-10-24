@@ -83,8 +83,18 @@ const respond =
     }
 
     if (result.kind === 'file') {
+      // The dev server rebuilds into the directory it serves, so a file resolved a moment
+      // ago can be gone by the time it is read. That is a failed request, not a crash.
+      let body: Buffer;
+      try {
+        body = readFileSync(result.file);
+      } catch {
+        res.writeHead(503, { 'content-type': 'text/plain; charset=utf-8', 'retry-after': '1' });
+        res.end('rebuilding');
+        return;
+      }
       res.writeHead(200, { 'content-type': mimeFor(result.file), 'cache-control': 'no-store' });
-      res.end(readFileSync(result.file));
+      res.end(body);
       return;
     }
 
