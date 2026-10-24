@@ -211,13 +211,15 @@ export class Math extends RanElement {
     this.invalidateCopy();
     if (this._renderQueued) return;
     this._renderQueued = true;
-    this._pending = new Promise<void>((resolve) =>
+    const queued: Promise<void> = new Promise<void>((resolve) =>
       queueMicrotask(() => {
         this._renderQueued = false;
         if (this.isConnected) this.renderSource();
-        resolve(this._pending);
+        // Resolving with itself would reject ("chaining cycle") when nothing rendered.
+        resolve(this._pending === queued ? undefined : this._pending);
       }),
     );
+    this._pending = queued;
   };
   render(): void {
     this.invalidateCopy();
