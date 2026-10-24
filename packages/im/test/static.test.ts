@@ -61,15 +61,32 @@ it('hands a request downstream once even when the next handler throws', async ()
   const serve = createStaticServer(root);
   const failure = new Error('downstream failed');
   let calls = 0;
+  const response = { headersSent: false, writableEnded: false, status: 0 };
+  const res = {
+    get headersSent() {
+      return response.headersSent;
+    },
+    get writableEnded() {
+      return response.writableEnded;
+    },
+    writeHead(status: number) {
+      response.status = status;
+      response.headersSent = true;
+    },
+    end() {
+      response.writableEnded = true;
+    },
+  };
   const logged = vi.spyOn(console, 'error').mockImplementation(() => {});
   try {
-    serve({ req: { method: 'GET', url: '/missing.txt' }, res: {} } as unknown as Context, () => {
+    serve({ req: { method: 'GET', url: '/missing.txt' }, res } as unknown as Context, () => {
       calls++;
       throw failure;
     });
     await vi.waitFor(() => expect(logged).toHaveBeenCalled());
     expect(calls).toBe(1);
     expect(logged).toHaveBeenCalledWith('static: the next handler failed', failure);
+    expect(response).toMatchObject({ status: 500, writableEnded: true });
   } finally {
     logged.mockRestore();
     rmSync(root, { recursive: true, force: true });
