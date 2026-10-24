@@ -45,4 +45,27 @@ describe('loadScript', () => {
     await loadScript({ type: 'url', content });
     expect(document.scripts).toHaveLength(2);
   });
+
+  it('shares one tag between calls made while the URL is still loading', async () => {
+    const url = 'https://cdn.example.test/sdk.js';
+    const first = loadScript({ type: 'url', content: url });
+    const second = loadScript({ type: 'url', content: url });
+
+    expect(document.scripts).toHaveLength(1);
+    document.scripts[0].dispatchEvent(new Event('load'));
+    await expect(Promise.all([first, second])).resolves.toEqual([{ success: true }, { success: true }]);
+  });
+
+  it('removes a failed tag so a later call retries the URL', async () => {
+    const url = 'https://cdn.example.test/flaky.js';
+    const failed = loadScript({ type: 'url', content: url });
+    document.scripts[0].dispatchEvent(new Event('error'));
+    await expect(failed).rejects.toMatchObject({ success: false });
+    expect(document.scripts).toHaveLength(0);
+
+    const retry = loadScript({ type: 'url', content: url });
+    expect(document.scripts).toHaveLength(1);
+    document.scripts[0].dispatchEvent(new Event('load'));
+    await expect(retry).resolves.toEqual({ success: true });
+  });
 });

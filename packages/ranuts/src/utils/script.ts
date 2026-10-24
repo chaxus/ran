@@ -1,5 +1,8 @@
-/** Exact keys of already-injected scripts, so the same code is never evaluated twice */
-const loadedScripts = new Set<string>();
+/**
+ * One promise per exact key, created when the tag is inserted rather than when it loads,
+ * so a second call made while the first is still downloading waits on the same tag.
+ */
+const scripts = new Map<string, Promise<{ success: boolean }>>();
 
 export interface LoadScriptOptions {
   /** `'url'` loads via `src`; `'content'` inlines the script text directly */
@@ -14,7 +17,9 @@ export interface LoadScriptOptions {
  * How this differs from `scriptOnLoad`: that one loads a batch of URLs at once (routing
  * .css through a link tag), while this one handles a single script, supports an inline body,
  * and **guarantees the same script is evaluated only once** — injecting a third-party SDK
- * twice usually means its initialisation side effects ran twice.
+ * twice usually means its initialisation side effects ran twice. Concurrent calls for the
+ * same script share one tag and one promise; a failed load removes its tag so a later call
+ * can retry.
  *
  * The key includes the type and exact content, so distinct sources and URL/inline scripts stay separate.
  *
@@ -22,39 +27,35 @@ export interface LoadScriptOptions {
  * @return {Promise<{ success: boolean }>} rejects with `{ success: false, error }` on failure
  */
 export const loadScript = ({ type, content }: LoadScriptOptions): Promise<{ success: boolean }> => {
-  return new Promise((resolve, reject) => {
-    const scriptKey = `${type}:${content}`;
+  const scriptKey = `${type}:${content}`;
+  const existing = scripts.get(scriptKey);
+  if (existing) return existing;
 
-    // Already loaded — short-circuit rather than inserting a second tag
-    if (loadedScripts.has(scriptKey)) {
-      resolve({ success: true });
-      return;
-    }
+  const script = document.createElement('script');
+  if (type === 'content') {
+    script.textContent = content;
+    document.body.append(script);
+    // An inline script is evaluated synchronously the moment it is appended and never
+    // dispatches a load event afterwards. Waiting only on onload would leave this promise
+    // pending forever in a real browser (jsdom does dispatch one, so a unit test would not
+    // catch it). Returning from append therefore counts as done.
+    const done = Promise.resolve({ success: true });
+    scripts.set(scriptKey, done);
+    return done;
+  }
 
-    const script = document.createElement('script');
-    script.onload = function () {
-      loadedScripts.add(scriptKey);
-      resolve({ success: true });
-    };
-    script.onerror = function (error) {
+  const loading = new Promise<{ success: boolean }>((resolve, reject) => {
+    script.onload = () => resolve({ success: true });
+    script.onerror = (error) => {
+      scripts.delete(scriptKey);
+      script.remove();
       reject({ success: false, error });
     };
-
-    if (type === 'content') {
-      script.textContent = content;
-      document.body.append(script);
-      // An inline script is evaluated synchronously the moment it is appended and never
-      // dispatches a load event afterwards. Waiting only on onload would leave this promise
-      // pending forever in a real browser (jsdom does dispatch one, so a unit test would not
-      // catch it). Returning from append therefore counts as done.
-      loadedScripts.add(scriptKey);
-      resolve({ success: true });
-      return;
-    }
-
-    script.src = content;
-    document.body.append(script);
   });
+  scripts.set(scriptKey, loading);
+  script.src = content;
+  document.body.append(script);
+  return loading;
 };
 
 /**
