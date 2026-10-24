@@ -1,6 +1,6 @@
 # ran
 
-ran provides design methods, UI components and TypeScript utilities for developers and agents building web products.
+ran provides design methods, components and tools for building web products, for developers and coding agents. This sentence is the positioning the README and the website headline repeat; change all three together.
 
 ## Three pillars
 
