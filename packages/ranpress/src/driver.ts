@@ -53,9 +53,19 @@ export interface PrepareOptions {
   publicDir?: string;
   /** Skip wiping the output. The dev server rebuilds constantly and owns it already. */
   keepDist?: boolean;
-  /** Re-render pages without re-bundling — the dev server's fast path. */
+  /**
+   * Re-render pages without re-bundling — the dev server's fast path. The previous
+   * bundle stays in place and its URLs are reused, so this also implies `keepDist`.
+   */
   skipAssets?: boolean;
 }
+
+/**
+ * The asset URLs of the last bundle written to each output directory. Vite's manifest is
+ * dropped from the output at the end of a build, so a later fast-path rebuild could not
+ * read it back — and pages written then would reference no stylesheet and no script.
+ */
+const bundled = new Map<string, Assets>();
 
 /**
  * Clear the output, copy `public/` into it, bundle the client, and report the hashed
@@ -68,16 +78,19 @@ export const prepareDist = async ({
   keepDist,
   skipAssets,
 }: PrepareOptions): Promise<Assets> => {
-  if (!keepDist) rmSync(distDir, { recursive: true, force: true });
+  const reuse = skipAssets ? bundled.get(distDir) : undefined;
+  if (!keepDist && !reuse) rmSync(distDir, { recursive: true, force: true });
   mkdirSync(distDir, { recursive: true });
 
   // public/ first: a generated page must win over a stray file of the same name, so a
   // typo in public/ can never shadow a real route.
   if (publicDir && existsSync(publicDir)) cpSync(publicDir, distDir, { recursive: true });
 
-  if (!skipAssets) await viteBuild({ root, logLevel: 'warn' });
-
-  return resolveAssets(distDir);
+  if (reuse) return reuse;
+  await viteBuild({ root, logLevel: 'warn' });
+  const assets = resolveAssets(distDir);
+  bundled.set(distDir, assets);
+  return assets;
 };
 
 /** Write one file into the output, creating its directory. */
