@@ -369,11 +369,11 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `dropdown`
 
-- Tokens: 27
+- Tokens: 26
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 6 · skin: 1 · component: 17 · internal: 3 -->
+<!-- layers: semantic: 6 · skin: 1 · component: 17 · internal: 2 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-text`
@@ -400,7 +400,6 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-skin-font-family`
 - `--ran-text-label-1`
 - `--ran-text-label-weight`
-- `--ran-z-dropdown`
 
 ### Parts
 - `dropdown`
@@ -594,14 +593,16 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `loading/variants/arc`
 
-- Tokens: 3
+- Tokens: 5
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
+<!-- layers: semantic: 3 · internal: 2 -->
 - `--ran-color-primary`
 - `--ran-color-success`
 - `--ran-color-text`
+- `--ran-space-4`
+- `--ran-text-copy-weight`
 
 ### Parts
 - `arc`
@@ -636,14 +637,16 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `loading/variants/circle-line`
 
-- Tokens: 3
+- Tokens: 5
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
+<!-- layers: semantic: 5 -->
+- `--ran-color-bg`
 - `--ran-color-primary`
 - `--ran-color-success`
 - `--ran-color-text`
+- `--ran-color-text-secondary`
 
 ### Parts
 - `circle-line`
@@ -762,14 +765,15 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `loading/variants/dot-bar`
 
-- Tokens: 3
+- Tokens: 4
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
+<!-- layers: semantic: 4 -->
 - `--ran-color-primary`
 - `--ran-color-success`
 - `--ran-color-text`
+- `--ran-color-text-secondary`
 
 ### Parts
 - `dot-bar`
@@ -790,14 +794,15 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `loading/variants/dot-line`
 
-- Tokens: 3
+- Tokens: 4
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
+<!-- layers: semantic: 4 -->
 - `--ran-color-primary`
 - `--ran-color-success`
 - `--ran-color-text`
+- `--ran-color-text-secondary`
 
 ### Parts
 - `dot-line`
@@ -832,14 +837,16 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `loading/variants/drop`
 
-- Tokens: 3
+- Tokens: 5
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
+<!-- layers: semantic: 3 · internal: 2 -->
 - `--ran-color-primary`
 - `--ran-color-success`
 - `--ran-color-text`
+- `--ran-space-2`
+- `--ran-space-8`
 
 ### Parts
 - `drop`
@@ -1303,11 +1310,11 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `player`
 
-- Tokens: 168
+- Tokens: 169
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 5 · component: 152 · internal: 11 -->
+<!-- layers: semantic: 5 · component: 152 · internal: 12 -->
 - `--ran-color-`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -1322,6 +1329,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-dropdown-option-item-content-text-align`
 - `--ran-dropdown-option-item-hover-background-color`
 - `--ran-focus-ring-inverse-color`
+- `--ran-media-background`
 - `--ran-player-background`
 - `--ran-player-clarity-border-radius`
 - `--ran-player-clarity-color`

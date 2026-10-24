@@ -46,3 +46,7 @@ packages/docs/dist
 
 # Agent reference bytes are generated from formatted canonical design sources and hash-bound.
 plugins/ran/skills/design/references/
+
+# Captured evidence JSON is an immutable measurement record. Some manifests hash
+# neighboring JSON byte-for-byte; formatting those records would invalidate provenance.
+packages/*/test/evidence/**/*.json

@@ -207,6 +207,8 @@ flips with the theme on its own.
 `--ran-color-primary-hover` / `-active` are the two literals in the semantic layer: they step
 toward the page background rather than along a scale, so dark mode redefines them directly.
 
+`--ran-media-background` is `#000` in both themes. A video canvas stays dark beneath fixed white playback controls; Player derives `--ran-player-background` from it. This media role deliberately does not invert with the page palette.
+
 ### What each accent means
 
 - **Primary is monochrome**: black-on-white in light, white-on-black in dark (the Geist brand
