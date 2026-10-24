@@ -1,0 +1,19 @@
+import {chromium} from './ran/packages/ranui/node_modules/@playwright/test/index.mjs';
+const b=await chromium.launch();
+const p=await b.newPage();
+await p.route('**/__escape_probe',r=>r.fulfill({contentType:'text/html',body:'<script type="module">import "/@fs/Users/ranzhouhang/Documents/Codex/2026-10-21/https-github-com-ranuts-document-pull/work/ran/packages/ranui/index.ts";</script>'}));
+await p.goto('http://localhost:5273/__escape_probe');
+await p.waitForFunction(()=>customElements.get('r-modal'));
+await p.evaluate(()=>{
+ document.body.innerHTML='<r-modal id="m" heading="Settings"><r-popover id="outer" trigger="click"><button id="ot">Details</button><r-content><r-popover id="inner" trigger="click"><button id="it">Nested details</button><r-content><button id="action">Nested action</button></r-content></r-popover><input id="other"></r-content></r-popover></r-modal>';
+ document.querySelector('#m').setAttribute('open','');
+});
+await p.locator('#ot').click();
+await p.locator('#it').click();
+await p.keyboard.press('Tab');
+console.log('afterTab',await p.evaluate(()=>document.activeElement.id));
+await p.keyboard.press('Escape');
+const state=await p.evaluate(()=>({modal:document.querySelector('#m').hasAttribute('open'),outer:document.querySelector('#outer').hasAttribute('open'),inner:document.querySelector('#inner').hasAttribute('open'),focus:document.activeElement.id,panels:[...document.querySelectorAll('r-dropdown')].map(e=>getComputedStyle(e).display)}));
+console.log(JSON.stringify(state,null,2));
+await b.close();
+if(!state.modal||!state.outer||state.inner||state.focus!=='it') process.exitCode=1;

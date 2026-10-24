@@ -1,0 +1,12 @@
+Provenance: transcribed from this review agent's earlier exec_command tool result before the Popover descendant-Escape patch. The original probe was supplied to node on stdin and did not write a script or log file. This file is a retained transcript, not a new run against old source.
+The saved final-review-nested-escape.mjs reproduces the same markup and click → click → native Tab → Escape sequence; it additionally asserts the repaired result.
+
+Original tool output:
+afterTab other
+{
+  modal: true,
+  outer: false,
+  inner: true,
+  focus: 'ot',
+  panels: [ 'block', 'block' ]
+}

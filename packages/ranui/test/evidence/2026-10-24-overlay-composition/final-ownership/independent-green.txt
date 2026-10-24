@@ -1,0 +1,11 @@
+afterTab other
+{
+  "modal": true,
+  "outer": true,
+  "inner": false,
+  "focus": "it",
+  "panels": [
+    "block",
+    "block"
+  ]
+}

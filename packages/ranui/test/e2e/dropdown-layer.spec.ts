@@ -140,3 +140,56 @@ test('a child editor consumes Escape before the modal dismisses on the next unha
   await page.keyboard.press('Escape');
   await expect(page.locator('#modal')).not.toHaveAttribute('open');
 });
+
+for (const kind of ['popover', 'select']) {
+  test(`Escape from a sibling field dismisses ${kind} before its modal`, async ({ page }) => {
+    await page.locator('#modal').evaluate((modal) => {
+      const input = document.createElement('input');
+      input.id = 'sibling';
+      modal.append(input);
+      modal.setAttribute('open', '');
+    });
+    const trigger = page.locator(kind === 'popover' ? '#help-trigger' : '#choice');
+    const owner = page.locator(kind === 'popover' ? '#help' : '#choice');
+    await trigger.click();
+    await expect(owner).toHaveAttribute('open');
+    await trigger.focus();
+    await page.keyboard.press('Tab');
+    if (kind === 'select') await page.keyboard.press('Tab');
+    await expect(page.locator('#sibling')).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(owner).not.toHaveAttribute('open');
+    await expect(page.locator('#modal')).toHaveAttribute('open');
+    await expect(trigger).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#modal')).not.toHaveAttribute('open');
+  });
+}
+
+test('Escape from an outer popup sibling dismisses the nested popup first', async ({ page }) => {
+  await page.locator('#modal').evaluate((modal) => {
+    const outer = document.createElement('r-popover');
+    outer.id = 'outer';
+    outer.setAttribute('trigger', 'click');
+    outer.innerHTML =
+      '<button id="outer-trigger">Outer</button><r-content><r-popover id="inner" trigger="click"><button id="inner-trigger">Inner</button><r-content><button>Nested action</button></r-content></r-popover><input id="outer-sibling" aria-label="Outer draft" value="Retained"></r-content>';
+    modal.append(outer);
+    modal.setAttribute('open', '');
+  });
+  await page.locator('#outer-trigger').click();
+  await page.locator('#inner-trigger').click();
+  await page.locator('#inner-trigger').focus();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#outer-sibling')).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#inner')).not.toHaveAttribute('open');
+  await expect(page.locator('#outer')).toHaveAttribute('open');
+  await expect(page.locator('#modal')).toHaveAttribute('open');
+  await expect(page.locator('#inner-trigger')).toBeFocused();
+  await expect(page.locator('#outer-sibling')).toHaveValue('Retained');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#outer')).not.toHaveAttribute('open');
+  await expect(page.locator('#outer-trigger')).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#modal')).not.toHaveAttribute('open');
+});

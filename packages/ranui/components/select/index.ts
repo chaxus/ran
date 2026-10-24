@@ -73,6 +73,10 @@ export class Select extends RanElement {
    * reposition listeners had begun to.
    */
   _floating = new FloatingController({
+    onEscape: (event) => {
+      this.keydownSelect(event);
+      if (event.defaultPrevented) this.focus({ preventScroll: true });
+    },
     host: this,
     panel: () => this._selectionDropdown,
     placement: () => this.placement,
