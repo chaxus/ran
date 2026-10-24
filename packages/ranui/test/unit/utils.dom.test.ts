@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { escapeHtml, loadScript } from 'ranuts/utils';
-import { falseList, getMimeTypeFromExtension, isDisabled } from '@/utils/dom';
+import { falseList, isDisabled } from '@/utils/dom';
 
 describe('utils/dom', () => {
   beforeEach(() => {
@@ -29,13 +29,6 @@ describe('utils/dom', () => {
     );
     expect(escapeHtml(null)).toBe('null');
     expect(escapeHtml(123)).toBe('123');
-  });
-
-  it('returns known MIME types and falls back for unknown extensions', () => {
-    expect(getMimeTypeFromExtension('report.PDF')).toBe('application/pdf');
-    expect(getMimeTypeFromExtension('avatar.jpeg')).toBe('image/jpeg');
-    expect(getMimeTypeFromExtension('archive.unknown')).toBe('application/octet-stream');
-    expect(getMimeTypeFromExtension('README')).toBe('application/octet-stream');
   });
 
   it('loads content scripts and reuses already loaded content', async () => {

@@ -25,10 +25,14 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { gzipSync } from 'node:zlib';
 
-// Button must fit without an unrelated ~30 kB MIME catalogue. The larger entries
-// keep independent initial-load ceilings; lazy renderers/media engines are excluded.
+// Button, input and message must fit without ranuts' unrelated ~30 kB MIME catalogue: with
+// it, input measured 83 kB / 23 kB gzip and message 80 kB / 24 kB; without, 53 / 16 and 51 / 16.
+// The larger entries keep independent initial-load ceilings; lazy renderers/media engines are
+// excluded.
 export const componentBundleBudgets = {
   button: { bytes: 40_000, gzipBytes: 13_000 },
+  input: { bytes: 60_000, gzipBytes: 18_000 },
+  message: { bytes: 60_000, gzipBytes: 18_000 },
   markdown: { bytes: 60_000, gzipBytes: 20_000 },
   player: { bytes: 300_000, gzipBytes: 80_000 },
 };
