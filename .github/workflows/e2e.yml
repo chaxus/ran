@@ -82,8 +82,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # The browser download is keyed by the lockfile, which pins Playwright. System
+      # packages are not cacheable this way, so a hit still installs those.
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ matrix.browser }}-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm --filter ranui exec playwright install ${{ matrix.browser }} --with-deps
+
+      - name: Install Playwright system dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm --filter ranui exec playwright install-deps ${{ matrix.browser }}
 
       - name: Build ranuts
         run: pnpm --filter ranuts run build
@@ -136,10 +150,15 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
+      # BuildKit's gha cache needs buildx and the runtime token the cache API uses.
+      - uses: docker/setup-buildx-action@v4
+      - uses: crazy-max/ghaction-github-runtime@v4
       # The launcher installs/builds the three required workspaces inside the same
       # digest-pinned renderer used for local baseline updates. Missing PNGs fail.
       - name: Compare reviewed screenshot baselines
         run: node packages/ranui/bin/visual.ts check
+        env:
+          RANUI_VISUAL_CACHE: gha
       - name: Upload visual differences and environment
         if: always()
         uses: actions/upload-artifact@v7
