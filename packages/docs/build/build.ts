@@ -6,6 +6,7 @@
  * canonicals, every hreflang set and all 17,216 heading anchors identical before
  * anything was switched. This is the build that ships.
  */
+import { cpSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildIndex, createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ranpress';
@@ -87,6 +88,9 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
     publicDir: join(ROOT, 'public'),
     skipAssets: options.skipAssets,
   });
+  // Markdown references these relative to its source file, and the output mirrors the
+  // source tree, so `../../assets/…` from a page lands here only if the files do.
+  cpSync(join(ROOT, 'assets'), join(DIST_DIR, 'assets'), { recursive: true });
 
   const written: string[] = [];
   for (const page of content.pages) {

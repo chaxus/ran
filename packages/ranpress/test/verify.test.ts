@@ -1,0 +1,61 @@
+/**
+ * Media references in the built output.
+ *
+ * Article screenshots were written relative to their markdown source and never copied
+ * into the output, so every one of them 404'd in production while the build passed.
+ */
+import { afterEach, describe, expect, it } from 'vitest';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { verifyDist } from '../src/verify.ts';
+
+const ORIGIN = 'https://example.test';
+let dist: string;
+
+const put = (rel: string, body = ''): void => {
+  const full = join(dist, rel);
+  mkdirSync(join(full, '..'), { recursive: true });
+  writeFileSync(full, body);
+};
+
+const page = (canonical: string, body: string): string =>
+  `<html><head><title>t</title><meta name="description" content="d">` +
+  `<link rel="canonical" href="${ORIGIN}${canonical}"></head><body>${body}</body></html>`;
+
+const mediaFailures = (): string[] =>
+  verifyDist({ distDir: dist, origin: ORIGIN })
+    .filter((f) => f.message.startsWith('missing media'))
+    .map((f) => `${f.file}: ${f.message}`);
+
+afterEach(() => rmSync(dist, { recursive: true, force: true }));
+
+describe('verifyDist media', () => {
+  it('reports an image whose relative src is not in the output', () => {
+    dist = mkdtempSync(join(tmpdir(), 'ranpress-verify-'));
+    put('src/article/post.html', page('/src/article/post', '<img src="../../assets/article/shot.webp" alt="">'));
+    expect(mediaFailures()).toEqual(['src/article/post.html: missing media: ../../assets/article/shot.webp']);
+  });
+
+  it('accepts relative and absolute media that exist, and skips remote ones', () => {
+    dist = mkdtempSync(join(tmpdir(), 'ranpress-verify-'));
+    put('assets/article/shot.webp');
+    put('assets/article/clip.mp4');
+    put(
+      'src/article/post.html',
+      page(
+        '/src/article/post',
+        '<img src="../../assets/article/shot.webp" alt="">' +
+          '<video controls src="/assets/article/clip.mp4"></video>' +
+          '<img src="https://cdn.example.test/x.png" alt=""><img src="data:image/png;base64,AA" alt="">',
+      ),
+    );
+    expect(mediaFailures()).toEqual([]);
+  });
+
+  it('checks <source> inside a video', () => {
+    dist = mkdtempSync(join(tmpdir(), 'ranpress-verify-'));
+    put('src/a.html', page('/src/a', '<video controls><source src="../assets/gone.mp4" type="video/mp4"></video>'));
+    expect(mediaFailures()).toEqual(['src/a.html: missing media: ../assets/gone.mp4']);
+  });
+});
