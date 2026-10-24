@@ -103,6 +103,23 @@ describe('r-markdown contract', () => {
     expect(body(el).textContent).toContain('**bold');
   });
 
+  it('renders the first streamed update at once and folds the rest of the frame into one', async () => {
+    const el = await mount({}, 'start');
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    const renders = vi.fn();
+    el.addEventListener('render', renders);
+
+    el.content = 'one';
+    expect(body(el).textContent).toContain('one');
+    el.content = 'one two';
+    el.content = 'one two three';
+    expect(body(el).textContent).not.toContain('three');
+
+    await el._pending;
+    expect(body(el).textContent).toContain('one two three');
+    expect(renders).toHaveBeenCalledTimes(2);
+  });
+
   it('removes trailing blocks when content shrinks and clears on empty', async () => {
     const el = await mount({}, 'a\n\nb\n\nc');
     expect(body(el).children.length).toBe(3);
