@@ -220,6 +220,20 @@ Por dentro, el elemento acompañante `<r-content>` vigila su propio subárbol co
 
 La accesibilidad se conecta sola: el host recibe `tabindex="0"`, `aria-haspopup="dialog"` y un `aria-expanded` que alterna entre `"false"` y `"true"` conforme el panel se abre y se cierra.
 
+## Antes de que cargue el script
+
+Hasta que se ejecuta el script del componente, el navegador coloca `<r-content>` como marcado normal. `ranui.css` lo oculta si la página carga esa hoja de estilos antes del primer pintado. Marcar el panel con `hidden` permite que el navegador lo oculte por sí mismo, así que tampoco aparece sin la hoja de estilos. Una vez definido, `<r-popover>` mueve los hijos del panel a su capa flotante, de modo que el atributo ya no cambia nada. `popover` funciona igual en los navegadores que lo admiten.
+
+```html
+<r-popover trigger="click">
+  <r-button>Language</r-button>
+  <r-content hidden>
+    <a href="/en/">English</a>
+    <a href="/zh-CN/">中文</a>
+  </r-content>
+</r-popover>
+```
+
 ## Buenas prácticas
 
 - **Elemento disparador**: pon un control enfocable (por ejemplo `<r-button>`) como disparador, para que abrir y cerrar con el teclado funcione.

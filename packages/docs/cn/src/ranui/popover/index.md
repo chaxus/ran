@@ -227,6 +227,20 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
 
 无障碍访问是自动接好的：host 元素会带上 `tabindex="0"`、`aria-haspopup="dialog"`，以及会随面板开关在 `"false"` 和 `"true"` 之间切换的 `aria-expanded`。
 
+## 脚本加载之前
+
+组件脚本运行之前，浏览器会把 `<r-content>` 当作普通内容排版出来。如果页面在首屏之前加载了 `ranui.css`，它会把这部分藏起来。给浮层加上 `hidden`，浏览器自己就会隐藏它，没加载样式表的页面也不会露出来。组件注册后，`<r-popover>` 会把浮层里的子元素搬进自己的浮动层，所以这个属性之后不起任何作用。支持 `popover` 属性的浏览器里，用 `popover` 效果相同。
+
+```html
+<r-popover trigger="click">
+  <r-button>Language</r-button>
+  <r-content hidden>
+    <a href="/en/">English</a>
+    <a href="/zh-CN/">中文</a>
+  </r-content>
+</r-popover>
+```
+
 ## 最佳实践
 
 - **触发元素**：把可聚焦的控件（例如 `<r-button>`）作为触发器，这样键盘打开/关闭才能正常工作。

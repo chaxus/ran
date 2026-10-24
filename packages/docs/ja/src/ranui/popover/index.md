@@ -220,6 +220,20 @@ description: 'ranui の Popover（<r-popover>）は、ホバーやクリック�
 
 アクセシビリティは自動で配線されます。ホストには `tabindex="0"`、`aria-haspopup="dialog"`、そしてパネルの開閉に合わせて `"false"` と `"true"` を行き来する `aria-expanded` が付きます。
 
+## スクリプトが読み込まれる前
+
+コンポーネントのスクリプトが実行されるまで、ブラウザーは `<r-content>` を通常のマークアップとして配置します。ページが初回描画前に `ranui.css` を読み込んでいれば、このスタイルシートが隠します。パネルに `hidden` を付けるとブラウザー自身が隠すため、スタイルシートがなくても表示されません。定義後、`<r-popover>` はパネルの子要素を自分のフローティング層へ移すので、この属性はその後なにも変えません。`popover` 属性に対応したブラウザーでは `popover` でも同じように動きます。
+
+```html
+<r-popover trigger="click">
+  <r-button>Language</r-button>
+  <r-content hidden>
+    <a href="/en/">English</a>
+    <a href="/zh-CN/">中文</a>
+  </r-content>
+</r-popover>
+```
+
 ## ベストプラクティス
 
 - **トリガー要素**：フォーカスできるコントロール（`<r-button>` など）をトリガーにしてください。そうすればキーボードでの開閉が動きます。

@@ -385,6 +385,17 @@ The wait is the stylesheet's own animation rather than a duration copied into sc
 | `search`         | The inline search input (visible with `showSearch`)         |
 | `label`          | The static label above the field (present when `label` set) |
 
+## Before the Script Loads
+
+Until the component's script runs, the browser lays the `<r-option>` elements out as ordinary text. `ranui.css` hides them when the page loads that stylesheet before first paint. Marking each option `hidden` lets the browser hide them on its own, so they also stay off the page without the stylesheet. `<r-select>` reads the label and value from each option and renders its own list, so the attribute changes nothing once it is defined.
+
+```html
+<r-select placeholder="Language">
+  <r-option hidden value="en">English</r-option>
+  <r-option hidden value="zh-CN">中文</r-option>
+</r-select>
+```
+
 ## Best Practices
 
 - **Many options**: Enable `showSearch` so users can filter by label.

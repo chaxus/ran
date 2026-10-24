@@ -367,6 +367,17 @@ Gewartet wird auf die Animation des Stylesheets selbst, nicht auf eine ins Skrip
 | `search`         | Das eingebaute Suchfeld (sichtbar mit `showSearch`)             |
 | `label`          | Die feste Beschriftung über dem Feld (wenn `label` gesetzt ist) |
 
+## Bevor das Skript lädt
+
+Bis das Skript der Komponente läuft, setzt der Browser die `<r-option>`-Elemente als gewöhnlichen Text in den Fluss. `ranui.css` blendet sie aus, wenn die Seite dieses Stylesheet vor dem ersten Rendern lädt. Mit `hidden` an jeder Option blendet der Browser sie selbst aus, sodass sie auch ohne Stylesheet nicht erscheinen. `<r-select>` liest Beschriftung und Wert jeder Option und zeichnet eine eigene Liste, daher ändert das Attribut nach der Definition nichts.
+
+```html
+<r-select placeholder="Language">
+  <r-option hidden value="en">English</r-option>
+  <r-option hidden value="zh-CN">中文</r-option>
+</r-select>
+```
+
 ## Bewährte Vorgehensweisen
 
 - **Viele Optionen**: Aktiviere `showSearch`, damit sich nach Beschriftung filtern lässt.

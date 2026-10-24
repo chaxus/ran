@@ -367,6 +367,17 @@ Lo que se espera es la animación de la propia hoja de estilos, no una duración
 | `search`         | El campo de búsqueda incorporado (visible con `showSearch`) |
 | `label`          | La etiqueta fija sobre el campo (existe cuando hay `label`) |
 
+## Antes de que cargue el script
+
+Hasta que se ejecuta el script del componente, el navegador coloca los `<r-option>` como texto normal. `ranui.css` los oculta si la página carga esa hoja de estilos antes del primer pintado. Marcar cada opción con `hidden` permite que el navegador las oculte por sí mismo, así que tampoco aparecen sin la hoja de estilos. `<r-select>` lee la etiqueta y el valor de cada opción y dibuja su propia lista, así que el atributo no cambia nada una vez definido.
+
+```html
+<r-select placeholder="Language">
+  <r-option hidden value="en">English</r-option>
+  <r-option hidden value="zh-CN">中文</r-option>
+</r-select>
+```
+
 ## Buenas prácticas
 
 - **Muchas opciones**: activa `showSearch` para que se pueda filtrar por etiqueta.

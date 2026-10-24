@@ -367,6 +367,17 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 | `search`         | 内蔵の検索入力（`showSearch` のときに見えます）          |
 | `label`          | フィールド上の固定ラベル（`label` を設定したときに存在） |
 
+## スクリプトが読み込まれる前
+
+コンポーネントのスクリプトが実行されるまで、ブラウザーは `<r-option>` を通常のテキストとして配置します。ページが初回描画前に `ranui.css` を読み込んでいれば、このスタイルシートが隠します。各オプションに `hidden` を付けるとブラウザー自身が隠すため、スタイルシートがなくても表示されません。`<r-select>` は各オプションのラベルと値を読み取って独自のリストを描画するので、定義後この属性はなにも変えません。
+
+```html
+<r-select placeholder="Language">
+  <r-option hidden value="en">English</r-option>
+  <r-option hidden value="zh-CN">中文</r-option>
+</r-select>
+```
+
 ## ベストプラクティス
 
 - **選択肢が多いとき**：`showSearch` を有効にして、ラベルで絞り込めるようにしてください。

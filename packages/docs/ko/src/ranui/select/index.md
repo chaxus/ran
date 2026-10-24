@@ -367,6 +367,17 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 | `search`         | 내장 검색 입력(`showSearch`일 때 보입니다)        |
 | `label`          | 필드 위의 고정 레이블(`label`을 지정했을 때 존재) |
 
+## 스크립트가 로드되기 전
+
+컴포넌트 스크립트가 실행되기 전까지 브라우저는 `<r-option>`을 일반 텍스트로 배치합니다. 페이지가 첫 렌더링 전에 `ranui.css`를 불러오면 이 스타일시트가 숨깁니다. 각 옵션에 `hidden`을 붙이면 브라우저가 직접 숨기므로 스타일시트가 없어도 화면에 나타나지 않습니다. `<r-select>`는 각 옵션의 레이블과 값을 읽어 자체 목록을 그리므로, 정의된 뒤에는 이 속성이 아무것도 바꾸지 않습니다.
+
+```html
+<r-select placeholder="Language">
+  <r-option hidden value="en">English</r-option>
+  <r-option hidden value="zh-CN">中文</r-option>
+</r-select>
+```
+
 ## 모범 사례
 
 - **선택지가 많을 때**: `showSearch`를 켜서 레이블로 걸러 볼 수 있게 하세요.

@@ -220,6 +220,20 @@ description: 'ranui Popover(<r-popover>)는 트리거에 커서를 올리거나 
 
 접근성은 자동으로 연결됩니다. 호스트에는 `tabindex="0"`, `aria-haspopup="dialog"`, 그리고 패널이 열리고 닫힘에 따라 `"false"`와 `"true"`를 오가는 `aria-expanded`가 붙습니다.
 
+## 스크립트가 로드되기 전
+
+컴포넌트 스크립트가 실행되기 전까지 브라우저는 `<r-content>`를 일반 마크업으로 배치합니다. 페이지가 첫 렌더링 전에 `ranui.css`를 불러오면 이 스타일시트가 숨깁니다. 패널에 `hidden`을 붙이면 브라우저가 직접 숨기므로 스타일시트가 없어도 화면에 나타나지 않습니다. 정의된 뒤에는 `<r-popover>`가 패널의 자식 요소를 자체 플로팅 레이어로 옮기므로, 이 속성은 그 후 아무것도 바꾸지 않습니다. `popover` 속성을 지원하는 브라우저에서는 `popover`도 똑같이 동작합니다.
+
+```html
+<r-popover trigger="click">
+  <r-button>Language</r-button>
+  <r-content hidden>
+    <a href="/en/">English</a>
+    <a href="/zh-CN/">中文</a>
+  </r-content>
+</r-popover>
+```
+
 ## 모범 사례
 
 - **트리거 요소**: 포커스를 받을 수 있는 컨트롤(예: `<r-button>`)을 트리거로 두세요. 그래야 키보드로 열고 닫는 동작이 됩니다.
