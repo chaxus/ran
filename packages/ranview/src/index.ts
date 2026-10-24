@@ -33,7 +33,6 @@ export {
   Match,
   ElementBuilder,
   ShadowBuilder,
-  SVG_NAMESPACE,
 } from './core';
 export {
   View,
