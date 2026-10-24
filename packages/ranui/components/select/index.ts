@@ -99,6 +99,12 @@ export class Select extends RanElement {
     },
   });
   _optionList: Option[];
+  /**
+   * The rendered item for each option. Option objects are rebuilt on every slot change, so
+   * this survives exactly as long as the option set does: searching reuses the items
+   * instead of constructing a custom element (and its shadow root) per option per keystroke.
+   */
+  private _optionItems = new WeakMap<Option, HTMLElement>();
   _optionLabelMapValue: Map<string, string>;
   _optionValueMapLabel: Map<string, string>;
   _activeOption?: HTMLElement;
@@ -872,15 +878,14 @@ export class Select extends RanElement {
     } else {
       this._selectDropdown?.style.setProperty('display', 'block');
     }
-    if (this._selectionDropdown) {
-      this._selectionDropdown.innerHTML = '';
-      this._activeOption = undefined;
-      this._activeIndex = -1;
-    }
-    options.forEach((item) => {
-      if (this._selectionDropdown) {
-        const { label, value, disabled } = item;
-        const selectOptionItem = View('r-dropdown-item')
+    this._activeOption = undefined;
+    this._activeIndex = -1;
+    const selectedValue = this.value || (this._pendingDefaultValue ? this.defaultValue : '');
+    const items = (this._selectionDropdown ? options : []).map((item) => {
+      const { label, value, disabled } = item;
+      let selectOptionItem = this._optionItems.get(item);
+      if (!selectOptionItem) {
+        selectOptionItem = View('r-dropdown-item')
           .attr('role', 'option')
           .attr('value', `${value}`)
           .attr('title', `${label}`)
@@ -892,16 +897,17 @@ export class Select extends RanElement {
           selectOptionItem.setAttribute('disabled', '');
           selectOptionItem.setAttribute('aria-disabled', 'true');
         }
-        const selectedValue = this.value || (this._pendingDefaultValue ? this.defaultValue : '');
-        if (selectedValue === value) {
-          selectOptionItem.setAttribute('active', value);
-          this._activeOption = selectOptionItem;
-        } else {
-          selectOptionItem.removeAttribute('active');
-        }
-        this._selectionDropdown.appendChild(selectOptionItem);
+        this._optionItems.set(item, selectOptionItem);
       }
+      if (selectedValue === value) {
+        selectOptionItem.setAttribute('active', value);
+        this._activeOption = selectOptionItem;
+      } else {
+        selectOptionItem.removeAttribute('active');
+      }
+      return selectOptionItem;
     });
+    this._selectionDropdown?.replaceChildren(...items);
     this._activeIndex = this.getDropdownOptions().findIndex((item) => item === this._activeOption);
     // Rendering reflects the current value, without applying defaults again or closing.
     if (this._activeOption) this.selectOptionElement(this._activeOption, false);
