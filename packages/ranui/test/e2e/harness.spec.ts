@@ -31,3 +31,27 @@ test('isolated fixtures cannot inherit an external media error overlay', async (
   expect(requests).toEqual([]);
   await expect(page.locator('r-modal[heading="Playback failed"]')).toHaveCount(0);
 });
+
+test('frozen fixtures apply geometry, palette and layers without a transitional frame', async ({ page }) => {
+  await isolatedSetup(page, DEV_SERVER, 'r-button');
+  await mount(page, '<div id="probe" style="position:absolute;left:0;color:rgb(0,0,0);z-index:1">Probe</div>');
+  const state = await page.locator('#probe').evaluate(async (node) => {
+    const element = node as HTMLElement;
+    // Establish the initial computed values before changing all three roles together.
+    const before = getComputedStyle(element);
+    const initial = [before.left, before.color, before.zIndex];
+    element.style.left = '120px';
+    element.style.color = 'rgb(255, 255, 255)';
+    element.style.zIndex = '1400';
+    const read = () => {
+      const style = getComputedStyle(element);
+      return [style.left, style.color, style.zIndex];
+    };
+    const immediate = read();
+    await new Promise(requestAnimationFrame);
+    return { initial, immediate, painted: read() };
+  });
+  expect(state.initial).toEqual(['0px', 'rgb(0, 0, 0)', '1']);
+  expect(state.immediate).toEqual(['120px', 'rgb(255, 255, 255)', '1400']);
+  expect(state.painted).toEqual(state.immediate);
+});
