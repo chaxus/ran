@@ -330,7 +330,8 @@ export class Select extends RanElement {
   private _syncPlaceholder = (): void => {
     if (this.value || !this._text) return;
     this._text.textContent = this.placeholder;
-    this._search.placeholder = this.placeholder;
+    if (this.placeholder) this._search.placeholder = this.placeholder;
+    else this._search.removeAttribute('placeholder');
   };
   get defaultValue(): string {
     return this.getAttribute('defaultValue') || '';

@@ -16,3 +16,7 @@ Inspected all endpoint states and decoded continuous recordings at 2fps: no popu
 - Full ranui unit run: 100 files, 1705 tests passed; SSR: 76 passed. The full three-browser run is tracked separately and was not yet complete when these captures were reviewed.
 
 The fix distinguishes managed portals from inline dropdowns, follows logical ownership for focus, and preserves an ancestor portal when it contains the newly opened modal. Prior rejected captures are retained outside this accepted set; tests were not relaxed to accept the prior layering failures.
+
+## First-frame follow-up
+
+The full Linux run exposed a first-frame race: the managed panel became visible before its deferred position pass assigned its layer. The layer is now assigned synchronously before visibility. The same six layer cases and Select composition/lifecycle checks passed in a 28-case focused run; the recordings and source manifest were refreshed after this correction. Empty Selects without an authored hint now remove the internal placeholder instead of leaving an empty attribute. Existing clearing assertions were kept unchanged.
