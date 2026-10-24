@@ -28,8 +28,10 @@ const sampleAbilitys = JSON.stringify([
   },
 ]);
 
+const nextFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
 describe('r-radar contract', () => {
-  it('resumes resize updates after removal and reconnection', () => {
+  it('resumes resize updates after removal and reconnection', async () => {
     const targets = new Set<Element>();
     let notify!: () => void;
     const original = globalThis.ResizeObserver;
@@ -56,6 +58,7 @@ describe('r-radar contract', () => {
       document.body.appendChild(radar);
       refresh.mockClear();
       if (targets.size) notify();
+      await nextFrame();
       expect(refresh).toHaveBeenCalledOnce();
       radar.remove();
     } finally {
@@ -193,23 +196,23 @@ describe('r-radar contract', () => {
     const radar = mount();
     const refresh = vi.spyOn(radar, 'refreshData').mockImplementation(() => {});
     document.documentElement.setAttribute('data-ran-theme', 'dark');
-    await Promise.resolve();
+    await nextFrame();
     expect(refresh).toHaveBeenCalledOnce();
     radar.remove();
     refresh.mockClear();
     document.documentElement.setAttribute('data-ran-theme', 'light');
-    await Promise.resolve();
+    await nextFrame();
     expect(refresh).not.toHaveBeenCalled();
     document.body.appendChild(radar);
     refresh.mockClear();
     document.documentElement.setAttribute('data-ran-theme', 'dark');
-    await Promise.resolve();
+    await nextFrame();
     expect(refresh).toHaveBeenCalledOnce();
     radar.remove();
     document.documentElement.removeAttribute('data-ran-theme');
   });
 
-  it('observes system theme changes only while connected', () => {
+  it('observes system theme changes only while connected', async () => {
     const detach = vi.fn();
     let listener: (() => void) | undefined;
     const matchMedia = vi.spyOn(window, 'matchMedia').mockReturnValue({
@@ -224,6 +227,7 @@ describe('r-radar contract', () => {
       const radar = mount();
       const refresh = vi.spyOn(radar, 'refreshData').mockImplementation(() => {});
       listener?.();
+      await nextFrame();
       expect(refresh).toHaveBeenCalledOnce();
       radar.remove();
       expect(detach).toHaveBeenCalledOnce();
@@ -340,11 +344,25 @@ describe('r-radar contract', () => {
     expect(result).toBeNull();
   });
 
-  it('resize method calls refreshData', () => {
+  it('resize method calls refreshData', async () => {
     const radar = mount();
     const refreshSpy = vi.spyOn(radar, 'refreshData').mockImplementation(() => undefined);
     (radar as any).resize();
+    await nextFrame();
     expect(refreshSpy).toHaveBeenCalled();
+  });
+
+  it('draws once for a resize, a theme change and a token write in the same frame', async () => {
+    const radar = mount();
+    const refresh = vi.spyOn(radar, 'refreshData').mockImplementation(() => undefined);
+    (radar as any).resize();
+    document.documentElement.setAttribute('data-ran-theme', 'dark');
+    document.documentElement.style.setProperty('--ran-color-text', '#123456');
+    await nextFrame();
+    expect(refresh).toHaveBeenCalledOnce();
+    radar.remove();
+    document.documentElement.removeAttribute('data-ran-theme');
+    document.documentElement.style.removeProperty('--ran-color-text');
   });
 
   it('refreshData exercises else label branch when label position differs', () => {
