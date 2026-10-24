@@ -112,6 +112,7 @@
   "card.markdown": "Markdown",
   "markdown.stream": "Stream a reply",
   "card.math": "Math",
+  "player.load": "Load sample video",
   "card.player": "Player",
   "sec.more": "Overlays, media & utilities",
   "popover.trigger": "Hover or click",

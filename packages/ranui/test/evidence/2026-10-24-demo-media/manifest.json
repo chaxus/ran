@@ -1,0 +1,31 @@
+{
+  "sources": {
+    "packages/ranui/demo/index.html": "cce0a1267aff95e300ebfacbe3d8a551003c66800af63d747f918b6f484b4677",
+    "packages/ranui/demo/index.ts": "13b51f7067f7ba0ffb2a61d7c93eff58fa4f5be8c0961575fef0bd1886dae35f",
+    "packages/ranui/components/player/core/error-modal.ts": "f8403911e5b14aaf9a949a053911880ea299909f8cd21e1352289ba457860ab4"
+  },
+  "observations": [
+    {
+      "width": 360,
+      "requests": [
+        "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+      ]
+    },
+    {
+      "width": 1280,
+      "requests": [
+        "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+      ]
+    }
+  ],
+  "media": {
+    "1280-idle.png": "aed6f51daa12e44aed375f038cbcc9a05543646e94472acde7a30560626327db",
+    "1280-requested-failure.png": "299aeba7874d18637d13f55797bfdeb509c56ab17aabf43f7583b3b6c0b863e5",
+    "1280.webm": "83440142f02586a3cb931055691be2737ec96dfb7ff108a6971365fdf7a76a60",
+    "360-idle.png": "e9fdcfcc6b0792f14d3845d8d4955f3748336e60a19ec2bc4955d22a285b68ea",
+    "360-requested-failure.png": "1ddfb279e680154ef03f6f91f6f7fb3cbec890b7b6b998a3262975c54cea53cf",
+    "360.webm": "e1a8919949c1ceaf2de766752d1d2f5eb57774cf938f8cb2bf2111cd850a9f5a"
+  }
+}

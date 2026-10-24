@@ -44,7 +44,7 @@ test('player control bar layout', { tag: '@visual' }, async ({ page }) => {
   await expect(page.locator('r-player')).toHaveScreenshot('player-control-bar.png');
 });
 
-test('player with live stream src mounts in the demo', async ({ page }) => {
+test('player loads its live sample after explicit intent in the demo', async ({ page }) => {
   await demoSetup(page, 'r-player', { liveMedia: true });
   // Functional only — deliberately no screenshot. This section holds the demo's live HLS
   // stream, and a decoding <video> never yields two identical frames, so the old
@@ -54,5 +54,7 @@ test('player with live stream src mounts in the demo', async ({ page }) => {
   const section = page.locator('#component-player');
   await expect(section).toBeVisible();
   await expect(section.locator('r-player')).toHaveCount(1);
+  await expect(section.locator('r-player')).not.toHaveAttribute('src');
+  await page.locator('#load-player-sample').click();
   await expect(section.locator('r-player')).toHaveAttribute('src', 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8');
 });

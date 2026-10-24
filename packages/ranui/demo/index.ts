@@ -247,6 +247,14 @@ document.getElementById('markdown-stream')?.addEventListener('click', () => {
 });
 if (markdownEl) markdownEl.content = MARKDOWN_SAMPLE;
 
+// External sample media starts only after explicit intent, so an unavailable stream
+// cannot interrupt browsing unrelated component examples with an error dialog.
+document.getElementById('load-player-sample')?.addEventListener('click', () => {
+  document
+    .querySelector('#component-player r-player')
+    ?.setAttribute('src', 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8');
+});
+
 // ── Modal open / close wiring ─────────────────────────────────────────
 const modal = document.getElementById('demo-modal') as (HTMLElement & { open: boolean }) | null;
 document.getElementById('open-modal')?.addEventListener('click', () => {
