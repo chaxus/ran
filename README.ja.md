@@ -6,59 +6,37 @@
 </p>
 
 <h1 align="center">ran</h1>
-<p align="center">Web アプリケーションのための UI コンポーネントと TypeScript ツール。</p>
-<p align="center"><a href="https://ran.chaxus.com/ja/">ドキュメント</a> · <a href="https://github.com/chaxus/ran/actions/workflows/ci.yml">CI</a></p>
+<p align="center">Web プロダクトを作るための設計手法、コンポーネント、ツール。開発者にもコーディングエージェントにも。</p>
+<p align="center"><a href="https://ran.chaxus.com/ja/">ドキュメント</a> · <a href="https://ran.chaxus.com/ja/src/ranui/">コンポーネント</a></p>
 <p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">中文</a> · <b>日本語</b> · <a href="./README.es.md">Español</a> · <a href="./README.pt.md">Português</a> · <a href="./README.ko.md">한국어</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.fa.md">فارسی</a></p>
 
-ran は Web インターフェースを構築するためのライブラリ群です。既製の HTML コンポーネントでフォーム、管理画面、コンテンツページを作り、ブラウザーやデータ処理の関数を再利用したり、TypeScript でリアクティブな DOM ビューを組み立てたりできます。
+ran は 3 つの部分からなり、それぞれ単独で使えます。**ranui** はネイティブのカスタム要素で作られた UI コンポーネント、**ranuts** は型付きの TypeScript ユーティリティ、**Ran Design** はどの技術スタックでも人とコーディングエージェントが使えるレイアウト・インタラクション・レビューの手法です。ranui の各コンポーネントは `<r-*>` タグなので、React、Vue、Svelte、素の HTML のどれでも同じように動き、AI チャット画面向けのコンポーネントも揃っています。
 
-各パッケージは個別にインストールできます。[ドキュメントサイト](./packages/docs/)と [IM デモ](./packages/im/)では、これらを組み合わせたアプリケーションを紹介しています。
+## インストール
 
-## パッケージを選ぶ
+ビルドなしで試す場合は、CDN から読み込んでタグを書くだけです。
 
-| パッケージ                                            | できること                                                                                                                                           |
-| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ranui@0.5.0](./packages/ranui/README.ja.md)          | カスタム HTML 要素で入力欄、セレクト、ダイアログ、テーブル、Markdown、メディアプレーヤーを構築。テーマとサーバーレンダリング用のツールも提供します。 |
-| [ranuts@0.5.0](./packages/ranuts/README.ja.md)        | 色やバイナリの変換、ストレージ操作、SSE 解析、ストリーミング応答の状態管理など、ブラウザーとデータの処理。                                           |
-| [@alixex/ranview@0.2.0](./packages/ranview/README.md) | チェーン可能なビルダーとリアクティブなシグナルで DOM ビューを構成。サーバーレンダリング用の静的 HTML も生成できます。                                |
-
-## ranui を試す
-
-ESM 対応のバンドラーを使うブラウザーアプリにインストールします。
-
-```sh
-npm install ranui@0.5.0
+```html
+<script src="https://cdn.jsdelivr.net/npm/ranui/dist/iife/button.iife.js" defer></script>
+<r-button type="primary">保存</r-button>
 ```
 
-次のコードをアプリの JavaScript エントリーに追加すると、クリックに反応するボタンが表示されます。
+バンドラーを使う場合:
+
+```sh
+npm install ranui
+```
 
 ```js
 import 'ranui/button';
 import 'ranui/style';
-
-const button = document.createElement('r-button');
-button.setAttribute('type', 'primary');
-button.textContent = '保存';
-button.addEventListener('click', () => {
-  button.textContent = '保存済み';
-});
-document.body.append(button);
 ```
 
-コンポーネントはブラウザー標準のカスタム要素とイベントを使うため、React や Vue のランタイムは不要です。他のコンポーネントも `ranui/input` のように個別のエントリーから読み込めます。[コンポーネントの例](https://ran.chaxus.com/ja/src/ranui/)でタグ、イベント、カスタマイズを確認できます。バンドラーを使わない場合は[独立スクリプトの例](./packages/ranui/README.ja.md#iife--cdn)を参照してください。
+ranui はアルファ版で、リリースに破壊的変更が含まれることがあります。本番では正確なバージョンを固定してください。
 
-## 開発に参加する
+## 詳しく
 
-Node 24+ と pnpm 11.6.0 を使用します。
-
-```sh
-pnpm install --frozen-lockfile
-pnpm build
-pnpm test
-pnpm -F docs dev
-```
-
-各パッケージのディレクトリーにガイドと例があります。貢献する前に[リポジトリーの規約](./AGENTS.md)を、パッケージの公開準備には[リリース手順](./docs/RELEASING.md)を参照してください。
+パッケージごとの説明は [ranui](./packages/ranui/README.ja.md) と [ranuts](./packages/ranuts/README.ja.md) を、ライブデモは[ドキュメントサイト](https://ran.chaxus.com/ja/)を参照してください。コーディングエージェント用プラグインと開発への参加方法は[英語版 README](./README.md) にあります。
 
 ## ライセンス
 

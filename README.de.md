@@ -6,59 +6,37 @@
 </p>
 
 <h1 align="center">ran</h1>
-<p align="center">UI-Komponenten und TypeScript-Werkzeuge für Webanwendungen.</p>
-<p align="center"><a href="https://ran.chaxus.com/de/">Dokumentation</a> · <a href="https://github.com/chaxus/ran/actions/workflows/ci.yml">CI</a></p>
+<p align="center">Designmethoden, Komponenten und Werkzeuge für Webprodukte, für Entwickler und Coding-Agents.</p>
+<p align="center"><a href="https://ran.chaxus.com/de/">Dokumentation</a> · <a href="https://ran.chaxus.com/de/src/ranui/">Komponenten</a></p>
 <p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">中文</a> · <a href="./README.ja.md">日本語</a> · <a href="./README.es.md">Español</a> · <a href="./README.pt.md">Português</a> · <a href="./README.ko.md">한국어</a> · <b>Deutsch</b> · <a href="./README.fa.md">فارسی</a></p>
 
-ran ist eine Sammlung von Bibliotheken zum Erstellen von Weboberflächen. Mit fertigen HTML-Komponenten lassen sich Formulare, Dashboards und Inhaltsseiten bauen. Dazu kommen Hilfsfunktionen für Browser und Datenverarbeitung sowie reaktive DOM-Ansichten direkt in TypeScript.
+ran besteht aus drei Teilen, die sich einzeln nutzen lassen: **ranui**, UI-Komponenten als native Custom Elements; **ranuts**, typisierte TypeScript-Hilfsfunktionen; und **Ran Design**, Methoden für Layout, Interaktion und Abnahme, die Menschen und Coding-Agents in jedem Stack anwenden können. Jede ranui-Komponente ist ein `<r-*>`-Tag und funktioniert deshalb in React, Vue, Svelte und reinem HTML gleich; Bausteine für KI-Chatoberflächen sind enthalten.
 
-Jedes Paket lässt sich einzeln installieren. Die [Dokumentationswebsite](./packages/docs/) und die [IM-Demo](./packages/im/) zeigen ihr Zusammenspiel in vollständigen Anwendungen.
+## Installation
 
-## Ein Paket auswählen
+Ohne Build-Schritt die Komponente von einem CDN laden und das Tag schreiben:
 
-| Paket                                                 | Was sich damit bauen lässt                                                                                                                                        |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ranui@0.5.0](./packages/ranui/README.de.md)          | Oberflächen aus eigenen HTML-Elementen: Eingaben, Auswahllisten, Dialoge, Tabellen, Markdown und Mediaplayer. Mit Themes und Hilfen für serverseitiges Rendering. |
-| [ranuts@0.5.0](./packages/ranuts/README.de.md)        | Browser- und Datenabläufe: Farb- und Binärkonvertierung, Speicherzugriff, SSE-Verarbeitung und Zustände gestreamter Antworten.                                    |
-| [@alixex/ranview@0.2.0](./packages/ranview/README.md) | DOM-Ansichten mit verkettbaren Buildern und reaktiven Signalen; statische HTML-Ausgaben für serverseitiges Rendering.                                             |
-
-## ranui ausprobieren
-
-In einer Browseranwendung mit einem ESM-kompatiblen Bundler installieren:
-
-```sh
-npm install ranui@0.5.0
+```html
+<script src="https://cdn.jsdelivr.net/npm/ranui/dist/iife/button.iife.js" defer></script>
+<r-button type="primary">Speichern</r-button>
 ```
 
-Diesen Code im JavaScript-Einstiegspunkt der Anwendung ergänzen. Er erzeugt einen Button, der auf einen Klick reagiert:
+Mit einem Bundler:
+
+```sh
+npm install ranui
+```
 
 ```js
 import 'ranui/button';
 import 'ranui/style';
-
-const button = document.createElement('r-button');
-button.setAttribute('type', 'primary');
-button.textContent = 'Speichern';
-button.addEventListener('click', () => {
-  button.textContent = 'Gespeichert';
-});
-document.body.append(button);
 ```
 
-Die Komponenten nutzen Custom Elements und standardmäßige Browserereignisse; eine React- oder Vue-Laufzeit ist nicht erforderlich. Weitere Komponenten werden über eigene Einstiegspunkte wie `ranui/input` importiert. Die [Komponentenbeispiele](https://ran.chaxus.com/de/src/ranui/) zeigen Markup, Ereignisse und Anpassungen. Ohne Bundler hilft das [Beispiel mit eigenständigem Skript](./packages/ranui/README.de.md#iife--cdn).
+ranui ist im Alpha-Stadium, neue Versionen können inkompatible Änderungen enthalten. Im Produktivbetrieb eine exakte Version festlegen.
 
-## Am Repository arbeiten
+## Weiterlesen
 
-Node 24+ und pnpm 11.6.0 verwenden.
-
-```sh
-pnpm install --frozen-lockfile
-pnpm build
-pnpm test
-pnpm -F docs dev
-```
-
-Die Paketverzeichnisse enthalten eigene Anleitungen und Beispiele. Vor Beiträgen die [Repository-Regeln](./AGENTS.md) lesen; zum Vorbereiten von Paketen die [Release-Anleitung](./docs/RELEASING.md) nutzen.
+Details zu den Paketen stehen in [ranui](./packages/ranui/README.de.md) und [ranuts](./packages/ranuts/README.de.md), Live-Beispiele auf der [Dokumentationswebsite](https://ran.chaxus.com/de/). Das Plugin für Coding-Agents und die Hinweise zum Mitwirken finden sich im [englischen README](./README.md).
 
 ## Lizenz
 

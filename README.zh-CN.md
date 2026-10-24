@@ -6,89 +6,81 @@
 </p>
 
 <h1 align="center">ran</h1>
-<p align="center">用于构建 Web 应用的界面组件和 TypeScript 工具。</p>
-<p align="center"><a href="https://ran.chaxus.com/cn/">文档</a> · <a href="https://github.com/chaxus/ran/actions/workflows/ci.yml">CI</a></p>
+<p align="center">构建 Web 产品用的设计方法、组件和工具，开发者和编程 agent 都能直接用。</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/v/ranui?label=ranui" alt="npm 上的 ranui"></a>
+  <a href="https://www.npmjs.com/package/ranuts"><img src="https://img.shields.io/npm/v/ranuts?label=ranuts" alt="npm 上的 ranuts"></a>
+  <a href="https://github.com/chaxus/ran/actions/workflows/ci.yml"><img src="https://github.com/chaxus/ran/actions/workflows/ci.yml/badge.svg" alt="CI 状态"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/github/license/chaxus/ran" alt="MIT 许可证"></a>
+</p>
+
+<p align="center"><a href="https://ran.chaxus.com/cn/">文档</a> · <a href="https://ran.chaxus.com/cn/src/ranui/">组件</a> · <a href="https://ran.chaxus.com/cn/src/agents/">Agent</a></p>
 <p align="center"><a href="./README.md">English</a> · <b>中文</b> · <a href="./README.ja.md">日本語</a> · <a href="./README.es.md">Español</a> · <a href="./README.pt.md">Português</a> · <a href="./README.ko.md">한국어</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.fa.md">فارسی</a></p>
 
-ran 是一组用于构建 Web 界面的库：用现成的 HTML 组件搭建表单、管理界面和内容页面，复用浏览器与数据处理函数，或直接用 TypeScript 编写响应式 DOM 界面。
+ran 由三部分组成，每部分都能单独使用：**ranui** 是基于原生自定义元素的界面组件库；**ranuts** 是带类型的 TypeScript 工具函数；**Ran Design** 是一套布局、交互和验收方法，人和编程 agent 在任何技术栈里都能照着做。
 
-每个包都可以单独安装。[文档站](./packages/docs/)和 [IM 示例](./packages/im/)展示了它们在完整应用中的组合用法。
+- **不挑框架，也可以不用框架。** 每个组件都是一个 `<r-*>` 标签，React、Vue、Svelte 和纯 HTML 页面的用法完全一样。不需要适配层，也不带框架运行时，一个 script 标签就能跑起来。
+- **现成的 AI 对话界面组件。** 包括跟随流式输出滚动的对话视图、能渲染写到一半的 Markdown、推理过程和工具调用的展示行、附件和语音输入。流式响应的解析交给 `ranuts/stream`。
+- **主题、服务端渲染和类型都已内置。** 通过设计 token 切换亮色和暗色主题，附带 SSR 工具和 TypeScript 类型声明。
+- **用到什么装什么。** 每个包、每个组件都有独立入口。
 
-## 选择需要的包
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/readme-home-dark.webp">
+    <img width="800" src="./.github/assets/readme-home.webp" alt="ran.chaxus.com 首页：左边是 ranui 的标签写法，右边的实时面板渲染出对应的按钮、进度条、加载动画和复选框">
+  </picture>
+</p>
 
-| 包                                                    | 能做什么                                                                                              |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| [ranui@0.5.0](./packages/ranui/README.zh-CN.md)       | 用自定义 HTML 元素构建界面：输入框、选择器、弹窗、表格、Markdown 和播放器，提供主题和服务端渲染工具。 |
-| [ranuts@0.5.0](./packages/ranuts/README.zh-CN.md)     | 处理浏览器与数据任务：颜色和二进制转换、存储操作、SSE 解析及流式响应状态。                            |
-| [@alixex/ranview@0.2.0](./packages/ranview/README.md) | 用链式构建器和响应式信号组合 DOM 界面，也可生成用于服务端渲染的静态 HTML。                            |
+## 包
 
-## 试用 ranui
+| 包                                          | 用来做什么                                                                                     |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| [ranui](./packages/ranui/README.zh-CN.md)   | 用自定义元素构建表单、弹窗、表格、Markdown、播放器和 AI 对话界面，并提供主题和服务端渲染工具。 |
+| [ranuts](./packages/ranuts/README.zh-CN.md) | 处理字符串、颜色、时间、文件、存储和 DOM 的工具函数，以及 SSE 解析和流式响应的状态管理。       |
+| [Ran Design](./design/README.md)            | 关于构图、交互、动效和基于证据的验收的方法。以 agent 插件的形式发布，不依赖 ranui。            |
 
-在使用 ESM 构建工具的浏览器项目中安装：
+ranui 的构建器和响应式层单独发布为 [@alixex/ranview](./packages/ranview/README.md)。
 
-```sh
-npm install ranui@0.5.0
+## 快速上手
+
+不用构建工具时，从 CDN 引入组件，直接写标签：
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/ranui/dist/iife/button.iife.js" defer></script>
+<r-button type="primary">保存</r-button>
 ```
 
-将以下代码放进应用的 JavaScript 入口，即可生成一个能响应点击的按钮：
+使用构建工具时，先安装，再引入要用的组件：
+
+```sh
+npm install ranui
+```
 
 ```js
 import 'ranui/button';
 import 'ranui/style';
-
-const button = document.createElement('r-button');
-button.setAttribute('type', 'primary');
-button.textContent = '保存';
-button.addEventListener('click', () => {
-  button.textContent = '已保存';
-});
-document.body.append(button);
 ```
 
-组件使用浏览器原生的自定义元素和标准事件，无需 React 或 Vue 运行时。其他组件通过各自入口引入，例如 `ranui/input`。在[组件示例](https://ran.chaxus.com/cn/src/ranui/)中查看标签、事件和定制方式；不使用构建工具时，可参考[独立脚本示例](./packages/ranui/README.zh-CN.md#iife--cdn)。
+ranui 还在 alpha 阶段，新版本可能包含不兼容的改动，生产环境请锁定具体版本号。每个组件的在线示例、事件和样式定制见[组件文档](https://ran.chaxus.com/cn/src/ranui/)。
 
-## 与 agent 一起使用
+## 配合编程 agent 使用
 
-统一的 **ran 插件**包含 [design](./plugins/ran/skills/design/SKILL.md)、
-[ranui](./plugins/ran/skills/ranui/SKILL.md) 和 [ranuts](./plugins/ran/skills/ranuts/SKILL.md)
-三个 skill。设计方法适用于现有技术栈，无需安装 ranui；库相关指引读取宿主实际安装版本的公开契约。
-插件自带设计参考文件，无需 MCP 服务、账号或 hook。
-
-测试当前分支时，在仓库根目录运行 `codex plugin marketplace add .` 或
-`claude plugin marketplace add .`，再安装 `ran@ran`。下面的远程安装方式在统一插件进入默认分支后适用。
-
-**Claude Code 插件**：添加本仓库的 marketplace，再安装 ranui：
+**ran** 插件给 Claude Code 和 Codex 加上 design、ranui、ranuts 三个技能，不需要 MCP 服务，也不需要注册账号。
 
 ```sh
-claude plugin marketplace add chaxus/ran
-claude plugin install ran@ran
+claude plugin marketplace add chaxus/ran && claude plugin install ran@ran
 ```
-
-新会话中按任务使用 `/ran:design`、`/ran:ranui` 或 `/ran:ranuts`。
-
-**Codex 插件**：注册仓库的 marketplace，安装同一份 skill：
 
 ```sh
-codex plugin marketplace add chaxus/ran
-codex plugin add ran@ran
+codex plugin marketplace add chaxus/ran && codex plugin add ran@ran
 ```
 
-新任务中使用 `$design`、`$ranui` 或 `$ranuts`。本地检出仓库时，在仓库根目录执行 `codex plugin marketplace add .`。
-[插件清单](./plugins/ran/plugin.json)和 [Codex marketplace](./.agents/plugins/marketplace.json)
-遵循[官方打包格式](https://developers.openai.com/plugins/build/plugins)。
-两种安装入口使用同一份 skill 正文，不需要 MCP 服务、额外账号或 hook。
-
-使用示例：“用 ranui 优化这个设置侧栏，保留任务和交互，用相关主题、宽度的实际截图验证。”
-[UI 任务索引](./packages/ranui/docs/INTERFACE_GUIDE.md#ui-task-lookup)按任务进入唯一规则来源：
-[设计](./packages/ranui/docs/DESIGN.md)、[交互](./packages/ranui/docs/INTERACTION.md)、
-[公开 API](./packages/ranui/docs/COMPONENTS.md)和[证据与验收](./packages/ranui/docs/ACCEPTANCE.md)。
-插件先明确简短的任务契约，再保留宿主产品已有决策，并用实际渲染证据支撑界面结论。
-自动检查、agent 视觉审查和用户验收分别记录；[六个可选 agent 场景](./plugins/ran/evals/README.md)
-验证指引的实际执行效果，不用 token/API 检查冒充行为验证。源码贡献者先读 [AGENTS.md](./AGENTS.md)。
+新开一个会话后，在 Claude Code 里用 `/ran:design`、`/ran:ranui` 或 `/ran:ranuts`，在 Codex 里用 `$design`、`$ranui` 或 `$ranuts`。想从本地仓库安装，看 [Agent 指南](https://ran.chaxus.com/cn/src/agents/)；技能本身在 [plugins/ran](./plugins/ran/)。
 
 ## 参与开发
 
-使用 Node 24+ 和 pnpm 11.6.0。
+需要 Node 24 及以上，pnpm 版本以 `package.json` 里固定的为准。
 
 ```sh
 pnpm install --frozen-lockfile
@@ -97,7 +89,7 @@ pnpm test
 pnpm -F docs dev
 ```
 
-各包目录包含自己的指南和示例。贡献前请阅读[仓库约定](./AGENTS.md)，准备发包时请参考[发布流程](./docs/RELEASING.md)。
+贡献代码前请先读 [AGENTS.md](./AGENTS.md)，发布包时参考[发布指南](./docs/RELEASING.md)。
 
 ## 许可证
 
