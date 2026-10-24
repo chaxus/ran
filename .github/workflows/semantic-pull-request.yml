@@ -13,8 +13,10 @@ permissions:
 
 # Editing a title twice in a row started two runs that both post a status check.
 # The newest title is the only one that matters, so the older run is cancelled.
+# Keyed by PR number: under pull_request_target, github.ref is the base branch, so a
+# ref-keyed group would let one PR's edit cancel another PR's check.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
