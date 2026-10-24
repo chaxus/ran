@@ -7,14 +7,14 @@ catalog:
   # Also pinned in packages/ranui/test/visual/environment.json with the matching image
   # digest; change both together (see that directory's README, "Updating the renderer").
   '@playwright/test': 1.62.1
-  '@types/node': 26.1.2
-  '@vitest/coverage-v8': 4.1.11
-  less: 4.8.1
-  terser: 5.49.2
-  tsx: 4.23.10
+  '@types/node': 26.6.5
+  '@vitest/coverage-v8': 4.1.12
+  less: 4.9.1
+  terser: 5.51.2
+  tsx: 4.23.15
   typescript: 7.0.2
-  vite: 8.2.4
-  vitest: 4.1.11
+  vite: 8.3.5
+  vitest: 4.1.12
 # Force patched versions of transitively-pulled build tools (Dependabot advisories).
 overrides:
   esbuild: 0.28.1
