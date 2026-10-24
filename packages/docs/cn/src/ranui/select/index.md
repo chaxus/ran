@@ -383,6 +383,17 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 | `search`         | 内联搜索输入框（`showSearch` 时可见）       |
 | `label`          | 字段上方的静态标题（设置了 `label` 时存在） |
 
+## 脚本加载之前
+
+组件脚本运行之前，浏览器会把 `<r-option>` 当作普通文字排版出来。如果页面在首屏之前加载了 `ranui.css`，它会把这些选项藏起来。给每个选项加上 `hidden`，浏览器自己就会隐藏它们，没加载样式表的页面也不会露出来。`<r-select>` 只读取每个选项的文字和值、自己渲染下拉列表，所以注册后这个属性不起任何作用。
+
+```html
+<r-select placeholder="Language">
+  <r-option hidden value="en">English</r-option>
+  <r-option hidden value="zh-CN">中文</r-option>
+</r-select>
+```
+
 ## 最佳实践
 
 - **选项较多时**：开启 `showSearch`，让用户能按标签过滤。

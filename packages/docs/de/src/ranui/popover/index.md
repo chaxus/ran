@@ -220,6 +220,20 @@ Intern beobachtet das begleitende `<r-content>`-Element seinen eigenen Teilbaum 
 
 Barrierefreiheit wird automatisch verdrahtet: Der Host bekommt `tabindex="0"`, `aria-haspopup="dialog"` und ein `aria-expanded`, das beim Öffnen und Schließen zwischen `"false"` und `"true"` wechselt.
 
+## Bevor das Skript lädt
+
+Bis das Skript der Komponente läuft, setzt der Browser `<r-content>` als gewöhnliches Markup in den Fluss. `ranui.css` blendet es aus, wenn die Seite dieses Stylesheet vor dem ersten Rendern lädt. Mit `hidden` am Panel blendet der Browser es selbst aus, sodass es auch ohne Stylesheet nicht erscheint. Nach der Definition verschiebt `<r-popover>` die Kinder des Panels in seine schwebende Ebene, danach ändert das Attribut nichts mehr. `popover` funktioniert in Browsern, die es unterstützen, genauso.
+
+```html
+<r-popover trigger="click">
+  <r-button>Language</r-button>
+  <r-content hidden>
+    <a href="/en/">English</a>
+    <a href="/zh-CN/">中文</a>
+  </r-content>
+</r-popover>
+```
+
 ## Bewährte Vorgehensweisen
 
 - **Auslöserelement**: Nimm ein fokussierbares Bedienelement (etwa `<r-button>`) als Auslöser, damit Öffnen und Schließen per Tastatur funktionieren.

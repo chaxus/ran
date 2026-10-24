@@ -230,6 +230,20 @@ Internally, the companion `<r-content>` element watches its own subtree with a `
 
 Accessibility is wired automatically: the host receives `tabindex="0"`, `aria-haspopup="dialog"`, and an `aria-expanded` that toggles between `"false"` and `"true"` as the panel opens and closes.
 
+## Before the Script Loads
+
+Until the component's script runs, the browser lays `<r-content>` out as ordinary markup. `ranui.css` hides it when the page loads that stylesheet before first paint. Marking the panel `hidden` lets the browser hide it on its own, so it also stays off the page without the stylesheet. Once defined, `<r-popover>` moves the panel's children into its floating layer, so the attribute changes nothing afterwards. `popover` works the same way in browsers that support it.
+
+```html
+<r-popover trigger="click">
+  <r-button>Language</r-button>
+  <r-content hidden>
+    <a href="/en/">English</a>
+    <a href="/zh-CN/">中文</a>
+  </r-content>
+</r-popover>
+```
+
 ## Best Practices
 
 - **Trigger element**: Place a focusable control (e.g. `<r-button>`) as the trigger so keyboard open/close works.

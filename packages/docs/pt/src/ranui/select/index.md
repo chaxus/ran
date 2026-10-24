@@ -367,6 +367,17 @@ O `r-select` é um elemento personalizado associado a formulários (`static form
 | `search`         | O campo de busca embutido (visível com `showSearch`)    |
 | `label`          | O rótulo fixo acima do campo (existe quando há `label`) |
 
+## Antes de o script carregar
+
+Até o script do componente rodar, o navegador dispõe os `<r-option>` como texto comum. O `ranui.css` os esconde se a página carregar essa folha de estilo antes da primeira pintura. Marcar cada opção com `hidden` deixa o próprio navegador escondê-las, então elas também não aparecem sem a folha de estilo. O `<r-select>` lê o rótulo e o valor de cada opção e desenha a própria lista, então o atributo não muda nada depois de definido.
+
+```html
+<r-select placeholder="Language">
+  <r-option hidden value="en">English</r-option>
+  <r-option hidden value="zh-CN">中文</r-option>
+</r-select>
+```
+
 ## Boas práticas
 
 - **Muitas opções**: ligue `showSearch` para que dê para filtrar pelo rótulo.

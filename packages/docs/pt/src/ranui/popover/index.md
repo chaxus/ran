@@ -220,6 +220,20 @@ Internamente, o elemento companheiro `<r-content>` observa a própria subárvore
 
 A acessibilidade é ligada automaticamente: o host recebe `tabindex="0"`, `aria-haspopup="dialog"` e um `aria-expanded` que alterna entre `"false"` e `"true"` conforme o painel abre e fecha.
 
+## Antes de o script carregar
+
+Até o script do componente rodar, o navegador dispõe `<r-content>` como marcação comum. O `ranui.css` o esconde se a página carregar essa folha de estilo antes da primeira pintura. Marcar o painel com `hidden` deixa o próprio navegador escondê-lo, então ele também não aparece sem a folha de estilo. Depois de definido, o `<r-popover>` move os filhos do painel para sua camada flutuante, e o atributo não muda mais nada. `popover` funciona da mesma forma nos navegadores que o suportam.
+
+```html
+<r-popover trigger="click">
+  <r-button>Language</r-button>
+  <r-content hidden>
+    <a href="/en/">English</a>
+    <a href="/zh-CN/">中文</a>
+  </r-content>
+</r-popover>
+```
+
 ## Boas práticas
 
 - **Elemento gatilho**: coloque um controle focável (por exemplo `<r-button>`) como gatilho, para que abrir e fechar pelo teclado funcione.
