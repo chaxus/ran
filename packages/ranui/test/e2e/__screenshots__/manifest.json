@@ -12,7 +12,7 @@
     "systemFontsSha256": "c339750d748e2a442eec2756219b1e49e9601fe3a6927100deea37040547d226",
     "systemFontFiles": 48,
     "localFontsSha256": "a95cd2bae45daa40ee591ea0ed3affc47db95cc32c42eb2f2f6f23c46f7b237e",
-    "harnessSha256": "a5ee2f7ac62f27c953eea14fac00f7b0a016e76b4cf9c819baf79720cbe52e90"
+    "harnessSha256": "e78639fc1498bf30a0997595790862463f0123059fc154797d380bedf4c312e4"
   },
   "image": "sha256:1e4036499dbd57ce025415082032606025c411f81e13296d8e1773a5e528db76",
   "snapshots": {
