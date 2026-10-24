@@ -152,6 +152,9 @@ importers:
       shiki:
         specifier: 4.4.3
         version: 4.4.3
+      vite:
+        specifier: 'catalog:'
+        version: 8.2.4(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10)
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -159,9 +162,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
-      vite:
-        specifier: 'catalog:'
-        version: 8.2.4(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10)
       vitest:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@26.1.2)(@vitest/coverage-v8@4.1.11)(jsdom@30.0.1)(vite@8.2.4(@types/node@26.1.2)(esbuild@0.28.1)(less@4.8.1)(terser@5.49.2)(tsx@4.23.10))
