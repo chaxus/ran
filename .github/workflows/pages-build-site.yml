@@ -8,11 +8,13 @@ on:
   push:
     branches:
       - main
+    # 跳转器的内容只由本文件决定;其他提交重新发布的是同一份字节。
+    paths:
+      - ".github/workflows/pages-build-site.yml"
+  workflow_dispatch:
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+# 发布用的是 RAN_ACTIONS_TOKEN,job 自带的 GITHUB_TOKEN 不做任何事,所以不给权限。
+permissions: {}
 
 # Two merges landing close together used to publish to gh-pages concurrently, and the
 # older run could finish last and leave the branch serving the previous commit's stub.
@@ -24,7 +26,9 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.repository == 'chaxus/ran'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Generate redirect stub
         run: |

@@ -45,7 +45,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
 
 # Pushing a fixup three times in a row used to start three complete pipelines —
 # build-test alone is four os/node combinations — and all three ran to completion.
