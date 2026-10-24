@@ -430,7 +430,7 @@
     }
   },
   "devDependencies": {
-    "@playwright/test": "1.62.1",
+    "@playwright/test": "catalog:",
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "jsdom": "30.0.1",
