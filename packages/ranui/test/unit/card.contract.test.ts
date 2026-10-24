@@ -213,6 +213,31 @@ describe('r-card contract', () => {
     }
   });
 
+  it('a changed sheet replaces the previous one, and removing it removes the styles', () => {
+    const originalCSSStyleSheet = window.CSSStyleSheet;
+    try {
+      (window as any).CSSStyleSheet = class {
+        replaceSync() {
+          throw new Error('force fallback');
+        }
+      };
+      const card = document.createElement('r-card') as Card;
+      document.body.appendChild(card);
+      const shadow = (card as any)._shadowDom as ShadowRoot;
+      const sheets = (): string[] =>
+        Array.from(shadow.querySelectorAll('style[data-ranui-sheet]')).map((s) => s.textContent ?? '');
+
+      card.setAttribute('sheet', '.ran-card { color: red; }');
+      card.setAttribute('sheet', '.ran-card { color: blue; }');
+      expect(sheets()).toEqual(['.ran-card { color: blue; }']);
+
+      card.removeAttribute('sheet');
+      expect(sheets()).toEqual([]);
+    } finally {
+      window.CSSStyleSheet = originalCSSStyleSheet;
+    }
+  });
+
   // ── attributeChangedCallback guards ──────────────────────────────────────
 
   it('attributeChangedCallback skips sync when oldValue === newValue', () => {
