@@ -447,7 +447,7 @@
     "mermaid": "11.16.1"
   },
   "dependencies": {
-    "dompurify": "3.4.16",
+    "dompurify": "3.4.17",
     "marked": "18.0.9",
     "ranuts": "workspace:*",
     "@alixex/ranview": "workspace:*",
