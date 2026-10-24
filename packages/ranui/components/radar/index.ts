@@ -44,6 +44,10 @@ export class RadarChart extends RanElement {
   resizeObserver: ResizeObserver;
   private _themeObserver?: MutationObserver;
   private _detachThemeMedia?: () => void;
+  /** Pending coalesced redraw; resize, theme and token writes in one frame draw once. */
+  private _frame = 0;
+  /** CSS variables resolved during one draw, so per-point color reads do not restyle. */
+  private _cssCache?: Map<string, string>;
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, radarCss);
@@ -60,7 +64,18 @@ export class RadarChart extends RanElement {
     this.resizeObserver = new ResizeObserver(this.resize);
   }
   resize = (): void => {
-    this.refreshData();
+    this.scheduleRefresh();
+  };
+  scheduleRefresh = (): void => {
+    if (this._frame) return;
+    if (typeof requestAnimationFrame === 'undefined') {
+      this.refreshData();
+      return;
+    }
+    this._frame = requestAnimationFrame(() => {
+      this._frame = 0;
+      this.refreshData();
+    });
   };
   get abilitys() {
     const item = this.getAttribute('abilitys');
@@ -84,7 +99,11 @@ export class RadarChart extends RanElement {
   }
   _cssVar(name: string): string {
     if (typeof getComputedStyle === 'undefined') return '';
-    return getComputedStyle(this).getPropertyValue(name).trim();
+    const cached = this._cssCache?.get(name);
+    if (cached !== undefined) return cached;
+    const value = getComputedStyle(this).getPropertyValue(name).trim();
+    this._cssCache?.set(name, value);
+    return value;
   }
   get colorPolygon() {
     return this.getAttribute('colorPolygon') || this._cssVar('--ran-radar-polygon-color') || POLYGON_COLOR;
@@ -123,6 +142,14 @@ export class RadarChart extends RanElement {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   refreshData() {
+    this._cssCache = new Map();
+    try {
+      this.draw();
+    } finally {
+      this._cssCache = undefined;
+    }
+  }
+  draw() {
     const ctx = this.abilityRadarChart.getContext('2d');
     if (!this.abilityRadarChartContainer || !ctx) return;
     const radio = getPixelRatio(ctx);
@@ -330,14 +357,16 @@ export class RadarChart extends RanElement {
   connectedCallback() {
     this.resizeObserver.observe(this.abilityRadarChartContainer);
     this.handlerExternalCss();
-    this._themeObserver = new MutationObserver(() => this.refreshData());
+    this._themeObserver = new MutationObserver(this.scheduleRefresh);
     this._themeObserver.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-ran-theme', 'theme', 'class', 'style'],
     });
-    this._detachThemeMedia = watchMediaQuery('(prefers-color-scheme: dark)', () => this.refreshData());
+    this._detachThemeMedia = watchMediaQuery('(prefers-color-scheme: dark)', this.scheduleRefresh);
   }
   disconnectedCallback() {
+    if (this._frame) cancelAnimationFrame(this._frame);
+    this._frame = 0;
     this.resizeObserver.disconnect();
     this._themeObserver?.disconnect();
     this._themeObserver = undefined;
