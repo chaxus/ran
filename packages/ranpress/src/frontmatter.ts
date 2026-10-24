@@ -128,32 +128,3 @@ export const parseFrontmatter = (raw: string, file: string): ParsedFile => {
   }
   return { data, content: lines.slice(end + 1).join('\n') };
 };
-
-// ── Typed accessors ─────────────────────────────────────────────────────────
-// Every read of a frontmatter field goes through one of these, so a post with a
-// mistyped field fails at build time naming the file, instead of rendering
-// "[object Object]" into a <title> that nobody looks at again.
-
-export const readString = (data: Frontmatter, key: string, file: string, fallback?: string): string => {
-  const v = data[key];
-  if (v === undefined || v === '') {
-    if (fallback !== undefined) return fallback;
-    throw new Error(`${file}: frontmatter is missing required "${key}"`);
-  }
-  if (typeof v !== 'string') throw new Error(`${file}: frontmatter "${key}" must be a string, got ${typeof v}`);
-  return v;
-};
-
-export const readList = (data: Frontmatter, key: string, file: string): string[] => {
-  const v = data[key];
-  if (v === undefined || v === '') return [];
-  if (Array.isArray(v)) return v;
-  throw new Error(`${file}: frontmatter "${key}" must be a list like [a, b]`);
-};
-
-export const readBoolean = (data: Frontmatter, key: string, file: string, fallback: boolean): boolean => {
-  const v = data[key];
-  if (v === undefined || v === '') return fallback;
-  if (typeof v !== 'boolean') throw new Error(`${file}: frontmatter "${key}" must be true or false`);
-  return v;
-};

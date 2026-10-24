@@ -7,16 +7,16 @@
  * itself. It has no opinion about what a page is, what URL it gets, or what it looks
  * like — those live in the consuming application.
  */
-export { parseFrontmatter, readString, readList, readBoolean } from './frontmatter.ts';
+export { parseFrontmatter } from './frontmatter.ts';
 export type { Frontmatter, FrontmatterValue, ParsedFile } from './frontmatter.ts';
 
-export { createMarkdown, slugify, stripCustomAnchor, truncate, DEFAULT_LANGS } from './markdown.ts';
+export { createMarkdown, slugify, truncate, DEFAULT_LANGS } from './markdown.ts';
 export type { ComponentRenderer, MarkdownOptions, MarkdownRenderer, RenderedMarkdown, TocEntry } from './markdown.ts';
 
-export { readSources, walkMarkdown } from './discover.ts';
+export { readSources } from './discover.ts';
 export type { SourceFile, WalkOptions } from './discover.ts';
 
-export { prepareDist, resolveAssets, writeOut, dropViteManifest } from './driver.ts';
+export { prepareDist, writeOut, dropViteManifest } from './driver.ts';
 export type { Assets, PrepareOptions } from './driver.ts';
 
 export { verifyDist, verifyOrExit } from './verify.ts';
@@ -25,12 +25,12 @@ export type { VerifyOptions, Failure } from './verify.ts';
 export { createDevServer, createPreviewServer } from './serve.ts';
 export type { DevServerOptions, ServeOptions, WatchTarget } from './serve.ts';
 
-export { resolveHost, followHost, mimeFor, MIME } from './host.ts';
+export { resolveHost, MIME } from './host.ts';
 export type { HostResolution } from './host.ts';
 
-export { renderSitemap, renderFeed, renderRobotsTxt } from './feeds.ts';
-export type { FeedItem, FeedOptions, SitemapEntry } from './feeds.ts';
+export { renderSitemap } from './feeds.ts';
+export type { SitemapEntry } from './feeds.ts';
 
-export { buildIndex, createIndex, tokenize, SEARCH_FIELDS } from './search.ts';
+export { buildIndex, tokenize, SEARCH_FIELDS } from './search.ts';
 export type { IndexablePage, SearchDoc } from './search.ts';
 export type { Section } from './markdown.ts';
