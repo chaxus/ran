@@ -129,3 +129,44 @@ test.describe('before definition, content the component hides stays off the page
     expect(await height(page, 'r-scratch')).toBe(120);
   });
 });
+
+// Overlay content can also be hidden by the browser itself, so it stays off the page even when
+// ranui.css is not loaded at all. These cases withhold the stylesheet.
+const mountBare = async (page: Page, markup: string): Promise<void> => {
+  await page.setContent(`<!doctype html><body>${markup}<p id="after">after</p></body>`);
+};
+
+test.describe('natively marked overlay content, without ranui.css', () => {
+  for (const marker of ['hidden', 'popover']) {
+    test(`r-popover hides <r-content ${marker}> until opened`, async ({ page }) => {
+      await mountBare(
+        page,
+        `<r-popover trigger="click"><span id="trigger">Open</span><r-content ${marker}><div class="list">${items(7, 'a')}</div></r-content></r-popover>`,
+      );
+      await expect(page.locator('.list')).toBeHidden();
+      expect(await height(page, 'r-popover')).toBeLessThan(30);
+
+      await upgrade(page, 'r-popover', 'popover', 'content');
+      await expect(page.locator('.list')).toBeHidden();
+      await page.locator('#trigger').click();
+      await expect(page.getByText('Item 7')).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(page.getByText('Item 7')).toBeHidden();
+    });
+
+    test(`r-select hides <r-option ${marker}> and still lists them`, async ({ page }) => {
+      await mountBare(
+        page,
+        `<r-select placeholder="Pick">${Array.from({ length: 6 }, (_, i) => `<r-option ${marker} value="${i}">Option ${i}</r-option>`).join('')}</r-select>`,
+      );
+      await expect(page.locator('r-option').first()).toBeHidden();
+
+      await upgrade(page, 'r-select', 'select');
+      await page.locator('r-select').click();
+      await expect.poll(() => page.locator('r-dropdown-item').count()).toBe(6);
+      await expect(page.locator('r-dropdown-item').last()).toBeVisible();
+      await page.locator('r-dropdown-item').nth(2).click();
+      await expect.poll(() => page.locator('r-select').evaluate((node) => (node as HTMLElement & { value: string }).value)).toBe('2');
+    });
+  }
+});
