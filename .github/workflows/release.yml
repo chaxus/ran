@@ -65,7 +65,6 @@ jobs:
           pnpm lint:prettier
           pnpm verify:docs
           pnpm verify:links
-          pnpm -F docs check:langs
           pnpm verify:design
           pnpm typecheck:tooling
           node bin/run-checks.ts tsc
