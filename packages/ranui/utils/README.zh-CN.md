@@ -23,7 +23,7 @@ import {
 | `getStringAttribute(element, name, fallback?)`             | 读取属性，并在属性不存在时返回字符串兜底值。                                  |
 | `setStringAttribute(element, name, value, options?)`       | 设置字符串属性；`removeEmpty: true` 会移除空值。                              |
 | `setBooleanAttribute(element, name, value, options?)`      | 设置或移除布尔属性，可选同步到 `aria-*` 属性。                                |
-| `syncSheetAttribute(host, root, name, oldValue, newValue)` | `sheet` 属性变化时，通过 `adoptSheetText` 应用动态样式。                      |
+| `syncSheetAttribute(host, root, name, oldValue, newValue)` | `sheet` 属性变化时，用当前值替换该 Shadow Root 的动态样式。                   |
 
 组件约定：
 
