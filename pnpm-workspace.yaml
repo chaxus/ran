@@ -24,7 +24,7 @@ overrides:
   nanoid: 3.3.18
   '@babel/core': 7.29.7
   # Keep jsdom's undici dependency on a patched release within its major version.
-  'undici@8': 8.10.2
+  'undici@8': 8.12.2
   # less pulls probe-image-size 7.3.x, whose SVG parser is vulnerable to ReDoS.
   probe-image-size: 7.4.0
   # Protect build/test source-map consumers against malicious indexed offsets.
