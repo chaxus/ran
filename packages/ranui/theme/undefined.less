@@ -1,0 +1,31 @@
+// Before its definition arrives (a deferred IIFE, a lazy chunk, a slow network), the browser
+// treats a component as an unknown inline element and lays its light-DOM children out in
+// flow. For the components below that is content the upgraded element hides, portals or
+// replaces, so it would flash on screen and push the page around until the upgrade
+// collapses it. Shadow styles cannot help: the shadow root does not exist yet. These rules
+// ship in ranui.css, which pages load before first paint, and stop matching the moment the
+// element is defined.
+
+// Hidden until opened, or rendered from source: nothing of it belongs on screen yet.
+r-content:not(:defined),
+r-popover:not(:defined) > r-content,
+r-select:not(:defined) > r-option,
+r-modal:not(:defined),
+r-route:not(:defined),
+r-reasoning:not(:defined),
+r-markdown:not(:defined),
+r-math:not(:defined),
+r-mermaid:not(:defined) {
+  display: none;
+}
+
+// Only one pane shows once upgraded; the first is the default.
+r-tabs:not(:defined) > r-tab:not(:first-of-type) {
+  display: none;
+}
+
+// The reveal content sits under a cover the component draws. Keep its box so the page does
+// not shift, but do not show the prize before the cover exists.
+r-scratch:not(:defined) {
+  visibility: hidden;
+}
