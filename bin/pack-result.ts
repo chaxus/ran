@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { object, text } from '../../../bin/tooling-json.ts';
+import { object, text } from './tooling-json.ts';
 
 /** npm 12 keys pack results by package name; npm 10/11 return an array. */
 export function packedFilename(value: unknown): string {

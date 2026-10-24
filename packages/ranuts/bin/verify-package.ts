@@ -1,4 +1,4 @@
-import { packedFilename } from './pack-result.ts';
+import { packedFilename } from '../../../bin/pack-result.ts';
 import { packageManifest, printCommandError } from '../../../bin/tooling-json.ts';
 /** Verify the tarball in a consumer with no repository paths or skipLibCheck. Build first. */
 import assert from 'node:assert/strict';
