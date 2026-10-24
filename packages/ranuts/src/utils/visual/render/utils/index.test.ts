@@ -23,6 +23,12 @@ describe('getRgb', () => {
     expect(getRgb('#abc')).toEqual([170, 187, 204]);
   });
 
+  it('keeps resolving correctly after many distinct colours evict older entries', () => {
+    for (let i = 0; i < 3000; i++) getRgb(`#${i.toString(16).padStart(6, '0')}`);
+    expect(getRgb('#000001')).toEqual([0, 0, 1]);
+    expect(getRgb('#000bb7')).toEqual([0, 11, 183]);
+  });
+
   it('returns the same result for a repeated colour (cache hit)', () => {
     expect(getRgb('#123456')).toEqual(getRgb('#123456'));
   });
