@@ -151,7 +151,7 @@
       ]
     }
   },
-  "homepage": "https://ran.chaxus.com/src/ranui/",
+  "homepage": "https://ran.chaxus.com/ranui/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chaxus/ran.git",

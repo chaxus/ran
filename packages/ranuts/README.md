@@ -49,7 +49,7 @@ The utility IIFE exposes `ranuts_utils`; the full `dist/iife/index.iife.js` expo
 
 ## Documentation
 
-- [ranuts](https://ran.chaxus.com/src/ranuts/)
+- [ranuts](https://ran.chaxus.com/ranuts/)
 - [API](./docs/API.md)
 - [Maintainer and agent reference](./CLAUDE.md)
 

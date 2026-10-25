@@ -54,7 +54,7 @@
   "bugs": {
     "url": "https://github.com/chaxus/ran/issues"
   },
-  "homepage": "https://ran.chaxus.com/src/ranuts/",
+  "homepage": "https://ran.chaxus.com/ranuts/",
   "files": [
     "dist",
     "typings.d.ts",

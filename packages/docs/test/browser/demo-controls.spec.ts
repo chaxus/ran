@@ -10,21 +10,21 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('message buttons load the imperative API without an existing toast', async ({ page }) => {
-  await page.goto('/src/ranui/message/');
+  await page.goto('/ranui/message/');
   await expect.poll(() => page.evaluate(() => typeof (window as any).message?.info)).toBe('function');
   await page.locator('ran-demo r-button').first().click();
   await expect(page.locator('r-message')).toHaveAttribute('content', 'This is a hint');
 });
 
 test('checkbox event feedback reports its new checked state', async ({ page }) => {
-  await page.goto('/src/ranui/checkbox/');
+  await page.goto('/ranui/checkbox/');
   await page.waitForFunction(() => customElements.get('r-checkbox'));
   await page.locator('ran-demo r-checkbox[onchange]').click();
   await expect(page.locator('r-message')).toHaveAttribute('content', 'checked: true');
 });
 
 test('live forms submit with one native button and preserve the documentation URL', async ({ page }) => {
-  await page.goto('/src/ranui/form/');
+  await page.goto('/ranui/form/');
   await page.waitForFunction(() => customElements.get('r-input') && customElements.get('r-select'));
   const forms = page.locator('ran-demo form');
   const before = page.url();
@@ -53,7 +53,7 @@ test('live forms submit with one native button and preserve the documentation UR
 });
 
 test('glass moves by dragging and keyboard, stays bounded, and resets', async ({ page }) => {
-  await page.goto('/src/ranui/glass/');
+  await page.goto('/ranui/glass/');
   await page.waitForFunction(() => customElements.get('r-glass'));
   const stage = page.locator('.gp-stage');
   const glass = page.locator('.gp-glass');
@@ -75,7 +75,7 @@ test('glass moves by dragging and keyboard, stays bounded, and resets', async ({
 for (const reducedMotion of ['no-preference', 'reduce'] as const) {
   test(`modal autofocus and footer keyboard navigation work with ${reducedMotion} motion`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion });
-    await page.goto('/src/ranui/modal/');
+    await page.goto('/ranui/modal/');
     await page.waitForFunction(() => customElements.get('r-modal') && customElements.get('r-button'));
     await page.locator('ran-demo r-button').first().click();
     const modal = page.locator('#quickstart-modal');

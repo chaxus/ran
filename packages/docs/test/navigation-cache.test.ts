@@ -150,6 +150,17 @@ it('does not turn a followed redirect into a cached page at the original URL', a
   expect(worker.documents.has(url)).toBe(false);
 });
 
+it('forgets a page whose URL was retired behind a redirect the browser follows', async () => {
+  const worker = harness(html('page at its retired /src/ URL', 'previous'));
+  const moved = new Response(null, { status: 200 });
+  Object.defineProperty(moved, 'type', { value: 'opaqueredirect' });
+  Object.defineProperty(moved, 'status', { value: 0 });
+  worker.finish(moved);
+  expect(await worker.response).toBe(moved);
+  await worker.settled();
+  expect(worker.documents.has(url)).toBe(false);
+});
+
 it('returns a network error when offline and no saved page exists', async () => {
   const worker = harness();
   worker.fail(new TypeError('offline'));

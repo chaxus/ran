@@ -10,7 +10,7 @@
  * publishing.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import { join, relative, sep } from 'node:path';
 import { followHost } from './host.ts';
 
 export interface VerifyOptions {
@@ -159,7 +159,10 @@ export const verifyDist = ({ distDir, origin, notFoundFiles = ['404.html'] }: Ve
         fail(rel, `malformed media URL: ${raw}`);
         continue;
       }
-      const target = path.startsWith('/') ? join(DIST_DIR, path) : join(dirname(file), path);
+      // Resolve the way the browser does, against the page's own URL: `..` past the root
+      // stays at the root instead of escaping the output directory.
+      const page = relative(DIST_DIR, file).split(sep).join('/');
+      const target = join(DIST_DIR, decodeURI(new URL(encodeURI(path), `https://x/${page}`).pathname));
       if (!existsSync(target)) fail(rel, `missing media: ${src}`);
     }
   }

@@ -718,10 +718,10 @@ Color-only state signals are covered by D-ACCESS-2.
 
 > Companion documents: [CODING.md](./CODING.md) is the engineering standard for the same code
 > (architecture, state ownership, events, testing). The consumer-facing versions are published
-> as [Design system](https://ran.chaxus.com/src/ranui/design-system/),
-> [Design guidelines](https://ran.chaxus.com/src/ranui/design-guides/),
-> [Information architecture](https://ran.chaxus.com/src/ranui/information-architecture/) and
-> [Coding guidelines](https://ran.chaxus.com/src/ranui/coding-guides/) — update those when a
+> as [Design system](https://ran.chaxus.com/ranui/design-system/),
+> [Design guidelines](https://ran.chaxus.com/ranui/design-guides/),
+> [Information architecture](https://ran.chaxus.com/ranui/information-architecture/) and
+> [Coding guidelines](https://ran.chaxus.com/ranui/coding-guides/) — update those when a
 > rule here changes in a way consumers can see.
 
 Each rule carries an ID and a level, with the meanings defined in [DESIGN](./DESIGN.md); the

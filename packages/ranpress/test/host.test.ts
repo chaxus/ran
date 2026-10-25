@@ -11,7 +11,7 @@ import { describe, expect, it, beforeAll, afterAll } from 'vitest';
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { followHost, resolveHost } from '../src/host.ts';
+import { followHost, followRedirects, matchRedirect, parseRedirects, resolveHost } from '../src/host.ts';
 
 let dist: string;
 
@@ -46,11 +46,11 @@ describe('resolveHost', () => {
   });
 
   it('redirects the extensionless URL of a directory to its trailing-slash form', () => {
-    expect(resolveHost(dist, '/blog')).toEqual({ kind: 'redirect', to: '/blog/' });
+    expect(resolveHost(dist, '/blog')).toEqual({ kind: 'redirect', to: '/blog/', status: 308 });
   });
 
   it('redirects in reverse when the page is a leaf .html', () => {
-    expect(resolveHost(dist, '/about/')).toEqual({ kind: 'redirect', to: '/about' });
+    expect(resolveHost(dist, '/about/')).toEqual({ kind: 'redirect', to: '/about', status: 308 });
   });
 
   it('does not reverse-redirect an exact file', () => {
@@ -102,5 +102,52 @@ describe('followHost', () => {
 
   it('returns null when nothing resolves', () => {
     expect(followHost(dist, '/nope')).toBeNull();
+  });
+});
+
+describe('_redirects', () => {
+  const rules = parseRedirects(
+    [
+      '# a retired page, then the trees that moved',
+      '/old/page /about 301',
+      '/old/* /blog/:splat',
+      '/*.html /:splat 301',
+    ].join('\n'),
+  );
+
+  it('parses `from to [status]`, defaulting to 301', () => {
+    expect(rules).toEqual([
+      { from: '/old/page', to: '/about', status: 301 },
+      { from: '/old/*', to: '/blog/:splat', status: 301 },
+      { from: '/*.html', to: '/:splat', status: 301 },
+    ]);
+  });
+
+  it('rejects the forms it would otherwise misread', () => {
+    expect(() => parseRedirects('/a/:id /b/:id 301')).toThrow(/named placeholders/);
+    expect(() => parseRedirects('/a/* /b 200')).toThrow(/not a redirect/);
+    expect(() => parseRedirects('/a/*/b/* /c 301')).toThrow(/more than one/);
+  });
+
+  it('takes the first matching rule and fills in the splat', () => {
+    expect(matchRedirect(rules, '/old/page')).toEqual({ to: '/about', status: 301 });
+    expect(matchRedirect(rules, '/old/x/y/')).toEqual({ to: '/blog/x/y/', status: 301 });
+    expect(matchRedirect(rules, '/old/')).toEqual({ to: '/blog/', status: 301 });
+    expect(matchRedirect(rules, '/old')).toBeNull();
+  });
+
+  it('applies a redirect before an existing file, as the host does', () => {
+    expect(resolveHost(dist, '/about.html', rules)).toEqual({ kind: 'redirect', to: '/about', status: 301 });
+  });
+
+  it('follows every hop and counts them', () => {
+    expect(followRedirects(dist, '/old/page', rules)).toEqual({ file: join(dist, 'about.html'), hops: 1 });
+    expect(followRedirects(dist, '/old', rules)).toBeNull();
+    // `/old/` → `/blog/` (rule) → served: one hop.
+    expect(followRedirects(dist, '/old/', rules)?.hops).toBe(1);
+  });
+
+  it('stops a redirect loop', () => {
+    expect(followRedirects(dist, '/a', parseRedirects('/a /b\n/b /a'))).toBeNull();
   });
 });

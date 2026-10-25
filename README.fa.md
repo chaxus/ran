@@ -15,7 +15,7 @@
   <a href="./LICENSE"><img src="https://img.shields.io/github/license/chaxus/ran" alt="مجوز MIT"></a>
 </p>
 
-<p align="center"><a href="https://ran.chaxus.com/fa/">مستندات</a> · <a href="https://ran.chaxus.com/fa/src/ranui/">کامپوننت‌ها</a> · <a href="https://ran.chaxus.com/fa/src/agents/">عامل‌ها</a></p>
+<p align="center"><a href="https://ran.chaxus.com/fa/">مستندات</a> · <a href="https://ran.chaxus.com/fa/ranui/">کامپوننت‌ها</a> · <a href="https://ran.chaxus.com/fa/agents/">عامل‌ها</a></p>
 <p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">中文</a> · <a href="./README.ja.md">日本語</a> · <a href="./README.es.md">Español</a> · <a href="./README.pt.md">Português</a> · <a href="./README.ko.md">한국어</a> · <a href="./README.de.md">Deutsch</a> · <b>فارسی</b></p>
 
 ran سه بخش دارد که هر کدام جداگانه قابل استفاده است: **ranui**، کامپوننت‌های رابط کاربری ساخته‌شده با عنصرهای سفارشی بومی؛ **ranuts**، ابزارهای TypeScript با تایپ؛ و **Ran Design**، روش‌هایی برای چیدمان، تعامل و بازبینی که انسان‌ها و عامل‌های برنامه‌نویسی در هر پشتهٔ فناوری می‌توانند به کار ببرند.
@@ -62,7 +62,7 @@ import 'ranui/button';
 import 'ranui/style';
 ```
 
-ranui در مرحلهٔ آلفا است و نسخه‌های جدید ممکن است تغییرات ناسازگار داشته باشند؛ پس در محیط عملیاتی نسخهٔ دقیق را ثابت کنید. [مستندات کامپوننت‌ها](https://ran.chaxus.com/fa/src/ranui/) نمونه‌های زنده، رویدادها و سبک‌دهی هر عنصر را دارد.
+ranui در مرحلهٔ آلفا است و نسخه‌های جدید ممکن است تغییرات ناسازگار داشته باشند؛ پس در محیط عملیاتی نسخهٔ دقیق را ثابت کنید. [مستندات کامپوننت‌ها](https://ran.chaxus.com/fa/ranui/) نمونه‌های زنده، رویدادها و سبک‌دهی هر عنصر را دارد.
 
 ## استفاده با عامل برنامه‌نویسی
 
@@ -76,7 +76,7 @@ claude plugin marketplace add chaxus/ran && claude plugin install ran@ran
 codex plugin marketplace add chaxus/ran && codex plugin add ran@ran
 ```
 
-در یک نشست جدید، در Claude Code از `/ran:design`، `/ran:ranui` یا `/ran:ranuts` و در Codex از `$design`، `$ranui` یا `$ranuts` استفاده کنید. برای نصب از یک کپی محلی [راهنمای عامل‌ها](https://ran.chaxus.com/fa/src/agents/) را ببینید؛ خود مهارت‌ها در [plugins/ran](./plugins/ran/) هستند.
+در یک نشست جدید، در Claude Code از `/ran:design`، `/ran:ranui` یا `/ran:ranuts` و در Codex از `$design`، `$ranui` یا `$ranuts` استفاده کنید. برای نصب از یک کپی محلی [راهنمای عامل‌ها](https://ran.chaxus.com/fa/agents/) را ببینید؛ خود مهارت‌ها در [plugins/ran](./plugins/ran/) هستند.
 
 ## مشارکت
 

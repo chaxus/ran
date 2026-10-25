@@ -5,7 +5,7 @@ const pdf = await readFile(new URL('./fixtures/two-pages.pdf', import.meta.url))
 const longPdf = await readFile(new URL('./fixtures/thirty-pages.pdf', import.meta.url));
 
 async function open(page: Page) {
-  await page.goto('/src/ranui/preview/', { waitUntil: 'domcontentloaded' });
+  await page.goto('/ranui/preview/', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => customElements.get('r-preview'));
   await page.evaluate(() => {
     const preview = document.querySelector('r-preview')!;
@@ -43,7 +43,7 @@ test.beforeEach(async ({ page }) => {
 test('ordinary documentation pages do not fetch preview or PDF resources', async ({ page }) => {
   const requests: string[] = [];
   page.on('request', (request) => requests.push(request.url()));
-  await page.goto('/src/ranui/button/', { waitUntil: 'domcontentloaded' });
+  await page.goto('/ranui/button/', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => customElements.get('r-button'));
   expect(await page.evaluate(() => Boolean(customElements.get('r-preview')))).toBe(false);
   expect(requests.filter((url) => /preview-0\.3\.0|\/pdf-|\/pdfjs\//.test(url))).toEqual([]);

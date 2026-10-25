@@ -78,7 +78,7 @@ setTheme('system');
 
 ## Documentación
 
-[ranui](https://ran.chaxus.com/es/src/ranui/)
+[ranui](https://ran.chaxus.com/es/ranui/)
 
 - [API de componentes](./docs/COMPONENTS.md)
 - [Estilos y tokens](./docs/style-tokens-public.md)

@@ -15,7 +15,7 @@
   <a href="./LICENSE"><img src="https://img.shields.io/github/license/chaxus/ran" alt="licencia MIT"></a>
 </p>
 
-<p align="center"><a href="https://ran.chaxus.com/es/">Documentación</a> · <a href="https://ran.chaxus.com/es/src/ranui/">Componentes</a> · <a href="https://ran.chaxus.com/es/src/agents/">Agentes</a></p>
+<p align="center"><a href="https://ran.chaxus.com/es/">Documentación</a> · <a href="https://ran.chaxus.com/es/ranui/">Componentes</a> · <a href="https://ran.chaxus.com/es/agents/">Agentes</a></p>
 <p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">中文</a> · <a href="./README.ja.md">日本語</a> · <b>Español</b> · <a href="./README.pt.md">Português</a> · <a href="./README.ko.md">한국어</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.fa.md">فارسی</a></p>
 
 ran tiene tres partes que se pueden usar por separado: **ranui**, componentes de interfaz creados como elementos personalizados nativos; **ranuts**, utilidades de TypeScript con tipos; y **Ran Design**, métodos de maquetación, interacción y revisión que personas y agentes de programación pueden aplicar en cualquier stack.
@@ -62,7 +62,7 @@ import 'ranui/button';
 import 'ranui/style';
 ```
 
-ranui está en fase alfa y sus versiones pueden incluir cambios incompatibles, así que fija una versión exacta en producción. La [documentación de componentes](https://ran.chaxus.com/es/src/ranui/) tiene ejemplos en vivo, eventos y estilos de cada elemento.
+ranui está en fase alfa y sus versiones pueden incluir cambios incompatibles, así que fija una versión exacta en producción. La [documentación de componentes](https://ran.chaxus.com/es/ranui/) tiene ejemplos en vivo, eventos y estilos de cada elemento.
 
 ## Uso con un agente de programación
 
@@ -76,7 +76,7 @@ claude plugin marketplace add chaxus/ran && claude plugin install ran@ran
 codex plugin marketplace add chaxus/ran && codex plugin add ran@ran
 ```
 
-En una sesión nueva, usa `/ran:design`, `/ran:ranui` o `/ran:ranuts` en Claude Code, o `$design`, `$ranui` o `$ranuts` en Codex. Para instalarlo desde una copia local, consulta la [guía de agentes](https://ran.chaxus.com/es/src/agents/); las skills están en [plugins/ran](./plugins/ran/).
+En una sesión nueva, usa `/ran:design`, `/ran:ranui` o `/ran:ranuts` en Claude Code, o `$design`, `$ranui` o `$ranuts` en Codex. Para instalarlo desde una copia local, consulta la [guía de agentes](https://ran.chaxus.com/es/agents/); las skills están en [plugins/ran](./plugins/ran/).
 
 ## Contribuir
 

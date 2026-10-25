@@ -49,7 +49,7 @@ console.log(rgbToHex(1, 2, 3)); // #010203
 
 ## ドキュメント
 
-- [ranuts](https://ran.chaxus.com/ja/src/ranuts/)
+- [ranuts](https://ran.chaxus.com/ja/ranuts/)
 - [API](./docs/API.md)
 - [メンテナーと Agent 向け資料](./CLAUDE.md)
 

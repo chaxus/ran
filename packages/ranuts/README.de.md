@@ -49,7 +49,7 @@ Das Utility-IIFE stellt `ranuts_utils` bereit, das vollständige `dist/iife/inde
 
 ## Dokumentation
 
-- [ranuts](https://ran.chaxus.com/de/src/ranuts/)
+- [ranuts](https://ran.chaxus.com/de/ranuts/)
 - [API](./docs/API.md)
 - [Referenz für Maintainer und Agents](./CLAUDE.md)
 

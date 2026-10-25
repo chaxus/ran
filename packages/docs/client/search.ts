@@ -148,10 +148,12 @@ export const mountSearch = (): void => {
       if (retry) retry.hidden = !failed;
       return;
     }
-    const section = location.pathname.match(/\/src\/(ranui|ranuts|article|note)\//)?.[1];
+    // The reader's current tree (`/ranui/`, `/cn/articles/`…) ranks first.
+    const section = location.pathname.match(/^(?:\/[a-z]{2})?\/(design|agents|ranui|ranuts|articles|notes)\//)?.[1];
     hits = (index.search(query) as unknown as Hit[])
       .sort((a, b) => {
-        const score = (hit: Hit): number => hit.score * (section && hit.url.includes(`/src/${section}/`) ? 1.15 : 1);
+        const score = (hit: Hit): number =>
+          hit.score * (section && new RegExp(`^(?:/[a-z]{2})?/${section}/`).test(hit.url) ? 1.15 : 1);
         return score(b) - score(a);
       })
       .slice(0, LIMIT);

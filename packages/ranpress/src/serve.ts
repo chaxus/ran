@@ -20,7 +20,7 @@ import { createServer } from 'node:http';
 import type { IncomingMessage, Server, ServerResponse } from 'node:http';
 import { existsSync, readFileSync, watch } from 'node:fs';
 import { join } from 'node:path';
-import { MIME, mimeFor, resolveHost } from './host.ts';
+import { MIME, mimeFor, readRedirects, resolveHost } from './host.ts';
 
 export interface ServeOptions {
   distDir: string;
@@ -51,7 +51,8 @@ const respond =
   (req: IncomingMessage, res: ServerResponse): void => {
     const serveNotFound = notFoundResponder(distDir, notFoundFile);
     const url = req.url ?? '/';
-    const result = resolveHost(distDir, url);
+    // Read per request: the dev server rebuilds `_redirects` along with everything else.
+    const result = resolveHost(distDir, url, readRedirects(distDir));
 
     if (result.kind === 'redirect') {
       /*
@@ -77,7 +78,7 @@ const respond =
         serveNotFound(res);
         return;
       }
-      res.writeHead(308, { location: `${location.pathname}${location.search}` });
+      res.writeHead(result.status, { location: `${location.pathname}${location.search}` });
       res.end();
       return;
     }

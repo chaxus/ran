@@ -5,6 +5,7 @@ import { expect, it } from 'vitest';
 import { LOCALES, localeHref } from '../build/langs/locales.ts';
 import { navFor } from '../build/nav.ts';
 import { renderHome } from '../build/components.ts';
+import { publicUrl } from '../build/urls.ts';
 
 it.each(LOCALES)('makes all three pillars and agent guidance reachable in $lang without JavaScript', (locale) => {
   document.body.innerHTML = renderHome(locale);
@@ -15,12 +16,13 @@ it.each(LOCALES)('makes all three pillars and agent guidance reachable in $lang 
     href: link.getAttribute('href'),
   }));
   expect(pillars).toEqual([
-    { title: 'ranui', href: localeHref('/src/ranui/', locale) },
-    { title: 'ranuts', href: localeHref('/src/ranuts/', locale) },
-    { title: 'Ran Design', href: localeHref('/src/design/', locale) },
+    { title: 'ranui', href: publicUrl(localeHref('/src/ranui/', locale)) },
+    { title: 'ranuts', href: publicUrl(localeHref('/src/ranuts/', locale)) },
+    { title: 'Ran Design', href: publicUrl(localeHref('/src/design/', locale)) },
   ]);
   for (const section of ['design', 'ranui', 'ranuts', 'agents']) {
-    const path = localeHref(`/src/${section}/`, locale);
+    const path = publicUrl(localeHref(`/src/${section}/`, locale));
+    expect(path).not.toContain('/src/');
     expect(links, `${locale.lang}: home → ${section}`).toContain(path);
     const entry = navigation.find((item) => item.link === path);
     expect(entry?.text.trim(), `${locale.lang}: navigation → ${section}`).toBeTruthy();

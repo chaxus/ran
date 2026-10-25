@@ -31,11 +31,11 @@ test.describe('native global navigation', () => {
       await expect(navigation).toBeVisible();
       const articlePrefix = ['', '/cn'].includes(prefix) ? prefix : '';
       const destinations = [
-        `${prefix}/src/design/`,
-        `${prefix}/src/ranui/`,
-        `${prefix}/src/ranuts/`,
-        `${articlePrefix}/src/article/doc_preview`,
-        `${prefix}/src/agents/`,
+        `${prefix}/design/`,
+        `${prefix}/ranui/`,
+        `${prefix}/ranuts/`,
+        `${articlePrefix}/articles/doc_preview`,
+        `${prefix}/agents/`,
         'https://edit.chaxus.com/',
       ];
       expect(
@@ -69,12 +69,7 @@ test.describe('native global navigation', () => {
 for (const width of [320, 900]) {
   test(`prose and demo grids fit their actual column at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 720 });
-    for (const path of [
-      '/src/article/doc_preview',
-      '/cn/src/ranui/loading/',
-      '/cn/src/ranui/glass/',
-      '/cn/src/ranui/preview/',
-    ]) {
+    for (const path of ['/articles/doc_preview', '/cn/ranui/loading/', '/cn/ranui/glass/', '/cn/ranui/preview/']) {
       await page.goto(path);
       if (path.includes('loading')) await page.waitForFunction(() => customElements.get('r-loading'));
       if (path.includes('glass')) await page.waitForFunction(() => customElements.get('r-glass'));
@@ -96,7 +91,7 @@ for (const width of [320, 900]) {
 for (const prefix of ['/cn', '/fa']) {
   test(`the language menu remains usable in a short touch viewport on ${prefix}`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 320 });
-    await page.goto(`${prefix}/src/ranui/`);
+    await page.goto(`${prefix}/ranui/`);
     await page.locator('.langs__summary').click();
     const menu = page.locator('.langs__list');
     expect(await menu.evaluate((element) => element.getBoundingClientRect().bottom)).toBeLessThanOrEqual(320);
@@ -109,7 +104,7 @@ for (const prefix of ['/cn', '/fa']) {
 test('both outline copies reflect the current heading', async ({ page }) => {
   await page.setViewportSize({ width: 900, height: 720 });
   await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'dark' });
-  await page.goto('/cn/src/ranui/');
+  await page.goto('/cn/ranui/');
   await page.locator('.prose h2').nth(1).scrollIntoViewIfNeeded();
   const id = await page.locator('.prose h2').nth(1).getAttribute('id');
   await page.evaluate((target) => document.getElementById(target!)!.scrollIntoView({ block: 'start' }), id);

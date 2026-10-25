@@ -10,6 +10,7 @@
 import { renderSitemap } from 'ranpress';
 import { LOCALES, ORIGIN, ROOT_LOCALE, SITE } from './config.ts';
 import type { DocContent, DocPage } from './content.ts';
+import { pageUrl } from './urls.ts';
 
 const escapeHtml = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -20,13 +21,7 @@ const meta = (attr: 'name' | 'property', key: string, content: string): string =
 export const absoluteUrl = (path: string): string => `${ORIGIN}${path}`;
 
 /** The URL this page would have in another locale, whether or not it exists. */
-const urlIn = (page: DocPage, dir: string): string => {
-  const stem = page.baseRel.replace(/\.md$/, '');
-  const prefix = dir ? `/${dir}` : '';
-  if (stem === 'index') return `${prefix}/`;
-  if (stem.endsWith('/index')) return `${prefix}/${stem.slice(0, -'index'.length)}`;
-  return `${prefix}/${stem}`;
-};
+const urlIn = (page: DocPage, dir: string): string => pageUrl(page.baseRel, dir);
 
 export const headFor = (page: DocPage, content: DocContent): string[] => {
   // Served from every wrong URL there is, so a canonical would claim a different page

@@ -15,7 +15,7 @@
   <a href="./LICENSE"><img src="https://img.shields.io/github/license/chaxus/ran" alt="MIT ライセンス"></a>
 </p>
 
-<p align="center"><a href="https://ran.chaxus.com/ja/">ドキュメント</a> · <a href="https://ran.chaxus.com/ja/src/ranui/">コンポーネント</a> · <a href="https://ran.chaxus.com/ja/src/agents/">エージェント</a></p>
+<p align="center"><a href="https://ran.chaxus.com/ja/">ドキュメント</a> · <a href="https://ran.chaxus.com/ja/ranui/">コンポーネント</a> · <a href="https://ran.chaxus.com/ja/agents/">エージェント</a></p>
 <p align="center"><a href="./README.md">English</a> · <a href="./README.zh-CN.md">中文</a> · <b>日本語</b> · <a href="./README.es.md">Español</a> · <a href="./README.pt.md">Português</a> · <a href="./README.ko.md">한국어</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.fa.md">فارسی</a></p>
 
 ran は 3 つの部分からなり、それぞれ単独で使えます。**ranui** はネイティブのカスタム要素で作られた UI コンポーネント、**ranuts** は型付きの TypeScript ユーティリティ、**Ran Design** はどの技術スタックでも人とコーディングエージェントが使えるレイアウト・インタラクション・レビューの手法です。
@@ -62,7 +62,7 @@ import 'ranui/button';
 import 'ranui/style';
 ```
 
-ranui はアルファ版で、リリースに破壊的変更が含まれることがあります。本番では正確なバージョンを固定してください。各要素のライブ例、イベント、スタイルは[コンポーネントのドキュメント](https://ran.chaxus.com/ja/src/ranui/)にあります。
+ranui はアルファ版で、リリースに破壊的変更が含まれることがあります。本番では正確なバージョンを固定してください。各要素のライブ例、イベント、スタイルは[コンポーネントのドキュメント](https://ran.chaxus.com/ja/ranui/)にあります。
 
 ## コーディングエージェントで使う
 
@@ -76,7 +76,7 @@ claude plugin marketplace add chaxus/ran && claude plugin install ran@ran
 codex plugin marketplace add chaxus/ran && codex plugin add ran@ran
 ```
 
-新しいセッションで、Claude Code では `/ran:design`、`/ran:ranui`、`/ran:ranuts` を、Codex では `$design`、`$ranui`、`$ranuts` を使います。ローカルのチェックアウトからインストールする方法は[エージェントガイド](https://ran.chaxus.com/ja/src/agents/)を、スキル本体は [plugins/ran](./plugins/ran/) を参照してください。
+新しいセッションで、Claude Code では `/ran:design`、`/ran:ranui`、`/ran:ranuts` を、Codex では `$design`、`$ranui`、`$ranuts` を使います。ローカルのチェックアウトからインストールする方法は[エージェントガイド](https://ran.chaxus.com/ja/agents/)を、スキル本体は [plugins/ran](./plugins/ran/) を参照してください。
 
 ## 開発に参加する
 

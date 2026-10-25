@@ -12,6 +12,7 @@ import type { MarkdownRenderer, Section, TocEntry } from 'ranpress';
 import { setRenderContext } from './render-context.ts';
 import { LOCALES, ROOT_LOCALE, SITE } from './config.ts';
 import type { LocaleDef } from './config.ts';
+import { pageUrl, sourceUrl } from './urls.ts';
 
 export type DocKind = 'page' | 'notfound';
 
@@ -27,8 +28,13 @@ export interface DocPage {
    * another rather than unrelated URLs.
    */
   baseRel: string;
-  /** Site-absolute URL, extensionless. */
+  /** Site-absolute public URL, extensionless: `/cn/ranui/button/`. */
   url: string;
+  /**
+   * The URL the source tree implies, `/cn/src/ranui/button/`. Markdown links are written
+   * against it, so relative links resolve from here; it is also the retired public URL.
+   */
+  sourceUrl: string;
   outFile: string;
   title: string;
   description: string;
@@ -48,15 +54,6 @@ const kindFor = (rel: string): DocKind => (rel === '404.md' ? 'notfound' : 'page
 const localeOf = (rel: string): LocaleDef => {
   const head = rel.split('/')[0];
   return LOCALES.find((locale) => locale.dir && locale.dir === head) ?? ROOT_LOCALE;
-};
-
-/** `src/ranui/index.md` → `/src/ranui/`; `index.md` → `/`. */
-const urlForBase = (baseRel: string, locale: LocaleDef): string => {
-  const stem = baseRel.replace(/\.md$/, '');
-  const prefix = locale.dir ? `/${locale.dir}` : '';
-  if (stem === 'index') return `${prefix}/`;
-  if (stem.endsWith('/index')) return `${prefix}/${stem.slice(0, -'index'.length)}`;
-  return `${prefix}/${stem}`;
 };
 
 /**
@@ -116,7 +113,8 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
     const kind = kindFor(rel);
     const locale = localeOf(rel);
     const baseRel = locale.dir ? rel.slice(locale.dir.length + 1) : rel;
-    const url = urlForBase(baseRel, locale);
+    const url = pageUrl(baseRel, locale.dir);
+    const source = sourceUrl(baseRel, locale.dir);
 
     const clash = seen.get(url);
     if (clash) throw new Error(`${label}: URL ${url} is already produced by ${clash}`);
@@ -124,7 +122,7 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
 
     // The component renderers need the page's language; link resolution needs the page
     // a relative path is relative to.
-    setRenderContext({ locale, url });
+    setRenderContext({ locale, url: source });
     const { html, toc, excerpt, sections } = markdown.render(content);
     const fmTitle = typeof data.title === 'string' ? data.title : '';
     const fmDescription = typeof data.description === 'string' ? data.description : '';
@@ -144,6 +142,7 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
       locale,
       baseRel,
       url,
+      sourceUrl: source,
       outFile: outFileFor(url, kind),
       title,
       description,
