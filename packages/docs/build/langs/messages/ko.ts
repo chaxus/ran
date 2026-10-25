@@ -243,6 +243,9 @@ const ko: LocaleMessages = {
   },
   ui: {
     outline: '이 페이지 목차',
+    componentApi: 'API',
+    componentTokens: '스타일 토큰',
+    componentSource: '소스',
     returnToTop: '맨 위로',
     sidebarMenu: '메뉴',
     darkModeSwitch: '화면 모드',

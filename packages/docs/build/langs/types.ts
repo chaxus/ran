@@ -51,6 +51,10 @@ export interface LocaleMessages {
 /** Chrome the site renders itself, so it needs a translation per locale. */
 export interface UiMessages {
   outline: string;
+  /** Under a component page's title: its generated API entry, style tokens and source. */
+  componentApi: string;
+  componentTokens: string;
+  componentSource: string;
   returnToTop: string;
   sidebarMenu: string;
   darkModeSwitch: string;

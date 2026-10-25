@@ -243,6 +243,9 @@ const es: LocaleMessages = {
   },
   ui: {
     outline: 'En esta página',
+    componentApi: 'API',
+    componentTokens: 'Tokens de estilo',
+    componentSource: 'Código fuente',
     returnToTop: 'Volver arriba',
     sidebarMenu: 'Menú',
     darkModeSwitch: 'Apariencia',

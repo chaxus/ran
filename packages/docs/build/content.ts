@@ -15,6 +15,7 @@ import { LOCALES, ROOT_LOCALE, SITE } from './config.ts';
 import type { LocaleDef } from './config.ts';
 import { pageUrl, sourceUrl } from './urls.ts';
 import { designReferenceSources } from './design-reference.ts';
+import { componentFacts } from './component-facts.ts';
 
 export type DocKind = 'page' | 'notfound';
 
@@ -115,12 +116,16 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
     ...source,
     data: { title: source.title } as Frontmatter,
   }));
-  for (const { rel, label, data, content } of [...sources, ...designReference]) {
+  const factsFor = componentFacts(root);
+  for (const { rel, label, data, content: source } of [...sources, ...designReference]) {
     const kind = kindFor(rel);
     const locale = localeOf(rel);
     const baseRel = locale.dir ? rel.slice(locale.dir.length + 1) : rel;
     const url = pageUrl(baseRel, locale.dir);
-    const source = sourceUrl(baseRel, locale.dir);
+    const legacy = sourceUrl(baseRel, locale.dir);
+    // A component page's title is followed by its element names and reference links.
+    const facts = factsFor(baseRel, locale);
+    const content = facts ? source.replace(/^# .+$/m, (title) => `${title}\n\n${facts}\n`) : source;
 
     const clash = seen.get(url);
     if (clash) throw new Error(`${label}: URL ${url} is already produced by ${clash}`);
@@ -128,7 +133,7 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
 
     // The component renderers need the page's language; link resolution needs the page
     // a relative path is relative to.
-    setRenderContext({ locale, url: source });
+    setRenderContext({ locale, url: legacy });
     const { html, toc, excerpt, sections } = markdown.render(content);
     const fmTitle = typeof data.title === 'string' ? data.title : '';
     const fmDescription = typeof data.description === 'string' ? data.description : '';
@@ -148,7 +153,7 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
       locale,
       baseRel,
       url,
-      sourceUrl: source,
+      sourceUrl: legacy,
       outFile: outFileFor(url, kind),
       title,
       description,
