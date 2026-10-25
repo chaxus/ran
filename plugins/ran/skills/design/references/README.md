@@ -10,6 +10,7 @@ capabilities; use the existing product’s visual language and implementation co
 | Find the relevant owner                                    | [Task index](./INTERFACE_GUIDE.md)          |
 | Structure, proportion, wording, visual coherence or motion | [Design](./DESIGN.md)                       |
 | Input, focus, progress and recovery                        | [Interaction](./INTERACTION.md)             |
+| Every graded rule with its level and proof                 | [Rule index](./RULES.md)                    |
 | A supported multi-step workflow                            | [Optional patterns](./WORKFLOW_PATTERNS.md) |
 | Browser proof, recordings and evidence freshness           | [Acceptance](./ACCEPTANCE.md)               |
 | Research an unresolved design question                     | [References](./REFERENCE_RESEARCH.md)       |

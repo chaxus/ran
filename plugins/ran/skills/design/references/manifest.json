@@ -4,21 +4,21 @@
   "sources": [
     {
       "source": "design/ACCEPTANCE.md",
-      "sha256": "27981d3f8ecc8edab6b17a5a47f1ec0b7ef1d0868dffbd1526fc6e9472396cec",
+      "sha256": "d75ecc4e72b39c5aa4d93d63fca5a263510b7ef57ff900a4ec68c20040b4d839",
       "output": "ACCEPTANCE.md",
-      "outputSha256": "ea4da86a81b3cc81f42f15a852d253d5cbc97db3c0f1176472a9e0b41421cf3c"
+      "outputSha256": "aa0ecd99d01831a926c9e191074e7dd99180073310743e3a87a3120a5a208197"
     },
     {
       "source": "design/DESIGN.md",
-      "sha256": "87b6fa30179fea6dd20d6b9d2eedc6e3421f1bec624c500357d5e0da923ea6b3",
+      "sha256": "d86047263a277d826b78f47be9047347c185644519848182f201bd88290ec023",
       "output": "DESIGN.md",
-      "outputSha256": "cfc4e6451444b4da4db4df4b96b3cca7a2358f5c3beee850eb56159a0d0919c1"
+      "outputSha256": "9ab31940344312fc9ec6e8a3a0d72e91b5b041147c96f9db3655c020d3856d8b"
     },
     {
       "source": "design/INTERACTION.md",
-      "sha256": "539cdaa4527eca61cfe6098f2759d63396ec17215a7bfc444518cb8981c41b95",
+      "sha256": "90a0634789c55b6b63d3e54f2cabbd71ac817ee53c9dd576142373bcb6548be2",
       "output": "INTERACTION.md",
-      "outputSha256": "677d911bbd22abc1214d25360d36809e3e1ad3c57f079d9c0b080ac5fa91eac7"
+      "outputSha256": "8b8e14163a0e576ca034ec55ccc7103f422ef48a7d5167927760e67e82fb30f2"
     },
     {
       "source": "design/INTERFACE_GUIDE.md",
@@ -28,9 +28,9 @@
     },
     {
       "source": "design/README.md",
-      "sha256": "18071bb2be15f839ccfb1a1ffe46f5d4725faeadb0f5d2040cb1fe4a65381926",
+      "sha256": "7556995d30a8b1630ab0056a13c32e74eb48b6ceafa2e9eca440cc11328a80a5",
       "output": "README.md",
-      "outputSha256": "08cbaf0b5bee3bd92dfc4804ff90c2df1f74f562d813a4494cf26dd03c19677a"
+      "outputSha256": "7049f0e282f25484f5830882b56a88beee0a8fe9f5c3d015ad7869e2a995e455"
     },
     {
       "source": "design/REFERENCE_RESEARCH.md",
@@ -39,10 +39,16 @@
       "outputSha256": "815f6889cb4838b2f1eaf09031e8b75ef1b8109672657068700fc7f780fe58b0"
     },
     {
+      "source": "design/RULES.md",
+      "sha256": "90c1776aa1e745e8c635f6395105c1e617ddb87dafb512b416947c6dd9d5ea70",
+      "output": "RULES.md",
+      "outputSha256": "ac8c03b4435291145a95f722da1a98b99ebe307d8be099d6734a5b09472595a2"
+    },
+    {
       "source": "design/WORKFLOW_PATTERNS.md",
-      "sha256": "ae519b57ea95ca0c5ea27481df7e62bdda90cd6b55872bcb3c02a9ff7b72e0e3",
+      "sha256": "232d8bec54146854cf08dafad9aaad32604fd10764c4a598d2d494aa34fb0c78",
       "output": "WORKFLOW_PATTERNS.md",
-      "outputSha256": "b163aa489e0cce0ee8ea113bbae9ddbe997c16b9426bdb23cc1727d34c14f076"
+      "outputSha256": "11a2428dba51d5a76771dc722f702a1b430ef8a0fc8802fca50309b5e64a341e"
     }
   ]
 }

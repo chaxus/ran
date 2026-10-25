@@ -10,6 +10,7 @@ export const guideNames = [
   'WORKFLOW_PATTERNS',
   'REFERENCE_RESEARCH',
   'INTERFACE_GUIDE',
+  'RULES',
 ] as const;
 const repository = fileURLToPath(new URL('../', import.meta.url));
 
@@ -24,7 +25,7 @@ export async function renderDesignDocs(root: string): Promise<Map<string, string
       .replaceAll('https://github.com/chaxus/ran/blob/main/packages/ranui/docs/', './')
       .replaceAll('https://github.com/chaxus/ran/blob/main/packages/ranui/CLAUDE.md', '../CLAUDE.md');
     const sources = [source];
-    if (name === 'DESIGN' || name === 'INTERACTION') {
+    if (name === 'DESIGN' || name === 'INTERACTION' || name === 'RULES') {
       const adapter = `packages/ranui/docs/adapters/${name}.md`;
       sources.push(adapter);
       content += `\n---\n\n${(await readFile(resolve(root, adapter), 'utf8')).replaceAll('](../', '](./').replaceAll('](./../CLAUDE.md)', '](../CLAUDE.md)')}`;
