@@ -4,9 +4,9 @@ import { test, expect } from '@playwright/test';
 test.use({ javaScriptEnabled: false });
 
 for (const variant of [
-  { name: 'wide Chinese', path: '/cn/src/ranui/', width: 1512, height: 861, theme: 'light' },
-  { name: 'short desktop', path: '/src/ranui/', width: 900, height: 540, theme: 'dark' },
-  { name: 'Persian RTL', path: '/fa/src/ranui/', width: 1512, height: 861, theme: 'dark' },
+  { name: 'wide Chinese', path: '/cn/ranui/', width: 1512, height: 861, theme: 'light' },
+  { name: 'short desktop', path: '/ranui/', width: 900, height: 540, theme: 'dark' },
+  { name: 'Persian RTL', path: '/fa/ranui/', width: 1512, height: 861, theme: 'dark' },
 ] as const) {
   test(`${variant.name} keeps all components reachable while reading a long page`, async ({ page }) => {
     await page.setViewportSize({ width: variant.width, height: variant.height });
@@ -40,7 +40,7 @@ for (const variant of [
   });
 }
 
-for (const path of ['/cn/src/ranui/', '/fa/src/ranui/']) {
+for (const path of ['/cn/ranui/', '/fa/ranui/']) {
   test(`the narrow drawer still opens and scrolls without a client bundle on ${path}`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 720 });
     await page.emulateMedia({ reducedMotion: 'reduce' });

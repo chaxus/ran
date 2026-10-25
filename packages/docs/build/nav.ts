@@ -15,6 +15,7 @@ import { localeHref, prefixOf } from './langs/locales.ts';
 import { messagesFor } from './langs/index.ts';
 import type { SidebarNode } from './langs/types.ts';
 import type { LocaleDef } from './config.ts';
+import { publicUrl } from './urls.ts';
 
 export interface NavLink {
   text: string;
@@ -46,10 +47,14 @@ const label = (node: SidebarNode, labels: Record<string, string>): string => {
 
 const isExternal = (link: string): boolean => /^https?:\/\//.test(link);
 
+/** A structure link (a source path) as the URL this locale's reader follows. */
+const siteLink = (link: string, locale: LocaleDef): string =>
+  isExternal(link) ? link : publicUrl(localeHref(link, locale));
+
 const resolveItems = (nodes: SidebarNode[], locale: LocaleDef, labels: Record<string, string>): SidebarItem[] =>
   nodes.map((node) => {
     const item: SidebarItem = { text: node.kind ? label(node, labels) : '' };
-    if (node.link) item.link = isExternal(node.link) ? node.link : localeHref(node.link, locale);
+    if (node.link) item.link = siteLink(node.link, locale);
     if (node.collapsed !== undefined) item.collapsed = node.collapsed;
     if (node.items) item.items = resolveItems(node.items, locale, labels);
     return item;
@@ -59,13 +64,13 @@ export const navFor = (locale: LocaleDef): NavLink[] => {
   const { labels } = messagesFor(locale);
   return NAV.map((node) => {
     const raw = node.link ?? '/';
-    const link = isExternal(raw) ? raw : localeHref(raw, locale);
+    const link = siteLink(raw, locale);
     const item: NavLink = { text: label(node, labels), link };
     if (isExternal(raw)) item.external = true;
     if (node.activeMatch) {
       // Prefix the pattern exactly when the link itself was prefixed, so an entry that
       // falls back to the English pages also highlights on the English routes.
-      item.activeMatch = `^${link === raw ? '' : prefixOf(locale)}${node.activeMatch}`;
+      item.activeMatch = `^${localeHref(raw, locale) === raw ? '' : prefixOf(locale)}${node.activeMatch}`;
     }
     return item;
   });
@@ -79,7 +84,7 @@ export const navFor = (locale: LocaleDef): NavLink[] => {
 export const sidebarFor = (url: string, locale: LocaleDef): SidebarItem[] => {
   const { labels } = messagesFor(locale);
   const candidates = Object.keys(SIDEBAR)
-    .map((key) => [key, localeHref(key, locale)] as const)
+    .map((key) => [key, siteLink(key, locale)] as const)
     .filter(([, prefixed]) => url.startsWith(prefixed))
     .sort((a, b) => b[1].length - a[1].length);
   const match = candidates[0];

@@ -49,7 +49,7 @@ IIFE ابزارها `ranuts_utils` و بسته کامل `dist/iife/index.iife.js
 
 ## مستندات
 
-- [ranuts](https://ran.chaxus.com/fa/src/ranuts/)
+- [ranuts](https://ran.chaxus.com/fa/ranuts/)
 - [API](./docs/API.md)
 - [مرجع نگهدارندگان و Agentها](./CLAUDE.md)
 

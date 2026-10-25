@@ -22,6 +22,7 @@ import { localeHref } from './langs/locales.ts';
 import type { LocaleDef } from './config.ts';
 import { currentLinkBase, currentLocale } from './render-context.ts';
 import { resolveLinkFrom } from './links.ts';
+import { publicUrl } from './urls.ts';
 
 /** The component hooks the markdown renderer is configured with. */
 export const componentRenderers = {
@@ -126,7 +127,7 @@ const liveSource = (t: ReturnType<typeof homeCopy>): string =>
 
 export const renderHome = (locale: LocaleDef): string => {
   const t = homeCopy(locale.dir);
-  const href = (path: string): string => localeHref(path, locale);
+  const href = (path: string): string => publicUrl(localeHref(path, locale));
   // Languages that opt out of word splitting — the CJK headlines and Persian — render as
   // one segment: word units either do not exist there or are not worth reordering an
   // RTL line for.

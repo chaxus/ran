@@ -54,6 +54,15 @@ describe('verifyDist media', () => {
     expect(mediaFailures()).toEqual([]);
   });
 
+  it('resolves a relative src the way the browser does, clamping `..` at the site root', () => {
+    // A page served one level shallower than its source keeps working in the browser:
+    // `../../../assets` from `/articles/sort/` stops at `/`.
+    dist = mkdtempSync(join(tmpdir(), 'ranpress-verify-'));
+    put('assets/sort.png');
+    put('articles/sort/index.html', page('/articles/sort/', '<img src="../../../assets/sort.png" alt="">'));
+    expect(mediaFailures()).toEqual([]);
+  });
+
   it('checks <source> inside a video', () => {
     dist = mkdtempSync(join(tmpdir(), 'ranpress-verify-'));
     put('src/a.html', page('/src/a', '<video controls><source src="../assets/gone.mp4" type="video/mp4"></video>'));

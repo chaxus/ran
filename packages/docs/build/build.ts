@@ -6,7 +6,7 @@
  * canonicals, every hreflang set and all 17,216 heading anchors identical before
  * anything was switched. This is the build that ships.
  */
-import { cpSync } from 'node:fs';
+import { cpSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildIndex, createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ranpress';
@@ -16,7 +16,9 @@ import { loadDocs } from './content.ts';
 import { renderDoc } from './page.ts';
 import { designIllustrationFiles } from './design-illustrations.ts';
 import { createOfflineManifest } from './offline.ts';
-import { generatedFiles, headFor } from './seo.ts';
+import { absoluteUrl, generatedFiles, headFor } from './seo.ts';
+import { legacyRedirects } from './urls.ts';
+import type { DocContent } from './content.ts';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const DIST_DIR = join(ROOT, 'dist');
@@ -78,6 +80,31 @@ export interface DocsBuildResult {
   written: string[];
 }
 
+const REDIRECTS_MARKER = '# @generated legacyRedirects';
+
+/** `public/_redirects` with its marker replaced by the retired-URL rules. */
+const redirectsFile = (): string => {
+  const source = readFileSync(join(ROOT, 'public/_redirects'), 'utf8');
+  if (!source.includes(REDIRECTS_MARKER)) throw new Error(`public/_redirects: missing "${REDIRECTS_MARKER}"`);
+  return source.replace(REDIRECTS_MARKER, legacyRedirects().join('\n'));
+};
+
+/**
+ * Every prose page's markdown in one file, each block headed by its public URL, for a model
+ * to read the whole site at once. Only the source trees: the home pages are a component.
+ */
+const llmsFull = (content: DocContent): string => {
+  const blocks = content.pages
+    .filter((page) => page.baseRel.startsWith('src/'))
+    .sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0))
+    .map((page) => {
+      const rule = '='.repeat(64);
+      const source = readFileSync(join(ROOT, page.locale.dir, page.baseRel), 'utf8');
+      return `${rule}\n# ${absoluteUrl(page.url)}\n${rule}\n\n${source}\n\n`;
+    });
+  return `# ran — full documentation corpus\n# ${ORIGIN}  •  auto-generated at build time\n\n${blocks.join('')}`;
+};
+
 export const build = async (options: { skipAssets?: boolean } = {}): Promise<DocsBuildResult> => {
   await markdown.init();
   const content = loadDocs(ROOT, markdown);
@@ -97,6 +124,9 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
     writeOut(DIST_DIR, page.outFile, renderDoc({ page, head: headFor(page, content), assets, urls: content.urls }));
     written.push(page.outFile);
   }
+  writeOut(DIST_DIR, '_redirects', redirectsFile());
+  writeOut(DIST_DIR, 'llms-full.txt', llmsFull(content));
+  written.push('_redirects', 'llms-full.txt');
   for (const [name, body] of generatedFiles(content)) {
     writeOut(DIST_DIR, name, body);
     written.push(name);

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const path = '/src/ranui/button/';
+const path = '/ranui/button/';
 
 test('the enhanced mobile drawer cycles focus without entering unrelated header controls', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 720 });

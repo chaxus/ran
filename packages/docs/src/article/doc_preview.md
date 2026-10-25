@@ -281,7 +281,7 @@ And so on — we just need to parse and render each part according to the standa
 
 Full source code: [ranui](https://github.com/chaxus/ran/tree/main/packages/ranui)
 
-Usage docs: [preview component](https://ran.chaxus.com/src/ranui/preview/)
+Usage docs: [preview component](https://ran.chaxus.com/ranui/preview/)
 
 ### 2. pdf Preview Solutions
 
@@ -322,7 +322,7 @@ If you run into this, you can use an older version, which doesn't have this rest
 Usage details are as follows:
 
 - Full source code: https://github.com/chaxus/ran/tree/main/packages/ranui
-- Usage docs: https://ran.chaxus.com/src/ranui/preview/
+- Usage docs: https://ran.chaxus.com/ranui/preview/
 
 ```ts
 import * as pdfjs from 'pdfjs-dist';
@@ -500,13 +500,13 @@ For `xlsx` preview, this is the best one I've found.
 
 ### 5. Summary of Frontend Preview Solutions
 
-We refined and consolidated the excellent solutions found above, and packaged them into a `web components` component: [preview component](https://ran.chaxus.com/src/ranui/preview/)
+We refined and consolidated the excellent solutions found above, and packaged them into a `web components` component: [preview component](https://ran.chaxus.com/ranui/preview/)
 
 Why a `web components` component?
 
 Because it's framework-agnostic — it can be used in any framework, and is as convenient to use as a native `div` tag.
 
-We also wrote usage documentation: [preview component docs](https://ran.chaxus.com/src/ranui/preview/), which supports an interactive experience.
+We also wrote usage documentation: [preview component docs](https://ran.chaxus.com/ranui/preview/), which supports an interactive experience.
 
 The source is public, under the `MIT` license.
 

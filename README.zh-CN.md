@@ -15,7 +15,7 @@
   <a href="./LICENSE"><img src="https://img.shields.io/github/license/chaxus/ran" alt="MIT 许可证"></a>
 </p>
 
-<p align="center"><a href="https://ran.chaxus.com/cn/">文档</a> · <a href="https://ran.chaxus.com/cn/src/ranui/">组件</a> · <a href="https://ran.chaxus.com/cn/src/agents/">Agent</a></p>
+<p align="center"><a href="https://ran.chaxus.com/cn/">文档</a> · <a href="https://ran.chaxus.com/cn/ranui/">组件</a> · <a href="https://ran.chaxus.com/cn/agents/">Agent</a></p>
 <p align="center"><a href="./README.md">English</a> · <b>中文</b> · <a href="./README.ja.md">日本語</a> · <a href="./README.es.md">Español</a> · <a href="./README.pt.md">Português</a> · <a href="./README.ko.md">한국어</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.fa.md">فارسی</a></p>
 
 ran 由三部分组成，每部分都能单独使用：**ranui** 是基于原生自定义元素的界面组件库；**ranuts** 是带类型的 TypeScript 工具函数；**Ran Design** 是一套布局、交互和验收方法，人和编程 agent 在任何技术栈里都能照着做。
@@ -62,7 +62,7 @@ import 'ranui/button';
 import 'ranui/style';
 ```
 
-ranui 还在 alpha 阶段，新版本可能包含不兼容的改动，生产环境请锁定具体版本号。每个组件的在线示例、事件和样式定制见[组件文档](https://ran.chaxus.com/cn/src/ranui/)。
+ranui 还在 alpha 阶段，新版本可能包含不兼容的改动，生产环境请锁定具体版本号。每个组件的在线示例、事件和样式定制见[组件文档](https://ran.chaxus.com/cn/ranui/)。
 
 ## 配合编程 agent 使用
 
@@ -76,7 +76,7 @@ claude plugin marketplace add chaxus/ran && claude plugin install ran@ran
 codex plugin marketplace add chaxus/ran && codex plugin add ran@ran
 ```
 
-新开一个会话后，在 Claude Code 里用 `/ran:design`、`/ran:ranui` 或 `/ran:ranuts`，在 Codex 里用 `$design`、`$ranui` 或 `$ranuts`。想从本地仓库安装，看 [Agent 指南](https://ran.chaxus.com/cn/src/agents/)；技能本身在 [plugins/ran](./plugins/ran/)。
+新开一个会话后，在 Claude Code 里用 `/ran:design`、`/ran:ranui` 或 `/ran:ranuts`，在 Codex 里用 `$design`、`$ranui` 或 `$ranuts`。想从本地仓库安装，看 [Agent 指南](https://ran.chaxus.com/cn/agents/)；技能本身在 [plugins/ran](./plugins/ran/)。
 
 ## 参与开发
 

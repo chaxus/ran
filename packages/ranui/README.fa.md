@@ -78,7 +78,7 @@ setTheme('system');
 
 ## مستندات
 
-[ranui](https://ran.chaxus.com/fa/src/ranui/)
+[ranui](https://ran.chaxus.com/fa/ranui/)
 
 - [API مؤلفه‌ها](./docs/COMPONENTS.md)
 - [سبک و توکن‌ها](./docs/style-tokens-public.md)

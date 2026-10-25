@@ -78,7 +78,7 @@ setTheme('system');
 
 ## 문서
 
-[ranui](https://ran.chaxus.com/ko/src/ranui/)
+[ranui](https://ran.chaxus.com/ko/ranui/)
 
 - [컴포넌트 API](./docs/COMPONENTS.md)
 - [스타일과 토큰](./docs/style-tokens-public.md)

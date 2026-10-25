@@ -34,7 +34,7 @@ Server-side implementation:
 
 The `web`-side source code has been open-sourced under the `MIT` license. If this helps after you finish reading, feel free to `star`, file `issue`s, or send `pr`s — I'd also love to have a friendly discussion~
 
-Demo: https://ran.chaxus.com/src/ranui/player/
+Demo: https://ran.chaxus.com/ranui/player/
 
 Source code: https://github.com/chaxus/ran
 
@@ -834,7 +834,7 @@ By default, it looks like this
 
 ![image.png](../../assets/article/video/rplayer_demo.webp)
 
-Demo: https://ran.chaxus.com/src/ranui/player/
+Demo: https://ran.chaxus.com/ranui/player/
 
 Source code: https://github.com/chaxus/ran
 
@@ -872,7 +872,7 @@ At this point, from both the front-end and back-end sides, we've implemented
 
 Here are the `demo` and source code links:
 
-`demo` and documentation: https://ran.chaxus.com/src/ranui/player/
+`demo` and documentation: https://ran.chaxus.com/ranui/player/
 
 Source code: https://github.com/chaxus/ran
 

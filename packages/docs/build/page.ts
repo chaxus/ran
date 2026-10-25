@@ -24,6 +24,7 @@ import {
 import type { LocaleDef } from './config.ts';
 import type { DocPage } from './content.ts';
 import { navFor, prevNextFor, sidebarFor } from './nav.ts';
+import { pageUrl } from './urls.ts';
 import type { SidebarItem } from './nav.ts';
 import { messagesFor } from './langs/index.ts';
 import { interactionCopy } from '../client/copy.ts';
@@ -79,13 +80,7 @@ const tocHtml = (page: DocPage, label: string): string => {
  * and then 404s is worse than one that offers fewer.
  */
 const langMenuHtml = (page: DocPage, urls: ReadonlySet<string>, label: string): string => {
-  const stem = page.baseRel.replace(/\.md$/, '');
-  const urlIn = (dir: string): string => {
-    const prefix = dir ? `/${dir}` : '';
-    if (stem === 'index') return `${prefix}/`;
-    if (stem.endsWith('/index')) return `${prefix}/${stem.slice(0, -'index'.length)}`;
-    return `${prefix}/${stem}`;
-  };
+  const urlIn = (dir: string): string => pageUrl(page.baseRel, dir);
   const options = LOCALES.filter((locale) => urls.has(urlIn(locale.dir)));
   if (options.length < 2) return '';
   const items = options

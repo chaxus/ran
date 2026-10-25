@@ -56,8 +56,11 @@ const SERVICE_WORK = {
 const updateCache = async (fetchedResponse, request) => {
   const { url } = request
   const { status } = fetchedResponse
-  // A removed or redirected route must stop serving its previous cached document.
-  if (request.mode === 'navigate' && (fetchedResponse.redirected || status === 404 || status === 410)) {
+  // A removed or redirected route must stop serving its previous cached document. A
+  // navigation's own fetch does not follow redirects: a retired URL answers with an
+  // `opaqueredirect`, which the browser then follows.
+  if (request.mode === 'navigate' && (fetchedResponse.redirected || fetchedResponse.type === 'opaqueredirect' ||
+    status === 404 || status === 410)) {
     try { await removeDocument(url); } catch { /* Optional storage. */ }
     return
   }

@@ -49,7 +49,7 @@ El IIFE de utilidades expone `ranuts_utils`; el completo `dist/iife/index.iife.j
 
 ## Documentación
 
-- [ranuts](https://ran.chaxus.com/es/src/ranuts/)
+- [ranuts](https://ran.chaxus.com/es/ranuts/)
 - [API](./docs/API.md)
 - [Referencia para mantenedores y agentes](./CLAUDE.md)
 

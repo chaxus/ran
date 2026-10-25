@@ -9,31 +9,31 @@
 # First match wins — keep the catch-all `.html` rule LAST.
 #
 # ── Articles (all pruned article slugs → the surviving flagship article) ──────
-/src/article/design_mode /src/article/doc_preview 301
-/src/article/babel /src/article/doc_preview 301
-/src/article/bundle /src/article/doc_preview 301
-/src/article/imagemin /src/article/doc_preview 301
-/src/article/system_design /src/article/doc_preview 301
-/src/article/ast_parse/tokenizer /src/article/doc_preview 301
-/src/article/javascript/dom_load /src/article/doc_preview 301
-/src/article/typescript /src/article/doc_preview 301
-/src/article/typescript/ /src/article/doc_preview 301
-/src/article/typescript/* /src/article/doc_preview 301
+/src/article/design_mode /articles/doc_preview 301
+/src/article/babel /articles/doc_preview 301
+/src/article/bundle /articles/doc_preview 301
+/src/article/imagemin /articles/doc_preview 301
+/src/article/system_design /articles/doc_preview 301
+/src/article/ast_parse/tokenizer /articles/doc_preview 301
+/src/article/javascript/dom_load /articles/doc_preview 301
+/src/article/typescript /articles/doc_preview 301
+/src/article/typescript/ /articles/doc_preview 301
+/src/article/typescript/* /articles/doc_preview 301
 
-/cn/src/article/design_mode /cn/src/article/doc_preview 301
-/cn/src/article/babel /cn/src/article/doc_preview 301
-/cn/src/article/bundle /cn/src/article/doc_preview 301
-/cn/src/article/imagemin /cn/src/article/doc_preview 301
-/cn/src/article/system_design /cn/src/article/doc_preview 301
-/cn/src/article/ast_parse/tokenizer /cn/src/article/doc_preview 301
-/cn/src/article/javascript/dom_load /cn/src/article/doc_preview 301
-/cn/src/article/typescript /cn/src/article/doc_preview 301
-/cn/src/article/typescript/ /cn/src/article/doc_preview 301
-/cn/src/article/typescript/* /cn/src/article/doc_preview 301
+/cn/src/article/design_mode /cn/articles/doc_preview 301
+/cn/src/article/babel /cn/articles/doc_preview 301
+/cn/src/article/bundle /cn/articles/doc_preview 301
+/cn/src/article/imagemin /cn/articles/doc_preview 301
+/cn/src/article/system_design /cn/articles/doc_preview 301
+/cn/src/article/ast_parse/tokenizer /cn/articles/doc_preview 301
+/cn/src/article/javascript/dom_load /cn/articles/doc_preview 301
+/cn/src/article/typescript /cn/articles/doc_preview 301
+/cn/src/article/typescript/ /cn/articles/doc_preview 301
+/cn/src/article/typescript/* /cn/articles/doc_preview 301
 
 # ── Notes (ubuntu note removed → the surviving Linux note) ───────────────────
-/src/note/ubuntu /src/note/centos 301
-/cn/src/note/ubuntu /cn/src/note/centos 301
+/src/note/ubuntu /notes/centos 301
+/cn/src/note/ubuntu /cn/notes/centos 301
 
 # ── Blockchain section (removed entirely → home) ─────────────────────────────
 /src/blockchain / 301
@@ -44,45 +44,51 @@
 /cn/src/blockchain/* /cn/ 301
 
 # ── ranui components (renamed / removed → current equivalents) ───────────────
-/src/ranui/tabs /src/ranui/tab/ 301
-/src/ranui/tabs/ /src/ranui/tab/ 301
-/src/ranui/video /src/ranui/player/ 301
-/src/ranui/video/ /src/ranui/player/ 301
-/cn/src/ranui/tabs /cn/src/ranui/tab/ 301
-/cn/src/ranui/tabs/ /cn/src/ranui/tab/ 301
-/cn/src/ranui/video /cn/src/ranui/player/ 301
-/cn/src/ranui/video/ /cn/src/ranui/player/ 301
+/src/ranui/tabs /ranui/tab/ 301
+/src/ranui/tabs/ /ranui/tab/ 301
+/src/ranui/video /ranui/player/ 301
+/src/ranui/video/ /ranui/player/ 301
+/cn/src/ranui/tabs /cn/ranui/tab/ 301
+/cn/src/ranui/tabs/ /cn/ranui/tab/ 301
+/cn/src/ranui/video /cn/ranui/player/ 301
+/cn/src/ranui/video/ /cn/ranui/player/ 301
 
 # ── ranuts (removed sections → library overview, removed utils → closest live) ─
-/src/ranuts/binary_tree /src/ranuts/ 301
-/src/ranuts/binary_tree/ /src/ranuts/ 301
-/src/ranuts/bundler /src/ranuts/ 301
-/src/ranuts/bundler/ /src/ranuts/ 301
-/src/ranuts/mode/subscribe /src/ranuts/utils/create_signal 301
-/src/ranuts/utils/change_hump_to_lower_case /src/ranuts/utils/ 301
-/src/ranuts/utils/get_host /src/ranuts/utils/ 301
-/src/ranuts/utils/get_query /src/ranuts/utils/querystring 301
-/src/ranuts/utils/is_bang_device /src/ranuts/utils/ 301
-/src/ranuts/utils/ocr /src/ranuts/utils/ 301
-/src/ranuts/utils/remove_ghosting /src/ranuts/utils/ 301
-/src/ranuts/utils/retain /src/ranuts/utils/ 301
-/src/ranuts/utils/set_attribute_by_global /src/ranuts/utils/ 301
-/src/ranuts/utils/str2xml /src/ranuts/utils/ 301
+/src/ranuts/binary_tree /ranuts/ 301
+/src/ranuts/binary_tree/ /ranuts/ 301
+/src/ranuts/bundler /ranuts/ 301
+/src/ranuts/bundler/ /ranuts/ 301
+/src/ranuts/mode/subscribe /ranuts/utils/create_signal 301
+/src/ranuts/utils/change_hump_to_lower_case /ranuts/utils/ 301
+/src/ranuts/utils/get_host /ranuts/utils/ 301
+/src/ranuts/utils/get_query /ranuts/utils/querystring 301
+/src/ranuts/utils/is_bang_device /ranuts/utils/ 301
+/src/ranuts/utils/ocr /ranuts/utils/ 301
+/src/ranuts/utils/remove_ghosting /ranuts/utils/ 301
+/src/ranuts/utils/retain /ranuts/utils/ 301
+/src/ranuts/utils/set_attribute_by_global /ranuts/utils/ 301
+/src/ranuts/utils/str2xml /ranuts/utils/ 301
 
-/cn/src/ranuts/binary_tree /cn/src/ranuts/ 301
-/cn/src/ranuts/binary_tree/ /cn/src/ranuts/ 301
-/cn/src/ranuts/bundler /cn/src/ranuts/ 301
-/cn/src/ranuts/bundler/ /cn/src/ranuts/ 301
-/cn/src/ranuts/mode/subscribe /cn/src/ranuts/utils/create_signal 301
-/cn/src/ranuts/utils/change_hump_to_lower_case /cn/src/ranuts/utils/ 301
-/cn/src/ranuts/utils/get_host /cn/src/ranuts/utils/ 301
-/cn/src/ranuts/utils/get_query /cn/src/ranuts/utils/querystring 301
-/cn/src/ranuts/utils/is_bang_device /cn/src/ranuts/utils/ 301
-/cn/src/ranuts/utils/ocr /cn/src/ranuts/utils/ 301
-/cn/src/ranuts/utils/remove_ghosting /cn/src/ranuts/utils/ 301
-/cn/src/ranuts/utils/retain /cn/src/ranuts/utils/ 301
-/cn/src/ranuts/utils/set_attribute_by_global /cn/src/ranuts/utils/ 301
-/cn/src/ranuts/utils/str2xml /cn/src/ranuts/utils/ 301
+/cn/src/ranuts/binary_tree /cn/ranuts/ 301
+/cn/src/ranuts/binary_tree/ /cn/ranuts/ 301
+/cn/src/ranuts/bundler /cn/ranuts/ 301
+/cn/src/ranuts/bundler/ /cn/ranuts/ 301
+/cn/src/ranuts/mode/subscribe /cn/ranuts/utils/create_signal 301
+/cn/src/ranuts/utils/change_hump_to_lower_case /cn/ranuts/utils/ 301
+/cn/src/ranuts/utils/get_host /cn/ranuts/utils/ 301
+/cn/src/ranuts/utils/get_query /cn/ranuts/utils/querystring 301
+/cn/src/ranuts/utils/is_bang_device /cn/ranuts/utils/ 301
+/cn/src/ranuts/utils/ocr /cn/ranuts/utils/ 301
+/cn/src/ranuts/utils/remove_ghosting /cn/ranuts/utils/ 301
+/cn/src/ranuts/utils/retain /cn/ranuts/utils/ 301
+/cn/src/ranuts/utils/set_attribute_by_global /cn/ranuts/utils/ 301
+/cn/src/ranuts/utils/str2xml /cn/ranuts/utils/ 301
+
+# ── Clean URLs: the retired `/src/…` trees ──────────────────────────────────
+# The build replaces the next line with the rules from build/urls.ts, one hop from every
+# old `/src/` and `/<lang>/src/` URL to its page. They follow the specific rules above
+# and precede the `.html` catch-alls below; the host takes the first match.
+# @generated legacyRedirects
 
 # ── Legacy `.html` URLs (GitHub Pages era) → extensionless ───────────────────
 # VitePress cleanUrls serves `/foo` from `foo.html`; a direct `/foo.html`
