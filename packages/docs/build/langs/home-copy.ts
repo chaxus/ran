@@ -82,17 +82,28 @@ export interface HomeStrings {
   startStep2: string;
   copy: string;
   liveLabel: string;
-  /**
-   * Labels on the live demo's three buttons — primary, default, warning — in that order.
-   * They name the button *variants* on show, so they are translated as variant names, not
-   * as whatever action a real application would put on those buttons.
-   */
-  liveButtons: [string, string, string];
-  /** Label beside the live demo's checkbox. */
-  liveCheck: string;
   liveNote: string;
+  /** The hero's working example: inviting a teammate, with its states and the rules it follows. */
+  example: ExampleCopy;
   /** Titles and descriptions for `FEATURE_KINDS`, in that order. */
   features: [Pair2, Pair2, Pair2, Pair2];
+}
+
+/** `{email}` and `{role}` are filled in by the client; keep them in every translation. */
+export interface ExampleCopy {
+  title: string;
+  email: string;
+  emailPlaceholder: string;
+  role: string;
+  /** Viewer, editor, admin, in that order. */
+  roles: [string, string, string];
+  submit: string;
+  sending: string;
+  invalid: string;
+  sent: string;
+  failed: string;
+  simulate: string;
+  rules: string;
 }
 
 interface Pair2 {
@@ -181,10 +192,22 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     startStep1: 'Install & register',
     startStep2: 'Use anywhere',
     copy: 'Copy install command',
-    liveLabel: 'Live',
-    liveButtons: ['Primary', 'Default', 'Warning'],
-    liveCheck: 'Subscribe',
-    liveNote: 'Real ranui components, running right on this page.',
+    liveLabel: 'Example',
+    liveNote: 'Real ranui components. Leave the email empty, or simulate a failure, to see each state.',
+    example: {
+      title: 'Invite a teammate',
+      email: 'Work email',
+      emailPlaceholder: 'ada@company.com',
+      role: 'Role',
+      roles: ['Viewer', 'Editor', 'Admin'],
+      submit: 'Send invite',
+      sending: 'Sending…',
+      invalid: 'Enter an email address, like ada@company.com.',
+      sent: 'Invitation sent to {email} as {role}.',
+      failed: "The invitation wasn't sent. Your entries are still here; try again.",
+      simulate: 'Simulate a failed request',
+      rules: 'Rules this example follows',
+    },
     features: [
       { title: 'Works everywhere', desc: 'Standards-based custom elements run in any framework, or none at all.' },
       { title: 'Fully typed', desc: 'Written in TypeScript, shipped with declarations end to end.' },
@@ -242,10 +265,22 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     startStep1: '安装并注册',
     startStep2: '随处使用',
     copy: '复制安装命令',
-    liveLabel: '实时',
-    liveButtons: ['主要', '默认', '警告'],
-    liveCheck: '订阅',
-    liveNote: '真实的 ranui 组件，就运行在这个页面上。',
+    liveLabel: '示例',
+    liveNote: '真实的 ranui 组件。不填邮箱或模拟失败，就能看到每种状态。',
+    example: {
+      title: '邀请成员',
+      email: '工作邮箱',
+      emailPlaceholder: 'ada@company.com',
+      role: '角色',
+      roles: ['只读', '编辑', '管理员'],
+      submit: '发送邀请',
+      sending: '发送中…',
+      invalid: '请输入邮箱地址，例如 ada@company.com。',
+      sent: '已向 {email} 发送邀请，角色为{role}。',
+      failed: '邀请没有发出去。填写的内容都还在，请重试。',
+      simulate: '模拟请求失败',
+      rules: '这个示例遵循的规则',
+    },
     features: [
       { title: '随处可用', desc: '基于标准的自定义元素，在任意框架或无框架下都能运行。' },
       { title: '完整类型', desc: '全程 TypeScript 编写，附带类型声明。' },
@@ -322,10 +357,22 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     startStep1: 'インストールと登録',
     startStep2: 'どこでも使う',
     copy: 'インストールコマンドをコピー',
-    liveLabel: 'ライブ',
-    liveButtons: ['プライマリ', 'デフォルト', '警告'],
-    liveCheck: '購読する',
-    liveNote: '本物の ranui コンポーネントが、このページ上で動いています。',
+    liveLabel: 'サンプル',
+    liveNote: '本物の ranui コンポーネントです。メールを空のままにするか、失敗を再現すると各状態を確認できます。',
+    example: {
+      title: 'メンバーを招待',
+      email: '仕事用メール',
+      emailPlaceholder: 'ada@company.com',
+      role: '権限',
+      roles: ['閲覧者', '編集者', '管理者'],
+      submit: '招待を送信',
+      sending: '送信中…',
+      invalid: 'ada@company.com のようなメールアドレスを入力してください。',
+      sent: '{email} に{role}として招待を送信しました。',
+      failed: '招待は送信されませんでした。入力内容はそのまま残っています。もう一度お試しください。',
+      simulate: 'リクエストの失敗を再現',
+      rules: 'このサンプルが従うルール',
+    },
     features: [
       {
         title: 'どこでも動く',
@@ -412,10 +459,22 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     startStep1: 'Instalar y registrar',
     startStep2: 'Usar en cualquier sitio',
     copy: 'Copiar el comando de instalación',
-    liveLabel: 'En vivo',
-    liveButtons: ['Principal', 'Predeterminado', 'Aviso'],
-    liveCheck: 'Suscribirme',
-    liveNote: 'Componentes ranui reales, funcionando en esta misma página.',
+    liveLabel: 'Ejemplo',
+    liveNote: 'Componentes ranui reales. Deja el correo vacío o simula un fallo para ver cada estado.',
+    example: {
+      title: 'Invitar a un compañero',
+      email: 'Correo de trabajo',
+      emailPlaceholder: 'ada@company.com',
+      role: 'Rol',
+      roles: ['Lector', 'Editor', 'Administrador'],
+      submit: 'Enviar invitación',
+      sending: 'Enviando…',
+      invalid: 'Escribe un correo, por ejemplo ada@company.com.',
+      sent: 'Invitación enviada a {email} como {role}.',
+      failed: 'La invitación no se envió. Tus datos siguen aquí; inténtalo de nuevo.',
+      simulate: 'Simular un fallo de la petición',
+      rules: 'Reglas que sigue este ejemplo',
+    },
     features: [
       {
         title: 'Funciona en todas partes',
@@ -499,10 +558,22 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     startStep1: 'Instalar e registrar',
     startStep2: 'Usar em qualquer lugar',
     copy: 'Copiar o comando de instalação',
-    liveLabel: 'Ao vivo',
-    liveButtons: ['Principal', 'Padrão', 'Aviso'],
-    liveCheck: 'Inscrever-me',
-    liveNote: 'Componentes ranui reais, rodando nesta própria página.',
+    liveLabel: 'Exemplo',
+    liveNote: 'Componentes ranui reais. Deixe o e-mail vazio ou simule uma falha para ver cada estado.',
+    example: {
+      title: 'Convidar alguém para a equipe',
+      email: 'E-mail de trabalho',
+      emailPlaceholder: 'ada@company.com',
+      role: 'Função',
+      roles: ['Leitor', 'Editor', 'Administrador'],
+      submit: 'Enviar convite',
+      sending: 'Enviando…',
+      invalid: 'Digite um e-mail, como ada@company.com.',
+      sent: 'Convite enviado para {email} como {role}.',
+      failed: 'O convite não foi enviado. Seus dados continuam aqui; tente de novo.',
+      simulate: 'Simular uma falha na requisição',
+      rules: 'Regras que este exemplo segue',
+    },
     features: [
       {
         title: 'Funciona em qualquer lugar',
@@ -580,10 +651,22 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     startStep1: '설치와 등록',
     startStep2: '어디서든 사용',
     copy: '설치 명령 복사',
-    liveLabel: '실시간',
-    liveButtons: ['주요', '기본', '경고'],
-    liveCheck: '구독',
-    liveNote: '진짜 ranui 컴포넌트가 바로 이 페이지에서 돌아가고 있습니다.',
+    liveLabel: '예제',
+    liveNote: '실제 ranui 컴포넌트입니다. 이메일을 비워 두거나 실패를 재현하면 각 상태를 볼 수 있습니다.',
+    example: {
+      title: '팀원 초대',
+      email: '업무용 이메일',
+      emailPlaceholder: 'ada@company.com',
+      role: '권한',
+      roles: ['뷰어', '편집자', '관리자'],
+      submit: '초대 보내기',
+      sending: '보내는 중…',
+      invalid: 'ada@company.com 같은 이메일 주소를 입력하세요.',
+      sent: '{email}에게 {role} 권한으로 초대를 보냈습니다.',
+      failed: '초대를 보내지 못했습니다. 입력한 내용은 그대로 있으니 다시 시도하세요.',
+      simulate: '요청 실패 재현',
+      rules: '이 예제가 따르는 규칙',
+    },
     features: [
       {
         title: '어디서나 동작',
@@ -667,10 +750,22 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     startStep1: 'Installieren & registrieren',
     startStep2: 'Überall verwenden',
     copy: 'Installationsbefehl kopieren',
-    liveLabel: 'Live',
-    liveButtons: ['Primär', 'Standard', 'Warnung'],
-    liveCheck: 'Abonnieren',
-    liveNote: 'Echte ranui-Komponenten, die direkt auf dieser Seite laufen.',
+    liveLabel: 'Beispiel',
+    liveNote: 'Echte ranui-Komponenten. Lass die E-Mail leer oder simuliere einen Fehler, um jeden Zustand zu sehen.',
+    example: {
+      title: 'Teammitglied einladen',
+      email: 'Geschäftliche E-Mail',
+      emailPlaceholder: 'ada@company.com',
+      role: 'Rolle',
+      roles: ['Leser', 'Bearbeiter', 'Admin'],
+      submit: 'Einladung senden',
+      sending: 'Wird gesendet…',
+      invalid: 'Gib eine E-Mail-Adresse ein, etwa ada@company.com.',
+      sent: 'Einladung an {email} als {role} gesendet.',
+      failed: 'Die Einladung wurde nicht gesendet. Deine Eingaben sind noch da; versuch es erneut.',
+      simulate: 'Fehlgeschlagene Anfrage simulieren',
+      rules: 'Regeln, denen dieses Beispiel folgt',
+    },
     features: [
       {
         title: 'Läuft überall',
@@ -748,10 +843,22 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     startStep1: 'نصب و ثبت',
     startStep2: 'استفاده در هر جا',
     copy: 'رونوشت فرمان نصب',
-    liveLabel: 'زنده',
-    liveButtons: ['اصلی', 'پیش‌فرض', 'هشدار'],
-    liveCheck: 'اشتراک',
-    liveNote: 'کامپوننت‌های واقعی ranui، همین‌جا روی این صفحه در حال اجرا.',
+    liveLabel: 'نمونه',
+    liveNote: 'کامپوننت‌های واقعی ranui. ایمیل را خالی بگذارید یا خطا را شبیه‌سازی کنید تا هر حالت را ببینید.',
+    example: {
+      title: 'دعوت از هم‌تیمی',
+      email: 'ایمیل کاری',
+      emailPlaceholder: 'ada@company.com',
+      role: 'نقش',
+      roles: ['بیننده', 'ویرایشگر', 'مدیر'],
+      submit: 'ارسال دعوت',
+      sending: 'در حال ارسال…',
+      invalid: 'یک نشانی ایمیل وارد کنید، مثلاً ada@company.com.',
+      sent: 'دعوت برای {email} با نقش {role} ارسال شد.',
+      failed: 'دعوت ارسال نشد. اطلاعاتی که وارد کردید باقی است؛ دوباره تلاش کنید.',
+      simulate: 'شبیه‌سازی خطای درخواست',
+      rules: 'قواعدی که این نمونه رعایت می‌کند',
+    },
     features: [
       { title: 'همه‌جا کار می‌کند', desc: 'عناصر سفارشی استاندارد در هر فریم‌ورکی — و بدون فریم‌ورک — اجرا می‌شوند.' },
       { title: 'کاملاً تایپ‌شده', desc: 'با TypeScript نوشته شده و همراه با تعریف تایپ‌ها منتشر می‌شود.' },
@@ -794,9 +901,8 @@ export const homeCopy = (dir: string) => {
     startStep2: s.startStep2,
     copy: s.copy,
     liveLabel: s.liveLabel,
-    liveButtons: s.liveButtons,
-    liveCheck: s.liveCheck,
     liveNote: s.liveNote,
+    example: s.example,
     features: FEATURE_KINDS.map((kind, i) => ({ kind, ...s.features[i] })),
   };
 };
