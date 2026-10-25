@@ -99,7 +99,10 @@ const llmsFull = (content: DocContent): string => {
     .sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0))
     .map((page) => {
       const rule = '='.repeat(64);
-      const source = readFileSync(join(ROOT, page.locale.dir, page.baseRel), 'utf8');
+      const path = page.file.startsWith('design/')
+        ? join(ROOT, '..', '..', page.file)
+        : join(ROOT, page.locale.dir, page.baseRel);
+      const source = readFileSync(path, 'utf8');
       return `${rule}\n# ${absoluteUrl(page.url)}\n${rule}\n\n${source}\n\n`;
     });
   return `# ran — full documentation corpus\n# ${ORIGIN}  •  auto-generated at build time\n\n${blocks.join('')}`;

@@ -1,12 +1,12 @@
 /**
  * The site's locale registry — the single list every other piece of i18n machinery reads:
- * `seo.ts` (hreflang, `og:locale`), the sidebar builder, the language switcher and
- * `bin/build.sh`'s llms-full.txt walk.
+ * `seo.ts` (hreflang, `og:locale`), the sidebar builder and the language switcher.
  *
  * Adding a language means adding one row here plus one file under `messages/`. Anything
  * that needs a hard-coded list of languages elsewhere is a bug — it will silently miss the
  * next language added.
  */
+import { DESIGN_REFERENCE_LINKS } from './design-pages.ts';
 
 /** Directory under the package root that holds a locale's pages; `''` is the root locale. */
 export type LocaleDir = '' | 'cn' | 'ja' | 'es' | 'pt' | 'ko' | 'de' | 'fa';
@@ -34,6 +34,9 @@ export interface LocaleDef {
 
 /** Every content tree — what a fully mirrored locale carries. */
 const ALL = ['/src/design/', '/src/agents/', '/src/ranui/', '/src/ranuts/', '/src/article/', '/src/note/'] as const;
+/** Pages published in English only, inside a tree every locale otherwise mirrors. */
+const ENGLISH_ONLY = DESIGN_REFERENCE_LINKS;
+
 /** The library reference only; articles and notes stay English. */
 const LIBS = ['/src/design/', '/src/agents/', '/src/ranui/', '/src/ranuts/'] as const;
 
@@ -97,6 +100,7 @@ export const localeHref = (link: string, locale: LocaleDef): string => {
   const prefix = prefixOf(locale);
   if (!prefix) return link;
   if (link === '/') return `${prefix}/`;
+  if (ENGLISH_ONLY.some((page) => link === page || link.startsWith(`${page}#`))) return link;
   return locale.mirrors.some((m) => link.startsWith(m)) ? `${prefix}${link}` : link;
 };
 

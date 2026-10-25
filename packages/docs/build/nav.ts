@@ -10,7 +10,7 @@
  * the structure file existing at all — the tree used to be copy-pasted per language, two
  * ~500-line files edited in lockstep, which does not survive eight languages.
  */
-import { NAV, SIDEBAR } from './langs/structure.ts';
+import { NAV, SECONDARY_NAV, SIDEBAR } from './langs/structure.ts';
 import { localeHref, prefixOf } from './langs/locales.ts';
 import { messagesFor } from './langs/index.ts';
 import type { SidebarNode } from './langs/types.ts';
@@ -60,9 +60,9 @@ const resolveItems = (nodes: SidebarNode[], locale: LocaleDef, labels: Record<st
     return item;
   });
 
-export const navFor = (locale: LocaleDef): NavLink[] => {
+const linksFor = (nodes: SidebarNode[], locale: LocaleDef): NavLink[] => {
   const { labels } = messagesFor(locale);
-  return NAV.map((node) => {
+  return nodes.map((node) => {
     const raw = node.link ?? '/';
     const link = siteLink(raw, locale);
     const item: NavLink = { text: label(node, labels), link };
@@ -75,6 +75,12 @@ export const navFor = (locale: LocaleDef): NavLink[] => {
     return item;
   });
 };
+
+/** The header navigation: the product. */
+export const navFor = (locale: LocaleDef): NavLink[] => linksFor(NAV, locale);
+
+/** The footer navigation: everything else a reader may still want. */
+export const secondaryNavFor = (locale: LocaleDef): NavLink[] => linksFor(SECONDARY_NAV, locale);
 
 /**
  * The sidebar for a page: by path prefix, longest first. A page whose path matches no key
