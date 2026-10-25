@@ -1274,7 +1274,7 @@ ran-demo p {
 
 @media (min-width: 1240px) {
   /*
-   * One inset for the header, the sidebar and the outline — they are siblings and §11 asks
+   * One inset for the header, the sidebar and the outline — they are siblings and §9 asks
    * siblings to share a content inset. 16px against a 1440px viewport read as flush; this
    * moves all three together, so the wordmark still lines up with the sidebar exactly.
    */

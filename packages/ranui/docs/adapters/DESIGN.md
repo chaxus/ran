@@ -111,11 +111,7 @@ Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layer
 
 A **4px base unit** with **nine values** only: `--ran-space-1..24` → `4, 8, 12, 16, 24, 32, 40, 64, 96`px.
 
-**Rhythm**
-
-- `8px` between elements inside a group.
-- `16px` between groups.
-- `32–40px` between sections.
+[ranui spacing relationships](#ranui-spacing-relationships) map each relationship to a step.
 
 **Rule:** pick a value from the scale. Don't invent `20px`/`28px` — a limited set is what creates the page's rhythm.
 
@@ -192,7 +188,7 @@ transition: var(--ran-checkbox-tick-transition, transform 0.1s cubic-bezier(0.71
 transition: var(--ran-input-transition, none);
 ```
 
-## 9. Components — how to apply the system
+## ranui components — how to apply the system
 
 - Reuse existing semantic native controls or supported ranui primitives; do not rebuild them merely for styling. Choose a ranui component when its contract fits; preserve native form and keyboard semantics, including supported native controls in overlay slots ([INTERACTION §2](../INTERACTION.md#2-reachable-controls-and-predictable-focus)).
 - Theme through **CSS variables**, **`::part()`**, or the **`sheet`** attribute (escape hatch). CSS variables cross Shadow DOM; selectors do not.
@@ -220,7 +216,7 @@ Build shadow structure once and retain its references; do not rediscover it thro
 [CODING §2](../CODING.md#2-the-component-skeleton) owns construction, runtime-child exceptions
 and SSR implementation. These are engineering requirements, not extra visual recipes.
 
-## 10. Component token naming
+## ranui component token naming
 
 Use `--ran-{component}-{element}[-{state}]-{property}`. Keep the existing component prefix;
 name the most specific distinct UI part, not its full DOM/BEM path. Keep track/fill as
@@ -234,6 +230,11 @@ encodes implementation nesting. The generated [public catalog](../style-tokens-p
 owns available names. This section owns naming; do not hand-maintain another catalog.
 
 ## Applying generic composition to ranui
+
+The [navigation-layer rules](../DESIGN.md#containers-do-not-fix-structure) map to ranui as
+follows: `r-modal` for a short confirmation or a single field, `r-popover` / `r-dropdown` for
+transient context, `r-disclosure-row` for progressive disclosure, and `r-tabs` only for peer
+views of one object.
 
 ### ranui spacing relationships
 

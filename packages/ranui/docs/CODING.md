@@ -126,7 +126,7 @@ Events are the outward half of the contract, so treat a change to one as a break
 
 - **Tokens, never literals.** Component tokens follow
   `--ran-{component}-{element}[-{state}]-{property}` and default to a semantic token; the
-  naming rules and the reasoning are DESIGN.md §10.
+  naming rules and the reasoning are in [DESIGN.md](DESIGN.md#ranui-component-token-naming).
 - **A fallback must name a token that exists and that flips.** Both failure modes are silent
   and both are machine-checked (DESIGN.md §1).
 - **No palette property in a `transition`, no `transition: all`.** CSS cannot tell an

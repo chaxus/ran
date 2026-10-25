@@ -1,7 +1,7 @@
 # Browser layout acceptance example
 
 This is a host composition example and test-only measurement utility, not a ranui API or a
-set of required product dimensions. The normative owner is [DESIGN §11](../../docs/DESIGN.md#alignment-is-structure-not-polish).
+set of required product dimensions. The normative owner is [DESIGN §9](../../docs/DESIGN.md#alignment-is-structure-not-polish).
 
 From the repository root:
 

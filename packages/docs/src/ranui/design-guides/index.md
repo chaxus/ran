@@ -95,7 +95,7 @@ menu/list contexts; do not mandate them everywhere. A nested card, group fill an
 separators must not repeat the same boundary. Declare shared icon/checkbox and text columns
 across adjacent controls. Retain functional field frames and keyboard focus outlines. Inspect
 the resting whole pane and explain the distinct purpose of each remaining border, fill or divider;
-the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#11-composition--the-page-not-the-component)
+the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#9-composition--the-page-not-the-component)
 own the exceptions and acceptance criteria.
 
 Keep vertical rhythm consistent by relationship: title/description and field/hint pairs can

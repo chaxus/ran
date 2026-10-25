@@ -19,8 +19,8 @@ Preserve accessible names, useful constraints, errors and consequences.
 Use screenshots of the actual host to inspect layout, content density and responsive states.
 Use continuous recordings for changed transitions, streaming, navigation and interruption.
 Record the source/runtime being inspected, observations and limits; fixtures do not certify another product.
-Distinguish automated checks, agent visual review and human acceptance. Complete authorized work without
-introducing an additional approval gate.
+Distinguish automated checks, agent visual review and human acceptance. Do not add a confirmation step
+to work that is already authorized; the host project's own approval rules still apply.
 
 When the project uses ranui or ranuts, load that library's sibling skill for installed-version contracts.
 These design references describe methods, not APIs or permission to install or upgrade dependencies.
