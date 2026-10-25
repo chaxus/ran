@@ -7,6 +7,13 @@
   animation-timing-function: linear;
   animation-iteration-count: var(--ran-icon-host-spin-animation, infinite);
 }
+// The reduced-motion sheet every shadow root adopts reaches the shadow tree, not the host,
+// so the host's own spin needs its own rule.
+@media (prefers-reduced-motion: reduce) {
+  :host([spin]) {
+    animation: none;
+  }
+}
 .ran-icon {
   display: var(--ran-icon-display, flex);
   align-items: var(--ran-icon-align-items, center);
