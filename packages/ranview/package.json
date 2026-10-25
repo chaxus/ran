@@ -1,6 +1,6 @@
 {
   "name": "@alixex/ranview",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Framework-free DOM construction with fine-grained reactivity — build once, update in place, in a browser or to a string",
   "type": "module",
   "exports": {
