@@ -847,9 +847,27 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 }
 
 /* The deck introduces the topic quietly; section rhythm comes from type and space. */
-.prose > h1 + p {
+.prose > h1 + p:not(.component-facts),
+.prose > h1 + .component-facts + p {
   color: var(--fg-muted);
   text-wrap: pretty;
+}
+
+/* A component's element names, then where its API, tokens and source live. */
+.prose > .component-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ran-space-2, 8px) var(--ran-space-4, 16px);
+  font-size: 13px;
+}
+.component-facts code {
+  color: var(--fg);
+}
+.component-facts__links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--ran-space-4, 16px);
 }
 
 .prose h1 {

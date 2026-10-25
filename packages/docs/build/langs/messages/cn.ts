@@ -243,6 +243,9 @@ const cn: LocaleMessages = {
   },
   ui: {
     outline: '本页目录',
+    componentApi: 'API',
+    componentTokens: '样式变量',
+    componentSource: '源码',
     returnToTop: '回到顶部',
     sidebarMenu: '菜单',
     darkModeSwitch: '外观',

@@ -243,6 +243,9 @@ const fa: LocaleMessages = {
   },
   ui: {
     outline: 'در این صفحه',
+    componentApi: 'API',
+    componentTokens: 'توکن‌های سبک',
+    componentSource: 'کد منبع',
     returnToTop: 'بازگشت به بالا',
     sidebarMenu: 'منو',
     darkModeSwitch: 'ظاهر',

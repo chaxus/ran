@@ -243,6 +243,9 @@ const ja: LocaleMessages = {
   },
   ui: {
     outline: 'このページの内容',
+    componentApi: 'API',
+    componentTokens: 'スタイルトークン',
+    componentSource: 'ソース',
     returnToTop: 'トップへ戻る',
     sidebarMenu: 'メニュー',
     darkModeSwitch: '外観',
