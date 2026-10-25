@@ -293,7 +293,7 @@ Use the shared composition and information architecture rules for pages, and com
 violation, and a count that falls fails until it is lowered. The baseline records debt, not
 permission — the target for every entry is zero.
 
-Two rules from §11 that this site's stylesheets are built around, because breaking them was
+Two rules from §9 that this site's stylesheets are built around, because breaking them was
 invisible and expensive:
 
 - **The measure governs text, not the column.** `--measure` caps paragraphs and lists;

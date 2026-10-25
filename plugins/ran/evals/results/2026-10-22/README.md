@@ -44,7 +44,8 @@ removed; [tools-cleanup.patch](./tools-cleanup.patch) records that cosmetic delt
 `feedback.mjs` probe and negative/restored control are separate from the frozen v1 rubric.
 Final deterministic controls were rerun against the shipped tools.
 
-Codex marketplace discovery, actual installation of ranui 1.2.0, cached/source skill byte equality,
+Codex marketplace discovery, actual installation of the then-separate `ranui` agent plugin
+1.2.0 (since merged into `plugins/ran`; not the npm package), cached/source skill byte equality,
 and a new read-only `$ranui` session were exercised. It routed the copy/snapshot rule and stale
 screenshots to their canonical owners. Temporary plugin/marketplace entries were removed and
 the user's marketplace inventory returned unchanged. Both Claude manifests validated; no Claude

@@ -99,7 +99,7 @@ export class MyComponent extends RanElement {
 
     // Capture each element as it is built. Never `root.querySelector('.ran-mycomp-inner')!`
     // afterwards: that re-derives the element through a class name, and a rename on one side
-    // yields `null` that the `!` waves through. `verify:design` rejects it (DESIGN.md §9).
+    // yields `null` that the `!` waves through. `verify:design` rejects it (DESIGN.md, "Hold what you build").
     const inner = createRef<HTMLDivElement>();
     this._shadowDom.appendChild(
       Div()
@@ -633,7 +633,7 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 
 ### CSS variable naming tiers
 
-Use [DESIGN's token roles](docs/DESIGN.md#10-component-token-naming) and the generated
+Use [DESIGN's token roles](docs/DESIGN.md#ranui-component-token-naming) and the generated
 [public token catalog](docs/style-tokens-public.md), rather than a second value snapshot.
 Foundation declarations are in `theme/tokens.less` and `theme/dark.less` in a source checkout;
 installed readers can inspect the installed package’s `dist/ranui.css`. Primary actions are monochrome;
@@ -707,13 +707,14 @@ A structured content container with header, body, and footer zones.
 
 **Attributes / Properties:**
 
-| Name          | Type     | Default | Description                                   |
-| ------------- | -------- | ------- | --------------------------------------------- |
-| `title`       | `string` | `''`    | Card heading (hidden when empty via `:empty`) |
-| `description` | `string` | `''`    | Subtitle below title (hidden when empty)      |
-| `sheet`       | `string` | `''`    | CSS injected into shadow DOM                  |
+| Name          | Type      | Default | Description                                              |
+| ------------- | --------- | ------- | -------------------------------------------------------- |
+| `heading`     | `string`  | `''`    | Card heading (hidden when empty via `:empty`)            |
+| `description` | `string`  | `''`    | Subtitle below heading (hidden when empty)               |
+| `hoverable`   | `boolean` | `false` | Hover feedback (border and shadow); clickable cards only |
+| `sheet`       | `string`  | `''`    | CSS injected into shadow DOM                             |
 
-**Header visibility:** Controlled by `:host(:not([title]):not([description])) .ran-card-header { display: none }` — header is invisible when neither attribute is set.
+**Header visibility:** `_syncHeader()` hides the header unless the heading, the description or the `extra` slot has an assigned element.
 
 **Footer visibility:** Controlled by `slotchange` on `slot[name="footer"]` — footer `div` starts with `style.display='none'`, shown when `slot.assignedElements().length > 0`.
 
@@ -1172,7 +1173,7 @@ describe('r-card contract', () => {
     const card = document.createElement('r-card') as Card;
     document.body.appendChild(card);
 
-    card.setAttribute('title', 'Hello');
+    card.setAttribute('heading', 'Hello');
     expect((card as any)._titleEl.textContent).toBe('Hello');
   });
 
@@ -1181,7 +1182,7 @@ describe('r-card contract', () => {
     document.body.appendChild(card);
 
     const spy = vi.spyOn(card as any, '_syncTitle');
-    card.attributeChangedCallback('title', 'same', 'same');
+    card.attributeChangedCallback('heading', 'same', 'same');
     expect(spy).not.toHaveBeenCalled();
   });
 

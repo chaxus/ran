@@ -92,9 +92,9 @@ may move to demonstrate loading; a decorative status pulse must not imply live a
 - Test actual pointer/touch gestures, hover fallback and keyboard routes where affected;
   checking two color schemes does not establish input parity.
 
-## 11. Composition — the page, not the component
+## 9. Composition — the page, not the component
 
-Choose the page structure in §12 first; then compose its components with these rules.
+Choose the page structure in §10 first; then compose its components with these rules.
 
 ### Style coherence across components and pages
 
@@ -416,7 +416,7 @@ actual runtime/capture identity, browser measurements and separate automated, ag
 results. The source-only [browser example](https://github.com/chaxus/ran/blob/main/packages/ranui/test/e2e/layout-contract.md)
 contains setup commands and test utility details; they are not public package APIs.
 
-## 12. Information architecture — the shape before the composition
+## 10. Information architecture — the shape before the composition
 
 Choose structure before composition for information-dense consoles, dashboards and workbenches.
 Complete API data is not a page design: the reader still needs a clear order for understanding
@@ -475,7 +475,7 @@ point that links back to it.
 Default reading order — page identity → current status or exception → primary task and primary
 action → the information the judgement needs → relationships, changes, evidence → secondary
 information and low-frequency actions. **One primary action per task region**, and it is the
-most likely next step, not the most destructive one (§11, "Emphasis is a budget", governs how
+most likely next step, not the most destructive one (§9, "Emphasis is a budget", governs how
 much weight it may take).
 
 ### Density is effective information, not controls per inch
@@ -500,12 +500,12 @@ redundant return shortcut, or repeat that parent as an inert crumb above its ret
 When returning through the parent already reaches the ancestor, that journey preserves access
 without adding another detail-header row. Use breadcrumbs when the hierarchy itself helps the task.
 
-**`r-modal` is not a navigation layer.** Anything needing a copyable link, history, a
-side-by-side comparison, or work that survives a refresh gets a route. Reserve the modal for a
-short confirmation or a single field, `r-popover` / `r-dropdown` for transient context, and
-`r-disclosure-row` for progressive disclosure.
+**A modal is not a navigation layer.** Anything needing a copyable link, history, a
+side-by-side comparison, or work that survives a refresh gets a route. Reserve a modal for a
+short confirmation or a single field, a popover or menu for transient context, and a disclosure
+row for progressive disclosure.
 
-**`r-tabs` carries peer views of one object** — its conversation, its checks, its diff — never
+**Tabs carry peer views of one object** — its conversation, its checks, its diff — never
 unrelated modules; that is navigation's job.
 
 If the chosen library lacks a suitable primitive, use existing semantic elements and host tokens;
@@ -527,4 +527,4 @@ unrelated flows merely to satisfy the list. Repository CI still runs its complet
 - [ ] Run the host’s applicable checks and inspect actual browser evidence.
 - [ ] Copy follows §6; nothing signals state by color alone (§7).
 - [ ] For a dense surface: one primary model, the skeleton chosen from the question rather
-      than the payload, and every fact with one authoritative location (§12).
+      than the payload, and every fact with one authoritative location (§10).

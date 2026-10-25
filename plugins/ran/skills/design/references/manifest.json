@@ -10,9 +10,9 @@
     },
     {
       "source": "design/DESIGN.md",
-      "sha256": "e155cd85297c6024c201dfce74c3f48b2fc21082a8255c1dda3542e5ab601b6f",
+      "sha256": "87b6fa30179fea6dd20d6b9d2eedc6e3421f1bec624c500357d5e0da923ea6b3",
       "output": "DESIGN.md",
-      "outputSha256": "7cd2d4cfa1ee38930fccc2528164a845c6c1326fad0c1f3671475d9c04ed716d"
+      "outputSha256": "cfc4e6451444b4da4db4df4b96b3cca7a2358f5c3beee850eb56159a0d0919c1"
     },
     {
       "source": "design/INTERACTION.md",
@@ -22,9 +22,9 @@
     },
     {
       "source": "design/INTERFACE_GUIDE.md",
-      "sha256": "0dec552801694c9bdeae3e01350918280b76dfb525dcf095905ade560fdc1323",
+      "sha256": "7e05ef8f5dcd216ed6054e4829a2d225a6a0f48433ca0bb97752e65b8a76f2f5",
       "output": "INTERFACE_GUIDE.md",
-      "outputSha256": "c6f12d12178a9ff015161d5e294e402d5dcca7eaa88ab230c56de064c34f9aa0"
+      "outputSha256": "075b80aa1c9a406897b026500e856cae2114662d42d29eea2c4d92d3901b9fb0"
     },
     {
       "source": "design/README.md",

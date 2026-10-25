@@ -82,7 +82,7 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 不要让内层卡片、整组底色和逐行分隔线重复表达同一个分组。声明相邻控件共享的图标／勾选框列和文字列。
 输入控件的功能性边框、键盘焦点框继续保留。验收应查看静止的完整面板，
 并说明每条边框、底色和分隔线的独立用途；
-[权威组合规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#11-composition--the-page-not-the-component)
+[权威组合规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#9-composition--the-page-not-the-component)
 维护例外及验收条件。
 
 纵向间距按元素关系统一：标题与说明、字段与提示可用 8px，组间 16px，相关子区块间 24px。
