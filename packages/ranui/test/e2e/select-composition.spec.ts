@@ -92,3 +92,45 @@ test('keyboard traversal scrolls only the constrained option surface', async ({ 
   expect(visible.contained).toBe(true);
   expect(await page.evaluate(() => scrollY)).toBe(0);
 });
+
+/**
+ * A labelled Select's field stays inside its own box. With the field at 100% of a host whose
+ * height is definite (a flex item, or an explicit height), the label was counted twice and
+ * the field ran into whatever came next — measured 29px into the following row.
+ */
+const fieldGeometry = (page: import('@playwright/test').Page, selector: string) =>
+  insideShadow(page, selector, (root) => {
+    const host = (root as ShadowRoot).host.getBoundingClientRect();
+    const label = root.querySelector('.ran-select-label')!.getBoundingClientRect();
+    const field = root.querySelector('.ran-select')!.getBoundingClientRect();
+    return { hostBottom: host.bottom, labelBottom: label.bottom, fieldTop: field.top, fieldBottom: field.bottom };
+  });
+
+test('a labelled Select in a flex column keeps its field inside its host', async ({ page }) => {
+  await isolatedSetup(page, DEV_SERVER, 'r-select');
+  await mount(
+    page,
+    // A definite container height is what makes a flex item's height definite (the home
+    // page's hero panel was one): only then does the field's 100% resolve against the host.
+    '<div style="display:flex;flex-direction:column;gap:16px;width:280px;height:320px">' +
+      '<r-select id="role" label="Role" value="editor"><r-option value="editor">Editor</r-option></r-select>' +
+      '<div id="next" style="height:32px">next</div></div>',
+  );
+  const geometry = await fieldGeometry(page, '#role');
+  const next = await page.locator('#next').evaluate((el) => el.getBoundingClientRect().top);
+  expect(geometry.fieldTop).toBeGreaterThanOrEqual(geometry.labelBottom);
+  expect(geometry.fieldBottom).toBeLessThanOrEqual(geometry.hostBottom + 0.5);
+  expect(geometry.fieldBottom).toBeLessThanOrEqual(next);
+  expect(geometry.fieldBottom - geometry.fieldTop).toBe(32);
+});
+
+test('a labelled Select with an explicit height fills the rest of it with the field', async ({ page }) => {
+  await isolatedSetup(page, DEV_SERVER, 'r-select');
+  await mount(
+    page,
+    '<r-select id="tall" label="Role" style="width:240px;height:72px"><r-option value="a">A</r-option></r-select>',
+  );
+  const geometry = await fieldGeometry(page, '#tall');
+  expect(geometry.fieldBottom).toBeCloseTo(geometry.hostBottom, 0);
+  expect(geometry.fieldTop).toBeGreaterThanOrEqual(geometry.labelBottom);
+});

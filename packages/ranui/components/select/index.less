@@ -111,6 +111,22 @@
   color: var(--ran-select-label-color, var(--ran-color-text, #171717));
   cursor: var(--ran-select-label-cursor, pointer);
 }
+// A labelled host stacks caption and field, and the field takes the remaining height: the
+// same contract as r-input. At 100% of a host whose height is definite (an explicit height,
+// or a flex item in a container of definite height) the field counted the caption twice and
+// overflowed into the next element. Unlabelled, the host stays inline-block and the field
+// keeps filling it, so `style="height:40px"` still sizes the field.
+:host([label]) {
+  display: var(--ran-select-host-display, inline-flex);
+  flex-direction: column;
+}
+:host([label]) .ran-select-label {
+  flex: none;
+}
+:host([label]) .ran-select {
+  flex: 1 1 auto;
+  height: var(--ran-select-root-height, auto);
+}
 :host([disabled]) .ran-select-label {
   color: var(--ran-select-label-disabled-color, var(--ran-color-text-disabled, #999));
   cursor: var(--ran-select-label-disabled-cursor, not-allowed);
