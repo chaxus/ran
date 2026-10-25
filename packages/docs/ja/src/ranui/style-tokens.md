@@ -1010,11 +1010,11 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ## `markdown`
 
-- Tokens: 76
+- Tokens: 75
 - Parts: 4
 
 ### Tokens
-<!-- layers: semantic: 12 · skin: 1 · internal: 63 -->
+<!-- layers: semantic: 12 · skin: 1 · internal: 62 -->
 - `--ran-color-bg-muted`
 - `--ran-color-border`
 - `--ran-color-border-secondary`
@@ -1079,7 +1079,6 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 - `--ran-space-2`
 - `--ran-space-3`
 - `--ran-space-4`
-- `--ran-space-5`
 - `--ran-space-6`
 - `--ran-text-copy-1`
 - `--ran-text-copy-2`

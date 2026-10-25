@@ -693,7 +693,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     pillars: [
       {
         title: 'ranui',
-        desc: 'کتابخانهٔ Web Components مستقل از فریم‌ورک. چهل عنصر ‎r-‎ آمادهٔ استفاده را در Vue، React یا HTML ساده بگذارید.',
+        desc: 'کتابخانهٔ Web Components مستقل از فریم‌ورک. ۴۰ عنصر ‎r-‎ آمادهٔ استفاده را در Vue، React یا HTML ساده بگذارید.',
         more: 'مرور کامپوننت‌ها',
       },
       {

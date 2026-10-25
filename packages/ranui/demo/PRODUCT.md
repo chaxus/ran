@@ -10,7 +10,7 @@ Frontend engineers, UI library maintainers, and technical learners evaluating We
 
 ## Product Purpose
 
-ranui is an experimental Web Components UI library. The demo should introduce the library, prove that the components are real custom elements, and make theme packs, import paths, styling hooks, and representative components easy to inspect in one page.
+ranui is an experimental Web Components UI library. The demo should introduce the library, prove that the components are real custom elements, and make light/dark theming, import paths, styling hooks, and representative components easy to inspect in one page.
 
 ## Brand Personality
 

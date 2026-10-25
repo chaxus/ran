@@ -261,8 +261,7 @@ Installation still uses only the small static precache, not the full language pl
 Deliberately small. Navigation, sidebar, outline, language menu and the mobile drawer are
 all generated HTML and CSS — a documentation site that needs script to show its navigation
 shows nothing to a crawler, and nothing to a reader on a failed request. What is in
-`client/` genuinely cannot be done without it: search, the theme switch, copy buttons, the
-scroll-reveal on the landing.
+`client/` genuinely cannot be done without it: search, the theme switch and copy buttons.
 
 **`@ranui/preview` loads only on pages containing `<r-preview>`.** Its PDF engine is
 loaded only when a PDF opens. `build/preview-assets.ts` deploys the installed package's
@@ -275,11 +274,10 @@ width rule in `styles/demos.css` gives virtual page placeholders a definite pare
 width on desktop WebKit. Browser regressions exercise the built site with
 `pnpm -F docs test:preview`; build the workspace libraries and docs first.
 
-**CSS may hide something only when script is there to bring it back.** `.reveal` sets
-`opacity: 0` and an IntersectionObserver adds `.in`; the rule is gated on the landing's
-`data-reveal-ready` marker, set only after the client installs its observer. The head's
-`js` class alone cannot prove that the client loaded. Disabled JavaScript, a failed client
-request or an unavailable observer must leave every server-rendered section visible.
+**CSS may hide something only when script is there to bring it back.** The landing has no
+scroll reveal: every section is visible on first paint. Its sections keep a `.reveal` class only
+as the marker `test/browser/layout-audit.spec.ts` uses to prove they stay visible when the client
+request fails. The head's `js` class alone cannot prove that the client loaded.
 
 ---
 

@@ -1,5 +1,5 @@
 {
-  "$comment": "Known design-rule violations, recorded per file by bin/verify-design-rules.ts. This is a ratchet, not an allowlist: a count that rises fails as a new violation, and a count that falls fails until it is lowered here, so a fix cannot regress later. Do not edit by hand — run `pnpm -F ranui verify:design --update-baseline`. The rules themselves are stated in docs/DESIGN.md and CLAUDE.md.",
+  "$comment": "Known design-rule violations, recorded per file by bin/verify-design-rules.ts. This is a ratchet, not an allowlist: a count that rises fails as a new violation, and a count that falls fails until it is lowered here, so a fix cannot regress later. Do not edit by hand — run `pnpm -F docs verify:design --update-baseline`. The rules themselves are stated in design/DESIGN.md and the ranui adapter.",
   "rules": {
     "dark-unsafe-fallback": {
       "styles/demos.css": 2,

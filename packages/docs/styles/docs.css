@@ -1155,7 +1155,7 @@ ran-demo:has(+ figure.code) {
 .prose ran-demo + figure.code pre,
 .prose .code-group figure.code pre {
   padding-block-start: var(--ran-space-4);
-  padding-inline: 20px;
+  padding-inline: var(--ran-space-4, 16px);
 }
 
 ran-demo + figure.code {
@@ -1499,7 +1499,7 @@ body.drawer-open {
   display: none;
 }
 .code-group__fallback {
-  padding: var(--ran-space-3, 12px) var(--ran-space-5, 20px) 0;
+  padding: var(--ran-space-3, 12px) var(--ran-space-4, 16px) 0;
   font-size: 13px;
   font-weight: 600;
 }
