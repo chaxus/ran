@@ -278,17 +278,27 @@ const RULES: Rule[] = [
     summary: 'a component token falls back to a `--ran-*` token the theme never defines',
     fix: "Point the fallback at a token that exists — `grep -- '--ran-color-' theme/tokens.less` lists them. A `var()` naming an undeclared property resolves to nothing at all: the declaration is dropped and the element silently keeps whatever it inherited, which for a colour is usually the body text colour and looks almost right.",
     extensions: ['.less', '.css'],
-    roots: ['components', 'demo', 'theme'],
+    // A consumer's `--roots` joins the library's own directories.
+    roots: [...new Set(['components', 'demo', 'theme', ...DEFAULT_ROOTS])],
     scan(source, file) {
       const out: Violation[] = [];
+      // A numbered step of a theme scale is never an override hook, so a missing step is a
+      // typo even with a literal fallback: `--ran-space-5` silently means its fallback.
+      const scales = new Set([...themeTokens].map((token) => /^--ran-([a-z]+)-\d+$/.exec(token)?.[1]).filter(Boolean));
       lines(stripComments(source)).forEach((line, i) => {
+        // Every name on the line on its own: the fallback match below can swallow a second `var()`.
+        for (const [, name, family] of line.matchAll(/var\(\s*(--ran-([a-z]+)-\d+)\b(?!-)/g))
+          if (scales.has(family) && !themeTokens.has(name))
+            out.push({ file, line: i + 1, text: `${name} (not a step of the --ran-${family} scale)` });
         // Every `var()` on the line, with whatever follows the name up to the closing paren.
         for (const match of line.matchAll(/var\(\s*(--ran-[a-zA-Z0-9-]+)\s*(,([^;]*))?\)/g)) {
           const [, name, , fallback] = match;
           if (fallback === undefined) {
             // No fallback: the reference is the whole chain, so the name must resolve. A
             // component's own override hook is always written with one.
-            if (!themeTokens.has(name)) out.push({ file, line: i + 1, text: `${name} (undeclared, no fallback)` });
+            // A missing scale step was already reported above.
+            if (!themeTokens.has(name) && !/^--ran-[a-z]+-\d+$/.test(name))
+              out.push({ file, line: i + 1, text: `${name} (undeclared, no fallback)` });
             continue;
           }
           // A fallback that is itself a bare `var(--ran-…)` ends the chain, so it has to

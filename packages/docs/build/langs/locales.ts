@@ -69,8 +69,8 @@ export const localeOfPath = (relativePath: string): LocaleDef => {
 
 /**
  * Which locale a *URL* belongs to, e.g. `/ja/src/ranui/` → the `ja` locale. The browser-side
- * counterpart of `localeOfPath`, used to keep the vue-i18n runtime on the same language as
- * the page being rendered.
+ * counterpart of `localeOfPath`, used to keep client-side copy on the same language as the
+ * page being rendered.
  */
 export const localeFromUrlPath = (pathname: string): LocaleDef => {
   const segment = pathname.replace(/^\/+/, '').split('/')[0];

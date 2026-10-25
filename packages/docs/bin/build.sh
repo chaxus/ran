@@ -30,7 +30,7 @@ llms_full="$dir/llms-full.txt"
 # 管道的退出码只看最后一个命令 —— find 失败时 sort 照样成功，循环拿到空输入，结果是
 # 静默产出一个空的 llms-full.txt。分成两步后 set -e 才能拦住 find 的失败。
 md_list=$(mktemp)
-# 每种语言一个内容目录：英文在 ./src，其余在 ./<语言>/src（见 .vitepress/langs/locales.ts）。
+# 每种语言一个内容目录：英文在 ./src，其余在 ./<语言>/src（见 build/langs/locales.ts）。
 # 用通配符而不是写死列表 —— 加一门语言就该只改 locales.ts，忘了改这里的后果是静默的：
 # llms-full.txt 少掉整整一门语言，而构建照常成功。
 md_dirs="./src"

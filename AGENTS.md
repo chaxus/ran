@@ -15,7 +15,7 @@ For product positioning and website ownership, start with [PRODUCT.md](PRODUCT.m
 | Component state, events, lifecycle or SSR                         | [engineering standard](packages/ranui/docs/CODING.md), then [implementation reference](packages/ranui/CLAUDE.md)                                    |
 | Exact attributes, events, slots, parts or theme variables         | Generated [component API](packages/ranui/docs/COMPONENTS.md) and [public tokens](packages/ranui/docs/style-tokens-public.md); verify against source |
 | Public documentation or localized prose                           | [documentation site reference](packages/docs/CLAUDE.md)                                                                                             |
-| Repository landing/demo identity                                  | [root DESIGN.md](DESIGN.md), scoped to that surface                                                                                                 |
+| Product website visual identity                                   | [root DESIGN.md](DESIGN.md), scoped to that surface                                                                                                 |
 
 `packages/ranui/theme/tokens.less` and `packages/ranui/theme/dark.less` own foundation tokens. Product semantic aliases may derive from them;
 do not create a parallel palette or copy one application's dimensions into library defaults.
