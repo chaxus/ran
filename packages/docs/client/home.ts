@@ -40,6 +40,77 @@ const mountHome = (): void => {
   }
 };
 
+/** How long the example pretends the server takes; long enough to see the busy state. */
+const EXAMPLE_LATENCY = 900;
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * The home page's invite form: a real task in miniature, following the rules it links to.
+ * Validation sits on the field (X-INPUT-1); one activation sends once (X-INPUT-4); success
+ * is shown only after the "server" answers (X-FEEDBACK-2); a failure keeps every entry
+ * (X-RECOVER-4). The request is simulated; nothing leaves the page.
+ */
+export const mountExample = (form: HTMLElement): void => {
+  const email = form.querySelector<HTMLElement & { value: string }>('r-input[name="email"]');
+  const role = form.querySelector<HTMLElement & { value: string }>('r-select[name="role"]');
+  const simulate = form.querySelector<HTMLElement & { checked: boolean }>('r-checkbox[name="simulate"]');
+  const submit = form.querySelector<HTMLElement>('.example__submit');
+  const status = form.querySelector<HTMLElement>('.example__status');
+  if (!email || !role || !submit || !status) return;
+  const label = submit.textContent ?? '';
+  let sending = false;
+
+  const say = (text: string, tone: '' | 'success' | 'error'): void => {
+    status.textContent = text;
+    status.dataset.tone = tone;
+  };
+  const clearError = (): void => {
+    if (email.getAttribute('status') !== 'error') return;
+    email.removeAttribute('status');
+    email.removeAttribute('message');
+  };
+  email.addEventListener('input', () => {
+    clearError();
+    if (status.dataset.tone) say('', '');
+  });
+
+  const send = (): void => {
+    if (sending) return;
+    const address = email.value.trim();
+    if (!EMAIL.test(address)) {
+      email.setAttribute('status', 'error');
+      email.setAttribute('message', form.dataset.invalid ?? '');
+      say('', '');
+      email.focus();
+      return;
+    }
+    sending = true;
+    submit.setAttribute('disabled', '');
+    submit.setAttribute('aria-busy', 'true');
+    submit.textContent = form.dataset.sending ?? label;
+    say('', '');
+    const fails = simulate?.checked === true;
+    const roleName = role.querySelector(`r-option[value="${role.value}"]`)?.textContent ?? role.value;
+    window.setTimeout(() => {
+      sending = false;
+      submit.removeAttribute('disabled');
+      submit.removeAttribute('aria-busy');
+      submit.textContent = label;
+      if (fails) {
+        say(form.dataset.failed ?? '', 'error');
+        return;
+      }
+      say((form.dataset.sent ?? '').replace('{email}', address).replace('{role}', roleName), 'success');
+      email.value = '';
+    }, EXAMPLE_LATENCY);
+  };
+  submit.addEventListener('click', send);
+  // Enter in the email field sends, as it would in a single-field form.
+  email.addEventListener('keydown', (event) => {
+    if ((event as KeyboardEvent).key === 'Enter' && !(event as KeyboardEvent).isComposing) send();
+  });
+};
+
 const mountGlass = (): void => {
   const root = document.querySelector<HTMLElement>('[data-glass]');
   const glass = root?.querySelector<HTMLElement>('.gp-glass');
@@ -152,6 +223,7 @@ const mountIconGallery = (): void => {
 
 export const mountDemos = (): void => {
   mountHome();
+  for (const form of document.querySelectorAll<HTMLElement>('[data-home-example]')) mountExample(form);
   mountGlass();
   mountIconGallery();
 };

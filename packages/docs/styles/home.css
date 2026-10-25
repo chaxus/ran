@@ -274,7 +274,7 @@
  * this panel against a five-line headline and dropped it 170px below the text it belongs
  * beside. But left at its natural 280px in a 516px column it stranded 236px of empty space
  * under it, which reads as the right half of the hero having given up. Filling the column
- * keeps the panel's top edge on the headline's and lets `.live-body` centre its contents.
+ * keeps the panel's top edge on the headline's and lets the example fill it.
  */
 .hero-live {
   align-self: stretch;
@@ -306,83 +306,71 @@
   height: 8px;
   border-radius: 50%;
   background: var(--ran-color-success, #28a948);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ran-color-success, #28a948) 22%, transparent);
-  animation: pulse 2s ease-in-out infinite;
 }
-@keyframes pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ran-color-success, #28a948) 22%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--ran-color-success, #28a948) 8%, transparent);
-  }
-}
-.live-body {
+/*
+ * The example is a form, so it reads top to bottom: title, fields, actions, outcome.
+ *
+ * Block flow, not a flex column: a labelled r-select sizes its field to 100% of its host,
+ * and a flex item's height is definite, so the field grew by the label's height and ran
+ * into the actions below it.
+ */
+.example {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  padding: 30px 24px;
-  /*
-   * Content at the top, caption at the bottom — the panel is a stage, not a centred
-   * cluster.
-   *
-   * Two other arrangements were measured and rejected. Centring left ~180px empty above
-   * the rows and ~160px below: the dead space the stretch removed from the column, moved
-   * inside a border where it is more obvious. `space-evenly` pushed the three rows so far
-   * apart that the progress bar floated alone and they stopped reading as one demo.
-   */
-  justify-content: flex-start;
+  padding: var(--ran-space-6, 24px);
 }
-.live-row {
+.example > * + * {
+  margin-block-start: var(--ran-space-4, 16px);
+}
+.example__title {
+  margin: 0;
+  font-size: var(--ran-text-heading-4, 16px);
+  font-weight: var(--ran-text-heading-weight, 600);
+  color: var(--fg);
+}
+.example__field {
+  display: block;
+  width: 100%;
+}
+.example__actions {
   display: flex;
-  gap: 12px;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--ran-space-3, 12px);
 }
-.live-inline {
-  gap: 18px;
+/* Reserved for its two-line maximum, so an outcome appearing does not push the rules down. */
+.example__status {
+  min-height: 3em;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-muted);
 }
-.live-progress {
-  width: 100%;
-  --ran-progress-track-height: 6px;
-  --ran-progress-fill-background: linear-gradient(90deg, var(--fg-faint), var(--ink));
+.example__status[data-tone='success'] {
+  color: var(--ran-color-success, #0a7d4f);
 }
-.live-loading {
-  --loading-circle-line-border-width: 22px;
-  --loading-circle-line-border-height: 22px;
-  --loading-circle-line-border-padding: 2.5px;
-  --loading-circle-line-border-background: linear-gradient(
-    0deg,
-    color-mix(in srgb, var(--ink) 12%, transparent) 33%,
-    var(--ink) 100%
-  );
-  --loading-circle-line-core-background: var(--surface);
+.example__status[data-tone='error'] {
+  color: var(--ran-color-danger, #b23a2f);
 }
-.live-skeleton {
-  gap: 14px;
+.example__rules {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ran-space-2, 8px);
+  padding: var(--ran-space-3, 12px) var(--ran-space-6, 24px);
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
 }
-.live-skeleton span {
-  height: 34px;
-  border-radius: 8px;
-  background: linear-gradient(90deg, var(--bg-soft), var(--rule), var(--bg-soft));
-  background-size: 200% 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
+.example__rules-label {
+  color: var(--fg-muted);
 }
-.live-skeleton span:nth-child(2) {
-  width: 70%;
+.example__rule {
+  font-family: var(--font-mono);
+  color: var(--link);
+  text-decoration: none;
 }
-.live-skeleton span:nth-child(3) {
-  width: 45%;
-}
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+.example__rule:hover {
+  text-decoration: underline;
 }
 .live-note {
   padding: 12px 20px 16px;
@@ -663,7 +651,6 @@
 }
 /* See the note in docs.css: code reads left-to-right whatever the page's direction. */
 .snippet,
-.live-code,
 .cmd {
   direction: ltr;
   text-align: start;
@@ -693,32 +680,6 @@
 }
 .snippet .c-attr {
   color: var(--fg-faint);
-}
-
-/*
- * Source above, result below, one hairline between them.
- *
- * The two halves are one object: the same panel, the same border, a single rule marking
- * where the markup stops and what it produces begins. A second box around either half
- * would say they are two things that happen to be adjacent.
- */
-.live-lang {
-  margin-inline-start: auto;
-  color: var(--fg-faint);
-  text-transform: lowercase;
-  letter-spacing: 0.06em;
-}
-.live-code {
-  flex: none;
-  padding: var(--ran-space-4, 16px) var(--ran-space-6, 24px);
-  font-size: 12.5px;
-  line-height: 1.85;
-  border-bottom: 1px solid var(--hairline);
-  white-space: pre;
-  tab-size: 2;
-}
-.live-code .c-tag {
-  color: var(--fg-muted);
 }
 
 /* ---------- feature strip ---------- */
@@ -795,13 +756,5 @@
 @media (max-width: 900px) and (min-width: 521px) {
   .strip {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .live-dot {
-    animation: none;
-  }
-  .live-skeleton span {
-    animation: none;
   }
 }

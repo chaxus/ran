@@ -79,3 +79,21 @@ export const designReferenceSources = (
     content: designReferenceMarkdown(designDir, file, maps),
   }));
 };
+
+/**
+ * The source path of the section that states a graded rule, e.g. `X-INPUT-4` →
+ * `/src/design/interaction#_1-inputs-drafts-and-intent`. Throws for an unknown ID, so a
+ * renamed rule fails the build instead of leaving a link to nowhere.
+ */
+export const designRuleLink = (designDir: string, id: string): string => {
+  for (const { file, page } of DESIGN_REFERENCE) {
+    if (file === 'RULES.md') continue;
+    let section = '';
+    for (const line of readFileSync(join(designDir, file), 'utf8').split(/\r?\n/)) {
+      const heading = line.match(/^#{1,6} (.+)$/)?.[1];
+      if (heading) section = slugify(heading);
+      else if (line.startsWith(`- **${id} · `)) return `/src/design/${page}${section ? `#${section}` : ''}`;
+    }
+  }
+  throw new Error(`design rule ${id} is not stated in design/`);
+};

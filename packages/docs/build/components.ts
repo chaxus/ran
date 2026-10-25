@@ -14,6 +14,8 @@
  * Markdown pages write `<HomeCinematic />` and the engine's component hook matches it as
  * an html token, so the tag stays ordinary markup and the page stays readable as prose.
  */
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { homeCopy } from './langs/home-copy.ts';
 import { renderPackageFacts } from './package-facts.ts';
 import { renderDesignIllustrations } from './design-illustrations.ts';
@@ -23,6 +25,12 @@ import type { LocaleDef } from './config.ts';
 import { currentLinkBase, currentLocale } from './render-context.ts';
 import { resolveLinkFrom } from './links.ts';
 import { publicUrl } from './urls.ts';
+import { designRuleLink } from './design-reference.ts';
+
+const DESIGN_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'design');
+
+/** The rules the home example demonstrates, each linked to the section that states it. */
+const EXAMPLE_RULES = ['X-INPUT-1', 'X-INPUT-4', 'X-FEEDBACK-2', 'X-RECOVER-4', 'X-CANCEL-5'] as const;
 
 /** The component hooks the markdown renderer is configured with. */
 export const componentRenderers = {
@@ -97,34 +105,6 @@ const SNIPPET_USE = `<span class="c-com">&lt;!-- Vue, React, or plain HTML --&gt
 <span class="c-tag">&lt;r-button</span> <span class="c-attr">type</span>=<span class="c-str">"primary"</span><span class="c-tag">&gt;</span>Save<span class="c-tag">&lt;/r-button&gt;</span>
 <span class="c-tag">&lt;r-progress</span> <span class="c-attr">percent</span>=<span class="c-str">"66"</span><span class="c-tag">&gt;&lt;/r-progress&gt;</span>`;
 
-/** `<r-button type="primary">Save</r-button>`, coloured with the landing's own classes. */
-const tag = (name: string, attrs: string, body: string): string =>
-  `<span class="c-tag">&lt;${name}</span>${attrs}<span class="c-tag">&gt;</span>` +
-  `${body}<span class="c-tag">&lt;/${name}&gt;</span>`;
-
-const attr = (name: string, value: string): string =>
-  ` <span class="c-attr">${name}</span>=<span class="c-str">"${value}"</span>`;
-
-/**
- * The markup for the live panel, kept in step with what `renderHome` renders below it.
- *
- * Labels come from the same copy table the rendered components use, so the code a reader
- * sees is the code that produced the buttons they are looking at, in their language.
- */
-const liveSource = (t: ReturnType<typeof homeCopy>): string =>
-  [
-    tag('r-button', attr('type', 'primary'), esc(t.liveButtons[0])),
-    tag('r-button', '', esc(t.liveButtons[1])),
-    tag('r-button', attr('type', 'warning'), esc(t.liveButtons[2])),
-    '',
-    tag('r-progress', attr('percent', '66'), ''),
-    '',
-    // The spinner is rendered beside the checkbox below, so it belongs here too — the
-    // panel's whole argument is that this markup is what produced that result.
-    tag('r-loading', attr('name', 'circle-line'), ''),
-    tag('r-checkbox', ' <span class="c-attr">checked</span>', esc(t.liveCheck)),
-  ].join('\n');
-
 export const renderHome = (locale: LocaleDef): string => {
   const t = homeCopy(locale.dir);
   const href = (path: string): string => publicUrl(localeHref(path, locale));
@@ -152,27 +132,36 @@ export const renderHome = (locale: LocaleDef): string => {
     // The live panel holds real ranui elements. They are inert custom elements until the
     // bundle upgrades them, so this is the markup either way — no skeleton swap, and
     // therefore none of the hydration mismatch the Vue version had to avoid.
+    // A working example, not a gallery of variants: one small task with every state a
+    // reader can reach — empty, invalid, sending, sent, failed and retried. The markup
+    // is complete without script; `client/home.ts` adds the behaviour.
     `<div class="hero-live">` +
-    `<div class="live-head"><span class="live-dot"></span>${esc(t.liveLabel)}` +
-    `<span class="live-lang">html</span></div>` +
-    /*
-     * The source of exactly what is rendered underneath — not an illustration of it.
-     *
-     * The headline claims a component is "just a tag, no build step"; a panel that only
-     * shows the result asks the reader to take that on trust. Showing the markup above
-     * the thing it produces is the claim and the proof in one object, and it is the same
-     * demo-over-fence pairing the component pages use throughout, so the landing speaks
-     * the site's own idiom rather than inventing a second one.
-     */
-    `<pre class="snippet live-code">${liveSource(t)}</pre>` +
-    `<div class="live-body">` +
-    `<div class="live-row"><r-button type="primary">${esc(t.liveButtons[0])}</r-button>` +
-    `<r-button>${esc(t.liveButtons[1])}</r-button>` +
-    `<r-button type="warning">${esc(t.liveButtons[2])}</r-button></div>` +
-    `<div class="live-row"><r-progress class="live-progress" percent="66" total="100"></r-progress></div>` +
-    `<div class="live-row live-inline"><r-loading class="live-loading" name="circle-line"></r-loading>` +
-    `<r-checkbox checked="true">${esc(t.liveCheck)}</r-checkbox></div>` +
-    `</div><span class="live-note">${esc(t.liveNote)}</span></div></header>` +
+    `<div class="live-head"><span class="live-dot"></span>${esc(t.liveLabel)}</div>` +
+    // A group, not a <form>: the request is simulated, and a real form would submit itself
+    // on Enter (its controls are form-associated) and put the email in the URL.
+    `<div class="example" role="form" aria-labelledby="home-example-title" data-home-example` +
+    ` data-invalid="${esc(t.example.invalid)}" data-sending="${esc(t.example.sending)}"` +
+    ` data-sent="${esc(t.example.sent)}" data-failed="${esc(t.example.failed)}">` +
+    `<h2 class="example__title" id="home-example-title">${esc(t.example.title)}</h2>` +
+    `<r-input class="example__field" name="email" type="email" required label="${esc(t.example.email)}"` +
+    ` placeholder="${esc(t.example.emailPlaceholder)}"></r-input>` +
+    `<r-select class="example__field" name="role" label="${esc(t.example.role)}" value="editor">` +
+    ['viewer', 'editor', 'admin']
+      .map((value, i) => `<r-option value="${value}">${esc(t.example.roles[i]!)}</r-option>`)
+      .join('') +
+    `</r-select>` +
+    `<div class="example__actions">` +
+    `<r-checkbox class="example__simulate" name="simulate">${esc(t.example.simulate)}</r-checkbox>` +
+    `<r-button class="example__submit" type="primary">${esc(t.example.submit)}</r-button>` +
+    `</div>` +
+    `<p class="example__status" role="status" aria-live="polite"></p>` +
+    `</div>` +
+    `<div class="example__rules"><span class="example__rules-label">${esc(t.example.rules)}</span>` +
+    EXAMPLE_RULES.map(
+      (id) => `<a class="example__rule" href="${esc(href(designRuleLink(DESIGN_DIR, id)))}">${id}</a>`,
+    ).join('') +
+    `</div>` +
+    `<span class="live-note">${esc(t.liveNote)}</span></div></header>` +
     // ── stats ──
     `<section class="stats reveal">` +
     t.stats
