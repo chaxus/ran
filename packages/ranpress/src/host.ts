@@ -54,7 +54,9 @@ export interface RedirectRule {
  */
 export const parseRedirects = (text: string): RedirectRule[] =>
   text.split(/\r?\n/).flatMap((raw, index) => {
-    const line = raw.replace(/#.*$/, '').trim();
+    // `indexOf`, not `/#.*$/`: that pattern backtracks quadratically over a run of `#`.
+    const comment = raw.indexOf('#');
+    const line = (comment === -1 ? raw : raw.slice(0, comment)).trim();
     if (!line) return [];
     const [from, to, code = '301', ...rest] = line.split(/\s+/);
     const status = Number(code);
