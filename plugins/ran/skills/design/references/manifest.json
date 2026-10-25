@@ -40,9 +40,9 @@
     },
     {
       "source": "design/RULES.md",
-      "sha256": "90c1776aa1e745e8c635f6395105c1e617ddb87dafb512b416947c6dd9d5ea70",
+      "sha256": "00af9598a8ed484d37df7009fc509ab8e217f832a827f4efabc022500f8ee930",
       "output": "RULES.md",
-      "outputSha256": "ac8c03b4435291145a95f722da1a98b99ebe307d8be099d6734a5b09472595a2"
+      "outputSha256": "feaf551ae38a49b30c5a52c6800eccac270e6b8a0511f054bb4e62422d12bea0"
     },
     {
       "source": "design/WORKFLOW_PATTERNS.md",

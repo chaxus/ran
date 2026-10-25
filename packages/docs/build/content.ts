@@ -7,18 +7,20 @@
  * not a visible bug — it is a set of hreflang tags pointing at 404s, which nobody
  * notices until a search console says so months later.
  */
+import { join } from 'node:path';
 import { readSources } from 'ranpress';
-import type { MarkdownRenderer, Section, TocEntry } from 'ranpress';
+import type { Frontmatter, MarkdownRenderer, Section, TocEntry } from 'ranpress';
 import { setRenderContext } from './render-context.ts';
 import { LOCALES, ROOT_LOCALE, SITE } from './config.ts';
 import type { LocaleDef } from './config.ts';
 import { pageUrl, sourceUrl } from './urls.ts';
+import { designReferenceSources } from './design-reference.ts';
 
 export type DocKind = 'page' | 'notfound';
 
 export interface DocPage {
   kind: DocKind;
-  /** Source path relative to the package. `cn/src/ranui/index.md`. */
+  /** Source path, for messages: `docs/cn/src/ranui/index.md`, or `design/DESIGN.md` for the design reference. */
   file: string;
   /** The locale this page is written in. */
   locale: LocaleDef;
@@ -109,7 +111,11 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
     labelPrefix: 'docs',
   });
 
-  for (const { rel, label, data, content } of sources) {
+  const designReference = designReferenceSources(join(root, '..', '..', 'design')).map((source) => ({
+    ...source,
+    data: { title: source.title } as Frontmatter,
+  }));
+  for (const { rel, label, data, content } of [...sources, ...designReference]) {
     const kind = kindFor(rel);
     const locale = localeOf(rel);
     const baseRel = locale.dir ? rel.slice(locale.dir.length + 1) : rel;

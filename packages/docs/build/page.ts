@@ -23,7 +23,8 @@ import {
 } from './common/index.ts';
 import type { LocaleDef } from './config.ts';
 import type { DocPage } from './content.ts';
-import { navFor, prevNextFor, sidebarFor } from './nav.ts';
+import { navFor, prevNextFor, secondaryNavFor, sidebarFor } from './nav.ts';
+import type { NavLink } from './nav.ts';
 import { pageUrl } from './urls.ts';
 import type { SidebarItem } from './nav.ts';
 import { messagesFor } from './langs/index.ts';
@@ -112,15 +113,18 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
   const sidebar = sidebarFor(page.url, page.locale);
   const { prev, next } = prevNextFor(page.url, sidebar);
 
-  const navHtml = nav
-    .map((item) => {
-      const active = item.activeMatch ? new RegExp(item.activeMatch).test(page.url) : samePath(item.link, page.url);
-      return (
-        `<a class="nav__link" href="${escapeHtml(item.link)}"${active ? ' aria-current="page"' : ''}` +
-        `${item.external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${escapeHtml(item.text)}</a>`
-      );
-    })
-    .join('');
+  const linksHtml = (items: NavLink[], className: string): string =>
+    items
+      .map((item) => {
+        const active = item.activeMatch ? new RegExp(item.activeMatch).test(page.url) : samePath(item.link, page.url);
+        return (
+          `<a class="${className}" href="${escapeHtml(item.link)}"${active ? ' aria-current="page"' : ''}` +
+          `${item.external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${escapeHtml(item.text)}</a>`
+        );
+      })
+      .join('');
+  const navHtml = linksHtml(nav, 'nav__link');
+  const secondary = secondaryNavFor(page.locale);
 
   const footerNav =
     prev || next
@@ -183,11 +187,12 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
   </div>
 </header>
 <div class="layout">
-<label class="drawer__scrim" for="drawer"></label><nav id="doc-sidebar" class="sidebar${sb ? '' : ' sidebar--mobile-only'}" aria-label="${escapeHtml(ui.sidebarMenu)}"><div class="mobile-nav">${navHtml}</div>${sb}</nav>
+<label class="drawer__scrim" for="drawer"></label><nav id="doc-sidebar" class="sidebar${sb ? '' : ' sidebar--mobile-only'}" aria-label="${escapeHtml(ui.sidebarMenu)}"><div class="mobile-nav">${navHtml}<div class="mobile-nav__secondary">${linksHtml(secondary, 'nav__link')}</div></div>${sb}</nav>
 <main id="main" class="doc">
 ${tocHtml(page, ui.outline) ? `<details class="mobile-toc"><summary>${escapeHtml(ui.outline)}</summary>${tocHtml(page, ui.outline).replace(/<aside[^>]*>|<\/aside>|<p[^>]*>.*?<\/p>/g, '')}</details>` : ''}
 <${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div class="landing"' : 'article class="prose"'}>${page.html}</${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div' : 'article'}>
 ${footerNav}
+<footer class="site-footer">${linksHtml(secondary, 'site-footer__link')}</footer>
 </main>
 ${tocHtml(page, ui.outline)}
 </div>

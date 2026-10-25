@@ -1,5 +1,6 @@
 import type { SidebarNode } from './types.ts';
 import { EDITOR } from '../common/index.ts';
+import { DESIGN_REFERENCE, DESIGN_REFERENCE_LINKS } from './design-pages.ts';
 
 /**
  * The site's navigation, once, without language or locale prefix.
@@ -60,16 +61,25 @@ const articleSidebar: SidebarNode[] = [
   },
 ];
 
+/** The product: the three pillars and the agent workflow. */
 export const NAV: SidebarNode[] = [
   { kind: 'full', key: 'ran_design', link: '/src/design/', activeMatch: '/design/' },
   { kind: 'full', key: 'ranui', link: '/src/ranui/', activeMatch: '/ranui/' },
   { kind: 'full', key: 'ranuts', link: '/src/ranuts/', activeMatch: '/ranuts/' },
-  { kind: 'full', key: 'articles', link: '/src/article/doc_preview', activeMatch: '/(articles|notes)/' },
   { kind: 'full', key: 'agents', link: '/src/agents/', activeMatch: '/agents/' },
+];
+
+/** Reachable from every page, but not part of the product: the page footer and the drawer's end. */
+export const SECONDARY_NAV: SidebarNode[] = [
+  { kind: 'full', key: 'articles', link: '/src/article/doc_preview', activeMatch: '/(articles|notes)/' },
   { kind: 'full', key: 'doc_editor', link: EDITOR },
 ];
 
 export const SIDEBAR: Record<string, SidebarNode[]> = {
+  '/src/design/': [
+    { kind: 'full', key: 'overview', link: '/src/design/' },
+    ...DESIGN_REFERENCE.map(({ key }, i) => ({ kind: 'full' as const, key, link: DESIGN_REFERENCE_LINKS[i] })),
+  ],
   '/src/ranuts/': [
     { kind: 'full', key: 'overview', link: '/src/ranuts/' },
     { kind: 'full', key: 'api_reference', link: '/src/ranuts/api' },

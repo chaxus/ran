@@ -199,7 +199,12 @@ it('keeps captions and geometry aligned with changed source tokens and ignores c
   try {
     writeFileSync(join(dir, 'package.json'), JSON.stringify({ type: 'module' }));
     for (const path of ['docs/build/langs', 'ranui/theme']) mkdirSync(join(dir, path), { recursive: true });
-    for (const path of ['design-illustrations.ts', 'langs/locales.ts', 'langs/design-illustrations-copy.ts'])
+    for (const path of [
+      'design-illustrations.ts',
+      'langs/locales.ts',
+      'langs/design-pages.ts',
+      'langs/design-illustrations-copy.ts',
+    ])
       copyFileSync(resolve(import.meta.dirname, '../build', path), join(dir, 'docs/build', path));
     const modified =
       source

@@ -62,6 +62,12 @@ test('a rule keeps its continuation lines, section anchor and proof', () => {
   );
 });
 
+test('a same-page anchor in a rule points back into its source from the index', () => {
+  const { rules } = parseRules('design/X.md', graded('- **X-IN-1 · SHOULD** See [wording](#words).'));
+  assert.match(renderIndex(rules), /See \[wording\]\(\.\/X\.md#words\)\./);
+  assert.match(renderIndex(rules, '../', false), /See \[wording\]\(\.\.\/X\.md#words\)\./);
+});
+
 test('missing, unknown or misplaced proofs and duplicate IDs are reported', () => {
   const root = mkdtempSync(path.join(tmpdir(), 'ran-design-rules-'));
   try {

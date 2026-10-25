@@ -8,10 +8,11 @@ Métodos de composición, interacción, movimiento y revisión con evidencia, in
 
 Empieza con la tarea y el contenido real. Define un lenguaje visual compartido y revisa los estados completos en el navegador, incluido el teclado y el movimiento. Consulta los contratos detallados abajo.
 
-- [Composición visual](https://github.com/chaxus/ran/blob/main/design/DESIGN.md)
-- [Interacción](https://github.com/chaxus/ran/blob/main/design/INTERACTION.md)
-- [Validación](https://github.com/chaxus/ran/blob/main/design/ACCEPTANCE.md)
-- [Patrones de producto](https://github.com/chaxus/ran/blob/main/design/WORKFLOW_PATTERNS.md)
+- [Composición visual](/src/design/composition)
+- [Interacción](/src/design/interaction)
+- [Validación](/src/design/acceptance)
+- [Patrones de producto](/src/design/patterns)
+- [Índice de reglas](/src/design/rules)
 - [Referencias](https://github.com/chaxus/ran/blob/main/design/REFERENCE_RESEARCH.md)
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [Agentes](../agents/)

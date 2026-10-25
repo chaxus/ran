@@ -1076,6 +1076,11 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   white-space: normal;
   overflow-wrap: normal;
 }
+/* A sentence-long cell wraps instead of stretching the table to its whole length; short
+   identifiers never reach the cap, so they still never break mid-word. */
+.prose td {
+  max-width: 36rem;
+}
 .prose th,
 .prose td {
   text-align: start;
@@ -1200,6 +1205,38 @@ ran-demo:has(r-modal[closing]) {
 ran-demo p {
   display: contents;
   margin: 0;
+}
+
+/* ── Footer: what is reachable but not the product ───────────────────────── */
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ran-space-2, 8px) var(--ran-space-6, 24px);
+  margin-top: var(--ran-space-10, 40px);
+  padding-block: var(--ran-space-6, 24px);
+  border-top: 1px solid var(--rule);
+  font-size: 13px;
+}
+.site-footer__link {
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+.site-footer__link:hover {
+  color: var(--fg);
+  text-decoration: underline;
+}
+/* In the drawer the secondary links follow the product ones, quieter and set apart. */
+.mobile-nav__secondary {
+  display: contents;
+}
+.mobile-nav__secondary .nav__link {
+  color: var(--fg-muted);
+}
+.mobile-nav__secondary .nav__link:first-child {
+  margin-top: var(--ran-space-3, 12px);
+  padding-top: var(--ran-space-3, 12px);
+  border-top: 1px solid var(--rule);
 }
 
 /* ── Pager ───────────────────────────────────────────────────────────────── */

@@ -34,8 +34,9 @@ test.describe('native global navigation', () => {
         `${prefix}/design/`,
         `${prefix}/ranui/`,
         `${prefix}/ranuts/`,
-        `${articlePrefix}/articles/doc_preview`,
         `${prefix}/agents/`,
+        // Secondary destinations follow the product ones, set apart in the drawer.
+        `${articlePrefix}/articles/doc_preview`,
         'https://edit.chaxus.com/',
       ];
       expect(

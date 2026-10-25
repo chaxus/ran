@@ -29,7 +29,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { LOCALES } from '../build/langs/locales.ts';
-import { NAV, SIDEBAR } from '../build/langs/structure.ts';
+import { NAV, SECONDARY_NAV, SIDEBAR } from '../build/langs/structure.ts';
 import type { SidebarNode } from '../build/langs/types.ts';
 import { HOME_STRINGS } from '../build/langs/home-copy.ts';
 import { DEMO_STRINGS } from '../build/langs/demo-copy.ts';
@@ -58,6 +58,7 @@ const collect = (nodes: SidebarNode[]): void => {
   }
 };
 collect(NAV);
+collect(SECONDARY_NAV);
 for (const nodes of Object.values(SIDEBAR)) collect(nodes);
 
 for (const locale of LOCALES) {
