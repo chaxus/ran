@@ -36,7 +36,8 @@ export class FanGallery extends RanElement {
   _shadowDom!: ShadowRoot;
   private _slot: HTMLSlotElement;
   private _open = false;
-  private _active: Element | null = null;
+  private _hovered: Element | null = null;
+  private _focused: Element | null = null;
   private _stopEntry: (() => void) | null = null;
 
   static get observedAttributes(): string[] {
@@ -49,11 +50,12 @@ export class FanGallery extends RanElement {
     this._slot = Slot().build() as HTMLSlotElement;
     this._shadowDom.appendChild(Div().class('ran-fan-gallery').attr('part', 'stage').children(this._slot).build());
     this._slot.addEventListener('slotchange', () => this._layout(false));
-    this.addEventListener('pointerover', (event) => this._setActive(this._itemOf(event)));
-    this.addEventListener('pointerleave', () => this._setActive(null));
-    this.addEventListener('focusin', (event) => this._setActive(this._itemOf(event)));
+    // Pointer and focus are tracked apart, so the mouse leaving never drops a focused child.
+    this.addEventListener('pointerover', (event) => this._track('_hovered', this._itemOf(event)));
+    this.addEventListener('pointerleave', () => this._track('_hovered', null));
+    this.addEventListener('focusin', (event) => this._track('_focused', this._itemOf(event)));
     this.addEventListener('focusout', (event) => {
-      if (!this.contains(event.relatedTarget as Node | null)) this._setActive(null);
+      if (!this.contains(event.relatedTarget as Node | null)) this._track('_focused', null);
     });
   }
 
@@ -82,7 +84,9 @@ export class FanGallery extends RanElement {
       return;
     }
     this._layout(false);
+    // A line at the very bottom: a short gallery at the end of a page may never reach a higher one.
     this._stopEntry = observeEntry(this, {
+      line: 1,
       onEnter: ({ reduced }) => {
         this._stopEntry = null;
         this._open = true;
@@ -112,9 +116,9 @@ export class FanGallery extends RanElement {
     return (event.composedPath().find((node) => items.includes(node as Element)) as Element | undefined) ?? null;
   }
 
-  private _setActive(item: Element | null): void {
-    if (item === this._active) return;
-    this._active = item;
+  private _track(source: '_hovered' | '_focused', item: Element | null): void {
+    if (this[source] === item) return;
+    this[source] = item;
     this._layout(false);
   }
 
@@ -124,7 +128,8 @@ export class FanGallery extends RanElement {
     const count = items.length;
     const spread = Number.parseFloat(this.spread);
     const step = count > 1 && Number.isFinite(spread) ? spread / (count - 1) : 0;
-    const active = this._open && this._active ? items.indexOf(this._active as HTMLElement) : -1;
+    const lifted = this._hovered ?? this._focused;
+    const active = this._open && lifted ? items.indexOf(lifted as HTMLElement) : -1;
     items.forEach((item, index) => {
       const base = this._open ? (index - (count - 1) / 2) * step : 0;
       const part = active < 0 || index === active ? 0 : index < active ? -PART_DEG : PART_DEG;

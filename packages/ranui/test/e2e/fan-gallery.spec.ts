@@ -40,6 +40,17 @@ test.describe('with motion', () => {
     await page.mouse.move(0, 0);
     await expect.poll(() => rotations(page)).toEqual([-20, -10, 0, 10, 20]);
   });
+
+  test('a short gallery at the very end of a page still opens', async ({ page }) => {
+    const short = CARDS.replaceAll('height:160px', 'height:20px');
+    await page.setViewportSize({ width: 800, height: 800 });
+    await mount(
+      page,
+      `<div style="height:150vh"></div><r-fan-gallery id="fan" spread="40" style="--ran-fan-gallery-padding:8px">${short}</r-fan-gallery>`,
+    );
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await expect.poll(() => rotations(page)).toEqual([-20, -10, 0, 10, 20]);
+  });
 });
 
 test.describe('with reduced motion', () => {
@@ -61,5 +72,15 @@ test('focus lifts a child the same way a pointer does', async ({ page }) => {
   await mount(page, `<r-fan-gallery id="fan" spread="40" style="margin-top:80px">${CARDS}</r-fan-gallery>`);
   // WebKit does not Tab to buttons by default, so focus the child directly.
   await page.locator('#fan > button').first().focus();
+  await expect.poll(() => rotations(page)).toEqual([-20, -6, 4, 14, 24]);
+});
+
+test('the pointer leaving does not drop a child that still has focus', async ({ page }) => {
+  await isolatedSetup(page, DEV_SERVER, 'r-fan-gallery');
+  await mount(page, `<r-fan-gallery id="fan" spread="40" style="margin-top:80px">${CARDS}</r-fan-gallery>`);
+  await page.locator('#fan > button').first().focus();
+  await page.locator('#fan > button').nth(4).hover();
+  await expect.poll(() => rotations(page)).toEqual([-24, -14, -4, 6, 20]);
+  await page.mouse.move(0, 0);
   await expect.poll(() => rotations(page)).toEqual([-20, -6, 4, 14, 24]);
 });
