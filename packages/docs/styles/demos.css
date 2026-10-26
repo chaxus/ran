@@ -355,6 +355,8 @@
 
 .playground {
   display: grid;
+  /* The track must not grow to a wide example's min-content; the stage scrolls instead. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--ran-space-4, 16px);
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-md, 12px);
@@ -367,14 +369,17 @@
   justify-content: center;
   gap: var(--ran-space-3, 12px);
   min-height: 96px;
+  overflow-x: auto;
   padding: var(--ran-space-6, 24px);
   border-radius: var(--ran-radius-sm, 6px);
   background: var(--bg-soft);
 }
 .playground__controls {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(12rem, 100%), 1fr));
   gap: var(--ran-space-3, 12px) var(--ran-space-4, 16px);
+  /* A fieldset defaults to min-content wide, which would hold the playground open. */
+  min-inline-size: 0;
   margin: 0;
   padding: 0;
   border: 0;
