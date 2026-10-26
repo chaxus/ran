@@ -1,3 +1,5 @@
+import { SIDEBAR_SCROLL_KEY } from '../../client/sidebar.ts';
+
 export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0';
 
 export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`;
@@ -15,10 +17,55 @@ export const BD_ANALYSE = `
     if (window.requestIdleCallback) window.requestIdleCallback(load, { timeout: 2000 });
     else window.setTimeout(load, 0);
   }
-  if (document.readyState === 'complete') schedule();
-  else window.addEventListener('load', schedule, { once: true });
+  function start() {
+    if (document.readyState === 'complete') schedule();
+    else window.addEventListener('load', schedule, { once: true });
+  }
+  // A page rendered ahead on hover is not a visit until the reader opens it.
+  if (document.prerendering) document.addEventListener('prerenderingchange', start, { once: true });
+  else start();
 })();
 `;
+
+/**
+ * Renders the next docs page while the reader's pointer rests on its link (about 200ms in
+ * Chromium), so the click shows a finished page instead of a loading one. Browsers without
+ * speculation rules ignore the script.
+ */
+export const SPECULATION_RULES = JSON.stringify({
+  prerender: [
+    {
+      where: {
+        and: [
+          { href_matches: '/*' },
+          { selector_matches: '.sb__link, .nav__link, .pager__link, .prose a' },
+          { not: { selector_matches: '[download], [target]' } },
+        ],
+      },
+      eagerness: 'moderate',
+    },
+  ],
+});
+
+/**
+ * Puts the sidebar back where the reader left it, before the first paint. It runs inline right
+ * after the sidebar markup: from the module bundle it would run after paint and visibly jump.
+ * A position saved on another sidebar (another section or language) is ignored; either way
+ * the current page's link ends up in view.
+ */
+export const SIDEBAR_SCROLL = `(function(){
+  var sidebar = document.getElementById('doc-sidebar');
+  if (!sidebar || window.innerWidth < 900) return;
+  var first = sidebar.querySelector('.sb__link');
+  var saved = null;
+  try { saved = JSON.parse(sessionStorage.getItem('${SIDEBAR_SCROLL_KEY}') || 'null'); } catch (e) {}
+  if (saved && first && saved.sidebar === first.getAttribute('href')) sidebar.scrollTop = saved.top;
+  var current = sidebar.querySelector('.sb__link[aria-current="page"]');
+  if (!current) return;
+  var box = current.getBoundingClientRect();
+  var frame = sidebar.getBoundingClientRect();
+  if (box.top < frame.top || box.bottom > frame.bottom) sidebar.scrollTop += box.top - frame.top - frame.height / 3;
+})();`;
 
 export const PREVIEW_CODE = `
   window.uploadFile = (name) => {

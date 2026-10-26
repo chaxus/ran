@@ -651,6 +651,33 @@ a {
   padding-bottom: 0;
 }
 
+/* ── Page transitions ────────────────────────────────────────────────────── */
+
+/*
+ * Moving between docs pages cross-fades the content while the header and the sidebar hold
+ * still, so a click reads as the page changing, not the whole window reloading. Browsers
+ * without cross-document view transitions navigate as before.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--ran-motion-duration-base);
+}
+/* Named only where both are on screen: the drawer sidebar is hidden, and a hidden element
+   cannot be captured. */
+@media (min-width: 900px) {
+  .site-header {
+    view-transition-name: site-header;
+  }
+  .sidebar {
+    view-transition-name: sidebar;
+  }
+}
+
 /* ── Sidebar ─────────────────────────────────────────────────────────────── */
 
 .sidebar {
@@ -749,6 +776,36 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .sb__link:hover {
   color: var(--fg);
   background: var(--bg-soft);
+}
+/* With script, one fill slides between rows (client/sidebar.ts) instead of each row
+   painting its own. It is the sidebar's first child and unstacked, so the positioned
+   links paint over it. */
+.sidebar[data-hover-fill] .sb__link:hover {
+  background: transparent;
+}
+.sb__hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-radius: 5px;
+  background: var(--bg-soft);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--ran-motion-duration-slow) var(--ran-motion-ease-standard),
+    width var(--ran-motion-duration-slow) var(--ran-motion-ease-standard),
+    height var(--ran-motion-duration-slow) var(--ran-motion-ease-standard),
+    opacity var(--ran-motion-duration-fast) linear;
+}
+.sb__hover[data-instant] {
+  transition: opacity var(--ran-motion-duration-fast) linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sb__hover {
+    transition: none;
+  }
 }
 /*
  * Selection is persistent state and must read differently from hover, which is transient.

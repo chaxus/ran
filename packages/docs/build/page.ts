@@ -20,6 +20,8 @@ import {
   PREVIEW_CODE,
   SERVICE_WORK,
   SET_FONT_SIZE,
+  SIDEBAR_SCROLL,
+  SPECULATION_RULES,
 } from './common/index.ts';
 import type { LocaleDef } from './config.ts';
 import type { DocPage } from './content.ts';
@@ -172,6 +174,7 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
 <script>${GOOGLE_ANALYSE}</script>
 <script>${BD_ANALYSE}</script>
 <script>${SERVICE_WORK}</script>
+<script type="speculationrules">${SPECULATION_RULES}</script>
 ${head.join('\n')}
 ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
 </head>
@@ -192,7 +195,7 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
   </div>
 </header>
 <div class="layout">
-<label class="drawer__scrim" for="drawer"></label><nav id="doc-sidebar" class="sidebar${sb ? '' : ' sidebar--mobile-only'}" aria-label="${escapeHtml(ui.sidebarMenu)}"><div class="mobile-nav">${navHtml}<div class="mobile-nav__secondary">${linksHtml(secondary, 'nav__link')}</div></div>${sb}</nav>
+<label class="drawer__scrim" for="drawer"></label><nav id="doc-sidebar" class="sidebar${sb ? '' : ' sidebar--mobile-only'}" aria-label="${escapeHtml(ui.sidebarMenu)}"><div class="mobile-nav">${navHtml}<div class="mobile-nav__secondary">${linksHtml(secondary, 'nav__link')}</div></div>${sb}</nav>${sb ? `<script>${SIDEBAR_SCROLL}</script>` : ''}
 <main id="main" class="doc">
 ${tocHtml(page, ui.outline) ? `<details class="mobile-toc"><summary>${escapeHtml(ui.outline)}</summary>${tocHtml(page, ui.outline).replace(/<aside[^>]*>|<\/aside>|<p[^>]*>.*?<\/p>/g, '')}</details>` : ''}
 <${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div class="landing"' : 'article class="prose"'}>${page.html}</${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div' : 'article'}>

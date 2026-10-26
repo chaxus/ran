@@ -42,6 +42,8 @@ script. Navigation, sidebar, outline and language menu are generated HTML.
 ## Motion
 
 Interaction feedback only. Every landing section is visible on first paint; there is no scroll reveal.
+The sidebar's hover fill slides from row to row, and moving between docs pages cross-fades the content
+while the header and sidebar hold still. Both stop under reduced motion.
 
 ## Responsive Rules
 
