@@ -2,6 +2,14 @@
 
 The release set is **ranuts → @alixex/ranview → ranui**, in dependency order. Other workspaces are not published by this workflow. All workspaces and the published libraries require **Node 24+**. Use pnpm **11.6.0**, pinned in the root `packageManager` field; the release workflow pins npm **11.20.0** for registry operations.
 
+## Patch candidate — 2026-10-26
+
+The next release set is `ranuts@0.5.3` → `@alixex/ranview@0.2.3` → `ranui@0.5.3`.
+These versions are prepared for verification, **not yet published**. ranui keeps a labelled
+`r-select`'s field inside its host and stops `r-icon`'s spin under reduced motion; all three
+packages point their README and homepage links at the documentation site's new URLs. The
+published installation examples below remain valid until the registry confirms the new release.
+
 ## Published stable release — 2026-10-24
 
 | Package         | Version | npm tag |

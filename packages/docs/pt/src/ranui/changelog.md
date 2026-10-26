@@ -9,6 +9,15 @@ Gerado a partir de `packages/ranui/CHANGELOG.md` do repositório. As entradas ma
 
 ::: v-pre
 
+## [0.5.3] — 2026-10-26
+
+Release preparation; npm publication is pending verification.
+
+- A labelled `r-select` keeps its field inside its own box. The field was 100% of a host that already includes the label, so whenever the host's height was definite — an explicit height, or a flex item in a container of definite height — the field overflowed by the label's height into the next element. A labelled host now stacks caption and field and gives the field the remaining height, as `r-input` does. Unlabelled selects are unchanged.
+- `<r-icon spin>` stops spinning under `prefers-reduced-motion: reduce`. The reduced-motion styles adopted into every shadow root reached the shadow tree but not the host, where the spin runs.
+- README and package `homepage` links point at the documentation site's new URLs (`/ranui/…` instead of `/src/ranui/…`); the old addresses redirect.
+- Coordinate `ranuts@0.5.3` and `@alixex/ranview@0.2.3`, whose only changes are the same link updates; packed internal dependencies resolve to those exact versions.
+
 ## [0.5.2] — 2026-10-24
 
 Published to npm as [ranui@0.5.2](https://www.npmjs.com/package/ranui/v/0.5.2) on the `latest` tag.

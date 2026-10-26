@@ -2,6 +2,15 @@
 
 `ranui` 的所有重要变更都记录在本文件中。
 
+## [0.5.3] — 2026-10-26
+
+发布准备版本；通过验证后再发布到 npm。
+
+- 带 `label` 的 `r-select` 不再撑出自己的盒子。字段高度原本是宿主的 100%，而宿主高度里已经包含了 label，所以只要宿主高度是确定的（设了显式高度，或者作为 flex 子项、容器高度确定），字段就会多出一个 label 的高度，压到下一个元素上。现在带 label 的宿主改为纵向排列标题和字段，字段占据剩余高度，和 `r-input` 一致。不带 label 的 select 不受影响。
+- 开启 `prefers-reduced-motion: reduce` 后，`<r-icon spin>` 不再旋转。每个 shadow root 引入的减弱动效样式只作用于 shadow 树内部，管不到宿主元素，而旋转动画恰好写在宿主上。
+- README 和 package 的 `homepage` 链接改为文档站的新地址（`/ranui/…`，不再是 `/src/ranui/…`），旧地址会自动跳转。
+- 联动 `ranuts@0.5.3` 和 `@alixex/ranview@0.2.3`，它们只更新了同样的链接；打包后的内部依赖使用这些确切版本。
+
 ## [0.5.2] — 2026-10-24
 
 [ranui@0.5.2](https://www.npmjs.com/package/ranui/v/0.5.2) 已正式发布到 npm 的 `latest` 标签。
