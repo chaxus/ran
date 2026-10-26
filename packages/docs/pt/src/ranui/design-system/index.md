@@ -30,7 +30,7 @@ O ranui adota essa escada como as escalas `--ran-*` dele, põe tokens semântico
 **Camada 2: os tokens semânticos.** `--ran-color-*` e companhia, mapeados sobre a camada 1. **Consuma esta camada.** O modo escuro redefine só a camada 1, então todo token semântico vira pelo `var()` sem nenhuma sobrescrita escura por componente em lugar algum da biblioteca.
 
 ```
---ran-gray-1000        →  #171717 (claro)  /  #ededed (escuro)   ← camada 1, vira
+--ran-gray-1000        →  #111113 (claro)  /  #ededef (escuro)   ← camada 1, vira
 --ran-color-text       →  var(--ran-gray-1000)                    ← camada 2, acompanha
 --ran-btn-color        →  var(--ran-color-text, …)                ← token de componente
 ```
@@ -55,8 +55,8 @@ Toda escala de matiz vai de `100` a `1000`, e cada degrau tem uma função fixa:
 
 | Token                  | Claro                                                           | Escuro                                                          | Serve para                |
 | ---------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------- |
-| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | Fundo da página           |
-| `--ran-background-200` | <span class="swatch" style="--swatch:#fafafa"></span> `#fafafa` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | Zonas discretas da página |
+| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#0a0a0b"></span> `#0a0a0b` | Fundo da página           |
+| `--ran-background-200` | <span class="swatch" style="--swatch:#f7f7f8"></span> `#f7f7f8` | <span class="swatch" style="--swatch:#111113"></span> `#111113` | Zonas discretas da página |
 
 ### Cinza — `--ran-gray-100..1000`
 
@@ -64,16 +64,16 @@ A escala que está por trás do texto, das bordas e das superfícies.
 
 | Degrau | Claro                                                           | Escuro                                                          |
 | ------ | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| 100    | <span class="swatch" style="--swatch:#f2f2f2"></span> `#f2f2f2` | <span class="swatch" style="--swatch:#1a1a1a"></span> `#1a1a1a` |
-| 200    | <span class="swatch" style="--swatch:#ebebeb"></span> `#ebebeb` | <span class="swatch" style="--swatch:#1f1f1f"></span> `#1f1f1f` |
-| 300    | <span class="swatch" style="--swatch:#e6e6e6"></span> `#e6e6e6` | <span class="swatch" style="--swatch:#292929"></span> `#292929` |
-| 400    | <span class="swatch" style="--swatch:#eaeaea"></span> `#eaeaea` | <span class="swatch" style="--swatch:#2e2e2e"></span> `#2e2e2e` |
-| 500    | <span class="swatch" style="--swatch:#c9c9c9"></span> `#c9c9c9` | <span class="swatch" style="--swatch:#454545"></span> `#454545` |
-| 600    | <span class="swatch" style="--swatch:#a8a8a8"></span> `#a8a8a8` | <span class="swatch" style="--swatch:#878787"></span> `#878787` |
-| 700    | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` |
-| 800    | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` |
-| 900    | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` | <span class="swatch" style="--swatch:#a0a0a0"></span> `#a0a0a0` |
-| 1000   | <span class="swatch" style="--swatch:#171717"></span> `#171717` | <span class="swatch" style="--swatch:#ededed"></span> `#ededed` |
+| 100    | <span class="swatch" style="--swatch:#f0f0f2"></span> `#f0f0f2` | <span class="swatch" style="--swatch:#1c1c20"></span> `#1c1c20` |
+| 200    | <span class="swatch" style="--swatch:#ebebee"></span> `#ebebee` | <span class="swatch" style="--swatch:#232328"></span> `#232328` |
+| 300    | <span class="swatch" style="--swatch:#e2e2e6"></span> `#e2e2e6` | <span class="swatch" style="--swatch:#2c2c32"></span> `#2c2c32` |
+| 400    | <span class="swatch" style="--swatch:#e4e4e8"></span> `#e4e4e8` | <span class="swatch" style="--swatch:#26262b"></span> `#26262b` |
+| 500    | <span class="swatch" style="--swatch:#b8b8c0"></span> `#b8b8c0` | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` |
+| 600    | <span class="swatch" style="--swatch:#9d9da6"></span> `#9d9da6` | <span class="swatch" style="--swatch:#52525b"></span> `#52525b` |
+| 700    | <span class="swatch" style="--swatch:#8a8a94"></span> `#8a8a94` | <span class="swatch" style="--swatch:#71717a"></span> `#71717a` |
+| 800    | <span class="swatch" style="--swatch:#6e6e78"></span> `#6e6e78` | <span class="swatch" style="--swatch:#8b8b94"></span> `#8b8b94` |
+| 900    | <span class="swatch" style="--swatch:#55555e"></span> `#55555e` | <span class="swatch" style="--swatch:#a1a1aa"></span> `#a1a1aa` |
+| 1000   | <span class="swatch" style="--swatch:#111113"></span> `#111113` | <span class="swatch" style="--swatch:#ededef"></span> `#ededef` |
 
 ### Cinza alfa — `--ran-gray-alpha-100..1000`
 
@@ -81,16 +81,16 @@ Translúcida, então se sobrepõe a qualquer superfície: a escolha certa para u
 
 | Degrau | Claro                                                                        | Escuro                                                                       |
 | ------ | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100    | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200    | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300    | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400    | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500    | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600    | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700    | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800    | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900    | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000   | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100    | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200    | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300    | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400    | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500    | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600    | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700    | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800    | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900    | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000   | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### Azul — `--ran-blue-100..1000`
 
@@ -104,8 +104,8 @@ Reservado para os links e o anel de foco.
 | 400    | <span class="swatch" style="--swatch:#cae7ff"></span> `#cae7ff` | <span class="swatch" style="--swatch:#003674"></span> `#003674` |
 | 500    | <span class="swatch" style="--swatch:#94ccff"></span> `#94ccff` | <span class="swatch" style="--swatch:#00418b"></span> `#00418b` |
 | 600    | <span class="swatch" style="--swatch:#48aeff"></span> `#48aeff` | <span class="swatch" style="--swatch:#0090ff"></span> `#0090ff` |
-| 700    | <span class="swatch" style="--swatch:#006bff"></span> `#006bff` | <span class="swatch" style="--swatch:#006efe"></span> `#006efe` |
-| 800    | <span class="swatch" style="--swatch:#0059ec"></span> `#0059ec` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
+| 700    | <span class="swatch" style="--swatch:#0a6cff"></span> `#0a6cff` | <span class="swatch" style="--swatch:#3b82f6"></span> `#3b82f6` |
+| 800    | <span class="swatch" style="--swatch:#0a5bd8"></span> `#0a5bd8` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
 | 900    | <span class="swatch" style="--swatch:#005ff2"></span> `#005ff2` | <span class="swatch" style="--swatch:#47a8ff"></span> `#47a8ff` |
 | 1000   | <span class="swatch" style="--swatch:#002359"></span> `#002359` | <span class="swatch" style="--swatch:#eaf6ff"></span> `#eaf6ff` |
 
@@ -121,7 +121,7 @@ Perigo e erros.
 | 400    | <span class="swatch" style="--swatch:#ffd7d6"></span> `#ffd7d6` | <span class="swatch" style="--swatch:#6f101b"></span> `#6f101b` |
 | 500    | <span class="swatch" style="--swatch:#ffb1b3"></span> `#ffb1b3` | <span class="swatch" style="--swatch:#88151f"></span> `#88151f` |
 | 600    | <span class="swatch" style="--swatch:#ff676d"></span> `#ff676d` | <span class="swatch" style="--swatch:#f32e40"></span> `#f32e40` |
-| 700    | <span class="swatch" style="--swatch:#fc0035"></span> `#fc0035` | <span class="swatch" style="--swatch:#f13242"></span> `#f13242` |
+| 700    | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` |
 | 800    | <span class="swatch" style="--swatch:#ea001d"></span> `#ea001d` | <span class="swatch" style="--swatch:#e2162a"></span> `#e2162a` |
 | 900    | <span class="swatch" style="--swatch:#d8001b"></span> `#d8001b` | <span class="swatch" style="--swatch:#ff565f"></span> `#ff565f` |
 | 1000   | <span class="swatch" style="--swatch:#47000c"></span> `#47000c` | <span class="swatch" style="--swatch:#ffe9ed"></span> `#ffe9ed` |
@@ -164,29 +164,30 @@ Sucesso.
 
 A camada que os componentes de fato leem. Tudo aqui se resolve pelas escalas de cima, então vira com o tema sozinho.
 
-| Token                          | Resolve para                                                                                                                               | Papel                                     |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
-| `--ran-color-bg`               | `--ran-background-100`                                                                                                                     | Fundo da página                           |
-| `--ran-color-bg-subtle`        | `--ran-background-200`                                                                                                                     | Zonas discretas da página                 |
-| `--ran-color-bg-elevated`      | `--ran-background-100` · gray-100 (escuro)                                                                                                 | Cartões, superfícies                      |
-| `--ran-color-bg-muted`         | `--ran-gray-100`                                                                                                                           | Preenchimentos recuados ou apagados       |
-| `--ran-color-bg-hover`         | `--ran-gray-200`                                                                                                                           | Superfície do hover                       |
-| `--ran-color-bg-active`        | `--ran-gray-300`                                                                                                                           | Superfície ativa (pressionada)            |
-| `--ran-color-text`             | `--ran-gray-1000`                                                                                                                          | Texto principal                           |
-| `--ran-color-text-secondary`   | `--ran-gray-900`                                                                                                                           | Texto secundário                          |
-| `--ran-color-text-disabled`    | `--ran-gray-700`                                                                                                                           | Texto desabilitado                        |
-| `--ran-color-border`           | `--ran-gray-400`                                                                                                                           | Borda padrão                              |
-| `--ran-color-border-secondary` | `--ran-gray-300`                                                                                                                           | Borda mais discreta                       |
-| `--ran-color-border-hover`     | `--ran-gray-500`                                                                                                                           | Borda do hover                            |
-| `--ran-color-border-active`    | `--ran-gray-600`                                                                                                                           | Borda ativa                               |
-| `--ran-color-primary`          | `--ran-gray-1000`                                                                                                                          | A ação principal (monocromática)          |
-| `--ran-color-primary-hover`    | <span class="swatch" style="--swatch:#383838"></span> `#383838` · <span class="swatch" style="--swatch:#cccccc"></span> `#cccccc` (escuro) | Hover do primário                         |
-| `--ran-color-primary-active`   | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` · <span class="swatch" style="--swatch:#b3b3b3"></span> `#b3b3b3` (escuro) | Primário pressionado                      |
-| `--ran-color-primary-text`     | `--ran-background-100`                                                                                                                     | A tinta **sobre** uma superfície primária |
-| `--ran-color-success`          | `--ran-green-700`                                                                                                                          | Sucesso                                   |
-| `--ran-color-warning`          | `--ran-amber-700`                                                                                                                          | Aviso                                     |
-| `--ran-color-danger`           | `--ran-red-700`                                                                                                                            | Perigo / erro                             |
-| `--ran-color-link`             | `--ran-blue-700`                                                                                                                           | Links                                     |
+| Token                          | Resolve para                                                                                                                               | Papel                                                       |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| `--ran-color-bg`               | `--ran-background-100`                                                                                                                     | Fundo da página                                             |
+| `--ran-color-bg-subtle`        | `--ran-background-200`                                                                                                                     | Zonas discretas da página                                   |
+| `--ran-color-bg-elevated`      | `--ran-background-100` · gray-100 (escuro)                                                                                                 | Cartões, superfícies                                        |
+| `--ran-color-bg-muted`         | `--ran-gray-100`                                                                                                                           | Preenchimentos recuados ou apagados                         |
+| `--ran-color-bg-hover`         | `--ran-gray-200`                                                                                                                           | Superfície do hover                                         |
+| `--ran-color-bg-active`        | `--ran-gray-300`                                                                                                                           | Superfície ativa (pressionada)                              |
+| `--ran-color-text`             | `--ran-gray-1000`                                                                                                                          | Texto principal                                             |
+| `--ran-color-text-secondary`   | `--ran-gray-900`                                                                                                                           | Texto secundário                                            |
+| `--ran-color-text-disabled`    | `--ran-gray-700`                                                                                                                           | Texto desabilitado                                          |
+| `--ran-color-border`           | `--ran-gray-400`                                                                                                                           | Borda padrão                                                |
+| `--ran-color-border-secondary` | `--ran-gray-300`                                                                                                                           | Borda mais discreta                                         |
+| `--ran-color-border-hover`     | `--ran-gray-500`                                                                                                                           | Borda do hover                                              |
+| `--ran-color-border-active`    | `--ran-gray-600`                                                                                                                           | Borda ativa                                                 |
+| `--ran-color-border-control`   | `--ran-gray-700`                                                                                                                           | Bordas de controles: campo, caixa de seleção, seletor (3:1) |
+| `--ran-color-primary`          | `--ran-gray-1000`                                                                                                                          | A ação principal (monocromática)                            |
+| `--ran-color-primary-hover`    | <span class="swatch" style="--swatch:#2a2a2e"></span> `#2a2a2e` · <span class="swatch" style="--swatch:#d4d4d8"></span> `#d4d4d8` (escuro) | Hover do primário                                           |
+| `--ran-color-primary-active`   | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` · <span class="swatch" style="--swatch:#b4b4bb"></span> `#b4b4bb` (escuro) | Primário pressionado                                        |
+| `--ran-color-primary-text`     | `--ran-background-100`                                                                                                                     | A tinta **sobre** uma superfície primária                   |
+| `--ran-color-success`          | `--ran-green-700`                                                                                                                          | Sucesso                                                     |
+| `--ran-color-warning`          | `--ran-amber-700`                                                                                                                          | Aviso                                                       |
+| `--ran-color-danger`           | `--ran-red-700`                                                                                                                            | Perigo / erro                                               |
+| `--ran-color-link`             | `--ran-blue-800`                                                                                                                           | Links                                                       |
 
 `--ran-color-primary-hover` / `-active` são os dois literais da camada semântica: eles caminham em direção ao fundo da página em vez de ao longo de uma escala, então o modo escuro os redefine direto.
 
@@ -274,22 +275,24 @@ Sem ela, os tokens recaem nas pilhas de fontes do sistema; tudo continua funcion
 
 ## Raio
 
-| Token               | Valor    | Serve para                       |
-| ------------------- | -------- | -------------------------------- |
-| `--ran-radius-sm`   | `6px`    | Controles: botão, campo, seletor |
-| `--ran-radius-md`   | `12px`   | Cartões, diálogos                |
-| `--ran-radius-lg`   | `16px`   | Superfícies grandes              |
-| `--ran-radius-full` | `9999px` | Pílulas, avatares                |
+| Token               | Valor    | Serve para                        |
+| ------------------- | -------- | --------------------------------- |
+| `--ran-radius-xs`   | `4px`    | Marcas pequenas: etiquetas, selos |
+| `--ran-radius-sm`   | `8px`    | Controles: botão, campo, seletor  |
+| `--ran-radius-md`   | `12px`   | Cartões, diálogos                 |
+| `--ran-radius-lg`   | `16px`   | Superfícies grandes               |
+| `--ran-radius-xl`   | `24px`   | Molduras de página                |
+| `--ran-radius-full` | `9999px` | Pílulas, avatares                 |
 
 ## Elevação
 
 A sombra é um **papel**, não enfeite. Escolha o nível pelo que o elemento é. O modo escuro substitui os três, porque uma sombra afinada para uma página branca some numa preta.
 
-| Token                   | Serve para                                                                   | Claro                                                           | Escuro                                                                                      |
-| ----------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `--ran-shadow-elevated` | Superfícies no fluxo que também têm borda: `r-card`, `r-section`             | `0 1px 2px rgba(0,0,0,.04), 0 2px 4px -2px rgba(0,0,0,.05)`     | `0 1px 2px rgba(0,0,0,.16)`                                                                 |
-| `--ran-shadow-menu`     | Camadas passageiras sobre o conteúdo: menu suspenso, seletor, popover, aviso | `0 2px 4px rgba(0,0,0,.05), 0 8px 24px -6px rgba(0,0,0,.14)`    | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
-| `--ran-shadow-modal`    | Diálogos que bloqueiam: `r-modal`                                            | `0 4px 12px rgba(0,0,0,.08), 0 20px 48px -12px rgba(0,0,0,.22)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
+| Token                   | Serve para                                                                   | Claro                                                          | Escuro                                                                                      |
+| ----------------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `--ran-shadow-elevated` | Superfícies no fluxo que também têm borda: `r-card`, `r-section`             | `0 1px 2px rgba(0,0,0,.04)`                                    | `inset 0 1px 0 rgba(255,255,255,.06), 0 1px 2px rgba(0,0,0,.16)`                            |
+| `--ran-shadow-menu`     | Camadas passageiras sobre o conteúdo: menu suspenso, seletor, popover, aviso | `0 1px 2px rgba(0,0,0,.06), 0 12px 32px -8px rgba(0,0,0,.16)`  | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
+| `--ran-shadow-modal`    | Diálogos que bloqueiam: `r-modal`                                            | `0 2px 4px rgba(0,0,0,.06), 0 24px 64px -12px rgba(0,0,0,.24)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
 
 Camadas sem borda contam só com a sombra para se separar, então os níveis de camada flutuante carregam peso de verdade; uma camada que cai no nível elevado parece plana e pregada à página.
 
@@ -309,17 +312,17 @@ A escada começa em 1000 para passar por cima da moldura comum de uma página (b
 
 | Token                        | Valor   | Uso                                |
 | ---------------------------- | ------- | ---------------------------------- |
-| `--ran-motion-duration-fast` | `0.15s` | Transições de hover e estado ativo |
+| `--ran-motion-duration-fast` | `0.14s` | Transições de hover e estado ativo |
 | `--ran-motion-duration-base` | `0.2s`  | Popovers, menus                    |
-| `--ran-motion-duration-slow` | `0.35s` | Aparições maiores                  |
+| `--ran-motion-duration-slow` | `0.28s` | Aparições maiores                  |
 
-| Token de aceleração          | Curva                               | Caráter                                                            |
-| ---------------------------- | ----------------------------------- | ------------------------------------------------------------------ |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.645,0.045,0.355,1)` | De entrada e saída, de uso geral                                   |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`       | Rápida, sem passar do ponto: interruptores                         |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.34,1.26,0.5,1)`     | Passa levemente do ponto: botões, cartões                          |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)`    | Passa do ponto de forma brincalhona: curtir, adicionar ao carrinho |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`         | Calma, sem passar do ponto: aparições, layout                      |
+| Token de aceleração          | Curva                            | Caráter                                                            |
+| ---------------------------- | -------------------------------- | ------------------------------------------------------------------ |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | Desacelerada, de uso geral                                         |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | Rápida, sem passar do ponto: interruptores                         |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | Passa levemente do ponto: botões, cartões                          |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | Passa do ponto de forma brincalhona: curtir, adicionar ao carrinho |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | Calma, sem passar do ponto: aparições, layout                      |
 
 A família spring é destilada de molas afinadas do SwiftUI (response/damping reduzidos a uma bézier de uma só ultrapassagem).
 

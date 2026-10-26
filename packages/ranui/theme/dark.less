@@ -5,20 +5,20 @@
 // shadows are overridden explicitly.
 .ran-theme-dark() {
   /* ── Backgrounds ──────────────────────────────────────────────── */
-  --ran-background-100: #000000;
-  --ran-background-200: #000000;
+  --ran-background-100: #0a0a0b;
+  --ran-background-200: #111113;
 
   /* ── Gray scale ───────────────────────────────────────────────── */
-  --ran-gray-100: #1a1a1a;
-  --ran-gray-200: #1f1f1f;
-  --ran-gray-300: #292929;
-  --ran-gray-400: #2e2e2e;
-  --ran-gray-500: #454545;
-  --ran-gray-600: #878787;
-  --ran-gray-700: #8f8f8f;
-  --ran-gray-800: #7d7d7d;
-  --ran-gray-900: #a0a0a0;
-  --ran-gray-1000: #ededed;
+  --ran-gray-100: #1c1c20;
+  --ran-gray-200: #232328;
+  --ran-gray-300: #2c2c32;
+  --ran-gray-400: #26262b;
+  --ran-gray-500: #3f3f46;
+  --ran-gray-600: #52525b;
+  --ran-gray-700: #71717a; /* control boundaries 4.0:1 */
+  --ran-gray-800: #8b8b94;
+  --ran-gray-900: #a1a1aa; /* 7.7:1 */
+  --ran-gray-1000: #ededef; /* 16.9:1 */
 
   /* ── Gray alpha ───────────────────────────────────────────────── */
   --ran-gray-alpha-100: #ffffff12;
@@ -39,7 +39,7 @@
   --ran-blue-400: #003674;
   --ran-blue-500: #00418b;
   --ran-blue-600: #0090ff;
-  --ran-blue-700: #006efe;
+  --ran-blue-700: #3b82f6; /* focus */
   --ran-blue-800: #005be7;
   --ran-blue-900: #47a8ff;
   --ran-blue-1000: #eaf6ff;
@@ -51,7 +51,7 @@
   --ran-red-400: #6f101b;
   --ran-red-500: #88151f;
   --ran-red-600: #f32e40;
-  --ran-red-700: #f13242;
+  --ran-red-700: #d70f2f; /* white text on it: 5.3:1, as in light */
   --ran-red-800: #e2162a;
   --ran-red-900: #ff565f;
   --ran-red-1000: #ffe9ed;
@@ -81,14 +81,17 @@
   --ran-green-1000: #d8ffe4;
 
   /* ── Surfaces that do not track a single scale step ───────────── */
-  --ran-color-bg-elevated: var(--ran-gray-100);
+  /* Dark depth is a surface ladder: page < subtle < elevated < muted. */
+  --ran-color-bg-elevated: #18181b;
+  --ran-color-link: #5b9dff; /* 7.3:1 */
   /* Monochrome primary hover/active: in dark the surface is near-white, so it
      steps DOWN toward gray (mirror of the light-mode step up toward black). */
-  --ran-color-primary-hover: #cccccc;
-  --ran-color-primary-active: #b3b3b3;
+  --ran-color-primary-hover: #d4d4d8;
+  --ran-color-primary-active: #b4b4bb;
 
   /* ── Elevation ────────────────────────────────────────────────── */
-  --ran-shadow-elevated: 0 1px 2px rgba(0, 0, 0, 0.16);
+  /* A raised surface catches light on its top edge; shadows alone vanish on a dark page. */
+  --ran-shadow-elevated: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 2px rgba(0, 0, 0, 0.16);
   --ran-shadow-menu:
     0 1px 1px rgba(0, 0, 0, 0.2), 0 4px 8px -4px rgba(0, 0, 0, 0.4), 0 16px 24px -8px rgba(0, 0, 0, 0.5);
   --ran-shadow-modal:

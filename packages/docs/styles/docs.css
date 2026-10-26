@@ -10,6 +10,31 @@
  * is the default. Tokens are declared once on bare `:root` and only redefined after.
  */
 
+/* Geist ships as two variable woff2 files in public/fonts. `swap` keeps text on first paint
+   in the fallback face; CJK and Arabic have no glyphs here and fall through to system fonts. */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/geist-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/geist-mono-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Code outside the article (the home install line, package facts) otherwise falls back to the
+   browser's monospace, which is Courier on most systems. */
+code,
+kbd,
+samp {
+  font-family: var(--font-mono);
+}
+
 /*
  * The palette is ranui's, not a second one.
  *
@@ -25,31 +50,31 @@
  */
 :root {
   --bg: var(--ran-color-bg, #ffffff);
-  --bg-soft: var(--ran-color-bg-subtle, #f6f7f9);
-  --bg-code: var(--ran-color-bg-muted, #f8f9fb);
-  --fg: var(--ran-color-text, #1a1d21);
-  --fg-muted: var(--ran-color-text-secondary, #596270);
-  --fg-faint: var(--ran-color-text-disabled, #8a929e);
-  --rule: var(--ran-color-border-secondary, #e3e6ea);
-  --rule-strong: var(--ran-color-border, #c9ced6);
-  --accent: var(--ran-color-primary, #0b5fe0);
-  --accent-hover: var(--ran-color-primary-hover, #0847ad);
-  --accent-wash: var(--ran-color-bg-hover, #eaf1fe);
+  --bg-soft: var(--ran-color-bg-subtle, #f7f7f8);
+  --bg-code: var(--ran-color-bg-muted, #f0f0f2);
+  --fg: var(--ran-color-text, #111113);
+  --fg-muted: var(--ran-color-text-secondary, #55555e);
+  --fg-faint: var(--ran-color-text-disabled, #8a8a94);
+  --rule: var(--ran-color-border-secondary, #e2e2e6);
+  --rule-strong: var(--ran-color-border, #e4e4e8);
+  --accent: var(--ran-color-primary, #111113);
+  --accent-hover: var(--ran-color-primary-hover, #2a2a2e);
+  --accent-wash: var(--ran-color-bg-hover, #ebebee);
   /*
    * ranui reserves a blue for links and the focus ring; `--ran-color-primary` is
    * near-black and means commitment, not prose. Using primary for links made every link
    * in the body the same colour as the text around it.
    */
-  --link: var(--ran-color-link, #0b5fe0);
+  --link: var(--ran-color-link, #0a5bd8);
 
   --callout-note: var(--ran-color-text-secondary, #4b5563);
   --callout-tip: var(--ran-color-success, #0a7d4f);
   --callout-warning: var(--ran-color-warning, #9a6206);
   --callout-danger: var(--ran-color-danger, #b23a2f);
 
-  /* ranui ships Geist and its own mono; the CJK and Arabic fallbacks are the docs
-     site's own concern — it publishes in eight languages, the component library does
-     not. No web font is loaded for them: a face covering CJK is megabytes. */
+  /* Geist and Geist Mono load from public/fonts (the @font-face rules above). The CJK and
+     Arabic fallbacks are the docs site's own concern; no web font is loaded for them,
+     because a face covering CJK is megabytes. */
   --font-sans:
     var(--ran-font-family, system-ui), -apple-system, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
     'Noto Sans Arabic', sans-serif;
@@ -77,35 +102,35 @@
  */
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']) {
-    --bg: var(--ran-color-bg, #0b0d10);
-    --bg-soft: var(--ran-color-bg-subtle, #14171c);
-    --bg-code: var(--ran-color-bg-muted, #121519);
-    --fg: var(--ran-color-text, #e3e7ec);
-    --fg-muted: var(--ran-color-text-secondary, #a0abb9);
-    --fg-faint: var(--ran-color-text-disabled, #6d7986);
-    --rule: var(--ran-color-border-secondary, #232830);
-    --rule-strong: var(--ran-color-border, #353c47);
-    --accent: var(--ran-color-primary, #6ba5ff);
-    --accent-hover: var(--ran-color-primary-hover, #96bfff);
-    --accent-wash: var(--ran-color-bg-hover, #12203a);
-    --link: var(--ran-color-link, #6ba5ff);
+    --bg: var(--ran-color-bg, #0a0a0b);
+    --bg-soft: var(--ran-color-bg-subtle, #111113);
+    --bg-code: var(--ran-color-bg-muted, #1c1c20);
+    --fg: var(--ran-color-text, #ededef);
+    --fg-muted: var(--ran-color-text-secondary, #a1a1aa);
+    --fg-faint: var(--ran-color-text-disabled, #71717a);
+    --rule: var(--ran-color-border-secondary, #2c2c32);
+    --rule-strong: var(--ran-color-border, #26262b);
+    --accent: var(--ran-color-primary, #ededef);
+    --accent-hover: var(--ran-color-primary-hover, #d4d4d8);
+    --accent-wash: var(--ran-color-bg-hover, #232328);
+    --link: var(--ran-color-link, #5b9dff);
     color-scheme: dark;
   }
 }
 
 :root[data-ran-theme='dark'] {
-  --bg: var(--ran-color-bg, #0b0d10);
-  --bg-soft: var(--ran-color-bg-subtle, #14171c);
-  --bg-code: var(--ran-color-bg-muted, #121519);
-  --fg: var(--ran-color-text, #e3e7ec);
-  --fg-muted: var(--ran-color-text-secondary, #a0abb9);
-  --fg-faint: var(--ran-color-text-disabled, #6d7986);
-  --rule: var(--ran-color-border-secondary, #232830);
-  --rule-strong: var(--ran-color-border, #353c47);
-  --accent: var(--ran-color-primary, #6ba5ff);
-  --accent-hover: var(--ran-color-primary-hover, #96bfff);
-  --accent-wash: var(--ran-color-bg-hover, #12203a);
-  --link: var(--ran-color-link, #6ba5ff);
+  --bg: var(--ran-color-bg, #0a0a0b);
+  --bg-soft: var(--ran-color-bg-subtle, #111113);
+  --bg-code: var(--ran-color-bg-muted, #1c1c20);
+  --fg: var(--ran-color-text, #ededef);
+  --fg-muted: var(--ran-color-text-secondary, #a1a1aa);
+  --fg-faint: var(--ran-color-text-disabled, #71717a);
+  --rule: var(--ran-color-border-secondary, #2c2c32);
+  --rule-strong: var(--ran-color-border, #26262b);
+  --accent: var(--ran-color-primary, #ededef);
+  --accent-hover: var(--ran-color-primary-hover, #d4d4d8);
+  --accent-wash: var(--ran-color-bg-hover, #232328);
+  --link: var(--ran-color-link, #5b9dff);
   color-scheme: dark;
 }
 

@@ -1,23 +1,25 @@
-// ranui design tokens — based on the Geist design system (https://vercel.com/design).
+// ranui design tokens — Graphite: Geist's monochrome model with cool-tinted neutrals.
+// The neutrals carry a faint blue cast so black reads as ink rather than flat; contrast
+// ratios in the comments are against the page background they sit on.
 // Layer 1: base palette (Geist scales). Layer 2: semantic tokens consumed by
 // components. Semantic tokens reference base scales so they flip automatically
 // when dark.less redefines the scale; see theme/dark.less.
 :root {
   /* ── Backgrounds ────────────────────────────────────────────────── */
   --ran-background-100: #ffffff;
-  --ran-background-200: #fafafa;
+  --ran-background-200: #f7f7f8;
 
   /* ── Gray scale ─────────────────────────────────────────────────── */
-  --ran-gray-100: #f2f2f2;
-  --ran-gray-200: #ebebeb;
-  --ran-gray-300: #e6e6e6;
-  --ran-gray-400: #eaeaea;
-  --ran-gray-500: #c9c9c9;
-  --ran-gray-600: #a8a8a8;
-  --ran-gray-700: #8f8f8f;
-  --ran-gray-800: #7d7d7d;
-  --ran-gray-900: #4d4d4d;
-  --ran-gray-1000: #171717;
+  --ran-gray-100: #f0f0f2;
+  --ran-gray-200: #ebebee;
+  --ran-gray-300: #e2e2e6;
+  --ran-gray-400: #e4e4e8;
+  --ran-gray-500: #b8b8c0;
+  --ran-gray-600: #9d9da6;
+  --ran-gray-700: #8a8a94; /* 3.4:1 — control boundaries and disabled text, not body copy */
+  --ran-gray-800: #6e6e78;
+  --ran-gray-900: #55555e; /* 7.4:1 */
+  --ran-gray-1000: #111113; /* 18.9:1 */
 
   /* ── Gray alpha (translucent, layer over any surface) ───────────── */
   --ran-gray-alpha-100: #0000000d;
@@ -38,8 +40,8 @@
   --ran-blue-400: #cae7ff;
   --ran-blue-500: #94ccff;
   --ran-blue-600: #48aeff;
-  --ran-blue-700: #006bff;
-  --ran-blue-800: #0059ec;
+  --ran-blue-700: #0a6cff; /* focus */
+  --ran-blue-800: #0a5bd8; /* link, 6.0:1 */
   --ran-blue-900: #005ff2;
   --ran-blue-1000: #002359;
 
@@ -50,7 +52,7 @@
   --ran-red-400: #ffd7d6;
   --ran-red-500: #ffb1b3;
   --ran-red-600: #ff676d;
-  --ran-red-700: #fc0035;
+  --ran-red-700: #d70f2f; /* white text on it: 5.3:1 */
   --ran-red-800: #ea001d;
   --ran-red-900: #d8001b;
   --ran-red-1000: #47000c;
@@ -87,8 +89,8 @@
      must flip too (else white-on-white in dark). hover/active step toward the
      page bg and are overridden in dark.less. */
   --ran-color-primary: var(--ran-gray-1000);
-  --ran-color-primary-hover: #383838;
-  --ran-color-primary-active: #4d4d4d;
+  --ran-color-primary-hover: #2a2a2e;
+  --ran-color-primary-active: #3f3f46;
   --ran-color-primary-text: var(--ran-background-100);
   --ran-color-success: var(--ran-green-700);
   --ran-color-warning: var(--ran-amber-700);
@@ -113,7 +115,10 @@
   /* interaction states — Geist scale (500 hover border, 600 active border) */
   --ran-color-border-hover: var(--ran-gray-500);
   --ran-color-border-active: var(--ran-gray-600);
-  --ran-color-link: var(--ran-blue-700);
+  /* The boundary of something you operate (input, checkbox, select, switch). Decorative
+     hairlines stay on --ran-color-border; a control's edge has to clear 3:1 on its own. */
+  --ran-color-border-control: var(--ran-gray-700);
+  --ran-color-link: var(--ran-blue-800);
 
   /* ── Typography ─────────────────────────────────────────────────── */
   --ran-font-family:
@@ -153,10 +158,14 @@
   --ran-text-mono-weight-regular: 400;
   --ran-text-mono-weight-medium: 500;
 
-  /* ── Radius (Geist) ─────────────────────────────────────────────── */
-  --ran-radius-sm: 6px;
+  /* ── Radius ───────────────────────────────────────────────────────
+     One family, nested by D-ELEV-1 (inner = outer − inset): a control is sm, a card that
+     holds controls at a 4px inset is md, a panel lg, a page-level frame xl. */
+  --ran-radius-xs: 4px;
+  --ran-radius-sm: 8px;
   --ran-radius-md: 12px;
   --ran-radius-lg: 16px;
+  --ran-radius-xl: 24px;
   --ran-radius-full: 9999px;
 
   /* ── Spacing (4px base unit) ────────────────────────────────────── */
@@ -195,9 +204,9 @@
      elevated = in-flow surfaces (card, section), kept subtle since they
      also have a border. menu = floating overlays (dropdown, select,
      popover, message/toast). modal = blocking dialogs. */
-  --ran-shadow-elevated: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --ran-shadow-menu: 0 2px 4px rgba(0, 0, 0, 0.05), 0 8px 24px -6px rgba(0, 0, 0, 0.14);
-  --ran-shadow-modal: 0 4px 12px rgba(0, 0, 0, 0.08), 0 20px 48px -12px rgba(0, 0, 0, 0.22);
+  --ran-shadow-elevated: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --ran-shadow-menu: 0 1px 2px rgba(0, 0, 0, 0.06), 0 12px 32px -8px rgba(0, 0, 0, 0.16);
+  --ran-shadow-modal: 0 2px 4px rgba(0, 0, 0, 0.06), 0 24px 64px -12px rgba(0, 0, 0, 0.24);
 
   /* ── Z-index ladder (overlays) ──────────────────────────────────────
      Floating overlays portal to <body>, so they need an explicit stacking
@@ -230,9 +239,9 @@
   --ran-media-background: #000;
 
   /* ── Motion ─────────────────────────────────────────────────────── */
-  --ran-motion-duration-fast: 0.15s;
+  --ran-motion-duration-fast: 0.14s;
   --ran-motion-duration-base: 0.2s;
-  --ran-motion-duration-slow: 0.35s;
+  --ran-motion-duration-slow: 0.28s;
 
   /* Easing curves. `standard` is the general in-out; the spring family is
      distilled from tuned SwiftUI springs (response/damping → single-overshoot
@@ -242,10 +251,10 @@
      every theme flip fade component-by-component instead of switching with the
      host page in one frame; the library must not impose that on consumers
      (see components/button/index.less). */
-  --ran-motion-ease-standard: cubic-bezier(0.645, 0.045, 0.355, 1); /* in-out, general purpose */
+  --ran-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1); /* decelerating, general purpose */
   --ran-motion-ease-snappy: cubic-bezier(0.33, 0, 0.15, 1); /* quick, no overshoot — toggles, small state */
-  --ran-motion-ease-spring: cubic-bezier(0.34, 1.26, 0.5, 1); /* slight overshoot — buttons, cards */
-  --ran-motion-ease-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1); /* playful overshoot — like, add-to-cart */
+  --ran-motion-ease-spring: cubic-bezier(0.3, 1.1, 0.4, 1); /* a trace of overshoot — buttons, cards */
+  --ran-motion-ease-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1); /* playful overshoot — opt-in only, no default uses it */
   --ran-motion-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1); /* calm, no overshoot — reveals, layout */
 
   /* ── Skin primitives (component-facing; kept minimal) ───────────── */

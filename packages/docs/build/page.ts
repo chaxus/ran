@@ -151,6 +151,7 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0d10">
 <link rel="icon" href="/favicon.ico">
 <link rel="manifest" href="/manifest.json">
+<link rel="preload" href="/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="robots" content="all">
 <meta name="google" content="notranslate">
 <meta property="og:image" content="${OG_IMAGE}">

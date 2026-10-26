@@ -30,7 +30,7 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 **2층: 시맨틱 토큰.** `--ran-color-*`와 그 동료들로, 1층 위에 대응됩니다. **쓰는 것은 이 층입니다.** 다크 모드는 1층만 다시 정의하므로, 모든 시맨틱 토큰이 `var()`를 통해 함께 바뀌고, 라이브러리 어디에도 컴포넌트별 다크 전용 덮어쓰기는 없습니다.
 
 ```
---ran-gray-1000        →  #171717(라이트) / #ededed(다크)        ← 1층. 바뀝니다
+--ran-gray-1000        →  #111113(라이트) / #ededef(다크)        ← 1층. 바뀝니다
 --ran-color-text       →  var(--ran-gray-1000)                    ← 2층. 따라갑니다
 --ran-btn-color        →  var(--ran-color-text, …)                ← 컴포넌트 토큰
 ```
@@ -55,8 +55,8 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 
 | 토큰                   | 라이트                                                          | 다크                                                            | 쓰임새             |
 | ---------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- | ------------------ |
-| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | 페이지 배경        |
-| `--ran-background-200` | <span class="swatch" style="--swatch:#fafafa"></span> `#fafafa` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | 은은한 페이지 영역 |
+| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#0a0a0b"></span> `#0a0a0b` | 페이지 배경        |
+| `--ran-background-200` | <span class="swatch" style="--swatch:#f7f7f8"></span> `#f7f7f8` | <span class="swatch" style="--swatch:#111113"></span> `#111113` | 은은한 페이지 영역 |
 
 ### 회색 — `--ran-gray-100..1000`
 
@@ -64,16 +64,16 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 
 | 단   | 라이트                                                          | 다크                                                            |
 | ---- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| 100  | <span class="swatch" style="--swatch:#f2f2f2"></span> `#f2f2f2` | <span class="swatch" style="--swatch:#1a1a1a"></span> `#1a1a1a` |
-| 200  | <span class="swatch" style="--swatch:#ebebeb"></span> `#ebebeb` | <span class="swatch" style="--swatch:#1f1f1f"></span> `#1f1f1f` |
-| 300  | <span class="swatch" style="--swatch:#e6e6e6"></span> `#e6e6e6` | <span class="swatch" style="--swatch:#292929"></span> `#292929` |
-| 400  | <span class="swatch" style="--swatch:#eaeaea"></span> `#eaeaea` | <span class="swatch" style="--swatch:#2e2e2e"></span> `#2e2e2e` |
-| 500  | <span class="swatch" style="--swatch:#c9c9c9"></span> `#c9c9c9` | <span class="swatch" style="--swatch:#454545"></span> `#454545` |
-| 600  | <span class="swatch" style="--swatch:#a8a8a8"></span> `#a8a8a8` | <span class="swatch" style="--swatch:#878787"></span> `#878787` |
-| 700  | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` |
-| 800  | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` |
-| 900  | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` | <span class="swatch" style="--swatch:#a0a0a0"></span> `#a0a0a0` |
-| 1000 | <span class="swatch" style="--swatch:#171717"></span> `#171717` | <span class="swatch" style="--swatch:#ededed"></span> `#ededed` |
+| 100  | <span class="swatch" style="--swatch:#f0f0f2"></span> `#f0f0f2` | <span class="swatch" style="--swatch:#1c1c20"></span> `#1c1c20` |
+| 200  | <span class="swatch" style="--swatch:#ebebee"></span> `#ebebee` | <span class="swatch" style="--swatch:#232328"></span> `#232328` |
+| 300  | <span class="swatch" style="--swatch:#e2e2e6"></span> `#e2e2e6` | <span class="swatch" style="--swatch:#2c2c32"></span> `#2c2c32` |
+| 400  | <span class="swatch" style="--swatch:#e4e4e8"></span> `#e4e4e8` | <span class="swatch" style="--swatch:#26262b"></span> `#26262b` |
+| 500  | <span class="swatch" style="--swatch:#b8b8c0"></span> `#b8b8c0` | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` |
+| 600  | <span class="swatch" style="--swatch:#9d9da6"></span> `#9d9da6` | <span class="swatch" style="--swatch:#52525b"></span> `#52525b` |
+| 700  | <span class="swatch" style="--swatch:#8a8a94"></span> `#8a8a94` | <span class="swatch" style="--swatch:#71717a"></span> `#71717a` |
+| 800  | <span class="swatch" style="--swatch:#6e6e78"></span> `#6e6e78` | <span class="swatch" style="--swatch:#8b8b94"></span> `#8b8b94` |
+| 900  | <span class="swatch" style="--swatch:#55555e"></span> `#55555e` | <span class="swatch" style="--swatch:#a1a1aa"></span> `#a1a1aa` |
+| 1000 | <span class="swatch" style="--swatch:#111113"></span> `#111113` | <span class="swatch" style="--swatch:#ededef"></span> `#ededef` |
 
 ### 회색 알파 — `--ran-gray-alpha-100..1000`
 
@@ -81,16 +81,16 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 
 | 단   | 라이트                                                                       | 다크                                                                         |
 | ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### 파랑 — `--ran-blue-100..1000`
 
@@ -104,8 +104,8 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 | 400  | <span class="swatch" style="--swatch:#cae7ff"></span> `#cae7ff` | <span class="swatch" style="--swatch:#003674"></span> `#003674` |
 | 500  | <span class="swatch" style="--swatch:#94ccff"></span> `#94ccff` | <span class="swatch" style="--swatch:#00418b"></span> `#00418b` |
 | 600  | <span class="swatch" style="--swatch:#48aeff"></span> `#48aeff` | <span class="swatch" style="--swatch:#0090ff"></span> `#0090ff` |
-| 700  | <span class="swatch" style="--swatch:#006bff"></span> `#006bff` | <span class="swatch" style="--swatch:#006efe"></span> `#006efe` |
-| 800  | <span class="swatch" style="--swatch:#0059ec"></span> `#0059ec` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
+| 700  | <span class="swatch" style="--swatch:#0a6cff"></span> `#0a6cff` | <span class="swatch" style="--swatch:#3b82f6"></span> `#3b82f6` |
+| 800  | <span class="swatch" style="--swatch:#0a5bd8"></span> `#0a5bd8` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
 | 900  | <span class="swatch" style="--swatch:#005ff2"></span> `#005ff2` | <span class="swatch" style="--swatch:#47a8ff"></span> `#47a8ff` |
 | 1000 | <span class="swatch" style="--swatch:#002359"></span> `#002359` | <span class="swatch" style="--swatch:#eaf6ff"></span> `#eaf6ff` |
 
@@ -121,7 +121,7 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 | 400  | <span class="swatch" style="--swatch:#ffd7d6"></span> `#ffd7d6` | <span class="swatch" style="--swatch:#6f101b"></span> `#6f101b` |
 | 500  | <span class="swatch" style="--swatch:#ffb1b3"></span> `#ffb1b3` | <span class="swatch" style="--swatch:#88151f"></span> `#88151f` |
 | 600  | <span class="swatch" style="--swatch:#ff676d"></span> `#ff676d` | <span class="swatch" style="--swatch:#f32e40"></span> `#f32e40` |
-| 700  | <span class="swatch" style="--swatch:#fc0035"></span> `#fc0035` | <span class="swatch" style="--swatch:#f13242"></span> `#f13242` |
+| 700  | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` |
 | 800  | <span class="swatch" style="--swatch:#ea001d"></span> `#ea001d` | <span class="swatch" style="--swatch:#e2162a"></span> `#e2162a` |
 | 900  | <span class="swatch" style="--swatch:#d8001b"></span> `#d8001b` | <span class="swatch" style="--swatch:#ff565f"></span> `#ff565f` |
 | 1000 | <span class="swatch" style="--swatch:#47000c"></span> `#47000c` | <span class="swatch" style="--swatch:#ffe9ed"></span> `#ffe9ed` |
@@ -164,29 +164,30 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 
 컴포넌트가 실제로 읽는 층입니다. 여기 있는 것은 모두 위의 스케일을 통해 풀리므로, 테마에 맞춰 저절로 바뀝니다.
 
-| 토큰                           | 풀리는 곳                                                                                                                                | 역할                            |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `--ran-color-bg`               | `--ran-background-100`                                                                                                                   | 페이지 배경                     |
-| `--ran-color-bg-subtle`        | `--ran-background-200`                                                                                                                   | 은은한 페이지 영역              |
-| `--ran-color-bg-elevated`      | `--ran-background-100` · gray-100 (다크)                                                                                                 | 카드, 면                        |
-| `--ran-color-bg-muted`         | `--ran-gray-100`                                                                                                                         | 들어간·가라앉은 채움            |
-| `--ran-color-bg-hover`         | `--ran-gray-200`                                                                                                                         | 호버의 면                       |
-| `--ran-color-bg-active`        | `--ran-gray-300`                                                                                                                         | 활성(눌림)의 면                 |
-| `--ran-color-text`             | `--ran-gray-1000`                                                                                                                        | 주요 텍스트                     |
-| `--ran-color-text-secondary`   | `--ran-gray-900`                                                                                                                         | 보조 텍스트                     |
-| `--ran-color-text-disabled`    | `--ran-gray-700`                                                                                                                         | 비활성 텍스트                   |
-| `--ran-color-border`           | `--ran-gray-400`                                                                                                                         | 기본 테두리                     |
-| `--ran-color-border-secondary` | `--ran-gray-300`                                                                                                                         | 더 은은한 테두리                |
-| `--ran-color-border-hover`     | `--ran-gray-500`                                                                                                                         | 호버 테두리                     |
-| `--ran-color-border-active`    | `--ran-gray-600`                                                                                                                         | 활성 테두리                     |
-| `--ran-color-primary`          | `--ran-gray-1000`                                                                                                                        | 주된 동작(흑백)                 |
-| `--ran-color-primary-hover`    | <span class="swatch" style="--swatch:#383838"></span> `#383838` · <span class="swatch" style="--swatch:#cccccc"></span> `#cccccc` (다크) | primary의 호버                  |
-| `--ran-color-primary-active`   | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` · <span class="swatch" style="--swatch:#b3b3b3"></span> `#b3b3b3` (다크) | primary의 눌림                  |
-| `--ran-color-primary-text`     | `--ran-background-100`                                                                                                                   | primary 면 **위에** 얹히는 잉크 |
-| `--ran-color-success`          | `--ran-green-700`                                                                                                                        | 성공                            |
-| `--ran-color-warning`          | `--ran-amber-700`                                                                                                                        | 경고                            |
-| `--ran-color-danger`           | `--ran-red-700`                                                                                                                          | 위험 / 오류                     |
-| `--ran-color-link`             | `--ran-blue-700`                                                                                                                         | 링크                            |
+| 토큰                           | 풀리는 곳                                                                                                                                | 역할                                    |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `--ran-color-bg`               | `--ran-background-100`                                                                                                                   | 페이지 배경                             |
+| `--ran-color-bg-subtle`        | `--ran-background-200`                                                                                                                   | 은은한 페이지 영역                      |
+| `--ran-color-bg-elevated`      | `--ran-background-100` · gray-100 (다크)                                                                                                 | 카드, 면                                |
+| `--ran-color-bg-muted`         | `--ran-gray-100`                                                                                                                         | 들어간·가라앉은 채움                    |
+| `--ran-color-bg-hover`         | `--ran-gray-200`                                                                                                                         | 호버의 면                               |
+| `--ran-color-bg-active`        | `--ran-gray-300`                                                                                                                         | 활성(눌림)의 면                         |
+| `--ran-color-text`             | `--ran-gray-1000`                                                                                                                        | 주요 텍스트                             |
+| `--ran-color-text-secondary`   | `--ran-gray-900`                                                                                                                         | 보조 텍스트                             |
+| `--ran-color-text-disabled`    | `--ran-gray-700`                                                                                                                         | 비활성 텍스트                           |
+| `--ran-color-border`           | `--ran-gray-400`                                                                                                                         | 기본 테두리                             |
+| `--ran-color-border-secondary` | `--ran-gray-300`                                                                                                                         | 더 은은한 테두리                        |
+| `--ran-color-border-hover`     | `--ran-gray-500`                                                                                                                         | 호버 테두리                             |
+| `--ran-color-border-active`    | `--ran-gray-600`                                                                                                                         | 활성 테두리                             |
+| `--ran-color-border-control`   | `--ran-gray-700`                                                                                                                         | 컨트롤 경계: 입력, 체크박스, 선택 (3:1) |
+| `--ran-color-primary`          | `--ran-gray-1000`                                                                                                                        | 주된 동작(흑백)                         |
+| `--ran-color-primary-hover`    | <span class="swatch" style="--swatch:#2a2a2e"></span> `#2a2a2e` · <span class="swatch" style="--swatch:#d4d4d8"></span> `#d4d4d8` (다크) | primary의 호버                          |
+| `--ran-color-primary-active`   | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` · <span class="swatch" style="--swatch:#b4b4bb"></span> `#b4b4bb` (다크) | primary의 눌림                          |
+| `--ran-color-primary-text`     | `--ran-background-100`                                                                                                                   | primary 면 **위에** 얹히는 잉크         |
+| `--ran-color-success`          | `--ran-green-700`                                                                                                                        | 성공                                    |
+| `--ran-color-warning`          | `--ran-amber-700`                                                                                                                        | 경고                                    |
+| `--ran-color-danger`           | `--ran-red-700`                                                                                                                          | 위험 / 오류                             |
+| `--ran-color-link`             | `--ran-blue-800`                                                                                                                         | 링크                                    |
 
 `--ran-color-primary-hover` / `-active`는 시맨틱 층에 있는 두 개의 리터럴입니다. 스케일을 따라가는 대신 페이지 배경 쪽으로 다가가므로, 다크 모드에서는 이것들을 직접 다시 정의합니다.
 
@@ -276,20 +277,22 @@ import 'ranui/fonts'; // 번들러용
 
 | 토큰                | 값       | 쓰임새                   |
 | ------------------- | -------- | ------------------------ |
-| `--ran-radius-sm`   | `6px`    | 컨트롤: 버튼, 입력, 선택 |
+| `--ran-radius-xs`   | `4px`    | 작은 표시: 태그, 배지    |
+| `--ran-radius-sm`   | `8px`    | 컨트롤: 버튼, 입력, 선택 |
 | `--ran-radius-md`   | `12px`   | 카드, 대화 상자          |
 | `--ran-radius-lg`   | `16px`   | 큰 면                    |
+| `--ran-radius-xl`   | `24px`   | 페이지 단위 프레임       |
 | `--ran-radius-full` | `9999px` | 알약 모양, 아바타        |
 
 ## 그림자 높이
 
 그림자는 장식이 아니라 **역할**입니다. 단계는 그 요소가 무엇인지로 고르세요. 다크 모드에서는 셋 모두 갈아 끼웁니다. 흰 페이지에 맞춰 다듬은 그림자는 검은 페이지에서 사라지기 때문입니다.
 
-| 토큰                    | 쓰임새                                                        | 라이트                                                          | 다크                                                                                        |
-| ----------------------- | ------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `--ran-shadow-elevated` | 흐름 속에 있으면서 테두리도 지닌 면: `r-card`, `r-section`    | `0 1px 2px rgba(0,0,0,.04), 0 2px 4px -2px rgba(0,0,0,.05)`     | `0 1px 2px rgba(0,0,0,.16)`                                                                 |
-| `--ran-shadow-menu`     | 내용 위에 잠시 겹치는 층: 드롭다운, 선택 메뉴, 팝오버, 토스트 | `0 2px 4px rgba(0,0,0,.05), 0 8px 24px -6px rgba(0,0,0,.14)`    | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
-| `--ran-shadow-modal`    | 앞을 막는 대화 상자: `r-modal`                                | `0 4px 12px rgba(0,0,0,.08), 0 20px 48px -12px rgba(0,0,0,.22)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
+| 토큰                    | 쓰임새                                                        | 라이트                                                         | 다크                                                                                        |
+| ----------------------- | ------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `--ran-shadow-elevated` | 흐름 속에 있으면서 테두리도 지닌 면: `r-card`, `r-section`    | `0 1px 2px rgba(0,0,0,.04)`                                    | `inset 0 1px 0 rgba(255,255,255,.06), 0 1px 2px rgba(0,0,0,.16)`                            |
+| `--ran-shadow-menu`     | 내용 위에 잠시 겹치는 층: 드롭다운, 선택 메뉴, 팝오버, 토스트 | `0 1px 2px rgba(0,0,0,.06), 0 12px 32px -8px rgba(0,0,0,.16)`  | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
+| `--ran-shadow-modal`    | 앞을 막는 대화 상자: `r-modal`                                | `0 2px 4px rgba(0,0,0,.06), 0 24px 64px -12px rgba(0,0,0,.24)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
 
 테두리 없는 오버레이는 주변과의 분리를 오로지 그림자에 기댑니다. 그래서 오버레이 단계에는 실제로 무게가 실려 있습니다. 오버레이가 들린 면 단계로 내려앉으면 납작해 보이고 페이지에 붙박인 것처럼 보입니다.
 
@@ -309,17 +312,17 @@ import 'ranui/fonts'; // 번들러용
 
 | 토큰                         | 값      | 쓰임                  |
 | ---------------------------- | ------- | --------------------- |
-| `--ran-motion-duration-fast` | `0.15s` | 호버·활성 상태의 전환 |
+| `--ran-motion-duration-fast` | `0.14s` | 호버·활성 상태의 전환 |
 | `--ran-motion-duration-base` | `0.2s`  | 팝오버, 메뉴          |
-| `--ran-motion-duration-slow` | `0.35s` | 더 큰 등장            |
+| `--ran-motion-duration-slow` | `0.28s` | 더 큰 등장            |
 
-| 이징 토큰                    | 곡선                                | 성격                                   |
-| ---------------------------- | ----------------------------------- | -------------------------------------- |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.645,0.045,0.355,1)` | 인-아웃. 범용                          |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`       | 빠르고 넘침 없음: 토글                 |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.34,1.26,0.5,1)`     | 살짝 넘침: 버튼, 카드                  |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)`    | 장난스러운 넘침: 좋아요, 장바구니 담기 |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`         | 차분하고 넘침 없음: 등장, 레이아웃     |
+| 이징 토큰                    | 곡선                             | 성격                                   |
+| ---------------------------- | -------------------------------- | -------------------------------------- |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | 감속. 범용                             |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | 빠르고 넘침 없음: 토글                 |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | 살짝 넘침: 버튼, 카드                  |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | 장난스러운 넘침: 좋아요, 장바구니 담기 |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | 차분하고 넘침 없음: 등장, 레이아웃     |
 
 spring 계열은 다듬어진 SwiftUI 스프링에서 증류한 것입니다(response/damping을 한 번만 넘치는 베지어로 줄였습니다).
 
