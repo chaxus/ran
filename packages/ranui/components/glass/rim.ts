@@ -178,8 +178,28 @@ export function createRimRenderer(container: HTMLElement): RimRenderer {
     return canvas;
   };
 
-  let glCanvas = makeCanvas();
-  let gl: RimBackend | null = createWebGlRim(glCanvas);
+  /**
+   * A WebGL context can be lost at any time (memory pressure, a GPU reset, too many
+   * contexts). Its program and buffers die with it, so on restore the backend is rebuilt.
+   * `preventDefault` on loss is what tells the browser to attempt the restore at all.
+   */
+  const makeGlCanvas = (): HTMLCanvasElement => {
+    const canvas = makeCanvas();
+    canvas.addEventListener('webglcontextlost', (event) => {
+      event.preventDefault();
+      if (gl && glCanvas === canvas) gl = null;
+    });
+    canvas.addEventListener('webglcontextrestored', () => {
+      if (destroyed || gpu || glCanvas !== canvas) return;
+      gl = createWebGlRim(canvas);
+      redraw();
+    });
+    return canvas;
+  };
+
+  let gl: RimBackend | null = null;
+  let glCanvas = makeGlCanvas();
+  gl = createWebGlRim(glCanvas);
   let gpu: RimBackend | null = null;
   let gpuCanvas: HTMLCanvasElement | null = null;
 
@@ -234,7 +254,7 @@ export function createRimRenderer(container: HTMLElement): RimRenderer {
         gpu = null;
         gpuCanvas?.remove();
         gpuCanvas = null;
-        glCanvas = makeCanvas();
+        glCanvas = makeGlCanvas();
         gl = createWebGlRim(glCanvas);
         redraw();
       });
