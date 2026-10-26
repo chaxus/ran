@@ -37,7 +37,7 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 层，每个语义令牌都通过 `var()` 自动翻转，整个组件库不存在任何组件级的暗色覆盖。
 
 ```
---ran-gray-1000        →  #171717（浅色） / #ededed（暗色）     ← 第一层，会翻转
+--ran-gray-1000        →  #111113（浅色） / #ededef（暗色）     ← 第一层，会翻转
 --ran-color-text       →  var(--ran-gray-1000)                   ← 第二层，跟随
 --ran-btn-color        →  var(--ran-color-text, …)               ← 组件令牌
 ```
@@ -62,8 +62,8 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 | 令牌                   | 浅色                                                            | 暗色                                                            | 用于         |
 | ---------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- | ------------ |
-| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | 页面背景     |
-| `--ran-background-200` | <span class="swatch" style="--swatch:#fafafa"></span> `#fafafa` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | 轻微区分区域 |
+| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#0a0a0b"></span> `#0a0a0b` | 页面背景     |
+| `--ran-background-200` | <span class="swatch" style="--swatch:#f7f7f8"></span> `#f7f7f8` | <span class="swatch" style="--swatch:#111113"></span> `#111113` | 轻微区分区域 |
 
 ### 灰阶 —— `--ran-gray-100..1000`
 
@@ -71,16 +71,16 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 | 档位 | 浅色                                                            | 暗色                                                            |
 | ---- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| 100  | <span class="swatch" style="--swatch:#f2f2f2"></span> `#f2f2f2` | <span class="swatch" style="--swatch:#1a1a1a"></span> `#1a1a1a` |
-| 200  | <span class="swatch" style="--swatch:#ebebeb"></span> `#ebebeb` | <span class="swatch" style="--swatch:#1f1f1f"></span> `#1f1f1f` |
-| 300  | <span class="swatch" style="--swatch:#e6e6e6"></span> `#e6e6e6` | <span class="swatch" style="--swatch:#292929"></span> `#292929` |
-| 400  | <span class="swatch" style="--swatch:#eaeaea"></span> `#eaeaea` | <span class="swatch" style="--swatch:#2e2e2e"></span> `#2e2e2e` |
-| 500  | <span class="swatch" style="--swatch:#c9c9c9"></span> `#c9c9c9` | <span class="swatch" style="--swatch:#454545"></span> `#454545` |
-| 600  | <span class="swatch" style="--swatch:#a8a8a8"></span> `#a8a8a8` | <span class="swatch" style="--swatch:#878787"></span> `#878787` |
-| 700  | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` |
-| 800  | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` |
-| 900  | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` | <span class="swatch" style="--swatch:#a0a0a0"></span> `#a0a0a0` |
-| 1000 | <span class="swatch" style="--swatch:#171717"></span> `#171717` | <span class="swatch" style="--swatch:#ededed"></span> `#ededed` |
+| 100  | <span class="swatch" style="--swatch:#f0f0f2"></span> `#f0f0f2` | <span class="swatch" style="--swatch:#1c1c20"></span> `#1c1c20` |
+| 200  | <span class="swatch" style="--swatch:#ebebee"></span> `#ebebee` | <span class="swatch" style="--swatch:#232328"></span> `#232328` |
+| 300  | <span class="swatch" style="--swatch:#e2e2e6"></span> `#e2e2e6` | <span class="swatch" style="--swatch:#2c2c32"></span> `#2c2c32` |
+| 400  | <span class="swatch" style="--swatch:#e4e4e8"></span> `#e4e4e8` | <span class="swatch" style="--swatch:#26262b"></span> `#26262b` |
+| 500  | <span class="swatch" style="--swatch:#b8b8c0"></span> `#b8b8c0` | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` |
+| 600  | <span class="swatch" style="--swatch:#9d9da6"></span> `#9d9da6` | <span class="swatch" style="--swatch:#52525b"></span> `#52525b` |
+| 700  | <span class="swatch" style="--swatch:#8a8a94"></span> `#8a8a94` | <span class="swatch" style="--swatch:#71717a"></span> `#71717a` |
+| 800  | <span class="swatch" style="--swatch:#6e6e78"></span> `#6e6e78` | <span class="swatch" style="--swatch:#8b8b94"></span> `#8b8b94` |
+| 900  | <span class="swatch" style="--swatch:#55555e"></span> `#55555e` | <span class="swatch" style="--swatch:#a1a1aa"></span> `#a1a1aa` |
+| 1000 | <span class="swatch" style="--swatch:#111113"></span> `#111113` | <span class="swatch" style="--swatch:#ededef"></span> `#ededef` |
 
 ### 半透明灰 —— `--ran-gray-alpha-100..1000`
 
@@ -88,16 +88,16 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 | 档位 | 浅色                                                                         | 暗色                                                                         |
 | ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### 蓝 —— `--ran-blue-100..1000`
 
@@ -111,8 +111,8 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 | 400  | <span class="swatch" style="--swatch:#cae7ff"></span> `#cae7ff` | <span class="swatch" style="--swatch:#003674"></span> `#003674` |
 | 500  | <span class="swatch" style="--swatch:#94ccff"></span> `#94ccff` | <span class="swatch" style="--swatch:#00418b"></span> `#00418b` |
 | 600  | <span class="swatch" style="--swatch:#48aeff"></span> `#48aeff` | <span class="swatch" style="--swatch:#0090ff"></span> `#0090ff` |
-| 700  | <span class="swatch" style="--swatch:#006bff"></span> `#006bff` | <span class="swatch" style="--swatch:#006efe"></span> `#006efe` |
-| 800  | <span class="swatch" style="--swatch:#0059ec"></span> `#0059ec` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
+| 700  | <span class="swatch" style="--swatch:#0a6cff"></span> `#0a6cff` | <span class="swatch" style="--swatch:#3b82f6"></span> `#3b82f6` |
+| 800  | <span class="swatch" style="--swatch:#0a5bd8"></span> `#0a5bd8` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
 | 900  | <span class="swatch" style="--swatch:#005ff2"></span> `#005ff2` | <span class="swatch" style="--swatch:#47a8ff"></span> `#47a8ff` |
 | 1000 | <span class="swatch" style="--swatch:#002359"></span> `#002359` | <span class="swatch" style="--swatch:#eaf6ff"></span> `#eaf6ff` |
 
@@ -128,7 +128,7 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 | 400  | <span class="swatch" style="--swatch:#ffd7d6"></span> `#ffd7d6` | <span class="swatch" style="--swatch:#6f101b"></span> `#6f101b` |
 | 500  | <span class="swatch" style="--swatch:#ffb1b3"></span> `#ffb1b3` | <span class="swatch" style="--swatch:#88151f"></span> `#88151f` |
 | 600  | <span class="swatch" style="--swatch:#ff676d"></span> `#ff676d` | <span class="swatch" style="--swatch:#f32e40"></span> `#f32e40` |
-| 700  | <span class="swatch" style="--swatch:#fc0035"></span> `#fc0035` | <span class="swatch" style="--swatch:#f13242"></span> `#f13242` |
+| 700  | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` |
 | 800  | <span class="swatch" style="--swatch:#ea001d"></span> `#ea001d` | <span class="swatch" style="--swatch:#e2162a"></span> `#e2162a` |
 | 900  | <span class="swatch" style="--swatch:#d8001b"></span> `#d8001b` | <span class="swatch" style="--swatch:#ff565f"></span> `#ff565f` |
 | 1000 | <span class="swatch" style="--swatch:#47000c"></span> `#47000c` | <span class="swatch" style="--swatch:#ffe9ed"></span> `#ffe9ed` |
@@ -171,31 +171,35 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 组件真正读取的那一层。这里的一切都通过上面的色阶解析，因此会自己跟着主题翻转。
 
-| 令牌                             | 解析到                                                                                                                                 | 职责                     |
-| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `--ran-color-bg`                 | `--ran-background-100`                                                                                                                 | 页面背景                 |
-| `--ran-color-bg-subtle`          | `--ran-background-200`                                                                                                                 | 轻微区分的区域           |
-| `--ran-color-bg-elevated`        | `--ran-background-100` · 暗色下为 gray-100                                                                                             | 卡片、表面               |
-| `--ran-color-bg-muted`           | `--ran-gray-100`                                                                                                                       | 内凹 / 弱化填充          |
-| `--ran-color-bg-hover`           | `--ran-gray-200`                                                                                                                       | 悬停表面                 |
-| `--ran-color-bg-active`          | `--ran-gray-300`                                                                                                                       | 激活（按下）表面         |
-| `--ran-color-text`               | `--ran-gray-1000`                                                                                                                      | 主要文字                 |
-| `--ran-color-text-secondary`     | `--ran-gray-900`                                                                                                                       | 次要文字                 |
-| `--ran-color-text-disabled`      | `--ran-gray-700`                                                                                                                       | 禁用文字                 |
-| `--ran-color-border`             | `--ran-gray-400`                                                                                                                       | 默认边框                 |
-| `--ran-color-border-secondary`   | `--ran-gray-300`                                                                                                                       | 更弱的边框               |
-| `--ran-color-border-hover`       | `--ran-gray-500`                                                                                                                       | 悬停边框                 |
-| `--ran-color-border-active`      | `--ran-gray-600`                                                                                                                       | 激活边框                 |
-| `--ran-color-primary`            | `--ran-gray-1000`                                                                                                                      | 主操作（无彩色）         |
-| `--ran-color-primary-hover`      | <span class="swatch" style="--swatch:#383838"></span> `#383838` · 暗色 <span class="swatch" style="--swatch:#cccccc"></span> `#cccccc` | 主操作悬停               |
-| `--ran-color-primary-active`     | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` · 暗色 <span class="swatch" style="--swatch:#b3b3b3"></span> `#b3b3b3` | 主操作按下               |
-| `--ran-color-primary-text`       | `--ran-background-100`                                                                                                                 | 主操作表面**之上**的文字 |
-| `--ran-color-success`            | `--ran-green-700`                                                                                                                      | 成功                     |
-| `--ran-color-warning`            | `--ran-amber-700`                                                                                                                      | 警告                     |
-| `--ran-color-danger`             | `--ran-red-700`                                                                                                                        | 危险 / 错误              |
-| `--ran-color-warning-foreground` | `--ran-amber-900`                                                                                                                      | 警告文字                 |
-| `--ran-color-danger-foreground`  | `--ran-red-900`                                                                                                                        | 危险 / 错误文字          |
-| `--ran-color-link`               | `--ran-blue-700`                                                                                                                       | 链接                     |
+| 令牌                               | 解析到                                                                                                                                 | 职责                                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `--ran-color-bg`                   | `--ran-background-100`                                                                                                                 | 页面背景                                |
+| `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                 | 轻微区分的区域                          |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · 暗色下为 gray-100                                                                                             | 卡片、表面                              |
+| `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                       | 内凹 / 弱化填充                         |
+| `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                       | 悬停表面                                |
+| `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                       | 激活（按下）表面                        |
+| `--ran-color-text`                 | `--ran-gray-1000`                                                                                                                      | 主要文字                                |
+| `--ran-color-text-secondary`       | `--ran-gray-900`                                                                                                                       | 次要文字                                |
+| `--ran-color-text-disabled`        | `--ran-gray-700`                                                                                                                       | 禁用文字                                |
+| `--ran-color-border`               | `--ran-gray-400`                                                                                                                       | 默认边框                                |
+| `--ran-color-border-secondary`     | `--ran-gray-300`                                                                                                                       | 更弱的边框                              |
+| `--ran-color-border-hover`         | `--ran-gray-500`                                                                                                                       | 悬停边框                                |
+| `--ran-color-border-active`        | `--ran-gray-600`                                                                                                                       | 激活边框                                |
+| `--ran-color-border-control`       | `--ran-gray-700`                                                                                                                       | 控件边框：输入框、复选框、选择器（3:1） |
+| `--ran-color-border-control-hover` | `--ran-gray-900`                                                                                                                       | 控件边框（悬停）                        |
+| `--ran-color-text-placeholder`     | `--ran-gray-800`                                                                                                                       | 占位文字（≥4.5:1）                      |
+| `--ran-color-primary`              | `--ran-gray-1000`                                                                                                                      | 主操作（无彩色）                        |
+| `--ran-color-primary-hover`        | <span class="swatch" style="--swatch:#2a2a2e"></span> `#2a2a2e` · 暗色 <span class="swatch" style="--swatch:#d4d4d8"></span> `#d4d4d8` | 主操作悬停                              |
+| `--ran-color-primary-active`       | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` · 暗色 <span class="swatch" style="--swatch:#b4b4bb"></span> `#b4b4bb` | 主操作按下                              |
+| `--ran-color-primary-text`         | `--ran-background-100`                                                                                                                 | 主操作表面**之上**的文字                |
+| `--ran-color-success`              | `--ran-green-700`                                                                                                                      | 成功                                    |
+| `--ran-color-warning`              | `--ran-amber-700`                                                                                                                      | 警告                                    |
+| `--ran-color-danger`               | `--ran-red-700`                                                                                                                        | 危险 / 错误                             |
+| `--ran-color-warning-foreground`   | `--ran-amber-900`                                                                                                                      | 警告文字                                |
+| `--ran-color-danger-foreground`    | `--ran-red-900`                                                                                                                        | 危险 / 错误文字                         |
+| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                       | 链接                                    |
+| `--ran-color-focus`                | `--ran-blue-700`                                                                                                                       | 焦点色：焦点环与焦点描边                |
 
 `--ran-color-primary-hover` / `-active` 是语义层里仅有的两个字面量：它们是朝页面背景方向走的，而不
 是沿着某条色阶走，所以暗色模式直接重定义了它们。
@@ -296,9 +300,11 @@ import 'ranui/fonts'; // 打包器
 
 | 令牌                | 值       | 用于                         |
 | ------------------- | -------- | ---------------------------- |
-| `--ran-radius-sm`   | `6px`    | 控件（按钮、输入框、选择器） |
+| `--ran-radius-xs`   | `4px`    | 小标记：标签、徽标           |
+| `--ran-radius-sm`   | `8px`    | 控件（按钮、输入框、选择器） |
 | `--ran-radius-md`   | `12px`   | 卡片、对话框                 |
 | `--ran-radius-lg`   | `16px`   | 大面积表面                   |
+| `--ran-radius-xl`   | `24px`   | 页面级外框                   |
 | `--ran-radius-full` | `9999px` | 胶囊、头像                   |
 
 ## 投影
@@ -306,11 +312,11 @@ import 'ranui/fonts'; // 打包器
 投影是**角色**，不是装饰，按元素「是什么」来选层级。暗色模式会把三档全部替换，因为为白色页面调过
 的投影放到黑色页面上就看不见了。
 
-| 令牌                    | 用于                                                    | 浅色                                                            | 暗色                                                                                        |
-| ----------------------- | ------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `--ran-shadow-elevated` | 文档流内、同时带边框的表面，如 `r-card`、`r-section`    | `0 1px 2px rgba(0,0,0,.04), 0 2px 4px -2px rgba(0,0,0,.05)`     | `0 1px 2px rgba(0,0,0,.16)`                                                                 |
-| `--ran-shadow-menu`     | 浮在内容之上的临时层，如下拉、选择面板、气泡卡片、toast | `0 2px 4px rgba(0,0,0,.05), 0 8px 24px -6px rgba(0,0,0,.14)`    | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
-| `--ran-shadow-modal`    | 阻塞式对话框，如 `r-modal`                              | `0 4px 12px rgba(0,0,0,.08), 0 20px 48px -12px rgba(0,0,0,.22)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
+| 令牌                    | 用于                                                    | 浅色                                                           | 暗色                                                                                        |
+| ----------------------- | ------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `--ran-shadow-elevated` | 文档流内、同时带边框的表面，如 `r-card`、`r-section`    | `0 1px 2px rgba(0,0,0,.04)`                                    | `inset 0 1px 0 rgba(255,255,255,.06), 0 1px 2px rgba(0,0,0,.16)`                            |
+| `--ran-shadow-menu`     | 浮在内容之上的临时层，如下拉、选择面板、气泡卡片、toast | `0 1px 2px rgba(0,0,0,.06), 0 12px 32px -8px rgba(0,0,0,.16)`  | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
+| `--ran-shadow-modal`    | 阻塞式对话框，如 `r-modal`                              | `0 2px 4px rgba(0,0,0,.06), 0 24px 64px -12px rgba(0,0,0,.24)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
 
 无边框的浮层只靠投影与页面拉开距离，所以浮层层级的投影必须有真实重量；浮层若回退到「抬起」层级，
 看起来就像贴在页面上。
@@ -333,17 +339,17 @@ import 'ranui/fonts'; // 打包器
 
 | 令牌                         | 值      | 用于                |
 | ---------------------------- | ------- | ------------------- |
-| `--ran-motion-duration-fast` | `0.15s` | 悬停 / 激活状态过渡 |
+| `--ran-motion-duration-fast` | `0.14s` | 悬停 / 激活状态过渡 |
 | `--ran-motion-duration-base` | `0.2s`  | 气泡、菜单          |
-| `--ran-motion-duration-slow` | `0.35s` | 较大的展开          |
+| `--ran-motion-duration-slow` | `0.28s` | 较大的展开          |
 
-| 缓动令牌                     | 曲线                                | 性格                           |
-| ---------------------------- | ----------------------------------- | ------------------------------ |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.645,0.045,0.355,1)` | in-out，通用                   |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`       | 干脆、无回弹，用于开关等小状态 |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.34,1.26,0.5,1)`     | 轻微回弹，用于按钮、卡片       |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)`    | 明显回弹，用于点赞、加入购物车 |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`         | 平缓、无回弹，用于展开与布局   |
+| 缓动令牌                     | 曲线                             | 性格                           |
+| ---------------------------- | -------------------------------- | ------------------------------ |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | 减速曲线，通用                 |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | 干脆、无回弹，用于开关等小状态 |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | 轻微回弹，用于按钮、卡片       |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | 明显回弹，用于点赞、加入购物车 |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | 平缓、无回弹，用于展开与布局   |
 
 spring 这一族是把调好的 SwiftUI 弹簧参数（response / damping）折算成的单次回弹贝塞尔曲线。
 
@@ -399,7 +405,7 @@ CSS 分不清「交互」和「主题翻转」，你给颜色加的淡入淡出�
 ```
 
 例如 `--ran-btn-hover-background`、`--ran-select-search-active-border-width`。它们默认指向语义令牌，
-例如 `var(--ran-btn-background, var(--ran-color-primary, #171717))`，所以覆盖语义令牌能一次影响
+例如 `var(--ran-btn-background, var(--ran-color-primary, #111113))`，所以覆盖语义令牌能一次影响
 全部，覆盖组件令牌则只改一个元素。
 
 完整清单见仓库中的
@@ -423,7 +429,7 @@ CSS 分不清「交互」和「主题翻转」，你给颜色加的淡入淡出�
 
 1. 该跟随主题的值，**不要写死 hex**。
 2. **兜底值必须是会翻转的令牌**，写 `var(--ran-color-text, var(--ran-gray-1000))`，不要写
-   `var(--ran-color-text, #171717)`。
+   `var(--ran-color-text, #111113)`。
 3. **兜底值引用的令牌必须存在**，否则整条声明被丢弃，元素静默沿用继承来的样式。
 
 > 组件库声明的每一个全局令牌都在本页列出；新增令牌若没有在这里记录，单元测试会失败。组件级令牌另行

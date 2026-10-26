@@ -1,15 +1,11 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .dot-line {
+    --_ran-loading-units: 200;
     max-width: var(--loading-dot-line-max-width, 70%);
     aspect-ratio: 1;
     margin-inline: var(--loading-dot-line-margin-inline, auto);
-    width: var(--loading-dot-line-width, 20em);
+    width: var(--loading-dot-line-width, 200em);
     height: var(--loading-dot-line-height, auto);
-    font-size: var(--loading-dot-line-font-size, 10px);
     position: var(--loading-dot-line-position, relative);
     display: var(--loading-dot-line-display, flex);
     align-items: var(--loading-dot-line-align-items, center);
@@ -33,7 +29,7 @@
           --loading-dot-line-item-nth-child-1-border-color,
           currentColor transparent transparent currentColor
         );
-        border-width: var(--loading-dot-line-item-nth-child-1-border-width, 0.2em 0.2em 0em 0em);
+        border-width: var(--loading-dot-line-item-nth-child-1-border-width, 2em 2em 0 0);
         --deg: var(--loading-dot-line-item-nth-child-1-deg, -45deg);
         animation-direction: var(--loading-dot-line-item-nth-child-1-animation-direction, normal);
       }
@@ -45,14 +41,14 @@
           --loading-dot-line-item-nth-child-2-border-color,
           currentColor currentColor transparent transparent
         );
-        border-width: var(--loading-dot-line-item-nth-child-2-border-width, 0.2em 0em 0em 0.2em);
+        border-width: var(--loading-dot-line-item-nth-child-2-border-width, 2em 0 0 2em);
         --deg: var(--loading-dot-line-item-nth-child-2-deg, -135deg);
         animation-direction: var(--loading-dot-line-item-nth-child-2-animation-direction, reverse);
       }
       &-circle {
         position: var(--loading-dot-line-item-circle-position, absolute);
         width: var(--loading-dot-line-item-circle-width, 50%);
-        height: var(--loading-dot-line-item-circle-height, 0.1em);
+        height: var(--loading-dot-line-item-circle-height, 1em);
         top: var(--loading-dot-line-item-circle-top, 50%);
         left: var(--loading-dot-line-item-circle-left, 50%);
         background-color: var(--loading-dot-line-item-circle-background-color, transparent);
@@ -60,11 +56,11 @@
         transform-origin: var(--loading-dot-line-item-circle-transform-origin, left);
         &::before {
           position: var(--loading-dot-line-item-circle-before-position, absolute);
-          top: var(--loading-dot-line-item-circle-before-top, -0.5em);
-          right: var(--loading-dot-line-item-circle-before-right, -0.5em);
+          top: var(--loading-dot-line-item-circle-before-top, -5em);
+          right: var(--loading-dot-line-item-circle-before-right, -5em);
           content: var(--loading-dot-line-item-circle-before-content, '');
-          width: var(--loading-dot-line-item-circle-before-width, 1em);
-          height: var(--loading-dot-line-item-circle-before-height, 1em);
+          width: var(--loading-dot-line-item-circle-before-width, 10em);
+          height: var(--loading-dot-line-item-circle-before-height, 10em);
           background-color: var(--loading-dot-line-item-circle-before-background-color, currentColor);
           border-radius: var(--loading-dot-line-item-circle-before-border-radius, 50%);
           box-shadow: var(--loading-dot-line-item-circle-before-box-shadow, none);

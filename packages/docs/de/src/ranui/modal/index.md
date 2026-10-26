@@ -43,7 +43,7 @@ Ob das Modal sichtbar ist, steuert das Attribut `open` (oder die Eigenschaft `op
 | -------------- | --------- | -------- | ------------------------------------------------------------------------------------ |
 | `open`         | `boolean` | `false`  | Ob das Modal sichtbar ist                                                            |
 | `heading`      | `string`  | `''`     | Titeltext der Kopfzeile (fällt bei leerem Wert auf `Modal` zurück)                   |
-| `closable`     | `boolean` | `true`   | Ob die Schließen-Schaltfläche (`x`) gezeigt wird                                     |
+| `closable`     | `boolean` | `true`   | Ob die Schließen-Schaltfläche gezeigt wird                                           |
 | `maskClosable` | `boolean` | `true`   | Ob ein Klick auf die Hintergrundmaske das Modal schließt                             |
 | `closeOnEsc`   | `boolean` | `true`   | Ob `Escape` das Modal schließt                                                       |
 | `lockScroll`   | `boolean` | `true`   | Ob das Scrollen des Body gesperrt wird, solange das Modal offen ist                  |
@@ -208,7 +208,7 @@ Gestalte die inneren Teile über `::part()`.
 | `dialog` | Der Dialogkasten              |
 | `header` | Kopfleiste                    |
 | `title`  | Titelüberschrift              |
-| `close`  | Schließen-Schaltfläche (`x`)  |
+| `close`  | Schließen-Schaltfläche        |
 | `body`   | Scrollbarer Textbereich       |
 | `footer` | Aktionsleiste am Fuß          |
 

@@ -20,10 +20,11 @@
 // oversized hit box.
 :host {
   box-sizing: border-box;
+  width: var(--ran-colorpicker-width, var(--ran-size-7, 32px));
   min-width: var(--ran-colorpicker-min-width, var(--ran-size-7, 32px));
   height: var(--ran-colorpicker-height, var(--ran-size-7, 32px));
-  border-radius: var(--ran-colorpicker-border-radius, var(--ran-radius-md, 8px));
-  border: var(--ran-colorpicker-border, 1px solid var(--ran-color-border, #eaeaea));
+  border-radius: var(--ran-colorpicker-border-radius, var(--ran-radius-sm, 8px));
+  border: var(--ran-colorpicker-border, 1px solid var(--ran-color-border-control, #8a8a94));
   cursor: pointer;
   display: var(--ran-colorpicker-host-display, inline-flex);
   align-items: center;
@@ -32,18 +33,30 @@
      would fade on a theme flip. Opt in via the hook var if wanted. */
   transition: var(--ran-colorpicker-transition, none);
   background: var(--ran-colorpicker-background, var(--ran-color-bg-elevated, #ffffff));
-  padding: var(--ran-colorpicker-padding, var(--ran-space-1, 4px));
+  /* (32 - 2 border - 20 swatch) / 2: the swatch sits centred in a 32px square. */
+  padding: var(--ran-colorpicker-padding, 5px);
 }
 
-:host(:hover) {
-  border-color: var(--ran-colorpicker-hover-border-color, var(--ran-color-border-hover, var(--ran-gray-500)));
+@media (hover: hover) {
+  :host(:hover:not([disabled]:not([disabled='false']))) {
+    border-color: var(--ran-colorpicker-hover-border-color, var(--ran-color-border-control-hover, #55555e));
+  }
+}
+
+/* The disabled recipe lives on the host, which owns the chrome: recessed surface, decorative
+   edge, no stacked opacity. The swatch keeps its colour so the value stays readable. */
+:host([disabled]:not([disabled='false'])) {
+  cursor: var(--ran-colorpicker-disabled-cursor, not-allowed);
+  opacity: var(--ran-colorpicker-disabled-opacity, 1);
+  background: var(--ran-colorpicker-disabled-background, var(--ran-color-bg-subtle, #f7f7f8));
+  border-color: var(--ran-colorpicker-disabled-border-color, var(--ran-color-border, #e4e4e8));
 }
 
 .ran-colorpicker-block {
   position: relative;
-  border-radius: var(--ran-colorpicker-block-border-radius, var(--ran-radius-sm, 4px));
-  width: var(--ran-colorpicker-block-width, var(--ran-size-4, 24px));
-  height: var(--ran-colorpicker-block-height, var(--ran-size-4, 24px));
+  border-radius: var(--ran-colorpicker-block-border-radius, var(--ran-radius-xs, 4px));
+  width: var(--ran-colorpicker-block-width, 20px);
+  height: var(--ran-colorpicker-block-height, 20px);
   box-shadow: inset 0 0 0 1px var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.09));
   background-image: conic-gradient(
     var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.06)) 0 25%,
@@ -52,10 +65,16 @@
     transparent 0
   );
   background-size: 50% 50%;
+  outline: none;
+
+  /* The swatch is the one tab stop (the inner r-popover is not, see its syncTabStop). */
+  &:focus-visible {
+    /* The ring's page-coloured gap separates a pale swatch from the field, so the hairline can go. */
+    box-shadow: var(--ran-colorpicker-focus-ring, var(--ran-focus-ring));
+  }
 
   &[disabled] {
     cursor: var(--ran-colorpicker-disabled-cursor, not-allowed);
-    opacity: var(--ran-colorpicker-disabled-opacity, 0.5);
   }
 }
 

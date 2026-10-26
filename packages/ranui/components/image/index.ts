@@ -1,4 +1,3 @@
-import failImage from '../../assets/image/failImage';
 import { Div } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
@@ -15,12 +14,13 @@ export class ImageElement extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, imageCss);
-    const container = Div().class('ran-image').build();
+    const container = Div().class('ran-image').attr('part', 'image').attr('data-state', 'loading').build();
     this._shadowDom.appendChild(container);
     this._container = container;
   }
+  /** Image shown when `src` fails. Empty by default: a failed image then shows a theme-aware placeholder that fills the box. */
   get fallback() {
-    return getStringAttribute(this, 'fallback', failImage);
+    return getStringAttribute(this, 'fallback');
   }
   set fallback(value) {
     setStringAttribute(this, 'fallback', value, { removeEmpty: true });
@@ -60,9 +60,28 @@ export class ImageElement extends RanElement {
    * listeners wired in `connectedCallback` stay attached, so this reuses the
    * same fallback-on-error and append-on-load behavior for every src change.
    */
+  /** Name the container as an image only while it stands in for a failed, meaningful one. */
+  private _nameErrorSurface = (alt: string): void => {
+    if (alt) {
+      this._container.setAttribute('role', 'img');
+      this._container.setAttribute('aria-label', alt);
+    } else {
+      this._container.removeAttribute('role');
+      this._container.removeAttribute('aria-label');
+    }
+  };
   updateSrc = (): void => {
     if (this._image) {
-      this._image.src = this.getAttribute('src') || '';
+      this._container.setAttribute('data-state', 'loading');
+      this._nameErrorSurface('');
+      const src = this.getAttribute('src');
+      // No src is not a failed load: keep the quiet placeholder rather than the error icon.
+      if (!src) {
+        this._image.removeAttribute('src');
+        this._image.remove();
+        return;
+      }
+      this._image.src = src;
     }
   };
   connectedCallback() {
@@ -74,10 +93,19 @@ export class ImageElement extends RanElement {
       image.addEventListener('error', () => {
         const fallback = this.fallback;
         // A failing custom fallback must stop here rather than request itself forever.
-        if (fallback && image.getAttribute('src') !== fallback) image.src = fallback;
+        if (fallback && image.getAttribute('src') !== fallback) {
+          image.src = fallback;
+          return;
+        }
+        image.remove();
+        this._container.setAttribute('data-state', 'error');
+        // The <img> and its alt are gone; a meaningful image keeps its name on the error surface.
+        this._nameErrorSurface(this.alt);
       });
       image.addEventListener('load', () => {
         if (!this._container.contains(image)) this._container.appendChild(image);
+        this._container.setAttribute('data-state', 'loaded');
+        this._nameErrorSurface('');
       });
       this._image = image;
     }

@@ -20,12 +20,13 @@
         &-content {
           display: var(--ran-message-content-toast-display, inline-block);
           padding: var(--ran-message-content-toast-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px));
-          /* Deliberately a fixed dark pill (Android-toast convention) rather
-             than --ran-color-bg-elevated — a toast is meant to read the same
-             regardless of the host page's light/dark theme. Still routed
-             through tokens so a consumer can retheme it. */
-          background: var(--ran-message-content-toast-background, rgba(0, 0, 0, 0.7));
-          border-radius: var(--ran-message-content-toast-border-radius, var(--ran-radius-sm, 7px));
+          /* An inverse pill: text colour as the surface, page colour as the ink. Both flip
+             with the theme, so it stays the highest-contrast pair in either mode and still
+             reads apart from the elevated notices. A fixed translucent black vanished on a
+             dark page. The transparent border keeps its box the same size as a notice's. */
+          background: var(--ran-message-content-toast-background, var(--ran-color-text, #111113));
+          border: var(--ran-message-content-toast-border, 1px solid transparent);
+          border-radius: var(--ran-message-content-toast-border-radius, var(--ran-radius-md, 12px));
           pointer-events: var(--ran-message-content-toast-pointer-events, all);
           &-info {
             align-items: var(--ran-message-info-toast-align-items, center);
@@ -41,13 +42,33 @@
               z-index: var(--ran-message-text-toast-z-index, 1010);
               width: var(--ran-message-text-toast-width, 100%);
               pointer-events: var(--ran-message-text-toast-pointer-events, none);
-              color: var(--ran-message-text-toast-color, #fff);
+              color: var(--ran-message-text-toast-color, var(--ran-color-bg, #ffffff));
             }
           }
         }
       }
     }
   }
+}
+.ran-message-icon {
+  flex: none;
+  font-size: var(--ran-message-icon-size, 16px);
+  margin-inline-end: var(--ran-message-icon-gap, var(--ran-space-2, 8px));
+}
+:host([type='success']) .ran-message-icon {
+  color: var(--ran-message-icon-success-color, var(--ran-color-success));
+}
+:host([type='warning']) .ran-message-icon {
+  color: var(--ran-message-icon-warning-color, var(--ran-color-warning-foreground));
+}
+:host([type='error']) .ran-message-icon {
+  color: var(--ran-message-icon-error-color, var(--ran-color-danger));
+}
+:host([type='info']) .ran-message-icon {
+  color: var(--ran-message-icon-info-color, var(--ran-color-link));
+}
+:host([type='toast']) .ran-message-icon {
+  display: none;
 }
 .ran-message {
   &-notice {
@@ -60,7 +81,8 @@
     &-content {
       display: var(--ran-message-content-display, inline-block);
       padding: var(--ran-message-content-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px));
-      background: var(--ran-message-content-background, var(--ran-color-bg-elevated, #fff));
+      background: var(--ran-message-content-background, var(--ran-color-bg-elevated, #ffffff));
+      border: var(--ran-message-content-border, 1px solid var(--ran-color-border, #e4e4e8));
       border-image-source: var(--ran-message-content-border-image-source, none);
       border-image-slice: var(--ran-message-content-border-image-slice, 8);
       border-image-width: var(--ran-message-content-border-image-width, var(--ran-skin-border-image-width, 4px));
@@ -78,7 +100,7 @@
         span {
           margin: var(--ran-message-text-margin, 0);
           padding: var(--ran-message-text-padding, 0);
-          color: var(--ran-message-text-color, var(--ran-color-text, #000000d9));
+          color: var(--ran-message-text-color, var(--ran-color-text, #111113));
           font-size: var(--ran-message-text-font-size, var(--ran-text-copy-2, 14px));
           font-weight: var(--ran-message-text-font-weight, var(--ran-text-copy-weight, 400));
           font-variant: var(--ran-message-text-font-variant, tabular-nums);
@@ -128,7 +150,7 @@
   box-sizing: var(--ran-message-box-sizing, border-box);
   margin: var(--ran-message-margin, 0);
   padding: var(--ran-message-padding, 0);
-  color: var(--ran-message-color, var(--ran-color-text, #000000d9));
+  color: var(--ran-message-color, var(--ran-color-text, #111113));
   font-size: var(--ran-message-font-size, var(--ran-text-copy-2, 14px));
   font-weight: var(--ran-message-font-weight, var(--ran-text-copy-weight, 400));
   font-variant: var(--ran-message-font-variant, tabular-nums);
@@ -162,13 +184,22 @@
 // keyframe's end state instead, so there's nothing to snap back to.
 :host(.message-in) {
   animation-name: var(--ran-message-in-animation-name, MessageMoveIn);
-  animation-duration: var(--ran-message-in-animation-duration, 0.3s);
-  animation-timing-function: var(--ran-message-in-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
+  animation-duration: var(--ran-message-in-animation-duration, var(--ran-motion-duration-base, 0.2s));
+  animation-timing-function: var(--ran-message-in-animation-timing-function, var(--ran-motion-ease-standard));
   animation-fill-mode: var(--ran-message-in-animation-fill-mode, forwards);
 }
 :host(.message-leave) {
   animation-name: var(--ran-message-leave-animation-name, MessageMoveOut);
-  animation-duration: var(--ran-message-leave-animation-duration, 0.3s);
-  animation-timing-function: var(--ran-message-leave-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
+  animation-duration: var(--ran-message-leave-animation-duration, var(--ran-motion-duration-base, 0.2s));
+  animation-timing-function: var(--ran-message-leave-animation-timing-function, var(--ran-motion-ease-standard));
   animation-fill-mode: var(--ran-message-leave-animation-fill-mode, forwards);
+}
+// The reduced-motion sheet adopted by every shadow root reaches the shadow tree, not the
+// host, so the host animations need their own rule. A 1ms run keeps `forwards` landing on
+// the end state, so a leaving message still disappears.
+@media (prefers-reduced-motion: reduce) {
+  :host(.message-in),
+  :host(.message-leave) {
+    animation-duration: 1ms;
+  }
 }

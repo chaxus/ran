@@ -43,7 +43,7 @@ description: 'ranui の Modal（<r-modal>）は集中した操作のためのダ
 | -------------- | --------- | ------- | --------------------------------------------------------------- |
 | `open`         | `boolean` | `false` | モーダルを表示するかどうか                                      |
 | `heading`      | `string`  | `''`    | ヘッダーのタイトル文字列（空のときは `Modal` にフォールバック） |
-| `closable`     | `boolean` | `true`  | 閉じる（`x`）ボタンを出すかどうか                               |
+| `closable`     | `boolean` | `true`  | 閉じるボタンを出すかどうか                                      |
 | `maskClosable` | `boolean` | `true`  | 背景マスクのクリックで閉じるかどうか                            |
 | `closeOnEsc`   | `boolean` | `true`  | `Escape` キーで閉じるかどうか                                   |
 | `lockScroll`   | `boolean` | `true`  | 開いている間、body のスクロールをロックするかどうか             |
@@ -208,7 +208,7 @@ if (result.action === 'confirm') {
 | `dialog` | ダイアログ本体           |
 | `header` | ヘッダーバー             |
 | `title`  | タイトル見出し           |
-| `close`  | 閉じる（`x`）ボタン      |
+| `close`  | 閉じるボタン             |
 | `body`   | スクロールする本文領域   |
 | `footer` | フッターのアクションバー |
 

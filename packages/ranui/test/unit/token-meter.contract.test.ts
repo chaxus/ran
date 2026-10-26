@@ -86,6 +86,21 @@ describe('r-token-meter contract', () => {
     expect(root.getAttribute('title')).not.toContain('limit');
   });
 
+  it('says the escalation in words beside the bar', () => {
+    const { meter } = mount();
+    const flag = (meter as unknown as { _shadowDom: ShadowRoot })._shadowDom.querySelector<HTMLElement>(
+      '[part="flag"]',
+    )!;
+    meter.limit = 1000;
+    meter.used = 100;
+    expect(flag.hidden).toBe(true);
+    meter.used = 850;
+    expect(flag.hidden).toBe(false);
+    expect(flag.textContent).toBe('Near limit');
+    meter.used = 1200;
+    expect(flag.textContent).toBe('Over limit');
+  });
+
   it('abbreviates in the readout and spells the number out in the title', () => {
     const { meter, root, text } = mount();
     meter.limit = 128_000;

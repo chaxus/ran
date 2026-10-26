@@ -1,9 +1,6 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .circle-line {
+    --_ran-loading-units: 56;
     @keyframes circle-line {
       from {
         transform: var(--loading-circle-line-keyframes-from, rotate(0));
@@ -13,9 +10,9 @@
       }
     }
     &-border {
-      width: var(--loading-circle-line-border-width, 50px);
-      height: var(--loading-circle-line-border-height, 50px);
-      padding: var(--loading-circle-line-border-padding, 3px);
+      width: var(--loading-circle-line-border-width, 50em);
+      height: var(--loading-circle-line-border-height, 50em);
+      padding: var(--loading-circle-line-border-padding, 3em);
       display: var(--loading-circle-line-border-display, flex);
       justify-content: var(--loading-circle-line-border-justify-content, center);
       align-items: var(--loading-circle-line-border-align-items, center);

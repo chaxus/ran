@@ -47,6 +47,12 @@
   max-width: var(--ran-conversation-measure, 46rem);
 }
 
+/* Consecutive tool calls and reasoning are one run of steps, not separate paragraphs: the
+   rows close up so the run reads as a list and the gap is kept for turns. */
+:is(r-tool-card, r-reasoning).ran-conversation-row + :is(r-tool-card, r-reasoning).ran-conversation-row {
+  margin-top: calc(var(--ran-conversation-step-gap, 0px) - var(--ran-conversation-gap, var(--ran-space-4)));
+}
+
 .ran-conversation-row {
   display: block;
   min-width: 0;
@@ -104,7 +110,7 @@
 }
 
 .ran-conversation-older button:focus-visible {
-  outline: 2px solid var(--ran-conversation-focus-color, var(--ran-color-primary));
+  outline: 2px solid var(--ran-color-focus);
   outline-offset: 2px;
 }
 

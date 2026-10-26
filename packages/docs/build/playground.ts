@@ -8,11 +8,12 @@
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { UNSET } from '../client/playground.ts';
 
 export type Control =
   | { name: string; kind: 'boolean'; description: string; defaultOn: boolean }
-  | { name: string; kind: 'select'; options: string[]; description: string }
-  | { name: string; kind: 'text'; description: string };
+  | { name: string; kind: 'select'; options: string[]; description: string; defaultValue?: string }
+  | { name: string; kind: 'text'; description: string; defaultValue?: string };
 
 /** Attributes the playground leaves out: styling escape hatches, ARIA and form plumbing. */
 const SKIP = /^(sheet|aria-.*|name|id|class|style|key|slot)$/;
@@ -24,6 +25,22 @@ const esc = (s: string): string =>
 const literals = (text: string): string[] => {
   const values = [...text.matchAll(/'([^']*)'/g)].map((match) => match[1]!);
   return values.length > 1 ? values : [];
+};
+
+/**
+ * The default a description states — `Default 'x'`, `Defaults to 'x'`, `'x' (default)`,
+ * `Behaves as x when unset` — or `undefined` when it states none. `''` (default) reads as `default`.
+ */
+export const statedDefault = (description: string): string | undefined => {
+  const marked = /`'([^'`]*)'` \(default\)/.exec(description);
+  if (marked) return marked[1] || 'default';
+  const stated = /(?:Defaults? to|Default) (?:`'?([^'`]*)'?`|"([^"]+)")|Behaves as `([^`]+)` when unset/.exec(
+    description,
+  );
+  const value = stated?.[1] ?? stated?.[2] ?? stated?.[3];
+  // An expression such as `document.body` is how the default is computed, not a value to type.
+  if (!value || /^[A-Za-z_$][\w$]*\.[A-Za-z_$]/.test(value)) return undefined;
+  return value;
 };
 
 /** Element → its controls, read from the generated API reference. */
@@ -45,11 +62,22 @@ export const parseControls = (componentsMd: string): Map<string, Control[]> => {
       // A switch that is on until written `="false"` says so in its description.
       if (/^boolean\b/.test(type))
         controls.push({ name: attribute, kind: 'boolean', description, defaultOn: /on by default/i.test(description) });
-      else if (literals(type).length)
-        controls.push({ name: attribute, kind: 'select', options: literals(type), description });
-      else if (/^(string|number)\b/.test(type) && literals(description).length)
-        controls.push({ name: attribute, kind: 'select', options: literals(description), description });
-      else if (/^(string|number)\b/.test(type)) controls.push({ name: attribute, kind: 'text', description });
+      else {
+        const defaultValue = statedDefault(description);
+        const withDefault = defaultValue === undefined ? {} : { defaultValue };
+        if (literals(type).length)
+          controls.push({ name: attribute, kind: 'select', options: literals(type), description, ...withDefault });
+        else if (/^(string|number)\b/.test(type) && literals(description).length)
+          controls.push({
+            name: attribute,
+            kind: 'select',
+            options: literals(description),
+            description,
+            ...withDefault,
+          });
+        else if (/^(string|number)\b/.test(type))
+          controls.push({ name: attribute, kind: 'text', description, ...withDefault });
+      }
     }
     if (controls.length) byElement.set(element, controls);
   }
@@ -64,20 +92,24 @@ export const firstExample = (markdown: string, element: string): string =>
       .find((html) => html.includes(`<${element}`)) ?? ''
   ).replace(/\s+id="[^"]*"/g, '');
 
-const controlHtml = (control: Control, id: string): string => {
-  const label = `<code>${esc(control.name)}</code>`;
+/**
+ * Controls are ranui elements named through their own `label` (or slotted text). Before the
+ * modules load, `demos.css` prints that label so the generated section still reads.
+ */
+const controlHtml = (control: Control): string => {
+  const attr = ` data-attr="${esc(control.name)}"`;
   const title = control.description ? ` title="${esc(control.description.replace(/`/g, ''))}"` : '';
   if (control.kind === 'boolean')
-    return `<label class="playground__control"${title}><input type="checkbox" id="${id}" data-attr="${esc(control.name)}"${control.defaultOn ? ' data-default-on' : ''}> ${label}</label>`;
-  const field =
-    control.kind === 'select'
-      ? `<select id="${id}" data-attr="${esc(control.name)}"><option value="">—</option>${control.options
-          .filter(Boolean)
-          .map((option) => `<option value="${esc(option)}">${esc(option)}</option>`)
-          .join('')}</select>`
-      : `<input type="text" id="${id}" data-attr="${esc(control.name)}" spellcheck="false" autocomplete="off">`;
-  // The field sits beside its label, not inside it, so its options are not read as its name.
-  return `<div class="playground__control playground__control--field"${title}><label for="${id}">${label}</label>${field}</div>`;
+    return `<r-checkbox class="playground__switch"${attr}${control.defaultOn ? ' data-default-on' : ''}${title}><code>${esc(control.name)}</code></r-checkbox>`;
+  const shown = control.defaultValue ?? 'not set';
+  if (control.kind === 'text')
+    return `<r-input class="playground__field"${attr} label="${esc(control.name)}" placeholder="${esc(shown)}"${title}></r-input>`;
+  // The stated default is what an unwritten attribute does, so it is the unset choice, not a second option.
+  const options = control.options
+    .filter((option) => option && option !== control.defaultValue)
+    .map((option) => `<r-option value="${esc(option)}">${esc(option)}</r-option>`)
+    .join('');
+  return `<r-select class="playground__field"${attr} label="${esc(control.name)}" placeholder="${esc(shown)}"${title}><r-option value="${UNSET}">${esc(shown)}</r-option>${options}</r-select>`;
 };
 
 export interface Playground {
@@ -92,15 +124,18 @@ export const playground = (docsRoot: string, elementsFor: (baseRel: string) => s
     const element = elementsFor(baseRel).find((name) => controls.has(name) && firstExample(markdown, name));
     if (!element) return '';
     const example = firstExample(markdown, element);
-    const fields = controls
-      .get(element)!
-      .map((control, i) => controlHtml(control, `pg-${element}-${i}`))
-      .join('');
+    const all = controls.get(element)!;
+    const switches = all.filter((control) => control.kind === 'boolean');
+    const fields = all.filter((control) => control.kind !== 'boolean');
+    const group = (name: string, items: Control[]): string =>
+      items.length
+        ? `<div class="playground__${name}">${items.map((control) => controlHtml(control)).join('')}</div>`
+        : '';
     return (
       `\n\n## ${heading}\n\n` +
       `<div class="playground" data-playground="${element}">` +
       `<div class="playground__stage">${example}</div>` +
-      `<fieldset class="playground__controls"><legend class="playground__legend"><code>&lt;${element}&gt;</code></legend>${fields}</fieldset>` +
+      `<fieldset class="playground__controls"><legend class="playground__legend"><code>&lt;${element}&gt;</code></legend>${group('switches', switches)}${group('fields', fields)}</fieldset>` +
       `<figure class="playground__markup"><figcaption>${esc(markup)}</figcaption><pre><code></code></pre></figure>` +
       `</div>\n`
     );

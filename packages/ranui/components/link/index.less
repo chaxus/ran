@@ -3,20 +3,22 @@
 }
 
 a {
-  color: var(--ran-color-link, #006bff);
+  color: var(--ran-color-link, #0a5bd8);
   text-decoration: none;
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
   border-radius: var(--ran-radius-sm, 6px);
 
-  &:hover {
-    text-decoration: underline;
-    opacity: 0.85;
+  @media (hover: hover) {
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.85;
+    }
   }
 
   &:focus-visible {
-    outline: var(--ran-link-focus-outline, 2px solid var(--ran-color-primary, #006bff));
+    outline: var(--ran-link-focus-outline, 2px solid var(--ran-color-focus, #0a6cff));
     outline-offset: var(--ran-link-focus-outline-offset, 2px);
   }
 }

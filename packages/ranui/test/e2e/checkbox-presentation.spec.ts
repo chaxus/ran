@@ -27,9 +27,25 @@ test('disabled=false looks and behaves enabled while actual disabled stays quiet
     page,
     '<r-checkbox id="normal">Normal</r-checkbox><r-checkbox id="enabled" disabled="false">Enabled</r-checkbox><r-checkbox id="disabled" disabled>Disabled</r-checkbox>',
   );
-  const opacity = (selector: string) => page.locator(selector).evaluate((el) => getComputedStyle(el).opacity);
-  expect(await opacity('#enabled')).toBe(await opacity('#normal'));
-  expect(Number(await opacity('#disabled'))).toBeLessThan(1);
+  const look = (selector: string) =>
+    insideShadow(page, selector, (root) => {
+      const box = getComputedStyle(root.querySelector('.ran-checkbox-inner')!);
+      const label = getComputedStyle(root.querySelector('.ran-checkbox-label')!);
+      return {
+        opacity: getComputedStyle(root.host).opacity,
+        boxBackground: box.backgroundColor,
+        boxBorder: box.borderTopColor,
+        labelColor: label.color,
+      };
+    });
+  expect(await look('#enabled')).toEqual(await look('#normal'));
+  // One disabled recipe, no stacked opacity: recessed box, decorative edge, disabled text.
+  const disabled = await look('#disabled');
+  const normal = await look('#normal');
+  expect(disabled.opacity).toBe('1');
+  expect(disabled.boxBackground).not.toBe(normal.boxBackground);
+  expect(disabled.boxBorder).not.toBe(normal.boxBorder);
+  expect(disabled.labelColor).not.toBe(normal.labelColor);
   await page.locator('#enabled').click();
   await expect(page.locator('#enabled')).toHaveAttribute('aria-checked', 'true');
   // Actionability correctly rejects a disabled control; send an actual pointer

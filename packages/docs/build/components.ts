@@ -56,12 +56,6 @@ const ICONS: Record<string, string> = {
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6a1.5 1.5 0 0 0 2.1 2.1l6-6a4 4 0 0 0 5.4-5.4l-2.3 2.3-2.1-2.1z"/></svg>',
   article:
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M14 4v5h5M8 13h8M8 17h5"/></svg>',
-  agnostic:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
-  typed:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg>',
-  pwa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"/></svg>',
-  i18n: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.9 6 4 9-.1 3-1.5 6.4-4 9-2.5-2.6-3.9-6-4-9 .1-3 1.5-6.4 4-9z"/></svg>',
   bridge:
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="12" r="2.4"/><circle cx="19" cy="12" r="2.4"/><path d="M7.4 12h9.2"/></svg>',
   gpu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9.5 3v3M14.5 3v3M9.5 18v3M14.5 18v3M3 9.5h3M3 14.5h3M18 9.5h3M18 14.5h3"/></svg>',
@@ -81,8 +75,6 @@ const ICONS: Record<string, string> = {
 };
 
 const icon = (kind: string): string => ICONS[kind] ?? '';
-
-/** Staggered entrance delay, as a CSS custom property on the element. */
 
 const ARROW =
   '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -115,32 +107,29 @@ export const renderHome = (locale: LocaleDef): string => {
   // one segment: word units either do not exist there or are not worth reordering an
   // RTL line for.
   const words = t.splitWords ? t.headline.split(/\s+/) : [t.headline];
+  const head = (kicker: string, title: string, id: string): string =>
+    `<div class="sec-head"><span class="kicker">${esc(kicker)}</span><h2 id="${id}">${esc(title)}</h2></div>`;
 
   return (
     `<div class="cine">` +
-    `<div class="bg" aria-hidden="true"><span class="glow"></span><span class="grid"></span></div>` +
-    // ── hero ──
+    // ── 1. positioning: what ran is, one action, the facts, and a working example ──
     `<header class="hero"><div class="hero-copy">` +
-    `<span class="eyebrow"><span class="dot"></span>${esc(t.eyebrow)}</span>` +
     `<h1 class="headline"><span class="line">` +
     // Real spaces between the word boxes, so the heading's text reads as words to crawlers too.
     words.map((w) => `<span class="word"><span class="word-in">${esc(w)}</span></span>`).join(' ') +
     `</span></h1>` +
     `<p class="subtitle">${esc(t.subtitle)}</p>` +
-    `<div class="cmd"><code>npm&nbsp;i&nbsp;ranui&nbsp;ranuts</code>` +
-    `<button class="copy" type="button" data-copy="npm i ranui ranuts" aria-label="${esc(t.copy)}">${COPY_ICON}</button></div>` +
     `<div class="cta">` +
     `<a class="btn btn-primary" href="${esc(href('/src/agents/'))}">${esc(t.ctaPrimary)}${ARROW}</a>` +
-    `<a class="btn btn-ghost" href="https://github.com/chaxus/ran" target="_blank" rel="noreferrer">${GITHUB_MARK}${esc(t.ctaSecondary)}</a>` +
+    `<a class="btn-text" href="https://github.com/chaxus/ran" target="_blank" rel="noreferrer">${GITHUB_MARK}${esc(t.ctaSecondary)}</a>` +
     `</div></div>` +
     // The live panel holds real ranui elements. They are inert custom elements until the
-    // bundle upgrades them, so this is the markup either way — no skeleton swap, and
-    // therefore none of the hydration mismatch the Vue version had to avoid.
+    // bundle upgrades them, so this is the markup either way — no skeleton swap.
     // A working example, not a gallery of variants: one small task with every state a
     // reader can reach — empty, invalid, sending, sent, failed and retried. The markup
     // is complete without script; `client/home.ts` adds the behaviour.
     `<div class="hero-live">` +
-    `<div class="live-head"><span class="live-dot"></span>${esc(t.liveLabel)}</div>` +
+    `<div class="live-head">${esc(t.liveLabel)}</div>` +
     // A group, not a <form>: the request is simulated, and a real form would submit itself
     // on Enter (its controls are form-associated) and put the email in the URL.
     `<div class="example" role="form" aria-labelledby="home-example-title" data-home-example` +
@@ -165,33 +154,37 @@ export const renderHome = (locale: LocaleDef): string => {
       (id) => `<a class="example__rule" href="${esc(href(designRuleLink(DESIGN_DIR, id)))}">${id}</a>`,
     ).join('') +
     `</div>` +
-    `<span class="live-note">${esc(t.liveNote)}</span></div></header>` +
-    // ── stats ──
-    `<section class="stats reveal">` +
+    `<p class="live-note">${esc(t.liveNote)}</p></div></header>` +
+    `<dl class="stats reveal">` +
     t.stats
       .map(
         (s) =>
-          `<div class="stat"><span class="stat-num">${esc(s.num)}</span>` +
-          `<span class="stat-label">${esc(s.label)}</span></div>`,
+          `<div class="stat"><dt class="stat-label">${esc(s.label)}</dt>` +
+          `<dd class="stat-num">${esc(s.num)}</dd></div>`,
       )
       .join('') +
+    `</dl>` +
+    // ── 2. live proof: what the library looks like, composed into small states ──
+    `<section class="section proof reveal" aria-labelledby="home-proof">` +
+    head(t.proofKicker, t.proofTitle, 'home-proof') +
+    renderProof(t.proof) +
     `</section>` +
-    // ── pillars ──
-    `<section class="pillars">` +
+    // ── 3. choose a pillar, then what the two libraries carry that others leave out ──
+    `<section class="section choose reveal" aria-labelledby="home-choose">` +
+    head(t.chooseKicker, t.chooseTitle, 'home-choose') +
+    `<div class="pillars reveal">` +
     t.pillars
       .map(
         (p) =>
-          `<a class="pillar reveal" href="${esc(href(p.link))}">` +
+          `<a class="pillar" href="${esc(href(p.link))}">` +
           `<span class="pillar-icon" data-kind="${esc(p.kind)}">${icon(p.kind)}</span>` +
           `<h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p>` +
           `<span class="pillar-more">${esc(p.more)} ${ARROW_SM}</span></a>`,
       )
       .join('') +
-    `</section>` +
-    // ── capabilities ──
-    `<section class="section caps"><div class="sec-head reveal">` +
-    `<span class="kicker">${esc(t.capsKicker)}</span><h2>${esc(t.capsTitle)}</h2>` +
-    `<p class="sec-sub">${esc(t.capsSub)}</p></div><div class="bento reveal">` +
+    `</div>` +
+    `<h3 class="caps-title">${esc(t.capsTitle)}</h3>` +
+    `<div class="bento reveal">` +
     t.caps
       .map(
         (col) =>
@@ -210,27 +203,50 @@ export const renderHome = (locale: LocaleDef): string => {
       )
       .join('') +
     `</div></section>` +
-    // ── get started ──
-    `<section class="section start"><div class="sec-head reveal">` +
-    `<span class="kicker">${esc(t.startKicker)}</span><h2>${esc(t.startTitle)}</h2>` +
-    `<p class="sec-sub">${esc(t.startDesc)}</p></div>` +
-    `<div class="panel reveal">` +
+    // ── 4. install ──
+    `<section class="section start reveal" aria-labelledby="home-start">` +
+    head(t.startKicker, t.startTitle, 'home-start') +
+    `<p class="sec-sub">${esc(t.startDesc)}</p>` +
+    `<div class="cmd"><code>npm&nbsp;i&nbsp;ranui&nbsp;ranuts</code>` +
+    `<button class="copy" type="button" data-copy="npm i ranui ranuts" aria-label="${esc(t.copy)}">${COPY_ICON}</button></div>` +
+    `<div class="panel">` +
     `<div class="code-cell"><div class="code-head">${esc(t.startStep1)}</div><pre class="snippet">${SNIPPET_INSTALL}</pre></div>` +
     `<div class="code-cell"><div class="code-head">${esc(t.startStep2)}</div><pre class="snippet">${SNIPPET_USE}</pre></div>` +
-    `</div></section>` +
-    // ── feature strip ──
-    `<section class="strip reveal">` +
-    t.features
-      .map(
-        (f) =>
-          `<div class="feature"><span class="feature-head">` +
-          `<span class="feature-icon">${icon(f.kind)}</span><h4>${esc(f.title)}</h4></span>` +
-          `<p>${esc(f.desc)}</p></div>`,
-      )
-      .join('') +
-    `</section></div>`
+    `</div></section></div>`
   );
 };
+
+const PROOF_STEP_STATES = ['success', 'running', 'idle'] as const;
+
+/**
+ * Three small states composed from real `r-*` elements. Every visible word is light-DOM
+ * text beside the elements, so with no script the captions, file name and steps still
+ * read; only the controls themselves wait for the bundle.
+ */
+const renderProof = (p: ReturnType<typeof homeCopy>['proof']): string =>
+  `<div class="proof-stage">` +
+  `<figure class="proof-cell"><figcaption class="proof-cap">${esc(p.states[0])}</figcaption>` +
+  `<div class="proof-file"><span class="proof-name">quarterly-report.pdf</span><span class="proof-pct">64%</span></div>` +
+  `<r-progress class="proof-bar" percent="64" total="100" aria-label="${esc(p.states[0])}: quarterly-report.pdf"></r-progress>` +
+  // A specimen, not a control: the button shows how ranui renders it but takes no focus.
+  `<r-button class="proof-action" disabled>${esc(p.cancel)}</r-button></figure>` +
+  `<figure class="proof-cell"><figcaption class="proof-cap">${esc(p.states[1])}</figcaption>` +
+  `<ol class="proof-steps">` +
+  p.steps
+    .map(
+      (step, i) =>
+        `<li><r-state-dot state="${PROOF_STEP_STATES[i]}" label="${esc(p.stepStates[i]!)}"></r-state-dot>` +
+        `<span>${esc(step)}</span></li>`,
+    )
+    .join('') +
+  `</ol>` +
+  `<r-token-meter class="proof-meter" used="48200" limit="200000" label="${esc(p.meter)}"></r-token-meter></figure>` +
+  `<figure class="proof-cell"><figcaption class="proof-cap">${esc(p.states[2])}</figcaption>` +
+  `<div class="proof-skel"><r-skeleton class="proof-avatar"></r-skeleton>` +
+  `<div class="proof-lines"><r-skeleton></r-skeleton><r-skeleton class="proof-short"></r-skeleton></div></div>` +
+  `<div class="proof-text"><r-skeleton></r-skeleton><r-skeleton></r-skeleton><r-skeleton class="proof-short"></r-skeleton></div>` +
+  `</figure>` +
+  `</div>`;
 
 // ── Glass playground ────────────────────────────────────────────────────────
 

@@ -236,7 +236,7 @@ Hasta que se ejecuta el script del componente, el navegador coloca `<r-content>`
 
 ## Buenas prácticas
 
-- **Elemento disparador**: pon un control enfocable (por ejemplo `<r-button>`) como disparador, para que abrir y cerrar con el teclado funcione.
+- **Elemento disparador**: pon un control enfocable (por ejemplo `<r-button>`) como disparador, para que abrir y cerrar con el teclado funcione. Si el disparador no puede recibir el foco, el propio popover pasa a ser la única parada de tabulación y dibuja `--ran-focus-ring`.
 - **Envoltorio del contenido**: envuelve siempre el contenido del panel en `<r-content>`: los hijos sueltos que no estén dentro de `<r-content>` no se muestran como panel flotante.
 - **Tamaño en línea**: el host es `display: block`; añade `style="display: inline-block;"` (o colócalo en un contexto en línea) para que se encoja hasta el disparador.
 - **Posición**: `placement` es una preferencia, no una garantía: cuando el disparador está cerca del borde de la ventana y al lado preferido le falta sitio, el panel voltea solo al lado opuesto y se desplaza por el eje transversal para no salirse de la pantalla. Este volteo automático solo se aplica al posicionamiento por defecto a nivel de `body`.

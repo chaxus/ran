@@ -78,40 +78,48 @@ describe('r-message component', () => {
     expect(el.getAttribute('sheet')).toBe('.ran-message-notice { color: red; }');
   });
 
-  it('setIcon sets icon name and color for success type', () => {
+  it('setIcon sets the success icon and leaves its colour to the theme', () => {
     const el = document.createElement('r-message') as any;
     document.body.appendChild(el);
 
     el.setIcon('success');
     expect(el._icon.getAttribute('name')).toBe('check-circle-fill');
-    expect(el._icon.getAttribute('color')).toBe('#52c41a');
+    expect(el._icon.getAttribute('color')).toBeNull();
+    expect(el._icon.getAttribute('size')).toBeNull();
+    expect(el._icon.getAttribute('style')).toBeNull();
   });
 
-  it('setIcon sets icon name and color for error type', () => {
+  it('setIcon sets the error icon and leaves its colour to the theme', () => {
     const el = document.createElement('r-message') as any;
     document.body.appendChild(el);
 
     el.setIcon('error');
     expect(el._icon.getAttribute('name')).toBe('close-circle-fill');
-    expect(el._icon.getAttribute('color')).toBe('#ff4d4f');
+    expect(el._icon.getAttribute('color')).toBeNull();
+    expect(el._icon.getAttribute('size')).toBeNull();
+    expect(el._icon.getAttribute('style')).toBeNull();
   });
 
-  it('setIcon sets icon name and color for warning type', () => {
+  it('setIcon sets the warning icon and leaves its colour to the theme', () => {
     const el = document.createElement('r-message') as any;
     document.body.appendChild(el);
 
     el.setIcon('warning');
     expect(el._icon.getAttribute('name')).toBe('warning-circle-fill');
-    expect(el._icon.getAttribute('color')).toBe('#faad14');
+    expect(el._icon.getAttribute('color')).toBeNull();
+    expect(el._icon.getAttribute('size')).toBeNull();
+    expect(el._icon.getAttribute('style')).toBeNull();
   });
 
-  it('setIcon sets icon name and color for info type', () => {
+  it('setIcon sets the info icon and leaves its colour to the theme', () => {
     const el = document.createElement('r-message') as any;
     document.body.appendChild(el);
 
     el.setIcon('info');
     expect(el._icon.getAttribute('name')).toBe('info-circle-fill');
-    expect(el._icon.getAttribute('color')).toBe('#006bff');
+    expect(el._icon.getAttribute('color')).toBeNull();
+    expect(el._icon.getAttribute('size')).toBeNull();
+    expect(el._icon.getAttribute('style')).toBeNull();
   });
 
   it('setIcon does not set icon for toast type', () => {

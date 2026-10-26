@@ -4,8 +4,8 @@ import { observeEntry, prefersReducedMotion, spring, stagger } from 'ranuts/util
 const RISE = spring({ stiffness: 220, damping: 22 });
 
 /** Groups whose icons rise as they arrive. Only the icons move: text and values never wait. */
-const GROUPS = '.pillars, .bento, .strip';
-const ICONS = '.pillar-icon, .caps-ico, .feature-icon';
+const GROUPS = '.pillars, .bento';
+const ICONS = '.pillar-icon, .caps-ico';
 
 /**
  * A quiet entrance for the landing's decorative icons.

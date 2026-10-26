@@ -1,8 +1,10 @@
 :host {
-  --ran-radar-polygon-color: var(--ran-color-border, #e6e6e6);
-  --ran-radar-line-color: var(--ran-color-border, #e6e6e6);
-  --ran-radar-fill-color: rgba(255, 121, 35, 0.6);
-  --ran-radar-stroke-color: rgba(255, 121, 35, 0.6);
+  --ran-radar-polygon-color: var(--ran-color-border);
+  --ran-radar-line-color: var(--ran-color-border);
+  /* The series draws in the theme's primary ink; the fill is a tint of the same ink so it
+     follows light/dark. Canvas parses color-mix() in Chromium, Firefox and WebKit. */
+  --ran-radar-fill-color: color-mix(in srgb, var(--ran-color-primary) 16%, transparent);
+  --ran-radar-stroke-color: var(--ran-color-primary);
 }
 
 .ran-radar {

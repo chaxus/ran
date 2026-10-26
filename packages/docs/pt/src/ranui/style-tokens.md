@@ -43,13 +43,13 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-color-bg-hover`
 - `--ran-color-bg-subtle`
 - `--ran-color-border`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-radius-full`
 - `--ran-radius-md`
 - `--ran-radius-sm`
-- `--ran-size-3`
+- `--ran-size-4`
 - `--ran-size-6`
 - `--ran-space-1`
 - `--ran-space-2`
@@ -66,11 +66,11 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `button`
 
-- Tokens: 66
+- Tokens: 76
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 15 · skin: 2 · component: 43 · internal: 6 -->
+<!-- layers: semantic: 17 · skin: 2 · component: 48 · internal: 9 -->
 - `--ran-btn-active-background`
 - `--ran-btn-active-border-color`
 - `--ran-btn-active-transform`
@@ -91,6 +91,10 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-btn-color`
 - `--ran-btn-content-background-image`
 - `--ran-btn-content-justify-content`
+- `--ran-btn-disabled-background`
+- `--ran-btn-disabled-border-color`
+- `--ran-btn-disabled-box-shadow`
+- `--ran-btn-disabled-color`
 - `--ran-btn-disabled-opacity`
 - `--ran-btn-font-family`
 - `--ran-btn-font-size`
@@ -107,6 +111,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-btn-text-align`
 - `--ran-btn-text-border`
 - `--ran-btn-text-box-shadow`
+- `--ran-btn-text-disabled-background`
 - `--ran-btn-text-surface-background`
 - `--ran-btn-transition`
 - `--ran-btn-user-select`
@@ -115,21 +120,26 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-btn-warning-color`
 - `--ran-btn-white-space`
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
 - `--ran-color-border-hover`
 - `--ran-color-danger`
-- `--ran-color-link`
+- `--ran-color-focus`
 - `--ran-color-primary`
 - `--ran-color-primary-active`
 - `--ran-color-primary-hover`
 - `--ran-color-primary-text`
 - `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-focus-ring`
 - `--ran-gray-alpha-400`
 - `--ran-motion-duration-base`
 - `--ran-motion-ease-spring`
 - `--ran-motion-ease-standard`
 - `--ran-radius-full`
 - `--ran-radius-sm`
+- `--ran-red-700`
+- `--ran-size-7`
 - `--ran-skin-font-family`
 - `--ran-skin-raised-shadow`
 - `--ran-space-1`
@@ -164,7 +174,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-card-title-font-size`
 - `--ran-card-title-font-weight`
 - `--ran-card-title-letter-spacing`
-- `--ran-color-bg`
+- `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-border-hover`
 - `--ran-color-text`
@@ -191,22 +201,25 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `checkbox`
 
-- Tokens: 48
+- Tokens: 53
 - Parts: 5
 
 ### Tokens
-<!-- layers: semantic: 9 · skin: 1 · component: 33 · internal: 5 -->
+<!-- layers: semantic: 11 · skin: 1 · component: 36 · internal: 5 -->
 - `--ran-checkbox-border-radius`
 - `--ran-checkbox-checked-background-color`
 - `--ran-checkbox-checked-background-image`
 - `--ran-checkbox-checked-border`
 - `--ran-checkbox-color`
+- `--ran-checkbox-disabled-background-color`
+- `--ran-checkbox-disabled-border`
+- `--ran-checkbox-disabled-label-color`
 - `--ran-checkbox-disabled-opacity`
 - `--ran-checkbox-disabled-tick-color`
-- `--ran-checkbox-focus-border-color`
 - `--ran-checkbox-focus-box-shadow`
 - `--ran-checkbox-font-family`
 - `--ran-checkbox-font-size`
+- `--ran-checkbox-hover-border-color`
 - `--ran-checkbox-inner-background-color`
 - `--ran-checkbox-inner-border`
 - `--ran-checkbox-inner-border-collapse`
@@ -230,14 +243,16 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-checkbox-tick-transition`
 - `--ran-checkbox-white-space`
 - `--ran-color-bg-elevated`
-- `--ran-color-bg-muted`
-- `--ran-color-border`
+- `--ran-color-bg-subtle`
+- `--ran-color-border-control`
+- `--ran-color-border-control-hover`
+- `--ran-color-border-hover`
 - `--ran-color-primary`
 - `--ran-color-primary-text`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-focus-ring`
-- `--ran-gray-600`
+- `--ran-gray-700`
 - `--ran-motion-duration-base`
 - `--ran-motion-ease-bouncy`
 - `--ran-size-1`
@@ -254,29 +269,31 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `colorpicker`
 
-- Tokens: 18
+- Tokens: 20
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 5 · component: 7 · internal: 6 -->
+<!-- layers: semantic: 6 · component: 10 · internal: 4 -->
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
-- `--ran-color-border-hover`
+- `--ran-color-border-control`
+- `--ran-color-border-control-hover`
 - `--ran-colorpicker-background`
 - `--ran-colorpicker-block-border-radius`
 - `--ran-colorpicker-border`
 - `--ran-colorpicker-border-radius`
+- `--ran-colorpicker-disabled-background`
+- `--ran-colorpicker-disabled-border-color`
 - `--ran-colorpicker-disabled-opacity`
+- `--ran-colorpicker-focus-ring`
 - `--ran-colorpicker-hover-border-color`
 - `--ran-colorpicker-transition`
-- `--ran-gray-500`
+- `--ran-focus-ring`
 - `--ran-gray-alpha-100`
 - `--ran-gray-alpha-200`
-- `--ran-radius-md`
 - `--ran-radius-sm`
-- `--ran-size-4`
 - `--ran-size-7`
-- `--ran-space-1`
 
 ### Parts
 - `block`
@@ -292,13 +309,12 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-color-bg`
 - `--ran-color-border`
 - `--ran-color-border-hover`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-conversation-background`
 - `--ran-conversation-color`
 - `--ran-conversation-empty-color`
-- `--ran-conversation-focus-color`
 - `--ran-conversation-font-size`
 - `--ran-conversation-footer-background`
 - `--ran-conversation-gap`
@@ -309,6 +325,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-conversation-older-hover-border-color`
 - `--ran-conversation-older-hover-color`
 - `--ran-conversation-older-radius`
+- `--ran-conversation-step-gap`
 - `--ran-radius-full`
 - `--ran-space-1`
 - `--ran-space-3`
@@ -326,22 +343,22 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `disclosure-row`
 
-- Tokens: 29
+- Tokens: 31
 - Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 9 · internal: 20 -->
+<!-- layers: semantic: 11 · internal: 20 -->
 - `--ran-color-bg`
 - `--ran-color-bg-hover`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
+- `--ran-disclosure-body-indent`
 - `--ran-disclosure-chevron-size`
 - `--ran-disclosure-color`
 - `--ran-disclosure-error-color`
-- `--ran-disclosure-focus-color`
 - `--ran-disclosure-font-size`
 - `--ran-disclosure-gap`
 - `--ran-disclosure-hover-background`
@@ -355,6 +372,8 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-disclosure-title-weight`
 - `--ran-disclosure-toggle-duration`
 - `--ran-disclosure-transition`
+- `--ran-motion-duration-base`
+- `--ran-motion-duration-fast`
 - `--ran-motion-ease-standard`
 - `--ran-radius-sm`
 - `--ran-size-7`
@@ -372,22 +391,22 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `dropdown`
 
-- Tokens: 26
+- Tokens: 30
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 6 · skin: 1 · component: 17 · internal: 2 -->
+<!-- layers: semantic: 8 · skin: 1 · component: 17 · internal: 4 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-text`
 - `--ran-dropdown-animation-duration`
+- `--ran-dropdown-animation-timing-function`
 - `--ran-dropdown-arrow-anchor-offset`
 - `--ran-dropdown-arrow-fill-background`
 - `--ran-dropdown-arrow-overlap`
 - `--ran-dropdown-arrow-shadow`
 - `--ran-dropdown-arrow-shape-offset`
 - `--ran-dropdown-arrow-tip-background`
-- `--ran-dropdown-arrow-tip-box-shadow`
 - `--ran-dropdown-background`
 - `--ran-dropdown-border`
 - `--ran-dropdown-border-radius`
@@ -397,12 +416,16 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-dropdown-font-size`
 - `--ran-dropdown-font-variant`
 - `--ran-dropdown-font-weight`
+- `--ran-motion-duration-base`
+- `--ran-motion-ease-standard`
 - `--ran-radius-md`
 - `--ran-shadow-elevated`
 - `--ran-shadow-menu`
 - `--ran-skin-font-family`
+- `--ran-space-1`
 - `--ran-text-label-1`
 - `--ran-text-label-weight`
+- `--ran-z-dropdown`
 
 ### Parts
 - `dropdown`
@@ -424,11 +447,11 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `glass`
 
-- Tokens: 19
+- Tokens: 20
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 5 · internal: 14 -->
+<!-- layers: semantic: 6 · internal: 14 -->
 - `--ran-color-bg-elevated`
 - `--ran-glass-blur`
 - `--ran-glass-border`
@@ -447,6 +470,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-motion-duration-base`
 - `--ran-motion-duration-fast`
 - `--ran-motion-ease-spring`
+- `--ran-radius-lg`
 - `--ran-shadow-elevated`
 
 ### Parts
@@ -472,14 +496,20 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `image`
 
-- Tokens: 0
-- Parts: 0
+- Tokens: 6
+- Parts: 1
 
 ### Tokens
-- (none)
+<!-- layers: semantic: 2 · component: 2 · internal: 2 -->
+- `--ran-color-bg-muted`
+- `--ran-color-text-secondary`
+- `--ran-image-fallback-color`
+- `--ran-image-placeholder-background`
+- `--ran-size-4`
+- `--ran-space-10`
 
 ### Parts
-- (none)
+- `image`
 
 ## `input`
 
@@ -489,15 +519,15 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 ### Tokens
 <!-- layers: semantic: 14 · skin: 1 · component: 61 · internal: 12 -->
 - `--ran-color-bg-elevated`
-- `--ran-color-bg-muted`
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
-- `--ran-color-border-hover`
+- `--ran-color-border-control`
+- `--ran-color-border-control-hover`
 - `--ran-color-danger`
 - `--ran-color-danger-foreground`
-- `--ran-color-link`
-- `--ran-color-primary`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
+- `--ran-color-text-placeholder`
 - `--ran-color-text-secondary`
 - `--ran-color-warning`
 - `--ran-color-warning-foreground`
@@ -590,8 +620,8 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ### Tokens
 <!-- layers: semantic: 3 · internal: 1 -->
+- `--ran-color-focus`
 - `--ran-color-link`
-- `--ran-color-primary`
 - `--ran-link-active-font-weight`
 - `--ran-radius-sm`
 
@@ -600,69 +630,59 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `loading`
 
-- Tokens: 0
+- Tokens: 3
 - Parts: 0
 
 ### Tokens
-- (none)
+<!-- layers: component: 2 · internal: 1 -->
+- `--ran-loading-color`
+- `--ran-loading-size`
+- `--ran-space-10`
 
 ### Parts
 - (none)
 
 ## `loading/variants/arc`
 
-- Tokens: 5
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 · internal: 2 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
-- `--ran-space-4`
-- `--ran-text-copy-weight`
+- (none)
 
 ### Parts
 - `arc`
 
 ## `loading/variants/circle`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `circle`
 
 ## `loading/variants/circle-fold`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `circle-fold`
 
 ## `loading/variants/circle-line`
 
-- Tokens: 5
+- Tokens: 3
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 5 -->
+<!-- layers: semantic: 3 -->
 - `--ran-color-bg`
-- `--ran-color-primary`
-- `--ran-color-success`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 
@@ -671,125 +691,99 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `loading/variants/circle-rotate`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `circle-rotate`
 
 ## `loading/variants/circle-spin`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `circle-spin`
 
 ## `loading/variants/circle-turn`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `circle-turn`
 
 ## `loading/variants/cube`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `cube`
 
 ## `loading/variants/cube-dim`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `cube-dim`
 
 ## `loading/variants/cube-fold`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `cube-fold`
 
 ## `loading/variants/cube-grid`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `cube-grid`
 
 ## `loading/variants/dot`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `dot`
 
 ## `loading/variants/dot-bar`
 
-- Tokens: 4
+- Tokens: 2
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 4 -->
-- `--ran-color-primary`
-- `--ran-color-success`
+<!-- layers: semantic: 2 -->
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 
@@ -798,27 +792,22 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `loading/variants/dot-circle`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `dot-circle`
 
 ## `loading/variants/dot-line`
 
-- Tokens: 4
+- Tokens: 2
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 4 -->
-- `--ran-color-primary`
-- `--ran-color-success`
+<!-- layers: semantic: 2 -->
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 
@@ -827,99 +816,77 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `loading/variants/dot-pulse`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `dot-pulse`
 
 ## `loading/variants/double-bounce`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `double-bounce`
 
 ## `loading/variants/drop`
 
-- Tokens: 5
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 · internal: 2 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
-- `--ran-space-2`
-- `--ran-space-8`
+- (none)
 
 ### Parts
 - `drop`
 
 ## `loading/variants/line`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `line`
 
 ## `loading/variants/line-scale`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `line-scale`
 
 ## `loading/variants/pacman`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `pacman`
 
 ## `loading/variants/pulse`
 
-- Tokens: 3
+- Tokens: 1
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
+<!-- layers: semantic: 1 -->
 - `--ran-color-text`
 
 ### Parts
@@ -927,42 +894,33 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `loading/variants/rotate`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `rotate`
 
 ## `loading/variants/scale-out`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `scale-out`
 
 ## `loading/variants/solar`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `solar`
@@ -970,40 +928,33 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `loading/variants/square`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `square`
 
 ## `loading/variants/stretch`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `stretch`
 
 ## `loading/variants/text`
 
-- Tokens: 3
+- Tokens: 2
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 2 · internal: 1 -->
-- `--ran-color-text`
+<!-- layers: semantic: 1 · internal: 1 -->
 - `--ran-font-family`
 - `--ran-text-label-1`
 
@@ -1012,29 +963,28 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `loading/variants/triple-bounce`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 ### Parts
 - `triple-bounce`
 
 ## `markdown`
 
-- Tokens: 75
+- Tokens: 80
 - Parts: 4
 
 ### Tokens
-<!-- layers: semantic: 12 · skin: 1 · internal: 62 -->
-- `--ran-color-bg-muted`
+<!-- layers: semantic: 14 · skin: 1 · internal: 65 -->
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
 - `--ran-color-border-secondary`
 - `--ran-color-danger`
+- `--ran-color-danger-foreground`
+- `--ran-color-focus`
 - `--ran-color-link`
 - `--ran-color-primary`
 - `--ran-color-text`
@@ -1089,6 +1039,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-markdown-table-radius`
 - `--ran-radius-sm`
 - `--ran-red-100`
+- `--ran-red-300`
 - `--ran-size-7`
 - `--ran-skin-border-style`
 - `--ran-space-1`
@@ -1102,10 +1053,12 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-text-heading-2`
 - `--ran-text-heading-3`
 - `--ran-text-heading-4`
+- `--ran-text-heading-tracking`
 - `--ran-text-heading-weight`
 - `--ran-text-label-2`
 - `--ran-text-label-3`
 - `--ran-text-label-weight`
+- `--ran-text-mono-weight-regular`
 
 ### Parts
 - `block`
@@ -1115,19 +1068,19 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `math`
 
-- Tokens: 33
+- Tokens: 37
 - Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 10 · component: 16 · internal: 7 -->
+<!-- layers: semantic: 11 · skin: 1 · component: 16 · internal: 9 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-muted`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-danger-foreground`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-font-mono`
-- `--ran-gray-alpha-100`
 - `--ran-math-align`
 - `--ran-math-button-color`
 - `--ran-math-button-hover-background`
@@ -1146,7 +1099,11 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-math-toolbar-shadow`
 - `--ran-radius-md`
 - `--ran-radius-sm`
+- `--ran-red-100`
+- `--ran-red-300`
 - `--ran-shadow-menu`
+- `--ran-size-7`
+- `--ran-skin-border-style`
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-3`
@@ -1165,21 +1122,24 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `mermaid`
 
-- Tokens: 27
+- Tokens: 35
 - Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 9 · internal: 18 -->
+<!-- layers: semantic: 11 · skin: 1 · internal: 23 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-muted`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-danger-foreground`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
+- `--ran-font-mono`
 - `--ran-mermaid-button-color`
 - `--ran-mermaid-button-hover-background`
 - `--ran-mermaid-button-hover-color`
 - `--ran-mermaid-button-size`
+- `--ran-mermaid-error-background`
 - `--ran-mermaid-error-color`
 - `--ran-mermaid-error-font-size`
 - `--ran-mermaid-error-font-weight`
@@ -1191,12 +1151,17 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-mermaid-toolbar-shadow`
 - `--ran-radius-md`
 - `--ran-radius-sm`
+- `--ran-red-100`
+- `--ran-red-300`
 - `--ran-shadow-menu`
+- `--ran-size-7`
+- `--ran-skin-border-style`
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-3`
 - `--ran-text-label-2`
 - `--ran-text-label-weight`
+- `--ran-text-mono-weight-regular`
 
 ### Parts
 - `button`
@@ -1209,25 +1174,39 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `message`
 
-- Tokens: 47
+- Tokens: 63
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 5 · component: 37 · internal: 5 -->
+<!-- layers: semantic: 12 · component: 45 · internal: 6 -->
+- `--ran-color-bg`
 - `--ran-color-bg-elevated`
+- `--ran-color-border`
+- `--ran-color-danger`
+- `--ran-color-link`
+- `--ran-color-success`
 - `--ran-color-text`
+- `--ran-color-warning-foreground`
 - `--ran-message-color`
 - `--ran-message-content-background`
+- `--ran-message-content-border`
 - `--ran-message-content-border-image-slice`
 - `--ran-message-content-border-image-source`
 - `--ran-message-content-border-radius`
 - `--ran-message-content-box-shadow`
 - `--ran-message-content-toast-background`
+- `--ran-message-content-toast-border`
 - `--ran-message-content-toast-border-radius`
 - `--ran-message-font-feature-settings`
 - `--ran-message-font-size`
 - `--ran-message-font-variant`
 - `--ran-message-font-weight`
+- `--ran-message-icon-error-color`
+- `--ran-message-icon-gap`
+- `--ran-message-icon-info-color`
+- `--ran-message-icon-size`
+- `--ran-message-icon-success-color`
+- `--ran-message-icon-warning-color`
 - `--ran-message-in-animation-duration`
 - `--ran-message-in-animation-fill-mode`
 - `--ran-message-in-animation-name`
@@ -1253,9 +1232,11 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-message-text-toast-font-size`
 - `--ran-message-text-toast-font-variant`
 - `--ran-message-text-toast-font-weight`
+- `--ran-motion-duration-base`
+- `--ran-motion-ease-standard`
 - `--ran-radius-md`
-- `--ran-radius-sm`
 - `--ran-shadow-menu`
+- `--ran-space-2`
 - `--ran-space-3`
 - `--ran-space-4`
 - `--ran-text-copy-2`
@@ -1267,27 +1248,35 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `modal`
 
-- Tokens: 42
+- Tokens: 56
 - Parts: 8
 
 ### Tokens
-<!-- layers: semantic: 11 · component: 23 · internal: 8 -->
+<!-- layers: semantic: 15 · component: 29 · internal: 12 -->
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-hover`
 - `--ran-color-border`
 - `--ran-color-border-secondary`
 - `--ran-color-primary`
 - `--ran-color-primary-text`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
+- `--ran-focus-ring`
 - `--ran-modal-action-font-size`
 - `--ran-modal-action-font-weight`
 - `--ran-modal-actions-gap`
 - `--ran-modal-body-color`
 - `--ran-modal-close-background`
 - `--ran-modal-close-border`
+- `--ran-modal-close-border-radius`
 - `--ran-modal-close-color`
 - `--ran-modal-close-font-size`
+- `--ran-modal-close-hover-background`
+- `--ran-modal-close-hover-color`
+- `--ran-modal-close-size`
+- `--ran-modal-close-touch-size`
 - `--ran-modal-dialog-background`
+- `--ran-modal-dialog-border`
 - `--ran-modal-dialog-border-image-slice`
 - `--ran-modal-dialog-border-image-source`
 - `--ran-modal-dialog-border-radius`
@@ -1302,10 +1291,16 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-modal-title-font-size`
 - `--ran-modal-title-font-weight`
 - `--ran-modal-title-letter-spacing`
+- `--ran-motion-duration-fast`
+- `--ran-motion-duration-slow`
+- `--ran-motion-ease-standard`
 - `--ran-radius-md`
 - `--ran-radius-sm`
 - `--ran-shadow-elevated`
 - `--ran-shadow-modal`
+- `--ran-size-7`
+- `--ran-space-1`
+- `--ran-space-2`
 - `--ran-space-3`
 - `--ran-space-4`
 - `--ran-text-button-size`
@@ -1327,11 +1322,11 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `player`
 
-- Tokens: 169
+- Tokens: 173
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 5 · component: 152 · internal: 12 -->
+<!-- layers: semantic: 9 · component: 152 · internal: 12 -->
 - `--ran-color-`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -1339,14 +1334,18 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-dropdown-border`
 - `--ran-dropdown-box-shadow`
 - `--ran-dropdown-option-active-background-color`
-- `--ran-dropdown-option-active-hover-background-color`
 - `--ran-dropdown-option-item-color`
 - `--ran-dropdown-option-item-content-color`
 - `--ran-dropdown-option-item-content-font-size`
 - `--ran-dropdown-option-item-content-text-align`
 - `--ran-dropdown-option-item-hover-background-color`
+- `--ran-dropdown-option-selected-background-color`
 - `--ran-focus-ring-inverse-color`
 - `--ran-media-background`
+- `--ran-motion-duration-fast`
+- `--ran-motion-duration-slow`
+- `--ran-motion-ease-smooth`
+- `--ran-motion-ease-standard`
 - `--ran-player-background`
 - `--ran-player-clarity-border-radius`
 - `--ran-player-clarity-color`
@@ -1518,11 +1517,13 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `popover`
 
-- Tokens: 0
+- Tokens: 2
 - Parts: 0
 
 ### Tokens
-- (none)
+<!-- layers: semantic: 1 · internal: 1 -->
+- `--ran-focus-ring`
+- `--ran-radius-sm`
 
 ### Parts
 - (none)
@@ -1540,12 +1541,13 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `progress`
 
-- Tokens: 18
+- Tokens: 19
 - Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 4 · component: 12 · internal: 2 -->
+<!-- layers: semantic: 5 · component: 12 · internal: 2 -->
 - `--ran-color-bg-elevated`
+- `--ran-color-focus`
 - `--ran-color-primary`
 - `--ran-gray-200`
 - `--ran-progress-dot-background`
@@ -1571,12 +1573,13 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `radar`
 
-- Tokens: 5
+- Tokens: 6
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 1 · component: 4 -->
+<!-- layers: semantic: 2 · component: 4 -->
 - `--ran-color-border`
+- `--ran-color-primary`
 - `--ran-radar-fill-color`
 - `--ran-radar-line-color`
 - `--ran-radar-polygon-color`
@@ -1587,20 +1590,22 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `reasoning`
 
-- Tokens: 10
+- Tokens: 12
 - Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 2 · internal: 8 -->
+<!-- layers: semantic: 2 · internal: 10 -->
 - `--ran-color-border`
 - `--ran-color-text-secondary`
+- `--ran-disclosure-body-indent`
+- `--ran-disclosure-color`
 - `--ran-reasoning-body-indent`
 - `--ran-reasoning-border-color`
 - `--ran-reasoning-color`
 - `--ran-reasoning-font-size`
 - `--ran-space-1`
 - `--ran-space-2`
-- `--ran-space-3`
+- `--ran-space-6`
 - `--ran-text-copy-2`
 
 ### Parts
@@ -1632,17 +1637,16 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `scratch`
 
-- Tokens: 20
+- Tokens: 21
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 8 · component: 3 · internal: 9 -->
+<!-- layers: semantic: 8 · skin: 1 · component: 3 · internal: 9 -->
 - `--ran-background-100`
-- `--ran-color-bg`
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-hover`
 - `--ran-color-border`
-- `--ran-color-link`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-gray-1000`
@@ -1653,7 +1657,9 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-scratch-award-background`
 - `--ran-scratch-cover-background`
 - `--ran-scratch-disabled-opacity`
+- `--ran-shadow-elevated`
 - `--ran-size-7`
+- `--ran-skin-raised-shadow`
 - `--ran-space-2`
 - `--ran-space-3`
 - `--ran-text-button-size`
@@ -1702,18 +1708,25 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `select`
 
-- Tokens: 63
+- Tokens: 69
 - Parts: 6
 
 ### Tokens
-<!-- layers: semantic: 7 · skin: 1 · component: 47 · internal: 8 -->
+<!-- layers: semantic: 9 · skin: 1 · component: 47 · internal: 12 -->
+- `--ran-background-200`
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
-- `--ran-color-primary`
+- `--ran-color-border-control`
+- `--ran-color-border-control-hover`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
-- `--ran-color-text-secondary`
+- `--ran-color-text-placeholder`
 - `--ran-focus-ring`
+- `--ran-gray-400`
+- `--ran-gray-700`
+- `--ran-gray-800`
+- `--ran-gray-900`
 - `--ran-radius-sm`
 - `--ran-select-background-color`
 - `--ran-select-background-image`
@@ -1766,7 +1779,6 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-size-7`
 - `--ran-skin-font-family`
 - `--ran-space-1`
-- `--ran-space-3`
 - `--ran-text-label-1`
 - `--ran-text-label-3`
 - `--ran-text-label-weight`
@@ -1781,17 +1793,15 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `select/dropdown-item`
 
-- Tokens: 20
+- Tokens: 23
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 15 · internal: 2 -->
-- `--ran-blue-100`
+<!-- layers: semantic: 4 · component: 16 · internal: 3 -->
+- `--ran-color-bg-hover`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-dropdown-option-active-background-color`
-- `--ran-dropdown-option-active-font-weight`
-- `--ran-dropdown-option-active-hover-background-color`
 - `--ran-dropdown-option-item-border-radius`
 - `--ran-dropdown-option-item-color`
 - `--ran-dropdown-option-item-content-color`
@@ -1804,8 +1814,13 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-dropdown-option-item-font-weight`
 - `--ran-dropdown-option-item-hover-background-color`
 - `--ran-dropdown-option-item-transition`
-- `--ran-gray-alpha-100`
+- `--ran-dropdown-option-selected-background-color`
+- `--ran-dropdown-option-selected-check-color`
+- `--ran-dropdown-option-selected-font-weight`
 - `--ran-radius-sm`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-label-1`
 
 ### Parts
 - `content`
@@ -1917,7 +1932,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 <!-- layers: semantic: 6 · skin: 1 · internal: 15 -->
 - `--ran-color-bg-hover`
 - `--ran-color-border`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-radius-full`
@@ -1944,22 +1959,24 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `token-meter`
 
-- Tokens: 21
-- Parts: 2
+- Tokens: 23
+- Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 6 · component: 3 · internal: 12 -->
+<!-- layers: semantic: 6 · component: 3 · internal: 14 -->
 - `--ran-color-bg-muted`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-color-warning`
+- `--ran-gray-alpha-700`
 - `--ran-progress-fill-background`
 - `--ran-progress-track-background`
 - `--ran-progress-track-border-radius`
 - `--ran-radius-full`
 - `--ran-space-2`
 - `--ran-text-label-3`
+- `--ran-text-label-weight`
 - `--ran-token-meter-`
 - `--ran-token-meter-color`
 - `--ran-token-meter-fill-background`
@@ -1972,6 +1989,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-token-meter-warn-background`
 
 ### Parts
+- `flag`
 - `meter`
 - `text`
 
@@ -1981,17 +1999,16 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - Parts: 11
 
 ### Tokens
-<!-- layers: semantic: 10 · internal: 34 -->
-- `--ran-color-bg-muted`
+<!-- layers: semantic: 8 · internal: 36 -->
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
 - `--ran-color-danger`
 - `--ran-color-link`
 - `--ran-color-text`
-- `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
+- `--ran-disclosure-body-indent`
 - `--ran-font-mono`
 - `--ran-green-200`
-- `--ran-radius-md`
 - `--ran-radius-sm`
 - `--ran-red-200`
 - `--ran-size-4`
@@ -2000,6 +2017,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-space-3`
 - `--ran-space-6`
 - `--ran-text-copy-2`
+- `--ran-text-label-2`
 - `--ran-text-label-3`
 - `--ran-text-mono-weight-regular`
 - `--ran-tool-card-added-background`
@@ -2042,25 +2060,27 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `voice-button`
 
-- Tokens: 37
+- Tokens: 39
 - Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 12 · internal: 25 -->
-- `--ran-color-bg`
+<!-- layers: semantic: 13 · skin: 1 · internal: 25 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-subtle`
 - `--ran-color-border`
 - `--ran-color-border-hover`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
 - `--ran-radius-md`
+- `--ran-radius-sm`
 - `--ran-red-200`
+- `--ran-shadow-elevated`
 - `--ran-shadow-menu`
 - `--ran-size-7`
+- `--ran-skin-raised-shadow`
 - `--ran-space-2`
 - `--ran-space-3`
 - `--ran-text-label-3`

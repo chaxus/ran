@@ -1,15 +1,12 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .triple-bounce {
-    width: var(--loading-triple-bounce-width, 10em);
+    --_ran-loading-units: 70;
+    width: var(--loading-triple-bounce-width, 140em);
     text-align: var(--loading-triple-bounce-text-align, center);
     div {
-      width: var(--loading-triple-bounce-div-width, 2em);
-      height: var(--loading-triple-bounce-div-height, 2em);
-      background: var(--loading-triple-bounce-div-background, @blue-1);
+      width: var(--loading-triple-bounce-div-width, 28em);
+      height: var(--loading-triple-bounce-div-height, 28em);
+      background: var(--loading-triple-bounce-div-background, currentColor);
       border-radius: var(--loading-triple-bounce-div-border-radius, 100%);
       display: var(--loading-triple-bounce-div-display, inline-block);
       animation: var(--loading-triple-bounce-div-animation, ran-loading-triple-bounce 1.4s infinite ease-in-out);

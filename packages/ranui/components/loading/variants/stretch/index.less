@@ -1,11 +1,8 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .stretch {
-    width: var(--loading-stretch-width, 4em);
-    height: var(--loading-stretch-height, 5em);
+    --_ran-loading-units: 70;
+    width: var(--loading-stretch-width, 56em);
+    height: var(--loading-stretch-height, 70em);
     text-align: var(--loading-stretch-text-align, center);
     display: var(--loading-stretch-display, flex);
     flex-flow: var(--loading-stretch-flex-flow, row nowrap);
@@ -22,9 +19,9 @@
       }
     }
     div {
-      background-color: var(--loading-stretch-div-background-color, @blue-1);
+      background-color: var(--loading-stretch-div-background-color, currentColor);
       height: var(--loading-stretch-div-height, 100%);
-      width: var(--loading-stretch-div-width, 0.4em);
+      width: var(--loading-stretch-div-width, 5.6em);
       animation: var(--loading-stretch-div-animation, ran-loading-stretch 1.2s infinite ease-in-out);
       animation-play-state: var(--loading-stretch-div-animation-play-state, running);
     }

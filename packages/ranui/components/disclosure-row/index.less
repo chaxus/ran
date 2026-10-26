@@ -3,6 +3,11 @@
   min-width: 0;
   color: var(--ran-disclosure-color, var(--ran-color-text));
   font-size: var(--ran-disclosure-font-size, var(--ran-text-copy-2));
+  /* Where the title column starts: the leading box plus the gap after it. Slotted bodies
+     (r-reasoning, r-tool-card) indent by this so they sit on the title's spine. */
+  --ran-disclosure-body-indent: calc(
+    var(--ran-disclosure-leading-size, 16px) + var(--ran-disclosure-gap, var(--ran-space-2))
+  );
 }
 
 /* `hidden` is how a caller hides an element, and the UA rule that implements it is a
@@ -46,12 +51,18 @@
   cursor: pointer;
 }
 
+/* The fill reaches 8px past the chevron and the summary while the text stays on the column
+   spine. Two sideways shadows, not padding plus a negative margin: a shadow takes no layout
+   and adds no scrollable overflow, so the row still never widens its container. */
 :host([expandable]) .ran-disclosure-row:hover {
+  box-shadow:
+    calc(-1 * var(--ran-space-2)) 0 0 0 var(--ran-disclosure-hover-background, var(--ran-color-bg-hover)),
+    var(--ran-space-2) 0 0 0 var(--ran-disclosure-hover-background, var(--ran-color-bg-hover));
   background: var(--ran-disclosure-hover-background, var(--ran-color-bg-hover));
 }
 
 .ran-disclosure-row:focus-visible {
-  outline: 2px solid var(--ran-disclosure-focus-color, var(--ran-color-primary));
+  outline: 2px solid var(--ran-color-focus);
   outline-offset: 2px;
 }
 
@@ -70,7 +81,7 @@
 .ran-disclosure-icon,
 .ran-disclosure-chevron {
   grid-area: 1 / 1;
-  transition: opacity var(--ran-disclosure-transition, 100ms) ease;
+  transition: opacity var(--ran-disclosure-transition, var(--ran-motion-duration-fast)) var(--ran-motion-ease-standard);
 }
 
 .ran-disclosure-icon {
@@ -86,9 +97,8 @@
      reader which state the row is in, so it is the thing that has to animate. */
   transform: rotate(-90deg);
   transition:
-    opacity var(--ran-disclosure-transition, 100ms) ease,
-    transform var(--ran-disclosure-toggle-duration, 180ms)
-      var(--ran-motion-ease-standard, cubic-bezier(0.645, 0.045, 0.355, 1));
+    opacity var(--ran-disclosure-transition, var(--ran-motion-duration-fast)) var(--ran-motion-ease-standard),
+    transform var(--ran-disclosure-toggle-duration, var(--ran-motion-duration-base)) var(--ran-motion-ease-standard);
 }
 
 :host([open]) .ran-disclosure-chevron {
@@ -196,8 +206,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* A stopped sweep is not a quieter sweep: it parks a page-coloured veil over the title
+     and drops the text to about 2:1. Busy is still said by the leading state dot or text. */
   :host([busy]) .ran-disclosure-row::after {
-    animation: none;
+    display: none;
   }
 }
 
@@ -209,8 +221,8 @@
   display: grid;
   grid-template-rows: 0fr;
   min-width: 0;
-  transition: grid-template-rows var(--ran-disclosure-toggle-duration, 180ms)
-    var(--ran-motion-ease-standard, cubic-bezier(0.645, 0.045, 0.355, 1));
+  transition: grid-template-rows var(--ran-disclosure-toggle-duration, var(--ran-motion-duration-base))
+    var(--ran-motion-ease-standard);
 }
 
 :host([open]) .ran-disclosure-body {
@@ -228,7 +240,7 @@
      collapse animating, because the property flips to visible at the start of the opening
      transition and back to hidden only at the end of the closing one. */
   content-visibility: hidden;
-  transition: content-visibility var(--ran-disclosure-toggle-duration, 180ms) allow-discrete;
+  transition: content-visibility var(--ran-disclosure-toggle-duration, var(--ran-motion-duration-base)) allow-discrete;
 }
 
 :host([open]) .ran-disclosure-body-inner {

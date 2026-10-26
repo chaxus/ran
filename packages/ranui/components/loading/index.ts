@@ -1,3 +1,4 @@
+import loadingCss from './index.less?inline';
 import { RanElement } from '@/utils/index';
 import { Div } from '@/utils/builder';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
@@ -69,12 +70,12 @@ export class Loading extends RanElement {
   /** 最近一次渲染的 Promise，便于测试 await。 */
   _pending: Promise<void> = Promise.resolve();
   static get observedAttributes(): string[] {
-    return ['name', 'sheet'];
+    return ['name', 'sheet', 'label'];
   }
   constructor() {
     super();
-    this._shadowDom = ensureShadowRoot(this);
-    const contain = Div().class('ran-loading').build() as HTMLDivElement;
+    this._shadowDom = ensureShadowRoot(this, loadingCss);
+    const contain = Div().class('ran-loading').attr('aria-hidden', 'true').build() as HTMLDivElement;
     this._shadowDom.appendChild(contain);
     this.contain = contain;
   }
@@ -85,6 +86,13 @@ export class Loading extends RanElement {
   }
   set name(value: string) {
     setStringAttribute(this, 'name', value);
+  }
+  /** Accessible name announced by the `status` role. Defaults to "Loading"; set it to say what is loading. */
+  get label(): string {
+    return getStringAttribute(this, 'label');
+  }
+  set label(value: string) {
+    setStringAttribute(this, 'label', value);
   }
   get sheet(): string {
     return getStringAttribute(this, 'sheet');
@@ -125,7 +133,27 @@ export class Loading extends RanElement {
         if (isDev) console.warn(`[ranui-loading] load failed: ${name}`, err);
       });
   };
+  /** The caller's own aria-label, kept while `label` overrides it so removing `label` restores it. */
+  private _authorLabel: string | null = null;
+  private _ownsLabel = false;
+  private _syncA11y(): void {
+    if (!this.hasAttribute('role')) this.setAttribute('role', 'status');
+    // A caller's own aria-label stands unless `label` is set.
+    if (this.label) {
+      if (!this._ownsLabel && this.hasAttribute('aria-label')) this._authorLabel = this.getAttribute('aria-label');
+      this.setAttribute('aria-label', this.label);
+      this._ownsLabel = true;
+    } else if (this._authorLabel !== null) {
+      this.setAttribute('aria-label', this._authorLabel);
+      this._authorLabel = null;
+      this._ownsLabel = false;
+    } else if (this._ownsLabel || !this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Loading');
+      this._ownsLabel = true;
+    }
+  }
   connectedCallback(): void {
+    this._syncA11y();
     this.handlerExternalCss();
     this.createLoading();
   }
@@ -133,6 +161,7 @@ export class Loading extends RanElement {
     if (o === n) return;
     if (k === 'name') this.createLoading();
     if (k === 'sheet') this.handlerExternalCss();
+    if (k === 'label' && this.isConnected) this._syncA11y();
   }
 }
 

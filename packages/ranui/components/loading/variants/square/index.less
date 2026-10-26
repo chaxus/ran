@@ -1,9 +1,6 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .square {
+    --_ran-loading-units: 79;
     @keyframes square-box1 {
       0% {
         transform: var(--loading-square-box1-keyframes-0, rotate(0));
@@ -40,27 +37,27 @@
       }
     }
     &-box1 {
-      width: var(--loading-square-box1-width, 50px);
-      height: var(--loading-square-box1-height, 50px);
-      padding: var(--loading-square-box1-padding, 3px);
+      width: var(--loading-square-box1-width, 50em);
+      height: var(--loading-square-box1-height, 50em);
+      padding: var(--loading-square-box1-padding, 3em);
       position: var(--loading-square-box1-position, absolute);
       display: var(--loading-square-box1-display, flex);
       justify-content: var(--loading-square-box1-justify-content, center);
       align-items: var(--loading-square-box1-align-items, center);
-      background: var(--loading-square-box1-background, #ffab91);
+      background: var(--loading-square-box1-background, color-mix(in srgb, currentColor 60%, transparent));
       animation: var(--loading-square-box1-animation, square-box1 3s ease-in-out 0s infinite alternate);
       animation-play-state: var(--loading-square-box1-animation-play-state, running);
     }
 
     &-box2 {
-      width: var(--loading-square-box2-width, 50px);
-      height: var(--loading-square-box2-height, 50px);
-      padding: var(--loading-square-box2-padding, 3px);
-      left: var(--loading-square-box2-left, -50px);
+      width: var(--loading-square-box2-width, 50em);
+      height: var(--loading-square-box2-height, 50em);
+      padding: var(--loading-square-box2-padding, 3em);
+      left: var(--loading-square-box2-left, -50em);
       display: var(--loading-square-box2-display, flex);
       justify-content: var(--loading-square-box2-justify-content, center);
       align-items: var(--loading-square-box2-align-items, center);
-      background: var(--loading-square-box2-background, rgb(63, 249, 220));
+      background: var(--loading-square-box2-background, currentColor);
       transform: var(--loading-square-box2-transform, rotate(45deg));
       animation: var(--loading-square-box2-animation, square-box2 3s ease-in-out 0s infinite alternate);
       animation-play-state: var(--loading-square-box2-animation-play-state, running);
@@ -69,7 +66,7 @@
     &-core {
       width: var(--loading-square-core-width, 100%);
       height: var(--loading-square-core-height, 100%);
-      background: var(--loading-square-core-background, #37474f);
+      background: var(--loading-square-core-background, color-mix(in srgb, currentColor 35%, transparent));
     }
   }
 }

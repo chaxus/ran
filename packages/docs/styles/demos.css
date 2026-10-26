@@ -357,27 +357,28 @@
   display: grid;
   /* The track must not grow to a wide example's min-content; the stage scrolls instead. */
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--ran-space-4, 16px);
-  border: 1px solid var(--rule);
-  border-radius: var(--ran-radius-md, 12px);
-  padding: var(--ran-space-4, 16px);
+  gap: var(--ran-space-6, 24px);
 }
+/* The live object: an elevated surface, so it stays distinct from the page in dark mode.
+   Its 24px inset is larger than its 16px radius, so the example keeps its own corners (D-ELEV-1). */
 .playground__stage {
   display: flex;
   flex-wrap: wrap;
+  /* A wrapping row only fills min-height when its lines are centred too. */
+  align-content: center;
   align-items: center;
   justify-content: center;
   gap: var(--ran-space-3, 12px);
-  min-height: 96px;
+  min-height: 120px;
   overflow-x: auto;
   padding: var(--ran-space-6, 24px);
-  border-radius: var(--ran-radius-sm, 6px);
-  background: var(--bg-soft);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-lg, 16px);
+  background: var(--ran-color-bg-elevated);
 }
 .playground__controls {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(12rem, 100%), 1fr));
-  gap: var(--ran-space-3, 12px) var(--ran-space-4, 16px);
+  gap: var(--ran-space-4, 16px);
   /* A fieldset defaults to min-content wide, which would hold the playground open. */
   min-inline-size: 0;
   margin: 0;
@@ -385,36 +386,44 @@
   border: 0;
 }
 .playground__legend {
-  margin-bottom: var(--ran-space-2, 8px);
+  margin-bottom: var(--ran-space-3, 12px);
   padding: 0;
   font-size: 13px;
   color: var(--fg-muted);
 }
-.playground__control {
+.playground__switches {
   display: flex;
-  align-items: center;
-  gap: var(--ran-space-2, 8px);
+  flex-wrap: wrap;
+  gap: var(--ran-space-2, 8px) var(--ran-space-6, 24px);
+}
+.playground__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(13rem, 100%), 1fr));
+  gap: var(--ran-space-3, 12px) var(--ran-space-4, 16px);
+  align-items: start;
+}
+.playground__switch,
+.playground__field {
   font-size: 13px;
 }
-/* A switch shares the bottom line of the fields beside it. */
-.playground__control:not(.playground__control--field) {
-  align-self: end;
-  min-height: 32px;
+.playground__field {
+  display: block;
+  min-width: 0;
 }
-.playground__control--field {
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--ran-space-1, 4px);
+.playground__field::part(label) {
+  font-family: var(--font-mono);
+  font-size: 12px;
 }
-.playground__control input[type='text'],
-.playground__control select {
-  min-height: 32px;
-  padding: 0 var(--ran-space-2, 8px);
-  border: 1px solid var(--rule-strong);
-  border-radius: var(--ran-radius-sm, 6px);
-  background: var(--bg);
-  color: var(--fg);
-  font: inherit;
+/* Before the modules load, the generated section still names every control. */
+.playground__field:not(:defined)::before {
+  content: attr(label);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+.playground__field:not(:defined) > r-option {
+  display: none;
 }
 .playground__markup {
   margin: 0;

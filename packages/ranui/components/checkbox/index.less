@@ -7,30 +7,53 @@
   padding: var(--ran-checkbox-host-padding, 0);
   box-sizing: var(--ran-checkbox-host-box-sizing, border-box);
   list-style: var(--ran-checkbox-host-list-style, none);
+  /* The ring is drawn on the box below; the host's own UA outline would wrap the label too. */
+  outline: none;
   &([disabled]:not([disabled='false'])) {
     .ran-checkbox-input {
       cursor: var(--ran-checkbox-disabled-cursor, not-allowed);
       pointer-events: var(--ran-checkbox-disabled-pointer-events, all);
     }
-    opacity: var(--ran-checkbox-disabled-opacity, 0.6);
+    .ran-checkbox-wrapper {
+      cursor: var(--ran-checkbox-disabled-cursor, not-allowed);
+    }
+    .ran-checkbox-label {
+      color: var(--ran-checkbox-disabled-label-color, var(--ran-color-text-disabled, #8a8a94));
+    }
+    /* The shared disabled recipe, no stacked opacity: a recessed box. Its edge is one step
+       above decorative, because a 16px box drawn in the hairline colour disappears. */
+    opacity: var(--ran-checkbox-disabled-opacity, 1);
     .ran-checkbox-inner {
-      background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-bg-muted, #f2f2f2));
-      border: 1px solid var(--ran-color-border, #eaeaea);
+      background-color: var(--ran-checkbox-disabled-background-color, var(--ran-color-bg-subtle, #f7f7f8));
+      border: var(--ran-checkbox-disabled-border, 1px solid var(--ran-color-border-hover, #b8b8c0));
       &::after {
         cursor: not-allowed;
         pointer-events: none;
         opacity: var(--ran-checkbox-tick-opacity, 0);
-        border-color: var(--ran-checkbox-disabled-tick-color, var(--ran-color-text-disabled, var(--ran-gray-600)));
+        border-color: var(--ran-checkbox-disabled-tick-color, var(--ran-color-text-disabled, var(--ran-gray-700)));
       }
     }
     .ran-checkbox-checked {
       .ran-checkbox-inner {
-        background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-bg-muted, #f2f2f2));
         &::after {
           opacity: var(--ran-checkbox-tick-checked-opacity, 1);
         }
       }
     }
+  }
+}
+
+/* The host is the focus target (role=checkbox, the inner input is tabIndex -1). */
+:host(:focus-visible) .ran-checkbox-inner {
+  box-shadow: var(--ran-checkbox-focus-box-shadow, var(--ran-focus-ring));
+}
+
+@media (hover: hover) {
+  :host(:not([disabled]:not([disabled='false'])))
+    .ran-checkbox-wrapper:hover
+    .ran-checkbox:not(.ran-checkbox-checked)
+    .ran-checkbox-inner {
+    border-color: var(--ran-checkbox-hover-border-color, var(--ran-color-border-control-hover, #55555e));
   }
 }
 
@@ -89,7 +112,7 @@
   font-family: var(--ran-checkbox-font-family, var(--ran-skin-font-family, @fontFamily));
   white-space: var(--ran-checkbox-white-space, nowrap);
   cursor: var(--ran-checkbox-cursor, pointer);
-  border-radius: var(--ran-checkbox-border-radius, 4px);
+  border-radius: var(--ran-checkbox-border-radius, var(--ran-radius-xs, 4px));
   &-input {
     position: var(--ran-checkbox-input-position, absolute);
     inset: var(--ran-checkbox-input-inset, 0);
@@ -104,14 +127,14 @@
     width: var(--ran-checkbox-inner-width, var(--ran-size-1, 16px));
     height: var(--ran-checkbox-inner-height, var(--ran-size-1, 16px));
     direction: var(--ran-checkbox-inner-direction, ltr);
-    background-color: var(--ran-checkbox-inner-background-color, var(--ran-color-bg-elevated, #fff));
-    border: var(--ran-checkbox-inner-border, 1px solid var(--ran-color-border, #eaeaea));
+    background-color: var(--ran-checkbox-inner-background-color, var(--ran-color-bg-elevated, #ffffff));
+    border: var(--ran-checkbox-inner-border, 1px solid var(--ran-color-border-control, #8a8a94));
     border-image-source: var(--ran-checkbox-inner-border-image-source, none);
     border-image-slice: var(--ran-checkbox-inner-border-image-slice, 8);
     border-image-width: var(--ran-checkbox-inner-border-image-width, var(--ran-skin-border-image-width, 4px));
     border-image-outset: 0;
     border-image-repeat: stretch;
-    border-radius: var(--ran-checkbox-inner-border-radius, 4px);
+    border-radius: var(--ran-checkbox-inner-border-radius, var(--ran-radius-xs, 4px));
     border-collapse: var(--ran-checkbox-inner-border-collapse, separate);
     &::after {
       box-sizing: var(--ran-checkbox-tick-box-sizing, border-box);
@@ -121,7 +144,7 @@
       display: var(--ran-checkbox-tick-display, table);
       width: var(--ran-checkbox-tick-width, calc(16px / 14 * 5));
       height: var(--ran-checkbox-tick-height, calc(16px / 14 * 8));
-      border: var(--ran-checkbox-tick-border, 2px solid var(--ran-color-primary-text, #fff));
+      border: var(--ran-checkbox-tick-border, 2px solid var(--ran-color-primary-text, #ffffff));
       border-top: var(--ran-checkbox-tick-border-top, 0);
       border-inline-start: var(--ran-checkbox-tick-border-inline-start, 0);
       opacity: var(--ran-checkbox-tick-opacity, 0);
@@ -138,9 +161,9 @@
   }
   &-checked {
     .ran-checkbox-inner {
-      background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-primary, #006bff));
+      background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-primary, #111113));
       background-image: var(--ran-checkbox-checked-background-image, none);
-      border: var(--ran-checkbox-checked-border, 1px solid var(--ran-color-primary, #006bff));
+      border: var(--ran-checkbox-checked-border, 1px solid var(--ran-color-primary, #111113));
       // Bouncy pop on check — a transform-only keyframe (safe on theme flip).
       animation: var(
         --ran-checkbox-pop-animation,
@@ -151,14 +174,6 @@
         opacity: var(--ran-checkbox-tick-checked-opacity, 1);
       }
     }
-  }
-  /* :has(:focus-visible) instead of :focus-within — a mouse click on the label
-     also focuses the native input, and :focus-within fired for that too, so
-     every click left a persistent ring behind. Keyboard-only, matching the
-     rest of the library's focus convention (see r-button). */
-  &:has(.ran-checkbox-input:focus-visible) &-inner {
-    box-shadow: var(--ran-checkbox-focus-box-shadow, var(--ran-focus-ring));
-    border-color: var(--ran-checkbox-focus-border-color, var(--ran-color-primary, #171717));
   }
 }
 

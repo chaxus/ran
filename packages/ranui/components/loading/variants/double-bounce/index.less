@@ -1,17 +1,14 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .double-bounce {
-    width: var(--loading-double-bounce-width, 4em);
-    height: var(--loading-double-bounce-height, 4em);
+    --_ran-loading-units: 56;
+    width: var(--loading-double-bounce-width, 56em);
+    height: var(--loading-double-bounce-height, 56em);
     position: var(--loading-double-bounce-height, relative);
     .double-bounce1 {
       width: var(--loading-double-bounce1-width, 100%);
       height: var(--loading-double-bounce1-height, 100%);
       border-radius: var(--loading-double-bounce1-border-radius, 50%);
-      background: var(--loading-double-bounce1-background, @blue-1);
+      background: var(--loading-double-bounce1-background, currentColor);
       opacity: var(--loading-double-bounce1-opacity, 0.6);
       position: var(--loading-double-bounce1-position, absolute);
       top: var(--loading-double-bounce1-top, 0);
@@ -23,7 +20,7 @@
       width: var(--loading-double-bounce2-width, 100%);
       height: var(--loading-double-bounce2-height, 100%);
       border-radius: var(--loading-double-bounce2-border-radius, 50%);
-      background: var(--loading-double-bounce2-background, @blue-1);
+      background: var(--loading-double-bounce2-background, currentColor);
       opacity: var(--loading-double-bounce2-opacity, 0.6);
       position: var(--loading-double-bounce2-position, absolute);
       top: var(--loading-double-bounce2-top, 0);

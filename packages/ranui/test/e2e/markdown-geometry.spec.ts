@@ -65,7 +65,7 @@ test('code chrome aligns to text and numeric table columns preserve their semant
     };
   });
   expect(Math.abs(geometry.header - geometry.text)).toBeLessThanOrEqual(0.5);
-  expect(geometry.font).toBe('14px');
+  expect(geometry.font).toBe('13px');
   expect(geometry.target.width).toBeGreaterThanOrEqual(32);
   expect(geometry.target.height).toBeGreaterThanOrEqual(32);
   expect(geometry.align).toEqual(['right', 'right']);

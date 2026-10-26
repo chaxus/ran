@@ -43,7 +43,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 | -------------- | --------- | ------- | -------------------------------------- |
 | `open`         | `boolean` | `false` | 对话框是否可见                         |
 | `heading`      | `string`  | `''`    | 头部标题文本（为空时回退为 `Modal`）   |
-| `closable`     | `boolean` | `true`  | 是否显示关闭（`x`）按钮                |
+| `closable`     | `boolean` | `true`  | 是否显示关闭按钮                       |
 | `maskClosable` | `boolean` | `true`  | 点击背景遮罩是否关闭对话框             |
 | `closeOnEsc`   | `boolean` | `true`  | 按下 `Escape` 键是否关闭对话框         |
 | `lockScroll`   | `boolean` | `true`  | 对话框打开时是否锁定 body 滚动         |
@@ -208,7 +208,7 @@ if (result.action === 'confirm') {
 | `dialog` | 对话框盒子           |
 | `header` | 头部栏               |
 | `title`  | 标题                 |
-| `close`  | 关闭（`x`）按钮      |
+| `close`  | 关闭按钮             |
 | `body`   | 可滚动的主体区域     |
 | `footer` | 底部操作栏           |
 

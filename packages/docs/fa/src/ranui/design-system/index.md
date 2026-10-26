@@ -30,7 +30,7 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 **لایه ۲: توکن‌های معنایی.** `--ran-color-*` و هم‌خانواده‌هایش، که روی لایه ۱ نگاشت شده‌اند. **همین لایه را مصرف کنید.** حالت تیره تنها لایه ۱ را از نو تعریف می‌کند، پس هر توکن معنایی از راه `var()` می‌چرخد و هیچ‌جای کتابخانه بازنویسیِ تیرهٔ کامپوننت‌به‌کامپوننت وجود ندارد.
 
 ```
---ran-gray-1000        →  #171717 (روشن) / #ededed (تیره)        ← لایه ۱، می‌چرخد
+--ran-gray-1000        →  #111113 (روشن) / #ededef (تیره)        ← لایه ۱، می‌چرخد
 --ran-color-text       →  var(--ran-gray-1000)                    ← لایه ۲، دنبال می‌کند
 --ran-btn-color        →  var(--ran-color-text, …)                ← توکن کامپوننت
 ```
@@ -55,8 +55,8 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 
 | توکن                   | روشن                                                            | تیره                                                            | کاربرد           |
 | ---------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- | ---------------- |
-| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | پس‌زمینه صفحه    |
-| `--ran-background-200` | <span class="swatch" style="--swatch:#fafafa"></span> `#fafafa` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | نواحی ملایم صفحه |
+| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#0a0a0b"></span> `#0a0a0b` | پس‌زمینه صفحه    |
+| `--ran-background-200` | <span class="swatch" style="--swatch:#f7f7f8"></span> `#f7f7f8` | <span class="swatch" style="--swatch:#111113"></span> `#111113` | نواحی ملایم صفحه |
 
 ### خاکستری — `--ran-gray-100..1000`
 
@@ -64,16 +64,16 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 
 | پله  | روشن                                                            | تیره                                                            |
 | ---- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| 100  | <span class="swatch" style="--swatch:#f2f2f2"></span> `#f2f2f2` | <span class="swatch" style="--swatch:#1a1a1a"></span> `#1a1a1a` |
-| 200  | <span class="swatch" style="--swatch:#ebebeb"></span> `#ebebeb` | <span class="swatch" style="--swatch:#1f1f1f"></span> `#1f1f1f` |
-| 300  | <span class="swatch" style="--swatch:#e6e6e6"></span> `#e6e6e6` | <span class="swatch" style="--swatch:#292929"></span> `#292929` |
-| 400  | <span class="swatch" style="--swatch:#eaeaea"></span> `#eaeaea` | <span class="swatch" style="--swatch:#2e2e2e"></span> `#2e2e2e` |
-| 500  | <span class="swatch" style="--swatch:#c9c9c9"></span> `#c9c9c9` | <span class="swatch" style="--swatch:#454545"></span> `#454545` |
-| 600  | <span class="swatch" style="--swatch:#a8a8a8"></span> `#a8a8a8` | <span class="swatch" style="--swatch:#878787"></span> `#878787` |
-| 700  | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` |
-| 800  | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` |
-| 900  | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` | <span class="swatch" style="--swatch:#a0a0a0"></span> `#a0a0a0` |
-| 1000 | <span class="swatch" style="--swatch:#171717"></span> `#171717` | <span class="swatch" style="--swatch:#ededed"></span> `#ededed` |
+| 100  | <span class="swatch" style="--swatch:#f0f0f2"></span> `#f0f0f2` | <span class="swatch" style="--swatch:#1c1c20"></span> `#1c1c20` |
+| 200  | <span class="swatch" style="--swatch:#ebebee"></span> `#ebebee` | <span class="swatch" style="--swatch:#232328"></span> `#232328` |
+| 300  | <span class="swatch" style="--swatch:#e2e2e6"></span> `#e2e2e6` | <span class="swatch" style="--swatch:#2c2c32"></span> `#2c2c32` |
+| 400  | <span class="swatch" style="--swatch:#e4e4e8"></span> `#e4e4e8` | <span class="swatch" style="--swatch:#26262b"></span> `#26262b` |
+| 500  | <span class="swatch" style="--swatch:#b8b8c0"></span> `#b8b8c0` | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` |
+| 600  | <span class="swatch" style="--swatch:#9d9da6"></span> `#9d9da6` | <span class="swatch" style="--swatch:#52525b"></span> `#52525b` |
+| 700  | <span class="swatch" style="--swatch:#8a8a94"></span> `#8a8a94` | <span class="swatch" style="--swatch:#71717a"></span> `#71717a` |
+| 800  | <span class="swatch" style="--swatch:#6e6e78"></span> `#6e6e78` | <span class="swatch" style="--swatch:#8b8b94"></span> `#8b8b94` |
+| 900  | <span class="swatch" style="--swatch:#55555e"></span> `#55555e` | <span class="swatch" style="--swatch:#a1a1aa"></span> `#a1a1aa` |
+| 1000 | <span class="swatch" style="--swatch:#111113"></span> `#111113` | <span class="swatch" style="--swatch:#ededef"></span> `#ededef` |
 
 ### خاکستری آلفا — `--ran-gray-alpha-100..1000`
 
@@ -81,16 +81,16 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 
 | پله  | روشن                                                                         | تیره                                                                         |
 | ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### آبی — `--ran-blue-100..1000`
 
@@ -104,8 +104,8 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 | 400  | <span class="swatch" style="--swatch:#cae7ff"></span> `#cae7ff` | <span class="swatch" style="--swatch:#003674"></span> `#003674` |
 | 500  | <span class="swatch" style="--swatch:#94ccff"></span> `#94ccff` | <span class="swatch" style="--swatch:#00418b"></span> `#00418b` |
 | 600  | <span class="swatch" style="--swatch:#48aeff"></span> `#48aeff` | <span class="swatch" style="--swatch:#0090ff"></span> `#0090ff` |
-| 700  | <span class="swatch" style="--swatch:#006bff"></span> `#006bff` | <span class="swatch" style="--swatch:#006efe"></span> `#006efe` |
-| 800  | <span class="swatch" style="--swatch:#0059ec"></span> `#0059ec` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
+| 700  | <span class="swatch" style="--swatch:#0a6cff"></span> `#0a6cff` | <span class="swatch" style="--swatch:#3b82f6"></span> `#3b82f6` |
+| 800  | <span class="swatch" style="--swatch:#0a5bd8"></span> `#0a5bd8` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
 | 900  | <span class="swatch" style="--swatch:#005ff2"></span> `#005ff2` | <span class="swatch" style="--swatch:#47a8ff"></span> `#47a8ff` |
 | 1000 | <span class="swatch" style="--swatch:#002359"></span> `#002359` | <span class="swatch" style="--swatch:#eaf6ff"></span> `#eaf6ff` |
 
@@ -121,7 +121,7 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 | 400  | <span class="swatch" style="--swatch:#ffd7d6"></span> `#ffd7d6` | <span class="swatch" style="--swatch:#6f101b"></span> `#6f101b` |
 | 500  | <span class="swatch" style="--swatch:#ffb1b3"></span> `#ffb1b3` | <span class="swatch" style="--swatch:#88151f"></span> `#88151f` |
 | 600  | <span class="swatch" style="--swatch:#ff676d"></span> `#ff676d` | <span class="swatch" style="--swatch:#f32e40"></span> `#f32e40` |
-| 700  | <span class="swatch" style="--swatch:#fc0035"></span> `#fc0035` | <span class="swatch" style="--swatch:#f13242"></span> `#f13242` |
+| 700  | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` |
 | 800  | <span class="swatch" style="--swatch:#ea001d"></span> `#ea001d` | <span class="swatch" style="--swatch:#e2162a"></span> `#e2162a` |
 | 900  | <span class="swatch" style="--swatch:#d8001b"></span> `#d8001b` | <span class="swatch" style="--swatch:#ff565f"></span> `#ff565f` |
 | 1000 | <span class="swatch" style="--swatch:#47000c"></span> `#47000c` | <span class="swatch" style="--swatch:#ffe9ed"></span> `#ffe9ed` |
@@ -164,29 +164,33 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 
 لایه‌ای که کامپوننت‌ها واقعاً می‌خوانند. هرچه اینجاست از راه مقیاس‌های بالا حل می‌شود، پس خودش با پوسته می‌چرخد.
 
-| توکن                           | حل می‌شود به                                                                                                                             | نقش                                   |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `--ran-color-bg`               | `--ran-background-100`                                                                                                                   | پس‌زمینه صفحه                         |
-| `--ran-color-bg-subtle`        | `--ran-background-200`                                                                                                                   | نواحی ملایم صفحه                      |
-| `--ran-color-bg-elevated`      | `--ran-background-100` · gray-100 (تیره)                                                                                                 | کارت‌ها، سطح‌ها                       |
-| `--ran-color-bg-muted`         | `--ran-gray-100`                                                                                                                         | پرشدگی فرورفته یا خفه                 |
-| `--ran-color-bg-hover`         | `--ran-gray-200`                                                                                                                         | سطح هاور                              |
-| `--ran-color-bg-active`        | `--ran-gray-300`                                                                                                                         | سطح حالت فشرده                        |
-| `--ran-color-text`             | `--ran-gray-1000`                                                                                                                        | متن اصلی                              |
-| `--ran-color-text-secondary`   | `--ran-gray-900`                                                                                                                         | متن ثانویه                            |
-| `--ran-color-text-disabled`    | `--ran-gray-700`                                                                                                                         | متن غیرفعال                           |
-| `--ran-color-border`           | `--ran-gray-400`                                                                                                                         | کادر پیش‌فرض                          |
-| `--ran-color-border-secondary` | `--ran-gray-300`                                                                                                                         | کادر ملایم‌تر                         |
-| `--ran-color-border-hover`     | `--ran-gray-500`                                                                                                                         | کادر هاور                             |
-| `--ran-color-border-active`    | `--ran-gray-600`                                                                                                                         | کادر حالت فشرده                       |
-| `--ran-color-primary`          | `--ran-gray-1000`                                                                                                                        | کنش اصلی (تک‌رنگ)                     |
-| `--ran-color-primary-hover`    | <span class="swatch" style="--swatch:#383838"></span> `#383838` · <span class="swatch" style="--swatch:#cccccc"></span> `#cccccc` (تیره) | هاورِ primary                         |
-| `--ran-color-primary-active`   | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` · <span class="swatch" style="--swatch:#b3b3b3"></span> `#b3b3b3` (تیره) | فشردنِ primary                        |
-| `--ran-color-primary-text`     | `--ran-background-100`                                                                                                                   | جوهری که **روی** سطح primary می‌نشیند |
-| `--ran-color-success`          | `--ran-green-700`                                                                                                                        | موفقیت                                |
-| `--ran-color-warning`          | `--ran-amber-700`                                                                                                                        | هشدار                                 |
-| `--ran-color-danger`           | `--ran-red-700`                                                                                                                          | خطر / ارور                            |
-| `--ran-color-link`             | `--ran-blue-700`                                                                                                                         | پیوندها                               |
+| توکن                               | حل می‌شود به                                                                                                                             | نقش                                          |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `--ran-color-bg`                   | `--ran-background-100`                                                                                                                   | پس‌زمینه صفحه                                |
+| `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                   | نواحی ملایم صفحه                             |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · gray-100 (تیره)                                                                                                 | کارت‌ها، سطح‌ها                              |
+| `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                         | پرشدگی فرورفته یا خفه                        |
+| `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                         | سطح هاور                                     |
+| `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                         | سطح حالت فشرده                               |
+| `--ran-color-text`                 | `--ran-gray-1000`                                                                                                                        | متن اصلی                                     |
+| `--ran-color-text-secondary`       | `--ran-gray-900`                                                                                                                         | متن ثانویه                                   |
+| `--ran-color-text-disabled`        | `--ran-gray-700`                                                                                                                         | متن غیرفعال                                  |
+| `--ran-color-border`               | `--ran-gray-400`                                                                                                                         | کادر پیش‌فرض                                 |
+| `--ran-color-border-secondary`     | `--ran-gray-300`                                                                                                                         | کادر ملایم‌تر                                |
+| `--ran-color-border-hover`         | `--ran-gray-500`                                                                                                                         | کادر هاور                                    |
+| `--ran-color-border-active`        | `--ran-gray-600`                                                                                                                         | کادر حالت فشرده                              |
+| `--ran-color-border-control`       | `--ran-gray-700`                                                                                                                         | مرز کنترل‌ها: ورودی، چک‌باکس، انتخابگر (۳:۱) |
+| `--ran-color-border-control-hover` | `--ran-gray-900`                                                                                                                         | مرز کنترل هنگام اشاره                        |
+| `--ran-color-text-placeholder`     | `--ran-gray-800`                                                                                                                         | متن جای‌نگهدار (≥۴٫۵:۱)                      |
+| `--ran-color-primary`              | `--ran-gray-1000`                                                                                                                        | کنش اصلی (تک‌رنگ)                            |
+| `--ran-color-primary-hover`        | <span class="swatch" style="--swatch:#2a2a2e"></span> `#2a2a2e` · <span class="swatch" style="--swatch:#d4d4d8"></span> `#d4d4d8` (تیره) | هاورِ primary                                |
+| `--ran-color-primary-active`       | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` · <span class="swatch" style="--swatch:#b4b4bb"></span> `#b4b4bb` (تیره) | فشردنِ primary                               |
+| `--ran-color-primary-text`         | `--ran-background-100`                                                                                                                   | جوهری که **روی** سطح primary می‌نشیند        |
+| `--ran-color-success`              | `--ran-green-700`                                                                                                                        | موفقیت                                       |
+| `--ran-color-warning`              | `--ran-amber-700`                                                                                                                        | هشدار                                        |
+| `--ran-color-danger`               | `--ran-red-700`                                                                                                                          | خطر / ارور                                   |
+| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                         | پیوندها                                      |
+| `--ran-color-focus`                | `--ran-blue-700`                                                                                                                         | رنگ فوکوس: حلقه و خط‌های فوکوس               |
 
 `--ran-color-primary-hover` / `-active` دو مقدار ثابت لایه معنایی‌اند: به‌جای حرکت در طول یک مقیاس، به‌سوی پس‌زمینه صفحه گام برمی‌دارند، پس حالت تیره مستقیم از نو تعریفشان می‌کند.
 
@@ -276,20 +280,22 @@ import 'ranui/fonts'; // برای باندلرها
 
 | توکن                | مقدار    | کاربرد                          |
 | ------------------- | -------- | ------------------------------- |
-| `--ran-radius-sm`   | `6px`    | کنترل‌ها: دکمه، ورودی، انتخابگر |
+| `--ran-radius-xs`   | `4px`    | نشانه‌های کوچک: برچسب، نشان     |
+| `--ran-radius-sm`   | `8px`    | کنترل‌ها: دکمه، ورودی، انتخابگر |
 | `--ran-radius-md`   | `12px`   | کارت‌ها، دیالوگ‌ها              |
 | `--ran-radius-lg`   | `16px`   | سطح‌های بزرگ                    |
+| `--ran-radius-xl`   | `24px`   | قاب‌های سطح صفحه                |
 | `--ran-radius-full` | `9999px` | قرص‌ها، آواتارها                |
 
 ## ارتفاع سایه
 
 سایه یک **نقش** است، نه تزئین. رده را بر پایه اینکه عنصر چیست انتخاب کنید. حالت تیره هر سه را جایگزین می‌کند، چون سایه‌ای که برای صفحه سفید کوک شده روی صفحه سیاه ناپدید می‌شود.
 
-| توکن                    | کاربرد                                                               | روشن                                                            | تیره                                                                                        |
-| ----------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `--ran-shadow-elevated` | سطح‌هایی که در جریان صفحه‌اند و کادر هم دارند: `r-card`، `r-section` | `0 1px 2px rgba(0,0,0,.04), 0 2px 4px -2px rgba(0,0,0,.05)`     | `0 1px 2px rgba(0,0,0,.16)`                                                                 |
-| `--ran-shadow-menu`     | لایه‌های گذرا روی محتوا: منوی کشویی، انتخابگر، پاپ‌اور، اعلان        | `0 2px 4px rgba(0,0,0,.05), 0 8px 24px -6px rgba(0,0,0,.14)`    | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
-| `--ran-shadow-modal`    | دیالوگ‌هایی که راه را می‌بندند: `r-modal`                            | `0 4px 12px rgba(0,0,0,.08), 0 20px 48px -12px rgba(0,0,0,.22)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
+| توکن                    | کاربرد                                                               | روشن                                                           | تیره                                                                                        |
+| ----------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `--ran-shadow-elevated` | سطح‌هایی که در جریان صفحه‌اند و کادر هم دارند: `r-card`، `r-section` | `0 1px 2px rgba(0,0,0,.04)`                                    | `inset 0 1px 0 rgba(255,255,255,.06), 0 1px 2px rgba(0,0,0,.16)`                            |
+| `--ran-shadow-menu`     | لایه‌های گذرا روی محتوا: منوی کشویی، انتخابگر، پاپ‌اور، اعلان        | `0 1px 2px rgba(0,0,0,.06), 0 12px 32px -8px rgba(0,0,0,.16)`  | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
+| `--ran-shadow-modal`    | دیالوگ‌هایی که راه را می‌بندند: `r-modal`                            | `0 2px 4px rgba(0,0,0,.06), 0 24px 64px -12px rgba(0,0,0,.24)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
 
 لایه‌های بی‌کادر برای جدا شدن تنها به سایه تکیه می‌کنند، پس رده‌های لایه شناور وزن واقعی دارند؛ لایه‌ای که به رده برجسته سقوط کند تخت به نظر می‌رسد و انگار به صفحه سنجاق شده است.
 
@@ -309,17 +315,17 @@ import 'ranui/fonts'; // برای باندلرها
 
 | توکن                         | مقدار   | کاربرد                    |
 | ---------------------------- | ------- | ------------------------- |
-| `--ran-motion-duration-fast` | `0.15s` | گذارهای حالت هاور و فشرده |
+| `--ran-motion-duration-fast` | `0.14s` | گذارهای حالت هاور و فشرده |
 | `--ran-motion-duration-base` | `0.2s`  | پاپ‌اورها، منوها          |
-| `--ran-motion-duration-slow` | `0.35s` | نمایان‌شدن‌های بزرگ‌تر    |
+| `--ran-motion-duration-slow` | `0.28s` | نمایان‌شدن‌های بزرگ‌تر    |
 
-| توکن شتاب                    | منحنی                               | خصلت                                   |
-| ---------------------------- | ----------------------------------- | -------------------------------------- |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.645,0.045,0.355,1)` | رفت و برگشت، همه‌کاره                  |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`       | سریع و بدون رد شدن از هدف: کلیدها      |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.34,1.26,0.5,1)`     | رد شدن اندک از هدف: دکمه‌ها، کارت‌ها   |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)`    | رد شدن بازیگوشانه: لایک، افزودن به سبد |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`         | آرام و بدون رد شدن: نمایان‌شدن، چیدمان |
+| توکن شتاب                    | منحنی                            | خصلت                                   |
+| ---------------------------- | -------------------------------- | -------------------------------------- |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | کندشونده، همه‌کاره                     |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | سریع و بدون رد شدن از هدف: کلیدها      |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | رد شدن اندک از هدف: دکمه‌ها، کارت‌ها   |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | رد شدن بازیگوشانه: لایک، افزودن به سبد |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | آرام و بدون رد شدن: نمایان‌شدن، چیدمان |
 
 خانواده spring از فنرهای کوک‌شده SwiftUI تقطیر شده است (response/damping به یک بزیهٔ تک‌گذر از هدف فرو کاسته شده).
 
@@ -367,7 +373,7 @@ import 'ranui/fonts'; // برای باندلرها
 --ran-{component}-{element}[-{state}]-{property}
 ```
 
-مثلاً `--ran-btn-hover-background`، `--ran-select-search-active-border-width`. این‌ها به‌طور پیش‌فرض به توکن‌های معنایی برمی‌گردند: `var(--ran-btn-background, var(--ran-color-primary, #171717))`؛ پس بازنویسی یک توکن معنایی به همه‌شان می‌رسد و بازنویسی یک توکن کامپوننت، تغییر را به یک عنصر محدود می‌کند.
+مثلاً `--ran-btn-hover-background`، `--ran-select-search-active-border-width`. این‌ها به‌طور پیش‌فرض به توکن‌های معنایی برمی‌گردند: `var(--ran-btn-background, var(--ran-color-primary, #111113))`؛ پس بازنویسی یک توکن معنایی به همه‌شان می‌رسد و بازنویسی یک توکن کامپوننت، تغییر را به یک عنصر محدود می‌کند.
 
 فهرست کاملِ تولیدشده در [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) در مخزن است؛ API به‌تفکیک عنصر [اینجاست](/fa/src/ranui/api). برای شیوه اعمالشان [پوسته‌بندی](/fa/src/ranui/theme/#customizing-tokens) را ببینید.
 
@@ -387,7 +393,7 @@ import 'ranui/fonts'; // برای باندلرها
 سه قاعده آن را در حالت تیره امن نگه می‌دارد:
 
 1. برای هرچه باید از پوسته پیروی کند **هیچ کد شانزده‌شانزدهی خامی ننویسید**.
-2. **مقدار جایگزین باید توکنی را نام ببرد که می‌چرخد**: `var(--ran-color-text, var(--ran-gray-1000))`، نه `var(--ran-color-text, #171717)`.
+2. **مقدار جایگزین باید توکنی را نام ببرد که می‌چرخد**: `var(--ran-color-text, var(--ran-gray-1000))`، نه `var(--ran-color-text, #111113)`.
 3. **مقدار جایگزین باید توکنی موجود را نام ببرد**، وگرنه اعلان دور ریخته می‌شود و عنصر بی‌صدا همان چیزی را که به ارث برده نگه می‌دارد.
 
 > هر توکن سراسری‌ای که کتابخانه اعلام می‌کند در همین صفحه فهرست شده، و اگر توکنی بدون مستندسازی در اینجا افزوده شود یک تست واحد شکست می‌خورد. توکن‌های محدود به کامپوننت جداگانه تولید می‌شوند، در [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md).

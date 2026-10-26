@@ -54,7 +54,12 @@ const anchorMaps = (designDir: string): Map<string, Map<string, string>> =>
 /** One design source as a site page: links between reference files stay on the site. */
 export const designReferenceMarkdown = (designDir: string, file: string, maps = anchorMaps(designDir)): string => {
   const pageOf = new Map<string, string>(DESIGN_REFERENCE.map((entry) => [entry.file, entry.page]));
-  const source = readFileSync(join(designDir, file), 'utf8').replace(/^<!--[\s\S]*?-->\s*/, '');
+  const title = DESIGN_REFERENCE.find((entry) => entry.file === file)?.title;
+  // DESIGN.md opens with the document's name ("Ran Design"), which the section index already
+  // uses; on its own page the heading names the page instead.
+  const source = readFileSync(join(designDir, file), 'utf8')
+    .replace(/^<!--[\s\S]*?-->\s*/, '')
+    .replace(/^# Ran Design[ \t]*$/m, title ? `# ${title}` : '$&');
   const body = source.replace(/\]\((?:\.\/)?([A-Z_]+\.md)?(#[^)\s]*)?\)/g, (whole, target?: string, hash?: string) => {
     if (!target && !hash) return whole;
     const into = target ?? file;

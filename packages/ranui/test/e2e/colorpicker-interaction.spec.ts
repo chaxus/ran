@@ -16,7 +16,7 @@ async function setup(page: Page, theme: 'light' | 'dark') {
   );
   await expect(page.locator('body')).toHaveCSS(
     'background-color',
-    theme === 'dark' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)',
+    theme === 'dark' ? 'rgb(10, 10, 11)' : 'rgb(255, 255, 255)',
   );
   await page.locator('#picker').evaluate((picker) => {
     (window as unknown as { pickerChanges: unknown[] }).pickerChanges = [];

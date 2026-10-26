@@ -2,10 +2,11 @@
   display: var(--ran-icon-host-display, inline-flex);
 }
 :host([spin]) {
-  animation-name: var(--ran-icon-host-spin-animation, rotate);
-  animation-duration: var(--ran-icon-host-spin-animation, 1.4s);
+  /* `--ran-icon-host-spin-animation` is the older name hook, kept as an alias. */
+  animation-name: var(--ran-icon-host-spin-name, var(--ran-icon-host-spin-animation, rotate));
+  animation-duration: var(--ran-icon-host-spin-duration, 1.4s);
   animation-timing-function: linear;
-  animation-iteration-count: var(--ran-icon-host-spin-animation, infinite);
+  animation-iteration-count: var(--ran-icon-host-spin-iteration-count, infinite);
 }
 // The reduced-motion sheet every shadow root adopts reaches the shadow tree, not the host,
 // so the host's own spin needs its own rule.

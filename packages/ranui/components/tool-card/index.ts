@@ -62,6 +62,26 @@ function summaryOf(view: ToolCallView | null): string {
   return typeof first === 'string' ? first : '';
 }
 
+/**
+ * The first line of what a failed call returned, for the collapsed row.
+ *
+ * A collapsed error otherwise shows only what was called, in red, and the failure itself
+ * sits in a closed body. The first non-empty line is usually the message ("503 Service
+ * Unavailable"); a terminal with no output falls back to its exit code.
+ *
+ * @param result The result view, or null while none has arrived.
+ * @returns The line, or an empty string when the result says nothing usable.
+ */
+function failureOf(result: ToolResultView | null): string {
+  if (result === null) return '';
+  const text = result.card === 'generic' ? result.content : result.card === 'terminal' ? result.output : undefined;
+  const line = typeof text === 'string' ? (text.split('\n').find((part) => part.trim() !== '') ?? '').trim() : '';
+  if (line !== '') return line;
+  return result.card === 'terminal' && result.exitCode !== undefined && result.exitCode !== 0
+    ? `exit ${result.exitCode}`
+    : '';
+}
+
 /** Status a state dot shows for a card status. */
 const DOT_STATE = { running: 'running', success: 'success', error: 'error' } as const;
 
@@ -205,7 +225,8 @@ export class ToolCard extends RanElement {
     const view = this._call;
     const status = this.status;
     this._row.heading = view !== null && 'title' in view ? view.title : '';
-    this._row.summary = summaryOf(view);
+    const failure = status === 'error' ? failureOf(this._result) : '';
+    this._row.summary = failure === '' ? summaryOf(view) : failure;
     this._row.open = this.open;
     this._row.tone = status === 'error' ? 'error' : '';
     this._row.busy = status === 'running';

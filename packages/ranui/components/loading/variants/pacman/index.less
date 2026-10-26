@@ -1,9 +1,6 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .pacman {
+    --_ran-loading-units: 56;
     position: var(--loading-pacman-position, relative);
     @keyframes rotate_pacman_half_up {
       0% {
@@ -23,7 +20,7 @@
         opacity: var(--loading-pacman-keyframes-balls-75-opacity, 0.7);
       }
       100% {
-        transform: var(--loading-pacman-keyframes-balls-100-transform, translate(-100px, -6.25px));
+        transform: var(--loading-pacman-keyframes-balls-100-transform, translate(-100em, -6.25em));
       }
     }
     @keyframes rotate_pacman_half_down {
@@ -41,64 +38,64 @@
     }
     div {
       &:nth-child(2) {
-        width: var(--loading-pacman-div-nth-child-2-width, 0px);
-        height: var(--loading-pacman-div-nth-child-2-height, 0px);
-        border-right: var(--loading-pacman-div-nth-child-2-border-right, 25px solid transparent);
-        border-top: var(--loading-pacman-div-nth-child-2-border-top, 25px solid #279fcf);
-        border-left: var(--loading-pacman-div-nth-child-2-border-left, 25px solid #279fcf);
-        border-bottom: var(--loading-pacman-div-nth-child-2-border-bottom, 25px solid #279fcf);
-        border-radius: var(--loading-pacman-div-nth-child-2-border-radius, 25px);
-        margin-top: var(--loading-pacman-div-nth-child-2-margin-top, -50px);
+        width: var(--loading-pacman-div-nth-child-2-width, 0);
+        height: var(--loading-pacman-div-nth-child-2-height, 0);
+        border-right: var(--loading-pacman-div-nth-child-2-border-right, 25em solid transparent);
+        border-top: var(--loading-pacman-div-nth-child-2-border-top, 25em solid currentColor);
+        border-left: var(--loading-pacman-div-nth-child-2-border-left, 25em solid currentColor);
+        border-bottom: var(--loading-pacman-div-nth-child-2-border-bottom, 25em solid currentColor);
+        border-radius: var(--loading-pacman-div-nth-child-2-border-radius, 25em);
+        margin-top: var(--loading-pacman-div-nth-child-2-margin-top, -50em);
         animation: var(--loading-pacman-div-nth-child-2-animation, rotate_pacman_half_down 0.5s 0s infinite);
         animation-play-state: var(--loading-pacman-div-nth-child-2-animation-play-state, running);
       }
       &:nth-child(3) {
-        background-color: var(--loading-pacman-div-nth-child-3-background-color, #279fcf);
+        background-color: var(--loading-pacman-div-nth-child-3-background-color, currentColor);
         border-radius: var(--loading-pacman-div-nth-child-3-border-radius, 100%);
-        margin: var(--loading-pacman-div-nth-child-3-margin, 2px);
-        width: var(--loading-pacman-div-nth-child-3-width, 10px);
-        height: var(--loading-pacman-div-nth-child-3-height, 10px);
+        margin: var(--loading-pacman-div-nth-child-3-margin, 2em);
+        width: var(--loading-pacman-div-nth-child-3-width, 10em);
+        height: var(--loading-pacman-div-nth-child-3-height, 10em);
         position: var(--loading-pacman-div-nth-child-3-position, absolute);
-        transform: var(--loading-pacman-div-nth-child-3-transform, translate(0, -6.25px));
-        top: var(--loading-pacman-div-nth-child-3-top, 25px);
-        left: var(--loading-pacman-div-nth-child-3-left, 100px);
+        transform: var(--loading-pacman-div-nth-child-3-transform, translate(0, -6.25em));
+        top: var(--loading-pacman-div-nth-child-3-top, 25em);
+        left: var(--loading-pacman-div-nth-child-3-left, 100em);
         animation: var(--loading-pacman-div-nth-child-3-animation, pacman-balls 1s 0.33s infinite linear);
         animation-play-state: var(--loading-pacman-div-nth-child-3-animation-play-state, running);
       }
       &:nth-child(4) {
-        background-color: var(--loading-pacman-div-nth-child-4-background-color, #279fcf);
+        background-color: var(--loading-pacman-div-nth-child-4-background-color, currentColor);
         border-radius: var(--loading-pacman-div-nth-child-4-border-radius, 100%);
-        margin: var(--loading-pacman-div-nth-child-4-margin, 2px);
-        width: var(--loading-pacman-div-nth-child-4-width, 10px);
-        height: var(--loading-pacman-div-nth-child-4-height, 10px);
+        margin: var(--loading-pacman-div-nth-child-4-margin, 2em);
+        width: var(--loading-pacman-div-nth-child-4-width, 10em);
+        height: var(--loading-pacman-div-nth-child-4-height, 10em);
         position: var(--loading-pacman-div-nth-child-4-position, absolute);
-        transform: var(--loading-pacman-div-nth-child-4-transform, translate(0, -6.25px));
-        top: var(--loading-pacman-div-nth-child-4-top, 25px);
-        left: var(--loading-pacman-div-nth-child-4-left, 100px);
+        transform: var(--loading-pacman-div-nth-child-4-transform, translate(0, -6.25em));
+        top: var(--loading-pacman-div-nth-child-4-top, 25em);
+        left: var(--loading-pacman-div-nth-child-4-left, 100em);
         animation: var(--loading-pacman-div-nth-child-4-animation, pacman-balls 1s 0.66s infinite linear);
         animation-play-state: var(--loading-pacman-div-nth-child-4-animation-play-state, running);
       }
       &:nth-child(5) {
-        background-color: var(--loading-pacman-div-nth-child-5-background-color, #279fcf);
+        background-color: var(--loading-pacman-div-nth-child-5-background-color, currentColor);
         border-radius: var(--loading-pacman-div-nth-child-5-border-radius, 100%);
-        margin: var(--loading-pacman-div-nth-child-5-margin, 2px);
-        width: var(--loading-pacman-div-nth-child-5-width, 10px);
-        height: var(--loading-pacman-div-nth-child-5-height, 10px);
+        margin: var(--loading-pacman-div-nth-child-5-margin, 2em);
+        width: var(--loading-pacman-div-nth-child-5-width, 10em);
+        height: var(--loading-pacman-div-nth-child-5-height, 10em);
         position: var(--loading-pacman-div-nth-child-5-position, absolute);
-        transform: var(--loading-pacman-div-nth-child-5-transform, translate(0, -6.25px));
-        top: var(--loading-pacman-div-nth-child-5-top, 25px);
-        left: var(--loading-pacman-div-nth-child-5-left, 100px);
+        transform: var(--loading-pacman-div-nth-child-5-transform, translate(0, -6.25em));
+        top: var(--loading-pacman-div-nth-child-5-top, 25em);
+        left: var(--loading-pacman-div-nth-child-5-left, 100em);
         animation: var(--loading-pacman-div-nth-child-5-animation, pacman-balls 1s 0.99s infinite linear);
         animation-play-state: var(--loading-pacman-div-nth-child-5-animation-play-state, running);
       }
       &:first-of-type {
-        width: var(--loading-pacman-div-first-of-type-width, 0px);
-        height: var(--loading-pacman-div-first-of-type-height, 0px);
-        border-right: var(--loading-pacman-div-first-of-type-border-right, 25px solid transparent);
-        border-top: var(--loading-pacman-div-first-of-type-border-top, 25px solid #279fcf);
-        border-left: var(--loading-pacman-div-first-of-type-border-left, 25px solid #279fcf);
-        border-bottom: var(--loading-pacman-div-first-of-type-border-bottom, 25px solid #279fcf);
-        border-radius: var(--loading-pacman-div-first-of-type-border-radius, 25px);
+        width: var(--loading-pacman-div-first-of-type-width, 0);
+        height: var(--loading-pacman-div-first-of-type-height, 0);
+        border-right: var(--loading-pacman-div-first-of-type-border-right, 25em solid transparent);
+        border-top: var(--loading-pacman-div-first-of-type-border-top, 25em solid currentColor);
+        border-left: var(--loading-pacman-div-first-of-type-border-left, 25em solid currentColor);
+        border-bottom: var(--loading-pacman-div-first-of-type-border-bottom, 25em solid currentColor);
+        border-radius: var(--loading-pacman-div-first-of-type-border-radius, 25em);
         animation: var(--loading-pacman-div-first-of-type-animation, rotate_pacman_half_up 0.5s 0s infinite);
         animation-play-state: var(--loading-pacman-div-first-of-type-animation-play-state, running);
       }

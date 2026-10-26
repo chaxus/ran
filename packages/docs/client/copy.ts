@@ -8,9 +8,6 @@ export interface InteractionCopy {
   copy: string;
   copied: string;
   copyFailed: string;
-  guide: string;
-  reference: string;
-  article: string;
 }
 const copy: Record<string, InteractionCopy> = {
   en: {
@@ -22,9 +19,6 @@ const copy: Record<string, InteractionCopy> = {
     copy: 'Copy code',
     copied: 'Copied',
     copyFailed: 'Copy failed. Select the code and copy it manually.',
-    guide: 'Guide',
-    reference: 'Reference',
-    article: 'Article',
   },
   zh: {
     skip: '跳到正文',
@@ -35,9 +29,6 @@ const copy: Record<string, InteractionCopy> = {
     copy: '复制代码',
     copied: '已复制',
     copyFailed: '复制失败，请选择代码后手动复制。',
-    guide: '指南',
-    reference: '参考',
-    article: '文章',
   },
   ja: {
     skip: '本文へスキップ',
@@ -48,9 +39,6 @@ const copy: Record<string, InteractionCopy> = {
     copy: 'コードをコピー',
     copied: 'コピーしました',
     copyFailed: 'コピーできません。コードを選択して手動でコピーしてください。',
-    guide: 'ガイド',
-    reference: 'リファレンス',
-    article: '記事',
   },
   es: {
     skip: 'Saltar al contenido',
@@ -61,9 +49,6 @@ const copy: Record<string, InteractionCopy> = {
     copy: 'Copiar código',
     copied: 'Copiado',
     copyFailed: 'Error al copiar. Selecciona el código y cópialo manualmente.',
-    guide: 'Guía',
-    reference: 'Referencia',
-    article: 'Artículo',
   },
   pt: {
     skip: 'Ir para o conteúdo',
@@ -74,9 +59,6 @@ const copy: Record<string, InteractionCopy> = {
     copy: 'Copiar código',
     copied: 'Copiado',
     copyFailed: 'Falha ao copiar. Selecione o código e copie manualmente.',
-    guide: 'Guia',
-    reference: 'Referência',
-    article: 'Artigo',
   },
   ko: {
     skip: '본문으로 건너뛰기',
@@ -87,9 +69,6 @@ const copy: Record<string, InteractionCopy> = {
     copy: '코드 복사',
     copied: '복사됨',
     copyFailed: '복사하지 못했습니다. 코드를 선택하여 직접 복사하세요.',
-    guide: '가이드',
-    reference: '참조',
-    article: '문서',
   },
   de: {
     skip: 'Zum Inhalt springen',
@@ -100,9 +79,6 @@ const copy: Record<string, InteractionCopy> = {
     copy: 'Code kopieren',
     copied: 'Kopiert',
     copyFailed: 'Kopieren fehlgeschlagen. Code auswählen und manuell kopieren.',
-    guide: 'Anleitung',
-    reference: 'Referenz',
-    article: 'Artikel',
   },
   fa: {
     skip: 'رفتن به محتوا',
@@ -113,9 +89,6 @@ const copy: Record<string, InteractionCopy> = {
     copy: 'کپی کد',
     copied: 'کپی شد',
     copyFailed: 'کپی انجام نشد. کد را انتخاب کرده و دستی کپی کنید.',
-    guide: 'راهنما',
-    reference: 'مرجع',
-    article: 'مقاله',
   },
 };
 export const interactionCopy = (lang: string): InteractionCopy => copy[lang.split('-')[0]] ?? copy.en;

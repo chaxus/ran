@@ -1,7 +1,5 @@
 @import url('../../base.less');
 
-@theme-color: var(--ran-color-primary, #006bff);
-
 :host {
   position: var(--ran-select-host-position, relative);
   display: var(--ran-select-host-display, inline-block);
@@ -12,6 +10,12 @@
   // when `label` is set (see `.ran-select-label`, a sibling inserted before
   // `.ran-select` — same structure r-input uses for the same reason: a
   // labeled select and a labeled input must line up in a form).
+  // Floor for a select with no width of its own: it sizes to its value, and a short value
+  // (or none) still reads as a field rather than a bare chevron. 80px fits the docs' narrowest
+  // explicit width, so no existing usage is widened.
+  min-width: 80px;
+  // The value sits in flow now, so a long label would otherwise widen the field past its container.
+  max-width: 100%;
   outline: var(--ran-select-host-outline, 0);
   -webkit-tap-highlight-color: var(--ran-select-host-tap-highlight-color, transparent);
   &,
@@ -26,22 +30,40 @@
   &([disabled]) {
     cursor: var(--ran-select-host-disabled-cursor, not-allowed);
     pointer-events: var(--ran-select-host-disabled-pointer-events, all);
-    opacity: var(--ran-select-host-disabled-opacity, 0.6);
+    opacity: var(--ran-select-host-disabled-opacity, 1);
   }
   &(:not([disabled]):hover) {
     .ran-select {
       cursor: var(--ran-select-host-hover-cursor, pointer);
     }
   }
-  &(:not([disabled],[type="text"]):hover) {
+  // The ring is the focus signal, so focus keeps the resting border; this rule stays ahead of
+  // the hover rule below so a hovered, focused field still shows the hover edge.
+  &(:not([disabled],[type="text"]):focus-visible) {
     .selection {
-      border: var(--ran-select-hover-border, 1px solid @theme-color);
+      border: var(--ran-select-focus-border, 1px solid var(--ran-color-border-control, var(--ran-gray-700)));
+    }
+  }
+  &(:not([disabled]):hover) {
+    .selection {
       &-search {
         cursor: var(--ran-select-search-hover-cursor, pointer);
       }
       &-item {
         cursor: var(--ran-select-item-hover-cursor, pointer);
-        color: var(--ran-select-item-hover-color, var(--ran-color-text, #171717));
+      }
+    }
+  }
+  // (hover: hover), not a width breakpoint: a mouse in a narrow window still hovers.
+  @media (hover: hover) {
+    &(:not([disabled],[type="text"]):hover) {
+      .selection {
+        border: var(--ran-select-hover-border, 1px solid var(--ran-color-border-control-hover, var(--ran-gray-900)));
+      }
+    }
+    &(:not([disabled]):hover) {
+      .selection-item {
+        color: var(--ran-select-item-hover-color, var(--ran-color-text, #111113));
       }
     }
   }
@@ -65,13 +87,8 @@
       }
       &-item {
         cursor: var(--ran-select-item-focus-cursor, pointer);
-        color: var(--ran-select-item-focus-color, var(--ran-color-text, #171717));
+        color: var(--ran-select-item-focus-color, var(--ran-color-text, #111113));
       }
-    }
-  }
-  &(:not([disabled],[type="text"]):focus-visible) {
-    .selection {
-      border: var(--ran-select-focus-border, 1px solid @theme-color);
     }
   }
   .selection-search {
@@ -99,6 +116,11 @@
   }
 }
 
+// The UA `[hidden]` rule loses to any author `display` on :host.
+:host([hidden]) {
+  display: none;
+}
+
 // Static caption above the field — same tokens, same "renders in normal block
 // flow as a sibling inserted before the field, never overlaps adjacent
 // content" pattern as r-input's `.ran-input-label` (see DESIGN.md §3 and
@@ -108,7 +130,7 @@
   margin-bottom: var(--ran-select-label-margin-bottom, var(--ran-space-1, 4px));
   font-size: var(--ran-select-label-font-size, var(--ran-text-label-1, 14px));
   font-weight: var(--ran-select-label-font-weight, var(--ran-text-label-weight, 500));
-  color: var(--ran-select-label-color, var(--ran-color-text, #171717));
+  color: var(--ran-select-label-color, var(--ran-color-text, #111113));
   cursor: var(--ran-select-label-cursor, pointer);
 }
 // A labelled host stacks caption and field, and the field takes the remaining height: the
@@ -128,7 +150,7 @@
   height: var(--ran-select-root-height, auto);
 }
 :host([disabled]) .ran-select-label {
-  color: var(--ran-select-label-disabled-color, var(--ran-color-text-disabled, #999));
+  color: var(--ran-select-label-disabled-color, var(--ran-color-text-disabled, #8a8a94));
   cursor: var(--ran-select-label-disabled-cursor, not-allowed);
 }
 .ran-select {
@@ -163,14 +185,15 @@
     position: var(--ran-select-position, relative);
     background-color: var(--ran-select-background-color, var(--ran-color-bg-elevated, #ffffff));
     background-image: var(--ran-select-background-image, none);
-    border: var(--ran-select-border, 1px solid var(--ran-color-border, #eaeaea));
+    border: var(--ran-select-border, 1px solid var(--ran-color-border-control, var(--ran-gray-700)));
     /* No default transition: border-color / box-shadow / color are palette props
        and would fade on a theme flip. Consumers can opt in via the hook var. */
     transition: var(--ran-select-transition, none);
     width: var(--ran-select-width, 100%);
     height: var(--ran-select-height, 100%);
     min-height: var(--ran-select-min-height, var(--ran-size-7, 32px));
-    padding: var(--ran-select-padding, 0 var(--ran-space-3, 12px));
+    // Horizontal room lives on the value (item-left / item-right below), which is in flow.
+    padding: var(--ran-select-padding, 0);
     box-sizing: var(--ran-select-box-sizing, border-box);
     margin: var(--ran-select-margin, 0);
     color: var(--ran-select-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
@@ -222,21 +245,29 @@
         min-height: var(--ran-select-search-content-min-height, 0);
       }
     }
+    &-value {
+      display: flex;
+      flex: 1 1 auto;
+      align-items: center;
+      min-width: 0;
+    }
+    // In flow, not absolute: an absolute value gave the field no width of its own, so a
+    // select without an explicit width collapsed to its chevron.
     &-item {
-      position: var(--ran-select-item-position, absolute);
-      top: var(--ran-select-item-top, 0);
-      left: var(--ran-select-item-left, 12px);
-      /* bound the width so the ellipsis actually triggers (leaves room for the arrow) */
-      right: var(--ran-select-item-right, 28px);
+      position: var(--ran-select-item-position, static);
+      top: var(--ran-select-item-top, auto);
+      flex: 1 1 auto;
+      min-width: 0;
       margin: var(--ran-select-item-margin, 0);
-      padding: var(--ran-select-item-padding, 0);
+      // item-left / item-right are physical: the start gap and the room kept for the chevron.
+      padding: var(--ran-select-item-padding, 0 var(--ran-select-item-right, 28px) 0 var(--ran-select-item-left, 12px));
       background: var(--ran-select-item-background, transparent);
       border: var(--ran-select-item-border, none);
       outline: var(--ran-select-item-outline, none);
       appearance: var(--ran-select-item-appearance, none);
       font-family: var(--ran-select-item-font-family, inherit);
-      height: var(--ran-select-item-height, 100%);
-      display: var(--ran-select-item-display, flex);
+      height: var(--ran-select-item-height, auto);
+      display: var(--ran-select-item-display, block);
       align-items: var(--ran-select-item-align-items, center);
       user-select: var(--ran-select-item-user-select, none);
       overflow: var(--ran-select-item-overflow, hidden);
@@ -274,5 +305,14 @@
 // An empty hint must remain distinct from a selected value, including on focus.
 :host(:not([value])) .ran-select .selection .selection-item,
 :host([value='']) .ran-select .selection .selection-item {
-  color: var(--ran-color-text-secondary);
+  color: var(--ran-color-text-placeholder, var(--ran-gray-800));
+}
+
+// One disabled recipe across fields: recessed surface and disabled ink, no faded opacity.
+:host([disabled]) .ran-select .selection {
+  background-color: var(--ran-color-bg-subtle, var(--ran-background-200));
+  border-color: var(--ran-color-border, var(--ran-gray-400));
+}
+:host([disabled]) .ran-select .selection .selection-item {
+  color: var(--ran-color-text-disabled, var(--ran-gray-700));
 }

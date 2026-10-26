@@ -121,7 +121,7 @@ Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layer
 - **R-COLOR-3 · SHOULD** Reserve **blue** for **links (`--ran-color-link`) and the focus ring** only; green
   means success, amber warning, red danger/error.
 
-**Light & dark:** same token name, different value. `gray-1000` is `#171717` in light and `#ededed` in dark. Components reference the _semantic name_. The dark mixin redefines the base scales plus explicit surface, primary hover/active and shadow overrides.
+**Light & dark:** same token name, different value. `gray-1000` is `#111113` in light and `#ededef` in dark. Components reference the _semantic name_. The dark mixin redefines the base scales plus explicit surface, primary hover/active and shadow overrides.
 
 - **R-COLOR-4 · SHOULD** Read the theme declarations rather than assuming every semantic value follows one
   scale step.
@@ -133,7 +133,7 @@ Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layer
 - **R-COLOR-6 · MUST** A component token's colour fallback starts with a **token that flips**
   (`var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`, `var(--ran-color-text, …)`), never a bare
   light-only literal — otherwise it breaks in dark mode. A final literal behind that token, as in
-  `var(--ran-btn-background, var(--ran-color-primary, #171717))`, is allowed.
+  `var(--ran-btn-background, var(--ran-color-primary, #111113))`, is allowed.
   _Proof: check:dark-unsafe-fallback_
 
 ## ranui spacing — a limited, rhythmic scale
@@ -273,7 +273,7 @@ transition: var(--ran-input-transition, none);
 - **R-COMP-4 · SHOULD** Theme through **CSS variables**, **`::part()`**, or the **`sheet`** attribute
   (escape hatch). CSS variables cross Shadow DOM; selectors do not.
 - **R-COMP-5 · SHOULD** Component tokens default to semantic tokens:
-  `var(--ran-btn-background, var(--ran-color-primary, #171717))`.
+  `var(--ran-btn-background, var(--ran-color-primary, #111113))`.
 - **R-COMP-6 · SHOULD** Map states to the color ladder: default → `bg`/`text`; hover → `bg-hover` /
   `border-hover` / `primary-hover`; active → `bg-active` / `primary-active`; disabled → appropriate
   disabled tokens, with opacity only when needed and still legible; focus → focus ring.

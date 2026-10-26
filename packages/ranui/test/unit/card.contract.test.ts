@@ -276,4 +276,28 @@ describe('r-card contract', () => {
     expect((card as any)._titleEl.textContent).toBe('');
     expect((card as any)._descriptionEl.textContent).toBe('');
   });
+
+  it('keeps an empty body out of the layout and shows it once content is slotted', async () => {
+    const card = document.createElement('r-card') as Card;
+    card.setAttribute('heading', 'Only a heading');
+    document.body.appendChild(card);
+    const body = (card as any)._shadowDom.querySelector('.ran-card-body') as HTMLElement;
+    expect(body.style.display).toBe('none');
+    card.append(document.createElement('p'));
+    await new Promise((r) => setTimeout(r, 0));
+    expect(body.style.display).toBe('');
+  });
+
+  it('shows the body when slotted text changes from empty in place', async () => {
+    const card = document.createElement('r-card') as Card;
+    const text = document.createTextNode('');
+    card.append(text);
+    document.body.appendChild(card);
+    const body = (card as any)._shadowDom.querySelector('.ran-card-body') as HTMLElement;
+    await new Promise((r) => setTimeout(r, 0));
+    expect(body.style.display).toBe('none');
+    text.data = 'Now filled';
+    await new Promise((r) => setTimeout(r, 0));
+    expect(body.style.display).toBe('');
+  });
 });

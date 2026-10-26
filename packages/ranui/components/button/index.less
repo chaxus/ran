@@ -1,5 +1,8 @@
 @clickX: var(--ran-x, 0);
 @clickY: var(--ran-y, 0);
+// White ink on the solid danger fill: 5.3:1 against --ran-red-700 in both themes. It does
+// not flip with the theme, so it cannot borrow --ran-color-primary-text.
+@dangerInk: var(--ran-btn-warning-color, #fff);
 
 :host {
   box-sizing: var(--ran-btn-box-sizing, border-box);
@@ -23,11 +26,11 @@
   // The raised shadow above is painted on THIS box, so it has to be shaped like
   // the surface it sits behind. Without this the host stays a rectangle: a
   // rounded button ends up inside a square shadow, whose bottom edge shows as a
-  // straight line poking out past both corners. Invisible at the 6px default,
+  // straight line poking out past both corners. Invisible at a small default radius,
   // which is why it survived — a consumer rounding the button to a pill
   // (--ran-btn-border-radius: var(--ran-radius-full)) sees it immediately.
   // Same reasoning as the `.ran-btn` radius below, one box further out.
-  border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 6px));
+  border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 8px));
   cursor: var(--ran-btn-cursor, pointer);
   user-select: var(--ran-btn-user-select, none);
   touch-action: var(--ran-btn-touch-action, manipulation);
@@ -54,8 +57,8 @@
     touch-action: var(--ran-btn-surface-touch-action, manipulation);
     // Round the elevated surface to match the content, so it can never poke out
     // at the corners behind the rounded content (was showing white corners in dark).
-    border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 6px));
-    background: var(--ran-btn-surface-background, var(--ran-color-bg-elevated, #fff));
+    border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 8px));
+    background: var(--ran-btn-surface-background, var(--ran-color-bg-elevated, #ffffff));
   }
 
   &,
@@ -69,9 +72,10 @@
   }
 
   // The keyboard target is inside the closed root, so the host does not match
-  // :focus-visible. Keep its ring inset: the host clips ripple overflow.
+  // :focus-visible. Keep its ring inset: the host clips ripple overflow, so an
+  // outside ring (or --ran-focus-ring's box-shadow) would be cut off.
   .ran-btn:focus-visible {
-    outline: var(--ran-btn-focus-outline, 2px solid var(--ran-color-link));
+    outline: var(--ran-btn-focus-outline, 2px solid var(--ran-color-focus, #0a6cff));
     outline-offset: var(--ran-btn-focus-outline-offset, -2px);
   }
 
@@ -79,10 +83,10 @@
      Text/ripple use --ran-color-primary-text so the ink inverts with the surface. */
   &([type="primary"]) {
     .ran-btn-content {
-      background-color: var(--ran-btn-background, var(--ran-color-primary, #171717));
+      background-color: var(--ran-btn-background, var(--ran-color-primary, #111113));
       background-image: var(--ran-btn-content-background-image, none);
-      border-color: var(--ran-btn-border-color, var(--ran-color-primary, #171717));
-      color: var(--ran-btn-color, var(--ran-color-primary-text, #fff));
+      border-color: var(--ran-btn-border-color, var(--ran-color-primary, #111113));
+      color: var(--ran-btn-color, var(--ran-color-primary-text, #ffffff));
     }
   }
 
@@ -90,58 +94,69 @@
     .ran-btn::after {
       background-image: var(
         --ran-btn-after-background-image,
-        radial-gradient(circle, var(--ran-color-primary-text, #fff) 10%, transparent 10.01%)
+        radial-gradient(circle, var(--ran-color-primary-text, #ffffff) 10%, transparent 10.01%)
       );
     }
   }
 
   &([type="primary"]:not([disabled]):active) {
     .ran-btn-content {
-      background-color: var(--ran-btn-active-background, var(--ran-color-primary-active, #4d4d4d));
-      border-color: var(--ran-btn-active-border-color, var(--ran-color-primary-active, #4d4d4d));
+      background-color: var(--ran-btn-active-background, var(--ran-color-primary-active, #3f3f46));
+      border-color: var(--ran-btn-active-border-color, var(--ran-color-primary-active, #3f3f46));
     }
   }
 
-  /* 媒体查询，针对屏幕宽度大于或等于 1024px 的设备（这里假设这是电脑屏幕的最小宽度） */
-  @media (min-width: 1024px) {
+  // (hover: hover), not a width breakpoint: a mouse in a narrow window still hovers,
+  // and a touch screen never leaves a sticky hover behind.
+  @media (hover: hover) {
     /* Default (secondary) hover — Geist border-darken, not accent-flip:
-       border steps 400 → 500 on the gray ladder, text stays primary text. */
-    &(:not([disabled]):hover) {
+       border steps 400 → 500 on the gray ladder, text stays primary text.
+       Text buttons keep their transparent border; only their ink responds. */
+    &(:not([disabled], [type='text']):hover) {
       .ran-btn-content {
-        border-color: var(--ran-btn-hover-border-color, var(--ran-color-border-hover, #c9c9c9));
-        color: var(--ran-btn-hover-color, var(--ran-color-text, #171717));
+        border-color: var(--ran-btn-hover-border-color, var(--ran-color-border-hover, #b8b8c0));
+        color: var(--ran-btn-hover-color, var(--ran-color-text, #111113));
+      }
+    }
+
+    &([type='text']:not([disabled]):hover) {
+      .ran-btn-content {
+        color: var(--ran-btn-hover-color, var(--ran-color-text, #111113));
       }
     }
 
     &([type="primary"]:not([disabled]):hover) {
       .ran-btn-content {
-        background-color: var(--ran-btn-hover-background, var(--ran-color-primary-hover, #383838));
-        border-color: var(--ran-btn-hover-border-color, var(--ran-color-primary-hover, #383838));
-        color: var(--ran-btn-hover-color, var(--ran-color-primary-text, #fff));
+        background-color: var(--ran-btn-hover-background, var(--ran-color-primary-hover, #2a2a2e));
+        border-color: var(--ran-btn-hover-border-color, var(--ran-color-primary-hover, #2a2a2e));
+        color: var(--ran-btn-hover-color, var(--ran-color-primary-text, #ffffff));
       }
     }
 
     &([type="warning"]:not([disabled]):hover) {
       .ran-btn-content {
-        border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #ff4d4f));
-        background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #ff4d4f));
-        color: var(--ran-btn-warning-color, #fff);
+        border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #d70f2f));
+        background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #d70f2f));
+        color: @dangerInk;
       }
     }
   }
 
   &([type="warning"]) {
     .ran-btn-content {
-      border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #ff4d4f));
-      background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #ff4d4f));
+      border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #d70f2f));
+      background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #d70f2f));
       background-image: var(--ran-btn-content-background-image, none);
-      color: var(--ran-btn-warning-color, #fff);
+      color: @dangerInk;
     }
   }
 
   &([type="warning"]:not([disabled])) {
     .ran-btn::after {
-      background-image: var(--ran-btn-after-background-image, radial-gradient(circle, #fff 10%, transparent 10.01%));
+      background-image: var(
+        --ran-btn-after-background-image,
+        radial-gradient(circle, @dangerInk 10%, transparent 10.01%)
+      );
     }
   }
 
@@ -158,21 +173,38 @@
     .ran-btn {
       background: var(--ran-btn-text-surface-background, transparent);
     }
+    // A transparent 1px border, not none: every type is the same 32px tall.
     .ran-btn-content {
-      border: var(--ran-btn-text-border, none);
+      border: var(--ran-btn-text-border, 1px solid transparent);
     }
   }
 
+  // One disabled recipe: recessed surface, decorative border, disabled ink. No
+  // opacity — the old host + surface layers multiplied to 0.36 and lost the label.
+  // Declared after the types so it overrides their fills at equal specificity.
   &([disabled]) {
     cursor: var(--ran-btn-disabled-cursor, not-allowed);
     pointer-events: var(--ran-btn-disabled-pointer-events, all);
-    opacity: var(--ran-btn-disabled-opacity, 0.6);
+    opacity: var(--ran-btn-disabled-opacity, 1);
+    box-shadow: var(--ran-btn-disabled-box-shadow, none);
 
     .ran-btn {
       cursor: var(--ran-btn-surface-disabled-cursor, not-allowed);
       pointer-events: var(--ran-btn-surface-disabled-pointer-events, all);
-      opacity: var(--ran-btn-surface-disabled-opacity, 0.6);
+      opacity: var(--ran-btn-surface-disabled-opacity, 1);
     }
+
+    .ran-btn-content {
+      background-color: var(--ran-btn-disabled-background, var(--ran-color-bg-subtle, #f7f7f8));
+      border-color: var(--ran-btn-disabled-border-color, var(--ran-color-border, #e4e4e8));
+      color: var(--ran-btn-disabled-color, var(--ran-color-text-disabled, #8a8a94));
+    }
+  }
+
+  // A disabled text button stays chromeless; only its ink goes quiet.
+  &([type='text'][disabled]) .ran-btn-content {
+    background-color: var(--ran-btn-text-disabled-background, transparent);
+    border-color: transparent;
   }
 
   &(:not([disabled]):active) {
@@ -189,7 +221,7 @@
     }
   }
 
-  @media (min-width: 1024px) {
+  @media (hover: hover) {
     // `[effect='false']`, not a bare `[effect]`: the ripple is on by default, so only an
     // explicit false turns it off (`effect="true"` used to turn it off too).
     &(:not([disabled], [effect='false'])) {
@@ -214,6 +246,13 @@
     }
   }
 
+  // The ripple is decoration; reduced motion shows the press through the surface colour alone.
+  @media (prefers-reduced-motion: reduce) {
+    .ran-btn::after {
+      display: none;
+    }
+  }
+
   .slot {
     display: var(--ran-btn-slot-display, block);
   }
@@ -230,10 +269,8 @@
   display: var(--ran-btn-content-display, flex);
   justify-content: var(--ran-btn-content-justify-content, space-between);
   align-items: var(--ran-btn-align-items, center);
-  // Vertical padding compensates the line-height drop below (22px → 1, i.e.
-  // font-size) so the button's total height is unchanged: previously
-  // 4+4 (padding) + 22 (line-height) = 30px content-box height; now
-  // 8+8 (padding) + 14 (line-height at font-size 14px) = the same 30px.
+  // 8+8 padding + 14 line-height + 1+1 border = 32px, the --ran-size-7 control height.
+  min-height: var(--ran-btn-height, var(--ran-size-7, 32px));
   padding: var(--ran-btn-padding, var(--ran-space-2, 8px) var(--ran-space-4, 16px));
   border: var(--ran-btn-border, 1px solid transparent);
   border-image-source: var(--ran-btn-border-image-source, none);
@@ -241,9 +278,9 @@
   border-image-width: var(--ran-btn-border-image-width, var(--ran-skin-border-image-width, 4px));
   border-image-outset: 0;
   border-image-repeat: stretch;
-  border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 6px));
-  border-color: var(--ran-btn-border-color, var(--ran-color-border, #eaeaea));
-  color: var(--ran-btn-color, var(--ran-color-text, #000000d9));
+  border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 8px));
+  border-color: var(--ran-btn-border-color, var(--ran-color-border, #e4e4e8));
+  color: var(--ran-btn-color, var(--ran-color-text, #111113));
   line-height: var(--ran-btn-line-height, var(--ran-text-button-line-height, 1));
   font-size: var(--ran-btn-font-size, var(--ran-text-button-size, 14px));
   font-weight: var(--ran-btn-font-weight, var(--ran-text-button-weight, 500));

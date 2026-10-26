@@ -95,3 +95,47 @@ it('keeps the input, selection, focus and keyboard navigation while results rere
   expect(input.value).toBe('remark mark');
   expect([input.selectionStart, input.selectionEnd]).toEqual([2, 5]);
 });
+
+it('labels each result with its section, in the words of the page navigation', async () => {
+  document.body.insertAdjacentHTML(
+    'afterbegin',
+    `<header class="site-header"><a class="nav__link" href="/cn/design/">设计</a><a class="nav__link" href="/cn/ranui/">ranui</a></header>` +
+      `<footer class="site-footer"><a class="site-footer__link" href="/cn/articles/">文章</a></footer>`,
+  );
+  const index = new MiniSearch<SearchDoc>({
+    fields: [...SEARCH_FIELDS],
+    storeFields: ['url', 'page', 'title', 'preview'],
+    tokenize,
+    processTerm: (term) => term,
+  });
+  index.addAll(
+    [
+      { url: '/cn/ranui/button/#a', page: 'Button' },
+      { url: '/cn/ranui/api#b', page: 'element API' },
+      { url: '/cn/design/composition#c', page: 'Visual composition' },
+      { url: '/cn/articles/sort#d', page: 'Sort' },
+      { url: '/cn/notes/docker#e', page: 'Docker' },
+    ].map((doc, i) => ({ ...doc, id: String(i), title: 'needle', preview: 'needle', text: 'needle' })),
+  );
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, text: async () => JSON.stringify(index) }));
+  const { mountSearch } = await import('../client/search');
+  mountSearch();
+  document.querySelector<HTMLButtonElement>('.search-open')!.click();
+  await vi.waitFor(() => expect(document.querySelector('#search-results')!.hasAttribute('aria-busy')).toBe(false));
+  const input = document.querySelector<HTMLInputElement>('#search-input')!;
+  input.value = 'needle';
+  input.dispatchEvent(new Event('input'));
+  const labels = Object.fromEntries(
+    [...document.querySelectorAll('.search-hit')].map((hit) => [
+      hit.getAttribute('href'),
+      hit.querySelector('.search-hit__kind')?.textContent,
+    ]),
+  );
+  expect(labels).toEqual({
+    '/cn/ranui/button/#a': 'ranui',
+    '/cn/ranui/api#b': 'API',
+    '/cn/design/composition#c': '设计',
+    '/cn/articles/sort#d': '文章',
+    '/cn/notes/docker#e': '文章',
+  });
+});

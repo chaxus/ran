@@ -33,7 +33,7 @@ describe('theme tokens', () => {
       // Primary is the monochrome action (Vercel/Geist); blue is links + focus only.
       '--ran-color-primary: var(--ran-gray-1000)',
       '--ran-color-primary-text: var(--ran-background-100)',
-      '--ran-color-link: var(--ran-blue-700)',
+      '--ran-color-link: var(--ran-blue-800)',
       '--ran-color-text: var(--ran-gray-1000)',
       '--ran-color-bg: var(--ran-background-100)',
       '--ran-color-border: var(--ran-gray-400)',
@@ -59,7 +59,7 @@ describe('theme tokens', () => {
     const source = read('theme/dark.less');
 
     expect(source).toContain('.ran-theme-dark()');
-    expect(source).toContain('--ran-gray-1000: #ededed');
+    expect(source).toContain('--ran-gray-1000: #ededef');
     expect(source).toContain("[data-ran-theme='dark']");
   });
 });

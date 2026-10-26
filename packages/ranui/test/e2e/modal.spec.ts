@@ -102,3 +102,49 @@ test.describe('modal — closing attribute lifecycle', () => {
     await expect.poll(hasClosingAttr).toBe(false);
   });
 });
+
+const FOOTER_HTML = `
+  <r-modal id="footer-modal" heading="Deploy">
+    <p>Ship this build?</p>
+    <div slot="footer">
+      <button id="cancel" type="button">Cancel</button>
+      <button id="deploy" type="button">Deploy</button>
+    </div>
+  </r-modal>
+`;
+
+test('modal — close button is a named 32px target with the focus ring', async ({ page }) => {
+  await mount(page, FOOTER_HTML);
+  await page.evaluate(() => document.querySelector('r-modal')?.setAttribute('open', ''));
+  await page.waitForTimeout(150);
+  const close = await page.evaluate(() => {
+    const m = document.querySelector('r-modal') as (HTMLElement & { _shadowDom?: ShadowRoot }) | null;
+    const button = m?._shadowDom?.querySelector('[part="close"]') as HTMLButtonElement;
+    button.focus();
+    const rect = button.getBoundingClientRect();
+    return {
+      name: button.getAttribute('aria-label'),
+      text: button.textContent?.trim(),
+      icon: button.querySelector('r-icon')?.getAttribute('name'),
+      width: rect.width,
+      height: rect.height,
+      ring: getComputedStyle(button).boxShadow,
+    };
+  });
+  expect(close.name).toBe('Close dialog');
+  expect(close.text).toBe('');
+  expect(close.icon).toBe('close');
+  expect(close.width).toBe(32);
+  expect(close.height).toBe(32);
+  expect(close.ring).not.toBe('none');
+});
+
+test('modal — documented slot="footer" wrapper spaces its actions', async ({ page }) => {
+  await mount(page, FOOTER_HTML);
+  await page.evaluate(() => document.querySelector('r-modal')?.setAttribute('open', ''));
+  await page.waitForTimeout(150);
+  const cancel = await page.locator('#cancel').boundingBox();
+  const deploy = await page.locator('#deploy').boundingBox();
+  expect(cancel && deploy).toBeTruthy();
+  expect(Math.round(deploy!.x - (cancel!.x + cancel!.width))).toBe(12);
+});

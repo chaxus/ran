@@ -1,20 +1,17 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .circle {
-    width: var(--loading-circle-width, 4em);
-    height: var(--loading-circle-height, 4em);
+    --_ran-loading-units: 79;
+    width: var(--loading-circle-width, 56em);
+    height: var(--loading-circle-height, 56em);
     position: var(--loading-circle-position, relative);
     &-container {
       position: var(--loading-circle-container-position, absolute);
       width: var(--loading-circle-container-width, 100%);
       height: var(--loading-circle-container-height, 100%);
       div {
-        width: var(--loading-circle-container-div-width, 1em);
-        height: var(--loading-circle-container-div-height, 1em);
-        background: var(--loading-circle-container-div-background, @blue-1);
+        width: var(--loading-circle-container-div-width, 14em);
+        height: var(--loading-circle-container-div-height, 14em);
+        background: var(--loading-circle-container-div-background, currentColor);
         border-radius: var(--loading-circle-container-div-border-radius, 100%);
         position: var(--loading-circle-container-div-position, absolute);
         animation: var(--loading-circle-container-div-animation, ran-loading-circle 1.2s infinite ease-in-out);

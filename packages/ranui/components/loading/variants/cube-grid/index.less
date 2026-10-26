@@ -1,11 +1,8 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .cube-grid {
-    width: var(--loading-cube-grid-width, 4em);
-    height: var(--loading-cube-grid-height, 4em);
+    --_ran-loading-units: 56;
+    width: var(--loading-cube-grid-width, 56em);
+    height: var(--loading-cube-grid-height, 56em);
     margin: var(--loading-cube-grid-margin, auto);
     @keyframes cube-grid {
       0%,
@@ -20,7 +17,7 @@
     &-item {
       width: var(--loading-cube-grid-item-width, 33%);
       height: var(--loading-cube-grid-item-height, 33%);
-      background: var(--loading-cube-grid-item-background, #337ab7);
+      background: var(--loading-cube-grid-item-background, currentColor);
       float: var(--loading-cube-grid-item-float, left);
       animation: var(--loading-cube-grid-item-animation, cube-grid 1.3s infinite ease-in-out);
       animation-play-state: var(--loading-cube-grid-item-animation-play-state, running);

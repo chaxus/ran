@@ -110,6 +110,7 @@ export class Select extends RanElement {
   _optionLabelMapValue: Map<string, string>;
   _optionValueMapLabel: Map<string, string>;
   _activeOption?: HTMLElement;
+  _lastPointerAt = '';
   _text: HTMLSpanElement;
   _selector: HTMLDivElement;
   _label: HTMLLabelElement | undefined;
@@ -181,6 +182,7 @@ export class Select extends RanElement {
               .attr('color', 'var(--ran-color-text-secondary)')
               .attr('size', '16'),
             Div()
+              .class('selection-value')
               .ref(selectorRef)
               .children(
                 Span().class('selection-item').ref(textRef).part('selection-item'),
@@ -497,6 +499,12 @@ export class Select extends RanElement {
       this.open = false;
       return;
     }
+    // Each opening starts the cursor on the committed value, whatever a previous hover left.
+    if (this.open) {
+      const value = this.getAttribute('value');
+      const selected = this.getDropdownOptions().findIndex((item) => !!value && item.getAttribute('value') === value);
+      if (selected >= 0) this.setActiveOptionByIndex(selected, false);
+    }
     this._floating.apply(this.open);
   };
 
@@ -524,8 +532,11 @@ export class Select extends RanElement {
 
   syncActiveState = (): void => {
     const options = this.getDropdownOptions();
+    const value = this.getAttribute('value') || '';
     options.forEach((item, index) => {
       item.setAttribute('role', 'option');
+      // `active` is the moving cursor; `selected` is the committed value and stays put.
+      item.toggleAttribute('selected', !!value && item.getAttribute('value') === value);
       item.setAttribute('aria-selected', item === this._activeOption ? 'true' : 'false');
       if (!item.id) {
         item.id = `${this._listboxId}-option-${index}`;
@@ -538,7 +549,19 @@ export class Select extends RanElement {
     }
   };
 
-  setActiveOptionByIndex = (targetIndex: number): void => {
+  /** Pointer hover moves the same cursor the arrow keys do, so the list shows one transient fill. */
+  _cursorFromPointer = (e: PointerEvent): void => {
+    // Scrolling under a resting pointer can emit a move at the same spot; it must not steal the keyboard cursor.
+    const at = `${e.clientX},${e.clientY}`;
+    if (at === this._lastPointerAt) return;
+    this._lastPointerAt = at;
+    const element = (e.target as Element).closest?.('r-dropdown-item') as HTMLElement | null;
+    if (!element || element === this._activeOption || isDisabled(element)) return;
+    const index = this.getDropdownOptions().indexOf(element);
+    if (index >= 0) this.setActiveOptionByIndex(index, false);
+  };
+
+  setActiveOptionByIndex = (targetIndex: number, reveal = true): void => {
     const options = this.getDropdownOptions();
     if (options.length === 0) return;
     const normalizedIndex = range(targetIndex, 0, options.length - 1);
@@ -557,7 +580,7 @@ export class Select extends RanElement {
     // scrollIntoView also scrolls the page, losing the field's reading position.
     // Move only the owned list surface when the consumer constrains its height.
     const surface = (this._selectionDropdown as Dropdown | undefined)?.dropdown;
-    if (surface && surface.clientHeight > 0 && surface.scrollHeight > surface.clientHeight) {
+    if (reveal && surface && surface.clientHeight > 0 && surface.scrollHeight > surface.clientHeight) {
       const itemRect = next.getBoundingClientRect();
       const listRect = surface.getBoundingClientRect();
       const scale = listRect.height / surface.offsetHeight || 1;
@@ -565,29 +588,6 @@ export class Select extends RanElement {
       else if (itemRect.bottom > listRect.bottom) surface.scrollTop += (itemRect.bottom - listRect.bottom) / scale;
     }
     this.syncActiveState();
-  };
-
-  /**
-   * Vertically center the closed-state label by matching its line-height to the
-   * host height.
-   *
-   * Guarded on a non-zero height: during a custom-element **upgrade** (SSR/DSD
-   * markup, or any element whose `value` attribute is present before it is laid
-   * out) `attributeChangedCallback` runs before `connectedCallback`, so
-   * `getBoundingClientRect()` still reports 0. Writing `line-height: 0px` then
-   * collapses the label to invisible even though its text is correct — the
-   * component looks empty until something re-selects the option. When there is
-   * no layout yet we clear the inline value and let the stylesheet decide;
-   * `connectedCallback` re-applies it once the element has a box.
-   */
-  applyLabelLineHeight = (): void => {
-    if (!this._text) return;
-    const { height } = this.getBoundingClientRect();
-    if (height > 0) {
-      this._text.style.setProperty('line-height', `${height}px`);
-    } else {
-      this._text.style.removeProperty('line-height');
-    }
   };
 
   selectOptionElement = (optionElement: HTMLElement | null, shouldDispatch = true): void => {
@@ -600,7 +600,6 @@ export class Select extends RanElement {
     this._text.textContent = label;
     this._text.setAttribute('title', label);
     this._search.setAttribute('placeholder', label);
-    this.applyLabelLineHeight();
     if (this._activeOption && this._activeOption !== optionElement) {
       this._activeOption.removeAttribute('active');
       this._activeOption.setAttribute('aria-selected', 'false');
@@ -843,6 +842,7 @@ export class Select extends RanElement {
         .style('-webkit-tap-highlight-color', 'transparent')
         .style('outline', '0')
         .on('click', this.clickOption)
+        .on('pointermove', this._cursorFromPointer)
         .build() as HTMLDivElement;
 
       this._selectionDropdown = View('r-dropdown')
@@ -957,7 +957,6 @@ export class Select extends RanElement {
     this.setAttribute('value', defaultValue);
     this._text.textContent = label;
     this._text.setAttribute('title', label);
-    this.applyLabelLineHeight();
     const options = this.getDropdownOptions();
     const target = options.find((item) => item.getAttribute('value') === defaultValue) || null;
     if (target) {
@@ -1033,7 +1032,6 @@ export class Select extends RanElement {
     if (!value) return;
     this._activeOption = undefined;
     this.syncSelectedFromValue(value);
-    this.applyLabelLineHeight();
   };
   /**
    * (Re)wire the search-box listeners to match the current `showSearch` value.
@@ -1134,12 +1132,15 @@ export class Select extends RanElement {
       this._clearSelection();
       return;
     }
-    // Already reflected (e.g. the change came from selectOptionElement itself).
-    if (this._activeOption?.getAttribute('value') === value) return;
     const option = Array.from(this.querySelectorAll('r-option')).find(
       (item) => item.getAttribute('value') === value,
     ) as HTMLElement | undefined;
-    if (option) this.selectOptionElement(option, false);
+    if (!option) return;
+    // Already reflected (e.g. the change came from selectOptionElement itself). Compare with the
+    // committed label, not with _activeOption: hovering moves that cursor without committing.
+    const label = option.getAttribute('title') || option.textContent?.trim() || '';
+    if (this._text.textContent === label) return;
+    this.selectOptionElement(option, false);
   };
 }
 

@@ -30,7 +30,7 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 **第 2 層：セマンティックトークン。** `--ran-color-*` とその仲間で、第 1 層の上に対応づけられています。**使うのはこの層です。** ダークモードが再定義するのは第 1 層だけなので、すべてのセマンティックトークンは `var()` を通じて切り替わり、ライブラリのどこにもコンポーネントごとのダーク用の上書きはありません。
 
 ```
---ran-gray-1000        →  #171717（ライト） / #ededed（ダーク） ← 第 1 層。切り替わる
+--ran-gray-1000        →  #111113（ライト） / #ededef（ダーク） ← 第 1 層。切り替わる
 --ran-color-text       →  var(--ran-gray-1000)                    ← 第 2 層。追随する
 --ran-btn-color        →  var(--ran-color-text, …)                ← コンポーネントのトークン
 ```
@@ -55,8 +55,8 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 
 | トークン               | ライト                                                          | ダーク                                                          | 用途         |
 | ---------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- | ------------ |
-| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | ページの背景 |
-| `--ran-background-200` | <span class="swatch" style="--swatch:#fafafa"></span> `#fafafa` | <span class="swatch" style="--swatch:#000000"></span> `#000000` | 控えめな区画 |
+| `--ran-background-100` | <span class="swatch" style="--swatch:#ffffff"></span> `#ffffff` | <span class="swatch" style="--swatch:#0a0a0b"></span> `#0a0a0b` | ページの背景 |
+| `--ran-background-200` | <span class="swatch" style="--swatch:#f7f7f8"></span> `#f7f7f8` | <span class="swatch" style="--swatch:#111113"></span> `#111113` | 控えめな区画 |
 
 ### グレー — `--ran-gray-100..1000`
 
@@ -64,16 +64,16 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 
 | 段   | ライト                                                          | ダーク                                                          |
 | ---- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| 100  | <span class="swatch" style="--swatch:#f2f2f2"></span> `#f2f2f2` | <span class="swatch" style="--swatch:#1a1a1a"></span> `#1a1a1a` |
-| 200  | <span class="swatch" style="--swatch:#ebebeb"></span> `#ebebeb` | <span class="swatch" style="--swatch:#1f1f1f"></span> `#1f1f1f` |
-| 300  | <span class="swatch" style="--swatch:#e6e6e6"></span> `#e6e6e6` | <span class="swatch" style="--swatch:#292929"></span> `#292929` |
-| 400  | <span class="swatch" style="--swatch:#eaeaea"></span> `#eaeaea` | <span class="swatch" style="--swatch:#2e2e2e"></span> `#2e2e2e` |
-| 500  | <span class="swatch" style="--swatch:#c9c9c9"></span> `#c9c9c9` | <span class="swatch" style="--swatch:#454545"></span> `#454545` |
-| 600  | <span class="swatch" style="--swatch:#a8a8a8"></span> `#a8a8a8` | <span class="swatch" style="--swatch:#878787"></span> `#878787` |
-| 700  | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` | <span class="swatch" style="--swatch:#8f8f8f"></span> `#8f8f8f` |
-| 800  | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` | <span class="swatch" style="--swatch:#7d7d7d"></span> `#7d7d7d` |
-| 900  | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` | <span class="swatch" style="--swatch:#a0a0a0"></span> `#a0a0a0` |
-| 1000 | <span class="swatch" style="--swatch:#171717"></span> `#171717` | <span class="swatch" style="--swatch:#ededed"></span> `#ededed` |
+| 100  | <span class="swatch" style="--swatch:#f0f0f2"></span> `#f0f0f2` | <span class="swatch" style="--swatch:#1c1c20"></span> `#1c1c20` |
+| 200  | <span class="swatch" style="--swatch:#ebebee"></span> `#ebebee` | <span class="swatch" style="--swatch:#232328"></span> `#232328` |
+| 300  | <span class="swatch" style="--swatch:#e2e2e6"></span> `#e2e2e6` | <span class="swatch" style="--swatch:#2c2c32"></span> `#2c2c32` |
+| 400  | <span class="swatch" style="--swatch:#e4e4e8"></span> `#e4e4e8` | <span class="swatch" style="--swatch:#26262b"></span> `#26262b` |
+| 500  | <span class="swatch" style="--swatch:#b8b8c0"></span> `#b8b8c0` | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` |
+| 600  | <span class="swatch" style="--swatch:#9d9da6"></span> `#9d9da6` | <span class="swatch" style="--swatch:#52525b"></span> `#52525b` |
+| 700  | <span class="swatch" style="--swatch:#8a8a94"></span> `#8a8a94` | <span class="swatch" style="--swatch:#71717a"></span> `#71717a` |
+| 800  | <span class="swatch" style="--swatch:#6e6e78"></span> `#6e6e78` | <span class="swatch" style="--swatch:#8b8b94"></span> `#8b8b94` |
+| 900  | <span class="swatch" style="--swatch:#55555e"></span> `#55555e` | <span class="swatch" style="--swatch:#a1a1aa"></span> `#a1a1aa` |
+| 1000 | <span class="swatch" style="--swatch:#111113"></span> `#111113` | <span class="swatch" style="--swatch:#ededef"></span> `#ededef` |
 
 ### グレー（アルファ） — `--ran-gray-alpha-100..1000`
 
@@ -81,16 +81,16 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 
 | 段   | ライト                                                                       | ダーク                                                                       |
 | ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### ブルー — `--ran-blue-100..1000`
 
@@ -104,8 +104,8 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 | 400  | <span class="swatch" style="--swatch:#cae7ff"></span> `#cae7ff` | <span class="swatch" style="--swatch:#003674"></span> `#003674` |
 | 500  | <span class="swatch" style="--swatch:#94ccff"></span> `#94ccff` | <span class="swatch" style="--swatch:#00418b"></span> `#00418b` |
 | 600  | <span class="swatch" style="--swatch:#48aeff"></span> `#48aeff` | <span class="swatch" style="--swatch:#0090ff"></span> `#0090ff` |
-| 700  | <span class="swatch" style="--swatch:#006bff"></span> `#006bff` | <span class="swatch" style="--swatch:#006efe"></span> `#006efe` |
-| 800  | <span class="swatch" style="--swatch:#0059ec"></span> `#0059ec` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
+| 700  | <span class="swatch" style="--swatch:#0a6cff"></span> `#0a6cff` | <span class="swatch" style="--swatch:#3b82f6"></span> `#3b82f6` |
+| 800  | <span class="swatch" style="--swatch:#0a5bd8"></span> `#0a5bd8` | <span class="swatch" style="--swatch:#005be7"></span> `#005be7` |
 | 900  | <span class="swatch" style="--swatch:#005ff2"></span> `#005ff2` | <span class="swatch" style="--swatch:#47a8ff"></span> `#47a8ff` |
 | 1000 | <span class="swatch" style="--swatch:#002359"></span> `#002359` | <span class="swatch" style="--swatch:#eaf6ff"></span> `#eaf6ff` |
 
@@ -121,7 +121,7 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 | 400  | <span class="swatch" style="--swatch:#ffd7d6"></span> `#ffd7d6` | <span class="swatch" style="--swatch:#6f101b"></span> `#6f101b` |
 | 500  | <span class="swatch" style="--swatch:#ffb1b3"></span> `#ffb1b3` | <span class="swatch" style="--swatch:#88151f"></span> `#88151f` |
 | 600  | <span class="swatch" style="--swatch:#ff676d"></span> `#ff676d` | <span class="swatch" style="--swatch:#f32e40"></span> `#f32e40` |
-| 700  | <span class="swatch" style="--swatch:#fc0035"></span> `#fc0035` | <span class="swatch" style="--swatch:#f13242"></span> `#f13242` |
+| 700  | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` | <span class="swatch" style="--swatch:#d70f2f"></span> `#d70f2f` |
 | 800  | <span class="swatch" style="--swatch:#ea001d"></span> `#ea001d` | <span class="swatch" style="--swatch:#e2162a"></span> `#e2162a` |
 | 900  | <span class="swatch" style="--swatch:#d8001b"></span> `#d8001b` | <span class="swatch" style="--swatch:#ff565f"></span> `#ff565f` |
 | 1000 | <span class="swatch" style="--swatch:#47000c"></span> `#47000c` | <span class="swatch" style="--swatch:#ffe9ed"></span> `#ffe9ed` |
@@ -164,29 +164,33 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 
 コンポーネントが実際に読む層です。ここにあるものはすべて上のスケールを通じて解決されるので、テーマに合わせて自分で切り替わります。
 
-| トークン                       | 解決先                                                                                                                                       | 役割                             |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `--ran-color-bg`               | `--ran-background-100`                                                                                                                       | ページの背景                     |
-| `--ran-color-bg-subtle`        | `--ran-background-200`                                                                                                                       | 控えめな区画                     |
-| `--ran-color-bg-elevated`      | `--ran-background-100` · gray-100 （ダーク）                                                                                                 | カード、面                       |
-| `--ran-color-bg-muted`         | `--ran-gray-100`                                                                                                                             | 沈んだ／控えめな塗り             |
-| `--ran-color-bg-hover`         | `--ran-gray-200`                                                                                                                             | ホバーの面                       |
-| `--ran-color-bg-active`        | `--ran-gray-300`                                                                                                                             | アクティブ（押下）の面           |
-| `--ran-color-text`             | `--ran-gray-1000`                                                                                                                            | 主要なテキスト                   |
-| `--ran-color-text-secondary`   | `--ran-gray-900`                                                                                                                             | 副次のテキスト                   |
-| `--ran-color-text-disabled`    | `--ran-gray-700`                                                                                                                             | 無効なテキスト                   |
-| `--ran-color-border`           | `--ran-gray-400`                                                                                                                             | 既定の境界線                     |
-| `--ran-color-border-secondary` | `--ran-gray-300`                                                                                                                             | より控えめな境界線               |
-| `--ran-color-border-hover`     | `--ran-gray-500`                                                                                                                             | ホバーの境界線                   |
-| `--ran-color-border-active`    | `--ran-gray-600`                                                                                                                             | アクティブの境界線               |
-| `--ran-color-primary`          | `--ran-gray-1000`                                                                                                                            | 主たるアクション（モノクロ）     |
-| `--ran-color-primary-hover`    | <span class="swatch" style="--swatch:#383838"></span> `#383838` · <span class="swatch" style="--swatch:#cccccc"></span> `#cccccc` （ダーク） | primary のホバー                 |
-| `--ran-color-primary-active`   | <span class="swatch" style="--swatch:#4d4d4d"></span> `#4d4d4d` · <span class="swatch" style="--swatch:#b3b3b3"></span> `#b3b3b3` （ダーク） | primary の押下                   |
-| `--ran-color-primary-text`     | `--ran-background-100`                                                                                                                       | primary の面**の上に**乗るインク |
-| `--ran-color-success`          | `--ran-green-700`                                                                                                                            | 成功                             |
-| `--ran-color-warning`          | `--ran-amber-700`                                                                                                                            | 警告                             |
-| `--ran-color-danger`           | `--ran-red-700`                                                                                                                              | 危険／エラー                     |
-| `--ran-color-link`             | `--ran-blue-700`                                                                                                                             | リンク                           |
+| トークン                           | 解決先                                                                                                                                       | 役割                                                        |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `--ran-color-bg`                   | `--ran-background-100`                                                                                                                       | ページの背景                                                |
+| `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                       | 控えめな区画                                                |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · gray-100 （ダーク）                                                                                                 | カード、面                                                  |
+| `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                             | 沈んだ／控えめな塗り                                        |
+| `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                             | ホバーの面                                                  |
+| `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                             | アクティブ（押下）の面                                      |
+| `--ran-color-text`                 | `--ran-gray-1000`                                                                                                                            | 主要なテキスト                                              |
+| `--ran-color-text-secondary`       | `--ran-gray-900`                                                                                                                             | 副次のテキスト                                              |
+| `--ran-color-text-disabled`        | `--ran-gray-700`                                                                                                                             | 無効なテキスト                                              |
+| `--ran-color-border`               | `--ran-gray-400`                                                                                                                             | 既定の境界線                                                |
+| `--ran-color-border-secondary`     | `--ran-gray-300`                                                                                                                             | より控えめな境界線                                          |
+| `--ran-color-border-hover`         | `--ran-gray-500`                                                                                                                             | ホバーの境界線                                              |
+| `--ran-color-border-active`        | `--ran-gray-600`                                                                                                                             | アクティブの境界線                                          |
+| `--ran-color-border-control`       | `--ran-gray-700`                                                                                                                             | コントロールの境界：入力、チェックボックス、セレクト（3:1） |
+| `--ran-color-border-control-hover` | `--ran-gray-900`                                                                                                                             | コントロールの境界（ホバー）                                |
+| `--ran-color-text-placeholder`     | `--ran-gray-800`                                                                                                                             | プレースホルダー（4.5:1 以上）                              |
+| `--ran-color-primary`              | `--ran-gray-1000`                                                                                                                            | 主たるアクション（モノクロ）                                |
+| `--ran-color-primary-hover`        | <span class="swatch" style="--swatch:#2a2a2e"></span> `#2a2a2e` · <span class="swatch" style="--swatch:#d4d4d8"></span> `#d4d4d8` （ダーク） | primary のホバー                                            |
+| `--ran-color-primary-active`       | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` · <span class="swatch" style="--swatch:#b4b4bb"></span> `#b4b4bb` （ダーク） | primary の押下                                              |
+| `--ran-color-primary-text`         | `--ran-background-100`                                                                                                                       | primary の面**の上に**乗るインク                            |
+| `--ran-color-success`              | `--ran-green-700`                                                                                                                            | 成功                                                        |
+| `--ran-color-warning`              | `--ran-amber-700`                                                                                                                            | 警告                                                        |
+| `--ran-color-danger`               | `--ran-red-700`                                                                                                                              | 危険／エラー                                                |
+| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                             | リンク                                                      |
+| `--ran-color-focus`                | `--ran-blue-700`                                                                                                                             | フォーカス色：リングとアウトライン                          |
 
 `--ran-color-primary-hover` / `-active` は、セマンティック層にあるふたつのリテラルです。スケールに沿ってではなくページの背景に向かって進むので、ダークモードではこれらを直接定義し直します。
 
@@ -276,20 +280,22 @@ import 'ranui/fonts'; // バンドラー向け
 
 | トークン            | 値       | 用途                                 |
 | ------------------- | -------- | ------------------------------------ |
-| `--ran-radius-sm`   | `6px`    | コントロール：ボタン、入力、セレクト |
+| `--ran-radius-xs`   | `4px`    | 小さな印：タグ、バッジ               |
+| `--ran-radius-sm`   | `8px`    | コントロール：ボタン、入力、セレクト |
 | `--ran-radius-md`   | `12px`   | カード、ダイアログ                   |
 | `--ran-radius-lg`   | `16px`   | 大きな面                             |
+| `--ran-radius-xl`   | `24px`   | ページ全体の枠                       |
 | `--ran-radius-full` | `9999px` | ピル、アバター                       |
 
 ## 影の高さ
 
 影は装飾ではなく**役割**です。段階は、その要素が何であるかで選びます。ダークモードでは 3 つとも差し替えられます。白いページに合わせて調整した影は、黒いページでは消えてしまうからです。
 
-| トークン                | 用途                                                                           | ライト                                                          | ダーク                                                                                      |
-| ----------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `--ran-shadow-elevated` | 流れの中にあって境界線も持つ面：`r-card`、`r-section`                          | `0 1px 2px rgba(0,0,0,.04), 0 2px 4px -2px rgba(0,0,0,.05)`     | `0 1px 2px rgba(0,0,0,.16)`                                                                 |
-| `--ran-shadow-menu`     | 内容の上に一時的に重なる層：ドロップダウン、セレクト、ポップオーバー、トースト | `0 2px 4px rgba(0,0,0,.05), 0 8px 24px -6px rgba(0,0,0,.14)`    | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
-| `--ran-shadow-modal`    | 行く手をふさぐダイアログ：`r-modal`                                            | `0 4px 12px rgba(0,0,0,.08), 0 20px 48px -12px rgba(0,0,0,.22)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
+| トークン                | 用途                                                                           | ライト                                                         | ダーク                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `--ran-shadow-elevated` | 流れの中にあって境界線も持つ面：`r-card`、`r-section`                          | `0 1px 2px rgba(0,0,0,.04)`                                    | `inset 0 1px 0 rgba(255,255,255,.06), 0 1px 2px rgba(0,0,0,.16)`                            |
+| `--ran-shadow-menu`     | 内容の上に一時的に重なる層：ドロップダウン、セレクト、ポップオーバー、トースト | `0 1px 2px rgba(0,0,0,.06), 0 12px 32px -8px rgba(0,0,0,.16)`  | `0 1px 1px rgba(0,0,0,.2), 0 4px 8px -4px rgba(0,0,0,.4), 0 16px 24px -8px rgba(0,0,0,.5)`  |
+| `--ran-shadow-modal`    | 行く手をふさぐダイアログ：`r-modal`                                            | `0 2px 4px rgba(0,0,0,.06), 0 24px 64px -12px rgba(0,0,0,.24)` | `0 1px 1px rgba(0,0,0,.2), 0 8px 16px -4px rgba(0,0,0,.4), 0 24px 32px -8px rgba(0,0,0,.5)` |
 
 境界線のないオーバーレイは、周囲との切り分けを影だけに頼ります。だからオーバーレイの段階には本当に重みがあります。オーバーレイが持ち上げの段階に落ちてしまうと、平らでページに貼り付いて見えます。
 
@@ -309,17 +315,17 @@ import 'ranui/fonts'; // バンドラー向け
 
 | トークン                     | 値      | 用途                         |
 | ---------------------------- | ------- | ---------------------------- |
-| `--ran-motion-duration-fast` | `0.15s` | ホバー／アクティブの状態遷移 |
+| `--ran-motion-duration-fast` | `0.14s` | ホバー／アクティブの状態遷移 |
 | `--ran-motion-duration-base` | `0.2s`  | ポップオーバー、メニュー     |
-| `--ran-motion-duration-slow` | `0.35s` | もっと大きな現れ方           |
+| `--ran-motion-duration-slow` | `0.28s` | もっと大きな現れ方           |
 
-| イージングのトークン         | カーブ                              | 性格                                     |
-| ---------------------------- | ----------------------------------- | ---------------------------------------- |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.645,0.045,0.355,1)` | イン・アウト。汎用                       |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`       | 素早く、行き過ぎなし：トグル             |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.34,1.26,0.5,1)`     | わずかに行き過ぎ：ボタン、カード         |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)`    | 遊びのある行き過ぎ：いいね、カートに追加 |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`         | 穏やかで行き過ぎなし：現れ、レイアウト   |
+| イージングのトークン         | カーブ                           | 性格                                     |
+| ---------------------------- | -------------------------------- | ---------------------------------------- |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | 減速。汎用                               |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | 素早く、行き過ぎなし：トグル             |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | わずかに行き過ぎ：ボタン、カード         |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | 遊びのある行き過ぎ：いいね、カートに追加 |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | 穏やかで行き過ぎなし：現れ、レイアウト   |
 
 spring 系は、調整済みの SwiftUI のばねから蒸留したものです（response / damping を、一度だけ行き過ぎるベジェに落とし込んでいます）。
 
@@ -367,7 +373,7 @@ spring 系は、調整済みの SwiftUI のばねから蒸留したものです�
 --ran-{component}-{element}[-{state}]-{property}
 ```
 
-たとえば `--ran-btn-hover-background`、`--ran-select-search-active-border-width` です。既定ではセマンティックトークンへ落ちます：`var(--ran-btn-background, var(--ran-color-primary, #171717))`。だからセマンティックトークンをひとつ上書きすればそのすべてに届き、コンポーネントのトークンを上書きすれば変化はひとつの要素に絞られます。
+たとえば `--ran-btn-hover-background`、`--ran-select-search-active-border-width` です。既定ではセマンティックトークンへ落ちます：`var(--ran-btn-background, var(--ran-color-primary, #111113))`。だからセマンティックトークンをひとつ上書きすればそのすべてに届き、コンポーネントのトークンを上書きすれば変化はひとつの要素に絞られます。
 
 生成された完全な一覧は、リポジトリの [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) にあります。要素ごとの API は[こちら](/ja/src/ranui/api)です。適用のしかたは[テーマ](/ja/src/ranui/theme/#customizing-tokens)を参照してください。
 
@@ -387,7 +393,7 @@ spring 系は、調整済みの SwiftUI のばねから蒸留したものです�
 3 つのルールが、それをダークでも安全に保ちます。
 
 1. テーマに追随すべきものに**生の 16 進数を書かないこと**。
-2. **フォールバックは切り替わるトークンを指すこと**：`var(--ran-color-text, var(--ran-gray-1000))` であって、`var(--ran-color-text, #171717)` ではありません。
+2. **フォールバックは切り替わるトークンを指すこと**：`var(--ran-color-text, var(--ran-gray-1000))` であって、`var(--ran-color-text, #111113)` ではありません。
 3. **フォールバックは存在するトークンを指すこと**。さもないと宣言は捨てられ、要素は継承したものを黙って保ち続けます。
 
 > ライブラリが宣言するグローバルなトークンはすべてこのページに載っており、ここに書かないままトークンを増やすとユニットテストが落ちます。コンポーネント単位のトークンは別途生成され、[style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) にあります。

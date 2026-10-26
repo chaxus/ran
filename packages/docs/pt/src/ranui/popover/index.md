@@ -236,7 +236,7 @@ Até o script do componente rodar, o navegador dispõe `<r-content>` como marca�
 
 ## Boas práticas
 
-- **Elemento gatilho**: coloque um controle focável (por exemplo `<r-button>`) como gatilho, para que abrir e fechar pelo teclado funcione.
+- **Elemento gatilho**: coloque um controle focável (por exemplo `<r-button>`) como gatilho, para que abrir e fechar pelo teclado funcione. Se o gatilho não puder receber foco, o próprio popover passa a ser a única parada de tabulação e desenha `--ran-focus-ring`.
 - **Invólucro do conteúdo**: envolva sempre o conteúdo do painel em `<r-content>`: filhos soltos, fora do `<r-content>`, não aparecem como painel flutuante.
 - **Tamanho em linha**: o host é `display: block`; acrescente `style="display: inline-block;"` (ou coloque-o em um contexto de linha) para que ele encolha até o tamanho do gatilho.
 - **Posição**: `placement` é uma preferência, não uma garantia: quando o gatilho está perto da borda da janela e falta espaço do lado preferido, o painel inverte sozinho para o lado oposto e desliza pelo eixo transversal para continuar na tela. Essa inversão automática só vale para o posicionamento padrão no nível do `body`.

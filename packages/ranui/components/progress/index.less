@@ -12,7 +12,7 @@
     -webkit-tap-highlight-color: transparent;
   }
   &(:focus-visible) {
-    outline: var(--ran-progress-focus-outline, 2px solid var(--ran-color-primary, #006bff));
+    outline: var(--ran-progress-focus-outline, 2px solid var(--ran-color-focus, #0a6cff));
     outline-offset: var(--ran-progress-focus-outline-offset, 2px);
     border-radius: var(--ran-radius-full, 9999px);
   }
@@ -39,7 +39,7 @@
     width: var(--ran-progress-track-width, 100%);
     height: var(--ran-progress-track-height, 8px);
     border-radius: var(--ran-progress-track-border-radius, var(--ran-radius-full, 9999px));
-    background: var(--ran-progress-track-background, var(--ran-gray-200, #ebebeb));
+    background: var(--ran-progress-track-background, var(--ran-gray-200, #ebebee));
     // Was a plain in-flow `position: relative`, which put the track flush at
     // the *top* of `.ran-progress` — fine only when the host's own height
     // exactly equals the track height. The moment a consumer gives the host
@@ -67,7 +67,7 @@
       will-change: var(--ran-progress-fill-will-change, transform);
       /* Monochrome primary, matching the rest of the design system (was a
          leftover Ant-Design-era teal→green gradient unrelated to any token). */
-      background: var(--ran-progress-fill-background, var(--ran-color-primary, #171717));
+      background: var(--ran-progress-fill-background, var(--ran-color-primary, #111113));
       border-radius: var(--ran-progress-fill-border-radius, var(--ran-radius-full, 9999px));
     }
   }
@@ -93,8 +93,8 @@
     box-sizing: border-box;
     width: var(--ran-progress-dot-width, 14px);
     height: var(--ran-progress-dot-height, 14px);
-    background: var(--ran-progress-dot-background, var(--ran-color-primary, #171717));
-    border: var(--ran-progress-dot-border, 2px solid var(--ran-color-bg-elevated, #fff));
+    background: var(--ran-progress-dot-background, var(--ran-color-primary, #111113));
+    border: var(--ran-progress-dot-border, 2px solid var(--ran-color-bg-elevated, #ffffff));
     box-shadow: var(--ran-progress-dot-box-shadow, var(--ran-shadow-elevated, 0 1px 2px rgba(0, 0, 0, 0.15)));
     cursor: var(--ran-progress-dot-cursor, pointer);
     touch-action: none;

@@ -1,6 +1,12 @@
 :host {
   display: var(--ran-popover-host-display, block);
 }
+/* Only reachable when the trigger cannot take focus itself (see syncTabStop). */
+:host(:focus-visible) {
+  outline: none;
+  border-radius: var(--ran-radius-sm, 8px);
+  box-shadow: var(--ran-focus-ring);
+}
 .ran-popover {
   box-sizing: var(--ran-popover-box-sizing, border-box);
   position: var(--ran-popover-position, relative);

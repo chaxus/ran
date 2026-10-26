@@ -22,11 +22,12 @@ interface AbilityTags {
 
 const BACKGROUND_COLOR = 'rgba(0,0,0,0)';
 const FONT_COLOR = 'rgba(0,0,0,1)';
-const POLYGON_COLOR = '#e6e6e6';
-const LINE_COLOR = '#e6e6e6';
+const POLYGON_COLOR = 'rgba(0,0,0,0.12)';
+const LINE_COLOR = 'rgba(0,0,0,0.12)';
 const FONT_FAMILY = 'sans-serif';
-const FILL_COLOR = 'rgba(255,121,35,0.60)';
-const STROKE_COLOR = 'rgba(255,121,35,0.60)';
+// Only used when no stylesheet resolves the tokens (no layout); index.less owns the real colours.
+const FILL_COLOR = 'rgba(0,0,0,0.16)';
+const STROKE_COLOR = 'rgba(0,0,0,1)';
 
 export class RadarChart extends RanElement {
   mData?: Array<AbilityTags>;

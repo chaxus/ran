@@ -88,6 +88,7 @@ export class Reasoning extends RanElement {
 
     const text = createRef<HTMLElement>();
     const row = View('r-disclosure-row')
+      .class('ran-reasoning-row')
       .attr('part', 'row')
       .attr('expandable', '')
       .children(

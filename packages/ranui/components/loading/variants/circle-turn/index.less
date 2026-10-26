@@ -1,22 +1,19 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .circle-turn {
-    width: var(--loading-circle-turn-width, 30px);
-    height: var(--loading-circle-turn-height, 30px);
-    border: var(--loading-circle-turn-border, 8px solid #fff);
+    --_ran-loading-units: 46;
+    width: var(--loading-circle-turn-width, 30em);
+    height: var(--loading-circle-turn-height, 30em);
+    border: var(--loading-circle-turn-border, 8em solid color-mix(in srgb, currentColor 15%, transparent));
     border-right-color: var(--loading-circle-turn-border-right-color, transparent);
     border-top-color: var(--loading-circle-turn-border-top-color, transparent);
     border-radius: var(--loading-circle-turn-border-radius, 50%);
-    box-shadow: var(--loading-circle-turn-box-shadow, 0 0 25px 2px);
-    border-color: var(--loading-circle-turn-border-color, #f00);
-    color: var(--loading-circle-turn-color, #cc0000);
+    box-shadow: var(--loading-circle-turn-box-shadow, 0 0 25em 2em color-mix(in srgb, currentColor 25%, transparent));
+    border-color: var(--loading-circle-turn-border-color, currentColor);
+    color: var(--loading-circle-turn-color, currentColor);
     animation: var(--loading-circle-turn-animation, circle-turn 1s linear infinite normal);
     animation-play-state: var(--loading-circle-turn-animation-play-state, running);
     animation-delay: var(--loading-circle-turn-animation-delay, 0);
-    margin: var(--loading-circle-turn-margin, 30px auto 0);
+    margin: var(--loading-circle-turn-margin, 0 auto);
     @keyframes circle-turn {
       from {
         transform: var(--loading-circle-turn-keyframes-from-transform, rotate(0deg));
@@ -33,10 +30,10 @@
     }
     &::after {
       display: var(--loading-circle-turn-after-display, block);
-      width: var(--loading-circle-turn-after-width, 13px);
-      height: var(--loading-circle-turn-after-height, 13px);
-      margin: var(--loading-circle-turn-after-margin, 3px);
-      border: var(--loading-circle-turn-after-border, 6px solid #f00);
+      width: var(--loading-circle-turn-after-width, 13em);
+      height: var(--loading-circle-turn-after-height, 13em);
+      margin: var(--loading-circle-turn-after-margin, 3em);
+      border: var(--loading-circle-turn-after-border, 6em solid currentColor);
       content: var(--loading-circle-turn-after-content, ' ');
       border-radius: var(--loading-circle-turn-after-border-radius, 50%);
       border-left-color: var(--loading-circle-turn-after-border-left-color, transparent);
