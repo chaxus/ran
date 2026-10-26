@@ -22,7 +22,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 - 缩略图预览：把 `thumbnails` 设为 WebVTT 雪碧图 manifest 地址后，进度条悬停提示上方会出现裁剪后的预览图
 - `poster` / `autoplay` / `loop` / `muted`：标准 `<video>` 属性，直接透传
 - 字幕/CC：设置 `tracks` 属性，浏览器原生渲染字幕 cue，语言选择器会记住用户的选择
-- 错误 + 重试：播放致命错误时默认弹出 `Modal.error()` 对话框，可通过 `disable-error-modal` 关闭
+- 错误 + 重试：播放致命错误时默认在播放器上直接显示错误面板，可通过 `disable-error-modal` 关闭
 - 断点续播：通过 `remember-position` 选择开启，存到 `localStorage`，按 `src` 区分
 - QoE 埋点：`getMetrics()` 从现有事件流里算出卡顿次数/时长、首帧耗时、清晰度切换次数、错误次数
 - HLS（`.m3u8`）和 DASH（`.mpd`）播放，支持自动码率切换和手动清晰度选择；FLV/原始 MPEG-TS（`.flv`/`.ts`）通过 `mpegts.js` 播放。每个引擎都按需懒加载，无需手动配置。当 URL 的扩展名探测不出来时，可以用 `format` 属性强制指定引擎（或者退回原生 `<video src>`）。
@@ -45,23 +45,25 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 ### 属性
 
-| 属性                  | 类型                  | 默认值  | 说明                                                                                                                                                                                                       |
-| --------------------- | --------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src`                 | `string`              | `''`    | 视频资源地址。改变它会重新加载播放器。引擎（HLS/native）按扩展名自动探测。                                                                                                                                 |
-| `format`              | `string`              | `''`    | 强制指定引擎（`hls`/`dash`/`flv`/`webrtc`/`native`），代替按 `src` 扩展名自动探测。适用于拿不到扩展名的加签/无后缀流地址；`webrtc` **必须**显式指定（WHEP 端点没有扩展名可探测）。改变它会重新加载播放器。 |
-| `volume`              | `string`              | `''`    | 初始音量，`0`–`100` 制，和 `setVolume()`/`getVolume()` 是同一套刻度。                                                                                                                                      |
-| `currentTime`         | `string`              | `''`    | 初始播放位置（秒）。也接受小写形式 `currenttime`。                                                                                                                                                         |
-| `playbackRate`        | `string`              | `''`    | 播放倍速（如 `1`、`1.5`、`2`）。也接受小写形式 `playbackrate`。                                                                                                                                            |
-| `debug`               | `string`              | `''`    | 为真值时，把每个内部 `change` 事件和警告都打印到控制台。                                                                                                                                                   |
-| `sheet`               | `string`              | `''`    | 注入组件 shadow DOM 的自定义样式文本。                                                                                                                                                                     |
-| `poster`              | `string`              | `''`    | 播放开始前显示的封面图 URL。直接透传给 `<video poster>`。                                                                                                                                                  |
-| `autoplay`            | `boolean`             | `false` | 布尔属性：出现即为 `true`，等价于原生 `<video autoplay>`。多数浏览器要求同时设置 `muted` 才能在无用户交互时自动播放。                                                                                      |
-| `loop`                | `boolean`             | `false` | 布尔属性：播放结束后循环，等价于原生 `<video loop>`。                                                                                                                                                      |
-| `muted`               | `boolean`             | `false` | 布尔属性：初始静音。内部会同时把音量设为 `0`（保证静音图标/滑块状态一致）**以及**设置原生 `<video>.muted` 标志（满足浏览器的静音自动播放策略）。移除该属性会恢复之前的音量。                               |
-| `thumbnails`          | `string`              | `''`    | WebVTT 雪碧图 manifest 的地址，在进度条悬停提示上方显示裁剪后的缩略图。详见下方[缩略图预览](#缩略图预览-thumbnails)。和 `src` 无关：只有这个属性本身变化时才会重新抓取。                                   |
-| `disable-error-modal` | `boolean`             | `false` | 关闭内置的错误 + 重试对话框，错误依然会通过 `error`/`sourceerror` 这两个 `change` 事件通知你，可以在此基础上搭建自己的 UI。                                                                                |
-| `remember-position`   | `boolean`             | `false` | 开启断点续播：`pause` 时和标签页切到后台时把当前播放位置存到 `localStorage`（按 `src` 区分），下次加载同一个 `src` 时恢复，播放结束后清除。                                                                |
-| `tracks`              | `PlayerTrackConfig[]` | `[]`    | 字幕/CC 轨道，**只有 JS 属性，没有对应的 HTML attribute**（播放器每次加载都会清空自己的 light DOM，声明式写在里面的 `<track>` 子标签会在生效前就被清除）。详见下方[字幕/CC](#字幕-cc-tracks)。             |
+| 属性                  | 类型                  | 默认值              | 说明                                                                                                                                                                                                       |
+| --------------------- | --------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src`                 | `string`              | `''`                | 视频资源地址。改变它会重新加载播放器。引擎（HLS/native）按扩展名自动探测。                                                                                                                                 |
+| `format`              | `string`              | `''`                | 强制指定引擎（`hls`/`dash`/`flv`/`webrtc`/`native`），代替按 `src` 扩展名自动探测。适用于拿不到扩展名的加签/无后缀流地址；`webrtc` **必须**显式指定（WHEP 端点没有扩展名可探测）。改变它会重新加载播放器。 |
+| `volume`              | `string`              | `''`                | 初始音量，`0`–`100` 制，和 `setVolume()`/`getVolume()` 是同一套刻度。                                                                                                                                      |
+| `currentTime`         | `string`              | `''`                | 初始播放位置（秒）。也接受小写形式 `currenttime`。                                                                                                                                                         |
+| `playbackRate`        | `string`              | `''`                | 播放倍速（如 `1`、`1.5`、`2`）。也接受小写形式 `playbackrate`。                                                                                                                                            |
+| `debug`               | `string`              | `''`                | 为真值时，把每个内部 `change` 事件和警告都打印到控制台。                                                                                                                                                   |
+| `sheet`               | `string`              | `''`                | 注入组件 shadow DOM 的自定义样式文本。                                                                                                                                                                     |
+| `poster`              | `string`              | `''`                | 播放开始前显示的封面图 URL。直接透传给 `<video poster>`。                                                                                                                                                  |
+| `autoplay`            | `boolean`             | `false`             | 布尔属性：出现即为 `true`，等价于原生 `<video autoplay>`。多数浏览器要求同时设置 `muted` 才能在无用户交互时自动播放。                                                                                      |
+| `loop`                | `boolean`             | `false`             | 布尔属性：播放结束后循环，等价于原生 `<video loop>`。                                                                                                                                                      |
+| `muted`               | `boolean`             | `false`             | 布尔属性：初始静音。内部会同时把音量设为 `0`（保证静音图标/滑块状态一致）**以及**设置原生 `<video>.muted` 标志（满足浏览器的静音自动播放策略）。移除该属性会恢复之前的音量。                               |
+| `thumbnails`          | `string`              | `''`                | WebVTT 雪碧图 manifest 的地址，在进度条悬停提示上方显示裁剪后的缩略图。详见下方[缩略图预览](#缩略图预览-thumbnails)。和 `src` 无关：只有这个属性本身变化时才会重新抓取。                                   |
+| `disable-error-modal` | `boolean`             | `false`             | 关闭内置的错误 + 重试面板，错误依然会通过 `error`/`sourceerror` 这两个 `change` 事件通知你，可以在此基础上搭建自己的 UI。                                                                                  |
+| `label-error`         | `string`              | `'Playback failed'` | 内置错误面板的标题。                                                                                                                                                                                       |
+| `label-retry`         | `string`              | `'Retry'`           | 错误面板里重试按钮的文字。                                                                                                                                                                                 |
+| `remember-position`   | `boolean`             | `false`             | 开启断点续播：`pause` 时和标签页切到后台时把当前播放位置存到 `localStorage`（按 `src` 区分），下次加载同一个 `src` 时恢复，播放结束后清除。                                                                |
+| `tracks`              | `PlayerTrackConfig[]` | `[]`                | 字幕/CC 轨道，**只有 JS 属性，没有对应的 HTML attribute**（播放器每次加载都会清空自己的 light DOM，声明式写在里面的 `<track>` 子标签会在生效前就被清除）。详见下方[字幕/CC](#字幕-cc-tracks)。             |
 
 > 观察的属性列表（来自 `observedAttributes`）：`src`、`format`、`volume`、`currentTime`/`currenttime`、`playbackRate`/`playbackrate`、`debug`、`sheet`、`poster`、`thumbnails`、`autoplay`、`loop`、`muted`、`disable-error-modal`、`remember-position`。
 
@@ -172,7 +174,7 @@ stage.append(player);
 
 ### 错误 + 重试
 
-默认开启。流媒体引擎的致命错误或者原生 `<video>` 的 `error` 事件会弹出一个 `Modal.error()` 对话框（懒加载：不出错的话 `r-modal` 根本不会下载），带一个**重试**按钮重新加载播放器。设置 `disable-error-modal` 可以关掉这个默认行为，改成自己接 `error`/`sourceerror` change 事件处理。非致命的引擎错误（hls.js 会自己内部恢复）不会触发这个对话框。
+默认开启。流媒体引擎的致命错误或者原生 `<video>` 的 `error` 事件会在播放器自身的深色画面上显示一个错误面板，不会弹出挡住整个页面的对话框。面板上有一个**重试**按钮，点击后重新加载播放器。屏幕阅读器只会播报一次。想改标题和按钮文字，设置 `label-error` 和 `label-retry` 即可。设置 `disable-error-modal` 可以关掉这个默认行为，改成自己接 `error`/`sourceerror` change 事件处理。非致命的引擎错误（hls.js 会自己内部恢复）不会显示这个面板。
 
 ### 断点续播 `remember-position`
 
@@ -256,30 +258,30 @@ stage.append(player);
 
 从底层 `<video>` 转发的原生媒体状态：
 
-| 类型             | 说明                                                                                  |
-| ---------------- | ------------------------------------------------------------------------------------- |
-| `canplay`        | 有足够数据可以开始播放。                                                              |
-| `canplaythrough` | 可以不缓冲地播放到结束。                                                              |
-| `complete`       | 渲染完成。                                                                            |
-| `durationchange` | `duration` 值发生变化。                                                               |
-| `emptied`        | 媒体内容被清空/重新加载。                                                             |
-| `ended`          | 播放到达结尾。                                                                        |
-| `error`          | 发生媒体错误（除非设了 `disable-error-modal`，否则也会弹出内置的错误 + 重试对话框）。 |
-| `loadstart`      | 浏览器开始加载媒体。                                                                  |
-| `loadedmetadata` | 元数据已加载。                                                                        |
-| `loadeddata`     | 首帧已加载。                                                                          |
-| `progress`       | 资源加载期间周期性触发。                                                              |
-| `ratechange`     | 播放速率发生变化。                                                                    |
-| `seeking`        | 跳帧（seek）开始。                                                                    |
-| `seeked`         | 跳帧（seek）完成。                                                                    |
-| `stalled`        | 浏览器正尝试获取数据但数据没有到达。                                                  |
-| `suspend`        | 媒体加载被挂起。                                                                      |
-| `timeupdate`     | `currentTime` 发生变化。                                                              |
-| `volumechange`   | video 元素的音量发生变化。                                                            |
-| `waiting`        | 播放因等待数据而停止。                                                                |
-| `play`           | 播放已开始。                                                                          |
-| `playing`        | 缓冲/暂停之后播放恢复。                                                               |
-| `pause`          | 播放已暂停。                                                                          |
+| 类型             | 说明                                                                                |
+| ---------------- | ----------------------------------------------------------------------------------- |
+| `canplay`        | 有足够数据可以开始播放。                                                            |
+| `canplaythrough` | 可以不缓冲地播放到结束。                                                            |
+| `complete`       | 渲染完成。                                                                          |
+| `durationchange` | `duration` 值发生变化。                                                             |
+| `emptied`        | 媒体内容被清空/重新加载。                                                           |
+| `ended`          | 播放到达结尾。                                                                      |
+| `error`          | 发生媒体错误（除非设了 `disable-error-modal`，否则也会显示内置的错误 + 重试面板）。 |
+| `loadstart`      | 浏览器开始加载媒体。                                                                |
+| `loadedmetadata` | 元数据已加载。                                                                      |
+| `loadeddata`     | 首帧已加载。                                                                        |
+| `progress`       | 资源加载期间周期性触发。                                                            |
+| `ratechange`     | 播放速率发生变化。                                                                  |
+| `seeking`        | 跳帧（seek）开始。                                                                  |
+| `seeked`         | 跳帧（seek）完成。                                                                  |
+| `stalled`        | 浏览器正尝试获取数据但数据没有到达。                                                |
+| `suspend`        | 媒体加载被挂起。                                                                    |
+| `timeupdate`     | `currentTime` 发生变化。                                                            |
+| `volumechange`   | video 元素的音量发生变化。                                                          |
+| `waiting`        | 播放因等待数据而停止。                                                              |
+| `play`           | 播放已开始。                                                                        |
+| `playing`        | 缓冲/暂停之后播放恢复。                                                             |
+| `pause`          | 播放已暂停。                                                                        |
 
 播放器自身的动作：
 
@@ -292,7 +294,7 @@ stage.append(player);
 | `subtitlechange`   | `string`                 | 通过 CC 选择器或 `setSubtitleLanguage()` 切换了字幕语言，值是一个 `srclang`，或 `'off'`。                                                              |
 | `resume`           | `number`                 | 加载时静默恢复了保存的位置（`remember-position`）；`data` 是恢复到的秒数。                                                                             |
 | `levelsready`      | `{ levels }`             | 流媒体引擎解析完 manifest，清晰度档位已可用。                                                                                                          |
-| `sourceerror`      | `{ fatal, detail }`      | 发生流媒体引擎错误（回退到原始 `src`；**致命**错误在没设 `disable-error-modal` 时还会弹出错误 + 重试对话框；非致命错误是引擎自己的内部恢复，不会弹）。 |
+| `sourceerror`      | `{ fatal, detail }`      | 发生流媒体引擎错误（回退到原始 `src`；**致命**错误在没设 `disable-error-modal` 时还会显示错误 + 重试面板；非致命错误是引擎自己的内部恢复，不会显示）。 |
 | `qualityswitch`    | `{ level }`              | 用户在清晰度选择器里选择了一个档位。                                                                                                                   |
 | `gestureseek`      | `{ direction, seconds }` | 双击快进/快退手势触发（`direction` 是 `'forward'`/`'backward'`）。                                                                                     |
 

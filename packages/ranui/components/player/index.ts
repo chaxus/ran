@@ -17,10 +17,10 @@ import {
 import { createPlayerVisualSignals, type PlayerVisualSignals } from './core/store';
 import { createPlaybackVisualEffects, type PlayerVisualEffectRefs } from './core/effects';
 import {
-  createErrorModalController,
-  type PlayerErrorModalController,
-  type PlayerErrorModalDeps,
-} from './core/error-modal';
+  createErrorPanelController,
+  type PlayerErrorPanelController,
+  type PlayerErrorPanelDeps,
+} from './core/error-panel';
 import { createSeekHandlers, type PlayerSeekDeps, type PlayerSeekHandlers } from './core/seek';
 import { createChromeHandlers, type PlayerChromeDeps, type PlayerChromeHandlers } from './core/chrome';
 import { createMediaEventHandlers, type PlayerMediaDispatchDeps } from './core/media-dispatch';
@@ -141,7 +141,8 @@ export class RanPlayer extends RanElement {
   _thumbnailCues: ThumbnailCue[] = [];
   _thumbnailLoadGuard: RaceGuard = createRaceGuard();
   /** Domain modules — each built once in the constructor from a narrow `getXxxDeps()` slice. */
-  _errorModal!: PlayerErrorModalController;
+  _errorPanel!: PlayerErrorPanelController;
+  _errorRefs!: PlayerErrorPanelDeps['refs'];
   _mediaHandlers!: PlayerMediaHandlers;
   _seek!: PlayerSeekHandlers;
   _chrome!: PlayerChromeHandlers;
@@ -189,6 +190,13 @@ export class RanPlayer extends RanElement {
 
     this._player = viewRefs.player;
     this._container = viewRefs.container;
+    this._errorRefs = {
+      panel: viewRefs.errorPanel,
+      title: viewRefs.errorTitle,
+      message: viewRefs.errorMessage,
+      retry: viewRefs.errorRetry,
+      live: viewRefs.errorLive,
+    };
     this._playerBtn = viewRefs.playerBtn;
     this._progress = viewRefs.progress;
     this._progressWrap = viewRefs.progressWrap;
@@ -223,7 +231,7 @@ export class RanPlayer extends RanElement {
     this.ctx = createDefaultPlayerContext<SyncHook, EngineQualityLevel>(new SyncHook());
     this._runtimeState = createDefaultRuntimeState<PlaybackSnapshot>();
     this._visualSignals = createPlayerVisualSignals();
-    this._errorModal = createErrorModalController(this.getErrorModalDeps());
+    this._errorPanel = createErrorPanelController(this.getErrorPanelDeps());
     this._mediaHandlers = createMediaEventHandlers(this.getMediaDispatchDeps());
     this._seek = createSeekHandlers(this.getSeekDeps());
     this._chrome = createChromeHandlers(this.getChromeDeps());
@@ -253,9 +261,11 @@ export class RanPlayer extends RanElement {
     for (const dispose of this._effectDisposers) dispose();
     this._effectDisposers = [];
   };
-  getErrorModalDeps = (): PlayerErrorModalDeps => ({
+  getErrorPanelDeps = (): PlayerErrorPanelDeps => ({
     isDisabled: () => this.disableErrorModal,
     onRetry: () => this.updatePlayer(),
+    labels: () => ({ title: this.labelError, retry: this.labelRetry }),
+    refs: this._errorRefs,
   });
   getMediaDispatchDeps = (): PlayerMediaDispatchDeps => ({
     refs: {
@@ -461,7 +471,21 @@ export class RanPlayer extends RanElement {
   set muted(value: boolean) {
     setBooleanAttribute(this, 'muted', value);
   }
-  /** Suppress the built-in "Playback failed" dialog with its Retry button, for apps that show their own error UI. Off by default, so the dialog shows. */
+  /** Heading of the built-in playback-error panel. Defaults to `'Playback failed'`. */
+  get labelError(): string {
+    return getStringAttribute(this, 'label-error', 'Playback failed');
+  }
+  set labelError(value: string) {
+    setStringAttribute(this, 'label-error', value);
+  }
+  /** Label of the panel's retry button. Defaults to `'Retry'`. */
+  get labelRetry(): string {
+    return getStringAttribute(this, 'label-retry', 'Retry');
+  }
+  set labelRetry(value: string) {
+    setStringAttribute(this, 'label-retry', value);
+  }
+  /** Suppress the built-in playback-error panel with its Retry button, for apps that show their own error UI. Off by default, so the panel shows. */
   get disableErrorModal(): boolean {
     return this.hasAttribute('disable-error-modal');
   }
@@ -531,8 +555,8 @@ export class RanPlayer extends RanElement {
   set controllerBarTimeId(v: ReturnType<typeof setTimeout> | undefined) {
     this._runtimeState.controllerBarTimeId = v;
   }
-  get _isShowingErrorModal(): boolean {
-    return this._errorModal.isShowing();
+  get _isShowingError(): boolean {
+    return this._errorPanel.isShowing();
   }
   resetTransientState = (): void => {
     resetTransientRuntimeState(this._runtimeState);
@@ -586,6 +610,8 @@ export class RanPlayer extends RanElement {
     this._thumbnailCues = cues;
   };
   updatePlayer = (): void => {
+    // A new source starts clean; an error from the previous one no longer applies.
+    this._errorPanel.hide();
     // 重置清晰度状态，避免旧数据干扰新视频的 manifest 加载
     resetSourceContextState(this.ctx);
     this._metrics.onLoadStart();
@@ -651,7 +677,7 @@ export class RanPlayer extends RanElement {
     const value = numberAttribute(this, 'currentTime');
     if (value !== null && value >= 0) this.setCurrentTime(value);
   };
-  showErrorModal = (message: string): void => this._errorModal.show(message);
+  showErrorModal = (message: string): void => this._errorPanel.show(message);
   change = (name: string, value: unknown): void => {
     const currentTime = this.getCurrentTime();
     const duration = this.getTotalTime();

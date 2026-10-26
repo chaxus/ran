@@ -22,7 +22,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 - Thumbnail scrubbing preview: set `thumbnails` to a WebVTT sprite-sheet manifest URL, and a cropped preview appears above the seek-bar hover tip
 - `poster` / `autoplay` / `loop` / `muted`: standard `<video>` attributes, passed straight through
 - Subtitles/CC: set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
-- Error + retry: a `Modal.error()` dialog on fatal playback failures, on by default, opt out via `disable-error-modal`
+- Error + retry: an inline panel on the player itself for fatal playback failures, on by default, opt out via `disable-error-modal`
 - Resume playback: opt in via `remember-position`, saved to `localStorage`, keyed per `src`
 - QoE metrics: `getMetrics()` derives rebuffer count/duration, first-frame time, quality-switch count and error count from the existing event stream
 - HLS (`.m3u8`) and DASH (`.mpd`) playback with automatic bitrate switching and a manual clarity selector; FLV/raw MPEG-TS (`.flv`/`.ts`) playback via `mpegts.js`. Every engine lazy-loads on demand, no setup required. Force a specific engine (or opt back into plain `<video src>`) via the `format` attribute when a URL's extension can't be sniffed.
@@ -45,23 +45,25 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 
 ### Properties
 
-| Property              | Type                  | Default | Description                                                                                                                                                                                                                                                                      |
-| --------------------- | --------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src`                 | `string`              | `''`    | Video resource URL. Changing it reloads the player. Engine (HLS/native) is auto-detected from the extension.                                                                                                                                                                     |
-| `format`              | `string`              | `''`    | Force a specific engine (`hls` / `dash` / `flv` / `webrtc` / `native`) instead of auto-detecting from `src`'s extension. Useful for extensionless/signed streaming URLs; **required** for `webrtc` (a WHEP endpoint has no extension to detect). Changing it reloads the player. |
-| `volume`              | `string`              | `''`    | Initial volume on a `0`–`100` scale, the same scale as `setVolume()`/`getVolume()`.                                                                                                                                                                                              |
-| `currentTime`         | `string`              | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                                                                                                                                                                                                  |
-| `playbackRate`        | `string`              | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.                                                                                                                                                                                     |
-| `debug`               | `string`              | `''`    | When truthy, logs every internal `change` event and warnings to the console.                                                                                                                                                                                                     |
-| `sheet`               | `string`              | `''`    | CSS text injected into the component's shadow DOM for custom styling.                                                                                                                                                                                                            |
-| `poster`              | `string`              | `''`    | Image URL shown before playback starts. Passed straight to `<video poster>`.                                                                                                                                                                                                     |
-| `autoplay`            | `boolean`             | `false` | Boolean attribute: presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture.                                                                                                           |
-| `loop`                | `boolean`             | `false` | Boolean attribute: loops playback on end, same as native `<video loop>`.                                                                                                                                                                                                         |
-| `muted`               | `boolean`             | `false` | Boolean attribute: starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume.                         |
-| `thumbnails`          | `string`              | `''`    | URL of a WebVTT sprite-sheet manifest; shows a cropped thumbnail above the seek-bar hover tip. See [Thumbnail Scrubbing Preview](#thumbnail-scrubbing-preview-thumbnails) below. Independent of `src`: only refetched when this attribute itself changes.                        |
-| `disable-error-modal` | `boolean`             | `false` | Opt out of the built-in error + retry dialog. Errors still reach you via the `error`/`sourceerror` `change` events, so build your own UI on top.                                                                                                                                 |
-| `remember-position`   | `boolean`             | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends.                                                                    |
-| `tracks`              | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks. **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children would be removed before they took effect). See [Subtitles/CC](#subtitles-cc-tracks) below.                                 |
+| Property              | Type                  | Default             | Description                                                                                                                                                                                                                                                                      |
+| --------------------- | --------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src`                 | `string`              | `''`                | Video resource URL. Changing it reloads the player. Engine (HLS/native) is auto-detected from the extension.                                                                                                                                                                     |
+| `format`              | `string`              | `''`                | Force a specific engine (`hls` / `dash` / `flv` / `webrtc` / `native`) instead of auto-detecting from `src`'s extension. Useful for extensionless/signed streaming URLs; **required** for `webrtc` (a WHEP endpoint has no extension to detect). Changing it reloads the player. |
+| `volume`              | `string`              | `''`                | Initial volume on a `0`–`100` scale, the same scale as `setVolume()`/`getVolume()`.                                                                                                                                                                                              |
+| `currentTime`         | `string`              | `''`                | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                                                                                                                                                                                                  |
+| `playbackRate`        | `string`              | `''`                | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.                                                                                                                                                                                     |
+| `debug`               | `string`              | `''`                | When truthy, logs every internal `change` event and warnings to the console.                                                                                                                                                                                                     |
+| `sheet`               | `string`              | `''`                | CSS text injected into the component's shadow DOM for custom styling.                                                                                                                                                                                                            |
+| `poster`              | `string`              | `''`                | Image URL shown before playback starts. Passed straight to `<video poster>`.                                                                                                                                                                                                     |
+| `autoplay`            | `boolean`             | `false`             | Boolean attribute: presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture.                                                                                                           |
+| `loop`                | `boolean`             | `false`             | Boolean attribute: loops playback on end, same as native `<video loop>`.                                                                                                                                                                                                         |
+| `muted`               | `boolean`             | `false`             | Boolean attribute: starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume.                         |
+| `thumbnails`          | `string`              | `''`                | URL of a WebVTT sprite-sheet manifest; shows a cropped thumbnail above the seek-bar hover tip. See [Thumbnail Scrubbing Preview](#thumbnail-scrubbing-preview-thumbnails) below. Independent of `src`: only refetched when this attribute itself changes.                        |
+| `disable-error-modal` | `boolean`             | `false`             | Opt out of the built-in error + retry panel. Errors still reach you via the `error`/`sourceerror` `change` events, so build your own UI on top.                                                                                                                                  |
+| `label-error`         | `string`              | `'Playback failed'` | Heading of the built-in error panel.                                                                                                                                                                                                                                             |
+| `label-retry`         | `string`              | `'Retry'`           | Label of the error panel's retry button.                                                                                                                                                                                                                                         |
+| `remember-position`   | `boolean`             | `false`             | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends.                                                                    |
+| `tracks`              | `PlayerTrackConfig[]` | `[]`                | Subtitle/CC tracks. **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children would be removed before they took effect). See [Subtitles/CC](#subtitles-cc-tracks) below.                                 |
 
 > Observed attributes (from `observedAttributes`): `src`, `format`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `thumbnails`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
 
@@ -186,7 +188,7 @@ Each entry becomes a native `<track>` on the underlying `<video>`; cue rendering
 
 ### Error + Retry
 
-On by default. A fatal streaming-engine error or a native `<video>` `error` event opens a `Modal.error()` dialog (lazy-loaded: `r-modal` isn't fetched at all until something actually fails) with a **Retry** button that reloads the player. Set `disable-error-modal` to turn this off and handle errors yourself via the `error`/`sourceerror` `change` events instead. Non-fatal engine errors (hls.js recovers these internally) never trigger the dialog.
+On by default. A fatal streaming-engine error or a native `<video>` `error` event shows an inline panel on the player's own dark surface, rather than a dialog that blocks the page, with a **Retry** button that reloads the player. The panel is announced once to screen readers. Set `label-error` and `label-retry` to change its heading and button text. Set `disable-error-modal` to turn this off and handle errors yourself via the `error`/`sourceerror` `change` events instead. Non-fatal engine errors (hls.js recovers these internally) never show the panel.
 
 ### Resume Playback `remember-position`
 
@@ -270,45 +272,45 @@ The player dispatches a single `change` CustomEvent. Every internal state transi
 
 Native media states forwarded from the underlying `<video>`:
 
-| Type             | Description                                                                                               |
-| ---------------- | --------------------------------------------------------------------------------------------------------- |
-| `canplay`        | Enough data to start playing.                                                                             |
-| `canplaythrough` | Can play to the end without buffering.                                                                    |
-| `complete`       | Rendering complete.                                                                                       |
-| `durationchange` | The `duration` value changed.                                                                             |
-| `emptied`        | Media emptied / reloaded.                                                                                 |
-| `ended`          | Playback reached the end.                                                                                 |
-| `error`          | A media error occurred (also opens the built-in error+retry dialog, unless `disable-error-modal` is set). |
-| `loadstart`      | The browser began loading the media.                                                                      |
-| `loadedmetadata` | Metadata has loaded.                                                                                      |
-| `loadeddata`     | The first frame has loaded.                                                                               |
-| `progress`       | Fired periodically while the resource loads.                                                              |
-| `ratechange`     | Playback rate changed.                                                                                    |
-| `seeking`        | A seek started.                                                                                           |
-| `seeked`         | A seek completed.                                                                                         |
-| `stalled`        | The browser is trying to fetch data but none arrived.                                                     |
-| `suspend`        | Media loading was suspended.                                                                              |
-| `timeupdate`     | `currentTime` changed.                                                                                    |
-| `volumechange`   | The video element's volume changed.                                                                       |
-| `waiting`        | Playback stalled waiting for data.                                                                        |
-| `play`           | Playback started.                                                                                         |
-| `playing`        | Playback resumed after buffering/pause.                                                                   |
-| `pause`          | Playback paused.                                                                                          |
+| Type             | Description                                                                                                |
+| ---------------- | ---------------------------------------------------------------------------------------------------------- |
+| `canplay`        | Enough data to start playing.                                                                              |
+| `canplaythrough` | Can play to the end without buffering.                                                                     |
+| `complete`       | Rendering complete.                                                                                        |
+| `durationchange` | The `duration` value changed.                                                                              |
+| `emptied`        | Media emptied / reloaded.                                                                                  |
+| `ended`          | Playback reached the end.                                                                                  |
+| `error`          | A media error occurred (also shows the built-in error + retry panel, unless `disable-error-modal` is set). |
+| `loadstart`      | The browser began loading the media.                                                                       |
+| `loadedmetadata` | Metadata has loaded.                                                                                       |
+| `loadeddata`     | The first frame has loaded.                                                                                |
+| `progress`       | Fired periodically while the resource loads.                                                               |
+| `ratechange`     | Playback rate changed.                                                                                     |
+| `seeking`        | A seek started.                                                                                            |
+| `seeked`         | A seek completed.                                                                                          |
+| `stalled`        | The browser is trying to fetch data but none arrived.                                                      |
+| `suspend`        | Media loading was suspended.                                                                               |
+| `timeupdate`     | `currentTime` changed.                                                                                     |
+| `volumechange`   | The video element's volume changed.                                                                        |
+| `waiting`        | Playback stalled waiting for data.                                                                         |
+| `play`           | Playback started.                                                                                          |
+| `playing`        | Playback resumed after buffering/pause.                                                                    |
+| `pause`          | Playback paused.                                                                                           |
 
 Player-specific actions:
 
-| Type               | `data`                   | Description                                                                                                                                                                                                                  |
-| ------------------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `volume`           | `number` (`0`–`100`)     | Volume changed via the control bar or mute toggle.                                                                                                                                                                           |
-| `speed`            | `number`                 | Playback speed changed via the speed selector.                                                                                                                                                                               |
-| `fullscreen`       | `boolean`                | Fullscreen entered (`true`) or exited (`false`).                                                                                                                                                                             |
-| `pictureinpicture` | `boolean`                | Picture-in-Picture entered (`true`) or exited (`false`); fires whether triggered by `togglePip()` or the browser's own PiP window controls.                                                                                  |
-| `subtitlechange`   | `string`                 | Subtitle language changed via the CC picker or `setSubtitleLanguage()`: a `srclang`, or `'off'`.                                                                                                                             |
-| `resume`           | `number`                 | A saved position was silently restored on load (`remember-position`); `data` is the restored time in seconds.                                                                                                                |
-| `levelsready`      | `{ levels }`             | The streaming engine's manifest was parsed; clarity levels are now available.                                                                                                                                                |
-| `sourceerror`      | `{ fatal, detail }`      | A streaming-engine error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set; non-fatal errors are the engine's own internal recovery and don't). |
-| `qualityswitch`    | `{ level }`              | The user picked a clarity level from the quality selector.                                                                                                                                                                   |
-| `gestureseek`      | `{ direction, seconds }` | A double-tap seek gesture fired (`direction` is `'forward'`/`'backward'`).                                                                                                                                                   |
+| Type               | `data`                   | Description                                                                                                                                                                                                                   |
+| ------------------ | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `volume`           | `number` (`0`–`100`)     | Volume changed via the control bar or mute toggle.                                                                                                                                                                            |
+| `speed`            | `number`                 | Playback speed changed via the speed selector.                                                                                                                                                                                |
+| `fullscreen`       | `boolean`                | Fullscreen entered (`true`) or exited (`false`).                                                                                                                                                                              |
+| `pictureinpicture` | `boolean`                | Picture-in-Picture entered (`true`) or exited (`false`); fires whether triggered by `togglePip()` or the browser's own PiP window controls.                                                                                   |
+| `subtitlechange`   | `string`                 | Subtitle language changed via the CC picker or `setSubtitleLanguage()`: a `srclang`, or `'off'`.                                                                                                                              |
+| `resume`           | `number`                 | A saved position was silently restored on load (`remember-position`); `data` is the restored time in seconds.                                                                                                                 |
+| `levelsready`      | `{ levels }`             | The streaming engine's manifest was parsed; clarity levels are now available.                                                                                                                                                 |
+| `sourceerror`      | `{ fatal, detail }`      | A streaming-engine error occurred (falls back to the raw `src`; a **fatal** error also shows the error + retry panel unless `disable-error-modal` is set; non-fatal errors are the engine's own internal recovery and don't). |
+| `qualityswitch`    | `{ level }`              | The user picked a clarity level from the quality selector.                                                                                                                                                                    |
+| `gestureseek`      | `{ direction, seconds }` | A double-tap seek gesture fired (`direction` is `'forward'`/`'backward'`).                                                                                                                                                    |
 
 ## Slots
 

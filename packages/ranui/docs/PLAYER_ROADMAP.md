@@ -43,7 +43,7 @@ gaps), and any newly-discovered gap is worth closing the same way rather than pa
   `<r-select>` language picker (mirrors the clarity selector), preference persisted globally
   via `createStore` (`core/tracks.ts`).
 - **Error + retry**: on by default — a fatal HLS error or a native `error` event opens a
-  lazy-loaded `Modal.error()` dialog with a Retry button; `disable-error-modal` opts out
+  inline error panel on the player surface with a Retry button (`label-error` / `label-retry` set its text); `disable-error-modal` opts out
   (`core/error.ts`).
 - **Resume playback**: opt-in via `remember-position` — saves position to `localStorage` on
   `pause`/tab-hidden, restores on the next load of the same `src`, clears on `ended`

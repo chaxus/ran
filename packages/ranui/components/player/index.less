@@ -1143,3 +1143,74 @@
     animation: none;
   }
 }
+
+/* ── Playback error ──────────────────────────────────────────────────────────
+   The failure belongs to this video, so it is shown on the player's own dark surface
+   rather than in a page-blocking dialog. Light ink on the fixed media canvas, in either
+   page theme, like the rest of the controls. */
+.ran-player-error {
+  position: absolute;
+  inset: 0;
+  z-index: var(--ran-player-error-z-index, 12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ran-space-2, 8px);
+  padding: var(--ran-space-6, 24px);
+  text-align: center;
+  color: var(--ran-player-error-color, var(--ran-focus-ring-inverse-color, #fff));
+  background: var(--ran-player-error-background, color-mix(in srgb, var(--ran-media-background) 72%, transparent));
+}
+.ran-player-error[hidden] {
+  display: none;
+}
+/* There is nothing to play while playback has failed; the big play glyph would read
+   through the translucent panel and sit on top of the message. */
+.ran-player:has(> .ran-player-error:not([hidden])) .ran-player-play-btn {
+  display: none;
+}
+.ran-player-error-title {
+  font-size: var(--ran-text-label-1, 14px);
+  font-weight: var(--ran-text-heading-weight, 600);
+}
+.ran-player-error-message {
+  max-width: 36em;
+  font-size: var(--ran-text-label-2, 13px);
+  opacity: 0.8;
+}
+.ran-player-error-retry {
+  margin-top: var(--ran-space-2, 8px);
+  min-height: var(--ran-size-7, 32px);
+  padding: 0 var(--ran-space-4, 16px);
+  border: 1px solid color-mix(in srgb, var(--ran-focus-ring-inverse-color) 40%, transparent);
+  border-radius: var(--ran-radius-sm, 8px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--ran-text-label-1, 14px);
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .ran-player-error-retry:hover {
+    background: color-mix(in srgb, var(--ran-focus-ring-inverse-color) 12%, transparent);
+  }
+}
+.ran-player-error-retry:focus-visible {
+  outline: 2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff));
+  outline-offset: 2px;
+}
+@media (pointer: coarse) {
+  .ran-player-error-retry {
+    min-height: 44px;
+  }
+}
+/* Read once by a screen reader when its text is set; never painted. */
+.ran-player-error-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

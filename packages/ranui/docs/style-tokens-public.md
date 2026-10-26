@@ -1312,11 +1312,11 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `player`
 
-- Tokens: 173
+- Tokens: 180
 - Parts: 0
 
 #### Tokens
-<!-- layers: semantic: 9 · component: 152 · internal: 12 -->
+<!-- layers: semantic: 9 · component: 154 · internal: 17 -->
 - `--ran-color-`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -1351,6 +1351,8 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-player-controller-transition`
 - `--ran-player-controls-align-items`
 - `--ran-player-controls-justify-content`
+- `--ran-player-error-background`
+- `--ran-player-error-color`
 - `--ran-player-fullscreen-border-radius`
 - `--ran-player-fullscreen-color`
 - `--ran-player-fullscreen-focus-visible-border-radius`
@@ -1483,9 +1485,14 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-size-3`
 - `--ran-size-4`
 - `--ran-size-6`
+- `--ran-size-7`
 - `--ran-space-1`
 - `--ran-space-2`
+- `--ran-space-4`
+- `--ran-space-6`
+- `--ran-text-heading-weight`
 - `--ran-text-label-1`
+- `--ran-text-label-2`
 - `--ran-text-label-3`
 - `--ran-text-label-weight`
 - `--ran-text-mono-weight-regular`
