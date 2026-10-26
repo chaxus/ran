@@ -26,6 +26,7 @@ import type { DocPage } from './content.ts';
 import { navFor, prevNextFor, secondaryNavFor, sidebarFor } from './nav.ts';
 import type { NavLink } from './nav.ts';
 import { pageUrl } from './urls.ts';
+import { pageTitle } from './seo.ts';
 import type { SidebarItem } from './nav.ts';
 import { messagesFor } from './langs/index.ts';
 import { interactionCopy } from '../client/copy.ts';
@@ -108,7 +109,7 @@ export interface RenderDocOptions {
 export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): string => {
   const { ui } = messagesFor(page.locale as LocaleDef);
   const feedback = interactionCopy(page.locale.lang);
-  const title = page.url === '/' ? SITE.name : `${page.title} | ${SITE.name}`;
+  const title = pageTitle(page);
   const nav = navFor(page.locale);
   const sidebar = sidebarFor(page.url, page.locale);
   const { prev, next } = prevNextFor(page.url, sidebar);

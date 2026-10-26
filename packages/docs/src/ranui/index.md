@@ -224,7 +224,7 @@ CSS custom properties. **Internet Explorer is not supported.**
 ## Contributors
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" />
+  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="ran contributors on GitHub" />
 </a>
 
 ## Further reading

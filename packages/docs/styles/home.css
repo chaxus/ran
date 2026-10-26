@@ -163,7 +163,6 @@
   vertical-align: top;
   /* Preserve the total allowance while accommodating ascenders as well as descenders. */
   padding-block: 0.08em;
-  margin-right: 0.26em;
 }
 .headline .word-in {
   display: inline-block;
@@ -619,7 +618,9 @@
 /* ---------- get started ---------- */
 .panel {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* minmax(0, …): a track left at its min-content width grows to the longest code line,
+     and the snippet's own scroll never engages. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   /* The internal rule is the only boundary these need — the section heading above and
      the row hairlines inside already say where this starts and how it is divided. An
      outer frame was a third statement of the same thing. */
@@ -640,7 +641,8 @@
   padding-inline-start: 30px;
 }
 .code-head {
-  padding: 12px 20px 12px 0;
+  padding-block: 12px;
+  padding-inline: 0 20px;
   font-family: var(--font-mono);
   font-size: 11.5px;
   font-weight: 500;
@@ -734,9 +736,20 @@
     grid-template-columns: 1fr;
   }
   .bento,
-  .panel,
   .strip {
     grid-template-columns: 1fr;
+  }
+  .panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Stacked, the second cell sits below the first: its divider is the row hairline, and
+     the inset that cleared a side divider would give the column a second left edge. */
+  .code-cell + .code-cell {
+    border-inline-start: 0;
+  }
+  .code-cell + .code-cell .code-head,
+  .code-cell + .code-cell .snippet {
+    padding-inline-start: 0;
   }
 }
 @media (max-width: 520px) {
