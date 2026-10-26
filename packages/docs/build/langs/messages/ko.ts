@@ -246,6 +246,8 @@ const ko: LocaleMessages = {
     componentApi: 'API',
     componentTokens: '스타일 토큰',
     componentSource: '소스',
+    playground: '플레이그라운드',
+    playgroundMarkup: '마크업',
     returnToTop: '맨 위로',
     sidebarMenu: '메뉴',
     darkModeSwitch: '화면 모드',

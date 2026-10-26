@@ -246,6 +246,8 @@ const fa: LocaleMessages = {
     componentApi: 'API',
     componentTokens: 'توکن‌های سبک',
     componentSource: 'کد منبع',
+    playground: 'زمین بازی',
+    playgroundMarkup: 'نشانه‌گذاری',
     returnToTop: 'بازگشت به بالا',
     sidebarMenu: 'منو',
     darkModeSwitch: 'ظاهر',

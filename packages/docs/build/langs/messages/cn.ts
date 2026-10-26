@@ -246,6 +246,8 @@ const cn: LocaleMessages = {
     componentApi: 'API',
     componentTokens: '样式变量',
     componentSource: '源码',
+    playground: '试玩',
+    playgroundMarkup: '标记',
     returnToTop: '回到顶部',
     sidebarMenu: '菜单',
     darkModeSwitch: '外观',

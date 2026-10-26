@@ -20,6 +20,7 @@ import { mountDesignIllustrations } from './design-illustrations.ts';
 import { mountSearch } from './search.ts';
 import { mountDemos } from './home.ts';
 import { mountNavigation, mountCodeCopy } from './interactions.ts';
+import { mountPlaygrounds } from './playground.ts';
 
 cacheVisitedAssets();
 mountComponents();
@@ -27,6 +28,7 @@ mountPreviewDemo();
 
 mountCodeGroups();
 mountDesignIllustrations();
+mountPlaygrounds();
 
 /**
  * Mark the outline entry for whatever section is on screen.

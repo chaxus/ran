@@ -246,6 +246,8 @@ const pt: LocaleMessages = {
     componentApi: 'API',
     componentTokens: 'Tokens de estilo',
     componentSource: 'Código-fonte',
+    playground: 'Área de testes',
+    playgroundMarkup: 'Marcação',
     returnToTop: 'Voltar ao topo',
     sidebarMenu: 'Menu',
     darkModeSwitch: 'Aparência',

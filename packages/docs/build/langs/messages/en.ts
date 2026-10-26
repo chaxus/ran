@@ -246,6 +246,8 @@ const en: LocaleMessages = {
     componentApi: 'API',
     componentTokens: 'Style tokens',
     componentSource: 'Source',
+    playground: 'Playground',
+    playgroundMarkup: 'Markup',
     returnToTop: 'Return to top',
     sidebarMenu: 'Menu',
     darkModeSwitch: 'Appearance',
