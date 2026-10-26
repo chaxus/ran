@@ -3,13 +3,11 @@ import assert from 'node:assert/strict';
 import { compareToBaseline, localPaths } from '../verify-local-paths.ts';
 
 test('finds machine paths and leaves documentation placeholders alone', () => {
-  assert.deepEqual(localPaths('cd /Users/ada/code && ls /home/grace/x C:\\Users\\lin\\a /private/var/folders/xy'), [
-    '/Users/ada',
-    '/home/grace',
-    'C:\\Users\\lin',
-    '/private/var/folders/xy',
-  ]);
-  assert.deepEqual(localPaths("truncate('/Users/me/code/app') and /Users/someone/work"), []);
+  // Built at run time so this file does not itself contain the paths it is about.
+  const [users, home, windows, temp] = ['/Users/', '/home/', 'C:\\Users\\', '/private/var/folders/'];
+  const text = `cd ${users}ada/code && ls ${home}grace/x ${windows}lin\\a ${temp}xy`;
+  assert.deepEqual(localPaths(text), [`${users}ada`, `${home}grace`, `${windows}lin`, `${temp}xy`]);
+  assert.deepEqual(localPaths(`truncate('${users}me/code/app') and ${users}someone/work`), []);
 });
 
 test('a new file or a higher count fails; a lower count asks for the baseline to be lowered', () => {
