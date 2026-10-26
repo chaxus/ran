@@ -439,6 +439,11 @@ const createParser = (
         if (title) attrs.push(`title="${escapeHtml(title)}"`);
         return `<img ${attrs.join(' ')}>`;
       },
+      codespan({ text }: Tokens.Codespan): string {
+        // Code with no space in it is one identifier or value. Marked so a site can keep it on
+        // one line: a browser otherwise breaks `disable-error-modal` after a hyphen.
+        return `<code${/\s/.test(text) ? '' : ' class="code-word"'}>${escapeHtml(text)}</code>`;
+      },
       table(token: Tokens.Table): string {
         // Wrapped so a wide table scrolls inside its own box. Without the wrapper the
         // table's min-content width pushes the page itself sideways — the exact bug

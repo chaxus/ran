@@ -88,9 +88,9 @@ samp {
   --header-h: 60px;
   --sidebar-w: 272px;
   --toc-w: 224px;
-  /* A shared reading measure stays independent of each text role’s font size. 33rem holds
-     Geist prose at about 66–72 characters a line, and CJK at 33 characters. */
-  --measure: 33rem;
+  /* The docs column width, shared by text, tables and code so they end on one edge.
+     42rem is about 85 Geist characters a line and 42 CJK characters. */
+  --measure: 42rem;
   --pad: var(--ran-space-4, 16px);
   --column-gap: var(--ran-space-10, 40px);
   /* Where a docs page's text starts inside the layout: past the sidebar column. Pages with
@@ -300,6 +300,11 @@ a {
   text-decoration: none;
   font-size: var(--type-label-1);
   white-space: nowrap;
+}
+/* Lowercase beside the lowercase product names; root DESIGN.md records the exception.
+   Header only, and not German, where lowercasing a noun is a spelling mistake. */
+:root:not(:lang(de)) .site-header .nav__link {
+  text-transform: lowercase;
 }
 .nav__link:hover {
   color: var(--fg);
@@ -907,15 +912,6 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 
 /* ── Prose ───────────────────────────────────────────────────────────────── */
 
-/*
- * The measure governs running text, not the column.
- *
- * Capping `.prose` itself capped everything inside it, including the things that are not
- * text and gain nothing from a comfortable line length. The Properties table wanted 762px
- * inside a 736px cap, so it quietly became a scroll container and lost 26px off its last
- * column — a clipped sentence that looked like a rendering bug rather than a width.
- * Prose keeps the measure; tables, fences and demo stages get the full column.
- */
 /* Give undefined heavy demo elements a box for viewport observation. The component
    owns its layout after registration; inline formulas keep their inline placement. */
 .prose :is(r-markdown, r-mermaid, r-player):not(:defined) {
@@ -942,12 +938,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   gap: var(--prose-gap);
   overflow-wrap: anywhere;
 }
-.prose > p,
-.prose > ul,
-.prose > ol,
-.prose > blockquote,
-.prose > aside,
-.prose > dl {
+.prose {
   max-width: var(--measure);
 }
 .prose > :first-child {
@@ -1212,27 +1203,28 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
      boundary doing the same job. */
   border-top: 1px solid var(--rule);
 }
-/* The table sizes to its own content and the wrapper scrolls, rather than the table
-   being forced to 100% and compressing columns until identifiers break mid-word —
-   "disable d", "boolea n". `min-width: 100%` keeps a narrow table filling the card. */
+/* The table fills the column and sentence cells wrap. Cells use `break-word`, not the prose's
+   `anywhere`: only `anywhere` lowers a cell's minimum width, which let auto layout squeeze
+   identifiers into "disable d", "boolea n". The wrapper scrolls only when the code alone
+   is wider than the column. */
 .prose table {
   border-collapse: collapse;
-  width: max-content;
-  min-width: 100%;
+  width: 100%;
   font-size: var(--type-copy-2);
 }
+/* A single identifier stays whole (ranpress marks it `code-word`); code with spaces, such as a
+   signature, wraps at its spaces so it does not force the table wider than the column. */
 .prose td code,
 .prose th code {
   white-space: normal;
   overflow-wrap: normal;
 }
-/* A sentence-long cell wraps instead of stretching the table to its whole length; short
-   identifiers never reach the cap, so they still never break mid-word. */
-.prose td {
-  max-width: 36rem;
+.prose :is(td, th) .code-word {
+  white-space: nowrap;
 }
 .prose th,
 .prose td {
+  overflow-wrap: break-word;
   text-align: start;
   padding: var(--ran-space-2) var(--ran-space-4);
   border-bottom: 1px solid var(--rule);
@@ -1469,9 +1461,9 @@ ran-demo p {
 
 @media (min-width: 1240px) {
   /*
-   * One inset for the header, the sidebar and the outline — they are siblings and §9 asks
-   * siblings to share a content inset. 16px against a 1440px viewport read as flush; this
-   * moves all three together, so the wordmark still lines up with the sidebar exactly.
+   * One inset for the header and the sidebar — they are siblings and §9 asks siblings to
+   * share a content inset. 16px against a 1440px viewport read as flush; this moves both
+   * together, so the wordmark still lines up with the sidebar exactly.
    */
   :root {
     --pad: var(--ran-space-6, 24px);
@@ -1481,12 +1473,16 @@ ran-demo p {
    * rendered per page — the landing has none — and a column declared unconditionally is
    * still a column: the home page laid out as `1144px 224px` and left 280px of dead space
    * down its whole right edge, which read as the entire site being off-centre.
+   *
+   * The text column is the measure, not `1fr`, so the outline sits beside the text. On a
+   * screen wider than the three columns the spare width collects after the outline
+   * (144px at 1440px) instead of as a gap between the text and its outline.
    */
   body.has-sidebar .layout:has(.toc) {
-    grid-template-columns: var(--sidebar-w) minmax(0, 1fr) var(--toc-w);
+    grid-template-columns: var(--sidebar-w) minmax(0, var(--measure)) var(--toc-w);
   }
   body:not(.has-sidebar) .layout:has(.toc) {
-    grid-template-columns: minmax(0, 1fr) var(--toc-w);
+    grid-template-columns: minmax(0, calc(var(--spine-docs) + var(--measure))) var(--toc-w);
   }
   .toc {
     display: block;
