@@ -187,6 +187,7 @@ const fa: LocaleMessages = {
     toolcard: 'کارت ابزار',
     reasoning: 'زنجیرهٔ استدلال',
     statedot: 'نقطهٔ وضعیت',
+    fangallery: 'گالری بادبزنی',
     disclosurerow: 'ردیف بازشو',
     tokenmeter: 'مصرف بافتار',
     checkbox: 'چک‌باکس',

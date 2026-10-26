@@ -187,6 +187,7 @@ const es: LocaleMessages = {
     toolcard: 'Tarjeta de herramienta',
     reasoning: 'Cadena de razonamiento',
     statedot: 'Punto de estado',
+    fangallery: 'Galería en abanico',
     disclosurerow: 'Fila desplegable',
     tokenmeter: 'Uso de contexto',
     checkbox: 'Casilla',

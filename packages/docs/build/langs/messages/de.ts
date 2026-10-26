@@ -187,6 +187,7 @@ const de: LocaleMessages = {
     toolcard: 'Tool-Karte',
     reasoning: 'Gedankengang',
     statedot: 'Statuspunkt',
+    fangallery: 'Fächergalerie',
     disclosurerow: 'Ausklappzeile',
     tokenmeter: 'Kontextverbrauch',
     checkbox: 'Kontrollkästchen',

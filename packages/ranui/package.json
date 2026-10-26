@@ -110,6 +110,9 @@
       "state-dot": [
         "./dist/components/state-dot/index.d.ts"
       ],
+      "fan-gallery": [
+        "./dist/components/fan-gallery/index.d.ts"
+      ],
       "disclosure-row": [
         "./dist/components/disclosure-row/index.d.ts"
       ],
@@ -385,6 +388,10 @@
     "./state-dot": {
       "types": "./dist/components/state-dot/index.d.ts",
       "import": "./dist/state-dot.js"
+    },
+    "./fan-gallery": {
+      "types": "./dist/components/fan-gallery/index.d.ts",
+      "import": "./dist/fan-gallery.js"
     },
     "./disclosure-row": {
       "types": "./dist/components/disclosure-row/index.d.ts",

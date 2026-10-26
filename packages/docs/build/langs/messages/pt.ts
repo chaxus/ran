@@ -187,6 +187,7 @@ const pt: LocaleMessages = {
     toolcard: 'Cartão de ferramenta',
     reasoning: 'Cadeia de raciocínio',
     statedot: 'Ponto de estado',
+    fangallery: 'Galeria em leque',
     disclosurerow: 'Linha expansível',
     tokenmeter: 'Uso de contexto',
     checkbox: 'Caixa de seleção',

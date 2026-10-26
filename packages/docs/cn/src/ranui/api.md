@@ -1,6 +1,6 @@
 ---
 title: ranui 元素 API
-description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。'
+description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。'
 ---
 
 # ranui 元素 API（自动生成）
@@ -18,7 +18,7 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 `cancelable`（`preventDefault()` 可否决）。**`element-only`** 表示三者皆无——在祖先节点上
 做事件委托永远收不到它，请把监听绑在元素本身上。
 
-**共 40 个自定义元素。**
+**共 41 个自定义元素。**
 
 ## `<r-attachments>`
 
@@ -164,6 +164,18 @@ description: 'ranui 的全部自定义元素 —— 40 个元素的属性、属�
 - **事件**: —
 - **插槽**: `默认插槽`
 - **Part**: `content`, `item`
+
+## `<r-fan-gallery>`
+
+源码: `components/fan-gallery/index.ts`
+
+- **属性（attribute）**: `sheet: string`, `spread: string`
+- **属性值（property）**:
+  - `sheet: string`
+  - `spread: string` — Angle in degrees between the first and last child once open. Defaults to `24`; `0` lines them up.
+- **事件**: —
+- **插槽**: `默认插槽`
+- **Part**: `stage`
 
 ## `<r-glass>`
 

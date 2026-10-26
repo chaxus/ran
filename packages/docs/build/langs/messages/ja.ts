@@ -187,6 +187,7 @@ const ja: LocaleMessages = {
     toolcard: 'ツールカード',
     reasoning: '思考プロセス',
     statedot: 'ステータスドット',
+    fangallery: 'ファンギャラリー',
     disclosurerow: '折りたたみ行',
     tokenmeter: 'コンテキスト使用量',
     checkbox: 'チェックボックス',

@@ -187,6 +187,7 @@ const ko: LocaleMessages = {
     toolcard: '툴 카드',
     reasoning: '추론 과정',
     statedot: '상태 점',
+    fangallery: '부채꼴 갤러리',
     disclosurerow: '접기 행',
     tokenmeter: '컨텍스트 사용량',
     checkbox: '체크박스',

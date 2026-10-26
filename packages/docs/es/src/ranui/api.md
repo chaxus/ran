@@ -1,6 +1,6 @@
 ---
 title: API de elementos de ranui
-description: 'Todos los custom elements de ranui: 40 elementos con sus atributos, propiedades, eventos, slots y nombres de ::part(), extraídos del código fuente.'
+description: 'Todos los custom elements de ranui: 41 elementos con sus atributos, propiedades, eventos, slots y nombres de ::part(), extraídos del código fuente.'
 ---
 
 # API de elementos de ranui (generada)
@@ -22,7 +22,7 @@ límite del shadow DOM) y `cancelable` (`preventDefault()` lo veta). **`element-
 significa ninguna de las tres: una escucha delegada en un ancestro nunca verá ese evento,
 así que enlázala al elemento mismo.
 
-**40 custom elements.**
+**41 custom elements.**
 
 ## `<r-attachments>`
 
@@ -168,6 +168,18 @@ Código fuente: `components/select/dropdown-item/index.ts`
 - **Eventos**: —
 - **Slots**: `por defecto`
 - **Partes**: `content`, `item`
+
+## `<r-fan-gallery>`
+
+Código fuente: `components/fan-gallery/index.ts`
+
+- **Atributos**: `sheet: string`, `spread: string`
+- **Propiedades**:
+  - `sheet: string`
+  - `spread: string` — Angle in degrees between the first and last child once open. Defaults to `24`; `0` lines them up.
+- **Eventos**: —
+- **Slots**: `por defecto`
+- **Partes**: `stage`
 
 ## `<r-glass>`
 

@@ -578,6 +578,7 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
         { kind: 'suffix', key: 'dropdown', name: 'Dropdown', link: '/src/ranui/dropdown/' },
         { kind: 'suffix', key: 'card', name: 'Card', link: '/src/ranui/card/' },
         { kind: 'suffix', key: 'glass', name: 'Glass', link: '/src/ranui/glass/' },
+        { kind: 'suffix', key: 'fangallery', name: 'FanGallery', link: '/src/ranui/fan-gallery/' },
         { kind: 'suffix', key: 'section', name: 'Section', link: '/src/ranui/section/' },
         { kind: 'suffix', key: 'scratch', name: 'Scratch', link: '/src/ranui/scratch/' },
       ],

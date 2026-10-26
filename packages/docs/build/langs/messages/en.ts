@@ -187,6 +187,7 @@ const en: LocaleMessages = {
     toolcard: '',
     reasoning: '',
     statedot: '',
+    fangallery: '',
     disclosurerow: '',
     tokenmeter: '',
     checkbox: '',

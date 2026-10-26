@@ -187,6 +187,7 @@ const cn: LocaleMessages = {
     toolcard: '工具卡片',
     reasoning: '思维链',
     statedot: '状态点',
+    fangallery: '扇形画廊',
     disclosurerow: '折叠行',
     tokenmeter: '上下文用量',
     checkbox: '多选框',

@@ -1,6 +1,6 @@
 ---
 title: ranui-Element-API
-description: 'Alle Custom Elements von ranui — 40 Elemente mit ihren Attributen, Eigenschaften, Events, Slots und ::part()-Namen, aus dem Quelltext extrahiert.'
+description: 'Alle Custom Elements von ranui — 41 Elemente mit ihren Attributen, Eigenschaften, Events, Slots und ::part()-Namen, aus dem Quelltext extrahiert.'
 ---
 
 # ranui-Element-API (generiert)
@@ -22,7 +22,7 @@ Zu jedem Event stehen die Optionen, mit denen es ausgelöst wird: `bubbles`, `co
 **`element-only`** heißt: keine der drei — ein delegierter Listener an einem Vorfahren sieht
 dieses Event nie, binde ihn also an das Element selbst.
 
-**40 Custom Elements.**
+**41 Custom Elements.**
 
 ## `<r-attachments>`
 
@@ -168,6 +168,18 @@ Quelltext: `components/select/dropdown-item/index.ts`
 - **Events**: —
 - **Slots**: `Standard`
 - **Parts**: `content`, `item`
+
+## `<r-fan-gallery>`
+
+Quelltext: `components/fan-gallery/index.ts`
+
+- **Attribute**: `sheet: string`, `spread: string`
+- **Eigenschaften**:
+  - `sheet: string`
+  - `spread: string` — Angle in degrees between the first and last child once open. Defaults to `24`; `0` lines them up.
+- **Events**: —
+- **Slots**: `Standard`
+- **Parts**: `stage`
 
 ## `<r-glass>`
 
