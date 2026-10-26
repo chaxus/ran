@@ -104,6 +104,8 @@ export interface ProofCopy {
   stepStates: [string, string, string];
   /** What the token meter counts; its accessible name. */
   meter: string;
+  /** Caption for the glass specimen, whose rim renders through WebGPU where available. */
+  glass: string;
 }
 
 /** `{email}` and `{role}` are filled in by the client; keep them in every translation. */
@@ -155,6 +157,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       steps: ['Read 4 files', 'Run the test suite', 'Open a pull request'],
       stepStates: ['Done', 'Running', 'Waiting'],
       meter: 'Context',
+      glass: 'Glass',
     },
     chooseKicker: 'Three pillars',
     chooseTitle: 'Choose where to start',
@@ -249,6 +252,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       steps: ['读取 4 个文件', '运行测试', '创建 Pull Request'],
       stepStates: ['已完成', '运行中', '等待中'],
       meter: '上下文',
+      glass: '玻璃材质',
     },
     chooseKicker: '三个部分',
     chooseTitle: '选择从哪里开始',
@@ -324,6 +328,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       steps: ['4 ファイルを読み込む', 'テストを実行', 'プルリクエストを作成'],
       stepStates: ['完了', '実行中', '待機中'],
       meter: 'コンテキスト',
+      glass: 'ガラス',
     },
     chooseKicker: '3 つの柱',
     chooseTitle: 'どこから始めるか選ぶ',
@@ -419,6 +424,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       steps: ['Leer 4 archivos', 'Ejecutar las pruebas', 'Abrir un pull request'],
       stepStates: ['Hecho', 'En curso', 'En espera'],
       meter: 'Contexto',
+      glass: 'Vidrio',
     },
     chooseKicker: 'Tres pilares',
     chooseTitle: 'Elige por dónde empezar',
@@ -517,6 +523,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       steps: ['Ler 4 arquivos', 'Executar os testes', 'Abrir um pull request'],
       stepStates: ['Concluído', 'Em execução', 'Aguardando'],
       meter: 'Contexto',
+      glass: 'Vidro',
     },
     chooseKicker: 'Três pilares',
     chooseTitle: 'Escolha por onde começar',
@@ -615,6 +622,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       steps: ['파일 4개 읽기', '테스트 실행', '풀 리퀘스트 열기'],
       stepStates: ['완료', '실행 중', '대기 중'],
       meter: '컨텍스트',
+      glass: '유리',
     },
     chooseKicker: '세 가지 축',
     chooseTitle: '시작할 곳 고르기',
@@ -707,6 +715,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       steps: ['4 Dateien lesen', 'Tests ausführen', 'Pull-Request öffnen'],
       stepStates: ['Erledigt', 'Läuft', 'Wartet'],
       meter: 'Kontext',
+      glass: 'Glas',
     },
     chooseKicker: 'Drei Säulen',
     chooseTitle: 'Wähle deinen Einstieg',
@@ -805,6 +814,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       steps: ['خواندن ۴ فایل', 'اجرای تست‌ها', 'باز کردن pull request'],
       stepStates: ['انجام شد', 'در حال اجرا', 'در انتظار'],
       meter: 'زمینه',
+      glass: 'شیشه',
     },
     chooseKicker: 'سه بخش',
     chooseTitle: 'از کجا شروع کنید',

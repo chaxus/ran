@@ -322,7 +322,7 @@
 /* The same tray-and-frame as the example: three small products on one stage. */
 .proof-stage {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--cine-inset);
   padding: var(--cine-inset);
   border: 1px solid var(--rule);
@@ -687,7 +687,75 @@
   font-family: var(--font-sans);
 }
 
-/* ---------- responsive ---------- */
+/* ---------- glass specimen ---------- */
+/* Backdrop and pane share one grid cell. The backdrop is the scene the glass bends, drawn
+   in the text colour so it stays monochrome in both themes: stripes, a disc and a ring
+   give the refraction something to work on without adding a hue to the page. */
+.proof-glass-stage {
+  display: grid;
+  flex: 1;
+  min-height: 136px;
+  border-radius: var(--ran-radius-md, 12px);
+  overflow: hidden;
+}
+.proof-backdrop,
+.proof-pane {
+  grid-area: 1 / 1;
+}
+.proof-backdrop {
+  position: relative;
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--fg) 12%, transparent) 0 6px,
+    transparent 6px 14px
+  );
+}
+.proof-backdrop i {
+  position: absolute;
+  border-radius: var(--ran-radius-full, 9999px);
+}
+.proof-backdrop i:nth-child(1) {
+  width: 46%;
+  aspect-ratio: 1;
+  left: 4%;
+  top: 6%;
+  background: var(--fg);
+}
+.proof-backdrop i:nth-child(2) {
+  width: 40%;
+  aspect-ratio: 1;
+  right: 2%;
+  bottom: -14%;
+  border: 6px solid var(--fg);
+}
+.proof-backdrop i:nth-child(3) {
+  width: 14%;
+  aspect-ratio: 1;
+  right: 30%;
+  top: 8%;
+  background: var(--fg-muted);
+}
+.proof-pane {
+  display: block;
+  align-self: center;
+  justify-self: center;
+  width: 78%;
+}
+.proof-pane code {
+  display: block;
+  padding: var(--ran-space-6, 24px) var(--ran-space-3, 12px);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-2, 13px);
+  color: var(--fg);
+}
+
+/* Four states need about 260px each; between the phone column and that width, two by two. */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .proof-stage {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 @media (max-width: 900px) {
   .cine {
     padding-top: var(--ran-space-10, 40px);

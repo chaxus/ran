@@ -45,7 +45,7 @@ const selector = Object.keys(loaders).join(',');
 const messageHandlers = ['onclick', 'onchange', 'onsubmit'].map((name) => `[${name}*="message."]`).join(',');
 // Registration upgrades every instance of a tag. Defer a heavy module until at least
 // one instance is near the viewport; controls and the theme switch remain eager.
-const deferred = new Set(['r-markdown', 'r-math', 'r-mermaid', 'r-player']);
+const deferred = new Set(['r-glass', 'r-markdown', 'r-math', 'r-mermaid', 'r-player']);
 
 export const mountComponents = (): (() => void) => {
   const pending = new Set<string>();

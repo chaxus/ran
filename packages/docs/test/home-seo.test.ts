@@ -49,6 +49,6 @@ it.each(LOCALES)('the $lang home runs positioning, live proof, pillars, install 
   expect(html.match(/\bMIT\b/g)?.length).toBe(1);
   // Real ranui elements make up the live-proof section.
   const proof = html.slice(at[2], at[3]);
-  for (const tag of ['r-progress', 'r-button', 'r-state-dot', 'r-token-meter', 'r-skeleton'])
+  for (const tag of ['r-progress', 'r-button', 'r-state-dot', 'r-token-meter', 'r-skeleton', 'r-glass'])
     expect(proof).toContain(`<${tag}`);
 });
