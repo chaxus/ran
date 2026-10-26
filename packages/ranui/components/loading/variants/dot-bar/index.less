@@ -1,12 +1,9 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .dot-bar {
+    --_ran-loading-units: 45;
     margin: var(--loading-dot-bar-margin, 0 auto);
     overflow: var(--loading-dot-bar-overflow, hidden);
-    width: var(--loading-dot-bar-width, 90px);
+    width: var(--loading-dot-bar-width, 90em);
     @keyframes pulse {
       from {
         transform: var(--loading-dot-bar-keyframes-from-transform, scale(1.2));
@@ -23,10 +20,10 @@
         --loading-dot-bar-item-background-image,
         linear-gradient(45deg, var(--ran-color-text) 25%, var(--ran-color-text-secondary))
       );
-      width: var(--loading-dot-bar-item-width, 10px);
-      height: var(--loading-dot-bar-item-height, 10px);
+      width: var(--loading-dot-bar-item-width, 10em);
+      height: var(--loading-dot-bar-item-height, 10em);
       float: var(--loading-dot-bar-item-float, left);
-      margin-left: var(--loading-dot-bar-item-margin-left, 5px);
+      margin-left: var(--loading-dot-bar-item-margin-left, 5em);
       opacity: var(--loading-dot-bar-item-opacity, 0.1);
       animation: var(--loading-dot-bar-item-animation, pulse 1s linear infinite normal);
       animation-play-state: var(--loading-dot-bar-item-animation-play-state, running);

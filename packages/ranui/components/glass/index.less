@@ -13,7 +13,7 @@
 :host {
   display: var(--ran-glass-display, inline-block);
   position: var(--ran-glass-position, relative);
-  border-radius: var(--ran-glass-radius, 20px);
+  border-radius: var(--ran-glass-radius, var(--ran-radius-lg, 16px));
   isolation: isolate;
   -webkit-tap-highlight-color: transparent;
 }
@@ -61,7 +61,7 @@
   );
   transition: var(
     --ran-glass-transition,
-    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, cubic-bezier(0.34, 1.26, 0.5, 1))
+    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, cubic-bezier(0.3, 1.1, 0.4, 1))
   );
 }
 
@@ -125,7 +125,7 @@
 }
 :host([interactive]:active) .ran-glass {
   transform: translateY(0) scale(0.98);
-  transition-duration: var(--ran-motion-duration-fast, 0.15s);
+  transition-duration: var(--ran-motion-duration-fast, 0.14s);
 }
 
 @media (prefers-reduced-motion: reduce) {

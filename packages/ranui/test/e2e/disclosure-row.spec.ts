@@ -19,6 +19,18 @@ test.describe('r-disclosure-row', () => {
     await isolatedSetup(page, DEV_SERVER, 'r-disclosure-row');
   });
 
+  test('drops the busy sweep entirely under reduced motion', async ({ page }) => {
+    // A stopped sweep is a page-coloured veil parked over the title: the text underneath
+    // fell to about 2:1. Busy is still said by the leading dot, so the band has to go.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await mount(page, '<r-disclosure-row busy heading="Fetching" summary="https://example.com"></r-disclosure-row>');
+    const veil = await insideShadow(page, 'r-disclosure-row', (root) => {
+      const row = root.querySelector<HTMLElement>('[part="row"]')!;
+      return getComputedStyle(row, '::after').display;
+    });
+    expect(veil).toBe('none');
+  });
+
   test('stays on one line however long the summary is', async ({ page }) => {
     // A row that wraps stops being scannable, and scannability is the whole reason a run of
     // these is a list instead of a wall.

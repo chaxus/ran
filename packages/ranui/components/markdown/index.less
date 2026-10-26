@@ -4,7 +4,7 @@
   color: var(--ran-markdown-color, var(--ran-color-text, #171717));
   font-family: var(--ran-markdown-font-family, var(--ran-font-family, inherit));
   font-size: var(--ran-markdown-font-size, var(--ran-text-copy-1, 16px));
-  line-height: var(--ran-markdown-line-height, 1.7);
+  line-height: var(--ran-markdown-line-height, var(--ran-line-height, 1.5715));
   overflow-wrap: break-word;
   /* Long code lines / wide diagrams scroll inside their own box instead of widening the
      host (a chat bubble, a grid cell) — the host takes its width from its container only. */
@@ -73,11 +73,11 @@ h3,
 h4,
 h5,
 h6 {
-  margin: var(--ran-markdown-heading-margin, var(--ran-space-6, 32px) 0 var(--ran-space-3, 12px));
+  margin: var(--ran-markdown-heading-margin, var(--ran-space-6, 24px) 0 var(--ran-space-3, 12px));
   color: var(--ran-markdown-heading-color, var(--ran-color-text, #171717));
   font-weight: var(--ran-markdown-heading-weight, var(--ran-text-heading-weight, 600));
   line-height: 1.3;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ran-text-heading-tracking, -0.03em);
 }
 h1 {
   font-size: var(--ran-markdown-h1-size, var(--ran-text-heading-1, 32px));
@@ -122,7 +122,7 @@ del {
 
 hr {
   height: 0;
-  margin: var(--ran-space-6, 32px) 0;
+  margin: var(--ran-space-6, 24px) 0;
   border: 0;
   border-top: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
     var(--ran-markdown-hr-color, var(--ran-color-border, #eaeaea));
@@ -131,7 +131,7 @@ hr {
 ul,
 ol {
   margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
-  padding-left: var(--ran-markdown-list-indent, var(--ran-space-6, 32px));
+  padding-left: var(--ran-markdown-list-indent, var(--ran-space-6, 24px));
 }
 li {
   margin: var(--ran-markdown-list-item-margin, var(--ran-space-1, 4px)) 0;
@@ -167,13 +167,13 @@ blockquote > :last-child {
 img {
   max-width: 100%;
   height: auto;
-  border-radius: var(--ran-markdown-image-radius, var(--ran-radius-sm, 6px));
+  border-radius: var(--ran-markdown-image-radius, var(--ran-radius-sm, 8px));
 }
 
 /* ── Inline code ───────────────────────────────────────────────────────────── */
 :not(pre) > code {
   padding: 0.15em 0.4em;
-  border-radius: var(--ran-radius-sm, 6px);
+  border-radius: var(--ran-radius-sm, 8px);
   background: var(--ran-markdown-inline-code-bg, var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.06)));
   color: var(--ran-markdown-inline-code-color, inherit);
   font-family: var(--ran-markdown-mono-font, var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace));
@@ -186,8 +186,8 @@ img {
   margin: 0 0 var(--ran-markdown-paragraph-margin, var(--ran-space-3, 12px));
   border: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
     var(--ran-markdown-code-border, var(--ran-color-border, #eaeaea));
-  border-radius: var(--ran-markdown-code-radius, var(--ran-radius-sm, 6px));
-  background: var(--ran-markdown-code-bg, var(--ran-color-bg-muted, #fafafa));
+  border-radius: var(--ran-markdown-code-radius, var(--ran-radius-sm, 8px));
+  background: var(--ran-markdown-code-bg, var(--ran-color-bg-subtle, #f7f7f8));
   overflow: hidden;
   /* Off-screen blocks skip layout/paint — long answers stay cheap. */
   content-visibility: auto;
@@ -199,7 +199,7 @@ img {
   justify-content: space-between;
   gap: var(--ran-space-2, 8px);
   min-height: var(--ran-markdown-code-header-height, var(--ran-size-7, 32px));
-  padding: var(--ran-space-1, 4px) var(--ran-space-2, 8px) var(--ran-space-1, 4px) var(--ran-space-4, 16px);
+  padding: var(--ran-space-1, 4px) var(--ran-space-2, 8px) var(--ran-space-1, 4px) var(--ran-space-3, 12px);
   border-bottom: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid)
     var(--ran-markdown-code-border, var(--ran-color-border, #eaeaea));
   background: var(--ran-markdown-code-header-bg, transparent);
@@ -226,7 +226,7 @@ img {
   height: var(--ran-markdown-button-size, var(--ran-size-7, 32px));
   padding: 0;
   border: none;
-  border-radius: var(--ran-radius-sm, 6px);
+  border-radius: var(--ran-radius-sm, 8px);
   background: transparent;
   color: var(--ran-markdown-button-color, var(--ran-color-text-secondary, #666));
   cursor: pointer;
@@ -240,18 +240,18 @@ img {
   cursor: default;
 }
 .ran-md-btn:focus-visible {
-  outline: 2px solid var(--ran-color-link);
-  outline-offset: 1px;
+  outline: 2px solid var(--ran-color-focus, #0a6cff);
+  outline-offset: 2px;
 }
 
 .ran-md-pre {
   margin: 0;
-  padding: var(--ran-markdown-code-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px));
+  padding: var(--ran-markdown-code-padding, var(--ran-space-2, 8px) var(--ran-space-3, 12px));
   overflow-x: auto;
   background: transparent !important; /* shiki's theme bg is dropped in favour of the token above */
   color: var(--ran-markdown-code-color, var(--ran-color-text, #171717));
   font-family: var(--ran-markdown-mono-font, var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace));
-  font-size: var(--ran-markdown-code-font-size, var(--ran-text-copy-2, 14px));
+  font-size: var(--ran-markdown-code-font-size, var(--ran-text-label-2, 13px));
   line-height: var(--ran-markdown-code-line-height, 1.6);
   tab-size: 2;
 }
@@ -279,7 +279,7 @@ img {
   display: inline-block;
   width: var(--ran-markdown-line-number-width, 2.5em);
   margin-right: var(--ran-space-3, 12px);
-  color: var(--ran-markdown-line-number-color, var(--ran-color-text-disabled, #a3a3a3));
+  color: var(--ran-markdown-line-number-color, var(--ran-color-text-secondary, #55555e));
   text-align: right;
   user-select: none;
 }
@@ -331,16 +331,18 @@ th[align='center'],
 td[align='center'] {
   text-align: center;
 }
+/* Inset, not the usual 2px outside: the pre sits in .ran-md-code's overflow: hidden and the
+   table in its own scroller, so an outside ring would be clipped. */
 .ran-md-pre:focus-visible,
 .ran-md-table-wrap:focus-visible {
-  outline: 2px solid var(--ran-color-link);
+  outline: 2px solid var(--ran-color-focus, #0a6cff);
   outline-offset: -2px;
 }
 .ran-md-copy-status {
   min-width: 0;
   color: var(--ran-color-danger);
-  font-size: var(--ran-text-copy-2, 14px);
-  line-height: 1.4;
+  font-size: var(--ran-text-label-2, 13px);
+  line-height: 1.5;
 }
 .ran-md-copy-status[hidden] {
   display: none;
@@ -375,10 +377,14 @@ r-math[display='inline'] {
 .ran-markdown-error {
   margin: 0;
   padding: var(--ran-markdown-error-padding, var(--ran-space-2, 8px) var(--ran-space-3, 12px));
-  border-radius: var(--ran-radius-sm, 6px);
-  background: var(--ran-markdown-error-background, var(--ran-red-100, #fff0f0));
-  color: var(--ran-markdown-error-color, var(--ran-color-danger, #e5484d));
-  font-family: var(--ran-font-mono, ui-monospace, monospace);
+  border: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid) var(--ran-red-300, #ffe3e4);
+  border-radius: var(--ran-radius-sm, 8px);
+  background: var(--ran-markdown-error-background, var(--ran-red-100, #ffeeef));
+  color: var(--ran-markdown-error-color, var(--ran-color-danger-foreground, #d8001b));
+  font-family: var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   font-size: var(--ran-text-label-2, 13px);
+  font-weight: var(--ran-text-mono-weight-regular, 400);
+  line-height: 1.5;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }

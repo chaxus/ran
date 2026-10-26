@@ -1,36 +1,34 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
-  container-type: inline-size;
   .cube-dim {
-    font-size: var(--loading-cube-dim-font-size, min(1em, 4.5cqi));
+    --_ran-loading-units: 297;
     margin-inline: var(--loading-cube-dim-margin-inline, auto);
-    height: var(--loading-cube-dim-height, 9em);
-    width: var(--loading-cube-dim-width, 9em);
-    padding: var(--loading-cube-dim-padding, 3em);
+    height: var(--loading-cube-dim-height, 126em);
+    width: var(--loading-cube-dim-width, 126em);
+    padding: var(--loading-cube-dim-padding, 42em);
     transform: var(--loading-cube-dim-transform, rotateX(45deg) rotateZ(45deg));
     transform-style: var(--loading-cube-dim-transform-style, preserve-3d);
     @keyframes anim {
       50% {
-        transform: var(--loading-cube-dim-width, translateZ(0.5em));
+        transform: var(--loading-cube-dim-width, translateZ(7em));
       }
     }
     &-item {
-      background-color: var(--loading-cube-dim-item-background-color, #05afd1);
+      background-color: var(--loading-cube-dim-item-background-color, currentColor);
       position: var(--loading-cube-dim-item-position, relative);
-      transform: var(--loading-cube-dim-item-transform, translateZ(3em));
+      transform: var(--loading-cube-dim-item-transform, translateZ(42em));
       transform-style: var(--loading-cube-dim-item-transform-style, preserve-3d);
       /* transform only — the bare `0.25s` shorthand meant `all`, which also
          faded the shadow color on a theme flip */
       transition: var(--loading-cube-dim-item-transition, transform 0.25s);
-      box-shadow: var(--loading-cube-dim-item-box-shadow, 13em 13em 1.5em rgba(0, 0, 0, 0.1));
+      box-shadow: var(
+        --loading-cube-dim-item-box-shadow,
+        182em 182em 21em color-mix(in srgb, currentColor 10%, transparent)
+      );
       animation: var(--loading-cube-dim-item-animation, anim 1s infinite);
       animation-play-state: var(--loading-cube-dim-item-animation-play-state, running);
       float: var(--loading-cube-dim-item-float, left);
-      height: var(--loading-cube-dim-item-height, 3em);
-      width: var(--loading-cube-dim-item-width, 3em);
+      height: var(--loading-cube-dim-item-height, 42em);
+      width: var(--loading-cube-dim-item-width, 42em);
       &:nth-child(1) {
         animation-delay: var(--loading-cube-dim-item-nth-child-1-animation-delay, 0.05s);
       }
@@ -61,21 +59,27 @@
       &::before {
         content: var(--loading-cube-dim-item-before-content, '');
         float: var(--loading-cube-dim-item-before-float, left);
-        height: var(--loading-cube-dim-item-before-height, 3em);
+        height: var(--loading-cube-dim-item-before-height, 42em);
         position: var(--loading-cube-dim-item-before-position, absolute);
-        width: var(--loading-cube-dim-item-before-width, 3em);
-        background-color: var(--loading-cube-dim-item-before-background-color, #048ca7);
-        transform: var(--loading-cube-dim-item-before-transform, rotateY(90deg) translateX(3em));
+        width: var(--loading-cube-dim-item-before-width, 42em);
+        background-color: var(
+          --loading-cube-dim-item-before-background-color,
+          color-mix(in srgb, currentColor 60%, transparent)
+        );
+        transform: var(--loading-cube-dim-item-before-transform, rotateY(90deg) translateX(42em));
         transform-origin: var(--loading-cube-dim-item-before-transform-origin, 100% 0);
       }
       &::after {
         content: var(--loading-cube-dim-item-after-content, '');
         float: var(--loading-cube-dim-item-after-float, left);
-        height: var(--loading-cube-dim-item-after-height, 3em);
+        height: var(--loading-cube-dim-item-after-height, 42em);
         position: var(--loading-cube-dim-item-after-position, absolute);
-        width: var(--loading-cube-dim-item-after-width, 3em);
-        background-color: var(--loading-cube-dim-item-after-background-color, #049dbc);
-        transform: var(--loading-cube-dim-item-after-transform, rotateX(-90deg) translateY(3em));
+        width: var(--loading-cube-dim-item-after-width, 42em);
+        background-color: var(
+          --loading-cube-dim-item-after-background-color,
+          color-mix(in srgb, currentColor 80%, transparent)
+        );
+        transform: var(--loading-cube-dim-item-after-transform, rotateX(-90deg) translateY(42em));
         transform-origin: var(--loading-cube-dim-item-after-transform-origin, 100% 100%);
       }
     }

@@ -30,22 +30,31 @@
 
 .ran-math-error {
   margin: 0;
-  padding: var(--ran-math-error-padding, 8px 12px);
-  color: var(--ran-math-error-color, var(--ran-color-danger, #e5484d));
-  background: var(--ran-math-error-background, var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.04)));
-  border-radius: var(--ran-radius-sm, 6px);
+  padding: var(--ran-math-error-padding, var(--ran-space-2, 8px) var(--ran-space-3, 12px));
+  border: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid) var(--ran-red-300, #ffe3e4);
+  border-radius: var(--ran-radius-sm, 8px);
+  background: var(--ran-math-error-background, var(--ran-red-100, #ffeeef));
+  color: var(--ran-math-error-color, var(--ran-color-danger-foreground, #d8001b));
   font-family: var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   font-size: var(--ran-math-error-font-size, var(--ran-text-label-2, 13px));
   font-weight: var(--ran-math-error-font-weight, var(--ran-text-mono-weight-regular, 400));
   line-height: 1.5;
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: anywhere;
   text-align: left;
 }
 
+/* overflow-x: auto turns overflow-y into auto too, and MathML ink (fraction bars, limits)
+   reaches a few px below the line box — that alone made a vertical scrollbar. Clip the block
+   axis and give the ink that room as padding instead. */
 .ran-math-render {
   overflow-x: auto;
+  overflow-y: hidden;
   max-width: 100%;
+  padding-block: var(--ran-space-1, 4px);
+}
+:host([display='inline']) .ran-math-render {
+  padding-block: 0;
 }
 
 /* Opt-in actions remain visible in normal flow; absent controls take no space. */
@@ -69,14 +78,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--ran-math-button-size, 32px);
-  height: var(--ran-math-button-size, 32px);
-  min-width: 32px;
-  min-height: 32px;
+  width: var(--ran-math-button-size, var(--ran-size-7, 32px));
+  height: var(--ran-math-button-size, var(--ran-size-7, 32px));
+  min-width: var(--ran-size-7, 32px);
+  min-height: var(--ran-size-7, 32px);
   flex-shrink: 0;
   padding: 0;
   border: none;
-  border-radius: var(--ran-radius-sm, 6px);
+  border-radius: var(--ran-radius-sm, 8px);
   background: transparent;
   color: var(--ran-math-button-color, var(--ran-color-text-secondary, #666));
   cursor: pointer;
@@ -86,8 +95,8 @@
   color: var(--ran-math-button-hover-color, var(--ran-color-text, #222));
 }
 .ran-math-btn:focus-visible {
-  outline: var(--ran-math-button-focus-outline, 2px solid var(--ran-color-primary, #1890ff));
-  outline-offset: 1px;
+  outline: var(--ran-math-button-focus-outline, 2px solid var(--ran-color-focus, #0a6cff));
+  outline-offset: 2px;
 }
 
 /* Download format menu (shown when `download` lists >1 format). */
@@ -99,7 +108,7 @@
   flex-direction: column;
   min-width: 132px;
   padding: var(--ran-math-menu-padding, var(--ran-space-1, 4px));
-  border-radius: var(--ran-radius-md, 8px);
+  border-radius: var(--ran-radius-md, 12px);
   background: var(--ran-math-toolbar-background, var(--ran-color-bg-elevated, #fff));
   box-shadow: var(--ran-math-toolbar-shadow, var(--ran-shadow-menu, 0 2px 8px rgba(0, 0, 0, 0.12)));
   z-index: 1;
@@ -109,7 +118,7 @@
   padding: var(--ran-math-menu-item-padding-block, var(--ran-space-2, 8px))
     var(--ran-math-menu-item-padding-inline, var(--ran-space-3, 12px));
   border: none;
-  border-radius: var(--ran-radius-sm, 6px);
+  border-radius: var(--ran-radius-sm, 8px);
   background: transparent;
   color: var(--ran-math-item-color, var(--ran-color-text, #222));
   text-align: left;

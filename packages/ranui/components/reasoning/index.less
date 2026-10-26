@@ -12,12 +12,27 @@
   display: none;
 }
 
+/* The inner r-disclosure-row sets its own ink, so the receded colour is handed to it
+   explicitly; without this the thinking reads in the same ink as the answer. */
+.ran-reasoning-row {
+  --ran-disclosure-color: var(--ran-reasoning-color, var(--ran-color-text-secondary));
+}
+
 /* The body keeps the quiet left rule that says "this is the thinking, not the answer"; the
    header is `r-disclosure-row`, the same one a tool call uses, so a transcript carrying both
    has one disclosure language rather than two. */
 .ran-reasoning-body {
   border-left: 2px solid var(--ran-reasoning-border-color, var(--ran-color-border));
-  padding: var(--ran-reasoning-body-padding, var(--ran-space-1) 0 var(--ran-space-2) var(--ran-space-3));
+  /* The rule sits under the leading icon; the text starts on the title column, which the
+     row publishes as --ran-disclosure-body-indent. */
+  padding: var(
+    --ran-reasoning-body-padding,
+    var(--ran-space-1) 0 var(--ran-space-2)
+      calc(
+        var(--ran-disclosure-body-indent, var(--ran-space-6)) - var(--ran-reasoning-body-indent, var(--ran-space-2)) -
+          2px
+      )
+  );
   margin-left: var(--ran-reasoning-body-indent, var(--ran-space-2));
   overflow-wrap: anywhere;
   white-space: pre-wrap;

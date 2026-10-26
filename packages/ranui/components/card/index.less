@@ -11,9 +11,8 @@
   display: none;
 }
 
-/* Interactive card (Geist): opt in with the `hoverable` attribute — border
-   darkens one step (400 → 500) and the surface takes the quiet elevated
-   shadow. Non-interactive cards must not react to hover, so this is gated. */
+/* Interactive card (Geist): opt in with the `hoverable` attribute — the border
+   darkens one step (400 → 500). Non-interactive cards must not react to hover. */
 /* No transition: border-color / box-shadow are palette props and would fade on
    a theme flip; the hover state snaps, matching the rest of the library. */
 :host([hoverable]:hover) .ran-card {
@@ -32,9 +31,10 @@
   border-style: var(--ran-skin-border-style, solid);
   border-color: var(--ran-card-border-color, var(--ran-color-border, #eaeaea));
   border-radius: var(--ran-card-radius, var(--ran-radius-md));
-  // Geist card: page background + 1px border, not a muted gray fill.
-  background: var(--ran-card-background, var(--ran-color-bg));
-  box-shadow: var(--ran-card-shadow, none);
+  /* Same in-flow surface as r-section, so a card nested in a section never steps down
+     (darker) from its parent in dark mode. */
+  background: var(--ran-card-background, var(--ran-color-bg-elevated));
+  box-shadow: var(--ran-card-shadow, var(--ran-shadow-elevated));
   box-sizing: border-box;
 
   &-header {

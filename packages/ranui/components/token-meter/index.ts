@@ -51,7 +51,8 @@ function short(tokens: number): string {
  * ```
  *
  * `level` is reflected (`ok` / `warn` / `over`) so a page can react to the same escalation
- * the bar shows, and `title` always states the numbers — colour is never the only carrier.
+ * the bar shows. Past `ok` the `flag` part says "Near limit" or "Over limit" beside the
+ * readout, and the meter's `title` states the exact numbers — colour is never the only carrier.
  *
  * Attributes: `limit`, `used`, `spent`, `label`, `sheet`. `level` is set by the element and
  * writing it from outside is overwritten on the next update.
@@ -79,6 +80,7 @@ export class TokenMeter extends RanElement {
   _shadowDom!: ShadowRoot;
   _bar!: Progress;
   _text!: HTMLElement;
+  _flag!: HTMLElement;
   _root!: HTMLElement;
 
   static get observedAttributes(): string[] {
@@ -90,6 +92,7 @@ export class TokenMeter extends RanElement {
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
     const text = createRef<HTMLElement>();
+    const flag = createRef<HTMLElement>();
     const bar = createBar();
     bar.setAttribute('class', 'ran-token-meter-bar');
     bar.setAttribute('part', 'bar');
@@ -111,12 +114,14 @@ export class TokenMeter extends RanElement {
       .children(
         bar as unknown as HTMLElement,
         Span().class('ran-token-meter-text').ref(text).attr('part', 'text').build(),
+        Span().class('ran-token-meter-flag').ref(flag).attr('part', 'flag').attr('hidden', '').build(),
       )
       .build();
     this._shadowDom.appendChild(root);
     this._root = root;
     this._bar = bar;
     this._text = shadowPart(text, 'text');
+    this._flag = shadowPart(flag, 'flag');
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────
@@ -236,8 +241,12 @@ export class TokenMeter extends RanElement {
     const context = limit === 0 ? short(used) : `${short(used)} / ${short(limit)}`;
     const counts = spent === 0 ? context : `${context} · ${short(spent)}`;
     this._text.textContent = label === '' ? counts : `${label} ${counts}`;
-    // The exact numbers, unabbreviated, and the only place the level is stated in words —
-    // a reader who cannot distinguish the colours still gets the escalation.
+    // The escalation in words beside the bar, so it never rests on the fill colour alone.
+    this._flag.textContent = level === 'warn' ? 'Near limit' : level === 'over' ? 'Over limit' : '';
+    if (level === 'ok') this._flag.setAttribute('hidden', '');
+    else this._flag.removeAttribute('hidden');
+    // The exact numbers, unabbreviated, and the level in words for assistive technology: the
+    // visible `flag` sits inside role="progressbar", whose children are presentational.
     this._root.setAttribute(
       'title',
       [

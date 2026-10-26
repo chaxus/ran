@@ -104,6 +104,29 @@ test.describe('r-tool-card', () => {
     await expect(page.locator('r-tool-card')).not.toHaveAttribute('open', '');
   });
 
+  test('shows the failure on the collapsed row, not only in the closed body', async ({ page }) => {
+    await mountCards(page, [
+      {
+        call: { card: 'generic', title: 'fetch_url', summary: 'https://api.example.com/v1/items' },
+        result: { card: 'generic', content: '503 Service Unavailable\nRetry-After: 30' },
+        status: 'error',
+      },
+    ]);
+    await expect(page.locator('r-tool-card')).not.toHaveAttribute('open', '');
+    const shown = await insideShadow(page, 'r-tool-card', (root) => {
+      const host = root.querySelector('r-disclosure-row') as HTMLElement & { _shadowDom: ShadowRoot };
+      const row = host._shadowDom.querySelector<HTMLElement>('[part="row"]')!.getBoundingClientRect();
+      const summary = host._shadowDom.querySelector<HTMLElement>('[part="summary"]')!;
+      const box = summary.getBoundingClientRect();
+      return {
+        text: summary.textContent,
+        visible: box.width > 0 && box.height > 0 && box.right <= row.right + 0.5,
+      };
+    });
+    expect(shown.text).toContain('503 Service Unavailable');
+    expect(shown.visible).toBe(true);
+  });
+
   test('renders each lifecycle state', { tag: '@visual' }, async ({ page }) => {
     await mountCards(page, [
       { call: { card: 'generic', title: '读取当前时间', summary: 'Asia/Shanghai' }, status: 'running' },

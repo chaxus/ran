@@ -164,7 +164,7 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-card-title-font-size`
 - `--ran-card-title-font-weight`
 - `--ran-card-title-letter-spacing`
-- `--ran-color-bg`
+- `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-border-hover`
 - `--ran-color-text`
@@ -299,13 +299,12 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-color-bg`
 - `--ran-color-border`
 - `--ran-color-border-hover`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-conversation-background`
 - `--ran-conversation-color`
 - `--ran-conversation-empty-color`
-- `--ran-conversation-focus-color`
 - `--ran-conversation-font-size`
 - `--ran-conversation-footer-background`
 - `--ran-conversation-gap`
@@ -316,6 +315,7 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-conversation-older-hover-border-color`
 - `--ran-conversation-older-hover-color`
 - `--ran-conversation-older-radius`
+- `--ran-conversation-step-gap`
 - `--ran-radius-full`
 - `--ran-space-1`
 - `--ran-space-3`
@@ -333,22 +333,22 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `disclosure-row`
 
-- Tokens: 29
+- Tokens: 31
 - Parts: 7
 
 #### Tokens
-<!-- layers: semantic: 9 · internal: 20 -->
+<!-- layers: semantic: 11 · internal: 20 -->
 - `--ran-color-bg`
 - `--ran-color-bg-hover`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
+- `--ran-disclosure-body-indent`
 - `--ran-disclosure-chevron-size`
 - `--ran-disclosure-color`
 - `--ran-disclosure-error-color`
-- `--ran-disclosure-focus-color`
 - `--ran-disclosure-font-size`
 - `--ran-disclosure-gap`
 - `--ran-disclosure-hover-background`
@@ -362,6 +362,8 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-disclosure-title-weight`
 - `--ran-disclosure-toggle-duration`
 - `--ran-disclosure-transition`
+- `--ran-motion-duration-base`
+- `--ran-motion-duration-fast`
 - `--ran-motion-ease-standard`
 - `--ran-radius-sm`
 - `--ran-size-7`
@@ -435,11 +437,11 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `glass`
 
-- Tokens: 19
+- Tokens: 20
 - Parts: 2
 
 #### Tokens
-<!-- layers: semantic: 5 · internal: 14 -->
+<!-- layers: semantic: 6 · internal: 14 -->
 - `--ran-color-bg-elevated`
 - `--ran-glass-blur`
 - `--ran-glass-border`
@@ -458,6 +460,7 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-motion-duration-base`
 - `--ran-motion-duration-fast`
 - `--ran-motion-ease-spring`
+- `--ran-radius-lg`
 - `--ran-shadow-elevated`
 
 #### Parts
@@ -483,14 +486,20 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `image`
 
-- Tokens: 0
-- Parts: 0
+- Tokens: 6
+- Parts: 1
 
 #### Tokens
-- (none)
+<!-- layers: semantic: 2 · component: 2 · internal: 2 -->
+- `--ran-color-bg-muted`
+- `--ran-color-text-secondary`
+- `--ran-image-fallback-color`
+- `--ran-image-placeholder-background`
+- `--ran-size-4`
+- `--ran-space-10`
 
 #### Parts
-- (none)
+- `image`
 
 ### `input`
 
@@ -611,69 +620,59 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `loading`
 
-- Tokens: 0
+- Tokens: 3
 - Parts: 0
 
 #### Tokens
-- (none)
+<!-- layers: component: 2 · internal: 1 -->
+- `--ran-loading-color`
+- `--ran-loading-size`
+- `--ran-space-10`
 
 #### Parts
 - (none)
 
 ### `loading/variants/arc`
 
-- Tokens: 5
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 · internal: 2 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
-- `--ran-space-4`
-- `--ran-text-copy-weight`
+- (none)
 
 #### Parts
 - `arc`
 
 ### `loading/variants/circle`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `circle`
 
 ### `loading/variants/circle-fold`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `circle-fold`
 
 ### `loading/variants/circle-line`
 
-- Tokens: 5
+- Tokens: 3
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 5 -->
+<!-- layers: semantic: 3 -->
 - `--ran-color-bg`
-- `--ran-color-primary`
-- `--ran-color-success`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 
@@ -682,125 +681,99 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `loading/variants/circle-rotate`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `circle-rotate`
 
 ### `loading/variants/circle-spin`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `circle-spin`
 
 ### `loading/variants/circle-turn`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `circle-turn`
 
 ### `loading/variants/cube`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `cube`
 
 ### `loading/variants/cube-dim`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `cube-dim`
 
 ### `loading/variants/cube-fold`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `cube-fold`
 
 ### `loading/variants/cube-grid`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `cube-grid`
 
 ### `loading/variants/dot`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `dot`
 
 ### `loading/variants/dot-bar`
 
-- Tokens: 4
+- Tokens: 2
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 4 -->
-- `--ran-color-primary`
-- `--ran-color-success`
+<!-- layers: semantic: 2 -->
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 
@@ -809,27 +782,22 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `loading/variants/dot-circle`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `dot-circle`
 
 ### `loading/variants/dot-line`
 
-- Tokens: 4
+- Tokens: 2
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 4 -->
-- `--ran-color-primary`
-- `--ran-color-success`
+<!-- layers: semantic: 2 -->
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 
@@ -838,99 +806,77 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `loading/variants/dot-pulse`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `dot-pulse`
 
 ### `loading/variants/double-bounce`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `double-bounce`
 
 ### `loading/variants/drop`
 
-- Tokens: 5
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 · internal: 2 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
-- `--ran-space-2`
-- `--ran-space-8`
+- (none)
 
 #### Parts
 - `drop`
 
 ### `loading/variants/line`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `line`
 
 ### `loading/variants/line-scale`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `line-scale`
 
 ### `loading/variants/pacman`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `pacman`
 
 ### `loading/variants/pulse`
 
-- Tokens: 3
+- Tokens: 1
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
+<!-- layers: semantic: 1 -->
 - `--ran-color-text`
 
 #### Parts
@@ -938,42 +884,33 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `loading/variants/rotate`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `rotate`
 
 ### `loading/variants/scale-out`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `scale-out`
 
 ### `loading/variants/solar`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 2
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `solar`
@@ -981,40 +918,33 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `loading/variants/square`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `square`
 
 ### `loading/variants/stretch`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `stretch`
 
 ### `loading/variants/text`
 
-- Tokens: 3
+- Tokens: 2
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 2 · internal: 1 -->
-- `--ran-color-text`
+<!-- layers: semantic: 1 · internal: 1 -->
 - `--ran-font-family`
 - `--ran-text-label-1`
 
@@ -1023,29 +953,28 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `loading/variants/triple-bounce`
 
-- Tokens: 3
+- Tokens: 0
 - Parts: 1
 
 #### Tokens
-<!-- layers: semantic: 3 -->
-- `--ran-color-primary`
-- `--ran-color-success`
-- `--ran-color-text`
+- (none)
 
 #### Parts
 - `triple-bounce`
 
 ### `markdown`
 
-- Tokens: 75
+- Tokens: 80
 - Parts: 4
 
 #### Tokens
-<!-- layers: semantic: 12 · skin: 1 · internal: 62 -->
-- `--ran-color-bg-muted`
+<!-- layers: semantic: 14 · skin: 1 · internal: 65 -->
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
 - `--ran-color-border-secondary`
 - `--ran-color-danger`
+- `--ran-color-danger-foreground`
+- `--ran-color-focus`
 - `--ran-color-link`
 - `--ran-color-primary`
 - `--ran-color-text`
@@ -1100,6 +1029,7 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-markdown-table-radius`
 - `--ran-radius-sm`
 - `--ran-red-100`
+- `--ran-red-300`
 - `--ran-size-7`
 - `--ran-skin-border-style`
 - `--ran-space-1`
@@ -1113,10 +1043,12 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-text-heading-2`
 - `--ran-text-heading-3`
 - `--ran-text-heading-4`
+- `--ran-text-heading-tracking`
 - `--ran-text-heading-weight`
 - `--ran-text-label-2`
 - `--ran-text-label-3`
 - `--ran-text-label-weight`
+- `--ran-text-mono-weight-regular`
 
 #### Parts
 - `block`
@@ -1126,19 +1058,19 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `math`
 
-- Tokens: 33
+- Tokens: 37
 - Parts: 7
 
 #### Tokens
-<!-- layers: semantic: 10 · component: 16 · internal: 7 -->
+<!-- layers: semantic: 11 · skin: 1 · component: 16 · internal: 9 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-muted`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-danger-foreground`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-font-mono`
-- `--ran-gray-alpha-100`
 - `--ran-math-align`
 - `--ran-math-button-color`
 - `--ran-math-button-hover-background`
@@ -1157,7 +1089,11 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-math-toolbar-shadow`
 - `--ran-radius-md`
 - `--ran-radius-sm`
+- `--ran-red-100`
+- `--ran-red-300`
 - `--ran-shadow-menu`
+- `--ran-size-7`
+- `--ran-skin-border-style`
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-3`
@@ -1176,21 +1112,24 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `mermaid`
 
-- Tokens: 27
+- Tokens: 35
 - Parts: 7
 
 #### Tokens
-<!-- layers: semantic: 9 · internal: 18 -->
+<!-- layers: semantic: 11 · skin: 1 · internal: 23 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-muted`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-danger-foreground`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
+- `--ran-font-mono`
 - `--ran-mermaid-button-color`
 - `--ran-mermaid-button-hover-background`
 - `--ran-mermaid-button-hover-color`
 - `--ran-mermaid-button-size`
+- `--ran-mermaid-error-background`
 - `--ran-mermaid-error-color`
 - `--ran-mermaid-error-font-size`
 - `--ran-mermaid-error-font-weight`
@@ -1202,12 +1141,17 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-mermaid-toolbar-shadow`
 - `--ran-radius-md`
 - `--ran-radius-sm`
+- `--ran-red-100`
+- `--ran-red-300`
 - `--ran-shadow-menu`
+- `--ran-size-7`
+- `--ran-skin-border-style`
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-3`
 - `--ran-text-label-2`
 - `--ran-text-label-weight`
+- `--ran-text-mono-weight-regular`
 
 #### Parts
 - `button`
@@ -1368,11 +1312,11 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `player`
 
-- Tokens: 169
+- Tokens: 173
 - Parts: 0
 
 #### Tokens
-<!-- layers: semantic: 5 · component: 152 · internal: 12 -->
+<!-- layers: semantic: 9 · component: 152 · internal: 12 -->
 - `--ran-color-`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -1388,6 +1332,10 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-dropdown-option-selected-background-color`
 - `--ran-focus-ring-inverse-color`
 - `--ran-media-background`
+- `--ran-motion-duration-fast`
+- `--ran-motion-duration-slow`
+- `--ran-motion-ease-smooth`
+- `--ran-motion-ease-standard`
 - `--ran-player-background`
 - `--ran-player-clarity-border-radius`
 - `--ran-player-clarity-color`
@@ -1615,12 +1563,13 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `radar`
 
-- Tokens: 5
+- Tokens: 6
 - Parts: 0
 
 #### Tokens
-<!-- layers: semantic: 1 · component: 4 -->
+<!-- layers: semantic: 2 · component: 4 -->
 - `--ran-color-border`
+- `--ran-color-primary`
 - `--ran-radar-fill-color`
 - `--ran-radar-line-color`
 - `--ran-radar-polygon-color`
@@ -1631,20 +1580,22 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `reasoning`
 
-- Tokens: 10
+- Tokens: 12
 - Parts: 3
 
 #### Tokens
-<!-- layers: semantic: 2 · internal: 8 -->
+<!-- layers: semantic: 2 · internal: 10 -->
 - `--ran-color-border`
 - `--ran-color-text-secondary`
+- `--ran-disclosure-body-indent`
+- `--ran-disclosure-color`
 - `--ran-reasoning-body-indent`
 - `--ran-reasoning-border-color`
 - `--ran-reasoning-color`
 - `--ran-reasoning-font-size`
 - `--ran-space-1`
 - `--ran-space-2`
-- `--ran-space-3`
+- `--ran-space-6`
 - `--ran-text-copy-2`
 
 #### Parts
@@ -1998,22 +1949,24 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `token-meter`
 
-- Tokens: 21
-- Parts: 2
+- Tokens: 23
+- Parts: 3
 
 #### Tokens
-<!-- layers: semantic: 6 · component: 3 · internal: 12 -->
+<!-- layers: semantic: 6 · component: 3 · internal: 14 -->
 - `--ran-color-bg-muted`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-color-warning`
+- `--ran-gray-alpha-700`
 - `--ran-progress-fill-background`
 - `--ran-progress-track-background`
 - `--ran-progress-track-border-radius`
 - `--ran-radius-full`
 - `--ran-space-2`
 - `--ran-text-label-3`
+- `--ran-text-label-weight`
 - `--ran-token-meter-`
 - `--ran-token-meter-color`
 - `--ran-token-meter-fill-background`
@@ -2026,6 +1979,7 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-token-meter-warn-background`
 
 #### Parts
+- `flag`
 - `meter`
 - `text`
 
@@ -2035,17 +1989,16 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - Parts: 11
 
 #### Tokens
-<!-- layers: semantic: 10 · internal: 34 -->
-- `--ran-color-bg-muted`
+<!-- layers: semantic: 8 · internal: 36 -->
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
 - `--ran-color-danger`
 - `--ran-color-link`
 - `--ran-color-text`
-- `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
+- `--ran-disclosure-body-indent`
 - `--ran-font-mono`
 - `--ran-green-200`
-- `--ran-radius-md`
 - `--ran-radius-sm`
 - `--ran-red-200`
 - `--ran-size-4`
@@ -2054,6 +2007,7 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-space-3`
 - `--ran-space-6`
 - `--ran-text-copy-2`
+- `--ran-text-label-2`
 - `--ran-text-label-3`
 - `--ran-text-mono-weight-regular`
 - `--ran-tool-card-added-background`

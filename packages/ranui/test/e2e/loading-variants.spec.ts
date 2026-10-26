@@ -4,29 +4,76 @@ import { insideShadow, isolatedSetup, mount, settlePending } from './helpers';
 
 test.beforeEach(async ({ page }) => isolatedSetup(page, DEV_SERVER, 'r-loading'));
 
-test('arc keeps its loading label visible and in flow with reduced motion in both themes', async ({ page }) => {
-  for (const theme of ['light', 'dark']) {
-    await page.evaluate((theme) => document.documentElement.setAttribute('data-ran-theme', theme), theme);
-    await mount(page, '<r-loading name="arc"></r-loading>');
-    await settlePending(page, 'r-loading');
-    const result = await insideShadow(page, 'r-loading', (root) => {
-      const label = root.querySelector('h1')!;
-      const text = root.querySelector('span')!;
-      const style = getComputedStyle(label);
-      return {
-        display: getComputedStyle(text).display,
-        color: style.color,
-        weight: Number(style.fontWeight),
-        expected: getComputedStyle(document.body).color,
-        contained:
-          label.getBoundingClientRect().bottom <= root.querySelector('.arc')!.getBoundingClientRect().bottom + 1,
-      };
-    });
-    expect(result.display).not.toBe('none');
-    expect(result.weight).toBeGreaterThanOrEqual(400);
-    expect(result.color).toBe(result.expected);
-    expect(result.contained).toBe(true);
+test('arc and drop draw no text of their own; the host carries the status and its name', async ({ page }) => {
+  await mount(page, '<r-loading name="arc"></r-loading><r-loading name="drop" label="Loading files"></r-loading>');
+  await settlePending(page, 'r-loading');
+  const hosts = await page.locator('r-loading').evaluateAll((els) =>
+    els.map((el) => ({
+      role: el.getAttribute('role'),
+      name: el.getAttribute('aria-label'),
+      text: (el as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom.textContent,
+      headings: (el as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom.querySelectorAll('h1,h2,h3').length,
+    })),
+  );
+  expect(hosts).toEqual([
+    { role: 'status', name: 'Loading', text: '', headings: 0 },
+    { role: 'status', name: 'Loading files', text: '', headings: 0 },
+  ]);
+});
+
+test('every variant lands on the size token footprint and follows --ran-loading-size', async ({ page }) => {
+  const list = [
+    'arc',
+    'circle',
+    'circle-fold',
+    'circle-line',
+    'circle-rotate',
+    'circle-spin',
+    'circle-turn',
+    'cube',
+    'cube-dim',
+    'cube-fold',
+    'cube-grid',
+    'dot',
+    'dot-bar',
+    'dot-circle',
+    'dot-line',
+    'dot-pulse',
+    'double-bounce',
+    'drop',
+    'line',
+    'line-scale',
+    'pacman',
+    'pulse',
+    'rotate',
+    'scale-out',
+    'solar',
+    'square',
+    'stretch',
+    'text',
+    'triple-bounce',
+  ];
+  await mount(page, list.map((n) => `<r-loading name="${n}"></r-loading>`).join(''));
+  await settlePending(page, 'r-loading');
+  const boxes = await page.locator('r-loading').evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { name: el.getAttribute('name'), w: Math.round(r.width), h: Math.round(r.height) };
+    }),
+  );
+  for (const box of boxes) {
+    if (box.name === 'text') continue;
+    expect(box.h, box.name!).toBe(40);
+    expect(box.w, box.name!).toBeGreaterThanOrEqual(40);
+    expect(box.w, box.name!).toBeLessThanOrEqual(80);
   }
+  await mount(page, '<r-loading name="circle" style="--ran-loading-size: 24px"></r-loading>');
+  await settlePending(page, 'r-loading');
+  const small = await page.locator('r-loading').evaluate((el) => {
+    const inner = (el as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom.querySelector('.circle')!;
+    return Math.round(inner.getBoundingClientRect().width);
+  });
+  expect(small).toBeLessThanOrEqual(24);
 });
 
 test('dot-pulse shows all five static dots immediately in reduced motion', async ({ page }) => {
@@ -46,10 +93,10 @@ test('dot-pulse shows all five static dots immediately in reduced motion', async
   }
 });
 
-test('status marks contrast with both surfaces and drop text stays outside its animated fill', async ({ page }) => {
+test('status marks contrast with both surfaces', async ({ page }) => {
   for (const theme of ['light', 'dark']) {
     await page.evaluate((theme) => document.documentElement.setAttribute('data-ran-theme', theme), theme);
-    await mount(page, '<r-loading name="pulse"></r-loading><r-loading name="drop"></r-loading>');
+    await mount(page, '<r-loading name="pulse"></r-loading>');
     await settlePending(page, 'r-loading');
     const result = await insideShadow(page, 'r-loading[name="pulse"]', (root) => {
       const luminance = (color: string): number => {
@@ -72,11 +119,5 @@ test('status marks contrast with both surfaces and drop text stays outside its a
       return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
     });
     expect(result).toBeGreaterThanOrEqual(3);
-    const geometry = await insideShadow(page, 'r-loading[name="drop"]', (root) => {
-      const label = root.querySelector('.drop-item-bg')!;
-      const fill = root.querySelector('.drop-item')!;
-      return { labelTop: label.getBoundingClientRect().top, fillBottom: fill.getBoundingClientRect().bottom };
-    });
-    expect(geometry.labelTop).toBeGreaterThanOrEqual(geometry.fillBottom + 4);
   }
 });

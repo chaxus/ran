@@ -1,0 +1,20 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  min-inline-size: var(--ran-loading-size, var(--ran-space-10, 40px));
+  min-block-size: var(--ran-loading-size, var(--ran-space-10, 40px));
+  color: var(--ran-loading-color, currentColor);
+}
+
+/* `hidden` is a user-agent rule; any author `display` on `:host` outranks it. */
+:host([hidden]) {
+  display: none;
+}
+
+/* Variants draw in `em` of this font-size. Each variant names its natural footprint in em
+   through `--_ran-loading-units`, so every default lands on `--ran-loading-size`. */
+.ran-loading > * {
+  font-size: calc(var(--ran-loading-size, var(--ran-space-10, 40px)) / var(--_ran-loading-units, 40));
+}

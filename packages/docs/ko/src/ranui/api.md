@@ -63,7 +63,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
 - **프로퍼티**:
   - `description: string` — Secondary text shown under the heading. Empty by default; the header is hidden when the heading, description and `extra` slot are all empty.
   - `heading: string` — Heading text.
-  - `hoverable: boolean` — Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable.
+  - `hoverable: boolean` — Interactive card (Geist): hover darkens the border one step. Purely presentational — gate it to cards that are actually clickable.
   - `sheet: string`
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`, `extra (이름 있음)`, `footer (이름 있음)`
@@ -232,11 +232,11 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
 - **어트리뷰트**: `alt`, `fallback`, `sheet`, `src`
 - **프로퍼티**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
-  - `fallback`
+  - `fallback` — Image shown when `src` fails. Empty by default: a failed image then shows a theme-aware placeholder that fills the box.
   - `sheet`
 - **이벤트**: —
 - **슬롯**: —
-- **Part**: —
+- **Part**: `image`
 
 ## `<r-input>`
 
@@ -281,8 +281,11 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
 
 소스: `components/loading/index.ts`
 
-- **어트리뷰트**: `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
-- **프로퍼티**: `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
+- **어트리뷰트**: `label: string`, `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
+- **프로퍼티**:
+  - `label: string` — Accessible name announced by the `status` role. Defaults to "Loading"; set it to say what is loading.
+  - `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`
+  - `sheet: string`
 - **이벤트**: —
 - **슬롯**: —
 - **Part**: —
@@ -620,7 +623,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
   - `used: number` — Tokens the next request will carry — the history, not the whole conversation.
 - **이벤트**: —
 - **슬롯**: —
-- **Part**: `meter`, `text`
+- **Part**: `flag`, `meter`, `text`
 
 ## `<r-tool-card>`
 

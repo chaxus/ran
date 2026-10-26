@@ -361,7 +361,10 @@
     border-radius: var(--ran-player-gesture-flash-border-radius, var(--ran-radius-full, 999px));
     opacity: 0;
     pointer-events: none;
-    transition: var(--ran-player-gesture-flash-transition, opacity 0.15s ease-out);
+    transition: var(
+      --ran-player-gesture-flash-transition,
+      opacity var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1))
+    );
     z-index: var(--ran-player-gesture-flash-z-index, 5);
 
     &-left {
@@ -414,7 +417,10 @@
     height: var(--ran-player-controller-height, 34px);
     padding: var(--ran-player-controller-padding, 16px);
     opacity: var(--ran-player-controller-opacity, 0);
-    transition: var(--ran-player-controller-transition, opacity 0.5s);
+    transition: var(
+      --ran-player-controller-transition,
+      opacity var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-smooth, cubic-bezier(0.4, 0, 0.2, 1))
+    );
     box-sizing: var(--ran-player-controller-box-sizing, content-box);
 
     &-tip {
@@ -435,7 +441,7 @@
       z-index: var(--ran-player-tip-z-index, 100);
       font-variant: var(--ran-player-tip-font-variant, initial);
       background: var(--ran-player-tip-background, rgba(0, 0, 0, 0.5));
-      border-radius: var(--ran-player-tip-border-radius, 8px);
+      border-radius: var(--ran-player-tip-border-radius, var(--ran-radius-sm, 8px));
       outline: var(--ran-player-tip-outline, none);
       box-shadow: var(--ran-player-tip-box-shadow, @box-shadow);
       // `visible`, not `hidden` — the thumbnail preview below sits above this pill via
@@ -456,7 +462,7 @@
         margin-bottom: var(--ran-player-tip-thumbnail-margin-bottom, var(--ran-space-2, 8px));
         background-repeat: no-repeat;
         border: var(--ran-player-tip-thumbnail-border, 2px solid rgba(255, 255, 255, 0.9));
-        border-radius: var(--ran-player-tip-thumbnail-border-radius, 4px);
+        border-radius: var(--ran-player-tip-thumbnail-border-radius, var(--ran-radius-xs, 4px));
         box-shadow: var(--ran-player-tip-thumbnail-box-shadow, 0 2px 8px rgba(0, 0, 0, 0.4));
       }
 
@@ -509,7 +515,7 @@
       &-wrap {
         width: var(--ran-player-progress-track-width, 100%);
         height: var(--ran-player-progress-track-height, 100%);
-        border-radius: var(--ran-player-progress-track-border-radius, 20px);
+        border-radius: var(--ran-player-progress-track-border-radius, var(--ran-radius-full, 9999px));
         background: var(--ran-player-progress-track-background, rgba(255, 255, 255, 0.3));
         position: var(--ran-player-progress-track-position, relative);
         overflow: var(--ran-player-progress-track-overflow, hidden);
@@ -526,7 +532,7 @@
           transform-origin: var(--ran-player-progress-buffer-transform-origin, 0 0);
           will-change: var(--ran-player-progress-buffer-will-change, transform);
           background: var(--ran-player-progress-buffer-background, rgba(255, 255, 255, 0.45));
-          border-radius: var(--ran-player-progress-buffer-border-radius, 20px);
+          border-radius: var(--ran-player-progress-buffer-border-radius, var(--ran-radius-full, 9999px));
           box-sizing: var(--ran-player-progress-buffer-box-sizing, content-box);
           z-index: var(--ran-player-progress-buffer-z-index, 1);
         }
@@ -541,7 +547,7 @@
           transform-origin: var(--ran-player-progress-fill-transform-origin, 0 0);
           will-change: var(--ran-player-progress-fill-will-change, transform);
           background: var(--ran-player-progress-fill-background, rgba(255, 255, 255, 0.8));
-          border-radius: var(--ran-player-progress-fill-border-radius, 20px);
+          border-radius: var(--ran-player-progress-fill-border-radius, var(--ran-radius-full, 9999px));
           box-sizing: var(--ran-player-progress-fill-box-sizing, content-box);
           cursor: var(--ran-player-progress-fill-cursor, pointer);
           z-index: var(--ran-player-progress-fill-z-index, 2);
@@ -605,7 +611,7 @@
             @width: var(--ran-player-toggle-width, var(--ran-size-3, 20px));
             @height: var(--ran-player-toggle-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-toggle-padding, var(--ran-space-1, 4px));
-            @radius: var(--ran-player-toggle-border-radius, var(--ran-radius-sm, 6px));
+            @radius: var(--ran-player-toggle-border-radius, var(--ran-radius-sm, 8px));
             @color: var(--ran-player-toggle-color, #fff);
             @cursor: var(--ran-player-toggle-cursor, pointer);
             @outline: var(--ran-player-toggle-outline, 0);
@@ -616,7 +622,7 @@
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
             @focus-offset: var(--ran-player-toggle-focus-visible-outline-offset, 2px);
-            @focus-radius: var(--ran-player-toggle-focus-visible-border-radius, var(--ran-radius-sm, 6px));
+            @focus-radius: var(--ran-player-toggle-focus-visible-border-radius, var(--ran-radius-sm, 8px));
           );
         }
 
@@ -692,7 +698,7 @@
           // control in this row now shares, instead of volume being the one
           // control with no hover feedback at all.
           padding: var(--ran-player-volume-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
-          border-radius: var(--ran-player-volume-border-radius, var(--ran-radius-sm, 6px));
+          border-radius: var(--ran-player-volume-border-radius, var(--ran-radius-sm, 8px));
           transition: var(--ran-player-volume-transition, none);
 
           &:hover {
@@ -789,7 +795,7 @@
             @width: var(--ran-player-speed-width, 36px);
             @height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-speed-padding, var(--ran-space-1, 4px) var(--ran-space-1, 4px));
-            @radius: var(--ran-player-speed-border-radius, var(--ran-radius-sm, 6px));
+            @radius: var(--ran-player-speed-border-radius, var(--ran-radius-sm, 8px));
             @color: var(--ran-player-speed-color, #fff);
             @font-family: var(--ran-player-speed-font-family, PingFang SC);
             @font-size: var(--ran-player-speed-font-size, var(--ran-text-label-1, 14px));
@@ -885,7 +891,7 @@
             @width: var(--ran-player-subtitle-width, 50px);
             @height: var(--ran-player-subtitle-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-subtitle-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
-            @radius: var(--ran-player-subtitle-border-radius, var(--ran-radius-sm, 6px));
+            @radius: var(--ran-player-subtitle-border-radius, var(--ran-radius-sm, 8px));
             @color: var(--ran-player-subtitle-color, #fff);
             @font-family: var(--ran-player-subtitle-font-family, PingFang SC);
             @font-size: var(--ran-player-subtitle-font-size, var(--ran-text-label-1, 14px));
@@ -970,7 +976,7 @@
             @width: var(--ran-player-clarity-width, 40px);
             @height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-clarity-padding, var(--ran-space-1, 4px) var(--ran-space-1, 4px));
-            @radius: var(--ran-player-clarity-border-radius, var(--ran-radius-sm, 6px));
+            @radius: var(--ran-player-clarity-border-radius, var(--ran-radius-sm, 8px));
             @color: var(--ran-player-clarity-color, #fff);
             @font-family: var(--ran-player-clarity-font-family, PingFang SC);
             @font-size: var(--ran-player-clarity-font-size, var(--ran-text-label-1, 14px));
@@ -1056,7 +1062,7 @@
             @width: var(--ran-player-pip-width, var(--ran-size-3, 20px));
             @height: var(--ran-player-pip-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-pip-padding, var(--ran-space-1, 4px));
-            @radius: var(--ran-player-pip-border-radius, var(--ran-radius-sm, 6px));
+            @radius: var(--ran-player-pip-border-radius, var(--ran-radius-sm, 8px));
             @color: var(--ran-player-pip-color, #fff);
             @cursor: var(--ran-player-pip-cursor, pointer);
             @outline: var(--ran-player-pip-outline, 0);
@@ -1067,7 +1073,7 @@
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
             @focus-offset: var(--ran-player-pip-focus-visible-outline-offset, 2px);
-            @focus-radius: var(--ran-player-pip-focus-visible-border-radius, var(--ran-radius-sm, 6px));
+            @focus-radius: var(--ran-player-pip-focus-visible-border-radius, var(--ran-radius-sm, 8px));
           );
 
           &-hidden {
@@ -1082,7 +1088,7 @@
             @width: var(--ran-player-remote-width, var(--ran-size-3, 20px));
             @height: var(--ran-player-remote-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-remote-padding, var(--ran-space-1, 4px));
-            @radius: var(--ran-player-remote-border-radius, var(--ran-radius-sm, 6px));
+            @radius: var(--ran-player-remote-border-radius, var(--ran-radius-sm, 8px));
             @color: var(--ran-player-remote-color, #fff);
             @cursor: var(--ran-player-remote-cursor, pointer);
             @outline: var(--ran-player-remote-outline, 0);
@@ -1093,7 +1099,7 @@
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
             @focus-offset: var(--ran-player-remote-focus-visible-outline-offset, 2px);
-            @focus-radius: var(--ran-player-remote-focus-visible-border-radius, var(--ran-radius-sm, 6px));
+            @focus-radius: var(--ran-player-remote-focus-visible-border-radius, var(--ran-radius-sm, 8px));
           );
 
           &-hidden {
@@ -1112,7 +1118,7 @@
             @width: var(--ran-player-fullscreen-width, var(--ran-size-3, 20px));
             @height: var(--ran-player-fullscreen-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-fullscreen-padding, var(--ran-space-1, 4px));
-            @radius: var(--ran-player-fullscreen-border-radius, var(--ran-radius-sm, 6px));
+            @radius: var(--ran-player-fullscreen-border-radius, var(--ran-radius-sm, 8px));
             @color: var(--ran-player-fullscreen-color, #fff);
             @cursor: var(--ran-player-fullscreen-cursor, pointer);
             @outline: var(--ran-player-fullscreen-outline, 0);
@@ -1123,7 +1129,7 @@
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
             @focus-offset: var(--ran-player-fullscreen-focus-visible-outline-offset, 2px);
-            @focus-radius: var(--ran-player-fullscreen-focus-visible-border-radius, var(--ran-radius-sm, 6px));
+            @focus-radius: var(--ran-player-fullscreen-focus-visible-border-radius, var(--ran-radius-sm, 8px));
           );
         }
       }

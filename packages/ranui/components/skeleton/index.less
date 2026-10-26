@@ -30,9 +30,10 @@
   overflow: hidden;
   background: 0 0;
   width: 100%;
-  height: var(--ran-skeleton-height, var(--ran-size-1, 16px));
+  /* The host owns the size: `style="height:24px"` or `--ran-skeleton-height` both land here. */
+  height: 100%;
   background: var(--ran-skeleton-background, var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.06)));
-  border-radius: var(--ran-skeleton-border-radius, var(--ran-radius-sm, 6px));
+  border-radius: var(--ran-skeleton-border-radius, var(--ran-radius-sm, 8px));
   &::after {
     position: absolute;
     top: 0;

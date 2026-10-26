@@ -55,7 +55,7 @@ Source: `components/card/index.ts`
 - **Properties**:
   - `description: string` — Secondary text shown under the heading. Empty by default; the header is hidden when the heading, description and `extra` slot are all empty.
   - `heading: string` — Heading text.
-  - `hoverable: boolean` — Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable.
+  - `hoverable: boolean` — Interactive card (Geist): hover darkens the border one step. Purely presentational — gate it to cards that are actually clickable.
   - `sheet: string`
 - **Events**: —
 - **Slots**: `default`, `extra (named)`, `footer (named)`
@@ -224,11 +224,11 @@ Source: `components/image/index.ts`
 - **Attributes**: `alt`, `fallback`, `sheet`, `src`
 - **Properties**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
-  - `fallback`
+  - `fallback` — Image shown when `src` fails. Empty by default: a failed image then shows a theme-aware placeholder that fills the box.
   - `sheet`
 - **Events**: —
 - **Slots**: —
-- **Parts**: —
+- **Parts**: `image`
 
 ## `<r-input>`
 
@@ -273,8 +273,11 @@ Source: `components/link/index.ts`
 
 Source: `components/loading/index.ts`
 
-- **Attributes**: `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
-- **Properties**: `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
+- **Attributes**: `label: string`, `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
+- **Properties**:
+  - `label: string` — Accessible name announced by the `status` role. Defaults to "Loading"; set it to say what is loading.
+  - `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`
+  - `sheet: string`
 - **Events**: —
 - **Slots**: —
 - **Parts**: —
@@ -612,7 +615,7 @@ Source: `components/token-meter/index.ts`
   - `used: number` — Tokens the next request will carry — the history, not the whole conversation.
 - **Events**: —
 - **Slots**: —
-- **Parts**: `meter`, `text`
+- **Parts**: `flag`, `meter`, `text`
 
 ## `<r-tool-card>`
 

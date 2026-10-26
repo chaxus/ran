@@ -44,14 +44,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--ran-mermaid-button-size, 32px);
-  height: var(--ran-mermaid-button-size, 32px);
-  min-width: 32px;
-  min-height: 32px;
+  width: var(--ran-mermaid-button-size, var(--ran-size-7, 32px));
+  height: var(--ran-mermaid-button-size, var(--ran-size-7, 32px));
+  min-width: var(--ran-size-7, 32px);
+  min-height: var(--ran-size-7, 32px);
   flex-shrink: 0;
   padding: 0;
   border: none;
-  border-radius: var(--ran-radius-sm, 6px);
+  border-radius: var(--ran-radius-sm, 8px);
   background: transparent;
   color: var(--ran-mermaid-button-color, var(--ran-color-text-secondary, #666));
   cursor: pointer;
@@ -61,8 +61,8 @@
   color: var(--ran-mermaid-button-hover-color, var(--ran-color-text, #222));
 }
 .ran-mermaid-btn:focus-visible {
-  outline: var(--ran-mermaid-button-focus-outline, 2px solid var(--ran-color-primary, #1890ff));
-  outline-offset: var(--ran-mermaid-button-focus-outline-offset, 1px);
+  outline: var(--ran-mermaid-button-focus-outline, 2px solid var(--ran-color-focus, #0a6cff));
+  outline-offset: var(--ran-mermaid-button-focus-outline-offset, 2px);
 }
 /* Download format menu (shown when the download attribute lists >1 format). */
 .ran-mermaid-menu {
@@ -73,7 +73,7 @@
   flex-direction: column;
   min-width: 132px;
   padding: var(--ran-mermaid-menu-padding, var(--ran-space-1, 4px));
-  border-radius: var(--ran-radius-md, 8px);
+  border-radius: var(--ran-radius-md, 12px);
   background: var(--ran-mermaid-toolbar-background, var(--ran-color-bg-elevated, #fff));
   box-shadow: var(--ran-mermaid-toolbar-shadow, var(--ran-shadow-menu, 0 2px 8px rgba(0, 0, 0, 0.12)));
   z-index: 1;
@@ -82,7 +82,7 @@
   padding: var(--ran-mermaid-menu-item-padding-block, var(--ran-space-2, 8px))
     var(--ran-mermaid-menu-item-padding-inline, var(--ran-space-3, 12px));
   border: none;
-  border-radius: var(--ran-radius-sm, 6px);
+  border-radius: var(--ran-radius-sm, 8px);
   background: transparent;
   color: var(--ran-mermaid-menu-item-color, var(--ran-color-text, #222));
   text-align: left;
@@ -95,11 +95,17 @@
 }
 .ran-mermaid-error {
   margin: 0;
-  padding: var(--ran-mermaid-error-padding, var(--ran-space-3, 12px));
-  color: var(--ran-mermaid-error-color, #c0392b);
-  white-space: pre-wrap;
+  padding: var(--ran-mermaid-error-padding, var(--ran-space-2, 8px) var(--ran-space-3, 12px));
+  border: var(--ran-skin-border-width, 1px) var(--ran-skin-border-style, solid) var(--ran-red-300, #ffe3e4);
+  border-radius: var(--ran-radius-sm, 8px);
+  background: var(--ran-mermaid-error-background, var(--ran-red-100, #ffeeef));
+  color: var(--ran-mermaid-error-color, var(--ran-color-danger-foreground, #d8001b));
+  font-family: var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   font-size: var(--ran-mermaid-error-font-size, var(--ran-text-label-2, 13px));
-  font-weight: var(--ran-mermaid-error-font-weight, var(--ran-text-label-weight, 500));
+  font-weight: var(--ran-mermaid-error-font-weight, var(--ran-text-mono-weight-regular, 400));
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .ran-mermaid-copy-status {

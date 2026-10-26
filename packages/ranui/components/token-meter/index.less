@@ -32,7 +32,8 @@
   --ran-progress-track-height: var(--ran-token-meter-track-height, 0.375rem);
   --ran-progress-track-border-radius: var(--ran-token-meter-track-radius, var(--ran-radius-full));
   --ran-progress-track-background: var(--ran-token-meter-track-background, var(--ran-color-bg-muted));
-  --ran-progress-fill-background: var(--ran-token-meter-fill-background, var(--ran-color-primary));
+  /* A gray step, not primary: at rest the meter is the quietest mark in the composer. */
+  --ran-progress-fill-background: var(--ran-token-meter-fill-background, var(--ran-gray-alpha-700));
   --ran-progress-cursor: default;
 }
 
@@ -43,14 +44,24 @@
 }
 
 /* The two escalations. `warn` says the window is filling; `over` says the next request
-   will not fit. Colour alone does not carry either — `title` states the numbers, and the
-   element exposes `level` as an attribute for a caller that wants to say more. */
+   will not fit. Colour alone does not carry either: the `flag` part says it in words, the
+   meter's `title` states the exact numbers, and `level` is reflected for the page. */
 :host([level='warn']) .ran-token-meter-bar {
   --ran-progress-fill-background: var(--ran-token-meter-warn-background, var(--ran-color-warning));
 }
 
 :host([level='over']) .ran-token-meter-bar {
   --ran-progress-fill-background: var(--ran-token-meter-over-background, var(--ran-color-danger));
+}
+
+.ran-token-meter-flag {
+  flex: none;
+  color: var(--ran-color-text);
+  font-weight: var(--ran-text-label-weight);
+}
+
+.ran-token-meter-flag[hidden] {
+  display: none;
 }
 
 .ran-token-meter-text {

@@ -20,18 +20,24 @@
   display: flex;
   flex-direction: column;
   gap: var(--ran-tool-card-body-gap, var(--ran-space-2));
-  padding: var(--ran-tool-card-body-padding, var(--ran-space-2) 0 var(--ran-space-2) var(--ran-space-6));
+  /* Indented by the row's own title column, so the body sits under the title. */
+  padding: var(
+    --ran-tool-card-body-padding,
+    var(--ran-space-2) 0 var(--ran-space-2) var(--ran-disclosure-body-indent, var(--ran-space-6))
+  );
 }
 
-/* IN and OUT in one bordered card, each section capped and scrolling on its own so a long
-   input never buries a short output. */
+/* IN/OUT, terminal output and diff hunks are one code surface, shared with r-markdown's code
+   blocks: subtle fill, 1px border, 8px radius, 8×12 padding, 13px mono. Each IO section is
+   capped and scrolls on its own so a long input never buries a short output. */
 .ran-tool-card-io {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--ran-tool-card-io-border-color, var(--ran-color-border));
-  border-radius: var(--ran-tool-card-io-radius, var(--ran-radius-md));
-  background: var(--ran-tool-card-io-background, var(--ran-color-bg-muted));
+  border-radius: var(--ran-tool-card-io-radius, var(--ran-radius-sm));
+  background: var(--ran-tool-card-io-background, var(--ran-color-bg-subtle));
   min-width: 0;
+  font-size: var(--ran-text-label-2);
 }
 
 .ran-tool-card-io-section {
@@ -39,7 +45,7 @@
   grid-template-columns: max-content 1fr;
   column-gap: var(--ran-tool-card-io-gutter-gap, var(--ran-space-3));
   align-items: baseline;
-  padding: var(--ran-tool-card-io-padding, var(--ran-space-3));
+  padding: var(--ran-tool-card-io-padding, var(--ran-space-2) var(--ran-space-3));
   max-height: var(--ran-tool-card-io-max-height, 9.5rem);
   overflow: auto;
   overscroll-behavior: contain;
@@ -49,12 +55,12 @@
   border-top: 1px solid var(--ran-tool-card-io-border-color, var(--ran-color-border));
 }
 
-/* One step dimmer than the payload, so the gutter reads as labels rather than as content.
-   Sticky so the label stays put while its own section scrolls under it. */
+/* Secondary ink, not disabled: the gutter is quieter than the payload but still has to be
+   read (disabled is about 2.9:1 on this surface). Sticky so the label stays put while its own section scrolls under it. */
 .ran-tool-card-io-label {
   position: sticky;
   top: 0;
-  color: var(--ran-tool-card-io-label-color, var(--ran-color-text-disabled));
+  color: var(--ran-tool-card-io-label-color, var(--ran-color-text-secondary));
   font-size: var(--ran-tool-card-io-label-size, var(--ran-text-label-3));
   font-family: var(--ran-tool-card-output-font, var(--ran-font-mono));
   user-select: none;
@@ -79,9 +85,11 @@
   max-height: var(--ran-tool-card-output-max-height, 18rem);
   overflow: auto;
   overscroll-behavior: contain;
+  border: 1px solid var(--ran-tool-card-io-border-color, var(--ran-color-border));
   border-radius: var(--ran-tool-card-output-radius, var(--ran-radius-sm));
-  background: var(--ran-tool-card-output-background, var(--ran-color-bg-muted));
-  padding: var(--ran-tool-card-output-padding, var(--ran-space-2));
+  background: var(--ran-tool-card-output-background, var(--ran-color-bg-subtle));
+  padding: var(--ran-tool-card-output-padding, var(--ran-space-2) var(--ran-space-3));
+  font-size: var(--ran-text-label-2);
   font-weight: var(--ran-tool-card-output-weight, var(--ran-text-mono-weight-regular));
   font-family: var(--ran-tool-card-output-font, var(--ran-font-mono));
   white-space: pre;
@@ -105,8 +113,13 @@
 
 .ran-tool-card-hunk {
   overflow-x: auto;
+  border: 1px solid var(--ran-tool-card-io-border-color, var(--ran-color-border));
   border-radius: var(--ran-tool-card-output-radius, var(--ran-radius-sm));
-  background: var(--ran-tool-card-output-background, var(--ran-color-bg-muted));
+  background: var(--ran-tool-card-output-background, var(--ran-color-bg-subtle));
+  /* Block padding only: the lines carry the inline padding so added/removed fills run edge
+     to edge. */
+  padding-block: var(--ran-space-2);
+  font-size: var(--ran-text-label-2);
   font-family: var(--ran-tool-card-output-font, var(--ran-font-mono));
   white-space: pre;
 }
@@ -118,7 +131,7 @@
 .ran-tool-card-line {
   display: flex;
   gap: var(--ran-tool-card-line-gap, var(--ran-space-2));
-  padding: 0 var(--ran-tool-card-line-padding, var(--ran-space-2));
+  padding: 0 var(--ran-tool-card-line-padding, var(--ran-space-3));
 }
 
 .ran-tool-card-line[data-kind='added'] {
@@ -132,7 +145,7 @@
 .ran-tool-card-gutter {
   flex: none;
   min-width: var(--ran-tool-card-gutter-width, var(--ran-size-4));
-  color: var(--ran-tool-card-gutter-color, var(--ran-color-text-disabled));
+  color: var(--ran-tool-card-gutter-color, var(--ran-color-text-secondary));
   text-align: right;
   user-select: none;
 }

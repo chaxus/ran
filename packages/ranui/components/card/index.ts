@@ -16,6 +16,9 @@ export class Card extends RanElement {
   _descriptionEl!: HTMLElement;
   _headerEl!: HTMLElement;
   _footerEl!: HTMLElement;
+  _bodyEl!: HTMLElement;
+  private _bodySlot!: HTMLSlotElement;
+  private _bodyTextObserver?: MutationObserver;
   private _extraSlot!: HTMLSlotElement;
 
   static get observedAttributes(): string[] {
@@ -28,6 +31,8 @@ export class Card extends RanElement {
     const headerElRef = createRef<HTMLDivElement>();
     const titleElRef = createRef<HTMLDivElement>();
     const descriptionElRef = createRef<HTMLDivElement>();
+    const bodyElRef = createRef<HTMLDivElement>();
+    const bodySlotRef = createRef<HTMLSlotElement>();
     const footerElRef = createRef<HTMLDivElement>();
     const footerSlotRef = createRef<HTMLSlotElement>();
     const extraSlotRef = createRef<HTMLSlotElement>();
@@ -49,7 +54,7 @@ export class Card extends RanElement {
               ),
             Slot().attr('name', 'extra').attr('part', 'extra').ref(extraSlotRef),
           ),
-        Div().class('ran-card-body').attr('part', 'body').children(Slot()),
+        Div().class('ran-card-body').ref(bodyElRef).attr('part', 'body').children(Slot().ref(bodySlotRef)),
         Div()
           .class('ran-card-footer')
           .ref(footerElRef)
@@ -66,7 +71,13 @@ export class Card extends RanElement {
     this._extraSlot = shadowPart(extraSlotRef, 'slot[name="extra"]');
     this._extraSlot.addEventListener('slotchange', () => this._syncHeader());
 
-    // Hide footer until content is slotted
+    // An empty region would still take a grid gap (D-SPACE-12), so body and footer stay
+    // hidden until something is slotted into them.
+    this._bodyEl = shadowPart(bodyElRef, 'body');
+    this._bodyEl.style.display = 'none';
+    this._bodySlot = shadowPart(bodySlotRef, 'slot:not([name])');
+    this._bodySlot.addEventListener('slotchange', () => this._syncBody());
+
     this._footerEl.style.display = 'none';
     const footerSlot = shadowPart(footerSlotRef, 'slot[name="footer"]');
     footerSlot.addEventListener('slotchange', () => {
@@ -106,7 +117,7 @@ export class Card extends RanElement {
     setStringAttribute(this, 'sheet', value);
   }
 
-  /** Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable. */
+  /** Interactive card (Geist): hover darkens the border one step. Purely presentational — gate it to cards that are actually clickable. */
   get hoverable(): boolean {
     return this.hasAttribute('hoverable');
   }
@@ -138,12 +149,29 @@ export class Card extends RanElement {
     this._headerEl.style.display = hasContent ? '' : 'none';
   }
 
+  private _syncBody(): void {
+    const filled = this._bodySlot
+      // flatten: a wrapper forwarding its own empty <slot> is not content.
+      .assignedNodes({ flatten: true })
+      .some((node) => node.nodeType === Node.ELEMENT_NODE || node.textContent?.trim());
+    this._bodyEl.style.display = filled ? '' : 'none';
+  }
+
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
   connectedCallback(): void {
+    // slotchange misses a text node whose data changes in place (framework text bindings).
+    if (typeof MutationObserver !== 'undefined') {
+      this._bodyTextObserver ??= new MutationObserver(() => this._syncBody());
+      this._bodyTextObserver.observe(this, { characterData: true, subtree: true });
+    }
     this._syncTitle();
     this._syncDescription();
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
+  }
+
+  disconnectedCallback(): void {
+    this._bodyTextObserver?.disconnect();
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {

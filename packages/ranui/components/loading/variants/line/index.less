@@ -1,51 +1,57 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .line {
-    width: var(--loading-line-width, 32px);
-    height: var(--loading-line-width, 32px);
+    --_ran-loading-units: 32;
+    width: var(--loading-line-width, 32em);
+    height: var(--loading-line-width, 32em);
     margin: var(--loading-line-width, 0 auto);
     @keyframes line {
       10% {
-        margin-top: var(--loading-line-keyframes-10-margin-top, 5px);
-        height: var(--loading-line-keyframes-10-height, 22px);
-        border-color: var(--loading-line-keyframes-10-border-color, #d1d8e6);
-        background-color: var(--loading-line-keyframes-10-background-color, #bac5db);
+        margin-top: var(--loading-line-keyframes-10-margin-top, 5em);
+        height: var(--loading-line-keyframes-10-height, 22em);
+        border-color: var(--loading-line-keyframes-10-border-color, color-mix(in srgb, currentColor 25%, transparent));
+        background-color: var(
+          --loading-line-keyframes-10-background-color,
+          color-mix(in srgb, currentColor 40%, transparent)
+        );
       }
       20% {
-        margin-top: var(--loading-line-keyframes-20-margin-top, 0px);
-        height: var(--loading-line-keyframes-20-height, 32px);
-        border-color: var(--loading-line-keyframes-20-border-color, #d1d7e2);
-        background-color: var(--loading-line-keyframes-20-background-color, #bac5db);
+        margin-top: var(--loading-line-keyframes-20-margin-top, 0);
+        height: var(--loading-line-keyframes-20-height, 32em);
+        border-color: var(--loading-line-keyframes-20-border-color, color-mix(in srgb, currentColor 25%, transparent));
+        background-color: var(
+          --loading-line-keyframes-20-background-color,
+          color-mix(in srgb, currentColor 40%, transparent)
+        );
       }
       30% {
-        margin-top: var(--loading-line-keyframes-30-margin-top, 1px);
-        height: var(--loading-line-keyframes-30-height, 30px);
-        border-color: var(--loading-line-keyframes-30-border-color, #d1d8e6);
-        background-color: var(--loading-line-keyframes-30-background-color, #bac5db);
+        margin-top: var(--loading-line-keyframes-30-margin-top, 1em);
+        height: var(--loading-line-keyframes-30-height, 30em);
+        border-color: var(--loading-line-keyframes-30-border-color, color-mix(in srgb, currentColor 25%, transparent));
+        background-color: var(
+          --loading-line-keyframes-30-background-color,
+          color-mix(in srgb, currentColor 40%, transparent)
+        );
       }
       40% {
-        margin-top: var(--loading-line-keyframes-40-margin-top, 3px);
-        height: var(--loading-line-keyframes-40-height, 26px);
+        margin-top: var(--loading-line-keyframes-40-margin-top, 3em);
+        height: var(--loading-line-keyframes-40-height, 26em);
       }
       50% {
-        margin-top: var(--loading-line-keyframes-50-margin-top, 5px);
-        height: var(--loading-line-keyframes-50-height, 22px);
+        margin-top: var(--loading-line-keyframes-50-margin-top, 5em);
+        height: var(--loading-line-keyframes-50-height, 22em);
       }
       60% {
-        margin-top: var(--loading-line-keyframes-60-margin-top, 6px);
-        height: var(--loading-line-keyframes-60-height, 18px);
+        margin-top: var(--loading-line-keyframes-60-margin-top, 6em);
+        height: var(--loading-line-keyframes-60-height, 18em);
       }
     }
     &-item {
-      background: var(--loading-line-item-background, #99aaca);
-      border: var(--loading-line-item-border, 1px solid #96a6c9);
+      background: var(--loading-line-item-background, currentColor);
+      border: var(--loading-line-item-border, 1em solid currentColor);
       float: var(--loading-line-item-float, left);
-      margin: var(--loading-line-item-margin, 6px 4px 0 0);
-      width: var(--loading-line-item-width, 6px);
-      height: var(--loading-line-item-height, 18px);
+      margin: var(--loading-line-item-margin, 6em 4em 0 0);
+      width: var(--loading-line-item-width, 6em);
+      height: var(--loading-line-item-height, 18em);
       animation: var(--loading-line-item-animation, line 1s linear infinite normal);
       animation-play-state: var(--loading-line-item-animation-play-state, running);
       animation-delay: var(--loading-line-item-animation-delay, 0);

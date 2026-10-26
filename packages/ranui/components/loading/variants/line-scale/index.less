@@ -1,15 +1,15 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .line-scale {
+    --_ran-loading-units: 90;
     display: var(--loading-line-scale-display, block);
     position: var(--loading-line-scale-position, relative);
     overflow: var(--loading-line-scale-overflow, hidden);
-    width: var(--loading-line-scale-width, 5em);
-    margin: var(--loading-line-scale-margin, 30px auto);
-    padding: var(--loading-line-scale-padding, 20px 10px);
+    width: var(
+      --loading-line-scale-width,
+      72em
+    ); /* 5 × (7 + 7) plus slack: Firefox wraps the last bar on sub-pixel sums */
+    margin: var(--loading-line-scale-margin, 0 auto);
+    padding: var(--loading-line-scale-padding, 20em 10em);
     @keyframes pound {
       to {
         transform: var(--loading-line-scale-keyframes-to-transform, scale(1.2));
@@ -18,16 +18,19 @@
     &-item {
       display: var(--loading-line-scale-item-display, block);
       float: var(--loading-line-scale-item-float, left);
-      width: var(--loading-line-scale-item-width, 0.5em);
-      height: var(--loading-line-scale-item-height, 3em);
-      margin: var(--loading-line-scale-item-margin, 0 0.5em 0 0);
-      background: var(--loading-line-scale-item-background, #635863);
-      background-image: var(--loading-line-scale-item-background-image, linear-gradient(top, #635863 25%, #3d353b));
+      width: var(--loading-line-scale-item-width, 7em);
+      height: var(--loading-line-scale-item-height, 42em);
+      margin: var(--loading-line-scale-item-margin, 0 7em 0 0);
+      background: var(--loading-line-scale-item-background, currentColor);
+      background-image: var(
+        --loading-line-scale-item-background-image,
+        linear-gradient(top, currentColor 25%, color-mix(in srgb, currentColor 70%, transparent))
+      );
       box-shadow: var(
         --loading-line-scale-item-box-shadow,
-        1px 1px 1px 0 rgba(0, 0, 0, 0),
-        1px 1px 1px 0 rgba(0, 0, 0, 0),
-        1px 1px 1px 0 rgba(0, 0, 0, 0)
+        1em 1em 1em 0 transparent,
+        1em 1em 1em 0 transparent,
+        1em 1em 1em 0 transparent
       );
       animation: var(--loading-line-scale-item-animation, pound 0.7s ease-in-out infinite alternate);
       animation-play-state: var(--loading-line-scale-item-animation-play-state, running);

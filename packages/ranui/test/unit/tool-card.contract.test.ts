@@ -77,6 +77,17 @@ describe('r-tool-card contract', () => {
     expect(row.tone).toBe('error');
   });
 
+  it('puts the failure itself on the collapsed line of a failed call', () => {
+    const { card, row } = mount();
+    card.call = { card: 'generic', title: 'Fetch', summary: 'https://a.test' };
+    card.result = { card: 'generic', content: '\n503 Service Unavailable\nRetry-After: 30' };
+    expect(row.summary).toBe('https://a.test');
+    card.status = 'error';
+    expect(row.summary).toBe('503 Service Unavailable');
+    card.result = { card: 'terminal', output: '', exitCode: 2 };
+    expect(row.summary).toBe('exit 2');
+  });
+
   it('offers no toggle for a call with nothing inside', () => {
     // A control that reveals a blank is worse than no control: it invites a press and
     // answers with nothing.

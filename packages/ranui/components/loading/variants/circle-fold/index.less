@@ -1,11 +1,8 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .circle-fold {
-    width: var(--loading-circle-fold-width, 4em);
-    height: var(--loading-circle-fold-height, 4em);
+    --_ran-loading-units: 76;
+    width: var(--loading-circle-fold-width, 56em);
+    height: var(--loading-circle-fold-height, 56em);
     position: var(--loading-circle-fold-position, relative);
     margin: var(--loading-circle-fold-margin, auto);
     @keyframes circle-fold {
@@ -30,7 +27,7 @@
         margin: var(--loading-circle-fold-item-before-margin, 0 auto);
         width: var(--loading-circle-fold-item-before-width, 15%);
         height: var(--loading-circle-fold-item-before-height, 15%);
-        background: var(--loading-circle-fold-item-before-background, #337ab7);
+        background: var(--loading-circle-fold-item-before-background, currentColor);
         border-radius: var(--loading-circle-fold-item-before-border-radius, 100%);
         animation: var(--loading-circle-fold-item-before-animation, circle-fold 1.2s infinite ease-in-out both);
         animation-play-state: var(--loading-circle-fold-item-before-animation-play-state, running);

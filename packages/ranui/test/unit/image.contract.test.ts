@@ -26,9 +26,32 @@ describe('r-img contract', () => {
     expect((img as any).fallback).toBe('https://example.com/fallback.png');
 
     img.removeAttribute('fallback');
-    // should fall back to built-in failImage data URI
-    expect(typeof (img as any).fallback).toBe('string');
-    expect((img as any).fallback.length).toBeGreaterThan(0);
+    expect((img as any).fallback).toBe('');
+  });
+
+  it('shows a placeholder while loading and an error state when there is no fallback', () => {
+    const host = document.createElement('r-img') as ImageElement;
+    host.setAttribute('src', 'https://example.com/broken.jpg');
+    document.body.append(host);
+    expect(host._container.getAttribute('data-state')).toBe('loading');
+    host._image!.dispatchEvent(new Event('error'));
+    expect(host._container.getAttribute('data-state')).toBe('error');
+    expect(host._container.querySelector('img')).toBeNull();
+  });
+
+  it('keeps the loading placeholder, not the error state, when there is no src', () => {
+    const host = document.createElement('r-img') as ImageElement;
+    document.body.append(host);
+    expect(host._container.getAttribute('data-state')).toBe('loading');
+    expect(host._image!.hasAttribute('src')).toBe(false);
+  });
+
+  it('marks the container loaded once the image arrives', () => {
+    const host = document.createElement('r-img') as ImageElement;
+    host.setAttribute('src', 'https://example.com/photo.jpg');
+    document.body.append(host);
+    host._image!.dispatchEvent(new Event('load'));
+    expect(host._container.getAttribute('data-state')).toBe('loaded');
   });
 
   it('sets fallback via property setter', () => {

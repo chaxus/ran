@@ -113,4 +113,42 @@ describe('r-loading contract', () => {
     loading.attributeChangedCallback('name', 'rotate', 'rotate');
     expect(createSpy).not.toHaveBeenCalled();
   });
+
+  it('announces itself as a status with an English default name', () => {
+    const loading = document.createElement('r-loading');
+    expect(loading.hasAttribute('role')).toBe(false);
+    document.body.appendChild(loading);
+    expect(loading.getAttribute('role')).toBe('status');
+    expect(loading.getAttribute('aria-label')).toBe('Loading');
+  });
+
+  it('takes its accessible name from label and keeps a caller role', () => {
+    const loading = document.createElement('r-loading') as unknown as Loading;
+    loading.setAttribute('role', 'progressbar');
+    loading.setAttribute('label', 'Loading comments');
+    document.body.appendChild(loading);
+    expect(loading.getAttribute('role')).toBe('progressbar');
+    expect(loading.getAttribute('aria-label')).toBe('Loading comments');
+    loading.label = 'Saving';
+    expect(loading.getAttribute('aria-label')).toBe('Saving');
+  });
+
+  it('keeps a caller aria-label when no label is given', () => {
+    const loading = document.createElement('r-loading');
+    loading.setAttribute('aria-label', 'Fetching');
+    document.body.appendChild(loading);
+    expect(loading.getAttribute('aria-label')).toBe('Fetching');
+  });
+
+  it('renders no heading or hard-coded visible text in arc and drop', async () => {
+    for (const name of [ICON_NAME_AMP.ARC, ICON_NAME_AMP.DROP]) {
+      const loading = document.createElement('r-loading') as any;
+      loading.setAttribute('name', name);
+      document.body.appendChild(loading);
+      await loading._pending;
+      const shadow = loading._shadowDom as ShadowRoot;
+      expect(shadow.querySelector('h1, h2, h3, [role="heading"]')).toBeNull();
+      expect(shadow.querySelector('.ran-loading')!.textContent).toBe('');
+    }
+  });
 });

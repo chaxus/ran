@@ -62,7 +62,7 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
 - **属性值（property）**:
   - `description: string` — Secondary text shown under the heading. Empty by default; the header is hidden when the heading, description and `extra` slot are all empty.
   - `heading: string` — Heading text.
-  - `hoverable: boolean` — Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable.
+  - `hoverable: boolean` — Interactive card (Geist): hover darkens the border one step. Purely presentational — gate it to cards that are actually clickable.
   - `sheet: string`
 - **事件**: —
 - **插槽**: `默认插槽`, `extra（具名）`, `footer（具名）`
@@ -231,11 +231,11 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
 - **属性（attribute）**: `alt`, `fallback`, `sheet`, `src`
 - **属性值（property）**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
-  - `fallback`
+  - `fallback` — Image shown when `src` fails. Empty by default: a failed image then shows a theme-aware placeholder that fills the box.
   - `sheet`
 - **事件**: —
 - **插槽**: —
-- **Part**: —
+- **Part**: `image`
 
 ## `<r-input>`
 
@@ -280,8 +280,11 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
 
 源码: `components/loading/index.ts`
 
-- **属性（attribute）**: `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
-- **属性值（property）**: `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
+- **属性（attribute）**: `label: string`, `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
+- **属性值（property）**:
+  - `label: string` — Accessible name announced by the `status` role. Defaults to "Loading"; set it to say what is loading.
+  - `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`
+  - `sheet: string`
 - **事件**: —
 - **插槽**: —
 - **Part**: —
@@ -619,7 +622,7 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
   - `used: number` — Tokens the next request will carry — the history, not the whole conversation.
 - **事件**: —
 - **插槽**: —
-- **Part**: `meter`, `text`
+- **Part**: `flag`, `meter`, `text`
 
 ## `<r-tool-card>`
 

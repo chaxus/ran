@@ -1,17 +1,14 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .pulse {
-    width: var(--loading-pulse-width, 120px);
+    --_ran-loading-units: 60;
+    width: var(--loading-pulse-width, 120em);
     display: var(--loading-pulse-display, flex);
     justify-content: var(--loading-pulse-justify-content, space-between);
     align-items: var(--loading-pulse-align-items, center);
 
     &-bubble {
-      width: var(--loading-pulse-bubble-width, 20px);
-      height: var(--loading-pulse-bubble-height, 20px);
+      width: var(--loading-pulse-bubble-width, 20em);
+      height: var(--loading-pulse-bubble-height, 20em);
       border-radius: var(--loading-pulse-bubble-border-radius, 50%);
       background: var(--loading-pulse-bubble-background, var(--ran-color-text));
       @keyframes pulse {

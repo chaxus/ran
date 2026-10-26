@@ -1,9 +1,6 @@
-@blue-1: var(--ran-color-primary, #4096ff);
-@green-1: var(--ran-color-success, #67cf22);
-@gray-1: var(--ran-color-text, #333);
-
 .ran-loading {
   .arc {
+    --_ran-loading-units: 102;
     position: relative;
     @keyframes rt {
       100% {
@@ -16,33 +13,22 @@
         height: var(--loading-arc-keyframes-cw-0-height, 0);
       }
       75% {
-        width: var(--loading-arc-keyframes-cw-75-width, 40px);
-        height: var(--loading-arc-keyframes-cw-75-height, 40px);
+        width: var(--loading-arc-keyframes-cw-75-width, 40em);
+        height: var(--loading-arc-keyframes-cw-75-height, 40em);
       }
       100% {
         width: var(--loading-arc-keyframes-cw-100-width, 0);
         height: var(--loading-arc-keyframes-cw-100-height, 0);
       }
     }
-    @keyframes txt {
-      0% {
-        content: var(--loading-arc-keyframes-txt-0-content, 'LOADING.');
-      }
-      50% {
-        content: var(--loading-arc-keyframes-txt-50-content, 'LOADING..');
-      }
-      100% {
-        content: var(--loading-arc-keyframes-txt-100-content, 'LOADING...');
-      }
-    }
     &-item {
       margin: var(--loading-arc-item-margin, auto);
-      width: var(--loading-arc-item-width, 100px);
-      height: var(--loading-arc-item-height, 100px);
+      width: var(--loading-arc-item-width, 100em);
+      height: var(--loading-arc-item-height, 100em);
       border-radius: var(--loading-arc-item-border-radius, 50%);
-      border-top: var(--loading-arc-item-border-top, 2px solid #ffea29);
-      border-left: var(--loading-arc-item-border-left, 1px solid transparent);
-      border-right: var(--loading-arc-item-border-right, 1px solid transparent);
+      border-top: var(--loading-arc-item-border-top, 2em solid currentColor);
+      border-left: var(--loading-arc-item-border-left, 1em solid transparent);
+      border-right: var(--loading-arc-item-border-right, 1em solid transparent);
       animation: var(--loading-arc-item-animation, rt 2s infinite linear);
       animation-play-state: var(--loading-arc-item-animation-play-state, running);
       &::before {
@@ -52,12 +38,15 @@
         right: var(--loading-arc-item-before-right, 0);
         bottom: var(--loading-arc-item-before-bottom, 0);
         left: var(--loading-arc-item-before-left, 0);
-        width: var(--loading-arc-item-before-width, 70px);
-        height: var(--loading-arc-item-before-height, 70px);
+        width: var(--loading-arc-item-before-width, 70em);
+        height: var(--loading-arc-item-before-height, 70em);
         border-radius: var(--loading-arc-item-before-border-radius, 50%);
-        border-top: var(--loading-arc-item-before-border-top, 2px solid #8d29ff);
-        border-left: var(--loading-arc-item-before-border-left, 1px solid transparent);
-        border-right: var(--loading-arc-item-before-border-right, 1px solid transparent);
+        border-top: var(
+          --loading-arc-item-before-border-top,
+          2em solid color-mix(in srgb, currentColor 55%, transparent)
+        );
+        border-left: var(--loading-arc-item-before-border-left, 1em solid transparent);
+        border-right: var(--loading-arc-item-before-border-right, 1em solid transparent);
         animation: var(--loading-arc-item-before-animation, rt 4s infinite linear reverse);
         animation-play-state: var(--loading-arc-item-before-animation-play-state, running);
         content: var(--loading-arc-item-before-content, '');
@@ -78,41 +67,8 @@
         animation: var(--loading-arc-item-after-animation, cw 1s infinite);
         animation-play-state: var(--loading-arc-item-after-animation-play-state, running);
         content: var(--loading-arc-item-after-content, '');
-        background: var(--loading-arc-item-after-background, snow);
+        background: var(--loading-arc-item-after-background, color-mix(in srgb, currentColor 25%, transparent));
       }
     }
-    h1 {
-      position: var(--loading-arc-h1-position, relative);
-      margin: var(--loading-arc-h1-margin, var(--ran-space-4) auto);
-      top: var(--loading-arc-h1-top, auto);
-      left: var(--loading-arc-h1-left, 0);
-      right: var(--loading-arc-h1-right, 0);
-      bottom: var(--loading-arc-h1-bottom, 0);
-      text-transform: var(--loading-arc-h1-text-transform, uppercase);
-      text-align: var(--loading-arc-h1-text-align, center);
-      letter-spacing: var(--loading-arc-h1-letter-spacing, 0.1em);
-      font-size: var(--loading-arc-h1-font-size, 14px);
-      font-weight: var(--loading-arc-h1-ont-weight, var(--ran-text-copy-weight));
-      color: var(--loading-arc-h1-color, var(--ran-color-text));
-      &::after {
-        animation: var(--loading-arc-h1-after-animation, txt 5s infinite);
-        animation-play-state: var(--loading-arc-h1-after-animation-play-state, running);
-        content: var(--loading-arc-h1-after-content, '');
-        font-family: var(--loading-arc-h1-after-font-family, 'Inconsolata', monospace);
-      }
-    }
-    span {
-      display: var(--loading-arc-span-display, none);
-    }
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ran-loading .arc span {
-    display: inline;
-  }
-  .ran-loading .arc h1::after {
-    animation: none;
-    content: '';
   }
 }
