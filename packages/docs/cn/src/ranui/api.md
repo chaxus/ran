@@ -595,7 +595,7 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
 - **事件**:
   - `change` · element-only · detail `{ active }`
 - **插槽**: `默认插槽`
-- **Part**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+- **Part**: `content`, `content-wrap`, `header`, `hover`, `indicator`, `nav`, `tabs`
 
 ## `<r-theme-switch>`
 

@@ -108,6 +108,14 @@ export async function clickTabHeader(page: Page, selector: string, key: string):
     { selector, key },
   );
   await page.mouse.click(point.x, point.y);
+  // Off the headers again: these screenshots are of the selection, and a pointer left on
+  // the tab would also paint its hover fill. Into the tabs' own panel, not the page corner,
+  // which could be another demo's hover target.
+  const panel = await page.locator(selector).evaluate((host) => {
+    const box = host.getBoundingClientRect();
+    return { x: box.left + 8, y: box.bottom - 8 };
+  });
+  await page.mouse.move(panel.x, panel.y);
 }
 
 /** The selected header, indicator and visible panel must agree before capture. */

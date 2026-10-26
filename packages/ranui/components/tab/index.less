@@ -24,7 +24,31 @@
     &::-webkit-scrollbar {
       display: none;
     }
+    // One fill under the headers, moved by script to whichever the pointer or keyboard is on.
+    &-hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-radius: var(--ran-tab-hover-radius, var(--ran-radius-sm, 8px));
+      background: var(--ran-tab-hover-background, var(--ran-color-bg-hover, #ebebee));
+      opacity: 0;
+      pointer-events: none;
+      transition: var(
+        --ran-tab-hover-transition,
+        transform var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
+        width var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
+        height var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
+        opacity var(--ran-motion-duration-fast, 0.14s) linear
+      );
+      &[data-instant] {
+        transition: opacity var(--ran-motion-duration-fast, 0.14s) linear;
+      }
+    }
     &-nav {
+      // Positioned so it paints over the absolutely positioned fill before it.
+      position: relative;
       display: flex;
       width: max-content;
       min-width: 100%;

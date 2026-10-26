@@ -599,7 +599,7 @@ Quelltext: `components/tab/index.ts`
 - **Events**:
   - `change` · element-only · detail `{ active }`
 - **Slots**: `Standard`
-- **Parts**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+- **Parts**: `content`, `content-wrap`, `header`, `hover`, `indicator`, `nav`, `tabs`
 
 ## `<r-theme-switch>`
 

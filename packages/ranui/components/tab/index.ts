@@ -30,6 +30,8 @@ export class Tabs extends RanElement {
   _header: HTMLDivElement;
   _nav: HTMLDivElement;
   _line: HTMLDivElement;
+  _hover: HTMLDivElement;
+  _hovered: Element | null = null;
   _content: HTMLDivElement;
   _wrap: HTMLDivElement;
   _slot: HTMLSlotElement;
@@ -47,6 +49,7 @@ export class Tabs extends RanElement {
     const headerRef = createRef<HTMLDivElement>();
     const navRef = createRef<HTMLDivElement>();
     const lineRef = createRef<HTMLDivElement>();
+    const hoverRef = createRef<HTMLDivElement>();
     const contentRef = createRef<HTMLDivElement>();
     const wrapRef = createRef<HTMLDivElement>();
     const slotRef = createRef<HTMLSlotElement>();
@@ -55,14 +58,12 @@ export class Tabs extends RanElement {
       .class('ran-tab')
       .part('tabs')
       .children(
-        Div()
-          .class('ran-tab-header')
-          .ref(headerRef)
-          .part('header')
-          .children(
-            Div().class('ran-tab-header-nav').ref(navRef).part('nav'),
-            Div().class('ran-tab-header-line').ref(lineRef).part('indicator'),
-          ),
+        Div().class('ran-tab-header').ref(headerRef).part('header').children(
+          // First, so the headers paint over it.
+          Div().class('ran-tab-header-hover').ref(hoverRef).part('hover').ariaHidden(true),
+          Div().class('ran-tab-header-nav').ref(navRef).part('nav'),
+          Div().class('ran-tab-header-line').ref(lineRef).part('indicator'),
+        ),
         Div()
           .class('ran-tab-content')
           .ref(contentRef)
@@ -78,6 +79,7 @@ export class Tabs extends RanElement {
     this._header = shadowPart(headerRef, 'header');
     this._nav = shadowPart(navRef, 'header nav');
     this._line = shadowPart(lineRef, 'header line');
+    this._hover = shadowPart(hoverRef, 'header hover');
     this._content = shadowPart(contentRef, 'content');
     this._wrap = shadowPart(wrapRef, 'content wrap');
     this._slot = shadowPart(slotRef, 'slot');
@@ -211,6 +213,63 @@ export class Tabs extends RanElement {
    */
   _onNavResize = (): void => {
     if (this.active) this.setTabLine(this.active);
+    if (this._hovered?.isConnected && !isDisabled(this._hovered)) this._placeHover(this._hovered);
+    else if (this._hovered) this._hideHover();
+  };
+
+  /**
+   * One hover fill slides between headers instead of each header lighting up on its own.
+   * Measured from the fill's own untranslated origin, so the header's scroll offset and
+   * padding cancel out; computed style gives the in-flight transform, so mid-slide works.
+   */
+  private _placeHover = (header: Element): void => {
+    const box = header.getBoundingClientRect();
+    const shift = new DOMMatrixReadOnly(getComputedStyle(this._hover).transform);
+    const at = this._hover.getBoundingClientRect();
+    // Appearing, it fades in where it is; only a fill already showing slides.
+    this._hover.toggleAttribute('data-instant', this._hovered === null);
+    this._hover.style.setProperty(
+      'transform',
+      `translate(${box.left - (at.left - shift.e)}px, ${box.top - (at.top - shift.f)}px)`,
+    );
+    this._hover.style.setProperty('width', `${box.width}px`);
+    this._hover.style.setProperty('height', `${box.height}px`);
+    this._hover.style.setProperty('opacity', '1');
+    this._hovered = header;
+  };
+
+  /** Back to the header the keyboard is on, if any; otherwise away. */
+  private _settleHover = (): void => {
+    const focused = [...this._nav.children].find((header) => this.tabFocusable(header).matches(':focus-visible'));
+    if (focused) this._placeHover(focused);
+    else this._hideHover();
+  };
+
+  private _hideHover = (): void => {
+    this._hover.style.setProperty('opacity', '0');
+    this._hovered = null;
+  };
+
+  private _onNavPointerOver = (event: PointerEvent): void => {
+    // A tap is not a hover; a fill left behind by one would read as a second selection.
+    if (event.pointerType === 'touch') return;
+    const header = (event.target as Element).closest?.('.tab-header-nav-item');
+    if (!header || header === this._hovered) return;
+    if (isDisabled(header)) this._settleHover();
+    else this._placeHover(header);
+  };
+
+  private _onNavPointerLeave = (): void => {
+    this._settleHover();
+  };
+
+  private _onNavFocusIn = (event: FocusEvent): void => {
+    const header = (event.target as Element).closest?.('.tab-header-nav-item');
+    if (header && this.tabFocusable(header).matches(':focus-visible')) this._placeHover(header);
+  };
+
+  private _onNavFocusOut = (event: FocusEvent): void => {
+    if (!this._nav.contains(event.relatedTarget as Node | null) && !this._nav.matches(':hover')) this._hideHover();
   };
 
   _attachNavResizeObserver = (): void => {
@@ -441,7 +500,13 @@ export class Tabs extends RanElement {
   connectedCallback(): void {
     this.handlerExternalCss();
     this._events.on(this._slot, 'slotchange', this.listenSlotChange);
-    this._events.on(this._nav, 'keydown', this.onNavKeydown as EventListener).on(this._nav, 'click', this.clickTabHead);
+    this._events
+      .on(this._nav, 'keydown', this.onNavKeydown as EventListener)
+      .on(this._nav, 'click', this.clickTabHead)
+      .on(this._nav, 'pointerover', this._onNavPointerOver as EventListener)
+      .on(this._nav, 'pointerleave', this._onNavPointerLeave)
+      .on(this._nav, 'focusin', this._onNavFocusIn as EventListener)
+      .on(this._nav, 'focusout', this._onNavFocusOut as EventListener);
     this._paneObserver = new MutationObserver((records) => {
       if (records.some((record) => record.target.parentNode === this)) this.listenSlotChange();
     });
@@ -455,6 +520,7 @@ export class Tabs extends RanElement {
 
   disconnectedCallback(): void {
     this._events.abort();
+    this._hideHover();
     this._paneObserver?.disconnect();
     this._paneObserver = undefined;
     this._navResizeObserver?.disconnect();
