@@ -22,9 +22,13 @@ for (const type of ['flat', 'line']) {
         const box = selected.getBoundingClientRect();
         const bounds = header.getBoundingClientRect();
         const line = root.querySelector<HTMLElement>('[part="indicator"]')!.getBoundingClientRect();
+        // The label is the header's own text; measure that, not the inner element's scroll
+        // size, which also counts the button's invisible resting ripple.
+        const label = document.createRange();
+        label.selectNodeContents(selected);
         return {
           overflow: header.scrollWidth > header.clientWidth,
-          fullLabel: box.width + 1 >= (selected as HTMLElement & { _btn: HTMLElement })._btn.scrollWidth,
+          fullLabel: box.width + 1 >= label.getBoundingClientRect().width,
           visible: box.left >= bounds.left + 1 && box.right <= bounds.right - 1,
           aligned: Math.abs(box.left - line.left) < 1 && Math.abs(box.width - line.width) < 1,
         };

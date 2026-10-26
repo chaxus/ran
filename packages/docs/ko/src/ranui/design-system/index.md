@@ -164,30 +164,33 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 
 컴포넌트가 실제로 읽는 층입니다. 여기 있는 것은 모두 위의 스케일을 통해 풀리므로, 테마에 맞춰 저절로 바뀝니다.
 
-| 토큰                           | 풀리는 곳                                                                                                                                | 역할                                    |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| `--ran-color-bg`               | `--ran-background-100`                                                                                                                   | 페이지 배경                             |
-| `--ran-color-bg-subtle`        | `--ran-background-200`                                                                                                                   | 은은한 페이지 영역                      |
-| `--ran-color-bg-elevated`      | `--ran-background-100` · gray-100 (다크)                                                                                                 | 카드, 면                                |
-| `--ran-color-bg-muted`         | `--ran-gray-100`                                                                                                                         | 들어간·가라앉은 채움                    |
-| `--ran-color-bg-hover`         | `--ran-gray-200`                                                                                                                         | 호버의 면                               |
-| `--ran-color-bg-active`        | `--ran-gray-300`                                                                                                                         | 활성(눌림)의 면                         |
-| `--ran-color-text`             | `--ran-gray-1000`                                                                                                                        | 주요 텍스트                             |
-| `--ran-color-text-secondary`   | `--ran-gray-900`                                                                                                                         | 보조 텍스트                             |
-| `--ran-color-text-disabled`    | `--ran-gray-700`                                                                                                                         | 비활성 텍스트                           |
-| `--ran-color-border`           | `--ran-gray-400`                                                                                                                         | 기본 테두리                             |
-| `--ran-color-border-secondary` | `--ran-gray-300`                                                                                                                         | 더 은은한 테두리                        |
-| `--ran-color-border-hover`     | `--ran-gray-500`                                                                                                                         | 호버 테두리                             |
-| `--ran-color-border-active`    | `--ran-gray-600`                                                                                                                         | 활성 테두리                             |
-| `--ran-color-border-control`   | `--ran-gray-700`                                                                                                                         | 컨트롤 경계: 입력, 체크박스, 선택 (3:1) |
-| `--ran-color-primary`          | `--ran-gray-1000`                                                                                                                        | 주된 동작(흑백)                         |
-| `--ran-color-primary-hover`    | <span class="swatch" style="--swatch:#2a2a2e"></span> `#2a2a2e` · <span class="swatch" style="--swatch:#d4d4d8"></span> `#d4d4d8` (다크) | primary의 호버                          |
-| `--ran-color-primary-active`   | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` · <span class="swatch" style="--swatch:#b4b4bb"></span> `#b4b4bb` (다크) | primary의 눌림                          |
-| `--ran-color-primary-text`     | `--ran-background-100`                                                                                                                   | primary 면 **위에** 얹히는 잉크         |
-| `--ran-color-success`          | `--ran-green-700`                                                                                                                        | 성공                                    |
-| `--ran-color-warning`          | `--ran-amber-700`                                                                                                                        | 경고                                    |
-| `--ran-color-danger`           | `--ran-red-700`                                                                                                                          | 위험 / 오류                             |
-| `--ran-color-link`             | `--ran-blue-800`                                                                                                                         | 링크                                    |
+| 토큰                               | 풀리는 곳                                                                                                                                | 역할                                    |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `--ran-color-bg`                   | `--ran-background-100`                                                                                                                   | 페이지 배경                             |
+| `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                   | 은은한 페이지 영역                      |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · gray-100 (다크)                                                                                                 | 카드, 면                                |
+| `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                         | 들어간·가라앉은 채움                    |
+| `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                         | 호버의 면                               |
+| `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                         | 활성(눌림)의 면                         |
+| `--ran-color-text`                 | `--ran-gray-1000`                                                                                                                        | 주요 텍스트                             |
+| `--ran-color-text-secondary`       | `--ran-gray-900`                                                                                                                         | 보조 텍스트                             |
+| `--ran-color-text-disabled`        | `--ran-gray-700`                                                                                                                         | 비활성 텍스트                           |
+| `--ran-color-border`               | `--ran-gray-400`                                                                                                                         | 기본 테두리                             |
+| `--ran-color-border-secondary`     | `--ran-gray-300`                                                                                                                         | 더 은은한 테두리                        |
+| `--ran-color-border-hover`         | `--ran-gray-500`                                                                                                                         | 호버 테두리                             |
+| `--ran-color-border-active`        | `--ran-gray-600`                                                                                                                         | 활성 테두리                             |
+| `--ran-color-border-control`       | `--ran-gray-700`                                                                                                                         | 컨트롤 경계: 입력, 체크박스, 선택 (3:1) |
+| `--ran-color-border-control-hover` | `--ran-gray-900`                                                                                                                         | 컨트롤 경계(호버)                       |
+| `--ran-color-text-placeholder`     | `--ran-gray-800`                                                                                                                         | 플레이스홀더 텍스트(4.5:1 이상)         |
+| `--ran-color-primary`              | `--ran-gray-1000`                                                                                                                        | 주된 동작(흑백)                         |
+| `--ran-color-primary-hover`        | <span class="swatch" style="--swatch:#2a2a2e"></span> `#2a2a2e` · <span class="swatch" style="--swatch:#d4d4d8"></span> `#d4d4d8` (다크) | primary의 호버                          |
+| `--ran-color-primary-active`       | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` · <span class="swatch" style="--swatch:#b4b4bb"></span> `#b4b4bb` (다크) | primary의 눌림                          |
+| `--ran-color-primary-text`         | `--ran-background-100`                                                                                                                   | primary 면 **위에** 얹히는 잉크         |
+| `--ran-color-success`              | `--ran-green-700`                                                                                                                        | 성공                                    |
+| `--ran-color-warning`              | `--ran-amber-700`                                                                                                                        | 경고                                    |
+| `--ran-color-danger`               | `--ran-red-700`                                                                                                                          | 위험 / 오류                             |
+| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                         | 링크                                    |
+| `--ran-color-focus`                | `--ran-blue-700`                                                                                                                         | 포커스 색: 링과 포커스 윤곽선           |
 
 `--ran-color-primary-hover` / `-active`는 시맨틱 층에 있는 두 개의 리터럴입니다. 스케일을 따라가는 대신 페이지 배경 쪽으로 다가가므로, 다크 모드에서는 이것들을 직접 다시 정의합니다.
 

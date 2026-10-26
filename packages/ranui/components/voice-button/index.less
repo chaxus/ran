@@ -16,8 +16,10 @@
   align-items: center;
   justify-content: center;
   border: 1px solid var(--ran-voice-border-color, var(--ran-color-border));
-  border-radius: var(--ran-voice-border-radius, var(--ran-radius-md));
-  background: var(--ran-voice-background, var(--ran-color-bg));
+  border-radius: var(--ran-voice-border-radius, var(--ran-radius-sm));
+  /* The same raised surface as r-button. */
+  background: var(--ran-voice-background, var(--ran-color-bg-elevated));
+  box-shadow: var(--ran-skin-raised-shadow, var(--ran-shadow-elevated));
   padding: 0;
   width: var(--ran-voice-size, var(--ran-size-7));
   height: var(--ran-voice-size, var(--ran-size-7));
@@ -25,13 +27,15 @@
   cursor: pointer;
 }
 
-.ran-voice:hover:not(:disabled) {
-  border-color: var(--ran-voice-hover-border-color, var(--ran-color-border-hover));
-  color: var(--ran-voice-hover-color, var(--ran-color-text));
+@media (hover: hover) {
+  .ran-voice:hover:not(:disabled) {
+    border-color: var(--ran-voice-hover-border-color, var(--ran-color-border-hover));
+    color: var(--ran-voice-hover-color, var(--ran-color-text));
+  }
 }
 
 .ran-voice:focus-visible {
-  outline: 2px solid var(--ran-voice-focus-color, var(--ran-color-primary));
+  outline: 2px solid var(--ran-voice-focus-color, var(--ran-color-focus));
   outline-offset: 2px;
 }
 
@@ -52,7 +56,7 @@
 :host([listening]) .ran-voice::after {
   position: absolute;
   border: 2px solid var(--ran-voice-active-border-color, var(--ran-color-danger));
-  border-radius: var(--ran-voice-border-radius, var(--ran-radius-md));
+  border-radius: var(--ran-voice-border-radius, var(--ran-radius-sm));
   width: var(--ran-voice-size, var(--ran-size-7));
   height: var(--ran-voice-size, var(--ran-size-7));
   content: '';

@@ -118,6 +118,12 @@
   /* The boundary of something you operate (input, checkbox, select, switch). Decorative
      hairlines stay on --ran-color-border; a control's edge has to clear 3:1 on its own. */
   --ran-color-border-control: var(--ran-gray-700);
+  --ran-color-border-control-hover: var(--ran-gray-900);
+  /* Distinct from a typed value, still readable: 5.0:1 light, 5.3:1 dark on an elevated surface. */
+  --ran-color-text-placeholder: var(--ran-gray-800);
+  /* The one focus colour. --ran-focus-ring draws it as a box-shadow; a component that
+     can only use `outline` writes `2px solid var(--ran-color-focus)` at a 2px offset. */
+  --ran-color-focus: var(--ran-blue-700);
   --ran-color-link: var(--ran-blue-800);
 
   /* ── Typography ─────────────────────────────────────────────────── */
@@ -217,20 +223,13 @@
   --ran-z-dropdown: 1100;
   --ran-z-message: 1200;
 
-  /* ── Focus ring (Geist) ─────────────────────────────────────────── */
-  /* Focus stays blue (Geist), decoupled from the now-monochrome primary. */
-  --ran-focus-ring: 0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700);
-  /* The outline-based sibling of --ran-focus-ring, for a component that draws
-     its focus indicator with `outline` instead of `box-shadow` (r-button:
-     `outline: var(--ran-btn-focus-outline, 2px solid var(--ran-color-primary))`).
-     --ran-color-primary is the "light-skin" color for that shorthand — flips
-     correctly with the page theme. A component whose own surface is a
-     *fixed* dark skin regardless of page theme (r-player's control bar over
-     arbitrary video content) needs the opposite: a light color that stays
-     legible against ITS dark surface no matter what the page theme is doing.
-     That's this token. Deliberately not redefined in dark.less — unlike
-     --ran-color-primary, it doesn't track the page theme, it tracks the
-     fixed-dark surface it's meant for. */
+  /* ── Focus ring ─────────────────────────────────────────────────── */
+  /* One treatment for every control: a 2px page-coloured gap, then 2px of --ran-color-focus.
+     The control's own border does not change colour on focus — the ring is the signal. */
+  --ran-focus-ring: 0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-focus);
+  /* For a control on a fixed dark surface whatever the page theme (r-player's bar over
+     video): a light ring colour that stays legible there. Deliberately not redefined in
+     dark.less — it tracks that surface, not the page. */
   --ran-focus-ring-inverse-color: #fff;
 
   /* Media uses a fixed dark canvas beneath white playback controls in both page

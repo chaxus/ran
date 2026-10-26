@@ -68,17 +68,21 @@
   padding: 0 var(--ran-space-3, 12px);
   border: 1px solid var(--ran-color-border, var(--ran-gray-400));
   border-radius: var(--ran-radius-sm, 6px);
-  background: var(--ran-color-bg, var(--ran-background-100));
+  // The same raised surface as r-button.
+  background: var(--ran-color-bg-elevated, var(--ran-background-100));
+  box-shadow: var(--ran-skin-raised-shadow, var(--ran-shadow-elevated));
   color: var(--ran-color-text, var(--ran-gray-1000));
   font: inherit;
   font-size: var(--ran-text-button-size, 14px);
   cursor: pointer;
   &:focus-visible {
-    outline: var(--ran-scratch-focus-outline, 2px solid var(--ran-color-link, #0070f3));
+    outline: var(--ran-scratch-focus-outline, 2px solid var(--ran-color-focus, #0a6cff));
     outline-offset: 2px;
   }
-  &:hover:not([aria-disabled='true']) {
-    background: var(--ran-color-bg-hover, var(--ran-gray-200));
+  @media (hover: hover) {
+    &:hover:not([aria-disabled='true'], :disabled) {
+      background: var(--ran-color-bg-hover, var(--ran-gray-200));
+    }
   }
   &:disabled {
     cursor: not-allowed;

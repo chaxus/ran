@@ -41,8 +41,10 @@
      this control triggers. Hover feedback snaps, like the rest of the library. */
 }
 
-.ran-theme-switch button:hover {
-  color: var(--ran-theme-switch-button-hover-color, var(--ran-color-text, #171717));
+@media (hover: hover) {
+  .ran-theme-switch button:hover {
+    color: var(--ran-theme-switch-button-hover-color, var(--ran-color-text, #171717));
+  }
 }
 
 .ran-theme-switch button[aria-pressed='true'] {
@@ -51,7 +53,7 @@
 }
 
 .ran-theme-switch button:focus-visible {
-  outline: var(--ran-theme-switch-button-focus-outline, 2px solid var(--ran-color-primary, #006bff));
+  outline: var(--ran-theme-switch-button-focus-outline, 2px solid var(--ran-color-focus, #0a6cff));
   outline-offset: var(--ran-theme-switch-button-focus-outline-offset, 2px);
 }
 

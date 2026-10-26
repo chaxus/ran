@@ -25,7 +25,7 @@ for (const theme of ['light', 'dark'] as const) {
         await page.evaluate(() =>
           getComputedStyle(document.documentElement).getPropertyValue('--ran-gray-1000').trim(),
         ),
-      ).toBe(theme === 'dark' ? '#ededed' : '#171717');
+      ).toBe(theme === 'dark' ? '#ededef' : '#111113');
     });
 
     test('text variant paints keyboard focus while retaining its chromeless surface', async ({ page }) => {

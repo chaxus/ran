@@ -43,13 +43,13 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 - `--ran-color-bg-hover`
 - `--ran-color-bg-subtle`
 - `--ran-color-border`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-radius-full`
 - `--ran-radius-md`
 - `--ran-radius-sm`
-- `--ran-size-3`
+- `--ran-size-4`
 - `--ran-size-6`
 - `--ran-space-1`
 - `--ran-space-2`
@@ -66,11 +66,11 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `button`
 
-- Tokens: 66
+- Tokens: 76
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 15 · skin: 2 · component: 43 · internal: 6 -->
+<!-- layers: semantic: 17 · skin: 2 · component: 48 · internal: 9 -->
 - `--ran-btn-active-background`
 - `--ran-btn-active-border-color`
 - `--ran-btn-active-transform`
@@ -91,6 +91,10 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 - `--ran-btn-color`
 - `--ran-btn-content-background-image`
 - `--ran-btn-content-justify-content`
+- `--ran-btn-disabled-background`
+- `--ran-btn-disabled-border-color`
+- `--ran-btn-disabled-box-shadow`
+- `--ran-btn-disabled-color`
 - `--ran-btn-disabled-opacity`
 - `--ran-btn-font-family`
 - `--ran-btn-font-size`
@@ -107,6 +111,7 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 - `--ran-btn-text-align`
 - `--ran-btn-text-border`
 - `--ran-btn-text-box-shadow`
+- `--ran-btn-text-disabled-background`
 - `--ran-btn-text-surface-background`
 - `--ran-btn-transition`
 - `--ran-btn-user-select`
@@ -115,21 +120,26 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 - `--ran-btn-warning-color`
 - `--ran-btn-white-space`
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
 - `--ran-color-border-hover`
 - `--ran-color-danger`
-- `--ran-color-link`
+- `--ran-color-focus`
 - `--ran-color-primary`
 - `--ran-color-primary-active`
 - `--ran-color-primary-hover`
 - `--ran-color-primary-text`
 - `--ran-color-text`
+- `--ran-color-text-disabled`
+- `--ran-focus-ring`
 - `--ran-gray-alpha-400`
 - `--ran-motion-duration-base`
 - `--ran-motion-ease-spring`
 - `--ran-motion-ease-standard`
 - `--ran-radius-full`
 - `--ran-radius-sm`
+- `--ran-red-700`
+- `--ran-size-7`
 - `--ran-skin-font-family`
 - `--ran-skin-raised-shadow`
 - `--ran-space-1`
@@ -191,22 +201,25 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `checkbox`
 
-- Tokens: 48
+- Tokens: 53
 - Parts: 5
 
 ### Tokens
-<!-- layers: semantic: 9 · skin: 1 · component: 33 · internal: 5 -->
+<!-- layers: semantic: 11 · skin: 1 · component: 36 · internal: 5 -->
 - `--ran-checkbox-border-radius`
 - `--ran-checkbox-checked-background-color`
 - `--ran-checkbox-checked-background-image`
 - `--ran-checkbox-checked-border`
 - `--ran-checkbox-color`
+- `--ran-checkbox-disabled-background-color`
+- `--ran-checkbox-disabled-border`
+- `--ran-checkbox-disabled-label-color`
 - `--ran-checkbox-disabled-opacity`
 - `--ran-checkbox-disabled-tick-color`
-- `--ran-checkbox-focus-border-color`
 - `--ran-checkbox-focus-box-shadow`
 - `--ran-checkbox-font-family`
 - `--ran-checkbox-font-size`
+- `--ran-checkbox-hover-border-color`
 - `--ran-checkbox-inner-background-color`
 - `--ran-checkbox-inner-border`
 - `--ran-checkbox-inner-border-collapse`
@@ -230,14 +243,16 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 - `--ran-checkbox-tick-transition`
 - `--ran-checkbox-white-space`
 - `--ran-color-bg-elevated`
-- `--ran-color-bg-muted`
-- `--ran-color-border`
+- `--ran-color-bg-subtle`
+- `--ran-color-border-control`
+- `--ran-color-border-control-hover`
+- `--ran-color-border-hover`
 - `--ran-color-primary`
 - `--ran-color-primary-text`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-focus-ring`
-- `--ran-gray-600`
+- `--ran-gray-700`
 - `--ran-motion-duration-base`
 - `--ran-motion-ease-bouncy`
 - `--ran-size-1`
@@ -254,29 +269,31 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `colorpicker`
 
-- Tokens: 18
+- Tokens: 20
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 5 · component: 7 · internal: 6 -->
+<!-- layers: semantic: 6 · component: 10 · internal: 4 -->
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
-- `--ran-color-border-hover`
+- `--ran-color-border-control`
+- `--ran-color-border-control-hover`
 - `--ran-colorpicker-background`
 - `--ran-colorpicker-block-border-radius`
 - `--ran-colorpicker-border`
 - `--ran-colorpicker-border-radius`
+- `--ran-colorpicker-disabled-background`
+- `--ran-colorpicker-disabled-border-color`
 - `--ran-colorpicker-disabled-opacity`
+- `--ran-colorpicker-focus-ring`
 - `--ran-colorpicker-hover-border-color`
 - `--ran-colorpicker-transition`
-- `--ran-gray-500`
+- `--ran-focus-ring`
 - `--ran-gray-alpha-100`
 - `--ran-gray-alpha-200`
-- `--ran-radius-md`
 - `--ran-radius-sm`
-- `--ran-size-4`
 - `--ran-size-7`
-- `--ran-space-1`
 
 ### Parts
 - `block`
@@ -489,15 +506,15 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 ### Tokens
 <!-- layers: semantic: 14 · skin: 1 · component: 61 · internal: 12 -->
 - `--ran-color-bg-elevated`
-- `--ran-color-bg-muted`
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
-- `--ran-color-border-hover`
+- `--ran-color-border-control`
+- `--ran-color-border-control-hover`
 - `--ran-color-danger`
 - `--ran-color-danger-foreground`
-- `--ran-color-link`
-- `--ran-color-primary`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
+- `--ran-color-text-placeholder`
 - `--ran-color-text-secondary`
 - `--ran-color-warning`
 - `--ran-color-warning-foreground`
@@ -590,8 +607,8 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ### Tokens
 <!-- layers: semantic: 3 · internal: 1 -->
+- `--ran-color-focus`
 - `--ran-color-link`
-- `--ran-color-primary`
 - `--ran-link-active-font-weight`
 - `--ran-radius-sm`
 
@@ -1518,11 +1535,13 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `popover`
 
-- Tokens: 0
+- Tokens: 2
 - Parts: 0
 
 ### Tokens
-- (none)
+<!-- layers: semantic: 1 · internal: 1 -->
+- `--ran-focus-ring`
+- `--ran-radius-sm`
 
 ### Parts
 - (none)
@@ -1540,12 +1559,13 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `progress`
 
-- Tokens: 18
+- Tokens: 19
 - Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 4 · component: 12 · internal: 2 -->
+<!-- layers: semantic: 5 · component: 12 · internal: 2 -->
 - `--ran-color-bg-elevated`
+- `--ran-color-focus`
 - `--ran-color-primary`
 - `--ran-gray-200`
 - `--ran-progress-dot-background`
@@ -1632,17 +1652,16 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `scratch`
 
-- Tokens: 20
+- Tokens: 21
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 8 · component: 3 · internal: 9 -->
+<!-- layers: semantic: 8 · skin: 1 · component: 3 · internal: 9 -->
 - `--ran-background-100`
-- `--ran-color-bg`
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-hover`
 - `--ran-color-border`
-- `--ran-color-link`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-gray-1000`
@@ -1653,7 +1672,9 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 - `--ran-scratch-award-background`
 - `--ran-scratch-cover-background`
 - `--ran-scratch-disabled-opacity`
+- `--ran-shadow-elevated`
 - `--ran-size-7`
+- `--ran-skin-raised-shadow`
 - `--ran-space-2`
 - `--ran-space-3`
 - `--ran-text-button-size`
@@ -1702,18 +1723,25 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `select`
 
-- Tokens: 63
+- Tokens: 69
 - Parts: 6
 
 ### Tokens
-<!-- layers: semantic: 7 · skin: 1 · component: 47 · internal: 8 -->
+<!-- layers: semantic: 9 · skin: 1 · component: 47 · internal: 12 -->
+- `--ran-background-200`
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
-- `--ran-color-primary`
+- `--ran-color-border-control`
+- `--ran-color-border-control-hover`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
-- `--ran-color-text-secondary`
+- `--ran-color-text-placeholder`
 - `--ran-focus-ring`
+- `--ran-gray-400`
+- `--ran-gray-700`
+- `--ran-gray-800`
+- `--ran-gray-900`
 - `--ran-radius-sm`
 - `--ran-select-background-color`
 - `--ran-select-background-image`
@@ -1766,7 +1794,6 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 - `--ran-size-7`
 - `--ran-skin-font-family`
 - `--ran-space-1`
-- `--ran-space-3`
 - `--ran-text-label-1`
 - `--ran-text-label-3`
 - `--ran-text-label-weight`
@@ -1917,7 +1944,7 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 <!-- layers: semantic: 6 · skin: 1 · internal: 15 -->
 - `--ran-color-bg-hover`
 - `--ran-color-border`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
 - `--ran-radius-full`
@@ -2042,25 +2069,27 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `voice-button`
 
-- Tokens: 37
+- Tokens: 39
 - Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 12 · internal: 25 -->
-- `--ran-color-bg`
+<!-- layers: semantic: 13 · skin: 1 · internal: 25 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-subtle`
 - `--ran-color-border`
 - `--ran-color-border-hover`
 - `--ran-color-danger`
-- `--ran-color-primary`
+- `--ran-color-focus`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-color-text-secondary`
 - `--ran-radius-md`
+- `--ran-radius-sm`
 - `--ran-red-200`
+- `--ran-shadow-elevated`
 - `--ran-shadow-menu`
 - `--ran-size-7`
+- `--ran-skin-raised-shadow`
 - `--ran-space-2`
 - `--ran-space-3`
 - `--ran-text-label-3`

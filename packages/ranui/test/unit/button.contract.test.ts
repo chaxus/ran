@@ -313,7 +313,7 @@ describe('r-button contract', () => {
  * The raised shadow is painted on the host box, while the visible surface and
  * its radius live inside the shadow DOM. If the host is left square, a rounded
  * button sits inside a square shadow and its bottom edge shows as a straight
- * line poking out past both corners -- invisible at the 6px default, obvious
+ * line poking out past both corners -- invisible at a small default radius, obvious
  * as soon as a consumer rounds the button into a pill.
  */
 describe('r-button host shape', () => {
@@ -347,7 +347,7 @@ describe('r-button host shape', () => {
     expect(own).toMatch(/box-shadow:/);
     // Same token, same fallback: one lever rounds the host, the surface and the
     // content together, so the shadow can never disagree with the button.
-    const radius = 'border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 6px));';
+    const radius = 'border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 8px));';
     expect(own).toContain(radius);
     expect(source).toContain(`  .ran-btn {`);
     // The surface inside carries the identical declaration.

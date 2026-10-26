@@ -236,7 +236,7 @@ Bis das Skript der Komponente läuft, setzt der Browser `<r-content>` als gewöh
 
 ## Bewährte Vorgehensweisen
 
-- **Auslöserelement**: Nimm ein fokussierbares Bedienelement (etwa `<r-button>`) als Auslöser, damit Öffnen und Schließen per Tastatur funktionieren.
+- **Auslöserelement**: Nimm ein fokussierbares Bedienelement (etwa `<r-button>`) als Auslöser, damit Öffnen und Schließen per Tastatur funktionieren. Kann der Auslöser keinen Fokus erhalten, wird das Popover selbst zum einzigen Tab-Stopp und zeichnet `--ran-focus-ring`.
 - **Hülle für den Inhalt**: Packe den Inhalt der Fläche immer in `<r-content>`. Kinder, die nicht darin stehen, erscheinen nicht als schwebende Fläche.
 - **Größe im Textfluss**: Der Host ist `display: block`; ergänze `style="display: inline-block;"` (oder setze ihn in einen Inline-Kontext), damit er auf die Breite des Auslösers schrumpft.
 - **Lage**: `placement` ist ein Wunsch, keine Zusage: Steht der Auslöser nahe am Rand des Viewports und fehlt auf der gewünschten Seite der Platz, klappt die Fläche selbsttätig auf die Gegenseite und verschiebt sich entlang der Querachse, um sichtbar zu bleiben. Dieses automatische Umklappen greift nur bei der voreingestellten Positionierung auf `body`-Ebene.

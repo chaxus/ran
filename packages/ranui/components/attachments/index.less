@@ -28,6 +28,8 @@
   align-items: center;
   gap: var(--ran-attachment-gap, var(--ran-space-2));
   border: 1px solid var(--ran-attachment-border-color, var(--ran-color-border));
+  /* A card holding a control at a 4px inset, not a control: md by the radius nesting rule
+     in theme/tokens.less. */
   border-radius: var(--ran-attachment-border-radius, var(--ran-radius-md));
   background: var(--ran-attachment-background, var(--ran-color-bg-subtle));
   padding: var(--ran-attachment-padding, var(--ran-space-1) var(--ran-space-2));
@@ -67,6 +69,7 @@
 }
 
 .ran-attachment-remove {
+  position: relative;
   display: flex;
   flex: none;
   align-items: center;
@@ -75,18 +78,27 @@
   border-radius: var(--ran-attachment-remove-radius, var(--ran-radius-full));
   background: none;
   padding: 0;
-  width: var(--ran-attachment-remove-size, var(--ran-size-3));
-  height: var(--ran-attachment-remove-size, var(--ran-size-3));
+  width: var(--ran-attachment-remove-size, var(--ran-size-4));
+  height: var(--ran-attachment-remove-size, var(--ran-size-4));
   color: var(--ran-attachment-remove-color, var(--ran-color-text-secondary));
   cursor: pointer;
 }
 
-.ran-attachment-remove:hover {
-  background: var(--ran-attachment-remove-hover-background, var(--ran-color-bg-hover));
-  color: var(--ran-attachment-remove-hover-color, var(--ran-color-text));
+/* Widens the hit area to 32px without growing the chip. */
+.ran-attachment-remove::before {
+  position: absolute;
+  inset: -4px;
+  content: '';
+}
+
+@media (hover: hover) {
+  .ran-attachment-remove:hover {
+    background: var(--ran-attachment-remove-hover-background, var(--ran-color-bg-hover));
+    color: var(--ran-attachment-remove-hover-color, var(--ran-color-text));
+  }
 }
 
 .ran-attachment-remove:focus-visible {
-  outline: 2px solid var(--ran-attachment-focus-color, var(--ran-color-primary));
-  outline-offset: 1px;
+  outline: 2px solid var(--ran-attachment-focus-color, var(--ran-color-focus));
+  outline-offset: 2px;
 }

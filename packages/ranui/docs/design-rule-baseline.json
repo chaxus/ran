@@ -2,9 +2,9 @@
   "$comment": "Known design-rule violations, recorded per file by bin/verify-design-rules.ts. This is a ratchet, not an allowlist: a count that rises fails as a new violation, and a count that falls fails until it is lowered here, so a fix cannot regress later. Do not edit by hand — run `pnpm -F ranui verify:design --update-baseline`. The rules themselves are stated in docs/DESIGN.md and CLAUDE.md.",
   "rules": {
     "dark-unsafe-fallback": {
-      "components/button/index.less": 5,
+      "components/button/index.less": 3,
       "components/card/index.less": 1,
-      "components/checkbox/index.less": 3,
+      "components/checkbox/index.less": 2,
       "components/colorpicker/index.less": 3,
       "components/colorpicker/panel.less": 2,
       "components/dropdown/index.less": 1,
@@ -48,7 +48,7 @@
       "components/progress/index.less": 1,
       "components/radar/index.less": 2,
       "components/select/dropdown-item/index.less": 3,
-      "components/select/index.less": 5,
+      "components/select/index.less": 4,
       "components/skeleton/index.less": 4,
       "components/tab/index.less": 1
     },

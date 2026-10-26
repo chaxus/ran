@@ -37,6 +37,9 @@ const HOVER_CLOSE_DELAY = 300;
 
 const HOVER_TIME = 16;
 
+const FOCUSABLE_TRIGGER =
+  'a[href], button, input:not([type="hidden"]), select, textarea, summary, [contenteditable]:not([contenteditable="false"]), [tabindex]';
+
 export enum PLACEMENT_TYPE {
   TOP = 'top',
   BOTTOM = 'bottom',
@@ -230,10 +233,46 @@ export class Popover extends RanElement {
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
-  initAria = (): void => {
-    if (!this.hasAttribute('tabindex')) {
-      this.tabIndex = 0;
+  /** Whether the tabindex on the host was written by syncTabStop rather than by the author. */
+  private _ownsTabStop = false;
+  /**
+   * The slotted trigger is already a control: a native interactive element, anything carrying
+   * `tabindex` (even -1, e.g. a disabled r-colorpicker swatch), or a custom element that forwards
+   * `focus()` to an inner control in its own shadow root (r-button).
+   */
+  private _hasFocusableTrigger = (): boolean =>
+    Array.from(this.children).some((child) => {
+      if (child.tagName === 'R-CONTENT') return false;
+      return [child, ...Array.from(child.querySelectorAll('*'))].some(
+        (el) =>
+          el instanceof HTMLElement &&
+          (el.matches(FOCUSABLE_TRIGGER) || (el.localName.includes('-') && el.focus !== HTMLElement.prototype.focus)),
+      );
+    });
+  /**
+   * X-FOCUS-8: the host is a tab stop only when its trigger cannot take focus itself; otherwise
+   * Tab would stop on the host and then again on the trigger. Keyboard opening needs no host
+   * focus, because the trigger's keydown bubbles to keydownPopover. An author's tabindex wins.
+   */
+  syncTabStop = (): void => {
+    // Ours only while it still holds the value we wrote; an author who changed it took it over.
+    if (this._ownsTabStop && this.getAttribute('tabindex') !== '0') this._ownsTabStop = false;
+    if (this.hasAttribute('tabindex') && !this._ownsTabStop) return;
+    if (this._hasFocusableTrigger()) {
+      if (this._ownsTabStop) this.removeAttribute('tabindex');
+      this._ownsTabStop = false;
+      return;
     }
+    this.tabIndex = 0;
+    this._ownsTabStop = true;
+    // A trigger that upgrades later (parsed before its definition) gains its focus() only then.
+    // Any depth: _hasFocusableTrigger looks through descendants too.
+    for (const pending of Array.from(this.querySelectorAll(':not(:defined)'))) {
+      customElements.whenDefined(pending.localName).then(this.syncTabStop, () => undefined);
+    }
+  };
+  initAria = (): void => {
+    this.syncTabStop();
     this.setAttribute('aria-haspopup', 'dialog');
     this.setAttribute('aria-expanded', 'false');
   };
@@ -444,6 +483,7 @@ export class Popover extends RanElement {
       this._events.on(this, 'mouseleave', this.blur);
     }
     this._events.on(this, 'click', this.clickPopover).on(this, 'keydown', this.keydownPopover);
+    this._events.on(this._slot, 'slotchange', this.syncTabStop);
     this._events.on(this, 'show', () => {
       const root = this.getRootNode() as Document | ShadowRoot;
       const active = root.activeElement;

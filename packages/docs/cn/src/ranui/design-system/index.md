@@ -171,32 +171,35 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 组件真正读取的那一层。这里的一切都通过上面的色阶解析，因此会自己跟着主题翻转。
 
-| 令牌                             | 解析到                                                                                                                                 | 职责                                    |
-| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| `--ran-color-bg`                 | `--ran-background-100`                                                                                                                 | 页面背景                                |
-| `--ran-color-bg-subtle`          | `--ran-background-200`                                                                                                                 | 轻微区分的区域                          |
-| `--ran-color-bg-elevated`        | `--ran-background-100` · 暗色下为 gray-100                                                                                             | 卡片、表面                              |
-| `--ran-color-bg-muted`           | `--ran-gray-100`                                                                                                                       | 内凹 / 弱化填充                         |
-| `--ran-color-bg-hover`           | `--ran-gray-200`                                                                                                                       | 悬停表面                                |
-| `--ran-color-bg-active`          | `--ran-gray-300`                                                                                                                       | 激活（按下）表面                        |
-| `--ran-color-text`               | `--ran-gray-1000`                                                                                                                      | 主要文字                                |
-| `--ran-color-text-secondary`     | `--ran-gray-900`                                                                                                                       | 次要文字                                |
-| `--ran-color-text-disabled`      | `--ran-gray-700`                                                                                                                       | 禁用文字                                |
-| `--ran-color-border`             | `--ran-gray-400`                                                                                                                       | 默认边框                                |
-| `--ran-color-border-secondary`   | `--ran-gray-300`                                                                                                                       | 更弱的边框                              |
-| `--ran-color-border-hover`       | `--ran-gray-500`                                                                                                                       | 悬停边框                                |
-| `--ran-color-border-active`      | `--ran-gray-600`                                                                                                                       | 激活边框                                |
-| `--ran-color-border-control`     | `--ran-gray-700`                                                                                                                       | 控件边框：输入框、复选框、选择器（3:1） |
-| `--ran-color-primary`            | `--ran-gray-1000`                                                                                                                      | 主操作（无彩色）                        |
-| `--ran-color-primary-hover`      | <span class="swatch" style="--swatch:#2a2a2e"></span> `#2a2a2e` · 暗色 <span class="swatch" style="--swatch:#d4d4d8"></span> `#d4d4d8` | 主操作悬停                              |
-| `--ran-color-primary-active`     | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` · 暗色 <span class="swatch" style="--swatch:#b4b4bb"></span> `#b4b4bb` | 主操作按下                              |
-| `--ran-color-primary-text`       | `--ran-background-100`                                                                                                                 | 主操作表面**之上**的文字                |
-| `--ran-color-success`            | `--ran-green-700`                                                                                                                      | 成功                                    |
-| `--ran-color-warning`            | `--ran-amber-700`                                                                                                                      | 警告                                    |
-| `--ran-color-danger`             | `--ran-red-700`                                                                                                                        | 危险 / 错误                             |
-| `--ran-color-warning-foreground` | `--ran-amber-900`                                                                                                                      | 警告文字                                |
-| `--ran-color-danger-foreground`  | `--ran-red-900`                                                                                                                        | 危险 / 错误文字                         |
-| `--ran-color-link`               | `--ran-blue-800`                                                                                                                       | 链接                                    |
+| 令牌                               | 解析到                                                                                                                                 | 职责                                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `--ran-color-bg`                   | `--ran-background-100`                                                                                                                 | 页面背景                                |
+| `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                 | 轻微区分的区域                          |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · 暗色下为 gray-100                                                                                             | 卡片、表面                              |
+| `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                       | 内凹 / 弱化填充                         |
+| `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                       | 悬停表面                                |
+| `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                       | 激活（按下）表面                        |
+| `--ran-color-text`                 | `--ran-gray-1000`                                                                                                                      | 主要文字                                |
+| `--ran-color-text-secondary`       | `--ran-gray-900`                                                                                                                       | 次要文字                                |
+| `--ran-color-text-disabled`        | `--ran-gray-700`                                                                                                                       | 禁用文字                                |
+| `--ran-color-border`               | `--ran-gray-400`                                                                                                                       | 默认边框                                |
+| `--ran-color-border-secondary`     | `--ran-gray-300`                                                                                                                       | 更弱的边框                              |
+| `--ran-color-border-hover`         | `--ran-gray-500`                                                                                                                       | 悬停边框                                |
+| `--ran-color-border-active`        | `--ran-gray-600`                                                                                                                       | 激活边框                                |
+| `--ran-color-border-control`       | `--ran-gray-700`                                                                                                                       | 控件边框：输入框、复选框、选择器（3:1） |
+| `--ran-color-border-control-hover` | `--ran-gray-900`                                                                                                                       | 控件边框（悬停）                        |
+| `--ran-color-text-placeholder`     | `--ran-gray-800`                                                                                                                       | 占位文字（≥4.5:1）                      |
+| `--ran-color-primary`              | `--ran-gray-1000`                                                                                                                      | 主操作（无彩色）                        |
+| `--ran-color-primary-hover`        | <span class="swatch" style="--swatch:#2a2a2e"></span> `#2a2a2e` · 暗色 <span class="swatch" style="--swatch:#d4d4d8"></span> `#d4d4d8` | 主操作悬停                              |
+| `--ran-color-primary-active`       | <span class="swatch" style="--swatch:#3f3f46"></span> `#3f3f46` · 暗色 <span class="swatch" style="--swatch:#b4b4bb"></span> `#b4b4bb` | 主操作按下                              |
+| `--ran-color-primary-text`         | `--ran-background-100`                                                                                                                 | 主操作表面**之上**的文字                |
+| `--ran-color-success`              | `--ran-green-700`                                                                                                                      | 成功                                    |
+| `--ran-color-warning`              | `--ran-amber-700`                                                                                                                      | 警告                                    |
+| `--ran-color-danger`               | `--ran-red-700`                                                                                                                        | 危险 / 错误                             |
+| `--ran-color-warning-foreground`   | `--ran-amber-900`                                                                                                                      | 警告文字                                |
+| `--ran-color-danger-foreground`    | `--ran-red-900`                                                                                                                        | 危险 / 错误文字                         |
+| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                       | 链接                                    |
+| `--ran-color-focus`                | `--ran-blue-700`                                                                                                                       | 焦点色：焦点环与焦点描边                |
 
 `--ran-color-primary-hover` / `-active` 是语义层里仅有的两个字面量：它们是朝页面背景方向走的，而不
 是沿着某条色阶走，所以暗色模式直接重定义了它们。

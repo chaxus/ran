@@ -30,6 +30,28 @@ describe('r-popover accessibility contract', () => {
     expect(popover.getAttribute('aria-expanded')).toBe('false');
   });
 
+  it('is not a second tab stop when its trigger is already focusable', async () => {
+    await import('@/components/button');
+    document.body.innerHTML =
+      '<r-popover id="native"><button>Open</button><r-content>x</r-content></r-popover>' +
+      '<r-popover id="ranui"><r-button>Open</r-button><r-content>x</r-content></r-popover>' +
+      '<r-popover id="text"><span>Open</span><r-content>x</r-content></r-popover>' +
+      '<r-popover id="authored" tabindex="0"><button>Open</button><r-content>x</r-content></r-popover>';
+    await sleep(0);
+    expect(document.getElementById('native')!.hasAttribute('tabindex')).toBe(false);
+    expect(document.getElementById('ranui')!.hasAttribute('tabindex')).toBe(false);
+    expect((document.getElementById('text') as HTMLElement).tabIndex).toBe(0);
+    expect((document.getElementById('authored') as HTMLElement).tabIndex).toBe(0);
+  });
+
+  it('drops its own tab stop once a focusable trigger is slotted', async () => {
+    const popover = await mountElement<Popover>('r-popover', { trigger: 'click' });
+    expect(popover.tabIndex).toBe(0);
+    popover.prepend(document.createElement('button'));
+    await sleep(0);
+    expect(popover.hasAttribute('tabindex')).toBe(false);
+  });
+
   it('opens with Enter or Space and closes with Escape', async () => {
     const popover = await createPopover();
     vi.useFakeTimers();

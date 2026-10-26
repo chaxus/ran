@@ -55,7 +55,7 @@
   line-height: var(--ran-input-line-height, 1.5715);
   background-color: var(--ran-input-background-color, var(--ran-color-bg-elevated, #fff));
   background-image: var(--ran-input-background-image, none);
-  border: var(--ran-input-border, 1px solid var(--ran-color-border, #eaeaea));
+  border: var(--ran-input-border, 1px solid var(--ran-color-border-control, #8a8a94));
   border-image-source: var(--ran-input-border-image-source, none);
   border-image-slice: var(--ran-input-border-image-slice, 8);
   border-image-width: var(--ran-input-border-image-width, var(--ran-skin-border-image-width, 4px));
@@ -76,13 +76,13 @@
      the native input, and :focus-within fired for that too, leaving a ring on
      every click. Keyboard-only, matching r-button's :focus-visible convention;
      the token also matches r-checkbox's ring for a consistent focus treatment. */
-  // Border and ring both go blue on focus — DESIGN.md §1 reserves blue for
-  // "links and the focus ring only", so the border must match the ring
-  // color here rather than switching to the monochrome --ran-color-primary
-  // (which would put a black-bordered box inside a blue ring: two
-  // uncoordinated focus signals instead of one).
+  // The ring is the focus signal; the border keeps its colour so the two do not read as
+  // a doubled blue edge (see --ran-focus-ring in theme/tokens.less).
+  // A status border (error, warning) outranks this: :not([status]) keeps red red on focus.
+  &:not([status]):has(.ran-input-content:focus-visible) {
+    border-color: var(--ran-input-active-border-color, var(--ran-color-border-control, #8a8a94));
+  }
   &:has(.ran-input-content:focus-visible) {
-    border-color: var(--ran-input-active-border-color, var(--ran-color-link, #006bff));
     box-shadow: var(--ran-input-active-box-shadow, var(--ran-focus-ring));
     border-right-width: var(--ran-input-active-border-right-width, 1px);
     outline: var(--ran-input-active-outline, 0);
@@ -90,9 +90,12 @@
   // Hover darkens the border one step on the gray ladder — matching
   // r-button/r-card's own hover treatment — rather than switching to blue,
   // which DESIGN.md reserves for links and focus only.
-  &:hover {
-    border-color: var(--ran-input-hover-border-color, var(--ran-color-border-hover, #c9c9c9));
-    border-right-width: var(--ran-input-hover-border-right-width, 1px);
+  // (hover: hover), not a width breakpoint: a mouse in a narrow window still hovers.
+  @media (hover: hover) {
+    &:hover:not([disabled]) {
+      border-color: var(--ran-input-hover-border-color, var(--ran-color-border-control-hover, #55555e));
+      border-right-width: var(--ran-input-hover-border-right-width, 1px);
+    }
   }
   /* Status icon — a non-color cue (shape) so error/warning is not signalled
      by color alone (see DESIGN.md §7). CSS mask so it tints with the token. */
@@ -136,14 +139,15 @@
   }
   &[disabled] {
     color: var(--ran-input-disabled-color, var(--ran-color-text-disabled, #00000040));
-    background-color: var(--ran-input-disabled-background-color, var(--ran-color-bg-muted, #f5f5f5));
-    border-color: var(--ran-input-disabled-border-color, var(--ran-color-border, #eaeaea));
+    // Recessed rather than faded: the subtle surface sits below elevated in both themes.
+    background-color: var(--ran-input-disabled-background-color, var(--ran-color-bg-subtle, #f7f7f8));
+    border-color: var(--ran-input-disabled-border-color, var(--ran-color-border, #e4e4e8));
     box-shadow: var(--ran-input-disabled-box-shadow, none);
     cursor: var(--ran-input-disabled-cursor, not-allowed);
     opacity: var(--ran-input-disabled-opacity, 1);
     & > .ran-input-content {
       color: var(--ran-input-content-disabled-color, var(--ran-color-text-disabled, #00000040));
-      background-color: var(--ran-input-content-disabled-background-color, var(--ran-color-bg-muted, #f5f5f5));
+      background-color: var(--ran-input-content-disabled-background-color, var(--ran-color-bg-subtle, #f7f7f8));
       border-color: var(--ran-input-content-disabled-border-color, var(--ran-color-border, #eaeaea));
       box-shadow: var(--ran-input-content-disabled-box-shadow, none);
       cursor: var(--ran-input-content-disabled-cursor, not-allowed);
@@ -205,7 +209,7 @@
       box-shadow: var(--ran-input-content-hover-box-shadow, none);
     }
     &::placeholder {
-      color: var(--ran-input-content-placeholder-color, var(--ran-color-text-disabled, #999));
+      color: var(--ran-input-content-placeholder-color, var(--ran-color-text-placeholder, #6e6e78));
     }
     &::-webkit-search-cancel-button {
       display: none;
