@@ -373,7 +373,7 @@ Por debajo de la capa semántica, cada componente expone sus propios ganchos, co
 --ran-{component}-{element}[-{state}]-{property}
 ```
 
-por ejemplo `--ran-btn-hover-background`, `--ran-select-search-active-border-width`. Por defecto recurren a los tokens semánticos: `var(--ran-btn-background, var(--ran-color-primary, #171717))`, así que sobrescribir un token semántico llega a todos ellos, y sobrescribir uno de componente reduce el cambio a un solo elemento.
+por ejemplo `--ran-btn-hover-background`, `--ran-select-search-active-border-width`. Por defecto recurren a los tokens semánticos: `var(--ran-btn-background, var(--ran-color-primary, #111113))`, así que sobrescribir un token semántico llega a todos ellos, y sobrescribir uno de componente reduce el cambio a un solo elemento.
 
 La lista completa, generada, es [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) en el repositorio; la API por elemento está [aquí](/es/src/ranui/api). Para saber cómo aplicarlos, véase [Tematización](/es/src/ranui/theme/#customizing-tokens).
 
@@ -393,7 +393,7 @@ La lista completa, generada, es [style-tokens-public.md](https://github.com/chax
 Tres reglas mantienen eso a salvo en oscuro:
 
 1. **Nada de hex crudo** para algo que deba seguir al tema.
-2. **Un respaldo debe nombrar un token que cambie**: `var(--ran-color-text, var(--ran-gray-1000))`, nunca `var(--ran-color-text, #171717)`.
+2. **Un respaldo debe nombrar un token que cambie**: `var(--ran-color-text, var(--ran-gray-1000))`, nunca `var(--ran-color-text, #111113)`.
 3. **Un respaldo debe nombrar un token que exista**, o la declaración se descarta y el elemento se queda en silencio con lo que heredó.
 
 > Todos los tokens globales que declara la biblioteca están listados en esta página, y una prueba unitaria falla si se añade uno sin documentarlo aquí. Los tokens de ámbito de componente se generan aparte, en [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md).

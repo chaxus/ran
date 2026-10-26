@@ -58,7 +58,7 @@
     // Round the elevated surface to match the content, so it can never poke out
     // at the corners behind the rounded content (was showing white corners in dark).
     border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 8px));
-    background: var(--ran-btn-surface-background, var(--ran-color-bg-elevated, #fff));
+    background: var(--ran-btn-surface-background, var(--ran-color-bg-elevated, #ffffff));
   }
 
   &,
@@ -83,10 +83,10 @@
      Text/ripple use --ran-color-primary-text so the ink inverts with the surface. */
   &([type="primary"]) {
     .ran-btn-content {
-      background-color: var(--ran-btn-background, var(--ran-color-primary, #171717));
+      background-color: var(--ran-btn-background, var(--ran-color-primary, #111113));
       background-image: var(--ran-btn-content-background-image, none);
-      border-color: var(--ran-btn-border-color, var(--ran-color-primary, #171717));
-      color: var(--ran-btn-color, var(--ran-color-primary-text, #fff));
+      border-color: var(--ran-btn-border-color, var(--ran-color-primary, #111113));
+      color: var(--ran-btn-color, var(--ran-color-primary-text, #ffffff));
     }
   }
 
@@ -94,15 +94,15 @@
     .ran-btn::after {
       background-image: var(
         --ran-btn-after-background-image,
-        radial-gradient(circle, var(--ran-color-primary-text, #fff) 10%, transparent 10.01%)
+        radial-gradient(circle, var(--ran-color-primary-text, #ffffff) 10%, transparent 10.01%)
       );
     }
   }
 
   &([type="primary"]:not([disabled]):active) {
     .ran-btn-content {
-      background-color: var(--ran-btn-active-background, var(--ran-color-primary-active, #4d4d4d));
-      border-color: var(--ran-btn-active-border-color, var(--ran-color-primary-active, #4d4d4d));
+      background-color: var(--ran-btn-active-background, var(--ran-color-primary-active, #3f3f46));
+      border-color: var(--ran-btn-active-border-color, var(--ran-color-primary-active, #3f3f46));
     }
   }
 
@@ -114,29 +114,29 @@
        Text buttons keep their transparent border; only their ink responds. */
     &(:not([disabled], [type='text']):hover) {
       .ran-btn-content {
-        border-color: var(--ran-btn-hover-border-color, var(--ran-color-border-hover, #c9c9c9));
-        color: var(--ran-btn-hover-color, var(--ran-color-text, #171717));
+        border-color: var(--ran-btn-hover-border-color, var(--ran-color-border-hover, #b8b8c0));
+        color: var(--ran-btn-hover-color, var(--ran-color-text, #111113));
       }
     }
 
     &([type='text']:not([disabled]):hover) {
       .ran-btn-content {
-        color: var(--ran-btn-hover-color, var(--ran-color-text, #171717));
+        color: var(--ran-btn-hover-color, var(--ran-color-text, #111113));
       }
     }
 
     &([type="primary"]:not([disabled]):hover) {
       .ran-btn-content {
-        background-color: var(--ran-btn-hover-background, var(--ran-color-primary-hover, #383838));
-        border-color: var(--ran-btn-hover-border-color, var(--ran-color-primary-hover, #383838));
-        color: var(--ran-btn-hover-color, var(--ran-color-primary-text, #fff));
+        background-color: var(--ran-btn-hover-background, var(--ran-color-primary-hover, #2a2a2e));
+        border-color: var(--ran-btn-hover-border-color, var(--ran-color-primary-hover, #2a2a2e));
+        color: var(--ran-btn-hover-color, var(--ran-color-primary-text, #ffffff));
       }
     }
 
     &([type="warning"]:not([disabled]):hover) {
       .ran-btn-content {
-        border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #ff4d4f));
-        background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #ff4d4f));
+        border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #d70f2f));
+        background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #d70f2f));
         color: @dangerInk;
       }
     }
@@ -144,8 +144,8 @@
 
   &([type="warning"]) {
     .ran-btn-content {
-      border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #ff4d4f));
-      background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #ff4d4f));
+      border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #d70f2f));
+      background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #d70f2f));
       background-image: var(--ran-btn-content-background-image, none);
       color: @dangerInk;
     }
@@ -279,8 +279,8 @@
   border-image-outset: 0;
   border-image-repeat: stretch;
   border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 8px));
-  border-color: var(--ran-btn-border-color, var(--ran-color-border, #eaeaea));
-  color: var(--ran-btn-color, var(--ran-color-text, #000000d9));
+  border-color: var(--ran-btn-border-color, var(--ran-color-border, #e4e4e8));
+  color: var(--ran-btn-color, var(--ran-color-text, #111113));
   line-height: var(--ran-btn-line-height, var(--ran-text-button-line-height, 1));
   font-size: var(--ran-btn-font-size, var(--ran-text-button-size, 14px));
   font-weight: var(--ran-btn-font-weight, var(--ran-text-button-weight, 500));

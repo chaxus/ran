@@ -427,7 +427,7 @@ Below the semantic layer, every component exposes its own hooks, named:
 ```
 
 for example `--ran-btn-hover-background`, `--ran-select-search-active-border-width`. They
-default to semantic tokens: `var(--ran-btn-background, var(--ran-color-primary, #171717))`,
+default to semantic tokens: `var(--ran-btn-background, var(--ran-color-primary, #111113))`,
 so overriding a semantic token reaches all of them, and overriding a component token narrows
 the change to one element.
 
@@ -453,7 +453,7 @@ Three rules keep that dark-safe:
 
 1. **No raw hex** for anything that should follow the theme.
 2. **A fallback must name a token that flips**: `var(--ran-color-text, var(--ran-gray-1000))`,
-   never `var(--ran-color-text, #171717)`.
+   never `var(--ran-color-text, #111113)`.
 3. **A fallback must name a token that exists**, or the declaration is dropped and the element
    silently keeps whatever it inherited.
 

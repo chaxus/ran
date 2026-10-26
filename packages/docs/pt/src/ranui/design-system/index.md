@@ -373,7 +373,7 @@ Abaixo da camada semântica, todo componente expõe os próprios ganchos, nomead
 --ran-{component}-{element}[-{state}]-{property}
 ```
 
-por exemplo `--ran-btn-hover-background`, `--ran-select-search-active-border-width`. Por padrão eles recaem nos tokens semânticos: `var(--ran-btn-background, var(--ran-color-primary, #171717))`, então sobrescrever um token semântico alcança todos eles, e sobrescrever um de componente estreita a mudança para um elemento só.
+por exemplo `--ran-btn-hover-background`, `--ran-select-search-active-border-width`. Por padrão eles recaem nos tokens semânticos: `var(--ran-btn-background, var(--ran-color-primary, #111113))`, então sobrescrever um token semântico alcança todos eles, e sobrescrever um de componente estreita a mudança para um elemento só.
 
 A lista completa, gerada, é o [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) no repositório; a API por elemento está [aqui](/pt/src/ranui/api). Para saber como aplicá-los, veja [Tematização](/pt/src/ranui/theme/#customizing-tokens).
 
@@ -393,7 +393,7 @@ A lista completa, gerada, é o [style-tokens-public.md](https://github.com/chaxu
 Três regras mantêm isso seguro no escuro:
 
 1. **Nada de hexadecimal cru** para algo que deva acompanhar o tema.
-2. **Um valor reserva precisa nomear um token que vire**: `var(--ran-color-text, var(--ran-gray-1000))`, nunca `var(--ran-color-text, #171717)`.
+2. **Um valor reserva precisa nomear um token que vire**: `var(--ran-color-text, var(--ran-gray-1000))`, nunca `var(--ran-color-text, #111113)`.
 3. **Um valor reserva precisa nomear um token que exista**, ou a declaração é descartada e o elemento fica em silêncio com o que herdou.
 
 > Todo token global que a biblioteca declara está listado nesta página, e um teste unitário falha se algum for acrescentado sem ser documentado aqui. Os tokens de escopo de componente são gerados à parte, no [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md).

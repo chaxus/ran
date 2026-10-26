@@ -24,7 +24,7 @@
              with the theme, so it stays the highest-contrast pair in either mode and still
              reads apart from the elevated notices. A fixed translucent black vanished on a
              dark page. The transparent border keeps its box the same size as a notice's. */
-          background: var(--ran-message-content-toast-background, var(--ran-color-text, #0a0a0a));
+          background: var(--ran-message-content-toast-background, var(--ran-color-text, #111113));
           border: var(--ran-message-content-toast-border, 1px solid transparent);
           border-radius: var(--ran-message-content-toast-border-radius, var(--ran-radius-md, 12px));
           pointer-events: var(--ran-message-content-toast-pointer-events, all);
@@ -42,7 +42,7 @@
               z-index: var(--ran-message-text-toast-z-index, 1010);
               width: var(--ran-message-text-toast-width, 100%);
               pointer-events: var(--ran-message-text-toast-pointer-events, none);
-              color: var(--ran-message-text-toast-color, var(--ran-color-bg, #fff));
+              color: var(--ran-message-text-toast-color, var(--ran-color-bg, #ffffff));
             }
           }
         }
@@ -81,8 +81,8 @@
     &-content {
       display: var(--ran-message-content-display, inline-block);
       padding: var(--ran-message-content-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px));
-      background: var(--ran-message-content-background, var(--ran-color-bg-elevated, #fff));
-      border: var(--ran-message-content-border, 1px solid var(--ran-color-border, #d4d4d4));
+      background: var(--ran-message-content-background, var(--ran-color-bg-elevated, #ffffff));
+      border: var(--ran-message-content-border, 1px solid var(--ran-color-border, #e4e4e8));
       border-image-source: var(--ran-message-content-border-image-source, none);
       border-image-slice: var(--ran-message-content-border-image-slice, 8);
       border-image-width: var(--ran-message-content-border-image-width, var(--ran-skin-border-image-width, 4px));
@@ -100,7 +100,7 @@
         span {
           margin: var(--ran-message-text-margin, 0);
           padding: var(--ran-message-text-padding, 0);
-          color: var(--ran-message-text-color, var(--ran-color-text, #000000d9));
+          color: var(--ran-message-text-color, var(--ran-color-text, #111113));
           font-size: var(--ran-message-text-font-size, var(--ran-text-copy-2, 14px));
           font-weight: var(--ran-message-text-font-weight, var(--ran-text-copy-weight, 400));
           font-variant: var(--ran-message-text-font-variant, tabular-nums);
@@ -150,7 +150,7 @@
   box-sizing: var(--ran-message-box-sizing, border-box);
   margin: var(--ran-message-margin, 0);
   padding: var(--ran-message-padding, 0);
-  color: var(--ran-message-color, var(--ran-color-text, #000000d9));
+  color: var(--ran-message-color, var(--ran-color-text, #111113));
   font-size: var(--ran-message-font-size, var(--ran-text-copy-2, 14px));
   font-weight: var(--ran-message-font-weight, var(--ran-text-copy-weight, 400));
   font-variant: var(--ran-message-font-variant, tabular-nums);

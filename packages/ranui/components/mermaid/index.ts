@@ -493,7 +493,7 @@ export class Mermaid extends RanElement {
       // zoom controls (bottom-center, inline-styled since they live in modal light DOM)
       const controls = Div().build();
       controls.style.cssText =
-        'position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:4px;border-radius:8px;background:var(--ran-color-bg-elevated,#fff);box-shadow:0 2px 8px rgba(0,0,0,.15);';
+        'position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:4px;border-radius:8px;background:var(--ran-color-bg-elevated, #ffffff);box-shadow:0 2px 8px rgba(0,0,0,.15);';
       const fsBtn = (icon: string, label: string, fn: () => void): HTMLButtonElement => {
         const b = View('button')
           .attr('type', 'button')
@@ -502,7 +502,7 @@ export class Mermaid extends RanElement {
           .children(View('r-icon').attr('name', icon).attr('size', '18').attr('color', 'currentColor'))
           .build() as HTMLButtonElement;
         b.style.cssText =
-          'display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:none;border-radius:6px;background:transparent;color:var(--ran-color-text-secondary,#666);cursor:pointer;';
+          'display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:none;border-radius:6px;background:transparent;color:var(--ran-color-text-secondary, #55555e);cursor:pointer;';
         b.addEventListener('click', fn, { signal: sig });
         return b;
       };

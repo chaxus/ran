@@ -16,7 +16,7 @@
 /* No transition: border-color / box-shadow are palette props and would fade on
    a theme flip; the hover state snaps, matching the rest of the library. */
 :host([hoverable]:hover) .ran-card {
-  border-color: var(--ran-card-hover-border-color, var(--ran-color-border-hover, #c9c9c9));
+  border-color: var(--ran-card-hover-border-color, var(--ran-color-border-hover, #b8b8c0));
   box-shadow: var(--ran-card-hover-shadow, var(--ran-shadow-elevated, 0 1px 2px rgba(0, 0, 0, 0.04)));
 }
 
@@ -29,7 +29,7 @@
   padding: var(--ran-card-padding, var(--ran-space-4, 16px));
   border-width: var(--ran-skin-border-width, 1px);
   border-style: var(--ran-skin-border-style, solid);
-  border-color: var(--ran-card-border-color, var(--ran-color-border, #eaeaea));
+  border-color: var(--ran-card-border-color, var(--ran-color-border, #e4e4e8));
   border-radius: var(--ran-card-radius, var(--ran-radius-md));
   /* Same in-flow surface as r-section, so a card nested in a section never steps down
      (darker) from its parent in dark mode. */

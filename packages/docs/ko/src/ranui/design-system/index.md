@@ -373,7 +373,7 @@ spring 계열은 다듬어진 SwiftUI 스프링에서 증류한 것입니다(res
 --ran-{component}-{element}[-{state}]-{property}
 ```
 
-예를 들어 `--ran-btn-hover-background`, `--ran-select-search-active-border-width`입니다. 기본값은 시맨틱 토큰으로 물러납니다: `var(--ran-btn-background, var(--ran-color-primary, #171717))`. 그래서 시맨틱 토큰 하나를 덮어쓰면 그 전부에 닿고, 컴포넌트 토큰을 덮어쓰면 변화가 요소 하나로 좁혀집니다.
+예를 들어 `--ran-btn-hover-background`, `--ran-select-search-active-border-width`입니다. 기본값은 시맨틱 토큰으로 물러납니다: `var(--ran-btn-background, var(--ran-color-primary, #111113))`. 그래서 시맨틱 토큰 하나를 덮어쓰면 그 전부에 닿고, 컴포넌트 토큰을 덮어쓰면 변화가 요소 하나로 좁혀집니다.
 
 생성된 전체 목록은 저장소의 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)에 있습니다. 요소별 API는 [여기](/ko/src/ranui/api)에 있습니다. 적용하는 법은 [테마](/ko/src/ranui/theme/#customizing-tokens)를 보세요.
 
@@ -393,7 +393,7 @@ spring 계열은 다듬어진 SwiftUI 스프링에서 증류한 것입니다(res
 세 가지 규칙이 그것을 다크에서도 안전하게 지켜 줍니다.
 
 1. 테마를 따라야 하는 것에는 **날 16진수를 쓰지 마세요.**
-2. **대체값은 함께 바뀌는 토큰을 가리켜야 합니다**: `var(--ran-color-text, var(--ran-gray-1000))`이지, `var(--ran-color-text, #171717)`이 아닙니다.
+2. **대체값은 함께 바뀌는 토큰을 가리켜야 합니다**: `var(--ran-color-text, var(--ran-gray-1000))`이지, `var(--ran-color-text, #111113)`이 아닙니다.
 3. **대체값은 존재하는 토큰을 가리켜야 합니다.** 그러지 않으면 선언이 버려지고, 요소는 물려받은 값을 조용히 지닌 채로 남습니다.
 
 > 라이브러리가 선언하는 전역 토큰은 모두 이 페이지에 실려 있고, 여기에 적지 않은 채 토큰을 늘리면 단위 테스트가 실패합니다. 컴포넌트 범위의 토큰은 따로 생성되어 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)에 있습니다.

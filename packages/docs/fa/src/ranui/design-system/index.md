@@ -373,7 +373,7 @@ import 'ranui/fonts'; // برای باندلرها
 --ran-{component}-{element}[-{state}]-{property}
 ```
 
-مثلاً `--ran-btn-hover-background`، `--ran-select-search-active-border-width`. این‌ها به‌طور پیش‌فرض به توکن‌های معنایی برمی‌گردند: `var(--ran-btn-background, var(--ran-color-primary, #171717))`؛ پس بازنویسی یک توکن معنایی به همه‌شان می‌رسد و بازنویسی یک توکن کامپوننت، تغییر را به یک عنصر محدود می‌کند.
+مثلاً `--ran-btn-hover-background`، `--ran-select-search-active-border-width`. این‌ها به‌طور پیش‌فرض به توکن‌های معنایی برمی‌گردند: `var(--ran-btn-background, var(--ran-color-primary, #111113))`؛ پس بازنویسی یک توکن معنایی به همه‌شان می‌رسد و بازنویسی یک توکن کامپوننت، تغییر را به یک عنصر محدود می‌کند.
 
 فهرست کاملِ تولیدشده در [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) در مخزن است؛ API به‌تفکیک عنصر [اینجاست](/fa/src/ranui/api). برای شیوه اعمالشان [پوسته‌بندی](/fa/src/ranui/theme/#customizing-tokens) را ببینید.
 
@@ -393,7 +393,7 @@ import 'ranui/fonts'; // برای باندلرها
 سه قاعده آن را در حالت تیره امن نگه می‌دارد:
 
 1. برای هرچه باید از پوسته پیروی کند **هیچ کد شانزده‌شانزدهی خامی ننویسید**.
-2. **مقدار جایگزین باید توکنی را نام ببرد که می‌چرخد**: `var(--ran-color-text, var(--ran-gray-1000))`، نه `var(--ran-color-text, #171717)`.
+2. **مقدار جایگزین باید توکنی را نام ببرد که می‌چرخد**: `var(--ran-color-text, var(--ran-gray-1000))`، نه `var(--ran-color-text, #111113)`.
 3. **مقدار جایگزین باید توکنی موجود را نام ببرد**، وگرنه اعلان دور ریخته می‌شود و عنصر بی‌صدا همان چیزی را که به ارث برده نگه می‌دارد.
 
 > هر توکن سراسری‌ای که کتابخانه اعلام می‌کند در همین صفحه فهرست شده، و اگر توکنی بدون مستندسازی در اینجا افزوده شود یک تست واحد شکست می‌خورد. توکن‌های محدود به کامپوننت جداگانه تولید می‌شوند، در [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md).

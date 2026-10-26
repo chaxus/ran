@@ -373,7 +373,7 @@ Unterhalb der semantischen Ebene stellt jede Komponente eigene Haken bereit, ben
 --ran-{component}-{element}[-{state}]-{property}
 ```
 
-zum Beispiel `--ran-btn-hover-background`, `--ran-select-search-active-border-width`. Sie fallen standardmäßig auf semantische Tokens zurück: `var(--ran-btn-background, var(--ran-color-primary, #171717))`. Ein semantisches Token zu überschreiben erreicht sie also alle, ein Komponenten-Token zu überschreiben verengt die Änderung auf ein einzelnes Element.
+zum Beispiel `--ran-btn-hover-background`, `--ran-select-search-active-border-width`. Sie fallen standardmäßig auf semantische Tokens zurück: `var(--ran-btn-background, var(--ran-color-primary, #111113))`. Ein semantisches Token zu überschreiben erreicht sie also alle, ein Komponenten-Token zu überschreiben verengt die Änderung auf ein einzelnes Element.
 
 Die vollständige erzeugte Liste ist [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) im Repository; die API je Element steht [hier](/de/src/ranui/api). Wie man sie anwendet, zeigt die [Themengestaltung](/de/src/ranui/theme/#customizing-tokens).
 
@@ -393,7 +393,7 @@ Die vollständige erzeugte Liste ist [style-tokens-public.md](https://github.com
 Drei Regeln halten das im Dunkeln sicher:
 
 1. **Kein roher Hex-Wert** für etwas, das dem Theme folgen soll.
-2. **Ein Rückfallwert muss ein Token nennen, das mitwechselt**: `var(--ran-color-text, var(--ran-gray-1000))`, niemals `var(--ran-color-text, #171717)`.
+2. **Ein Rückfallwert muss ein Token nennen, das mitwechselt**: `var(--ran-color-text, var(--ran-gray-1000))`, niemals `var(--ran-color-text, #111113)`.
 3. **Ein Rückfallwert muss ein Token nennen, das es gibt**, sonst fällt die Deklaration weg und das Element behält stillschweigend, was es geerbt hat.
 
 > Jedes globale Token, das die Bibliothek deklariert, steht auf dieser Seite, und ein Unit-Test schlägt fehl, wenn eines hinzukommt, ohne hier dokumentiert zu sein. Komponentenbezogene Tokens werden getrennt erzeugt, in [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md).

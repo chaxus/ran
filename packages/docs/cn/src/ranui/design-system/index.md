@@ -405,7 +405,7 @@ CSS 分不清「交互」和「主题翻转」，你给颜色加的淡入淡出�
 ```
 
 例如 `--ran-btn-hover-background`、`--ran-select-search-active-border-width`。它们默认指向语义令牌，
-例如 `var(--ran-btn-background, var(--ran-color-primary, #171717))`，所以覆盖语义令牌能一次影响
+例如 `var(--ran-btn-background, var(--ran-color-primary, #111113))`，所以覆盖语义令牌能一次影响
 全部，覆盖组件令牌则只改一个元素。
 
 完整清单见仓库中的
@@ -429,7 +429,7 @@ CSS 分不清「交互」和「主题翻转」，你给颜色加的淡入淡出�
 
 1. 该跟随主题的值，**不要写死 hex**。
 2. **兜底值必须是会翻转的令牌**，写 `var(--ran-color-text, var(--ran-gray-1000))`，不要写
-   `var(--ran-color-text, #171717)`。
+   `var(--ran-color-text, #111113)`。
 3. **兜底值引用的令牌必须存在**，否则整条声明被丢弃，元素静默沿用继承来的样式。
 
 > 组件库声明的每一个全局令牌都在本页列出；新增令牌若没有在这里记录，单元测试会失败。组件级令牌另行

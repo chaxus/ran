@@ -42,7 +42,7 @@ variant in [components/button/index.less](../components/button/index.less) uses:
 
 ```css
 :host([type='primary']) .ran-btn-content {
-  background-color: var(--ran-btn-background, var(--ran-color-primary, #171717));
+  background-color: var(--ran-btn-background, var(--ran-color-primary, #111113));
   color: var(--ran-btn-color, var(--ran-color-primary-text, #fff));
 }
 ```

@@ -373,7 +373,7 @@ spring 系は、調整済みの SwiftUI のばねから蒸留したものです�
 --ran-{component}-{element}[-{state}]-{property}
 ```
 
-たとえば `--ran-btn-hover-background`、`--ran-select-search-active-border-width` です。既定ではセマンティックトークンへ落ちます：`var(--ran-btn-background, var(--ran-color-primary, #171717))`。だからセマンティックトークンをひとつ上書きすればそのすべてに届き、コンポーネントのトークンを上書きすれば変化はひとつの要素に絞られます。
+たとえば `--ran-btn-hover-background`、`--ran-select-search-active-border-width` です。既定ではセマンティックトークンへ落ちます：`var(--ran-btn-background, var(--ran-color-primary, #111113))`。だからセマンティックトークンをひとつ上書きすればそのすべてに届き、コンポーネントのトークンを上書きすれば変化はひとつの要素に絞られます。
 
 生成された完全な一覧は、リポジトリの [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) にあります。要素ごとの API は[こちら](/ja/src/ranui/api)です。適用のしかたは[テーマ](/ja/src/ranui/theme/#customizing-tokens)を参照してください。
 
@@ -393,7 +393,7 @@ spring 系は、調整済みの SwiftUI のばねから蒸留したものです�
 3 つのルールが、それをダークでも安全に保ちます。
 
 1. テーマに追随すべきものに**生の 16 進数を書かないこと**。
-2. **フォールバックは切り替わるトークンを指すこと**：`var(--ran-color-text, var(--ran-gray-1000))` であって、`var(--ran-color-text, #171717)` ではありません。
+2. **フォールバックは切り替わるトークンを指すこと**：`var(--ran-color-text, var(--ran-gray-1000))` であって、`var(--ran-color-text, #111113)` ではありません。
 3. **フォールバックは存在するトークンを指すこと**。さもないと宣言は捨てられ、要素は継承したものを黙って保ち続けます。
 
 > ライブラリが宣言するグローバルなトークンはすべてこのページに載っており、ここに書かないままトークンを増やすとユニットテストが落ちます。コンポーネント単位のトークンは別途生成され、[style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) にあります。

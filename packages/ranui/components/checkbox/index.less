@@ -127,7 +127,7 @@
     width: var(--ran-checkbox-inner-width, var(--ran-size-1, 16px));
     height: var(--ran-checkbox-inner-height, var(--ran-size-1, 16px));
     direction: var(--ran-checkbox-inner-direction, ltr);
-    background-color: var(--ran-checkbox-inner-background-color, var(--ran-color-bg-elevated, #fff));
+    background-color: var(--ran-checkbox-inner-background-color, var(--ran-color-bg-elevated, #ffffff));
     border: var(--ran-checkbox-inner-border, 1px solid var(--ran-color-border-control, #8a8a94));
     border-image-source: var(--ran-checkbox-inner-border-image-source, none);
     border-image-slice: var(--ran-checkbox-inner-border-image-slice, 8);
@@ -144,7 +144,7 @@
       display: var(--ran-checkbox-tick-display, table);
       width: var(--ran-checkbox-tick-width, calc(16px / 14 * 5));
       height: var(--ran-checkbox-tick-height, calc(16px / 14 * 8));
-      border: var(--ran-checkbox-tick-border, 2px solid var(--ran-color-primary-text, #fff));
+      border: var(--ran-checkbox-tick-border, 2px solid var(--ran-color-primary-text, #ffffff));
       border-top: var(--ran-checkbox-tick-border-top, 0);
       border-inline-start: var(--ran-checkbox-tick-border-inline-start, 0);
       opacity: var(--ran-checkbox-tick-opacity, 0);
@@ -161,9 +161,9 @@
   }
   &-checked {
     .ran-checkbox-inner {
-      background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-primary, #006bff));
+      background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-primary, #111113));
       background-image: var(--ran-checkbox-checked-background-image, none);
-      border: var(--ran-checkbox-checked-border, 1px solid var(--ran-color-primary, #006bff));
+      border: var(--ran-checkbox-checked-border, 1px solid var(--ran-color-primary, #111113));
       // Bouncy pop on check — a transform-only keyframe (safe on theme flip).
       animation: var(
         --ran-checkbox-pop-animation,

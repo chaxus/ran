@@ -52,9 +52,9 @@
   position: var(--ran-modal-dialog-position, relative);
   width: var(--ran-modal-dialog-width, min(560px, calc(100vw - 32px)));
   margin: var(--ran-modal-dialog-margin, 0 auto);
-  background: var(--ran-modal-dialog-background, var(--ran-color-bg-elevated, #fff));
+  background: var(--ran-modal-dialog-background, var(--ran-color-bg-elevated, #ffffff));
   /* The hairline is what separates the dialog in dark, where the shadow vanishes. */
-  border: var(--ran-modal-dialog-border, 1px solid var(--ran-color-border, #d4d4d4));
+  border: var(--ran-modal-dialog-border, 1px solid var(--ran-color-border, #e4e4e8));
   border-image-source: var(--ran-modal-dialog-border-image-source, none);
   border-image-slice: var(--ran-modal-dialog-border-image-slice, 8);
   border-image-width: var(--ran-modal-dialog-border-image-width, var(--ran-skin-border-image-width, 4px));
@@ -81,7 +81,7 @@
   align-items: var(--ran-modal-header-align-items, center);
   justify-content: var(--ran-modal-header-justify-content, space-between);
   padding: var(--ran-modal-header-padding, var(--ran-space-4, 16px));
-  border-bottom: var(--ran-modal-header-border-bottom, 1px solid var(--ran-color-border-secondary, #f0f0f0));
+  border-bottom: var(--ran-modal-header-border-bottom, 1px solid var(--ran-color-border-secondary, #e2e2e6));
 }
 
 /* Headerless mode: collapse the title bar into a floating close button (top-right). */
@@ -104,7 +104,7 @@
   font-weight: var(--ran-modal-title-font-weight, var(--ran-text-heading-weight, 600));
   letter-spacing: var(--ran-modal-title-letter-spacing, var(--ran-text-heading-tracking, -0.03em));
   line-height: var(--ran-modal-title-line-height, 1.5);
-  color: var(--ran-modal-title-color, var(--ran-color-text, #111827));
+  color: var(--ran-modal-title-color, var(--ran-color-text, #111113));
 }
 
 .ran-modal-close {
@@ -125,7 +125,7 @@
   border: var(--ran-modal-close-border, none);
   border-radius: var(--ran-modal-close-border-radius, var(--ran-radius-sm, 8px));
   background: var(--ran-modal-close-background, transparent);
-  color: var(--ran-modal-close-color, var(--ran-color-text-secondary, #667085));
+  color: var(--ran-modal-close-color, var(--ran-color-text-secondary, #55555e));
   font-size: var(--ran-modal-close-font-size, 16px);
   cursor: var(--ran-modal-close-cursor, pointer);
   padding: var(--ran-modal-close-padding, 0);
@@ -158,7 +158,7 @@
   padding: var(--ran-modal-body-padding, var(--ran-space-4, 16px));
   max-height: var(--ran-modal-body-max-height, calc(100vh - 32vh));
   overflow: var(--ran-modal-body-overflow, auto);
-  color: var(--ran-modal-body-color, var(--ran-color-text-secondary, #344054));
+  color: var(--ran-modal-body-color, var(--ran-color-text-secondary, #55555e));
 }
 
 .ran-modal-footer {
@@ -167,7 +167,7 @@
   justify-content: var(--ran-modal-footer-justify-content, flex-end);
   gap: var(--ran-modal-footer-gap, var(--ran-space-3, 12px));
   padding: var(--ran-modal-footer-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px) var(--ran-space-4, 16px));
-  border-top: var(--ran-modal-footer-border-top, 1px solid var(--ran-color-border-secondary, #f0f0f0));
+  border-top: var(--ran-modal-footer-border-top, 1px solid var(--ran-color-border-secondary, #e2e2e6));
 }
 
 .ran-modal-root.has-footer .ran-modal-footer {
@@ -190,8 +190,8 @@ slot[name='footer']::slotted(.ran-modal-action) {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  border: 1px solid var(--ran-color-border, #d0d5dd);
-  background: var(--ran-color-bg-elevated, #fff);
+  border: 1px solid var(--ran-color-border, #e4e4e8);
+  background: var(--ran-color-bg-elevated, #ffffff);
   border-radius: var(--ran-radius-sm, 8px);
   height: var(--ran-modal-action-height, var(--ran-size-7, 32px));
   padding: 0 var(--ran-modal-action-padding-inline, var(--ran-space-4, 16px));
@@ -199,7 +199,7 @@ slot[name='footer']::slotted(.ran-modal-action) {
   cursor: pointer;
   font-size: var(--ran-modal-action-font-size, var(--ran-text-button-size, 14px));
   font-weight: var(--ran-modal-action-font-weight, var(--ran-text-button-weight, 500));
-  color: var(--ran-color-text-secondary, #344054);
+  color: var(--ran-color-text-secondary, #55555e);
 }
 
 slot[name='footer']::slotted(.ran-modal-action:focus-visible) {
@@ -208,14 +208,14 @@ slot[name='footer']::slotted(.ran-modal-action:focus-visible) {
 }
 
 slot[name='footer']::slotted(.ran-modal-action-confirm) {
-  border-color: var(--ran-color-primary, #171717);
-  background: var(--ran-color-primary, #171717);
+  border-color: var(--ran-color-primary, #111113);
+  background: var(--ran-color-primary, #111113);
   /* Bare #fff read fine against the old blue primary but is wrong once
      --ran-color-primary flips to a light surface in dark mode (monochrome
      primary: black-on-white in light, white-on-black in dark) — a bare white
      confirm-button label went invisible on a white button. Use the inverse
      ink token, which flips with it. */
-  color: var(--ran-color-primary-text, #fff);
+  color: var(--ran-color-primary-text, #ffffff);
 }
 
 slot[name='footer']::slotted(.ran-modal-action:disabled) {
