@@ -131,6 +131,7 @@ export class Modal extends RanElement {
     this.syncHeader();
   }
 
+  /** Shows the dialog when set and closes it when removed. Off by default; `open="false"` counts as closed. */
   get open(): boolean {
     return this.hasAttribute('open') && !falseList.includes(this.getAttribute('open'));
   }
@@ -143,7 +144,7 @@ export class Modal extends RanElement {
   }
 
   /**
-   * Heading text.
+   * Heading text shown in the title bar; falls back to `Modal` when empty.
    *
    * Not `title`: that is a native `HTMLElement` attribute, and the browser renders it as a
    * tooltip. A dialog using it for its heading makes the whole dialog sprout a tooltip
@@ -157,6 +158,7 @@ export class Modal extends RanElement {
     this.setAttribute('heading', value || '');
   }
 
+  /** Closes the dialog when the backdrop outside it is clicked. On by default; turn off with `maskClosable="false"` for forms that must not be dismissed by a stray click. */
   get maskClosable(): boolean {
     const value = this.getAttribute('maskClosable');
     return !(value === 'false' || value === '0');
@@ -177,6 +179,7 @@ export class Modal extends RanElement {
     setStringAttribute(this, 'sheet', value);
   }
 
+  /** Closes the topmost dialog when Escape is pressed. On by default; turn off with `closeOnEsc="false"`. */
   get closeOnEsc(): boolean {
     const value = this.getAttribute('closeOnEsc');
     return !(value === 'false' || value === '0');
@@ -189,6 +192,7 @@ export class Modal extends RanElement {
     }
   }
 
+  /** Stops the page behind from scrolling while the dialog is open. On by default; turn off with `lockScroll="false"`. */
   get lockScroll(): boolean {
     const value = this.getAttribute('lockScroll');
     return !(value === 'false' || value === '0');
@@ -201,6 +205,7 @@ export class Modal extends RanElement {
     }
   }
 
+  /** Moves focus to the first focusable element in the dialog (or the dialog itself) when it opens. On by default; turn off with `autoFocus="false"`. */
   get autoFocus(): boolean {
     const value = this.getAttribute('autoFocus');
     return !(value === 'false' || value === '0');
@@ -213,6 +218,7 @@ export class Modal extends RanElement {
     }
   }
 
+  /** Shows the close button in the corner. On by default; turn off with `closable="false"` when the dialog must be closed by its own actions. */
   get closable(): boolean {
     const value = this.getAttribute('closable');
     return !(value === 'false' || value === '0');
@@ -225,10 +231,10 @@ export class Modal extends RanElement {
     }
   }
   /**
-   * Headerless mode: drops the title bar and its border, leaving only a floating
-   * close button (top-right) when `closable`. Suited to content-only dialogs like
-   * image / diagram lightboxes. The dialog keeps an accessible name via `aria-label`
-   * (derived from `title`) since the visible `<h3>` title is removed.
+   * Headerless mode for content-only dialogs such as image lightboxes: drops the title bar and keeps only a floating close button when `closable`. Off by default.
+   *
+   * The dialog keeps an accessible name via `aria-label` (derived from `heading`) since
+   * the visible `<h3>` title is removed.
    */
   get hideHeader(): boolean {
     const value = this.getAttribute('hide-header');

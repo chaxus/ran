@@ -140,7 +140,7 @@ export class Popover extends RanElement {
     this._slot = shadowPart(slotRef, 'slot');
   }
   /**
-   * Which side of the trigger the panel sits on, with an optional alignment.
+   * Which side of the trigger the panel sits on, with an optional alignment. Defaults to `'top'`.
    *
    * `bottom`, `bottom-end`, `right-center`, … — the suffix lines the panel up
    * with the trigger's leading edge, centre or trailing edge along the cross
@@ -203,12 +203,18 @@ export class Popover extends RanElement {
     this.open = !this.open;
   };
 
+  /**
+   * How the panel opens: `'hover'` | `'click'`. Default `'hover'`. Click toggles the panel in either mode; hover is ignored on mobile devices.
+   */
   get trigger(): string {
     return getStringAttribute(this, 'trigger', 'hover');
   }
   set trigger(value: string) {
     setStringAttribute(this, 'trigger', value);
   }
+  /**
+   * Id of the element the panel is mounted into, looked up in the popover's own root first and then the document. Defaults to `document.body`.
+   */
   get getPopupContainerId(): string {
     return getStringAttribute(this, 'getPopupContainerId');
   }

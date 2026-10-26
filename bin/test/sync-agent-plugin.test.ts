@@ -28,6 +28,7 @@ test('generation is deterministic and detects changed source, tampered output an
   const root = mkdtempSync(path.join(tmpdir(), 'ran-plugin-generation-'));
   try {
     mkdirSync(path.join(root, 'design'));
+    writeFileSync(path.join(root, 'LICENSE'), 'MIT License\n');
     writeFileSync(path.join(root, 'design/README.md'), '[Motion](MOTION.md)\n');
     writeFileSync(path.join(root, 'design/MOTION.md'), '# Motion\n');
     syncAgentPlugin(root);
@@ -36,6 +37,10 @@ test('generation is deterministic and detects changed source, tampered output an
     syncAgentPlugin(root);
     assert.equal(readFileSync(manifest, 'utf8'), first);
     syncAgentPlugin(root, true);
+    assert.equal(readFileSync(path.join(root, 'plugins/ran/LICENSE'), 'utf8'), 'MIT License\n');
+    writeFileSync(path.join(root, 'plugins/ran/LICENSE'), 'tampered\n');
+    assert.throws(() => syncAgentPlugin(root, true), /Stale plugin LICENSE/);
+    syncAgentPlugin(root);
     writeFileSync(path.join(root, 'design/MOTION.md'), '# Motion\nChanged source\n');
     assert.throws(() => syncAgentPlugin(root, true), /Stale agent reference/);
     syncAgentPlugin(root);

@@ -55,6 +55,7 @@ export class Button extends RanElement {
     this.handlerExternalCss();
   }
 
+  /** Blocks clicks and keyboard activation and removes the button from the tab order. Off by default; `disabled="false"` counts as enabled. */
   get disabled(): boolean | string {
     return isDisabled(this);
   }
@@ -68,6 +69,7 @@ export class Button extends RanElement {
     }
   }
 
+  /** Icon size passed to the inner `<r-icon>`. Defaults to about 1.15× the button's font size; set it only when the icon needs a fixed size. */
   get iconSize(): string {
     return this.getAttribute('iconSize') || '';
   }
@@ -80,6 +82,7 @@ export class Button extends RanElement {
     }
   }
 
+  /** Name of an `<r-icon>` drawn before the label, for example `'search'`. No icon when empty. */
   get icon(): string {
     return this.getAttribute('icon') || '';
   }

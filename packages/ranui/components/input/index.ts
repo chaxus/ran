@@ -97,7 +97,7 @@ export class Input extends RanElement {
     this._inputContent?.select?.();
   }
   /**
-   * @description: 获取 input 的值
+   * Current text of the field. Updates on every keystroke and is submitted with the owning form under `name`. Empty by default.
    * @return {String}
    */
   get value(): string {
@@ -120,7 +120,7 @@ export class Input extends RanElement {
     this._syncValue();
   }
   /**
-   * @description: 获取 input 的占位字符
+   * Hint text shown inside the field while it is empty.
    * @return {String}
    */
   get placeholder(): string {
@@ -138,8 +138,8 @@ export class Input extends RanElement {
     }
   }
   /**
-   * @description: input 是否为必选
-   * @return {String}
+   * Makes an empty value fail native form validation (`checkValidity()`, `:invalid`) and sets `aria-required`. Off by default; setting the property to `false` or `'false'` removes it.
+   * @return {Boolean}
    */
   get required(): boolean {
     return this.hasAttribute('required');
@@ -152,8 +152,8 @@ export class Input extends RanElement {
     setBooleanAttribute(this, 'required', !(!value || value === 'false'));
   }
   /**
-   * @description: 获取 input 上 disabled 属性
-   * @return {String | null}
+   * Blocks typing and focus, greys the field out and leaves it out of form validation. Off by default; `disabled="false"` counts as enabled.
+   * @return {Boolean}
    */
   get disabled(): boolean {
     return isDisabled(this);
@@ -174,7 +174,7 @@ export class Input extends RanElement {
     }
   }
   /**
-   * @description: 获取字段上方的静态说明文字（label）。
+   * Caption rendered above the field and linked to the inner input, so it is the field's accessible name and clicking it focuses the input. No caption when unset.
    */
   get label(): string {
     return this.getAttribute('label') || '';
@@ -186,7 +186,7 @@ export class Input extends RanElement {
     this.setAttribute('label', value);
   }
   /**
-   * @description: 获取 input 框的状态
+   * Validation state: `'error'` | `'warning'`. Colours the border and label and adds a status icon; pair it with `message` so the state is not shown by colour alone. Empty (neutral) by default.
    */
   get status(): string {
     return this.getAttribute('status') || '';
@@ -204,7 +204,7 @@ export class Input extends RanElement {
     }
   }
   /**
-   * @description: 获取下方的提示/校验文案
+   * Helper or validation text shown below the field and linked to it with `aria-describedby`. Nothing is rendered when empty.
    */
   get message(): string {
     return this.getAttribute('message') || '';
@@ -220,7 +220,7 @@ export class Input extends RanElement {
     }
   }
   /**
-   * @description: 与 form 组件联动时，收集的属性名
+   * Key under which the value is submitted with the owning form.
    * @return {String}
    */
   get name(): string {
@@ -234,7 +234,7 @@ export class Input extends RanElement {
     this.setAttribute('name', value);
   }
   /**
-   * @description: 当 input 类型为 number 类型时，可以获取 min 属性
+   * Lowest accepted number. Applies only when `type` is `'number'`; smaller values fail form validation.
    * @return {String}
    */
   get min(): string {
@@ -248,7 +248,7 @@ export class Input extends RanElement {
     if (this.type === 'number') this.setAttribute('min', value);
   }
   /**
-   * @description: 当 input 类型为 number 类型时，可以获取 max 属性
+   * Highest accepted number. Applies only when `type` is `'number'`; larger values fail form validation.
    * @return {String}
    */
   get max(): string {
@@ -262,7 +262,7 @@ export class Input extends RanElement {
     if (this.type === 'number') this.setAttribute('max', value);
   }
   /**
-   * @description: 当 input 类型为 number 类型时，可以获取 step 属性
+   * Granularity of accepted numbers, forwarded to the native input. Applies only when `type` is `'number'`; off-step values fail form validation.
    * @return {String}
    */
   get step(): string {
@@ -276,7 +276,7 @@ export class Input extends RanElement {
     if (this.type === 'number') this.setAttribute('step', value);
   }
   /**
-   * @description: 获取一个 icon
+   * Name of an `r-icon` shown before the text, for example `search`. No icon when unset.
    * @return {String}
    */
   get icon(): string {
@@ -294,8 +294,8 @@ export class Input extends RanElement {
     }
   }
   /**
-   * @description: 获取 input 的类型
-   * @return {string|null}
+   * Native input type forwarded to the inner `<input>`, such as `text`, `password` or `number`; `number` enables `min`, `max` and `step`. Behaves as `text` when unset.
+   * @return {String}
    */
   get type(): string {
     return this.getAttribute('type') || '';
@@ -376,9 +376,15 @@ export class Input extends RanElement {
   reportValidity(): boolean {
     return reportInternalsValidity(this._internals);
   }
+  /**
+   * Native `ValidityState` of the field, for reading constraint errors from script. `undefined` where ElementInternals is unavailable.
+   */
   get validity(): ValidityState | undefined {
     return this._internals?.validity;
   }
+  /**
+   * The browser's message for the current constraint error; empty while the field is valid.
+   */
   get validationMessage(): string {
     return this._internals?.validationMessage ?? '';
   }

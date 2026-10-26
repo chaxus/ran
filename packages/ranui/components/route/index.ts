@@ -33,6 +33,7 @@ export class Route extends RanElement {
     this._shadowDom.appendChild(Slot().build());
   }
 
+  /** Path pattern this route shows for. `:name` segments capture params and `*` matches the rest. Without `exact`, deeper paths also match. Defaults to `'/'`. */
   get path(): string {
     return getStringAttribute(this, 'path', '/');
   }
@@ -40,6 +41,7 @@ export class Route extends RanElement {
     setStringAttribute(this, 'path', v);
   }
 
+  /** Match only the full path, so `/users` no longer shows for `/users/42`. Off by default; set it on a `/` home route. */
   get exact(): boolean {
     return this.hasAttribute('exact');
   }
@@ -52,6 +54,7 @@ export class Route extends RanElement {
     setStringAttribute(this, 'src', v);
   }
 
+  /** Read-only. Values captured by the `:name` segments of `path` on the last match, URL-decoded. Empty when the route does not match. */
   get params(): Record<string, string> {
     return { ...this._params };
   }

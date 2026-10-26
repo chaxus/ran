@@ -205,6 +205,9 @@ export class Select extends RanElement {
     this._search = shadowPart(searchRef, 'selection search');
     this._slot = shadowPart(slotRef, 'slot');
   }
+  /**
+   * Value of the selected option, submitted with the owning form. Setting it selects the matching option; an empty value clears the selection.
+   */
   get value(): string {
     return this.getAttribute('value') || '';
   }
@@ -228,6 +231,9 @@ export class Select extends RanElement {
     this._internals?.setFormValue?.(this.value);
     this._updateValidity();
   };
+  /**
+   * Makes an empty selection fail native form validation and sets `aria-required`. Ignored while disabled. Off by default; setting the property to `false` or `'false'` removes it.
+   */
   get required(): boolean {
     return this.hasAttribute('required');
   }
@@ -235,7 +241,7 @@ export class Select extends RanElement {
     setBooleanAttribute(this, 'required', !(!value || value === 'false'));
   }
   /**
-   * @description: 获取字段上方的静态说明文字（label）。
+   * Caption rendered above the field and used as its accessible name; clicking it focuses the select. No caption when unset.
    */
   get label(): string {
     return this.getAttribute('label') || '';
@@ -299,9 +305,15 @@ export class Select extends RanElement {
   reportValidity(): boolean {
     return reportInternalsValidity(this._internals);
   }
+  /**
+   * Native `ValidityState` of the field, for reading constraint errors from script. `undefined` where ElementInternals is unavailable.
+   */
   get validity(): ValidityState | undefined {
     return this._internals?.validity;
   }
+  /**
+   * The browser's message for the current constraint error; empty while the field is valid.
+   */
   get validationMessage(): string {
     return this._internals?.validationMessage ?? '';
   }
@@ -345,18 +357,27 @@ export class Select extends RanElement {
     if (this.placeholder) this._search.placeholder = this.placeholder;
     else this._search.removeAttribute('placeholder');
   };
+  /**
+   * Option value to select initially when `value` is not set; also restored by `form.reset()`. Applied once the matching option exists.
+   */
   get defaultValue(): string {
     return this.getAttribute('defaultValue') || '';
   }
   set defaultValue(value: string) {
     this.setAttribute('defaultValue', value || '');
   }
+  /**
+   * Adds a search box that filters options as you type. Enabled whenever the attribute is present, whatever its value; remove the attribute to turn it off.
+   */
   get showSearch(): string {
     return this.getAttribute('showSearch') || '';
   }
   set showSearch(value: string) {
     this.setAttribute('showSearch', value || '');
   }
+  /**
+   * Visual style. `'text'` drops the border, background and arrow so the select reads as inline text; any other value keeps the boxed field.
+   */
   get type(): string {
     return this.getAttribute('type') || '';
   }
@@ -364,7 +385,7 @@ export class Select extends RanElement {
     this.setAttribute('type', value || '');
   }
   /**
-   * Which side of the trigger the panel opens on, with an optional alignment.
+   * Which side of the trigger the panel opens on, with an optional alignment. Defaults to `'bottom'`.
    *
    * `bottom`, `bottom-end`, `top-center`, … — the same grammar r-popover takes,
    * because both now position through the same controller. A bare side means
@@ -383,24 +404,36 @@ export class Select extends RanElement {
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
   }
+  /**
+   * Id of the element the dropdown panel is mounted into, looked up in the select's own root first and then the document. Defaults to `document.body`.
+   */
   get getPopupContainerId(): string {
     return this.getAttribute('getPopupContainerId') || '';
   }
   set getPopupContainerId(value: string) {
     this.setAttribute('getPopupContainerId', value || '');
   }
+  /**
+   * Class name set on the dropdown panel when it is first built, so the portaled panel can be styled from outside.
+   */
   get dropdownclass(): string {
     return this.getAttribute('dropdownclass') || '';
   }
   set dropdownclass(value: string) {
     this.setAttribute('dropdownclass', value || '');
   }
+  /**
+   * How the dropdown opens: `'click'` | `'hover'`. Default `'click'`. Hover is ignored on mobile devices.
+   */
   get trigger(): string {
     return this.getAttribute('trigger') || 'click';
   }
   set trigger(value: string) {
     this.setAttribute('trigger', value || '');
   }
+  /**
+   * Blocks opening, selection and search, removes the select from the tab order and closes an open dropdown. Off by default; `disabled="false"` counts as enabled.
+   */
   get disabled(): boolean {
     return isDisabled(this);
   }

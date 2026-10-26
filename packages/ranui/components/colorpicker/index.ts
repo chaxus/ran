@@ -122,8 +122,9 @@ export class ColorPicker extends RanElement {
 
   // ── Accessors ───────────────────────────────────────────────────────────
   /**
-   * Accessible name of the swatch that opens the picker. An attribute rather than a
-   * constant because ranui ships no translation dictionary: a string only the source
+   * Accessible name of the swatch that opens the picker. Defaults to `'Choose color'`.
+   *
+   * An attribute rather than a constant because ranui ships no translation dictionary: a string only the source
    * can set is a string no consumer can localize.
    */
   get label(): string {
@@ -149,6 +150,9 @@ export class ColorPicker extends RanElement {
     setStringAttribute(this, 'alpha-label', value);
   }
 
+  /**
+   * Selected colour as `#rrggbb` (or `#rgb`), `rgb(...)` or `rgba(...)`; picking a colour writes a hex value, or `rgba(...)` when opacity is below 1. Unparseable values are ignored. Empty until set; the swatch starts white.
+   */
   get value(): string {
     return this.context?.value.getter() || '';
   }
@@ -165,6 +169,9 @@ export class ColorPicker extends RanElement {
     setStringAttribute(this, 'sheet', value);
   }
 
+  /**
+   * Blocks opening the picker and emitting `change`, and removes the swatch from the tab order. Off by default; `disabled="false"` counts as enabled.
+   */
   get disabled(): boolean {
     return isDisabled(this);
   }

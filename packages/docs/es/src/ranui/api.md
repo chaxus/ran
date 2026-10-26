@@ -48,10 +48,10 @@ Código fuente: `components/button/index.ts`
 
 - **Atributos**: `aria-label`, `disabled: boolean | string`, `effect: boolean`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
 - **Propiedades**:
-  - `disabled: boolean | string`
+  - `disabled: boolean | string` — Blocks clicks and keyboard activation and removes the button from the tab order. Off by default; `disabled="false"` counts as enabled.
   - `effect: boolean` — Whether the click ripple is drawn. On by default; opt out with `effect="false"`.
-  - `icon: string`
-  - `iconSize: string`
+  - `icon: string` — Name of an `<r-icon>` drawn before the label, for example `'search'`. No icon when empty.
+  - `iconSize: string` — Icon size passed to the inner `<r-icon>`. Defaults to about 1.15× the button's font size; set it only when the icon needs a fixed size.
   - `sheet: string`
   - `type: string` — Visual variant: `''` (default) | `'primary'` (monochrome) | `'warning'` | `'text'`. Drives the `:host([type=...])` styles.
 - **Eventos**: —
@@ -64,7 +64,7 @@ Código fuente: `components/card/index.ts`
 
 - **Atributos**: `description: string`, `heading: string`, `hoverable: boolean`, `sheet: string`
 - **Propiedades**:
-  - `description: string`
+  - `description: string` — Secondary text shown under the heading. Empty by default; the header is hidden when the heading, description and `extra` slot are all empty.
   - `heading: string` — Heading text.
   - `hoverable: boolean` — Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable.
   - `sheet: string`
@@ -90,11 +90,11 @@ Código fuente: `components/colorpicker/index.ts`
 - **Atributos**: `alpha-label`, `disabled: boolean`, `hue-label`, `label: string`, `sheet: string`, `value: string`
 - **Propiedades**:
   - `alphaLabel: string` — Accessible name of the opacity slider.
-  - `disabled: boolean`
+  - `disabled: boolean` — Blocks opening the picker and emitting `change`, and removes the swatch from the tab order. Off by default; `disabled="false"` counts as enabled.
   - `hueLabel: string` — Accessible name of the hue slider.
-  - `label: string` — Accessible name of the swatch that opens the picker. An attribute rather than a
+  - `label: string` — Accessible name of the swatch that opens the picker. Defaults to `'Choose color'`.
   - `sheet: string`
-  - `value: string`
+  - `value: string` — Selected colour as `#rrggbb` (or `#rgb`), `rgb(...)` or `rgba(...)`; picking a colour writes a hex value, or `rgba(...)` when opacity is below 1. Unparseable values are ignored. Empty until set; the swatch starts white.
 - **Eventos**:
   - `change` · bubbles, composed
 - **Slots**: —
@@ -242,22 +242,22 @@ Código fuente: `components/input/index.ts`
 
 - **Atributos**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `type: string`, `value: string`
 - **Propiedades**:
-  - `disabled: boolean` — input 上 disabled 属性
-  - `icon: string` — 一个 icon
-  - `label: string` — 字段上方的静态说明文字（label）。
-  - `max: string` — 当 input 类型为 number 类型时，可以获取 max 属性
-  - `message: string` — 下方的提示/校验文案
-  - `min: string` — 当 input 类型为 number 类型时，可以获取 min 属性
-  - `name: string` — 与 form 组件联动时，收集的属性名
-  - `placeholder: string` — input 的占位字符
-  - `required: boolean` — input 是否为必选
+  - `disabled: boolean` — Blocks typing and focus, greys the field out and leaves it out of form validation. Off by default; `disabled="false"` counts as enabled.
+  - `icon: string` — Name of an `r-icon` shown before the text, for example `search`. No icon when unset.
+  - `label: string` — Caption rendered above the field and linked to the inner input, so it is the field's accessible name and clicking it focuses the input. No caption when unset.
+  - `max: string` — Highest accepted number. Applies only when `type` is `'number'`; larger values fail form validation.
+  - `message: string` — Helper or validation text shown below the field and linked to it with `aria-describedby`. Nothing is rendered when empty.
+  - `min: string` — Lowest accepted number. Applies only when `type` is `'number'`; smaller values fail form validation.
+  - `name: string` — Key under which the value is submitted with the owning form.
+  - `placeholder: string` — Hint text shown inside the field while it is empty.
+  - `required: boolean` — Makes an empty value fail native form validation (`checkValidity()`, `:invalid`) and sets `aria-required`. Off by default; setting the property to `false` or `'false'` removes it.
   - `sheet: string`
-  - `status: string` — input 框的状态
-  - `step: string` — 当 input 类型为 number 类型时，可以获取 step 属性
-  - `type: string` — input 的类型
-  - `validationMessage: string`
-  - `validity: ValidityState | undefined`
-  - `value: string` — input 的值
+  - `status: string` — Validation state: `'error'` | `'warning'`. Colours the border and label and adds a status icon; pair it with `message` so the state is not shown by colour alone. Empty (neutral) by default.
+  - `step: string` — Granularity of accepted numbers, forwarded to the native input. Applies only when `type` is `'number'`; off-step values fail form validation.
+  - `type: string` — Native input type forwarded to the inner `<input>`, such as `text`, `password` or `number`; `number` enables `min`, `max` and `step`. Behaves as `text` when unset.
+  - `validationMessage: string` — The browser's message for the current constraint error; empty while the field is valid.
+  - `validity: ValidityState | undefined` — Native `ValidityState` of the field, for reading constraint errors from script. `undefined` where ElementInternals is unavailable.
+  - `value: string` — Current text of the field. Updates on every keystroke and is submitted with the owning form under `name`. Empty by default.
 - **Eventos**:
   - `change` · element-only · detail `{ value }`
   - `input` · element-only · detail `{ value }`
@@ -291,17 +291,17 @@ Código fuente: `components/markdown/index.ts`
 
 - **Atributos**: `caret: string`, `content: string`, `copy`, `download`, `highlight: string | null`, `inline-math`, `label-copy-error`, `line-numbers`, `link-target`, `mode: string`, `sheet: string`, `theme: string`
 - **Propiedades**:
-  - `caret: string`
-  - `content: string` — Markdown source. Resolution order: the `content` property (set via JS, not
-  - `copyable: boolean`
-  - `downloadable: boolean`
-  - `highlight: string | null` — `""` → github-light/github-dark; `"a"` → both; `"a b"` → light / dark theme.
-  - `inlineMath: boolean`
-  - `lineNumbers: boolean`
-  - `linkTarget: string`
-  - `mode: string`
+  - `caret: string` — Shows a blinking caret after the last block while text streams in; remove it when the answer is complete. Any value draws a block caret; `'circle'` draws a dot.
+  - `content: string` — Markdown source. Resolution order: the `content` property (set via JS, not reflected), the `content` attribute, then the element's text content.
+  - `copyable: boolean` — Adds a copy button to each code block header. Reflects the `copy` attribute; off by default.
+  - `downloadable: boolean` — Adds a download button to each code block header that saves the code as a file. Reflects the `download` attribute; off by default.
+  - `highlight: string | null` — Shiki syntax highlighting for code blocks; off when the attribute is absent. `""` → github-light/github-dark; `"a"` → both; `"a b"` → light / dark theme.
+  - `inlineMath: boolean` — Treats `$…$` as inline math. Off by default because `$` often means currency; `\(…\)` always works. Reflects the `inline-math` attribute.
+  - `lineNumbers: boolean` — Shows line numbers in code blocks. Reflects the `line-numbers` attribute; off by default.
+  - `linkTarget: string` — `target` for rendered links, set with `rel="noopener noreferrer"`. Defaults to `'_blank'`; use `'_self'` to open links in place. In-page `#` links are left alone.
+  - `mode: string` — Parsing mode: `'streaming'` | `'static'`. Default `'streaming'` repairs half-written syntax and re-renders only changed blocks; use `'static'` for finished text.
   - `sheet: string`
-  - `theme: string`
+  - `theme: string` — Colour scheme: `'auto'` | `'light'` | `'dark'`. Default `'auto'` follows the document theme; embedded Mermaid diagrams use the same value.
 - **Eventos**:
   - `copied` · bubbles, composed · detail `{ code, kind, language }`
   - `download` · bubbles, composed · detail `{ filename, kind, language }`
@@ -355,14 +355,14 @@ Código fuente: `components/modal/index.ts`
 
 - **Atributos**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `heading: string`, `hide-header`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`
 - **Propiedades**:
-  - `autoFocus: boolean`
-  - `closable: boolean`
-  - `closeOnEsc: boolean`
-  - `heading: string` — Heading text.
-  - `hideHeader: boolean` — Headerless mode: drops the title bar and its border, leaving only a floating
-  - `lockScroll: boolean`
-  - `maskClosable: boolean`
-  - `open: boolean`
+  - `autoFocus: boolean` — Moves focus to the first focusable element in the dialog (or the dialog itself) when it opens. On by default; turn off with `autoFocus="false"`.
+  - `closable: boolean` — Shows the close button in the corner. On by default; turn off with `closable="false"` when the dialog must be closed by its own actions.
+  - `closeOnEsc: boolean` — Closes the topmost dialog when Escape is pressed. On by default; turn off with `closeOnEsc="false"`.
+  - `heading: string` — Heading text shown in the title bar; falls back to `Modal` when empty.
+  - `hideHeader: boolean` — Headerless mode for content-only dialogs such as image lightboxes: drops the title bar and keeps only a floating close button when `closable`. Off by default.
+  - `lockScroll: boolean` — Stops the page behind from scrolling while the dialog is open. On by default; turn off with `lockScroll="false"`.
+  - `maskClosable: boolean` — Closes the dialog when the backdrop outside it is clicked. On by default; turn off with `maskClosable="false"` for forms that must not be dismissed by a stray click.
+  - `open: boolean` — Shows the dialog when set and closes it when removed. Off by default; `open="false"` counts as closed.
   - `sheet: string`
 - **Eventos**:
   - `afterclose` · element-only · detail `{ trigger }`
@@ -390,23 +390,23 @@ Código fuente: `components/player/index.ts`
 
 - **Atributos**: `autoplay: boolean`, `currenttime`, `currentTime: string`, `debug: string`, `disable-error-modal`, `format: string`, `loop: boolean`, `muted: boolean`, `playbackrate`, `playbackRate: string`, `poster: string`, `remember-position`, `sheet: string`, `src: string`, `thumbnails: string`, `volume: string`
 - **Propiedades**:
-  - `autoplay: boolean`
-  - `controllerBarTimeId: ReturnType<typeof setTimeout> | undefined`
-  - `currentTime: string`
-  - `debug: string`
-  - `disableErrorModal: boolean`
-  - `format: string` — 强制指定引擎（`hls`/`dash`/`flv`/`webrtc`/`native`），给拿不到扩展名的
-  - `loop: boolean`
-  - `moveProgress`
-  - `muted: boolean`
-  - `playbackRate: string`
-  - `poster: string`
-  - `rememberPosition: boolean`
+  - `autoplay: boolean` — Start playback as soon as the video can play, via the native `autoplay` flag. Browsers usually block unmuted autoplay, so pair it with `muted`. Off by default.
+  - `controllerBarTimeId: ReturnType<typeof setTimeout> | undefined` — Internal timer id for auto-hiding the control bar. Not meant to be set by consumers.
+  - `currentTime: string` — Playback position in seconds, also accepted as `currenttime`. In the markup it is the start position; a later change seeks. The getter returns the attribute, not the live position.
+  - `debug: string` — Any non-empty value logs every internal `change` event and source-load errors to the console. An empty value (`<r-player debug>`) leaves logging off.
+  - `disableErrorModal: boolean` — Suppress the built-in "Playback failed" dialog with its Retry button, for apps that show their own error UI. Off by default, so the dialog shows.
+  - `format: string` — Playback engine: `'hls'` | `'dash'` | `'flv'` | `'webrtc'` | `'native'`. Empty by default, which detects it from the `src` extension; set it for signed or extensionless URLs, and always for `webrtc` (a WHEP endpoint).
+  - `loop: boolean` — Restart from the beginning when playback ends, via the native `loop` flag. Off by default.
+  - `moveProgress` — Internal seek-bar drag state (`percentage`, `mouseDown`), read by the player's own modules. Not meant to be set by consumers.
+  - `muted: boolean` — Start silent: sets volume to 0 and the native `muted` flag. Removing the attribute restores the previous volume, or 50 if none was recorded. Off by default.
+  - `playbackRate: string` — Speed multiplier such as `1`, `1.5` or `2`, also accepted as `playbackrate`. Applied from the markup and on every change.
+  - `poster: string` — Image URL shown on the video before playback starts, passed to the native `<video poster>`.
+  - `rememberPosition: boolean` — Save the position to localStorage, keyed by `src`, on pause and when the page is hidden, and resume there on the next load of the same `src`. The entry is cleared when playback ends. Off by default.
   - `sheet: string`
-  - `src: string`
-  - `thumbnails: string` — URL of a WebVTT sprite-sheet manifest (cues whose text is
-  - `tracks: PlayerTrackConfig[]` — 字幕/CC 轨道配置，imperative 属性而不是 attribute——player 会在每次
-  - `volume: string`
+  - `src: string` — Media URL to play. The engine is picked from its extension unless `format` is set; changing it on a connected player reloads the source.
+  - `thumbnails: string` — URL of a WebVTT sprite-sheet manifest that shows a preview thumbnail above the seek-bar hover tip.
+  - `tracks: PlayerTrackConfig[]` — Subtitle and caption tracks as `{ src, srclang, label, kind?, default? }` objects; property only, no attribute. Defaults to `[]`.
+  - `volume: string` — Volume on a 0-100 scale, clamped; `muted` wins. Applied from the markup and on every change; the getter returns the attribute, not the live volume.
 - **Eventos**:
   - `change` · element-only · detail `{ currentTime, data, duration, tag, type }`
 - **Slots**: —
@@ -418,11 +418,11 @@ Código fuente: `components/popover/index.ts`
 
 - **Atributos**: `open: boolean`, `placement: Placement`, `sheet: string`, `trigger: string`
 - **Propiedades**:
-  - `getPopupContainerId: string`
+  - `getPopupContainerId: string` — Id of the element the panel is mounted into, looked up in the popover's own root first and then the document. Defaults to `document.body`.
   - `open: boolean` — Whether the panel is showing.
-  - `placement: Placement` — Which side of the trigger the panel sits on, with an optional alignment.
+  - `placement: Placement` — Which side of the trigger the panel sits on, with an optional alignment. Defaults to `'top'`.
   - `sheet: string`
-  - `trigger: string`
+  - `trigger: string` — How the panel opens: `'hover'` | `'click'`. Default `'hover'`. Click toggles the panel in either mode; hover is ignored on mobile devices.
 - **Eventos**:
   - `after-hide` · element-only
   - `after-show` · element-only
@@ -474,9 +474,9 @@ Código fuente: `components/route/index.ts`
 
 - **Atributos**: `exact: boolean`, `path: string`, `sheet: string`, `src: string`
 - **Propiedades**:
-  - `exact: boolean`
-  - `params: Record<string, string>`
-  - `path: string`
+  - `exact: boolean` — Match only the full path, so `/users` no longer shows for `/users/42`. Off by default; set it on a `/` home route.
+  - `params: Record<string, string>` — Read-only. Values captured by the `:name` segments of `path` on the last match, URL-decoded. Empty when the route does not match.
+  - `path: string` — Path pattern this route shows for. `:name` segments capture params and `*` matches the rest. Without `exact`, deeper paths also match. Defaults to `'/'`.
   - `sheet: string`
   - `src: string` — Module specifier for lazy, code-split, mount/unmount page rendering.
 - **Eventos**:
@@ -521,22 +521,22 @@ Código fuente: `components/select/index.ts`
 
 - **Atributos**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placeholder: string`, `placement: Placement`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
 - **Propiedades**:
-  - `defaultValue: string`
-  - `disabled: boolean`
-  - `dropdownclass: string`
-  - `getPopupContainerId: string`
-  - `label: string` — 字段上方的静态说明文字（label）。
+  - `defaultValue: string` — Option value to select initially when `value` is not set; also restored by `form.reset()`. Applied once the matching option exists.
+  - `disabled: boolean` — Blocks opening, selection and search, removes the select from the tab order and closes an open dropdown. Off by default; `disabled="false"` counts as enabled.
+  - `dropdownclass: string` — Class name set on the dropdown panel when it is first built, so the portaled panel can be styled from outside.
+  - `getPopupContainerId: string` — Id of the element the dropdown panel is mounted into, looked up in the select's own root first and then the document. Defaults to `document.body`.
+  - `label: string` — Caption rendered above the field and used as its accessible name; clicking it focuses the select. No caption when unset.
   - `open: boolean` — Whether the dropdown is showing.
   - `placeholder: string` — Empty-field hint; the field's accessible name remains its label.
-  - `placement: Placement` — Which side of the trigger the panel opens on, with an optional alignment.
-  - `required: boolean`
+  - `placement: Placement` — Which side of the trigger the panel opens on, with an optional alignment. Defaults to `'bottom'`.
+  - `required: boolean` — Makes an empty selection fail native form validation and sets `aria-required`. Ignored while disabled. Off by default; setting the property to `false` or `'false'` removes it.
   - `sheet: string`
-  - `showSearch: string`
-  - `trigger: string`
-  - `type: string`
-  - `validationMessage: string`
-  - `validity: ValidityState | undefined`
-  - `value: string`
+  - `showSearch: string` — Adds a search box that filters options as you type. Enabled whenever the attribute is present, whatever its value; remove the attribute to turn it off.
+  - `trigger: string` — How the dropdown opens: `'click'` | `'hover'`. Default `'click'`. Hover is ignored on mobile devices.
+  - `type: string` — Visual style. `'text'` drops the border, background and arrow so the select reads as inline text; any other value keeps the boxed field.
+  - `validationMessage: string` — The browser's message for the current constraint error; empty while the field is valid.
+  - `validity: ValidityState | undefined` — Native `ValidityState` of the field, for reading constraint errors from script. `undefined` where ElementInternals is unavailable.
+  - `value: string` — Value of the selected option, submitted with the owning form. Setting it selects the matching option; an empty value clears the selection.
 - **Eventos**:
   - `after-hide` · element-only
   - `after-show` · element-only
@@ -644,8 +644,8 @@ Código fuente: `components/voice-button/index.ts`
 - **Propiedades**:
   - `activeLabel: string` — Accessible cancel/stop name while capture is pending or listening.
   - `cancelHint: string` — Replaces {@link holdHint} once the finger has slid far enough to discard.
-  - `continuous: boolean` — Keep listening across pauses instead of stopping at the first one.
-  - `disabled: boolean`
+  - `continuous: boolean` — Keep listening across pauses instead of stopping at the first one. On by default; set `continuous="false"` to stop at the first pause.
+  - `disabled: boolean` — Disable the button so no capture can start. Off by default. Where speech recognition is unsupported the button is hidden instead, regardless of this.
   - `holdHint: string` — Shown above the button while a finger is held down.
   - `label: string` — Accessible name while idle.
   - `lang: string` — Language being spoken, as a BCP 47 tag.
