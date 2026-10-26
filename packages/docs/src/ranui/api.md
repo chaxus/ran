@@ -378,21 +378,21 @@ Source: `components/player/index.ts`
 - **Properties**:
   - `autoplay: boolean` — Start playback as soon as the video can play, via the native `autoplay` flag. Browsers usually block unmuted autoplay, so pair it with `muted`. Off by default.
   - `controllerBarTimeId: ReturnType<typeof setTimeout> | undefined` — Internal timer id for auto-hiding the control bar. Not meant to be set by consumers.
-  - `currentTime: string` — Playback position in seconds, also accepted as `currenttime`. Seeks when the attribute changes on a player whose video already exists; the getter returns the attribute, not the live position.
+  - `currentTime: string` — Playback position in seconds, also accepted as `currenttime`. In the markup it is the start position; a later change seeks. The getter returns the attribute, not the live position.
   - `debug: string` — Any non-empty value logs every internal `change` event and source-load errors to the console. An empty value (`<r-player debug>`) leaves logging off.
   - `disableErrorModal: boolean` — Suppress the built-in "Playback failed" dialog with its Retry button, for apps that show their own error UI. Off by default, so the dialog shows.
   - `format: string` — Playback engine: `'hls'` | `'dash'` | `'flv'` | `'webrtc'` | `'native'`. Empty by default, which detects it from the `src` extension; set it for signed or extensionless URLs, and always for `webrtc` (a WHEP endpoint).
   - `loop: boolean` — Restart from the beginning when playback ends, via the native `loop` flag. Off by default.
   - `moveProgress` — Internal seek-bar drag state (`percentage`, `mouseDown`), read by the player's own modules. Not meant to be set by consumers.
   - `muted: boolean` — Start silent: sets volume to 0 and the native `muted` flag. Removing the attribute restores the previous volume, or 50 if none was recorded. Off by default.
-  - `playbackRate: string` — Speed multiplier such as `1`, `1.5` or `2`, also accepted as `playbackrate`. Applied when the attribute changes on a player whose video already exists.
+  - `playbackRate: string` — Speed multiplier such as `1`, `1.5` or `2`, also accepted as `playbackrate`. Applied from the markup and on every change.
   - `poster: string` — Image URL shown on the video before playback starts, passed to the native `<video poster>`.
   - `rememberPosition: boolean` — Save the position to localStorage, keyed by `src`, on pause and when the page is hidden, and resume there on the next load of the same `src`. The entry is cleared when playback ends. Off by default.
   - `sheet: string`
   - `src: string` — Media URL to play. The engine is picked from its extension unless `format` is set; changing it on a connected player reloads the source.
   - `thumbnails: string` — URL of a WebVTT sprite-sheet manifest that shows a preview thumbnail above the seek-bar hover tip.
   - `tracks: PlayerTrackConfig[]` — Subtitle and caption tracks as `{ src, srclang, label, kind?, default? }` objects; property only, no attribute. Defaults to `[]`.
-  - `volume: string` — Volume on a 0-100 scale. Applied through `setVolume()` when the attribute changes on a player whose video already exists; the getter returns the attribute, not the live volume.
+  - `volume: string` — Volume on a 0-100 scale, clamped; `muted` wins. Applied from the markup and on every change; the getter returns the attribute, not the live volume.
 - **Events**:
   - `change` · element-only · detail `{ currentTime, data, duration, tag, type }`
 - **Slots**: —

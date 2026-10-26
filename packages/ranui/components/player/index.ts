@@ -386,21 +386,21 @@ export class RanPlayer extends RanElement {
   set debug(value: string) {
     this.setAttribute('debug', value || '');
   }
-  /** Volume on a 0-100 scale. Applied through `setVolume()` when the attribute changes on a player whose video already exists; the getter returns the attribute, not the live volume. */
+  /** Volume on a 0-100 scale, clamped; `muted` wins. Applied from the markup and on every change; the getter returns the attribute, not the live volume. */
   get volume(): string {
     return this.getAttribute('volume') || '';
   }
   set volume(value: string) {
     this.setAttribute('volume', value || '');
   }
-  /** Playback position in seconds, also accepted as `currenttime`. Seeks when the attribute changes on a player whose video already exists; the getter returns the attribute, not the live position. */
+  /** Playback position in seconds, also accepted as `currenttime`. In the markup it is the start position; a later change seeks. The getter returns the attribute, not the live position. */
   get currentTime(): string {
     return this.getAttribute('currentTime') || '';
   }
   set currentTime(value: string) {
     this.setAttribute('currentTime', value || '');
   }
-  /** Speed multiplier such as `1`, `1.5` or `2`, also accepted as `playbackrate`. Applied when the attribute changes on a player whose video already exists. */
+  /** Speed multiplier such as `1`, `1.5` or `2`, also accepted as `playbackrate`. Applied from the markup and on every change. */
   get playbackRate(): string {
     return this.getAttribute('playbackRate') || '';
   }
