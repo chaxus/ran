@@ -1888,14 +1888,18 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `tab`
 
-- Tokens: 17
-- Parts: 6
+- Tokens: 24
+- Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 5 · component: 10 · internal: 2 -->
+<!-- layers: semantic: 9 · component: 13 · internal: 2 -->
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-hover`
 - `--ran-color-border`
 - `--ran-color-primary`
+- `--ran-motion-duration-fast`
+- `--ran-motion-duration-slow`
+- `--ran-motion-ease-standard`
 - `--ran-radius-md`
 - `--ran-radius-sm`
 - `--ran-space-2`
@@ -1907,6 +1911,9 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-tab-content-border`
 - `--ran-tab-content-border-radius`
 - `--ran-tab-content-transition`
+- `--ran-tab-hover-background`
+- `--ran-tab-hover-radius`
+- `--ran-tab-hover-transition`
 - `--ran-tab-line-border-radius`
 - `--ran-tab-line-color`
 - `--ran-tab-line-transition`
@@ -1915,6 +1922,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `content`
 - `content-wrap`
 - `header`
+- `hover`
 - `indicator`
 - `nav`
 - `tabs`

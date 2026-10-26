@@ -588,7 +588,7 @@ Source: `components/tab/index.ts`
 - **Events**:
   - `change` · element-only · detail `{ active }`
 - **Slots**: `default`
-- **Parts**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+- **Parts**: `content`, `content-wrap`, `header`, `hover`, `indicator`, `nav`, `tabs`
 
 ## `<r-theme-switch>`
 

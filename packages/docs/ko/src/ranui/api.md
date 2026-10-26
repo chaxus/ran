@@ -596,7 +596,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
 - **이벤트**:
   - `change` · element-only · detail `{ active }`
 - **슬롯**: `기본 슬롯`
-- **Part**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+- **Part**: `content`, `content-wrap`, `header`, `hover`, `indicator`, `nav`, `tabs`
 
 ## `<r-theme-switch>`
 

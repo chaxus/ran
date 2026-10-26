@@ -599,7 +599,7 @@ Código-fonte: `components/tab/index.ts`
 - **Eventos**:
   - `change` · element-only · detail `{ active }`
 - **Slots**: `padrão`
-- **Partes**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+- **Partes**: `content`, `content-wrap`, `header`, `hover`, `indicator`, `nav`, `tabs`
 
 ## `<r-theme-switch>`
 

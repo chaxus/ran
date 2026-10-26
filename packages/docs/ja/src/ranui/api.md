@@ -597,7 +597,7 @@ description: 'ranui のすべてのカスタム要素 —— 41 個の要素の�
 - **イベント**:
   - `change` · element-only · detail `{ active }`
 - **スロット**: `デフォルトスロット`
-- **Part**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+- **Part**: `content`, `content-wrap`, `header`, `hover`, `indicator`, `nav`, `tabs`
 
 ## `<r-theme-switch>`
 

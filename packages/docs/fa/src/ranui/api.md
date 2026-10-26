@@ -596,7 +596,7 @@ description: 'همهٔ عناصر سفارشی ranui — 41 عنصر همراه 
 - **رویدادها**:
   - `change` · element-only · detail `{ active }`
 - **اسلات‌ها**: `پیش‌فرض`
-- **Part‌ها**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+- **Part‌ها**: `content`, `content-wrap`, `header`, `hover`, `indicator`, `nav`, `tabs`
 
 ## `<r-theme-switch>`
 
