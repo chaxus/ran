@@ -32,6 +32,9 @@ const drawnPixels = (page: import('@playwright/test').Page, radius: string) =>
   }, radius);
 
 test('the rim draws again after its WebGL context is lost and restored', async ({ page }) => {
+  // Some headless runners (Firefox on Linux CI) expose no WebGL at all; there is no rim to lose.
+  const webgl = await page.evaluate(() => !!document.createElement('canvas').getContext('webgl'));
+  test.skip(!webgl, 'this browser has no WebGL here');
   expect(await drawnPixels(page, '21')).toBeGreaterThan(0);
   const restored = await page.evaluate(async () => {
     const glass = document.querySelector('#g') as HTMLElement & { _shadowDom: ShadowRoot };
