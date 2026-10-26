@@ -3,6 +3,9 @@ import '@/components/player';
 
 const makePlayer = (): any => {
   const player = document.createElement('r-player') as any;
+  // A media `error` lazily imports and opens r-modal after the test has returned; left on,
+  // its after-open timer can fire once the environment is gone and fail the whole run.
+  player.setAttribute('disable-error-modal', '');
   document.body.appendChild(player);
   player._video = document.createElement('video');
   // Rebind media listeners to the replacement video so dispatched events below

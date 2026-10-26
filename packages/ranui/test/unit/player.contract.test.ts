@@ -275,6 +275,8 @@ describe('r-player contract', () => {
 
   it('falls back to native src and emits sourceerror when the engine fails', () => {
     const player = document.createElement('r-player') as any;
+    // A fatal engine error lazily opens r-modal after the test returns; keep it out of this one.
+    player.setAttribute('disable-error-modal', '');
     document.body.appendChild(player);
     player.setAttribute('src', 'https://cdn.example.com/fallback.mp4');
     player._video = document.createElement('video');
