@@ -398,8 +398,10 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
   - `controllerBarTimeId: ReturnType<typeof setTimeout> | undefined` — Internal timer id for auto-hiding the control bar. Not meant to be set by consumers.
   - `currentTime: string` — Playback position in seconds, also accepted as `currenttime`. In the markup it is the start position; a later change seeks. The getter returns the attribute, not the live position.
   - `debug: string` — Any non-empty value logs every internal `change` event and source-load errors to the console. An empty value (`<r-player debug>`) leaves logging off.
-  - `disableErrorModal: boolean` — Suppress the built-in "Playback failed" dialog with its Retry button, for apps that show their own error UI. Off by default, so the dialog shows.
+  - `disableErrorModal: boolean` — Suppress the built-in playback-error panel with its Retry button, for apps that show their own error UI. Off by default, so the panel shows.
   - `format: string` — Playback engine: `'hls'` | `'dash'` | `'flv'` | `'webrtc'` | `'native'`. Empty by default, which detects it from the `src` extension; set it for signed or extensionless URLs, and always for `webrtc` (a WHEP endpoint).
+  - `labelError: string` — Heading of the built-in playback-error panel. Defaults to `'Playback failed'`.
+  - `labelRetry: string` — Label of the panel's retry button. Defaults to `'Retry'`.
   - `loop: boolean` — Restart from the beginning when playback ends, via the native `loop` flag. Off by default.
   - `moveProgress` — Internal seek-bar drag state (`percentage`, `mouseDown`), read by the player's own modules. Not meant to be set by consumers.
   - `muted: boolean` — Start silent: sets volume to 0 and the native `muted` flag. Removing the attribute restores the previous volume, or 50 if none was recorded. Off by default.

@@ -21,7 +21,7 @@ description: 'ranui Player(<r-player>)는 네이티브 <video>를 하나의 컨�
 - 썸네일 스크러빙 미리보기: `thumbnails`에 WebVTT 스프라이트 시트 매니페스트 URL을 주면, 진행 바 툴팁 위에 잘라 낸 미리보기가 나타납니다
 - `poster` / `autoplay` / `loop` / `muted`: 표준 `<video>` 어트리뷰트를 그대로 넘깁니다
 - 자막·CC: `tracks` 프로퍼티를 지정하면, 큐 렌더링은 브라우저 기본 기능이 맡고, 시청자의 선택을 기억하는 언어 선택기가 붙습니다
-- 오류와 다시 시도: 치명적인 재생 실패 때 `Modal.error()` 대화 상자를 띄웁니다. 기본으로 켜져 있고 `disable-error-modal`로 끕니다
+- 오류와 다시 시도: 치명적인 재생 실패 때 플레이어 위에 바로 오류 패널을 보여 줍니다. 기본으로 켜져 있고 `disable-error-modal`로 끕니다
 - 이어 보기: `remember-position`으로 켜면 `localStorage`에 `src`별 키로 저장됩니다
 - QoE 지표: `getMetrics()`가 이미 있는 이벤트 흐름에서 재버퍼 횟수와 시간, 첫 프레임까지의 시간, 화질 전환 횟수, 오류 횟수를 뽑아냅니다
 - HLS(`.m3u8`)와 DASH(`.mpd`) 재생. 자동 비트레이트 전환과 수동 화질 선택기가 있습니다. FLV / 날 MPEG-TS(`.flv`/`.ts`)는 `mpegts.js`로 재생합니다. 모든 엔진이 필요할 때 지연 로드되며 설정은 필요 없습니다. URL의 확장자를 짚어 낼 수 없을 때는 `format` 어트리뷰트로 특정 엔진을 강제할 수 있습니다(평범한 `<video src>`로 되돌릴 수도 있습니다).
@@ -44,23 +44,25 @@ description: 'ranui Player(<r-player>)는 네이티브 <video>를 하나의 컨�
 
 ### 속성
 
-| 속성                  | 타입                  | 기본값  | 설명                                                                                                                                                                                                                                                                  |
-| --------------------- | --------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src`                 | `string`              | `''`    | 영상 리소스의 URL. 바꾸면 플레이어를 다시 불러옵니다. 엔진(HLS·네이티브)은 확장자에서 자동으로 판별됩니다.                                                                                                                                                            |
-| `format`              | `string`              | `''`    | `src`의 확장자로 판별하는 대신 특정 엔진(`hls` / `dash` / `flv` / `webrtc` / `native`)을 강제합니다. 확장자가 없거나 서명된 스트리밍 URL에 쓸모 있고, `webrtc`에서는 **필수**입니다(WHEP 엔드포인트에는 판별할 확장자가 없습니다). 바꾸면 플레이어를 다시 불러옵니다. |
-| `volume`              | `string`              | `''`    | 초기 음량. `0`–`100` 눈금이며 `setVolume()`/`getVolume()`과 같은 척도입니다.                                                                                                                                                                                          |
-| `currentTime`         | `string`              | `''`    | 초기 재생 위치(초). 소문자 `currenttime`으로도 받습니다.                                                                                                                                                                                                              |
-| `playbackRate`        | `string`              | `''`    | 재생 속도 배수(`1`, `1.5`, `2` 등). 소문자 `playbackrate`로도 받습니다.                                                                                                                                                                                               |
-| `debug`               | `string`              | `''`    | 참 값이면 내부의 모든 `change` 이벤트와 경고를 콘솔에 찍습니다.                                                                                                                                                                                                       |
-| `sheet`               | `string`              | `''`    | 모습을 바꾸려고 컴포넌트의 섀도 DOM에 주입하는 CSS 텍스트.                                                                                                                                                                                                            |
-| `poster`              | `string`              | `''`    | 재생 전에 보여 줄 이미지 URL. `<video poster>`로 그대로 넘어갑니다.                                                                                                                                                                                                   |
-| `autoplay`            | `boolean`             | `false` | 불리언 어트리뷰트. 있으면 `true`이며 네이티브 `<video autoplay>`와 같습니다. 사용자의 조작 없이 자동 재생이 실제로 시작되려면 브라우저는 대개 `muted`를 요구합니다.                                                                                                   |
-| `loop`                | `boolean`             | `false` | 불리언 어트리뷰트. 끝나면 다시 재생합니다. 네이티브 `<video loop>`와 같습니다.                                                                                                                                                                                        |
-| `muted`               | `boolean`             | `false` | 불리언 어트리뷰트. 소리 없이 시작합니다. 내부적으로 음량을 `0`으로 두고(음소거 아이콘과 슬라이더가 맞도록) **동시에** 네이티브 `<video>.muted` 플래그도 세웁니다(브라우저의 음소거 자동재생 정책을 만족시키려고). 어트리뷰트를 없애면 이전 음량으로 돌아갑니다.       |
-| `thumbnails`          | `string`              | `''`    | WebVTT 스프라이트 시트 매니페스트의 URL. 진행 바 툴팁 위에 잘라 낸 썸네일을 보여 줍니다. 아래 [썸네일 스크러빙 미리보기](#thumbnail-scrubbing-preview-thumbnails)를 보세요. `src`와 무관하며, 이 어트리뷰트 자체가 바뀔 때만 다시 가져옵니다.                         |
-| `disable-error-modal` | `boolean`             | `false` | 내장된 오류·다시 시도 대화 상자를 끕니다. 오류는 `error`/`sourceerror` `change` 이벤트로 계속 전해지므로, 그 위에 직접 UI를 만들 수 있습니다.                                                                                                                         |
-| `remember-position`   | `boolean`             | `false` | 이어 보기를 켭니다. 일시정지할 때와 탭이 가려질 때 현재 위치를 `localStorage`(`src`별 키)에 저장하고, 같은 `src`를 다음에 불러올 때 되살리며, 재생이 끝나면 지웁니다.                                                                                                 |
-| `tracks`              | `PlayerTrackConfig[]` | `[]`    | 자막·CC 트랙. **JS 프로퍼티만 있고 짝이 되는 어트리뷰트는 없습니다**(플레이어가 불러올 때마다 자기 라이트 DOM을 비우므로, 선언적으로 쓴 `<track>` 자식은 효력을 내기 전에 사라집니다). 아래 [자막·CC](#subtitles-cc-tracks)를 보세요.                                 |
+| 속성                  | 타입                  | 기본값              | 설명                                                                                                                                                                                                                                                                  |
+| --------------------- | --------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src`                 | `string`              | `''`                | 영상 리소스의 URL. 바꾸면 플레이어를 다시 불러옵니다. 엔진(HLS·네이티브)은 확장자에서 자동으로 판별됩니다.                                                                                                                                                            |
+| `format`              | `string`              | `''`                | `src`의 확장자로 판별하는 대신 특정 엔진(`hls` / `dash` / `flv` / `webrtc` / `native`)을 강제합니다. 확장자가 없거나 서명된 스트리밍 URL에 쓸모 있고, `webrtc`에서는 **필수**입니다(WHEP 엔드포인트에는 판별할 확장자가 없습니다). 바꾸면 플레이어를 다시 불러옵니다. |
+| `volume`              | `string`              | `''`                | 초기 음량. `0`–`100` 눈금이며 `setVolume()`/`getVolume()`과 같은 척도입니다.                                                                                                                                                                                          |
+| `currentTime`         | `string`              | `''`                | 초기 재생 위치(초). 소문자 `currenttime`으로도 받습니다.                                                                                                                                                                                                              |
+| `playbackRate`        | `string`              | `''`                | 재생 속도 배수(`1`, `1.5`, `2` 등). 소문자 `playbackrate`로도 받습니다.                                                                                                                                                                                               |
+| `debug`               | `string`              | `''`                | 참 값이면 내부의 모든 `change` 이벤트와 경고를 콘솔에 찍습니다.                                                                                                                                                                                                       |
+| `sheet`               | `string`              | `''`                | 모습을 바꾸려고 컴포넌트의 섀도 DOM에 주입하는 CSS 텍스트.                                                                                                                                                                                                            |
+| `poster`              | `string`              | `''`                | 재생 전에 보여 줄 이미지 URL. `<video poster>`로 그대로 넘어갑니다.                                                                                                                                                                                                   |
+| `autoplay`            | `boolean`             | `false`             | 불리언 어트리뷰트. 있으면 `true`이며 네이티브 `<video autoplay>`와 같습니다. 사용자의 조작 없이 자동 재생이 실제로 시작되려면 브라우저는 대개 `muted`를 요구합니다.                                                                                                   |
+| `loop`                | `boolean`             | `false`             | 불리언 어트리뷰트. 끝나면 다시 재생합니다. 네이티브 `<video loop>`와 같습니다.                                                                                                                                                                                        |
+| `muted`               | `boolean`             | `false`             | 불리언 어트리뷰트. 소리 없이 시작합니다. 내부적으로 음량을 `0`으로 두고(음소거 아이콘과 슬라이더가 맞도록) **동시에** 네이티브 `<video>.muted` 플래그도 세웁니다(브라우저의 음소거 자동재생 정책을 만족시키려고). 어트리뷰트를 없애면 이전 음량으로 돌아갑니다.       |
+| `thumbnails`          | `string`              | `''`                | WebVTT 스프라이트 시트 매니페스트의 URL. 진행 바 툴팁 위에 잘라 낸 썸네일을 보여 줍니다. 아래 [썸네일 스크러빙 미리보기](#thumbnail-scrubbing-preview-thumbnails)를 보세요. `src`와 무관하며, 이 어트리뷰트 자체가 바뀔 때만 다시 가져옵니다.                         |
+| `disable-error-modal` | `boolean`             | `false`             | 내장된 오류·다시 시도 패널을 끕니다. 오류는 `error`/`sourceerror` `change` 이벤트로 계속 전해지므로, 그 위에 직접 UI를 만들 수 있습니다.                                                                                                                              |
+| `label-error`         | `string`              | `'Playback failed'` | 내장 오류 패널의 제목입니다.                                                                                                                                                                                                                                          |
+| `label-retry`         | `string`              | `'Retry'`           | 오류 패널의 다시 시도 버튼 레이블입니다.                                                                                                                                                                                                                              |
+| `remember-position`   | `boolean`             | `false`             | 이어 보기를 켭니다. 일시정지할 때와 탭이 가려질 때 현재 위치를 `localStorage`(`src`별 키)에 저장하고, 같은 `src`를 다음에 불러올 때 되살리며, 재생이 끝나면 지웁니다.                                                                                                 |
+| `tracks`              | `PlayerTrackConfig[]` | `[]`                | 자막·CC 트랙. **JS 프로퍼티만 있고 짝이 되는 어트리뷰트는 없습니다**(플레이어가 불러올 때마다 자기 라이트 DOM을 비우므로, 선언적으로 쓴 `<track>` 자식은 효력을 내기 전에 사라집니다). 아래 [자막·CC](#subtitles-cc-tracks)를 보세요.                                 |
 
 > 관찰하는 어트리뷰트(`observedAttributes` 기준): `src`, `format`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `thumbnails`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
 
@@ -171,7 +173,7 @@ stage.append(player);
 
 ### 오류와 다시 시도
 
-기본으로 켜져 있습니다. 스트리밍 엔진의 치명적 오류나 네이티브 `<video>`의 `error` 이벤트가 나면 `Modal.error()` 대화 상자가 열립니다(지연 로드라, 실제로 무언가 실패하기 전까지 `r-modal`은 아예 내려받지 않습니다). 안에는 플레이어를 다시 불러오는 **다시 시도** 버튼이 있습니다. 이것을 끄고 오류를 직접 다루려면 `disable-error-modal`을 지정하고 대신 `error`/`sourceerror` `change` 이벤트를 쓰세요. 치명적이지 않은 엔진 오류(hls.js가 내부에서 회복하는 것)는 이 대화 상자를 띄우지 않습니다.
+기본으로 켜져 있습니다. 스트리밍 엔진의 치명적 오류나 네이티브 `<video>`의 `error` 이벤트가 나면 페이지 전체를 막는 대화 상자 대신 플레이어 자체의 어두운 화면 위에 오류 패널이 나타납니다. 패널에는 플레이어를 다시 불러오는 **다시 시도** 버튼이 있습니다. 스크린 리더에는 한 번만 읽힙니다. 제목과 버튼 문구는 `label-error`와 `label-retry`로 바꿀 수 있습니다. 이것을 끄고 오류를 직접 다루려면 `disable-error-modal`을 지정하고 대신 `error`/`sourceerror` `change` 이벤트를 쓰세요. 치명적이지 않은 엔진 오류(hls.js가 내부에서 회복하는 것)는 이 패널을 띄우지 않습니다.
 
 ### 이어 보기 `remember-position`
 
@@ -263,7 +265,7 @@ stage.append(player);
 | `durationchange` | `duration` 값이 바뀌었습니다.                                                                  |
 | `emptied`        | 미디어가 비워졌거나 다시 로드되었습니다.                                                       |
 | `ended`          | 재생이 끝에 이르렀습니다.                                                                      |
-| `error`          | 미디어 오류가 났습니다(`disable-error-modal`이 없으면 내장 오류·다시 시도 대화 상자도 엽니다). |
+| `error`          | 미디어 오류가 났습니다(`disable-error-modal`이 없으면 내장 오류·다시 시도 패널도 보여 줍니다). |
 | `loadstart`      | 브라우저가 미디어를 불러오기 시작했습니다.                                                     |
 | `loadedmetadata` | 메타데이터가 로드되었습니다.                                                                   |
 | `loadeddata`     | 첫 프레임이 로드되었습니다.                                                                    |
@@ -282,18 +284,18 @@ stage.append(player);
 
 플레이어 고유의 동작:
 
-| 종류               | `data`                   | 설명                                                                                                                                                                                                    |
-| ------------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `volume`           | `number`(`0`–`100`)      | 컨트롤 바나 음소거 전환으로 음량이 바뀌었습니다.                                                                                                                                                        |
-| `speed`            | `number`                 | 속도 선택기로 재생 속도가 바뀌었습니다.                                                                                                                                                                 |
-| `fullscreen`       | `boolean`                | 전체 화면에 들어갔거나(`true`) 나왔습니다(`false`).                                                                                                                                                     |
-| `pictureinpicture` | `boolean`                | PIP에 들어갔거나(`true`) 나왔습니다(`false`). `togglePip()`으로 일어났든 브라우저 자체의 PIP 창 컨트롤로 일어났든 발생합니다.                                                                           |
-| `subtitlechange`   | `string`                 | CC 선택기나 `setSubtitleLanguage()`로 자막 언어가 바뀌었습니다. 값은 `srclang` 또는 `'off'`.                                                                                                            |
-| `resume`           | `number`                 | 로드할 때 저장된 위치가 조용히 되살아났습니다(`remember-position`). `data`는 되살아난 시각(초)입니다.                                                                                                   |
-| `levelsready`      | `{ levels }`             | 스트리밍 엔진의 매니페스트가 파싱되어 화질 단계를 쓸 수 있습니다.                                                                                                                                       |
-| `sourceerror`      | `{ fatal, detail }`      | 스트리밍 엔진 오류가 났습니다(날 `src`로 물러납니다. **치명적** 오류는 `disable-error-modal`이 없으면 오류·다시 시도 대화 상자도 엽니다. 치명적이지 않은 것은 엔진 자체의 내부 회복이라 열지 않습니다). |
-| `qualityswitch`    | `{ level }`              | 사용자가 화질 선택기에서 화질을 골랐습니다.                                                                                                                                                             |
-| `gestureseek`      | `{ direction, seconds }` | 두 번 두드려 이동하는 제스처가 발생했습니다(`direction`은 `'forward'`/`'backward'`).                                                                                                                    |
+| 종류               | `data`                   | 설명                                                                                                                                                                                                         |
+| ------------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `volume`           | `number`(`0`–`100`)      | 컨트롤 바나 음소거 전환으로 음량이 바뀌었습니다.                                                                                                                                                             |
+| `speed`            | `number`                 | 속도 선택기로 재생 속도가 바뀌었습니다.                                                                                                                                                                      |
+| `fullscreen`       | `boolean`                | 전체 화면에 들어갔거나(`true`) 나왔습니다(`false`).                                                                                                                                                          |
+| `pictureinpicture` | `boolean`                | PIP에 들어갔거나(`true`) 나왔습니다(`false`). `togglePip()`으로 일어났든 브라우저 자체의 PIP 창 컨트롤로 일어났든 발생합니다.                                                                                |
+| `subtitlechange`   | `string`                 | CC 선택기나 `setSubtitleLanguage()`로 자막 언어가 바뀌었습니다. 값은 `srclang` 또는 `'off'`.                                                                                                                 |
+| `resume`           | `number`                 | 로드할 때 저장된 위치가 조용히 되살아났습니다(`remember-position`). `data`는 되살아난 시각(초)입니다.                                                                                                        |
+| `levelsready`      | `{ levels }`             | 스트리밍 엔진의 매니페스트가 파싱되어 화질 단계를 쓸 수 있습니다.                                                                                                                                            |
+| `sourceerror`      | `{ fatal, detail }`      | 스트리밍 엔진 오류가 났습니다(날 `src`로 물러납니다. **치명적** 오류는 `disable-error-modal`이 없으면 오류·다시 시도 패널도 보여 줍니다. 치명적이지 않은 것은 엔진 자체의 내부 회복이라 보여 주지 않습니다). |
+| `qualityswitch`    | `{ level }`              | 사용자가 화질 선택기에서 화질을 골랐습니다.                                                                                                                                                                  |
+| `gestureseek`      | `{ direction, seconds }` | 두 번 두드려 이동하는 제스처가 발생했습니다(`direction`은 `'forward'`/`'backward'`).                                                                                                                         |
 
 ## 슬롯
 

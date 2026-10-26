@@ -46,6 +46,13 @@ export interface SpeedOption {
 export interface PlayerViewRefs {
   player: HTMLDivElement;
   container: HTMLDivElement;
+  /** The inline playback-error panel, hidden until `core/error-panel.ts` shows it. */
+  errorPanel: HTMLDivElement;
+  errorTitle: HTMLDivElement;
+  errorMessage: HTMLDivElement;
+  errorRetry: HTMLButtonElement;
+  /** Always in the tree so a screen reader hears the error once when its text is set. */
+  errorLive: HTMLDivElement;
   playerBtn: HTMLDivElement;
   playerController: HTMLDivElement;
   gestureFlash: HTMLDivElement;
@@ -255,10 +262,25 @@ export function ensurePlayerView(input: {
     .children(playerTip, progress, playerControllerBottom)
     .build() as HTMLDivElement;
 
+  const errorTitle = Div().class('ran-player-error-title').build() as HTMLDivElement;
+  const errorMessage = Div().class('ran-player-error-message').build() as HTMLDivElement;
+  const errorRetry = View('button')
+    .class('ran-player-error-retry')
+    .attr('type', 'button')
+    .attr('part', 'error-retry')
+    .build() as HTMLButtonElement;
+  const errorPanel = Div()
+    .class('ran-player-error')
+    .attr('part', 'error')
+    .attr('hidden', '')
+    .children(errorTitle, errorMessage, errorRetry)
+    .build() as HTMLDivElement;
+  const errorLive = Div().class('ran-player-error-live').attr('aria-live', 'polite').build() as HTMLDivElement;
+
   const player = Div()
     .class('ran-player')
     .id(playerIdentifier)
-    .children(container, playerBtn, gestureFlash, playerController)
+    .children(container, playerBtn, gestureFlash, playerController, errorPanel, errorLive)
     .build() as HTMLDivElement;
 
   // deferred mount: this is the constructor's own work, extracted into a function —
@@ -268,6 +290,11 @@ export function ensurePlayerView(input: {
   return {
     player,
     container,
+    errorPanel,
+    errorTitle,
+    errorMessage,
+    errorRetry,
+    errorLive,
     playerBtn,
     playerController,
     gestureFlash,
