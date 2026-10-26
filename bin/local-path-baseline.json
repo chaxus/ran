@@ -1,0 +1,17 @@
+{
+  "packages/ranui/test/evidence/2026-10-23-glass/manifest.json": 290,
+  "packages/ranui/test/evidence/2026-10-23-player-live/native/observations.json": 291,
+  "packages/ranui/test/evidence/2026-10-23-player-live/webrtc/observations.json": 291,
+  "packages/ranui/test/evidence/2026-10-23-renderers/static/manifest.json": 328,
+  "packages/ranui/test/evidence/2026-10-23-renderers/wrapped/manifest.json": 328,
+  "packages/ranui/test/evidence/2026-10-24-composed-controls/observations.json": 580,
+  "packages/ranui/test/evidence/2026-10-24-navigation/observations.json": 1,
+  "packages/ranui/test/evidence/2026-10-24-overlay-composition/capture.ts.txt": 2,
+  "packages/ranui/test/evidence/2026-10-24-overlay-composition/editor-escape/capture.ts.txt": 2,
+  "packages/ranui/test/evidence/2026-10-24-overlay-composition/editor-escape/manifest.json": 548,
+  "packages/ranui/test/evidence/2026-10-24-overlay-composition/final-ownership/capture.ts.txt": 2,
+  "packages/ranui/test/evidence/2026-10-24-overlay-composition/final-ownership/independent-probe.mjs.txt": 1,
+  "packages/ranui/test/evidence/2026-10-24-overlay-composition/final-ownership/manifest.json": 548,
+  "packages/ranui/test/evidence/2026-10-24-overlay-composition/manifest.json": 548,
+  "packages/ranui/test/evidence/2026-10-24-player-adapters/observations.json": 299
+}
