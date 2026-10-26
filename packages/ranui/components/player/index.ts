@@ -148,6 +148,9 @@ export class RanPlayer extends RanElement {
   _clarity!: PlayerClarityHandlers<EngineQualityLevel>;
   _subtitles!: PlayerSubtitleHandlers;
   _metrics!: PlayerMetricsController;
+  /** Off screen the progress bar is invisible, so its per-frame repaint loop stops. */
+  _inViewport = true;
+  _viewportObserver: IntersectionObserver | undefined;
   _gestures?: PlayerGestureController;
   static get observedAttributes(): string[] {
     return [
@@ -674,7 +677,21 @@ export class RanPlayer extends RanElement {
   progressDotPointerMove = (e: PointerEvent): void => this._seek.progressDotPointerMove(e);
   progressDotPointerUp = (): void => this._seek.progressDotPointerUp();
   progressDotPointerCancel = (): void => this._seek.progressDotPointerCancel();
-  requestAnimationFrame = (fn: Function): void => this._seek.requestAnimationFrame(fn);
+  requestAnimationFrame = (fn: Function): void => {
+    if (this._inViewport) this._seek.requestAnimationFrame(fn);
+  };
+  /** Stop repainting progress off screen; on return, repaint at once and resume if playing. */
+  onViewportChange = (visible: boolean): void => {
+    this._inViewport = visible;
+    if (!visible) {
+      this._seek.cancelAnimationFrame();
+      return;
+    }
+    if (this._video && !this._video.paused) {
+      this.updateCurrentProgress();
+      this.requestAnimationFrame(this.updateCurrentProgress);
+    }
+  };
   cancelAnimationFrame = (): void => this._seek.cancelAnimationFrame();
   updateCurrentProgress = (): void => this._seek.updateCurrentProgress();
   progressMouseEnter = (e: MouseEvent): void => this._seek.progressMouseEnter(e);
@@ -821,8 +838,18 @@ export class RanPlayer extends RanElement {
     this.updatePlayer();
     this.syncPipButtonVisibility();
     this.syncRemoteButtonVisibility();
+    if (typeof IntersectionObserver !== 'undefined') {
+      this._viewportObserver = new IntersectionObserver((entries) => {
+        const entry = entries[entries.length - 1];
+        if (entry) this.onViewportChange(entry.isIntersecting);
+      });
+      this._viewportObserver.observe(this);
+    }
   }
   disconnectedCallback(): void {
+    this._viewportObserver?.disconnect();
+    this._viewportObserver = undefined;
+    this._inViewport = true;
     this._events.abort();
     this.disposeEffects();
     this._gestures?.destroy();
