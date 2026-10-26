@@ -594,6 +594,10 @@ export class RanPlayer extends RanElement {
     this._video.autoplay = this.autoplay;
     this._video.loop = this.loop;
     if (this.muted) this.setVolume(0);
+    // The markup's values arrive through attributeChangedCallback before this video exists.
+    this.applyVolumeAttribute();
+    this.applyPlaybackRateAttribute();
+    this.applyCurrentTimeAttribute();
     try {
       this._engine = loadVideoSource({
         video: this._video,
@@ -612,6 +616,23 @@ export class RanPlayer extends RanElement {
     } catch (error) {
       if (this.debug) console.warn('r-player update player error:', error);
     }
+  };
+  /** `muted` wins; the volume is remembered so unmuting restores it. Clamped to 0-100. */
+  applyVolumeAttribute = (): void => {
+    const value = numberAttribute(this, 'volume');
+    if (value === null) return;
+    const volume = Math.min(100, Math.max(0, value));
+    if (this.muted) this._volume = volume;
+    else this.setVolume(volume);
+  };
+  applyPlaybackRateAttribute = (): void => {
+    const value = numberAttribute(this, 'playbackRate');
+    if (value !== null && value > 0) this.setPlaybackRate(value);
+  };
+  /** Before metadata loads this sets the video's start position, which the browser seeks to once it can. */
+  applyCurrentTimeAttribute = (): void => {
+    const value = numberAttribute(this, 'currentTime');
+    if (value !== null && value >= 0) this.setCurrentTime(value);
   };
   showErrorModal = (message: string): void => this._errorModal.show(message);
   change = (name: string, value: unknown): void => {
@@ -860,13 +881,13 @@ export class RanPlayer extends RanElement {
       if (this._didInitialConnect) this.updatePlayer();
     }
     if (k === 'volume' && o !== n) {
-      this.setVolume(Number(n));
+      this.applyVolumeAttribute();
     }
     if ((k === 'currentTime' || k === 'currenttime') && o !== n) {
-      this.setCurrentTime(Number(n));
+      this.applyCurrentTimeAttribute();
     }
     if ((k === 'playbackRate' || k === 'playbackrate') && o !== n) {
-      this.setPlaybackRate(Number(n));
+      this.applyPlaybackRateAttribute();
     }
     if (k === 'sheet' && o !== n) {
       this.handlerExternalCss();
@@ -888,6 +909,14 @@ export class RanPlayer extends RanElement {
     }
   }
 }
+
+/** The attribute as a finite number, or `null` when it is absent, empty or not a number. */
+const numberAttribute = (element: HTMLElement, name: string): number | null => {
+  const raw = element.getAttribute(name)?.trim();
+  if (!raw) return null;
+  const value = Number(raw);
+  return Number.isFinite(value) ? value : null;
+};
 
 defineSSR('r-player', RanPlayer as unknown as new () => HTMLElement);
 export default RanPlayer;
