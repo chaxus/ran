@@ -147,6 +147,7 @@ const ja: LocaleMessages = {
     canvas_animation: 'Canvas とアニメーション',
     canvas_2d_geometry_paths_gradients: 'Canvas 2D ジオメトリ - パスとグラデーション',
     tween: 'イージング関数',
+    motion: 'スプリング・時差・ビューポート進入',
     i18n: 'i18n',
     internationalisation_engine: '国際化エンジン',
     '2d_rendering_visual': '2D レンダリング (visual)',

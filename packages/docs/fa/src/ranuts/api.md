@@ -1,6 +1,6 @@
 ---
 title: مرجع API کتابخانهٔ ranuts
-description: 'همهٔ نمادهایی که ranuts صادر می‌کند — 422 خروجی در 7 نقطهٔ ورود، همراه با امضا و توضیح.'
+description: 'همهٔ نمادهایی که ranuts صادر می‌کند — 430 خروجی در 7 نقطهٔ ورود، همراه با امضا و توضیح.'
 ---
 
 # API کتابخانهٔ ranuts (تولید خودکار)
@@ -13,11 +13,11 @@ description: 'همهٔ نمادهایی که ranuts صادر می‌کند — 4
 از همان **زیرمسیری** که نماد به آن تعلق دارد import کنید، مثلاً `import { debounce } from
 'ranuts/utils'`. نقطهٔ ورود ریشه یعنی `ranuts` سطح utils و visual را دوباره صادر می‌کند.
 
-**422 خروجی** در 7 نقطهٔ ورود.
+**430 خروجی** در 7 نقطهٔ ورود.
 
 ## نقاط ورود
 
-- [`ranuts/utils`](#ranuts-utils) — ابزارهای مرورگر و ابزارهای عمومی · _مرورگر + node_ · 333 خروجی
+- [`ranuts/utils`](#ranuts-utils) — ابزارهای مرورگر و ابزارهای عمومی · _مرورگر + node_ · 341 خروجی
 - [`ranuts/sw`](#ranuts-sw) — راهبردهای حافظهٔ نهان Service Worker و پروتکل پیش‌بارگذاری · _فقط service worker_ · 9 خروجی
 - [`ranuts/visual`](#ranuts-visual) — موتور رندر دوبعدی (Canvas / WebGL / WebGPU) · _فقط مرورگر_ · 16 خروجی
 - [`ranuts/i18n`](#ranuts-i18n) — موتور i18n مستقل از فریم‌ورک (از ranuts/utils هم دوباره صادر می‌شود) · _مرورگر + node_ · 9 خروجی
@@ -171,6 +171,7 @@ import { /* … */ } from 'ranuts/utils';
 - `networkAllowsDownload(options?: NetworkAllowanceOptions) => boolean` — Whether the current network and user settings allow proactively downloading
 - `networkSpeed(options: Options) => Promise<ReturnType>` — Measure the network's ping by timing requests
 - `noop() => void`
+- `observeEntry(element: Element, { line, onEnter }: EntryOptions) => () => void` — Calls `onEnter` once, when `element` first scrolls past `line`, then stops observing.
 - `once<T extends Func>(fn: T | unknown) => ((...args: Parameters<T>) => ReturnType<T>)` — Run once — evaluate on the first call, cache the result, and return that
 - `opacity(img: ImgSource, opacity: number) => ImgSource` — Apply an overall opacity to an image, returning an offscreen canvas.
 - `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
@@ -182,6 +183,7 @@ import { /* … */ } from 'ranuts/utils';
 - `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT/SRT-style timestamp — `HH:MM:SS.mmm` or `MM:SS.mmm` (the hour
 - `performanceTime() => number` — Current timestamp
 - `perToNum(str?: string) => number` — Convert a percentage string into a number
+- `prefersReducedMotion() => boolean` — Whether the reader asked for reduced motion. `false` where there is no window (SSR, Node).
 - `prefetchUrl(url: string) => Promise<void>` — Pull a single URL into the cache; skipped when already cached. Failures are
 - `prefetchUrls(urls: string[], options?: PrefetchOptions) => Promise<void>` — Prefetch a group of URLs, **serially** — prefetching is background work, and
 - `prefetchWhenIdle(urls: string[], options?: WhenIdleOptions & NetworkAllowanceOptions & PrefetchOptions) => (() => void)` — Prefetch a group of URLs while idle, subject to `networkAllowsDownload`.
@@ -225,7 +227,9 @@ import { /* … */ } from 'ranuts/utils';
 - `singleFlight<T>(fn: () => Promise<T>) => SingleFlight<T>` — The async flavour of "run once": concurrent callers share one in-flight
 - `slugify(text: string, maxLength?: number) => string` — Reduce text to a lowercase `a-z0-9-` slug, safe as a filename on every
 - `smoothstep(edge0: number, edge1: number, x: number) => number` — Smooth Hermite interpolation between 0 and 1 for `edge0 < x < edge1` (GLSL `smoothstep`).
+- `spring({ stiffness, damping, mass, velocity }?: SpringOptions) => Spring` — A damped spring from 0 to 1, solved exactly rather than stepped, so any frame rate gives
 - `srgbToLinear(c: number) => number` — Convert one sRGB channel (0..1) to linear-light (IEC 61966-2-1 transfer function).
+- `stagger(index: number, count: number, { each, from }?: StaggerOptions) => number` — Delay, in seconds, for item `index` of `count` so a group arrives in order.
 - `strParse(str?: string, sep?: string | RegExp, eq?: string | RegExp) => Record<string, string>` — Parse a delimited string into an object, e.g.
 - `throttle<T extends (...args: any[]) => any>(fn: T, delay?: number) => Throttled<T>` — Throttle — under a burst of calls, run at a fixed interval: the first call
 - `toFullWidth(value: string) => string` — Convert half-width characters to full-width (the inverse of `toHalfWidth`)
@@ -284,6 +288,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface DiffOptions` — How to compute a diff.
 - `interface DoubleTapDetector`
 - `interface DoubleTapDetectorOptions`
+- `interface EntryOptions`
 - `interface FormatRelativeOptions`
 - `interface Handoff`
 - `interface HandoffOptions`
@@ -318,6 +323,9 @@ import { /* … */ } from 'ranuts/utils';
 - `interface SpeechRecognizer`
 - `interface SpeechRecognizerOptions`
 - `interface SpeedType` — The ease-in / ease-out pair of one easing family
+- `interface Spring`
+- `interface SpringOptions`
+- `interface StaggerOptions`
 - `interface TextBox` — The box each page must fit into, in px.
 - `interface TextGridMetrics`
 - `interface TextPage`

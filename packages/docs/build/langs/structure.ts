@@ -473,6 +473,7 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
       items: [
         { kind: 'full', key: 'canvas_2d_geometry_paths_gradients', link: '/src/ranuts/utils/canvas' },
         { kind: 'dash', key: 'tween', name: 'tween', link: '/src/ranuts/utils/tween' },
+        { kind: 'dash', key: 'motion', name: 'spring / stagger / observeEntry', link: '/src/ranuts/utils/motion' },
       ],
     },
     {

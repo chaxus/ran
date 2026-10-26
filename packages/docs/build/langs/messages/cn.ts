@@ -147,6 +147,7 @@ const cn: LocaleMessages = {
     canvas_animation: 'Canvas 与动画',
     canvas_2d_geometry_paths_gradients: 'Canvas 2D 几何 - 路径与渐变',
     tween: '缓动函数',
+    motion: '弹簧、错峰与进场',
     i18n: 'i18n',
     internationalisation_engine: '国际化引擎',
     '2d_rendering_visual': '2D 渲染引擎 (visual)',

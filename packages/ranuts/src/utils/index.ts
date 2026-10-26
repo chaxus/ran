@@ -112,6 +112,8 @@ import { handleError } from './error';
 import { EventManager, createDoubleTapDetector } from './event';
 import type { DoubleTapDetector, DoubleTapDetectorOptions } from './event';
 import { circ, cubic, expo, quad, quart, quint, sine } from './tween';
+import { observeEntry, prefersReducedMotion, spring, stagger } from './motion';
+import type { EntryOptions, Spring, SpringOptions, StaggerOptions } from './motion';
 import type { EasingFn, SpeedType } from './tween';
 import { convertImageToBase64, cutRound, getImage, getMatrix, isImageSize, opacity } from './img';
 import type { ImgSource } from './img';
@@ -262,6 +264,10 @@ import {
 import type { RGB } from '@/utils/color';
 export {
   createBottomFollower,
+  observeEntry,
+  prefersReducedMotion,
+  spring,
+  stagger,
   diffLines,
   formatBytes,
   performanceTime,
@@ -516,6 +522,10 @@ export {
 };
 
 export type {
+  EntryOptions,
+  Spring,
+  SpringOptions,
+  StaggerOptions,
   RGB,
   DateInput,
   FormatRelativeOptions,
