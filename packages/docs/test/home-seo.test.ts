@@ -18,8 +18,11 @@ it('any other page leads with its own title', () => {
 
 it('the home headline keeps the spaces between its words', () => {
   const english = LOCALES.find((locale) => locale.dir === '')!;
-  const h1 = /<h1[\s\S]*?<\/h1>/.exec(renderHome(english))![0].replace(/<[^>]+>/g, '');
-  expect(h1).toBe(homeCopy('').headline);
+  const html = renderHome(english);
+  const words = [...html.matchAll(/<span class="word-in">([^<]*)<\/span>/g)].map((match) => match[1]);
+  expect(words.join(' ')).toBe(homeCopy('').headline);
+  // Each word box is followed by a real space before the next one, not by margin alone.
+  expect(html.match(/<\/span><\/span> <span class="word">/g)?.length).toBe(words.length - 1);
 });
 
 it('the article index lists every article, nested groups included', () => {
