@@ -56,11 +56,13 @@ export const parseControls = (componentsMd: string): Map<string, Control[]> => {
   return byElement;
 };
 
-/** The first live example in a page that contains `element`, or `''`. */
+/** The first live example in a page that contains `element`, or `''`; its ids are dropped because the page already has the original. */
 export const firstExample = (markdown: string, element: string): string =>
-  [...markdown.matchAll(/<ran-demo[^>]*>([\s\S]*?)<\/ran-demo>/g)]
-    .map((match) => match[1]!.trim())
-    .find((html) => html.includes(`<${element}`)) ?? '';
+  (
+    [...markdown.matchAll(/<ran-demo[^>]*>([\s\S]*?)<\/ran-demo>/g)]
+      .map((match) => match[1]!.trim())
+      .find((html) => html.includes(`<${element}`)) ?? ''
+  ).replace(/\s+id="[^"]*"/g, '');
 
 const controlHtml = (control: Control, id: string): string => {
   const label = `<code>${esc(control.name)}</code>`;

@@ -26,4 +26,5 @@ it('starts from the first live example that holds the element', () => {
     '<ran-demo>\n<r-icon></r-icon>\n</ran-demo>\n\n<ran-demo column>\n  <r-demo type="text">Go</r-demo>\n</ran-demo>';
   expect(firstExample(page, 'r-demo')).toBe('<r-demo type="text">Go</r-demo>');
   expect(firstExample(page, 'r-missing')).toBe('');
+  expect(firstExample('<ran-demo><r-demo id="one">Go</r-demo></ran-demo>', 'r-demo')).toBe('<r-demo>Go</r-demo>');
 });
