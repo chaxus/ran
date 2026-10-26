@@ -4,6 +4,8 @@ import { RanElement } from '@/utils/index';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { formatBytes } from 'ranuts/utils';
+import { uiText } from '@/utils/ui-text';
+import { attachmentsText } from './text';
 
 /** One file staged for sending. */
 export interface Attachment {
@@ -308,7 +310,7 @@ export class Attachments extends RanElement {
         .attr('part', 'remove')
         .attr('type', 'button')
         // Named with the file, so a list of four remove buttons is four distinct commands.
-        .attr('aria-label', `Remove ${attachment.name}`)
+        .attr('aria-label', uiText(attachmentsText, 'attachments.remove', this, { name: attachment.name }))
         .children(View('r-icon').attr('name', 'close').build())
         .build();
       row.appendChild(remove);

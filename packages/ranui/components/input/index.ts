@@ -12,6 +12,8 @@ import {
 } from '@/utils/component';
 import inputCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { uiText } from '@/utils/ui-text';
+import { inputText } from './text';
 
 // Monotonic id source so each field's inner <input> can be referenced by its
 // <label for>. A counter (not Math.random) keeps ids stable and SSR-safe.
@@ -351,7 +353,11 @@ export class Input extends RanElement {
         if (validity?.[flag]) flags[flag] = true;
       }
       if (!validity) flags.valueMissing = true;
-      this._internals?.setValidity?.(flags, control.validationMessage || 'Please fill out this field.', control);
+      this._internals?.setValidity?.(
+        flags,
+        control.validationMessage || uiText(inputText, 'input.required', this),
+        control,
+      );
     } else {
       control.removeAttribute('aria-invalid');
       this._internals?.setValidity?.({});

@@ -12,6 +12,8 @@ import {
 } from '@/utils/component';
 import checkboxCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { uiText } from '@/utils/ui-text';
+import { checkboxText } from './text';
 
 export interface Context {
   checked: boolean;
@@ -179,7 +181,7 @@ export class Checkbox extends RanElement {
       disabled: this.disabled,
       required: this.required,
       isEmpty: !this.context.checked,
-      message: 'Please check this box if you want to proceed.',
+      message: uiText(checkboxText, 'checkbox.required', this),
       // The host itself is the focusable/tabbable element (tabIndex is set on
       // `this` in syncA11yAndForm, never on `container`) — the native
       // validation bubble anchors correctly only against a focusable element.

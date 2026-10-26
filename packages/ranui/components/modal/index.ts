@@ -1,4 +1,6 @@
 import modalCss from './index.less?inline';
+import { uiText } from '@/utils/ui-text';
+import { modalText } from './text';
 import closeIcon from '@/assets/icons/close.svg?raw';
 import { registerIcon } from '@/components/icon';
 import {
@@ -112,7 +114,9 @@ export class Modal extends RanElement {
                   .class('ran-modal-close')
                   .part('close')
                   .attr('type', 'button')
-                  .label('Close dialog')
+                  // Named here too, so server-rendered markup is never an unnamed button;
+                  // connectedCallback re-reads it in the language of the page it joins.
+                  .label(uiText(modalText, 'modal.close'))
                   .children(View('r-icon').class('ran-modal-close-icon').attr('name', 'close').attr('decorative', '')),
               ),
             Div().class('ran-modal-body').part('body').children(Slot()),
@@ -260,7 +264,8 @@ export class Modal extends RanElement {
   syncTitle = (): void => {
     this._title.textContent = this.heading || 'Modal';
     // In headerless mode the visible title is gone; keep the dialog's a11y name current.
-    if (this.hideHeader) this._dialog.setAttribute('aria-label', this.heading || 'Modal');
+    if (this.hideHeader)
+      this._dialog.setAttribute('aria-label', this.heading || uiText(modalText, 'modal.dialog', this));
   };
 
   syncClosable = (): void => {
@@ -276,7 +281,7 @@ export class Modal extends RanElement {
     // The <h3 id=_labelId> title leaves the a11y tree when the header is hidden, so
     // aria-labelledby would dangle — label the dialog directly instead.
     if (hideHeader) {
-      this._dialog.setAttribute('aria-label', this.heading || 'Modal');
+      this._dialog.setAttribute('aria-label', this.heading || uiText(modalText, 'modal.dialog', this));
       this._dialog.removeAttribute('aria-labelledby');
     } else {
       this._dialog.setAttribute('aria-labelledby', this._labelId);
@@ -567,6 +572,8 @@ export class Modal extends RanElement {
 
   connectedCallback(): void {
     this.handlerExternalCss();
+    // Named on connect, when the element can see the language of the page it joined.
+    this._closeBtn.setAttribute('aria-label', uiText(modalText, 'modal.close', this));
     this._events
       .on(this._mask, 'click', this.onMaskClick)
       .on(this._closeBtn, 'click', this.onCloseButtonClick)
@@ -637,10 +644,10 @@ export class Modal extends RanElement {
 
     const resolved = Modal.normalizeProgrammaticOptions(options);
     const {
-      title = 'Confirm',
+      title = uiText(modalText, 'modal.confirm'),
       content = '',
-      okText = 'OK',
-      cancelText = 'Cancel',
+      okText = uiText(modalText, 'modal.ok'),
+      cancelText = uiText(modalText, 'modal.cancel'),
       showCancel = false,
       maskClosable = false,
       closeOnEsc = true,
@@ -733,22 +740,22 @@ export class Modal extends RanElement {
 
   static info = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
     const resolved = Modal.normalizeProgrammaticOptions(options);
-    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || 'Info' });
+    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || uiText(modalText, 'modal.info') });
   };
 
   static success = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
     const resolved = Modal.normalizeProgrammaticOptions(options);
-    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || 'Success' });
+    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || uiText(modalText, 'modal.success') });
   };
 
   static warning = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
     const resolved = Modal.normalizeProgrammaticOptions(options);
-    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || 'Warning' });
+    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || uiText(modalText, 'modal.warning') });
   };
 
   static error = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
     const resolved = Modal.normalizeProgrammaticOptions(options);
-    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || 'Error' });
+    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || uiText(modalText, 'modal.error') });
   };
 }
 

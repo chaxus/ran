@@ -2,6 +2,8 @@ import { View } from '@/utils/builder';
 import type { EngineAdapter, EngineQualityLevel } from './adapters/types';
 import type { PlaybackSnapshot } from './playback';
 import type { PlayerRuntimeState } from './state';
+import { uiText } from '@/utils/ui-text';
+import { playerText } from '../text';
 
 export interface PlayerClarityRefs {
   clarityContainer: HTMLElement;
@@ -66,7 +68,9 @@ export function createClarityHandlers<TLevel extends EngineQualityLevel = Engine
       const { name, id } = item;
       if (!name || !id) return;
       ctx.levelMap.set(name, id);
-      const option = View('r-option').attr('value', name).text(name).build() as HTMLElement;
+      // `Auto` stays the value the select and the `qualityswitch` event carry; only its text is translated.
+      const text = name === 'Auto' ? uiText(playerText, 'player.qualityAuto', refs.player) : name;
+      const option = View('r-option').attr('value', name).text(text).build() as HTMLElement;
       Fragment.appendChild(option);
     });
     const id = refs.player.getAttribute('id');
@@ -80,8 +84,8 @@ export function createClarityHandlers<TLevel extends EngineQualityLevel = Engine
       // aligns the way every other path does, so what was implicit is stated.
       .attr('placement', 'top-center')
       .attr('dropdownclass', 'video-clarity-dropdown')
-      .aria('label', 'Video quality')
-      .attr('title', 'Video quality')
+      .aria('label', uiText(playerText, 'player.quality', refs.player))
+      .attr('title', uiText(playerText, 'player.quality', refs.player))
       .children(Fragment as unknown as HTMLElement)
       .build() as HTMLElement;
 
@@ -124,7 +128,7 @@ export function createClarityHandlers<TLevel extends EngineQualityLevel = Engine
     // recovery — only a fatal error means playback has actually stopped and is
     // worth interrupting the user for.
     if (payload.fatal) {
-      deps.showErrorModal('The stream could not be loaded.');
+      deps.showErrorModal(uiText(playerText, 'player.errorStream', refs.player));
     }
   };
 

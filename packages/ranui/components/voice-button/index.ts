@@ -11,6 +11,8 @@ import {
 import { defineSSR } from '@/utils/ssr-registry';
 import { createSpeechRecognizer } from 'ranuts/utils';
 import type { SpeechError, SpeechRecognizer } from 'ranuts/utils';
+import { uiText } from '@/utils/ui-text';
+import { voiceButtonText } from './text';
 
 /**
  * `<r-voice-button>` — dictation for a text composer.
@@ -147,7 +149,7 @@ export class VoiceButton extends RanElement {
 
   /** Accessible name while idle. */
   get label(): string {
-    return getStringAttribute(this, 'label', 'Start voice input');
+    return getStringAttribute(this, 'label', uiText(voiceButtonText, 'voiceButton.start', this));
   }
   set label(value: string) {
     setStringAttribute(this, 'label', value);
@@ -155,7 +157,7 @@ export class VoiceButton extends RanElement {
 
   /** Accessible cancel/stop name while capture is pending or listening. */
   get activeLabel(): string {
-    return getStringAttribute(this, 'active-label', 'Stop voice input');
+    return getStringAttribute(this, 'active-label', uiText(voiceButtonText, 'voiceButton.stop', this));
   }
   set activeLabel(value: string) {
     setStringAttribute(this, 'active-label', value);
@@ -163,7 +165,7 @@ export class VoiceButton extends RanElement {
 
   /** Shown above the button while a finger is held down. */
   get holdHint(): string {
-    return getStringAttribute(this, 'hold-hint', 'Release to keep · slide up to cancel');
+    return getStringAttribute(this, 'hold-hint', uiText(voiceButtonText, 'voiceButton.holdHint', this));
   }
   set holdHint(value: string) {
     setStringAttribute(this, 'hold-hint', value);
@@ -171,7 +173,7 @@ export class VoiceButton extends RanElement {
 
   /** Replaces {@link holdHint} once the finger has slid far enough to discard. */
   get cancelHint(): string {
-    return getStringAttribute(this, 'cancel-hint', 'Release to cancel');
+    return getStringAttribute(this, 'cancel-hint', uiText(voiceButtonText, 'voiceButton.cancelHint', this));
   }
   set cancelHint(value: string) {
     setStringAttribute(this, 'cancel-hint', value);

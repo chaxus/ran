@@ -15,6 +15,8 @@ import markdownCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 import { observeDocumentTheme, resolveDocumentTheme, THEME_SIGNAL_ATTRIBUTES } from '@/utils/theme';
 import type { DocumentTheme } from '@/utils/theme';
+import { uiText } from '@/utils/ui-text';
+import { markdownText } from './text';
 
 type RenderModule = typeof import('./render');
 type CodeCopyControl = import('./render').CodeCopyControl;
@@ -239,8 +241,8 @@ export class Markdown extends RanElement {
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
   }
-  private label(key: string, fallback: string): string {
-    return getStringAttribute(this, `label-${key}`) || fallback;
+  private label(key: string, fallback: keyof typeof markdownText.en): string {
+    return getStringAttribute(this, `label-${key}`) || uiText(markdownText, fallback, this);
   }
   private emit(name: string, detail: Record<string, unknown>): void {
     this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
@@ -350,7 +352,7 @@ export class Markdown extends RanElement {
         highlight: highlightAttr === null ? null : mod.parseThemes(highlightAttr),
         linkTarget: this.linkTarget,
         theme: this.theme,
-        labels: { copy: this.label('copy', 'Copy code'), download: this.label('download', 'Download') },
+        labels: { copy: this.label('copy', 'markdown.copy'), download: this.label('download', 'markdown.download') },
         onCopy: this.copyCode,
         resetCopy: this.resetCopy,
         onDownload: this.downloadCode,
@@ -458,7 +460,7 @@ export class Markdown extends RanElement {
         }, 1200);
       } catch {
         if (!current()) return;
-        control.status.textContent = this.label('copy-error', 'Could not copy. Try again.');
+        control.status.textContent = this.label('copy-error', 'markdown.copyError');
         control.status.hidden = false;
       } finally {
         if (current()) {
@@ -520,7 +522,7 @@ export class Markdown extends RanElement {
     else if (k === 'content') this.render();
     else if (k === 'label-copy-error') {
       for (const { control } of this._copies.values()) {
-        if (!control.status.hidden) control.status.textContent = this.label('copy-error', 'Could not copy. Try again.');
+        if (!control.status.hidden) control.status.textContent = this.label('copy-error', 'markdown.copyError');
       }
     } else if (k === 'theme') {
       this.observeTheme();

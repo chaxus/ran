@@ -6,6 +6,8 @@ import {
   setActiveSubtitleLanguage,
   type PlayerTrackConfig,
 } from './tracks';
+import { uiText } from '@/utils/ui-text';
+import { playerText } from '../text';
 
 export interface PlayerSubtitleRefs {
   subtitleContainer: HTMLElement;
@@ -60,7 +62,12 @@ export function createSubtitleHandlers(deps: PlayerSubtitleDeps): PlayerSubtitle
     const tracks = deps.getTracks();
     if (tracks.length <= 0) return;
     const Fragment = document.createDocumentFragment();
-    Fragment.appendChild(View('r-option').attr('value', 'Off').text('Off').build() as HTMLElement);
+    Fragment.appendChild(
+      View('r-option')
+        .attr('value', 'Off')
+        .text(uiText(playerText, 'player.subtitlesOff', refs.subtitleContainer))
+        .build() as HTMLElement,
+    );
     tracks.forEach((track) => {
       const option = View('r-option').attr('value', track.srclang).text(track.label).build() as HTMLElement;
       Fragment.appendChild(option);
@@ -76,8 +83,8 @@ export function createSubtitleHandlers(deps: PlayerSubtitleDeps): PlayerSubtitle
       // aligns the way every other path does, so what was implicit is stated.
       .attr('placement', 'top-center')
       .attr('dropdownclass', 'video-subtitle-dropdown')
-      .aria('label', 'Subtitles')
-      .attr('title', 'Subtitles')
+      .aria('label', uiText(playerText, 'player.subtitles', refs.subtitleContainer))
+      .attr('title', uiText(playerText, 'player.subtitles', refs.subtitleContainer))
       .children(Fragment as unknown as HTMLElement)
       .build() as HTMLElement;
 

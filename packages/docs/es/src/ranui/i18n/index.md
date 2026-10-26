@@ -123,9 +123,26 @@ i18n.addMessages('fr', fr); // se fusiona con cualquier diccionario 'fr' existen
 i18n.setLocale('fr');
 ```
 
+## Texto incorporado en los componentes
+
+Las pocas cadenas que escribe el propio componente (los nombres accesibles de los controles del reproductor, los botones de copiar y descargar de `r-markdown`, `r-math` y `r-mermaid`, los mensajes de validación, el aviso de límite del medidor de tokens) siguen el idioma de quien lee. ranui usa el idioma de la instancia de i18n de la app si hay una registrada y, si no, el atributo `lang` más cercano (normalmente `<html lang>`). Trae estas cadenas en chino, japonés, coreano, español, portugués, alemán y persa; cualquier otro idioma ve el inglés.
+
+Para cambiar una, define `ranui.<key>` en tu propio diccionario. Tiene prioridad sobre la tabla incorporada:
+
+```js
+createI18n({
+  messages: {
+    en: { 'ranui.player.error': 'This video is unavailable' },
+    zh: { 'ranui.player.error': '视频暂时无法播放' },
+  },
+});
+```
+
+Las claves de cada componente y su texto en inglés están en su propio `components/<name>/text.ts` del código fuente de ranui. Un atributo puesto en el elemento, como `label` o `label-*`, sigue ganando a ambos. El texto se resuelve al escribirse: cuando el elemento se conecta o cuando cambia el estado que describe. Por eso, tras cambiar de idioma en tiempo de ejecución, un elemento que ya está en la página conserva su texto hasta la próxima escritura; si necesitas el cambio al momento, vuelve a aplicar las etiquetas como se muestra más abajo.
+
 ## Localizar el texto de los componentes
 
-Los componentes **no** leen de este motor por su cuenta. Es a propósito: un componente que leyera directamente de un singleton global ataría a todos sus consumidores a una única instancia y a un único esquema de nombres de claves, y haría que una página que importa un solo botón se trajera también la capa de traducción. En su lugar, **toda cadena visible es una entrada**: un atributo, una propiedad, una opción o contenido en un slot, así que localizar ranui consiste en pasar la salida de `t()` allí donde la cadena ya va:
+Toda cadena visible es también una entrada: un atributo, una propiedad, una opción o contenido en un slot. Lo que pases ahí gana al texto incorporado, así que la otra forma de localizar ranui es pasar la salida de `t()` allí donde la cadena ya va:
 
 ```js
 const i18n = useI18n(); // se dan por registrados los mensajes de abajo
@@ -134,7 +151,7 @@ modal.setAttribute('title', i18n.t('dialog.deleteProject.title'));
 themeSwitch.setAttribute('label-dark', i18n.t('theme.dark'));
 ```
 
-La mayoría de componentes no tienen texto propio: les llega por los slots y atributos que ya escribes. Un puñado trae un valor por defecto en inglés para alguna cadena que no tiene de dónde salir, casi siempre nombres accesibles:
+La mayoría de componentes no tienen texto propio: les llega por los slots y atributos que ya escribes. Estas son las cadenas que no tienen de dónde salir y las entradas que las sustituyen; la tabla muestra el texto en inglés:
 
 | Componente                                        | Inglés incorporado                                                                                                       | Se sobrescribe con                                   |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
@@ -145,6 +162,8 @@ La mayoría de componentes no tienen texto propio: les llega por los slots y atr
 | `<r-reasoning>`                                   | etiqueta de cabecera `Reasoning`                                                                                         | `label`                                              |
 | `<r-token-meter>`                                 | etiqueta `Context`                                                                                                       | `label`                                              |
 | `<r-colorpicker>`                                 | aria-labels `Choose color`, `Hue`, `Alpha opacity`                                                                       | `label`, `hue-label`, `alpha-label`                  |
+| `<r-player>`                                      | título del panel de error `Playback failed`, botón `Retry`                                                               | `label-error`, `label-retry`                         |
+| `<r-markdown>` / `<r-math>` / `<r-mermaid>`       | botones de la barra como `Copy code` y `Download`                                                                        | `label-copy`, `label-download` y demás `label-*`     |
 
 Un patrón práctico es volver a aplicarlas desde un único sitio en cada cambio de idioma, para que el mismo código corra al arrancar y después de un cambio:
 

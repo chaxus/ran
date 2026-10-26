@@ -1,6 +1,8 @@
 import type { Progress } from '@/components/progress';
 import { Div, View } from '@/utils/builder';
 import type { ElementBuilder } from '@/utils/builder';
+import { uiText } from '@/utils/ui-text';
+import { playerText } from '../text';
 
 /** A keyboard-focusable, labeled control — the play/fullscreen buttons and the
  * seek slider all need the same tabIndex + role + aria-label triple. `title`
@@ -36,6 +38,34 @@ function createIconControl(className: string, iconName: string, ariaLabel: strin
   return focusableRole(Div().class(className), 'button', ariaLabel)
     .children(icon(iconName, sizeVar))
     .build() as HTMLDivElement;
+}
+
+/** The controls whose names are fixed at build time, named again once the player joins a page. */
+export interface PlayerControlLabelRefs {
+  progress: HTMLElement;
+  speed: HTMLElement;
+  volume: HTMLElement;
+  pip: HTMLElement;
+  remote: HTMLElement;
+  fullscreen: HTMLElement;
+}
+
+/**
+ * Names the controls in the page's language. The play button is not here: its name follows
+ * the playback state and `syncPlayButtonState` writes it.
+ */
+export function labelPlayerControls(refs: PlayerControlLabelRefs): void {
+  const name = (element: HTMLElement, key: keyof typeof playerText.en, aria = true): void => {
+    const text = uiText(playerText, key, element);
+    if (aria) element.setAttribute('aria-label', text);
+    element.setAttribute('title', text);
+  };
+  name(refs.progress, 'player.seek');
+  name(refs.speed, 'player.speed');
+  name(refs.volume, 'player.volume', false);
+  name(refs.pip, 'player.pip');
+  name(refs.remote, 'player.cast');
+  name(refs.fullscreen, 'player.fullscreen');
 }
 
 export interface SpeedOption {
@@ -127,7 +157,11 @@ export function ensurePlayerView(input: {
   // syncProgressByPercentage) carries the actual "current of total" time
   // for a screen reader, since a bare percentage isn't very meaningful for
   // a seek bar.
-  const progress = focusableRole(Div().class('ran-player-controller-progress'), 'slider', 'Seek')
+  const progress = focusableRole(
+    Div().class('ran-player-controller-progress'),
+    'slider',
+    uiText(playerText, 'player.seek'),
+  )
     .aria('valuemin', '0')
     .aria('valuemax', '100')
     .children(progressWrap, progressDot)
@@ -137,7 +171,7 @@ export function ensurePlayerView(input: {
   const playerControllerBottomPlayBtn = focusableRole(
     Div().class('ran-player-controller-bottom-left-btn'),
     'button',
-    'Play',
+    uiText(playerText, 'player.play'),
   )
     .children(playerControllerBottomPlayBtnIcon)
     .build() as HTMLDivElement;
@@ -168,8 +202,8 @@ export function ensurePlayerView(input: {
     .attr('placement', 'top')
     .attr('getPopupContainerId', playerIdentifier)
     .attr('dropdownclass', 'video-speed-dropdown')
-    .aria('label', 'Playback speed')
-    .attr('title', 'Playback speed')
+    .aria('label', uiText(playerText, 'player.speed'))
+    .attr('title', uiText(playerText, 'player.speed'))
     .children(...speedOptions.map((item) => View('r-option').attr('value', `${item.value}`).text(item.label).build()))
     .build() as HTMLElement;
   playControllerBottomSpeedPopover.addEventListener('change', onSpeedChange);
@@ -190,7 +224,7 @@ export function ensurePlayerView(input: {
     .build() as Progress;
   const playControllerBottomVolume = Div()
     .class('ran-player-controller-bottom-right-volume')
-    .attr('title', 'Volume')
+    .attr('title', uiText(playerText, 'player.volume'))
     .children(playControllerBottomVolumeIcon, playControllerBottomVolumeProgress)
     .build() as HTMLDivElement;
 
@@ -210,7 +244,7 @@ export function ensurePlayerView(input: {
   const playControllerBottomPip = createIconControl(
     'ran-player-controller-bottom-right-pip ran-player-controller-bottom-right-pip-hidden',
     'pip',
-    'Picture in picture',
+    uiText(playerText, 'player.pip'),
     'var(--ran-player-pip-width, 20px)',
   );
   // Hidden by default, same reasoning/mechanism as PiP above — visibility toggled by
@@ -218,13 +252,13 @@ export function ensurePlayerView(input: {
   const playControllerBottomRemote = createIconControl(
     'ran-player-controller-bottom-right-remote ran-player-controller-bottom-right-remote-hidden',
     'cast',
-    'Cast to device',
+    uiText(playerText, 'player.cast'),
     'var(--ran-player-remote-width, 20px)',
   );
   const playControllerBottomRightFullScreen = createIconControl(
     'ran-player-controller-bottom-right-full',
     'fullscreen',
-    'Fullscreen',
+    uiText(playerText, 'player.fullscreen'),
     'var(--ran-player-fullscreen-width, 20px)',
   );
 

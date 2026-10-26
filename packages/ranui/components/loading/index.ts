@@ -1,4 +1,6 @@
 import loadingCss from './index.less?inline';
+import { uiText } from '@/utils/ui-text';
+import { loadingText } from './text';
 import { RanElement } from '@/utils/index';
 import { Div } from '@/utils/builder';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
@@ -148,7 +150,7 @@ export class Loading extends RanElement {
       this._authorLabel = null;
       this._ownsLabel = false;
     } else if (this._ownsLabel || !this.hasAttribute('aria-label')) {
-      this.setAttribute('aria-label', 'Loading');
+      this.setAttribute('aria-label', uiText(loadingText, 'loading.label', this));
       this._ownsLabel = true;
     }
   }

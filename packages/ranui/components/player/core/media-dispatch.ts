@@ -94,7 +94,7 @@ export function createMediaEventHandlers(deps: PlayerMediaDispatchDeps): PlayerM
       state.isSwitchingSource = false;
       deps.setLoadingState(false);
       deps.change('error', e);
-      deps.showErrorModal(describeMediaError(deps.getVideo()?.error));
+      deps.showErrorModal(describeMediaError(deps.getVideo()?.error, deps.refs.playerBtn));
     },
     onLoadedmetadata: (e: Event): void => {
       ctx.currentState = e.type;

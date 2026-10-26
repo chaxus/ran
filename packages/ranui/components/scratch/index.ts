@@ -3,6 +3,8 @@ import { Div, EventManager, Slot, View } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import { uiText } from '@/utils/ui-text';
+import { scratchText } from './text';
 
 /** Auto-reveals the rest once this fraction of the canvas has been stroked over — a
  * common scratch-card UX (scratch a bit, the reveal completes on its own) rather than
@@ -91,13 +93,13 @@ class ScratchTicket extends RanElement {
     setStringAttribute(this, 'sheet', value);
   }
   get revealLabel(): string {
-    return getStringAttribute(this, 'reveal-label') || 'Reveal';
+    return getStringAttribute(this, 'reveal-label') || uiText(scratchText, 'scratch.reveal', this);
   }
   set revealLabel(value: string) {
     setStringAttribute(this, 'reveal-label', value);
   }
   get revealedLabel(): string {
-    return getStringAttribute(this, 'revealed-label') || 'Revealed';
+    return getStringAttribute(this, 'revealed-label') || uiText(scratchText, 'scratch.revealed', this);
   }
   set revealedLabel(value: string) {
     setStringAttribute(this, 'revealed-label', value);

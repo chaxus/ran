@@ -123,9 +123,26 @@ i18n.addMessages('fr', fr); // wird in ein vorhandenes 'fr'-Wörterbuch eingefü
 i18n.setLocale('fr');
 ```
 
+## Eingebaute Komponententexte
+
+Die wenigen Zeichenketten, die eine Komponente selbst schreibt (die zugänglichen Namen der Player-Bedienelemente, die Schaltflächen zum Kopieren und Herunterladen in `r-markdown`, `r-math` und `r-mermaid`, Validierungsmeldungen, der Limit-Hinweis des Token-Zählers), folgen der Sprache der Lesenden. ranui nimmt die Locale der i18n-Instanz der App, falls eine registriert ist, sonst das nächstgelegene `lang`-Attribut (meist `<html lang>`). Mitgeliefert werden Chinesisch, Japanisch, Koreanisch, Spanisch, Portugiesisch, Deutsch und Persisch; jede andere Sprache bekommt Englisch.
+
+Um eine davon zu ändern, definiere `ranui.<key>` in deinem eigenen Wörterbuch. Das hat Vorrang vor der eingebauten Tabelle:
+
+```js
+createI18n({
+  messages: {
+    en: { 'ranui.player.error': 'This video is unavailable' },
+    zh: { 'ranui.player.error': '视频暂时无法播放' },
+  },
+});
+```
+
+Die Schlüssel jeder Komponente und ihr englischer Text stehen in deren eigener Datei `components/<name>/text.ts` im ranui-Quellcode. Ein am Element gesetztes Attribut wie `label` oder `label-*` gewinnt weiterhin gegen beides. Der Text wird beim Schreiben aufgelöst: wenn das Element verbunden wird oder sich der Zustand ändert, den es beschreibt. Nach einem Sprachwechsel zur Laufzeit behält ein Element, das schon auf der Seite steht, seinen Text also bis zum nächsten Schreiben; soll der Wechsel sofort greifen, setze die Beschriftungen wie unten gezeigt neu.
+
 ## Komponententexte lokalisieren
 
-Die Komponenten lesen **nicht** selbst aus dieser Engine. Das ist Absicht: Eine Komponente, die direkt aus einem globalen Singleton läse, bände jeden Verwender an eine Instanz und ein Schlüsselschema — und eine Seite, die eine einzige Schaltfläche importiert, zöge die Übersetzungsschicht gleich mit. Stattdessen ist **jede sichtbare Zeichenkette eine Eingabe**: ein Attribut, eine Eigenschaft, eine Option oder Slot-Inhalt. ranui zu lokalisieren heißt also, die Ausgabe von `t()` dort einzusetzen, wo die Zeichenkette ohnehin hingehört:
+Jede sichtbare Zeichenkette ist zugleich eine Eingabe: ein Attribut, eine Eigenschaft, eine Option oder Slot-Inhalt. Was du dort übergibst, gewinnt gegen den eingebauten Text. Der andere Weg, ranui zu lokalisieren, ist also, die Ausgabe von `t()` dort einzusetzen, wo die Zeichenkette ohnehin hingehört:
 
 ```js
 const i18n = useI18n(); // die Nachrichten unten gelten als registriert
@@ -134,17 +151,19 @@ modal.setAttribute('title', i18n.t('dialog.deleteProject.title'));
 themeSwitch.setAttribute('label-dark', i18n.t('theme.dark'));
 ```
 
-Die meisten Komponenten haben überhaupt keinen eigenen Text: Er kommt über Slots und Attribute, die du ohnehin schreibst. Eine Handvoll bringt eine englische Vorgabe für eine Zeichenkette mit, die sonst nirgends herkommt — meist zugängliche Namen:
+Die meisten Komponenten haben überhaupt keinen eigenen Text: Er kommt über Slots und Attribute, die du ohnehin schreibst. Das hier sind die Zeichenketten, die sonst nirgends herkommen, und die Eingaben, die sie ersetzen; die Tabelle zeigt den englischen Text:
 
-| Komponente                                        | Eingebautes Englisch                                                                                                       | Überschreiben mit                                    |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `Modal.confirm` / `Modal.open`                    | Titel `Confirm`, Schaltflächen `OK` / `Cancel`                                                                             | den Optionen `title`, `okText`, `cancelText`         |
-| `Modal.info` / `.success` / `.warning` / `.error` | Titel `Info` / `Success` / `Warning` / `Error`                                                                             | der Option `title`                                   |
-| `<r-theme-switch>`                                | aria-labels `Theme`, `System theme`, `Light theme`, `Dark theme`                                                           | `label`, `label-system`, `label-light`, `label-dark` |
-| `<r-voice-button>`                                | aria-labels `Start voice input` / `Stop voice input`; Hinweise `Release to keep · slide up to cancel`, `Release to cancel` | `label`, `active-label`, `hold-hint`, `cancel-hint`  |
-| `<r-reasoning>`                                   | Kopfzeilen-Beschriftung `Reasoning`                                                                                        | `label`                                              |
-| `<r-token-meter>`                                 | Beschriftung `Context`                                                                                                     | `label`                                              |
-| `<r-colorpicker>`                                 | aria-labels `Choose color`, `Hue`, `Alpha opacity`                                                                         | `label`, `hue-label`, `alpha-label`                  |
+| Komponente                                        | Eingebautes Englisch                                                                                                       | Überschreiben mit                                        |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `Modal.confirm` / `Modal.open`                    | Titel `Confirm`, Schaltflächen `OK` / `Cancel`                                                                             | den Optionen `title`, `okText`, `cancelText`             |
+| `Modal.info` / `.success` / `.warning` / `.error` | Titel `Info` / `Success` / `Warning` / `Error`                                                                             | der Option `title`                                       |
+| `<r-theme-switch>`                                | aria-labels `Theme`, `System theme`, `Light theme`, `Dark theme`                                                           | `label`, `label-system`, `label-light`, `label-dark`     |
+| `<r-voice-button>`                                | aria-labels `Start voice input` / `Stop voice input`; Hinweise `Release to keep · slide up to cancel`, `Release to cancel` | `label`, `active-label`, `hold-hint`, `cancel-hint`      |
+| `<r-reasoning>`                                   | Kopfzeilen-Beschriftung `Reasoning`                                                                                        | `label`                                                  |
+| `<r-token-meter>`                                 | Beschriftung `Context`                                                                                                     | `label`                                                  |
+| `<r-colorpicker>`                                 | aria-labels `Choose color`, `Hue`, `Alpha opacity`                                                                         | `label`, `hue-label`, `alpha-label`                      |
+| `<r-player>`                                      | Titel des Fehlerfelds `Playback failed`, Schaltfläche `Retry`                                                              | `label-error`, `label-retry`                             |
+| `<r-markdown>` / `<r-math>` / `<r-mermaid>`       | Werkzeugleiste, etwa `Copy code` und `Download`                                                                            | `label-copy`, `label-download` und die übrigen `label-*` |
 
 Praktisch bewährt es sich, sie bei jedem Sprachwechsel von einer Stelle aus neu zu setzen, damit derselbe Code beim Start und nach einem Wechsel läuft:
 
