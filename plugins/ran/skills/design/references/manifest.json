@@ -10,9 +10,9 @@
     },
     {
       "source": "design/DESIGN.md",
-      "sha256": "d86047263a277d826b78f47be9047347c185644519848182f201bd88290ec023",
+      "sha256": "721826efb2aec84d4a4a7e1cfbbae965565552a7282ed421016363c108dd1561",
       "output": "DESIGN.md",
-      "outputSha256": "9ab31940344312fc9ec6e8a3a0d72e91b5b041147c96f9db3655c020d3856d8b"
+      "outputSha256": "7f55157cb8a69a318c127993115b3181864e7103d0a226bdb8f98967ccf50445"
     },
     {
       "source": "design/INTERACTION.md",
@@ -40,9 +40,9 @@
     },
     {
       "source": "design/RULES.md",
-      "sha256": "00af9598a8ed484d37df7009fc509ab8e217f832a827f4efabc022500f8ee930",
+      "sha256": "ddb0bedc64df4ecf8453a0ecf3587d7a680088b012fa69979337c6453003c517",
       "output": "RULES.md",
-      "outputSha256": "feaf551ae38a49b30c5a52c6800eccac270e6b8a0511f054bb4e62422d12bea0"
+      "outputSha256": "ae22ce0168fdbbed18d54896719eb8df0de0a7e545208ef17725815d9e20c9fc"
     },
     {
       "source": "design/WORKFLOW_PATTERNS.md",
