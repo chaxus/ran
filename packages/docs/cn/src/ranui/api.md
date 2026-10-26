@@ -159,8 +159,13 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
 
 源码: `components/select/dropdown-item/index.ts`
 
-- **属性（attribute）**: `active: string`, `sheet: string`, `title: string`, `value: string`
-- **属性值（property）**: `active: string`, `sheet: string`, `title: string`, `value: string`
+- **属性（attribute）**: `active: string`, `selected: boolean`, `sheet: string`, `title: string`, `value: string`
+- **属性值（property）**:
+  - `active: string` — The transient cursor that pointer hover and arrow keys move; r-select sets it. It shares the hover fill and carries no selection meaning.
+  - `selected: boolean` — Marks the committed choice with a check mark. Unlike `active` (the transient cursor), it stays put while the cursor moves.
+  - `sheet: string`
+  - `title: string`
+  - `value: string`
 - **事件**: —
 - **插槽**: `默认插槽`
 - **Part**: `content`, `item`

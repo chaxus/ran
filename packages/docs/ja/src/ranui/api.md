@@ -161,8 +161,13 @@ description: 'ranui のすべてのカスタム要素 —— 41 個の要素の�
 
 ソース: `components/select/dropdown-item/index.ts`
 
-- **属性（attribute）**: `active: string`, `sheet: string`, `title: string`, `value: string`
-- **プロパティ（property）**: `active: string`, `sheet: string`, `title: string`, `value: string`
+- **属性（attribute）**: `active: string`, `selected: boolean`, `sheet: string`, `title: string`, `value: string`
+- **プロパティ（property）**:
+  - `active: string` — The transient cursor that pointer hover and arrow keys move; r-select sets it. It shares the hover fill and carries no selection meaning.
+  - `selected: boolean` — Marks the committed choice with a check mark. Unlike `active` (the transient cursor), it stays put while the cursor moves.
+  - `sheet: string`
+  - `title: string`
+  - `value: string`
 - **イベント**: —
 - **スロット**: `デフォルトスロット`
 - **Part**: `content`, `item`

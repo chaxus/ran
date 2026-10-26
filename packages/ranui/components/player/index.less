@@ -21,13 +21,16 @@
   // `--ran-color-*` tokens at all), so the border needs the same treatment.
   --ran-dropdown-border: 1px solid rgba(255, 255, 255, 0.12);
   --ran-dropdown-option-item-hover-background-color: rgba(255, 255, 255, 0.15);
-  --ran-dropdown-option-active-hover-background-color: rgba(255, 255, 255, 0.25);
   --ran-dropdown-option-item-padding: 4px 2px;
   --ran-dropdown-option-item-color: #fff;
   --ran-dropdown-option-item-content-color: #fff;
   --ran-dropdown-option-item-content-font-size: var(--ran-text-label-3, 12px);
   --ran-dropdown-option-active-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-option-item-content-text-align: center;
+  // A 56px centred menu has no room for the check; the selected rate keeps a fill instead.
+  --ran-dropdown-option-selected-check-display: none;
+  --ran-dropdown-option-selected-padding-inline-end: 2px;
+  --ran-dropdown-option-selected-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 
   // The panel's own `min-width` defaults to the trigger's width (`r-select`'s
@@ -51,13 +54,16 @@
   // tuned for a light panel and mismatched against this dark one.
   --ran-dropdown-border: 1px solid rgba(255, 255, 255, 0.12);
   --ran-dropdown-option-item-hover-background-color: rgba(255, 255, 255, 0.15);
-  --ran-dropdown-option-active-hover-background-color: rgba(255, 255, 255, 0.25);
   --ran-dropdown-option-item-padding: 4px 2px;
   --ran-dropdown-option-item-color: #fff;
   --ran-dropdown-option-item-content-color: #fff;
   --ran-dropdown-option-item-content-font-size: var(--ran-text-label-3, 12px);
   --ran-dropdown-option-active-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-option-item-content-text-align: center;
+  // A 56px centred menu has no room for the check; the selected rate keeps a fill instead.
+  --ran-dropdown-option-selected-check-display: none;
+  --ran-dropdown-option-selected-padding-inline-end: 2px;
+  --ran-dropdown-option-selected-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 
   // Same reasoning as `.video-speed-dropdown` above — "Auto"/"1080p" were

@@ -112,20 +112,10 @@
   }
 }
 
-// Both consumers that drive this animation via a `transit` attribute — r-popover and
-// r-select — wait a hardcoded 300ms (their own `animationTime` constant) before actually
-// setting `display:none`/removing the panel, matching that duration here so the CSS
-// animation's own opacity fade finishes exactly when the JS timer does. It used to be a
-// flat 0.1s (100ms): the panel visually finished fading 200ms *before* the JS timeout
-// fired, so it sat fully transparent-but-still-`display:block` for that gap — and the
-// arrow (`&-arrow` below, a *sibling* of `.ranui-dropdown` appended straight into
-// `.ranui-dropdown-container`, not a descendant — see `index.ts`'s `arrowIcon` — so it
-// never inherits this animation at all) stayed fully opaque that whole time, then popped
-// out abruptly with the panel at the 300ms cut, reading as "the arrow lags behind."
-// Aligning the durations doesn't give the arrow its own fade, but it does make both
-// disappear at the same instant instead of 200ms apart.
+// Exit timing is read back with getAnimations(), so this duration has no JS copy.
 .animation(@animation, @animation-mode:forwards) {
-  animation: @animation var(--ran-dropdown-animation-duration, 0.3s);
+  animation: @animation var(--ran-dropdown-animation-duration, var(--ran-motion-duration-base, 0.2s))
+    var(--ran-dropdown-animation-timing-function, var(--ran-motion-ease-standard, ease));
   animation-fill-mode: @animation-mode;
 }
 
@@ -178,7 +168,7 @@
   font-weight: var(--ran-dropdown-font-weight, var(--ran-text-label-weight, 500));
   list-style: var(--ran-dropdown-list-style, none);
   font-family: var(--ran-dropdown-font-family, var(--ran-skin-font-family, @font-family));
-  z-index: var(--ran-dropdown-z-index, 1050);
+  z-index: var(--ran-dropdown-z-index, var(--ran-z-dropdown, 1100));
   overflow: var(--ran-dropdown-overflow, hidden);
   font-variant: var(--ran-dropdown-font-variant, initial);
   background: var(--ran-dropdown-background, var(--ran-color-bg-elevated, #ffffff));
@@ -195,6 +185,11 @@
   height: var(--ran-dropdown-height, 100%);
   min-height: var(--ran-dropdown-min-height, 100%);
   min-width: var(--ran-dropdown-min-width, 100%);
+  /* A menu insets its rows by 4px so a row's fill clears the panel's rounded corners. */
+  :host([role='listbox']) &,
+  :host([role='menu']) & {
+    padding: var(--ran-dropdown-padding, var(--ran-space-1, 4px));
+  }
   &-container {
     position: var(--ran-dropdown-container-position, relative);
     display: var(--ran-dropdown-container-display, block);
@@ -331,13 +326,12 @@
         --ran-dropdown-arrow-fill-background,
         var(--ran-dropdown-arrow-tip-background, var(--ran-color-bg-elevated, #fff))
       );
-      // `--ran-dropdown-arrow-shadow` takes a `filter: drop-shadow(...)` value —
-      // NOT the same syntax as the old `--ran-dropdown-arrow-tip-box-shadow`
-      // (a `box-shadow` value), which is why this doesn't chain to that old
-      // variable as a fallback the way `fill` does above: the two properties'
-      // value grammars aren't compatible, so a value meant for one would be
-      // invalid on the other rather than silently doing the same thing.
-      filter: var(--ran-dropdown-arrow-shadow, drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.05)));
+      // `--ran-dropdown-arrow-shadow` takes a `filter` value, not a `box-shadow`.
+      // The default is the panel's hairline traced along the arrow's sloped
+      // edges (a 1px offset toward the tip), so the arrow keeps the panel's edge
+      // in dark mode where a soft shadow would vanish. The box's `overflow:
+      // hidden` clips it at the base, where the panel's own border takes over.
+      filter: var(--ran-dropdown-arrow-shadow, drop-shadow(0 -1px 0 var(--ran-color-border)));
     }
   }
 }

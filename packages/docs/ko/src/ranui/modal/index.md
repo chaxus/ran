@@ -43,7 +43,7 @@ description: 'ranui Modal(<r-modal>)은 집중된 상호작용을 위한 대화 
 | -------------- | --------- | ------- | -------------------------------------------------------- |
 | `open`         | `boolean` | `false` | 모달이 보이는지 여부                                     |
 | `heading`      | `string`  | `''`    | 헤더 제목 텍스트(비어 있으면 `Modal`로 대체)             |
-| `closable`     | `boolean` | `true`  | 닫기(`x`) 버튼을 보일지 여부                             |
+| `closable`     | `boolean` | `true`  | 닫기 버튼을 보일지 여부                                  |
 | `maskClosable` | `boolean` | `true`  | 배경 마스크를 클릭했을 때 닫을지 여부                    |
 | `closeOnEsc`   | `boolean` | `true`  | `Escape`를 눌렀을 때 닫을지 여부                         |
 | `lockScroll`   | `boolean` | `true`  | 모달이 열려 있는 동안 body 스크롤을 잠글지 여부          |
@@ -208,7 +208,7 @@ if (result.action === 'confirm') {
 | `dialog` | 대화 상자 본체         |
 | `header` | 헤더 막대              |
 | `title`  | 제목 헤딩              |
-| `close`  | 닫기(`x`) 버튼         |
+| `close`  | 닫기 버튼              |
 | `body`   | 스크롤되는 본문 영역   |
 | `footer` | 푸터 동작 막대         |
 

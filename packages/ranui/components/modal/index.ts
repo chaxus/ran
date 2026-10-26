@@ -1,4 +1,6 @@
 import modalCss from './index.less?inline';
+import closeIcon from '@/assets/icons/close.svg?raw';
+import { registerIcon } from '@/components/icon';
 import {
   FLOATING_CHANGE,
   floatingPanelsWithin,
@@ -11,6 +13,9 @@ import { falseList } from '@/utils/dom';
 import { ButtonBuilder, Div, EventManager, Slot, View } from '@/utils/builder';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
+
+// Self-registered so the dialog's own chrome needs no lazy icon fetch on first open.
+registerIcon('close', closeIcon);
 
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -108,7 +113,7 @@ export class Modal extends RanElement {
                   .part('close')
                   .attr('type', 'button')
                   .label('Close dialog')
-                  .text('x'),
+                  .children(View('r-icon').class('ran-modal-close-icon').attr('name', 'close').attr('decorative', '')),
               ),
             Div().class('ran-modal-body').part('body').children(Slot()),
             View('footer').class('ran-modal-footer').part('footer').children(Slot().attr('name', 'footer')),
@@ -665,11 +670,14 @@ export class Modal extends RanElement {
 
       let action: ModalProgrammaticAction = 'dismiss';
 
-      const footerBuilder = Div().attr('slot', 'footer').class('ran-modal-actions');
+      // Each action is slotted on its own: ::slotted() reaches only top-level slotted
+      // elements, so buttons inside a wrapper could never take the action styles.
+      const footer: HTMLButtonElement[] = [];
 
       if (showCancel) {
         const cancelButton = ButtonBuilder()
           .attr('type', 'button')
+          .attr('slot', 'footer')
           .class('ran-modal-action ran-modal-action-cancel')
           .text(cancelText)
           .build();
@@ -679,11 +687,12 @@ export class Modal extends RanElement {
           action = 'cancel';
           modal.close('program');
         });
-        footerBuilder.children(cancelButton);
+        footer.push(cancelButton);
       }
 
       const okButton = ButtonBuilder()
         .attr('type', 'button')
+        .attr('slot', 'footer')
         .class('ran-modal-action ran-modal-action-confirm')
         .text(okText)
         .build();
@@ -698,9 +707,9 @@ export class Modal extends RanElement {
           okButton.disabled = false;
         }
       });
-      footerBuilder.children(okButton);
+      footer.push(okButton);
 
-      modal.appendChild(footerBuilder.build());
+      modal.append(...footer);
 
       const onAfterClose = (event: Event) => {
         const trigger = ((event as CustomEvent).detail?.trigger || 'program') as ModalCloseTrigger;

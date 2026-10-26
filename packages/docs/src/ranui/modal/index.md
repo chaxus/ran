@@ -43,7 +43,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 | -------------- | --------- | ------- | ------------------------------------------------------------- |
 | `open`         | `boolean` | `false` | Whether the modal is visible                                  |
 | `heading`      | `string`  | `''`    | Header title text (falls back to `Modal` when empty)          |
-| `closable`     | `boolean` | `true`  | Whether the close (`x`) button is shown                       |
+| `closable`     | `boolean` | `true`  | Whether the close button is shown                             |
 | `maskClosable` | `boolean` | `true`  | Whether clicking the backdrop mask closes the modal           |
 | `closeOnEsc`   | `boolean` | `true`  | Whether pressing `Escape` closes the modal                    |
 | `lockScroll`   | `boolean` | `true`  | Whether body scroll is locked while the modal is open         |
@@ -208,7 +208,7 @@ Style internal pieces with `::part()`.
 | `dialog` | The dialog box             |
 | `header` | Header bar                 |
 | `title`  | Title heading              |
-| `close`  | Close (`x`) button         |
+| `close`  | Close button               |
 | `body`   | Scrollable body region     |
 | `footer` | Footer action bar          |
 

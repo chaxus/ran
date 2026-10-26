@@ -1,4 +1,3 @@
-import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import less from './index.less?inline';
 import { createRef, Div, Slot } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
@@ -17,7 +16,7 @@ export class DropdownItem extends RanElement {
   _shadowDom: ShadowRoot;
   ionDropdownItemContent: HTMLElement;
   static get observedAttributes(): string[] {
-    return ['active', 'value', 'title', 'sheet'];
+    return ['active', 'selected', 'value', 'title', 'sheet'];
   }
   constructor() {
     super();
@@ -51,6 +50,9 @@ export class DropdownItem extends RanElement {
       this.removeAttribute('value');
     }
   }
+  /**
+   * The transient cursor that pointer hover and arrow keys move; r-select sets it. It shares the hover fill and carries no selection meaning.
+   */
   get active(): string {
     return getStringAttribute(this, 'active');
   }
@@ -60,6 +62,15 @@ export class DropdownItem extends RanElement {
     } else {
       this.removeAttribute('active');
     }
+  }
+  /**
+   * Marks the committed choice with a check mark. Unlike `active` (the transient cursor), it stays put while the cursor moves.
+   */
+  get selected(): boolean {
+    return this.hasAttribute('selected');
+  }
+  set selected(value: boolean) {
+    this.toggleAttribute('selected', !!value);
   }
   get title(): string {
     return getStringAttribute(this, 'title');
@@ -82,20 +93,16 @@ export class DropdownItem extends RanElement {
   };
   connectedCallback(): void {
     this.handlerExternalCss();
-    if (this.active) {
-      addClassToElement(this.ionDropdownItem, 'ranui-dropdown-option-active');
-    }
+    this.ionDropdownItem.classList.toggle('ranui-dropdown-option-active', !!this.active);
+    this.ionDropdownItem.classList.toggle('ranui-dropdown-option-selected', this.selected);
   }
   attributeChangedCallback(name: string, _: string, newValue: string): void {
     if (name === 'sheet') {
       this.handlerExternalCss();
       return;
     }
-    if (name === 'active' && newValue) {
-      addClassToElement(this.ionDropdownItem, 'ranui-dropdown-option-active');
-    } else {
-      removeClassToElement(this.ionDropdownItem, 'ranui-dropdown-option-active');
-    }
+    if (name === 'active') this.ionDropdownItem.classList.toggle('ranui-dropdown-option-active', !!newValue);
+    if (name === 'selected') this.ionDropdownItem.classList.toggle('ranui-dropdown-option-selected', newValue !== null);
   }
 }
 

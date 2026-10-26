@@ -160,8 +160,13 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
 
 소스: `components/select/dropdown-item/index.ts`
 
-- **어트리뷰트**: `active: string`, `sheet: string`, `title: string`, `value: string`
-- **프로퍼티**: `active: string`, `sheet: string`, `title: string`, `value: string`
+- **어트리뷰트**: `active: string`, `selected: boolean`, `sheet: string`, `title: string`, `value: string`
+- **프로퍼티**:
+  - `active: string` — The transient cursor that pointer hover and arrow keys move; r-select sets it. It shares the hover fill and carries no selection meaning.
+  - `selected: boolean` — Marks the committed choice with a check mark. Unlike `active` (the transient cursor), it stays put while the cursor moves.
+  - `sheet: string`
+  - `title: string`
+  - `value: string`
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`
 - **Part**: `content`, `item`

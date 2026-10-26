@@ -41,14 +41,6 @@ const typeMapIcon = new Map([
   ['toast', null],
 ]);
 
-const typeMapColor = new Map([
-  ['success', '#52c41a'],
-  ['warning', '#faad14'],
-  ['error', '#ff4d4f'],
-  ['info', '#006bff'],
-  ['toast', 'rgba(0, 0, 0, 0.7)'],
-]);
-
 export class CustomMessage extends RanElement {
   _info: HTMLDivElement;
   _notice: HTMLDivElement;
@@ -78,7 +70,7 @@ export class CustomMessage extends RanElement {
             Div()
               .class('ran-message-notice-content-info')
               .ref(infoRef)
-              .children(View('r-icon').ref(iconRef), Span().ref(spanRef)),
+              .children(View('r-icon').class('ran-message-icon').ref(iconRef), Span().ref(spanRef)),
           ),
       )
       .build() as HTMLDivElement;
@@ -128,17 +120,10 @@ export class CustomMessage extends RanElement {
     const assertive = value === 'error' || value === 'warning';
     this.setAttribute('role', assertive ? 'alert' : 'status');
   };
+  // Colour, size and spacing come from index.less keyed on :host([type]), so they flip with the theme.
   setIcon = (value: string) => {
     const icon = typeMapIcon.get(value);
-    const color = typeMapColor.get(value);
-    if (icon) {
-      this._icon?.setAttribute('name', icon);
-      this._icon?.style.setProperty('margin-right', '8px');
-      this._icon?.setAttribute('size', '18');
-      if (color) {
-        this._icon?.setAttribute('color', color);
-      }
-    }
+    if (icon) this._icon?.setAttribute('name', icon);
   };
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue === newValue) return;

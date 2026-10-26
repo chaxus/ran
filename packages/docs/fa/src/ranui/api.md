@@ -160,8 +160,13 @@ description: 'همهٔ عناصر سفارشی ranui — 41 عنصر همراه 
 
 کد منبع: `components/select/dropdown-item/index.ts`
 
-- **ویژگی‌ها (attribute)**: `active: string`, `sheet: string`, `title: string`, `value: string`
-- **خصیصه‌ها (property)**: `active: string`, `sheet: string`, `title: string`, `value: string`
+- **ویژگی‌ها (attribute)**: `active: string`, `selected: boolean`, `sheet: string`, `title: string`, `value: string`
+- **خصیصه‌ها (property)**:
+  - `active: string` — The transient cursor that pointer hover and arrow keys move; r-select sets it. It shares the hover fill and carries no selection meaning.
+  - `selected: boolean` — Marks the committed choice with a check mark. Unlike `active` (the transient cursor), it stays put while the cursor moves.
+  - `sheet: string`
+  - `title: string`
+  - `value: string`
 - **رویدادها**: —
 - **اسلات‌ها**: `پیش‌فرض`
 - **Part‌ها**: `content`, `item`

@@ -386,22 +386,22 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `dropdown`
 
-- Tokens: 26
+- Tokens: 30
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 6 · skin: 1 · component: 17 · internal: 2 -->
+<!-- layers: semantic: 8 · skin: 1 · component: 17 · internal: 4 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-text`
 - `--ran-dropdown-animation-duration`
+- `--ran-dropdown-animation-timing-function`
 - `--ran-dropdown-arrow-anchor-offset`
 - `--ran-dropdown-arrow-fill-background`
 - `--ran-dropdown-arrow-overlap`
 - `--ran-dropdown-arrow-shadow`
 - `--ran-dropdown-arrow-shape-offset`
 - `--ran-dropdown-arrow-tip-background`
-- `--ran-dropdown-arrow-tip-box-shadow`
 - `--ran-dropdown-background`
 - `--ran-dropdown-border`
 - `--ran-dropdown-border-radius`
@@ -411,12 +411,16 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-dropdown-font-size`
 - `--ran-dropdown-font-variant`
 - `--ran-dropdown-font-weight`
+- `--ran-motion-duration-base`
+- `--ran-motion-ease-standard`
 - `--ran-radius-md`
 - `--ran-shadow-elevated`
 - `--ran-shadow-menu`
 - `--ran-skin-font-family`
+- `--ran-space-1`
 - `--ran-text-label-1`
 - `--ran-text-label-weight`
+- `--ran-z-dropdown`
 
 ### Parts
 - `dropdown`
@@ -1223,25 +1227,39 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `message`
 
-- Tokens: 47
+- Tokens: 63
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 5 · component: 37 · internal: 5 -->
+<!-- layers: semantic: 12 · component: 45 · internal: 6 -->
+- `--ran-color-bg`
 - `--ran-color-bg-elevated`
+- `--ran-color-border`
+- `--ran-color-danger`
+- `--ran-color-link`
+- `--ran-color-success`
 - `--ran-color-text`
+- `--ran-color-warning-foreground`
 - `--ran-message-color`
 - `--ran-message-content-background`
+- `--ran-message-content-border`
 - `--ran-message-content-border-image-slice`
 - `--ran-message-content-border-image-source`
 - `--ran-message-content-border-radius`
 - `--ran-message-content-box-shadow`
 - `--ran-message-content-toast-background`
+- `--ran-message-content-toast-border`
 - `--ran-message-content-toast-border-radius`
 - `--ran-message-font-feature-settings`
 - `--ran-message-font-size`
 - `--ran-message-font-variant`
 - `--ran-message-font-weight`
+- `--ran-message-icon-error-color`
+- `--ran-message-icon-gap`
+- `--ran-message-icon-info-color`
+- `--ran-message-icon-size`
+- `--ran-message-icon-success-color`
+- `--ran-message-icon-warning-color`
 - `--ran-message-in-animation-duration`
 - `--ran-message-in-animation-fill-mode`
 - `--ran-message-in-animation-name`
@@ -1267,9 +1285,11 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-message-text-toast-font-size`
 - `--ran-message-text-toast-font-variant`
 - `--ran-message-text-toast-font-weight`
+- `--ran-motion-duration-base`
+- `--ran-motion-ease-standard`
 - `--ran-radius-md`
-- `--ran-radius-sm`
 - `--ran-shadow-menu`
+- `--ran-space-2`
 - `--ran-space-3`
 - `--ran-space-4`
 - `--ran-text-copy-2`
@@ -1281,27 +1301,35 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `modal`
 
-- Tokens: 42
+- Tokens: 56
 - Parts: 8
 
 ### Tokens
-<!-- layers: semantic: 11 · component: 23 · internal: 8 -->
+<!-- layers: semantic: 15 · component: 29 · internal: 12 -->
 - `--ran-color-bg-elevated`
+- `--ran-color-bg-hover`
 - `--ran-color-border`
 - `--ran-color-border-secondary`
 - `--ran-color-primary`
 - `--ran-color-primary-text`
 - `--ran-color-text`
 - `--ran-color-text-secondary`
+- `--ran-focus-ring`
 - `--ran-modal-action-font-size`
 - `--ran-modal-action-font-weight`
 - `--ran-modal-actions-gap`
 - `--ran-modal-body-color`
 - `--ran-modal-close-background`
 - `--ran-modal-close-border`
+- `--ran-modal-close-border-radius`
 - `--ran-modal-close-color`
 - `--ran-modal-close-font-size`
+- `--ran-modal-close-hover-background`
+- `--ran-modal-close-hover-color`
+- `--ran-modal-close-size`
+- `--ran-modal-close-touch-size`
 - `--ran-modal-dialog-background`
+- `--ran-modal-dialog-border`
 - `--ran-modal-dialog-border-image-slice`
 - `--ran-modal-dialog-border-image-source`
 - `--ran-modal-dialog-border-radius`
@@ -1316,10 +1344,16 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-modal-title-font-size`
 - `--ran-modal-title-font-weight`
 - `--ran-modal-title-letter-spacing`
+- `--ran-motion-duration-fast`
+- `--ran-motion-duration-slow`
+- `--ran-motion-ease-standard`
 - `--ran-radius-md`
 - `--ran-radius-sm`
 - `--ran-shadow-elevated`
 - `--ran-shadow-modal`
+- `--ran-size-7`
+- `--ran-space-1`
+- `--ran-space-2`
 - `--ran-space-3`
 - `--ran-space-4`
 - `--ran-text-button-size`
@@ -1353,12 +1387,12 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-dropdown-border`
 - `--ran-dropdown-box-shadow`
 - `--ran-dropdown-option-active-background-color`
-- `--ran-dropdown-option-active-hover-background-color`
 - `--ran-dropdown-option-item-color`
 - `--ran-dropdown-option-item-content-color`
 - `--ran-dropdown-option-item-content-font-size`
 - `--ran-dropdown-option-item-content-text-align`
 - `--ran-dropdown-option-item-hover-background-color`
+- `--ran-dropdown-option-selected-background-color`
 - `--ran-focus-ring-inverse-color`
 - `--ran-media-background`
 - `--ran-player-background`
@@ -1805,17 +1839,15 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `select/dropdown-item`
 
-- Tokens: 20
+- Tokens: 23
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 15 · internal: 2 -->
-- `--ran-blue-100`
+<!-- layers: semantic: 4 · component: 16 · internal: 3 -->
+- `--ran-color-bg-hover`
 - `--ran-color-text`
 - `--ran-color-text-disabled`
 - `--ran-dropdown-option-active-background-color`
-- `--ran-dropdown-option-active-font-weight`
-- `--ran-dropdown-option-active-hover-background-color`
 - `--ran-dropdown-option-item-border-radius`
 - `--ran-dropdown-option-item-color`
 - `--ran-dropdown-option-item-content-color`
@@ -1828,8 +1860,13 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-dropdown-option-item-font-weight`
 - `--ran-dropdown-option-item-hover-background-color`
 - `--ran-dropdown-option-item-transition`
-- `--ran-gray-alpha-100`
+- `--ran-dropdown-option-selected-background-color`
+- `--ran-dropdown-option-selected-check-color`
+- `--ran-dropdown-option-selected-font-weight`
 - `--ran-radius-sm`
+- `--ran-space-2`
+- `--ran-space-3`
+- `--ran-text-label-1`
 
 ### Parts
 - `content`

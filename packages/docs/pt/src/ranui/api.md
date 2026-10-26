@@ -163,8 +163,13 @@ Código-fonte: `components/dropdown/index.ts`
 
 Código-fonte: `components/select/dropdown-item/index.ts`
 
-- **Atributos**: `active: string`, `sheet: string`, `title: string`, `value: string`
-- **Propriedades**: `active: string`, `sheet: string`, `title: string`, `value: string`
+- **Atributos**: `active: string`, `selected: boolean`, `sheet: string`, `title: string`, `value: string`
+- **Propriedades**:
+  - `active: string` — The transient cursor that pointer hover and arrow keys move; r-select sets it. It shares the hover fill and carries no selection meaning.
+  - `selected: boolean` — Marks the committed choice with a check mark. Unlike `active` (the transient cursor), it stays put while the cursor moves.
+  - `sheet: string`
+  - `title: string`
+  - `value: string`
 - **Eventos**: —
 - **Slots**: `padrão`
 - **Partes**: `content`, `item`

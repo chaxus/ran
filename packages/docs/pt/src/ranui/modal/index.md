@@ -43,7 +43,7 @@ A visibilidade do modal é controlada pelo atributo `open` (ou pela propriedade 
 | -------------- | --------- | ------- | ---------------------------------------------------------------------------- |
 | `open`         | `boolean` | `false` | Se o modal está visível                                                      |
 | `heading`      | `string`  | `''`    | Texto do título do cabeçalho (recai em `Modal` quando vazio)                 |
-| `closable`     | `boolean` | `true`  | Se o botão de fechar (`x`) aparece                                           |
+| `closable`     | `boolean` | `true`  | Se o botão de fechar aparece                                                 |
 | `maskClosable` | `boolean` | `true`  | Se clicar na máscara de fundo fecha o modal                                  |
 | `closeOnEsc`   | `boolean` | `true`  | Se pressionar `Escape` fecha o modal                                         |
 | `lockScroll`   | `boolean` | `true`  | Se a rolagem do body fica travada enquanto o modal está aberto               |
@@ -208,7 +208,7 @@ Estilize as peças internas com `::part()`.
 | `dialog` | A caixa do diálogo          |
 | `header` | Barra de cabeçalho          |
 | `title`  | Título                      |
-| `close`  | Botão de fechar (`x`)       |
+| `close`  | Botão de fechar             |
 | `body`   | Região do corpo, rolável    |
 | `footer` | Barra de ações do rodapé    |
 

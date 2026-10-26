@@ -110,6 +110,7 @@ export class Select extends RanElement {
   _optionLabelMapValue: Map<string, string>;
   _optionValueMapLabel: Map<string, string>;
   _activeOption?: HTMLElement;
+  _lastPointerAt = '';
   _text: HTMLSpanElement;
   _selector: HTMLDivElement;
   _label: HTMLLabelElement | undefined;
@@ -498,6 +499,12 @@ export class Select extends RanElement {
       this.open = false;
       return;
     }
+    // Each opening starts the cursor on the committed value, whatever a previous hover left.
+    if (this.open) {
+      const value = this.getAttribute('value');
+      const selected = this.getDropdownOptions().findIndex((item) => !!value && item.getAttribute('value') === value);
+      if (selected >= 0) this.setActiveOptionByIndex(selected, false);
+    }
     this._floating.apply(this.open);
   };
 
@@ -525,8 +532,11 @@ export class Select extends RanElement {
 
   syncActiveState = (): void => {
     const options = this.getDropdownOptions();
+    const value = this.getAttribute('value') || '';
     options.forEach((item, index) => {
       item.setAttribute('role', 'option');
+      // `active` is the moving cursor; `selected` is the committed value and stays put.
+      item.toggleAttribute('selected', !!value && item.getAttribute('value') === value);
       item.setAttribute('aria-selected', item === this._activeOption ? 'true' : 'false');
       if (!item.id) {
         item.id = `${this._listboxId}-option-${index}`;
@@ -539,7 +549,19 @@ export class Select extends RanElement {
     }
   };
 
-  setActiveOptionByIndex = (targetIndex: number): void => {
+  /** Pointer hover moves the same cursor the arrow keys do, so the list shows one transient fill. */
+  _cursorFromPointer = (e: PointerEvent): void => {
+    // Scrolling under a resting pointer can emit a move at the same spot; it must not steal the keyboard cursor.
+    const at = `${e.clientX},${e.clientY}`;
+    if (at === this._lastPointerAt) return;
+    this._lastPointerAt = at;
+    const element = (e.target as Element).closest?.('r-dropdown-item') as HTMLElement | null;
+    if (!element || element === this._activeOption || isDisabled(element)) return;
+    const index = this.getDropdownOptions().indexOf(element);
+    if (index >= 0) this.setActiveOptionByIndex(index, false);
+  };
+
+  setActiveOptionByIndex = (targetIndex: number, reveal = true): void => {
     const options = this.getDropdownOptions();
     if (options.length === 0) return;
     const normalizedIndex = range(targetIndex, 0, options.length - 1);
@@ -558,7 +580,7 @@ export class Select extends RanElement {
     // scrollIntoView also scrolls the page, losing the field's reading position.
     // Move only the owned list surface when the consumer constrains its height.
     const surface = (this._selectionDropdown as Dropdown | undefined)?.dropdown;
-    if (surface && surface.clientHeight > 0 && surface.scrollHeight > surface.clientHeight) {
+    if (reveal && surface && surface.clientHeight > 0 && surface.scrollHeight > surface.clientHeight) {
       const itemRect = next.getBoundingClientRect();
       const listRect = surface.getBoundingClientRect();
       const scale = listRect.height / surface.offsetHeight || 1;
@@ -820,6 +842,7 @@ export class Select extends RanElement {
         .style('-webkit-tap-highlight-color', 'transparent')
         .style('outline', '0')
         .on('click', this.clickOption)
+        .on('pointermove', this._cursorFromPointer)
         .build() as HTMLDivElement;
 
       this._selectionDropdown = View('r-dropdown')
@@ -1109,12 +1132,15 @@ export class Select extends RanElement {
       this._clearSelection();
       return;
     }
-    // Already reflected (e.g. the change came from selectOptionElement itself).
-    if (this._activeOption?.getAttribute('value') === value) return;
     const option = Array.from(this.querySelectorAll('r-option')).find(
       (item) => item.getAttribute('value') === value,
     ) as HTMLElement | undefined;
-    if (option) this.selectOptionElement(option, false);
+    if (!option) return;
+    // Already reflected (e.g. the change came from selectOptionElement itself). Compare with the
+    // committed label, not with _activeOption: hovering moves that cursor without committing.
+    const label = option.getAttribute('title') || option.textContent?.trim() || '';
+    if (this._text.textContent === label) return;
+    this.selectOptionElement(option, false);
   };
 }
 
