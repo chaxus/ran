@@ -37,7 +37,13 @@ Brand accents are contextual.
 
 ## 4. Radius & elevation
 
-- **D-ELEV-1 · SHOULD** Coordinate nested corner radii with their real inset.
+- **D-ELEV-1 · SHOULD** Coordinate nested corner radii with their real inset: inner radius = outer radius −
+  inset. When the result is 2px or less, the shapes no longer read as concentric; give the inner shape its
+  own role radius, or none.
+
+A 16px card with 8px of padding gives its inner panel an 8px radius. The same card with 16px of padding
+leaves nothing to carry over, so the panel takes whatever its own role uses.
+
 - **D-ELEV-2 · SHOULD** Use elevation to explain a floating layer, not importance, through the host’s
   stacking roles, and verify overlays against surrounding chrome.
 
@@ -84,6 +90,18 @@ for examples and limits, and [temporal acceptance](./ACCEPTANCE.md#review-motion
 - **D-MOTION-13 · MUST** Factual values and readable content are shown immediately on return to a working
   surface, without animated counts. _Proof: browser_
 - **D-MOTION-16 · SHOULD** Do not replay decorative title entrances on each return to a working surface.
+- **D-MOTION-17 · SHOULD** Choose entrance motion by what a region holds, from the table below. Stagger in
+  reading order inside one region, not across the page.
+
+| Region holds                                                  | Entrance                                                                           | Afterwards                                                     |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Text, headings, values, forms, navigation, calls to action    | None: present on first paint (D-MOTION-13)                                         | None                                                           |
+| A decorative visual beside text: an icon set, diagram, sketch | Transform only, once, the first time it scrolls into view; none if visible at load | An explanatory loop may run while it is on screen (D-CRAFT-19) |
+| A product mockup or live demo                                 | None for its content; a loading demonstration may move (D-MOTION-14)               | Driven by the reader's own interaction                         |
+| A status indicator                                            | None                                                                               | A pulse only while the activity is live (D-MOTION-15)          |
+
+With reduced motion every region starts in its final state (D-MOTION-10).
+
 - **D-MOTION-14 · MAY** A loading demonstration may move to demonstrate loading.
 - **D-MOTION-15 · MUST** A status pulse appears only while the activity is live. _Proof: review_
 
