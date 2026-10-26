@@ -213,7 +213,7 @@ export class Tabs extends RanElement {
    */
   _onNavResize = (): void => {
     if (this.active) this.setTabLine(this.active);
-    if (this._hovered?.isConnected) this._placeHover(this._hovered);
+    if (this._hovered?.isConnected && !isDisabled(this._hovered)) this._placeHover(this._hovered);
     else if (this._hovered) this._hideHover();
   };
 
@@ -238,6 +238,13 @@ export class Tabs extends RanElement {
     this._hovered = header;
   };
 
+  /** Back to the header the keyboard is on, if any; otherwise away. */
+  private _settleHover = (): void => {
+    const focused = [...this._nav.children].find((header) => this.tabFocusable(header).matches(':focus-visible'));
+    if (focused) this._placeHover(focused);
+    else this._hideHover();
+  };
+
   private _hideHover = (): void => {
     this._hover.style.setProperty('opacity', '0');
     this._hovered = null;
@@ -248,13 +255,12 @@ export class Tabs extends RanElement {
     if (event.pointerType === 'touch') return;
     const header = (event.target as Element).closest?.('.tab-header-nav-item');
     if (!header || header === this._hovered) return;
-    if (isDisabled(header)) this._hideHover();
+    if (isDisabled(header)) this._settleHover();
     else this._placeHover(header);
   };
 
   private _onNavPointerLeave = (): void => {
-    const focused = [...this._nav.children].some((header) => this.tabFocusable(header).matches(':focus-visible'));
-    if (!focused) this._hideHover();
+    this._settleHover();
   };
 
   private _onNavFocusIn = (event: FocusEvent): void => {

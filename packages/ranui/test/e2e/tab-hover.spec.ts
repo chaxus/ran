@@ -65,3 +65,27 @@ test('the fill follows keyboard focus between headers', async ({ page }) => {
   await expect.poll(async () => (await fill(page)).left).toBe(second.left);
   expect((await fill(page)).opacity).toBe('1');
 });
+
+test('with a header focused from the keyboard, the fill returns to it when the pointer leaves', async ({ page }) => {
+  await page.locator('#tabs').evaluate((node) => {
+    const tabs = node as HTMLElement & { _nav: HTMLElement; tabFocusable: (header: Element) => HTMLElement };
+    tabs.tabFocusable(tabs._nav.children[0]).focus();
+  });
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowLeft');
+  const focused = await header(page, 0);
+  const hovered = await header(page, 3);
+  await page.mouse.move(hovered.x, hovered.y);
+  await expect.poll(async () => (await fill(page)).left).toBe(hovered.left);
+  await page.mouse.move(hovered.x, hovered.y + 300);
+  await expect.poll(async () => (await fill(page)).left).toBe(focused.left);
+  expect((await fill(page)).opacity).toBe('1');
+});
+
+test('a hovered header that becomes disabled loses the fill', async ({ page }) => {
+  const target = await header(page, 1);
+  await page.mouse.move(target.x, target.y);
+  await expect.poll(async () => (await fill(page)).opacity).toBe('1');
+  await page.locator('r-tab[r-key="b"]').evaluate((tab) => tab.setAttribute('disabled', ''));
+  await expect.poll(async () => (await fill(page)).opacity).toBe('0');
+});
