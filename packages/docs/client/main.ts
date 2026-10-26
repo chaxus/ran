@@ -22,6 +22,7 @@ import { mountDemos } from './home.ts';
 import { mountEntrance } from './entrance.ts';
 import { mountNavigation, mountCodeCopy } from './interactions.ts';
 import { mountPlaygrounds } from './playground.ts';
+import { mountSidebar } from './sidebar.ts';
 
 cacheVisitedAssets();
 mountComponents();
@@ -70,6 +71,7 @@ mountDemos();
 mountEntrance();
 
 mountNavigation();
+mountSidebar();
 mountCodeCopy();
 
 mountIdlePrefetch();

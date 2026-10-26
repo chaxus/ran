@@ -1,3 +1,5 @@
+import { SIDEBAR_SCROLL_KEY } from '../../client/sidebar.ts';
+
 export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0';
 
 export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`;
@@ -19,6 +21,54 @@ export const BD_ANALYSE = `
   else window.addEventListener('load', schedule, { once: true });
 })();
 `;
+
+/**
+ * Fetches the next docs page while the reader's pointer rests on its link (about 200ms in
+ * Chromium), so the click does not wait on the network. Prefetch, not prerender: a prerendered
+ * page runs its inline sidebar restore before this page has saved where the sidebar was.
+ * Browsers without speculation rules ignore the script.
+ */
+export const SPECULATION_RULES = JSON.stringify({
+  prefetch: [
+    {
+      where: {
+        and: [
+          { href_matches: '/*' },
+          { selector_matches: '.sb__link, .nav__link, .pager__link, .prose a:not([href^="#"])' },
+          { not: { selector_matches: '[download], [target]' } },
+        ],
+      },
+      eagerness: 'moderate',
+    },
+  ],
+});
+
+/**
+ * Puts the sidebar back where the reader left it, before the first paint. It runs inline right
+ * after the sidebar markup: from the module bundle it would run after paint and visibly jump.
+ *
+ * Arriving from a sidebar link, the new page's link is put at the height the clicked one had:
+ * groups open and close per page, so a raw `scrollTop` can land on another row. Otherwise the
+ * saved `scrollTop` is reused, on the same sidebar only. Either way the link ends up in view.
+ */
+export const SIDEBAR_SCROLL = `(function(){
+  var sidebar = document.getElementById('doc-sidebar');
+  if (!sidebar || window.innerWidth < 900) return;
+  var first = sidebar.querySelector('.sb__link');
+  var current = sidebar.querySelector('.sb__link[aria-current="page"]');
+  var saved = null;
+  try { saved = JSON.parse(sessionStorage.getItem('${SIDEBAR_SCROLL_KEY}') || 'null'); } catch (e) {}
+  if (saved && first && saved.sidebar === first.getAttribute('href')) {
+    sidebar.scrollTop = saved.top;
+    if (current && saved.href === current.getAttribute('href')) {
+      sidebar.scrollTop += current.getBoundingClientRect().top - sidebar.getBoundingClientRect().top - saved.offset;
+    }
+  }
+  if (!current) return;
+  var box = current.getBoundingClientRect();
+  var frame = sidebar.getBoundingClientRect();
+  if (box.top < frame.top || box.bottom > frame.bottom) sidebar.scrollTop += box.top - frame.top - frame.height / 3;
+})();`;
 
 export const PREVIEW_CODE = `
   window.uploadFile = (name) => {
