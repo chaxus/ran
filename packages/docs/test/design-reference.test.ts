@@ -30,4 +30,13 @@ describe('the Ran Design reference pages', () => {
     const page = designReferenceMarkdown(DESIGN, 'RULES.md');
     expect(page).toContain('](/src/design/composition#_9-composition-—-the-page-not-the-component)');
   });
+
+  it.each(DESIGN_REFERENCE.map(({ file }) => file))('%s does not open with the shared document name', (file) => {
+    const heading = designReferenceMarkdown(DESIGN, file).match(/^# (.+)$/m)?.[1];
+    expect(heading).not.toBe('Ran Design');
+  });
+
+  it('names the composition page after itself', () => {
+    expect(designReferenceMarkdown(DESIGN, 'DESIGN.md').match(/^# (.+)$/m)?.[1]).toBe('Visual composition');
+  });
 });

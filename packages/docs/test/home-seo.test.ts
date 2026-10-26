@@ -32,3 +32,23 @@ it('the article index lists every article, nested groups included', () => {
   expect(html).toContain('href="/articles/sort/bubble/"');
   expect(html).toContain('href="/notes/docker"');
 });
+
+it.each(LOCALES)('the $lang home runs positioning, live proof, pillars, install — each fact once', (locale) => {
+  const html = renderHome(locale);
+  const order = [
+    'class="hero"',
+    'class="stats',
+    'class="section proof',
+    'class="section choose',
+    'class="section start',
+  ];
+  const at = order.map((marker) => html.indexOf(marker));
+  expect(at.every((index) => index >= 0)).toBe(true);
+  expect([...at].sort((a, b) => a - b)).toEqual(at);
+  // The licence is stated in the facts row and nowhere else on the page.
+  expect(html.match(/\bMIT\b/g)?.length).toBe(1);
+  // Real ranui elements make up the live-proof section.
+  const proof = html.slice(at[2], at[3]);
+  for (const tag of ['r-progress', 'r-button', 'r-state-dot', 'r-token-meter', 'r-skeleton'])
+    expect(proof).toContain(`<${tag}`);
+});

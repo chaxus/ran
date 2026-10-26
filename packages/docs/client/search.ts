@@ -116,14 +116,30 @@ export const mountSearch = (): void => {
   let active = 0;
   let composing = false;
 
+  // A result is labelled with its section, named the way this page's own navigation names it,
+  // so the label is already in the reader's language. Reference tables share one label.
+  const sections = new Map<string, string>();
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('.site-header .nav__link, .site-footer__link')) {
+    const section = link.pathname.match(/^(?:\/[a-z]{2})?\/([^/]+)\/$/)?.[1];
+    const label = link.textContent?.trim();
+    if (section && label && !sections.has(section)) sections.set(section, label);
+  }
+  const sectionOf = (url: string): string => {
+    const [, section = '', page = ''] = url.match(/^(?:\/[a-z]{2}(?=\/))?\/([^/#]+)\/?([^/#]*)/) ?? [];
+    if (/^(ranui|ranuts)$/.test(section) && /^(api|style-tokens)$/.test(page)) return 'API';
+    // Notes have no nav entry of their own; the navigation files them under articles.
+    return sections.get(section === 'notes' ? 'articles' : section) ?? '';
+  };
+
   const render = (): void => {
     list.innerHTML = hits
       .map((hit, i) => {
         const terms = input.value.split(/\s+/).filter(Boolean);
+        const kind = sectionOf(hit.url);
         return (
           `<li id="search-option-${i}" role="option" aria-selected="${i === active}"><a tabindex="-1" class="search-hit" href="${escapeHtml(hit.url)}"${i === active ? ' data-active' : ''}>` +
           `<span class="search-hit__title">${highlight(hit.title, terms)}</span>` +
-          `<span class="search-hit__page"><span class="search-hit__kind">${escapeHtml(/\/src\/(ranui|ranuts)\/(api|style-tokens|changelog)(?:[/#]|$)/.test(hit.url) ? feedback.reference : /\/src\/(ranui|ranuts)\//.test(hit.url) ? feedback.guide : feedback.article)}</span> ${escapeHtml(hit.page)}</span>` +
+          `<span class="search-hit__page">${kind && kind !== hit.page ? `<span class="search-hit__kind">${escapeHtml(kind)}</span> ` : ''}${escapeHtml(hit.page)}</span>` +
           `<span class="search-hit__text">${snippet((hit.preview ?? '').replace(/^(?:源码|Source(?: code)?):[^\n]*(?:\n|$)/i, ''), terms)}</span></a></li>`
         );
       })

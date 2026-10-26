@@ -2,7 +2,7 @@
  * Home page copy, per language.
  *
  * It lives outside the home renderer because eight languages of hero, pillars,
- * capabilities and features is more prose than component — and because the invariant half
+ * capabilities and component states is more prose than component — and because the invariant half
  * (which capability sits in which column, what its API signature is, where a pillar links)
  * must not be retyped per language, where it would drift.
  *
@@ -16,16 +16,6 @@
 /** The part of a capability card that never changes: its icon key and API signature. */
 const CAPS_STRUCTURE = [
   {
-    lib: 'ranuts',
-    items: [
-      { kind: 'bridge', api: 'PostMessageBridge' },
-      { kind: 'gpu', api: 'Application' },
-      { kind: 'vdom', api: 'h() · init()' },
-      { kind: 'totp', api: 'TOTP' },
-      { kind: 'mime', api: 'getMime()' },
-    ],
-  },
-  {
     lib: 'ranui',
     items: [
       { kind: 'player', api: '<r-player>' },
@@ -35,16 +25,30 @@ const CAPS_STRUCTURE = [
       { kind: 'scratch', api: '<r-scratch>' },
     ],
   },
+  {
+    lib: 'ranuts',
+    items: [
+      { kind: 'bridge', api: 'PostMessageBridge' },
+      { kind: 'gpu', api: 'Application' },
+      { kind: 'vdom', api: 'h() · init()' },
+      { kind: 'totp', api: 'TOTP' },
+      { kind: 'mime', api: 'getMime()' },
+    ],
+  },
 ] as const;
 
-/** Stat figures and pillar destinations — identical in every language. */
+/**
+ * Stat figures and pillar destinations — identical in every language.
+ *
+ * Each fact has one place on the page: the licence and the language count live only in
+ * this row, so the hero and the pillars must not repeat them (audit F14).
+ */
 const STAT_NUMS = ['41', '90+', '8', 'MIT'] as const;
 const PILLAR_STRUCTURE = [
   { kind: 'ui', link: '/src/ranui/' },
   { kind: 'utils', link: '/src/ranuts/' },
   { kind: 'article', link: '/src/design/' },
 ] as const;
-const FEATURE_KINDS = ['agnostic', 'typed', 'pwa', 'i18n'] as const;
 
 interface Pair {
   name: string;
@@ -53,7 +57,6 @@ interface Pair {
 
 /** One language's translatable strings. Order matches the rendered page, top to bottom. */
 export interface HomeStrings {
-  eyebrow: string;
   headline: string;
   /**
    * Whether the headline animates word by word. False for scripts written without spaces
@@ -66,12 +69,16 @@ export interface HomeStrings {
   ctaSecondary: string;
   /** Labels under `STAT_NUMS`, in that order. */
   statLabels: [string, string, string, string];
+  proofKicker: string;
+  proofTitle: string;
+  /** The composed component states in the live-proof section. */
+  proof: ProofCopy;
+  chooseKicker: string;
+  chooseTitle: string;
   /** `{ title, desc, more }` for ranui, ranuts and the Ran Design pillar, in that order. */
   pillars: [Pair3, Pair3, Pair3];
-  capsKicker: string;
   capsTitle: string;
-  capsSub: string;
-  /** Column tags: ranuts' then ranui's. */
+  /** Column tags: ranui's then ranuts'. */
   capTags: [string, string];
   /** Keyed by the `kind` in `CAPS_STRUCTURE`. */
   caps: Record<string, Pair>;
@@ -85,8 +92,18 @@ export interface HomeStrings {
   liveNote: string;
   /** The hero's working example: inviting a teammate, with its states and the rules it follows. */
   example: ExampleCopy;
-  /** Titles and descriptions for `FEATURE_KINDS`, in that order. */
-  features: [Pair2, Pair2, Pair2, Pair2];
+}
+
+export interface ProofCopy {
+  /** Captions for the upload, agent-run and loading states, in that order. */
+  states: [string, string, string];
+  cancel: string;
+  /** The agent run's three steps, finished, running and waiting. */
+  steps: [string, string, string];
+  /** Accessible names for those three step states. */
+  stepStates: [string, string, string];
+  /** What the token meter counts; its accessible name. */
+  meter: string;
 }
 
 /** `{email}` and `{role}` are filled in by the client; keep them in every translation. */
@@ -123,7 +140,6 @@ interface Pair3 extends Pair2 {
  */
 export const HOME_STRINGS: Record<string, HomeStrings> = {
   '': {
-    eyebrow: 'Open source · MIT Licensed',
     headline: 'Design methods, components and tools',
     splitWords: true,
     subtitle:
@@ -131,6 +147,17 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'Build with agents',
     ctaSecondary: 'Star on GitHub',
     statLabels: ['Components', 'Utilities', 'Languages', 'Licensed'],
+    proofKicker: 'Live components',
+    proofTitle: 'Real states built with ranui',
+    proof: {
+      states: ['Uploading', 'Agent run', 'Loading'],
+      cancel: 'Cancel',
+      steps: ['Read 4 files', 'Run the test suite', 'Open a pull request'],
+      stepStates: ['Done', 'Running', 'Waiting'],
+      meter: 'Context',
+    },
+    chooseKicker: 'Three pillars',
+    chooseTitle: 'Choose where to start',
     pillars: [
       {
         title: 'ranui',
@@ -148,10 +175,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'Explore design',
       },
     ],
-    capsKicker: 'Capabilities',
     capsTitle: 'What most libraries leave out',
-    capsSub: 'Five in ranuts, five in ranui.',
-    capTags: ['utilities', 'components'],
+    capTags: ['components', 'utilities'],
     caps: {
       bridge: {
         name: 'Bridge',
@@ -208,21 +233,25 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       simulate: 'Simulate a failed request',
       rules: 'Rules this example follows',
     },
-    features: [
-      { title: 'Works everywhere', desc: 'Standards-based custom elements run in any framework, or none at all.' },
-      { title: 'Fully typed', desc: 'Written in TypeScript, shipped with declarations end to end.' },
-      { title: 'Installable & offline', desc: 'The docs are a PWA, with their own service worker.' },
-      { title: 'Eight languages', desc: 'The ranui and ranuts reference is maintained in eight languages.' },
-    ],
   },
   cn: {
-    eyebrow: '开源 · MIT 协议',
     headline: '设计方法、组件与工具',
     splitWords: false,
     subtitle: '使用 Ran Design、ranui 组件和 ranuts 工具构建产品。三者可独立使用，为开发者和 agent 提供指引。',
     ctaPrimary: '使用 agent 构建',
     ctaSecondary: '前往 GitHub',
     statLabels: ['组件', '工具函数', '语言', '协议'],
+    proofKicker: '组件实例',
+    proofTitle: '用 ranui 组合的真实状态',
+    proof: {
+      states: ['上传中', 'Agent 运行', '加载中'],
+      cancel: '取消',
+      steps: ['读取 4 个文件', '运行测试', '创建 Pull Request'],
+      stepStates: ['已完成', '运行中', '等待中'],
+      meter: '上下文',
+    },
+    chooseKicker: '三个部分',
+    chooseTitle: '选择从哪里开始',
     pillars: [
       {
         title: 'ranui',
@@ -240,10 +269,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: '探索设计方法',
       },
     ],
-    capsKicker: '特色能力',
     capsTitle: '多数库没有的能力',
-    capsSub: 'ranuts 五项，ranui 五项。',
-    capTags: ['工具函数', '组件'],
+    capTags: ['组件', '工具函数'],
     caps: {
       bridge: {
         name: 'Bridge 通信桥',
@@ -281,21 +308,25 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       simulate: '模拟请求失败',
       rules: '这个示例遵循的规则',
     },
-    features: [
-      { title: '随处可用', desc: '基于标准的自定义元素，在任意框架或无框架下都能运行。' },
-      { title: '完整类型', desc: '全程 TypeScript 编写，附带类型声明。' },
-      { title: '可安装 · 离线', desc: '文档本身就是一个 PWA，带自己的 Service Worker。' },
-      { title: '八种语言', desc: 'ranui 与 ranuts 的文档以八种语言维护。' },
-    ],
   },
   ja: {
-    eyebrow: 'オープンソース · MIT ライセンス',
     headline: '設計方法、コンポーネント、ツール',
     splitWords: false,
     subtitle: 'Ran Design、ranui、ranuts で製品を構築。各機能を独立して使い、開発者とエージェントを支援します。',
     ctaPrimary: 'エージェントで構築',
     ctaSecondary: 'GitHub でスターする',
     statLabels: ['コンポーネント', 'ユーティリティ', '言語', 'ライセンス'],
+    proofKicker: 'ライブコンポーネント',
+    proofTitle: 'ranui で組んだ実際の状態',
+    proof: {
+      states: ['アップロード中', 'エージェント実行', '読み込み中'],
+      cancel: 'キャンセル',
+      steps: ['4 ファイルを読み込む', 'テストを実行', 'プルリクエストを作成'],
+      stepStates: ['完了', '実行中', '待機中'],
+      meter: 'コンテキスト',
+    },
+    chooseKicker: '3 つの柱',
+    chooseTitle: 'どこから始めるか選ぶ',
     pillars: [
       {
         title: 'ranui',
@@ -313,10 +344,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: '設計方法を見る',
       },
     ],
-    capsKicker: '特色ある機能',
     capsTitle: '多くのライブラリが用意していないもの',
-    capsSub: 'ranuts から 5 つ、ranui から 5 つ。',
-    capTags: ['ユーティリティ', 'コンポーネント'],
+    capTags: ['コンポーネント', 'ユーティリティ'],
     caps: {
       bridge: {
         name: 'Bridge',
@@ -373,21 +402,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       simulate: 'リクエストの失敗を再現',
       rules: 'このサンプルが従うルール',
     },
-    features: [
-      {
-        title: 'どこでも動く',
-        desc: '標準準拠のカスタム要素なので、どのフレームワークでも、フレームワークなしでも動きます。',
-      },
-      { title: '完全な型定義', desc: 'TypeScript で書かれ、型宣言まで含めて配布しています。' },
-      {
-        title: 'インストール可能・オフライン対応',
-        desc: 'ドキュメント自体が PWA で、専用の Service Worker を持ちます。',
-      },
-      { title: '8 言語', desc: 'ranui と ranuts のリファレンスは 8 言語で維持されています。' },
-    ],
   },
   es: {
-    eyebrow: 'Código abierto · Licencia MIT',
     headline: 'Métodos de diseño, componentes y herramientas',
     splitWords: true,
     subtitle:
@@ -395,6 +411,17 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'Crear con agentes',
     ctaSecondary: 'Dar una estrella en GitHub',
     statLabels: ['Componentes', 'Utilidades', 'Idiomas', 'Licencia'],
+    proofKicker: 'Componentes en vivo',
+    proofTitle: 'Estados reales hechos con ranui',
+    proof: {
+      states: ['Subiendo', 'Ejecución del agente', 'Cargando'],
+      cancel: 'Cancelar',
+      steps: ['Leer 4 archivos', 'Ejecutar las pruebas', 'Abrir un pull request'],
+      stepStates: ['Hecho', 'En curso', 'En espera'],
+      meter: 'Contexto',
+    },
+    chooseKicker: 'Tres pilares',
+    chooseTitle: 'Elige por dónde empezar',
     pillars: [
       {
         title: 'ranui',
@@ -412,10 +439,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'Explorar diseño',
       },
     ],
-    capsKicker: 'Capacidades',
     capsTitle: 'Lo que la mayoría de bibliotecas deja fuera',
-    capsSub: 'Cinco en ranuts, cinco en ranui.',
-    capTags: ['utilidades', 'componentes'],
+    capTags: ['componentes', 'utilidades'],
     caps: {
       bridge: {
         name: 'Bridge',
@@ -475,18 +500,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       simulate: 'Simular un fallo de la petición',
       rules: 'Reglas que sigue este ejemplo',
     },
-    features: [
-      {
-        title: 'Funciona en todas partes',
-        desc: 'Los custom elements estándar funcionan en cualquier framework, o sin ninguno.',
-      },
-      { title: 'Totalmente tipado', desc: 'Escrito en TypeScript y publicado con sus declaraciones de tipos.' },
-      { title: 'Instalable y sin conexión', desc: 'La documentación es una PWA, con su propio service worker.' },
-      { title: 'Ocho idiomas', desc: 'La referencia de ranui y ranuts se mantiene en ocho idiomas.' },
-    ],
   },
   pt: {
-    eyebrow: 'Código aberto · Licença MIT',
     headline: 'Métodos de design, componentes e ferramentas',
     splitWords: true,
     subtitle:
@@ -494,6 +509,17 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'Criar com agentes',
     ctaSecondary: 'Dar uma estrela no GitHub',
     statLabels: ['Componentes', 'Utilitários', 'Idiomas', 'Licença'],
+    proofKicker: 'Componentes ao vivo',
+    proofTitle: 'Estados reais feitos com ranui',
+    proof: {
+      states: ['Enviando', 'Execução do agente', 'Carregando'],
+      cancel: 'Cancelar',
+      steps: ['Ler 4 arquivos', 'Executar os testes', 'Abrir um pull request'],
+      stepStates: ['Concluído', 'Em execução', 'Aguardando'],
+      meter: 'Contexto',
+    },
+    chooseKicker: 'Três pilares',
+    chooseTitle: 'Escolha por onde começar',
     pillars: [
       {
         title: 'ranui',
@@ -511,10 +537,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'Explorar design',
       },
     ],
-    capsKicker: 'Recursos',
     capsTitle: 'O que a maioria das bibliotecas deixa de fora',
-    capsSub: 'Cinco no ranuts, cinco no ranui.',
-    capTags: ['utilitários', 'componentes'],
+    capTags: ['componentes', 'utilitários'],
     caps: {
       bridge: {
         name: 'Bridge',
@@ -574,18 +598,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       simulate: 'Simular uma falha na requisição',
       rules: 'Regras que este exemplo segue',
     },
-    features: [
-      {
-        title: 'Funciona em qualquer lugar',
-        desc: 'Custom elements baseados em padrões rodam em qualquer framework, ou em nenhum.',
-      },
-      { title: 'Totalmente tipado', desc: 'Escrito em TypeScript e publicado com as declarações de tipos.' },
-      { title: 'Instalável e offline', desc: 'A documentação é um PWA, com seu próprio service worker.' },
-      { title: 'Oito idiomas', desc: 'A referência do ranui e do ranuts é mantida em oito idiomas.' },
-    ],
   },
   ko: {
-    eyebrow: '오픈소스 · MIT 라이선스',
     headline: '디자인 방법, 컴포넌트와 도구',
     splitWords: true,
     subtitle:
@@ -593,6 +607,17 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: '에이전트로 만들기',
     ctaSecondary: 'GitHub에서 스타 주기',
     statLabels: ['컴포넌트', '유틸리티', '언어', '라이선스'],
+    proofKicker: '라이브 컴포넌트',
+    proofTitle: 'ranui로 만든 실제 상태',
+    proof: {
+      states: ['업로드 중', '에이전트 실행', '불러오는 중'],
+      cancel: '취소',
+      steps: ['파일 4개 읽기', '테스트 실행', '풀 리퀘스트 열기'],
+      stepStates: ['완료', '실행 중', '대기 중'],
+      meter: '컨텍스트',
+    },
+    chooseKicker: '세 가지 축',
+    chooseTitle: '시작할 곳 고르기',
     pillars: [
       {
         title: 'ranui',
@@ -610,10 +635,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: '디자인 살펴보기',
       },
     ],
-    capsKicker: '주요 기능',
     capsTitle: '대부분의 라이브러리가 빼놓는 것',
-    capsSub: 'ranuts에서 다섯 가지, ranui에서 다섯 가지.',
-    capTags: ['유틸리티', '컴포넌트'],
+    capTags: ['컴포넌트', '유틸리티'],
     caps: {
       bridge: {
         name: 'Bridge',
@@ -667,18 +690,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       simulate: '요청 실패 재현',
       rules: '이 예제가 따르는 규칙',
     },
-    features: [
-      {
-        title: '어디서나 동작',
-        desc: '표준 기반 커스텀 엘리먼트라 어떤 프레임워크에서도, 프레임워크 없이도 동작합니다.',
-      },
-      { title: '완전한 타입', desc: 'TypeScript로 작성했고 타입 선언까지 함께 배포합니다.' },
-      { title: '설치 가능 · 오프라인', desc: '문서 자체가 PWA이며 자체 서비스 워커를 갖습니다.' },
-      { title: '여덟 개 언어', desc: 'ranui와 ranuts 레퍼런스는 여덟 개 언어로 관리됩니다.' },
-    ],
   },
   de: {
-    eyebrow: 'Open Source · MIT-Lizenz',
     headline: 'Designmethoden, Komponenten und Werkzeuge',
     splitWords: true,
     subtitle:
@@ -686,6 +699,17 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'Mit Agenten entwickeln',
     ctaSecondary: 'Auf GitHub mit Stern versehen',
     statLabels: ['Komponenten', 'Utilities', 'Sprachen', 'Lizenz'],
+    proofKicker: 'Live-Komponenten',
+    proofTitle: 'Echte Zustände, gebaut mit ranui',
+    proof: {
+      states: ['Hochladen', 'Agent-Lauf', 'Laden'],
+      cancel: 'Abbrechen',
+      steps: ['4 Dateien lesen', 'Tests ausführen', 'Pull-Request öffnen'],
+      stepStates: ['Erledigt', 'Läuft', 'Wartet'],
+      meter: 'Kontext',
+    },
+    chooseKicker: 'Drei Säulen',
+    chooseTitle: 'Wähle deinen Einstieg',
     pillars: [
       {
         title: 'ranui',
@@ -703,10 +727,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'Design erkunden',
       },
     ],
-    capsKicker: 'Fähigkeiten',
     capsTitle: 'Was die meisten Bibliotheken weglassen',
-    capsSub: 'Fünf in ranuts, fünf in ranui.',
-    capTags: ['Utilities', 'Komponenten'],
+    capTags: ['Komponenten', 'Utilities'],
     caps: {
       bridge: {
         name: 'Bridge',
@@ -766,18 +788,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       simulate: 'Fehlgeschlagene Anfrage simulieren',
       rules: 'Regeln, denen dieses Beispiel folgt',
     },
-    features: [
-      {
-        title: 'Läuft überall',
-        desc: 'Standardbasierte Custom Elements laufen in jedem Framework — oder ganz ohne.',
-      },
-      { title: 'Vollständig typisiert', desc: 'In TypeScript geschrieben und samt Typdeklarationen ausgeliefert.' },
-      { title: 'Installierbar & offline', desc: 'Die Dokumentation ist eine PWA mit eigenem Service Worker.' },
-      { title: 'Acht Sprachen', desc: 'Die Referenz zu ranui und ranuts wird in acht Sprachen gepflegt.' },
-    ],
   },
   fa: {
-    eyebrow: 'متن‌باز · مجوز MIT',
     headline: 'روش\u200cهای طراحی، مؤلفه\u200cها و ابزارها',
     splitWords: false,
     subtitle:
@@ -785,6 +797,17 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'ساخت با عامل\u200cها',
     ctaSecondary: 'ستاره دادن در گیت‌هاب',
     statLabels: ['کامپوننت', 'ابزار', 'زبان', 'مجوز'],
+    proofKicker: 'کامپوننت‌های زنده',
+    proofTitle: 'حالت‌های واقعی ساخته‌شده با ranui',
+    proof: {
+      states: ['در حال آپلود', 'اجرای عامل', 'در حال بارگیری'],
+      cancel: 'لغو',
+      steps: ['خواندن ۴ فایل', 'اجرای تست‌ها', 'باز کردن pull request'],
+      stepStates: ['انجام شد', 'در حال اجرا', 'در انتظار'],
+      meter: 'زمینه',
+    },
+    chooseKicker: 'سه بخش',
+    chooseTitle: 'از کجا شروع کنید',
     pillars: [
       {
         title: 'ranui',
@@ -802,10 +825,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         more: 'کاوش طراحی',
       },
     ],
-    capsKicker: 'توانمندی‌ها',
     capsTitle: 'آنچه بیشتر کتابخانه‌ها کنار می‌گذارند',
-    capsSub: 'پنج مورد در ranuts، پنج مورد در ranui.',
-    capTags: ['ابزارها', 'کامپوننت‌ها'],
+    capTags: ['کامپوننت‌ها', 'ابزارها'],
     caps: {
       bridge: {
         name: 'Bridge',
@@ -859,12 +880,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       simulate: 'شبیه‌سازی خطای درخواست',
       rules: 'قواعدی که این نمونه رعایت می‌کند',
     },
-    features: [
-      { title: 'همه‌جا کار می‌کند', desc: 'عناصر سفارشی استاندارد در هر فریم‌ورکی — و بدون فریم‌ورک — اجرا می‌شوند.' },
-      { title: 'کاملاً تایپ‌شده', desc: 'با TypeScript نوشته شده و همراه با تعریف تایپ‌ها منتشر می‌شود.' },
-      { title: 'قابل نصب و برون‌خط', desc: 'خود مستندات یک PWA است و Service Worker اختصاصی دارد.' },
-      { title: 'هشت زبان', desc: 'مرجع ranui و ranuts در هشت زبان نگهداری می‌شود.' },
-    ],
   },
 };
 
@@ -878,17 +893,19 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
 export const homeCopy = (dir: string) => {
   const s = HOME_STRINGS[dir] ?? HOME_STRINGS[''];
   return {
-    eyebrow: s.eyebrow,
     headline: s.headline,
     splitWords: s.splitWords,
     subtitle: s.subtitle,
     ctaPrimary: s.ctaPrimary,
     ctaSecondary: s.ctaSecondary,
     stats: STAT_NUMS.map((num, i) => ({ num, label: s.statLabels[i] })),
+    proofKicker: s.proofKicker,
+    proofTitle: s.proofTitle,
+    proof: s.proof,
+    chooseKicker: s.chooseKicker,
+    chooseTitle: s.chooseTitle,
     pillars: PILLAR_STRUCTURE.map((p, i) => ({ ...p, ...s.pillars[i] })),
-    capsKicker: s.capsKicker,
     capsTitle: s.capsTitle,
-    capsSub: s.capsSub,
     caps: CAPS_STRUCTURE.map((col, i) => ({
       lib: col.lib,
       tag: s.capTags[i],
@@ -903,6 +920,5 @@ export const homeCopy = (dir: string) => {
     liveLabel: s.liveLabel,
     liveNote: s.liveNote,
     example: s.example,
-    features: FEATURE_KINDS.map((kind, i) => ({ kind, ...s.features[i] })),
   };
 };

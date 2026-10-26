@@ -139,6 +139,8 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
   // all eight languages would make every reader download seven they cannot read.
   const byLocale = new Map<string, typeof content.pages>();
   for (const page of content.pages) {
+    // The not-found page is served at every wrong URL; as a search result it leads nowhere.
+    if (page.kind === 'notfound') continue;
     byLocale.set(page.locale.lang, [...(byLocale.get(page.locale.lang) ?? []), page]);
   }
   for (const [lang, pages] of byLocale) {

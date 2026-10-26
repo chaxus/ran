@@ -88,9 +88,45 @@ samp {
   --header-h: 60px;
   --sidebar-w: 272px;
   --toc-w: 224px;
-  /* A shared reading measure stays independent of each text role’s font size. */
-  --measure: 44rem;
+  /* A shared reading measure stays independent of each text role’s font size. 33rem holds
+     Geist prose at about 66–72 characters a line, and CJK at 33 characters. */
+  --measure: 33rem;
   --pad: var(--ran-space-4, 16px);
+  --column-gap: var(--ran-space-10, 40px);
+  /* Where a docs page's text starts inside the layout: past the sidebar column. Pages with
+     no sidebar keep the same x so the content does not jump between top-level pages. */
+  --spine-docs: calc(var(--sidebar-w) + var(--column-gap));
+  /*
+   * The landing's content edge, as an inline inset inside the landing column. The percentage
+   * resolves against the element it is used on, so it is only valid as the padding or margin
+   * of a full-width child of `.doc` — the landing sections and the home footer.
+   * 1120px is the landing's content width.
+   */
+  --spine-landing: max(var(--ran-space-6, 24px), (100% - 1120px) / 2);
+
+  /*
+   * Type roles — one size per role, shared with the landing. Equal ranui tokens are reused;
+   * the display sizes and the code size have no ranui counterpart.
+   */
+  --type-display-1: 56px;
+  --type-display-2: 44px;
+  --type-display-weight: 600;
+  --type-display-tracking: -0.035em;
+  --type-display-leading: 1.1;
+  --type-heading-1: var(--ran-text-heading-1, 32px);
+  --type-heading-2: var(--ran-text-heading-2, 24px);
+  --type-heading-3: var(--ran-text-heading-3, 20px);
+  --type-heading-4: var(--ran-text-heading-4, 16px);
+  --type-heading-weight: 600;
+  --type-heading-tracking: -0.02em;
+  --type-copy-1: var(--ran-text-copy-1, 16px);
+  --type-copy-1-leading: 1.65;
+  --type-copy-2: var(--ran-text-copy-2, 14px);
+  --type-label-1: var(--ran-text-label-1, 14px);
+  --type-label-2: var(--ran-text-label-2, 13px);
+  --type-label-3: var(--ran-text-label-3, 12px);
+  --type-label-weight: var(--ran-text-label-weight, 500);
+  --type-code: 13px;
 
   color-scheme: light;
 }
@@ -152,8 +188,8 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.75;
+  font-size: var(--type-copy-1);
+  line-height: var(--type-copy-1-leading);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -236,8 +272,8 @@ a {
 
 .wordmark {
   font-family: var(--font-mono);
-  font-size: 17px;
-  font-weight: 700;
+  font-size: var(--type-heading-4);
+  font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--fg);
   text-decoration: none;
@@ -262,7 +298,7 @@ a {
   border-radius: 5px;
   color: var(--fg-muted);
   text-decoration: none;
-  font-size: 14.5px;
+  font-size: var(--type-label-1);
   white-space: nowrap;
 }
 .nav__link:hover {
@@ -285,7 +321,7 @@ a {
   cursor: pointer;
   padding: 6px 10px;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: var(--type-label-1);
   color: var(--fg-muted);
   white-space: nowrap;
 }
@@ -318,7 +354,7 @@ a {
   border-radius: 5px;
   color: var(--fg-muted);
   text-decoration: none;
-  font-size: 14px;
+  font-size: var(--type-label-1);
 }
 .langs__link:hover {
   color: var(--fg);
@@ -390,22 +426,22 @@ a {
   border: 1px solid var(--rule);
   border-radius: 7px;
   background: var(--bg-soft);
-  color: var(--fg-faint);
+  color: var(--fg-muted);
   font: inherit;
-  font-size: 13.5px;
+  font-size: var(--type-label-2);
   cursor: pointer;
   flex: none;
 }
 .search-open:hover {
   border-color: var(--rule-strong);
-  color: var(--fg-muted);
+  color: var(--fg);
 }
 .search-open__text {
   display: none;
 }
 .search-open__kbd {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--type-label-3);
   padding: 1px 5px;
   border: 1px solid var(--rule);
   border-radius: 4px;
@@ -454,7 +490,7 @@ a {
   background: transparent;
   color: var(--fg);
   font: inherit;
-  font-size: 16px;
+  font-size: var(--type-copy-1);
   outline: none;
 }
 .search__input::-webkit-search-cancel-button {
@@ -470,16 +506,16 @@ a {
   border: 1px solid var(--rule);
   border-radius: 5px;
   background: var(--bg-soft);
-  color: var(--fg-faint);
+  color: var(--fg-muted);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--type-label-3);
   cursor: pointer;
 }
 .search__status {
   margin: 0;
   padding: 18px 16px;
-  color: var(--fg-faint);
-  font-size: 14px;
+  color: var(--fg-muted);
+  font-size: var(--type-copy-2);
 }
 .search__status:empty {
   display: none;
@@ -506,14 +542,14 @@ a {
 }
 .search-hit__title {
   font-weight: 600;
-  font-size: 14.5px;
+  font-size: var(--type-label-1);
 }
 .search-hit__page {
-  font-size: 12px;
-  color: var(--fg-faint);
+  font-size: var(--type-label-3);
+  color: var(--fg-muted);
 }
 .search-hit__text {
-  font-size: 13px;
+  font-size: var(--type-label-2);
   color: var(--fg-muted);
   line-height: 1.6;
 }
@@ -548,7 +584,7 @@ a {
   gap: 0;
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: var(--type-label-3);
   color: var(--fg-muted);
 }
 .pkg-facts__item {
@@ -596,7 +632,7 @@ a {
   padding: 0 var(--pad);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 0 40px;
+  gap: 0 var(--column-gap);
   align-items: start;
 }
 
@@ -697,14 +733,14 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   display: block;
   padding: 5px 9px;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: var(--type-label-1);
   line-height: 1.5;
   color: var(--fg-muted);
   text-decoration: none;
 }
 .sb__label {
-  color: var(--fg-faint);
-  font-size: 11.5px;
+  color: var(--fg-muted);
+  font-size: var(--type-label-3);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -780,12 +816,12 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   overflow-y: auto;
   padding-inline-start: var(--ran-space-4);
   border-inline-start: 1px solid var(--rule);
-  font-size: var(--ran-text-label-2);
+  font-size: var(--type-label-2);
 }
 .toc__label {
   margin: 0 0 var(--ran-space-2);
-  font-size: var(--ran-text-label-3);
-  font-weight: var(--ran-text-label-weight);
+  font-size: var(--type-label-3);
+  font-weight: var(--type-label-weight);
   color: var(--fg-muted);
 }
 .toc__list {
@@ -843,7 +879,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   /* Named because it is referenced again: a child that has to cancel this gap must use
      the same value, and two hand-copied numbers drift. */
   --prose-gap: var(--ran-space-4);
-  font-size: var(--ran-text-copy-1);
+  font-size: var(--type-copy-1);
   font-weight: var(--ran-text-copy-weight);
   display: flex;
   flex-direction: column;
@@ -884,7 +920,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--ran-space-2, 8px) var(--ran-space-4, 16px);
-  font-size: 13px;
+  font-size: var(--type-label-2);
 }
 .component-facts code {
   color: var(--fg);
@@ -897,32 +933,32 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 
 .prose h1 {
   margin: 0;
-  font-size: clamp(var(--ran-text-heading-2), 4vw, var(--ran-text-heading-1));
-  font-weight: var(--ran-text-heading-weight);
+  font-size: clamp(var(--type-heading-2), 4vw, var(--type-heading-1));
+  font-weight: var(--type-heading-weight);
   line-height: 1.25;
-  letter-spacing: var(--ran-text-heading-tracking);
+  letter-spacing: var(--type-heading-tracking);
   text-wrap: balance;
 }
 .prose h2,
 .prose h3,
 .prose h4 {
   margin: 0;
-  font-weight: var(--ran-text-heading-weight);
+  font-weight: var(--type-heading-weight);
   line-height: 1.35;
-  letter-spacing: var(--ran-text-heading-tracking);
+  letter-spacing: var(--type-heading-tracking);
   text-wrap: balance;
 }
 .prose h2 {
   margin-block-start: var(--ran-space-6);
-  font-size: var(--ran-text-heading-2);
+  font-size: var(--type-heading-2);
 }
 .prose h3 {
   margin-block-start: var(--ran-space-4);
-  font-size: var(--ran-text-heading-3);
+  font-size: var(--type-heading-3);
 }
 .prose h4 {
   margin-block-start: var(--ran-space-2);
-  font-size: var(--ran-text-heading-4);
+  font-size: var(--type-heading-4);
 }
 
 .prose .anchor {
@@ -1013,11 +1049,11 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   top: 8px;
   inset-inline-end: 0;
   font-family: var(--font-mono);
-  font-size: var(--ran-text-label-3);
-  font-weight: var(--ran-text-label-weight);
+  font-size: var(--type-label-3);
+  font-weight: var(--type-label-weight);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--fg-faint);
+  color: var(--fg-muted);
   pointer-events: none;
 }
 .prose figure.code pre {
@@ -1026,7 +1062,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   padding: var(--ran-space-8) 0 var(--ran-space-4);
   overflow-x: auto;
   font-family: var(--font-mono);
-  font-size: var(--ran-text-copy-2);
+  font-size: var(--type-code);
   font-weight: var(--ran-text-mono-weight-regular);
   line-height: 1.7;
   background: transparent !important;
@@ -1044,17 +1080,32 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 }
 .shiki,
 .shiki span {
-  color: var(--shiki-light);
+  color: var(--code-light, var(--shiki-light));
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']) .shiki,
   :root:not([data-ran-theme='light']) .shiki span {
-    color: var(--shiki-dark);
+    color: var(--code-dark, var(--shiki-dark));
   }
 }
 :root[data-ran-theme='dark'] .shiki,
 :root[data-ran-theme='dark'] .shiki span {
-  color: var(--shiki-dark);
+  color: var(--code-dark, var(--shiki-dark));
+}
+/*
+ * The GitHub themes' tag green and variable orange (light) and comment grey (dark) fall
+ * under 4.5:1 on the code surfaces. shiki writes its colours inline, so a token is matched
+ * by the light value it carries (the text before `;--shiki-dark`) and moved one step along
+ * ranui's own ladder. Both themes colour comments the same grey, so the light value names it.
+ */
+.shiki span[style*='22863A;--shiki-dark' i] {
+  --code-light: var(--ran-green-900);
+}
+.shiki span[style*='E36209;--shiki-dark' i] {
+  --code-light: var(--ran-amber-900);
+}
+.shiki span[style*='6A737D;--shiki-dark' i] {
+  --code-dark: var(--fg-muted);
 }
 
 /* ── Code groups ─────────────────────────────────────────────────────────── */
@@ -1079,7 +1130,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   background: transparent;
   color: var(--fg-muted);
   font: inherit;
-  font-size: 13px;
+  font-size: var(--type-label-2);
   cursor: pointer;
   white-space: nowrap;
 }
@@ -1112,7 +1163,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   border-collapse: collapse;
   width: max-content;
   min-width: 100%;
-  font-size: var(--ran-text-copy-2);
+  font-size: var(--type-copy-2);
 }
 .prose td code,
 .prose th code {
@@ -1138,7 +1189,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   padding-inline-end: 0;
 }
 .prose th {
-  font-weight: var(--ran-text-label-weight);
+  font-weight: var(--type-label-weight);
   color: var(--fg-muted);
   background: transparent;
   border-bottom-color: var(--rule-strong);
@@ -1168,8 +1219,8 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 }
 .callout__label {
   margin: 0;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--type-label-3);
+  font-weight: 600;
   letter-spacing: 0.05em;
   color: var(--callout-color);
 }
@@ -1259,7 +1310,11 @@ ran-demo p {
   margin-top: var(--ran-space-10, 40px);
   padding-block: var(--ran-space-6, 24px);
   border-top: 1px solid var(--rule);
-  font-size: 13px;
+  font-size: var(--type-label-2);
+}
+/* The home footer stands on the landing's spine, not on the layout's edge. */
+.doc:has(> .landing) > .site-footer {
+  margin-inline: var(--spine-landing);
 }
 .site-footer__link {
   color: var(--fg-muted);
@@ -1309,13 +1364,13 @@ ran-demo p {
   grid-column: 2;
 }
 .pager__dir {
-  font-size: 12px;
-  color: var(--fg-faint);
+  font-size: var(--type-label-3);
+  color: var(--fg-muted);
 }
 .pager__text {
   font-weight: 600;
   color: var(--accent);
-  font-size: 14.5px;
+  font-size: var(--type-label-1);
 }
 
 /* ── Wide screens ────────────────────────────────────────────────────────── */
@@ -1334,6 +1389,10 @@ ran-demo p {
   }
   body.has-sidebar .layout {
     grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  }
+  /* A sidebar-less docs page (Agents, not found) keeps the docs spine. */
+  body:not(.has-sidebar) .doc:not(:has(> .landing)) {
+    padding-inline-start: var(--spine-docs);
   }
   .sidebar {
     position: sticky;
@@ -1496,7 +1555,7 @@ body.drawer-open {
   background: transparent;
   color: var(--fg-muted);
   font: inherit;
-  font-size: 12px;
+  font-size: var(--type-label-3);
   cursor: pointer;
 }
 .code-copy:hover {
@@ -1513,7 +1572,7 @@ body.drawer-open {
   display: block;
   padding-block: var(--ran-space-2);
   color: var(--fg-muted);
-  font-size: var(--ran-text-label-2);
+  font-size: var(--type-label-2);
 }
 .code-copy__status:empty {
   display: none;
@@ -1538,7 +1597,7 @@ body.drawer-open {
   border-radius: var(--ran-radius-sm, 6px);
   background: var(--bg);
   color: var(--fg);
-  font-size: 14px;
+  font-size: var(--type-copy-2);
 }
 .copy-status:empty {
   display: none;
@@ -1580,7 +1639,7 @@ body.drawer-open {
 }
 .code-group__fallback {
   padding: var(--ran-space-3, 12px) var(--ran-space-4, 16px) 0;
-  font-size: 13px;
+  font-size: var(--type-label-2);
   font-weight: 600;
 }
 .code-group[data-enhanced] .code-group__fallback {
@@ -1598,4 +1657,23 @@ body.drawer-open {
   .code-group__tab {
     min-height: 44px;
   }
+}
+
+/* The not-found page's search command sits in the prose, not in the header. */
+.prose .search-open--inline {
+  align-self: start;
+  margin-inline-start: 0;
+  min-height: 44px;
+  padding-inline: var(--ran-space-3, 12px) var(--ran-space-2, 8px);
+  color: var(--fg);
+  font-size: var(--type-label-1);
+}
+
+/*
+ * Persian is a joined script: letter-spacing pulls its cursive joins apart, and the
+ * uppercase eyebrows and negative heading tracking were set for Latin.
+ */
+:lang(fa) :is(.sb__label, .callout__label, .prose h1, .prose h2, .prose h3, .prose h4),
+:lang(fa) .prose figure.code::after {
+  letter-spacing: 0;
 }
