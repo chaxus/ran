@@ -13,6 +13,9 @@
       display: var(--loading-dot1-display, inline-block);
       position: var(--loading-dot1-position, absolute);
       top: var(--loading-dot1-top, 0);
+      // Centred in the box: without an inline offset the dots start at the centre line and
+      // overflow to the right, which shows whenever the rotation is paused.
+      left: var(--loading-dot1-left, 20%);
       background: var(--loading-dot1-background, currentColor);
       border-radius: var(--loading-dot1-border-radius, 100%);
       animation: var(--loading-dot1-animation, ran-loading-dot-bounce 2s infinite ease-in-out);
@@ -28,6 +31,7 @@
       animation: var(--loading-dot2-animation, ran-loading-dot-bounce 2s infinite ease-in-out);
       top: var(--loading-dot2-top, auto);
       bottom: var(--loading-dot2-bottom, 0);
+      left: var(--loading-dot2-left, 20%);
       animation-delay: var(--loading-dot2-animation-delay, -1s);
       animation-play-state: var(--loading-dot2-animation-play-state, running);
     }
