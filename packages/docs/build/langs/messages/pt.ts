@@ -162,7 +162,7 @@ const pt: LocaleMessages = {
     caching_precache: 'Cache e pré-cache',
     bridge_postmessage: 'Bridge (postMessage)',
     cross_context_messaging: 'Mensagens entre contextos',
-    element_api_all_40_elements: 'API de elementos (todos os 40 elementos)',
+    element_api_all_41_elements: 'API de elementos (todos os 41 elementos)',
     style_tokens_parts: 'Tokens de estilo e partes',
     changelog: 'Registro de alterações',
     foundations: 'Fundamentos',

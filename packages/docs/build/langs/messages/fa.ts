@@ -162,7 +162,7 @@ const fa: LocaleMessages = {
     caching_precache: 'حافظهٔ نهان و پیش‌بارگذاری',
     bridge_postmessage: 'Bridge (postMessage)',
     cross_context_messaging: 'پیام‌رسانی میان بافتارها',
-    element_api_all_40_elements: 'API عناصر (هر ۴۰ عنصر)',
+    element_api_all_41_elements: 'API عناصر (هر ۴۱ عنصر)',
     style_tokens_parts: 'توکن‌های استایل و Part',
     changelog: 'تغییرات',
     foundations: 'پایه‌ها',

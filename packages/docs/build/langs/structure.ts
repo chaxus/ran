@@ -521,7 +521,7 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
   ],
   '/src/ranui/': [
     { kind: 'suffix', key: 'ranui_overview', name: 'Overview', link: '/src/ranui/' },
-    { kind: 'full', key: 'element_api_all_40_elements', link: '/src/ranui/api' },
+    { kind: 'full', key: 'element_api_all_41_elements', link: '/src/ranui/api' },
     { kind: 'full', key: 'style_tokens_parts', link: '/src/ranui/style-tokens' },
     { kind: 'suffix', key: 'changelog', name: 'Changelog', link: '/src/ranui/changelog' },
     {

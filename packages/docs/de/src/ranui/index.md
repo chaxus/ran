@@ -98,7 +98,7 @@ zahlt also nie für die Komponentenbibliothek.
 
 ## Komponenten
 
-40 Elemente. Alle, samt Attributen, Eigenschaften, Events, Slots und `::part()`-Namen, stehen in der
+41 Elemente. Alle, samt Attributen, Eigenschaften, Events, Slots und `::part()`-Namen, stehen in der
 [Element-API-Referenz](/de/src/ranui/api).
 
 **Allgemein**: [Button](/de/src/ranui/button/) · [Icon](/de/src/ranui/icon/) ·

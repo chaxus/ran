@@ -97,7 +97,7 @@ nunca paga por la biblioteca de componentes.
 
 ## Componentes
 
-40 elementos. Todos ellos, con sus atributos, propiedades, eventos, slots y nombres de `::part()`,
+41 elementos. Todos ellos, con sus atributos, propiedades, eventos, slots y nombres de `::part()`,
 están en la [referencia de la API de elementos](/es/src/ranui/api).
 
 **Comunes**: [Button](/es/src/ranui/button/) · [Icon](/es/src/ranui/icon/) ·

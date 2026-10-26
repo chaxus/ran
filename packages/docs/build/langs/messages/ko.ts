@@ -162,7 +162,7 @@ const ko: LocaleMessages = {
     caching_precache: '캐싱과 프리캐시',
     bridge_postmessage: 'Bridge (postMessage)',
     cross_context_messaging: '컨텍스트 간 메시징',
-    element_api_all_40_elements: '엘리먼트 API (전체 40개 엘리먼트)',
+    element_api_all_41_elements: '엘리먼트 API (전체 41개 엘리먼트)',
     style_tokens_parts: '스타일 토큰과 Part',
     changelog: '변경 이력',
     foundations: '기반',

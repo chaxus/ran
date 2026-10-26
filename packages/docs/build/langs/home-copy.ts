@@ -38,7 +38,7 @@ const CAPS_STRUCTURE = [
 ] as const;
 
 /** Stat figures and pillar destinations — identical in every language. */
-const STAT_NUMS = ['40', '90+', '8', 'MIT'] as const;
+const STAT_NUMS = ['41', '90+', '8', 'MIT'] as const;
 const PILLAR_STRUCTURE = [
   { kind: 'ui', link: '/src/ranui/' },
   { kind: 'utils', link: '/src/ranuts/' },
@@ -134,7 +134,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     pillars: [
       {
         title: 'ranui',
-        desc: 'A framework-agnostic Web Components library. Drop 40 styled r- elements into any stack: Vue, React, or plain HTML.',
+        desc: 'A framework-agnostic Web Components library. Drop 41 styled r- elements into any stack: Vue, React, or plain HTML.',
         more: 'Browse components',
       },
       {
@@ -226,7 +226,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     pillars: [
       {
         title: 'ranui',
-        desc: '框架无关的 Web Components 组件库。40 个开箱即用的 r- 元素，可放进 Vue、React 或纯 HTML 的任意技术栈。',
+        desc: '框架无关的 Web Components 组件库。41 个开箱即用的 r- 元素，可放进 Vue、React 或纯 HTML 的任意技术栈。',
         more: '查看组件',
       },
       {
@@ -299,7 +299,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     pillars: [
       {
         title: 'ranui',
-        desc: 'フレームワーク非依存の Web Components ライブラリ。スタイル済みの r- 要素 40 個を Vue・React・素の HTML のどこにでも置けます。',
+        desc: 'フレームワーク非依存の Web Components ライブラリ。スタイル済みの r- 要素 41 個を Vue・React・素の HTML のどこにでも置けます。',
         more: 'コンポーネント一覧',
       },
       {
@@ -398,7 +398,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     pillars: [
       {
         title: 'ranui',
-        desc: 'Una biblioteca de Web Components independiente de cualquier framework. Coloca 40 elementos r- ya estilizados en Vue, React o HTML puro.',
+        desc: 'Una biblioteca de Web Components independiente de cualquier framework. Coloca 41 elementos r- ya estilizados en Vue, React o HTML puro.',
         more: 'Explorar componentes',
       },
       {
@@ -497,7 +497,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     pillars: [
       {
         title: 'ranui',
-        desc: 'Uma biblioteca de Web Components independente de framework. Coloque 40 elementos r- já estilizados no Vue, no React ou em HTML puro.',
+        desc: 'Uma biblioteca de Web Components independente de framework. Coloque 41 elementos r- já estilizados no Vue, no React ou em HTML puro.',
         more: 'Explorar componentes',
       },
       {
@@ -596,7 +596,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     pillars: [
       {
         title: 'ranui',
-        desc: '프레임워크 비종속 Web Components 라이브러리. 스타일이 갖춰진 r- 엘리먼트 40개를 Vue, React, 순수 HTML 어디에나 넣을 수 있습니다.',
+        desc: '프레임워크 비종속 Web Components 라이브러리. 스타일이 갖춰진 r- 엘리먼트 41개를 Vue, React, 순수 HTML 어디에나 넣을 수 있습니다.',
         more: '컴포넌트 보기',
       },
       {
@@ -689,7 +689,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     pillars: [
       {
         title: 'ranui',
-        desc: 'Eine frameworkunabhängige Web-Components-Bibliothek. 40 fertig gestaltete r--Elemente für jeden Stack: Vue, React oder reines HTML.',
+        desc: 'Eine frameworkunabhängige Web-Components-Bibliothek. 41 fertig gestaltete r--Elemente für jeden Stack: Vue, React oder reines HTML.',
         more: 'Komponenten durchsehen',
       },
       {
@@ -788,7 +788,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     pillars: [
       {
         title: 'ranui',
-        desc: 'کتابخانهٔ Web Components مستقل از فریم‌ورک. ۴۰ عنصر ‎r-‎ آمادهٔ استفاده را در Vue، React یا HTML ساده بگذارید.',
+        desc: 'کتابخانهٔ Web Components مستقل از فریم‌ورک. ۴۱ عنصر ‎r-‎ آمادهٔ استفاده را در Vue، React یا HTML ساده بگذارید.',
         more: 'مرور کامپوننت‌ها',
       },
       {

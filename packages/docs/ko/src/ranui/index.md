@@ -96,7 +96,7 @@ document.body.appendChild(button);
 
 ## 컴포넌트
 
-엘리먼트 40 개. 어트리뷰트, 프로퍼티, 이벤트, 슬롯, `::part()` 이름까지 전부
+엘리먼트 41 개. 어트리뷰트, 프로퍼티, 이벤트, 슬롯, `::part()` 이름까지 전부
 [엘리먼트 API 레퍼런스](/ko/src/ranui/api)에 있습니다.
 
 **공통**: [Button](/ko/src/ranui/button/) · [Icon](/ko/src/ranui/icon/) ·
