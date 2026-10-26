@@ -19,6 +19,7 @@ import { mountCodeGroups } from './code-groups.ts';
 import { mountDesignIllustrations } from './design-illustrations.ts';
 import { mountSearch } from './search.ts';
 import { mountDemos } from './home.ts';
+import { mountEntrance } from './entrance.ts';
 import { mountNavigation, mountCodeCopy } from './interactions.ts';
 import { mountPlaygrounds } from './playground.ts';
 
@@ -66,6 +67,7 @@ if (headings.length && links.size) {
 
 mountSearch();
 mountDemos();
+mountEntrance();
 
 mountNavigation();
 mountCodeCopy();
