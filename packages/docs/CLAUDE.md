@@ -171,8 +171,8 @@ commit produced different source trees.
 - **hreflang alternates, existence-checked**, so a one-language-only page never advertises a
   404 counterpart.
 - **`og:` / `twitter:` tags**, and `SoftwareSourceCode` JSON-LD on the ranui/ranuts landings.
-- The **home page title** is promoted to the full tagline (otherwise it is just `ran`, since
-  `title === site title` suppresses the template).
+- **Every language's home title** is `ran — {headline}` from `langs/home-copy.ts`, through
+  `pageTitle` in `seo.ts`, which both `<title>` and `og:title` use.
 
 Site copy is written for SEO/GEO. Don't add decorative taglines to the home page.
 

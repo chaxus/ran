@@ -71,7 +71,7 @@ export const NAV: SidebarNode[] = [
 
 /** Reachable from every page, but not part of the product: the page footer and the drawer's end. */
 export const SECONDARY_NAV: SidebarNode[] = [
-  { kind: 'full', key: 'articles', link: '/src/article/doc_preview', activeMatch: '/(articles|notes)/' },
+  { kind: 'full', key: 'articles', link: '/src/article/', activeMatch: '/(articles|notes)/' },
   { kind: 'full', key: 'doc_editor', link: EDITOR },
 ];
 

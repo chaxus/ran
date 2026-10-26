@@ -31,11 +31,12 @@ it.each(LOCALES)('makes all three pillars and agent guidance reachable in $lang 
   }
 });
 
-it('keeps the installation guide explicit about checkout previews and release commands', () => {
+it('leads the installation guide with the published commands and keeps the checkout preview', () => {
   const guide = readFileSync(resolve(import.meta.dirname, '../src/agents/index.md'), 'utf8');
-  expect(guide).toContain('After publication');
-  expect(guide).toContain('codex plugin marketplace add .');
-  expect(guide).toContain('claude plugin marketplace add .');
+  expect(guide).not.toContain('After publication');
+  expect(guide).toContain('codex plugin marketplace add chaxus/ran');
+  expect(guide).toContain('claude plugin marketplace add chaxus/ran');
+  expect(guide).toContain('with `.` in place of `chaxus/ran` from the repository root');
   expect(guide).toContain('codex plugin add ran@ran');
   expect(guide).toContain('claude plugin install ran@ran');
   expect(guide).toContain('`$design`');
