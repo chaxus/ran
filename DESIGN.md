@@ -26,7 +26,12 @@ chooses. There is no other theme.
 ## Typography
 
 `--ran-font-family` (Geist) and `--ran-font-mono`, with system CJK and Arabic fallbacks; no web font is
-loaded for those scripts. Prose is capped by `--measure` (44rem); tables, code and demos take the full column.
+loaded for those scripts. A docs page is one column `--measure` (42rem) wide: prose, tables, code and demos
+end on the same edge, and the outline sits beside it.
+
+Header navigation labels are lowercase, matching the `ran` wordmark and the lowercase product names beside
+them (`ranui`, `ranuts`). This is the one exception to sentence case (D-COPY-14); it is applied with CSS, so
+the labels themselves stay sentence case wherever else they appear.
 
 ## Layout
 
