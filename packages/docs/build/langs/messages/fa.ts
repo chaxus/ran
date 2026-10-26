@@ -147,6 +147,7 @@ const fa: LocaleMessages = {
     canvas_animation: 'Canvas و انیمیشن',
     canvas_2d_geometry_paths_gradients: 'هندسهٔ دوبعدی Canvas - مسیرها و گرادیان‌ها',
     tween: 'توابع نرم‌کننده',
+    motion: 'فنر، پلکانی و ورود به دید',
     i18n: 'i18n',
     internationalisation_engine: 'موتور بین‌المللی‌سازی',
     '2d_rendering_visual': 'رندر دوبعدی (visual)',

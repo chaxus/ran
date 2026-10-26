@@ -147,6 +147,7 @@ const ko: LocaleMessages = {
     canvas_animation: 'Canvas와 애니메이션',
     canvas_2d_geometry_paths_gradients: 'Canvas 2D 지오메트리 - 패스와 그라디언트',
     tween: '이징 함수',
+    motion: '스프링·시차·뷰포트 진입',
     i18n: 'i18n',
     internationalisation_engine: '국제화 엔진',
     '2d_rendering_visual': '2D 렌더링 (visual)',

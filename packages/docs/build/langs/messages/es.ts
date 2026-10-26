@@ -147,6 +147,7 @@ const es: LocaleMessages = {
     canvas_animation: 'Canvas y animación',
     canvas_2d_geometry_paths_gradients: 'Geometría 2D en canvas - Trazados y degradados',
     tween: 'Funciones de suavizado',
+    motion: 'Muelles, escalonado y entrada en pantalla',
     i18n: 'i18n',
     internationalisation_engine: 'Motor de internacionalización',
     '2d_rendering_visual': 'Renderizado 2D (visual)',
