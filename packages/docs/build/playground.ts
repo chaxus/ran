@@ -34,8 +34,9 @@ const literals = (text: string): string[] => {
 export const statedDefault = (description: string): string | undefined => {
   const marked = /`'([^'`]*)'` \(default\)/.exec(description);
   if (marked) return marked[1] || 'default';
-  const stated =
-    /(?:Defaults? to|Default) (?:`'?([^'`]*)'?`|"([^"]+)")|Behaves as `([^`]+)` when unset/.exec(description);
+  const stated = /(?:Defaults? to|Default) (?:`'?([^'`]*)'?`|"([^"]+)")|Behaves as `([^`]+)` when unset/.exec(
+    description,
+  );
   const value = stated?.[1] ?? stated?.[2] ?? stated?.[3];
   // An expression such as `document.body` is how the default is computed, not a value to type.
   if (!value || /^[A-Za-z_$][\w$]*\.[A-Za-z_$]/.test(value)) return undefined;
