@@ -18,6 +18,8 @@ import mathCss from './index.less?inline';
 // shadow root.
 import temmlCss from './temml.css?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { uiText } from '@/utils/ui-text';
+import { mathText } from './text';
 
 // Bundled math fonts make <r-math> render identically on every OS / browser (rather than
 // depending on a system math font). `latinmodernmath` is the main face (Computer-Modern /
@@ -182,8 +184,8 @@ export class Math extends RanElement {
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
   }
-  private label(key: string, fallback: string): string {
-    return getStringAttribute(this, `label-${key}`) || fallback;
+  private label(key: string, fallback: keyof typeof mathText.en): string {
+    return getStringAttribute(this, `label-${key}`) || uiText(mathText, fallback, this);
   }
   private emit(name: string, detail: Record<string, unknown>): void {
     this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
@@ -295,11 +297,11 @@ export class Math extends RanElement {
     this._toolbar.innerHTML = '';
     const buttons: HTMLElement[] = [];
     if (this.copyable) {
-      const label = this.copyTarget === 'mathml' ? 'Copy MathML' : 'Copy LaTeX';
+      const label = this.copyTarget === 'mathml' ? 'math.copyMathml' : 'math.copyLatex';
       buttons.push(this.iconButton('copy', this.label('copy', label), this.copyContent));
     }
     if (this.downloadable)
-      buttons.push(this.iconButton('download', this.label('download', 'Download'), this.onDownload));
+      buttons.push(this.iconButton('download', this.label('download', 'math.download'), this.onDownload));
     buttons.forEach((b) => this._toolbar.appendChild(b));
     this._wrap.classList.toggle('has-controls', buttons.length > 0);
   }
@@ -346,7 +348,7 @@ export class Math extends RanElement {
     } catch {
       if (!current()) return;
       const status = Div().class('ran-math-copy-status').part('copy-status').attr('role', 'status').build();
-      status.textContent = this.label('copy-error', 'Could not copy. Try again.');
+      status.textContent = this.label('copy-error', 'math.copyError');
       this._copyStatus = status;
       this._toolbar.prepend(status);
     } finally {
@@ -403,8 +405,8 @@ export class Math extends RanElement {
     }
     const menu = Div().class('ran-math-menu').part('menu').build();
     const names: Record<string, string> = {
-      source: this.label('download-source', 'Source (.tex)'),
-      mathml: this.label('download-mathml', 'MathML (.mml)'),
+      source: this.label('download-source', 'math.downloadSource'),
+      mathml: this.label('download-mathml', 'math.downloadMathml'),
     };
     this.downloadFormats().forEach((fmt) => {
       const item = View('button').class('ran-math-menu-item').attr('type', 'button').build();

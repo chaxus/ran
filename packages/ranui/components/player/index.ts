@@ -30,7 +30,7 @@ import { createMetricsController, type PlayerMetrics, type PlayerMetricsControll
 import { attachGestureHandlers, type PlayerGestureController, type PlayerGestureDeps } from './core/gestures';
 import { findThumbnailCue, loadThumbnailCues, type ThumbnailCue } from './core/thumbnails';
 import { type PlayerTrackConfig } from './core/tracks';
-import { ensurePlayerView } from './core/view';
+import { ensurePlayerView, labelPlayerControls, type PlayerControlLabelRefs } from './core/view';
 import { EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/ssr';
 import { registerIcon } from '@/components/icon';
@@ -49,6 +49,8 @@ import {
 } from '@/utils/component';
 import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { uiText } from '@/utils/ui-text';
+import { playerText } from './text';
 
 registerIcon('pip', pipIcon);
 registerIcon('cast', castIcon);
@@ -239,6 +241,14 @@ export class RanPlayer extends RanElement {
     this._subtitles = createSubtitleHandlers(this.getSubtitleDeps());
     this._metrics = createMetricsController();
   }
+  getControlLabelRefs = (): PlayerControlLabelRefs => ({
+    progress: this._progress,
+    speed: this._playControllerBottomSpeedPopover,
+    volume: this._playControllerBottomVolume,
+    pip: this._playControllerBottomPip,
+    remote: this._playControllerBottomRemote,
+    fullscreen: this._playControllerBottomRightFullScreen,
+  });
   getVisualEffectRefs = (): PlayerVisualEffectRefs => {
     return {
       playBtn: this._playerControllerBottomPlayBtn,
@@ -473,14 +483,14 @@ export class RanPlayer extends RanElement {
   }
   /** Heading of the built-in playback-error panel. Defaults to `'Playback failed'`. */
   get labelError(): string {
-    return getStringAttribute(this, 'label-error', 'Playback failed');
+    return getStringAttribute(this, 'label-error', uiText(playerText, 'player.error', this));
   }
   set labelError(value: string) {
     setStringAttribute(this, 'label-error', value);
   }
   /** Label of the panel's retry button. Defaults to `'Retry'`. */
   get labelRetry(): string {
-    return getStringAttribute(this, 'label-retry', 'Retry');
+    return getStringAttribute(this, 'label-retry', uiText(playerText, 'player.retry', this));
   }
   set labelRetry(value: string) {
     setStringAttribute(this, 'label-retry', value);
@@ -885,6 +895,8 @@ export class RanPlayer extends RanElement {
     // the player (including the already-wired Space/Escape/Arrow shortcuts in
     // SpaceKeyDown) was ever focusable, so no keyboard user could reach them.
     if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
+    // Named on connect, when the controls can see the language of the page they joined.
+    labelPlayerControls(this.getControlLabelRefs());
     bindControllerEvents(this._events, this.getControllerElements(), this.getControllerHandlers());
     if (this._effectDisposers.length === 0) this.setupEffects();
     this._gestures = attachGestureHandlers(this.getGestureDeps());

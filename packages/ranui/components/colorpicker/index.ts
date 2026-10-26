@@ -15,6 +15,8 @@ import {
 import colorPickerCss from './index.less?inline';
 import panelCss from './panel.less?inline';
 import { isActivationKey, sliderStepFromKeydown } from '@/utils/a11y';
+import { uiText } from '@/utils/ui-text';
+import { colorpickerText } from './text';
 
 const HUE = 360;
 
@@ -128,7 +130,7 @@ export class ColorPicker extends RanElement {
    * can set is a string no consumer can localize.
    */
   get label(): string {
-    return getStringAttribute(this, 'label', 'Choose color');
+    return getStringAttribute(this, 'label', uiText(colorpickerText, 'colorpicker.label', this));
   }
   set label(value: string) {
     setStringAttribute(this, 'label', value);
@@ -136,7 +138,7 @@ export class ColorPicker extends RanElement {
 
   /** Accessible name of the hue slider. */
   get hueLabel(): string {
-    return getStringAttribute(this, 'hue-label', 'Hue');
+    return getStringAttribute(this, 'hue-label', uiText(colorpickerText, 'colorpicker.hue', this));
   }
   set hueLabel(value: string) {
     setStringAttribute(this, 'hue-label', value);
@@ -144,7 +146,7 @@ export class ColorPicker extends RanElement {
 
   /** Accessible name of the opacity slider. */
   get alphaLabel(): string {
-    return getStringAttribute(this, 'alpha-label', 'Alpha opacity');
+    return getStringAttribute(this, 'alpha-label', uiText(colorpickerText, 'colorpicker.alpha', this));
   }
   set alphaLabel(value: string) {
     setStringAttribute(this, 'alpha-label', value);
@@ -599,6 +601,8 @@ export class ColorPicker extends RanElement {
     this._events.on(document, 'pointerup', this.onPointerUp);
     this._events.on(document, 'pointercancel', this.onPointerUp);
     this.syncDisabledState();
+    // Named again on connect, when the element can see the language of the page it joined.
+    this.syncLabels();
     if (this.value) this.updateColorValue(this.value);
     // Paint the swatch immediately regardless of whether `value` was set — the panel
     // (and the reactive effect that would otherwise keep this in sync) doesn't exist yet.

@@ -9,6 +9,8 @@ import { exitPip, isPipSupported, requestPip } from './pip';
 import { isRemotePlaybackSupported, requestRemotePlayback } from './remote-playback';
 import { maybeSaveResumePosition } from './resume';
 import type { PlayerContextState, PlayerRuntimeState } from './state';
+import { uiText } from '@/utils/ui-text';
+import { playerText } from '../text';
 
 const REMOTE_PLAYBACK_FLASH_MS = 1800;
 
@@ -347,7 +349,7 @@ export function createChromeHandlers(deps: PlayerChromeDeps): PlayerChromeHandle
         // consumer build custom UI around it; the flash gives every player
         // a default, non-blocking one without requiring a listener.
         deps.change('remoteplaybackerror', { message: 'No cast device found' });
-        remoteFlash.show('No cast device found', 'ran-player-gesture-flash-center');
+        remoteFlash.show(uiText(playerText, 'player.noCastDevice', refs.player), 'ran-player-gesture-flash-center');
       });
     },
     /**

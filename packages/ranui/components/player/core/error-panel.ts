@@ -1,3 +1,5 @@
+import { uiText } from '@/utils/ui-text';
+import { playerText } from '../text';
 export interface PlayerErrorPanelDeps {
   isDisabled: () => boolean;
   onRetry: () => void;
@@ -49,7 +51,7 @@ export function createErrorPanelController(deps: PlayerErrorPanelDeps): PlayerEr
     message.textContent = text;
     retry.textContent = labels.retry;
     panel.hidden = false;
-    live.textContent = `${labels.title}. ${text}`;
+    live.textContent = uiText(playerText, 'player.errorAnnouncement', panel, { title: labels.title, message: text });
   };
   return { show, hide, isShowing: () => showing };
 }

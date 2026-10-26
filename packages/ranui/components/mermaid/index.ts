@@ -15,6 +15,8 @@ import mermaidCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 import { observeDocumentTheme, resolveDocumentTheme, THEME_SIGNAL_ATTRIBUTES } from '@/utils/theme';
 import { watchMediaQuery } from 'ranuts/utils';
+import { uiText } from '@/utils/ui-text';
+import { mermaidText } from './text';
 
 let seq = 0;
 
@@ -104,8 +106,8 @@ export class Mermaid extends RanElement {
   set fullscreenable(v: boolean) {
     setBooleanAttribute(this, 'fullscreen', v);
   }
-  private label(key: string, fallback: string): string {
-    return getStringAttribute(this, `label-${key}`) || fallback;
+  private label(key: string, fallback: keyof typeof mermaidText.en): string {
+    return getStringAttribute(this, `label-${key}`) || uiText(mermaidText, fallback, this);
   }
   private resolveTheme(): 'dark' | 'default' {
     const t = this.theme;
@@ -242,11 +244,11 @@ export class Mermaid extends RanElement {
     this.closeDownloadMenu();
     this._toolbar.innerHTML = '';
     const buttons: HTMLElement[] = [];
-    if (this.copyable) buttons.push(this.iconButton('copy', this.label('copy', 'Copy source'), this.copySource));
+    if (this.copyable) buttons.push(this.iconButton('copy', this.label('copy', 'mermaid.copy'), this.copySource));
     if (this.downloadable)
-      buttons.push(this.iconButton('download', this.label('download', 'Download'), this.onDownload));
+      buttons.push(this.iconButton('download', this.label('download', 'mermaid.download'), this.onDownload));
     if (this.fullscreenable)
-      buttons.push(this.iconButton('fullscreen', this.label('fullscreen', 'Fullscreen'), this.openFullscreen));
+      buttons.push(this.iconButton('fullscreen', this.label('fullscreen', 'mermaid.fullscreen'), this.openFullscreen));
     buttons.forEach((b) => this._toolbar.appendChild(b));
     this._wrap.classList.toggle('has-controls', buttons.length > 0);
   }
@@ -283,7 +285,7 @@ export class Mermaid extends RanElement {
     } catch {
       if (!current()) return;
       const status = Div().class('ran-mermaid-copy-status').part('copy-status').attr('role', 'status').build();
-      status.textContent = this.label('copy-error', 'Could not copy. Try again.');
+      status.textContent = this.label('copy-error', 'mermaid.copyError');
       this._copyStatus = status;
       this._toolbar.prepend(status);
     } finally {
@@ -385,9 +387,9 @@ export class Mermaid extends RanElement {
     }
     const menu = Div().class('ran-mermaid-menu').part('menu').build();
     const names: Record<string, string> = {
-      svg: this.label('download-svg', 'SVG'),
-      png: this.label('download-png', 'PNG'),
-      source: this.label('download-source', 'Source (.mmd)'),
+      svg: getStringAttribute(this, 'label-download-svg') || 'SVG',
+      png: getStringAttribute(this, 'label-download-png') || 'PNG',
+      source: this.label('download-source', 'mermaid.downloadSource'),
     };
     this.downloadFormats().forEach((fmt) => {
       const item = View('button').class('ran-mermaid-menu-item').attr('type', 'button').build();
@@ -413,7 +415,7 @@ export class Mermaid extends RanElement {
       const modal = document.createElement('r-modal');
       // Diagram lightbox: headerless (no title bar) but keep the floating close button.
       // `title` still gives the dialog an accessible label in headerless mode.
-      modal.setAttribute('title', this.label('diagram', 'Diagram'));
+      modal.setAttribute('title', this.label('diagram', 'mermaid.diagram'));
       modal.setAttribute('hide-header', '');
       modal.setAttribute('closable', '');
       modal.setAttribute('maskClosable', 'true');
@@ -506,9 +508,9 @@ export class Mermaid extends RanElement {
         b.addEventListener('click', fn, { signal: sig });
         return b;
       };
-      controls.appendChild(fsBtn('zoom-out', this.label('zoom-out', 'Zoom out'), () => zoom(1 / 1.2)));
-      controls.appendChild(fsBtn('refresh', this.label('reset', 'Reset'), reset));
-      controls.appendChild(fsBtn('zoom-in', this.label('zoom-in', 'Zoom in'), () => zoom(1.2)));
+      controls.appendChild(fsBtn('zoom-out', this.label('zoom-out', 'mermaid.zoomOut'), () => zoom(1 / 1.2)));
+      controls.appendChild(fsBtn('refresh', this.label('reset', 'mermaid.reset'), reset));
+      controls.appendChild(fsBtn('zoom-in', this.label('zoom-in', 'mermaid.zoomIn'), () => zoom(1.2)));
       wrap.appendChild(controls);
 
       modal.appendChild(wrap);

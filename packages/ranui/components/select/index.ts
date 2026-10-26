@@ -21,6 +21,8 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
+import { uiText } from '@/utils/ui-text';
+import { selectText } from './text';
 
 interface Option {
   label: string | number;
@@ -294,7 +296,7 @@ export class Select extends RanElement {
       disabled: this.disabled,
       required: this.required,
       isEmpty: !this.value,
-      message: 'Please select an item in the list.',
+      message: uiText(selectText, 'select.required', this),
       // The host itself is the focusable/tabbable element (tabIndex is set on
       // `this`, never on `_selection`) — the native validation bubble anchors
       // correctly only against a focusable descendant.

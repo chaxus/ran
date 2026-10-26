@@ -12,6 +12,8 @@ import { defineSSR } from '@/utils/ssr-registry';
 import { DISCLOSURE_TOGGLE } from '@/components/disclosure-row';
 import '@/components/disclosure-row';
 import type { DisclosureRow } from '@/components/disclosure-row';
+import { uiText } from '@/utils/ui-text';
+import { reasoningText } from './text';
 
 /**
  * The line a collapsed reasoning block shows.
@@ -137,7 +139,7 @@ export class Reasoning extends RanElement {
 
   /** Summary text. Defaults to `Reasoning`. */
   get label(): string {
-    return getStringAttribute(this, 'label', 'Reasoning');
+    return getStringAttribute(this, 'label', uiText(reasoningText, 'reasoning.label', this));
   }
   set label(value: string) {
     setStringAttribute(this, 'label', value);

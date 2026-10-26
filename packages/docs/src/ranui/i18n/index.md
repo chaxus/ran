@@ -141,14 +141,26 @@ i18n.addMessages('fr', fr); // merges into any existing 'fr' dictionary
 i18n.setLocale('fr');
 ```
 
+## Built-in component text
+
+The few strings a component writes itself (accessible names for the player's controls, the copy and download buttons on `r-markdown`, `r-math` and `r-mermaid`, validation messages, the token meter's limit flag) follow the reader's language. ranui uses the app's i18n locale when one is registered, otherwise the nearest `lang` attribute (usually `<html lang>`). It ships these strings in Chinese, Japanese, Korean, Spanish, Portuguese, German and Persian; any other language gets English.
+
+To change one, define `ranui.<key>` in your own dictionary. It takes precedence over the built-in table:
+
+```js
+createI18n({
+  messages: {
+    en: { 'ranui.player.error': 'This video is unavailable' },
+    zh: { 'ranui.player.error': '视频暂时无法播放' },
+  },
+});
+```
+
+Each component's keys and their English text are in its own `components/<name>/text.ts` in the ranui source. An attribute set on the element, such as `label` or `label-*`, still wins over both. Text is resolved when it is written: when the element connects, or when the state it describes changes. After a runtime locale switch, an element already on the page keeps its text until it next writes it; to apply the switch at once, re-apply the labels as shown below.
+
 ## Localizing component text
 
-The components do **not** read from this engine themselves. That is deliberate: a component
-that read directly from a global singleton would tie every consumer to one instance and one
-key-naming scheme, and would make a page that imports one button pull in the translation
-layer too. Instead
-**every user-visible string is an input**: an attribute, a property, an option, or slotted
-content, so localizing ranui means passing `t()` output in where the string already goes:
+Every user-visible string is also an input: an attribute, a property, an option, or slotted content. What you pass there wins over the built-in text, so the other way to localize ranui is to pass `t()` output in where the string already goes:
 
 ```js
 const i18n = useI18n(); // messages below assumed registered
@@ -157,19 +169,19 @@ modal.setAttribute('title', i18n.t('dialog.deleteProject.title'));
 themeSwitch.setAttribute('label-dark', i18n.t('theme.dark'));
 ```
 
-Most components have no text of their own at all: it arrives through slots and attributes you
-already write. A handful ship an English default for a string that has nowhere else to come
-from, mostly accessible names:
+Most components have no text of their own at all: it arrives through slots and attributes you already write. These are the strings that have nowhere else to come from, and the inputs that replace them; the table shows the English text:
 
-| Component                                         | Built-in English                                                                                                        | Override with                                        |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `Modal.confirm` / `Modal.open`                    | title `Confirm`, buttons `OK` / `Cancel`                                                                                | the `title`, `okText`, `cancelText` options          |
-| `Modal.info` / `.success` / `.warning` / `.error` | titles `Info` / `Success` / `Warning` / `Error`                                                                         | the `title` option                                   |
-| `<r-theme-switch>`                                | aria-labels `Theme`, `System theme`, `Light theme`, `Dark theme`                                                        | `label`, `label-system`, `label-light`, `label-dark` |
-| `<r-voice-button>`                                | aria-labels `Start voice input` / `Stop voice input`; hints `Release to keep · slide up to cancel`, `Release to cancel` | `label`, `active-label`, `hold-hint`, `cancel-hint`  |
-| `<r-reasoning>`                                   | header label `Reasoning`                                                                                                | `label`                                              |
-| `<r-token-meter>`                                 | label `Context`                                                                                                         | `label`                                              |
-| `<r-colorpicker>`                                 | aria-labels `Choose color`, `Hue`, `Alpha opacity`                                                                      | `label`, `hue-label`, `alpha-label`                  |
+| Component                                         | Built-in English                                                                                                        | Override with                                          |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `Modal.confirm` / `Modal.open`                    | title `Confirm`, buttons `OK` / `Cancel`                                                                                | the `title`, `okText`, `cancelText` options            |
+| `Modal.info` / `.success` / `.warning` / `.error` | titles `Info` / `Success` / `Warning` / `Error`                                                                         | the `title` option                                     |
+| `<r-theme-switch>`                                | aria-labels `Theme`, `System theme`, `Light theme`, `Dark theme`                                                        | `label`, `label-system`, `label-light`, `label-dark`   |
+| `<r-voice-button>`                                | aria-labels `Start voice input` / `Stop voice input`; hints `Release to keep · slide up to cancel`, `Release to cancel` | `label`, `active-label`, `hold-hint`, `cancel-hint`    |
+| `<r-reasoning>`                                   | header label `Reasoning`                                                                                                | `label`                                                |
+| `<r-token-meter>`                                 | label `Context`                                                                                                         | `label`                                                |
+| `<r-colorpicker>`                                 | aria-labels `Choose color`, `Hue`, `Alpha opacity`                                                                      | `label`, `hue-label`, `alpha-label`                    |
+| `<r-player>`                                      | error heading `Playback failed`, retry button `Retry`                                                                   | `label-error`, `label-retry`                           |
+| `<r-markdown>` / `<r-math>` / `<r-mermaid>`       | toolbar labels such as `Copy code` and `Download`                                                                       | `label-copy`, `label-download` and the other `label-*` |
 
 A practical pattern is to re-apply them from one place on every locale change, so the same code
 runs at startup and after a switch:

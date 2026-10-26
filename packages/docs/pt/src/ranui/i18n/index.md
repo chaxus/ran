@@ -123,9 +123,26 @@ i18n.addMessages('fr', fr); // funde-se a qualquer dicionário 'fr' existente
 i18n.setLocale('fr');
 ```
 
+## Texto embutido nos componentes
+
+As poucas cadeias que o próprio componente escreve (os nomes acessíveis dos controles do player, os botões de copiar e baixar de `r-markdown`, `r-math` e `r-mermaid`, as mensagens de validação, o aviso de limite do medidor de tokens) seguem o idioma de quem lê. O ranui usa o idioma da instância de i18n do app, quando há uma registrada, ou então o atributo `lang` mais próximo (normalmente `<html lang>`). Essas cadeias vêm em chinês, japonês, coreano, espanhol, português, alemão e persa; qualquer outro idioma vê o inglês.
+
+Para trocar uma, defina `ranui.<key>` no seu próprio dicionário. Ela tem prioridade sobre a tabela embutida:
+
+```js
+createI18n({
+  messages: {
+    en: { 'ranui.player.error': 'This video is unavailable' },
+    zh: { 'ranui.player.error': '视频暂时无法播放' },
+  },
+});
+```
+
+As chaves de cada componente e o texto em inglês estão no próprio `components/<name>/text.ts` do código-fonte do ranui. Um atributo definido no elemento, como `label` ou `label-*`, continua vencendo os dois. O texto é resolvido quando é escrito: quando o elemento se conecta ou quando muda o estado que ele descreve. Por isso, depois de trocar o idioma em tempo de execução, um elemento que já está na página mantém o texto até a próxima escrita; se precisar da mudança na hora, reaplique os rótulos como mostrado abaixo.
+
 ## Localizar o texto dos componentes
 
-Os componentes **não** leem deste motor por conta própria. Isso é proposital: um componente que lesse direto de um singleton global amarraria todo consumidor a uma única instância e a um único esquema de nomes de chave, e faria uma página que importa um só botão trazer junto a camada de tradução. Em vez disso, **toda cadeia visível é uma entrada**: um atributo, uma propriedade, uma opção ou conteúdo de slot. Localizar o ranui, então, é passar a saída de `t()` no lugar por onde a cadeia já entra:
+Toda cadeia visível também é uma entrada: um atributo, uma propriedade, uma opção ou conteúdo de slot. O que você passa ali vence o texto embutido, então a outra forma de localizar o ranui é passar a saída de `t()` no lugar por onde a cadeia já entra:
 
 ```js
 const i18n = useI18n(); // considera-se que as mensagens abaixo já estão registradas
@@ -134,7 +151,7 @@ modal.setAttribute('title', i18n.t('dialog.deleteProject.title'));
 themeSwitch.setAttribute('label-dark', i18n.t('theme.dark'));
 ```
 
-A maioria dos componentes não tem texto próprio: ele chega pelos slots e atributos que você já escreve. Uns poucos trazem um padrão em inglês para alguma cadeia que não tem de onde vir, quase sempre nomes acessíveis:
+A maioria dos componentes não tem texto próprio: ele chega pelos slots e atributos que você já escreve. Estas são as cadeias que não têm de onde vir e as entradas que as substituem; a tabela mostra o texto em inglês:
 
 | Componente                                        | Inglês embutido                                                                                                         | Sobrescreve com                                      |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
@@ -145,6 +162,8 @@ A maioria dos componentes não tem texto próprio: ele chega pelos slots e atrib
 | `<r-reasoning>`                                   | rótulo do cabeçalho `Reasoning`                                                                                         | `label`                                              |
 | `<r-token-meter>`                                 | rótulo `Context`                                                                                                        | `label`                                              |
 | `<r-colorpicker>`                                 | aria-labels `Choose color`, `Hue`, `Alpha opacity`                                                                      | `label`, `hue-label`, `alpha-label`                  |
+| `<r-player>`                                      | título do painel de erro `Playback failed`, botão `Retry`                                                               | `label-error`, `label-retry`                         |
+| `<r-markdown>` / `<r-math>` / `<r-mermaid>`       | botões da barra como `Copy code` e `Download`                                                                           | `label-copy`, `label-download` e os demais `label-*` |
 
 Um padrão prático é reaplicá-los a partir de um só lugar a cada mudança de idioma, para que o mesmo código rode na inicialização e depois de uma troca:
 

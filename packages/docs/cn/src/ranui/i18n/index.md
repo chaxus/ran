@@ -136,12 +136,26 @@ i18n.addMessages('fr', fr); // 合并进已有的 'fr' 字典
 i18n.setLocale('fr');
 ```
 
+## 组件内置文案
+
+组件自己写出的少量文字，比如播放器各个控件的无障碍名称，`r-markdown`、`r-math`、`r-mermaid` 上的复制和下载按钮，表单校验提示，以及 token 计量条的超限提示，会跟着读者的语言走。应用注册了 i18n 时用它的当前语言，否则用最近的 `lang` 属性（通常是 `<html lang>`）。内置中文、日语、韩语、西班牙语、葡萄牙语、德语和波斯语七种语言，其他语言显示英文。
+
+想改其中某一条，在自己的词典里定义 `ranui.<key>` 就行，它优先于内置文案：
+
+```js
+createI18n({
+  messages: {
+    en: { 'ranui.player.error': 'This video is unavailable' },
+    zh: { 'ranui.player.error': '视频暂时无法播放' },
+  },
+});
+```
+
+每个组件的 key 和英文原文都在 ranui 源码里该组件自己的 `components/<name>/text.ts` 中。元素上设置的属性（如 `label`、`label-*`）仍然比这两者都优先。文案在写入时才确定：元素连接到页面时，或它所表示的状态变化时。所以运行中切换语言后，已经在页面上的元素要等下一次写入才会更新；想立即生效，就按下文的办法重新设置一遍。
+
 ## 组件文案的本地化
 
-组件**不会**自己去读这个引擎。这是刻意为之：组件如果直接读取全局单例，就会把所有使用者绑死在同一个
-实例和同一套 key 命名上，而且只引入一个按钮的页面也得被迫带上翻译层。所以 ranui 的做法是**所有用户
-可见的文案都作为输入**（attribute、property、选项或插槽内容）传进来，本地化 ranui 就是把 `t()` 的
-结果传到文案本来就该去的地方：
+所有用户可见的文案同时也是输入：attribute、property、选项或插槽内容。传进去的值优先于内置文案，所以另一种本地化方式，就是把 `t()` 的结果传到文案本来就该去的地方：
 
 ```js
 const i18n = useI18n(); // 假设消息已注册
@@ -150,8 +164,7 @@ modal.setAttribute('title', i18n.t('dialog.deleteProject.title'));
 themeSwitch.setAttribute('label-dark', i18n.t('theme.dark'));
 ```
 
-多数组件根本没有自己的文案，文字都来自你本来就在写的插槽和属性。少数组件给「没有别的来源」的字符串
-内置了英文默认值，主要是无障碍名称：
+多数组件根本没有自己的文案，文字都来自你本来就在写的插槽和属性。下面这些字符串没有别的来源，表里列出英文原文和用来覆盖它的输入：
 
 | 组件                                              | 内置英文                                                                                                              | 覆盖方式                                             |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
@@ -162,6 +175,8 @@ themeSwitch.setAttribute('label-dark', i18n.t('theme.dark'));
 | `<r-reasoning>`                                   | 头部标签 `Reasoning`                                                                                                  | `label`                                              |
 | `<r-token-meter>`                                 | 标签 `Context`                                                                                                        | `label`                                              |
 | `<r-colorpicker>`                                 | aria-label `Choose color`、`Hue`、`Alpha opacity`                                                                     | `label`、`hue-label`、`alpha-label`                  |
+| `<r-player>`                                      | 错误面板标题 `Playback failed`，重试按钮 `Retry`                                                                      | `label-error`、`label-retry`                         |
+| `<r-markdown>` / `<r-math>` / `<r-mermaid>`       | 工具栏按钮 `Copy code`、`Download` 等                                                                                 | `label-copy`、`label-download` 等 `label-*`          |
 
 实用做法是把它们集中在一处、随语言切换重新应用，这样启动时和切换后跑的是同一段代码：
 

@@ -13,6 +13,8 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR, getSSRConstructor } from '@/utils/ssr-registry';
+import { uiText } from '@/utils/ui-text';
+import { tokenMeterText } from './text';
 
 /** How full the context window is. */
 export type TokenMeterLevel = 'ok' | 'warn' | 'over';
@@ -158,7 +160,7 @@ export class TokenMeter extends RanElement {
 
   /** Prefix for the readout. Defaults to `Context`; an empty string leaves only the counts. */
   get label(): string {
-    return getStringAttribute(this, 'label', 'Context');
+    return getStringAttribute(this, 'label', uiText(tokenMeterText, 'tokenMeter.label', this));
   }
   set label(value: string) {
     setStringAttribute(this, 'label', value);
@@ -242,7 +244,12 @@ export class TokenMeter extends RanElement {
     const counts = spent === 0 ? context : `${context} · ${short(spent)}`;
     this._text.textContent = label === '' ? counts : `${label} ${counts}`;
     // The escalation in words beside the bar, so it never rests on the fill colour alone.
-    this._flag.textContent = level === 'warn' ? 'Near limit' : level === 'over' ? 'Over limit' : '';
+    this._flag.textContent =
+      level === 'warn'
+        ? uiText(tokenMeterText, 'tokenMeter.nearLimit', this)
+        : level === 'over'
+          ? uiText(tokenMeterText, 'tokenMeter.overLimit', this)
+          : '';
     if (level === 'ok') this._flag.setAttribute('hidden', '');
     else this._flag.removeAttribute('hidden');
     // The exact numbers, unabbreviated, and the level in words for assistive technology: the
@@ -250,9 +257,16 @@ export class TokenMeter extends RanElement {
     this._root.setAttribute(
       'title',
       [
-        `${label}: ${used.toLocaleString()}${limit === 0 ? '' : ` / ${limit.toLocaleString()}`}`,
-        spent === 0 ? '' : `Spent: ${spent.toLocaleString()}`,
-        level === 'ok' ? '' : level === 'warn' ? 'Approaching the limit' : 'Over the limit',
+        uiText(tokenMeterText, 'tokenMeter.used', this, {
+          label,
+          count: `${used.toLocaleString()}${limit === 0 ? '' : ` / ${limit.toLocaleString()}`}`,
+        }),
+        spent === 0 ? '' : uiText(tokenMeterText, 'tokenMeter.spent', this, { count: spent.toLocaleString() }),
+        level === 'ok'
+          ? ''
+          : level === 'warn'
+            ? uiText(tokenMeterText, 'tokenMeter.approaching', this)
+            : uiText(tokenMeterText, 'tokenMeter.over', this),
       ]
         .filter((part) => part !== '')
         .join('\n'),

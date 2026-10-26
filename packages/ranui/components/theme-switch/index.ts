@@ -6,6 +6,8 @@ import { syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { getTheme, setTheme } from '@/utils/theme';
 import type { RanThemeName } from '@/utils/theme';
+import { uiText } from '@/utils/ui-text';
+import { themeSwitchText } from './text';
 
 const CHOICES: RanThemeName[] = ['system', 'light', 'dark'];
 
@@ -81,12 +83,17 @@ export class ThemeSwitch extends RanElement {
   }
 
   _label(choice: RanThemeName): string {
-    const fallback = { system: 'System theme', light: 'Light theme', dark: 'Dark theme' }[choice];
-    return this.getAttribute(`label-${choice}`) || fallback;
+    const fallback = ({ system: 'themeSwitch.system', light: 'themeSwitch.light', dark: 'themeSwitch.dark' } as const)[
+      choice
+    ];
+    return this.getAttribute(`label-${choice}`) || uiText(themeSwitchText, fallback, this);
   }
 
   _syncLabels(): void {
-    this._group.setAttribute('aria-label', this.getAttribute('label') || 'Theme');
+    this._group.setAttribute(
+      'aria-label',
+      this.getAttribute('label') || uiText(themeSwitchText, 'themeSwitch.label', this),
+    );
     for (const button of this._buttons) {
       button.setAttribute('aria-label', this._label(button.dataset.choice as RanThemeName));
     }
