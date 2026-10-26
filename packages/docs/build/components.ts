@@ -26,6 +26,8 @@ import { currentLinkBase, currentLocale } from './render-context.ts';
 import { resolveLinkFrom } from './links.ts';
 import { publicUrl } from './urls.ts';
 import { designRuleLink } from './design-reference.ts';
+import { sidebarFor } from './nav.ts';
+import type { SidebarItem } from './nav.ts';
 
 const DESIGN_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'design');
 
@@ -40,6 +42,7 @@ export const componentRenderers = {
   IconGallery: () => renderIconGallery(currentLocale()),
   Loading: () => renderLoadingGallery(),
   DesignIllustrations: () => renderDesignIllustrations(currentLocale()),
+  ArticleIndex: () => renderArticleIndex(currentLocale()),
 };
 
 export const resolveCurrentLink = (href: string): string => resolveLinkFrom(currentLinkBase())(href);
@@ -120,7 +123,8 @@ export const renderHome = (locale: LocaleDef): string => {
     `<header class="hero"><div class="hero-copy">` +
     `<span class="eyebrow"><span class="dot"></span>${esc(t.eyebrow)}</span>` +
     `<h1 class="headline"><span class="line">` +
-    words.map((w) => `<span class="word"><span class="word-in">${esc(w)}</span></span>`).join('') +
+    // Real spaces between the word boxes, so the heading's text reads as words to crawlers too.
+    words.map((w) => `<span class="word"><span class="word-in">${esc(w)}</span></span>`).join(' ') +
     `</span></h1>` +
     `<p class="subtitle">${esc(t.subtitle)}</p>` +
     `<div class="cmd"><code>npm&nbsp;i&nbsp;ranui&nbsp;ranuts</code>` +
@@ -380,4 +384,24 @@ export const renderLoadingGallery = (): string => {
     ).join('') +
     `</div>`
   );
+};
+
+// ── Article index ───────────────────────────────────────────────────────────
+
+/** Every article and note, from the same structure as the article sidebar, so the two cannot drift. */
+export const renderArticleIndex = (locale: LocaleDef): string => {
+  const list = (items: SidebarItem[]): string =>
+    `<ul>` +
+    items
+      .map(
+        (item) =>
+          `<li>${item.link ? `<a href="${esc(item.link)}">${esc(item.text)}</a>` : esc(item.text)}` +
+          `${item.items?.length ? list(item.items) : ''}</li>`,
+      )
+      .join('') +
+    `</ul>`;
+  const items = sidebarFor(publicUrl(localeHref('/src/article/', locale)), locale).flatMap((group) =>
+    group.link ? [group] : (group.items ?? []),
+  );
+  return `<nav class="article-index">${list(items)}</nav>`;
 };

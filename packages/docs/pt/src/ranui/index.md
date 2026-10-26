@@ -223,7 +223,7 @@ Shadow DOM v1 e propriedades personalizadas de CSS. **O Internet Explorer n√£o √
 ## Contribuidores
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" />
+  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="Colaboradores do ran no GitHub" />
 </a>
 
 ## Leitura adicional

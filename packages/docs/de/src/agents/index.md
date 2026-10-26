@@ -8,24 +8,24 @@ Ein ran-Plugin bietet drei Skills: design für Produktentscheidungen, ranui für
 
 [design](../design/) · [ranui](../ranui/) · [ranuts](../ranuts/)
 
-Im Stammverzeichnis des Repositorys diesen Checkout registrieren und das Plugin installieren.
+Das Plugin von GitHub installieren.
 
 ## Codex
 
 ```sh
-codex plugin marketplace add .
+codex plugin marketplace add chaxus/ran
 codex plugin add ran@ran
 ```
 
 ## Claude Code
 
 ```sh
-claude plugin marketplace add .
+claude plugin marketplace add chaxus/ran
 claude plugin install ran@ran
 ```
 
 In einer neuen Sitzung `$design`, `$ranui` oder `$ranuts` in Codex verwenden; `/ran:design`, `/ran:ranui` oder `/ran:ranuts` in Claude Code.
 
-Nach Veröffentlichung `.` im Marketplace-Befehl durch `chaxus/ran` ersetzen. Die Links verweisen auf die kanonischen Orte auf main nach dem Merge.
+Um einen lokalen Checkout zu testen, den Marketplace-Befehl im Stammverzeichnis des Repositorys mit `.` statt `chaxus/ran` ausführen.
 
 [plugins/ran](https://github.com/chaxus/ran/tree/main/plugins/ran)
