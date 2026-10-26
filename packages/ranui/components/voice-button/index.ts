@@ -128,7 +128,7 @@ export class VoiceButton extends RanElement {
     setStringAttribute(this, 'lang', value);
   }
 
-  /** Keep listening across pauses instead of stopping at the first one. */
+  /** Keep listening across pauses instead of stopping at the first one. On by default; set `continuous="false"` to stop at the first pause. */
   get continuous(): boolean {
     return getStringAttribute(this, 'continuous', 'true') !== 'false';
   }
@@ -136,6 +136,7 @@ export class VoiceButton extends RanElement {
     setStringAttribute(this, 'continuous', value ? 'true' : 'false');
   }
 
+  /** Disable the button so no capture can start. Off by default. Where speech recognition is unsupported the button is hidden instead, regardless of this. */
   get disabled(): boolean {
     return this.hasAttribute('disabled');
   }

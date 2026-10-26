@@ -156,8 +156,7 @@ export class Markdown extends RanElement {
 
   // ── Accessors ─────────────────────────────────────────────────────────────
   /**
-   * Markdown source. Resolution order: the `content` property (set via JS, not
-   * reflected), the `content` attribute, then the element's text content.
+   * Markdown source. Resolution order: the `content` property (set via JS, not reflected), the `content` attribute, then the element's text content.
    */
   get content(): string {
     if (this._content !== null) return this._content;
@@ -171,55 +170,63 @@ export class Markdown extends RanElement {
     this._content = next;
     this.renderThrottled();
   }
+  /** Parsing mode: `'streaming'` | `'static'`. Default `'streaming'` repairs half-written syntax and re-renders only changed blocks; use `'static'` for finished text. */
   get mode(): string {
     return getStringAttribute(this, 'mode') || 'streaming';
   }
   set mode(value: string) {
     setStringAttribute(this, 'mode', value);
   }
+  /** Colour scheme: `'auto'` | `'light'` | `'dark'`. Default `'auto'` follows the document theme; embedded Mermaid diagrams use the same value. */
   get theme(): string {
     return getStringAttribute(this, 'theme') || 'auto';
   }
   set theme(value: string) {
     setStringAttribute(this, 'theme', value);
   }
+  /** Shows a blinking caret after the last block while text streams in; remove it when the answer is complete. Any value draws a block caret; `'circle'` draws a dot. */
   get caret(): string {
     return getStringAttribute(this, 'caret');
   }
   set caret(value: string | null) {
     setStringAttribute(this, 'caret', value);
   }
+  /** Adds a copy button to each code block header. Reflects the `copy` attribute; off by default. */
   get copyable(): boolean {
     return this.hasAttribute('copy');
   }
   set copyable(v: boolean) {
     setBooleanAttribute(this, 'copy', v);
   }
+  /** Adds a download button to each code block header that saves the code as a file. Reflects the `download` attribute; off by default. */
   get downloadable(): boolean {
     return this.hasAttribute('download');
   }
   set downloadable(v: boolean) {
     setBooleanAttribute(this, 'download', v);
   }
+  /** Shows line numbers in code blocks. Reflects the `line-numbers` attribute; off by default. */
   get lineNumbers(): boolean {
     return this.hasAttribute('line-numbers');
   }
   set lineNumbers(v: boolean) {
     setBooleanAttribute(this, 'line-numbers', v);
   }
-  /** `""` → github-light/github-dark; `"a"` → both; `"a b"` → light / dark theme. */
+  /** Shiki syntax highlighting for code blocks; off when the attribute is absent. `""` → github-light/github-dark; `"a"` → both; `"a b"` → light / dark theme. */
   get highlight(): string | null {
     return this.hasAttribute('highlight') ? getStringAttribute(this, 'highlight') : null;
   }
   set highlight(value: string | null) {
     setStringAttribute(this, 'highlight', value);
   }
+  /** Treats `$…$` as inline math. Off by default because `$` often means currency; `\(…\)` always works. Reflects the `inline-math` attribute. */
   get inlineMath(): boolean {
     return this.hasAttribute('inline-math');
   }
   set inlineMath(v: boolean) {
     setBooleanAttribute(this, 'inline-math', v);
   }
+  /** `target` for rendered links, set with `rel="noopener noreferrer"`. Defaults to `'_blank'`; use `'_self'` to open links in place. In-page `#` links are left alone. */
   get linkTarget(): string {
     return getStringAttribute(this, 'link-target') || '_blank';
   }

@@ -372,36 +372,42 @@ export class RanPlayer extends RanElement {
     getTracks: () => this._tracks,
     change: (name, value) => this.change(name, value),
   });
+  /** Media URL to play. The engine is picked from its extension unless `format` is set; changing it on a connected player reloads the source. */
   get src(): string {
     return this.getAttribute('src') || '';
   }
   set src(value: string) {
     this.setAttribute('src', value || '');
   }
+  /** Any non-empty value logs every internal `change` event and source-load errors to the console. An empty value (`<r-player debug>`) leaves logging off. */
   get debug(): string {
     return this.getAttribute('debug') || '';
   }
   set debug(value: string) {
     this.setAttribute('debug', value || '');
   }
+  /** Volume on a 0-100 scale. Applied through `setVolume()` when the attribute changes on a player whose video already exists; the getter returns the attribute, not the live volume. */
   get volume(): string {
     return this.getAttribute('volume') || '';
   }
   set volume(value: string) {
     this.setAttribute('volume', value || '');
   }
+  /** Playback position in seconds, also accepted as `currenttime`. Seeks when the attribute changes on a player whose video already exists; the getter returns the attribute, not the live position. */
   get currentTime(): string {
     return this.getAttribute('currentTime') || '';
   }
   set currentTime(value: string) {
     this.setAttribute('currentTime', value || '');
   }
+  /** Speed multiplier such as `1`, `1.5` or `2`, also accepted as `playbackrate`. Applied when the attribute changes on a player whose video already exists. */
   get playbackRate(): string {
     return this.getAttribute('playbackRate') || '';
   }
   set playbackRate(value: string) {
     this.setAttribute('playbackRate', value || '');
   }
+  /** Image URL shown on the video before playback starts, passed to the native `<video poster>`. */
   get poster(): string {
     return this.getAttribute('poster') || '';
   }
@@ -409,9 +415,9 @@ export class RanPlayer extends RanElement {
     this.setAttribute('poster', value || '');
   }
   /**
-   * URL of a WebVTT sprite-sheet manifest (cues whose text is
-   * `spritesheet.jpg#xywh=x,y,w,h`, the YouTube/Video.js convention) — shows a
-   * cropped thumbnail above the seek-bar hover tip. Independent of `src`: not
+   * URL of a WebVTT sprite-sheet manifest that shows a preview thumbnail above the seek-bar hover tip.
+   *
+   * Cue text is `spritesheet.jpg#xywh=x,y,w,h`, the YouTube/Video.js convention. Independent of `src`: not
    * reset on a source reload, only refetched when this attribute itself changes.
    */
   get thumbnails(): string {
@@ -421,9 +427,9 @@ export class RanPlayer extends RanElement {
     this.setAttribute('thumbnails', value || '');
   }
   /**
-   * @description: 强制指定引擎（`hls`/`dash`/`flv`/`webrtc`/`native`），给拿不到扩展名的
-   * 加签/无后缀流地址用；缺省时按 `src` 扩展名自动探测（见 `core/adapters/detect.ts`）。
-   * `webrtc`（WHEP 端点 URL）没有扩展名可探测，必须显式指定这个值。
+   * Playback engine: `'hls'` | `'dash'` | `'flv'` | `'webrtc'` | `'native'`. Empty by default, which detects it from the `src` extension; set it for signed or extensionless URLs, and always for `webrtc` (a WHEP endpoint).
+   *
+   * Detection lives in `core/adapters/detect.ts`; an unrecognized value falls back to detection.
    */
   get format(): string {
     return this.getAttribute('format') || '';
@@ -431,30 +437,35 @@ export class RanPlayer extends RanElement {
   set format(value: string) {
     this.setAttribute('format', value || '');
   }
+  /** Start playback as soon as the video can play, via the native `autoplay` flag. Browsers usually block unmuted autoplay, so pair it with `muted`. Off by default. */
   get autoplay(): boolean {
     return this.hasAttribute('autoplay');
   }
   set autoplay(value: boolean) {
     setBooleanAttribute(this, 'autoplay', value);
   }
+  /** Restart from the beginning when playback ends, via the native `loop` flag. Off by default. */
   get loop(): boolean {
     return this.hasAttribute('loop');
   }
   set loop(value: boolean) {
     setBooleanAttribute(this, 'loop', value);
   }
+  /** Start silent: sets volume to 0 and the native `muted` flag. Removing the attribute restores the previous volume, or 50 if none was recorded. Off by default. */
   get muted(): boolean {
     return this.hasAttribute('muted');
   }
   set muted(value: boolean) {
     setBooleanAttribute(this, 'muted', value);
   }
+  /** Suppress the built-in "Playback failed" dialog with its Retry button, for apps that show their own error UI. Off by default, so the dialog shows. */
   get disableErrorModal(): boolean {
     return this.hasAttribute('disable-error-modal');
   }
   set disableErrorModal(value: boolean) {
     setBooleanAttribute(this, 'disable-error-modal', value);
   }
+  /** Save the position to localStorage, keyed by `src`, on pause and when the page is hidden, and resume there on the next load of the same `src`. The entry is cleared when playback ends. Off by default. */
   get rememberPosition(): boolean {
     return this.hasAttribute('remember-position');
   }
@@ -462,8 +473,9 @@ export class RanPlayer extends RanElement {
     setBooleanAttribute(this, 'remember-position', value);
   }
   /**
-   * @description: 字幕/CC 轨道配置，imperative 属性而不是 attribute——player 会在每次
-   * `updatePlayer()` 时清空 light DOM，不能指望用户塞 `<track>` 子标签进去。
+   * Subtitle and caption tracks as `{ src, srclang, label, kind?, default? }` objects; property only, no attribute. Defaults to `[]`.
+   *
+   * Child `<track>` elements are not supported: the player clears its light DOM, so tracks are set here and rebuilt on every source load.
    */
   get tracks(): PlayerTrackConfig[] {
     return this._tracks;
@@ -481,6 +493,7 @@ export class RanPlayer extends RanElement {
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
+  /** Internal seek-bar drag state (`percentage`, `mouseDown`), read by the player's own modules. Not meant to be set by consumers. */
   get moveProgress(): { percentage: number; mouseDown: boolean } {
     return this._runtimeState.moveProgress;
   }
@@ -508,6 +521,7 @@ export class RanPlayer extends RanElement {
   set _pendingPlaybackRestore(v: PlaybackSnapshot | undefined) {
     this._runtimeState.pendingPlaybackRestore = v;
   }
+  /** Internal timer id for auto-hiding the control bar. Not meant to be set by consumers. */
   get controllerBarTimeId(): ReturnType<typeof setTimeout> | undefined {
     return this._runtimeState.controllerBarTimeId;
   }

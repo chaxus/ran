@@ -91,6 +91,7 @@ export class Card extends RanElement {
     setStringAttribute(this, 'heading', value);
   }
 
+  /** Secondary text shown under the heading. Empty by default; the header is hidden when the heading, description and `extra` slot are all empty. */
   get description(): string {
     return getStringAttribute(this, 'description');
   }

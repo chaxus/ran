@@ -47,7 +47,12 @@ export function syncAgentPlugin(root: string, check = false): void {
     JSON.stringify({ schema: 1, generator: 'bin/sync-agent-plugin.ts', sources }, null, 2) + '\n',
   );
   const destination = path.join(root, bundlePath);
+  // The plugin is copied out of this repository on install; MIT requires the notice to travel with it.
+  const license = readFileSync(path.join(root, 'LICENSE'), 'utf8');
+  const pluginLicense = path.join(root, 'plugins/ran/LICENSE');
   if (check) {
+    if (!existsSync(pluginLicense) || readFileSync(pluginLicense, 'utf8') !== license)
+      throw new Error('Stale plugin LICENSE; run sync:agent-plugin');
     if (!existsSync(destination)) throw new Error('Missing agent reference bundle; run sync:agent-plugin');
     const actual = [...markdownFiles(destination), 'manifest.json'].sort();
     if (JSON.stringify(actual) !== JSON.stringify([...expected.keys()].sort()))
@@ -58,6 +63,8 @@ export function syncAgentPlugin(root: string, check = false): void {
     verifyLocalLinks(destination, names);
     return;
   }
+  mkdirSync(path.dirname(pluginLicense), { recursive: true });
+  writeFileSync(pluginLicense, license);
   rmSync(destination, { recursive: true, force: true });
   for (const [name, content] of expected) {
     mkdirSync(path.dirname(path.join(destination, name)), { recursive: true });
