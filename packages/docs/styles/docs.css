@@ -667,12 +667,11 @@ a {
 ::view-transition-new(root) {
   animation-duration: var(--ran-motion-duration-base);
 }
-/* Named only where both are on screen: the drawer sidebar is hidden, and a hidden element
-   cannot be captured. */
+/* The sidebar is named so its own pixels stay put. The header is not: it is identical on
+   both pages, so the cross-fade leaves it unchanged, and a named header would be captured
+   without its backdrop blur. Named only where the sidebar is on screen; the drawer sidebar
+   is hidden, and a hidden element cannot be captured. */
 @media (min-width: 900px) {
-  .site-header {
-    view-transition-name: site-header;
-  }
   .sidebar {
     view-transition-name: sidebar;
   }

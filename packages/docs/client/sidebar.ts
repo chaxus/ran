@@ -15,13 +15,25 @@ export const mountSidebar = (): void => {
   const first = sidebar.querySelector('.sb__link')?.getAttribute('href');
   if (first) {
     // Read back by the inline `SIDEBAR_SCROLL` on the next page, before it paints.
-    window.addEventListener('pagehide', () => {
+    let anchor: { href: string; offset: number } | undefined;
+    const save = (): void => {
       try {
-        sessionStorage.setItem(SIDEBAR_SCROLL_KEY, JSON.stringify({ sidebar: first, top: sidebar.scrollTop }));
+        sessionStorage.setItem(
+          SIDEBAR_SCROLL_KEY,
+          JSON.stringify({ sidebar: first, top: sidebar.scrollTop, ...anchor }),
+        );
       } catch {
         // Storage blocked: the next page falls back to showing its own link.
       }
+    };
+    sidebar.addEventListener('click', (event) => {
+      const link = (event.target as Element).closest?.<HTMLElement>('.sb__link');
+      if (!link) return;
+      const offset = link.getBoundingClientRect().top - sidebar.getBoundingClientRect().top;
+      anchor = { href: link.getAttribute('href') ?? '', offset };
+      save();
     });
+    window.addEventListener('pagehide', save);
   }
 
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -59,7 +71,10 @@ export const mountSidebar = (): void => {
     if (link && link !== current) place(link);
   });
   sidebar.addEventListener('pointerleave', () => {
-    if (!sidebar.querySelector(':focus-visible')) hide();
+    // Back to the row the keyboard is on, if any, rather than staying on the last one hovered.
+    const focused = sidebar.querySelector<HTMLElement>('.sb__link:focus-visible');
+    if (focused) place(focused);
+    else hide();
   });
   sidebar.addEventListener('focusin', (event) => {
     const link = event.target;
@@ -68,12 +83,11 @@ export const mountSidebar = (): void => {
   sidebar.addEventListener('focusout', (event) => {
     if (!sidebar.contains(event.relatedTarget as Node | null) && !sidebar.matches(':hover')) hide();
   });
-  // Opening or closing a group moves every row below it; `toggle` does not bubble.
-  sidebar.addEventListener(
-    'toggle',
-    () => {
-      if (current) place(current);
-    },
-    true,
-  );
+  // Opening or closing a group moves every row below it (`toggle` does not bubble), and a
+  // resize or a font-size change can rewrap the labels.
+  const replace = (): void => {
+    if (current) place(current);
+  };
+  sidebar.addEventListener('toggle', replace, true);
+  window.addEventListener('resize', replace);
 };

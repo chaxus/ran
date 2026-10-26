@@ -17,28 +17,24 @@ export const BD_ANALYSE = `
     if (window.requestIdleCallback) window.requestIdleCallback(load, { timeout: 2000 });
     else window.setTimeout(load, 0);
   }
-  function start() {
-    if (document.readyState === 'complete') schedule();
-    else window.addEventListener('load', schedule, { once: true });
-  }
-  // A page rendered ahead on hover is not a visit until the reader opens it.
-  if (document.prerendering) document.addEventListener('prerenderingchange', start, { once: true });
-  else start();
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule, { once: true });
 })();
 `;
 
 /**
- * Renders the next docs page while the reader's pointer rests on its link (about 200ms in
- * Chromium), so the click shows a finished page instead of a loading one. Browsers without
- * speculation rules ignore the script.
+ * Fetches the next docs page while the reader's pointer rests on its link (about 200ms in
+ * Chromium), so the click does not wait on the network. Prefetch, not prerender: a prerendered
+ * page runs its inline sidebar restore before this page has saved where the sidebar was.
+ * Browsers without speculation rules ignore the script.
  */
 export const SPECULATION_RULES = JSON.stringify({
-  prerender: [
+  prefetch: [
     {
       where: {
         and: [
           { href_matches: '/*' },
-          { selector_matches: '.sb__link, .nav__link, .pager__link, .prose a' },
+          { selector_matches: '.sb__link, .nav__link, .pager__link, .prose a:not([href^="#"])' },
           { not: { selector_matches: '[download], [target]' } },
         ],
       },
@@ -50,17 +46,24 @@ export const SPECULATION_RULES = JSON.stringify({
 /**
  * Puts the sidebar back where the reader left it, before the first paint. It runs inline right
  * after the sidebar markup: from the module bundle it would run after paint and visibly jump.
- * A position saved on another sidebar (another section or language) is ignored; either way
- * the current page's link ends up in view.
+ *
+ * Arriving from a sidebar link, the new page's link is put at the height the clicked one had:
+ * groups open and close per page, so a raw `scrollTop` can land on another row. Otherwise the
+ * saved `scrollTop` is reused, on the same sidebar only. Either way the link ends up in view.
  */
 export const SIDEBAR_SCROLL = `(function(){
   var sidebar = document.getElementById('doc-sidebar');
   if (!sidebar || window.innerWidth < 900) return;
   var first = sidebar.querySelector('.sb__link');
+  var current = sidebar.querySelector('.sb__link[aria-current="page"]');
   var saved = null;
   try { saved = JSON.parse(sessionStorage.getItem('${SIDEBAR_SCROLL_KEY}') || 'null'); } catch (e) {}
-  if (saved && first && saved.sidebar === first.getAttribute('href')) sidebar.scrollTop = saved.top;
-  var current = sidebar.querySelector('.sb__link[aria-current="page"]');
+  if (saved && first && saved.sidebar === first.getAttribute('href')) {
+    sidebar.scrollTop = saved.top;
+    if (current && saved.href === current.getAttribute('href')) {
+      sidebar.scrollTop += current.getBoundingClientRect().top - sidebar.getBoundingClientRect().top - saved.offset;
+    }
+  }
   if (!current) return;
   var box = current.getBoundingClientRect();
   var frame = sidebar.getBoundingClientRect();

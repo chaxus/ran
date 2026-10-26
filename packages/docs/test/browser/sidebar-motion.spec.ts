@@ -49,10 +49,31 @@ test('the sidebar keeps its scroll position on the next page, with the new link 
   expect(await inView()).toBe(true);
 });
 
-test('pages declare a hover prerender rule', async ({ page }) => {
+test('a clicked link stays at the same height even when a group above it closes', async ({ page }) => {
+  await page.goto('/ranuts/utils/random_string');
+  const sidebar = page.locator('#doc-sidebar');
+  // Open a second group below the current one, then follow a link inside it. On the next
+  // page the current group closes and every row below it moves up.
+  const group = page.locator('.sb__details:not([open]) > .sb__summary', { hasText: 'DOM Manipulation' });
+  await group.scrollIntoViewIfNeeded();
+  await group.click();
+  const link = page.locator('.sb__link[href="/ranuts/utils/add_class_to_element"]');
+  // Mid-sidebar, far enough down that the closing group's height can come off the scroll
+  // offset; nearer the top it cannot, since scrollTop does not go below zero.
+  await link.evaluate((el) => el.scrollIntoView({ block: 'center' }));
+  const offset = (el: HTMLElement) =>
+    el.getBoundingClientRect().top - document.getElementById('doc-sidebar')!.getBoundingClientRect().top;
+  const before = await link.evaluate(offset);
+  await link.click();
+  await page.waitForURL('**/ranuts/utils/add_class_to_element');
+  const after = await sidebar.locator('.sb__link[aria-current="page"]').evaluate(offset);
+  expect(Math.abs(after - before)).toBeLessThanOrEqual(1);
+});
+
+test('pages declare a hover prefetch rule', async ({ page }) => {
   await page.goto('/ranui/');
   const rules = JSON.parse((await page.locator('script[type="speculationrules"]').textContent())!);
-  expect(rules.prerender[0].eagerness).toBe('moderate');
+  expect(rules.prefetch[0].eagerness).toBe('moderate');
 });
 
 test('pages opt into a cross-page transition', async ({ page, browserName }) => {
