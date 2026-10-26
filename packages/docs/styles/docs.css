@@ -294,14 +294,17 @@ a {
   gap: 2px;
 }
 .nav__link {
-  /* Lowercase beside the lowercase product names; root DESIGN.md records the exception. */
-  text-transform: lowercase;
   padding: 6px 10px;
   border-radius: 5px;
   color: var(--fg-muted);
   text-decoration: none;
   font-size: var(--type-label-1);
   white-space: nowrap;
+}
+/* Lowercase beside the lowercase product names; root DESIGN.md records the exception.
+   Header only, and not German, where lowercasing a noun is a spelling mistake. */
+:root:not(:lang(de)) .site-header .nav__link {
+  text-transform: lowercase;
 }
 .nav__link:hover {
   color: var(--fg);
@@ -1458,9 +1461,9 @@ ran-demo p {
 
 @media (min-width: 1240px) {
   /*
-   * One inset for the header, the sidebar and the outline — they are siblings and §9 asks
-   * siblings to share a content inset. 16px against a 1440px viewport read as flush; this
-   * moves all three together, so the wordmark still lines up with the sidebar exactly.
+   * One inset for the header and the sidebar — they are siblings and §9 asks siblings to
+   * share a content inset. 16px against a 1440px viewport read as flush; this moves both
+   * together, so the wordmark still lines up with the sidebar exactly.
    */
   :root {
     --pad: var(--ran-space-6, 24px);
@@ -1470,6 +1473,10 @@ ran-demo p {
    * rendered per page — the landing has none — and a column declared unconditionally is
    * still a column: the home page laid out as `1144px 224px` and left 280px of dead space
    * down its whole right edge, which read as the entire site being off-centre.
+   *
+   * The text column is the measure, not `1fr`, so the outline sits beside the text. On a
+   * screen wider than the three columns the spare width collects after the outline
+   * (144px at 1440px) instead of as a gap between the text and its outline.
    */
   body.has-sidebar .layout:has(.toc) {
     grid-template-columns: var(--sidebar-w) minmax(0, var(--measure)) var(--toc-w);
