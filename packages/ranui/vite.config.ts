@@ -145,6 +145,7 @@ export const componentEntries: Record<string, string> = {
   'tool-card': resolve(__dirname, 'components/tool-card/index.ts'),
   'token-meter': resolve(__dirname, 'components/token-meter/index.ts'),
   'state-dot': resolve(__dirname, 'components/state-dot/index.ts'),
+  'fan-gallery': resolve(__dirname, 'components/fan-gallery/index.ts'),
   'disclosure-row': resolve(__dirname, 'components/disclosure-row/index.ts'),
   attachments: resolve(__dirname, 'components/attachments/index.ts'),
   'voice-button': resolve(__dirname, 'components/voice-button/index.ts'),

@@ -97,7 +97,7 @@ document.body.appendChild(button);
 
 ## コンポーネント
 
-40 要素。属性、プロパティ、イベント、スロット、`::part()` 名まで含めた全体像は
+41 要素。属性、プロパティ、イベント、スロット、`::part()` 名まで含めた全体像は
 [要素 API リファレンス](/ja/src/ranui/api)にあります。
 
 **共通**: [Button](/ja/src/ranui/button/) · [Icon](/ja/src/ranui/icon/) ·

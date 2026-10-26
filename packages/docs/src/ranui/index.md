@@ -97,7 +97,7 @@ for the component library.
 
 ## Components
 
-40 elements. Every one of them, with its attributes, properties, events, slots and `::part()`
+41 elements. Every one of them, with its attributes, properties, events, slots and `::part()`
 names, is in the [element API reference](/src/ranui/api).
 
 **Common**: [Button](/src/ranui/button/) · [Icon](/src/ranui/icon/) ·

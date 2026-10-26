@@ -1,6 +1,6 @@
 ---
 title: ranui 엘리먼트 API
-description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 어트리뷰트, 프로퍼티, 이벤트, 슬롯, ::part() 이름. 모두 소스에서 추출했습니다.'
+description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 어트리뷰트, 프로퍼티, 이벤트, 슬롯, ::part() 이름. 모두 소스에서 추출했습니다.'
 ---
 
 # ranui 엘리먼트 API (자동 생성)
@@ -19,7 +19,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 넘음), `cancelable`(`preventDefault()`로 취소 가능). **`element-only`** 은 셋 다 아니라는
 뜻이며, 조상 노드에 건 위임 리스너로는 절대 받을 수 없습니다. 엘리먼트 자체에 바인딩하세요.
 
-**커스텀 엘리먼트 40개.**
+**커스텀 엘리먼트 41개.**
 
 ## `<r-attachments>`
 
@@ -165,6 +165,18 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 40개 엘리먼트의 �
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`
 - **Part**: `content`, `item`
+
+## `<r-fan-gallery>`
+
+소스: `components/fan-gallery/index.ts`
+
+- **어트리뷰트**: `sheet: string`, `spread: string`
+- **프로퍼티**:
+  - `sheet: string`
+  - `spread: string` — Angle in degrees between the first and last child once open. Defaults to `24`; `0` lines them up.
+- **이벤트**: —
+- **슬롯**: `기본 슬롯`
+- **Part**: `stage`
 
 ## `<r-glass>`
 

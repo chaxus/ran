@@ -397,6 +397,21 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 #### Parts
 - `dropdown`
 
+### `fan-gallery`
+
+- Tokens: 4
+- Parts: 1
+
+#### Tokens
+<!-- layers: internal: 4 -->
+- `--ran-fan-gallery-lift`
+- `--ran-fan-gallery-pivot`
+- `--ran-space-10`
+- `--ran-space-4`
+
+#### Parts
+- `stage`
+
 ### `glass`
 
 - Tokens: 19

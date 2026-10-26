@@ -11,7 +11,7 @@ shadow boundary) and `cancelable` (`preventDefault()` vetoes it). **`element-onl
 none of the three — a delegated listener on an ancestor never sees that event, so bind to
 the element itself.
 
-40 custom elements.
+41 custom elements.
 
 ## `<r-attachments>`
 
@@ -157,6 +157,18 @@ Source: `components/select/dropdown-item/index.ts`
 - **Events**: —
 - **Slots**: `default`
 - **Parts**: `content`, `item`
+
+## `<r-fan-gallery>`
+
+Source: `components/fan-gallery/index.ts`
+
+- **Attributes**: `sheet: string`, `spread: string`
+- **Properties**:
+  - `sheet: string`
+  - `spread: string` — Angle in degrees between the first and last child once open. Defaults to `24`; `0` lines them up.
+- **Events**: —
+- **Slots**: `default`
+- **Parts**: `stage`
 
 ## `<r-glass>`
 

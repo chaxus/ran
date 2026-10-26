@@ -31,6 +31,7 @@ const loaders: Record<string, () => Promise<unknown>> = {
   'r-select': () => import('ranui/select'),
   'r-skeleton': () => import('ranui/skeleton'),
   'r-state-dot': () => import('ranui/state-dot'),
+  'r-fan-gallery': () => import('ranui/fan-gallery'),
   'r-tabs': () => import('ranui/tab'),
   'r-tab': () => import('ranui/tabpane'),
   'r-theme-switch': () => import('ranui/theme-switch'),

@@ -1,6 +1,6 @@
 ---
 title: API عناصر ranui
-description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه با ویژگی‌ها، خصیصه‌ها، رویدادها، اسلات‌ها و نام‌های ()::part، همگی استخراج‌شده از کد منبع.'
+description: 'همهٔ عناصر سفارشی ranui — 41 عنصر همراه با ویژگی‌ها، خصیصه‌ها، رویدادها، اسلات‌ها و نام‌های ()::part، همگی استخراج‌شده از کد منبع.'
 ---
 
 # API عناصر ranui (تولید خودکار)
@@ -19,7 +19,7 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 مرز Shadow) و `cancelable` (امکان وتو با `preventDefault()`). **`element-only`** یعنی هیچ‌کدام
 از این سه — شنوندهٔ واگذارشده روی یک گره والد هرگز آن را نمی‌بیند، پس شنونده را به خود عنصر ببندید.
 
-**40 عنصر سفارشی.**
+**41 عنصر سفارشی.**
 
 ## `<r-attachments>`
 
@@ -165,6 +165,18 @@ description: 'همهٔ عناصر سفارشی ranui — 40 عنصر همراه 
 - **رویدادها**: —
 - **اسلات‌ها**: `پیش‌فرض`
 - **Part‌ها**: `content`, `item`
+
+## `<r-fan-gallery>`
+
+کد منبع: `components/fan-gallery/index.ts`
+
+- **ویژگی‌ها (attribute)**: `sheet: string`, `spread: string`
+- **خصیصه‌ها (property)**:
+  - `sheet: string`
+  - `spread: string` — Angle in degrees between the first and last child once open. Defaults to `24`; `0` lines them up.
+- **رویدادها**: —
+- **اسلات‌ها**: `پیش‌فرض`
+- **Part‌ها**: `stage`
 
 ## `<r-glass>`
 

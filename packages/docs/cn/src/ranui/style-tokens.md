@@ -404,6 +404,21 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 ### Parts
 - `dropdown`
 
+## `fan-gallery`
+
+- Tokens: 4
+- Parts: 1
+
+### Tokens
+<!-- layers: internal: 4 -->
+- `--ran-fan-gallery-lift`
+- `--ran-fan-gallery-pivot`
+- `--ran-space-10`
+- `--ran-space-4`
+
+### Parts
+- `stage`
+
 ## `glass`
 
 - Tokens: 19

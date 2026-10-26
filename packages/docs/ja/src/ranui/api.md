@@ -1,6 +1,6 @@
 ---
 title: ranui 要素 API
-description: 'ranui のすべてのカスタム要素 —— 40 個の要素の属性、プロパティ、イベント、スロット、::part() 名。いずれもソースから抽出しています。'
+description: 'ranui のすべてのカスタム要素 —— 41 個の要素の属性、プロパティ、イベント、スロット、::part() 名。いずれもソースから抽出しています。'
 ---
 
 # ranui 要素 API（自動生成）
@@ -20,7 +20,7 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 は三つとものない状態で、祖先要素へのイベント委譲では決して受け取れません。要素自身に
 リスナーを登録してください。
 
-**カスタム要素 40 個。**
+**カスタム要素 41 個。**
 
 ## `<r-attachments>`
 
@@ -166,6 +166,18 @@ description: 'ranui のすべてのカスタム要素 —— 40 個の要素の�
 - **イベント**: —
 - **スロット**: `デフォルトスロット`
 - **Part**: `content`, `item`
+
+## `<r-fan-gallery>`
+
+ソース: `components/fan-gallery/index.ts`
+
+- **属性（attribute）**: `sheet: string`, `spread: string`
+- **プロパティ（property）**:
+  - `sheet: string`
+  - `spread: string` — Angle in degrees between the first and last child once open. Defaults to `24`; `0` lines them up.
+- **イベント**: —
+- **スロット**: `デフォルトスロット`
+- **Part**: `stage`
 
 ## `<r-glass>`
 

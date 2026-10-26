@@ -20,7 +20,7 @@ and a virtual DOM.
 - [ranui design system](https://ran.chaxus.com/ranui/design-system/): the Geist-based token catalog — colour ladder, semantic tokens, spacing, typography, radius, elevation, stacking, motion
 - [ranui design guidelines](https://ran.chaxus.com/ranui/design-guides/): the rules for building a screen with it — pick a role, let the token supply the value, design every state
 - [ranui coding guidelines](https://ran.chaxus.com/ranui/coding-guides/): entry points, the attribute/property/event contract, styling across the Shadow DOM boundary, SSR, testing, antipatterns
-- [ranui element API](https://ran.chaxus.com/ranui/api): all 40 custom elements with their attributes, properties, events (detail shape + dispatch flags), slots and ::part() names, generated from source
+- [ranui element API](https://ran.chaxus.com/ranui/api): all 41 custom elements with their attributes, properties, events (detail shape + dispatch flags), slots and ::part() names, generated from source
 - [ranui builder](https://ran.chaxus.com/ranui/builder/): the fluent DOM builder with fine-grained reactivity — signals, Show/For/Index, ownership and teardown
 - [ranui server rendering](https://ran.chaxus.com/ranui/ssr/): declarative shadow DOM via renderHTMLToString / renderToStream, and what the client rebuilds
 - [ranui style tokens](https://ran.chaxus.com/ranui/style-tokens): the CSS custom properties and ::part() names every element exposes, extracted from its stylesheet

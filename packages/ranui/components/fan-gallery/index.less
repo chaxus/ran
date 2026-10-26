@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+/* Every child sits in the same grid cell, so the stage is as tall as the tallest child and
+   the fan needs no fixed height. The padding is the room the turned corners swing into. */
+.ran-fan-gallery {
+  display: grid;
+  justify-items: center;
+  align-items: end;
+  padding: var(--ran-fan-gallery-padding, var(--ran-space-10));
+}
+
+/* The pivot sits below the row, so a small angle moves a child sideways as well as turning
+   it. A lifted child moves out along its own axis and comes to the front. */
+::slotted(*) {
+  grid-area: 1 / 1;
+  transform-origin: 50% calc(100% + var(--ran-fan-gallery-pivot, 320px));
+  transform: rotate(var(--fan-angle, 0deg))
+    translateY(calc(var(--fan-lifted, 0) * -1 * var(--ran-fan-gallery-lift, var(--ran-space-4))));
+  z-index: var(--fan-lifted, 0);
+  transition: transform var(--fan-duration, 0.4s) var(--fan-easing, ease-out) var(--fan-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(*) {
+    transition: none;
+  }
+}
