@@ -247,6 +247,8 @@ const ja: LocaleMessages = {
     componentApi: 'API',
     componentTokens: 'スタイルトークン',
     componentSource: 'ソース',
+    playground: 'プレイグラウンド',
+    playgroundMarkup: 'マークアップ',
     returnToTop: 'トップへ戻る',
     sidebarMenu: 'メニュー',
     darkModeSwitch: '外観',

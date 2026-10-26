@@ -55,6 +55,9 @@ export interface UiMessages {
   componentApi: string;
   componentTokens: string;
   componentSource: string;
+  /** The playground section at the end of a component page, and its markup readout. */
+  playground: string;
+  playgroundMarkup: string;
   returnToTop: string;
   sidebarMenu: string;
   darkModeSwitch: string;

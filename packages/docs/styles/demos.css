@@ -350,3 +350,87 @@
 .demo-result:empty {
   display: none;
 }
+
+/* ── Attribute playground (build/playground.ts) ───────────────────────────── */
+
+.playground {
+  display: grid;
+  /* The track must not grow to a wide example's min-content; the stage scrolls instead. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ran-space-4, 16px);
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-md, 12px);
+  padding: var(--ran-space-4, 16px);
+}
+.playground__stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ran-space-3, 12px);
+  min-height: 96px;
+  overflow-x: auto;
+  padding: var(--ran-space-6, 24px);
+  border-radius: var(--ran-radius-sm, 6px);
+  background: var(--bg-soft);
+}
+.playground__controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(12rem, 100%), 1fr));
+  gap: var(--ran-space-3, 12px) var(--ran-space-4, 16px);
+  /* A fieldset defaults to min-content wide, which would hold the playground open. */
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.playground__legend {
+  margin-bottom: var(--ran-space-2, 8px);
+  padding: 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+.playground__control {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2, 8px);
+  font-size: 13px;
+}
+/* A switch shares the bottom line of the fields beside it. */
+.playground__control:not(.playground__control--field) {
+  align-self: end;
+  min-height: 32px;
+}
+.playground__control--field {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ran-space-1, 4px);
+}
+.playground__control input[type='text'],
+.playground__control select {
+  min-height: 32px;
+  padding: 0 var(--ran-space-2, 8px);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--ran-radius-sm, 6px);
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+}
+.playground__markup {
+  margin: 0;
+}
+.playground__markup figcaption {
+  margin-bottom: var(--ran-space-1, 4px);
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+.playground__markup pre {
+  margin: 0;
+  padding: var(--ran-space-3, 12px);
+  overflow-x: auto;
+  border-radius: var(--ran-radius-sm, 6px);
+  background: var(--bg-code);
+  font-size: 12.5px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

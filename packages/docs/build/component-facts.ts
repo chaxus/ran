@@ -28,24 +28,36 @@ const elementsByDirectory = (componentsMd: string): Map<string, string[]> => {
 };
 
 export interface ComponentFacts {
-  /** The facts line for a page, or '' for a page that documents no element. */
-  (baseRel: string, locale: LocaleDef): string;
+  /**
+   * The facts line for a page, or '' for a page that documents no element. `playground` is
+   * the anchor of the page's playground section, when it has one.
+   */
+  (baseRel: string, locale: LocaleDef, playground?: string): string;
 }
+
+/** The elements a component page documents, its own first; `[]` for any other page. */
+export const componentElements = (docsRoot: string): ((baseRel: string) => string[]) => {
+  const byDir = elementsByDirectory(readFileSync(join(docsRoot, '..', 'ranui', 'docs', 'COMPONENTS.md'), 'utf8'));
+  return (baseRel) => {
+    const dir = /^src\/ranui\/([a-z-]+)\/index\.md$/.exec(baseRel)?.[1];
+    const found = dir ? byDir.get(dir) : undefined;
+    return found ? [...found].sort((a, b) => Number(b === `r-${dir}`) - Number(a === `r-${dir}`)) : [];
+  };
+};
 
 /** Reads the generated references once per build. */
 export const componentFacts = (docsRoot: string): ComponentFacts => {
-  const byDir = elementsByDirectory(readFileSync(join(docsRoot, '..', 'ranui', 'docs', 'COMPONENTS.md'), 'utf8'));
+  const elementsOf = componentElements(docsRoot);
   const tokenSections = new Set(
     [...readFileSync(join(docsRoot, 'src', 'ranui', 'style-tokens.md'), 'utf8').matchAll(/^## `([a-z-]+)`$/gm)].map(
       (match) => match[1]!,
     ),
   );
-  return (baseRel, locale) => {
-    const dir = /^src\/ranui\/([a-z-]+)\/index\.md$/.exec(baseRel)?.[1];
-    const found = dir ? byDir.get(dir) : undefined;
-    if (!dir || !found) return '';
+  return (baseRel, locale, playground) => {
     // The page's own element leads, and is the one the API link opens.
-    const elements = [...found].sort((a, b) => Number(b === `r-${dir}`) - Number(a === `r-${dir}`));
+    const elements = elementsOf(baseRel);
+    const dir = /^src\/ranui\/([a-z-]+)\//.exec(baseRel)?.[1];
+    if (!dir || !elements.length) return '';
     const { ui } = messagesFor(locale);
     const site = (path: string): string => publicUrl(localeHref(path, locale));
     const links = [
@@ -55,6 +67,7 @@ export const componentFacts = (docsRoot: string): ComponentFacts => {
             `<a href="${esc(`${site('/src/ranui/style-tokens')}#${slugify(`\`${dir}\``)}`)}">${esc(ui.componentTokens)}</a>`,
           ]
         : []),
+      ...(playground ? [`<a href="#${esc(playground)}">${esc(ui.playground)}</a>`] : []),
       `<a href="${SOURCE}${dir}/" target="_blank" rel="noopener noreferrer">${esc(ui.componentSource)}</a>`,
     ];
     const names = elements.map((element) => `<code>&lt;${element}&gt;</code>`).join(' ');

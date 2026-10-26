@@ -15,7 +15,10 @@ import { LOCALES, ROOT_LOCALE, SITE } from './config.ts';
 import type { LocaleDef } from './config.ts';
 import { pageUrl, sourceUrl } from './urls.ts';
 import { designReferenceSources } from './design-reference.ts';
-import { componentFacts } from './component-facts.ts';
+import { componentElements, componentFacts } from './component-facts.ts';
+import { playground } from './playground.ts';
+import { messagesFor } from './langs/index.ts';
+import { slugify } from 'ranpress';
 
 export type DocKind = 'page' | 'notfound';
 
@@ -117,6 +120,7 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
     data: { title: source.title } as Frontmatter,
   }));
   const factsFor = componentFacts(root);
+  const playgroundFor = playground(root, componentElements(root));
   for (const { rel, label, data, content: source } of [...sources, ...designReference]) {
     const kind = kindFor(rel);
     const locale = localeOf(rel);
@@ -124,8 +128,13 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
     const url = pageUrl(baseRel, locale.dir);
     const legacy = sourceUrl(baseRel, locale.dir);
     // A component page's title is followed by its element names and reference links.
-    const facts = factsFor(baseRel, locale);
-    const content = facts ? source.replace(/^# .+$/m, (title) => `${title}\n\n${facts}\n`) : source;
+    // A component page's title is followed by its element names and reference links, and
+    // the page ends with a playground for its first live example.
+    const { ui } = messagesFor(locale);
+    const play = playgroundFor(baseRel, source, { heading: ui.playground, markup: ui.playgroundMarkup });
+    const facts = factsFor(baseRel, locale, play ? slugify(ui.playground) : undefined);
+    const titled = facts ? source.replace(/^# .+$/m, (title) => `${title}\n\n${facts}\n`) : source;
+    const content = `${titled}${play}`;
 
     const clash = seen.get(url);
     if (clash) throw new Error(`${label}: URL ${url} is already produced by ${clash}`);
