@@ -89,6 +89,7 @@ test('pages opt into a cross-page transition', async ({ page, browserName }) => 
 
 test('the current-page rail slides from the old row to the new one', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'Cross-document view transitions are what carry the rail');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.addInitScript(() => {
     addEventListener('pagereveal', (event) => {
       const transition = (event as Event & { viewTransition: ViewTransition | null }).viewTransition;

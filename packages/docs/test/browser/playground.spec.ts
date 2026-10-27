@@ -1,13 +1,5 @@
 import { expect, test, type Locator } from '@playwright/test';
 
-// The page scrolls smoothly (`html { scroll-behavior: smooth }`), so the scroll that brings
-// each control into view before a click animates; WebKit then presses on one element and
-// releases on whichever has moved under the pointer, and the click lands on neither. The
-// docs stylesheet turns smooth scrolling off under reduced motion.
-test.beforeEach(async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-});
-
 /** Picks an option from an `r-select`, whose listbox is portaled to the body. */
 const choose = async (select: Locator, value: string): Promise<void> => {
   await select.click();
