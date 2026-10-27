@@ -49,7 +49,7 @@ The container. Holds the header row, the active indicator, and the pane content 
 | Property | Type      | Default           | Description                                                          |
 | -------- | --------- | ----------------- | -------------------------------------------------------------------- |
 | `active` | `string`  | first enabled tab | The `r-key` of the currently active tab                              |
-| `type`   | `string`  | `'flat'`          | Header style: `flat`, `line`                                         |
+| `type`   | `string`  | `'flat'`          | Header style: `flat`, `line`, `segment`                              |
 | `align`  | `string`  | `'start'`         | Header alignment: `start`, `center`, `end`                           |
 | `effect` | `boolean` | `false`           | Enables ripple on the header buttons and hides the sliding indicator |
 | `sheet`  | `string`  | `''`              | CSS text injected into the shadow DOM                                |
@@ -74,7 +74,7 @@ A single pane. Its attributes are read by the parent `<r-tabs>` to build the mat
 
 ### Header Style `type`
 
-`flat` (default) shows a sliding underline indicator; `line` renders bordered tab headers.
+`flat` (default) shows a sliding underline under the headers; `line` adds a baseline under the whole row; `segment` puts the headers in a rounded track with a sliding thumb, like a segmented control.
 
 <ran-demo column>
   <r-tabs type="flat">
@@ -83,6 +83,11 @@ A single pane. Its attributes are read by the parent `<r-tabs>` to build the mat
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
   <r-tabs type="line">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="segment">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
@@ -97,6 +102,12 @@ A single pane. Its attributes are read by the parent `<r-tabs>` to build the mat
 </r-tabs>
 
 <r-tabs type="line">
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
+
+<r-tabs type="segment">
   <r-tab label="tab1">11111</r-tab>
   <r-tab label="tab2">22222</r-tab>
   <r-tab label="tab3">33333</r-tab>
@@ -249,14 +260,14 @@ Set `effect` on `<r-tabs>` to enable the click ripple on the header buttons. Whe
 
 `r-tabs` exposes:
 
-| Part           | Description                             |
-| -------------- | --------------------------------------- |
-| `tabs`         | Root wrapper                            |
-| `header`       | Header row wrapper                      |
-| `nav`          | The tablist containing the header items |
-| `indicator`    | The sliding underline line              |
-| `content`      | Pane content viewport                   |
-| `content-wrap` | The sliding track holding all panes     |
+| Part           | Description                                      |
+| -------------- | ------------------------------------------------ |
+| `tabs`         | Root wrapper                                     |
+| `header`       | Header row wrapper                               |
+| `nav`          | The tablist containing the header items          |
+| `indicator`    | The sliding underline, or the thumb in `segment` |
+| `content`      | Pane content viewport                            |
+| `content-wrap` | The sliding track holding all panes              |
 
 `r-tab` exposes:
 
@@ -298,7 +309,7 @@ The full list is in [style tokens](/src/ranui/style-tokens#tab); which token to 
 ## Best Practices
 
 - **Stable identity**: Give each `<r-tab>` a unique `r-key` and drive selection with `active` on `<r-tabs>` instead of relying on positional indexes.
-- **Style choice**: Use `type="line"` for a bordered, document-style tab strip; `type="flat"` (default) for the minimal sliding underline.
+- **Style choice**: `type="flat"` (default) for a light underline; `type="line"` when the tab row needs a visible edge against the content below; `type="segment"` for a few short, equal-weight views, such as switching between preview and code.
 - **Alignment**: Use `align="center"` or `align="end"` to reposition the header row within wide containers.
 - **Disabled panes**: Mark unavailable panes with `disabled`; they are skipped for both clicks and default selection.
 - **Keyboard navigation**: The header row is a WAI-ARIA tablist: arrow keys move between tabs (with `Home`/`End`), and only the active tab is in the tab order.

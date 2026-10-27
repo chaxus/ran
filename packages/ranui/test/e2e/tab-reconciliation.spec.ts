@@ -43,7 +43,7 @@ test('tabs preserve active key and real keyboard focus through keyed slot change
   expect(errors).toEqual([]);
 });
 
-for (const type of ['flat', 'line']) {
+for (const type of ['flat', 'line', 'segment']) {
   for (const method of ['attribute', 'property']) {
     test(`programmatic active ${method} synchronizes ${type} tab presentation`, async ({ page }) => {
       await isolatedSetup(page, DEV_SERVER, 'r-tabs');
@@ -78,11 +78,10 @@ for (const type of ['flat', 'line']) {
         });
       await expect.poll(presentation).toEqual({ colored: ['B'], aria: ['false', 'true'], indicatorAligned: true });
       if (type === 'line') {
+        // A baseline runs under the whole row, not only the selected header.
         expect(
-          await insideShadow(page, '#tabs', (root) =>
-            [...root.querySelector('[part="nav"]')!.children].map((header) => getComputedStyle(header).borderTopWidth),
-          ),
-        ).toEqual(['0px', '1px']);
+          await insideShadow(page, '#tabs', (root) => getComputedStyle(root.querySelector('[part="nav"]')!).boxShadow),
+        ).toContain('inset');
       }
       await expect(tabs.locator('r-tab[r-key="a"]')).toHaveAttribute('aria-hidden', 'true');
       await expect(tabs.locator('r-tab[r-key="b"]')).not.toHaveAttribute('aria-hidden');

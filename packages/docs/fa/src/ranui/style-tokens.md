@@ -1888,35 +1888,54 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `tab`
 
-- Tokens: 24
+- Tokens: 43
 - Parts: 7
 
 ### Tokens
-<!-- layers: semantic: 9 · component: 13 · internal: 2 -->
+<!-- layers: semantic: 14 · component: 23 · internal: 6 -->
+- `--ran-btn-active-transform`
+- `--ran-btn-border-radius`
+- `--ran-btn-color`
+- `--ran-btn-hover-color`
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-hover`
+- `--ran-color-bg-subtle`
 - `--ran-color-border`
+- `--ran-color-border-secondary`
 - `--ran-color-primary`
+- `--ran-color-text-secondary`
+- `--ran-gray-400`
+- `--ran-gray-alpha-100`
 - `--ran-motion-duration-fast`
 - `--ran-motion-duration-slow`
 - `--ran-motion-ease-standard`
+- `--ran-radius-full`
 - `--ran-radius-md`
 - `--ran-radius-sm`
+- `--ran-shadow-elevated`
+- `--ran-size-5`
+- `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-3`
 - `--ran-tab-active-color`
 - `--ran-tab-border-color`
-- `--ran-tab-border-radius`
+- `--ran-tab-color`
 - `--ran-tab-content-background`
 - `--ran-tab-content-border`
 - `--ran-tab-content-border-radius`
 - `--ran-tab-content-transition`
+- `--ran-tab-gap`
 - `--ran-tab-hover-background`
 - `--ran-tab-hover-radius`
 - `--ran-tab-hover-transition`
 - `--ran-tab-line-border-radius`
 - `--ran-tab-line-color`
 - `--ran-tab-line-transition`
+- `--ran-tab-segment-background`
+- `--ran-tab-segment-border`
+- `--ran-tab-segment-radius`
+- `--ran-tab-segment-thumb-background`
+- `--ran-tab-segment-thumb-shadow`
 
 ### Parts
 - `content`

@@ -39,7 +39,7 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 | プロパティ | 型        | 既定値           | 説明                                                                     |
 | ---------- | --------- | ---------------- | ------------------------------------------------------------------------ |
 | `active`   | `string`  | 最初の有効なタブ | いま選ばれているタブの `r-key`                                           |
-| `type`     | `string`  | `'flat'`         | ヘッダーの見た目：`flat`、`line`                                         |
+| `type`     | `string`  | `'flat'`         | ヘッダーの見た目：`flat`、`line`、`segment`                              |
 | `align`    | `string`  | `'start'`        | ヘッダーの揃え：`start`、`center`、`end`                                 |
 | `effect`   | `boolean` | `false`          | ヘッダーボタンのリップルを有効にし、スライドするインジケーターを隠します |
 | `sheet`    | `string`  | `''`             | Shadow DOM に注入する CSS テキスト                                       |
@@ -64,7 +64,7 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 ### ヘッダーの見た目 `type`
 
-`flat`（既定）はスライドする下線のインジケーターを見せ、`line` は枠線付きのタブヘッダーを描画します。
+`flat`（既定）はヘッダーの下にスライドする下線を表示します。`line` は行全体の下にベースラインを加えます。`segment` はヘッダーを角丸のトラックに収め、選択中の項目をスライドするつまみで示すセグメントコントロールです。
 
 <ran-demo column>
   <r-tabs type="flat">
@@ -73,6 +73,11 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
   <r-tabs type="line">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="segment">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
@@ -87,6 +92,12 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 </r-tabs>
 
 <r-tabs type="line">
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
+
+<r-tabs type="segment">
   <r-tab label="tab1">11111</r-tab>
   <r-tab label="tab2">22222</r-tab>
   <r-tab label="tab3">33333</r-tab>
@@ -239,14 +250,14 @@ description: 'ranui の Tabs（<r-tabs>）は、どのフレームワークで�
 
 `r-tabs` が公開するもの：
 
-| Part           | 説明                                   |
-| -------------- | -------------------------------------- |
-| `tabs`         | ルートのラッパー                       |
-| `header`       | ヘッダー行のラッパー                   |
-| `nav`          | ヘッダー項目を収める tablist           |
-| `indicator`    | スライドする下線                       |
-| `content`      | ペイン内容のビューポート               |
-| `content-wrap` | すべてのペインを載せるスライドトラック |
+| Part           | 説明                                     |
+| -------------- | ---------------------------------------- |
+| `tabs`         | ルートのラッパー                         |
+| `header`       | ヘッダー行のラッパー                     |
+| `nav`          | ヘッダー項目を収める tablist             |
+| `indicator`    | スライドする下線（`segment` ではつまみ） |
+| `content`      | ペイン内容のビューポート                 |
+| `content-wrap` | すべてのペインを載せるスライドトラック   |
 
 `r-tab` が公開するもの：
 
@@ -287,7 +298,7 @@ Parts：`content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs
 ## ベストプラクティス
 
 - **安定した識別子**：各 `<r-tab>` に一意な `r-key` を与え、位置のインデックスに頼らず `<r-tabs>` の `active` で選択を制御してください。
-- **見た目の選択**：枠線のある文書風のタブ列には `type="line"` を、最小限のスライド下線には `type="flat"`（既定）を使ってください。
+- **見た目の選択**：軽い下線なら `type="flat"`（既定）、タブ列を下のコンテンツとはっきり分けたいときは `type="line"`、プレビューとコードの切り替えのように短く同格のビューが少数なら `type="segment"` を使ってください。
 - **揃え**：幅の広いコンテナの中でヘッダー行の位置を変えるには `align="center"` や `align="end"` を使います。
 - **無効なペイン**：使えないペインには `disabled` を付けてください。クリックでも既定の選択でも飛ばされます。
 - **キーボード操作**：ヘッダー行は WAI-ARIA の tablist です。矢印キーでタブ間を移動でき（`Home` / `End` も使えます）、タブ順に入るのはアクティブなタブだけです。

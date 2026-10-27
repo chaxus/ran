@@ -6,6 +6,8 @@
 // break real consumers' import paths.
 import { isDisabled, RanElement } from '@/utils/index';
 import tabCss from './index.less?inline';
+// The headers are r-buttons; a per-component import must register them too.
+import '@/components/button';
 import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
   ensureShadowRoot,
@@ -143,6 +145,8 @@ export class Tabs extends RanElement {
     }
   };
 
+  private effectOn = (): boolean => !!this.effect && this.effect !== 'false';
+
   createTabHeader(tabPane: Element, index: number): HTMLElement {
     const label = tabPane.getAttribute('label') || '';
     const icon = tabPane.getAttribute('icon') || '';
@@ -156,8 +160,10 @@ export class Tabs extends RanElement {
     if (icon) builder.attr('icon', icon);
     if (iconSize) builder.attr('iconSize', iconSize);
     if (isDisabled(tabPane)) builder.attr('disabled', '');
+    // r-button ripples unless told not to; tabs ripple only when asked.
+    builder.attr('effect', (this.effectOn() && this.effect) || 'false');
 
-    if (this.effect) {
+    if (this.effectOn() && this.effect) {
       tabPane.setAttribute('effect', this.effect);
       this._line.style.setProperty('display', 'none');
     }
@@ -185,6 +191,9 @@ export class Tabs extends RanElement {
     const distance = [...this._nav.children]
       .slice(0, this.tabHeaderKeyMapIndex[key])
       .reduce((offset, item) => offset + item.getBoundingClientRect().width, 0);
+    // The first placement lands; only a move between headers slides.
+    const width = this._line.style.getPropertyValue('width');
+    this._line.toggleAttribute('data-instant', !width || width === '0px');
     this._line.style.setProperty('width', `${bounds.width}px`);
     this._line.style.setProperty('left', `${bounds.left - viewport.left + this._header.scrollLeft - distance}px`);
     this._line.style.setProperty('transform', `translateX(${distance}px)`);
@@ -310,7 +319,6 @@ export class Tabs extends RanElement {
     const index = valid ? this.tabHeaderKeyMapIndex[key] : -1;
     [...this._nav.children].forEach((item, position) => item.classList.toggle('active', position === index));
     if (valid) {
-      // Line tabs change border geometry with selection; measure after styling.
       this.setTabLine(key);
       this.setTabContent(key);
       this._revealHeader(this._nav.children[index]);
@@ -405,7 +413,13 @@ export class Tabs extends RanElement {
   updateAttribute = (key: string, attribute: string, value: string | null = ''): void => {
     const index = this.tabHeaderKeyMapIndex[key];
     const focused = this._shadowDom.activeElement === this._nav.children[index];
-    if (key && value && this._nav.children[index]) {
+    if (attribute === 'effect') {
+      // The tabs' own effect decides; a pane can only pass its value through when that is on.
+      this._nav.children[index]?.setAttribute(
+        'effect',
+        this.effectOn() && value && value !== 'false' ? value : 'false',
+      );
+    } else if (key && value && this._nav.children[index]) {
       this._nav.children[index]?.setAttribute(attribute, value);
     } else {
       this._nav.children[index]?.removeAttribute(attribute);
@@ -537,11 +551,7 @@ export class Tabs extends RanElement {
     if (name === 'effect') {
       const tabHeaderList = [...this._nav.children];
       tabHeaderList.forEach((item) => {
-        if (!this.effect || this.effect === 'false') {
-          item.removeAttribute('effect');
-        } else {
-          item.setAttribute('effect', newValue);
-        }
+        item.setAttribute('effect', this.effectOn() ? newValue : 'false');
       });
     }
     if (name === 'active') {
