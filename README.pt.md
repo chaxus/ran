@@ -28,7 +28,7 @@ O ran tem três partes que podem ser usadas separadamente: **ranui**, componente
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/readme-home-dark.webp">
-    <img width="800" src="./.github/assets/readme-home.webp" alt="A página inicial de ran.chaxus.com: a marcação do ranui à esquerda de um painel ao vivo que mostra os mesmos botões, barra de progresso, indicador de carregamento e caixa de seleção">
+    <img width="800" src="./.github/assets/readme-home.webp" alt="A página inicial de ran.chaxus.com: o título à esquerda e, à direita, um formulário do ranui que funciona para convidar um colega, com campo de e-mail, seletor de função, caixa de seleção e botão de envio">
   </picture>
 </p>
 

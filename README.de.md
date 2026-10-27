@@ -28,7 +28,7 @@ ran besteht aus drei Teilen, die sich einzeln nutzen lassen: **ranui**, UI-Kompo
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/readme-home-dark.webp">
-    <img width="800" src="./.github/assets/readme-home.webp" alt="Die Startseite von ran.chaxus.com: links ranui-Markup, rechts ein Live-Panel, das dieselben Buttons, Fortschrittsbalken, Ladeanzeige und Checkbox darstellt">
+    <img width="800" src="./.github/assets/readme-home.webp" alt="Die Startseite von ran.chaxus.com: links die Überschrift, rechts ein funktionierendes ranui-Formular zum Einladen eines Teammitglieds mit E-Mail-Feld, Rollenauswahl, Checkbox und Senden-Button">
   </picture>
 </p>
 

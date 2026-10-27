@@ -28,7 +28,7 @@ ran 由三部分组成，每部分都能单独使用：**ranui** 是基于原生
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/readme-home-dark.webp">
-    <img width="800" src="./.github/assets/readme-home.webp" alt="ran.chaxus.com 首页：左边是 ranui 的标签写法，右边的实时面板渲染出对应的按钮、进度条、加载动画和复选框">
+    <img width="800" src="./.github/assets/readme-home.webp" alt="ran.chaxus.com 首页：左边是标题，右边是一个真实可用的 ranui 表单「邀请成员」，有邮箱输入框、角色下拉框、复选框和发送按钮">
   </picture>
 </p>
 
