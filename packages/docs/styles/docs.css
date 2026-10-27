@@ -680,6 +680,15 @@ a {
   .sidebar {
     view-transition-name: sidebar;
   }
+  /* Captured apart from the sidebar, so the current-page marker slides from the old row to
+     the new one instead of cutting. */
+  .sb__rail {
+    view-transition-name: sb-rail;
+  }
+}
+::view-transition-group(sb-rail) {
+  animation-duration: var(--ran-motion-duration-slow);
+  animation-timing-function: var(--ran-motion-ease-standard);
 }
 
 /* ── Sidebar ─────────────────────────────────────────────────────────────── */
@@ -775,11 +784,21 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+.sb__item > .sb__label {
   padding-top: 14px;
 }
 .sb__link:hover {
   color: var(--fg);
   background: var(--bg-soft);
+}
+/* The row is as wide as its label, so the hover fill wraps the words rather than the column.
+   Touch keeps full-width rows: there the row is the tap target. */
+@media (hover: hover) and (pointer: fine) {
+  .sb__link {
+    width: fit-content;
+    max-width: 100%;
+  }
 }
 /* With script, one fill slides between rows (client/sidebar.ts) instead of each row
    painting its own. It is the sidebar's first child and unstacked, so the positioned
@@ -831,8 +850,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
  * there is one line and one meaning. The offset is the group's `padding-inline-start` plus
  * its 1px border.
  */
-.sb__link[aria-current='page']::before {
-  content: '';
+.sb__rail {
   position: absolute;
   inset-block: 0;
   inset-inline-start: -13px;
@@ -846,25 +864,39 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 .sb__summary::-webkit-details-marker {
   display: none;
 }
-/* The disclosure arrow is drawn on the summary rather than left to the UA, which paints
-   it outside the padding and misaligns it with the links above and below. */
+/* The arrow is a flex item beside the label, so the two share one centre line whatever the
+   label's size. The group's top spacing sits on the summary, not in the label, for the same
+   reason: padding inside the label would pull the centre down. */
 .sb__summary {
-  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: var(--ran-space-2);
 }
 .sb__summary::after {
   content: '';
-  position: absolute;
-  inset-inline-end: 8px;
-  top: 13px;
+  flex: none;
   width: 5px;
   height: 5px;
+  margin-inline: auto var(--ran-space-2);
   border-right: 1.5px solid var(--fg-faint);
   border-bottom: 1.5px solid var(--fg-faint);
-  transform: rotate(45deg);
+  /* A rotated corner draws in one half of its box; the shift puts the drawn chevron, not
+     the box, on the centre line. */
+  transform: translateY(-1.5px) rotate(45deg);
   transition: transform 0.15s ease;
 }
 .sb__details[open] > .sb__summary::after {
-  transform: rotate(-135deg);
+  transform: translateY(1.5px) rotate(-135deg);
+}
+/* A group header opens and closes rather than navigating, so it answers hover with ink, not
+   the fill that marks a link. */
+@media (hover: hover) {
+  .sb__summary:hover > .sb__label {
+    color: var(--fg);
+  }
+  .sb__summary:hover::after {
+    border-color: var(--fg-muted);
+  }
 }
 
 /* ── Outline ─────────────────────────────────────────────────────────────── */

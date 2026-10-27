@@ -51,7 +51,7 @@ const sidebarHtml = (items: SidebarItem[], url: string, depth = 0): string => {
       const holdsCurrent = active || (children.includes('aria-current="page"') ?? false);
       const collapsed = item.collapsed === true && !holdsCurrent;
       const label = item.link
-        ? `<a class="sb__link" href="${escapeHtml(item.link)}"${active ? ' aria-current="page"' : ''}>${escapeHtml(item.text)}</a>`
+        ? `<a class="sb__link" href="${escapeHtml(item.link)}"${active ? ' aria-current="page"' : ''}>${active ? '<span class="sb__rail" aria-hidden="true"></span>' : ''}${escapeHtml(item.text)}</a>`
         : `<span class="sb__label">${escapeHtml(item.text)}</span>`;
       if (!children) return `<li class="sb__item">${label}</li>`;
       return (
@@ -155,7 +155,8 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
 <meta name="description" content="${escapeHtml(page.description)}">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0d10">
-<link rel="icon" href="/favicon.ico">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="/manifest.json">
 <link rel="preload" href="/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="robots" content="all">
