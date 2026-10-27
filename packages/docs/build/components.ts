@@ -246,13 +246,12 @@ const renderProof = (p: ReturnType<typeof homeCopy>['proof']): string =>
   `<div class="proof-lines"><r-skeleton></r-skeleton><r-skeleton class="proof-short"></r-skeleton></div></div>` +
   `<div class="proof-text"><r-skeleton></r-skeleton><r-skeleton></r-skeleton><r-skeleton class="proof-short"></r-skeleton></div>` +
   `</figure>` +
-  // The rim draws through WebGPU, falling back to WebGL; it repaints only on resize, so
-  // nothing here loops. The backdrop is what the glass bends, not decoration of the page.
-  // tint 70%: the lowest page-colour share that keeps the label at 4.5:1 over the white
-  // disc in dark (measured 5.7:1 dark, 9.6:1 light; 62% gave 4.3:1).
+  // The same clear glass as the playground: default tint, no rim, so the backdrop it bends
+  // stays visible. Nothing here loops. The label carries its own backing (home.css), so the
+  // pane does not have to be milked over to keep it readable.
   `<figure class="proof-cell proof-glass"><figcaption class="proof-cap">${esc(p.glass)}</figcaption>` +
   `<div class="proof-glass-stage"><span class="proof-backdrop" aria-hidden="true"><i></i><i></i><i></i></span>` +
-  `<r-glass class="proof-pane" rim radius="16" blur="12" saturate="170" tint="color-mix(in srgb, var(--bg) 70%, transparent)"><code>&lt;r-glass rim&gt;</code></r-glass></div>` +
+  `<r-glass class="proof-pane" radius="16" blur="12" saturate="170" displace="8"><code>&lt;r-glass&gt;</code></r-glass></div>` +
   `</figure>` +
   `</div>`;
 
