@@ -148,14 +148,14 @@
 //
 // Entering, a toast slides down from above its own top while it fades in, decelerating with
 // no overshoot (400ms, Sonner's). Leaving is shorter and accelerates (200ms). The toasts below
-// a leaving one slide up into place through the same transition (index.ts measures them).
+// a leaving one slide up into place through the same transition on `translate`, which
+// composes with `transform` (index.ts measures them).
 :host {
   transition:
     transform var(--ran-message-enter-duration, 400ms)
       var(--ran-message-enter-easing, var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1))),
     opacity var(--ran-message-enter-duration, 400ms)
       var(--ran-message-enter-easing, var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1))),
-    // `translate` is the stack moving up past a toast that left; it composes with `transform`.
     translate var(--ran-message-enter-duration, 400ms)
       var(--ran-message-enter-easing, var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)));
 }
