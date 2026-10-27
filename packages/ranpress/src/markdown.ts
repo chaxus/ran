@@ -547,13 +547,22 @@ export const createMarkdown = ({
   };
   const container = createContainer(containerRenderers);
 
+  // Translations repeat their code blocks verbatim, so about four in ten fences are a
+  // repeat, and a dev rebuild re-renders every page; highlighting is most of the render.
+  const highlighted = new Map<string, string>();
   const highlight = (code: string, lang: string): string => {
     if (!highlighter) throw new Error('init() must be awaited before rendering markdown');
     const known = langs.includes(lang);
     if (lang && !known) {
       throw new Error(`unknown code fence language "${lang}" — add it to this site's \`langs\``);
     }
-    return highlighter.codeToHtml(code, { lang: known ? lang : 'text', themes: THEMES, defaultColor: false });
+    const key = `${lang}\0${code}`;
+    let html = highlighted.get(key);
+    if (html === undefined) {
+      html = highlighter.codeToHtml(code, { lang: known ? lang : 'text', themes: THEMES, defaultColor: false });
+      highlighted.set(key, html);
+    }
+    return html;
   };
 
   const isExternal = (href: string): boolean => /^https?:\/\//.test(href) && !href.startsWith(origin);
