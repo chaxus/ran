@@ -250,6 +250,7 @@ const ko: LocaleMessages = {
     componentSource: '소스',
     playground: '플레이그라운드',
     playgroundMarkup: '마크업',
+    designSource: '원문(영어): {source}. 이 페이지는 번역본이며, 원문과 다를 때는 원문을 따릅니다.',
     returnToTop: '맨 위로',
     sidebarMenu: '메뉴',
     darkModeSwitch: '화면 모드',

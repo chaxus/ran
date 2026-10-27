@@ -250,6 +250,7 @@ const es: LocaleMessages = {
     componentSource: 'Código fuente',
     playground: 'Prueba interactiva',
     playgroundMarkup: 'Marcado',
+    designSource: 'Original (en inglés): {source}. Esta página es una traducción; si difiere, prevalece el original.',
     returnToTop: 'Volver arriba',
     sidebarMenu: 'Menú',
     darkModeSwitch: 'Apariencia',

@@ -18,6 +18,10 @@
  *    (`description: What changed: added, fixed`) makes the value a mapping key, and VitePress
  *    fails the whole build with a YAML stack trace that names one file and lists no others.
  *    Six pages broke this way at once; catching it here names all six in a second.
+ * 7. **A design reference translation that is missing or stale.** `design-i18n/<dir>/` holds
+ *    each language's copy of `design/*.md`, and each copy names the English blob it was
+ *    translated from. When the English file changes, every copy is out of date until it is
+ *    updated; the failure prints the `git diff` that shows what to carry over.
  * 6. **A language the component copy never got.** `home-copy.ts` and `demo-copy.ts` fall
  *    back to English for an unknown locale, so adding a language renders its home page and
  *    its interactive demos entirely in English — a fallback, not an error, and therefore
@@ -34,6 +38,8 @@ import type { SidebarNode } from '../build/langs/types.ts';
 import { HOME_STRINGS } from '../build/langs/home-copy.ts';
 import { DEMO_STRINGS } from '../build/langs/demo-copy.ts';
 import { DESIGN_ILLUSTRATION_STRINGS } from '../build/langs/design-illustrations-copy.ts';
+import { DESIGN_REFERENCE } from '../build/langs/design-pages.ts';
+import { gitBlobId, translatedFrom, translationOf } from '../build/design-reference.ts';
 import en from '../build/langs/messages/en.ts';
 import cn from '../build/langs/messages/cn.ts';
 import ja from '../build/langs/messages/ja.ts';
@@ -236,6 +242,35 @@ for (const locale of LOCALES) {
   }
 }
 
+const DESIGN_DIR = resolve(ROOT, '..', '..', 'design');
+for (const locale of LOCALES) {
+  if (!locale.dir) continue;
+  for (const { file } of DESIGN_REFERENCE) {
+    const where = `design-i18n/${locale.dir}/${file}`;
+    const translation = translationOf(locale, file);
+    if (!translation) {
+      fail(`${locale.id}: ${where} is a missing page`);
+      continue;
+    }
+    const english = join(DESIGN_DIR, file);
+    const current = gitBlobId(readFileSync(english, 'utf8'));
+    const from = translatedFrom(translation);
+    if (from !== current)
+      fail(
+        from
+          ? `${locale.id}: ${where} is stale; carry over \`git diff ${from} ${current}\` and set its source line to ${current}`
+          : `${locale.id}: ${where} must start with <!-- source: ${current} -->`,
+      );
+    const en = skeleton(english);
+    const other = skeleton(join(ROOT, where));
+    if (en.levels !== other.levels)
+      fail(`${locale.id}: ${where} heading outline differs (en ${en.levels}, got ${other.levels})`);
+    if (en.fences !== other.fences) fail(`${locale.id}: ${where} has ${other.fences} code blocks, en has ${en.fences}`);
+    if (proseBackticks(join(ROOT, where)) % 2 === 1)
+      fail(`${locale.id}: ${where} has an unclosed inline-code span (odd backtick count in prose)`);
+  }
+}
+
 if (errors.length) {
   // Report a sample of *each kind* rather than the first N overall. A language still being
   // translated reports one "missing page" per page, and a flat cap let those bury every
@@ -245,6 +280,7 @@ if (errors.length) {
     ['stray label', (e: string) => e.includes('stray label')],
     ['empty UI string', (e: string) => e.includes('empty UI string')],
     ['component copy', (e: string) => /-copy\.ts/.test(e)],
+    ['stale design translation', (e: string) => e.includes('is stale') || e.includes('must start with')],
     ['structure mismatch', (e: string) => /heading outline|code blocks|<ran-demo> blocks|backtick/.test(e)],
     ['frontmatter', (e: string) => e.includes('not valid YAML')],
     ['extra page', (e: string) => e.includes('extra page')],

@@ -108,7 +108,7 @@ export const loadDocs = (root: string, markdown: MarkdownRenderer): DocContent =
   const sources = readSources(root, {
     // Everything that is not prose: the generator, its data, the client bundle, the
     // stylesheets, and whatever is copied verbatim into the output.
-    ignore: ['node_modules', 'public', 'dist', 'bin', 'build', 'client', 'styles', 'assets'],
+    ignore: ['node_modules', 'public', 'dist', 'bin', 'build', 'client', 'styles', 'assets', 'design-i18n'],
     // Orientation for maintainers, not a page — and VitePress excludes it for the same
     // reason, which is how its own "a bare {{ breaks the build" note used to break it.
     ignoreFiles: ['CLAUDE.md'],

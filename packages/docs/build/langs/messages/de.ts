@@ -250,6 +250,8 @@ const de: LocaleMessages = {
     componentSource: 'Quellcode',
     playground: 'Spielwiese',
     playgroundMarkup: 'Markup',
+    designSource:
+      'Original (Englisch): {source}. Diese Seite ist eine Übersetzung; bei Abweichungen gilt das Original.',
     returnToTop: 'Nach oben',
     sidebarMenu: 'Menü',
     darkModeSwitch: 'Erscheinungsbild',

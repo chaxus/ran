@@ -2,7 +2,9 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { designReferenceMarkdown, githubSlug } from '../build/design-reference.ts';
+import { slugify } from 'ranpress';
+import { designReferenceMarkdown, designRuleLink, githubSlug } from '../build/design-reference.ts';
+import { LOCALES } from '../build/langs/locales.ts';
 import { DESIGN_REFERENCE } from '../build/langs/design-pages.ts';
 
 const DESIGN = resolve(import.meta.dirname, '../../../design');
@@ -39,4 +41,32 @@ describe('the Ran Design reference pages', () => {
   it('names the composition page after itself', () => {
     expect(designReferenceMarkdown(DESIGN, 'DESIGN.md').match(/^# (.+)$/m)?.[1]).toBe('Visual composition');
   });
+
+  // Translations keep the English links; every in-reference anchor must land on a heading
+  // of the translated page it points into, in that page's own language.
+  for (const locale of LOCALES.filter((l) => l.dir)) {
+    it(`links the ${locale.dir} translation to its own pages and headings`, () => {
+      const headings = new Map<string, Set<string>>(
+        DESIGN_REFERENCE.map(({ file, page }) => [
+          page,
+          new Set(
+            [...designReferenceMarkdown(DESIGN, file, undefined, locale).matchAll(/^#{1,6} (.+)$/gm)].map((m) =>
+              slugify(m[1]!),
+            ),
+          ),
+        ]),
+      );
+      for (const { file } of DESIGN_REFERENCE) {
+        const page = designReferenceMarkdown(DESIGN, file, undefined, locale);
+        for (const [, path, anchor] of page.matchAll(/\]\((\/[a-z]+\/src\/design\/[a-z]+)(?:#([^)\s]+))?\)/g)) {
+          expect(path!.startsWith(`/${locale.dir}/src/design/`), `${file}: ${path}`).toBe(true);
+          if (anchor)
+            expect(headings.get(path!.split('/').pop()!)?.has(anchor), `${file}: ${path}#${anchor}`).toBe(true);
+        }
+      }
+      const rule = designRuleLink(DESIGN, 'X-INPUT-4', locale);
+      const [, page, anchor] = rule.match(/\/src\/design\/([a-z]+)#(.+)$/)!;
+      expect(headings.get(page!)?.has(anchor!)).toBe(true);
+    });
+  }
 });
