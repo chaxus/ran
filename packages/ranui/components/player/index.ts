@@ -1,6 +1,8 @@
 import { SyncHook, createRaceGuard } from 'ranuts/utils';
 import type { RaceGuard } from 'ranuts/utils';
 import type { Progress } from '@/components/progress';
+// The volume slider is an <r-progress>; register it here, a type import alone registers nothing.
+import '@/components/progress';
 import '@/components/select';
 import { SPEED } from './core/constants';
 import { bindControllerEvents, type PlayerControllerElements, type PlayerControllerHandlers } from './core/controller';

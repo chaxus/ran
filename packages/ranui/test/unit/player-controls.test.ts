@@ -18,6 +18,20 @@ describe('r-player controls and browser-facing helpers', () => {
     vi.useRealTimers();
   });
 
+  // This file imports only the player: a control it renders but never registers stays an empty,
+  // zero-height tag (the volume slider did).
+  it('registers every element its control bar renders when imported on its own', () => {
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+    const tags = new Set(
+      [...player._shadowDom.querySelectorAll('*')]
+        .map((node: Element) => node.localName)
+        .filter((tag: string) => tag.includes('-')),
+    );
+    expect(tags.has('r-progress')).toBe(true);
+    expect([...tags].filter((tag) => !customElements.get(tag))).toEqual([]);
+  });
+
   it('captures a playback snapshot from the current video state', () => {
     const player = makePlayer();
     player._video.currentTime = 42;

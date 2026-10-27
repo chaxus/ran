@@ -1315,11 +1315,11 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `player`
 
-- Tokens: 180
+- Tokens: 179
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 9 · component: 154 · internal: 17 -->
+<!-- layers: semantic: 9 · component: 154 · internal: 16 -->
 - `--ran-color-`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -1487,7 +1487,6 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-radius-sm`
 - `--ran-size-3`
 - `--ran-size-4`
-- `--ran-size-6`
 - `--ran-size-7`
 - `--ran-space-1`
 - `--ran-space-2`

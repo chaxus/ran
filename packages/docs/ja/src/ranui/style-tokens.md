@@ -1317,11 +1317,11 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ## `player`
 
-- Tokens: 180
+- Tokens: 179
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 9 · component: 154 · internal: 17 -->
+<!-- layers: semantic: 9 · component: 154 · internal: 16 -->
 - `--ran-color-`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -1489,7 +1489,6 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 - `--ran-radius-sm`
 - `--ran-size-3`
 - `--ran-size-4`
-- `--ran-size-6`
 - `--ran-size-7`
 - `--ran-space-1`
 - `--ran-space-2`
