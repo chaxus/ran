@@ -80,10 +80,11 @@ test.describe('message', () => {
     // What a reader sees, frame by frame: a toast slides into place without overshooting or
     // swelling, leaves completely, and the one below it glides up rather than jumping.
     test('enters without overshoot, leaves completely, and the stack glides', async ({ page, browserName }) => {
-      // Headless WebKit delays the first timer after these two toasts mount by about 1.3s, so the
-      // trace starts after the entrance is over. Whether Safari shows that delay is still open;
-      // the motion itself is traced in Chromium and Firefox.
-      test.skip(browserName === 'webkit', 'headless WebKit stalls the trace for ~1.3s after mount');
+      // Inside this runner, headless WebKit holds the first timer after the toasts mount for about
+      // 1.3s, so the trace starts after the entrance is over. The harness causes it, not the
+      // component: the same calls in a standalone WebKit page, on the real page or a cleared one,
+      // answer in 16–60ms. The motion itself is traced in Chromium and Firefox.
+      test.skip(browserName === 'webkit', 'the WebKit runner stalls ~1.3s after mount; standalone WebKit does not');
       await page.goto(DEV_SERVER, { waitUntil: 'load' });
       await page.waitForFunction(() => !!(window as any).message);
       await page.setContent('<html><body></body></html>');
