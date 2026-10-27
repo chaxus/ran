@@ -250,6 +250,7 @@ const en: LocaleMessages = {
     componentSource: 'Source',
     playground: 'Playground',
     playgroundMarkup: 'Markup',
+    designSource: 'Source: {source}. Edit the source, not this page.',
     returnToTop: 'Return to top',
     sidebarMenu: 'Menu',
     darkModeSwitch: 'Appearance',

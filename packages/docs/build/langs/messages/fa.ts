@@ -250,6 +250,7 @@ const fa: LocaleMessages = {
     componentSource: 'کد منبع',
     playground: 'زمین بازی',
     playgroundMarkup: 'نشانه‌گذاری',
+    designSource: 'متن اصلی (انگلیسی): {source}. این صفحه ترجمه است و در صورت تفاوت، متن اصلی ملاک است.',
     returnToTop: 'بازگشت به بالا',
     sidebarMenu: 'منو',
     darkModeSwitch: 'ظاهر',

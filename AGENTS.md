@@ -46,6 +46,8 @@ Public ranui guidance has English and Chinese entry points under `packages/docs/
 and `packages/docs/cn/src/ranui/`. Link to canonical owners instead of duplicating long rules.
 
 Shared methods are edited in `design/`; ranui-specific guidance in `packages/ranui/docs/adapters/`.
-Run `pnpm sync:design` and `pnpm sync:agent-plugin` after changing them. Generated npm guides
+Run `pnpm sync:design` and `pnpm sync:agent-plugin` after changing them. The website's seven translations of
+the design reference live in `packages/docs/design-i18n/`; `pnpm -F docs check:langs` names each one a
+change made stale and the diff to carry over. Generated npm guides
 and bundled plugin references are checked distributions, not additional rule owners.
 The unified `plugins/ran` entry has three skills; read only the one relevant to the task.

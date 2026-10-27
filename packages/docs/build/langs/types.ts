@@ -58,6 +58,8 @@ export interface UiMessages {
   /** The playground section at the end of a component page, and its markup readout. */
   playground: string;
   playgroundMarkup: string;
+  /** Footer of a design reference page; `{source}` is the link to its file in design/. */
+  designSource: string;
   returnToTop: string;
   sidebarMenu: string;
   darkModeSwitch: string;

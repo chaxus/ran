@@ -250,6 +250,7 @@ const ja: LocaleMessages = {
     componentSource: 'ソース',
     playground: 'プレイグラウンド',
     playgroundMarkup: 'マークアップ',
+    designSource: '原文（英語）：{source}。このページは翻訳です。原文と食い違う場合は原文が優先されます。',
     returnToTop: 'トップへ戻る',
     sidebarMenu: 'メニュー',
     darkModeSwitch: '外観',

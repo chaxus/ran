@@ -151,7 +151,7 @@ export const renderHome = (locale: LocaleDef): string => {
     `</div>` +
     `<div class="example__rules"><span class="example__rules-label">${esc(t.example.rules)}</span>` +
     EXAMPLE_RULES.map(
-      (id) => `<a class="example__rule" href="${esc(href(designRuleLink(DESIGN_DIR, id)))}">${id}</a>`,
+      (id) => `<a class="example__rule" href="${esc(href(designRuleLink(DESIGN_DIR, id, locale)))}">${id}</a>`,
     ).join('') +
     `</div>` +
     `<p class="live-note">${esc(t.liveNote)}</p></div></header>` +

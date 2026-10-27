@@ -99,9 +99,13 @@ const llmsFull = (content: DocContent): string => {
     .sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0))
     .map((page) => {
       const rule = '='.repeat(64);
+      // The design reference has no file in the prose trees: English is `design/` at the
+      // repository root, a translation is `design-i18n/` here (see build/design-reference.ts).
       const path = page.file.startsWith('design/')
         ? join(ROOT, '..', '..', page.file)
-        : join(ROOT, page.locale.dir, page.baseRel);
+        : page.file.startsWith('docs/design-i18n/')
+          ? join(ROOT, page.file.slice('docs/'.length))
+          : join(ROOT, page.locale.dir, page.baseRel);
       const source = readFileSync(path, 'utf8');
       return `${rule}\n# ${absoluteUrl(page.url)}\n${rule}\n\n${source}\n\n`;
     });

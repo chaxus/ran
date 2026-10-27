@@ -250,6 +250,7 @@ const cn: LocaleMessages = {
     componentSource: '源码',
     playground: '试玩',
     playgroundMarkup: '标记',
+    designSource: '原文（英文）：{source}。本页是译文，与原文不一致时以原文为准。',
     returnToTop: '回到顶部',
     sidebarMenu: '菜单',
     darkModeSwitch: '外观',
