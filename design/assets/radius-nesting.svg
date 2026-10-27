@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="t d">
+<title id="t">Nested radius: inner = outer − gap</title>
+<desc id="d">A card with radius 16 holds an inset surface 8 in, radius 8, which holds a button 4 in, radius 4; their corner arcs share one centre. Beside it, an inset surface that keeps radius 16 leaves a band that is 8 wide on the edges but about 11.3 at the corner.</desc>
+<style>
+svg{--bg:#fafafa;--card:#ffffff;--ink:#111113;--muted:#6b6b76;--hair:#e4e4e8;--accent:#0a6cff;--accent-soft:rgba(10,108,255,.12)}
+@media (prefers-color-scheme: dark){svg{--bg:#111113;--card:#18181b;--ink:#ededef;--muted:#a1a1aa;--hair:#2e2e33;--accent:#4a9bff;--accent-soft:rgba(74,155,255,.18)}}
+.panel{fill:var(--bg);stroke:var(--hair)}
+.card{fill:var(--card);stroke:var(--hair)}
+.hair{fill:none;stroke:var(--hair)}
+.line{fill:none;stroke:var(--muted)}
+.ink{fill:none;stroke:var(--ink)}
+.acc{fill:none;stroke:var(--accent)}
+.acc-dash{fill:none;stroke:var(--accent);stroke-dasharray:4 4}
+.faint{fill:none;stroke:var(--accent);stroke-opacity:.45;stroke-dasharray:2 3}
+.bar{fill:var(--hair)}
+.bar-ink{fill:var(--muted)}
+.dot{fill:var(--accent)}
+.soft{fill:var(--accent-soft)}
+text{font-family:ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;fill:var(--muted);font-size:12px}
+.h{fill:var(--ink);font-size:15px;font-weight:600}
+.lab{fill:var(--ink);font-size:13px;font-weight:500}
+.mono{font-family:ui-monospace, monospace;font-size:11px}
+.mono-acc{font-family:ui-monospace, monospace;font-size:11px;fill:var(--accent)}
+</style>
+<rect class="panel" x="0.5" y="0.5" width="719" height="359" rx="16"/>
+<text class="h" x="32" y="40">Nested radius: inner = outer − gap</text><text x="32" y="60">Drawn at 3×. Corner arcs share one centre.</text><rect class="card" x="48.5" y="84.5" width="299" height="227" rx="48"/><rect class="soft" x="72" y="108" width="252" height="180" rx="24"/><rect class="hair" x="72.5" y="108.5" width="251" height="179" rx="24"/><rect class="card" x="84.5" y="120.5" width="143" height="47" rx="12"/><circle class="faint" cx="96" cy="132" r="48"/><circle class="faint" cx="96" cy="132" r="24"/><circle class="faint" cx="96" cy="132" r="12"/><circle class="dot" cx="96" cy="132" r="2.5"/><path class="acc" stroke-width="2" d="M48 132A48 48 0 0 1 96 84"/><path class="acc" stroke-width="2" d="M72 132A24 24 0 0 1 96 108"/><path class="acc" stroke-width="2" d="M84 132A12 12 0 0 1 96 120"/><text class="mono-acc" x="104" y="76">R 16</text><text class="mono-acc" x="152" y="100">r 8 = 16 − 8</text><text class="mono-acc" x="146" y="148">r 4 = 8 − 4</text><path class="ink" d="M48 256.5H72M48.5 252v8M72.5 252v8"/><text class="mono" x="80" y="260">gap 8</text><path class="ink" d="M244.5 108V120M240 108.5h8M240 120.5h8"/><text class="mono" x="254" y="124">gap 4</text><path class="hair" d="M388.5 84V312"/><text class="lab" x="412" y="96">Same radius: the band swells</text><text x="412" y="116">Inner r 16 inside R 16 with gap 8</text><rect class="card" x="412.5" y="132.5" width="267" height="179" rx="48"/><rect class="soft" x="436" y="156" width="220" height="132" rx="48"/><rect class="hair" x="436.5" y="156.5" width="219" height="131" rx="48"/><path class="acc" stroke-width="2" d="M426.1 146.1L450.1 170.1"/><circle class="dot" cx="426.1" cy="146.1" r="2"/><circle class="dot" cx="450.1" cy="170.1" r="2"/><text class="mono-acc" x="464" y="192">11.3 at the corner</text><path class="ink" d="M412 262.5H436M412.5 258v8M436.5 258v8"/><text class="mono" x="444" y="266">8 on the edge</text>
+</svg>
