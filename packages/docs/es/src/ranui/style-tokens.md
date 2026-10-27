@@ -1174,11 +1174,11 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `message`
 
-- Tokens: 63
+- Tokens: 59
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 12 · component: 45 · internal: 6 -->
+<!-- layers: semantic: 12 · component: 41 · internal: 6 -->
 - `--ran-color-bg`
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
@@ -1197,6 +1197,10 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-message-content-toast-background`
 - `--ran-message-content-toast-border`
 - `--ran-message-content-toast-border-radius`
+- `--ran-message-enter-duration`
+- `--ran-message-enter-easing`
+- `--ran-message-exit-duration`
+- `--ran-message-exit-easing`
 - `--ran-message-font-feature-settings`
 - `--ran-message-font-size`
 - `--ran-message-font-variant`
@@ -1207,17 +1211,9 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-message-icon-size`
 - `--ran-message-icon-success-color`
 - `--ran-message-icon-warning-color`
-- `--ran-message-in-animation-duration`
-- `--ran-message-in-animation-fill-mode`
-- `--ran-message-in-animation-name`
-- `--ran-message-in-animation-timing-function`
 - `--ran-message-info-align-items`
 - `--ran-message-info-toast-align-items`
 - `--ran-message-ist-style`
-- `--ran-message-leave-animation-duration`
-- `--ran-message-leave-animation-fill-mode`
-- `--ran-message-leave-animation-name`
-- `--ran-message-leave-animation-timing-function`
 - `--ran-message-notice-text-align`
 - `--ran-message-notice-toast-text-align`
 - `--ran-message-notice-toast-word-break`
@@ -1232,7 +1228,7 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-message-text-toast-font-size`
 - `--ran-message-text-toast-font-variant`
 - `--ran-message-text-toast-font-weight`
-- `--ran-motion-duration-base`
+- `--ran-motion-duration-fast`
 - `--ran-motion-ease-standard`
 - `--ran-radius-md`
 - `--ran-shadow-menu`

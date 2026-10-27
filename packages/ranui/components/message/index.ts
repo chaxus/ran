@@ -23,8 +23,38 @@ export interface MessagePrompt extends MessageRenderOptions {
   close?: () => void;
 }
 
-const AnimationTime = 300;
 const defaultDuration = 3000;
+/** When the leave starts, before `duration` ends; matches the stylesheet's default exit. */
+const EXIT_ESTIMATE = 200;
+
+/** The longest transition on an element, in ms: how long its current state takes to land. */
+const settleTime = (el: HTMLElement): number => {
+  const style = getComputedStyle(el);
+  const seconds = (list: string) => list.split(',').map((value) => Number.parseFloat(value) || 0);
+  const durations = seconds(style.transitionDuration);
+  const delays = seconds(style.transitionDelay);
+  return Math.max(0, ...durations.map((duration, i) => (duration + (delays[i % delays.length] ?? 0)) * 1000));
+};
+
+/**
+ * Takes a toast out of the stack; the ones after it move up by however far they shifted,
+ * through their own transition, instead of jumping (a FLIP: measure, remove, invert, play).
+ */
+const removeFromStack = (stack: HTMLElement, toast: HTMLElement): void => {
+  const after: HTMLElement[] = [];
+  for (let el = toast.nextElementSibling; el; el = el.nextElementSibling) after.push(el as HTMLElement);
+  const before = after.map((el) => el.getBoundingClientRect().top);
+  stack.removeChild(toast);
+  after.forEach((el, i) => {
+    const shift = before[i]! - el.getBoundingClientRect().top;
+    if (!shift) return;
+    el.style.setProperty('transition', 'none');
+    el.style.setProperty('translate', `0 ${shift}px`);
+    el.getBoundingClientRect();
+    el.style.removeProperty('transition');
+    el.style.removeProperty('translate');
+  });
+};
 
 registerIcons({
   'check-circle-fill': checkCircleFill,
@@ -168,23 +198,23 @@ function initMessageApi() {
       const div = getMessageContainer(renderOptions);
       if (!div) return;
 
-      const time = setTimeout(() => {
-        message.classList.remove('message-in');
-        message.classList.add('message-leave');
-        clearTimeout(time);
-      }, duration - AnimationTime);
-
-      message.timeId = setTimeout(() => {
-        message.classList.remove('message-leave');
-        if (message.parentNode === div) div.removeChild(message);
-        if (close) close();
-      }, duration);
-
+      // Entering: placed in its start state, then released to rest in the same task, so the
+      // transition runs from there (the forced style read is what makes the start state stick).
+      message.setAttribute('data-state', 'enter');
       div.appendChild(message);
-      message.classList.add('message-in');
-      setTimeout(() => {
-        message.classList.remove('message-in');
-      }, AnimationTime);
+      message.getBoundingClientRect();
+      message.removeAttribute('data-state');
+
+      message.timeId = setTimeout(
+        () => {
+          message.setAttribute('data-state', 'exit');
+          setTimeout(() => {
+            if (message.parentNode === div) removeFromStack(div, message);
+            if (close) close();
+          }, settleTime(message));
+        },
+        Math.max(0, duration - EXIT_ESTIMATE),
+      );
     };
   };
 

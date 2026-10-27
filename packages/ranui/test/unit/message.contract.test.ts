@@ -247,11 +247,14 @@ describe('r-message component', () => {
     expect(msg).not.toBeNull();
   });
 
-  it('message.info removes class message-leave after duration', () => {
+  it('message.info keeps the toast until its duration, then removes it', () => {
     message?.info({ content: 'Leave test', duration: 1000 });
-    vi.advanceTimersByTime(700);
     const container = document.querySelector('.ranui-message')!;
-    const msg = container.querySelector('.message') as HTMLElement;
-    expect(msg?.classList.contains('message-leave')).toBe(true);
+    const msg = [...container.querySelectorAll('.message')].pop() as HTMLElement;
+    vi.advanceTimersByTime(790);
+    expect(msg.isConnected).toBe(true);
+    expect(msg.hasAttribute('data-state')).toBe(false);
+    vi.advanceTimersByTime(300);
+    expect(msg.isConnected).toBe(false);
   });
 });
