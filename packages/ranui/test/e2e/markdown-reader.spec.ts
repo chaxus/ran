@@ -43,12 +43,22 @@ async function mount(page: import('@playwright/test').Page, source: string, attr
 }
 
 async function clickCopy(page: import('@playwright/test').Page, index = 0) {
-  const points = await insideShadow(page, '#reader', (root) =>
-    [...root.querySelectorAll('[data-md-action="copy"]')].map((button) => {
-      const box = button.getBoundingClientRect();
-      return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-    }),
-  );
+  const measure = () =>
+    insideShadow(page, '#reader', (root) =>
+      [...root.querySelectorAll('[data-md-action="copy"]')].map((button) => {
+        const box = button.getBoundingClientRect();
+        return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+      }),
+    );
+  // Late highlighting can still be laying the block out; click where the button has settled.
+  let points = await measure();
+  await expect
+    .poll(async () => {
+      const previous = JSON.stringify(points);
+      points = await measure();
+      return JSON.stringify(points) === previous;
+    })
+    .toBe(true);
   await page.mouse.click(points[index].x, points[index].y);
 }
 
@@ -104,10 +114,10 @@ test('raw copy, concurrent feedback and local rejection use the current code sou
   });
   await clickCopy(page);
   await clickCopy(page, 1);
-  expect(await page.evaluate(() => (window as unknown as { clipboardValues: string[] }).clipboardValues)).toEqual([
-    '\tfirst\n\nlast\n',
-    'second\n',
-  ]);
+  // The copy is asynchronous; wait for both writes instead of reading right after the clicks.
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { clipboardValues: string[] }).clipboardValues))
+    .toEqual(['\tfirst\n\nlast\n', 'second\n']);
   await expect
     .poll(() =>
       insideShadow(page, '#reader', (root) =>
