@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="t d">
+<title id="t">Alignment spines</title>
+<desc id="d">A product screen with a header, sidebar list and content area. Dashed lines mark three shared left edges: the navigation spine, the content spine where the breadcrumb, title, paragraph, first field and button start, and a second column spine for the next field.</desc>
+<style>
+svg{--bg:#fafafa;--card:#ffffff;--ink:#111113;--muted:#6b6b76;--hair:#e4e4e8;--accent:#0a6cff;--accent-soft:rgba(10,108,255,.12)}
+@media (prefers-color-scheme: dark){svg{--bg:#111113;--card:#18181b;--ink:#ededef;--muted:#a1a1aa;--hair:#2e2e33;--accent:#4a9bff;--accent-soft:rgba(74,155,255,.18)}}
+.panel{fill:var(--bg);stroke:var(--hair)}
+.card{fill:var(--card);stroke:var(--hair)}
+.hair{fill:none;stroke:var(--hair)}
+.line{fill:none;stroke:var(--muted)}
+.ink{fill:none;stroke:var(--ink)}
+.acc{fill:none;stroke:var(--accent)}
+.acc-dash{fill:none;stroke:var(--accent);stroke-dasharray:4 4}
+.faint{fill:none;stroke:var(--accent);stroke-opacity:.45;stroke-dasharray:2 3}
+.bar{fill:var(--hair)}
+.bar-ink{fill:var(--muted)}
+.dot{fill:var(--accent)}
+.soft{fill:var(--accent-soft)}
+text{font-family:ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;fill:var(--muted);font-size:12px}
+.h{fill:var(--ink);font-size:15px;font-weight:600}
+.lab{fill:var(--ink);font-size:13px;font-weight:500}
+.mono{font-family:ui-monospace, monospace;font-size:11px}
+.mono-acc{font-family:ui-monospace, monospace;font-size:11px;fill:var(--accent)}
+</style>
+<rect class="panel" x="0.5" y="0.5" width="719" height="359" rx="16"/>
+<text class="h" x="32" y="40">Alignment spines</text><rect class="card" x="40.5" y="60.5" width="639" height="259" rx="12"/><path class="hair" d="M40 100.5H680M208.5 100V320"/><rect class="bar-ink" x="60" y="74" width="12" height="12" rx="3"/><rect class="bar" x="80" y="76" width="56" height="8" rx="4"/><rect class="bar" x="240" y="76" width="96" height="8" rx="4"/><circle class="hair" cx="654" cy="80" r="9.5"/><rect class="bar" x="60" y="120" width="64" height="8" rx="4"/><rect class="soft" x="52" y="140" width="144" height="24" rx="6"/><rect class="bar-ink" x="60" y="148" width="48" height="8" rx="4"/><rect class="bar" x="60" y="176" width="72" height="8" rx="4"/><rect class="bar" x="60" y="204" width="56" height="8" rx="4"/><rect class="bar" x="60" y="232" width="40" height="8" rx="4"/><rect class="bar-ink" x="240" y="120" width="168" height="14" rx="4"/><rect class="bar" x="240" y="154" width="400" height="6" rx="3"/><rect class="bar" x="240" y="170" width="384" height="6" rx="3"/><rect class="bar" x="240" y="186" width="248" height="6" rx="3"/><rect class="bar" x="240" y="212" width="48" height="6" rx="3"/><rect class="bar" x="456" y="212" width="64" height="6" rx="3"/><rect class="line" x="240.5" y="226.5" width="199" height="31" rx="6"/><rect class="line" x="456.5" y="226.5" width="199" height="31" rx="6"/><rect class="bar" x="252" y="239" width="72" height="6" rx="3"/><rect x="240" y="270" width="88" height="32" rx="6" style="fill:var(--ink)"/><rect x="260" y="283" width="48" height="6" rx="3" style="fill:var(--card)"/><rect class="line" x="336.5" y="270.5" width="71" height="31" rx="6"/><path class="acc-dash" d="M60.5 56V324"/><path class="acc-dash" d="M240.5 56V324"/><path class="acc-dash" d="M456.5 56V324"/><text class="mono-acc" x="66" y="340">nav</text><text class="mono-acc" x="246" y="340">content</text><text class="mono-acc" x="462" y="340">column</text><text x="680" y="40" text-anchor="end">Text, fields and actions share one left edge</text>
+</svg>

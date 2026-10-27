@@ -2,20 +2,14 @@
 
 # Ran Design
 
-Portable product design methods for people and agents. Start with the task, content and host
-capabilities; use the existing product’s visual language and implementation contracts.
+A design guide for people and coding agents building the interface of a web product, in any stack.
+Read [the guide](./DESIGN.md) top to bottom once; it follows the order you design in, from the task to
+verifying the change, and ends with checklists to reuse on every change.
 
-| Decision                                                   | Read                                        |
-| ---------------------------------------------------------- | ------------------------------------------- |
-| Find the relevant owner                                    | [Task index](./INTERFACE_GUIDE.md)          |
-| Structure, proportion, wording, visual coherence or motion | [Design](./DESIGN.md)                       |
-| Input, focus, progress and recovery                        | [Interaction](./INTERACTION.md)             |
-| Every graded rule with its level and proof                 | [Rule index](./RULES.md)                    |
-| A supported multi-step workflow                            | [Optional patterns](./WORKFLOW_PATTERNS.md) |
-| Browser proof, recordings and evidence freshness           | [Acceptance](./ACCEPTANCE.md)               |
-| Research an unresolved design question                     | [References](./REFERENCE_RESEARCH.md)       |
+[Reference research](./REFERENCE_RESEARCH.md) collects the outside material behind some of its
+decisions; it supplies examples, not rules.
 
-Read only relevant sections. These files are the editable source for shared methods. The ranui
-npm guides compose them with library-specific adapters; the agent plugin distributes a checked
-copy. Edit this source, then run `pnpm sync:design` and `pnpm sync:agent-plugin` from the ran repository.
-These commands are for maintainers; consuming these methods requires no repository checkout.
+These files are the editable source. The ranui npm guides compose the guide with ranui's
+[implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md),
+and the agent plugin distributes a checked copy. Edit this source, then run `pnpm sync:design` and
+`pnpm sync:agent-plugin` from the ran repository. Consuming the guide requires no checkout.
