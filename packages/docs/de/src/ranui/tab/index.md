@@ -39,7 +39,7 @@ Der Container. Er hält die Kopfzeile, die Markierung des aktiven Reiters und de
 | Eigenschaft | Typ       | Standard              | Beschreibung                                                                                     |
 | ----------- | --------- | --------------------- | ------------------------------------------------------------------------------------------------ |
 | `active`    | `string`  | erster aktiver Reiter | Der `r-key` des gerade aktiven Reiters                                                           |
-| `type`      | `string`  | `'flat'`              | Stil der Kopfzeile: `flat`, `line`                                                               |
+| `type`      | `string`  | `'flat'`              | Stil der Kopfzeile: `flat`, `line`, `segment`                                                    |
 | `align`     | `string`  | `'start'`             | Ausrichtung der Kopfzeile: `start`, `center`, `end`                                              |
 | `effect`    | `boolean` | `false`               | Schaltet die Welle auf den Kopfzeilen-Schaltflächen ein und blendet die gleitende Markierung aus |
 | `sheet`     | `string`  | `''`                  | CSS-Text, der in das Shadow DOM eingefügt wird                                                   |
@@ -64,7 +64,7 @@ Ein einzelner Bereich. Seine Attribute liest das übergeordnete `<r-tabs>`, um d
 
 ### Stil der Kopfzeile `type`
 
-`flat` (Standard) zeigt eine gleitende Unterstreichung als Markierung; `line` zeichnet Reiter mit Rahmen.
+`flat` (Standard) zeigt eine gleitende Unterstreichung unter den Reitern; `line` legt zusätzlich eine Grundlinie unter die ganze Zeile; `segment` setzt die Reiter in eine abgerundete Schiene mit gleitendem Schieber, wie ein Segment-Schalter.
 
 <ran-demo column>
   <r-tabs type="flat">
@@ -73,6 +73,11 @@ Ein einzelner Bereich. Seine Attribute liest das übergeordnete `<r-tabs>`, um d
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
   <r-tabs type="line">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="segment">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
@@ -87,6 +92,12 @@ Ein einzelner Bereich. Seine Attribute liest das übergeordnete `<r-tabs>`, um d
 </r-tabs>
 
 <r-tabs type="line">
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
+
+<r-tabs type="segment">
   <r-tab label="tab1">11111</r-tab>
   <r-tab label="tab2">22222</r-tab>
   <r-tab label="tab3">33333</r-tab>
@@ -239,14 +250,14 @@ Setze `effect` auf `<r-tabs>`, damit die Schaltflächen der Kopfzeile beim Klick
 
 `r-tabs` stellt bereit:
 
-| Part           | Beschreibung                                |
-| -------------- | ------------------------------------------- |
-| `tabs`         | Äußere Hülle                                |
-| `header`       | Hülle der Kopfzeile                         |
-| `nav`          | Die Tablist mit den Einträgen der Kopfzeile |
-| `indicator`    | Die gleitende Unterstreichung               |
-| `content`      | Sichtfenster für den Bereichsinhalt         |
-| `content-wrap` | Die gleitende Spur, die alle Bereiche trägt |
+| Part           | Beschreibung                                              |
+| -------------- | --------------------------------------------------------- |
+| `tabs`         | Äußere Hülle                                              |
+| `header`       | Hülle der Kopfzeile                                       |
+| `nav`          | Die Tablist mit den Einträgen der Kopfzeile               |
+| `indicator`    | Die gleitende Unterstreichung, bei `segment` der Schieber |
+| `content`      | Sichtfenster für den Bereichsinhalt                       |
+| `content-wrap` | Die gleitende Spur, die alle Bereiche trägt               |
 
 `r-tab` stellt bereit:
 
@@ -287,7 +298,7 @@ Die vollständige Liste steht bei den [Style-Tokens](/de/src/ranui/style-tokens#
 ## Bewährte Vorgehensweisen
 
 - **Stabile Identität**: Gib jedem `<r-tab>` einen eindeutigen `r-key` und steuere die Auswahl über `active` an `<r-tabs>`, statt dich auf Positionsindizes zu verlassen.
-- **Wahl des Stils**: Nimm `type="line"` für eine gerahmte Reiterleiste im Dokumentstil und `type="flat"` (Standard) für die schlichte gleitende Unterstreichung.
+- **Wahl des Stils**: `type="flat"` (Standard) für eine leichte Unterstreichung; `type="line"`, wenn sich die Reiterleiste deutlich vom Inhalt darunter abheben soll; `type="segment"` für wenige kurze, gleichrangige Ansichten, etwa den Wechsel zwischen Vorschau und Code.
 - **Ausrichtung**: Mit `align="center"` oder `align="end"` verschiebst du die Kopfzeile in breiten Containern.
 - **Deaktivierte Bereiche**: Markiere nicht verfügbare Bereiche mit `disabled`; sie werden sowohl bei Klicks als auch bei der Vorauswahl übersprungen.
 - **Tastaturbedienung**: Die Kopfzeile ist eine WAI-ARIA-Tablist: Pfeiltasten wechseln zwischen den Reitern (auch `Pos1`/`Ende`), und nur der aktive Reiter liegt in der Tab-Reihenfolge.

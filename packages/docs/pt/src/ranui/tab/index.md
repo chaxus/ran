@@ -39,7 +39,7 @@ O contêiner. Abriga a fila de cabeçalhos, o indicador de ativo e a área de co
 | Propriedade | Tipo      | Padrão                  | Descrição                                                                 |
 | ----------- | --------- | ----------------------- | ------------------------------------------------------------------------- |
 | `active`    | `string`  | primeira aba habilitada | O `r-key` da aba ativa no momento                                         |
-| `type`      | `string`  | `'flat'`                | Estilo do cabeçalho: `flat`, `line`                                       |
+| `type`      | `string`  | `'flat'`                | Estilo do cabeçalho: `flat`, `line`, `segment`                            |
 | `align`     | `string`  | `'start'`               | Alinhamento do cabeçalho: `start`, `center`, `end`                        |
 | `effect`    | `boolean` | `false`                 | Liga a ondulação nos botões de cabeçalho e esconde o indicador deslizante |
 | `sheet`     | `string`  | `''`                    | Texto CSS injetado no shadow DOM                                          |
@@ -64,7 +64,7 @@ Um único painel. Seus atributos são lidos pelo `<r-tabs>` pai para montar o bo
 
 ### Estilo do cabeçalho `type`
 
-`flat` (padrão) mostra um sublinhado deslizante como indicador; `line` desenha cabeçalhos com borda.
+`flat` (padrão) mostra um sublinhado deslizante sob os cabeçalhos; `line` acrescenta uma linha de base sob a fila inteira; `segment` coloca os cabeçalhos num trilho arredondado com um seletor deslizante, como um controle segmentado.
 
 <ran-demo column>
   <r-tabs type="flat">
@@ -73,6 +73,11 @@ Um único painel. Seus atributos são lidos pelo `<r-tabs>` pai para montar o bo
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
   <r-tabs type="line">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="segment">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
@@ -87,6 +92,12 @@ Um único painel. Seus atributos são lidos pelo `<r-tabs>` pai para montar o bo
 </r-tabs>
 
 <r-tabs type="line">
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
+
+<r-tabs type="segment">
   <r-tab label="tab1">11111</r-tab>
   <r-tab label="tab2">22222</r-tab>
   <r-tab label="tab3">33333</r-tab>
@@ -239,14 +250,14 @@ Coloque `effect` no `<r-tabs>` para ligar a ondulação de clique nos botões de
 
 O `r-tabs` expõe:
 
-| Part           | Descrição                                       |
-| -------------- | ----------------------------------------------- |
-| `tabs`         | Invólucro raiz                                  |
-| `header`       | Invólucro da fila de cabeçalhos                 |
-| `nav`          | A tablist que contém os itens de cabeçalho      |
-| `indicator`    | A linha do sublinhado deslizante                |
-| `content`      | Janela do conteúdo dos painéis                  |
-| `content-wrap` | A trilha deslizante que segura todos os painéis |
+| Part           | Descrição                                          |
+| -------------- | -------------------------------------------------- |
+| `tabs`         | Invólucro raiz                                     |
+| `header`       | Invólucro da fila de cabeçalhos                    |
+| `nav`          | A tablist que contém os itens de cabeçalho         |
+| `indicator`    | O sublinhado deslizante, ou o seletor em `segment` |
+| `content`      | Janela do conteúdo dos painéis                     |
+| `content-wrap` | A trilha deslizante que segura todos os painéis    |
 
 O `r-tab` expõe:
 
@@ -287,7 +298,7 @@ A lista completa está em [tokens de estilo](/pt/src/ranui/style-tokens#tab); qu
 ## Boas práticas
 
 - **Identidade estável**: dê a cada `<r-tab>` um `r-key` único e conduza a seleção pelo `active` do `<r-tabs>`, em vez de depender de índices posicionais.
-- **Escolha de estilo**: use `type="line"` para uma faixa de abas com borda, no estilo documento; `type="flat"` (padrão) para o sublinhado deslizante mínimo.
+- **Escolha de estilo**: `type="flat"` (padrão) para um sublinhado leve; `type="line"` quando a fila de abas precisa de uma borda visível em relação ao conteúdo; `type="segment"` para poucas visões curtas e de mesmo peso, como alternar entre prévia e código.
 - **Alinhamento**: use `align="center"` ou `align="end"` para reposicionar a fila de cabeçalhos em contêineres largos.
 - **Painéis desabilitados**: marque com `disabled` os painéis indisponíveis; eles são pulados tanto nos cliques quanto na seleção padrão.
 - **Navegação pelo teclado**: a fila de cabeçalhos é uma tablist WAI-ARIA: as setas movem entre as abas (com `Home`/`End`), e só a aba ativa entra na ordem de tabulação.

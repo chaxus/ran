@@ -39,7 +39,7 @@ El contenedor. Alberga la fila de cabeceras, el indicador de activo y el área d
 | Propiedad | Tipo      | Por defecto                | Descripción                                                                |
 | --------- | --------- | -------------------------- | -------------------------------------------------------------------------- |
 | `active`  | `string`  | primera pestaña habilitada | El `r-key` de la pestaña activa                                            |
-| `type`    | `string`  | `'flat'`                   | Estilo de cabecera: `flat`, `line`                                         |
+| `type`    | `string`  | `'flat'`                   | Estilo de cabecera: `flat`, `line`, `segment`                              |
 | `align`   | `string`  | `'start'`                  | Alineación de la cabecera: `start`, `center`, `end`                        |
 | `effect`  | `boolean` | `false`                    | Activa la onda en los botones de cabecera y oculta el indicador deslizante |
 | `sheet`   | `string`  | `''`                       | Texto CSS inyectado en el shadow DOM                                       |
@@ -64,7 +64,7 @@ Un solo panel. Sus atributos los lee el `<r-tabs>` padre para construir el botó
 
 ### Estilo de cabecera `type`
 
-`flat` (por defecto) muestra un subrayado deslizante como indicador; `line` dibuja cabeceras con borde.
+`flat` (por defecto) muestra un subrayado deslizante bajo las cabeceras; `line` añade una línea base bajo toda la fila; `segment` coloca las cabeceras en un carril redondeado con un selector deslizante, como un control segmentado.
 
 <ran-demo column>
   <r-tabs type="flat">
@@ -73,6 +73,11 @@ Un solo panel. Sus atributos los lee el `<r-tabs>` padre para construir el botó
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
   <r-tabs type="line">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="segment">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
@@ -87,6 +92,12 @@ Un solo panel. Sus atributos los lee el `<r-tabs>` padre para construir el botó
 </r-tabs>
 
 <r-tabs type="line">
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
+
+<r-tabs type="segment">
   <r-tab label="tab1">11111</r-tab>
   <r-tab label="tab2">22222</r-tab>
   <r-tab label="tab3">33333</r-tab>
@@ -239,14 +250,14 @@ Pon `effect` en `<r-tabs>` para activar la onda al hacer clic en los botones de 
 
 `r-tabs` expone:
 
-| Part           | Descripción                                       |
-| -------------- | ------------------------------------------------- |
-| `tabs`         | Envoltorio raíz                                   |
-| `header`       | Envoltorio de la fila de cabeceras                |
-| `nav`          | La tablist que contiene los elementos de cabecera |
-| `indicator`    | La línea de subrayado deslizante                  |
-| `content`      | Ventana del contenido de los paneles              |
-| `content-wrap` | La pista deslizante que sostiene los paneles      |
+| Part           | Descripción                                         |
+| -------------- | --------------------------------------------------- |
+| `tabs`         | Envoltorio raíz                                     |
+| `header`       | Envoltorio de la fila de cabeceras                  |
+| `nav`          | La tablist que contiene los elementos de cabecera   |
+| `indicator`    | El subrayado deslizante, o el selector en `segment` |
+| `content`      | Ventana del contenido de los paneles                |
+| `content-wrap` | La pista deslizante que sostiene los paneles        |
 
 `r-tab` expone:
 
@@ -287,7 +298,7 @@ La lista completa está en [tokens de estilo](/es/src/ranui/style-tokens#tab); c
 ## Buenas prácticas
 
 - **Identidad estable**: da a cada `<r-tab>` un `r-key` único y gobierna la selección con `active` en `<r-tabs>`, en vez de fiarte de los índices posicionales.
-- **Elección de estilo**: usa `type="line"` para una tira de pestañas con borde, al estilo documento; `type="flat"` (por defecto) para el subrayado deslizante mínimo.
+- **Elección de estilo**: `type="flat"` (por defecto) para un subrayado ligero; `type="line"` cuando la fila de pestañas necesita un borde visible frente al contenido; `type="segment"` para pocas vistas cortas y del mismo peso, como alternar entre vista previa y código.
 - **Alineación**: usa `align="center"` o `align="end"` para recolocar la fila de cabeceras en contenedores anchos.
 - **Paneles deshabilitados**: marca con `disabled` los paneles no disponibles; se saltan tanto en los clics como en la selección por defecto.
 - **Navegación con teclado**: la fila de cabeceras es una tablist WAI-ARIA: las flechas mueven entre pestañas (con `Inicio`/`Fin`) y solo la pestaña activa entra en el orden de tabulación.

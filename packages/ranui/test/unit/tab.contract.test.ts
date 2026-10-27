@@ -327,7 +327,7 @@ describe('r-tabs and r-tab contract', () => {
     expect(tabs._nav.children[0].getAttribute('effect')).toBe('slide');
   });
 
-  it('attributeChangedCallback effect false removes effect from nav children', () => {
+  it('attributeChangedCallback effect false turns the header ripple off', () => {
     const tabs = document.createElement('r-tabs') as any;
     document.body.appendChild(tabs);
 
@@ -339,7 +339,23 @@ describe('r-tabs and r-tab contract', () => {
     tabs._nav.children[0].setAttribute('effect', 'slide');
 
     tabs.attributeChangedCallback('effect', 'slide', 'false');
-    expect(tabs._nav.children[0].hasAttribute('effect')).toBe(false);
+    expect(tabs._nav.children[0].getAttribute('effect')).toBe('false');
+  });
+
+  it('a pane effect cannot turn the ripple on while r-tabs has none', () => {
+    const tabs = document.createElement('r-tabs') as any;
+    document.body.appendChild(tabs);
+    const pane = document.createElement('r-tab');
+    pane.setAttribute('label', 'A');
+    pane.setAttribute('r-key', 'k1');
+    tabs._nav.appendChild(tabs.createTabHeader(pane, 0));
+
+    tabs.updateAttribute('k1', 'effect', 'slide');
+    expect(tabs._nav.children[0].getAttribute('effect')).toBe('false');
+
+    tabs.setAttribute('effect', 'slide');
+    tabs.updateAttribute('k1', 'effect', 'slide');
+    expect(tabs._nav.children[0].getAttribute('effect')).toBe('slide');
   });
 
   it('handlerExternalCss called during connectedCallback when sheet is set', () => {

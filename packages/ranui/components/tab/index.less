@@ -1,7 +1,9 @@
 @activeColor: var(--ran-tab-active-color, var(--ran-color-primary, #111113));
 @lineColor: var(--ran-tab-line-color, var(--ran-color-primary, #111113));
 @borderColor: var(--ran-tab-border-color, var(--ran-color-border, rgba(0, 0, 0, 0.2)));
-@borderRadius: var(--ran-tab-border-radius, var(--ran-radius-sm, 0.25em));
+@itemColor: var(--ran-tab-color, var(--ran-color-text-secondary, #5f5f6b));
+@segmentInset: var(--ran-tab-segment-padding, var(--ran-space-1, 4px));
+@slide: var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1));
 
 .ran-tab {
   // 这个伪类选择器仅仅适用于 影子节点树 (Shadow Dom)。并且只会选择实际的元素节点，而不包括文本节点。
@@ -55,13 +57,25 @@
       flex-flow: row nowrap;
       justify-content: flex-start;
       align-items: center;
+      gap: var(--ran-tab-gap, var(--ran-space-1, 4px));
       &::-webkit-scrollbar {
         display: none;
       }
+      // Headers are r-buttons; these inherit into their shadow roots. The shared hover
+      // fill is the only hover surface, so the button's own press scale stays off.
       .tab-header-nav-item {
         flex-shrink: 0;
+        --ran-btn-padding: var(--ran-tab-item-padding, var(--ran-space-2, 8px) var(--ran-space-3, 12px));
+        --ran-btn-border-radius: var(--ran-tab-hover-radius, var(--ran-radius-sm, 8px));
+        --ran-btn-active-transform: none;
       }
-      .active {
+      // Only the default text headers take the tab ink; a filled type keeps its own.
+      .tab-header-nav-item[type='text'] {
+        color: @itemColor;
+        --ran-btn-color: currentColor;
+        --ran-btn-hover-color: @activeColor;
+      }
+      .tab-header-nav-item.active {
         color: @activeColor;
       }
     }
@@ -79,14 +93,17 @@
       background: @lineColor;
       /* positional props only — the bare `0.2s` shorthand meant `all`, which
          also faded the line color on a theme flip */
-      transition: var(--ran-tab-line-transition, left 0.2s, width 0.2s, transform 0.2s);
+      transition: var(--ran-tab-line-transition, left @slide, width @slide, transform @slide);
+      &[data-instant] {
+        transition: none;
+      }
     }
   }
 
   &-content {
     overflow: hidden;
     box-sizing: border-box;
-    margin-top: var(--ran-tab-content-margin-top, var(--ran-space-2, 8px));
+    margin-top: var(--ran-tab-content-margin-top, var(--ran-space-3, 12px));
     border: var(--ran-tab-content-border, 1px solid var(--ran-color-border, #e4e4e8));
     border-radius: var(--ran-tab-content-border-radius, var(--ran-radius-md, 12px));
     background: var(--ran-tab-content-background, var(--ran-color-bg-elevated, #ffffff));
@@ -104,39 +121,54 @@
     }
   }
 }
-:host([type='line']) {
-  .ran-tab {
-    &-header {
-      &-nav {
-        .active {
-          color: @lineColor;
-          border: solid 1px transparent;
-          border-color: @borderColor @borderColor transparent;
-          border-radius: @borderRadius @borderRadius 0 0;
-        }
-      }
-      &-line {
-        transition: none;
-        visibility: hidden;
-        &::after,
-        &::before {
-          content: '';
-          position: absolute;
-          visibility: visible;
-          width: 9999px;
-          height: 1px;
-          bottom: 0;
-          background: @borderColor;
-        }
-        &::after {
-          left: 100%;
-        }
-        &::before {
-          right: 100%;
-        }
+:host([type='line']) .ran-tab-header-nav {
+  // A baseline under every header; the indicator, painted after the nav, covers it.
+  box-shadow: inset 0 -1px 0 @borderColor;
+}
+// A segmented control: the headers sit in a track and the indicator becomes the thumb.
+:host([type='segment']) {
+  .ran-tab-header {
+    box-sizing: border-box;
+    width: max-content;
+    max-width: 100%;
+    padding: var(--ran-tab-segment-padding, var(--ran-space-1, 4px));
+    border-radius: var(--ran-tab-segment-radius, var(--ran-radius-full, 9999px));
+    // subtle < elevated holds in both themes, so the thumb is always the raised surface.
+    background: var(--ran-tab-segment-background, var(--ran-color-bg-subtle, #f7f7f8));
+    box-shadow: var(--ran-tab-segment-border, inset 0 0 0 1px var(--ran-color-border-secondary, #e2e2e6));
+    &-hover {
+      border-radius: var(--ran-tab-segment-radius, var(--ran-radius-full, 9999px));
+      background: var(--ran-tab-hover-background, var(--ran-gray-alpha-100, #0000000d));
+    }
+    &-nav {
+      // Above the thumb, which follows it in the tree.
+      z-index: 1;
+      .tab-header-nav-item {
+        --ran-btn-height: var(--ran-tab-segment-item-height, var(--ran-size-5, 28px));
+        --ran-btn-padding: var(--ran-tab-item-padding, var(--ran-space-1, 4px) var(--ran-space-3, 12px));
+        --ran-btn-border-radius: var(--ran-tab-segment-radius, var(--ran-radius-full, 9999px));
       }
     }
+    &-line {
+      top: @segmentInset;
+      bottom: @segmentInset;
+      height: auto;
+      margin-top: 0;
+      border-radius: var(--ran-tab-segment-radius, var(--ran-radius-full, 9999px));
+      background: var(--ran-tab-segment-thumb-background, var(--ran-color-bg-elevated, #ffffff));
+      box-shadow: var(
+        --ran-tab-segment-thumb-shadow,
+        0 0 0 1px var(--ran-color-border, var(--ran-gray-400)),
+        var(--ran-shadow-elevated)
+      );
+    }
   }
+}
+:host([type='segment'][align='center']) .ran-tab-header {
+  margin-inline: auto;
+}
+:host([type='segment'][align='end']) .ran-tab-header {
+  margin-inline-start: auto;
 }
 :host([align='center']) {
   .ran-tab {

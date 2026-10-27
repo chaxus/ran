@@ -46,7 +46,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 | 属性     | 类型      | 默认值             | 说明                                       |
 | -------- | --------- | ------------------ | ------------------------------------------ |
 | `active` | `string`  | 第一个未禁用的标签 | 当前激活标签的 `r-key`                     |
-| `type`   | `string`  | `'flat'`           | 标题样式：`flat`、`line`                   |
+| `type`   | `string`  | `'flat'`           | 标题样式：`flat`、`line`、`segment`        |
 | `align`  | `string`  | `'start'`          | 标题对齐方式：`start`、`center`、`end`     |
 | `effect` | `boolean` | `false`            | 开启标题按钮的水波纹效果，并隐藏滑动指示条 |
 | `sheet`  | `string`  | `''`               | 注入 shadow DOM 的自定义样式文本           |
@@ -71,7 +71,7 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 ### 标题样式 `type`
 
-`flat`（默认）显示一条滑动的下划线指示条；`line` 渲染带边框的标签标题。
+`flat`（默认）在标题下方显示滑动下划线；`line` 在整行标题下方加一条基线；`segment` 把标题放进圆角轨道，选中项是一块滑动的滑块，类似分段控件。
 
 <ran-demo column>
   <r-tabs type="flat">
@@ -80,6 +80,11 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
   <r-tabs type="line">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="segment">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
@@ -94,6 +99,12 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 </r-tabs>
 
 <r-tabs type="line">
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
+
+<r-tabs type="segment">
   <r-tab label="tab1">11111</r-tab>
   <r-tab label="tab2">22222</r-tab>
   <r-tab label="tab3">33333</r-tab>
@@ -246,14 +257,14 @@ description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，
 
 `r-tabs` 暴露：
 
-| Part           | 说明                   |
-| -------------- | ---------------------- |
-| `tabs`         | 根容器                 |
-| `header`       | 标题行容器             |
-| `nav`          | 承载标题项的 tablist   |
-| `indicator`    | 滑动的下划线           |
-| `content`      | 面板内容的可视区域     |
-| `content-wrap` | 承载所有面板的滑动轨道 |
+| Part           | 说明                             |
+| -------------- | -------------------------------- |
+| `tabs`         | 根容器                           |
+| `header`       | 标题行容器                       |
+| `nav`          | 承载标题项的 tablist             |
+| `indicator`    | 滑动的下划线；`segment` 下是滑块 |
+| `content`      | 面板内容的可视区域               |
+| `content-wrap` | 承载所有面板的滑动轨道           |
 
 `r-tab` 暴露：
 
@@ -295,7 +306,7 @@ Part：`content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 ## 最佳实践
 
 - **稳定的身份标识**：给每个 `<r-tab>` 一个唯一的 `r-key`，用 `<r-tabs>` 上的 `active` 驱动选中状态，而不是依赖位置索引。
-- **样式选择**：需要带边框、文档风格的标签条时用 `type="line"`；需要极简的滑动下划线时用默认的 `type="flat"`。
+- **样式选择**：默认的 `type="flat"` 是轻量的下划线；标签行需要和下方内容明确分开时用 `type="line"`；只有几个简短、地位相同的视图（比如在预览和代码之间切换）时用 `type="segment"`。
 - **对齐**：在宽容器里用 `align="center"` 或 `align="end"` 重新定位标题行。
 - **禁用面板**：用 `disabled` 标记不可用的面板；它们会同时跳过点击选择和默认选中逻辑。
 - **键盘导航**：标题行是一个 WAI-ARIA tablist，方向键在标签间移动（配合 `Home`/`End`），只有激活的标签在 tab 顺序里。

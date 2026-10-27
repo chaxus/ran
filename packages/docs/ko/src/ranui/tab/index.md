@@ -39,7 +39,7 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 | 속성     | 타입      | 기본값          | 설명                                                      |
 | -------- | --------- | --------------- | --------------------------------------------------------- |
 | `active` | `string`  | 첫 번째 활성 탭 | 지금 활성인 탭의 `r-key`                                  |
-| `type`   | `string`  | `'flat'`        | 헤더 스타일: `flat`, `line`                               |
+| `type`   | `string`  | `'flat'`        | 헤더 스타일: `flat`, `line`, `segment`                    |
 | `align`  | `string`  | `'start'`       | 헤더 정렬: `start`, `center`, `end`                       |
 | `effect` | `boolean` | `false`         | 헤더 버튼에 물결 효과를 켜고 미끄러지는 표시자를 숨깁니다 |
 | `sheet`  | `string`  | `''`            | 섀도 DOM에 주입할 CSS 텍스트                              |
@@ -64,7 +64,7 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 ### 헤더 스타일 `type`
 
-`flat`(기본)은 미끄러지는 밑줄 표시자를 보여 주고, `line`은 테두리가 있는 탭 헤더를 그립니다.
+`flat`(기본)은 헤더 아래에 미끄러지는 밑줄을 보여 주고, `line`은 행 전체 아래에 기준선을 더합니다. `segment`는 헤더를 둥근 트랙에 담고 선택 항목을 미끄러지는 손잡이로 표시하는 세그먼트 컨트롤입니다.
 
 <ran-demo column>
   <r-tabs type="flat">
@@ -73,6 +73,11 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
     <r-tab label="tab3">33333</r-tab>
   </r-tabs>
   <r-tabs type="line">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="segment">
     <r-tab label="tab1">11111</r-tab>
     <r-tab label="tab2">22222</r-tab>
     <r-tab label="tab3">33333</r-tab>
@@ -87,6 +92,12 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 </r-tabs>
 
 <r-tabs type="line">
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
+
+<r-tabs type="segment">
   <r-tab label="tab1">11111</r-tab>
   <r-tab label="tab2">22222</r-tab>
   <r-tab label="tab3">33333</r-tab>
@@ -239,14 +250,14 @@ description: 'ranui Tabs(<r-tabs>)는 어떤 프레임워크에서도 쓸 수 �
 
 `r-tabs`가 노출하는 것:
 
-| Part           | 설명                             |
-| -------------- | -------------------------------- |
-| `tabs`         | 최상위 래퍼                      |
-| `header`       | 헤더 줄 래퍼                     |
-| `nav`          | 헤더 항목을 담은 tablist         |
-| `indicator`    | 미끄러지는 밑줄                  |
-| `content`      | 패널 내용의 뷰포트               |
-| `content-wrap` | 모든 패널을 얹은 미끄러지는 트랙 |
+| Part           | 설명                                    |
+| -------------- | --------------------------------------- |
+| `tabs`         | 최상위 래퍼                             |
+| `header`       | 헤더 줄 래퍼                            |
+| `nav`          | 헤더 항목을 담은 tablist                |
+| `indicator`    | 미끄러지는 밑줄, `segment`에서는 손잡이 |
+| `content`      | 패널 내용의 뷰포트                      |
+| `content-wrap` | 모든 패널을 얹은 미끄러지는 트랙        |
 
 `r-tab`이 노출하는 것:
 
@@ -287,7 +298,7 @@ Part: `content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 ## 모범 사례
 
 - **안정적인 정체성**: 각 `<r-tab>`에 유일한 `r-key`를 주고, 위치 인덱스에 기대는 대신 `<r-tabs>`의 `active`로 선택을 다루세요.
-- **스타일 선택**: 문서풍의 테두리 있는 탭 띠에는 `type="line"`을, 최소한의 미끄러지는 밑줄에는 `type="flat"`(기본)을 쓰세요.
+- **스타일 선택**: 가벼운 밑줄에는 `type="flat"`(기본)을, 탭 행을 아래 콘텐츠와 분명히 구분해야 할 때는 `type="line"`을, 미리보기와 코드 전환처럼 짧고 대등한 보기가 몇 개뿐일 때는 `type="segment"`를 쓰세요.
 - **정렬**: 넓은 컨테이너 안에서 헤더 줄의 위치를 옮기려면 `align="center"`나 `align="end"`를 쓰세요.
 - **비활성 패널**: 쓸 수 없는 패널에는 `disabled`를 표시하세요. 클릭에서도, 기본 선택에서도 건너뜁니다.
 - **키보드 탐색**: 헤더 줄은 WAI-ARIA tablist입니다. 화살표 키로 탭 사이를 오갈 수 있고(`Home`/`End`도 됩니다), 탭 순서에 들어가는 것은 활성 탭 하나뿐입니다.
