@@ -5,13 +5,14 @@ import { fileURLToPath } from 'node:url';
 
 const hash = (text: string) => createHash('sha256').update(text).digest('hex');
 const bundlePath = 'plugins/ran/skills/design/references';
-export function markdownFiles(root: string): string[] {
+/** Markdown plus the SVG figures the guide embeds; figures are copied byte for byte. */
+export function bundledFiles(root: string): string[] {
   return readdirSync(root, { withFileTypes: true })
     .flatMap((entry) => {
       if (entry.isSymbolicLink()) throw new Error(`Reference symlink is not portable: ${entry.name}`);
       return entry.isDirectory()
-        ? markdownFiles(path.join(root, entry.name)).map((file) => `${entry.name}/${file}`)
-        : entry.name.endsWith('.md')
+        ? bundledFiles(path.join(root, entry.name)).map((file) => `${entry.name}/${file}`)
+        : /\.(?:md|svg)$/.test(entry.name)
           ? [entry.name]
           : [];
     })
@@ -32,13 +33,15 @@ export function verifyLocalLinks(root: string, files: string[]): void {
 }
 export function syncAgentPlugin(root: string, check = false): void {
   const sourceRoot = path.join(root, 'design');
-  const names = markdownFiles(sourceRoot);
+  const names = bundledFiles(sourceRoot);
   if (!names.includes('README.md')) throw new Error('design/README.md must be the portable entry');
   verifyLocalLinks(sourceRoot, names);
   const expected = new Map<string, string>();
   const sources = names.map((name) => {
     const content = readFileSync(path.join(sourceRoot, name), 'utf8');
-    const generated = `<!-- Generated from design/${name}; edit the source, then run sync:agent-plugin. -->\n\n${content}`;
+    const generated = name.endsWith('.md')
+      ? `<!-- Generated from design/${name}; edit the source, then run sync:agent-plugin. -->\n\n${content}`
+      : content;
     expected.set(name, generated);
     return { source: `design/${name}`, sha256: hash(content), output: name, outputSha256: hash(generated) };
   });
@@ -54,7 +57,7 @@ export function syncAgentPlugin(root: string, check = false): void {
     if (!existsSync(pluginLicense) || readFileSync(pluginLicense, 'utf8') !== license)
       throw new Error('Stale plugin LICENSE; run sync:agent-plugin');
     if (!existsSync(destination)) throw new Error('Missing agent reference bundle; run sync:agent-plugin');
-    const actual = [...markdownFiles(destination), 'manifest.json'].sort();
+    const actual = [...bundledFiles(destination), 'manifest.json'].sort();
     if (JSON.stringify(actual) !== JSON.stringify([...expected.keys()].sort()))
       throw new Error('Stale agent reference file set; run sync:agent-plugin');
     for (const [name, content] of expected)

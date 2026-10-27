@@ -3,52 +3,40 @@
   "generator": "bin/sync-agent-plugin.ts",
   "sources": [
     {
-      "source": "design/ACCEPTANCE.md",
-      "sha256": "d75ecc4e72b39c5aa4d93d63fca5a263510b7ef57ff900a4ec68c20040b4d839",
-      "output": "ACCEPTANCE.md",
-      "outputSha256": "aa0ecd99d01831a926c9e191074e7dd99180073310743e3a87a3120a5a208197"
-    },
-    {
       "source": "design/DESIGN.md",
-      "sha256": "721826efb2aec84d4a4a7e1cfbbae965565552a7282ed421016363c108dd1561",
+      "sha256": "204a3b9a3c07780b6a62fc61cf13d40b3f27e69dbada294e23b0d2504db85aa1",
       "output": "DESIGN.md",
-      "outputSha256": "7f55157cb8a69a318c127993115b3181864e7103d0a226bdb8f98967ccf50445"
-    },
-    {
-      "source": "design/INTERACTION.md",
-      "sha256": "90a0634789c55b6b63d3e54f2cabbd71ac817ee53c9dd576142373bcb6548be2",
-      "output": "INTERACTION.md",
-      "outputSha256": "8b8e14163a0e576ca034ec55ccc7103f422ef48a7d5167927760e67e82fb30f2"
-    },
-    {
-      "source": "design/INTERFACE_GUIDE.md",
-      "sha256": "7e05ef8f5dcd216ed6054e4829a2d225a6a0f48433ca0bb97752e65b8a76f2f5",
-      "output": "INTERFACE_GUIDE.md",
-      "outputSha256": "075b80aa1c9a406897b026500e856cae2114662d42d29eea2c4d92d3901b9fb0"
+      "outputSha256": "f97a0664fd023c186fcf8ab0f852e24edaccb5deb060af6d82adbdbb676c27d5"
     },
     {
       "source": "design/README.md",
-      "sha256": "7556995d30a8b1630ab0056a13c32e74eb48b6ceafa2e9eca440cc11328a80a5",
+      "sha256": "7a1f9b9ce99943a5d1f760f1c116292344406628bdbb932ab1627652fac6ae18",
       "output": "README.md",
-      "outputSha256": "7049f0e282f25484f5830882b56a88beee0a8fe9f5c3d015ad7869e2a995e455"
+      "outputSha256": "5966365f3484ce7f9280bacc97abee891d212ffb4d0672bd01b6369cf48fad15"
     },
     {
       "source": "design/REFERENCE_RESEARCH.md",
-      "sha256": "29048e7043a37d6fe08e9f15f9d40b2d34b058eefcaf5997b00404e62ddb6607",
+      "sha256": "8cbcdba79b6fdb9a70b58c9ef9f79f33a28abf797a327c15f1db945a1dcb333d",
       "output": "REFERENCE_RESEARCH.md",
-      "outputSha256": "815f6889cb4838b2f1eaf09031e8b75ef1b8109672657068700fc7f780fe58b0"
+      "outputSha256": "22f1ea1a0380dc346e3b86f7393dc8aa5f55543ce1d51eccbad21f9413b371a0"
     },
     {
-      "source": "design/RULES.md",
-      "sha256": "ddb0bedc64df4ecf8453a0ecf3587d7a680088b012fa69979337c6453003c517",
-      "output": "RULES.md",
-      "outputSha256": "ae22ce0168fdbbed18d54896719eb8df0de0a7e545208ef17725815d9e20c9fc"
+      "source": "design/assets/alignment-spines.svg",
+      "sha256": "24bb19ebb6d962fdfd4c98406941a25c5eccae6d2bc78fd6a09f1c896238c31d",
+      "output": "assets/alignment-spines.svg",
+      "outputSha256": "24bb19ebb6d962fdfd4c98406941a25c5eccae6d2bc78fd6a09f1c896238c31d"
     },
     {
-      "source": "design/WORKFLOW_PATTERNS.md",
-      "sha256": "232d8bec54146854cf08dafad9aaad32604fd10764c4a598d2d494aa34fb0c78",
-      "output": "WORKFLOW_PATTERNS.md",
-      "outputSha256": "11a2428dba51d5a76771dc722f702a1b430ef8a0fc8802fca50309b5e64a341e"
+      "source": "design/assets/motion-curves.svg",
+      "sha256": "9825a19dbd0303ace9d73469b56f66acf18eb72f19869d1a82e16b1fcad154ff",
+      "output": "assets/motion-curves.svg",
+      "outputSha256": "9825a19dbd0303ace9d73469b56f66acf18eb72f19869d1a82e16b1fcad154ff"
+    },
+    {
+      "source": "design/assets/radius-nesting.svg",
+      "sha256": "9731bd27d2713470e09488365915b67d606921423ad0efa15c943f4f73eeda15",
+      "output": "assets/radius-nesting.svg",
+      "outputSha256": "9731bd27d2713470e09488365915b67d606921423ad0efa15c943f4f73eeda15"
     }
   ]
 }

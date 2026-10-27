@@ -4,7 +4,7 @@ import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } f
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { markdownFiles, syncAgentPlugin, verifyLocalLinks } from '../sync-agent-plugin.ts';
+import { bundledFiles, syncAgentPlugin, verifyLocalLinks } from '../sync-agent-plugin.ts';
 const repo = fileURLToPath(new URL('../../', import.meta.url));
 
 test('the installed plugin has a closed offline Markdown reference graph without repository files', () => {
@@ -12,7 +12,7 @@ test('the installed plugin has a closed offline Markdown reference graph without
   try {
     cpSync(path.join(repo, 'plugins/ran'), path.join(isolated, 'ran'), { recursive: true });
     const skills = path.join(isolated, 'ran/skills');
-    verifyLocalLinks(skills, markdownFiles(skills));
+    verifyLocalLinks(skills, bundledFiles(skills));
     assert.deepEqual(
       ['design', 'ranui', 'ranuts'].map(
         (name) => readFileSync(path.join(skills, name, 'SKILL.md'), 'utf8').match(/^name: (.+)$/m)?.[1],
