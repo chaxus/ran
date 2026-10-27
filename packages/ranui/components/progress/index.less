@@ -18,13 +18,6 @@
   }
 }
 
-/* `hidden` is how a caller hides an element, and the UA rule that implements it is a
-   user-agent rule — any author `display` on `:host` outranks it. Without this, setting
-   `hidden` does nothing at all. */
-:host([hidden]) {
-  display: none;
-}
-
 .ran-progress {
   position: var(--ran-progress-position, relative);
   cursor: var(--ran-progress-cursor, pointer);

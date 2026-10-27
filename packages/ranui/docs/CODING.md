@@ -131,9 +131,11 @@ Events are the outward half of the contract, so treat a change to one as a break
   and both are machine-checked (DESIGN.md §1).
 - **No palette property in a `transition`, no `transition: all`.** CSS cannot tell an
   interaction from a theme flip (DESIGN.md §5).
-- **`:host` display rules must keep `hidden` working** — add `:host([hidden]) { display: none }`
-  whenever you set `display` on `:host`. Nineteen components once shipped with
-  `element.hidden = true` doing nothing.
+- **`:host` display rules must keep `hidden` working.** `ensureShadowRoot` appends
+  `:host([hidden]) { display: none }` (`HOST_HIDDEN_CSS` in `utils/component.ts`) to every
+  component, so ranui's own components need no copy; an element that builds its shadow root
+  any other way adds the rule itself. Nineteen components once shipped with
+  `element.hidden = true` doing nothing, and five more later, each writing its own copy.
 - **Expose parts for structure consumers will need**, and keep part names stable: a rename is
   a breaking change with no type error behind it.
 

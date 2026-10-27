@@ -116,11 +116,6 @@
   }
 }
 
-// The UA `[hidden]` rule loses to any author `display` on :host.
-:host([hidden]) {
-  display: none;
-}
-
 // Static caption above the field — same tokens, same "renders in normal block
 // flow as a sibling inserted before the field, never overlaps adjacent
 // content" pattern as r-input's `.ran-input-label` (see DESIGN.md §3 and

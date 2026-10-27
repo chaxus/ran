@@ -37,6 +37,15 @@ const flag = (name: string, fallback: string): string => {
 };
 
 const ROOT = path.resolve(process.cwd());
+/** This package's own components, and whether ensureShadowRoot still appends the hidden rule to them. */
+const LIBRARY_COMPONENTS = path.resolve(import.meta.dirname, '..', 'components') + path.sep;
+const LIBRARY_HIDDEN_RULE = await fs
+  .readFile(path.resolve(import.meta.dirname, '..', 'utils', 'component.ts'), 'utf8')
+  .then(
+    (source) =>
+      source.includes("HOST_HIDDEN_CSS = ':host([hidden]){display:none}'") && /\$\{HOST_HIDDEN_CSS\}/.test(source),
+    () => false,
+  );
 const BASELINE_FILE = path.resolve(ROOT, flag('baseline', path.join('docs', 'design-rule-baseline.json')));
 const DEFAULT_ROOTS = flag('roots', 'components')
   .split(',')
@@ -260,6 +269,9 @@ const RULES: Rule[] = [
     fix: "Add `:host([hidden]) { display: none; }`. The UA stylesheet's `[hidden] { display: none }` is a user-agent rule, and any author `display` on `:host` outranks it — so `element.hidden = true` silently leaves the element on screen.",
     extensions: STYLESHEETS,
     scan(source, file) {
+      // ranui's own components get the rule from ensureShadowRoot, which appends it to
+      // every shadow root; a consumer's stylesheets are checked as written.
+      if (LIBRARY_HIDDEN_RULE && path.resolve(ROOT, file).startsWith(LIBRARY_COMPONENTS)) return [];
       const stripped = stripComments(source);
       // Only a `:host` rule with no condition; `:host([open])` and friends are states the
       // element already controls, and none of them can shadow the `hidden` attribute.
