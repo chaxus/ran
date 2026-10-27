@@ -4,11 +4,10 @@ title: Ran Design
 
 # Ran Design
 
-A design guide for building product interfaces, independent of any component library.
+A one-page design checklist for building product interfaces, independent of any component library.
 
-It follows the order you design in: start from the task and real content, settle one visual language, lay out and compose the page, design interaction and motion, then verify the change in a real browser. It ends with checklists to reuse on every change.
+Use it before you start, while you build and before you hand a change back. It includes Steve Krug's five-second and trunk tests, and marks the items a browser test checks automatically.
 
-- [Design guide](/src/design/guide)
-- [References](https://github.com/chaxus/ran/blob/main/design/REFERENCE_RESEARCH.md)
+- [Design checklist](/src/design/guide)
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [Agents](../agents/)

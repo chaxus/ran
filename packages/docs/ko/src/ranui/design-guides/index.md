@@ -57,7 +57,7 @@ ranui 컴포넌트로 만든 화면이 부품 더미가 아니라 **하나의 �
 서로 다른 그룹은 16px, 관련 하위 구역은 24px을 사용할 수 있습니다. 각 간격은 한 계층에서만
 관리하고, 자식 요소의 margin, 기존 안쪽 여백, 인라인 컨트롤의 기준선 여백을 먼저 계산합니다.
 줄바꿈, 도움말 숨김, 오류 표시 상태를 브라우저에서 실측하세요.
-[세로 리듬의 공식 지침](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
+[세로 리듬의 공식 지침](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
 에서 예외와 실행 가능한 역검증을 다루며, 컴포넌트 기본값은 변경하지 않습니다.
 
 ## 글자 고르기

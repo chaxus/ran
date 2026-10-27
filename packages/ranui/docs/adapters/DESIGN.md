@@ -26,7 +26,7 @@ clear typography, proportions and complete states, not a decorative effect on ev
 - **SHOULD** Treat glass and expressive demonstrations as explicit surface or theme choices,
   not as default text or control backgrounds.
 - **MUST** Preserve reading contrast and the same interaction semantics across themes.
-- **SHOULD** Apply the shared [style brief](../DESIGN.md#components-and-composition)
+- **SHOULD** Apply the shared [style brief](../DESIGN.md#visual-language)
   before changing a family.
 - **SHOULD** Review a family change in a realistic composed page with neighboring controls; a
   polished isolated component does not establish a coherent product.
@@ -43,8 +43,7 @@ clear typography, proportions and complete states, not a decorative effect on ev
 - **SHOULD** Resolve conflicts in this order: **user goals → verified evidence → this file →
   repo guidance (`CLAUDE.md`) → shipped patterns → general heuristics.**
 
-The guide's [interaction](../DESIGN.md#interaction) section owns observable behavior, and its optional
-[product patterns](../DESIGN.md#product-patterns) cover multi-step workflows.
+The guide's [interaction](../DESIGN.md#interaction) section owns observable behavior.
 
 ## What is machine-checked
 
@@ -265,7 +264,7 @@ transition: var(--ran-input-transition, none);
   rebuild them merely for styling.
 - **SHOULD** Choose a ranui component when its contract fits.
 - **MUST** Preserve native form and keyboard semantics, including supported native controls in
-  overlay slots ([the guide's focus rules](../DESIGN.md#focus)).
+  overlay slots ([the guide's focus rules](../DESIGN.md#interaction)).
 - **SHOULD** Theme through **CSS variables**, **`::part()`**, or the **`sheet`** attribute
   (escape hatch). CSS variables cross Shadow DOM; selectors do not.
 - **SHOULD** Component tokens default to semantic tokens:
@@ -337,7 +336,7 @@ owns available names. This section owns naming.
 
 ## Applying generic composition to ranui
 
-- **SHOULD** Map the [navigation-layer rules](../DESIGN.md#shells)
+- **SHOULD** Map the [navigation-layer rules](../DESIGN.md#layout)
   to ranui as follows: `r-modal` for a short confirmation or a single field, `r-popover` / `r-dropdown`
   for transient context, `r-disclosure-row` for progressive disclosure, and `r-tabs` only for peer views
   of one object.

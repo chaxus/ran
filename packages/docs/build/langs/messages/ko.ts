@@ -15,7 +15,7 @@ const ko: LocaleMessages = {
     ranuts: 'ranuts',
     articles: '아티클',
     doc_editor: '문서 편집기',
-    design_guide: '디자인 가이드',
+    design_guide: '디자인 체크리스트',
     overview: '개요',
     api_reference: 'API 레퍼런스 ',
     choosing_a_utility: '유틸리티 선택 가이드',

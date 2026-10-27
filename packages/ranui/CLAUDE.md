@@ -21,9 +21,9 @@ For exact attributes, properties, events, slots and parts, use generated
 [COMPONENTS.md](docs/COMPONENTS.md); component variables live in
 [style-tokens-public.md](docs/style-tokens-public.md). Regenerate these when their source contracts change.
 
-For visual changes, the guide's [review checklist](docs/DESIGN.md#review-checklist) and
+For visual changes, the guide's [checklist](docs/DESIGN.md) and
 [verifying a change](docs/DESIGN.md#verifying-a-change) say what to check. DESIGN owns visual rules,
-[mechanical checks](docs/DESIGN.md#what-is-machine-checked) and rendered acceptance;
+[mechanical checks](docs/DESIGN.md#what-the-checks-cover) and rendered acceptance;
 the implementation recipes below do not establish a second visual standard.
 
 ---
@@ -514,7 +514,7 @@ setThemeTokens(tokens: Record<string, string | number | null | undefined>, targe
 
 localStorage key: `'ran-theme'`. SSR-safe (all `document`/`localStorage` access guarded).
 
-Theme declarations live in `theme/tokens.less` and `theme/dark.less`: the dark mixin updates base scales and explicit surface, primary hover/active and shadow overrides. See [DESIGN §1](docs/DESIGN.md#colour-and-themes); do not infer values from a copied summary.
+Theme declarations live in `theme/tokens.less` and `theme/dark.less`: the dark mixin updates base scales and explicit surface, primary hover/active and shadow overrides. See [DESIGN's visual language](docs/DESIGN.md#visual-language); do not infer values from a copied summary.
 
 **Dark-mode activation signals** (any one turns on dark tokens on `:root`):
 

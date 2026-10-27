@@ -137,7 +137,7 @@ export const designReferenceSources = (
 
 /**
  * A guide section by its English heading, as a source path plus the heading in the reader's
- * language: `/src/design/guide#inputs-and-drafts`. Throws for an unknown heading, so a renamed
+ * language: `/src/design/guide#interaction`. Throws for an unknown heading, so a renamed
  * section fails the build instead of leaving a link to nowhere.
  */
 export const designSectionLink = (

@@ -15,7 +15,7 @@ const fa: LocaleMessages = {
     ranuts: 'ranuts',
     articles: 'مقاله‌ها',
     doc_editor: 'ویرایشگر سند',
-    design_guide: 'راهنمای طراحی',
+    design_guide: 'چک‌لیست طراحی',
     overview: 'نمای کلی',
     api_reference: 'مرجع API ',
     choosing_a_utility: 'انتخاب ابزار مناسب',
