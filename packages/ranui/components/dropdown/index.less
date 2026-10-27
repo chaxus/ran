@@ -226,62 +226,32 @@
         translateY(var(--ran-dropdown-arrow-overlap, 2px)) rotate(180deg);
       top: max(0px, calc(100% - calc(@arrow-size / 4)));
     }
-    .left {
-      // `.top`/`.bottom` fold their overlap into `translateY` because that's the
-      // axis they protrude on (arrow sits above/below the panel); `.left` sits
-      // to the panel's *left* and protrudes along X, so the overlap belongs in
-      // `translateX` — it used to be missing here entirely (0px overlap, a
-      // hairline seam against the panel border) while a stray `+ overlap` sat
-      // in `translateY` instead, where it only ever mis-nudged the vertical
-      // centering by 2px.
-      //
-      // `--ran-dropdown-arrow-shape-offset` is a separate, *static* correction
-      // (not a JS-measured one, unlike `--ran-dropdown-arrow-anchor-offset-y`):
-      // the arrow's SVG path (see `&-arrow` below) is bottom-anchored inside
-      // its own viewBox (by design — that's what makes it read as a
-      // continuous bump for `.top`/`.bottom`, which never rotate that box),
-      // so the *visible* ink's bounding box sits below the box's own
-      // geometric center. `rotate(270deg)`/`rotate(90deg)` carry that offset
-      // onto this axis. The default is derived directly from the path's own
-      // geometry — the tip's rounded apex sits at `1 - (9·√2)/32 ≈ 0.6023` of
-      // the arrow's height from the top, so the visible region's (apex → 100%)
-      // bounding-box midpoint sits `0.3011` of the arrow's size below center
-      // — expressed as a fraction of `--ran-dropdown-arrow-width` so it scales
-      // if that's overridden, not a fixed pixel value. Without this, the
-      // arrow's *bounding box* centers correctly on the trigger but the
-      // visible triangle inside it doesn't.
-      transform: translateX(calc(0px - var(--ran-dropdown-arrow-width, 16px) + var(--ran-dropdown-arrow-overlap, 2px)))
-        translateY(
-          calc(
-            var(--ran-dropdown-arrow-width, 16px) / 2 +
-              var(--ran-dropdown-arrow-shape-offset, calc(var(--ran-dropdown-arrow-width, 16px) * -0.301126)) +
-              var(--ran-dropdown-arrow-anchor-offset-y, 0px)
-          )
-        )
-        rotate(270deg);
+    // Left and right arrows centre on the anchor's height (the trigger, written by the
+    // floating controller), or on the panel when nothing anchors it. `top` takes that as a
+    // percentage of the panel; a percentage inside `translateY` would mean the arrow's own
+    // 16px, which once put the right arrow above the panel's top edge.
+    //
+    // After `rotate(270deg)`/`rotate(90deg)` the shape's bottom-anchored ink lies along X, not
+    // Y, so its vertical centre is the box's: `--ran-dropdown-arrow-shape-offset` defaults to 0
+    // and stays only as an override. Its old default (-0.3 of the width) sat the ink 5px high.
+    .left,
+    .right {
       top: max(
         0px,
-        calc(var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - @arrow-size)
+        calc(var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - @arrow-size / 2)
       );
+    }
+    .left {
+      // The overlap pulls the arrow into the panel's border along X, the axis it protrudes on.
+      transform: translateX(calc(0px - var(--ran-dropdown-arrow-width, 16px) + var(--ran-dropdown-arrow-overlap, 2px)))
+        translateY(calc(var(--ran-dropdown-arrow-shape-offset, 0px) + var(--ran-dropdown-arrow-anchor-offset-y, 0px)))
+        rotate(270deg);
     }
     .right {
       left: 100%;
-      // Same fixes mirrored: the overlap moves from translateY into translateX
-      // (pulling the arrow left, into the panel's right edge, by `overlap`),
-      // plus the same static shape-offset correction as `.left` above (same
-      // sign — confirmed empirically that both directions need the same
-      // correction, since it compensates for the shape's construction, not
-      // for which way it's rotated).
       transform: translateX(calc(0px - var(--ran-dropdown-arrow-overlap, 2px)))
-        translateY(
-          calc(
-            var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - calc(@arrow-size / 2) +
-              var(--ran-dropdown-arrow-shape-offset, calc(var(--ran-dropdown-arrow-width, 16px) * -0.301126)) +
-              var(--ran-dropdown-arrow-anchor-offset-y, 0px)
-          )
-        )
+        translateY(calc(var(--ran-dropdown-arrow-shape-offset, 0px) + var(--ran-dropdown-arrow-anchor-offset-y, 0px)))
         rotate(90deg);
-      top: 0px;
     }
   }
   &-arrow {
