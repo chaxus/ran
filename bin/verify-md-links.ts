@@ -53,6 +53,20 @@ function collect(dir: string, out: string[] = []) {
 }
 
 /**
+ * The website's design reference translations (`packages/docs/design-i18n/<dir>/`) are
+ * copies of `design/*.md` and keep its relative links, which the docs build resolves against
+ * `design/`; so does this check.
+ *
+ * @param file Absolute path of the Markdown file.
+ * @returns The directory its relative links are written against, when not its own.
+ */
+function translatedFrom(file: string) {
+  return /[\\/]packages[\\/]docs[\\/]design-i18n[\\/][^\\/]+[\\/][^\\/]+\.md$/.test(file)
+    ? join(ROOT, 'design')
+    : undefined;
+}
+
+/**
  * Resolves one link target against the file that contains it.
  *
  * A directory counts as resolved on its own: on GitHub a directory link renders its
@@ -66,7 +80,7 @@ function collect(dir: string, out: string[] = []) {
  * @returns Whether the target exists.
  */
 function resolves(file: string, target: string) {
-  const path = resolve(dirname(file), target);
+  const path = resolve(translatedFrom(file) ?? dirname(file), target);
   // Extensionless is how the documentation site links between pages: `./throttle` is
   // served from `throttle.md`, and `../utils/` from `utils/index.md`.
   return existsSync(path) || existsSync(`${path}.md`) || existsSync(join(path, 'index.md'));
