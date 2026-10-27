@@ -1,7 +1,7 @@
 # Browser layout acceptance example
 
 This is a host composition example and test-only measurement utility, not a ranui API or a
-set of required product dimensions. The normative owner is [DESIGN §9](../../docs/DESIGN.md#alignment-is-structure-not-polish).
+set of required product dimensions. The normative owner is [DESIGN §9](../../docs/DESIGN.md#alignment).
 
 From the repository root:
 
@@ -36,7 +36,7 @@ The half-CSS-pixel tolerance handles fractional layout rounding and must not mas
 The vertical fixture adds a host-owned spacing vocabulary: 8px for title/description and
 label/control/hint pairs, 16px between groups, and 24px between related subsections. These
 values are independent expectations, not values read back from the implementation's own
-`gap`. The canonical [vertical-rhythm guidance](../../docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+`gap`. The canonical [vertical-rhythm guidance](../../docs/DESIGN.md#spacing-as-relationships)
 explains which relationships they represent and when a different scale role is appropriate.
 
 Real text wraps on resize; the description's height changes while the following group's

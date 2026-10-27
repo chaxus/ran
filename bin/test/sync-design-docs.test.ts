@@ -42,28 +42,28 @@ test('portable method reading dependencies remain inside its distributed directo
 test('freshness gate rejects an edited distribution and regeneration repairs it', async () => {
   const fixture = await mkdtemp(resolve(tmpdir(), 'ran-design-docs-'));
   try {
-    for (const directory of ['design', 'packages/ranui/docs/adapters']) {
+    for (const directory of ['design', 'design/assets', 'packages/ranui/docs/adapters']) {
       await mkdir(resolve(fixture, directory), { recursive: true });
       for (const file of await readdir(resolve(root, directory))) {
-        if (file.endsWith('.md'))
+        if (file.endsWith('.md') || file.endsWith('.svg'))
           await writeFile(resolve(fixture, directory, file), await readFile(resolve(root, directory, file)));
       }
     }
     await syncDesignDocs(fixture, false);
     await syncDesignDocs(fixture, true);
-    const target = resolve(fixture, 'packages/ranui/docs/INTERACTION.md');
+    const target = resolve(fixture, 'packages/ranui/docs/DESIGN.md');
     await writeFile(target, (await readFile(target, 'utf8')) + 'Independent duplicate rule\n');
     await assert.rejects(syncDesignDocs(fixture, true), /stale/);
     await syncDesignDocs(fixture, false);
     await syncDesignDocs(fixture, true);
     // Changing a source must invalidate its generated output too.
-    const source = resolve(fixture, 'design/INTERACTION.md');
+    const source = resolve(fixture, 'design/DESIGN.md');
     await writeFile(source, (await readFile(source, 'utf8')) + '\nNew canonical decision\n');
     await assert.rejects(syncDesignDocs(fixture, true), /stale/);
     await syncDesignDocs(fixture, false);
     assert.equal(
       await readFile(target, 'utf8'),
-      (await renderDesignDocs(fixture)).get('packages/ranui/docs/INTERACTION.md'),
+      (await renderDesignDocs(fixture)).get('packages/ranui/docs/DESIGN.md'),
     );
   } finally {
     await rm(fixture, { recursive: true, force: true });

@@ -1,17 +1,9 @@
 import { format } from 'prettier';
-import { readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const guideNames = [
-  'DESIGN',
-  'INTERACTION',
-  'ACCEPTANCE',
-  'WORKFLOW_PATTERNS',
-  'REFERENCE_RESEARCH',
-  'INTERFACE_GUIDE',
-  'RULES',
-] as const;
+export const guideNames = ['DESIGN', 'REFERENCE_RESEARCH'] as const;
 const repository = fileURLToPath(new URL('../', import.meta.url));
 
 /** Compose portable methods with package-owned implementation guidance. */
@@ -21,11 +13,16 @@ export async function renderDesignDocs(root: string): Promise<Map<string, string
     const source = `design/${name}.md`;
     let content = await readFile(resolve(root, source), 'utf8');
     // Installed npm guides resolve public engineering contracts locally, without a checkout.
+    // The guide's pointer to the adapter lands on the adapter appended below, not on a file npm omits.
     content = content
+      .replaceAll(
+        'https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md',
+        '#ranui-implementation-adapter',
+      )
       .replaceAll('https://github.com/chaxus/ran/blob/main/packages/ranui/docs/', './')
       .replaceAll('https://github.com/chaxus/ran/blob/main/packages/ranui/CLAUDE.md', '../CLAUDE.md');
     const sources = [source];
-    if (name === 'DESIGN' || name === 'INTERACTION' || name === 'RULES') {
+    if (name === 'DESIGN') {
       const adapter = `packages/ranui/docs/adapters/${name}.md`;
       sources.push(adapter);
       content += `\n---\n\n${(await readFile(resolve(root, adapter), 'utf8')).replaceAll('](../', '](./').replaceAll('](./../CLAUDE.md)', '](../CLAUDE.md)')}`;
@@ -36,6 +33,11 @@ export async function renderDesignDocs(root: string): Promise<Map<string, string
       await format(banner + content.trimEnd() + '\n', { parser: 'markdown', printWidth: 120 }),
     );
   }
+  // The guide's figures, referenced as `./assets/<name>.svg`, travel beside it unchanged.
+  const assets = resolve(root, 'design/assets');
+  for (const file of (await readdir(assets).catch(() => [])).filter((name) => name.endsWith('.svg'))) {
+    outputs.set(`packages/ranui/docs/assets/${file}`, await readFile(resolve(assets, file), 'utf8'));
+  }
   return outputs;
 }
 
@@ -45,7 +47,10 @@ export async function syncDesignDocs(root: string, check: boolean): Promise<void
     if (check) {
       const current = await readFile(resolve(root, path), 'utf8').catch(() => null);
       if (current !== content) stale.push(path);
-    } else await writeFile(resolve(root, path), content);
+    } else {
+      await mkdir(resolve(root, path, '..'), { recursive: true });
+      await writeFile(resolve(root, path), content);
+    }
   }
   if (stale.length)
     throw new Error(`Generated design guides are stale: ${stale.join(', ')}. Run node bin/sync-design-docs.ts.`);

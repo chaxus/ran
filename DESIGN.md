@@ -30,7 +30,7 @@ loaded for those scripts. A docs page is one column `--measure` (42rem) wide: pr
 end on the same edge, and the outline sits beside it.
 
 Header navigation labels are lowercase, matching the `ran` wordmark and the lowercase product names beside
-them (`ranui`, `ranuts`). This is the one exception to sentence case (D-COPY-14). It is applied with CSS to
+them (`ranui`, `ranuts`). This is the one exception to sentence case ([Words](design/DESIGN.md#words-are-part-of-the-interface)). It is applied with CSS to
 the header alone, so the same labels keep their case in the drawer, and German keeps its capitalised nouns.
 
 ## Layout

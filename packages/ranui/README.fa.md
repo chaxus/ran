@@ -82,7 +82,7 @@ setTheme('system');
 
 - [API مؤلفه‌ها](./docs/COMPONENTS.md)
 - [سبک و توکن‌ها](./docs/style-tokens-public.md)
-- [طراحی و تعامل](./docs/DESIGN.md) · [Interaction](./docs/INTERACTION.md)
+- [طراحی و تعامل](./docs/DESIGN.md)
 - [سازنده DOM و سیگنال‌ها](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md)
 - [مرجع نگهدارندگان و Agentها](./CLAUDE.md)
 

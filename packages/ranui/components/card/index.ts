@@ -71,7 +71,7 @@ export class Card extends RanElement {
     this._extraSlot = shadowPart(extraSlotRef, 'slot[name="extra"]');
     this._extraSlot.addEventListener('slotchange', () => this._syncHeader());
 
-    // An empty region would still take a grid gap (D-SPACE-12), so body and footer stay
+    // An empty region would still take a grid gap, so body and footer stay
     // hidden until something is slotted into them.
     this._bodyEl = shadowPart(bodyElRef, 'body');
     this._bodyEl.style.display = 'none';

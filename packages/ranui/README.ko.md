@@ -82,7 +82,7 @@ setTheme('system');
 
 - [컴포넌트 API](./docs/COMPONENTS.md)
 - [스타일과 토큰](./docs/style-tokens-public.md)
-- [디자인과 상호작용](./docs/DESIGN.md) · [Interaction](./docs/INTERACTION.md)
+- [디자인과 상호작용](./docs/DESIGN.md)
 - [DOM 빌더와 시그널](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md)
 - [유지 관리자와 Agent 참고](./CLAUDE.md)
 

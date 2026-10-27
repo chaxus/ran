@@ -41,5 +41,5 @@ retain demo navigation warmup; the reviewed fixture sequence follows it without 
 
 Relevant runnable cases live in `../../e2e/`: `input-primitives`, `popover-dismissal`,
 `disclosure-row`, `markdown-reader`, `markdown-geometry`, `conversation-follow` and
-`select-interaction`. The public [acceptance contract](../../../docs/ACCEPTANCE.md) distinguishes
+`select-interaction`. The public [verifying a change](../../../docs/DESIGN.md#verifying-a-change) distinguishes
 component, application, automated, agent and human evidence.

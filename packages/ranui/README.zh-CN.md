@@ -82,7 +82,7 @@ setTheme('system');
 
 - [组件 API](./docs/COMPONENTS.md)
 - [样式与 Token](./docs/style-tokens-public.md)
-- [设计与交互](./docs/DESIGN.md) · [Interaction](./docs/INTERACTION.md)
+- [设计与交互](./docs/DESIGN.md)
 - [DOM 构建器与信号](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md)
 - [维护者与 Agent 参考](./CLAUDE.md)
 
