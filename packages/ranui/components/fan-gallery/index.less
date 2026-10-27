@@ -1,5 +1,9 @@
 :host {
   display: block;
+  /* As wide as its container, in a flex row too: that width is what the component measures
+     to zoom the stage down when the open fan would not fit (a sized-to-content host would
+     shrink with every zoom step). The stage centres the fan inside it. */
+  width: 100%;
 }
 
 :host([hidden]) {
@@ -13,6 +17,9 @@
   justify-items: center;
   align-items: end;
   padding: var(--ran-fan-gallery-padding, var(--ran-space-10));
+  /* Beside the children, the open fan's own reach (set by the component), so the box holds
+     what it paints instead of spilling over its neighbours. */
+  padding-inline: max(var(--ran-fan-gallery-padding, var(--ran-space-10)), var(--fan-reach, 0px));
 }
 
 /* The pivot sits below the row, so a small angle moves a child sideways as well as turning
