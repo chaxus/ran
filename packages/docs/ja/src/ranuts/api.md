@@ -1,6 +1,6 @@
 ---
 title: ranuts API リファレンス
-description: 'ranuts がエクスポートする全シンボル —— 7 個のエントリーポイント、計 430 件のエクスポートを、シグネチャと説明つきで。'
+description: 'ranuts がエクスポートする全シンボル —— 7 個のエントリーポイント、計 431 件のエクスポートを、シグネチャと説明つきで。'
 ---
 
 # ranuts API（自動生成）
@@ -13,11 +13,11 @@ JSDoc をそのまま取り出したものなので英語のままです。ど�
 そのシンボルを持つ**サブパス**から import してください。たとえば `import { debounce } from
 'ranuts/utils'`。ルートの `ranuts` は utils + visual の面を再エクスポートします。
 
-**430 件のエクスポート**、エントリーポイント 7 個。
+**431 件のエクスポート**、エントリーポイント 7 個。
 
 ## エントリーポイント
 
-- [`ranuts/utils`](#ranuts-utils) — ブラウザ向けおよび汎用のユーティリティ · _ブラウザ + node_ · 341 件のエクスポート
+- [`ranuts/utils`](#ranuts-utils) — ブラウザ向けおよび汎用のユーティリティ · _ブラウザ + node_ · 342 件のエクスポート
 - [`ranuts/sw`](#ranuts-sw) — Service Worker のキャッシュ戦略とプリキャッシュのプロトコル · _service worker のみ_ · 9 件のエクスポート
 - [`ranuts/visual`](#ranuts-visual) — 2D レンダリングエンジン（Canvas / WebGL / WebGPU） · _ブラウザのみ_ · 16 件のエクスポート
 - [`ranuts/i18n`](#ranuts-i18n) — フレームワーク非依存の i18n エンジン（ranuts/utils からも再エクスポート） · _ブラウザ + node_ · 9 件のエクスポート
@@ -90,6 +90,7 @@ import { /* … */ } from 'ranuts/utils';
 - `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
 - `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary script from character ratios. Pure statistics, no
 - `diffLines(oldText: string, newText: string, options?: DiffOptions) => DiffHunk[]` — Diffs two texts by line.
+- `downloadBlob(blob: Blob, fileName: string) => boolean` — Download a blob straight away, without a "Save as" dialog: a programmatic
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`

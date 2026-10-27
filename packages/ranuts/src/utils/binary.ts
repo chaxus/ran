@@ -257,11 +257,18 @@ export const saveFileToDisk = async (
     }
   }
 
-  return anchorDownload(blob, fileName);
+  return downloadBlob(blob, fileName);
 };
 
-/** The universal path: a programmatic click on an object URL. Needs no gesture and no API. */
-const anchorDownload = (blob: Blob, fileName: string): boolean => {
+/**
+ * @description: Download a blob straight away, without a "Save as" dialog: a programmatic
+ * click on an object URL. Needs no gesture and no API. Use `saveFileToDisk` to offer the
+ * dialog where the browser has one.
+ * @param {Blob} blob
+ * @param {string} fileName
+ * @return {boolean} always `true`; the browser reports nothing back
+ */
+export const downloadBlob = (blob: Blob, fileName: string): boolean => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;

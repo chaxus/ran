@@ -1,6 +1,6 @@
 ---
 title: Referência da API do ranuts
-description: 'Todos os símbolos exportados pelo ranuts: 430 exportações em 7 pontos de entrada, com assinaturas e descrições.'
+description: 'Todos os símbolos exportados pelo ranuts: 431 exportações em 7 pontos de entrada, com assinaturas e descrições.'
 ---
 
 # API do ranuts (gerada)
@@ -13,11 +13,11 @@ entrada importar, restrições de ambiente, convenções) leia antes [CLAUDE.md]
 Importe da **subrota** dona do símbolo, por exemplo `import { debounce } from
 'ranuts/utils'`. O barril raiz `ranuts` reexporta a superfície de utils + visual.
 
-**430 exportações** em 7 pontos de entrada.
+**431 exportações** em 7 pontos de entrada.
 
 ## Pontos de entrada
 
-- [`ranuts/utils`](#ranuts-utils) — Utilitários para o navegador e de uso geral · _navegador + node_ · 341 exportações
+- [`ranuts/utils`](#ranuts-utils) — Utilitários para o navegador e de uso geral · _navegador + node_ · 342 exportações
 - [`ranuts/sw`](#ranuts-sw) — Estratégias de cache do Service Worker e o protocolo de pré-cache · _apenas service worker_ · 9 exportações
 - [`ranuts/visual`](#ranuts-visual) — Motor de renderização 2D (Canvas / WebGL / WebGPU) · _apenas navegador_ · 16 exportações
 - [`ranuts/i18n`](#ranuts-i18n) — Motor de i18n independente de framework (também reexportado de ranuts/utils) · _navegador + node_ · 9 exportações
@@ -90,6 +90,7 @@ import { /* … */ } from 'ranuts/utils';
 - `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
 - `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary script from character ratios. Pure statistics, no
 - `diffLines(oldText: string, newText: string, options?: DiffOptions) => DiffHunk[]` — Diffs two texts by line.
+- `downloadBlob(blob: Blob, fileName: string) => boolean` — Download a blob straight away, without a "Save as" dialog: a programmatic
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`
