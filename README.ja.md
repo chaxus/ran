@@ -28,7 +28,7 @@ ran は 3 つの部分からなり、それぞれ単独で使えます。**ranui
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/readme-home-dark.webp">
-    <img width="800" src="./.github/assets/readme-home.webp" alt="ran.chaxus.com のトップページ：左に ranui のマークアップ、右のライブパネルに同じボタン、プログレスバー、ローディング、チェックボックスが描画されている">
+    <img width="800" src="./.github/assets/readme-home.webp" alt="ran.chaxus.com のトップページ：左に見出し、右に実際に動く ranui のフォーム「チームメイトを招待」があり、メール欄、役割の選択、チェックボックス、送信ボタンが並ぶ">
   </picture>
 </p>
 

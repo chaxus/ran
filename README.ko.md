@@ -28,7 +28,7 @@ ran은 각각 따로 쓸 수 있는 세 부분으로 이루어져 있습니다. 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/readme-home-dark.webp">
-    <img width="800" src="./.github/assets/readme-home.webp" alt="ran.chaxus.com 첫 화면: 왼쪽에는 ranui 마크업, 오른쪽 라이브 패널에는 같은 버튼, 진행 막대, 로딩 표시, 체크박스가 렌더링되어 있다">
+    <img width="800" src="./.github/assets/readme-home.webp" alt="ran.chaxus.com 첫 화면: 왼쪽에는 제목, 오른쪽에는 실제로 동작하는 ranui 양식 '팀원 초대'가 있으며 이메일 입력란, 역할 선택, 체크박스, 보내기 버튼으로 이루어져 있다">
   </picture>
 </p>
 

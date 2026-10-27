@@ -28,7 +28,7 @@ ran has three parts, each usable on its own: **ranui**, UI components built as n
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/readme-home-dark.webp">
-    <img width="800" src="./.github/assets/readme-home.webp" alt="The ran.chaxus.com home page: ranui markup on the left of a live panel rendering the same buttons, progress bar, spinner and checkbox">
+    <img width="800" src="./.github/assets/readme-home.webp" alt="The ran.chaxus.com home page: the headline on the left, and on the right a working ranui form for inviting a teammate, with an email field, a role select, a checkbox and a send button">
   </picture>
 </p>
 

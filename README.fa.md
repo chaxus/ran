@@ -28,7 +28,7 @@ ran سه بخش دارد که هر کدام جداگانه قابل استفاد
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/readme-home-dark.webp">
-    <img width="800" src="./.github/assets/readme-home.webp" alt="صفحهٔ اصلی ran.chaxus.com: در سمت چپ نشانه‌گذاری ranui و در سمت راست پنلی زنده که همان دکمه‌ها، نوار پیشرفت، نشانگر بارگذاری و چک‌باکس را نمایش می‌دهد">
+    <img width="800" src="./.github/assets/readme-home.webp" alt="صفحهٔ اصلی ran.chaxus.com: در سمت چپ عنوان و در سمت راست یک فرم واقعی ranui برای دعوت هم‌تیمی، با فیلد ایمیل، انتخاب نقش، چک‌باکس و دکمهٔ ارسال">
   </picture>
 </p>
 
