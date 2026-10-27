@@ -75,40 +75,57 @@ test.describe('message', () => {
     await expect(page.locator('#custom-message-root-2 r-message')).toHaveCount(2);
   });
 
-  test.describe('exit motion', () => {
+  test.describe('motion', () => {
     test.use({ contextOptions: { reducedMotion: 'no-preference' } });
-    test('leave animation holds its faded end state after completion', async ({ page }) => {
+    // What a reader sees, frame by frame: a toast slides into place without overshooting or
+    // swelling, leaves completely, and the one below it glides up rather than jumping.
+    test('enters without overshoot, leaves completely, and the stack glides', async ({ page }) => {
       await page.goto(DEV_SERVER, { waitUntil: 'load' });
-      await page.waitForFunction(() => !!customElements.get('r-message'));
-      // Retain registration while removing demo rendering and resource work from the fixture.
+      await page.waitForFunction(() => !!(window as any).message);
       await page.setContent('<html><body></body></html>');
 
-      const result = await page.evaluate(async () => {
-        const message = document.createElement('r-message');
-        message.setAttribute('content', 'fade completion test');
-        message.style.setProperty('--ran-message-leave-animation-duration', '0.1s');
-        document.body.appendChild(message);
-        message.classList.add('message-leave');
-
-        // Force style resolution before capturing the actual CSS animations. Hold the
-        // leave class after completion, so API removal timers cannot race the assertion.
-        const animationName = getComputedStyle(message).animationName;
-        const animations = message.getAnimations();
-        await Promise.all(animations.map((animation) => animation.finished));
-        const opacities: number[] = [];
-        for (let frame = 0; frame < 3; frame++) {
+      const trace = await page.evaluate(async () => {
+        const api = (window as any).message;
+        api.info({ content: 'first', duration: 900 });
+        api.success({ content: 'second', duration: 3000 });
+        const [first, second] = [...document.querySelectorAll('r-message')] as HTMLElement[];
+        const frames: Array<{
+          t: number;
+          top: number;
+          height: number;
+          opacity: number;
+          secondTop: number;
+          inDom: boolean;
+        }> = [];
+        const t0 = performance.now();
+        while (performance.now() - t0 < 1500) {
           await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-          opacities.push(parseFloat(getComputedStyle(message).opacity));
+          frames.push({
+            t: performance.now() - t0,
+            top: first.getBoundingClientRect().top,
+            height: first.getBoundingClientRect().height,
+            opacity: parseFloat(getComputedStyle(first).opacity),
+            secondTop: second.getBoundingClientRect().top,
+            inDom: first.isConnected,
+          });
         }
-        return { animationName, animationCount: animations.length, opacities };
+        return frames;
       });
 
-      expect(result.animationName).toBe('MessageMoveOut');
-      expect(result.animationCount).toBeGreaterThan(0);
-      expect(result.opacities).toHaveLength(3);
-      for (const opacity of result.opacities) {
-        expect(opacity).toBeLessThan(0.5);
-      }
+      const entering = trace.filter((frame) => frame.t < 400);
+      const rest = trace.find((frame) => frame.t > 500 && frame.t < 600)!.top;
+      for (let i = 1; i < entering.length; i++)
+        expect(entering[i]!.top).toBeGreaterThanOrEqual(entering[i - 1]!.top - 0.5);
+      expect(Math.max(...entering.map((frame) => frame.top))).toBeLessThanOrEqual(rest + 0.5);
+      expect(new Set(trace.filter((frame) => frame.inDom).map((frame) => Math.round(frame.height))).size).toBe(1);
+
+      const gone = trace.findIndex((frame) => !frame.inDom);
+      expect(gone).toBeGreaterThan(0);
+      expect(trace[gone - 1]!.opacity).toBeLessThan(0.2);
+      // The second toast's steps once the first is gone: many small ones, none a jump.
+      const steps = trace.slice(gone).map((frame, i, all) => (i ? all[i - 1]!.secondTop - frame.secondTop : 0));
+      expect(Math.max(...steps)).toBeLessThan(30);
+      expect(trace.at(-1)!.secondTop).toBeCloseTo(rest, 0);
     });
   });
 });

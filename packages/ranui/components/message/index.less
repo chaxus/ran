@@ -117,31 +117,6 @@
   }
 }
 
-@keyframes MessageMoveIn {
-  0% {
-    padding: 0;
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  100% {
-    padding: var(--ran-message-notice-padding, 8px);
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-@keyframes MessageMoveOut {
-  0% {
-    max-height: 150px;
-    padding: var(--ran-message-notice-padding, 8px);
-    opacity: 1;
-  }
-  100% {
-    max-height: 0;
-    padding: 0;
-    opacity: 0;
-  }
-}
-
 .ranui-message {
   box-sizing: var(--ran-message-box-sizing, border-box);
   margin: var(--ran-message-margin, 0);
@@ -161,41 +136,43 @@
   pointer-events: var(--ran-message-pointer-events, none);
 }
 
-// `.message-in`/`.message-leave` are toggled on the light-DOM `<r-message>` host
-// itself (see `index.ts`'s `commonPrompt`) — `.ranui-message` is the message-stack
-// *container* div, a light-DOM ancestor `container.ts` appends straight to
-// `document.body`. A shadow-scoped stylesheet can never select outside its own
-// shadow tree, so `.ranui-message .message-in { … }` (the old nesting) could never
-// match anything regardless of what class the host actually carried — the
-// animation silently never ran. `:host(.message-in)` is the correct way to select
-// the host element, by its own class, from inside its own shadow root's styles.
-// `animation-fill-mode: forwards` is required on both: the JS side removes
-// each class via its own `setTimeout` clocked to the same nominal duration as
-// the CSS animation (see `AnimationTime` in index.ts), but a `setTimeout`
-// callback and a CSS animation's natural completion are scheduled on
-// different clocks and drift by a few ms. Without `forwards`, the instant the
-// animation completes it snaps back to the pre-animation state (full
-// opacity/height/padding) for however long that drift window lasts — read as
-// a bounce right before the element disappears. `forwards` freezes the
-// keyframe's end state instead, so there's nothing to snap back to.
-:host(.message-in) {
-  animation-name: var(--ran-message-in-animation-name, MessageMoveIn);
-  animation-duration: var(--ran-message-in-animation-duration, var(--ran-motion-duration-base, 0.2s));
-  animation-timing-function: var(--ran-message-in-animation-timing-function, var(--ran-motion-ease-standard));
-  animation-fill-mode: var(--ran-message-in-animation-fill-mode, forwards);
+// Motion, after Sonner: only `transform` and `opacity` move, as transitions driven by the
+// host's `data-state` (index.ts), so nothing animates layout and an interrupted toast carries
+// on from where it is. The old keyframes grew the padding on the way in and collapsed
+// max-height on the way out, so a toast swelled 15px, snapped back when its class came off,
+// and dragged everything below it along.
+//
+// Entering, a toast slides down from above its own top while it fades in, decelerating with
+// no overshoot (400ms, Sonner's). Leaving is shorter and accelerates (200ms). The toasts below
+// a leaving one slide up into place through the same transition on `translate`, which
+// composes with `transform` (index.ts measures them).
+:host {
+  transition:
+    transform var(--ran-message-enter-duration, 400ms)
+      var(--ran-message-enter-easing, var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1))),
+    opacity var(--ran-message-enter-duration, 400ms)
+      var(--ran-message-enter-easing, var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1))),
+    translate var(--ran-message-enter-duration, 400ms)
+      var(--ran-message-enter-easing, var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)));
 }
-:host(.message-leave) {
-  animation-name: var(--ran-message-leave-animation-name, MessageMoveOut);
-  animation-duration: var(--ran-message-leave-animation-duration, var(--ran-motion-duration-base, 0.2s));
-  animation-timing-function: var(--ran-message-leave-animation-timing-function, var(--ran-motion-ease-standard));
-  animation-fill-mode: var(--ran-message-leave-animation-fill-mode, forwards);
+:host([data-state='enter']) {
+  opacity: 0;
+  transform: translateY(-100%);
 }
-// The reduced-motion sheet adopted by every shadow root reaches the shadow tree, not the
-// host, so the host animations need their own rule. A 1ms run keeps `forwards` landing on
-// the end state, so a leaving message still disappears.
+:host([data-state='exit']) {
+  opacity: 0;
+  transform: translateY(-100%);
+  transition-duration: var(--ran-message-exit-duration, 200ms);
+  // Material's standard accelerate: the leave gathers speed instead of easing out.
+  transition-timing-function: var(--ran-message-exit-easing, cubic-bezier(0.4, 0, 1, 1));
+}
+// The reduced-motion sheet every shadow root adopts reaches the shadow tree, not the host.
+// Without motion a toast still has to appear and go: it fades, briefly, and does not travel.
 @media (prefers-reduced-motion: reduce) {
-  :host(.message-in),
-  :host(.message-leave) {
-    animation-duration: 1ms;
+  :host {
+    transition: opacity var(--ran-motion-duration-fast, 0.14s) linear;
+  }
+  :host([data-state]) {
+    transform: none;
   }
 }
