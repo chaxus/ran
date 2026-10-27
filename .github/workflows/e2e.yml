@@ -59,6 +59,15 @@ jobs:
     if: github.repository == 'chaxus/ran'
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    # The image carries the browsers and their system libraries for the pinned Playwright
+    # (pnpm-workspace.yaml), so nothing is fetched from the distribution's mirror: that
+    # step used to stall for the whole job timeout when the mirror slowed down.
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+    # Firefox refuses to start when HOME belongs to another user than the process. The
+    # runner sets its own HOME for the container, so it is set here rather than in its options.
+    env:
+      HOME: /root
     name: "E2E (${{ matrix.browser }})"
     strategy:
       fail-fast: false
@@ -70,40 +79,22 @@ jobs:
       # build all work off the working tree.
       - uses: actions/checkout@v7
 
+      # The checkout belongs to the runner's user and the container runs as root, so git
+      # refuses the repository ("dubious ownership") until it is marked safe.
+      - name: Trust the checkout inside the container
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - uses: pnpm/action-setup@v6
         name: Install pnpm
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 26
+          node-version-file: .nvmrc
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      # The browser download is keyed by the lockfile, which pins Playwright. System
-      # packages are not cacheable this way, so a hit still installs those.
-      # Playwright ships browser builds per distribution, so a runner image moving to a new
-      # Ubuntu release must not restore the previous one's.
-      - name: Read runner image
-        id: runner-image
-        run: echo "os=$ImageOS" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ steps.runner-image.outputs.os }}-${{ matrix.browser }}-${{ hashFiles('pnpm-lock.yaml') }}
-
-      - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm --filter ranui exec playwright install ${{ matrix.browser }} --with-deps
-
-      - name: Install Playwright system dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm --filter ranui exec playwright install-deps ${{ matrix.browser }}
 
       - name: Build ranuts
         run: pnpm --filter ranuts run build
@@ -132,7 +123,7 @@ jobs:
       # what the browser draws once the pieces are wired together, which no unit test sees.
       # The suite runs keyless against the built-in sample answer, so it needs no secret.
       - name: Run im E2E tests
-        run: pnpm --filter im exec playwright test --project=${{ matrix.browser }}
+        run: pnpm --filter im exec playwright test --project=${{ matrix.browser }} --grep-invert @soak
 
       - name: Upload Playwright report
         if: always()

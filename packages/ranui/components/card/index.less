@@ -4,13 +4,6 @@
   min-height: var(--ran-card-min-height, 0);
 }
 
-/* `hidden` is how a caller hides an element, and the UA rule that implements it is a
-   user-agent rule — any author `display` on `:host` outranks it. Without this, setting
-   `hidden` does nothing at all. */
-:host([hidden]) {
-  display: none;
-}
-
 /* Interactive card (Geist): opt in with the `hoverable` attribute — the border
    darkens one step (400 → 500). Non-interactive cards must not react to hover. */
 /* No transition: border-color / box-shadow are palette props and would fade on

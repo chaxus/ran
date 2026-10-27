@@ -2,12 +2,6 @@
   display: inline-flex;
 }
 
-/* Nothing to offer on a platform without speech recognition, and a button that cannot work
-   is worse than no button: it invites a tap and then explains itself. */
-:host([hidden]) {
-  display: none;
-}
-
 .ran-voice {
   display: inline-flex;
   /* The press owns this pointer: without it a hold-to-talk gesture scrolls the page and the

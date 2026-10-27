@@ -1,6 +1,6 @@
 ---
 title: ranuts API 레퍼런스
-description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 430개 export를 시그니처와 설명과 함께.'
+description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 431개 export를 시그니처와 설명과 함께.'
 ---
 
 # ranuts API (자동 생성)
@@ -12,11 +12,11 @@ description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 430�
 심볼이 속한 **서브패스**에서 import하세요. 예: `import { debounce } from
 'ranuts/utils'`. 루트 배럴 `ranuts`는 utils + visual 표면을 다시 내보냅니다.
 
-**export 430개**, 진입점 7개.
+**export 431개**, 진입점 7개.
 
 ## 진입점
 
-- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 341개
+- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 342개
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 캐싱 전략과 프리캐시 프로토콜 · _service worker 전용_ · export 9개
 - [`ranuts/visual`](#ranuts-visual) — 2D 렌더링 엔진 (Canvas / WebGL / WebGPU) · _브라우저 전용_ · export 16개
 - [`ranuts/i18n`](#ranuts-i18n) — 프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄) · _브라우저 + node_ · export 9개
@@ -89,6 +89,7 @@ import { /* … */ } from 'ranuts/utils';
 - `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
 - `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary script from character ratios. Pure statistics, no
 - `diffLines(oldText: string, newText: string, options?: DiffOptions) => DiffHunk[]` — Diffs two texts by line.
+- `downloadBlob(blob: Blob, fileName: string) => boolean` — Download a blob straight away, without a "Save as" dialog: a programmatic
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`

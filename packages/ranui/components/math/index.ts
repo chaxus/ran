@@ -18,6 +18,7 @@ import mathCss from './index.less?inline';
 // shadow root.
 import temmlCss from './temml.css?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { downloadBlob } from 'ranuts/utils';
 import { uiText } from '@/utils/ui-text';
 import { mathText } from './text';
 
@@ -375,24 +376,16 @@ export class Math extends RanElement {
     if (format === 'source') this.downloadSource();
     else this.downloadMathML();
   }
-  private saveBlob(blob: Blob, filename: string): void {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
   private downloadSource(): void {
     const source = this.latex;
     if (!source) return;
-    this.saveBlob(new Blob([source], { type: 'application/x-tex;charset=utf-8' }), 'formula.tex');
+    downloadBlob(new Blob([source], { type: 'application/x-tex;charset=utf-8' }), 'formula.tex');
     this.emit('download', { format: 'source' });
   }
   private downloadMathML(): void {
     const mml = this.currentMathML();
     if (!mml) return;
-    this.saveBlob(
+    downloadBlob(
       new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n${mml}`], { type: 'application/mathml+xml;charset=utf-8' }),
       'formula.mml',
     );

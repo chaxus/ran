@@ -1,6 +1,6 @@
 ---
 title: مرجع API کتابخانهٔ ranuts
-description: 'همهٔ نمادهایی که ranuts صادر می‌کند — 430 خروجی در 7 نقطهٔ ورود، همراه با امضا و توضیح.'
+description: 'همهٔ نمادهایی که ranuts صادر می‌کند — 431 خروجی در 7 نقطهٔ ورود، همراه با امضا و توضیح.'
 ---
 
 # API کتابخانهٔ ranuts (تولید خودکار)
@@ -13,11 +13,11 @@ description: 'همهٔ نمادهایی که ranuts صادر می‌کند — 4
 از همان **زیرمسیری** که نماد به آن تعلق دارد import کنید، مثلاً `import { debounce } from
 'ranuts/utils'`. نقطهٔ ورود ریشه یعنی `ranuts` سطح utils و visual را دوباره صادر می‌کند.
 
-**430 خروجی** در 7 نقطهٔ ورود.
+**431 خروجی** در 7 نقطهٔ ورود.
 
 ## نقاط ورود
 
-- [`ranuts/utils`](#ranuts-utils) — ابزارهای مرورگر و ابزارهای عمومی · _مرورگر + node_ · 341 خروجی
+- [`ranuts/utils`](#ranuts-utils) — ابزارهای مرورگر و ابزارهای عمومی · _مرورگر + node_ · 342 خروجی
 - [`ranuts/sw`](#ranuts-sw) — راهبردهای حافظهٔ نهان Service Worker و پروتکل پیش‌بارگذاری · _فقط service worker_ · 9 خروجی
 - [`ranuts/visual`](#ranuts-visual) — موتور رندر دوبعدی (Canvas / WebGL / WebGPU) · _فقط مرورگر_ · 16 خروجی
 - [`ranuts/i18n`](#ranuts-i18n) — موتور i18n مستقل از فریم‌ورک (از ranuts/utils هم دوباره صادر می‌شود) · _مرورگر + node_ · 9 خروجی
@@ -90,6 +90,7 @@ import { /* … */ } from 'ranuts/utils';
 - `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
 - `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary script from character ratios. Pure statistics, no
 - `diffLines(oldText: string, newText: string, options?: DiffOptions) => DiffHunk[]` — Diffs two texts by line.
+- `downloadBlob(blob: Blob, fileName: string) => boolean` — Download a blob straight away, without a "Save as" dialog: a programmatic
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`

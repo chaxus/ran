@@ -13,6 +13,7 @@ import {
 import '@/components/icon';
 import markdownCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { downloadBlob } from 'ranuts/utils';
 import { observeDocumentTheme, resolveDocumentTheme, THEME_SIGNAL_ATTRIBUTES } from '@/utils/theme';
 import type { DocumentTheme } from '@/utils/theme';
 import { uiText } from '@/utils/ui-text';
@@ -479,12 +480,7 @@ export class Markdown extends RanElement {
   private downloadCode = (code: string, language: string): void => {
     const ext = EXTENSIONS[language] || language || 'txt';
     const filename = ext === 'Dockerfile' ? 'Dockerfile' : `code.${ext}`;
-    const url = URL.createObjectURL(new Blob([code], { type: 'text/plain;charset=utf-8' }));
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadBlob(new Blob([code], { type: 'text/plain;charset=utf-8' }), filename);
     this.emit('download', { kind: 'code', language, filename });
   };
 

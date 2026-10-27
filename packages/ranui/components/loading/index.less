@@ -8,11 +8,6 @@
   color: var(--ran-loading-color, currentColor);
 }
 
-/* `hidden` is a user-agent rule; any author `display` on `:host` outranks it. */
-:host([hidden]) {
-  display: none;
-}
-
 /* Variants draw in `em` of this font-size. Each variant names its natural footprint in em
    through `--_ran-loading-units`, so every default lands on `--ran-loading-size`. */
 .ran-loading > * {

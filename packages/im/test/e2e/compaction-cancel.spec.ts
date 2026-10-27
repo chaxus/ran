@@ -113,6 +113,8 @@ const test = base.extend<{ dialog: Dialog }>({
 });
 // This regression must fail visibly rather than turn green on a later attempt.
 test.describe.configure({ retries: 0 });
+/** CI repeats this file on its own; the full im run skips it with `--grep-invert @soak`. */
+const SOAK = { tag: '@soak' };
 
 async function seed(
   page: Page,
@@ -167,7 +169,7 @@ const stored = (page: Page) =>
   });
 
 for (const mode of ['empty', 'partial', 'previous', 'delayed', 'fragmented', 'reader-only'] as const) {
-  test(`stopping ${mode} compaction preserves history through reload`, async ({ page, dialog }) => {
+  test(`stopping ${mode} compaction preserves history through reload`, SOAK, async ({ page, dialog }) => {
     const original = mode === 'previous' ? previous : [];
     dialog.summary = mode === 'empty' ? 'empty' : 'partial';
     // Deliberate transport latency beyond the default DOM assertion budget.
@@ -213,27 +215,28 @@ for (const mode of ['empty', 'partial', 'previous', 'delayed', 'fragmented', 're
 }
 
 for (const fragmented of [false, true]) {
-  test(`completed ${fragmented ? 'fragmented ' : ''}compaction still replaces the prefix with its full summary`, async ({
-    page,
-    dialog,
-  }) => {
-    dialog.summary = 'complete';
-    dialog.unicode = fragmented;
-    await seed(page, [], { fragmentBytes: fragmented ? 1 : undefined });
-    await send(page, 'prime context limit');
-    await send(page, 'trigger complete summary');
-    const summary = fragmented ? 'complete replacement summary 中文' : 'complete replacement summary';
-    const saved = await stored(page);
-    expect(saved.compactions).toHaveLength(1);
-    expect(saved.compactions[0].summary).toBe(summary);
-    expect(saved.compactions[0].at).toBeGreaterThan(0);
-    expect(dialog.requests.at(-1)!.messages[0]).toEqual({ role: 'system', content: summary });
-  });
+  test(
+    `completed ${fragmented ? 'fragmented ' : ''}compaction still replaces the prefix with its full summary`,
+    SOAK,
+    async ({ page, dialog }) => {
+      dialog.summary = 'complete';
+      dialog.unicode = fragmented;
+      await seed(page, [], { fragmentBytes: fragmented ? 1 : undefined });
+      await send(page, 'prime context limit');
+      await send(page, 'trigger complete summary');
+      const summary = fragmented ? 'complete replacement summary 中文' : 'complete replacement summary';
+      const saved = await stored(page);
+      expect(saved.compactions).toHaveLength(1);
+      expect(saved.compactions[0].summary).toBe(summary);
+      expect(saved.compactions[0].at).toBeGreaterThan(0);
+      expect(dialog.requests.at(-1)!.messages[0]).toEqual({ role: 'system', content: summary });
+    },
+  );
 }
 
 for (const action of ['new', 'open', 'delete'] as const) {
   for (const mode of ['live', 'demo'] as const) {
-    test(`${action} session clears a cancelled compaction notice (${mode})`, async ({ page, dialog }) => {
+    test(`${action} session clears a cancelled compaction notice (${mode})`, SOAK, async ({ page, dialog }) => {
       dialog.mode = mode;
       await seed(page);
       if (action === 'open') {

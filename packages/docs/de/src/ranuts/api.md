@@ -1,6 +1,6 @@
 ---
 title: ranuts-API-Referenz
-description: 'Jedes von ranuts exportierte Symbol — 430 Exporte über 7 Entry Points, mit Signatur und Beschreibung.'
+description: 'Jedes von ranuts exportierte Symbol — 431 Exporte über 7 Entry Points, mit Signatur und Beschreibung.'
 ---
 
 # ranuts-API (generiert)
@@ -13,11 +13,11 @@ Laufzeit-Einschränkungen, welche Konventionen) lies zuerst [CLAUDE.md](https://
 Importiere aus dem **Subpfad**, dem das Symbol gehört, z. B. `import { debounce } from
 'ranuts/utils'`. Das Root-Barrel `ranuts` reexportiert die Oberfläche von utils + visual.
 
-**430 Exporte** über 7 Entry Points.
+**431 Exporte** über 7 Entry Points.
 
 ## Entry Points
 
-- [`ranuts/utils`](#ranuts-utils) — Browser- und Allzweck-Utilities · _Browser + node_ · 341 Exporte
+- [`ranuts/utils`](#ranuts-utils) — Browser- und Allzweck-Utilities · _Browser + node_ · 342 Exporte
 - [`ranuts/sw`](#ranuts-sw) — Caching-Strategien des Service Workers und das Precache-Protokoll · _nur Service Worker_ · 9 Exporte
 - [`ranuts/visual`](#ranuts-visual) — 2D-Rendering-Engine (Canvas / WebGL / WebGPU) · _nur Browser_ · 16 Exporte
 - [`ranuts/i18n`](#ranuts-i18n) — Frameworkunabhängige i18n-Engine (auch aus ranuts/utils reexportiert) · _Browser + node_ · 9 Exporte
@@ -90,6 +90,7 @@ import { /* … */ } from 'ranuts/utils';
 - `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
 - `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary script from character ratios. Pure statistics, no
 - `diffLines(oldText: string, newText: string, options?: DiffOptions) => DiffHunk[]` — Diffs two texts by line.
+- `downloadBlob(blob: Blob, fileName: string) => boolean` — Download a blob straight away, without a "Save as" dialog: a programmatic
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`

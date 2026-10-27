@@ -100,11 +100,11 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
 
   const syncProgressByPercentage = (percentage: number): void => {
     const normalizedPercentage = normalizeProgress(percentage);
+    // Read before writing: measured after the fill's transform, the width forced a layout
+    // on every pointermove of a drag.
+    const width = refs.progress.offsetWidth;
     refs.progressWrapValue.style.setProperty('transform', `scaleX(${normalizedPercentage})`);
-    refs.progressDot.style.setProperty(
-      'transform',
-      `translateX(${normalizedPercentage * refs.progress.offsetWidth}px)`,
-    );
+    refs.progressDot.style.setProperty('transform', `translateX(${normalizedPercentage * width}px)`);
     refs.progress.setAttribute('aria-valuenow', String(Math.round(normalizedPercentage * 100)));
     refs.progress.setAttribute('aria-valuetext', formatDuration(normalizedPercentage * ctx.duration));
   };

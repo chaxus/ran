@@ -14,7 +14,7 @@ import '@/components/icon';
 import mermaidCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 import { observeDocumentTheme, resolveDocumentTheme, THEME_SIGNAL_ATTRIBUTES } from '@/utils/theme';
-import { watchMediaQuery } from 'ranuts/utils';
+import { downloadBlob, watchMediaQuery } from 'ranuts/utils';
 import { uiText } from '@/utils/ui-text';
 import { mermaidText } from './text';
 
@@ -315,19 +315,11 @@ export class Mermaid extends RanElement {
     else if (format === 'source') this.downloadSource();
     else this.downloadRawSvg();
   }
-  private saveBlob(blob: Blob, filename: string): void {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
   private downloadRawSvg(): void {
     const svg = this.currentSvg();
     if (!svg) return;
     const source = new XMLSerializer().serializeToString(svg);
-    this.saveBlob(
+    downloadBlob(
       new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n${source}`], { type: 'image/svg+xml;charset=utf-8' }),
       'diagram.svg',
     );
@@ -336,7 +328,7 @@ export class Mermaid extends RanElement {
   private downloadSource(): void {
     const source = this.code;
     if (!source) return;
-    this.saveBlob(new Blob([source], { type: 'text/plain;charset=utf-8' }), 'diagram.mmd');
+    downloadBlob(new Blob([source], { type: 'text/plain;charset=utf-8' }), 'diagram.mmd');
     this.emit('download', { format: 'source' });
   }
   private downloadPng(): void {
@@ -362,7 +354,7 @@ export class Mermaid extends RanElement {
         canvas.toBlob((blob) => {
           URL.revokeObjectURL(url);
           if (blob) {
-            this.saveBlob(blob, 'diagram.png');
+            downloadBlob(blob, 'diagram.png');
             this.emit('download', { format: 'png' });
           } else {
             this.emit('error', { message: 'PNG export failed' });

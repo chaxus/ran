@@ -14,7 +14,14 @@ export const REDUCED_MOTION_CSS =
   'animation-duration:.01ms !important;animation-iteration-count:1 !important;' +
   'transition-duration:.01ms !important;scroll-behavior:auto !important}}';
 
-/** Component CSS joined with {@link REDUCED_MOTION_CSS}, keyed by the component's own text. */
+/**
+ * `hidden` is how a caller hides an element, and the UA rule that implements it is a
+ * user-agent rule: any author `display` on `:host` outranks it, so without this setting
+ * `hidden` on a component did nothing. Appended to every component, like the motion rule.
+ */
+export const HOST_HIDDEN_CSS = ':host([hidden]){display:none}';
+
+/** Component CSS joined with the shared rules above, keyed by the component's own text. */
 const withMotionCache = new Map<string, string>();
 
 /**
@@ -27,12 +34,13 @@ const withMotionCache = new Map<string, string>();
  * and hands the cache the same joined string on every call.
  *
  * @param cssText - The component's own styles.
- * @returns The text to adopt: the component's styles first, so the overrides win.
+ * @returns The text to adopt: the component's styles first, so the shared rules win.
  */
 const withReducedMotion = (cssText: string): string => {
   const cached = withMotionCache.get(cssText);
   if (cached !== undefined) return cached;
-  const joined = cssText ? `${cssText}\n${REDUCED_MOTION_CSS}` : REDUCED_MOTION_CSS;
+  const shared = `${HOST_HIDDEN_CSS}\n${REDUCED_MOTION_CSS}`;
+  const joined = cssText ? `${cssText}\n${shared}` : shared;
   withMotionCache.set(cssText, joined);
   return joined;
 };

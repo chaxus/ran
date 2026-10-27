@@ -4,7 +4,8 @@ export default defineConfig({
   testDir: './test/browser',
   outputDir: '../../.temp/docs-preview-results',
   fullyParallel: true,
-  workers: process.env.CI ? 1 : 2,
+  // Two workers on the CI runner's four cores; one left the job minutes from its timeout.
+  workers: 2,
   forbidOnly: Boolean(process.env.CI),
   retries: 0,
   use: {
