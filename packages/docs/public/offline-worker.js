@@ -71,7 +71,7 @@ const offlineTarget = url => offlineDocuments.has(url) ? DOCUMENT_CACHE_NAME : a
 const offlinePlans = new Map();
 const offlinePlan = lang => {
   if (!offlinePlans.has(lang)) {
-    const urls = [...new Set([...OFFLINE_MANIFEST.shared, ...OFFLINE_MANIFEST.deferred, ...OFFLINE_MANIFEST.locales[lang]])];
+    const urls = [...new Set([...OFFLINE_MANIFEST.shared, ...OFFLINE_MANIFEST.deferred, ...(OFFLINE_MANIFEST.media?.[lang] ?? []), ...OFFLINE_MANIFEST.locales[lang]])];
     offlinePlans.set(lang, { urls, allowed: new Set(urls) });
   }
   return offlinePlans.get(lang);
@@ -83,7 +83,7 @@ const runOfflineBatch = async (data, controller) => {
   const preferred = Array.isArray(data.priority) ? data.priority.filter(url => allowed.has(url)) : [];
   const current = locale.includes(data.current) ? [data.current] : [];
   // Prepare this language's reading paths before rarely used demo/highlighter chunks.
-  const queue = [...new Set([...preferred, ...current, `/search/${data.lang}.json`, ...locale, ...OFFLINE_MANIFEST.shared, ...OFFLINE_MANIFEST.deferred])].filter(url => allowed.has(url));
+  const queue = [...new Set([...preferred, ...current, `/search/${data.lang}.json`, ...locale, ...(OFFLINE_MANIFEST.media?.[data.lang] ?? []), ...OFFLINE_MANIFEST.shared, ...OFFLINE_MANIFEST.deferred])].filter(url => allowed.has(url));
   const progress = state => ({ state });
   let files = 0;
   let bytes = 0;
