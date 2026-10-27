@@ -746,9 +746,16 @@
   justify-self: center;
   width: 78%;
 }
+/* The label sits on its own chip of page colour rather than on a tinted pane, so the glass
+   stays clear. 70% page colour is the lowest share that kept the label at 4.5:1 over the
+   white disc in dark (measured 5.7:1 dark, 9.6:1 light; 62% gave 4.3:1). */
 .proof-pane code {
   display: block;
-  padding: var(--ran-space-6, 24px) var(--ran-space-3, 12px);
+  width: fit-content;
+  margin: var(--ran-space-6, 24px) auto;
+  padding: var(--ran-space-1, 4px) var(--ran-space-3, 12px);
+  border-radius: var(--ran-radius-full, 9999px);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
   text-align: center;
   font-family: var(--font-mono);
   font-size: var(--type-label-2, 13px);

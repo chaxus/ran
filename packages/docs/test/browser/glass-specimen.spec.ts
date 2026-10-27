@@ -34,6 +34,6 @@ test.describe('without JavaScript', () => {
   test('the specimen label still reads', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.proof-glass figcaption')).toBeVisible();
-    await expect(page.locator('.proof-pane code')).toHaveText('<r-glass rim>');
+    await expect(page.locator('.proof-pane code')).toHaveText('<r-glass>');
   });
 });
