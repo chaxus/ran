@@ -33,7 +33,7 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
       '<input id="previous" aria-label="Previous field"><r-popover id="parent" trigger="click"><button id="trigger">Options</button><r-content><button id="action">Action</button></r-content></r-popover>',
     );
     const parent = page.locator('#parent');
-    // The host is no tab stop of its own when its trigger is focusable (X-FOCUS-8).
+    // The host is no tab stop of its own when its trigger is focusable.
     await page.locator('#trigger').focus();
     await page.keyboard.press('Enter');
     await expect(parent).toHaveAttribute('open');

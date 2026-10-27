@@ -17,7 +17,7 @@
     "lint:prettier": "prettier --check --cache .",
     "format": "prettier --write --cache .",
     "cpd": "jscpd ./packages",
-    "verify:docs": "node bin/design-rules.ts --check && node bin/sync-design-docs.ts --check && pnpm verify:agent-plugin && pnpm -F ranui doc:api:check && pnpm -F ranui doc:style:check && pnpm -F ranui doc:changelog:check && pnpm -F ranuts doc:api:check && pnpm -F docs check:langs",
+    "verify:docs": "node bin/sync-design-docs.ts --check && pnpm verify:agent-plugin && pnpm -F ranui doc:api:check && pnpm -F ranui doc:style:check && pnpm -F ranui doc:changelog:check && pnpm -F ranuts doc:api:check && pnpm -F docs check:langs",
     "verify:design": "node bin/run-checks.ts verify:design",
     "verify:packages": "node bin/verify-packages.ts",
     "verify:consumers": "pnpm -F ranuts verify:package && node bin/verify-package-consumers.ts",
@@ -31,7 +31,7 @@
     "release:publish": "node bin/release.ts publish",
     "verify:release": "node bin/verify-release-install.ts",
     "typecheck:tooling": "tsc --project tsconfig.tooling.json",
-    "sync:design": "node bin/design-rules.ts && node bin/sync-design-docs.ts",
+    "sync:design": "node bin/sync-design-docs.ts",
     "sync:agent-plugin": "node bin/sync-agent-plugin.ts",
     "verify:agent-plugin": "node bin/sync-agent-plugin.ts --check"
   },

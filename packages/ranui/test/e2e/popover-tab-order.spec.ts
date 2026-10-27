@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
-// X-FOCUS-8: one tab stop per popover and per colorpicker, never the host and then its trigger.
+// Design guide, Focus: one tab stop per popover and per colorpicker, never the host and then its trigger.
 
 /** Names each stop by the deepest focused element, walking into shadow roots. */
 async function tabStops(page: Page, key: string, count: number): Promise<string[]> {

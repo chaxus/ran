@@ -69,9 +69,7 @@ describe('executable interface guidance', () => {
   });
 
   it('uses declared foundation tokens in every CSS example, including fallbacks', () => {
-    const examples = ['DESIGN', 'INTERACTION', 'WORKFLOW_PATTERNS'].flatMap((owner) =>
-      cssExamples(read(`docs/${owner}.md`)),
-    );
+    const examples = ['DESIGN'].flatMap((owner) => cssExamples(read(`docs/${owner}.md`)));
     expect(examples.length).toBeGreaterThan(0);
     expect(references(examples.join('\n')).length).toBeGreaterThanOrEqual(6);
     for (const example of examples) {
@@ -144,7 +142,7 @@ describe('executable interface guidance', () => {
     ) as Record<string, { files: Array<{ path: string }> }> | Array<{ files: Array<{ path: string }> }>;
     // npm versions return either an array or a package-name keyed object.
     const files = new Set(Object.values(packed)[0].files.map((file) => file.path));
-    for (const owner of ['INTERFACE_GUIDE', 'INTERACTION', 'WORKFLOW_PATTERNS', 'ACCEPTANCE']) {
+    for (const owner of ['DESIGN', 'REFERENCE_RESEARCH']) {
       expect(files.has(`docs/${owner}.md`), `package omits docs/${owner}.md`).toBe(true);
     }
     const canonical = [...files].filter(

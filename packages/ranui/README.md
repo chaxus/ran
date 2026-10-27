@@ -82,7 +82,7 @@ setTheme('system');
 
 - [Component API](./docs/COMPONENTS.md)
 - [Styling and tokens](./docs/style-tokens-public.md)
-- [Design and interaction](./docs/DESIGN.md) · [Interaction](./docs/INTERACTION.md)
+- [Design and interaction](./docs/DESIGN.md)
 - [DOM builder and signals](https://github.com/chaxus/ran/blob/main/packages/ranview/README.md)
 - [Maintainer and agent reference](./CLAUDE.md)
 

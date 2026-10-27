@@ -250,7 +250,7 @@ export class Popover extends RanElement {
       );
     });
   /**
-   * X-FOCUS-8: the host is a tab stop only when its trigger cannot take focus itself; otherwise
+   * Design guide, Focus: the host is a tab stop only when its trigger cannot take focus itself; otherwise
    * Tab would stop on the host and then again on the trigger. Keyboard opening needs no host
    * focus, because the trigger's keydown bubbles to keydownPopover. An author's tabindex wins.
    */

@@ -2,728 +2,810 @@
 
 # Ran Design
 
-Design methods for the host product and its existing technology. Read only the relevant
-sections through [the task index](./INTERFACE_GUIDE.md). Library tokens and API mechanics belong
-to their implementation adapter, not this portable method.
+This guide is for people and coding agents who build the interface of a web product, whatever the
+stack. It describes how a screen should be structured, how it should look, how it should behave
+under input, how it should move, and how to prove that a change works. It assumes you are working
+inside an existing product with its own tokens and components; it tells you how to use them well,
+not which ones to pick.
+
+Three words carry weight. **MUST** marks a requirement whose violation a user can observe: a lost
+draft, a focus that disappears, text you cannot read. Breaking one is a defect. **SHOULD** is the
+default; depart from it when the case in front of you gives a concrete reason, and say what that
+reason is. **MAY** is an option. Everything else is explanation.
 
-Each rule carries an ID and a level. **MUST** is a defect when broken and names its proof;
-**SHOULD** is the default, and a deviation states its reason for that case; **MAY** is optional.
-The [rule index](./RULES.md) lists every graded rule with its proof.
+A few rules are checked by machine: `verify:design` flags light-only colour fallbacks, raw colours,
+off-scale spacing, drags without Pointer Events, a broken `hidden` attribute and a handful of
+component-construction mistakes. Most of this guide cannot be checked statically. Layout, focus,
+motion and contrast are only proven in a real browser, at real widths, in both themes.
 
-## 1. Color — a state ladder, not a palette
-
-- **D-COLOR-1 · SHOULD** Choose semantic roles for content, surfaces, boundaries, actions and status.
-- **D-COLOR-2 · SHOULD** Define default, hover, active, disabled and focus states together.
-- **D-COLOR-3 · SHOULD** Resolve light/dark values through the host’s authoritative tokens, and verify
-  contrast in the actual composition.
-
-Brand accents are contextual.
-
-## 2. Spacing — a limited, rhythmic scale
-
-- **D-SPACE-1 · SHOULD** Use the host’s existing spacing scale.
-- **D-SPACE-2 · SHOULD** Use tight gaps to group related parts and larger gaps to separate tasks or
-  regions.
-- **D-SPACE-3 · SHOULD** Establish inside padding before outside gaps.
-- **D-SPACE-4 · SHOULD** Do not copy a reference product’s dimensions without evaluating content, density
-  and input method.
-
-## 3. Typography — choose a role, not a size
-
-- **D-TYPE-1 · SHOULD** Choose heading, label, body, action and code roles with coherent size, weight and
-  line height, and keep a single authority for each role.
-- **D-TYPE-2 · SHOULD** Verify actual scripts, fallback metrics and long content.
-- **D-TYPE-3 · SHOULD** Establish hierarchy with typography before decorative containers.
-
-## 4. Radius & elevation
-
-- **D-ELEV-1 · SHOULD** Coordinate nested corner radii with their real inset: inner radius = outer radius −
-  inset. When the result is 2px or less, the shapes no longer read as concentric; give the inner shape its
-  own role radius, or none.
-
-A 16px card with 8px of padding gives its inner panel an 8px radius. The same card with 16px of padding
-leaves nothing to carry over, so the panel takes whatever its own role uses.
-
-- **D-ELEV-2 · SHOULD** Use elevation to explain a floating layer, not importance, through the host’s
-  stacking roles, and verify overlays against surrounding chrome.
-
-## 5. Motion — prefer none
-
-Timing below is a starting heuristic.
-
-- **D-MOTION-1 · SHOULD** Use the host system’s motion tokens and verify frequency, continuity and reduced
-  motion in the actual task.
-
-| Duration | Use                                                                     |
-| -------- | ----------------------------------------------------------------------- |
-| 0ms      | Frequent hover, focus and keyboard feedback; changes already understood |
-| ~150ms   | Optional, purposeful small motion, not a mandatory hover delay          |
-| ~200ms   | Menu/popover motion when it clarifies the layer change                  |
-| ~300ms   | Dialog motion when orientation benefits from it                         |
-
-**Principle:** purpose and frequency determine whether motion earns time.
-
-- **D-MOTION-2 · SHOULD** Default repeated interaction to immediate feedback; a larger change is not
-  automatically a reason to animate.
-- **D-MOTION-3 · SHOULD** Use existing tokens for purposeful motion and keep it quick and interruptible.
-  Reduced motion is graded under D-MOTION-10 and D-ACCESS-5.
-
-### Functional motion contract
-
-- **D-MOTION-4 · SHOULD** Specify the trigger, state change and destination before choosing an effect.
-- **D-MOTION-5 · MUST** Motion preserves unrelated content, drafts and reading position. _Proof: recording_
-- **D-MOTION-6 · SHOULD** Give sibling components with the same interaction meaning a shared motion
-  language; consistency does not require every component to animate.
-- **D-MOTION-7 · MUST** When motion is used, a new intent can interrupt or reverse it from the current
-  presentation, without a jump, stale completion or duplicate activation. _Proof: recording_
-- **D-MOTION-8 · MUST** Feedback stays immediate; animation is not an input lock. _Proof: recording_
-- **D-MOTION-9 · SHOULD** During insertion/removal, avoid visibly squeezing text or passing exiting controls
-  across live actions; coordinate opacity and layout so the result stays readable.
-- **D-MOTION-10 · MUST** Reduced motion retains a visible, understandable final state. _Proof: browser_
-- **D-MOTION-11 · MAY** Use a spring; it need not overshoot.
-
-See the optional [component craft research](./REFERENCE_RESEARCH.md#component-craft-设计垂点--wxaddesign)
-for examples and limits, and [temporal acceptance](./ACCEPTANCE.md#review-motion-over-time) for proof.
-
-- **D-MOTION-12 · SHOULD** Let theme palettes settle coherently. Avoid implicit palette fades or
-  `transition: all`; opt in explicitly only where the host intends and verifies a coordinated effect.
-- **D-MOTION-13 · MUST** Factual values and readable content are shown immediately on return to a working
-  surface, without animated counts. _Proof: browser_
-- **D-MOTION-16 · SHOULD** Do not replay decorative title entrances on each return to a working surface.
-- **D-MOTION-17 · SHOULD** Choose entrance motion by what a region holds, from the table below. Stagger in
-  reading order inside one region, not across the page.
-
-| Region holds                                                  | Entrance                                                                           | Afterwards                                                     |
-| ------------------------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| Text, headings, values, forms, navigation, calls to action    | None: present on first paint (D-MOTION-13)                                         | None                                                           |
-| A decorative visual beside text: an icon set, diagram, sketch | Transform only, once, the first time it scrolls into view; none if visible at load | An explanatory loop may run while it is on screen (D-CRAFT-19) |
-| A product mockup or live demo                                 | None for its content; a loading demonstration may move (D-MOTION-14)               | Driven by the reader's own interaction                         |
-| A status indicator                                            | None                                                                               | A pulse only while the activity is live (D-MOTION-15)          |
-
-With reduced motion every region starts in its final state (D-MOTION-10).
+ranui's [implementation adapter](#ranui-implementation-adapter) maps these methods to
+ranui's tokens, stacking tiers and component specifics. This guide stays library-agnostic.
 
-- **D-MOTION-14 · MAY** A loading demonstration may move to demonstrate loading.
-- **D-MOTION-15 · MUST** A status pulse appears only while the activity is live. _Proof: review_
-
-## 6. Content — copy is part of the system
-
-- **D-COPY-1 · SHOULD** Buttons name the outcome. Include the object when context does not establish it:
-  "Deploy project", "Delete member". In a clearly named object or dialog, "Save" or "Delete" is sufficient;
-  avoid generic "OK". See [contextual wording](#words-are-part-of-the-interface).
-- **D-COPY-2 · SHOULD** Errors say **what happened**, then **how to fix it**. ✅ "Build failed: the bundle
-  exceeds the size limit. Reduce it or raise the limit." ❌ "Operation failed, please try again."
-- **D-COPY-3 · SHOULD** Confirmations and toasts state the completed **change**. ✅ "Project deleted".
-  ❌ "Operation successful".
-- **D-COPY-4 · MUST** Show completion feedback only after the operation is confirmed. _Proof: unit, browser_
-- **D-COPY-5 · SHOULD** Be specific; every sentence removes guesswork rather than adding it.
-
-## 7. Accessibility — the system serves everyone
-
-- **D-ACCESS-1 · MUST** Text keeps sufficient contrast with its background (**WCAG AA**). _Proof: browser_
-- **D-ACCESS-2 · MUST** Never signal state with color alone; pair it with an icon or text (e.g. ✓ / ✕ labels,
-  not just green/red). _Proof: review_
-- **D-ACCESS-3 · MUST** Every interactive element has a **visible focus ring** appropriate to its surface;
-  never remove it for "cleanliness". _Proof: browser_
-- **D-ACCESS-4 · MUST** **Full keyboard navigation**: nothing is mouse-only. _Proof: browser_
-- **D-ACCESS-5 · MUST** Respect `prefers-reduced-motion`. _Proof: browser_
-- **D-ACCESS-6 · MUST** When the host supports both schemes, the initial render follows
-  `prefers-color-scheme`. _Proof: browser_
-
-## 8. Input & viewport — mobile and desktop, both
-
-- **D-INPUT-1 · MUST** Support mouse, keyboard and touch at narrow and wide widths. _Proof: browser_
-- **D-INPUT-2 · MUST** Reflow controls instead of hiding the only route to an action. _Proof: browser_
-- **D-INPUT-3 · MUST** A hover affordance has a click/tap alternative. _Proof: browser_
-- **D-INPUT-4 · MUST** Drags use Pointer Events, including cancellation. _Proof: browser_
-- **D-INPUT-5 · MUST** Scope `touch-action` to the actual drag surface and pair it with a real handler;
-  ordinary scrolling keeps working elsewhere. _Proof: browser_
-- **D-INPUT-6 · SHOULD** Prefer content/viewport-relative bounds (`min()`, `max()`, `clamp()`) to arbitrary
-  breakpoints.
-- **D-INPUT-7 · SHOULD** Use existing host breakpoints, and introduce a justified shared role only when
-  repeated needs emerge.
-
-A measured position becomes stale after resize, container reflow or scroll.
-
-- **D-INPUT-8 · SHOULD** Exercise resizing into a narrow layout, not only loading there.
-- **D-INPUT-9 · MUST** Overlay placement tracks its trigger while open. _Proof: browser_
+## Principles
 
-The host owns lifecycle mechanics; [ranui engineering](./CODING.md#3-state-and-ownership) is one implementation adapter.
+**The task comes first.** Decide what the reader needs to see, understand and do before choosing a
+single component.
 
-- **D-INPUT-10 · SHOULD** Test actual pointer/touch gestures, hover fallback and keyboard routes where
-  affected; checking two color schemes does not establish input parity.
+**Structure before decoration.** Spacing, alignment and type weight group content; borders, fills
+and shadows are for boundaries that structure alone leaves unclear.
+
+**Emphasis is a budget.** Colour, weight, badges and elevation only work when they are rare, so
+spend them on the one thing that matters.
+
+**State is visible and honest.** The screen shows what is actually true: selected, pending, failed,
+saved. It never claims success early or hides an unresolved error.
 
-## 9. Composition — the page, not the component
+**Input is never lost.** Drafts, focus, caret position and reading position survive updates,
+failures, mode switches and animation.
 
-- **D-COMP-1 · SHOULD** Choose the page structure in §10 first; then compose its components with these
-  rules.
+**Every path works without a mouse.** Keyboard, touch and narrow screens reach every action that a
+pointer at a wide width can reach.
 
-### Style coherence across components and pages
+**Motion explains a change, then gets out of the way.** It is short, interruptible and driven by
+state, and the interface reads correctly with motion turned off.
 
-- **D-COMP-2 · SHOULD** Before implementation, record a short design brief in the existing task note or
-  product design owner. Use the existing system; a small fix only needs the affected decisions.
-  The brief settles each applicable decision in the table below (D-COMP-2).
+**The box owns what it paints.** A component's layout box contains everything it draws and is
+reserved before the component finishes loading, so nothing jumps or spills.
 
-"Premium", "modern" or "like Claude" is a direction to investigate, not an implementable specification.
+**Proof is observed, not assumed.** A change is done when someone has watched it work in a real
+browser; a passing type check or a tidy screenshot is not that.
 
-| Decision           | What the brief settles                                                                                                         |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| Task and hierarchy | The real content, primary action and first reading focus; what can recede or disappear.                                        |
-| Proportion         | Type roles/line heights, text measure, control density, icon weight and alignment spines using host tokens.                    |
-| Surface language   | Which regions need containment, nested radius/inset relationships, semantic accent and elevation roles.                        |
-| State composition  | A representative default plus long content, pending/failure and narrow input paths; include combined states.                   |
-| Motion             | The state change it explains, trigger and frequency, interruption/reverse behavior and reduced-motion result; "none" is valid. |
-| Reference decision | Where a reference is used, link its source, the principle adopted and the adaptation the host task needs.                      |
-| Acceptance         | The observable result and actual views/recordings that can demonstrate or reject it.                                           |
+## Start from the task
 
-- **D-COMP-4 · SHOULD** Reuse the brief across sibling components and docs chrome; change emphasis
-  according to the task.
+Before drawing anything, write a short brief in the task note or design owner that already exists.
+A small fix only needs the decisions it touches. "Premium", "modern" or "like product X" is a
+direction to investigate, not a specification.
 
-Uniformity does not mean equal-sized controls or boxed sections everywhere.
+Answer three questions first:
 
-- **D-COMP-5 · SHOULD** Keep an expressive demo visibly distinct from its documentation chrome.
-- **D-COMP-6 · SHOULD** Update the brief before changing the visual direction; do not silently rewrite the
-  standard to justify an implementation that failed review.
-- **D-COMP-7 · SHOULD** Compare a representative composed still with different real content before
-  animating it, then inspect the state change and return path at normal speed.
+1. **What does the reader need to see on arrival?** That is the primary information.
+2. **What else has to be visible for it to make sense?** Related objects, context, status.
+3. **What do they do next?** Judge, act, or keep reading.
 
-A shared color alone cannot reconcile inconsistent proportions, icon weight, containment or motion.
+A page has one primary model. Supporting information helps the reader understand or operate it; it
+does not compete for the first screen. A complete API payload is not a page design: the reader still
+needs an order for understanding objects, their state and their relationships, and then acting.
 
-- **D-COMP-8 · SHOULD** When an example looks imported from another product, fix that relationship at its
-  owning token/component/style rather than adding a page-specific patch.
-- **D-COMP-9 · SHOULD** Keep reference observations and validation limits in the optional
-  [research index](./REFERENCE_RESEARCH.md#style-coherence-and-transition-research).
+Then settle the parts of the brief that apply:
 
-### Structure before containers
+| Decision           | What to settle                                                                                  |
+| ------------------ | ----------------------------------------------------------------------------------------------- |
+| Task and hierarchy | The real content, the primary action, the first reading focus, and what can recede              |
+| Shape              | Which layout answers the reader's question (see below)                                          |
+| States             | Default, empty, loading, failure, long content, narrow width, and combinations of these         |
+| Surfaces           | Which regions really need a boundary, and how nested radii and insets relate                    |
+| Motion             | Which change it explains, its trigger and frequency, how it reverses, what reduced motion shows |
+| Acceptance         | What you will observe in the browser that would prove or reject the change                      |
+
+Choose the shape from the reader's question, not from the data's structure:
 
-- **D-BOX-1 · SHOULD** **Reach for spacing, alignment, weight and a hairline before a box.**
+| The reader wants to…                  | Useful shape                                           |
+| ------------------------------------- | ------------------------------------------------------ |
+| Compare values or differences         | Table or diff                                          |
+| Recognise and open a resource         | List; an image grid only when images identify items    |
+| Understand one object's current state | Sectioned detail                                       |
+| Understand ownership or dependencies  | Tree or adjacency list; a graph only when paths matter |
+| Move work through stages              | Step flow, or a board when moving items is the work    |
+| Audit what happened, when and by whom | Timeline                                               |
+| Read or discuss continuous text       | Document or thread                                     |
+| Judge health or spot anomalies        | Status overview                                        |
+| Work through items one after another  | Master-detail                                          |
+
+Do not confuse historical events with future steps, a filter with a board, or prose with a field
+grid. A date alone does not justify a calendar. Ship several views of the same data only when each
+serves a distinct task worth maintaining.
+
+Put each kind of information where readers look for it. Identity and status belong in the title
+or summary, not in the last column or behind a tab. Attributes are grouped the way people think
+about them, not in API field order. Evidence sits beside the judgement it supports. The primary
+action sits in the title region and the rest sit beside their object. Feedback appears beside the
+action that caused it. Every fact has one authoritative location; other places show a summary
+that links back.
+
+The default reading order is: identity, then current status or exception, then the primary task
+and action, then the information that judgement needs, then relationships, history and evidence,
+then secondary information and rare actions.
+
+## Visual language
+
+### Hierarchy and the emphasis budget
+
+Build hierarchy from type and position before reaching for a container. One step up in size and one
+step down in colour turn a title and its first sentence into a title and a deck, with no box and no
+border.
 
-A container is a claim that its contents are a separate object. Most regions need a background, a
-hairline and intentional spacing — nothing more.
+Treat colour, weight, badges, filled buttons and shadows as scarce. If everything is emphasised,
+nothing is. Each task region gets at most one primary action, and it is the most likely next step,
+not the most destructive one.
 
-- **D-BOX-2 · SHOULD** Reserve a box for **a genuinely separate object**: a live demo stage, an overlay, a
-  panel that floats. Not for a code block, a table, a list row, a previous/next link, or a cell in a
-  gallery.
-- **D-BOX-3 · SHOULD** **Avoid redundant nested containers and doubled padding.** A card inside a padded
-  panel does not need another decorative frame or inset.
-- **D-BOX-4 · SHOULD** Keep functionally required nested controls or surfaces, and coordinate their radii
-  with the actual inset; containment alone is not a reason to add a box.
-- **D-BOX-5 · SHOULD** **Every persistent boundary needs a distinct job.** Start with headings, alignment
-  and proximity to group content. Add a border, surface fill or elevation only when that structure leaves
-  a real boundary unclear.
-- **D-BOX-6 · SHOULD** Do not repeat the same grouping with a panel frame, a nested card, row rules and
-  another inset at the same time.
+Reach for spacing, alignment, weight and a hairline before a box. A container is a claim that its
+contents are a separate object. Reserve one for things that really are separate: a live demo, an
+overlay, a floating panel. A code block, a table, a list row or a gallery cell does not need its own
+card. Avoid nesting the same grouping twice: a panel frame, a card inside it, rules between rows
+and another inset all saying "this is a group" is four boundaries doing one job.
 
-Faint lines are still extra hierarchy; reducing their contrast or shortening them leaves a redundant
-enclosure redundant.
-
-The table below applies D-BOX-5 and D-BOX-8.
-
-- **D-BOX-8 · MUST** Keep keyboard focus and persistent selection cues; never remove them to make the
-  resting layout quieter. _Proof: browser_
-
-| Boundary                | Keep when it communicates                                               | Remove when it only repeats                                                    |
-| ----------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Field/control frame     | Where values can be entered or a selection made                         | A decorative wrapper around already legible commands                           |
-| Region frame or divider | An independent viewport, resize boundary or major change of task        | A title and gap that already make the same group clear                         |
-| Nested surface          | A distinct floating layer, preview, drop target or interaction boundary | Another container inside an established settings pane                          |
-| Focus/selection outline | Keyboard focus or persistent selection state                            | Keep this state cue even when the resting layout would look quieter without it |
-
-- **D-BOX-9 · SHOULD** Review the full pane or page, not only the cropped group. For every remaining stable
-  outline, fill or separator, name the relationship or interaction it communicates and check what becomes
-  ambiguous if it is removed.
-
-A frame is optional; a reachable, recognisable control is not.
-
-### Emphasis is a budget
-
-**Colour, weight, badges, fills and elevation are scarce.** If everything is emphasised,
-nothing reads as important.
-
-- **D-COMP-10 · SHOULD** Establish priority with structure and proximity first, and spend emphasis on the
-  one thing that deserves it.
-
-**Elevation explains stacking, not importance.**
-
-- **D-ELEV-3 · SHOULD** Reserve shadows for surfaces that genuinely float above content: popovers, menus,
-  dialogs, notifications. Do not shadow every card.
-
-### Spacing carries meaning
-
-The scale in §2 is not only a rhythm; each step states a relationship.
-
-Choose the step by what the gap _means_ (D-SPACE-2):
-
-| Relationship             | Relative spacing                |
-| ------------------------ | ------------------------------- |
-| Parts of one control     | Tightest deliberate gap         |
-| Closely related controls | Compact group gap               |
-| One content group        | Group rhythm                    |
-| Separate groups          | Larger separation               |
-| Major region boundary    | Strongest deliberate separation |
-
-**Inside before outside:** a component's own padding is decided before the gap between
-components (D-SPACE-3). **Smaller gap means tighter relationship** — that is the only thing vertical
-rhythm communicates.
-
-- **D-SPACE-6 · SHOULD** Do not undo a gap's relationship with a decorative divider.
-
-### Vertical rhythm across sibling views
-
-- **D-SPACE-7 · SHOULD** Repeat relationships, not fixed heights. Choose title/description, field/hint,
-  group and region gaps from the host scale according to their relationship.
-
-These are composition decisions, not universal component dimensions.
-
-- **D-SPACE-8 · SHOULD** Let translations grow naturally, and leave no vacant row for a missing
-  description.
-- **D-SPACE-9 · SHOULD** Give each gap one owner: parent stack or explicit child margin. Reset authored
-  local heading/paragraph margins rather than adding them to the parent's gap.
-- **D-SPACE-10 · SHOULD** Account for owned control padding, collapsing margins and inline baseline space;
-  do not compensate with transforms or smaller type.
-- **D-SPACE-11 · SHOULD** Place hints with the field/action they explain.
-- **D-SPACE-12 · MUST** Hidden helpers leave no accidental gap. _Proof: browser_
-- **D-SPACE-16 · SHOULD** A reserved async status line has a stated purpose and bounds.
-  Measure both axes after content settles; [ACCEPTANCE](./ACCEPTANCE.md) grades this as V-PROOF-6.
-
-`next.top - previous.bottom` measures frame separation, not glyph/line-box space.
-
-- **D-SPACE-14 · SHOULD** Keep leading, padding and hairlines distinct: 16px padding plus a 1px rule is
-  not a 17px spacing token.
-- **D-SPACE-15 · SHOULD** Use independent expectations and exercise wrapping, resizing, helper/error
-  visibility and relevant density.
-
-[ACCEPTANCE](./ACCEPTANCE.md#browser-proof) owns settling and mutation checks for doubled margins,
-phantom rows and text-only drift.
-
-### The measure governs text, not the column
-
-- **D-TYPE-4 · SHOULD** **Choose a readable measure for the actual script and font.**
-
-For Latin prose, 60–75 characters per line is a starting heuristic, not a universal range for every
-writing system.
-
-- **D-TYPE-5 · SHOULD** Review realistic text at supported widths, zoom levels and font fallbacks; CJK and
-  mixed-script text need their own judgment.
-
-[WCAG visual presentation](https://www.w3.org/WAI/WCAG22/Understanding/visual-presentation.html)
-also distinguishes CJK in its Level AAA criterion; it is not a mandatory library default.
-
-- **D-TYPE-6 · SHOULD** Let a table, code fence, demo stage or image retain the width its content needs.
-  Cap the text elements, not the column that holds them.
-- **D-TYPE-7 · SHOULD** **Declare the measure in `rem`, never `em`.**
-
-`em` resolves against the element's own font-size, so the larger the type, the longer the line —
-exactly backwards.
-
-- **D-TYPE-8 · SHOULD** **Build hierarchy out of type before reaching for a box.**
-
-One step of size and one step down in colour turns a title and its first sentence into a title and a
-deck, with no new container and no new border.
-
-### If the layout says two things are one object, the spacing must agree
-
-**A shared border, a shared radius and a gap between them are a contradiction.**
-
-- **D-ALIGN-1 · SHOULD** Decide whether the elements are one object or two, and make every property say
-  the same thing.
-- **D-ALIGN-2 · SHOULD** **When a value must equal another value, name it.** A gap that a child has to
-  subtract is not a literal in two places; it is one custom property referenced twice.
-
-### Reserve a column only when its content exists
-
-**A column declared unconditionally is still a column, even on the pages that have nothing
-to put in it.**
-
-- **D-ALIGN-3 · SHOULD** Condition the track on the element actually being there (`:has()`), not on a
-  page type you assume implies it.
-
-### Alignment is structure, not polish
-
-- **D-ALIGN-4 · SHOULD** **Name each alignment spine and the geometry it aligns.** State which siblings
-  share each one; include headers, body copy, rows, actions and empty/loading/error content.
-
-A page content spine, navigation column and nested form-label spine can differ intentionally.
-
-- **D-ALIGN-5 · SHOULD** A back button plus gap may establish a separate title column: do not silently
-  treat that title as aligned to body text.
-- **D-ALIGN-6 · MUST** A missing optional icon or badge never moves labels out of their declared column.
-  _Proof: browser_
-- **D-ALIGN-7 · SHOULD** A nested level returns exactly to its parent's spine when it ends.
-  Compare the right boxes. These are separate measurements, even when they happen to coincide; measuring the
-  defect's layer is graded in [ACCEPTANCE](./ACCEPTANCE.md) as V-PROOF-10.
-
-| Geometry      | What to measure                                                                                   |
-| ------------- | ------------------------------------------------------------------------------------------------- |
-| Frame         | The wrapper/host border box from `getBoundingClientRect()`                                        |
-| Content       | The inner edge after the actual border and padding, including nested wrappers                     |
-| Text          | A DOM `Range` around the rendered label's text nodes; use first/last line rectangles for wrapping |
-| Icon viewport | The SVG/viewbox or image box; painted glyph ink may be asymmetric inside it                       |
-| Hit area      | The actual event target and its hover/focus surface; verify points near its edges                 |
-
-A button frame aligned with a paragraph does not prove its text is aligned: internal padding can
-move the label while the frame stays fixed. `Range` gives typographic geometry, not exact glyph ink.
-
-- **D-ALIGN-9 · SHOULD** Inspect optical glyph corrections separately.
-  For web components, measure the host, documented shadow parts and slotted text through supported test
-  seams. V-PROOF-11 in [ACCEPTANCE](./ACCEPTANCE.md) owns this, including the ban on production shadow queries
-  and on assuming document CSS crosses the boundary.
-- **D-ALIGN-11 · SHOULD** **Keep a header command's hit zone separate from layout filler.** A title/menu
-  trigger hugs its content plus deliberate padding, bounded by the available width. Let a separate
-  flex/grid track absorb remaining space.
-- **D-ALIGN-12 · SHOULD** Define truncation/wrapping and adjacent action behavior for long translations.
-- **D-ALIGN-13 · MUST** The title trigger's hit area does not span unused header space (for example through
-  `flex: 1` on the title button) unless D-ALIGN-14 applies. _Proof: browser_
-- **D-ALIGN-14 · SHOULD** A row that intentionally selects its whole width is a different role; record
-  that contract explicitly.
-- **D-ALIGN-15 · MAY** Coarse-pointer targets may grow larger.
-- **D-ALIGN-22 · SHOULD** A grown target's hover fill stays on the control's own content, not across unrelated
-  content.
-- **D-ALIGN-16 · SHOULD** **Count every inset from the shared ancestor to the visible text.** Parent
-  padding, nested panel padding, a control's internal padding, borders and navigation columns all
-  contribute.
-- **D-ALIGN-17 · SHOULD** Remove a redundant inset at its owner instead of cancelling it with an
-  unexplained negative margin.
-- **D-ALIGN-18 · SHOULD** Empty states retain their region's content spine and width; extra breathing room
-  never introduces a second left edge or makes a compact action fill the region.
-- **D-ALIGN-19 · SHOULD** Keep product-specific insets and target sizes as application aliases, not new
-  foundation values or universal component defaults.
-- **D-ALIGN-20 · SHOULD** **When two layout edges or gaps are meant to be equal, a one-pixel difference is a
-  defect.** Optical glyph correction (D-ALIGN-21) is the only tolerance.
-- **D-ALIGN-21 · SHOULD** Treat optical correction for an asymmetric glyph as a separate, documented
-  asset/component decision, reused at supported sizes while sibling gaps, baselines and spines stay exact.
-
-Optical correction is not permission to nudge page margins until a screenshot looks balanced.
-
-### Selection, links and other semantic lies
-
-- **D-SEM-1 · MUST** **Selection is persistent state and never looks like hover.** _Proof: browser_
-
-Hover is transient; if the current item is marked with the same fill hover uses, the interface has two
-names for one appearance.
-
-- **D-SEM-2 · MUST** **Action and link roles remain distinguishable.** _Proof: browser_
-- **D-SEM-3 · SHOULD** Verify inline links against surrounding prose, including themes where action and
-  body colors happen to match.
-
-**A link leaves; a button acts.**
-
-- **D-SEM-4 · MUST** Anything that changes application state is a button, whatever it looks like.
-  _Proof: review, browser_
-- **D-SEM-5 · SHOULD** A button-shaped link carries no underline.
-
-### Command hierarchy in constrained panes
-
-- **D-CMD-1 · SHOULD** **Remove redundant group enclosures without erasing control affordance.**
-
-Headings, alignment and proximity establish groups inside a settings pane; by themselves they leave an
-icon and label without a clickable look.
-
-- **D-CMD-2 · SHOULD** Use flat rows when a recognizable menu/list pattern already conveys action; do not
-  require them in every context.
-- **D-CMD-3 · SHOULD** Give a standalone command that needs it its own restrained button surface or
-  functional stroke, visible before hover in every supported theme.
-- **D-CMD-4 · SHOULD** Let a button's own shape identify its target; an enclosing card, muted group fill
-  and row rules still pass the distinct-boundary test (D-BOX-5).
-- **D-CMD-5 · MUST** Initial discovery does not rely on hover, pointer cursors, verb labels or keyboard
-  focus alone. _Proof: browser_
-- **D-CMD-6 · SHOULD** Inspect the resting full pane with the pointer away, including touch use.
-- **D-CMD-7 · MUST** Hover, press, disabled and keyboard focus stay distinguishable after the control is
-  discovered. _Proof: browser_
-- **D-CMD-8 · SHOULD** Wrap long translated labels inside one command column instead of a ragged horizontal
-  button cloud.
-- **D-CMD-9 · MUST** Do not add navigation chevrons to immediate commands. _Proof: review_
-- **D-CMD-10 · SHOULD** Declare which visible columns are shared with adjacent checkboxes or controls:
-  measure icon/checkbox edges and text Ranges, not only button rectangles or alignment within the command
-  group.
-- **D-CMD-11 · MAY** A hit target may extend into an owned gutter to preserve those columns; name the
-  extension.
-- **D-CMD-12 · MUST** An extended hit target stays inside its pane, does not overlap other targets, and
-  keeps focus visible. _Proof: browser_
-- **D-CMD-13 · SHOULD** Separate destructive commands from recovery and transfer actions.
-- **D-CMD-14 · SHOULD** Let a danger label and icon communicate intent without a large red outline on
-  every resting command; reserve the strongest danger fill for explicit confirmation.
-- **D-CMD-15 · MUST** Destructive commands keep confirmation, cancellation, focus return and busy guards.
-  _Proof: browser_
-- **D-CMD-16 · SHOULD** Accept a command pane against its resting state, not only its hover state.
-
-Acceptance covers resting discoverability, declared shared columns, full-pane boundary hierarchy, target
-bounds, label clipping, contrast and interaction states.
-
-- **D-CMD-17 · SHOULD** Inspect the actual render as well: an automated surface-difference check catches
-  invisible control fills but does not prove that users recognize the action.
-- **D-CMD-18 · SHOULD** Reuse foundation roles and coarse-input target requirements; this guidance changes
-  no component defaults.
-
-### One product, one token set
-
-- **D-TOKEN-1 · SHOULD** Use the product’s authoritative semantic tokens. Aliases may improve readability,
-  but resolve from that source rather than inventing a competing palette.
-- **D-TOKEN-2 · SHOULD** Coordinate third-party components through supported theme APIs and verify the
-  composed result.
-
-### Density follows control roles
-
-Spacing, intrinsic dimensions and hit targets solve different problems. A small glyph can have
-a larger native button target.
-
-- **D-TOKEN-3 · SHOULD** Measure actual hit bounds, focus and adjacent gaps.
-- **D-TOKEN-4 · SHOULD** Derive repeated host aliases from foundation tokens, not one application's
-  dimensions copied across the library.
-- **D-TOKEN-5 · SHOULD** Choose target bounds for the actual input method without enlarging every glyph or
-  reserving space for hidden controls. Use supported public theme APIs.
-- **D-TOKEN-6 · MUST** Name icon-only controls accessibly. _Proof: browser_
-- **D-TOKEN-7 · SHOULD** Document legitimate viewport, hairline, artwork and optical geometry exceptions.
-
-### Evaluate craft through evidence
-
-Polish follows task clarity, not a preset of cards, blur or entrances.
-
-- **D-CRAFT-1 · SHOULD** Choose a deliberate visual direction using realistic objects, copy and states; a
-  generic empty shell cannot establish product quality.
-
-Working interfaces need sustained reading and frequent actions; marketing pages may need a different
-composition.
-
-- **D-CRAFT-2 · SHOULD** Evaluate the smallest intervention against real content, language, device and
-  repeated use.
-
-Primary references answer specific questions:
-[Linear hierarchy](https://linear.app/now/behind-the-latest-design-refresh),
-[Geist typography](https://vercel.com/geist/typography),
-[optical alignment](https://craft.gustavofior.com/optical-alignment) and
-[interruptibility](https://craft.gustavofior.com/interruptibility).
-
-- **D-CRAFT-3 · SHOULD** Adapt their principles with the host’s tokens and actual capabilities; do not
-  copy a product's pixel sizes or import recipes as rules.
-- **D-CRAFT-4 · SHOULD** Treat references as inputs to decisions, not additional instruction sets; for
-  example, [Don't Make Me Think](https://sensible.com/dont-make-me-think/) informs scanning, hierarchy and
-  clear choices.
-
-[taste-skill](https://github.com/leonxlnx/taste-skill) informs deliberate direction and critique;
-[ryugi](https://github.com/Innei/ryugi) informs executable work and fresh evidence.
-
-- **D-CRAFT-5 · SHOULD** A stylistic preference needs context; a requirement identifies the task or
-  observable contract it protects.
-- **D-CRAFT-6 · SHOULD** Choose references by the job they support: logo/app identity, marketing
-  composition and frequent working interactions solve different problems.
-- **D-CRAFT-7 · SHOULD** Record the observed pattern and its adaptation; verify the result with real
-  content.
-
-The optional [research index](./REFERENCE_RESEARCH.md) maps sources to questions and demonstrates this
-translation without adding another rule set.
-
-- **D-CRAFT-8 · SHOULD** When direction is unresolved, compare two small real-host variants with the same
-  content, width and theme, changing one dimension at a time. Explain what each difference does for the
-  task.
-
-A clear direction or small correction proceeds directly; there is no mandatory approval ritual.
-
-- **D-CRAFT-9 · SHOULD** Balance short headings progressively with `text-wrap: balance`, preserving normal
-  wrapping.
-- **D-CRAFT-10 · MUST** Headings contain no locale-dependent manual line breaks and are not clipped to
-  preserve a screenshot. _Proof: browser_
-- **D-CRAFT-11 · SHOULD** Check cost and support before using `pretty` on long live content.
-- **D-CRAFT-12 · SHOULD** Use tabular figures to stabilize digit advances if the font supports them.
-- **D-CRAFT-13 · SHOULD** Reserve a meaningful column for digit-count changes such as 99 → 100.
-- **D-CRAFT-14 · MUST** A digit-count change never truncates the value. _Proof: browser_
-- **D-CRAFT-15 · SHOULD** Correct asymmetric glyphs in a reusable asset/component, preserving exact layout
-  spines.
-- **D-CRAFT-16 · SHOULD** Derive nested corner geometry from actual inset; remove an unnecessary nested
-  surface first.
-- **D-CRAFT-17 · SHOULD** Give motion a job: immediate frequent feedback, interruptible transitions,
-  reduced motion and instant themes. See §5.
-- **D-CRAFT-18 · MUST** Optional delight never delays typing or obscures status. _Proof: recording_
-- **D-CRAFT-19 · SHOULD** Pause offscreen decoration and profile realistic content before adopting costly
-  effects.
+Every persistent boundary should have a distinct job. For each remaining outline, fill or divider,
+name the relationship it communicates and check what becomes ambiguous if you remove it. Keep it
+when it marks where values can be entered, an independent scrolling region, a floating layer or a
+drop target. Remove it when a heading and a gap already make the same group clear. Making a
+redundant line fainter does not make it less redundant.
+
+Focus rings and selection markers are never removed to make a resting layout look quieter.
+
+### Colour and themes
+
+Assign colour by role, not by hue: text and secondary text, surfaces, boundaries, actions and
+status. Define default, hover, pressed, disabled and focus states together, as one ladder, so
+they stay distinguishable from each other.
+
+Text MUST meet WCAG AA contrast against its actual background, in every supported theme. Check
+the composed result, not the token pair in isolation: text on a tinted status fill, on an image,
+on a checked control or in a loading state is where contrast fails in practice.
+
+State MUST NOT be signalled by colour alone. Pair it with an icon, text or shape: a failed check
+shows a cross and the word "Failed", not only a red dot.
+
+When the product supports light and dark, the first paint MUST follow `prefers-color-scheme` or the
+stored preference, with no flash of the wrong theme. Both themes are first-class; review every
+change in both.
+
+Use the product's authoritative semantic tokens. Aliases may improve readability but resolve from
+that source; never build a parallel palette. A raw colour in a component means that value will not
+follow the theme, and a fallback that is a light-only literal breaks dark mode as soon as the token
+is missing. `verify:design` flags both, as well as fallbacks that name a token the theme never
+defines (an undefined custom property silently drops the whole declaration).
+
+Brand accents are contextual. Use them where they identify the product, not as a general-purpose
+highlight.
+
+### Spacing as relationships
+
+Spacing comes from a 4px scale, and each step states a relationship. A smaller gap means a tighter
+relationship; that is all vertical rhythm communicates.
+
+| Relationship                                 | Step |
+| -------------------------------------------- | ---- |
+| Parts of one control (icon and label)        | 4px  |
+| Closely related controls (a button row)      | 8px  |
+| Lines within one content group (a list item) | 12px |
+| Separate groups (form groups)                | 16px |
+| Related subsections                          | 24px |
+| Major regions                                | 32px |
+
+Larger steps (40, 64, 96px) separate page-level regions where the relationship warrants it. Do not
+invent in-between values such as 20px or 28px; a limited set is what makes rhythm visible.
+`verify:design` flags spacing written as a literal length instead of a scale token, and intrinsic
+dimensions (width, height, font size, radius) drawn from the spacing scale instead of a sizing scale.
+
+A few habits keep spacing honest:
+
+- Decide a component's own padding before the gaps between components.
+- Give each gap one owner: either the parent's `gap` or the child's margin, never both. Reset
+  default heading and paragraph margins rather than adding them to a parent gap.
+- Keep leading, padding and hairlines distinct. 16px of padding plus a 1px rule is not a 17px step.
+- Repeat relationships, not fixed heights. Title-to-description, field-to-hint and group-to-group
+  gaps should match across sibling views; their content can still grow.
+- Place hints and errors with the field they explain.
+- Do not undo a gap's meaning with a decorative divider.
+
+Hidden optional content MUST leave no gap behind. A missing description, a hidden helper or an
+empty error slot leaves no blank row. If a component styles its host's `display`, it must keep the
+standard `hidden` attribute working; `verify:design` checks this.
+
+If two things are one object, every property must agree. A shared border, a shared radius and a gap
+between them are a contradiction. When one value must equal another, name it once as a custom
+property and reference it twice, instead of writing the same literal in two places.
+
+Reserve a column only when its content exists. A track declared unconditionally is still a column
+on the pages that have nothing to put in it; condition it on the element being present (for example
+with `:has()`).
+
+### Radius and nesting
+
+Nested corners look concentric only when the inner radius accounts for the inset between the two
+shapes: **inner radius = outer radius − gap**. A 16px card with 8px of padding gives its inner panel
+an 8px radius. The same card with 16px of padding leaves nothing to carry over; when the result is
+2px or less, the shapes no longer read as concentric, so give the inner shape its own role radius,
+or none.
+
+![A card with radius 16, an inset panel 8px inside it with radius 8, and a button 4px inside that with radius 4, their corner arcs sharing one centre; beside it, an inner panel that keeps radius 16 makes the band swell from 8px on the edges to about 11px at the corner](./assets/radius-nesting.svg)
+
+Before tuning nested radii, ask whether the nested surface needs to exist. Removing an unnecessary
+inner box is usually better than perfecting its corners.
+
+### Alignment
+
+Alignment is structure, not polish. Name each alignment spine and the elements that share it:
+headings, body text, list rows, actions, and the empty, loading and error content that replaces
+them. A page content spine, a navigation column and a nested form-label spine can differ on
+purpose; a back button and its gap may establish a separate title column. What matters is that
+the difference is intended.
+
+![Three vertical alignment spines through a page: navigation, content and nested form labels, with headings, rows, actions and the empty state all sitting on their declared spine](./assets/alignment-spines.svg)
+
+- Measure the layer that matters. A button frame aligned with a paragraph does not prove its label
+  is aligned, because internal padding moves the text. Compare text against text.
+- Count every inset from the shared ancestor to the visible text: parent padding, nested panel
+  padding, the control's own padding and borders.
+- Remove a redundant inset where it is declared, rather than cancelling it with a negative margin.
+- A nested level returns exactly to its parent's spine when it ends.
+- A missing optional icon or badge should not push labels out of their column; reserve the icon
+  slot or align the label to the column regardless.
+- Empty states keep their region's spine and width. Extra breathing room never introduces a second
+  left edge.
+- When two edges or gaps are meant to be equal, a one-pixel difference is a defect. Optical
+  correction for an asymmetric glyph (a play triangle, for instance) is the only tolerance, and it
+  belongs in the icon asset, not in a page margin nudged until a screenshot looks balanced.
+
+### Density
+
+Density is effective information per screen, not controls per inch. Tightening spacing raises
+visual density and leaves effective density where it was; removing irrelevant fields and putting a
+comparison in one place raises the real thing.
+
+Use at most two adjacent density levels on one page: spacious for first use and risky
+confirmation, standard for most lists and details, compact for expert workbenches. Padding and line
+height may tighten. Body text size, a visible focus ring and pointer target size MUST NOT shrink
+with density.
+
+Spacing, intrinsic size and hit area solve different problems. A small glyph can sit in a larger
+target. Choose target bounds for the actual input method (coarse pointers need more) without
+enlarging every icon. An enlarged target's hover fill stays on the control itself, not across
+neighbouring content. Keep product-specific insets and target sizes as application aliases, not as
+new foundation values.
+
+### Surfaces and elevation
+
+Elevation explains stacking, not importance. Shadows belong to surfaces that float above content:
+popovers, menus, dialogs, notifications. Do not shadow every card to make it feel important. A
+floating layer's shadow should clearly lift it off the page in both themes; a card-level shadow on
+a menu makes it look like part of the page.
+
+A product needs one ordered set of stacking layers: page content, sticky chrome, popovers and
+menus, dialogs, then notifications on top. A menu opened inside a dialog MUST appear above that
+dialog; a toast MUST appear above both. Put the stacking value on the element that is actually
+positioned, and raise an enclosing wrapper only while its overlay paints, including its exit.
+
+### Type and icons
+
+Choose a type role, not a size. Heading, label, body, button and code roles each have one coherent
+size, weight and line height, and one owner. Sizes come from tokens in `rem` so that browser text
+settings scale them; never fix body text in `px` that ignores the reader's settings.
+
+- Choose a readable measure for the actual script and font. For Latin prose, 60–75 characters per
+  line is a starting point; CJK and mixed scripts need their own judgement. Declare the measure in
+  `rem`, never `em`: `em` grows with the element's own font size, so larger type would get longer
+  lines.
+- Cap text elements, not the column. A table, code block, demo or image keeps the width its content
+  needs.
+- Balance short headings with `text-wrap: balance`. Headings contain no manual line breaks, which
+  only work in the locale they were written for.
+- Text MUST NOT be clipped to keep a layout tidy. Headings, labels, identifiers and navigation
+  destinations reflow or use a meaningful shorter form; an ellipsis or tooltip never hides the only
+  cue to where a link goes.
+- Use tabular figures for numbers that change, and reserve room for a digit-count change (99 to
+  100). A value MUST NOT be truncated when it gains a digit.
+- Check real copy: long translations, fallback fonts, browser zoom.
+
+Icons share one stroke weight and optical size per context, align to the text they accompany, and
+never carry meaning alone without an accessible name or a visible label.
+
+## Layout
+
+### Shells
+
+Most product screens are one of a few shells: a navigation rail or sidebar beside a content
+region; a header over a single column; master-detail with a list beside the selected item. Pick the
+shell from the task and keep it stable across the product, so readers learn where things live.
+
+Navigation gives one contextual return per view. Do not show an outer "Back to project" and an
+inner "Back to files" together. A detail view returns to its immediate parent, ancestors stay
+reachable through the route hierarchy or breadcrumbs, and returning to a parent puts focus back on
+the item the reader came from.
+
+A modal is not a navigation layer. Anything that needs a shareable link, history, side-by-side
+comparison or survival across a refresh gets a route. Reserve a modal for a short confirmation or a
+single field, a popover or menu for transient context, and a disclosure for progressive detail.
+Tabs hold peer views of one object, never unrelated modules.
+
+### Reading measure
+
+Running text is capped at a comfortable measure; everything that is not running text is free of
+that cap. A wide table beside a narrow paragraph is correct. A paragraph stretched across a 1600px
+monitor is not.
+
+### Narrow widths
+
+Every screen works from 320px up. At 320–375px, every action MUST remain reachable: controls reflow
+or move into an overflow menu, but the only route to an action is never hidden. The page MUST NOT
+scroll horizontally at those widths, unless a specific region (a wide table, a code block) scrolls
+on its own.
+
+Prefer content-relative bounds (`min()`, `max()`, `clamp()`, container queries) to arbitrary
+breakpoints, and reuse the product's breakpoints when you need one. Test by resizing into a narrow
+layout, not only by loading there: measured positions go stale after resize, reflow and scroll.
+
+### No layout shift
+
+Content does not move after it first appears unless the reader caused it.
+
+- A component that is registered or hydrated late MUST have its box reserved before it is defined.
+  An undefined custom element renders as an empty inline box; give it a placeholder size from the
+  same tokens the real component uses (for example `my-element:not(:defined) { display: block;
+min-height: var(--control-height); }`), so the upgrade fills space that already exists.
+- Images, embeds and media declare their dimensions or aspect ratio.
+- A status change MUST NOT resize its control. A button whose label changes from "Copy" to "Copied"
+  or shows a spinner keeps its width, height and focus ring position.
+- An asynchronous status line that may appear later reserves its space with a stated purpose and
+  bounds, or appears where it pushes nothing.
+
+### Visible without script or animation
+
+Text, headings, values, forms and navigation MUST be readable on first paint. They never wait on an
+animation, an intersection observer or a script to become visible. If the script fails or reduced
+motion is on, the content is already there. Entrance effects are for decorative visuals beside the
+text, run once, and are skipped when the visual is already on screen at load. Factual values are
+shown immediately on return to a working screen, not counted up again.
+
+### Boxes contain what they paint
+
+A component's layout box MUST contain everything it draws. Rotated, fanned or offset children
+reserve their full reach inside the component's box; they never spill over neighbours, and they
+never cause horizontal scrolling at 320–375px. If a decoration has to extend beyond the box, the box
+grows or the decoration is clipped on purpose.
+
+Position rotated decorations against the right axis. Percentages in `translate()` refer to the
+element's own size, not its container's, so `translate(-50%)` centres an element on a point; it
+does not move it half-way across its parent. Rotate around a deliberate `transform-origin`, then
+measure the painted bounds in the browser rather than trusting the arithmetic.
+
+## Components and composition
+
+### Compose before inventing
+
+Start with the product's existing components and native HTML elements. Most new needs are a
+composition of existing pieces: a list of rows, a disclosure, a menu, a form. Build something new
+only when the composition cannot express the required behaviour, and then use native semantics
+(`button`, `a`, `input`, `dialog`, `details`) underneath. Never patch a component's private internals;
+integrate through its public attributes, events, slots, CSS variables and parts.
+
+Uniformity does not mean equal-sized controls or boxed sections everywhere. Sibling components
+share proportions, icon weight, containment and motion language; a shared colour alone cannot
+reconcile them.
+
+### Actions reachable without hover
+
+Discovering an action MUST NOT depend on hover. A secondary action revealed on hover is also
+revealed on keyboard focus within the row, and has a persistent route on touch screens (always
+visible, or in a visible overflow menu). Essential recovery actions such as Retry or Restore stay
+visible.
+
+A standalone command needs a recognisable shape before hover: its own restrained button surface or
+stroke, visible in both themes. Flat rows are fine where a recognisable menu or list pattern already
+says "these are actions". Review a command pane with the pointer away from it.
+
+Once discovered, hover, pressed, disabled and focus states stay distinguishable. A disabled control
+MUST NOT dispatch, and it stays quiet on hover.
+
+Separate destructive commands from recovery and transfer actions. Let a danger label and icon carry
+intent; keep the strongest danger fill for the confirmation step. A destructive command keeps its
+confirmation, its cancel path, focus return and a guard against double activation.
+
+### Buttons and links
+
+A link leaves; a button acts. Anything that changes application state MUST be a `button` (or have
+the button role and keyboard behaviour), whatever it looks like. Anything that navigates to a URL is
+a link, so it can be opened in a new tab and copied. The two stay visually distinguishable; check
+inline links against surrounding prose in themes where action and body colours are close. A
+button-shaped link carries no underline. Navigation chevrons belong on things that navigate, not on
+commands that act immediately.
+
+Every icon-only control MUST have an accessible name.
+
+### Overlays
+
+Popovers, menus, tooltips and dialogs share a contract:
+
+- **Stacking.** Overlays follow the product's layer order, so a select opened inside a dialog
+  appears above it and notifications sit above everything.
+- **Follow the trigger.** An open overlay MUST track its trigger through scroll, resize and reflow.
+  It never floats away from what opened it, and it never animates out from a stale position.
+- **Dialog focus.** A dialog MUST place initial focus inside itself, keep Tab and Shift+Tab within
+  it, close on Escape and Cancel, and return focus to the element that opened it. A keyboard-safe
+  primitive does not make a composed dialog safe; test the composition.
+- **Escape.** Escape closes the topmost layer only, and does not also trigger the layer beneath.
+- **Dismissal.** Clicking outside closes a menu or popover, not a dialog with unsaved input.
+
+### Selection is not hover
+
+Selection is persistent state; hover is transient. Selection MUST NOT look like hover. If the
+current item uses the same fill as hover, the interface has two meanings for one appearance, and
+the current item vanishes from view as soon as the pointer moves nearby.
+
+Hover feedback is one fill that wraps the label it belongs to, with its own padding. It does not
+stretch across empty header space or neighbouring content. A title or menu trigger hugs its
+content; a separate layout track absorbs the remaining width. A row that deliberately selects across
+its whole width is a different role and says so.
+
+Group headers that toggle a section respond to hover with ink (text and icon colour), not with the
+navigation fill used by destinations. That keeps "this opens a group" visibly different from "this
+takes you somewhere".
+
+### Common web habits
+
+| Common web habit                                   | Better default                                                         |
+| -------------------------------------------------- | ---------------------------------------------------------------------- |
+| Row actions that appear only on hover              | Actions visible on focus within the row and reachable on touch         |
+| A command styled as a link                         | A `button` with a restrained surface; links only for navigation        |
+| Animating `height` or `max-height` to open a panel | Reserve or measure the box; animate `transform` and `opacity` only     |
+| A spinner for an action that completes instantly   | Immediate feedback; show progress only when work takes noticeable time |
+| A red or green dot as the only status signal       | Colour plus an icon or a word                                          |
+| Fixed `px` font sizes                              | `rem`-based type roles that follow the reader's text settings          |
+| `transition: all` on components                    | Transitions listed per property; no palette properties                 |
+| The current page marked with the hover fill        | A distinct, persistent selection marker                                |
+| A card and a shadow around every section           | Spacing, headings and a hairline; boxes only for separate objects      |
+| A toast for every result                           | Feedback next to the object acted on                                   |
+| A modal for a multi-step task                      | A route that survives refresh and can be linked                        |
+
+## Interaction
+
+### Inputs and drafts
+
+- **One activation, one dispatch.** Submit MUST dispatch once per activation; a double click or a
+  repeated Enter does not create two writes.
+- **Composition is not submission.** Enter MUST NOT submit while an input method editor is
+  composing (check `isComposing`). Enter submits only where the field's convention calls for it,
+  and multiline entry keeps working. Dictation updates text and never submits by itself.
+- **The latest intent wins.** An older response MUST NOT replace newer results: a slow search for
+  "ab" never overwrites the results for "abc", and a preview for one file never appears under
+  another. Tie each async result to the request that asked for it, and drop stale ones.
+- **Never rebuild a focused input.** A search response, stream update, resize or status change
+  MUST NOT replace the element the reader is typing in. Focus, caret, selection and value stay put.
+- **Drafts survive.** Unsent input MUST survive a failed save, a lost connection, a mode switch,
+  an expired session and a round trip to settings. A retained draft is not a saved one; say which
+  it is.
+- **Restore is not retry.** Restore repopulates fields without submitting. Retry dispatches again
+  with the original scope and destination, never a silently broadened one.
+- **Escape user text.** Search highlights are built from text nodes, never by inserting the query
+  as HTML.
+
+Use native input types and `autocomplete`, keep platform editing shortcuts working, and keep labels,
+prerequisites and validation messages next to the field they affect. Distinguish "you have not
+filled this in" from "the service is unavailable", and explain why submit is disabled when the
+reason is not obvious.
+
+### Focus
+
+Every interactive element MUST show a visible focus ring when focused from the keyboard, and
+everything MUST be reachable and operable from the keyboard: Tab reaches it, Enter or Space
+activates it. A component does not add tab stops that lead nowhere or duplicate an inner control.
+
+Focus never falls back to the page body by accident:
+
+- Collapsing a region that contains focus MUST return focus to its toggle.
+- Removing the focused item moves focus to the next meaningful item or a stable parent control.
+- Closing an overlay returns focus to its trigger.
+- A background request completing MUST NOT move focus.
+
+A collapsed region still names its contents and state, and collapsing never hides an unresolved
+error.
+
+### Feedback and recovery
+
+Success MUST be shown only after the operation is confirmed. "Saved" appears after the server
+acknowledges the write; "Copied" appears after the clipboard call resolves. Feedback belongs to the
+operation that produced it: if content changes while a copy is pending, the old completion does not
+mark the new content as copied.
+
+Show feedback beside the object acted on. A "Copied" label next to the copy button is easier to
+connect than a toast in a corner; use a toast for changes beyond the current object or feedback
+that would otherwise be missed. One failure gets one coherent recovery, not a row error plus a
+toast plus a banner.
+
+Errors say what failed, whether anything changed, and what to do next. "The import stopped before
+saving. Your selected files are still here. Retry the import." Promise only what the product can
+establish. Credential-free diagnostics can go behind a details disclosure.
+
+Name a known phase ("Reading files", "Writing export") rather than showing only a spinner, and
+announce phase changes, not timer ticks. Show a percentage only when there is a real denominator.
+
+Cancel, retry and completion are different outcomes:
+
+- `Cancel` MUST leave without committing anything.
+- A cancellation request is not a confirmed cancellation. Show a pending state until the work has
+  actually stopped; if the client can only stop waiting, say that.
+- Cancellation is not failure and is not styled as one.
+- A timeout does not prove nothing happened. Find out whether a write committed before retrying,
+  using the product's idempotency or deduplication mechanism where it has one.
+- Offer Undo only when the operation can actually be reversed.
+
+| Condition                     | Useful response                                      | Avoid                                      |
+| ----------------------------- | ---------------------------------------------------- | ------------------------------------------ |
+| Network interrupted           | Keep inputs and partial output; retry when reachable | Clearing the form                          |
+| Permission or config rejected | Name the category; link to the relevant setting      | Automatic retry loops                      |
+| User cancelled                | Mark cancelled; keep recoverable output              | Red failure styling                        |
+| Context changed               | Mark output as stale; refresh against current data   | Applying an old result to a newer document |
+
+### Streaming content
+
+Live logs and streamed answers follow new content only while the reader is at the end. Scrolling
+up MUST suspend following; new content arrives without moving what the reader is looking at, and a
+"Jump to latest" control restores following. Do not announce every streamed character to assistive
+technology; announce completion or meaningful chunks.
+
+Clicks MUST NOT depend on smooth scrolling having finished. A click that scrolls to an anchor or
+selects an item takes effect at once; the scroll animation is presentation. Test these paths with
+reduced motion on, where smooth scrolling is instant and races become visible.
+
+## Motion
+
+Motion explains where something came from and where it went. Frequent feedback (hover, focus,
+press, typing) is immediate or nearly so. A larger change is not automatically a reason to animate;
+"no motion" is a valid design.
+
+![Three position-over-time curves: entering decelerates over 250–400ms and settles on the target without passing it; leaving accelerates over 150–200ms; a third curve, marked as one to avoid, overshoots the target and comes back](./assets/motion-curves.svg)
+
+| Purpose                                | Duration                     | Curve                            |
+| -------------------------------------- | ---------------------------- | -------------------------------- |
+| Hover, focus, press feedback           | 0–100ms                      | Linear or none                   |
+| Element entering (menu, panel, dialog) | 250–400ms                    | Decelerate, no overshoot         |
+| Element leaving                        | 150–200ms                    | Accelerate                       |
+| Siblings moving to make room           | Same as the entering element | Decelerate, via transform (FLIP) |
+| Theme switch                           | None                         | —                                |
+| Reduced motion                         | ~100–150ms                   | Opacity fade only, no travel     |
+
+The rules:
+
+- **Animate only `transform` and `opacity`.** Never animate `height`, `padding`, `margin` or
+  `max-height` to show or hide something; those reflow the page every frame and squeeze text as it
+  goes. Reserve or measure the final box, then move and fade into it.
+- **Siblings move by transform.** When an item is inserted or removed, neighbours move with FLIP:
+  record their old positions, apply the new layout, then animate from the old position to zero with
+  a transform. Do not let them jump or reflow frame by frame.
+- **Entering decelerates, leaving accelerates.** Things arrive quickly and settle; they leave
+  faster than they arrived. No overshoot by default. Bounce or spring overshoot is an explicit
+  opt-in for a specific, playful moment, never a library default.
+- **Interruptible and state-driven.** A new intent MUST be able to interrupt or reverse a running
+  transition from where it currently is, without a jump, a stale completion or a duplicate event.
+  Drive transitions from state (a class or attribute that reflects open or closed), and finish them
+  on `transitionend` or `animationend` for that element; never on a `setTimeout` that races the
+  CSS. Reopening during an exit simply reverses.
+- **Animation is not an input lock.** Typing, clicking and keyboard navigation work during a
+  transition. Optional delight never delays input or hides status.
+- **Motion preserves context.** Animation MUST NOT clear drafts, move focus, or change the reader's
+  scroll position.
+- **Reduced motion keeps meaning.** Under `prefers-reduced-motion: reduce`, motion MUST NOT travel:
+  keep a short fade, or none, so the change is still noticeable and the final state is visible.
+  Every region starts in its final state.
+- **Themes do not fade.** A theme switch is instant. Do not list palette properties (`color`,
+  `background-color`, `border-color`, `fill`) in component transitions, and never use
+  `transition: all`: any palette property in a transition also fades on a theme switch, each
+  component at its own speed while the page has already flipped.
+- **Pulses mean live.** A status pulse appears only while the activity is actually running.
+- **Pause what is off screen.** Decorative loops stop when out of view; profile costly effects with
+  real content before adopting them.
+
+Sibling components with the same interaction meaning share one motion language. That does not
+require every component to animate.
+
+### View transitions
+
+The View Transitions API lifts each named element into its own snapshot layer above the page. A
+lifted element escapes its parent's `overflow` clip and rounded corners for the duration of the
+transition, so an element that is clipped in the steady state will briefly paint outside its
+container. Only give a `view-transition-name` to elements that are fully visible in both the old
+and new states, and keep names unique on the page. Test view transitions with reduced motion, where
+they should collapse to a fade or nothing.
+
+## Words
 
 ### Words are part of the interface
 
-- **D-COPY-6 · SHOULD** Avoid unnecessary secondary labels and descriptions. Let the layout do the
-  explaining.
-- **D-COPY-7 · SHOULD** A heading, grouping, proximity or obvious control needs no other sentence
-  repeating its purpose.
-- **D-COPY-8 · SHOULD** Remove copy with no new decision, constraint or consequence; do not replace it
-  with a decorative badge or tooltip.
-- **D-COPY-9 · MUST** Preserve accessible names, field labels, units, errors and risk disclosures.
-  _Proof: browser_
-- **D-COPY-10 · SHOULD** Preserve useful first-use guidance, and test whether the task remains
-  understandable.
-- **D-COPY-11 · SHOULD** Let context carry context: `Users` rather than `User Management`; do not repeat a
+Copy that adds a decision, a constraint or a consequence stays. Copy that repeats what the layout
+already says goes.
+
+- Avoid unnecessary secondary labels and descriptions; let the layout do the explaining. A heading,
+  grouping or obvious control does not need a sentence repeating its purpose.
+- Do not replace removed copy with a decorative badge or tooltip.
+- Accessible names, field labels, units, errors and risk disclosures MUST be kept. Quieting a
+  screen never removes them. Keep useful first-use guidance, and check that the task is still
+  understandable without the copy you cut.
+- Let context carry context: "Users", not "User management", inside an admin area. Do not repeat a
   dialog's question in its body.
-- **D-COPY-12 · SHOULD** Name results (`Save`, `Move`, `Delete`), not gestures (`Click to save`). Include
-  the object only when context does not establish it.
-- **D-COPY-13 · MUST** `Cancel` leaves without committing. _Proof: browser_
-- **D-COPY-14 · SHOULD** Use sentence case, no period on short labels, and a period on explanatory
-  sentences.
-- **D-COPY-15 · SHOULD** Use one `…` when an action needs more input before completing; reserve ALL CAPS
-  for short statuses, eyebrows and acronyms.
+- Buttons name the result, not the gesture: "Save", "Move", "Delete", not "Click to save" or "OK".
+  Include the object when context does not establish it: "Delete member", "Deploy project".
+- Errors say what happened, then how to fix it: "Build failed: the bundle exceeds the size limit.
+  Reduce it or raise the limit." Not "Operation failed, please try again."
+- Confirmations state the completed change: "Project deleted", not "Success".
+- Sentence case. No period on short labels; a period on full sentences.
+- One ellipsis (…) on a command that needs more input before it completes, such as "Rename…".
+- All caps only for short status tags, eyebrows and acronyms.
+- Translations grow. Leave room for longer labels; wrap long labels within one column rather than
+  letting a row of buttons turn ragged.
 
-### Review checklist for a composed surface
+## Product patterns
 
-- **D-REVIEW-1 · SHOULD** Apply these questions to the affected surface and reachable changed states.
-  Skip irrelevant variants; a small patch does not require redesigning unrelated pages. A "no" within
-  scope is a finding.
+These patterns apply only when the task needs them. An ordinary form or search page does not need a
+queue, an account connection or version history. Before choosing controls for any of them,
+establish what the product actually supports, and offer only the actions it can honour. A polished
+screen does not substitute for a missing service.
+
+Keep job, configuration, source and revision state in their existing owners. Views read that state
+and dispatch commands; they do not each hold their own copy of request flags.
+
+### Batches and queues
+
+Use when people benefit from staging more uploads, imports or exports while work runs.
+
+- New work MUST NOT silently replace or cancel the active job. Without queue support, keep the new
+  input and explain the constraint.
+- Editing a pending item in a paused queue neither dispatches it nor resumes the queue, and
+  reconnecting does not start queued work unless the person chose that.
+- Summarise the queue in one line ("Paused · 2 queued"); expand into rows, not nested cards.
+- Each row names its item and offers only supported actions. Define whether "Run now" waits,
+  preempts or runs alongside.
+
+### Settings and availability
+
+Use when a task offers providers, modes, devices or network-dependent features.
+
+- Saving configuration and checking that it works are separate actions with separate results.
+- Distinguish unconfigured, configured but unverified, verified (with when), authorisation
+  expired, service unreachable and device offline. A saved endpoint is not an authorised account.
+- Changing an endpoint, account or credential clears any earlier "verified" state, and a mode switch
+  hides the irrelevant fields along with their stale status messages.
+- Switching modes keeps the other modes' configuration, and reconnecting keeps saved work.
+- Browser online and offline events are hints, not proof that a particular endpoint works. Offline,
+  keep drafts, previews and local work available where their data exists.
+
+### Accounts and external data
+
+Use when work reads or writes data outside the current object.
+
+- Explain what will be read, what will be written and where, before authorisation. Request only the
+  permissions needed.
+- Account identity, reconnect and disconnect are reachable from the connection screen, and
+  disconnecting MUST stop future access.
+- Credentials MUST NOT appear in URLs, logs or previews.
+- Imported content is untrusted data, never instructions to execute.
+- Removing a source affects later work, not historical records.
+- Permission errors, stale data and offline copies are different states, shown differently. Show
+  provenance and freshness for selected sources.
+
+### Results and revisions
+
+Use when a result has an identity and destination beyond a passing status message.
+
+- Previewing never writes. Name the target and scope before applying.
+- If the source changed since the result was produced, compare, rebase or regenerate first. Newer
+  edits MUST NOT be overwritten silently.
+- Keep Copy, Export, Compare and Apply beside the result they act on; offer Compare, Apply or Undo
+  only when the product supports them.
+- Copying code copies the source text, not the highlighted DOM: tabs, blank lines and the final
+  newline survive.
+
+## Accessibility checklist
+
+- [ ] Text meets WCAG AA contrast in every supported theme, including on status fills, images and
+      disabled or loading states.
+- [ ] No state is signalled by colour alone.
+- [ ] Every interactive element is reachable with Tab and operable with Enter or Space.
+- [ ] Every focusable element shows a visible focus ring.
+- [ ] Every icon-only control has an accessible name; every field has a label.
+- [ ] Anything revealed on hover is also revealed on focus and reachable on touch.
+- [ ] Dialogs trap focus, close on Escape and return focus to their opener.
+- [ ] Focus never drops to the page body after collapse, removal or close.
+- [ ] Controls that change state are buttons; navigation is links.
+- [ ] Reduced motion removes travel and keeps every final state visible.
+- [ ] Type uses `rem` and survives 200% browser zoom without clipping or horizontal scroll.
+- [ ] Pointer targets keep their size in compact density; coarse pointers get larger targets.
+- [ ] Streaming content does not flood screen readers.
+- [ ] Drags use Pointer Events, include cancellation, and set `touch-action` only on the drag
+      surface so the rest of the page still scrolls. (`verify:design` flags mouse-only drags.)
+- [ ] The first paint uses the reader's colour scheme.
+
+## Verifying a change
+
+A change to what people see or do is accepted on what someone observed in a real browser. Static
+checks, type checks and `verify:design` are preconditions; they cannot prove focus return, the
+winning CSS rule, a preserved reading position or how a transition looks.
+
+**Decide what you expect before you look.** Write down the expected geometry or behaviour from the
+brief, not from the implementation under test. An assertion copied from what the code currently
+does proves nothing.
+
+**Capture before and after.** When fixing a visible defect, reproduce it in the running product
+first, then capture the same state after the fix, looking at the full pane with realistic content
+and its surrounding chrome, not a cropped component.
+
+**Walk the states that changed.** Default, hover, pressed, focus, disabled, loading, empty, error,
+long content and large numbers, as far as the change touches them. Include the combined states:
+a long translated label in an error state at narrow width.
+
+**Check the variants.**
+
+- Both themes, including a theme switch while the screen is open.
+- 320px width, by resizing down to it, not only loading there. Confirm no horizontal scroll and
+  every action reachable.
+- The keyboard path: Tab through the change, activate with Enter and Space, open and close
+  overlays, and confirm where focus lands.
+- Touch or a coarse pointer, where hover is involved.
+- Reduced motion: final states visible, nothing travels, clicks still land.
+- First load with a cold cache, to catch layout shift from late-registering components.
+
+**Measure, do not eyeball.** Wait for components to register, fonts to load and content to settle
+before measuring; fail on missing or zero-size targets. Measure the layer that matters: a wrapper,
+its content box, the rendered text (a DOM `Range`) and the actual hit target are different
+measurements. When an assertion checks layout, prove it can fail: introduce the defect (move only
+the label, add a doubled margin) and watch the check go red.
+
+**Review motion over time.** A still frame cannot show a jump. Watch the transition at normal speed,
+then sample it frame by frame (a recording, or reading `getBoundingClientRect()` on each animation
+frame) to find discontinuities. Include the reverse path and an interruption: trigger, then trigger
+again before it finishes. Check the final state, focus, event count and scroll position separately
+from the animation.
+
+**Report honestly.** Never claim what was not observed. Keep three results apart: automated checks
+(command output), the agent's own visual review, and a human decision. An agent's review is not a
+user's acceptance, and a fixture passing is not the host product passing. Say which paths remain
+unverified, and do not present an old capture as evidence for a newer build. A short note is enough:
+
+> Runtime: build or commit, viewport, theme, locale.
+> Automated: commands and results.
+> Agent review: what was observed, and its limits.
+> Human decision: not requested, pending, or the actual decision.
+> Unverified: what was not checked.
+
+## Guidance for coding agents
+
+Do:
+
+- Read the existing components, tokens and nearby screens before writing anything. Reuse what is
+  there; match the product, not a reference product.
+- State the task, the primary action, the state owner and the keyboard path before you edit.
+- Check public APIs in source or generated docs. Never invent an attribute, event or token from a
+  plausible name.
+- Take spacing, colour, radius and type from tokens; run `verify:design` and the product's checks
+  for the packages you touched.
+- Reserve the box for anything that loads, registers or appears later.
+- Animate with `transform` and `opacity`, finish on `transitionend`, and check reduced motion.
+- Keep a focused input mounted across updates; update its surroundings instead.
+- Tie each async result to the request that produced it.
+- Open the change in a real browser, in both themes, at 320px and at desktop width, and walk it with
+  the keyboard.
+- Report what you observed, what you only inferred, and what you could not check.
+
+Don't:
+
+- Wrap every section in a card with a shadow to make it look finished.
+- Hide row actions behind hover, or use a link for something that changes state.
+- Animate `height`, `max-height` or `padding`, use `transition: all`, or wait on `setTimeout` for a
+  transition to end.
+- Add a spinner, a toast or a success message before the operation is confirmed.
+- Replace the input someone is typing in when results arrive.
+- Remove focus rings, labels or error text to make a screenshot quieter.
+- Add spacing values off the scale, raw colours, or light-only fallbacks.
+- Let a decoration overflow its component or cause horizontal scroll on a phone.
+- Treat a good-looking screenshot as proof of focus, keyboard, motion or async behaviour.
+- Mark your own review as "accepted" or "approved".
+
+## Review checklist
 
 1. Can a new reader recognise the purpose and the primary action without guessing?
-2. Does every control's label, state and result describe one consistent outcome?
-3. Is emphasis scarce — does the core thing get the weight while colour, badges and primary buttons stay rare?
-4. Could this do less: any entry point, option or state removable without weakening the task?
-5. Are named spines exact at the visible text/content layer, including nested and empty states, with intentional navigation columns and no doubled padding?
-6. Do adjacent controls share their declared icon/text columns?
-7. Are title hit zones content-hugging?
-8. Do repeated vertical relationships use consistent gaps with one owner, including wrapped copy and hidden helper/error content?
-9. Is running text comfortable in its actual scripts, fonts and zoom levels, and is everything that is **not** running text free of that measure cap?
-10. Does every element that looks like part of one object agree — border, radius **and** spacing — and does every reserved column actually have content? Does each persistent frame, fill or divider communicate a distinct boundary instead of nesting the same group again?
-11. Does it hold in relevant changed states: empty, loading, failure, long translations, narrow width, supported themes, reduced motion and **RTL**, where affected?
-12. For layout or interaction changes, has the affected surface been checked in a real browser at the relevant widths and themes? Are standalone actions recognizable before hover, including touch use, without redundant group enclosures?
-
-A happy-path screenshot does not prove keyboard behavior, focus, dynamic content,
-resizing or failure recovery.
-
-- **D-REVIEW-2 · SHOULD** Follow [ACCEPTANCE](./ACCEPTANCE.md) for independent expectations, actual
-  runtime/capture identity, browser measurements and separate automated, agent and human results.
-
-The source-only [browser example](https://github.com/chaxus/ran/blob/main/packages/ranui/test/e2e/layout-contract.md)
-contains setup commands and test utility details; they are not public package APIs.
-
-## 10. Information architecture — the shape before the composition
-
-- **D-IA-1 · SHOULD** Choose structure before composition for information-dense consoles, dashboards and
-  workbenches.
-
-Complete API data is not a page design: the reader still needs a clear order for understanding
-objects, their state and relationships, then acting.
-
-- **D-IA-2 · SHOULD** Give single-conversion and landing pages their own task structure rather than a
-  dense-console template.
-
-### Answer three questions before naming a component
-
-- **D-IA-3 · SHOULD** Settle all three answers before choosing components.
-
-1. **What does the reader need to see on arrival?** That is the primary information.
-2. **What else has to be visible for it to make sense?** Related resources, related models, context.
-3. **What do they do next?** Judge, act, or keep thinking.
-
-- **D-IA-4 · SHOULD** **A page has exactly one primary model.** Supporting models may help the reader
-  understand or operate it; they may not compete for the first screen.
-- **D-IA-5 · SHOULD** Prefer a clear, unambiguous next choice over an arbitrary click budget. Test whether
-  readers recognize the next action, not merely whether the destination is reachable.
-
-### The shape follows the task, not the payload
-
-- **D-IA-6 · SHOULD** Choose a skeleton from the reader's question, not an API array or route ID, using
-  the table below.
-
-| Task                                          | Useful shape                                             |
-| --------------------------------------------- | -------------------------------------------------------- |
-| Compare values/differences                    | Table or diff                                            |
-| Recognize/open a resource                     | List; image grid only when images identify it            |
-| Understand one object's current state         | Sectioned detail                                         |
-| Understand ownership/dependencies             | Tree or adjacency list; graph only when the path matters |
-| Plan the next step / move work through stages | Step flow / kanban when moving is the actual work        |
-| Audit what happened, when and by whom         | Timeline or trace drill-down                             |
-| Discuss or read continuous text               | Thread or document                                       |
-| Judge health, trends or anomalies             | Status wall or dashboard                                 |
-| Find occupancy/conflicts or location          | Calendar or map/canvas                                   |
-| Work on the next item / change rules          | Master-detail workbench / configuration form             |
-
-- **D-IA-7 · SHOULD** Do not confuse historical events with future steps, a filter with kanban, or ordered
-  prose with a field grid. A date alone does not justify a calendar.
-- **D-IA-8 · SHOULD** Ship multiple views only when each serves a distinct task worth its
-  filter/state/action maintenance.
-
-### Each kind of information has a place
-
-- **D-IA-9 · SHOULD** Lead with identity and status in the title or summary region, and keep actions,
-  feedback and evidence beside their subject, as the table below lays out.
-
-| Information   | Belongs                                                      | Wrong place                              |
-| ------------- | ------------------------------------------------------------ | ---------------------------------------- |
-| Identity      | Title, object summary                                        | The last column, or behind a tab         |
-| Status        | Title or summary region                                      | Findable only in a detail field          |
-| Attributes    | Detail body, grouped as people think about it                | Flattened in API field order             |
-| Relationships | Own region or tab; ownership, dependency, reference distinct | Mixed into the attribute table           |
-| Changes       | Diff region, timeline                                        | Shown as the new value only              |
-| Evidence      | Beside the judgement, expandable                             | A log page elsewhere                     |
-| Actions       | Primary in the title region, the rest beside their object    | Buried under "more"                      |
-| Feedback      | Beside the action, keeping task context                      | A global toast detached from its subject |
-
-- **D-IA-10 · SHOULD** **Every fact has exactly one authoritative location.** Elsewhere shows a summary or
-  an entry point that links back to it.
-- **D-IA-11 · SHOULD** Follow the default reading order: page identity → current status or exception →
-  primary task and primary action → the information the judgement needs → relationships, changes,
-  evidence → secondary information and low-frequency actions.
-- **D-IA-12 · SHOULD** **One primary action per task region**, and it is the most likely next step, not
-  the most destructive one (§9, "Emphasis is a budget", governs how much weight it may take).
-
-### Density is effective information, not controls per inch
-
-Tightening spacing raises visual density and leaves effective density where it was. Removing
-irrelevant fields and putting the comparison in one place raises the real thing.
-
-- **D-IA-13 · SHOULD** **Use at most two adjacent density levels on one page**: spacious for first use and
-  risky confirmation, standard for most lists and details, compact for expert workbenches.
-- **D-IA-14 · MAY** Container padding and line height may tighten.
-- **D-IA-15 · MUST** Readable body text, a visible focus ring and pointer target size do not shrink with
-  density (§7, §8). _Proof: browser_
-
-### Containers do not fix structure
-
-- **D-IA-16 · SHOULD** **One contextual return per view.** Do not show an outer “Back to chat” and an
-  inner “Back to artifacts” together.
-- **D-IA-17 · SHOULD** The detail view returns to its immediate parent.
-- **D-IA-18 · MUST** Ancestors remain reachable through the route hierarchy or clearly named breadcrumbs.
-  _Proof: browser_
-- **D-IA-19 · SHOULD** Verify the full journey, including focus return and long translated destination
-  names.
-- **D-IA-27 · MUST** Returning to the parent restores focus to the originating item. _Proof: browser_
-- **D-IA-20 · MUST** If text does not fit, reflow or use a meaningful shorter destination; an ellipsis or
-  tooltip never hides the only destination cue. _Proof: browser_
-- **D-IA-21 · SHOULD** Choose one composition for the parent context. Do not add a breadcrumb merely to
-  relabel a redundant return shortcut, or repeat that parent as an inert crumb above its return command.
-
-When returning through the parent already reaches the ancestor, that journey preserves access
-without adding another detail-header row.
-
-- **D-IA-22 · SHOULD** Use breadcrumbs when the hierarchy itself helps the task.
-
-**A modal is not a navigation layer.**
-
-- **D-IA-23 · SHOULD** Give a route to anything needing a copyable link, history, a side-by-side
-  comparison, or work that survives a refresh.
-- **D-IA-24 · SHOULD** Reserve a modal for a short confirmation or a single field, a popover or menu for
-  transient context, and a disclosure row for progressive disclosure.
-- **D-IA-25 · SHOULD** **Tabs carry peer views of one object** — its conversation, its checks, its diff —
-  never unrelated modules; that is navigation's job.
-- **D-IA-26 · SHOULD** If the chosen library lacks a suitable primitive, use existing semantic elements
-  and host tokens; verify the required interaction rather than inventing unsupported APIs.
-
-## Verification checklist (before shipping UI)
-
-- **D-VERIFY-1 · SHOULD** Select checks for the affected surface, supported variants and changed behavior;
-  do not create unrelated flows merely to satisfy the list.
-
-Repository CI still runs its complete gates.
-
-- **D-VERIFY-2 · SHOULD** Primary task and primary action are unmistakable.
-
-Affected layout/theme changes work at relevant **narrow and wide** widths and supported themes (D-INPUT-1).
-Mouse and touch both work: drags use Pointer Events and any `trigger="hover"` has a tap fallback (D-INPUT-3,
-D-INPUT-4). Keyboard and visible focus are covered by D-ACCESS-3 and D-ACCESS-4.
-
-- **D-VERIFY-5 · SHOULD** Exercise all changed **states** (hover, active, focus, disabled, loading, empty,
-  error).
-- **D-VERIFY-7 · SHOULD** Cover relevant edge cases: long text, large numbers and the host's supported
-  scripts/locales.
-- **D-VERIFY-8 · SHOULD** Spacing comes from the scale; type uses a role; color uses semantic tokens.
-- **D-VERIFY-9 · SHOULD** Run the host’s applicable checks and inspect actual browser evidence.
-- **D-VERIFY-10 · SHOULD** Copy follows §6.
-
-Color-only state signals are covered by D-ACCESS-2.
-
-- **D-VERIFY-12 · SHOULD** For a dense surface: one primary model, the skeleton chosen from the question
-  rather than the payload, and every fact with one authoritative location (§10).
+2. Is emphasis scarce: one primary action per region, colour and badges rare?
+3. Could it do less? Is any boundary, option, label or state removable without weakening the task?
+4. Do gaps follow the scale and mean the same relationship everywhere, with no phantom rows?
+5. Is text aligned to its declared spine, including nested, empty and error states?
+6. Do nested radii agree with their insets, and does each remaining boundary have a job?
+7. Does it work at 320px with no horizontal scroll and every action reachable?
+8. Does anything shift on first load, on a status change, or when a late component registers?
+9. Is every action reachable by keyboard and touch, with visible focus and correct focus return?
+10. Is selection distinct from hover, and is every state shown truthfully (no early success)?
+11. Do drafts, focus and reading position survive updates, failures and animation?
+12. Does motion use transform and opacity only, reverse cleanly, and degrade to a fade under reduced
+    motion?
+13. Does it read correctly in both themes, with contrast checked on the real composition?
+14. Has it been observed in a real browser, and does the report say what was and was not checked?
 
 ---
 
@@ -742,8 +824,7 @@ Color-only state signals are covered by D-ACCESS-2.
 > [Coding guidelines](https://ran.chaxus.com/ranui/coding-guides/) — update those when a
 > rule here changes in a way consumers can see.
 
-Each rule carries an ID and a level, with the meanings defined in [DESIGN](./DESIGN.md); the
-[rule index](./RULES.md) lists the ranui rules after the portable ones.
+**MUST**, **SHOULD** and **MAY** mean what [the Ran Design guide](./DESIGN.md) says they mean.
 
 ## ranui default visual direction
 
@@ -751,32 +832,30 @@ The default is a quiet, content-first working interface: neutral semantic surfac
 emphasis and compact desktop controls with reachable touch targets. Distinction comes from
 clear typography, proportions and complete states, not a decorative effect on every component.
 
-- **R-STYLE-1 · SHOULD** Use existing token roles to choose exact dimensions; do not introduce a second
+- **SHOULD** Use existing token roles to choose exact dimensions; do not introduce a second
   "premium" scale.
-- **R-STYLE-2 · SHOULD** Treat glass and expressive demonstrations as explicit surface or theme choices,
+- **SHOULD** Treat glass and expressive demonstrations as explicit surface or theme choices,
   not as default text or control backgrounds.
-- **R-STYLE-3 · MUST** Preserve reading contrast and the same interaction semantics across themes.
-  _Proof: browser_
-- **R-STYLE-4 · SHOULD** Apply the shared [style brief](./DESIGN.md#style-coherence-across-components-and-pages)
+- **MUST** Preserve reading contrast and the same interaction semantics across themes.
+- **SHOULD** Apply the shared [style brief](./DESIGN.md#components-and-composition)
   before changing a family.
-- **R-STYLE-5 · SHOULD** Review a family change in a realistic composed page with neighboring controls; a
+- **SHOULD** Review a family change in a realistic composed page with neighboring controls; a
   polished isolated component does not establish a coherent product.
 
 ## How to use this file
 
-- **R-USE-1 · SHOULD** Prefer **semantic tokens** (`--ran-color-*`, `--ran-space-*`, …) over raw scales or hex.
-- **R-USE-2 · SHOULD** Decide by **role/state**, not by eyeballing a value. The value is chosen for you.
-- **R-USE-3 · SHOULD** When a choice is unresolved, mark it explicitly instead of burying a guess in code.
-- **R-USE-4 · SHOULD** Design **all reachable states** (default, hover, active, focus, disabled, loading,
+- **SHOULD** Prefer **semantic tokens** (`--ran-color-*`, `--ran-space-*`, …) over raw scales or hex.
+- **SHOULD** Decide by **role/state**, not by eyeballing a value. The value is chosen for you.
+- **SHOULD** When a choice is unresolved, mark it explicitly instead of burying a guess in code.
+- **SHOULD** Design **all reachable states** (default, hover, active, focus, disabled, loading,
   empty, error), not just the happy path.
-- **R-USE-5 · MUST** **Verify the rendered result** in the themes and widths the change affects; code review
-  alone is not enough. _Proof: browser_
-- **R-USE-6 · SHOULD** Resolve conflicts in this order: **user goals → verified evidence → this file →
+- **MUST** **Verify the rendered result** in the themes and widths the change affects; code review
+  alone is not enough.
+- **SHOULD** Resolve conflicts in this order: **user goals → verified evidence → this file →
   repo guidance (`CLAUDE.md`) → shipped patterns → general heuristics.**
 
-[INTERACTION.md](./INTERACTION.md) owns observable behavior. The short
-[interface index](./INTERFACE_GUIDE.md) routes other decisions to their owner; optional task
-recipes live separately in [WORKFLOW_PATTERNS.md](./WORKFLOW_PATTERNS.md).
+The guide's [interaction](./DESIGN.md#interaction) section owns observable behavior, and its optional
+[product patterns](./DESIGN.md#product-patterns) cover multi-step workflows.
 
 ## What is machine-checked
 
@@ -785,13 +864,13 @@ fallbacks, semantic colors, spacing/sizing scales, Pointer Events, working `hidd
 held builder references and constructor-only shadow mounting. Repository CI also checks its
 configured consumer surfaces. Static checks cannot prove composition or interaction.
 See [CODING](./CODING.md#what-is-machine-checked) for engineering checks and
-[ACCEPTANCE](./ACCEPTANCE.md) for actual browser evidence and decision authority.
+[verifying a change](./DESIGN.md#verifying-a-change) for actual browser evidence and decision authority.
 
-- **R-CHECK-1 · MUST** A change adds no new `verify:design` violations; the per-file baseline is a debt
-  ratchet, not permission to add violations. _Proof: review_
-- **R-CHECK-2 · MUST** A component that implements a drag drives it with Pointer Events
+- **MUST** A change adds no new `verify:design` violations; the per-file baseline is a debt
+  ratchet, not permission to add violations.
+- **MUST** A component that implements a drag drives it with Pointer Events
   (`pointerdown`/`pointermove`/`pointerup`/`pointercancel`), not a `mousemove`-only loop, so touch can drive
-  it. _Proof: check:mouse-only-drag_
+  it. (checked by `verify:design` (`mouse-only-drag`))
 
 ## Looking at the whole system at once
 
@@ -800,7 +879,7 @@ tokens into a browsable bundle. It needs the docs preview running first (`pnpm -
 then `pnpm -F docs preview`). Cards are rendered ranui output, not drawings of imagined APIs.
 The command reports components missing a live demo.
 
-- **R-BUNDLE-1 · SHOULD** Use the bundle from the matching installed version; a reference bundle is not
+- **SHOULD** Use the bundle from the matching installed version; a reference bundle is not
   evidence that the host application passed acceptance.
 
 ## ranui color — a state ladder, not a palette
@@ -822,7 +901,7 @@ Each hue is a **10-step scale** (`100`–`1000`). Every step has **one fixed job
 
 Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layers over any surface), `--ran-blue-*`, `--ran-red-*`, `--ran-amber-*`, `--ran-green-*`, plus `--ran-background-100/200`.
 
-- **R-COLOR-1 · SHOULD** **Use the semantic layer in the table below, not the scale, in components.**
+- **SHOULD** **Use the semantic layer in the table below, not the scale, in components.**
 
 | Token                                        | Maps to                               | Use for                          |
 | -------------------------------------------- | ------------------------------------- | -------------------------------- |
@@ -845,25 +924,25 @@ Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layer
 
 **Accent meaning:** the **primary action is monochrome** — `--ran-color-primary` is black-on-white in light, white-on-black in dark (matching Vercel's brand tone). There is no separate "contrast" token — primary _is_ the highest-contrast monochrome action.
 
-- **R-COLOR-2 · SHOULD** Text and icons on a primary surface use `--ran-color-primary-text` (the inverse,
+- **SHOULD** Text and icons on a primary surface use `--ran-color-primary-text` (the inverse,
   which flips too).
-- **R-COLOR-3 · SHOULD** Reserve **blue** for **links (`--ran-color-link`) and the focus ring** only; green
+- **SHOULD** Reserve **blue** for **links (`--ran-color-link`) and the focus ring** only; green
   means success, amber warning, red danger/error.
 
 **Light & dark:** same token name, different value. `gray-1000` is `#111113` in light and `#ededef` in dark. Components reference the _semantic name_. The dark mixin redefines the base scales plus explicit surface, primary hover/active and shadow overrides.
 
-- **R-COLOR-4 · SHOULD** Read the theme declarations rather than assuming every semantic value follows one
+- **SHOULD** Read the theme declarations rather than assuming every semantic value follows one
   scale step.
 
 **Rules**
 
-- **R-COLOR-5 · MUST** Do not hard-code a hex/rgb in a component for a value that follows the theme.
-  _Proof: check:bare-colour_
-- **R-COLOR-6 · MUST** A component token's colour fallback starts with a **token that flips**
+- **MUST** Do not hard-code a hex/rgb in a component for a value that follows the theme.
+  (checked by `verify:design` (`bare-colour`))
+- **MUST** A component token's colour fallback starts with a **token that flips**
   (`var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`, `var(--ran-color-text, …)`), never a bare
   light-only literal — otherwise it breaks in dark mode. A final literal behind that token, as in
   `var(--ran-btn-background, var(--ran-color-primary, #111113))`, is allowed.
-  _Proof: check:dark-unsafe-fallback_
+  (checked by `verify:design` (`dark-unsafe-fallback`))
 
 ## ranui spacing — a limited, rhythmic scale
 
@@ -871,11 +950,11 @@ A **4px base unit** with **nine values** only: `--ran-space-1..24` → `4, 8, 12
 
 [ranui spacing relationships](#ranui-spacing-relationships) map each relationship to a step.
 
-- **R-SPACE-1 · MUST** Pick spacing from the scale; do not invent `20px`/`28px` — a limited set is what
-  creates the page's rhythm. _Proof: check:spacing-scale_
-- **R-SPACE-2 · MUST** Intrinsic dimensions (`width`, `height`, their `min-`/`max-` forms, `font-size`,
+- **MUST** Pick spacing from the scale; do not invent `20px`/`28px` — a limited set is what
+  creates the page's rhythm. (checked by `verify:design` (`spacing-scale`))
+- **MUST** Intrinsic dimensions (`width`, `height`, their `min-`/`max-` forms, `font-size`,
   `line-height`, `border-radius`) take `--ran-size-*` or role tokens, never `--ran-space-*`, so consumers can
-  retune either scale without perturbing the other. _Proof: check:sizing-scale_
+  retune either scale without perturbing the other. (checked by `verify:design` (`sizing-scale`))
 
 ## ranui typography — choose a role, not a size
 
@@ -891,17 +970,17 @@ The role fixes font, size, weight and line-height. Each row is backed by real to
 | button  | Button text                   | `--ran-text-button-weight` (500)                  | `--ran-text-button-size` (14px)           | `--ran-text-button-line-height: 1` for crisp vertical centering |
 | mono    | Code, data, eyebrows          | `--ran-text-mono-weight-regular/medium` (400/500) | borrows label/copy size tiers             | `--ran-font-mono`                                               |
 
-- **R-TYPE-1 · SHOULD** Decide text style by **role**: ask "what role is this text?" (heading / label /
+- **SHOULD** Decide text style by **role**: ask "what role is this text?" (heading / label /
   copy / button) and the style follows. Do not pick raw px per instance.
-- **R-TYPE-2 · SHOULD** Reference the role tokens
+- **SHOULD** Reference the role tokens
   (`var(--ran-{component}-…, var(--ran-text-{role}…, fallback))`) instead of hand-copying the px/weight
   number.
-- **R-TYPE-3 · SHOULD** Follow the Notes column of the role table; for example, compact action labels stay
+- **SHOULD** Follow the Notes column of the role table; for example, compact action labels stay
   on one line while field labels may wrap.
 
 **A role is a tool, not a law.**
 
-- **R-TYPE-4 · MAY** Transient/decorative UI that maps to no role (an active-link weight bump, a player
+- **MAY** Transient/decorative UI that maps to no role (an active-link weight bump, a player
   gesture-flash overlay) keeps its own one-off component token instead of being forced into the nearest
   role — see `r-link`'s `--ran-link-active-font-weight` and `r-player`'s
   `--ran-player-gesture-flash-font-weight`.
@@ -910,13 +989,13 @@ The role fixes font, size, weight and line-height. Each row is backed by real to
 
 Radius: `--ran-radius-sm` 6 · `--ran-radius-md` 12 · `--ran-radius-lg` 16 · `--ran-radius-full` 9999.
 
-- **R-RADIUS-1 · SHOULD** Controls (button, input, select) → `sm`. Cards / dialogs → `md`. Large surfaces →
+- **SHOULD** Controls (button, input, select) → `sm`. Cards / dialogs → `md`. Large surfaces →
   `lg`. Pills / avatars → `full`.
 
 **Elevation is a role, not decoration.**
 
-- **R-ELEV-1 · SHOULD** Pick the shadow tier from the table below by _what the element is_.
-- **R-ELEV-2 · SHOULD** Make sure each tier is actually perceptible — a shadow you can't see fails its job.
+- **SHOULD** Pick the shadow tier from the table below by _what the element is_.
+- **SHOULD** Make sure each tier is actually perceptible — a shadow you can't see fails its job.
 
 | Tier    | Token                   | Use for                                                                                                                                           |
 | ------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -924,21 +1003,21 @@ Radius: `--ran-radius-sm` 6 · `--ran-radius-md` 12 · `--ran-radius-lg` 16 · `
 | Overlay | `--ran-shadow-menu`     | Transient layers floating **over** content — `r-dropdown`, `r-select` menu, `r-popover`, tooltips, `r-message`/toast. Clearly lifts off the page. |
 | Modal   | `--ran-shadow-modal`    | Blocking dialogs — `r-modal`. Strongest.                                                                                                          |
 
-- **R-ELEV-3 · MUST** A floating overlay does not fall back to `--ran-shadow-elevated` (the card tier) — it
-  would look flat. _Proof: test:packages/ranui/test/unit/theme.semantic-tokens.test.ts, review_
-- **R-ELEV-4 · MUST** An overlay's shadow clearly lifts it off the page. _Proof: browser_
+- **MUST** A floating overlay does not fall back to `--ran-shadow-elevated` (the card tier) — it
+  would look flat. (tested in `packages/ranui/test/unit/theme.semantic-tokens.test.ts`)
+- **MUST** An overlay's shadow clearly lifts it off the page.
 
 Borderless overlays (dropdown, toast) rely on the shadow alone for separation, so the overlay tiers carry real weight.
 
 **Stacking follows the same roles (z-index ladder).** Floating overlays portal to `<body>`, so they need an explicit stacking tier.
 
-- **R-Z-1 · MUST** The z-index sits on the element that is **positioned and portaled** (the host); a
+- **MUST** The z-index sits on the element that is **positioned and portaled** (the host); a
   z-index on an inner shadow node is trapped in the host's stacking context and does nothing against page
-  content. _Proof: test:packages/ranui/test/e2e/dropdown-layer.spec.ts_
-- **R-Z-2 · MUST** Overlays use the stacking tiers in the table below, so a select opened inside a modal
-  stays visible. _Proof: test:packages/ranui/test/e2e/dropdown-layer.spec.ts_
-- **R-Z-3 · MUST** Toasts and notifications sit on the top tier (`--ran-z-message`), above modals and
-  dropdowns. _Proof: review_
+  content. (tested in `packages/ranui/test/e2e/dropdown-layer.spec.ts`)
+- **MUST** Overlays use the stacking tiers in the table below, so a select opened inside a modal
+  stays visible. (tested in `packages/ranui/test/e2e/dropdown-layer.spec.ts`)
+- **MUST** Toasts and notifications sit on the top tier (`--ran-z-message`), above modals and
+  dropdowns.
 
 | Tier     | Token              | Default | Use for                                                                                             |
 | -------- | ------------------ | ------- | --------------------------------------------------------------------------------------------------- |
@@ -946,35 +1025,35 @@ Borderless overlays (dropdown, toast) rely on the shadow alone for separation, s
 | Dropdown | `--ran-z-dropdown` | `1100`  | Dropdown / select menu / popover. **Above** modal, so a select opened inside a modal stays visible. |
 | Message  | `--ran-z-message`  | `1200`  | Toasts / notifications. The top tier.                                                               |
 
-- **R-Z-4 · MUST** Override a tier globally (set `--ran-z-dropdown` on `:root`) or per component
+- **MUST** Override a tier globally (set `--ran-z-dropdown` on `:root`) or per component
   (`--ran-dropdown-host-z-index`, `--ran-modal-root-z-index`, `--ran-message-z-index`), never with
-  `!important`. _Proof: test:packages/ranui/test/e2e/dropdown-layer.spec.ts, review_
-- **R-Z-5 · MUST** An overlay open while the page scrolls re-runs its placement on `scroll`/`resize` so it
-  tracks its trigger (e.g. inside a sticky header). _Proof: test:packages/ranui/test/unit/utils.floating.test.ts_
+  `!important`. (tested in `packages/ranui/test/e2e/dropdown-layer.spec.ts`)
+- **MUST** An overlay open while the page scrolls re-runs its placement on `scroll`/`resize` so it
+  tracks its trigger (e.g. inside a sticky header). (tested in `packages/ranui/test/unit/utils.floating.test.ts`)
 
 **Host stacking contexts:** a body-portaled overlay compares directly with root chrome;
 it usually needs no wrapper elevation. A non-portaled fixed overlay remains trapped in its
 ancestor stacking context (`isolation`, `transform`, `opacity`, `filter`, `will-change`).
 A blanket elevated wrapper promotes ordinary content above sticky chrome too.
 
-- **R-Z-6 · MUST** Raise an enclosing wrapper only while that overlay actually paints, including its
-  closing transition. _Proof: browser_
-- **R-Z-7 · SHOULD** Verify reflected open/closing attributes against the component API before using
+- **MUST** Raise an enclosing wrapper only while that overlay actually paints, including its
+  closing transition.
+- **SHOULD** Verify reflected open/closing attributes against the component API before using
   selectors.
 
-**Theme switches are not animated.** Transitions are for _interaction_ (hover / focus / press), not for flipping light↔dark. CSS cannot tell _why_ a property changed: any palette prop listed in a `transition` will also fade when the theme flips its token — each component at its own duration, while the host page has already switched. A general-purpose library that did this would impose it on every consumer. For ranui components this adapter deliberately tightens the portable D-MOTION-12 to MUST.
+**Theme switches are not animated.** Transitions are for _interaction_ (hover / focus / press), not for flipping light↔dark. CSS cannot tell _why_ a property changed: any palette prop listed in a `transition` will also fade when the theme flips its token — each component at its own duration, while the host page has already switched. A general-purpose library that did this would impose it on every consumer. For ranui components this adapter deliberately tightens the guide's advice on theme transitions to MUST.
 
-- **R-MOTION-1 · MUST** Do not animate a theme switch. _Proof: browser_
-- **R-MOTION-2 · MUST** **Palette props get no default transition.** `background` / `background-color`,
+- **MUST** Do not animate a theme switch.
+- **MUST** **Palette props get no default transition.** `background` / `background-color`,
   `color`, `border-color`, `box-shadow`, `fill`, `stroke` — none of them, on any element that carries a
-  theme-driven color. Hover/focus feedback on these props snaps. _Proof: review, browser_
-- **R-MOTION-3 · MAY** **Motion props may transition.** `transform`, `opacity`, and box-geometry props
+  theme-driven color. Hover/focus feedback on these props snaps.
+- **MAY** **Motion props may transition.** `transform`, `opacity`, and box-geometry props
   (`left` / `top` / `width` / `height` / `font-size`) do not follow the theme — checkbox pops, tab
   ink-bars, ripples all stay animated.
-- **R-MOTION-4 · MUST** Do not use `transition: all` or bare-duration shorthands (`transition: 0.2s` —
-  which means `all`); they silently include palette props. _Proof: review_
-- **R-MOTION-5 · MUST** Every removed default keeps its `--ran-*-transition` hook var, so a consumer who
-  wants palette fades can opt in per component. _Proof: review_
+- **MUST** Do not use `transition: all` or bare-duration shorthands (`transition: 0.2s` —
+  which means `all`); they silently include palette props.
+- **MUST** Every removed default keeps its `--ran-*-transition` hook var, so a consumer who
+  wants palette fades can opt in per component.
 
 ```less
 /* ✗ fades on theme switch (palette props; `all`; bare duration = all) */
@@ -993,30 +1072,29 @@ transition: var(--ran-input-transition, none);
 
 ## ranui components — how to apply the system
 
-- **R-COMP-1 · SHOULD** Reuse existing semantic native controls or supported ranui primitives; do not
+- **SHOULD** Reuse existing semantic native controls or supported ranui primitives; do not
   rebuild them merely for styling.
-- **R-COMP-2 · SHOULD** Choose a ranui component when its contract fits.
-- **R-COMP-3 · MUST** Preserve native form and keyboard semantics, including supported native controls in
-  overlay slots ([INTERACTION §2](./INTERACTION.md#2-reachable-controls-and-predictable-focus)).
-  _Proof: browser_
-- **R-COMP-4 · SHOULD** Theme through **CSS variables**, **`::part()`**, or the **`sheet`** attribute
+- **SHOULD** Choose a ranui component when its contract fits.
+- **MUST** Preserve native form and keyboard semantics, including supported native controls in
+  overlay slots ([the guide's focus rules](./DESIGN.md#focus)).
+- **SHOULD** Theme through **CSS variables**, **`::part()`**, or the **`sheet`** attribute
   (escape hatch). CSS variables cross Shadow DOM; selectors do not.
-- **R-COMP-5 · SHOULD** Component tokens default to semantic tokens:
+- **SHOULD** Component tokens default to semantic tokens:
   `var(--ran-btn-background, var(--ran-color-primary, #111113))`.
-- **R-COMP-6 · SHOULD** Map states to the color ladder: default → `bg`/`text`; hover → `bg-hover` /
+- **SHOULD** Map states to the color ladder: default → `bg`/`text`; hover → `bg-hover` /
   `border-hover` / `primary-hover`; active → `bg-active` / `primary-active`; disabled → appropriate
   disabled tokens, with opacity only when needed and still legible; focus → focus ring.
-- **R-COMP-7 · MUST** **Interactive cards opt in**: `r-card` only reacts to hover with the `hoverable`
+- **MUST** **Interactive cards opt in**: `r-card` only reacts to hover with the `hoverable`
   attribute (border 400 → 500 + elevated shadow). Non-interactive cards stay inert — no hover feedback on
-  something that isn't clickable. _Proof: browser_
-- **R-COMP-8 · SHOULD** **When the host needs ranui theme switching UI**, use `<r-theme-switch>` (system /
+  something that isn't clickable.
+- **SHOULD** **When the host needs ranui theme switching UI**, use `<r-theme-switch>` (system /
   light / dark segmented pill, wired to `setTheme`/localStorage, syncs across instances and updates
   `theme-color` metas) instead of hand-rolling equivalent toggles.
-- **R-COMP-9 · SHOULD** Preserve an existing host theme authority; R-COMP-8 does not require adding a theme
+- **SHOULD** Preserve an existing host theme authority; the theme-switch recommendation above does not require adding a theme
   switch.
-- **R-COMP-10 · SHOULD** Localize `<r-theme-switch>` with `label` / `label-system` / `label-light` /
+- **SHOULD** Localize `<r-theme-switch>` with `label` / `label-system` / `label-light` /
   `label-dark`.
-- **R-COMP-11 · MAY** **Typography ships with the system**: `import 'ranui/fonts'` (or link
+- **MAY** **Typography ships with the system**: `import 'ranui/fonts'` (or link
   `dist/fonts/fonts.css`) self-hosts Geist Sans + Geist Mono (variable, OFL-licensed) — the canonical
   faces behind `--ran-font-family` / `--ran-font-mono`. Without it the stacks fall back to system fonts.
 
@@ -1027,50 +1105,50 @@ See [THEME_STYLE_SYSTEM_DESIGN.md](https://github.com/chaxus/ran/blob/main/packa
 For example, `--ran-color-danger` exists; a plausible `--ran-color-error` does not.
 [CODING §5](./CODING.md#5-styles) owns enforcement.
 
-- **R-TOKEN-1 · MUST** Declared tokens, including fallbacks, name tokens that exist in the installed theme;
-  an undefined `var()` can silently discard the entire declaration. _Proof: check:undefined-token-fallback_
+- **MUST** Declared tokens, including fallbacks, name tokens that exist in the installed theme;
+  an undefined `var()` can silently discard the entire declaration. (checked by `verify:design` (`undefined-token-fallback`))
 
 ### `hidden` must keep working
 
 See [CODING §5](./CODING.md#5-styles).
 
-- **R-HOST-1 · MUST** An author `:host` display rule preserves `:host([hidden]) { display: none; }`.
-  _Proof: check:hidden-inert_
-- **R-HOST-2 · MUST** Hiding optional content also removes accidental gaps. _Proof: browser_
+- **MUST** An author `:host` display rule preserves `:host([hidden]) { display: none; }`.
+  (checked by `verify:design` (`hidden-inert`))
+- **MUST** Hiding optional content also removes accidental gaps.
 
 ### Hold what you build
 
 [CODING §2](./CODING.md#2-the-component-skeleton) owns construction, runtime-child exceptions
 and SSR implementation. These are engineering requirements, not extra visual recipes.
 
-- **R-BUILD-1 · MUST** Append shadow structure in the constructor; content that genuinely cannot exist yet
+- **MUST** Append shadow structure in the constructor; content that genuinely cannot exist yet
   is mounted later only with the documented `// deferred mount: <why>` marker on the line above, which also
-  says how a second append is prevented. _Proof: check:shadow-mount-outside-constructor_
-- **R-BUILD-2 · MUST** Retain the references to what you built; do not rediscover them through selectors.
-  _Proof: check:built-then-queried_
+  says how a second append is prevented. (checked by `verify:design` (`shadow-mount-outside-constructor`))
+- **MUST** Retain the references to what you built; do not rediscover them through selectors.
+  (checked by `verify:design` (`built-then-queried`))
 
 ## ranui component token naming
 
-- **R-NAME-1 · SHOULD** Use `--ran-{component}-{element}[-{state}]-{property}`, keeping the existing
+- **SHOULD** Use `--ran-{component}-{element}[-{state}]-{property}`, keeping the existing
   component prefix.
-- **R-NAME-2 · SHOULD** Name the most specific distinct UI part, not its full DOM/BEM path; drop
+- **SHOULD** Name the most specific distinct UI part, not its full DOM/BEM path; drop
   wrapper/position segments that add no identity.
-- **R-NAME-3 · SHOULD** Keep track/fill as separate parts.
-- **R-NAME-4 · MUST** The state segment is optional, and when present corresponds to an independently
-  overridable interaction state. _Proof: review_
-- **R-NAME-5 · SHOULD** Property names retain their CSS meaning.
-- **R-NAME-6 · SHOULD** Aim for at most four semantic segments after `ran`, without collapsing distinct
+- **SHOULD** Keep track/fill as separate parts.
+- **MUST** The state segment is optional, and when present corresponds to an independently
+  overridable interaction state.
+- **SHOULD** Property names retain their CSS meaning.
+- **SHOULD** Aim for at most four semantic segments after `ran`, without collapsing distinct
   override points merely to shorten a name.
 
 For example, `--ran-progress-fill-background` names a part; `--ran-progress-wrap-value-background`
 encodes implementation nesting. The generated [public catalog](./style-tokens-public.md)
 owns available names. This section owns naming.
 
-- **R-NAME-7 · SHOULD** Do not hand-maintain another token catalog.
+- **SHOULD** Do not hand-maintain another token catalog.
 
 ## Applying generic composition to ranui
 
-- **R-COMPOSE-1 · SHOULD** Map the [navigation-layer rules](./DESIGN.md#containers-do-not-fix-structure)
+- **SHOULD** Map the [navigation-layer rules](./DESIGN.md#shells)
   to ranui as follows: `r-modal` for a short confirmation or a single field, `r-popover` / `r-dropdown`
   for transient context, `r-disclosure-row` for progressive disclosure, and `r-tabs` only for peer views
   of one object.
@@ -1086,19 +1164,19 @@ owns available names. This section owns naming.
 | Related subsections      | `--ran-space-6` | Compact blocks      |
 | Major region boundary    | `--ran-space-8` | Region separation   |
 
-- **R-COMPOSE-2 · SHOULD** Space each relationship with the token the table above maps it to.
+- **SHOULD** Space each relationship with the token the table above maps it to.
 
 **Inside before outside:** these are host composition choices, not fixed component heights. The
 generic composition contract owns the relationship; this adapter owns its mapping to the installed
 ranui scale.
 
-- **R-COMPOSE-3 · MAY** Major regions use `--ran-space-10` when their relationship warrants it.
-- **R-COMPOSE-4 · MUST** Absent descriptions leave no vacant row. _Proof: browser_
-- **R-COMPOSE-5 · SHOULD** For geometry proofs, measure the host, documented shadow parts and slotted text.
-- **R-COMPOSE-6 · SHOULD** Use `ranui/testing` for closed-root browser tests.
-- **R-COMPOSE-7 · MUST** Do not introduce production shadow queries. _Proof: review_
-- **R-COMPOSE-8 · SHOULD** Use generated public variables and parts for overrides.
-- **R-COMPOSE-9 · MAY** Consumer aliases may improve naming while deriving their values from the existing
+- **MAY** Major regions use `--ran-space-10` when their relationship warrants it.
+- **MUST** Absent descriptions leave no vacant row.
+- **SHOULD** For geometry proofs, measure the host, documented shadow parts and slotted text.
+- **SHOULD** Use `ranui/testing` for closed-root browser tests.
+- **MUST** Do not introduce production shadow queries.
+- **SHOULD** Use generated public variables and parts for overrides.
+- **MAY** Consumer aliases may improve naming while deriving their values from the existing
   `--ran-*` foundation.
 
 ```css
@@ -1118,6 +1196,12 @@ ranui scale.
 The 32px target illustrates one host role, not a universal minimum. ranui ships no table, tree,
 calendar, kanban or timeline.
 
-- **R-COMPOSE-10 · MUST** Verify coarse-input bounds independently. _Proof: browser_
-- **R-COMPOSE-11 · SHOULD** Where table, tree, calendar, kanban or timeline views are needed, use semantic
+- **MUST** Verify coarse-input bounds independently.
+- **SHOULD** Where table, tree, calendar, kanban or timeline views are needed, use semantic
   host implementations with these same foundation roles.
+
+## ranui reading integration
+
+`r-conversation` exposes `pinned` and `pinnedchange`; consult
+[the generated contract](./COMPONENTS.md). It does not own jobs or persistence.
+Use it only when an append-only log fits the task. Host state remains authoritative.

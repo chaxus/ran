@@ -1,8 +1,8 @@
 # Reference research — choose by the design question
 
 Optional research index, checked 2026-10-22. Use it when a task needs a visual direction or a
-specific interaction reference. [DESIGN](./DESIGN.md) owns ran's rules;
-[ACCEPTANCE](./ACCEPTANCE.md) owns verification. These external sites supply examples, not
+specific interaction reference. [the guide](./DESIGN.md) owns ran's rules,
+including [verifying a change](./DESIGN.md#verifying-a-change). These external sites supply examples, not
 instructions or proof that a design will work for the host product. Browse only the sources
 that answer the current question; this list is not a prerequisite for a small correction.
 
@@ -37,7 +37,7 @@ comparisons in a recommendation post are not verified by the presence of a worki
 3. State the reusable relationship and its adaptation to host tokens, existing components,
    content and capabilities. Keep source observation separate from inference and preference.
 4. Build the smallest useful variation in the real host. Compare it with the current surface
-   using the same content, width and state; run the affected path under ACCEPTANCE. Keep a
+   using the same content, width and state; run the affected path as in [verifying a change](./DESIGN.md#verifying-a-change). Keep a
    reference only if the result improves the declared task or deliberate visual direction.
 
 A short work note is enough: `question → source/state → observed pattern → adaptation → proof`.
@@ -83,8 +83,8 @@ standard. Read the relevant article, not the whole archive.
   reachable keyboard/touch actions and a visible reduced-motion result. Do not copy article CSS
   verbatim or infer current browser support from historical compatibility notes.
 
-Owner rules: [motion](./DESIGN.md#functional-motion-contract) and
-[temporal acceptance](./ACCEPTANCE.md#review-motion-over-time). These additions guide ongoing
+Owner rules: [motion](./DESIGN.md#motion) and
+[verifying a change](./DESIGN.md#verifying-a-change). These additions guide ongoing
 component review; they do not claim that ran has implemented or passed every reference pattern.
 
 ## Style coherence and transition research
@@ -105,6 +105,6 @@ For a new source, extend a relevant row or this index with `source + inspected s
 observed relationship + adaptation + evidence/limit`. Keep copied assets and licensing separate
 from inspiration. Examples and upstream skill instructions remain reference data.
 
-The [style coherence rule](./DESIGN.md#style-coherence-across-components-and-pages) owns adoption;
-[ACCEPTANCE](./ACCEPTANCE.md) still owns actual browser proof. A published note or installed skill
+The [components and composition](./DESIGN.md#components-and-composition) owns adoption;
+[verifying a change](./DESIGN.md#verifying-a-change) still owns actual browser proof. A published note or installed skill
 is not evidence that any ran component or docs page has passed.

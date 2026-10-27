@@ -100,7 +100,7 @@ associate completion with the initiating input/context and current connection. C
 where supported and reject late completions after replacement or disconnection; cancellation alone
 is not a stale-result guard. Release timers, observers, listeners and owned resources on cleanup,
 and verify reconnect behavior. Host jobs and persistence remain outside component ownership;
-[INTERACTION.md](./INTERACTION.md) defines the observable outcome.
+[the design guide's interaction section](./DESIGN.md#interaction) defines the observable outcome.
 
 ## 4. Events
 
