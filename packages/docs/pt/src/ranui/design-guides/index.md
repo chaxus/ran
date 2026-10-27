@@ -58,7 +58,7 @@ grupos separados 16px e subseções relacionadas 24px. Cada intervalo deve ter u
 responsável; conte as margens dos filhos, o preenchimento existente e o espaço da linha
 de base dos controles em linha. Verifique quebras de linha, ajuda oculta e estados de erro
 no navegador. As
-[regras canônicas de ritmo vertical](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+[regras canônicas de ritmo vertical](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
 definem exceções e testes inversos executáveis, sem alterar os padrões dos componentes.
 
 ## Escolher a tipografia
@@ -150,4 +150,4 @@ Escolha verificações para a superfície afetada e o comportamento alterado; a 
 
 ## Evidências e aceitação {#evidence-and-acceptance}
 
-[O contrato de aceitação](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/ACCEPTANCE.md) define a verificação real no navegador, a validade das capturas e a separação entre verificações automáticas, revisão visual do agente e decisão do usuário. Após alterar estilos compartilhados, atualize as evidências afetadas; a revisão do agente não é aceitação do usuário. Evite rótulos secundários e descrições sem informação nova: deixe o layout explicar relações evidentes. Preserve nomes acessíveis, rótulos úteis, unidades, erros e riscos.
+[O contrato de aceitação](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) define a verificação real no navegador, a validade das capturas e a separação entre verificações automáticas, revisão visual do agente e decisão do usuário. Após alterar estilos compartilhados, atualize as evidências afetadas; a revisão do agente não é aceitação do usuário. Evite rótulos secundários e descrições sem informação nova: deixe o layout explicar relações evidentes. Preserve nomes acessíveis, rótulos úteis, unidades, erros e riscos.

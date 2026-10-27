@@ -4,15 +4,11 @@ title: Ran Design
 
 # Ran Design
 
-Bibliotheksunabhängige Methoden für Layout, Interaktion, Bewegung und Prüfung anhand konkreter Ergebnisse.
+Ein Designleitfaden für Produktoberflächen, unabhängig von einer Komponentenbibliothek.
 
-Mit der Aufgabe und echten Inhalten beginnen. Eine gemeinsame visuelle Sprache festlegen und vollständige Zustände im Browser prüfen, einschließlich Tastatur und Bewegung. Die detaillierten Anforderungen stehen unten.
+Er folgt der Reihenfolge, in der man gestaltet: von der Aufgabe und echten Inhalten aus eine visuelle Sprache festlegen, die Seite anordnen und zusammensetzen, Interaktion und Bewegung gestalten und die Änderung in einem echten Browser prüfen. Am Ende stehen Checklisten für jede Änderung.
 
-- [Visuelle Gestaltung](/de/src/design/composition)
-- [Interaktion](/de/src/design/interaction)
-- [Abnahme](/de/src/design/acceptance)
-- [Produktmuster](/de/src/design/patterns)
-- [Regelindex](/de/src/design/rules)
+- [Designleitfaden](/src/design/guide) (Englisch)
 - [Referenzen](https://github.com/chaxus/ran/blob/main/design/REFERENCE_RESEARCH.md)
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [Agenten](../agents/)

@@ -4,15 +4,11 @@ title: Ran Design
 
 # Ran Design
 
-Methods for layout, interaction, motion and evidence-based review, independent of any component library.
+A design guide for building product interfaces, independent of any component library.
 
-Start with the task and real content. Choose one visual language for the whole product, then review complete states in the browser, including keyboard use and motion. Use the references below for the detailed contracts.
+It follows the order you design in: start from the task and real content, settle one visual language, lay out and compose the page, design interaction and motion, then verify the change in a real browser. It ends with checklists to reuse on every change.
 
-- [Visual composition](/src/design/composition)
-- [Interaction](/src/design/interaction)
-- [Acceptance](/src/design/acceptance)
-- [Product patterns](/src/design/patterns)
-- [Rule index](/src/design/rules)
+- [Design guide](/src/design/guide)
 - [References](https://github.com/chaxus/ran/blob/main/design/REFERENCE_RESEARCH.md)
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [Agents](../agents/)

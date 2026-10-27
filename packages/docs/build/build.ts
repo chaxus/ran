@@ -14,6 +14,7 @@ import { LANGS, ORIGIN } from './config.ts';
 import { componentRenderers, resolveCurrentLink } from './components.ts';
 import { loadDocs } from './content.ts';
 import { renderDoc } from './page.ts';
+import { DESIGN_ASSETS } from './design-reference.ts';
 import { designIllustrationFiles } from './design-illustrations.ts';
 import { createOfflineManifest } from './offline.ts';
 import { absoluteUrl, generatedFiles, headFor } from './seo.ts';
@@ -125,6 +126,7 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
   // Markdown references these relative to its source file, and the output mirrors the
   // source tree, so `../../assets/…` from a page lands here only if the files do.
   cpSync(join(ROOT, 'assets'), join(DIST_DIR, 'assets'), { recursive: true });
+  cpSync(join(ROOT, '..', '..', 'design', 'assets'), join(DIST_DIR, DESIGN_ASSETS), { recursive: true });
 
   const written: string[] = [];
   for (const page of content.pages) {

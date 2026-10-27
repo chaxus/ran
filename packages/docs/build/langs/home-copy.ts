@@ -90,7 +90,7 @@ export interface HomeStrings {
   copy: string;
   liveLabel: string;
   liveNote: string;
-  /** The hero's working example: inviting a teammate, with its states and the rules it follows. */
+  /** The hero's working example: inviting a teammate, with its states and the guide sections it follows. */
   example: ExampleCopy;
 }
 
@@ -234,7 +234,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sent: 'Invitation sent to {email} as {role}.',
       failed: "The invitation wasn't sent. Your entries are still here; try again.",
       simulate: 'Simulate a failed request',
-      rules: 'Rules this example follows',
+      rules: 'Guide sections this example follows',
     },
   },
   cn: {
@@ -310,7 +310,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sent: '已向 {email} 发送邀请，角色为{role}。',
       failed: '邀请没有发出去。填写的内容都还在，请重试。',
       simulate: '模拟请求失败',
-      rules: '这个示例遵循的规则',
+      rules: '这个示例对应的指南章节',
     },
   },
   ja: {
@@ -405,7 +405,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sent: '{email} に{role}として招待を送信しました。',
       failed: '招待は送信されませんでした。入力内容はそのまま残っています。もう一度お試しください。',
       simulate: 'リクエストの失敗を再現',
-      rules: 'このサンプルが従うルール',
+      rules: 'このサンプルに対応するガイドの章',
     },
   },
   es: {
@@ -504,7 +504,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sent: 'Invitación enviada a {email} como {role}.',
       failed: 'La invitación no se envió. Tus datos siguen aquí; inténtalo de nuevo.',
       simulate: 'Simular un fallo de la petición',
-      rules: 'Reglas que sigue este ejemplo',
+      rules: 'Secciones de la guía que sigue este ejemplo',
     },
   },
   pt: {
@@ -603,7 +603,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sent: 'Convite enviado para {email} como {role}.',
       failed: 'O convite não foi enviado. Seus dados continuam aqui; tente de novo.',
       simulate: 'Simular uma falha na requisição',
-      rules: 'Regras que este exemplo segue',
+      rules: 'Seções do guia que este exemplo segue',
     },
   },
   ko: {
@@ -696,7 +696,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sent: '{email}에게 {role} 권한으로 초대를 보냈습니다.',
       failed: '초대를 보내지 못했습니다. 입력한 내용은 그대로 있으니 다시 시도하세요.',
       simulate: '요청 실패 재현',
-      rules: '이 예제가 따르는 규칙',
+      rules: '이 예제가 따르는 가이드 섹션',
     },
   },
   de: {
@@ -795,7 +795,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sent: 'Einladung an {email} als {role} gesendet.',
       failed: 'Die Einladung wurde nicht gesendet. Deine Eingaben sind noch da; versuch es erneut.',
       simulate: 'Fehlgeschlagene Anfrage simulieren',
-      rules: 'Regeln, denen dieses Beispiel folgt',
+      rules: 'Abschnitte des Leitfadens, denen dieses Beispiel folgt',
     },
   },
   fa: {
@@ -888,7 +888,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sent: 'دعوت برای {email} با نقش {role} ارسال شد.',
       failed: 'دعوت ارسال نشد. اطلاعاتی که وارد کردید باقی است؛ دوباره تلاش کنید.',
       simulate: 'شبیه‌سازی خطای درخواست',
-      rules: 'قواعدی که این نمونه رعایت می‌کند',
+      rules: 'بخش‌هایی از راهنما که این نمونه رعایت می‌کند',
     },
   },
 };

@@ -141,24 +141,22 @@ If you add a step, assume it will be the one that fails.
 
 ---
 
-## Design reference translations (`design-i18n/`)
+## Design guide translations (`design-i18n/`)
 
-The Ran Design reference pages (`/design/composition`, `interaction`, `acceptance`, `patterns`,
-`rules`) are generated from `design/*.md` at the repository root, the single source the npm
-guides and the agent plugin also ship. Every other language publishes a translation from
-`design-i18n/<dir>/<FILE>.md`; the directory is website-only and is not a prose tree.
+The Ran Design guide (`/design/guide`) is generated from `design/DESIGN.md` at the repository
+root, the single source the npm guides and the agent plugin also ship. Its figures are copied
+from `design/assets/` to `/design/assets/`. A language listed in the entry's `translated`
+(`build/langs/design-pages.ts`, currently `cn` only) publishes a translation from
+`design-i18n/<dir>/DESIGN.md`; every other language links to the English page. The directory
+is website-only and is not a prose tree.
 
 - **Line 1 is `<!-- source: <git blob id> -->`**, the English file the translation was made
-  from (`git hash-object design/<FILE>.md`). When the English changes, `check:langs` fails for
-  every language and prints the `git diff <old> <new>` to carry over; update the text, then
-  the source line.
-- **The heading outline must match the English one exactly.** Cross-page links in the
-  sources use GitHub anchors of the English headings; the build maps them to the translated
-  heading at the same position. Adding, dropping or reordering a heading breaks every link
-  into that section, so `check:langs` compares the outlines.
-- **Keep untranslated:** rule tags (`- **X-INPUT-1 · MUST**`), `_Proof: …_` markers, link
-  targets, code, and the MUST/SHOULD/MAY keywords. `RULES.md`'s rule cells repeat the
-  translated rule wording from the four sources.
+  from (`git hash-object design/DESIGN.md`). When the English changes, `check:langs` fails and
+  prints the `git diff <old> <new>` to carry over; update the text, then the source line.
+- **The heading outline must match the English one exactly.** Section links (the home page
+  example, any in-guide anchor) are mapped to the translated heading at the same position, so
+  `check:langs` compares the outlines.
+- **Keep untranslated:** link targets, code, figure paths and the MUST/SHOULD/MAY keywords.
 - The page footer (`ui.designSource`) tells the reader the English source governs.
 
 ---
@@ -324,7 +322,7 @@ Use the shared composition and information architecture rules for pages, and com
 violation, and a count that falls fails until it is lowered. The baseline records debt, not
 permission — the target for every entry is zero.
 
-Two rules from §9 that this site's stylesheets are built around, because breaking them was
+Two rules from the design guide's Layout section that this site's stylesheets are built around, because breaking them was
 invisible and expensive:
 
 - **The measure governs text, not the column.** `--measure` caps paragraphs and lists;

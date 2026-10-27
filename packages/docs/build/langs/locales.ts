@@ -6,6 +6,7 @@
  * that needs a hard-coded list of languages elsewhere is a bug — it will silently miss the
  * next language added.
  */
+import { designPageUntranslated } from './design-pages.ts';
 
 /** Directory under the package root that holds a locale's pages; `''` is the root locale. */
 export type LocaleDir = '' | 'cn' | 'ja' | 'es' | 'pt' | 'ko' | 'de' | 'fa';
@@ -97,6 +98,7 @@ export const localeHref = (link: string, locale: LocaleDef): string => {
   const prefix = prefixOf(locale);
   if (!prefix) return link;
   if (link === '/') return `${prefix}/`;
+  if (designPageUntranslated(link, locale.dir)) return link;
   return locale.mirrors.some((m) => link.startsWith(m)) ? `${prefix}${link}` : link;
 };
 

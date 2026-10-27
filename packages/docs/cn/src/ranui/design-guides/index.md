@@ -10,11 +10,9 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 [信息架构](/cn/src/ranui/information-architecture/)负责页面结构。
 本页是统一维护的 [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) 的摘要。
 
-需要其他方面的规则时，从[界面规范索引](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md)进入：
-输入、焦点和反馈见 [INTERACTION](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md)，
-组件实现见 [CODING](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/CODING.md)。
-只有涉及队列、账号连接等任务时，才需参考[可选工作流模式](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md)。
-安装后也可从 `node_modules/ranui/docs/` 读取这些文档。
+交互、动效、产品场景和验证都在同一份[设计指南](/cn/src/design/guide)里；组件实现见
+[CODING](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/CODING.md)。
+安装后也可从 `node_modules/ranui/docs/` 读取这两份文档。
 
 > **适用场景**：为 `<r-*>` 界面选择颜色、间距、排版、纵深或动效。
 
@@ -74,7 +72,7 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 为共享内容起点和有意独立的导航／标题列命名。分别测量外框、内层内容边缘、文字 Range、图标视口和真实点击区域：
 按钮外框不动，内边距仍可能让文字偏移。标题／菜单按钮按内容收紧，剩余宽度交给独立布局区域；逐层计算内边距，
 并让空状态保持所属区域的内容起点。产品的目标尺寸由应用决定。
-[权威对齐规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#alignment-is-structure-not-polish)
+[权威对齐规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#alignment)
 维护完整规则及可运行的浏览器验收示例。
 
 分组先用标题、对齐和间距。去掉重复容器不能同时去掉操作提示：独立命令可以保留轻量的按钮表面，
@@ -82,13 +80,13 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 不要让内层卡片、整组底色和逐行分隔线重复表达同一个分组。声明相邻控件共享的图标／勾选框列和文字列。
 输入控件的功能性边框、键盘焦点框继续保留。验收应查看静止的完整面板，
 并说明每条边框、底色和分隔线的独立用途；
-[权威组合规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#9-composition--the-page-not-the-component)
+[权威组合规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#components-and-composition)
 维护例外及验收条件。
 
 纵向间距按元素关系统一：标题与说明、字段与提示可用 8px，组间 16px，相关子区块间 24px。
 每一处间距只由一层布局负责；先计入子元素 margin、已有内边距和行内控件的基线留白，再决定是否增加间隔。
 换行、提示隐藏和错误出现后，都要在浏览器中实测。
-[权威纵向节奏规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+[权威纵向节奏规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
 维护例外与可运行的反向校验，不改变组件默认值。
 
 ## 选排版
@@ -224,7 +222,7 @@ display 规则、引用未声明令牌的兜底、组件查询自己的 shadow �
 
 ## 证据与验收 {#evidence-and-acceptance}
 
-[验收契约](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/ACCEPTANCE.md)
-统一维护实际浏览器验证、运行版本与截图的新鲜度，以及自动检查、agent 视觉审查和用户决定的区别。
+[验证一次改动](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change)
+说明了实际浏览器验证、运行版本与截图的新鲜度，以及自动检查、agent 视觉审查和用户决定的区别。
 共享样式变化后，应更新受影响的证据；agent 自检不等于用户验收。
 删除没有信息增量的次级标签和说明，让布局解释显而易见的关系；保留无障碍名称、有用的字段标签、单位、错误和风险说明。

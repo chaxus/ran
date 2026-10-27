@@ -1,72 +1,50 @@
-import { readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { slugify } from 'ranpress';
-import { designReferenceMarkdown, designRuleLink, githubSlug } from '../build/design-reference.ts';
-import { LOCALES } from '../build/langs/locales.ts';
-import { DESIGN_REFERENCE } from '../build/langs/design-pages.ts';
+import { DESIGN_ASSETS, designReferenceMarkdown, designSectionLink } from '../build/design-reference.ts';
+import { LOCALES, localeHref } from '../build/langs/locales.ts';
 
 const DESIGN = resolve(import.meta.dirname, '../../../design');
+const cn = LOCALES.find((l) => l.dir === 'cn')!;
+const ja = LOCALES.find((l) => l.dir === 'ja')!;
 
-describe('the Ran Design reference pages', () => {
-  it('slugs headings exactly like the rule index does', async () => {
-    // Outside this package's sources, so loaded at runtime rather than type-checked here.
-    const owner = pathToFileURL(resolve(import.meta.dirname, '../../../bin/design-rules.ts')).href;
-    const { slug } = (await import(owner)) as { slug: (heading: string) => string };
-    for (const { file } of DESIGN_REFERENCE)
-      for (const [, heading] of readFileSync(resolve(DESIGN, file), 'utf8').matchAll(/^#{1,6} (.+)$/gm))
-        expect(githubSlug(heading!), heading).toBe(slug(heading!));
-  });
-
-  it.each(DESIGN_REFERENCE.map(({ file }) => file))('keeps %s readers on the site', (file) => {
-    const page = designReferenceMarkdown(DESIGN, file);
-    // No link to another reference file survives as a file path.
-    expect(page).not.toMatch(/\]\((?:\.\/)?(?:DESIGN|INTERACTION|ACCEPTANCE|WORKFLOW_PATTERNS|RULES)\.md/);
-    // Files that are not published here go to GitHub, where they are maintained.
+describe('the Ran Design guide page', () => {
+  it('keeps readers on the site and sends unpublished files to GitHub', () => {
+    const page = designReferenceMarkdown(DESIGN, 'DESIGN.md');
     expect(page).not.toMatch(/\]\(\.\/[A-Z_]+\.md/);
-    expect(page).toContain(`https://github.com/chaxus/ran/blob/main/design/${file}`);
+    expect(page).toContain('https://github.com/chaxus/ran/blob/main/design/DESIGN.md');
   });
 
-  it('rewrites a GitHub anchor to the heading anchor this site renders', () => {
-    const page = designReferenceMarkdown(DESIGN, 'RULES.md');
-    expect(page).toContain('](/src/design/composition#_9-composition-—-the-page-not-the-component)');
+  it.each([undefined, cn])('serves every figure from the copied assets (%s)', (locale) => {
+    const page = designReferenceMarkdown(DESIGN, 'DESIGN.md', undefined, locale);
+    const figures = [...page.matchAll(/!\[[^\]]*\]\(([^)\s]+)\)/g)].map((m) => m[1]!);
+    expect(figures.length).toBeGreaterThan(0);
+    for (const src of figures) {
+      expect(src.startsWith(`${DESIGN_ASSETS}/`), src).toBe(true);
+      expect(existsSync(resolve(DESIGN, 'assets', src.slice(DESIGN_ASSETS.length + 1))), src).toBe(true);
+    }
   });
 
-  it.each(DESIGN_REFERENCE.map(({ file }) => file))('%s does not open with the shared document name', (file) => {
-    const heading = designReferenceMarkdown(DESIGN, file).match(/^# (.+)$/m)?.[1];
-    expect(heading).not.toBe('Ran Design');
+  it('names the page after itself, not the shared document name', () => {
+    expect(designReferenceMarkdown(DESIGN, 'DESIGN.md').match(/^# (.+)$/m)?.[1]).toBe('Design guide');
+    expect(designReferenceMarkdown(DESIGN, 'DESIGN.md', undefined, cn).match(/^# (.+)$/m)?.[1]).toBe('设计指南');
   });
 
-  it('names the composition page after itself', () => {
-    expect(designReferenceMarkdown(DESIGN, 'DESIGN.md').match(/^# (.+)$/m)?.[1]).toBe('Visual composition');
-  });
+  it('links a section in the reader’s language where a translation exists, in English otherwise', () => {
+    const headings = new Set(
+      [...designReferenceMarkdown(DESIGN, 'DESIGN.md', undefined, cn).matchAll(/^#{1,6} (.+)$/gm)].map((m) =>
+        slugify(m[1]!),
+      ),
+    );
+    const translated = designSectionLink(DESIGN, 'Feedback and recovery', cn);
+    expect(translated.label).not.toBe('Feedback and recovery');
+    expect(headings.has(translated.link.split('#')[1]!)).toBe(true);
+    expect(localeHref(translated.link, cn)).toBe(`/cn${translated.link}`);
 
-  // Translations keep the English links; every in-reference anchor must land on a heading
-  // of the translated page it points into, in that page's own language.
-  for (const locale of LOCALES.filter((l) => l.dir)) {
-    it(`links the ${locale.dir} translation to its own pages and headings`, () => {
-      const headings = new Map<string, Set<string>>(
-        DESIGN_REFERENCE.map(({ file, page }) => [
-          page,
-          new Set(
-            [...designReferenceMarkdown(DESIGN, file, undefined, locale).matchAll(/^#{1,6} (.+)$/gm)].map((m) =>
-              slugify(m[1]!),
-            ),
-          ),
-        ]),
-      );
-      for (const { file } of DESIGN_REFERENCE) {
-        const page = designReferenceMarkdown(DESIGN, file, undefined, locale);
-        for (const [, path, anchor] of page.matchAll(/\]\((\/[a-z]+\/src\/design\/[a-z]+)(?:#([^)\s]+))?\)/g)) {
-          expect(path!.startsWith(`/${locale.dir}/src/design/`), `${file}: ${path}`).toBe(true);
-          if (anchor)
-            expect(headings.get(path!.split('/').pop()!)?.has(anchor), `${file}: ${path}#${anchor}`).toBe(true);
-        }
-      }
-      const rule = designRuleLink(DESIGN, 'X-INPUT-4', locale);
-      const [, page, anchor] = rule.match(/\/src\/design\/([a-z]+)#(.+)$/)!;
-      expect(headings.get(page!)?.has(anchor!)).toBe(true);
-    });
-  }
+    const english = designSectionLink(DESIGN, 'Feedback and recovery', ja);
+    expect(english).toEqual({ link: '/src/design/guide#feedback-and-recovery', label: 'Feedback and recovery' });
+    expect(localeHref(english.link, ja)).toBe(english.link);
+    expect(() => designSectionLink(DESIGN, 'No such section', cn)).toThrow();
+  });
 });

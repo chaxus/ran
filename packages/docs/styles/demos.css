@@ -360,7 +360,7 @@
   gap: var(--ran-space-6, 24px);
 }
 /* The live object: an elevated surface, so it stays distinct from the page in dark mode.
-   Its 24px inset is larger than its 16px radius, so the example keeps its own corners (D-ELEV-1). */
+   Its 24px inset is larger than its 16px radius, so the example keeps its own corners. */
 .playground__stage {
   display: flex;
   flex-wrap: wrap;

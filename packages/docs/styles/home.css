@@ -47,7 +47,7 @@
 .cine {
   --cine-radius-outer: var(--ran-radius-lg, 16px);
   --cine-inset: var(--ran-space-1, 4px);
-  /* D-ELEV-1: the inner frame's radius is the outer one minus the real inset. */
+  /* The inner frame's radius is the outer one minus the real inset. */
   --cine-radius-inner: calc(var(--cine-radius-outer) - var(--cine-inset));
   padding-block: var(--ran-space-16, 64px) var(--ran-space-24, 96px);
   padding-inline: var(--spine-landing, max(24px, (100% - 1120px) / 2));
@@ -234,7 +234,6 @@
   color: var(--fg-muted);
 }
 .example__rule {
-  font-family: var(--font-mono);
   color: var(--link);
 }
 .example__rule:hover {
@@ -585,7 +584,7 @@
   content: '$ ';
   color: var(--fg-muted);
 }
-/* 8px outer radius less a 6px inset leaves 2px, too little to read as concentric (D-ELEV-1). */
+/* 8px outer radius less a 6px inset leaves 2px, too little to read as concentric. */
 .copy {
   flex: 0 0 auto;
   display: grid;

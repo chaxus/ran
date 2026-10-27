@@ -11,11 +11,10 @@ Use the [design system](/src/ranui/design-system/) for tokens,
 [information architecture](/src/ranui/information-architecture/) for page structure.
 This page summarizes the canonical [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
 
-The [interface index](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERFACE_GUIDE.md)
-routes behavior to [INTERACTION](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/INTERACTION.md),
-engineering to [CODING](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/CODING.md), and relevant host tasks to
-[optional workflow patterns](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/WORKFLOW_PATTERNS.md).
-These references also ship under `node_modules/ranui/docs/`.
+Interaction, motion, product patterns and verification are sections of the same
+[design guide](/src/design/guide); component engineering is in
+[CODING](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/CODING.md).
+Both also ship under `node_modules/ranui/docs/`.
 
 > **Use when** choosing color, spacing, type, depth or motion for a screen built with `<r-*>` elements.
 
@@ -85,7 +84,7 @@ Name the shared content spine and any intentional navigation/title column. Measu
 inner content edges, rendered text Ranges, icon viewports and actual hit areas separately: a stable
 button frame can hide an inset label. Keep title/menu triggers content-hugging with separate layout
 filler, count nested padding, and preserve the same spine in empty states. Product target sizes remain
-local choices. The [canonical alignment contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#alignment-is-structure-not-polish)
+local choices. The [canonical alignment contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#alignment)
 owns these rules and the runnable browser acceptance example.
 
 Group with headings, alignment and spacing first. Removing redundant enclosures must not
@@ -95,14 +94,14 @@ menu/list contexts; do not mandate them everywhere. A nested card, group fill an
 separators must not repeat the same boundary. Declare shared icon/checkbox and text columns
 across adjacent controls. Retain functional field frames and keyboard focus outlines. Inspect
 the resting whole pane and explain the distinct purpose of each remaining border, fill or divider;
-the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#9-composition--the-page-not-the-component)
+the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#components-and-composition)
 own the exceptions and acceptance criteria.
 
 Keep vertical rhythm consistent by relationship: title/description and field/hint pairs can
 use 8px, separate groups 16px, and related subsections 24px. Give each gap one owner;
 count child margins, existing padding and inline baseline space before adding another gap.
 Verify wrapped copy and hidden helper/error states in the browser. The
-[canonical vertical-rhythm guidance](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+[canonical vertical-rhythm guidance](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
 owns the exceptions and runnable reverse checks, without changing component defaults.
 
 ## Choosing type
@@ -261,8 +260,8 @@ Choose checks for the affected surface and changed behavior; repository CI still
 
 ## Evidence and acceptance {#evidence-and-acceptance}
 
-[The acceptance contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/ACCEPTANCE.md)
-owns actual browser proof, runtime/capture freshness and separate automated, agent and human
+[Verifying a change](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change)
+covers actual browser proof, runtime/capture freshness and separate automated, agent and human
 results. Changed shared styles require fresh affected evidence; an agent review is not user acceptance.
 Avoid unnecessary secondary labels and descriptions: let layout explain the obvious, while retaining
 accessible names, useful field labels, units, errors and risks.
