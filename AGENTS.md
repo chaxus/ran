@@ -19,13 +19,13 @@ The index routes decisions; workflow recipes describe host responsibilities, not
 
 Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
 Keep copy that adds a decision, constraint or consequence; preserve accessible names, field labels,
-units, errors and risk disclosures. [DESIGN's wording rules](design/DESIGN.md#words-are-part-of-the-interface)
+units, errors and risk disclosures. [the guide's Words section](design/DESIGN.md#words)
 own this principle; do not remove useful guidance merely to make a screenshot quieter.
 
-For visual changes, the guide's [review checklist](design/DESIGN.md#review-checklist) and
+For visual changes, the guide's [checklist](design/DESIGN.md) and
 [verifying a change](design/DESIGN.md#verifying-a-change) say what to check and what evidence to report.
 Reuse existing controls and local token mappings. Stop when the smallest patch and its evidence are
-clear. Product patterns are optional and require no new infrastructure.
+clear.
 
 Run affected-package checks appropriate to the change and report evidence, not assumptions.
 The local scope below does not weaken the complete repository CI gates:

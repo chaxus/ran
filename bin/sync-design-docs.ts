@@ -3,7 +3,7 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const guideNames = ['DESIGN', 'REFERENCE_RESEARCH'] as const;
+export const guideNames = ['DESIGN'] as const;
 const repository = fileURLToPath(new URL('../', import.meta.url));
 
 /** Compose portable methods with package-owned implementation guidance. */

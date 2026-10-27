@@ -4,21 +4,15 @@
   "sources": [
     {
       "source": "design/DESIGN.md",
-      "sha256": "204a3b9a3c07780b6a62fc61cf13d40b3f27e69dbada294e23b0d2504db85aa1",
+      "sha256": "c0fff1d421f2fa74e83530caf29b7cd7cabb3eb8538c602b69517e48086dfb84",
       "output": "DESIGN.md",
-      "outputSha256": "f97a0664fd023c186fcf8ab0f852e24edaccb5deb060af6d82adbdbb676c27d5"
+      "outputSha256": "8309cb6a44393ede01d226d12c60116cbca62e3cc309ad1b3653c289ca281c49"
     },
     {
       "source": "design/README.md",
-      "sha256": "7a1f9b9ce99943a5d1f760f1c116292344406628bdbb932ab1627652fac6ae18",
+      "sha256": "238e15f19eb08547aff669f716ed46cab7149ed4bb334d172f37c628a6364b86",
       "output": "README.md",
-      "outputSha256": "5966365f3484ce7f9280bacc97abee891d212ffb4d0672bd01b6369cf48fad15"
-    },
-    {
-      "source": "design/REFERENCE_RESEARCH.md",
-      "sha256": "8cbcdba79b6fdb9a70b58c9ef9f79f33a28abf797a327c15f1db945a1dcb333d",
-      "output": "REFERENCE_RESEARCH.md",
-      "outputSha256": "22f1ea1a0380dc346e3b86f7393dc8aa5f55543ce1d51eccbad21f9413b371a0"
+      "outputSha256": "9d39628a7ebece7551f1a204e52bc70bcbd1677e48c22ebca07f4e36d1c1a59e"
     },
     {
       "source": "design/assets/alignment-spines.svg",

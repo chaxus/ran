@@ -15,7 +15,7 @@ const cn: LocaleMessages = {
     ranuts: 'ranuts',
     articles: '文章',
     doc_editor: '文档编辑器',
-    design_guide: '设计指南',
+    design_guide: '设计检查清单',
     overview: '总览',
     api_reference: 'API 索引',
     choosing_a_utility: '选型指南',

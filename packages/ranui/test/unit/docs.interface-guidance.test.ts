@@ -142,7 +142,7 @@ describe('executable interface guidance', () => {
     ) as Record<string, { files: Array<{ path: string }> }> | Array<{ files: Array<{ path: string }> }>;
     // npm versions return either an array or a package-name keyed object.
     const files = new Set(Object.values(packed)[0].files.map((file) => file.path));
-    for (const owner of ['DESIGN', 'REFERENCE_RESEARCH']) {
+    for (const owner of ['DESIGN']) {
       expect(files.has(`docs/${owner}.md`), `package omits docs/${owner}.md`).toBe(true);
     }
     const canonical = [...files].filter(

@@ -7,11 +7,11 @@ description: Design, improve or review product interfaces, including layout, vis
 
 Use the host's product goals, framework and visual language. This skill needs no npm package.
 
-Read the [design guide](references/DESIGN.md). It is one page, ordered the way you design: start
-from the task, then visual language, layout, components, interaction, motion and words. Read the
-sections the task touches; a small correction stays small.
+Read the [design checklist](references/DESIGN.md). It is one page: before you start, the five-second
+and trunk tests, visual language, layout, interaction, motion, words and verification. A small
+correction stays small.
 
-Before implementation, write the [brief](references/DESIGN.md#start-from-the-task) in the existing
+Before implementation, write the [brief](references/DESIGN.md#before-you-start) in the existing
 task note, and update it before changing direction. Compare composed screens before adding motion.
 
 Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
@@ -24,9 +24,8 @@ own review as accepted; the host project's approval rules still apply.
 
 ## Before handing back
 
-Walk the [review checklist](references/DESIGN.md#review-checklist) and the
-[guidance for coding agents](references/DESIGN.md#guidance-for-coding-agents); skip lines that do
-not apply to the change.
+Walk the [checklist](references/DESIGN.md) again, including the five-second and trunk tests on any
+page whose structure changed; skip lines that do not apply to the change.
 
 When the project uses ranui or ranuts, load that library's sibling skill for installed-version contracts.
 These design references describe methods, not APIs or permission to install or upgrade dependencies.

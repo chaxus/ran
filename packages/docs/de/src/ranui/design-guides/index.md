@@ -58,7 +58,7 @@ getrennte Gruppen 16px und zusammengehörige Unterabschnitte 24px verwenden. Jed
 hat genau einen Verantwortlichen; berücksichtigen Sie Kind-Margins, Innenabstände und
 Grundlinienraum bei Inline-Steuerelementen. Prüfen Sie Zeilenumbrüche sowie ausgeblendete
 Hinweise und Fehlerzustände im Browser. Die
-[verbindlichen Regeln zum vertikalen Rhythmus](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
+[verbindlichen Regeln zum vertikalen Rhythmus](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
 enthalten Ausnahmen und ausführbare Gegenproben, ohne Komponentenvorgaben zu ändern.
 
 ## Schrift wählen

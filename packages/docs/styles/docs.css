@@ -923,13 +923,16 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--ran-space-1);
 }
 .toc__item--h3 {
   padding-inline-start: var(--ran-space-3);
 }
+/* Stacked links need a 24px target (WCAG 2.5.8); the row height replaces the old 4px gap, so
+   the rhythm stays where it was. */
 .toc__link {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 24px;
   color: var(--fg-muted);
   text-decoration: none;
   line-height: 1.5;
@@ -1008,6 +1011,14 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   display: inline-flex;
   flex-wrap: wrap;
   gap: var(--ran-space-4, 16px);
+}
+/* They sit right under the heading's own link, so each needs a full 24px target (WCAG 2.5.8). */
+.component-facts__links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .prose h1 {

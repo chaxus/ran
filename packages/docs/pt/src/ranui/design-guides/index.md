@@ -58,7 +58,7 @@ grupos separados 16px e subseções relacionadas 24px. Cada intervalo deve ter u
 responsável; conte as margens dos filhos, o preenchimento existente e o espaço da linha
 de base dos controles em linha. Verifique quebras de linha, ajuda oculta e estados de erro
 no navegador. As
-[regras canônicas de ritmo vertical](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
+[regras canônicas de ritmo vertical](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
 definem exceções e testes inversos executáveis, sem alterar os padrões dos componentes.
 
 ## Escolher a tipografia

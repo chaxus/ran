@@ -32,7 +32,7 @@ import type { SidebarItem } from './nav.ts';
 const DESIGN_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'design');
 
 /** The guide sections the home example demonstrates. */
-const EXAMPLE_SECTIONS = ['Inputs and drafts', 'Feedback and recovery', 'Focus'] as const;
+const EXAMPLE_SECTIONS = ['Interaction', 'Words'] as const;
 
 /** The component hooks the markdown renderer is configured with. */
 export const componentRenderers = {

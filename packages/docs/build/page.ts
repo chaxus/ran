@@ -58,6 +58,9 @@ const sidebarHtml = (items: SidebarItem[], url: string, depth = 0): string => {
         ? `<a class="sb__link" href="${escapeHtml(item.link)}"${active ? ' aria-current="page"' : ''}>${rail}${escapeHtml(item.text)}</a>`
         : `<span class="sb__label">${escapeHtml(item.text)}</span>`;
       if (!children) return `<li class="sb__item">${label}</li>`;
+      // An untitled group only gathers its rows, at its own depth; a summary with no label would
+      // be an invisible toggle that hides them all.
+      if (!item.text) return `<li class="sb__item">${sidebarHtml(item.items!, url, depth)}</li>`;
       return (
         `<li class="sb__item sb__item--group"${collapsed ? ' data-collapsed' : ''}>` +
         `<details class="sb__details"${collapsed ? '' : ' open'}>` +

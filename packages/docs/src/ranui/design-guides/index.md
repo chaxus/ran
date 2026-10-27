@@ -84,7 +84,7 @@ Name the shared content spine and any intentional navigation/title column. Measu
 inner content edges, rendered text Ranges, icon viewports and actual hit areas separately: a stable
 button frame can hide an inset label. Keep title/menu triggers content-hugging with separate layout
 filler, count nested padding, and preserve the same spine in empty states. Product target sizes remain
-local choices. The [canonical alignment contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#alignment)
+local choices. The [canonical alignment contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
 owns these rules and the runnable browser acceptance example.
 
 Group with headings, alignment and spacing first. Removing redundant enclosures must not
@@ -94,14 +94,14 @@ menu/list contexts; do not mandate them everywhere. A nested card, group fill an
 separators must not repeat the same boundary. Declare shared icon/checkbox and text columns
 across adjacent controls. Retain functional field frames and keyboard focus outlines. Inspect
 the resting whole pane and explain the distinct purpose of each remaining border, fill or divider;
-the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#components-and-composition)
+the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
 own the exceptions and acceptance criteria.
 
 Keep vertical rhythm consistent by relationship: title/description and field/hint pairs can
 use 8px, separate groups 16px, and related subsections 24px. Give each gap one owner;
 count child margins, existing padding and inline baseline space before adding another gap.
 Verify wrapped copy and hidden helper/error states in the browser. The
-[canonical vertical-rhythm guidance](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
+[canonical vertical-rhythm guidance](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
 owns the exceptions and runnable reverse checks, without changing component defaults.
 
 ## Choosing type
@@ -150,8 +150,7 @@ transition after `open` is removed.
 Keep one visual language across related components and documentation chrome: coordinated type
 roles, control density, radius/inset relationships, semantic accents and motion. Preserve differences
 that communicate role or priority. Compare composed states with different real content before adding
-effects; a shared color cannot compensate for inconsistent proportions. Source observations and
-validation limits live in the [reference index](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/REFERENCE_RESEARCH.md).
+effects; a shared color cannot compensate for inconsistent proportions.
 
 ## Motion {#motion}
 

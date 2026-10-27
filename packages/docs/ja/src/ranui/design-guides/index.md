@@ -57,7 +57,7 @@ ranui のコンポーネントで組み立てた画面が、部品の寄せ集�
 グループ間には 16px、関連する小区画の間には 24px を使えます。各間隔を管理する層は一つにし、
 子要素の margin、既存の内側余白、インラインコントロールのベースライン余白を先に数えます。
 折り返し、補足の非表示、エラー表示をブラウザーで実測してください。
-[縦方向のリズムに関する正式な規則](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
+[縦方向のリズムに関する正式な規則](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
 に例外と実行可能な逆検証をまとめており、コンポーネントの既定値は変更しません。
 
 ## 文字の選び方

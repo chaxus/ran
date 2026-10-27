@@ -27,8 +27,8 @@ describe('the Ran Design guide page', () => {
   });
 
   it('names the page after itself, not the shared document name', () => {
-    expect(designReferenceMarkdown(DESIGN, 'DESIGN.md').match(/^# (.+)$/m)?.[1]).toBe('Design guide');
-    expect(designReferenceMarkdown(DESIGN, 'DESIGN.md', undefined, cn).match(/^# (.+)$/m)?.[1]).toBe('设计指南');
+    expect(designReferenceMarkdown(DESIGN, 'DESIGN.md').match(/^# (.+)$/m)?.[1]).toBe('Design checklist');
+    expect(designReferenceMarkdown(DESIGN, 'DESIGN.md', undefined, cn).match(/^# (.+)$/m)?.[1]).toBe('设计检查清单');
   });
 
   it('links a section in the reader’s language where a translation exists, in English otherwise', () => {
@@ -37,13 +37,13 @@ describe('the Ran Design guide page', () => {
         slugify(m[1]!),
       ),
     );
-    const translated = designSectionLink(DESIGN, 'Feedback and recovery', cn);
-    expect(translated.label).not.toBe('Feedback and recovery');
+    const translated = designSectionLink(DESIGN, 'Interaction', cn);
+    expect(translated.label).toBe('交互');
     expect(headings.has(translated.link.split('#')[1]!)).toBe(true);
     expect(localeHref(translated.link, cn)).toBe(`/cn${translated.link}`);
 
-    const english = designSectionLink(DESIGN, 'Feedback and recovery', ja);
-    expect(english).toEqual({ link: '/src/design/guide#feedback-and-recovery', label: 'Feedback and recovery' });
+    const english = designSectionLink(DESIGN, 'Interaction', ja);
+    expect(english).toEqual({ link: '/src/design/guide#interaction', label: 'Interaction' });
     expect(localeHref(english.link, ja)).toBe(english.link);
     expect(() => designSectionLink(DESIGN, 'No such section', cn)).toThrow();
   });

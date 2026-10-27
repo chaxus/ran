@@ -15,7 +15,7 @@ const ja: LocaleMessages = {
     ranuts: 'ranuts',
     articles: '記事',
     doc_editor: 'ドキュメントエディタ',
-    design_guide: 'デザインガイド',
+    design_guide: 'デザインチェックリスト',
     overview: '概要',
     api_reference: 'API リファレンス',
     choosing_a_utility: 'ユーティリティの選び方',

@@ -3,7 +3,7 @@
  * Pure data, because the locale registry reads it and the client bundle reads the registry.
  */
 export const DESIGN_REFERENCE = [
-  { file: 'DESIGN.md', page: 'guide', key: 'design_guide', title: 'Design guide', translated: ['cn'] },
+  { file: 'DESIGN.md', page: 'guide', key: 'design_guide', title: 'Design checklist', translated: ['cn'] },
 ] as const;
 
 /** Their source paths, as structure links and `localeHref` see them. */

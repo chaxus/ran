@@ -4,11 +4,10 @@ title: Ran Design
 
 # Ran Design
 
-Una guía de diseño para construir interfaces de producto, independiente de cualquier biblioteca de componentes.
+Una lista de comprobación de diseño de una página para interfaces de producto, independiente de cualquier biblioteca de componentes.
 
-Sigue el orden en que se diseña: parte de la tarea y del contenido real, fija un único lenguaje visual, organiza y compone la página, diseña la interacción y el movimiento, y verifica el cambio en un navegador real. Termina con listas de comprobación para cada cambio.
+Úsala antes de empezar, mientras construyes y antes de entregar un cambio. Incluye las pruebas de cinco segundos y del maletero de Steve Krug, y marca los puntos que comprueba automáticamente una prueba en el navegador.
 
-- [Guía de diseño](/src/design/guide) (en inglés)
-- [Referencias](https://github.com/chaxus/ran/blob/main/design/REFERENCE_RESEARCH.md)
+- [Lista de diseño](/src/design/guide) (en inglés)
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [Agentes](../agents/)

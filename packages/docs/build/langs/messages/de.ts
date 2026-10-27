@@ -15,7 +15,7 @@ const de: LocaleMessages = {
     ranuts: 'ranuts',
     articles: 'Artikel',
     doc_editor: 'Dokumenteditor',
-    design_guide: 'Designleitfaden',
+    design_guide: 'Design-Checkliste',
     overview: 'Überblick',
     api_reference: 'API-Referenz ',
     choosing_a_utility: 'Die richtige Utility wählen',
