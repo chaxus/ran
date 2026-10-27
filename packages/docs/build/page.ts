@@ -50,8 +50,12 @@ const sidebarHtml = (items: SidebarItem[], url: string, depth = 0): string => {
       // page hidden, which reads as the page not being in the navigation at all.
       const holdsCurrent = active || (children.includes('aria-current="page"') ?? false);
       const collapsed = item.collapsed === true && !holdsCurrent;
+      // The rail marks the current page on a group's line. A top-level row has no line to
+      // mark, and the rail would sit left of the sidebar's edge, clipped by its scrolling
+      // box, until a view transition lifted it out and flashed it; there, weight alone marks it.
+      const rail = active && depth > 0 ? '<span class="sb__rail" aria-hidden="true"></span>' : '';
       const label = item.link
-        ? `<a class="sb__link" href="${escapeHtml(item.link)}"${active ? ' aria-current="page"' : ''}>${active ? '<span class="sb__rail" aria-hidden="true"></span>' : ''}${escapeHtml(item.text)}</a>`
+        ? `<a class="sb__link" href="${escapeHtml(item.link)}"${active ? ' aria-current="page"' : ''}>${rail}${escapeHtml(item.text)}</a>`
         : `<span class="sb__label">${escapeHtml(item.text)}</span>`;
       if (!children) return `<li class="sb__item">${label}</li>`;
       return (

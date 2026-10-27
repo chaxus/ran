@@ -109,3 +109,16 @@ test('the current-page rail slides from the old row to the new one', async ({ pa
   await page.waitForURL('**/ranui/theme-switch/');
   await expect.poll(() => page.evaluate(() => (window as unknown as { rail?: string }).rail)).toBe('animated');
 });
+
+test('the rail marks the current page only where a group line runs, inside the sidebar', async ({ page }) => {
+  await page.goto('/design/rules');
+  await expect(page.locator('.sidebar .sb__link[aria-current="page"]')).toHaveCount(1);
+  await expect(page.locator('.sidebar .sb__rail')).toHaveCount(0);
+  await page.goto('/ranui/theme/');
+  const inside = await page.locator('.sidebar .sb__rail').evaluate((rail) => {
+    const box = rail.getBoundingClientRect();
+    const frame = rail.closest('.sidebar')!.getBoundingClientRect();
+    return box.width > 0 && box.left >= frame.left && box.right <= frame.right;
+  });
+  expect(inside).toBe(true);
+});
