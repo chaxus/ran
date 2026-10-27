@@ -111,7 +111,7 @@ test('the current-page rail slides from the old row to the new one', async ({ pa
 });
 
 test('the rail marks the current page only where a group line runs, inside the sidebar', async ({ page }) => {
-  await page.goto('/design/rules');
+  await page.goto('/design/guide');
   await expect(page.locator('.sidebar .sb__link[aria-current="page"]')).toHaveCount(1);
   await expect(page.locator('.sidebar .sb__rail')).toHaveCount(0);
   await page.goto('/ranui/theme/');

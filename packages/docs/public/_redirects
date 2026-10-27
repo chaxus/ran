@@ -84,6 +84,96 @@
 /cn/src/ranuts/utils/set_attribute_by_global /cn/ranuts/utils/ 301
 /cn/src/ranuts/utils/str2xml /cn/ranuts/utils/ 301
 
+# ── Ran Design (five reference pages merged into one guide) ─────────────────
+# Only Chinese has a translation of the guide; every other language lands on the English page.
+/design/composition /design/guide 301
+/src/design/composition /design/guide 301
+/design/interaction /design/guide 301
+/src/design/interaction /design/guide 301
+/design/acceptance /design/guide 301
+/src/design/acceptance /design/guide 301
+/design/patterns /design/guide 301
+/src/design/patterns /design/guide 301
+/design/rules /design/guide 301
+/src/design/rules /design/guide 301
+
+/cn/design/composition /cn/design/guide 301
+/cn/src/design/composition /cn/design/guide 301
+/cn/design/interaction /cn/design/guide 301
+/cn/src/design/interaction /cn/design/guide 301
+/cn/design/acceptance /cn/design/guide 301
+/cn/src/design/acceptance /cn/design/guide 301
+/cn/design/patterns /cn/design/guide 301
+/cn/src/design/patterns /cn/design/guide 301
+/cn/design/rules /cn/design/guide 301
+/cn/src/design/rules /cn/design/guide 301
+
+/ja/design/composition /design/guide 301
+/ja/src/design/composition /design/guide 301
+/ja/design/interaction /design/guide 301
+/ja/src/design/interaction /design/guide 301
+/ja/design/acceptance /design/guide 301
+/ja/src/design/acceptance /design/guide 301
+/ja/design/patterns /design/guide 301
+/ja/src/design/patterns /design/guide 301
+/ja/design/rules /design/guide 301
+/ja/src/design/rules /design/guide 301
+
+/es/design/composition /design/guide 301
+/es/src/design/composition /design/guide 301
+/es/design/interaction /design/guide 301
+/es/src/design/interaction /design/guide 301
+/es/design/acceptance /design/guide 301
+/es/src/design/acceptance /design/guide 301
+/es/design/patterns /design/guide 301
+/es/src/design/patterns /design/guide 301
+/es/design/rules /design/guide 301
+/es/src/design/rules /design/guide 301
+
+/pt/design/composition /design/guide 301
+/pt/src/design/composition /design/guide 301
+/pt/design/interaction /design/guide 301
+/pt/src/design/interaction /design/guide 301
+/pt/design/acceptance /design/guide 301
+/pt/src/design/acceptance /design/guide 301
+/pt/design/patterns /design/guide 301
+/pt/src/design/patterns /design/guide 301
+/pt/design/rules /design/guide 301
+/pt/src/design/rules /design/guide 301
+
+/ko/design/composition /design/guide 301
+/ko/src/design/composition /design/guide 301
+/ko/design/interaction /design/guide 301
+/ko/src/design/interaction /design/guide 301
+/ko/design/acceptance /design/guide 301
+/ko/src/design/acceptance /design/guide 301
+/ko/design/patterns /design/guide 301
+/ko/src/design/patterns /design/guide 301
+/ko/design/rules /design/guide 301
+/ko/src/design/rules /design/guide 301
+
+/de/design/composition /design/guide 301
+/de/src/design/composition /design/guide 301
+/de/design/interaction /design/guide 301
+/de/src/design/interaction /design/guide 301
+/de/design/acceptance /design/guide 301
+/de/src/design/acceptance /design/guide 301
+/de/design/patterns /design/guide 301
+/de/src/design/patterns /design/guide 301
+/de/design/rules /design/guide 301
+/de/src/design/rules /design/guide 301
+
+/fa/design/composition /design/guide 301
+/fa/src/design/composition /design/guide 301
+/fa/design/interaction /design/guide 301
+/fa/src/design/interaction /design/guide 301
+/fa/design/acceptance /design/guide 301
+/fa/src/design/acceptance /design/guide 301
+/fa/design/patterns /design/guide 301
+/fa/src/design/patterns /design/guide 301
+/fa/design/rules /design/guide 301
+/fa/src/design/rules /design/guide 301
+
 # ── Clean URLs: the retired `/src/…` trees ──────────────────────────────────
 # The build replaces the next line with the rules from build/urls.ts, one hop from every
 # old `/src/` and `/<lang>/src/` URL to its page. They follow the specific rules above

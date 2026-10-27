@@ -46,9 +46,8 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
  * The home page's invite form: a real task in miniature, following the rules it links to.
- * Validation sits on the field (X-INPUT-1); one activation sends once (X-INPUT-4); success
- * is shown only after the "server" answers (X-FEEDBACK-2); a failure keeps every entry
- * (X-RECOVER-4). The request is simulated; nothing leaves the page.
+ * Validation sits on the field; one activation sends once; success is shown only after the
+ * "server" answers; a failure keeps every entry (the design guide's Interaction section). The request is simulated; nothing leaves the page.
  */
 export const mountExample = (form: HTMLElement): void => {
   const email = form.querySelector<HTMLElement & { value: string }>('r-input[name="email"]');

@@ -25,14 +25,14 @@ import type { LocaleDef } from './config.ts';
 import { currentLinkBase, currentLocale } from './render-context.ts';
 import { resolveLinkFrom } from './links.ts';
 import { publicUrl } from './urls.ts';
-import { designRuleLink } from './design-reference.ts';
+import { designSectionLink } from './design-reference.ts';
 import { sidebarFor } from './nav.ts';
 import type { SidebarItem } from './nav.ts';
 
 const DESIGN_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'design');
 
-/** The rules the home example demonstrates, each linked to the section that states it. */
-const EXAMPLE_RULES = ['X-INPUT-1', 'X-INPUT-4', 'X-FEEDBACK-2', 'X-RECOVER-4', 'X-CANCEL-5'] as const;
+/** The guide sections the home example demonstrates. */
+const EXAMPLE_SECTIONS = ['Inputs and drafts', 'Feedback and recovery', 'Focus'] as const;
 
 /** The component hooks the markdown renderer is configured with. */
 export const componentRenderers = {
@@ -150,9 +150,10 @@ export const renderHome = (locale: LocaleDef): string => {
     `<p class="example__status" role="status" aria-live="polite"></p>` +
     `</div>` +
     `<div class="example__rules"><span class="example__rules-label">${esc(t.example.rules)}</span>` +
-    EXAMPLE_RULES.map(
-      (id) => `<a class="example__rule" href="${esc(href(designRuleLink(DESIGN_DIR, id, locale)))}">${id}</a>`,
-    ).join('') +
+    EXAMPLE_SECTIONS.map((heading) => {
+      const { link, label } = designSectionLink(DESIGN_DIR, heading, locale);
+      return `<a class="example__rule" href="${esc(href(link))}">${esc(label)}</a>`;
+    }).join('') +
     `</div>` +
     `<p class="live-note">${esc(t.liveNote)}</p></div></header>` +
     `<dl class="stats reveal">` +

@@ -18,9 +18,9 @@
  *    (`description: What changed: added, fixed`) makes the value a mapping key, and VitePress
  *    fails the whole build with a YAML stack trace that names one file and lists no others.
  *    Six pages broke this way at once; catching it here names all six in a second.
- * 7. **A design reference translation that is missing or stale.** `design-i18n/<dir>/` holds
- *    each language's copy of `design/*.md`, and each copy names the English blob it was
- *    translated from. When the English file changes, every copy is out of date until it is
+ * 7. **A design guide translation that is missing or stale.** `design-i18n/<dir>/` holds
+ *    the copy of `design/DESIGN.md` for each language its entry lists as `translated`, and
+ *    each copy names the English blob it was translated from. When the English file changes, every copy is out of date until it is
  *    updated; the failure prints the `git diff` that shows what to carry over.
  * 6. **A language the component copy never got.** `home-copy.ts` and `demo-copy.ts` fall
  *    back to English for an unknown locale, so adding a language renders its home page and
@@ -245,11 +245,16 @@ for (const locale of LOCALES) {
 const DESIGN_DIR = resolve(ROOT, '..', '..', 'design');
 for (const locale of LOCALES) {
   if (!locale.dir) continue;
-  for (const { file } of DESIGN_REFERENCE) {
+  for (const { file, translated } of DESIGN_REFERENCE) {
     const where = `design-i18n/${locale.dir}/${file}`;
     const translation = translationOf(locale, file);
+    const listed = (translated as readonly string[]).includes(locale.dir);
     if (!translation) {
-      fail(`${locale.id}: ${where} is a missing page`);
+      if (listed) fail(`${locale.id}: ${where} is a missing page`);
+      continue;
+    }
+    if (!listed) {
+      fail(`${locale.id}: ${where} is an extra page; add ${locale.dir} to the entry's \`translated\` or delete it`);
       continue;
     }
     const english = join(DESIGN_DIR, file);

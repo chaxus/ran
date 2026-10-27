@@ -1,11 +1,12 @@
 /**
- * The Ran Design reference, published from `design/*.md` at build time.
+ * The Ran Design guide, published from `design/DESIGN.md` at build time.
  *
- * Those files are the editable source of the shared design methods; the npm guides and the
- * agent plugin already carry generated copies. The website renders them as pages instead of
- * linking readers out to GitHub. The English pages keep no copy of their own; every other
- * language publishes a translation from `design-i18n/<dir>/`, which records the English
- * version it was made from (see `translatedFrom`) so `check:langs` can say when it went stale.
+ * That file is the editable source; the npm guides and the agent plugin already carry
+ * generated copies. The website renders it as a page instead of linking readers out to
+ * GitHub. English keeps no copy of its own; a language listed in the entry's `translated`
+ * publishes a translation from `design-i18n/<dir>/`, which records the English version it
+ * was made from (see `translatedFrom`) so `check:langs` can say when it went stale. Other
+ * languages link to the English page.
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
@@ -16,6 +17,8 @@ import { messagesFor } from './langs/index.ts';
 import { LOCALES, prefixOf, type LocaleDef } from './langs/locales.ts';
 
 const GITHUB = 'https://github.com/chaxus/ran/blob/main/design/';
+/** Where `build.ts` copies `design/assets/`; one copy serves every language's page. */
+export const DESIGN_ASSETS = '/design/assets';
 
 /** The translations: `design-i18n/<locale dir>/<FILE>.md`, website-only. */
 export const DESIGN_I18N_DIR = join(import.meta.dirname, '..', 'design-i18n');
@@ -38,11 +41,7 @@ export const translationOf = (locale: LocaleDef, file: string): string | undefin
   return locale.dir && existsSync(path) ? readFileSync(path, 'utf8') : undefined;
 };
 
-/**
- * GitHub's heading anchor, the form the design sources link with. Same rule as `slug` in
- * `bin/design-rules.ts`, which this package cannot import; `test/design-reference.test.ts`
- * holds the two equal.
- */
+/** GitHub's heading anchor, the form the design sources link with. */
 export const githubSlug = (heading: string): string =>
   heading
     .toLowerCase()
@@ -51,9 +50,9 @@ export const githubSlug = (heading: string): string =>
     .replace(/\s/g, '-');
 
 /** Headings in order, outside fenced code: GitHub's anchor (with its `-n` suffix) and the site's. */
-const headingAnchors = (text: string): Array<{ github: string; site: string }> => {
+const headingAnchors = (text: string): Array<{ github: string; site: string; text: string }> => {
   const counts = new Map<string, number>();
-  const anchors: Array<{ github: string; site: string }> = [];
+  const anchors: Array<{ github: string; site: string; text: string }> = [];
   let fence = '';
   for (const line of text.split(/\r?\n/)) {
     const marker = line.match(/^\s*(`{3,}|~{3,})/)?.[1];
@@ -63,7 +62,7 @@ const headingAnchors = (text: string): Array<{ github: string; site: string }> =
     const base = githubSlug(heading);
     const seen = counts.get(base) ?? 0;
     counts.set(base, seen + 1);
-    anchors.push({ github: seen ? `${base}-${seen}` : base, site: slugify(heading) });
+    anchors.push({ github: seen ? `${base}-${seen}` : base, site: slugify(heading), text: heading });
   }
   return anchors;
 };
@@ -104,14 +103,16 @@ export const designReferenceMarkdown = (
   const source = (translationOf(locale, file) ?? readFileSync(join(designDir, file), 'utf8'))
     .replace(/^<!--[\s\S]*?-->\s*/, '')
     .replace(/^# Ran Design[ \t]*$/m, title ? `# ${title}` : '$&');
-  const body = source.replace(/\]\((?:\.\/)?([A-Z_]+\.md)?(#[^)\s]*)?\)/g, (whole, target?: string, hash?: string) => {
-    if (!target && !hash) return whole;
-    const into = target ?? file;
-    const page = pageOf.get(into);
-    if (!page) return `](${GITHUB}${into}${hash ?? ''})`;
-    const anchor = hash ? `#${maps.get(into)?.get(hash.slice(1)) ?? hash.slice(1)}` : '';
-    return `](${prefix}/src/design/${page}${anchor})`;
-  });
+  const body = source
+    .replace(/\]\(\.\/assets\//g, `](${DESIGN_ASSETS}/`)
+    .replace(/\]\((?:\.\/)?([A-Z_]+\.md)?(#[^)\s]*)?\)/g, (whole, target?: string, hash?: string) => {
+      if (!target && !hash) return whole;
+      const into = target ?? file;
+      const page = pageOf.get(into);
+      if (!page) return `](${GITHUB}${into}${hash ?? ''})`;
+      const anchor = hash ? `#${maps.get(into)?.get(hash.slice(1)) ?? hash.slice(1)}` : '';
+      return `](${prefix}/src/design/${page}${anchor})`;
+    });
   const sourceLink = `[design/${file}](${GITHUB}${file})`;
   return `${body.trimEnd()}\n\n---\n\n${ui.designSource.replace('{source}', sourceLink)}\n`;
 };
@@ -123,40 +124,33 @@ export const designReferenceSources = (
   LOCALES.flatMap((locale) => {
     const maps = anchorMaps(designDir, locale);
     const { labels } = messagesFor(locale);
-    return DESIGN_REFERENCE.filter(({ file }) => !locale.dir || translationOf(locale, file)).map(
-      ({ file, page, key, title }) => ({
-        rel: `${locale.dir ? `${locale.dir}/` : ''}src/design/${page}.md`,
-        label: locale.dir ? `docs/design-i18n/${locale.dir}/${file}` : `design/${file}`,
-        // The sources' own H1 is the document name ("Ran Design"), which every page would share.
-        title: `${locale.dir ? labels[key] : title} — Ran Design`,
-        content: designReferenceMarkdown(designDir, file, maps, locale),
-      }),
-    );
+    return DESIGN_REFERENCE.filter(
+      ({ translated }) => !locale.dir || (translated as readonly string[]).includes(locale.dir),
+    ).map(({ file, page, key, title }) => ({
+      rel: `${locale.dir ? `${locale.dir}/` : ''}src/design/${page}.md`,
+      label: locale.dir ? `docs/design-i18n/${locale.dir}/${file}` : `design/${file}`,
+      // The sources' own H1 is the document name ("Ran Design"), which every page would share.
+      title: `${locale.dir ? labels[key] : title} — Ran Design`,
+      content: designReferenceMarkdown(designDir, file, maps, locale),
+    }));
   });
 
 /**
- * The source path of the section that states a graded rule, e.g. `X-INPUT-4` →
- * `/src/design/interaction#_1-inputs-drafts-and-intent`. Throws for an unknown ID, so a
- * renamed rule fails the build instead of leaving a link to nowhere.
+ * A guide section by its English heading, as a source path plus the heading in the reader's
+ * language: `/src/design/guide#inputs-and-drafts`. Throws for an unknown heading, so a renamed
+ * section fails the build instead of leaving a link to nowhere.
  */
-/** The section anchor is the reader's language's; the caller prefixes the path for its locale. */
-export const designRuleLink = (designDir: string, id: string, locale?: LocaleDef): string => {
-  for (const { file, page } of DESIGN_REFERENCE) {
-    if (file === 'RULES.md') continue;
-    // The section is found in English, where the rule's ID line is written, and named in
-    // the page the reader is on: a translation's heading at the same position.
-    const translation = locale && translationOf(locale, file);
-    const named = translation ? headingAnchors(translation) : undefined;
-    let index = -1;
-    let section = '';
-    let fence = '';
-    for (const line of readFileSync(join(designDir, file), 'utf8').split(/\r?\n/)) {
-      const marker = line.match(/^\s*(`{3,}|~{3,})/)?.[1];
-      if (marker && (!fence || marker.startsWith(fence))) fence = fence ? '' : marker;
-      const heading = !fence && line.match(/^#{1,6} (.+)$/)?.[1];
-      if (heading) section = named?.[++index]?.site ?? slugify(heading);
-      else if (line.startsWith(`- **${id} · `)) return `/src/design/${page}${section ? `#${section}` : ''}`;
-    }
-  }
-  throw new Error(`design rule ${id} is not stated in design/`);
+export const designSectionLink = (
+  designDir: string,
+  heading: string,
+  locale: LocaleDef,
+): { link: string; label: string } => {
+  const { file, page, translated } = DESIGN_REFERENCE[0];
+  const english = readFileSync(join(designDir, file), 'utf8');
+  const index = headingAnchors(english).findIndex(({ site }) => site === slugify(heading));
+  if (index < 0) throw new Error(`design guide has no section "${heading}"`);
+  const translation = (translated as readonly string[]).includes(locale.dir) && translationOf(locale, file);
+  if (!translation) return { link: `/src/design/${page}#${slugify(heading)}`, label: heading };
+  const { site, text } = headingAnchors(translation)[index]!;
+  return { link: `/src/design/${page}#${site}`, label: text };
 };

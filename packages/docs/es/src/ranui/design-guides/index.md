@@ -58,7 +58,7 @@ los grupos separados 16px y las subsecciones relacionadas 24px. Cada separación
 un solo responsable; cuente los márgenes de los hijos, el relleno existente y el espacio de
 línea base de los controles en línea. Compruebe los saltos de línea, la ayuda oculta y los
 errores en el navegador. Las
-[reglas canónicas de ritmo vertical](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+[reglas canónicas de ritmo vertical](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
 incluyen excepciones y pruebas inversas ejecutables, sin cambiar los valores predeterminados de los componentes.
 
 ## Elegir la tipografía
@@ -150,4 +150,4 @@ Elige comprobaciones para la superficie afectada y el comportamiento cambiado; C
 
 ## Evidencia y aceptación {#evidence-and-acceptance}
 
-[El contrato de aceptación](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/ACCEPTANCE.md) define la verificación real en el navegador, la vigencia de las capturas y la separación entre comprobaciones automáticas, revisión visual del agente y decisión del usuario. Tras cambiar estilos compartidos, actualiza la evidencia afectada; la revisión del agente no equivale a aceptación del usuario. Evita etiquetas secundarias y descripciones que no aportan información: deja que la disposición explique las relaciones evidentes. Conserva nombres accesibles, etiquetas útiles, unidades, errores y riesgos.
+[El contrato de aceptación](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) define la verificación real en el navegador, la vigencia de las capturas y la separación entre comprobaciones automáticas, revisión visual del agente y decisión del usuario. Tras cambiar estilos compartidos, actualiza la evidencia afectada; la revisión del agente no equivale a aceptación del usuario. Evita etiquetas secundarias y descripciones que no aportan información: deja que la disposición explique las relaciones evidentes. Conserva nombres accesibles, etiquetas útiles, unidades, errores y riesgos.

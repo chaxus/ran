@@ -4,15 +4,11 @@ title: Ran Design
 
 # Ran Design
 
-レイアウト、操作、モーション、実際の検証を扱う、ライブラリに依存しない設計方法。
+コンポーネントライブラリに依存しない、プロダクト UI のためのデザインガイド。
 
-タスクと実際の内容から始めます。製品全体の視覚言語を決め、キーボード操作と動きを含めた各状態をブラウザーで確認します。詳細な契約は以下を参照してください。
+設計する順に並んでいます。タスクと実際の内容から始め、視覚言語を一つに決め、ページを配置・構成し、操作とモーションを設計し、最後に実際のブラウザーで変更を確かめます。最後のチェックリストは変更のたびに使えます。
 
-- [視覚と構成](/ja/src/design/composition)
-- [操作](/ja/src/design/interaction)
-- [検証](/ja/src/design/acceptance)
-- [製品パターン](/ja/src/design/patterns)
-- [ルール索引](/ja/src/design/rules)
+- [デザインガイド](/src/design/guide)（英語）
 - [参考資料](https://github.com/chaxus/ran/blob/main/design/REFERENCE_RESEARCH.md)
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [エージェント](../agents/)

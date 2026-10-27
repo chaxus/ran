@@ -58,7 +58,7 @@ getrennte Gruppen 16px und zusammengehörige Unterabschnitte 24px verwenden. Jed
 hat genau einen Verantwortlichen; berücksichtigen Sie Kind-Margins, Innenabstände und
 Grundlinienraum bei Inline-Steuerelementen. Prüfen Sie Zeilenumbrüche sowie ausgeblendete
 Hinweise und Fehlerzustände im Browser. Die
-[verbindlichen Regeln zum vertikalen Rhythmus](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#vertical-rhythm-across-sibling-views)
+[verbindlichen Regeln zum vertikalen Rhythmus](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#spacing-as-relationships)
 enthalten Ausnahmen und ausführbare Gegenproben, ohne Komponentenvorgaben zu ändern.
 
 ## Schrift wählen
@@ -150,4 +150,4 @@ Wähle Prüfungen für die betroffene Oberfläche und das geänderte Verhalten; 
 
 ## Nachweise und Abnahme {#evidence-and-acceptance}
 
-[Der Abnahmevertrag](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/ACCEPTANCE.md) regelt echte Browserprüfungen, die Aktualität von Laufzeit und Aufnahmen sowie getrennte Ergebnisse für automatische Prüfungen, visuelle Agentenprüfung und Nutzerentscheidung. Änderungen an gemeinsamen Stilen erfordern neue betroffene Nachweise; Agentenprüfung ist keine Nutzerabnahme. Vermeide zusätzliche Beschriftungen und Beschreibungen ohne Informationsgewinn; die Anordnung soll offensichtliche Beziehungen erklären. Erhalte zugängliche Namen, hilfreiche Feldbeschriftungen, Einheiten, Fehler und Risikohinweise.
+[Der Abnahmevertrag](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) regelt echte Browserprüfungen, die Aktualität von Laufzeit und Aufnahmen sowie getrennte Ergebnisse für automatische Prüfungen, visuelle Agentenprüfung und Nutzerentscheidung. Änderungen an gemeinsamen Stilen erfordern neue betroffene Nachweise; Agentenprüfung ist keine Nutzerabnahme. Vermeide zusätzliche Beschriftungen und Beschreibungen ohne Informationsgewinn; die Anordnung soll offensichtliche Beziehungen erklären. Erhalte zugängliche Namen, hilfreiche Feldbeschriftungen, Einheiten, Fehler und Risikohinweise.
