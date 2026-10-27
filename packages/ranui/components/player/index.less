@@ -394,25 +394,12 @@
     position: var(--ran-player-controller-position, absolute);
     bottom: var(--ran-player-controller-bottom, 0);
     left: var(--ran-player-controller-left, 0);
-    // A frosted-glass bar, not `r-glass`: that component's WebGL SVG-displacement
-    // refraction is built for a decorative panel you look *at*, re-rendered only
-    // on its own interaction/resize — not for chrome that sits over a video
-    // repainting 30-60x/sec, where a per-frame GPU refraction pass is real,
-    // continuous cost for a look the viewer is mostly not looking straight at.
-    // `backdrop-filter` is the native, compositor-level way to get the same
-    // "frosted" read (blur + a saturation lift so colors under the glass don't
-    // look washed out) at a fraction of the cost — the technique every major
-    // player's premium chrome (Apple TV, YouTube's current bar, Vimeo) actually
-    // ships. The previous flat gray-to-gray gradient read as a dated plain
-    // scrim; this keeps a gradient (transparent up top, so it doesn't hard-edge
-    // against the video) but tints it neutral-dark instead of gray, to match
-    // the same dark surface the speed/clarity/subtitle dropdowns already use.
-    background: var(
-      --ran-player-controller-background,
-      linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, rgba(10, 10, 10, 0.65) 100%)
-    );
-    backdrop-filter: var(--ran-player-controller-backdrop-filter, blur(16px) saturate(160%));
-    -webkit-backdrop-filter: var(--ran-player-controller-backdrop-filter, blur(16px) saturate(160%));
+    // A plain scrim, not a frosted bar: blurring the frame behind it smeared a light picture and
+    // the black letterbox into a grey haze that white controls could not be read against. The
+    // scrim starts 48px above the bar, so the seek track has a dark ground over a white frame too.
+    isolation: isolate;
+    backdrop-filter: var(--ran-player-controller-backdrop-filter, none);
+    -webkit-backdrop-filter: var(--ran-player-controller-backdrop-filter, none);
     width: var(--ran-player-controller-width, calc(100% - 32px));
     height: var(--ran-player-controller-height, 34px);
     padding: var(--ran-player-controller-padding, 16px);
@@ -422,6 +409,15 @@
       opacity var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-smooth, cubic-bezier(0.4, 0, 0.2, 1))
     );
     box-sizing: var(--ran-player-controller-box-sizing, content-box);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -48px 0 0;
+      z-index: -1;
+      pointer-events: none;
+      background: var(--ran-player-controller-background, linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.75)));
+    }
 
     &-tip {
       position: var(--ran-player-tip-position, absolute);
@@ -773,24 +769,9 @@
           // `r-select:focus-visible` matches regardless of shadow
           // encapsulation, since the custom element host itself (not
           // something inside its shadow root) is the actual focus target.
-          // `@width` and `&-select`'s own `width` below are kept in sync
-          // (both 36px, not this row's `--ran-size-6`/30px scale step) —
-          // they used to disagree (wrapper 30px vs. the inner select's own
-          // 46px), and since the select has `flex-shrink: 0`, it simply
-          // overflowed the narrower wrapper rather than being clipped or
-          // stretching it, throwing the hover-pill background (painted on
-          // the wrapper's own, narrower box) a couple pixels short of fully
-          // covering the label text. Matching them removes that overflow
-          // *and* narrows the gap between the compact trigger and the wider
-          // dropdown panel above it (still deliberately wider — see the
-          // panel's own `min-width` override further up — so the longest
-          // option label, e.g. clarity's "1080", never clips).
-          //
-          // 36px (was 50px) — the pill only ever holds a 2-4 char value
-          // ("Auto", "1.5X"), so the old width read as a wide empty button
-          // next to its tightly-hugging icon-control neighbors (pip/cast/
-          // fullscreen). Matches YouTube/Vimeo-style compact speed/quality
-          // chips: the box hugs the label, not a fixed generic control size.
+          // The pill is a fixed 36px; the select inside sizes to its label, so the pill's
+          // `justify-content: center` keeps "1.0X" on the fill. The open panel is wider on purpose
+          // (its `min-width` override further up), so the longest option never clips.
           .player-pill-control(
             @width: var(--ran-player-speed-width, 36px);
             @height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
@@ -820,11 +801,13 @@
             // that the moment `&-speed` became a flex container (for the
             // hover-pill padding), squashing "1.5X"/"0.8X" and — since the
             // open dropdown panel positions itself off *this* element's rect
-            // — throwing the panel off-center too. Its width now matches
-            // `&-speed`'s own `@width` above (both 36px) rather than
-            // overflowing a narrower wrapper.
+            // — throwing the panel off-center too.
             flex-shrink: 0;
-            width: var(--ran-player-speed-select-width, 36px);
+            width: var(--ran-player-speed-select-width, auto);
+            // r-select's own 80px floor would outgrow the pill, and its item keeps 12px/28px of
+            // padding for an arrow this text-type select hides; both pushed the label off its fill.
+            min-width: 0;
+            --ran-select-item-padding: 0;
             height: var(--ran-player-speed-select-height, var(--ran-size-3, 20px));
             // `r-select`'s own `.selection` (the shadow-internal box the label
             // text actually sits in) defaults `min-height` to 32px — sized for
@@ -922,7 +905,9 @@
             // See the identical comments on `&-speed`'s `r-select` above
             // (`flex-shrink`, matched `width`, and `--ran-select-min-height`).
             flex-shrink: 0;
-            width: var(--ran-player-subtitle-select-width, 50px);
+            width: var(--ran-player-subtitle-select-width, auto);
+            min-width: 0;
+            --ran-select-item-padding: 0;
             height: var(--ran-player-subtitle-select-height, var(--ran-size-3, 20px));
             --ran-select-min-height: var(--ran-player-subtitle-select-height, var(--ran-size-3, 20px));
             outline: 0;
@@ -999,7 +984,9 @@
             // See the identical comments on `&-speed`'s `r-select` above
             // (`flex-shrink`, matched `width`, and `--ran-select-min-height`).
             flex-shrink: 0;
-            width: var(--ran-player-clarity-select-width, 40px);
+            width: var(--ran-player-clarity-select-width, auto);
+            min-width: 0;
+            --ran-select-item-padding: 0;
             height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
             --ran-select-min-height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
             outline: 0;
