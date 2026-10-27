@@ -86,3 +86,25 @@ test('pages opt into a cross-page transition', async ({ page, browserName }) => 
   );
   expect(transition).toBe(true);
 });
+
+test('the current-page rail slides from the old row to the new one', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'Cross-document view transitions are what carry the rail');
+  await page.addInitScript(() => {
+    addEventListener('pagereveal', (event) => {
+      const transition = (event as Event & { viewTransition: ViewTransition | null }).viewTransition;
+      const state = window as unknown as { rail?: string };
+      state.rail = transition ? 'pending' : 'none';
+      void transition?.ready.then(() => {
+        state.rail = document
+          .getAnimations()
+          .some((animation) => (animation.effect as KeyframeEffect | null)?.pseudoElement?.includes('sb-rail'))
+          ? 'animated'
+          : 'missing';
+      });
+    });
+  });
+  await page.goto('/ranui/theme/');
+  await page.locator('.sb__link[href="/ranui/theme-switch/"]').click();
+  await page.waitForURL('**/ranui/theme-switch/');
+  await expect.poll(() => page.evaluate(() => (window as unknown as { rail?: string }).rail)).toBe('animated');
+});

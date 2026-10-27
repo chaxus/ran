@@ -29,3 +29,76 @@ r-tabs:not(:defined) > r-tab:not(:first-of-type) {
 r-scratch:not(:defined) {
   visibility: hidden;
 }
+
+// Controls render nothing (or bare text) until upgraded, then grow to their own size and push
+// everything after them. Reserve that box. Each value comes from the component's own
+// stylesheet and reads the same override variables, so a resized control reserves its size.
+// An input or select caption is one line of label text plus its 4px gap; `1lh` measures that
+// line with the inherited line height, as the upgraded caption does. Each rule is wrapped in
+// :where() so the page's own sizing and display for the element still win.
+:where(r-input:not(:defined)) {
+  display: block;
+  min-height: var(--ran-input-min-height, var(--ran-size-7, 32px));
+}
+:where(r-select:not(:defined)) {
+  display: inline-block;
+  min-height: var(--ran-select-min-height, var(--ran-size-7, 32px));
+}
+:where(r-input[label]:not(:defined), r-select[label]:not(:defined)) {
+  font-size: var(--ran-text-label-1, 14px);
+}
+:where(r-input[label]:not(:defined)) {
+  min-height: calc(1lh + var(--ran-space-1, 4px) + var(--ran-input-min-height, var(--ran-size-7, 32px)));
+}
+:where(r-select[label]:not(:defined)) {
+  min-height: calc(1lh + var(--ran-space-1, 4px) + var(--ran-select-min-height, var(--ran-size-7, 32px)));
+}
+:where(r-button:not(:defined)) {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: var(--ran-btn-height, var(--ran-size-7, 32px));
+  padding: var(--ran-btn-padding, var(--ran-space-2, 8px) var(--ran-space-4, 16px));
+  border: 1px solid transparent;
+  font-size: var(--ran-btn-font-size, var(--ran-text-button-size, 14px));
+  font-family: var(--ran-btn-font-family, var(--ran-skin-font-family, inherit));
+  font-weight: var(--ran-btn-font-weight, var(--ran-text-button-weight, 500));
+  line-height: 1;
+  white-space: nowrap;
+}
+// Three buttons, two gaps, the padding and the 1px border on each side.
+:where(r-theme-switch:not(:defined)) {
+  display: inline-block;
+  inline-size: calc(
+    3 * var(--ran-theme-switch-button-size, var(--ran-size-5, 28px)) + 2 *
+      var(--ran-theme-switch-gap, var(--ran-space-1, 4px)) + 2 *
+      var(--ran-theme-switch-padding, var(--ran-space-1, 4px)) + 2px
+  );
+  block-size: calc(
+    var(--ran-theme-switch-button-size, var(--ran-size-5, 28px)) + 2 *
+      var(--ran-theme-switch-padding, var(--ran-space-1, 4px)) + 2px
+  );
+}
+// On touch screens each button grows to the 44px touch target.
+@media (pointer: coarse) {
+  :where(r-theme-switch:not(:defined)) {
+    inline-size: calc(
+      3 * max(var(--ran-theme-switch-button-size, var(--ran-size-5, 28px)), var(--ran-theme-switch-touch-size, 44px)) +
+        2 * var(--ran-theme-switch-gap, var(--ran-space-1, 4px)) + 2 *
+        var(--ran-theme-switch-padding, var(--ran-space-1, 4px)) + 2px
+    );
+    block-size: calc(
+      max(var(--ran-theme-switch-button-size, var(--ran-size-5, 28px)), var(--ran-theme-switch-touch-size, 44px)) + 2 *
+        var(--ran-theme-switch-padding, var(--ran-space-1, 4px)) + 2px
+    );
+  }
+}
+// The label text is already there; the 16px box and its 8px gap come with the upgrade.
+:where(r-checkbox:not(:defined)) {
+  display: inline-block;
+  padding-inline-start: calc(var(--ran-checkbox-width, var(--ran-size-1, 16px)) + var(--ran-checkbox-label-gap, 8px));
+  font-size: var(--ran-checkbox-label-font-size, var(--ran-text-label-1, 14px));
+  font-family: var(--ran-checkbox-label-font-family, var(--ran-skin-font-family, inherit));
+  font-weight: var(--ran-checkbox-label-font-weight, var(--ran-text-label-weight, 500));
+  line-height: var(--ran-checkbox-label-line-height, 1.5);
+}

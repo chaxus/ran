@@ -525,10 +525,15 @@
   display: flex;
   gap: var(--ran-space-3, 12px);
 }
+/* One title line tall at the title's size, so the icon centres on the name rather than
+   hanging from the top of the row. */
 .caps-ico {
   flex: 0 0 auto;
+  display: grid;
+  place-items: center;
   width: 20px;
-  height: 20px;
+  height: 1lh;
+  font-size: var(--type-label-1, 14px);
   color: var(--fg-muted);
 }
 .caps-ico svg {

@@ -130,6 +130,43 @@ test.describe('before definition, content the component hides stays off the page
   });
 });
 
+// A control that grows when it upgrades pushes the rest of the page; its placeholder keeps the box.
+test.describe('before definition, controls keep their upgraded size', () => {
+  const box = (page: Page, selector: string) =>
+    page.locator(selector).evaluate((node) => {
+      const { width, height } = node.getBoundingClientRect();
+      return { width, height };
+    });
+  const cases = [
+    { tag: 'r-theme-switch', bundle: 'theme-switch', markup: '<r-theme-switch></r-theme-switch>', width: true },
+    { tag: 'r-input', bundle: 'input', markup: '<r-input label="Work email"></r-input>', width: false },
+    { tag: 'r-input', bundle: 'input', markup: '<r-input placeholder="Email"></r-input>', width: false },
+    {
+      tag: 'r-select',
+      bundle: 'select',
+      markup: '<r-select label="Role"><r-option value="a">A</r-option></r-select>',
+      width: false,
+    },
+    { tag: 'r-button', bundle: 'button', markup: '<r-button type="primary">Send invite</r-button>', width: true },
+    {
+      tag: 'r-checkbox',
+      bundle: 'checkbox',
+      markup: '<r-checkbox>Simulate a failed request</r-checkbox>',
+      width: true,
+    },
+  ];
+  for (const { tag, bundle, markup, width } of cases) {
+    test(`${markup.slice(0, markup.indexOf('>') + 1)} reserves its box`, async ({ page }) => {
+      await mount(page, markup);
+      const before = await box(page, tag);
+      await upgrade(page, tag, bundle);
+      const after = await box(page, tag);
+      expect(Math.abs(after.height - before.height)).toBeLessThan(1);
+      if (width) expect(Math.abs(after.width - before.width)).toBeLessThan(1);
+    });
+  }
+});
+
 // Overlay content can also be hidden by the browser itself, so it stays off the page even when
 // ranui.css is not loaded at all. These cases withhold the stylesheet.
 const mountBare = async (page: Page, markup: string): Promise<void> => {
