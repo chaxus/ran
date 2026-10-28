@@ -25,7 +25,15 @@ export type { VerifyOptions, Failure } from './verify.ts';
 export { createDevServer, createPreviewServer } from './serve.ts';
 export type { DevServerOptions, ServeOptions, WatchTarget } from './serve.ts';
 
-export { resolveHost, followRedirects, matchRedirect, parseRedirects, readRedirects, MIME } from './host.ts';
+export {
+  resolveHost,
+  followRedirects,
+  isExternal,
+  matchRedirect,
+  parseRedirects,
+  readRedirects,
+  MIME,
+} from './host.ts';
 export type { HostResolution, RedirectRule } from './host.ts';
 
 export { renderSitemap } from './feeds.ts';

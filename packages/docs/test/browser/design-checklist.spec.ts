@@ -15,7 +15,7 @@ const PAGES = [
   '/cn/ranui/input/',
   '/ranuts/',
   '/agents/',
-  '/articles/doc_preview',
+  '/ranuts/choosing/',
 ];
 const HOMES = new Set(['/', '/cn/', '/fa/']);
 

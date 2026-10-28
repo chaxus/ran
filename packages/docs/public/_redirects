@@ -9,31 +9,33 @@
 # First match wins — keep the catch-all `.html` rule LAST.
 #
 # ── Articles (all pruned article slugs → the surviving flagship article) ──────
-/src/article/design_mode /articles/doc_preview 301
-/src/article/babel /articles/doc_preview 301
-/src/article/bundle /articles/doc_preview 301
-/src/article/imagemin /articles/doc_preview 301
-/src/article/system_design /articles/doc_preview 301
-/src/article/ast_parse/tokenizer /articles/doc_preview 301
-/src/article/javascript/dom_load /articles/doc_preview 301
-/src/article/typescript /articles/doc_preview 301
-/src/article/typescript/ /articles/doc_preview 301
-/src/article/typescript/* /articles/doc_preview 301
+# Articles and notes moved to chaxus.com; these point at it directly, so a
+# pruned slug is still one hop. build/urls.ts owns the moved pages themselves.
+/src/article/design_mode https://chaxus.com/writing/doc_preview/ 301
+/src/article/babel https://chaxus.com/writing/doc_preview/ 301
+/src/article/bundle https://chaxus.com/writing/doc_preview/ 301
+/src/article/imagemin https://chaxus.com/writing/doc_preview/ 301
+/src/article/system_design https://chaxus.com/writing/doc_preview/ 301
+/src/article/ast_parse/tokenizer https://chaxus.com/writing/doc_preview/ 301
+/src/article/javascript/dom_load https://chaxus.com/writing/doc_preview/ 301
+/src/article/typescript https://chaxus.com/writing/doc_preview/ 301
+/src/article/typescript/ https://chaxus.com/writing/doc_preview/ 301
+/src/article/typescript/* https://chaxus.com/writing/doc_preview/ 301
 
-/cn/src/article/design_mode /cn/articles/doc_preview 301
-/cn/src/article/babel /cn/articles/doc_preview 301
-/cn/src/article/bundle /cn/articles/doc_preview 301
-/cn/src/article/imagemin /cn/articles/doc_preview 301
-/cn/src/article/system_design /cn/articles/doc_preview 301
-/cn/src/article/ast_parse/tokenizer /cn/articles/doc_preview 301
-/cn/src/article/javascript/dom_load /cn/articles/doc_preview 301
-/cn/src/article/typescript /cn/articles/doc_preview 301
-/cn/src/article/typescript/ /cn/articles/doc_preview 301
-/cn/src/article/typescript/* /cn/articles/doc_preview 301
+/cn/src/article/design_mode https://chaxus.com/zh/writing/doc_preview/ 301
+/cn/src/article/babel https://chaxus.com/zh/writing/doc_preview/ 301
+/cn/src/article/bundle https://chaxus.com/zh/writing/doc_preview/ 301
+/cn/src/article/imagemin https://chaxus.com/zh/writing/doc_preview/ 301
+/cn/src/article/system_design https://chaxus.com/zh/writing/doc_preview/ 301
+/cn/src/article/ast_parse/tokenizer https://chaxus.com/zh/writing/doc_preview/ 301
+/cn/src/article/javascript/dom_load https://chaxus.com/zh/writing/doc_preview/ 301
+/cn/src/article/typescript https://chaxus.com/zh/writing/doc_preview/ 301
+/cn/src/article/typescript/ https://chaxus.com/zh/writing/doc_preview/ 301
+/cn/src/article/typescript/* https://chaxus.com/zh/writing/doc_preview/ 301
 
 # ── Notes (ubuntu note removed → the surviving Linux note) ───────────────────
-/src/note/ubuntu /notes/centos 301
-/cn/src/note/ubuntu /cn/notes/centos 301
+/src/note/ubuntu https://chaxus.com/writing/centos/ 301
+/cn/src/note/ubuntu https://chaxus.com/zh/writing/centos/ 301
 
 # ── Blockchain section (removed entirely → home) ─────────────────────────────
 /src/blockchain / 301

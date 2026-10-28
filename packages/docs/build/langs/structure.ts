@@ -14,53 +14,6 @@ import { DESIGN_REFERENCE, DESIGN_REFERENCE_LINKS } from './design-pages.ts';
  * prefix; `buildThemeConfig` adds it, and only for locales that actually mirror the page.
  */
 
-/** Shared by `/src/article/` and `/src/note/` — sidebars are matched by path prefix. */
-const articleSidebar: SidebarNode[] = [
-  {
-    items: [
-      { kind: 'full', key: 'how_ai_agents_work', link: '/src/article/ai/' },
-      { kind: 'full', key: 'article_functional_programming', link: '/src/article/functional_programming' },
-      { kind: 'full', key: 'web_document_preview', link: '/src/article/doc_preview' },
-      { kind: 'full', key: 'web_video_encryption', link: '/src/article/video' },
-      { kind: 'full', key: 'visual_rendering_engine', link: '/src/article/visual' },
-      {
-        kind: 'full',
-        key: 'sorting_algorithm',
-        link: '/src/article/sort/',
-        collapsed: true,
-        items: [
-          { kind: 'full', key: 'bubble_sort', link: '/src/article/sort/bubble/' },
-          { kind: 'full', key: 'selection_sort', link: '/src/article/sort/select/' },
-          { kind: 'full', key: 'insertion_sort', link: '/src/article/sort/insert/' },
-          { kind: 'full', key: 'shell_sort', link: '/src/article/sort/shell/' },
-          { kind: 'full', key: 'merge_sort', link: '/src/article/sort/merge/' },
-          { kind: 'full', key: 'quick_sort', link: '/src/article/sort/quick/' },
-          { kind: 'full', key: 'heap_sort', link: '/src/article/sort/heap/' },
-          { kind: 'full', key: 'counting_sort', link: '/src/article/sort/count/' },
-          { kind: 'full', key: 'bucket_sort', link: '/src/article/sort/bucket/' },
-          { kind: 'full', key: 'radix_sort', link: '/src/article/sort/radix/' },
-        ],
-      },
-      {
-        kind: 'full',
-        key: 'article_math',
-        collapsed: true,
-        items: [{ kind: 'full', key: 'linear_algebra', link: '/src/article/math/linear_algebra' }],
-      },
-      {
-        kind: 'full',
-        key: 'notes',
-        collapsed: true,
-        items: [
-          { kind: 'full', key: 'compiling_libreoffice_to_webassembly', link: '/src/note/libreoffice2wasm' },
-          { kind: 'full', key: 'centos', link: '/src/note/centos' },
-          { kind: 'full', key: 'docker', link: '/src/note/docker' },
-        ],
-      },
-    ],
-  },
-];
-
 /** The product: the three pillars and the agent workflow. */
 export const NAV: SidebarNode[] = [
   { kind: 'full', key: 'ran_design', link: '/src/design/', activeMatch: '/design/' },
@@ -70,10 +23,7 @@ export const NAV: SidebarNode[] = [
 ];
 
 /** Reachable from every page, but not part of the product: the page footer and the drawer's end. */
-export const SECONDARY_NAV: SidebarNode[] = [
-  { kind: 'full', key: 'articles', link: '/src/article/', activeMatch: '/(articles|notes)/' },
-  { kind: 'full', key: 'doc_editor', link: EDITOR },
-];
+export const SECONDARY_NAV: SidebarNode[] = [{ kind: 'full', key: 'doc_editor', link: EDITOR }];
 
 export const SIDEBAR: Record<string, SidebarNode[]> = {
   '/src/design/': [
@@ -613,6 +563,4 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
       ],
     },
   ],
-  '/src/article/': articleSidebar,
-  '/src/note/': articleSidebar,
 };

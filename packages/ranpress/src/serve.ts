@@ -20,7 +20,7 @@ import { createServer } from 'node:http';
 import type { IncomingMessage, Server, ServerResponse } from 'node:http';
 import { existsSync, readFileSync, watch } from 'node:fs';
 import { join } from 'node:path';
-import { MIME, mimeFor, readRedirects, resolveHost } from './host.ts';
+import { MIME, isExternal, mimeFor, readRedirects, resolveHost } from './host.ts';
 
 export interface ServeOptions {
   distDir: string;
@@ -72,6 +72,15 @@ const respond =
        * second header and a `//host` in it cannot become an origin.
        */
       const base = 'http://redirect.invalid';
+      // Another origin only when `_redirects` names it outright; the parser keeps a `:splat`
+      // out of that origin, so the request still cannot pick the host.
+      if (isExternal(result.to)) {
+        const location = new URL(result.to);
+        location.search = new URL(url, base).search;
+        res.writeHead(result.status, { location: location.href });
+        res.end();
+        return;
+      }
       const location = new URL(result.to, base);
       location.search = new URL(url, base).search;
       if (location.origin !== base) {

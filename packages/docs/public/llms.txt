@@ -27,7 +27,7 @@ and a virtual DOM.
 - [ranui changelog](https://ran.chaxus.com/ranui/changelog): what changed and why, plus the dated engineering notes — ranui is alpha and ships breaking changes
 - [ranuts — utility library](https://ran.chaxus.com/ranuts/): functional (debounce, throttle, once, singleFlight, compose), string/object/number/colour utils, storage and IndexedDB, Web Worker request/response on both ends, Service Worker caching and precache, text pagination, postMessage bridge, ZIP, i18n, audio recording, speech-to-text, a 2D rendering engine, virtual DOM, TOTP
 - [ranuts — choosing a utility](https://ran.chaxus.com/ranuts/choosing/): which of two similar exports to reach for (debounce vs throttle, once vs singleFlight, localStorage vs IndexedDB, bridge vs worker client) and when the platform already has it
-- [Articles](https://ran.chaxus.com/articles/doc_preview): front-end engineering notes — web document preview, video encryption, a 2D/WebGL/WebGPU rendering engine, sorting algorithms, functional programming, AI agents, linear algebra
+- [Writing on chaxus.com](https://chaxus.com/writing/): the author's front-end engineering articles, moved from this site in 2026-10 — web document preview, video encryption, a 2D/WebGL/WebGPU rendering engine, sorting algorithms, functional programming, AI agents, linear algebra
 
 ## Entry points
 
