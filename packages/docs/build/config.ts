@@ -21,6 +21,9 @@ export const SITE = {
   description: DESCRIPTION,
   author: 'chaxus',
   github: GITHUB,
+  /** The author's own site; the Chinese pages link to its Chinese version. */
+  authorUrl: 'https://chaxus.com/',
+  authorUrlCn: 'https://chaxus.com/zh/',
 } as const;
 
 /**

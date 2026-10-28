@@ -208,7 +208,7 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
 ${tocHtml(page, ui.outline) ? `<details class="mobile-toc"><summary>${escapeHtml(ui.outline)}</summary>${tocHtml(page, ui.outline).replace(/<aside[^>]*>|<\/aside>|<p[^>]*>.*?<\/p>/g, '')}</details>` : ''}
 <${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div class="landing"' : 'article class="prose"'}>${page.html}</${page.url === '/' || /^\/[a-z]{2}(-[A-Z]{2})?\/$/.test(page.url) ? 'div' : 'article'}>
 ${footerNav}
-<footer class="site-footer">${linksHtml(secondary, 'site-footer__link')}</footer>
+<footer class="site-footer">${linksHtml(secondary, 'site-footer__link')}<a class="site-footer__link" href="${page.locale.dir === 'cn' ? SITE.authorUrlCn : SITE.authorUrl}" rel="author">${escapeHtml(ui.authorLink)}</a></footer>
 </main>
 ${tocHtml(page, ui.outline)}
 </div>

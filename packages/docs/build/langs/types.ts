@@ -69,6 +69,8 @@ export interface UiMessages {
   prevPage: string;
   nextPage: string;
   lastUpdated: string;
+  /** The footer link to the author's site. */
+  authorLink: string;
   /** Local-search UI. */
   searchButton: string;
   searchPlaceholder: string;

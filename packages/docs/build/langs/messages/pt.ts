@@ -234,6 +234,7 @@ const pt: LocaleMessages = {
     prevPage: 'Página anterior',
     nextPage: 'Próxima página',
     lastUpdated: 'Última atualização',
+    authorLink: 'Por chaxus',
     searchButton: 'Pesquisar',
     searchPlaceholder: 'Exibir lista detalhada',
     noResults: 'Nenhum resultado para',
