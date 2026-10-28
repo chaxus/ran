@@ -68,19 +68,19 @@ describe('r-dropdown contract', () => {
     document.body.appendChild(dropdown);
 
     dropdown.transit = 'ran-dropdown-down-in';
-    expect(dropdown.dropdown.classList.contains('ran-dropdown-down-in')).toBe(true);
+    expect(dropdown.getAnimationTarget().classList.contains('ran-dropdown-down-in')).toBe(true);
 
     // Reversing direction must not leave the first class behind.
     dropdown.transit = 'ran-dropdown-down-out';
-    expect(dropdown.dropdown.classList.contains('ran-dropdown-down-in')).toBe(false);
-    expect(dropdown.dropdown.classList.contains('ran-dropdown-down-out')).toBe(true);
+    expect(dropdown.getAnimationTarget().classList.contains('ran-dropdown-down-in')).toBe(false);
+    expect(dropdown.getAnimationTarget().classList.contains('ran-dropdown-down-out')).toBe(true);
 
     // And it stays until the attribute goes, rather than expiring on a timer.
     await sleep(350);
-    expect(dropdown.dropdown.classList.contains('ran-dropdown-down-out')).toBe(true);
+    expect(dropdown.getAnimationTarget().classList.contains('ran-dropdown-down-out')).toBe(true);
 
     dropdown.removeAttribute('transit');
-    expect(dropdown.dropdown.classList.contains('ran-dropdown-down-out')).toBe(false);
+    expect(dropdown.getAnimationTarget().classList.contains('ran-dropdown-down-out')).toBe(false);
   });
 
   it('exposes the element its animations run on', () => {
@@ -88,9 +88,13 @@ describe('r-dropdown contract', () => {
     // host reports nothing and `{ subtree: true }` does not cross the boundary.
     // Anything waiting for the panel's transition asks for this instead of
     // reaching through the shadow tree for a class name.
+    // It holds the arrow as well as the panel, so the two fade out together.
     const dropdown = document.createElement('r-dropdown') as any;
+    dropdown.setAttribute('arrow', 'top');
     document.body.appendChild(dropdown);
-    expect(dropdown.getAnimationTarget()).toBe(dropdown.dropdown);
+    const target = dropdown.getAnimationTarget() as Element;
+    expect(target.contains(dropdown.dropdown)).toBe(true);
+    expect(target.contains(dropdown._shadowDom.querySelector('.ranui-dropdown-arrow'))).toBe(true);
   });
 
   it('stopPropagation calls event.stopPropagation', () => {
@@ -142,6 +146,6 @@ describe('r-dropdown contract', () => {
     document.body.appendChild(dropdown);
 
     dropdown.setAttribute('transit', 'ran-dropdown-down-in');
-    expect(dropdown.dropdown.classList.contains('ran-dropdown-down-in')).toBe(true);
+    expect(dropdown.getAnimationTarget().classList.contains('ran-dropdown-down-in')).toBe(true);
   });
 });
