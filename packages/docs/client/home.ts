@@ -243,7 +243,10 @@ const mountGlass = (): void => {
   });
 
   let uploaded = '';
+  /** A scene tile's thumbnail is the full picture, so the stage reuses its URL. */
+  const tileSource = (radio: HTMLInputElement): string => radio.parentElement?.querySelector('img')?.src ?? '';
   const showScene = (src: string): void => {
+    if (!src) return;
     scene.src = src;
     if (uploaded && src !== uploaded) {
       URL.revokeObjectURL(uploaded);
@@ -252,7 +255,7 @@ const mountGlass = (): void => {
   };
   root.addEventListener('change', (event) => {
     const target = event.target as HTMLInputElement;
-    if (target.name === 'gp-scene') showScene(`/glass/${target.value}.svg`);
+    if (target.name === 'gp-scene') showScene(tileSource(target));
     if (target.matches('[data-upload]') && target.files?.[0]) {
       const url = URL.createObjectURL(target.files[0]);
       showScene(url);
@@ -272,7 +275,7 @@ const mountGlass = (): void => {
     const first = root.querySelector<HTMLInputElement>('[name="gp-scene"]');
     if (first) {
       first.checked = true;
-      showScene(`/glass/${first.value}.svg`);
+      showScene(tileSource(first));
     }
     x = y = 24;
     sync();

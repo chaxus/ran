@@ -112,3 +112,12 @@ it('restores Copy after repeated clicks', async () => {
   await vi.advanceTimersByTimeAsync(1700);
   expect(button.textContent).toBe('Copy');
 });
+it('a scene tile shows its picture on the stage, and reset brings back the first', () => {
+  const stage = document.querySelector<HTMLImageElement>('[data-scene]')!;
+  const paper = document.querySelector<HTMLInputElement>('input[name="gp-scene"][value="paper"]')!;
+  paper.checked = true;
+  paper.dispatchEvent(new Event('change', { bubbles: true }));
+  expect(stage.src).toMatch(/\/glass\/paper\.svg$/);
+  document.querySelector<HTMLButtonElement>('[data-reset]')!.click();
+  expect(stage.src).toMatch(/\/glass\/aurora\.svg$/);
+});
