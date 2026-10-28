@@ -62,14 +62,15 @@ test('glass moves by dragging and keyboard, stays bounded, and resets', async ({
   await page.mouse.down();
   await page.mouse.move(box.x + 45, box.y + 50);
   await page.mouse.up();
-  await expect(glass).toHaveCSS('left', '25px');
-  await expect(glass).toHaveCSS('top', '30px');
+  // It starts 24px in from the stage's corner.
+  await expect(glass).toHaveCSS('left', '49px');
+  await expect(glass).toHaveCSS('top', '54px');
   await stage.focus();
   await page.keyboard.press('ArrowDown');
-  await expect(glass).toHaveCSS('top', '40px');
+  await expect(glass).toHaveCSS('top', '64px');
   await page.locator('[data-reset]').click();
-  await expect(glass).toHaveCSS('left', '0px');
-  await expect(glass).toHaveCSS('top', '0px');
+  await expect(glass).toHaveCSS('left', '24px');
+  await expect(glass).toHaveCSS('top', '24px');
 });
 
 for (const reducedMotion of ['no-preference', 'reduce'] as const) {

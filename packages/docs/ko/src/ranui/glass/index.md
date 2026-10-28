@@ -1,38 +1,105 @@
 ---
-description: '배경 블러, 빛을 휘게 하는 SVG 변위, 스페큘러 테두리를 합친 액체 간유리 표면. backdrop-filter를 지원하지 않는 곳에서는 자연스럽게 낮춰 그립니다.'
+description: '액체 유리 표면. 재질을 고르면 뒤에 놓인 것을 흐리고 렌즈 같은 가장자리에서 휘게 합니다. 이미지나 영상 위에서는 WebGL2로 픽셀 자체를 굴절시킵니다.'
 ---
 
 # Glass
 
-액체 같은 간유리 표면입니다. `<r-glass>`는 뒤에 놓인 것을 흐리고 굴절시킵니다. 간유리 느낌은 `backdrop-filter`의 blur와 saturate, 빛이 액체처럼 휘는 부분은 SVG `feDisplacementMap`, 여기에 유리처럼 읽히게 하는 스페큘러 테두리와 하이라이트가 더해집니다. 전부 토큰으로 움직이고, 내용은 기본 슬롯에 넣습니다.
+액체 유리 표면입니다. `material`만 고르면 유리가 완성됩니다. 뒤에 놓인 것을 흐리게 하고, 곡면 가장자리에서 렌즈처럼 휘게 하며, 테두리에서 색을 살짝 가르고 가장자리를 비춥니다. 개별 값은 같은 이름의 속성으로 덮어쓸 수 있습니다. 내용은 기본 슬롯에 넣으며, 유리 위에서 잘 읽히는 색이 입혀집니다.
 
-> **이럴 때 씁니다.** 색이 풍부하고 복잡한 콘텐츠 위에 반투명 패널을 얹고 싶을 때(히어로 카드, 떠 있는 툴바, 미디어 위의 오버레이). `displace` 속성이 얼마나 _액체처럼_ 보일지를 정합니다(0은 평평한 간유리판). `backdrop-filter`를 지원하지 않는 곳에서는 모든 효과가 그냥 반투명한 면으로 낮춰집니다.
+> **이럴 때 씁니다.** 색이 풍부한 콘텐츠 위에 패널이 놓일 때(히어로 카드, 떠 있는 툴바, 미디어 위의 오버레이). 평평한 배경 위에서는 휘게 할 것이 없어 효과가 사라집니다.
 
 ## 놀이터
 
-무대 위에서 유리를 끌어보고, 속성을 바꿔보고, 그대로의 마크업을 복사하세요. 기본값은 iOS의 간유리 재질 그대로입니다.
+유리를 끌어 옮기고, 재질과 배경을 바꾸고, 마크업을 복사하세요. 스니펫에는 재질과 다른 값만 담깁니다.
 
 <GlassPlayground />
 
 ```html
-<r-glass displace="8">
+<r-glass material="clear" backdrop>
   <div class="panel">…</div>
 </r-glass>
 ```
 
-> `<r-glass>`는 색이 많고 복잡한 콘텐츠 위에 두세요. 단색 배경 위에서는 효과가 보이지 않습니다.
+## 재질
+
+대부분의 용도는 네 가지 재질로 충분합니다. 기본값은 `regular`입니다.
+
+<ran-demo>
+  <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; padding: 32px; border-radius: 16px; overflow: hidden;">
+    <img src="/glass/aurora.svg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <r-glass material="thin"><div style="padding: 24px;">thin</div></r-glass>
+    <r-glass><div style="padding: 24px;">regular</div></r-glass>
+    <r-glass material="thick"><div style="padding: 24px;">thick</div></r-glass>
+    <r-glass material="clear"><div style="padding: 24px;">clear</div></r-glass>
+  </div>
+</ran-demo>
+
+```html
+<r-glass material="thin">…</r-glass>
+<r-glass>…regular…</r-glass>
+<r-glass material="thick">…</r-glass>
+<r-glass material="clear">…</r-glass>
+```
+
+| 재질      | `blur` | `saturate` | `displace` | `bevel` | `dispersion` | `specular` |
+| --------- | ------ | ---------- | ---------- | ------- | ------------ | ---------- |
+| `thin`    | 8      | 160        | 12         | 20      | 20           | 80         |
+| `regular` | 16     | 180        | 18         | 28      | 25           | 100        |
+| `thick`   | 28     | 200        | 22         | 32      | 25           | 100        |
+| `clear`   | 2      | 130        | 28         | 40      | 40           | 120        |
+
+## 이미지 위에서
+
+유리가 `<img>`나 `<video>` 위에 놓일 때는 `backdrop`을 추가합니다. 값이 없으면 유리의 부모에 있는 첫 번째 이미지나 영상을 쓰고, 선택자를 쓰면 다른 요소를 지정합니다. 그러면 유리는 그 요소의 픽셀을 WebGL2로 읽어 파장마다 다른 양만큼 굴절시킵니다. CSS 경로는 Chromium에서만 빛을 휘게 하지만, 이 방식은 WebGL2가 있는 모든 엔진에서 동작합니다. 이미지는 페이지에 그대로 남으므로 alt 텍스트와 주변 콘텐츠는 바뀌지 않습니다.
+
+<ran-demo>
+  <div style="position: relative; height: 280px; border-radius: 16px; overflow: hidden;">
+    <img src="/glass/grid.svg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <r-glass material="clear" backdrop rim style="position: absolute; left: 32px; top: 48px; width: 320px;">
+      <div style="padding: 32px;">Refracted with WebGL2</div>
+    </r-glass>
+  </div>
+</ran-demo>
+
+```html
+<div class="hero">
+  <img src="hero.jpg" alt="…" />
+  <r-glass material="clear" backdrop rim>…</r-glass>
+</div>
+```
+
+교차 출처 이미지를 읽으려면 `crossorigin`과 CORS 응답이 필요합니다. 그렇지 않으면 유리는 CSS 흐림을 유지합니다.
+
+## 톤과 잉크
+
+`tone`은 유리 뒤에 무엇이 있는지를 나타냅니다. 어둡거나 색이 진한 배경에서는 가장자리가 밝게 비치고 내용은 흰색입니다. 밝은 배경에서는 흰 가장자리가 보이지 않으므로 가장자리에 그늘을 넣고 내용은 어두운 색이 됩니다. `backdrop` 이미지 위에서는 직접 지정하지 않는 한 덮인 영역의 밝기를 따릅니다. 현재 적용된 톤은 `:state(light)`와 `:state(dark)`로 잡을 수 있고, `--ran-glass-ink`로 내용 색을 덮어쓸 수 있습니다.
+
+<ran-demo>
+  <div style="position: relative; height: 240px; border-radius: 16px; overflow: hidden;">
+    <img src="/glass/paper.svg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <r-glass backdrop rim style="position: absolute; left: 32px; top: 40px; width: 300px;">
+      <div style="padding: 32px;">The tone follows the image</div>
+    </r-glass>
+  </div>
+</ran-demo>
+
+```css
+r-glass:state(light) .badge {
+  border-color: rgb(0 0 0 / 0.2);
+}
+```
 
 ## 중첩
 
-`<r-glass>`는 겹쳐 쓸 수 있습니다. 하나를 다른 하나 안에 넣으면 재질이 층을 이룹니다(유리 패널 위의 유리 툴바처럼). 각 층은 자기 뒤에 있는 것을 굴절시킵니다.
+`<r-glass>`는 조합할 수 있습니다. 유리 패널 위의 유리 툴바처럼 하나를 다른 하나 안에 넣으면 겹친 재질이 됩니다. 각 층은 자기 뒤에 있는 것을 휘게 합니다.
 
 <ran-demo>
-  <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
-    <r-glass radius="26" style="width: 340px;">
-      <div style="padding: 26px;">
-        <div style="color: #fff; font-weight: 700; margin-bottom: 16px;">바깥 패널</div>
-        <r-glass radius="16" displace="6" style="display: block;">
-          <div style="padding: 14px 16px; color: #fff; font-size: 13px;">중첩된 유리 툴바</div>
+  <div style="position: relative; padding: 48px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
+    <r-glass radius="28" style="width: 340px;">
+      <div style="padding: 28px;">
+        <div style="font-weight: 700; margin-bottom: 16px;">Outer panel</div>
+        <r-glass material="thin" radius="16" style="display: block;">
+          <div style="padding: 12px 16px; font-size: 13px;">Nested glass toolbar</div>
         </r-glass>
       </div>
     </r-glass>
@@ -40,11 +107,11 @@ description: '배경 블러, 빛을 휘게 하는 SVG 변위, 스페큘러 테�
 </ran-demo>
 
 ```html
-<r-glass radius="26">
+<r-glass radius="28">
   <div class="panel">
-    바깥 패널
-    <r-glass radius="16" displace="6">
-      <div class="toolbar">중첩된 유리 툴바</div>
+    Outer panel
+    <r-glass material="thin" radius="16">
+      <div class="toolbar">Nested glass toolbar</div>
     </r-glass>
   </div>
 </r-glass>
@@ -54,95 +121,98 @@ description: '배경 블러, 빛을 휘게 하는 SVG 변위, 스페큘러 테�
 
 ### 속성
 
-| 속성          | 타입      | 기본값  | 설명                                                                                                                                                                                                        |
-| ------------- | --------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `blur`        | `number`  | `16`    | 배경 블러 반경(px). 간유리의 정도.                                                                                                                                                                          |
-| `saturate`    | `number`  | `180`   | 배경 채도(퍼센트). 유리 너머에 있는 것의 색을 끌어올립니다.                                                                                                                                                 |
-| `displace`    | `number`  | `8`     | 액체 굴절의 세기(SVG 변위 스케일). `0`은 평평한 간유리판이고, 값이 클수록 더 일렁입니다.                                                                                                                    |
-| `frequency`   | `number`  | `0.005` | 난류의 기본 주파수. 값이 작을수록 크고 부드러운 물결이 됩니다.                                                                                                                                              |
-| `radius`      | `number`  | `20`    | 모서리 반경(px).                                                                                                                                                                                            |
-| `tint`        | `string`  | 은은함  | 유리 채움의 색조. 임의의 CSS background 값.                                                                                                                                                                 |
-| `sheen`       | `boolean` | `false` | 표면을 훑고 지나가는 스페큘러 애니메이션.                                                                                                                                                                   |
-| `interactive` | `boolean` | `false` | 호버 시 떠오르고 누르면 줄어드는 반응. 누를 수 있는 유리를 위한 것. 호스트를 키보드로 조작할 수 있는 버튼으로도 만듭니다(`role="button"`, 탭 정지, Enter/Space가 클릭처럼 동작).                            |
-| `rim`         | `boolean` | `false` | 더 물리적인 조명감을 위한 스페큘러 테두리와 색수차 가장자리(선택). 항상 WebGL로 먼저(동기적으로) 그리고, 가능하면 배경에서 WebGPU로 조용히 넘어갑니다. 둘 다 없으면 CSS 스페큘러 그러데이션으로 물러납니다. |
+| 속성          | 타입      | 기본값    | 설명                                                                                                                                                                            |
+| ------------- | --------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `material`    | `string`  | `regular` | `thin`, `regular`, `thick`, `clear` 중 하나. 아래 광학 값을 한 번에 정합니다.                                                                                                   |
+| `blur`        | `number`  | 재질 따름 | 흐림 반경(px).                                                                                                                                                                  |
+| `saturate`    | `number`  | 재질 따름 | 뒤에 놓인 것의 채도(퍼센트).                                                                                                                                                    |
+| `displace`    | `number`  | 재질 따름 | 가장자리가 배경을 안쪽으로 끌어당기는 거리(px). `0`은 평평한 판입니다.                                                                                                          |
+| `bevel`       | `number`  | 재질 따름 | 빛을 휘게 하는 곡면 가장자리 띠의 폭(px).                                                                                                                                       |
+| `dispersion`  | `number`  | 재질 따름 | 가장자리에서 색이 갈라지는 정도. `displace`에 대한 퍼센트.                                                                                                                      |
+| `specular`    | `number`  | 재질 따름 | 하이라이트의 세기(퍼센트).                                                                                                                                                      |
+| `radius`      | `number`  | `20`      | 모서리 반경(px).                                                                                                                                                                |
+| `tint`        | `string`  | 재질 따름 | 흐림 위에 덮는 채움. 어떤 CSS background 값이든 됩니다.                                                                                                                         |
+| `tone`        | `string`  | `dark`    | `dark` 또는 `light`. 유리 뒤에 무엇이 있는지. `backdrop` 위에서 지정하지 않으면 이미지를 따릅니다.                                                                              |
+| `backdrop`    | `string`  | —         | `<img>`나 `<video>`를 WebGL2로 굴절시킵니다. 비워 두면 부모의 첫 번째 것을, 선택자를 쓰면 다른 요소를 가리킵니다.                                                               |
+| `rim`         | `boolean` | `false`   | GPU로 조명한 가장자리: 바깥 벽과 안쪽 벽, 키 라이트와 필 라이트, 반짝임. 패널의 모양에만 의존합니다.                                                                            |
+| `sheen`       | `boolean` | `false`   | 표면을 가로질러 지나가는 하이라이트.                                                                                                                                            |
+| `interactive` | `boolean` | `false`   | 클릭할 수 있는 유리를 위한 호버 시 떠오름과 눌림 피드백. 호스트를 키보드로 조작 가능한 버튼으로도 만듭니다: `role="button"`, 탭 이동 대상, Enter와 Space가 클릭처럼 동작합니다. |
 
 ### 굴절 `displace`
 
-`displace`는 SVG `feDisplacementMap`의 스케일, 즉 빛이 표면을 지나며 얼마나 세게 휘는지를 정합니다. 그냥 간유리판으로 만들려면 `0`으로 두세요.
+`displace`는 가장자리가 뒤에 있는 것을 중심 쪽으로 얼마나 끌어당길지를 정합니다. 그래서 테두리 바로 안쪽의 배경이 테두리 위로 늘어나, 두꺼운 볼록 가장자리가 확대해 보이는 것과 같은 모습이 됩니다. `bevel`은 그 곡면 띠의 폭을 정합니다. bevel의 절반을 넘으면 실제 두꺼운 유리의 테두리처럼 가장자리가 상을 뒤집어 접습니다.
 
 <ran-demo>
-  <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
-    <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
-    <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
+  <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; overflow: hidden;">
+    <img src="/glass/grid.svg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <r-glass material="clear" displace="0" style="flex: 1;"><div style="padding: 24px;">displace = 0</div></r-glass>
+    <r-glass material="clear" displace="40" style="flex: 1;"><div style="padding: 24px;">displace = 40</div></r-glass>
   </div>
 </ran-demo>
 
 ```html
-<r-glass displace="0">…평평한 간유리…</r-glass> <r-glass displace="60">…액체…</r-glass>
+<r-glass material="clear" displace="0">…flat…</r-glass> <r-glass material="clear" displace="40">…lensed edge…</r-glass>
 ```
 
 ### 광택과 상호작용
 
-`sheen`은 움직이는 스페큘러 하이라이트를 더하고, `interactive`는 호버 시 떠오름과 탄성 있는 눌림을 더합니다(공용 토큰 `--ran-motion-ease-spring` 사용).
+`sheen`은 움직이는 하이라이트를, `interactive`는 호버 시 떠오름과 되튀는 눌림을 더합니다.
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
-    <r-glass sheen interactive displace="36" style="width: 260px;">
-      <div style="padding: 20px; color: #fff; font-weight: 600;">올려보고 눌러보세요</div>
+    <r-glass sheen interactive style="width: 260px;">
+      <div style="padding: 20px; font-weight: 600;">Hover & press me</div>
     </r-glass>
   </div>
 </ran-demo>
 
 ```html
-<r-glass sheen interactive displace="36">
-  <div>올려보고 눌러보세요</div>
+<r-glass sheen interactive>
+  <div>Hover &amp; press me</div>
 </r-glass>
 ```
 
 ### Rim — GPU 스페큘러 가장자리(선택)
 
-`rim`은 두 번째 하이라이트 층을 더합니다. 왼쪽 위로 고정된 광원에서 비추는 스페큘러 테두리와, 둥근 사각형 경계에 아주 옅게 걸리는 색수차(RGB) 프린지입니다. `displace` 굴절과 달리 **배경을 전혀 샘플링하지 않습니다**. 셰이더는 패널 자신의 너비·높이·모서리 반경만 알기 때문에, 배경 전체를 GPU로 붙잡는 방식이 치러야 할 상호작용과 접근성의 대가를 하나도 치르지 않습니다([참고](#notes)). 같은 `backdrop-filter` 간유리 위에 얹히는 순수한 장식 층이며, 켜고 끄더라도 유리 뒤에 있는 것이나 그것을 샘플링하는 방식은 달라지지 않습니다.
-
-먼저 WebGL로 그리고(동기적이며 사실상 모든 브라우저에서 동작하므로 테두리가 자기 첫 페인트를 늦추는 일이 없습니다), 브라우저가 지원하면 배경에서 조용히 WebGPU로 넘어갑니다(효과는 같고 출력은 픽셀 단위로 동일). 두 GPU API가 모두 없을 때(아주 오래된 브라우저, 비활성화, SSR)는 CSS 스페큘러 그러데이션으로 물러나므로, 디자인에서 감안해야 할 깨진 상태나 빈 상태는 없습니다.
+`rim`은 가장자리를 GPU로 그립니다. 밝은 바깥 벽과, bevel이 평평한 면과 만나는 곳의 더 희미한 안쪽 벽이 있고, 왼쪽 위에서 오는 키 라이트와 오른쪽 아래의 약한 필 라이트로 비추며, 가장자리를 따라 두께가 달라지고 이따금 반짝입니다. `light` 톤에서는 벽에 빛 대신 그늘이 집니다. 배경은 샘플링하지 않습니다. 셰이더는 패널의 크기, 반경, bevel만 압니다. 먼저 WebGL로 그리고, 브라우저에 WebGPU가 있으면 백그라운드에서 옮겨 가며, 둘 다 없으면 CSS 하이라이트를 그대로 둡니다.
 
 <ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
-    <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim 없음</div></r-glass>
-    <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
+    <r-glass style="flex: 1;"><div style="padding: 20px; font-size: 13px;">no rim</div></r-glass>
+    <r-glass rim style="flex: 1;"><div style="padding: 20px; font-size: 13px;">rim</div></r-glass>
   </div>
 </ran-demo>
 
 ```html
-<r-glass>…CSS 스페큘러만…</r-glass> <r-glass rim>…GPU 테두리 + 색수차 가장자리(WebGL, WebGPU로 승격)…</r-glass>
+<r-glass>…CSS highlight…</r-glass> <r-glass rim>…GPU-lit edge…</r-glass>
 ```
 
 ### CSS part와 토큰
 
-`::part(glass)`, `::part(specular)`, 그리고 (`rim`을 켰을 때의) `::part(rim)`으로 내부에 스타일을 주거나, `--ran-glass-*` 사용자 정의 속성을 덮어쓰세요.
+내부는 `::part(glass)`, `::part(specular)`, `::part(refraction)`, 그리고 `rim`을 켰을 때 `::part(rim)`으로 스타일을 지정하거나, `--ran-glass-*` 커스텀 속성을 덮어씁니다:
 
-| 토큰                                          | 쓰임                                               |
-| --------------------------------------------- | -------------------------------------------------- |
-| `--ran-glass-blur`                            | 배경 블러 반경.                                    |
-| `--ran-glass-saturate`                        | 배경 채도.                                         |
-| `--ran-glass-radius`                          | 모서리 반경.                                       |
-| `--ran-glass-tint`                            | 채움 배경.                                         |
-| `--ran-glass-border`                          | 테두리 선.                                         |
-| `--ran-glass-shadow`                          | 그림자 묶음(하이라이트 + 깊이).                    |
-| `--ran-glass-specular-background`             | 스페큘러 하이라이트 배경.                          |
-| `--ran-glass-specular-opacity`                | 스페큘러 세기.                                     |
-| `--ran-glass-reduced-transparency-background` | OS의 "투명도 줄이기" 설정이 켜졌을 때의 대체 표면. |
-| `--ran-glass-reduced-transparency-shadow`     | 같은 상태에서의 대체 그림자.                       |
+| 토큰                                          | 쓰임                                                            |
+| --------------------------------------------- | --------------------------------------------------------------- |
+| `--ran-glass-ink`                             | 콘텐츠 색. 기본은 흰색, light 톤에서는 거의 검은색입니다.       |
+| `--ran-glass-tint`                            | 흐림 위의 채움.                                                 |
+| `--ran-glass-border`                          | 가장자리 테두리.                                                |
+| `--ran-glass-shadow`                          | 박스 그림자 묶음(스페큘러와 깊이).                              |
+| `--ran-glass-brightness`                      | 뒤에 놓인 것의 밝기.                                            |
+| `--ran-glass-specular-background`             | CSS 하이라이트 배경.                                            |
+| `--ran-glass-specular-opacity`                | CSS 하이라이트 세기. 그 레이어에서는 `specular`보다 우선합니다. |
+| `--ran-glass-reduced-transparency-background` | OS의 "투명도 줄이기" 설정이 켜졌을 때의 대체 표면.              |
+| `--ran-glass-reduced-transparency-shadow`     | 같은 상태에서의 대체 그림자.                                    |
 
 ```css
-r-glass::part(glass) {
-  --ran-glass-tint: linear-gradient(135deg, rgba(0, 0, 0, 0.2), transparent);
+r-glass {
+  --ran-glass-tint: linear-gradient(135deg, rgb(0 0 0 / 0.2), transparent);
 }
 ```
 
 ## 참고 {#notes}
 
-- **배경 샘플링.** `<r-glass>`는 `backdrop-filter`로 뒤쪽 DOM을 굴절시키므로, 유리 뒤의 선택 가능한 텍스트, 재생 중인 영상, 조작 가능한 요소는 그대로 동작합니다. 위의 `rim`은 패널 자신의 모양만으로 계산되는 순수 장식 GPU 층이라 배경을 샘플링하지 않습니다.
-- **가독성.** 본문 텍스트는 불투명한 안쪽 면에 두세요. 대비를 유리에만 맡기지 마세요.
-- **투명도 줄이기.** `<r-glass>`는 OS 수준의 "투명도 줄이기 / 대비 높이기" 설정(`prefers-reduced-transparency: reduce`)에 반응해, 흐림과 굴절 대신 불투명하고 테마를 따르는 면(기본값 `--ran-color-bg-elevated`)으로 바뀝니다. 네이티브 컨트롤이 알아서 하는 일을 커스텀 엘리먼트에서 그대로 해주는 것입니다.
-- **브라우저별 굴절 차이.** `feDisplacementMap` 액체 효과는 현재 Chromium에서만 그려집니다. Safari와 Firefox는 `backdrop-filter` 값의 그 부분을 버리고 blur / saturate / brightness 간유리만 남기는데, 더 평평해지긴 해도 깨진 상태가 아니라 정당한 대체 표현입니다.
-- **모션.** 이 표면은 `transform`만 트랜지션하고 색은 절대 트랜지션하지 않으므로, 라이트/다크 전환이 한 프레임에 끝납니다. 광택과 눌림은 `prefers-reduced-motion`을 따릅니다.
+- **두 가지 경로.** `backdrop`이 없으면 `backdrop-filter`가 유리 뒤의 실제 페이지를 흐리게 하므로, 뒤에 있는 텍스트, 영상, 컨트롤은 그대로 동작합니다. 렌즈 같고 색이 갈라지는 가장자리는 SVG 필터로, Chromium에서 그려지며 Safari와 Firefox에서는 흐림만 남습니다. `backdrop`이 있으면 WebGL2가 있는 모든 엔진에서 WebGL2가 그 이미지나 영상 하나를 굴절시킵니다.
+- **가독성.** 내용은 `--ran-glass-ink` 색을 씁니다. 긴 글은 대비를 유리에 맡기지 말고 불투명한 안쪽 면에 두세요.
+- **투명도 줄이기.** OS의 "투명도 줄이기"나 "대비 높이기" 설정(`prefers-reduced-transparency: reduce`)에서는 유리가 테마를 따르는 불투명한 면(`--ran-color-bg-elevated`)이 되고, 흐림, 굴절, 하이라이트가 사라집니다.
+- **모션.** 표면은 `transform`만 트랜지션하므로 테마 전환이 한 프레임에 끝납니다. 광택과 눌림은 `prefers-reduced-motion`을 따릅니다.
+- **비용.** SVG 렌즈 맵은 패널의 크기, 반경, bevel이 바뀔 때 다시 만들어집니다. WebGL 굴절은 보이는 동안 프레임마다 한 번 패널과 이미지를 확인하고, 둘 중 하나가 움직였을 때만 그립니다.

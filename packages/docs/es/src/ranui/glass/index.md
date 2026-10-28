@@ -1,38 +1,105 @@
 ---
-description: 'Una superficie de vidrio esmerilado líquido que combina desenfoque del fondo, desplazamiento SVG que curva la luz y un borde especular, degradando con elegancia donde backdrop-filter no existe.'
+description: 'Una superficie de vidrio líquido: elige un material y esmerila y curva lo que tiene detrás en un borde de lente. Sobre una imagen o un vídeo refracta los propios píxeles con WebGL2.'
 ---
 
 # Glass
 
-Una superficie de vidrio líquido / esmerilado. `<r-glass>` esmerila y refracta lo que quede detrás: `backdrop-filter` con blur y saturate para el esmerilado, un `feDisplacementMap` SVG para la curvatura líquida de la luz, más un borde y un brillo especulares para que se lea como vidrio. Todo va guiado por tokens; el contenido entra en el slot por defecto.
+Una superficie de vidrio líquido. Elige un `material` y el panel está listo: esmerila lo que tiene detrás, lo curva en un borde redondeado como lo haría una lente, separa ligeramente los colores en el filo e ilumina el borde. Cualquier valor suelto se puede sobrescribir con un atributo del mismo nombre. El contenido va en el slot por defecto y toma un color de tinta legible sobre el vidrio.
 
-> **Úsalo cuando** quieras un panel translúcido sobre contenido rico y colorido (una tarjeta destacada, una barra de herramientas flotante, una capa sobre un vídeo). El atributo `displace` decide cuán _líquido_ se ve (0 es un cristal esmerilado plano). Todos los efectos degradan a una superficie translúcida simple allí donde `backdrop-filter` no existe.
+> **Úsalo cuando** un panel quede sobre contenido rico y colorido: una tarjeta destacada, una barra de herramientas flotante, una capa sobre un vídeo. Sobre un fondo plano no hay nada que curvar y el efecto desaparece.
 
 ## Campo de pruebas
 
-Arrastra el vidrio por el escenario, ajusta cada atributo y copia el marcado exacto. Los valores por defecto son el material esmerilado de iOS.
+Arrastra el vidrio, cambia el material y el fondo, y copia el marcado. El fragmento solo lleva lo que difiere del material.
 
 <GlassPlayground />
 
 ```html
-<r-glass displace="8">
+<r-glass material="clear" backdrop>
   <div class="panel">…</div>
 </r-glass>
 ```
 
-> Coloca `<r-glass>` sobre contenido colorido o movido: sobre un fondo plano el efecto no se ve.
+## Materiales
+
+Cuatro materiales cubren la mayoría de los usos. `regular` es el predeterminado.
+
+<ran-demo>
+  <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; padding: 32px; border-radius: 16px; overflow: hidden;">
+    <img src="/glass/aurora.svg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <r-glass material="thin"><div style="padding: 24px;">thin</div></r-glass>
+    <r-glass><div style="padding: 24px;">regular</div></r-glass>
+    <r-glass material="thick"><div style="padding: 24px;">thick</div></r-glass>
+    <r-glass material="clear"><div style="padding: 24px;">clear</div></r-glass>
+  </div>
+</ran-demo>
+
+```html
+<r-glass material="thin">…</r-glass>
+<r-glass>…regular…</r-glass>
+<r-glass material="thick">…</r-glass>
+<r-glass material="clear">…</r-glass>
+```
+
+| Material  | `blur` | `saturate` | `displace` | `bevel` | `dispersion` | `specular` |
+| --------- | ------ | ---------- | ---------- | ------- | ------------ | ---------- |
+| `thin`    | 8      | 160        | 12         | 20      | 20           | 80         |
+| `regular` | 16     | 180        | 18         | 28      | 25           | 100        |
+| `thick`   | 28     | 200        | 22         | 32      | 25           | 100        |
+| `clear`   | 2      | 130        | 28         | 40      | 40           | 120        |
+
+## Sobre una imagen
+
+Añade `backdrop` cuando el vidrio esté sobre un `<img>` o un `<video>`. Sin valor usa la primera imagen o vídeo del padre del vidrio; un selector nombra otro. El vidrio lee entonces los píxeles de ese elemento con WebGL2 y refracta cada longitud de onda en su propia medida, en cualquier motor con WebGL2, mientras que la vía CSS solo curva la luz en Chromium. La imagen sigue en la página, así que su texto alternativo y el contenido de alrededor no cambian.
+
+<ran-demo>
+  <div style="position: relative; height: 280px; border-radius: 16px; overflow: hidden;">
+    <img src="/glass/grid.svg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <r-glass material="clear" backdrop rim style="position: absolute; left: 32px; top: 48px; width: 320px;">
+      <div style="padding: 32px;">Refracted with WebGL2</div>
+    </r-glass>
+  </div>
+</ran-demo>
+
+```html
+<div class="hero">
+  <img src="hero.jpg" alt="…" />
+  <r-glass material="clear" backdrop rim>…</r-glass>
+</div>
+```
+
+Una imagen de otro origen necesita `crossorigin` y una respuesta CORS para poder leerse; si no, el vidrio conserva su esmerilado CSS.
+
+## Tono y tinta
+
+`tone` indica qué hay detrás del vidrio. Sobre un fondo oscuro o colorido el borde se ilumina y el contenido es blanco; sobre uno claro un borde blanco desaparece, así que el borde se sombrea y el contenido pasa a ser oscuro. Sobre una imagen `backdrop` el tono sigue el brillo de la zona cubierta, salvo que lo fijes. El tono en vigor está disponible como `:state(light)` y `:state(dark)`, y `--ran-glass-ink` sustituye el color del contenido.
+
+<ran-demo>
+  <div style="position: relative; height: 240px; border-radius: 16px; overflow: hidden;">
+    <img src="/glass/paper.svg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <r-glass backdrop rim style="position: absolute; left: 32px; top: 40px; width: 300px;">
+      <div style="padding: 32px;">The tone follows the image</div>
+    </r-glass>
+  </div>
+</ran-demo>
+
+```css
+r-glass:state(light) .badge {
+  border-color: rgb(0 0 0 / 0.2);
+}
+```
 
 ## Anidamiento
 
-`<r-glass>` compone: anida uno dentro de otro para materiales por capas (una barra de vidrio sobre un panel de vidrio, por ejemplo). Cada capa refracta lo que tiene detrás.
+`<r-glass>` se compone: anida uno dentro de otro para tener materiales en capas, como una barra de herramientas de vidrio sobre un panel de vidrio. Cada capa curva lo que tiene detrás.
 
 <ran-demo>
-  <div style="position: relative; padding: 44px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
-    <r-glass radius="26" style="width: 340px;">
-      <div style="padding: 26px;">
-        <div style="color: #fff; font-weight: 700; margin-bottom: 16px;">Panel exterior</div>
-        <r-glass radius="16" displace="6" style="display: block;">
-          <div style="padding: 14px 16px; color: #fff; font-size: 13px;">Barra de vidrio anidada</div>
+  <div style="position: relative; padding: 48px; border-radius: 16px; background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397); overflow: hidden;">
+    <r-glass radius="28" style="width: 340px;">
+      <div style="padding: 28px;">
+        <div style="font-weight: 700; margin-bottom: 16px;">Outer panel</div>
+        <r-glass material="thin" radius="16" style="display: block;">
+          <div style="padding: 12px 16px; font-size: 13px;">Nested glass toolbar</div>
         </r-glass>
       </div>
     </r-glass>
@@ -40,11 +107,11 @@ Arrastra el vidrio por el escenario, ajusta cada atributo y copia el marcado exa
 </ran-demo>
 
 ```html
-<r-glass radius="26">
+<r-glass radius="28">
   <div class="panel">
-    Panel exterior
-    <r-glass radius="16" displace="6">
-      <div class="toolbar">Barra de vidrio anidada</div>
+    Outer panel
+    <r-glass material="thin" radius="16">
+      <div class="toolbar">Nested glass toolbar</div>
     </r-glass>
   </div>
 </r-glass>
@@ -54,96 +121,98 @@ Arrastra el vidrio por el escenario, ajusta cada atributo y copia el marcado exa
 
 ### Propiedades
 
-| Propiedad     | Tipo      | Por defecto | Descripción                                                                                                                                                                                                                                                             |
-| ------------- | --------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `blur`        | `number`  | `16`        | Radio de desenfoque del fondo, en px (cuánto esmerilado).                                                                                                                                                                                                               |
-| `saturate`    | `number`  | `180`       | Saturación del fondo, en porcentaje: levanta el color de lo que hay detrás del vidrio.                                                                                                                                                                                  |
-| `displace`    | `number`  | `8`         | Fuerza de la refracción líquida (escala del desplazamiento SVG). `0` es un cristal esmerilado plano; más alto, más ondulado.                                                                                                                                            |
-| `frequency`   | `number`  | `0.005`     | Frecuencia base de la turbulencia: valores menores dan ondas más grandes y suaves.                                                                                                                                                                                      |
-| `radius`      | `number`  | `20`        | Radio de las esquinas, en px.                                                                                                                                                                                                                                           |
-| `tint`        | `string`  | sutil       | Tinte del relleno del vidrio: cualquier valor CSS de background.                                                                                                                                                                                                        |
-| `sheen`       | `boolean` | `false`     | Barrido especular animado sobre la superficie.                                                                                                                                                                                                                          |
-| `interactive` | `boolean` | `false`     | Elevación al pasar el cursor y escala al pulsar, para vidrio en el que se hace clic. También convierte el host en un botón operable con teclado: `role="button"`, parada de tabulación, Enter/Espacio actúan como un clic.                                              |
-| `rim`         | `boolean` | `false`     | Borde especular y filo cromático opcionales, para una luz de aspecto más físico. Primero WebGL (siempre, de forma síncrona), con paso transparente a WebGPU en segundo plano si está disponible. Cae en el degradado especular de CSS cuando no hay ninguno de los dos. |
+| Propiedad     | Tipo      | Por defecto  | Descripción                                                                                                                                                                                                           |
+| ------------- | --------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `material`    | `string`  | `regular`    | `thin`, `regular`, `thick` o `clear`: fija de una vez todos los valores ópticos de abajo.                                                                                                                             |
+| `blur`        | `number`  | del material | Radio del esmerilado, en px.                                                                                                                                                                                          |
+| `saturate`    | `number`  | del material | Saturación de lo que hay detrás, en porcentaje.                                                                                                                                                                       |
+| `displace`    | `number`  | del material | Cuánto tira el borde del fondo hacia dentro, en px. `0` es un cristal plano.                                                                                                                                          |
+| `bevel`       | `number`  | del material | Ancho de la franja curva del borde que desvía la luz, en px.                                                                                                                                                          |
+| `dispersion`  | `number`  | del material | Cuánto se separan los colores en el borde, como porcentaje de `displace`.                                                                                                                                             |
+| `specular`    | `number`  | del material | Intensidad de los brillos, en porcentaje.                                                                                                                                                                             |
+| `radius`      | `number`  | `20`         | Radio de las esquinas, en px.                                                                                                                                                                                         |
+| `tint`        | `string`  | del material | Relleno sobre el esmerilado: cualquier valor CSS de fondo.                                                                                                                                                            |
+| `tone`        | `string`  | `dark`       | `dark` o `light`: qué hay detrás del vidrio. Sin fijar sobre un `backdrop`, sigue a la imagen.                                                                                                                        |
+| `backdrop`    | `string`  | —            | Refracta un `<img>` o `<video>` con WebGL2. Vacío usa el primero del padre; un selector nombra otro.                                                                                                                  |
+| `rim`         | `boolean` | `false`      | Un borde iluminado por GPU: paredes exterior e interior, una luz principal y una de relleno, destellos. Solo depende de la forma del panel.                                                                           |
+| `sheen`       | `boolean` | `false`      | Un brillo que barre la superficie.                                                                                                                                                                                    |
+| `interactive` | `boolean` | `false`      | Elevación al pasar el cursor y respuesta al pulsar, para vidrio clicable. También convierte el host en un botón operable con teclado: `role="button"`, una parada de tabulación, Enter y Espacio actúan como un clic. |
 
 ### Refracción `displace`
 
-`displace` gobierna la escala del `feDisplacementMap` SVG: con cuánta fuerza se curva la luz al atravesar la superficie. Ponlo a `0` para un cristal esmerilado sin más.
+`displace` fija cuánto tira el borde de lo que hay detrás hacia el centro, de modo que el fondo justo dentro del filo se estira sobre él, igual que aumenta un borde convexo grueso. `bevel` fija el ancho de esa franja curva. Por encima de la mitad del bevel, el borde vuelve a plegar la imagen sobre sí misma, como hace el filo de un vidrio grueso real.
 
 <ran-demo>
-  <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
-    <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
-    <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
+  <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; overflow: hidden;">
+    <img src="/glass/grid.svg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <r-glass material="clear" displace="0" style="flex: 1;"><div style="padding: 24px;">displace = 0</div></r-glass>
+    <r-glass material="clear" displace="40" style="flex: 1;"><div style="padding: 24px;">displace = 40</div></r-glass>
   </div>
 </ran-demo>
 
 ```html
-<r-glass displace="0">…esmerilado plano…</r-glass> <r-glass displace="60">…líquido…</r-glass>
+<r-glass material="clear" displace="0">…flat…</r-glass> <r-glass material="clear" displace="40">…lensed edge…</r-glass>
 ```
 
 ### Brillo e interacción
 
-`sheen` añade un reflejo especular en movimiento; `interactive` añade una elevación al pasar el cursor y una pulsación con rebote (usando el token compartido `--ran-motion-ease-spring`).
+`sheen` añade un brillo en movimiento; `interactive` añade una elevación al pasar el cursor y una pulsación que rebota.
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
-    <r-glass sheen interactive displace="36" style="width: 260px;">
-      <div style="padding: 20px; color: #fff; font-weight: 600;">Pasa el cursor y pulsa</div>
+    <r-glass sheen interactive style="width: 260px;">
+      <div style="padding: 20px; font-weight: 600;">Hover & press me</div>
     </r-glass>
   </div>
 </ran-demo>
 
 ```html
-<r-glass sheen interactive displace="36">
-  <div>Pasa el cursor y pulsa</div>
+<r-glass sheen interactive>
+  <div>Hover &amp; press me</div>
 </r-glass>
 ```
 
 ### Rim — filo especular por GPU (opcional)
 
-`rim` añade una segunda capa de reflejo: un borde especular iluminado desde una dirección fija arriba a la izquierda, más un sutil filo cromático (RGB) en el borde redondeado del panel. A diferencia de la refracción de `displace`, **nunca muestrea el fondo**: el shader solo conoce el ancho, el alto y el radio de esquina del propio panel, así que no cuesta ninguna de las renuncias en interactividad y accesibilidad que traería un enfoque de GPU que capturase el fondo entero (véanse las [notas](#notes)). Es una capa puramente decorativa sobre el mismo esmerilado de `backdrop-filter`; activarla o desactivarla nunca cambia lo que hay detrás del vidrio ni cómo se muestrea.
-
-Se dibuja primero con WebGL (síncrono, funciona en prácticamente todos los navegadores, así que el borde nunca retrasa su propio primer pintado) y pasa de forma transparente a WebGPU en segundo plano si el navegador lo tiene (mismo efecto, salida idéntica al píxel). Cae en el degradado especular de CSS cuando no hay ninguna de las dos API de GPU (navegadores muy antiguos, GPU deshabilitada, SSR); no hay ningún estado roto o en blanco que haya que contemplar en el diseño.
+`rim` dibuja el borde en la GPU: una pared exterior brillante y una interior más tenue donde el bevel se une con la cara plana, iluminadas por una luz principal desde arriba a la izquierda y un relleno tenue desde abajo a la derecha, con un grosor que varía a lo largo del borde y destellos ocasionales. Con un tono `light` las paredes se sombrean en su lugar. Nunca muestrea el fondo: el shader solo conoce el tamaño, el radio y el bevel del panel. Se dibuja primero con WebGL, pasa a WebGPU en segundo plano cuando el navegador lo tiene y deja intacto el brillo CSS cuando no hay ninguno de los dos.
 
 <ran-demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
-    <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">sin rim</div></r-glass>
-    <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
+    <r-glass style="flex: 1;"><div style="padding: 20px; font-size: 13px;">no rim</div></r-glass>
+    <r-glass rim style="flex: 1;"><div style="padding: 20px; font-size: 13px;">rim</div></r-glass>
   </div>
 </ran-demo>
 
 ```html
-<r-glass>…especular de CSS a secas…</r-glass>
-<r-glass rim>…borde por GPU + filo cromático (WebGL, pasa a WebGPU)…</r-glass>
+<r-glass>…CSS highlight…</r-glass> <r-glass rim>…GPU-lit edge…</r-glass>
 ```
 
 ### Parts y tokens CSS
 
-Da estilo a las piezas internas con `::part(glass)`, `::part(specular)` y (cuando `rim` está puesto) `::part(rim)`, o sobrescribe las propiedades personalizadas `--ran-glass-*`:
+Da estilo al interior con `::part(glass)`, `::part(specular)`, `::part(refraction)` y, cuando `rim` está activo, `::part(rim)`, o sobrescribe las propiedades personalizadas `--ran-glass-*`:
 
 | Token                                         | Para qué sirve                                                                           |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `--ran-glass-blur`                            | Radio de desenfoque del fondo.                                                           |
-| `--ran-glass-saturate`                        | Saturación del fondo.                                                                    |
-| `--ran-glass-radius`                          | Radio de las esquinas.                                                                   |
-| `--ran-glass-tint`                            | Fondo del relleno.                                                                       |
-| `--ran-glass-border`                          | Línea del borde.                                                                         |
-| `--ran-glass-shadow`                          | Pila de sombras (especular + profundidad).                                               |
-| `--ran-glass-specular-background`             | Fondo del reflejo especular.                                                             |
-| `--ran-glass-specular-opacity`                | Intensidad del especular.                                                                |
-| `--ran-glass-reduced-transparency-background` | Superficie alternativa cuando el ajuste «reducir transparencia» del sistema está activo. |
-| `--ran-glass-reduced-transparency-shadow`     | Sombra alternativa en ese mismo estado.                                                  |
+| `--ran-glass-ink`                             | Color del contenido. Blanco por defecto, o casi negro en un tono claro.                  |
+| `--ran-glass-tint`                            | Relleno sobre el esmerilado.                                                             |
+| `--ran-glass-border`                          | Borde del filo.                                                                          |
+| `--ran-glass-shadow`                          | Pila de sombras (especular y profundidad).                                               |
+| `--ran-glass-brightness`                      | Brillo de lo que hay detrás.                                                             |
+| `--ran-glass-specular-background`             | Fondo del brillo CSS.                                                                    |
+| `--ran-glass-specular-opacity`                | Intensidad del brillo CSS; sustituye a `specular` en esa capa.                           |
+| `--ran-glass-reduced-transparency-background` | Superficie de respaldo cuando el ajuste del sistema «reducir transparencia» está activo. |
+| `--ran-glass-reduced-transparency-shadow`     | Sombra de respaldo en ese mismo estado.                                                  |
 
 ```css
-r-glass::part(glass) {
-  --ran-glass-tint: linear-gradient(135deg, rgba(0, 0, 0, 0.2), transparent);
+r-glass {
+  --ran-glass-tint: linear-gradient(135deg, rgb(0 0 0 / 0.2), transparent);
 }
 ```
 
 ## Notas {#notes}
 
-- **Muestreo del fondo.** `<r-glass>` refracta el DOM que tiene detrás mediante `backdrop-filter`, así que el texto seleccionable, el vídeo en reproducción y los elementos interactivos que quedan detrás siguen funcionando. `rim` (arriba) es una capa GPU puramente decorativa calculada a partir de la forma del propio panel: nunca muestrea el fondo.
-- **Legibilidad.** Mantén el texto de lectura sobre una superficie interior opaca; no confíes el contraste solo al vidrio.
-- **Transparencia reducida.** `<r-glass>` responde al ajuste del sistema «reducir transparencia» / «aumentar contraste» (`prefers-reduced-transparency: reduce`): cambia a una superficie sólida y consciente del tema (`--ran-color-bg-elevated` por defecto) en lugar de esmerilar y refractar. Los controles nativos lo hacen solos; esto es el equivalente para un elemento personalizado.
-- **Refracción entre navegadores.** El efecto líquido de `feDisplacementMap` hoy solo se dibuja en Chromium: Safari y Firefox descartan esa parte del valor de `backdrop-filter` y conservan el esmerilado de blur / saturate / brightness, que es una alternativa legítima —más plana, eso sí—, no un estado roto.
-- **Movimiento.** La superficie solo transiciona `transform`, nunca el color, así que los cambios de tema claro/oscuro se resuelven en un fotograma. El brillo y la pulsación respetan `prefers-reduced-motion`.
+- **Dos vías.** Sin `backdrop`, `backdrop-filter` esmerila la página real que hay detrás del vidrio, así que el texto, el vídeo y los controles de detrás siguen funcionando; el borde de lente con colores separados es un filtro SVG que se dibuja en Chromium, y Safari y Firefox conservan el esmerilado. Con `backdrop`, WebGL2 refracta esa única imagen o vídeo en cualquier motor que tenga WebGL2.
+- **Legibilidad.** El contenido toma `--ran-glass-ink`. Mantén el texto largo sobre una superficie interior opaca en lugar de confiar el contraste al vidrio.
+- **Transparencia reducida.** Con el ajuste del sistema «reducir transparencia» o «aumentar contraste» (`prefers-reduced-transparency: reduce`), el vidrio pasa a ser una superficie sólida que sigue el tema (`--ran-color-bg-elevated`), sin esmerilado, refracción ni brillos.
+- **Movimiento.** La superficie solo transiciona `transform`, así que un cambio de tema se resuelve en un fotograma. El brillo y la pulsación respetan `prefers-reduced-motion`.
+- **Coste.** El mapa de lente SVG se reconstruye cuando cambian el tamaño, el radio o el bevel del panel. La refracción WebGL comprueba el panel y la imagen una vez por fotograma mientras está visible y solo dibuja cuando alguno de los dos se ha movido.

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="#f4f4f5"/>
+<g stroke="#d4d4d8" stroke-width="2"><line x1="0" y1="60" x2="1600" y2="60"/><line x1="0" y1="120" x2="1600" y2="120"/><line x1="0" y1="180" x2="1600" y2="180"/><line x1="0" y1="240" x2="1600" y2="240"/><line x1="0" y1="300" x2="1600" y2="300"/><line x1="0" y1="360" x2="1600" y2="360"/><line x1="0" y1="420" x2="1600" y2="420"/><line x1="0" y1="480" x2="1600" y2="480"/><line x1="0" y1="540" x2="1600" y2="540"/><line x1="0" y1="600" x2="1600" y2="600"/><line x1="0" y1="660" x2="1600" y2="660"/><line x1="0" y1="720" x2="1600" y2="720"/><line x1="0" y1="780" x2="1600" y2="780"/><line x1="0" y1="840" x2="1600" y2="840"/></g>
+<circle cx="1260" cy="250" r="170" fill="#fb923c"/>
+<rect x="980" y="520" width="420" height="260" rx="40" fill="#22c55e"/>
+<text x="90" y="420" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="800" font-size="250" fill="#1d4ed8" letter-spacing="-8">Light</text>
+<text x="96" y="640" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="800" font-size="110" fill="#18181b">on paper</text>
+</svg>

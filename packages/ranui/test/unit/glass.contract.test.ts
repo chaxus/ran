@@ -17,15 +17,16 @@ describe('r-glass contract', () => {
     expect(shadow.querySelector('slot')).not.toBeNull();
   });
 
-  it('injects exactly one SVG displacement filter, even across repeated connects', () => {
+  it('points backdrop-filter at exactly one filter of its own, even across repeated connects', () => {
     const glass = document.createElement('r-glass') as Glass;
     document.body.appendChild(glass);
     document.body.removeChild(glass);
     document.body.appendChild(glass);
 
     const shadow = (glass as any)._shadowDom as ShadowRoot;
-    expect(shadow.querySelectorAll('.ran-glass-defs').length).toBe(1);
-    expect(shadow.querySelectorAll('feDisplacementMap').length).toBe(1);
+    const filters = shadow.querySelectorAll('filter');
+    expect(filters.length).toBe(1);
+    expect(glass.style.getPropertyValue('--ran-glass-refraction')).toBe(`url(#${filters[0]!.id})`);
   });
 
   it('blur/saturate/radius reflect to CSS custom properties with units', () => {
@@ -50,26 +51,42 @@ describe('r-glass contract', () => {
     expect(glass.style.getPropertyValue('--ran-glass-tint')).toBe('rgba(0,0,0,0.2)');
   });
 
-  it('removing an attribute clears its custom property', () => {
+  it('removing an attribute returns that value to the material', () => {
     const glass = document.createElement('r-glass') as Glass;
+    glass.setAttribute('material', 'thick');
     glass.setAttribute('blur', '24');
     document.body.appendChild(glass);
     expect(glass.style.getPropertyValue('--ran-glass-blur')).toBe('24px');
 
     glass.removeAttribute('blur');
-    expect(glass.style.getPropertyValue('--ran-glass-blur')).toBe('');
+    expect(glass.style.getPropertyValue('--ran-glass-blur')).toBe('28px');
   });
 
-  it('displace/frequency drive the SVG filter primitives, not a CSS variable', () => {
+  it('a material sets every optical value, and an attribute overrides only its own', () => {
+    const glass = document.createElement('r-glass') as Glass;
+    glass.material = 'clear';
+    glass.displace = '40';
+    document.body.appendChild(glass);
+    expect(glass.optics).toEqual({ blur: 2, saturate: 130, displace: 40, bevel: 40, dispersion: 40, specular: 120 });
+    glass.material = 'nonsense';
+    expect(glass.optics.blur).toBe(16);
+  });
+
+  it('tone is explicit or dark', () => {
     const glass = document.createElement('r-glass') as Glass;
     document.body.appendChild(glass);
+    const pane = (glass as any)._glass as HTMLElement;
+    expect(pane.dataset.tone).toBe('dark');
+    glass.tone = 'light';
+    expect(pane.dataset.tone).toBe('light');
+  });
 
-    glass.displace = '20';
-    glass.frequency = '0.01';
-
-    const shadow = (glass as any)._shadowDom as ShadowRoot;
-    expect(shadow.querySelector('feDisplacementMap')?.getAttribute('scale')).toBe('20');
-    expect(shadow.querySelector('feTurbulence')?.getAttribute('baseFrequency')).toBe('0.01');
+  it('backdrop without WebGL2 leaves the CSS glass in place', () => {
+    document.body.innerHTML = '<div><img src="x.png"><r-glass backdrop></r-glass></div>';
+    const glass = document.querySelector('r-glass') as Glass;
+    const pane = (glass as any)._glass as HTMLElement;
+    expect(pane.hasAttribute('data-refracting')).toBe(false);
+    expect((glass as any)._refraction).toBeNull();
   });
 
   it('sheen and interactive are plain boolean attributes', () => {
@@ -145,7 +162,7 @@ describe('r-glass contract', () => {
     const glass = document.createElement('r-glass') as any;
     document.body.appendChild(glass);
 
-    const applySpy = vi.spyOn(glass, '_apply');
+    const applySpy = vi.spyOn(glass, '_syncStyle');
     glass.attributeChangedCallback('blur', '10', '10');
     expect(applySpy).not.toHaveBeenCalled();
   });
@@ -191,10 +208,10 @@ describe('r-glass contract', () => {
         glass.setAttribute('rim', '');
         document.body.appendChild(glass);
       }).not.toThrow();
-      // Still a live renderer object (setRadius/destroy are safe to call) — it's
+      // Still a live renderer object (set/destroy are safe to call) — it's
       // the canvas underneath that's a no-op, since jsdom has neither backend.
       expect(glass._rimRenderer).not.toBeNull();
-      expect(() => glass._rimRenderer.setRadius(40)).not.toThrow();
+      expect(() => glass._rimRenderer.set({ radius: 40, bevel: 20, strength: 1, tone: 'light' })).not.toThrow();
     });
 
     it('does not attempt WebGPU when navigator.gpu is absent (jsdom) — mounts exactly one canvas', () => {

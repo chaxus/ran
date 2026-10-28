@@ -39,6 +39,10 @@ struct Uniforms {
   resolution: vec2<f32>,
   radius: f32,
   dpr: f32,
+  bevel: f32,
+  strength: f32,
+  tone: f32,
+  pad: f32,
 };
 @group(0) @binding(0) var<uniform> u: Uniforms;
 
@@ -46,6 +50,13 @@ fn sdRoundRect(p: vec2<f32>, halfSize: vec2<f32>, r: f32) -> f32 {
   let q = abs(p) - halfSize + r;
   return length(max(q, vec2<f32>(0.0, 0.0))) + min(max(q.x, q.y), 0.0) - r;
 }
+fn hash(n: f32) -> f32 { return fract(sin(n * 127.1 + 311.7) * 43758.5453); }
+fn noise(v: f32) -> f32 {
+  let i = floor(v);
+  let f = fract(v);
+  return mix(hash(i), hash(i + 1.0), f * f * (3.0 - 2.0 * f));
+}
+fn bell(x: f32, w: f32) -> f32 { return exp(-(x * x) / (w * w)); }
 
 @vertex
 fn vs_main(@builtin(vertex_index) idx: u32) -> @builtin(position) vec4<f32> {
@@ -59,20 +70,17 @@ fn vs_main(@builtin(vertex_index) idx: u32) -> @builtin(position) vec4<f32> {
   return vec4<f32>(pos[idx], 0.0, 1.0);
 }
 
+// A line-for-line port of FRAGMENT_SRC in rim.ts; the comments there explain each term.
 @fragment
 fn fs_main(@builtin(position) fragCoord: vec4<f32>) -> @location(0) vec4<f32> {
   let halfSize = u.resolution * 0.5;
-  // Unlike WebGL's gl_FragCoord (origin bottom-left, Y increasing upward),
-  // WGSL's fragment-stage @builtin(position) already has origin top-left with
-  // Y increasing downward — the same convention as CSS/screen space. No flip
-  // needed here; contrast with rim.ts's GLSL, which flips explicitly to match
-  // this same convention so the light vector means the same thing in both shaders.
+  // WGSL's @builtin(position) already has origin top-left, Y down — the CSS
+  // convention rim.ts's GLSL flips to explicitly. No flip needed here.
   let p = fragCoord.xy - halfSize;
   let r = min(u.radius, min(halfSize.x, halfSize.y));
   let d = sdRoundRect(p, halfSize, r);
-
-  let rimWidth = 6.0 * u.dpr;
-  if (abs(d) > rimWidth * 1.5) {
+  let band = max(u.bevel * u.dpr, 4.0 * u.dpr);
+  if (d > 2.0 * u.dpr || d < -band) {
     discard;
   }
 
@@ -80,33 +88,55 @@ fn fs_main(@builtin(position) fragCoord: vec4<f32>) -> @location(0) vec4<f32> {
   let n = normalize(vec2<f32>(
     sdRoundRect(p + vec2<f32>(eps, 0.0), halfSize, r) - sdRoundRect(p - vec2<f32>(eps, 0.0), halfSize, r),
     sdRoundRect(p + vec2<f32>(0.0, eps), halfSize, r) - sdRoundRect(p - vec2<f32>(0.0, eps), halfSize, r),
-  ));
+  ) + vec2<f32>(1e-5, 1e-5));
 
-  let light = normalize(vec2<f32>(-0.6, -0.8));
-  let lit = clamp(dot(n, light), 0.0, 1.0);
+  let arc = atan2(p.y, p.x) * length(halfSize);
+  let grain = 10.0 * u.dpr;
+  let thickness = 0.7 + 0.6 * noise(arc / (grain * 3.0) + 13.0);
+  let shimmer = 0.6 + 0.8 * noise(arc / grain);
 
-  let rim = 1.0 - smoothstep(0.0, rimWidth, abs(d));
-  let glow = rim * mix(0.15, 1.0, lit);
+  let rim = bell(d + u.dpr, 1.2 * u.dpr * thickness + 0.5);
+  let inner = bell(d + band * 0.55, 1.4 * u.dpr / thickness + 0.5) * smoothstep(0.2, 0.85, noise(arc / (grain * 9.0) + 41.0));
 
-  // Chromatic fringe: same trick as the WebGL backend — split the rim mask
-  // along the surface normal by a couple of device pixels per channel.
-  let off = 1.4 * u.dpr;
-  let dR = sdRoundRect(p + n * off, halfSize, r);
-  let dB = sdRoundRect(p - n * off, halfSize, r);
-  let rimR = 1.0 - smoothstep(0.0, rimWidth, abs(dR));
-  let rimB = 1.0 - smoothstep(0.0, rimWidth, abs(dB));
+  let key = pow(clamp(dot(n, normalize(vec2<f32>(-0.6, -0.8))), 0.0, 1.0), 1.6);
+  let fill = pow(clamp(dot(n, normalize(vec2<f32>(0.7, 0.7))), 0.0, 1.0), 3.0);
 
-  let color = vec3<f32>(mix(glow, rimR, 0.5), glow, mix(glow, rimB, 0.5));
-  let alpha = clamp(glow * 0.85 + max(rimR, rimB) * 0.15, 0.0, 1.0);
-  return vec4<f32>(color * alpha, alpha);
+  let spacing = grain * 5.0;
+  let cell = floor(arc / spacing);
+  let glintAt = (cell + 0.2 + 0.6 * hash(cell + 17.0)) * spacing;
+  let glint = step(0.72, hash(cell + 7.0)) * bell(arc - glintAt, grain * 0.9) * bell(d + u.dpr, u.dpr) * key;
+
+  let light = rim * (0.2 + 0.8 * key + 0.35 * fill) * shimmer + inner * (0.45 * key * key + 0.2 * fill) + glint * 1.4;
+
+  let off = 1.2 * u.dpr;
+  let rimR = bell(d + u.dpr - off, 1.2 * u.dpr + 0.5);
+  let rimB = bell(d + u.dpr + off, 1.2 * u.dpr + 0.5);
+  let fringe = vec3<f32>(rimR, 0.0, rimB) * 0.3 * (key + fill);
+
+  let shade = u.tone * (rim * 0.55 + inner * 0.12) * (1.0 - 0.7 * key);
+  let highlight = mix(light, light * key, u.tone);
+  let color = vec3<f32>(highlight) + fringe * (1.0 - u.tone) + vec3<f32>(0.18, 0.23, 0.33) * shade;
+  let alpha = clamp(highlight + shade + max(rimR, rimB) * 0.1 * (1.0 - u.tone), 0.0, 1.0);
+  let strength = clamp(u.strength, 0.0, 2.0);
+  let outAlpha = clamp(alpha * strength, 0.0, 1.0);
+  return vec4<f32>(min(color * strength, vec3<f32>(outAlpha)), outAlpha);
 }
 `;
+
+/** What the rim shader needs to know about the pane, in CSS px. */
+export interface RimParams {
+  radius: number;
+  bevel: number;
+  /** 1 is the material's normal light. */
+  strength: number;
+  tone: 'dark' | 'light';
+}
 
 export interface RimBackend {
   /** Resolves when an active device is lost; renderer restores its fallback. */
   lost?: Promise<unknown>;
-  /** Draws once at the given backing-store size (already dpr-scaled) plus CSS-px radius and dpr. */
-  draw(width: number, height: number, radius: number, dpr: number): void;
+  /** Draws once at the given backing-store size (already dpr-scaled). */
+  draw(width: number, height: number, params: RimParams, dpr: number): void;
   /** Frees the GPU device — browsers cap how many WebGPU/WebGL contexts can be live at once. */
   destroy(): void;
 }
@@ -176,28 +206,37 @@ export async function createWebGpuRim(canvas: HTMLCanvasElement): Promise<RimBac
       primitive: { topology: 'triangle-list' },
     });
 
-    // vec2<f32> resolution (8B, align 8) + f32 radius (4B) + f32 dpr (4B) = 16B,
-    // already a multiple of the largest member's alignment — no padding needed.
+    // Eight f32s: resolution (vec2, align 8), radius, dpr, bevel, strength, tone and one
+    // pad, 32 bytes, a multiple of the struct's 8-byte alignment.
     uniformBuffer = device.createBuffer({
-      size: 16,
+      size: 32,
       usage: BUFFER_USAGE_UNIFORM | BUFFER_USAGE_COPY_DST,
     });
     const bindGroup = device.createBindGroup({
       layout: pipeline.getBindGroupLayout(0),
       entries: [{ binding: 0, resource: { buffer: uniformBuffer } }],
     });
-    const uniformData = new Float32Array(4);
+    const uniformData = new Float32Array(8);
 
     const activeDevice = device;
     const activeContext = context;
     const activeBuffer = uniformBuffer;
     return {
       lost: device.lost,
-      draw(width, height, radius, dpr) {
+      draw(width, height, params, dpr) {
         if (destroyed || width <= 0 || height <= 0) return;
         canvas.width = width;
         canvas.height = height;
-        uniformData.set([width, height, radius * dpr, dpr]);
+        uniformData.set([
+          width,
+          height,
+          params.radius * dpr,
+          dpr,
+          params.bevel,
+          params.strength,
+          params.tone === 'light' ? 1 : 0,
+          0,
+        ]);
         activeDevice.queue.writeBuffer(activeBuffer, 0, uniformData);
 
         const encoder = activeDevice.createCommandEncoder();

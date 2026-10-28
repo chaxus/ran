@@ -24,6 +24,12 @@ interface GlassStrings {
   reset: string;
   copy: string;
   copied: string;
+  /** Headings of the control groups. Control labels are attribute names and stay untranslated. */
+  sections: { material: string; optics: string; light: string; backdrop: string };
+  /** Accessible names of the built-in backdrop pictures. */
+  scenes: { aurora: string; paper: string; grid: string };
+  /** The tile that loads a picture of the reader's own. */
+  upload: string;
 }
 
 interface IconStrings {
@@ -50,6 +56,9 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
       reset: 'Reset',
       copy: 'Copy',
       copied: 'Copied',
+      sections: { material: 'Material', optics: 'Optics', light: 'Shape and light', backdrop: 'Backdrop' },
+      scenes: { aurora: 'Colorful gradient', paper: 'Light page', grid: 'Colored lines' },
+      upload: 'Your image',
     },
     icons: { copied: 'Copied!', copyLabel: 'Copy the markup for the {name} icon' },
   },
@@ -60,6 +69,9 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
       reset: '重置',
       copy: '复制',
       copied: '已复制',
+      sections: { material: '材质', optics: '光学', light: '形状与光', backdrop: '背景' },
+      scenes: { aurora: '彩色渐变', paper: '浅色页面', grid: '彩色线条' },
+      upload: '用自己的图',
     },
     icons: { copied: '已复制', copyLabel: '复制 {name} 图标的代码' },
   },
@@ -70,6 +82,9 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
       reset: 'リセット',
       copy: 'コピー',
       copied: 'コピーしました',
+      sections: { material: '素材', optics: '光学', light: '形と光', backdrop: '背景' },
+      scenes: { aurora: 'カラフルなグラデーション', paper: '明るいページ', grid: 'カラーライン' },
+      upload: '自分の画像',
     },
     icons: { copied: 'コピーしました', copyLabel: '{name} アイコンのコードをコピー' },
   },
@@ -80,6 +95,9 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
       reset: 'Restablecer',
       copy: 'Copiar',
       copied: 'Copiado',
+      sections: { material: 'Material', optics: 'Óptica', light: 'Forma y luz', backdrop: 'Fondo' },
+      scenes: { aurora: 'Degradado de colores', paper: 'Página clara', grid: 'Líneas de colores' },
+      upload: 'Tu imagen',
     },
     icons: { copied: '¡Copiado!', copyLabel: 'Copiar el marcado del icono {name}' },
   },
@@ -90,6 +108,9 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
       reset: 'Redefinir',
       copy: 'Copiar',
       copied: 'Copiado',
+      sections: { material: 'Material', optics: 'Óptica', light: 'Forma e luz', backdrop: 'Fundo' },
+      scenes: { aurora: 'Gradiente colorido', paper: 'Página clara', grid: 'Linhas coloridas' },
+      upload: 'Sua imagem',
     },
     icons: { copied: 'Copiado!', copyLabel: 'Copiar o markup do ícone {name}' },
   },
@@ -100,6 +121,9 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
       reset: '초기화',
       copy: '복사',
       copied: '복사됨',
+      sections: { material: '재질', optics: '광학', light: '모양과 빛', backdrop: '배경' },
+      scenes: { aurora: '컬러 그라데이션', paper: '밝은 페이지', grid: '컬러 선' },
+      upload: '내 이미지',
     },
     icons: { copied: '복사됨', copyLabel: '{name} 아이콘 코드 복사' },
   },
@@ -110,6 +134,9 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
       reset: 'Zurücksetzen',
       copy: 'Kopieren',
       copied: 'Kopiert',
+      sections: { material: 'Material', optics: 'Optik', light: 'Form und Licht', backdrop: 'Hintergrund' },
+      scenes: { aurora: 'Farbverlauf', paper: 'Helle Seite', grid: 'Farbige Linien' },
+      upload: 'Eigenes Bild',
     },
     icons: { copied: 'Kopiert!', copyLabel: 'Markup für das Symbol {name} kopieren' },
   },
@@ -120,6 +147,9 @@ export const DEMO_STRINGS: Record<string, DemoStrings> = {
       reset: 'بازنشانی',
       copy: 'کپی',
       copied: 'کپی شد',
+      sections: { material: 'جنس', optics: 'اپتیک', light: 'شکل و نور', backdrop: 'پس‌زمینه' },
+      scenes: { aurora: 'گرادیان رنگی', paper: 'صفحهٔ روشن', grid: 'خطوط رنگی' },
+      upload: 'تصویر خودتان',
     },
     icons: { copied: 'کپی شد!', copyLabel: 'کپی کد آیکن {name}' },
   },

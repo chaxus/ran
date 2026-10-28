@@ -1,11 +1,9 @@
-/* r-glass — liquid / frosted glass surface.
+/* r-glass — liquid glass surface.
  *
- * Refracts + frosts whatever sits behind the host: backdrop-filter blur +
- * saturate for the frost, an SVG feDisplacementMap (driven by the `displace`
- * attribute) for the liquid light-bending, plus a specular rim and top
- * highlight for the "glass" read. Everything is token-driven; the JS layer only
- * writes the SVG filter's scale/frequency (which CSS can't reach) and reflects
- * the numeric attributes onto the custom properties below.
+ * Frosts what sits behind the host with backdrop-filter, bends it at the edge with the
+ * per-instance SVG lens filter, and lights it with the specular layer. The JS layer resolves
+ * the material and writes every value below onto the host; the fallbacks here are the
+ * `regular` material, so a server-rendered pane looks right before the script runs.
  *
  * Discipline: transitions are motion-props only (transform/opacity) so a theme
  * flip never fades the surface out of sync with the host page. */
@@ -35,7 +33,9 @@
   padding: var(--ran-glass-padding, 0);
   border-radius: inherit;
   overflow: hidden;
-  color: inherit;
+  /* Content takes the ink that reads on the glass, so text stays legible when the tone
+     follows a backdrop the page author never sees. */
+  color: var(--ran-glass-ink, var(--ran-backdrop-ink-dark));
   /* `layout paint` (NOT `strict`/`content`, which also imply `size`) bounds
      backdrop-filter's repaint/compositing cost to this box without forcing an
      explicit size — a glass panel that sizes to its slotted content (the
@@ -49,8 +49,9 @@
   -webkit-backdrop-filter: blur(var(--ran-glass-blur, 16px)) saturate(var(--ran-glass-saturate, 180%))
     brightness(var(--ran-glass-brightness, 1.05));
   backdrop-filter: blur(var(--ran-glass-blur, 16px)) saturate(var(--ran-glass-saturate, 180%))
-    brightness(var(--ran-glass-brightness, 1.05)) var(--ran-glass-refraction, url(#ran-glass-filter));
-  background: var(--ran-glass-tint, rgba(255, 255, 255, 0.14));
+    brightness(var(--ran-glass-brightness, 1.05)) var(--ran-glass-refraction, saturate(1));
+  --glass-fill: var(--ran-glass-tint, rgba(255, 255, 255, var(--ran-glass-tint-alpha, 0.14)));
+  background: var(--glass-fill);
   border: var(--ran-glass-border, 1px solid rgba(255, 255, 255, 0.35));
   box-shadow: var(
     --ran-glass-shadow,
@@ -72,12 +73,56 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  opacity: var(--ran-glass-specular-opacity, 1);
+  opacity: var(--ran-glass-specular-opacity, var(--ran-glass-specular-strength, 1));
   background: var(
     --ran-glass-specular-background,
     linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 34%),
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.18), transparent 60%)
   );
+}
+
+/* On a pale backdrop a white edge disappears: the edge is drawn as a cool shade instead,
+   and the pane's own shadow is lighter so it does not read as a grey smudge. */
+.ran-glass[data-tone='light'] {
+  color: var(--ran-glass-ink, var(--ran-backdrop-ink-light));
+  border: var(--ran-glass-border, 1px solid var(--ran-backdrop-edge-light));
+  box-shadow: var(
+    --ran-glass-shadow,
+    inset 0 1px 0 var(--ran-backdrop-highlight),
+    0 16px 40px -16px var(--ran-backdrop-shadow-light)
+  );
+}
+.ran-glass[data-tone='light'] .ran-glass-specular {
+  background: var(
+    --ran-glass-specular-background,
+    linear-gradient(180deg, var(--ran-backdrop-highlight), transparent 40%)
+  );
+}
+
+/* The WebGL refraction of a `backdrop` element, painted over the frost it replaces and
+   under the highlights. The tint goes on top of it, where the pane's own background
+   would otherwise be hidden. */
+.ran-glass-refraction {
+  position: absolute;
+  inset: 0;
+  display: none;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.ran-glass[data-refracting] .ran-glass-refraction {
+  display: block;
+}
+.ran-glass-refraction::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--glass-fill);
+}
+.ran-glass-refraction canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* `rim`'s WebGL canvas — appended as a child of .ran-glass-specular (above its
@@ -152,7 +197,8 @@
     background: var(--ran-glass-reduced-transparency-background, var(--ran-color-bg-elevated));
     box-shadow: var(--ran-glass-reduced-transparency-shadow, var(--ran-shadow-elevated));
   }
-  .ran-glass-specular {
+  .ran-glass-specular,
+  .ran-glass-refraction {
     display: none;
   }
 }

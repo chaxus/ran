@@ -7,11 +7,11 @@
       "styles/home.css": 6
     },
     "bare-colour": {
-      "styles/demos.css": 10,
+      "styles/demos.css": 3,
       "styles/docs.css": 4
     },
     "spacing-scale": {
-      "styles/demos.css": 23,
+      "styles/demos.css": 11,
       "styles/docs.css": 40
     },
     "sizing-scale": {},

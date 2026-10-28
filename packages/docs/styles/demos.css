@@ -6,155 +6,233 @@
 /* ── Glass playground ─────────────────────────────────────────────────────── */
 .gp {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: 16px;
-  margin: 22px 0;
-}
-@media (max-width: 720px) {
-  .gp {
-    grid-template-columns: 1fr;
-  }
+  gap: var(--ran-space-4);
+  margin: var(--ran-space-6) 0;
 }
 
 /* ---- stage ---- */
 .gp-stage {
   position: relative;
-  min-height: 320px;
-  border-radius: 14px;
+  height: 400px;
+  border-radius: 16px;
   border: 1px solid var(--rule);
   overflow: hidden;
+  background: #0b0d16;
 }
 .gp-stage:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline-offset: 4px;
 }
-.gp-bg {
+.gp-scene {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(40% 55% at 22% 26%, #ff5f6d, transparent 60%),
-    radial-gradient(45% 55% at 80% 30%, #22d3ee, transparent 60%),
-    radial-gradient(55% 60% at 55% 88%, #a855f7, transparent 60%),
-    radial-gradient(40% 45% at 12% 82%, #f9d423, transparent 55%), #0b0d16;
-}
-.gp-bg span,
-.gp-bg b,
-.gp-bg i {
-  position: absolute;
-  color: rgba(255, 255, 255, 0.85);
-  mix-blend-mode: overlay;
-  font-style: normal;
-  font-weight: 800;
-}
-.gp-bg span {
-  top: 8%;
-  right: 10%;
-  font-size: 68px;
-}
-.gp-bg b {
-  bottom: 12%;
-  left: 8%;
-  font-size: 84px;
-  letter-spacing: -0.04em;
-}
-.gp-bg i {
-  top: 44%;
-  left: 40%;
-  font-size: 40px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  opacity: 0.7;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .gp-glass {
   position: absolute;
   cursor: grab;
   touch-action: none;
-  max-width: 100%;
+  max-width: calc(100% - 48px);
 }
 .gp-glass:active {
   cursor: grabbing;
 }
 .gp-card {
-  padding: 20px 22px;
-  color: #fff;
+  padding: var(--ran-space-6);
+}
+/* The ink the glass gives its content once it upgrades, so the caption does not change
+   color when the element loads. */
+.gp-glass:not(:defined) {
+  color: var(--ran-backdrop-ink-dark);
 }
 .gp-card-title {
   font-size: 17px;
   font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
 }
 .gp-card-sub {
   font-size: 12.5px;
-  margin-top: 3px;
-  color: rgba(255, 255, 255, 0.8);
+  margin-top: var(--ran-space-1);
+  opacity: 0.85;
 }
 
-/* ---- control panel ---- */
-.gp-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+/* ---- controls ---- */
+.gp-controls {
+  position: relative;
+  display: grid;
+  gap: var(--ran-space-4);
+}
+.gp-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
   min-width: 0;
 }
-.gp-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  background: var(--bg-soft);
+.gp-legend {
+  padding: 0;
+  margin-bottom: var(--ran-space-2);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
 }
-.gp-row {
+.gp-grid {
   display: grid;
-  grid-template-columns: 74px minmax(0, 1fr) 52px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--ran-space-2);
+}
+.gp-field {
+  position: relative;
+  display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: var(--ran-space-2);
+  min-height: 40px;
+  padding: 0 var(--ran-space-3);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: 13px;
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+.gp-field:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
 }
 .gp-label {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--fg-muted);
-}
-.gp-row input[type='range'] {
-  width: 100%;
-  min-width: 0;
-  accent-color: var(--accent);
 }
 .gp-val {
   font-family: var(--font-mono);
   font-size: 12px;
   color: var(--fg);
-  text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.gp-toggles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
-  grid-template-columns: none;
-  padding-top: 4px;
-  border-top: 1px solid var(--rule);
+
+/* A range field fills up to its value, with a hairline at the edge of the fill; the real
+   input lies over the whole field, so pointer, touch and keyboard all reach it. */
+.gp-range {
+  background:
+    linear-gradient(var(--rule), var(--rule)) var(--fill) 0 / 1px 100% no-repeat,
+    linear-gradient(to right, var(--bg-soft) var(--fill), var(--bg) var(--fill));
 }
-.gp-check {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.gp-range input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+
+.gp-field select {
+  appearance: none;
+  border: 0;
+  padding: 0 var(--ran-space-4) 0 0;
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.5'/%3E%3C/svg%3E")
+    right center no-repeat;
+  font: inherit;
   font-family: var(--font-mono);
-  font-size: 12.5px;
-  color: var(--fg-muted);
+  font-size: 12px;
+  color: var(--fg);
+  text-align: right;
   cursor: pointer;
 }
-.gp-check input {
-  accent-color: var(--accent);
+.gp-field select:focus {
+  outline: none;
 }
-.gp-reset {
-  margin-left: auto;
+
+.gp-switch input {
+  appearance: none;
+  position: relative;
+  width: 32px;
+  height: 20px;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--rule);
+  cursor: pointer;
+}
+.gp-switch input::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
+}
+.gp-switch input:checked {
+  background: var(--fg);
+}
+.gp-switch input:checked::after {
+  transform: translateX(12px);
+}
+.gp-switch input:focus {
+  outline: none;
+}
+
+.gp-tiles {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: var(--ran-space-2);
+}
+.gp-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-soft);
   font-size: 12px;
-  padding: 4px 12px;
-  border-radius: 7px;
+  color: var(--fg-muted);
+  text-align: center;
+  cursor: pointer;
+}
+.gp-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gp-tile input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.gp-tile:has(input:checked) {
+  outline: 2px solid var(--fg);
+  outline-offset: 1px;
+}
+.gp-tile:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.gp-upload {
+  border-style: dashed;
+  padding: var(--ran-space-1);
+}
+
+.gp-reset {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 12px;
+  padding: var(--ran-space-1) var(--ran-space-3);
+  border-radius: 8px;
   border: 1px solid var(--rule);
   background: var(--bg);
   color: var(--fg-muted);
@@ -163,6 +241,12 @@
 .gp-reset:hover {
   border-color: var(--fg-faint);
   color: var(--fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gp-switch input::after {
+    transition: none;
+  }
 }
 
 /* ---- code ---- */

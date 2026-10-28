@@ -47,32 +47,36 @@ afterEach(() => {
 });
 
 describe('Glass resource lifecycle (mock GPU protocol, not rendering)', () => {
-  it('defers rim allocation until connection and releases observer/canvas on removal, recreating on reconnect', () => {
-    const disconnect = vi.fn();
-    const observe = vi.fn();
+  it('defers rim allocation until connection and releases observers/canvas on removal, recreating on reconnect', () => {
+    const live = new Set<object>();
     vi.stubGlobal(
       'ResizeObserver',
       class {
-        observe = observe;
-        disconnect = disconnect;
+        observe() {
+          live.add(this);
+        }
+        disconnect() {
+          live.delete(this);
+        }
       },
     );
     const element = document.createElement('r-glass') as Glass;
     element.rim = true;
     expect(element._shadowDom.querySelectorAll('canvas')).toHaveLength(0);
-    expect(observe).not.toHaveBeenCalled();
+    expect(live.size).toBe(0);
     document.body.append(element);
     const first = element._shadowDom.querySelector('canvas');
     expect(first).not.toBeNull();
+    expect(live.size).toBeGreaterThan(0);
     element.remove();
-    expect(disconnect).toHaveBeenCalledTimes(1);
+    expect(live.size).toBe(0);
     expect(element._shadowDom.querySelectorAll('canvas')).toHaveLength(0);
     element.rim = false;
     element.rim = true;
-    expect(observe).toHaveBeenCalledTimes(1);
+    expect(live.size).toBe(0);
     document.body.append(element);
     expect(element._shadowDom.querySelector('canvas')).not.toBe(first);
-    expect(observe).toHaveBeenCalledTimes(2);
+    expect(live.size).toBeGreaterThan(0);
   });
 
   it('disposes a GPU device arriving after the owning component disconnected', async () => {
@@ -108,7 +112,7 @@ describe('Glass resource lifecycle (mock GPU protocol, not rendering)', () => {
     renderer.destroy();
     const draws = device.queue.submit.mock.calls.length;
     resize();
-    renderer.setRadius(42);
+    renderer.set({ radius: 42, bevel: 20, strength: 1, tone: 'dark' });
     lost.resolve({ reason: 'destroyed', message: 'intentional cleanup' });
     await Promise.resolve();
     expect(device.queue.submit).toHaveBeenCalledTimes(draws);

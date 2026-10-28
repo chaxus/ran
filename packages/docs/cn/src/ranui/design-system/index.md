@@ -206,6 +206,8 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 `--ran-media-background` 在两种主题下均为 `#000`。视频画布需要保持深色，以承托固定白色的播放控件；Player 的 `--ran-player-background` 派生自此令牌。这个媒体角色不会随页面配色反转。
 
+backdrop 系列颜色用于叠在其他内容上方的表面，比如玻璃。这类表面上的文字是否清晰，取决于下面的内容，与页面主题无关，所以暗色模式下同样不重新定义：`--ran-backdrop-ink-dark`（`#fff`）和 `--ran-backdrop-ink-light`（`#18181b`）分别是深色和浅色背景上的文字颜色，`--ran-backdrop-highlight`、`--ran-backdrop-edge-light` 和 `--ran-backdrop-shadow-light` 负责边缘的高光和轮廓。
+
 ### 每个色彩语义只有一个含义
 
 - **主操作是无彩色的**：浅色下黑底白字，暗色下白底黑字（Geist 的品牌调性，

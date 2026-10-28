@@ -110,14 +110,22 @@ export const mountExample = (form: HTMLElement): void => {
   });
 };
 
+const OPTIC_KEYS = ['blur', 'saturate', 'displace', 'bevel', 'dispersion', 'specular'] as const;
+
+/** The material table, written into the markup at build time from ranui's own. */
+type Materials = Record<string, Record<(typeof OPTIC_KEYS)[number], number>>;
+
 const mountGlass = (): void => {
   const root = document.querySelector<HTMLElement>('[data-glass]');
   const glass = root?.querySelector<HTMLElement>('.gp-glass');
   const stage = root?.querySelector<HTMLElement>('.gp-stage');
-  if (!root || !glass || !stage) return;
+  const scene = root?.querySelector<HTMLImageElement>('[data-scene]');
+  if (!root || !glass || !stage || !scene) return;
+  const GLASS_MATERIALS = JSON.parse(root.dataset.materials ?? '{}') as Materials;
+  if (!GLASS_MATERIALS.regular) return;
 
-  let x = 0;
-  let y = 0;
+  let x = 24;
+  let y = 24;
   let drag: { pointer: number; x: number; y: number } | undefined;
   const move = (nextX = x, nextY = y): void => {
     x = Math.max(0, Math.min(nextX, stage.clientWidth - glass.offsetWidth));
@@ -161,42 +169,118 @@ const mountGlass = (): void => {
   } else window.addEventListener('resize', () => move());
 
   const codeEl = root.querySelector('.gp-code code');
-  const read = (param: string): string => root.querySelector<HTMLInputElement>(`[data-param="${param}"]`)?.value ?? '';
+  const control = (name: string): HTMLInputElement | HTMLSelectElement | null =>
+    root.querySelector<HTMLInputElement | HTMLSelectElement>(`[data-param="${name}"]`);
+  const material = (): string => {
+    const value = control('material')?.value ?? '';
+    return Object.hasOwn(GLASS_MATERIALS, value) ? value : 'regular';
+  };
 
+  /** Writes a slider's value beside it and fills the field up to it. */
+  const paint = (input: HTMLInputElement): void => {
+    const min = Number(input.min);
+    const fill = ((Number(input.value) - min) / (Number(input.max) - min)) * 100;
+    input.parentElement?.style.setProperty('--fill', `${fill}%`);
+    const out = input.parentElement?.querySelector('.gp-val');
+    const text = `${input.value}${input.dataset.unit ?? ''}`;
+    input.setAttribute('aria-valuetext', text);
+    if (out) out.textContent = text;
+  };
+
+  /**
+   * The element only carries what differs from its material, and so does the snippet: the
+   * shortest markup that reproduces the stage is the one a reader should copy.
+   */
   const sync = (): void => {
-    for (const input of root.querySelectorAll<HTMLInputElement>('[data-param]')) {
-      const param = input.dataset.param ?? '';
-      const unit = input.dataset.unit ?? '';
-      // `width` is geometry, not a component attribute — it sizes the host.
-      if (param === 'width') glass.style.width = `${input.value}px`;
-      else glass.setAttribute(param, input.value);
-      const out = input.parentElement?.querySelector('.gp-val');
-      if (out) out.textContent = `${input.value}${unit}`;
+    const preset = GLASS_MATERIALS[material()]!;
+    const attrs: string[] = [];
+    if (material() === 'regular') glass.removeAttribute('material');
+    else {
+      glass.setAttribute('material', material());
+      attrs.push(`material="${material()}"`);
+    }
+    for (const key of OPTIC_KEYS) {
+      const value = control(key)?.value ?? '';
+      if (Number(value) === preset[key]) glass.removeAttribute(key);
+      else {
+        glass.setAttribute(key, value);
+        attrs.push(`${key}="${value}"`);
+      }
+    }
+    const radius = control('radius')?.value ?? '';
+    glass.setAttribute('radius', radius);
+    attrs.push(`radius="${radius}"`);
+    const tone = control('tone')?.value ?? 'auto';
+    if (tone === 'auto') glass.removeAttribute('tone');
+    else {
+      glass.setAttribute('tone', tone);
+      attrs.push(`tone="${tone}"`);
     }
     for (const box of root.querySelectorAll<HTMLInputElement>('[data-flag]')) {
-      glass.toggleAttribute(box.dataset.flag ?? '', box.checked);
+      const flag = box.dataset.flag ?? '';
+      glass.toggleAttribute(flag, box.checked);
+      if (box.checked) attrs.push(flag);
     }
+    const width = control('width')?.value ?? '';
+    glass.style.width = `${width}px`;
+    for (const input of root.querySelectorAll<HTMLInputElement>('input[type="range"]')) paint(input);
     move();
-    if (codeEl) {
-      codeEl.textContent =
-        `<r-glass blur="${read('blur')}" saturate="${read('saturate')}" ` +
-        `displace="${read('displace')}" radius="${read('radius')}" style="width:${read('width')}px"` +
-        `${glass.hasAttribute('sheen') ? ' sheen' : ''}${glass.hasAttribute('interactive') ? ' interactive' : ''}>\n  …\n</r-glass>`;
+    if (codeEl) codeEl.textContent = `<r-glass ${[...attrs, `style="width:${width}px"`].join(' ')}>\n  …\n</r-glass>`;
+  };
+
+  /** Choosing a material moves every optical control to that material's value. */
+  const applyMaterial = (): void => {
+    const preset = GLASS_MATERIALS[material()]!;
+    for (const key of OPTIC_KEYS) {
+      const input = control(key);
+      if (input) input.value = String(preset[key]);
     }
   };
 
-  root.addEventListener('input', sync);
+  root.addEventListener('input', (event) => {
+    if ((event.target as HTMLElement).dataset.param === 'material') applyMaterial();
+    sync();
+  });
+
+  let uploaded = '';
+  const showScene = (src: string): void => {
+    scene.src = src;
+    if (uploaded && src !== uploaded) {
+      URL.revokeObjectURL(uploaded);
+      uploaded = '';
+    }
+  };
+  root.addEventListener('change', (event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.name === 'gp-scene') showScene(`/glass/${target.value}.svg`);
+    if (target.matches('[data-upload]') && target.files?.[0]) {
+      const url = URL.createObjectURL(target.files[0]);
+      showScene(url);
+      uploaded = url;
+      for (const radio of root.querySelectorAll<HTMLInputElement>('[name="gp-scene"]')) radio.checked = false;
+      target.value = '';
+    }
+  });
+
   root.querySelector('[data-reset]')?.addEventListener('click', () => {
-    for (const input of root.querySelectorAll<HTMLInputElement>('[data-param]')) {
-      input.value = input.defaultValue;
+    for (const input of root.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-param]')) {
+      if (input instanceof HTMLSelectElement)
+        input.selectedIndex = [...input.options].findIndex((o) => o.defaultSelected);
+      else input.value = input.defaultValue;
     }
     for (const box of root.querySelectorAll<HTMLInputElement>('[data-flag]')) box.checked = false;
-    x = y = 0;
+    const first = root.querySelector<HTMLInputElement>('[name="gp-scene"]');
+    if (first) {
+      first.checked = true;
+      showScene(`/glass/${first.value}.svg`);
+    }
+    x = y = 24;
     sync();
   });
 
   const copy = root.querySelector<HTMLElement>('[data-copy-code]');
   if (copy) wireCopy(copy, () => codeEl?.textContent ?? '', copy.dataset.done);
+  sync();
 };
 
 const mountIconGallery = (): void => {
