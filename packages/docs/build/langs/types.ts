@@ -33,7 +33,7 @@ export interface SidebarNode {
   link?: string;
   /**
    * Nav only: the section this item highlights for, as a regex body without the `^` anchor
-   * and without a locale prefix (`/src/(article|note)/`). The builder anchors it and adds
+   * and without a locale prefix (`/(ranui|ranuts)/`). The builder anchors it and adds
    * the prefix exactly when it prefixed `link`, so an entry that falls back to the English
    * page also matches the English routes.
    */

@@ -65,9 +65,9 @@ packages/docs/
 
 ## URLs and the file layout
 
-Sources live in `src/` and `<dir>/src/`; the published URL drops that segment and pluralises
-the reading trees: `src/ranui/button/index.md` is `/ranui/button/`, `cn/src/article/x.md` is
-`/cn/articles/x`. `build/urls.ts` owns that mapping. Page URLs, hreflang, the language menu,
+Sources live in `src/` and `<dir>/src/`; the published URL drops that segment:
+`src/ranui/button/index.md` is `/ranui/button/`, `cn/src/ranuts/x.md` is `/cn/ranuts/x`.
+`build/urls.ts` owns that mapping. Page URLs, hreflang, the language menu,
 nav and sidebar links, markdown links and `llms-full.txt` all go through it; markdown and
 `build/langs/structure.ts` keep addressing pages by source path.
 
@@ -75,6 +75,11 @@ The `/src/…` URLs were public until 2026-10. `build/urls.ts`'s `legacyRedirect
 `# @generated legacyRedirects` line in `public/_redirects` at build time, and `build/verify.ts`
 fails the build unless every retired URL reaches its page in exactly one 301. The preview and
 dev servers follow `_redirects` the way Cloudflare does — before looking for a file.
+
+The articles and notes moved to chaxus.com (`/writing/`, Chinese under `/zh/writing/`) in
+2026-10. `movedRedirects()` in `build/urls.ts` lists them and sends every URL they had,
+`/src/…` forms included, there in one 301. Their targets end in `/` because chaxus.com
+answers the bare form with a further 307.
 
 `content.ts`'s `outFileFor` decides where a page is written, and it must agree with the
 canonical the page declares. Cloudflare Pages resolves a request by trying the exact file,
@@ -350,6 +355,6 @@ invisible and expensive:
 | Translating a `<ran-demo>` block's labels inside a component page                           | They mirror the code block printed right under them — `<r-button type="primary">Primary Button</r-button>` has to read the same in both. Same rule for the playground's slider labels, which are `r-glass` attribute names. Only chrome the reader is _told_ in their own language gets translated.                                                                                                                                              |
 | Adding `isolation`/`z-index` to the `<ran-demo>` box "just in case" a demo opens an overlay | `ran-demo` stays `isolation: isolate` unconditionally (cheap, contains decorative high-z-index content) but only escalates via `:has(r-modal[open]), :has(r-modal[closing])` — exactly when a real fixed-position overlay is open or fading out. A blanket `z-index` promotes the _whole box_ above the sticky nav for its entire scroll lifetime; that shipped once and painted a static `r-math` demo over the nav on ordinary scroll.         |
 | Matching only `:has(r-modal[open])` for that escalation                                     | `close()` removes `open` synchronously but the mask keeps painting for `getTransitionTimeout()` (~0.3s) more. `r-modal` reflects `closing` for exactly that tail — match both, or the still-fading mask repaints under whatever the escalation was holding it above.                                                                                                                                                                             |
-| Adding a product switcher / dropdown next to the logo                                       | The nav is deliberately flat: Design · ranui · ranuts · Articles · Agents · Doc Editor. A `ProductSwitcher` used to live beside the logo; it needed pixel measuring to sit there and a `pointer-events` hack to be clickable at all. Removed in favour of plain nav items.                                                                                                                                                                       |
+| Adding a product switcher / dropdown next to the logo                                       | The nav is deliberately flat: Design · ranui · ranuts · Agents, with Doc Editor in the footer and drawer. A `ProductSwitcher` used to live beside the logo; it needed pixel measuring to sit there and a `pointer-events` hack to be clickable at all. Removed in favour of plain nav items.                                                                                                                                                     |
 | Adding a custom PWA install prompt                                                          | The site is installable — `public/manifest.json` is linked and the SW is registered — but a `<pwa-install>` element used to be appended on every page load, interrupting reading, and its "remember the dismissal" attribute did not actually stop it recurring. Installation still works through the browser's own affordance.                                                                                                                  |
 | Assuming generated output is ignored by tooling                                             | Generated artefacts must be added to `.prettierignore` explicitly, or `lint:prettier` goes red the first time someone runs the generator.                                                                                                                                                                                                                                                                                                        |

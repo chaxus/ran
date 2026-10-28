@@ -18,7 +18,7 @@ const PAGES = [
   '/cn/ranui/input/',
   '/ranuts/',
   '/agents/',
-  '/articles/doc_preview',
+  '/ranuts/choosing/',
 ];
 const WIDTHS = [320, 768, 1280];
 
@@ -45,7 +45,7 @@ for (const width of WIDTHS) {
         else await expect(drawer).toBeVisible();
 
         // The secondary destinations stay one link away on every page.
-        await expect(page.locator('.site-footer a')).toHaveCount(2);
+        await expect(page.locator('.site-footer a')).toHaveCount(1);
 
         // Reduced motion leaves nothing animating.
         const running = await page.evaluate(

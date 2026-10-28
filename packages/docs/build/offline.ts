@@ -77,7 +77,7 @@ export const createOfflineManifest = (dist: string, pages: readonly OfflinePage[
     const html = htmlFor(dist, page.url);
     if (!html) continue;
     const seen = (media[page.locale.lang] ??= new Set());
-    // Article images are written relative to the page (`../../assets/article/…`).
+    // Images may be written relative to the page (`../../assets/…`).
     for (const [, ref] of readFileSync(html, 'utf8').matchAll(/(?:src|href|poster)="([^"#?]+)"/g)) {
       if (/^[a-z][a-z0-9+.-]*:|^\/\//i.test(ref!) || !IMAGE.test(ref!)) continue;
       let url: string;

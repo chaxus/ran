@@ -32,25 +32,21 @@ export interface LocaleDef {
   mirrors: readonly string[];
 }
 
-/** Every content tree — what a fully mirrored locale carries. */
-const ALL = ['/src/design/', '/src/agents/', '/src/ranui/', '/src/ranuts/', '/src/article/', '/src/note/'] as const;
-
-/** The library reference only; articles and notes stay English. */
-const LIBS = ['/src/design/', '/src/agents/', '/src/ranui/', '/src/ranuts/'] as const;
+/** Every content tree; each locale mirrors all of them. */
+const ALL = ['/src/design/', '/src/agents/', '/src/ranui/', '/src/ranuts/'] as const;
 
 /**
- * Menu order is deliberate: Chinese and English first (the two fully mirrored languages,
- * and the author's own), then the rest.
+ * Menu order is deliberate: Chinese and English first (the author's own), then the rest.
  */
 export const LOCALES: readonly LocaleDef[] = [
   { id: 'cn', dir: 'cn', lang: 'zh-CN', label: '简体中文', ogLocale: 'zh_CN', mirrors: ALL },
   { id: 'root', dir: '', lang: 'en', label: 'English', ogLocale: 'en_US', mirrors: ALL },
-  { id: 'ja', dir: 'ja', lang: 'ja', label: '日本語', ogLocale: 'ja_JP', mirrors: LIBS },
-  { id: 'es', dir: 'es', lang: 'es', label: 'Español', ogLocale: 'es_ES', mirrors: LIBS },
-  { id: 'pt', dir: 'pt', lang: 'pt', label: 'Português', ogLocale: 'pt_BR', mirrors: LIBS },
-  { id: 'ko', dir: 'ko', lang: 'ko', label: '한국어', ogLocale: 'ko_KR', mirrors: LIBS },
-  { id: 'de', dir: 'de', lang: 'de', label: 'Deutsch', ogLocale: 'de_DE', mirrors: LIBS },
-  { id: 'fa', dir: 'fa', lang: 'fa', label: 'فارسی', ogLocale: 'fa_IR', rtl: true, mirrors: LIBS },
+  { id: 'ja', dir: 'ja', lang: 'ja', label: '日本語', ogLocale: 'ja_JP', mirrors: ALL },
+  { id: 'es', dir: 'es', lang: 'es', label: 'Español', ogLocale: 'es_ES', mirrors: ALL },
+  { id: 'pt', dir: 'pt', lang: 'pt', label: 'Português', ogLocale: 'pt_BR', mirrors: ALL },
+  { id: 'ko', dir: 'ko', lang: 'ko', label: '한국어', ogLocale: 'ko_KR', mirrors: ALL },
+  { id: 'de', dir: 'de', lang: 'de', label: 'Deutsch', ogLocale: 'de_DE', mirrors: ALL },
+  { id: 'fa', dir: 'fa', lang: 'fa', label: 'فارسی', ogLocale: 'fa_IR', rtl: true, mirrors: ALL },
 ];
 
 /** The root locale — the one served without a prefix, and the hreflang `x-default`. */

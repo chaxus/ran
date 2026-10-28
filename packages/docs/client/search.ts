@@ -127,8 +127,7 @@ export const mountSearch = (): void => {
   const sectionOf = (url: string): string => {
     const [, section = '', page = ''] = url.match(/^(?:\/[a-z]{2}(?=\/))?\/([^/#]+)\/?([^/#]*)/) ?? [];
     if (/^(ranui|ranuts)$/.test(section) && /^(api|style-tokens)$/.test(page)) return 'API';
-    // Notes have no nav entry of their own; the navigation files them under articles.
-    return sections.get(section === 'notes' ? 'articles' : section) ?? '';
+    return sections.get(section) ?? '';
   };
 
   const render = (): void => {
@@ -164,8 +163,8 @@ export const mountSearch = (): void => {
       if (retry) retry.hidden = !failed;
       return;
     }
-    // The reader's current tree (`/ranui/`, `/cn/articles/`…) ranks first.
-    const section = location.pathname.match(/^(?:\/[a-z]{2})?\/(design|agents|ranui|ranuts|articles|notes)\//)?.[1];
+    // The reader's current tree (`/ranui/`, `/cn/ranuts/`…) ranks first.
+    const section = location.pathname.match(/^(?:\/[a-z]{2})?\/(design|agents|ranui|ranuts)\//)?.[1];
     hits = (index.search(query) as unknown as Hit[])
       .sort((a, b) => {
         const score = (hit: Hit): number =>

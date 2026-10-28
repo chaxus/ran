@@ -29,14 +29,12 @@ test.describe('native global navigation', () => {
       await expect(toggle).toBeChecked();
       const navigation = page.locator('.sidebar .mobile-nav');
       await expect(navigation).toBeVisible();
-      const articlePrefix = ['', '/cn'].includes(prefix) ? prefix : '';
       const destinations = [
         `${prefix}/design/`,
         `${prefix}/ranui/`,
         `${prefix}/ranuts/`,
         `${prefix}/agents/`,
         // Secondary destinations follow the product ones, set apart in the drawer.
-        `${articlePrefix}/articles/`,
         'https://edit.chaxus.com/',
       ];
       expect(
@@ -70,7 +68,7 @@ test.describe('native global navigation', () => {
 for (const width of [320, 900]) {
   test(`prose and demo grids fit their actual column at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 720 });
-    for (const path of ['/articles/doc_preview', '/cn/ranui/loading/', '/cn/ranui/glass/', '/cn/ranui/preview/']) {
+    for (const path of ['/ranuts/choosing/', '/cn/ranui/loading/', '/cn/ranui/glass/', '/cn/ranui/preview/']) {
       await page.goto(path);
       if (path.includes('loading')) await page.waitForFunction(() => customElements.get('r-loading'));
       if (path.includes('glass')) await page.waitForFunction(() => customElements.get('r-glass'));

@@ -36,6 +36,10 @@ beforeAll(async () => {
   put('about.html');
   put('blog/index.html');
   put('404.html');
+  writeFileSync(
+    join(dist, '_redirects'),
+    ['/moved https://example.org/new/ 301', '/gone/* https://example.org/old/:splat 301'].join('\n'),
+  );
 
   server = createPreviewServer({ distDir: dist, port: 0 });
   await new Promise<void>((r) => server.once('listening', () => r()));
@@ -65,6 +69,18 @@ describe('redirects', () => {
     const { location } = await raw('/blog?a=1%0D%0AX-Injected:%20yes');
     expect(location).not.toMatch(/[\r\n]/);
     expect(location?.startsWith('/blog/?')).toBe(true);
+  });
+});
+
+describe('redirects to another origin', () => {
+  it('follows a rule that names the origin', async () => {
+    expect(await raw('/moved?a=1')).toEqual({ status: 301, location: 'https://example.org/new/?a=1' });
+  });
+
+  it('keeps a splat in the path, whatever the request carries', async () => {
+    for (const path of ['/gone/x', '/gone/@evil.com', '/gone//evil.com']) {
+      expect(new URL((await raw(path)).location!).origin).toBe('https://example.org');
+    }
   });
 });
 

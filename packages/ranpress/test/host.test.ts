@@ -127,6 +127,11 @@ describe('_redirects', () => {
     expect(() => parseRedirects('/a/:id /b/:id 301')).toThrow(/named placeholders/);
     expect(() => parseRedirects('/a/* /b 200')).toThrow(/not a redirect/);
     expect(() => parseRedirects('/a/*/b/* /c 301')).toThrow(/more than one/);
+    expect(() => parseRedirects('/a/* https://:splat 301')).toThrow(/needs a path/);
+    expect(() => parseRedirects('/a/* https://x.org:splat/ 301')).toThrow(/needs a path/);
+    expect(parseRedirects('/a/* https://x.org/b/:splat 301')).toEqual([
+      { from: '/a/*', to: 'https://x.org/b/:splat', status: 301 },
+    ]);
   });
 
   it('takes the first matching rule and fills in the splat', () => {

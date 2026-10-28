@@ -44,13 +44,18 @@ export interface RedirectRule {
   status: number;
 }
 
+/** A redirect target on another origin, which only `_redirects` itself can name. */
+export const isExternal = (to: string): boolean => /^https?:\/\//.test(to);
+
 /**
  * Parse Cloudflare Pages' `_redirects`.
  *
  * Only the forms the host documents for redirects are accepted: a path, at most one `*`
- * whose capture the target names as `:splat`, and a 3xx status (301 by default). A named
- * placeholder or a rewrite status throws rather than being silently treated as a literal,
- * because the local servers and the verifier would then disagree with production.
+ * whose capture the target names as `:splat`, and a 3xx status (301 by default). The target
+ * is a path or an absolute `http(s)` URL with a path, so a `:splat` in it can never reach the
+ * host a request is sent to. A named placeholder or a rewrite status throws rather than being
+ * silently treated as a literal, because the local servers and the verifier would then
+ * disagree with production.
  */
 export const parseRedirects = (text: string): RedirectRule[] =>
   text.split(/\r?\n/).flatMap((raw, index) => {
@@ -67,9 +72,11 @@ export const parseRedirects = (text: string): RedirectRule[] =>
           ? 'more than one `*`'
           : /:(?!splat\b)[a-z]/i.test(`${from} ${to}`)
             ? 'named placeholders are not supported'
-            : !(status >= 300 && status < 400)
-              ? `status ${code} is not a redirect`
-              : '';
+            : isExternal(to) && !/^https?:\/\/[^/:]+(:\d+)?\//.test(to)
+              ? 'an absolute target needs a path'
+              : !(status >= 300 && status < 400)
+                ? `status ${code} is not a redirect`
+                : '';
     if (problem) throw new Error(`_redirects:${index + 1}: ${problem}: ${raw.trim()}`);
     return [{ from, to: to!, status }];
   });

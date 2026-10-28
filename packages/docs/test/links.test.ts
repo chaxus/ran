@@ -41,13 +41,13 @@ describe('resolveLinkFrom', () => {
   it('publishes a site-absolute source path at its public URL', () => {
     expect(from('/src/ranui/')).toBe('/ranui/');
     expect(from('/src/ranui/index.md')).toBe('/ranui/');
-    expect(from('/cn/src/article/doc_preview')).toBe('/cn/articles/doc_preview');
+    expect(from('/cn/src/ranuts/choosing/')).toBe('/cn/ranuts/choosing/');
     expect(from('/assets/a.png')).toBe('/assets/a.png');
   });
 
   it('resolves a relative path against the source tree, then publishes it', () => {
-    // From `/src/ranui/button/`, `../../article/x` is `/src/article/x`, not `/article/x`.
-    expect(fromDir('../../article/x.md')).toBe('/articles/x');
+    // From `/src/ranui/button/`, `../../ranuts/x` is `/src/ranuts/x`, published at `/ranuts/x`.
+    expect(fromDir('../../ranuts/x.md')).toBe('/ranuts/x');
   });
 
   it.each([
