@@ -224,7 +224,7 @@ Shadow DOM v1 y propiedades personalizadas de CSS. **Internet Explorer no está 
 ## Colaboradores
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="Colaboradores de ran en GitHub" />
+  <img loading="lazy" src="https://contrib.rocks/image?repo=chaxus/ran" alt="Colaboradores de ran en GitHub" />
 </a>
 
 ## Para seguir leyendo

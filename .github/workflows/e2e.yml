@@ -68,11 +68,15 @@ jobs:
     # runner sets its own HOME for the container, so it is set here rather than in its options.
     env:
       HOME: /root
-    name: "E2E (${{ matrix.browser }})"
+    name: "E2E (${{ matrix.browser }}, ${{ matrix.suite }})"
+    # One job per browser used to run the four suites back to back: about 15 minutes, of which
+    # 1.5 was setup. Split by suite, with ranui's own (the longest) in two shards, each job is
+    # a few minutes and the run is as long as its slowest one.
     strategy:
       fail-fast: false
       matrix:
         browser: [chromium, firefox, webkit]
+        suite: [ranui-1, ranui-2, docs, im]
     steps:
       # Shallow clone on purpose. This repository's history is hundreds of megabytes, and
       # nothing in this job reads it: the specs, both Playwright configs and the ranui
@@ -100,36 +104,41 @@ jobs:
         run: pnpm --filter ranuts run build
 
       - name: Verify agent-evaluation browser oracles (no model calls)
-        if: matrix.browser == 'chromium'
+        if: matrix.browser == 'chromium' && matrix.suite == 'docs'
         run: pnpm verify:agent-evals
 
       - name: Build ranui
         run: pnpm --filter ranui run build
 
       - name: Build documentation preview integration
+        if: matrix.suite == 'docs'
         run: pnpm --filter docs run build
 
       - name: Verify standalone preview compatibility in the built documentation site
+        if: matrix.suite == 'docs'
         run: pnpm --filter docs run test:preview --project=${{ matrix.browser }}
 
       - name: Exercise compaction cancellation without retries
+        if: matrix.suite == 'im'
         run: pnpm --filter im exec playwright test test/e2e/compaction-cancel.spec.ts --project=${{ matrix.browser }} --repeat-each=5 --retries=0
 
       # Engine assertions remain independent from the canonical screenshot gate below.
       - name: Run E2E tests
-        run: pnpm --filter ranui exec playwright test --project=${{ matrix.browser }}
+        if: startsWith(matrix.suite, 'ranui-')
+        run: pnpm --filter ranui exec playwright test --project=${{ matrix.browser }} --shard=${{ matrix.suite == 'ranui-1' && '1/2' || '2/2' }}
 
       # im is the assembled application, and its defects have all been integration-level —
       # what the browser draws once the pieces are wired together, which no unit test sees.
       # The suite runs keyless against the built-in sample answer, so it needs no secret.
       - name: Run im E2E tests
+        if: matrix.suite == 'im'
         run: pnpm --filter im exec playwright test --project=${{ matrix.browser }} --grep-invert @soak
 
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report-${{ matrix.browser }}
+          name: playwright-report-${{ matrix.browser }}-${{ matrix.suite }}
           path: |
             packages/ranui/playwright-report/
             packages/ranui/test-results/

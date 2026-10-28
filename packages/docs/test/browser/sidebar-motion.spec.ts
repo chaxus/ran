@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
@@ -44,8 +44,10 @@ test('the sidebar keeps its scroll position on the next page, with the new link 
   expect(top).toBeGreaterThan(0);
   await page.locator('.sb__link[href="/ranui/skeleton/"]').click();
   await page.waitForURL('**/ranui/skeleton/');
-  // Firefox reports a fractional scrollTop and restores the whole pixel.
-  expect(Math.abs((await sidebar.evaluate((element) => element.scrollTop)) - top)).toBeLessThanOrEqual(1);
+  // Firefox reports a fractional scrollTop and restores the whole pixel. The restore also runs
+  // before the webfont has loaded, and when it swaps in, scroll anchoring moves the list by
+  // about 1.5px (measured in Firefox with the fonts uncached).
+  expect(Math.abs((await sidebar.evaluate((element) => element.scrollTop)) - top)).toBeLessThanOrEqual(2);
   expect(await inView()).toBe(true);
 });
 

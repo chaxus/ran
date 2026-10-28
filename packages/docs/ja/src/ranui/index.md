@@ -225,7 +225,7 @@ Custom Elements v1、Shadow DOM v1、CSS カスタムプロパティの上に作
 ## コントリビューター
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="GitHub 上の ran のコントリビューター" />
+  <img loading="lazy" src="https://contrib.rocks/image?repo=chaxus/ran" alt="GitHub 上の ran のコントリビューター" />
 </a>
 
 ## さらに読む

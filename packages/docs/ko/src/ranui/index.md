@@ -223,7 +223,7 @@ document.body.appendChild(button);
 ## 기여자
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="GitHub의 ran 기여자" />
+  <img loading="lazy" src="https://contrib.rocks/image?repo=chaxus/ran" alt="GitHub의 ran 기여자" />
 </a>
 
 ## 더 읽을거리

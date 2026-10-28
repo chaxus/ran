@@ -223,7 +223,7 @@ document.body.appendChild(button);
 ## مشارکت‌کنندگان
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="مشارکت‌کنندگان ran در GitHub" />
+  <img loading="lazy" src="https://contrib.rocks/image?repo=chaxus/ran" alt="مشارکت‌کنندگان ran در GitHub" />
 </a>
 
 ## خواندنی‌های بیشتر

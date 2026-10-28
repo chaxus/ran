@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 // The navigation is server-rendered; its layout must work before the client loads.
 test.use({ javaScriptEnabled: false });

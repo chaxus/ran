@@ -225,7 +225,7 @@ CSS-Custom-Properties. **Internet Explorer wird nicht unterstützt.**
 ## Mitwirkende
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="Mitwirkende an ran auf GitHub" />
+  <img loading="lazy" src="https://contrib.rocks/image?repo=chaxus/ran" alt="Mitwirkende an ran auf GitHub" />
 </a>
 
 ## Weiterführendes
