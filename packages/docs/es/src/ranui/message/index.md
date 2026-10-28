@@ -57,14 +57,15 @@ message.info({
 
 ### Opciones
 
-| Opción         | Tipo                        | Por defecto     | Descripción                                                                       |
-| -------------- | --------------------------- | --------------- | --------------------------------------------------------------------------------- |
-| `content`      | `string`                    | —               | Texto que se muestra (obligatorio al pasar un objeto)                             |
-| `duration`     | `number`                    | `3000`          | Retardo en milisegundos antes de cerrarse solo                                    |
-| `close`        | `() => void`                | —               | Callback que se dispara tras retirar el aviso                                     |
-| `top`          | `number \| string`          | `8`             | Distancia de la pila de avisos al borde superior del contenedor (un número es px) |
-| `zIndex`       | `number \| string`          | `1200`          | Orden de apilado del contenedor de avisos                                         |
-| `getContainer` | `() => HTMLElement \| null` | `document.body` | Devuelve el elemento en el que se monta la pila de avisos                         |
+| Opción         | Tipo                        | Por defecto     | Descripción                                                                                  |
+| -------------- | --------------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `content`      | `string`                    | —               | Texto que se muestra (obligatorio al pasar un objeto)                                        |
+| `duration`     | `number`                    | `3000`          | Retardo en milisegundos antes de cerrarse solo                                               |
+| `close`        | `() => void`                | —               | Callback que se dispara tras retirar el aviso                                                |
+| `top`          | `number \| string`          | `8`             | Distancia de la pila de avisos al borde superior del contenedor (un número es px)            |
+| `zIndex`       | `number \| string`          | `1200`          | Orden de apilado del contenedor de avisos                                                    |
+| `getContainer` | `() => HTMLElement \| null` | `document.body` | Devuelve el elemento en el que se monta la pila de avisos                                    |
+| `stacked`      | `boolean`                   | `false`         | Apila los avisos del contenedor, el más reciente delante; el puntero o el foco los despliega |
 
 > Pasar `null`, `undefined` o ningún argumento no hace nada: no se muestra nada.
 

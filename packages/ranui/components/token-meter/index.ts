@@ -12,6 +12,7 @@ import {
   shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
+import { rollText } from 'ranuts/utils';
 import { defineSSR, getSSRConstructor } from '@/utils/ssr-registry';
 import { uiText } from '@/utils/ui-text';
 import { tokenMeterText } from './text';
@@ -242,7 +243,8 @@ export class TokenMeter extends RanElement {
     // number beside a bar is a number nobody can name, and `title` needs a hover to reach.
     const context = limit === 0 ? short(used) : `${short(used)} / ${short(limit)}`;
     const counts = spent === 0 ? context : `${context} · ${short(spent)}`;
-    this._text.textContent = label === '' ? counts : `${label} ${counts}`;
+    // Only the digits that changed roll in, so a count climbing during a stream reads as motion.
+    rollText(this._text, label === '' ? counts : `${label} ${counts}`);
     // The escalation in words beside the bar, so it never rests on the fill colour alone.
     this._flag.textContent =
       level === 'warn'

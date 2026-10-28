@@ -1,4 +1,4 @@
-import { observeEntry, prefersReducedMotion, spring, stagger } from 'ranuts/utils';
+import { observeEntry, prefersReducedMotion, rollText, spring, stagger } from 'ranuts/utils';
 
 /** Settles in about half a second with a slight overshoot. */
 const RISE = spring({ stiffness: 220, damping: 22 });
@@ -8,7 +8,7 @@ const GROUPS = '.pillars, .bento';
 const ICONS = '.pillar-icon, .caps-ico';
 
 /**
- * A quiet entrance for the landing's decorative icons.
+ * A quiet entrance for the landing's decorative icons and its row of figures.
  *
  * Transform only, never opacity, so nothing is hidden at any moment and a failed script
  * leaves the page exactly as rendered. A group already on screen at load is left alone:
@@ -31,6 +31,17 @@ export const mountEntrance = (): void => {
             fill: 'backwards',
           }),
         );
+      },
+    });
+  }
+  // The figures rise digit by digit; transform only, so each value reads correctly throughout.
+  const stats = document.querySelector('.stats');
+  if (stats && stats.getBoundingClientRect().top >= window.innerHeight) {
+    observeEntry(stats, {
+      onEnter: ({ reduced }) => {
+        if (reduced) return;
+        for (const num of stats.querySelectorAll<HTMLElement>('.stat-num'))
+          rollText(num, num.textContent ?? '', { rise: true });
       },
     });
   }

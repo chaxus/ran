@@ -57,14 +57,15 @@ message.info({
 
 ### Optionen
 
-| Option         | Typ                         | Standard        | Beschreibung                                                         |
-| -------------- | --------------------------- | --------------- | -------------------------------------------------------------------- |
-| `content`      | `string`                    | —               | Anzuzeigender Text (Pflicht, wenn ein Objekt übergeben wird)         |
-| `duration`     | `number`                    | `3000`          | Verzögerung in Millisekunden bis zum automatischen Schließen         |
-| `close`        | `() => void`                | —               | Callback, das nach dem Entfernen des Toasts läuft                    |
-| `top`          | `number \| string`          | `8`             | Abstand des Toast-Stapels vom oberen Rand des Containers (Zahl = px) |
-| `zIndex`       | `number \| string`          | `1200`          | Stapelreihenfolge des Toast-Containers                               |
-| `getContainer` | `() => HTMLElement \| null` | `document.body` | Liefert das Element, in das der Toast-Stapel eingehängt wird         |
+| Option         | Typ                         | Standard        | Beschreibung                                                                           |
+| -------------- | --------------------------- | --------------- | -------------------------------------------------------------------------------------- |
+| `content`      | `string`                    | —               | Anzuzeigender Text (Pflicht, wenn ein Objekt übergeben wird)                           |
+| `duration`     | `number`                    | `3000`          | Verzögerung in Millisekunden bis zum automatischen Schließen                           |
+| `close`        | `() => void`                | —               | Callback, das nach dem Entfernen des Toasts läuft                                      |
+| `top`          | `number \| string`          | `8`             | Abstand des Toast-Stapels vom oberen Rand des Containers (Zahl = px)                   |
+| `zIndex`       | `number \| string`          | `1200`          | Stapelreihenfolge des Toast-Containers                                                 |
+| `getContainer` | `() => HTMLElement \| null` | `document.body` | Liefert das Element, in das der Toast-Stapel eingehängt wird                           |
+| `stacked`      | `boolean`                   | `false`         | Stapelt die Toasts des Containers, der neueste vorn; Zeiger oder Fokus fächert sie auf |
 
 > `null`, `undefined` oder gar kein Argument bewirken nichts: Es wird nichts angezeigt.
 

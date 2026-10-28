@@ -1,6 +1,6 @@
 ---
 title: Referencia de la API de ranuts
-description: 'Todos los símbolos que exporta ranuts: 431 exportaciones en 7 puntos de entrada, con firmas y descripciones.'
+description: 'Todos los símbolos que exporta ranuts: 433 exportaciones en 7 puntos de entrada, con firmas y descripciones.'
 ---
 
 # API de ranuts (generada)
@@ -13,11 +13,11 @@ entrada importar, restricciones de ejecución, convenciones) lee antes [CLAUDE.m
 Importa desde la **subruta** dueña del símbolo, p. ej. `import { debounce } from
 'ranuts/utils'`. El barril raíz `ranuts` reexporta la superficie de utils + visual.
 
-**431 exportaciones** en 7 puntos de entrada.
+**433 exportaciones** en 7 puntos de entrada.
 
 ## Puntos de entrada
 
-- [`ranuts/utils`](#ranuts-utils) — Utilidades para el navegador y de propósito general · _navegador + node_ · 342 exportaciones
+- [`ranuts/utils`](#ranuts-utils) — Utilidades para el navegador y de propósito general · _navegador + node_ · 344 exportaciones
 - [`ranuts/sw`](#ranuts-sw) — Estrategias de caché del Service Worker y el protocolo de precarga · _solo service worker_ · 9 exportaciones
 - [`ranuts/visual`](#ranuts-visual) — Motor de renderizado 2D (Canvas / WebGL / WebGPU) · _solo navegador_ · 16 exportaciones
 - [`ranuts/i18n`](#ranuts-i18n) — Motor de i18n independiente de framework (también reexportado desde ranuts/utils) · _navegador + node_ · 9 exportaciones
@@ -213,6 +213,7 @@ import { /* … */ } from 'ranuts/utils';
 - `rgbToHsb(r: number, g: number, b: number) => number[]`
 - `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
 - `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
+- `rollText(host: HTMLElement, next: string, { rise }?: RollOptions) => void` — Writes `next` into `host`, rolling in only the characters that changed.
 - `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
 - `safeEqual(a: string | Uint8Array, b: string | Uint8Array) => boolean` — Compare two secrets in time that does not depend on where they first differ.
 - `saturation(color: RGB, amount: number) => RGB` — Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
@@ -317,6 +318,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface ReportConfig`
 - `interface ResolveLocaleOptions`
 - `interface RewriteZipOptions`
+- `interface RollOptions`
 - `interface Segment` — One piece of the split result: `value === null` marks a plain span covered by no range
 - `interface ServeWorkerOptions`
 - `interface SingleFlight`

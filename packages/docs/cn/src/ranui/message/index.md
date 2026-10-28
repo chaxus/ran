@@ -57,14 +57,15 @@ message.info({
 
 ### 选项
 
-| 选项           | 类型                        | 默认值          | 说明                                                     |
-| -------------- | --------------------------- | --------------- | -------------------------------------------------------- |
-| `content`      | `string`                    | —               | 显示的文本内容（以对象形式传入时为必填项）               |
-| `duration`     | `number`                    | `3000`          | 自动关闭的延时，单位毫秒                                 |
-| `close`        | `() => void`                | —               | toast 被移除后触发的回调函数                             |
-| `top`          | `number \| string`          | `8`             | toast 堆栈相对于所在容器顶部的偏移量（数字将按 px 处理） |
-| `zIndex`       | `number \| string`          | `1200`          | toast 容器的堆叠层级（z-index）                          |
-| `getContainer` | `() => HTMLElement \| null` | `document.body` | 返回 toast 堆栈挂载到的目标元素                          |
+| 选项           | 类型                        | 默认值          | 说明                                                                  |
+| -------------- | --------------------------- | --------------- | --------------------------------------------------------------------- |
+| `content`      | `string`                    | —               | 显示的文本内容（以对象形式传入时为必填项）                            |
+| `duration`     | `number`                    | `3000`          | 自动关闭的延时，单位毫秒                                              |
+| `close`        | `() => void`                | —               | toast 被移除后触发的回调函数                                          |
+| `top`          | `number \| string`          | `8`             | toast 堆栈相对于所在容器顶部的偏移量（数字将按 px 处理）              |
+| `zIndex`       | `number \| string`          | `1200`          | toast 容器的堆叠层级（z-index）                                       |
+| `getContainer` | `() => HTMLElement \| null` | `document.body` | 返回 toast 堆栈挂载到的目标元素                                       |
+| `stacked`      | `boolean`                   | `false`         | 把同一容器里的 toast 叠成一摞，最新的在最前；指针移入或焦点进入时展开 |
 
 > 传入 `null`、`undefined` 或空参数不会有任何效果，不会显示任何内容。
 

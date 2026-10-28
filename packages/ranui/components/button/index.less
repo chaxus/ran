@@ -213,11 +213,10 @@
       opacity: var(--ran-btn-after-opacity, 0.3);
       transition: var(--ran-btn-after-transition, 0s);
     }
-    // Tactile press: scale the visible surface down; it springs back on release
-    // via .ran-btn-content's transform transition. Motion prop only — safe on
-    // theme flip.
+    // Tactile press: the visible surface shrinks and springs back on release. The
+    // individual `scale` property, not `transform`, so a host's own transform survives.
     .ran-btn-content {
-      transform: var(--ran-btn-active-transform, scale(0.96));
+      scale: var(--ran-btn-active-scale, 0.96);
     }
   }
 
@@ -239,9 +238,10 @@
         background-position: 50%;
         transform: translate(-50%, -50%) scale(10);
         opacity: 0;
+        // Grows within feedback time (100ms) and fades like anything leaving (200ms).
         transition:
-          transform 0.3s,
-          opacity 0.8s;
+          transform 0.1s var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
+          opacity 0.2s cubic-bezier(0.4, 0, 1, 1);
       }
     }
   }
@@ -281,12 +281,9 @@
   white-space: var(--ran-btn-white-space, nowrap);
   text-align: var(--ran-btn-text-align, center);
   box-sizing: var(--ran-btn-content-box-sizing, border-box);
-  // Motion prop only (transform) — spring easing gives a slight bounce on
-  // release when the press scale (see :active) relaxes back to rest.
-  transition: var(
-    --ran-btn-transition,
-    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, cubic-bezier(0.34, 1.26, 0.5, 1))
-  );
+  // Press feedback lands within 100ms, the guide's feedback budget, and settles without
+  // overshoot as the press scale (see :active) relaxes.
+  transition: var(--ran-btn-transition, scale 0.1s var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)));
   .icon {
     margin-right: var(--ran-btn-icon-margin-right, var(--ran-space-1, 4px));
   }
