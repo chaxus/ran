@@ -71,10 +71,12 @@ export class Dropdown extends RanElement {
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
-  /** The class currently mirrored onto the panel, so it can be taken off again. */
+  /** The class currently mirrored onto the container, so it can be taken off again. */
   private appliedTransit = '';
   /**
-   * Mirror the `transit` attribute onto the panel as a class, and nothing else.
+   * Mirror the `transit` attribute as a class, and nothing else, onto the container that
+   * holds the panel and its arrow, so the two enter and leave as one. On the panel alone the
+   * arrow stayed fully opaque through the exit and vanished only when the host was hidden.
    *
    * It used to add the class and set a 300ms timer to take it off — a fourth
    * copy of a duration the stylesheet already owns, and one that removed
@@ -90,10 +92,10 @@ export class Dropdown extends RanElement {
    * rather than on a number.
    */
   handlerTransit = (): void => {
-    if (!this.dropdown) return;
-    if (this.appliedTransit) removeClassToElement(this.dropdown, this.appliedTransit);
+    if (!this.container) return;
+    if (this.appliedTransit) removeClassToElement(this.container, this.appliedTransit);
     this.appliedTransit = this.transit;
-    if (this.appliedTransit) addClassToElement(this.dropdown, this.appliedTransit);
+    if (this.appliedTransit) addClassToElement(this.container, this.appliedTransit);
   };
 
   /**
@@ -105,7 +107,7 @@ export class Dropdown extends RanElement {
    * for the panel's transition asks for this rather than reaching into the
    * shadow tree and depending on a class name.
    */
-  getAnimationTarget = (): Element => this.dropdown;
+  getAnimationTarget = (): Element => this.container;
   handlerArrow = (): void => {
     const arrow = (this.arrow || '').trim();
     if (!arrow) {
