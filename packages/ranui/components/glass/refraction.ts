@@ -421,9 +421,14 @@ export const createRefraction = (
     }
     reportTone((left - cx) / cw, (top - cy) / ch, (left + width - cx) / cw, (top + height - cy) / ch);
 
-    canvas.width = Math.round(width * dpr);
-    canvas.height = Math.round(height * dpr);
-    gl.viewport(0, 0, canvas.width, canvas.height);
+    // Assigning a canvas dimension reallocates its buffer even when the value is unchanged.
+    const backingWidth = Math.round(width * dpr);
+    const backingHeight = Math.round(height * dpr);
+    if (canvas.width !== backingWidth || canvas.height !== backingHeight) {
+      canvas.width = backingWidth;
+      canvas.height = backingHeight;
+      gl.viewport(0, 0, backingWidth, backingHeight);
+    }
     const { uniform } = pipeline;
     gl.uniform1i(uniform('uImage'), 0);
     gl.uniform2f(uniform('uTexSize'), texSize[0], texSize[1]);
