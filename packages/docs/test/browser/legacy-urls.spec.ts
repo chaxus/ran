@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 /**
  * Every page used to be published under `/src/`, and those URLs are indexed and linked from

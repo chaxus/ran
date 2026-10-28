@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 /**
  * The measurable items of the Ran Design checklist (`design/DESIGN.md`), run on the pages a

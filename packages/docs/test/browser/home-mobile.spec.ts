@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 for (const path of ['/', '/fa/']) {
   test(`the install code on ${path} scrolls inside its panel on a phone instead of being cut off`, async ({ page }) => {

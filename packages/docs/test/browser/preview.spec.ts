@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './fixtures';
 import { readFile } from 'node:fs/promises';
 
 const pdf = await readFile(new URL('./fixtures/two-pages.pdf', import.meta.url));

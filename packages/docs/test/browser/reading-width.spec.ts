@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('prose, tables and code end on one edge with the outline beside them', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });

@@ -1,4 +1,4 @@
-import { expect, test, type Locator } from '@playwright/test';
+import { expect, test, type Locator } from './fixtures';
 
 /** Picks an option from an `r-select`, whose listbox is portaled to the body. */
 const choose = async (select: Locator, value: string): Promise<void> => {

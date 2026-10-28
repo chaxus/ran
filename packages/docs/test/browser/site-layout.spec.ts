@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 /**
  * Layout invariants for the pages a visitor is most likely to land on, at phone, tablet and

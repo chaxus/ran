@@ -223,7 +223,7 @@ document.body.appendChild(button);
 ## 贡献者
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chaxus/ran" alt="ran 的 GitHub 贡献者" />
+  <img loading="lazy" src="https://contrib.rocks/image?repo=chaxus/ran" alt="ran 的 GitHub 贡献者" />
 </a>
 
 ## 延伸阅读
