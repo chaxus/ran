@@ -9,7 +9,15 @@
 import { cpSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildIndex, createMarkdown, dropViteManifest, prepareDist, writeOut } from 'ranpress';
+import {
+  buildIndex,
+  createMarkdown,
+  dropViteManifest,
+  matchRedirect,
+  parseRedirects,
+  prepareDist,
+  writeOut,
+} from 'ranpress';
 import { LANGS, ORIGIN } from './config.ts';
 import { componentRenderers, resolveCurrentLink } from './components.ts';
 import { loadDocs } from './content.ts';
@@ -83,11 +91,28 @@ export interface DocsBuildResult {
 
 const REDIRECTS_MARKER = '# @generated legacyRedirects';
 
-/** `public/_redirects` with its marker replaced by the retired-URL rules. */
+/**
+ * `public/_redirects` with its marker replaced by the retired-URL rules, every splat rule moved
+ * after every exact one.
+ *
+ * Cloudflare Pages counts each rule from the first splat onwards against its 100-rule dynamic
+ * limit and silently drops the rest — measured: with a splat on line 23, rule 110 and every
+ * one after it 404'd in production. Moving an exact rule ahead of a splat rule is safe only
+ * when that splat never matched it, so a splat that would shadow a later exact rule fails the
+ * build instead of quietly changing where that URL goes.
+ */
 const redirectsFile = (): string => {
   const source = readFileSync(join(ROOT, 'public/_redirects'), 'utf8');
   if (!source.includes(REDIRECTS_MARKER)) throw new Error(`public/_redirects: missing "${REDIRECTS_MARKER}"`);
-  return source.replace(REDIRECTS_MARKER, legacyRedirects().join('\n'));
+  const lines = source.replace(REDIRECTS_MARKER, legacyRedirects().join('\n')).split('\n');
+  const splat = (line: string): boolean => /^\/\S*\*/.test(line);
+  const rules = parseRedirects(lines.join('\n'));
+  rules.forEach((rule, i) => {
+    if (rule.from.includes('*')) return;
+    const earlier = rules.slice(0, i).find((other) => other.from.includes('*') && matchRedirect([other], rule.from));
+    if (earlier) throw new Error(`_redirects: ${earlier.from} shadows the later ${rule.from}`);
+  });
+  return [...lines.filter((line) => !splat(line)), ...lines.filter(splat)].join('\n');
 };
 
 /**

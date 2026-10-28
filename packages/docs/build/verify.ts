@@ -28,9 +28,24 @@ export const legacyFailures = (distDir: string): string[] => {
   return failures;
 };
 
-const failures = legacyFailures(DIST_DIR);
+/**
+ * What Cloudflare Pages would drop: it counts every rule from the first splat onwards against
+ * 100 dynamic rules (see `redirectsFile` in build.ts), and allows 2000 exact ones.
+ */
+export const redirectLimitFailures = (distDir: string): string[] => {
+  const rules = readRedirects(distDir);
+  const first = rules.findIndex((rule) => rule.from.includes('*'));
+  const dynamic = first === -1 ? 0 : rules.length - first;
+  const failures: string[] = [];
+  if (dynamic > 100) failures.push(`_redirects: ${dynamic} rules from the first splat on; Cloudflare keeps 100`);
+  if (rules.length - dynamic > 2000)
+    failures.push(`_redirects: ${rules.length - dynamic} exact rules; Cloudflare keeps 2000`);
+  return failures;
+};
+
+const failures = [...redirectLimitFailures(DIST_DIR), ...legacyFailures(DIST_DIR)];
 if (failures.length) {
-  console.error(`verify: ${failures.length} retired URL(s) broken\n${failures.map((f) => `  ${f}`).join('\n')}`);
+  console.error(`verify: ${failures.length} redirect problem(s)\n${failures.map((f) => `  ${f}`).join('\n')}`);
   process.exit(1);
 }
 console.log('verify: every retired /src/ URL reaches its page in one redirect');
