@@ -12,6 +12,7 @@ import { LOCALES, ORIGIN, ROOT_LOCALE, SITE } from './config.ts';
 import type { DocContent, DocPage } from './content.ts';
 import { pageUrl } from './urls.ts';
 import { homeCopy } from './langs/home-copy.ts';
+import { SEO } from './langs/seo.ts';
 
 const escapeHtml = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -20,6 +21,56 @@ const meta = (attr: 'name' | 'property', key: string, content: string): string =
   `<meta ${attr}="${key}" content="${escapeHtml(content)}">`;
 
 export const absoluteUrl = (path: string): string => `${ORIGIN}${path}`;
+
+/**
+ * The author, as chaxus.com describes the same person. The `@id`, name and url must match
+ * what chaxus.com and edit.chaxus.com publish, or search engines see three different people.
+ */
+const AUTHOR = {
+  '@type': 'Person',
+  '@id': 'https://chaxus.com/#person',
+  name: SITE.author,
+  url: SITE.authorUrl,
+  sameAs: ['https://github.com/chaxus'],
+};
+
+/** The home page's JSON-LD: the site and its two libraries, all by the one author. */
+const homeJsonLd = (page: DocPage): string => {
+  const { dir, lang } = page.locale;
+  const copy = SEO[dir] ?? SEO['']!;
+  const by = { '@id': AUTHOR['@id'] };
+  const library = (name: string, path: string, description: string) => ({
+    '@type': 'SoftwareSourceCode',
+    name,
+    description,
+    url: absoluteUrl(`${dir ? `/${dir}` : ''}${path}`),
+    codeRepository: SITE.github,
+    programmingLanguage: 'TypeScript',
+    license: 'https://opensource.org/licenses/MIT',
+    inLanguage: lang,
+    author: by,
+    publisher: by,
+  });
+  const graph = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      AUTHOR,
+      {
+        '@type': 'WebSite',
+        name: SITE.name,
+        url: absoluteUrl(page.url),
+        description: copy.homeDescription,
+        inLanguage: lang,
+        author: by,
+        publisher: by,
+      },
+      library('ranui', '/ranui/', copy.ranui),
+      library('ranuts', '/ranuts/', copy.ranuts),
+    ],
+  };
+  // `<` escaped so no string in the data can close the script element.
+  return `<script type="application/ld+json">${JSON.stringify(graph).replace(/</g, '\\u003c')}</script>`;
+};
 
 /** The URL this page would have in another locale, whether or not it exists. */
 const urlIn = (page: DocPage, dir: string): string => pageUrl(page.baseRel, dir);
@@ -65,6 +116,7 @@ export const headFor = (page: DocPage, content: DocContent): string[] => {
     meta('name', 'twitter:title', title),
     meta('name', 'twitter:description', page.description),
   );
+  if (page.baseRel === 'index.md') head.push(homeJsonLd(page));
 
   return head;
 };

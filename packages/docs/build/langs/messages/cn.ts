@@ -233,6 +233,7 @@ const cn: LocaleMessages = {
     prevPage: '上一页',
     nextPage: '下一页',
     lastUpdated: '最后更新于',
+    authorLink: '作者：chaxus',
     searchButton: '搜索',
     searchPlaceholder: '显示详细列表',
     noResults: '没有找到结果：',

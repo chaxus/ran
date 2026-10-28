@@ -1,6 +1,6 @@
 # ran
 
-> ran provides three independent pillars: Ran Design for product design and acceptance, ranui for native Web Components, and ranuts for typed utilities. The unified ran agent plugin routes tasks to design, ranui and ranuts skills.
+> ran provides three independent pillars: Ran Design for product design and acceptance, ranui for native Web Components, and ranuts for typed utilities. The unified ran agent plugin routes tasks to design, ranui and ranuts skills. By chaxus (https://chaxus.com/).
 
 ranui is built on native Custom Elements (`<r-*>` tags), so it works in any framework
 or plain HTML. It ships first-class TypeScript types, light/dark theming via Geist-based

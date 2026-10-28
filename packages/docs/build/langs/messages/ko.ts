@@ -233,6 +233,7 @@ const ko: LocaleMessages = {
     prevPage: '이전 페이지',
     nextPage: '다음 페이지',
     lastUpdated: '마지막 수정',
+    authorLink: '만든 사람: chaxus',
     searchButton: '검색',
     searchPlaceholder: '상세 목록 표시',
     noResults: '검색 결과 없음:',

@@ -45,7 +45,12 @@ for (const width of WIDTHS) {
         else await expect(drawer).toBeVisible();
 
         // The secondary destinations stay one link away on every page.
-        await expect(page.locator('.site-footer a')).toHaveCount(1);
+        await expect(page.locator('.site-footer a')).toHaveCount(2);
+        // The last one names the author and leads to their own site, in Chinese for Chinese pages.
+        await expect(page.locator('.site-footer a[rel="author"]')).toHaveAttribute(
+          'href',
+          path.startsWith('/cn/') ? 'https://chaxus.com/zh/' : 'https://chaxus.com/',
+        );
 
         // Reduced motion leaves nothing animating.
         const running = await page.evaluate(
@@ -53,6 +58,25 @@ for (const width of WIDTHS) {
         );
         expect(running, 'animations running under reduced motion').toBe(0);
       });
+    }
+  });
+}
+
+// Search engines and answer engines tie ran to its author through this graph; chaxus.com
+// publishes the same Person under the same @id.
+for (const home of ['/', '/cn/', '/ja/']) {
+  test(`${home} describes the site and both libraries as the work of one author`, async ({ page }) => {
+    await page.goto(home);
+    const graph = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent()) ?? '{}')[
+      '@graph'
+    ];
+    const person = graph.find((node: { '@type': string }) => node['@type'] === 'Person');
+    expect(person).toMatchObject({ '@id': 'https://chaxus.com/#person', name: 'chaxus', url: 'https://chaxus.com/' });
+    const works = graph.filter((node: { '@type': string }) => node['@type'] !== 'Person');
+    expect(works.map((node: { name: string }) => node.name)).toEqual(['ran', 'ranui', 'ranuts']);
+    for (const work of works) {
+      expect(work.author).toEqual({ '@id': person['@id'] });
+      expect(work.publisher).toEqual({ '@id': person['@id'] });
     }
   });
 }

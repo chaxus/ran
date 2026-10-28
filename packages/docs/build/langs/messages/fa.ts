@@ -233,6 +233,7 @@ const fa: LocaleMessages = {
     prevPage: 'صفحهٔ قبل',
     nextPage: 'صفحهٔ بعد',
     lastUpdated: 'آخرین به‌روزرسانی',
+    authorLink: 'از chaxus',
     searchButton: 'جست‌وجو',
     searchPlaceholder: 'نمایش فهرست کامل',
     noResults: 'نتیجه‌ای یافت نشد برای',

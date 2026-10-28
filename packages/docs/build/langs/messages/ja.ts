@@ -233,6 +233,7 @@ const ja: LocaleMessages = {
     prevPage: '前のページ',
     nextPage: '次のページ',
     lastUpdated: '最終更新',
+    authorLink: '作者：chaxus',
     searchButton: '検索',
     searchPlaceholder: '詳細リストを表示',
     noResults: '見つかりませんでした：',
