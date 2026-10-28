@@ -1,6 +1,6 @@
 ---
 title: ranuts-API-Referenz
-description: 'Jedes von ranuts exportierte Symbol — 431 Exporte über 7 Entry Points, mit Signatur und Beschreibung.'
+description: 'Jedes von ranuts exportierte Symbol — 433 Exporte über 7 Entry Points, mit Signatur und Beschreibung.'
 ---
 
 # ranuts-API (generiert)
@@ -13,11 +13,11 @@ Laufzeit-Einschränkungen, welche Konventionen) lies zuerst [CLAUDE.md](https://
 Importiere aus dem **Subpfad**, dem das Symbol gehört, z. B. `import { debounce } from
 'ranuts/utils'`. Das Root-Barrel `ranuts` reexportiert die Oberfläche von utils + visual.
 
-**431 Exporte** über 7 Entry Points.
+**433 Exporte** über 7 Entry Points.
 
 ## Entry Points
 
-- [`ranuts/utils`](#ranuts-utils) — Browser- und Allzweck-Utilities · _Browser + node_ · 342 Exporte
+- [`ranuts/utils`](#ranuts-utils) — Browser- und Allzweck-Utilities · _Browser + node_ · 344 Exporte
 - [`ranuts/sw`](#ranuts-sw) — Caching-Strategien des Service Workers und das Precache-Protokoll · _nur Service Worker_ · 9 Exporte
 - [`ranuts/visual`](#ranuts-visual) — 2D-Rendering-Engine (Canvas / WebGL / WebGPU) · _nur Browser_ · 16 Exporte
 - [`ranuts/i18n`](#ranuts-i18n) — Frameworkunabhängige i18n-Engine (auch aus ranuts/utils reexportiert) · _Browser + node_ · 9 Exporte
@@ -213,6 +213,7 @@ import { /* … */ } from 'ranuts/utils';
 - `rgbToHsb(r: number, g: number, b: number) => number[]`
 - `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
 - `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
+- `rollText(host: HTMLElement, next: string, { rise }?: RollOptions) => void` — Writes `next` into `host`, rolling in only the characters that changed.
 - `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
 - `safeEqual(a: string | Uint8Array, b: string | Uint8Array) => boolean` — Compare two secrets in time that does not depend on where they first differ.
 - `saturation(color: RGB, amount: number) => RGB` — Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
@@ -317,6 +318,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface ReportConfig`
 - `interface ResolveLocaleOptions`
 - `interface RewriteZipOptions`
+- `interface RollOptions`
 - `interface Segment` — One piece of the split result: `value === null` marks a plain span covered by no range
 - `interface ServeWorkerOptions`
 - `interface SingleFlight`

@@ -1,6 +1,6 @@
 ---
 title: ranuts API 레퍼런스
-description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 431개 export를 시그니처와 설명과 함께.'
+description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 433개 export를 시그니처와 설명과 함께.'
 ---
 
 # ranuts API (자동 생성)
@@ -12,11 +12,11 @@ description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 431�
 심볼이 속한 **서브패스**에서 import하세요. 예: `import { debounce } from
 'ranuts/utils'`. 루트 배럴 `ranuts`는 utils + visual 표면을 다시 내보냅니다.
 
-**export 431개**, 진입점 7개.
+**export 433개**, 진입점 7개.
 
 ## 진입점
 
-- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 342개
+- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 344개
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 캐싱 전략과 프리캐시 프로토콜 · _service worker 전용_ · export 9개
 - [`ranuts/visual`](#ranuts-visual) — 2D 렌더링 엔진 (Canvas / WebGL / WebGPU) · _브라우저 전용_ · export 16개
 - [`ranuts/i18n`](#ranuts-i18n) — 프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄) · _브라우저 + node_ · export 9개
@@ -212,6 +212,7 @@ import { /* … */ } from 'ranuts/utils';
 - `rgbToHsb(r: number, g: number, b: number) => number[]`
 - `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
 - `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
+- `rollText(host: HTMLElement, next: string, { rise }?: RollOptions) => void` — Writes `next` into `host`, rolling in only the characters that changed.
 - `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
 - `safeEqual(a: string | Uint8Array, b: string | Uint8Array) => boolean` — Compare two secrets in time that does not depend on where they first differ.
 - `saturation(color: RGB, amount: number) => RGB` — Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
@@ -316,6 +317,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface ReportConfig`
 - `interface ResolveLocaleOptions`
 - `interface RewriteZipOptions`
+- `interface RollOptions`
 - `interface Segment` — One piece of the split result: `value === null` marks a plain span covered by no range
 - `interface ServeWorkerOptions`
 - `interface SingleFlight`

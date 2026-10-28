@@ -57,14 +57,15 @@ message.info({
 
 ### Options
 
-| Option         | Type                        | Default         | Description                                                                       |
-| -------------- | --------------------------- | --------------- | --------------------------------------------------------------------------------- |
-| `content`      | `string`                    | —               | Text to display (required when passing an object)                                 |
-| `duration`     | `number`                    | `3000`          | Auto-dismiss delay in milliseconds                                                |
-| `close`        | `() => void`                | —               | Callback fired after the toast is removed                                         |
-| `top`          | `number \| string`          | `8`             | Offset of the toast stack from the top of its container (number is treated as px) |
-| `zIndex`       | `number \| string`          | `1200`          | Stacking order of the toast container                                             |
-| `getContainer` | `() => HTMLElement \| null` | `document.body` | Returns the element the toast stack mounts into                                   |
+| Option         | Type                        | Default         | Description                                                                                  |
+| -------------- | --------------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `content`      | `string`                    | —               | Text to display (required when passing an object)                                            |
+| `duration`     | `number`                    | `3000`          | Auto-dismiss delay in milliseconds                                                           |
+| `close`        | `() => void`                | —               | Callback fired after the toast is removed                                                    |
+| `top`          | `number \| string`          | `8`             | Offset of the toast stack from the top of its container (number is treated as px)            |
+| `zIndex`       | `number \| string`          | `1200`          | Stacking order of the toast container                                                        |
+| `getContainer` | `() => HTMLElement \| null` | `document.body` | Returns the element the toast stack mounts into                                              |
+| `stacked`      | `boolean`                   | `false`         | Piles the container's toasts newest in front; pointing at or focusing the pile fans them out |
 
 > Passing `null`, `undefined`, or an empty argument is a no-op: nothing is shown.
 

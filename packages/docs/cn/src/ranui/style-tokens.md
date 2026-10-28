@@ -63,14 +63,14 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `button`
 
-- Tokens: 76
+- Tokens: 75
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 17 · skin: 2 · component: 48 · internal: 9 -->
+<!-- layers: semantic: 16 · skin: 2 · component: 48 · internal: 9 -->
 - `--ran-btn-active-background`
 - `--ran-btn-active-border-color`
-- `--ran-btn-active-transform`
+- `--ran-btn-active-scale`
 - `--ran-btn-after-background-image`
 - `--ran-btn-after-opacity`
 - `--ran-btn-after-transform`
@@ -131,7 +131,6 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-focus-ring`
 - `--ran-gray-alpha-400`
 - `--ran-motion-duration-base`
-- `--ran-motion-ease-spring`
 - `--ran-motion-ease-standard`
 - `--ran-radius-full`
 - `--ran-radius-sm`
@@ -1171,11 +1170,11 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `message`
 
-- Tokens: 59
+- Tokens: 61
 - Parts: 0
 
 ### Tokens
-<!-- layers: semantic: 12 · component: 41 · internal: 6 -->
+<!-- layers: semantic: 12 · component: 43 · internal: 6 -->
 - `--ran-color-bg`
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
@@ -1215,6 +1214,8 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-message-notice-toast-text-align`
 - `--ran-message-notice-toast-word-break`
 - `--ran-message-notice-word-break`
+- `--ran-message-stack-offset`
+- `--ran-message-stack-scale`
 - `--ran-message-text-color`
 - `--ran-message-text-font-feature-settings`
 - `--ran-message-text-font-size`
@@ -1885,7 +1886,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ### Tokens
 <!-- layers: semantic: 14 · component: 23 · internal: 6 -->
-- `--ran-btn-active-transform`
+- `--ran-btn-active-scale`
 - `--ran-btn-border-radius`
 - `--ran-btn-color`
 - `--ran-btn-hover-color`

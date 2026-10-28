@@ -1,6 +1,6 @@
 ---
 title: ranuts API リファレンス
-description: 'ranuts がエクスポートする全シンボル —— 7 個のエントリーポイント、計 431 件のエクスポートを、シグネチャと説明つきで。'
+description: 'ranuts がエクスポートする全シンボル —— 7 個のエントリーポイント、計 433 件のエクスポートを、シグネチャと説明つきで。'
 ---
 
 # ranuts API（自動生成）
@@ -13,11 +13,11 @@ JSDoc をそのまま取り出したものなので英語のままです。ど�
 そのシンボルを持つ**サブパス**から import してください。たとえば `import { debounce } from
 'ranuts/utils'`。ルートの `ranuts` は utils + visual の面を再エクスポートします。
 
-**431 件のエクスポート**、エントリーポイント 7 個。
+**433 件のエクスポート**、エントリーポイント 7 個。
 
 ## エントリーポイント
 
-- [`ranuts/utils`](#ranuts-utils) — ブラウザ向けおよび汎用のユーティリティ · _ブラウザ + node_ · 342 件のエクスポート
+- [`ranuts/utils`](#ranuts-utils) — ブラウザ向けおよび汎用のユーティリティ · _ブラウザ + node_ · 344 件のエクスポート
 - [`ranuts/sw`](#ranuts-sw) — Service Worker のキャッシュ戦略とプリキャッシュのプロトコル · _service worker のみ_ · 9 件のエクスポート
 - [`ranuts/visual`](#ranuts-visual) — 2D レンダリングエンジン（Canvas / WebGL / WebGPU） · _ブラウザのみ_ · 16 件のエクスポート
 - [`ranuts/i18n`](#ranuts-i18n) — フレームワーク非依存の i18n エンジン（ranuts/utils からも再エクスポート） · _ブラウザ + node_ · 9 件のエクスポート
@@ -213,6 +213,7 @@ import { /* … */ } from 'ranuts/utils';
 - `rgbToHsb(r: number, g: number, b: number) => number[]`
 - `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
 - `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
+- `rollText(host: HTMLElement, next: string, { rise }?: RollOptions) => void` — Writes `next` into `host`, rolling in only the characters that changed.
 - `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
 - `safeEqual(a: string | Uint8Array, b: string | Uint8Array) => boolean` — Compare two secrets in time that does not depend on where they first differ.
 - `saturation(color: RGB, amount: number) => RGB` — Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
@@ -317,6 +318,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface ReportConfig`
 - `interface ResolveLocaleOptions`
 - `interface RewriteZipOptions`
+- `interface RollOptions`
 - `interface Segment` — One piece of the split result: `value === null` marks a plain span covered by no range
 - `interface ServeWorkerOptions`
 - `interface SingleFlight`

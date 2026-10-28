@@ -14,7 +14,7 @@ import {
 } from '@/utils/component';
 import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
-import { getMessageContainer, type MessageRenderOptions } from './container';
+import { getMessageContainer, restack, type MessageRenderOptions } from './container';
 
 /** Options accepted by the message API, shared with the optional browser globals. */
 export interface MessagePrompt extends MessageRenderOptions {
@@ -193,6 +193,7 @@ function initMessageApi() {
         renderOptions.top = options.top;
         renderOptions.zIndex = options.zIndex;
         renderOptions.getContainer = options.getContainer;
+        renderOptions.stacked = options.stacked;
       }
 
       const div = getMessageContainer(renderOptions);
@@ -202,6 +203,7 @@ function initMessageApi() {
       // transition runs from there (the forced style read is what makes the start state stick).
       message.setAttribute('data-state', 'enter');
       div.appendChild(message);
+      restack(div);
       message.getBoundingClientRect();
       message.removeAttribute('data-state');
 
@@ -209,7 +211,11 @@ function initMessageApi() {
         () => {
           message.setAttribute('data-state', 'exit');
           setTimeout(() => {
-            if (message.parentNode === div) removeFromStack(div, message);
+            if (message.parentNode === div && div.hasAttribute('data-stacked')) {
+              // A pile has no flow to close up; the rest move to their new depths by transition.
+              div.removeChild(message);
+              restack(div);
+            } else if (message.parentNode === div) removeFromStack(div, message);
             if (close) close();
           }, settleTime(message));
         },

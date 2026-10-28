@@ -152,3 +152,39 @@ for (const motion of ['reduce', 'no-preference'] as const) {
     }
   });
 }
+
+// The row of figures rises digit by digit as it scrolls in, and each figure reads correctly
+// at every moment of it: only transforms move, nothing fades or waits.
+test('the home figures rise into place without ever showing a wrong value', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.setViewportSize({ width: 1280, height: 600 });
+  await page.goto('/');
+  const stats = page.locator('.stats');
+  const before = await stats.locator('.stat-num').allTextContents();
+  await stats.evaluate((element) => {
+    (window as unknown as { samples: string[][] }).samples = [];
+    const sample = () => {
+      (window as unknown as { samples: string[][] }).samples.push(
+        [...element.querySelectorAll('.stat-num')].map((num) => num.textContent ?? ''),
+      );
+      if (performance.now() < 30_000) requestAnimationFrame(sample);
+    };
+    sample();
+    element.scrollIntoView({ block: 'center' });
+  });
+  // The digits move as they arrive.
+  await expect
+    .poll(() => stats.evaluate((element) => element.getAnimations({ subtree: true }).length))
+    .toBeGreaterThan(0);
+  const moving = await stats.evaluate((element) =>
+    element.getAnimations({ subtree: true }).map((animation) => {
+      const frames = (animation.effect as KeyframeEffect).getKeyframes();
+      return frames.every((frame) => frame.opacity === undefined) && frames.some((frame) => frame.transform !== 'none');
+    }),
+  );
+  expect(moving.every(Boolean)).toBe(true);
+  await expect.poll(() => stats.evaluate((element) => element.getAnimations({ subtree: true }).length)).toBe(0);
+  const samples = await page.evaluate(() => (window as unknown as { samples: string[][] }).samples);
+  expect(samples.length).toBeGreaterThan(3);
+  for (const sample of samples) expect(sample).toEqual(before);
+});

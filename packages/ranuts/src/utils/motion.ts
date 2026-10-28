@@ -134,3 +134,117 @@ export function observeEntry(element: Element, { line = 0.85, onEnter }: EntryOp
   observer.observe(element);
   return () => observer.disconnect();
 }
+
+export interface RollOptions {
+  /**
+   * Every character rises into place, staggered, as for an entrance. Transform only, so the
+   * value is legible the whole time; without it the first call writes the text unanimated.
+   */
+  rise?: boolean;
+}
+
+/** What each host showed last: its text, and the cell of every character (null for whitespace). */
+const shown = new WeakMap<HTMLElement, { text: string; cells: Array<HTMLElement | null> }>();
+
+/** Entering motion: decelerates and stops on its mark, within the guide's 250–400ms. */
+const ROLL = { duration: 300, easing: 'cubic-bezier(0.2, 0, 0, 1)' };
+
+const SCALE: Record<string, number> = { k: 1e3, m: 1e6, b: 1e9 };
+
+/** The first number in `text`, with a k/M/B suffix applied: "1.0k / 128k" reads as 1000. */
+const leadingNumber = (text: string): number => {
+  const match = /(-?\d+(?:\.\d+)?)\s*([kmb])?(?![a-z])/i.exec(text.replace(/,(?=\d{3})/g, ''));
+  return match ? Number(match[1]) * (SCALE[match[2]?.toLowerCase() ?? ''] ?? 1) : Number.NaN;
+};
+
+/** -1 when `next` leads with a smaller number than `previous`, else +1. */
+const direction = (previous: string, next: string): number => {
+  const a = leadingNumber(previous);
+  const b = leadingNumber(next);
+  return Number.isFinite(a) && Number.isFinite(b) && b < a ? -1 : 1;
+};
+
+/**
+ * @description: Writes `next` into `host`, rolling in only the characters that changed.
+ *
+ * Each character gets its own cell. A changed one slides up from below when the value grows
+ * and down from above when it shrinks, clipped to its cell.
+ *
+ * The cells hold the real characters and nothing else, so `textContent`, selection, find in
+ * page and screen readers always see the current value; the old character is not kept
+ * around to slide out. Characters are matched from the right, the way digits line up, and an
+ * unchanged one keeps its cell, so a roll still running finishes instead of snapping. The
+ * direction follows the first number in the text, read with any k/M/B suffix.
+ * Each word stays unbroken and whitespace stays plain text, so the text wraps where it did.
+ * Under reduced motion, without the Web Animations API, or without a document, it only
+ * writes the text.
+ *
+ * @example
+ * ```ts
+ * rollText(count, '41.2k'); // first call: written as is
+ * rollText(count, '41.5k'); // only the "5" rolls in
+ * ```
+ */
+export function rollText(host: HTMLElement, next: string, { rise = false }: RollOptions = {}): void {
+  if (typeof document === 'undefined') {
+    host.textContent = next;
+    return;
+  }
+  const last = shown.get(host);
+  if (last?.text === next && host.textContent === next) return;
+  const animated = typeof host.animate === 'function' && !prefersReducedMotion() && (rise || last !== undefined);
+  const step = direction(last?.text ?? '', next);
+  const old = [...(last?.text ?? '')];
+  const length = [...next].length;
+  const cells: Array<HTMLElement | null> = [];
+  let index = 0;
+  const cellFor = (char: string): HTMLElement => {
+    const position = index++;
+    const before = old.length - (length - position);
+    const kept = !rise && old[before] === char ? last?.cells[before] : null;
+    if (kept) {
+      cells.push(kept);
+      return kept;
+    }
+    const cell = document.createElement('span');
+    cells.push(cell);
+    cell.style.display = 'inline-block';
+    const glyph = document.createElement('span');
+    glyph.style.display = 'inline-block';
+    glyph.textContent = char;
+    cell.append(glyph);
+    if (!animated) return cell;
+    if (rise) {
+      glyph.animate([{ transform: 'translateY(0.4em)' }, { transform: 'none' }], {
+        ...ROLL,
+        delay: stagger(position, length, { each: 0.03 }) * 1000,
+        fill: 'backwards',
+      });
+      return cell;
+    }
+    if (old[before] === char) return cell;
+    // The clip is on the cell and the motion on the glyph, so the glyph moves inside it.
+    // `clip-path`, not `overflow`: an inline-block with overflow moves its baseline.
+    cell.style.clipPath = 'inset(0 -0.25em)';
+    const roll = glyph.animate([{ transform: `translateY(${step * 100}%)` }, { transform: 'none' }], ROLL);
+    roll.onfinish = () => cell.style.removeProperty('clip-path');
+    return cell;
+  };
+  host.replaceChildren(
+    ...next.split(/(\s+)/).flatMap((part): Node[] => {
+      if (!part) return [];
+      if (/^\s/.test(part)) {
+        for (const _ of part) {
+          index++;
+          cells.push(null);
+        }
+        return [document.createTextNode(part)];
+      }
+      const word = document.createElement('span');
+      word.style.whiteSpace = 'nowrap';
+      word.append(...[...part].map(cellFor));
+      return [word];
+    }),
+  );
+  shown.set(host, { text: next, cells });
+}

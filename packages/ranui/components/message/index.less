@@ -153,7 +153,26 @@
     opacity var(--ran-message-enter-duration, 400ms)
       var(--ran-message-enter-easing, var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1))),
     translate var(--ran-message-enter-duration, 400ms)
+      var(--ran-message-enter-easing, var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1))),
+    scale var(--ran-message-enter-duration, 400ms)
       var(--ran-message-enter-easing, var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)));
+}
+// A stacked container (`stacked: true`) piles its toasts in one grid cell; container.ts sets
+// each one's offset and scale. `translate` and `scale` compose with the enter and exit
+// `transform`, and shrinking from the bottom edge is what leaves the older ones peeking out.
+:host([data-stack]) {
+  grid-area: 1 / 1;
+  transform-origin: 50% 100%;
+  translate: 0 var(--ran-message-stack-offset, 0px);
+  scale: var(--ran-message-stack-scale, 1);
+}
+// Faded, not `visibility: hidden`: unhiding a toast inside the live region could have it
+// announced a second time when the pile fans out.
+:host([data-buried]) {
+  opacity: 0;
+}
+:host([data-buried]) .ran-message-notice-content {
+  pointer-events: none;
 }
 :host([data-state='enter']) {
   opacity: 0;

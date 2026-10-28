@@ -197,6 +197,7 @@ description: 'ranui 的变更记录——新增、变更、修复与移除及其
 
 | 日期 | ranui |
 | ---- | ------- |
+| 2026-10-28 | [press feedback, rolling counts and stacked toasts](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-10-28.md) |
 | 2026-08-16 | [new `<r-markdown>`: streaming Markdown renderer](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-08-16.md) |
 | 2026-08-08 | [`<r-form>` redesign + native reset/validation for form fields](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-08-08.md) |
 | 2026-07-04 | [r-message：toast 变成可朗读的 live region](https://github.com/chaxus/ran/blob/main/packages/ranui/changelogs/2026-07-04.md) |

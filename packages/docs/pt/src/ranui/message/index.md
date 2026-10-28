@@ -57,14 +57,15 @@ message.info({
 
 ### Opções
 
-| Opção          | Tipo                        | Padrão          | Descrição                                                                       |
-| -------------- | --------------------------- | --------------- | ------------------------------------------------------------------------------- |
-| `content`      | `string`                    | —               | Texto exibido (obrigatório ao passar um objeto)                                 |
-| `duration`     | `number`                    | `3000`          | Atraso em milissegundos até fechar sozinho                                      |
-| `close`        | `() => void`                | —               | Callback disparado depois que o aviso é removido                                |
-| `top`          | `number \| string`          | `8`             | Distância da pilha de avisos ao topo do contêiner (um número é tratado como px) |
-| `zIndex`       | `number \| string`          | `1200`          | Ordem de empilhamento do contêiner de avisos                                    |
-| `getContainer` | `() => HTMLElement \| null` | `document.body` | Devolve o elemento em que a pilha de avisos é montada                           |
+| Opção          | Tipo                        | Padrão          | Descrição                                                                             |
+| -------------- | --------------------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `content`      | `string`                    | —               | Texto exibido (obrigatório ao passar um objeto)                                       |
+| `duration`     | `number`                    | `3000`          | Atraso em milissegundos até fechar sozinho                                            |
+| `close`        | `() => void`                | —               | Callback disparado depois que o aviso é removido                                      |
+| `top`          | `number \| string`          | `8`             | Distância da pilha de avisos ao topo do contêiner (um número é tratado como px)       |
+| `zIndex`       | `number \| string`          | `1200`          | Ordem de empilhamento do contêiner de avisos                                          |
+| `getContainer` | `() => HTMLElement \| null` | `document.body` | Devolve o elemento em que a pilha de avisos é montada                                 |
+| `stacked`      | `boolean`                   | `false`         | Empilha os avisos do contêiner, o mais recente à frente; o ponteiro ou o foco os abre |
 
 > Passar `null`, `undefined` ou nenhum argumento não faz nada: nada é exibido.
 

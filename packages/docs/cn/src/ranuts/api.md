@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: 'ranuts 导出的全部符号 — 7 个入口点，共 431 个导出，含签名与描述。'
+description: 'ranuts 导出的全部符号 — 7 个入口点，共 433 个导出，含签名与描述。'
 ---
 
 # ranuts API（自动生成）
@@ -12,11 +12,11 @@ description: 'ranuts 导出的全部符号 — 7 个入口点，共 431 个导�
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**431 个导出**，共 7 个入口点。
+**433 个导出**，共 7 个入口点。
 
 ## 入口点
 
-- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 342 个导出
+- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 344 个导出
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 缓存策略与预缓存协议 · _仅 service worker_ · 9 个导出
 - [`ranuts/visual`](#ranuts-visual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _仅浏览器_ · 16 个导出
 - [`ranuts/i18n`](#ranuts-i18n) — 框架无关的 i18n 引擎（也从 ranuts/utils 再导出） · _浏览器 + node_ · 9 个导出
@@ -212,6 +212,7 @@ import { /* … */ } from 'ranuts/utils';
 - `rgbToHsb(r: number, g: number, b: number) => number[]`
 - `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
 - `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
+- `rollText(host: HTMLElement, next: string, { rise }?: RollOptions) => void` — Writes `next` into `host`, rolling in only the characters that changed.
 - `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
 - `safeEqual(a: string | Uint8Array, b: string | Uint8Array) => boolean` — Compare two secrets in time that does not depend on where they first differ.
 - `saturation(color: RGB, amount: number) => RGB` — Adjust saturation by mixing toward the colour's luminance. `amount` 0 = greyscale, 1 = unchanged, >1 = more saturated. Channels in 0..1.
@@ -316,6 +317,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface ReportConfig`
 - `interface ResolveLocaleOptions`
 - `interface RewriteZipOptions`
+- `interface RollOptions`
 - `interface Segment` — One piece of the split result: `value === null` marks a plain span covered by no range
 - `interface ServeWorkerOptions`
 - `interface SingleFlight`
