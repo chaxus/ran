@@ -1652,7 +1652,10 @@ body.drawer-open {
   /* Source already belongs to its demo or named code-group pane. */
   content: none;
 }
-.prose figure.code:has(.code-copy) pre {
+/* Room for the copy button, reserved before first paint. Keyed to the button itself, the
+   space opened only once the client script inserted it, and every code block on screen jumped
+   16px: on a slow load that was a 0.09 layout shift. The head script sets `js` before paint. */
+.js .prose figure.code pre {
   padding-top: var(--ran-space-8, 32px);
 }
 .code-copy {
@@ -1692,7 +1695,7 @@ body.drawer-open {
   .code-copy {
     min-height: 44px;
   }
-  .prose figure.code:has(.code-copy) pre {
+  .js .prose figure.code pre {
     padding-top: var(--ran-space-10, 40px);
   }
 }
