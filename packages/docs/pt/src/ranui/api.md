@@ -190,19 +190,25 @@ Código-fonte: `components/fan-gallery/index.ts`
 
 Código-fonte: `components/glass/index.ts`
 
-- **Atributos**: `blur`, `displace: string`, `frequency: string`, `interactive: boolean`, `radius: string`, `rim: boolean`, `saturate: string`, `tint: string`
+- **Atributos**: `backdrop: string`, `bevel: string`, `blur`, `dispersion: string`, `displace: string`, `interactive: boolean`, `material: string`, `radius: string`, `rim: boolean`, `saturate: string`, `specular: string`, `tint: string`, `tone: string`
 - **Propriedades**:
-  - `displace: string` — Liquid refraction strength — the SVG displacement scale. `0` is a flat pane.
-  - `frequency: string` — Turbulence base frequency — smaller = larger, smoother liquid ripples.
+  - `backdrop: string` — An `<img>` or `<video>` to refract with the WebGL path: a selector, resolved in the host's
+  - `bevel: string` — Width of the curved edge band that bends light, in px.
+  - `dispersion: string` — How far the colors split at the edge, as a percentage of `displace`. `0` keeps them together.
+  - `displace: string` — How far the edge pulls the backdrop inward, in px. `0` is a flat pane.
   - `interactive: boolean` — Hover lift + press-scale feedback, for clickable glass. Also makes the host
+  - `material: string` — A preset for every optical value: `regular` (default), `thin`, `thick` or `clear`.
+  - `optics: GlassOptics` — The material's values with any attribute override applied.
   - `radius: string` — Corner radius, in px.
-  - `rim: boolean` — Opt-in GPU specular rim + chromatic edge, lit from a fixed top-left light —
+  - `rim: boolean` — Opt-in GPU specular rim: an outer and an inner wall line, lit by a key light from the
   - `saturate: string` — Backdrop saturation, as a percentage number (e.g. `180`).
   - `sheen: boolean` — Animated specular sweep across the surface.
+  - `specular: string` — Strength of the highlights, as a percentage (`100` is the material's normal light).
   - `tint: string` — Glass fill tint (any CSS background value).
+  - `tone: string` — What sits behind the glass: `dark` (default) lights the edge, `light` shades it, because a
 - **Eventos**: —
 - **Slots**: `padrão`
-- **Partes**: `glass`, `specular`
+- **Partes**: `glass`, `refraction`, `specular`
 
 ## `<r-icon>`
 

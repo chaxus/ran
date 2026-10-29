@@ -23,7 +23,7 @@
  *   file's module doc for why this exists despite not making the single draw
  *   call this renders any faster.
  */
-import { createWebGpuRim, type RimBackend } from './rim-webgpu';
+import { createWebGpuRim, type RimBackend, type RimParams } from './rim-webgpu';
 
 const VERTEX_SRC = `
 attribute vec2 a_position;
@@ -33,15 +33,32 @@ void main() {
 `;
 
 const FRAGMENT_SRC = `
+// The hash below multiplies values in the thousands; at fp16 mediump that is noise, and the
+// edge texture would no longer match the WebGPU backend's f32.
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
 precision mediump float;
+#endif
 uniform vec2 u_resolution;
 uniform float u_radius;
 uniform float u_dpr;
+uniform float u_bevel;
+uniform float u_strength;
+uniform float u_tone;
 
 float sdRoundRect(vec2 p, vec2 halfSize, float r) {
   vec2 q = abs(p) - halfSize + r;
   return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
 }
+float hash(float n) { return fract(sin(n * 127.1 + 311.7) * 43758.5453); }
+// Smooth 1D value noise: glass light varies slowly along an edge instead of being one stroke.
+float noise(float u) {
+  float i = floor(u);
+  float f = fract(u);
+  return mix(hash(i), hash(i + 1.0), f * f * (3.0 - 2.0 * f));
+}
+float bell(float x, float w) { return exp(-(x * x) / (w * w)); }
 
 void main() {
   vec2 halfSize = u_resolution * 0.5;
@@ -50,36 +67,53 @@ void main() {
   vec2 p = vec2(gl_FragCoord.x, u_resolution.y - gl_FragCoord.y) - halfSize;
   float r = min(u_radius, min(halfSize.x, halfSize.y));
   float d = sdRoundRect(p, halfSize, r);
-
-  float rimWidth = 6.0 * u_dpr;
-  // Outside this band the pixel contributes nothing — skip the rest of the
-  // shader for it rather than computing a zero-alpha result.
-  if (abs(d) > rimWidth * 1.5) discard;
+  float band = max(u_bevel * u_dpr, 4.0 * u_dpr);
+  if (d > 2.0 * u_dpr || d < -band) discard;
 
   float eps = max(u_dpr, 1.0);
   vec2 n = normalize(vec2(
     sdRoundRect(p + vec2(eps, 0.0), halfSize, r) - sdRoundRect(p - vec2(eps, 0.0), halfSize, r),
     sdRoundRect(p + vec2(0.0, eps), halfSize, r) - sdRoundRect(p - vec2(0.0, eps), halfSize, r)
-  ));
+  ) + 1e-5);
 
-  vec2 light = normalize(vec2(-0.6, -0.8));
-  float lit = clamp(dot(n, light), 0.0, 1.0);
+  // Arc length around the pane, so texture along the edge keeps its scale at any size.
+  float arc = atan(p.y, p.x) * length(halfSize);
+  float grain = 10.0 * u_dpr;
+  float thickness = 0.7 + 0.6 * noise(arc / (grain * 3.0) + 13.0);
+  float shimmer = 0.6 + 0.8 * noise(arc / grain);
 
-  float rim = 1.0 - smoothstep(0.0, rimWidth, abs(d));
-  float glow = rim * mix(0.15, 1.0, lit);
+  // Two walls: the outer rim, and a fainter line where the bevel meets the flat face.
+  float rim = bell(d + u_dpr, 1.2 * u_dpr * thickness + 0.5);
+  float inner = bell(d + band * 0.55, 1.4 * u_dpr / thickness + 0.5) * smoothstep(0.2, 0.85, noise(arc / (grain * 9.0) + 41.0));
 
-  // Chromatic fringe: split the same rim mask along the surface normal by a
-  // couple of device pixels per channel — a cheap stand-in for real light
-  // dispersion, since there is no refracted backdrop image here to disperse.
-  float off = 1.4 * u_dpr;
-  float dR = sdRoundRect(p + n * off, halfSize, r);
-  float dB = sdRoundRect(p - n * off, halfSize, r);
-  float rimR = 1.0 - smoothstep(0.0, rimWidth, abs(dR));
-  float rimB = 1.0 - smoothstep(0.0, rimWidth, abs(dB));
+  // A key light from the top left and a dim, cool fill from the bottom right.
+  float key = pow(clamp(dot(n, normalize(vec2(-0.6, -0.8))), 0.0, 1.0), 1.6);
+  float fill = pow(clamp(dot(n, normalize(vec2(0.7, 0.7))), 0.0, 1.0), 3.0);
 
-  vec3 color = vec3(mix(glow, rimR, 0.5), glow, mix(glow, rimB, 0.5));
-  float alpha = clamp(glow * 0.85 + max(rimR, rimB) * 0.15, 0.0, 1.0);
-  gl_FragColor = vec4(color * alpha, alpha);
+  // Short glints where the key light catches an uneven patch of the rim.
+  float spacing = grain * 5.0;
+  float cell = floor(arc / spacing);
+  float glintAt = (cell + 0.2 + 0.6 * hash(cell + 17.0)) * spacing;
+  float glint = step(0.72, hash(cell + 7.0)) * bell(arc - glintAt, grain * 0.9) * bell(d + u_dpr, u_dpr) * key;
+
+  float light = rim * (0.2 + 0.8 * key + 0.35 * fill) * shimmer + inner * (0.45 * key * key + 0.2 * fill) + glint * 1.4;
+
+  // Chromatic fringe: the rim line split along the normal, warm outside and cool inside.
+  float off = 1.2 * u_dpr;
+  float rimR = bell(d + u_dpr - off, 1.2 * u_dpr + 0.5);
+  float rimB = bell(d + u_dpr + off, 1.2 * u_dpr + 0.5);
+  vec3 fringe = vec3(rimR, 0.0, rimB) * 0.3 * (key + fill);
+
+  // On a pale backdrop a white line vanishes, so the walls are shaded with a cool ink and
+  // only the key-lit part keeps a highlight.
+  float shade = u_tone * (rim * 0.55 + inner * 0.12) * (1.0 - 0.7 * key);
+  float highlight = mix(light, light * key, u_tone);
+  vec3 color = vec3(highlight) + fringe * (1.0 - u_tone) + vec3(0.18, 0.23, 0.33) * shade;
+  float alpha = clamp(highlight + shade + max(rimR, rimB) * 0.1 * (1.0 - u_tone), 0.0, 1.0);
+  float strength = clamp(u_strength, 0.0, 2.0);
+  // Premultiplied output: no channel may exceed alpha.
+  float outAlpha = clamp(alpha * strength, 0.0, 1.0);
+  gl_FragColor = vec4(min(color * strength, vec3(outAlpha)), outAlpha);
 }
 `;
 
@@ -117,9 +151,13 @@ function createWebGlRim(canvas: HTMLCanvasElement): RimBackend | null {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
 
   const positionLoc = gl.getAttribLocation(program, 'a_position');
-  const resolutionLoc = gl.getUniformLocation(program, 'u_resolution');
-  const radiusLoc = gl.getUniformLocation(program, 'u_radius');
-  const dprLoc = gl.getUniformLocation(program, 'u_dpr');
+  const loc = (name: string) => gl.getUniformLocation(program, name);
+  const resolutionLoc = loc('u_resolution');
+  const radiusLoc = loc('u_radius');
+  const dprLoc = loc('u_dpr');
+  const bevelLoc = loc('u_bevel');
+  const strengthLoc = loc('u_strength');
+  const toneLoc = loc('u_tone');
 
   gl.useProgram(program);
   gl.enableVertexAttribArray(positionLoc);
@@ -128,14 +166,17 @@ function createWebGlRim(canvas: HTMLCanvasElement): RimBackend | null {
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
   return {
-    draw(width, height, radius, dpr) {
+    draw(width, height, params, dpr) {
       if (width <= 0 || height <= 0) return;
       canvas.width = width;
       canvas.height = height;
       gl.viewport(0, 0, width, height);
       gl.uniform2f(resolutionLoc, width, height);
-      gl.uniform1f(radiusLoc, radius * dpr);
+      gl.uniform1f(radiusLoc, params.radius * dpr);
       gl.uniform1f(dprLoc, dpr);
+      gl.uniform1f(bevelLoc, params.bevel);
+      gl.uniform1f(strengthLoc, params.strength);
+      gl.uniform1f(toneLoc, params.tone === 'light' ? 1 : 0);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -147,8 +188,8 @@ function createWebGlRim(canvas: HTMLCanvasElement): RimBackend | null {
 }
 
 export interface RimRenderer {
-  /** Corner radius, in CSS px, matching the `radius` attribute. */
-  setRadius(radius: number): void;
+  /** Redraws with the pane's current shape and light. */
+  set(params: RimParams): void;
   /** Tears down whichever backend is active and removes its canvas(es). */
   destroy(): void;
 }
@@ -166,7 +207,7 @@ const MAX_DPR = 2;
  * branch on).
  */
 export function createRimRenderer(container: HTMLElement): RimRenderer {
-  let radius = 20;
+  let params: RimParams = { radius: 20, bevel: 22, strength: 1, tone: 'dark' };
   let destroyed = false;
 
   const makeCanvas = (): HTMLCanvasElement => {
@@ -216,7 +257,7 @@ export function createRimRenderer(container: HTMLElement): RimRenderer {
   const redraw = (): void => {
     if (destroyed) return;
     const { width, height, dpr } = currentSize();
-    (gpu ?? gl)?.draw(width, height, radius, dpr);
+    (gpu ?? gl)?.draw(width, height, params, dpr);
   };
 
   const resizeObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(redraw) : null;
@@ -262,8 +303,8 @@ export function createRimRenderer(container: HTMLElement): RimRenderer {
   }
 
   return {
-    setRadius(r) {
-      radius = r;
+    set(next) {
+      params = next;
       redraw();
     },
     destroy() {

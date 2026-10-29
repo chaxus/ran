@@ -446,15 +446,21 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `glass`
 
-- Tokens: 20
-- Parts: 2
+- Tokens: 28
+- Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 6 · internal: 14 -->
+<!-- layers: semantic: 6 · internal: 22 -->
+- `--ran-backdrop-edge-light`
+- `--ran-backdrop-highlight`
+- `--ran-backdrop-ink-dark`
+- `--ran-backdrop-ink-light`
+- `--ran-backdrop-shadow-light`
 - `--ran-color-bg-elevated`
 - `--ran-glass-blur`
 - `--ran-glass-border`
 - `--ran-glass-brightness`
+- `--ran-glass-ink`
 - `--ran-glass-radius`
 - `--ran-glass-reduced-transparency-background`
 - `--ran-glass-reduced-transparency-shadow`
@@ -464,7 +470,9 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-glass-sheen-duration`
 - `--ran-glass-specular-background`
 - `--ran-glass-specular-opacity`
+- `--ran-glass-specular-strength`
 - `--ran-glass-tint`
+- `--ran-glass-tint-alpha`
 - `--ran-glass-transition`
 - `--ran-motion-duration-base`
 - `--ran-motion-duration-fast`
@@ -474,6 +482,7 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 
 ### Parts
 - `glass`
+- `refraction`
 - `specular`
 
 ## `icon`

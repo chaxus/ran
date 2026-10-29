@@ -75,7 +75,7 @@ for (const width of [320, 900]) {
       await expect
         .poll(() => page.evaluate(() => document.documentElement.scrollWidth), { message: path })
         .toBeLessThanOrEqual(width);
-      for (const selector of ['.gp', '.gp-row', '.gp-toggles', '.loading-gallery']) {
+      for (const selector of ['.gp', '.gp-grid', '.gp-tiles', '.loading-gallery']) {
         for (const element of await page.locator(selector).all()) {
           expect(
             await element.evaluate((node) => node.scrollWidth - node.clientWidth),

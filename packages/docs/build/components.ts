@@ -26,6 +26,7 @@ import { currentLinkBase, currentLocale } from './render-context.ts';
 import { resolveLinkFrom } from './links.ts';
 import { publicUrl } from './urls.ts';
 import { designSectionLink } from './design-reference.ts';
+import { GLASS_MATERIALS } from 'ranui/glass';
 
 const DESIGN_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'design');
 
@@ -255,53 +256,96 @@ const renderProof = (p: ReturnType<typeof homeCopy>['proof']): string =>
 
 // ── Glass playground ────────────────────────────────────────────────────────
 
-/** Initial values, and the range each slider covers. Mirrors the old component's. */
-const GLASS_DEFAULTS = { blur: 16, saturate: 180, displace: 8, radius: 24, width: 300 } as const;
+/** Geometry the stage starts with; everything optical comes from the `regular` material. */
+const GLASS_START = { width: 340, radius: 24 } as const;
 
-const GLASS_SLIDERS = [
+const GLASS_OPTICS = [
   { key: 'blur', min: 0, max: 40, step: 1, unit: 'px' },
   { key: 'saturate', min: 100, max: 260, step: 5, unit: '%' },
-  { key: 'displace', min: 0, max: 80, step: 1, unit: '' },
-  { key: 'radius', min: 0, max: 48, step: 1, unit: 'px' },
-  { key: 'width', min: 180, max: 460, step: 10, unit: 'px' },
+  { key: 'displace', min: 0, max: 60, step: 1, unit: 'px' },
+  { key: 'bevel', min: 4, max: 80, step: 1, unit: 'px' },
+  { key: 'dispersion', min: 0, max: 100, step: 5, unit: '%' },
 ] as const;
 
+const GLASS_SHAPE = [
+  { key: 'radius', min: 0, max: 60, step: 1, unit: 'px' },
+  { key: 'width', min: 200, max: 520, step: 10, unit: 'px' },
+  { key: 'specular', min: 0, max: 200, step: 5, unit: '%' },
+] as const;
+
+const GLASS_SCENES = ['aurora', 'paper', 'grid'] as const;
+
+type Slider = { key: string; min: number; max: number; step: number; unit: string };
+
 /**
- * Slider labels are attribute names, so they are not translated. The rule the docs
+ * A range control drawn as a field: label left, value right, the filled part shows the value.
+ * The value text is hidden from assistive technology: the range announces its own value,
+ * and inside the label it would become part of the name ("blur16px").
+ */
+const rangeField = (s: Slider, value: number): string => {
+  const fill = ((value - s.min) / (s.max - s.min)) * 100;
+  return (
+    `<label class="gp-field gp-range" style="--fill:${fill.toFixed(1)}%"><span class="gp-label">${s.key}</span>` +
+    `<span class="gp-val" aria-hidden="true">${value}${s.unit}</span>` +
+    `<input type="range" min="${s.min}" max="${s.max}" step="${s.step}" value="${value}" aria-valuetext="${value}${s.unit}" data-param="${s.key}" data-unit="${s.unit}"></label>`
+  );
+};
+
+const selectField = (key: string, options: readonly string[], value: string): string =>
+  `<label class="gp-field"><span class="gp-label">${key}</span><select data-param="${key}">` +
+  options.map((o) => `<option${o === value ? ' selected' : ''}>${o}</option>`).join('') +
+  `</select></label>`;
+
+const switchField = (key: string): string =>
+  `<label class="gp-field gp-switch"><span class="gp-label">${key}</span><input type="checkbox" role="switch" data-flag="${key}"></label>`;
+
+const group = (legend: string, body: string): string =>
+  `<fieldset class="gp-group"><legend class="gp-legend">${esc(legend)}</legend><div class="gp-grid">${body}</div></fieldset>`;
+
+/**
+ * Control labels are attribute names, so they are not translated. The rule the docs
  * follow: only chrome a reader is *told* in their own language gets translated, and
- * `blur` is the name of a `<r-glass>` attribute, not prose.
+ * `blur` is the name of a `<r-glass>` attribute, not prose. The group headings and the
+ * backdrop pictures' names are prose and are translated.
  */
 export const renderGlassPlayground = (locale: LocaleDef): string => {
   const t = demoCopy(locale.dir).glass;
-  const d = GLASS_DEFAULTS;
-  const code =
-    `<r-glass blur="${d.blur}" saturate="${d.saturate}" displace="${d.displace}" radius="${d.radius}" style="width:${d.width}px">\n` +
-    `  …\n</r-glass>`;
+  const m = GLASS_MATERIALS.regular;
+  const code = `<r-glass style="width:${GLASS_START.width}px">\n  …\n</r-glass>`;
+  const scene = (name: (typeof GLASS_SCENES)[number], index: number): string =>
+    `<label class="gp-tile"><input type="radio" name="gp-scene" value="${name}" aria-label="${esc(t.scenes[name])}"${index === 0 ? ' checked' : ''}>` +
+    `<img src="/glass/${name}.svg" alt="" loading="lazy"></label>`;
 
   return (
-    `<div class="gp" data-glass>` +
-    `<div class="gp-stage" tabindex="0" role="group" aria-label="${esc(t.cardTitle)}" aria-describedby="gp-instructions"><div class="gp-bg" aria-hidden="true"><span>Aa</span><b>ranui</b><i>glass</i></div>` +
+    `<div class="gp" data-glass data-materials="${esc(JSON.stringify(GLASS_MATERIALS))}">` +
+    `<div class="gp-stage" tabindex="0" role="group" aria-label="${esc(t.cardTitle)}" aria-describedby="gp-instructions">` +
+    `<img class="gp-scene" src="/glass/aurora.svg" alt="" data-scene>` +
     // The element is in the markup with its defaults already applied, so a reader with
-    // no JavaScript still sees the effect — just not the sliders moving it.
-    `<r-glass class="gp-glass" style="left:0px;top:0px;width:${d.width}px" blur="${d.blur}" ` +
-    `saturate="${d.saturate}" displace="${d.displace}" radius="${d.radius}">` +
+    // no JavaScript still sees the effect — just not the controls moving it.
+    `<r-glass class="gp-glass" style="left:24px;top:24px;width:${GLASS_START.width}px" radius="${GLASS_START.radius}">` +
     `<div class="gp-card"><div class="gp-card-title">${esc(t.cardTitle)}</div>` +
     `<div class="gp-card-sub" id="gp-instructions">${esc(t.cardSub)}</div></div></r-glass></div>` +
-    `<div class="gp-panel"><div class="gp-rows">` +
-    GLASS_SLIDERS.map(
-      (s) =>
-        `<label class="gp-row"><span class="gp-label">${s.key}</span>` +
-        `<input type="range" min="${s.min}" max="${s.max}" step="${s.step}" ` +
-        `value="${d[s.key]}" data-param="${s.key}" data-unit="${s.unit}">` +
-        `<span class="gp-val">${d[s.key]}${s.unit}</span></label>`,
-    ).join('') +
-    `<div class="gp-row gp-toggles">` +
-    `<label class="gp-check"><input type="checkbox" data-flag="sheen"> sheen</label>` +
-    `<label class="gp-check"><input type="checkbox" data-flag="interactive"> interactive</label>` +
-    `<button class="gp-reset" type="button" data-reset>${esc(t.reset)}</button></div>` +
+    `<div class="gp-controls">` +
+    `<button class="gp-reset" type="button" data-reset>${esc(t.reset)}</button>` +
+    group(t.sections.material, selectField('material', Object.keys(GLASS_MATERIALS), 'regular')) +
+    group(t.sections.optics, GLASS_OPTICS.map((s) => rangeField(s, m[s.key])).join('')) +
+    group(
+      t.sections.light,
+      rangeField(GLASS_SHAPE[0], GLASS_START.radius) +
+        rangeField(GLASS_SHAPE[1], GLASS_START.width) +
+        rangeField(GLASS_SHAPE[2], m.specular) +
+        selectField('tone', ['auto', 'dark', 'light'], 'auto') +
+        ['rim', 'sheen', 'interactive'].map(switchField).join(''),
+    ) +
+    group(
+      t.sections.backdrop,
+      switchField('backdrop') +
+        `<div class="gp-tiles">${GLASS_SCENES.map(scene).join('')}` +
+        `<label class="gp-tile gp-upload"><input type="file" accept="image/*" data-upload><span>${esc(t.upload)}</span></label></div>`,
+    ) +
     `</div><div class="gp-code">` +
     `<button class="gp-copy" type="button" data-copy-code data-label="${esc(t.copy)}" data-done="${esc(t.copied)}">${esc(t.copy)}</button>` +
-    `<pre><code>${esc(code)}</code></pre></div></div></div>`
+    `<pre><code>${esc(code)}</code></pre></div></div>`
   );
 };
 

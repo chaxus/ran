@@ -213,6 +213,8 @@ toward the page background rather than along a scale, so dark mode redefines the
 
 `--ran-media-background` is `#000` in both themes. A video canvas stays dark beneath fixed white playback controls; Player derives `--ran-player-background` from it. This media role deliberately does not invert with the page palette.
 
+The backdrop colors serve surfaces that sit over other content, such as glass. Their legibility depends on what is behind them, not on the page theme, so they are not redefined in dark mode either: `--ran-backdrop-ink-dark` (`#fff`) and `--ran-backdrop-ink-light` (`#18181b`) are the text colors over a dark or a light backdrop; `--ran-backdrop-highlight`, `--ran-backdrop-edge-light` and `--ran-backdrop-shadow-light` light and outline the edge.
+
 ### What each accent means
 
 - **Primary is monochrome**: black-on-white in light, white-on-black in dark (the Geist brand
