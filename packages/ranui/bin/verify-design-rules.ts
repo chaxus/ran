@@ -249,6 +249,38 @@ const RULES: Rule[] = [
     },
   },
   {
+    id: 'gradient-text',
+    summary: 'text is filled with a gradient',
+    fix: 'Carry emphasis with weight or size. Gradient text is decoration that costs contrast, and one of the most recognisable marks of an interface nobody designed.',
+    extensions: STYLESHEETS,
+    scan(source, file) {
+      const out: Violation[] = [];
+      lines(source).forEach((line, i) => {
+        if (/^\s*(-webkit-)?background-clip\s*:\s*text\b/.test(line))
+          out.push({ file, line: i + 1, text: line.trim() });
+      });
+      return out;
+    },
+  },
+  {
+    id: 'overshoot-easing',
+    summary: 'an easing curve overshoots its target',
+    fix: 'Motion decelerates into place without passing it (DESIGN.md, Motion). Use `--ran-motion-ease-standard` or another curve whose control points stay within 0–1; bounce and elastic easing read as dated.',
+    extensions: STYLESHEETS,
+    scan(source, file) {
+      const out: Violation[] = [];
+      lines(source).forEach((line, i) => {
+        for (const m of line.matchAll(
+          /cubic-bezier\(\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\)/g,
+        )) {
+          const [y1, y2] = [Number(m[2]), Number(m[4])];
+          if (y1 < 0 || y1 > 1 || y2 < 0 || y2 > 1) out.push({ file, line: i + 1, text: m[0] });
+        }
+      });
+      return out;
+    },
+  },
+  {
     id: 'mouse-only-drag',
     summary: 'a drag loop is driven by mouse events with no Pointer Events path',
     fix: 'Drive drags with `pointerdown`/`pointermove`/`pointerup`/`pointercancel` plus `setPointerCapture`, and set `touch-action: none` on the drag surface. A `mousemove`-driven drag simply does not work on touch.',

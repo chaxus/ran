@@ -24,6 +24,13 @@ question: compare → table, recognise and open → list, one object's state →
 → step flow, what happened → timeline, continuous text → document. Put identity and status first,
 the primary action in the title region, and feedback beside the action that caused it.
 
+Name the surface's mode, because it decides how much expression the page can spend. A tool
+(dashboards, settings, editors) and a document (docs, articles, changelogs) spend it on precision and
+restraint, in patterns the reader already knows; a page that persuades (a landing or pricing page) can
+commit to a bold point of view, carried by one signature idea it will be remembered for rather than
+several effects competing for the same attention. The mode comes from the surface, not the product: a tool's landing page
+persuades, its documentation reads.
+
 ## The five-second test
 
 From Steve Krug's _Don't Make Me Think_: show the first screen to someone for five seconds, hide it,
@@ -70,7 +77,25 @@ MUST be able to answer, without scrolling:
 
 ![Three vertical alignment spines through a page: navigation, content and nested form labels, with headings, rows, actions and the empty state all sitting on their declared spine](./assets/alignment-spines.svg)
 
-- Use few type sizes, far apart. Body text keeps a measure of about 45–75 characters.
+- Use few type sizes, far apart. Body text keeps a measure of about 45–75 characters and a leading of
+  at least 1.5; text a reader needs is never below 12px. **(checked)**
+- A heading has more space above it than below, so it binds to what it introduces. **(checked)**
+  Headings wrap with `text-wrap: balance`, paragraphs with `text-wrap: pretty`.
+- The surfaces the browser draws still carry the design: text selection, the caret, focus rings,
+  scrollbars and the numerals in tables (`tabular-nums`). Theme them from the tokens.
+
+### Defaults to refuse
+
+These are what an interface looks like when nobody decided. A brief can earn any of them; reaching
+for one by habit means the decision was skipped.
+
+- A label above a heading (an eyebrow or kicker) that repeats what the heading says, or section
+  numbers (01, 02) that carry no sequence the reader needs.
+- Cards nested in cards; identical icon-heading-text cards as the page's structure; a rounded icon tile
+  above every heading.
+- Gradient text **(checked)**, glow halos, glass and blur as decoration rather than a specific effect,
+  and a hairline border under a wide soft shadow: declare elevation once.
+- Pulsing dots, blinking cursors and marquees that move without reporting anything.
 
 ## Layout
 
@@ -108,6 +133,7 @@ MUST be able to answer, without scrolling:
 
 - Feedback (hover, focus, press) is 0–100ms. Entering is 250–400ms and decelerates without
   overshoot; leaving is 150–200ms and accelerates. Theme switches are not animated.
+- No bounce or elastic easing: things decelerate into place. **(checked: no overshooting curve)**
 - Animate only `transform` and `opacity`; neighbours make room by transform (FLIP). Never animate
   `height`, `padding` or `max-height`, and never use `transition: all`.
 - MUST: under reduced motion nothing travels or keeps running; at most a short fade. **(checked)**
@@ -122,6 +148,8 @@ From Krug again: remove half the words, then half of what is left.
 - Keep what adds a decision, constraint or consequence: accessible names, field labels, units,
   errors and risk disclosures.
 - Errors say what happened and what to do next, beside the thing that failed.
+- Say the product's own thing. Generic marketing words (empower, seamless, next-generation) and
+  dashes used for rhythm read as copy nobody wrote.
 - Sentence case. Try long text, large numbers and every locale the product ships.
 
 ## Verifying a change
@@ -132,12 +160,18 @@ From Krug again: remove half the words, then half of what is left.
 - Run the five-second and trunk tests on any page whose structure changed.
 - Report what you observed, what you only inferred and what you could not check. Do not call your own
   review acceptance.
+- Rank findings so the reader fixes the right thing first: **P0** blocks use (lost input, unreadable
+  text, an unreachable action), **P1** breaks a MUST, **P2** departs from a SHOULD without a reason,
+  **P3** is polish.
+- Write each fix as values, not adjectives: "48px to `clamp(40px, 6vw, 72px)`", not "bigger".
 
 ## What the checks cover
 
 | Item                                                     | Check                                                 |
 | -------------------------------------------------------- | ----------------------------------------------------- |
 | Raw colours, light-only fallbacks, off-scale spacing     | `verify:design` (static, configured packages)         |
+| Gradient text, overshoot easing                          | `verify:design` (static, configured packages)         |
+| Measure, leading, text size, heading spacing             | `packages/docs/test/browser/design-checklist.spec.ts` |
 | No horizontal scroll; navigation reachable; still motion | `packages/docs/test/browser/site-layout.spec.ts`      |
 | Five-second heading, trunk test, targets, focus, shift   | `packages/docs/test/browser/design-checklist.spec.ts` |
 | Readable without script or entrance motion               | `packages/docs/test/browser/layout-audit.spec.ts`     |

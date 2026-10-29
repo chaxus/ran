@@ -125,6 +125,63 @@ for (const width of [320, 1280]) {
         });
         expect(problems).toEqual([]);
       });
+
+      test(`${path} sets its text to read: measure, leading, size and heading spacing`, async ({ page }) => {
+        await ready(page, path);
+        const problems = await page.evaluate(() => {
+          const shown = (element: Element): boolean => {
+            const box = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return box.width > 0 && box.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+          };
+          const label = (element: Element): string =>
+            `${element.tagName.toLowerCase()} "${(element.textContent ?? '').trim().slice(0, 32)}"`;
+          const found: string[] = [];
+
+          // Running text: the measure is counted in the width of its own zero, the CSS `ch`.
+          const zero = document.createElement('span');
+          zero.style.cssText = 'position:absolute;visibility:hidden;white-space:pre';
+          document.body.append(zero);
+          for (const block of document.querySelectorAll('main p, main li')) {
+            if (!shown(block) || block.closest('pre, table, ran-demo, nav, .gp, [data-glass]')) continue;
+            const style = getComputedStyle(block);
+            const size = parseFloat(style.fontSize);
+            const leading = parseFloat(style.lineHeight);
+            if (block.getBoundingClientRect().height < leading * 1.5) continue; // one line: no measure, no leading
+            zero.style.font = style.font;
+            zero.textContent = '0000000000';
+            const measure = (block as HTMLElement).clientWidth / (zero.getBoundingClientRect().width / 10);
+            // "About 45–75 characters": the zero is narrower than an average letter, so allow some slack.
+            if (measure > 85) found.push(`${label(block)} runs ${measure.toFixed(0)}ch wide`);
+            if (leading / size < 1.5) found.push(`${label(block)} has leading ${(leading / size).toFixed(2)}`);
+          }
+          zero.remove();
+
+          // Text a reader needs is at least 12px.
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          const small = new Set<Element>();
+          while (walker.nextNode()) {
+            const parent = walker.currentNode.parentElement;
+            if (!parent || !walker.currentNode.textContent?.trim() || small.has(parent) || !shown(parent)) continue;
+            if (parseFloat(getComputedStyle(parent).fontSize) < 12) small.add(parent);
+          }
+          for (const element of small) found.push(`${label(element)} is ${getComputedStyle(element).fontSize}`);
+
+          // A heading binds to what it introduces: more space above it than below.
+          for (const heading of document.querySelectorAll('main h2, main h3')) {
+            const before = heading.previousElementSibling;
+            const after = heading.nextElementSibling;
+            if (!shown(heading) || !before || !after || !shown(before) || !shown(after)) continue;
+            const box = heading.getBoundingClientRect();
+            const above = box.top - before.getBoundingClientRect().bottom;
+            const below = after.getBoundingClientRect().top - box.bottom;
+            if (above <= below)
+              found.push(`${label(heading)} has ${above.toFixed(0)}px above, ${below.toFixed(0)}px below`);
+          }
+          return found;
+        });
+        expect(problems).toEqual([]);
+      });
     }
   });
 }

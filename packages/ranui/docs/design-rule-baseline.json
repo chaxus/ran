@@ -37,6 +37,11 @@
       "components/image/index.less": 2,
       "components/loading/index.less": 1
     },
+    "gradient-text": {},
+    "overshoot-easing": {
+      "components/checkbox/index.less": 2,
+      "components/glass/index.less": 1
+    },
     "mouse-only-drag": {},
     "hidden-inert": {},
     "undefined-token-fallback": {},

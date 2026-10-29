@@ -193,6 +193,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* The surfaces the browser draws still belong to the site: selection and the caret take
+   its own colours instead of the platform's blue. */
+::selection {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+input,
+textarea {
+  caret-color: var(--accent);
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -501,7 +511,17 @@ a {
 .search__input::-webkit-search-cancel-button {
   display: none;
 }
-.search__input:focus-visible {
+.search__input/* The surfaces the browser draws still belong to the site: selection and the caret take
+   its own colours instead of the platform's blue. */
+::selection {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+input,
+textarea {
+  caret-color: var(--accent);
+}
+
+:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
@@ -1103,7 +1123,8 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 }
 .prose :not(pre) > code {
   font-family: var(--font-mono);
-  font-size: 0.875em;
+  /* Mono reads smaller than the text around it; 12px is the floor for text a reader needs. */
+  font-size: max(0.875em, 12px);
   /* `overflow-wrap`, not `word-break`: this breaks a token only when it genuinely
      cannot fit, instead of breaking every long identifier mid-word. */
   overflow-wrap: break-word;
