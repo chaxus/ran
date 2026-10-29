@@ -128,9 +128,9 @@ Events are the outward half of the contract, so treat a change to one as a break
   `--ran-{component}-{element}[-{state}]-{property}` and default to a semantic token; the
   naming rules and the reasoning are in [DESIGN.md](DESIGN.md#ranui-component-token-naming).
 - **A fallback must name a token that exists and that flips.** Both failure modes are silent
-  and both are machine-checked (DESIGN.md §1).
+  and both are machine-checked ([DESIGN.md](DESIGN.md#ranui-color)).
 - **No palette property in a `transition`, no `transition: all`.** CSS cannot tell an
-  interaction from a theme flip (DESIGN.md §5).
+  interaction from a theme flip ([DESIGN.md](DESIGN.md#ranui-motion)).
 - **`:host` display rules must keep `hidden` working.** `ensureShadowRoot` appends
   `:host([hidden]) { display: none }` (`HOST_HIDDEN_CSS` in `utils/component.ts`) to every
   component, so ranui's own components need no copy; an element that builds its shadow root

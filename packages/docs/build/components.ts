@@ -105,8 +105,7 @@ export const renderHome = (locale: LocaleDef): string => {
   // one segment: word units either do not exist there or are not worth reordering an
   // RTL line for.
   const words = t.splitWords ? t.headline.split(/\s+/) : [t.headline];
-  const head = (kicker: string, title: string, id: string): string =>
-    `<div class="sec-head"><span class="kicker">${esc(kicker)}</span><h2 id="${id}">${esc(title)}</h2></div>`;
+  const head = (title: string, id: string): string => `<div class="sec-head"><h2 id="${id}">${esc(title)}</h2></div>`;
 
   return (
     `<div class="cine">` +
@@ -165,12 +164,12 @@ export const renderHome = (locale: LocaleDef): string => {
     `</dl>` +
     // ── 2. live proof: what the library looks like, composed into small states ──
     `<section class="section proof reveal" aria-labelledby="home-proof">` +
-    head(t.proofKicker, t.proofTitle, 'home-proof') +
+    head(t.proofTitle, 'home-proof') +
     renderProof(t.proof) +
     `</section>` +
     // ── 3. choose a pillar, then what the two libraries carry that others leave out ──
     `<section class="section choose reveal" aria-labelledby="home-choose">` +
-    head(t.chooseKicker, t.chooseTitle, 'home-choose') +
+    head(t.chooseTitle, 'home-choose') +
     `<div class="pillars reveal">` +
     t.pillars
       .map(
@@ -204,7 +203,7 @@ export const renderHome = (locale: LocaleDef): string => {
     `</div></section>` +
     // ── 4. install ──
     `<section class="section start reveal" aria-labelledby="home-start">` +
-    head(t.startKicker, t.startTitle, 'home-start') +
+    head(t.startTitle, 'home-start') +
     `<p class="sec-sub">${esc(t.startDesc)}</p>` +
     `<div class="cmd"><code>npm&nbsp;i&nbsp;ranui&nbsp;ranuts</code>` +
     `<button class="copy" type="button" data-copy="npm i ranui ranuts" aria-label="${esc(t.copy)}">${COPY_ICON}</button></div>` +

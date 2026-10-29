@@ -253,7 +253,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-focus-ring`
 - `--ran-gray-700`
 - `--ran-motion-duration-base`
-- `--ran-motion-ease-bouncy`
+- `--ran-motion-ease-standard`
 - `--ran-size-1`
 - `--ran-skin-font-family`
 - `--ran-text-label-1`
@@ -476,7 +476,7 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-glass-transition`
 - `--ran-motion-duration-base`
 - `--ran-motion-duration-fast`
-- `--ran-motion-ease-spring`
+- `--ran-motion-ease-standard`
 - `--ran-radius-lg`
 - `--ran-shadow-elevated`
 

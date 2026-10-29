@@ -78,9 +78,14 @@ describe('executable interface guidance', () => {
   });
 
   it('keeps the authoritative spacing relationship table on the real scale', () => {
+    // Normalised: a Windows checkout has CRLF line endings.
     const table = read('docs/adapters/DESIGN.md')
-      .split('### ranui spacing relationships')[1]
-      ?.split('**Inside before outside:**')[0];
+      .replace(/\r\n/g, '\n')
+      .split('\n## ranui spacing\n')[1]
+      ?.split('\n## ')[0]
+      ?.split('\n')
+      .filter((line) => line.startsWith('|'))
+      .join('\n');
     expect(table, 'the spacing relationship table must remain discoverable').toBeDefined();
     expect(references(table!).length).toBeGreaterThanOrEqual(6);
     expect(missing(table!)).toEqual([]);

@@ -156,7 +156,7 @@ O `<r-glass>` se compõe: aninhe um dentro do outro para ter materiais em camada
 
 ### Brilho e interação
 
-`sheen` adiciona um brilho em movimento; `interactive` adiciona uma elevação ao passar o cursor e um pressionar que volta com mola.
+`sheen` adiciona um brilho em movimento; `interactive` adiciona uma elevação ao passar o cursor e um pressionar que volta ao lugar sem ressalto.
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">

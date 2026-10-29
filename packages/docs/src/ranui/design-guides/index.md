@@ -1,47 +1,37 @@
 ---
-description: 'Design rules for building screens with ranui: pick a role and let the token supply the value, design every reachable state, and verify what actually rendered.'
+description: 'How to apply ranui on a screen: pick a role and let the token supply the value, design every reachable state, and check what actually rendered.'
 ---
 
 # Design guidelines
 
-Build a coherent interface with ranui: choose roles and states, then let tokens supply the values.
+How to apply ranui on a real screen: choose a role and a state, and let the tokens supply the values.
 
-Use the [design system](/src/ranui/design-system/) for tokens,
-[theming](/src/ranui/theme/) for runtime overrides, and
-[information architecture](/src/ranui/information-architecture/) for page structure.
-This page summarizes the canonical [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
-
-Interaction, motion, product patterns and verification are sections of the same
-[design guide](/src/design/guide); component engineering is in
-[CODING](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/CODING.md).
-Both also ship under `node_modules/ranui/docs/`.
+The rules themselves live in two places, and this page links to them rather than restating them: the
+[design guide](/src/design/guide) for the method that applies to any product, and the
+[ranui implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)
+for ranui's tokens, tiers and component rules. Both ship in `node_modules/ranui/docs/DESIGN.md`. The
+[design system](/src/ranui/design-system/) lists every token and its value,
+[theming](/src/ranui/theme/) covers runtime overrides, and
+[information architecture](/src/ranui/information-architecture/) covers page structure.
 
 > **Use when** choosing color, spacing, type, depth or motion for a screen built with `<r-*>` elements.
 
 ## Principles
 
-1. **Clarity before personality.** The primary task and the primary action must be
-   unmistakable before anything else is considered.
-2. **Reuse existing controls.** Prefer semantic native controls or supported ranui primitives
-   such as `r-button`, `r-input`, `r-select` and `r-modal` when their contracts fit. Preserve
-   their form, keyboard and accessibility behavior rather than rebuilding it for styling.
-3. **Tokens, never raw values.** A hex code, a `20px` gap or a hand-picked shadow is a decision
-   that will not follow the theme.
-4. **Decide by role and state, not by eye.** "What is this text?" (heading / label / copy /
-   button) has an answer; "what size looks right?" does not.
-5. **Design every reachable state.** Default, hover, active, focus, disabled, loading, empty,
-   error: the default state is one of eight.
-6. **Verify what rendered.** In light _and_ dark, narrow _and_ wide, mouse _and_ touch. Review
-   does not catch a shadow you cannot see.
+1. **Clarity before personality.** The primary task and the primary action are unmistakable first.
+2. **Reuse existing controls.** `r-button`, `r-input`, `r-select` and `r-modal` already carry form,
+   keyboard and accessibility behavior; restyle them rather than rebuilding them.
+3. **Decide by role and state.** "What is this text?" has an answer; "what size looks right?" does
+   not. The token for the role supplies the value, and it follows the theme.
+4. **Design every reachable state, and look at the result.** The default state is one of eight, and a
+   shadow nobody can see shows up only in a browser.
 
-Conflict order when two rules pull apart: **user goals → verified evidence → these guidelines
-→ shipped patterns → general heuristics.**
+These are starting points. Depart from one when the screen is better for it, and say why.
 
 ## Choosing a color
 
-Color is assigned by **role and state**, never picked by eye. The
-[ladder](/src/ranui/design-system/#the-ladder) already fixes what hover and active look
-like; your job is to name the role.
+The [ladder](/src/ranui/design-system/#the-ladder) already decides what hover and active look like;
+your job is to name the role.
 
 | The element is…                   | Use                                                            |
 | --------------------------------- | -------------------------------------------------------------- |
@@ -53,82 +43,45 @@ like; your job is to name the role.
 | A status                          | `--ran-color-success` / `-warning` / `-danger`                 |
 | A link                            | `--ran-color-link`                                             |
 
-**Accents have one meaning each.** Primary is monochrome (black-on-white in light,
-white-on-black in dark), so don't use blue for it: blue belongs to links and the focus
-ring. Green is success, amber is warning, red is danger; using red for emphasis leaves you
-with no way to use it for danger later.
+**Accents have one meaning each.** Primary is monochrome, so blue is left for links and the focus
+ring; green is success, amber warning, red danger. Using red for emphasis leaves nothing to say
+"danger" with later.
 
-**Three rules that prevent silent breakage:**
-
-- Never hard-code a hex or `rgb()` for a value that should follow the theme.
-- A fallback must name a **token that flips**: `var(--ran-color-text, var(--ran-gray-1000))`,
-  never `var(--ran-color-text, #171717)`: a light-only literal disappears in dark mode.
-- A fallback must name a token that **exists**. `var()` on an undeclared property resolves to
-  nothing, the whole declaration is dropped, and the element keeps whatever it inherited,
-  which usually looks _almost_ right. (`--ran-color-error` does not exist; it is
-  `--ran-color-danger`.)
+A raw hex, a fallback that does not flip with the theme, or a fallback naming a token that does not
+exist breaks silently in dark mode or drops the whole declaration; the adapter's
+[color rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#ranui-color)
+explain each, and `verify:design` catches them in ranui's own source.
 
 ## Spacing and rhythm
 
-Take every gap from the [nine-value scale](/src/ranui/design-system/#spacing), and let the
-distance carry meaning:
+Take gaps from the [4px scale](/src/ranui/design-system/#spacing) and let the distance carry meaning:
 
 - **8px** between elements inside a group.
 - **16px** between groups.
-- **32–40px** between sections.
+- **24–32px** between regions.
 
-Don't invent `20px` or `28px`. The limited set is what produces the page's rhythm; one
-off-scale gap is what breaks it. Keep shared spines across regions (edges, baselines and
-columns that line up) and verify alignment against the rendered pixels rather than by eye.
-Name the shared content spine and any intentional navigation/title column. Measure outer frames,
-inner content edges, rendered text Ranges, icon viewports and actual hit areas separately: a stable
-button frame can hide an inset label. Keep title/menu triggers content-hugging with separate layout
-filler, count nested padding, and preserve the same spine in empty states. Product target sizes remain
-local choices. The [canonical alignment contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-owns these rules and the runnable browser acceptance example.
-
-Group with headings, alignment and spacing first. Removing redundant enclosures must not
-erase action affordance: standalone commands may need their own restrained button surface,
-visible before hover in both themes and on touch screens. Flat rows suit recognizable
-menu/list contexts; do not mandate them everywhere. A nested card, group fill and row
-separators must not repeat the same boundary. Declare shared icon/checkbox and text columns
-across adjacent controls. Retain functional field frames and keyboard focus outlines. Inspect
-the resting whole pane and explain the distinct purpose of each remaining border, fill or divider;
-the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-own the exceptions and acceptance criteria.
-
-Keep vertical rhythm consistent by relationship: title/description and field/hint pairs can
-use 8px, separate groups 16px, and related subsections 24px. Give each gap one owner;
-count child margins, existing padding and inline baseline space before adding another gap.
-Verify wrapped copy and hidden helper/error states in the browser. The
-[canonical vertical-rhythm guidance](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-owns the exceptions and runnable reverse checks, without changing component defaults.
+A smaller gap means a closer relationship, so one off-scale gap is what breaks the rhythm. Give each
+gap one owner: count a child's margin and the parent's padding before adding a third space between
+them.
 
 ## Choosing type
 
-Ask what **role** the text plays (heading, label, copy, button, mono) and the font, size,
-weight and line-height all follow from the
-[type scale](/src/ranui/design-system/#typography). Don't pick raw px per instance.
-
-A role is a tool, not a law: genuinely one-off decorative text (a gesture-flash overlay, an
-active-link weight bump) is better off with its own component token than forced into the
+Ask what **role** the text plays (heading, label, copy, button, mono); the font, size, weight and
+line height follow from the [type scale](/src/ranui/design-system/#typography). Genuinely one-off text,
+such as a gesture flash on a video, is better off with its own component token than forced into the
 nearest role.
 
 ## Depth: shadow and stacking
 
-**Pick the shadow tier by what the element is** (in-flow surface, floating overlay, or
-blocking dialog) and make sure it is actually perceptible. A shadow that cannot be seen
-provides no depth cue, and an overlay that falls back to the card tier looks pinned to the
-page.
+Pick the shadow tier by what the element is: an in-flow surface, a floating overlay or a blocking
+dialog. An overlay that falls back to the card tier looks pinned to the page.
 
-**Embedding ranui overlays in your own chrome.** The [z-index
-ladder](/src/ranui/design-system/#stacking) starts at 1000 precisely so it clears ordinary page
-chrome. A portaled overlay therefore needs no help from you. But a `position: fixed` overlay
-that stays inside its own shadow DOM (`r-modal`'s dialog) only escapes as far as its nearest
-ancestor **stacking context**, so if you wrap embedded content in anything that creates one
-(`isolation`, `opacity < 1`, `transform`, `filter`, `will-change`), that wrapper's stacking
-level has to be raised so the dialog is stacked above it again. Scope the escalation to when
-an overlay is _actually_ open:
+**Embedding ranui overlays in your own chrome.** The [z-index ladder](/src/ranui/design-system/#stacking)
+starts at 1000, so a portaled overlay clears ordinary page chrome on its own. A `position: fixed`
+overlay that stays inside its own shadow DOM (`r-modal`'s dialog) escapes only as far as its nearest
+ancestor **stacking context**. If you wrap embedded content in something that creates one
+(`isolation`, `opacity < 1`, `transform`, `filter`, `will-change`), raise that wrapper only while an
+overlay is actually open:
 
 ```css
 .embed {
@@ -142,125 +95,77 @@ an overlay is _actually_ open:
 }
 ```
 
-A blanket `z-index` on the wrapper elevates _everything_ inside it (including entirely static
-content) over your sticky header for its whole scroll lifetime. That bug shipped on this very
-site once. Match `closing` as well as `open`: the mask keeps painting for the length of its
-transition after `open` is removed.
-
-Keep one visual language across related components and documentation chrome: coordinated type
-roles, control density, radius/inset relationships, semantic accents and motion. Preserve differences
-that communicate role or priority. Compare composed states with different real content before adding
-effects; a shared color cannot compensate for inconsistent proportions.
+A permanent `z-index` on the wrapper lifts everything inside it, static content included, over your
+sticky header for its whole scroll lifetime; that shipped on this site once. Match `closing` as well
+as `open`: the mask keeps painting through its closing transition.
 
 ## Motion {#motion}
 
-Purpose and frequency decide whether to animate. Frequent hover, focus and keyboard feedback
-is immediate by default. Use existing motion tokens only when motion explains a change: a small
-transition may take ~150ms, menus ~200ms and dialogs ~300ms. These are optional examples, not
-required delays. Keep motion interruptible and respect `prefers-reduced-motion`.
+Frequent feedback (hover, focus, press) is immediate. When motion explains a change, feedback stays
+within 0–100ms, entering takes 250–400ms and decelerates, and leaving takes 150–200ms and accelerates.
+Keep it interruptible and respect `prefers-reduced-motion`.
 
-For changed motion, describe its trigger, state and destination. New input may interrupt or
-reverse it without stale completion or duplicate activation. Preserve drafts and reading position;
-avoid squeezing visible text during insertion/removal. Inspect a continuous action and its return
-path at normal speed, then replay discontinuities slowly. Check that reduced motion still leaves a
-visible final state. Optional effects should form a consistent language across related components.
-
-**Never let a palette property transition.** CSS cannot tell _why_ a color changed, so a
-`transition` on `background-color`, `color`, `border-color`, `box-shadow`, `fill` or `stroke`
-also fires when the **theme** flips, with every element fading at its own pace while the rest
-of the page has already switched. Animate motion properties (`transform`, `opacity`, geometry)
-instead. `transition: all` and bare shorthands like `transition: 0.2s` mean _all_, palette
-properties included; both are banned in ranui's own styles and are a bad idea in yours.
+**Never let a color property transition.** CSS cannot tell _why_ a color changed, so a `transition`
+on `background-color`, `color`, `border-color`, `box-shadow`, `fill` or `stroke` also fires when the
+**theme** flips: every element fades at its own pace while the page has already switched. Animate
+`transform` and `opacity` instead. `transition: all` and a bare `transition: 0.2s` include color too.
 
 ## States and content
 
-Every reachable state is part of the design: **hover, active, focus, disabled, loading, empty,
-error**. Map them onto the ladder: hover → `bg-hover` / `border-hover`; active → `bg-active`;
-disabled → disabled tokens; reduce opacity only when needed and still legible; focus → the focus ring.
-
-Nothing non-interactive may look interactive. `r-card` only reacts to hover with the
-`hoverable` attribute; leave it off for cards that don't click.
+Every reachable state is part of the design: hover, active, focus, disabled, loading, empty, error.
+Hover maps to `bg-hover` / `border-hover`, active to `bg-active`, focus to the focus ring. Nothing that
+does not click looks clickable: `r-card` reacts to hover only with `hoverable`.
 
 Copy is part of the system too:
 
-- **Buttons** name the outcome. Include the object when context does not establish it: "Delete member". A clearly named dialog may use "Delete"; avoid generic "OK".
-- **Errors** say what happened, then how to fix it. ✅ "Build failed: the bundle exceeds the
-  size limit. Reduce it or raise the limit." ❌ "Operation failed, please try again."
-- **Confirmations and toasts** state the change, not the success. ✅ "Project deleted"
-  ❌ "Operation successful". Show completion feedback only after the operation is confirmed.
-- Let context remove redundancy: a dialog titled "Delete project" does not need a button
-  labelled "Delete project permanently, forever".
+- **Buttons** name the outcome, with the object when context does not supply it: "Delete member". A
+  clearly named dialog may say "Delete"; avoid a generic "OK".
+- **Errors** say what happened, then how to fix it. ✅ "Build failed: the bundle exceeds the size
+  limit. Reduce it or raise the limit." ❌ "Operation failed, please try again."
+- **Confirmations** state the change, not the success, and appear only once it is confirmed.
+  ✅ "Project deleted" ❌ "Operation successful".
+- Let context remove redundancy: a dialog titled "Delete project" does not need a button labelled
+  "Delete project permanently, forever".
 
 ## Accessibility {#accessibility}
 
 - Meet **WCAG AA** contrast for text against its background.
 - **Never signal state with color alone**: pair it with an icon, a label or text.
 - Every interactive element keeps a **visible focus ring** (`--ran-focus-ring`, or
-  `outline: 2px solid var(--ran-color-primary); outline-offset: 2px`). Never remove it for
-  tidiness.
-- **Everything is reachable by keyboard.** Nothing is mouse-only.
+  `outline: 2px solid var(--ran-color-focus); outline-offset: 2px`).
+- **Everything is reachable by keyboard.**
 - Respect `prefers-reduced-motion` and `prefers-color-scheme`.
 
 ## Mouse and touch, narrow and wide
 
 Neither input nor viewport is the secondary target.
 
-- Drag, slider and gesture interactions use **Pointer Events** (`pointerdown` / `pointermove` /
-  `pointerup` / `pointercancel`), never `mouse*` alone, paired with `touch-action: none` on the
-  exact drag surface. CSS declaring `touch-action: none` with no pointer handler behind it is a
-  broken control, not a harmless no-op.
-- A **hover-only affordance needs a tap fallback**. `trigger="hover"` on `r-select` or
-  `r-popover` degrades to click on touch devices; anything you build must do the same.
-- Prefer **viewport-relative sizing** (`%`, `min()`, `max()`, `clamp()`, `vw`/`vh`, e.g.
-  `min(560px, calc(100vw - 32px))`) over inventing a breakpoint. ranui has no shared
-  breakpoint token, so every hard breakpoint is a one-off number someone has to maintain.
-- **Never hide the only way to do something on mobile.** Reflow instead of `display: none`.
-- **A measured position is only correct until the next reflow.** Anything derived from
-  `getBoundingClientRect()` goes stale on resize, on container reflow, and (for a portaled
-  panel) on scroll. Re-measure on those events, not only on the interaction that first
-  triggered the measurement. Loading a page at a narrow width exercises the initial layout;
-  it does not exercise _resizing into_ it, which is where this bug class actually appears.
+- Drags, sliders and gestures use **Pointer Events**, with `touch-action: none` on the exact drag
+  surface. `touch-action: none` with no pointer handler behind it is a broken control.
+- A **hover-only affordance needs a tap fallback**. `trigger="hover"` on `r-select` or `r-popover`
+  becomes a click on touch devices; anything you build should do the same.
+- Prefer **viewport-relative sizing** (`min(560px, calc(100vw - 32px))`, `clamp()`) to inventing a
+  breakpoint: ranui has no breakpoint token, so each hard breakpoint is a number someone maintains.
+- **Never hide the only way to do something on mobile.** Reflow it instead.
+- **A measured position is correct only until the next reflow.** Anything derived from
+  `getBoundingClientRect()` goes stale on resize, on container reflow and, for a portaled panel, on
+  scroll. Loading at a narrow width does not exercise _resizing into_ it, which is where this breaks.
 
 ## What the library enforces mechanically
 
-Nine of these rules are checked by `pnpm -F ranui verify:design`, which CI runs on ranui's own
-source: dark-unsafe color fallbacks, raw color literals, the spacing scale, the sizing scale,
-mouse-only drag loops, `:host` display rules that break `hidden`, fallbacks naming undeclared
-tokens, components querying their own shadow tree, and shadow trees built outside the
-constructor. Known violations are ratcheted in a baseline file, so a new one cannot be added
-and a fix cannot be silently undone.
-
-These checks scan only the source roots configured for the command; they do not automatically
-inspect applications that use ranui. This repository has separate checks for surfaces such as
-the documentation site. Application developers use their own checks and verify layout, themes
-and interaction in the browser.
-Wait for fonts and component content before measuring DOM text and documented shadow parts. Check
-long translations, empty states, coarse input and relevant zoom as well as themes and widths.
-Prove the assertions detect text-only drift inside an unchanged frame, an oversized title hit zone
-and a shifted sibling region; restore each mutation and confirm the checks pass.
+`pnpm -F ranui verify:design` checks nine rules in ranui's own source: color fallbacks that do not
+flip, raw color literals, the spacing and sizing scales, mouse-only drags, `:host` rules that break
+`hidden`, fallbacks naming undeclared tokens, components searching their own shadow tree, and shadow
+trees built outside the constructor. A line that breaks a rule on purpose says so with
+`design-ok: <rule> <reason>`. The checks cover only the configured source roots; an application that
+uses ranui runs its own checks and looks at its own pages.
 
 ## Design examples {#design-examples}
 
 <DesignIllustrations />
 
-## Checklist before shipping UI
-
-Choose checks for the affected surface and changed behavior; repository CI still runs its complete gates.
-
-- [ ] Primary task and primary action are unmistakable.
-- [ ] Works in **light and dark**, at **narrow and wide** widths.
-- [ ] Works with **mouse and touch**; any hover trigger has a tap fallback.
-- [ ] Affected states exercised: hover, active, focus, disabled, loading, empty, error.
-- [ ] Keyboard and focus verified; focus visible everywhere.
-- [ ] Edge cases: long text, large numbers, supported locales.
-- [ ] Spacing from the scale, type by role, color from semantic tokens.
-- [ ] No palette property in a `transition`; no `transition: all`.
-- [ ] Copy makes the action and its object clear from context; nothing signals state by color alone.
-
 ## Evidence and acceptance {#evidence-and-acceptance}
 
-[Verifying a change](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change)
-covers actual browser proof, runtime/capture freshness and separate automated, agent and human
-results. Changed shared styles require fresh affected evidence; an agent review is not user acceptance.
-Avoid unnecessary secondary labels and descriptions: let layout explain the obvious, while retaining
-accessible names, useful field labels, units, errors and risks.
+The guide's [verifying a change](/src/design/guide#verifying-a-change) says what to check in a real
+browser and what to report: what you observed, what you only inferred, and what you could not check.
+An agent's review is not the user's acceptance.

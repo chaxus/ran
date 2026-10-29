@@ -156,7 +156,7 @@ r-glass:state(light) .badge {
 
 ### Schimmer und Interaktion
 
-`sheen` fügt ein wanderndes Glanzlicht hinzu; `interactive` fügt ein Anheben beim Hover und ein zurückfederndes Drücken hinzu.
+`sheen` fügt ein wanderndes Glanzlicht hinzu; `interactive` fügt ein Anheben beim Hover und ein Drücken, das ohne Nachfedern zurückkehrt hinzu.
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">

@@ -6,16 +6,17 @@ A one-page checklist for anyone, person or coding agent, building the interface 
 Use it before you start, while you build, and before you hand a change back. It assumes the product
 already has tokens and components; it is about using them well.
 
-**MUST** marks a defect a user can observe. **SHOULD** is the default; say why when you depart from
-it. Items marked **(checked)** are enforced by a test in this repository; the table at the end says
-which one. Everything else needs your eyes in a real browser.
+**MUST** marks a defect a user can observe, and nothing else is a MUST. **SHOULD** is a starting
+point, not a limit: depart from it whenever the work is better for it, and say why. Items marked
+**(checked)** are enforced by a test in this repository; the table at the end says which one. Everything else needs your eyes in a real browser.
 
 ranui's [implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md) maps these items to ranui's tokens,
 stacking tiers and component specifics.
 
 ## Before you start
 
-Write three answers in the task note before touching a component:
+Answer three questions before you change what a page shows; for a page or region you are building or
+restructuring, write the answers down:
 
 1. What does the reader need to see on arrival?
 2. What else must be visible for that to make sense?
@@ -25,6 +26,20 @@ A page has one primary model and one primary action per region. Choose the layou
 question: compare → table, recognise and open → list, one object's state → sectioned detail, stages
 → step flow, what happened → timeline, continuous text → document. Put identity and status first,
 the primary action in the title region, and feedback beside the action that caused it.
+
+Count how hard each choice is, not how many clicks it takes: several steps that each need no thought
+beat one crowded screen where every option does.
+
+For a new page or region, compare two or three directions side by side in one place (a toggle, a
+canvas) before committing to one, and vary what is actually undecided: the layout, the interaction,
+the copy or the look.
+
+Name the surface's mode, because it decides how much expression the page can spend. A tool
+(dashboards, settings, editors) and a document (docs, articles, changelogs) spend it on precision and
+restraint, in patterns the reader already knows; a page that persuades (a landing or pricing page) can
+commit to a bold point of view, carried by one signature idea it will be remembered for rather than
+several effects competing for the same attention. The mode comes from the surface, not the product: a tool's landing page
+persuades, its documentation reads.
 
 ## The five-second test
 
@@ -72,7 +87,17 @@ MUST be able to answer, without scrolling:
 
 ![Three vertical alignment spines through a page: navigation, content and nested form labels, with headings, rows, actions and the empty state all sitting on their declared spine](./assets/alignment-spines.svg)
 
-- Use few type sizes, far apart. Body text keeps a measure of about 45–75 characters.
+- Use few type sizes, far apart. Body text keeps a measure of about 45–75 characters and a leading of
+  at least 1.5; text a reader needs is never below 12px. **(checked)**
+- A heading has more space above it than below, so it binds to what it introduces. **(checked)**
+  Headings wrap with `text-wrap: balance`, paragraphs with `text-wrap: pretty`.
+- The surfaces the browser draws still carry the design: text selection, the caret, focus rings,
+  scrollbars and the numerals in tables (`tabular-nums`). Theme them from the tokens.
+- Mixed scripts: put the Latin face first and the CJK or Arabic fallback after it, mark each block's
+  `lang`, and give Chinese, Japanese or Korean running text more leading than Latin (about 1.7–1.8).
+  A Latin serif has no Han glyphs; pair it with a CJK serif.
+- Decoration is a decision, not a default. When an eyebrow label, a gradient, a glow or a card around
+  everything appears, check that it does a job on this page; remove it if it only fills space.
 
 ## Layout
 
@@ -85,7 +110,8 @@ MUST be able to answer, without scrolling:
 - A component's box contains everything it paints. Rotated, fanned or offset parts stay inside it.
 - MUST: text and values are never clipped. If something must truncate, the full value stays
   reachable (a tooltip, an expanded row, the detail page).
-- Actions stay reachable without hover, and at every width.
+- Actions stay reachable without hover, and at every width. Anything clickable looks clickable at rest:
+  touch has no hover to reveal it.
 
 ## Interaction
 
@@ -96,10 +122,15 @@ MUST be able to answer, without scrolling:
   not touch its neighbours (WCAG 2.5.8). Links inside running text are exempt. **(checked)**
 - MUST: input is never lost. Drafts, focus, caret and reading position survive updates, failures and
   animation. Do not replace an input someone is typing in.
+- Accept input the way people type it (spaces in a phone number, a pasted value with a trailing
+  space) rather than rejecting it, and ask only for what the task needs.
 - Validation sits on the field; one activation sends once; success appears only after it is
   confirmed; a failure keeps every entry and says how to recover.
 - Each async result is tied to the request that produced it, so a late answer never overwrites a
   newer one, and a background update never moves focus.
+- A modal is for a short confirmation or one answer the task cannot continue without, not a place to
+  navigate; transient context belongs in a popover, peer views of one object in tabs, and a second
+  task on its own page.
 - A modal dialog keeps focus inside it until it closes. Enter never submits while an input method is
   still composing text.
 - Selection looks different from hover. A link navigates; a button changes state.
@@ -110,8 +141,11 @@ MUST be able to answer, without scrolling:
 
 - Feedback (hover, focus, press) is 0–100ms. Entering is 250–400ms and decelerates without
   overshoot; leaving is 150–200ms and accelerates. Theme switches are not animated.
-- Animate only `transform` and `opacity`; neighbours make room by transform (FLIP). Never animate
-  `height`, `padding` or `max-height`, and never use `transition: all`.
+- Controls and content settle without bounce or elastic easing; a page that persuades may spend one
+  expressive moment.
+- Prefer `transform` and `opacity`; neighbours make room by transform (FLIP). Never animate layout
+  (`height`, `padding`, `max-height`, `top`, `left`), which reflows the page every frame, and never use
+  `transition: all`.
 - MUST: under reduced motion nothing travels or keeps running; at most a short fade. **(checked)**
 - Motion is interruptible and reverses cleanly. Watch it as a recording, not a still.
 
@@ -119,11 +153,18 @@ MUST be able to answer, without scrolling:
 
 From Krug again: remove half the words, then half of what is left.
 
+- Make things self-evident before making them self-explanatory: name them the way readers already
+  do, and follow conventions unless the new way is clearly better. A clever name costs a moment of
+  thought every time it is read.
 - Name actions for what they do ("Send invite", not "Submit"). No welcome text or instructions that
   restate the layout.
 - Keep what adds a decision, constraint or consequence: accessible names, field labels, units,
   errors and risk disclosures.
 - Errors say what happened and what to do next, beside the thing that failed.
+- Don't fill space with invented content: sections, stats, icons or copy nobody asked for. An area
+  that looks empty is a layout problem, not a content one.
+- Say the product's own thing. Generic marketing words (empower, seamless, next-generation) and
+  dashes used for rhythm read as copy nobody wrote.
 - Sentence case. Try long text, large numbers and every locale the product ships.
 
 ## Verifying a change
@@ -134,12 +175,19 @@ From Krug again: remove half the words, then half of what is left.
 - Run the five-second and trunk tests on any page whose structure changed.
 - Report what you observed, what you only inferred and what you could not check. Do not call your own
   review acceptance.
+- Watching three people try the task finds the worst problems faster than any review. Fix the worst
+  first, with the smallest change that removes it.
+- Rank findings so the reader fixes the right thing first: **P0** blocks use (lost input, unreadable
+  text, an unreachable action), **P1** breaks a MUST, **P2** departs from a SHOULD without a reason,
+  **P3** is polish.
+- Write each fix as values, not adjectives: "48px to `clamp(40px, 6vw, 72px)`", not "bigger".
 
 ## What the checks cover
 
 | Item                                                     | Check                                                 |
 | -------------------------------------------------------- | ----------------------------------------------------- |
 | Raw colours, light-only fallbacks, off-scale spacing     | `verify:design` (static, configured packages)         |
+| Measure, leading, text size, heading spacing             | `packages/docs/test/browser/design-checklist.spec.ts` |
 | No horizontal scroll; navigation reachable; still motion | `packages/docs/test/browser/site-layout.spec.ts`      |
 | Five-second heading, trunk test, targets, focus, shift   | `packages/docs/test/browser/design-checklist.spec.ts` |
 | Readable without script or entrance motion               | `packages/docs/test/browser/layout-audit.spec.ts`     |

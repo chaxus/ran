@@ -156,7 +156,7 @@ r-glass:state(light) .badge {
 
 ### 流れる光と操作感
 
-`sheen` は動くハイライトを、`interactive` はホバー時の浮き上がりと跳ね返る押し込みを加えます。
+`sheen` は動くハイライトを、`interactive` はホバー時の浮き上がりと押し込んで滑らかに戻る反応を加えます。
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">

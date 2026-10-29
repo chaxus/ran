@@ -156,7 +156,7 @@ r-glass:state(light) .badge {
 
 ### 광택과 상호작용
 
-`sheen`은 움직이는 하이라이트를, `interactive`는 호버 시 떠오름과 되튀는 눌림을 더합니다.
+`sheen`은 움직이는 하이라이트를, `interactive`는 호버 시 떠오름과 눌렀다가 부드럽게 돌아오는 반응을 더합니다.
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">

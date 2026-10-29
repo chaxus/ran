@@ -250,7 +250,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-focus-ring`
 - `--ran-gray-700`
 - `--ran-motion-duration-base`
-- `--ran-motion-ease-bouncy`
+- `--ran-motion-ease-standard`
 - `--ran-size-1`
 - `--ran-skin-font-family`
 - `--ran-text-label-1`
@@ -473,7 +473,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-glass-transition`
 - `--ran-motion-duration-base`
 - `--ran-motion-duration-fast`
-- `--ran-motion-ease-spring`
+- `--ran-motion-ease-standard`
 - `--ran-radius-lg`
 - `--ran-shadow-elevated`
 

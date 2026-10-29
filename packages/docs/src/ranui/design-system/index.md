@@ -37,8 +37,9 @@ ranui adopts that ladder as its `--ran-*` scales, layers semantic tokens on top,
 **Layer 1: base palette.** The raw scales below. Rarely consumed directly.
 
 **Layer 2: semantic tokens.** `--ran-color-*` and friends, mapped onto layer 1. **Consume
-this layer.** Dark mode redefines only layer 1, so every semantic token flips through `var()`
-with no per-component dark overrides anywhere in the library.
+this layer.** Dark mode redefines layer 1 and only the few semantic tokens that cannot follow a
+single scale step (listed at the end of this page), so every other semantic token flips through
+`var()` with no per-component dark overrides anywhere in the library.
 
 ```
 --ran-gray-1000        →  #111113 (light)  /  #ededef (dark)     ← layer 1, flips
@@ -94,16 +95,16 @@ divider that must sit on unknown content.
 
 | Step | Light                                                                        | Dark                                                                         |
 | ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100  | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200  | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300  | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400  | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500  | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600  | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700  | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800  | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900  | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000 | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### Blue — `--ran-blue-100..1000`
 
@@ -175,14 +176,14 @@ Success.
 
 ### Semantic colour tokens
 
-The layer components actually read. Everything here resolves through the scales above, so it
-flips with the theme on its own.
+The layer components actually read. Apart from the literals noted below, everything here
+resolves through the scales above, so it flips with the theme on its own.
 
 | Token                              | Resolves to                                                                                                                              | Role                                              |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | `--ran-color-bg`                   | `--ran-background-100`                                                                                                                   | Page background                                   |
 | `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                   | Subtle page zones                                 |
-| `--ran-color-bg-elevated`          | `--ran-background-100` · gray-100 (dark)                                                                                                 | Cards, surfaces                                   |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · <span class="swatch" style="--swatch:#18181b"></span> `#18181b` (dark)                                          | Cards, surfaces                                   |
 | `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                         | Inset / muted fills                               |
 | `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                         | Hover surface                                     |
 | `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                         | Active (pressed) surface                          |
@@ -205,11 +206,13 @@ flips with the theme on its own.
 | `--ran-color-danger`               | `--ran-red-700`                                                                                                                          | Danger / error                                    |
 | `--ran-color-warning-foreground`   | `--ran-amber-900`                                                                                                                        | Warning text                                      |
 | `--ran-color-danger-foreground`    | `--ran-red-900`                                                                                                                          | Danger / error text                               |
-| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                         | Links                                             |
+| `--ran-color-link`                 | `--ran-blue-800` · <span class="swatch" style="--swatch:#5b9dff"></span> `#5b9dff` (dark)                                                | Links                                             |
 | `--ran-color-focus`                | `--ran-blue-700`                                                                                                                         | Focus colour: the ring and focus outlines         |
 
-`--ran-color-primary-hover` / `-active` are the two literals in the semantic layer: they step
-toward the page background rather than along a scale, so dark mode redefines them directly.
+`--ran-color-primary-hover` / `-active` are literals in both themes: they step toward the page
+background rather than along a scale, so dark mode redefines them directly. Dark mode also sets
+`--ran-color-bg-elevated` and `--ran-color-link` to literals, because neither tracks a single
+scale step there.
 
 `--ran-media-background` is `#000` in both themes. A video canvas stays dark beneath fixed white playback controls; Player derives `--ran-player-background` from it. This media role deliberately does not invert with the page palette.
 
@@ -355,19 +358,19 @@ with `!important`.
 
 ## Motion
 
-| Token                        | Value   | Use                              |
-| ---------------------------- | ------- | -------------------------------- |
-| `--ran-motion-duration-fast` | `0.14s` | Hover / active state transitions |
-| `--ran-motion-duration-base` | `0.2s`  | Popovers, menus                  |
-| `--ran-motion-duration-slow` | `0.28s` | Larger reveals                   |
+| Token                        | Value   | Use                                                         |
+| ---------------------------- | ------- | ----------------------------------------------------------- |
+| `--ran-motion-duration-fast` | `0.14s` | Short opacity fades and icon swaps; the reduced-motion fade |
+| `--ran-motion-duration-base` | `0.2s`  | Popovers, menus                                             |
+| `--ran-motion-duration-slow` | `0.28s` | Larger reveals                                              |
 
-| Easing token                 | Curve                            | Character                            |
-| ---------------------------- | -------------------------------- | ------------------------------------ |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | Decelerating, general purpose        |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | Quick, no overshoot: toggles         |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | Slight overshoot: buttons, cards     |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | Playful overshoot: like, add-to-cart |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | Calm, no overshoot: reveals, layout  |
+| Easing token                 | Curve                            | Character                                                                                                  |
+| ---------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | Decelerating, general purpose                                                                              |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | Quick, no overshoot: toggles                                                                               |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | Slight overshoot: one expressive moment a host chooses on a page that persuades; never a component default |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | Playful overshoot: the same opt-in host moment; no component uses it                                       |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | Calm, no overshoot: reveals, layout                                                                        |
 
 The spring family is distilled from tuned SwiftUI springs (response/damping reduced to a
 single-overshoot bézier).
@@ -380,13 +383,13 @@ still exposes a `--ran-*-transition` hook if you want to opt back in.
 
 ## Focus
 
-| Token                            | Value                                                                | For                                                         |
-| -------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700)` | The standard ring, as a `box-shadow`                        |
-| `--ran-focus-ring-inverse-color` | `#fff`                                                               | The ring colour for a surface that is dark in _both_ themes |
+| Token                            | Value                                                                   | For                                                         |
+| -------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-focus)` | The standard ring, as a `box-shadow`                        |
+| `--ran-focus-ring-inverse-color` | `#fff`                                                                  | The ring colour for a surface that is dark in _both_ themes |
 
-The ring is two layers: a background-coloured inner ring and a blue outer one, so it stays
-visible on any surface, and it stays blue rather than following the now-monochrome primary.
+The ring is two layers: a background-coloured inner ring and an outer one in `--ran-color-focus`
+(blue), so it stays visible on any surface, and it stays blue rather than following the now-monochrome primary.
 
 `--ran-focus-ring-inverse-color` is **deliberately not redefined in dark mode**: it exists for
 a component whose own surface is fixed-dark regardless of page theme (`r-player`'s control bar,
@@ -408,13 +411,15 @@ purpose: this layer used to be much larger and most of it was removed with the t
 ## What dark mode redefines
 
 `data-ran-theme="dark"` on `<html>` (or on any subtree, see [theming](/src/ranui/theme/))
-redefines **the base palette and nothing else**, with three exceptions that cannot resolve
+redefines **the base palette and nothing else**, with four exceptions that cannot resolve
 through a scale:
 
 - the whole of layer 1: every step of gray, gray-alpha, blue, red, amber, green, and both
   backgrounds;
-- `--ran-color-bg-elevated`, which points at `--ran-gray-100` in dark so a card lifts off a
+- `--ran-color-bg-elevated`, which is the literal `#18181b` in dark so a card lifts off a
   black page instead of vanishing into it;
+- `--ran-color-link`, which is the literal `#5b9dff` in dark so links keep their contrast on a
+  dark page;
 - `--ran-color-primary-hover` / `-active`, which are literals rather than scale references;
 - all three shadow tiers, retuned for a dark ground.
 

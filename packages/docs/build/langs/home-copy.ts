@@ -69,11 +69,9 @@ export interface HomeStrings {
   ctaSecondary: string;
   /** Labels under `STAT_NUMS`, in that order. */
   statLabels: [string, string, string, string];
-  proofKicker: string;
   proofTitle: string;
   /** The composed component states in the live-proof section. */
   proof: ProofCopy;
-  chooseKicker: string;
   chooseTitle: string;
   /** `{ title, desc, more }` for ranui, ranuts and the Ran Design pillar, in that order. */
   pillars: [Pair3, Pair3, Pair3];
@@ -82,7 +80,6 @@ export interface HomeStrings {
   capTags: [string, string];
   /** Keyed by the `kind` in `CAPS_STRUCTURE`. */
   caps: Record<string, Pair>;
-  startKicker: string;
   startTitle: string;
   startDesc: string;
   startStep1: string;
@@ -149,7 +146,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'Build with agents',
     ctaSecondary: 'Star on GitHub',
     statLabels: ['Components', 'Utilities', 'Languages', 'Licensed'],
-    proofKicker: 'Live components',
     proofTitle: 'Real states built with ranui',
     proof: {
       states: ['Uploading', 'Agent run', 'Loading'],
@@ -159,7 +155,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       meter: 'Context',
       glass: 'Glass',
     },
-    chooseKicker: 'Three pillars',
     chooseTitle: 'Choose where to start',
     pillars: [
       {
@@ -213,7 +208,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       scratch: { name: 'Scratch card', desc: 'An interactive canvas scratch-to-reveal with a completion threshold.' },
     },
-    startKicker: 'Quick start',
     startTitle: 'Install and use',
     startDesc:
       'Install both packages, register the elements once, and use them anywhere. No build step or framework required.',
@@ -244,7 +238,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: '使用 agent 构建',
     ctaSecondary: '前往 GitHub',
     statLabels: ['组件', '工具函数', '语言', '协议'],
-    proofKicker: '组件实例',
     proofTitle: '用 ranui 组合的真实状态',
     proof: {
       states: ['上传中', 'Agent 运行', '加载中'],
@@ -254,7 +247,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       meter: '上下文',
       glass: '玻璃材质',
     },
-    chooseKicker: '三个部分',
     chooseTitle: '选择从哪里开始',
     pillars: [
       {
@@ -290,7 +282,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sigma: { name: '数学公式', desc: '通过懒加载的 Temml，用一个属性把 LaTeX 公式渲染成原生 MathML。' },
       scratch: { name: '刮刮卡', desc: '可交互的 Canvas 刮开揭晓，带完成度阈值。' },
     },
-    startKicker: '快速开始',
     startTitle: '安装与使用',
     startDesc: '安装两个包，注册一次元素，即可在任意地方使用，无需构建步骤，也不依赖任何框架。',
     startStep1: '安装并注册',
@@ -320,7 +311,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'エージェントで構築',
     ctaSecondary: 'GitHub でスターする',
     statLabels: ['コンポーネント', 'ユーティリティ', '言語', 'ライセンス'],
-    proofKicker: 'ライブコンポーネント',
     proofTitle: 'ranui で組んだ実際の状態',
     proof: {
       states: ['アップロード中', 'エージェント実行', '読み込み中'],
@@ -330,7 +320,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       meter: 'コンテキスト',
       glass: 'ガラス',
     },
-    chooseKicker: '3 つの柱',
     chooseTitle: 'どこから始めるか選ぶ',
     pillars: [
       {
@@ -384,7 +373,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sigma: { name: '数式', desc: '遅延読み込みの Temml で、属性ひとつから LaTeX をネイティブ MathML に描画します。' },
       scratch: { name: 'スクラッチカード', desc: '完了しきい値つきの、削って表示する Canvas インタラクション。' },
     },
-    startKicker: 'クイックスタート',
     startTitle: 'インストールして使う',
     startDesc:
       '2 つのパッケージを入れ、要素を一度登録すれば、どこでも使えます。ビルド工程もフレームワークも必要ありません。',
@@ -416,7 +404,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'Crear con agentes',
     ctaSecondary: 'Dar una estrella en GitHub',
     statLabels: ['Componentes', 'Utilidades', 'Idiomas', 'Licencia'],
-    proofKicker: 'Componentes en vivo',
     proofTitle: 'Estados reales hechos con ranui',
     proof: {
       states: ['Subiendo', 'Ejecución del agente', 'Cargando'],
@@ -426,7 +413,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       meter: 'Contexto',
       glass: 'Vidrio',
     },
-    chooseKicker: 'Tres pilares',
     chooseTitle: 'Elige por dónde empezar',
     pillars: [
       {
@@ -483,7 +469,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       scratch: { name: 'Tarjeta rasca y gana', desc: 'Un raspado interactivo en canvas, con umbral de finalización.' },
     },
-    startKicker: 'Primeros pasos',
     startTitle: 'Instalar y usar',
     startDesc:
       'Instala ambos paquetes, registra los elementos una vez y úsalos donde quieras. Sin paso de compilación ni framework.',
@@ -515,7 +500,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'Criar com agentes',
     ctaSecondary: 'Dar uma estrela no GitHub',
     statLabels: ['Componentes', 'Utilitários', 'Idiomas', 'Licença'],
-    proofKicker: 'Componentes ao vivo',
     proofTitle: 'Estados reais feitos com ranui',
     proof: {
       states: ['Enviando', 'Execução do agente', 'Carregando'],
@@ -525,7 +509,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       meter: 'Contexto',
       glass: 'Vidro',
     },
-    chooseKicker: 'Três pilares',
     chooseTitle: 'Escolha por onde começar',
     pillars: [
       {
@@ -582,7 +565,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       scratch: { name: 'Cartão raspadinha', desc: 'Uma raspagem interativa em canvas, com limiar de conclusão.' },
     },
-    startKicker: 'Primeiros passos',
     startTitle: 'Instalar e usar',
     startDesc:
       'Instale os dois pacotes, registre os elementos uma vez e use-os em qualquer lugar. Sem etapa de build nem framework.',
@@ -614,7 +596,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: '에이전트로 만들기',
     ctaSecondary: 'GitHub에서 스타 주기',
     statLabels: ['컴포넌트', '유틸리티', '언어', '라이선스'],
-    proofKicker: '라이브 컴포넌트',
     proofTitle: 'ranui로 만든 실제 상태',
     proof: {
       states: ['업로드 중', '에이전트 실행', '불러오는 중'],
@@ -624,7 +605,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       meter: '컨텍스트',
       glass: '유리',
     },
-    chooseKicker: '세 가지 축',
     chooseTitle: '시작할 곳 고르기',
     pillars: [
       {
@@ -675,7 +655,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       sigma: { name: '수식', desc: '지연 로딩되는 Temml로, 속성 하나만으로 LaTeX을 네이티브 MathML로 렌더링합니다.' },
       scratch: { name: '스크래치 카드', desc: '완료 임계값이 있는, 긁어서 드러내는 canvas 인터랙션.' },
     },
-    startKicker: '빠른 시작',
     startTitle: '설치하고 사용하기',
     startDesc:
       '두 패키지를 설치하고 엘리먼트를 한 번만 등록하면 어디서든 씁니다. 빌드 단계도 프레임워크도 필요 없습니다.',
@@ -707,7 +686,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'Mit Agenten entwickeln',
     ctaSecondary: 'Auf GitHub mit Stern versehen',
     statLabels: ['Komponenten', 'Utilities', 'Sprachen', 'Lizenz'],
-    proofKicker: 'Live-Komponenten',
     proofTitle: 'Echte Zustände, gebaut mit ranui',
     proof: {
       states: ['Hochladen', 'Agent-Lauf', 'Laden'],
@@ -717,7 +695,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       meter: 'Kontext',
       glass: 'Glas',
     },
-    chooseKicker: 'Drei Säulen',
     chooseTitle: 'Wähle deinen Einstieg',
     pillars: [
       {
@@ -774,7 +751,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       scratch: { name: 'Rubbelkarte', desc: 'Interaktives Freirubbeln auf Canvas, mit Schwelle für „fertig“.' },
     },
-    startKicker: 'Schnellstart',
     startTitle: 'Installieren und verwenden',
     startDesc:
       'Beide Pakete installieren, die Elemente einmal registrieren, überall verwenden. Kein Build-Schritt, kein Framework nötig.',
@@ -806,7 +782,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
     ctaPrimary: 'ساخت با عامل\u200cها',
     ctaSecondary: 'ستاره دادن در گیت‌هاب',
     statLabels: ['کامپوننت', 'ابزار', 'زبان', 'مجوز'],
-    proofKicker: 'کامپوننت‌های زنده',
     proofTitle: 'حالت‌های واقعی ساخته‌شده با ranui',
     proof: {
       states: ['در حال آپلود', 'اجرای عامل', 'در حال بارگیری'],
@@ -816,7 +791,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       meter: 'زمینه',
       glass: 'شیشه',
     },
-    chooseKicker: 'سه بخش',
     chooseTitle: 'از کجا شروع کنید',
     pillars: [
       {
@@ -867,7 +841,6 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       scratch: { name: 'کارت اسکراچ', desc: 'تعامل خراشیدن و آشکار شدن روی canvas، با آستانهٔ تکمیل.' },
     },
-    startKicker: 'شروع سریع',
     startTitle: 'نصب و استفاده',
     startDesc:
       'هر دو بسته را نصب کنید، عناصر را یک بار ثبت کنید و هرجا خواستید به کار ببرید. نه مرحلهٔ ساخت لازم است نه فریم‌ورک.',
@@ -909,10 +882,8 @@ export const homeCopy = (dir: string) => {
     ctaPrimary: s.ctaPrimary,
     ctaSecondary: s.ctaSecondary,
     stats: STAT_NUMS.map((num, i) => ({ num, label: s.statLabels[i] })),
-    proofKicker: s.proofKicker,
     proofTitle: s.proofTitle,
     proof: s.proof,
-    chooseKicker: s.chooseKicker,
     chooseTitle: s.chooseTitle,
     pillars: PILLAR_STRUCTURE.map((p, i) => ({ ...p, ...s.pillars[i] })),
     capsTitle: s.capsTitle,
@@ -921,7 +892,6 @@ export const homeCopy = (dir: string) => {
       tag: s.capTags[i],
       items: col.items.map((it) => ({ kind: it.kind, api: it.api, ...s.caps[it.kind] })),
     })),
-    startKicker: s.startKicker,
     startTitle: s.startTitle,
     startDesc: s.startDesc,
     startStep1: s.startStep1,

@@ -108,6 +108,34 @@ const RUNTIME_CHILDREN = /\/\/\s*runtime children:\s*\S/;
  */
 const DEFERRED_MOUNT = /\/\/\s*deferred mount:\s*\S/;
 
+/**
+ * A reasoned exception to any rule: a comment reading
+ * `design-ok: bare-colour glass ink follows the backdrop, not the theme`, either at the end of the
+ * offending line or alone on the line above it. Several ids may be listed, comma-separated. The
+ * reason is required and must start with a word: an exception that cannot say why is a violation.
+ */
+const DESIGN_OK = /design-ok:\s*([a-z-]+(?:\s*,\s*[a-z-]+)*)\s+[\p{L}\p{N}]/u;
+/** A line holding nothing but a comment, so an exception on it can only be about the next line. */
+const COMMENT_ONLY = /^\s*(\/\*|\/\/)/;
+
+/**
+ * Whether a violation carries a reasoned exception for its rule.
+ *
+ * @param raw The file's lines as written, comments included.
+ * @param line The violation's 1-based line.
+ * @param rule The rule id.
+ * @returns True when that line, or a comment-only line above it, names the rule with a reason.
+ */
+function excused(raw: string[], line: number, rule: string): boolean {
+  const own = raw[line - 1];
+  const above = raw[line - 2];
+  const candidates = [own, above !== undefined && COMMENT_ONLY.test(above) ? above : undefined];
+  return candidates.some((text) => {
+    const ids = text === undefined ? null : DESIGN_OK.exec(text)?.[1];
+    return !!ids && ids.split(',').some((id) => id.trim() === rule);
+  });
+}
+
 /** Colour literal in any CSS notation. */
 /**
  * Stylesheet extensions these rules read.
@@ -213,19 +241,22 @@ const RULES: Rule[] = [
   },
   {
     id: 'spacing-scale',
-    summary: 'spacing uses a literal length instead of the `--ran-space-*` scale',
-    fix: 'Use `var(--ran-space-N)`. The scale is 4px-based with nine steps; a one-off inset that is genuinely not shared belongs in a component token with its own fallback.',
+    summary: 'spacing is off the 4px scale, or a library component spells a step as a literal',
+    fix: 'Use a step of the 4px scale. Inside the library write it as `var(--ran-space-N)`, so a consumer who retunes the scale moves every component; elsewhere `8px` is as good as the token.',
     extensions: STYLESHEETS,
     scan(source, file) {
       const property = /^\s*(padding|margin|gap|row-gap|column-gap)(-(top|right|bottom|left))?\s*:\s*([^;]+);/;
       const exempt = /^(0|auto|inherit|unset|initial|revert)$/;
+      // A consumer of the scale only needs its values; the library has to name them.
+      const library = path.resolve(ROOT, file).startsWith(LIBRARY_COMPONENTS);
+      const onScale = (part: string): boolean => /^-?(4|8|12|16|24|32|40|64|96)px$/.test(part);
       const out: Violation[] = [];
       lines(source).forEach((line, i) => {
         const m = property.exec(line);
         if (!m) return;
         const value = m[4].trim();
         if (value.includes('var(--')) return;
-        if (value.split(/\s+/).every((part) => exempt.test(part))) return;
+        if (value.split(/\s+/).every((part) => exempt.test(part) || (!library && onScale(part)))) return;
         out.push({ file, line: i + 1, text: `${m[1]}${m[2] ?? ''}: ${value}` });
       });
       return out;
@@ -448,7 +479,9 @@ async function main(): Promise<void> {
   for (const rule of RULES) {
     const violations: Violation[] = [];
     for (const file of await collect(rule.extensions, rule.roots)) {
-      violations.push(...rule.scan(await fs.readFile(path.join(ROOT, file), 'utf8'), file));
+      const source = await fs.readFile(path.join(ROOT, file), 'utf8');
+      const raw = source.split('\n');
+      violations.push(...rule.scan(source, file).filter((v) => !excused(raw, v.line, rule.id)));
     }
     found.set(rule.id, violations);
   }

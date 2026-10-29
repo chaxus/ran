@@ -27,7 +27,7 @@ ranui adopta esa escalera como sus escalas `--ran-*`, superpone tokens semántic
 
 **Capa 1: la paleta base.** Las escalas crudas de abajo. Rara vez se consumen directamente.
 
-**Capa 2: los tokens semánticos.** `--ran-color-*` y compañía, mapeados sobre la capa 1. **Consume esta capa.** El modo oscuro redefine solo la capa 1, así que cada token semántico cambia a través de `var()` sin una sola sobreescritura oscura por componente en toda la biblioteca.
+**Capa 2: los tokens semánticos.** `--ran-color-*` y compañía, mapeados sobre la capa 1. **Consume esta capa.** El modo oscuro redefine la capa 1 y solo los pocos tokens semánticos que no siguen un único paso de escala (enumerados al final de esta página), así que el resto de tokens semánticos cambia a través de `var()` sin una sola sobreescritura oscura por componente en toda la biblioteca.
 
 ```
 --ran-gray-1000        →  #111113 (claro)  /  #ededef (oscuro)   ← capa 1, cambia
@@ -81,16 +81,16 @@ Translúcida, así que se superpone a cualquier superficie: la elección correct
 
 | Peldaño | Claro                                                                        | Oscuro                                                                       |
 | ------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100     | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200     | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300     | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400     | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500     | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600     | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700     | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800     | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900     | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000    | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100     | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200     | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300     | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400     | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500     | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600     | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700     | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800     | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900     | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000    | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### Azul — `--ran-blue-100..1000`
 
@@ -162,13 +162,13 @@ Advertencias.
 
 ### Tokens semánticos de color
 
-La capa que los componentes leen de verdad. Todo lo de aquí se resuelve a través de las escalas de arriba, así que cambia con el tema por sí solo.
+La capa que los componentes leen de verdad. Salvo los literales indicados abajo, todo lo de aquí se resuelve a través de las escalas de arriba, así que cambia con el tema por sí solo.
 
 | Token                              | Se resuelve en                                                                                                                             | Rol                                                    |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
 | `--ran-color-bg`                   | `--ran-background-100`                                                                                                                     | Fondo de la página                                     |
 | `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                     | Zonas sutiles de la página                             |
-| `--ran-color-bg-elevated`          | `--ran-background-100` · gray-100 (oscuro)                                                                                                 | Tarjetas, superficies                                  |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · <span class="swatch" style="--swatch:#18181b"></span> `#18181b` (oscuro)                                          | Tarjetas, superficies                                  |
 | `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                           | Rellenos hundidos o apagados                           |
 | `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                           | Superficie del hover                                   |
 | `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                           | Superficie activa (pulsada)                            |
@@ -189,10 +189,10 @@ La capa que los componentes leen de verdad. Todo lo de aquí se resuelve a trav�
 | `--ran-color-success`              | `--ran-green-700`                                                                                                                          | Éxito                                                  |
 | `--ran-color-warning`              | `--ran-amber-700`                                                                                                                          | Advertencia                                            |
 | `--ran-color-danger`               | `--ran-red-700`                                                                                                                            | Peligro / error                                        |
-| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                           | Enlaces                                                |
+| `--ran-color-link`                 | `--ran-blue-800` · <span class="swatch" style="--swatch:#5b9dff"></span> `#5b9dff` (oscuro)                                                | Enlaces                                                |
 | `--ran-color-focus`                | `--ran-blue-700`                                                                                                                           | Color de foco: el anillo y los contornos de foco       |
 
-`--ran-color-primary-hover` / `-active` son los dos literales de la capa semántica: avanzan hacia el fondo de la página en lugar de a lo largo de una escala, así que el modo oscuro los redefine directamente.
+`--ran-color-primary-hover` / `-active` son literales en ambos temas: avanzan hacia el fondo de la página en lugar de a lo largo de una escala, así que el modo oscuro los redefine directamente. El modo oscuro también fija `--ran-color-bg-elevated` y `--ran-color-link` como literales, porque allí ninguno de los dos sigue un único paso de escala.
 
 ### Qué significa cada acento
 
@@ -313,19 +313,19 @@ La escalera empieza en 1000 para superar el marco habitual de una página (las b
 
 ## Movimiento
 
-| Token                        | Valor   | Uso                                   |
-| ---------------------------- | ------- | ------------------------------------- |
-| `--ran-motion-duration-fast` | `0.14s` | Transiciones de hover y estado activo |
-| `--ran-motion-duration-base` | `0.2s`  | Popovers, menús                       |
-| `--ran-motion-duration-slow` | `0.28s` | Apariciones mayores                   |
+| Token                        | Valor   | Uso                                                                                |
+| ---------------------------- | ------- | ---------------------------------------------------------------------------------- |
+| `--ran-motion-duration-fast` | `0.14s` | Fundidos breves de opacidad y cambios de icono; el fundido con movimiento reducido |
+| `--ran-motion-duration-base` | `0.2s`  | Popovers, menús                                                                    |
+| `--ran-motion-duration-slow` | `0.28s` | Apariciones mayores                                                                |
 
-| Token de aceleración         | Curva                            | Carácter                                     |
-| ---------------------------- | -------------------------------- | -------------------------------------------- |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | Desacelerada, de uso general                 |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | Rápida, sin rebote: interruptores            |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | Rebote leve: botones, tarjetas               |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | Rebote juguetón: me gusta, añadir al carrito |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | Serena, sin rebote: apariciones, maquetación |
+| Token de aceleración         | Curva                            | Carácter                                                                                                                                  |
+| ---------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | Desacelerada, de uso general                                                                                                              |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | Rápida, sin rebote: interruptores                                                                                                         |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | Rebote leve: un único momento expresivo que el anfitrión elige en una página que persuade; nunca es el valor por defecto de un componente |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | Rebote juguetón: el mismo momento opcional del anfitrión; ningún componente lo usa                                                        |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | Serena, sin rebote: apariciones, maquetación                                                                                              |
 
 La familia spring está destilada de muelles afinados de SwiftUI (response/damping reducidos a una bézier de un solo rebote).
 
@@ -333,12 +333,12 @@ La familia spring está destilada de muelles afinados de SwiftUI (response/dampi
 
 ## Foco
 
-| Token                            | Valor                                                                | Para                                                            |
-| -------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700)` | El anillo estándar, como `box-shadow`                           |
-| `--ran-focus-ring-inverse-color` | `#fff`                                                               | El color del anillo para una superficie oscura en _ambos_ temas |
+| Token                            | Valor                                                                   | Para                                                            |
+| -------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-focus)` | El anillo estándar, como `box-shadow`                           |
+| `--ran-focus-ring-inverse-color` | `#fff`                                                                  | El color del anillo para una superficie oscura en _ambos_ temas |
 
-El anillo tiene dos capas: una interior del color del fondo y otra exterior azul, así que sigue viéndose sobre cualquier superficie, y se queda azul en vez de seguir al primario, ahora monocromo.
+El anillo tiene dos capas: una interior del color del fondo y otra exterior en `--ran-color-focus` (azul), así que sigue viéndose sobre cualquier superficie, y se queda azul en vez de seguir al primario, ahora monocromo.
 
 `--ran-focus-ring-inverse-color` **no se redefine en modo oscuro a propósito**: existe para un componente cuya propia superficie es oscura fija, sea cual sea el tema de la página (la barra de control de `r-player`, sobre un vídeo cualquiera), y esa superficie no cambia cuando cambia la página.
 
@@ -356,10 +356,11 @@ Los pocos valores estructurales que comparten los componentes y que no son color
 
 ## Qué redefine el modo oscuro
 
-`data-ran-theme="dark"` en `<html>` (o en cualquier subárbol, véase [tematización](/es/src/ranui/theme/)) redefine **la paleta base y nada más**, con tres excepciones que no pueden resolverse a través de una escala:
+`data-ran-theme="dark"` en `<html>` (o en cualquier subárbol, véase [tematización](/es/src/ranui/theme/)) redefine **la paleta base y nada más**, con cuatro excepciones que no pueden resolverse a través de una escala:
 
 - toda la capa 1: cada peldaño de gris, gris alfa, azul, rojo, ámbar y verde, y los dos fondos;
-- `--ran-color-bg-elevated`, que en oscuro apunta a `--ran-gray-100` para que una tarjeta se levante de una página negra en vez de desaparecer en ella;
+- `--ran-color-bg-elevated`, que en oscuro es el literal `#18181b` para que una tarjeta se levante de una página negra en vez de desaparecer en ella;
+- `--ran-color-link`, que en oscuro es el literal `#5b9dff` para que los enlaces mantengan el contraste sobre una página oscura;
 - `--ran-color-primary-hover` / `-active`, que son literales y no referencias a una escala;
 - los tres niveles de sombra, reafinados para un fondo oscuro.
 
