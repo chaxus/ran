@@ -38,6 +38,12 @@ engineering rules are listed in [CODING](../CODING.md#what-is-machine-checked).
 CI fails on a new violation. The per-file baseline records existing debt to clear, not permission to
 add more.
 
+A rule broken on purpose says so where it happens: a comment on the line or the line above reading
+`design-ok: <rule> <reason>` (for example `/* design-ok: bare-colour the ink follows the backdrop */`)
+exempts that line. The reason is required, so a reviewer can judge it. Outside the library,
+`spacing-scale` only asks for a step of the 4px scale; `8px` is as good as `var(--ran-space-2)`
+there.
+
 `pnpm -F ranui design:bundle` captures the live documentation components and the resolved light and
 dark tokens into one browsable bundle (run `pnpm -F docs build` and `pnpm -F docs preview` first). Its
 cards are rendered ranui output, and it reports components that have no live demo. A bundle shows the
@@ -236,6 +242,7 @@ A host may alias the foundation under its own names, as long as the values deriv
   --app-command-gap: var(--ran-space-2);
   color: var(--ran-color-text);
   background: var(--ran-color-bg);
+  font-family: var(--ran-font-family);
 }
 .workspace-command {
   min-block-size: var(--app-command-target);

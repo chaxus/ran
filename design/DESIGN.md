@@ -25,6 +25,9 @@ question: compare → table, recognise and open → list, one object's state →
 → step flow, what happened → timeline, continuous text → document. Put identity and status first,
 the primary action in the title region, and feedback beside the action that caused it.
 
+Count how hard each choice is, not how many clicks it takes: several steps that each need no thought
+beat one crowded screen where every option does.
+
 Name the surface's mode, because it decides how much expression the page can spend. A tool
 (dashboards, settings, editors) and a document (docs, articles, changelogs) spend it on precision and
 restraint, in patterns the reader already knows; a page that persuades (a landing or pricing page) can
@@ -99,7 +102,8 @@ MUST be able to answer, without scrolling:
 - A component's box contains everything it paints. Rotated, fanned or offset parts stay inside it.
 - MUST: text and values are never clipped. If something must truncate, the full value stays
   reachable (a tooltip, an expanded row, the detail page).
-- Actions stay reachable without hover, and at every width.
+- Actions stay reachable without hover, and at every width. Anything clickable looks clickable at rest:
+  touch has no hover to reveal it.
 
 ## Interaction
 
@@ -110,6 +114,8 @@ MUST be able to answer, without scrolling:
   not touch its neighbours (WCAG 2.5.8). Links inside running text are exempt. **(checked)**
 - MUST: input is never lost. Drafts, focus, caret and reading position survive updates, failures and
   animation. Do not replace an input someone is typing in.
+- Accept input the way people type it (spaces in a phone number, a pasted value with a trailing
+  space) rather than rejecting it, and ask only for what the task needs.
 - Validation sits on the field; one activation sends once; success appears only after it is
   confirmed; a failure keeps every entry and says how to recover.
 - Each async result is tied to the request that produced it, so a late answer never overwrites a
@@ -139,6 +145,9 @@ MUST be able to answer, without scrolling:
 
 From Krug again: remove half the words, then half of what is left.
 
+- Make things self-evident before making them self-explanatory: name them the way readers already
+  do, and follow conventions unless the new way is clearly better. A clever name costs a moment of
+  thought every time it is read.
 - Name actions for what they do ("Send invite", not "Submit"). No welcome text or instructions that
   restate the layout.
 - Keep what adds a decision, constraint or consequence: accessible names, field labels, units,
@@ -156,6 +165,8 @@ From Krug again: remove half the words, then half of what is left.
 - Run the five-second and trunk tests on any page whose structure changed.
 - Report what you observed, what you only inferred and what you could not check. Do not call your own
   review acceptance.
+- Watching three people try the task finds the worst problems faster than any review. Fix the worst
+  first, with the smallest change that removes it.
 - Rank findings so the reader fixes the right thing first: **P0** blocks use (lost input, unreadable
   text, an unreachable action), **P1** breaks a MUST, **P2** departs from a SHOULD without a reason,
   **P3** is polish.

@@ -156,7 +156,7 @@ r-glass:state(light) .badge {
 
 ### 流光与交互
 
-`sheen` 加一道流动的高光；`interactive` 加上 hover 抬升和带回弹的按下反馈。
+`sheen` 加一道流动的高光；`interactive` 加上 hover 抬升和按下后平稳复位的反馈。
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">

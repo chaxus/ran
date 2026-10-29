@@ -156,7 +156,7 @@ r-glass:state(light) .badge {
 
 ### Brillo e interacción
 
-`sheen` añade un brillo en movimiento; `interactive` añade una elevación al pasar el cursor y una pulsación que rebota.
+`sheen` añade un brillo en movimiento; `interactive` añade una elevación al pasar el cursor y una pulsación que vuelve a su sitio sin rebote.
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">

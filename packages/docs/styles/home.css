@@ -289,17 +289,8 @@
 .sec-head {
   margin-bottom: var(--ran-space-8, 32px);
 }
-.kicker {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--type-label-3, 12px);
-  font-weight: var(--type-label-weight, 500);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-}
 .sec-head h2 {
-  margin: var(--ran-space-3, 12px) 0 0;
+  margin: 0;
   padding: 0;
   border: 0;
   font-family: var(--font-sans);
@@ -671,10 +662,9 @@
   color: var(--fg-muted);
 }
 
-/* Persian joins its letters; tracking breaks the joins, so eyebrows and heads set none. */
+/* Persian joins its letters; tracking breaks the joins, so labels and heads set none. */
 .headline:lang(fa),
 .sec-head h2:lang(fa),
-.kicker:lang(fa),
 .live-head:lang(fa),
 .proof-cap:lang(fa),
 .caps-lib-tag:lang(fa),
@@ -683,7 +673,6 @@
 }
 /* The mono face has no Arabic glyphs; its fallback sets each letter on its own cell and
    breaks the joins too. Persian labels read in the sans face instead. */
-.kicker:lang(fa),
 .live-head:lang(fa),
 .proof-cap:lang(fa),
 .caps-lib-tag:lang(fa),

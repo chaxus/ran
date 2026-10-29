@@ -1,29 +1,37 @@
 ---
-description: 'Reglas de diseño para construir pantallas con ranui: elige un rol y deja que el token ponga el valor, diseña todos los estados alcanzables y verifica lo que de verdad se dibujó.'
+description: 'Cómo aplicar ranui en una pantalla: elige un rol y deja que el token ponga el valor, diseña todos los estados alcanzables y comprueba lo que de verdad se dibujó.'
 ---
 
 # Pautas de diseño
 
-Las reglas que debe seguir una pantalla hecha con componentes de ranui para que se lea como **un sistema** y no como un montón de piezas.
+Cómo aplicar ranui en una pantalla real: elige un rol y un estado, y deja que los tokens pongan los valores.
 
-Esta página trata del **criterio**: a qué token echar mano, qué comprobar antes de publicar. El catálogo de tokens en sí es el [sistema de diseño](/es/src/ranui/design-system/); cambiar y sobrescribir en tiempo de ejecución es la [tematización](/es/src/ranui/theme/); qué forma toma la página antes de todo eso es la [arquitectura de información](/es/src/ranui/information-architecture/). Las reglas completas están en el repositorio, en la [guía de diseño](https://github.com/chaxus/ran/blob/main/design/DESIGN.md) y el [adaptador de implementación de ranui](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md); [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) se genera a partir de ambos.
+Las reglas en sí viven en dos sitios, y esta página enlaza a ellos en vez de repetirlas: la
+[guía de diseño](/src/design/guide) para el método que vale en cualquier producto, y el
+[adaptador de implementación de ranui](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)
+para los tokens, niveles y reglas de componentes de ranui. Ambos se distribuyen en `node_modules/ranui/docs/DESIGN.md`. El
+[sistema de diseño](/es/src/ranui/design-system/) lista cada token y su valor, la
+[tematización](/es/src/ranui/theme/) cubre las sobrescrituras en tiempo de ejecución y la
+[arquitectura de información](/es/src/ranui/information-architecture/) cubre la estructura de la página.
 
-> **Úsalas cuando** estés maquetando una página o construyendo un componente propio a partir de elementos `<r-*>` y tengas que decidir un color, un espacio, un tamaño de texto, una sombra o una duración de animación. La respuesta corta es siempre la misma: **elige un rol y deja que el token ponga el valor.**
+> **Úsalas cuando** elijas color, espacio, tipografía, profundidad o movimiento para una pantalla hecha con elementos `<r-*>`.
 
 ## Principios
 
-1. **Claridad antes que personalidad.** La tarea principal y la acción principal deben ser inconfundibles antes de considerar ninguna otra cosa.
-2. **Reutiliza los controles existentes.** Usa controles nativos semánticos o componentes compatibles como `r-button`, `r-input`, `r-select` y `r-modal` cuando se ajusten a la necesidad. Conserva su comportamiento de formulario, teclado y accesibilidad en vez de reconstruirlo solo para cambiar el estilo.
-3. **Tokens, nunca valores crudos.** Un código hexadecimal, un espacio de `20px` o una sombra elegida a mano son decisiones que no van a seguir al tema.
-4. **Decide por rol y por estado, no a ojo.** «¿Qué es este texto?» (título / etiqueta / cuerpo / botón) tiene respuesta; «¿qué tamaño se ve bien?» no la tiene.
-5. **Diseña todos los estados alcanzables.** Normal, hover, activo, foco, deshabilitado, cargando, vacío, error: el estado normal es uno de ocho.
-6. **Verifica lo que se dibujó.** En claro _y_ oscuro, estrecho _y_ ancho, con ratón _y_ con dedo. Una revisión no atrapa una sombra que no se ve.
+1. **Claridad antes que personalidad.** Lo primero es que la tarea principal y la acción principal sean inconfundibles.
+2. **Reutiliza los controles existentes.** `r-button`, `r-input`, `r-select` y `r-modal` ya traen el comportamiento de formulario,
+   teclado y accesibilidad; cámbiales el estilo en vez de reconstruirlos.
+3. **Decide por rol y por estado.** «¿Qué es este texto?» tiene respuesta; «¿qué tamaño se ve bien?» no
+   la tiene. El token del rol pone el valor, y ese valor sigue al tema.
+4. **Diseña todos los estados alcanzables y mira el resultado.** El estado normal es uno de ocho, y una
+   sombra que nadie ve solo se descubre en un navegador.
 
-Orden de prioridad cuando dos reglas tiran en direcciones distintas: **objetivos de quien usa → evidencia verificada → estas pautas → patrones ya publicados → heurísticas generales.**
+Son puntos de partida. Apártate de uno cuando la pantalla gane con ello, y explica por qué.
 
 ## Elegir un color
 
-El color se asigna por **rol y estado**, nunca se escoge a ojo. La [escalera](/es/src/ranui/design-system/#the-ladder) ya fija cómo se ven el hover y el estado activo; tu trabajo es nombrar el rol.
+La [escalera](/es/src/ranui/design-system/#the-ladder) ya decide cómo se ven el hover y el estado activo;
+tu trabajo es nombrar el rol.
 
 | El elemento es…                          | Usa                                                            |
 | ---------------------------------------- | -------------------------------------------------------------- |
@@ -35,48 +43,51 @@ El color se asigna por **rol y estado**, nunca se escoge a ojo. La [escalera](/e
 | Un estado                                | `--ran-color-success` / `-warning` / `-danger`                 |
 | Un enlace                                | `--ran-color-link`                                             |
 
-**Cada acento tiene un solo significado.** El primario es monocromo (negro sobre blanco en claro, blanco sobre negro en oscuro), así que no uses azul para él: el azul es de los enlaces y del anillo de foco. El verde es éxito, el ámbar advertencia y el rojo peligro; usar el rojo para enfatizar te deja sin manera de usarlo luego para el peligro.
+**Cada acento tiene un solo significado.** El primario es monocromo, así que el azul queda para los enlaces y el
+anillo de foco; el verde es éxito, el ámbar advertencia y el rojo peligro. Usar rojo para resaltar te deja
+sin nada con qué decir «peligro» más adelante.
 
-**Tres reglas que evitan roturas silenciosas:**
-
-- Nunca escribas a mano un hexadecimal o un `rgb()` para un valor que debería seguir al tema.
-- Un respaldo debe nombrar **un token que cambie con el tema**: `var(--ran-color-text, var(--ran-gray-1000))`, nunca `var(--ran-color-text, #171717)`: un literal pensado solo para el modo claro desaparece en oscuro.
-- Un respaldo debe nombrar un token que **exista**. Un `var()` sobre una propiedad no declarada se resuelve en nada, la declaración entera se descarta y el elemento se queda con lo que heredó, que normalmente se ve _casi_ bien. (`--ran-color-error` no existe; es `--ran-color-danger`.)
+Un hexadecimal crudo, un valor de reserva que no cambia con el tema o uno que nombra un token que no
+existe se rompe sin avisar en modo oscuro o anula la declaración entera; las
+[reglas de color](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#ranui-color) del adaptador
+explican cada caso, y `verify:design` los detecta en el código fuente de ranui.
 
 ## Espacio y ritmo
 
-Toma cada espacio de la [escala de nueve valores](/es/src/ranui/design-system/#spacing) y deja que la distancia signifique algo:
+Toma los espacios de la [escala de 4px](/es/src/ranui/design-system/#spacing) y deja que la distancia signifique algo:
 
 - **8px** entre elementos dentro de un grupo.
 - **16px** entre grupos.
 - **24–32px** entre regiones.
 
-No inventes `20px` ni `28px`. El conjunto limitado es lo que produce el ritmo de la página; un solo espacio fuera de la escala es lo que lo rompe. Mantén ejes compartidos entre regiones (bordes, líneas base y columnas que se alinean) y comprueba la alineación contra los píxeles dibujados, no a ojo.
-
-El ritmo vertical depende de la relación: título/descripción y campo/ayuda pueden usar 8px,
-los grupos separados 16px y las subsecciones relacionadas 24px. Cada separación debe tener
-un solo responsable; cuente los márgenes de los hijos, el relleno existente y el espacio de
-línea base de los controles en línea. Compruebe los saltos de línea, la ayuda oculta y los
-errores en el navegador. Las
-La sección de [lenguaje visual](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language) de la guía fija estas relaciones de espaciado, y [verificar un cambio](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) explica cómo comprobarlas, sin cambiar los valores predeterminados de los componentes.
+Un espacio menor significa una relación más estrecha, así que basta un espacio fuera de la escala para romper el ritmo. Da a cada
+espacio un único responsable: cuenta el margen del hijo y el relleno del padre antes de añadir un tercer espacio entre
+ellos.
 
 ## Elegir la tipografía
 
-Pregunta qué **rol** cumple el texto (título, etiqueta, cuerpo, botón, monoespaciado) y la fuente, el tamaño, el grosor y la altura de línea salen todos de la [escala tipográfica](/es/src/ranui/design-system/#typography). No elijas píxeles crudos caso por caso.
-
-Un rol es una herramienta, no una ley: un texto decorativo genuinamente irrepetible (una capa de destello para un gesto, un grosor extra en el enlace activo) queda mejor con su propio token de componente que forzado dentro del rol más cercano.
+Pregunta qué **rol** cumple el texto (título, etiqueta, cuerpo, botón, monoespaciado); la fuente, el tamaño, el grosor y la
+altura de línea salen de la [escala tipográfica](/es/src/ranui/design-system/#typography). Un texto de verdad excepcional,
+como el aviso de un gesto sobre un vídeo, queda mejor con su propio token de componente que forzado al
+rol más cercano.
 
 ## Profundidad: sombra y apilamiento
 
-**Elige el nivel de sombra por lo que es el elemento** (superficie en el flujo, capa flotante o diálogo que bloquea) y asegúrate de que se percibe de verdad. Una sombra que no se ve no da ninguna pista de profundidad, y una capa flotante que cae al nivel de tarjeta parece clavada a la página.
+Elige el nivel de sombra según lo que es el elemento: una superficie dentro del flujo, una capa flotante o un diálogo
+que bloquea. Una capa que cae al nivel de las tarjetas parece clavada a la página.
 
-**Incrustar capas de ranui en tu propio marco.** La [escalera de z-index](/es/src/ranui/design-system/#stacking) empieza en 1000 justamente para superar el marco habitual de una página. Una capa portalizada no necesita ayuda tuya. Pero una capa con `position: fixed` que se queda dentro de su propio shadow DOM (el diálogo de `r-modal`) solo escapa hasta su **contexto de apilamiento** ancestro más cercano, así que si envuelves el contenido incrustado en algo que cree uno (`isolation`, `opacity < 1`, `transform`, `filter`, `will-change`), hay que subir el nivel de apilamiento de ese envoltorio para que el diálogo vuelva a quedar por encima. Acota la subida a cuando una capa está _de verdad_ abierta:
+**Incrustar capas de ranui en tu propio marco.** La [escalera de z-index](/es/src/ranui/design-system/#stacking)
+empieza en 1000, así que una capa portalizada supera por sí sola el marco habitual de la página. Una capa con `position: fixed`
+que se queda dentro de su propio shadow DOM (el diálogo de `r-modal`) solo escapa hasta su
+**contexto de apilamiento** ancestro más cercano. Si envuelves el contenido incrustado en algo que cree uno
+(`isolation`, `opacity < 1`, `transform`, `filter`, `will-change`), sube ese envoltorio solo mientras una
+capa esté realmente abierta:
 
 ```css
 .embed {
-  isolation: isolate; /* barato: no tiene z-index propio, así que no promueve nada */
+  isolation: isolate; /* cheap: no z-index of its own, so nothing is promoted */
 }
-/* Sube solo mientras haya una capa real abierta, nunca «por si acaso» */
+/* Escalate only while a real overlay is open — never "just in case" */
 .embed:has(r-modal[open]),
 .embed:has(r-modal[closing]) {
   position: relative;
@@ -84,69 +95,77 @@ Un rol es una herramienta, no una ley: un texto decorativo genuinamente irrepeti
 }
 ```
 
-Un `z-index` general en el envoltorio eleva _todo_ lo que hay dentro (incluido el contenido totalmente estático) por encima de tu cabecera fija durante toda la vida del desplazamiento. Ese fallo llegó a publicarse en este mismo sitio. Haz coincidir también `closing`, no solo `open`: la máscara sigue pintando lo que dure su transición después de que `open` desaparezca.
+Un `z-index` permanente en el envoltorio sube todo lo que contiene, contenido estático incluido, por encima de tu
+cabecera fija durante todo el desplazamiento; este sitio llegó a publicarse así una vez. Coincide con `closing` además
+de con `open`: la máscara sigue pintándose durante su transición de cierre.
 
 ## Movimiento {#motion}
 
-El propósito y la frecuencia de uso deciden si hace falta movimiento. La respuesta frecuente al hover, al foco y al teclado es inmediata por defecto. Usa los tokens existentes solo cuando el movimiento explique un cambio: la respuesta dura 0–100ms; la entrada, 250–400ms, y desacelera sin pasarse del destino; la salida, 150–200ms, y acelera. Son rangos para cuando hay movimiento, no esperas obligatorias. Permite interrumpir el movimiento y respeta `prefers-reduced-motion`.
+La respuesta frecuente (hover, foco, pulsación) es inmediata. Cuando el movimiento explica un cambio, la respuesta se queda
+en 0–100ms, la entrada dura 250–400ms y desacelera, y la salida dura 150–200ms y acelera.
+Permite interrumpirlo y respeta `prefers-reduced-motion`.
 
-**Nunca dejes que una propiedad de la paleta haga transición.** El CSS no puede saber _por qué_ cambió un color, así que una `transition` sobre `background-color`, `color`, `border-color`, `box-shadow`, `fill` o `stroke` también se dispara cuando cambia el **tema**, y cada elemento se funde a su propio ritmo mientras el resto de la página ya ha cambiado. Anima propiedades de movimiento (`transform`, `opacity`, geometría) en su lugar. `transition: all` y atajos pelados como `transition: 0.2s` significan _todo_, propiedades de la paleta incluidas; ambos están prohibidos en los estilos de ranui y son mala idea en los tuyos.
+**Nunca dejes que una propiedad de color haga transición.** El CSS no puede saber _por qué_ cambió un color, así que una `transition`
+sobre `background-color`, `color`, `border-color`, `box-shadow`, `fill` o `stroke` también se dispara cuando cambia el
+**tema**: cada elemento se funde a su propio ritmo cuando la página ya ha cambiado. Anima
+`transform` y `opacity` en su lugar. `transition: all` y un `transition: 0.2s` pelado también incluyen el color.
 
 ## Estados y textos
 
-Todo estado alcanzable forma parte del diseño: **hover, activo, foco, deshabilitado, cargando, vacío, error**. Trasládalos a la escalera: hover → `bg-hover` / `border-hover`; activo → `bg-active`; deshabilitado → tokens de deshabilitado; reducir la opacidad solo cuando haga falta y siga siendo legible; foco → el anillo de foco.
-
-Nada que no sea interactivo puede parecerlo. `r-card` solo reacciona al hover con el atributo `hoverable`; déjalo sin poner en las tarjetas que no se pulsan.
+Todo estado alcanzable forma parte del diseño: hover, activo, foco, deshabilitado, cargando, vacío, error.
+El hover corresponde a `bg-hover` / `border-hover`, el activo a `bg-active` y el foco al anillo de foco. Nada que no
+se pulse debe parecer pulsable: `r-card` solo reacciona al hover con `hoverable`.
 
 El texto también es parte del sistema:
 
-- **Los botones** nombran el resultado. Incluye el objeto si el contexto no lo establece: «Eliminar miembro». Un diálogo con el objeto claro puede usar «Eliminar»; evita «Aceptar» sin contexto.
-- **Los errores** dicen qué pasó y luego cómo arreglarlo. ✅ «La compilación falló: el paquete supera el límite de tamaño. Redúcelo o sube el límite.» ❌ «La operación falló, inténtalo de nuevo.»
-- **Las confirmaciones y los avisos** describen el cambio completado. ✅ «Proyecto eliminado» ❌ «Operación exitosa». Muestra la confirmación solo después de comprobar que la operación terminó.
-- Deja que el contexto quite lo redundante: un diálogo titulado «Eliminar proyecto» no necesita un botón que diga «Eliminar el proyecto permanentemente, para siempre».
+- **Los botones** nombran el resultado, con el objeto cuando el contexto no lo aporta: «Eliminar miembro». Un
+  diálogo con el objeto claro puede decir «Eliminar»; evita un «Aceptar» genérico.
+- **Los errores** dicen qué pasó y luego cómo arreglarlo. ✅ «La compilación falló: el paquete supera el límite de
+  tamaño. Redúcelo o sube el límite.» ❌ «La operación falló, inténtalo de nuevo.»
+- **Las confirmaciones** describen el cambio, no el éxito, y aparecen solo cuando está confirmado.
+  ✅ «Proyecto eliminado» ❌ «Operación exitosa».
+- Deja que el contexto quite lo redundante: un diálogo titulado «Eliminar proyecto» no necesita un botón que diga
+  «Eliminar el proyecto permanentemente, para siempre».
 
 ## Accesibilidad {#accessibility}
 
 - Cumple el contraste **WCAG AA** del texto contra su fondo.
 - **Nunca señales un estado solo con color**: acompáñalo de un icono, una etiqueta o texto.
-- Todo elemento interactivo conserva un **anillo de foco visible** (`--ran-focus-ring`, o `outline: 2px solid var(--ran-color-focus); outline-offset: 2px`). Nunca lo quites por pulcritud.
-- **Todo se alcanza con el teclado.** Nada es solo de ratón.
+- Todo elemento interactivo conserva un **anillo de foco visible** (`--ran-focus-ring`, o
+  `outline: 2px solid var(--ran-color-focus); outline-offset: 2px`).
+- **Todo se alcanza con el teclado.**
 - Respeta `prefers-reduced-motion` y `prefers-color-scheme`.
 
 ## Ratón y dedo, estrecho y ancho
 
 Ni la forma de apuntar ni el tamaño de la ventana son el objetivo secundario.
 
-- Los arrastres, los deslizadores y los gestos usan **Pointer Events** (`pointerdown` / `pointermove` / `pointerup` / `pointercancel`), nunca `mouse*` a secas, junto con `touch-action: none` en la superficie exacta que se arrastra. Un CSS que declara `touch-action: none` sin un manejador de puntero detrás es un control roto, no una línea inofensiva.
-- **Una afordancia que solo aparece al pasar el cursor necesita un recurso para el dedo.** `trigger="hover"` en `r-select` o `r-popover` degrada a clic en dispositivos táctiles; lo que construyas debe hacer lo mismo.
-- Prefiere **medidas relativas a la ventana** (`%`, `min()`, `max()`, `clamp()`, `vw`/`vh`, por ejemplo `min(560px, calc(100vw - 32px))`) a inventar un punto de ruptura. ranui no tiene un token compartido de puntos de ruptura, así que cada corte fijo es un número suelto que alguien tendrá que mantener.
-- **Nunca escondas en móvil la única manera de hacer algo.** Reordena en vez de recurrir a `display: none`.
-- **Una posición medida solo es correcta hasta el siguiente reflujo.** Todo lo derivado de `getBoundingClientRect()` caduca al redimensionar, al reflujo del contenedor y (para un panel portalizado) al desplazarse. Vuelve a medir en esos eventos, no solo en la interacción que provocó la primera medición. Cargar la página en un ancho estrecho ejercita la maquetación inicial; no ejercita el _redimensionar hasta_ ese ancho, que es donde esta clase de fallo aparece de verdad.
+- Los arrastres, deslizadores y gestos usan **Pointer Events**, con `touch-action: none` en la superficie exacta de
+  arrastre. Un `touch-action: none` sin ningún manejador de puntero detrás es un control roto.
+- **Lo que solo aparece con hover necesita una alternativa táctil.** `trigger="hover"` en `r-select` o `r-popover`
+  se convierte en un clic en dispositivos táctiles; todo lo que construyas debería hacer lo mismo.
+- Prefiere **tamaños relativos al viewport** (`min(560px, calc(100vw - 32px))`, `clamp()`) a inventar un
+  punto de corte: ranui no tiene token de punto de corte, así que cada punto de corte fijo es un número que alguien mantiene.
+- **Nunca ocultes en móvil la única forma de hacer algo.** Reorganízalo en su lugar.
+- **Una posición medida solo es correcta hasta el siguiente reflujo.** Todo lo que se derive de
+  `getBoundingClientRect()` queda obsoleto al redimensionar, cuando el contenedor se reorganiza y, en un panel portalizado, al
+  desplazarse. Cargar con un ancho estrecho no prueba _redimensionar hasta_ ese ancho, que es donde esto se rompe.
 
 ## Lo que la biblioteca comprueba de forma mecánica
 
-Nueve de estas reglas las comprueba `pnpm -F ranui verify:design`, que CI ejecuta sobre el código de la propia ranui: respaldos de color inseguros en modo oscuro, literales de color crudos, la escala de espacios, la escala de tamaños, bucles de arrastre solo para ratón, reglas de `display` en `:host` que rompen `hidden`, respaldos que nombran tokens no declarados, componentes que buscan en su árbol shadow un elemento que acaban de construir y árboles shadow construidos fuera del constructor. Las infracciones conocidas quedan fijadas en un archivo de referencia, así que no se puede añadir una nueva ni deshacer una corrección en silencio.
-
-Estas comprobaciones solo inspeccionan las rutas de código configuradas para el comando; no revisan automáticamente las aplicaciones que usan ranui. Este repositorio tiene comprobaciones separadas para superficies como la documentación. Usa las comprobaciones de tu aplicación y verifica el diseño, los temas y la interacción en el navegador.
+`pnpm -F ranui verify:design` comprueba nueve reglas en el código fuente de ranui: valores de reserva de color que no
+cambian con el tema, literales de color crudos, las escalas de espacio y de tamaño, arrastres solo para ratón, reglas de `:host` que rompen
+`hidden`, valores de reserva que nombran tokens no declarados, componentes que buscan en su propio árbol shadow y árboles shadow
+construidos fuera del constructor. Una línea que rompe una regla a propósito lo indica con
+`design-ok: <rule> <reason>`. Las comprobaciones solo cubren las raíces de código configuradas; una aplicación que
+usa ranui ejecuta sus propias comprobaciones y revisa sus propias páginas.
 
 ## Ejemplos de diseño {#design-examples}
 
 <DesignIllustrations />
 
-## Lista antes de publicar interfaz
-
-Elige comprobaciones para la superficie afectada y el comportamiento cambiado; CI mantiene todas sus verificaciones.
-
-- [ ] La tarea principal y la acción principal son inconfundibles.
-- [ ] Funciona en **claro y oscuro**, con anchos **estrechos y amplios**.
-- [ ] Funciona con **ratón y dedo**; todo disparador por hover tiene alternativa táctil.
-- [ ] Estados afectados probados: hover, activo, foco, deshabilitado, cargando, vacío, error.
-- [ ] Teclado y foco verificados; el foco se ve en todas partes.
-- [ ] Casos límite: textos largos, números grandes, idiomas admitidos.
-- [ ] Espacios de la escala, tipografía por rol, color de tokens semánticos.
-- [ ] Ninguna propiedad de la paleta en una `transition`; ningún `transition: all`.
-- [ ] El texto y el contexto aclaran la acción y el objeto; nada señala un estado solo con color.
-
 ## Evidencia y aceptación {#evidence-and-acceptance}
 
-[El contrato de aceptación](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) define la verificación real en el navegador, la vigencia de las capturas y la separación entre comprobaciones automáticas, revisión visual del agente y decisión del usuario. Tras cambiar estilos compartidos, actualiza la evidencia afectada; la revisión del agente no equivale a aceptación del usuario. Evita etiquetas secundarias y descripciones que no aportan información: deja que la disposición explique las relaciones evidentes. Conserva nombres accesibles, etiquetas útiles, unidades, errores y riesgos.
+El apartado [verificar un cambio](/src/design/guide#verifying-a-change) de la guía dice qué comprobar en un navegador
+real y qué informar: lo que observaste, lo que solo dedujiste y lo que no pudiste comprobar.
+La revisión de un agente no es la aceptación del usuario.

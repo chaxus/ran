@@ -156,7 +156,7 @@ r-glass:state(light) .badge {
 
 ### Sheen & interactive
 
-`sheen` adds a moving highlight; `interactive` adds a hover lift and a press that springs back.
+`sheen` adds a moving highlight; `interactive` adds a hover lift and a press that settles back.
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">

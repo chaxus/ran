@@ -156,7 +156,7 @@ r-glass:state(light) .badge {
 
 ### درخشش و تعامل
 
-`sheen` یک هایلایت متحرک اضافه می‌کند؛ `interactive` بالا آمدن هنگام hover و فشردنی که با فنر برمی‌گردد را اضافه می‌کند.
+`sheen` یک هایلایت متحرک اضافه می‌کند؛ `interactive` بالا آمدن هنگام hover و فشردنی که بدون جهش به جای خود برمی‌گردد را اضافه می‌کند.
 
 <ran-demo>
   <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">

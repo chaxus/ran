@@ -11,8 +11,8 @@
       "styles/docs.css": 4
     },
     "spacing-scale": {
-      "styles/demos.css": 11,
-      "styles/docs.css": 40
+      "styles/demos.css": 4,
+      "styles/docs.css": 31
     },
     "sizing-scale": {},
     "mouse-only-drag": {},
