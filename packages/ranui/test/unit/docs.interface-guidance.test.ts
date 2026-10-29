@@ -78,7 +78,9 @@ describe('executable interface guidance', () => {
   });
 
   it('keeps the authoritative spacing relationship table on the real scale', () => {
+    // Normalised: a Windows checkout has CRLF line endings.
     const table = read('docs/adapters/DESIGN.md')
+      .replace(/\r\n/g, '\n')
       .split('\n## ranui spacing\n')[1]
       ?.split('\n## ')[0]
       ?.split('\n')

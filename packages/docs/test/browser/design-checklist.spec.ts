@@ -229,17 +229,40 @@ test.describe('focus and stability', () => {
   test('pages do not shift while they load', async ({ page, browserName }) => {
     test.skip(browserName !== 'chromium', 'Layout Instability API is Chromium-only');
     await page.addInitScript(() => {
-      (window as unknown as { shift: number }).shift = 0;
+      const record = window as unknown as { shift: number; moved: string[] };
+      record.shift = 0;
+      record.moved = [];
+      type Shift = PerformanceEntry & {
+        value: number;
+        hadRecentInput: boolean;
+        sources?: Array<{ node?: Node; previousRect: DOMRectReadOnly; currentRect: DOMRectReadOnly }>;
+      };
       new PerformanceObserver((list) => {
-        for (const entry of list.getEntries() as Array<PerformanceEntry & { value: number; hadRecentInput: boolean }>)
-          if (!entry.hadRecentInput) (window as unknown as { shift: number }).shift += entry.value;
+        for (const entry of list.getEntries() as Shift[]) {
+          if (entry.hadRecentInput) continue;
+          record.shift += entry.value;
+          // Name what moved, so a failure on a runner we cannot reproduce says where to look.
+          for (const source of entry.sources ?? []) {
+            const node = source.node instanceof Element ? source.node : source.node?.parentElement;
+            const name = node
+              ? `${node.tagName.toLowerCase()}${node.className ? `.${String(node.className).split(' ')[0]}` : ''}`
+              : '?';
+            record.moved.push(
+              `${entry.value.toFixed(4)} @${Math.round(entry.startTime)}ms ${name} y ${Math.round(source.previousRect.y)}→${Math.round(source.currentRect.y)} h ${Math.round(source.previousRect.height)}→${Math.round(source.currentRect.height)}`,
+            );
+          }
+        }
       }).observe({ type: 'layout-shift', buffered: true });
     });
     for (const path of PAGES) {
       await ready(page, path);
       await page.waitForTimeout(500);
+      const { shift, moved } = await page.evaluate(() => {
+        const record = window as unknown as { shift: number; moved: string[] };
+        return { shift: record.shift, moved: record.moved };
+      });
       // 0.1 is the "good" Core Web Vitals line; the site measures 0.007 at worst.
-      expect(await page.evaluate(() => (window as unknown as { shift: number }).shift), path).toBeLessThan(0.05);
+      expect(shift, `${path}\n${moved.join('\n')}`).toBeLessThan(0.05);
     }
   });
 });
