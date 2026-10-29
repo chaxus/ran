@@ -972,6 +972,11 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   display: block;
 }
 
+/* Hanzi, kana and hangul fill every cell of a line, so running text in those scripts needs more
+   room between lines than Latin does. */
+.prose:is(:lang(zh), :lang(ja), :lang(ko)) {
+  line-height: 1.75;
+}
 .prose {
   /* Named because it is referenced again: a child that has to cancel this gap must use
      the same value, and two hand-copied numbers drift. */

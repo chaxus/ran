@@ -15,6 +15,10 @@ For a page or region you are building or restructuring, write the
 [brief](references/DESIGN.md#before-you-start) in the existing task note first, and update it before
 changing direction. Compare composed screens before adding motion.
 
+When the direction is open, ask for a reference: a screenshot or a product the user likes moves the
+result more than any description. Ask before adding sections, pages or copy the request did not
+include; the user knows the audience.
+
 Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
 Preserve accessible names, useful constraints, errors and consequences.
 

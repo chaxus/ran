@@ -30,6 +30,10 @@ the primary action in the title region, and feedback beside the action that caus
 Count how hard each choice is, not how many clicks it takes: several steps that each need no thought
 beat one crowded screen where every option does.
 
+For a new page or region, compare two or three directions side by side in one place (a toggle, a
+canvas) before committing to one, and vary what is actually undecided: the layout, the interaction,
+the copy or the look.
+
 Name the surface's mode, because it decides how much expression the page can spend. A tool
 (dashboards, settings, editors) and a document (docs, articles, changelogs) spend it on precision and
 restraint, in patterns the reader already knows; a page that persuades (a landing or pricing page) can
@@ -89,6 +93,9 @@ MUST be able to answer, without scrolling:
   Headings wrap with `text-wrap: balance`, paragraphs with `text-wrap: pretty`.
 - The surfaces the browser draws still carry the design: text selection, the caret, focus rings,
   scrollbars and the numerals in tables (`tabular-nums`). Theme them from the tokens.
+- Mixed scripts: put the Latin face first and the CJK or Arabic fallback after it, mark each block's
+  `lang`, and give Chinese, Japanese or Korean running text more leading than Latin (about 1.7–1.8).
+  A Latin serif has no Han glyphs; pair it with a CJK serif.
 - Decoration is a decision, not a default. When an eyebrow label, a gradient, a glow or a card around
   everything appears, check that it does a job on this page; remove it if it only fills space.
 
@@ -154,6 +161,8 @@ From Krug again: remove half the words, then half of what is left.
 - Keep what adds a decision, constraint or consequence: accessible names, field labels, units,
   errors and risk disclosures.
 - Errors say what happened and what to do next, beside the thing that failed.
+- Don't fill space with invented content: sections, stats, icons or copy nobody asked for. An area
+  that looks empty is a layout problem, not a content one.
 - Say the product's own thing. Generic marketing words (empower, seamless, next-generation) and
   dashes used for rhythm read as copy nobody wrote.
 - Sentence case. Try long text, large numbers and every locale the product ships.
