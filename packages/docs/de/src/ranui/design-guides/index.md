@@ -6,7 +6,7 @@ description: 'Gestaltungsregeln für Oberflächen mit ranui: eine Rolle wählen 
 
 Die Regeln, denen eine aus ranui-Komponenten gebaute Oberfläche folgen sollte, damit sie sich als **ein System** liest und nicht als Haufen von Teilen.
 
-Auf dieser Seite geht es um **Urteilsvermögen**: zu welchem Token man greift und was vor der Auslieferung zu prüfen ist. Der Tokenkatalog selbst ist das [Designsystem](/de/src/ranui/design-system/); Umschalten und Überschreiben zur Laufzeit ist die [Themengestaltung](/de/src/ranui/theme/); welche Form die Seite vor alledem annimmt, ist die [Informationsarchitektur](/de/src/ranui/information-architecture/). Die vollständigen Designregeln stehen im Repository unter [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
+Auf dieser Seite geht es um **Urteilsvermögen**: zu welchem Token man greift und was vor der Auslieferung zu prüfen ist. Der Tokenkatalog selbst ist das [Designsystem](/de/src/ranui/design-system/); Umschalten und Überschreiben zur Laufzeit ist die [Themengestaltung](/de/src/ranui/theme/); welche Form die Seite vor alledem annimmt, ist die [Informationsarchitektur](/de/src/ranui/information-architecture/). Die vollständigen Designregeln stehen im Repository im [Designleitfaden](https://github.com/chaxus/ran/blob/main/design/DESIGN.md) und im [ranui-Implementierungsadapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md); [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) wird aus beiden erzeugt.
 
 > **Einsetzen, wenn** du eine Seite anlegst oder aus `<r-*>`-Elementen eine Komponente auf Anwendungsebene baust und über eine Farbe, einen Abstand, eine Textgröße, einen Schatten oder eine Bewegungsdauer entscheiden musst. Die kurze Antwort ist immer dieselbe: **Wähle eine Rolle und lass das Token den Wert bestimmen.**
 
@@ -49,7 +49,7 @@ Nimm jeden Abstand aus der [neunstufigen Skala](/de/src/ranui/design-system/#spa
 
 - **8px** zwischen Elementen innerhalb einer Gruppe.
 - **16px** zwischen Gruppen.
-- **32–40px** zwischen Abschnitten.
+- **24–32px** zwischen Bereichen.
 
 Erfinde kein `20px` oder `28px`. Den Rhythmus einer Seite erzeugt gerade die begrenzte Auswahl; ein einziger Abstand außerhalb der Skala bricht ihn. Halte gemeinsame Achsen über Bereiche hinweg (Kanten, Grundlinien und Spalten, die fluchten) und prüfe die Ausrichtung an den gezeichneten Pixeln statt nach Augenmaß.
 
@@ -58,8 +58,7 @@ getrennte Gruppen 16px und zusammengehörige Unterabschnitte 24px verwenden. Jed
 hat genau einen Verantwortlichen; berücksichtigen Sie Kind-Margins, Innenabstände und
 Grundlinienraum bei Inline-Steuerelementen. Prüfen Sie Zeilenumbrüche sowie ausgeblendete
 Hinweise und Fehlerzustände im Browser. Die
-[verbindlichen Regeln zum vertikalen Rhythmus](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-enthalten Ausnahmen und ausführbare Gegenproben, ohne Komponentenvorgaben zu ändern.
+Der Abschnitt [visuelle Sprache](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language) des Leitfadens legt diese Abstandsbeziehungen fest, und [eine Änderung prüfen](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) beschreibt, wie man sie kontrolliert, ohne Komponentenvorgaben zu ändern.
 
 ## Schrift wählen
 
@@ -89,7 +88,7 @@ Ein pauschaler `z-index` auf der Hülle hebt _alles_ darin (auch völlig statisc
 
 ## Bewegung {#motion}
 
-Zweck und Nutzungshäufigkeit entscheiden, ob Bewegung sinnvoll ist. Häufiges Hover-, Fokus- und Tastaturfeedback erfolgt standardmäßig sofort. Nutze vorhandene Bewegungstokens nur, wenn sie eine Änderung erklären: kleine Übergänge etwa 150ms, Menüs 200ms und Dialoge 300ms sind optionale Beispiele, keine Pflichtverzögerungen. Bewegung muss unterbrechbar bleiben und `prefers-reduced-motion` beachten.
+Zweck und Nutzungshäufigkeit entscheiden, ob Bewegung sinnvoll ist. Häufiges Hover-, Fokus- und Tastaturfeedback erfolgt standardmäßig sofort. Nutze vorhandene Bewegungstokens nur, wenn sie eine Änderung erklären: Rückmeldung dauert 0–100ms, Einblenden 250–400ms und bremst ab, ohne überzuschießen, Ausblenden 150–200ms und beschleunigt. Das sind Spannen für den Fall, dass sich etwas bewegt, keine Pflichtverzögerungen. Bewegung muss unterbrechbar bleiben und `prefers-reduced-motion` beachten.
 
 **Lass niemals eine Paletteneigenschaft animieren.** CSS kann nicht wissen, _warum_ sich eine Farbe geändert hat, also feuert eine `transition` auf `background-color`, `color`, `border-color`, `box-shadow`, `fill` oder `stroke` auch beim Wechsel des **Themes** — jedes Element blendet in seinem eigenen Tempo über, während der Rest der Seite längst umgeschaltet hat. Animiere stattdessen Bewegungseigenschaften (`transform`, `opacity`, Geometrie). `transition: all` und nackte Kurzformen wie `transition: 0.2s` bedeuten _alles_, Paletteneigenschaften eingeschlossen; beides ist in ranuis eigenen Stilen verboten und in deinen eine schlechte Idee.
 
@@ -110,7 +109,7 @@ Auch Texte gehören zum System:
 
 - Erfülle den Kontrast nach **WCAG AA** für Text gegen seinen Hintergrund.
 - **Signalisiere einen Zustand nie allein über Farbe**: Verbinde sie mit einem Symbol, einer Beschriftung oder Text.
-- Jedes interaktive Element behält einen **sichtbaren Fokusring** (`--ran-focus-ring`, oder `outline: 2px solid var(--ran-color-primary); outline-offset: 2px`). Entferne ihn nie der Ordnung halber.
+- Jedes interaktive Element behält einen **sichtbaren Fokusring** (`--ran-focus-ring`, oder `outline: 2px solid var(--ran-color-focus); outline-offset: 2px`). Entferne ihn nie der Ordnung halber.
 - **Alles ist mit der Tastatur erreichbar.** Nichts ist nur mit der Maus zu bedienen.
 - Achte auf `prefers-reduced-motion` und `prefers-color-scheme`.
 
@@ -126,7 +125,7 @@ Weder die Eingabeart noch die Fenstergröße ist das zweitrangige Ziel.
 
 ## Was die Bibliothek maschinell durchsetzt
 
-Neun dieser Regeln prüft `pnpm -F ranui verify:design`, das die CI auf ranuis eigenem Quelltext ausführt: im Dunkeln unsichere Farb-Rückfallwerte, rohe Farbliterale, die Abstandsskala, die Größenskala, nur mausgesteuerte Ziehschleifen, `:host`-display-Regeln, die `hidden` brechen, Rückfallwerte auf nicht deklarierte Tokens, Komponenten, die ihren eigenen Shadow-Baum abfragen, und Shadow-Bäume, die außerhalb des Konstruktors entstehen. Bekannte Verstöße sind in einer Basisdatei festgeschrieben, sodass kein neuer hinzukommen und keine Korrektur stillschweigend rückgängig gemacht werden kann.
+Neun dieser Regeln prüft `pnpm -F ranui verify:design`, das die CI auf ranuis eigenem Quelltext ausführt: im Dunkeln unsichere Farb-Rückfallwerte, rohe Farbliterale, die Abstandsskala, die Größenskala, nur mausgesteuerte Ziehschleifen, `:host`-display-Regeln, die `hidden` brechen, Rückfallwerte auf nicht deklarierte Tokens, Komponenten, die in ihrem Shadow-Baum ein Element suchen, das sie gerade selbst gebaut haben, und Shadow-Bäume, die außerhalb des Konstruktors entstehen. Bekannte Verstöße sind in einer Basisdatei festgeschrieben, sodass kein neuer hinzukommen und keine Korrektur stillschweigend rückgängig gemacht werden kann.
 
 Diese Prüfungen untersuchen nur die für den Befehl konfigurierten Quellpfade, nicht automatisch alle Anwendungen mit ranui. Das Repository hat eigene Prüfungen für Oberflächen wie die Dokumentation. Anwendungen nutzen ihre eigenen Prüfungen und kontrollieren Layout, Themes und Interaktion im Browser.
 

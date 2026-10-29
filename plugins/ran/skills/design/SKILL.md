@@ -11,8 +11,9 @@ Read the [design checklist](references/DESIGN.md). It is one page: before you st
 and trunk tests, visual language, layout, interaction, motion, words and verification. A small
 correction stays small.
 
-Before implementation, write the [brief](references/DESIGN.md#before-you-start) in the existing
-task note, and update it before changing direction. Compare composed screens before adding motion.
+For a page or region you are building or restructuring, write the
+[brief](references/DESIGN.md#before-you-start) in the existing task note first, and update it before
+changing direction. Compare composed screens before adding motion.
 
 Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
 Preserve accessible names, useful constraints, errors and consequences.

@@ -27,7 +27,7 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 
 **第 1 層：基礎パレット。** 下に並ぶ生のスケールです。直接使うことは滅多にありません。
 
-**第 2 層：セマンティックトークン。** `--ran-color-*` とその仲間で、第 1 層の上に対応づけられています。**使うのはこの層です。** ダークモードが再定義するのは第 1 層だけなので、すべてのセマンティックトークンは `var()` を通じて切り替わり、ライブラリのどこにもコンポーネントごとのダーク用の上書きはありません。
+**第 2 層：セマンティックトークン。** `--ran-color-*` とその仲間で、第 1 層の上に対応づけられています。**使うのはこの層です。** ダークモードが再定義するのは第 1 層と、ひとつのスケール段階に対応しない少数のセマンティックトークン（このページの最後に一覧があります）だけなので、それ以外のセマンティックトークンは `var()` を通じて切り替わり、ライブラリのどこにもコンポーネントごとのダーク用の上書きはありません。
 
 ```
 --ran-gray-1000        →  #111113（ライト） / #ededef（ダーク） ← 第 1 層。切り替わる
@@ -81,16 +81,16 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 
 | 段   | ライト                                                                       | ダーク                                                                       |
 | ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100  | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200  | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300  | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400  | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500  | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600  | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700  | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800  | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900  | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000 | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### ブルー — `--ran-blue-100..1000`
 
@@ -162,13 +162,13 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 
 ### セマンティックな色トークン
 
-コンポーネントが実際に読む層です。ここにあるものはすべて上のスケールを通じて解決されるので、テーマに合わせて自分で切り替わります。
+コンポーネントが実際に読む層です。下に挙げるリテラルを除き、ここにあるものはすべて上のスケールを通じて解決されるので、テーマに合わせて自分で切り替わります。
 
 | トークン                           | 解決先                                                                                                                                       | 役割                                                        |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `--ran-color-bg`                   | `--ran-background-100`                                                                                                                       | ページの背景                                                |
 | `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                       | 控えめな区画                                                |
-| `--ran-color-bg-elevated`          | `--ran-background-100` · gray-100 （ダーク）                                                                                                 | カード、面                                                  |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · <span class="swatch" style="--swatch:#18181b"></span> `#18181b` （ダーク）                                          | カード、面                                                  |
 | `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                             | 沈んだ／控えめな塗り                                        |
 | `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                             | ホバーの面                                                  |
 | `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                             | アクティブ（押下）の面                                      |
@@ -189,10 +189,10 @@ ranui はそのはしごを `--ran-*` のスケールとして取り入れ、そ
 | `--ran-color-success`              | `--ran-green-700`                                                                                                                            | 成功                                                        |
 | `--ran-color-warning`              | `--ran-amber-700`                                                                                                                            | 警告                                                        |
 | `--ran-color-danger`               | `--ran-red-700`                                                                                                                              | 危険／エラー                                                |
-| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                             | リンク                                                      |
+| `--ran-color-link`                 | `--ran-blue-800` · <span class="swatch" style="--swatch:#5b9dff"></span> `#5b9dff` （ダーク）                                                | リンク                                                      |
 | `--ran-color-focus`                | `--ran-blue-700`                                                                                                                             | フォーカス色：リングとアウトライン                          |
 
-`--ran-color-primary-hover` / `-active` は、セマンティック層にあるふたつのリテラルです。スケールに沿ってではなくページの背景に向かって進むので、ダークモードではこれらを直接定義し直します。
+`--ran-color-primary-hover` / `-active` は、どちらのテーマでもリテラルです。スケールに沿ってではなくページの背景に向かって進むので、ダークモードではこれらを直接定義し直します。ダークモードでは `--ran-color-bg-elevated` と `--ran-color-link` もリテラルになります。ダークではどちらもひとつのスケール段階に対応しないためです。
 
 ### アクセントそれぞれの意味
 
@@ -313,19 +313,19 @@ import 'ranui/fonts'; // バンドラー向け
 
 ## モーション
 
-| トークン                     | 値      | 用途                         |
-| ---------------------------- | ------- | ---------------------------- |
-| `--ran-motion-duration-fast` | `0.14s` | ホバー／アクティブの状態遷移 |
-| `--ran-motion-duration-base` | `0.2s`  | ポップオーバー、メニュー     |
-| `--ran-motion-duration-slow` | `0.28s` | もっと大きな現れ方           |
+| トークン                     | 値      | 用途                                                                     |
+| ---------------------------- | ------- | ------------------------------------------------------------------------ |
+| `--ran-motion-duration-fast` | `0.14s` | 短い不透明度のフェードとアイコンの切り替え、動きを減らす設定でのフェード |
+| `--ran-motion-duration-base` | `0.2s`  | ポップオーバー、メニュー                                                 |
+| `--ran-motion-duration-slow` | `0.28s` | もっと大きな現れ方                                                       |
 
-| イージングのトークン         | カーブ                           | 性格                                     |
-| ---------------------------- | -------------------------------- | ---------------------------------------- |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | 減速。汎用                               |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | 素早く、行き過ぎなし：トグル             |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | わずかに行き過ぎ：ボタン、カード         |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | 遊びのある行き過ぎ：いいね、カートに追加 |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | 穏やかで行き過ぎなし：現れ、レイアウト   |
+| イージングのトークン         | カーブ                           | 性格                                                                                                         |
+| ---------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | 減速。汎用                                                                                                   |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | 素早く、行き過ぎなし：トグル                                                                                 |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | わずかに行き過ぎ：説得するページでホストが選ぶ一度きりの表現的な瞬間に限る。コンポーネントの既定では使わない |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | 遊びのある行き過ぎ：同じくホストが選ぶ場合のみ。使うコンポーネントはない                                     |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | 穏やかで行き過ぎなし：現れ、レイアウト                                                                       |
 
 spring 系は、調整済みの SwiftUI のばねから蒸留したものです（response / damping を、一度だけ行き過ぎるベジェに落とし込んでいます）。
 
@@ -333,12 +333,12 @@ spring 系は、調整済みの SwiftUI のばねから蒸留したものです�
 
 ## フォーカス
 
-| トークン                         | 値                                                                   | 用途                                                    |
-| -------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------- |
-| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700)` | 標準のリング。`box-shadow` として                       |
-| `--ran-focus-ring-inverse-color` | `#fff`                                                               | **どちらの** テーマでも暗いままの面のための、リングの色 |
+| トークン                         | 値                                                                      | 用途                                                    |
+| -------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- |
+| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-focus)` | 標準のリング。`box-shadow` として                       |
+| `--ran-focus-ring-inverse-color` | `#fff`                                                                  | **どちらの** テーマでも暗いままの面のための、リングの色 |
 
-リングは 2 層です。背景色の内側のリングと、青い外側のリング。だからどんな面の上でも見えたままになりますし、モノクロになった primary に追随せず青のままです。
+リングは 2 層です。背景色の内側のリングと、`--ran-color-focus`（青）の外側のリング。だからどんな面の上でも見えたままになりますし、モノクロになった primary に追随せず青のままです。
 
 `--ran-focus-ring-inverse-color` は**あえてダークモードで再定義していません**。ページのテーマに関わらず自分の面が暗いままのコンポーネント（任意の映像の上に重なる `r-player` のコントロールバー）のためにあり、その面はページが変わっても変わらないからです。
 
@@ -356,10 +356,11 @@ spring 系は、調整済みの SwiftUI のばねから蒸留したものです�
 
 ## ダークモードが再定義するもの
 
-`<html>`（あるいは任意のサブツリー。[テーマ](/ja/src/ranui/theme/)を参照）に付いた `data-ran-theme="dark"` が再定義するのは、**基礎パレットだけ**です。ただし、スケールを通じては解決できない例外が 3 つあります。
+`<html>`（あるいは任意のサブツリー。[テーマ](/ja/src/ranui/theme/)を参照）に付いた `data-ran-theme="dark"` が再定義するのは、**基礎パレットだけ**です。ただし、スケールを通じては解決できない例外が 4 つあります。
 
 - 第 1 層のすべて：グレー、グレー（アルファ）、ブルー、レッド、アンバー、グリーンの全段と、ふたつの背景。
-- `--ran-color-bg-elevated`。ダークでは `--ran-gray-100` を指し、カードが黒いページに溶けるのではなく浮き上がるようにします。
+- `--ran-color-bg-elevated`。ダークではリテラルの `#18181b` になり、カードが黒いページに溶けるのではなく浮き上がるようにします。
+- `--ran-color-link`。ダークではリテラルの `#5b9dff` になり、暗いページでもリンクのコントラストを保ちます。
 - `--ran-color-primary-hover` / `-active`。スケールの参照ではなくリテラルだからです。
 - 影の 3 段階すべて。暗い地に合わせて調整し直されます。
 

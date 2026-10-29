@@ -27,7 +27,7 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 
 **1층: 기본 팔레트.** 아래에 늘어놓은 날 스케일입니다. 직접 쓰는 일은 드뭅니다.
 
-**2층: 시맨틱 토큰.** `--ran-color-*`와 그 동료들로, 1층 위에 대응됩니다. **쓰는 것은 이 층입니다.** 다크 모드는 1층만 다시 정의하므로, 모든 시맨틱 토큰이 `var()`를 통해 함께 바뀌고, 라이브러리 어디에도 컴포넌트별 다크 전용 덮어쓰기는 없습니다.
+**2층: 시맨틱 토큰.** `--ran-color-*`와 그 동료들로, 1층 위에 대응됩니다. **쓰는 것은 이 층입니다.** 다크 모드는 1층과, 스케일의 한 단계에 대응하지 않는 몇몇 시맨틱 토큰(이 페이지 끝에 정리)만 다시 정의하므로, 나머지 시맨틱 토큰은 모두 `var()`를 통해 함께 바뀌고, 라이브러리 어디에도 컴포넌트별 다크 전용 덮어쓰기는 없습니다.
 
 ```
 --ran-gray-1000        →  #111113(라이트) / #ededef(다크)        ← 1층. 바뀝니다
@@ -81,16 +81,16 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 
 | 단   | 라이트                                                                       | 다크                                                                         |
 | ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100  | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200  | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300  | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400  | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500  | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600  | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700  | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800  | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900  | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000 | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### 파랑 — `--ran-blue-100..1000`
 
@@ -162,13 +162,13 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 
 ### 시맨틱 색 토큰
 
-컴포넌트가 실제로 읽는 층입니다. 여기 있는 것은 모두 위의 스케일을 통해 풀리므로, 테마에 맞춰 저절로 바뀝니다.
+컴포넌트가 실제로 읽는 층입니다. 아래에서 말하는 리터럴을 빼면, 여기 있는 것은 모두 위의 스케일을 통해 풀리므로, 테마에 맞춰 저절로 바뀝니다.
 
 | 토큰                               | 풀리는 곳                                                                                                                                | 역할                                    |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | `--ran-color-bg`                   | `--ran-background-100`                                                                                                                   | 페이지 배경                             |
 | `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                   | 은은한 페이지 영역                      |
-| `--ran-color-bg-elevated`          | `--ran-background-100` · gray-100 (다크)                                                                                                 | 카드, 면                                |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · <span class="swatch" style="--swatch:#18181b"></span> `#18181b` (다크)                                          | 카드, 면                                |
 | `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                         | 들어간·가라앉은 채움                    |
 | `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                         | 호버의 면                               |
 | `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                         | 활성(눌림)의 면                         |
@@ -189,10 +189,10 @@ ranui는 그 사다리를 `--ran-*` 스케일로 받아들이고, 그 위에 시
 | `--ran-color-success`              | `--ran-green-700`                                                                                                                        | 성공                                    |
 | `--ran-color-warning`              | `--ran-amber-700`                                                                                                                        | 경고                                    |
 | `--ran-color-danger`               | `--ran-red-700`                                                                                                                          | 위험 / 오류                             |
-| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                         | 링크                                    |
+| `--ran-color-link`                 | `--ran-blue-800` · <span class="swatch" style="--swatch:#5b9dff"></span> `#5b9dff` (다크)                                                | 링크                                    |
 | `--ran-color-focus`                | `--ran-blue-700`                                                                                                                         | 포커스 색: 링과 포커스 윤곽선           |
 
-`--ran-color-primary-hover` / `-active`는 시맨틱 층에 있는 두 개의 리터럴입니다. 스케일을 따라가는 대신 페이지 배경 쪽으로 다가가므로, 다크 모드에서는 이것들을 직접 다시 정의합니다.
+`--ran-color-primary-hover` / `-active`는 두 테마 모두에서 리터럴입니다. 스케일을 따라가는 대신 페이지 배경 쪽으로 다가가므로, 다크 모드에서는 이것들을 직접 다시 정의합니다. 다크 모드는 `--ran-color-bg-elevated`와 `--ran-color-link`도 리터럴로 정합니다. 다크에서는 둘 다 스케일의 한 단계에 대응하지 않기 때문입니다.
 
 ### 강조색마다의 뜻
 
@@ -313,19 +313,19 @@ import 'ranui/fonts'; // 번들러용
 
 ## 모션
 
-| 토큰                         | 값      | 쓰임                  |
-| ---------------------------- | ------- | --------------------- |
-| `--ran-motion-duration-fast` | `0.14s` | 호버·활성 상태의 전환 |
-| `--ran-motion-duration-base` | `0.2s`  | 팝오버, 메뉴          |
-| `--ran-motion-duration-slow` | `0.28s` | 더 큰 등장            |
+| 토큰                         | 값      | 쓰임                                                              |
+| ---------------------------- | ------- | ----------------------------------------------------------------- |
+| `--ran-motion-duration-fast` | `0.14s` | 짧은 불투명도 페이드와 아이콘 전환, 동작 줄이기 설정에서의 페이드 |
+| `--ran-motion-duration-base` | `0.2s`  | 팝오버, 메뉴                                                      |
+| `--ran-motion-duration-slow` | `0.28s` | 더 큰 등장                                                        |
 
-| 이징 토큰                    | 곡선                             | 성격                                   |
-| ---------------------------- | -------------------------------- | -------------------------------------- |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | 감속. 범용                             |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | 빠르고 넘침 없음: 토글                 |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | 살짝 넘침: 버튼, 카드                  |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | 장난스러운 넘침: 좋아요, 장바구니 담기 |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | 차분하고 넘침 없음: 등장, 레이아웃     |
+| 이징 토큰                    | 곡선                             | 성격                                                                                                         |
+| ---------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | 감속. 범용                                                                                                   |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | 빠르고 넘침 없음: 토글                                                                                       |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | 살짝 넘침: 설득하는 페이지에서 호스트가 고르는 단 한 번의 표현적 순간용이며, 컴포넌트 기본값으로는 쓰지 않음 |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | 장난스러운 넘침: 마찬가지로 호스트가 고를 때만 쓰며, 이를 쓰는 컴포넌트는 없음                               |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | 차분하고 넘침 없음: 등장, 레이아웃                                                                           |
 
 spring 계열은 다듬어진 SwiftUI 스프링에서 증류한 것입니다(response/damping을 한 번만 넘치는 베지어로 줄였습니다).
 
@@ -333,12 +333,12 @@ spring 계열은 다듬어진 SwiftUI 스프링에서 증류한 것입니다(res
 
 ## 포커스
 
-| 토큰                             | 값                                                                   | 용도                                      |
-| -------------------------------- | -------------------------------------------------------------------- | ----------------------------------------- |
-| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700)` | 표준 링. `box-shadow`로                   |
-| `--ran-focus-ring-inverse-color` | `#fff`                                                               | _두_ 테마 모두에서 어두운 면을 위한 링 색 |
+| 토큰                             | 값                                                                      | 용도                                      |
+| -------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------- |
+| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-focus)` | 표준 링. `box-shadow`로                   |
+| `--ran-focus-ring-inverse-color` | `#fff`                                                                  | _두_ 테마 모두에서 어두운 면을 위한 링 색 |
 
-링은 두 겹입니다. 배경색의 안쪽 링과 파란 바깥 링. 그래서 어떤 면 위에서도 보이고, 이제 흑백이 된 primary를 따라가지 않고 파랑으로 남습니다.
+링은 두 겹입니다. 배경색의 안쪽 링과 `--ran-color-focus`(파랑)의 바깥 링. 그래서 어떤 면 위에서도 보이고, 이제 흑백이 된 primary를 따라가지 않고 파랑으로 남습니다.
 
 `--ran-focus-ring-inverse-color`는 **일부러 다크 모드에서 다시 정의하지 않습니다.** 페이지 테마와 상관없이 자기 면이 늘 어두운 컴포넌트(임의의 영상 위에 얹히는 `r-player`의 컨트롤 바)를 위한 것이고, 그 면은 페이지가 바뀌어도 바뀌지 않기 때문입니다.
 
@@ -356,10 +356,11 @@ spring 계열은 다듬어진 SwiftUI 스프링에서 증류한 것입니다(res
 
 ## 다크 모드가 다시 정의하는 것
 
-`<html>`(또는 임의의 서브트리. [테마](/ko/src/ranui/theme/) 참고)에 붙은 `data-ran-theme="dark"`가 다시 정의하는 것은 **기본 팔레트뿐**입니다. 다만 스케일을 통해 풀 수 없는 예외가 셋 있습니다.
+`<html>`(또는 임의의 서브트리. [테마](/ko/src/ranui/theme/) 참고)에 붙은 `data-ran-theme="dark"`가 다시 정의하는 것은 **기본 팔레트뿐**입니다. 다만 스케일을 통해 풀 수 없는 예외가 넷 있습니다.
 
 - 1층 전체: 회색, 회색 알파, 파랑, 빨강, 호박, 초록의 모든 단과 두 배경.
-- `--ran-color-bg-elevated`. 다크에서는 `--ran-gray-100`을 가리켜, 카드가 검은 페이지에 묻히지 않고 들려 보이게 합니다.
+- `--ran-color-bg-elevated`. 다크에서는 리터럴 `#18181b`이 되어, 카드가 검은 페이지에 묻히지 않고 들려 보이게 합니다.
+- `--ran-color-link`. 다크에서는 리터럴 `#5b9dff`이 되어, 어두운 페이지에서도 링크의 대비를 유지합니다.
 - `--ran-color-primary-hover` / `-active`. 스케일 참조가 아니라 리터럴이기 때문입니다.
 - 그림자 세 단계 모두. 어두운 바탕에 맞춰 다시 다듬습니다.
 

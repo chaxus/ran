@@ -261,7 +261,12 @@
      (see components/button/index.less). */
   --ran-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1); /* decelerating, general purpose */
   --ran-motion-ease-snappy: cubic-bezier(0.33, 0, 0.15, 1); /* quick, no overshoot — toggles, small state */
-  --ran-motion-ease-spring: cubic-bezier(0.3, 1.1, 0.4, 1); /* a trace of overshoot — buttons, cards */
+  --ran-motion-ease-spring: cubic-bezier(
+    0.3,
+    1.1,
+    0.4,
+    1
+  ); /* a trace of overshoot — one expressive host moment, never a component default */
   --ran-motion-ease-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1); /* playful overshoot — opt-in only, no default uses it */
   --ran-motion-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1); /* calm, no overshoot — reveals, layout */
 

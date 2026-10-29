@@ -8,7 +8,8 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 
 [设计系统](/cn/src/ranui/design-system/)提供令牌，[主题系统](/cn/src/ranui/theme/)说明运行时覆盖，
 [信息架构](/cn/src/ranui/information-architecture/)负责页面结构。
-本页是统一维护的 [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) 的摘要。
+本页摘要自[设计指南](https://github.com/chaxus/ran/blob/main/design/DESIGN.md)和 [ranui 实现适配](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)，
+[DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) 就是由这两份源文件生成的。
 
 交互、动效、产品场景和验证都在同一份[设计指南](/cn/src/design/guide)里；组件实现见
 [CODING](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/CODING.md)。
@@ -65,29 +66,29 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 
 - 组**内**元素之间 **8px**。
 - 组与组之间 **16px**。
-- 区块之间 **32–40px**。
+- 区域之间 **24–32px**。
 
 不要自创 `20px`、`28px`。档位有限才有节奏，一处越界就破坏了它。跨区域也应保持文字起点、内容边缘和操作列对齐，
 并在浏览器中检查实际位置。
 为共享内容起点和有意独立的导航／标题列命名。分别测量外框、内层内容边缘、文字 Range、图标视口和真实点击区域：
 按钮外框不动，内边距仍可能让文字偏移。标题／菜单按钮按内容收紧，剩余宽度交给独立布局区域；逐层计算内边距，
 并让空状态保持所属区域的内容起点。产品的目标尺寸由应用决定。
-[权威对齐规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-维护完整规则及可运行的浏览器验收示例。
+这些规则以指南的[视觉语言](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)一节为准，
+在浏览器里怎么检查见[验证一次改动](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change)。
 
 分组先用标题、对齐和间距。去掉重复容器不能同时去掉操作提示：独立命令可以保留轻量的按钮表面，
 在深浅主题的静止状态及触屏上也能辨认。平面列表适合已有明确菜单／列表语境的操作，不应成为所有设置页的默认答案。
 不要让内层卡片、整组底色和逐行分隔线重复表达同一个分组。声明相邻控件共享的图标／勾选框列和文字列。
 输入控件的功能性边框、键盘焦点框继续保留。验收应查看静止的完整面板，
 并说明每条边框、底色和分隔线的独立用途；
-[权威组合规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-维护例外及验收条件。
+指南的[视觉语言](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)一节要求每条留下的边界都说得出用途，
+验收方法见[验证一次改动](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change)。
 
 纵向间距按元素关系统一：标题与说明、字段与提示可用 8px，组间 16px，相关子区块间 24px。
 每一处间距只由一层布局负责；先计入子元素 margin、已有内边距和行内控件的基线留白，再决定是否增加间隔。
 换行、提示隐藏和错误出现后，都要在浏览器中实测。
-[权威纵向节奏规范](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-维护例外与可运行的反向校验，不改变组件默认值。
+间距关系以指南的[视觉语言](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)一节为准，
+检查方法见[验证一次改动](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change)，组件默认值不因此改变。
 
 ## 选排版
 
@@ -131,7 +132,8 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 ## 动效 {#motion}
 
 根据目的和使用频率决定是否需要动效。高频的悬停、聚焦和键盘反馈默认即时响应。只有动效能解释变化时，
-才使用已有动效令牌：小幅过渡约 150ms、菜单约 200ms、对话框约 300ms，都是可选参考，而非必须等待的时长。
+才使用已有动效令牌：反馈控制在 0–100ms；进入用 250–400ms，减速收尾、不过冲；离开用 150–200ms，逐渐加速。
+这些是用动效时的取值范围，并不是必须等待的时长。
 动效应能被新操作打断，并尊重 `prefers-reduced-motion`。
 
 修改动效前，说明触发操作、状态变化和目标位置。新操作应能打断或反向衔接，避免过期回调和重复触发；
@@ -166,7 +168,7 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 - 文字与背景的对比度满足 **WCAG AA**。
 - **绝不只用颜色表达状态**，要配上图标、标签或文字。
 - 所有可交互元素都保留**可见的聚焦环**（`--ran-focus-ring`，或
-  `outline: 2px solid var(--ran-color-primary); outline-offset: 2px`）。不要为了「干净」删掉它。
+  `outline: 2px solid var(--ran-color-focus); outline-offset: 2px`）。不要为了「干净」删掉它。
 - **一切都能用键盘到达**，不存在只能用鼠标的操作。
 - 尊重 `prefers-reduced-motion` 与 `prefers-color-scheme`。
 
@@ -193,7 +195,7 @@ description: '使用 ranui 构建界面：根据元素的用途选择设计令�
 
 其中九条由 `pnpm -F ranui verify:design` 校验，CI 在每个 PR 上对 ranui 自身源码运行：暗色不安全的
 颜色兜底、裸颜色字面量、间距尺度、尺寸尺度、只支持鼠标的拖拽循环、会让 `hidden` 失效的 `:host`
-display 规则、引用未声明令牌的兜底、组件查询自己的 shadow 树、以及在构造函数之外构建 shadow 树。
+display 规则、引用未声明令牌的兜底、组件在自己的 shadow 树里查找刚刚构建的元素，以及在构造函数之外构建 shadow 树。
 已知的违例记录在基线文件里并单向收紧：新增会失败，修好后再被悄悄改回去也会失败。
 
 这些检查只扫描命令配置的源码范围，不会自动检查使用 ranui 的外部应用。本仓库的文档站等页面另有对应检查。

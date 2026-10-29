@@ -6,7 +6,7 @@ description: 'Reglas de diseño para construir pantallas con ranui: elige un rol
 
 Las reglas que debe seguir una pantalla hecha con componentes de ranui para que se lea como **un sistema** y no como un montón de piezas.
 
-Esta página trata del **criterio**: a qué token echar mano, qué comprobar antes de publicar. El catálogo de tokens en sí es el [sistema de diseño](/es/src/ranui/design-system/); cambiar y sobrescribir en tiempo de ejecución es la [tematización](/es/src/ranui/theme/); qué forma toma la página antes de todo eso es la [arquitectura de información](/es/src/ranui/information-architecture/). Las reglas completas están en el repositorio en [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
+Esta página trata del **criterio**: a qué token echar mano, qué comprobar antes de publicar. El catálogo de tokens en sí es el [sistema de diseño](/es/src/ranui/design-system/); cambiar y sobrescribir en tiempo de ejecución es la [tematización](/es/src/ranui/theme/); qué forma toma la página antes de todo eso es la [arquitectura de información](/es/src/ranui/information-architecture/). Las reglas completas están en el repositorio, en la [guía de diseño](https://github.com/chaxus/ran/blob/main/design/DESIGN.md) y el [adaptador de implementación de ranui](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md); [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) se genera a partir de ambos.
 
 > **Úsalas cuando** estés maquetando una página o construyendo un componente propio a partir de elementos `<r-*>` y tengas que decidir un color, un espacio, un tamaño de texto, una sombra o una duración de animación. La respuesta corta es siempre la misma: **elige un rol y deja que el token ponga el valor.**
 
@@ -49,7 +49,7 @@ Toma cada espacio de la [escala de nueve valores](/es/src/ranui/design-system/#s
 
 - **8px** entre elementos dentro de un grupo.
 - **16px** entre grupos.
-- **32–40px** entre secciones.
+- **24–32px** entre regiones.
 
 No inventes `20px` ni `28px`. El conjunto limitado es lo que produce el ritmo de la página; un solo espacio fuera de la escala es lo que lo rompe. Mantén ejes compartidos entre regiones (bordes, líneas base y columnas que se alinean) y comprueba la alineación contra los píxeles dibujados, no a ojo.
 
@@ -58,8 +58,7 @@ los grupos separados 16px y las subsecciones relacionadas 24px. Cada separación
 un solo responsable; cuente los márgenes de los hijos, el relleno existente y el espacio de
 línea base de los controles en línea. Compruebe los saltos de línea, la ayuda oculta y los
 errores en el navegador. Las
-[reglas canónicas de ritmo vertical](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-incluyen excepciones y pruebas inversas ejecutables, sin cambiar los valores predeterminados de los componentes.
+La sección de [lenguaje visual](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language) de la guía fija estas relaciones de espaciado, y [verificar un cambio](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) explica cómo comprobarlas, sin cambiar los valores predeterminados de los componentes.
 
 ## Elegir la tipografía
 
@@ -89,7 +88,7 @@ Un `z-index` general en el envoltorio eleva _todo_ lo que hay dentro (incluido e
 
 ## Movimiento {#motion}
 
-El propósito y la frecuencia de uso deciden si hace falta movimiento. La respuesta frecuente al hover, al foco y al teclado es inmediata por defecto. Usa los tokens existentes solo cuando el movimiento explique un cambio: unos 150ms para transiciones pequeñas, 200ms para menús y 300ms para diálogos son ejemplos opcionales, no esperas obligatorias. Permite interrumpir el movimiento y respeta `prefers-reduced-motion`.
+El propósito y la frecuencia de uso deciden si hace falta movimiento. La respuesta frecuente al hover, al foco y al teclado es inmediata por defecto. Usa los tokens existentes solo cuando el movimiento explique un cambio: la respuesta dura 0–100ms; la entrada, 250–400ms, y desacelera sin pasarse del destino; la salida, 150–200ms, y acelera. Son rangos para cuando hay movimiento, no esperas obligatorias. Permite interrumpir el movimiento y respeta `prefers-reduced-motion`.
 
 **Nunca dejes que una propiedad de la paleta haga transición.** El CSS no puede saber _por qué_ cambió un color, así que una `transition` sobre `background-color`, `color`, `border-color`, `box-shadow`, `fill` o `stroke` también se dispara cuando cambia el **tema**, y cada elemento se funde a su propio ritmo mientras el resto de la página ya ha cambiado. Anima propiedades de movimiento (`transform`, `opacity`, geometría) en su lugar. `transition: all` y atajos pelados como `transition: 0.2s` significan _todo_, propiedades de la paleta incluidas; ambos están prohibidos en los estilos de ranui y son mala idea en los tuyos.
 
@@ -110,7 +109,7 @@ El texto también es parte del sistema:
 
 - Cumple el contraste **WCAG AA** del texto contra su fondo.
 - **Nunca señales un estado solo con color**: acompáñalo de un icono, una etiqueta o texto.
-- Todo elemento interactivo conserva un **anillo de foco visible** (`--ran-focus-ring`, o `outline: 2px solid var(--ran-color-primary); outline-offset: 2px`). Nunca lo quites por pulcritud.
+- Todo elemento interactivo conserva un **anillo de foco visible** (`--ran-focus-ring`, o `outline: 2px solid var(--ran-color-focus); outline-offset: 2px`). Nunca lo quites por pulcritud.
 - **Todo se alcanza con el teclado.** Nada es solo de ratón.
 - Respeta `prefers-reduced-motion` y `prefers-color-scheme`.
 
@@ -126,7 +125,7 @@ Ni la forma de apuntar ni el tamaño de la ventana son el objetivo secundario.
 
 ## Lo que la biblioteca comprueba de forma mecánica
 
-Nueve de estas reglas las comprueba `pnpm -F ranui verify:design`, que CI ejecuta sobre el código de la propia ranui: respaldos de color inseguros en modo oscuro, literales de color crudos, la escala de espacios, la escala de tamaños, bucles de arrastre solo para ratón, reglas de `display` en `:host` que rompen `hidden`, respaldos que nombran tokens no declarados, componentes que consultan su propio árbol shadow y árboles shadow construidos fuera del constructor. Las infracciones conocidas quedan fijadas en un archivo de referencia, así que no se puede añadir una nueva ni deshacer una corrección en silencio.
+Nueve de estas reglas las comprueba `pnpm -F ranui verify:design`, que CI ejecuta sobre el código de la propia ranui: respaldos de color inseguros en modo oscuro, literales de color crudos, la escala de espacios, la escala de tamaños, bucles de arrastre solo para ratón, reglas de `display` en `:host` que rompen `hidden`, respaldos que nombran tokens no declarados, componentes que buscan en su árbol shadow un elemento que acaban de construir y árboles shadow construidos fuera del constructor. Las infracciones conocidas quedan fijadas en un archivo de referencia, así que no se puede añadir una nueva ni deshacer una corrección en silencio.
 
 Estas comprobaciones solo inspeccionan las rutas de código configuradas para el comando; no revisan automáticamente las aplicaciones que usan ranui. Este repositorio tiene comprobaciones separadas para superficies como la documentación. Usa las comprobaciones de tu aplicación y verifica el diseño, los temas y la interacción en el navegador.
 

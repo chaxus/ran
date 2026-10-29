@@ -6,7 +6,7 @@ description: 'ranui로 화면을 만들 때의 디자인 규칙. 역할을 고�
 
 ranui 컴포넌트로 만든 화면이 부품 더미가 아니라 **하나의 시스템**으로 읽히도록 지켜야 할 규칙입니다.
 
-이 페이지가 다루는 것은 **판단**입니다. 어떤 토큰에 손을 뻗을지, 내보내기 전에 무엇을 확인할지. 토큰 목록 자체는 [디자인 시스템](/ko/src/ranui/design-system/)이고, 실행 중에 바꾸고 덮어쓰는 일은 [테마](/ko/src/ranui/theme/)가 다룹니다. 그 모든 것보다 앞서 페이지가 어떤 형태를 갖는지는 [정보 구조](/ko/src/ranui/information-architecture/)가 다룹니다. 자세한 설계 규칙은 저장소의 [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md)에 있습니다.
+이 페이지가 다루는 것은 **판단**입니다. 어떤 토큰에 손을 뻗을지, 내보내기 전에 무엇을 확인할지. 토큰 목록 자체는 [디자인 시스템](/ko/src/ranui/design-system/)이고, 실행 중에 바꾸고 덮어쓰는 일은 [테마](/ko/src/ranui/theme/)가 다룹니다. 그 모든 것보다 앞서 페이지가 어떤 형태를 갖는지는 [정보 구조](/ko/src/ranui/information-architecture/)가 다룹니다. 자세한 설계 규칙은 저장소의 [디자인 가이드](https://github.com/chaxus/ran/blob/main/design/DESIGN.md)와 [ranui 구현 어댑터](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)에 있으며, [`packages/ranui/docs/DESIGN.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md)는 이 두 파일로 생성됩니다.
 
 > **이럴 때 씁니다.** 페이지를 배치하거나 `<r-*>` 요소로 앱 수준의 컴포넌트를 만들면서 색, 간격, 글자 크기, 그림자, 동작 시간을 정해야 할 때. 짧은 답은 늘 같습니다. **역할을 고르고, 값은 토큰에 맡기세요.**
 
@@ -49,7 +49,7 @@ ranui 컴포넌트로 만든 화면이 부품 더미가 아니라 **하나의 �
 
 - 한 묶음 안의 요소 사이는 **8px**.
 - 묶음과 묶음 사이는 **16px**.
-- 구역과 구역 사이는 **32–40px**.
+- 구역과 구역 사이는 **24–32px**.
 
 `20px`이나 `28px`을 지어내지 마세요. 페이지의 리듬을 만드는 것은 제한된 선택지이고, 그것을 깨뜨리는 것은 스케일을 벗어난 간격 하나입니다. 영역을 가로지르는 공통의 등뼈(맞춰진 가장자리, 기준선, 열)를 지키고, 정렬은 눈이 아니라 그려진 픽셀로 확인하세요.
 
@@ -57,8 +57,7 @@ ranui 컴포넌트로 만든 화면이 부품 더미가 아니라 **하나의 �
 서로 다른 그룹은 16px, 관련 하위 구역은 24px을 사용할 수 있습니다. 각 간격은 한 계층에서만
 관리하고, 자식 요소의 margin, 기존 안쪽 여백, 인라인 컨트롤의 기준선 여백을 먼저 계산합니다.
 줄바꿈, 도움말 숨김, 오류 표시 상태를 브라우저에서 실측하세요.
-[세로 리듬의 공식 지침](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-에서 예외와 실행 가능한 역검증을 다루며, 컴포넌트 기본값은 변경하지 않습니다.
+간격 관계는 가이드의 [시각 언어](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language) 절이 정하고, 확인 방법은 [변경 검증](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change)에 있습니다. 컴포넌트 기본값은 변경하지 않습니다.
 
 ## 글자 고르기
 
@@ -88,7 +87,7 @@ ranui 컴포넌트로 만든 화면이 부품 더미가 아니라 **하나의 �
 
 ## 모션 {#motion}
 
-목적과 사용 빈도로 움직임이 필요한지 판단하세요. 빈번한 호버, 포커스, 키보드 피드백은 기본적으로 즉시 반응합니다. 변화를 이해하는 데 도움이 될 때만 기존 모션 토큰을 사용하세요. 작은 전환 약 150ms, 메뉴 약 200ms, 대화 상자 약 300ms는 선택적인 예시이지 필수 대기 시간이 아닙니다. 새 동작으로 중단할 수 있게 하고 `prefers-reduced-motion`을 존중하세요.
+목적과 사용 빈도로 움직임이 필요한지 판단하세요. 빈번한 호버, 포커스, 키보드 피드백은 기본적으로 즉시 반응합니다. 변화를 이해하는 데 도움이 될 때만 기존 모션 토큰을 사용하세요. 피드백은 0–100ms, 들어올 때는 250–400ms 동안 목표를 넘치지 않고 감속하며, 나갈 때는 150–200ms 동안 가속합니다. 움직임을 쓸 때의 범위일 뿐 필수 대기 시간이 아닙니다. 새 동작으로 중단할 수 있게 하고 `prefers-reduced-motion`을 존중하세요.
 
 **팔레트 속성은 절대 트랜지션하지 마세요.** CSS는 색이 **왜** 바뀌었는지 알지 못합니다. 그래서 `background-color`, `color`, `border-color`, `box-shadow`, `fill`, `stroke`에 건 `transition`은 **테마**가 바뀔 때도 발동하고, 페이지의 나머지가 이미 넘어간 뒤에도 요소마다 제 속도로 서서히 물듭니다. 대신 움직임 속성(`transform`, `opacity`, 형상)을 애니메이션하세요. `transition: all`과 `transition: 0.2s` 같은 맨 축약형은 팔레트 속성까지 포함해 **전부**를 뜻합니다. 둘 다 ranui 자체 스타일에서는 금지되어 있고, 여러분의 스타일에서도 나쁜 생각입니다.
 
@@ -109,7 +108,7 @@ ranui 컴포넌트로 만든 화면이 부품 더미가 아니라 **하나의 �
 
 - 글자와 배경의 대비는 **WCAG AA**를 만족시키세요.
 - **상태를 색만으로 알리지 마세요.** 아이콘이나 레이블, 글과 짝지으세요.
-- 조작할 수 있는 모든 요소는 **보이는 포커스 링**을 지킵니다(`--ran-focus-ring`, 또는 `outline: 2px solid var(--ran-color-primary); outline-offset: 2px`). 깔끔해 보이려고 지우지 마세요.
+- 조작할 수 있는 모든 요소는 **보이는 포커스 링**을 지킵니다(`--ran-focus-ring`, 또는 `outline: 2px solid var(--ran-color-focus); outline-offset: 2px`). 깔끔해 보이려고 지우지 마세요.
 - **모든 것은 키보드로 닿을 수 있어야 합니다.** 마우스 전용은 없습니다.
 - `prefers-reduced-motion`과 `prefers-color-scheme`을 존중하세요.
 
@@ -125,7 +124,7 @@ ranui 컴포넌트로 만든 화면이 부품 더미가 아니라 **하나의 �
 
 ## 라이브러리가 기계적으로 강제하는 것
 
-이 규칙 가운데 아홉 가지는 `pnpm -F ranui verify:design`이 확인하며, CI가 ranui 자체 소스에 대해 돌립니다. 다크에서 안전하지 않은 색 대체값, 날 색 리터럴, 간격 스케일, 크기 스케일, 마우스 전용 끌기 루프, `hidden`을 깨뜨리는 `:host`의 display 규칙, 선언되지 않은 토큰을 가리키는 대체값, 자기 섀도 트리를 query하는 컴포넌트, 생성자 밖에서 지어진 섀도 트리가 그것입니다. 알려진 위반은 기준선 파일에 고정되어 있어, 새 위반을 더할 수도 없고 고친 것이 조용히 되돌아갈 수도 없습니다.
+이 규칙 가운데 아홉 가지는 `pnpm -F ranui verify:design`이 확인하며, CI가 ranui 자체 소스에 대해 돌립니다. 다크에서 안전하지 않은 색 대체값, 날 색 리터럴, 간격 스케일, 크기 스케일, 마우스 전용 끌기 루프, `hidden`을 깨뜨리는 `:host`의 display 규칙, 선언되지 않은 토큰을 가리키는 대체값, 방금 만든 요소를 자기 섀도 트리에서 다시 찾는 컴포넌트, 생성자 밖에서 지어진 섀도 트리가 그것입니다. 알려진 위반은 기준선 파일에 고정되어 있어, 새 위반을 더할 수도 없고 고친 것이 조용히 되돌아갈 수도 없습니다.
 
 이 검사는 명령에 설정된 소스 범위만 확인하며 ranui를 사용하는 외부 앱을 자동으로 검사하지 않습니다. 이 저장소의 문서 사이트 등에는 별도 검사가 있습니다. 앱 자체의 검사 명령을 사용하고 브라우저에서 레이아웃, 테마, 상호작용을 확인하세요.
 

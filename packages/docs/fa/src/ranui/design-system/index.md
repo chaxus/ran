@@ -27,7 +27,7 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 
 **لایه ۱: پالت پایه.** همان مقیاس‌های خام پایین. به‌ندرت مستقیم مصرف می‌شوند.
 
-**لایه ۲: توکن‌های معنایی.** `--ran-color-*` و هم‌خانواده‌هایش، که روی لایه ۱ نگاشت شده‌اند. **همین لایه را مصرف کنید.** حالت تیره تنها لایه ۱ را از نو تعریف می‌کند، پس هر توکن معنایی از راه `var()` می‌چرخد و هیچ‌جای کتابخانه بازنویسیِ تیرهٔ کامپوننت‌به‌کامپوننت وجود ندارد.
+**لایه ۲: توکن‌های معنایی.** `--ran-color-*` و هم‌خانواده‌هایش، که روی لایه ۱ نگاشت شده‌اند. **همین لایه را مصرف کنید.** حالت تیره لایه ۱ و تنها چند توکن معنایی را که با یک پلهٔ مقیاس جور درنمی‌آیند (فهرستشان در پایان همین صفحه آمده) از نو تعریف می‌کند، پس هر توکن معنایی دیگر از راه `var()` می‌چرخد و هیچ‌جای کتابخانه بازنویسیِ تیرهٔ کامپوننت‌به‌کامپوننت وجود ندارد.
 
 ```
 --ran-gray-1000        →  #111113 (روشن) / #ededef (تیره)        ← لایه ۱، می‌چرخد
@@ -81,16 +81,16 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 
 | پله  | روشن                                                                         | تیره                                                                         |
 | ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100  | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200  | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300  | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400  | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500  | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600  | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700  | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800  | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900  | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000 | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### آبی — `--ran-blue-100..1000`
 
@@ -162,13 +162,13 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 
 ### توکن‌های معنایی رنگ
 
-لایه‌ای که کامپوننت‌ها واقعاً می‌خوانند. هرچه اینجاست از راه مقیاس‌های بالا حل می‌شود، پس خودش با پوسته می‌چرخد.
+لایه‌ای که کامپوننت‌ها واقعاً می‌خوانند. جز مقدارهای ثابتی که پایین‌تر آمده، هرچه اینجاست از راه مقیاس‌های بالا حل می‌شود، پس خودش با پوسته می‌چرخد.
 
 | توکن                               | حل می‌شود به                                                                                                                             | نقش                                          |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | `--ran-color-bg`                   | `--ran-background-100`                                                                                                                   | پس‌زمینه صفحه                                |
 | `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                   | نواحی ملایم صفحه                             |
-| `--ran-color-bg-elevated`          | `--ran-background-100` · gray-100 (تیره)                                                                                                 | کارت‌ها، سطح‌ها                              |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · <span class="swatch" style="--swatch:#18181b"></span> `#18181b` (تیره)                                          | کارت‌ها، سطح‌ها                              |
 | `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                         | پرشدگی فرورفته یا خفه                        |
 | `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                         | سطح هاور                                     |
 | `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                         | سطح حالت فشرده                               |
@@ -189,10 +189,10 @@ ranui همان نردبان را به‌شکل مقیاس‌های `--ran-*` خ�
 | `--ran-color-success`              | `--ran-green-700`                                                                                                                        | موفقیت                                       |
 | `--ran-color-warning`              | `--ran-amber-700`                                                                                                                        | هشدار                                        |
 | `--ran-color-danger`               | `--ran-red-700`                                                                                                                          | خطر / ارور                                   |
-| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                         | پیوندها                                      |
+| `--ran-color-link`                 | `--ran-blue-800` · <span class="swatch" style="--swatch:#5b9dff"></span> `#5b9dff` (تیره)                                                | پیوندها                                      |
 | `--ran-color-focus`                | `--ran-blue-700`                                                                                                                         | رنگ فوکوس: حلقه و خط‌های فوکوس               |
 
-`--ran-color-primary-hover` / `-active` دو مقدار ثابت لایه معنایی‌اند: به‌جای حرکت در طول یک مقیاس، به‌سوی پس‌زمینه صفحه گام برمی‌دارند، پس حالت تیره مستقیم از نو تعریفشان می‌کند.
+`--ran-color-primary-hover` / `-active` در هر دو پوسته مقدار ثابت‌اند: به‌جای حرکت در طول یک مقیاس، به‌سوی پس‌زمینه صفحه گام برمی‌دارند، پس حالت تیره مستقیم از نو تعریفشان می‌کند. حالت تیره `--ran-color-bg-elevated` و `--ran-color-link` را هم مقدار ثابت می‌گذارد، چون در تیره هیچ‌کدام با یک پلهٔ مقیاس جور درنمی‌آید.
 
 ### هر رنگ تأکیدی چه معنایی دارد
 
@@ -313,19 +313,19 @@ import 'ranui/fonts'; // برای باندلرها
 
 ## حرکت
 
-| توکن                         | مقدار   | کاربرد                    |
-| ---------------------------- | ------- | ------------------------- |
-| `--ran-motion-duration-fast` | `0.14s` | گذارهای حالت هاور و فشرده |
-| `--ran-motion-duration-base` | `0.2s`  | پاپ‌اورها، منوها          |
-| `--ran-motion-duration-slow` | `0.28s` | نمایان‌شدن‌های بزرگ‌تر    |
+| توکن                         | مقدار   | کاربرد                                                              |
+| ---------------------------- | ------- | ------------------------------------------------------------------- |
+| `--ran-motion-duration-fast` | `0.14s` | محوشدن‌های کوتاه شفافیت و جابه‌جایی آیکون؛ محوشدن در حالت کاهش حرکت |
+| `--ran-motion-duration-base` | `0.2s`  | پاپ‌اورها، منوها                                                    |
+| `--ran-motion-duration-slow` | `0.28s` | نمایان‌شدن‌های بزرگ‌تر                                              |
 
-| توکن شتاب                    | منحنی                            | خصلت                                   |
-| ---------------------------- | -------------------------------- | -------------------------------------- |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | کندشونده، همه‌کاره                     |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | سریع و بدون رد شدن از هدف: کلیدها      |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | رد شدن اندک از هدف: دکمه‌ها، کارت‌ها   |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | رد شدن بازیگوشانه: لایک، افزودن به سبد |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | آرام و بدون رد شدن: نمایان‌شدن، چیدمان |
+| توکن شتاب                    | منحنی                            | خصلت                                                                                                                 |
+| ---------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | کندشونده، همه‌کاره                                                                                                   |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | سریع و بدون رد شدن از هدف: کلیدها                                                                                    |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | رد شدن اندک از هدف: فقط برای یک لحظهٔ بیانگر که میزبان در صفحه‌ای متقاعدکننده برمی‌گزیند؛ هرگز پیش‌فرض کامپوننت نیست |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | رد شدن بازیگوشانه: همان لحظهٔ اختیاری میزبان؛ هیچ کامپوننتی از آن استفاده نمی‌کند                                    |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | آرام و بدون رد شدن: نمایان‌شدن، چیدمان                                                                               |
 
 خانواده spring از فنرهای کوک‌شده SwiftUI تقطیر شده است (response/damping به یک بزیهٔ تک‌گذر از هدف فرو کاسته شده).
 
@@ -333,12 +333,12 @@ import 'ranui/fonts'; // برای باندلرها
 
 ## فوکوس
 
-| توکن                             | مقدار                                                                | برای                                            |
-| -------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------- |
-| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700)` | حلقه استاندارد، به‌شکل `box-shadow`             |
-| `--ran-focus-ring-inverse-color` | `#fff`                                                               | رنگ حلقه برای سطحی که در _هر دو_ پوسته تیره است |
+| توکن                             | مقدار                                                                   | برای                                            |
+| -------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------- |
+| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-focus)` | حلقه استاندارد، به‌شکل `box-shadow`             |
+| `--ran-focus-ring-inverse-color` | `#fff`                                                                  | رنگ حلقه برای سطحی که در _هر دو_ پوسته تیره است |
 
-حلقه دو لایه است: یک حلقه درونی به رنگ پس‌زمینه و یک حلقه بیرونی آبی؛ پس روی هر سطحی دیده می‌شود و به‌جای دنبال‌کردنِ primaryِ حالا تک‌رنگ، آبی می‌ماند.
+حلقه دو لایه است: یک حلقه درونی به رنگ پس‌زمینه و یک حلقه بیرونی به رنگ `--ran-color-focus` (آبی)؛ پس روی هر سطحی دیده می‌شود و به‌جای دنبال‌کردنِ primaryِ حالا تک‌رنگ، آبی می‌ماند.
 
 `--ran-focus-ring-inverse-color` **عمداً در حالت تیره از نو تعریف نمی‌شود**: برای کامپوننتی هست که سطح خودش صرف‌نظر از پوسته صفحه همیشه تیره است (نوار کنترل `r-player` روی هر ویدیویی) و آن سطح با تغییر صفحه عوض نمی‌شود.
 
@@ -356,10 +356,11 @@ import 'ranui/fonts'; // برای باندلرها
 
 ## حالت تیره چه چیزی را از نو تعریف می‌کند
 
-`data-ran-theme="dark"` روی `<html>` (یا روی هر زیردرختی، [پوسته‌بندی](/fa/src/ranui/theme/) را ببینید) **فقط پالت پایه** را از نو تعریف می‌کند، با سه استثنا که از راه یک مقیاس حل نمی‌شوند:
+`data-ran-theme="dark"` روی `<html>` (یا روی هر زیردرختی، [پوسته‌بندی](/fa/src/ranui/theme/) را ببینید) **فقط پالت پایه** را از نو تعریف می‌کند، با چهار استثنا که از راه یک مقیاس حل نمی‌شوند:
 
 - تمام لایه ۱: هر پله خاکستری، خاکستری آلفا، آبی، قرمز، کهربایی و سبز، و هر دو پس‌زمینه؛
-- `--ran-color-bg-elevated` که در تیره به `--ran-gray-100` اشاره می‌کند تا کارت از صفحه سیاه بالا بیاید نه اینکه در آن گم شود؛
+- `--ran-color-bg-elevated` که در تیره مقدار ثابت `#18181b` است تا کارت از صفحه سیاه بالا بیاید نه اینکه در آن گم شود؛
+- `--ran-color-link` که در تیره مقدار ثابت `#5b9dff` است تا پیوندها روی صفحهٔ تیره کنتراست کافی داشته باشند؛
 - `--ran-color-primary-hover` / `-active` که مقدار ثابت‌اند نه ارجاع به مقیاس؛
 - هر سه رده سایه، که برای زمینه تیره از نو کوک شده‌اند.
 

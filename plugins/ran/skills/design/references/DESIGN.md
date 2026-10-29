@@ -6,8 +6,8 @@ A one-page checklist for anyone, person or coding agent, building the interface 
 Use it before you start, while you build, and before you hand a change back. It assumes the product
 already has tokens and components; it is about using them well.
 
-**MUST** marks a defect a user can observe. **SHOULD** is the default; say why when you depart from
-it. Items marked **(checked)** are enforced by a test in this repository; the table at the end says
+**MUST** marks a defect a user can observe, and nothing else is a MUST. **SHOULD** is a starting
+point, not a limit: depart from it whenever the work is better for it, and say why. Items marked **(checked)** are enforced by a test in this repository; the table at the end says
 which one. Everything else needs your eyes in a real browser.
 
 ranui's [implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md) maps these items to ranui's tokens,
@@ -15,7 +15,8 @@ stacking tiers and component specifics.
 
 ## Before you start
 
-Write three answers in the task note before touching a component:
+Answer three questions before you change what a page shows; for a page or region you are building or
+restructuring, write the answers down:
 
 1. What does the reader need to see on arrival?
 2. What else must be visible for that to make sense?
@@ -86,18 +87,8 @@ MUST be able to answer, without scrolling:
 - The surfaces the browser draws still carry the design: text selection, the caret, focus rings,
   scrollbars and the numerals in tables (`tabular-nums`). Theme them from the tokens.
 
-### Defaults to refuse
-
-These are what an interface looks like when nobody decided. A brief can earn any of them; reaching
-for one by habit means the decision was skipped.
-
-- A label above a heading (an eyebrow or kicker) that repeats what the heading says, or section
-  numbers (01, 02) that carry no sequence the reader needs.
-- Cards nested in cards; identical icon-heading-text cards as the page's structure; a rounded icon tile
-  above every heading.
-- Gradient text **(checked)**, glow halos, glass and blur as decoration rather than a specific effect,
-  and a hairline border under a wide soft shadow: declare elevation once.
-- Pulsing dots, blinking cursors and marquees that move without reporting anything.
+- Decoration is a decision, not a default. When an eyebrow label, a gradient, a glow or a card around
+  everything appears, check that it does a job on this page; remove it if it only fills space.
 
 ## Layout
 
@@ -125,6 +116,9 @@ for one by habit means the decision was skipped.
   confirmed; a failure keeps every entry and says how to recover.
 - Each async result is tied to the request that produced it, so a late answer never overwrites a
   newer one, and a background update never moves focus.
+- A modal is for a short confirmation or one answer the task cannot continue without, not a place to
+  navigate; transient context belongs in a popover, peer views of one object in tabs, and a second
+  task on its own page.
 - A modal dialog keeps focus inside it until it closes. Enter never submits while an input method is
   still composing text.
 - Selection looks different from hover. A link navigates; a button changes state.
@@ -135,9 +129,11 @@ for one by habit means the decision was skipped.
 
 - Feedback (hover, focus, press) is 0–100ms. Entering is 250–400ms and decelerates without
   overshoot; leaving is 150–200ms and accelerates. Theme switches are not animated.
-- No bounce or elastic easing: things decelerate into place. **(checked: no overshooting curve)**
-- Animate only `transform` and `opacity`; neighbours make room by transform (FLIP). Never animate
-  `height`, `padding` or `max-height`, and never use `transition: all`.
+- Controls and content settle without bounce or elastic easing; a page that persuades may spend one
+  expressive moment.
+- Prefer `transform` and `opacity`; neighbours make room by transform (FLIP). Never animate layout
+  (`height`, `padding`, `max-height`, `top`, `left`), which reflows the page every frame, and never use
+  `transition: all`.
 - MUST: under reduced motion nothing travels or keeps running; at most a short fade. **(checked)**
 - Motion is interruptible and reverses cleanly. Watch it as a recording, not a still.
 
@@ -172,7 +168,6 @@ From Krug again: remove half the words, then half of what is left.
 | Item                                                     | Check                                                 |
 | -------------------------------------------------------- | ----------------------------------------------------- |
 | Raw colours, light-only fallbacks, off-scale spacing     | `verify:design` (static, configured packages)         |
-| Gradient text, overshoot easing                          | `verify:design` (static, configured packages)         |
 | Measure, leading, text size, heading spacing             | `packages/docs/test/browser/design-checklist.spec.ts` |
 | No horizontal scroll; navigation reachable; still motion | `packages/docs/test/browser/site-layout.spec.ts`      |
 | Five-second heading, trunk test, targets, focus, shift   | `packages/docs/test/browser/design-checklist.spec.ts` |

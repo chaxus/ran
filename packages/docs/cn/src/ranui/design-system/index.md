@@ -33,8 +33,9 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 **第一层，基础色板**：下面这些原始色阶，很少直接消费。
 
-**第二层，语义令牌**：`--ran-color-*` 等，映射到第一层。**请使用这一层。** 暗色模式只重定义第一
-层，每个语义令牌都通过 `var()` 自动翻转，整个组件库不存在任何组件级的暗色覆盖。
+**第二层，语义令牌**：`--ran-color-*` 等，映射到第一层。**请使用这一层。** 暗色模式重定义第一
+层，语义令牌里只改那几个无法跟随单一色阶档位的（见本页末尾），其余语义令牌都通过 `var()` 自动翻转，
+整个组件库不存在任何组件级的暗色覆盖。
 
 ```
 --ran-gray-1000        →  #111113（浅色） / #ededef（暗色）     ← 第一层，会翻转
@@ -88,16 +89,16 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 | 档位 | 浅色                                                                         | 暗色                                                                         |
 | ---- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 100  | <span class="swatch is-alpha" style="--swatch:#0a0a0b0d"></span> `#0a0a0b0d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
-| 200  | <span class="swatch is-alpha" style="--swatch:#0a0a0b15"></span> `#0a0a0b15` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
-| 300  | <span class="swatch is-alpha" style="--swatch:#0a0a0b1a"></span> `#0a0a0b1a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
-| 400  | <span class="swatch is-alpha" style="--swatch:#0a0a0b14"></span> `#0a0a0b14` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
-| 500  | <span class="swatch is-alpha" style="--swatch:#0a0a0b36"></span> `#0a0a0b36` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
-| 600  | <span class="swatch is-alpha" style="--swatch:#0a0a0b3d"></span> `#0a0a0b3d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
-| 700  | <span class="swatch is-alpha" style="--swatch:#0a0a0b70"></span> `#0a0a0b70` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
-| 800  | <span class="swatch is-alpha" style="--swatch:#0a0a0b82"></span> `#0a0a0b82` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
-| 900  | <span class="swatch is-alpha" style="--swatch:#0a0a0bb3"></span> `#0a0a0bb3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
-| 1000 | <span class="swatch is-alpha" style="--swatch:#0a0a0be8"></span> `#0a0a0be8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
+| 100  | <span class="swatch is-alpha" style="--swatch:#0000000d"></span> `#0000000d` | <span class="swatch is-alpha" style="--swatch:#ffffff12"></span> `#ffffff12` |
+| 200  | <span class="swatch is-alpha" style="--swatch:#00000015"></span> `#00000015` | <span class="swatch is-alpha" style="--swatch:#ffffff17"></span> `#ffffff17` |
+| 300  | <span class="swatch is-alpha" style="--swatch:#0000001a"></span> `#0000001a` | <span class="swatch is-alpha" style="--swatch:#ffffff21"></span> `#ffffff21` |
+| 400  | <span class="swatch is-alpha" style="--swatch:#00000014"></span> `#00000014` | <span class="swatch is-alpha" style="--swatch:#ffffff24"></span> `#ffffff24` |
+| 500  | <span class="swatch is-alpha" style="--swatch:#00000036"></span> `#00000036` | <span class="swatch is-alpha" style="--swatch:#ffffff3d"></span> `#ffffff3d` |
+| 600  | <span class="swatch is-alpha" style="--swatch:#0000003d"></span> `#0000003d` | <span class="swatch is-alpha" style="--swatch:#ffffff82"></span> `#ffffff82` |
+| 700  | <span class="swatch is-alpha" style="--swatch:#00000070"></span> `#00000070` | <span class="swatch is-alpha" style="--swatch:#ffffff8a"></span> `#ffffff8a` |
+| 800  | <span class="swatch is-alpha" style="--swatch:#00000082"></span> `#00000082` | <span class="swatch is-alpha" style="--swatch:#ffffff78"></span> `#ffffff78` |
+| 900  | <span class="swatch is-alpha" style="--swatch:#000000b3"></span> `#000000b3` | <span class="swatch is-alpha" style="--swatch:#ffffff9c"></span> `#ffffff9c` |
+| 1000 | <span class="swatch is-alpha" style="--swatch:#000000e8"></span> `#000000e8` | <span class="swatch is-alpha" style="--swatch:#ffffffeb"></span> `#ffffffeb` |
 
 ### 蓝 —— `--ran-blue-100..1000`
 
@@ -169,13 +170,13 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 
 ### 语义颜色令牌
 
-组件真正读取的那一层。这里的一切都通过上面的色阶解析，因此会自己跟着主题翻转。
+组件真正读取的那一层。除了下文提到的几个字面量，这里的一切都通过上面的色阶解析，因此会自己跟着主题翻转。
 
 | 令牌                               | 解析到                                                                                                                                 | 职责                                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | `--ran-color-bg`                   | `--ran-background-100`                                                                                                                 | 页面背景                                |
 | `--ran-color-bg-subtle`            | `--ran-background-200`                                                                                                                 | 轻微区分的区域                          |
-| `--ran-color-bg-elevated`          | `--ran-background-100` · 暗色下为 gray-100                                                                                             | 卡片、表面                              |
+| `--ran-color-bg-elevated`          | `--ran-background-100` · 暗色 <span class="swatch" style="--swatch:#18181b"></span> `#18181b`                                          | 卡片、表面                              |
 | `--ran-color-bg-muted`             | `--ran-gray-100`                                                                                                                       | 内凹 / 弱化填充                         |
 | `--ran-color-bg-hover`             | `--ran-gray-200`                                                                                                                       | 悬停表面                                |
 | `--ran-color-bg-active`            | `--ran-gray-300`                                                                                                                       | 激活（按下）表面                        |
@@ -198,11 +199,12 @@ ranui 把这套阶梯落成 `--ran-*` 色阶，在其上叠加语义令牌，并
 | `--ran-color-danger`               | `--ran-red-700`                                                                                                                        | 危险 / 错误                             |
 | `--ran-color-warning-foreground`   | `--ran-amber-900`                                                                                                                      | 警告文字                                |
 | `--ran-color-danger-foreground`    | `--ran-red-900`                                                                                                                        | 危险 / 错误文字                         |
-| `--ran-color-link`                 | `--ran-blue-800`                                                                                                                       | 链接                                    |
+| `--ran-color-link`                 | `--ran-blue-800` · 暗色 <span class="swatch" style="--swatch:#5b9dff"></span> `#5b9dff`                                                | 链接                                    |
 | `--ran-color-focus`                | `--ran-blue-700`                                                                                                                       | 焦点色：焦点环与焦点描边                |
 
-`--ran-color-primary-hover` / `-active` 是语义层里仅有的两个字面量：它们是朝页面背景方向走的，而不
-是沿着某条色阶走，所以暗色模式直接重定义了它们。
+`--ran-color-primary-hover` / `-active` 在两套主题下都是字面量：它们是朝页面背景方向走的，而不
+是沿着某条色阶走，所以暗色模式直接重定义了它们。暗色模式还把 `--ran-color-bg-elevated` 和
+`--ran-color-link` 设成了字面量，因为在暗色下它们都对应不上某一个色阶档位。
 
 `--ran-media-background` 在两种主题下均为 `#000`。视频画布需要保持深色，以承托固定白色的播放控件；Player 的 `--ran-player-background` 派生自此令牌。这个媒体角色不会随页面配色反转。
 
@@ -339,19 +341,19 @@ import 'ranui/fonts'; // 打包器
 
 ## 动效
 
-| 令牌                         | 值      | 用于                |
-| ---------------------------- | ------- | ------------------- |
-| `--ran-motion-duration-fast` | `0.14s` | 悬停 / 激活状态过渡 |
-| `--ran-motion-duration-base` | `0.2s`  | 气泡、菜单          |
-| `--ran-motion-duration-slow` | `0.28s` | 较大的展开          |
+| 令牌                         | 值      | 用于                                                 |
+| ---------------------------- | ------- | ---------------------------------------------------- |
+| `--ran-motion-duration-fast` | `0.14s` | 短暂的透明度渐变和图标切换，以及减弱动效时的淡入淡出 |
+| `--ran-motion-duration-base` | `0.2s`  | 气泡、菜单                                           |
+| `--ran-motion-duration-slow` | `0.28s` | 较大的展开                                           |
 
-| 缓动令牌                     | 曲线                             | 性格                           |
-| ---------------------------- | -------------------------------- | ------------------------------ |
-| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | 减速曲线，通用                 |
-| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | 干脆、无回弹，用于开关等小状态 |
-| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | 轻微回弹，用于按钮、卡片       |
-| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | 明显回弹，用于点赞、加入购物车 |
-| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | 平缓、无回弹，用于展开与布局   |
+| 缓动令牌                     | 曲线                             | 性格                                                                           |
+| ---------------------------- | -------------------------------- | ------------------------------------------------------------------------------ |
+| `--ran-motion-ease-standard` | `cubic-bezier(0.2,0,0,1)`        | 减速曲线，通用                                                                 |
+| `--ran-motion-ease-snappy`   | `cubic-bezier(0.33,0,0.15,1)`    | 干脆、无回弹，用于开关等小状态                                                 |
+| `--ran-motion-ease-spring`   | `cubic-bezier(0.3,1.1,0.4,1)`    | 轻微回弹，只留给宿主在需要打动人的页面上自选的一个表现性时刻，组件默认从不使用 |
+| `--ran-motion-ease-bouncy`   | `cubic-bezier(0.34,1.56,0.64,1)` | 明显回弹，同样由宿主按需选用，没有组件使用它                                   |
+| `--ran-motion-ease-smooth`   | `cubic-bezier(0.4,0,0.2,1)`      | 平缓、无回弹，用于展开与布局                                                   |
 
 spring 这一族是把调好的 SwiftUI 弹簧参数（response / damping）折算成的单次回弹贝塞尔曲线。
 
@@ -362,12 +364,12 @@ CSS 分不清「交互」和「主题翻转」，你给颜色加的淡入淡出�
 
 ## 聚焦
 
-| 令牌                             | 值                                                                   | 用于                                   |
-| -------------------------------- | -------------------------------------------------------------------- | -------------------------------------- |
-| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700)` | 标准聚焦环，形式是 `box-shadow`        |
-| `--ran-focus-ring-inverse-color` | `#fff`                                                               | **两套主题下都是深色**的表面上的环颜色 |
+| 令牌                             | 值                                                                      | 用于                                   |
+| -------------------------------- | ----------------------------------------------------------------------- | -------------------------------------- |
+| `--ran-focus-ring`               | `0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-focus)` | 标准聚焦环，形式是 `box-shadow`        |
+| `--ran-focus-ring-inverse-color` | `#fff`                                                                  | **两套主题下都是深色**的表面上的环颜色 |
 
-聚焦环是双层的（内层用背景色，外层用蓝色），所以在任何表面上都清晰可见；而且它保持蓝色，不跟随已经
+聚焦环是双层的（内层用背景色，外层用 `--ran-color-focus`，即蓝色），所以在任何表面上都清晰可见；而且它保持蓝色，不跟随已经
 变成无彩色的主操作色。
 
 `--ran-focus-ring-inverse-color` **刻意没有在暗色模式里重定义**：它是给那种「无论页面主题如何、自身
@@ -389,10 +391,11 @@ CSS 分不清「交互」和「主题翻转」，你给颜色加的淡入淡出�
 ## 暗色模式重定义了哪些
 
 `<html>` 上的 `data-ran-theme="dark"`（也可以只作用于某棵子树，见[主题系统](/cn/src/ranui/theme/)）
-**只重定义基础色板**，外加三处无法通过色阶解析的例外：
+**只重定义基础色板**，外加四处无法通过色阶解析的例外：
 
 - 第一层的全部：gray、gray-alpha、blue、red、amber、green 的每一档，以及两个背景；
-- `--ran-color-bg-elevated`，暗色下指向 `--ran-gray-100`，这样卡片才能从黑色页面上浮起来而不是融进去；
+- `--ran-color-bg-elevated`，暗色下是字面量 `#18181b`，这样卡片才能从黑色页面上浮起来而不是融进去；
+- `--ran-color-link`，暗色下是字面量 `#5b9dff`，让链接在深色页面上保持足够的对比度；
 - `--ran-color-primary-hover` / `-active`，它们是字面量而不是色阶引用；
 - 三档投影，为深色底重新调过。
 

@@ -9,7 +9,9 @@ Build a coherent interface with ranui: choose roles and states, then let tokens 
 Use the [design system](/src/ranui/design-system/) for tokens,
 [theming](/src/ranui/theme/) for runtime overrides, and
 [information architecture](/src/ranui/information-architecture/) for page structure.
-This page summarizes the canonical [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md).
+This page summarizes the [design guide](https://github.com/chaxus/ran/blob/main/design/DESIGN.md) and the
+[ranui implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md), the two sources
+from which [DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md) is generated.
 
 Interaction, motion, product patterns and verification are sections of the same
 [design guide](/src/design/guide); component engineering is in
@@ -75,7 +77,7 @@ distance carry meaning:
 
 - **8px** between elements inside a group.
 - **16px** between groups.
-- **32–40px** between sections.
+- **24–32px** between regions.
 
 Don't invent `20px` or `28px`. The limited set is what produces the page's rhythm; one
 off-scale gap is what breaks it. Keep shared spines across regions (edges, baselines and
@@ -84,8 +86,8 @@ Name the shared content spine and any intentional navigation/title column. Measu
 inner content edges, rendered text Ranges, icon viewports and actual hit areas separately: a stable
 button frame can hide an inset label. Keep title/menu triggers content-hugging with separate layout
 filler, count nested padding, and preserve the same spine in empty states. Product target sizes remain
-local choices. The [canonical alignment contract](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-owns these rules and the runnable browser acceptance example.
+local choices. The guide's [visual language](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
+section owns these rules; [verifying a change](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) says how to check them in a browser.
 
 Group with headings, alignment and spacing first. Removing redundant enclosures must not
 erase action affordance: standalone commands may need their own restrained button surface,
@@ -94,15 +96,15 @@ menu/list contexts; do not mandate them everywhere. A nested card, group fill an
 separators must not repeat the same boundary. Declare shared icon/checkbox and text columns
 across adjacent controls. Retain functional field frames and keyboard focus outlines. Inspect
 the resting whole pane and explain the distinct purpose of each remaining border, fill or divider;
-the [canonical composition rules](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-own the exceptions and acceptance criteria.
+the guide's [visual language](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language) section asks every remaining
+boundary to have a job you can name, and [verifying a change](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) covers acceptance.
 
 Keep vertical rhythm consistent by relationship: title/description and field/hint pairs can
 use 8px, separate groups 16px, and related subsections 24px. Give each gap one owner;
 count child margins, existing padding and inline baseline space before adding another gap.
-Verify wrapped copy and hidden helper/error states in the browser. The
-[canonical vertical-rhythm guidance](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language)
-owns the exceptions and runnable reverse checks, without changing component defaults.
+Verify wrapped copy and hidden helper/error states in the browser. The guide's
+[visual language](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#visual-language) section owns the spacing relationships, and
+[verifying a change](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#verifying-a-change) says how to check them, without changing component defaults.
 
 ## Choosing type
 
@@ -155,9 +157,10 @@ effects; a shared color cannot compensate for inconsistent proportions.
 ## Motion {#motion}
 
 Purpose and frequency decide whether to animate. Frequent hover, focus and keyboard feedback
-is immediate by default. Use existing motion tokens only when motion explains a change: a small
-transition may take ~150ms, menus ~200ms and dialogs ~300ms. These are optional examples, not
-required delays. Keep motion interruptible and respect `prefers-reduced-motion`.
+is immediate by default. Use existing motion tokens only when motion explains a change:
+feedback stays within 0–100ms, entering takes 250–400ms and decelerates without overshoot, and
+leaving takes 150–200ms and accelerates. These are ranges for when motion is used, not required
+delays. Keep motion interruptible and respect `prefers-reduced-motion`.
 
 For changed motion, describe its trigger, state and destination. New input may interrupt or
 reverse it without stale completion or duplicate activation. Preserve drafts and reading position;
@@ -196,7 +199,7 @@ Copy is part of the system too:
 - Meet **WCAG AA** contrast for text against its background.
 - **Never signal state with color alone**: pair it with an icon, a label or text.
 - Every interactive element keeps a **visible focus ring** (`--ran-focus-ring`, or
-  `outline: 2px solid var(--ran-color-primary); outline-offset: 2px`). Never remove it for
+  `outline: 2px solid var(--ran-color-focus); outline-offset: 2px`). Never remove it for
   tidiness.
 - **Everything is reachable by keyboard.** Nothing is mouse-only.
 - Respect `prefers-reduced-motion` and `prefers-color-scheme`.
@@ -226,8 +229,8 @@ Neither input nor viewport is the secondary target.
 Nine of these rules are checked by `pnpm -F ranui verify:design`, which CI runs on ranui's own
 source: dark-unsafe color fallbacks, raw color literals, the spacing scale, the sizing scale,
 mouse-only drag loops, `:host` display rules that break `hidden`, fallbacks naming undeclared
-tokens, components querying their own shadow tree, and shadow trees built outside the
-constructor. Known violations are ratcheted in a baseline file, so a new one cannot be added
+tokens, components searching their shadow tree for an element they just built, and shadow trees
+built outside the constructor. Known violations are ratcheted in a baseline file, so a new one cannot be added
 and a fix cannot be silently undone.
 
 These checks scan only the source roots configured for the command; they do not automatically
