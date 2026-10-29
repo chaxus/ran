@@ -43,6 +43,21 @@ describe('verify:design exceptions', () => {
     expect(output).toContain('styles/site.css:3  #fff');
   });
 
+  it('covers only its own line: a trailing exception does not excuse the next one', () => {
+    const { status, output } = verify(
+      '.a {\n  color: #fff; /* design-ok: bare-colour the ink follows the backdrop */\n  background: #000;\n}\n',
+    );
+    expect(status).not.toBe(0);
+    expect(output).toContain('styles/site.css:3  #000');
+    expect(output).not.toContain('styles/site.css:2');
+  });
+
+  it('needs a reason in words, not punctuation', () => {
+    const { status, output } = verify('.a {\n  padding: 10px; /* design-ok: spacing-scale - */\n}\n');
+    expect(status).not.toBe(0);
+    expect(output).toContain('styles/site.css:2  padding: 10px');
+  });
+
   it('outside the library, a step of the scale may be written as a length', () => {
     const { status, output } = verify('.a {\n  margin: 8px 16px;\n  gap: 24px;\n}\n');
     expect(output).toContain('no new violations');

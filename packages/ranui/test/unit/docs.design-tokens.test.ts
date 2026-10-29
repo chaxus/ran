@@ -94,6 +94,12 @@ const light = values('theme/tokens.less');
 const dark = values('theme/dark.less');
 const HEX = /^#[0-9a-f]{3,8}$/i;
 /** A value short enough to be written out exactly: a colour, a length, a duration, a curve. */
+/** Compares values the way CSS reads them: no spaces, no case, `.04` is `0.04`. */
+const squash = (value: string): string =>
+  value
+    .replace(/\s+/g, '')
+    .toLowerCase()
+    .replace(/(^|[^\d.])\.(\d)/g, '$10.$2');
 const SIMPLE = /^(#[0-9a-f]{3,8}|-?[\d.]+(px|rem|em|s|ms|%)?|cubic-bezier\([^)]*\))$/i;
 
 /**
@@ -122,18 +128,36 @@ const drift = (text: string): string[] => {
       });
       continue;
     }
-    // A token row: | `--ran-x` | value | … |
-    const token = /^`(--ran-[a-z0-9-]+)`$/.exec(cells[1] ?? '')?.[1];
-    const want = token ? light.get(token) : undefined;
-    if (!token || !want || cells.length < 4) continue;
-    const cell = (cells[2] ?? '').replace(/`/g, '').replace(/\s+/g, ' ');
-    const referenced = [...want.matchAll(/var\((--ran-[a-z0-9-]+)/g)].map((match) => match[1]!);
-    // Only plain values are compared literally: a font stack or a shadow is summarised in words.
-    const literal = SIMPLE.test(want) ? want : '';
-    const squash = (value: string): string => value.replace(/\s+/g, '').toLowerCase();
-    if (literal && !squash(cell).includes(squash(literal))) found.push(`${token}: ${cell}, theme ${want}`);
-    for (const name of referenced)
-      if (!cell.includes(name) && cell.includes('--ran-')) found.push(`${token}: ${cell}, theme ${want}`);
+    // Token rows. A row may hold several `token | value` pairs (the spacing table does), show a
+    // dark value as "`#hex` (dark)", or give light and dark shadows in two cells.
+    cells.forEach((cell, i) => {
+      const token = /^`(--ran-[a-z0-9-]+)`$/.exec(cell)?.[1];
+      const want = token ? light.get(token) : undefined;
+      if (!token || !want) return;
+      const next = (cells[i + 1] ?? '').replace(/\s+/g, ' ');
+      const plain = next.replace(/`/g, '');
+      if (SIMPLE.test(want) && /^[-\d.#]/.test(plain.trim()) && !squash(plain).includes(squash(want)))
+        found.push(`${token}: ${plain}, theme ${want}`);
+      const referenced = [...want.matchAll(/var\((--ran-[a-z0-9-]+)/g)].map((match) => match[1]!);
+      if (plain.includes('--ran-'))
+        for (const name of referenced) if (!plain.includes(name)) found.push(`${token}: ${plain}, theme ${want}`);
+      const darkShown = /`(#[0-9a-fA-F]{3,8})`\s*\(dark\)/.exec(line)?.[1];
+      const darkWant = dark.get(token);
+      if (darkShown && darkWant && HEX.test(darkWant) && darkShown.toLowerCase() !== darkWant.toLowerCase())
+        found.push(`${token} dark: ${darkShown}, theme ${darkWant}`);
+      if (/rgba?\(/.test(want)) {
+        const shadows = [...line.matchAll(/`([^`]*rgba?\([^`]*)`/g)].map((match) => match[1]!);
+        if (shadows[0] && squash(shadows[0]) !== squash(want)) found.push(`${token}: ${shadows[0]}, theme ${want}`);
+        if (shadows[1] && darkWant && squash(shadows[1]) !== squash(darkWant))
+          found.push(`${token} dark: ${shadows[1]}, theme ${darkWant}`);
+      }
+    });
+    // Values written inline: "`--ran-text-heading-weight` (600)".
+    for (const [, token, shown] of line.matchAll(/`(--ran-[a-z0-9-]+)`\s*\(([^)]+)\)/g)) {
+      const want = light.get(token!);
+      if (want && SIMPLE.test(want) && /^[-\d.#]/.test(shown!) && squash(shown!) !== squash(want))
+        found.push(`${token}: (${shown}), theme ${want}`);
+    }
   }
   return [...new Set(found)];
 };

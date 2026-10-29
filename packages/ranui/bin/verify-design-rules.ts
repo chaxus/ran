@@ -109,13 +109,14 @@ const RUNTIME_CHILDREN = /\/\/\s*runtime children:\s*\S/;
 const DEFERRED_MOUNT = /\/\/\s*deferred mount:\s*\S/;
 
 /**
- * A reasoned exception to any rule, written as a comment on the line or the line above:
- * `design-ok: bare-colour glass ink follows the backdrop, not the theme`, in a CSS or line comment.
- * Several ids may be listed, comma-separated. The reason is required: an exception that
- * cannot say why is a violation.
+ * A reasoned exception to any rule: a comment reading
+ * `design-ok: bare-colour glass ink follows the backdrop, not the theme`, either at the end of the
+ * offending line or alone on the line above it. Several ids may be listed, comma-separated. The
+ * reason is required and must start with a word: an exception that cannot say why is a violation.
  */
-// The reason has to start with something other than a comment's closing `*/`.
-const DESIGN_OK = /design-ok:\s*([a-z-]+(?:\s*,\s*[a-z-]+)*)\s+[^\s*/]/;
+const DESIGN_OK = /design-ok:\s*([a-z-]+(?:\s*,\s*[a-z-]+)*)\s+[\p{L}\p{N}]/u;
+/** A line holding nothing but a comment, so an exception on it can only be about the next line. */
+const COMMENT_ONLY = /^\s*(\/\*|\/\/)/;
 
 /**
  * Whether a violation carries a reasoned exception for its rule.
@@ -123,10 +124,13 @@ const DESIGN_OK = /design-ok:\s*([a-z-]+(?:\s*,\s*[a-z-]+)*)\s+[^\s*/]/;
  * @param raw The file's lines as written, comments included.
  * @param line The violation's 1-based line.
  * @param rule The rule id.
- * @returns True when that line or the one above names the rule with a reason.
+ * @returns True when that line, or a comment-only line above it, names the rule with a reason.
  */
 function excused(raw: string[], line: number, rule: string): boolean {
-  return [raw[line - 1], raw[line - 2]].some((text) => {
+  const own = raw[line - 1];
+  const above = raw[line - 2];
+  const candidates = [own, above !== undefined && COMMENT_ONLY.test(above) ? above : undefined];
+  return candidates.some((text) => {
     const ids = text === undefined ? null : DESIGN_OK.exec(text)?.[1];
     return !!ids && ids.split(',').some((id) => id.trim() === rule);
   });

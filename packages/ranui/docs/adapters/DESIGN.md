@@ -130,7 +130,7 @@ both faces; without it the stacks fall back to system fonts.
 | ------- | ---------------------- | --------------------------------------- | ----------------------------------------- | -------------------------------------------------- |
 | heading | Titles                 | `--ran-text-heading-weight` (600)       | `--ran-text-heading-1..4` (32/24/20/16px) | Tracking `--ran-text-heading-tracking` (≈ -0.03em) |
 | label   | Field and action names | `--ran-text-label-weight` (500)         | `--ran-text-label-1..3` (14/13/12px)      | Action labels stay on one line; field labels wrap  |
-| copy    | Multi-line body        | `--ran-text-copy-weight` (400)          | `--ran-text-copy-1..2` (16/14px)          | Line height about 1.55                             |
+| copy    | Multi-line body        | `--ran-text-copy-weight` (400)          | `--ran-text-copy-1..2` (16/14px)          | Line height `--ran-line-height` (1.5715)           |
 | button  | Button text            | `--ran-text-button-weight` (500)        | `--ran-text-button-size` (14px)           | Line height 1, for exact vertical centring         |
 | mono    | Code and data          | `--ran-text-mono-weight-regular/medium` | the label and copy sizes                  | `--ran-font-mono`                                  |
 

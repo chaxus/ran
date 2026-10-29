@@ -4,9 +4,9 @@
   "sources": [
     {
       "source": "design/DESIGN.md",
-      "sha256": "54d084c32f17fc3477f3e838b52c74430506b6ef10f10dac410059f9dd6d2644",
+      "sha256": "be86fef432e2b2355ac2b7463c0528022c0ffbc2f237955a5ede368e4f0ababe",
       "output": "DESIGN.md",
-      "outputSha256": "21fb301ab1a002df3e4f17bf398da368ba7b6c5974c9b1831665720cb2cf5222"
+      "outputSha256": "09e45cbeed9e9d2ee8ee3ef8c3daabc7b5085ac2578b1b6dbcf5f82ce7ef0d10"
     },
     {
       "source": "design/README.md",

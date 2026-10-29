@@ -245,7 +245,7 @@ test.describe('focus and stability', () => {
           for (const source of entry.sources ?? []) {
             const node = source.node instanceof Element ? source.node : source.node?.parentElement;
             const name = node
-              ? `${node.tagName.toLowerCase()}${node.className ? `.${String(node.className).split(' ')[0]}` : ''}`
+              ? `${node.tagName.toLowerCase()}${node.getAttribute('class') ? `.${node.getAttribute('class')!.split(' ')[0]}` : ''}`
               : '?';
             record.moved.push(
               `${entry.value.toFixed(4)} @${Math.round(entry.startTime)}ms ${name} y ${Math.round(source.previousRect.y)}→${Math.round(source.currentRect.y)} h ${Math.round(source.previousRect.height)}→${Math.round(source.currentRect.height)}`,

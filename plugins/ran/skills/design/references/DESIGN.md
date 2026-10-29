@@ -7,8 +7,8 @@ Use it before you start, while you build, and before you hand a change back. It 
 already has tokens and components; it is about using them well.
 
 **MUST** marks a defect a user can observe, and nothing else is a MUST. **SHOULD** is a starting
-point, not a limit: depart from it whenever the work is better for it, and say why. Items marked **(checked)** are enforced by a test in this repository; the table at the end says
-which one. Everything else needs your eyes in a real browser.
+point, not a limit: depart from it whenever the work is better for it, and say why. Items marked
+**(checked)** are enforced by a test in this repository; the table at the end says which one. Everything else needs your eyes in a real browser.
 
 ranui's [implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md) maps these items to ranui's tokens,
 stacking tiers and component specifics.
@@ -89,7 +89,6 @@ MUST be able to answer, without scrolling:
   Headings wrap with `text-wrap: balance`, paragraphs with `text-wrap: pretty`.
 - The surfaces the browser draws still carry the design: text selection, the caret, focus rings,
   scrollbars and the numerals in tables (`tabular-nums`). Theme them from the tokens.
-
 - Decoration is a decision, not a default. When an eyebrow label, a gradient, a glow or a card around
   everything appears, check that it does a job on this page; remove it if it only fills space.
 

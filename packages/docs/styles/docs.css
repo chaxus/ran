@@ -511,17 +511,7 @@ a {
 .search__input::-webkit-search-cancel-button {
   display: none;
 }
-.search__input/* The surfaces the browser draws still belong to the site: selection and the caret take
-   its own colours instead of the platform's blue. */
-::selection {
-  background: color-mix(in srgb, var(--accent) 18%, transparent);
-}
-input,
-textarea {
-  caret-color: var(--accent);
-}
-
-:focus-visible {
+.search__input:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
