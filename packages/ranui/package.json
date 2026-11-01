@@ -445,13 +445,13 @@
     "vite": "catalog:",
     "vitest": "catalog:",
     "dashjs": "5.2.1",
-    "hls.js": "1.7.3",
+    "hls.js": "1.7.4",
     "mpegts.js": "1.8.2",
     "mermaid": "11.17.2"
   },
   "dependencies": {
     "dompurify": "3.4.17",
-    "marked": "18.1.1",
+    "marked": "18.1.2",
     "ranuts": "workspace:*",
     "@alixex/ranview": "workspace:*",
     "remend": "1.4.0",
