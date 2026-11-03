@@ -11,7 +11,10 @@
  */
 
 /* Geist ships as two variable woff2 files in public/fonts. `swap` keeps text on first paint
-   in the fallback face; CJK and Arabic have no glyphs here and fall through to system fonts. */
+   in the fallback face; CJK and Arabic have no glyphs here and fall through to system fonts.
+   Geist Mono is `optional`: inline code sits inside running text, so a late swap rewraps the
+   paragraph and pushes everything below it (measured 0.098 shift on /ranui/select/). If it
+   misses first paint, the page keeps the fallback until the next navigation. */
 @font-face {
   font-family: 'Geist';
   src: url('/fonts/geist-variable.woff2') format('woff2');
@@ -24,7 +27,7 @@
   src: url('/fonts/geist-mono-variable.woff2') format('woff2');
   font-weight: 100 900;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 /* Code outside the article (the home install line, package facts) otherwise falls back to the
