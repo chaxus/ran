@@ -166,6 +166,7 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="/manifest.json">
 <link rel="preload" href="/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist-mono-variable.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="robots" content="all">
 <meta name="google" content="notranslate">
 <meta property="og:image" content="${OG_IMAGE}">
