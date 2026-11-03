@@ -16,6 +16,23 @@ const ICONS = '.pillar-icon, .caps-ico';
  */
 export const mountEntrance = (): void => {
   if (prefersReducedMotion() || typeof Element.prototype.animate !== 'function') return;
+  // WebKit runs module scripts before a pending stylesheet applies. Measured unstyled, the page
+  // is far taller and every group reads as below the fold, so the ones on screen would move.
+  const pending = [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')].filter(
+    (link) => !link.sheet,
+  );
+  void Promise.all(
+    pending.map(
+      (link) =>
+        new Promise((settle) => {
+          link.addEventListener('load', settle, { once: true });
+          link.addEventListener('error', settle, { once: true });
+        }),
+    ),
+  ).then(arm);
+};
+
+const arm = (): void => {
   for (const group of document.querySelectorAll(GROUPS)) {
     if (group.getBoundingClientRect().top < window.innerHeight) continue;
     const icons = [...group.querySelectorAll<HTMLElement>(ICONS)];
