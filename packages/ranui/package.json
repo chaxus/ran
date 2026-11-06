@@ -456,6 +456,7 @@
     "@alixex/ranview": "workspace:*",
     "remend": "1.4.0",
     "shiki": "4.5.0",
+    "@shikijs/langs": "4.5.0",
     "temml": "0.14.0"
   }
 }

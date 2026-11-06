@@ -129,6 +129,10 @@ Because dark mode redefines only the base palette:
 - Override a **base** scale step (`--ran-blue-700`) when the change should flip with the theme:
   everything semantic that references it follows.
 - Override a **component** token (`--ran-btn-hover-background`) to change exactly one element.
+- Override a **skin** primitive (`--ran-skin-font-family`, `--ran-skin-raised-shadow`, border
+  width/style) when a host brand kit should restyle chrome without inventing a second token
+  system. Keep Graphite/`--ran-*` as the product surface; load `ranui/fonts` if the stack still
+  names Geist, or point `--ran-skin-font-family` at the host face.
 
 That layering is described in full on the [design system](/src/ranui/design-system/#two-layers)
 page. Note that a runtime override is an inline style on the target: it wins over stylesheet

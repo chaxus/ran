@@ -9,6 +9,12 @@ Resolve `ranui` from the host project's dependency graph, not the plugin cache. 
 `package.json` version and exports. In a ran checkout, use `packages/ranui/` and identify it as
 working-tree source; its version does not prove that code has been published.
 
+`package-contract.json` beside this skill records the monorepo version the skill was authored
+against and states that API/token facts are **not** bundled here (`bundledApi: false`). Always
+prefer the host's installed `docs/COMPONENTS.md` and `docs/style-tokens-public.md` for that
+version. If the installed version differs from `authoredAgainst`, say so and do not invent APIs
+from memory or from a newer checkout.
+
 Read only the installed reference needed for the task:
 
 | Task | Package-relative reference |

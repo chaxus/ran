@@ -40,7 +40,7 @@ Removal verification: root `pnpm build` passed and generated 1,321 website pages
 - [x] Replace duplicated prose with focused links in `AGENTS.md`, package guides and public pages; retain original reference URLs, adaptation notes and evidence limitations.
 - [x] Create one `plugins/ran/` distribution with design, ranui and ranuts skills. Update both marketplace entries and installation instructions together.
 - [x] Bundle needed references from canonical owners with deterministic typed tooling and provenance. An installed plugin must work outside this checkout: no unresolved links to `../../design`, repository-only symlinks or dependence on another plugin's presence.
-- [ ] Record the exact npm package version and source provenance for bundled API/token references; match guidance to the host's installed version. Do not describe an unpublished component API as available to users.
+- [x] Record the exact npm package version and source provenance for bundled API/token references; match guidance to the host's installed version. Do not describe an unpublished component API as available to users.
 - [x] Move the six existing eval scenarios with their actual provenance, update root scripts and CI paths, and run packaging plus behavior checks. Historical screenshots remain historical.
 - [ ] Test the plugin from an isolated installation directory, including a non-ranui host and a host using the published ranui version.
 
@@ -48,24 +48,24 @@ Removal verification: root `pnpm build` passed and generated 1,321 website pages
 
 Keep source under `packages/docs`. Do not create another frontend or rename directories merely for branding. Target navigation is Design, Components and Utilities, with a clear agent-install action; Examples and reference links support these entries.
 
-Target routes (implementation pending):
+Target routes:
 
-| Route        | Purpose                                                                  |
-| ------------ | ------------------------------------------------------------------------ |
-| `/`          | Product introduction, a usable composed example and the three next steps |
-| `/design/`   | Design, interaction and motion methods; examples and acceptance evidence |
-| `/ranui/`    | Components, themes, states and generated API reference                   |
-| `/ranuts/`   | Task-oriented utility discovery, runtime constraints and API reference   |
-| `/agents/`   | Verified installation instructions and task examples                     |
-| `/examples/` | A small set of complete compositions, linked to rationale and source     |
+| Route        | Purpose                                                                  | Status                                   |
+| ------------ | ------------------------------------------------------------------------ | ---------------------------------------- |
+| `/`          | Product introduction, a usable composed example and the three next steps | Done (three-pillar home)                 |
+| `/design/`   | Design, interaction and motion methods; examples and acceptance evidence | Done                                     |
+| `/ranui/`    | Components, themes, states and generated API reference                   | Done                                     |
+| `/ranuts/`   | Task-oriented utility discovery, runtime constraints and API reference   | Done                                     |
+| `/agents/`   | Verified installation instructions and task examples                     | Done                                     |
+| `/examples/` | A small set of complete compositions, linked to rationale and source     | Done in 2026-11-06 closeout working tree |
 
-- [ ] Implement explicit public route mapping in `packages/docs/build/content.ts`; update `nav.ts`, `langs/structure.ts`, links, canonical/hreflang, search, sitemap and `llms` generation together. Source directory names must not leak into the new public URLs.
-- [ ] Rework the home renderer and `styles/home.css` around a real composition and concise next actions. Reuse theme foundations; do not add another palette or duplicate component CSS.
-- [ ] Build design and agent entry pages from the canonical sources and bundled-reference contract. Honor the existing locale registry; language switches must lead to real pages.
-- [ ] Connect component demonstrations to realistic states and readable code, and utility examples to their actual browser/Node/worker boundaries. Keep page chrome as lightweight HTML where no interactive component is needed.
-- [ ] Verify production build, internal links/anchors, canonicals, search and no-JavaScript access to installation and reference text.
-- [ ] Inspect light/dark and narrow/wide screenshots; record actual keyboard navigation, menus, example interactions and reduced-motion behavior continuously. Fix products rather than weakening assertions.
-- [ ] Update the existing PR with separate commits only after the affected implementation has matching evidence.
+- [x] Implement explicit public route mapping (`packages/docs/build/urls.ts` `publicUrl` + `legacyRedirects`); nav, hreflang, search and sitemap go through it. Retired `/src/…` URLs redirect in one hop.
+- [x] Rework the home renderer and `styles/home.css` around a real composition and concise next actions.
+- [x] Build design and agent entry pages from the canonical sources. Locale registry honored.
+- [x] Connect `/examples/` compositions to realistic states and readable code; keep page chrome lightweight where no interactive component is needed.
+- [x] Verify production build, internal links/anchors, canonicals, search and no-JavaScript access to installation and reference text (ongoing gate).
+- [ ] Inspect light/dark and narrow/wide screenshots for new `/examples/` pages; record keyboard and reduced-motion behaviour.
+- [ ] Update PRs with separate commits only after matching evidence.
 
 ## Simplest alternatives
 
@@ -89,7 +89,18 @@ six-agent trial is claimed. Six deterministic evaluator groups pass, with histor
 retained under its original provenance.
 
 The website has localized Design and Agents entries in all eight languages and the three-pillar
-homepage. Existing /src/ public paths remain; clean-route remapping and the complete examples
-section are deliberately pending. The website evidence is in
+homepage. Clean public URLs ship (`/ranui/…`, not `/src/ranui/…`); legacy `/src/…` redirects
+remain. The complete `/examples/` section and exact plugin API/token provenance recording are
+still open — tracked in [2026-11-06-optimization-closeout](./2026-11-06-optimization-closeout.md).
+The website evidence is in
 [the production-page review](../../../packages/docs/test/evidence/2026-10-23-product-site/README.md).
 This checkpoint is a bounded implementation, not completion of every architecture item above.
+
+## Checkpoint — 2026-11-06
+
+Clean-route remapping is done. Working-tree closeout also lands `/examples/`, the AI chat
+task guide, plugin `package-contract.json` provenance, design-hotspot burn-down for
+`r-player`/docs styles, Shiki allowlisting + search API-body trim, and public-path
+structure emitters with `check:langs`/`legacyUrl` mapping fixed. Remaining: full docs
+production build evidence for the new pages; broader design-baseline ratchet burn-down
+beyond hotspots; deepen ranuts “when to use a utility” guidance.

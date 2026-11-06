@@ -7,27 +7,64 @@
  * resident, `highlight()` returns synchronously so a streaming code block re-highlights
  * without flashing back to plain text.
  *
+ * Languages are an explicit allowlist (not `bundledLanguages` of every grammar shiki
+ * ships). Vite then only emits those grammar chunks; an unknown fence falls back to
+ * plain `text` instead of pulling a 700KB grammar for a one-line demo.
+ *
  * Output uses shiki's dual-theme mode with `defaultColor: false`: every token carries
  * `--shiki-light` / `--shiki-dark` custom properties and the component's CSS picks one
  * based on the resolved theme — flipping light/dark never re-highlights.
  */
-import type { Highlighter } from 'shiki';
+import type { Highlighter, LanguageRegistration } from 'shiki';
 
-type ShikiModule = typeof import('shiki');
-
-let shikiModule: ShikiModule | null = null;
 let highlighter: Highlighter | null = null;
 let highlighterPromise: Promise<Highlighter> | null = null;
 const loadedThemes = new Set<string>();
 const loadedLangs = new Set<string>();
 const inflight = new Map<string, Promise<void>>();
 
+/**
+ * Fence languages this package will load. Keep aligned with the docs site's `LANGS` list
+ * in `packages/docs/build/config.ts` — that list is measured from the corpus; this one
+ * gates the browser download.
+ */
+const LANG_LOADERS: Record<string, () => Promise<{ default: LanguageRegistration[] }>> = {
+  typescript: () => import('@shikijs/langs/typescript'),
+  ts: () => import('@shikijs/langs/typescript'),
+  javascript: () => import('@shikijs/langs/javascript'),
+  js: () => import('@shikijs/langs/javascript'),
+  tsx: () => import('@shikijs/langs/tsx'),
+  jsx: () => import('@shikijs/langs/jsx'),
+  html: () => import('@shikijs/langs/html'),
+  css: () => import('@shikijs/langs/css'),
+  less: () => import('@shikijs/langs/less'),
+  scss: () => import('@shikijs/langs/scss'),
+  json: () => import('@shikijs/langs/json'),
+  md: () => import('@shikijs/langs/markdown'),
+  markdown: () => import('@shikijs/langs/markdown'),
+  sh: () => import('@shikijs/langs/shellscript'),
+  bash: () => import('@shikijs/langs/shellscript'),
+  shell: () => import('@shikijs/langs/shellscript'),
+  shellscript: () => import('@shikijs/langs/shellscript'),
+  xml: () => import('@shikijs/langs/xml'),
+  yaml: () => import('@shikijs/langs/yaml'),
+  yml: () => import('@shikijs/langs/yaml'),
+  toml: () => import('@shikijs/langs/toml'),
+  diff: () => import('@shikijs/langs/diff'),
+  sql: () => import('@shikijs/langs/sql'),
+  python: () => import('@shikijs/langs/python'),
+  py: () => import('@shikijs/langs/python'),
+  java: () => import('@shikijs/langs/java'),
+  rust: () => import('@shikijs/langs/rust'),
+  wasm: () => import('@shikijs/langs/wasm'),
+  vue: () => import('@shikijs/langs/vue'),
+};
+
 const JS_ENGINE_HIGHLIGHTER = (): Promise<Highlighter> => {
   if (highlighterPromise) return highlighterPromise;
   // The engine comes from its own subpath so the IIFE build can alias `shiki` to the
   // web facade (which does not re-export the engine).
   highlighterPromise = Promise.all([import('shiki'), import('shiki/engine/javascript')]).then(async ([mod, eng]) => {
-    shikiModule = mod;
     const hl = await mod.createHighlighter({
       themes: [],
       langs: [],
@@ -40,14 +77,12 @@ const JS_ENGINE_HIGHLIGHTER = (): Promise<Highlighter> => {
   return highlighterPromise;
 };
 
-/** Resolve a fence info string to a shiki language id, or `text` when unknown. */
+/** Resolve a fence info string to a shiki language id, or `text` when unknown / disallowed. */
 export const resolveLanguage = (lang: string): string => {
   const id = (lang || '').trim().toLowerCase();
   if (!id) return 'text';
   if (id === 'text' || id === 'plain' || id === 'plaintext' || id === 'txt') return 'text';
-  if (!shikiModule) return id;
-  const langs = shikiModule.bundledLanguages as Record<string, unknown>;
-  return id in langs ? id : 'text';
+  return id in LANG_LOADERS ? id : 'text';
 };
 
 const ensureLoaded = (kind: 'theme' | 'lang', name: string): Promise<void> => {
@@ -61,7 +96,10 @@ const ensureLoaded = (kind: 'theme' | 'lang', name: string): Promise<void> => {
       if (kind === 'theme') {
         await hl.loadTheme(name as never);
       } else if (name !== 'text') {
-        await hl.loadLanguage(name as never);
+        const load = LANG_LOADERS[name];
+        if (!load) return;
+        const mod = await load();
+        await hl.loadLanguage(mod.default);
       }
       cache.add(name);
     })
@@ -98,7 +136,6 @@ export const highlight = (code: string, language: string, themes: HighlightTheme
   if (isReady(lang, themes)) return render(code, lang, themes);
   return Promise.all([ensureLoaded('theme', themes.light), ensureLoaded('theme', themes.dark)])
     .then(() => {
-      // Only now (module loaded) can unknown languages be detected and downgraded.
       const resolved = resolveLanguage(language);
       return ensureLoaded('lang', resolved).then(() => render(code, resolved, themes));
     })

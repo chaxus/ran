@@ -111,7 +111,7 @@ export const designReferenceMarkdown = (
       const page = pageOf.get(into);
       if (!page) return `](${GITHUB}${into}${hash ?? ''})`;
       const anchor = hash ? `#${maps.get(into)?.get(hash.slice(1)) ?? hash.slice(1)}` : '';
-      return `](${prefix}/src/design/${page}${anchor})`;
+      return `](${prefix}/design/${page}${anchor})`;
     });
   const sourceLink = `[design/${file}](${GITHUB}${file})`;
   return `${body.trimEnd()}\n\n---\n\n${ui.designSource.replace('{source}', sourceLink)}\n`;
@@ -137,7 +137,7 @@ export const designReferenceSources = (
 
 /**
  * A guide section by its English heading, as a source path plus the heading in the reader's
- * language: `/src/design/guide#interaction`. Throws for an unknown heading, so a renamed
+ * language: `/design/guide#interaction`. Throws for an unknown heading, so a renamed
  * section fails the build instead of leaving a link to nowhere.
  */
 export const designSectionLink = (
@@ -150,7 +150,7 @@ export const designSectionLink = (
   const index = headingAnchors(english).findIndex(({ site }) => site === slugify(heading));
   if (index < 0) throw new Error(`design guide has no section "${heading}"`);
   const translation = (translated as readonly string[]).includes(locale.dir) && translationOf(locale, file);
-  if (!translation) return { link: `/src/design/${page}#${slugify(heading)}`, label: heading };
+  if (!translation) return { link: `/design/${page}#${slugify(heading)}`, label: heading };
   const { site, text } = headingAnchors(translation)[index]!;
-  return { link: `/src/design/${page}#${site}`, label: text };
+  return { link: `/design/${page}#${site}`, label: text };
 };

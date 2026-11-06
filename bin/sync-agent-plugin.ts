@@ -31,7 +31,48 @@ export function verifyLocalLinks(root: string, files: string[]): void {
     }
   }
 }
+/**
+ * Library skills must declare which published-line version they were authored against.
+ * Fixture roots used by unit tests only sync `design/` — skip when the monorepo packages
+ * are absent so those tests keep covering portable-reference closure.
+ */
+export function verifyPackageContracts(root: string): void {
+  const present = (['ranui', 'ranuts'] as const).filter((name) =>
+    existsSync(path.join(root, 'packages', name, 'package.json')),
+  );
+  if (present.length === 0) return;
+  for (const name of present) {
+    const pkg = JSON.parse(readFileSync(path.join(root, 'packages', name, 'package.json'), 'utf8')) as {
+      version: string;
+    };
+    const contractPath = path.join(root, 'plugins/ran/skills', name, 'package-contract.json');
+    if (!existsSync(contractPath)) throw new Error(`Missing ${name} package-contract.json`);
+    const contract = JSON.parse(readFileSync(contractPath, 'utf8')) as {
+      package?: string;
+      authoredAgainst?: string;
+      bundledApi?: boolean;
+      apiSource?: string;
+      tokenSource?: string;
+    };
+    if (contract.package !== name) throw new Error(`${name} package-contract.json: wrong package field`);
+    if (contract.authoredAgainst !== pkg.version)
+      throw new Error(
+        `${name} package-contract.json authoredAgainst ${contract.authoredAgainst} != packages/${name} ${pkg.version}`,
+      );
+    if (contract.bundledApi !== false)
+      throw new Error(`${name} package-contract.json must set bundledApi false until API refs are versioned bundles`);
+    if (!contract.apiSource?.startsWith('installed:'))
+      throw new Error(`${name} package-contract.json apiSource must point at installed: package docs`);
+    // ranui publishes public tokens; other packages may omit tokenSource.
+    if (name === 'ranui' || contract.tokenSource !== undefined) {
+      if (!contract.tokenSource?.startsWith('installed:'))
+        throw new Error(`${name} package-contract.json tokenSource must point at installed: package docs`);
+    }
+  }
+}
+
 export function syncAgentPlugin(root: string, check = false): void {
+  verifyPackageContracts(root);
   const sourceRoot = path.join(root, 'design');
   const names = bundledFiles(sourceRoot);
   if (!names.includes('README.md')) throw new Error('design/README.md must be the portable entry');

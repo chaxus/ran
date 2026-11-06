@@ -25,15 +25,17 @@ export interface LocaleDef {
   /** Writing direction; only Persian is right-to-left. */
   rtl?: true;
   /**
-   * Content trees mirrored in this locale, as path prefixes of the *unprefixed* path.
-   * A link outside these falls back to the English page instead of pointing at a 404:
-   * there is no per-page language fallback, a missing page is simply not built.
+   * Content trees mirrored in this locale, as *public* path prefixes (`/ranui/`).
+   * On disk they live under `src/<tree>/` (and `<dir>/src/<tree>/` for non-root locales);
+   * `check:langs` and `legacyUrl` map these prefixes back. A link outside these falls
+   * back to the English page instead of pointing at a 404: there is no per-page language
+   * fallback, a missing page is simply not built.
    */
   mirrors: readonly string[];
 }
 
 /** Every content tree; each locale mirrors all of them. */
-const ALL = ['/src/design/', '/src/agents/', '/src/ranui/', '/src/ranuts/'] as const;
+const ALL = ['/design/', '/agents/', '/ranui/', '/ranuts/', '/examples/'] as const;
 
 /**
  * Menu order is deliberate: Chinese and English first (the author's own), then the rest.

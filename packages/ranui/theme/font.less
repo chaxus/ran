@@ -1,2 +1,20 @@
-@fontFamily: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-  'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+/* Ultimate font-family fallback for the few components that still import this file.
+   Must name the same faces as `--ran-font-family` in tokens.less: Geist is the product
+   face (loaded via `import 'ranui/fonts'` or the docs site's public/fonts preload). Without
+   Geist here, checkbox labels (and anything else that falls through to @fontFamily) silently
+   skip the design-system stack and render in the OS UI font even when Geist is available. */
+@fontFamily:
+  'Geist',
+  'Geist Sans',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  'Helvetica Neue',
+  Arial,
+  'Noto Sans',
+  sans-serif,
+  'Apple Color Emoji',
+  'Segoe UI Emoji',
+  'Segoe UI Symbol',
+  'Noto Color Emoji';

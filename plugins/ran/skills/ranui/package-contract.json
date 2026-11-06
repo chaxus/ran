@@ -1,0 +1,9 @@
+{
+  "$comment": "Advisory only. Agents must resolve the host's installed ranui version and read its docs; this file records what the skill was authored against in the ran monorepo.",
+  "package": "ranui",
+  "authoredAgainst": "0.5.4",
+  "apiSource": "installed:docs/COMPONENTS.md",
+  "tokenSource": "installed:docs/style-tokens-public.md",
+  "bundledApi": false,
+  "rule": "Never claim an attribute, event, slot or token that is absent from the host's installed package docs for that version."
+}

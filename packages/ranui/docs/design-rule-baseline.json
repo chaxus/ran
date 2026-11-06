@@ -16,7 +16,6 @@
       "components/mermaid/index.less": 4,
       "components/message/index.less": 1,
       "components/modal/index.less": 8,
-      "components/player/index.less": 35,
       "components/progress/index.less": 1,
       "components/select/dropdown-item/index.less": 2,
       "components/select/index.less": 4,
@@ -25,8 +24,7 @@
     },
     "bare-colour": {
       "components/colorpicker/panel.less": 15,
-      "components/glass/index.less": 7,
-      "components/player/index.less": 25
+      "components/glass/index.less": 7
     },
     "spacing-scale": {
       "components/colorpicker/panel.less": 5,

@@ -143,7 +143,9 @@ for (const locale of LOCALES) {
   // present in English and missing here is a dead sidebar link; the reverse is a page no
   // language but this one can reach.
   for (const tree of locale.mirrors) {
-    const sub = tree.replace(/^\/|\/$/g, ''); // `/src/ranui/` → `src/ranui`
+    // Public mirror `/ranui/` → on-disk `src/ranui`; legacy `/src/ranui/` stays as-is.
+    const cleaned = tree.replace(/^\/|\/$/g, '');
+    const sub = cleaned.startsWith('src/') ? cleaned : `src/${cleaned}`;
     const source = new Set(pagesUnder(join(ROOT, sub)));
     const target = new Set(pagesUnder(join(ROOT, locale.dir, sub)));
     for (const page of source) if (!target.has(page)) fail(`${locale.id}: missing page ${locale.dir}/${sub}/${page}`);
@@ -214,7 +216,8 @@ const skeleton = (file: string): { levels: string; fences: number; demos: number
 for (const locale of LOCALES) {
   if (!locale.dir) continue;
   for (const tree of locale.mirrors) {
-    const sub = tree.replace(/^\/|\/$/g, '');
+    const cleaned = tree.replace(/^\/|\/$/g, '');
+    const sub = cleaned.startsWith('src/') ? cleaned : `src/${cleaned}`;
     for (const page of pagesUnder(join(ROOT, sub))) {
       const target = join(ROOT, locale.dir, sub, page);
       if (!existsSync(target)) continue; // already reported as a missing page

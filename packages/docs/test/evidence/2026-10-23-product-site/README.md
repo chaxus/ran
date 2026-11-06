@@ -5,8 +5,9 @@ entry points and homepage at 1280, 900 and 360 CSS pixels, light/dark, English/C
 The manifest identifies Chromium and hashes each media file and loaded document/style/script/font.
 This is browser automation and agent visual review, not a human study or Document acceptance.
 
-The product website remains at ran.chaxus.com, with existing /src/ route conventions. Clean-route
-migration and a complete example gallery are pending; this evidence does not claim them complete.
+The product website remains at ran.chaxus.com. Clean public routes shipped after this review
+(`publicUrl` drops `/src/`; legacy redirects keep old URLs reachable). A complete `/examples/`
+gallery was still pending at capture time; later closeout work is tracked separately.
 
 The review rejected repeated headline/hero/scroll entrances and numeric count-up because they
 interrupt reading after navigation. Those decorations were removed; real loading demonstrations

@@ -26,7 +26,7 @@ export interface SidebarNode {
   /** The part of the label that is never translated (an export or element name). */
   name?: string;
   /**
-   * Path without a locale prefix (`/src/ranui/`), or an absolute external URL. The builder
+   * Path without a locale prefix (`/ranui/`), or an absolute external URL. The builder
    * adds the active locale's prefix only when the target is actually mirrored in that
    * locale — otherwise the link falls back to the English page rather than a 404.
    */
