@@ -117,7 +117,7 @@ export const renderHome = (locale: LocaleDef): string => {
     `</span></h1>` +
     `<p class="subtitle">${esc(t.subtitle)}</p>` +
     `<div class="cta">` +
-    `<a class="btn btn-primary" href="${esc(href('/src/agents/'))}">${esc(t.ctaPrimary)}${ARROW}</a>` +
+    `<a class="btn btn-primary" href="${esc(href('/agents/'))}">${esc(t.ctaPrimary)}${ARROW}</a>` +
     `<a class="btn-text" href="https://github.com/chaxus/ran" target="_blank" rel="noreferrer">${GITHUB_MARK}${esc(t.ctaSecondary)}</a>` +
     `</div></div>` +
     // The live panel holds real ranui elements. They are inert custom elements until the

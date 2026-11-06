@@ -9,6 +9,11 @@ Resolve `ranuts` from the host project, not the plugin cache. Read its `package.
 exports before selecting a utility. In a ran checkout use `packages/ranuts/` and identify it as
 working-tree source; do not assume that source is already available from npm.
 
+`package-contract.json` beside this skill records the monorepo version the skill was authored
+against and states that API facts are **not** bundled here (`bundledApi: false`). Prefer the
+host's installed `docs/API.md` for that version. If the installed version differs from
+`authoredAgainst`, say so and do not invent exports from memory or from a newer checkout.
+
 Read package-relative `docs/API.md` for generated utility signatures, then relevant sections of
 `CLAUDE.md` and exported declarations for other subpaths. Prefer the smallest supported public entry.
 Do not copy a function inventory into the product or invent an export from a newer example.

@@ -279,8 +279,8 @@
   cursor: pointer;
 }
 .gp-copy.done {
-  color: var(--ran-color-success, #28a948);
-  border-color: color-mix(in srgb, var(--ran-color-success, #28a948) 45%, transparent);
+  color: var(--ran-color-success, var(--ran-green-900, #28a948));
+  border-color: color-mix(in srgb, var(--ran-color-success, var(--ran-green-900, #28a948)) 45%, transparent);
 }
 
 /* ── Icon gallery ─────────────────────────────────────────────────────────── */

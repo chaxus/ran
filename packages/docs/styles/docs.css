@@ -52,28 +52,28 @@ samp {
  * values written once.
  */
 :root {
-  --bg: var(--ran-color-bg, #ffffff);
-  --bg-soft: var(--ran-color-bg-subtle, #f7f7f8);
-  --bg-code: var(--ran-color-bg-muted, #f0f0f2);
-  --fg: var(--ran-color-text, #111113);
-  --fg-muted: var(--ran-color-text-secondary, #55555e);
-  --fg-faint: var(--ran-color-text-disabled, #8a8a94);
-  --rule: var(--ran-color-border-secondary, #e2e2e6);
-  --rule-strong: var(--ran-color-border, #e4e4e8);
-  --accent: var(--ran-color-primary, #111113);
-  --accent-hover: var(--ran-color-primary-hover, #2a2a2e);
-  --accent-wash: var(--ran-color-bg-hover, #ebebee);
+  --bg: var(--ran-color-bg, var(--ran-background-100, #ffffff));
+  --bg-soft: var(--ran-color-bg-subtle, var(--ran-background-200, #f7f7f8));
+  --bg-code: var(--ran-color-bg-muted, var(--ran-gray-100, #f0f0f2));
+  --fg: var(--ran-color-text, var(--ran-gray-1000, #111113));
+  --fg-muted: var(--ran-color-text-secondary, var(--ran-gray-900, #55555e));
+  --fg-faint: var(--ran-color-text-disabled, var(--ran-gray-700, #8a8a94));
+  --rule: var(--ran-color-border-secondary, var(--ran-gray-300, #e2e2e6));
+  --rule-strong: var(--ran-color-border, var(--ran-gray-400, #e4e4e8));
+  --accent: var(--ran-color-primary, var(--ran-gray-1000, #111113));
+  --accent-hover: var(--ran-color-primary-hover, var(--ran-gray-900, #2a2a2e));
+  --accent-wash: var(--ran-color-bg-hover, var(--ran-gray-200, #ebebee));
   /*
    * ranui reserves a blue for links and the focus ring; `--ran-color-primary` is
    * near-black and means commitment, not prose. Using primary for links made every link
    * in the body the same colour as the text around it.
    */
-  --link: var(--ran-color-link, #0a5bd8);
+  --link: var(--ran-color-link, var(--ran-blue-900, #0a5bd8));
 
-  --callout-note: var(--ran-color-text-secondary, #4b5563);
-  --callout-tip: var(--ran-color-success, #0a7d4f);
-  --callout-warning: var(--ran-color-warning, #9a6206);
-  --callout-danger: var(--ran-color-danger, #b23a2f);
+  --callout-note: var(--ran-color-text-secondary, var(--ran-gray-900, #4b5563));
+  --callout-tip: var(--ran-color-success, var(--ran-green-900, #0a7d4f));
+  --callout-warning: var(--ran-color-warning, var(--ran-amber-900, #9a6206));
+  --callout-danger: var(--ran-color-danger, var(--ran-red-900, #b23a2f));
 
   /* Geist and Geist Mono load from public/fonts (the @font-face rules above). The CJK and
      Arabic fallbacks are the docs site's own concern; no web font is loaded for them,
@@ -141,35 +141,35 @@ samp {
  */
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']) {
-    --bg: var(--ran-color-bg, #0a0a0b);
-    --bg-soft: var(--ran-color-bg-subtle, #111113);
-    --bg-code: var(--ran-color-bg-muted, #1c1c20);
-    --fg: var(--ran-color-text, #ededef);
-    --fg-muted: var(--ran-color-text-secondary, #a1a1aa);
-    --fg-faint: var(--ran-color-text-disabled, #71717a);
-    --rule: var(--ran-color-border-secondary, #2c2c32);
-    --rule-strong: var(--ran-color-border, #26262b);
-    --accent: var(--ran-color-primary, #ededef);
-    --accent-hover: var(--ran-color-primary-hover, #d4d4d8);
-    --accent-wash: var(--ran-color-bg-hover, #232328);
-    --link: var(--ran-color-link, #5b9dff);
+    --bg: var(--ran-color-bg, var(--ran-background-100, #0a0a0b));
+    --bg-soft: var(--ran-color-bg-subtle, var(--ran-background-200, #111113));
+    --bg-code: var(--ran-color-bg-muted, var(--ran-gray-100, #1c1c20));
+    --fg: var(--ran-color-text, var(--ran-gray-1000, #ededef));
+    --fg-muted: var(--ran-color-text-secondary, var(--ran-gray-900, #a1a1aa));
+    --fg-faint: var(--ran-color-text-disabled, var(--ran-gray-700, #71717a));
+    --rule: var(--ran-color-border-secondary, var(--ran-gray-300, #2c2c32));
+    --rule-strong: var(--ran-color-border, var(--ran-gray-400, #26262b));
+    --accent: var(--ran-color-primary, var(--ran-gray-1000, #ededef));
+    --accent-hover: var(--ran-color-primary-hover, var(--ran-gray-900, #d4d4d8));
+    --accent-wash: var(--ran-color-bg-hover, var(--ran-gray-200, #232328));
+    --link: var(--ran-color-link, var(--ran-blue-900, #5b9dff));
     color-scheme: dark;
   }
 }
 
 :root[data-ran-theme='dark'] {
-  --bg: var(--ran-color-bg, #0a0a0b);
-  --bg-soft: var(--ran-color-bg-subtle, #111113);
-  --bg-code: var(--ran-color-bg-muted, #1c1c20);
-  --fg: var(--ran-color-text, #ededef);
-  --fg-muted: var(--ran-color-text-secondary, #a1a1aa);
-  --fg-faint: var(--ran-color-text-disabled, #71717a);
-  --rule: var(--ran-color-border-secondary, #2c2c32);
-  --rule-strong: var(--ran-color-border, #26262b);
-  --accent: var(--ran-color-primary, #ededef);
-  --accent-hover: var(--ran-color-primary-hover, #d4d4d8);
-  --accent-wash: var(--ran-color-bg-hover, #232328);
-  --link: var(--ran-color-link, #5b9dff);
+  --bg: var(--ran-color-bg, var(--ran-background-100, #0a0a0b));
+  --bg-soft: var(--ran-color-bg-subtle, var(--ran-background-200, #111113));
+  --bg-code: var(--ran-color-bg-muted, var(--ran-gray-100, #1c1c20));
+  --fg: var(--ran-color-text, var(--ran-gray-1000, #ededef));
+  --fg-muted: var(--ran-color-text-secondary, var(--ran-gray-900, #a1a1aa));
+  --fg-faint: var(--ran-color-text-disabled, var(--ran-gray-700, #71717a));
+  --rule: var(--ran-color-border-secondary, var(--ran-gray-300, #2c2c32));
+  --rule-strong: var(--ran-color-border, var(--ran-gray-400, #26262b));
+  --accent: var(--ran-color-primary, var(--ran-gray-1000, #ededef));
+  --accent-hover: var(--ran-color-primary-hover, var(--ran-gray-900, #d4d4d8));
+  --accent-wash: var(--ran-color-bg-hover, var(--ran-gray-200, #232328));
+  --link: var(--ran-color-link, var(--ran-blue-900, #5b9dff));
   color-scheme: dark;
 }
 
@@ -254,7 +254,7 @@ a {
   z-index: 100;
   width: auto;
   height: auto;
-  padding: 10px 16px;
+  padding: 12px 16px;
   overflow: visible;
   clip-path: none;
   background: var(--bg);
@@ -304,10 +304,10 @@ a {
 
 .nav {
   display: none;
-  gap: 2px;
+  gap: 4px;
 }
 .nav__link {
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 5px;
   color: var(--fg-muted);
   text-decoration: none;
@@ -337,7 +337,7 @@ a {
 .langs__summary {
   list-style: none;
   cursor: pointer;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 5px;
   font-size: var(--type-label-1);
   color: var(--fg-muted);
@@ -355,7 +355,7 @@ a {
   inset-inline-end: 0;
   top: calc(100% + 6px);
   margin: 0;
-  padding: 6px;
+  padding: 8px;
   list-style: none;
   min-width: 150px;
   max-height: calc(100dvh - var(--header-h) - var(--pad));
@@ -368,7 +368,7 @@ a {
 }
 .langs__link {
   display: block;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 5px;
   color: var(--fg-muted);
   text-decoration: none;
@@ -416,7 +416,7 @@ a {
   gap: 4px;
   width: 34px;
   height: 34px;
-  padding: 7px;
+  padding: 8px;
   border-radius: 6px;
   cursor: pointer;
   flex: none;
@@ -440,7 +440,7 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 8px 5px 11px;
+  padding: 4px 8px 4px 12px;
   border: 1px solid var(--rule);
   border-radius: 7px;
   background: var(--bg-soft);
@@ -460,7 +460,7 @@ a {
 .search-open__kbd {
   font-family: var(--font-mono);
   font-size: var(--type-label-3);
-  padding: 1px 5px;
+  padding: 0 4px;
   border: 1px solid var(--rule);
   border-radius: 4px;
   background: var(--bg);
@@ -477,7 +477,7 @@ a {
 .search {
   width: min(640px, calc(100vw - 32px));
   max-height: min(70vh, 560px);
-  margin-top: 12vh;
+  margin-top: 12vh; /* design-ok: spacing-scale hero clearance is viewport-relative */
   padding: 0;
   border: 1px solid var(--rule);
   border-radius: 12px;
@@ -497,8 +497,8 @@ a {
 .search__form {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 12px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--rule);
 }
 .search__input {
@@ -520,7 +520,7 @@ a {
 }
 .search__close {
   flex: none;
-  padding: 3px 8px;
+  padding: 4px 8px;
   border: 1px solid var(--rule);
   border-radius: 5px;
   background: var(--bg-soft);
@@ -531,7 +531,7 @@ a {
 }
 .search__status {
   margin: 0;
-  padding: 18px 16px;
+  padding: 16px;
   color: var(--fg-muted);
   font-size: var(--type-copy-2);
 }
@@ -541,15 +541,15 @@ a {
 .search__results {
   list-style: none;
   margin: 0;
-  padding: 6px;
+  padding: 8px;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 .search-hit {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 9px 12px;
+  gap: 4px;
+  padding: 8px 12px;
   border-radius: 7px;
   text-decoration: none;
   color: var(--fg);
@@ -714,7 +714,7 @@ a {
   inset-inline-start: 0;
   z-index: 25;
   width: var(--sidebar-w);
-  padding: 20px 18px 64px;
+  padding: 24px 16px 64px;
   overflow-y: auto;
   scrollbar-gutter: stable;
   scrollbar-color: var(--fg-muted) var(--bg-soft);
@@ -778,13 +778,13 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   margin-inline-start: 6px;
 }
 .sb__item {
-  margin: 1px 0;
+  margin: 0;
 }
 .sb__link,
 .sb__label {
   position: relative;
   display: block;
-  padding: 5px 9px;
+  padding: 4px 8px;
   border-radius: 5px;
   font-size: var(--type-label-1);
   line-height: 1.5;
@@ -799,7 +799,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   text-transform: uppercase;
 }
 .sb__item > .sb__label {
-  padding-top: 14px;
+  padding-top: 16px;
 }
 .sb__link:hover {
   color: var(--fg);
@@ -1103,7 +1103,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   padding-inline-start: 1.4em;
   display: flex;
   flex-direction: column;
-  gap: 0.35em;
+  gap: 0.35em; /* design-ok: spacing-scale inline code chip tracking follows em */
 }
 .prose li::marker {
   color: var(--fg-faint);
@@ -1117,7 +1117,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   width: 100%;
   border: none;
   border-top: 1px solid var(--rule);
-  margin: 0.4em 0;
+  margin: 0.4em 0; /* design-ok: spacing-scale list rhythm follows em */
 }
 .prose :not(pre) > code {
   font-family: var(--font-mono);
@@ -1227,13 +1227,13 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 }
 .code-group__tabs {
   display: flex;
-  gap: 2px;
-  padding: 6px 6px 0;
+  gap: 4px;
+  padding: 8px 8px 0;
   overflow-x: auto;
   border-bottom: 1px solid var(--rule);
 }
 .code-group__tab {
-  padding: 6px 12px;
+  padding: 8px 12px;
   border: none;
   border-radius: var(--ran-radius-sm, 6px) var(--ran-radius-sm, 6px) 0 0;
   background: transparent;
@@ -1310,13 +1310,13 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
 
 .callout {
   --callout-color: var(--callout-note);
-  padding: 15px 19px;
+  padding: 16px;
   border-inline-start: 3px solid var(--callout-color);
   border-radius: 0 6px 6px 0;
   background: var(--bg-soft);
   display: flex;
   flex-direction: column;
-  gap: 0.6em;
+  gap: 0.6em; /* design-ok: spacing-scale label cluster follows em */
 }
 .callout--tip {
   --callout-color: var(--callout-tip);
@@ -1378,10 +1378,10 @@ ran-demo + figure.code {
 ran-demo {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px;
+  gap: 16px;
   align-items: center;
   margin: 4px 0;
-  padding: 26px 24px;
+  padding: 24px;
   border: 1px solid var(--rule);
   border-radius: 12px;
   background: var(--bg-soft);
@@ -1453,7 +1453,7 @@ ran-demo p {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  margin-top: 56px;
+  margin-top: 64px;
   padding-top: 24px;
   border-top: 1px solid var(--rule);
   max-width: var(--measure);

@@ -43,7 +43,7 @@ describe('the Ran Design guide page', () => {
     expect(localeHref(translated.link, cn)).toBe(`/cn${translated.link}`);
 
     const english = designSectionLink(DESIGN, 'Interaction', ja);
-    expect(english).toEqual({ link: '/src/design/guide#interaction', label: 'Interaction' });
+    expect(english).toEqual({ link: '/design/guide#interaction', label: 'Interaction' });
     expect(localeHref(english.link, ja)).toBe(english.link);
     expect(() => designSectionLink(DESIGN, 'No such section', cn)).toThrow();
   });

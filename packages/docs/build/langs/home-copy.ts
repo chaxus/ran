@@ -45,9 +45,9 @@ const CAPS_STRUCTURE = [
  */
 const STAT_NUMS = ['41', '90+', '8', 'MIT'] as const;
 const PILLAR_STRUCTURE = [
-  { kind: 'ui', link: '/src/ranui/' },
-  { kind: 'utils', link: '/src/ranuts/' },
-  { kind: 'article', link: '/src/design/' },
+  { kind: 'ui', link: '/ranui/' },
+  { kind: 'utils', link: '/ranuts/' },
+  { kind: 'article', link: '/design/' },
 ] as const;
 
 interface Pair {

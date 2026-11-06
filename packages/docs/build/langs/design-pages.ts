@@ -7,7 +7,7 @@ export const DESIGN_REFERENCE = [
 ] as const;
 
 /** Their source paths, as structure links and `localeHref` see them. */
-export const DESIGN_REFERENCE_LINKS: readonly string[] = DESIGN_REFERENCE.map(({ page }) => `/src/design/${page}`);
+export const DESIGN_REFERENCE_LINKS: readonly string[] = DESIGN_REFERENCE.map(({ page }) => `/design/${page}`);
 
 /**
  * A guide page a locale has no translation of; its links stay on the English page. Must agree
@@ -16,6 +16,6 @@ export const DESIGN_REFERENCE_LINKS: readonly string[] = DESIGN_REFERENCE.map(({
 export const designPageUntranslated = (link: string, dir: string): boolean =>
   DESIGN_REFERENCE.some(
     ({ page, translated }) =>
-      (link === `/src/design/${page}` || link.startsWith(`/src/design/${page}#`)) &&
+      (link === `/design/${page}` || link.startsWith(`/design/${page}#`)) &&
       !(translated as readonly string[]).includes(dir),
   );

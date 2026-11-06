@@ -61,11 +61,9 @@ export const componentFacts = (docsRoot: string): ComponentFacts => {
     const { ui } = messagesFor(locale);
     const site = (path: string): string => publicUrl(localeHref(path, locale));
     const links = [
-      `<a href="${esc(`${site('/src/ranui/api')}#${slugify(`\`<${elements[0]}>\``)}`)}">${esc(ui.componentApi)}</a>`,
+      `<a href="${esc(`${site('/ranui/api')}#${slugify(`\`<${elements[0]}>\``)}`)}">${esc(ui.componentApi)}</a>`,
       ...(tokenSections.has(dir)
-        ? [
-            `<a href="${esc(`${site('/src/ranui/style-tokens')}#${slugify(`\`${dir}\``)}`)}">${esc(ui.componentTokens)}</a>`,
-          ]
+        ? [`<a href="${esc(`${site('/ranui/style-tokens')}#${slugify(`\`${dir}\``)}`)}">${esc(ui.componentTokens)}</a>`]
         : []),
       ...(playground ? [`<a href="#${esc(playground)}">${esc(ui.playground)}</a>`] : []),
       `<a href="${SOURCE}${dir}/" target="_blank" rel="noopener noreferrer">${esc(ui.componentSource)}</a>`,

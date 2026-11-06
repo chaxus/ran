@@ -25,8 +25,17 @@ export const publicUrl = (path: string): string => {
   return `${prefix}/${rest ?? ''}`;
 };
 
-/** Every tree the site publishes. */
-const TREES = new Set(ROOT_LOCALE.mirrors.map((mirror) => mirror.split('/')[2]!));
+/**
+ * Every tree the site publishes (`design`, `ranui`, …). Mirrors are public path prefixes
+ * (`/ranui/`); older `/src/ranui/` forms are still accepted so a partial migration cannot
+ * empty this set and break `legacyUrl`.
+ */
+const TREES = new Set(
+  ROOT_LOCALE.mirrors.map((mirror) => {
+    const parts = mirror.replace(/^\/|\/$/g, '').split('/');
+    return parts[0] === 'src' ? parts[1]! : parts[0]!;
+  }),
+);
 
 /** The inverse of `publicUrl`: the `/src/…` URL a published page used to have, or null. */
 export const legacyUrl = (path: string): string | null => {

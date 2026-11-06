@@ -176,7 +176,15 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
   }
   for (const [lang, pages] of byLocale) {
     const name = `search/${lang}.json`;
-    writeOut(DIST_DIR, name, buildIndex(pages));
+    // Generated API dumps dominate the index bytes and are already reachable from the
+    // sidebar; keep their titles findable, drop the body so every locale's search JSON
+    // stays downloadable on a slow link.
+    const forSearch = pages.map((page) =>
+      /\/api\/?$/.test(page.url.replace(/\.html$/, ''))
+        ? { ...page, sections: page.sections.map((section) => ({ ...section, text: '' })) }
+        : page,
+    );
+    writeOut(DIST_DIR, name, buildIndex(forSearch));
     written.push(name);
   }
 
