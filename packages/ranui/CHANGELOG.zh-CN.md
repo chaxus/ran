@@ -2,6 +2,17 @@
 
 `ranui` 的所有重要变更都记录在本文件中。
 
+## [0.5.4] — 2026-11-06
+
+[ranui@0.5.4](https://www.npmjs.com/package/ranui/v/0.5.4) 已正式发布到 npm 的 `latest` 标签。
+
+- **Graphite 主题** — 冷调中性色（`#111113` / 暗色 `#0a0a0b`），主操作单色，蓝色只留给链接与焦点。宿主（如 edit.chaxus.com）通过 `ranui.css` 同步的 token 层随之更新。
+- **`r-glass`** — 材质档位、透镜边缘，以及可选的 WebGL 对已知图片背景的折射。
+- `r-button` 按压反馈落在 100ms 内；浮层箭头随面板退出；`r-token-meter` 数字翻滚；消息 API 支持堆叠 toast。
+- 更宽松的 `r-tabs`（含 `segment`）、滑动悬停填充、内置文案多语言、`r-fan-gallery`，以及播放器报错与控制条修复。
+- Ran Design 收成一页清单，并由浏览器检查落实。细节见 `packages/ranui/changelogs/`。
+- 联动 `ranuts@0.5.4` 与 `@alixex/ranview@0.2.4`；打包后的内部依赖使用这些确切版本。
+
 ## [0.5.3] — 2026-10-26
 
 [ranui@0.5.3](https://www.npmjs.com/package/ranui/v/0.5.3) 已正式发布到 npm 的 `latest` 标签。

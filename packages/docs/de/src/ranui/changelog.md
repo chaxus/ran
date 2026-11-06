@@ -9,6 +9,17 @@ Aus `packages/ranui/CHANGELOG.md` im Repository erzeugt. Die Einträge bleiben i
 
 ::: v-pre
 
+## [0.5.4] — 2026-11-06
+
+Published to npm as [ranui@0.5.4](https://www.npmjs.com/package/ranui/v/0.5.4) on the `latest` tag.
+
+- **Graphite theme** — cool-tinted neutrals (`#111113` / dark `#0a0a0b`), monochrome primary actions, blue reserved for links and focus. Ships the token layer hosts like edit.chaxus.com vendor via `ranui.css`.
+- **`r-glass`** — materials (`thin` / `regular` / `thick` / `clear`), lensed edge, optional WebGL refraction over a known image backdrop.
+- Press feedback on `r-button` within 100ms; popover/dropdown arrows exit with their panels; `r-token-meter` rolling counts; stacked toasts on the message API.
+- Roomier `r-tabs` (including `segment`), sliding header hover fill, localized built-in labels, `r-fan-gallery`, clearer player errors and control-bar fixes.
+- Ran Design collapses to a one-page checklist with browser-checked rules. See dated notes under `packages/ranui/changelogs/` for engineering detail.
+- Coordinate `ranuts@0.5.4` (motion helpers including `rollText` / spring / stagger) and `@alixex/ranview@0.2.4`; packed internal dependencies resolve to those exact versions.
+
 ## [0.5.3] — 2026-10-26
 
 Published to npm as [ranui@0.5.3](https://www.npmjs.com/package/ranui/v/0.5.3) on the `latest` tag.

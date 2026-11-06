@@ -2,21 +2,21 @@
 
 The release set is **ranuts → @alixex/ranview → ranui**, in dependency order. Other workspaces are not published by this workflow. All workspaces and the published libraries require **Node 24+**. Use pnpm **11.6.0**, pinned in the root `packageManager` field; the release workflow pins npm **11.20.0** for registry operations.
 
-## Published stable release — 2026-10-26
+## Published stable release — 2026-11-06
 
 | Package         | Version | npm tag |
 | --------------- | ------- | ------- |
-| ranuts          | 0.5.3   | latest  |
-| @alixex/ranview | 0.2.3   | latest  |
-| ranui           | 0.5.3   | latest  |
+| ranuts          | 0.5.4   | latest  |
+| @alixex/ranview | 0.2.4   | latest  |
+| ranui           | 0.5.4   | latest  |
 
-All three versions are published to npm on `latest` by the Release libraries workflow (run 40247521849, source commit `323b159fd`) on 2026-10-26. The registry serves each as its `latest` dist-tag, with archive integrity matching the workflow's publication record. They follow 0.5.2 / 0.2.2 / 0.5.2, published on 2026-10-24. Install them directly:
+Prepare and publish these versions with the Release libraries workflow on `main` (`publish=true`, channel `latest`). They follow 0.5.3 / 0.2.3 / 0.5.3 (2026-10-26) and ship Graphite tokens plus the post-0.5.3 library work. Install them directly:
 
 ```sh
-npm install ranui@0.5.3
+npm install ranui@0.5.4
 # Or install the utility or DOM-view library separately:
-npm install ranuts@0.5.3
-npm install @alixex/ranview@0.2.3
+npm install ranuts@0.5.4
+npm install @alixex/ranview@0.2.4
 ```
 
 Change all affected package versions together before preparing a release. Keep internal dependencies as `workspace:*`: pnpm materializes the exact corresponding versions in the archives, and verification rejects old or unresolved internal versions. Update the lockfile if needed and commit the version/changelog changes before preparing the final artifacts.
