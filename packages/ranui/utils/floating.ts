@@ -6,6 +6,7 @@ import {
   type PlacementAlign,
   type PlacementSide,
 } from '@/utils/placement';
+import { settlePresence } from '@/utils/presence';
 
 /**
  * The shared machinery behind every panel that floats next to something else:
@@ -158,56 +159,6 @@ export interface FloatingOptions {
   afterPosition?: (position: FloatingPosition, panel: HTMLElement) => void;
 }
 
-/**
- * Wait for whatever the stylesheet is animating on `el` to finish.
- *
- * Reading the CSS rather than duplicating its duration in a timer. The three
- * components used to hold a `const animationTime = 300` each, matched by hand
- * against `--ran-dropdown-animation-duration` in the stylesheet -- a comment in
- * `dropdown/index.less` records what happened the last time the two got out of
- * step, and a consumer setting that token would have reproduced it. Asking the
- * element what it is animating cannot go out of step, and it answers
- * immediately when there is nothing to wait for: a panel under
- * `prefers-reduced-motion`, or one whose animation a consumer turned off.
- */
-/**
- * A panel that knows where its own animations run.
- *
- * `r-dropdown` applies them to an element inside its shadow root, so
- * `getAnimations()` on the host reports nothing — and `{ subtree: true }` does
- * not cross a shadow boundary either. Rather than reach through the shadow tree
- * for a class name, the panel is asked.
- */
-interface AnimatablePanel extends HTMLElement {
-  getAnimationTarget?: () => Element;
-}
-
-const animationTargetOf = (panel: HTMLElement): Element => (panel as AnimatablePanel).getAnimationTarget?.() ?? panel;
-
-const settleAnimations = (panel: HTMLElement, done: () => void): void => {
-  const el = animationTargetOf(panel);
-  // No animation API (jsdom) or no frames to wait for: there is provably
-  // nothing running, so finish in this tick rather than a microtask later.
-  if (typeof el.getAnimations !== 'function' || typeof requestAnimationFrame !== 'function') {
-    done();
-    return;
-  }
-  // A class applied this tick has no running animation until the next frame.
-  requestAnimationFrame(() => {
-    const running = el.getAnimations();
-    if (!running.length) {
-      done();
-      return;
-    }
-    void (async () => {
-      // `finished` rejects on cancel, which is a normal outcome here: a panel
-      // re-opened mid-exit cancels the exit animation.
-      await Promise.allSettled(running.map((animation) => animation.finished));
-      done();
-    })();
-  });
-};
-
 export class FloatingController {
   private options: FloatingOptions;
   private repositionBound = false;
@@ -338,7 +289,7 @@ export class FloatingController {
       panel.style.setProperty('display', 'block');
       this.attachReposition();
       this.position(true);
-      settleAnimations(panel, () => {
+      settlePresence(panel, () => {
         if (generation !== this.generation) return;
         panel.removeAttribute('transit');
         host.dispatchEvent(new CustomEvent('after-show'));
@@ -356,7 +307,7 @@ export class FloatingController {
     // an animation. `getAnimations()` forces the style recalculation that makes
     // it visible.
     panel.setAttribute('transit', TRANSIT[this.resolvedSide ?? this.side()].exit);
-    settleAnimations(panel, () => {
+    settlePresence(panel, () => {
       if (generation !== this.generation) return;
       panel.style.setProperty('display', 'none');
       panel.removeAttribute('transit');
