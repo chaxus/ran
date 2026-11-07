@@ -6,7 +6,7 @@ title: Ran Design
 
 روش‌هایی برای چیدمان، تعامل، حرکت و بازبینی مبتنی بر شواهد — مستقل از هر کتابخانهٔ مؤلفه.
 
-- [چک‌لیست طراحی](/fa/design/guide)
+- [چک‌لیست طراحی](/design/guide)
 - [زبان سطح](/design/surface) (انگلیسی)
 - [سیستم طراحی](/fa/design/design-system/)
 - [راهنمای طراحی](/fa/design/design-guides/)

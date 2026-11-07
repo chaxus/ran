@@ -6,7 +6,7 @@ title: Ran Design
 
 Métodos para composición, interacción, movimiento y revisión con evidencia — independientes de cualquier biblioteca de componentes.
 
-- [Lista de diseño](/es/design/guide)
+- [Lista de diseño](/design/guide)
 - [Lenguaje de superficie](/design/surface) (inglés)
 - [Sistema de diseño](/es/design/design-system/)
 - [Guía de diseño](/es/design/design-guides/)

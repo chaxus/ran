@@ -6,7 +6,7 @@ title: Ran Design
 
 レイアウト、インタラクション、モーション、根拠に基づくレビューの方法 — 特定のコンポーネントライブラリに依存しません。
 
-- [デザインチェックリスト](/ja/design/guide)
+- [デザインチェックリスト](/design/guide)
 - [サーフェス言語](/design/surface)（英語）
 - [デザインシステム](/ja/design/design-system/)
 - [デザインガイドライン](/ja/design/design-guides/)

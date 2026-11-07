@@ -12,7 +12,7 @@ confiar.
 
 Defina um token em qualquer lugar de onde ele seja herdado — `:root`, um contêiner ou o
 próprio elemento — e prefira um token semântico quando ele der conta da mudança, porque
-alcança todos os componentes de uma vez. O vocabulário é o [design system](/pt/src/ranui/design-system/);
+alcança todos os componentes de uma vez. O vocabulário é o [design system](/pt/src/design/design-system/);
 a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `attachments`

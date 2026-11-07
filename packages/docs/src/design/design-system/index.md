@@ -413,7 +413,7 @@ purpose: this layer used to be much larger and most of it was removed with the t
 Orthogonal to light/dark. Default is **solid** Graphite. **Glass** is explicit
 (`data-ran-surface="glass"` or `surface="glass"` on a pilot control). Optics lean on
 [`r-glass`](/ranui/glass/) thin/regular without pulling WebGL into every control. See
-[Theming](/ranui/theme/#surface-language-solid--glass).
+[Theming](/ranui/theme/#surface-language-solid-glass).
 
 | Token | Light | Use for |
 | --- | --- | --- |

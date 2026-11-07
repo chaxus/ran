@@ -12,7 +12,7 @@ que puedes confiar.
 
 Define un token allí donde se herede — `:root`, un contenedor o el propio elemento — y
 prefiere un token semántico cuando cubra el cambio, porque alcanza a todos los componentes
-de una vez. El vocabulario es el [sistema de diseño](/es/src/ranui/design-system/); la regla de
+de una vez. El vocabulario es el [sistema de diseño](/es/src/design/design-system/); la regla de
 nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `attachments`

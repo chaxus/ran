@@ -11,7 +11,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 토큰은 상속이 닿는 곳이면 어디에나 지정할 수 있습니다 — `:root`, 바깥 컨테이너, 엘리먼트 자체.
 의미 토큰 하나로 그 변경을 표현할 수 있다면 그쪽을 택하세요. 한 번에 모든 컴포넌트에 적용됩니다.
-어휘는 [디자인 시스템](/ko/src/ranui/design-system/)에 정리돼 있고, 이름 규칙은
+어휘는 [디자인 시스템](/ko/src/design/design-system/)에 정리돼 있고, 이름 규칙은
 `--ran-{component}-{element}[-{state}]-{property}` 입니다.
 
 ## `attachments`

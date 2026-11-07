@@ -6,7 +6,7 @@ title: Ran Design
 
 Methoden für Layout, Interaktion, Bewegung und evidenzbasierte Abnahme — unabhängig von einer Komponentenbibliothek.
 
-- [Design-Checkliste](/de/design/guide)
+- [Design-Checkliste](/design/guide)
 - [Oberflächensprache](/design/surface) (Englisch)
 - [Designsystem](/de/design/design-system/)
 - [Designrichtlinien](/de/design/design-guides/)

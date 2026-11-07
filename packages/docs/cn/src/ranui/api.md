@@ -11,7 +11,7 @@ description: 'ranui 的全部自定义元素 —— 42 个元素的属性、属�
 
 每个元素暴露的 CSS 变量见
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)；如何在其中取舍见
-[设计系统](/cn/src/ranui/design-system/)与[设计规范](/cn/src/ranui/design-guides/)。
+[设计系统](/cn/src/design/design-system/)与[设计规范](/cn/src/design/design-guides/)。
 单个元素的用法说明在侧边栏各自的页面里，这里是一次性列全的完整接口。
 
 每个事件都标注了它的派发选项：`bubbles`（冒泡）、`composed`（可穿过 Shadow 边界）、

@@ -12,7 +12,7 @@ die du dich verlassen kannst.
 
 Setze ein Token überall dort, wo es vererbt wird — `:root`, ein Wrapper oder das Element
 selbst — und bevorzuge ein semantisches Token, wenn eines die Änderung abdeckt: es erreicht
-alle Komponenten auf einmal. Das Vokabular ist das [Designsystem](/de/src/ranui/design-system/);
+alle Komponenten auf einmal. Das Vokabular ist das [Designsystem](/de/src/design/design-system/);
 die Namensregel lautet `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `attachments`

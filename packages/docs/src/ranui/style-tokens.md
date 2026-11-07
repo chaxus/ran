@@ -11,7 +11,7 @@ are filtered out: what is left is the styling API you can rely on.
 
 Set a token anywhere it inherits from — `:root`, a wrapper, or the element itself — and
 prefer a semantic token when one covers the change, since it reaches every component at
-once. The vocabulary is the [design system](/src/ranui/design-system/); the naming rule is
+once. The vocabulary is the [design system](/src/design/design-system/); the naming rule is
 `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `attachments`
