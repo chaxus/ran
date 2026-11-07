@@ -178,7 +178,7 @@ input.addEventListener('change', (event) => {
 
 ## 폼 연동 {#form-association}
 
-`r-input`은 폼 연동 커스텀 엘리먼트입니다(`static formAssociated = true`). `ElementInternals`를 붙이고 `setFormValue`로 값을 전달하므로, 네이티브 `<form>`의 실제 자손이라면 `new FormData(form)`이 이 필드를 수집합니다. 값에 키를 주려면 `name`을 지정하세요. 제출을 평범한 객체로 바꿔 주는 `serializeForm()` 헬퍼는 [폼](/ko/src/ranui/form/)을 보세요.
+`r-input`은 폼 연동 커스텀 엘리먼트입니다(`static formAssociated = true`). `ElementInternals`를 붙이고 `setFormValue`로 값을 전달하므로, 네이티브 `<form>`의 실제 자손이라면 `new FormData(form)`이 이 필드를 수집합니다. 값에 키를 주려면 `name`을 지정하세요. 제출을 평범한 객체로 바꿔 주는 `serializeForm()` 헬퍼는 [폼](/ko/ranui/form/)을 보세요.
 
 ```html
 <form>
@@ -226,7 +226,7 @@ r-input {
 
 Part: `content` · `input` · `label` · `message`
 
-전체 목록은 [스타일 토큰](/ko/src/ranui/style-tokens#input)에 있고, 어떤 토큰을 쓸지는 [디자인 시스템](/ko/src/ranui/design-system/)이 다룹니다.
+전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#input)에 있고, 어떤 토큰을 쓸지는 [디자인 시스템](/ko/ranui/design-system/)이 다룹니다.
 
 ## 모범 사례
 

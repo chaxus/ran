@@ -5,7 +5,7 @@ description: 'Un control segmentado de tres estados (sistema/claro/oscuro) conec
 # ThemeSwitch
 
 Un control segmentado de tres estados (**sistema / claro / oscuro**) conectado a la
-[API de temas](/es/src/ranui/theme/) de ranui. Al pulsar un segmento se llama a `setTheme()`, se
+[API de temas](/es/ranui/theme/) de ranui. Al pulsar un segmento se llama a `setTheme()`, se
 guarda la elección bajo la clave de localStorage `ran-theme` y se mantienen sincronizadas todas
 las instancias de la página (y de otras pestañas).
 

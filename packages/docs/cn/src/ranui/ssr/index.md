@@ -64,7 +64,7 @@ const html = renderToString(new Button());
 第一帧，随后会被一棵一模一样的客户端树替换。由此有两点要注意：
 
 - 它保证的是首屏正确，不是 hydration 复用：closed root 没法被客户端复用，原因见上文。详见
-  [编码规范](/cn/src/ranui/coding-guides/#server-rendering)。
+  [编码规范](/cn/ranui/coding-guides/#server-rendering)。
 - **不要把状态写进服务端渲染的 shadow 标记里**，指望客户端再读回来。状态请通过属性传递，属性在重建后
   仍然保留。
 
@@ -81,7 +81,7 @@ const html = renderToString(new Button());
 `initTheme()` 在服务端不做任何事（所有 `document` / `localStorage` / `matchMedia` 访问都加了判断），
 主题由客户端应用。要避免主题闪烁，请在服务端模板里直接给 `<html>` 写好 `data-ran-theme`：值可以从
 cookie 取，也可以用一小段在首屏绘制前读取 `localStorage` 的内联脚本来设置，之后再交给
-[`initTheme`](/cn/src/ranui/theme/) 接管。
+[`initTheme`](/cn/ranui/theme/) 接管。
 
 ## 最佳实践
 

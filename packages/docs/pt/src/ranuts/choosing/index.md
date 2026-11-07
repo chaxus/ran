@@ -4,7 +4,7 @@ description: 'Qual utilitário do ranuts escolher: debounce ou throttle, once ou
 
 # Escolhendo um utilitário
 
-A [referência da API](/pt/src/ranuts/api) lista todas as exportações. Esta página responde ao que ela não consegue: **de duas coisas parecidas, qual eu quero e por quê**.
+A [referência da API](/pt/ranuts/api) lista todas as exportações. Esta página responde ao que ela não consegue: **de duas coisas parecidas, qual eu quero e por quê**.
 
 > **Use quando** você já souber mais ou menos o que precisa («que isso rode menos vezes», «só uma vez», «guardar isso», «conversar com um worker»), mas não qual exportação faz aquilo.
 
@@ -78,7 +78,7 @@ O `WorkerClient` é o que você procura quando o worker responde perguntas: sem 
 ## Idioma e texto
 
 - **`resolveLocale({ supported, … })`** decide qual dos _seus_ idiomas usar, seguindo a cadeia de sempre (uma escolha explícita, o armazenamento, `navigator.languages`, um valor de reserva). Ele responde «qual idioma», não «o que esta string diz».
-- **`createI18n` / `useI18n`** ([`ranuts/i18n`](/pt/src/ranuts/i18n/)) é o motor de tradução: dicionários planos de mensagens, interpolação com `{param}` e troca em tempo de execução.
+- **`createI18n` / `useI18n`** ([`ranuts/i18n`](/pt/ranuts/i18n/)) é o motor de tradução: dicionários planos de mensagens, interpolação com `{param}` e troca em tempo de execução.
 - **`segmentByRanges`** e **`paginateText`** servem para diagramar texto: o primeiro, deslocamentos e destaques; o segundo, cortar o texto em páginas que caibam numa caixa.
 
 Use o `resolveLocale` mesmo que não use o motor de i18n: a decisão que ele toma — respeitar a ordem inteira de `navigator.languages` do leitor, e não só o primeiro item — é justamente a parte fácil de errar.
@@ -87,9 +87,9 @@ Use o `resolveLocale` mesmo que não use o motor de i18n: a decisão que ele tom
 
 Três camadas, e cada uma serve sozinha:
 
-1. **[`ranuts/stream`](/pt/src/ranuts/stream/)**: interpreta o SSE e depois dobra os incrementos num instantâneo com `createStreamAccumulator()`. É neutro quanto ao provedor: incrementos de texto, de raciocínio e de chamadas de ferramenta acabam com o mesmo formato, venham de quem vierem.
-2. **[`ranuts/conversation`](/pt/src/ranuts/conversation/)**: projeta um registro de eventos só de acréscimo em nós desenháveis com `createConversationEngine()`. Ele decide _o que_ é cada linha; não desenha nada.
-3. **[`<r-conversation>`](/pt/src/ranui/conversation/)** no ranui: o elemento que desenha esses nós, mantém a vista grudada no fim e reconcilia as linhas.
+1. **[`ranuts/stream`](/pt/ranuts/stream/)**: interpreta o SSE e depois dobra os incrementos num instantâneo com `createStreamAccumulator()`. É neutro quanto ao provedor: incrementos de texto, de raciocínio e de chamadas de ferramenta acabam com o mesmo formato, venham de quem vierem.
+2. **[`ranuts/conversation`](/pt/ranuts/conversation/)**: projeta um registro de eventos só de acréscimo em nós desenháveis com `createConversationEngine()`. Ele decide _o que_ é cada linha; não desenha nada.
+3. **[`<r-conversation>`](/pt/ranui/conversation/)** no ranui: o elemento que desenha esses nós, mantém a vista grudada no fim e reconcilia as linhas.
 
 Pare na camada 1 se você só pinta texto; acrescente a 2 quando a transcrição tiver uma estrutura que valha a pena projetar; acrescente a 3 quando quiser a rolagem e a reconciliação já resolvidas.
 
@@ -110,4 +110,4 @@ Cada subcaminho é um barril independente do qual dá para podar o que não se u
 
 ## Ainda em dúvida?
 
-Procure na [referência da API](/pt/src/ranuts/api): todas as exportações estão lá com sua assinatura e uma linha de descrição, geradas a partir do código. Se, depois de ler as duas linhas, duas delas ainda parecerem intercambiáveis, isso é um defeito de documentação que vale [relatar](https://github.com/chaxus/ran/issues).
+Procure na [referência da API](/pt/ranuts/api): todas as exportações estão lá com sua assinatura e uma linha de descrição, geradas a partir do código. Se, depois de ler as duas linhas, duas delas ainda parecerem intercambiáveis, isso é um defeito de documentação que vale [relatar](https://github.com/chaxus/ran/issues).

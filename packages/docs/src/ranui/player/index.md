@@ -327,7 +327,7 @@ r-player {
 }
 ```
 
-The full list is in [style tokens](/src/ranui/style-tokens#player); which token to reach for is the [design system](/src/ranui/design-system/).
+The full list is in [style tokens](/ranui/style-tokens#player); which token to reach for is the [design system](/ranui/design-system/).
 
 ## Best Practices
 

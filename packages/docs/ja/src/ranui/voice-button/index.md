@@ -134,7 +134,7 @@ r-voice-button {
 
 Part：`button` · `hint` · `icon`
 
-一覧は[スタイルトークン](/ja/src/ranui/style-tokens#voice-button)に、どのトークンを選ぶかは[デザインシステム](/ja/src/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#voice-button)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
 
 ## 関連
 

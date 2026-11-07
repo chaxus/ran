@@ -185,7 +185,7 @@ input.addEventListener('change', (event) => {
 
 ## 表单关联 {#form-association}
 
-`r-input` 是一个表单关联自定义元素（`static formAssociated = true`）。它挂载了 `ElementInternals`，并通过 `setFormValue` 上报自己的值，因此只要是原生 `<form>` 的真实子孙元素，就能被 `new FormData(form)` 收集到，记得设置 `name` 来指定它的 key。把提交结果转成普通对象时，参见 [Forms](/cn/src/ranui/form/) 里的 `serializeForm()` 辅助函数。
+`r-input` 是一个表单关联自定义元素（`static formAssociated = true`）。它挂载了 `ElementInternals`，并通过 `setFormValue` 上报自己的值，因此只要是原生 `<form>` 的真实子孙元素，就能被 `new FormData(form)` 收集到，记得设置 `name` 来指定它的 key。把提交结果转成普通对象时，参见 [Forms](/cn/ranui/form/) 里的 `serializeForm()` 辅助函数。
 
 ```html
 <form>
@@ -236,7 +236,7 @@ r-input {
 
 Part：`content` · `input` · `label` · `message`
 
-完整清单见[样式令牌](/cn/src/ranui/style-tokens#input)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+完整清单见[样式令牌](/cn/ranui/style-tokens#input)；该选哪个令牌见[设计系统](/cn/ranui/design-system/)。
 
 ## 最佳实践
 

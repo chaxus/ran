@@ -22,57 +22,57 @@ import { debounce } from 'ranuts/utils';
 | Import                                                | Enthält                                                           | Umgebung           |
 | ----------------------------------------------------- | ----------------------------------------------------------------- | ------------------ |
 | `ranuts`                                              | Das Wurzel-Barrel: die Fläche aus utils und visual                | Browser + Node     |
-| [`ranuts/utils`](/de/src/ranuts/utils/)               | DOM/BOM, Zeichenketten, Objekte, Zahlen, Farbe, Zeit, Speicher, … | Browser + Node\*   |
-| [`ranuts/visual`](/de/src/ranuts/visual/)             | 2D-Zeichen-Engine (Canvas / WebGL / WebGPU)                       | **nur Browser**    |
-| [`ranuts/i18n`](/de/src/ranuts/i18n/)                 | Übersetzungs-Engine: flache Wörterbücher, Umschalten zur Laufzeit | Browser + Node     |
-| [`ranuts/sw`](/de/src/ranuts/sw/)                     | Cache-Strategien und die Worker-Hälfte des Precache-Protokolls    | **Service Worker** |
-| [`ranuts/vnode`](/de/src/ranuts/vnode/)               | Virtuelles DOM im Stil von Snabbdom                               | Browser            |
-| [`ranuts/stream`](/de/src/ranuts/stream/)             | SSE-Auswertung, Falten von Modellströmen, Token-Budget            | Browser + Node     |
-| [`ranuts/conversation`](/de/src/ranuts/conversation/) | Ereignisprotokoll → darstellbare Gesprächsknoten                  | Browser + Node     |
+| [`ranuts/utils`](/de/ranuts/utils/)               | DOM/BOM, Zeichenketten, Objekte, Zahlen, Farbe, Zeit, Speicher, … | Browser + Node\*   |
+| [`ranuts/visual`](/de/ranuts/visual/)             | 2D-Zeichen-Engine (Canvas / WebGL / WebGPU)                       | **nur Browser**    |
+| [`ranuts/i18n`](/de/ranuts/i18n/)                 | Übersetzungs-Engine: flache Wörterbücher, Umschalten zur Laufzeit | Browser + Node     |
+| [`ranuts/sw`](/de/ranuts/sw/)                     | Cache-Strategien und die Worker-Hälfte des Precache-Protokolls    | **Service Worker** |
+| [`ranuts/vnode`](/de/ranuts/vnode/)               | Virtuelles DOM im Stil von Snabbdom                               | Browser            |
+| [`ranuts/stream`](/de/ranuts/stream/)             | SSE-Auswertung, Falten von Modellströmen, Token-Budget            | Browser + Node     |
+| [`ranuts/conversation`](/de/ranuts/conversation/) | Ereignisprotokoll → darstellbare Gesprächsknoten                  | Browser + Node     |
 
 ## Was drin ist
 
-**Funktional**: [debounce](/de/src/ranuts/utils/debounce) · [throttle](/de/src/ranuts/utils/throttle) ·
-[once / singleFlight](/de/src/ranuts/utils/memoize) ·
-[QuestQueue](/de/src/ranuts/utils/quest_queue) ·
-[withTimeout / deferred](/de/src/ranuts/utils/with_timeout) ·
-[compose](/de/src/ranuts/utils/compose)
+**Funktional**: [debounce](/de/ranuts/utils/debounce) · [throttle](/de/ranuts/utils/throttle) ·
+[once / singleFlight](/de/ranuts/utils/memoize) ·
+[QuestQueue](/de/ranuts/utils/quest_queue) ·
+[withTimeout / deferred](/de/ranuts/utils/with_timeout) ·
+[compose](/de/ranuts/utils/compose)
 
-**Daten**: [cloneDeep](/de/src/ranuts/utils/clone_deep) · [isEqual](/de/src/ranuts/utils/is_equal) ·
-[merge](/de/src/ranuts/utils/merge) · [filterObj](/de/src/ranuts/utils/filter_obj) ·
-[Zahlen formatieren und einlesen](/de/src/ranuts/utils/parse_number) ·
-[Farbumrechnung und -mischung](/de/src/ranuts/utils/color)
+**Daten**: [cloneDeep](/de/ranuts/utils/clone_deep) · [isEqual](/de/ranuts/utils/is_equal) ·
+[merge](/de/ranuts/utils/merge) · [filterObj](/de/ranuts/utils/filter_obj) ·
+[Zahlen formatieren und einlesen](/de/ranuts/utils/parse_number) ·
+[Farbumrechnung und -mischung](/de/ranuts/utils/color)
 
-**Text**: [truncate](/de/src/ranuts/utils/truncate) ·
-[detectLanguage](/de/src/ranuts/utils/detect_language) ·
-[resolveLocale](/de/src/ranuts/utils/resolve_locale) ·
-[segmentByRanges](/de/src/ranuts/utils/segment) · [paginate](/de/src/ranuts/utils/paginate) ·
-[escapeHtml](/de/src/ranuts/utils/escape_html)
+**Text**: [truncate](/de/ranuts/utils/truncate) ·
+[detectLanguage](/de/ranuts/utils/detect_language) ·
+[resolveLocale](/de/ranuts/utils/resolve_locale) ·
+[segmentByRanges](/de/ranuts/utils/segment) · [paginate](/de/ranuts/utils/paginate) ·
+[escapeHtml](/de/ranuts/utils/escape_html)
 
-**Browser**: [Speicher](/de/src/ranuts/utils/local_storage) ·
-[IndexedDB](/de/src/ranuts/utils/web_db) · [Worker-Client](/de/src/ranuts/utils/worker_client) ·
-[postMessage-Brücke](/de/src/ranuts/bridge/) · [Prefetch](/de/src/ranuts/utils/prefetch) ·
-[Geräteerkennung](/de/src/ranuts/utils/current_device) ·
-[Leistung](/de/src/ranuts/utils/get_performance) · [ZIP](/de/src/ranuts/utils/zip) ·
-[Tonaufnahme](/de/src/ranuts/utils/audio_recorder) ·
-[Sprache zu Text](/de/src/ranuts/utils/speech)
+**Browser**: [Speicher](/de/ranuts/utils/local_storage) ·
+[IndexedDB](/de/ranuts/utils/web_db) · [Worker-Client](/de/ranuts/utils/worker_client) ·
+[postMessage-Brücke](/de/ranuts/bridge/) · [Prefetch](/de/ranuts/utils/prefetch) ·
+[Geräteerkennung](/de/ranuts/utils/current_device) ·
+[Leistung](/de/ranuts/utils/get_performance) · [ZIP](/de/ranuts/utils/zip) ·
+[Tonaufnahme](/de/ranuts/utils/audio_recorder) ·
+[Sprache zu Text](/de/ranuts/utils/speech)
 
-**KI und Chat**: [stream](/de/src/ranuts/stream/) · [conversation](/de/src/ranuts/conversation/) ·
-[i18n](/de/src/ranuts/i18n/)
+**KI und Chat**: [stream](/de/ranuts/stream/) · [conversation](/de/ranuts/conversation/) ·
+[i18n](/de/ranuts/i18n/)
 
-**Zeichnen**: [2D-Engine](/de/src/ranuts/visual/) · [virtuelles DOM](/de/src/ranuts/vnode/) ·
-[Canvas-Helfer](/de/src/ranuts/utils/canvas) · [tween](/de/src/ranuts/utils/tween)
+**Zeichnen**: [2D-Engine](/de/ranuts/visual/) · [virtuelles DOM](/de/ranuts/vnode/) ·
+[Canvas-Helfer](/de/ranuts/utils/canvas) · [tween](/de/ranuts/utils/tween)
 
-Das ist eine Auswahl. Die [API-Referenz](/de/src/ranuts/api) führt **jeden** Export mit Signatur und Beschreibung auf, aus dem Quelltext erzeugt, damit sie nicht auseinanderlaufen kann.
+Das ist eine Auswahl. Die [API-Referenz](/de/ranuts/api) führt **jeden** Export mit Signatur und Beschreibung auf, aus dem Quelltext erzeugt, damit sie nicht auseinanderlaufen kann.
 
 ## Wohin als Nächstes
 
 | Wenn du …                                                           | Lies                                                                            |
 | ------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| herausfinden willst, ob es eine Funktion gibt, und wie sie aussieht | [API-Referenz](/de/src/ranuts/api)                                              |
-| dich zwischen zwei ähnlichen Helfern entscheiden willst             | [Den passenden Helfer wählen](/de/src/ranuts/choosing/)                         |
-| nach Kategorien stöbern willst                                      | [Übersicht der Helfer](/de/src/ranuts/utils/)                                   |
-| eine gestreamte Modellantwort darstellen willst                     | [stream](/de/src/ranuts/stream/) → [conversation](/de/src/ranuts/conversation/) |
-| eine Oberfläche darauf bauen willst                                 | [ranui](/de/src/ranui/)                                                         |
+| herausfinden willst, ob es eine Funktion gibt, und wie sie aussieht | [API-Referenz](/de/ranuts/api)                                              |
+| dich zwischen zwei ähnlichen Helfern entscheiden willst             | [Den passenden Helfer wählen](/de/ranuts/choosing/)                         |
+| nach Kategorien stöbern willst                                      | [Übersicht der Helfer](/de/ranuts/utils/)                                   |
+| eine gestreamte Modellantwort darstellen willst                     | [stream](/de/ranuts/stream/) → [conversation](/de/ranuts/conversation/) |
+| eine Oberfläche darauf bauen willst                                 | [ranui](/de/ranui/)                                                         |
 
 Beide Pakete liefern im npm-Tarball ein `CLAUDE.md` mit: eine Orientierung für Coding-Agenten, direkt aus `node_modules` lesbar, ohne Netzzugang.

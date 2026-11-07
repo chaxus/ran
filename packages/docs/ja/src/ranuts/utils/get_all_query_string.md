@@ -63,7 +63,7 @@ console.log(params.search); // 'hello world'（自動でデコードされます
 
 ## 補足
 
-1. **値を書かないフラグも残ります。** `?embed` も `?embed=` も、どちらも `{ embed: '' }` になります。0.3 より前は値のないパラメーターを落としていたので、真偽値フラグのふつうの書き方である `?readonly` や `?embed` が、パラメーターがない場合と見分けられませんでした。この種のフラグは [`queryFlag`](/ja/src/ranuts/utils/query_flag) で読んでください。
+1. **値を書かないフラグも残ります。** `?embed` も `?embed=` も、どちらも `{ embed: '' }` になります。0.3 より前は値のないパラメーターを落としていたので、真偽値フラグのふつうの書き方である `?readonly` や `?embed` が、パラメーターがない場合と見分けられませんでした。この種のフラグは [`queryFlag`](/ja/ranuts/utils/query_flag) で読んでください。
 
 2. **フラグメントが最後の値に紛れ込むことはありません。** `?lang=en#section` は `{ lang: 'en' }` になります。
 

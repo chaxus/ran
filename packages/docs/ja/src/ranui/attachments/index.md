@@ -169,7 +169,7 @@ r-attachments {
 
 Part：`attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
 
-一覧は[スタイルトークン](/ja/src/ranui/style-tokens#attachments)に、どのトークンを選ぶかは[デザインシステム](/ja/src/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#attachments)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
 
 ## ベストプラクティス
 

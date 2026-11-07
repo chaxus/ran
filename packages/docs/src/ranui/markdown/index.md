@@ -10,8 +10,8 @@ while text streams in it closes half-typed `**bold`, `` `code ``, links and `$$`
 fly, splits the document into blocks and re-renders **only the block that changed**, so a
 long answer never re-parses from the top on every token.
 
-Fenced ` ```mermaid ` blocks become [`<r-mermaid>`](/src/ranui/mermaid/), math becomes
-[`<r-math>`](/src/ranui/math/), and code can be highlighted with shiki; every one of these is
+Fenced ` ```mermaid ` blocks become [`<r-mermaid>`](/ranui/mermaid/), math becomes
+[`<r-math>`](/ranui/math/), and code can be highlighted with shiki; every one of these is
 lazy-loaded the first time the content needs it. Output is sanitized with DOMPurify.
 
 > **Use when** you display Markdown you don't fully control (chat replies, LLM streams,

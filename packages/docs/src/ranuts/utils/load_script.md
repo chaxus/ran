@@ -2,7 +2,7 @@
 
 Inject a single `<script>` dynamically, de-duplicated by content.
 
-How this differs from [`scriptOnLoad`](/src/ranuts/utils/script_on_load): that one loads a **batch**
+How this differs from [`scriptOnLoad`](/ranuts/utils/script_on_load): that one loads a **batch**
 of URLs at once (routing `.css` through a `<link>` tag), while this one handles a **single** script,
 supports an inline body, and guarantees the same script is evaluated only once — injecting a
 third-party SDK twice usually means its initialisation side effects ran twice.

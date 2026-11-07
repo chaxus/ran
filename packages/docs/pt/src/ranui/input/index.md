@@ -178,7 +178,7 @@ input.addEventListener('change', (event) => {
 
 ## Associação a formulários {#form-association}
 
-O `r-input` é um elemento personalizado associado a formulários (`static formAssociated = true`). Ele anexa `ElementInternals` e repassa seu valor via `setFormValue`, então o campo é recolhido por `new FormData(form)` quando é descendente real de um `<form>` nativo; defina `name` para dar uma chave ao valor. Veja [Formulários](/pt/src/ranui/form/) para o auxiliar `serializeForm()`, que transforma um envio em um objeto simples.
+O `r-input` é um elemento personalizado associado a formulários (`static formAssociated = true`). Ele anexa `ElementInternals` e repassa seu valor via `setFormValue`, então o campo é recolhido por `new FormData(form)` quando é descendente real de um `<form>` nativo; defina `name` para dar uma chave ao valor. Veja [Formulários](/pt/ranui/form/) para o auxiliar `serializeForm()`, que transforma um envio em um objeto simples.
 
 ```html
 <form>
@@ -226,7 +226,7 @@ r-input {
 
 Partes: `content` · `input` · `label` · `message`
 
-A lista completa está em [tokens de estilo](/pt/src/ranui/style-tokens#input); qual usar é assunto do [design system](/pt/src/ranui/design-system/).
+A lista completa está em [tokens de estilo](/pt/ranui/style-tokens#input); qual usar é assunto do [design system](/pt/ranui/design-system/).
 
 ## Boas práticas
 

@@ -13,9 +13,9 @@ ranui 构建于其上的**设计语言**，以及表达这套语言的**完整**
 | 页面                                                | 回答                     |
 | --------------------------------------------------- | ------------------------ |
 | **设计系统**（本页）                                | 令牌**是什么**，即词汇表 |
-| [设计规范](/cn/src/ranui/design-guides/)            | 做界面时**如何取舍**     |
-| [信息架构](/cn/src/ranui/information-architecture/) | 页面本身该是**什么形状** |
-| [主题系统](/cn/src/ranui/theme/)                    | 运行时**如何切换与覆盖** |
+| [设计规范](/cn/ranui/design-guides/)            | 做界面时**如何取舍**     |
+| [信息架构](/cn/ranui/information-architecture/) | 页面本身该是**什么形状** |
+| [主题系统](/cn/ranui/theme/)                    | 运行时**如何切换与覆盖** |
 
 > **适用场景**：需要查某个令牌的名字或取值（颜色角色、间距档位、图标尺寸、投影层级、缓动曲线），
 > 或想理解这些阶梯为什么长这样。
@@ -390,7 +390,7 @@ CSS 分不清「交互」和「主题翻转」，你给颜色加的淡入淡出�
 
 ## 暗色模式重定义了哪些
 
-`<html>` 上的 `data-ran-theme="dark"`（也可以只作用于某棵子树，见[主题系统](/cn/src/ranui/theme/)）
+`<html>` 上的 `data-ran-theme="dark"`（也可以只作用于某棵子树，见[主题系统](/cn/ranui/theme/)）
 **只重定义基础色板**，外加四处无法通过色阶解析的例外：
 
 - 第一层的全部：gray、gray-alpha、blue、red、amber、green 的每一档，以及两个背景；
@@ -415,7 +415,7 @@ CSS 分不清「交互」和「主题翻转」，你给颜色加的淡入淡出�
 
 完整清单见仓库中的
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)，
-逐元素接口见[元素 API](/cn/src/ranui/api)。怎么覆盖见[主题系统](/cn/src/ranui/theme/#customizing-tokens)。
+逐元素接口见[元素 API](/cn/ranui/api)。怎么覆盖见[主题系统](/cn/ranui/theme/#customizing-tokens)。
 
 ## 在自己的 CSS 里使用令牌 {#using-tokens-in-your-own-css}
 

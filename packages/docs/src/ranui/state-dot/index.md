@@ -38,7 +38,7 @@ its place in the row.
 ### Beside a label
 
 The dot only encodes state through colour; it does not explain what the colour means. Never
-let the colour be the only thing that distinguishes two rows. See [design guidelines](/src/ranui/design-guides/#accessibility).
+let the colour be the only thing that distinguishes two rows. See [design guidelines](/ranui/design-guides/#accessibility).
 
 <ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">

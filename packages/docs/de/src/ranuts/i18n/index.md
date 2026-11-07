@@ -40,7 +40,7 @@ Einmal im Konstruktor aufgelöst, in dieser Reihenfolge:
 3. Die Sprachen des Browsers (nur bei aktivem `detectNavigator`)
 4. `fallbackLocale`
 
-Schritt 3 läuft über [`resolveLocale`](/de/src/ranuts/utils/resolve_locale), das die vollständige geordnete Liste `navigator.languages` liest statt nur `navigator.language`: Wessen erste Wahl nicht unter deinen Wörterbüchern ist, bekommt trotzdem die zweite, statt gleich auf die Ersatzsprache zu fallen.
+Schritt 3 läuft über [`resolveLocale`](/de/ranuts/utils/resolve_locale), das die vollständige geordnete Liste `navigator.languages` liest statt nur `navigator.language`: Wessen erste Wahl nicht unter deinen Wörterbüchern ist, bekommt trotzdem die zweite, statt gleich auf die Ersatzsprache zu fallen.
 
 ## Interpolation
 

@@ -40,7 +40,7 @@ Se resuelve una sola vez en el constructor, en este orden:
 3. Los idiomas del navegador (solo con `detectNavigator` activo)
 4. `fallbackLocale`
 
-El paso 3 pasa por [`resolveLocale`](/es/src/ranuts/utils/resolve_locale), que lee la lista ordenada `navigator.languages` completa en vez de solo `navigator.language`: quien no tenga su primera opción entre tus diccionarios recibe igualmente la segunda, en lugar de caer directo al idioma de reserva.
+El paso 3 pasa por [`resolveLocale`](/es/ranuts/utils/resolve_locale), que lee la lista ordenada `navigator.languages` completa en vez de solo `navigator.language`: quien no tenga su primera opción entre tus diccionarios recibe igualmente la segunda, en lugar de caer directo al idioma de reserva.
 
 ## Interpolación
 

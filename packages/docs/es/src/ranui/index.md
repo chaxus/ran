@@ -12,7 +12,7 @@ y oscuro mediante design tokens, encapsulación con Shadow DOM y renderizado en 
 <PackageFacts package="ranui" />
 
 - ranui está en **alfa**: las versiones traen cambios incompatibles. Fija una versión exacta y lee el
-  [registro de cambios](/es/src/ranui/changelog) antes de actualizar.
+  [registro de cambios](/es/ranui/changelog) antes de actualizar.
 
 ## Instalación
 
@@ -39,7 +39,7 @@ import 'ranui/button'; // o solo uno
 ```
 
 Es la misma etiqueta en todos los frameworks: lo que cambia es cómo cada uno pasa valores y enlaza
-eventos, algo que la [guía de código](/es/src/ranui/coding-guides/#framework-integration) cubre por
+eventos, algo que la [guía de código](/es/ranui/coding-guides/#framework-integration) cubre por
 completo:
 
 ::: code-group
@@ -86,50 +86,50 @@ nunca paga por la biblioteca de componentes.
 | ----------------------------------------------------- | ------------------------------------------------------------- |
 | `ranui`                                               | Todos los componentes                                         |
 | `ranui/<component>`                                   | Un componente: `ranui/button`, `ranui/select`, …              |
-| [`ranui/theme`](/es/src/ranui/theme/)                 | Tema claro/oscuro y sobrescritura de tokens; sin elementos    |
-| [`ranui/i18n`](/es/src/ranui/i18n/)                   | El motor de traducción; sin elementos                         |
+| [`ranui/theme`](/es/ranui/theme/)                 | Tema claro/oscuro y sobrescritura de tokens; sin elementos    |
+| [`ranui/i18n`](/es/ranui/i18n/)                   | El motor de traducción; sin elementos                         |
 | `ranui/fonts`                                         | Geist Sans + Geist Mono autoalojadas                          |
 | `ranui/style`                                         | La hoja de estilos, si tu configuración no la recoge sola     |
-| [`ranui/builder`](/es/src/ranui/builder/)             | El constructor de DOM fluido con reactividad de grano fino    |
-| [`ranui/ssr`](/es/src/ranui/ssr/), `ranui/ssr-stream` | Renderizado en servidor                                       |
+| [`ranui/builder`](/es/ranui/builder/)             | El constructor de DOM fluido con reactividad de grano fino    |
+| [`ranui/ssr`](/es/ranui/ssr/), `ranui/ssr-stream` | Renderizado en servidor                                       |
 | `ranui/testing`                                       | Ayudas para entrar en un shadow root cerrado desde una prueba |
 | `ranui/typings`                                       | Tipos ambientales de elementos para JSX / TS                  |
 
 ## Componentes
 
 41 elementos. Todos ellos, con sus atributos, propiedades, eventos, slots y nombres de `::part()`,
-están en la [referencia de la API de elementos](/es/src/ranui/api).
+están en la [referencia de la API de elementos](/es/ranui/api).
 
-**Comunes**: [Button](/es/src/ranui/button/) · [Icon](/es/src/ranui/icon/) ·
-[Loading](/es/src/ranui/loading/)
+**Comunes**: [Button](/es/ranui/button/) · [Icon](/es/ranui/icon/) ·
+[Loading](/es/ranui/loading/)
 
-**Entrada de datos**: [Input](/es/src/ranui/input/) · [CheckBox](/es/src/ranui/checkbox/) ·
-[Select](/es/src/ranui/select/) · [ColorPicker](/es/src/ranui/colorpicker/) ·
-[Attachments](/es/src/ranui/attachments/) · [VoiceButton](/es/src/ranui/voice-button/) ·
-[Forms](/es/src/ranui/form/)
+**Entrada de datos**: [Input](/es/ranui/input/) · [CheckBox](/es/ranui/checkbox/) ·
+[Select](/es/ranui/select/) · [ColorPicker](/es/ranui/colorpicker/) ·
+[Attachments](/es/ranui/attachments/) · [VoiceButton](/es/ranui/voice-button/) ·
+[Forms](/es/ranui/form/)
 
-**Presentación de datos**: [Card](/es/src/ranui/card/) · [Section](/es/src/ranui/section/) ·
-[Tabs](/es/src/ranui/tab/) · [Image](/es/src/ranui/image/) · [Progress](/es/src/ranui/progress/) ·
-[Radar](/es/src/ranui/radar/) · [Player](/es/src/ranui/player/) · [Preview](/es/src/ranui/preview/) ·
-[Glass](/es/src/ranui/glass/) · [Scratch](/es/src/ranui/scratch/) ·
-[StateDot](/es/src/ranui/state-dot/) · [DisclosureRow](/es/src/ranui/disclosure-row/)
+**Presentación de datos**: [Card](/es/ranui/card/) · [Section](/es/ranui/section/) ·
+[Tabs](/es/ranui/tab/) · [Image](/es/ranui/image/) · [Progress](/es/ranui/progress/) ·
+[Radar](/es/ranui/radar/) · [Player](/es/ranui/player/) · [Preview](/es/ranui/preview/) ·
+[Glass](/es/ranui/glass/) · [Scratch](/es/ranui/scratch/) ·
+[StateDot](/es/ranui/state-dot/) · [DisclosureRow](/es/ranui/disclosure-row/)
 
-**Renderizado de contenido**: [Markdown](/es/src/ranui/markdown/) · [Math](/es/src/ranui/math/) ·
-[Mermaid](/es/src/ranui/mermaid/)
+**Renderizado de contenido**: [Markdown](/es/ranui/markdown/) · [Math](/es/ranui/math/) ·
+[Mermaid](/es/ranui/mermaid/)
 
-**IA y chat**: [Conversation](/es/src/ranui/conversation/) ·
-[Reasoning](/es/src/ranui/reasoning/) · [ToolCard](/es/src/ranui/tool-card/) ·
-[TokenMeter](/es/src/ranui/token-meter/)
+**IA y chat**: [Conversation](/es/ranui/conversation/) ·
+[Reasoning](/es/ranui/reasoning/) · [ToolCard](/es/ranui/tool-card/) ·
+[TokenMeter](/es/ranui/token-meter/)
 
-**Capas y avisos**: [Modal](/es/src/ranui/modal/) · [Popover](/es/src/ranui/popover/) ·
-[Dropdown](/es/src/ranui/dropdown/) · [Message](/es/src/ranui/message/) ·
-[Skeleton](/es/src/ranui/skeleton/)
+**Capas y avisos**: [Modal](/es/ranui/modal/) · [Popover](/es/ranui/popover/) ·
+[Dropdown](/es/ranui/dropdown/) · [Message](/es/ranui/message/) ·
+[Skeleton](/es/ranui/skeleton/)
 
-**Navegación**: [Router](/es/src/ranui/router/) · [Route](/es/src/ranui/route/) ·
-[Link](/es/src/ranui/link/)
+**Navegación**: [Router](/es/ranui/router/) · [Route](/es/ranui/route/) ·
+[Link](/es/ranui/link/)
 
-**Fundamentos**: [Temas](/es/src/ranui/theme/) · [ThemeSwitch](/es/src/ranui/theme-switch/) ·
-[i18n](/es/src/ranui/i18n/)
+**Fundamentos**: [Temas](/es/ranui/theme/) · [ThemeSwitch](/es/ranui/theme-switch/) ·
+[i18n](/es/ranui/i18n/)
 
 Cinco elementos no tienen página propia porque solo existen dentro de otro: `<r-option>`
 (Select), `<r-tabs>` (Tabs), `<r-img>` (Image), `<r-dropdown-item>` (Dropdown) y
@@ -177,9 +177,9 @@ definirlos en `:root`, en un contenedor o en el propio elemento funciona igual:
 **3. el atributo `sheet`** para inyectar CSS en el shadow root ·
 **4. contenido en slots**, que se queda en tu documento y toma el CSS de tu página.
 
-Los nombres de los tokens son el [sistema de diseño](/es/src/ranui/design-system/); las reglas para
-elegir entre ellos son la [guía de diseño](/es/src/ranui/design-guides/); la mecánica está en la
-[guía de código](/es/src/ranui/coding-guides/#styling-across-the-shadow-boundary).
+Los nombres de los tokens son el [sistema de diseño](/es/ranui/design-system/); las reglas para
+elegir entre ellos son la [guía de diseño](/es/ranui/design-guides/); la mecánica está en la
+[guía de código](/es/ranui/coding-guides/#styling-across-the-shadow-boundary).
 
 ## Eventos
 
@@ -204,15 +204,15 @@ son elementos del DOM normales, pero solo admiten un manejador y no tienen fase 
 
 | Si quieres…                                        | Lee                                               |
 | -------------------------------------------------- | ------------------------------------------------- |
-| Consultar la API exacta de un elemento             | [API de elementos](/es/src/ranui/api)             |
-| Saber qué token usar, y por qué                    | [Sistema de diseño](/es/src/ranui/design-system/) |
-| Construir una pantalla que parezca un solo sistema | [Guía de diseño](/es/src/ranui/design-guides/)    |
-| Integrar ranui en una aplicación correctamente     | [Guía de código](/es/src/ranui/coding-guides/)    |
-| Añadir claro/oscuro, o rehacer todo el estilo      | [Temas](/es/src/ranui/theme/)                     |
-| Traducir la interfaz                               | [i18n](/es/src/ranui/i18n/)                       |
-| Renderizar en un servidor                          | [Renderizado en servidor](/es/src/ranui/ssr/)     |
-| Construir vistas reactivas sin framework           | [Builder](/es/src/ranui/builder/)                 |
-| Ver qué cambió antes de actualizar                 | [Registro de cambios](/es/src/ranui/changelog)    |
+| Consultar la API exacta de un elemento             | [API de elementos](/es/ranui/api)             |
+| Saber qué token usar, y por qué                    | [Sistema de diseño](/es/ranui/design-system/) |
+| Construir una pantalla que parezca un solo sistema | [Guía de diseño](/es/ranui/design-guides/)    |
+| Integrar ranui en una aplicación correctamente     | [Guía de código](/es/ranui/coding-guides/)    |
+| Añadir claro/oscuro, o rehacer todo el estilo      | [Temas](/es/ranui/theme/)                     |
+| Traducir la interfaz                               | [i18n](/es/ranui/i18n/)                       |
+| Renderizar en un servidor                          | [Renderizado en servidor](/es/ranui/ssr/)     |
+| Construir vistas reactivas sin framework           | [Builder](/es/ranui/builder/)                 |
+| Ver qué cambió antes de actualizar                 | [Registro de cambios](/es/ranui/changelog)    |
 
 ## Compatibilidad con navegadores
 

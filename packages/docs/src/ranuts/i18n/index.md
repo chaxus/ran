@@ -46,7 +46,7 @@ Resolved once in the constructor, in this order:
 3. The browser's languages (only when `detectNavigator` is on)
 4. `fallbackLocale`
 
-Step 3 goes through [`resolveLocale`](/src/ranuts/utils/resolve_locale), which reads the whole
+Step 3 goes through [`resolveLocale`](/ranuts/utils/resolve_locale), which reads the whole
 ordered `navigator.languages` list rather than just `navigator.language`: a reader whose first
 choice isn't among your dictionaries still gets their second, instead of dropping straight to the
 fallback.

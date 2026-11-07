@@ -6,7 +6,7 @@ description: '스트리밍에 강한 Markdown 렌더러 웹 컴포넌트. 절반
 
 Markdown을(**토큰 단위로 오는 AI 출력**까지) 프레임워크에 매이지 않는 웹 컴포넌트로 그립니다. `<r-markdown>`은 Vercel의 [Streamdown](https://streamdown.ai)을 본떴습니다. 텍스트가 흘러드는 동안 쓰다 만 `**bold`, `` `code ``, 링크, `$$` 수식을 즉석에서 닫고, 문서를 블록으로 쪼개 **바뀐 블록만** 다시 그립니다. 그래서 긴 답변이라도 토큰마다 처음부터 다시 파싱하지 않습니다.
 
-` ```mermaid ` 펜스는 [`<r-mermaid>`](/ko/src/ranui/mermaid/)가 되고, 수식은 [`<r-math>`](/ko/src/ranui/math/)가 되며, 코드는 shiki로 하이라이트할 수 있습니다. 이 모두는 내용이 실제로 필요로 한 첫 순간에 지연 로드됩니다. 출력은 DOMPurify로 정화됩니다.
+` ```mermaid ` 펜스는 [`<r-mermaid>`](/ko/ranui/mermaid/)가 되고, 수식은 [`<r-math>`](/ko/ranui/math/)가 되며, 코드는 shiki로 하이라이트할 수 있습니다. 이 모두는 내용이 실제로 필요로 한 첫 순간에 지연 로드됩니다. 출력은 DOMPurify로 정화됩니다.
 
 > **이럴 때 씁니다.** 온전히 통제하지 못하는 Markdown(채팅 답변, LLM 스트림, 사용자 댓글, 문서)을 보여 주면서, 파서·정화기·하이라이터를 직접 엮지 않고도 스트리밍, 코드·다이어그램·수식 지원, 안전한 HTML을 얻고 싶을 때.
 

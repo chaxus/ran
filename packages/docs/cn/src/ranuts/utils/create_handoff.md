@@ -67,4 +67,4 @@ if (queryFlag('open')) {
 5. **仓库在版本 1 由先打开数据库的一方创建**，另一方打开时会发现它已经存在。
 
 6. **一次只放一个值**。这是交接而非队列，第二次 `put` 会覆盖上一个待取值。需要真正的存储请用
-   [`WebDB`](/cn/src/ranuts/utils/web_db)。
+   [`WebDB`](/cn/ranuts/utils/web_db)。

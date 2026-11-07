@@ -157,4 +157,4 @@ r-icon {
 
 Parts: `ran-icon`
 
-Die vollständige Liste steht in den [Style-Tokens](/de/src/ranui/style-tokens#icon); welches Token du wählst, klärt das [Designsystem](/de/src/ranui/design-system/).
+Die vollständige Liste steht in den [Style-Tokens](/de/ranui/style-tokens#icon); welches Token du wählst, klärt das [Designsystem](/de/ranui/design-system/).

@@ -22,57 +22,57 @@ import { debounce } from 'ranuts/utils';
 | Importación                                           | Contiene                                                                      | Entorno            |
 | ----------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
 | `ranuts`                                              | El barril raíz: la superficie de utils y visual                               | navegador + node   |
-| [`ranuts/utils`](/es/src/ranuts/utils/)               | DOM/BOM, cadenas, objetos, números, color, tiempo, almacenamiento, …          | navegador + node   |
-| [`ranuts/visual`](/es/src/ranuts/visual/)             | Motor de dibujado 2D (Canvas / WebGL / WebGPU)                                | **solo navegador** |
-| [`ranuts/i18n`](/es/src/ranuts/i18n/)                 | Motor de traducción: diccionarios planos, cambio en caliente                  | navegador + node   |
-| [`ranuts/sw`](/es/src/ranuts/sw/)                     | Estrategias de caché y la mitad del protocolo de precaché que va en el worker | **service worker** |
-| [`ranuts/vnode`](/es/src/ranuts/vnode/)               | DOM virtual al estilo de Snabbdom                                             | navegador          |
-| [`ranuts/stream`](/es/src/ranuts/stream/)             | Análisis de SSE, plegado de flujos de modelos, presupuesto de tokens          | navegador + node   |
-| [`ranuts/conversation`](/es/src/ranuts/conversation/) | Registro de eventos → nodos de conversación dibujables                        | navegador + node   |
+| [`ranuts/utils`](/es/ranuts/utils/)               | DOM/BOM, cadenas, objetos, números, color, tiempo, almacenamiento, …          | navegador + node   |
+| [`ranuts/visual`](/es/ranuts/visual/)             | Motor de dibujado 2D (Canvas / WebGL / WebGPU)                                | **solo navegador** |
+| [`ranuts/i18n`](/es/ranuts/i18n/)                 | Motor de traducción: diccionarios planos, cambio en caliente                  | navegador + node   |
+| [`ranuts/sw`](/es/ranuts/sw/)                     | Estrategias de caché y la mitad del protocolo de precaché que va en el worker | **service worker** |
+| [`ranuts/vnode`](/es/ranuts/vnode/)               | DOM virtual al estilo de Snabbdom                                             | navegador          |
+| [`ranuts/stream`](/es/ranuts/stream/)             | Análisis de SSE, plegado de flujos de modelos, presupuesto de tokens          | navegador + node   |
+| [`ranuts/conversation`](/es/ranuts/conversation/) | Registro de eventos → nodos de conversación dibujables                        | navegador + node   |
 
 ## Qué hay dentro
 
-**Funcional**: [debounce](/es/src/ranuts/utils/debounce) · [throttle](/es/src/ranuts/utils/throttle) ·
-[once / singleFlight](/es/src/ranuts/utils/memoize) ·
-[QuestQueue](/es/src/ranuts/utils/quest_queue) ·
-[withTimeout / deferred](/es/src/ranuts/utils/with_timeout) ·
-[compose](/es/src/ranuts/utils/compose)
+**Funcional**: [debounce](/es/ranuts/utils/debounce) · [throttle](/es/ranuts/utils/throttle) ·
+[once / singleFlight](/es/ranuts/utils/memoize) ·
+[QuestQueue](/es/ranuts/utils/quest_queue) ·
+[withTimeout / deferred](/es/ranuts/utils/with_timeout) ·
+[compose](/es/ranuts/utils/compose)
 
-**Datos**: [cloneDeep](/es/src/ranuts/utils/clone_deep) · [isEqual](/es/src/ranuts/utils/is_equal) ·
-[merge](/es/src/ranuts/utils/merge) · [filterObj](/es/src/ranuts/utils/filter_obj) ·
-[dar formato a números y analizarlos](/es/src/ranuts/utils/parse_number) ·
-[conversión y mezcla de color](/es/src/ranuts/utils/color)
+**Datos**: [cloneDeep](/es/ranuts/utils/clone_deep) · [isEqual](/es/ranuts/utils/is_equal) ·
+[merge](/es/ranuts/utils/merge) · [filterObj](/es/ranuts/utils/filter_obj) ·
+[dar formato a números y analizarlos](/es/ranuts/utils/parse_number) ·
+[conversión y mezcla de color](/es/ranuts/utils/color)
 
-**Texto**: [truncate](/es/src/ranuts/utils/truncate) ·
-[detectLanguage](/es/src/ranuts/utils/detect_language) ·
-[resolveLocale](/es/src/ranuts/utils/resolve_locale) ·
-[segmentByRanges](/es/src/ranuts/utils/segment) · [paginate](/es/src/ranuts/utils/paginate) ·
-[escapeHtml](/es/src/ranuts/utils/escape_html)
+**Texto**: [truncate](/es/ranuts/utils/truncate) ·
+[detectLanguage](/es/ranuts/utils/detect_language) ·
+[resolveLocale](/es/ranuts/utils/resolve_locale) ·
+[segmentByRanges](/es/ranuts/utils/segment) · [paginate](/es/ranuts/utils/paginate) ·
+[escapeHtml](/es/ranuts/utils/escape_html)
 
-**Navegador**: [almacenamiento](/es/src/ranuts/utils/local_storage) ·
-[IndexedDB](/es/src/ranuts/utils/web_db) · [cliente de worker](/es/src/ranuts/utils/worker_client) ·
-[puente de postMessage](/es/src/ranuts/bridge/) · [prefetch](/es/src/ranuts/utils/prefetch) ·
-[detección de dispositivo](/es/src/ranuts/utils/current_device) ·
-[rendimiento](/es/src/ranuts/utils/get_performance) · [ZIP](/es/src/ranuts/utils/zip) ·
-[grabación de audio](/es/src/ranuts/utils/audio_recorder) ·
-[voz a texto](/es/src/ranuts/utils/speech)
+**Navegador**: [almacenamiento](/es/ranuts/utils/local_storage) ·
+[IndexedDB](/es/ranuts/utils/web_db) · [cliente de worker](/es/ranuts/utils/worker_client) ·
+[puente de postMessage](/es/ranuts/bridge/) · [prefetch](/es/ranuts/utils/prefetch) ·
+[detección de dispositivo](/es/ranuts/utils/current_device) ·
+[rendimiento](/es/ranuts/utils/get_performance) · [ZIP](/es/ranuts/utils/zip) ·
+[grabación de audio](/es/ranuts/utils/audio_recorder) ·
+[voz a texto](/es/ranuts/utils/speech)
 
-**IA y chat**: [stream](/es/src/ranuts/stream/) · [conversation](/es/src/ranuts/conversation/) ·
-[i18n](/es/src/ranuts/i18n/)
+**IA y chat**: [stream](/es/ranuts/stream/) · [conversation](/es/ranuts/conversation/) ·
+[i18n](/es/ranuts/i18n/)
 
-**Dibujado**: [motor 2D](/es/src/ranuts/visual/) · [DOM virtual](/es/src/ranuts/vnode/) ·
-[ayudas para canvas](/es/src/ranuts/utils/canvas) · [tween](/es/src/ranuts/utils/tween)
+**Dibujado**: [motor 2D](/es/ranuts/visual/) · [DOM virtual](/es/ranuts/vnode/) ·
+[ayudas para canvas](/es/ranuts/utils/canvas) · [tween](/es/ranuts/utils/tween)
 
-Esto es una selección. La [referencia de la API](/es/src/ranuts/api) tiene **todas** las exportaciones con su firma y su descripción, generadas desde el código para que no puedan quedarse atrás.
+Esto es una selección. La [referencia de la API](/es/ranuts/api) tiene **todas** las exportaciones con su firma y su descripción, generadas desde el código para que no puedan quedarse atrás.
 
 ## A dónde ir después
 
 | Si quieres…                                               | Lee                                                                             |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Averiguar si una función existe, y con qué firma          | [Referencia de la API](/es/src/ranuts/api)                                      |
-| Decidir entre dos utilidades parecidas                    | [Elegir una utilidad](/es/src/ranuts/choosing/)                                 |
-| Curiosear por categorías                                  | [Índice de utilidades](/es/src/ranuts/utils/)                                   |
-| Dibujar la respuesta de un modelo que llega por streaming | [stream](/es/src/ranuts/stream/) → [conversation](/es/src/ranuts/conversation/) |
-| Construir interfaz encima                                 | [ranui](/es/src/ranui/)                                                         |
+| Averiguar si una función existe, y con qué firma          | [Referencia de la API](/es/ranuts/api)                                      |
+| Decidir entre dos utilidades parecidas                    | [Elegir una utilidad](/es/ranuts/choosing/)                                 |
+| Curiosear por categorías                                  | [Índice de utilidades](/es/ranuts/utils/)                                   |
+| Dibujar la respuesta de un modelo que llega por streaming | [stream](/es/ranuts/stream/) → [conversation](/es/ranuts/conversation/) |
+| Construir interfaz encima                                 | [ranui](/es/ranui/)                                                         |
 
 Los dos paquetes incluyen un `CLAUDE.md` dentro del tarball de npm: orientación para agentes de código, legible directamente desde `node_modules` y sin acceso a la red.

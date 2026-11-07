@@ -12,7 +12,7 @@ Shadow DOM 캡슐화, 서버 렌더링이 기본으로 들어 있습니다.
 <PackageFacts package="ranui" />
 
 - ranui 는 **alpha**입니다. 버전마다 호환성을 깨는 변경이 들어갑니다. 정확한 버전을 고정하고,
-  업그레이드 전에 [변경 이력](/ko/src/ranui/changelog)을 읽으세요.
+  업그레이드 전에 [변경 이력](/ko/ranui/changelog)을 읽으세요.
 
 ## 설치
 
@@ -39,7 +39,7 @@ import 'ranui/button'; // 또는 하나만
 ```
 
 태그는 어느 프레임워크에서나 같습니다. 다른 것은 값을 넘기고 이벤트를 묶는 방식뿐이며, 그 부분은
-[코딩 가이드](/ko/src/ranui/coding-guides/#framework-integration)에서 전부 다룹니다.
+[코딩 가이드](/ko/ranui/coding-guides/#framework-integration)에서 전부 다룹니다.
 
 ::: code-group
 
@@ -85,50 +85,50 @@ document.body.appendChild(button);
 | ----------------------------------------------------- | ------------------------------------------------- |
 | `ranui`                                               | 모든 컴포넌트                                     |
 | `ranui/<component>`                                   | 컴포넌트 하나: `ranui/button`, `ranui/select`, …  |
-| [`ranui/theme`](/ko/src/ranui/theme/)                 | 라이트/다크 테마와 토큰 덮어쓰기. 엘리먼트는 없음 |
-| [`ranui/i18n`](/ko/src/ranui/i18n/)                   | 번역 엔진. 엘리먼트는 없음                        |
+| [`ranui/theme`](/ko/ranui/theme/)                 | 라이트/다크 테마와 토큰 덮어쓰기. 엘리먼트는 없음 |
+| [`ranui/i18n`](/ko/ranui/i18n/)                   | 번역 엔진. 엘리먼트는 없음                        |
 | `ranui/fonts`                                         | 자체 호스팅한 Geist Sans + Geist Mono             |
 | `ranui/style`                                         | 스타일시트. 설정이 자동으로 집어 가지 않을 때     |
-| [`ranui/builder`](/ko/src/ranui/builder/)             | 세밀한 반응성을 갖춘 유창한 DOM 빌더              |
-| [`ranui/ssr`](/ko/src/ranui/ssr/), `ranui/ssr-stream` | 서버 렌더링                                       |
+| [`ranui/builder`](/ko/ranui/builder/)             | 세밀한 반응성을 갖춘 유창한 DOM 빌더              |
+| [`ranui/ssr`](/ko/ranui/ssr/), `ranui/ssr-stream` | 서버 렌더링                                       |
 | `ranui/testing`                                       | 테스트에서 닫힌 섀도 루트에 손을 뻗기 위한 도우미 |
 | `ranui/typings`                                       | 앰비언트 JSX / TS 엘리먼트 타입                   |
 
 ## 컴포넌트
 
 엘리먼트 41 개. 어트리뷰트, 프로퍼티, 이벤트, 슬롯, `::part()` 이름까지 전부
-[엘리먼트 API 레퍼런스](/ko/src/ranui/api)에 있습니다.
+[엘리먼트 API 레퍼런스](/ko/ranui/api)에 있습니다.
 
-**공통**: [Button](/ko/src/ranui/button/) · [Icon](/ko/src/ranui/icon/) ·
-[Loading](/ko/src/ranui/loading/)
+**공통**: [Button](/ko/ranui/button/) · [Icon](/ko/ranui/icon/) ·
+[Loading](/ko/ranui/loading/)
 
-**데이터 입력**: [Input](/ko/src/ranui/input/) · [CheckBox](/ko/src/ranui/checkbox/) ·
-[Select](/ko/src/ranui/select/) · [ColorPicker](/ko/src/ranui/colorpicker/) ·
-[Attachments](/ko/src/ranui/attachments/) · [VoiceButton](/ko/src/ranui/voice-button/) ·
-[Forms](/ko/src/ranui/form/)
+**데이터 입력**: [Input](/ko/ranui/input/) · [CheckBox](/ko/ranui/checkbox/) ·
+[Select](/ko/ranui/select/) · [ColorPicker](/ko/ranui/colorpicker/) ·
+[Attachments](/ko/ranui/attachments/) · [VoiceButton](/ko/ranui/voice-button/) ·
+[Forms](/ko/ranui/form/)
 
-**데이터 표시**: [Card](/ko/src/ranui/card/) · [Section](/ko/src/ranui/section/) ·
-[Tabs](/ko/src/ranui/tab/) · [Image](/ko/src/ranui/image/) · [Progress](/ko/src/ranui/progress/) ·
-[Radar](/ko/src/ranui/radar/) · [Player](/ko/src/ranui/player/) · [Preview](/ko/src/ranui/preview/) ·
-[Glass](/ko/src/ranui/glass/) · [Scratch](/ko/src/ranui/scratch/) ·
-[StateDot](/ko/src/ranui/state-dot/) · [DisclosureRow](/ko/src/ranui/disclosure-row/)
+**데이터 표시**: [Card](/ko/ranui/card/) · [Section](/ko/ranui/section/) ·
+[Tabs](/ko/ranui/tab/) · [Image](/ko/ranui/image/) · [Progress](/ko/ranui/progress/) ·
+[Radar](/ko/ranui/radar/) · [Player](/ko/ranui/player/) · [Preview](/ko/ranui/preview/) ·
+[Glass](/ko/ranui/glass/) · [Scratch](/ko/ranui/scratch/) ·
+[StateDot](/ko/ranui/state-dot/) · [DisclosureRow](/ko/ranui/disclosure-row/)
 
-**콘텐츠 렌더링**: [Markdown](/ko/src/ranui/markdown/) · [Math](/ko/src/ranui/math/) ·
-[Mermaid](/ko/src/ranui/mermaid/)
+**콘텐츠 렌더링**: [Markdown](/ko/ranui/markdown/) · [Math](/ko/ranui/math/) ·
+[Mermaid](/ko/ranui/mermaid/)
 
-**AI 와 채팅**: [Conversation](/ko/src/ranui/conversation/) ·
-[Reasoning](/ko/src/ranui/reasoning/) · [ToolCard](/ko/src/ranui/tool-card/) ·
-[TokenMeter](/ko/src/ranui/token-meter/)
+**AI 와 채팅**: [Conversation](/ko/ranui/conversation/) ·
+[Reasoning](/ko/ranui/reasoning/) · [ToolCard](/ko/ranui/tool-card/) ·
+[TokenMeter](/ko/ranui/token-meter/)
 
-**오버레이와 피드백**: [Modal](/ko/src/ranui/modal/) · [Popover](/ko/src/ranui/popover/) ·
-[Dropdown](/ko/src/ranui/dropdown/) · [Message](/ko/src/ranui/message/) ·
-[Skeleton](/ko/src/ranui/skeleton/)
+**오버레이와 피드백**: [Modal](/ko/ranui/modal/) · [Popover](/ko/ranui/popover/) ·
+[Dropdown](/ko/ranui/dropdown/) · [Message](/ko/ranui/message/) ·
+[Skeleton](/ko/ranui/skeleton/)
 
-**내비게이션**: [Router](/ko/src/ranui/router/) · [Route](/ko/src/ranui/route/) ·
-[Link](/ko/src/ranui/link/)
+**내비게이션**: [Router](/ko/ranui/router/) · [Route](/ko/ranui/route/) ·
+[Link](/ko/ranui/link/)
 
-**기반**: [테마](/ko/src/ranui/theme/) · [ThemeSwitch](/ko/src/ranui/theme-switch/) ·
-[i18n](/ko/src/ranui/i18n/)
+**기반**: [테마](/ko/ranui/theme/) · [ThemeSwitch](/ko/ranui/theme-switch/) ·
+[i18n](/ko/ranui/i18n/)
 
 엘리먼트 다섯 개는 다른 엘리먼트 안에서만 존재하기 때문에 자기 페이지가 없습니다: `<r-option>`
 (Select), `<r-tabs>`(Tabs), `<r-img>`(Image), `<r-dropdown-item>`(Dropdown), `<r-content>`
@@ -176,9 +176,9 @@ document.body.appendChild(button);
 **3. `sheet` 어트리뷰트** — 섀도 루트에 CSS 를 주입 ·
 **4. 슬롯에 넣은 콘텐츠** — 여러분의 문서에 남아 페이지 CSS 를 그대로 받습니다.
 
-토큰 이름은 [디자인 시스템](/ko/src/ranui/design-system/)에, 무엇을 고를지의 규칙은
-[디자인 가이드](/ko/src/ranui/design-guides/)에, 작동 원리는
-[코딩 가이드](/ko/src/ranui/coding-guides/#styling-across-the-shadow-boundary)에 있습니다.
+토큰 이름은 [디자인 시스템](/ko/ranui/design-system/)에, 무엇을 고를지의 규칙은
+[디자인 가이드](/ko/ranui/design-guides/)에, 작동 원리는
+[코딩 가이드](/ko/ranui/coding-guides/#styling-across-the-shadow-boundary)에 있습니다.
 
 ## 이벤트
 
@@ -203,15 +203,15 @@ document.body.appendChild(button);
 
 | 하고 싶은 일                            | 읽을 문서                                     |
 | --------------------------------------- | --------------------------------------------- |
-| 엘리먼트의 정확한 API 찾기              | [엘리먼트 API](/ko/src/ranui/api)             |
-| 어떤 토큰을 왜 써야 하는지 알기         | [디자인 시스템](/ko/src/ranui/design-system/) |
-| 하나의 체계로 보이는 화면 만들기        | [디자인 가이드](/ko/src/ranui/design-guides/) |
-| ranui 를 앱에 제대로 붙이기             | [코딩 가이드](/ko/src/ranui/coding-guides/)   |
-| 라이트/다크를 넣거나 전체를 다시 꾸미기 | [테마](/ko/src/ranui/theme/)                  |
-| 인터페이스 번역하기                     | [i18n](/ko/src/ranui/i18n/)                   |
-| 서버에서 렌더링하기                     | [서버 렌더링](/ko/src/ranui/ssr/)             |
-| 프레임워크 없이 반응형 뷰 만들기        | [빌더](/ko/src/ranui/builder/)                |
-| 업그레이드 전에 무엇이 바뀌었는지 보기  | [변경 이력](/ko/src/ranui/changelog)          |
+| 엘리먼트의 정확한 API 찾기              | [엘리먼트 API](/ko/ranui/api)             |
+| 어떤 토큰을 왜 써야 하는지 알기         | [디자인 시스템](/ko/ranui/design-system/) |
+| 하나의 체계로 보이는 화면 만들기        | [디자인 가이드](/ko/ranui/design-guides/) |
+| ranui 를 앱에 제대로 붙이기             | [코딩 가이드](/ko/ranui/coding-guides/)   |
+| 라이트/다크를 넣거나 전체를 다시 꾸미기 | [테마](/ko/ranui/theme/)                  |
+| 인터페이스 번역하기                     | [i18n](/ko/ranui/i18n/)                   |
+| 서버에서 렌더링하기                     | [서버 렌더링](/ko/ranui/ssr/)             |
+| 프레임워크 없이 반응형 뷰 만들기        | [빌더](/ko/ranui/builder/)                |
+| 업그레이드 전에 무엇이 바뀌었는지 보기  | [변경 이력](/ko/ranui/changelog)          |
 
 ## 브라우저 지원
 

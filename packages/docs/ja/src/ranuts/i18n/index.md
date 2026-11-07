@@ -40,7 +40,7 @@ i18n.t('hero.title', { name: 'Ada' }); // "你好，Ada"
 3. ブラウザーの言語（`detectNavigator` が有効な場合のみ）
 4. `fallbackLocale`
 
-3 番目は [`resolveLocale`](/ja/src/ranuts/utils/resolve_locale) を通ります。`navigator.language` だけでなく、順序付きの `navigator.languages` を丸ごと読むので、第 1 希望があなたの辞書にない読者にも、いきなりフォールバックへ落ちるのではなく第 2 希望が届きます。
+3 番目は [`resolveLocale`](/ja/ranuts/utils/resolve_locale) を通ります。`navigator.language` だけでなく、順序付きの `navigator.languages` を丸ごと読むので、第 1 希望があなたの辞書にない読者にも、いきなりフォールバックへ落ちるのではなく第 2 希望が届きます。
 
 ## 補間
 

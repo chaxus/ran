@@ -92,7 +92,7 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 ## 検証とリセット
 
-`r-input`、`r-checkbox`、`r-select` はいずれも `required`（ネイティブのフィールドとまったく同じように送信を止め、ブラウザ標準の検証バブルを出します）に加えて、`checkValidity()`、`reportValidity()`、`validity`、`validationMessage` に対応しています。ネイティブの `form.reset()`（または `<button type="reset">`）は `formResetCallback()` を通じて各フィールドを操作前の状態に戻します。詳しくは各フィールドのドキュメント（[Input](/ja/src/ranui/input/#form-association)、[Checkbox](/ja/src/ranui/checkbox/#form-association)、[Select](/ja/src/ranui/select/#form-association)）を参照してください。
+`r-input`、`r-checkbox`、`r-select` はいずれも `required`（ネイティブのフィールドとまったく同じように送信を止め、ブラウザ標準の検証バブルを出します）に加えて、`checkValidity()`、`reportValidity()`、`validity`、`validationMessage` に対応しています。ネイティブの `form.reset()`（または `<button type="reset">`）は `formResetCallback()` を通じて各フィールドを操作前の状態に戻します。詳しくは各フィールドのドキュメント（[Input](/ja/ranui/input/#form-association)、[Checkbox](/ja/ranui/checkbox/#form-association)、[Select](/ja/ranui/select/#form-association)）を参照してください。
 
 <ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">

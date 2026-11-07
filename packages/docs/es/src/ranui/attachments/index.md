@@ -172,7 +172,7 @@ r-attachments {
 
 Partes: `attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
 
-La lista completa está en [tokens de estilo](/es/src/ranui/style-tokens#attachments); cuál elegir lo explica el [sistema de diseño](/es/src/ranui/design-system/).
+La lista completa está en [tokens de estilo](/es/ranui/style-tokens#attachments); cuál elegir lo explica el [sistema de diseño](/es/ranui/design-system/).
 
 ## Buenas prácticas
 

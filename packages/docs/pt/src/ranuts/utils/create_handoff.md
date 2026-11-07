@@ -61,4 +61,4 @@ if (queryFlag('open')) {
 
 5. **O repositório é criado na versão 1** por quem abrir o banco primeiro; o outro lado o encontra pronto.
 
-6. **Um valor por vez.** Isto é uma passagem de bastão, não uma fila: um segundo `put` sobrescreve o valor pendente. Use [`WebDB`](/pt/src/ranuts/utils/web_db) quando precisar de armazenamento de verdade.
+6. **Um valor por vez.** Isto é uma passagem de bastão, não uma fila: um segundo `put` sobrescreve o valor pendente. Use [`WebDB`](/pt/ranuts/utils/web_db) quando precisar de armazenamento de verdade.

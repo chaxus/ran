@@ -12,9 +12,9 @@ description: '在挑第一个令牌之前，先把高密度页面的形状定下
 | 页面                                     | 回答                           |
 | ---------------------------------------- | ------------------------------ |
 | **信息架构**（本页）                     | 页面该是**什么形状**           |
-| [设计系统](/cn/src/ranui/design-system/) | 令牌**是什么**：词汇表         |
-| [设计规范](/cn/src/ranui/design-guides/) | 做界面时**怎么在它们之间取舍** |
-| [主题系统](/cn/src/ranui/theme/)         | 运行时**怎么切换和覆盖**       |
+| [设计系统](/cn/ranui/design-system/) | 令牌**是什么**：词汇表         |
+| [设计规范](/cn/ranui/design-guides/) | 做界面时**怎么在它们之间取舍** |
+| [主题系统](/cn/ranui/theme/)         | 运行时**怎么切换和覆盖**       |
 
 > **适用场景**：要做一块同时装着多个对象、多种状态以及它们之间关系的屏幕，比如控制台、仪表盘、
 > 后台、工作台、监控页。落地页和单一转化的表单不算，那类页面的成败取决于说服力，而不是用户能不能
@@ -161,11 +161,11 @@ ranui 在页面形状上是刻意不表态的：它提供基础件和令牌，�
   块，那是导航的事。
 - `r-disclosure-row` 做渐进展开，`r-popover` 和 `r-dropdown` 承载临时上下文，`r-modal` 只做上面
   那张表允许它做的事。
-- `r-state-dot` 表达状态，并且永远带上文字标签：[不能只靠颜色](/cn/src/ranui/design-guides/#accessibility)。
+- `r-state-dot` 表达状态，并且永远带上文字标签：[不能只靠颜色](/cn/ranui/design-guides/#accessibility)。
 - 首屏加载时用 `r-skeleton`，长到会让人犯嘀咕的操作配 `r-progress`，结果用 `r-message` 告诉他。
 
-ranui **没有表格、树、日历、看板和时间线**。自己实现时，用[令牌](/cn/src/ranui/design-system/)和
-[设计规范](/cn/src/ranui/design-guides/)去搭，不要另起一套视觉体系：间距取自标尺，字体按角色定，
+ranui **没有表格、树、日历、看板和时间线**。自己实现时，用[令牌](/cn/ranui/design-system/)和
+[设计规范](/cn/ranui/design-guides/)去搭，不要另起一套视觉体系：间距取自标尺，字体按角色定，
 颜色来自语义令牌，每一个可达状态都要设计到。
 
 ## 典型做坏的方式 {#anti-patterns}

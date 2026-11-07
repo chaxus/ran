@@ -40,7 +40,7 @@ i18n.t('hero.title', { name: 'Ada' }); // "你好，Ada"
 3. زبان‌های مرورگر (تنها وقتی `detectNavigator` روشن باشد)
 4. `fallbackLocale`
 
-گام ۳ از [`resolveLocale`](/fa/src/ranuts/utils/resolve_locale) می‌گذرد که به‌جای تنها `navigator.language`، کل فهرست مرتب `navigator.languages` را می‌خواند: خواننده‌ای که انتخاب اولش میان واژه‌نامه‌های شما نیست، به‌جای سقوط مستقیم به زبان جایگزین، انتخاب دومش را می‌گیرد.
+گام ۳ از [`resolveLocale`](/fa/ranuts/utils/resolve_locale) می‌گذرد که به‌جای تنها `navigator.language`، کل فهرست مرتب `navigator.languages` را می‌خواند: خواننده‌ای که انتخاب اولش میان واژه‌نامه‌های شما نیست، به‌جای سقوط مستقیم به زبان جایگزین، انتخاب دومش را می‌گیرد.
 
 ## درج مقدار
 

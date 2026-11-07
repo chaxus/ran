@@ -13,7 +13,7 @@ React でも Vue でも Svelte でも Solid でも Astro でも、素の HTML �
 <PackageFacts package="ranui" />
 
 - ranui は **alpha** です。バージョンには破壊的変更が入ります。バージョンを正確に固定し、
-  アップグレード前に[更新履歴](/ja/src/ranui/changelog)を読んでください。
+  アップグレード前に[更新履歴](/ja/ranui/changelog)を読んでください。
 
 ## インストール
 
@@ -40,7 +40,7 @@ import 'ranui/button'; // 一つだけでも
 ```
 
 タグはどのフレームワークでも同じです。違うのは値の渡し方とイベントの結び付け方だけで、それは
-[コーディング規約](/ja/src/ranui/coding-guides/#framework-integration)で詳しく扱っています。
+[コーディング規約](/ja/ranui/coding-guides/#framework-integration)で詳しく扱っています。
 
 ::: code-group
 
@@ -86,50 +86,50 @@ document.body.appendChild(button);
 | ----------------------------------------------------- | ------------------------------------------------------- |
 | `ranui`                                               | すべてのコンポーネント                                  |
 | `ranui/<component>`                                   | コンポーネント一つ：`ranui/button`、`ranui/select`、…   |
-| [`ranui/theme`](/ja/src/ranui/theme/)                 | ライト／ダークテーマとトークンの上書き。要素は含まない  |
-| [`ranui/i18n`](/ja/src/ranui/i18n/)                   | 翻訳エンジン。要素は含まない                            |
+| [`ranui/theme`](/ja/ranui/theme/)                 | ライト／ダークテーマとトークンの上書き。要素は含まない  |
+| [`ranui/i18n`](/ja/ranui/i18n/)                   | 翻訳エンジン。要素は含まない                            |
 | `ranui/fonts`                                         | セルフホストの Geist Sans + Geist Mono                  |
 | `ranui/style`                                         | スタイルシート。自動で読み込まれない環境向け            |
-| [`ranui/builder`](/ja/src/ranui/builder/)             | 細粒度リアクティビティつきの流暢な DOM ビルダー         |
-| [`ranui/ssr`](/ja/src/ranui/ssr/), `ranui/ssr-stream` | サーバーレンダリング                                    |
+| [`ranui/builder`](/ja/ranui/builder/)             | 細粒度リアクティビティつきの流暢な DOM ビルダー         |
+| [`ranui/ssr`](/ja/ranui/ssr/), `ranui/ssr-stream` | サーバーレンダリング                                    |
 | `ranui/testing`                                       | テストから閉じた shadow root に手を入れるためのヘルパー |
 | `ranui/typings`                                       | アンビエントな JSX / TS の要素型                        |
 
 ## コンポーネント
 
 41 要素。属性、プロパティ、イベント、スロット、`::part()` 名まで含めた全体像は
-[要素 API リファレンス](/ja/src/ranui/api)にあります。
+[要素 API リファレンス](/ja/ranui/api)にあります。
 
-**共通**: [Button](/ja/src/ranui/button/) · [Icon](/ja/src/ranui/icon/) ·
-[Loading](/ja/src/ranui/loading/)
+**共通**: [Button](/ja/ranui/button/) · [Icon](/ja/ranui/icon/) ·
+[Loading](/ja/ranui/loading/)
 
-**データ入力**: [Input](/ja/src/ranui/input/) · [CheckBox](/ja/src/ranui/checkbox/) ·
-[Select](/ja/src/ranui/select/) · [ColorPicker](/ja/src/ranui/colorpicker/) ·
-[Attachments](/ja/src/ranui/attachments/) · [VoiceButton](/ja/src/ranui/voice-button/) ·
-[Forms](/ja/src/ranui/form/)
+**データ入力**: [Input](/ja/ranui/input/) · [CheckBox](/ja/ranui/checkbox/) ·
+[Select](/ja/ranui/select/) · [ColorPicker](/ja/ranui/colorpicker/) ·
+[Attachments](/ja/ranui/attachments/) · [VoiceButton](/ja/ranui/voice-button/) ·
+[Forms](/ja/ranui/form/)
 
-**データ表示**: [Card](/ja/src/ranui/card/) · [Section](/ja/src/ranui/section/) ·
-[Tabs](/ja/src/ranui/tab/) · [Image](/ja/src/ranui/image/) · [Progress](/ja/src/ranui/progress/) ·
-[Radar](/ja/src/ranui/radar/) · [Player](/ja/src/ranui/player/) · [Preview](/ja/src/ranui/preview/) ·
-[Glass](/ja/src/ranui/glass/) · [Scratch](/ja/src/ranui/scratch/) ·
-[StateDot](/ja/src/ranui/state-dot/) · [DisclosureRow](/ja/src/ranui/disclosure-row/)
+**データ表示**: [Card](/ja/ranui/card/) · [Section](/ja/ranui/section/) ·
+[Tabs](/ja/ranui/tab/) · [Image](/ja/ranui/image/) · [Progress](/ja/ranui/progress/) ·
+[Radar](/ja/ranui/radar/) · [Player](/ja/ranui/player/) · [Preview](/ja/ranui/preview/) ·
+[Glass](/ja/ranui/glass/) · [Scratch](/ja/ranui/scratch/) ·
+[StateDot](/ja/ranui/state-dot/) · [DisclosureRow](/ja/ranui/disclosure-row/)
 
-**コンテンツ描画**: [Markdown](/ja/src/ranui/markdown/) · [Math](/ja/src/ranui/math/) ·
-[Mermaid](/ja/src/ranui/mermaid/)
+**コンテンツ描画**: [Markdown](/ja/ranui/markdown/) · [Math](/ja/ranui/math/) ·
+[Mermaid](/ja/ranui/mermaid/)
 
-**AI とチャット**: [Conversation](/ja/src/ranui/conversation/) ·
-[Reasoning](/ja/src/ranui/reasoning/) · [ToolCard](/ja/src/ranui/tool-card/) ·
-[TokenMeter](/ja/src/ranui/token-meter/)
+**AI とチャット**: [Conversation](/ja/ranui/conversation/) ·
+[Reasoning](/ja/ranui/reasoning/) · [ToolCard](/ja/ranui/tool-card/) ·
+[TokenMeter](/ja/ranui/token-meter/)
 
-**オーバーレイとフィードバック**: [Modal](/ja/src/ranui/modal/) · [Popover](/ja/src/ranui/popover/) ·
-[Dropdown](/ja/src/ranui/dropdown/) · [Message](/ja/src/ranui/message/) ·
-[Skeleton](/ja/src/ranui/skeleton/)
+**オーバーレイとフィードバック**: [Modal](/ja/ranui/modal/) · [Popover](/ja/ranui/popover/) ·
+[Dropdown](/ja/ranui/dropdown/) · [Message](/ja/ranui/message/) ·
+[Skeleton](/ja/ranui/skeleton/)
 
-**ナビゲーション**: [Router](/ja/src/ranui/router/) · [Route](/ja/src/ranui/route/) ·
-[Link](/ja/src/ranui/link/)
+**ナビゲーション**: [Router](/ja/ranui/router/) · [Route](/ja/ranui/route/) ·
+[Link](/ja/ranui/link/)
 
-**基盤**: [テーマ](/ja/src/ranui/theme/) · [ThemeSwitch](/ja/src/ranui/theme-switch/) ·
-[i18n](/ja/src/ranui/i18n/)
+**基盤**: [テーマ](/ja/ranui/theme/) · [ThemeSwitch](/ja/ranui/theme-switch/) ·
+[i18n](/ja/ranui/i18n/)
 
 5 つの要素には専用ページがありません。ほかの要素の内側でしか存在しないからです：`<r-option>`
 （Select）、`<r-tabs>`（Tabs）、`<r-img>`（Image）、`<r-dropdown-item>`（Dropdown）、
@@ -177,9 +177,9 @@ document.body.appendChild(button);
 **3. `sheet` 属性**：shadow root へ CSS を注入する ·
 **4. スロットに渡した内容**：あなたのドキュメントに留まり、ページの CSS がそのまま効きます。
 
-トークンの名前は[デザインシステム](/ja/src/ranui/design-system/)に、どれを選ぶかの基準は
-[デザインガイドライン](/ja/src/ranui/design-guides/)に、仕組みは
-[コーディング規約](/ja/src/ranui/coding-guides/#styling-across-the-shadow-boundary)にあります。
+トークンの名前は[デザインシステム](/ja/ranui/design-system/)に、どれを選ぶかの基準は
+[デザインガイドライン](/ja/ranui/design-guides/)に、仕組みは
+[コーディング規約](/ja/ranui/coding-guides/#styling-across-the-shadow-boundary)にあります。
 
 ## イベント
 
@@ -205,15 +205,15 @@ document.body.appendChild(button);
 
 | やりたいこと                                 | 読むページ                                           |
 | -------------------------------------------- | ---------------------------------------------------- |
-| 要素の正確な API を調べる                    | [要素 API](/ja/src/ranui/api)                        |
-| どのトークンを使うべきか、その理由を知る     | [デザインシステム](/ja/src/ranui/design-system/)     |
-| 一つの体系に見える画面を作る                 | [デザインガイドライン](/ja/src/ranui/design-guides/) |
-| ranui をアプリへ正しく組み込む               | [コーディング規約](/ja/src/ranui/coding-guides/)     |
-| ライト／ダークを足す、全体を作り替える       | [テーマ](/ja/src/ranui/theme/)                       |
-| インターフェースを翻訳する                   | [i18n](/ja/src/ranui/i18n/)                          |
-| サーバー側で描画する                         | [サーバーレンダリング](/ja/src/ranui/ssr/)           |
-| フレームワークなしでリアクティブな画面を作る | [ビルダー](/ja/src/ranui/builder/)                   |
-| アップグレード前に変更点を確認する           | [更新履歴](/ja/src/ranui/changelog)                  |
+| 要素の正確な API を調べる                    | [要素 API](/ja/ranui/api)                        |
+| どのトークンを使うべきか、その理由を知る     | [デザインシステム](/ja/ranui/design-system/)     |
+| 一つの体系に見える画面を作る                 | [デザインガイドライン](/ja/ranui/design-guides/) |
+| ranui をアプリへ正しく組み込む               | [コーディング規約](/ja/ranui/coding-guides/)     |
+| ライト／ダークを足す、全体を作り替える       | [テーマ](/ja/ranui/theme/)                       |
+| インターフェースを翻訳する                   | [i18n](/ja/ranui/i18n/)                          |
+| サーバー側で描画する                         | [サーバーレンダリング](/ja/ranui/ssr/)           |
+| フレームワークなしでリアクティブな画面を作る | [ビルダー](/ja/ranui/builder/)                   |
+| アップグレード前に変更点を確認する           | [更新履歴](/ja/ranui/changelog)                  |
 
 ## ブラウザ対応
 

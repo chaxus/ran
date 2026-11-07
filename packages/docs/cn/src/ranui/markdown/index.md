@@ -6,7 +6,7 @@ description: '面向流式输出的 Markdown 渲染 Web Component：自动补全
 
 以框架无关的 Web Component 渲染 Markdown，包括**逐 token 到达的 AI 输出**。`<r-markdown>` 参考 Vercel 的 [Streamdown](https://streamdown.ai) 设计：文本流式到达时会即时闭合半截的 `**粗体`、`` `代码 ``、链接和 `$$` 公式，把文档切成块并 **只重渲染发生变化的那一块**，长回复不会因为每个 token 都从头重新解析。
 
-围栏 ` ```mermaid ` 代码块会变成 [`<r-mermaid>`](/cn/src/ranui/mermaid/)，公式变成 [`<r-math>`](/cn/src/ranui/math/)，代码可用 shiki 高亮，这三者都在内容首次需要时才懒加载。输出经 DOMPurify 净化。
+围栏 ` ```mermaid ` 代码块会变成 [`<r-mermaid>`](/cn/ranui/mermaid/)，公式变成 [`<r-math>`](/cn/ranui/math/)，代码可用 shiki 高亮，这三者都在内容首次需要时才懒加载。输出经 DOMPurify 净化。
 
 > **何时使用**：需要展示不完全可控的 Markdown（聊天回复、LLM 流式输出、用户评论、文档），并希望开箱即得流式、代码/图表/公式支持与安全 HTML，而不必自己拼装解析器、净化器和高亮器。
 

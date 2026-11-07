@@ -69,7 +69,7 @@ substituída por uma idêntica montada no cliente. Duas consequências:
 
 - Você ganha uma primeira pintura correta, não reaproveitamento de hidratação: shadow roots fechados
   não podem ser reaproveitados pelo cliente, pelo motivo acima. Veja as
-  [diretrizes de código](/pt/src/ranui/coding-guides/#server-rendering).
+  [diretrizes de código](/pt/ranui/coding-guides/#server-rendering).
 - **Nunca guarde estado na marcação do shadow renderizada no servidor** esperando que o cliente o
   leia de volta. Passe-o por atributos, que sobrevivem.
 
@@ -89,7 +89,7 @@ renderizar, então esta lista não pode crescer em silêncio.
 protegido), então o tema é aplicado pelo cliente. Para evitar um lampejo com o tema errado, defina
 `data-ran-theme` no `<html>` do seu template de servidor (a partir de um cookie, ou de um script
 inline minúsculo que leia o `localStorage` antes da primeira pintura) e deixe o
-[`initTheme`](/pt/src/ranui/theme/) assumir depois.
+[`initTheme`](/pt/ranui/theme/) assumir depois.
 
 ## Boas práticas
 

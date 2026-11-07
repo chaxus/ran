@@ -181,10 +181,10 @@ function showPage(render, host) {
 }
 ```
 
-[`<r-route>`](/ko/src/ranui/route/)에는 이것이 들어 있습니다. `src`를 쓰면 경로가 맞을 때 페이지 모듈을 import하고, 그 기본 내보내기가 `createRoot` 안에서 돌며, 떠날 때 그 루트가 폐기됩니다. `getOwner()` / `runWithOwner()`로 라우터가 `await`를 건너 스코프를 나를 수 있습니다.
+[`<r-route>`](/ko/ranui/route/)에는 이것이 들어 있습니다. `src`를 쓰면 경로가 맞을 때 페이지 모듈을 import하고, 그 기본 내보내기가 `createRoot` 안에서 돌며, 떠날 때 그 루트가 폐기됩니다. `getOwner()` / `runWithOwner()`로 라우터가 `await`를 건너 스코프를 나를 수 있습니다.
 
 ::: warning 웹 컴포넌트 안에서는 getter 바인딩을 쓰지 마세요
-컴포넌트의 `constructor`와 `connectedCallback`은 **반응형 스코프가 아닙니다**. 거기서 만든 getter 바인딩이나 `createEffect`는 주인 없는 고아가 되어 결코 폐기되지 않습니다. 떨어져 나간 노드 위에서 계속 발동하고, 시그널이 요소보다 오래 살아남으면 그 요소를 메모리에 붙들어 둡니다. 평범한 값으로 짓고, 갱신은 명시적인 `createEffect`로 이끌되 그 폐기 함수를 모아 두었다가 `disconnectedCallback`에서 부르고, 다시 연결될 때 새로 걸어 주세요. [코딩 지침](/ko/src/ranui/coding-guides/)을 보세요.
+컴포넌트의 `constructor`와 `connectedCallback`은 **반응형 스코프가 아닙니다**. 거기서 만든 getter 바인딩이나 `createEffect`는 주인 없는 고아가 되어 결코 폐기되지 않습니다. 떨어져 나간 노드 위에서 계속 발동하고, 시그널이 요소보다 오래 살아남으면 그 요소를 메모리에 붙들어 둡니다. 평범한 값으로 짓고, 갱신은 명시적인 `createEffect`로 이끌되 그 폐기 함수를 모아 두었다가 `disconnectedCallback`에서 부르고, 다시 연결될 때 새로 걸어 주세요. [코딩 지침](/ko/ranui/coding-guides/)을 보세요.
 :::
 
 ## 커스텀 엘리먼트 안의 리스너
@@ -207,7 +207,7 @@ disconnectedCallback() {
 
 ## 서버 렌더링
 
-빌더는 [SSR](/ko/src/ranui/ssr/)에서도 동작합니다. `build()`는 흉내 낸 노드를, `serialize()`는 HTML을 돌려줍니다. 반응형 바인딩과 `For`, `Show`는 서버에서 **한 번만** 그려져 정적인 스냅숏이 됩니다. 브라우저에서 코드가 돌기 전까지 조정은 일어나지 않습니다.
+빌더는 [SSR](/ko/ranui/ssr/)에서도 동작합니다. `build()`는 흉내 낸 노드를, `serialize()`는 HTML을 돌려줍니다. 반응형 바인딩과 `For`, `Show`는 서버에서 **한 번만** 그려져 정적인 스냅숏이 됩니다. 브라우저에서 코드가 돌기 전까지 조정은 일어나지 않습니다.
 
 ## 전체 레퍼런스
 

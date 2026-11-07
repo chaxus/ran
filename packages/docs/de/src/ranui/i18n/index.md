@@ -4,7 +4,7 @@ description: 'Eine Internationalisierungs-Engine ohne Framework-Bindung: ein kle
 
 # i18n
 
-Eine Internationalisierungs-Engine ohne Framework-Bindung. Sie folgt demselben Entwurf wie der [Router](/de/src/ranui/router/): ein kleiner Kern (`I18nCore`) mit optionalem globalem Singleton (`createI18n` / `useI18n`) und ohne Kopplung ans DOM — wie du sie an die Oberfläche bindest, bleibt dir überlassen.
+Eine Internationalisierungs-Engine ohne Framework-Bindung. Sie folgt demselben Entwurf wie der [Router](/de/ranui/router/): ein kleiner Kern (`I18nCore`) mit optionalem globalem Singleton (`createI18n` / `useI18n`) und ohne Kopplung ans DOM — wie du sie an die Oberfläche bindest, bleibt dir überlassen.
 
 > **Einsetzen, wenn** du in einer ranui-Anwendung zur Laufzeit die Sprache umschalten willst. Rufe `createI18n` einmal auf, lies Zeichenketten dann mit `useI18n().t(key, params)` und wechsle die Sprache mit `setLocale`. Es hängt weder an einem Framework noch am DOM und läuft daher in schlichtem JS, in jedem Framework und im SSR.
 

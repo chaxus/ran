@@ -97,7 +97,7 @@ r-reasoning {
 
 Part：`body` · `row` · `text`
 
-一覧は[スタイルトークン](/ja/src/ranui/style-tokens#reasoning)に、どのトークンを選ぶかは[デザインシステム](/ja/src/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#reasoning)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
 
 ## 関連
 

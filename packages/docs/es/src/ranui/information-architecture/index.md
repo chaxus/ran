@@ -13,9 +13,9 @@ disposición le permite hacerlo?
 | Página                                            | Responde                                                   |
 | ------------------------------------------------- | ---------------------------------------------------------- |
 | **Arquitectura de información** (esta página)     | _Qué forma_ debe tomar la página                           |
-| [Sistema de diseño](/es/src/ranui/design-system/) | _Qué_ son los tokens: el vocabulario                       |
-| [Pautas de diseño](/es/src/ranui/design-guides/)  | _Cómo elegir_ entre ellos al construir una pantalla        |
-| [Temas](/es/src/ranui/theme/)                     | _Cómo cambiarlos y sobrescribirlos_ en tiempo de ejecución |
+| [Sistema de diseño](/es/ranui/design-system/) | _Qué_ son los tokens: el vocabulario                       |
+| [Pautas de diseño](/es/ranui/design-guides/)  | _Cómo elegir_ entre ellos al construir una pantalla        |
+| [Temas](/es/ranui/theme/)                     | _Cómo cambiarlos y sobrescribirlos_ en tiempo de ejecución |
 
 > **Úsalo cuando** empieces una pantalla que debe sostener varios objetos, varios estados y
 > las relaciones entre ellos: una consola, un panel, un backoffice, un puesto de trabajo, una
@@ -185,13 +185,13 @@ plantillas. Lo que sí te da aquí:
 - `r-disclosure-row` para la divulgación progresiva, `r-popover` y `r-dropdown` para contexto
   pasajero, y `r-modal` solo para lo que la tabla anterior le permite.
 - `r-state-dot` para el estado, siempre con su etiqueta:
-  [nunca solo color](/es/src/ranui/design-guides/#accessibility).
+  [nunca solo color](/es/ranui/design-guides/#accessibility).
 - `r-skeleton` mientras carga la primera pantalla, `r-progress` para lo bastante largo como
   para hacer dudar a alguien, `r-message` para el resultado.
 
 En ranui **no hay tabla, árbol, calendario, kanban ni línea de tiempo**. Cuando construyas
-una, hazlo sobre [los tokens](/es/src/ranui/design-system/) y las
-[pautas de diseño](/es/src/ranui/design-guides/) en lugar de levantar un segundo sistema
+una, hazlo sobre [los tokens](/es/ranui/design-system/) y las
+[pautas de diseño](/es/ranui/design-guides/) en lugar de levantar un segundo sistema
 visual: el espaciado de la escala, la tipografía por rol, el color de los tokens semánticos y
 todos los estados alcanzables diseñados.
 

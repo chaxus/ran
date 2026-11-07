@@ -98,5 +98,5 @@ type ImgSource = HTMLImageElement | HTMLCanvasElement;
 
 ## Relacionado
 
-- [convertImageToBase64](/pt/src/ranuts/utils/convert_image_to_base64): de `File` para data URL em base64
-- [isImageSize](/pt/src/ranuts/utils/is_image_size): validar as dimensões de uma imagem
+- [convertImageToBase64](/pt/ranuts/utils/convert_image_to_base64): de `File` para data URL em base64
+- [isImageSize](/pt/ranuts/utils/is_image_size): validar as dimensões de uma imagem

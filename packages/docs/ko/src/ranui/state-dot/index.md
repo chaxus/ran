@@ -37,7 +37,7 @@ description: 'ranui 의 StateDot(<r-state-dot>) 은 후광과 중심을 한 엘�
 
 이 점은 색으로만 상태를 나타낼 뿐, 그 색이 무엇을 뜻하는지는 설명하지 않습니다. 두 행을 구분하는
 단서가 색뿐인 상황은 절대 만들지 마세요.
-[디자인 가이드](/ko/src/ranui/design-guides/#accessibility)를 참고하세요.
+[디자인 가이드](/ko/ranui/design-guides/#accessibility)를 참고하세요.
 
 <ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">

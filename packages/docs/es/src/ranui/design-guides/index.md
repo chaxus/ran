@@ -7,12 +7,12 @@ description: 'Cómo aplicar ranui en una pantalla: elige un rol y deja que el to
 Cómo aplicar ranui en una pantalla real: elige un rol y un estado, y deja que los tokens pongan los valores.
 
 Las reglas en sí viven en dos sitios, y esta página enlaza a ellos en vez de repetirlas: la
-[guía de diseño](/src/design/guide) para el método que vale en cualquier producto, y el
+[guía de diseño](/design/guide) para el método que vale en cualquier producto, y el
 [adaptador de implementación de ranui](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)
 para los tokens, niveles y reglas de componentes de ranui. Ambos se distribuyen en `node_modules/ranui/docs/DESIGN.md`. El
-[sistema de diseño](/es/src/ranui/design-system/) lista cada token y su valor, la
-[tematización](/es/src/ranui/theme/) cubre las sobrescrituras en tiempo de ejecución y la
-[arquitectura de información](/es/src/ranui/information-architecture/) cubre la estructura de la página.
+[sistema de diseño](/es/ranui/design-system/) lista cada token y su valor, la
+[tematización](/es/ranui/theme/) cubre las sobrescrituras en tiempo de ejecución y la
+[arquitectura de información](/es/ranui/information-architecture/) cubre la estructura de la página.
 
 > **Úsalas cuando** elijas color, espacio, tipografía, profundidad o movimiento para una pantalla hecha con elementos `<r-*>`.
 
@@ -30,7 +30,7 @@ Son puntos de partida. Apártate de uno cuando la pantalla gane con ello, y expl
 
 ## Elegir un color
 
-La [escalera](/es/src/ranui/design-system/#the-ladder) ya decide cómo se ven el hover y el estado activo;
+La [escalera](/es/ranui/design-system/#the-ladder) ya decide cómo se ven el hover y el estado activo;
 tu trabajo es nombrar el rol.
 
 | El elemento es…                          | Usa                                                            |
@@ -54,7 +54,7 @@ explican cada caso, y `verify:design` los detecta en el código fuente de ranui.
 
 ## Espacio y ritmo
 
-Toma los espacios de la [escala de 4px](/es/src/ranui/design-system/#spacing) y deja que la distancia signifique algo:
+Toma los espacios de la [escala de 4px](/es/ranui/design-system/#spacing) y deja que la distancia signifique algo:
 
 - **8px** entre elementos dentro de un grupo.
 - **16px** entre grupos.
@@ -67,7 +67,7 @@ ellos.
 ## Elegir la tipografía
 
 Pregunta qué **rol** cumple el texto (título, etiqueta, cuerpo, botón, monoespaciado); la fuente, el tamaño, el grosor y la
-altura de línea salen de la [escala tipográfica](/es/src/ranui/design-system/#typography). Un texto de verdad excepcional,
+altura de línea salen de la [escala tipográfica](/es/ranui/design-system/#typography). Un texto de verdad excepcional,
 como el aviso de un gesto sobre un vídeo, queda mejor con su propio token de componente que forzado al
 rol más cercano.
 
@@ -76,7 +76,7 @@ rol más cercano.
 Elige el nivel de sombra según lo que es el elemento: una superficie dentro del flujo, una capa flotante o un diálogo
 que bloquea. Una capa que cae al nivel de las tarjetas parece clavada a la página.
 
-**Incrustar capas de ranui en tu propio marco.** La [escalera de z-index](/es/src/ranui/design-system/#stacking)
+**Incrustar capas de ranui en tu propio marco.** La [escalera de z-index](/es/ranui/design-system/#stacking)
 empieza en 1000, así que una capa portalizada supera por sí sola el marco habitual de la página. Una capa con `position: fixed`
 que se queda dentro de su propio shadow DOM (el diálogo de `r-modal`) solo escapa hasta su
 **contexto de apilamiento** ancestro más cercano. Si envuelves el contenido incrustado en algo que cree uno
@@ -166,6 +166,6 @@ usa ranui ejecuta sus propias comprobaciones y revisa sus propias páginas.
 
 ## Evidencia y aceptación {#evidence-and-acceptance}
 
-El apartado [verificar un cambio](/src/design/guide#verifying-a-change) de la guía dice qué comprobar en un navegador
+El apartado [verificar un cambio](/design/guide#verifying-a-change) de la guía dice qué comprobar en un navegador
 real y qué informar: lo que observaste, lo que solo dedujiste y lo que no pudiste comprobar.
 La revisión de un agente no es la aceptación del usuario.

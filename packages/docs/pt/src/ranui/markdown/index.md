@@ -6,7 +6,7 @@ description: 'Web Component renderizador de Markdown feito para streaming: fecha
 
 Renderiza Markdown (inclusive a **saída de uma IA token a token**) como um web component independente de framework. O `<r-markdown>` é modelado no [Streamdown](https://streamdown.ai) da Vercel: enquanto o texto chega, ele fecha na hora o `**bold`, o `` `code ``, os links e a matemática `$$` digitados pela metade, divide o documento em blocos e redesenha **só o bloco que mudou**, de modo que uma resposta longa nunca é reanalisada do início a cada token.
 
-Blocos cercados com ` ```mermaid ` viram [`<r-mermaid>`](/pt/src/ranui/mermaid/), a matemática vira [`<r-math>`](/pt/src/ranui/math/), e o código pode ser destacado com shiki; cada um deles é carregado sob demanda na primeira vez que o conteúdo precisa. A saída é sanitizada com DOMPurify.
+Blocos cercados com ` ```mermaid ` viram [`<r-mermaid>`](/pt/ranui/mermaid/), a matemática vira [`<r-math>`](/pt/ranui/math/), e o código pode ser destacado com shiki; cada um deles é carregado sob demanda na primeira vez que o conteúdo precisa. A saída é sanitizada com DOMPurify.
 
 > **Use quando** exibir Markdown que você não controla por inteiro (respostas de chat, fluxos de LLM, comentários de usuários, documentação) e quiser streaming, suporte a código, diagramas e matemática, e HTML seguro, sem ter de ligar você mesmo um parser, um sanitizador e um destacador.
 

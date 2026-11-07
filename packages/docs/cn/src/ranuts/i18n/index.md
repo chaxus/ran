@@ -40,7 +40,7 @@ i18n.t('hero.title', { name: 'Ada' }); // "你好，Ada"
 3. 浏览器的语言偏好（仅当 `detectNavigator` 打开）
 4. `fallbackLocale`
 
-第 3 步走的是 [`resolveLocale`](/cn/src/ranuts/utils/resolve_locale)，它读的是完整有序的 `navigator.languages` 列表，而不是只读 `navigator.language`：首选语言不在你词典里的读者，仍然能拿到他的第二选择，而不会直接落到 fallback。
+第 3 步走的是 [`resolveLocale`](/cn/ranuts/utils/resolve_locale)，它读的是完整有序的 `navigator.languages` 列表，而不是只读 `navigator.language`：首选语言不在你词典里的读者，仍然能拿到他的第二选择，而不会直接落到 fallback。
 
 ## 插值
 

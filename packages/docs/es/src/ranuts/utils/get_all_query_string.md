@@ -63,7 +63,7 @@ console.log(params.search); // 'hello world' (decodificado solo)
 
 ## Notas
 
-1. **Una bandera a secas conserva su sitio.** `?embed` y `?embed=` dan los dos `{ embed: '' }`. Antes de la 0.3 se descartaba cualquier parámetro sin valor, lo que hacía que `?readonly` y `?embed` (la forma habitual de escribir una bandera booleana) no se distinguieran de que el parámetro no estuviera. Lee esas banderas con [`queryFlag`](/es/src/ranuts/utils/query_flag).
+1. **Una bandera a secas conserva su sitio.** `?embed` y `?embed=` dan los dos `{ embed: '' }`. Antes de la 0.3 se descartaba cualquier parámetro sin valor, lo que hacía que `?readonly` y `?embed` (la forma habitual de escribir una bandera booleana) no se distinguieran de que el parámetro no estuviera. Lee esas banderas con [`queryFlag`](/es/ranuts/utils/query_flag).
 
 2. **El fragmento nunca se cuela en el último valor.** `?lang=en#section` da `{ lang: 'en' }`.
 

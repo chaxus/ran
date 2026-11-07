@@ -4,7 +4,7 @@ description: 'ranui 의 테마 API 에 연결된 시스템/라이트/다크 3 �
 
 # ThemeSwitch
 
-ranui 의 [테마 API](/ko/src/ranui/theme/)에 연결된 3 상태 (**시스템 / 라이트 / 다크**) 세그먼트
+ranui 의 [테마 API](/ko/ranui/theme/)에 연결된 3 상태 (**시스템 / 라이트 / 다크**) 세그먼트
 컨트롤입니다. 세그먼트를 누르면 `setTheme()`를 호출하고, 선택을 localStorage 키 `ran-theme`에
 저장하며, 페이지 안 (그리고 다른 탭) 의 모든 인스턴스를 같은 상태로 유지합니다.
 

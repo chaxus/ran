@@ -11,9 +11,9 @@ Quatro páginas respondem a quatro perguntas diferentes, e são separadas de pro
 | Página                                                               | Responde                                                |
 | -------------------------------------------------------------------- | ------------------------------------------------------- |
 | **Design system** (esta página)                                      | _O que_ os tokens são: o vocabulário                    |
-| [Diretrizes de design](/pt/src/ranui/design-guides/)                 | _Como escolher_ entre eles ao montar uma tela           |
-| [Arquitetura da informação](/pt/src/ranui/information-architecture/) | _Que forma_ a própria página deve ter                   |
-| [Tematização](/pt/src/ranui/theme/)                                  | _Como trocá-los e sobrescrevê-los_ em tempo de execução |
+| [Diretrizes de design](/pt/ranui/design-guides/)                 | _Como escolher_ entre eles ao montar uma tela           |
+| [Arquitetura da informação](/pt/ranui/information-architecture/) | _Que forma_ a própria página deve ter                   |
+| [Tematização](/pt/ranui/theme/)                                  | _Como trocá-los e sobrescrevê-los_ em tempo de execução |
 
 > **Use quando** precisar do nome ou do valor de um token (um papel de cor, um passo de espaço, um tamanho de ícone, um nível de sombra, uma curva de aceleração) ou quiser entender por que as escalas têm o formato que têm.
 
@@ -356,7 +356,7 @@ Os poucos valores estruturais que os componentes compartilham e que não são co
 
 ## O que o modo escuro redefine
 
-`data-ran-theme="dark"` no `<html>` (ou em qualquer subárvore, veja [tematização](/pt/src/ranui/theme/)) redefine **a paleta base e nada mais**, com quatro exceções que não conseguem se resolver por uma escala:
+`data-ran-theme="dark"` no `<html>` (ou em qualquer subárvore, veja [tematização](/pt/ranui/theme/)) redefine **a paleta base e nada mais**, com quatro exceções que não conseguem se resolver por uma escala:
 
 - a camada 1 inteira: cada degrau de cinza, cinza alfa, azul, vermelho, âmbar e verde, e os dois fundos;
 - `--ran-color-bg-elevated`, que no escuro é o literal `#18181b` para um cartão se levantar de uma página preta em vez de sumir nela;
@@ -376,7 +376,7 @@ Abaixo da camada semântica, todo componente expõe os próprios ganchos, nomead
 
 por exemplo `--ran-btn-hover-background`, `--ran-select-search-active-border-width`. Por padrão eles recaem nos tokens semânticos: `var(--ran-btn-background, var(--ran-color-primary, #111113))`, então sobrescrever um token semântico alcança todos eles, e sobrescrever um de componente estreita a mudança para um elemento só.
 
-A lista completa, gerada, é o [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) no repositório; a API por elemento está [aqui](/pt/src/ranui/api). Para saber como aplicá-los, veja [Tematização](/pt/src/ranui/theme/#customizing-tokens).
+A lista completa, gerada, é o [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) no repositório; a API por elemento está [aqui](/pt/ranui/api). Para saber como aplicá-los, veja [Tematização](/pt/ranui/theme/#customizing-tokens).
 
 ## Usar os tokens no seu próprio CSS {#using-tokens-in-your-own-css}
 

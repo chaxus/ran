@@ -70,7 +70,7 @@ Bild und wird dann durch einen identischen, clientseitig gebauten ersetzt. Zwei 
 
 - Du bekommst ein korrektes erstes Bild, keine Wiederverwendung bei der Hydration: Geschlossene
   Shadow Roots kann der Client aus dem genannten Grund nicht wiederverwenden. Siehe die
-  [Coding-Richtlinien](/de/src/ranui/coding-guides/#server-rendering).
+  [Coding-Richtlinien](/de/ranui/coding-guides/#server-rendering).
 - **Lege niemals Zustand in das servergerenderte Shadow-Markup** in der Erwartung, der Client lese
   ihn zurück. Reiche ihn über Attribute weiter — die überleben.
 
@@ -90,7 +90,7 @@ Test, der fehlschlägt, sobald es nicht mehr rendert — diese Liste kann also n
 `matchMedia` ist abgesichert), das Theme wendet also der Client an. Um ein Aufblitzen des falschen
 Themes zu vermeiden, setze `data-ran-theme` am `<html>` deiner Servervorlage (aus einem Cookie oder
 aus einem winzigen Inline-Skript, das vor dem ersten Rendern `localStorage` liest) und lass danach
-[`initTheme`](/de/src/ranui/theme/) übernehmen.
+[`initTheme`](/de/ranui/theme/) übernehmen.
 
 ## Bewährte Praxis
 

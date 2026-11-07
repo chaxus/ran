@@ -8,8 +8,8 @@ Die **Laufzeit**-Hälfte des Stylings von ranui: zwischen hellem, dunklem und Sy
 die Wahl speichern und Tokens im laufenden Betrieb überschreiben.
 
 Die Tokens selbst (wie sie heißen und wofür jedes gut ist) sind das
-[Designsystem](/de/src/ranui/design-system/); die Regeln zur Auswahl sind die
-[Designrichtlinien](/de/src/ranui/design-guides/). Diese Seite handelt nur vom _Anwenden_.
+[Designsystem](/de/ranui/design-system/); die Regeln zur Auswahl sind die
+[Designrichtlinien](/de/ranui/design-guides/). Diese Seite handelt nur vom _Anwenden_.
 
 > **Nimm es, wenn** du in einer ranui-App helles und dunkles Theming brauchst: rufe `initTheme`
 > einmal beim Laden auf, `setTheme` zum Umschalten und `setThemeToken(s)`, wenn du einzelne Tokens
@@ -43,7 +43,7 @@ also nie die Komponentenbibliothek nach. Dieselben Funktionen werden auch aus de
 Komponenten-Styles reagieren darauf. Die Wahl wird unter dem localStorage-Schlüssel `ran-theme`
 gespeichert.
 
-Für eine fertige Umschalt-Oberfläche nimm [`<r-theme-switch>`](/de/src/ranui/theme-switch/): ein
+Für eine fertige Umschalt-Oberfläche nimm [`<r-theme-switch>`](/de/ranui/theme-switch/): ein
 Segment-Steuerelement für System, Hell und Dunkel, bereits an diese API angebunden, über Instanzen
 hinweg abgeglichen und die `theme-color`-Metas aktualisierend.
 
@@ -84,7 +84,7 @@ Zwei Folgen, die man kennen sollte:
 
 - **Dein eigenes CSS bekommt den Dunkelmodus geschenkt**, wenn es semantische Tokens verwendet — und
   bekommt ihn falsch, wenn es eine Farbe fest verdrahtet oder einen nur für Hell gedachten Rückfall
-  schreibt. Siehe [Tokens im eigenen CSS verwenden](/de/src/ranui/design-system/#using-tokens-in-your-own-css).
+  schreibt. Siehe [Tokens im eigenen CSS verwenden](/de/ranui/design-system/#using-tokens-in-your-own-css).
 - **Beim Theme-Wechsel darf nichts überblenden.** CSS kann nicht wissen, warum sich eine Farbe
   geändert hat; eine `transition` auf einer Palettenfarbe lässt daher beim Umschalten jedes Element
   in seinem eigenen Tempo überblenden. Die Komponenten von ranui tun das bewusst nicht — deine
@@ -135,7 +135,7 @@ Weil der Dunkelmodus nur die Basispalette neu definiert:
 - Überschreibe ein **Komponenten**-Token (`--ran-btn-hover-background`), um genau ein Element zu
   ändern.
 
-Diese Schichtung ist auf der Seite zum [Designsystem](/de/src/ranui/design-system/#two-layers)
+Diese Schichtung ist auf der Seite zum [Designsystem](/de/ranui/design-system/#two-layers)
 vollständig beschrieben. Beachte: Eine Laufzeit-Überschreibung ist ein Inline-Style am Ziel — sie
 gewinnt für diesen Teilbaum gegen Stylesheet-Regeln. Genau das macht Theming pro Panel möglich und
 genau das macht eine vergessene Überschreibung später schwer auffindbar.

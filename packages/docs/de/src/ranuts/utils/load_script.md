@@ -2,7 +2,7 @@
 
 Fügt ein einzelnes `<script>` zur Laufzeit ein, ohne denselben Inhalt zweimal zu laden.
 
-Der Unterschied zu [`scriptOnLoad`](/de/src/ranuts/utils/script_on_load): Jenes lädt **einen Stapel** URLs auf einmal (und schickt `.css` über ein `<link>`-Tag), während dieses **ein einzelnes** Skript behandelt, einen Inline-Rumpf annimmt und dafür sorgt, dass dasselbe Skript nur ein einziges Mal ausgewertet wird — ein zweimal eingefügtes Fremd-SDK bedeutet meist, dass auch seine Initialisierung zweimal gelaufen ist.
+Der Unterschied zu [`scriptOnLoad`](/de/ranuts/utils/script_on_load): Jenes lädt **einen Stapel** URLs auf einmal (und schickt `.css` über ein `<link>`-Tag), während dieses **ein einzelnes** Skript behandelt, einen Inline-Rumpf annimmt und dafür sorgt, dass dasselbe Skript nur ein einziges Mal ausgewertet wird — ein zweimal eingefügtes Fremd-SDK bedeutet meist, dass auch seine Initialisierung zweimal gelaufen ist.
 
 Skripte werden anhand des exakten Typs und Inhalts dedupliziert, ohne Hashing oder Normalisierung von Zeilenumbrüchen.
 

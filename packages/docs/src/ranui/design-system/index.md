@@ -14,9 +14,9 @@ Four pages answer four different questions, and they are deliberately separate:
 | Page                                                             | Answers                                             |
 | ---------------------------------------------------------------- | --------------------------------------------------- |
 | **Design system** (this page)                                    | _What_ the tokens are: the vocabulary               |
-| [Design guidelines](/src/ranui/design-guides/)                   | _How to choose_ between them when building a screen |
-| [Information architecture](/src/ranui/information-architecture/) | _What shape_ the page itself should take            |
-| [Theming](/src/ranui/theme/)                                     | _How to switch and override_ them at runtime        |
+| [Design guidelines](/ranui/design-guides/)                   | _How to choose_ between them when building a screen |
+| [Information architecture](/ranui/information-architecture/) | _What shape_ the page itself should take            |
+| [Theming](/ranui/theme/)                                     | _How to switch and override_ them at runtime        |
 
 > **Use when** you need the name or the value of a token (a colour role, a spacing step, an
 > icon size, a shadow tier, an easing curve) or want to understand why the scales are shaped
@@ -410,7 +410,7 @@ purpose: this layer used to be much larger and most of it was removed with the t
 
 ## What dark mode redefines
 
-`data-ran-theme="dark"` on `<html>` (or on any subtree, see [theming](/src/ranui/theme/))
+`data-ran-theme="dark"` on `<html>` (or on any subtree, see [theming](/ranui/theme/))
 redefines **the base palette and nothing else**, with four exceptions that cannot resolve
 through a scale:
 
@@ -440,8 +440,8 @@ the change to one element.
 
 The full generated list is
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)
-in the repository; the per-element API is [here](/src/ranui/api). For how to apply them, see
-[Theming](/src/ranui/theme/#customizing-tokens).
+in the repository; the per-element API is [here](/ranui/api). For how to apply them, see
+[Theming](/ranui/theme/#customizing-tokens).
 
 ## Using tokens in your own CSS {#using-tokens-in-your-own-css}
 

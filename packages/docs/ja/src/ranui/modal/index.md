@@ -233,7 +233,7 @@ r-modal {
 
 Parts：`body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
 
-全一覧は[スタイルトークン](/ja/src/ranui/style-tokens#modal)にあります。どのトークンを使うかは[デザインシステム](/ja/src/ranui/design-system/)を参照してください。
+全一覧は[スタイルトークン](/ja/ranui/style-tokens#modal)にあります。どのトークンを使うかは[デザインシステム](/ja/ranui/design-system/)を参照してください。
 
 ## ベストプラクティス
 

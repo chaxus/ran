@@ -72,4 +72,4 @@ if (queryFlag('open')) {
    other finds it already there.
 
 6. **One value at a time.** This is a handoff, not a queue: a second `put` overwrites the
-   pending value. Use [`WebDB`](/src/ranuts/utils/web_db) when you need real storage.
+   pending value. Use [`WebDB`](/ranuts/utils/web_db) when you need real storage.

@@ -8,8 +8,8 @@ The **runtime** half of ranui's styling: switching between light, dark and syste
 persisting the choice, and overriding tokens on the fly.
 
 The tokens themselves (what they are called and what each one is for) are the
-[design system](/src/ranui/design-system/); the rules for choosing between them are the
-[design guidelines](/src/ranui/design-guides/). This page is only about _applying_ them.
+[design system](/ranui/design-system/); the rules for choosing between them are the
+[design guidelines](/ranui/design-guides/). This page is only about _applying_ them.
 
 > **Use when** you need light/dark theming in a ranui app: call `initTheme` once on load,
 > `setTheme` to switch, and `setThemeToken(s)` if you want to override individual tokens
@@ -41,7 +41,7 @@ library. The same functions are also re-exported from the top-level `ranui` barr
 `setTheme` writes a `data-ran-theme` (and a legacy `theme`) attribute onto `<html>`; all
 component styles react to it. The choice is saved under the localStorage key `ran-theme`.
 
-For ready-made switching UI, use [`<r-theme-switch>`](/src/ranui/theme-switch/): a
+For ready-made switching UI, use [`<r-theme-switch>`](/ranui/theme-switch/): a
 system / light / dark segmented control already wired to this API, synced across instances,
 and updating the `theme-color` metas.
 
@@ -81,7 +81,7 @@ Two consequences worth knowing:
 
 - **Your own CSS gets dark mode for free** if it consumes semantic tokens, and gets it wrong
   if it hard-codes a color or writes a light-only fallback. See
-  [Using tokens in your own CSS](/src/ranui/design-system/#using-tokens-in-your-own-css).
+  [Using tokens in your own CSS](/ranui/design-system/#using-tokens-in-your-own-css).
 - **Nothing should transition on a theme flip.** CSS cannot tell why a color changed, so a
   `transition` on a palette property fades every element at its own pace when the theme
   switches. ranui's components deliberately don't; yours shouldn't either.
@@ -134,7 +134,7 @@ Because dark mode redefines only the base palette:
   system. Keep Graphite/`--ran-*` as the product surface; load `ranui/fonts` if the stack still
   names Geist, or point `--ran-skin-font-family` at the host face.
 
-That layering is described in full on the [design system](/src/ranui/design-system/#two-layers)
+That layering is described in full on the [design system](/ranui/design-system/#two-layers)
 page. Note that a runtime override is an inline style on the target: it wins over stylesheet
 rules for that subtree, which is what makes per-panel theming work, and what makes an
 override you forgot to clear hard to spot later.

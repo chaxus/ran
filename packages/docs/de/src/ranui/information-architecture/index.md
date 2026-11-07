@@ -13,9 +13,9 @@ und welche Anordnung lässt sie das tun?
 | Seite                                             | Beantwortet                                      |
 | ------------------------------------------------- | ------------------------------------------------ |
 | **Informationsarchitektur** (diese Seite)         | _Welche Form_ die Seite haben soll               |
-| [Designsystem](/de/src/ranui/design-system/)      | _Was_ die Tokens sind: das Vokabular             |
-| [Designrichtlinien](/de/src/ranui/design-guides/) | _Wie man wählt_, wenn man eine Oberfläche baut   |
-| [Themes](/de/src/ranui/theme/)                    | _Wie man zur Laufzeit wechselt und überschreibt_ |
+| [Designsystem](/de/ranui/design-system/)      | _Was_ die Tokens sind: das Vokabular             |
+| [Designrichtlinien](/de/ranui/design-guides/) | _Wie man wählt_, wenn man eine Oberfläche baut   |
+| [Themes](/de/ranui/theme/)                    | _Wie man zur Laufzeit wechselt und überschreibt_ |
 
 > **Dann lesen**, wenn eine Oberfläche entsteht, die mehrere Objekte, mehrere Zustände und
 > deren Beziehungen zugleich tragen muss: eine Konsole, ein Dashboard, ein Backoffice, ein
@@ -193,13 +193,13 @@ Seitenvorlagen. Was es hier gibt:
 - `r-disclosure-row` für schrittweise Offenlegung, `r-popover` und `r-dropdown` für flüchtigen
   Kontext, `r-modal` nur für das, was die Tabelle oben ihm erlaubt.
 - `r-state-dot` für Status, immer mit Beschriftung:
-  [nie allein über Farbe](/de/src/ranui/design-guides/#accessibility).
+  [nie allein über Farbe](/de/ranui/design-guides/#accessibility).
 - `r-skeleton`, solange der erste Bildschirm lädt, `r-progress` für alles, was lang genug
   dauert, um jemanden zweifeln zu lassen, `r-message` für das Ergebnis.
 
 In ranui gibt es **keine Tabelle, keinen Baum, keinen Kalender, kein Kanban und keine
-Zeitleiste**. Wer eines baut, baut es auf [den Tokens](/de/src/ranui/design-system/) und den
-[Designrichtlinien](/de/src/ranui/design-guides/) auf statt auf einem zweiten visuellen
+Zeitleiste**. Wer eines baut, baut es auf [den Tokens](/de/ranui/design-system/) und den
+[Designrichtlinien](/de/ranui/design-guides/) auf statt auf einem zweiten visuellen
 System: Abstände aus der Skala, Schrift nach Rolle, Farbe aus semantischen Tokens, jeder
 erreichbare Zustand entworfen.
 

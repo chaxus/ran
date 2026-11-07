@@ -181,10 +181,10 @@ function showPage(render, host) {
 }
 ```
 
-O [`<r-route>`](/pt/src/ranui/route/) já traz isso: com `src`, o módulo da página é importado ao casar, a exportação padrão dele roda dentro de um `createRoot`, e essa raiz é descartada ao sair. `getOwner()` / `runWithOwner()` deixam um roteador levar um escopo através de um `await`.
+O [`<r-route>`](/pt/ranui/route/) já traz isso: com `src`, o módulo da página é importado ao casar, a exportação padrão dele roda dentro de um `createRoot`, e essa raiz é descartada ao sair. `getOwner()` / `runWithOwner()` deixam um roteador levar um escopo através de um `await`.
 
 ::: warning Dentro de um Web Component, não use ligações com getter
-O `constructor` e o `connectedCallback` de um componente **não** são escopos reativos, então uma ligação com getter ou um `createEffect` criados ali ficam órfãos e nunca são descartados; continuam disparando sobre um nó desconectado e, se o sinal viver mais que o elemento, prendem o elemento na memória. Construa com valores simples e conduza as atualizações com `createEffect` explícitos, guardando as funções de descarte deles para chamar no `disconnectedCallback` e rearmá-las ao reconectar. Veja as [diretrizes de código](/pt/src/ranui/coding-guides/).
+O `constructor` e o `connectedCallback` de um componente **não** são escopos reativos, então uma ligação com getter ou um `createEffect` criados ali ficam órfãos e nunca são descartados; continuam disparando sobre um nó desconectado e, se o sinal viver mais que o elemento, prendem o elemento na memória. Construa com valores simples e conduza as atualizações com `createEffect` explícitos, guardando as funções de descarte deles para chamar no `disconnectedCallback` e rearmá-las ao reconectar. Veja as [diretrizes de código](/pt/ranui/coding-guides/).
 :::
 
 ## Ouvintes dentro de um elemento personalizado
@@ -207,7 +207,7 @@ disconnectedCallback() {
 
 ## Renderização no servidor
 
-Os construtores funcionam sob [SSR](/pt/src/ranui/ssr/): `build()` devolve um nó simulado e `serialize()` devolve HTML. Ligações reativas, `For` e `Show` desenham **uma vez só** no servidor, como um retrato estático; não há reconciliação até o código rodar num navegador.
+Os construtores funcionam sob [SSR](/pt/ranui/ssr/): `build()` devolve um nó simulado e `serialize()` devolve HTML. Ligações reativas, `For` e `Show` desenham **uma vez só** no servidor, como um retrato estático; não há reconciliação até o código rodar num navegador.
 
 ## Referência completa
 

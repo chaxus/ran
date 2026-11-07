@@ -78,7 +78,7 @@ r-math {
 
 Part‌ها: `button` · `error` · `math` · `menu` · `render` · `toolbar`
 
-فهرست کامل در [توکن‌های استایل](/fa/src/ranui/style-tokens#math) است و اینکه کدام توکن را به کار ببرید در [سیستم طراحی](/fa/src/ranui/design-system/) آمده.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#math) است و اینکه کدام توکن را به کار ببرید در [سیستم طراحی](/fa/ranui/design-system/) آمده.
 
 ## بهترین شیوه‌ها
 

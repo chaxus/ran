@@ -47,7 +47,7 @@ Componente de botón para disparar acciones inmediatas, con varios estilos y est
 <r-button>Default Button</r-button>
 ```
 
-`primary` es la acción monocroma (del lenguaje de diseño Geist): negro sobre blanco en modo claro, blanco sobre negro en modo oscuro. Aquí el azul no aporta significado de marca; queda reservado para los enlaces y el anillo de foco. Se apoya en los tokens `--ran-color-primary*` (`--ran-color-primary`, `-hover`, `-active` y `--ran-color-primary-text` para la tinta inversa); consulta [Tema y tokens](/es/src/ranui/theme/).
+`primary` es la acción monocroma (del lenguaje de diseño Geist): negro sobre blanco en modo claro, blanco sobre negro en modo oscuro. Aquí el azul no aporta significado de marca; queda reservado para los enlaces y el anillo de foco. Se apoya en los tokens `--ran-color-primary*` (`--ran-color-primary`, `-hover`, `-active` y `--ran-color-primary-text` para la tinta inversa); consulta [Tema y tokens](/es/ranui/theme/).
 
 ### Estado deshabilitado `disabled`
 
@@ -130,7 +130,7 @@ r-button::part(content) {
 }
 ```
 
-La lista completa está en [tokens de estilo](/es/src/ranui/style-tokens#button); cuál elegir lo explica el [sistema de diseño](/es/src/ranui/design-system/).
+La lista completa está en [tokens de estilo](/es/ranui/style-tokens#button); cuál elegir lo explica el [sistema de diseño](/es/ranui/design-system/).
 
 ## Buenas prácticas
 

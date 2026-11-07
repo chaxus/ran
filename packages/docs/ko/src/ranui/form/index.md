@@ -92,7 +92,7 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 ## 검증과 초기화
 
-`r-input`, `r-checkbox`, `r-select`는 모두 `required`(네이티브 필드와 똑같이 제출을 막고 브라우저 기본 검증 말풍선을 띄웁니다) 와 함께 `checkValidity()`, `reportValidity()`, `validity`, `validationMessage`를 지원합니다. 네이티브 `form.reset()`(또는 `<button type="reset">`) 은 `formResetCallback()`을 통해 각 필드를 조작 전 상태로 되돌립니다. 자세한 내용은 각 필드 문서 ([Input](/ko/src/ranui/input/#form-association), [Checkbox](/ko/src/ranui/checkbox/#form-association), [Select](/ko/src/ranui/select/#form-association)) 를 보세요.
+`r-input`, `r-checkbox`, `r-select`는 모두 `required`(네이티브 필드와 똑같이 제출을 막고 브라우저 기본 검증 말풍선을 띄웁니다) 와 함께 `checkValidity()`, `reportValidity()`, `validity`, `validationMessage`를 지원합니다. 네이티브 `form.reset()`(또는 `<button type="reset">`) 은 `formResetCallback()`을 통해 각 필드를 조작 전 상태로 되돌립니다. 자세한 내용은 각 필드 문서 ([Input](/ko/ranui/input/#form-association), [Checkbox](/ko/ranui/checkbox/#form-association), [Select](/ko/ranui/select/#form-association)) 를 보세요.
 
 <ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">

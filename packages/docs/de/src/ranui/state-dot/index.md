@@ -39,7 +39,7 @@ nicht kennt, behält so seinen Platz in der Zeile.
 
 Der Punkt kodiert den Zustand allein über Farbe; was die Farbe bedeutet, erklärt er nicht. Lass
 die Farbe niemals das Einzige sein, was zwei Zeilen unterscheidet. Siehe die
-[Designrichtlinien](/de/src/ranui/design-guides/#accessibility).
+[Designrichtlinien](/de/ranui/design-guides/#accessibility).
 
 <ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">

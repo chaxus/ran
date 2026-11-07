@@ -13,9 +13,9 @@ permite que ela faça?
 | Página                                               | Responde                                          |
 | ---------------------------------------------------- | ------------------------------------------------- |
 | **Arquitetura da informação** (esta página)          | _Que forma_ a página deve ter                     |
-| [Design system](/pt/src/ranui/design-system/)        | _O que_ são os tokens: o vocabulário              |
-| [Diretrizes de design](/pt/src/ranui/design-guides/) | _Como escolher_ entre eles ao montar uma tela     |
-| [Temas](/pt/src/ranui/theme/)                        | _Como trocar e sobrescrever_ em tempo de execução |
+| [Design system](/pt/ranui/design-system/)        | _O que_ são os tokens: o vocabulário              |
+| [Diretrizes de design](/pt/ranui/design-guides/) | _Como escolher_ entre eles ao montar uma tela     |
+| [Temas](/pt/ranui/theme/)                        | _Como trocar e sobrescrever_ em tempo de execução |
 
 > **Use quando** estiver começando uma tela que precisa carregar vários objetos, vários
 > estados e as relações entre eles: um console, um painel, um backoffice, uma bancada de
@@ -185,13 +185,13 @@ modelos de página. O que ele dá aqui:
 - `r-disclosure-row` para divulgação progressiva, `r-popover` e `r-dropdown` para contexto
   passageiro, e `r-modal` só para o que a tabela acima permite.
 - `r-state-dot` para status, sempre com o rótulo:
-  [nunca só cor](/pt/src/ranui/design-guides/#accessibility).
+  [nunca só cor](/pt/ranui/design-guides/#accessibility).
 - `r-skeleton` enquanto a primeira tela carrega, `r-progress` para qualquer coisa longa o
   bastante para gerar dúvida, `r-message` para o resultado.
 
 No ranui **não existe tabela, árvore, calendário, kanban nem linha do tempo**. Ao construir
-uma, construa sobre [os tokens](/pt/src/ranui/design-system/) e as
-[diretrizes de design](/pt/src/ranui/design-guides/) em vez de levantar um segundo sistema
+uma, construa sobre [os tokens](/pt/ranui/design-system/) e as
+[diretrizes de design](/pt/ranui/design-guides/) em vez de levantar um segundo sistema
 visual: espaçamento vindo da escala, tipografia por papel, cor de tokens semânticos e todos os
 estados alcançáveis desenhados.
 

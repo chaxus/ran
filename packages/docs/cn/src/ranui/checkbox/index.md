@@ -166,7 +166,7 @@ r-checkbox {
 
 Part：`checkbox` · `inner` · `input` · `label` · `wrapper`
 
-完整清单见[样式令牌](/cn/src/ranui/style-tokens#checkbox)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+完整清单见[样式令牌](/cn/ranui/style-tokens#checkbox)；该选哪个令牌见[设计系统](/cn/ranui/design-system/)。
 
 ## 最佳实践
 
@@ -174,4 +174,4 @@ Part：`checkbox` · `inner` · `input` · `label` · `wrapper`
 - **checked 与 value 的选择**：用 `checked` 表示布尔状态；收集表单数据时读 `value`（`'true'`/`'false'`）。
 - **禁用状态**：选项不可用时使用 `disabled`。
 - **监听 `change`**：读取 `event.detail.checked`，而不是重新查询 DOM。
-- **表单**：把 `r-checkbox` 放进 `<form>` 里，选中时会自动被收集。需要把提交结果转成普通对象时，参见 [Forms](/cn/src/ranui/form/) 里的 `serializeForm()` 辅助函数。
+- **表单**：把 `r-checkbox` 放进 `<form>` 里，选中时会自动被收集。需要把提交结果转成普通对象时，参见 [Forms](/cn/ranui/form/) 里的 `serializeForm()` 辅助函数。

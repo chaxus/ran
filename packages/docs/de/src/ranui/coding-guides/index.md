@@ -6,7 +6,7 @@ description: 'Technische Regeln für die Arbeit mit ranui: Einstiegspunkte, der 
 
 Wie man mit ranui _baut_: worin der Komponentenvertrag besteht, wo die Shadow-DOM-Grenze die gewohnten Regeln verändert und welche Fehler es wert sind, sie zu kennen, bevor man sie macht.
 
-Die gestalterische Hälfte davon sind die [Gestaltungsleitlinien](/de/src/ranui/design-guides/); die Tokens sind das [Designsystem](/de/src/ranui/design-system/).
+Die gestalterische Hälfte davon sind die [Gestaltungsleitlinien](/de/ranui/design-guides/); die Tokens sind das [Designsystem](/de/ranui/design-system/).
 
 > **Einsetzen, wenn** du ranui-Komponenten in eine Anwendung einbindest: Importe auswählen, Ereignisse verdrahten, etwas gestalten, an das kein Selektor herankommt, auf einem Server rendern oder Tests schreiben.
 

@@ -293,7 +293,7 @@ r-tabs {
 
 Partها: `content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 
-فهرست کامل در [توکن‌های استایل](/fa/src/ranui/style-tokens#tab) است؛ اینکه سراغ کدام توکن بروید کار [سیستم طراحی](/fa/src/ranui/design-system/) است.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#tab) است؛ اینکه سراغ کدام توکن بروید کار [سیستم طراحی](/fa/ranui/design-system/) است.
 
 ## بهترین شیوه‌ها
 

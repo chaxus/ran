@@ -4,7 +4,7 @@ description: 'A framework-agnostic internationalization engine: a small core wit
 
 # i18n
 
-A framework-agnostic internationalization engine. It mirrors the [router](/src/ranui/router/)
+A framework-agnostic internationalization engine. It mirrors the [router](/ranui/router/)
 design: a small core (`I18nCore`) with an optional global singleton
 (`createI18n` / `useI18n`) and no DOM coupling, so you bind it to the UI however you like.
 

@@ -4,7 +4,7 @@ description: 'ranuts 选型指南：debounce 还是 throttle、once 还是 singl
 
 # 选型指南
 
-[API 参考](/cn/src/ranuts/api)列出了每一个导出。本页回答它回答不了的问题：**两个看起来差不多的东西，
+[API 参考](/cn/ranuts/api)列出了每一个导出。本页回答它回答不了的问题：**两个看起来差不多的东西，
 该用哪一个，为什么**。
 
 > **适用场景**：你大致知道要什么，比如「少跑几次」「只跑一次」「存起来」「和 worker 通信」，但不知道该
@@ -85,7 +85,7 @@ worker 要「回答问题」时就该用 `WorkerClient`：没有请求 id，两�
 
 - **`resolveLocale({ supported, … })`** 从常规链路（显式选择、存储、`navigator.languages`、兜底）里挑出
   该用**你支持的**哪个语言。它回答「用哪种语言」，不回答「这句话怎么说」。
-- **`createI18n` / `useI18n`**（[`ranuts/i18n`](/cn/src/ranuts/i18n/)）是翻译引擎：扁平词条、`{param}`
+- **`createI18n` / `useI18n`**（[`ranuts/i18n`](/cn/ranuts/i18n/)）是翻译引擎：扁平词条、`{param}`
   插值、运行时切换。
 - **`segmentByRanges`** 与 **`paginateText`** 用于文本排布：偏移与高亮，以及把文本切成能放进指定盒子的分页。
 
@@ -96,11 +96,11 @@ worker 要「回答问题」时就该用 `WorkerClient`：没有请求 id，两�
 
 三层，每层都可以单独使用：
 
-1. **[`ranuts/stream`](/cn/src/ranuts/stream/)**：解析 SSE，再用 `createStreamAccumulator()` 把 delta
+1. **[`ranuts/stream`](/cn/ranuts/stream/)**：解析 SSE，再用 `createStreamAccumulator()` 把 delta
    折叠成快照。与厂商无关：文本、思维链和工具调用的 delta 最终都落到同一种形状。
-2. **[`ranuts/conversation`](/cn/src/ranuts/conversation/)**：用 `createConversationEngine()` 把只追加的
+2. **[`ranuts/conversation`](/cn/ranuts/conversation/)**：用 `createConversationEngine()` 把只追加的
    事件日志投影成可渲染的节点。它决定一行**是什么**，但不画任何东西。
-3. ranui 的 **[`<r-conversation>`](/cn/src/ranui/conversation/)**：渲染这些节点、把视图钉在底部、并做行的
+3. ranui 的 **[`<r-conversation>`](/cn/ranui/conversation/)**：渲染这些节点、把视图钉在底部、并做行的
    协调。
 
 只渲染纯文本就停在第一层；转录有值得投影的结构时加第二层；想把滚动和协调也解决掉时加第三层。
@@ -122,5 +122,5 @@ worker 要「回答问题」时就该用 `WorkerClient`：没有请求 id，两�
 
 ## 还是拿不准？
 
-去[API 参考](/cn/src/ranuts/api)里搜，每个导出都在那里，带签名和一行描述，且从源码生成。如果读完两行
+去[API 参考](/cn/ranuts/api)里搜，每个导出都在那里，带签名和一行描述，且从源码生成。如果读完两行
 描述仍然觉得它们可以互换，那就是一个值得[反馈](https://github.com/chaxus/ran/issues)的文档问题。

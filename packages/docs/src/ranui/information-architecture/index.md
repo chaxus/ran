@@ -13,9 +13,9 @@ to do, and which arrangement lets them do it?
 | Page                                           | Answers                                             |
 | ---------------------------------------------- | --------------------------------------------------- |
 | **Information architecture** (this page)       | _What shape_ the page should take                   |
-| [Design system](/src/ranui/design-system/)     | _What_ the tokens are: the vocabulary               |
-| [Design guidelines](/src/ranui/design-guides/) | _How to choose_ between them when building a screen |
-| [Theming](/src/ranui/theme/)                   | _How to switch and override_ them at runtime        |
+| [Design system](/ranui/design-system/)     | _What_ the tokens are: the vocabulary               |
+| [Design guidelines](/ranui/design-guides/) | _How to choose_ between them when building a screen |
+| [Theming](/ranui/theme/)                   | _How to switch and override_ them at runtime        |
 
 > **Use when** you are starting a screen that has to carry several objects, several states
 > and the relationships between them: a console, a dashboard, an admin surface, a workbench,
@@ -182,13 +182,13 @@ page templates. What it does give you here:
 - `r-disclosure-row` for progressive disclosure, `r-popover` and `r-dropdown` for transient
   context, `r-modal` only for what the table above allows it.
 - `r-state-dot` for status, always with its label:
-  [never colour alone](/src/ranui/design-guides/#accessibility).
+  [never colour alone](/ranui/design-guides/#accessibility).
 - `r-skeleton` while the first screen loads, `r-progress` for anything long enough to make
   someone wonder, `r-message` for the result.
 
 There is **no table, tree, calendar, kanban or timeline** in ranui. When you build one, build
-it out of [the tokens](/src/ranui/design-system/) and the
-[design guidelines](/src/ranui/design-guides/) rather than a second visual system: spacing
+it out of [the tokens](/ranui/design-system/) and the
+[design guidelines](/ranui/design-guides/) rather than a second visual system: spacing
 from the scale, type by role, colour from semantic tokens, every reachable state designed.
 
 ## Anti-patterns {#anti-patterns}

@@ -311,7 +311,7 @@ r-player {
 }
 ```
 
-全一覧は[スタイルトークン](/ja/src/ranui/style-tokens#player)にあります。どのトークンを選ぶかは[デザインシステム](/ja/src/ranui/design-system/)を参照してください。
+全一覧は[スタイルトークン](/ja/ranui/style-tokens#player)にあります。どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)を参照してください。
 
 ## ベストプラクティス
 

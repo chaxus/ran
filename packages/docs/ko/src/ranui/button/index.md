@@ -47,7 +47,7 @@ description: 'ranui 의 Button(<r-button>) 은 여러 종류·크기와 로딩/�
 <r-button>Default Button</r-button>
 ```
 
-`primary`는 (Geist 디자인 언어에서 온) 무채색 동작입니다. 라이트 모드에서는 흰 바탕에 검정, 다크 모드에서는 검정 바탕에 흰색입니다. 여기서 파랑은 브랜드 의미를 담지 않고 링크와 포커스 링을 위해 남겨 둡니다. `--ran-color-primary*` 토큰 (`--ran-color-primary`, `-hover`, `-active`, 반전 잉크용 `--ran-color-primary-text`) 을 따릅니다. [테마와 토큰](/ko/src/ranui/theme/)을 보세요.
+`primary`는 (Geist 디자인 언어에서 온) 무채색 동작입니다. 라이트 모드에서는 흰 바탕에 검정, 다크 모드에서는 검정 바탕에 흰색입니다. 여기서 파랑은 브랜드 의미를 담지 않고 링크와 포커스 링을 위해 남겨 둡니다. `--ran-color-primary*` 토큰 (`--ran-color-primary`, `-hover`, `-active`, 반전 잉크용 `--ran-color-primary-text`) 을 따릅니다. [테마와 토큰](/ko/ranui/theme/)을 보세요.
 
 ### 비활성 상태 `disabled`
 
@@ -130,7 +130,7 @@ r-button::part(content) {
 }
 ```
 
-전체 목록은 [스타일 토큰](/ko/src/ranui/style-tokens#button)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/src/ranui/design-system/)에 있습니다.
+전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#button)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/ranui/design-system/)에 있습니다.
 
 ## 권장 사항
 

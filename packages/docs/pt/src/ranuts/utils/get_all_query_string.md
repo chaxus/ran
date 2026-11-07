@@ -63,7 +63,7 @@ console.log(params.search); // 'hello world' (decodificado sozinho)
 
 ## Notas
 
-1. **Uma flag sozinha mantém seu lugar.** `?embed` e `?embed=` dão os dois `{ embed: '' }`. Antes da 0.3, qualquer parâmetro sem valor era descartado, o que fazia `?readonly` e `?embed` (a forma habitual de escrever uma flag booleana) ficarem indistinguíveis do parâmetro ausente. Leia essas flags com [`queryFlag`](/pt/src/ranuts/utils/query_flag).
+1. **Uma flag sozinha mantém seu lugar.** `?embed` e `?embed=` dão os dois `{ embed: '' }`. Antes da 0.3, qualquer parâmetro sem valor era descartado, o que fazia `?readonly` e `?embed` (a forma habitual de escrever uma flag booleana) ficarem indistinguíveis do parâmetro ausente. Leia essas flags com [`queryFlag`](/pt/ranuts/utils/query_flag).
 
 2. **O fragmento nunca vaza para o último valor.** `?lang=en#section` dá `{ lang: 'en' }`.
 

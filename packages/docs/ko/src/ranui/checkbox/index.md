@@ -166,7 +166,7 @@ r-checkbox {
 
 Part: `checkbox` · `inner` · `input` · `label` · `wrapper`
 
-전체 목록은 [스타일 토큰](/ko/src/ranui/style-tokens#checkbox)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/src/ranui/design-system/)에 있습니다.
+전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#checkbox)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/ranui/design-system/)에 있습니다.
 
 ## 권장 사항
 
@@ -174,4 +174,4 @@ Part: `checkbox` · `inner` · `input` · `label` · `wrapper`
 - **checked 와 value**: 불리언 상태에는 `checked`를 쓰고, 폼 데이터를 모을 때는 `value`(`'true'` / `'false'`) 를 읽으세요.
 - **비활성 상태**: 그 선택을 쓸 수 없을 때 `disabled`를 쓰세요.
 - **`change`를 구독하세요**: DOM 을 다시 질의하지 말고 `event.detail.checked`를 읽으세요.
-- **폼**: `r-checkbox`를 `<form>` 안에 넣기만 하면 체크됐을 때 값이 자동으로 모입니다. 제출을 평범한 객체로 바꾸는 `serializeForm()` 도우미는 [Forms](/ko/src/ranui/form/)를 보세요.
+- **폼**: `r-checkbox`를 `<form>` 안에 넣기만 하면 체크됐을 때 값이 자동으로 모입니다. 제출을 평범한 객체로 바꾸는 `serializeForm()` 도우미는 [Forms](/ko/ranui/form/)를 보세요.

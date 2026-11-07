@@ -4,7 +4,7 @@ description: 'ranuts의 어떤 유틸리티를 쓸까. debounce냐 throttle이�
 
 # 유틸리티 고르기
 
-[API 레퍼런스](/ko/src/ranuts/api)에는 모든 내보내기가 늘어서 있습니다. 이 페이지는 거기서 답할 수 없는 물음에 답합니다. **비슷한 둘 중에 무엇을 원하는지, 그리고 왜인지.**
+[API 레퍼런스](/ko/ranuts/api)에는 모든 내보내기가 늘어서 있습니다. 이 페이지는 거기서 답할 수 없는 물음에 답합니다. **비슷한 둘 중에 무엇을 원하는지, 그리고 왜인지.**
 
 > **이럴 때 보세요.** 필요한 것은 대충 알겠는데(「이걸 덜 자주 돌리고 싶다」, 「딱 한 번만」, 「이걸 저장하고 싶다」, 「워커와 이야기하고 싶다」) 어떤 내보내기가 그 일을 하는지 모를 때.
 
@@ -78,7 +78,7 @@ _전부_ 한꺼번에 돌리고 싶다면 `Promise.all`이 맞습니다. 「한�
 ## 로캘과 텍스트
 
 - **`resolveLocale({ supported, … })`**는 _당신이_ 갖춘 로캘 가운데 무엇을 쓸지를 늘 쓰이는 사슬(명시적 선택, 저장소, `navigator.languages`, 대체값)에서 고릅니다. 답하는 것은 「어느 언어인가」이지 「이 문자열이 무슨 뜻인가」가 아닙니다.
-- **`createI18n` / `useI18n`**([`ranuts/i18n`](/ko/src/ranuts/i18n/))는 번역 엔진입니다. 평평한 메시지 사전, `{param}` 끼워넣기, 실행 중 전환을 맡습니다.
+- **`createI18n` / `useI18n`**([`ranuts/i18n`](/ko/ranuts/i18n/))는 번역 엔진입니다. 평평한 메시지 사전, `{param}` 끼워넣기, 실행 중 전환을 맡습니다.
 - **`segmentByRanges`**와 **`paginateText`**는 텍스트를 앉히는 데 씁니다. 앞엣것은 위치와 강조, 뒤엣것은 상자에 들어맞는 쪽으로 잘라 나누기입니다.
 
 i18n 엔진을 쓰지 않더라도 `resolveLocale`은 쓸 만합니다. 이 함수가 내리는 판단, 곧 읽는 사람의 `navigator.languages`를 첫 항목만 보지 않고 순서대로 존중한다는 그 대목이야말로 직접 짜면 틀리기 쉬운 곳이니까요.
@@ -87,9 +87,9 @@ i18n 엔진을 쓰지 않더라도 `resolveLocale`은 쓸 만합니다. 이 함�
 
 세 층이 있고, 각각 따로도 쓸 수 있습니다.
 
-1. **[`ranuts/stream`](/ko/src/ranuts/stream/)**: SSE를 해석한 다음 `createStreamAccumulator()`로 조각들을 하나의 스냅숏에 접어 넣습니다. 제공자를 가리지 않으므로 본문·추론·도구 호출 조각이 누가 내보냈든 같은 모양으로 정리됩니다.
-2. **[`ranuts/conversation`](/ko/src/ranuts/conversation/)**: 덧붙이기만 하는 이벤트 로그를 `createConversationEngine()`으로 그릴 수 있는 노드에 비춥니다. 한 줄이 _무엇인지_ 만 정하고, 그리지는 않습니다.
-3. ranui의 **[`<r-conversation>`](/ko/src/ranui/conversation/)**: 그 노드들을 실제로 그리는 요소입니다. 화면을 아래에 붙여 두고 줄을 맞춰 나갑니다.
+1. **[`ranuts/stream`](/ko/ranuts/stream/)**: SSE를 해석한 다음 `createStreamAccumulator()`로 조각들을 하나의 스냅숏에 접어 넣습니다. 제공자를 가리지 않으므로 본문·추론·도구 호출 조각이 누가 내보냈든 같은 모양으로 정리됩니다.
+2. **[`ranuts/conversation`](/ko/ranuts/conversation/)**: 덧붙이기만 하는 이벤트 로그를 `createConversationEngine()`으로 그릴 수 있는 노드에 비춥니다. 한 줄이 _무엇인지_ 만 정하고, 그리지는 않습니다.
+3. ranui의 **[`<r-conversation>`](/ko/ranui/conversation/)**: 그 노드들을 실제로 그리는 요소입니다. 화면을 아래에 붙여 두고 줄을 맞춰 나갑니다.
 
 본문만 그린다면 1층에서 멈춰도 됩니다. 대화 기록에 비출 만한 구조가 생기면 2층을, 스크롤과 줄 맞추기까지 해결되기를 바란다면 3층을 더하세요.
 
@@ -110,4 +110,4 @@ i18n 엔진을 쓰지 않더라도 `resolveLocale`은 쓸 만합니다. 이 함�
 
 ## 그래도 못 고르겠다면
 
-[API 레퍼런스](/ko/src/ranuts/api)를 찾아보세요. 모든 내보내기가 소스에서 뽑아낸 시그니처와 한 줄 설명과 함께 실려 있습니다. 두 줄을 다 읽고도 둘이 여전히 서로 바꿔 써도 될 것처럼 보인다면, 그건 문서의 결함이니 [알려 주시면](https://github.com/chaxus/ran/issues) 좋겠습니다.
+[API 레퍼런스](/ko/ranuts/api)를 찾아보세요. 모든 내보내기가 소스에서 뽑아낸 시그니처와 한 줄 설명과 함께 실려 있습니다. 두 줄을 다 읽고도 둘이 여전히 서로 바꿔 써도 될 것처럼 보인다면, 그건 문서의 결함이니 [알려 주시면](https://github.com/chaxus/ran/issues) 좋겠습니다.

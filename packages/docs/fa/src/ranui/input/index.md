@@ -178,7 +178,7 @@ input.addEventListener('change', (event) => {
 
 ## پیوند با فرم {#form-association}
 
-`r-input` یک عنصر سفارشی پیوسته به فرم است (`static formAssociated = true`). `ElementInternals` را متصل می‌کند و مقدارش را با `setFormValue` می‌فرستد، پس اگر واقعاً از نوادگان یک `<form>` بومی باشد، `new FormData(form)` آن را جمع می‌کند؛ برای اینکه مقدار کلیدی داشته باشد `name` را تنظیم کنید. برای کمک‌کننده `serializeForm()` که یک ارسال را به شیء ساده تبدیل می‌کند، [فرم‌ها](/fa/src/ranui/form/) را ببینید.
+`r-input` یک عنصر سفارشی پیوسته به فرم است (`static formAssociated = true`). `ElementInternals` را متصل می‌کند و مقدارش را با `setFormValue` می‌فرستد، پس اگر واقعاً از نوادگان یک `<form>` بومی باشد، `new FormData(form)` آن را جمع می‌کند؛ برای اینکه مقدار کلیدی داشته باشد `name` را تنظیم کنید. برای کمک‌کننده `serializeForm()` که یک ارسال را به شیء ساده تبدیل می‌کند، [فرم‌ها](/fa/ranui/form/) را ببینید.
 
 ```html
 <form>
@@ -226,7 +226,7 @@ r-input {
 
 Partها: `content` · `input` · `label` · `message`
 
-فهرست کامل در [توکن‌های استایل](/fa/src/ranui/style-tokens#input) است؛ اینکه کدام توکن را به کار ببرید در [سیستم طراحی](/fa/src/ranui/design-system/) آمده.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#input) است؛ اینکه کدام توکن را به کار ببرید در [سیستم طراحی](/fa/ranui/design-system/) آمده.
 
 ## بهترین شیوه‌ها
 

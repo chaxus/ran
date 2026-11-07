@@ -11,9 +11,9 @@ ranui가 딛고 선 **디자인 언어**와, 그것을 표현하는 토큰의 **
 | 페이지                                               | 답하는 것                               |
 | ---------------------------------------------------- | --------------------------------------- |
 | **디자인 시스템**(이 페이지)                         | 토큰이 _무엇인지_, 곧 어휘              |
-| [디자인 지침](/ko/src/ranui/design-guides/)          | 화면을 만들 때 그중에서 _어떻게 고를지_ |
-| [정보 구조](/ko/src/ranui/information-architecture/) | 페이지 자체가 **어떤 형태**여야 하는지  |
-| [테마](/ko/src/ranui/theme/)                         | 실행 중에 _어떻게 바꾸고 덮어쓸지_      |
+| [디자인 지침](/ko/ranui/design-guides/)          | 화면을 만들 때 그중에서 _어떻게 고를지_ |
+| [정보 구조](/ko/ranui/information-architecture/) | 페이지 자체가 **어떤 형태**여야 하는지  |
+| [테마](/ko/ranui/theme/)                         | 실행 중에 _어떻게 바꾸고 덮어쓸지_      |
 
 > **이럴 때 씁니다.** 토큰의 이름이나 값(색의 역할, 간격 단계, 아이콘 크기, 그림자 단계, 이징 곡선)이 필요할 때, 또는 스케일이 왜 이런 모양인지 알고 싶을 때.
 
@@ -356,7 +356,7 @@ spring 계열은 다듬어진 SwiftUI 스프링에서 증류한 것입니다(res
 
 ## 다크 모드가 다시 정의하는 것
 
-`<html>`(또는 임의의 서브트리. [테마](/ko/src/ranui/theme/) 참고)에 붙은 `data-ran-theme="dark"`가 다시 정의하는 것은 **기본 팔레트뿐**입니다. 다만 스케일을 통해 풀 수 없는 예외가 넷 있습니다.
+`<html>`(또는 임의의 서브트리. [테마](/ko/ranui/theme/) 참고)에 붙은 `data-ran-theme="dark"`가 다시 정의하는 것은 **기본 팔레트뿐**입니다. 다만 스케일을 통해 풀 수 없는 예외가 넷 있습니다.
 
 - 1층 전체: 회색, 회색 알파, 파랑, 빨강, 호박, 초록의 모든 단과 두 배경.
 - `--ran-color-bg-elevated`. 다크에서는 리터럴 `#18181b`이 되어, 카드가 검은 페이지에 묻히지 않고 들려 보이게 합니다.
@@ -376,7 +376,7 @@ spring 계열은 다듬어진 SwiftUI 스프링에서 증류한 것입니다(res
 
 예를 들어 `--ran-btn-hover-background`, `--ran-select-search-active-border-width`입니다. 기본값은 시맨틱 토큰으로 물러납니다: `var(--ran-btn-background, var(--ran-color-primary, #111113))`. 그래서 시맨틱 토큰 하나를 덮어쓰면 그 전부에 닿고, 컴포넌트 토큰을 덮어쓰면 변화가 요소 하나로 좁혀집니다.
 
-생성된 전체 목록은 저장소의 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)에 있습니다. 요소별 API는 [여기](/ko/src/ranui/api)에 있습니다. 적용하는 법은 [테마](/ko/src/ranui/theme/#customizing-tokens)를 보세요.
+생성된 전체 목록은 저장소의 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)에 있습니다. 요소별 API는 [여기](/ko/ranui/api)에 있습니다. 적용하는 법은 [테마](/ko/ranui/theme/#customizing-tokens)를 보세요.
 
 ## 내 CSS에서 토큰 쓰기 {#using-tokens-in-your-own-css}
 
