@@ -10,21 +10,27 @@
   background:
     var(
       --ran-surface-glass-specular,
-      linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.08) 28%, transparent 55%),
-      radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.28), transparent 58%)
+      linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.55) 0%,
+          rgba(255, 255, 255, 0.14) 24%,
+          transparent 48%
+        ),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.28) 0%, transparent 30%)
     ),
-    var(--ran-surface-glass-fill, rgba(255, 255, 255, 0.22));
-  -webkit-backdrop-filter: blur(var(--ran-surface-glass-blur, 20px))
-    saturate(var(--ran-surface-glass-saturate, 190%)) brightness(var(--ran-surface-glass-brightness, 1.1));
-  backdrop-filter: blur(var(--ran-surface-glass-blur, 20px))
-    saturate(var(--ran-surface-glass-saturate, 190%)) brightness(var(--ran-surface-glass-brightness, 1.1));
-  border-color: var(--ran-surface-glass-border, rgba(255, 255, 255, 0.42));
+    var(--ran-surface-glass-fill, rgba(255, 255, 255, 0.55));
+  -webkit-backdrop-filter: blur(var(--ran-surface-glass-blur, 12px))
+    saturate(var(--ran-surface-glass-saturate, 180%)) brightness(var(--ran-surface-glass-brightness, 1.08));
+  backdrop-filter: blur(var(--ran-surface-glass-blur, 12px))
+    saturate(var(--ran-surface-glass-saturate, 180%)) brightness(var(--ran-surface-glass-brightness, 1.08));
+  border-color: var(--ran-surface-glass-border, rgba(255, 255, 255, 0.72));
   box-shadow: var(
     --ran-surface-glass-shadow,
-    0 10px 32px -12px rgba(0, 0, 0, 0.22),
-    inset 0 1px 1px rgba(255, 255, 255, 0.7),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.18),
-    inset 0 -18px 36px rgba(255, 255, 255, 0.06)
+    0 8px 24px rgba(0, 0, 0, 0.14),
+    0 0 0 0.5px rgba(255, 255, 255, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.5)
   );
 }
 
@@ -32,21 +38,29 @@
   background:
     var(
       --ran-surface-glass-overlay-specular,
-      linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 58%),
-      radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.32), transparent 60%)
+      linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.42) 0%,
+          rgba(255, 255, 255, 0.12) 24%,
+          transparent 48%
+        ),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.22) 0%, transparent 30%),
+        radial-gradient(120% 55% at 50% -8%, rgba(255, 255, 255, 0.28), transparent 58%)
     ),
-    var(--ran-surface-glass-overlay-fill, rgba(255, 255, 255, 0.28));
-  -webkit-backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 28px))
-    saturate(var(--ran-surface-glass-saturate, 190%)) brightness(var(--ran-surface-glass-brightness, 1.1));
-  backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 28px))
-    saturate(var(--ran-surface-glass-saturate, 190%)) brightness(var(--ran-surface-glass-brightness, 1.1));
-  border-color: var(--ran-surface-glass-overlay-border, rgba(255, 255, 255, 0.38));
+    var(--ran-surface-glass-overlay-fill, rgba(255, 255, 255, 0.48));
+  -webkit-backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 18px))
+    saturate(var(--ran-surface-glass-saturate, 180%)) brightness(var(--ran-surface-glass-brightness, 1.08));
+  backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 18px))
+    saturate(var(--ran-surface-glass-saturate, 180%)) brightness(var(--ran-surface-glass-brightness, 1.08));
+  border-color: var(--ran-surface-glass-overlay-border, rgba(255, 255, 255, 0.72));
   box-shadow: var(
     --ran-surface-glass-overlay-shadow,
-    0 20px 48px -14px rgba(0, 0, 0, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.65),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.16),
-    inset 0 -24px 48px rgba(255, 255, 255, 0.05)
+    0 18px 48px rgba(0, 0, 0, 0.25),
+    0 0 0 0.5px rgba(255, 255, 255, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.5),
+    inset 0 -24px 48px rgba(255, 255, 255, 0.1)
   );
 }
 

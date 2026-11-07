@@ -6,7 +6,7 @@
       "components/card/index.less": 1,
       "components/checkbox/index.less": 2,
       "components/dropdown/index.less": 1,
-      "components/glass/index.less": 1,
+      "components/glass/index.less": 2,
       "components/input/index.less": 2,
       "components/link/index.less": 1,
       "components/markdown/index.less": 7,
@@ -21,7 +21,7 @@
       "components/tab/index.less": 1
     },
     "bare-colour": {
-      "components/glass/index.less": 7
+      "components/glass/index.less": 27
     },
     "spacing-scale": {
       "components/markdown/index.less": 2,
