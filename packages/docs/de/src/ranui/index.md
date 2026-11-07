@@ -83,18 +83,18 @@ document.body.appendChild(button);
 Jeder Einstiegspunkt registriert genau das, was sein Name sagt — eine Seite, die nur Theming will,
 zahlt also nie für die Komponentenbibliothek.
 
-| Import                                                | Enthält                                                                 |
-| ----------------------------------------------------- | ----------------------------------------------------------------------- |
-| `ranui`                                               | Alle Komponenten                                                        |
-| `ranui/<component>`                                   | Eine Komponente: `ranui/button`, `ranui/select`, …                      |
+| Import                                            | Enthält                                                                 |
+| ------------------------------------------------- | ----------------------------------------------------------------------- |
+| `ranui`                                           | Alle Komponenten                                                        |
+| `ranui/<component>`                               | Eine Komponente: `ranui/button`, `ranui/select`, …                      |
 | [`ranui/theme`](/de/ranui/theme/)                 | Helles/dunkles Theme und Token-Überschreibungen; keine Elemente         |
 | [`ranui/i18n`](/de/ranui/i18n/)                   | Die Übersetzungs-Engine; keine Elemente                                 |
-| `ranui/fonts`                                         | Selbst gehostete Geist Sans + Geist Mono                                |
-| `ranui/style`                                         | Das Stylesheet, falls dein Setup es nicht selbst einbindet              |
+| `ranui/fonts`                                     | Selbst gehostete Geist Sans + Geist Mono                                |
+| `ranui/style`                                     | Das Stylesheet, falls dein Setup es nicht selbst einbindet              |
 | [`ranui/builder`](/de/ranui/builder/)             | Der flüssige DOM-Builder mit feingranularer Reaktivität                 |
 | [`ranui/ssr`](/de/ranui/ssr/), `ranui/ssr-stream` | Server-Rendering                                                        |
-| `ranui/testing`                                       | Helfer, um aus einem Test in einen geschlossenen Shadow Root zu greifen |
-| `ranui/typings`                                       | Ambiente JSX-/TS-Elementtypen                                           |
+| `ranui/testing`                                   | Helfer, um aus einem Test in einen geschlossenen Shadow Root zu greifen |
+| `ranui/typings`                                   | Ambiente JSX-/TS-Elementtypen                                           |
 
 ## Komponenten
 
@@ -203,8 +203,8 @@ da dies gewöhnliche DOM-Elemente sind — sie erlauben aber nur einen Handler u
 
 ## Wie es weitergeht
 
-| Wenn du … willst                             | Lies                                               |
-| -------------------------------------------- | -------------------------------------------------- |
+| Wenn du … willst                             | Lies                                           |
+| -------------------------------------------- | ---------------------------------------------- |
 | die genaue API eines Elements nachschlagen   | [Element-API](/de/ranui/api)                   |
 | wissen, welches Token du nimmst und warum    | [Designsystem](/de/ranui/design-system/)       |
 | einen Screen bauen, der wie ein System wirkt | [Designrichtlinien](/de/ranui/design-guides/)  |

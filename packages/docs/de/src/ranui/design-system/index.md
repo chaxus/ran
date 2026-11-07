@@ -8,9 +8,9 @@ Die **Designsprache**, aus der ranui gebaut ist, und der **vollständige** Katal
 
 Vier Seiten beantworten vier verschiedene Fragen, und sie sind bewusst getrennt:
 
-| Seite                                                              | Beantwortet                                            |
-| ------------------------------------------------------------------ | ------------------------------------------------------ |
-| **Designsystem** (diese Seite)                                     | _Was_ die Tokens sind: das Vokabular                   |
+| Seite                                                          | Beantwortet                                            |
+| -------------------------------------------------------------- | ------------------------------------------------------ |
+| **Designsystem** (diese Seite)                                 | _Was_ die Tokens sind: das Vokabular                   |
 | [Gestaltungsleitlinien](/de/ranui/design-guides/)              | _Wie man wählt_, wenn man eine Oberfläche baut         |
 | [Informationsarchitektur](/de/ranui/information-architecture/) | _Welche Form_ die Seite selbst haben soll              |
 | [Themengestaltung](/de/ranui/theme/)                           | _Wie man sie zur Laufzeit umschaltet und überschreibt_ |

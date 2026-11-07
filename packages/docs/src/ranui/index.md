@@ -82,18 +82,18 @@ document.body.appendChild(button);
 Each entry registers exactly what its name says, so a page that only wants theming never pays
 for the component library.
 
-| Import                                             | Contains                                                   |
-| -------------------------------------------------- | ---------------------------------------------------------- |
-| `ranui`                                            | Every component                                            |
-| `ranui/<component>`                                | One component: `ranui/button`, `ranui/select`, …           |
+| Import                                         | Contains                                                   |
+| ---------------------------------------------- | ---------------------------------------------------------- |
+| `ranui`                                        | Every component                                            |
+| `ranui/<component>`                            | One component: `ranui/button`, `ranui/select`, …           |
 | [`ranui/theme`](/ranui/theme/)                 | Light/dark theming and token overrides; no elements        |
 | [`ranui/i18n`](/ranui/i18n/)                   | The translation engine; no elements                        |
-| `ranui/fonts`                                      | Self-hosted Geist Sans + Geist Mono                        |
-| `ranui/style`                                      | The stylesheet, if your setup does not pick it up          |
+| `ranui/fonts`                                  | Self-hosted Geist Sans + Geist Mono                        |
+| `ranui/style`                                  | The stylesheet, if your setup does not pick it up          |
 | [`ranui/builder`](/ranui/builder/)             | The fluent DOM builder with fine-grained reactivity        |
 | [`ranui/ssr`](/ranui/ssr/), `ranui/ssr-stream` | Server rendering                                           |
-| `ranui/testing`                                    | Helpers for reaching into a closed shadow root from a test |
-| `ranui/typings`                                    | Ambient JSX / TS element types                             |
+| `ranui/testing`                                | Helpers for reaching into a closed shadow root from a test |
+| `ranui/typings`                                | Ambient JSX / TS element types                             |
 
 ## Components
 
@@ -202,8 +202,8 @@ these are ordinary DOM elements, but they allow only one handler and no capture 
 
 ## Where to go next
 
-| If you want to…                           | Read                                           |
-| ----------------------------------------- | ---------------------------------------------- |
+| If you want to…                           | Read                                       |
+| ----------------------------------------- | ------------------------------------------ |
 | Look up an element's exact API            | [Element API](/ranui/api)                  |
 | Know which token to use, and why          | [Design system](/ranui/design-system/)     |
 | Build a screen that looks like one system | [Design guidelines](/ranui/design-guides/) |

@@ -11,9 +11,9 @@ restyles everything that consumes it.
 
 Four pages answer four different questions, and they are deliberately separate:
 
-| Page                                                             | Answers                                             |
-| ---------------------------------------------------------------- | --------------------------------------------------- |
-| **Design system** (this page)                                    | _What_ the tokens are: the vocabulary               |
+| Page                                                         | Answers                                             |
+| ------------------------------------------------------------ | --------------------------------------------------- |
+| **Design system** (this page)                                | _What_ the tokens are: the vocabulary               |
 | [Design guidelines](/ranui/design-guides/)                   | _How to choose_ between them when building a screen |
 | [Information architecture](/ranui/information-architecture/) | _What shape_ the page itself should take            |
 | [Theming](/ranui/theme/)                                     | _How to switch and override_ them at runtime        |

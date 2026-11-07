@@ -10,9 +10,9 @@ As outras páginas desta seção respondem perguntas sobre as peças. Esta respo
 antes: com tudo o que a tela precisa carregar, o que a pessoa veio fazer e qual arranjo
 permite que ela faça?
 
-| Página                                               | Responde                                          |
-| ---------------------------------------------------- | ------------------------------------------------- |
-| **Arquitetura da informação** (esta página)          | _Que forma_ a página deve ter                     |
+| Página                                           | Responde                                          |
+| ------------------------------------------------ | ------------------------------------------------- |
+| **Arquitetura da informação** (esta página)      | _Que forma_ a página deve ter                     |
 | [Design system](/pt/ranui/design-system/)        | _O que_ são os tokens: o vocabulário              |
 | [Diretrizes de design](/pt/ranui/design-guides/) | _Como escolher_ entre eles ao montar uma tela     |
 | [Temas](/pt/ranui/theme/)                        | _Como trocar e sobrescrever_ em tempo de execução |

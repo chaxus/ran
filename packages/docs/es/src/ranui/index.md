@@ -82,18 +82,18 @@ document.body.appendChild(button);
 Cada entrada registra exactamente lo que dice su nombre, así que una página que solo quiere temas
 nunca paga por la biblioteca de componentes.
 
-| Import                                                | Contiene                                                      |
-| ----------------------------------------------------- | ------------------------------------------------------------- |
-| `ranui`                                               | Todos los componentes                                         |
-| `ranui/<component>`                                   | Un componente: `ranui/button`, `ranui/select`, …              |
+| Import                                            | Contiene                                                      |
+| ------------------------------------------------- | ------------------------------------------------------------- |
+| `ranui`                                           | Todos los componentes                                         |
+| `ranui/<component>`                               | Un componente: `ranui/button`, `ranui/select`, …              |
 | [`ranui/theme`](/es/ranui/theme/)                 | Tema claro/oscuro y sobrescritura de tokens; sin elementos    |
 | [`ranui/i18n`](/es/ranui/i18n/)                   | El motor de traducción; sin elementos                         |
-| `ranui/fonts`                                         | Geist Sans + Geist Mono autoalojadas                          |
-| `ranui/style`                                         | La hoja de estilos, si tu configuración no la recoge sola     |
+| `ranui/fonts`                                     | Geist Sans + Geist Mono autoalojadas                          |
+| `ranui/style`                                     | La hoja de estilos, si tu configuración no la recoge sola     |
 | [`ranui/builder`](/es/ranui/builder/)             | El constructor de DOM fluido con reactividad de grano fino    |
 | [`ranui/ssr`](/es/ranui/ssr/), `ranui/ssr-stream` | Renderizado en servidor                                       |
-| `ranui/testing`                                       | Ayudas para entrar en un shadow root cerrado desde una prueba |
-| `ranui/typings`                                       | Tipos ambientales de elementos para JSX / TS                  |
+| `ranui/testing`                                   | Ayudas para entrar en un shadow root cerrado desde una prueba |
+| `ranui/typings`                                   | Tipos ambientales de elementos para JSX / TS                  |
 
 ## Componentes
 
@@ -202,8 +202,8 @@ son elementos del DOM normales, pero solo admiten un manejador y no tienen fase 
 
 ## Adónde ir después
 
-| Si quieres…                                        | Lee                                               |
-| -------------------------------------------------- | ------------------------------------------------- |
+| Si quieres…                                        | Lee                                           |
+| -------------------------------------------------- | --------------------------------------------- |
 | Consultar la API exacta de un elemento             | [API de elementos](/es/ranui/api)             |
 | Saber qué token usar, y por qué                    | [Sistema de diseño](/es/ranui/design-system/) |
 | Construir una pantalla que parezca un solo sistema | [Guía de diseño](/es/ranui/design-guides/)    |

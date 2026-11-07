@@ -19,9 +19,9 @@ import { debounce } from 'ranuts/utils';
 
 ## Einstiegspunkte
 
-| Import                                                | Enthält                                                           | Umgebung           |
-| ----------------------------------------------------- | ----------------------------------------------------------------- | ------------------ |
-| `ranuts`                                              | Das Wurzel-Barrel: die Fläche aus utils und visual                | Browser + Node     |
+| Import                                            | Enthält                                                           | Umgebung           |
+| ------------------------------------------------- | ----------------------------------------------------------------- | ------------------ |
+| `ranuts`                                          | Das Wurzel-Barrel: die Fläche aus utils und visual                | Browser + Node     |
 | [`ranuts/utils`](/de/ranuts/utils/)               | DOM/BOM, Zeichenketten, Objekte, Zahlen, Farbe, Zeit, Speicher, … | Browser + Node\*   |
 | [`ranuts/visual`](/de/ranuts/visual/)             | 2D-Zeichen-Engine (Canvas / WebGL / WebGPU)                       | **nur Browser**    |
 | [`ranuts/i18n`](/de/ranuts/i18n/)                 | Übersetzungs-Engine: flache Wörterbücher, Umschalten zur Laufzeit | Browser + Node     |
@@ -67,12 +67,12 @@ Das ist eine Auswahl. Die [API-Referenz](/de/ranuts/api) führt **jeden** Export
 
 ## Wohin als Nächstes
 
-| Wenn du …                                                           | Lies                                                                            |
-| ------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| herausfinden willst, ob es eine Funktion gibt, und wie sie aussieht | [API-Referenz](/de/ranuts/api)                                              |
-| dich zwischen zwei ähnlichen Helfern entscheiden willst             | [Den passenden Helfer wählen](/de/ranuts/choosing/)                         |
-| nach Kategorien stöbern willst                                      | [Übersicht der Helfer](/de/ranuts/utils/)                                   |
+| Wenn du …                                                           | Lies                                                                    |
+| ------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| herausfinden willst, ob es eine Funktion gibt, und wie sie aussieht | [API-Referenz](/de/ranuts/api)                                          |
+| dich zwischen zwei ähnlichen Helfern entscheiden willst             | [Den passenden Helfer wählen](/de/ranuts/choosing/)                     |
+| nach Kategorien stöbern willst                                      | [Übersicht der Helfer](/de/ranuts/utils/)                               |
 | eine gestreamte Modellantwort darstellen willst                     | [stream](/de/ranuts/stream/) → [conversation](/de/ranuts/conversation/) |
-| eine Oberfläche darauf bauen willst                                 | [ranui](/de/ranui/)                                                         |
+| eine Oberfläche darauf bauen willst                                 | [ranui](/de/ranui/)                                                     |
 
 Beide Pakete liefern im npm-Tarball ein `CLAUDE.md` mit: eine Orientierung für Coding-Agenten, direkt aus `node_modules` lesbar, ohne Netzzugang.

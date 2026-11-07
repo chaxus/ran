@@ -81,18 +81,18 @@ document.body.appendChild(button);
 각 진입점은 이름이 말하는 것만 정확히 등록합니다. 그래서 테마만 필요한 페이지가 컴포넌트
 라이브러리 값을 치를 일이 없습니다.
 
-| import                                                | 내용                                              |
-| ----------------------------------------------------- | ------------------------------------------------- |
-| `ranui`                                               | 모든 컴포넌트                                     |
-| `ranui/<component>`                                   | 컴포넌트 하나: `ranui/button`, `ranui/select`, …  |
+| import                                            | 내용                                              |
+| ------------------------------------------------- | ------------------------------------------------- |
+| `ranui`                                           | 모든 컴포넌트                                     |
+| `ranui/<component>`                               | 컴포넌트 하나: `ranui/button`, `ranui/select`, …  |
 | [`ranui/theme`](/ko/ranui/theme/)                 | 라이트/다크 테마와 토큰 덮어쓰기. 엘리먼트는 없음 |
 | [`ranui/i18n`](/ko/ranui/i18n/)                   | 번역 엔진. 엘리먼트는 없음                        |
-| `ranui/fonts`                                         | 자체 호스팅한 Geist Sans + Geist Mono             |
-| `ranui/style`                                         | 스타일시트. 설정이 자동으로 집어 가지 않을 때     |
+| `ranui/fonts`                                     | 자체 호스팅한 Geist Sans + Geist Mono             |
+| `ranui/style`                                     | 스타일시트. 설정이 자동으로 집어 가지 않을 때     |
 | [`ranui/builder`](/ko/ranui/builder/)             | 세밀한 반응성을 갖춘 유창한 DOM 빌더              |
 | [`ranui/ssr`](/ko/ranui/ssr/), `ranui/ssr-stream` | 서버 렌더링                                       |
-| `ranui/testing`                                       | 테스트에서 닫힌 섀도 루트에 손을 뻗기 위한 도우미 |
-| `ranui/typings`                                       | 앰비언트 JSX / TS 엘리먼트 타입                   |
+| `ranui/testing`                                   | 테스트에서 닫힌 섀도 루트에 손을 뻗기 위한 도우미 |
+| `ranui/typings`                                   | 앰비언트 JSX / TS 엘리먼트 타입                   |
 
 ## 컴포넌트
 
@@ -201,8 +201,8 @@ document.body.appendChild(button);
 
 ## 다음에 볼 곳
 
-| 하고 싶은 일                            | 읽을 문서                                     |
-| --------------------------------------- | --------------------------------------------- |
+| 하고 싶은 일                            | 읽을 문서                                 |
+| --------------------------------------- | ----------------------------------------- |
 | 엘리먼트의 정확한 API 찾기              | [엘리먼트 API](/ko/ranui/api)             |
 | 어떤 토큰을 왜 써야 하는지 알기         | [디자인 시스템](/ko/ranui/design-system/) |
 | 하나의 체계로 보이는 화면 만들기        | [디자인 가이드](/ko/ranui/design-guides/) |
