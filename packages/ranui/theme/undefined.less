@@ -66,32 +66,22 @@ r-scratch:not(:defined) {
   line-height: 1;
   white-space: nowrap;
 }
-// Three buttons, two gaps, the padding and the 1px border on each side.
+// Compact select of color themes — same box as the upgraded host.
 :where(r-theme-switch:not(:defined)) {
-  display: inline-block;
-  inline-size: calc(
-    3 * var(--ran-theme-switch-button-size, var(--ran-size-5, 28px)) + 2 *
-      var(--ran-theme-switch-gap, var(--ran-space-1, 4px)) + 2 *
-      var(--ran-theme-switch-padding, var(--ran-space-1, 4px)) + 2px
-  );
-  block-size: calc(
-    var(--ran-theme-switch-button-size, var(--ran-size-5, 28px)) + 2 *
-      var(--ran-theme-switch-padding, var(--ran-space-1, 4px)) + 2px
-  );
+  display: inline-flex;
+  box-sizing: border-box;
+  width: var(--ran-theme-switch-width, 8.75rem);
+  min-width: var(--ran-theme-switch-min-width, 7.5rem);
+  max-width: var(--ran-theme-switch-max-width, 11rem);
+  min-height: var(--ran-theme-switch-trigger-min-height, 32px);
 }
-// On touch screens each button grows to the 44px touch target.
-@media (pointer: coarse) {
-  :where(r-theme-switch:not(:defined)) {
-    inline-size: calc(
-      3 * max(var(--ran-theme-switch-button-size, var(--ran-size-5, 28px)), var(--ran-theme-switch-touch-size, 44px)) +
-        2 * var(--ran-theme-switch-gap, var(--ran-space-1, 4px)) + 2 *
-        var(--ran-theme-switch-padding, var(--ran-space-1, 4px)) + 2px
-    );
-    block-size: calc(
-      max(var(--ran-theme-switch-button-size, var(--ran-size-5, 28px)), var(--ran-theme-switch-touch-size, 44px)) + 2 *
-        var(--ran-theme-switch-padding, var(--ran-space-1, 4px)) + 2px
-    );
-  }
+:where(r-surface-switch:not(:defined)) {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: var(--ran-surface-switch-width, 10.5rem);
+  min-width: var(--ran-surface-switch-min-width, 9rem);
+  max-width: var(--ran-surface-switch-max-width, 13rem);
+  min-height: var(--ran-surface-switch-trigger-min-height, 32px);
 }
 // The label text is already there; the 16px box and its 8px gap come with the upgrade.
 :where(r-checkbox:not(:defined)) {

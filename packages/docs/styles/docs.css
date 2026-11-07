@@ -802,9 +802,37 @@ a {
 }
 .appearance .theme-switch {
   --ran-theme-switch-width: 8.25rem;
+  --ran-theme-switch-min-width: 7rem;
 }
 .appearance .surface-switch {
   --ran-surface-switch-width: 9.75rem;
+  --ran-surface-switch-min-width: 8rem;
+}
+/* Phone header: drawer + wordmark + search + langs leave room for one select. */
+@media (max-width: 520px) {
+  .appearance {
+    gap: 0;
+  }
+  .appearance .surface-switch {
+    display: none;
+  }
+  .appearance .theme-switch {
+    --ran-theme-switch-width: 6.5rem;
+    --ran-theme-switch-min-width: 6rem;
+  }
+}
+@media (min-width: 521px) and (max-width: 720px) {
+  .appearance {
+    gap: 4px;
+  }
+  .appearance .theme-switch {
+    --ran-theme-switch-width: 6.25rem;
+    --ran-theme-switch-min-width: 5.75rem;
+  }
+  .appearance .surface-switch {
+    --ran-surface-switch-width: 6.75rem;
+    --ran-surface-switch-min-width: 6.25rem;
+  }
 }
 .site-header__inner {
   height: 100%;
