@@ -4,6 +4,13 @@
  */
 export const DESIGN_REFERENCE = [
   { file: 'DESIGN.md', page: 'guide', key: 'design_guide', title: 'Design checklist', translated: ['cn'] },
+  {
+    file: 'SURFACE.md',
+    page: 'surface',
+    key: 'surface_language',
+    title: 'Surface language',
+    translated: ['cn'],
+  },
 ] as const;
 
 /** Their source paths, as structure links and `localeHref` see them. */
