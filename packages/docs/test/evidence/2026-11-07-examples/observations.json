@@ -1,0 +1,210 @@
+[
+  {
+    "path": "/examples/",
+    "theme": "light",
+    "width": 1280,
+    "status": 200,
+    "file": "examples-light-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/examples/chat-composer/",
+    "theme": "light",
+    "width": 1280,
+    "status": 200,
+    "file": "examples-chat-composer-light-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/examples/overlay-form/",
+    "theme": "light",
+    "width": 1280,
+    "status": 200,
+    "file": "examples-overlay-form-light-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/examples/content-render/",
+    "theme": "light",
+    "width": 1280,
+    "status": 200,
+    "file": "examples-content-render-light-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/ranui/ai-chat/",
+    "theme": "light",
+    "width": 1280,
+    "status": 200,
+    "file": "ranui-ai-chat-light-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/examples/",
+    "theme": "light",
+    "width": 360,
+    "status": 200,
+    "file": "examples-light-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "path": "/examples/chat-composer/",
+    "theme": "light",
+    "width": 360,
+    "status": 200,
+    "file": "examples-chat-composer-light-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "path": "/examples/overlay-form/",
+    "theme": "light",
+    "width": 360,
+    "status": 200,
+    "file": "examples-overlay-form-light-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "path": "/examples/content-render/",
+    "theme": "light",
+    "width": 360,
+    "status": 200,
+    "file": "examples-content-render-light-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "path": "/ranui/ai-chat/",
+    "theme": "light",
+    "width": 360,
+    "status": 200,
+    "file": "ranui-ai-chat-light-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "path": "/examples/",
+    "theme": "dark",
+    "width": 1280,
+    "status": 200,
+    "file": "examples-dark-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/examples/chat-composer/",
+    "theme": "dark",
+    "width": 1280,
+    "status": 200,
+    "file": "examples-chat-composer-dark-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/examples/overlay-form/",
+    "theme": "dark",
+    "width": 1280,
+    "status": 200,
+    "file": "examples-overlay-form-dark-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/examples/content-render/",
+    "theme": "dark",
+    "width": 1280,
+    "status": 200,
+    "file": "examples-content-render-dark-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/ranui/ai-chat/",
+    "theme": "dark",
+    "width": 1280,
+    "status": 200,
+    "file": "ranui-ai-chat-dark-w1280.png",
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "firstTab": "a"
+  },
+  {
+    "path": "/examples/",
+    "theme": "dark",
+    "width": 360,
+    "status": 200,
+    "file": "examples-dark-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "path": "/examples/chat-composer/",
+    "theme": "dark",
+    "width": 360,
+    "status": 200,
+    "file": "examples-chat-composer-dark-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "path": "/examples/overlay-form/",
+    "theme": "dark",
+    "width": 360,
+    "status": 200,
+    "file": "examples-overlay-form-dark-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "path": "/examples/content-render/",
+    "theme": "dark",
+    "width": 360,
+    "status": 200,
+    "file": "examples-content-render-dark-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "path": "/ranui/ai-chat/",
+    "theme": "dark",
+    "width": 360,
+    "status": 200,
+    "file": "ranui-ai-chat-dark-w360.png",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "firstTab": "label"
+  },
+  {
+    "note": "overlay keyboard",
+    "activated": true,
+    "dialogBefore": 0,
+    "dialogAfter": 1,
+    "dialogEscaped": 0,
+    "buttonCount": 1
+  }
+]

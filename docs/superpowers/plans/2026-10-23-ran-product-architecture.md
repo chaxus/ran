@@ -64,7 +64,7 @@ Target routes:
 - [x] Build design and agent entry pages from the canonical sources. Locale registry honored.
 - [x] Connect `/examples/` compositions to realistic states and readable code; keep page chrome lightweight where no interactive component is needed.
 - [x] Verify production build, internal links/anchors, canonicals, search and no-JavaScript access to installation and reference text (ongoing gate).
-- [ ] Inspect light/dark and narrow/wide screenshots for new `/examples/` pages; record keyboard and reduced-motion behaviour.
+- [x] Inspect light/dark and narrow/wide screenshots for new `/examples/` pages; record keyboard and reduced-motion behaviour. Evidence: [2026-11-07-examples](../../../packages/docs/test/evidence/2026-11-07-examples/README.md).
 - [ ] Update PRs with separate commits only after matching evidence.
 
 ## Simplest alternatives
@@ -98,9 +98,11 @@ This checkpoint is a bounded implementation, not completion of every architectur
 
 ## Checkpoint — 2026-11-06
 
-Clean-route remapping is done. Working-tree closeout also lands `/examples/`, the AI chat
-task guide, plugin `package-contract.json` provenance, design-hotspot burn-down for
-`r-player`/docs styles, Shiki allowlisting + search API-body trim, and public-path
-structure emitters with `check:langs`/`legacyUrl` mapping fixed. Remaining: full docs
-production build evidence for the new pages; broader design-baseline ratchet burn-down
-beyond hotspots; deepen ranuts “when to use a utility” guidance.
+Clean-route remapping is done. Closeout landed `/examples/`, the AI chat task guide,
+plugin `package-contract.json` provenance, design-hotspot burn-down for `r-player`/docs
+styles, Shiki allowlisting + search API-body trim, and public-path structure emitters.
+2026-11-07 follow-up: Temml copy on content-render, markdown absolute links rewritten off
+`/src/…`, examples light/dark × 1280/360 screenshots plus keyboard/reduced-motion notes,
+and a production-build size re-measure (1356 pages; search JSON 9.7 MB / 8 locales). Remaining:
+isolated plugin install smoke; broader design-baseline ratchet burn-down; deepen ranuts
+“when to use a utility” guidance.
