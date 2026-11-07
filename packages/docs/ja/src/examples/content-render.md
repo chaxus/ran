@@ -16,5 +16,5 @@ During streaming, set the `content` property on `r-markdown` (not the attribute)
 ## References
 
 - [Markdown](../ranui/markdown/) — streaming mode, code highlight, copy control
-- [Math](../ranui/math/) — KaTeX rendering
+- [Math](../ranui/math/) — Temml rendering
 - [Mermaid](../ranui/mermaid/) — lazy diagram load
