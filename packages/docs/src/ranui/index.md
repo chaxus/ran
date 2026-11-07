@@ -97,7 +97,7 @@ for the component library.
 
 ## Components
 
-41 elements. Every one of them, with its attributes, properties, events, slots and `::part()`
+42 elements. Every one of them, with its attributes, properties, events, slots and `::part()`
 names, is in the [element API reference](/ranui/api).
 
 **Common**: [Button](/ranui/button/) · [Icon](/ranui/icon/) ·
@@ -177,8 +177,8 @@ on `:root`, on a wrapper or on the element all work:
 **3. the `sheet` attribute** to inject CSS into the shadow root ·
 **4. slotted content**, which stays in your document and takes your page CSS.
 
-The token names are the [design system](/ranui/design-system/); the rules for choosing
-between them are the [design guidelines](/ranui/design-guides/); the mechanics are in the
+The token names are the [design system](/design/design-system/); the rules for choosing
+between them are the [design guidelines](/design/design-guides/); the mechanics are in the
 [coding guidelines](/ranui/coding-guides/#styling-across-the-shadow-boundary).
 
 ## Events
@@ -202,17 +202,17 @@ these are ordinary DOM elements, but they allow only one handler and no capture 
 
 ## Where to go next
 
-| If you want to…                           | Read                                       |
-| ----------------------------------------- | ------------------------------------------ |
-| Look up an element's exact API            | [Element API](/ranui/api)                  |
-| Know which token to use, and why          | [Design system](/ranui/design-system/)     |
-| Build a screen that looks like one system | [Design guidelines](/ranui/design-guides/) |
-| Wire ranui into an app correctly          | [Coding guidelines](/ranui/coding-guides/) |
-| Add light/dark, or restyle everything     | [Theming](/ranui/theme/)                   |
-| Translate the interface                   | [i18n](/ranui/i18n/)                       |
-| Render on a server                        | [Server rendering](/ranui/ssr/)            |
-| Build reactive views without a framework  | [Builder](/ranui/builder/)                 |
-| See what changed before upgrading         | [Changelog](/ranui/changelog)              |
+| If you want to…                           | Read                                        |
+| ----------------------------------------- | ------------------------------------------- |
+| Look up an element's exact API            | [Element API](/ranui/api)                   |
+| Know which token to use, and why          | [Design system](/design/design-system/)     |
+| Build a screen that looks like one system | [Design guidelines](/design/design-guides/) |
+| Wire ranui into an app correctly          | [Coding guidelines](/ranui/coding-guides/)  |
+| Add light/dark, or restyle everything     | [Theming](/ranui/theme/)                    |
+| Translate the interface                   | [i18n](/ranui/i18n/)                        |
+| Render on a server                        | [Server rendering](/ranui/ssr/)             |
+| Build reactive views without a framework  | [Builder](/ranui/builder/)                  |
+| See what changed before upgrading         | [Changelog](/ranui/changelog)               |
 
 ## Browser support
 

@@ -35,6 +35,7 @@ const loaders: Record<string, () => Promise<unknown>> = {
   'r-tabs': () => import('ranui/tab'),
   'r-tab': () => import('ranui/tabpane'),
   'r-theme-switch': () => import('ranui/theme-switch'),
+  'r-surface-switch': () => import('ranui/surface-switch'),
   'r-token-meter': () => import('ranui/token-meter'),
   'r-tool-card': () => import('ranui/tool-card'),
   'r-voice-button': () => import('ranui/voice-button'),

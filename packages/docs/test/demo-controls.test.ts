@@ -78,7 +78,7 @@ it('a material writes only the values that differ from it', async () => {
   material.value = 'clear';
   material.dispatchEvent(new Event('input', { bubbles: true }));
   const blur = document.querySelector<HTMLInputElement>('[data-param="blur"]')!;
-  expect(blur.value).toBe('2');
+  expect(blur.value).toBe('4');
   const glass = document.querySelector<HTMLElement>('.gp-glass')!;
   expect(glass.getAttribute('material')).toBe('clear');
   expect(glass.hasAttribute('blur')).toBe(false);

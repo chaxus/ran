@@ -4,10 +4,12 @@ title: Ran Design
 
 # Ran Design
 
-Uma lista de verificação de design de uma página para interfaces de produto, independente de qualquer biblioteca de componentes.
+Métodos para layout, interação, movimento e revisão baseada em evidência — independentes de qualquer biblioteca de componentes.
 
-Use antes de começar, durante a construção e antes de entregar uma mudança. Inclui os testes de cinco segundos e do porta-malas de Steve Krug e marca os itens que um teste no navegador verifica automaticamente.
+- [Lista de design](/design/guide)
+- [Linguagem de superfície](/design/surface) (inglês)
+- [Design system](/pt/design/design-system/)
+- [Diretrizes de design](/pt/design/design-guides/)
+- [Arquitetura de informação](/pt/design/information-architecture/)
 
-- [Lista de design](/design/guide) (em inglês)
-
-[ranui](../ranui/) · [ranuts](../ranuts/) · [Agentes](../agents/)
+[ranui](../ranui/) · [ranuts](../ranuts/) · [Agents](../agents/)

@@ -3,3 +3,5 @@
 // pulling in every custom element, keeping their bundle lean.
 export { setTheme, getTheme, setThemeToken, clearThemeToken, setThemeTokens, initTheme } from '@/utils/theme';
 export type { RanThemeName, ThemeTarget, ThemeTokenMap } from '@/utils/theme';
+export { setSurface, getSurface, initSurface } from '@/utils/surface';
+export type { RanSurfaceName } from '@/utils/surface';

@@ -196,7 +196,7 @@ r-disclosure-row {
 
 Parts: `body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
 
-The full list is in [style tokens](/ranui/style-tokens#disclosure-row); which token to reach for is the [design system](/ranui/design-system/).
+The full list is in [style tokens](/ranui/style-tokens#disclosure-row); which token to reach for is the [design system](/design/design-system/).
 
 ## Best Practices
 

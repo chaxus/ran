@@ -8,8 +8,8 @@ Die **Laufzeit**-Hälfte des Stylings von ranui: zwischen hellem, dunklem und Sy
 die Wahl speichern und Tokens im laufenden Betrieb überschreiben.
 
 Die Tokens selbst (wie sie heißen und wofür jedes gut ist) sind das
-[Designsystem](/de/ranui/design-system/); die Regeln zur Auswahl sind die
-[Designrichtlinien](/de/ranui/design-guides/). Diese Seite handelt nur vom _Anwenden_.
+[Designsystem](/de/design/design-system/); die Regeln zur Auswahl sind die
+[Designrichtlinien](/de/design/design-guides/). Diese Seite handelt nur vom _Anwenden_.
 
 > **Nimm es, wenn** du in einer ranui-App helles und dunkles Theming brauchst: rufe `initTheme`
 > einmal beim Laden auf, `setTheme` zum Umschalten und `setThemeToken(s)`, wenn du einzelne Tokens
@@ -73,6 +73,53 @@ ganze Seite zu begrenzen.
 **SSR-sicher**: Jeder Zugriff auf `document`, `localStorage` und `matchMedia` ist abgesichert, diese
 Funktionen sind beim Server-Rendering also wirkungslos (und werfen nicht).
 
+## Oberflächen-Sprache (solid / glass)
+
+Farbthema und Oberflächen-Sprache sind unabhängige Achsen. `setSurface('glass')` setzt `data-ran-surface="glass"` auf dem Ziel (meist `<html>`). Pilot-Controls — `r-button`, `r-input`, `r-card`, `r-modal`, `r-message` — frosten unter diesem Attribut oder mit `surface="glass"` am Element. Mit `surface="solid"` opten Sie aus einem dokumentweiten Glass aus.
+
+Primary-/Danger-Buttons und Toast-Pills bleiben unter Glass solid. `prefers-reduced-transparency: reduce` fällt auf elevated-Solid-Tokens zurück — wie [`r-glass`](/de/ranui/glass/).
+
+Für eine volle Liquid-Glass-Fläche weiter [`r-glass`](/de/ranui/glass/) nutzen — die Surface-Achse ist die Control-Familien-Frostung, kein Ersatz.
+
+<ran-demo>
+  <div style="display: grid; gap: 16px;">
+    <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid (default)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+    <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass (`data-ran-surface`)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card surface="glass" heading="Glass card" description="Opt-in frosted plate." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+  </div>
+</ran-demo>
+
 ## Wie der Dunkelmodus funktioniert
 
 `setTheme('dark')` setzt `data-ran-theme="dark"` an `<html>`. Das Stylesheet definiert daraufhin
@@ -84,7 +131,7 @@ Zwei Folgen, die man kennen sollte:
 
 - **Dein eigenes CSS bekommt den Dunkelmodus geschenkt**, wenn es semantische Tokens verwendet — und
   bekommt ihn falsch, wenn es eine Farbe fest verdrahtet oder einen nur für Hell gedachten Rückfall
-  schreibt. Siehe [Tokens im eigenen CSS verwenden](/de/ranui/design-system/#using-tokens-in-your-own-css).
+  schreibt. Siehe [Tokens im eigenen CSS verwenden](/de/design/design-system/#using-tokens-in-your-own-css).
 - **Beim Theme-Wechsel darf nichts überblenden.** CSS kann nicht wissen, warum sich eine Farbe
   geändert hat; eine `transition` auf einer Palettenfarbe lässt daher beim Umschalten jedes Element
   in seinem eigenen Tempo überblenden. Die Komponenten von ranui tun das bewusst nicht — deine
@@ -135,7 +182,7 @@ Weil der Dunkelmodus nur die Basispalette neu definiert:
 - Überschreibe ein **Komponenten**-Token (`--ran-btn-hover-background`), um genau ein Element zu
   ändern.
 
-Diese Schichtung ist auf der Seite zum [Designsystem](/de/ranui/design-system/#two-layers)
+Diese Schichtung ist auf der Seite zum [Designsystem](/de/design/design-system/#two-layers)
 vollständig beschrieben. Beachte: Eine Laufzeit-Überschreibung ist ein Inline-Style am Ziel — sie
 gewinnt für diesen Teilbaum gegen Stylesheet-Regeln. Genau das macht Theming pro Panel möglich und
 genau das macht eine vergessene Überschreibung später schwer auffindbar.

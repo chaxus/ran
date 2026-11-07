@@ -59,7 +59,7 @@ describe('r-glass contract', () => {
     expect(glass.style.getPropertyValue('--ran-glass-blur')).toBe('24px');
 
     glass.removeAttribute('blur');
-    expect(glass.style.getPropertyValue('--ran-glass-blur')).toBe('28px');
+    expect(glass.style.getPropertyValue('--ran-glass-blur')).toBe('22px');
   });
 
   it('a material sets every optical value, and an attribute overrides only its own', () => {
@@ -67,7 +67,7 @@ describe('r-glass contract', () => {
     glass.material = 'clear';
     glass.displace = '40';
     document.body.appendChild(glass);
-    expect(glass.optics).toEqual({ blur: 2, saturate: 130, displace: 40, bevel: 40, dispersion: 40, specular: 120 });
+    expect(glass.optics).toEqual({ blur: 4, saturate: 150, displace: 40, bevel: 20, dispersion: 25, specular: 110 });
     glass.material = 'nonsense';
     expect(glass.optics.blur).toBe(16);
   });

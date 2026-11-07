@@ -8,8 +8,8 @@ How to _build_ with ranui: what the component contract is, where the Shadow DOM 
 changes the rules you are used to, and which mistakes are worth knowing about before you make
 them.
 
-The visual half of this is the [design guidelines](/ranui/design-guides/); the tokens are
-the [design system](/ranui/design-system/).
+The visual half of this is the [design guidelines](/design/design-guides/); the tokens are
+the [design system](/design/design-system/).
 
 > **Use when** you are wiring ranui components into an application: picking imports, binding
 > events, styling something a selector cannot reach, rendering on a server, or writing tests.

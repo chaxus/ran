@@ -155,6 +155,7 @@ export const componentEntries: Record<string, string> = {
   route: resolve(__dirname, 'components/route/index.ts'),
   link: resolve(__dirname, 'components/link/index.ts'),
   'theme-switch': resolve(__dirname, 'components/theme-switch/index.ts'),
+  'surface-switch': resolve(__dirname, 'components/surface-switch/index.ts'),
 };
 
 export const es: BuildOptions = {

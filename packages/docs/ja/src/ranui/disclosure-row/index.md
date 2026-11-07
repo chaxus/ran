@@ -160,7 +160,7 @@ r-disclosure-row {
 
 Parts：`body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
 
-全一覧は[スタイルトークン](/ja/ranui/style-tokens#disclosure-row)にあります。どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)を参照してください。
+全一覧は[スタイルトークン](/ja/ranui/style-tokens#disclosure-row)にあります。どのトークンを選ぶかは[デザインシステム](/ja/design/design-system/)を参照してください。
 
 ## ベストプラクティス
 

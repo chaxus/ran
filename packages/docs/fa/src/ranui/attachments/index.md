@@ -171,7 +171,7 @@ r-attachments {
 
 Partها: `attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
 
-فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#attachments) است؛ اینکه سراغ کدام توکن بروید کار [سیستم طراحی](/fa/ranui/design-system/) است.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#attachments) است؛ اینکه سراغ کدام توکن بروید کار [سیستم طراحی](/fa/design/design-system/) است.
 
 ## بهترین شیوه‌ها
 

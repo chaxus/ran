@@ -107,8 +107,30 @@ export const movedRedirects = (): string[] =>
  * `_redirects` rules that keep every retired `/src/…` URL reaching its page in one hop.
  * Moved pages come first: the host takes the first matching rule.
  */
+/**
+ * Design-method pages that left ranui Foundations for the Design pillar (2026-11).
+ * Keep every prior `/ranui/…` form reachable in one hop.
+ */
+const DESIGN_PILLAR_MOVES: ReadonlyArray<readonly [string, string]> = [
+  ['ranui/design-system', 'design/design-system'],
+  ['ranui/design-guides', 'design/design-guides'],
+  ['ranui/information-architecture', 'design/information-architecture'],
+];
+
+const designPillarRedirects = (): string[] =>
+  ['', ...LOCALE_DIRS].flatMap((dir) => {
+    const prefix = dir ? `/${dir}` : '';
+    return DESIGN_PILLAR_MOVES.flatMap(([from, to]) =>
+      ['', '/', '/index.html'].flatMap((form) => [
+        `${prefix}/${from}${form} ${prefix}/${to}/ 301`,
+        `${prefix}/src/${from}${form} ${prefix}/${to}/ 301`,
+      ]),
+    );
+  });
+
 export const legacyRedirects = (): string[] => [
   ...movedRedirects(),
+  ...designPillarRedirects(),
   ...['', ...LOCALE_DIRS].flatMap((dir) => {
     const prefix = dir ? `/${dir}` : '';
     return [`${prefix}/src ${prefix}/ 301`, `${prefix}/src/* ${prefix}/:splat 301`];

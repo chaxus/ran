@@ -117,7 +117,7 @@ r-token-meter {
 
 Part：`fill` · `meter` · `text` · `track`
 
-一覧は[スタイルトークン](/ja/ranui/style-tokens#token-meter)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#token-meter)に、どのトークンを選ぶかは[デザインシステム](/ja/design/design-system/)にあります。
 
 ## ベストプラクティス
 
@@ -125,5 +125,5 @@ Part：`fill` · `meter` · `text` · `track`
   次のリクエストが実際に送る数だからです。
 - **段階への対応はメーターの外で。** `level="over"` のときに役立つ UI は提案（要約する、新しいスレッドを
   始める）であり、それはアプリの仕事です。
-- **テーマ切り替えで満ち具合をアニメーションさせない**：[デザインガイドライン](/ja/ranui/design-guides/#motion)
+- **テーマ切り替えで満ち具合をアニメーションさせない**：[デザインガイドライン](/ja/design/design-guides/#motion)
   を参照。

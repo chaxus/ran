@@ -7,4 +7,5 @@ export { signal, createEffect, computed, batch } from '@alixex/ranview';
 export * from './ssr';
 export * from './component';
 export * from './theme';
+export * from './surface';
 export * from './form';

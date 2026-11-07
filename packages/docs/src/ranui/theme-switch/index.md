@@ -1,15 +1,16 @@
 ---
-description: "A three-state system/light/dark segmented control wired to ranui's theme API, synced across tabs."
+description: "A select of color themes (system / light / dark) wired to ranui's theme API."
 ---
 
 # ThemeSwitch
 
-A three-state segmented control (**system / light / dark**) wired to ranui's
-[theme API](/ranui/theme/). Clicking a segment calls `setTheme()`, persists the choice
-under the localStorage key `ran-theme`, and keeps every instance on the page (and in other
-tabs) in sync.
+A compact **select** of color themes (**system / light / dark**) wired to ranui's
+[theme API](/ranui/theme/). Picking an option calls `setTheme()`, persists under `ran-theme`,
+and keeps every instance on the page (and in other tabs) in sync. Style / liquid glass is a
+separate axis: use [`<r-surface-switch>`](/ranui/surface-switch/) for that.
 
-> **Use when** you need a ready-made system/light/dark segmented control wired to ranui's theme API. `<r-theme-switch>` handles persistence, system tracking, and cross-tab sync so you don't hand-roll a toggle.
+> **Use when** you need a ready-made color-theme control. `<r-theme-switch>` handles persistence,
+> system tracking, and cross-tab sync so you don't hand-roll a menu.
 
 ## Quick Start
 
@@ -28,11 +29,7 @@ import 'ranui'; // or the standalone entry:
 import 'ranui/theme-switch';
 ```
 
-> 💡 **On this docs site** the theme is driven by the site-wide toggle in the header, which
-> overwrites `data-ran-theme` on its own, so the demo above may be reset by the site. In your
-> app, `<r-theme-switch>` is the source of truth.
-
-Call `initTheme()` once on page load so the saved choice is restored before the switch renders:
+Call `initTheme()` once on page load so the saved choice restores before paint:
 
 ```js
 import { initTheme } from 'ranui';
@@ -43,30 +40,19 @@ initTheme();
 
 ### Properties
 
-| Property | Type                            | Default    | Description                                                                                           |
-| -------- | ------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------- |
-| `value`  | `'system' \| 'light' \| 'dark'` | `'system'` | Current selection, read from the theme API (`getTheme()`). Setting it applies and persists the theme. |
-| `sheet`  | `string`                        | `''`       | CSS injected into the component's shadow DOM.                                                         |
+| Property | Type                            | Default    | Description                                                                 |
+| -------- | ------------------------------- | ---------- | --------------------------------------------------------------------------- |
+| `value`  | `'system' \| 'light' \| 'dark'` | `'system'` | Current theme from `getTheme()`. Setting it applies and persists the theme. |
+| `sheet`  | `string`                        | `''`       | CSS injected into the component's shadow DOM.                               |
 
 ### Localization Attributes
 
-The three buttons are icon-only, so each carries an `aria-label`. Override them to localize:
-
-| Attribute      | Default          | Description                        |
-| -------------- | ---------------- | ---------------------------------- |
-| `label`        | `'Theme'`        | `aria-label` of the control group. |
-| `label-system` | `'System theme'` | `aria-label` of the system button. |
-| `label-light`  | `'Light theme'`  | `aria-label` of the light button.  |
-| `label-dark`   | `'Dark theme'`   | `aria-label` of the dark button.   |
-
-```html
-<r-theme-switch
-  label="Theme"
-  label-system="System theme"
-  label-light="Light theme"
-  label-dark="Dark theme"
-></r-theme-switch>
-```
+| Attribute      | Default    | Description                 |
+| -------------- | ---------- | --------------------------- |
+| `label`        | `'Theme'`  | `aria-label` of the select. |
+| `label-system` | `'System'` | Option text for system.     |
+| `label-light`  | `'Light'`  | Option text for light.      |
+| `label-dark`   | `'Dark'`   | Option text for dark.       |
 
 ## Events
 
@@ -74,63 +60,16 @@ The three buttons are icon-only, so each carries an `aria-label`. Override them 
 | -------- | ------------------------------------------ | ------------------------------------------------------------------ |
 | `change` | `{ theme: 'system' \| 'light' \| 'dark' }` | Fired when the user picks a theme. Bubbles and crosses shadow DOM. |
 
-```js
-const themeSwitch = document.createElement('r-theme-switch');
-themeSwitch.addEventListener('change', (e) => {
-  console.log('theme is now', e.detail.theme);
-});
-toolbar.append(themeSwitch);
-```
-
-## Behavior
-
-- **Persistence**: selections go through `setTheme()`, so they're saved to localStorage
-  (`ran-theme`) and restored by `initTheme()` on the next visit.
-- **Multi-instance sync**: place one switch in the header and another in the footer; picking a
-  theme on either updates both.
-- **Cross-tab sync**: a theme flipped in another tab updates this control via the `storage` event.
-- **Browser chrome**: forced light/dark updates `<meta name="theme-color">` to the resolved page
-  background so the browser/PWA chrome matches; choosing `system` restores each meta's original
-  (possibly media-qualified) content.
-
-The group and button localization labels also update when their attributes change after mounting.
-Choice buttons retain a compact 28px size for fine pointers and a minimum 44px target for coarse pointers.
-
 ## CSS Parts
 
-| Part                        | Description                                                                    |
-| --------------------------- | ------------------------------------------------------------------------------ |
-| `switch`                    | The outer segmented pill.                                                      |
-| `button`                    | Every choice button (each also exposes its choice name as an additional part). |
-| `system` / `light` / `dark` | The individual choice buttons.                                                 |
-
-```css
-r-theme-switch::part(switch) {
-  border-color: var(--line);
-}
-r-theme-switch::part(dark) {
-  color: rebeccapurple;
-}
-```
-
-The following CSS variables can be overridden: `--ran-theme-switch-display`,
-`--ran-theme-switch-gap`, `--ran-theme-switch-padding`, `--ran-theme-switch-border-color`,
-`--ran-theme-switch-radius`, `--ran-theme-switch-background`, `--ran-theme-switch-button-size`,
-`--ran-theme-switch-icon-size`, `--ran-theme-switch-button-color`, `--ran-theme-switch-button-hover-color`,
-`--ran-theme-switch-button-active-background`, `--ran-theme-switch-button-active-color`,
-`--ran-theme-switch-button-focus-outline`.
+| Part                        | Description             |
+| --------------------------- | ----------------------- |
+| `select`                    | The inner `r-select`.   |
+| `option`                    | Every `r-option`.       |
+| `system` / `light` / `dark` | The individual options. |
 
 ```css
 r-theme-switch {
-  --ran-theme-switch-button-size: 32px;
-  --ran-theme-switch-icon-size: 18px;
+  --ran-theme-switch-width: 9rem;
 }
 ```
-
-## Best Practices
-
-- **One source of truth**: use `<r-theme-switch>` instead of hand-rolling a toggle; it already
-  handles persistence, system tracking, instance sync, and `theme-color` metas.
-- **Restore early**: call `initTheme()` as early as possible (ideally inline before first paint)
-  to avoid a light→dark flash.
-- **Localize**: the buttons are icon-only; set `label` / `label-*` for non-English UIs.

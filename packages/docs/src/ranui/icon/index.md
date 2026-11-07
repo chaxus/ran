@@ -156,4 +156,4 @@ r-icon {
 
 Parts: `ran-icon`
 
-The full list is in [style tokens](/ranui/style-tokens#icon); which token to reach for is the [design system](/ranui/design-system/).
+The full list is in [style tokens](/ranui/style-tokens#icon); which token to reach for is the [design system](/design/design-system/).

@@ -256,12 +256,12 @@ const renderProof = (p: ReturnType<typeof homeCopy>['proof']): string =>
 // ── Glass playground ────────────────────────────────────────────────────────
 
 /** Geometry the stage starts with; everything optical comes from the `regular` material. */
-const GLASS_START = { width: 340, radius: 24 } as const;
+const GLASS_START = { width: 340, radius: 28 } as const;
 
 const GLASS_OPTICS = [
   { key: 'blur', min: 0, max: 40, step: 1, unit: 'px' },
   { key: 'saturate', min: 100, max: 260, step: 5, unit: '%' },
-  { key: 'displace', min: 0, max: 60, step: 1, unit: 'px' },
+  { key: 'displace', min: 0, max: 120, step: 1, unit: 'px' },
   { key: 'bevel', min: 4, max: 80, step: 1, unit: 'px' },
   { key: 'dispersion', min: 0, max: 100, step: 5, unit: '%' },
 ] as const;

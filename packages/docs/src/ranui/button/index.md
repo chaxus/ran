@@ -49,6 +49,8 @@ Button component for triggering instant actions with multiple styles and states.
 
 `primary` is the monochrome action (from the Geist design language): black-on-white in light mode, white-on-black in dark mode. Blue carries no brand meaning here; it is reserved for links and the focus ring. It rides the `--ran-color-primary*` tokens (`--ran-color-primary`, `-hover`, `-active`, and `--ran-color-primary-text` for the inverse ink); see [Theme & Tokens](/ranui/theme/).
 
+Under [`data-ran-surface="glass"`](/design/surface), the **default** button frosts (Apple `glass`); `primary` and `warning` stay solid (Apple `glassProminent`) so emphasis does not wash out. Switch the site to Liquid glass to see the difference on the default control above.
+
 ### Disabled State `disabled`
 
 Disabled buttons reject pointer, keyboard and programmatic `click()` activation. Re-enabling restores the same control and its accessible name.
@@ -141,7 +143,7 @@ r-button::part(content) {
 ```
 
 The full list is in [style tokens](/ranui/style-tokens#button); which token to reach for is
-the [design system](/ranui/design-system/).
+the [design system](/design/design-system/).
 
 ## Best Practices
 

@@ -7,8 +7,8 @@ description: '用 ranui 开发时的工程规范：入口选择、attribute / pr
 这一页讲怎么**用** ranui 开发：组件的契约是什么，Shadow DOM 边界在哪些地方改变了你习惯的规则，还有
 哪些坑最好在踩到之前就知道。
 
-视觉方面的规范见[设计规范](/cn/ranui/design-guides/)，令牌清单见
-[设计系统](/cn/ranui/design-system/)。
+视觉方面的规范见[设计规范](/cn/design/design-guides/)，令牌清单见
+[设计系统](/cn/design/design-system/)。
 
 > **适用场景**：把 ranui 接入应用的各个环节：选择引入方式、绑定事件、给选择器够不到的地方加样式、
 > 做服务端渲染、写测试。

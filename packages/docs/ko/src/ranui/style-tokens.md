@@ -11,7 +11,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 토큰은 상속이 닿는 곳이면 어디에나 지정할 수 있습니다 — `:root`, 바깥 컨테이너, 엘리먼트 자체.
 의미 토큰 하나로 그 변경을 표현할 수 있다면 그쪽을 택하세요. 한 번에 모든 컴포넌트에 적용됩니다.
-어휘는 [디자인 시스템](/ko/src/ranui/design-system/)에 정리돼 있고, 이름 규칙은
+어휘는 [디자인 시스템](/ko/src/design/design-system/)에 정리돼 있고, 이름 규칙은
 `--ran-{component}-{element}[-{state}]-{property}` 입니다.
 
 ## `attachments`
@@ -65,11 +65,11 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `button`
 
-- Tokens: 75
+- Tokens: 77
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 16 · skin: 2 · component: 48 · internal: 9 -->
+<!-- layers: semantic: 16 · skin: 2 · component: 49 · internal: 10 -->
 - `--ran-btn-active-background`
 - `--ran-btn-active-border-color`
 - `--ran-btn-active-scale`
@@ -98,6 +98,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-btn-font-family`
 - `--ran-btn-font-size`
 - `--ran-btn-font-weight`
+- `--ran-btn-glass-border-color`
 - `--ran-btn-hover-background`
 - `--ran-btn-hover-border-color`
 - `--ran-btn-hover-color`
@@ -143,6 +144,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-4`
+- `--ran-surface-glass-border`
 - `--ran-text-button-size`
 - `--ran-text-button-weight`
 
@@ -445,16 +447,13 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `glass`
 
-- Tokens: 28
+- Tokens: 25
 - Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 6 · internal: 22 -->
-- `--ran-backdrop-edge-light`
-- `--ran-backdrop-highlight`
+<!-- layers: semantic: 6 · internal: 19 -->
 - `--ran-backdrop-ink-dark`
 - `--ran-backdrop-ink-light`
-- `--ran-backdrop-shadow-light`
 - `--ran-color-bg-elevated`
 - `--ran-glass-blur`
 - `--ran-glass-border`
@@ -520,11 +519,11 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `input`
 
-- Tokens: 88
+- Tokens: 89
 - Parts: 4
 
 ### Tokens
-<!-- layers: semantic: 14 · skin: 1 · component: 61 · internal: 12 -->
+<!-- layers: semantic: 14 · skin: 1 · component: 62 · internal: 12 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-subtle`
 - `--ran-color-border`
@@ -584,6 +583,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-input-error-border-color`
 - `--ran-input-font-family`
 - `--ran-input-font-size`
+- `--ran-input-glass-border-color`
 - `--ran-input-hover-border-color`
 - `--ran-input-icon-align-items`
 - `--ran-input-icon-justify-content`
@@ -1890,6 +1890,33 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 ### Parts
 - `dot`
 
+## `surface-switch`
+
+- Tokens: 15
+- Parts: 2
+
+### Tokens
+<!-- layers: semantic: 3 · component: 5 · internal: 7 -->
+- `--ran-background-100`
+- `--ran-color-bg-elevated`
+- `--ran-color-border-secondary`
+- `--ran-gray-200`
+- `--ran-radius-md`
+- `--ran-select-background-color`
+- `--ran-select-background-image`
+- `--ran-select-border`
+- `--ran-select-border-radius`
+- `--ran-select-font-size`
+- `--ran-surface-switch-background`
+- `--ran-surface-switch-border-color`
+- `--ran-surface-switch-font-size`
+- `--ran-surface-switch-radius`
+- `--ran-text-label-1`
+
+### Parts
+- `option ${choice}`
+- `select`
+
 ## `tab`
 
 - Tokens: 43
@@ -1963,37 +1990,31 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `theme-switch`
 
-- Tokens: 22
+- Tokens: 16
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 6 · skin: 1 · internal: 15 -->
-- `--ran-color-bg-hover`
-- `--ran-color-border`
-- `--ran-color-focus`
-- `--ran-color-text`
-- `--ran-color-text-secondary`
-- `--ran-radius-full`
-- `--ran-size-1`
-- `--ran-size-5`
-- `--ran-skin-border-style`
-- `--ran-space-1`
+<!-- layers: semantic: 3 · component: 5 · internal: 8 -->
+- `--ran-background-100`
+- `--ran-color-bg-elevated`
+- `--ran-color-border-secondary`
+- `--ran-gray-200`
+- `--ran-radius-md`
+- `--ran-select-background-color`
+- `--ran-select-background-image`
+- `--ran-select-border`
+- `--ran-select-border-radius`
+- `--ran-select-font-size`
+- `--ran-text-label-1`
 - `--ran-theme-switch-`
 - `--ran-theme-switch-background`
 - `--ran-theme-switch-border-color`
-- `--ran-theme-switch-button-active-background`
-- `--ran-theme-switch-button-active-color`
-- `--ran-theme-switch-button-color`
-- `--ran-theme-switch-button-hover-color`
-- `--ran-theme-switch-button-size`
-- `--ran-theme-switch-gap`
-- `--ran-theme-switch-icon-size`
+- `--ran-theme-switch-font-size`
 - `--ran-theme-switch-radius`
-- `--ran-theme-switch-touch-size`
 
 ### Parts
-- `button ${choice}`
-- `switch`
+- `option ${choice}`
+- `select`
 
 ## `token-meter`
 

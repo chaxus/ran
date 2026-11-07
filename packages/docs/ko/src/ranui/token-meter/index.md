@@ -113,7 +113,7 @@ r-token-meter {
 
 Part: `fill` · `meter` · `text` · `track`
 
-전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#token-meter)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/ranui/design-system/)에 있습니다.
+전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#token-meter)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/design/design-system/)에 있습니다.
 
 ## 권장 사항
 
@@ -121,5 +121,5 @@ Part: `fill` · `meter` · `text` · `track`
   숫자는 다음 요청이 실제로 보낼 숫자입니다.
 - **단계별 대응은 미터 밖에서 하세요.** `level="over"`일 때 쓸모 있는 UI 는 제안 (요약하기, 새 스레드
   시작하기) 이고, 그것은 앱의 몫입니다.
-- **테마가 바뀔 때 채움을 애니메이션하지 마세요**: [디자인 가이드](/ko/ranui/design-guides/#motion)를
+- **테마가 바뀔 때 채움을 애니메이션하지 마세요**: [디자인 가이드](/ko/design/design-guides/#motion)를
   보세요.

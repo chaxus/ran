@@ -19,8 +19,8 @@ import { describe, expect, it } from 'vitest';
  */
 const RANUI = resolve(__dirname, '../..');
 const PAGES = [
-  resolve(RANUI, '../docs/src/ranui/design-system/index.md'),
-  resolve(RANUI, '../docs/cn/src/ranui/design-system/index.md'),
+  resolve(RANUI, '../docs/src/design/design-system/index.md'),
+  resolve(RANUI, '../docs/cn/src/design/design-system/index.md'),
 ];
 
 /** Token names declared in the theme, in source order. */
@@ -73,7 +73,7 @@ describe('every global design token is documented', () => {
  * each scale table's light and dark values, and the value cell of each token row.
  */
 const LOCALE_PAGES = ['', 'cn', 'ja', 'es', 'pt', 'ko', 'de', 'fa']
-  .map((dir) => resolve(RANUI, `../docs/${dir ? `${dir}/` : ''}src/ranui/design-system/index.md`))
+  .map((dir) => resolve(RANUI, `../docs/${dir ? `${dir}/` : ''}src/design/design-system/index.md`))
   .filter((page) => existsSync(page));
 
 /**

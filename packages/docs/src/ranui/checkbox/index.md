@@ -166,7 +166,7 @@ r-checkbox {
 
 Parts: `checkbox` · `inner` · `input` · `label` · `wrapper`
 
-The full list is in [style tokens](/ranui/style-tokens#checkbox); which token to reach for is the [design system](/ranui/design-system/).
+The full list is in [style tokens](/ranui/style-tokens#checkbox); which token to reach for is the [design system](/design/design-system/).
 
 ## Best Practices
 

@@ -226,7 +226,7 @@ r-input {
 
 Partها: `content` · `input` · `label` · `message`
 
-فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#input) است؛ اینکه کدام توکن را به کار ببرید در [سیستم طراحی](/fa/ranui/design-system/) آمده.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#input) است؛ اینکه کدام توکن را به کار ببرید در [سیستم طراحی](/fa/design/design-system/) آمده.
 
 ## بهترین شیوه‌ها
 

@@ -111,10 +111,10 @@ r-token-meter {
 
 Part：`fill` · `meter` · `text` · `track`
 
-完整清单见[样式令牌](/cn/ranui/style-tokens#token-meter)；该选哪个令牌见[设计系统](/cn/ranui/design-system/)。
+完整清单见[样式令牌](/cn/ranui/style-tokens#token-meter)；该选哪个令牌见[设计系统](/cn/design/design-system/)。
 
 ## 最佳实践
 
 - **在构造请求的地方更新 `used`**，而不是在渲染流程里：人们信任的那个数，是下一次请求真正会发出去的量。
 - **升级提示放在组件外面。** `level="over"` 时真正有用的 UI 是一个建议（做摘要、另起会话），那属于应用。
-- **不要给填充加会在主题切换时触发的过渡**，详见[设计规范](/cn/ranui/design-guides/#motion)。
+- **不要给填充加会在主题切换时触发的过渡**，详见[设计规范](/cn/design/design-guides/#motion)。

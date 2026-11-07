@@ -142,7 +142,7 @@ r-voice-button {
 
 Partes: `button` · `hint` · `icon`
 
-La lista completa está en [tokens de estilo](/es/ranui/style-tokens#voice-button); cuál elegir lo explica el [sistema de diseño](/es/ranui/design-system/).
+La lista completa está en [tokens de estilo](/es/ranui/style-tokens#voice-button); cuál elegir lo explica el [sistema de diseño](/es/design/design-system/).
 
 ## Véase también
 

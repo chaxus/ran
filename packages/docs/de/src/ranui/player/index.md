@@ -311,7 +311,7 @@ r-player {
 }
 ```
 
-Die vollständige Liste steht bei den [Style-Tokens](/de/ranui/style-tokens#player); welches Token das richtige ist, klärt das [Designsystem](/de/ranui/design-system/).
+Die vollständige Liste steht bei den [Style-Tokens](/de/ranui/style-tokens#player); welches Token das richtige ist, klärt das [Designsystem](/de/design/design-system/).
 
 ## Bewährte Vorgehensweisen
 

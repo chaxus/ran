@@ -130,7 +130,7 @@ r-button::part(content) {
 }
 ```
 
-La lista completa está en [tokens de estilo](/es/ranui/style-tokens#button); cuál elegir lo explica el [sistema de diseño](/es/ranui/design-system/).
+La lista completa está en [tokens de estilo](/es/ranui/style-tokens#button); cuál elegir lo explica el [sistema de diseño](/es/design/design-system/).
 
 ## Buenas prácticas
 

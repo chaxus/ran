@@ -1,0 +1,25 @@
+/* Style switch — compact select of surface languages (solid / liquid glass).
+   Matches theme-switch chrome. On a glass page: fill only, no second blur. */
+:host {
+  display: var(--ran-surface-switch-display, inline-flex);
+  box-sizing: border-box;
+  width: var(--ran-surface-switch-width, 10.5rem);
+  min-width: var(--ran-surface-switch-min-width, 9rem);
+  max-width: var(--ran-surface-switch-max-width, 13rem);
+  flex: none;
+  vertical-align: middle;
+}
+
+.ran-surface-switch {
+  width: 100%;
+  --ran-select-min-height: var(--ran-surface-switch-trigger-min-height, 32px);
+  --ran-select-font-size: var(--ran-surface-switch-font-size, var(--ran-text-label-1, 13px));
+  --ran-select-border-radius: var(--ran-surface-switch-radius, var(--ran-radius-md, 8px));
+  --ran-select-background-color: var(
+    --ran-surface-switch-background,
+    color-mix(in srgb, var(--ran-color-bg-elevated, var(--ran-background-100)) 92%, transparent)
+  );
+  --ran-select-border: 1px solid
+    var(--ran-surface-switch-border-color, var(--ran-color-border-secondary, var(--ran-gray-200)));
+  --ran-select-background-image: none;
+}

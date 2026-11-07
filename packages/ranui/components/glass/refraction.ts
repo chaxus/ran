@@ -108,7 +108,9 @@ void main() {
     sdRoundRect(p + vec2(0.0, 0.5), halfSize, r) - sdRoundRect(p - vec2(0.0, 0.5), halfSize, r)
   ) + 1e-5);
   float u = clamp(1.0 + d / band, 0.0, 1.0);
-  float bend = u * u;
+  // Match lens.bendAt: smoothstep then cube — thin liquid lip, soft face.
+  float s = u * u * (3.0 - 2.0 * u);
+  float bend = s * s * s;
 
   // Each band of the spectrum is pulled inward by its own amount: blue the most.
   float spread = uDispersion / 100.0;

@@ -39,7 +39,7 @@ ocupando o seu lugar na linha.
 
 O ponto só codifica o estado pela cor; ele não explica o que a cor significa. Nunca deixe a
 cor ser a única coisa que distingue duas linhas. Veja as
-[diretrizes de design](/pt/ranui/design-guides/#accessibility).
+[diretrizes de design](/pt/design/design-guides/#accessibility).
 
 <ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">

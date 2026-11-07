@@ -57,8 +57,8 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       '',
       'For the CSS variables each element exposes see',
       `[style-tokens-public.md](${repo}/docs/style-tokens-public.md); for how to choose`,
-      `between them, the [design system](${href('/src/ranui/design-system/')}) and the`,
-      `[design guidelines](${href('/src/ranui/design-guides/')}). Usage guidance per element lives on its`,
+      `between them, the [design system](${href('/src/design/design-system/')}) and the`,
+      `[design guidelines](${href('/src/design/design-guides/')}). Usage guidance per element lives on its`,
       'own page in the sidebar; this is the exhaustive surface in one place.',
     ],
     eventLegend: [
@@ -91,7 +91,7 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       '',
       '每个元素暴露的 CSS 变量见',
       `[style-tokens-public.md](${repo}/docs/style-tokens-public.md)；如何在其中取舍见`,
-      `[设计系统](${href('/src/ranui/design-system/')})与[设计规范](${href('/src/ranui/design-guides/')})。`,
+      `[设计系统](${href('/src/design/design-system/')})与[设计规范](${href('/src/design/design-guides/')})。`,
       '单个元素的用法说明在侧边栏各自的页面里，这里是一次性列全的完整接口。',
     ],
     eventLegend: [
@@ -124,7 +124,7 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       '',
       '各要素が公開する CSS 変数は',
       `[style-tokens-public.md](${repo}/docs/style-tokens-public.md) を、使い分けは`,
-      `[デザインシステム](${href('/src/ranui/design-system/')})と[デザインガイドライン](${href('/src/ranui/design-guides/')})を参照してください。`,
+      `[デザインシステム](${href('/src/design/design-system/')})と[デザインガイドライン](${href('/src/design/design-guides/')})を参照してください。`,
       '個々の要素の使い方はサイドバーの各ページにあります。ここは全インターフェースを一望する場所です。',
     ],
     eventLegend: [
@@ -159,8 +159,8 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       '',
       'Para las variables CSS que expone cada elemento, consulta',
       `[style-tokens-public.md](${repo}/docs/style-tokens-public.md); para elegir entre ellas, el`,
-      `[sistema de diseño](${href('/src/ranui/design-system/')}) y la`,
-      `[guía de diseño](${href('/src/ranui/design-guides/')}). El uso de cada elemento se explica en su`,
+      `[sistema de diseño](${href('/src/design/design-system/')}) y la`,
+      `[guía de diseño](${href('/src/design/design-guides/')}). El uso de cada elemento se explica en su`,
       'propia página de la barra lateral; esto es la superficie completa en un solo sitio.',
     ],
     eventLegend: [
@@ -195,8 +195,8 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       '',
       'Para as variáveis CSS que cada elemento expõe, veja',
       `[style-tokens-public.md](${repo}/docs/style-tokens-public.md); para escolher entre elas, o`,
-      `[design system](${href('/src/ranui/design-system/')}) e as`,
-      `[diretrizes de design](${href('/src/ranui/design-guides/')}). O uso de cada elemento fica na página`,
+      `[design system](${href('/src/design/design-system/')}) e as`,
+      `[diretrizes de design](${href('/src/design/design-guides/')}). O uso de cada elemento fica na página`,
       'dele na barra lateral; aqui está toda a superfície em um só lugar.',
     ],
     eventLegend: [
@@ -230,7 +230,7 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       '',
       '각 엘리먼트가 노출하는 CSS 변수는',
       `[style-tokens-public.md](${repo}/docs/style-tokens-public.md)를, 무엇을 고를지는`,
-      `[디자인 시스템](${href('/src/ranui/design-system/')})과 [디자인 가이드](${href('/src/ranui/design-guides/')})를 보세요.`,
+      `[디자인 시스템](${href('/src/design/design-system/')})과 [디자인 가이드](${href('/src/design/design-guides/')})를 보세요.`,
       '엘리먼트별 사용법은 사이드바의 각 페이지에 있고, 여기는 전체 인터페이스를 한자리에 모은 곳입니다.',
     ],
     eventLegend: [
@@ -264,8 +264,8 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       '',
       'Die CSS-Variablen der einzelnen Elemente stehen in',
       `[style-tokens-public.md](${repo}/docs/style-tokens-public.md); zur Auswahl zwischen ihnen`,
-      `das [Designsystem](${href('/src/ranui/design-system/')}) und die`,
-      `[Designrichtlinien](${href('/src/ranui/design-guides/')}). Wie ein Element zu verwenden ist, steht auf`,
+      `das [Designsystem](${href('/src/design/design-system/')}) und die`,
+      `[Designrichtlinien](${href('/src/design/design-guides/')}). Wie ein Element zu verwenden ist, steht auf`,
       'seiner eigenen Seite in der Seitenleiste; hier ist die vollständige Oberfläche an einem Ort.',
     ],
     eventLegend: [
@@ -299,7 +299,7 @@ export const API_PAGE_COPY: Record<DocLocaleDir, ApiPageCopy> = {
       '',
       'متغیرهای CSS هر عنصر در',
       `[style-tokens-public.md](${repo}/docs/style-tokens-public.md) آمده است؛ برای انتخاب میان آن‌ها`,
-      `[سیستم طراحی](${href('/src/ranui/design-system/')}) و [راهنمای طراحی](${href('/src/ranui/design-guides/')}) را ببینید.`,
+      `[سیستم طراحی](${href('/src/design/design-system/')}) و [راهنمای طراحی](${href('/src/design/design-guides/')}) را ببینید.`,
       'شیوهٔ استفاده از هر عنصر در صفحهٔ خودش در نوار کناری است؛ اینجا کل سطح رابط یک‌جا آمده.',
     ],
     eventLegend: [

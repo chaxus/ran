@@ -136,7 +136,7 @@ r-tool-card {
 
 Part‌ها: `body` · `exit` · `file` · `hunk` · `io` · `io-text` · `line` · `location` · `locations` · `path` · `row`
 
-فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#tool-card) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/ranui/design-system/) آمده.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#tool-card) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/design/design-system/) آمده.
 
 ## همچنین ببینید
 

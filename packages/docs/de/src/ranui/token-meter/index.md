@@ -120,7 +120,7 @@ r-token-meter {
 
 Parts: `fill` · `meter` · `text` · `track`
 
-Die vollständige Liste steht in den [Style-Tokens](/de/ranui/style-tokens#token-meter); welches Token du wählst, klärt das [Designsystem](/de/ranui/design-system/).
+Die vollständige Liste steht in den [Style-Tokens](/de/ranui/style-tokens#token-meter); welches Token du wählst, klärt das [Designsystem](/de/design/design-system/).
 
 ## Bewährte Praxis
 
@@ -129,4 +129,4 @@ Die vollständige Liste steht in den [Style-Tokens](/de/ranui/style-tokens#token
 - **Eskaliere um den Meter herum, nicht in ihm.** Bei `level="over"` ist die nützliche Oberfläche ein
   Vorschlag (zusammenfassen, einen neuen Thread beginnen) — und der gehört der Anwendung.
 - **Animiere die Füllung nicht bei einem Themewechsel**: siehe die
-  [Designrichtlinien](/de/ranui/design-guides/#motion).
+  [Designrichtlinien](/de/design/design-guides/#motion).

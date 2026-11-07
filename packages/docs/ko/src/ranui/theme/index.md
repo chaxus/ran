@@ -7,8 +7,8 @@ description: 'ranui 의 런타임 테마 체계: initTheme / setTheme / getTheme
 ranui 스타일링의 **런타임** 쪽 절반입니다. 라이트·다크·시스템 모드 전환, 선택 저장, 그리고 토큰을
 그 자리에서 덮어쓰는 일을 다룹니다.
 
-토큰 자체 (이름이 무엇이고 각각 무엇을 위한 것인지) 는 [디자인 시스템](/ko/ranui/design-system/)이고,
-그중 무엇을 고를지의 규칙은 [디자인 가이드](/ko/ranui/design-guides/)입니다. 이 페이지는 그것을
+토큰 자체 (이름이 무엇이고 각각 무엇을 위한 것인지) 는 [디자인 시스템](/ko/design/design-system/)이고,
+그중 무엇을 고를지의 규칙은 [디자인 가이드](/ko/design/design-guides/)입니다. 이 페이지는 그것을
 _적용하는_ 이야기만 합니다.
 
 > **이럴 때 쓰세요.** ranui 앱에 라이트/다크 테마가 필요할 때. 로드 시 `initTheme`을 한 번 부르고,
@@ -68,6 +68,53 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 **SSR 안전**: `document` / `localStorage` / `matchMedia` 접근이 모두 보호되어 있어, 서버 렌더링 중에는
 이 함수들이 아무 일도 하지 않습니다 (예외도 던지지 않습니다).
 
+## 서피스 언어 (solid / glass)
+
+색 테마와 서피스 언어는 독립 축입니다. `setSurface('glass')`는 대상(보통 `<html>`)에 `data-ran-surface="glass"`를 씁니다. 파일럿 컨트롤 — `r-button`, `r-input`, `r-card`, `r-modal`, `r-message` — 은 그 속성 아래이거나 요소에 `surface="glass"`일 때 서리 처리됩니다. 문서급 glass에서 빠지려면 `surface="solid"`를 쓰세요.
+
+primary / danger 버튼과 toast 알약은 glass에서도 불투명합니다. `prefers-reduced-transparency: reduce`는 elevated 솔리드 토큰으로 돌아가며 [`r-glass`](/ko/ranui/glass/)와 같습니다.
+
+완전한 리퀴드 글래스 패널은 계속 [`r-glass`](/ko/ranui/glass/)를 쓰세요 — 서피스 축은 컨트롤 패밀리 frost이지 대체가 아닙니다.
+
+<ran-demo>
+  <div style="display: grid; gap: 16px;">
+    <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid (default)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+    <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass (`data-ran-surface`)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card surface="glass" heading="Glass card" description="Opt-in frosted plate." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+  </div>
+</ran-demo>
+
 ## 다크 모드가 동작하는 방식
 
 `setTheme('dark')`은 `<html>`에 `data-ran-theme="dark"`를 지정합니다. 그러면 스타일시트가 단일한 진실의
@@ -77,7 +124,7 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 알아 둘 만한 결과가 둘 있습니다.
 
 - **여러분의 CSS 도 의미 토큰을 쓰면 다크 모드를 공짜로 얻습니다.** 색을 직접 박아 넣거나 라이트 전용
-  대비값을 쓰면 어긋납니다. [내 CSS 에서 토큰 쓰기](/ko/ranui/design-system/#using-tokens-in-your-own-css)를
+  대비값을 쓰면 어긋납니다. [내 CSS 에서 토큰 쓰기](/ko/design/design-system/#using-tokens-in-your-own-css)를
   보세요.
 - **테마가 뒤집힐 때는 아무것도 전환해서는 안 됩니다.** CSS 는 색이 왜 바뀌었는지 알 수 없으므로, 팔레트
   프로퍼티에 `transition`이 걸려 있으면 테마를 바꿀 때 모든 엘리먼트가 저마다의 속도로 흐릿하게 변합니다.
@@ -126,7 +173,7 @@ clearThemeToken('--ran-color-primary');
   참조하는 모든 의미 토큰이 따라옵니다.
 - 정확히 한 엘리먼트만 바꾸려면 **컴포넌트** 토큰 (`--ran-btn-hover-background`) 을 덮어쓰세요.
 
-이 층 구조는 [디자인 시스템](/ko/ranui/design-system/#two-layers) 페이지에서 온전히 설명합니다.
+이 층 구조는 [디자인 시스템](/ko/design/design-system/#two-layers) 페이지에서 온전히 설명합니다.
 런타임 덮어쓰기는 대상에 붙는 인라인 스타일이라는 점을 기억하세요. 그 하위 트리에서는 스타일시트 규칙을
 이깁니다. 패널마다 다른 테마를 가능하게 하는 것도 이것이고, 지우는 것을 잊은 덮어쓰기를 나중에 찾기
 어렵게 만드는 것도 이것입니다.

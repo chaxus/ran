@@ -4,10 +4,12 @@ title: Ran Design
 
 # Ran Design
 
-특정 컴포넌트 라이브러리에 의존하지 않는, 제품 인터페이스를 위한 한 페이지 디자인 체크리스트입니다.
+레이아웃, 인터랙션, 모션, 증거 기반 리뷰를 위한 방법 — 특정 컴포넌트 라이브러리에 의존하지 않습니다.
 
-시작하기 전, 만드는 동안, 변경을 넘기기 전에 사용합니다. Steve Krug의 5초 테스트와 트렁크 테스트를 포함하며, 브라우저 테스트가 자동으로 확인하는 항목을 표시합니다.
+- [디자인 체크리스트](/design/guide)
+- [서피스 언어](/design/surface) (영어)
+- [디자인 시스템](/ko/design/design-system/)
+- [디자인 가이드](/ko/design/design-guides/)
+- [정보 구조](/ko/design/information-architecture/)
 
-- [디자인 체크리스트](/design/guide) (영어)
-
-[ranui](../ranui/) · [ranuts](../ranuts/) · [에이전트](../agents/)
+[ranui](../ranui/) · [ranuts](../ranuts/) · [Agents](../agents/)

@@ -9,7 +9,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 提取，因此不会与代码脱节。结构性与内部令牌已被过滤掉，剩下的就是可以放心依赖的样式接口。
 
 令牌可以设在任何能继承到的地方——`:root`、外层容器，或元素本身；如果某个语义令牌就能表达这次
-改动，优先用它，因为它一次影响所有组件。词汇表见[设计系统](/cn/src/ranui/design-system/)，
+改动，优先用它，因为它一次影响所有组件。词汇表见[设计系统](/cn/src/design/design-system/)，
 命名规则是 `--ran-{component}-{element}[-{state}]-{property}`。
 
 ## `attachments`
@@ -63,11 +63,11 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `button`
 
-- Tokens: 75
+- Tokens: 77
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 16 · skin: 2 · component: 48 · internal: 9 -->
+<!-- layers: semantic: 16 · skin: 2 · component: 49 · internal: 10 -->
 - `--ran-btn-active-background`
 - `--ran-btn-active-border-color`
 - `--ran-btn-active-scale`
@@ -96,6 +96,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-btn-font-family`
 - `--ran-btn-font-size`
 - `--ran-btn-font-weight`
+- `--ran-btn-glass-border-color`
 - `--ran-btn-hover-background`
 - `--ran-btn-hover-border-color`
 - `--ran-btn-hover-color`
@@ -141,6 +142,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-4`
+- `--ran-surface-glass-border`
 - `--ran-text-button-size`
 - `--ran-text-button-weight`
 
@@ -443,16 +445,13 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `glass`
 
-- Tokens: 28
+- Tokens: 25
 - Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 6 · internal: 22 -->
-- `--ran-backdrop-edge-light`
-- `--ran-backdrop-highlight`
+<!-- layers: semantic: 6 · internal: 19 -->
 - `--ran-backdrop-ink-dark`
 - `--ran-backdrop-ink-light`
-- `--ran-backdrop-shadow-light`
 - `--ran-color-bg-elevated`
 - `--ran-glass-blur`
 - `--ran-glass-border`
@@ -518,11 +517,11 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `input`
 
-- Tokens: 88
+- Tokens: 89
 - Parts: 4
 
 ### Tokens
-<!-- layers: semantic: 14 · skin: 1 · component: 61 · internal: 12 -->
+<!-- layers: semantic: 14 · skin: 1 · component: 62 · internal: 12 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-subtle`
 - `--ran-color-border`
@@ -582,6 +581,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `--ran-input-error-border-color`
 - `--ran-input-font-family`
 - `--ran-input-font-size`
+- `--ran-input-glass-border-color`
 - `--ran-input-hover-border-color`
 - `--ran-input-icon-align-items`
 - `--ran-input-icon-justify-content`
@@ -1888,6 +1888,33 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 ### Parts
 - `dot`
 
+## `surface-switch`
+
+- Tokens: 15
+- Parts: 2
+
+### Tokens
+<!-- layers: semantic: 3 · component: 5 · internal: 7 -->
+- `--ran-background-100`
+- `--ran-color-bg-elevated`
+- `--ran-color-border-secondary`
+- `--ran-gray-200`
+- `--ran-radius-md`
+- `--ran-select-background-color`
+- `--ran-select-background-image`
+- `--ran-select-border`
+- `--ran-select-border-radius`
+- `--ran-select-font-size`
+- `--ran-surface-switch-background`
+- `--ran-surface-switch-border-color`
+- `--ran-surface-switch-font-size`
+- `--ran-surface-switch-radius`
+- `--ran-text-label-1`
+
+### Parts
+- `option ${choice}`
+- `select`
+
 ## `tab`
 
 - Tokens: 43
@@ -1961,37 +1988,31 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ## `theme-switch`
 
-- Tokens: 22
+- Tokens: 16
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 6 · skin: 1 · internal: 15 -->
-- `--ran-color-bg-hover`
-- `--ran-color-border`
-- `--ran-color-focus`
-- `--ran-color-text`
-- `--ran-color-text-secondary`
-- `--ran-radius-full`
-- `--ran-size-1`
-- `--ran-size-5`
-- `--ran-skin-border-style`
-- `--ran-space-1`
+<!-- layers: semantic: 3 · component: 5 · internal: 8 -->
+- `--ran-background-100`
+- `--ran-color-bg-elevated`
+- `--ran-color-border-secondary`
+- `--ran-gray-200`
+- `--ran-radius-md`
+- `--ran-select-background-color`
+- `--ran-select-background-image`
+- `--ran-select-border`
+- `--ran-select-border-radius`
+- `--ran-select-font-size`
+- `--ran-text-label-1`
 - `--ran-theme-switch-`
 - `--ran-theme-switch-background`
 - `--ran-theme-switch-border-color`
-- `--ran-theme-switch-button-active-background`
-- `--ran-theme-switch-button-active-color`
-- `--ran-theme-switch-button-color`
-- `--ran-theme-switch-button-hover-color`
-- `--ran-theme-switch-button-size`
-- `--ran-theme-switch-gap`
-- `--ran-theme-switch-icon-size`
+- `--ran-theme-switch-font-size`
 - `--ran-theme-switch-radius`
-- `--ran-theme-switch-touch-size`
 
 ### Parts
-- `button ${choice}`
-- `switch`
+- `option ${choice}`
+- `select`
 
 ## `token-meter`
 

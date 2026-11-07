@@ -96,7 +96,7 @@ pela biblioteca de componentes.
 
 ## Componentes
 
-41 elementos. Todos eles, com seus atributos, propriedades, eventos, slots e nomes de `::part()`,
+42 elementos. Todos eles, com seus atributos, propriedades, eventos, slots e nomes de `::part()`,
 estão na [referência da API de elementos](/pt/ranui/api).
 
 **Comuns**: [Button](/pt/ranui/button/) · [Icon](/pt/ranui/icon/) ·
@@ -176,8 +176,8 @@ então defini-los no `:root`, num contêiner ou no próprio elemento funciona ig
 **3. o atributo `sheet`** para injetar CSS no shadow root ·
 **4. conteúdo em slots**, que fica no seu documento e recebe o CSS da sua página.
 
-Os nomes dos tokens são o [design system](/pt/ranui/design-system/); as regras para escolher
-entre eles são as [diretrizes de design](/pt/ranui/design-guides/); a mecânica está nas
+Os nomes dos tokens são o [design system](/pt/design/design-system/); as regras para escolher
+entre eles são as [diretrizes de design](/pt/design/design-guides/); a mecânica está nas
 [diretrizes de código](/pt/ranui/coding-guides/#styling-across-the-shadow-boundary).
 
 ## Eventos
@@ -201,17 +201,17 @@ então `addEventListener` é o caminho a seguir.
 
 ## Para onde ir em seguida
 
-| Se você quiser…                               | Leia                                             |
-| --------------------------------------------- | ------------------------------------------------ |
-| Consultar a API exata de um elemento          | [API de elementos](/pt/ranui/api)                |
-| Saber qual token usar, e por quê              | [Design system](/pt/ranui/design-system/)        |
-| Montar uma tela que pareça um sistema só      | [Diretrizes de design](/pt/ranui/design-guides/) |
-| Integrar o ranui a um aplicativo corretamente | [Diretrizes de código](/pt/ranui/coding-guides/) |
-| Acrescentar claro/escuro, ou reestilizar tudo | [Temas](/pt/ranui/theme/)                        |
-| Traduzir a interface                          | [i18n](/pt/ranui/i18n/)                          |
-| Renderizar num servidor                       | [Renderização no servidor](/pt/ranui/ssr/)       |
-| Montar views reativas sem framework           | [Builder](/pt/ranui/builder/)                    |
-| Ver o que mudou antes de atualizar            | [Registro de alterações](/pt/ranui/changelog)    |
+| Se você quiser…                               | Leia                                              |
+| --------------------------------------------- | ------------------------------------------------- |
+| Consultar a API exata de um elemento          | [API de elementos](/pt/ranui/api)                 |
+| Saber qual token usar, e por quê              | [Design system](/pt/design/design-system/)        |
+| Montar uma tela que pareça um sistema só      | [Diretrizes de design](/pt/design/design-guides/) |
+| Integrar o ranui a um aplicativo corretamente | [Diretrizes de código](/pt/ranui/coding-guides/)  |
+| Acrescentar claro/escuro, ou reestilizar tudo | [Temas](/pt/ranui/theme/)                         |
+| Traduzir a interface                          | [i18n](/pt/ranui/i18n/)                           |
+| Renderizar num servidor                       | [Renderização no servidor](/pt/ranui/ssr/)        |
+| Montar views reativas sem framework           | [Builder](/pt/ranui/builder/)                     |
+| Ver o que mudou antes de atualizar            | [Registro de alterações](/pt/ranui/changelog)     |
 
 ## Suporte a navegadores
 

@@ -166,7 +166,7 @@ r-checkbox {
 
 Part: `checkbox` · `inner` · `input` · `label` · `wrapper`
 
-전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#checkbox)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/ranui/design-system/)에 있습니다.
+전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#checkbox)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/design/design-system/)에 있습니다.
 
 ## 권장 사항
 

@@ -1,5 +1,23 @@
+@import url('../../theme/surface-frost.less');
+
 :host {
   position: var(--ran-modal-host-position, static);
+}
+
+.ran-modal-glass-surface() {
+  .ran-modal-dialog {
+    .ran-frost-overlay();
+    .ran-frost-overlay-reduced();
+  }
+}
+
+:host([surface='glass']) {
+  .ran-modal-glass-surface();
+}
+
+/* Chromium drops :host-context(...):not(...); put the host check inside :host(). */
+:host-context([data-ran-surface='glass']):host(:not([surface='solid'])) {
+  .ran-modal-glass-surface();
 }
 
 .ran-modal-root {

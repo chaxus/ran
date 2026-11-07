@@ -100,7 +100,7 @@ r-reasoning {
 
 Parts: `body` · `row` · `text`
 
-The full list is in [style tokens](/ranui/style-tokens#reasoning); which token to reach for is the [design system](/ranui/design-system/).
+The full list is in [style tokens](/ranui/style-tokens#reasoning); which token to reach for is the [design system](/design/design-system/).
 
 ## See also
 

@@ -4,10 +4,13 @@ title: Ran Design
 
 # Ran Design
 
-A one-page design checklist for building product interfaces, independent of any component library.
+Methods for layout, interaction, motion and evidence-based review — independent of any component
+library. ranui's tokens and adapters map these methods into concrete values.
 
-Use it before you start, while you build and before you hand a change back. It includes Steve Krug's five-second and trunk tests, and marks the items a browser test checks automatically.
-
-- [Design checklist](/design/guide)
+- [Design checklist](/design/guide) — the one-page acceptance guide
+- [Surface language](/design/surface) — solid versus liquid glass, orthogonal to colour theme
+- [Design system](/design/design-system/) — the token vocabulary (ranui's `--ran-*` scales)
+- [Design guidelines](/design/design-guides/) — how to choose between tokens on a screen
+- [Information architecture](/design/information-architecture/) — what shape the page should take
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [Agents](../agents/)

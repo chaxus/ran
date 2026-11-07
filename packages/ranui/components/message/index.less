@@ -1,3 +1,5 @@
+@import url('../../theme/surface-frost.less');
+
 :host {
   // A bare custom element defaults to `display: inline`, which silently drops
   // `transform` entirely (it only applies to block/inline-block/etc. boxes) —
@@ -194,4 +196,21 @@
   :host([data-state]) {
     transform: none;
   }
+}
+
+// Glass frost for status notices only; toast stays the inverse solid pill.
+.ran-message-glass-surface() {
+  .ran-message-notice-content {
+    .ran-frost-overlay();
+    .ran-frost-overlay-reduced();
+  }
+}
+
+:host([surface='glass']:not([type='toast'])) {
+  .ran-message-glass-surface();
+}
+
+/* Chromium drops :host-context(...):not(...); put the host check inside :host(). */
+:host-context([data-ran-surface='glass']):host(:not([surface='solid']):not([type='toast'])) {
+  .ran-message-glass-surface();
 }

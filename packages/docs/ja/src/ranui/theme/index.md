@@ -7,8 +7,8 @@ description: 'ranui の実行時テーマ機構：initTheme / setTheme / getThem
 ranui のスタイリングの**実行時**の半分です。ライト、ダーク、システムモードの切り替え、選択の保存、
 そしてトークンをその場で上書きすることを扱います。
 
-トークンそのもの（何という名前で、それぞれ何のためにあるか）は[デザインシステム](/ja/ranui/design-system/)、
-どれを選ぶかの基準は[デザインガイドライン](/ja/ranui/design-guides/)です。このページは、それらを
+トークンそのもの（何という名前で、それぞれ何のためにあるか）は[デザインシステム](/ja/design/design-system/)、
+どれを選ぶかの基準は[デザインガイドライン](/ja/design/design-guides/)です。このページは、それらを
 _適用する_ 話だけをします。
 
 > **使いどころ**：ranui のアプリでライト／ダークのテーマが必要なとき。読み込み時に `initTheme` を一度呼び、
@@ -69,6 +69,53 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 **SSR で安全**：`document` / `localStorage` / `matchMedia` へのアクセスはすべてガードされているので、
 サーバー描画中これらの関数は何もしません（例外も投げません）。
 
+## サーフェス言語（solid / glass）
+
+カラーテーマとサーフェス言語は独立した軸です。`setSurface('glass')` は対象（通常は `<html>`）に `data-ran-surface="glass"` を書き込みます。パイロットコントロール（`r-button`、`r-input`、`r-card`、`r-modal`、`r-message`）はその属性の下、または要素自身が `surface="glass"` のときに曇ります。ドキュメント級のガラスから外すには `surface="solid"` を付けます。
+
+プライマリ／危険ボタンと toast ピルはガラスでも実色のままです。`prefers-reduced-transparency: reduce` は elevated の実色トークンへ落ち、[`r-glass`](/ja/ranui/glass/) と同じ契約です。
+
+液体ガラスのパネル（屈折・マテリアル）は引き続き [`r-glass`](/ja/ranui/glass/) を使います——サーフェス軸はコントロール族のフロストであり、その置き換えではありません。
+
+<ran-demo>
+  <div style="display: grid; gap: 16px;">
+    <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid (default)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+    <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass (`data-ran-surface`)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card surface="glass" heading="Glass card" description="Opt-in frosted plate." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+  </div>
+</ran-demo>
+
 ## ダークモードの仕組み
 
 `setTheme('dark')` は `<html>` に `data-ran-theme="dark"` を設定します。するとスタイルシートは、
@@ -80,7 +127,7 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 - **あなたの CSS もセマンティックトークンを使っていればダークモードが無料で付いてきます。** 色を
   ベタ書きしたり、ライト専用のフォールバックを書いたりすると壊れます。
-  [自分の CSS でトークンを使う](/ja/ranui/design-system/#using-tokens-in-your-own-css)を参照してください。
+  [自分の CSS でトークンを使う](/ja/design/design-system/#using-tokens-in-your-own-css)を参照してください。
 - **テーマの切り替えで何もトランジションさせてはいけません。** CSS には色が変わった理由が分からないので、
   パレットのプロパティに `transition` があると、テーマを切り替えたときにすべての要素がそれぞれの速さで
   淡く変わってしまいます。ranui のコンポーネントは意図的にそうしていません。あなたのもそうすべきです。
@@ -129,7 +176,7 @@ clearThemeToken('--ran-color-primary');
 - ちょうど一つの要素だけを変えたいなら、**コンポーネント**トークン（`--ran-btn-hover-background`）を
   上書きします。
 
-この層構造は[デザインシステム](/ja/ranui/design-system/#two-layers)のページで詳しく説明しています。
+この層構造は[デザインシステム](/ja/design/design-system/#two-layers)のページで詳しく説明しています。
 実行時の上書きは対象へのインラインスタイルであることに注意してください。その部分木ではスタイルシートの
 規則に勝ちます。これがパネルごとのテーマを成り立たせている一方で、消し忘れた上書きを後から見つけにくく
 している理由でもあります。

@@ -1,6 +1,6 @@
 ---
 title: ranui 元素 API
-description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。'
+description: 'ranui 的全部自定义元素 —— 42 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。'
 ---
 
 # ranui 元素 API（自动生成）
@@ -11,14 +11,14 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
 
 每个元素暴露的 CSS 变量见
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)；如何在其中取舍见
-[设计系统](/cn/src/ranui/design-system/)与[设计规范](/cn/src/ranui/design-guides/)。
+[设计系统](/cn/src/design/design-system/)与[设计规范](/cn/src/design/design-guides/)。
 单个元素的用法说明在侧边栏各自的页面里，这里是一次性列全的完整接口。
 
 每个事件都标注了它的派发选项：`bubbles`（冒泡）、`composed`（可穿过 Shadow 边界）、
 `cancelable`（`preventDefault()` 可否决）。**`element-only`** 表示三者皆无——在祖先节点上
 做事件委托永远收不到它，请把监听绑在元素本身上。
 
-**共 41 个自定义元素。**
+**共 42 个自定义元素。**
 
 ## `<r-attachments>`
 
@@ -582,6 +582,17 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
 - **插槽**: —
 - **Part**: `dot`
 
+## `<r-surface-switch>`
+
+源码: `components/surface-switch/index.ts`
+
+- **属性（attribute）**: `label`, `label-glass`, `label-solid`, `sheet: string`
+- **属性值（property）**: `sheet: string`, `value: RanSurfaceName`
+- **事件**:
+  - `change` · bubbles, composed · detail `{ surface }`
+- **插槽**: —
+- **Part**: `option ${choice}`, `select`
+
 ## `<r-tab>`
 
 源码: `components/tabpane/index.ts`
@@ -610,11 +621,11 @@ description: 'ranui 的全部自定义元素 —— 41 个元素的属性、属�
 - **属性（attribute）**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **属性值（property）**:
   - `sheet: string`
-  - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.
+  - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **事件**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **插槽**: —
-- **Part**: `button ${choice}`, `switch`
+- **Part**: `option ${choice}`, `select`
 
 ## `<r-token-meter>`
 

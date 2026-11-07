@@ -1,32 +1,29 @@
 import themeSwitchCss from './index.less?inline';
-import { ButtonBuilder, Div, EventManager, isSSR } from '@/utils/builder';
+import { EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute } from '@/utils/component';
-import { syncSheetAttribute } from '@/utils/component';
+import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { getTheme, setTheme } from '@/utils/theme';
 import type { RanThemeName } from '@/utils/theme';
 import { uiText } from '@/utils/ui-text';
 import { themeSwitchText } from './text';
+import '@/components/select';
 
 const CHOICES: RanThemeName[] = ['system', 'light', 'dark'];
 
-/* 16px stroke glyphs (currentColor): monitor / sun / moon. */
-const ICONS: Record<RanThemeName, string> = {
-  system:
-    '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-  light:
-    '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v1.8M8 13.2V15M15 8h-1.8M2.8 8H1m11.4-4.4-1.3 1.3M4.9 11.1l-1.3 1.3m9.8 0-1.3-1.3M4.9 4.9 3.6 3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-  dark: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.5A6 6 0 0 1 6.5 2.5a6 6 0 1 0 7 7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
-};
-
 const SYNC_EVENT = 'ran-theme-switch-sync';
 
+const TEXT_KEY: Record<RanThemeName, `themeSwitch.${RanThemeName}`> = {
+  system: 'themeSwitch.system',
+  light: 'themeSwitch.light',
+  dark: 'themeSwitch.dark',
+};
+
 /**
- * `<r-theme-switch>` — a three-state (system / light / dark) segmented control
- * wired to ranui's theme API (`setTheme`/`getTheme`, localStorage `ran-theme`).
- * Multiple instances on one page stay in sync; `label-*` attributes localize
- * the aria-labels. Emits a composed `change` event with `{ theme }`.
+ * `<r-theme-switch>` — a select of color themes (system / light / dark) wired to
+ * ranui's theme API. Orthogonal to surface/style (`r-surface-switch`). Multiple
+ * instances stay in sync; `label-*` attributes localize option text. Emits a
+ * composed `change` event with `{ theme }`.
  */
 export class ThemeSwitch extends RanElement {
   static get observedAttributes(): string[] {
@@ -35,36 +32,28 @@ export class ThemeSwitch extends RanElement {
 
   _events = new EventManager();
   _shadowDom: ShadowRoot;
-  _group: HTMLDivElement;
-  /** The three choice buttons, in {@link CHOICES} order. */
-  _buttons: HTMLButtonElement[];
+  _select: HTMLElement & { value: string };
+  _options: Map<RanThemeName, HTMLElement> = new Map();
 
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, themeSwitchCss);
-    // Built before the factory, not inside it: these are the elements `_syncLabels` and
-    // `_reflect` drive on every theme change, and a list assembled inside a factory that
-    // may not run would leave both silently updating nothing.
-    // SVG glyphs are innerHTML, set client-only (like r-icon; the SSR shadow renders empty
-    // and the client rebuilds it).
-    this._buttons = CHOICES.map((choice) => {
-      const button = ButtonBuilder()
-        .attr('type', 'button')
-        .data('choice', choice)
-        .attr('part', `button ${choice}`)
-        .aria('pressed', 'false')
-        .build() as HTMLButtonElement;
-      if (!isSSR) button.innerHTML = ICONS[choice];
-      return button;
+
+    const options = CHOICES.map((choice) => {
+      const option = View('r-option').attr('value', choice).attr('part', `option ${choice}`).build() as HTMLElement;
+      this._options.set(choice, option);
+      return option;
     });
-    // Built via the isSSR-aware builder (not raw document.*) so the constructor is SSR-safe.
-    this._group = Div()
+
+    this._select = View('r-select')
       .class('ran-theme-switch')
-      .attr('part', 'switch')
-      .role('group')
-      .children(this._buttons)
-      .build() as HTMLDivElement;
-    this._shadowDom.appendChild(this._group);
+      .attr('part', 'select')
+      .attr('trigger', 'click')
+      .attr('value', 'system')
+      .children(...options)
+      .build() as HTMLElement & { value: string };
+
+    this._shadowDom.appendChild(this._select);
   }
 
   get sheet(): string {
@@ -74,50 +63,43 @@ export class ThemeSwitch extends RanElement {
     setStringAttribute(this, 'sheet', v);
   }
 
-  /** Current selection; falls back to 'system' when nothing is forced. */
+  /** Current color theme; falls back to 'system' when nothing is forced. */
   get value(): RanThemeName {
     return getTheme() || 'system';
   }
   set value(v: RanThemeName) {
-    if (CHOICES.includes(v)) this._select(v);
+    if (CHOICES.includes(v)) this._selectChoice(v);
   }
 
   _label(choice: RanThemeName): string {
-    const fallback = ({ system: 'themeSwitch.system', light: 'themeSwitch.light', dark: 'themeSwitch.dark' } as const)[
-      choice
-    ];
-    return this.getAttribute(`label-${choice}`) || uiText(themeSwitchText, fallback, this);
+    return this.getAttribute(`label-${choice}`) || uiText(themeSwitchText, TEXT_KEY[choice], this);
+  }
+
+  _groupLabel(): string {
+    return this.getAttribute('label') || uiText(themeSwitchText, 'themeSwitch.label', this);
   }
 
   _syncLabels(): void {
-    this._group.setAttribute(
-      'aria-label',
-      this.getAttribute('label') || uiText(themeSwitchText, 'themeSwitch.label', this),
-    );
-    for (const button of this._buttons) {
-      button.setAttribute('aria-label', this._label(button.dataset.choice as RanThemeName));
+    this._select.setAttribute('aria-label', this._groupLabel());
+    for (const [choice, option] of this._options) {
+      option.textContent = this._label(choice);
     }
   }
 
   _reflect(): void {
     const current = this.value;
-    for (const button of this._buttons) {
-      button.setAttribute('aria-pressed', button.dataset.choice === current ? 'true' : 'false');
-    }
+    if (this._select.value !== current) this._select.value = current;
   }
 
-  _select(choice: RanThemeName): void {
+  _selectChoice(choice: RanThemeName): void {
     setTheme(choice);
     this._reflect();
     this._syncMeta(choice);
-    // keep sibling instances (e.g. header + footer) in step
     document.dispatchEvent(new CustomEvent(SYNC_EVENT));
     this.dispatchEvent(new CustomEvent('change', { detail: { theme: choice }, bubbles: true, composed: true }));
   }
 
-  /** Keep <meta name="theme-color"> (browser/PWA chrome) in step. Forced
-   * themes get the page's resolved background (no hardcoded colors); 'system'
-   * restores each meta's original — possibly media-qualified — content. */
+  /** Keep <meta name="theme-color"> in step with the resolved color theme. */
   _syncMeta(choice: RanThemeName): void {
     if (typeof requestAnimationFrame === 'undefined') return;
     const metas = document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
@@ -130,7 +112,6 @@ export class ThemeSwitch extends RanElement {
         if (choice === 'system') {
           meta.setAttribute('content', meta.dataset.ranOriginalContent);
         } else {
-          // token layer first (body backgrounds are often transparent)
           const bg =
             getComputedStyle(document.documentElement).getPropertyValue('--ran-color-bg').trim() ||
             getComputedStyle(document.body).backgroundColor;
@@ -140,10 +121,10 @@ export class ThemeSwitch extends RanElement {
     });
   }
 
-  _handleClick = (event: MouseEvent): void => {
-    const button = (event.target as HTMLElement).closest?.('button');
-    const choice = button?.dataset.choice as RanThemeName | undefined;
-    if (choice && CHOICES.includes(choice)) this._select(choice);
+  _handleSelectChange = (event: Event): void => {
+    const detail = (event as CustomEvent<{ value?: string }>).detail;
+    const choice = (detail?.value || this._select.value) as RanThemeName;
+    if (CHOICES.includes(choice) && choice !== this.value) this._selectChoice(choice);
   };
 
   _handleSync = (): void => this._reflect();
@@ -156,9 +137,8 @@ export class ThemeSwitch extends RanElement {
     this.handlerExternalCss();
     this._syncLabels();
     this._reflect();
-    this._events.on(this._group, 'click', this._handleClick as EventListener);
+    this._events.on(this._select, 'change', this._handleSelectChange as EventListener);
     document.addEventListener(SYNC_EVENT, this._handleSync);
-    // cross-tab sync: another tab flipping the theme updates this control too
     if (typeof window !== 'undefined') window.addEventListener('storage', this._handleSync);
   }
 

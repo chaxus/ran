@@ -279,4 +279,36 @@
      4px literal in button/checkbox/input/modal/message; formalized here the
      same way border-width already was. */
   --ran-skin-border-image-width: 4px;
+
+  /* ── Surface language: glass (explicit; default face stays solid) ─
+     Apple macOS 27 Liquid Glass (Light Fill+Shadow + GLASS effect): Small UI
+     blur for controls, Large UI blur for overlays. Refraction stays on r-glass.
+     Activate with setSurface('glass') / data-ran-surface="glass". */
+  /* Apple Light Fill is ~0.7 white LIGHTEN — keep frost readable on pale pages. */
+  --ran-surface-glass-blur: 12px;
+  --ran-surface-glass-saturate: 180%;
+  --ran-surface-glass-brightness: 1.08;
+  --ran-surface-glass-fill: rgba(255, 255, 255, 0.55);
+  --ran-surface-glass-specular:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.14) 24%, transparent 48%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.28) 0%, transparent 30%);
+  --ran-surface-glass-border: rgba(255, 255, 255, 0.72);
+  --ran-surface-glass-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.14), 0 0 0 0.5px rgba(255, 255, 255, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4), inset 0 0 0 0.5px rgba(255, 255, 255, 0.5);
+  --ran-surface-glass-overlay-blur: 18px;
+  --ran-surface-glass-overlay-fill: rgba(255, 255, 255, 0.48);
+  --ran-surface-glass-overlay-specular:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.12) 24%, transparent 48%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.22) 0%, transparent 30%),
+    radial-gradient(120% 55% at 50% -8%, rgba(255, 255, 255, 0.28), transparent 58%);
+  --ran-surface-glass-overlay-border: rgba(255, 255, 255, 0.72);
+  --ran-surface-glass-overlay-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.25), 0 0 0 0.5px rgba(255, 255, 255, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4), inset 0 0 0 0.5px rgba(255, 255, 255, 0.5),
+    inset 0 -24px 48px rgba(255, 255, 255, 0.1);
+  --ran-surface-glass-solid-fallback: var(--ran-color-bg-elevated);
+  --ran-surface-glass-solid-shadow: var(--ran-shadow-elevated);
+  --ran-surface-glass-overlay-solid-fallback: var(--ran-color-bg-elevated);
+  --ran-surface-glass-overlay-solid-shadow: var(--ran-shadow-modal);
 }

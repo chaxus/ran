@@ -37,7 +37,7 @@ description: 'ranui の StateDot（<r-state-dot>）は、光晕と芯を一つ�
 
 この点は色でしか状態を伝えず、その色が何を意味するかは説明しません。二つの行を見分ける手がかりが
 色だけ、という状態には決してしないでください。詳しくは
-[デザインガイドライン](/ja/ranui/design-guides/#accessibility)を参照。
+[デザインガイドライン](/ja/design/design-guides/#accessibility)を参照。
 
 <ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">

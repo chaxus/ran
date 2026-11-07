@@ -136,7 +136,7 @@ r-conversation {
 
 Part‌ها: `conversation` · `empty` · `footer` · `list` · `older`
 
-فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#conversation) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/ranui/design-system/) آمده.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#conversation) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/design/design-system/) آمده.
 
 ## همچنین ببینید
 
