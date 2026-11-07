@@ -13,8 +13,8 @@ em inglês.
 
 Para as variáveis CSS que cada elemento expõe, veja
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md); para escolher entre elas, o
-[design system](/pt/ranui/design-system/) e as
-[diretrizes de design](/pt/ranui/design-guides/). O uso de cada elemento fica na página
+[design system](/pt/src/ranui/design-system/) e as
+[diretrizes de design](/pt/src/ranui/design-guides/). O uso de cada elemento fica na página
 dele na barra lateral; aqui está toda a superfície em um só lugar.
 
 Cada evento informa as opções com que é despachado: `bubbles`, `composed` (cruza a
