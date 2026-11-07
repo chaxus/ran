@@ -206,8 +206,8 @@ da dies gewöhnliche DOM-Elemente sind — sie erlauben aber nur einen Handler u
 | Wenn du … willst                             | Lies                                           |
 | -------------------------------------------- | ---------------------------------------------- |
 | die genaue API eines Elements nachschlagen   | [Element-API](/de/ranui/api)                   |
-| wissen, welches Token du nimmst und warum    | [Designsystem](/de/design/design-system/)       |
-| einen Screen bauen, der wie ein System wirkt | [Designrichtlinien](/de/design/design-guides/)  |
+| wissen, welches Token du nimmst und warum    | [Designsystem](/de/design/design-system/)      |
+| einen Screen bauen, der wie ein System wirkt | [Designrichtlinien](/de/design/design-guides/) |
 | ranui sauber in eine App einbinden           | [Coding-Richtlinien](/de/ranui/coding-guides/) |
 | Hell/Dunkel ergänzen oder alles umgestalten  | [Theming](/de/ranui/theme/)                    |
 | die Oberfläche übersetzen                    | [i18n](/de/ranui/i18n/)                        |

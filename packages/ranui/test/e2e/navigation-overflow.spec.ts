@@ -78,9 +78,7 @@ test('theme switch updates the accessible select label after mounting', async ({
   await mount(page, '<r-theme-switch id="theme"></r-theme-switch>');
   await page.locator('#theme').evaluate((node) => node.setAttribute('label', 'Workspace appearance'));
   await expect
-    .poll(() =>
-      insideShadow(page, '#theme', (root) => root.querySelector('r-select')!.getAttribute('aria-label')),
-    )
+    .poll(() => insideShadow(page, '#theme', (root) => root.querySelector('r-select')!.getAttribute('aria-label')))
     .toBe('Workspace appearance');
 });
 
@@ -102,7 +100,11 @@ test('theme switch select trigger meets touch size and synchronizes siblings', a
     });
     await expect
       .poll(() =>
-        insideShadow(page, '#sibling', (root) => (root.querySelector('r-select') as HTMLElement & { value: string }).value),
+        insideShadow(
+          page,
+          '#sibling',
+          (root) => (root.querySelector('r-select') as HTMLElement & { value: string }).value,
+        ),
       )
       .toBe('dark');
   } finally {

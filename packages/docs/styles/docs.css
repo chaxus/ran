@@ -350,8 +350,7 @@ a {
     transparent 62%
   );
   --glass-depth:
-    0 1px 0 rgba(255, 255, 255, 0.08), 0 14px 36px -14px rgba(0, 0, 0, 0.55),
-    0 28px 56px -28px rgba(0, 0, 0, 0.4);
+    0 1px 0 rgba(255, 255, 255, 0.08), 0 14px 36px -14px rgba(0, 0, 0, 0.55), 0 28px 56px -28px rgba(0, 0, 0, 0.4);
   --glass-inset:
     inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -0.5px 0 rgba(0, 0, 0, 0.35),
     inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
@@ -1952,11 +1951,7 @@ ran-demo {
     radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.55) 0 18%, transparent 19%),
     radial-gradient(circle at 78% 28%, rgba(40, 60, 100, 0.14) 0 14%, transparent 15%),
     radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.4) 0 16%, transparent 17%),
-    repeating-linear-gradient(
-      -18deg,
-      transparent 0 10px,
-      rgba(90, 120, 170, 0.07) 10px 12px
-    ),
+    repeating-linear-gradient(-18deg, transparent 0 10px, rgba(90, 120, 170, 0.07) 10px 12px),
     radial-gradient(ellipse 90% 80% at 16% 18%, rgba(120, 170, 230, 0.38), transparent 52%),
     radial-gradient(ellipse 80% 70% at 84% 82%, rgba(180, 150, 200, 0.28), transparent 48%),
     linear-gradient(155deg, #e4ebf5 0%, #efeaf4 55%, #e8ebf2 100%);
@@ -1967,11 +1962,7 @@ ran-demo {
     radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.12) 0 18%, transparent 19%),
     radial-gradient(circle at 78% 28%, rgba(120, 160, 220, 0.2) 0 14%, transparent 15%),
     radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.08) 0 16%, transparent 17%),
-    repeating-linear-gradient(
-      -18deg,
-      transparent 0 10px,
-      rgba(140, 170, 220, 0.08) 10px 12px
-    ),
+    repeating-linear-gradient(-18deg, transparent 0 10px, rgba(140, 170, 220, 0.08) 10px 12px),
     radial-gradient(ellipse 90% 80% at 16% 18%, rgba(70, 110, 170, 0.4), transparent 52%),
     radial-gradient(ellipse 80% 70% at 84% 82%, rgba(120, 80, 130, 0.3), transparent 48%),
     linear-gradient(155deg, #141820 0%, #12141a 55%, #16121c 100%);
@@ -1983,11 +1974,7 @@ ran-demo {
       radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.12) 0 18%, transparent 19%),
       radial-gradient(circle at 78% 28%, rgba(120, 160, 220, 0.2) 0 14%, transparent 15%),
       radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.08) 0 16%, transparent 17%),
-      repeating-linear-gradient(
-        -18deg,
-        transparent 0 10px,
-        rgba(140, 170, 220, 0.08) 10px 12px
-      ),
+      repeating-linear-gradient(-18deg, transparent 0 10px, rgba(140, 170, 220, 0.08) 10px 12px),
       radial-gradient(ellipse 90% 80% at 16% 18%, rgba(70, 110, 170, 0.4), transparent 52%),
       radial-gradient(ellipse 80% 70% at 84% 82%, rgba(120, 80, 130, 0.3), transparent 48%),
       linear-gradient(155deg, #141820 0%, #12141a 55%, #16121c 100%);
@@ -2137,7 +2124,10 @@ ran-demo p {
     background: var(--glass-specular), var(--glass-fill);
     -webkit-backdrop-filter: blur(26px) saturate(175%) brightness(1.04);
     backdrop-filter: blur(26px) saturate(175%) brightness(1.04);
-    box-shadow: var(--glass-depth), var(--glass-inset), 0 0 0 1px var(--glass-rim-cool);
+    box-shadow:
+      var(--glass-depth),
+      var(--glass-inset),
+      0 0 0 1px var(--glass-rim-cool);
   }
   :root[data-ran-surface='glass'] body.has-sidebar .layout {
     gap: 0 24px;

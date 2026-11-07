@@ -11,12 +11,12 @@ restyles everything that consumes it.
 
 Four pages answer four different questions, and they are deliberately separate:
 
-| Page                                                         | Answers                                             |
-| ------------------------------------------------------------ | --------------------------------------------------- |
-| **Design system** (this page)                                | _What_ the tokens are: the vocabulary               |
+| Page                                                          | Answers                                             |
+| ------------------------------------------------------------- | --------------------------------------------------- |
+| **Design system** (this page)                                 | _What_ the tokens are: the vocabulary               |
 | [Design guidelines](/design/design-guides/)                   | _How to choose_ between them when building a screen |
 | [Information architecture](/design/information-architecture/) | _What shape_ the page itself should take            |
-| [Theming](/ranui/theme/)                                     | _How to switch and override_ them at runtime        |
+| [Theming](/ranui/theme/)                                      | _How to switch and override_ them at runtime        |
 
 > **Use when** you need the name or the value of a token (a colour role, a spacing step, an
 > icon size, a shadow tier, an easing curve) or want to understand why the scales are shaped
@@ -415,24 +415,24 @@ Orthogonal to light/dark. Default is **solid** Graphite. **Glass** is explicit
 [`r-glass`](/ranui/glass/) thin/regular without pulling WebGL into every control. See
 [Theming](/ranui/theme/#surface-language-solid-glass).
 
-| Token | Light | Use for |
-| --- | --- | --- |
-| `--ran-surface-glass-blur` | `12px` | Control-scale frost blur |
-| `--ran-surface-glass-saturate` | `180%` | Frost saturation (iOS vibrancy) |
-| `--ran-surface-glass-brightness` | `1.08` | Frost brightness |
-| `--ran-surface-glass-fill` | `rgba(255, 255, 255, 0.55)` | Control tint (dark: `rgba(26, 26, 26, 0.55)`) |
-| `--ran-surface-glass-specular` | top-lit wash + crown glow | Specular layer over the tint |
-| `--ran-surface-glass-border` | `rgba(255, 255, 255, 0.72)` | Control frost border (dark: `rgba(166, 166, 166, 0.55)`) |
-| `--ran-surface-glass-shadow` | lift + bright edge + soft inner glow | Control frost elevation |
-| `--ran-surface-glass-overlay-blur` | `18px` | Modal/message frost blur |
-| `--ran-surface-glass-overlay-fill` | `rgba(255, 255, 255, 0.48)` | Overlay tint (dark: `rgba(26, 26, 26, 0.62)`) |
-| `--ran-surface-glass-overlay-specular` | stronger top-lit wash | Overlay specular layer |
-| `--ran-surface-glass-overlay-border` | `rgba(255, 255, 255, 0.72)` | Overlay frost border (dark: `rgba(166, 166, 166, 0.55)`) |
-| `--ran-surface-glass-overlay-shadow` | deeper lift + bright edge | Overlay frost elevation |
-| `--ran-surface-glass-solid-fallback` | `var(--ran-color-bg-elevated)` | Control fill under `prefers-reduced-transparency` |
-| `--ran-surface-glass-solid-shadow` | `var(--ran-shadow-elevated)` | Control shadow under reduced transparency |
-| `--ran-surface-glass-overlay-solid-fallback` | `var(--ran-color-bg-elevated)` | Overlay fill under reduced transparency |
-| `--ran-surface-glass-overlay-solid-shadow` | `var(--ran-shadow-modal)` | Overlay shadow under reduced transparency |
+| Token                                        | Light                                | Use for                                                  |
+| -------------------------------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `--ran-surface-glass-blur`                   | `12px`                               | Control-scale frost blur                                 |
+| `--ran-surface-glass-saturate`               | `180%`                               | Frost saturation (iOS vibrancy)                          |
+| `--ran-surface-glass-brightness`             | `1.08`                               | Frost brightness                                         |
+| `--ran-surface-glass-fill`                   | `rgba(255, 255, 255, 0.55)`          | Control tint (dark: `rgba(26, 26, 26, 0.55)`)            |
+| `--ran-surface-glass-specular`               | top-lit wash + crown glow            | Specular layer over the tint                             |
+| `--ran-surface-glass-border`                 | `rgba(255, 255, 255, 0.72)`          | Control frost border (dark: `rgba(166, 166, 166, 0.55)`) |
+| `--ran-surface-glass-shadow`                 | lift + bright edge + soft inner glow | Control frost elevation                                  |
+| `--ran-surface-glass-overlay-blur`           | `18px`                               | Modal/message frost blur                                 |
+| `--ran-surface-glass-overlay-fill`           | `rgba(255, 255, 255, 0.48)`          | Overlay tint (dark: `rgba(26, 26, 26, 0.62)`)            |
+| `--ran-surface-glass-overlay-specular`       | stronger top-lit wash                | Overlay specular layer                                   |
+| `--ran-surface-glass-overlay-border`         | `rgba(255, 255, 255, 0.72)`          | Overlay frost border (dark: `rgba(166, 166, 166, 0.55)`) |
+| `--ran-surface-glass-overlay-shadow`         | deeper lift + bright edge            | Overlay frost elevation                                  |
+| `--ran-surface-glass-solid-fallback`         | `var(--ran-color-bg-elevated)`       | Control fill under `prefers-reduced-transparency`        |
+| `--ran-surface-glass-solid-shadow`           | `var(--ran-shadow-elevated)`         | Control shadow under reduced transparency                |
+| `--ran-surface-glass-overlay-solid-fallback` | `var(--ran-color-bg-elevated)`       | Overlay fill under reduced transparency                  |
+| `--ran-surface-glass-overlay-solid-shadow`   | `var(--ran-shadow-modal)`            | Overlay shadow under reduced transparency                |
 
 ## What dark mode redefines
 

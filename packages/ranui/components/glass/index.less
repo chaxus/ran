@@ -44,12 +44,10 @@
   contain: layout paint;
   /* Default = liquid glass regular (Apple Large/Medium). Order matters: refract the
      sharp backdrop first, then frost — blur-before-displace erased the lip. */
-  -webkit-backdrop-filter: var(--ran-glass-refraction, saturate(1))
-    blur(var(--ran-glass-blur, 16px)) saturate(var(--ran-glass-saturate, 170%))
-    brightness(var(--ran-glass-brightness, 1.06));
-  backdrop-filter: var(--ran-glass-refraction, saturate(1))
-    blur(var(--ran-glass-blur, 16px)) saturate(var(--ran-glass-saturate, 170%))
-    brightness(var(--ran-glass-brightness, 1.06));
+  -webkit-backdrop-filter: var(--ran-glass-refraction, saturate(1)) blur(var(--ran-glass-blur, 16px))
+    saturate(var(--ran-glass-saturate, 170%)) brightness(var(--ran-glass-brightness, 1.06));
+  backdrop-filter: var(--ran-glass-refraction, saturate(1)) blur(var(--ran-glass-blur, 16px))
+    saturate(var(--ran-glass-saturate, 170%)) brightness(var(--ran-glass-brightness, 1.06));
   --glass-fill: var(--ran-glass-tint, rgba(255, 255, 255, var(--ran-glass-tint-alpha, 0.12)));
   background: var(--glass-fill);
   /* Apple Fill+Shadow edge: hairline burn ring + ± side lips + soft drop. */

@@ -39,33 +39,33 @@ initTheme();
 
 ### Propiedades
 
-| Propiedad | Tipo                            | Predeterminado | Descripción                                              |
-| --------- | ------------------------------- | -------------- | -------------------------------------------------------- |
+| Propiedad | Tipo                            | Predeterminado | Descripción                                               |
+| --------- | ------------------------------- | -------------- | --------------------------------------------------------- |
 | `value`   | `'system' \| 'light' \| 'dark'` | `'system'`     | Tema actual de `getTheme()`. Asignarlo aplica y persiste. |
-| `sheet`   | `string`                        | `''`           | CSS inyectado en el Shadow DOM.                          |
+| `sheet`   | `string`                        | `''`           | CSS inyectado en el Shadow DOM.                           |
 
 ### Atributos de localización
 
-| Atributo       | Predeterminado | Descripción                 |
-| -------------- | -------------- | --------------------------- |
-| `label`        | `'Theme'`      | `aria-label` del select.    |
-| `label-system` | `'System'`     | Texto de la opción system.  |
-| `label-light`  | `'Light'`      | Texto de la opción light.   |
-| `label-dark`   | `'Dark'`       | Texto de la opción dark.    |
+| Atributo       | Predeterminado | Descripción                |
+| -------------- | -------------- | -------------------------- |
+| `label`        | `'Theme'`      | `aria-label` del select.   |
+| `label-system` | `'System'`     | Texto de la opción system. |
+| `label-light`  | `'Light'`      | Texto de la opción light.  |
+| `label-dark`   | `'Dark'`       | Texto de la opción dark.   |
 
 ## Eventos
 
-| Evento   | Detail                                     | Descripción                                      |
-| -------- | ------------------------------------------ | ------------------------------------------------ |
+| Evento   | Detail                                     | Descripción                                     |
+| -------- | ------------------------------------------ | ----------------------------------------------- |
 | `change` | `{ theme: 'system' \| 'light' \| 'dark' }` | Al elegir un tema. Burbujea y cruza Shadow DOM. |
 
 ## Partes CSS
 
-| Parte                       | Descripción           |
-| --------------------------- | --------------------- |
-| `select`                    | El `r-select` interno.|
-| `option`                    | Cada `r-option`.      |
-| `system` / `light` / `dark` | Las opciones.         |
+| Parte                       | Descripción            |
+| --------------------------- | ---------------------- |
+| `select`                    | El `r-select` interno. |
+| `option`                    | Cada `r-option`.       |
+| `system` / `light` / `dark` | Las opciones.          |
 
 ```css
 r-theme-switch {

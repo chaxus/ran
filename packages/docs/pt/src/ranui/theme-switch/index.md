@@ -39,24 +39,24 @@ initTheme();
 
 ### Propriedades
 
-| Propriedade | Tipo                            | Predefinição | Descrição                                                 |
-| ----------- | ------------------------------- | ------------ | --------------------------------------------------------- |
-| `value`     | `'system' \| 'light' \| 'dark'` | `'system'`   | Tema atual de `getTheme()`. Atribuir aplica e persiste.   |
-| `sheet`     | `string`                        | `''`         | CSS injetado no Shadow DOM.                               |
+| Propriedade | Tipo                            | Predefinição | Descrição                                               |
+| ----------- | ------------------------------- | ------------ | ------------------------------------------------------- |
+| `value`     | `'system' \| 'light' \| 'dark'` | `'system'`   | Tema atual de `getTheme()`. Atribuir aplica e persiste. |
+| `sheet`     | `string`                        | `''`         | CSS injetado no Shadow DOM.                             |
 
 ### Atributos de localização
 
-| Atributo       | Predefinição | Descrição                   |
-| -------------- | ------------ | --------------------------- |
-| `label`        | `'Theme'`    | `aria-label` do select.     |
-| `label-system` | `'System'`   | Texto da opção system.      |
-| `label-light`  | `'Light'`    | Texto da opção light.       |
-| `label-dark`   | `'Dark'`     | Texto da opção dark.        |
+| Atributo       | Predefinição | Descrição               |
+| -------------- | ------------ | ----------------------- |
+| `label`        | `'Theme'`    | `aria-label` do select. |
+| `label-system` | `'System'`   | Texto da opção system.  |
+| `label-light`  | `'Light'`    | Texto da opção light.   |
+| `label-dark`   | `'Dark'`     | Texto da opção dark.    |
 
 ## Eventos
 
-| Evento   | Detail                                     | Descrição                                       |
-| -------- | ------------------------------------------ | ----------------------------------------------- |
+| Evento   | Detail                                     | Descrição                                         |
+| -------- | ------------------------------------------ | ------------------------------------------------- |
 | `change` | `{ theme: 'system' \| 'light' \| 'dark' }` | Ao escolher um tema. Borbulha e cruza Shadow DOM. |
 
 ## Partes CSS

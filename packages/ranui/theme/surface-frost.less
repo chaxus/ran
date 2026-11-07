@@ -10,19 +10,14 @@
   background:
     var(
       --ran-surface-glass-specular,
-      linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.55) 0%,
-          rgba(255, 255, 255, 0.14) 24%,
-          transparent 48%
-        ),
-        linear-gradient(0deg, rgba(255, 255, 255, 0.28) 0%, transparent 30%)
+      linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.14) 24%, transparent 48%),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.28) 0%, transparent 30%)
     ),
     var(--ran-surface-glass-fill, rgba(255, 255, 255, 0.55));
-  -webkit-backdrop-filter: blur(var(--ran-surface-glass-blur, 12px))
-    saturate(var(--ran-surface-glass-saturate, 180%)) brightness(var(--ran-surface-glass-brightness, 1.08));
-  backdrop-filter: blur(var(--ran-surface-glass-blur, 12px))
-    saturate(var(--ran-surface-glass-saturate, 180%)) brightness(var(--ran-surface-glass-brightness, 1.08));
+  -webkit-backdrop-filter: blur(var(--ran-surface-glass-blur, 12px)) saturate(var(--ran-surface-glass-saturate, 180%))
+    brightness(var(--ran-surface-glass-brightness, 1.08));
+  backdrop-filter: blur(var(--ran-surface-glass-blur, 12px)) saturate(var(--ran-surface-glass-saturate, 180%))
+    brightness(var(--ran-surface-glass-brightness, 1.08));
   border-color: var(--ran-surface-glass-border, rgba(255, 255, 255, 0.72));
   box-shadow: var(
     --ran-surface-glass-shadow,
@@ -38,20 +33,15 @@
   background:
     var(
       --ran-surface-glass-overlay-specular,
-      linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.42) 0%,
-          rgba(255, 255, 255, 0.12) 24%,
-          transparent 48%
-        ),
-        linear-gradient(0deg, rgba(255, 255, 255, 0.22) 0%, transparent 30%),
-        radial-gradient(120% 55% at 50% -8%, rgba(255, 255, 255, 0.28), transparent 58%)
+      linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.12) 24%, transparent 48%),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.22) 0%, transparent 30%),
+      radial-gradient(120% 55% at 50% -8%, rgba(255, 255, 255, 0.28), transparent 58%)
     ),
     var(--ran-surface-glass-overlay-fill, rgba(255, 255, 255, 0.48));
   -webkit-backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 18px))
     saturate(var(--ran-surface-glass-saturate, 180%)) brightness(var(--ran-surface-glass-brightness, 1.08));
-  backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 18px))
-    saturate(var(--ran-surface-glass-saturate, 180%)) brightness(var(--ran-surface-glass-brightness, 1.08));
+  backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 18px)) saturate(var(--ran-surface-glass-saturate, 180%))
+    brightness(var(--ran-surface-glass-brightness, 1.08));
   border-color: var(--ran-surface-glass-overlay-border, rgba(255, 255, 255, 0.72));
   box-shadow: var(
     --ran-surface-glass-overlay-shadow,

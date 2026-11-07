@@ -54,17 +54,17 @@ system / light / dark，[`<r-surface-switch>`](/ranui/surface-switch/) 切石墨
 
 ## API
 
-| 函数              | 签名                                                                    | 说明                                                                           |
-| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `initTheme`       | `(target?: ThemeTarget) => void`                                        | 从 `localStorage` 恢复主题，加载时调用一次。SSR 下为空操作。                   |
-| `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | 应用 `'light'` \| `'dark'` \| `'system'` 并持久化；`'system'` 会实时跟随系统。 |
-| `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | 读取当前主题。system 模式下返回 `'system'`，未设置时返回 `''`。                |
+| 函数              | 签名                                                                    | 说明                                                                                       |
+| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `initTheme`       | `(target?: ThemeTarget) => void`                                        | 从 `localStorage` 恢复主题，加载时调用一次。SSR 下为空操作。                               |
+| `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | 应用 `'light'` \| `'dark'` \| `'system'` 并持久化；`'system'` 会实时跟随系统。             |
+| `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | 读取当前主题。system 模式下返回 `'system'`，未设置时返回 `''`。                            |
 | `setSurface`      | `(name: RanSurfaceName, target?: ThemeTarget) => void`                  | 应用 `'solid'` \| `'glass'`。`solid` 会移除 `data-ran-surface`。目标为 `<html>` 时持久化。 |
-| `getSurface`      | `(target?: ThemeTarget) => RanSurfaceName`                              | 读取表面语言；没有属性时视为 `'solid'`。                                       |
-| `initSurface`     | `(target?: ThemeTarget) => void`                                        | 从 `localStorage` 恢复表面，加载时调用一次。SSR 下为空操作。                   |
-| `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | 运行时覆盖单个令牌（作为目标元素的内联样式）。                                 |
-| `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | 批量覆盖令牌，值为 `null` / `undefined` 时清除对应令牌。                       |
-| `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | 移除运行时的令牌覆盖。                                                         |
+| `getSurface`      | `(target?: ThemeTarget) => RanSurfaceName`                              | 读取表面语言；没有属性时视为 `'solid'`。                                                   |
+| `initSurface`     | `(target?: ThemeTarget) => void`                                        | 从 `localStorage` 恢复表面，加载时调用一次。SSR 下为空操作。                               |
+| `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | 运行时覆盖单个令牌（作为目标元素的内联样式）。                                             |
+| `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | 批量覆盖令牌，值为 `null` / `undefined` 时清除对应令牌。                                   |
+| `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | 移除运行时的令牌覆盖。                                                                     |
 
 **类型**
 
@@ -87,13 +87,13 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 `setSurface('glass')` 会在目标（通常是 `<html>`）上写入 `data-ran-surface="glass"`。
 
-| 文档级 glass 下 | 行为 |
-| --------------- | ---- |
-| 默认 `r-button` | 起霜（Apple `glass`） |
-| `type="primary"` / `warning` | 保持**实心**（Apple `glassProminent`） |
-| `r-modal`、非 toast 的 `r-message` | 浮层起霜 |
-| `r-card`、`r-input` | 保持**实心**（内容层）；用 `surface="glass"` 选择加入 |
-| Toast 药丸 | 保持**实心** |
+| 文档级 glass 下                    | 行为                                                  |
+| ---------------------------------- | ----------------------------------------------------- |
+| 默认 `r-button`                    | 起霜（Apple `glass`）                                 |
+| `type="primary"` / `warning`       | 保持**实心**（Apple `glassProminent`）                |
+| `r-modal`、非 toast 的 `r-message` | 浮层起霜                                              |
+| `r-card`、`r-input`                | 保持**实心**（内容层）；用 `surface="glass"` 选择加入 |
+| Toast 药丸                         | 保持**实心**                                          |
 
 在控件上设 `surface="solid"` 可退出文档级玻璃。`prefers-reduced-transparency: reduce` 会回退到 elevated 实色令牌，与 [`r-glass`](/cn/ranui/glass/) 一致。
 

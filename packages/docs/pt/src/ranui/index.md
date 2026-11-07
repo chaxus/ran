@@ -201,17 +201,17 @@ então `addEventListener` é o caminho a seguir.
 
 ## Para onde ir em seguida
 
-| Se você quiser…                               | Leia                                             |
-| --------------------------------------------- | ------------------------------------------------ |
-| Consultar a API exata de um elemento          | [API de elementos](/pt/ranui/api)                |
+| Se você quiser…                               | Leia                                              |
+| --------------------------------------------- | ------------------------------------------------- |
+| Consultar a API exata de um elemento          | [API de elementos](/pt/ranui/api)                 |
 | Saber qual token usar, e por quê              | [Design system](/pt/design/design-system/)        |
 | Montar uma tela que pareça um sistema só      | [Diretrizes de design](/pt/design/design-guides/) |
-| Integrar o ranui a um aplicativo corretamente | [Diretrizes de código](/pt/ranui/coding-guides/) |
-| Acrescentar claro/escuro, ou reestilizar tudo | [Temas](/pt/ranui/theme/)                        |
-| Traduzir a interface                          | [i18n](/pt/ranui/i18n/)                          |
-| Renderizar num servidor                       | [Renderização no servidor](/pt/ranui/ssr/)       |
-| Montar views reativas sem framework           | [Builder](/pt/ranui/builder/)                    |
-| Ver o que mudou antes de atualizar            | [Registro de alterações](/pt/ranui/changelog)    |
+| Integrar o ranui a um aplicativo corretamente | [Diretrizes de código](/pt/ranui/coding-guides/)  |
+| Acrescentar claro/escuro, ou reestilizar tudo | [Temas](/pt/ranui/theme/)                         |
+| Traduzir a interface                          | [i18n](/pt/ranui/i18n/)                           |
+| Renderizar num servidor                       | [Renderização no servidor](/pt/ranui/ssr/)        |
+| Montar views reativas sem framework           | [Builder](/pt/ranui/builder/)                     |
+| Ver o que mudou antes de atualizar            | [Registro de alterações](/pt/ranui/changelog)     |
 
 ## Suporte a navegadores
 

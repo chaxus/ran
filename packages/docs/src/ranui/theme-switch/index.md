@@ -62,11 +62,11 @@ initTheme();
 
 ## CSS Parts
 
-| Part                          | Description             |
-| ----------------------------- | ----------------------- |
-| `select`                      | The inner `r-select`.   |
-| `option`                      | Every `r-option`.       |
-| `system` / `light` / `dark`   | The individual options. |
+| Part                        | Description             |
+| --------------------------- | ----------------------- |
+| `select`                    | The inner `r-select`.   |
+| `option`                    | Every `r-option`.       |
+| `system` / `light` / `dark` | The individual options. |
 
 ```css
 r-theme-switch {

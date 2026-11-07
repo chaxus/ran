@@ -14,8 +14,7 @@ export interface AnimatableHost extends Element {
   getAnimationTarget?: () => Element;
 }
 
-export const presenceTarget = (host: Element): Element =>
-  (host as AnimatableHost).getAnimationTarget?.() ?? host;
+export const presenceTarget = (host: Element): Element => (host as AnimatableHost).getAnimationTarget?.() ?? host;
 
 export const settlePresence = (host: Element, done: () => void): void => {
   const el = presenceTarget(host);

@@ -312,15 +312,13 @@
   }
 }
 
-:host(
-  [surface='glass']:not([type='primary'], [type='warning'], [type='text'], [disabled])
-) {
+:host([surface='glass']:not([type='primary'], [type='warning'], [type='text'], [disabled])) {
   .ran-btn-glass-apply();
 }
 
 /* Chromium drops :host-context(...):not(...); keep every host check inside :host(). */
 :host-context([data-ran-surface='glass']):host(
-    :not([surface='solid']):not([type='primary']):not([type='warning']):not([type='text']):not([disabled])
-  ) {
+  :not([surface='solid']):not([type='primary']):not([type='warning']):not([type='text']):not([disabled])
+) {
   .ran-btn-glass-apply();
 }

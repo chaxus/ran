@@ -10,12 +10,12 @@ Las demás páginas de esta sección responden preguntas sobre las piezas. Esta 
 viene antes: con todo lo que la pantalla tiene que sostener, ¿a qué vino quien la abre y qué
 disposición le permite hacerlo?
 
-| Página                                        | Responde                                                   |
-| --------------------------------------------- | ---------------------------------------------------------- |
-| **Arquitectura de información** (esta página) | _Qué forma_ debe tomar la página                           |
+| Página                                         | Responde                                                   |
+| ---------------------------------------------- | ---------------------------------------------------------- |
+| **Arquitectura de información** (esta página)  | _Qué forma_ debe tomar la página                           |
 | [Sistema de diseño](/es/design/design-system/) | _Qué_ son los tokens: el vocabulario                       |
 | [Pautas de diseño](/es/design/design-guides/)  | _Cómo elegir_ entre ellos al construir una pantalla        |
-| [Temas](/es/ranui/theme/)                     | _Cómo cambiarlos y sobrescribirlos_ en tiempo de ejecución |
+| [Temas](/es/ranui/theme/)                      | _Cómo cambiarlos y sobrescribirlos_ en tiempo de ejecución |
 
 > **Úsalo cuando** empieces una pantalla que debe sostener varios objetos, varios estados y
 > las relaciones entre ellos: una consola, un panel, un backoffice, un puesto de trabajo, una

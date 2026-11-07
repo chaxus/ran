@@ -201,17 +201,17 @@ document.body.appendChild(button);
 
 ## 接下来读什么
 
-| 如果你想……               | 读                                   |
-| ------------------------ | ------------------------------------ |
-| 查某个元素的确切接口     | [元素 API](/cn/ranui/api)            |
+| 如果你想……               | 读                                    |
+| ------------------------ | ------------------------------------- |
+| 查某个元素的确切接口     | [元素 API](/cn/ranui/api)             |
 | 知道该用哪个令牌、为什么 | [设计系统](/cn/design/design-system/) |
 | 做出像一套系统的界面     | [设计规范](/cn/design/design-guides/) |
-| 把 ranui 正确接进应用    | [编码规范](/cn/ranui/coding-guides/) |
-| 接入明暗主题，或整体换皮 | [主题系统](/cn/ranui/theme/)         |
-| 把界面翻译成别的语言     | [i18n 国际化](/cn/ranui/i18n/)       |
-| 在服务端渲染             | [服务端渲染](/cn/ranui/ssr/)         |
-| 不用框架写响应式视图     | [Builder 构建器](/cn/ranui/builder/) |
-| 升级前看看改了什么       | [更新日志](/cn/ranui/changelog)      |
+| 把 ranui 正确接进应用    | [编码规范](/cn/ranui/coding-guides/)  |
+| 接入明暗主题，或整体换皮 | [主题系统](/cn/ranui/theme/)          |
+| 把界面翻译成别的语言     | [i18n 国际化](/cn/ranui/i18n/)        |
+| 在服务端渲染             | [服务端渲染](/cn/ranui/ssr/)          |
+| 不用框架写响应式视图     | [Builder 构建器](/cn/ranui/builder/)  |
+| 升级前看看改了什么       | [更新日志](/cn/ranui/changelog)       |
 
 ## 兼容性
 
