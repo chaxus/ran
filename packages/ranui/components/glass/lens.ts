@@ -18,13 +18,21 @@ export const lensRadius = (width: number, height: number, radius: number, bevel:
 /**
  * How far an edge point bends light, from 0 (deeper than the bevel) to 1 (on the rim).
  * `u` is 1 at the edge and 0 at the inner end of the bevel.
+ *
+ * Smoothstep then cube — almost flat face, very sharp liquid lip (matches
+ * `refraction.ts`). Square still left a soft band; Apple's edge is a thin fillet.
  */
-export const bendAt = (u: number): number => u * u;
+export const bendAt = (u: number): number => {
+  const t = Math.min(1, Math.max(0, u));
+  const s = t * t * (3 - 2 * t);
+  return s * s * s;
+};
 
 /**
  * The `feDisplacementMap` input for a `width`×`height` pane: R and G hold the inward
  * pull at each pixel, 128 is no pull. Every pixel pulls toward the centre, so the backdrop
  * just inside the edge is stretched over the rim, the way a convex lens magnifies.
+ * B encodes a specular mask (brighter on the rim) for tooling / future lighting passes.
  */
 export const lensMap = (
   width: number,
@@ -65,7 +73,7 @@ export const lensMap = (
       const i = (y * width + x) * 4;
       data[i] = 128 - nx * m * 127;
       data[i + 1] = 128 - ny * m * 127;
-      data[i + 2] = 128;
+      data[i + 2] = Math.round(128 + m * 127);
       data[i + 3] = 255;
     }
   }

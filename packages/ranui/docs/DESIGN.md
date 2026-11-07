@@ -196,11 +196,13 @@ From Krug again: remove half the words, then half of what is left.
 
 # ranui implementation adapter
 
-This file maps [the Ran Design guide](./DESIGN.md) to ranui's tokens, tiers and components. It is
-based on the [Geist design system](https://vercel.com/design). The guide owns the method; this file
-owns the values and the ranui-specific rules. How a component is built (construction, state, events,
-SSR, tests) is [CODING.md](./CODING.md). The public [design system](https://ran.chaxus.com/ranui/design-system/)
-page explains the same tokens to readers; update it when a value here changes.
+This file maps [the Ran Design guide](./DESIGN.md) and the
+[surface language](https://ran.chaxus.com/design/surface) guide to ranui's tokens, tiers and
+components. It is based on the [Geist design system](https://vercel.com/design). The guides own the
+method; this file owns the values and the ranui-specific rules. How a component is built
+(construction, state, events, SSR, tests) is [CODING.md](./CODING.md). The public
+[design system](https://ran.chaxus.com/design/design-system/) page explains the same tokens to
+readers; update it when a value here changes.
 
 **MUST**, **SHOULD** and **MAY** mean what the guide says they mean. Every MUST below either is
 checked or names the defect it prevents.
@@ -214,11 +216,18 @@ and complete states, not a decorative effect on every component.
 - **SHOULD** Choose dimensions from the existing token roles; do not add a second "premium" scale.
 - **SHOULD** Glass and other expressive effects are explicit surface choices (`r-glass`, a host's
   hero, or `data-ran-surface="glass"` / `surface="glass"` on the pilot control family), not
-  default text or control backgrounds. The default surface language stays solid Graphite.
+  default text or control backgrounds. The default surface language stays solid Graphite. Method:
+  [Surface language](https://ran.chaxus.com/design/surface).
+- **MUST** Colour theme (`setTheme` / `<r-theme-switch>`) and surface (`setSurface` /
+  `<r-surface-switch>`) stay orthogonal: glass still follows light and dark.
 - **MUST** A glass surface respects `prefers-reduced-transparency: reduce` by falling back to
   theme-aware solid elevated tokens (same contract as `r-glass`).
 - **SHOULD** Under glass, keep solid fills for high-emphasis actions (primary / danger) and for
-  inverse toast pills so contrast does not depend on the backdrop.
+  inverse toast pills so contrast does not depend on the backdrop (Apple `glassProminent`).
+- **SHOULD** Content-layer pilots (`r-card`, `r-input`) stay solid under document glass; opt in
+  with `surface="glass"` only when that element is the frosted plate.
+- **SHOULD** Host chrome (site headers, app shells) follows the same Regular-glass rules: frost
+  chrome, keep reading content solid, no glass-on-glass, visible hover ≠ selected.
 - **MUST** Reading contrast and interaction semantics are the same in both themes.
 - **SHOULD** Prefer a semantic token to a raw scale step, and decide by role and state rather than by
   eye. Design every reachable state: default, hover, active, focus, disabled, loading, empty, error.
@@ -426,9 +435,10 @@ chosen by the host, and are never a component's default.
   `primary-hover`; active to `bg-active`, `primary-active`; disabled to the disabled tokens, still
   legible; focus to the focus ring.
 - **MUST** Only clickable cards react to hover: `r-card` does so only with `hoverable`.
-- **SHOULD** For a theme control, use `<r-theme-switch>` (localised with `label`, `label-system`,
-  `label-light`, `label-dark`) rather than a hand-rolled toggle, unless the host already owns theme
-  switching.
+- **SHOULD** For color theme, use `<r-theme-switch>` (select of system / light / dark, localised with
+  `label`, `label-system`, `label-light`, `label-dark`). For style / surface language, use
+  `<r-surface-switch>` (select of solid / liquid glass). Keep the axes separate so glass still
+  respects light and dark, unless the host already owns appearance switching.
 - **SHOULD** Map the guide's navigation choices to ranui: `r-modal` for a short confirmation or one
   field, `r-popover` and `r-dropdown` for transient context, `r-disclosure-row` for progressive
   disclosure, `r-tabs` only for peer views of one object.

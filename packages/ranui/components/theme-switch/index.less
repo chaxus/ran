@@ -1,63 +1,27 @@
-/* Theme switch — a Vercel/Geist-style three-state segmented pill
-   (system / light / dark). Values ride the semantic token layer; per-instance
-   overrides via --ran-theme-switch-*. */
+/* Theme switch — compact select of color themes (system / light / dark).
+   Orthogonal to style (`r-surface-switch`). Overrides via --ran-theme-switch-*.
+   On a glass page the host sits ON chrome glass: use fill, never a second blur
+   (Apple: no glass-on-glass). */
 :host {
   display: var(--ran-theme-switch-display, inline-flex);
   box-sizing: border-box;
+  width: var(--ran-theme-switch-width, 8.75rem);
+  min-width: var(--ran-theme-switch-min-width, 7.5rem);
+  max-width: var(--ran-theme-switch-max-width, 11rem);
+  flex: none;
+  vertical-align: middle;
 }
 
 .ran-theme-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ran-theme-switch-gap, var(--ran-space-1, 4px));
-  padding: var(--ran-theme-switch-padding, var(--ran-space-1, 4px));
-  border-width: var(--ran-skin-border-width, 1px);
-  border-style: var(--ran-skin-border-style, solid);
-  border-color: var(--ran-theme-switch-border-color, var(--ran-color-border, #e4e4e8));
-  border-radius: var(--ran-theme-switch-radius, var(--ran-radius-full, 9999px));
-  background: var(--ran-theme-switch-background, transparent);
-  box-sizing: border-box;
-}
-
-.ran-theme-switch button {
-  width: var(--ran-theme-switch-button-size, var(--ran-size-5, 28px));
-  height: var(--ran-theme-switch-button-size, var(--ran-size-5, 28px));
-  display: grid;
-  place-items: center;
-  border: none;
-  border-radius: var(--ran-theme-switch-radius, var(--ran-radius-full, 9999px));
-  background: transparent;
-  color: var(--ran-theme-switch-button-color, var(--ran-color-text-secondary, #55555e));
-  cursor: pointer;
-  padding: 0;
-  /* No transition: color is a palette prop and fades on the very theme flip
-     this control triggers. Hover feedback snaps, like the rest of the library. */
-}
-
-@media (hover: hover) {
-  .ran-theme-switch button:hover {
-    color: var(--ran-theme-switch-button-hover-color, var(--ran-color-text, #111113));
-  }
-}
-
-.ran-theme-switch button[aria-pressed='true'] {
-  background: var(--ran-theme-switch-button-active-background, var(--ran-color-bg-hover, #ebebee));
-  color: var(--ran-theme-switch-button-active-color, var(--ran-color-text, #111113));
-}
-
-.ran-theme-switch button:focus-visible {
-  outline: var(--ran-theme-switch-button-focus-outline, 2px solid var(--ran-color-focus, #0a6cff));
-  outline-offset: var(--ran-theme-switch-button-focus-outline-offset, 2px);
-}
-
-.ran-theme-switch svg {
-  width: var(--ran-theme-switch-icon-size, var(--ran-size-1, 16px));
-  height: var(--ran-theme-switch-icon-size, var(--ran-size-1, 16px));
-}
-
-@media (pointer: coarse) {
-  .ran-theme-switch button {
-    min-width: var(--ran-theme-switch-touch-size, 44px);
-    min-height: var(--ran-theme-switch-touch-size, 44px);
-  }
+  width: 100%;
+  --ran-select-min-height: var(--ran-theme-switch-trigger-min-height, 32px);
+  --ran-select-font-size: var(--ran-theme-switch-font-size, var(--ran-text-label-1, 13px));
+  --ran-select-border-radius: var(--ran-theme-switch-radius, var(--ran-radius-md, 8px));
+  --ran-select-background-color: var(
+    --ran-theme-switch-background,
+    color-mix(in srgb, var(--ran-color-bg-elevated, #fff) 92%, transparent)
+  );
+  --ran-select-border: 1px solid
+    var(--ran-theme-switch-border-color, var(--ran-color-border-secondary, #e2e2e6));
+  --ran-select-background-image: none;
 }

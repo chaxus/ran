@@ -140,6 +140,9 @@
       "theme-switch": [
         "./dist/components/theme-switch/index.d.ts"
       ],
+      "surface-switch": [
+        "./dist/components/surface-switch/index.d.ts"
+      ],
       "*": [
         "./dist/index.d.ts"
       ],
@@ -415,6 +418,10 @@
     "./theme-switch": {
       "types": "./dist/components/theme-switch/index.d.ts",
       "import": "./dist/theme-switch.js"
+    },
+    "./surface-switch": {
+      "types": "./dist/components/surface-switch/index.d.ts",
+      "import": "./dist/surface-switch.js"
     },
     "./type": {
       "types": "./dist/index.d.ts",

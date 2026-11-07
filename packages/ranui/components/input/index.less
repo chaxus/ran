@@ -7,8 +7,8 @@
   box-sizing: var(--ran-input-host-box-sizing, border-box);
 }
 
-.ran-input-glass-surface() {
-  &:not([disabled]) .ran-input {
+.ran-input-glass-apply() {
+  .ran-input {
     .ran-frost-control();
     .ran-frost-control-reduced();
     /* Keep the control edge readable on frost — glass border alone can fall under 3:1. */
@@ -16,12 +16,13 @@
   }
 }
 
-:host([surface='glass']) {
-  .ran-input-glass-surface();
-}
-
-:host-context([data-ran-surface='glass']):not([surface='solid']) {
-  .ran-input-glass-surface();
+/*
+ * Apple: form fields live in the content layer. They stay solid under document
+ * glass so long forms stay readable and do not stack frost on a glass card.
+ * Opt in with surface="glass" for toolbar-like fields on a chrome plate.
+ */
+:host([surface='glass']:not([disabled])) {
+  .ran-input-glass-apply();
 }
 // A static caption above the field (Luke Wroblewski's/NN·g's top-aligned-label
 // research: ~2x faster form completion than side-aligned; also sidesteps a

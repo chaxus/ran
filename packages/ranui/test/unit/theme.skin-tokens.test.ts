@@ -75,17 +75,34 @@ describe('theme tokens', () => {
     ].forEach((token) => {
       expect(tokens).toContain(token);
     });
-    expect(dark).toContain('--ran-surface-glass-fill: rgba(24, 24, 27, 0.62)');
+    expect(dark).toContain('--ran-surface-glass-fill: rgba(26, 26, 26, 0.55)');
+    expect(tokens).toContain('--ran-surface-glass-blur: 12px');
+    expect(tokens).toContain('--ran-surface-glass-overlay-blur: 18px');
+    expect(tokens).toContain('--ran-surface-glass-specular');
   });
 
   it('wires glass surface selectors on the pilot control family', () => {
     const frost = read('theme/surface-frost.less');
     expect(frost).toContain('prefers-reduced-transparency');
-    ['button', 'card', 'input', 'modal', 'message'].forEach((name) => {
+    // Content-layer pilots: opt-in only (Apple — no Liquid Glass in the content layer).
+    ['card', 'input'].forEach((name) => {
       const source = read(`components/${name}/index.less`);
       expect(source).toContain('surface-frost.less');
-      expect(source).toMatch(/:host\(\[surface='glass'\]/);
-      expect(source).toContain(":host-context([data-ran-surface='glass'])");
+      expect(source).toMatch(/:host\(\s*\[surface='glass'\]/);
+      expect(source).not.toMatch(/:host-context\(\[data-ran-surface='glass'\]\)/);
+    });
+    // Functional / overlay pilots: document glass or explicit surface="glass".
+    ['button', 'modal', 'message'].forEach((name) => {
+      const source = read(`components/${name}/index.less`);
+      expect(source).toContain('surface-frost.less');
+      expect(source).toMatch(/:host\(\s*\[surface='glass'\]/);
+      // Chromium does not match :host-context(...):not(...); host checks stay inside :host().
+      expect(source).toMatch(
+        /:host-context\(\[data-ran-surface='glass'\]\):host\(\s*:not\(\[surface='solid'\]\)/,
+      );
+      expect(source).not.toMatch(
+        /:host-context\(\[data-ran-surface='glass'\]\):not\(/,
+      );
     });
   });
 });

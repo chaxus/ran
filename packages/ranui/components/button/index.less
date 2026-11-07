@@ -8,17 +8,15 @@
 
 // Glass surface language: frost the default (secondary) chrome only. Primary,
 // warning and text stay solid so emphasis and a11y ink do not wash out.
-.ran-btn-glass-surface() {
-  &:not([type='primary'], [type='warning'], [type='text'], [disabled]) {
-    box-shadow: none;
-    .ran-btn {
-      .ran-frost-control();
-      .ran-frost-control-reduced();
-    }
-    .ran-btn-content {
-      border-color: var(--ran-btn-glass-border-color, var(--ran-surface-glass-border));
-      background-color: transparent;
-    }
+.ran-btn-glass-apply() {
+  box-shadow: none;
+  .ran-btn {
+    .ran-frost-control();
+    .ran-frost-control-reduced();
+  }
+  .ran-btn-content {
+    border-color: var(--ran-btn-glass-border-color, var(--ran-surface-glass-border));
+    background-color: transparent;
   }
 }
 
@@ -314,10 +312,15 @@
   }
 }
 
-:host([surface='glass']) {
-  .ran-btn-glass-surface();
+:host(
+  [surface='glass']:not([type='primary'], [type='warning'], [type='text'], [disabled])
+) {
+  .ran-btn-glass-apply();
 }
 
-:host-context([data-ran-surface='glass']):not([surface='solid']) {
-  .ran-btn-glass-surface();
+/* Chromium drops :host-context(...):not(...); keep every host check inside :host(). */
+:host-context([data-ran-surface='glass']):host(
+    :not([surface='solid']):not([type='primary']):not([type='warning']):not([type='text']):not([disabled])
+  ) {
+  .ran-btn-glass-apply();
 }

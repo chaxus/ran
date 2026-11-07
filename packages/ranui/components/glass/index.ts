@@ -323,6 +323,9 @@ export class Glass extends RanElement {
     const { displace, bevel, dispersion } = this.optics;
     const url = width > 0 && height > 0 && displace > 0 ? this._lensImage(width, height, bevel) : '';
     let body = '<feOffset/>';
+    // Expand the filter region so the lip can sample backdrop just outside the pane;
+    // a tight box clamps the strongest edge pulls and flattens the glass look.
+    const pad = url ? Math.ceil(displace * 1.35) : 0;
     if (url) {
       // feDisplacementMap moves a pixel by scale × (map − 0.5); the map spans ±0.5, so the
       // largest pull is scale / 2 and `displace` px needs a scale of twice that.
@@ -352,7 +355,8 @@ export class Glass extends RanElement {
       }
     }
     this._defs.innerHTML =
-      `<svg width="0" height="0"><filter id="${this._uid}" x="0" y="0" width="${width || 1}" height="${height || 1}" ` +
+      `<svg width="0" height="0"><filter id="${this._uid}" x="${-pad}" y="${-pad}" ` +
+      `width="${(width || 1) + pad * 2}" height="${(height || 1) + pad * 2}" ` +
       `filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">${body}</filter></svg>`;
   }
 

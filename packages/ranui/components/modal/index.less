@@ -15,7 +15,8 @@
   .ran-modal-glass-surface();
 }
 
-:host-context([data-ran-surface='glass']):not([surface='solid']) {
+/* Chromium drops :host-context(...):not(...); put the host check inside :host(). */
+:host-context([data-ran-surface='glass']):host(:not([surface='solid'])) {
   .ran-modal-glass-surface();
 }
 

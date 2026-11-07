@@ -1,6 +1,6 @@
 export { setTheme, getTheme, setThemeToken, clearThemeToken, setThemeTokens, initTheme } from '@/utils/theme';
 export type { RanThemeName, ThemeTarget, ThemeTokenMap } from '@/utils/theme';
-export { setSurface, getSurface } from '@/utils/surface';
+export { setSurface, getSurface, initSurface } from '@/utils/surface';
 export type { RanSurfaceName } from '@/utils/surface';
 export { serializeForm } from '@/utils/form';
 export { Button } from '@/components/button';
@@ -53,6 +53,7 @@ export { Router } from '@/components/router';
 export { Route } from '@/components/route';
 export { Link } from '@/components/link';
 export { ThemeSwitch } from '@/components/theme-switch';
+export { SurfaceSwitch } from '@/components/surface-switch';
 export {
   RouterCore,
   createRouter,
@@ -121,6 +122,7 @@ import type { Router as TRouter } from '@/components/router';
 import type { Route as TRoute } from '@/components/route';
 import type { Link as TLink } from '@/components/link';
 import type { ThemeSwitch as TThemeSwitch } from '@/components/theme-switch';
+import type { SurfaceSwitch as TSurfaceSwitch } from '@/components/surface-switch';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -161,5 +163,6 @@ declare global {
     'r-route': TRoute;
     'r-link': TLink;
     'r-theme-switch': TThemeSwitch;
+    'r-surface-switch': TSurfaceSwitch;
   }
 }

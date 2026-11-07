@@ -210,6 +210,7 @@
   .ran-message-glass-surface();
 }
 
-:host-context([data-ran-surface='glass']):not([surface='solid'], [type='toast']) {
+/* Chromium drops :host-context(...):not(...); put the host check inside :host(). */
+:host-context([data-ran-surface='glass']):host(:not([surface='solid']):not([type='toast'])) {
   .ran-message-glass-surface();
 }
