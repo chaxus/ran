@@ -262,6 +262,52 @@ a {
   border-radius: 4px;
 }
 
+/*
+ * Docs glass pigments. They stay fixed: specular white must not flip with the
+ * theme, and this cool plate is the site atmosphere, not the control frost in
+ * --ran-surface-glass-* and not a --ran-color-* role.
+ */
+:root {
+  --glass-white: #ffffff; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-black: #000000; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-ink: #1c3056; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-night: #090b11; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-inset-cool: #6e8cb9; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-plate: #eef3fa; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-rim-tint: #b7cef0; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-depth-ink: #9eb6de; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-inset-side: #8ca5c8; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-glow-night: #3a64b2; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-glow-dusk: #62488c; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-glow-tide: #28646e; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-night-top: #0d1119; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-night-bottom: #10141c; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-selected-ink: #6a82a8; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-blue: #78a0dc; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-grid: #8caadc; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-night-blue: #466eaa; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-night-lilac: #785082; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-night-0: #141820; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-night-1: #12141a; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-night-2: #16121c; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-sky: #e3eaf3; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-glow-sky: #769edc; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-glow-lilac: #948ac6; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-glow-mist: #82afc6; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-sky-top: #e8eef6; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-sky-mid: #e5e8f1; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-sky-bottom: #e9eef5; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-slate: #1a2030; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-rim-night: #8aa4d4; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-spot: #283c64; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-hatch: #5a78aa; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-wash: #78aae6; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-blush: #b496c8; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-0: #e4ebf5; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-1: #efeaf4; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+  --glass-demo-2: #e8ebf2; /* design-ok: bare-colour fixed glass pigment, not theme ink */
+}
+
 /* ── Header ──────────────────────────────────────────────────────────────── */
 
 /*
@@ -289,129 +335,138 @@ a {
   --glass-ease: var(--ran-motion-ease-standard, cubic-bezier(0.2, 0.8, 0.2, 1));
   --glass-duration: var(--ran-motion-duration-fast, 160ms);
   /* Shared Regular glass recipe — clearer plate, cool rim, soft depth. */
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-fill: color-mix(in srgb, #eef3fa 30%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-fill-strong: color-mix(in srgb, #ffffff 42%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-rim: color-mix(in srgb, #ffffff 72%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-rim-cool: color-mix(in srgb, #b7cef0 45%, transparent);
+  --glass-fill: color-mix(in srgb, var(--glass-plate) 30%, transparent);
+  --glass-fill-strong: color-mix(in srgb, var(--glass-white) 42%, transparent);
+  --glass-rim: color-mix(in srgb, var(--glass-white) 72%, transparent);
+  --glass-rim-cool: color-mix(in srgb, var(--glass-rim-tint) 45%, transparent);
   --glass-specular: linear-gradient(
     155deg,
-    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.72) 0%,
-    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.18) 32%,
-    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.02) 58%,
+    color-mix(in srgb, var(--glass-white) 72%, transparent) 0%,
+    color-mix(in srgb, var(--glass-white) 18%, transparent) 32%,
+    color-mix(in srgb, var(--glass-white) 2%, transparent) 58%,
     transparent 72%
   );
   --glass-depth:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    0 0 0 0.5px color-mix(in srgb, #9eb6de 35%, transparent), 0 1px 0 rgba(255, 255, 255, 0.7),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 8px 20px -12px rgba(28, 48, 86, 0.28),
-    0 22px 48px -24px rgba(28, 48, 86, 0.34);
+    0 0 0 0.5px color-mix(in srgb, var(--glass-depth-ink) 35%, transparent),
+    0 1px 0 color-mix(in srgb, var(--glass-white) 70%, transparent),
+    0 8px 20px -12px color-mix(in srgb, var(--glass-ink) 28%, transparent),
+    0 22px 48px -24px color-mix(in srgb, var(--glass-ink) 34%, transparent);
   --glass-inset:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.92), inset 0 -1px 0 rgba(110, 140, 185, 0.14),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 1px 0 0 rgba(255, 255, 255, 0.35),
-    inset -1px 0 0 rgba(140, 165, 200, 0.1);
+    inset 0 1.5px 0 color-mix(in srgb, var(--glass-white) 92%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--glass-inset-cool) 14%, transparent),
+    inset 1px 0 0 color-mix(in srgb, var(--glass-white) 35%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--glass-inset-side) 10%, transparent);
 }
 
 :root[data-ran-surface='glass'] body {
   /* Cool mist, not candy blobs — glass needs quiet atmosphere to look expensive. */
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  background-color: #e3eaf3;
+  background-color: var(--glass-sky);
   background-image:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 85% 55% at 8% -14%, rgba(118, 158, 220, 0.38), transparent 62%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 70% 48% at 92% 0%, rgba(148, 138, 198, 0.22), transparent 58%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 55% 40% at 42% 110%, rgba(130, 175, 198, 0.16), transparent 55%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    linear-gradient(180deg, #e8eef6 0%, #e5e8f1 48%, #e9eef5 100%);
+    radial-gradient(
+      ellipse 85% 55% at 8% -14%,
+      color-mix(in srgb, var(--glass-glow-sky) 38%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 70% 48% at 92% 0%,
+      color-mix(in srgb, var(--glass-glow-lilac) 22%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 55% 40% at 42% 110%,
+      color-mix(in srgb, var(--glass-glow-mist) 16%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(180deg, var(--glass-sky-top) 0%, var(--glass-sky-mid) 48%, var(--glass-sky-bottom) 100%);
   background-attachment: fixed;
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] body {
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  background-color: #090b11;
+  background-color: var(--glass-night);
   background-image:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 85% 55% at 8% -14%, rgba(58, 100, 178, 0.42), transparent 62%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 70% 48% at 92% 0%, rgba(98, 72, 140, 0.28), transparent 58%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 55% 40% at 42% 110%, rgba(40, 100, 110, 0.18), transparent 55%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    linear-gradient(180deg, #0d1119 0%, #090b11 48%, #10141c 100%);
+    radial-gradient(
+      ellipse 85% 55% at 8% -14%,
+      color-mix(in srgb, var(--glass-glow-night) 42%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 70% 48% at 92% 0%,
+      color-mix(in srgb, var(--glass-glow-dusk) 28%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 55% 40% at 42% 110%,
+      color-mix(in srgb, var(--glass-glow-tide) 18%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(180deg, var(--glass-night-top) 0%, var(--glass-night) 48%, var(--glass-night-bottom) 100%);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']):not([data-ran-theme='dark'])[data-ran-surface='glass'] body {
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    background-color: #090b11;
+    background-color: var(--glass-night);
     background-image:
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-      radial-gradient(ellipse 85% 55% at 8% -14%, rgba(58, 100, 178, 0.42), transparent 62%),
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-        radial-gradient(ellipse 70% 48% at 92% 0%, rgba(98, 72, 140, 0.28), transparent 58%),
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-        radial-gradient(ellipse 55% 40% at 42% 110%, rgba(40, 100, 110, 0.18), transparent 55%),
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-        linear-gradient(180deg, #0d1119 0%, #090b11 48%, #10141c 100%);
+      radial-gradient(
+        ellipse 85% 55% at 8% -14%,
+        color-mix(in srgb, var(--glass-glow-night) 42%, transparent),
+        transparent 62%
+      ),
+      radial-gradient(
+        ellipse 70% 48% at 92% 0%,
+        color-mix(in srgb, var(--glass-glow-dusk) 28%, transparent),
+        transparent 58%
+      ),
+      radial-gradient(
+        ellipse 55% 40% at 42% 110%,
+        color-mix(in srgb, var(--glass-glow-tide) 18%, transparent),
+        transparent 55%
+      ),
+      linear-gradient(180deg, var(--glass-night-top) 0%, var(--glass-night) 48%, var(--glass-night-bottom) 100%);
   }
 }
 
 :root[data-ran-theme='dark'][data-ran-surface='glass'],
 :root:not([data-ran-theme='light'])[data-ran-surface='glass'] {
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-fill: color-mix(in srgb, #1a2030 48%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-fill-strong: color-mix(in srgb, #ffffff 14%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-rim: color-mix(in srgb, #ffffff 20%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-rim-cool: color-mix(in srgb, #8aa4d4 28%, transparent);
+  --glass-fill: color-mix(in srgb, var(--glass-slate) 48%, transparent);
+  --glass-fill-strong: color-mix(in srgb, var(--glass-white) 14%, transparent);
+  --glass-rim: color-mix(in srgb, var(--glass-white) 20%, transparent);
+  --glass-rim-cool: color-mix(in srgb, var(--glass-rim-night) 28%, transparent);
   --glass-specular: linear-gradient(
     165deg,
-    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.16) 0%,
-    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.04) 38%,
+    color-mix(in srgb, var(--glass-white) 16%, transparent) 0%,
+    color-mix(in srgb, var(--glass-white) 4%, transparent) 38%,
     transparent 62%
   );
   --glass-depth:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    0 1px 0 rgba(255, 255, 255, 0.08), 0 14px 36px -14px rgba(0, 0, 0, 0.55),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 28px 56px -28px rgba(0, 0, 0, 0.4);
+    0 1px 0 color-mix(in srgb, var(--glass-white) 8%, transparent),
+    0 14px 36px -14px color-mix(in srgb, var(--glass-black) 55%, transparent),
+    0 28px 56px -28px color-mix(in srgb, var(--glass-black) 40%, transparent);
   --glass-inset:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -0.5px 0 rgba(0, 0, 0, 0.35),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
+    inset 0 1px 0 color-mix(in srgb, var(--glass-white) 20%, transparent),
+    inset 0 -0.5px 0 color-mix(in srgb, var(--glass-black) 35%, transparent),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--glass-white) 8%, transparent);
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-ran-theme='dark'])[data-ran-surface='glass'] {
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-fill: color-mix(in srgb, #eef3fa 30%, transparent);
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-fill-strong: color-mix(in srgb, #ffffff 42%, transparent);
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-rim: color-mix(in srgb, #ffffff 72%, transparent);
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-rim-cool: color-mix(in srgb, #b7cef0 45%, transparent);
+    --glass-fill: color-mix(in srgb, var(--glass-plate) 30%, transparent);
+    --glass-fill-strong: color-mix(in srgb, var(--glass-white) 42%, transparent);
+    --glass-rim: color-mix(in srgb, var(--glass-white) 72%, transparent);
+    --glass-rim-cool: color-mix(in srgb, var(--glass-rim-tint) 45%, transparent);
     --glass-specular: linear-gradient(
       155deg,
-      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.72) 0%,
-      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.18) 32%,
-      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.02) 58%,
+      color-mix(in srgb, var(--glass-white) 72%, transparent) 0%,
+      color-mix(in srgb, var(--glass-white) 18%, transparent) 32%,
+      color-mix(in srgb, var(--glass-white) 2%, transparent) 58%,
       transparent 72%
     );
     --glass-depth:
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-      0 0 0 0.5px color-mix(in srgb, #9eb6de 35%, transparent), 0 1px 0 rgba(255, 255, 255, 0.7),
-      /* design-ok: bare-colour optical glass plate, not theme ink */ 0 8px 20px -12px rgba(28, 48, 86, 0.28),
-      0 22px 48px -24px rgba(28, 48, 86, 0.34);
+      0 0 0 0.5px color-mix(in srgb, var(--glass-depth-ink) 35%, transparent),
+      0 1px 0 color-mix(in srgb, var(--glass-white) 70%, transparent),
+      0 8px 20px -12px color-mix(in srgb, var(--glass-ink) 28%, transparent),
+      0 22px 48px -24px color-mix(in srgb, var(--glass-ink) 34%, transparent);
     --glass-inset:
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-      inset 0 1.5px 0 rgba(255, 255, 255, 0.92), inset 0 -1px 0 rgba(110, 140, 185, 0.14),
-      /* design-ok: bare-colour optical glass plate, not theme ink */ inset 1px 0 0 rgba(255, 255, 255, 0.35),
-      inset -1px 0 0 rgba(140, 165, 200, 0.1);
+      inset 0 1.5px 0 color-mix(in srgb, var(--glass-white) 92%, transparent),
+      inset 0 -1px 0 color-mix(in srgb, var(--glass-inset-cool) 14%, transparent),
+      inset 1px 0 0 color-mix(in srgb, var(--glass-white) 35%, transparent),
+      inset -1px 0 0 color-mix(in srgb, var(--glass-inset-side) 10%, transparent);
   }
 }
 
@@ -481,39 +536,27 @@ a {
  * Dark glass: white vibrancy chips. Selected denser than hover + edge + weight.
  */
 :root[data-ran-surface='glass'] {
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-hover: color-mix(in srgb, #1c3056 9%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-selected: color-mix(in srgb, #1c3056 16%, #ffffff 84%);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-selected-edge: color-mix(in srgb, #6a82a8 55%, transparent);
+  --glass-hover: color-mix(in srgb, var(--glass-ink) 9%, transparent);
+  --glass-selected: color-mix(in srgb, var(--glass-ink) 16%, var(--glass-white) 84%);
+  --glass-selected-edge: color-mix(in srgb, var(--glass-selected-ink) 55%, transparent);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] {
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-hover: color-mix(in srgb, #ffffff 22%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-selected: color-mix(in srgb, #ffffff 38%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  --glass-selected-edge: color-mix(in srgb, #ffffff 32%, transparent);
+  --glass-hover: color-mix(in srgb, var(--glass-white) 22%, transparent);
+  --glass-selected: color-mix(in srgb, var(--glass-white) 38%, transparent);
+  --glass-selected-edge: color-mix(in srgb, var(--glass-white) 32%, transparent);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']):not([data-ran-theme='dark'])[data-ran-surface='glass'] {
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-hover: color-mix(in srgb, #ffffff 22%, transparent);
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-selected: color-mix(in srgb, #ffffff 38%, transparent);
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-selected-edge: color-mix(in srgb, #ffffff 32%, transparent);
+    --glass-hover: color-mix(in srgb, var(--glass-white) 22%, transparent);
+    --glass-selected: color-mix(in srgb, var(--glass-white) 38%, transparent);
+    --glass-selected-edge: color-mix(in srgb, var(--glass-white) 32%, transparent);
   }
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-ran-theme='dark'])[data-ran-surface='glass'] {
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-hover: color-mix(in srgb, #1c3056 9%, transparent);
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-selected: color-mix(in srgb, #1c3056 16%, #ffffff 84%);
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    --glass-selected-edge: color-mix(in srgb, #6a82a8 55%, transparent);
+    --glass-hover: color-mix(in srgb, var(--glass-ink) 9%, transparent);
+    --glass-selected: color-mix(in srgb, var(--glass-ink) 16%, var(--glass-white) 84%);
+    --glass-selected-edge: color-mix(in srgb, var(--glass-selected-ink) 55%, transparent);
   }
 }
 
@@ -537,10 +580,8 @@ a {
 :root[data-ran-surface='glass'] .langs__summary:hover {
   background: var(--glass-hover);
   color: var(--fg);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border-color: color-mix(in srgb, #fff 55%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  border-color: color-mix(in srgb, var(--glass-white) 55%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 55%, transparent);
 }
 :root[data-ran-surface='glass'] .nav__link[aria-current='page'] {
   color: var(--fg);
@@ -548,10 +589,9 @@ a {
   background: var(--glass-selected);
   border-color: var(--glass-selected-edge);
   box-shadow:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 0 -0.5px 0 rgba(110, 140, 185, 0.2),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 3px rgba(28, 48, 86, 0.14);
+    inset 0 1px 0 color-mix(in srgb, var(--glass-white) 95%, transparent),
+    inset 0 -0.5px 0 color-mix(in srgb, var(--glass-inset-cool) 20%, transparent),
+    0 1px 3px color-mix(in srgb, var(--glass-ink) 14%, transparent);
 }
 :root[data-ran-surface='glass'] .search-open {
   position: relative;
@@ -560,9 +600,8 @@ a {
   background: var(--glass-fill-strong);
   border-color: var(--glass-rim);
   box-shadow:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 2px rgba(28, 48, 86, 0.06);
+    inset 0 1px 0 color-mix(in srgb, var(--glass-white) 70%, transparent),
+    0 1px 2px color-mix(in srgb, var(--glass-ink) 6%, transparent);
   transition:
     background var(--glass-duration) var(--glass-ease),
     border-color var(--glass-duration) var(--glass-ease),
@@ -585,40 +624,31 @@ a {
   pointer-events: none;
 }
 :root[data-ran-surface='glass'] .search-open:hover {
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  background: color-mix(in srgb, #fff 58%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border-color: color-mix(in srgb, #fff 78%, transparent);
+  background: color-mix(in srgb, var(--glass-white) 58%, transparent);
+  border-color: color-mix(in srgb, var(--glass-white) 78%, transparent);
 }
 :root[data-ran-surface='glass'] .search-open__kbd {
   border-radius: 6px;
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  background: color-mix(in srgb, #fff 42%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border-color: color-mix(in srgb, #fff 35%, transparent);
+  background: color-mix(in srgb, var(--glass-white) 42%, transparent);
+  border-color: color-mix(in srgb, var(--glass-white) 35%, transparent);
   color: var(--fg-muted);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .search-open:hover {
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  background: color-mix(in srgb, #fff 18%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border-color: color-mix(in srgb, #fff 28%, transparent);
+  background: color-mix(in srgb, var(--glass-white) 18%, transparent);
+  border-color: color-mix(in srgb, var(--glass-white) 28%, transparent);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .nav__link:hover,
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .langs__summary:hover {
   background: var(--glass-hover);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border-color: color-mix(in srgb, #fff 18%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border-color: color-mix(in srgb, var(--glass-white) 18%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 12%, transparent);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .nav__link[aria-current='page'] {
   background: var(--glass-selected);
   border-color: var(--glass-selected-edge);
   box-shadow:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 3px rgba(0, 0, 0, 0.35);
+    inset 0 1px 0 color-mix(in srgb, var(--glass-white) 22%, transparent),
+    0 1px 3px color-mix(in srgb, var(--glass-black) 35%, transparent);
 }
 :root[data-ran-surface='glass'] .appearance {
   gap: 4px;
@@ -661,8 +691,7 @@ a {
 }
 :root[data-ran-surface='glass'] .langs__summary:hover {
   border-color: var(--glass-rim);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 55%, transparent);
 }
 
 /* Transient panels — one overlay glass layer. */
@@ -684,22 +713,18 @@ a {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
   border-radius: 20px;
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border: 1px solid color-mix(in srgb, #fff 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--glass-white) 40%, transparent);
   box-shadow:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    0 1px 0 rgba(255, 255, 255, 0.7),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 20px 50px -30px rgba(28, 48, 86, 0.32),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 1px 0 color-mix(in srgb, var(--glass-white) 70%, transparent),
+    0 20px 50px -30px color-mix(in srgb, var(--glass-ink) 32%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--glass-white) 80%, transparent);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .doc {
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border-color: color-mix(in srgb, #fff 10%, transparent);
+  border-color: color-mix(in srgb, var(--glass-white) 10%, transparent);
   box-shadow:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    0 1px 0 rgba(255, 255, 255, 0.06),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 24px 56px -28px rgba(0, 0, 0, 0.55),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 1px 0 color-mix(in srgb, var(--glass-white) 6%, transparent),
+    0 24px 56px -28px color-mix(in srgb, var(--glass-black) 55%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--glass-white) 8%, transparent);
 }
 :root[data-ran-surface='glass'] .doc:has(> .landing) {
   margin: 0;
@@ -720,22 +745,16 @@ a {
   margin-block: 8px 16px;
   padding: 12px 12px 16px;
   border-radius: 12px;
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  background: color-mix(in srgb, #ffffff 14%, transparent);
+  background: color-mix(in srgb, var(--glass-white) 14%, transparent);
   -webkit-backdrop-filter: blur(14px) saturate(150%);
   backdrop-filter: blur(14px) saturate(150%);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border: 1px solid color-mix(in srgb, #fff 28%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  border: 1px solid color-mix(in srgb, var(--glass-white) 28%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 40%, transparent);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .toc {
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  background: color-mix(in srgb, #ffffff 5%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border-color: color-mix(in srgb, #fff 10%, transparent);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--glass-white) 5%, transparent);
+  border-color: color-mix(in srgb, var(--glass-white) 10%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 8%, transparent);
 }
 :root[data-ran-surface='glass'] .toc__label {
   letter-spacing: 0.04em;
@@ -758,16 +777,14 @@ a {
 :root[data-ran-surface='glass'] .toc__link:hover {
   color: var(--fg);
   background: var(--glass-hover);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  border-color: color-mix(in srgb, #fff 40%, transparent);
+  border-color: color-mix(in srgb, var(--glass-white) 40%, transparent);
 }
 :root[data-ran-surface='glass'] .toc__link[data-active] {
   color: var(--fg);
   font-weight: 600;
   background: var(--glass-selected);
   border-color: var(--glass-selected-edge);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 70%, transparent);
 }
 :root[data-ran-surface='glass'] .mobile-toc {
   background: transparent;
@@ -793,8 +810,7 @@ a {
 :root[data-ran-surface='glass'] .sb__hover {
   border-radius: 8px;
   background: var(--glass-hover);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 55%, transparent);
 }
 :root[data-ran-surface='glass'] .sb__link[aria-current='page'] {
   border-radius: 8px;
@@ -803,15 +819,13 @@ a {
   background: var(--glass-selected);
   border: 1px solid var(--glass-selected-edge);
   box-shadow:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 2px rgba(28, 48, 86, 0.1);
+    inset 0 1px 0 color-mix(in srgb, var(--glass-white) 85%, transparent),
+    0 1px 2px color-mix(in srgb, var(--glass-ink) 10%, transparent);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .sb__link[aria-current='page'] {
   box-shadow:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 2px rgba(0, 0, 0, 0.3);
+    inset 0 1px 0 color-mix(in srgb, var(--glass-white) 16%, transparent),
+    0 1px 2px color-mix(in srgb, var(--glass-black) 30%, transparent);
 }
 :root[data-ran-surface='glass'] .sb__list--d1,
 :root[data-ran-surface='glass'] .sb__list--d2 {
@@ -821,8 +835,7 @@ a {
   width: 2px;
   border-radius: 1px;
   background: var(--ran-color-primary, var(--fg));
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: 0 0 0 0.5px color-mix(in srgb, #fff 40%, transparent);
+  box-shadow: 0 0 0 0.5px color-mix(in srgb, var(--glass-white) 40%, transparent);
 }
 
 :root[data-ran-surface='glass'] ran-demo:has(+ figure.code) {
@@ -2026,70 +2039,94 @@ ran-demo {
   overflow: hidden;
   border-color: color-mix(in srgb, var(--rule) 80%, transparent);
   background:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.55) 0 18%, transparent 19%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(circle at 78% 28%, rgba(40, 60, 100, 0.14) 0 14%, transparent 15%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.4) 0 16%, transparent 17%),
+    radial-gradient(circle at 12% 20%, color-mix(in srgb, var(--glass-white) 55%, transparent) 0 18%, transparent 19%),
+    radial-gradient(
+      circle at 78% 28%,
+      color-mix(in srgb, var(--glass-demo-spot) 14%, transparent) 0 14%,
+      transparent 15%
+    ),
+    radial-gradient(circle at 58% 78%, color-mix(in srgb, var(--glass-white) 40%, transparent) 0 16%, transparent 17%),
     repeating-linear-gradient(
       -18deg,
       transparent 0 10px,
-      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(90, 120, 170, 0.07) 10px 12px
+      color-mix(in srgb, var(--glass-demo-hatch) 7%, transparent) 10px 12px
     ),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 90% 80% at 16% 18%, rgba(120, 170, 230, 0.38), transparent 52%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 80% 70% at 84% 82%, rgba(180, 150, 200, 0.28), transparent 48%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    linear-gradient(155deg, #e4ebf5 0%, #efeaf4 55%, #e8ebf2 100%);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    radial-gradient(
+      ellipse 90% 80% at 16% 18%,
+      color-mix(in srgb, var(--glass-demo-wash) 38%, transparent),
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 80% 70% at 84% 82%,
+      color-mix(in srgb, var(--glass-demo-blush) 28%, transparent),
+      transparent 48%
+    ),
+    linear-gradient(155deg, var(--glass-demo-0) 0%, var(--glass-demo-1) 55%, var(--glass-demo-2) 100%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 55%, transparent);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] ran-demo {
   background:
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.12) 0 18%, transparent 19%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(circle at 78% 28%, rgba(120, 160, 220, 0.2) 0 14%, transparent 15%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.08) 0 16%, transparent 17%),
+    radial-gradient(circle at 12% 20%, color-mix(in srgb, var(--glass-white) 12%, transparent) 0 18%, transparent 19%),
+    radial-gradient(
+      circle at 78% 28%,
+      color-mix(in srgb, var(--glass-demo-blue) 20%, transparent) 0 14%,
+      transparent 15%
+    ),
+    radial-gradient(circle at 58% 78%, color-mix(in srgb, var(--glass-white) 8%, transparent) 0 16%, transparent 17%),
     repeating-linear-gradient(
       -18deg,
       transparent 0 10px,
-      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(140, 170, 220, 0.08) 10px 12px
+      color-mix(in srgb, var(--glass-demo-grid) 8%, transparent) 10px 12px
     ),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 90% 80% at 16% 18%, rgba(70, 110, 170, 0.4), transparent 52%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    radial-gradient(ellipse 80% 70% at 84% 82%, rgba(120, 80, 130, 0.3), transparent 48%),
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    linear-gradient(155deg, #141820 0%, #12141a 55%, #16121c 100%);
-  /* design-ok: bare-colour optical glass plate, not theme ink */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    radial-gradient(
+      ellipse 90% 80% at 16% 18%,
+      color-mix(in srgb, var(--glass-demo-night-blue) 40%, transparent),
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 80% 70% at 84% 82%,
+      color-mix(in srgb, var(--glass-demo-night-lilac) 30%, transparent),
+      transparent 48%
+    ),
+    linear-gradient(155deg, var(--glass-demo-night-0) 0%, var(--glass-demo-night-1) 55%, var(--glass-demo-night-2) 100%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 10%, transparent);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']):not([data-ran-theme='dark'])[data-ran-surface='glass'] ran-demo {
     background:
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-      radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.12) 0 18%, transparent 19%),
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-        radial-gradient(circle at 78% 28%, rgba(120, 160, 220, 0.2) 0 14%, transparent 15%),
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-        radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.08) 0 16%, transparent 17%),
+      radial-gradient(
+        circle at 12% 20%,
+        color-mix(in srgb, var(--glass-white) 12%, transparent) 0 18%,
+        transparent 19%
+      ),
+      radial-gradient(
+        circle at 78% 28%,
+        color-mix(in srgb, var(--glass-demo-blue) 20%, transparent) 0 14%,
+        transparent 15%
+      ),
+      radial-gradient(circle at 58% 78%, color-mix(in srgb, var(--glass-white) 8%, transparent) 0 16%, transparent 17%),
       repeating-linear-gradient(
         -18deg,
         transparent 0 10px,
-        /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(140, 170, 220, 0.08) 10px 12px
+        color-mix(in srgb, var(--glass-demo-grid) 8%, transparent) 10px 12px
       ),
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-        radial-gradient(ellipse 90% 80% at 16% 18%, rgba(70, 110, 170, 0.4), transparent 52%),
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-        radial-gradient(ellipse 80% 70% at 84% 82%, rgba(120, 80, 130, 0.3), transparent 48%),
-      /* design-ok: bare-colour optical glass plate, not theme ink */
-        linear-gradient(155deg, #141820 0%, #12141a 55%, #16121c 100%);
-    /* design-ok: bare-colour optical glass plate, not theme ink */
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      radial-gradient(
+        ellipse 90% 80% at 16% 18%,
+        color-mix(in srgb, var(--glass-demo-night-blue) 40%, transparent),
+        transparent 52%
+      ),
+      radial-gradient(
+        ellipse 80% 70% at 84% 82%,
+        color-mix(in srgb, var(--glass-demo-night-lilac) 30%, transparent),
+        transparent 48%
+      ),
+      linear-gradient(
+        155deg,
+        var(--glass-demo-night-0) 0%,
+        var(--glass-demo-night-1) 55%,
+        var(--glass-demo-night-2) 100%
+      );
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 10%, transparent);
   }
 }
 ran-demo[align='start'] {
