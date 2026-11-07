@@ -12,7 +12,7 @@ description: 'ranui のすべてのカスタム要素 —— 41 個の要素の�
 
 各要素が公開する CSS 変数は
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) を、使い分けは
-[デザインシステム](/ja/ranui/design-system/)と[デザインガイドライン](/ja/ranui/design-guides/)を参照してください。
+[デザインシステム](/ja/src/ranui/design-system/)と[デザインガイドライン](/ja/src/ranui/design-guides/)を参照してください。
 個々の要素の使い方はサイドバーの各ページにあります。ここは全インターフェースを一望する場所です。
 
 各イベントには派発時のオプションを併記しています：`bubbles`（バブリング）、`composed`
