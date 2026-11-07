@@ -177,8 +177,8 @@ document.body.appendChild(button);
 **3. `sheet` 属性**：shadow root へ CSS を注入する ·
 **4. スロットに渡した内容**：あなたのドキュメントに留まり、ページの CSS がそのまま効きます。
 
-トークンの名前は[デザインシステム](/ja/ranui/design-system/)に、どれを選ぶかの基準は
-[デザインガイドライン](/ja/ranui/design-guides/)に、仕組みは
+トークンの名前は[デザインシステム](/ja/design/design-system/)に、どれを選ぶかの基準は
+[デザインガイドライン](/ja/design/design-guides/)に、仕組みは
 [コーディング規約](/ja/ranui/coding-guides/#styling-across-the-shadow-boundary)にあります。
 
 ## イベント
@@ -206,8 +206,8 @@ document.body.appendChild(button);
 | やりたいこと                                 | 読むページ                                       |
 | -------------------------------------------- | ------------------------------------------------ |
 | 要素の正確な API を調べる                    | [要素 API](/ja/ranui/api)                        |
-| どのトークンを使うべきか、その理由を知る     | [デザインシステム](/ja/ranui/design-system/)     |
-| 一つの体系に見える画面を作る                 | [デザインガイドライン](/ja/ranui/design-guides/) |
+| どのトークンを使うべきか、その理由を知る     | [デザインシステム](/ja/design/design-system/)     |
+| 一つの体系に見える画面を作る                 | [デザインガイドライン](/ja/design/design-guides/) |
 | ranui をアプリへ正しく組み込む               | [コーディング規約](/ja/ranui/coding-guides/)     |
 | ライト／ダークを足す、全体を作り替える       | [テーマ](/ja/ranui/theme/)                       |
 | インターフェースを翻訳する                   | [i18n](/ja/ranui/i18n/)                          |

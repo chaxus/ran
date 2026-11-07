@@ -12,7 +12,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
 
 각 엘리먼트가 노출하는 CSS 변수는
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)를, 무엇을 고를지는
-[디자인 시스템](/ko/src/ranui/design-system/)과 [디자인 가이드](/ko/src/ranui/design-guides/)를 보세요.
+[디자인 시스템](/ko/src/design/design-system/)과 [디자인 가이드](/ko/src/design/design-guides/)를 보세요.
 엘리먼트별 사용법은 사이드바의 각 페이지에 있고, 여기는 전체 인터페이스를 한자리에 모은 곳입니다.
 
 각 이벤트에는 디스패치 옵션이 함께 적혀 있습니다: `bubbles`(버블링), `composed`(섀도 경계를

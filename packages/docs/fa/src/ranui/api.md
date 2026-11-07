@@ -12,7 +12,7 @@ description: 'همهٔ عناصر سفارشی ranui — 41 عنصر همراه 
 
 متغیرهای CSS هر عنصر در
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) آمده است؛ برای انتخاب میان آن‌ها
-[سیستم طراحی](/fa/src/ranui/design-system/) و [راهنمای طراحی](/fa/src/ranui/design-guides/) را ببینید.
+[سیستم طراحی](/fa/src/design/design-system/) و [راهنمای طراحی](/fa/src/design/design-guides/) را ببینید.
 شیوهٔ استفاده از هر عنصر در صفحهٔ خودش در نوار کناری است؛ اینجا کل سطح رابط یک‌جا آمده.
 
 برای هر رویداد گزینه‌های ارسال آن نوشته شده است: `bubbles` (حباب‌کردن)، `composed` (عبور از

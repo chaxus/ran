@@ -6,7 +6,7 @@ description: 'ranui로 만들 때의 엔지니어링 규칙. 진입점, 어트�
 
 ranui로 _만드는_ 법입니다. 컴포넌트의 계약이 무엇인지, Shadow DOM 경계가 익숙한 규칙을 어디서 바꿔 놓는지, 그리고 저지르기 전에 알아 둘 만한 실수는 무엇인지.
 
-이것의 시각적인 반쪽은 [디자인 지침](/ko/ranui/design-guides/)이고, 토큰은 [디자인 시스템](/ko/ranui/design-system/)입니다.
+이것의 시각적인 반쪽은 [디자인 지침](/ko/design/design-guides/)이고, 토큰은 [디자인 시스템](/ko/design/design-system/)입니다.
 
 > **이럴 때 씁니다.** ranui 컴포넌트를 애플리케이션에 이어 붙일 때. import를 고르고, 이벤트를 연결하고, 선택자가 닿지 않는 것에 스타일을 주고, 서버에서 렌더링하고, 테스트를 쓸 때.
 

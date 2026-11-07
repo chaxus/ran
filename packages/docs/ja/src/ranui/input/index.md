@@ -226,7 +226,7 @@ r-input {
 
 Parts：`content` · `input` · `label` · `message`
 
-全一覧は[スタイルトークン](/ja/ranui/style-tokens#input)にあります。どのトークンを使うかは[デザインシステム](/ja/ranui/design-system/)を参照してください。
+全一覧は[スタイルトークン](/ja/ranui/style-tokens#input)にあります。どのトークンを使うかは[デザインシステム](/ja/design/design-system/)を参照してください。
 
 ## ベストプラクティス
 

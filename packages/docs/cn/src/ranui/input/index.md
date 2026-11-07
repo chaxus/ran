@@ -236,7 +236,7 @@ r-input {
 
 Part：`content` · `input` · `label` · `message`
 
-完整清单见[样式令牌](/cn/ranui/style-tokens#input)；该选哪个令牌见[设计系统](/cn/ranui/design-system/)。
+完整清单见[样式令牌](/cn/ranui/style-tokens#input)；该选哪个令牌见[设计系统](/cn/design/design-system/)。
 
 ## 最佳实践
 

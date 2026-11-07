@@ -293,7 +293,7 @@ r-tabs {
 
 Partes: `content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 
-La lista completa está en [tokens de estilo](/es/ranui/style-tokens#tab); cuál elegir lo explica el [sistema de diseño](/es/ranui/design-system/).
+La lista completa está en [tokens de estilo](/es/ranui/style-tokens#tab); cuál elegir lo explica el [sistema de diseño](/es/design/design-system/).
 
 ## Buenas prácticas
 

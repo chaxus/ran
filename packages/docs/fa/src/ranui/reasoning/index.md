@@ -98,7 +98,7 @@ r-reasoning {
 
 Part‌ها: `body` · `row` · `text`
 
-فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#reasoning) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/ranui/design-system/) آمده.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#reasoning) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/design/design-system/) آمده.
 
 ## همچنین ببینید
 

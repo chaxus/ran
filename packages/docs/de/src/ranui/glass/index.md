@@ -43,10 +43,10 @@ Vier Materialien decken die meisten Fälle ab. `regular` ist der Standard.
 
 | Material  | `blur` | `saturate` | `displace` | `bevel` | `dispersion` | `specular` |
 | --------- | ------ | ---------- | ---------- | ------- | ------------ | ---------- |
-| `thin`    | 8      | 160        | 12         | 20      | 20           | 80         |
-| `regular` | 16     | 180        | 18         | 28      | 25           | 100        |
-| `thick`   | 28     | 200        | 22         | 32      | 25           | 100        |
-| `clear`   | 2      | 130        | 28         | 40      | 40           | 120        |
+| `thin`    | 6      | 160        | 48         | 14      | 20           | 100        |
+| `regular` | 16     | 170        | 78         | 24      | 20           | 100        |
+| `thick`   | 22     | 180        | 56         | 28      | 20           | 90         |
+| `clear`   | 4      | 150        | 90         | 20      | 25           | 110        |
 
 ## Über einem Bild
 

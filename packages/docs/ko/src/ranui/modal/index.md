@@ -233,7 +233,7 @@ r-modal {
 
 Part: `body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
 
-전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#modal)에 있고, 어떤 토큰을 쓸지는 [디자인 시스템](/ko/ranui/design-system/)이 다룹니다.
+전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#modal)에 있고, 어떤 토큰을 쓸지는 [디자인 시스템](/ko/design/design-system/)이 다룹니다.
 
 ## 모범 사례
 

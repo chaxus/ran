@@ -6,7 +6,7 @@ description: 'Regras de engenharia para construir com o ranui: pontos de entrada
 
 Como _construir_ com o ranui: qual é o contrato dos componentes, onde a fronteira do Shadow DOM muda as regras a que você está acostumado e quais erros vale conhecer antes de cometê-los.
 
-A metade visual disso são as [diretrizes de design](/pt/ranui/design-guides/); os tokens são o [design system](/pt/ranui/design-system/).
+A metade visual disso são as [diretrizes de design](/pt/design/design-guides/); os tokens são o [design system](/pt/design/design-system/).
 
 > **Use quando** estiver ligando componentes do ranui a uma aplicação: escolhendo importações, amarrando eventos, estilizando algo que um seletor não alcança, renderizando num servidor ou escrevendo testes.
 

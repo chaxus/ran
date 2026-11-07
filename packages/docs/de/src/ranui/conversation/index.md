@@ -142,7 +142,7 @@ r-conversation {
 
 Parts: `conversation` · `empty` · `footer` · `list` · `older`
 
-Die vollständige Liste steht in den [Style-Tokens](/de/ranui/style-tokens#conversation); welches Token du wählst, klärt das [Designsystem](/de/ranui/design-system/).
+Die vollständige Liste steht in den [Style-Tokens](/de/ranui/style-tokens#conversation); welches Token du wählst, klärt das [Designsystem](/de/design/design-system/).
 
 ## Siehe auch
 

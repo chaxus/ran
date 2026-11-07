@@ -11,8 +11,8 @@ their `detail` shape and dispatch flags), slots, and `::part()` names.
 
 For the CSS variables each element exposes see
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md); for how to choose
-between them, the [design system](/src/ranui/design-system/) and the
-[design guidelines](/src/ranui/design-guides/). Usage guidance per element lives on its
+between them, the [design system](/src/design/design-system/) and the
+[design guidelines](/src/design/design-guides/). Usage guidance per element lives on its
 own page in the sidebar; this is the exhaustive surface in one place.
 
 Each event states the options it is dispatched with: `bubbles`, `composed` (crosses the

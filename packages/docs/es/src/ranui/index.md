@@ -177,8 +177,8 @@ definirlos en `:root`, en un contenedor o en el propio elemento funciona igual:
 **3. el atributo `sheet`** para inyectar CSS en el shadow root ·
 **4. contenido en slots**, que se queda en tu documento y toma el CSS de tu página.
 
-Los nombres de los tokens son el [sistema de diseño](/es/ranui/design-system/); las reglas para
-elegir entre ellos son la [guía de diseño](/es/ranui/design-guides/); la mecánica está en la
+Los nombres de los tokens son el [sistema de diseño](/es/design/design-system/); las reglas para
+elegir entre ellos son la [guía de diseño](/es/design/design-guides/); la mecánica está en la
 [guía de código](/es/ranui/coding-guides/#styling-across-the-shadow-boundary).
 
 ## Eventos
@@ -205,8 +205,8 @@ son elementos del DOM normales, pero solo admiten un manejador y no tienen fase 
 | Si quieres…                                        | Lee                                           |
 | -------------------------------------------------- | --------------------------------------------- |
 | Consultar la API exacta de un elemento             | [API de elementos](/es/ranui/api)             |
-| Saber qué token usar, y por qué                    | [Sistema de diseño](/es/ranui/design-system/) |
-| Construir una pantalla que parezca un solo sistema | [Guía de diseño](/es/ranui/design-guides/)    |
+| Saber qué token usar, y por qué                    | [Sistema de diseño](/es/design/design-system/) |
+| Construir una pantalla que parezca un solo sistema | [Guía de diseño](/es/design/design-guides/)    |
 | Integrar ranui en una aplicación correctamente     | [Guía de código](/es/ranui/coding-guides/)    |
 | Añadir claro/oscuro, o rehacer todo el estilo      | [Temas](/es/ranui/theme/)                     |
 | Traducir la interfaz                               | [i18n](/es/ranui/i18n/)                       |

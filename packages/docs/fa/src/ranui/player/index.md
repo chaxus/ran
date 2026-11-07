@@ -311,7 +311,7 @@ r-player {
 }
 ```
 
-فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#player) است؛ اینکه سراغ کدام توکن بروید کار [سیستم طراحی](/fa/ranui/design-system/) است.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#player) است؛ اینکه سراغ کدام توکن بروید کار [سیستم طراحی](/fa/design/design-system/) است.
 
 ## بهترین شیوه‌ها
 

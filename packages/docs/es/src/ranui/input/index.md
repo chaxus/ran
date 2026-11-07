@@ -226,7 +226,7 @@ r-input {
 
 Partes: `content` · `input` · `label` · `message`
 
-La lista completa está en [tokens de estilo](/es/ranui/style-tokens#input); cuál usar lo explica el [sistema de diseño](/es/ranui/design-system/).
+La lista completa está en [tokens de estilo](/es/ranui/style-tokens#input); cuál usar lo explica el [sistema de diseño](/es/design/design-system/).
 
 ## Buenas prácticas
 

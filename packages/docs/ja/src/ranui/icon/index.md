@@ -156,4 +156,4 @@ r-icon {
 
 Part：`ran-icon`
 
-一覧は[スタイルトークン](/ja/ranui/style-tokens#icon)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#icon)に、どのトークンを選ぶかは[デザインシステム](/ja/design/design-system/)にあります。

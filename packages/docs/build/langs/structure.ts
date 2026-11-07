@@ -33,6 +33,15 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
   '/design/': [
     { kind: 'full', key: 'overview', link: '/design/' },
     ...DESIGN_REFERENCE.map(({ key }, i) => ({ kind: 'full' as const, key, link: DESIGN_REFERENCE_LINKS[i] })),
+    /* Method pages that apply beyond a single library — not ranui Foundations. */
+    { kind: 'suffix', key: 'design_system', name: 'Design system', link: '/design/design-system/' },
+    { kind: 'suffix', key: 'design_guidelines', name: 'Design guidelines', link: '/design/design-guides/' },
+    {
+      kind: 'suffix',
+      key: 'information_architecture',
+      name: 'Information architecture',
+      link: '/design/information-architecture/',
+    },
   ],
   '/ranuts/': [
     { kind: 'full', key: 'overview', link: '/ranuts/' },
@@ -490,17 +499,10 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
       kind: 'full',
       key: 'foundations',
       items: [
-        { kind: 'suffix', key: 'design_system', name: 'Design system', link: '/ranui/design-system/' },
-        { kind: 'suffix', key: 'design_guidelines', name: 'Design guidelines', link: '/ranui/design-guides/' },
-        {
-          kind: 'suffix',
-          key: 'information_architecture',
-          name: 'Information architecture',
-          link: '/ranui/information-architecture/',
-        },
         { kind: 'suffix', key: 'coding_guidelines', name: 'Coding guidelines', link: '/ranui/coding-guides/' },
         { kind: 'full', key: 'theming', link: '/ranui/theme/' },
         { kind: 'suffix', key: 'themeswitch', name: 'ThemeSwitch', link: '/ranui/theme-switch/' },
+        { kind: 'suffix', key: 'surfaceswitch', name: 'SurfaceSwitch', link: '/ranui/surface-switch/' },
         { kind: 'suffix', key: 'ranui_i18n_foundation', name: 'i18n', link: '/ranui/i18n/' },
         { kind: 'suffix', key: 'builder', name: 'Builder', link: '/ranui/builder/' },
         { kind: 'full', key: 'server_rendering', link: '/ranui/ssr/' },

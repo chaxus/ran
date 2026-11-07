@@ -66,6 +66,8 @@ export interface UiMessages {
   lightModeSwitchTitle: string;
   darkModeSwitchTitle: string;
   langMenu: string;
+  /** aria-label for the header theme + style select pair. */
+  appearance: string;
   prevPage: string;
   nextPage: string;
   lastUpdated: string;

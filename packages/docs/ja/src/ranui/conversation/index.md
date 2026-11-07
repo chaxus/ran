@@ -136,7 +136,7 @@ r-conversation {
 
 Part：`conversation` · `empty` · `footer` · `list` · `older`
 
-一覧は[スタイルトークン](/ja/ranui/style-tokens#conversation)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#conversation)に、どのトークンを選ぶかは[デザインシステム](/ja/design/design-system/)にあります。
 
 ## 関連
 

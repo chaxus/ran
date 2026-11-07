@@ -101,7 +101,7 @@ r-reasoning {
 
 Partes: `body` · `row` · `text`
 
-La lista completa está en [tokens de estilo](/es/ranui/style-tokens#reasoning); cuál elegir lo explica el [sistema de diseño](/es/ranui/design-system/).
+La lista completa está en [tokens de estilo](/es/ranui/style-tokens#reasoning); cuál elegir lo explica el [sistema de diseño](/es/design/design-system/).
 
 ## Véase también
 

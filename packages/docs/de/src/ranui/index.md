@@ -178,8 +178,8 @@ auf einem Wrapper oder auf dem Element selbst zu setzen funktioniert also gleich
 **3. das Attribut `sheet`**, um CSS in den Shadow Root zu injizieren ·
 **4. Slot-Inhalt**, der in deinem Dokument bleibt und dein Seiten-CSS übernimmt.
 
-Die Tokennamen sind das [Designsystem](/de/ranui/design-system/); die Regeln zur Auswahl sind die
-[Designrichtlinien](/de/ranui/design-guides/); die Mechanik steht in den
+Die Tokennamen sind das [Designsystem](/de/design/design-system/); die Regeln zur Auswahl sind die
+[Designrichtlinien](/de/design/design-guides/); die Mechanik steht in den
 [Coding-Richtlinien](/de/ranui/coding-guides/#styling-across-the-shadow-boundary).
 
 ## Events
@@ -206,8 +206,8 @@ da dies gewöhnliche DOM-Elemente sind — sie erlauben aber nur einen Handler u
 | Wenn du … willst                             | Lies                                           |
 | -------------------------------------------- | ---------------------------------------------- |
 | die genaue API eines Elements nachschlagen   | [Element-API](/de/ranui/api)                   |
-| wissen, welches Token du nimmst und warum    | [Designsystem](/de/ranui/design-system/)       |
-| einen Screen bauen, der wie ein System wirkt | [Designrichtlinien](/de/ranui/design-guides/)  |
+| wissen, welches Token du nimmst und warum    | [Designsystem](/de/design/design-system/)       |
+| einen Screen bauen, der wie ein System wirkt | [Designrichtlinien](/de/design/design-guides/)  |
 | ranui sauber in eine App einbinden           | [Coding-Richtlinien](/de/ranui/coding-guides/) |
 | Hell/Dunkel ergänzen oder alles umgestalten  | [Theming](/de/ranui/theme/)                    |
 | die Oberfläche übersetzen                    | [i18n](/de/ranui/i18n/)                        |

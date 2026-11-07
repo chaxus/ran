@@ -176,8 +176,8 @@ document.body.appendChild(button);
 **3. `sheet` 어트리뷰트** — 섀도 루트에 CSS 를 주입 ·
 **4. 슬롯에 넣은 콘텐츠** — 여러분의 문서에 남아 페이지 CSS 를 그대로 받습니다.
 
-토큰 이름은 [디자인 시스템](/ko/ranui/design-system/)에, 무엇을 고를지의 규칙은
-[디자인 가이드](/ko/ranui/design-guides/)에, 작동 원리는
+토큰 이름은 [디자인 시스템](/ko/design/design-system/)에, 무엇을 고를지의 규칙은
+[디자인 가이드](/ko/design/design-guides/)에, 작동 원리는
 [코딩 가이드](/ko/ranui/coding-guides/#styling-across-the-shadow-boundary)에 있습니다.
 
 ## 이벤트
@@ -204,8 +204,8 @@ document.body.appendChild(button);
 | 하고 싶은 일                            | 읽을 문서                                 |
 | --------------------------------------- | ----------------------------------------- |
 | 엘리먼트의 정확한 API 찾기              | [엘리먼트 API](/ko/ranui/api)             |
-| 어떤 토큰을 왜 써야 하는지 알기         | [디자인 시스템](/ko/ranui/design-system/) |
-| 하나의 체계로 보이는 화면 만들기        | [디자인 가이드](/ko/ranui/design-guides/) |
+| 어떤 토큰을 왜 써야 하는지 알기         | [디자인 시스템](/ko/design/design-system/) |
+| 하나의 체계로 보이는 화면 만들기        | [디자인 가이드](/ko/design/design-guides/) |
 | ranui 를 앱에 제대로 붙이기             | [코딩 가이드](/ko/ranui/coding-guides/)   |
 | 라이트/다크를 넣거나 전체를 다시 꾸미기 | [테마](/ko/ranui/theme/)                  |
 | 인터페이스 번역하기                     | [i18n](/ko/ranui/i18n/)                   |

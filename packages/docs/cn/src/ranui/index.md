@@ -177,8 +177,8 @@ document.body.appendChild(button);
 **2. `::part()`**：做令牌覆盖不到的结构性调整 · **3. `sheet` 属性**：把 CSS 注入 shadow root ·
 **4. 插槽内容**：它本来就留在你的文档里，页面 CSS 直接生效。
 
-令牌名称见[设计系统](/cn/ranui/design-system/)，怎么取舍见
-[设计规范](/cn/ranui/design-guides/)，机制细节见
+令牌名称见[设计系统](/cn/design/design-system/)，怎么取舍见
+[设计规范](/cn/design/design-guides/)，机制细节见
 [编码规范](/cn/ranui/coding-guides/#styling-across-the-shadow-boundary)。
 
 ## 事件
@@ -204,8 +204,8 @@ document.body.appendChild(button);
 | 如果你想……               | 读                                   |
 | ------------------------ | ------------------------------------ |
 | 查某个元素的确切接口     | [元素 API](/cn/ranui/api)            |
-| 知道该用哪个令牌、为什么 | [设计系统](/cn/ranui/design-system/) |
-| 做出像一套系统的界面     | [设计规范](/cn/ranui/design-guides/) |
+| 知道该用哪个令牌、为什么 | [设计系统](/cn/design/design-system/) |
+| 做出像一套系统的界面     | [设计规范](/cn/design/design-guides/) |
 | 把 ranui 正确接进应用    | [编码规范](/cn/ranui/coding-guides/) |
 | 接入明暗主题，或整体换皮 | [主题系统](/cn/ranui/theme/)         |
 | 把界面翻译成别的语言     | [i18n 国际化](/cn/ranui/i18n/)       |

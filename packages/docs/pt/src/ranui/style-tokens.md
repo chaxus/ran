@@ -12,7 +12,7 @@ confiar.
 
 Defina um token em qualquer lugar de onde ele seja herdado — `:root`, um contêiner ou o
 próprio elemento — e prefira um token semântico quando ele der conta da mudança, porque
-alcança todos os componentes de uma vez. O vocabulário é o [design system](/pt/src/ranui/design-system/);
+alcança todos os componentes de uma vez. O vocabulário é o [design system](/pt/src/design/design-system/);
 a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `attachments`
@@ -448,16 +448,13 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `glass`
 
-- Tokens: 28
+- Tokens: 25
 - Parts: 3
 
 ### Tokens
-<!-- layers: semantic: 6 · internal: 22 -->
-- `--ran-backdrop-edge-light`
-- `--ran-backdrop-highlight`
+<!-- layers: semantic: 6 · internal: 19 -->
 - `--ran-backdrop-ink-dark`
 - `--ran-backdrop-ink-light`
-- `--ran-backdrop-shadow-light`
 - `--ran-color-bg-elevated`
 - `--ran-glass-blur`
 - `--ran-glass-border`
@@ -1894,6 +1891,35 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 ### Parts
 - `dot`
 
+## `surface-switch`
+
+- Tokens: 17
+- Parts: 2
+
+### Tokens
+<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-border-secondary`
+- `--ran-radius-md`
+- `--ran-select-background-color`
+- `--ran-select-background-image`
+- `--ran-select-border`
+- `--ran-select-border-radius`
+- `--ran-select-font-size`
+- `--ran-surface-glass-border`
+- `--ran-surface-glass-fill`
+- `--ran-surface-glass-specular`
+- `--ran-surface-switch-`
+- `--ran-surface-switch-background`
+- `--ran-surface-switch-border-color`
+- `--ran-surface-switch-font-size`
+- `--ran-surface-switch-radius`
+- `--ran-text-label-1`
+
+### Parts
+- `option ${choice}`
+- `select`
+
 ## `tab`
 
 - Tokens: 43
@@ -1967,37 +1993,32 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `theme-switch`
 
-- Tokens: 22
+- Tokens: 17
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 6 · skin: 1 · internal: 15 -->
-- `--ran-color-bg-hover`
-- `--ran-color-border`
-- `--ran-color-focus`
-- `--ran-color-text`
-- `--ran-color-text-secondary`
-- `--ran-radius-full`
-- `--ran-size-1`
-- `--ran-size-5`
-- `--ran-skin-border-style`
-- `--ran-space-1`
+<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+- `--ran-color-bg-elevated`
+- `--ran-color-border-secondary`
+- `--ran-radius-md`
+- `--ran-select-background-color`
+- `--ran-select-background-image`
+- `--ran-select-border`
+- `--ran-select-border-radius`
+- `--ran-select-font-size`
+- `--ran-surface-glass-border`
+- `--ran-surface-glass-fill`
+- `--ran-surface-glass-specular`
+- `--ran-text-label-1`
 - `--ran-theme-switch-`
 - `--ran-theme-switch-background`
 - `--ran-theme-switch-border-color`
-- `--ran-theme-switch-button-active-background`
-- `--ran-theme-switch-button-active-color`
-- `--ran-theme-switch-button-color`
-- `--ran-theme-switch-button-hover-color`
-- `--ran-theme-switch-button-size`
-- `--ran-theme-switch-gap`
-- `--ran-theme-switch-icon-size`
+- `--ran-theme-switch-font-size`
 - `--ran-theme-switch-radius`
-- `--ran-theme-switch-touch-size`
 
 ### Parts
-- `button ${choice}`
-- `switch`
+- `option ${choice}`
+- `select`
 
 ## `token-meter`
 
