@@ -485,13 +485,52 @@ describe('r-modal contract', () => {
     expect(focusSpy).toHaveBeenCalled();
   });
 
-  it('clearAfterTimers clears pending timers', async () => {
+  it('clearAfterTimers bumps the presence token to cancel settles', async () => {
     const modal = await createModal();
-    (modal as any)._afterOpenTimer = window.setTimeout(() => {}, 10000);
-    (modal as any)._afterCloseTimer = window.setTimeout(() => {}, 10000);
+    const before = (modal as any)._presenceToken;
     (modal as any).clearAfterTimers();
-    expect((modal as any)._afterOpenTimer).toBeNull();
-    expect((modal as any)._afterCloseTimer).toBeNull();
+    expect((modal as any)._presenceToken).toBe(before + 1);
+  });
+
+  it('restores focus only after the close presence settles', async () => {
+    const opener = document.createElement('button');
+    opener.textContent = 'Open';
+    document.body.appendChild(opener);
+    opener.focus();
+
+    const modal = await createModal();
+    modal.open = true;
+    await sleep(20);
+    expect(document.activeElement).not.toBe(opener);
+
+    let resolveFinished!: () => void;
+    const finished = new Promise<void>((resolve) => {
+      resolveFinished = resolve;
+    });
+    // jsdom has no getAnimations; install one on the root so settlePresence waits.
+    const root = (modal as any)._root as HTMLElement;
+    Object.defineProperty(root, 'getAnimations', {
+      configurable: true,
+      value: () => [{ finished } as unknown as Animation],
+    });
+
+    let afterClose = false;
+    modal.addEventListener('afterclose', () => {
+      afterClose = true;
+    });
+    modal.close('program');
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    // Still settling: focus must not have returned yet while [closing] is set.
+    expect(modal.hasAttribute('closing')).toBe(true);
+    expect(afterClose).toBe(false);
+    expect(document.activeElement).not.toBe(opener);
+
+    resolveFinished();
+    await sleep(20);
+    expect(afterClose).toBe(true);
+    expect(modal.hasAttribute('closing')).toBe(false);
+    expect(document.activeElement).toBe(opener);
+    opener.remove();
   });
 
   it('closeDialog when not open removes root open attribute', async () => {

@@ -13,6 +13,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { RanElement } from '@/utils/index';
+import { settlePresence } from '@/utils/presence';
 import { defineSSR } from '@/utils/ssr-registry';
 import { getMessageContainer, restack, type MessageRenderOptions } from './container';
 
@@ -24,17 +25,6 @@ export interface MessagePrompt extends MessageRenderOptions {
 }
 
 const defaultDuration = 3000;
-/** When the leave starts, before `duration` ends; matches the stylesheet's default exit. */
-const EXIT_ESTIMATE = 200;
-
-/** The longest transition on an element, in ms: how long its current state takes to land. */
-const settleTime = (el: HTMLElement): number => {
-  const style = getComputedStyle(el);
-  const seconds = (list: string) => list.split(',').map((value) => Number.parseFloat(value) || 0);
-  const durations = seconds(style.transitionDuration);
-  const delays = seconds(style.transitionDelay);
-  return Math.max(0, ...durations.map((duration, i) => (duration + (delays[i % delays.length] ?? 0)) * 1000));
-};
 
 /**
  * Takes a toast out of the stack; the ones after it move up by however far they shifted,
@@ -207,20 +197,19 @@ function initMessageApi() {
       message.getBoundingClientRect();
       message.removeAttribute('data-state');
 
-      message.timeId = setTimeout(
-        () => {
-          message.setAttribute('data-state', 'exit');
-          setTimeout(() => {
-            if (message.parentNode === div && div.hasAttribute('data-stacked')) {
-              // A pile has no flow to close up; the rest move to their new depths by transition.
-              div.removeChild(message);
-              restack(div);
-            } else if (message.parentNode === div) removeFromStack(div, message);
-            if (close) close();
-          }, settleTime(message));
-        },
-        Math.max(0, duration - EXIT_ESTIMATE),
-      );
+      // Stay visible for the full `duration`, then exit and wait for the stylesheet
+      // to finish before removing — same settle-then-teardown as floating/modal.
+      message.timeId = setTimeout(() => {
+        message.setAttribute('data-state', 'exit');
+        settlePresence(message, () => {
+          if (message.parentNode === div && div.hasAttribute('data-stacked')) {
+            // A pile has no flow to close up; the rest move to their new depths by transition.
+            div.removeChild(message);
+            restack(div);
+          } else if (message.parentNode === div) removeFromStack(div, message);
+          if (close) close();
+        });
+      }, Math.max(0, duration));
     };
   };
 

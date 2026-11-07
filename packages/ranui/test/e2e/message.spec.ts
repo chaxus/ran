@@ -119,9 +119,9 @@ test.describe('message', () => {
       });
 
       // A slow runner samples sparsely, so read windows, not single samples: the toast has
-      // settled after its 400ms entrance and stays put until its 200ms exit starts at 700ms.
+      // settled after its entrance and stays put until exit starts at the full `duration` (900ms).
       const entering = trace.filter((frame) => frame.t < 400);
-      const rest = trace.filter((frame) => frame.t > 420 && frame.t < 680).at(-1)!.top;
+      const rest = trace.filter((frame) => frame.t > 420 && frame.t < 880).at(-1)!.top;
       for (let i = 1; i < entering.length; i++)
         expect(entering[i]!.top).toBeGreaterThanOrEqual(entering[i - 1]!.top - 0.5);
       expect(Math.max(...entering.map((frame) => frame.top))).toBeLessThanOrEqual(rest + 0.5);
@@ -129,9 +129,9 @@ test.describe('message', () => {
 
       const gone = trace.findIndex((frame) => !frame.inDom);
       expect(gone).toBeGreaterThan(0);
-      // The last sample before removal is at most one interval from the end of a 200ms fade.
+      // The last sample before removal is at most one interval from the end of the exit fade.
       expect(trace[gone - 1]!.opacity).toBeLessThan(0.5);
-      const leaving = trace.slice(0, gone).filter((frame) => frame.t > 700);
+      const leaving = trace.slice(0, gone).filter((frame) => frame.t > 900);
       for (let i = 1; i < leaving.length; i++)
         expect(leaving[i]!.opacity).toBeLessThanOrEqual(leaving[i - 1]!.opacity + 0.01);
       // The second toast's steps once the first is gone: many small ones, none a jump.

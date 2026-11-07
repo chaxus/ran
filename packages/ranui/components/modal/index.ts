@@ -14,6 +14,7 @@ import { RanElement } from '@/utils/ssr';
 import { falseList } from '@/utils/dom';
 import { ButtonBuilder, Div, EventManager, Slot, View } from '@/utils/builder';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import { settlePresence } from '@/utils/presence';
 import { defineSSR } from '@/utils/ssr-registry';
 
 // Self-registered so the dialog's own chrome needs no lazy icon fetch on first open.
@@ -66,8 +67,10 @@ export class Modal extends RanElement {
   _previousActiveElement: Element | null;
   _isDialogOpen: boolean;
   _scrollLocked: boolean;
-  _afterOpenTimer: number | null;
-  _afterCloseTimer: number | null;
+  /** Bumped to cancel in-flight afteropen/afterclose presence settles. */
+  _presenceToken: number;
+  /** Close trigger for the pending afterclose, set by `close()` before open is cleared. */
+  _pendingCloseTrigger: ModalCloseTrigger | null;
 
   static get observedAttributes(): string[] {
     return [
@@ -89,8 +92,8 @@ export class Modal extends RanElement {
     this._previousActiveElement = null;
     this._isDialogOpen = false;
     this._scrollLocked = false;
-    this._afterOpenTimer = null;
-    this._afterCloseTimer = null;
+    this._presenceToken = 0;
+    this._pendingCloseTrigger = null;
     this._shadowDom = ensureShadowRoot(this, modalCss);
     const root = Div()
       .class('ran-modal-root')
@@ -391,45 +394,30 @@ export class Modal extends RanElement {
     }
   };
 
+  /** Cancel in-flight open/close presence settles (e.g. rapid reopen). */
   clearAfterTimers = (): void => {
-    if (this._afterOpenTimer !== null) {
-      window.clearTimeout(this._afterOpenTimer);
-      this._afterOpenTimer = null;
-    }
-    if (this._afterCloseTimer !== null) {
-      window.clearTimeout(this._afterCloseTimer);
-      this._afterCloseTimer = null;
-    }
-  };
-
-  getTransitionTimeout = (): number => {
-    const style = window.getComputedStyle(this._dialog);
-    const parseTime = (value: string): number => {
-      const item = value.split(',')[0]?.trim() || '0s';
-      if (item.endsWith('ms')) return Number.parseFloat(item);
-      if (item.endsWith('s')) return Number.parseFloat(item) * 1000;
-      return Number.parseFloat(item) || 0;
-    };
-    const delay = parseTime(style.transitionDelay);
-    const duration = parseTime(style.transitionDuration);
-    return Math.max(0, delay + duration);
+    this._presenceToken += 1;
   };
 
   emitAfterOpen = (): void => {
-    const timeout = this.getTransitionTimeout();
-    this._afterOpenTimer = window.setTimeout(() => {
-      this._afterOpenTimer = null;
+    const token = this._presenceToken;
+    settlePresence(this._root, () => {
+      if (token !== this._presenceToken) return;
       this.dispatchEvent(new CustomEvent('afteropen'));
-    }, timeout);
+    });
   };
 
   emitAfterClose = (trigger: ModalCloseTrigger): void => {
-    const timeout = this.getTransitionTimeout();
-    this._afterCloseTimer = window.setTimeout(() => {
-      this._afterCloseTimer = null;
+    const token = this._presenceToken;
+    const previous = this._previousActiveElement;
+    settlePresence(this._root, () => {
+      if (token !== this._presenceToken) return;
       this.removeAttribute('closing');
+      // Restore focus only after the exit fade finishes so focus does not jump
+      // while the dialog is still visually present.
+      if (previous instanceof HTMLElement) previous.focus();
       this.dispatchEvent(new CustomEvent('afterclose', { detail: { trigger } }));
-    }, timeout);
+    });
   };
 
   trapFocus = (event: KeyboardEvent): void => {
@@ -461,9 +449,11 @@ export class Modal extends RanElement {
       detail: { trigger },
     });
     if (!this.dispatchEvent(beforeClose)) return;
+    // Stash trigger before clearing `open` so closeDialog can emit afterclose
+    // after the exit settle (attributeChanged → closeDialog).
+    this._pendingCloseTrigger = trigger;
     this.removeAttribute('open');
     this.dispatchEvent(new CustomEvent('close', { detail: { trigger } }));
-    this.emitAfterClose(trigger);
   };
 
   openDialog = (): void => {
@@ -518,19 +508,16 @@ export class Modal extends RanElement {
     this._root.removeAttribute('open');
     this._dialog.setAttribute('aria-hidden', 'true');
     // `open` is removed synchronously (above), but the mask/dialog fade-and-scale
-    // CSS transition keeps painting for another `getTransitionTimeout()` (~0.3s).
-    // A host page that escalates z-index while `[open]` is set (e.g. this repo's
-    // docs `Demo.vue`, via `:has(r-modal[open])`, to lift the modal above its own
-    // sticky nav) would otherwise drop that escalation the instant `open` is
-    // gone, mid-fade — the still-visible mask then repaints *under* whatever the
-    // host's chrome outranks it with, clipping out that region for the rest of
-    // the close. `closing` stays set through the transition tail so a host can
-    // key off `:has(r-modal[open]), :has(r-modal[closing])` instead and the
-    // escalation lasts exactly as long as the modal is visually present.
+    // CSS transition keeps painting until settlePresence finishes. A host page
+    // that escalates z-index while `[open]` is set (e.g. this repo's docs via
+    // `:has(r-modal[open])`) would otherwise drop that escalation mid-fade.
+    // `closing` stays set through the transition tail so a host can key off
+    // `:has(r-modal[open]), :has(r-modal[closing])` for the full visual presence.
+    // Focus restore runs in emitAfterClose after settle — not here.
     this.setAttribute('closing', '');
-    if (this._previousActiveElement instanceof HTMLElement) {
-      this._previousActiveElement.focus();
-    }
+    const trigger = this._pendingCloseTrigger ?? 'program';
+    this._pendingCloseTrigger = null;
+    this.emitAfterClose(trigger);
   };
 
   onMaskClick = (event: MouseEvent): void => {
