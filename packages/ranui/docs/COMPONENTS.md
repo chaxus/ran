@@ -11,7 +11,7 @@ shadow boundary) and `cancelable` (`preventDefault()` vetoes it). **`element-onl
 none of the three — a delegated listener on an ancestor never sees that event, so bind to
 the element itself.
 
-41 custom elements.
+42 custom elements.
 
 ## `<r-attachments>`
 
@@ -575,6 +575,17 @@ Source: `components/state-dot/index.ts`
 - **Slots**: —
 - **Parts**: `dot`
 
+## `<r-surface-switch>`
+
+Source: `components/surface-switch/index.ts`
+
+- **Attributes**: `label`, `label-glass`, `label-solid`, `sheet: string`
+- **Properties**: `sheet: string`, `value: RanSurfaceName`
+- **Events**:
+  - `change` · bubbles, composed · detail `{ surface }`
+- **Slots**: —
+- **Parts**: `option ${choice}`, `select`
+
 ## `<r-tab>`
 
 Source: `components/tabpane/index.ts`
@@ -603,11 +614,11 @@ Source: `components/theme-switch/index.ts`
 - **Attributes**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **Properties**:
   - `sheet: string`
-  - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.
+  - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **Events**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **Slots**: —
-- **Parts**: `button ${choice}`, `switch`
+- **Parts**: `option ${choice}`, `select`
 
 ## `<r-token-meter>`
 

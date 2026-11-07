@@ -1,6 +1,6 @@
 ---
 title: API de elementos do ranui
-description: 'Todos os custom elements do ranui: 41 elementos com seus atributos, propriedades, eventos, slots e nomes de ::part(), extraídos do código-fonte.'
+description: 'Todos os custom elements do ranui: 42 elementos com seus atributos, propriedades, eventos, slots e nomes de ::part(), extraídos do código-fonte.'
 ---
 
 # API de elementos do ranui (gerada)
@@ -13,8 +13,8 @@ em inglês.
 
 Para as variáveis CSS que cada elemento expõe, veja
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md); para escolher entre elas, o
-[design system](/pt/src/design/design-system/) e as
-[diretrizes de design](/pt/src/design/design-guides/). O uso de cada elemento fica na página
+[design system](/pt/src/ranui/design-system/) e as
+[diretrizes de design](/pt/src/ranui/design-guides/). O uso de cada elemento fica na página
 dele na barra lateral; aqui está toda a superfície em um só lugar.
 
 Cada evento informa as opções com que é despachado: `bubbles`, `composed` (cruza a
@@ -22,7 +22,7 @@ fronteira do shadow DOM) e `cancelable` (`preventDefault()` o veta). **`element-
 significa nenhuma das três — um ouvinte delegado num ancestral nunca verá esse evento,
 então ligue-o ao próprio elemento.
 
-**41 custom elements.**
+**42 custom elements.**
 
 ## `<r-attachments>`
 
@@ -586,6 +586,17 @@ Código-fonte: `components/state-dot/index.ts`
 - **Slots**: —
 - **Partes**: `dot`
 
+## `<r-surface-switch>`
+
+Código-fonte: `components/surface-switch/index.ts`
+
+- **Atributos**: `label`, `label-glass`, `label-solid`, `sheet: string`
+- **Propriedades**: `sheet: string`, `value: RanSurfaceName`
+- **Eventos**:
+  - `change` · bubbles, composed · detail `{ surface }`
+- **Slots**: —
+- **Partes**: `option ${choice}`, `select`
+
 ## `<r-tab>`
 
 Código-fonte: `components/tabpane/index.ts`
@@ -614,11 +625,11 @@ Código-fonte: `components/theme-switch/index.ts`
 - **Atributos**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **Propriedades**:
   - `sheet: string`
-  - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.
+  - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **Eventos**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **Slots**: —
-- **Partes**: `button ${choice}`, `switch`
+- **Partes**: `option ${choice}`, `select`
 
 ## `<r-token-meter>`
 

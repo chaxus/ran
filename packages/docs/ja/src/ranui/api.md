@@ -1,6 +1,6 @@
 ---
 title: ranui 要素 API
-description: 'ranui のすべてのカスタム要素 —— 41 個の要素の属性、プロパティ、イベント、スロット、::part() 名。いずれもソースから抽出しています。'
+description: 'ranui のすべてのカスタム要素 —— 42 個の要素の属性、プロパティ、イベント、スロット、::part() 名。いずれもソースから抽出しています。'
 ---
 
 # ranui 要素 API（自動生成）
@@ -12,7 +12,7 @@ description: 'ranui のすべてのカスタム要素 —— 41 個の要素の�
 
 各要素が公開する CSS 変数は
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) を、使い分けは
-[デザインシステム](/ja/src/design/design-system/)と[デザインガイドライン](/ja/src/design/design-guides/)を参照してください。
+[デザインシステム](/ja/src/ranui/design-system/)と[デザインガイドライン](/ja/src/ranui/design-guides/)を参照してください。
 個々の要素の使い方はサイドバーの各ページにあります。ここは全インターフェースを一望する場所です。
 
 各イベントには派発時のオプションを併記しています：`bubbles`（バブリング）、`composed`
@@ -20,7 +20,7 @@ description: 'ranui のすべてのカスタム要素 —— 41 個の要素の�
 は三つとものない状態で、祖先要素へのイベント委譲では決して受け取れません。要素自身に
 リスナーを登録してください。
 
-**カスタム要素 41 個。**
+**カスタム要素 42 個。**
 
 ## `<r-attachments>`
 
@@ -584,6 +584,17 @@ description: 'ranui のすべてのカスタム要素 —— 41 個の要素の�
 - **スロット**: —
 - **Part**: `dot`
 
+## `<r-surface-switch>`
+
+ソース: `components/surface-switch/index.ts`
+
+- **属性（attribute）**: `label`, `label-glass`, `label-solid`, `sheet: string`
+- **プロパティ（property）**: `sheet: string`, `value: RanSurfaceName`
+- **イベント**:
+  - `change` · bubbles, composed · detail `{ surface }`
+- **スロット**: —
+- **Part**: `option ${choice}`, `select`
+
 ## `<r-tab>`
 
 ソース: `components/tabpane/index.ts`
@@ -612,11 +623,11 @@ description: 'ranui のすべてのカスタム要素 —— 41 個の要素の�
 - **属性（attribute）**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **プロパティ（property）**:
   - `sheet: string`
-  - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.
+  - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **イベント**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **スロット**: —
-- **Part**: `button ${choice}`, `switch`
+- **Part**: `option ${choice}`, `select`
 
 ## `<r-token-meter>`
 

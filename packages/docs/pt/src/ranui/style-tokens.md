@@ -12,7 +12,7 @@ confiar.
 
 Defina um token em qualquer lugar de onde ele seja herdado — `:root`, um contêiner ou o
 próprio elemento — e prefira um token semântico quando ele der conta da mudança, porque
-alcança todos os componentes de uma vez. O vocabulário é o [design system](/pt/src/design/design-system/);
+alcança todos os componentes de uma vez. O vocabulário é o [design system](/pt/src/ranui/design-system/);
 a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `attachments`
@@ -1893,11 +1893,11 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `surface-switch`
 
-- Tokens: 17
+- Tokens: 13
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 5 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -1906,10 +1906,6 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
-- `--ran-surface-switch-`
 - `--ran-surface-switch-background`
 - `--ran-surface-switch-border-color`
 - `--ran-surface-switch-font-size`
@@ -1993,11 +1989,11 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `theme-switch`
 
-- Tokens: 17
+- Tokens: 14
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 6 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -2006,9 +2002,6 @@ a regra de nomenclatura é `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
 - `--ran-text-label-1`
 - `--ran-theme-switch-`
 - `--ran-theme-switch-background`

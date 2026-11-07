@@ -1,6 +1,6 @@
 ---
 title: API عناصر ranui
-description: 'همهٔ عناصر سفارشی ranui — 41 عنصر همراه با ویژگی‌ها، خصیصه‌ها، رویدادها، اسلات‌ها و نام‌های ()::part، همگی استخراج‌شده از کد منبع.'
+description: 'همهٔ عناصر سفارشی ranui — 42 عنصر همراه با ویژگی‌ها، خصیصه‌ها، رویدادها، اسلات‌ها و نام‌های ()::part، همگی استخراج‌شده از کد منبع.'
 ---
 
 # API عناصر ranui (تولید خودکار)
@@ -12,14 +12,14 @@ description: 'همهٔ عناصر سفارشی ranui — 41 عنصر همراه 
 
 متغیرهای CSS هر عنصر در
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) آمده است؛ برای انتخاب میان آن‌ها
-[سیستم طراحی](/fa/src/design/design-system/) و [راهنمای طراحی](/fa/src/design/design-guides/) را ببینید.
+[سیستم طراحی](/fa/src/ranui/design-system/) و [راهنمای طراحی](/fa/src/ranui/design-guides/) را ببینید.
 شیوهٔ استفاده از هر عنصر در صفحهٔ خودش در نوار کناری است؛ اینجا کل سطح رابط یک‌جا آمده.
 
 برای هر رویداد گزینه‌های ارسال آن نوشته شده است: `bubbles` (حباب‌کردن)، `composed` (عبور از
 مرز Shadow) و `cancelable` (امکان وتو با `preventDefault()`). **`element-only`** یعنی هیچ‌کدام
 از این سه — شنوندهٔ واگذارشده روی یک گره والد هرگز آن را نمی‌بیند، پس شنونده را به خود عنصر ببندید.
 
-**41 عنصر سفارشی.**
+**42 عنصر سفارشی.**
 
 ## `<r-attachments>`
 
@@ -583,6 +583,17 @@ description: 'همهٔ عناصر سفارشی ranui — 41 عنصر همراه 
 - **اسلات‌ها**: —
 - **Part‌ها**: `dot`
 
+## `<r-surface-switch>`
+
+کد منبع: `components/surface-switch/index.ts`
+
+- **ویژگی‌ها (attribute)**: `label`, `label-glass`, `label-solid`, `sheet: string`
+- **خصیصه‌ها (property)**: `sheet: string`, `value: RanSurfaceName`
+- **رویدادها**:
+  - `change` · bubbles, composed · detail `{ surface }`
+- **اسلات‌ها**: —
+- **Part‌ها**: `option ${choice}`, `select`
+
 ## `<r-tab>`
 
 کد منبع: `components/tabpane/index.ts`
@@ -611,11 +622,11 @@ description: 'همهٔ عناصر سفارشی ranui — 41 عنصر همراه 
 - **ویژگی‌ها (attribute)**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **خصیصه‌ها (property)**:
   - `sheet: string`
-  - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.
+  - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **رویدادها**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **اسلات‌ها**: —
-- **Part‌ها**: `button ${choice}`, `switch`
+- **Part‌ها**: `option ${choice}`, `select`
 
 ## `<r-token-meter>`
 

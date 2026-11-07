@@ -11,7 +11,7 @@ are filtered out: what is left is the styling API you can rely on.
 
 Set a token anywhere it inherits from — `:root`, a wrapper, or the element itself — and
 prefer a semantic token when one covers the change, since it reaches every component at
-once. The vocabulary is the [design system](/src/design/design-system/); the naming rule is
+once. The vocabulary is the [design system](/src/ranui/design-system/); the naming rule is
 `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `attachments`
@@ -1892,11 +1892,11 @@ once. The vocabulary is the [design system](/src/design/design-system/); the nam
 
 ## `surface-switch`
 
-- Tokens: 17
+- Tokens: 13
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 5 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -1905,10 +1905,6 @@ once. The vocabulary is the [design system](/src/design/design-system/); the nam
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
-- `--ran-surface-switch-`
 - `--ran-surface-switch-background`
 - `--ran-surface-switch-border-color`
 - `--ran-surface-switch-font-size`
@@ -1992,11 +1988,11 @@ once. The vocabulary is the [design system](/src/design/design-system/); the nam
 
 ## `theme-switch`
 
-- Tokens: 17
+- Tokens: 14
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 6 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -2005,9 +2001,6 @@ once. The vocabulary is the [design system](/src/design/design-system/); the nam
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
 - `--ran-text-label-1`
 - `--ran-theme-switch-`
 - `--ran-theme-switch-background`

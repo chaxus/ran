@@ -1883,11 +1883,11 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `surface-switch`
 
-- Tokens: 17
+- Tokens: 13
 - Parts: 2
 
 #### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 5 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -1896,10 +1896,6 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
-- `--ran-surface-switch-`
 - `--ran-surface-switch-background`
 - `--ran-surface-switch-border-color`
 - `--ran-surface-switch-font-size`
@@ -1983,11 +1979,11 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 ### `theme-switch`
 
-- Tokens: 17
+- Tokens: 14
 - Parts: 2
 
 #### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 6 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -1996,9 +1992,6 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
 - `--ran-text-label-1`
 - `--ran-theme-switch-`
 - `--ran-theme-switch-background`

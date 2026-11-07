@@ -12,7 +12,7 @@ que puedes confiar.
 
 Define un token allí donde se herede — `:root`, un contenedor o el propio elemento — y
 prefiere un token semántico cuando cubra el cambio, porque alcanza a todos los componentes
-de una vez. El vocabulario es el [sistema de diseño](/es/src/design/design-system/); la regla de
+de una vez. El vocabulario es el [sistema de diseño](/es/src/ranui/design-system/); la regla de
 nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `attachments`
@@ -1893,11 +1893,11 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `surface-switch`
 
-- Tokens: 17
+- Tokens: 13
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 5 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -1906,10 +1906,6 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
-- `--ran-surface-switch-`
 - `--ran-surface-switch-background`
 - `--ran-surface-switch-border-color`
 - `--ran-surface-switch-font-size`
@@ -1993,11 +1989,11 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 
 ## `theme-switch`
 
-- Tokens: 17
+- Tokens: 14
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 6 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -2006,9 +2002,6 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
 - `--ran-text-label-1`
 - `--ran-theme-switch-`
 - `--ran-theme-switch-background`

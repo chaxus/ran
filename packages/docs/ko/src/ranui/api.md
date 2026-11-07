@@ -1,6 +1,6 @@
 ---
 title: ranui 엘리먼트 API
-description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 어트리뷰트, 프로퍼티, 이벤트, 슬롯, ::part() 이름. 모두 소스에서 추출했습니다.'
+description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 어트리뷰트, 프로퍼티, 이벤트, 슬롯, ::part() 이름. 모두 소스에서 추출했습니다.'
 ---
 
 # ranui 엘리먼트 API (자동 생성)
@@ -12,14 +12,14 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
 
 각 엘리먼트가 노출하는 CSS 변수는
 [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md)를, 무엇을 고를지는
-[디자인 시스템](/ko/src/design/design-system/)과 [디자인 가이드](/ko/src/design/design-guides/)를 보세요.
+[디자인 시스템](/ko/src/ranui/design-system/)과 [디자인 가이드](/ko/src/ranui/design-guides/)를 보세요.
 엘리먼트별 사용법은 사이드바의 각 페이지에 있고, 여기는 전체 인터페이스를 한자리에 모은 곳입니다.
 
 각 이벤트에는 디스패치 옵션이 함께 적혀 있습니다: `bubbles`(버블링), `composed`(섀도 경계를
 넘음), `cancelable`(`preventDefault()`로 취소 가능). **`element-only`** 은 셋 다 아니라는
 뜻이며, 조상 노드에 건 위임 리스너로는 절대 받을 수 없습니다. 엘리먼트 자체에 바인딩하세요.
 
-**커스텀 엘리먼트 41개.**
+**커스텀 엘리먼트 42개.**
 
 ## `<r-attachments>`
 
@@ -583,6 +583,17 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
 - **슬롯**: —
 - **Part**: `dot`
 
+## `<r-surface-switch>`
+
+소스: `components/surface-switch/index.ts`
+
+- **어트리뷰트**: `label`, `label-glass`, `label-solid`, `sheet: string`
+- **프로퍼티**: `sheet: string`, `value: RanSurfaceName`
+- **이벤트**:
+  - `change` · bubbles, composed · detail `{ surface }`
+- **슬롯**: —
+- **Part**: `option ${choice}`, `select`
+
 ## `<r-tab>`
 
 소스: `components/tabpane/index.ts`
@@ -611,11 +622,11 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 41개 엘리먼트의 �
 - **어트리뷰트**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **프로퍼티**:
   - `sheet: string`
-  - `value: RanThemeName` — Current selection; falls back to 'system' when nothing is forced.
+  - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **이벤트**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **슬롯**: —
-- **Part**: `button ${choice}`, `switch`
+- **Part**: `option ${choice}`, `select`
 
 ## `<r-token-meter>`
 

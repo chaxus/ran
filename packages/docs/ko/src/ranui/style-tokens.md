@@ -11,7 +11,7 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 토큰은 상속이 닿는 곳이면 어디에나 지정할 수 있습니다 — `:root`, 바깥 컨테이너, 엘리먼트 자체.
 의미 토큰 하나로 그 변경을 표현할 수 있다면 그쪽을 택하세요. 한 번에 모든 컴포넌트에 적용됩니다.
-어휘는 [디자인 시스템](/ko/src/design/design-system/)에 정리돼 있고, 이름 규칙은
+어휘는 [디자인 시스템](/ko/src/ranui/design-system/)에 정리돼 있고, 이름 규칙은
 `--ran-{component}-{element}[-{state}]-{property}` 입니다.
 
 ## `attachments`
@@ -1892,11 +1892,11 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `surface-switch`
 
-- Tokens: 17
+- Tokens: 13
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 5 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -1905,10 +1905,6 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
-- `--ran-surface-switch-`
 - `--ran-surface-switch-background`
 - `--ran-surface-switch-border-color`
 - `--ran-surface-switch-font-size`
@@ -1992,11 +1988,11 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 
 ## `theme-switch`
 
-- Tokens: 17
+- Tokens: 14
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 6 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -2005,9 +2001,6 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
 - `--ran-text-label-1`
 - `--ran-theme-switch-`
 - `--ran-theme-switch-background`

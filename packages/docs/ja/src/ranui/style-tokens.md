@@ -11,7 +11,7 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 トークンは継承が届く場所ならどこに設定してもかまいません——`:root`、外側のコンテナ、要素そのもの。
 その変更をセマンティックトークン一つで表せるなら、そちらを優先してください。一度で全コンポーネントに
-効きます。語彙は[デザインシステム](/ja/src/design/design-system/)にまとまっており、命名規則は
+効きます。語彙は[デザインシステム](/ja/src/ranui/design-system/)にまとまっており、命名規則は
 `--ran-{component}-{element}[-{state}]-{property}` です。
 
 ## `attachments`
@@ -1892,11 +1892,11 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ## `surface-switch`
 
-- Tokens: 17
+- Tokens: 13
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 5 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -1905,10 +1905,6 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
-- `--ran-surface-switch-`
 - `--ran-surface-switch-background`
 - `--ran-surface-switch-border-color`
 - `--ran-surface-switch-font-size`
@@ -1992,11 +1988,11 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ## `theme-switch`
 
-- Tokens: 17
+- Tokens: 14
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 9 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 6 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
 - `--ran-radius-md`
@@ -2005,9 +2001,6 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 - `--ran-select-border`
 - `--ran-select-border-radius`
 - `--ran-select-font-size`
-- `--ran-surface-glass-border`
-- `--ran-surface-glass-fill`
-- `--ran-surface-glass-specular`
 - `--ran-text-label-1`
 - `--ran-theme-switch-`
 - `--ran-theme-switch-background`
