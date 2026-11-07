@@ -9,7 +9,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 提取，因此不会与代码脱节。结构性与内部令牌已被过滤掉，剩下的就是可以放心依赖的样式接口。
 
 令牌可以设在任何能继承到的地方——`:root`、外层容器，或元素本身；如果某个语义令牌就能表达这次
-改动，优先用它，因为它一次影响所有组件。词汇表见[设计系统](/cn/ranui/design-system/)，
+改动，优先用它，因为它一次影响所有组件。词汇表见[设计系统](/cn/src/ranui/design-system/)，
 命名规则是 `--ran-{component}-{element}[-{state}]-{property}`。
 
 ## `attachments`
