@@ -102,10 +102,11 @@ describe('built-in component text', () => {
     const toggle = document.createElement('r-theme-switch');
     toggle.setAttribute('label-dark', 'Night');
     document.body.append(toggle);
-    expect(names(toggle, '[role="radiogroup"], [role="group"], button')).toEqual([
-      '主题',
+    const root = shadow(toggle);
+    expect(root.querySelector('r-select')!.getAttribute('aria-label')).toBe('主题');
+    expect([...root.querySelectorAll('r-option')].map((node) => node.textContent)).toEqual([
       '跟随系统',
-      '浅色模式',
+      '浅色',
       'Night',
     ]);
   });
@@ -120,7 +121,13 @@ describe('built-in component text', () => {
     document.body.append(player, meter, toggle, math);
     expect(names(player, '.ran-player-controller-progress')).toEqual(['Seek']);
     expect((meter as unknown as { _text: HTMLElement })._text.textContent).toMatch(/^Context /);
-    expect(names(toggle, 'button')).toEqual(['System theme', 'Light theme', 'Dark theme']);
+    const themeRoot = shadow(toggle);
+    expect(themeRoot.querySelector('r-select')!.getAttribute('aria-label')).toBe('Theme');
+    expect([...themeRoot.querySelectorAll('r-option')].map((node) => node.textContent)).toEqual([
+      'System',
+      'Light',
+      'Dark',
+    ]);
     expect(names(math, 'button')).toEqual(['Copy LaTeX']);
     expect(describeMediaError(null, player)).toBe('An unknown playback error occurred.');
   });

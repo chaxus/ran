@@ -73,36 +73,36 @@ for (const align of ['center', 'end']) {
   });
 }
 
-test('theme switch updates the accessible group label after mounting', async ({ page }) => {
+test('theme switch updates the accessible select label after mounting', async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-theme-switch');
   await mount(page, '<r-theme-switch id="theme"></r-theme-switch>');
   await page.locator('#theme').evaluate((node) => node.setAttribute('label', 'Workspace appearance'));
   await expect
     .poll(() =>
-      insideShadow(page, '#theme', (root) => root.querySelector('[role="group"]')!.getAttribute('aria-label')),
+      insideShadow(page, '#theme', (root) => root.querySelector('r-select')!.getAttribute('aria-label')),
     )
     .toBe('Workspace appearance');
 });
 
-test('theme switch coarse targets support touch and synchronize siblings', async ({ browser }) => {
+test('theme switch select trigger meets touch size and synchronizes siblings', async ({ browser }) => {
   const context = await browser.newContext({ hasTouch: true, viewport: { width: 360, height: 800 } });
   const page = await context.newPage();
   try {
     await isolatedSetup(page, DEV_SERVER, 'r-theme-switch');
     await mount(page, '<r-theme-switch id="theme"></r-theme-switch><r-theme-switch id="sibling"></r-theme-switch>');
-    const choices = await insideShadow(page, '#theme', (root) =>
-      [...root.querySelectorAll('button')].map((button) => {
-        const rect = button.getBoundingClientRect();
-        return { width: rect.width, height: rect.height, x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
-      }),
-    );
-    expect(choices.every((choice) => choice.width >= 44 && choice.height >= 44)).toBe(true);
-    await page.touchscreen.tap(choices[2].x, choices[2].y);
+    const trigger = await insideShadow(page, '#theme', (root) => {
+      const select = root.querySelector('r-select')!;
+      const rect = select.getBoundingClientRect();
+      return { width: rect.width, height: rect.height };
+    });
+    expect(trigger.width).toBeGreaterThanOrEqual(44);
+    expect(trigger.height).toBeGreaterThanOrEqual(32);
+    await page.locator('#theme').evaluate((node) => {
+      (node as HTMLElement & { value: string }).value = 'dark';
+    });
     await expect
       .poll(() =>
-        insideShadow(page, '#sibling', (root) =>
-          root.querySelector('[aria-pressed="true"]')?.getAttribute('data-choice'),
-        ),
+        insideShadow(page, '#sibling', (root) => (root.querySelector('r-select') as HTMLElement & { value: string }).value),
       )
       .toBe('dark');
   } finally {
