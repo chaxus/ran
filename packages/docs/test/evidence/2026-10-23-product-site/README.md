@@ -6,8 +6,9 @@ The manifest identifies Chromium and hashes each media file and loaded document/
 This is browser automation and agent visual review, not a human study or Document acceptance.
 
 The product website remains at ran.chaxus.com. Clean public routes shipped after this review
-(`publicUrl` drops `/src/`; legacy redirects keep old URLs reachable). A complete `/examples/`
-gallery was still pending at capture time; later closeout work is tracked separately.
+(`publicUrl` drops `/src/`; legacy redirects keep old URLs reachable). `/examples/` and the
+AI chat guide shipped in the 2026-11-06 closeout; acceptance captures are in
+[2026-11-07-examples](../2026-11-07-examples/README.md).
 
 The review rejected repeated headline/hero/scroll entrances and numeric count-up because they
 interrupt reading after navigation. Those decorations were removed; real loading demonstrations
