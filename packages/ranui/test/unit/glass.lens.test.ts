@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { bendAt, lensMap } from '@/components/glass/lens';
 
 describe('glass lens profile', () => {
