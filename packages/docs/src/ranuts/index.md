@@ -21,9 +21,9 @@ import { debounce } from 'ranuts/utils';
 
 ## Entry points
 
-| Import                                             | Contains                                                  | Runtime            |
-| -------------------------------------------------- | --------------------------------------------------------- | ------------------ |
-| `ranuts`                                           | Root barrel: the utils + visual surface                   | browser + node     |
+| Import                                         | Contains                                                  | Runtime            |
+| ---------------------------------------------- | --------------------------------------------------------- | ------------------ |
+| `ranuts`                                       | Root barrel: the utils + visual surface                   | browser + node     |
 | [`ranuts/utils`](/ranuts/utils/)               | DOM/BOM, string, object, number, colour, time, storage, … | browser + node     |
 | [`ranuts/visual`](/ranuts/visual/)             | 2D rendering engine (Canvas / WebGL / WebGPU)             | **browser only**   |
 | [`ranuts/i18n`](/ranuts/i18n/)                 | Translation engine: flat dictionaries, runtime switching  | browser + node     |
@@ -70,13 +70,13 @@ signature and description, generated from source so it cannot drift.
 
 ## Where to go next
 
-| If you want to…                                       | Read                                                                      |
-| ----------------------------------------------------- | ------------------------------------------------------------------------- |
-| Find out whether a function exists, and its signature | [API reference](/ranuts/api)                                          |
-| Decide between two similar utilities                  | [Choosing a utility](/ranuts/choosing/)                               |
-| Browse by category                                    | [Utility index](/ranuts/utils/)                                       |
+| If you want to…                                       | Read                                                              |
+| ----------------------------------------------------- | ----------------------------------------------------------------- |
+| Find out whether a function exists, and its signature | [API reference](/ranuts/api)                                      |
+| Decide between two similar utilities                  | [Choosing a utility](/ranuts/choosing/)                           |
+| Browse by category                                    | [Utility index](/ranuts/utils/)                                   |
 | Render a streamed model response                      | [stream](/ranuts/stream/) → [conversation](/ranuts/conversation/) |
-| Build UI on top of it                                 | [ranui](/ranui/)                                                      |
+| Build UI on top of it                                 | [ranui](/ranui/)                                                  |
 
 Both packages ship `CLAUDE.md` inside the npm tarball: orientation for coding agents, readable
 straight from `node_modules` with no network access.

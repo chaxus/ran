@@ -10,9 +10,9 @@ Die übrigen Seiten dieses Abschnitts beantworten Fragen zu den Teilen. Diese be
 Frage davor: Bei allem, was der Bildschirm tragen muss, wozu ist die lesende Person gekommen,
 und welche Anordnung lässt sie das tun?
 
-| Seite                                             | Beantwortet                                      |
-| ------------------------------------------------- | ------------------------------------------------ |
-| **Informationsarchitektur** (diese Seite)         | _Welche Form_ die Seite haben soll               |
+| Seite                                         | Beantwortet                                      |
+| --------------------------------------------- | ------------------------------------------------ |
+| **Informationsarchitektur** (diese Seite)     | _Welche Form_ die Seite haben soll               |
 | [Designsystem](/de/ranui/design-system/)      | _Was_ die Tokens sind: das Vokabular             |
 | [Designrichtlinien](/de/ranui/design-guides/) | _Wie man wählt_, wenn man eine Oberfläche baut   |
 | [Themes](/de/ranui/theme/)                    | _Wie man zur Laufzeit wechselt und überschreibt_ |

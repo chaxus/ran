@@ -6,13 +6,13 @@ a local production `dist/` preview. This is agent visual review, not Document ac
 
 ## Matrix
 
-| Path | Themes | Widths | Files |
-| ---- | ------ | ------ | ----- |
-| `/examples/` | light, dark | 1280, 360 | `examples-{theme}-w{width}.png` |
-| `/examples/chat-composer/` | light, dark | 1280, 360 | `examples-chat-composer-…` |
-| `/examples/overlay-form/` | light, dark | 1280, 360 | `examples-overlay-form-…` |
-| `/examples/content-render/` | light, dark | 1280, 360 | `examples-content-render-…` |
-| `/ranui/ai-chat/` | light, dark | 1280, 360 | `ranui-ai-chat-…` |
+| Path                        | Themes      | Widths    | Files                           |
+| --------------------------- | ----------- | --------- | ------------------------------- |
+| `/examples/`                | light, dark | 1280, 360 | `examples-{theme}-w{width}.png` |
+| `/examples/chat-composer/`  | light, dark | 1280, 360 | `examples-chat-composer-…`      |
+| `/examples/overlay-form/`   | light, dark | 1280, 360 | `examples-overlay-form-…`       |
+| `/examples/content-render/` | light, dark | 1280, 360 | `examples-content-render-…`     |
+| `/ranui/ai-chat/`           | light, dark | 1280, 360 | `ranui-ai-chat-…`               |
 
 All captures used `prefers-reduced-motion: reduce`. Raw observations (status, scroll width,
 first Tab target, overlay keyboard) are in `observations.json`.
@@ -37,11 +37,11 @@ first Tab target, overlay keyboard) are in `observations.json`.
 `pnpm -F docs build` → **1356** pages; link/anchor/canonical/asset/sitemap verify passed;
 every retired `/src/…` URL still one-hop redirects.
 
-| Artifact | Size |
-| -------- | ---- |
-| `dist/` | 124 MB |
-| `dist/search/*.json` (8 locales) | **9.7 MB** total (en 0.92 MB … ja 1.68 MB) |
-| Search documents (en) | 2118 stored fields; API routes keep titles, bodies trimmed |
+| Artifact                         | Size                                                       |
+| -------------------------------- | ---------------------------------------------------------- |
+| `dist/`                          | 124 MB                                                     |
+| `dist/search/*.json` (8 locales) | **9.7 MB** total (en 0.92 MB … ja 1.68 MB)                 |
+| Search documents (en)            | 2118 stored fields; API routes keep titles, bodies trimmed |
 
 Residual note: `dist/assets/` still emits some Shiki grammar chunks beyond the
 `r-markdown` allowlist / docs `LANGS` list (e.g. `emacs-lisp`, `wolfram`, `cpp`), likely

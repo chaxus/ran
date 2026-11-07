@@ -8,9 +8,9 @@ El **lenguaje de diseño** con el que está hecho ranui, y el catálogo **comple
 
 Cuatro páginas responden a cuatro preguntas distintas, y están separadas a propósito:
 
-| Página                                                                 | Responde                                                   |
-| ---------------------------------------------------------------------- | ---------------------------------------------------------- |
-| **Sistema de diseño** (esta página)                                    | _Qué_ son los tokens: el vocabulario                       |
+| Página                                                             | Responde                                                   |
+| ------------------------------------------------------------------ | ---------------------------------------------------------- |
+| **Sistema de diseño** (esta página)                                | _Qué_ son los tokens: el vocabulario                       |
 | [Pautas de diseño](/es/ranui/design-guides/)                       | _Cómo elegir_ entre ellos al construir una pantalla        |
 | [Arquitectura de información](/es/ranui/information-architecture/) | _Qué forma_ debe tomar la página misma                     |
 | [Tematización](/es/ranui/theme/)                                   | _Cómo cambiarlos y sobrescribirlos_ en tiempo de ejecución |

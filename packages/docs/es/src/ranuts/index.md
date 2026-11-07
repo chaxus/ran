@@ -19,9 +19,9 @@ import { debounce } from 'ranuts/utils';
 
 ## Puntos de entrada
 
-| Importación                                           | Contiene                                                                      | Entorno            |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
-| `ranuts`                                              | El barril raíz: la superficie de utils y visual                               | navegador + node   |
+| Importación                                       | Contiene                                                                      | Entorno            |
+| ------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
+| `ranuts`                                          | El barril raíz: la superficie de utils y visual                               | navegador + node   |
 | [`ranuts/utils`](/es/ranuts/utils/)               | DOM/BOM, cadenas, objetos, números, color, tiempo, almacenamiento, …          | navegador + node   |
 | [`ranuts/visual`](/es/ranuts/visual/)             | Motor de dibujado 2D (Canvas / WebGL / WebGPU)                                | **solo navegador** |
 | [`ranuts/i18n`](/es/ranuts/i18n/)                 | Motor de traducción: diccionarios planos, cambio en caliente                  | navegador + node   |
@@ -67,12 +67,12 @@ Esto es una selección. La [referencia de la API](/es/ranuts/api) tiene **todas*
 
 ## A dónde ir después
 
-| Si quieres…                                               | Lee                                                                             |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Averiguar si una función existe, y con qué firma          | [Referencia de la API](/es/ranuts/api)                                      |
-| Decidir entre dos utilidades parecidas                    | [Elegir una utilidad](/es/ranuts/choosing/)                                 |
-| Curiosear por categorías                                  | [Índice de utilidades](/es/ranuts/utils/)                                   |
+| Si quieres…                                               | Lee                                                                     |
+| --------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Averiguar si una función existe, y con qué firma          | [Referencia de la API](/es/ranuts/api)                                  |
+| Decidir entre dos utilidades parecidas                    | [Elegir una utilidad](/es/ranuts/choosing/)                             |
+| Curiosear por categorías                                  | [Índice de utilidades](/es/ranuts/utils/)                               |
 | Dibujar la respuesta de un modelo que llega por streaming | [stream](/es/ranuts/stream/) → [conversation](/es/ranuts/conversation/) |
-| Construir interfaz encima                                 | [ranui](/es/ranui/)                                                         |
+| Construir interfaz encima                                 | [ranui](/es/ranui/)                                                     |
 
 Los dos paquetes incluyen un `CLAUDE.md` dentro del tarball de npm: orientación para agentes de código, legible directamente desde `node_modules` y sin acceso a la red.

@@ -81,18 +81,18 @@ document.body.appendChild(button);
 Cada entrada registra exatamente o que o nome diz, então uma página que só quer temas nunca paga
 pela biblioteca de componentes.
 
-| Import                                                | Contém                                                               |
-| ----------------------------------------------------- | -------------------------------------------------------------------- |
-| `ranui`                                               | Todos os componentes                                                 |
-| `ranui/<component>`                                   | Um componente: `ranui/button`, `ranui/select`, …                     |
+| Import                                            | Contém                                                               |
+| ------------------------------------------------- | -------------------------------------------------------------------- |
+| `ranui`                                           | Todos os componentes                                                 |
+| `ranui/<component>`                               | Um componente: `ranui/button`, `ranui/select`, …                     |
 | [`ranui/theme`](/pt/ranui/theme/)                 | Tema claro/escuro e sobrescrita de tokens; sem elementos             |
 | [`ranui/i18n`](/pt/ranui/i18n/)                   | O motor de tradução; sem elementos                                   |
-| `ranui/fonts`                                         | Geist Sans + Geist Mono auto-hospedadas                              |
-| `ranui/style`                                         | A folha de estilos, se a sua configuração não a pegar sozinha        |
+| `ranui/fonts`                                     | Geist Sans + Geist Mono auto-hospedadas                              |
+| `ranui/style`                                     | A folha de estilos, se a sua configuração não a pegar sozinha        |
 | [`ranui/builder`](/pt/ranui/builder/)             | O construtor de DOM fluente com reatividade de granulação fina       |
 | [`ranui/ssr`](/pt/ranui/ssr/), `ranui/ssr-stream` | Renderização no servidor                                             |
-| `ranui/testing`                                       | Auxiliares para alcançar um shadow root fechado a partir de um teste |
-| `ranui/typings`                                       | Tipos ambientais de elementos para JSX / TS                          |
+| `ranui/testing`                                   | Auxiliares para alcançar um shadow root fechado a partir de um teste |
+| `ranui/typings`                                   | Tipos ambientais de elementos para JSX / TS                          |
 
 ## Componentes
 
@@ -201,8 +201,8 @@ então `addEventListener` é o caminho a seguir.
 
 ## Para onde ir em seguida
 
-| Se você quiser…                               | Leia                                                 |
-| --------------------------------------------- | ---------------------------------------------------- |
+| Se você quiser…                               | Leia                                             |
+| --------------------------------------------- | ------------------------------------------------ |
 | Consultar a API exata de um elemento          | [API de elementos](/pt/ranui/api)                |
 | Saber qual token usar, e por quê              | [Design system](/pt/ranui/design-system/)        |
 | Montar uma tela que pareça um sistema só      | [Diretrizes de design](/pt/ranui/design-guides/) |
