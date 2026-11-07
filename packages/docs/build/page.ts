@@ -200,7 +200,10 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
       <kbd class="search-open__kbd">/</kbd>
     </button>
     ${langMenuHtml(page, urls, ui.langMenu)}
-    <r-theme-switch class="theme-switch"></r-theme-switch>
+    <div class="appearance" role="group" aria-label="${escapeHtml(ui.appearance)}">
+      <r-theme-switch class="theme-switch"></r-theme-switch>
+      <r-surface-switch class="surface-switch"></r-surface-switch>
+    </div>
   </div>
 </header>
 <div class="layout">
@@ -248,6 +251,8 @@ ${assets.js.map((src) => `<script type="module" src="${src}"></script>`).join('\
  */
 const THEME_BOOTSTRAP = `(function(){try{
 document.documentElement.classList.add('js');
+var e=document.documentElement;
 var t=localStorage.getItem('ran-theme');
-if(t==='dark'||t==='light'){var e=document.documentElement;e.setAttribute('data-ran-theme',t);e.setAttribute('theme',t);}
+if(t==='dark'||t==='light'){e.setAttribute('data-ran-theme',t);e.setAttribute('theme',t);}
+if(localStorage.getItem('ran-surface')==='glass')e.setAttribute('data-ran-surface','glass');
 }catch(e){}})();`;
