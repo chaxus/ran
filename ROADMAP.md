@@ -27,15 +27,17 @@ full translation is not yet in place):
   locales, plus the ranui **Build AI chat** task guide.
 - Plugin `package-contract.json` provenance (`authoredAgainst` + `bundledApi: false`)
   gated by `verify:agent-plugin`.
-- Design-rule hotspot burn-down for `r-player` and docs site stylesheets (remaining
-  baseline entries elsewhere are ratchet debt, not blockers).
+- Design-rule hotspot burn-down for `r-player`, docs site stylesheets, and
+  `r-colorpicker` (ranui baseline 86→61). Remaining entries elsewhere are ratchet
+  debt, not blockers.
 
 ### Quality & discoverability
 
 - Keep `llms.txt` accurate to the shipped element and utility surface.
 - Bundle/perf: Shiki browser grammars are allowlisted in `r-markdown`; docs search drops
-  generated API body text. Re-measure after the next docs build; media engines stay
-  page-gated / lazy.
+  generated API body text. 2026-11-07 re-measure: production `dist/` ~124 MB; search JSON
+  ~9.7 MB across eight locales (en ~0.92 MB). Residual grammar chunks beyond the allowlist
+  and dual KaTeX/Temml assets remain; media engines stay page-gated / lazy.
 
 ### Task-oriented guides
 

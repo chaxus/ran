@@ -5,11 +5,11 @@
  * document.body, so these rules cannot live in the shadow stylesheet — they
  * are injected as a <style> inside the panel subtree and travel with it.
  * Selectors are uniquely namespaced (.ran-color-picker-*) so global injection
- * is safe, and every color references a theme token so dark mode just works.
+ * is safe, and every themeable colour references a token so dark mode just works.
  */
 
-@checker: var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.06));
-@hairline: var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.09));
+@checker: var(--ran-gray-alpha-100);
+@hairline: var(--ran-gray-alpha-200);
 
 .ran-color-picker-inner {
   box-sizing: border-box;
@@ -19,9 +19,9 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--ran-space-3);
   width: 224px;
-  padding: 12px;
+  padding: var(--ran-space-3);
   font-family: var(--ran-font-family, inherit);
 
   *,
@@ -48,8 +48,8 @@
   inset: 0;
   border-radius: inherit;
   /* hue background-color is set inline; these two overlays build S/V */
-  background-image:
-    linear-gradient(to top, #000, rgba(0, 0, 0, 0)), linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
+  /* design-ok: bare-colour SV overlays are black/white fades, not theme ink */
+  background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0)), linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
 }
 
 .ran-color-picker-palette-dot {
@@ -61,10 +61,8 @@
   height: 14px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.2),
-    0 1px 3px rgba(0, 0, 0, 0.35);
+  border: 2px solid #fff; /* design-ok: bare-colour picker thumbs sit on a chromatic field and stay white/black for contrast */
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.35); /* design-ok: bare-colour picker thumbs sit on a chromatic field and stay white/black for contrast */
   pointer-events: none;
 }
 
@@ -72,7 +70,7 @@
 .ran-color-picker-controls {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--ran-space-3);
 }
 
 .ran-color-picker-preview {
@@ -98,7 +96,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--ran-space-3);
 }
 
 .ran-color-picker-slider {
@@ -111,6 +109,7 @@
 }
 
 .ran-color-picker-slider-hue {
+  /* design-ok: bare-colour hue stops are the spectral primaries, not theme tokens */
   background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
 }
 
@@ -135,10 +134,8 @@
   height: 14px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.2),
-    0 1px 3px rgba(0, 0, 0, 0.35);
+  border: 2px solid #fff; /* design-ok: bare-colour picker thumbs sit on a chromatic field and stay white/black for contrast */
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.35); /* design-ok: bare-colour picker thumbs sit on a chromatic field and stay white/black for contrast */
   pointer-events: none;
 }
 
@@ -146,7 +143,7 @@
 .ran-color-picker-input-container {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--ran-space-2);
 }
 
 .ran-color-picker-format {

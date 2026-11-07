@@ -5,8 +5,6 @@
       "components/button/index.less": 3,
       "components/card/index.less": 1,
       "components/checkbox/index.less": 2,
-      "components/colorpicker/index.less": 3,
-      "components/colorpicker/panel.less": 2,
       "components/dropdown/index.less": 1,
       "components/glass/index.less": 1,
       "components/input/index.less": 2,
@@ -23,11 +21,9 @@
       "components/tab/index.less": 1
     },
     "bare-colour": {
-      "components/colorpicker/panel.less": 15,
       "components/glass/index.less": 7
     },
     "spacing-scale": {
-      "components/colorpicker/panel.less": 5,
       "components/markdown/index.less": 2,
       "components/player/index.less": 2
     },
