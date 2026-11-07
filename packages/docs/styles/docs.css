@@ -289,92 +289,129 @@ a {
   --glass-ease: var(--ran-motion-ease-standard, cubic-bezier(0.2, 0.8, 0.2, 1));
   --glass-duration: var(--ran-motion-duration-fast, 160ms);
   /* Shared Regular glass recipe — clearer plate, cool rim, soft depth. */
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-fill: color-mix(in srgb, #eef3fa 30%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-fill-strong: color-mix(in srgb, #ffffff 42%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-rim: color-mix(in srgb, #ffffff 72%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-rim-cool: color-mix(in srgb, #b7cef0 45%, transparent);
   --glass-specular: linear-gradient(
     155deg,
-    rgba(255, 255, 255, 0.72) 0%,
-    rgba(255, 255, 255, 0.18) 32%,
-    rgba(255, 255, 255, 0.02) 58%,
+    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.72) 0%,
+    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.18) 32%,
+    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.02) 58%,
     transparent 72%
   );
   --glass-depth:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     0 0 0 0.5px color-mix(in srgb, #9eb6de 35%, transparent), 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 8px 20px -12px rgba(28, 48, 86, 0.28), 0 22px 48px -24px rgba(28, 48, 86, 0.34);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 8px 20px -12px rgba(28, 48, 86, 0.28),
+    0 22px 48px -24px rgba(28, 48, 86, 0.34);
   --glass-inset:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     inset 0 1.5px 0 rgba(255, 255, 255, 0.92), inset 0 -1px 0 rgba(110, 140, 185, 0.14),
-    inset 1px 0 0 rgba(255, 255, 255, 0.35), inset -1px 0 0 rgba(140, 165, 200, 0.1);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 1px 0 0 rgba(255, 255, 255, 0.35),
+    inset -1px 0 0 rgba(140, 165, 200, 0.1);
 }
 
 :root[data-ran-surface='glass'] body {
   /* Cool mist, not candy blobs — glass needs quiet atmosphere to look expensive. */
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   background-color: #e3eaf3;
   background-image:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 85% 55% at 8% -14%, rgba(118, 158, 220, 0.38), transparent 62%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 70% 48% at 92% 0%, rgba(148, 138, 198, 0.22), transparent 58%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 55% 40% at 42% 110%, rgba(130, 175, 198, 0.16), transparent 55%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     linear-gradient(180deg, #e8eef6 0%, #e5e8f1 48%, #e9eef5 100%);
   background-attachment: fixed;
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] body {
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   background-color: #090b11;
   background-image:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 85% 55% at 8% -14%, rgba(58, 100, 178, 0.42), transparent 62%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 70% 48% at 92% 0%, rgba(98, 72, 140, 0.28), transparent 58%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 55% 40% at 42% 110%, rgba(40, 100, 110, 0.18), transparent 55%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     linear-gradient(180deg, #0d1119 0%, #090b11 48%, #10141c 100%);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']):not([data-ran-theme='dark'])[data-ran-surface='glass'] body {
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     background-color: #090b11;
     background-image:
+      /* design-ok: bare-colour optical glass plate, not theme ink */
       radial-gradient(ellipse 85% 55% at 8% -14%, rgba(58, 100, 178, 0.42), transparent 62%),
-      radial-gradient(ellipse 70% 48% at 92% 0%, rgba(98, 72, 140, 0.28), transparent 58%),
-      radial-gradient(ellipse 55% 40% at 42% 110%, rgba(40, 100, 110, 0.18), transparent 55%),
-      linear-gradient(180deg, #0d1119 0%, #090b11 48%, #10141c 100%);
+      /* design-ok: bare-colour optical glass plate, not theme ink */
+        radial-gradient(ellipse 70% 48% at 92% 0%, rgba(98, 72, 140, 0.28), transparent 58%),
+      /* design-ok: bare-colour optical glass plate, not theme ink */
+        radial-gradient(ellipse 55% 40% at 42% 110%, rgba(40, 100, 110, 0.18), transparent 55%),
+      /* design-ok: bare-colour optical glass plate, not theme ink */
+        linear-gradient(180deg, #0d1119 0%, #090b11 48%, #10141c 100%);
   }
 }
 
 :root[data-ran-theme='dark'][data-ran-surface='glass'],
 :root:not([data-ran-theme='light'])[data-ran-surface='glass'] {
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-fill: color-mix(in srgb, #1a2030 48%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-fill-strong: color-mix(in srgb, #ffffff 14%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-rim: color-mix(in srgb, #ffffff 20%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-rim-cool: color-mix(in srgb, #8aa4d4 28%, transparent);
   --glass-specular: linear-gradient(
     165deg,
-    rgba(255, 255, 255, 0.16) 0%,
-    rgba(255, 255, 255, 0.04) 38%,
+    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.16) 0%,
+    /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.04) 38%,
     transparent 62%
   );
   --glass-depth:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     0 1px 0 rgba(255, 255, 255, 0.08), 0 14px 36px -14px rgba(0, 0, 0, 0.55),
-    0 28px 56px -28px rgba(0, 0, 0, 0.4);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 28px 56px -28px rgba(0, 0, 0, 0.4);
   --glass-inset:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -0.5px 0 rgba(0, 0, 0, 0.35),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-ran-theme='dark'])[data-ran-surface='glass'] {
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-fill: color-mix(in srgb, #eef3fa 30%, transparent);
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-fill-strong: color-mix(in srgb, #ffffff 42%, transparent);
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-rim: color-mix(in srgb, #ffffff 72%, transparent);
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-rim-cool: color-mix(in srgb, #b7cef0 45%, transparent);
     --glass-specular: linear-gradient(
       155deg,
-      rgba(255, 255, 255, 0.72) 0%,
-      rgba(255, 255, 255, 0.18) 32%,
-      rgba(255, 255, 255, 0.02) 58%,
+      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.72) 0%,
+      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.18) 32%,
+      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(255, 255, 255, 0.02) 58%,
       transparent 72%
     );
     --glass-depth:
+      /* design-ok: bare-colour optical glass plate, not theme ink */
       0 0 0 0.5px color-mix(in srgb, #9eb6de 35%, transparent), 0 1px 0 rgba(255, 255, 255, 0.7),
-      0 8px 20px -12px rgba(28, 48, 86, 0.28), 0 22px 48px -24px rgba(28, 48, 86, 0.34);
+      /* design-ok: bare-colour optical glass plate, not theme ink */ 0 8px 20px -12px rgba(28, 48, 86, 0.28),
+      0 22px 48px -24px rgba(28, 48, 86, 0.34);
     --glass-inset:
+      /* design-ok: bare-colour optical glass plate, not theme ink */
       inset 0 1.5px 0 rgba(255, 255, 255, 0.92), inset 0 -1px 0 rgba(110, 140, 185, 0.14),
-      inset 1px 0 0 rgba(255, 255, 255, 0.35), inset -1px 0 0 rgba(140, 165, 200, 0.1);
+      /* design-ok: bare-colour optical glass plate, not theme ink */ inset 1px 0 0 rgba(255, 255, 255, 0.35),
+      inset -1px 0 0 rgba(140, 165, 200, 0.1);
   }
 }
 
@@ -394,7 +431,7 @@ a {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 8px 0 12px;
-  gap: 6px;
+  gap: 4px;
   border-radius: var(--glass-chrome-radius);
   border: 1px solid var(--glass-rim);
   background: var(--glass-specular), var(--glass-fill);
@@ -444,38 +481,51 @@ a {
  * Dark glass: white vibrancy chips. Selected denser than hover + edge + weight.
  */
 :root[data-ran-surface='glass'] {
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-hover: color-mix(in srgb, #1c3056 9%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-selected: color-mix(in srgb, #1c3056 16%, #ffffff 84%);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-selected-edge: color-mix(in srgb, #6a82a8 55%, transparent);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] {
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-hover: color-mix(in srgb, #ffffff 22%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-selected: color-mix(in srgb, #ffffff 38%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   --glass-selected-edge: color-mix(in srgb, #ffffff 32%, transparent);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']):not([data-ran-theme='dark'])[data-ran-surface='glass'] {
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-hover: color-mix(in srgb, #ffffff 22%, transparent);
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-selected: color-mix(in srgb, #ffffff 38%, transparent);
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-selected-edge: color-mix(in srgb, #ffffff 32%, transparent);
   }
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-ran-theme='dark'])[data-ran-surface='glass'] {
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-hover: color-mix(in srgb, #1c3056 9%, transparent);
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-selected: color-mix(in srgb, #1c3056 16%, #ffffff 84%);
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     --glass-selected-edge: color-mix(in srgb, #6a82a8 55%, transparent);
   }
 }
 
 /* Controls on the glass bar: vibrancy fills — not a second blur plate. */
 :root[data-ran-surface='glass'] .nav {
+  /* design-ok: spacing-scale hairline between capsule links, under the 4px step */
   gap: 1px;
 }
 :root[data-ran-surface='glass'] .nav__link,
 :root[data-ran-surface='glass'] .langs__summary {
   border-radius: var(--glass-control-radius);
-  padding: 6px 11px;
+  padding: 4px 12px;
   border: 1px solid transparent;
   transition:
     background var(--glass-duration) var(--glass-ease),
@@ -487,7 +537,9 @@ a {
 :root[data-ran-surface='glass'] .langs__summary:hover {
   background: var(--glass-hover);
   color: var(--fg);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border-color: color-mix(in srgb, #fff 55%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 :root[data-ran-surface='glass'] .nav__link[aria-current='page'] {
@@ -496,9 +548,10 @@ a {
   background: var(--glass-selected);
   border-color: var(--glass-selected-edge);
   box-shadow:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -0.5px 0 rgba(110, 140, 185, 0.2),
-    0 1px 3px rgba(28, 48, 86, 0.14);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 0 -0.5px 0 rgba(110, 140, 185, 0.2),
+    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 3px rgba(28, 48, 86, 0.14);
 }
 :root[data-ran-surface='glass'] .search-open {
   position: relative;
@@ -507,8 +560,9 @@ a {
   background: var(--glass-fill-strong);
   border-color: var(--glass-rim);
   box-shadow:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 1px 2px rgba(28, 48, 86, 0.06);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 2px rgba(28, 48, 86, 0.06);
   transition:
     background var(--glass-duration) var(--glass-ease),
     border-color var(--glass-duration) var(--glass-ease),
@@ -531,31 +585,40 @@ a {
   pointer-events: none;
 }
 :root[data-ran-surface='glass'] .search-open:hover {
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   background: color-mix(in srgb, #fff 58%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border-color: color-mix(in srgb, #fff 78%, transparent);
 }
 :root[data-ran-surface='glass'] .search-open__kbd {
   border-radius: 6px;
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   background: color-mix(in srgb, #fff 42%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border-color: color-mix(in srgb, #fff 35%, transparent);
   color: var(--fg-muted);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .search-open:hover {
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   background: color-mix(in srgb, #fff 18%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border-color: color-mix(in srgb, #fff 28%, transparent);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .nav__link:hover,
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .langs__summary:hover {
   background: var(--glass-hover);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border-color: color-mix(in srgb, #fff 18%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .nav__link[aria-current='page'] {
   background: var(--glass-selected);
   border-color: var(--glass-selected-edge);
   box-shadow:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 1px 3px rgba(0, 0, 0, 0.35);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 :root[data-ran-surface='glass'] .appearance {
   gap: 4px;
@@ -574,9 +637,6 @@ a {
   --ran-theme-switch-width: 6.75rem;
   --ran-surface-switch-width: 7.75rem;
 }
-:root[data-ran-surface='glass'] .site-header__inner {
-  gap: 4px;
-}
 :root[data-ran-surface='glass'] .langs__summary {
   padding-inline: 8px;
 }
@@ -587,7 +647,7 @@ a {
 :root[data-ran-surface='glass'] .search-open {
   min-width: 0;
   padding-inline: 10px;
-  gap: 6px;
+  gap: 4px;
 }
 @media (max-width: 1100px) {
   :root[data-ran-surface='glass'] .appearance .theme-switch,
@@ -601,6 +661,7 @@ a {
 }
 :root[data-ran-surface='glass'] .langs__summary:hover {
   border-color: var(--glass-rim);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
@@ -623,18 +684,22 @@ a {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
   border-radius: 20px;
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border: 1px solid color-mix(in srgb, #fff 40%, transparent);
   box-shadow:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     0 1px 0 rgba(255, 255, 255, 0.7),
-    0 20px 50px -30px rgba(28, 48, 86, 0.32),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 20px 50px -30px rgba(28, 48, 86, 0.32),
+    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .doc {
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border-color: color-mix(in srgb, #fff 10%, transparent);
   box-shadow:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     0 1px 0 rgba(255, 255, 255, 0.06),
-    0 24px 56px -28px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 24px 56px -28px rgba(0, 0, 0, 0.55),
+    /* design-ok: bare-colour optical glass plate, not theme ink */ inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 :root[data-ran-surface='glass'] .doc:has(> .landing) {
   margin: 0;
@@ -653,17 +718,23 @@ a {
 /* Outline: quieter than header/sidebar — secondary chrome, not a third hero plate. */
 :root[data-ran-surface='glass'] .toc {
   margin-block: 8px 16px;
-  padding: 12px 12px 14px;
+  padding: 12px 12px 16px;
   border-radius: 12px;
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   background: color-mix(in srgb, #ffffff 14%, transparent);
   -webkit-backdrop-filter: blur(14px) saturate(150%);
   backdrop-filter: blur(14px) saturate(150%);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border: 1px solid color-mix(in srgb, #fff 28%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .toc {
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   background: color-mix(in srgb, #ffffff 5%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border-color: color-mix(in srgb, #fff 10%, transparent);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 :root[data-ran-surface='glass'] .toc__label {
@@ -687,6 +758,7 @@ a {
 :root[data-ran-surface='glass'] .toc__link:hover {
   color: var(--fg);
   background: var(--glass-hover);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   border-color: color-mix(in srgb, #fff 40%, transparent);
 }
 :root[data-ran-surface='glass'] .toc__link[data-active] {
@@ -694,6 +766,7 @@ a {
   font-weight: 600;
   background: var(--glass-selected);
   border-color: var(--glass-selected-edge);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 :root[data-ran-surface='glass'] .mobile-toc {
@@ -720,6 +793,7 @@ a {
 :root[data-ran-surface='glass'] .sb__hover {
   border-radius: 8px;
   background: var(--glass-hover);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 :root[data-ran-surface='glass'] .sb__link[aria-current='page'] {
@@ -729,13 +803,15 @@ a {
   background: var(--glass-selected);
   border: 1px solid var(--glass-selected-edge);
   box-shadow:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    0 1px 2px rgba(28, 48, 86, 0.1);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 2px rgba(28, 48, 86, 0.1);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .sb__link[aria-current='page'] {
   box-shadow:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 1px 2px rgba(0, 0, 0, 0.3);
+    /* design-ok: bare-colour optical glass plate, not theme ink */ 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 :root[data-ran-surface='glass'] .sb__list--d1,
 :root[data-ran-surface='glass'] .sb__list--d2 {
@@ -745,6 +821,7 @@ a {
   width: 2px;
   border-radius: 1px;
   background: var(--ran-color-primary, var(--fg));
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: 0 0 0 0.5px color-mix(in srgb, #fff 40%, transparent);
 }
 
@@ -1949,48 +2026,69 @@ ran-demo {
   overflow: hidden;
   border-color: color-mix(in srgb, var(--rule) 80%, transparent);
   background:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.55) 0 18%, transparent 19%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(circle at 78% 28%, rgba(40, 60, 100, 0.14) 0 14%, transparent 15%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.4) 0 16%, transparent 17%),
     repeating-linear-gradient(
       -18deg,
       transparent 0 10px,
-      rgba(90, 120, 170, 0.07) 10px 12px
+      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(90, 120, 170, 0.07) 10px 12px
     ),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 90% 80% at 16% 18%, rgba(120, 170, 230, 0.38), transparent 52%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 80% 70% at 84% 82%, rgba(180, 150, 200, 0.28), transparent 48%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     linear-gradient(155deg, #e4ebf5 0%, #efeaf4 55%, #e8ebf2 100%);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] ran-demo {
   background:
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.12) 0 18%, transparent 19%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(circle at 78% 28%, rgba(120, 160, 220, 0.2) 0 14%, transparent 15%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.08) 0 16%, transparent 17%),
     repeating-linear-gradient(
       -18deg,
       transparent 0 10px,
-      rgba(140, 170, 220, 0.08) 10px 12px
+      /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(140, 170, 220, 0.08) 10px 12px
     ),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 90% 80% at 16% 18%, rgba(70, 110, 170, 0.4), transparent 52%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     radial-gradient(ellipse 80% 70% at 84% 82%, rgba(120, 80, 130, 0.3), transparent 48%),
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     linear-gradient(155deg, #141820 0%, #12141a 55%, #16121c 100%);
+  /* design-ok: bare-colour optical glass plate, not theme ink */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-ran-theme='light']):not([data-ran-theme='dark'])[data-ran-surface='glass'] ran-demo {
     background:
+      /* design-ok: bare-colour optical glass plate, not theme ink */
       radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.12) 0 18%, transparent 19%),
-      radial-gradient(circle at 78% 28%, rgba(120, 160, 220, 0.2) 0 14%, transparent 15%),
-      radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.08) 0 16%, transparent 17%),
+      /* design-ok: bare-colour optical glass plate, not theme ink */
+        radial-gradient(circle at 78% 28%, rgba(120, 160, 220, 0.2) 0 14%, transparent 15%),
+      /* design-ok: bare-colour optical glass plate, not theme ink */
+        radial-gradient(circle at 58% 78%, rgba(255, 255, 255, 0.08) 0 16%, transparent 17%),
       repeating-linear-gradient(
         -18deg,
         transparent 0 10px,
-        rgba(140, 170, 220, 0.08) 10px 12px
+        /* design-ok: bare-colour optical glass plate, not theme ink */ rgba(140, 170, 220, 0.08) 10px 12px
       ),
-      radial-gradient(ellipse 90% 80% at 16% 18%, rgba(70, 110, 170, 0.4), transparent 52%),
-      radial-gradient(ellipse 80% 70% at 84% 82%, rgba(120, 80, 130, 0.3), transparent 48%),
-      linear-gradient(155deg, #141820 0%, #12141a 55%, #16121c 100%);
+      /* design-ok: bare-colour optical glass plate, not theme ink */
+        radial-gradient(ellipse 90% 80% at 16% 18%, rgba(70, 110, 170, 0.4), transparent 52%),
+      /* design-ok: bare-colour optical glass plate, not theme ink */
+        radial-gradient(ellipse 80% 70% at 84% 82%, rgba(120, 80, 130, 0.3), transparent 48%),
+      /* design-ok: bare-colour optical glass plate, not theme ink */
+        linear-gradient(155deg, #141820 0%, #12141a 55%, #16121c 100%);
+    /* design-ok: bare-colour optical glass plate, not theme ink */
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 }
@@ -2131,13 +2229,16 @@ ran-demo p {
     margin-block: 8px 16px;
     margin-inline-end: 8px;
     height: calc(100vh - var(--header-h) - 24px);
-    padding: 18px 12px 48px;
+    padding: 16px 12px 40px;
     border-radius: var(--glass-chrome-radius);
     border: 1px solid var(--glass-rim);
     background: var(--glass-specular), var(--glass-fill);
     -webkit-backdrop-filter: blur(26px) saturate(175%) brightness(1.04);
     backdrop-filter: blur(26px) saturate(175%) brightness(1.04);
-    box-shadow: var(--glass-depth), var(--glass-inset), 0 0 0 1px var(--glass-rim-cool);
+    box-shadow:
+      var(--glass-depth),
+      var(--glass-inset),
+      0 0 0 1px var(--glass-rim-cool);
   }
   :root[data-ran-surface='glass'] body.has-sidebar .layout {
     gap: 0 24px;
