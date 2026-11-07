@@ -279,4 +279,24 @@
      4px literal in button/checkbox/input/modal/message; formalized here the
      same way border-width already was. */
   --ran-skin-border-image-width: 4px;
+
+  /* ── Surface language: glass (explicit; default face stays solid) ─
+     Optics lean on r-glass thin/regular. Dark overrides live in dark.less.
+     Activate with data-ran-surface="glass" or surface="glass" on a control. */
+  --ran-surface-glass-blur: 12px;
+  --ran-surface-glass-saturate: 160%;
+  --ran-surface-glass-brightness: 1.05;
+  --ran-surface-glass-fill: rgba(255, 255, 255, 0.62);
+  --ran-surface-glass-border: rgba(255, 255, 255, 0.48);
+  --ran-surface-glass-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 8px 24px -10px rgba(0, 0, 0, 0.18);
+  --ran-surface-glass-overlay-blur: 16px;
+  --ran-surface-glass-overlay-fill: rgba(255, 255, 255, 0.72);
+  --ran-surface-glass-overlay-border: rgba(255, 255, 255, 0.4);
+  --ran-surface-glass-overlay-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 16px 40px -12px rgba(0, 0, 0, 0.28);
+  --ran-surface-glass-solid-fallback: var(--ran-color-bg-elevated);
+  --ran-surface-glass-solid-shadow: var(--ran-shadow-elevated);
+  --ran-surface-glass-overlay-solid-fallback: var(--ran-color-bg-elevated);
+  --ran-surface-glass-overlay-solid-shadow: var(--ran-shadow-modal);
 }

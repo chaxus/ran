@@ -72,6 +72,51 @@ página.
 **Seguro en SSR**: todos los accesos a `document`, `localStorage` y `matchMedia` están protegidos,
 así que estas funciones no hacen nada (ni lanzan) durante el renderizado en servidor.
 
+## Lenguaje de superficie (solid / glass)
+
+El tema de color y el lenguaje de superficie son ejes independientes. `setSurface('glass')` escribe `data-ran-surface="glass"` en el destino (normalmente `<html>`). Los controles piloto — `r-button`, `r-input`, `r-card`, `r-modal`, `r-message` — se esmerilan bajo ese atributo, o con `surface="glass"` en el elemento. Usa `surface="solid"` para optar por salir de un glass a nivel de documento.
+
+Los botones primary / danger y las pastillas toast siguen sólidos bajo glass. `prefers-reduced-transparency: reduce` vuelve a tokens elevated sólidos, igual que [`r-glass`](/es/ranui/glass/).
+
+Para un panel liquid glass completo, sigue usando [`r-glass`](/es/ranui/glass/) — el eje surface es la escarcha de la familia de controles, no un reemplazo.
+
+<ran-demo>
+  <div style="display: grid; gap: 16px;">
+    <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
+      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
+      #e8e8ec;">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid (default)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+    <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
+      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
+      #e8e8ec;">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass (`data-ran-surface`)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Glass card" description="Frosted elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+  </div>
+</ran-demo>
+
 ## Cómo funciona el modo oscuro
 
 `setTheme('dark')` pone `data-ran-theme="dark"` en `<html>`. La hoja de estilos redefine entonces

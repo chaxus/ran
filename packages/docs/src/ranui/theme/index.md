@@ -15,14 +15,16 @@ The tokens themselves (what they are called and what each one is for) are the
 > `setTheme` to switch, and `setThemeToken(s)` if you want to override individual tokens
 > without shipping extra CSS.
 
-There are exactly two themes: **light** and **dark**, plus a **system** mode that follows the
-OS preference. (Earlier "theme pack" APIs were removed; `setThemePack` / `RanThemePackName` no
-longer exist.)
+There are exactly two colour themes: **light** and **dark**, plus a **system** mode that follows the
+OS preference. Orthogonal to that is a **surface language**: **solid** (default Graphite) or
+**glass** (frosted controls). Glass is never the library default — enable it on purpose.
+
+(Earlier "theme pack" APIs were removed; `setThemePack` / `RanThemePackName` no longer exist.)
 
 ## Quick start
 
 ```js
-import { initTheme, setTheme, getTheme } from 'ranui/theme';
+import { initTheme, setTheme, getTheme, setSurface, getSurface } from 'ranui/theme';
 
 // Restore the persisted theme ('light' | 'dark' | 'system') from localStorage
 initTheme();
@@ -32,6 +34,11 @@ setTheme('dark');
 setTheme('system'); // tracks prefers-color-scheme and updates live
 
 getTheme(); // → 'light' | 'dark' | 'system' | ''
+
+// Surface language (not persisted): solid is the default
+setSurface('glass');
+getSurface(); // → 'glass'
+setSurface('solid');
 ```
 
 The dedicated **`ranui/theme`** entry ships only the theming engine: importing it registers no
@@ -52,6 +59,8 @@ and updating the `theme-color` metas.
 | `initTheme`       | `(target?: ThemeTarget) => void`                                        | Restore the saved theme from `localStorage`. Call once on load. No-op in SSR.              |
 | `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | Apply `'light'` \| `'dark'` \| `'system'` and persist it. `'system'` tracks the OS live.   |
 | `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | Read the active theme. Returns `'system'` when system mode is active, `''` if none is set. |
+| `setSurface`      | `(name: RanSurfaceName, target?: ThemeTarget) => void`                  | Apply `'solid'` \| `'glass'`. `solid` removes `data-ran-surface`; not persisted.           |
+| `getSurface`      | `(target?: ThemeTarget) => RanSurfaceName`                              | Read the surface language; missing attribute means `'solid'`.                              |
 | `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | Override a single token at runtime (inline style on the target).                           |
 | `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | Override many tokens at once. A `null` / `undefined` value clears that token.              |
 | `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | Remove a runtime token override.                                                           |
@@ -60,6 +69,7 @@ and updating the `theme-color` metas.
 
 ```ts
 type RanThemeName = 'light' | 'dark' | 'system';
+type RanSurfaceName = 'solid' | 'glass';
 type ThemeTarget = HTMLElement | Document; // defaults to document.documentElement
 type ThemeTokenMap = Record<string, string | number | null | undefined>;
 ```
@@ -69,6 +79,58 @@ to scope a theme or token override to a subtree instead of the whole page.
 
 **SSR-safe**: all `document` / `localStorage` / `matchMedia` access is guarded, so these
 functions are inert (not throwing) during server rendering.
+
+## Surface language (solid / glass)
+
+Colour theme and surface language are independent axes. `setSurface('glass')` writes
+`data-ran-surface="glass"` on the target (usually `<html>`). Pilot controls — `r-button`,
+`r-input`, `r-card`, `r-modal`, `r-message` — frost themselves under that attribute, or when
+the element itself has `surface="glass"`. Set `surface="solid"` on a control to opt out of a
+document-level glass surface.
+
+Primary / danger buttons and toast pills stay solid under glass so contrast does not depend
+on the backdrop. `prefers-reduced-transparency: reduce` falls back to elevated solid tokens,
+matching [`r-glass`](/ranui/glass/).
+
+For a full liquid pane (refraction, materials), keep using [`r-glass`](/ranui/glass/) — the
+surface axis is the control-family frost, not a replacement for that component.
+
+<ran-demo>
+  <div style="display: grid; gap: 16px;">
+    <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
+      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
+      #e8e8ec;">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid (default)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+    <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
+      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
+      #e8e8ec;">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass (`data-ran-surface`)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Glass card" description="Frosted elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+  </div>
+</ran-demo>
 
 ## How dark mode works
 

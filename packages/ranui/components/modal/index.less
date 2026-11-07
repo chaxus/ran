@@ -1,5 +1,22 @@
+@import url('../../theme/surface-frost.less');
+
 :host {
   position: var(--ran-modal-host-position, static);
+}
+
+.ran-modal-glass-surface() {
+  .ran-modal-dialog {
+    .ran-frost-overlay();
+    .ran-frost-overlay-reduced();
+  }
+}
+
+:host([surface='glass']) {
+  .ran-modal-glass-surface();
+}
+
+:host-context([data-ran-surface='glass']):not([surface='solid']) {
+  .ran-modal-glass-surface();
 }
 
 .ran-modal-root {

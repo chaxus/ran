@@ -354,6 +354,30 @@ spring 系は、調整済みの SwiftUI のばねから蒸留したものです�
 | `--ran-skin-raised-shadow`      | `var(--ran-shadow-elevated)` | 持ち上げた面の影。スキンが変えられるよう間接参照にしてあります                              |
 | `--ran-skin-font-family`        | `var(--ran-font-family)`     | コンポーネントが使う書体。同じように間接参照にしてあります                                  |
 
+## サーフェス言語
+
+Orthogonal to light/dark. Default is **solid** Graphite. **Glass** is explicit
+(`data-ran-surface="glass"` or `surface="glass"` on a pilot control). Optics lean on
+[`r-glass`](/ja/ranui/glass/) thin/regular without pulling WebGL into every control. See
+[Theming](/ja/ranui/theme/).
+
+| Token | Light | Use for |
+| --- | --- | --- |
+| `--ran-surface-glass-blur` | `12px` | Control-scale frost blur |
+| `--ran-surface-glass-saturate` | `160%` | Frost saturation |
+| `--ran-surface-glass-brightness` | `1.05` | Frost brightness |
+| `--ran-surface-glass-fill` | `rgba(255, 255, 255, 0.62)` | Control frost fill (dark: `rgba(24, 24, 27, 0.62)`) |
+| `--ran-surface-glass-border` | `rgba(255, 255, 255, 0.48)` | Control frost border |
+| `--ran-surface-glass-shadow` | inset highlight + soft drop | Control frost elevation |
+| `--ran-surface-glass-overlay-blur` | `16px` | Modal/message frost blur |
+| `--ran-surface-glass-overlay-fill` | `rgba(255, 255, 255, 0.72)` | Overlay frost fill (dark: `rgba(24, 24, 27, 0.72)`) |
+| `--ran-surface-glass-overlay-border` | `rgba(255, 255, 255, 0.4)` | Overlay frost border |
+| `--ran-surface-glass-overlay-shadow` | inset highlight + deeper drop | Overlay frost elevation |
+| `--ran-surface-glass-solid-fallback` | `var(--ran-color-bg-elevated)` | Control fill under `prefers-reduced-transparency` |
+| `--ran-surface-glass-solid-shadow` | `var(--ran-shadow-elevated)` | Control shadow under reduced transparency |
+| `--ran-surface-glass-overlay-solid-fallback` | `var(--ran-color-bg-elevated)` | Overlay fill under reduced transparency |
+| `--ran-surface-glass-overlay-solid-shadow` | `var(--ran-shadow-modal)` | Overlay shadow under reduced transparency |
+
 ## ダークモードが再定義するもの
 
 `<html>`（あるいは任意のサブツリー。[テーマ](/ja/ranui/theme/)を参照）に付いた `data-ran-theme="dark"` が再定義するのは、**基礎パレットだけ**です。ただし、スケールを通じては解決できない例外が 4 つあります。

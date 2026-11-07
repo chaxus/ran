@@ -65,11 +65,11 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 
 ## `button`
 
-- Tokens: 75
+- Tokens: 77
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 16 · skin: 2 · component: 48 · internal: 9 -->
+<!-- layers: semantic: 16 · skin: 2 · component: 49 · internal: 10 -->
 - `--ran-btn-active-background`
 - `--ran-btn-active-border-color`
 - `--ran-btn-active-scale`
@@ -98,6 +98,7 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 - `--ran-btn-font-family`
 - `--ran-btn-font-size`
 - `--ran-btn-font-weight`
+- `--ran-btn-glass-border-color`
 - `--ran-btn-hover-background`
 - `--ran-btn-hover-border-color`
 - `--ran-btn-hover-color`
@@ -143,6 +144,7 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 - `--ran-space-1`
 - `--ran-space-2`
 - `--ran-space-4`
+- `--ran-surface-glass-border`
 - `--ran-text-button-size`
 - `--ran-text-button-weight`
 
@@ -520,11 +522,11 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 
 ## `input`
 
-- Tokens: 88
+- Tokens: 89
 - Parts: 4
 
 ### Tokens
-<!-- layers: semantic: 14 · skin: 1 · component: 61 · internal: 12 -->
+<!-- layers: semantic: 14 · skin: 1 · component: 62 · internal: 12 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-subtle`
 - `--ran-color-border`
@@ -584,6 +586,7 @@ once. The vocabulary is the [design system](/src/ranui/design-system/); the nami
 - `--ran-input-error-border-color`
 - `--ran-input-font-family`
 - `--ran-input-font-size`
+- `--ran-input-glass-border-color`
 - `--ran-input-hover-border-color`
 - `--ran-input-icon-align-items`
 - `--ran-input-icon-justify-content`

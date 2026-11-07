@@ -1,7 +1,24 @@
+@import url('../../theme/surface-frost.less');
+
 :host {
   display: var(--ran-card-display, block);
   box-sizing: border-box;
   min-height: var(--ran-card-min-height, 0);
+}
+
+.ran-card-glass-surface() {
+  .ran-card {
+    .ran-frost-control();
+    .ran-frost-control-reduced();
+  }
+}
+
+:host([surface='glass']) {
+  .ran-card-glass-surface();
+}
+
+:host-context([data-ran-surface='glass']):not([surface='solid']) {
+  .ran-card-glass-surface();
 }
 
 /* Interactive card (Geist): opt in with the `hoverable` attribute — the border

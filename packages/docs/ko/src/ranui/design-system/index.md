@@ -354,6 +354,30 @@ spring 계열은 다듬어진 SwiftUI 스프링에서 증류한 것입니다(res
 | `--ran-skin-raised-shadow`      | `var(--ran-shadow-elevated)` | 들린 면의 그림자. 스킨이 바꿀 수 있도록 한 번 거쳐 갑니다                           |
 | `--ran-skin-font-family`        | `var(--ran-font-family)`     | 컴포넌트가 쓰는 서체. 같은 방식으로 한 번 거쳐 갑니다                               |
 
+## 서피스 언어
+
+Orthogonal to light/dark. Default is **solid** Graphite. **Glass** is explicit
+(`data-ran-surface="glass"` or `surface="glass"` on a pilot control). Optics lean on
+[`r-glass`](/ko/ranui/glass/) thin/regular without pulling WebGL into every control. See
+[Theming](/ko/ranui/theme/).
+
+| Token | Light | Use for |
+| --- | --- | --- |
+| `--ran-surface-glass-blur` | `12px` | Control-scale frost blur |
+| `--ran-surface-glass-saturate` | `160%` | Frost saturation |
+| `--ran-surface-glass-brightness` | `1.05` | Frost brightness |
+| `--ran-surface-glass-fill` | `rgba(255, 255, 255, 0.62)` | Control frost fill (dark: `rgba(24, 24, 27, 0.62)`) |
+| `--ran-surface-glass-border` | `rgba(255, 255, 255, 0.48)` | Control frost border |
+| `--ran-surface-glass-shadow` | inset highlight + soft drop | Control frost elevation |
+| `--ran-surface-glass-overlay-blur` | `16px` | Modal/message frost blur |
+| `--ran-surface-glass-overlay-fill` | `rgba(255, 255, 255, 0.72)` | Overlay frost fill (dark: `rgba(24, 24, 27, 0.72)`) |
+| `--ran-surface-glass-overlay-border` | `rgba(255, 255, 255, 0.4)` | Overlay frost border |
+| `--ran-surface-glass-overlay-shadow` | inset highlight + deeper drop | Overlay frost elevation |
+| `--ran-surface-glass-solid-fallback` | `var(--ran-color-bg-elevated)` | Control fill under `prefers-reduced-transparency` |
+| `--ran-surface-glass-solid-shadow` | `var(--ran-shadow-elevated)` | Control shadow under reduced transparency |
+| `--ran-surface-glass-overlay-solid-fallback` | `var(--ran-color-bg-elevated)` | Overlay fill under reduced transparency |
+| `--ran-surface-glass-overlay-solid-shadow` | `var(--ran-shadow-modal)` | Overlay shadow under reduced transparency |
+
 ## 다크 모드가 다시 정의하는 것
 
 `<html>`(또는 임의의 서브트리. [테마](/ko/ranui/theme/) 참고)에 붙은 `data-ran-theme="dark"`가 다시 정의하는 것은 **기본 팔레트뿐**입니다. 다만 스케일을 통해 풀 수 없는 예외가 넷 있습니다.

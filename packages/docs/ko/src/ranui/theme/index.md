@@ -68,6 +68,51 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 **SSR 안전**: `document` / `localStorage` / `matchMedia` 접근이 모두 보호되어 있어, 서버 렌더링 중에는
 이 함수들이 아무 일도 하지 않습니다 (예외도 던지지 않습니다).
 
+## 서피스 언어 (solid / glass)
+
+색 테마와 서피스 언어는 독립 축입니다. `setSurface('glass')`는 대상(보통 `<html>`)에 `data-ran-surface="glass"`를 씁니다. 파일럿 컨트롤 — `r-button`, `r-input`, `r-card`, `r-modal`, `r-message` — 은 그 속성 아래이거나 요소에 `surface="glass"`일 때 서리 처리됩니다. 문서급 glass에서 빠지려면 `surface="solid"`를 쓰세요.
+
+primary / danger 버튼과 toast 알약은 glass에서도 불투명합니다. `prefers-reduced-transparency: reduce`는 elevated 솔리드 토큰으로 돌아가며 [`r-glass`](/ko/ranui/glass/)와 같습니다.
+
+완전한 리퀴드 글래스 패널은 계속 [`r-glass`](/ko/ranui/glass/)를 쓰세요 — 서피스 축은 컨트롤 패밀리 frost이지 대체가 아닙니다.
+
+<ran-demo>
+  <div style="display: grid; gap: 16px;">
+    <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
+      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
+      #e8e8ec;">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid (default)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+    <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
+      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
+      #e8e8ec;">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass (`data-ran-surface`)</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Glass card" description="Frosted elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+  </div>
+</ran-demo>
+
 ## 다크 모드가 동작하는 방식
 
 `setTheme('dark')`은 `<html>`에 `data-ran-theme="dark"`를 지정합니다. 그러면 스타일시트가 단일한 진실의

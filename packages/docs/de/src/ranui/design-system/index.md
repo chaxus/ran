@@ -354,6 +354,30 @@ Die wenigen strukturellen Werte, die Komponenten teilen und die weder Farbe noch
 | `--ran-skin-raised-shadow`      | `var(--ran-shadow-elevated)` | Der Schatten gehobener Flächen, indirekt, damit ein Skin ihn ändern kann             |
 | `--ran-skin-font-family`        | `var(--ran-font-family)`     | Die Schriftfamilie der Komponenten, auf dieselbe Weise indirekt                      |
 
+## Oberflächen-Sprache
+
+Orthogonal to light/dark. Default is **solid** Graphite. **Glass** is explicit
+(`data-ran-surface="glass"` or `surface="glass"` on a pilot control). Optics lean on
+[`r-glass`](/de/ranui/glass/) thin/regular without pulling WebGL into every control. See
+[Theming](/de/ranui/theme/).
+
+| Token | Light | Use for |
+| --- | --- | --- |
+| `--ran-surface-glass-blur` | `12px` | Control-scale frost blur |
+| `--ran-surface-glass-saturate` | `160%` | Frost saturation |
+| `--ran-surface-glass-brightness` | `1.05` | Frost brightness |
+| `--ran-surface-glass-fill` | `rgba(255, 255, 255, 0.62)` | Control frost fill (dark: `rgba(24, 24, 27, 0.62)`) |
+| `--ran-surface-glass-border` | `rgba(255, 255, 255, 0.48)` | Control frost border |
+| `--ran-surface-glass-shadow` | inset highlight + soft drop | Control frost elevation |
+| `--ran-surface-glass-overlay-blur` | `16px` | Modal/message frost blur |
+| `--ran-surface-glass-overlay-fill` | `rgba(255, 255, 255, 0.72)` | Overlay frost fill (dark: `rgba(24, 24, 27, 0.72)`) |
+| `--ran-surface-glass-overlay-border` | `rgba(255, 255, 255, 0.4)` | Overlay frost border |
+| `--ran-surface-glass-overlay-shadow` | inset highlight + deeper drop | Overlay frost elevation |
+| `--ran-surface-glass-solid-fallback` | `var(--ran-color-bg-elevated)` | Control fill under `prefers-reduced-transparency` |
+| `--ran-surface-glass-solid-shadow` | `var(--ran-shadow-elevated)` | Control shadow under reduced transparency |
+| `--ran-surface-glass-overlay-solid-fallback` | `var(--ran-color-bg-elevated)` | Overlay fill under reduced transparency |
+| `--ran-surface-glass-overlay-solid-shadow` | `var(--ran-shadow-modal)` | Overlay shadow under reduced transparency |
+
 ## Was der Dunkelmodus neu definiert
 
 `data-ran-theme="dark"` an `<html>` (oder an einem beliebigen Teilbaum, siehe [Themengestaltung](/de/ranui/theme/)) definiert **die Basispalette neu und sonst nichts**, mit vier Ausnahmen, die sich nicht über eine Skala auflösen lassen:

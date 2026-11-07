@@ -1,8 +1,26 @@
+@import url('../../theme/surface-frost.less');
+
 @clickX: var(--ran-x, 0);
 @clickY: var(--ran-y, 0);
 // White ink on the solid danger fill: 5.3:1 against --ran-red-700 in both themes. It does
 // not flip with the theme, so it cannot borrow --ran-color-primary-text.
 @dangerInk: var(--ran-btn-warning-color, #fff);
+
+// Glass surface language: frost the default (secondary) chrome only. Primary,
+// warning and text stay solid so emphasis and a11y ink do not wash out.
+.ran-btn-glass-surface() {
+  &:not([type='primary'], [type='warning'], [type='text'], [disabled]) {
+    box-shadow: none;
+    .ran-btn {
+      .ran-frost-control();
+      .ran-frost-control-reduced();
+    }
+    .ran-btn-content {
+      border-color: var(--ran-btn-glass-border-color, var(--ran-surface-glass-border));
+      background-color: transparent;
+    }
+  }
+}
 
 :host {
   box-sizing: var(--ran-btn-box-sizing, border-box);
@@ -294,4 +312,12 @@
   .ran-btn-content {
     transition: none;
   }
+}
+
+:host([surface='glass']) {
+  .ran-btn-glass-surface();
+}
+
+:host-context([data-ran-surface='glass']):not([surface='solid']) {
+  .ran-btn-glass-surface();
 }

@@ -62,4 +62,30 @@ describe('theme tokens', () => {
     expect(source).toContain('--ran-gray-1000: #ededef');
     expect(source).toContain("[data-ran-theme='dark']");
   });
+
+  it('defines glass surface language tokens and dark overrides', () => {
+    const tokens = read('theme/tokens.less');
+    const dark = read('theme/dark.less');
+
+    [
+      '--ran-surface-glass-blur',
+      '--ran-surface-glass-fill',
+      '--ran-surface-glass-overlay-blur',
+      '--ran-surface-glass-solid-fallback',
+    ].forEach((token) => {
+      expect(tokens).toContain(token);
+    });
+    expect(dark).toContain('--ran-surface-glass-fill: rgba(24, 24, 27, 0.62)');
+  });
+
+  it('wires glass surface selectors on the pilot control family', () => {
+    const frost = read('theme/surface-frost.less');
+    expect(frost).toContain('prefers-reduced-transparency');
+    ['button', 'card', 'input', 'modal', 'message'].forEach((name) => {
+      const source = read(`components/${name}/index.less`);
+      expect(source).toContain('surface-frost.less');
+      expect(source).toMatch(/:host\(\[surface='glass'\]/);
+      expect(source).toContain(":host-context([data-ran-surface='glass'])");
+    });
+  });
 });

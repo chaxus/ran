@@ -1,0 +1,48 @@
+// Mixins for the glass surface language. Import into a component stylesheet.
+// The caller gates with :host([surface='glass']) / :host-context(...).
+
+.ran-frost-control() {
+  background: var(--ran-surface-glass-fill, rgba(255, 255, 255, 0.62));
+  -webkit-backdrop-filter: blur(var(--ran-surface-glass-blur, 12px))
+    saturate(var(--ran-surface-glass-saturate, 160%)) brightness(var(--ran-surface-glass-brightness, 1.05));
+  backdrop-filter: blur(var(--ran-surface-glass-blur, 12px))
+    saturate(var(--ran-surface-glass-saturate, 160%)) brightness(var(--ran-surface-glass-brightness, 1.05));
+  border-color: var(--ran-surface-glass-border, rgba(255, 255, 255, 0.48));
+  box-shadow: var(
+    --ran-surface-glass-shadow,
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 8px 24px -10px rgba(0, 0, 0, 0.18)
+  );
+}
+
+.ran-frost-overlay() {
+  background: var(--ran-surface-glass-overlay-fill, rgba(255, 255, 255, 0.72));
+  -webkit-backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 16px))
+    saturate(var(--ran-surface-glass-saturate, 160%)) brightness(var(--ran-surface-glass-brightness, 1.05));
+  backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 16px))
+    saturate(var(--ran-surface-glass-saturate, 160%)) brightness(var(--ran-surface-glass-brightness, 1.05));
+  border-color: var(--ran-surface-glass-overlay-border, rgba(255, 255, 255, 0.4));
+  box-shadow: var(
+    --ran-surface-glass-overlay-shadow,
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 16px 40px -12px rgba(0, 0, 0, 0.28)
+  );
+}
+
+.ran-frost-control-reduced() {
+  @media (prefers-reduced-transparency: reduce) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--ran-surface-glass-solid-fallback, var(--ran-color-bg-elevated));
+    box-shadow: var(--ran-surface-glass-solid-shadow, var(--ran-shadow-elevated));
+  }
+}
+
+.ran-frost-overlay-reduced() {
+  @media (prefers-reduced-transparency: reduce) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--ran-surface-glass-overlay-solid-fallback, var(--ran-color-bg-elevated));
+    box-shadow: var(--ran-surface-glass-overlay-solid-shadow, var(--ran-shadow-modal));
+  }
+}

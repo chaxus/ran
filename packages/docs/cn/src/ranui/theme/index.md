@@ -13,13 +13,16 @@ ranui 样式体系中**运行时**的那一半：在 light、dark、system 之�
 > **适用场景**：给 ranui 应用接入明暗主题：加载时调用一次 `initTheme`，用 `setTheme` 切换；想在不
 > 新增 CSS 的前提下覆盖个别令牌，就用 `setThemeToken(s)`。
 
-主题只有 **light（浅色）** 和 **dark（深色）** 两种，外加跟随操作系统偏好的 **system** 模式。
+主题色只有 **light（浅色）** 和 **dark（深色）** 两种，外加跟随操作系统偏好的 **system** 模式。
+与之正交的是 **表面语言（surface）**：**solid**（默认 Graphite）或 **glass**（毛玻璃控件）。
+玻璃不是库的默认脸——需要时再打开。
+
 （旧的「主题包（theme pack）」API 已移除，`setThemePack` / `RanThemePackName` 不再存在。）
 
 ## 快速开始
 
 ```js
-import { initTheme, setTheme, getTheme } from 'ranui/theme';
+import { initTheme, setTheme, getTheme, setSurface, getSurface } from 'ranui/theme';
 
 // 从 localStorage 恢复持久化的主题（'light' | 'dark' | 'system'）
 initTheme();
@@ -29,6 +32,11 @@ setTheme('dark');
 setTheme('system'); // 跟随 prefers-color-scheme 实时更新
 
 getTheme(); // → 'light' | 'dark' | 'system' | ''
+
+// 表面语言（不持久化）：默认 solid
+setSurface('glass');
+getSurface(); // → 'glass'
+setSurface('solid');
 ```
 
 独立的 **`ranui/theme`** 入口只包含主题引擎，引入它不会注册任何自定义元素，所以只需要令牌和暗色
@@ -47,6 +55,8 @@ getTheme(); // → 'light' | 'dark' | 'system' | ''
 | `initTheme`       | `(target?: ThemeTarget) => void`                                        | 从 `localStorage` 恢复主题，加载时调用一次。SSR 下为空操作。                   |
 | `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | 应用 `'light'` \| `'dark'` \| `'system'` 并持久化；`'system'` 会实时跟随系统。 |
 | `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | 读取当前主题。system 模式下返回 `'system'`，未设置时返回 `''`。                |
+| `setSurface`      | `(name: RanSurfaceName, target?: ThemeTarget) => void`                  | 应用 `'solid'` \| `'glass'`。`solid` 会移除 `data-ran-surface`；不持久化。     |
+| `getSurface`      | `(target?: ThemeTarget) => RanSurfaceName`                              | 读取表面语言；没有属性时视为 `'solid'`。                                       |
 | `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | 运行时覆盖单个令牌（作为目标元素的内联样式）。                                 |
 | `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | 批量覆盖令牌，值为 `null` / `undefined` 时清除对应令牌。                       |
 | `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | 移除运行时的令牌覆盖。                                                         |
@@ -55,6 +65,7 @@ getTheme(); // → 'light' | 'dark' | 'system' | ''
 
 ```ts
 type RanThemeName = 'light' | 'dark' | 'system';
+type RanSurfaceName = 'solid' | 'glass';
 type ThemeTarget = HTMLElement | Document; // 默认 document.documentElement
 type ThemeTokenMap = Record<string, string | number | null | undefined>;
 ```
@@ -64,6 +75,57 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 **SSR 安全**：所有对 `document` / `localStorage` / `matchMedia` 的访问都加了判断，服务端渲染时这些
 函数不会抛错，只是什么都不做。
+
+## 表面语言（solid / glass）
+
+色彩主题和表面语言是两条独立的轴。`setSurface('glass')` 会在目标（通常是 `<html>`）上写入
+`data-ran-surface="glass"`。试点控件——`r-button`、`r-input`、`r-card`、`r-modal`、`r-message`——
+会在该属性下（或自身带 `surface="glass"` 时）变成毛玻璃。在控件上设 `surface="solid"` 可退出
+文档级玻璃表面。
+
+主色 / 危险按钮与 toast 胶囊在玻璃模式下仍保持实色，对比度不依赖背后内容。
+`prefers-reduced-transparency: reduce` 会回退到 elevated 实色令牌，与
+[`r-glass`](/cn/ranui/glass/) 一致。
+
+需要完整液体玻璃面板（折射、材质档）时，继续用 [`r-glass`](/cn/ranui/glass/)——表面轴是控件族
+磨砂，不是替代该组件。
+
+<ran-demo>
+  <div style="display: grid; gap: 16px;">
+    <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
+      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
+      #e8e8ec;">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid（默认）</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+    <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
+      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
+      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
+      #e8e8ec;">
+      <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass（`data-ran-surface`）</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <r-card heading="Glass card" description="Frosted elevated surface." style="width: 220px;">
+          <r-input label="Name" placeholder="Ada"></r-input>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <r-button type="primary">Save</r-button>
+            <r-button>Cancel</r-button>
+          </div>
+        </r-card>
+      </div>
+    </div>
+  </div>
+</ran-demo>
 
 ## 暗色模式是怎么工作的
 

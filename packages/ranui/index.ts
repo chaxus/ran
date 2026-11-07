@@ -1,5 +1,7 @@
 export { setTheme, getTheme, setThemeToken, clearThemeToken, setThemeTokens, initTheme } from '@/utils/theme';
 export type { RanThemeName, ThemeTarget, ThemeTokenMap } from '@/utils/theme';
+export { setSurface, getSurface } from '@/utils/surface';
+export type { RanSurfaceName } from '@/utils/surface';
 export { serializeForm } from '@/utils/form';
 export { Button } from '@/components/button';
 export { Icon, registerIcon, registerIcons, RAN_ICON_NAMES } from '@/components/icon';

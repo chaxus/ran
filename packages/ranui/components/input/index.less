@@ -1,8 +1,27 @@
+@import url('../../theme/surface-frost.less');
+
 :host {
   position: var(--ran-input-host-position, relative);
   display: var(--ran-input-host-display, flex);
   flex-direction: column;
   box-sizing: var(--ran-input-host-box-sizing, border-box);
+}
+
+.ran-input-glass-surface() {
+  &:not([disabled]) .ran-input {
+    .ran-frost-control();
+    .ran-frost-control-reduced();
+    /* Keep the control edge readable on frost — glass border alone can fall under 3:1. */
+    border-color: var(--ran-input-glass-border-color, var(--ran-color-border-control, #8a8a94));
+  }
+}
+
+:host([surface='glass']) {
+  .ran-input-glass-surface();
+}
+
+:host-context([data-ran-surface='glass']):not([surface='solid']) {
+  .ran-input-glass-surface();
 }
 // A static caption above the field (Luke Wroblewski's/NN·g's top-aligned-label
 // research: ~2x faster form completion than side-aligned; also sidesteps a

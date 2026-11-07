@@ -213,7 +213,12 @@ and complete states, not a decorative effect on every component.
 
 - **SHOULD** Choose dimensions from the existing token roles; do not add a second "premium" scale.
 - **SHOULD** Glass and other expressive effects are explicit surface choices (`r-glass`, a host's
-  hero), not default text or control backgrounds.
+  hero, or `data-ran-surface="glass"` / `surface="glass"` on the pilot control family), not
+  default text or control backgrounds. The default surface language stays solid Graphite.
+- **MUST** A glass surface respects `prefers-reduced-transparency: reduce` by falling back to
+  theme-aware solid elevated tokens (same contract as `r-glass`).
+- **SHOULD** Under glass, keep solid fills for high-emphasis actions (primary / danger) and for
+  inverse toast pills so contrast does not depend on the backdrop.
 - **MUST** Reading contrast and interaction semantics are the same in both themes.
 - **SHOULD** Prefer a semantic token to a raw scale step, and decide by role and state rather than by
   eye. Design every reachable state: default, hover, active, focus, disabled, loading, empty, error.
