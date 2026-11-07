@@ -16,5 +16,5 @@ description: 同一列中渲染 Markdown 正文、行内/块级公式与 Mermaid
 ## 参考
 
 - [Markdown](../ranui/markdown/) — 流式模式、代码高亮、复制
-- [Math](../ranui/math/) — KaTeX
+- [Math](../ranui/math/) — Temml
 - [Mermaid](../ranui/mermaid/) — 懒加载图表
