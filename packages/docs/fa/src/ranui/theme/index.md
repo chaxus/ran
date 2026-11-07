@@ -7,8 +7,8 @@ description: 'سامانهٔ پوستهٔ زمان‌اجرا در ranui: initTh
 نیمهٔ **زمان‌اجرا**ی استایل‌دهی ranui: جابه‌جایی میان حالت روشن، تیره و سیستمی، ماندگار کردن انتخاب، و
 بازنویسی توکن‌ها همان لحظه.
 
-خودِ توکن‌ها (نامشان و اینکه هرکدام برای چیست) در [سیستم طراحی](/fa/ranui/design-system/) آمده‌اند و
-قاعدهٔ انتخاب میان آن‌ها در [راهنمای طراحی](/fa/ranui/design-guides/). این صفحه تنها دربارهٔ _به‌کار
+خودِ توکن‌ها (نامشان و اینکه هرکدام برای چیست) در [سیستم طراحی](/fa/design/design-system/) آمده‌اند و
+قاعدهٔ انتخاب میان آن‌ها در [راهنمای طراحی](/fa/design/design-guides/). این صفحه تنها دربارهٔ _به‌کار
 بستن_ آن‌هاست.
 
 > **کجا به کارش ببرید**: وقتی در برنامه‌ای با ranui به پوستهٔ روشن/تیره نیاز دارید. هنگام بارگذاری یک بار
@@ -80,10 +80,11 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 <ran-demo>
   <div style="display: grid; gap: 16px;">
     <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
-      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
-      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
-      #e8e8ec;">
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
       <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid (default)</p>
       <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
         <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
@@ -96,13 +97,14 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
       </div>
     </div>
     <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
-      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
-      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
-      #e8e8ec;">
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
       <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass (`data-ran-surface`)</p>
       <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-        <r-card heading="Glass card" description="Frosted elevated surface." style="width: 220px;">
+        <r-card surface="glass" heading="Glass card" description="Opt-in frosted plate." style="width: 220px;">
           <r-input label="Name" placeholder="Ada"></r-input>
           <div style="display: flex; gap: 8px; margin-top: 12px;">
             <r-button type="primary">Save</r-button>
@@ -125,7 +127,7 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 - **CSS خودتان هم اگر توکن‌های معنایی را مصرف کند، حالت تیره را رایگان می‌گیرد** — و اگر رنگی را
   سفت‌کد کند یا مقدار پشتیبانِ فقط‌روشن بنویسد، آن را نادرست می‌گیرد.
-  [استفاده از توکن‌ها در CSS خودتان](/fa/ranui/design-system/#using-tokens-in-your-own-css) را ببینید.
+  [استفاده از توکن‌ها در CSS خودتان](/fa/design/design-system/#using-tokens-in-your-own-css) را ببینید.
 - **هنگام تعویض پوسته هیچ چیز نباید گذار داشته باشد.** CSS نمی‌داند چرا رنگی عوض شده است، پس اگر روی یک
   ویژگی پالت `transition` بگذارید، با تعویض پوسته هر عنصر با شتاب خودش محو و ظاهر می‌شود. کامپوننت‌های
   ranui عمداً چنین نمی‌کنند؛ مال شما هم نباید بکند.
@@ -173,7 +175,7 @@ clearThemeToken('--ran-color-primary');
   هر توکن معنایی‌ای که به آن ارجاع دارد دنبالش می‌آید.
 - برای تغییر دقیقاً یک عنصر، توکن **کامپوننت** (`--ran-btn-hover-background`) را بازنویسی کنید.
 
-این لایه‌بندی به‌تمامی در صفحهٔ [سیستم طراحی](/fa/ranui/design-system/#two-layers) شرح داده شده است.
+این لایه‌بندی به‌تمامی در صفحهٔ [سیستم طراحی](/fa/design/design-system/#two-layers) شرح داده شده است.
 توجه کنید که بازنویسی زمان‌اجرا یک استایل درون‌خطی روی هدف است: در آن زیردرخت بر قاعده‌های شیوه‌نامه
 پیروز می‌شود — همین است که پوسته‌دادن به هر پنل را ممکن می‌کند و همین است که یافتنِ بازنویسی‌ای که پاک
 کردنش را فراموش کرده‌اید بعداً دشوار می‌سازد.

@@ -7,25 +7,28 @@ description: 'ranui 的运行时主题系统：initTheme / setTheme / getTheme�
 ranui 样式体系中**运行时**的那一半：在 light、dark、system 之间切换，持久化用户选择，以及在运行
 时覆盖令牌。
 
-令牌本身（叫什么名字、各自负责什么）在[设计系统](/cn/ranui/design-system/)里讲；怎么在它们
-之间取舍在[设计规范](/cn/ranui/design-guides/)里讲。本页只讲**怎么应用**。
+令牌本身（叫什么名字、各自负责什么）在[设计系统](/cn/design/design-system/)里讲；怎么在它们
+之间取舍在[设计规范](/cn/design/design-guides/)里讲。本页只讲**怎么应用**。
 
 > **适用场景**：给 ranui 应用接入明暗主题：加载时调用一次 `initTheme`，用 `setTheme` 切换；想在不
 > 新增 CSS 的前提下覆盖个别令牌，就用 `setThemeToken(s)`。
 
 主题色只有 **light（浅色）** 和 **dark（深色）** 两种，外加跟随操作系统偏好的 **system** 模式。
-与之正交的是 **表面语言（surface）**：**solid**（默认 Graphite）或 **glass**（毛玻璃控件）。
-玻璃不是库的默认脸——需要时再打开。
+苹果式 **Liquid Glass 观感不是第三套色彩主题**——它是 **表面语言（surface）**：**solid**（默认
+Graphite）或 **glass**（毛玻璃控件，对齐 macOS 27 Liquid Glass）。可自由组合，例如
+`setTheme('dark')` + `setSurface('glass')`。玻璃不是库的默认脸——需要时再打开。
 
 （旧的「主题包（theme pack）」API 已移除，`setThemePack` / `RanThemePackName` 不再存在。）
 
 ## 快速开始
 
 ```js
-import { initTheme, setTheme, getTheme, setSurface, getSurface } from 'ranui/theme';
+import { initTheme, setTheme, getTheme, initSurface, setSurface, getSurface } from 'ranui/theme';
 
 // 从 localStorage 恢复持久化的主题（'light' | 'dark' | 'system'）
 initTheme();
+// 恢复液态玻璃 / 实色表面（localStorage 键 `ran-surface`）
+initSurface();
 
 // 切换主题，自动持久化
 setTheme('dark');
@@ -33,7 +36,7 @@ setTheme('system'); // 跟随 prefers-color-scheme 实时更新
 
 getTheme(); // → 'light' | 'dark' | 'system' | ''
 
-// 表面语言（不持久化）：默认 solid
+// 表面语言——写到 <html> 时会持久化到 `ran-surface`
 setSurface('glass');
 getSurface(); // → 'glass'
 setSurface('solid');
@@ -45,8 +48,9 @@ setSurface('solid');
 `setTheme` 会在 `<html>` 上写入 `data-ran-theme`（以及兼容用的 `theme`）属性，所有组件样式随之
 响应。选择保存在 localStorage 键 `ran-theme` 下。
 
-如果需要现成的切换 UI，直接用 [`<r-theme-switch>`](/cn/ranui/theme-switch/)：它是一个已接入
-该 API 的 system / light / dark 分段控件，多个实例之间会互相同步，还会更新 `theme-color` meta。
+如果需要现成的切换 UI：用两条正交轴——[`<r-theme-switch>`](/cn/ranui/theme-switch/) 切
+system / light / dark，[`<r-surface-switch>`](/ranui/surface-switch/) 切石墨 / 液态玻璃。主题不强迫风格，玻璃也仍尊重
+浅色与深色。两者都会跨实例同步；主题开关还会更新 `theme-color` meta。文档站把它们成对放在页头。
 
 ## API
 
@@ -55,8 +59,9 @@ setSurface('solid');
 | `initTheme`       | `(target?: ThemeTarget) => void`                                        | 从 `localStorage` 恢复主题，加载时调用一次。SSR 下为空操作。                   |
 | `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | 应用 `'light'` \| `'dark'` \| `'system'` 并持久化；`'system'` 会实时跟随系统。 |
 | `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | 读取当前主题。system 模式下返回 `'system'`，未设置时返回 `''`。                |
-| `setSurface`      | `(name: RanSurfaceName, target?: ThemeTarget) => void`                  | 应用 `'solid'` \| `'glass'`。`solid` 会移除 `data-ran-surface`；不持久化。     |
+| `setSurface`      | `(name: RanSurfaceName, target?: ThemeTarget) => void`                  | 应用 `'solid'` \| `'glass'`。`solid` 会移除 `data-ran-surface`。目标为 `<html>` 时持久化。 |
 | `getSurface`      | `(target?: ThemeTarget) => RanSurfaceName`                              | 读取表面语言；没有属性时视为 `'solid'`。                                       |
+| `initSurface`     | `(target?: ThemeTarget) => void`                                        | 从 `localStorage` 恢复表面，加载时调用一次。SSR 下为空操作。                   |
 | `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | 运行时覆盖单个令牌（作为目标元素的内联样式）。                                 |
 | `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | 批量覆盖令牌，值为 `null` / `undefined` 时清除对应令牌。                       |
 | `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | 移除运行时的令牌覆盖。                                                         |
@@ -78,25 +83,30 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 ## 表面语言（solid / glass）
 
-色彩主题和表面语言是两条独立的轴。`setSurface('glass')` 会在目标（通常是 `<html>`）上写入
-`data-ran-surface="glass"`。试点控件——`r-button`、`r-input`、`r-card`、`r-modal`、`r-message`——
-会在该属性下（或自身带 `surface="glass"` 时）变成毛玻璃。在控件上设 `surface="solid"` 可退出
-文档级玻璃表面。
+想要的「玻璃主题」走这条轴，不必再加一套色板。色彩主题和表面语言彼此独立——见[表面语言](/cn/design/surface)（Apple Liquid Glass：功能层 vs 内容层）。
 
-主色 / 危险按钮与 toast 胶囊在玻璃模式下仍保持实色，对比度不依赖背后内容。
-`prefers-reduced-transparency: reduce` 会回退到 elevated 实色令牌，与
-[`r-glass`](/cn/ranui/glass/) 一致。
+`setSurface('glass')` 会在目标（通常是 `<html>`）上写入 `data-ran-surface="glass"`。
 
-需要完整液体玻璃面板（折射、材质档）时，继续用 [`r-glass`](/cn/ranui/glass/)——表面轴是控件族
-磨砂，不是替代该组件。
+| 文档级 glass 下 | 行为 |
+| --------------- | ---- |
+| 默认 `r-button` | 起霜（Apple `glass`） |
+| `type="primary"` / `warning` | 保持**实心**（Apple `glassProminent`） |
+| `r-modal`、非 toast 的 `r-message` | 浮层起霜 |
+| `r-card`、`r-input` | 保持**实心**（内容层）；用 `surface="glass"` 选择加入 |
+| Toast 药丸 | 保持**实心** |
+
+在控件上设 `surface="solid"` 可退出文档级玻璃。`prefers-reduced-transparency: reduce` 会回退到 elevated 实色令牌，与 [`r-glass`](/cn/ranui/glass/) 一致。
+
+需要完整液体玻璃面板（透镜折射、材质、rim）时，继续用 [`r-glass`](/cn/ranui/glass/)——表面轴是控件族磨砂，不是替代该组件。
 
 <ran-demo>
   <div style="display: grid; gap: 16px;">
     <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
-      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
-      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
-      #e8e8ec;">
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
       <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid（默认）</p>
       <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
         <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
@@ -109,13 +119,14 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
       </div>
     </div>
     <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
-      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
-      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
-      #e8e8ec;">
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
       <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass（`data-ran-surface`）</p>
       <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-        <r-card heading="Glass card" description="Frosted elevated surface." style="width: 220px;">
+        <r-card surface="glass" heading="Glass card" description="Opt-in frosted plate." style="width: 220px;">
           <r-input label="Name" placeholder="Ada"></r-input>
           <div style="display: flex; gap: 8px; margin-top: 12px;">
             <r-button type="primary">Save</r-button>
@@ -137,7 +148,7 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 - **只要用的是语义令牌，你自己的 CSS 也自动获得暗色模式**；反过来，写死颜色或者写了只在浅色下成立
   的兜底值就会出错。见
-  [在自己的 CSS 里使用令牌](/cn/ranui/design-system/#using-tokens-in-your-own-css)。
+  [在自己的 CSS 里使用令牌](/cn/design/design-system/#using-tokens-in-your-own-css)。
 - **主题翻转时不应该有任何过渡动画。** CSS 分不清颜色是为什么变的，所以颜色属性上的 `transition`
   会让每个元素在切换主题时按各自的时长淡变。ranui 的组件刻意没有这么做，你的也不应该。
 
@@ -184,7 +195,7 @@ clearThemeToken('--ran-color-primary');
   都会跟着变。
 - 覆盖**组件**令牌（`--ran-btn-hover-background`）：只改一个元素。
 
-完整分层见[设计系统](/cn/ranui/design-system/#two-layers)。注意运行时覆盖写的是目标元素上的
+完整分层见[设计系统](/cn/design/design-system/#two-layers)。注意运行时覆盖写的是目标元素上的
 **内联样式**：它在该子树内会压过样式表规则。这正是局部主题能生效的原因，也是忘记清除的覆盖事后很难
 被发现的原因。
 

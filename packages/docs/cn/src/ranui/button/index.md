@@ -51,6 +51,8 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 `primary` 是单色（无彩色）操作按钮，来自 Geist 设计语言：浅色模式下黑底白字，深色模式下白底黑字。蓝色在这里不承担品牌色的角色，只留给链接和聚焦环使用。它用的是 `--ran-color-primary*` 令牌（`--ran-color-primary`、`-hover`、`-active`，以及作为反色墨水的 `--ran-color-primary-text`），详见 [Theme 主题与令牌](/cn/ranui/theme/)。
 
+在 [`data-ran-surface="glass"`](/cn/design/surface) 下，**默认**按钮起霜（Apple `glass`）；`primary` 与 `warning` 保持实心（Apple `glassProminent`），强调不被冲淡。把站点切到液态玻璃，即可在上方默认按钮上看到差异。
+
 ### 禁用状态 `disabled`
 
 禁用按钮会阻止指针、键盘和程序化 `click()` 激活；重新启用后保留原控件及其可访问名称。
@@ -147,7 +149,7 @@ r-button::part(content) {
 ```
 
 完整清单见[样式令牌](/cn/ranui/style-tokens#button)；该选哪个令牌见
-[设计系统](/cn/ranui/design-system/)。
+[设计系统](/cn/design/design-system/)。
 
 ## 最佳实践
 

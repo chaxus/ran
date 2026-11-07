@@ -8,8 +8,8 @@ A metade **em tempo de execução** da estilização do ranui: alternar entre mo
 sistema, guardar a escolha e sobrescrever tokens na hora.
 
 Os tokens em si (como se chamam e para que serve cada um) são o
-[design system](/pt/ranui/design-system/); as regras para escolher entre eles são as
-[diretrizes de design](/pt/ranui/design-guides/). Esta página trata só de _aplicá-los_.
+[design system](/pt/design/design-system/); as regras para escolher entre eles são as
+[diretrizes de design](/pt/design/design-guides/). Esta página trata só de _aplicá-los_.
 
 > **Use quando** precisar de tema claro e escuro num aplicativo com ranui: chame `initTheme` uma vez
 > no carregamento, `setTheme` para alternar, e `setThemeToken(s)` se quiser sobrescrever tokens
@@ -81,10 +81,11 @@ Para um painel liquid glass completo, continue com [`r-glass`](/pt/ranui/glass/)
 <ran-demo>
   <div style="display: grid; gap: 16px;">
     <div style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
-      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
-      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
-      #e8e8ec;">
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
       <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">solid (default)</p>
       <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
         <r-card heading="Solid card" description="Graphite elevated surface." style="width: 220px;">
@@ -97,13 +98,14 @@ Para um painel liquid glass completo, continue com [`r-glass`](/pt/ranui/glass/)
       </div>
     </div>
     <div data-ran-surface="glass" style="position: relative; padding: 24px; border-radius: 16px; overflow: hidden; background:
-      radial-gradient(circle at 20% 20%, #94ccff 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #ffb1b3 0%, transparent 40%),
-      radial-gradient(circle at 50% 80%, #b9f5bc 0%, transparent 45%),
-      #e8e8ec;">
+      radial-gradient(circle at 18% 22%, #7eb8ff 0%, transparent 42%),
+      radial-gradient(circle at 82% 28%, #ff8fa3 0%, transparent 38%),
+      radial-gradient(circle at 48% 78%, #7de89a 0%, transparent 42%),
+      radial-gradient(circle at 70% 60%, #ffd27a 0%, transparent 35%),
+      linear-gradient(135deg, #ececf2 0%, #e4e8f0 100%);">
       <p style="margin: 0 0 12px; font-size: 13px; color: #55555e;">glass (`data-ran-surface`)</p>
       <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-        <r-card heading="Glass card" description="Frosted elevated surface." style="width: 220px;">
+        <r-card surface="glass" heading="Glass card" description="Opt-in frosted plate." style="width: 220px;">
           <r-input label="Name" placeholder="Ada"></r-input>
           <div style="display: flex; gap: 8px; margin-top: 12px;">
             <r-button type="primary">Save</r-button>
@@ -126,7 +128,7 @@ Duas consequências que vale conhecer:
 
 - **O seu próprio CSS ganha modo escuro de graça** se consumir tokens semânticos, e o ganha errado
   se fixar uma cor na mão ou escrever um valor de reserva só para o claro. Veja
-  [Usar tokens no seu próprio CSS](/pt/ranui/design-system/#using-tokens-in-your-own-css).
+  [Usar tokens no seu próprio CSS](/pt/design/design-system/#using-tokens-in-your-own-css).
 - **Nada deve fazer transição numa troca de tema.** O CSS não tem como saber por que uma cor mudou,
   então uma `transition` numa propriedade da paleta faz cada elemento desvanecer no próprio ritmo
   quando o tema muda. Os componentes do ranui deliberadamente não fazem isso; os seus também não
@@ -178,7 +180,7 @@ Como o modo escuro redefine apenas a paleta base:
   elemento.
 
 Essa estratificação está descrita por inteiro na página do
-[design system](/pt/ranui/design-system/#two-layers). Note que uma sobrescrita em tempo de
+[design system](/pt/design/design-system/#two-layers). Note que uma sobrescrita em tempo de
 execução é um estilo inline no alvo: ela vence as regras da folha de estilos naquela subárvore, o que
 é justamente o que faz o tema por painel funcionar — e o que torna difícil, mais tarde, notar uma
 sobrescrita que você esqueceu de limpar.

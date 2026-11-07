@@ -130,7 +130,7 @@ r-button::part(content) {
 }
 ```
 
-一覧は[スタイルトークン](/ja/ranui/style-tokens#button)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#button)に、どのトークンを選ぶかは[デザインシステム](/ja/design/design-system/)にあります。
 
 ## ベストプラクティス
 
