@@ -163,7 +163,7 @@ const ja: LocaleMessages = {
     caching_precache: 'キャッシュとプリキャッシュ',
     bridge_postmessage: 'Bridge (postMessage)',
     cross_context_messaging: 'コンテキスト間メッセージング',
-    element_api_all_41_elements: '要素 API（全 41 要素）',
+    element_api_all_42_elements: '要素 API（全 42 要素）',
     style_tokens_parts: 'スタイルトークンと Part',
     changelog: '更新履歴',
     foundations: '基盤',

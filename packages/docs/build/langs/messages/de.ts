@@ -163,7 +163,7 @@ const de: LocaleMessages = {
     caching_precache: 'Caching und Precache',
     bridge_postmessage: 'Bridge (postMessage)',
     cross_context_messaging: 'Nachrichten über Kontextgrenzen',
-    element_api_all_41_elements: 'Element-API (alle 41 Elemente)',
+    element_api_all_42_elements: 'Element-API (alle 42 Elemente)',
     style_tokens_parts: 'Style-Tokens und Parts',
     changelog: 'Änderungsprotokoll',
     foundations: 'Grundlagen',

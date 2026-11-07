@@ -1892,13 +1892,15 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ## `surface-switch`
 
-- Tokens: 13
+- Tokens: 15
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 5 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 7 -->
+- `--ran-background-100`
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
+- `--ran-gray-200`
 - `--ran-radius-md`
 - `--ran-select-background-color`
 - `--ran-select-background-image`
@@ -1988,13 +1990,15 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ## `theme-switch`
 
-- Tokens: 14
+- Tokens: 16
 - Parts: 2
 
 ### Tokens
-<!-- layers: semantic: 3 · component: 5 · internal: 6 -->
+<!-- layers: semantic: 3 · component: 5 · internal: 8 -->
+- `--ran-background-100`
 - `--ran-color-bg-elevated`
 - `--ran-color-border-secondary`
+- `--ran-gray-200`
 - `--ran-radius-md`
 - `--ran-select-background-color`
 - `--ran-select-background-image`
