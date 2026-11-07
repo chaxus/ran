@@ -202,17 +202,17 @@ son elementos del DOM normales, pero solo admiten un manejador y no tienen fase 
 
 ## Adónde ir después
 
-| Si quieres…                                        | Lee                                           |
-| -------------------------------------------------- | --------------------------------------------- |
-| Consultar la API exacta de un elemento             | [API de elementos](/es/ranui/api)             |
+| Si quieres…                                        | Lee                                            |
+| -------------------------------------------------- | ---------------------------------------------- |
+| Consultar la API exacta de un elemento             | [API de elementos](/es/ranui/api)              |
 | Saber qué token usar, y por qué                    | [Sistema de diseño](/es/design/design-system/) |
 | Construir una pantalla que parezca un solo sistema | [Guía de diseño](/es/design/design-guides/)    |
-| Integrar ranui en una aplicación correctamente     | [Guía de código](/es/ranui/coding-guides/)    |
-| Añadir claro/oscuro, o rehacer todo el estilo      | [Temas](/es/ranui/theme/)                     |
-| Traducir la interfaz                               | [i18n](/es/ranui/i18n/)                       |
-| Renderizar en un servidor                          | [Renderizado en servidor](/es/ranui/ssr/)     |
-| Construir vistas reactivas sin framework           | [Builder](/es/ranui/builder/)                 |
-| Ver qué cambió antes de actualizar                 | [Registro de cambios](/es/ranui/changelog)    |
+| Integrar ranui en una aplicación correctamente     | [Guía de código](/es/ranui/coding-guides/)     |
+| Añadir claro/oscuro, o rehacer todo el estilo      | [Temas](/es/ranui/theme/)                      |
+| Traducir la interfaz                               | [i18n](/es/ranui/i18n/)                        |
+| Renderizar en un servidor                          | [Renderizado en servidor](/es/ranui/ssr/)      |
+| Construir vistas reactivas sin framework           | [Builder](/es/ranui/builder/)                  |
+| Ver qué cambió antes de actualizar                 | [Registro de cambios](/es/ranui/changelog)     |
 
 ## Compatibilidad con navegadores
 

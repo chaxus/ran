@@ -10,12 +10,12 @@ Die übrigen Seiten dieses Abschnitts beantworten Fragen zu den Teilen. Diese be
 Frage davor: Bei allem, was der Bildschirm tragen muss, wozu ist die lesende Person gekommen,
 und welche Anordnung lässt sie das tun?
 
-| Seite                                         | Beantwortet                                      |
-| --------------------------------------------- | ------------------------------------------------ |
-| **Informationsarchitektur** (diese Seite)     | _Welche Form_ die Seite haben soll               |
+| Seite                                          | Beantwortet                                      |
+| ---------------------------------------------- | ------------------------------------------------ |
+| **Informationsarchitektur** (diese Seite)      | _Welche Form_ die Seite haben soll               |
 | [Designsystem](/de/design/design-system/)      | _Was_ die Tokens sind: das Vokabular             |
 | [Designrichtlinien](/de/design/design-guides/) | _Wie man wählt_, wenn man eine Oberfläche baut   |
-| [Themes](/de/ranui/theme/)                    | _Wie man zur Laufzeit wechselt und überschreibt_ |
+| [Themes](/de/ranui/theme/)                     | _Wie man zur Laufzeit wechselt und überschreibt_ |
 
 > **Dann lesen**, wenn eine Oberfläche entsteht, die mehrere Objekte, mehrere Zustände und
 > deren Beziehungen zugleich tragen muss: eine Konsole, ein Dashboard, ein Backoffice, ein

@@ -10,12 +10,12 @@ The other pages in this section answer questions about the parts. This one answe
 question that comes first: given everything a screen has to carry, what is the reader here
 to do, and which arrangement lets them do it?
 
-| Page                                       | Answers                                             |
-| ------------------------------------------ | --------------------------------------------------- |
-| **Information architecture** (this page)   | _What shape_ the page should take                   |
+| Page                                        | Answers                                             |
+| ------------------------------------------- | --------------------------------------------------- |
+| **Information architecture** (this page)    | _What shape_ the page should take                   |
 | [Design system](/design/design-system/)     | _What_ the tokens are: the vocabulary               |
 | [Design guidelines](/design/design-guides/) | _How to choose_ between them when building a screen |
-| [Theming](/ranui/theme/)                   | _How to switch and override_ them at runtime        |
+| [Theming](/ranui/theme/)                    | _How to switch and override_ them at runtime        |
 
 > **Use when** you are starting a screen that has to carry several objects, several states
 > and the relationships between them: a console, a dashboard, an admin surface, a workbench,

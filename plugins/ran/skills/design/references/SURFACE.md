@@ -11,9 +11,9 @@ lives in the
 
 ## Two axes
 
-| Axis | Choices | Stamps | Switch |
-| ---- | ------- | ------ | ------ |
-| Colour theme | system / light / dark | `data-ran-theme` | `<r-theme-switch>` / `setTheme` |
+| Axis             | Choices                 | Stamps                                      | Switch                              |
+| ---------------- | ----------------------- | ------------------------------------------- | ----------------------------------- |
+| Colour theme     | system / light / dark   | `data-ran-theme`                            | `<r-theme-switch>` / `setTheme`     |
 | Surface language | solid (default) / glass | `data-ran-surface="glass"` (absent = solid) | `<r-surface-switch>` / `setSurface` |
 
 - **MUST** Keep the axes orthogonal. Glass still follows light and dark; a colour theme never
@@ -65,13 +65,13 @@ Frosted plates wash out faint fills. State that was clear on Graphite can disapp
 
 Map Apple's control styles onto ranui pilots:
 
-| Role | Apple idea | ranui |
-| ---- | ---------- | ----- |
-| Secondary / toolbar control | `glass` | Default `r-button`, under document glass or `surface="glass"` |
-| Emphasized action | `glassProminent` / solid fill | `type="primary"` and `type="warning"` stay **solid** |
-| Content surfaces | Standard materials | `r-card`, `r-input` stay **solid** under document glass; opt in with `surface="glass"` when the element itself is the plate |
-| Transient overlays | Clear / sheet glass | `r-modal`, non-toast `r-message` under document glass or `surface="glass"` |
-| Toast pills | Opaque emphasis | Stay **solid** |
+| Role                        | Apple idea                    | ranui                                                                                                                       |
+| --------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Secondary / toolbar control | `glass`                       | Default `r-button`, under document glass or `surface="glass"`                                                               |
+| Emphasized action           | `glassProminent` / solid fill | `type="primary"` and `type="warning"` stay **solid**                                                                        |
+| Content surfaces            | Standard materials            | `r-card`, `r-input` stay **solid** under document glass; opt in with `surface="glass"` when the element itself is the plate |
+| Transient overlays          | Clear / sheet glass           | `r-modal`, non-toast `r-message` under document glass or `surface="glass"`                                                  |
+| Toast pills                 | Opaque emphasis               | Stay **solid**                                                                                                              |
 
 Opt out of document glass on a control with `surface="solid"`.
 

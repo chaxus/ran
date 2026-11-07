@@ -60,17 +60,17 @@ header as one appearance pair.
 
 ## API
 
-| Function          | Signature                                                               | Description                                                                                |
-| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `initTheme`       | `(target?: ThemeTarget) => void`                                        | Restore the saved theme from `localStorage`. Call once on load. No-op in SSR.              |
-| `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | Apply `'light'` \| `'dark'` \| `'system'` and persist it. `'system'` tracks the OS live.   |
-| `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | Read the active theme. Returns `'system'` when system mode is active, `''` if none is set. |
+| Function          | Signature                                                               | Description                                                                                         |
+| ----------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `initTheme`       | `(target?: ThemeTarget) => void`                                        | Restore the saved theme from `localStorage`. Call once on load. No-op in SSR.                       |
+| `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | Apply `'light'` \| `'dark'` \| `'system'` and persist it. `'system'` tracks the OS live.            |
+| `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | Read the active theme. Returns `'system'` when system mode is active, `''` if none is set.          |
 | `setSurface`      | `(name: RanSurfaceName, target?: ThemeTarget) => void`                  | Apply `'solid'` \| `'glass'`. `solid` removes `data-ran-surface`. Persists when target is `<html>`. |
-| `getSurface`      | `(target?: ThemeTarget) => RanSurfaceName`                              | Read the surface language; missing attribute means `'solid'`.                              |
-| `initSurface`     | `(target?: ThemeTarget) => void`                                        | Restore the saved surface from `localStorage`. Call once on load. No-op in SSR.            |
-| `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | Override a single token at runtime (inline style on the target).                           |
-| `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | Override many tokens at once. A `null` / `undefined` value clears that token.              |
-| `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | Remove a runtime token override.                                                           |
+| `getSurface`      | `(target?: ThemeTarget) => RanSurfaceName`                              | Read the surface language; missing attribute means `'solid'`.                                       |
+| `initSurface`     | `(target?: ThemeTarget) => void`                                        | Restore the saved surface from `localStorage`. Call once on load. No-op in SSR.                     |
+| `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | Override a single token at runtime (inline style on the target).                                    |
+| `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | Override many tokens at once. A `null` / `undefined` value clears that token.                       |
+| `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | Remove a runtime token override.                                                                    |
 
 **Types**
 
@@ -95,13 +95,13 @@ surface language are independent axes — see the [surface language](/design/sur
 
 `setSurface('glass')` writes `data-ran-surface="glass"` on the target (usually `<html>`).
 
-| Under document glass | Behaviour |
-| -------------------- | --------- |
-| Default `r-button` | Frosts (Apple `glass`) |
-| `type="primary"` / `warning` | Stay **solid** (Apple `glassProminent`) |
-| `r-modal`, non-toast `r-message` | Overlay frost |
-| `r-card`, `r-input` | Stay **solid** (content layer); opt in with `surface="glass"` |
-| Toast pills | Stay **solid** |
+| Under document glass             | Behaviour                                                     |
+| -------------------------------- | ------------------------------------------------------------- |
+| Default `r-button`               | Frosts (Apple `glass`)                                        |
+| `type="primary"` / `warning`     | Stay **solid** (Apple `glassProminent`)                       |
+| `r-modal`, non-toast `r-message` | Overlay frost                                                 |
+| `r-card`, `r-input`              | Stay **solid** (content layer); opt in with `surface="glass"` |
+| Toast pills                      | Stay **solid**                                                |
 
 Set `surface="solid"` on a control to opt out of document glass. `prefers-reduced-transparency: reduce` falls back to elevated solid tokens, matching [`r-glass`](/ranui/glass/).
 

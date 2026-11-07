@@ -202,17 +202,17 @@ these are ordinary DOM elements, but they allow only one handler and no capture 
 
 ## Where to go next
 
-| If you want to…                           | Read                                       |
-| ----------------------------------------- | ------------------------------------------ |
-| Look up an element's exact API            | [Element API](/ranui/api)                  |
+| If you want to…                           | Read                                        |
+| ----------------------------------------- | ------------------------------------------- |
+| Look up an element's exact API            | [Element API](/ranui/api)                   |
 | Know which token to use, and why          | [Design system](/design/design-system/)     |
 | Build a screen that looks like one system | [Design guidelines](/design/design-guides/) |
-| Wire ranui into an app correctly          | [Coding guidelines](/ranui/coding-guides/) |
-| Add light/dark, or restyle everything     | [Theming](/ranui/theme/)                   |
-| Translate the interface                   | [i18n](/ranui/i18n/)                       |
-| Render on a server                        | [Server rendering](/ranui/ssr/)            |
-| Build reactive views without a framework  | [Builder](/ranui/builder/)                 |
-| See what changed before upgrading         | [Changelog](/ranui/changelog)              |
+| Wire ranui into an app correctly          | [Coding guidelines](/ranui/coding-guides/)  |
+| Add light/dark, or restyle everything     | [Theming](/ranui/theme/)                    |
+| Translate the interface                   | [i18n](/ranui/i18n/)                        |
+| Render on a server                        | [Server rendering](/ranui/ssr/)             |
+| Build reactive views without a framework  | [Builder](/ranui/builder/)                  |
+| See what changed before upgrading         | [Changelog](/ranui/changelog)               |
 
 ## Browser support
 

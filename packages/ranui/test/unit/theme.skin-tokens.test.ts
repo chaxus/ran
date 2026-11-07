@@ -97,12 +97,8 @@ describe('theme tokens', () => {
       expect(source).toContain('surface-frost.less');
       expect(source).toMatch(/:host\(\s*\[surface='glass'\]/);
       // Chromium does not match :host-context(...):not(...); host checks stay inside :host().
-      expect(source).toMatch(
-        /:host-context\(\[data-ran-surface='glass'\]\):host\(\s*:not\(\[surface='solid'\]\)/,
-      );
-      expect(source).not.toMatch(
-        /:host-context\(\[data-ran-surface='glass'\]\):not\(/,
-      );
+      expect(source).toMatch(/:host-context\(\[data-ran-surface='glass'\]\):host\(\s*:not\(\[surface='solid'\]\)/);
+      expect(source).not.toMatch(/:host-context\(\[data-ran-surface='glass'\]\):not\(/);
     });
   });
 });

@@ -44,32 +44,32 @@ initSurface();
 
 ### Properties
 
-| Property | Type                 | Default   | Description                                                                           |
-| -------- | -------------------- | --------- | ------------------------------------------------------------------------------------- |
-| `value`  | `'solid' \| 'glass'` | `'solid'` | Current surface from `getSurface()`. Setting it applies and persists the surface.     |
-| `sheet`  | `string`             | `''`      | CSS injected into the component's shadow DOM.                                         |
+| Property | Type                 | Default   | Description                                                                       |
+| -------- | -------------------- | --------- | --------------------------------------------------------------------------------- |
+| `value`  | `'solid' \| 'glass'` | `'solid'` | Current surface from `getSurface()`. Setting it applies and persists the surface. |
+| `sheet`  | `string`             | `''`      | CSS injected into the component's shadow DOM.                                     |
 
 ### Localization Attributes
 
-| Attribute     | Default           | Description                      |
-| ------------- | ----------------- | -------------------------------- |
-| `label`       | `'Style'`         | `aria-label` of the select.      |
-| `label-solid` | `'Graphite'`      | Option text for solid Graphite.  |
-| `label-glass` | `'Liquid glass'`  | Option text for liquid glass.    |
+| Attribute     | Default          | Description                     |
+| ------------- | ---------------- | ------------------------------- |
+| `label`       | `'Style'`        | `aria-label` of the select.     |
+| `label-solid` | `'Graphite'`     | Option text for solid Graphite. |
+| `label-glass` | `'Liquid glass'` | Option text for liquid glass.   |
 
 ## Events
 
-| Event    | Detail                       | Description                                                         |
-| -------- | ---------------------------- | ------------------------------------------------------------------- |
+| Event    | Detail                            | Description                                                          |
+| -------- | --------------------------------- | -------------------------------------------------------------------- |
 | `change` | `{ surface: 'solid' \| 'glass' }` | Fired when the user picks a surface. Bubbles and crosses shadow DOM. |
 
 ## CSS Parts
 
-| Part                 | Description           |
-| -------------------- | --------------------- |
-| `select`             | The inner `r-select`. |
-| `option`             | Every `r-option`.     |
-| `solid` / `glass`    | The individual options. |
+| Part              | Description             |
+| ----------------- | ----------------------- |
+| `select`          | The inner `r-select`.   |
+| `option`          | Every `r-option`.       |
+| `solid` / `glass` | The individual options. |
 
 ```css
 r-surface-switch {

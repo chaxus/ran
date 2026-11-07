@@ -8,12 +8,12 @@ A **linguagem de design** com que o ranui é feito, e o catálogo **completo** d
 
 Quatro páginas respondem a quatro perguntas diferentes, e são separadas de propósito:
 
-| Página                                                           | Responde                                                |
-| ---------------------------------------------------------------- | ------------------------------------------------------- |
-| **Design system** (esta página)                                  | _O que_ os tokens são: o vocabulário                    |
+| Página                                                            | Responde                                                |
+| ----------------------------------------------------------------- | ------------------------------------------------------- |
+| **Design system** (esta página)                                   | _O que_ os tokens são: o vocabulário                    |
 | [Diretrizes de design](/pt/design/design-guides/)                 | _Como escolher_ entre eles ao montar uma tela           |
 | [Arquitetura da informação](/pt/design/information-architecture/) | _Que forma_ a própria página deve ter                   |
-| [Tematização](/pt/ranui/theme/)                                  | _Como trocá-los e sobrescrevê-los_ em tempo de execução |
+| [Tematização](/pt/ranui/theme/)                                   | _Como trocá-los e sobrescrevê-los_ em tempo de execução |
 
 > **Use quando** precisar do nome ou do valor de um token (um papel de cor, um passo de espaço, um tamanho de ícone, um nível de sombra, uma curva de aceleração) ou quiser entender por que as escalas têm o formato que têm.
 
@@ -361,24 +361,24 @@ Orthogonal to light/dark. Default is **solid** Graphite. **Glass** is explicit
 [`r-glass`](/pt/ranui/glass/) thin/regular without pulling WebGL into every control. See
 [Theming](/pt/ranui/theme/).
 
-| Token | Light | Use for |
-| --- | --- | --- |
-| `--ran-surface-glass-blur` | `12px` | Control-scale frost blur |
-| `--ran-surface-glass-saturate` | `180%` | Frost saturation (iOS vibrancy) |
-| `--ran-surface-glass-brightness` | `1.08` | Frost brightness |
-| `--ran-surface-glass-fill` | `rgba(255, 255, 255, 0.55)` | Control tint (dark: `rgba(26, 26, 26, 0.55)`) |
-| `--ran-surface-glass-specular` | top-lit wash + crown glow | Specular layer over the tint |
-| `--ran-surface-glass-border` | `rgba(255, 255, 255, 0.72)` | Control frost border (dark: `rgba(166, 166, 166, 0.55)`) |
-| `--ran-surface-glass-shadow` | lift + bright edge + soft inner glow | Control frost elevation |
-| `--ran-surface-glass-overlay-blur` | `18px` | Modal/message frost blur |
-| `--ran-surface-glass-overlay-fill` | `rgba(255, 255, 255, 0.48)` | Overlay tint (dark: `rgba(26, 26, 26, 0.62)`) |
-| `--ran-surface-glass-overlay-specular` | stronger top-lit wash | Overlay specular layer |
-| `--ran-surface-glass-overlay-border` | `rgba(255, 255, 255, 0.72)` | Overlay frost border (dark: `rgba(166, 166, 166, 0.55)`) |
-| `--ran-surface-glass-overlay-shadow` | deeper lift + bright edge | Overlay frost elevation |
-| `--ran-surface-glass-solid-fallback` | `var(--ran-color-bg-elevated)` | Control fill under `prefers-reduced-transparency` |
-| `--ran-surface-glass-solid-shadow` | `var(--ran-shadow-elevated)` | Control shadow under reduced transparency |
-| `--ran-surface-glass-overlay-solid-fallback` | `var(--ran-color-bg-elevated)` | Overlay fill under reduced transparency |
-| `--ran-surface-glass-overlay-solid-shadow` | `var(--ran-shadow-modal)` | Overlay shadow under reduced transparency |
+| Token                                        | Light                                | Use for                                                  |
+| -------------------------------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `--ran-surface-glass-blur`                   | `12px`                               | Control-scale frost blur                                 |
+| `--ran-surface-glass-saturate`               | `180%`                               | Frost saturation (iOS vibrancy)                          |
+| `--ran-surface-glass-brightness`             | `1.08`                               | Frost brightness                                         |
+| `--ran-surface-glass-fill`                   | `rgba(255, 255, 255, 0.55)`          | Control tint (dark: `rgba(26, 26, 26, 0.55)`)            |
+| `--ran-surface-glass-specular`               | top-lit wash + crown glow            | Specular layer over the tint                             |
+| `--ran-surface-glass-border`                 | `rgba(255, 255, 255, 0.72)`          | Control frost border (dark: `rgba(166, 166, 166, 0.55)`) |
+| `--ran-surface-glass-shadow`                 | lift + bright edge + soft inner glow | Control frost elevation                                  |
+| `--ran-surface-glass-overlay-blur`           | `18px`                               | Modal/message frost blur                                 |
+| `--ran-surface-glass-overlay-fill`           | `rgba(255, 255, 255, 0.48)`          | Overlay tint (dark: `rgba(26, 26, 26, 0.62)`)            |
+| `--ran-surface-glass-overlay-specular`       | stronger top-lit wash                | Overlay specular layer                                   |
+| `--ran-surface-glass-overlay-border`         | `rgba(255, 255, 255, 0.72)`          | Overlay frost border (dark: `rgba(166, 166, 166, 0.55)`) |
+| `--ran-surface-glass-overlay-shadow`         | deeper lift + bright edge            | Overlay frost elevation                                  |
+| `--ran-surface-glass-solid-fallback`         | `var(--ran-color-bg-elevated)`       | Control fill under `prefers-reduced-transparency`        |
+| `--ran-surface-glass-solid-shadow`           | `var(--ran-shadow-elevated)`         | Control shadow under reduced transparency                |
+| `--ran-surface-glass-overlay-solid-fallback` | `var(--ran-color-bg-elevated)`       | Overlay fill under reduced transparency                  |
+| `--ran-surface-glass-overlay-solid-shadow`   | `var(--ran-shadow-modal)`            | Overlay shadow under reduced transparency                |
 
 ## O que o modo escuro redefine
 

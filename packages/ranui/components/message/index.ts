@@ -199,17 +199,20 @@ function initMessageApi() {
 
       // Stay visible for the full `duration`, then exit and wait for the stylesheet
       // to finish before removing — same settle-then-teardown as floating/modal.
-      message.timeId = setTimeout(() => {
-        message.setAttribute('data-state', 'exit');
-        settlePresence(message, () => {
-          if (message.parentNode === div && div.hasAttribute('data-stacked')) {
-            // A pile has no flow to close up; the rest move to their new depths by transition.
-            div.removeChild(message);
-            restack(div);
-          } else if (message.parentNode === div) removeFromStack(div, message);
-          if (close) close();
-        });
-      }, Math.max(0, duration));
+      message.timeId = setTimeout(
+        () => {
+          message.setAttribute('data-state', 'exit');
+          settlePresence(message, () => {
+            if (message.parentNode === div && div.hasAttribute('data-stacked')) {
+              // A pile has no flow to close up; the rest move to their new depths by transition.
+              div.removeChild(message);
+              restack(div);
+            } else if (message.parentNode === div) removeFromStack(div, message);
+            if (close) close();
+          });
+        },
+        Math.max(0, duration),
+      );
     };
   };
 

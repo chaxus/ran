@@ -1,4 +1,4 @@
-<!-- source: ecd35593b91af23ea9394e758853284e7f0f37af -->
+<!-- source: 95f85b31c0fb36576407c4396fe8f60a52bf6d4f -->
 
 # 表面语言
 
@@ -8,10 +8,10 @@
 
 ## 两轴
 
-| 轴 | 选项 | 标记 | 切换 |
-| -- | ---- | ---- | ---- |
-| 颜色主题 | system / light / dark | `data-ran-theme` | `<r-theme-switch>` / `setTheme` |
-| 表面语言 | solid（默认）/ glass | `data-ran-surface="glass"`（缺省即实心） | `<r-surface-switch>` / `setSurface` |
+| 轴       | 选项                  | 标记                                     | 切换                                |
+| -------- | --------------------- | ---------------------------------------- | ----------------------------------- |
+| 颜色主题 | system / light / dark | `data-ran-theme`                         | `<r-theme-switch>` / `setTheme`     |
+| 表面语言 | solid（默认）/ glass  | `data-ran-surface="glass"`（缺省即实心） | `<r-surface-switch>` / `setSurface` |
 
 - **MUST** 两轴保持正交。玻璃仍跟随浅色与深色；颜色主题不隐含表面，玻璃也不隐含色板。
 - **MUST** 实心是默认。要开玻璃就显式开启（`setSurface('glass')` 或宿主打标）。
@@ -47,13 +47,13 @@
 
 把 Apple 的控件样式映射到 ranui 试点：
 
-| 角色 | Apple 思路 | ranui |
-| ---- | ---------- | ----- |
-| 次要 / 工具条控件 | `glass` | 默认 `r-button`，在文档级 glass 或 `surface="glass"` 下起霜 |
-| 强调操作 | `glassProminent` / 实心填充 | `type="primary"` 与 `type="warning"` 保持**实心** |
-| 内容表面 | Standard materials | `r-card`、`r-input` 在文档级 glass 下保持**实心**；仅当该元素本身是磨砂板时用 `surface="glass"` 选择加入 |
-| 瞬时浮层 | Clear / sheet 玻璃 | `r-modal`、非 toast 的 `r-message`，在文档级 glass 或 `surface="glass"` 下 |
-| Toast 药丸 | 不透明强调 | 保持**实心** |
+| 角色              | Apple 思路                  | ranui                                                                                                    |
+| ----------------- | --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| 次要 / 工具条控件 | `glass`                     | 默认 `r-button`，在文档级 glass 或 `surface="glass"` 下起霜                                              |
+| 强调操作          | `glassProminent` / 实心填充 | `type="primary"` 与 `type="warning"` 保持**实心**                                                        |
+| 内容表面          | Standard materials          | `r-card`、`r-input` 在文档级 glass 下保持**实心**；仅当该元素本身是磨砂板时用 `surface="glass"` 选择加入 |
+| 瞬时浮层          | Clear / sheet 玻璃          | `r-modal`、非 toast 的 `r-message`，在文档级 glass 或 `surface="glass"` 下                               |
+| Toast 药丸        | 不透明强调                  | 保持**实心**                                                                                             |
 
 用 `surface="solid"` 退出文档级玻璃。
 
