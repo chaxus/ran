@@ -4,7 +4,7 @@ description: 'Qué utilidad de ranuts elegir: debounce o throttle, once o single
 
 # Elegir una utilidad
 
-La [referencia de la API](/es/src/ranuts/api) enumera todas las exportaciones. Esta página responde a lo que aquella no puede: **de dos cosas parecidas, cuál quiero y por qué**.
+La [referencia de la API](/es/ranuts/api) enumera todas las exportaciones. Esta página responde a lo que aquella no puede: **de dos cosas parecidas, cuál quiero y por qué**.
 
 > **Úsala cuando** sepas más o menos lo que necesitas («que esto se ejecute menos», «solo una vez», «guardar esto», «hablar con un worker») pero no qué exportación lo hace.
 
@@ -78,7 +78,7 @@ Las envolturas `localStorage*` existen porque las llamadas nativas **lanzan** al
 ## Idioma y texto
 
 - **`resolveLocale({ supported, … })`** decide cuál de _tus_ idiomas usar, siguiendo la cadena de siempre (una elección explícita, el almacenamiento, `navigator.languages`, un valor de reserva). Responde a «qué idioma», no a «qué dice esta cadena».
-- **`createI18n` / `useI18n`** ([`ranuts/i18n`](/es/src/ranuts/i18n/)) es el motor de traducción: diccionarios planos de mensajes, interpolación con `{param}` y cambio en caliente.
+- **`createI18n` / `useI18n`** ([`ranuts/i18n`](/es/ranuts/i18n/)) es el motor de traducción: diccionarios planos de mensajes, interpolación con `{param}` y cambio en caliente.
 - **`segmentByRanges`** y **`paginateText`** sirven para maquetar texto: la primera, desplazamientos y resaltados; la segunda, cortar el texto en páginas que quepan en una caja.
 
 Usa `resolveLocale` aunque no uses el motor de i18n: la decisión que toma —respetar el orden completo de `navigator.languages` del lector, no solo el primero— es justo la parte que se hace mal con facilidad.
@@ -87,9 +87,9 @@ Usa `resolveLocale` aunque no uses el motor de i18n: la decisión que toma —re
 
 Tres capas, y cada una sirve por sí sola:
 
-1. **[`ranuts/stream`](/es/src/ranuts/stream/)**: interpreta el SSE y luego pliega los incrementos en una instantánea con `createStreamAccumulator()`. Es neutral respecto al proveedor: los incrementos de texto, de razonamiento y de llamadas a herramientas acaban con la misma forma, los emita quien los emita.
-2. **[`ranuts/conversation`](/es/src/ranuts/conversation/)**: proyecta un registro de eventos de solo añadidura en nodos dibujables con `createConversationEngine()`. Decide _qué_ es cada fila; no dibuja nada.
-3. **[`<r-conversation>`](/es/src/ranui/conversation/)** en ranui: el elemento que dibuja esos nodos, mantiene la vista pegada al fondo y concilia las filas.
+1. **[`ranuts/stream`](/es/ranuts/stream/)**: interpreta el SSE y luego pliega los incrementos en una instantánea con `createStreamAccumulator()`. Es neutral respecto al proveedor: los incrementos de texto, de razonamiento y de llamadas a herramientas acaban con la misma forma, los emita quien los emita.
+2. **[`ranuts/conversation`](/es/ranuts/conversation/)**: proyecta un registro de eventos de solo añadidura en nodos dibujables con `createConversationEngine()`. Decide _qué_ es cada fila; no dibuja nada.
+3. **[`<r-conversation>`](/es/ranui/conversation/)** en ranui: el elemento que dibuja esos nodos, mantiene la vista pegada al fondo y concilia las filas.
 
 Quédate en la capa 1 si solo pintas texto; añade la 2 cuando la transcripción tenga una estructura que merezca proyectarse; añade la 3 cuando quieras el desplazamiento y la conciliación ya resueltos.
 
@@ -110,4 +110,4 @@ Cada subruta es un barril independiente del que se puede podar lo no usado. Impo
 
 ## ¿Sigues con dudas?
 
-Busca en la [referencia de la API](/es/src/ranuts/api): están todas las exportaciones con su firma y una línea de descripción, generadas a partir del código. Si después de leer ambas líneas dos de ellas siguen pareciendo intercambiables, eso es un fallo de documentación que vale la pena [comunicar](https://github.com/chaxus/ran/issues).
+Busca en la [referencia de la API](/es/ranuts/api): están todas las exportaciones con su firma y una línea de descripción, generadas a partir del código. Si después de leer ambas líneas dos de ellas siguen pareciendo intercambiables, eso es un fallo de documentación que vale la pena [comunicar](https://github.com/chaxus/ran/issues).

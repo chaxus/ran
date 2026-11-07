@@ -4,7 +4,7 @@ description: 'Um motor de internacionalização independente de framework: um n�
 
 # i18n
 
-Um motor de internacionalização independente de framework. Ele espelha o desenho do [roteador](/pt/src/ranui/router/): um núcleo pequeno (`I18nCore`) com um singleton global opcional (`createI18n` / `useI18n`) e sem acoplamento ao DOM, então você o liga à interface como preferir.
+Um motor de internacionalização independente de framework. Ele espelha o desenho do [roteador](/pt/ranui/router/): um núcleo pequeno (`I18nCore`) com um singleton global opcional (`createI18n` / `useI18n`) e sem acoplamento ao DOM, então você o liga à interface como preferir.
 
 > **Use quando** precisar trocar de idioma em tempo de execução num aplicativo com ranui. Chame `createI18n` uma vez, depois leia as cadeias com `useI18n().t(key, params)` e troque de idioma com `setLocale`. Não depende de framework nem do DOM, então funciona em JS puro, em qualquer framework e em SSR.
 

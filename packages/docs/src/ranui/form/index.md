@@ -93,7 +93,7 @@ Fields have no default form-level layout: style your own `<form>` with plain CSS
 
 ## Validation and reset
 
-`r-input`, `r-checkbox`, and `r-select` all support `required` (which blocks submission and triggers the browser's native validation bubble, exactly like a native field) plus `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage`. A native `form.reset()` (or `<button type="reset">`) restores each field to its pre-interaction state via `formResetCallback()`. See each field's own docs ([Input](/src/ranui/input/#form-association), [Checkbox](/src/ranui/checkbox/#form-association), [Select](/src/ranui/select/#form-association)) for details.
+`r-input`, `r-checkbox`, and `r-select` all support `required` (which blocks submission and triggers the browser's native validation bubble, exactly like a native field) plus `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage`. A native `form.reset()` (or `<button type="reset">`) restores each field to its pre-interaction state via `formResetCallback()`. See each field's own docs ([Input](/ranui/input/#form-association), [Checkbox](/ranui/checkbox/#form-association), [Select](/ranui/select/#form-association)) for details.
 
 <ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">

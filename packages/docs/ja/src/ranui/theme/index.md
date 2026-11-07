@@ -7,8 +7,8 @@ description: 'ranui の実行時テーマ機構：initTheme / setTheme / getThem
 ranui のスタイリングの**実行時**の半分です。ライト、ダーク、システムモードの切り替え、選択の保存、
 そしてトークンをその場で上書きすることを扱います。
 
-トークンそのもの（何という名前で、それぞれ何のためにあるか）は[デザインシステム](/ja/src/ranui/design-system/)、
-どれを選ぶかの基準は[デザインガイドライン](/ja/src/ranui/design-guides/)です。このページは、それらを
+トークンそのもの（何という名前で、それぞれ何のためにあるか）は[デザインシステム](/ja/ranui/design-system/)、
+どれを選ぶかの基準は[デザインガイドライン](/ja/ranui/design-guides/)です。このページは、それらを
 _適用する_ 話だけをします。
 
 > **使いどころ**：ranui のアプリでライト／ダークのテーマが必要なとき。読み込み時に `initTheme` を一度呼び、
@@ -40,7 +40,7 @@ getTheme(); // → 'light' | 'dark' | 'system' | ''
 `setTheme` は `<html>` に `data-ran-theme`（および従来からの `theme`）属性を書き込み、
 すべてのコンポーネントのスタイルがそれに反応します。選択は localStorage の `ran-theme` キーに保存されます。
 
-出来合いの切り替え UI が欲しいときは [`<r-theme-switch>`](/ja/src/ranui/theme-switch/) を使ってください。
+出来合いの切り替え UI が欲しいときは [`<r-theme-switch>`](/ja/ranui/theme-switch/) を使ってください。
 この API にすでに接続され、インスタンス間で同期し、`theme-color` の meta も更新する、システム／ライト／
 ダークのセグメントコントロールです。
 
@@ -80,7 +80,7 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 - **あなたの CSS もセマンティックトークンを使っていればダークモードが無料で付いてきます。** 色を
   ベタ書きしたり、ライト専用のフォールバックを書いたりすると壊れます。
-  [自分の CSS でトークンを使う](/ja/src/ranui/design-system/#using-tokens-in-your-own-css)を参照してください。
+  [自分の CSS でトークンを使う](/ja/ranui/design-system/#using-tokens-in-your-own-css)を参照してください。
 - **テーマの切り替えで何もトランジションさせてはいけません。** CSS には色が変わった理由が分からないので、
   パレットのプロパティに `transition` があると、テーマを切り替えたときにすべての要素がそれぞれの速さで
   淡く変わってしまいます。ranui のコンポーネントは意図的にそうしていません。あなたのもそうすべきです。
@@ -129,7 +129,7 @@ clearThemeToken('--ran-color-primary');
 - ちょうど一つの要素だけを変えたいなら、**コンポーネント**トークン（`--ran-btn-hover-background`）を
   上書きします。
 
-この層構造は[デザインシステム](/ja/src/ranui/design-system/#two-layers)のページで詳しく説明しています。
+この層構造は[デザインシステム](/ja/ranui/design-system/#two-layers)のページで詳しく説明しています。
 実行時の上書きは対象へのインラインスタイルであることに注意してください。その部分木ではスタイルシートの
 規則に勝ちます。これがパネルごとのテーマを成り立たせている一方で、消し忘れた上書きを後から見つけにくく
 している理由でもあります。

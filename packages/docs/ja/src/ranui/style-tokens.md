@@ -11,7 +11,7 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 トークンは継承が届く場所ならどこに設定してもかまいません——`:root`、外側のコンテナ、要素そのもの。
 その変更をセマンティックトークン一つで表せるなら、そちらを優先してください。一度で全コンポーネントに
-効きます。語彙は[デザインシステム](/ja/src/ranui/design-system/)にまとまっており、命名規則は
+効きます。語彙は[デザインシステム](/ja/ranui/design-system/)にまとまっており、命名規則は
 `--ran-{component}-{element}[-{state}]-{property}` です。
 
 ## `attachments`

@@ -89,7 +89,7 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 ## 校验与重置
 
-`r-input`、`r-checkbox`、`r-select` 都支持 `required`（会阻止提交并触发浏览器原生的校验提示，和原生字段一模一样），以及 `checkValidity()`、`reportValidity()`、`validity`、`validationMessage`。原生的 `form.reset()`（或 `<button type="reset">`）会通过 `formResetCallback()` 把每个字段恢复到交互前的状态。细节见各字段自己的文档（[Input](/cn/src/ranui/input/#form-association)、[Checkbox](/cn/src/ranui/checkbox/#form-association)、[Select](/cn/src/ranui/select/#form-association)）。
+`r-input`、`r-checkbox`、`r-select` 都支持 `required`（会阻止提交并触发浏览器原生的校验提示，和原生字段一模一样），以及 `checkValidity()`、`reportValidity()`、`validity`、`validationMessage`。原生的 `form.reset()`（或 `<button type="reset">`）会通过 `formResetCallback()` 把每个字段恢复到交互前的状态。细节见各字段自己的文档（[Input](/cn/ranui/input/#form-association)、[Checkbox](/cn/ranui/checkbox/#form-association)、[Select](/cn/ranui/select/#form-association)）。
 
 <ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">

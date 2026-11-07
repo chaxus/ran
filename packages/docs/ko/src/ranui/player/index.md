@@ -311,7 +311,7 @@ r-player {
 }
 ```
 
-전체 목록은 [스타일 토큰](/ko/src/ranui/style-tokens#player)에 있고, 어떤 토큰을 골라야 하는지는 [디자인 시스템](/ko/src/ranui/design-system/)이 다룹니다.
+전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#player)에 있고, 어떤 토큰을 골라야 하는지는 [디자인 시스템](/ko/ranui/design-system/)이 다룹니다.
 
 ## 모범 사례
 

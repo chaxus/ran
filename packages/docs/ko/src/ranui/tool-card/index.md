@@ -135,7 +135,7 @@ r-tool-card {
 
 Part: `body` · `exit` · `file` · `hunk` · `io` · `io-text` · `line` · `location` · `locations` · `path` · `row`
 
-전체 목록은 [스타일 토큰](/ko/src/ranui/style-tokens#tool-card)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/src/ranui/design-system/)에 있습니다.
+전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#tool-card)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/ranui/design-system/)에 있습니다.
 
 ## 함께 보기
 

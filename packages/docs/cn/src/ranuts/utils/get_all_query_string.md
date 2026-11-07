@@ -60,7 +60,7 @@ getAllQueryString().search; // 'hello world'（自动解码）
 
 1. **不带值的开关会被保留**。`?embed` 和 `?embed=` 都得到 `{ embed: '' }`。0.3 之前没有值的参数
    会被直接丢掉，导致 `?readonly`、`?embed` 这类布尔开关的常见写法与「参数不存在」无法区分。
-   读取这类开关请用 [`queryFlag`](/cn/src/ranuts/utils/query_flag)。
+   读取这类开关请用 [`queryFlag`](/cn/ranuts/utils/query_flag)。
 
 2. **hash 不会混进最后一个值**。`?lang=en#section` 得到 `{ lang: 'en' }`。
 

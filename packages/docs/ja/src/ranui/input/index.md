@@ -178,7 +178,7 @@ input.addEventListener('change', (event) => {
 
 ## フォームとの関連付け {#form-association}
 
-`r-input` はフォーム関連付けカスタム要素です（`static formAssociated = true`）。`ElementInternals` を取り付け、`setFormValue` で値を伝えるので、ネイティブの `<form>` の実際の子孫であれば `new FormData(form)` で収集されます。値にキーを付けるには `name` を設定してください。送信をそのままプレーンなオブジェクトにする `serializeForm()` ヘルパーについては[フォーム](/ja/src/ranui/form/)を参照してください。
+`r-input` はフォーム関連付けカスタム要素です（`static formAssociated = true`）。`ElementInternals` を取り付け、`setFormValue` で値を伝えるので、ネイティブの `<form>` の実際の子孫であれば `new FormData(form)` で収集されます。値にキーを付けるには `name` を設定してください。送信をそのままプレーンなオブジェクトにする `serializeForm()` ヘルパーについては[フォーム](/ja/ranui/form/)を参照してください。
 
 ```html
 <form>
@@ -226,7 +226,7 @@ r-input {
 
 Parts：`content` · `input` · `label` · `message`
 
-全一覧は[スタイルトークン](/ja/src/ranui/style-tokens#input)にあります。どのトークンを使うかは[デザインシステム](/ja/src/ranui/design-system/)を参照してください。
+全一覧は[スタイルトークン](/ja/ranui/style-tokens#input)にあります。どのトークンを使うかは[デザインシステム](/ja/ranui/design-system/)を参照してください。
 
 ## ベストプラクティス
 

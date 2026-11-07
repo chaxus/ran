@@ -5,7 +5,7 @@ description: 'Ein dreistufiges Segment-Steuerelement (System/Hell/Dunkel), das a
 # ThemeSwitch
 
 Ein dreistufiges Segment-Steuerelement (**System / Hell / Dunkel**), angebunden an die
-[Theme-API](/de/src/ranui/theme/) von ranui. Ein Klick auf ein Segment ruft `setTheme()` auf,
+[Theme-API](/de/ranui/theme/) von ranui. Ein Klick auf ein Segment ruft `setTheme()` auf,
 speichert die Wahl unter dem localStorage-Schlüssel `ran-theme` und hält jede Instanz auf der
 Seite (und in anderen Tabs) im Gleichklang.
 

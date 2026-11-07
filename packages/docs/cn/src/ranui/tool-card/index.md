@@ -125,4 +125,4 @@ r-tool-card {
 
 Part：`body` · `exit` · `file` · `hunk` · `io` · `io-text` · `line` · `location` · `locations` · `path` · `row`
 
-完整清单见[样式令牌](/cn/src/ranui/style-tokens#tool-card)；该选哪个令牌见[设计系统](/cn/src/ranui/design-system/)。
+完整清单见[样式令牌](/cn/ranui/style-tokens#tool-card)；该选哪个令牌见[设计系统](/cn/ranui/design-system/)。

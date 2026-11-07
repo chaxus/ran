@@ -160,7 +160,7 @@ r-disclosure-row {
 
 Parts: `body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
 
-Die vollständige Liste steht bei den [Style-Tokens](/de/src/ranui/style-tokens#disclosure-row); welches Token das richtige ist, klärt das [Designsystem](/de/src/ranui/design-system/).
+Die vollständige Liste steht bei den [Style-Tokens](/de/ranui/style-tokens#disclosure-row); welches Token das richtige ist, klärt das [Designsystem](/de/ranui/design-system/).
 
 ## Bewährte Vorgehensweisen
 

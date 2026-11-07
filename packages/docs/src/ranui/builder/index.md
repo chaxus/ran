@@ -205,7 +205,7 @@ function showPage(render, host) {
 }
 ```
 
-[`<r-route>`](/src/ranui/route/) has this built in: with `src`, the page module is imported on
+[`<r-route>`](/ranui/route/) has this built in: with `src`, the page module is imported on
 match, its default export runs inside a `createRoot`, and that root is disposed on leave.
 `getOwner()` / `runWithOwner()` let a router carry a scope across an `await`.
 
@@ -215,7 +215,7 @@ binding or `createEffect` created there is orphaned and never disposed; it keeps
 detached node, and if the signal outlives the element it pins the element in memory. Build with
 plain values and drive updates with explicit `createEffect`s whose dispose functions you collect
 and call in `disconnectedCallback`, re-arming on reconnect. See the
-[coding guidelines](/src/ranui/coding-guides/).
+[coding guidelines](/ranui/coding-guides/).
 :::
 
 ## Listeners inside a custom element
@@ -238,7 +238,7 @@ disconnectedCallback() {
 
 ## Server rendering
 
-Builders work under [SSR](/src/ranui/ssr/): `build()` returns a mock node and `serialize()`
+Builders work under [SSR](/ranui/ssr/): `build()` returns a mock node and `serialize()`
 returns HTML. Reactive bindings, `For` and `Show` render **once** on the server, as a static
 snapshot; there is no reconciliation until the code runs in a browser.
 

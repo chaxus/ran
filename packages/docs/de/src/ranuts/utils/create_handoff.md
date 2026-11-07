@@ -61,4 +61,4 @@ if (queryFlag('open')) {
 
 5. **Der Store entsteht in Version 1** — angelegt von der Seite, die die Datenbank zuerst öffnet; die andere findet ihn bereits vor.
 
-6. **Immer nur ein Wert.** Das hier ist eine Übergabe, keine Warteschlange: Ein zweites `put` überschreibt den hinterlegten Wert. Nimm [`WebDB`](/de/src/ranuts/utils/web_db), wenn du echten Speicher brauchst.
+6. **Immer nur ein Wert.** Das hier ist eine Übergabe, keine Warteschlange: Ein zweites `put` überschreibt den hinterlegten Wert. Nimm [`WebDB`](/de/ranuts/utils/web_db), wenn du echten Speicher brauchst.

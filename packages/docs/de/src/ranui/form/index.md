@@ -93,7 +93,7 @@ Felder bringen kein Formular-Layout mit: Gestalte dein eigenes `<form>` mit gew�
 
 ## Validierung und Zurücksetzen
 
-`r-input`, `r-checkbox` und `r-select` unterstützen alle `required` (blockiert das Absenden und löst die native Validierungsblase des Browsers aus, genau wie ein natives Feld) sowie `checkValidity()`, `reportValidity()`, `validity` und `validationMessage`. Ein natives `form.reset()` (oder ein `<button type="reset">`) stellt über `formResetCallback()` jedes Feld auf seinen Zustand vor der Eingabe zurück. Einzelheiten stehen in der Dokumentation des jeweiligen Feldes ([Input](/de/src/ranui/input/#form-association), [Checkbox](/de/src/ranui/checkbox/#form-association), [Select](/de/src/ranui/select/#form-association)).
+`r-input`, `r-checkbox` und `r-select` unterstützen alle `required` (blockiert das Absenden und löst die native Validierungsblase des Browsers aus, genau wie ein natives Feld) sowie `checkValidity()`, `reportValidity()`, `validity` und `validationMessage`. Ein natives `form.reset()` (oder ein `<button type="reset">`) stellt über `formResetCallback()` jedes Feld auf seinen Zustand vor der Eingabe zurück. Einzelheiten stehen in der Dokumentation des jeweiligen Feldes ([Input](/de/ranui/input/#form-association), [Checkbox](/de/ranui/checkbox/#form-association), [Select](/de/ranui/select/#form-association)).
 
 <ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">

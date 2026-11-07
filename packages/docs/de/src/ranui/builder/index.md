@@ -181,10 +181,10 @@ function showPage(render, host) {
 }
 ```
 
-[`<r-route>`](/de/src/ranui/route/) hat das eingebaut: Mit `src` wird das Seitenmodul beim Treffer importiert, sein Default-Export läuft in einem `createRoot`, und diese Wurzel wird beim Verlassen verworfen. `getOwner()` / `runWithOwner()` erlauben es einem Router, einen Bereich über ein `await` hinweg mitzunehmen.
+[`<r-route>`](/de/ranui/route/) hat das eingebaut: Mit `src` wird das Seitenmodul beim Treffer importiert, sein Default-Export läuft in einem `createRoot`, und diese Wurzel wird beim Verlassen verworfen. `getOwner()` / `runWithOwner()` erlauben es einem Router, einen Bereich über ein `await` hinweg mitzunehmen.
 
 ::: warning Innerhalb eines Web Components keine Getter-Bindungen verwenden
-Der `constructor` und der `connectedCallback` einer Komponente sind **keine** reaktiven Bereiche. Eine dort erzeugte Getter-Bindung oder ein `createEffect` ist verwaist und wird nie verworfen; sie feuert weiter auf einem abgetrennten Knoten, und überlebt das Signal das Element, hält es das Element im Speicher fest. Baue mit einfachen Werten und steuere Aktualisierungen über ausdrückliche `createEffect`s, deren Verwerf-Funktionen du sammelst und im `disconnectedCallback` aufrufst — beim erneuten Verbinden setzt du sie wieder auf. Siehe die [Coding-Leitlinien](/de/src/ranui/coding-guides/).
+Der `constructor` und der `connectedCallback` einer Komponente sind **keine** reaktiven Bereiche. Eine dort erzeugte Getter-Bindung oder ein `createEffect` ist verwaist und wird nie verworfen; sie feuert weiter auf einem abgetrennten Knoten, und überlebt das Signal das Element, hält es das Element im Speicher fest. Baue mit einfachen Werten und steuere Aktualisierungen über ausdrückliche `createEffect`s, deren Verwerf-Funktionen du sammelst und im `disconnectedCallback` aufrufst — beim erneuten Verbinden setzt du sie wieder auf. Siehe die [Coding-Leitlinien](/de/ranui/coding-guides/).
 :::
 
 ## Listener innerhalb eines Custom Elements
@@ -207,7 +207,7 @@ disconnectedCallback() {
 
 ## Serverseitiges Rendern
 
-Builder funktionieren unter [SSR](/de/src/ranui/ssr/): `build()` gibt einen nachgebildeten Knoten zurück, `serialize()` liefert HTML. Reaktive Bindungen, `For` und `Show` zeichnen auf dem Server **einmal**, als statische Momentaufnahme; abgeglichen wird erst, wenn der Code im Browser läuft.
+Builder funktionieren unter [SSR](/de/ranui/ssr/): `build()` gibt einen nachgebildeten Knoten zurück, `serialize()` liefert HTML. Reaktive Bindungen, `For` und `Show` zeichnen auf dem Server **einmal**, als statische Momentaufnahme; abgeglichen wird erst, wenn der Code im Browser läuft.
 
 ## Vollständige Referenz
 

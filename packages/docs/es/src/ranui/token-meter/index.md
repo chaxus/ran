@@ -120,7 +120,7 @@ r-token-meter {
 
 Partes: `fill` · `meter` · `text` · `track`
 
-La lista completa está en [tokens de estilo](/es/src/ranui/style-tokens#token-meter); cuál elegir lo explica el [sistema de diseño](/es/src/ranui/design-system/).
+La lista completa está en [tokens de estilo](/es/ranui/style-tokens#token-meter); cuál elegir lo explica el [sistema de diseño](/es/ranui/design-system/).
 
 ## Buenas prácticas
 
@@ -129,4 +129,4 @@ La lista completa está en [tokens de estilo](/es/src/ranui/style-tokens#token-m
 - **Escala alrededor del medidor, no dentro de él.** En `level="over"` la interfaz útil es una
   sugerencia (resumir, empezar un hilo nuevo), y eso pertenece a la aplicación.
 - **No animes el relleno al cambiar de tema**: consulta la
-  [guía de diseño](/es/src/ranui/design-guides/#motion).
+  [guía de diseño](/es/ranui/design-guides/#motion).

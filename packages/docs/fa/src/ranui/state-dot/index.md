@@ -37,7 +37,7 @@ description: 'کامپوننت StateDot در ranui (<r-state-dot>) یک نشان
 ### کنار یک برچسب
 
 این نقطه وضعیت را فقط با رنگ می‌رساند و توضیح نمی‌دهد آن رنگ یعنی چه. هرگز نگذارید رنگ تنها چیزی
-باشد که دو ردیف را از هم جدا می‌کند. [راهنمای طراحی](/fa/src/ranui/design-guides/#accessibility)
+باشد که دو ردیف را از هم جدا می‌کند. [راهنمای طراحی](/fa/ranui/design-guides/#accessibility)
 را ببینید.
 
 <ran-demo column>

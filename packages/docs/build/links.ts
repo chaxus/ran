@@ -21,7 +21,8 @@ import { publicUrl } from './urls.ts';
  * - `.md` is dropped, and a trailing `/index` becomes a directory URL.
  * - A relative path resolves against the *directory* of the linking page.
  * - An anchor and anything with a scheme are left alone.
- * - The result is the target's public URL: `/src/ranui/x` is published as `/ranui/x`.
+ * - The result is the target's public URL (`publicUrl`): `/src/ranui/x` and `/ranui/x`
+ *   both publish as `/ranui/x`.
  */
 export const resolveLinkFrom = (pageUrl: string): ((href: string) => string) => {
   // `/src/ranui/button/` and `/src/ranui/button` both sit in `/src/ranui/`.

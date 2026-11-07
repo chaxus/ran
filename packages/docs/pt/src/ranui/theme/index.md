@@ -8,8 +8,8 @@ A metade **em tempo de execução** da estilização do ranui: alternar entre mo
 sistema, guardar a escolha e sobrescrever tokens na hora.
 
 Os tokens em si (como se chamam e para que serve cada um) são o
-[design system](/pt/src/ranui/design-system/); as regras para escolher entre eles são as
-[diretrizes de design](/pt/src/ranui/design-guides/). Esta página trata só de _aplicá-los_.
+[design system](/pt/ranui/design-system/); as regras para escolher entre eles são as
+[diretrizes de design](/pt/ranui/design-guides/). Esta página trata só de _aplicá-los_.
 
 > **Use quando** precisar de tema claro e escuro num aplicativo com ranui: chame `initTheme` uma vez
 > no carregamento, `setTheme` para alternar, e `setThemeToken(s)` se quiser sobrescrever tokens
@@ -41,7 +41,7 @@ componentes. As mesmas funções também são reexportadas pelo barril `ranui` d
 `setTheme` escreve um atributo `data-ran-theme` (e o legado `theme`) no `<html>`; todos os estilos
 dos componentes reagem a ele. A escolha é salva na chave de localStorage `ran-theme`.
 
-Para uma interface de troca pronta, use [`<r-theme-switch>`](/pt/src/ranui/theme-switch/): um
+Para uma interface de troca pronta, use [`<r-theme-switch>`](/pt/ranui/theme-switch/): um
 controle segmentado de sistema, claro e escuro já ligado a esta API, sincronizado entre instâncias e
 que atualiza as metas `theme-color`.
 
@@ -81,7 +81,7 @@ Duas consequências que vale conhecer:
 
 - **O seu próprio CSS ganha modo escuro de graça** se consumir tokens semânticos, e o ganha errado
   se fixar uma cor na mão ou escrever um valor de reserva só para o claro. Veja
-  [Usar tokens no seu próprio CSS](/pt/src/ranui/design-system/#using-tokens-in-your-own-css).
+  [Usar tokens no seu próprio CSS](/pt/ranui/design-system/#using-tokens-in-your-own-css).
 - **Nada deve fazer transição numa troca de tema.** O CSS não tem como saber por que uma cor mudou,
   então uma `transition` numa propriedade da paleta faz cada elemento desvanecer no próprio ritmo
   quando o tema muda. Os componentes do ranui deliberadamente não fazem isso; os seus também não
@@ -133,7 +133,7 @@ Como o modo escuro redefine apenas a paleta base:
   elemento.
 
 Essa estratificação está descrita por inteiro na página do
-[design system](/pt/src/ranui/design-system/#two-layers). Note que uma sobrescrita em tempo de
+[design system](/pt/ranui/design-system/#two-layers). Note que uma sobrescrita em tempo de
 execução é um estilo inline no alvo: ela vence as regras da folha de estilos naquela subárvore, o que
 é justamente o que faz o tema por painel funcionar — e o que torna difícil, mais tarde, notar uma
 sobrescrita que você esqueceu de limpar.

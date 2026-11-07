@@ -4,7 +4,7 @@ description: 'Zu welchem ranuts-Werkzeug greifen: debounce oder throttle, once o
 
 # Das passende Werkzeug wählen
 
-Die [API-Referenz](/de/src/ranuts/api) führt jeden Export auf. Diese Seite beantwortet die Frage, die dort offenbleibt: **Welches von zwei ähnlichen Dingen will ich, und warum?**
+Die [API-Referenz](/de/ranuts/api) führt jeden Export auf. Diese Seite beantwortet die Frage, die dort offenbleibt: **Welches von zwei ähnlichen Dingen will ich, und warum?**
 
 > **Nimm sie**, wenn du ungefähr weißt, was du brauchst („das soll seltener laufen“, „nur einmal“, „das speichern“, „mit einem Worker reden“), aber nicht, welcher Export das erledigt.
 
@@ -78,7 +78,7 @@ Die `localStorage*`-Hüllen gibt es, weil die nativen Aufrufe dort **werfen**, w
 ## Sprache und Text
 
 - **`resolveLocale({ supported, … })`** wählt, welche _deiner_ Sprachen genommen wird, entlang der üblichen Kette (eine ausdrückliche Wahl, der Speicher, `navigator.languages`, ein Rückfallwert). Es beantwortet „welche Sprache“, nicht „was sagt diese Zeichenkette“.
-- **`createI18n` / `useI18n`** ([`ranuts/i18n`](/de/src/ranuts/i18n/)) ist die Übersetzungsmaschine: flache Wörterbücher, Einsetzen über `{param}`, Umschalten zur Laufzeit.
+- **`createI18n` / `useI18n`** ([`ranuts/i18n`](/de/ranuts/i18n/)) ist die Übersetzungsmaschine: flache Wörterbücher, Einsetzen über `{param}`, Umschalten zur Laufzeit.
 - **`segmentByRanges`** und **`paginateText`** dienen dem Setzen von Text: das eine für Positionen und Hervorhebungen, das andere fürs Zerteilen in Seiten, die in einen Kasten passen.
 
 Nimm `resolveLocale` auch dann, wenn du die i18n-Maschine nicht benutzt: Die Entscheidung, die es trifft – die geordnete Liste `navigator.languages` des Lesers ganz zu achten und nicht nur ihren ersten Eintrag –, ist genau der Teil, den man leicht falsch macht.
@@ -87,9 +87,9 @@ Nimm `resolveLocale` auch dann, wenn du die i18n-Maschine nicht benutzt: Die Ent
 
 Drei Schichten, jede auch für sich brauchbar:
 
-1. **[`ranuts/stream`](/de/src/ranuts/stream/)**: liest SSE und faltet die Teilstücke mit `createStreamAccumulator()` zu einer Momentaufnahme zusammen. Anbieterneutral: Teilstücke von Text, Gedankengang und Werkzeugaufrufen landen in derselben Form, gleich von wem sie kommen.
-2. **[`ranuts/conversation`](/de/src/ranuts/conversation/)**: bildet ein nur wachsendes Ereignisprotokoll mit `createConversationEngine()` auf darstellbare Knoten ab. Es entscheidet, _was_ eine Zeile ist; gezeichnet wird nichts.
-3. **[`<r-conversation>`](/de/src/ranui/conversation/)** in ranui: das Element, das jene Knoten zeichnet, die Ansicht am unteren Rand festhält und Zeilen abgleicht.
+1. **[`ranuts/stream`](/de/ranuts/stream/)**: liest SSE und faltet die Teilstücke mit `createStreamAccumulator()` zu einer Momentaufnahme zusammen. Anbieterneutral: Teilstücke von Text, Gedankengang und Werkzeugaufrufen landen in derselben Form, gleich von wem sie kommen.
+2. **[`ranuts/conversation`](/de/ranuts/conversation/)**: bildet ein nur wachsendes Ereignisprotokoll mit `createConversationEngine()` auf darstellbare Knoten ab. Es entscheidet, _was_ eine Zeile ist; gezeichnet wird nichts.
+3. **[`<r-conversation>`](/de/ranui/conversation/)** in ranui: das Element, das jene Knoten zeichnet, die Ansicht am unteren Rand festhält und Zeilen abgleicht.
 
 Bleib bei Schicht 1, wenn du nur Text darstellst; nimm 2 dazu, sobald ein Verlauf eine Struktur hat, die sich abzubilden lohnt; nimm 3 dazu, wenn dir das Scrollen und der Abgleich abgenommen werden sollen.
 
@@ -110,4 +110,4 @@ Jeder Unterpfad ist ein eigenständiges Sammelmodul, aus dem sich Ungenutztes en
 
 ## Immer noch unschlüssig?
 
-Durchsuch die [API-Referenz](/de/src/ranuts/api): Jeder Export steht dort mit seiner Signatur und einer Zeile Beschreibung, erzeugt aus dem Quelltext. Wenn zwei davon auch nach dem Lesen beider Zeilen noch austauschbar wirken, ist das ein Dokumentationsfehler, den zu [melden](https://github.com/chaxus/ran/issues) sich lohnt.
+Durchsuch die [API-Referenz](/de/ranuts/api): Jeder Export steht dort mit seiner Signatur und einer Zeile Beschreibung, erzeugt aus dem Quelltext. Wenn zwei davon auch nach dem Lesen beider Zeilen noch austauschbar wirken, ist das ein Dokumentationsfehler, den zu [melden](https://github.com/chaxus/ran/issues) sich lohnt.

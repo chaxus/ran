@@ -47,7 +47,7 @@ description: 'ranui の Button（<r-button>）は、種類・サイズ・ロー�
 <r-button>Default Button</r-button>
 ```
 
-`primary` は（Geist のデザイン言語にならった）モノクロの操作です。ライトモードでは白地に黒、ダークモードでは黒地に白になります。ここでの青にブランドの意味はなく、リンクとフォーカスリングのために取ってあります。`--ran-color-primary*` トークン（`--ran-color-primary`、`-hover`、`-active`、反転インク用の `--ran-color-primary-text`）に乗っています。[テーマとトークン](/ja/src/ranui/theme/)を参照してください。
+`primary` は（Geist のデザイン言語にならった）モノクロの操作です。ライトモードでは白地に黒、ダークモードでは黒地に白になります。ここでの青にブランドの意味はなく、リンクとフォーカスリングのために取ってあります。`--ran-color-primary*` トークン（`--ran-color-primary`、`-hover`、`-active`、反転インク用の `--ran-color-primary-text`）に乗っています。[テーマとトークン](/ja/ranui/theme/)を参照してください。
 
 ### 無効状態 `disabled`
 
@@ -130,7 +130,7 @@ r-button::part(content) {
 }
 ```
 
-一覧は[スタイルトークン](/ja/src/ranui/style-tokens#button)に、どのトークンを選ぶかは[デザインシステム](/ja/src/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#button)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
 
 ## ベストプラクティス
 

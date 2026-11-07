@@ -93,7 +93,7 @@ Os campos não têm layout de formulário por padrão: estilize o seu próprio `
 
 ## Validação e reinício
 
-`r-input`, `r-checkbox` e `r-select` aceitam `required` (que bloqueia o envio e dispara o balão de validação nativo do navegador, exatamente como um campo nativo), além de `checkValidity()`, `reportValidity()`, `validity` e `validationMessage`. Um `form.reset()` nativo (ou um `<button type="reset">`) devolve cada campo ao estado anterior à interação por meio de `formResetCallback()`. Veja a documentação de cada campo ([Input](/pt/src/ranui/input/#form-association), [Checkbox](/pt/src/ranui/checkbox/#form-association), [Select](/pt/src/ranui/select/#form-association)) para os detalhes.
+`r-input`, `r-checkbox` e `r-select` aceitam `required` (que bloqueia o envio e dispara o balão de validação nativo do navegador, exatamente como um campo nativo), além de `checkValidity()`, `reportValidity()`, `validity` e `validationMessage`. Um `form.reset()` nativo (ou um `<button type="reset">`) devolve cada campo ao estado anterior à interação por meio de `formResetCallback()`. Veja a documentação de cada campo ([Input](/pt/ranui/input/#form-association), [Checkbox](/pt/ranui/checkbox/#form-association), [Select](/pt/ranui/select/#form-association)) para os detalhes.
 
 <ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">

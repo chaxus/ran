@@ -47,7 +47,7 @@ description: 'کامپوننت Button در ranui (<r-button>) یک وب‌کام
 <r-button>Default Button</r-button>
 ```
 
-`primary` کنشِ تک‌رنگ است (برگرفته از زبان طراحی Geist): در پوستهٔ روشن سیاه روی سفید و در پوستهٔ تیره سفید روی سیاه. آبی اینجا هیچ معنای برندی ندارد و برای پیوندها و حلقهٔ فوکوس کنار گذاشته شده است. این کنش روی توکن‌های `--ran-color-primary*` سوار است (`--ran-color-primary`، `-hover`، `-active` و `--ran-color-primary-text` برای جوهر وارونه)؛ [پوسته و توکن‌ها](/fa/src/ranui/theme/) را ببینید.
+`primary` کنشِ تک‌رنگ است (برگرفته از زبان طراحی Geist): در پوستهٔ روشن سیاه روی سفید و در پوستهٔ تیره سفید روی سیاه. آبی اینجا هیچ معنای برندی ندارد و برای پیوندها و حلقهٔ فوکوس کنار گذاشته شده است. این کنش روی توکن‌های `--ran-color-primary*` سوار است (`--ran-color-primary`، `-hover`، `-active` و `--ran-color-primary-text` برای جوهر وارونه)؛ [پوسته و توکن‌ها](/fa/ranui/theme/) را ببینید.
 
 ### حالت غیرفعال `disabled`
 
@@ -130,7 +130,7 @@ r-button::part(content) {
 }
 ```
 
-فهرست کامل در [توکن‌های استایل](/fa/src/ranui/style-tokens#button) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/src/ranui/design-system/) آمده.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#button) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/ranui/design-system/) آمده.
 
 ## بهترین شیوه‌ها
 

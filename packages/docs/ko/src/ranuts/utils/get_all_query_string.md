@@ -63,7 +63,7 @@ console.log(params.search); // 'hello world' (알아서 디코딩됩니다)
 
 ## 참고
 
-1. **값 없는 플래그도 자리를 지킵니다.** `?embed`와 `?embed=` 둘 다 `{ embed: '' }`이 됩니다. 0.3 이전에는 값 없는 매개변수를 버렸기 때문에, 불리언 플래그를 쓰는 흔한 방식인 `?readonly`와 `?embed`가 매개변수가 아예 없는 경우와 구별되지 않았습니다. 그런 플래그는 [`queryFlag`](/ko/src/ranuts/utils/query_flag)로 읽으세요.
+1. **값 없는 플래그도 자리를 지킵니다.** `?embed`와 `?embed=` 둘 다 `{ embed: '' }`이 됩니다. 0.3 이전에는 값 없는 매개변수를 버렸기 때문에, 불리언 플래그를 쓰는 흔한 방식인 `?readonly`와 `?embed`가 매개변수가 아예 없는 경우와 구별되지 않았습니다. 그런 플래그는 [`queryFlag`](/ko/ranuts/utils/query_flag)로 읽으세요.
 
 2. **프래그먼트가 마지막 값으로 새어 들지 않습니다.** `?lang=en#section`은 `{ lang: 'en' }`이 됩니다.
 

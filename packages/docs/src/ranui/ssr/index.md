@@ -69,7 +69,7 @@ then replaced by an identical client-built one. Two consequences:
 
 - You get correct first paint, not hydration reuse: closed shadow roots cannot be reused by
   the client, for the reason above. See the
-  [coding guidelines](/src/ranui/coding-guides/#server-rendering).
+  [coding guidelines](/ranui/coding-guides/#server-rendering).
 - **Never put state in the server-rendered shadow markup** expecting the client to read it
   back. Pass it through attributes, which survive.
 
@@ -89,7 +89,7 @@ if it stops rendering, so this list cannot grow silently.
 is guarded), so the theme is applied by the client. To avoid a flash of the wrong theme, set
 `data-ran-theme` on `<html>` in your server template (from a cookie, or from a tiny inline
 script that reads `localStorage` before first paint) and let
-[`initTheme`](/src/ranui/theme/) take over afterwards.
+[`initTheme`](/ranui/theme/) take over afterwards.
 
 ## Best Practices
 

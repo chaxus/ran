@@ -196,7 +196,7 @@ function showPage(render, host) {
 }
 ```
 
-[`<r-route>`](/cn/src/ranui/route/) 内置了这套机制：配上 `src` 后，匹配时动态引入页面模块，其默认导出
+[`<r-route>`](/cn/ranui/route/) 内置了这套机制：配上 `src` 后，匹配时动态引入页面模块，其默认导出
 在一个 `createRoot` 里运行，离开时销毁该 root。`getOwner()` / `runWithOwner()` 可以让路由把作用域带过
 `await` 边界。
 
@@ -204,7 +204,7 @@ function showPage(render, host) {
 组件的 `constructor` 和 `connectedCallback` **不是**响应式作用域，因此在那里创建的 getter 绑定或
 `createEffect` 是「孤儿」，永远不会被销毁：它会在已经断开的节点上继续触发；如果信号比元素活得久，还会
 让元素无法被回收。请用普通值构建，用显式的 `createEffect` 驱动更新，把它们的 dispose 收集起来在
-`disconnectedCallback` 里调用，并在重新连接时重新装配。见[编码规范](/cn/src/ranui/coding-guides/)。
+`disconnectedCallback` 里调用，并在重新连接时重新装配。见[编码规范](/cn/ranui/coding-guides/)。
 :::
 
 ## 自定义元素内部的监听器
@@ -227,7 +227,7 @@ disconnectedCallback() {
 
 ## 服务端渲染
 
-构建器在 [SSR](/cn/src/ranui/ssr/) 下同样可用：`build()` 返回 mock 节点，`serialize()` 返回 HTML。
+构建器在 [SSR](/cn/ranui/ssr/) 下同样可用：`build()` 返回 mock 节点，`serialize()` 返回 HTML。
 响应式绑定、`For`、`Show` 在服务端**只渲染一次**，作为静态快照，在代码跑进浏览器之前不会发生任何协调
 （reconciliation）。
 

@@ -47,7 +47,7 @@ Button component for triggering instant actions with multiple styles and states.
 <r-button>Default Button</r-button>
 ```
 
-`primary` is the monochrome action (from the Geist design language): black-on-white in light mode, white-on-black in dark mode. Blue carries no brand meaning here; it is reserved for links and the focus ring. It rides the `--ran-color-primary*` tokens (`--ran-color-primary`, `-hover`, `-active`, and `--ran-color-primary-text` for the inverse ink); see [Theme & Tokens](/src/ranui/theme/).
+`primary` is the monochrome action (from the Geist design language): black-on-white in light mode, white-on-black in dark mode. Blue carries no brand meaning here; it is reserved for links and the focus ring. It rides the `--ran-color-primary*` tokens (`--ran-color-primary`, `-hover`, `-active`, and `--ran-color-primary-text` for the inverse ink); see [Theme & Tokens](/ranui/theme/).
 
 ### Disabled State `disabled`
 
@@ -140,8 +140,8 @@ r-button::part(content) {
 }
 ```
 
-The full list is in [style tokens](/src/ranui/style-tokens#button); which token to reach for is
-the [design system](/src/ranui/design-system/).
+The full list is in [style tokens](/ranui/style-tokens#button); which token to reach for is
+the [design system](/ranui/design-system/).
 
 ## Best Practices
 

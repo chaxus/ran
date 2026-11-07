@@ -61,4 +61,4 @@ if (queryFlag('open')) {
 
 5. **El almacén se crea en la versión 1** por el lado que abra primero la base de datos; el otro se lo encuentra ya hecho.
 
-6. **Un valor cada vez.** Esto es un relevo, no una cola: un segundo `put` sobrescribe el valor pendiente. Usa [`WebDB`](/es/src/ranuts/utils/web_db) cuando necesites almacenamiento de verdad.
+6. **Un valor cada vez.** Esto es un relevo, no una cola: un segundo `put` sobrescribe el valor pendiente. Usa [`WebDB`](/es/ranuts/utils/web_db) cuando necesites almacenamiento de verdad.

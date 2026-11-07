@@ -7,12 +7,12 @@ description: 'Como aplicar o ranui numa tela: escolha um papel e deixe o token d
 Como aplicar o ranui numa tela real: escolha um papel e um estado, e deixe os tokens darem os valores.
 
 As regras em si ficam em dois lugares, e esta página aponta para eles em vez de repeti-las: o
-[guia de design](/src/design/guide), para o método que vale em qualquer produto, e o
+[guia de design](/design/guide), para o método que vale em qualquer produto, e o
 [adaptador de implementação do ranui](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md),
 para os tokens, níveis e regras de componentes do ranui. Os dois são distribuídos em `node_modules/ranui/docs/DESIGN.md`. O
-[design system](/pt/src/ranui/design-system/) lista cada token e o seu valor, a
-[tematização](/pt/src/ranui/theme/) cobre as sobrescritas em tempo de execução e a
-[arquitetura da informação](/pt/src/ranui/information-architecture/) cobre a estrutura da página.
+[design system](/pt/ranui/design-system/) lista cada token e o seu valor, a
+[tematização](/pt/ranui/theme/) cobre as sobrescritas em tempo de execução e a
+[arquitetura da informação](/pt/ranui/information-architecture/) cobre a estrutura da página.
 
 > **Use quando** for escolher cor, espaço, tipografia, profundidade ou movimento para uma tela feita com elementos `<r-*>`.
 
@@ -30,7 +30,7 @@ São pontos de partida. Afaste-se de um quando a tela ficar melhor com isso, e d
 
 ## Escolher uma cor
 
-A [escada](/pt/src/ranui/design-system/#the-ladder) já decide como ficam o hover e o estado ativo;
+A [escada](/pt/ranui/design-system/#the-ladder) já decide como ficam o hover e o estado ativo;
 o seu trabalho é nomear o papel.
 
 | O elemento é…                            | Use                                                            |
@@ -54,7 +54,7 @@ explicam cada caso, e o `verify:design` os detecta no código-fonte do próprio 
 
 ## Espaço e ritmo
 
-Tire os espaços da [escala de 4px](/pt/src/ranui/design-system/#spacing) e deixe a distância significar alguma coisa:
+Tire os espaços da [escala de 4px](/pt/ranui/design-system/#spacing) e deixe a distância significar alguma coisa:
 
 - **8px** entre elementos dentro de um grupo.
 - **16px** entre grupos.
@@ -67,7 +67,7 @@ eles.
 ## Escolher a tipografia
 
 Pergunte que **papel** o texto cumpre (título, rótulo, corpo, botão, monoespaçado); a fonte, o tamanho, o peso e a
-altura de linha saem da [escala tipográfica](/pt/src/ranui/design-system/#typography). Um texto de fato excepcional,
+altura de linha saem da [escala tipográfica](/pt/ranui/design-system/#typography). Um texto de fato excepcional,
 como o aviso de um gesto sobre um vídeo, fica melhor com o próprio token de componente do que forçado ao
 papel mais próximo.
 
@@ -76,7 +76,7 @@ papel mais próximo.
 Escolha o nível de sombra pelo que o elemento é: uma superfície no fluxo, uma camada flutuante ou um diálogo
 que bloqueia. Uma camada que cai para o nível dos cartões parece pregada na página.
 
-**Embutir camadas do ranui na sua própria moldura.** A [escada de z-index](/pt/src/ranui/design-system/#stacking)
+**Embutir camadas do ranui na sua própria moldura.** A [escada de z-index](/pt/ranui/design-system/#stacking)
 começa em 1000, então uma camada portalizada passa sozinha por cima da moldura comum da página. Uma camada com `position: fixed`
 que fica dentro do próprio shadow DOM (o diálogo do `r-modal`) só escapa até o
 **contexto de empilhamento** ancestral mais próximo. Se você envolver o conteúdo embutido em algo que crie um
@@ -166,6 +166,6 @@ usa o ranui roda as próprias verificações e olha as próprias páginas.
 
 ## Evidências e aceitação {#evidence-and-acceptance}
 
-A seção [verificar uma mudança](/src/design/guide#verifying-a-change) do guia diz o que conferir num navegador
+A seção [verificar uma mudança](/design/guide#verifying-a-change) do guia diz o que conferir num navegador
 real e o que relatar: o que você observou, o que só deduziu e o que não conseguiu conferir.
 A revisão de um agente não é a aceitação do usuário.

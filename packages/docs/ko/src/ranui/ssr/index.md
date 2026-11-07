@@ -68,7 +68,7 @@ const html = renderToString(new Button());
 교체됩니다. 여기서 두 가지가 따라옵니다.
 
 - 얻는 것은 올바른 첫 페인트이지 하이드레이션 재사용이 아닙니다. 위의 이유로 닫힌 섀도 루트는
-  클라이언트가 재사용할 수 없습니다. [코딩 가이드](/ko/src/ranui/coding-guides/#server-rendering)를
+  클라이언트가 재사용할 수 없습니다. [코딩 가이드](/ko/ranui/coding-guides/#server-rendering)를
   보세요.
 - **서버가 렌더링한 섀도 마크업에 상태를 넣고** 클라이언트가 읽어 가리라 기대하지 마세요. 상태는
   어트리뷰트로 넘기세요. 어트리뷰트는 살아남습니다.
@@ -87,7 +87,7 @@ const html = renderToString(new Button());
 `initTheme()`는 서버에서 아무 일도 하지 않습니다 (`document` / `localStorage` / `matchMedia` 접근이
 모두 보호되어 있습니다). 그래서 테마는 클라이언트가 적용합니다. 잘못된 테마가 번쩍이는 것을 피하려면
 서버 템플릿의 `<html>`에 `data-ran-theme`를 지정하고 (쿠키에서, 혹은 첫 페인트 전에 `localStorage`를
-읽는 아주 작은 인라인 스크립트에서) 그 뒤를 [`initTheme`](/ko/src/ranui/theme/)에 넘기세요.
+읽는 아주 작은 인라인 스크립트에서) 그 뒤를 [`initTheme`](/ko/ranui/theme/)에 넘기세요.
 
 ## 권장 사항
 

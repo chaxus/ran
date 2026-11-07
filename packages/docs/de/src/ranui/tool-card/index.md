@@ -140,7 +140,7 @@ r-tool-card {
 
 Parts: `body` · `exit` · `file` · `hunk` · `io` · `io-text` · `line` · `location` · `locations` · `path` · `row`
 
-Die vollständige Liste steht in den [Style-Tokens](/de/src/ranui/style-tokens#tool-card); welches Token du wählst, klärt das [Designsystem](/de/src/ranui/design-system/).
+Die vollständige Liste steht in den [Style-Tokens](/de/ranui/style-tokens#tool-card); welches Token du wählst, klärt das [Designsystem](/de/ranui/design-system/).
 
 ## Siehe auch
 

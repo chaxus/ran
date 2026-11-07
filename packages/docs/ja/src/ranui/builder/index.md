@@ -181,10 +181,10 @@ function showPage(render, host) {
 }
 ```
 
-[`<r-route>`](/ja/src/ranui/route/) にはこれが組み込まれています。`src` を使うと、一致したときにページのモジュールが import され、その default export が `createRoot` の中で走り、離れるときにそのルートが破棄されます。`getOwner()` / `runWithOwner()` を使えば、ルーターが `await` をまたいでスコープを運べます。
+[`<r-route>`](/ja/ranui/route/) にはこれが組み込まれています。`src` を使うと、一致したときにページのモジュールが import され、その default export が `createRoot` の中で走り、離れるときにそのルートが破棄されます。`getOwner()` / `runWithOwner()` を使えば、ルーターが `await` をまたいでスコープを運べます。
 
 ::: warning Web Component の中では getter の束縛を使わないこと
-コンポーネントの `constructor` と `connectedCallback` は**リアクティブなスコープではありません**。そこで作った getter の束縛や `createEffect` は所有者のない孤児になり、決して破棄されません。切り離されたノードの上で発火し続け、シグナルのほうが要素より長生きすれば、その要素をメモリに繋ぎ止めます。素の値で組み立て、更新は明示的な `createEffect` で駆動し、その破棄関数を集めて `disconnectedCallback` で呼び、再接続のときに張り直してください。[コーディングガイドライン](/ja/src/ranui/coding-guides/)を参照してください。
+コンポーネントの `constructor` と `connectedCallback` は**リアクティブなスコープではありません**。そこで作った getter の束縛や `createEffect` は所有者のない孤児になり、決して破棄されません。切り離されたノードの上で発火し続け、シグナルのほうが要素より長生きすれば、その要素をメモリに繋ぎ止めます。素の値で組み立て、更新は明示的な `createEffect` で駆動し、その破棄関数を集めて `disconnectedCallback` で呼び、再接続のときに張り直してください。[コーディングガイドライン](/ja/ranui/coding-guides/)を参照してください。
 :::
 
 ## カスタム要素の中のリスナー
@@ -207,7 +207,7 @@ disconnectedCallback() {
 
 ## サーバーサイドレンダリング
 
-ビルダーは [SSR](/ja/src/ranui/ssr/) でも動きます。`build()` はモックのノードを返し、`serialize()` は HTML を返します。リアクティブな束縛、`For`、`Show` はサーバー上では**一度だけ**、静的なスナップショットとして描画されます。ブラウザーでコードが走るまで、差分の突き合わせは起きません。
+ビルダーは [SSR](/ja/ranui/ssr/) でも動きます。`build()` はモックのノードを返し、`serialize()` は HTML を返します。リアクティブな束縛、`For`、`Show` はサーバー上では**一度だけ**、静的なスナップショットとして描画されます。ブラウザーでコードが走るまで、差分の突き合わせは起きません。
 
 ## 完全なリファレンス
 

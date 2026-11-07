@@ -12,7 +12,7 @@ description: 'ranui کتابخانهٔ رابط کاربری Web Components اس
 <PackageFacts package="ranui" />
 
 - ranui در مرحلهٔ **alpha** است: نسخه‌ها تغییرات ناسازگار دارند. نسخهٔ دقیق را قفل کنید و پیش از ارتقا
-  [فهرست تغییرات](/fa/src/ranui/changelog) را بخوانید.
+  [فهرست تغییرات](/fa/ranui/changelog) را بخوانید.
 
 ## نصب
 
@@ -39,7 +39,7 @@ import 'ranui/button'; // یا فقط یکی
 ```
 
 تگ در همهٔ فریم‌ورک‌ها یکی است؛ تفاوت فقط در شیوهٔ پاس‌دادن مقدار و بستن رویداد است که
-[راهنمای کدنویسی](/fa/src/ranui/coding-guides/#framework-integration) به‌تمامی پوشش می‌دهد:
+[راهنمای کدنویسی](/fa/ranui/coding-guides/#framework-integration) به‌تمامی پوشش می‌دهد:
 
 ::: code-group
 
@@ -85,50 +85,50 @@ document.body.appendChild(button);
 | ----------------------------------------------------- | ------------------------------------------------------- |
 | `ranui`                                               | همهٔ کامپوننت‌ها                                        |
 | `ranui/<component>`                                   | یک کامپوننت: `ranui/button`، `ranui/select`، …          |
-| [`ranui/theme`](/fa/src/ranui/theme/)                 | پوستهٔ روشن/تیره و بازنویسی توکن‌ها؛ بدون عنصر          |
-| [`ranui/i18n`](/fa/src/ranui/i18n/)                   | موتور ترجمه؛ بدون عنصر                                  |
+| [`ranui/theme`](/fa/ranui/theme/)                 | پوستهٔ روشن/تیره و بازنویسی توکن‌ها؛ بدون عنصر          |
+| [`ranui/i18n`](/fa/ranui/i18n/)                   | موتور ترجمه؛ بدون عنصر                                  |
 | `ranui/fonts`                                         | قلم‌های میزبانی‌شدهٔ Geist Sans و Geist Mono            |
 | `ranui/style`                                         | شیوه‌نامه، اگر پیکربندی شما خودش برنمی‌داردش            |
-| [`ranui/builder`](/fa/src/ranui/builder/)             | سازندهٔ روان DOM با واکنش‌پذیری ریزدانه                 |
-| [`ranui/ssr`](/fa/src/ranui/ssr/)، `ranui/ssr-stream` | رندر سمت سرور                                           |
+| [`ranui/builder`](/fa/ranui/builder/)             | سازندهٔ روان DOM با واکنش‌پذیری ریزدانه                 |
+| [`ranui/ssr`](/fa/ranui/ssr/)، `ranui/ssr-stream` | رندر سمت سرور                                           |
 | `ranui/testing`                                       | ابزارهایی برای رسیدن به shadow root بسته از دل یک آزمون |
 | `ranui/typings`                                       | تایپ‌های محیطی عناصر برای JSX / TS                      |
 
 ## کامپوننت‌ها
 
 ۴۱ عنصر. همهٔ آن‌ها همراه با ویژگی‌ها، خصیصه‌ها، رویدادها، اسلات‌ها و نام‌های `()::part` در
-[مرجع API عناصر](/fa/src/ranui/api) آمده‌اند.
+[مرجع API عناصر](/fa/ranui/api) آمده‌اند.
 
-**عمومی**: [Button](/fa/src/ranui/button/) · [Icon](/fa/src/ranui/icon/) ·
-[Loading](/fa/src/ranui/loading/)
+**عمومی**: [Button](/fa/ranui/button/) · [Icon](/fa/ranui/icon/) ·
+[Loading](/fa/ranui/loading/)
 
-**ورود داده**: [Input](/fa/src/ranui/input/) · [CheckBox](/fa/src/ranui/checkbox/) ·
-[Select](/fa/src/ranui/select/) · [ColorPicker](/fa/src/ranui/colorpicker/) ·
-[Attachments](/fa/src/ranui/attachments/) · [VoiceButton](/fa/src/ranui/voice-button/) ·
-[Forms](/fa/src/ranui/form/)
+**ورود داده**: [Input](/fa/ranui/input/) · [CheckBox](/fa/ranui/checkbox/) ·
+[Select](/fa/ranui/select/) · [ColorPicker](/fa/ranui/colorpicker/) ·
+[Attachments](/fa/ranui/attachments/) · [VoiceButton](/fa/ranui/voice-button/) ·
+[Forms](/fa/ranui/form/)
 
-**نمایش داده**: [Card](/fa/src/ranui/card/) · [Section](/fa/src/ranui/section/) ·
-[Tabs](/fa/src/ranui/tab/) · [Image](/fa/src/ranui/image/) · [Progress](/fa/src/ranui/progress/) ·
-[Radar](/fa/src/ranui/radar/) · [Player](/fa/src/ranui/player/) · [Preview](/fa/src/ranui/preview/) ·
-[Glass](/fa/src/ranui/glass/) · [Scratch](/fa/src/ranui/scratch/) ·
-[StateDot](/fa/src/ranui/state-dot/) · [DisclosureRow](/fa/src/ranui/disclosure-row/)
+**نمایش داده**: [Card](/fa/ranui/card/) · [Section](/fa/ranui/section/) ·
+[Tabs](/fa/ranui/tab/) · [Image](/fa/ranui/image/) · [Progress](/fa/ranui/progress/) ·
+[Radar](/fa/ranui/radar/) · [Player](/fa/ranui/player/) · [Preview](/fa/ranui/preview/) ·
+[Glass](/fa/ranui/glass/) · [Scratch](/fa/ranui/scratch/) ·
+[StateDot](/fa/ranui/state-dot/) · [DisclosureRow](/fa/ranui/disclosure-row/)
 
-**رندر محتوا**: [Markdown](/fa/src/ranui/markdown/) · [Math](/fa/src/ranui/math/) ·
-[Mermaid](/fa/src/ranui/mermaid/)
+**رندر محتوا**: [Markdown](/fa/ranui/markdown/) · [Math](/fa/ranui/math/) ·
+[Mermaid](/fa/ranui/mermaid/)
 
-**هوش مصنوعی و گفت‌وگو**: [Conversation](/fa/src/ranui/conversation/) ·
-[Reasoning](/fa/src/ranui/reasoning/) · [ToolCard](/fa/src/ranui/tool-card/) ·
-[TokenMeter](/fa/src/ranui/token-meter/)
+**هوش مصنوعی و گفت‌وگو**: [Conversation](/fa/ranui/conversation/) ·
+[Reasoning](/fa/ranui/reasoning/) · [ToolCard](/fa/ranui/tool-card/) ·
+[TokenMeter](/fa/ranui/token-meter/)
 
-**لایه‌ها و بازخورد**: [Modal](/fa/src/ranui/modal/) · [Popover](/fa/src/ranui/popover/) ·
-[Dropdown](/fa/src/ranui/dropdown/) · [Message](/fa/src/ranui/message/) ·
-[Skeleton](/fa/src/ranui/skeleton/)
+**لایه‌ها و بازخورد**: [Modal](/fa/ranui/modal/) · [Popover](/fa/ranui/popover/) ·
+[Dropdown](/fa/ranui/dropdown/) · [Message](/fa/ranui/message/) ·
+[Skeleton](/fa/ranui/skeleton/)
 
-**ناوبری**: [Router](/fa/src/ranui/router/) · [Route](/fa/src/ranui/route/) ·
-[Link](/fa/src/ranui/link/)
+**ناوبری**: [Router](/fa/ranui/router/) · [Route](/fa/ranui/route/) ·
+[Link](/fa/ranui/link/)
 
-**پایه‌ها**: [پوسته](/fa/src/ranui/theme/) · [ThemeSwitch](/fa/src/ranui/theme-switch/) ·
-[i18n](/fa/src/ranui/i18n/)
+**پایه‌ها**: [پوسته](/fa/ranui/theme/) · [ThemeSwitch](/fa/ranui/theme-switch/) ·
+[i18n](/fa/ranui/i18n/)
 
 پنج عنصر صفحهٔ جداگانه ندارند، چون تنها درون عنصر دیگری وجود دارند: `<r-option>` (Select)،
 `<r-tabs>` (Tabs)، `<r-img>` (Image)، `<r-dropdown-item>` (Dropdown) و `<r-content>` (Popover).
@@ -176,9 +176,9 @@ document.body.appendChild(button);
 **۳. ویژگی `sheet`** برای تزریق CSS به shadow root ·
 **۴. محتوای اسلات**، که در سند خودتان می‌ماند و CSS صفحهٔ شما را می‌گیرد.
 
-نام توکن‌ها همان [سیستم طراحی](/fa/src/ranui/design-system/) است؛ قاعدهٔ انتخاب میان آن‌ها
-[راهنمای طراحی](/fa/src/ranui/design-guides/) است؛ و سازوکارش در
-[راهنمای کدنویسی](/fa/src/ranui/coding-guides/#styling-across-the-shadow-boundary) آمده.
+نام توکن‌ها همان [سیستم طراحی](/fa/ranui/design-system/) است؛ قاعدهٔ انتخاب میان آن‌ها
+[راهنمای طراحی](/fa/ranui/design-guides/) است؛ و سازوکارش در
+[راهنمای کدنویسی](/fa/ranui/coding-guides/#styling-across-the-shadow-boundary) آمده.
 
 ## رویدادها
 
@@ -203,15 +203,15 @@ document.body.appendChild(button);
 
 | اگر می‌خواهید…                                   | بخوانید                                         |
 | ------------------------------------------------ | ----------------------------------------------- |
-| API دقیق یک عنصر را ببینید                       | [API عناصر](/fa/src/ranui/api)                  |
-| بدانید کدام توکن و چرا                           | [سیستم طراحی](/fa/src/ranui/design-system/)     |
-| صفحه‌ای بسازید که یکدست دیده شود                 | [راهنمای طراحی](/fa/src/ranui/design-guides/)   |
-| ranui را درست به یک برنامه وصل کنید              | [راهنمای کدنویسی](/fa/src/ranui/coding-guides/) |
-| روشن/تیره اضافه کنید یا همه‌چیز را بازطراحی کنید | [پوسته](/fa/src/ranui/theme/)                   |
-| رابط را ترجمه کنید                               | [i18n](/fa/src/ranui/i18n/)                     |
-| روی سرور رندر کنید                               | [رندر سمت سرور](/fa/src/ranui/ssr/)             |
-| بدون فریم‌ورک نمای واکنشی بسازید                 | [سازنده](/fa/src/ranui/builder/)                |
-| پیش از ارتقا ببینید چه تغییر کرده                | [فهرست تغییرات](/fa/src/ranui/changelog)        |
+| API دقیق یک عنصر را ببینید                       | [API عناصر](/fa/ranui/api)                  |
+| بدانید کدام توکن و چرا                           | [سیستم طراحی](/fa/ranui/design-system/)     |
+| صفحه‌ای بسازید که یکدست دیده شود                 | [راهنمای طراحی](/fa/ranui/design-guides/)   |
+| ranui را درست به یک برنامه وصل کنید              | [راهنمای کدنویسی](/fa/ranui/coding-guides/) |
+| روشن/تیره اضافه کنید یا همه‌چیز را بازطراحی کنید | [پوسته](/fa/ranui/theme/)                   |
+| رابط را ترجمه کنید                               | [i18n](/fa/ranui/i18n/)                     |
+| روی سرور رندر کنید                               | [رندر سمت سرور](/fa/ranui/ssr/)             |
+| بدون فریم‌ورک نمای واکنشی بسازید                 | [سازنده](/fa/ranui/builder/)                |
+| پیش از ارتقا ببینید چه تغییر کرده                | [فهرست تغییرات](/fa/ranui/changelog)        |
 
 ## پشتیبانی مرورگرها
 

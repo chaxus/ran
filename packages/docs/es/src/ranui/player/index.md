@@ -311,7 +311,7 @@ r-player {
 }
 ```
 
-La lista completa está en [tokens de estilo](/es/src/ranui/style-tokens#player); cuál elegir lo explica el [sistema de diseño](/es/src/ranui/design-system/).
+La lista completa está en [tokens de estilo](/es/ranui/style-tokens#player); cuál elegir lo explica el [sistema de diseño](/es/ranui/design-system/).
 
 ## Buenas prácticas
 

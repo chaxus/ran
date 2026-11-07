@@ -7,8 +7,8 @@ description: 'ranui 的运行时主题系统：initTheme / setTheme / getTheme�
 ranui 样式体系中**运行时**的那一半：在 light、dark、system 之间切换，持久化用户选择，以及在运行
 时覆盖令牌。
 
-令牌本身（叫什么名字、各自负责什么）在[设计系统](/cn/src/ranui/design-system/)里讲；怎么在它们
-之间取舍在[设计规范](/cn/src/ranui/design-guides/)里讲。本页只讲**怎么应用**。
+令牌本身（叫什么名字、各自负责什么）在[设计系统](/cn/ranui/design-system/)里讲；怎么在它们
+之间取舍在[设计规范](/cn/ranui/design-guides/)里讲。本页只讲**怎么应用**。
 
 > **适用场景**：给 ranui 应用接入明暗主题：加载时调用一次 `initTheme`，用 `setTheme` 切换；想在不
 > 新增 CSS 的前提下覆盖个别令牌，就用 `setThemeToken(s)`。
@@ -37,7 +37,7 @@ getTheme(); // → 'light' | 'dark' | 'system' | ''
 `setTheme` 会在 `<html>` 上写入 `data-ran-theme`（以及兼容用的 `theme`）属性，所有组件样式随之
 响应。选择保存在 localStorage 键 `ran-theme` 下。
 
-如果需要现成的切换 UI，直接用 [`<r-theme-switch>`](/cn/src/ranui/theme-switch/)：它是一个已接入
+如果需要现成的切换 UI，直接用 [`<r-theme-switch>`](/cn/ranui/theme-switch/)：它是一个已接入
 该 API 的 system / light / dark 分段控件，多个实例之间会互相同步，还会更新 `theme-color` meta。
 
 ## API
@@ -75,7 +75,7 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 - **只要用的是语义令牌，你自己的 CSS 也自动获得暗色模式**；反过来，写死颜色或者写了只在浅色下成立
   的兜底值就会出错。见
-  [在自己的 CSS 里使用令牌](/cn/src/ranui/design-system/#using-tokens-in-your-own-css)。
+  [在自己的 CSS 里使用令牌](/cn/ranui/design-system/#using-tokens-in-your-own-css)。
 - **主题翻转时不应该有任何过渡动画。** CSS 分不清颜色是为什么变的，所以颜色属性上的 `transition`
   会让每个元素在切换主题时按各自的时长淡变。ranui 的组件刻意没有这么做，你的也不应该。
 
@@ -122,7 +122,7 @@ clearThemeToken('--ran-color-primary');
   都会跟着变。
 - 覆盖**组件**令牌（`--ran-btn-hover-background`）：只改一个元素。
 
-完整分层见[设计系统](/cn/src/ranui/design-system/#two-layers)。注意运行时覆盖写的是目标元素上的
+完整分层见[设计系统](/cn/ranui/design-system/#two-layers)。注意运行时覆盖写的是目标元素上的
 **内联样式**：它在该子树内会压过样式表规则。这正是局部主题能生效的原因，也是忘记清除的覆盖事后很难
 被发现的原因。
 

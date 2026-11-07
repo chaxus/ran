@@ -78,7 +78,7 @@ r-math {
 
 Part：`button` · `error` · `math` · `menu` · `render` · `toolbar`
 
-一覧は[スタイルトークン](/ja/src/ranui/style-tokens#math)に、どのトークンを使うかは[デザインシステム](/ja/src/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#math)に、どのトークンを使うかは[デザインシステム](/ja/ranui/design-system/)にあります。
 
 ## ベストプラクティス
 

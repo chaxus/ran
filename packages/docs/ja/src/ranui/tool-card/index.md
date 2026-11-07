@@ -136,7 +136,7 @@ r-tool-card {
 
 Part：`body` · `exit` · `file` · `hunk` · `io` · `io-text` · `line` · `location` · `locations` · `path` · `row`
 
-一覧は[スタイルトークン](/ja/src/ranui/style-tokens#tool-card)に、どのトークンを選ぶかは[デザインシステム](/ja/src/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#tool-card)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
 
 ## 関連
 

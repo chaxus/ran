@@ -37,8 +37,9 @@ export interface DocPage {
   /** Site-absolute public URL, extensionless: `/cn/ranui/button/`. */
   url: string;
   /**
-   * The URL the source tree implies, `/cn/src/ranui/button/`. Markdown links are written
-   * against it, so relative links resolve from here; it is also the retired public URL.
+   * The URL the source tree implies, `/cn/src/ranui/button/`. Relative markdown links
+   * resolve from here; absolute links should already be public paths. Also the retired
+   * public URL kept reachable by redirects.
    */
   sourceUrl: string;
   outFile: string;

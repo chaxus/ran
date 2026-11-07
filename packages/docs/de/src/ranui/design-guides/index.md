@@ -7,12 +7,12 @@ description: 'So setzt du ranui auf einer Oberfläche ein: eine Rolle wählen un
 So setzt du ranui auf einer echten Oberfläche ein: Wähle eine Rolle und einen Zustand, und lass die Tokens die Werte liefern.
 
 Die Regeln selbst stehen an zwei Stellen, und diese Seite verlinkt sie, statt sie zu wiederholen: der
-[Designleitfaden](/src/design/guide) für die Methode, die für jedes Produkt gilt, und der
+[Designleitfaden](/design/guide) für die Methode, die für jedes Produkt gilt, und der
 [ranui-Implementierungsadapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)
 für ranuis Tokens, Stufen und Komponentenregeln. Beide werden in `node_modules/ranui/docs/DESIGN.md` ausgeliefert. Das
-[Designsystem](/de/src/ranui/design-system/) listet jedes Token und seinen Wert, die
-[Themengestaltung](/de/src/ranui/theme/) behandelt Überschreibungen zur Laufzeit und die
-[Informationsarchitektur](/de/src/ranui/information-architecture/) den Aufbau der Seite.
+[Designsystem](/de/ranui/design-system/) listet jedes Token und seinen Wert, die
+[Themengestaltung](/de/ranui/theme/) behandelt Überschreibungen zur Laufzeit und die
+[Informationsarchitektur](/de/ranui/information-architecture/) den Aufbau der Seite.
 
 > **Einsetzen, wenn** du Farbe, Abstand, Schrift, Tiefe oder Bewegung für eine Oberfläche aus `<r-*>`-Elementen wählst.
 
@@ -30,7 +30,7 @@ Das sind Ausgangspunkte. Weiche von einem ab, wenn die Oberfläche dadurch besse
 
 ## Eine Farbe wählen
 
-Die [Leiter](/de/src/ranui/design-system/#the-ladder) legt bereits fest, wie Überfahren und Gedrücktsein aussehen;
+Die [Leiter](/de/ranui/design-system/#the-ladder) legt bereits fest, wie Überfahren und Gedrücktsein aussehen;
 deine Aufgabe ist es, die Rolle zu benennen.
 
 | Das Element ist…                           | Nimm                                                           |
@@ -54,7 +54,7 @@ erklären jeden Fall, und `verify:design` findet sie in ranuis eigenem Quellcode
 
 ## Abstand und Rhythmus
 
-Nimm Abstände aus der [4px-Skala](/de/src/ranui/design-system/#spacing) und lass die Entfernung Bedeutung tragen:
+Nimm Abstände aus der [4px-Skala](/de/ranui/design-system/#spacing) und lass die Entfernung Bedeutung tragen:
 
 - **8px** zwischen Elementen innerhalb einer Gruppe.
 - **16px** zwischen Gruppen.
@@ -67,7 +67,7 @@ dazwischen setzt.
 ## Schrift wählen
 
 Frag, welche **Rolle** der Text spielt (Überschrift, Beschriftung, Fließtext, Schaltfläche, dicktengleich); Schriftart, Größe, Stärke und
-Zeilenhöhe ergeben sich aus der [Schriftskala](/de/src/ranui/design-system/#typography). Wirklich einmaliger Text,
+Zeilenhöhe ergeben sich aus der [Schriftskala](/de/ranui/design-system/#typography). Wirklich einmaliger Text,
 etwa eine Gesteneinblendung auf einem Video, fährt mit einem eigenen Komponenten-Token besser, als in die
 nächstliegende Rolle gezwängt zu werden.
 
@@ -76,7 +76,7 @@ nächstliegende Rolle gezwängt zu werden.
 Wähle die Schattenstufe danach, was das Element ist: eine Fläche im Fluss, ein schwebendes Overlay oder ein blockierender
 Dialog. Ein Overlay, das auf die Kartenstufe zurückfällt, wirkt wie an die Seite geheftet.
 
-**ranui-Overlays in dein eigenes Rahmenwerk einbetten.** Die [z-index-Leiter](/de/src/ranui/design-system/#stacking)
+**ranui-Overlays in dein eigenes Rahmenwerk einbetten.** Die [z-index-Leiter](/de/ranui/design-system/#stacking)
 beginnt bei 1000, also überragt ein portaltes Overlay gewöhnliches Seitenrahmenwerk von selbst. Ein Overlay mit `position: fixed`,
 das in seinem eigenen Shadow DOM bleibt (der Dialog von `r-modal`), entkommt nur bis zu seinem nächsten übergeordneten
 **Stapelkontext**. Wenn du eingebetteten Inhalt in etwas einwickelst, das einen erzeugt
@@ -166,6 +166,6 @@ ranui nutzt, führt ihre eigenen Prüfungen aus und sieht sich ihre eigenen Seit
 
 ## Nachweise und Abnahme {#evidence-and-acceptance}
 
-Der Abschnitt [eine Änderung prüfen](/src/design/guide#verifying-a-change) des Leitfadens sagt, was in einem echten
+Der Abschnitt [eine Änderung prüfen](/design/guide#verifying-a-change) des Leitfadens sagt, was in einem echten
 Browser zu prüfen und was zu berichten ist: was du beobachtet hast, was du nur gefolgert hast und was du nicht prüfen konntest.
 Die Prüfung durch einen Agenten ist keine Abnahme durch den Nutzer.

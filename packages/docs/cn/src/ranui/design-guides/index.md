@@ -6,12 +6,12 @@ description: '在真实界面上用好 ranui：选定用途，让令牌给出取
 
 在真实界面上使用 ranui：先确定元素的用途和状态，再让设计令牌（token）给出具体取值。
 
-规则本身放在两个地方，本页只给链接，不再复述：[设计指南](/cn/src/design/guide)讲适用于任何产品的方法，
+规则本身放在两个地方，本页只给链接，不再复述：[设计指南](/cn/design/guide)讲适用于任何产品的方法，
 [ranui 实现适配](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)
 讲 ranui 的令牌、层级和组件规则。两者都随包发布在 `node_modules/ranui/docs/DESIGN.md`。
-[设计系统](/cn/src/ranui/design-system/)列出每个令牌及其取值，
-[主题系统](/cn/src/ranui/theme/)说明运行时覆盖，
-[信息架构](/cn/src/ranui/information-architecture/)负责页面结构。
+[设计系统](/cn/ranui/design-system/)列出每个令牌及其取值，
+[主题系统](/cn/ranui/theme/)说明运行时覆盖，
+[信息架构](/cn/ranui/information-architecture/)负责页面结构。
 
 > **适用场景**：为 `<r-*>` 元素搭建的界面选择颜色、间距、排版、纵深或动效。
 
@@ -28,7 +28,7 @@ description: '在真实界面上用好 ranui：选定用途，让令牌给出取
 
 ## 选颜色
 
-[状态阶梯](/cn/src/ranui/design-system/#the-ladder)已经决定了悬停和按下的样子，你要做的只是确定用途。
+[状态阶梯](/cn/ranui/design-system/#the-ladder)已经决定了悬停和按下的样子，你要做的只是确定用途。
 
 | 这个元素是……        | 用                                                             |
 | ------------------- | -------------------------------------------------------------- |
@@ -49,7 +49,7 @@ description: '在真实界面上用好 ranui：选定用途，让令牌给出取
 
 ## 间距与节奏
 
-间距从 [4px 尺度](/cn/src/ranui/design-system/#spacing)里取，并让距离表达含义：
+间距从 [4px 尺度](/cn/ranui/design-system/#spacing)里取，并让距离表达含义：
 
 - 组内元素之间用 **8px**。
 - 组与组之间用 **16px**。
@@ -61,7 +61,7 @@ description: '在真实界面上用好 ranui：选定用途，让令牌给出取
 ## 选排版
 
 先问这段文字承担什么**角色**（标题、标签、正文、按钮、等宽），字体、字号、字重和行高都由
-[排版尺度](/cn/src/ranui/design-system/#typography)决定。真正只出现一次的文字，比如视频上的手势提示，
+[排版尺度](/cn/ranui/design-system/#typography)决定。真正只出现一次的文字，比如视频上的手势提示，
 单独给它一个组件令牌，比硬套最接近的角色更合适。
 
 ## 纵深：投影与层级
@@ -69,7 +69,7 @@ description: '在真实界面上用好 ranui：选定用途，让令牌给出取
 按元素的性质选投影层级：文档流里的表面、浮层，还是会挡住操作的对话框。浮层如果退回卡片层级的投影，
 看上去就像钉在页面上。
 
-**在自己的页面框架里嵌入 ranui 浮层。** [z-index 阶梯](/cn/src/ranui/design-system/#stacking)从 1000 起，
+**在自己的页面框架里嵌入 ranui 浮层。** [z-index 阶梯](/cn/ranui/design-system/#stacking)从 1000 起，
 所以 portal 出去的浮层自己就能越过普通的页面骨架。但留在自身 shadow DOM 里的 `position: fixed` 浮层
 （`r-modal` 的对话框）最多只能逃到最近的祖先**层叠上下文**。如果你用会创建层叠上下文的东西
 （`isolation`、`opacity < 1`、`transform`、`filter`、`will-change`）包住嵌入内容，只在浮层真正打开时
@@ -154,5 +154,5 @@ description: '在真实界面上用好 ranui：选定用途，让令牌给出取
 
 ## 证据与验收 {#evidence-and-acceptance}
 
-设计指南里的[验证一次改动](/cn/src/design/guide#验证一次改动)说明了在真实浏览器里检查什么、报告什么：
+设计指南里的[验证一次改动](/cn/design/guide#验证一次改动)说明了在真实浏览器里检查什么、报告什么：
 哪些是观察到的，哪些只是推断，哪些没能检查。agent 的审查不等于用户验收。

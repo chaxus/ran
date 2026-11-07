@@ -4,7 +4,7 @@ description: 'Which ranuts utility to reach for: debounce or throttle, once or s
 
 # Choosing a utility
 
-The [API reference](/src/ranuts/api) lists every export. This page answers the question it
+The [API reference](/ranuts/api) lists every export. This page answers the question it
 cannot: **which of two similar things do I want, and why**.
 
 > **Use when** you know roughly what you need ("run this less often", "only once", "store
@@ -92,7 +92,7 @@ the traffic is not request/response, or when the transport already exists.
 - **`resolveLocale({ supported, … })`** picks which of _your_ locales to use, from the usual
   chain (an explicit choice, storage, `navigator.languages`, a fallback). It answers "which
   language", not "what does this string say".
-- **`createI18n` / `useI18n`** ([`ranuts/i18n`](/src/ranuts/i18n/)) is the translation engine:
+- **`createI18n` / `useI18n`** ([`ranuts/i18n`](/ranuts/i18n/)) is the translation engine:
   flat message dictionaries, `{param}` interpolation, runtime switching.
 - **`segmentByRanges`** and **`paginateText`** are for laying text out: offsets and highlights,
   and cutting text into pages that fit a box.
@@ -105,13 +105,13 @@ wrong.
 
 Three layers, each usable alone:
 
-1. **[`ranuts/stream`](/src/ranuts/stream/)**: parse SSE, then fold the deltas into a snapshot
+1. **[`ranuts/stream`](/ranuts/stream/)**: parse SSE, then fold the deltas into a snapshot
    with `createStreamAccumulator()`. Provider-neutral: text, reasoning and tool-call deltas end
    up in the same shape regardless of who emitted them.
-2. **[`ranuts/conversation`](/src/ranuts/conversation/)**: project an append-only event log
+2. **[`ranuts/conversation`](/ranuts/conversation/)**: project an append-only event log
    into renderable nodes with `createConversationEngine()`. It decides _what_ a row is; it draws
    nothing.
-3. **[`<r-conversation>`](/src/ranui/conversation/)** in ranui: the element that renders those
+3. **[`<r-conversation>`](/ranui/conversation/)** in ranui: the element that renders those
    nodes, keeps the view pinned to the bottom, and reconciles rows.
 
 Stop at layer 1 if you are only rendering text; add 2 when a transcript has structure worth
@@ -135,7 +135,7 @@ symbol, never from a deep source path.
 
 ## Still not sure?
 
-Search the [API reference](/src/ranuts/api): every export is there with its signature and a
+Search the [API reference](/ranuts/api): every export is there with its signature and a
 one-line description, generated from source. If two of them still look interchangeable after
 reading both lines, that is a documentation bug worth
 [reporting](https://github.com/chaxus/ran/issues).

@@ -8,6 +8,6 @@ title: Ran Design
 
 시작하기 전, 만드는 동안, 변경을 넘기기 전에 사용합니다. Steve Krug의 5초 테스트와 트렁크 테스트를 포함하며, 브라우저 테스트가 자동으로 확인하는 항목을 표시합니다.
 
-- [디자인 체크리스트](/src/design/guide) (영어)
+- [디자인 체크리스트](/design/guide) (영어)
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [에이전트](../agents/)

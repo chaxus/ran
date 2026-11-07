@@ -63,7 +63,7 @@ console.log(params.search); // 'hello world' (von allein dekodiert)
 
 ## Hinweise
 
-1. **Ein Flag ohne Wert behält seinen Platz.** `?embed` und `?embed=` ergeben beide `{ embed: '' }`. Vor 0.3 fiel jeder Parameter ohne Wert weg, wodurch sich `?readonly` und `?embed` (die übliche Schreibweise eines booleschen Flags) nicht davon unterscheiden ließen, dass der Parameter fehlt. Lies solche Flags mit [`queryFlag`](/de/src/ranuts/utils/query_flag).
+1. **Ein Flag ohne Wert behält seinen Platz.** `?embed` und `?embed=` ergeben beide `{ embed: '' }`. Vor 0.3 fiel jeder Parameter ohne Wert weg, wodurch sich `?readonly` und `?embed` (die übliche Schreibweise eines booleschen Flags) nicht davon unterscheiden ließen, dass der Parameter fehlt. Lies solche Flags mit [`queryFlag`](/de/ranuts/utils/query_flag).
 
 2. **Ein Fragment sickert nie in den letzten Wert.** `?lang=en#section` ergibt `{ lang: 'en' }`.
 

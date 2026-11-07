@@ -11,9 +11,9 @@ ranui が拠って立つ**デザイン言語**と、それを表すトークン�
 | ページ                                                        | 答えること                                 |
 | ------------------------------------------------------------- | ------------------------------------------ |
 | **デザインシステム**（このページ）                            | トークンが**何か**、つまり語彙             |
-| [デザインガイドライン](/ja/src/ranui/design-guides/)          | 画面を作るとき、その中から**どう選ぶか**   |
-| [情報アーキテクチャ](/ja/src/ranui/information-architecture/) | ページ自体が**どんな形**を取るべきか       |
-| [テーマ](/ja/src/ranui/theme/)                                | 実行時に**どう切り替え、どう上書きするか** |
+| [デザインガイドライン](/ja/ranui/design-guides/)          | 画面を作るとき、その中から**どう選ぶか**   |
+| [情報アーキテクチャ](/ja/ranui/information-architecture/) | ページ自体が**どんな形**を取るべきか       |
+| [テーマ](/ja/ranui/theme/)                                | 実行時に**どう切り替え、どう上書きするか** |
 
 > **こんなときに**：トークンの名前や値（色の役割、余白の段階、アイコンの大きさ、影の段階、イージングのカーブ）が必要なとき、あるいはスケールがなぜこの形をしているのかを知りたいとき。
 
@@ -356,7 +356,7 @@ spring 系は、調整済みの SwiftUI のばねから蒸留したものです�
 
 ## ダークモードが再定義するもの
 
-`<html>`（あるいは任意のサブツリー。[テーマ](/ja/src/ranui/theme/)を参照）に付いた `data-ran-theme="dark"` が再定義するのは、**基礎パレットだけ**です。ただし、スケールを通じては解決できない例外が 4 つあります。
+`<html>`（あるいは任意のサブツリー。[テーマ](/ja/ranui/theme/)を参照）に付いた `data-ran-theme="dark"` が再定義するのは、**基礎パレットだけ**です。ただし、スケールを通じては解決できない例外が 4 つあります。
 
 - 第 1 層のすべて：グレー、グレー（アルファ）、ブルー、レッド、アンバー、グリーンの全段と、ふたつの背景。
 - `--ran-color-bg-elevated`。ダークではリテラルの `#18181b` になり、カードが黒いページに溶けるのではなく浮き上がるようにします。
@@ -376,7 +376,7 @@ spring 系は、調整済みの SwiftUI のばねから蒸留したものです�
 
 たとえば `--ran-btn-hover-background`、`--ran-select-search-active-border-width` です。既定ではセマンティックトークンへ落ちます：`var(--ran-btn-background, var(--ran-color-primary, #111113))`。だからセマンティックトークンをひとつ上書きすればそのすべてに届き、コンポーネントのトークンを上書きすれば変化はひとつの要素に絞られます。
 
-生成された完全な一覧は、リポジトリの [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) にあります。要素ごとの API は[こちら](/ja/src/ranui/api)です。適用のしかたは[テーマ](/ja/src/ranui/theme/#customizing-tokens)を参照してください。
+生成された完全な一覧は、リポジトリの [style-tokens-public.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/style-tokens-public.md) にあります。要素ごとの API は[こちら](/ja/ranui/api)です。適用のしかたは[テーマ](/ja/ranui/theme/#customizing-tokens)を参照してください。
 
 ## 自分の CSS でトークンを使う {#using-tokens-in-your-own-css}
 

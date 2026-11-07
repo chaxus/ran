@@ -39,7 +39,7 @@ ocupando su sitio en la fila.
 
 El punto solo codifica el estado mediante el color; no explica qué significa ese color. Nunca
 dejes que el color sea lo único que distingue dos filas. Consulta la
-[guía de diseño](/es/src/ranui/design-guides/#accessibility).
+[guía de diseño](/es/ranui/design-guides/#accessibility).
 
 <ran-demo column>
   <div style="display:flex;align-items:center;gap:8px">

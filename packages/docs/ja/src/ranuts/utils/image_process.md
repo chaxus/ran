@@ -98,5 +98,5 @@ type ImgSource = HTMLImageElement | HTMLCanvasElement;
 
 ## 関連
 
-- [convertImageToBase64](/ja/src/ranuts/utils/convert_image_to_base64)：`File` → base64 の data URL
-- [isImageSize](/ja/src/ranuts/utils/is_image_size)：画像の寸法を確かめる
+- [convertImageToBase64](/ja/ranuts/utils/convert_image_to_base64)：`File` → base64 の data URL
+- [isImageSize](/ja/ranuts/utils/is_image_size)：画像の寸法を確かめる

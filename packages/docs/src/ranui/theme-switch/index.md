@@ -5,7 +5,7 @@ description: "A three-state system/light/dark segmented control wired to ranui's
 # ThemeSwitch
 
 A three-state segmented control (**system / light / dark**) wired to ranui's
-[theme API](/src/ranui/theme/). Clicking a segment calls `setTheme()`, persists the choice
+[theme API](/ranui/theme/). Clicking a segment calls `setTheme()`, persists the choice
 under the localStorage key `ran-theme`, and keeps every instance on the page (and in other
 tabs) in sync.
 

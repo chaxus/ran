@@ -8,8 +8,8 @@ La mitad **en tiempo de ejecución** del estilo de ranui: cambiar entre modo cla
 sistema, guardar la elección y sobrescribir tokens sobre la marcha.
 
 Los tokens en sí (cómo se llaman y para qué sirve cada uno) son el
-[sistema de diseño](/es/src/ranui/design-system/); las reglas para elegir entre ellos son la
-[guía de diseño](/es/src/ranui/design-guides/). Esta página trata solo de _aplicarlos_.
+[sistema de diseño](/es/ranui/design-system/); las reglas para elegir entre ellos son la
+[guía de diseño](/es/ranui/design-guides/). Esta página trata solo de _aplicarlos_.
 
 > **Úsalo cuando** necesites tema claro y oscuro en una aplicación con ranui: llama a `initTheme`
 > una vez al cargar, a `setTheme` para cambiar, y a `setThemeToken(s)` si quieres sobrescribir
@@ -42,7 +42,7 @@ de componentes. Las mismas funciones se reexportan también desde el barril `ran
 estilos de los componentes reaccionan a él. La elección se guarda bajo la clave de localStorage
 `ran-theme`.
 
-Para una interfaz de cambio ya hecha, usa [`<r-theme-switch>`](/es/src/ranui/theme-switch/): un
+Para una interfaz de cambio ya hecha, usa [`<r-theme-switch>`](/es/ranui/theme-switch/): un
 control segmentado de sistema, claro y oscuro ya conectado a esta API, sincronizado entre
 instancias y que actualiza los metas `theme-color`.
 
@@ -83,7 +83,7 @@ Dos consecuencias que conviene conocer:
 
 - **Tu propio CSS recibe el modo oscuro gratis** si consume tokens semánticos, y lo recibe mal si
   codifica un color a mano o escribe un valor de reserva solo para el modo claro. Consulta
-  [Usar tokens en tu propio CSS](/es/src/ranui/design-system/#using-tokens-in-your-own-css).
+  [Usar tokens en tu propio CSS](/es/ranui/design-system/#using-tokens-in-your-own-css).
 - **Nada debe hacer transición al cambiar de tema.** El CSS no puede saber por qué cambió un color,
   así que una `transition` sobre una propiedad de la paleta hace que cada elemento se funda a su
   propio ritmo cuando cambias de tema. Los componentes de ranui no lo hacen a propósito; los tuyos
@@ -135,7 +135,7 @@ Como el modo oscuro solo redefine la paleta base:
   elemento.
 
 Esa estratificación se describe por completo en la página del
-[sistema de diseño](/es/src/ranui/design-system/#two-layers). Ten en cuenta que una sobrescritura en
+[sistema de diseño](/es/ranui/design-system/#two-layers). Ten en cuenta que una sobrescritura en
 tiempo de ejecución es un estilo en línea sobre el objetivo: gana a las reglas de la hoja de estilos
 para ese subárbol, que es lo que hace posible el tema por paneles y lo que hace difícil detectar más
 tarde una sobrescritura que olvidaste limpiar.

@@ -13,9 +13,9 @@ description: '첫 토큰을 고르기 전에 고밀도 페이지의 형태를 �
 | 페이지                                        | 답하는 것                           |
 | --------------------------------------------- | ----------------------------------- |
 | **정보 구조**(이 페이지)                      | 페이지가 **어떤 형태**여야 하는가   |
-| [디자인 시스템](/ko/src/ranui/design-system/) | 토큰이 _무엇인가_: 어휘             |
-| [디자인 가이드](/ko/src/ranui/design-guides/) | 화면을 만들 때 _어떻게 고르는가_    |
-| [테마](/ko/src/ranui/theme/)                  | 런타임에 _어떻게 바꾸고 덮어쓰는가_ |
+| [디자인 시스템](/ko/ranui/design-system/) | 토큰이 _무엇인가_: 어휘             |
+| [디자인 가이드](/ko/ranui/design-guides/) | 화면을 만들 때 _어떻게 고르는가_    |
+| [테마](/ko/ranui/theme/)                  | 런타임에 _어떻게 바꾸고 덮어쓰는가_ |
 
 > **이럴 때 봅니다.** 여러 객체와 여러 상태, 그리고 그 사이의 관계를 한꺼번에 담아야 하는 화면을
 > 시작할 때. 콘솔, 대시보드, 관리 화면, 워크벤치, 모니터링 페이지가 여기 해당합니다. 랜딩 페이지나
@@ -173,12 +173,12 @@ ranui는 페이지 형태에 대해 의도적으로 입장을 갖지 않습니�
 - 점진적 공개에는 `r-disclosure-row`, 잠깐 스치는 맥락에는 `r-popover`와 `r-dropdown`, `r-modal`은
   위 표가 허용하는 용도로만.
 - 상태에는 `r-state-dot`을 쓰되 항상 라벨과 함께:
-  [색만으로 알리지 않기](/ko/src/ranui/design-guides/#accessibility).
+  [색만으로 알리지 않기](/ko/ranui/design-guides/#accessibility).
 - 첫 화면이 로딩되는 동안에는 `r-skeleton`, 기다리는 사람이 의아해할 만큼 긴 작업에는 `r-progress`,
   결과는 `r-message`로 알립니다.
 
 ranui에는 **테이블, 트리, 달력, 칸반, 타임라인이 없습니다.** 직접 만들 때는 두 번째 시각 체계를
-세우지 말고 [토큰](/ko/src/ranui/design-system/)과 [디자인 가이드](/ko/src/ranui/design-guides/)
+세우지 말고 [토큰](/ko/ranui/design-system/)과 [디자인 가이드](/ko/ranui/design-guides/)
 위에서 만드세요. 여백은 스케일에서, 글자는 역할에서, 색은 시맨틱 토큰에서 가져오고, 닿을 수 있는
 상태를 모두 설계합니다.
 

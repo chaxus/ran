@@ -168,7 +168,7 @@ r-checkbox {
 
 Part：`checkbox` · `inner` · `input` · `label` · `wrapper`
 
-一覧は[スタイルトークン](/ja/src/ranui/style-tokens#checkbox)に、どのトークンを選ぶかは[デザインシステム](/ja/src/ranui/design-system/)にあります。
+一覧は[スタイルトークン](/ja/ranui/style-tokens#checkbox)に、どのトークンを選ぶかは[デザインシステム](/ja/ranui/design-system/)にあります。
 
 ## ベストプラクティス
 
@@ -176,4 +176,4 @@ Part：`checkbox` · `inner` · `input` · `label` · `wrapper`
 - **checked と value**：真偽の状態には `checked` を使い、フォームのデータを集めるときは `value`（`'true'` / `'false'`）を読みます。
 - **無効状態**：その選択が使えないときは `disabled` を使います。
 - **`change` を購読する**：DOM を問い合わせ直すのではなく `event.detail.checked` を読んでください。
-- **フォーム**：`r-checkbox` は `<form>` の中に置くだけで、チェックされていれば値が自動的に集められます。送信をプレーンなオブジェクトに変える `serializeForm()` については [Forms](/ja/src/ranui/form/) を参照してください。
+- **フォーム**：`r-checkbox` は `<form>` の中に置くだけで、チェックされていれば値が自動的に集められます。送信をプレーンなオブジェクトに変える `serializeForm()` については [Forms](/ja/ranui/form/) を参照してください。

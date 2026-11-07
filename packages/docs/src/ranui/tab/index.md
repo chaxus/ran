@@ -304,7 +304,7 @@ r-tabs {
 
 Parts: `content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 
-The full list is in [style tokens](/src/ranui/style-tokens#tab); which token to reach for is the [design system](/src/ranui/design-system/).
+The full list is in [style tokens](/ranui/style-tokens#tab); which token to reach for is the [design system](/ranui/design-system/).
 
 ## Best Practices
 

@@ -40,7 +40,7 @@ i18n.t('hero.title', { name: 'Ada' }); // "你好，Ada"
 3. 브라우저의 언어들(`detectNavigator`가 켜져 있을 때만)
 4. `fallbackLocale`
 
-3단계는 [`resolveLocale`](/ko/src/ranuts/utils/resolve_locale)을 거칩니다. `navigator.language`만이 아니라 순서가 있는 `navigator.languages` 목록 전체를 읽으므로, 첫 번째 선호 언어가 여러분의 사전에 없는 독자도 곧장 대체 언어로 떨어지는 대신 두 번째 언어를 받습니다.
+3단계는 [`resolveLocale`](/ko/ranuts/utils/resolve_locale)을 거칩니다. `navigator.language`만이 아니라 순서가 있는 `navigator.languages` 목록 전체를 읽으므로, 첫 번째 선호 언어가 여러분의 사전에 없는 독자도 곧장 대체 언어로 떨어지는 대신 두 번째 언어를 받습니다.
 
 ## 보간
 

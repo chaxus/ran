@@ -7,12 +7,12 @@ description: 'How to apply ranui on a screen: pick a role and let the token supp
 How to apply ranui on a real screen: choose a role and a state, and let the tokens supply the values.
 
 The rules themselves live in two places, and this page links to them rather than restating them: the
-[design guide](/src/design/guide) for the method that applies to any product, and the
+[design guide](/design/guide) for the method that applies to any product, and the
 [ranui implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)
 for ranui's tokens, tiers and component rules. Both ship in `node_modules/ranui/docs/DESIGN.md`. The
-[design system](/src/ranui/design-system/) lists every token and its value,
-[theming](/src/ranui/theme/) covers runtime overrides, and
-[information architecture](/src/ranui/information-architecture/) covers page structure.
+[design system](/ranui/design-system/) lists every token and its value,
+[theming](/ranui/theme/) covers runtime overrides, and
+[information architecture](/ranui/information-architecture/) covers page structure.
 
 > **Use when** choosing color, spacing, type, depth or motion for a screen built with `<r-*>` elements.
 
@@ -30,7 +30,7 @@ These are starting points. Depart from one when the screen is better for it, and
 
 ## Choosing a color
 
-The [ladder](/src/ranui/design-system/#the-ladder) already decides what hover and active look like;
+The [ladder](/ranui/design-system/#the-ladder) already decides what hover and active look like;
 your job is to name the role.
 
 | The element is…                   | Use                                                            |
@@ -54,7 +54,7 @@ explain each, and `verify:design` catches them in ranui's own source.
 
 ## Spacing and rhythm
 
-Take gaps from the [4px scale](/src/ranui/design-system/#spacing) and let the distance carry meaning:
+Take gaps from the [4px scale](/ranui/design-system/#spacing) and let the distance carry meaning:
 
 - **8px** between elements inside a group.
 - **16px** between groups.
@@ -67,7 +67,7 @@ them.
 ## Choosing type
 
 Ask what **role** the text plays (heading, label, copy, button, mono); the font, size, weight and
-line height follow from the [type scale](/src/ranui/design-system/#typography). Genuinely one-off text,
+line height follow from the [type scale](/ranui/design-system/#typography). Genuinely one-off text,
 such as a gesture flash on a video, is better off with its own component token than forced into the
 nearest role.
 
@@ -76,7 +76,7 @@ nearest role.
 Pick the shadow tier by what the element is: an in-flow surface, a floating overlay or a blocking
 dialog. An overlay that falls back to the card tier looks pinned to the page.
 
-**Embedding ranui overlays in your own chrome.** The [z-index ladder](/src/ranui/design-system/#stacking)
+**Embedding ranui overlays in your own chrome.** The [z-index ladder](/ranui/design-system/#stacking)
 starts at 1000, so a portaled overlay clears ordinary page chrome on its own. A `position: fixed`
 overlay that stays inside its own shadow DOM (`r-modal`'s dialog) escapes only as far as its nearest
 ancestor **stacking context**. If you wrap embedded content in something that creates one
@@ -166,6 +166,6 @@ uses ranui runs its own checks and looks at its own pages.
 
 ## Evidence and acceptance {#evidence-and-acceptance}
 
-The guide's [verifying a change](/src/design/guide#verifying-a-change) says what to check in a real
+The guide's [verifying a change](/design/guide#verifying-a-change) says what to check in a real
 browser and what to report: what you observed, what you only inferred, and what you could not check.
 An agent's review is not the user's acceptance.

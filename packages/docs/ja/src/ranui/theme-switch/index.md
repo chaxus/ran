@@ -4,7 +4,7 @@ description: 'ranui のテーマ API に接続された、システム／ライ�
 
 # ThemeSwitch
 
-ranui の[テーマ API](/ja/src/ranui/theme/) に接続された、3 状態（**システム / ライト / ダーク**）の
+ranui の[テーマ API](/ja/ranui/theme/) に接続された、3 状態（**システム / ライト / ダーク**）の
 セグメントコントロールです。セグメントをクリックすると `setTheme()` を呼び、選択を localStorage の
 `ran-theme` キーに保存し、ページ上の（そして別タブの）すべてのインスタンスを同期させます。
 

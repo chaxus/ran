@@ -6,7 +6,7 @@ description: 'ranui 를 실제 화면에 적용하는 법. 역할을 고르고 �
 
 ranui 를 실제 화면에 적용하는 법입니다. 역할과 상태를 고르고, 값은 토큰에 맡기세요.
 
-규칙 자체는 두 곳에 있고, 이 페이지는 내용을 되풀이하지 않고 그쪽으로 연결합니다. 어떤 제품에나 통하는 방법은 [디자인 가이드](/src/design/guide)에, ranui 의 토큰·단계·컴포넌트 규칙은 [ranui 구현 어댑터](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)에 있습니다. 둘 다 `node_modules/ranui/docs/DESIGN.md`에 함께 배포됩니다. 모든 토큰과 그 값은 [디자인 시스템](/ko/src/ranui/design-system/)에, 실행 중 덮어쓰기는 [테마](/ko/src/ranui/theme/)에, 페이지 구조는 [정보 구조](/ko/src/ranui/information-architecture/)에 있습니다.
+규칙 자체는 두 곳에 있고, 이 페이지는 내용을 되풀이하지 않고 그쪽으로 연결합니다. 어떤 제품에나 통하는 방법은 [디자인 가이드](/design/guide)에, ranui 의 토큰·단계·컴포넌트 규칙은 [ranui 구현 어댑터](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)에 있습니다. 둘 다 `node_modules/ranui/docs/DESIGN.md`에 함께 배포됩니다. 모든 토큰과 그 값은 [디자인 시스템](/ko/ranui/design-system/)에, 실행 중 덮어쓰기는 [테마](/ko/ranui/theme/)에, 페이지 구조는 [정보 구조](/ko/ranui/information-architecture/)에 있습니다.
 
 > **이럴 때 씁니다.** `<r-*>` 요소로 만든 화면의 색, 간격, 글자, 깊이, 모션을 고를 때.
 
@@ -21,7 +21,7 @@ ranui 를 실제 화면에 적용하는 법입니다. 역할과 상태를 고르
 
 ## 색 고르기
 
-호버와 활성이 어떤 모습인지는 [사다리](/ko/src/ranui/design-system/#the-ladder)가 이미 정해 두었습니다. 여러분의 몫은 역할에 이름을 붙이는 일입니다.
+호버와 활성이 어떤 모습인지는 [사다리](/ko/ranui/design-system/#the-ladder)가 이미 정해 두었습니다. 여러분의 몫은 역할에 이름을 붙이는 일입니다.
 
 | 이 요소는…                     | 이것을 쓰세요                                                  |
 | ------------------------------ | -------------------------------------------------------------- |
@@ -39,7 +39,7 @@ ranui 를 실제 화면에 적용하는 법입니다. 역할과 상태를 고르
 
 ## 간격과 리듬
 
-간격은 [4px 스케일](/ko/src/ranui/design-system/#spacing)에서 가져오고, 거리가 뜻을 지니게 하세요.
+간격은 [4px 스케일](/ko/ranui/design-system/#spacing)에서 가져오고, 거리가 뜻을 지니게 하세요.
 
 - 한 묶음 안의 요소 사이는 **8px**.
 - 묶음과 묶음 사이는 **16px**.
@@ -49,13 +49,13 @@ ranui 를 실제 화면에 적용하는 법입니다. 역할과 상태를 고르
 
 ## 글자 고르기
 
-그 글자가 어떤 **역할**을 하는지 (제목, 레이블, 본문, 버튼, 고정폭) 물으면 글꼴·크기·굵기·행간이 [타입 스케일](/ko/src/ranui/design-system/#typography)에서 따라 나옵니다. 동영상 위의 제스처 표시처럼 정말 한 번뿐인 글자는 가장 가까운 역할에 억지로 끼워 맞추기보다 전용 컴포넌트 토큰을 주는 편이 낫습니다.
+그 글자가 어떤 **역할**을 하는지 (제목, 레이블, 본문, 버튼, 고정폭) 물으면 글꼴·크기·굵기·행간이 [타입 스케일](/ko/ranui/design-system/#typography)에서 따라 나옵니다. 동영상 위의 제스처 표시처럼 정말 한 번뿐인 글자는 가장 가까운 역할에 억지로 끼워 맞추기보다 전용 컴포넌트 토큰을 주는 편이 낫습니다.
 
 ## 깊이: 그림자와 쌓임
 
 그림자 단계는 요소가 무엇인지로 고릅니다. 흐름 안의 면인지, 떠 있는 오버레이인지, 조작을 막는 대화 상자인지. 카드 단계로 떨어진 오버레이는 페이지에 박혀 있는 것처럼 보입니다.
 
-**여러분의 틀 안에 ranui 오버레이를 품을 때.** [z-index 사다리](/ko/src/ranui/design-system/#stacking)는 1000 에서 시작하므로, 포털된 오버레이는 평범한 페이지 틀을 스스로 넘어섭니다. 하지만 자기 섀도 DOM 안에 남아 있는 `position: fixed` 오버레이 (`r-modal`의 대화 상자) 는 가장 가까운 조상의 **쌓임 맥락**까지만 빠져나갑니다. 품은 내용을 쌓임 맥락을 만드는 것 (`isolation`, `opacity < 1`, `transform`, `filter`, `will-change`) 으로 감쌌다면, 오버레이가 실제로 열려 있는 동안에만 그 껍데기를 올리세요.
+**여러분의 틀 안에 ranui 오버레이를 품을 때.** [z-index 사다리](/ko/ranui/design-system/#stacking)는 1000 에서 시작하므로, 포털된 오버레이는 평범한 페이지 틀을 스스로 넘어섭니다. 하지만 자기 섀도 DOM 안에 남아 있는 `position: fixed` 오버레이 (`r-modal`의 대화 상자) 는 가장 가까운 조상의 **쌓임 맥락**까지만 빠져나갑니다. 품은 내용을 쌓임 맥락을 만드는 것 (`isolation`, `opacity < 1`, `transform`, `filter`, `will-change`) 으로 감쌌다면, 오버레이가 실제로 열려 있는 동안에만 그 껍데기를 올리세요.
 
 ```css
 .embed {
@@ -116,4 +116,4 @@ ranui 를 실제 화면에 적용하는 법입니다. 역할과 상태를 고르
 
 ## 증거와 승인 {#evidence-and-acceptance}
 
-실제 브라우저에서 무엇을 확인하고 무엇을 보고할지는 가이드의 [변경 검증](/src/design/guide#verifying-a-change)에 있습니다. 관찰한 것, 추론만 한 것, 확인하지 못한 것을 나눠 보고합니다. 에이전트의 검토는 사용자의 승인이 아닙니다.
+실제 브라우저에서 무엇을 확인하고 무엇을 보고할지는 가이드의 [변경 검증](/design/guide#verifying-a-change)에 있습니다. 관찰한 것, 추론만 한 것, 확인하지 못한 것을 나눠 보고합니다. 에이전트의 검토는 사용자의 승인이 아닙니다.

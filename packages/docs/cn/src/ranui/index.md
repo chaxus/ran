@@ -11,7 +11,7 @@ TypeScript 类型、基于设计令牌的明暗主题、Shadow DOM 封装和服�
 <PackageFacts package="ranui" />
 
 - ranui 仍处于 **alpha** 阶段，版本之间可能有破坏性变更。请锁定具体版本号，升级前先读
-  [更新日志](/cn/src/ranui/changelog)。
+  [更新日志](/cn/ranui/changelog)。
 
 ## 安装
 
@@ -38,7 +38,7 @@ import 'ranui/button'; // 或只要一个
 ```
 
 在任何框架里写的都是同一个标签，差别只在各框架怎么传值、怎么绑事件，这部分
-[编码规范](/cn/src/ranui/coding-guides/#framework-integration)里有完整说明：
+[编码规范](/cn/ranui/coding-guides/#framework-integration)里有完整说明：
 
 ::: code-group
 
@@ -83,54 +83,54 @@ document.body.appendChild(button);
 | ----------------------------------------------------- | ------------------------------------------- |
 | `ranui`                                               | 全部组件                                    |
 | `ranui/<component>`                                   | 单个组件，如 `ranui/button`、`ranui/select` |
-| [`ranui/theme`](/cn/src/ranui/theme/)                 | 明暗主题与令牌覆盖；不含元素                |
-| [`ranui/i18n`](/cn/src/ranui/i18n/)                   | 翻译引擎；不含元素                          |
+| [`ranui/theme`](/cn/ranui/theme/)                 | 明暗主题与令牌覆盖；不含元素                |
+| [`ranui/i18n`](/cn/ranui/i18n/)                   | 翻译引擎；不含元素                          |
 | `ranui/fonts`                                         | 自托管的 Geist Sans + Geist Mono            |
 | `ranui/style`                                         | 样式表，供构建工具没有自动引入时使用        |
-| [`ranui/builder`](/cn/src/ranui/builder/)             | 带细粒度响应式的链式 DOM 构建器             |
-| [`ranui/ssr`](/cn/src/ranui/ssr/)、`ranui/ssr-stream` | 服务端渲染                                  |
+| [`ranui/builder`](/cn/ranui/builder/)             | 带细粒度响应式的链式 DOM 构建器             |
+| [`ranui/ssr`](/cn/ranui/ssr/)、`ranui/ssr-stream` | 服务端渲染                                  |
 | `ranui/testing`                                       | 在测试中进入 closed shadow root 的助手      |
 | `ranui/typings`                                       | JSX / TS 环境类型声明                       |
 
 ## 组件
 
 共 41 个元素。每个元素的属性（attribute / property）、事件、插槽和 `::part()` 名称，都列在
-[元素 API 参考](/cn/src/ranui/api)里。
+[元素 API 参考](/cn/ranui/api)里。
 
-**通用**：[Button 按钮](/cn/src/ranui/button/) · [Icon 图标](/cn/src/ranui/icon/) ·
-[Loading 加载中](/cn/src/ranui/loading/)
+**通用**：[Button 按钮](/cn/ranui/button/) · [Icon 图标](/cn/ranui/icon/) ·
+[Loading 加载中](/cn/ranui/loading/)
 
-**数据录入**：[Input 输入框](/cn/src/ranui/input/) ·
-[CheckBox 多选框](/cn/src/ranui/checkbox/) · [Select 选择框](/cn/src/ranui/select/) ·
-[ColorPicker 颜色选择器](/cn/src/ranui/colorpicker/) ·
-[Attachments 附件条](/cn/src/ranui/attachments/) ·
-[VoiceButton 语音按钮](/cn/src/ranui/voice-button/) · [表单](/cn/src/ranui/form/)
+**数据录入**：[Input 输入框](/cn/ranui/input/) ·
+[CheckBox 多选框](/cn/ranui/checkbox/) · [Select 选择框](/cn/ranui/select/) ·
+[ColorPicker 颜色选择器](/cn/ranui/colorpicker/) ·
+[Attachments 附件条](/cn/ranui/attachments/) ·
+[VoiceButton 语音按钮](/cn/ranui/voice-button/) · [表单](/cn/ranui/form/)
 
-**数据展示**：[Card 卡片](/cn/src/ranui/card/) · [Section 区块](/cn/src/ranui/section/) ·
-[Tabs 标签页](/cn/src/ranui/tab/) · [Image 图片](/cn/src/ranui/image/) ·
-[Progress 进度条](/cn/src/ranui/progress/) · [Radar 雷达图](/cn/src/ranui/radar/) ·
-[Player 播放器](/cn/src/ranui/player/) · [Preview 预览](/cn/src/ranui/preview/) ·
-[Glass 毛玻璃](/cn/src/ranui/glass/) · [Scratch 刮刮卡](/cn/src/ranui/scratch/) ·
-[StateDot 状态点](/cn/src/ranui/state-dot/) ·
-[DisclosureRow 折叠行](/cn/src/ranui/disclosure-row/)
+**数据展示**：[Card 卡片](/cn/ranui/card/) · [Section 区块](/cn/ranui/section/) ·
+[Tabs 标签页](/cn/ranui/tab/) · [Image 图片](/cn/ranui/image/) ·
+[Progress 进度条](/cn/ranui/progress/) · [Radar 雷达图](/cn/ranui/radar/) ·
+[Player 播放器](/cn/ranui/player/) · [Preview 预览](/cn/ranui/preview/) ·
+[Glass 毛玻璃](/cn/ranui/glass/) · [Scratch 刮刮卡](/cn/ranui/scratch/) ·
+[StateDot 状态点](/cn/ranui/state-dot/) ·
+[DisclosureRow 折叠行](/cn/ranui/disclosure-row/)
 
-**内容渲染**：[Markdown 富文本](/cn/src/ranui/markdown/) ·
-[Math 数学公式](/cn/src/ranui/math/) · [Mermaid 图表](/cn/src/ranui/mermaid/)
+**内容渲染**：[Markdown 富文本](/cn/ranui/markdown/) ·
+[Math 数学公式](/cn/ranui/math/) · [Mermaid 图表](/cn/ranui/mermaid/)
 
-**AI 与对话**：[Conversation 对话](/cn/src/ranui/conversation/) ·
-[Reasoning 思维链](/cn/src/ranui/reasoning/) ·
-[ToolCard 工具卡片](/cn/src/ranui/tool-card/) ·
-[TokenMeter 上下文用量](/cn/src/ranui/token-meter/)
+**AI 与对话**：[Conversation 对话](/cn/ranui/conversation/) ·
+[Reasoning 思维链](/cn/ranui/reasoning/) ·
+[ToolCard 工具卡片](/cn/ranui/tool-card/) ·
+[TokenMeter 上下文用量](/cn/ranui/token-meter/)
 
-**浮层与反馈**：[Modal 对话框](/cn/src/ranui/modal/) ·
-[Popover 气泡卡片](/cn/src/ranui/popover/) · [Dropdown 下拉面板](/cn/src/ranui/dropdown/) ·
-[Message 全局提示](/cn/src/ranui/message/) · [Skeleton 骨架屏](/cn/src/ranui/skeleton/)
+**浮层与反馈**：[Modal 对话框](/cn/ranui/modal/) ·
+[Popover 气泡卡片](/cn/ranui/popover/) · [Dropdown 下拉面板](/cn/ranui/dropdown/) ·
+[Message 全局提示](/cn/ranui/message/) · [Skeleton 骨架屏](/cn/ranui/skeleton/)
 
-**导航**：[Router 路由](/cn/src/ranui/router/) · [Route 路由出口](/cn/src/ranui/route/) ·
-[Link 链接](/cn/src/ranui/link/)
+**导航**：[Router 路由](/cn/ranui/router/) · [Route 路由出口](/cn/ranui/route/) ·
+[Link 链接](/cn/ranui/link/)
 
-**基础能力**：[Theme 主题系统](/cn/src/ranui/theme/) ·
-[ThemeSwitch 主题切换](/cn/src/ranui/theme-switch/) · [i18n 国际化](/cn/src/ranui/i18n/)
+**基础能力**：[Theme 主题系统](/cn/ranui/theme/) ·
+[ThemeSwitch 主题切换](/cn/ranui/theme-switch/) · [i18n 国际化](/cn/ranui/i18n/)
 
 有五个元素没有独立页面，因为它们只会出现在另一个组件内部：`<r-option>`（Select）、
 `<r-tabs>`（Tabs）、`<r-img>`（Image）、`<r-dropdown-item>`（Dropdown）、
@@ -177,9 +177,9 @@ document.body.appendChild(button);
 **2. `::part()`**：做令牌覆盖不到的结构性调整 · **3. `sheet` 属性**：把 CSS 注入 shadow root ·
 **4. 插槽内容**：它本来就留在你的文档里，页面 CSS 直接生效。
 
-令牌名称见[设计系统](/cn/src/ranui/design-system/)，怎么取舍见
-[设计规范](/cn/src/ranui/design-guides/)，机制细节见
-[编码规范](/cn/src/ranui/coding-guides/#styling-across-the-shadow-boundary)。
+令牌名称见[设计系统](/cn/ranui/design-system/)，怎么取舍见
+[设计规范](/cn/ranui/design-guides/)，机制细节见
+[编码规范](/cn/ranui/coding-guides/#styling-across-the-shadow-boundary)。
 
 ## 事件
 
@@ -203,15 +203,15 @@ document.body.appendChild(button);
 
 | 如果你想……               | 读                                       |
 | ------------------------ | ---------------------------------------- |
-| 查某个元素的确切接口     | [元素 API](/cn/src/ranui/api)            |
-| 知道该用哪个令牌、为什么 | [设计系统](/cn/src/ranui/design-system/) |
-| 做出像一套系统的界面     | [设计规范](/cn/src/ranui/design-guides/) |
-| 把 ranui 正确接进应用    | [编码规范](/cn/src/ranui/coding-guides/) |
-| 接入明暗主题，或整体换皮 | [主题系统](/cn/src/ranui/theme/)         |
-| 把界面翻译成别的语言     | [i18n 国际化](/cn/src/ranui/i18n/)       |
-| 在服务端渲染             | [服务端渲染](/cn/src/ranui/ssr/)         |
-| 不用框架写响应式视图     | [Builder 构建器](/cn/src/ranui/builder/) |
-| 升级前看看改了什么       | [更新日志](/cn/src/ranui/changelog)      |
+| 查某个元素的确切接口     | [元素 API](/cn/ranui/api)            |
+| 知道该用哪个令牌、为什么 | [设计系统](/cn/ranui/design-system/) |
+| 做出像一套系统的界面     | [设计规范](/cn/ranui/design-guides/) |
+| 把 ranui 正确接进应用    | [编码规范](/cn/ranui/coding-guides/) |
+| 接入明暗主题，或整体换皮 | [主题系统](/cn/ranui/theme/)         |
+| 把界面翻译成别的语言     | [i18n 国际化](/cn/ranui/i18n/)       |
+| 在服务端渲染             | [服务端渲染](/cn/ranui/ssr/)         |
+| 不用框架写响应式视图     | [Builder 构建器](/cn/ranui/builder/) |
+| 升级前看看改了什么       | [更新日志](/cn/ranui/changelog)      |
 
 ## 兼容性
 

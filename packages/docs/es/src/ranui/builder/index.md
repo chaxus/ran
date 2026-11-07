@@ -181,10 +181,10 @@ function showPage(render, host) {
 }
 ```
 
-[`<r-route>`](/es/src/ranui/route/) lo trae de serie: con `src`, el módulo de la página se importa al coincidir, su exportación por defecto se ejecuta dentro de un `createRoot`, y esa raíz se desecha al salir. `getOwner()` / `runWithOwner()` permiten a un router llevar un ámbito a través de un `await`.
+[`<r-route>`](/es/ranui/route/) lo trae de serie: con `src`, el módulo de la página se importa al coincidir, su exportación por defecto se ejecuta dentro de un `createRoot`, y esa raíz se desecha al salir. `getOwner()` / `runWithOwner()` permiten a un router llevar un ámbito a través de un `await`.
 
 ::: warning Dentro de un Web Component, no uses ataduras con getter
-El `constructor` y el `connectedCallback` de un componente **no** son ámbitos reactivos, así que una atadura con getter o un `createEffect` creados ahí quedan huérfanos y nunca se desechan; siguen disparándose sobre un nodo desconectado y, si la señal sobrevive al elemento, lo dejan clavado en memoria. Construye con valores simples y gobierna las actualizaciones con `createEffect` explícitos cuyas funciones de desecho recojas y llames en `disconnectedCallback`, volviéndolas a armar al reconectar. Consulta las [pautas de código](/es/src/ranui/coding-guides/).
+El `constructor` y el `connectedCallback` de un componente **no** son ámbitos reactivos, así que una atadura con getter o un `createEffect` creados ahí quedan huérfanos y nunca se desechan; siguen disparándose sobre un nodo desconectado y, si la señal sobrevive al elemento, lo dejan clavado en memoria. Construye con valores simples y gobierna las actualizaciones con `createEffect` explícitos cuyas funciones de desecho recojas y llames en `disconnectedCallback`, volviéndolas a armar al reconectar. Consulta las [pautas de código](/es/ranui/coding-guides/).
 :::
 
 ## Escuchadores dentro de un elemento personalizado
@@ -207,7 +207,7 @@ disconnectedCallback() {
 
 ## Renderizado en el servidor
 
-Los constructores funcionan bajo [SSR](/es/src/ranui/ssr/): `build()` devuelve un nodo simulado y `serialize()` devuelve HTML. Las ataduras reactivas, `For` y `Show` se dibujan **una sola vez** en el servidor, como una instantánea estática; no hay reconciliación hasta que el código corre en un navegador.
+Los constructores funcionan bajo [SSR](/es/ranui/ssr/): `build()` devuelve un nodo simulado y `serialize()` devuelve HTML. Las ataduras reactivas, `For` y `Show` se dibujan **una sola vez** en el servidor, como una instantánea estática; no hay reconciliación hasta que el código corre en un navegador.
 
 ## Referencia completa
 

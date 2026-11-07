@@ -166,7 +166,7 @@ r-checkbox {
 
 Part‌ها: `checkbox` · `inner` · `input` · `label` · `wrapper`
 
-فهرست کامل در [توکن‌های استایل](/fa/src/ranui/style-tokens#checkbox) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/src/ranui/design-system/) آمده.
+فهرست کامل در [توکن‌های استایل](/fa/ranui/style-tokens#checkbox) است و اینکه کدام توکن را برگزینید در [سیستم طراحی](/fa/ranui/design-system/) آمده.
 
 ## بهترین شیوه‌ها
 
@@ -174,4 +174,4 @@ Part‌ها: `checkbox` · `inner` · `input` · `label` · `wrapper`
 - **`checked` در برابر `value`**: برای وضعیت بولی از `checked` استفاده کنید و هنگام جمع‌کردن دادهٔ فرم `value` را بخوانید (`'true'` / `'false'`).
 - **حالت غیرفعال**: وقتی آن انتخاب در دسترس نیست از `disabled` استفاده کنید.
 - **به `change` گوش بدهید**: به‌جای پرس‌وجوی دوبارهٔ DOM، `event.detail.checked` را بخوانید.
-- **فرم‌ها**: `r-checkbox` را داخل یک `<form>` بگذارید؛ وقتی تیک خورده باشد مقدارش خودکار جمع می‌شود. دربارهٔ `serializeForm()` که یک ارسال را به شیئی ساده تبدیل می‌کند، [Forms](/fa/src/ranui/form/) را ببینید.
+- **فرم‌ها**: `r-checkbox` را داخل یک `<form>` بگذارید؛ وقتی تیک خورده باشد مقدارش خودکار جمع می‌شود. دربارهٔ `serializeForm()` که یک ارسال را به شیئی ساده تبدیل می‌کند، [Forms](/fa/ranui/form/) را ببینید.

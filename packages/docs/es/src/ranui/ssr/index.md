@@ -70,7 +70,7 @@ sustituye uno idéntico construido en el cliente. Dos consecuencias:
 
 - Obtienes un primer pintado correcto, no reutilización de hidratación: los shadow roots cerrados no
   pueden ser reutilizados por el cliente, por lo dicho arriba. Consulta la
-  [guía de código](/es/src/ranui/coding-guides/#server-rendering).
+  [guía de código](/es/ranui/coding-guides/#server-rendering).
 - **Nunca guardes estado en el marcado del shadow renderizado en el servidor** esperando que el
   cliente lo lea de vuelta. Pásalo por atributos, que sí sobreviven.
 
@@ -91,7 +91,7 @@ en silencio.
 está protegido), así que el tema lo aplica el cliente. Para evitar un destello con el tema
 equivocado, define `data-ran-theme` en el `<html>` de tu plantilla de servidor (desde una cookie, o
 desde un script en línea diminuto que lea `localStorage` antes del primer pintado) y deja que
-[`initTheme`](/es/src/ranui/theme/) tome el relevo después.
+[`initTheme`](/es/ranui/theme/) tome el relevo después.
 
 ## Buenas prácticas
 

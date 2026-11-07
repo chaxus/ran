@@ -119,7 +119,7 @@ r-token-meter {
 
 Parts: `fill` · `meter` · `text` · `track`
 
-The full list is in [style tokens](/src/ranui/style-tokens#token-meter); which token to reach for is the [design system](/src/ranui/design-system/).
+The full list is in [style tokens](/ranui/style-tokens#token-meter); which token to reach for is the [design system](/ranui/design-system/).
 
 ## Best Practices
 
@@ -128,4 +128,4 @@ The full list is in [style tokens](/src/ranui/style-tokens#token-meter); which t
 - **Escalate around the meter, not inside it.** At `level="over"` the useful UI is a
   suggestion (summarise, start a new thread), and that belongs to the app.
 - **Don't animate the fill on a theme change**: see
-  [design guidelines](/src/ranui/design-guides/#motion).
+  [design guidelines](/ranui/design-guides/#motion).

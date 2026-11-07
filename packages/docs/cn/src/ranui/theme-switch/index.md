@@ -5,7 +5,7 @@ description: '一个 system/light/dark 三态分段控件，接入 ranui 主题 
 # ThemeSwitch 主题切换
 
 三态分段控件，在 **system（跟随系统）/ light（浅色）/ dark（深色）** 之间切换，直接接入 ranui 的
-[主题 API](/cn/src/ranui/theme/)。点击某一段会调用 `setTheme()`，把选择持久化到 localStorage
+[主题 API](/cn/ranui/theme/)。点击某一段会调用 `setTheme()`，把选择持久化到 localStorage
 键 `ran-theme`，并让页面上（以及其他标签页里）的所有实例保持同步。
 
 > **适用场景**：需要一个开箱即用的 system/light/dark 分段控件，并接入 ranui 主题 API 时：`<r-theme-switch>` 已经处理好持久化、系统跟随与跨标签页同步，无需自己手写一个开关。

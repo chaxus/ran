@@ -92,7 +92,7 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 ## اعتبارسنجی و بازنشانی
 
-`r-input`، `r-checkbox` و `r-select` هر سه `required` را پشتیبانی می‌کنند (که دقیقاً مثل فیلد بومی جلوی ارسال را می‌گیرد و حباب اعتبارسنجی بومی مرورگر را می‌آورد) و افزون بر آن `checkValidity()`، `reportValidity()`، `validity` و `validationMessage` را دارند. `form.reset()` بومی (یا `<button type="reset">`) هر فیلد را از راه `formResetCallback()` به وضعیت پیش از تعامل برمی‌گرداند. برای جزئیات، مستندات خود هر فیلد را ببینید: [Input](/fa/src/ranui/input/#form-association)، [Checkbox](/fa/src/ranui/checkbox/#form-association)، [Select](/fa/src/ranui/select/#form-association).
+`r-input`، `r-checkbox` و `r-select` هر سه `required` را پشتیبانی می‌کنند (که دقیقاً مثل فیلد بومی جلوی ارسال را می‌گیرد و حباب اعتبارسنجی بومی مرورگر را می‌آورد) و افزون بر آن `checkValidity()`، `reportValidity()`، `validity` و `validationMessage` را دارند. `form.reset()` بومی (یا `<button type="reset">`) هر فیلد را از راه `formResetCallback()` به وضعیت پیش از تعامل برمی‌گرداند. برای جزئیات، مستندات خود هر فیلد را ببینید: [Input](/fa/ranui/input/#form-association)، [Checkbox](/fa/ranui/checkbox/#form-association)، [Select](/fa/ranui/select/#form-association).
 
 <ran-demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); this.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">

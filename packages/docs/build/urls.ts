@@ -1,11 +1,11 @@
 /**
  * The one mapping from where a page lives in the source tree to the URL it is published at.
  *
- * Sources keep their directories — `src/ranui/button/index.md`, `cn/src/ranuts/x.md` — and
- * every markdown link, sidebar entry and generator still addresses them that way. The
- * public URL drops the `src/` segment: `/ranui/button/`, `/cn/ranuts/x`. Everything that
- * emits or compares a URL goes through here; a second copy of this rule is how hreflang,
- * sitemap and language links disagree.
+ * Sources keep their directories — `src/ranui/button/index.md`, `cn/src/ranuts/x.md`.
+ * Relative markdown links resolve against the source URL; absolute links and nav emitters
+ * should use the public path (`/ranui/button/`, `/cn/ranuts/x`). Everything that emits or
+ * compares a URL goes through here; a second copy of this rule is how hreflang, sitemap
+ * and language links disagree.
  *
  * The old `/src/…` URLs were public, so they stay reachable through `legacyRedirects()`.
  */

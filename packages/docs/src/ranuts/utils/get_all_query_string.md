@@ -66,7 +66,7 @@ console.log(params.search); // 'hello world' (automatically decoded)
 1. **A bare flag keeps its place.** `?embed` and `?embed=` both yield `{ embed: '' }`. Before
    0.3 any parameter without a value was dropped, which made `?readonly` and `?embed` (the
    usual way to write a boolean flag) indistinguishable from the parameter being absent. Read
-   such a flag with [`queryFlag`](/src/ranuts/utils/query_flag).
+   such a flag with [`queryFlag`](/ranuts/utils/query_flag).
 
 2. **A fragment never leaks into the last value.** `?lang=en#section` yields `{ lang: 'en' }`.
 

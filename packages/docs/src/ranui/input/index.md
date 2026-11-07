@@ -189,7 +189,7 @@ input.addEventListener('change', (event) => {
 
 ## Form Association {#form-association}
 
-`r-input` is a form-associated custom element (`static formAssociated = true`). It attaches `ElementInternals` and relays its value via `setFormValue`, so the field is collected by `new FormData(form)` when it's a real descendant of a native `<form>`; set `name` to give the value a key. See [Forms](/src/ranui/form/) for the `serializeForm()` helper that turns a submit into a plain object.
+`r-input` is a form-associated custom element (`static formAssociated = true`). It attaches `ElementInternals` and relays its value via `setFormValue`, so the field is collected by `new FormData(form)` when it's a real descendant of a native `<form>`; set `name` to give the value a key. See [Forms](/ranui/form/) for the `serializeForm()` helper that turns a submit into a plain object.
 
 ```html
 <form>
@@ -240,7 +240,7 @@ r-input {
 
 Parts: `content` · `input` · `label` · `message`
 
-The full list is in [style tokens](/src/ranui/style-tokens#input); which token to use is in the [design system](/src/ranui/design-system/).
+The full list is in [style tokens](/ranui/style-tokens#input); which token to use is in the [design system](/ranui/design-system/).
 
 ## Best Practices
 
