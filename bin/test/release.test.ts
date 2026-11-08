@@ -9,6 +9,7 @@ import {
   checkRegistry,
   verifyArtifacts,
   verifyPackedManifest,
+  parsePackageSelection,
   RELEASE_PACKAGES,
 } from '../release.ts';
 
@@ -33,25 +34,28 @@ const manifests = (): {
   },
 ];
 
-test('releases only the three libraries in dependency order', () => {
+test('releases the three libraries in dependency order and accepts a non-empty subset', () => {
   assert.deepEqual(
     RELEASE_PACKAGES.map((p) => p.name),
     manifests().map((p) => p.name),
   );
-  assert.equal(validatePlan(manifests(), { tag: 'rc', nodeVersion: '24.0.0' }).length, 3);
+  const all = manifests();
+  assert.equal(validatePlan(all, { tag: 'rc', nodeVersion: '24.0.0' }).length, 3);
+  assert.equal(validatePlan([all[2]], { tag: 'rc', nodeVersion: '24.0.0', allowlist: all }).length, 1);
+  assert.equal(validatePlan([all[0], all[2]], { tag: 'rc', allowlist: all }).length, 2);
 });
 
 test('rejects unsupported runtime, drifting engines and missing workspace dependencies', () => {
   assert.throws(() => validatePlan(manifests(), { tag: 'rc', nodeVersion: '23.11.0' }), /Node 24/);
   const engines = manifests();
   engines[2].engines.node = '>=20.19.0';
-  assert.throws(() => validatePlan(engines, { tag: 'rc' }), /engines/);
+  assert.throws(() => validatePlan([engines[2]], { tag: 'rc', allowlist: engines }), /engines/);
   const dependencies = manifests();
   dependencies[2].dependencies.ranuts = '0.4.1-alpha.2';
-  assert.throws(() => validatePlan(dependencies, { tag: 'rc' }), /workspace/);
+  assert.throws(() => validatePlan([dependencies[2]], { tag: 'rc', allowlist: dependencies }), /workspace/);
 });
 
-test('requires an explicit matching channel and rejects unsafe versions or extra packages', () => {
+test('requires an explicit matching channel and rejects unsafe versions or unknown packages', () => {
   assert.throws(() => validatePlan(manifests(), { tag: 'latest' }), /tag/);
   assert.throws(() => validatePlan(manifests(), { tag: 'beta' }), /tag/);
   const mixed = manifests();
@@ -60,9 +64,28 @@ test('requires an explicit matching channel and rejects unsafe versions or extra
   const invalid = manifests();
   invalid[0].version = '../escape';
   assert.throws(() => validatePlan(invalid, { tag: 'rc' }), /version/);
-  assert.throws(() => validatePlan([...manifests(), { name: 'docs' }], { tag: 'rc' }), /three/);
+  assert.throws(
+    () =>
+      validatePlan([{ name: 'docs', version: '1.0.0', engines: { node: '>=24.0.0' }, dependencies: {} }], {
+        tag: 'rc',
+        allowlist: manifests(),
+      }),
+    /Unknown release package/,
+  );
+  assert.throws(
+    () => validatePlan([manifests()[2], manifests()[0]], { tag: 'rc', allowlist: manifests() }),
+    /dependency order/,
+  );
   const stable = manifests().map((p) => ({ ...p, version: p.version.replace('-rc.0', '') }));
-  assert.equal(validatePlan(stable, { tag: 'latest' }).length, 3);
+  assert.equal(validatePlan([stable[2]], { tag: 'latest', allowlist: stable }).length, 1);
+});
+
+test('package selection parses comma lists and treats all as the full set', () => {
+  assert.equal(parsePackageSelection(undefined), undefined);
+  assert.equal(parsePackageSelection(''), undefined);
+  assert.equal(parsePackageSelection('all'), undefined);
+  assert.deepEqual(parsePackageSelection('ranui'), ['ranui']);
+  assert.deepEqual(parsePackageSelection('ranuts, ranui'), ['ranuts', 'ranui']);
 });
 
 test('registry preflight accepts only explicit 404s as unpublished versions', async () => {
@@ -124,6 +147,10 @@ test('artifact verification rejects missing or changed bytes and unexpected path
   const receipt = { tag: 'rc', packages };
   await writeFile(join(root, 'release.json'), JSON.stringify(receipt));
   assert.equal((await verifyArtifacts(root, plan, 'rc')).packages.length, 3);
+  const subset = [packages[2]];
+  await writeFile(join(root, 'release.json'), JSON.stringify({ tag: 'rc', packages: subset }));
+  assert.equal((await verifyArtifacts(root, [plan[2]], 'rc')).packages.length, 1);
+  await writeFile(join(root, 'release.json'), JSON.stringify(receipt));
   const first = join(root, packages[0].archive);
   const original = await readFile(first);
   await writeFile(first, 'modified');
@@ -151,7 +178,37 @@ test('the repository declares one Node baseline, channel and build lifecycle', a
   );
 });
 
-test('packed internal dependencies must resolve to the coordinated release versions', () => {
+test('readPlan can target a single package and auto-skips versions already on npm', async () => {
+  const { readPlan } = await import('../release.ts');
+  const onlyRanui = await readPlan(undefined, { packages: ['ranui'], registry: false });
+  assert.deepEqual(
+    onlyRanui.map((p) => p.name),
+    ['ranui'],
+  );
+  const workspace = await readPlan();
+  const auto = await readPlan(undefined, {
+    registry: true,
+    request: async (url) => {
+      const ranui = workspace.find((pkg) => pkg.name === 'ranui');
+      if (url.endsWith(`/${ranui?.version}`) && url.includes('ranui')) return new Response('', { status: 404 });
+      return Response.json({ dist: { integrity: 'sha512-other' } });
+    },
+  });
+  assert.deepEqual(
+    auto.map((p) => p.name),
+    ['ranui'],
+  );
+  await assert.rejects(
+    readPlan(undefined, {
+      packages: ['ranui'],
+      registry: true,
+      request: async () => Response.json({ dist: {} }),
+    }),
+    /Nothing to release/,
+  );
+});
+
+test('packed internal dependencies must resolve to the workspace library versions', () => {
   const plan = manifests();
   const packed = {
     ...plan[2],

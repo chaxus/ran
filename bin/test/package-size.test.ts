@@ -26,5 +26,12 @@ test('size gates reject installation growth, archive growth and missing packages
       /budget/,
     );
   }
-  assert.throws(() => assertSizeBudgets({ ...report, packages: [] }, budgets), /all release/);
+  assert.throws(() => assertSizeBudgets({ ...report, packages: [] }, budgets), /at least one/);
+  assertSizeBudgets(
+    { installation: { bytes: 100 }, packages: [{ name: 'a', archiveBytes: 10, unpackedBytes: 30 }] },
+    {
+      installationBytes: 100,
+      packages: { a: { archiveBytes: 10, unpackedBytes: 30 }, b: { archiveBytes: 5, unpackedBytes: 5 } },
+    },
+  );
 });
