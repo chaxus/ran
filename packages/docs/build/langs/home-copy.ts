@@ -166,12 +166,12 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       {
         title: 'ranui',
-        desc: 'A framework-agnostic Web Components library. Drop styled r- elements into any stack: Vue, React, or plain HTML.',
+        desc: 'A framework-agnostic Web Components library. Drop 42 styled r- elements into any stack: Vue, React, or plain HTML.',
         more: 'Browse components',
       },
       {
         title: 'ranuts',
-        desc: 'Typed helpers for strings, objects, color, time, files and the DOM. Tree-shakeable, zero-dependency.',
+        desc: '90+ typed helpers for strings, objects, color, time, files and the DOM. Tree-shakeable, zero-dependency.',
         more: 'Read the docs',
       },
     ],
@@ -195,8 +195,14 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         name: 'TOTP',
         desc: 'Use when you need RFC-6238 one-time passwords without pulling in a crypto library.',
       },
-      mime: { name: 'MIME registry', desc: 'Use when you need a bidirectional MIME ⇄ extension lookup from a large built-in table.' },
-      player: { name: 'Player', desc: 'Use when you need HLS adaptive video with a modular controller, not a full app shell.' },
+      mime: {
+        name: 'MIME registry',
+        desc: 'Use when you need a bidirectional MIME ⇄ extension lookup from a large built-in table.',
+      },
+      player: {
+        name: 'Player',
+        desc: 'Use when you need HLS adaptive video with a modular controller, not a full app shell.',
+      },
       droplet: {
         name: 'Color picker',
         desc: 'Use when a form needs HSV picking with live HEX / RGBA, not a native color input alone.',
@@ -259,7 +265,7 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       {
         title: 'ranui',
-        desc: '框架无关的 Web Components 组件库。开箱即用的 r- 元素，可放进 Vue、React 或纯 HTML 的任意技术栈。',
+        desc: '框架无关的 Web Components 组件库。42 个开箱即用的 r- 元素，可放进 Vue、React 或纯 HTML 的任意技术栈。',
         more: '查看组件',
       },
       {
@@ -287,7 +293,8 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       scratch: { name: '刮刮卡', desc: '揭示交互需要 canvas 刮开阈值时用。' },
     },
     startTitle: '安装与使用',
-    startDesc: '需要组件与工具库时安装 ranui 和 ranuts。Ran Design 与 agent 插件是上方支柱里的独立入口，不是 npm 安装。',
+    startDesc:
+      '需要组件与工具库时安装 ranui 和 ranuts。Ran Design 与 agent 插件是上方支柱里的独立入口，不是 npm 安装。',
     startStep1: '安装并注册',
     startStep2: '随处使用',
     copy: '复制安装命令',
@@ -333,12 +340,12 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       {
         title: 'ranui',
-        desc: 'フレームワーク非依存の Web Components ライブラリ。スタイル済みの r- 要素を Vue・React・素の HTML のどこにでも置けます。',
+        desc: 'フレームワーク非依存の Web Components ライブラリ。スタイル済みの r- 要素 42 個を Vue・React・素の HTML のどこにでも置けます。',
         more: 'コンポーネント一覧',
       },
       {
         title: 'ranuts',
-        desc: '文字列・オブジェクト・色・時間・ファイル・DOM を扱う型付きユーティリティ。tree-shaking 対応、依存ゼロ。',
+        desc: '文字列・オブジェクト・色・時間・ファイル・DOM を扱う型付きユーティリティが 90 以上。tree-shaking 対応、依存ゼロ。',
         more: 'ドキュメントを読む',
       },
     ],
@@ -376,7 +383,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         desc: '軸ごとのラベルとスタイルを持つ canvas レーダーチャートが必要なときに使う。',
       },
       sigma: { name: '数式', desc: '属性ひとつで LaTeX をネイティブ MathML に描きたいときに使う。' },
-      scratch: { name: 'スクラッチカード', desc: 'キャンバス上のスクラッチ閾値付きの「削って表示」が必要なときに使う。' },
+      scratch: {
+        name: 'スクラッチカード',
+        desc: 'キャンバス上のスクラッチ閾値付きの「削って表示」が必要なときに使う。',
+      },
     },
     startTitle: 'インストールして使う',
     startDesc:
@@ -427,12 +437,12 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       {
         title: 'ranui',
-        desc: 'Una biblioteca de Web Components independiente de cualquier framework. Coloca elementos r- ya estilizados en Vue, React o HTML puro.',
+        desc: 'Una biblioteca de Web Components independiente de cualquier framework. Coloca 42 elementos r- ya estilizados en Vue, React o HTML puro.',
         more: 'Explorar componentes',
       },
       {
         title: 'ranuts',
-        desc: 'Utilidades tipadas para cadenas, objetos, color, tiempo, archivos y el DOM. Compatibles con tree-shaking y sin dependencias.',
+        desc: 'Más de 90 utilidades tipadas para cadenas, objetos, color, tiempo, archivos y el DOM. Compatibles con tree-shaking y sin dependencias.',
         more: 'Leer la documentación',
       },
     ],
@@ -456,7 +466,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         name: 'TOTP',
         desc: 'Úsalo cuando necesites contraseñas de un solo uso RFC-6238 sin añadir una biblioteca criptográfica.',
       },
-      mime: { name: 'Registro MIME', desc: 'Úsalo cuando necesites una búsqueda bidireccional MIME ⇄ extensión desde una tabla grande incluida.' },
+      mime: {
+        name: 'Registro MIME',
+        desc: 'Úsalo cuando necesites una búsqueda bidireccional MIME ⇄ extensión desde una tabla grande incluida.',
+      },
       player: {
         name: 'Reproductor',
         desc: 'Úsalo cuando necesites vídeo HLS adaptativo con controlador modular, no un shell de aplicación completo.',
@@ -473,7 +486,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         name: 'Fórmulas',
         desc: 'Úsalo cuando un solo atributo deba renderizar LaTeX como MathML nativo.',
       },
-      scratch: { name: 'Tarjeta rasca y gana', desc: 'Úsalo cuando una revelación necesite un umbral de raspado en canvas.' },
+      scratch: {
+        name: 'Tarjeta rasca y gana',
+        desc: 'Úsalo cuando una revelación necesite un umbral de raspado en canvas.',
+      },
     },
     startTitle: 'Instalar y usar',
     startDesc:
@@ -524,12 +540,12 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       {
         title: 'ranui',
-        desc: 'Uma biblioteca de Web Components independente de framework. Coloque elementos r- já estilizados no Vue, no React ou em HTML puro.',
+        desc: 'Uma biblioteca de Web Components independente de framework. Coloque 42 elementos r- já estilizados no Vue, no React ou em HTML puro.',
         more: 'Explorar componentes',
       },
       {
         title: 'ranuts',
-        desc: 'Utilitários tipados para strings, objetos, cor, tempo, arquivos e o DOM. Compatíveis com tree-shaking e sem dependências.',
+        desc: 'Mais de 90 utilitários tipados para strings, objetos, cor, tempo, arquivos e o DOM. Compatíveis com tree-shaking e sem dependências.',
         more: 'Ler a documentação',
       },
     ],
@@ -553,7 +569,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         name: 'TOTP',
         desc: 'Use quando precisar de senhas de uso único RFC-6238 sem puxar uma biblioteca de criptografia.',
       },
-      mime: { name: 'Registro MIME', desc: 'Use quando precisar de busca bidirecional MIME ⇄ extensão a partir de uma tabela grande embutida.' },
+      mime: {
+        name: 'Registro MIME',
+        desc: 'Use quando precisar de busca bidirecional MIME ⇄ extensão a partir de uma tabela grande embutida.',
+      },
       player: {
         name: 'Reprodutor',
         desc: 'Use quando precisar de vídeo HLS adaptativo com controlador modular, não um shell de aplicativo inteiro.',
@@ -570,7 +589,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         name: 'Fórmulas',
         desc: 'Use quando um único atributo deve renderizar LaTeX como MathML nativo.',
       },
-      scratch: { name: 'Cartão raspadinha', desc: 'Use quando uma revelação precisar de um limiar de raspagem no canvas.' },
+      scratch: {
+        name: 'Cartão raspadinha',
+        desc: 'Use quando uma revelação precisar de um limiar de raspagem no canvas.',
+      },
     },
     startTitle: 'Instalar e usar',
     startDesc:
@@ -621,12 +643,12 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       {
         title: 'ranui',
-        desc: '프레임워크 비종속 Web Components 라이브러리. 스타일이 갖춰진 r- 엘리먼트를 Vue, React, 순수 HTML 어디에나 넣을 수 있습니다.',
+        desc: '프레임워크 비종속 Web Components 라이브러리. 스타일이 갖춰진 r- 엘리먼트 42개를 Vue, React, 순수 HTML 어디에나 넣을 수 있습니다.',
         more: '컴포넌트 보기',
       },
       {
         title: 'ranuts',
-        desc: '문자열, 객체, 색상, 시간, 파일, DOM을 다루는 타입 유틸리티. 트리 셰이킹을 지원하고 의존성이 없습니다.',
+        desc: '문자열, 객체, 색상, 시간, 파일, DOM을 다루는 타입 유틸리티 90여 개. 트리 셰이킹을 지원하고 의존성이 없습니다.',
         more: '문서 읽기',
       },
     ],
@@ -651,7 +673,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         desc: '암호 라이브러리 없이 RFC-6238 일회용 비밀번호가 필요할 때 쓰세요.',
       },
       mime: { name: 'MIME 레지스트리', desc: '내장 대량 테이블로 MIME ⇄ 확장자 양방향 조회가 필요할 때 쓰세요.' },
-      player: { name: '플레이어', desc: '앱 셸 전체가 아니라 모듈형 컨트롤러를 갖춘 HLS 적응형 비디오가 필요할 때 쓰세요.' },
+      player: {
+        name: '플레이어',
+        desc: '앱 셸 전체가 아니라 모듈형 컨트롤러를 갖춘 HLS 적응형 비디오가 필요할 때 쓰세요.',
+      },
       droplet: {
         name: '컬러 피커',
         desc: '네이티브 color 입력만으로는 부족하고, HEX / RGBA를 실시간으로 내는 HSV 피커가 폼에 필요할 때 쓰세요.',
@@ -712,12 +737,12 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       {
         title: 'ranui',
-        desc: 'Eine frameworkunabhängige Web-Components-Bibliothek. Fertig gestaltete r-Elemente für jeden Stack: Vue, React oder reines HTML.',
+        desc: 'Eine frameworkunabhängige Web-Components-Bibliothek. 42 fertig gestaltete r--Elemente für jeden Stack: Vue, React oder reines HTML.',
         more: 'Komponenten durchsehen',
       },
       {
         title: 'ranuts',
-        desc: 'Typisierte Helfer für Zeichenketten, Objekte, Farben, Zeit, Dateien und das DOM. Tree-shaking-fähig, ohne Abhängigkeiten.',
+        desc: 'Über 90 typisierte Helfer für Zeichenketten, Objekte, Farben, Zeit, Dateien und das DOM. Tree-shaking-fähig, ohne Abhängigkeiten.',
         more: 'Dokumentation lesen',
       },
     ],
@@ -745,7 +770,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         name: 'MIME-Registry',
         desc: 'Nutzen, wenn du eine bidirektionale MIME-⇄-Endungs-Suche aus einer großen eingebauten Tabelle brauchst.',
       },
-      player: { name: 'Player', desc: 'Nutzen, wenn du adaptives HLS-Video mit modularem Controller brauchst, nicht eine ganze App-Hülle.' },
+      player: {
+        name: 'Player',
+        desc: 'Nutzen, wenn du adaptives HLS-Video mit modularem Controller brauchst, nicht eine ganze App-Hülle.',
+      },
       droplet: {
         name: 'Farbwähler',
         desc: 'Nutzen, wenn ein Formular HSV mit live HEX / RGBA braucht, nicht nur ein natives color-Input.',
@@ -809,12 +837,12 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
       },
       {
         title: 'ranui',
-        desc: 'کتابخانهٔ Web Components مستقل از فریم‌ورک. عنصرهای ‎r-‎ آمادهٔ استفاده را در Vue، React یا HTML ساده بگذارید.',
+        desc: 'کتابخانهٔ Web Components مستقل از فریم‌ورک. ۴۲ عنصر ‎r-‎ آمادهٔ استفاده را در Vue، React یا HTML ساده بگذارید.',
         more: 'مرور کامپوننت‌ها',
       },
       {
         title: 'ranuts',
-        desc: 'ابزار تایپ‌شده برای رشته، شیء، رنگ، زمان، فایل و DOM. سازگار با tree-shaking و بدون وابستگی.',
+        desc: 'بیش از ۹۰ ابزار تایپ‌شده برای رشته، شیء، رنگ، زمان، فایل و DOM. سازگار با tree-shaking و بدون وابستگی.',
         more: 'خواندن مستندات',
       },
     ],
@@ -844,7 +872,10 @@ export const HOME_STRINGS: Record<string, HomeStrings> = {
         name: 'انتخابگر رنگ',
         desc: 'وقتی فرم به انتخاب HSV با خروجی زندهٔ HEX / RGBA نیاز دارد، نه فقط input رنگ بومی.',
       },
-      radar: { name: 'نمودار راداری', desc: 'وقتی به نمودار راداری canvas با برچسب و سبک برچسب برای هر محور نیاز دارید.' },
+      radar: {
+        name: 'نمودار راداری',
+        desc: 'وقتی به نمودار راداری canvas با برچسب و سبک برچسب برای هر محور نیاز دارید.',
+      },
       sigma: {
         name: 'فرمول ریاضی',
         desc: 'وقتی یک ویژگی باید LaTeX را به MathML بومی برساند.',

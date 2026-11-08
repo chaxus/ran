@@ -67,7 +67,7 @@ Componente de botón para disparar acciones inmediatas, con varios estilos y est
 
 ### Botón con icono `icon`
 
- para colocar el icono con precisión, usa directamente el componente Icon.
+para colocar el icono con precisión, usa directamente el componente Icon.
 
 <ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>

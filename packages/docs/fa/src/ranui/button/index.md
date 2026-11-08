@@ -67,7 +67,7 @@ description: 'کامپوننت Button در ranui (<r-button>) یک وب‌کام
 
 ### دکمهٔ آیکون‌دار `icon`
 
- اگر جای‌گذاری دقیق آیکون مهم است، مستقیم از کامپوننت Icon استفاده کنید.
+اگر جای‌گذاری دقیق آیکون مهم است، مستقیم از کامپوننت Icon استفاده کنید.
 
 <ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>

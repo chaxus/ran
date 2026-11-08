@@ -67,7 +67,7 @@ description: 'ranui 의 Button(<r-button>) 은 여러 종류·크기와 로딩/�
 
 ### 아이콘 버튼 `icon`
 
- 아이콘 위치를 세밀하게 잡아야 한다면 Icon 컴포넌트를 직접 쓰세요.
+아이콘 위치를 세밀하게 잡아야 한다면 Icon 컴포넌트를 직접 쓰세요.
 
 <ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>

@@ -67,7 +67,7 @@ Button-Komponente für sofortige Aktionen, mit mehreren Stilen und Zuständen.
 
 ### Button mit Icon `icon`
 
- Für eine präzise Icon-Positionierung nimm die Icon-Komponente direkt.
+Für eine präzise Icon-Positionierung nimm die Icon-Komponente direkt.
 
 <ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>

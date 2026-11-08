@@ -17,9 +17,9 @@ it.each(LOCALES)('makes all three pillars and agent guidance reachable in $lang 
     href: link.getAttribute('href'),
   }));
   expect(pillars).toEqual([
+    { title: 'Ran Design', href: publicUrl(localeHref('/design/', locale)) },
     { title: 'ranui', href: publicUrl(localeHref('/ranui/', locale)) },
     { title: 'ranuts', href: publicUrl(localeHref('/ranuts/', locale)) },
-    { title: 'Ran Design', href: publicUrl(localeHref('/design/', locale)) },
   ]);
   for (const section of ['design', 'ranui', 'ranuts', 'agents']) {
     const path = publicUrl(localeHref(`/${section}/`, locale));
