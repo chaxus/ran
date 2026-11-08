@@ -29,6 +29,37 @@ for (const path of ['/ranui/', '/fa/ranui/']) {
   });
 }
 
+test('sidebar hover wash spans the full row, including short labels', async ({ page }) => {
+  await page.goto('/ranui/');
+  // "i18n" is a short glyph run that used to get a fit-content wash hugging the letters.
+  const short = page.locator('.sb__link', { hasText: /^i18n$/ });
+  await short.scrollIntoViewIfNeeded();
+  await short.hover();
+  await expect.poll(async () => (await fillBox(page)).opacity).toBe('1');
+  const geometry = await page.evaluate(() => {
+    const link = [...document.querySelectorAll<HTMLElement>('.sb__link')].find(
+      (el) => el.textContent?.trim() === 'i18n',
+    );
+    const fill = document.querySelector('.sb__hover') as HTMLElement | null;
+    if (!link || !fill) return null;
+    const lb = link.getBoundingClientRect();
+    const fb = fill.getBoundingClientRect();
+    const item = link.closest('.sb__item')?.getBoundingClientRect();
+    return {
+      linkWidth: Math.round(lb.width),
+      fillWidth: Math.round(fb.width),
+      itemWidth: item ? Math.round(item.width) : 0,
+      textLength: (link.textContent || '').trim().length,
+    };
+  });
+  expect(geometry).not.toBeNull();
+  expect(geometry!.textLength).toBeLessThan(8);
+  // Wash and link match the row — not a pill around the glyphs.
+  expect(geometry!.fillWidth).toBe(geometry!.linkWidth);
+  expect(geometry!.linkWidth).toBeGreaterThanOrEqual(geometry!.itemWidth - 2);
+  expect(geometry!.fillWidth).toBeGreaterThan(80);
+});
+
 test('the sidebar keeps its scroll position on the next page, with the new link in view', async ({ page }) => {
   await page.goto('/ranui/message/');
   const sidebar = page.locator('#doc-sidebar');

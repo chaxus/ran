@@ -43,13 +43,14 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
 
 소스: `components/button/index.ts`
 
-- **어트리뷰트**: `aria-label`, `disabled: boolean | string`, `effect: boolean`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
+- **어트리뷰트**: `aria-label`, `disabled: boolean | string`, `effect: boolean`, `icon: string`, `iconSize: string`, `sheet: string`, `surface: string`, `type: string`
 - **프로퍼티**:
   - `disabled: boolean | string` — Blocks clicks and keyboard activation and removes the button from the tab order. Off by default; `disabled="false"` counts as enabled.
   - `effect: boolean` — Whether the click ripple is drawn. On by default; opt out with `effect="false"`.
   - `icon: string` — Name of an `<r-icon>` drawn before the label, for example `'search'`. No icon when empty.
   - `iconSize: string` — Icon size passed to the inner `<r-icon>`. Defaults to about 1.15× the button's font size; set it only when the icon needs a fixed size.
   - `sheet: string`
+  - `surface: string` — Surface language for this control (`glass` | `solid`). Paint is CSS-only via
   - `type: string` — Visual variant: `''` (default) | `'primary'` (monochrome) | `'warning'` | `'text'`. Drives the `:host([type=...])` styles.
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`
@@ -59,12 +60,13 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
 
 소스: `components/card/index.ts`
 
-- **어트리뷰트**: `description: string`, `heading: string`, `hoverable: boolean`, `sheet: string`
+- **어트리뷰트**: `description: string`, `heading: string`, `hoverable: boolean`, `sheet: string`, `surface: string`
 - **프로퍼티**:
   - `description: string` — Secondary text shown under the heading. Empty by default; the header is hidden when the heading, description and `extra` slot are all empty.
   - `heading: string` — Heading text.
   - `hoverable: boolean` — Interactive card (Geist): hover darkens the border one step. Purely presentational — gate it to cards that are actually clickable.
   - `sheet: string`
+  - `surface: string` — Surface language for this control (`glass` | `solid`). Paint is CSS-only via
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`, `extra (이름 있음)`, `footer (이름 있음)`
 - **Part**: `body`, `card`, `description`, `extra`, `footer`, `header`, `title`
@@ -150,8 +152,12 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
 
 소스: `components/dropdown/index.ts`
 
-- **어트리뷰트**: `arrow: string`, `sheet: string`, `transit: string`
-- **프로퍼티**: `arrow: string`, `sheet: string`, `transit: string`
+- **어트리뷰트**: `arrow: string`, `sheet: string`, `surface: string`, `transit: string`
+- **프로퍼티**:
+  - `arrow: string`
+  - `sheet: string`
+  - `surface: string` — Surface language for this panel (`glass` | `solid`). Paint is CSS-only via
+  - `transit: string`
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`
 - **Part**: `dropdown`
@@ -248,7 +254,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
 
 소스: `components/input/index.ts`
 
-- **어트리뷰트**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `type: string`, `value: string`
+- **어트리뷰트**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `surface: string`, `type: string`, `value: string`
 - **프로퍼티**:
   - `disabled: boolean` — Blocks typing and focus, greys the field out and leaves it out of form validation. Off by default; `disabled="false"` counts as enabled.
   - `icon: string` — Name of an `r-icon` shown before the text, for example `search`. No icon when unset.
@@ -262,6 +268,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
   - `sheet: string`
   - `status: string` — Validation state: `'error'` | `'warning'`. Colours the border and label and adds a status icon; pair it with `message` so the state is not shown by colour alone. Empty (neutral) by default.
   - `step: string` — Granularity of accepted numbers, forwarded to the native input. Applies only when `type` is `'number'`; off-step values fail form validation.
+  - `surface: string` — Surface language for this control (`glass` | `solid`). Paint is CSS-only via
   - `type: string` — Native input type forwarded to the inner `<input>`, such as `text`, `password` or `number`; `number` enables `min`, `max` and `step`. Behaves as `text` when unset.
   - `validationMessage: string` — The browser's message for the current constraint error; empty while the field is valid.
   - `validity: ValidityState | undefined` — Native `ValidityState` of the field, for reading constraint errors from script. `undefined` where ElementInternals is unavailable.
@@ -354,8 +361,12 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
 
 소스: `components/message/index.ts`
 
-- **어트리뷰트**: `content: string | null`, `sheet: string`, `type: string | null`
-- **프로퍼티**: `content: string | null`, `sheet: string`, `type: string | null`
+- **어트리뷰트**: `content: string | null`, `sheet: string`, `surface: string`, `type: string | null`
+- **프로퍼티**:
+  - `content: string | null`
+  - `sheet: string`
+  - `surface: string` — Surface language for this toast (`glass` | `solid`). Paint is CSS-only via
+  - `type: string | null`
 - **이벤트**: —
 - **슬롯**: —
 - **Part**: —
@@ -364,7 +375,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
 
 소스: `components/modal/index.ts`
 
-- **어트리뷰트**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `heading: string`, `hide-header`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`
+- **어트리뷰트**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `heading: string`, `hide-header`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`, `surface: string`
 - **프로퍼티**:
   - `autoFocus: boolean` — Moves focus to the first focusable element in the dialog (or the dialog itself) when it opens. On by default; turn off with `autoFocus="false"`.
   - `closable: boolean` — Shows the close button in the corner. On by default; turn off with `closable="false"` when the dialog must be closed by its own actions.
@@ -375,6 +386,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
   - `maskClosable: boolean` — Closes the dialog when the backdrop outside it is clicked. On by default; turn off with `maskClosable="false"` for forms that must not be dismissed by a stray click.
   - `open: boolean` — Shows the dialog when set and closes it when removed. Off by default; `open="false"` counts as closed.
   - `sheet: string`
+  - `surface: string` — Surface language for this dialog (`glass` | `solid`). Paint is CSS-only via
 - **이벤트**:
   - `afterclose` · element-only · detail `{ trigger }`
   - `afteropen` · element-only

@@ -918,4 +918,64 @@ describe('r-select contract', () => {
     select.disabled = true;
     expect(setValidity).toHaveBeenLastCalledWith({});
   });
+
+  it('under glass, moves a sliding wash fill when the listbox cursor changes', async () => {
+    document.documentElement.setAttribute('data-ran-surface', 'glass');
+    try {
+      const select = await createSelectWithOptions();
+      select.show();
+      await sleep(20);
+      const dropdown = select._selectionDropdown!;
+      expect(dropdown.hasAttribute('data-hover-fill')).toBe(true);
+      const fill = dropdown.querySelector('.ran-select-option-hover') as HTMLElement | null;
+      expect(fill).toBeTruthy();
+      // jsdom lays out at 0×0 — stub geometry so the wash placement contract is testable.
+      const box = (top: number) =>
+        ({
+          x: 0,
+          y: top,
+          top,
+          bottom: top + 32,
+          left: 0,
+          right: 120,
+          width: 120,
+          height: 32,
+          toJSON() {
+            return {};
+          },
+        }) as DOMRect;
+      fill!.getBoundingClientRect = () => box(0);
+      select.getDropdownOptions().forEach((item, index) => {
+        item.getBoundingClientRect = () => box(index * 32);
+      });
+      select.setActiveOptionByIndex(0, false);
+      const first = fill!.style.transform;
+      expect(fill!.style.opacity).toBe('1');
+      expect(fill!.style.width).toBe('120px');
+      select.setActiveOptionByIndex(1, false);
+      expect(fill!.style.transform).not.toBe(first);
+      expect(fill!.style.height).toBe('32px');
+      expect(dropdown.querySelectorAll('.ran-select-option-hover')).toHaveLength(1);
+      select.hide();
+      await sleep(20);
+      expect(dropdown.hasAttribute('data-hover-fill')).toBe(false);
+      expect(fill!.style.opacity).toBe('0');
+    } finally {
+      document.documentElement.removeAttribute('data-ran-surface');
+    }
+  });
+
+  it('skips the sliding wash when dropdownsurface is solid under document glass', async () => {
+    document.documentElement.setAttribute('data-ran-surface', 'glass');
+    try {
+      const select = await createSelectWithOptions();
+      select.dropdownsurface = 'solid';
+      select.show();
+      await sleep(20);
+      expect(select._selectionDropdown?.hasAttribute('data-hover-fill')).toBe(false);
+      expect(select._selectionDropdown?.querySelector('.ran-select-option-hover')).toBeNull();
+    } finally {
+      document.documentElement.removeAttribute('data-ran-surface');
+    }
+  });
 });

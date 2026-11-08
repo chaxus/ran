@@ -67,6 +67,9 @@ Frosted plates wash out faint fills. State that was clear on Graphite can disapp
   header fill). Hosts should not invent a second hover grey for menus — that is how agents
   drift from the surface. Overlay panels should read `--ran-surface-glass-overlay-*`, not a
   parallel host fill.
+- **SHOULD** Unify glass **menu chrome** (sliding wash cursor, weight for selected), not the
+  host tag: language and other URL menus stay `<details>` + `<a>`; theme / surface and other
+  value menus stay `r-select`.
 
 ## Host responsibilities
 

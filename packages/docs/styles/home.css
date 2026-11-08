@@ -216,6 +216,39 @@
   display: block;
   width: 100%;
 }
+/*
+ * Until the client bundle upgrades r-input / r-select, reserve a labelled field so
+ * the invite card does not jump, and hide light-DOM options (same pattern as the
+ * playground) so Viewer/Editor/Admin do not flash as raw text.
+ */
+.example__field:not(:defined) {
+  display: block;
+  width: 100%;
+  font-size: var(--type-label-1, 14px);
+  font-weight: var(--type-label-weight, 500);
+  color: var(--fg);
+}
+.example__field:not(:defined)::before {
+  content: attr(label);
+  display: block;
+  margin-bottom: var(--ran-space-1, 4px);
+  font-size: var(--type-label-1, 14px);
+  font-weight: var(--type-label-weight, 500);
+  color: var(--fg);
+}
+.example__field:not(:defined)::after {
+  content: '';
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--ran-size-7, 32px);
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-sm, 6px);
+  background: var(--bg);
+}
+.example__field:not(:defined) > r-option {
+  display: none;
+}
 /* An address is left-to-right text whatever the page's direction. */
 .example__field[type='email']::part(input) {
   direction: ltr;

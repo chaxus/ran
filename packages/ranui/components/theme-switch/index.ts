@@ -48,10 +48,12 @@ export class ThemeSwitch extends RanElement {
       return option;
     });
 
+    // Portaled panel is outside this shadow tree — chrome menu vars land via dropdownclass.
     this._select = View('r-select')
       .class('ran-theme-switch')
       .attr('part', 'select')
       .attr('trigger', 'click')
+      .attr('dropdownclass', 'ran-chrome-menu')
       .attr('value', 'system')
       .children(...options)
       .build() as HTMLElement & { value: string };

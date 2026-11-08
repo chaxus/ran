@@ -47,10 +47,12 @@ export class SurfaceSwitch extends RanElement {
       return option;
     });
 
+    // Portaled panel is outside this shadow tree — chrome menu vars land via dropdownclass.
     this._select = View('r-select')
       .class('ran-surface-switch')
       .attr('part', 'select')
       .attr('trigger', 'click')
+      .attr('dropdownclass', 'ran-chrome-menu')
       .attr('value', 'solid')
       .children(...options)
       .build() as HTMLElement & { value: string };

@@ -25,7 +25,7 @@ export class Dropdown extends RanElement {
   arrowIcon?: HTMLElement;
   container: HTMLElement;
   static get observedAttributes(): string[] {
-    return ['transit', 'arrow', 'sheet'];
+    return ['transit', 'arrow', 'sheet', 'surface'];
   }
   constructor() {
     super();
@@ -67,6 +67,17 @@ export class Dropdown extends RanElement {
   }
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
+  }
+  /**
+   * Surface language for this panel (`glass` | `solid`). Paint is CSS-only via
+   * `:host([surface=...])`; this reflects the attribute for the public contract.
+   * Under document glass, omit or use `glass`; player menus use `solid` on video.
+   */
+  get surface(): string {
+    return getStringAttribute(this, 'surface');
+  }
+  set surface(value: string) {
+    setStringAttribute(this, 'surface', value, { removeEmpty: true });
   }
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);

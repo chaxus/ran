@@ -46,13 +46,14 @@ Código fuente: `components/attachments/index.ts`
 
 Código fuente: `components/button/index.ts`
 
-- **Atributos**: `aria-label`, `disabled: boolean | string`, `effect: boolean`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
+- **Atributos**: `aria-label`, `disabled: boolean | string`, `effect: boolean`, `icon: string`, `iconSize: string`, `sheet: string`, `surface: string`, `type: string`
 - **Propiedades**:
   - `disabled: boolean | string` — Blocks clicks and keyboard activation and removes the button from the tab order. Off by default; `disabled="false"` counts as enabled.
   - `effect: boolean` — Whether the click ripple is drawn. On by default; opt out with `effect="false"`.
   - `icon: string` — Name of an `<r-icon>` drawn before the label, for example `'search'`. No icon when empty.
   - `iconSize: string` — Icon size passed to the inner `<r-icon>`. Defaults to about 1.15× the button's font size; set it only when the icon needs a fixed size.
   - `sheet: string`
+  - `surface: string` — Surface language for this control (`glass` | `solid`). Paint is CSS-only via
   - `type: string` — Visual variant: `''` (default) | `'primary'` (monochrome) | `'warning'` | `'text'`. Drives the `:host([type=...])` styles.
 - **Eventos**: —
 - **Slots**: `por defecto`
@@ -62,12 +63,13 @@ Código fuente: `components/button/index.ts`
 
 Código fuente: `components/card/index.ts`
 
-- **Atributos**: `description: string`, `heading: string`, `hoverable: boolean`, `sheet: string`
+- **Atributos**: `description: string`, `heading: string`, `hoverable: boolean`, `sheet: string`, `surface: string`
 - **Propiedades**:
   - `description: string` — Secondary text shown under the heading. Empty by default; the header is hidden when the heading, description and `extra` slot are all empty.
   - `heading: string` — Heading text.
   - `hoverable: boolean` — Interactive card (Geist): hover darkens the border one step. Purely presentational — gate it to cards that are actually clickable.
   - `sheet: string`
+  - `surface: string` — Surface language for this control (`glass` | `solid`). Paint is CSS-only via
 - **Eventos**: —
 - **Slots**: `por defecto`, `extra (con nombre)`, `footer (con nombre)`
 - **Partes**: `body`, `card`, `description`, `extra`, `footer`, `header`, `title`
@@ -153,8 +155,12 @@ Código fuente: `components/disclosure-row/index.ts`
 
 Código fuente: `components/dropdown/index.ts`
 
-- **Atributos**: `arrow: string`, `sheet: string`, `transit: string`
-- **Propiedades**: `arrow: string`, `sheet: string`, `transit: string`
+- **Atributos**: `arrow: string`, `sheet: string`, `surface: string`, `transit: string`
+- **Propiedades**:
+  - `arrow: string`
+  - `sheet: string`
+  - `surface: string` — Surface language for this panel (`glass` | `solid`). Paint is CSS-only via
+  - `transit: string`
 - **Eventos**: —
 - **Slots**: `por defecto`
 - **Partes**: `dropdown`
@@ -251,7 +257,7 @@ Código fuente: `components/image/index.ts`
 
 Código fuente: `components/input/index.ts`
 
-- **Atributos**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `type: string`, `value: string`
+- **Atributos**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `surface: string`, `type: string`, `value: string`
 - **Propiedades**:
   - `disabled: boolean` — Blocks typing and focus, greys the field out and leaves it out of form validation. Off by default; `disabled="false"` counts as enabled.
   - `icon: string` — Name of an `r-icon` shown before the text, for example `search`. No icon when unset.
@@ -265,6 +271,7 @@ Código fuente: `components/input/index.ts`
   - `sheet: string`
   - `status: string` — Validation state: `'error'` | `'warning'`. Colours the border and label and adds a status icon; pair it with `message` so the state is not shown by colour alone. Empty (neutral) by default.
   - `step: string` — Granularity of accepted numbers, forwarded to the native input. Applies only when `type` is `'number'`; off-step values fail form validation.
+  - `surface: string` — Surface language for this control (`glass` | `solid`). Paint is CSS-only via
   - `type: string` — Native input type forwarded to the inner `<input>`, such as `text`, `password` or `number`; `number` enables `min`, `max` and `step`. Behaves as `text` when unset.
   - `validationMessage: string` — The browser's message for the current constraint error; empty while the field is valid.
   - `validity: ValidityState | undefined` — Native `ValidityState` of the field, for reading constraint errors from script. `undefined` where ElementInternals is unavailable.
@@ -357,8 +364,12 @@ Código fuente: `components/mermaid/index.ts`
 
 Código fuente: `components/message/index.ts`
 
-- **Atributos**: `content: string | null`, `sheet: string`, `type: string | null`
-- **Propiedades**: `content: string | null`, `sheet: string`, `type: string | null`
+- **Atributos**: `content: string | null`, `sheet: string`, `surface: string`, `type: string | null`
+- **Propiedades**:
+  - `content: string | null`
+  - `sheet: string`
+  - `surface: string` — Surface language for this toast (`glass` | `solid`). Paint is CSS-only via
+  - `type: string | null`
 - **Eventos**: —
 - **Slots**: —
 - **Partes**: —
@@ -367,7 +378,7 @@ Código fuente: `components/message/index.ts`
 
 Código fuente: `components/modal/index.ts`
 
-- **Atributos**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `heading: string`, `hide-header`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`
+- **Atributos**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `heading: string`, `hide-header`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`, `surface: string`
 - **Propiedades**:
   - `autoFocus: boolean` — Moves focus to the first focusable element in the dialog (or the dialog itself) when it opens. On by default; turn off with `autoFocus="false"`.
   - `closable: boolean` — Shows the close button in the corner. On by default; turn off with `closable="false"` when the dialog must be closed by its own actions.
@@ -378,6 +389,7 @@ Código fuente: `components/modal/index.ts`
   - `maskClosable: boolean` — Closes the dialog when the backdrop outside it is clicked. On by default; turn off with `maskClosable="false"` for forms that must not be dismissed by a stray click.
   - `open: boolean` — Shows the dialog when set and closes it when removed. Off by default; `open="false"` counts as closed.
   - `sheet: string`
+  - `surface: string` — Surface language for this dialog (`glass` | `solid`). Paint is CSS-only via
 - **Eventos**:
   - `afterclose` · element-only · detail `{ trigger }`
   - `afteropen` · element-only

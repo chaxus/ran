@@ -105,6 +105,8 @@ const langMenuHtml = (page: DocPage, urls: ReadonlySet<string>, label: string): 
         }>${escapeHtml(locale.label)}</a></li>`,
     )
     .join('');
+  // Locale options are URLs — keep <details>+<a> (middle-click / new tab / copy link).
+  // Do not fold this into r-select; theme/surface selects are value menus, not navigation.
   return (
     `<details class="langs"><summary class="langs__summary" aria-label="${escapeHtml(label)}">` +
     `<span class="langs__current">${escapeHtml(page.locale.label)}</span>` +

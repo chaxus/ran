@@ -8,6 +8,9 @@ export const SIDEBAR_SCROLL_KEY = 'ran-sidebar-scroll';
  * The fill follows the pointer and keyboard focus and fades out when both leave. It does not
  * rest on the current page: that row is marked by the rail, and selection must not look like
  * hover (see the `.sb__link[aria-current]` rule in docs.css).
+ *
+ * Links are full row width (docs.css `.sb__link { width: 100% }`) so short labels still get a
+ * full-width wash and hit target — the fill copies the link's box, not the glyph bounds.
  */
 export const mountSidebar = (): void => {
   const sidebar = document.querySelector<HTMLElement>('.sidebar');

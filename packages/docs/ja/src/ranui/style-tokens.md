@@ -391,11 +391,11 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ## `dropdown`
 
-- Tokens: 30
+- Tokens: 37
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 8 · skin: 1 · component: 17 · internal: 4 -->
+<!-- layers: semantic: 11 · skin: 1 · component: 20 · internal: 5 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-text`
@@ -416,13 +416,20 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 - `--ran-dropdown-font-size`
 - `--ran-dropdown-font-variant`
 - `--ran-dropdown-font-weight`
+- `--ran-dropdown-option-item-border-radius`
 - `--ran-motion-duration-base`
+- `--ran-motion-duration-fast`
+- `--ran-motion-duration-slow`
 - `--ran-motion-ease-standard`
 - `--ran-radius-md`
+- `--ran-radius-sm`
+- `--ran-select-option-hover-background`
+- `--ran-select-option-hover-transition`
 - `--ran-shadow-elevated`
 - `--ran-shadow-menu`
 - `--ran-skin-font-family`
 - `--ran-space-1`
+- `--ran-surface-glass-hover`
 - `--ran-text-label-1`
 - `--ran-text-label-weight`
 - `--ran-z-dropdown`

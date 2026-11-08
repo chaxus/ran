@@ -107,8 +107,12 @@ describe('theme tokens', () => {
     const item = read('components/select/dropdown-item/index.less');
     expect(item).toMatch(/:host-context\(\[data-ran-surface='glass'\]\)/);
     expect(item).toContain('--ran-surface-glass-hover');
+    // Sliding wash mode suppresses per-row fills (r-dropdown[data-hover-fill]).
+    expect(item).toMatch(/:host-context\(\[data-hover-fill\]\)/);
     const select = read('components/select/index.less');
     expect(select).toMatch(/:host-context\(\[data-ran-surface='glass'\]\)/);
     expect(select).toContain('--ran-surface-glass-hover');
+    const dropdown = read('components/dropdown/index.less');
+    expect(dropdown).toContain('ran-select-option-hover');
   });
 });

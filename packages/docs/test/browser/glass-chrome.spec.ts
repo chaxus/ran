@@ -112,6 +112,64 @@ for (const theme of ['light', 'dark'] as const) {
   });
 }
 
+test('under glass the theme menu uses a sliding wash, weight-selected, and no check', async ({ page }) => {
+  await stampSurface(page, 'light');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  await expect.poll(async () => (await rootTokens(page)).surface).toBe('glass');
+  await page.waitForFunction(() => customElements.get('r-theme-switch') && customElements.get('r-select'));
+
+  const theme = page.locator('.appearance .theme-switch');
+  await theme.click();
+  const panel = page.locator('r-dropdown[role="listbox"][data-hover-fill]');
+  await expect(panel).toBeVisible();
+
+  // r-dropdown-item uses a closed shadow root — assert the host CSS-var contract
+  // (weight / no-check) rather than shadow computed styles.
+  const chrome = await page.evaluate(() => {
+    const list = document.querySelector('r-dropdown[role="listbox"][data-hover-fill]');
+    if (!list) return null;
+    const fill = list.querySelector('.ran-select-option-hover') as HTMLElement | null;
+    const items = [...list.querySelectorAll('r-dropdown-item')];
+    const selected = items.find((el) => el.hasAttribute('selected'));
+    const itemCs = selected ? getComputedStyle(selected) : null;
+    return {
+      hasFill: !!fill,
+      fillOpacity: fill?.style.opacity ?? '',
+      fillWidth: fill?.style.width ?? '',
+      itemCount: items.length,
+      listClass: list.className,
+      hasHoverFill: list.hasAttribute('data-hover-fill'),
+      varWeight: itemCs?.getPropertyValue('--ran-dropdown-option-selected-font-weight').trim() ?? '',
+      varCheck: itemCs?.getPropertyValue('--ran-dropdown-option-selected-check-display').trim() ?? '',
+      varPad: itemCs?.getPropertyValue('--ran-dropdown-option-selected-padding-inline-end').trim() ?? '',
+    };
+  });
+
+  expect(chrome).not.toBeNull();
+  expect(chrome!.listClass).toContain('ran-chrome-menu');
+  expect(chrome!.hasHoverFill).toBe(true);
+  expect(chrome!.varWeight).toBe('600');
+  expect(chrome!.varCheck).toBe('none');
+  expect(chrome!.varPad).not.toBe('');
+  expect(chrome!.hasFill).toBe(true);
+  expect(chrome!.fillOpacity).toBe('1');
+  expect(chrome!.fillWidth).not.toBe('0px');
+  expect(chrome!.itemCount).toBeGreaterThanOrEqual(2);
+
+  // Move the cursor to another option; the wash should follow.
+  const before = await page.evaluate(() => {
+    const fill = document.querySelector('r-dropdown[data-hover-fill] .ran-select-option-hover') as HTMLElement;
+    return fill?.style.transform ?? '';
+  });
+  await page.keyboard.press('ArrowDown');
+  const after = await page.evaluate(() => {
+    const fill = document.querySelector('r-dropdown[data-hover-fill] .ran-select-option-hover') as HTMLElement;
+    return fill?.style.transform ?? '';
+  });
+  expect(after).not.toBe(before);
+});
+
 test('search placeholder reads as search', async ({ page }) => {
   await stampSurface(page, 'light');
   await page.goto('/');

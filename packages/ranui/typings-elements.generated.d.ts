@@ -20,6 +20,7 @@ declare global {
     icon?: string;
     iconSize?: string;
     sheet?: string;
+    surface?: string;
     type?: string;
   };
   'r-card': {
@@ -27,6 +28,7 @@ declare global {
     heading?: string;
     hoverable?: boolean;
     sheet?: string;
+    surface?: string;
   };
   'r-checkbox': {
     checked?: boolean;
@@ -72,6 +74,7 @@ declare global {
   'r-dropdown': {
     arrow?: string;
     sheet?: string;
+    surface?: string;
     transit?: string;
   };
   'r-dropdown-item': {
@@ -131,6 +134,7 @@ declare global {
     sheet?: string;
     status?: string;
     step?: string;
+    surface?: string;
     type?: string;
     value?: string;
     validationMessage?: string;
@@ -193,6 +197,7 @@ declare global {
   'r-message': {
     content?: string | null;
     sheet?: string;
+    surface?: string;
     type?: string | null;
   };
   'r-modal': {
@@ -206,6 +211,7 @@ declare global {
     maskClosable?: boolean;
     open?: boolean;
     sheet?: string;
+    surface?: string;
   };
   'r-option': {
     disabled?: boolean | string | undefined | null;

@@ -83,6 +83,7 @@ export class Modal extends RanElement {
       'closable',
       'hide-header',
       'sheet',
+      'surface',
     ];
   }
 
@@ -189,6 +190,17 @@ export class Modal extends RanElement {
 
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
+  }
+
+  /**
+   * Surface language for this dialog (`glass` | `solid`). Paint is CSS-only via
+   * `:host([surface=...])`; this reflects the attribute for the public contract.
+   */
+  get surface(): string {
+    return getStringAttribute(this, 'surface');
+  }
+  set surface(value: string) {
+    setStringAttribute(this, 'surface', value, { removeEmpty: true });
   }
 
   /** Closes the topmost dialog when Escape is pressed. On by default; turn off with `closeOnEsc="false"`. */

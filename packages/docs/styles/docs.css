@@ -734,10 +734,21 @@ a {
   --ran-theme-switch-width: fit-content;
   --ran-surface-switch-width: fit-content;
   --ran-select-hover-border: 1px solid transparent;
-  --ran-select-hover-background-color: var(--glass-hover);
+  /* Trigger hover wash: library glass default (--ran-surface-glass-hover); do not re-set. */
   --ran-select-focus-border: 1px solid transparent;
   --ran-select-color: var(--fg);
   --ran-select-icon-color: var(--fg-muted);
+}
+/*
+ * Theme/surface portaled panels use dropdownclass=ran-chrome-menu (vars on .appearance
+ * do not reach body). Set vars on the items: slotted nodes inherit from the flat-tree
+ * slot, so host-only vars on r-dropdown may not reach the item shadow. Match language:
+ * weight for selected, no check. Forms keep the library check.
+ */
+r-dropdown.ran-chrome-menu r-dropdown-item {
+  --ran-dropdown-option-selected-check-display: none;
+  --ran-dropdown-option-selected-font-weight: 600;
+  --ran-dropdown-option-selected-padding-inline-end: var(--ran-space-3, 12px);
 }
 :root[data-ran-surface='glass'] .langs__summary {
   background: transparent;
@@ -781,22 +792,23 @@ a {
   border-radius: 16px;
 }
 /*
- * Language rows match r-select items: same ink wash, weight for current (no frost
- * chip — that read as a second, heavier grey next to select's hover).
+ * Language panel chrome siblings the glass r-select overlay: same inset (4px),
+ * row radius (8px / sm), ink wash, weight for current. Language stays
+ * <details>+<a> (URLs); theme/surface stay r-select (persisted values).
  */
 :root[data-ran-surface='glass'] .langs__list {
   /* Keep position:absolute from the base rule — relative put the panel in flow and
      shoved it down the hero (under Invite). Absolute still contains .hu__hover. */
   min-width: 9rem;
-  padding: 8px;
+  padding: var(--ran-space-1, 4px);
   transform-origin: top right;
 }
 :root[data-ran-surface='glass'] .langs__link {
   position: relative;
   z-index: 1;
   text-align: start;
-  border-radius: 10px;
-  padding: 8px 12px;
+  border-radius: var(--ran-radius-sm, 8px);
+  padding: var(--ran-space-2, 8px) var(--ran-space-3, 12px);
   transition:
     background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
     color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease);
@@ -813,9 +825,9 @@ a {
 :root[data-ran-surface='glass'] .langs__link[aria-current='true']:hover {
   background: var(--glass-hover);
 }
-/* Sliding wash inside the language panel — same motion as header / sidebar pills. */
+/* Sliding wash inside the language panel — same motion as header / select glass wash. */
 :root[data-ran-surface='glass'] .langs__list .hu__hover {
-  border-radius: 10px;
+  border-radius: var(--ran-radius-sm, 8px);
   background: var(--glass-hover);
 }
 :root[data-ran-surface='glass'] .langs__list[data-hover-fill] .langs__link:hover,
@@ -1062,6 +1074,49 @@ a {
 .surface-switch {
   flex: none;
 }
+/*
+ * Before the deferred module upgrades the switches, empty hosts collapse and the
+ * language control jumps beside them. Reserve the same trigger footprint as the
+ * upgraded select (32px tall, longest-option floors) with a quiet ghost shell —
+ * no second hover grey; this is a static pre-upgrade plate only.
+ */
+.appearance .theme-switch:not(:defined),
+.appearance .surface-switch:not(:defined) {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 32px;
+  min-height: 32px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  vertical-align: middle;
+}
+.appearance .theme-switch:not(:defined) {
+  min-width: 6.5rem;
+}
+.appearance .surface-switch:not(:defined) {
+  min-width: 8.75rem;
+}
+:root[data-ran-surface='glass'] .appearance .theme-switch:not(:defined),
+:root[data-ran-surface='glass'] .appearance .surface-switch:not(:defined) {
+  border-radius: var(--glass-control-radius, 10px);
+}
+@media (max-width: 720px) {
+  .appearance .theme-switch:not(:defined) {
+    min-width: 6rem;
+  }
+}
+/*
+ * No-JS / very narrow: a 6rem FOUC plate plus search and language overflows 320px
+ * (layout-audit). Keep a 32px square shell so the row does not jump when the
+ * deferred module upgrades, without claiming the longest-option floor.
+ */
+@media (max-width: 480px) {
+  .appearance .theme-switch:not(:defined) {
+    min-width: 32px;
+    width: 32px;
+  }
+}
 .appearance .theme-switch,
 .appearance .surface-switch {
   --ran-theme-switch-background: transparent;
@@ -1107,7 +1162,9 @@ a {
  * (Hiding it also stops 320px layout from overflowing by ~125px.)
  */
 @media (max-width: 1099px) {
-  .appearance .surface-switch {
+  /* Match :not(:defined) specificity so the FOUC plate cannot keep the row open. */
+  .appearance .surface-switch,
+  .appearance .surface-switch:not(:defined) {
     display: none;
   }
 }
@@ -1816,13 +1873,14 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   color: var(--fg);
   background: var(--bg-soft);
 }
-/* The row is as wide as its label, so the hover fill wraps the words rather than the column.
-   Touch keeps full-width rows: there the row is the tap target. */
-@media (hover: hover) and (pointer: fine) {
-  .sb__link {
-    width: fit-content;
-    max-width: 100%;
-  }
+/*
+ * Rows stay full column width so short labels (e.g. "i18n") keep a hittable hover
+ * wash and tap target — fit-content hugged the glyphs and made them hard to aim.
+ * The sliding `.sb__hover` measures the link box, so width here is the wash width.
+ */
+.sb__link {
+  width: 100%;
+  box-sizing: border-box;
 }
 /* With script, one fill slides between rows (client/sidebar.ts) instead of each row
    painting its own. It is the sidebar's first child and unstacked, so the positioned
@@ -2895,6 +2953,12 @@ body.drawer-open {
     align-items: center;
     justify-content: center;
     padding: 0;
+  }
+  /* 6rem theme + icon chrome was ~14px over on Firefox at 320; drop the floor. */
+  .appearance .theme-switch {
+    --ran-theme-switch-width: fit-content;
+    --ran-theme-switch-min-width: 0;
+    --ran-theme-switch-max-width: 5.25rem;
   }
 }
 @media (prefers-reduced-motion: reduce) {
