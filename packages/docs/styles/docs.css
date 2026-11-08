@@ -1162,7 +1162,9 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
  * (Hiding it also stops 320px layout from overflowing by ~125px.)
  */
 @media (max-width: 1099px) {
-  .appearance .surface-switch {
+  /* Match :not(:defined) specificity so the FOUC plate cannot keep the row open. */
+  .appearance .surface-switch,
+  .appearance .surface-switch:not(:defined) {
     display: none;
   }
 }
