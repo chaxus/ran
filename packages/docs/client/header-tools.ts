@@ -1,6 +1,11 @@
 /**
  * One hover fill that slides between sibling controls, matching the sidebar's soft
  * pill motion instead of each control flashing on its own.
+ *
+ * Header language stays `<details>` + `<a>` (options are locale URLs). Theme and
+ * surface stay `r-select` (persisted values). Under glass, r-select owns the same
+ * sliding-wash recipe inside its portaled panel — this helper is for in-flow chrome
+ * and the language list, not a second select implementation.
  */
 const mountHoverFill = (root: HTMLElement, targetSelector: string): void => {
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -69,7 +74,7 @@ export const mountHeaderTools = (): void => {
   const tools = document.querySelector<HTMLElement>('.header-tools');
   if (tools) mountHoverFill(tools, '.search-open, .langs__summary, .theme-switch, .surface-switch');
 
-  /* Language panel rows slide the same wash — not a discrete flash per row. */
+  /* Language panel: URL links keep details; wash matches glass r-select rows. */
   const langsList = document.querySelector<HTMLElement>('.langs__list');
   if (langsList) mountHoverFill(langsList, '.langs__link');
 };

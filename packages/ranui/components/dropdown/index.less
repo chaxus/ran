@@ -153,6 +153,8 @@
 }
 
 .ranui-dropdown {
+  /* Containing block for the select glass wash (::slotted(.ran-select-option-hover)). */
+  position: var(--ran-dropdown-position, relative);
   transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
   box-sizing: var(--ran-dropdown-box-sizing, border-box);
   margin: var(--ran-dropdown-margin, 0);
@@ -297,6 +299,39 @@
       // hidden` clips it at the base, where the panel's own border takes over.
       filter: var(--ran-dropdown-arrow-shadow, drop-shadow(0 -1px 0 var(--ran-color-border)));
     }
+  }
+}
+
+/*
+ * Glass select menus drive one sliding wash between rows (r-select sets
+ * data-hover-fill and prepends .ran-select-option-hover). Style lives here
+ * because the fill is light-DOM / slotted into this panel.
+ */
+::slotted(.ran-select-option-hover) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 0;
+  height: 0;
+  border-radius: var(--ran-dropdown-option-item-border-radius, var(--ran-radius-sm, 8px));
+  background: var(--ran-select-option-hover-background, var(--ran-surface-glass-hover));
+  opacity: 0;
+  pointer-events: none;
+  transition: var(
+    --ran-select-option-hover-transition,
+    transform var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
+    width var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
+    height var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
+    opacity var(--ran-motion-duration-fast, 0.14s) linear
+  );
+}
+::slotted(.ran-select-option-hover[data-instant]) {
+  transition: opacity var(--ran-motion-duration-fast, 0.14s) linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(.ran-select-option-hover) {
+    transition: none;
   }
 }
 

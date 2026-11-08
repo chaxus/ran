@@ -22,7 +22,7 @@ export class Card extends RanElement {
   private _extraSlot!: HTMLSlotElement;
 
   static get observedAttributes(): string[] {
-    return ['heading', 'description', 'sheet', 'hoverable'];
+    return ['heading', 'description', 'sheet', 'hoverable', 'surface'];
   }
 
   constructor() {
@@ -115,6 +115,18 @@ export class Card extends RanElement {
   }
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
+  }
+
+  /**
+   * Surface language for this control (`glass` | `solid`). Paint is CSS-only via
+   * `:host([surface=...])`; this reflects the attribute for the public contract.
+   * Content cards stay solid under document glass unless opted in.
+   */
+  get surface(): string {
+    return getStringAttribute(this, 'surface');
+  }
+  set surface(value: string) {
+    setStringAttribute(this, 'surface', value, { removeEmpty: true });
   }
 
   /** Interactive card (Geist): hover darkens the border one step. Purely presentational — gate it to cards that are actually clickable. */

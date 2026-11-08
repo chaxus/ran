@@ -40,6 +40,7 @@ export class Input extends RanElement {
       'step', // 当 type 等于 number 时的步长
       'required', // 原生约束校验
       'sheet',
+      'surface', // glass | solid — CSS paints; reflected for the public contract
     ];
   }
   _events = new EventManager();
@@ -320,6 +321,18 @@ export class Input extends RanElement {
 
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
+  }
+
+  /**
+   * Surface language for this control (`glass` | `solid`). Paint is CSS-only via
+   * `:host([surface=...])`; this reflects the attribute for the public contract.
+   * Fields stay solid under document glass unless opted in.
+   */
+  get surface(): string {
+    return getStringAttribute(this, 'surface');
+  }
+  set surface(value: string) {
+    setStringAttribute(this, 'surface', value, { removeEmpty: true });
   }
 
   handlerExternalCss = (): void => {

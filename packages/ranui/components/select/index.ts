@@ -111,6 +111,13 @@ export class Select extends RanElement {
   _optionLabelMapValue: Map<string, string>;
   _optionValueMapLabel: Map<string, string>;
   _activeOption?: HTMLElement;
+  /**
+   * Sliding wash under glass menus (same motion idea as docs header `.hu__hover` /
+   * `r-tabs` header fill). Lives in the portaled listbox light DOM so it paints
+   * with the options; Graphite menus leave it unused.
+   */
+  _optionHover?: HTMLElement;
+  _optionHoverTarget: HTMLElement | null = null;
   _lastPointerAt = '';
   _text: HTMLSpanElement;
   _selector: HTMLDivElement;
@@ -519,6 +526,8 @@ export class Select extends RanElement {
       if (selected >= 0) this.setActiveOptionByIndex(selected, false);
     }
     this._floating.apply(this.open);
+    // After the panel is shown/hidden, sync the glass sliding wash to the cursor.
+    this._syncGlassMenuChrome();
   };
 
   /** Open the dropdown. */
@@ -601,6 +610,70 @@ export class Select extends RanElement {
       else if (itemRect.bottom > listRect.bottom) surface.scrollTop += (itemRect.bottom - listRect.bottom) / scale;
     }
     this.syncActiveState();
+    this._syncGlassMenuChrome();
+  };
+
+  /**
+   * Under document glass (or an explicit glass dropdown surface), one sliding
+   * fill tracks the listbox cursor instead of each row flashing its own
+   * background. Value menus stay `r-select`; URL menus (docs language) stay
+   * `<details>` + `<a>` — unify the overlay chrome, not the tag.
+   */
+  _usesGlassMenuChrome = (): boolean => {
+    const explicit = this.dropdownsurface || this._selectionDropdown?.getAttribute('surface') || '';
+    if (explicit === 'solid') return false;
+    if (explicit === 'glass') return true;
+    return typeof document !== 'undefined' && document.documentElement.getAttribute('data-ran-surface') === 'glass';
+  };
+
+  _ensureOptionHover = (): HTMLElement => {
+    if (!this._optionHover) {
+      this._optionHover = document.createElement('span');
+      this._optionHover.className = 'ran-select-option-hover';
+      this._optionHover.setAttribute('aria-hidden', 'true');
+    }
+    return this._optionHover;
+  };
+
+  _placeOptionHover = (item: HTMLElement): void => {
+    const fill = this._optionHover;
+    if (!fill || !this._usesGlassMenuChrome()) return;
+    const box = item.getBoundingClientRect();
+    // jsdom has no DOMMatrixReadOnly; treat a missing matrix as identity (unit tests).
+    const Matrix = typeof DOMMatrixReadOnly !== 'undefined' ? DOMMatrixReadOnly : undefined;
+    const shift = Matrix ? new Matrix(getComputedStyle(fill).transform) : { e: 0, f: 0 };
+    const at = fill.getBoundingClientRect();
+    // Appearing, it fades in where it is; only a fill already showing slides.
+    fill.toggleAttribute('data-instant', this._optionHoverTarget === null);
+    fill.style.setProperty(
+      'transform',
+      `translate(${box.left - (at.left - shift.e)}px, ${box.top - (at.top - shift.f)}px)`,
+    );
+    fill.style.setProperty('width', `${box.width}px`);
+    fill.style.setProperty('height', `${box.height}px`);
+    fill.style.setProperty('opacity', '1');
+    this._optionHoverTarget = item;
+  };
+
+  _hideOptionHover = (): void => {
+    if (!this._optionHover) return;
+    this._optionHover.style.setProperty('opacity', '0');
+    this._optionHoverTarget = null;
+  };
+
+  _syncGlassMenuChrome = (): void => {
+    const dropdown = this._selectionDropdown;
+    if (!dropdown) return;
+    const glass = this.open && this._usesGlassMenuChrome();
+    dropdown.toggleAttribute('data-hover-fill', glass);
+    if (!glass) {
+      this._hideOptionHover();
+      return;
+    }
+    const fill = this._ensureOptionHover();
+    if (fill.parentNode !== dropdown) dropdown.prepend(fill);
+    if (this._activeOption?.isConnected) this._placeOptionHover(this._activeOption);
+    else this._hideOptionHover();
   };
 
   selectOptionElement = (optionElement: HTMLElement | null, shouldDispatch = true): void => {
@@ -961,11 +1034,17 @@ export class Select extends RanElement {
       }
       return selectOptionItem;
     });
-    this._selectionDropdown?.replaceChildren(...items);
+    // Keep the glass wash node ahead of options when present; replaceChildren would drop it.
+    if (this._optionHover && this._usesGlassMenuChrome()) {
+      this._selectionDropdown?.replaceChildren(this._optionHover, ...items);
+    } else {
+      this._selectionDropdown?.replaceChildren(...items);
+    }
     this._activeIndex = this.getDropdownOptions().findIndex((item) => item === this._activeOption);
     // Rendering reflects the current value, without applying defaults again or closing.
     if (this._activeOption) this.selectOptionElement(this._activeOption, false);
     else this.syncActiveState();
+    this._syncGlassMenuChrome();
   };
   setDefaultValue = (): void => {
     const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
@@ -1140,6 +1219,7 @@ export class Select extends RanElement {
     if (name === 'dropdownsurface' && this._selectionDropdown) {
       if (newValue) this._selectionDropdown.setAttribute('surface', newValue);
       else this._selectionDropdown.removeAttribute('surface');
+      this._syncGlassMenuChrome();
     }
     if (name === 'dropdownclass' && this._selectionDropdown) {
       this._selectionDropdown.setAttribute('class', newValue || '');

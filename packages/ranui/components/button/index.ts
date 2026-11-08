@@ -17,7 +17,7 @@ export class Button extends RanElement {
   debounceTimeId?: ReturnType<typeof setTimeout>;
 
   static get observedAttributes(): string[] {
-    return ['disabled', 'icon', 'effect', 'iconSize', 'type', 'aria-label', 'sheet'];
+    return ['disabled', 'icon', 'effect', 'iconSize', 'type', 'aria-label', 'sheet', 'surface'];
   }
 
   constructor() {
@@ -53,6 +53,18 @@ export class Button extends RanElement {
   set sheet(value: string) {
     this.setAttribute('sheet', value || '');
     this.handlerExternalCss();
+  }
+
+  /**
+   * Surface language for this control (`glass` | `solid`). Paint is CSS-only via
+   * `:host([surface=...])`; this reflects the attribute for the public contract.
+   */
+  get surface(): string {
+    return this.getAttribute('surface') || '';
+  }
+  set surface(value: string) {
+    if (!value) this.removeAttribute('surface');
+    else this.setAttribute('surface', value);
   }
 
   /** Blocks clicks and keyboard activation and removes the button from the tab order. Off by default; `disabled="false"` counts as enabled. */

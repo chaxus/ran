@@ -118,8 +118,9 @@ export const renderHome = (locale: LocaleDef): string => {
     `<a class="btn btn-primary" href="#home-choose">${esc(t.ctaPrimary)}${ARROW}</a>` +
     `<a class="btn-text" href="${esc(href('/agents/'))}">${esc(t.ctaSecondary)}</a>` +
     `</div></div>` +
-    // The live panel holds real ranui elements. They are inert custom elements until the
-    // bundle upgrades them, so this is the markup either way — no skeleton swap.
+    // The live panel holds real ranui elements. They are inert until the client bundle
+    // upgrades them; `home.css` reserves labelled `:not(:defined)` shells (and hides
+    // light-DOM options) so the card does not flash or jump — same idea as the playground.
     // A working example, not a gallery of variants: one small task with every state a
     // reader can reach — empty, invalid, sending, sent, failed and retried. The markup
     // is complete without script; `client/home.ts` adds the behaviour.

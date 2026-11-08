@@ -71,7 +71,7 @@ export class CustomMessage extends RanElement {
   timeId?: ReturnType<typeof setTimeout>;
   close?: () => void;
   static get observedAttributes() {
-    return ['type', 'content', 'sheet'];
+    return ['type', 'content', 'sheet', 'surface'];
   }
   constructor() {
     super();
@@ -129,6 +129,17 @@ export class CustomMessage extends RanElement {
   }
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
+  }
+  /**
+   * Surface language for this toast (`glass` | `solid`). Paint is CSS-only via
+   * `:host([surface=...])`; this reflects the attribute for the public contract.
+   * Toast-type pills stay solid regardless.
+   */
+  get surface(): string {
+    return getStringAttribute(this, 'surface');
+  }
+  set surface(value: string) {
+    setStringAttribute(this, 'surface', value, { removeEmpty: true });
   }
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);

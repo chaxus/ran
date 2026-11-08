@@ -87,6 +87,7 @@
         "icon",
         "iconSize",
         "sheet",
+        "surface",
         "type"
       ],
       "properties": [
@@ -116,6 +117,11 @@
           "desc": ""
         },
         {
+          "name": "surface",
+          "type": "string",
+          "desc": "Surface language for this control (`glass` | `solid`). Paint is CSS-only via"
+        },
+        {
           "name": "type",
           "type": "string",
           "desc": "Visual variant: `''` (default) | `'primary'` (monochrome) | `'warning'` | `'text'`. Drives the `:host([type=...])` styles."
@@ -136,7 +142,8 @@
         "description",
         "heading",
         "hoverable",
-        "sheet"
+        "sheet",
+        "surface"
       ],
       "properties": [
         {
@@ -158,6 +165,11 @@
           "name": "sheet",
           "type": "string",
           "desc": ""
+        },
+        {
+          "name": "surface",
+          "type": "string",
+          "desc": "Surface language for this control (`glass` | `solid`). Paint is CSS-only via"
         }
       ],
       "events": [],
@@ -502,6 +514,7 @@
       "attributes": [
         "arrow",
         "sheet",
+        "surface",
         "transit"
       ],
       "properties": [
@@ -514,6 +527,11 @@
           "name": "sheet",
           "type": "string",
           "desc": ""
+        },
+        {
+          "name": "surface",
+          "type": "string",
+          "desc": "Surface language for this panel (`glass` | `solid`). Paint is CSS-only via"
         },
         {
           "name": "transit",
@@ -815,6 +833,7 @@
         "sheet",
         "status",
         "step",
+        "surface",
         "type",
         "value"
       ],
@@ -878,6 +897,11 @@
           "name": "step",
           "type": "string",
           "desc": "Granularity of accepted numbers, forwarded to the native input. Applies only when `type` is `'number'`; off-step values fail form validation."
+        },
+        {
+          "name": "surface",
+          "type": "string",
+          "desc": "Surface language for this control (`glass` | `solid`). Paint is CSS-only via"
         },
         {
           "name": "type",
@@ -1383,6 +1407,7 @@
       "attributes": [
         "content",
         "sheet",
+        "surface",
         "type"
       ],
       "properties": [
@@ -1395,6 +1420,11 @@
           "name": "sheet",
           "type": "string",
           "desc": ""
+        },
+        {
+          "name": "surface",
+          "type": "string",
+          "desc": "Surface language for this toast (`glass` | `solid`). Paint is CSS-only via"
         },
         {
           "name": "type",
@@ -1419,7 +1449,8 @@
         "lockScroll",
         "maskClosable",
         "open",
-        "sheet"
+        "sheet",
+        "surface"
       ],
       "properties": [
         {
@@ -1466,6 +1497,11 @@
           "name": "sheet",
           "type": "string",
           "desc": ""
+        },
+        {
+          "name": "surface",
+          "type": "string",
+          "desc": "Surface language for this dialog (`glass` | `solid`). Paint is CSS-only via"
         }
       ],
       "events": [

@@ -95,6 +95,17 @@
     var(--ran-dropdown-option-item-hover-background-color, var(--ran-surface-glass-hover))
   );
 }
+/*
+ * When r-select owns a sliding wash (r-dropdown[data-hover-fill]), rows stay
+ * transparent so the wash is the only paint — same contract as docs .langs__list.
+ */
+:host-context([data-hover-fill]) .ranui-dropdown-option-item {
+  z-index: 1;
+}
+:host-context([data-hover-fill]) .ranui-dropdown-option-active,
+:host-context([data-hover-fill]):host(:not([disabled]):not([role='option'])) .ranui-dropdown-option-item:hover {
+  background-color: transparent;
+}
 @media (prefers-reduced-motion: reduce) {
   :host-context([data-ran-surface='glass']) .ranui-dropdown-option-item,
   :host-context([surface='glass']) .ranui-dropdown-option-item {
