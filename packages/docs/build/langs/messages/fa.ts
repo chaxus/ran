@@ -244,7 +244,7 @@ const fa: LocaleMessages = {
     lastUpdated: 'آخرین به‌روزرسانی',
     authorLink: 'از chaxus',
     searchButton: 'جست‌وجو',
-    searchPlaceholder: 'نمایش فهرست کامل',
+    searchPlaceholder: 'جستجو در اسناد',
     noResults: 'نتیجه‌ای یافت نشد برای',
     resetButton: 'پاک کردن جست‌وجو',
     backButton: 'بازگشت',

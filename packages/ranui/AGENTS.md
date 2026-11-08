@@ -28,15 +28,15 @@ extra runtime dependencies through the package; only import them when the host n
 
 ## Contracts
 
-| Need | Read |
-| --- | --- |
+| Need                                         | Read                                                                                                     |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | Attributes, properties, events, slots, parts | [docs/COMPONENTS.json](./docs/COMPONENTS.json) (preferred) or [docs/COMPONENTS.md](./docs/COMPONENTS.md) |
-| Public CSS variables | [docs/style-tokens-public.md](./docs/style-tokens-public.md) |
-| Design methods + ranui token adapter | [docs/DESIGN.md](./docs/DESIGN.md#ranui-implementation-adapter) |
-| Form-associated fields / `serializeForm` | CLAUDE.md form sections; `r-input`, `r-checkbox`, `r-select` |
-| SSR | `ranui/ssr` + CLAUDE.md SSR notes |
-| Closed-shadow tests | `ranui/testing` (`insideShadow`, `settlePainted`) |
-| JSX / globals | `import type {} from 'ranui/typings'` |
+| Public CSS variables                         | [docs/style-tokens-public.md](./docs/style-tokens-public.md)                                             |
+| Design methods + ranui token adapter         | [docs/DESIGN.md](./docs/DESIGN.md#ranui-implementation-adapter)                                          |
+| Form-associated fields / `serializeForm`     | CLAUDE.md form sections; `r-input`, `r-checkbox`, `r-select`                                             |
+| SSR                                          | `ranui/ssr` + CLAUDE.md SSR notes                                                                        |
+| Closed-shadow tests                          | `ranui/testing` (`insideShadow`, `settlePainted`)                                                        |
+| JSX / globals                                | `import type {} from 'ranui/typings'`                                                                    |
 
 Validate markup against the installed JSON:
 

@@ -109,8 +109,8 @@ const langMenuHtml = (page: DocPage, urls: ReadonlySet<string>, label: string): 
     `<details class="langs"><summary class="langs__summary" aria-label="${escapeHtml(label)}">` +
     `<span class="langs__current">${escapeHtml(page.locale.label)}</span>` +
     // Globe only on the narrowest phones (label collapses); chevron matches theme/surface selects.
-    `<svg class="langs__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a17 17 0 0 1 0 18M12 3a17 17 0 0 0 0 18"/></svg>` +
-    `<svg class="langs__chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>` +
+    `<svg class="langs__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>` +
+    `<svg class="langs__chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10.5c1.6 1.8 2.8 2.8 4 2.8s2.4-1 4-2.8"/></svg>` +
     `</summary><ul class="langs__list">${items}</ul></details>`
   );
 };
@@ -196,18 +196,22 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
 <header class="site-header">
   <div class="site-header__inner">
     <input type="checkbox" id="drawer" class="drawer__toggle" aria-controls="doc-sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}"><label class="drawer__button" for="drawer" aria-controls="doc-sidebar" aria-label="${escapeHtml(ui.sidebarMenu)}"><span></span><span></span><span></span></label>
-    <a class="wordmark" href="${escapeHtml(page.locale.dir ? `/${page.locale.dir}/` : '/')}">${escapeHtml(SITE.name)}</a>
-    <nav class="nav" aria-label="${escapeHtml(ui.sidebarMenu)}">${navHtml}</nav>
-    <button class="search-open" type="button" aria-label="${escapeHtml(ui.searchButton)}">
-      <svg class="search-open__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
-      <span class="search-open__text">${escapeHtml(ui.searchButton)}</span>
-      <kbd class="search-open__kbd">/</kbd>
-    </button>
-    <div class="header-utils">
-      ${langMenuHtml(page, urls, ui.langMenu)}
-      <div class="appearance" role="group" aria-label="${escapeHtml(ui.appearance)}">
-        <r-theme-switch class="theme-switch"></r-theme-switch>
-        <r-surface-switch class="surface-switch"></r-surface-switch>
+    <div class="header-primary">
+      <a class="wordmark" href="${escapeHtml(page.locale.dir ? `/${page.locale.dir}/` : '/')}">${escapeHtml(SITE.name)}</a>
+      <nav class="nav" aria-label="${escapeHtml(ui.sidebarMenu)}">${navHtml}</nav>
+    </div>
+    <div class="header-tools">
+      <button class="search-open" type="button" aria-label="${escapeHtml(ui.searchButton)}">
+        <svg class="search-open__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.25"/><path d="m15.8 15.8 4.2 4.2"/></svg>
+        <span class="search-open__text">${escapeHtml(ui.searchButton)}</span>
+        <kbd class="search-open__kbd">/</kbd>
+      </button>
+      <div class="header-utils">
+        ${langMenuHtml(page, urls, ui.langMenu)}
+        <div class="appearance" role="group" aria-label="${escapeHtml(ui.appearance)}">
+          <r-theme-switch class="theme-switch"></r-theme-switch>
+          <r-surface-switch class="surface-switch"></r-surface-switch>
+        </div>
       </div>
     </div>
   </div>

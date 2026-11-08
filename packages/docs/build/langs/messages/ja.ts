@@ -244,7 +244,7 @@ const ja: LocaleMessages = {
     lastUpdated: '最終更新',
     authorLink: '作者：chaxus',
     searchButton: '検索',
-    searchPlaceholder: '詳細リストを表示',
+    searchPlaceholder: 'ドキュメントを検索',
     noResults: '見つかりませんでした：',
     resetButton: '検索条件をクリア',
     backButton: '戻る',

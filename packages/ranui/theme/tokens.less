@@ -311,4 +311,11 @@
   --ran-surface-glass-solid-shadow: var(--ran-shadow-elevated);
   --ran-surface-glass-overlay-solid-fallback: var(--ran-color-bg-elevated);
   --ran-surface-glass-overlay-solid-shadow: var(--ran-shadow-modal);
+  /*
+   * Interactive washes on frosted chrome / overlay rows. Graphite keeps
+   * --ran-color-bg-hover; glass pilots read these so hosts (and agents) do not
+   * re-declare per-menu hover colours.
+   */
+  --ran-surface-glass-hover: color-mix(in srgb, var(--ran-gray-1000) 8%, transparent);
+  --ran-surface-glass-selected: color-mix(in srgb, var(--ran-gray-100) 58%, transparent);
 }

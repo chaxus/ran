@@ -59,9 +59,16 @@ stays quieter; a persuasive landing may let one glass moment carry the brand.
 Frosted plates wash out faint fills. State that was clear on Graphite can disappear on glass.
 
 - **MUST** Hover and selected remain distinguishable from each other and from rest.
-- **MUST** State is never colour alone (weight, edge, rail or chip together with colour).
-- **SHOULD** Hover uses a lighter chip; selected uses a denser chip plus weight (and a rail
-  where the solid Graphite pattern already had one).
+- **MUST** State is never colour alone (weight, rail or chip together with colour).
+- **SHOULD** Hover uses a quiet ink wash; selected uses a brighter frost lift plus weight on
+  light glass (denser white vibrancy on dark), and a rail where the solid Graphite pattern
+  already had one. Do not darken the selected chip with a rim or drop shadow — that reads as
+  solid chrome on a frosted plate.
+- **SHOULD** Prefer library tokens (`--ran-surface-glass-hover` / `--ran-surface-glass-selected`)
+  and the pilot defaults under document glass (`r-dropdown-item`, `r-select` trigger, `r-tabs`
+  header fill). Hosts should not invent a second hover grey for menus — that is how agents
+  drift from the surface. Overlay panels should read `--ran-surface-glass-overlay-*`, not a
+  parallel host fill.
 
 ## Host responsibilities
 
@@ -72,7 +79,7 @@ Map Apple's control styles onto ranui pilots:
 | Secondary / toolbar control | `glass`                       | Default `r-button`, under document glass or `surface="glass"`                                                               |
 | Emphasized action           | `glassProminent` / solid fill | `type="primary"` and `type="warning"` stay **solid**                                                                        |
 | Content surfaces            | Standard materials            | `r-card`, `r-input` stay **solid** under document glass; opt in with `surface="glass"` when the element itself is the plate |
-| Transient overlays          | Clear / sheet glass           | `r-modal`, non-toast `r-message` under document glass or `surface="glass"`                                                  |
+| Transient overlays          | Clear / sheet glass           | `r-modal`, non-toast `r-message`, `r-dropdown` (select menus) under document glass or `surface="glass"`                     |
 | Toast pills                 | Opaque emphasis               | Stay **solid**                                                                                                              |
 
 Opt out of document glass on a control with `surface="solid"`.

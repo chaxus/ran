@@ -72,10 +72,13 @@ describe('theme tokens', () => {
       '--ran-surface-glass-fill',
       '--ran-surface-glass-overlay-blur',
       '--ran-surface-glass-solid-fallback',
+      '--ran-surface-glass-hover',
+      '--ran-surface-glass-selected',
     ].forEach((token) => {
       expect(tokens).toContain(token);
     });
     expect(dark).toContain('--ran-surface-glass-fill: rgba(26, 26, 26, 0.55)');
+    expect(dark).toContain('--ran-surface-glass-hover');
     expect(tokens).toContain('--ran-surface-glass-blur: 12px');
     expect(tokens).toContain('--ran-surface-glass-overlay-blur: 18px');
     expect(tokens).toContain('--ran-surface-glass-specular');
@@ -92,7 +95,7 @@ describe('theme tokens', () => {
       expect(source).not.toMatch(/:host-context\(\[data-ran-surface='glass'\]\)/);
     });
     // Functional / overlay pilots: document glass or explicit surface="glass".
-    ['button', 'modal', 'message'].forEach((name) => {
+    ['button', 'modal', 'message', 'dropdown'].forEach((name) => {
       const source = read(`components/${name}/index.less`);
       expect(source).toContain('surface-frost.less');
       expect(source).toMatch(/:host\(\s*\[surface='glass'\]/);
@@ -100,5 +103,12 @@ describe('theme tokens', () => {
       expect(source).toMatch(/:host-context\(\[data-ran-surface='glass'\]\):host\(\s*:not\(\[surface='solid'\]\)/);
       expect(source).not.toMatch(/:host-context\(\[data-ran-surface='glass'\]\):not\(/);
     });
+    // Menu rows + select trigger: glass hover wash without a host re-declaring Graphite grey.
+    const item = read('components/select/dropdown-item/index.less');
+    expect(item).toMatch(/:host-context\(\[data-ran-surface='glass'\]\)/);
+    expect(item).toContain('--ran-surface-glass-hover');
+    const select = read('components/select/index.less');
+    expect(select).toMatch(/:host-context\(\[data-ran-surface='glass'\]\)/);
+    expect(select).toContain('--ran-surface-glass-hover');
   });
 });

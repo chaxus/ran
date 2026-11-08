@@ -315,3 +315,46 @@
 :host([disabled]) .ran-select .selection .selection-item {
   color: var(--ran-color-text-disabled, var(--ran-gray-700));
 }
+
+/*
+ * Under document glass the trigger is chrome on a frosted plate: quiet ink wash,
+ * no Graphite hover rim. Soft transition is glass-only (Graphite stays instant).
+ */
+:host-context([data-ran-surface='glass']) .ran-select .selection {
+  transition: var(
+    --ran-select-transition,
+    background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    border-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    box-shadow var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease)
+  );
+}
+@media (hover: hover) {
+  :host-context([data-ran-surface='glass']):host(:not([disabled], [type='text']):hover) {
+    .ran-select .selection {
+      border: var(--ran-select-hover-border, 1px solid transparent);
+      background-color: var(--ran-select-hover-background-color, var(--ran-surface-glass-hover));
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host-context([data-ran-surface='glass']) .ran-select .selection {
+    transition: none;
+  }
+}
+
+/*
+ * Glass focus: keep AA, drop the bright dual-ring that reads as Graphite on frost.
+ * Soft cool rim + thin focus wash; hosts override via --ran-select-focus-*.
+ */
+:host-context([data-ran-surface='glass']):host(:not([disabled]):focus-visible) {
+  .ran-select .selection {
+    border: var(
+      --ran-select-focus-border,
+      1px solid color-mix(in srgb, var(--ran-color-focus, var(--ran-blue-700)) 55%, transparent)
+    );
+    box-shadow: var(
+      --ran-select-focus-box-shadow,
+      0 0 0 3px color-mix(in srgb, var(--ran-color-focus, var(--ran-blue-700)) 22%, transparent)
+    );
+  }
+}

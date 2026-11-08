@@ -244,7 +244,7 @@ const cn: LocaleMessages = {
     lastUpdated: '最后更新于',
     authorLink: '作者：chaxus',
     searchButton: '搜索',
-    searchPlaceholder: '显示详细列表',
+    searchPlaceholder: '搜索文档',
     noResults: '没有找到结果：',
     resetButton: '清除搜索条件',
     backButton: '返回',

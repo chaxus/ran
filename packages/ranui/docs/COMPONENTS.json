@@ -2133,6 +2133,7 @@
         "defaultvalue",
         "disabled",
         "dropdownclass",
+        "dropdownsurface",
         "getpopupcontainerid",
         "label",
         "open",
@@ -2160,6 +2161,11 @@
           "name": "dropdownclass",
           "type": "string",
           "desc": "Class name set on the dropdown panel when it is first built, so the portaled panel can be styled from outside."
+        },
+        {
+          "name": "dropdownsurface",
+          "type": "string",
+          "desc": "Surface language for the portaled dropdown panel (`glass` | `solid`)."
         },
         {
           "name": "getPopupContainerId",

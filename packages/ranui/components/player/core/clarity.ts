@@ -84,6 +84,7 @@ export function createClarityHandlers<TLevel extends EngineQualityLevel = Engine
       // aligns the way every other path does, so what was implicit is stated.
       .attr('placement', 'top-center')
       .attr('dropdownclass', 'video-clarity-dropdown')
+      .attr('dropdownsurface', 'solid')
       .aria('label', uiText(playerText, 'player.quality', refs.player))
       .attr('title', uiText(playerText, 'player.quality', refs.player))
       .children(Fragment as unknown as HTMLElement)

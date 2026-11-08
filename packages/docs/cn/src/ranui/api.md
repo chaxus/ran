@@ -531,11 +531,12 @@ description: 'ranui 的全部自定义元素 —— 42 个元素的属性、属�
 
 源码: `components/select/index.ts`
 
-- **属性（attribute）**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placeholder: string`, `placement: Placement`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
+- **属性（attribute）**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `dropdownsurface: string`, `getpopupcontainerid`, `label: string`, `open: boolean`, `placeholder: string`, `placement: Placement`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
 - **属性值（property）**:
   - `defaultValue: string` — Option value to select initially when `value` is not set; also restored by `form.reset()`. Applied once the matching option exists.
   - `disabled: boolean` — Blocks opening, selection and search, removes the select from the tab order and closes an open dropdown. Off by default; `disabled="false"` counts as enabled.
   - `dropdownclass: string` — Class name set on the dropdown panel when it is first built, so the portaled panel can be styled from outside.
+  - `dropdownsurface: string` — Surface language for the portaled dropdown panel (`glass` | `solid`).
   - `getPopupContainerId: string` — Id of the element the dropdown panel is mounted into, looked up in the select's own root first and then the document. Defaults to `document.body`.
   - `label: string` — Caption rendered above the field and used as its accessible name; clicking it focuses the select. No caption when unset.
   - `open: boolean` — Whether the dropdown is showing.

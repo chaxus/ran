@@ -232,6 +232,13 @@ and complete states, not a decorative effect on every component.
   with `surface="glass"` only when that element is the frosted plate.
 - **SHOULD** Host chrome (site headers, app shells) follows the same Regular-glass rules: frost
   chrome, keep reading content solid, no glass-on-glass, visible hover ≠ selected.
+- **SHOULD** Under document glass, overlay menu rows (`r-dropdown-item` in select / theme /
+  surface menus), the select trigger, and the `r-tabs` sliding header fill use
+  `--ran-surface-glass-hover` by default — do not re-declare Graphite `--ran-color-bg-hover`
+  washes in the host unless opting out with `surface="solid"`. Override via
+  `--ran-dropdown-option-item-hover-background-color` /
+  `--ran-select-hover-background-color` / `--ran-tab-hover-background` only when the product
+  needs a different chip.
 - **MUST** Reading contrast and interaction semantics are the same in both themes.
 - **SHOULD** Prefer a semantic token to a raw scale step, and decide by role and state rather than by
   eye. Design every reachable state: default, hover, active, focus, disabled, loading, empty, error.

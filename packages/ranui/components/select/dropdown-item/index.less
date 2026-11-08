@@ -10,7 +10,8 @@
     font-weight: var(--ran-dropdown-option-item-font-weight, 400);
     font-size: var(--ran-dropdown-option-item-font-size, var(--ran-text-label-1, 14px));
     /* No default transition: background is a palette prop — an open dropdown
-       would fade its items on a theme flip. Opt in via the hook var if wanted. */
+       would fade its items on a theme flip. Glass opts in below; hosts can still
+       set --ran-dropdown-option-item-transition on Graphite. */
     transition: var(--ran-dropdown-option-item-transition, none);
     /* Nested radius: the menu's 12px minus its 4px inset. */
     border-radius: var(--ran-dropdown-option-item-border-radius, var(--ran-radius-sm, 8px));
@@ -66,6 +67,38 @@
   // instead; the cursor's own fill still wins on the row it sits on.
   &-option-selected:not(.ranui-dropdown-option-active) {
     background-color: var(--ran-dropdown-option-selected-background-color, transparent);
+  }
+}
+
+/*
+ * Document glass or a glass-surfaced ancestor (r-dropdown[surface=glass]): row
+ * washes follow --ran-surface-glass-hover, not Graphite --ran-color-bg-hover.
+ * Hosts can still set the --ran-dropdown-option-* hooks. Soft transition is
+ * glass-only so a theme flip with an open Graphite menu does not fade every row.
+ */
+:host-context([data-ran-surface='glass']) .ranui-dropdown-option-item,
+:host-context([surface='glass']) .ranui-dropdown-option-item {
+  transition: var(
+    --ran-dropdown-option-item-transition,
+    background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease)
+  );
+}
+:host-context([data-ran-surface='glass']):host(:not([disabled]):not([role='option'])) .ranui-dropdown-option-item:hover,
+:host-context([surface='glass']):host(:not([disabled]):not([role='option'])) .ranui-dropdown-option-item:hover {
+  background-color: var(--ran-dropdown-option-item-hover-background-color, var(--ran-surface-glass-hover));
+}
+:host-context([data-ran-surface='glass']) .ranui-dropdown-option-active,
+:host-context([surface='glass']) .ranui-dropdown-option-active {
+  background-color: var(
+    --ran-dropdown-option-active-background-color,
+    var(--ran-dropdown-option-item-hover-background-color, var(--ran-surface-glass-hover))
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  :host-context([data-ran-surface='glass']) .ranui-dropdown-option-item,
+  :host-context([surface='glass']) .ranui-dropdown-option-item {
+    transition: none;
   }
 }
 

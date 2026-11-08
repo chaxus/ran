@@ -117,6 +117,9 @@
     0 18px 48px rgba(0, 0, 0, 0.45), 0 0 0 0.5px rgba(166, 166, 166, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.5),
     inset 0 -1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 0.5px rgba(255, 255, 255, 0.25),
     inset 0 -24px 48px rgba(255, 255, 255, 0.04);
+  /* Light vibrancy on dark frost — denser than hover for selected chrome. */
+  --ran-surface-glass-hover: color-mix(in srgb, var(--ran-gray-1000) 18%, transparent);
+  --ran-surface-glass-selected: color-mix(in srgb, var(--ran-gray-1000) 28%, transparent);
 }
 
 @media (prefers-color-scheme: dark) {

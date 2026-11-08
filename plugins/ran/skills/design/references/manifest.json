@@ -16,9 +16,9 @@
     },
     {
       "source": "design/SURFACE.md",
-      "sha256": "4b8b6cdfb3ea702cb137e4db36786a910ba50e6965717564f84f2a832c3eb631",
+      "sha256": "74931998b9fe04baec35e98f78be893feddc0152b271d309a70148cf58c34711",
       "output": "SURFACE.md",
-      "outputSha256": "9222931656cad6e312b027b55281e774cc942e748c9c134e655d8a2686efe460"
+      "outputSha256": "dcc84588e85d50528117de86a19f213a78bbf5a69683440504b915b85365de7b"
     },
     {
       "source": "design/assets/alignment-spines.svg",

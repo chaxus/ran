@@ -142,6 +142,7 @@ export class Select extends RanElement {
       'placement', // 弹窗的方向
       'getpopupcontainerid', // 挂载的节点——同上，必须小写才会被观察到
       'dropdownclass', // 弹窗的类名
+      'dropdownsurface', // forwarded to the portaled r-dropdown as surface (e.g. solid on video)
       'trigger', // 触发下拉框的行为，click 还是 hover，hover 在 isMobile 移动端无效
     ];
   }
@@ -424,6 +425,17 @@ export class Select extends RanElement {
   }
   set dropdownclass(value: string) {
     this.setAttribute('dropdownclass', value || '');
+  }
+  /**
+   * Surface language for the portaled dropdown panel (`glass` | `solid`).
+   * Forwarded as `surface` on `r-dropdown` so a host like the player can keep
+   * an opaque menu on video while document glass frosts other selects.
+   */
+  get dropdownsurface(): string {
+    return this.getAttribute('dropdownsurface') || '';
+  }
+  set dropdownsurface(value: string) {
+    this.setAttribute('dropdownsurface', value || '');
   }
   /**
    * How the dropdown opens: `'click'` | `'hover'`. Default `'click'`. Hover is ignored on mobile devices.
@@ -856,6 +868,11 @@ export class Select extends RanElement {
       if (this.dropdownclass) {
         this._selectionDropdown.setAttribute('class', this.dropdownclass);
       }
+      if (this.dropdownsurface) {
+        this._selectionDropdown.setAttribute('surface', this.dropdownsurface);
+      } else {
+        this._selectionDropdown.removeAttribute('surface');
+      }
       if (this.trigger.includes('hover') && !isMobile()) {
         this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
         this._selectDropdown.addEventListener('mouseenter', this._cancelDropdownClose);
@@ -1120,6 +1137,13 @@ export class Select extends RanElement {
     }
     if (name === 'showsearch' && this._search) this._applyShowSearch();
     if (name === 'open') this._applyOpen();
+    if (name === 'dropdownsurface' && this._selectionDropdown) {
+      if (newValue) this._selectionDropdown.setAttribute('surface', newValue);
+      else this._selectionDropdown.removeAttribute('surface');
+    }
+    if (name === 'dropdownclass' && this._selectionDropdown) {
+      this._selectionDropdown.setAttribute('class', newValue || '');
+    }
   }
 
   /**
