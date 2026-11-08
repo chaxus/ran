@@ -120,6 +120,17 @@ Fill exact cells during bridge work; shipping a host without a matrix row is not
 - Platform breadth grows in **1.x minors** as `host-nsh` gains tested targets — do not wait for every OS before tagging 1.0.
 - ranui / ranuts majors stay independent unless a peer range forces a bump.
 
+### Tracking chaxus/nsh (authorized 2026-11-08)
+
+| Rule | Detail |
+| ---- | ------ |
+| Primary branch | Development tracks **`chaxus/nsh` `main`**. |
+| Who moves when | Breaking or API drift on NSH main updates **`@alixex/ranview/nsh` first** (and tests). Pure `host-web` / signal-only consumers are unaffected. |
+| Publish cadence | NSH main commits do **not** auto-publish ranview. Ship ranview when the bridge is green and the change is worth a release. |
+| Pin in CI / releases | Record the **NSH commit SHA** (or tag) used by the bridge smoke job and in the ranview changelog when `/nsh` changes. |
+| Gate | A CI job (or scheduled check) builds the host-nsh sample against `chaxus/nsh@main` (or the pinned SHA). Red bridge blocks `/nsh`-related releases. |
+| Later stabilization | When the fork API settles, prefer semver/peer ranges on NSH release tags; keep `main` as a preview channel. |
+
 ## Relationship to ranui 1.0 headless
 
 ```text
