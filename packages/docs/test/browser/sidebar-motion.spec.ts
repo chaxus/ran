@@ -37,7 +37,9 @@ test('sidebar hover wash spans the full row, including short labels', async ({ p
   await short.hover();
   await expect.poll(async () => (await fillBox(page)).opacity).toBe('1');
   const geometry = await page.evaluate(() => {
-    const link = [...document.querySelectorAll<HTMLElement>('.sb__link')].find((el) => el.textContent?.trim() === 'i18n');
+    const link = [...document.querySelectorAll<HTMLElement>('.sb__link')].find(
+      (el) => el.textContent?.trim() === 'i18n',
+    );
     const fill = document.querySelector('.sb__hover') as HTMLElement | null;
     if (!link || !fill) return null;
     const lb = link.getBoundingClientRect();
