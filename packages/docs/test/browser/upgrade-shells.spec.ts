@@ -16,7 +16,9 @@ test('undefined header switches and invite fields keep reserved shells', async (
   });
 
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
+  // Held module scripts never finish, so `load` may never fire (WebKit). DOM is enough
+  // to assert the CSS shells before the deferred chunks upgrade the hosts.
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect.poll(() => page.locator('.theme-switch:not(:defined)').count()).toBe(1);
   await expect.poll(() => page.locator('.example__field:not(:defined)').count()).toBe(2);
 
