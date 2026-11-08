@@ -1,8 +1,8 @@
-<!-- source: 95f85b31c0fb36576407c4396fe8f60a52bf6d4f -->
+<!-- source: 44eb7be487378787a6dc07f01dcf65a96480d02d -->
 
 # 表面语言
 
-产品如何在**实心**与**液态玻璃**之间选择，与颜色主题（浅色 / 深色 / 跟随系统）正交。与[设计检查清单](./DESIGN.md)一起用；ranui 的映射见[实现适配层](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)。
+产品如何在**实心**与**液态玻璃**之间选择，与颜色主题（浅色 / 深色 / 跟随系统）正交。与[设计检查清单](./DESIGN.md)一起用；ranui 的映射见实现适配层（已安装 `ranui` 时读 `docs/DESIGN.md#ranui-implementation-adapter`，否则读源码中的[packages/ranui/docs/adapters/DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)）。
 
 **MUST** 只用于用户能察觉的缺陷。**SHOULD** 是起点。
 

@@ -4,21 +4,21 @@
   "sources": [
     {
       "source": "design/DESIGN.md",
-      "sha256": "0a74487bf36c1dff7a21cd79b24d88868d1df102dbe945d8fb665409bf523b0b",
+      "sha256": "a63b23fea3d057b75549c0c26e9a5b1a675627a73a68bb8fc7ddbf2e748466af",
       "output": "DESIGN.md",
-      "outputSha256": "f6912d1d28567411d5e26a257ca8e59b26036705418bbbf14958c17d8426d719"
+      "outputSha256": "0e4efc146b7c7492c8ea0a15901f433e93e7c2807153675cb48a87054a9ee9c0"
     },
     {
       "source": "design/README.md",
-      "sha256": "238e15f19eb08547aff669f716ed46cab7149ed4bb334d172f37c628a6364b86",
+      "sha256": "72abf803bd1617a2bc1f489ff0adcbb838f86bd6a845970f8ef28e440e2e0e76",
       "output": "README.md",
-      "outputSha256": "9d39628a7ebece7551f1a204e52bc70bcbd1677e48c22ebca07f4e36d1c1a59e"
+      "outputSha256": "410de05c8e0a422c5226d69ab3c27f64e7db336ef936c08c4b39bf65f9005f2b"
     },
     {
       "source": "design/SURFACE.md",
-      "sha256": "4c0b982be8a0e236846bf0278ba7361b6e6312716fcdf5cc8aa13ece18022839",
+      "sha256": "4b8b6cdfb3ea702cb137e4db36786a910ba50e6965717564f84f2a832c3eb631",
       "output": "SURFACE.md",
-      "outputSha256": "cfde58cfd66d9689d1ae11116ad3d5df74915a02b3c8e843b46822f53da02f31"
+      "outputSha256": "9222931656cad6e312b027b55281e774cc942e748c9c134e655d8a2686efe460"
     },
     {
       "source": "design/assets/alignment-spines.svg",

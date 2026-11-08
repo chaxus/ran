@@ -1,4 +1,4 @@
-<!-- source: 75694bc76b361526840cf6580aa7c782649c3304 -->
+<!-- source: 7cfde1a0dc4209083f40b0c96575d71cf44ec8d7 -->
 
 # Ran Design
 
@@ -6,7 +6,8 @@
 
 **MUST** 只用于用户能察觉的缺陷，此外没有别的 MUST。**SHOULD** 是起点，不是限制：只要作品因此更好，就可以偏离，说明理由即可。标了 **（已检查）** 的条目由本仓库的测试自动保证，末尾的表格写明是哪个测试。其余条目要你在真实浏览器里亲眼确认。
 
-ranui 的[实现适配层](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)把这些条目对应到 ranui 的令牌、层叠层级和组件细节上。
+若已安装 `ranui`，优先读该包内的 `docs/DESIGN.md#ranui-implementation-adapter`
+（`node_modules/ranui/docs/DESIGN.md#ranui-implementation-adapter`）；否则使用源码中的[实现适配层](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)。适配层把这些条目对应到 ranui 的令牌、层叠层级和组件细节上。
 
 ## 开工前
 

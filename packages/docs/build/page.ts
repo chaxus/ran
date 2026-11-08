@@ -107,7 +107,11 @@ const langMenuHtml = (page: DocPage, urls: ReadonlySet<string>, label: string): 
     .join('');
   return (
     `<details class="langs"><summary class="langs__summary" aria-label="${escapeHtml(label)}">` +
-    `<span class="langs__current">${escapeHtml(page.locale.label)}</span><svg class="langs__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a17 17 0 0 1 0 18M12 3a17 17 0 0 0 0 18"/></svg></summary><ul class="langs__list">${items}</ul></details>`
+    `<span class="langs__current">${escapeHtml(page.locale.label)}</span>` +
+    // Globe only on the narrowest phones (label collapses); chevron matches theme/surface selects.
+    `<svg class="langs__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a17 17 0 0 1 0 18M12 3a17 17 0 0 0 0 18"/></svg>` +
+    `<svg class="langs__chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>` +
+    `</summary><ul class="langs__list">${items}</ul></details>`
   );
 };
 
@@ -199,10 +203,12 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
       <span class="search-open__text">${escapeHtml(ui.searchButton)}</span>
       <kbd class="search-open__kbd">/</kbd>
     </button>
-    ${langMenuHtml(page, urls, ui.langMenu)}
-    <div class="appearance" role="group" aria-label="${escapeHtml(ui.appearance)}">
-      <r-theme-switch class="theme-switch"></r-theme-switch>
-      <r-surface-switch class="surface-switch"></r-surface-switch>
+    <div class="header-utils">
+      ${langMenuHtml(page, urls, ui.langMenu)}
+      <div class="appearance" role="group" aria-label="${escapeHtml(ui.appearance)}">
+        <r-theme-switch class="theme-switch"></r-theme-switch>
+        <r-surface-switch class="surface-switch"></r-surface-switch>
+      </div>
     </div>
   </div>
 </header>

@@ -7,7 +7,10 @@ import { getSurface, setSurface } from '@/utils/surface';
 import type { RanSurfaceName } from '@/utils/surface';
 import { uiText } from '@/utils/ui-text';
 import { surfaceSwitchText } from './text';
-import '@/components/select';
+// Side-effect registration for `r-select` / `r-option`. Keep the class binding so
+// bundlers that honour package.json `sideEffects` still evaluate defineSSR.
+import { Select } from '@/components/select';
+void Select;
 
 const CHOICES: RanSurfaceName[] = ['solid', 'glass'];
 

@@ -7,7 +7,10 @@ import { getTheme, setTheme } from '@/utils/theme';
 import type { RanThemeName } from '@/utils/theme';
 import { uiText } from '@/utils/ui-text';
 import { themeSwitchText } from './text';
-import '@/components/select';
+// Side-effect registration for `r-select` / `r-option`. Keep the class binding so
+// bundlers that honour package.json `sideEffects` still evaluate defineSSR.
+import { Select } from '@/components/select';
+void Select;
 
 const CHOICES: RanThemeName[] = ['system', 'light', 'dark'];
 

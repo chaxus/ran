@@ -2,6 +2,13 @@
 
 Web Components library built with TypeScript. All components use Shadow DOM encapsulation, CSS variable theming, and SSR support.
 
+**Consumers and coding agents:** start with [AGENTS.md](AGENTS.md), then the installed
+[COMPONENTS.json](docs/COMPONENTS.json) / [COMPONENTS.md](docs/COMPONENTS.md) and
+[style-tokens-public.md](docs/style-tokens-public.md). Minimal import path:
+`import 'ranui/style'` plus the per-component subpaths you need (`ranui/button`, …).
+Form-associated fields are `r-input` / `r-checkbox` / `r-select` (+ `serializeForm`);
+SSR is `ranui/ssr`; closed-shadow test helpers are `ranui/testing`.
+
 Component skeletons, internal imports and repository commands below are for library contributors.
 Consumers start with the installed public API and their host application's existing conventions.
 
@@ -18,8 +25,9 @@ optional product patterns; read the sections the change touches. Visual and inte
 decisions stay in DESIGN; engineering stays in CODING. Both ship in npm.
 
 For exact attributes, properties, events, slots and parts, use generated
-[COMPONENTS.md](docs/COMPONENTS.md); component variables live in
-[style-tokens-public.md](docs/style-tokens-public.md). Regenerate these when their source contracts change.
+[COMPONENTS.json](docs/COMPONENTS.json) or [COMPONENTS.md](docs/COMPONENTS.md); component
+variables live in [style-tokens-public.md](docs/style-tokens-public.md). Regenerate these
+when their source contracts change.
 
 For visual changes, the guide's [checklist](docs/DESIGN.md) and
 [verifying a change](docs/DESIGN.md#verifying-a-change) say what to check. DESIGN owns visual rules,
@@ -51,6 +59,7 @@ packages/ranui/
 ├── theme/                # tokens.less (Geist base+semantic) + dark.less (dark mixin)
 ├── docs/DESIGN.md        # ⭐ AI-facing design standard — follow it for ANY UI work
 ├── docs/COMPONENTS.md    # ⭐ generated per-element API (attrs/props/events/slots/parts)
+├── docs/COMPONENTS.json  # ⭐ same extract for agents / check-component-attrs
 ├── test/unit/            # *.contract.test.ts per component
 ├── demo/                 # Dev server entry (Vite); routed showcase (r-router)
 ├── index.ts              # Barrel exports + side-effect imports

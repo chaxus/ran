@@ -89,6 +89,17 @@ test('pages opt into a cross-page transition', async ({ page, browserName }) => 
   expect(transition).toBe(true);
 });
 
+test('only docs sidebars are named for view transitions', async ({ page, browserName }) => {
+  test.skip(browserName === 'firefox', 'Firefox has no cross-document view transitions');
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/ranui/');
+  expect(await page.locator('.sidebar').evaluate((el) => getComputedStyle(el).viewTransitionName)).toBe('sidebar');
+  await page.goto('/');
+  // Home keeps a mobile-only sidebar shell; naming it (or pairing with the docs rail) left a
+  // frosted glass snapshot over the landing when leaving ranui.
+  expect(await page.locator('.sidebar').evaluate((el) => getComputedStyle(el).viewTransitionName)).toBe('none');
+});
+
 test('the current-page rail slides from the old row to the new one', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'Cross-document view transitions are what carry the rail');
   await page.emulateMedia({ reducedMotion: 'no-preference' });

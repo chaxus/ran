@@ -568,13 +568,21 @@ a {
 :root[data-ran-surface='glass'] .nav__link,
 :root[data-ran-surface='glass'] .langs__summary {
   border-radius: var(--glass-control-radius);
-  padding: 4px 12px;
   border: 1px solid transparent;
   transition:
     background var(--glass-duration) var(--glass-ease),
     color var(--glass-duration) var(--glass-ease),
     border-color var(--glass-duration) var(--glass-ease),
     box-shadow var(--glass-duration) var(--glass-ease);
+}
+:root[data-ran-surface='glass'] .nav__link {
+  padding: 4px 12px;
+}
+:root[data-ran-surface='glass'] .langs__summary {
+  /* Keep the graphite utility metrics (32× chevron) on glass too. */
+  padding: 0 28px 0 12px;
+  min-height: 32px;
+  height: 32px;
 }
 :root[data-ran-surface='glass'] .nav__link:hover,
 :root[data-ran-surface='glass'] .langs__summary:hover {
@@ -650,6 +658,7 @@ a {
     inset 0 1px 0 color-mix(in srgb, var(--glass-white) 22%, transparent),
     0 1px 3px color-mix(in srgb, var(--glass-black) 35%, transparent);
 }
+:root[data-ran-surface='glass'] .header-utils,
 :root[data-ran-surface='glass'] .appearance {
   gap: 4px;
 }
@@ -661,19 +670,27 @@ a {
   --ran-surface-switch-border-color: var(--glass-rim);
   --ran-theme-switch-radius: var(--glass-control-radius);
   --ran-surface-switch-radius: var(--glass-control-radius);
-  --ran-theme-switch-trigger-min-height: 30px;
-  --ran-surface-switch-trigger-min-height: 30px;
+  /* Same 32px trigger as language / search — not a denser 30px sibling. */
+  --ran-theme-switch-trigger-min-height: 32px;
+  --ran-surface-switch-trigger-min-height: 32px;
   /* Tighter than Graphite so Search + three selects fit the capsule. */
   --ran-theme-switch-width: 6.75rem;
   --ran-surface-switch-width: 7.75rem;
   /* Undo Graphite ghost select tokens on the Regular glass plate. */
   --ran-select-hover-border: 1px solid var(--glass-rim);
-  --ran-select-hover-background-color: var(--glass-fill-strong);
+  --ran-select-hover-background-color: var(--glass-hover);
   --ran-select-focus-border: 1px solid var(--glass-rim);
   --ran-select-color: var(--fg);
+  --ran-select-icon-color: var(--fg-muted);
 }
+/* Match search / theme / surface chips: filled plate + rim at rest. */
 :root[data-ran-surface='glass'] .langs__summary {
-  padding-inline: 8px;
+  background: var(--glass-fill-strong);
+  border-color: var(--glass-rim);
+  color: var(--fg);
+}
+:root[data-ran-surface='glass'] .langs__chevron {
+  color: var(--fg-muted);
 }
 /* Glass chrome is already dense — icon + kbd is enough; label fights the selects. */
 :root[data-ran-surface='glass'] .search-open__text {
@@ -681,7 +698,8 @@ a {
 }
 :root[data-ran-surface='glass'] .search-open {
   min-width: 0;
-  padding-inline: 10px;
+  height: 32px;
+  padding: 0 10px;
   gap: 4px;
 }
 @media (max-width: 1100px) {
@@ -691,10 +709,8 @@ a {
     --ran-surface-switch-width: 7.25rem;
   }
 }
-:root[data-ran-surface='glass'] .langs__summary {
-  border: 1px solid transparent;
-}
 :root[data-ran-surface='glass'] .langs__summary:hover {
+  background: var(--glass-hover);
   border-color: var(--glass-rim);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 55%, transparent);
 }
@@ -882,6 +898,13 @@ a {
  * triggers (borderless at rest) so they match language and search weight; glass
  * overrides these tokens under [data-ran-surface='glass'].
  */
+/* Language + theme + surface share one 4px cluster so the three peers read as a set. */
+.header-utils {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
 .appearance {
   display: flex;
   align-items: center;
@@ -913,6 +936,14 @@ a {
   --ran-select-hover-background-color: var(--bg-soft);
   --ran-select-focus-border: 1px solid transparent;
   --ran-select-color: var(--fg-muted);
+  /* Match language summary weight and chevron ink. */
+  --ran-select-font-weight: 400;
+  --ran-select-icon-color: var(--fg-muted);
+  /* Same soft pill feedback as language and sidebar rows (design: hover ≤100ms). */
+  --ran-select-transition:
+    background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    border-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease);
 }
 .appearance .theme-switch {
   --ran-theme-switch-width: 7rem;
@@ -983,6 +1014,9 @@ a {
   text-decoration: none;
   font-size: var(--type-label-1);
   white-space: nowrap;
+  transition:
+    background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease);
 }
 /* Lowercase beside the lowercase product names; root DESIGN.md records the exception.
    Header only, and not German, where lowercasing a noun is a spelling mistake. */
@@ -1007,8 +1041,10 @@ a {
 .langs__summary {
   list-style: none;
   cursor: pointer;
+  /* Match r-select trigger: 32px box, 12px start / chevron room at the end. */
   min-height: 32px;
-  padding: 8px 12px;
+  height: 32px;
+  padding: 0 28px 0 12px;
   border: 1px solid transparent;
   border-radius: 5px;
   font-size: var(--type-label-1);
@@ -1017,6 +1053,11 @@ a {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
+  position: relative;
+  transition:
+    background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    border-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease);
 }
 .langs__summary::-webkit-details-marker {
   display: none;
@@ -1024,6 +1065,16 @@ a {
 .langs__summary:hover {
   color: var(--fg);
   background: var(--bg-soft);
+}
+.langs__chevron {
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%);
+  color: var(--fg-muted);
+  pointer-events: none;
 }
 .langs__list {
   position: absolute;
@@ -1115,8 +1166,10 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  box-sizing: border-box;
+  height: 32px;
   min-height: 32px;
-  padding: 4px 8px 4px 12px;
+  padding: 0 8px 0 12px;
   border: 1px solid transparent;
   border-radius: 5px;
   background: transparent;
@@ -1125,6 +1178,10 @@ a {
   font-size: var(--type-label-1);
   cursor: pointer;
   flex: none;
+  transition:
+    background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    border-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease);
 }
 .search-open:hover {
   background: var(--bg-soft);
@@ -1362,19 +1419,34 @@ a {
 ::view-transition-new(root) {
   animation-duration: var(--ran-motion-duration-base);
 }
-/* The sidebar is named so its own pixels stay put. The header is not: it is identical on
-   both pages, so the cross-fade leaves it unchanged, and a named header would be captured
-   without its backdrop blur. Named only where the sidebar is on screen; the drawer sidebar
-   is hidden, and a hidden element cannot be captured. */
+/* The sidebar is named so its own pixels stay put between docs pages. The header is not:
+   it is identical on both pages, so the cross-fade leaves it unchanged, and a named header
+   would be captured without its backdrop blur. Only real docs sidebars (`body.has-sidebar`)
+   are named — home and agents keep a `.sidebar--mobile-only` that is `display: none` here,
+   and naming that (or naming a sidebar that has no pair on the next page) left a frosted
+   glass snapshot fading across the landing. */
 @media (min-width: 900px) {
-  .sidebar {
+  body.has-sidebar .sidebar:not(.sidebar--mobile-only) {
     view-transition-name: sidebar;
   }
   /* Captured apart from the sidebar, so the current-page marker slides from the old row to
      the new one instead of cutting. */
-  .sb__rail {
+  body.has-sidebar .sb__rail {
     view-transition-name: sb-rail;
   }
+}
+/*
+ * Paired docs→docs: old/new stay put (no cross-fade of the rail column). Unpaired
+ * docs→landing: hide the orphaned glass snapshot immediately — a default fade shows the
+ * backdrop-filter plate as a blurred rectangle over the home hero.
+ */
+::view-transition-old(sidebar),
+::view-transition-new(sidebar) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-group(sidebar) {
+  animation-duration: 0s;
 }
 ::view-transition-group(sb-rail) {
   animation-duration: var(--ran-motion-duration-slow);
@@ -2540,7 +2612,8 @@ body.drawer-open {
     gap: var(--ran-space-1, 4px);
     padding-inline: var(--ran-space-2, 8px);
   }
-  .langs__current {
+  .langs__current,
+  .langs__chevron {
     display: none;
   }
   .langs__icon {
@@ -2549,10 +2622,22 @@ body.drawer-open {
   .langs__summary {
     min-width: 44px;
     min-height: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav__link,
+  .langs__summary,
+  .search-open {
+    transition: none;
+  }
+  .appearance .theme-switch,
+  .appearance .surface-switch {
+    --ran-select-transition: none;
   }
 }
 
