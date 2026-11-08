@@ -78,13 +78,12 @@ export type { SSGPage } from '@/utils/ssg';
 export { I18nCore, createI18n, useI18n } from '@/utils/i18n';
 export type { I18nConfig, MessageDict, LocaleMessages, TranslateParams, LocaleChangeHandler } from '@/utils/i18n';
 
-// Scratch registers through the barrel without exposing a named constructor.
-import '@/components/scratch';
-
 // ── Typed custom elements ───────────────────────────────────────────────────
 // Augment the DOM tag map so `document.querySelector('r-select')` and
 // `document.createElement('r-input')` are typed as the component class — no
 // `as` casts needed to read `.value` and other component properties.
+// Companion tags (`r-option`, `r-dropdown-item`, `r-content`) register with their
+// owners (`ranui/select`, `ranui/popover`). `r-scratch` registers only via `ranui/scratch`.
 import type { Button as TButton } from '@/components/button';
 import type { Icon as TIcon } from '@/components/icon';
 import type { ImageElement as TImage } from '@/components/image';
@@ -97,6 +96,8 @@ import type { RadarChart as TRadar } from '@/components/radar';
 import type { RanPlayer as TPlayer } from '@/components/player';
 import type TModal from '@/components/modal';
 import type { Select as TSelect } from '@/components/select';
+import type { Option as TOption } from '@/components/select/option';
+import type { DropdownItem as TDropdownItem } from '@/components/select/dropdown-item';
 import type { Progress as TProgress } from '@/components/progress';
 import type TCheckbox from '@/components/checkbox';
 import type TColorPicker from '@/components/colorpicker';
@@ -105,6 +106,7 @@ import type { Math as TMath } from '@/components/math';
 import type { Mermaid as TMermaid } from '@/components/mermaid';
 import type { Markdown as TMarkdown } from '@/components/markdown';
 import type { Popover as TPopover } from '@/components/popover';
+import type { Content as TContent } from '@/components/popover/content';
 import type { Dropdown as TDropdown } from '@/components/dropdown';
 import type { Card as TCard } from '@/components/card';
 import type { Conversation as TConversation } from '@/components/conversation';
@@ -123,6 +125,7 @@ import type { Route as TRoute } from '@/components/route';
 import type { Link as TLink } from '@/components/link';
 import type { ThemeSwitch as TThemeSwitch } from '@/components/theme-switch';
 import type { SurfaceSwitch as TSurfaceSwitch } from '@/components/surface-switch';
+import type TScratch from '@/components/scratch';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -138,6 +141,8 @@ declare global {
     'r-player': TPlayer;
     'r-modal': TModal;
     'r-select': TSelect;
+    'r-option': TOption;
+    'r-dropdown-item': TDropdownItem;
     'r-progress': TProgress;
     'r-checkbox': TCheckbox;
     'r-colorpicker': TColorPicker;
@@ -146,6 +151,7 @@ declare global {
     'r-mermaid': TMermaid;
     'r-markdown': TMarkdown;
     'r-popover': TPopover;
+    'r-content': TContent;
     'r-dropdown': TDropdown;
     'r-card': TCard;
     'r-conversation': TConversation;
@@ -164,5 +170,6 @@ declare global {
     'r-link': TLink;
     'r-theme-switch': TThemeSwitch;
     'r-surface-switch': TSurfaceSwitch;
+    'r-scratch': TScratch;
   }
 }

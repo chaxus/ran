@@ -6,8 +6,13 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 const RANUI = resolve(__dirname, '../..');
 
+type GeneratedApi = {
+  markdown: string;
+  json: { count: number; elements: { tag: string; attributes: string[] }[] };
+};
+
 /** Exercise the real CLI in a disposable package; never rewrite checked-in generated docs. */
-function generate(sources: Record<string, string>): string {
+function generate(sources: Record<string, string>): GeneratedApi {
   const temporary = mkdtempSync(join(tmpdir(), 'ranui-component-api-'));
   const root = join(temporary, 'ranui');
   try {
@@ -22,7 +27,10 @@ function generate(sources: Record<string, string>): string {
       encoding: 'utf8',
       stdio: 'pipe',
     });
-    return readFileSync(join(root, 'docs/COMPONENTS.md'), 'utf8');
+    return {
+      markdown: readFileSync(join(root, 'docs/COMPONENTS.md'), 'utf8'),
+      json: JSON.parse(readFileSync(join(root, 'docs/COMPONENTS.json'), 'utf8')) as GeneratedApi['json'],
+    };
   } finally {
     rmSync(temporary, { recursive: true, force: true });
   }
@@ -37,6 +45,7 @@ function attributes(document: string, tag: string): string[] {
 
 describe('component API source extraction', () => {
   let document: string;
+  let api: GeneratedApi['json'];
   beforeAll(() => {
     const sources = Object.fromEntries(
       ['image', 'select/option', 'tabpane', 'progress', 'icon'].map((owner) => [
@@ -44,7 +53,7 @@ describe('component API source extraction', () => {
         readFileSync(join(RANUI, 'components', owner, 'index.ts'), 'utf8'),
       ]),
     );
-    document = generate({
+    const generated = generate({
       ...sources,
       typed: `class Typed {
         static get observedAttributes(): string[] {
@@ -67,6 +76,8 @@ describe('component API source extraction', () => {
       absent: `class Absent { render() { return ['not-an-attribute']; } }
       defineSSR('r-absent', Absent);`,
     });
+    document = generated.markdown;
+    api = generated.json;
   });
 
   it.each([
@@ -76,6 +87,13 @@ describe('component API source extraction', () => {
     ['r-progress', ['dot', 'percent', 'sheet', 'total', 'type']],
   ])('documents the real %s observed attributes', (tag, expected) => {
     expect(attributes(document, tag as string)).toEqual(expected);
+    expect(api.elements.find((el) => el.tag === tag)?.attributes).toEqual(expected);
+  });
+
+  it('keeps COMPONENTS.json count aligned with the markdown extract', () => {
+    expect(api.count).toBe(api.elements.length);
+    expect(document).toContain(`${api.count} custom elements.`);
+    expect(document).toContain('COMPONENTS.json');
   });
 
   it('preserves typed inline arrays without treating comments as attributes', () => {

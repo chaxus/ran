@@ -10,7 +10,11 @@ already has tokens and components; it is about using them well.
 point, not a limit: depart from it whenever the work is better for it, and say why. Items marked
 **(checked)** are enforced by a test in this repository; the table at the end says which one. Everything else needs your eyes in a real browser.
 
-ranui's [implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md) maps these items to ranui's tokens,
+When `ranui` is installed, prefer its shipped guide at
+`docs/DESIGN.md#ranui-implementation-adapter` inside that package
+(`node_modules/ranui/docs/DESIGN.md#ranui-implementation-adapter`). Otherwise use the
+source [implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md).
+The adapter maps these items to ranui's tokens,
 stacking tiers and component specifics.
 
 ## Before you start

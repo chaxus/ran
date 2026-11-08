@@ -3,7 +3,9 @@
 How a product chooses **solid** versus **liquid glass**, independent of colour theme
 (light / dark / system). Use it with the [design checklist](./DESIGN.md); ranui's mapping
 lives in the
-[implementation adapter](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md).
+implementation adapter (installed `ranui` → `docs/DESIGN.md#ranui-implementation-adapter`,
+or the source
+[packages/ranui/docs/adapters/DESIGN.md](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)).
 
 **MUST** marks a defect a user can observe. **SHOULD** is a starting point.
 

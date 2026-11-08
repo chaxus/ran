@@ -19,7 +19,7 @@ $bin/tsc --declaration --emitDeclarationOnly --outDir ./dist --project tsconfig.
 # degrades to `any`. Rewrite them to relative specifiers.
 
 cp tsconfig.json ./dist
-cp typings.d.ts ./dist
+cp typings.d.ts typings-elements.generated.d.ts ./dist
 
 # ship the self-hosted Geist faces (fonts.css + variable *.woff2 + OFL license)
 # as dist/fonts/ — consumed via the "./fonts" package export or by copying the

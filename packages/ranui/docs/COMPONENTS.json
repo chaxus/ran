@@ -1,0 +1,2784 @@
+{
+  "generatedBy": "bin/generate-component-api.ts",
+  "count": 42,
+  "elements": [
+    {
+      "tag": "r-attachments",
+      "file": "components/attachments/index.ts",
+      "attributes": [
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "accept",
+          "type": "string",
+          "desc": "Comma-separated types or extensions, in the form `<input accept>` takes."
+        },
+        {
+          "name": "attachments",
+          "type": "readonly Attachment[]",
+          "desc": "The staged files, in the order they arrived."
+        },
+        {
+          "name": "files",
+          "type": "File[]",
+          "desc": "Just the files, for building a request body."
+        },
+        {
+          "name": "maxCount",
+          "type": "number",
+          "desc": "Most files that may be staged at once; unlimited when unset."
+        },
+        {
+          "name": "maxSize",
+          "type": "number",
+          "desc": "Largest file accepted, in bytes."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "attachmentrejected",
+          "detail": [
+            "file",
+            "reason"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "attachmentschange",
+          "detail": [
+            "attachments"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "attachment",
+        "icon",
+        "list",
+        "name",
+        "remove",
+        "size",
+        "thumb"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-button",
+      "file": "components/button/index.ts",
+      "attributes": [
+        "aria-label",
+        "disabled",
+        "effect",
+        "icon",
+        "iconSize",
+        "sheet",
+        "type"
+      ],
+      "properties": [
+        {
+          "name": "disabled",
+          "type": "boolean | string",
+          "desc": "Blocks clicks and keyboard activation and removes the button from the tab order. Off by default; `disabled=\"false\"` counts as enabled."
+        },
+        {
+          "name": "effect",
+          "type": "boolean",
+          "desc": "Whether the click ripple is drawn. On by default; opt out with `effect=\"false\"`."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "desc": "Name of an `<r-icon>` drawn before the label, for example `'search'`. No icon when empty."
+        },
+        {
+          "name": "iconSize",
+          "type": "string",
+          "desc": "Icon size passed to the inner `<r-icon>`. Defaults to about 1.15× the button's font size; set it only when the icon needs a fixed size."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "desc": "Visual variant: `''` (default) | `'primary'` (monochrome) | `'warning'` | `'text'`. Drives the `:host([type=...])` styles."
+        }
+      ],
+      "events": [],
+      "parts": [
+        "button",
+        "content"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-card",
+      "file": "components/card/index.ts",
+      "attributes": [
+        "description",
+        "heading",
+        "hoverable",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "description",
+          "type": "string",
+          "desc": "Secondary text shown under the heading. Empty by default; the header is hidden when the heading, description and `extra` slot are all empty."
+        },
+        {
+          "name": "heading",
+          "type": "string",
+          "desc": "Heading text."
+        },
+        {
+          "name": "hoverable",
+          "type": "boolean",
+          "desc": "Interactive card (Geist): hover darkens the border one step. Purely presentational — gate it to cards that are actually clickable."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [
+        "body",
+        "card",
+        "description",
+        "extra",
+        "footer",
+        "header",
+        "title"
+      ],
+      "defaultSlot": true,
+      "namedSlots": [
+        "extra",
+        "footer"
+      ]
+    },
+    {
+      "tag": "r-checkbox",
+      "file": "components/checkbox/index.ts",
+      "attributes": [
+        "checked",
+        "disabled",
+        "required",
+        "sheet",
+        "value"
+      ],
+      "properties": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "validity",
+          "type": "ValidityState | undefined",
+          "desc": ""
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "detail": [
+            "checked"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "checkbox",
+        "inner",
+        "input",
+        "label",
+        "wrapper"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-colorpicker",
+      "file": "components/colorpicker/index.ts",
+      "attributes": [
+        "alpha-label",
+        "disabled",
+        "hue-label",
+        "label",
+        "sheet",
+        "value"
+      ],
+      "properties": [
+        {
+          "name": "alphaLabel",
+          "type": "string",
+          "desc": "Accessible name of the opacity slider."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "desc": "Blocks opening the picker and emitting `change`, and removes the swatch from the tab order. Off by default; `disabled=\"false\"` counts as enabled."
+        },
+        {
+          "name": "hueLabel",
+          "type": "string",
+          "desc": "Accessible name of the hue slider."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "desc": "Accessible name of the swatch that opens the picker. Defaults to `'Choose color'`."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "desc": "Selected colour as `#rrggbb` (or `#rgb`), `rgb(...)` or `rgba(...)`; picking a colour writes a hex value, or `rgba(...)` when opacity is below 1. Unparseable values are ignored. Empty until set; the swatch starts white."
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "detail": [],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "block",
+        "swatch"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-content",
+      "file": "components/popover/content/index.ts",
+      "attributes": [],
+      "properties": [],
+      "events": [
+        {
+          "name": "change",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-conversation",
+      "file": "components/conversation/index.ts",
+      "attributes": [
+        "empty",
+        "follow",
+        "loading-older",
+        "older",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "empty",
+          "type": "string",
+          "desc": "Text shown while the projection has produced no rows."
+        },
+        {
+          "name": "follow",
+          "type": "boolean",
+          "desc": "Whether new content is followed until the reader scrolls away from the floor."
+        },
+        {
+          "name": "loadingOlder",
+          "type": "boolean",
+          "desc": "Whether a page is in flight; the affordance stays visible and goes inert."
+        },
+        {
+          "name": "older",
+          "type": "string",
+          "desc": "Label for the paging affordance above the first row. Empty hides it."
+        },
+        {
+          "name": "pinned",
+          "type": "boolean",
+          "desc": "Whether the view is currently following new content."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "olderrequest",
+          "detail": [],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "pinnedchange",
+          "detail": [
+            "pinned"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "conversation",
+        "empty",
+        "footer",
+        "list",
+        "older"
+      ],
+      "defaultSlot": false,
+      "namedSlots": [
+        "footer"
+      ]
+    },
+    {
+      "tag": "r-disclosure-row",
+      "file": "components/disclosure-row/index.ts",
+      "attributes": [
+        "busy",
+        "expandable",
+        "heading",
+        "name",
+        "open",
+        "sheet",
+        "summary",
+        "tone"
+      ],
+      "properties": [
+        {
+          "name": "busy",
+          "type": "boolean",
+          "desc": "Whether the work this row stands for is still running."
+        },
+        {
+          "name": "expandable",
+          "type": "boolean",
+          "desc": "Whether the row has a body worth opening."
+        },
+        {
+          "name": "heading",
+          "type": "string",
+          "desc": "The fixed-width left half of the line."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "desc": "Groups rows so that opening one closes the rest."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "desc": "Whether the body is shown."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "desc": "The truncating right half. Empty drops the separator with it."
+        },
+        {
+          "name": "tone",
+          "type": "string",
+          "desc": "`error` colours the summary; anything else is the ordinary tone."
+        }
+      ],
+      "events": [
+        {
+          "name": "disclosurebeforetoggle",
+          "detail": [
+            "open"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": true
+          }
+        },
+        {
+          "name": "disclosuretoggle",
+          "detail": [
+            "open"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "body",
+        "disclosure",
+        "leading",
+        "row",
+        "separator",
+        "summary",
+        "title"
+      ],
+      "defaultSlot": true,
+      "namedSlots": [
+        "leading"
+      ]
+    },
+    {
+      "tag": "r-dropdown",
+      "file": "components/dropdown/index.ts",
+      "attributes": [
+        "arrow",
+        "sheet",
+        "transit"
+      ],
+      "properties": [
+        {
+          "name": "arrow",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "transit",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [
+        "dropdown"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-dropdown-item",
+      "file": "components/select/dropdown-item/index.ts",
+      "attributes": [
+        "active",
+        "selected",
+        "sheet",
+        "title",
+        "value"
+      ],
+      "properties": [
+        {
+          "name": "active",
+          "type": "string",
+          "desc": "The transient cursor that pointer hover and arrow keys move; r-select sets it. It shares the hover fill and carries no selection meaning."
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "desc": "Marks the committed choice with a check mark. Unlike `active` (the transient cursor), it stays put while the cursor moves."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [
+        "content",
+        "item"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-fan-gallery",
+      "file": "components/fan-gallery/index.ts",
+      "attributes": [
+        "sheet",
+        "spread"
+      ],
+      "properties": [
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "spread",
+          "type": "string",
+          "desc": "Angle in degrees between the first and last child once open. Defaults to `24`; `0` lines them up."
+        }
+      ],
+      "events": [],
+      "parts": [
+        "stage"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-glass",
+      "file": "components/glass/index.ts",
+      "attributes": [
+        "backdrop",
+        "bevel",
+        "blur",
+        "dispersion",
+        "displace",
+        "interactive",
+        "material",
+        "radius",
+        "rim",
+        "saturate",
+        "specular",
+        "tint",
+        "tone"
+      ],
+      "properties": [
+        {
+          "name": "backdrop",
+          "type": "string",
+          "desc": "An `<img>` or `<video>` to refract with the WebGL path: a selector, resolved in the host's"
+        },
+        {
+          "name": "bevel",
+          "type": "string",
+          "desc": "Width of the curved edge band that bends light, in px."
+        },
+        {
+          "name": "dispersion",
+          "type": "string",
+          "desc": "How far the colors split at the edge, as a percentage of `displace`. `0` keeps them together."
+        },
+        {
+          "name": "displace",
+          "type": "string",
+          "desc": "How far the edge pulls the backdrop inward, in px. `0` is a flat pane."
+        },
+        {
+          "name": "interactive",
+          "type": "boolean",
+          "desc": "Hover lift + press-scale feedback, for clickable glass. Also makes the host"
+        },
+        {
+          "name": "material",
+          "type": "string",
+          "desc": "A preset for every optical value: `regular` (default), `thin`, `thick` or `clear`."
+        },
+        {
+          "name": "optics",
+          "type": "GlassOptics",
+          "desc": "The material's values with any attribute override applied."
+        },
+        {
+          "name": "radius",
+          "type": "string",
+          "desc": "Corner radius, in px."
+        },
+        {
+          "name": "rim",
+          "type": "boolean",
+          "desc": "Opt-in GPU specular rim: an outer and an inner wall line, lit by a key light from the"
+        },
+        {
+          "name": "saturate",
+          "type": "string",
+          "desc": "Backdrop saturation, as a percentage number (e.g. `180`)."
+        },
+        {
+          "name": "sheen",
+          "type": "boolean",
+          "desc": "Animated specular sweep across the surface."
+        },
+        {
+          "name": "specular",
+          "type": "string",
+          "desc": "Strength of the highlights, as a percentage (`100` is the material's normal light)."
+        },
+        {
+          "name": "tint",
+          "type": "string",
+          "desc": "Glass fill tint (any CSS background value)."
+        },
+        {
+          "name": "tone",
+          "type": "string",
+          "desc": "What sits behind the glass: `dark` (default) lights the edge, `light` shades it, because a"
+        }
+      ],
+      "events": [],
+      "parts": [
+        "glass",
+        "refraction",
+        "specular"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-icon",
+      "file": "components/icon/index.ts",
+      "attributes": [
+        "aria-label",
+        "color",
+        "decorative",
+        "name",
+        "sheet",
+        "size",
+        "spin"
+      ],
+      "properties": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "decorative",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "size",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "spin",
+          "type": "boolean",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "ranui-icon-registered",
+          "detail": [
+            "name"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "ran-icon"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-img",
+      "file": "components/image/index.ts",
+      "attributes": [
+        "alt",
+        "fallback",
+        "sheet",
+        "src"
+      ],
+      "properties": [
+        {
+          "name": "alt",
+          "type": "",
+          "desc": "Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),"
+        },
+        {
+          "name": "fallback",
+          "type": "",
+          "desc": "Image shown when `src` fails. Empty by default: a failed image then shows a theme-aware placeholder that fills the box."
+        },
+        {
+          "name": "sheet",
+          "type": "",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [
+        "image"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-input",
+      "file": "components/input/index.ts",
+      "attributes": [
+        "disabled",
+        "icon",
+        "label",
+        "max",
+        "message",
+        "min",
+        "name",
+        "placeholder",
+        "required",
+        "sheet",
+        "status",
+        "step",
+        "type",
+        "value"
+      ],
+      "properties": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "desc": "Blocks typing and focus, greys the field out and leaves it out of form validation. Off by default; `disabled=\"false\"` counts as enabled."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "desc": "Name of an `r-icon` shown before the text, for example `search`. No icon when unset."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "desc": "Caption rendered above the field and linked to the inner input, so it is the field's accessible name and clicking it focuses the input. No caption when unset."
+        },
+        {
+          "name": "max",
+          "type": "string",
+          "desc": "Highest accepted number. Applies only when `type` is `'number'`; larger values fail form validation."
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "desc": "Helper or validation text shown below the field and linked to it with `aria-describedby`. Nothing is rendered when empty."
+        },
+        {
+          "name": "min",
+          "type": "string",
+          "desc": "Lowest accepted number. Applies only when `type` is `'number'`; smaller values fail form validation."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "desc": "Key under which the value is submitted with the owning form."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "desc": "Hint text shown inside the field while it is empty."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "desc": "Makes an empty value fail native form validation (`checkValidity()`, `:invalid`) and sets `aria-required`. Off by default; setting the property to `false` or `'false'` removes it."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "desc": "Validation state: `'error'` | `'warning'`. Colours the border and label and adds a status icon; pair it with `message` so the state is not shown by colour alone. Empty (neutral) by default."
+        },
+        {
+          "name": "step",
+          "type": "string",
+          "desc": "Granularity of accepted numbers, forwarded to the native input. Applies only when `type` is `'number'`; off-step values fail form validation."
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "desc": "Native input type forwarded to the inner `<input>`, such as `text`, `password` or `number`; `number` enables `min`, `max` and `step`. Behaves as `text` when unset."
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "desc": "The browser's message for the current constraint error; empty while the field is valid."
+        },
+        {
+          "name": "validity",
+          "type": "ValidityState | undefined",
+          "desc": "Native `ValidityState` of the field, for reading constraint errors from script. `undefined` where ElementInternals is unavailable."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "desc": "Current text of the field. Updates on every keystroke and is submitted with the owning form under `name`. Empty by default."
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "detail": [
+            "value"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "input",
+          "detail": [
+            "value"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "content",
+        "input",
+        "label",
+        "message"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-link",
+      "file": "components/link/index.ts",
+      "attributes": [
+        "href",
+        "replace",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "href",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "replace",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "ran-navigate",
+          "detail": [
+            "path",
+            "replace"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-loading",
+      "file": "components/loading/index.ts",
+      "attributes": [
+        "label",
+        "name",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "label",
+          "type": "string",
+          "desc": "Accessible name announced by the `status` role. Defaults to \"Loading\"; set it to say what is loading."
+        },
+        {
+          "name": "name",
+          "type": "'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-markdown",
+      "file": "components/markdown/index.ts",
+      "attributes": [
+        "caret",
+        "content",
+        "copy",
+        "download",
+        "highlight",
+        "inline-math",
+        "label-copy-error",
+        "line-numbers",
+        "link-target",
+        "mode",
+        "sheet",
+        "theme"
+      ],
+      "properties": [
+        {
+          "name": "caret",
+          "type": "string",
+          "desc": "Shows a blinking caret after the last block while text streams in; remove it when the answer is complete. Any value draws a block caret; `'circle'` draws a dot."
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "desc": "Markdown source. Resolution order: the `content` property (set via JS, not reflected), the `content` attribute, then the element's text content."
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "desc": "Adds a copy button to each code block header. Reflects the `copy` attribute; off by default."
+        },
+        {
+          "name": "downloadable",
+          "type": "boolean",
+          "desc": "Adds a download button to each code block header that saves the code as a file. Reflects the `download` attribute; off by default."
+        },
+        {
+          "name": "highlight",
+          "type": "string | null",
+          "desc": "Shiki syntax highlighting for code blocks; off when the attribute is absent. `\"\"` → github-light/github-dark; `\"a\"` → both; `\"a b\"` → light / dark theme."
+        },
+        {
+          "name": "inlineMath",
+          "type": "boolean",
+          "desc": "Treats `$…$` as inline math. Off by default because `$` often means currency; `\\(…\\)` always works. Reflects the `inline-math` attribute."
+        },
+        {
+          "name": "lineNumbers",
+          "type": "boolean",
+          "desc": "Shows line numbers in code blocks. Reflects the `line-numbers` attribute; off by default."
+        },
+        {
+          "name": "linkTarget",
+          "type": "string",
+          "desc": "`target` for rendered links, set with `rel=\"noopener noreferrer\"`. Defaults to `'_blank'`; use `'_self'` to open links in place. In-page `#` links are left alone."
+        },
+        {
+          "name": "mode",
+          "type": "string",
+          "desc": "Parsing mode: `'streaming'` | `'static'`. Default `'streaming'` repairs half-written syntax and re-renders only changed blocks; use `'static'` for finished text."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "theme",
+          "type": "string",
+          "desc": "Colour scheme: `'auto'` | `'light'` | `'dark'`. Default `'auto'` follows the document theme; embedded Mermaid diagrams use the same value."
+        }
+      ],
+      "events": [
+        {
+          "name": "copied",
+          "detail": [
+            "code",
+            "kind",
+            "language"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "download",
+          "detail": [
+            "filename",
+            "kind",
+            "language"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "error",
+          "detail": [
+            "message"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "render",
+          "detail": [
+            "blocks",
+            "changed"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "block",
+        "body",
+        "button",
+        "code",
+        "code-actions",
+        "code-header",
+        "code-lang",
+        "copy-status",
+        "error",
+        "markdown",
+        "table"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-math",
+      "file": "components/math/index.ts",
+      "attributes": [
+        "copy",
+        "display",
+        "download",
+        "font",
+        "latex",
+        "macros",
+        "sheet",
+        "wrap"
+      ],
+      "properties": [
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "copyTarget",
+          "type": "'source' | 'mathml'",
+          "desc": ""
+        },
+        {
+          "name": "display",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "downloadable",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "font",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "latex",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "macros",
+          "type": "Record<string, string> | undefined",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "wrap",
+          "type": "'none' | 'tex' | '=' | undefined",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "copied",
+          "detail": [
+            "kind"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "download",
+          "detail": [
+            "format"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "error",
+          "detail": [
+            "message"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "render",
+          "detail": [
+            "ok"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "button",
+        "copy-status",
+        "error",
+        "math",
+        "menu",
+        "render",
+        "toolbar"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-mermaid",
+      "file": "components/mermaid/index.ts",
+      "attributes": [
+        "code",
+        "copy",
+        "download",
+        "fullscreen",
+        "sheet",
+        "theme"
+      ],
+      "properties": [
+        {
+          "name": "code",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "downloadable",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "fullscreenable",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "theme",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "copied",
+          "detail": [
+            "kind"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "download",
+          "detail": [
+            "format"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "error",
+          "detail": [
+            "message"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "fullscreenchange",
+          "detail": [
+            "open"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "render",
+          "detail": [
+            "ok"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "button",
+        "copy-status",
+        "diagram",
+        "error",
+        "menu",
+        "mermaid",
+        "toolbar"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-message",
+      "file": "components/message/index.ts",
+      "attributes": [
+        "content",
+        "sheet",
+        "type"
+      ],
+      "properties": [
+        {
+          "name": "content",
+          "type": "string | null",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "type",
+          "type": "string | null",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-modal",
+      "file": "components/modal/index.ts",
+      "attributes": [
+        "autoFocus",
+        "closable",
+        "closeOnEsc",
+        "heading",
+        "hide-header",
+        "lockScroll",
+        "maskClosable",
+        "open",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "autoFocus",
+          "type": "boolean",
+          "desc": "Moves focus to the first focusable element in the dialog (or the dialog itself) when it opens. On by default; turn off with `autoFocus=\"false\"`."
+        },
+        {
+          "name": "closable",
+          "type": "boolean",
+          "desc": "Shows the close button in the corner. On by default; turn off with `closable=\"false\"` when the dialog must be closed by its own actions."
+        },
+        {
+          "name": "closeOnEsc",
+          "type": "boolean",
+          "desc": "Closes the topmost dialog when Escape is pressed. On by default; turn off with `closeOnEsc=\"false\"`."
+        },
+        {
+          "name": "heading",
+          "type": "string",
+          "desc": "Heading text shown in the title bar; falls back to `Modal` when empty."
+        },
+        {
+          "name": "hideHeader",
+          "type": "boolean",
+          "desc": "Headerless mode for content-only dialogs such as image lightboxes: drops the title bar and keeps only a floating close button when `closable`. Off by default."
+        },
+        {
+          "name": "lockScroll",
+          "type": "boolean",
+          "desc": "Stops the page behind from scrolling while the dialog is open. On by default; turn off with `lockScroll=\"false\"`."
+        },
+        {
+          "name": "maskClosable",
+          "type": "boolean",
+          "desc": "Closes the dialog when the backdrop outside it is clicked. On by default; turn off with `maskClosable=\"false\"` for forms that must not be dismissed by a stray click."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "desc": "Shows the dialog when set and closes it when removed. Off by default; `open=\"false\"` counts as closed."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "afterclose",
+          "detail": [
+            "trigger"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "afteropen",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "beforeclose",
+          "detail": [
+            "trigger"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": true
+          }
+        },
+        {
+          "name": "beforeopen",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": true
+          }
+        },
+        {
+          "name": "close",
+          "detail": [
+            "trigger"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "open",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "body",
+        "close",
+        "dialog",
+        "footer",
+        "header",
+        "mask",
+        "root",
+        "title"
+      ],
+      "defaultSlot": true,
+      "namedSlots": [
+        "footer"
+      ]
+    },
+    {
+      "tag": "r-option",
+      "file": "components/select/option/index.ts",
+      "attributes": [
+        "disabled",
+        "sheet",
+        "value"
+      ],
+      "properties": [
+        {
+          "name": "disabled",
+          "type": "boolean | string | undefined | null",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "value",
+          "type": "",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-player",
+      "file": "components/player/index.ts",
+      "attributes": [
+        "autoplay",
+        "currenttime",
+        "currentTime",
+        "debug",
+        "disable-error-modal",
+        "format",
+        "loop",
+        "muted",
+        "playbackrate",
+        "playbackRate",
+        "poster",
+        "remember-position",
+        "sheet",
+        "src",
+        "thumbnails",
+        "volume"
+      ],
+      "properties": [
+        {
+          "name": "autoplay",
+          "type": "boolean",
+          "desc": "Start playback as soon as the video can play, via the native `autoplay` flag. Browsers usually block unmuted autoplay, so pair it with `muted`. Off by default."
+        },
+        {
+          "name": "controllerBarTimeId",
+          "type": "ReturnType<typeof setTimeout> | undefined",
+          "desc": "Internal timer id for auto-hiding the control bar. Not meant to be set by consumers."
+        },
+        {
+          "name": "currentTime",
+          "type": "string",
+          "desc": "Playback position in seconds, also accepted as `currenttime`. In the markup it is the start position; a later change seeks. The getter returns the attribute, not the live position."
+        },
+        {
+          "name": "debug",
+          "type": "string",
+          "desc": "Any non-empty value logs every internal `change` event and source-load errors to the console. An empty value (`<r-player debug>`) leaves logging off."
+        },
+        {
+          "name": "disableErrorModal",
+          "type": "boolean",
+          "desc": "Suppress the built-in playback-error panel with its Retry button, for apps that show their own error UI. Off by default, so the panel shows."
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "desc": "Playback engine: `'hls'` | `'dash'` | `'flv'` | `'webrtc'` | `'native'`. Empty by default, which detects it from the `src` extension; set it for signed or extensionless URLs, and always for `webrtc` (a WHEP endpoint)."
+        },
+        {
+          "name": "labelError",
+          "type": "string",
+          "desc": "Heading of the built-in playback-error panel. Defaults to `'Playback failed'`."
+        },
+        {
+          "name": "labelRetry",
+          "type": "string",
+          "desc": "Label of the panel's retry button. Defaults to `'Retry'`."
+        },
+        {
+          "name": "loop",
+          "type": "boolean",
+          "desc": "Restart from the beginning when playback ends, via the native `loop` flag. Off by default."
+        },
+        {
+          "name": "moveProgress",
+          "type": "",
+          "desc": "Internal seek-bar drag state (`percentage`, `mouseDown`), read by the player's own modules. Not meant to be set by consumers."
+        },
+        {
+          "name": "muted",
+          "type": "boolean",
+          "desc": "Start silent: sets volume to 0 and the native `muted` flag. Removing the attribute restores the previous volume, or 50 if none was recorded. Off by default."
+        },
+        {
+          "name": "playbackRate",
+          "type": "string",
+          "desc": "Speed multiplier such as `1`, `1.5` or `2`, also accepted as `playbackrate`. Applied from the markup and on every change."
+        },
+        {
+          "name": "poster",
+          "type": "string",
+          "desc": "Image URL shown on the video before playback starts, passed to the native `<video poster>`."
+        },
+        {
+          "name": "rememberPosition",
+          "type": "boolean",
+          "desc": "Save the position to localStorage, keyed by `src`, on pause and when the page is hidden, and resume there on the next load of the same `src`. The entry is cleared when playback ends. Off by default."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "desc": "Media URL to play. The engine is picked from its extension unless `format` is set; changing it on a connected player reloads the source."
+        },
+        {
+          "name": "thumbnails",
+          "type": "string",
+          "desc": "URL of a WebVTT sprite-sheet manifest that shows a preview thumbnail above the seek-bar hover tip."
+        },
+        {
+          "name": "tracks",
+          "type": "PlayerTrackConfig[]",
+          "desc": "Subtitle and caption tracks as `{ src, srclang, label, kind?, default? }` objects; property only, no attribute. Defaults to `[]`."
+        },
+        {
+          "name": "volume",
+          "type": "string",
+          "desc": "Volume on a 0-100 scale, clamped; `muted` wins. Applied from the markup and on every change; the getter returns the attribute, not the live volume."
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "detail": [
+            "currentTime",
+            "data",
+            "duration",
+            "tag",
+            "type"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-popover",
+      "file": "components/popover/index.ts",
+      "attributes": [
+        "open",
+        "placement",
+        "sheet",
+        "trigger"
+      ],
+      "properties": [
+        {
+          "name": "getPopupContainerId",
+          "type": "string",
+          "desc": "Id of the element the panel is mounted into, looked up in the popover's own root first and then the document. Defaults to `document.body`."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "desc": "Whether the panel is showing."
+        },
+        {
+          "name": "placement",
+          "type": "Placement",
+          "desc": "Which side of the trigger the panel sits on, with an optional alignment. Defaults to `'top'`."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "trigger",
+          "type": "string",
+          "desc": "How the panel opens: `'hover'` | `'click'`. Default `'hover'`. Click toggles the panel in either mode; hover is ignored on mobile devices."
+        }
+      ],
+      "events": [
+        {
+          "name": "after-hide",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "after-show",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "hide",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "show",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-progress",
+      "file": "components/progress/index.ts",
+      "attributes": [
+        "dot",
+        "percent",
+        "sheet",
+        "total",
+        "type"
+      ],
+      "properties": [
+        {
+          "name": "dot",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "percent",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "total",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "detail": [
+            "percent",
+            "total",
+            "value"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "dot",
+        "fill",
+        "track"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-radar",
+      "file": "components/radar/index.ts",
+      "attributes": [
+        "abilitys",
+        "colorline",
+        "colorpolygon",
+        "fillcolor",
+        "sheet",
+        "strokecolor"
+      ],
+      "properties": [
+        {
+          "name": "abilitys",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "colorLine",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "colorPolygon",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "fillColor",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "fontColor",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "strokeColor",
+          "type": "",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-reasoning",
+      "file": "components/reasoning/index.ts",
+      "attributes": [
+        "duration",
+        "label",
+        "open",
+        "sheet",
+        "streaming"
+      ],
+      "properties": [
+        {
+          "name": "content",
+          "type": "string",
+          "desc": "The reasoning text. Assigning repeatedly is the streaming path."
+        },
+        {
+          "name": "duration",
+          "type": "number | null",
+          "desc": "How long the model spent, in milliseconds. Rendered beside the label when set."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "desc": "Summary text. Defaults to `Reasoning`."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "desc": "Whether the body is expanded."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "streaming",
+          "type": "boolean",
+          "desc": "Whether reasoning is still arriving."
+        }
+      ],
+      "events": [],
+      "parts": [
+        "body",
+        "row",
+        "text"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-route",
+      "file": "components/route/index.ts",
+      "attributes": [
+        "exact",
+        "path",
+        "sheet",
+        "src"
+      ],
+      "properties": [
+        {
+          "name": "exact",
+          "type": "boolean",
+          "desc": "Match only the full path, so `/users` no longer shows for `/users/42`. Off by default; set it on a `/` home route."
+        },
+        {
+          "name": "params",
+          "type": "Record<string, string>",
+          "desc": "Read-only. Values captured by the `:name` segments of `path` on the last match, URL-decoded. Empty when the route does not match."
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "desc": "Path pattern this route shows for. `:name` segments capture params and `*` matches the rest. Without `exact`, deeper paths also match. Defaults to `'/'`."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "desc": "Module specifier for lazy, code-split, mount/unmount page rendering."
+        }
+      ],
+      "events": [
+        {
+          "name": "routematch",
+          "detail": [
+            "params",
+            "path"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-router",
+      "file": "components/router/index.ts",
+      "attributes": [
+        "base",
+        "mode",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "base",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "mode",
+          "type": "'history' | 'hash'",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "routechange",
+          "detail": [
+            "path"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-scratch",
+      "file": "components/scratch/index.ts",
+      "attributes": [
+        "disabled",
+        "reveal-label",
+        "revealed-label",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "desc": ""
+        },
+        {
+          "name": "revealedLabel",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "revealLabel",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [
+        "award",
+        "reveal-button"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-section",
+      "file": "components/section/index.ts",
+      "attributes": [
+        "heading",
+        "sheet",
+        "subtitle"
+      ],
+      "properties": [
+        {
+          "name": "heading",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [
+        "body",
+        "header",
+        "heading",
+        "subtitle"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-select",
+      "file": "components/select/index.ts",
+      "attributes": [
+        "defaultvalue",
+        "disabled",
+        "dropdownclass",
+        "getpopupcontainerid",
+        "label",
+        "open",
+        "placeholder",
+        "placement",
+        "required",
+        "sheet",
+        "showsearch",
+        "trigger",
+        "type",
+        "value"
+      ],
+      "properties": [
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "desc": "Option value to select initially when `value` is not set; also restored by `form.reset()`. Applied once the matching option exists."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "desc": "Blocks opening, selection and search, removes the select from the tab order and closes an open dropdown. Off by default; `disabled=\"false\"` counts as enabled."
+        },
+        {
+          "name": "dropdownclass",
+          "type": "string",
+          "desc": "Class name set on the dropdown panel when it is first built, so the portaled panel can be styled from outside."
+        },
+        {
+          "name": "getPopupContainerId",
+          "type": "string",
+          "desc": "Id of the element the dropdown panel is mounted into, looked up in the select's own root first and then the document. Defaults to `document.body`."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "desc": "Caption rendered above the field and used as its accessible name; clicking it focuses the select. No caption when unset."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "desc": "Whether the dropdown is showing."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "desc": "Empty-field hint; the field's accessible name remains its label."
+        },
+        {
+          "name": "placement",
+          "type": "Placement",
+          "desc": "Which side of the trigger the panel opens on, with an optional alignment. Defaults to `'bottom'`."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "desc": "Makes an empty selection fail native form validation and sets `aria-required`. Ignored while disabled. Off by default; setting the property to `false` or `'false'` removes it."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "showSearch",
+          "type": "string",
+          "desc": "Adds a search box that filters options as you type. Enabled whenever the attribute is present, whatever its value; remove the attribute to turn it off."
+        },
+        {
+          "name": "trigger",
+          "type": "string",
+          "desc": "How the dropdown opens: `'click'` | `'hover'`. Default `'click'`. Hover is ignored on mobile devices."
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "desc": "Visual style. `'text'` drops the border, background and arrow so the select reads as inline text; any other value keeps the boxed field."
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "desc": "The browser's message for the current constraint error; empty while the field is valid."
+        },
+        {
+          "name": "validity",
+          "type": "ValidityState | undefined",
+          "desc": "Native `ValidityState` of the field, for reading constraint errors from script. `undefined` where ElementInternals is unavailable."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "desc": "Value of the selected option, submitted with the owning form. Setting it selects the matching option; an empty value clears the selection."
+        }
+      ],
+      "events": [
+        {
+          "name": "after-hide",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "after-show",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "change",
+          "detail": [
+            "label",
+            "value"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "hide",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "search",
+          "detail": [
+            "value"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "show",
+          "detail": [],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "icon",
+        "label",
+        "search",
+        "select",
+        "selection",
+        "selection-item"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-skeleton",
+      "file": "components/skeleton/index.ts",
+      "attributes": [
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-state-dot",
+      "file": "components/state-dot/index.ts",
+      "attributes": [
+        "label",
+        "sheet",
+        "state"
+      ],
+      "properties": [
+        {
+          "name": "label",
+          "type": "string",
+          "desc": "Accessible name."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "state",
+          "type": "'idle' | 'running' | 'success' | 'warning' | 'error'",
+          "desc": "Which lifecycle step to show. Unknown values render as `idle`."
+        }
+      ],
+      "events": [],
+      "parts": [
+        "dot"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-surface-switch",
+      "file": "components/surface-switch/index.ts",
+      "attributes": [
+        "label",
+        "label-glass",
+        "label-solid",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "value",
+          "type": "RanSurfaceName",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "detail": [
+            "surface"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "option ${choice}",
+        "select"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-tab",
+      "file": "components/tabpane/index.ts",
+      "attributes": [
+        "disabled",
+        "effect",
+        "icon",
+        "iconsize",
+        "key",
+        "label",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "disabled",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "effect",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "icon",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "iconSize",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "key",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "label",
+          "type": "",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "",
+          "desc": ""
+        }
+      ],
+      "events": [],
+      "parts": [
+        "content"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-tabs",
+      "file": "components/tab/index.ts",
+      "attributes": [
+        "active",
+        "align",
+        "effect",
+        "sheet",
+        "type"
+      ],
+      "properties": [
+        {
+          "name": "active",
+          "type": "string | null",
+          "desc": ""
+        },
+        {
+          "name": "align",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "effect",
+          "type": "string | null",
+          "desc": ""
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "desc": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "detail": [
+            "active"
+          ],
+          "flags": {
+            "bubbles": false,
+            "composed": false,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "content",
+        "content-wrap",
+        "header",
+        "hover",
+        "indicator",
+        "nav",
+        "tabs"
+      ],
+      "defaultSlot": true,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-theme-switch",
+      "file": "components/theme-switch/index.ts",
+      "attributes": [
+        "label",
+        "label-dark",
+        "label-light",
+        "label-system",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "value",
+          "type": "RanThemeName",
+          "desc": "Current color theme; falls back to 'system' when nothing is forced."
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "detail": [
+            "theme"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "option ${choice}",
+        "select"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-token-meter",
+      "file": "components/token-meter/index.ts",
+      "attributes": [
+        "label",
+        "limit",
+        "sheet",
+        "spent",
+        "used"
+      ],
+      "properties": [
+        {
+          "name": "label",
+          "type": "string",
+          "desc": "Prefix for the readout. Defaults to `Context`; an empty string leaves only the counts."
+        },
+        {
+          "name": "level",
+          "type": "'ok' | 'warn' | 'over'",
+          "desc": "How full the window is. Derived; assigning it is overwritten on the next update."
+        },
+        {
+          "name": "limit",
+          "type": "number",
+          "desc": "Context window size in tokens. Zero or absent hides the bar and shows only counts."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "spent",
+          "type": "number",
+          "desc": "Tokens billed across the conversation so far."
+        },
+        {
+          "name": "used",
+          "type": "number",
+          "desc": "Tokens the next request will carry — the history, not the whole conversation."
+        }
+      ],
+      "events": [],
+      "parts": [
+        "flag",
+        "meter",
+        "text"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-tool-card",
+      "file": "components/tool-card/index.ts",
+      "attributes": [
+        "open",
+        "sheet",
+        "status"
+      ],
+      "properties": [
+        {
+          "name": "call",
+          "type": "ToolCallView | null",
+          "desc": "The pending view, derived from the call's arguments."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "desc": "Whether the body is expanded."
+        },
+        {
+          "name": "result",
+          "type": "ToolResultView | null",
+          "desc": "The completed view. Replaces the pending one once set."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "status",
+          "type": "ToolCardStatus",
+          "desc": "Lifecycle of the call, reflected so styling can key off it."
+        }
+      ],
+      "events": [
+        {
+          "name": "locationclick",
+          "detail": [
+            "location"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "body",
+        "exit",
+        "file",
+        "hunk",
+        "io",
+        "io-text",
+        "line",
+        "location",
+        "locations",
+        "path",
+        "row"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-voice-button",
+      "file": "components/voice-button/index.ts",
+      "attributes": [
+        "active-label",
+        "cancel-hint",
+        "cancelling",
+        "disabled",
+        "hold-hint",
+        "holding",
+        "label",
+        "listening",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "activeLabel",
+          "type": "string",
+          "desc": "Accessible cancel/stop name while capture is pending or listening."
+        },
+        {
+          "name": "cancelHint",
+          "type": "string",
+          "desc": "Replaces {@link holdHint} once the finger has slid far enough to discard."
+        },
+        {
+          "name": "continuous",
+          "type": "boolean",
+          "desc": "Keep listening across pauses instead of stopping at the first one. On by default; set `continuous=\"false\"` to stop at the first pause."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "desc": "Disable the button so no capture can start. Off by default. Where speech recognition is unsupported the button is hidden instead, regardless of this."
+        },
+        {
+          "name": "holdHint",
+          "type": "string",
+          "desc": "Shown above the button while a finger is held down."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "desc": "Accessible name while idle."
+        },
+        {
+          "name": "lang",
+          "type": "string",
+          "desc": "Language being spoken, as a BCP 47 tag."
+        },
+        {
+          "name": "listening",
+          "type": "boolean",
+          "desc": "Whether a capture is running. Reflected, so `:host([listening])` can style it."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": ""
+        },
+        {
+          "name": "supported",
+          "type": "boolean",
+          "desc": "Whether this platform can recognize speech at all."
+        }
+      ],
+      "events": [
+        {
+          "name": "voiceend",
+          "detail": [],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "voiceerror",
+          "detail": [],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "voiceresult",
+          "detail": [
+            "isFinal",
+            "transcript"
+          ],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        },
+        {
+          "name": "voicestart",
+          "detail": [],
+          "flags": {
+            "bubbles": true,
+            "composed": true,
+            "cancelable": false
+          }
+        }
+      ],
+      "parts": [
+        "button",
+        "hint",
+        "icon"
+      ],
+      "defaultSlot": false,
+      "namedSlots": []
+    }
+  ]
+}
