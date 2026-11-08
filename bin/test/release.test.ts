@@ -65,13 +65,17 @@ test('requires an explicit matching channel and rejects unsafe versions or unkno
   invalid[0].version = '../escape';
   assert.throws(() => validatePlan(invalid, { tag: 'rc' }), /version/);
   assert.throws(
-    () => validatePlan([{ name: 'docs', version: '1.0.0', engines: { node: '>=24.0.0' }, dependencies: {} }], {
-      tag: 'rc',
-      allowlist: manifests(),
-    }),
+    () =>
+      validatePlan([{ name: 'docs', version: '1.0.0', engines: { node: '>=24.0.0' }, dependencies: {} }], {
+        tag: 'rc',
+        allowlist: manifests(),
+      }),
     /Unknown release package/,
   );
-  assert.throws(() => validatePlan([manifests()[2], manifests()[0]], { tag: 'rc', allowlist: manifests() }), /dependency order/);
+  assert.throws(
+    () => validatePlan([manifests()[2], manifests()[0]], { tag: 'rc', allowlist: manifests() }),
+    /dependency order/,
+  );
   const stable = manifests().map((p) => ({ ...p, version: p.version.replace('-rc.0', '') }));
   assert.equal(validatePlan([stable[2]], { tag: 'latest', allowlist: stable }).length, 1);
 });

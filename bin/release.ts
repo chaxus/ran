@@ -45,7 +45,10 @@ const INTERNAL_DEPS: Record<ReleasePackageName, readonly ReleasePackageName[]> =
 
 export function parsePackageSelection(value?: string): string[] | undefined {
   if (value === undefined || value.trim() === '' || value.trim() === 'all') return undefined;
-  const names = value.split(',').map((part) => part.trim()).filter(Boolean);
+  const names = value
+    .split(',')
+    .map((part) => part.trim())
+    .filter(Boolean);
   assert.ok(names.length > 0, 'Package selection must name at least one library');
   return names;
 }

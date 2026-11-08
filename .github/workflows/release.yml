@@ -11,7 +11,7 @@ on:
       packages:
         description: Packages to release (comma-separated, or all). Empty auto-selects versions not yet on npm.
         type: string
-        default: ''
+        default: ""
       publish:
         description: Upload the verified archives to npm (main only)
         type: boolean

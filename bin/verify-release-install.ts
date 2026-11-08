@@ -128,7 +128,7 @@ try {
     runtimeLines.push("import { renderToString } from 'ranui/ssr';");
     runtimeLines.push("import { renderHTMLToString } from 'ranui/ssr-stream';");
     runtimeLines.push('assert.equal(Button, BarrelButton);');
-    runtimeLines.push("assert.match(renderToString(new Button()), /<r-button/);");
+    runtimeLines.push('assert.match(renderToString(new Button()), /<r-button/);');
     runtimeLines.push("assert.match(await renderHTMLToString('<r-button>Ready</r-button>'), /shadowrootmode/);");
   }
 
