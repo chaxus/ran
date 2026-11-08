@@ -243,3 +243,5 @@ Until the component's script runs, the browser lays `<r-content>` out as ordinar
   </r-content>
 </r-popover>
 ```
+
+The full list is in [style tokens](/ranui/style-tokens#popover); when the trigger cannot take focus, the popover itself becomes the single tab stop and draws `--ran-focus-ring`.

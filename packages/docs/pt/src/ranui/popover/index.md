@@ -233,3 +233,5 @@ Até o script do componente rodar, o navegador dispõe `<r-content>` como marca�
   </r-content>
 </r-popover>
 ```
+
+A lista completa está em [tokens de estilo](/pt/ranui/style-tokens#popover); se o gatilho não puder receber foco, o próprio popover vira o único tab stop e desenha `--ran-focus-ring`.

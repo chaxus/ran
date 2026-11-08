@@ -233,3 +233,5 @@ description: 'ranui の Popover（<r-popover>）は、ホバーやクリック�
   </r-content>
 </r-popover>
 ```
+
+一覧は [スタイルトークン](/ja/ranui/style-tokens#popover) にあります。トリガーがフォーカスを受け取れない場合、ポップオーバー自身が唯一の Tab 停止点になり、`--ran-focus-ring` を描画します。

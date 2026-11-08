@@ -233,3 +233,5 @@ description: 'ranui Popover(<r-popover>)는 트리거에 커서를 올리거나 
   </r-content>
 </r-popover>
 ```
+
+전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#popover)에 있습니다. 트리거가 포커스를 받을 수 없으면 팝오버 자체가 유일한 Tab 정지점이 되며 `--ran-focus-ring`을 그립니다.

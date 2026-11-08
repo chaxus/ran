@@ -233,3 +233,5 @@ Bis das Skript der Komponente läuft, setzt der Browser `<r-content>` als gewöh
   </r-content>
 </r-popover>
 ```
+
+Die vollständige Liste steht unter [Style-Tokens](/de/ranui/style-tokens#popover); wenn der Trigger keinen Fokus annehmen kann, wird das Popover selbst zum einzigen Tab-Stop und zeichnet `--ran-focus-ring`.

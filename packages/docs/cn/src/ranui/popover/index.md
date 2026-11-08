@@ -240,3 +240,5 @@ description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气
   </r-content>
 </r-popover>
 ```
+
+完整列表见 [样式令牌](/cn/ranui/style-tokens#popover)；当触发器无法聚焦时，弹出层自身成为唯一 Tab 停靠点，并绘制 `--ran-focus-ring`。

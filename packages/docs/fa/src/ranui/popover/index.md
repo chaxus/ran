@@ -233,3 +233,5 @@ description: 'پاپ‌اور ranui (<r-popover>) با هاور یا کلیک ر
   </r-content>
 </r-popover>
 ```
+
+فهرست کامل در [توکن‌های سبک](/fa/ranui/style-tokens#popover) است؛ اگر تریگر نتواند فوکوس بگیرد، خود پاپ‌اور تنها توقف Tab می‌شود و `--ran-focus-ring` را می‌کشد.
