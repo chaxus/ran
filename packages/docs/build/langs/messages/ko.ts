@@ -19,6 +19,7 @@ const ko: LocaleMessages = {
     content_render: '콘텐츠 렌더링',
     build_ai_chat: 'AI 채팅 구축',
     doc_editor: '문서 편집기',
+    github: 'GitHub',
     design_guide: '디자인 체크리스트',
     surface_language: '서피스 언어',
     overview: '개요',

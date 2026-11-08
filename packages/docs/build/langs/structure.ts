@@ -1,5 +1,5 @@
 import type { SidebarNode } from './types.ts';
-import { EDITOR } from '../common/index.ts';
+import { EDITOR, GITHUB } from '../common/index.ts';
 import { DESIGN_REFERENCE, DESIGN_REFERENCE_LINKS } from './design-pages.ts';
 
 /**
@@ -27,6 +27,7 @@ export const NAV: SidebarNode[] = [
 export const SECONDARY_NAV: SidebarNode[] = [
   { kind: 'full', key: 'examples', link: '/examples/' },
   { kind: 'full', key: 'doc_editor', link: EDITOR },
+  { kind: 'full', key: 'github', link: GITHUB },
 ];
 
 export const SIDEBAR: Record<string, SidebarNode[]> = {
