@@ -17,7 +17,7 @@
     "lint:prettier": "prettier --check --cache .",
     "format": "prettier --write --cache .",
     "cpd": "jscpd ./packages",
-    "verify:docs": "node bin/sync-design-docs.ts --check && pnpm verify:agent-plugin && pnpm -F ranui doc:api:check && pnpm -F ranui doc:style:check && pnpm -F ranui doc:changelog:check && pnpm -F ranuts doc:api:check && pnpm -F docs check:langs && tsx bin/check-llms-element-count.ts",
+    "verify:docs": "node bin/sync-design-docs.ts --check && pnpm verify:agent-plugin && pnpm -F ranui doc:api:check && pnpm -F ranui doc:style:check && pnpm -F ranui doc:changelog:check && pnpm -F ranuts doc:api:check && pnpm -F docs check:langs && node bin/check-llms-element-count.ts",
     "verify:design": "node bin/run-checks.ts verify:design",
     "verify:packages": "node bin/verify-packages.ts",
     "verify:consumers": "pnpm -F ranuts verify:package && node bin/verify-package-consumers.ts",
