@@ -137,12 +137,3 @@ r-card::part(header) {
 ## Eventos
 
 O cartão é um contêiner passivo e não despacha eventos personalizados.
-
-## Boas práticas
-
-- **Título e descrição**: use `title` para o título e `description` para um subtítulo curto de apoio; omita ambos para esconder o cabeçalho por completo.
-- **Conteúdo do corpo**: coloque o conteúdo principal no slot padrão.
-- **Ações no cabeçalho**: use o slot `extra` para selos, links ou ações alinhados à direita do cabeçalho.
-- **Rodapé**: use o slot `footer` para ações ou links secundários; ele fica oculto até você colocar conteúdo nele.
-- **Resposta ao hover**: acrescente `hoverable` apenas a cartões clicáveis; cartões não interativos não devem reagir ao mouse.
-- **Temas**: prefira variáveis CSS e `::part()` ao atributo `sheet` quando o estilo for reutilizável.

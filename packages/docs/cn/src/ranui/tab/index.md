@@ -302,13 +302,3 @@ r-tabs {
 Part：`content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 
 完整清单见[样式令牌](/cn/ranui/style-tokens#tab)；该选哪个令牌见[设计系统](/cn/design/design-system/)。
-
-## 最佳实践
-
-- **稳定的身份标识**：给每个 `<r-tab>` 一个唯一的 `r-key`，用 `<r-tabs>` 上的 `active` 驱动选中状态，而不是依赖位置索引。
-- **样式选择**：默认的 `type="flat"` 是轻量的下划线；标签行需要和下方内容明确分开时用 `type="line"`；只有几个简短、地位相同的视图（比如在预览和代码之间切换）时用 `type="segment"`。
-- **对齐**：在宽容器里用 `align="center"` 或 `align="end"` 重新定位标题行。
-- **禁用面板**：用 `disabled` 标记不可用的面板；它们会同时跳过点击选择和默认选中逻辑。
-- **键盘导航**：标题行是一个 WAI-ARIA tablist，方向键在标签间移动（配合 `Home`/`End`），只有激活的标签在 tab 顺序里。
-
-- **长标签**：标题栏横向滚动，保留完整标签；键盘切换会显示当前选项，不改变页面滚动位置。

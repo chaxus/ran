@@ -19,6 +19,7 @@ const en: LocaleMessages = {
     content_render: 'Content render',
     build_ai_chat: 'Build AI chat',
     doc_editor: 'doc editor',
+    github: 'GitHub',
     design_guide: 'Design checklist',
     surface_language: 'Surface language',
     overview: 'Overview',

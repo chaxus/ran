@@ -152,11 +152,3 @@ r-dropdown {
   --ran-dropdown-arrow-height: 28px;
 }
 ```
-
-## 最佳实践
-
-- **底层原语**：只有需要自定义浮层面板时才直接使用 `r-dropdown`；常见场景优先用 `r-popover` 或 `r-select`。
-- **设置宿主尺寸**：面板默认 `width` / `height` 为宿主的 100%，所以要给宿主显式的尺寸与定位，再将其挂载。
-- **层级**：宿主携带 `--ran-z-dropdown`（`1100`），因此层级高于对话框；需要时可通过 `--ran-dropdown-host-z-index` 覆盖。
-- **箭头默认居中于面板本身**：`r-dropdown` 不追踪任何外部的"触发元素"，只有自己面板的尺寸可用。在没有外部定位逻辑接入的情况下，`arrow="top"` / `"bottom"` 默认居中于面板自身宽度，这正是上面示例中裸用 `r-dropdown` 时的正确表现。`r-popover` 在 `r-dropdown` 之上叠加了追踪触发元素的能力：它会测量真实的触发元素，并通过 `--ran-dropdown-arrow-anchor-offset` 传入一个像素偏移量；即使面板比触发元素更宽、且与其边缘对齐而非居中对齐，箭头依然会精确指向触发元素中心。若要在 `r-dropdown` 之上自建能追踪触发元素的面板，可以直接设置该变量，不必重新实现一遍 `r-popover` 的定位逻辑。
-- **引入方式**：通过 `import 'ranui'`（注册全部组件）或独立子路径 `import 'ranui/dropdown'` 引入。

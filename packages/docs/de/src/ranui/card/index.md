@@ -137,12 +137,3 @@ r-card::part(header) {
 ## Events
 
 Die Karte ist ein passiver Container und löst keine eigenen Events aus.
-
-## Bewährte Praxis
-
-- **Titel & Beschreibung**: Nimm `title` für die Überschrift und `description` für eine kurze begleitende Unterzeile; lässt du beide weg, verschwindet der Kopfbereich ganz.
-- **Körperinhalt**: Lege den Hauptinhalt in den Standard-Slot.
-- **Aktionen im Kopfbereich**: Nutze den Slot `extra` für Abzeichen, Links oder Aktionen, die rechts im Kopf sitzen.
-- **Fußbereich**: Nutze den Slot `footer` für sekundäre Aktionen oder Links; er bleibt verborgen, bis du Inhalt hineingibst.
-- **Hover-Rückmeldung**: Setze `hoverable` nur auf anklickbare Karten; nicht interaktive Karten dürfen nicht auf das Überfahren reagieren.
-- **Theming**: Bevorzuge für wiederverwendbares Styling CSS-Variablen und `::part()` gegenüber dem Attribut `sheet`.

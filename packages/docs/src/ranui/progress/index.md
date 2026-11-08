@@ -18,7 +18,7 @@ Progress bar for showing task completion, with an optional draggable handle.
 <r-progress percent="40%"></r-progress>
 ```
 
-> 💡 **Tip**: `r-progress` is a block-level element with no intrinsic width. Inside a flex row it can collapse to zero width; give it an explicit width (e.g. `style="width:100%"`) or place it in a block context.
+`r-progress` is a block-level element with no intrinsic width. Inside a flex row it can collapse to zero width; give it an explicit width (e.g. `style="width:100%"`) or place it in a block context.
 
 ## API Reference
 
@@ -131,10 +131,3 @@ r-progress::part(fill) {
   background: var(--ran-color-primary);
 }
 ```
-
-## Best Practices
-
-- **Static bars**: use the default `type="primary"` to display read-only progress.
-- **Interactive bars**: use `type="drag"` when the user should be able to set the value, and listen for the `change` event.
-- **Percent vs. number**: mix `percent` and `total` freely, passing raw numbers when they map to a known total, or percentages for direct control.
-- **Layout width**: wrap the bar in a block container or set an explicit width so it does not collapse in flex layouts.

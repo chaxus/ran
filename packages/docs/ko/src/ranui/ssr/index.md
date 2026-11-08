@@ -88,13 +88,3 @@ const html = renderToString(new Button());
 모두 보호되어 있습니다). 그래서 테마는 클라이언트가 적용합니다. 잘못된 테마가 번쩍이는 것을 피하려면
 서버 템플릿의 `<html>`에 `data-ran-theme`를 지정하고 (쿠키에서, 혹은 첫 페인트 전에 `localStorage`를
 읽는 아주 작은 인라인 스크립트에서) 그 뒤를 [`initTheme`](/ko/ranui/theme/)에 넘기세요.
-
-## 권장 사항
-
-- **렌더링 전에 `ranui`(또는 개별 `ranui/<component>` 엔트리) 를 import 하세요.** 레지스트리는 import 의
-  부수 효과로 채워집니다. 그것이 없으면 모든 태그가 펼쳐지지 않은 채 지나가고, 페이지는 조용히
-  마크업을 잃습니다.
-- **조각이 아니라 페이지를 렌더링하세요.** `renderHTMLToString`은 임의의 HTML 에 안전하므로 ranui
-  부분만 따로 떼어 낼 필요가 없습니다.
-- **스타일시트를 함께 보내세요.** DSD 마크업은 컴포넌트의 스타일을 담고 있지만, 페이지 수준 토큰은
-  `ranui/style`에서 (글꼴은 `ranui/fonts`에서) 옵니다.

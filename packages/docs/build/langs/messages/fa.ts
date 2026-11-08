@@ -19,6 +19,7 @@ const fa: LocaleMessages = {
     content_render: 'رندر محتوا',
     build_ai_chat: 'ساخت گفتگوی هوش مصنوعی',
     doc_editor: 'ویرایشگر سند',
+    github: 'GitHub',
     design_guide: 'چک‌لیست طراحی',
     surface_language: 'زبان سطح',
     overview: 'نمای کلی',

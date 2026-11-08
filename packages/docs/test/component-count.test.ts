@@ -21,7 +21,9 @@ it('documents at least one element', () => expect(documented).toBeGreaterThan(0)
 it.each(LOCALES)('states the documented element count on the $lang home page', (locale) => {
   const copy = homeCopy(locale.dir);
   expect(copy.stats[0]!.num).toBe(String(documented));
-  expect(states(copy.pillars[0]!.desc), copy.pillars[0]!.desc).toBe(true);
+  const ranui = copy.pillars.find((pillar) => pillar.title.toLowerCase() === 'ranui');
+  expect(ranui, 'home copy must include a ranui pillar').toBeTruthy();
+  expect(states(ranui!.desc), ranui!.desc).toBe(true);
 });
 
 it.each(LOCALES)('states the documented element count in the $lang API sidebar label', (locale) => {

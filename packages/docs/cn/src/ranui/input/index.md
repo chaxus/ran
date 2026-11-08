@@ -8,6 +8,8 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 
 > **适用场景**：需要一个带静态顶部标签、前置图标、校验状态/提示文本、并能参与原生表单的文本字段时，`<r-input>` 覆盖文本、密码、数字输入。
 
+用 `status` 搭配 `message`，不要只靠颜色表达状态。`placeholder` 只做提示，不能代替 `label`。表单收集值时设置 `name`。
+
 ## 快速开始
 
 ### 基础用法
@@ -237,12 +239,3 @@ r-input {
 Part：`content` · `input` · `label` · `message`
 
 完整清单见[样式令牌](/cn/ranui/style-tokens#input)；该选哪个令牌见[设计系统](/cn/design/design-system/)。
-
-## 最佳实践
-
-- **标签**：设置有意义的 `label`，让字段拥有可访问的名称。
-- **占位提示**：`placeholder` 用于输入提示，不能替代 `label`。
-- **状态 + 提示**：把 `status` 和 `message` 配对使用，不要只靠颜色传达状态。
-- **图标**：加上相关的 `icon` 提升可辨识度。
-- **类型**：为内容选择合适的 `type`（`text`、`password`、`number` …）。
-- **表单**：在表单中收集值时设置 `name`。

@@ -8,6 +8,8 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 
 > **何时使用**：需要在页面之上进行聚焦交互的对话框，并希望自动完成焦点锁定、滚动锁定与背景惰性化时，可通过 `open` 属性驱动 `<r-modal>`，或使用命令式的 `Modal.confirm` / `Modal.info` 等辅助方法。
 
+听 `beforeclose` 并 `preventDefault()`，以便在丢掉未保存内容前确认。操作放进 `slot="footer"`；有内容时页脚才会出现。不可关闭的流程设 `closable="false"` 与 `maskClosable="false"`。打开期间用 `:has(r-modal[open]), :has(r-modal[closing])` 抬高层级，避免关闭过渡中遮罩掉到下面。
+
 ## 快速开始
 
 ### 基础用法
@@ -51,7 +53,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 | `hideHeader`   | `boolean` | `false` | 完全去掉标题栏，只留一个悬浮的关闭按钮 |
 | `sheet`        | `string`  | `''`    | 注入到 shadow DOM 中的 CSS             |
 
-`closing` 是元素自己反映出的只读属性（不是可设置的属性）：从 `close()` 执行的那一刻起，一直到遮罩/对话框的淡出缩放过渡真正结束（约 0.3 秒后，与 `afterclose` 事件的时机一致）为止都会存在。适用于宿主页面需要在这段视觉尾巴期间仍把对话框视为「存在」的场景，参见下方「最佳实践」。
+`closing` 是元素自己反映出的只读属性（不是可设置的属性）：从 `close()` 执行的那一刻起，一直到遮罩/对话框的淡出缩放过渡真正结束（约 0.3 秒后，与 `afterclose` 事件的时机一致）为止都会存在。适用于宿主页面需要在这段视觉尾巴期间仍把对话框视为「存在」的场景，。
 
 ### 标题 `title`
 
@@ -235,12 +237,3 @@ r-modal {
 Part：`body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
 
 完整清单见[样式令牌](/cn/ranui/style-tokens#modal)；该选哪个令牌见[设计系统](/cn/design/design-system/)。
-
-## 最佳实践
-
-- **触发 + 切换**：用 `modal.open = true` 打开、`modal.open = false` 关闭，或调用 `close()`。
-- **拦截破坏性关闭**：监听 `beforeclose` 并 `preventDefault()`，在丢弃未保存内容前进行确认。
-- **底部操作**：把主/次按钮放进 `slot="footer"`；仅当该插槽有内容时才显示底栏。
-- **不可关闭的流程**：同时设置 `closable="false"` 与 `maskClosable="false"`，强制用户做出显式选择。
-- **一次性对话框**：用 `Modal.confirm` / `Modal.info` 快速弹窗，而不必手写标签。
-- **对话框打开期间把宿主页面提升到其上层**：要匹配 `:has(r-modal[open]), :has(r-modal[closing])`，而不只是 `[open]`。原因是 `close()` 一执行，`open` 就会立刻被移除，但遮罩/对话框的过渡动画还会继续绘制约 0.3 秒；如果在淡出过程中就撤掉 z-index 提升，仍可见的遮罩就会重新绘制到它原本被提升到的那一层之下。

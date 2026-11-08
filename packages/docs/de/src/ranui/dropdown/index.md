@@ -138,11 +138,3 @@ r-dropdown {
   --ran-dropdown-arrow-height: 28px;
 }
 ```
-
-## Bewährte Praxis
-
-- **Tief liegende Primitive**: Nimm `r-dropdown` nur dann direkt, wenn du ein eigenes schwebendes Panel brauchst; für übliche Fälle sind `r-popover` oder `r-select` die bessere Wahl.
-- **Dem Host Maße geben**: Das Panel übernimmt standardmäßig `width` und `height: 100%` des Hosts — gib dem Host also eine ausdrückliche Größe und Position und portaliere ihn dann.
-- **Stapelung**: Der Host trägt `--ran-z-dropdown` (`1100`) und liegt damit über Dialogen; überschreibe es bei Bedarf mit `--ran-dropdown-host-z-index`.
-- **Der Pfeil zentriert sich standardmäßig auf sich selbst**: `r-dropdown` verfolgt kein externes „Auslöser“-Element — es hat nur die Maße seines eigenen Panels. Ohne einen positionierenden Verwender zentriert sich `arrow="top"`/`"bottom"` auf der Breite des Panels selbst; genau das ist der richtige Standard, wenn man `r-dropdown` blank verwendet (wie in den Demos oben). `r-popover` sitzt eigens deshalb auf `r-dropdown`, um Auslöser-Verfolgung zu ergänzen: Es misst das echte Auslöser-Element und gibt über `--ran-dropdown-arrow-anchor-offset` einen Pixelversatz zurück, sodass der Pfeil auf die Mitte des Auslösers zeigt, auch wenn das Panel breiter ist und an einer Kante statt mittig ausgerichtet wird. Wer auf `r-dropdown` ein eigenes Panel mit Auslöser-Verfolgung baut, kann diese Variable direkt setzen, statt die Positionierungslogik von `r-popover` nachzubauen.
-- **Import**: Lade über `import 'ranui'` (registriert jede Komponente) oder eigenständig über `import 'ranui/dropdown'`.

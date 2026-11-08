@@ -45,7 +45,7 @@ for (const width of WIDTHS) {
         else await expect(drawer).toBeVisible();
 
         // Secondary destinations + author stay one link away on every page.
-        await expect(page.locator('.site-footer a')).toHaveCount(3);
+        await expect(page.locator('.site-footer a')).toHaveCount(4);
         // The last one names the author and leads to their own site, in Chinese for Chinese pages.
         await expect(page.locator('.site-footer a[rel="author"]')).toHaveAttribute(
           'href',

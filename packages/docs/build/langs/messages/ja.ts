@@ -19,6 +19,7 @@ const ja: LocaleMessages = {
     content_render: 'コンテンツ描画',
     build_ai_chat: 'AI チャット構築',
     doc_editor: 'ドキュメントエディタ',
+    github: 'GitHub',
     design_guide: 'デザインチェックリスト',
     surface_language: 'サーフェス言語',
     overview: '概要',

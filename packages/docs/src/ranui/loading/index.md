@@ -170,14 +170,3 @@ None. The component dispatches no custom events.
 ## All Loading Animations
 
 <Loading />
-
-## Best Practices
-
-- **Scene Selection**: Pick an animation that fits the context and pace of the task.
-- **CSS Variables**: Customize size and color via the `--loading-{type}-*` tokens rather than wrapping elements.
-- **Sizing**: Prefer `px` units over the default `em` sizing for predictable dimensions.
-- **Performance**: Avoid rendering many simultaneous animations on one screen.
-- **On-demand loading**: Each animation is a separate lazy chunk (its JS + CSS), so a `name` only ever loads the one variant it uses; referencing one animation never bundles the other 28. The default `circle` and the common `dot` are built in for instant, flash-free first render; the rest load asynchronously on first use. Usage is unchanged: just set `name`.
-- **Theming**: Theme-aware variants follow `--ran-color-*`; decorative variants expose their own color hooks.
-
-Loading indicators provide visual feedback; the host should apply suitable `aria-busy` or status announcements to the actual loading region rather than making every animation a live region. Reduced motion retains static visible shapes for circle, circle-fold, cube-fold, dot-bar and triple-bounce; text keeps a readable type size and theme text color. The default geometric frames of cube-dim and dot-line shrink within narrow parents; existing size/color hooks remain available. Decorative variants retain their distinct colors and are not all automatically monochrome-themed.

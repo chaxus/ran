@@ -137,12 +137,3 @@ r-card::part(header) {
 ## Eventos
 
 La tarjeta es un contenedor pasivo y no despacha eventos personalizados.
-
-## Buenas prácticas
-
-- **Título y descripción**: usa `title` para el encabezado y `description` para un breve subtítulo de apoyo; omite ambos para ocultar la cabecera por completo.
-- **Contenido del cuerpo**: coloca el contenido principal en el slot por defecto.
-- **Acciones en la cabecera**: usa el slot `extra` para distintivos, enlaces o acciones alineados a la derecha de la cabecera.
-- **Pie**: usa el slot `footer` para acciones o enlaces secundarios; permanece oculto hasta que le pongas contenido.
-- **Respuesta al hover**: añade `hoverable` solo a las tarjetas que se pueden pulsar; las no interactivas no deben reaccionar al ratón.
-- **Temas**: prefiere las variables CSS y `::part()` frente al atributo `sheet` cuando el estilo deba reutilizarse.

@@ -160,11 +160,3 @@ A pilha de avisos vive num contêiner levado para o body; cada `<r-message>` des
 | `--ran-message-text-color`            | `var(--ran-color-text)`        | Cor do texto do aviso         |
 | `--ran-message-z-index`               | `var(--ran-z-message, 1200)`   | z-index da pilha              |
 | `--ran-message-top`                   | `8px`                          | Distância da pilha até o topo |
-
-## Boas práticas
-
-- **Diga o que mudou**: escreva o texto do aviso como um resultado, "Projeto excluído" ou "Alterações salvas", não um vago "Sucesso".
-- **Sucesso / informação**: use `message.success` / `message.info` para confirmações que não bloqueiam.
-- **Erros / advertências**: use `message.error` / `message.warning`; eles sobem para uma região ARIA viva assertiva, então leitores de tela interrompem.
-- **Seja breve**: um aviso se fecha sozinho, então reserve conteúdo longo ou que exija ação para um diálogo.
-- **Ajuste a duração com parcimônia**: aumente `duration` para mensagens longas, mas evite tornar permanente um retorno passageiro.

@@ -73,8 +73,6 @@ Disabled buttons reject pointer, keyboard and programmatic `click()` activation.
 
 ### Icon Button `icon`
 
-> 💡 **Tip**: For precise icon positioning, use the Icon component directly
-
 <ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
   <r-button type="primary" icon="home">Primary Button</r-button>
@@ -144,11 +142,3 @@ r-button::part(content) {
 
 The full list is in [style tokens](/ranui/style-tokens#button); which token to reach for is
 the [design system](/design/design-system/).
-
-## Best Practices
-
-- **Primary Actions**: Use `type="primary"` (monochrome: black-on-white / white-on-black)
-- **Dangerous Actions**: Use `type="warning"`
-- **Secondary Actions**: Use `type="text"`
-- **Disabled State**: Use `disabled` when actions unavailable
-- **Icons**: Add relevant icons to enhance UX

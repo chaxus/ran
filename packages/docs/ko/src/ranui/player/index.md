@@ -312,16 +312,3 @@ r-player {
 ```
 
 전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#player)에 있고, 어떤 토큰을 골라야 하는지는 [디자인 시스템](/ko/design/design-system/)이 다룹니다.
-
-## 모범 사례
-
-- **크기**: 호스트는 `display: block`이고 고유한 크기가 없습니다. 반드시 너비와 높이를 명시하세요. 그러지 않으면 영상이 납작해집니다.
-- **스트리밍 엔진**: `.m3u8`(HLS), `.mpd`(DASH), `.flv`/`.ts`(`mpegts.js`를 통한 FLV/MPEG-TS) 소스는 각각의 엔진을 알아서 지연 로드합니다. 설정할 것은 없습니다. URL의 확장자를 짚어 낼 수 없다면(확장자가 없거나 서명된 CDN URL) 판별에 기대지 말고 `format` 어트리뷰트를 명시하세요(예: `format="dash"`). WebRTC(`format="webrtc"`)는 언제나 명시입니다. WHEP 엔드포인트에는 짚어 낼 것이 없습니다.
-- **리스너는 하나**: 여러 이벤트 핸들러를 붙이려 하기보다 `change` 리스너 하나에 `switch (detail.type)`를 두는 편이 낫습니다. 모든 상태가 `change`를 지나갑니다.
-- **음량의 단위**: `volume`(어트리뷰트), `setVolume()`/`getVolume()`, 그리고 `volume` 변화에 실리는 값 모두 `0`–`100`의 단일 눈금을 씁니다. `0`–`1`인 것은 밑에 깔린 네이티브 `<video>.volume`뿐이고, 플레이어가 그 한 지점에서 변환합니다.
-- **PIP는 점진적 향상입니다**: 브라우저가 지원하지 않으면 버튼은 비활성이 아니라 숨겨집니다. DOM에 늘 있다고 가정하지 마세요.
-- **스타일 조정**: 섀도 DOM에 CSS를 주입하려면 `sheet` 어트리뷰트를 쓰세요. 플레이어 자체에는 공개된 `::part()` 손잡이가 없습니다.
-
-## 로드맵
-
-`<r-player>`는 활발히 개발 중입니다. 다음에 무엇이 예정되어 있는지는 저장소의 [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md)를 보세요.

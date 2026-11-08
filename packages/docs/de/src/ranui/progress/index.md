@@ -18,7 +18,7 @@ Fortschrittsbalken für den Stand einer Aufgabe, wahlweise mit ziehbarem Griff.
 <r-progress percent="40%"></r-progress>
 ```
 
-> 💡 **Tipp**: `r-progress` ist ein Blockelement ohne eigene Breite. In einer Flex-Zeile kann es auf null Breite zusammenfallen; gib ihm eine explizite Breite (etwa `style="width:100%"`) oder setze es in einen Blockkontext.
+`r-progress` ist ein Blockelement ohne eigene Breite. In einer Flex-Zeile kann es auf null Breite zusammenfallen; gib ihm eine explizite Breite (etwa `style="width:100%"`) oder setze es in einen Blockkontext.
 
 ## API-Referenz
 
@@ -131,10 +131,3 @@ r-progress::part(fill) {
   background: var(--ran-color-primary);
 }
 ```
-
-## Bewährte Praxis
-
-- **Statische Balken**: Nimm den Standard `type="primary"`, um Fortschritt nur anzuzeigen.
-- **Interaktive Balken**: Nimm `type="drag"`, wenn der Nutzer den Wert setzen können soll, und höre auf das `change`-Event.
-- **Prozent oder Zahl**: Kombiniere `percent` und `total` frei — rohe Zahlen, wenn sie zu einer bekannten Gesamtmenge gehören, Prozentwerte für direkte Kontrolle.
-- **Breite im Layout**: Setze den Balken in einen Blockcontainer oder gib ihm eine explizite Breite, damit er in Flex-Layouts nicht zusammenfällt.

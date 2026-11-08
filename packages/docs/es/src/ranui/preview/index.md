@@ -99,7 +99,7 @@ Cuando quieras usar tu propio servicio de vista previa de documentos, indica su 
 <r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **Consejo**: por defecto se usa el servicio alojado en `https://edit.chaxus.com`. Para alojarlo tú mismo, consulta [OnlyOffice Web Local](https://github.com/ranuts/document).
+por defecto se usa el servicio alojado en `https://edit.chaxus.com`. Para alojarlo tú mismo, consulta [OnlyOffice Web Local](https://github.com/ranuts/document).
 
 ## Compatibilidad con 0.3.0
 

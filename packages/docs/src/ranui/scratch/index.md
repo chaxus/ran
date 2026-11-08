@@ -99,10 +99,3 @@ This component exposes **no `::part()` hooks**, but its two layer colors are the
 | `.ran-scratch-ticket-canvas` | The scratch cover canvas, `z-index: 2`; filled with `--ran-scratch-cover-background` (default `var(--ran-color-text-secondary, #6b6b6b)`), set on the host |
 
 Both colors route through theme tokens with a literal fallback, so they adapt to light/dark mode by default and can be overridden with `--ran-scratch-award-background` / `--ran-scratch-cover-background`. Size the host with plain `width` / `height`.
-
-## Best Practices
-
-- **Always size the host**: it is `display: block` with no intrinsic size; give it an explicit `width` and `height`, or its `100%` inner layers collapse to zero.
-- **Any reveal content works**: text, an image, an `<r-icon>`, several elements. Slot in whatever the prize actually is; there's no fixed icon+size API to work around.
-- **Works with mouse, touch, and pen**: Pointer Events unify all three, so it responds the same way on desktop and mobile.
-- **Treat as experimental**: still a work in progress; do not rely on it for production behavior.

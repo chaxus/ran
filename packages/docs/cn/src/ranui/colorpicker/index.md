@@ -151,11 +151,3 @@ r-colorpicker {
   --ran-colorpicker-border-radius: 6px;
 }
 ```
-
-## 最佳实践
-
-- **输入格式**：给 `value` 传任意 CSS 颜色字符串，比如 HEX、`rgb(...)` 或 `rgba(...)`；选择器会在内部做归一化。
-- **读取结果**：监听 `change` 并从 `event.detail` 中读取你需要的确切格式（`hex`、`rgb`、`rgba`、`alpha`）。
-- **透明度**：需要透明度时使用 `rgba(...)` 输入或透明度滑块；透明度低于 1 时，读回的 `value` 会是 `rgba(...)` 字符串。
-- **键盘操作**：色块和两个滑块都可聚焦并支持键盘操作，无需鼠标。
-- **引入方式**：通过 `import 'ranui'`（注册全部组件）或独立子路径 `import 'ranui/colorpicker'` 引入。

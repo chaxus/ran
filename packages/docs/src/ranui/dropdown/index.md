@@ -138,11 +138,3 @@ r-dropdown {
   --ran-dropdown-arrow-height: 28px;
 }
 ```
-
-## Best Practices
-
-- **Low-level primitive**: Use `r-dropdown` directly only when you need a custom floating panel; prefer `r-popover` or `r-select` for common cases.
-- **Size the host**: The panel defaults to `width` / `height: 100%` of the host, so give the host an explicit size and position, then portal it.
-- **Stacking**: The host carries `--ran-z-dropdown` (`1100`) so it stacks above dialogs; override with `--ran-dropdown-host-z-index` if needed.
-- **Arrow, self-centered by default**: `r-dropdown` does not track any external "trigger" element: it only has its own panel dimensions to work with. With no positioning consumer wired up, `arrow="top"`/`"bottom"` centers on the panel's own width; that's the correct default for using `r-dropdown` bare (as in the demos above). `r-popover` sits on top of `r-dropdown` specifically to add trigger tracking: it measures the real trigger element and feeds a pixel offset back in via `--ran-dropdown-arrow-anchor-offset`, nudging the arrow to point at the trigger's center even when the panel is wider and edge-aligned rather than centered on it. A consumer building its own trigger-tracking panel on `r-dropdown` can set that variable directly instead of re-deriving `r-popover`'s positioning logic.
-- **Import**: Load via `import 'ranui'` (registers every component) or the standalone `import 'ranui/dropdown'`.

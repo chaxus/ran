@@ -8,6 +8,8 @@ Componente de diálogo para interações concentradas sobre a página atual, com
 
 > **Use quando** precisar de um diálogo para uma interação concentrada sobre a página, com captura de foco, travamento da rolagem e inertização do fundo. Conduza o `<r-modal>` pelo atributo `open` ou pelos auxiliares imperativos `Modal.confirm` / `Modal.info`.
 
+Ouça `beforeclose` e chame `preventDefault()` para confirmar antes de descartar trabalho não salvo. Coloque ações em `slot="footer"`; o rodapé só aparece quando o slot tem conteúdo. Em fluxos não dispensáveis, use `closable="false"` e `maskClosable="false"`. Enquanto aberto, eleve o empilhamento com `:has(r-modal[open]), :has(r-modal[closing])` para a máscara não cair por baixo durante o fechamento.
+
 ## Início rápido
 
 ### Uso básico
@@ -51,7 +53,7 @@ A visibilidade do modal é controlada pelo atributo `open` (ou pela propriedade 
 | `hideHeader`   | `boolean` | `false` | Elimina a barra de título por inteiro, deixando um botão de fechar flutuante |
 | `sheet`        | `string`  | `''`    | CSS injetado no shadow DOM                                                   |
 
-`closing` é um atributo somente leitura que o elemento reflete em si mesmo (não uma propriedade atribuível): fica presente desde o instante em que `close()` roda até a transição de desvanecer e encolher da máscara e do diálogo realmente terminar (~0,3 s depois, o mesmo momento do evento `afterclose`). É útil para uma página anfitriã que precisa que o modal ainda conte como "presente" ao longo desse rastro visual; veja as boas práticas abaixo.
+`closing` é um atributo somente leitura que o elemento reflete em si mesmo (não uma propriedade atribuível): fica presente desde o instante em que `close()` roda até a transição de desvanecer e encolher da máscara e do diálogo realmente terminar (~0,3 s depois, o mesmo momento do evento `afterclose`). É útil para uma página anfitriã que precisa que o modal ainda conte como "presente" ao longo desse rastro visual.
 
 ### Título `title`
 
@@ -234,12 +236,3 @@ r-modal {
 Partes: `body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
 
 A lista completa está em [tokens de estilo](/pt/ranui/style-tokens#modal); qual usar é assunto do [design system](/pt/design/design-system/).
-
-## Boas práticas
-
-- **Gatilho e alternância**: abra com `modal.open = true` e feche com `modal.open = false`, ou chame `close()`.
-- **Proteja fechamentos destrutivos**: escute `beforeclose` e chame `preventDefault()` para confirmar antes de descartar trabalho não salvo.
-- **Ações do rodapé**: coloque os botões primário e secundário em `slot="footer"`; a barra do rodapé só aparece quando o slot tem conteúdo.
-- **Fluxos que não se dispensam**: defina `closable="false"` e `maskClosable="false"` para forçar uma escolha explícita.
-- **Diálogos pontuais**: use `Modal.confirm` / `Modal.info` para perguntas rápidas, em vez de escrever marcação.
-- **Elevar a página anfitriã acima do modal enquanto ele está aberto**: case `:has(r-modal[open]), :has(r-modal[closing])`, não apenas `[open]`. O `open` some no instante em que `close()` roda, mas a transição da máscara e do diálogo continua pintando por cerca de 0,3 s; retirar a elevação de `z-index` no meio do desvanecimento deixa a máscara, ainda visível, repintar por baixo daquilo sobre o que estava erguida.

@@ -18,7 +18,7 @@ description: 'ranui Progress（<r-progress>）以进度条展示任务完成度�
 <r-progress percent="40%"></r-progress>
 ```
 
-> 💡 **提示**：`r-progress` 是一个没有固有宽度的块级元素。放在 flex 行内时可能会被压缩为 0 宽度，请显式设置宽度（例如 `style="width:100%"`），或将其放在块级上下文中。
+`r-progress` 是一个没有固有宽度的块级元素。放在 flex 行内时可能会被压缩为 0 宽度，请显式设置宽度（例如 `style="width:100%"`），或将其放在块级上下文中。
 
 ## API 参考
 
@@ -131,10 +131,3 @@ r-progress::part(fill) {
   background: var(--ran-color-primary);
 }
 ```
-
-## 最佳实践
-
-- **静态进度条**：使用默认的 `type="primary"` 展示只读进度。
-- **可交互进度条**：需要用户设置数值时使用 `type="drag"`，并监听 `change` 事件。
-- **百分比与数字**：`percent` 和 `total` 可以自由搭配，数值有明确总数时传数字，需要直接控制时传百分比。
-- **布局宽度**：将进度条放入块级容器，或显式设置宽度，避免在 flex 布局中被压缩为 0。

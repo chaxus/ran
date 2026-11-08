@@ -37,6 +37,7 @@ test.describe('native global navigation', () => {
         // Secondary destinations follow the product ones, set apart in the drawer.
         `${prefix}/examples/`,
         'https://edit.chaxus.com/',
+        'https://github.com/chaxus/ran',
       ];
       expect(
         await navigation.locator('a').evaluateAll((links) => links.map((link) => link.getAttribute('href'))),

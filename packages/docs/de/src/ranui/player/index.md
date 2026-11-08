@@ -312,16 +312,3 @@ r-player {
 ```
 
 Die vollständige Liste steht bei den [Style-Tokens](/de/ranui/style-tokens#player); welches Token das richtige ist, klärt das [Designsystem](/de/design/design-system/).
-
-## Bewährte Vorgehensweisen
-
-- **Größe**: Der Host ist `display: block` und hat keine eigene Größe; gib ihm immer eine ausdrückliche Breite und Höhe, sonst fällt das Video zusammen.
-- **Streaming-Engines**: Quellen mit `.m3u8` (HLS), `.mpd` (DASH) und `.flv`/`.ts` (FLV/MPEG-TS über `mpegts.js`) laden ihre Engine je selbsttätig und bei Bedarf; einzurichten ist nichts. Lässt sich die Endung einer URL nicht erschnüffeln (endungslose oder signierte CDN-URLs), setze das Attribut `format` ausdrücklich (etwa `format="dash"`), statt dich auf die Erkennung zu verlassen. WebRTC (`format="webrtc"`) ist immer ausdrücklich: An einem WHEP-Endpunkt gibt es nichts zu erschnüffeln.
-- **Ein einziger Listener**: Nimm lieber einen einzelnen `change`-Listener mit `switch (detail.type)`, als viele Handler anzuhängen; aller Zustand fließt durch `change`.
-- **Einheiten der Lautstärke**: `volume` (das Attribut), `setVolume()`/`getVolume()` und die Nutzlast der `volume`-Änderung nutzen alle eine einzige Skala von `0` bis `100`. Nur das darunterliegende native `<video>.volume` reicht von `0` bis `1`; der Player rechnet an genau dieser einen Stelle um.
-- **Bild-in-Bild ist schrittweise Verbesserung**: Ohne Unterstützung wird die Schaltfläche ausgeblendet, nicht deaktiviert; verlass dich nicht darauf, dass sie immer im DOM steht.
-- **Eigene Gestaltung**: Nimm das Attribut `sheet`, um CSS ins Shadow DOM einzufügen; der Player selbst stellt keine `::part()`-Griffe bereit.
-
-## Fahrplan
-
-`<r-player>` wird aktiv weiterentwickelt; was als Nächstes geplant ist, steht in [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) im Repository.

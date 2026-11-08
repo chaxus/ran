@@ -8,6 +8,8 @@ Aufklappende Auswahl für genau einen Wert aus einer Liste von Optionen, mit opt
 
 > **Einsetzen, wenn** du eine Auswahlliste für einen einzelnen Wert brauchst, aufgebaut aus `<r-option>`-Kindern, mit optionaler Suche und Teilnahme an nativen Formularen. `<r-select>` kümmert sich ums Öffnen, Filtern und die Übergabe an `FormData`.
 
+Lange Listen: `showSearch` einschalten. Bei Touch `trigger="click"` bevorzugen (`hover` wird auf Mobilgeräten ignoriert). In Layouts mit Overflow `getPopupContainerId` setzen, damit das Menü nicht abgeschnitten wird. `name` setzen, wenn ein natives `<form>` den Wert einsammelt.
+
 ## Schnellstart
 
 ### Grundlegende Verwendung
@@ -377,11 +379,3 @@ Bis das Skript der Komponente läuft, setzt der Browser die `<r-option>`-Element
   <r-option hidden value="zh-CN">中文</r-option>
 </r-select>
 ```
-
-## Bewährte Vorgehensweisen
-
-- **Viele Optionen**: Aktiviere `showSearch`, damit sich nach Beschriftung filtern lässt.
-- **Auslöseart**: Richte `trigger` nach den Erwartungen der Nutzenden; auf Mobilgeräten wird `hover` ignoriert, also lass `click` verfügbar.
-- **Einhängepunkt**: In scrollenden oder überlaufbeschnittenen Layouts steuerst du mit `getPopupContainerId`, wo die Liste eingehängt wird.
-- **Eigenes Aussehen**: Nimm `dropdownclass` oder die bereitgestellten `::part()`-Namen, um Auslöser und Liste umzugestalten.
-- **Formulare**: Gib dem Select ein `name`, damit sein Wert innerhalb eines nativen `<form>` von `FormData` erfasst wird.

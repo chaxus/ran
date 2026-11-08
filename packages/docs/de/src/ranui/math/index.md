@@ -35,7 +35,7 @@ Rendert hochwertige LaTeX-Formeln in HTML-Seiten mit Temml, direkt zu nativem Ma
 | `download`  | `boolean` | `false`   | Zeigt Schaltfläche bzw. Menü zum Herunterladen des Quelltexts (`.tex`) und/oder MathML (`.mml`).      |
 | `sheet`     | `string`  | `''`      | CSS, das in das Shadow DOM der Komponente injiziert wird.                                             |
 
-> 💡 **Hinweis**: Der Getter der Eigenschaft `latex` dekodiert seinen Wert mit `decodeURIComponent`, URI-kodierte Formeln werden also vor dem Rendern dekodiert. Die Formel als Slot-Text zu übergeben hat keine Wirkung; gerendert wird nur das Attribut `latex`.
+Der Getter der Eigenschaft `latex` dekodiert seinen Wert mit `decodeURIComponent`, URI-kodierte Formeln werden also vor dem Rendern dekodiert. Die Formel als Slot-Text zu übergeben hat keine Wirkung; gerendert wird nur das Attribut `latex`.
 
 ### Formel `latex`
 
@@ -79,16 +79,3 @@ r-math {
 Parts: `button` · `error` · `math` · `menu` · `render` · `toolbar`
 
 Die vollständige Liste steht in den [Style-Tokens](/de/ranui/style-tokens#math); welches Token du nimmst, klärt das [Designsystem](/de/design/design-system/).
-
-## Bewährte Praxis
-
-- **Formeln über `latex` übergeben**: Setze die Formel auf das Attribut `latex`; Slot-Text wird nicht gerendert.
-- **Backslashes in JavaScript maskieren**: Weist du `latex` aus einem JS-String zu, denk daran, dass `\` maskiert werden muss (z. B. `'\\frac{1}{2}'`).
-- **Parse-Fehler behandeln**: Höre auf `error` (oder prüfe die gerenderte `::part(error)`-Box), statt anzunehmen, jede Formel sei gültiges LaTeX.
-- **Eigenes Layout über `sheet`**: Nutze das Attribut `sheet`, um das interne Layout von `.ran-math` bei Bedarf zu überschreiben.
-
-### Kopieren und schmale Ansichten
-
-Aktivierte Bedienelemente bleiben in einer ruhigen Zeile über dem Inhalt sichtbar: 32px für präzise Zeiger, 44px für Touch und 8px Abstand zum Inhalt. Ohne Bedienelemente wird kein Platz reserviert. Kopieren behält den Fokus und verhindert doppelte ausstehende Schreibvorgänge. Ablehnung oder fehlende Zwischenablage erscheint lokal in `::part(copy-status)` (`role="status"`); `label-copy-error` lokalisiert den Hinweis. Ein erneuter Versuch nutzt denselben Button. `copied` wird nur nach erfolgreichem Kopieren des aktuellen Inhalts ausgelöst. Änderungen an Quelle oder Kopierziel verwerfen Rückmeldungen älterer Anfragen. Bei Quellenänderungen bleibt der fokussierte Button erhalten; die neue Quelle kann sofort kopiert werden.
-
-Breite Formeln scrollen innerhalb von `::part(render)` horizontal, ohne die Seite zu verbreitern oder die Werkzeugleiste zu verschieben.

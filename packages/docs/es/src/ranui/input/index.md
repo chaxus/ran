@@ -8,6 +8,8 @@ Componente de entrada para escribir contenido con el teclado: el control de form
 
 > **Úsalo cuando** necesites un campo de texto con etiqueta fija encima, icono a la izquierda, estado y mensaje de validación, y participación en formularios nativos: `<r-input>` cubre la entrada de texto, contraseña y números.
 
+Empareja `status` con `message` para que el estado no sea solo color. Usa `placeholder` como pista, no como sustituto de `label`. Pon `name` cuando un formulario recoja el valor.
+
 ## Inicio rápido
 
 ### Uso básico
@@ -227,12 +229,3 @@ r-input {
 Partes: `content` · `input` · `label` · `message`
 
 La lista completa está en [tokens de estilo](/es/ranui/style-tokens#input); cuál usar lo explica el [sistema de diseño](/es/design/design-system/).
-
-## Buenas prácticas
-
-- **Etiquetas**: añade un `label` con sentido para que el campo tenga un nombre accesible.
-- **Marcadores**: usa `placeholder` como pista de escritura, no como sustituto de la etiqueta.
-- **Estado y mensaje**: acompaña `status` de `message` para que el estado no dependa solo del color.
-- **Iconos**: añade un `icon` pertinente para que el campo se reconozca antes.
-- **Tipos**: elige el `type` adecuado al contenido (`text`, `password`, `number`, …).
-- **Formularios**: pon `name` cuando recojas el valor dentro de un formulario.

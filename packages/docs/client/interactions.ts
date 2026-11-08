@@ -129,6 +129,15 @@ export const mountNavigation = (): void => {
     if ((event.target as Element)?.closest('a')) (event.currentTarget as HTMLDetailsElement).open = false;
   });
   for (const menu of document.querySelectorAll<HTMLDetailsElement>('.langs, .mobile-toc')) {
+    const panel =
+      menu.querySelector<HTMLElement>('.langs__list') ??
+      menu.querySelector<HTMLElement>('.toc__list') ??
+      ([...menu.children].find((child) => child.tagName !== 'SUMMARY') as HTMLElement | undefined);
+    const syncInert = (): void => {
+      if (panel) panel.inert = !menu.open;
+    };
+    syncInert();
+    menu.addEventListener('toggle', syncInert);
     document.addEventListener('click', (event) => {
       if (!menu.contains(event.target as Node)) menu.open = false;
     });

@@ -170,12 +170,3 @@ Keine. Die Komponente löst keine eigenen Events aus.
 ## Alle Lade-Animationen
 
 <Loading />
-
-## Bewährte Praxis
-
-- **Passend zur Situation wählen**: Nimm eine Animation, die zum Kontext und zum Tempo der Aufgabe passt.
-- **CSS-Variablen**: Passe Größe und Farbe über die Tokens `--loading-{type}-*` an, statt Elemente drumherum zu bauen.
-- **Bemessung**: Bevorzuge `px` gegenüber der Standardbemessung in `em`, damit die Maße vorhersehbar sind.
-- **Performance**: Vermeide viele gleichzeitige Animationen auf einem Bildschirm.
-- **Bedarfsgesteuertes Laden**: Jede Animation ist ein eigener nachgeladener Chunk (mit eigenem JS und CSS), ein `name` lädt also nur die Variante, die er verwendet; eine Animation zu referenzieren bündelt nie die anderen 28. Das voreingestellte `circle` und das häufige `dot` sind fest eingebaut, damit das erste Bild sofort und ohne Aufblitzen erscheint; alle übrigen laden beim ersten Gebrauch asynchron. Die Verwendung bleibt gleich: einfach `name` setzen.
-- **Theming**: Die Grundfarben folgen den Theme-Tokens `--ran-color-*`, die Animationen passen sich also von selbst an helle und dunkle Modi an.

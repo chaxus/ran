@@ -99,7 +99,7 @@ When you need to customize the document preview service, you can specify the ser
 <r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **Tip**: Defaults to the hosted preview service at `https://edit.chaxus.com`. To self-host it, see [OnlyOffice Web Local](https://github.com/ranuts/document).
+Defaults to the hosted preview service at `https://edit.chaxus.com`. To self-host it, see [OnlyOffice Web Local](https://github.com/ranuts/document).
 
 ## 0.3.0 compatibility
 

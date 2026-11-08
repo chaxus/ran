@@ -197,11 +197,3 @@ r-disclosure-row {
 Parts: `body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
 
 The full list is in [style tokens](/ranui/style-tokens#disclosure-row); which token to reach for is the [design system](/design/design-system/).
-
-## Best Practices
-
-- **Give a row a body, or don't make it expandable.** A chevron that opens onto empty space
-  serves no purpose; leave `expandable` off and the row stays a single line.
-- **Keep the heading a fixed vocabulary** (`Read file`, `Run tests`, `Search`) and put the
-  variable part in the summary. That is what makes a column of rows scannable.
-- **Pair `tone="error"` with words, never colour alone**: the summary should say what failed.

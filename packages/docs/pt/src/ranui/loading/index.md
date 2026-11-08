@@ -170,12 +170,3 @@ Nenhum. O componente não despacha eventos personalizados.
 ## Todas as animações de carregamento
 
 <Loading />
-
-## Boas práticas
-
-- **Escolha pela cena**: pegue uma animação que combine com o contexto e o ritmo da tarefa.
-- **Variáveis CSS**: personalize tamanho e cor pelos tokens `--loading-{type}-*` em vez de envolver elementos.
-- **Dimensionamento**: prefira unidades `px` ao `em` padrão para medidas previsíveis.
-- **Desempenho**: evite desenhar muitas animações ao mesmo tempo numa só tela.
-- **Carregamento sob demanda**: cada animação é um bloco preguiçoso separado (com JS e CSS próprios), então um `name` só carrega a variante que usa; referenciar uma animação nunca empacota as outras 28. A `circle` padrão e a comum `dot` vêm embutidas para um primeiro desenho imediato e sem lampejo; as demais carregam de forma assíncrona no primeiro uso. O uso não muda: basta definir `name`.
-- **Temas**: as cores base seguem os tokens de tema `--ran-color-*`, então as animações se adaptam sozinhas aos modos claro e escuro.

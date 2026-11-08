@@ -6,6 +6,12 @@ title: Agents
 
 One ran plugin provides three skills: design for product decisions, ranui for components, and ranuts for utilities.
 
+Pick a skill by the decision in front of you:
+
+- **design** — layout, interaction, motion, or whether a screen passes acceptance
+- **ranui** — which `<r-*>` element to use, its attributes, or theme tokens
+- **ranuts** — which helper to import, or which entry point owns a problem
+
 [design](../design/) · [ranui](../ranui/) · [ranuts](../ranuts/)
 
 Install the plugin from GitHub.

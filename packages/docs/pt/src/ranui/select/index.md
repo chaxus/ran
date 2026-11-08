@@ -8,6 +8,8 @@ Seletor suspenso para escolher um único valor de uma lista de opções, com bus
 
 > **Use quando** precisar de um seletor suspenso de valor único montado a partir de filhos `<r-option>`, com busca opcional e participação em formulários nativos. O `<r-select>` cuida de abrir, filtrar e entregar o valor ao `FormData`.
 
+Listas longas: ative `showSearch`. Prefira `trigger="click"` quando o toque importa (`hover` é ignorado no mobile). Em layouts com overflow, use `getPopupContainerId` para o menu não ser cortado. Defina `name` quando um `<form>` nativo coletar o valor.
+
 ## Início rápido
 
 ### Uso básico
@@ -377,11 +379,3 @@ Até o script do componente rodar, o navegador dispõe os `<r-option>` como text
   <r-option hidden value="zh-CN">中文</r-option>
 </r-select>
 ```
-
-## Boas práticas
-
-- **Muitas opções**: ligue `showSearch` para que dê para filtrar pelo rótulo.
-- **Forma de abrir**: ajuste `trigger` ao que as pessoas esperam; no celular o `hover` é ignorado, então mantenha o `click` disponível.
-- **Onde monta**: em layouts com rolagem ou com corte por transbordo, use `getPopupContainerId` para controlar onde o menu é montado.
-- **Estilos próprios**: use `dropdownclass` ou os nomes de `::part()` expostos para redesenhar o gatilho e o menu.
-- **Formulários**: dê um `name` ao select para que o valor dele seja capturado pelo `FormData` dentro de um `<form>` nativo.

@@ -1719,11 +1719,11 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ## `select`
 
-- Tokens: 69
+- Tokens: 70
 - Parts: 6
 
 ### Tokens
-<!-- layers: semantic: 9 · skin: 1 · component: 47 · internal: 12 -->
+<!-- layers: semantic: 9 · skin: 1 · component: 48 · internal: 12 -->
 - `--ran-background-200`
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-subtle`
@@ -1749,6 +1749,7 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 - `--ran-select-font-family`
 - `--ran-select-font-size`
 - `--ran-select-font-weight`
+- `--ran-select-hover-background-color`
 - `--ran-select-hover-border`
 - `--ran-select-icon-align-items`
 - `--ran-select-icon-color`

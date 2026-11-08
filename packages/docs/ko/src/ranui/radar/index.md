@@ -190,10 +190,3 @@ HTML의 `attribute`는 `string`만 담을 수 있으므로, 넘기는 데이터�
 ## 이벤트
 
 없습니다. `<r-radar>`는 커스텀 이벤트를 디스패치하지 않습니다.
-
-## 권장 사항
-
-- **크기**: 호스트에는 고유 크기가 없습니다. 언제나 `width`/`height`를 명시적으로(`style`이나 `--ran-radar-width`/`--ran-radar-height` 변수로) 지정하세요. 컨테이너 크기가 바뀌면 `ResizeObserver`로 감지해 차트가 자동으로 다시 그려집니다.
-- **데이터 형식**: `abilitys`에는 올바른 JSON을 넘기세요. 형식이 어긋난 JSON은 기록되고 해석되지 않습니다. 코드에서 진짜 배열을 다룰 때는 `abilitys` JS 프로퍼티를 쓰세요.
-- **척도**: `scoreRate`는 고정된 최대값 `100`을 기준으로 잽니다. 값을 그 범위로 정규화하세요.
-- **테마**: 색 어트리뷰트(`colorPolygon`, `colorLine`, `fillColor`, `strokeColor`)는 반응형이라 마운트 뒤에 바꾸면 차트를 다시 그립니다. 색이 라이트/다크 테마를 저절로 따르게 하려면 `--ran-radar-*` CSS 변수를 먼저 쓰세요.

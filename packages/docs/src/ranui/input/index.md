@@ -8,6 +8,8 @@ Input component for entering content via keyboard, the most basic form control.
 
 > **Use when** you need a text field with a static top-aligned label, leading icon, validation status/message, and native form participation: `<r-input>` covers text, password, and number entry.
 
+Pair `status` with `message` so state is not color alone. Use `placeholder` for hints, not as a substitute for `label`. Set `name` when a form collects the value.
+
 ## Quick Start
 
 ### Basic Usage
@@ -241,12 +243,3 @@ r-input {
 Parts: `content` · `input` · `label` · `message`
 
 The full list is in [style tokens](/ranui/style-tokens#input); which token to use is in the [design system](/design/design-system/).
-
-## Best Practices
-
-- **Labels**: Add a meaningful `label` so the field has an accessible name.
-- **Placeholders**: Use `placeholder` for input hints, not as a replacement for a label.
-- **Status + Message**: Pair `status` with `message` so state is not signalled by color alone.
-- **Icons**: Add a relevant `icon` to enhance recognition.
-- **Types**: Choose the appropriate `type` (`text`, `password`, `number`, …) for the content.
-- **Forms**: Set `name` when collecting the value inside a form.

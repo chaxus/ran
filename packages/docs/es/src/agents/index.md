@@ -6,6 +6,12 @@ title: Agentes
 
 Un plugin ran ofrece tres habilidades: design para decisiones de producto, ranui para componentes y ranuts para utilidades.
 
+Elige la habilidad según la decisión que tienes delante:
+
+- **design** — composición, interacción, movimiento, o si una pantalla supera la aceptación
+- **ranui** — qué elemento `<r-*>` usar, sus atributos o los tokens del tema
+- **ranuts** — qué utilidad importar, o qué punto de entrada cubre el problema
+
 [design](../design/) · [ranui](../ranui/) · [ranuts](../ranuts/)
 
 Instala el plugin desde GitHub.

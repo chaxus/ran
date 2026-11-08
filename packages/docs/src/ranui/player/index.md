@@ -328,16 +328,3 @@ r-player {
 ```
 
 The full list is in [style tokens](/ranui/style-tokens#player); which token to reach for is the [design system](/design/design-system/).
-
-## Best Practices
-
-- **Sizing**: The host is `display: block` with no intrinsic size; always give it an explicit width and height, otherwise the video collapses.
-- **Streaming engines**: `.m3u8` (HLS), `.mpd` (DASH), and `.flv`/`.ts` (FLV/MPEG-TS via `mpegts.js`) sources each load their engine lazily and automatically; no setup required. If a URL's extension can't be sniffed (extensionless/signed CDN URLs), set the `format` attribute explicitly (e.g. `format="dash"`) instead of relying on detection. WebRTC (`format="webrtc"`) is always explicit: a WHEP endpoint has nothing to sniff.
-- **One listener**: Prefer a single `change` listener with a `switch (detail.type)` over trying to attach many event handlers; all state flows through `change`.
-- **Volume units**: `volume` (attribute), `setVolume()`/`getVolume()`, and the `volume` change payload all use a single `0`–`100` scale. Only the underlying native `<video>.volume` is `0`–`1`; the player converts at that one boundary.
-- **Picture-in-Picture is progressive enhancement**: the button is hidden, not disabled, when the browser lacks support; don't rely on it always being present in the DOM.
-- **Custom styling**: Use the `sheet` attribute to inject shadow-DOM CSS; there are no exported `::part()` handles on the player itself.
-
-## Roadmap
-
-`<r-player>` is under active development; see [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for what's planned next.

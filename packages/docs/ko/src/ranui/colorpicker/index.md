@@ -145,11 +145,3 @@ r-colorpicker {
   --ran-colorpicker-border-radius: 6px;
 }
 ```
-
-## 권장 사항
-
-- **입력 형식**: `value`에는 어떤 CSS 색 문자열이든 넣으세요. HEX, `rgb(...)`, `rgba(...)` 모두 피커가 내부에서 정규화합니다.
-- **결과 읽기**: `change`를 구독하고 필요한 형식을 `event.detail`에서 읽으세요 (`hex`, `rgb`, `rgba`, `alpha`).
-- **투명도**: 투명도가 필요하면 `rgba(...)` 입력이나 투명도 슬라이더를 쓰세요. 투명도가 1 아래로 내려가면 읽어 낸 `value`가 `rgba(...)` 문자열이 됩니다.
-- **키보드**: 견본과 두 슬라이더 모두 포커스가 가고 키보드로 조작됩니다. 마우스가 없어도 됩니다.
-- **불러오기**: `import 'ranui'`(모든 컴포넌트 등록) 나 단독 `import 'ranui/colorpicker'`로 불러오세요.

@@ -37,9 +37,10 @@
  * The landing, in the Graphite language: neutral surfaces, hairlines, one primary action,
  * and real ranui elements as the only imagery besides small line icons.
  *
- * Four sections, one job each, in reading order: positioning (headline, action, facts and
- * a working example), live proof, choosing a pillar, and installing. Every text box stands
- * on the landing spine (`--spine-landing`, owned by docs.css), the footer included.
+ * Five sections, one job each, in reading order: positioning (headline, action, facts and
+ * a working example), live proof, choosing a pillar, capabilities, and installing. Every
+ * text box stands on the landing spine (`--spine-landing`, owned by docs.css), the footer
+ * included.
  *
  * Sizes come only from the type roles docs.css declares; the literals after them are the
  * pre-stylesheet fallbacks, not a second scale.
@@ -117,6 +118,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ran-space-2, 8px);
+  min-height: 40px;
+  padding: 0 var(--ran-space-3, 12px);
   font-size: var(--type-label-1, 14px);
   font-weight: var(--type-label-weight, 500);
   color: var(--fg-muted);
@@ -138,20 +141,36 @@
 }
 /* Arrows point the way the line reads. */
 .btn svg,
-.pillar-more svg {
+.pillar-more svg,
+.caps-name svg {
   transition: transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, ease);
 }
 .btn:hover svg,
-.pillar:hover .pillar-more svg {
+.pillar:hover .pillar-more svg,
+.caps-item:hover .caps-name svg {
   transform: translateX(3px);
 }
 [dir='rtl'] .btn svg,
-[dir='rtl'] .pillar-more svg {
+[dir='rtl'] .pillar-more svg,
+[dir='rtl'] .caps-name svg {
   transform: scaleX(-1);
 }
 [dir='rtl'] .btn:hover svg,
-[dir='rtl'] .pillar:hover .pillar-more svg {
+[dir='rtl'] .pillar:hover .pillar-more svg,
+[dir='rtl'] .caps-item:hover .caps-name svg {
   transform: scaleX(-1) translateX(3px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover svg,
+  .pillar:hover .pillar-more svg,
+  .caps-item:hover .caps-name svg {
+    transform: none;
+  }
+  [dir='rtl'] .btn:hover svg,
+  [dir='rtl'] .pillar:hover .pillar-more svg,
+  [dir='rtl'] .caps-item:hover .caps-name svg {
+    transform: scaleX(-1);
+  }
 }
 
 /*
@@ -225,7 +244,7 @@
 .example__rules {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: var(--ran-space-1, 4px) var(--ran-space-2, 8px);
   padding: var(--ran-space-3, 12px) var(--ran-space-3, 12px) 0;
   font-size: var(--type-label-3, 12px);
@@ -234,10 +253,18 @@
   color: var(--fg-muted);
 }
 .example__rule {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: var(--ran-space-1, 4px) 0;
   color: var(--link);
 }
 .example__rule:hover {
   text-decoration: underline;
+}
+.example__rule:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
 }
 /* Secondary text, not disabled text: `--fg-muted` keeps it above 4.5:1 on the tray. */
 .live-note {
@@ -469,15 +496,32 @@
   width: 16px;
   height: 16px;
 }
-
-.caps-title {
-  margin: var(--ran-space-16, 64px) 0 var(--ran-space-6, 24px);
-  border: 0;
-  font-size: var(--type-heading-3, 20px);
-  font-weight: var(--type-heading-weight, 600);
-  letter-spacing: -0.01em;
+.choose-agents {
+  margin: var(--ran-space-8, 32px) 0 0;
+  font-size: var(--type-label-1, 14px);
+  font-weight: var(--type-label-weight, 500);
+}
+.choose-agents a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-1, 4px);
+  min-height: 40px;
+  padding: 0 var(--ran-space-1, 4px);
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+.choose-agents a:hover {
   color: var(--fg);
 }
+.choose-agents a:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+.choose-agents svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* Two columns, no boxes: the column heads' rules are the only lines. */
 .bento {
   display: grid;
@@ -512,8 +556,36 @@
   list-style: none;
 }
 .caps-list li {
+  display: block;
+}
+.caps-item {
   display: flex;
   gap: var(--ran-space-3, 12px);
+  padding: var(--ran-space-1, 4px);
+  margin: calc(var(--ran-space-1, 4px) * -1);
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--ran-radius-sm, 8px);
+}
+.caps-item .caps-name {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ran-space-1, 4px);
+  color: var(--link);
+}
+.caps-item .caps-name svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  color: var(--link);
+}
+.caps-item:hover .caps-name {
+  text-decoration: underline;
+}
+.caps-item:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
 }
 /* One title line tall at the title's size, so the icon centres on the name rather than
    hanging from the top of the row. */
@@ -580,8 +652,8 @@
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-xs, 4px);
   background: var(--bg);
@@ -591,6 +663,10 @@
 .copy:hover {
   color: var(--fg);
   border-color: var(--rule-strong);
+}
+.copy:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
 }
 .copy.done {
   color: var(--ran-color-success, var(--ran-green-900, #0a7d4f));
@@ -783,9 +859,6 @@
   }
   .bento {
     gap: var(--ran-space-10, 40px);
-  }
-  .caps-title {
-    margin-top: var(--ran-space-10, 40px);
   }
   .panel {
     grid-template-columns: minmax(0, 1fr);

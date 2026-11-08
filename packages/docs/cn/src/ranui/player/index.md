@@ -314,16 +314,3 @@ r-player {
 ```
 
 完整清单见[样式令牌](/cn/ranui/style-tokens#player)；该选哪个令牌见[设计系统](/cn/design/design-system/)。
-
-## 最佳实践
-
-- **尺寸**：宿主元素是 `display: block`，没有固有尺寸，务必给它一个明确的宽高，否则视频区域会塌陷。
-- **流媒体引擎**：`.m3u8`（HLS）、`.mpd`（DASH）、`.flv`/`.ts`（通过 `mpegts.js` 的 FLV/MPEG-TS）这些源都会自动懒加载对应引擎，无需手动配置。如果 URL 的扩展名探测不出来（无后缀/加签的 CDN 地址），请显式设置 `format` 属性（比如 `format="dash"`），不要依赖自动探测。WebRTC（`format="webrtc"`）永远需要显式指定，因为 WHEP 端点没有任何东西可以探测。
-- **单一监听器**：优先用一个 `change` 监听器配合 `switch (detail.type)`，而不是给很多事件各挂一个处理函数，因为所有状态都流经 `change`。
-- **音量单位**：`volume`（属性）、`setVolume()`/`getVolume()`，以及 `volume` change 事件的载荷，全部使用同一套 `0`–`100` 刻度。只有底层原生 `<video>.volume` 是 `0`–`1`，播放器只在这一个边界上做转换。
-- **画中画是渐进增强**：浏览器不支持时按钮是隐藏而不是禁用，不要假设它一定存在于 DOM 里。
-- **自定义样式**：用 `sheet` 属性注入 shadow DOM 的 CSS；播放器本身没有导出任何 `::part()`。
-
-## Roadmap
-
-`<r-player>` 仍在持续开发；后续规划见仓库中的 [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md)。

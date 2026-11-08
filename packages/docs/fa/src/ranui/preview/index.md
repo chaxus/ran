@@ -99,7 +99,7 @@ npm install ranui
 <r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **نکته**: به‌طور پیش‌فرض از سرویس میزبانی‌شده روی `https://edit.chaxus.com` استفاده می‌شود. برای میزبانی خودتان [OnlyOffice Web Local](https://github.com/ranuts/document) را ببینید.
+به‌طور پیش‌فرض از سرویس میزبانی‌شده روی `https://edit.chaxus.com` استفاده می‌شود. برای میزبانی خودتان [OnlyOffice Web Local](https://github.com/ranuts/document) را ببینید.
 
 ## سازگاری با 0.3.0
 

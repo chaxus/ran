@@ -79,7 +79,7 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 可以通过 `icon` 属性为按钮添加图标，或者直接在按钮内使用 Icon 组件
 
-> 💡 **提示**：如果需要控制图标的具体位置，建议直接使用 Icon 组件而不是 icon 属性
+如果需要控制图标的具体位置，建议直接使用 Icon 组件而不是 icon 属性
 
 <ran-demo>
   <r-button type="default" icon="user">默认按钮</r-button>
@@ -150,11 +150,3 @@ r-button::part(content) {
 
 完整清单见[样式令牌](/cn/ranui/style-tokens#button)；该选哪个令牌见
 [设计系统](/cn/design/design-system/)。
-
-## 最佳实践
-
-- **主要操作**：使用 `type="primary"` 的按钮（单色，浅色模式黑底白字，深色模式白底黑字）
-- **危险操作**：使用 `type="warning"` 的按钮
-- **次要操作**：使用 `type="text"` 的按钮
-- **禁用状态**：在操作不可用时使用 `disabled` 属性
-- **图标使用**：为按钮添加相关图标可以提升用户体验

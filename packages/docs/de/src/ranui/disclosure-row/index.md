@@ -161,9 +161,3 @@ r-disclosure-row {
 Parts: `body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
 
 Die vollständige Liste steht bei den [Style-Tokens](/de/ranui/style-tokens#disclosure-row); welches Token das richtige ist, klärt das [Designsystem](/de/design/design-system/).
-
-## Bewährte Vorgehensweisen
-
-- **Gib einer Zeile einen Rumpf, oder mach sie nicht aufklappbar.** Ein Winkelzeichen, das auf leeren Raum aufgeht, hat keinen Zweck; lass `expandable` weg, und die Zeile bleibt eine einzelne Zeile.
-- **Halte die Überschrift bei einem festen Wortschatz** (`Datei lesen`, `Tests laufen lassen`, `Suchen`) und stecke den veränderlichen Teil in die Zusammenfassung. Genau das macht eine Spalte von Zeilen überfliegbar.
-- **Setze `tone="error"` immer zusammen mit Worten, nie mit Farbe allein**: Die Zusammenfassung soll sagen, was schiefging.

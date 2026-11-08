@@ -91,13 +91,3 @@ Test, der fehlschlägt, sobald es nicht mehr rendert — diese Liste kann also n
 Themes zu vermeiden, setze `data-ran-theme` am `<html>` deiner Servervorlage (aus einem Cookie oder
 aus einem winzigen Inline-Skript, das vor dem ersten Rendern `localStorage` liest) und lass danach
 [`initTheme`](/de/ranui/theme/) übernehmen.
-
-## Bewährte Praxis
-
-- **Importiere `ranui` (oder die einzelnen `ranui/<component>`-Einstiegspunkte) vor dem Rendern.**
-  Die Registry wird durch den Seiteneffekt des Imports gefüllt; ohne ihn geht jedes Tag unexpandiert
-  durch und die Seite verliert ihr Markup, ohne dass es auffällt.
-- **Rendere die Seite, nicht das Fragment.** `renderHTMLToString` ist über beliebiges HTML sicher, du
-  musst die ranui-Teile also nicht herauslösen.
-- **Liefere das Stylesheet mit.** DSD-Markup trägt die Styles der Komponente, aber die Tokens auf
-  Seitenebene kommen aus `ranui/style` (und `ranui/fonts` für die Schriften).

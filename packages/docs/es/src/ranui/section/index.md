@@ -111,10 +111,3 @@ r-section::part(subtitle) {
   max-width: 48ch;
 }
 ```
-
-## Buenas prácticas
-
-- **Títulos de sección**: define `heading` para etiquetar cada región importante de la página.
-- **Contexto**: usa `subtitle` para una línea breve de apoyo; omite ambos para obtener una superficie lisa sin fila de encabezado.
-- **Accesibilidad**: el encabezado se expone como encabezado ARIA de nivel 2, así que participa en el esquema del documento; mantenlo significativo.
-- **Temas**: prefiere las variables CSS `--ran-section-*` o los selectores `::part()` frente al atributo `sheet` cuando el estilo deba reutilizarse.

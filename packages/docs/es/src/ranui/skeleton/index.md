@@ -117,10 +117,3 @@ Ninguno. El esqueleto no despacha eventos personalizados.
 ## Slots
 
 Ninguno. El esqueleto solo dibuja su propia barra y no proyecta contenido con slots.
-
-## Buenas prácticas
-
-- **Ajusta la maqueta**: dimensiona el contenedor padre para que cada esqueleto coincida con el ancho del contenido real al que sustituye.
-- **Imita la forma**: apila varios esqueletos con separaciones uniformes para representar texto de varias líneas o filas de una lista.
-- **Da tema con variables**: prefiere las variables CSS `--ran-skeleton-*` para ajustes sencillos; usa `sheet` solo cuando necesites selectores que las variables no cubren.
-- **Sustituye al cargar**: reemplaza los esqueletos por el contenido real en cuanto lleguen los datos, en lugar de dejarlos animándose indefinidamente.

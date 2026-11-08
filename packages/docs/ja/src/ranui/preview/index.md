@@ -99,7 +99,7 @@ npm install ranui
 <r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **ヒント**：既定ではホスティング済みのプレビューサービス `https://edit.chaxus.com` を使います。自前でホストする方法は [OnlyOffice Web Local](https://github.com/ranuts/document) を参照してください。
+既定ではホスティング済みのプレビューサービス `https://edit.chaxus.com` を使います。自前でホストする方法は [OnlyOffice Web Local](https://github.com/ranuts/document) を参照してください。
 
 ## 0.3.0 の互換性
 

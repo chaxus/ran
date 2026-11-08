@@ -101,10 +101,3 @@ description: '一个实验性的刮刮卡组件：拖动擦除画布覆盖层，
 | `.ran-scratch-ticket-canvas` | 刮除覆盖层画布，`z-index: 2`；填充色来自宿主上的 `--ran-scratch-cover-background`（默认 `var(--ran-color-text-secondary, #6b6b6b)`）。 |
 
 两个颜色都走主题 token、带字面量回退，因此默认就能适配明暗主题，也可以通过 `--ran-scratch-award-background` / `--ran-scratch-cover-background` 覆盖。宿主尺寸请使用普通的 `width` / `height` 设置。
-
-## 最佳实践
-
-- **务必设置宿主尺寸**：宿主是 `display: block` 且没有内在尺寸，请显式指定 `width` 和 `height`，否则内部的 `100%` 各层会坍缩为 0。
-- **揭晓内容随便放**：文字、图片、`<r-icon>`、多个元素都行，奖品是什么就往 slot 里放什么，不用绕一套固定的 icon + 尺寸 API。
-- **鼠标、触摸、触控笔都支持**：基于 Pointer Events 统一处理，桌面端和移动端表现一致。
-- **视为实验性功能**：仍在开发中，生产环境请勿依赖它。

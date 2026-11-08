@@ -19,6 +19,7 @@ const cn: LocaleMessages = {
     content_render: '内容渲染',
     build_ai_chat: '搭建 AI 聊天',
     doc_editor: '文档编辑器',
+    github: 'GitHub',
     design_guide: '设计检查清单',
     surface_language: '表面语言',
     overview: '总览',

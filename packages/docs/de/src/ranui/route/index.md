@@ -125,11 +125,3 @@ Wird ausgelöst, wenn dieses Outlet aktiv wird (sein `path` passt auf den aktuel
 `r-route` stellt weder `::part()`-Handles noch eigene `--ran-route-*`-CSS-Variablen bereit. Der Host ist ein gewöhnliches `display: block`-Element, das im ausgeblendeten Zustand zu `display: none` zusammenfällt. Zum Anpassen nimm das Attribut `sheet` oder gestalte den Host direkt.
 
 Importiere es über `import 'ranui'` (registriert jede Komponente) oder eigenständig über `import 'ranui/route'`.
-
-## Bewährte Praxis
-
-- **In `r-router` einhängen**: `r-route` schaltet bei Navigation nur um, wenn es einen [`r-router`](../router/) als Vorfahren hat, der es abgleicht.
-- **`exact` für die Wurzel**: Gib `path="/"` das Attribut `exact`, damit es nicht als Präfix auf jede andere Route passt.
-- **Vom Speziellen zum Allgemeinen ordnen**: Setze eine Auffangroute `path="/*"` ans Ende, da eine Route ohne `exact` schon auf ihr Präfix passt.
-- **`params` lesen statt die URL zu parsen**: Fange dynamische Segmente mit `:param` ein und lies sie aus der Eigenschaft `params`.
-- **Mit `routematch` auf die Aktivierung reagieren**: Nutze das bubbelnde `routematch`-Event, um das Laden von Daten anzustoßen, sobald eine Route aktiv wird.

@@ -4,7 +4,13 @@ title: Agentes
 
 # Agentes
 
-Um plugin ran oferece três habilidades: design para decisões de produto, ranui para componentes e ranuts para utilitários.
+Um plugin ran oferece três skills: design para decisões de produto, ranui para componentes e ranuts para utilitários.
+
+Escolha a skill conforme a decisão à sua frente:
+
+- **design** — composição, interação, movimento, ou se uma tela passa na aceitação
+- **ranui** — qual elemento `<r-*>` usar, seus atributos ou os tokens do tema
+- **ranuts** — qual utilitário importar, ou qual ponto de entrada cobre o problema
 
 [design](../design/) · [ranui](../ranui/) · [ranuts](../ranuts/)
 
@@ -24,8 +30,8 @@ claude plugin marketplace add chaxus/ran
 claude plugin install ran@ran
 ```
 
-Em uma nova sessão, use `$design`, `$ranui` ou `$ranuts` no Codex; `/ran:design`, `/ran:ranui` ou `/ran:ranuts` no Claude Code.
+Numa nova sessão, use `$design`, `$ranui` ou `$ranuts` no Codex; `/ran:design`, `/ran:ranui` ou `/ran:ranuts` no Claude Code.
 
-Para testar uma cópia local, execute o comando do marketplace na raiz do repositório com `.` no lugar de `chaxus/ran`.
+Para experimentar um checkout local, execute o comando do marketplace na raiz do repositório com `.` no lugar de `chaxus/ran`.
 
 [plugins/ran](https://github.com/chaxus/ran/tree/main/plugins/ran)

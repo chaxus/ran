@@ -67,7 +67,7 @@ description: 'ranui 의 Button(<r-button>) 은 여러 종류·크기와 로딩/�
 
 ### 아이콘 버튼 `icon`
 
-> 💡 **팁**: 아이콘 위치를 세밀하게 잡아야 한다면 Icon 컴포넌트를 직접 쓰세요.
+아이콘 위치를 세밀하게 잡아야 한다면 Icon 컴포넌트를 직접 쓰세요.
 
 <ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
@@ -131,11 +131,3 @@ r-button::part(content) {
 ```
 
 전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#button)에, 어떤 토큰을 고를지는 [디자인 시스템](/ko/design/design-system/)에 있습니다.
-
-## 권장 사항
-
-- **주요 동작**: `type="primary"`(무채색: 흰 바탕에 검정 / 검정 바탕에 흰색)
-- **위험한 동작**: `type="warning"`
-- **보조 동작**: `type="text"`
-- **비활성 상태**: 동작을 쓸 수 없을 때 `disabled`
-- **아이콘**: 알맞은 아이콘을 붙여 이해를 돕기

@@ -666,6 +666,11 @@ a {
   /* Tighter than Graphite so Search + three selects fit the capsule. */
   --ran-theme-switch-width: 6.75rem;
   --ran-surface-switch-width: 7.75rem;
+  /* Undo Graphite ghost select tokens on the Regular glass plate. */
+  --ran-select-hover-border: 1px solid var(--glass-rim);
+  --ran-select-hover-background-color: var(--glass-fill-strong);
+  --ran-select-focus-border: 1px solid var(--glass-rim);
+  --ran-select-color: var(--fg);
 }
 :root[data-ran-surface='glass'] .langs__summary {
   padding-inline: 8px;
@@ -873,13 +878,14 @@ a {
 }
 
 /*
- * Theme + style selects sit as peers — no outer box. An `.appearance` border plus
- * each select's own border read as two rings around the same controls.
+ * Theme + style selects sit as peers — no outer box. Graphite chrome uses ghost
+ * triggers (borderless at rest) so they match language and search weight; glass
+ * overrides these tokens under [data-ran-surface='glass'].
  */
 .appearance {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   flex: none;
   padding: 0;
   border: none;
@@ -890,13 +896,31 @@ a {
 .surface-switch {
   flex: none;
 }
+.appearance .theme-switch,
+.appearance .surface-switch {
+  --ran-theme-switch-background: transparent;
+  --ran-surface-switch-background: transparent;
+  --ran-theme-switch-border-color: transparent;
+  --ran-surface-switch-border-color: transparent;
+  --ran-theme-switch-radius: 5px;
+  --ran-surface-switch-radius: 5px;
+  --ran-theme-switch-trigger-min-height: 32px;
+  --ran-surface-switch-trigger-min-height: 32px;
+  --ran-theme-switch-font-size: var(--type-label-1);
+  --ran-surface-switch-font-size: var(--type-label-1);
+  /* Select hover/focus inherit into the shadow tree. */
+  --ran-select-hover-border: 1px solid transparent;
+  --ran-select-hover-background-color: var(--bg-soft);
+  --ran-select-focus-border: 1px solid transparent;
+  --ran-select-color: var(--fg-muted);
+}
 .appearance .theme-switch {
-  --ran-theme-switch-width: 8.25rem;
-  --ran-theme-switch-min-width: 7rem;
+  --ran-theme-switch-width: 7rem;
+  --ran-theme-switch-min-width: 6.5rem;
 }
 .appearance .surface-switch {
-  --ran-surface-switch-width: 9.75rem;
-  --ran-surface-switch-min-width: 8rem;
+  --ran-surface-switch-width: 8.5rem;
+  --ran-surface-switch-min-width: 7.5rem;
 }
 /*
  * Surface lives beside theme once the header has room for both. Below ~1100px the
@@ -923,7 +947,8 @@ a {
   padding: 0 var(--pad);
   display: flex;
   align-items: center;
-  gap: 16px;
+  /* Tight within the utility cluster; search's auto margin separates nav from tools. */
+  gap: 8px;
 }
 
 .wordmark {
@@ -952,7 +977,9 @@ a {
 .nav__link {
   padding: 8px 12px;
   border-radius: 5px;
-  color: var(--fg-muted);
+  /* Same ink as body; wordmark leads by weight (600), not by washed-out nav. */
+  color: var(--fg);
+  font-weight: 400;
   text-decoration: none;
   font-size: var(--type-label-1);
   white-space: nowrap;
@@ -980,11 +1007,16 @@ a {
 .langs__summary {
   list-style: none;
   cursor: pointer;
+  min-height: 32px;
   padding: 8px 12px;
+  border: 1px solid transparent;
   border-radius: 5px;
   font-size: var(--type-label-1);
   color: var(--fg-muted);
   white-space: nowrap;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
 }
 .langs__summary::-webkit-details-marker {
   display: none;
@@ -1083,18 +1115,20 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-height: 32px;
   padding: 4px 8px 4px 12px;
-  border: 1px solid var(--rule);
-  border-radius: 7px;
-  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
   color: var(--fg-muted);
   font: inherit;
-  font-size: var(--type-label-2);
+  font-size: var(--type-label-1);
   cursor: pointer;
   flex: none;
 }
 .search-open:hover {
-  border-color: var(--rule-strong);
+  background: var(--bg-soft);
+  border-color: transparent;
   color: var(--fg);
 }
 .search-open__text {
@@ -2169,12 +2203,20 @@ ran-demo p {
   margin-inline: var(--spine-landing);
 }
 .site-footer__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding-block: var(--ran-space-1, 4px);
   color: var(--fg-muted);
   text-decoration: none;
 }
 .site-footer__link:hover {
   color: var(--fg);
   text-decoration: underline;
+}
+.site-footer__link:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
 }
 /* In the drawer the secondary links follow the product ones, quieter and set apart. */
 .mobile-nav__secondary {

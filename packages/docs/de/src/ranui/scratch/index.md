@@ -95,10 +95,3 @@ Diese Komponente stellt **keine `::part()`-Haken** bereit, aber die Farben ihrer
 | `.ran-scratch-ticket-canvas` | Das Deckblatt-Canvas, `z-index: 2`; gefüllt mit `--ran-scratch-cover-background` (Standard `var(--ran-color-text-secondary, #6b6b6b)`), am Host gesetzt |
 
 Beide Farben laufen über Theme-Tokens mit einem Literal als Rückfall, passen sich also von selbst an hellen und dunklen Modus an und lassen sich mit `--ran-scratch-award-background` / `--ran-scratch-cover-background` überschreiben. Die Größe des Hosts setzt du mit gewöhnlichem `width` / `height`.
-
-## Bewährte Praxis
-
-- **Gib dem Host immer Maße**: Er ist `display: block` ohne eigene Größe; ohne ausdrückliche `width` und `height` fallen seine inneren `100%`-Schichten auf null zusammen.
-- **Jeder freizulegende Inhalt geht**: Text, ein Bild, ein `<r-icon>`, mehrere Elemente. Lege in den Slot, was der Gewinn tatsächlich ist; es gibt keine feste Icon-plus-Größe-API, um die man herumarbeiten müsste.
-- **Funktioniert mit Maus, Finger und Stift**: Pointer Events vereinheitlichen alle drei, es reagiert also am Desktop wie am Handy gleich.
-- **Als experimentell behandeln**: noch in Arbeit; verlass dich für den Produktivbetrieb nicht darauf.

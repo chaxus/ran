@@ -91,10 +91,3 @@ When `src` fails to load, the component swaps in `fallback`. If `fallback` is no
 ## Events
 
 None. `r-img` does not dispatch any custom events.
-
-## Best Practices
-
-- **Change `src` anytime**: `src` is reactive, so updating it on a mounted element reloads the image; the fallback still kicks in if the new URL fails to load.
-- **Provide `alt` for meaningful images**: Describe the content for screen readers; leave `alt` empty only for purely decorative images.
-- **Rely on the built-in fallback**: A default broken-image placeholder is used automatically, but supply your own `fallback` when you want a branded or context-appropriate placeholder.
-- **Style with `sheet`**: Since the image lives in shadow DOM, use the `sheet` attribute (or component CSS variables) to apply borders, radius, or sizing.

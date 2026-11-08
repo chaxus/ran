@@ -8,6 +8,8 @@ Dialog component for focused interactions on top of the current page, with focus
 
 > **Use when** you need a dialog for a focused interaction over the page, with focus trapping, scroll locking, and background inerting. Drive `<r-modal>` via the `open` attribute or the imperative `Modal.confirm` / `Modal.info` helpers.
 
+Listen for `beforeclose` and call `preventDefault()` to confirm before discarding unsaved work. Put actions in `slot="footer"`; the footer only appears when that slot has content. For non-dismissible flows, set `closable="false"` and `maskClosable="false"`. While open, escalate stacking with `:has(r-modal[open]), :has(r-modal[closing])` so the mask stays above during the close transition.
+
 ## Quick Start
 
 ### Basic Usage
@@ -51,7 +53,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 | `hideHeader`   | `boolean` | `false` | Drops the title bar entirely, leaving a floating close button |
 | `sheet`        | `string`  | `''`    | CSS injected into the shadow DOM                              |
 
-`closing` is a read-only attribute the element reflects on itself (not a settable property): present from the moment `close()` runs until the mask/dialog's fade-and-scale-out transition actually finishes (~0.3s later, same timing as the `afterclose` event). Useful for a host page that needs the modal to still count as "present" through that visual tail; see Best Practices below.
+`closing` is a read-only attribute the element reflects on itself (not a settable property): present from the moment `close()` runs until the mask/dialog's fade-and-scale-out transition actually finishes (~0.3s later, same timing as the `afterclose` event). Useful for a host page that needs the modal to still count as "present" through that visual tail.
 
 ### Title `title`
 
@@ -235,12 +237,3 @@ r-modal {
 Parts: `body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
 
 The full list is in [style tokens](/ranui/style-tokens#modal); which token to use is in the [design system](/design/design-system/).
-
-## Best Practices
-
-- **Trigger + toggle**: Open with `modal.open = true` and close with `modal.open = false`, or call `close()`.
-- **Guard destructive closes**: Listen for `beforeclose` and `preventDefault()` to confirm before dismissing unsaved work.
-- **Footer actions**: Put primary/secondary buttons in `slot="footer"`; the footer bar only appears when the slot has content.
-- **Non-dismissible flows**: Set `closable="false"` and `maskClosable="false"` to force an explicit choice.
-- **One-off dialogs**: Use `Modal.confirm` / `Modal.info` for quick prompts instead of authoring markup.
-- **Escalating a host page above the modal while it's open**: match `:has(r-modal[open]), :has(r-modal[closing])`, not just `[open]`. `open` is removed the instant `close()` runs, but the mask/dialog transition keeps painting for ~0.3s more; dropping a z-index escalation mid-fade lets the still-visible mask repaint under whatever it was lifted above.

@@ -194,10 +194,3 @@ chart.append(radar);
 ## 事件
 
 无。`<r-radar>` 不派发任何自定义事件。
-
-## 最佳实践
-
-- **尺寸设置**：宿主元素没有固有尺寸，务必显式设置 `width`/`height`（通过 `style` 或 `--ran-radar-width`/`--ran-radar-height` 变量）。容器尺寸变化时图表会通过 `ResizeObserver` 自动重绘。
-- **数据格式**：`abilitys` 必须传入合法 JSON；格式错误会被记录且无法解析。若在脚本中直接操作真实数组，使用 `abilitys` 这个 JS 属性会更方便。
-- **量表范围**：`scoreRate` 是相对固定最大值 `100` 衡量的，请把数值归一化到该范围内。
-- **主题定制**：颜色相关属性（`colorPolygon`、`colorLine`、`fillColor`、`strokeColor`）是响应式的，挂载后修改会触发图表重新渲染。若希望颜色自动跟随浅色/深色主题切换，优先使用 `--ran-radar-*` 系列 CSS 变量。

@@ -95,10 +95,3 @@ Este componente **não expõe nenhum `::part()`**, mas as cores das suas duas ca
 | `.ran-scratch-ticket-canvas` | O canvas de cobertura, `z-index: 2`; preenchido com `--ran-scratch-cover-background` (padrão `var(--ran-color-text-secondary, #6b6b6b)`), posto no host |
 
 As duas cores passam por tokens de tema com um valor de reserva literal, então se adaptam sozinhas aos modos claro e escuro e podem ser sobrescritas com `--ran-scratch-award-background` / `--ran-scratch-cover-background`. Dimensione o host com `width` e `height` comuns.
-
-## Boas práticas
-
-- **Sempre dimensione o host**: ele é `display: block` e não tem tamanho próprio; dê a ele `width` e `height` explícitos, ou as camadas internas a `100%` colapsam para zero.
-- **Qualquer conteúdo revelado serve**: texto, uma imagem, um `<r-icon>`, vários elementos. Coloque no slot o que o prêmio de fato é; não há uma API fixa de ícone + tamanho para contornar.
-- **Funciona com mouse, toque e caneta**: Pointer Events unifica os três, então ele responde do mesmo jeito no desktop e no celular.
-- **Trate como experimental**: ainda está em andamento; não conte com o comportamento dele em produção.

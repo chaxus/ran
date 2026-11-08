@@ -67,7 +67,7 @@ Componente de botón para disparar acciones inmediatas, con varios estilos y est
 
 ### Botón con icono `icon`
 
-> 💡 **Consejo**: para colocar el icono con precisión, usa directamente el componente Icon.
+para colocar el icono con precisión, usa directamente el componente Icon.
 
 <ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
@@ -131,11 +131,3 @@ r-button::part(content) {
 ```
 
 La lista completa está en [tokens de estilo](/es/ranui/style-tokens#button); cuál elegir lo explica el [sistema de diseño](/es/design/design-system/).
-
-## Buenas prácticas
-
-- **Acciones principales**: usa `type="primary"` (monocromo: negro sobre blanco / blanco sobre negro)
-- **Acciones peligrosas**: usa `type="warning"`
-- **Acciones secundarias**: usa `type="text"`
-- **Estado deshabilitado**: usa `disabled` cuando la acción no esté disponible
-- **Iconos**: añade iconos pertinentes para mejorar la experiencia

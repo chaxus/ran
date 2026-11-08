@@ -91,10 +91,3 @@ Cuando `src` no se puede cargar, el componente cambia a `fallback`. Si no define
 ## Eventos
 
 Ninguno. `r-img` no despacha eventos personalizados.
-
-## Buenas prácticas
-
-- **Cambia `src` cuando quieras**: es reactivo, así que actualizarlo en un elemento montado recarga la imagen; el sustituto sigue entrando en juego si la nueva URL falla.
-- **Da `alt` a las imágenes con significado**: describe el contenido para los lectores de pantalla; deja `alt` vacío solo en las puramente decorativas.
-- **Confía en el sustituto integrado**: el marcador de imagen rota por defecto se usa automáticamente, pero define tu propio `fallback` cuando quieras uno acorde a tu marca o al contexto.
-- **Da estilo con `sheet`**: como la imagen vive en el shadow DOM, usa el atributo `sheet` (o las variables CSS del componente) para bordes, radio o tamaño.
