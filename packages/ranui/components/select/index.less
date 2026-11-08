@@ -59,6 +59,10 @@
     &(:not([disabled],[type="text"]):hover) {
       .selection {
         border: var(--ran-select-hover-border, 1px solid var(--ran-color-border-control-hover, var(--ran-gray-900)));
+        background-color: var(
+          --ran-select-hover-background-color,
+          var(--ran-select-background-color, var(--ran-color-bg-elevated, #ffffff))
+        );
       }
     }
     &(:not([disabled]):hover) {
