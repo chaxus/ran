@@ -1,8 +1,8 @@
 import { object, packageManifest, hasErrorCode } from './tooling-json.ts';
 import type { PackageManifest } from './tooling-json.ts';
 import { releaseReceipt } from './release-types.ts';
-import type { ReleaseIdentity, ReleaseArchive } from './release-types.ts';
-/** Prepare, verify and publish the three library tarballs, in dependency order. */
+import type { ReleaseIdentity, ReleaseArchive, ReleaseReceipt } from './release-types.ts';
+/** Prepare, verify and publish library tarballs (any non-empty subset), in dependency order. */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -16,7 +16,20 @@ export const RELEASE_PACKAGES = [
   { directory: 'ranuts', name: 'ranuts' },
   { directory: 'ranview', name: '@alixex/ranview' },
   { directory: 'ranui', name: 'ranui' },
-];
+] as const;
+
+export type ReleasePackageName = (typeof RELEASE_PACKAGES)[number]['name'];
+
+export type ReleasePlanOptions = {
+  tag?: string;
+  /** Explicit package names; omit to use the full allowlist (or unpublished-only with registry). */
+  packages?: readonly string[];
+  /** When true, drop versions already on npm and require unpublished upstream deps. */
+  registry?: boolean;
+  request?: (url: string, init?: RequestInit) => Promise<Response>;
+  nodeVersion?: string;
+};
+
 const registry = 'https://registry.npmjs.org/';
 const json = async (path: string): Promise<unknown> => JSON.parse(await readFile(path, 'utf8'));
 const digest = (bytes: Uint8Array) => `sha512-${createHash('sha512').update(bytes).digest('base64')}`;
@@ -24,34 +37,82 @@ const archiveName = (directory: string, version: string) => `${directory}-${vers
 const command = (name: string, args: string[], cwd = ROOT) => execFileSync(name, args, { cwd, stdio: 'inherit' });
 const git = (...args: string[]) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' }).trim();
 
+const INTERNAL_DEPS: Record<ReleasePackageName, readonly ReleasePackageName[]> = {
+  ranuts: [],
+  '@alixex/ranview': ['ranuts'],
+  ranui: ['ranuts', '@alixex/ranview'],
+};
+
+export function parsePackageSelection(value?: string): string[] | undefined {
+  if (value === undefined || value.trim() === '' || value.trim() === 'all') return undefined;
+  const names = value.split(',').map((part) => part.trim()).filter(Boolean);
+  assert.ok(names.length > 0, 'Package selection must name at least one library');
+  return names;
+}
+
+function packageIndex(name: string) {
+  const index = RELEASE_PACKAGES.findIndex((pkg) => pkg.name === name);
+  assert.ok(index >= 0, `Unknown release package: ${name}`);
+  return index;
+}
+
+function directoryFor(name: string) {
+  return RELEASE_PACKAGES[packageIndex(name)].directory;
+}
+
 export function validatePlan(
   values: readonly unknown[],
-  { tag, nodeVersion = process.versions.node }: { tag?: string; nodeVersion?: string } = {},
+  {
+    tag,
+    nodeVersion = process.versions.node,
+    allowlist = values,
+  }: { tag?: string; nodeVersion?: string; allowlist?: readonly unknown[] } = {},
 ) {
   assert.ok(Number(nodeVersion.split('.')[0]) >= 24, 'Release tooling requires Node 24 or newer');
-  assert.equal(values.length, 3, 'Release exactly the three libraries');
-  const manifests = values.map(packageManifest);
-  const seen = new Set();
-  for (const [index, manifest] of manifests.entries()) {
+  assert.ok(values.length >= 1 && values.length <= 3, 'Release one to three libraries');
+  const selected = values.map(packageManifest);
+  const libraries = allowlist.map(packageManifest);
+  assert.equal(libraries.length, 3, 'Allowlist must be the three libraries');
+  for (const [index, manifest] of libraries.entries()) {
     assert.equal(manifest.name, RELEASE_PACKAGES[index].name, 'Unexpected release package or dependency order');
     assert.equal(manifest.engines?.node, '>=24.0.0', `${manifest.name}: engines must be >=24.0.0`);
-    const version = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-(alpha|beta|rc)\.(0|[1-9]\d*))?$/.exec(
-      manifest.version,
-    );
-    assert.ok(version, `${manifest.name}: invalid release version`);
-    assert.equal(tag, version[4] ?? 'latest', `${manifest.name}: tag must match the version channel`);
-    const dependencies = index === 0 ? [] : index === 1 ? ['ranuts'] : ['ranuts', '@alixex/ranview'];
-    for (const dependency of dependencies) {
-      assert.ok(seen.has(dependency), `${dependency} must be released first`);
+    for (const dependency of INTERNAL_DEPS[manifest.name as ReleasePackageName]) {
       assert.equal(
         manifest.dependencies?.[dependency],
         'workspace:*',
         `${manifest.name}: use workspace:* for ${dependency}`,
       );
     }
-    seen.add(manifest.name);
   }
-  return manifests;
+
+  const selectedNames = new Set<string>();
+  let previousIndex = -1;
+  for (const manifest of selected) {
+    const index = packageIndex(manifest.name);
+    assert.ok(index > previousIndex, 'Release packages must stay in dependency order');
+    previousIndex = index;
+    assert.equal(
+      libraries[index].version,
+      manifest.version,
+      `${manifest.name}: selected version must match the workspace`,
+    );
+    const version = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-(alpha|beta|rc)\.(0|[1-9]\d*))?$/.exec(
+      manifest.version,
+    );
+    assert.ok(version, `${manifest.name}: invalid release version`);
+    assert.equal(tag, version[4] ?? 'latest', `${manifest.name}: tag must match the version channel`);
+    selectedNames.add(manifest.name);
+  }
+
+  for (const manifest of selected) {
+    for (const dependency of INTERNAL_DEPS[manifest.name as ReleasePackageName]) {
+      assert.ok(
+        selectedNames.has(dependency) || libraries.some((pkg) => pkg.name === dependency),
+        `${dependency} must exist in the workspace before ${manifest.name}`,
+      );
+    }
+  }
+  return selected;
 }
 
 export async function currentTag(root = ROOT) {
@@ -59,7 +120,15 @@ export async function currentTag(root = ROOT) {
   return /-(alpha|beta|rc)\.\d+$/.exec(pkg.version)?.[1] ?? 'latest';
 }
 
-export async function readPlan(root = ROOT, tag?: string) {
+export async function readLibraryManifests(root = ROOT) {
+  return Promise.all(
+    RELEASE_PACKAGES.map(async (pkg) =>
+      packageManifest(await json(join(root, 'packages', pkg.directory, 'package.json'))),
+    ),
+  );
+}
+
+async function assertWorkspaceEngines(root: string) {
   const workspace = [packageManifest(await json(join(root, 'package.json')))];
   for (const entry of await readdir(join(root, 'packages'), { withFileTypes: true })) {
     if (!entry.isDirectory() || entry.name === 'node_modules') continue;
@@ -70,16 +139,15 @@ export async function readPlan(root = ROOT, tag?: string) {
     }
   }
   for (const pkg of workspace) assert.equal(pkg.engines?.node, '>=24.0.0', `${pkg.name}: engines must be >=24.0.0`);
-  const manifests = await Promise.all(
-    RELEASE_PACKAGES.map(async (pkg) =>
-      packageManifest(await json(join(root, 'packages', pkg.directory, 'package.json'))),
-    ),
-  );
-  for (const pkg of manifests) {
-    assert.equal(pkg.scripts?.prepack, 'pnpm run build', `${pkg.name}: prepack must build the package`);
-    assert.ok(!pkg.scripts.prepublish && !pkg.scripts.prepublishOnly, `${pkg.name}: use one prepack build lifecycle`);
-  }
-  return validatePlan(manifests, { tag: tag ?? (await currentTag(root)) });
+}
+
+function pickPackages(libraries: PackageManifest[], names: readonly string[]) {
+  const unique = new Set(names);
+  assert.equal(unique.size, names.length, 'Duplicate package in selection');
+  for (const name of names) packageIndex(name);
+  const selected = libraries.filter((pkg) => unique.has(pkg.name));
+  assert.equal(selected.length, unique.size, 'Unknown release package in selection');
+  return selected;
 }
 
 /** A network/auth failure is never evidence that a version is available. */
@@ -90,7 +158,7 @@ export async function checkRegistry(
     resume = false,
   }: { request?: (url: string, init?: RequestInit) => Promise<Response>; resume?: boolean } = {},
 ) {
-  const existing = new Set();
+  const existing = new Set<string>();
   for (const pkg of plan) {
     const response = await request(`${registry}${encodeURIComponent(pkg.name)}/${pkg.version}`, {
       signal: AbortSignal.timeout(20000),
@@ -109,6 +177,78 @@ export async function checkRegistry(
   return existing;
 }
 
+async function assertUpstreamPublished(
+  selected: readonly PackageManifest[],
+  libraries: readonly PackageManifest[],
+  request: (url: string, init?: RequestInit) => Promise<Response>,
+) {
+  const selectedNames = new Set(selected.map((pkg) => pkg.name));
+  const libraryByName = new Map(libraries.map((pkg) => [pkg.name, pkg]));
+  for (const manifest of selected) {
+    for (const dependency of INTERNAL_DEPS[manifest.name as ReleasePackageName]) {
+      if (selectedNames.has(dependency)) continue;
+      const upstream = libraryByName.get(dependency);
+      assert.ok(upstream, `${dependency} missing from workspace`);
+      const response = await request(`${registry}${encodeURIComponent(dependency)}/${upstream.version}`, {
+        signal: AbortSignal.timeout(20000),
+      });
+      assert.ok(
+        response.ok,
+        `${dependency}@${upstream.version} must already be on npm before releasing ${manifest.name} alone (HTTP ${response.status})`,
+      );
+    }
+  }
+}
+
+export async function readPlan(root = ROOT, tagOrOptions?: string | ReleasePlanOptions) {
+  const options: ReleasePlanOptions =
+    typeof tagOrOptions === 'string' || tagOrOptions === undefined ? { tag: tagOrOptions } : tagOrOptions;
+  const tag = options.tag ?? (await currentTag(root));
+  await assertWorkspaceEngines(root);
+  const libraries = await readLibraryManifests(root);
+  for (const pkg of libraries) {
+    assert.equal(pkg.scripts?.prepack, 'pnpm run build', `${pkg.name}: prepack must build the package`);
+    assert.ok(!pkg.scripts.prepublish && !pkg.scripts.prepublishOnly, `${pkg.name}: use one prepack build lifecycle`);
+  }
+
+  let selected = options.packages ? pickPackages(libraries, options.packages) : libraries;
+  if (options.registry) {
+    const request = options.request ?? fetch;
+    const unpublished: PackageManifest[] = [];
+    for (const pkg of selected) {
+      const response = await request(`${registry}${encodeURIComponent(pkg.name)}/${pkg.version}`, {
+        signal: AbortSignal.timeout(20000),
+      });
+      if (response.status === 404) {
+        unpublished.push(pkg);
+        continue;
+      }
+      assert.ok(response.ok, `Registry check failed for ${pkg.name}: HTTP ${response.status}`);
+    }
+    assert.ok(
+      unpublished.length > 0,
+      options.packages
+        ? 'Nothing to release; every selected version is already on npm'
+        : 'Nothing to release; ranuts, @alixex/ranview and ranui are already on npm at the workspace versions',
+    );
+    selected = unpublished;
+    await assertUpstreamPublished(selected, libraries, request);
+  }
+
+  return validatePlan(selected, { tag, nodeVersion: options.nodeVersion, allowlist: libraries });
+}
+
+export async function readPlanFromReceipt(root: string, receipt: ReleaseReceipt, tag: string) {
+  const libraries = await readLibraryManifests(root);
+  const selected = receipt.packages.map((pkg) => {
+    const workspace = libraries.find((entry) => entry.name === pkg.name);
+    assert.ok(workspace, `Receipt package ${pkg.name} is not a release library`);
+    assert.equal(workspace.version, pkg.version, `${pkg.name}: receipt version differs from the workspace`);
+    return workspace;
+  });
+  return validatePlan(selected, { tag, allowlist: libraries });
+}
+
 export async function verifyArtifacts(
   directory: string,
   plan: readonly ReleaseIdentity[],
@@ -118,11 +258,11 @@ export async function verifyArtifacts(
   assert.ok(!(await lstat(directory)).isSymbolicLink(), 'Artifact directory must not be a symlink');
   const receipt = releaseReceipt(await json(join(directory, 'release.json')));
   assert.equal(receipt.tag, tag, 'Artifact tag differs from the release plan');
-  assert.equal(receipt.packages?.length, 3, 'Artifact receipt must contain three libraries');
+  assert.equal(receipt.packages?.length, plan.length, 'Artifact receipt package count differs from the release plan');
   for (const [index, pkg] of receipt.packages.entries()) {
     assert.equal(pkg.name, plan[index].name, 'Artifact package/order differs from the release plan');
     assert.equal(pkg.version, plan[index].version, 'Artifact version differs from the release plan');
-    assert.equal(pkg.archive, archiveName(RELEASE_PACKAGES[index].directory, pkg.version), 'Unexpected archive path');
+    assert.equal(pkg.archive, archiveName(directoryFor(pkg.name), pkg.version), 'Unexpected archive path');
     const file = join(directory, pkg.archive);
     assert.ok(
       (await lstat(file)).isFile() && !(await lstat(file)).isSymbolicLink(),
@@ -144,13 +284,13 @@ export async function verifyArtifacts(
 export function verifyPackedManifest(
   packed: PackageManifest,
   source: PackageManifest,
-  plan: readonly ReleaseIdentity[],
+  libraries: readonly ReleaseIdentity[],
 ) {
   assert.equal(packed.name, source.name);
   assert.equal(packed.version, source.version);
   assert.equal(packed.engines?.node, '>=24.0.0');
   assert.equal(packed.type, 'module');
-  for (const dependency of plan) {
+  for (const dependency of libraries) {
     if (source.dependencies?.[dependency.name])
       assert.equal(packed.dependencies?.[dependency.name], dependency.version);
   }
@@ -160,35 +300,52 @@ export function verifyPackedManifest(
   );
 }
 
-export async function prepare(tag?: string) {
+export async function prepare(tagOrOptions?: string | ReleasePlanOptions) {
+  const options: ReleasePlanOptions =
+    typeof tagOrOptions === 'string' || tagOrOptions === undefined ? { tag: tagOrOptions } : tagOrOptions;
   const commit = git('rev-parse', 'HEAD');
   const cleanBefore = git('status', '--porcelain') === '';
-  tag ??= await currentTag();
-  const plan = await readPlan(ROOT, tag);
+  const tag = options.tag ?? (await currentTag());
+  const libraries = await readLibraryManifests(ROOT);
+  const plan = await readPlan(ROOT, { ...options, tag });
   const directory = join(ROOT, '.release');
   await mkdir(directory, { recursive: true });
   assert.ok(!(await lstat(directory)).isSymbolicLink(), 'Artifact directory must not be a symlink');
+
+  const selectedNames = new Set(plan.map((pkg) => pkg.name));
+  const lastIndex = Math.max(...plan.map((pkg) => packageIndex(pkg.name)));
   const packages = [];
-  for (const [index, pkg] of plan.entries()) {
-    const source = RELEASE_PACKAGES[index];
-    const archive = archiveName(source.directory, pkg.version);
+  for (const [index, source] of RELEASE_PACKAGES.entries()) {
+    if (index > lastIndex) break;
+    const workspace = libraries[index];
+    if (!selectedNames.has(source.name)) {
+      // Upstream of a selected package: build so pack can resolve workspace dist.
+      command('pnpm', ['run', 'build'], join(ROOT, 'packages', source.directory));
+      continue;
+    }
+    const archive = archiveName(source.directory, workspace.version);
     const path = join(directory, archive);
     try {
       assert.ok((await lstat(path)).isFile(), 'Archive output must be a regular file');
     } catch (error) {
       if (!hasErrorCode(error, 'ENOENT')) throw error;
     }
-    // prepack builds each package exactly once, after its local dependencies.
+    // prepack builds each selected package exactly once, after its local dependencies.
     command('pnpm', ['pack', '--out', path], join(ROOT, 'packages', source.directory));
     const packed = packageManifest(
       JSON.parse(execFileSync('tar', ['-xOf', path, 'package/package.json'], { encoding: 'utf8' })),
     );
-    verifyPackedManifest(packed, pkg, plan);
+    verifyPackedManifest(packed, workspace, libraries);
     const entries = execFileSync('tar', ['-tzf', path], { encoding: 'utf8' }).split('\n');
     for (const entry of ['package/dist/index.js', 'package/dist/index.d.ts'])
       assert.ok(entries.includes(entry), `Missing ${entry}`);
     assert.ok(!entries.some((entry) => /\.(?:cjs|cts)(?:\.map)?$/.test(entry)), 'CommonJS artifact in release');
-    packages.push({ name: pkg.name, version: pkg.version, archive, integrity: digest(await readFile(path)) });
+    packages.push({
+      name: workspace.name,
+      version: workspace.version,
+      archive,
+      integrity: digest(await readFile(path)),
+    });
   }
   assert.equal(git('rev-parse', 'HEAD'), commit, 'Source commit changed during preparation');
   const preparedFromCleanCheckout = cleanBefore && git('status', '--porcelain') === '';
@@ -225,11 +382,21 @@ export async function publish({
   tag,
   dryRun = true,
   confirm = false,
-}: { tag?: string; dryRun?: boolean; confirm?: boolean } = {}) {
+  packages,
+}: { tag?: string; dryRun?: boolean; confirm?: boolean; packages?: readonly string[] } = {}) {
   tag ??= await currentTag();
-  const plan = await readPlan(ROOT, tag);
   const directory = join(ROOT, '.release');
-  const receipt = await verifyArtifacts(directory, plan, tag, { requireVerification: true });
+  const receipt = releaseReceipt(await json(join(directory, 'release.json')));
+  if (packages) {
+    const libraries = await readLibraryManifests(ROOT);
+    assert.deepEqual(
+      receipt.packages.map((pkg) => pkg.name),
+      pickPackages(libraries, packages).map((pkg) => pkg.name),
+      'Package selection differs from the prepared receipt',
+    );
+  }
+  const plan = await readPlanFromReceipt(ROOT, receipt, tag);
+  await verifyArtifacts(directory, plan, tag, { requireVerification: true });
   if (!dryRun) {
     assertPublication({
       confirm,
@@ -275,13 +442,19 @@ async function main() {
   const [action = 'check', ...args] = process.argv.slice(2);
   const { values } = parseArgs({
     args,
-    options: { tag: { type: 'string' }, registry: { type: 'boolean' }, confirm: { type: 'boolean' } },
+    options: {
+      tag: { type: 'string' },
+      registry: { type: 'boolean' },
+      confirm: { type: 'boolean' },
+      packages: { type: 'string' },
+    },
   });
   const tag = values.tag ?? (await currentTag());
   assert.ok(tag && ['alpha', 'beta', 'rc', 'latest'].includes(tag), 'Invalid release tag');
+  const packages = parsePackageSelection(values.packages);
+  const planOptions: ReleasePlanOptions = { tag, packages, registry: values.registry };
   if (action === 'check') {
-    const plan = await readPlan(ROOT, tag);
-    if (values.registry) await checkRegistry(plan);
+    const plan = await readPlan(ROOT, planOptions);
     console.log(
       JSON.stringify(
         { tag, node: '>=24.0.0', packages: plan.map(({ name, version }) => ({ name, version })) },
@@ -289,9 +462,9 @@ async function main() {
         2,
       ),
     );
-  } else if (action === 'prepare') await prepare(tag);
+  } else if (action === 'prepare') await prepare(planOptions);
   else if (action === 'dry-run' || action === 'publish')
-    await publish({ tag, dryRun: action === 'dry-run', confirm: values.confirm });
+    await publish({ tag, dryRun: action === 'dry-run', confirm: values.confirm, packages });
   else throw new Error('Use check, prepare, dry-run or publish');
 }
 

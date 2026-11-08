@@ -9,7 +9,7 @@
 - 文档级玻璃下，`r-select` 菜单用一条滑动 wash 光标，不再每行闪背景；`dropdownsurface="solid"` 仍可退出（视频上的播放器菜单）。
 - `r-button`、`r-card`、`r-input`、`r-modal`、`r-message`、`r-dropdown` 公开反映 `surface`（`glass` | `solid`），COMPONENTS / `check:attrs` 与 agents 能看到这条 CSS 绘制契约。
 - `r-theme-switch` / `r-surface-switch` 给浮层面板打上 `ran-chrome-menu`，宿主可按语言菜单样式（字重选中、无勾）定制，而不用穿透 closed shadow。
-- 联动 `ranuts@0.5.5` 与 `@alixex/ranview@0.2.5`；打包后的内部依赖使用这些确切版本。
+- 打包后的内部依赖使用已发布的 `ranuts@0.5.4` 与 `@alixex/ranview@0.2.4`；这两个配套包本次不再发版。
 
 ## [0.5.4] — 2026-11-06
 

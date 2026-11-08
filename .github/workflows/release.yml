@@ -4,10 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: npm channel (must match all three package versions)
+        description: npm channel (must match each selected package version)
         type: choice
         options: [latest, rc, beta, alpha]
         default: latest
+      packages:
+        description: Packages to release (comma-separated, or all). Empty auto-selects versions not yet on npm.
+        type: string
+        default: ''
       publish:
         description: Upload the verified archives to npm (main only)
         type: boolean
@@ -27,6 +31,7 @@ jobs:
     timeout-minutes: 30
     env:
       RELEASE_TAG: ${{ inputs.tag }}
+      RELEASE_PACKAGES: ${{ inputs.packages }}
     steps:
       - name: Reject publication from another branch
         if: inputs.publish && github.ref != 'refs/heads/main'
@@ -49,10 +54,20 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Validate versions, Node baseline and npm availability
-        run: pnpm release:check --tag "$RELEASE_TAG" --registry
+        run: |
+          if [ -n "$RELEASE_PACKAGES" ]; then
+            pnpm release:check --tag "$RELEASE_TAG" --registry --packages "$RELEASE_PACKAGES"
+          else
+            pnpm release:check --tag "$RELEASE_TAG" --registry
+          fi
 
       - name: Build and pack libraries in dependency order
-        run: pnpm release:prepare --tag "$RELEASE_TAG"
+        run: |
+          if [ -n "$RELEASE_PACKAGES" ]; then
+            pnpm release:prepare --tag "$RELEASE_TAG" --registry --packages "$RELEASE_PACKAGES"
+          else
+            pnpm release:prepare --tag "$RELEASE_TAG" --registry
+          fi
 
       - name: Verify repository scripts
         run: pnpm verify:scripts
@@ -79,7 +94,12 @@ jobs:
         run: pnpm verify:release "$RELEASE_TAG"
 
       - name: Preview npm publication of the verified bytes
-        run: pnpm release:dry-run --tag "$RELEASE_TAG"
+        run: |
+          if [ -n "$RELEASE_PACKAGES" ]; then
+            pnpm release:dry-run --tag "$RELEASE_TAG" --packages "$RELEASE_PACKAGES"
+          else
+            pnpm release:dry-run --tag "$RELEASE_TAG"
+          fi
 
       - uses: actions/upload-artifact@v7
         with:
@@ -99,6 +119,7 @@ jobs:
       id-token: write
     env:
       RELEASE_TAG: ${{ inputs.tag }}
+      RELEASE_PACKAGES: ${{ inputs.packages }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -117,7 +138,12 @@ jobs:
           path: .release/
 
       - name: Publish verified tarballs using npm trusted publishing
-        run: node bin/release.ts publish --tag "$RELEASE_TAG" --confirm
+        run: |
+          if [ -n "$RELEASE_PACKAGES" ]; then
+            node bin/release.ts publish --tag "$RELEASE_TAG" --packages "$RELEASE_PACKAGES" --confirm
+          else
+            node bin/release.ts publish --tag "$RELEASE_TAG" --confirm
+          fi
 
       - name: Preserve partial or complete publication results
         if: always()
