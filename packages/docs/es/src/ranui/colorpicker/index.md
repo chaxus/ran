@@ -145,11 +145,3 @@ r-colorpicker {
   --ran-colorpicker-border-radius: 6px;
 }
 ```
-
-## Buenas prácticas
-
-- **Formatos de entrada**: dale a `value` cualquier cadena de color CSS: HEX, `rgb(...)` o `rgba(...)`; el selector la normaliza por dentro.
-- **Leer el resultado**: escucha `change` y lee de `event.detail` el formato exacto que necesites (`hex`, `rgb`, `rgba`, `alpha`).
-- **Transparencia**: usa una entrada `rgba(...)` o el deslizador de transparencia cuando la necesites; el `value` que se lee pasa a ser una cadena `rgba(...)` en cuanto la transparencia baja de 1.
-- **Teclado**: la muestra y ambos deslizadores son enfocables y se manejan con el teclado; no hace falta ratón.
-- **Importar**: cárgalo con `import 'ranui'` (registra todos los componentes) o con el independiente `import 'ranui/colorpicker'`.

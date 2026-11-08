@@ -160,11 +160,3 @@ toast 堆栈挂载在一个传送到 `body` 的容器中；每个 `<r-message>` 
 | `--ran-message-text-color`            | `var(--ran-color-text)`        | toast 文本颜色      |
 | `--ran-message-z-index`               | `var(--ran-z-message, 1200)`   | 堆栈层级（z-index） |
 | `--ran-message-top`                   | `8px`                          | 堆栈相对顶部的偏移  |
-
-## 最佳实践
-
-- **陈述结果**：把 toast 文案写成一个结果，比如「项目已删除」「已保存修改」，而不是含糊的「成功」。
-- **成功 / 信息**：使用 `message.success` / `message.info` 表示不阻塞流程的确认。
-- **错误 / 警告**：使用 `message.error` / `message.warning`；它们会升级为强调（assertive）的 ARIA live region，让屏幕阅读器打断当前朗读进行播报。
-- **保持简洁**：toast 会自动消失，较长或需要用户操作的内容应放进对话框。
-- **谨慎调整时长**：可以为较长的文案适当延长 `duration`，但不要让短暂反馈变得常驻不消失。

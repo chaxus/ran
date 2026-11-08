@@ -120,12 +120,3 @@ r-token-meter {
 Parts: `fill` · `meter` · `text` · `track`
 
 The full list is in [style tokens](/ranui/style-tokens#token-meter); which token to reach for is the [design system](/design/design-system/).
-
-## Best Practices
-
-- **Update `used` from the same place you build the request**, not from a rendering pass:
-  the number people trust is the one the next request will actually send.
-- **Escalate around the meter, not inside it.** At `level="over"` the useful UI is a
-  suggestion (summarise, start a new thread), and that belongs to the app.
-- **Don't animate the fill on a theme change**: see
-  [design guidelines](/design/design-guides/#motion).

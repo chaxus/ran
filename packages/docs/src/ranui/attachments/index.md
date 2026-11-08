@@ -179,11 +179,3 @@ r-attachments {
 Parts: `attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
 
 The full list is in [style tokens](/ranui/style-tokens#attachments); which token to reach for is the [design system](/design/design-system/).
-
-## Best Practices
-
-- **Validate on the server too.** `accept` and `max-size` are a courtesy to the person
-  attaching, not a security boundary.
-- **Clear after a successful send**, not before. A failed request should leave the files
-  staged so they can be retried.
-- **Explain every rejection.** The event exists so the strip never silently drops a file.

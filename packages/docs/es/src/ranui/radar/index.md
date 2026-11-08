@@ -190,10 +190,3 @@ El color del texto de las etiquetas también recurre al token de tema `--ran-col
 ## Eventos
 
 Ninguno. `<r-radar>` no despacha eventos personalizados.
-
-## Buenas prácticas
-
-- **Dimensionado**: el host no tiene tamaño propio; define siempre un `width`/`height` explícito (con `style` o con las variables `--ran-radar-width`/`--ran-radar-height`). El gráfico se redibuja solo al cambiar el tamaño del contenedor, mediante un `ResizeObserver`.
-- **Formato de los datos**: pasa JSON válido en `abilitys`; un JSON mal formado se registra y no se puede analizar. Usa la propiedad JS `abilitys` cuando trabajes con arrays de verdad desde código.
-- **Escala**: `scoreRate` se mide contra un máximo fijo de `100`; normaliza tus valores a ese rango.
-- **Temas**: los atributos de color (`colorPolygon`, `colorLine`, `fillColor`, `strokeColor`) son reactivos y redibujan el gráfico al cambiarlos tras el montaje. Prefiere las variables CSS `--ran-radar-*` cuando quieras que los colores sigan solos el tema claro u oscuro.

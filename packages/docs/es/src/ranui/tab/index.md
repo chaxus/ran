@@ -294,11 +294,3 @@ r-tabs {
 Partes: `content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 
 La lista completa está en [tokens de estilo](/es/ranui/style-tokens#tab); cuál elegir lo explica el [sistema de diseño](/es/design/design-system/).
-
-## Buenas prácticas
-
-- **Identidad estable**: da a cada `<r-tab>` un `r-key` único y gobierna la selección con `active` en `<r-tabs>`, en vez de fiarte de los índices posicionales.
-- **Elección de estilo**: `type="flat"` (por defecto) para un subrayado ligero; `type="line"` cuando la fila de pestañas necesita un borde visible frente al contenido; `type="segment"` para pocas vistas cortas y del mismo peso, como alternar entre vista previa y código.
-- **Alineación**: usa `align="center"` o `align="end"` para recolocar la fila de cabeceras en contenedores anchos.
-- **Paneles deshabilitados**: marca con `disabled` los paneles no disponibles; se saltan tanto en los clics como en la selección por defecto.
-- **Navegación con teclado**: la fila de cabeceras es una tablist WAI-ARIA: las flechas mueven entre pestañas (con `Inicio`/`Fin`) y solo la pestaña activa entra en el orden de tabulación.

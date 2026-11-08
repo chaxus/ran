@@ -111,10 +111,3 @@ r-section::part(subtitle) {
   max-width: 48ch;
 }
 ```
-
-## Boas práticas
-
-- **Títulos de seção**: defina `heading` para rotular cada região importante da página.
-- **Contexto**: use `subtitle` para uma linha curta de apoio; omita ambos para obter uma superfície lisa, sem linha de cabeçalho.
-- **Acessibilidade**: o título é exposto como título ARIA de nível 2, então participa do esquema do documento; mantenha-o significativo.
-- **Temas**: prefira as variáveis CSS `--ran-section-*` ou os seletores `::part()` ao atributo `sheet` quando o estilo for reutilizável.

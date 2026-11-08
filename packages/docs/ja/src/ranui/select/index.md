@@ -8,6 +8,8 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
 
 > **こんなときに**：`<r-option>` の子要素から組み立てる、値ひとつのドロップダウンが必要なとき。検索やネイティブフォームへの参加も欲しい場合に。`<r-select>` が開閉、絞り込み、`FormData` への受け渡しを引き受けます。
 
+選択肢が多いときは `showSearch` を付けます。タッチが絡むときは `trigger="click"` を優先します（モバイルでは `hover` は無視されます）。overflow で欠けるレイアウトでは `getPopupContainerId` でマウント先を指定します。ネイティブの `<form>` に載せるときは `name` を付けます。
+
 ## クイックスタート
 
 ### 基本的な使い方
@@ -377,11 +379,3 @@ description: 'ranui の Select（<r-select>）は、選択肢から値をひと�
   <r-option hidden value="zh-CN">中文</r-option>
 </r-select>
 ```
-
-## ベストプラクティス
-
-- **選択肢が多いとき**：`showSearch` を有効にして、ラベルで絞り込めるようにしてください。
-- **開き方**：`trigger` は利用者の期待に合わせてください。モバイルでは `hover` が無視されるので、`click` は残しておきます。
-- **配置先**：スクロールする、あるいははみ出しを切るレイアウトでは、`getPopupContainerId` でドロップダウンの配置先を制御してください。
-- **見た目の調整**：`dropdownclass` や公開されている `::part()` の名前で、トリガーとドロップダウンのスタイルを変えられます。
-- **フォーム**：select に `name` を与えると、ネイティブの `<form>` の中で値が `FormData` に取り込まれます。

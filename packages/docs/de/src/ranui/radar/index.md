@@ -190,10 +190,3 @@ Die Textfarbe der Beschriftungen greift ebenfalls auf das Theme-Token `--ran-col
 ## Events
 
 Keine. `<r-radar>` löst keine eigenen Events aus.
-
-## Bewährte Praxis
-
-- **Größe**: Der Host hat keine eigene Größe; setze immer eine ausdrückliche `width`/`height` (über `style` oder die Variablen `--ran-radar-width`/`--ran-radar-height`). Bei Größenänderungen des Containers zeichnet sich das Diagramm über einen `ResizeObserver` selbst neu.
-- **Datenformat**: Übergib gültiges JSON in `abilitys`; fehlerhaftes JSON wird protokolliert und kann nicht gelesen werden. Arbeite im Skript mit echten Arrays über die JS-Eigenschaft `abilitys`.
-- **Skala**: `scoreRate` misst gegen ein festes Maximum von `100`; normalisiere deine Werte auf diesen Bereich.
-- **Theming**: Die Farbattribute (`colorPolygon`, `colorLine`, `fillColor`, `strokeColor`) sind reaktiv und zeichnen das Diagramm neu, wenn du sie nach dem Mounten änderst. Sollen die Farben dem hellen bzw. dunklen Theme von selbst folgen, nimm die CSS-Variablen `--ran-radar-*`.

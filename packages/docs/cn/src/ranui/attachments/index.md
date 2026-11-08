@@ -172,9 +172,3 @@ r-attachments {
 Part：`attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
 
 完整清单见[样式令牌](/cn/ranui/style-tokens#attachments)；该选哪个令牌见[设计系统](/cn/design/design-system/)。
-
-## 最佳实践
-
-- **服务端也要校验。** `accept` 和 `max-size` 是对上传者的体贴，不是安全边界。
-- **发送成功后再清空**，不要提前：请求失败时文件应当还留着，方便重试。
-- **每一次拒绝都要解释。** 这个事件存在的意义，就是让附件条永远不会悄悄丢掉一个文件。

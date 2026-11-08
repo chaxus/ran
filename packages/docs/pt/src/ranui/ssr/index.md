@@ -90,13 +90,3 @@ protegido), então o tema é aplicado pelo cliente. Para evitar um lampejo com o
 `data-ran-theme` no `<html>` do seu template de servidor (a partir de um cookie, ou de um script
 inline minúsculo que leia o `localStorage` antes da primeira pintura) e deixe o
 [`initTheme`](/pt/ranui/theme/) assumir depois.
-
-## Boas práticas
-
-- **Importe `ranui` (ou as entradas específicas `ranui/<component>`) antes de renderizar.** O
-  registro é preenchido pelo efeito colateral do import; sem ele, cada tag passa sem expandir e a
-  página perde a marcação em silêncio.
-- **Renderize a página, não o fragmento.** `renderHTMLToString` é seguro sobre HTML arbitrário, então
-  não é preciso isolar as partes do ranui.
-- **Entregue a folha de estilos.** A marcação DSD carrega os estilos do componente, mas os tokens em
-  nível de página vêm de `ranui/style` (e de `ranui/fonts` para as fontes).

@@ -99,7 +99,7 @@ Wenn du den Dokument-Vorschaudienst selbst betreiben willst, gib seine Adresse �
 <r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **Tipp**: Standardmäßig wird der gehostete Vorschaudienst unter `https://edit.chaxus.com` verwendet. Zum Selbsthosten siehe [OnlyOffice Web Local](https://github.com/ranuts/document).
+Standardmäßig wird der gehostete Vorschaudienst unter `https://edit.chaxus.com` verwendet. Zum Selbsthosten siehe [OnlyOffice Web Local](https://github.com/ranuts/document).
 
 ## Kompatibilität mit 0.3.0
 

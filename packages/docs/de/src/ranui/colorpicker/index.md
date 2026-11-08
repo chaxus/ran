@@ -145,11 +145,3 @@ r-colorpicker {
   --ran-colorpicker-border-radius: 6px;
 }
 ```
-
-## Bewährte Praxis
-
-- **Eingabeformate**: Gib `value` jede beliebige CSS-Farbzeichenkette: HEX, `rgb(...)` oder `rgba(...)`; der Picker normalisiert intern.
-- **Ergebnis lesen**: Höre auf `change` und lies aus `event.detail` genau das Format, das du brauchst (`hex`, `rgb`, `rgba`, `alpha`).
-- **Alpha**: Nimm eine `rgba(...)`-Eingabe oder den Alpha-Regler, wenn du Transparenz brauchst; sobald Alpha unter 1 fällt, wird der zurückgelesene `value` zu einer `rgba(...)`-Zeichenkette.
-- **Tastatur**: Farbfeld und beide Regler sind fokussierbar und per Tastatur bedienbar; eine Maus ist nicht nötig.
-- **Import**: Lade über `import 'ranui'` (registriert jede Komponente) oder eigenständig über `import 'ranui/colorpicker'`.

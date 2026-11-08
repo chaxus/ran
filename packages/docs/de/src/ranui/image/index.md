@@ -91,10 +91,3 @@ Wenn `src` nicht geladen werden kann, wechselt die Komponente auf `fallback`. Is
 ## Events
 
 Keine. `r-img` löst keine eigenen Events aus.
-
-## Bewährte Praxis
-
-- **`src` jederzeit ändern**: `src` ist reaktiv — es an einem gemounteten Element zu aktualisieren lädt das Bild neu; das Ersatzbild greift auch dann, wenn die neue URL fehlschlägt.
-- **Aussagekräftigen Bildern ein `alt` geben**: Beschreibe den Inhalt für Screenreader; lass `alt` nur bei rein dekorativen Bildern leer.
-- **Auf das eingebaute Ersatzbild vertrauen**: Der Standardplatzhalter wird automatisch verwendet — gib ein eigenes `fallback` nur an, wenn du einen zur Marke oder zum Kontext passenden Platzhalter willst.
-- **Mit `sheet` gestalten**: Da das Bild im Shadow DOM liegt, setzt du Rahmen, Radius oder Größe über das Attribut `sheet` (oder die CSS-Variablen der Komponente).

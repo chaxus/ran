@@ -160,11 +160,3 @@ Der Toast-Stapel liegt in einem an den Body portalierten Container; jedes `<r-me
 | `--ran-message-text-color`            | `var(--ran-color-text)`        | Textfarbe des Toasts         |
 | `--ran-message-z-index`               | `var(--ran-z-message, 1200)`   | z-index des Stapels          |
 | `--ran-message-top`                   | `8px`                          | Abstand des Stapels von oben |
-
-## Bewährte Praxis
-
-- **Benenne die Änderung**: Formuliere den Toast-Text als Ergebnis, etwa „Projekt gelöscht“ oder „Änderungen gespeichert“, nicht als vages „Erfolg“.
-- **Erfolg / Hinweis**: Nimm `message.success` / `message.info` für Bestätigungen, die nicht blockieren.
-- **Fehler / Warnungen**: Nimm `message.error` / `message.warning`; sie steigen in eine bestimmte ARIA-Live-Region auf, sodass Screenreader unterbrechen.
-- **Halte es kurz**: Ein Toast verschwindet von selbst — hebe lange oder handlungsbedürftige Inhalte für einen Dialog auf.
-- **Dauer sparsam anpassen**: Erhöhe `duration` für längere Meldungen, mache eine kurzlebige Rückmeldung aber nicht dauerhaft.

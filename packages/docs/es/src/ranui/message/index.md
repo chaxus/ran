@@ -160,11 +160,3 @@ La pila de avisos vive en un contenedor portalizado al body; cada `<r-message>` 
 | `--ran-message-text-color`            | `var(--ran-color-text)`        | Color del texto del aviso         |
 | `--ran-message-z-index`               | `var(--ran-z-message, 1200)`   | z-index de la pila                |
 | `--ran-message-top`                   | `8px`                          | Distancia de la pila desde arriba |
-
-## Buenas prácticas
-
-- **Nombra el cambio**: escribe el texto del aviso como un resultado, «Proyecto eliminado» o «Cambios guardados», no un vago «Éxito».
-- **Éxito e información**: usa `message.success` / `message.info` para confirmaciones que no bloquean.
-- **Errores y advertencias**: usa `message.error` / `message.warning`; estos escalan a una región ARIA viva asertiva, de modo que los lectores de pantalla interrumpen.
-- **Sé breve**: un aviso se cierra solo, así que reserva el contenido largo o accionable para un diálogo.
-- **Ajusta la duración con moderación**: sube `duration` para mensajes largos, pero evita volver permanente un aviso pasajero.

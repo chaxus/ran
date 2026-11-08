@@ -99,7 +99,7 @@ npm install ranui
 <r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **팁**: 기본값은 호스팅된 미리보기 서비스 `https://edit.chaxus.com` 입니다. 직접 호스팅하려면 [OnlyOffice Web Local](https://github.com/ranuts/document)을 참고하세요.
+기본값은 호스팅된 미리보기 서비스 `https://edit.chaxus.com` 입니다. 직접 호스팅하려면 [OnlyOffice Web Local](https://github.com/ranuts/document)을 참고하세요.
 
 ## 0.3.0 호환성
 

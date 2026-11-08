@@ -170,12 +170,3 @@ Ninguno. El componente no despacha eventos personalizados.
 ## Todas las animaciones de carga
 
 <Loading />
-
-## Buenas prácticas
-
-- **Elige según la escena**: escoge una animación que encaje con el contexto y el ritmo de la tarea.
-- **Variables CSS**: personaliza tamaño y color con los tokens `--loading-{type}-*` en lugar de envolver elementos.
-- **Dimensionado**: prefiere unidades `px` al `em` por defecto para obtener medidas predecibles.
-- **Rendimiento**: evita dibujar muchas animaciones simultáneas en una misma pantalla.
-- **Carga bajo demanda**: cada animación es un fragmento diferido aparte (su JS y su CSS), así que un `name` solo carga la variante que usa; referenciar una animación nunca empaqueta las otras 28. La `circle` por defecto y la habitual `dot` vienen integradas para un primer dibujado inmediato y sin destello; el resto se cargan de forma asíncrona en su primer uso. El uso no cambia: basta con definir `name`.
-- **Temas**: los colores base siguen los tokens de tema `--ran-color-*`, así que las animaciones se adaptan solas a los modos claro y oscuro.

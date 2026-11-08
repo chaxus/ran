@@ -121,12 +121,3 @@ r-token-meter {
 Parts: `fill` · `meter` · `text` · `track`
 
 Die vollständige Liste steht in den [Style-Tokens](/de/ranui/style-tokens#token-meter); welches Token du wählst, klärt das [Designsystem](/de/design/design-system/).
-
-## Bewährte Praxis
-
-- **Aktualisiere `used` an derselben Stelle, an der du die Anfrage baust**, nicht in einem
-  Render-Durchlauf: Die Zahl, der Menschen vertrauen, ist die, die die nächste Anfrage wirklich sendet.
-- **Eskaliere um den Meter herum, nicht in ihm.** Bei `level="over"` ist die nützliche Oberfläche ein
-  Vorschlag (zusammenfassen, einen neuen Thread beginnen) — und der gehört der Anwendung.
-- **Animiere die Füllung nicht bei einem Themewechsel**: siehe die
-  [Designrichtlinien](/de/design/design-guides/#motion).

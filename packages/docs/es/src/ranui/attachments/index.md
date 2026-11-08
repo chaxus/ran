@@ -173,11 +173,3 @@ r-attachments {
 Partes: `attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
 
 La lista completa está en [tokens de estilo](/es/ranui/style-tokens#attachments); cuál elegir lo explica el [sistema de diseño](/es/design/design-system/).
-
-## Buenas prácticas
-
-- **Valida también en el servidor.** `accept` y `max-size` son una cortesía hacia quien adjunta, no
-  una frontera de seguridad.
-- **Vacía tras un envío correcto**, no antes. Una petición fallida debe dejar los archivos
-  preparados para poder reintentar.
-- **Explica cada rechazo.** El evento existe para que la tira nunca descarte un archivo en silencio.

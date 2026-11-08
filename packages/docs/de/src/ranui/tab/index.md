@@ -294,11 +294,3 @@ r-tabs {
 Parts: `content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 
 Die vollständige Liste steht bei den [Style-Tokens](/de/ranui/style-tokens#tab); welches Token das richtige ist, klärt das [Designsystem](/de/design/design-system/).
-
-## Bewährte Vorgehensweisen
-
-- **Stabile Identität**: Gib jedem `<r-tab>` einen eindeutigen `r-key` und steuere die Auswahl über `active` an `<r-tabs>`, statt dich auf Positionsindizes zu verlassen.
-- **Wahl des Stils**: `type="flat"` (Standard) für eine leichte Unterstreichung; `type="line"`, wenn sich die Reiterleiste deutlich vom Inhalt darunter abheben soll; `type="segment"` für wenige kurze, gleichrangige Ansichten, etwa den Wechsel zwischen Vorschau und Code.
-- **Ausrichtung**: Mit `align="center"` oder `align="end"` verschiebst du die Kopfzeile in breiten Containern.
-- **Deaktivierte Bereiche**: Markiere nicht verfügbare Bereiche mit `disabled`; sie werden sowohl bei Klicks als auch bei der Vorauswahl übersprungen.
-- **Tastaturbedienung**: Die Kopfzeile ist eine WAI-ARIA-Tablist: Pfeiltasten wechseln zwischen den Reitern (auch `Pos1`/`Ende`), und nur der aktive Reiter liegt in der Tab-Reihenfolge.

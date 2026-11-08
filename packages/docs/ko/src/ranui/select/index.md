@@ -8,6 +8,8 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
 
 > **이럴 때 씁니다.** `<r-option>` 자식으로 만드는, 값 하나짜리 드롭다운이 필요할 때. 검색이나 네이티브 폼 참여도 함께 원한다면 더욱. `<r-select>`가 열고 닫기, 걸러내기, `FormData` 전달을 맡습니다.
 
+옵션이 많으면 `showSearch`를 켜세요. 터치가 중요하면 `trigger="click"`을 쓰세요(모바일에서는 `hover`가 무시됩니다). overflow로 잘리는 레이아웃에서는 `getPopupContainerId`로 마운트 위치를 정하세요. 네이티브 `<form>`에 실을 때는 `name`을 주세요.
+
 ## 빠른 시작
 
 ### 기본 사용법
@@ -377,11 +379,3 @@ description: 'ranui Select(<r-select>)은 여러 선택지 중 값 하나를 고
   <r-option hidden value="zh-CN">中文</r-option>
 </r-select>
 ```
-
-## 모범 사례
-
-- **선택지가 많을 때**: `showSearch`를 켜서 레이블로 걸러 볼 수 있게 하세요.
-- **여는 방식**: `trigger`는 사용자의 기대에 맞추세요. 모바일에서는 `hover`가 무시되니 `click`은 남겨 두세요.
-- **붙는 위치**: 스크롤되거나 넘침을 잘라 내는 레이아웃에서는 `getPopupContainerId`로 드롭다운이 붙을 곳을 정하세요.
-- **스타일 조정**: `dropdownclass`나 공개된 `::part()` 이름으로 트리거와 드롭다운의 모습을 바꾸세요.
-- **폼**: select에 `name`을 주면 네이티브 `<form>` 안에서 값이 `FormData`에 담깁니다.

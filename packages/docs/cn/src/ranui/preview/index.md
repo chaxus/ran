@@ -99,7 +99,7 @@ npm install ranui
 <r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **提示**：默认使用 `https://edit.chaxus.com` 提供的预览服务，如需自部署请参考 [OnlyOffice Web Local](https://github.com/ranuts/document)
+默认使用 `https://edit.chaxus.com` 提供的预览服务，如需自部署请参考 [OnlyOffice Web Local](https://github.com/ranuts/document)
 
 ## 0.3.0 兼容性
 

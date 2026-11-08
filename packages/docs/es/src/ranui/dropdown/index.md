@@ -138,11 +138,3 @@ r-dropdown {
   --ran-dropdown-arrow-height: 28px;
 }
 ```
-
-## Buenas prácticas
-
-- **Primitiva de bajo nivel**: usa `r-dropdown` directamente solo cuando necesites un panel flotante propio; para los casos habituales prefiere `r-popover` o `r-select`.
-- **Dale tamaño al host**: el panel toma por defecto `width` y `height: 100%` del host, así que dale al host un tamaño y una posición explícitos, y luego portalízalo.
-- **Apilado**: el host lleva `--ran-z-dropdown` (`1100`), de modo que se apila por encima de los diálogos; sobrescríbelo con `--ran-dropdown-host-z-index` si hace falta.
-- **La flecha se centra en sí misma por defecto**: `r-dropdown` no sigue a ningún elemento «disparador» externo: solo cuenta con las dimensiones de su propio panel. Sin nadie que lo posicione, `arrow="top"`/`"bottom"` se centra respecto al ancho del propio panel; ese es el valor correcto para usar `r-dropdown` a secas (como en las demos de arriba). `r-popover` se apoya sobre `r-dropdown` precisamente para añadir el seguimiento del disparador: mide el elemento disparador real y devuelve un desplazamiento en píxeles mediante `--ran-dropdown-arrow-anchor-offset`, empujando la flecha para que apunte al centro del disparador incluso cuando el panel es más ancho y se alinea por un borde en vez de centrarse en él. Quien construya su propio panel con seguimiento de disparador sobre `r-dropdown` puede definir esa variable directamente en lugar de rehacer la lógica de posicionamiento de `r-popover`.
-- **Importar**: cárgalo con `import 'ranui'` (registra todos los componentes) o con el independiente `import 'ranui/dropdown'`.

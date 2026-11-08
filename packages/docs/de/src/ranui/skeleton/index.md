@@ -117,10 +117,3 @@ Keine. Das Skeleton löst keine eigenen Events aus.
 ## Slots
 
 Keine. Das Skeleton zeichnet nur seinen eigenen Balken und projiziert keinen Slot-Inhalt.
-
-## Bewährte Praxis
-
-- **Am Layout ausrichten**: Gib dem Elterncontainer solche Maße, dass jedes Skeleton die Breite des echten Inhalts hat, für den es steht.
-- **Die Form nachbilden**: Stapele mehrere Skeletons mit gleichmäßigen Abständen, um mehrzeiligen Text oder Listenzeilen darzustellen.
-- **Über Variablen gestalten**: Nimm für einfache Anpassungen die CSS-Variablen `--ran-skeleton-*`; greife nur dann zu `sheet`, wenn du Selektoren brauchst, die die Variablen nicht abdecken.
-- **Beim Laden austauschen**: Ersetze die Skeletons durch echten Inhalt, sobald die Daten eintreffen, statt sie endlos weiteranimieren zu lassen.

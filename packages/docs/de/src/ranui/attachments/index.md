@@ -175,12 +175,3 @@ r-attachments {
 Parts: `attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
 
 Die vollständige Liste steht bei den [Style-Tokens](/de/ranui/style-tokens#attachments); welches Token das richtige ist, klärt das [Designsystem](/de/design/design-system/).
-
-## Bewährte Vorgehensweisen
-
-- **Prüfe auch auf dem Server.** `accept` und `max-size` sind eine Höflichkeit gegenüber der Person,
-  die anhängt, keine Sicherheitsgrenze.
-- **Leere nach erfolgreichem Senden**, nicht davor. Eine gescheiterte Anfrage soll die Dateien
-  vorbereitet zurücklassen, damit ein neuer Versuch möglich ist.
-- **Erkläre jede Ablehnung.** Das Ereignis gibt es, damit die Leiste niemals stillschweigend eine
-  Datei verwirft.

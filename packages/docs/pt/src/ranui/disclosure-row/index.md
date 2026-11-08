@@ -161,9 +161,3 @@ r-disclosure-row {
 Partes: `body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
 
 A lista completa está em [tokens de estilo](/pt/ranui/style-tokens#disclosure-row); qual token escolher é assunto do [design system](/pt/design/design-system/).
-
-## Boas práticas
-
-- **Dê um corpo à linha, ou não a torne expansível.** Uma seta que abre para um espaço vazio não serve para nada; deixe `expandable` de fora e a linha continua sendo uma linha só.
-- **Mantenha o título num vocabulário fixo** (`Ler arquivo`, `Rodar testes`, `Buscar`) e ponha a parte variável no resumo. É isso que faz uma coluna de linhas ser percorrível de relance.
-- **Acompanhe `tone="error"` de palavras, nunca só de cor**: o resumo deveria dizer o que falhou.

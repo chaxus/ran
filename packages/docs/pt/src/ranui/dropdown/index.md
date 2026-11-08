@@ -138,11 +138,3 @@ r-dropdown {
   --ran-dropdown-arrow-height: 28px;
 }
 ```
-
-## Boas práticas
-
-- **Primitiva de baixo nível**: use o `r-dropdown` diretamente só quando precisar de um painel flutuante próprio; para os casos comuns prefira `r-popover` ou `r-select`.
-- **Dê tamanho ao host**: o painel assume por padrão `width` e `height: 100%` do host, então dê ao host um tamanho e uma posição explícitos e depois leve-o para o body.
-- **Empilhamento**: o host carrega `--ran-z-dropdown` (`1100`), então fica acima dos diálogos; sobrescreva com `--ran-dropdown-host-z-index` se precisar.
-- **A seta se centraliza em si por padrão**: o `r-dropdown` não acompanha nenhum elemento "disparador" externo — ele só tem as dimensões do próprio painel. Sem ninguém posicionando, `arrow="top"`/`"bottom"` se centraliza pela largura do próprio painel; esse é o padrão certo para usar o `r-dropdown` sozinho (como nas demonstrações acima). O `r-popover` fica em cima do `r-dropdown` justamente para acrescentar o acompanhamento do disparador: ele mede o elemento disparador real e devolve um deslocamento em pixels por `--ran-dropdown-arrow-anchor-offset`, empurrando a seta para apontar ao centro do disparador mesmo quando o painel é mais largo e se alinha por uma borda em vez de se centralizar nele. Quem montar o próprio painel com acompanhamento de disparador sobre o `r-dropdown` pode definir essa variável direto, em vez de refazer a lógica de posicionamento do `r-popover`.
-- **Importar**: carregue com `import 'ranui'` (registra todos os componentes) ou com o independente `import 'ranui/dropdown'`.

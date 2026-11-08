@@ -8,6 +8,8 @@ Dialogkomponente für konzentrierte Interaktionen über der aktuellen Seite, mit
 
 > **Einsetzen, wenn** du einen Dialog für eine konzentrierte Interaktion über der Seite brauchst, samt Fokusfalle, Scroll-Sperre und inertem Hintergrund. Steuere `<r-modal>` über das Attribut `open` oder über die imperativen Helfer `Modal.confirm` / `Modal.info`.
 
+`beforeclose` abhören und `preventDefault()` aufrufen, bevor ungespeicherte Arbeit verworfen wird. Aktionen in `slot="footer"` legen; die Fußzeile erscheint nur, wenn der Slot Inhalt hat. Bei nicht schließbaren Abläufen `closable="false"` und `maskClosable="false"` setzen. Während es offen ist, die Stapelung mit `:has(r-modal[open]), :has(r-modal[closing])` anheben, damit die Maske beim Schließen nicht darunter rutscht.
+
 ## Schnellstart
 
 ### Grundlegende Verwendung
@@ -51,7 +53,7 @@ Ob das Modal sichtbar ist, steuert das Attribut `open` (oder die Eigenschaft `op
 | `hideHeader`   | `boolean` | `false`  | Lässt die Titelleiste ganz weg und behält nur eine schwebende Schließen-Schaltfläche |
 | `sheet`        | `string`  | `''`     | CSS, das in das Shadow DOM eingefügt wird                                            |
 
-`closing` ist ein schreibgeschütztes Attribut, das das Element auf sich selbst spiegelt (keine setzbare Eigenschaft): Es ist vom Moment an gesetzt, in dem `close()` läuft, bis der Übergang von Maske und Dialog (Ausblenden und Verkleinern) tatsächlich fertig ist — etwa 0,3 s später, zum selben Zeitpunkt wie das `afterclose`-Ereignis. Nützlich für eine Gastgeberseite, für die das Modal während dieses sichtbaren Nachlaufs noch als „vorhanden“ zählen muss; siehe die bewährten Vorgehensweisen weiter unten.
+`closing` ist ein schreibgeschütztes Attribut, das das Element auf sich selbst spiegelt (keine setzbare Eigenschaft): Es ist vom Moment an gesetzt, in dem `close()` läuft, bis der Übergang von Maske und Dialog (Ausblenden und Verkleinern) tatsächlich fertig ist — etwa 0,3 s später, zum selben Zeitpunkt wie das `afterclose`-Ereignis. Nützlich für eine Gastgeberseite, für die das Modal während dieses sichtbaren Nachlaufs noch als „vorhanden“ zählen muss.
 
 ### Titel `title`
 
@@ -234,12 +236,3 @@ r-modal {
 Parts: `body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
 
 Die vollständige Liste steht bei den [Style-Tokens](/de/ranui/style-tokens#modal); welches Token wofür gedacht ist, klärt das [Designsystem](/de/design/design-system/).
-
-## Bewährte Vorgehensweisen
-
-- **Auslöser und Umschalten**: Öffne mit `modal.open = true` und schließe mit `modal.open = false` oder `close()`.
-- **Zerstörerisches Schließen absichern**: Höre auf `beforeclose` und rufe `preventDefault()`, um vor dem Verwerfen ungesicherter Arbeit nachzufragen.
-- **Aktionen im Fuß**: Primäre und sekundäre Schaltflächen gehören in `slot="footer"`; die Fußleiste erscheint nur, wenn der Slot Inhalt hat.
-- **Abläufe ohne Ausweg**: Setze `closable="false"` und `maskClosable="false"`, um eine ausdrückliche Entscheidung zu erzwingen.
-- **Einmalige Dialoge**: Nimm `Modal.confirm` / `Modal.info` für kurze Rückfragen, statt Markup zu schreiben.
-- **Eine Gastgeberseite über das offene Modal heben**: Matche `:has(r-modal[open]), :has(r-modal[closing])`, nicht nur `[open]`. `open` verschwindet in dem Moment, in dem `close()` läuft, aber der Übergang von Maske und Dialog zeichnet noch etwa 0,3 s weiter; wer die z-index-Anhebung mitten im Ausblenden fallen lässt, lässt die noch sichtbare Maske unter dem neu zeichnen, worüber sie gerade gehoben war.

@@ -8,6 +8,8 @@ Eingabekomponente zum Erfassen von Inhalt über die Tastatur: das grundlegendste
 
 > **Einsetzen, wenn** du ein Textfeld mit fester Beschriftung darüber, führendem Symbol, Validierungsstatus samt Meldung und Teilnahme an nativen Formularen brauchst: `<r-input>` deckt Text-, Passwort- und Zahleneingabe ab.
 
+`status` mit `message` koppeln, damit der Zustand nicht nur Farbe ist. `placeholder` ist ein Hinweis, kein Ersatz für `label`. `name` setzen, wenn ein Formular den Wert einsammelt.
+
 ## Schnellstart
 
 ### Grundlegende Verwendung
@@ -227,12 +229,3 @@ r-input {
 Parts: `content` · `input` · `label` · `message`
 
 Die vollständige Liste steht bei den [Style-Tokens](/de/ranui/style-tokens#input); welches Token wofür gedacht ist, klärt das [Designsystem](/de/design/design-system/).
-
-## Bewährte Vorgehensweisen
-
-- **Beschriftungen**: Gib ein aussagekräftiges `label`, damit das Feld einen zugänglichen Namen hat.
-- **Platzhalter**: Nimm `placeholder` als Eingabehinweis, nicht als Ersatz für eine Beschriftung.
-- **Status und Meldung**: Setze `status` gemeinsam mit `message`, damit der Zustand nicht allein über Farbe signalisiert wird.
-- **Symbole**: Ein passendes `icon` macht das Feld schneller wiedererkennbar.
-- **Typen**: Wähle den zum Inhalt passenden `type` (`text`, `password`, `number`, …).
-- **Formulare**: Setze `name`, wenn du den Wert innerhalb eines Formulars einsammelst.

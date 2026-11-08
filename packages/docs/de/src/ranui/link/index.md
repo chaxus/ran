@@ -94,12 +94,3 @@ CSS, das in das Shadow DOM des Links injiziert wird — dieselbe `sheet`-Konvent
   nav.append(link);
 </script>
 ```
-
-## Bewährte Praxis
-
-- **App-interne Navigation**: Nimm einen wurzelrelativen `href` (z. B. `/docs`), damit der Router ihn in der App abarbeitet.
-- **Externe Links**: Absolute URLs sowie `mailto:` und `tel:` gehen an den Browser; zusätzliche Konfiguration ist nicht nötig.
-- **Verlauf ersetzen**: Setze `replace` bei Links, die keinen Zurück-Eintrag erzeugen sollen (Weiterleitungen, Tabwechsel).
-- **Aktiver Zustand**: Der Host gestaltet `:host([active]) a` (fett + unterstrichen) — setze also das Attribut `active`, um den aktuellen Link zu markieren.
-- **Als Button oder Karte**: Lege die Fläche (Hintergrund, Rahmen, Radius) auf den Host und injiziere das Boxmodell des `<a>` (`display`, `padding`, `width`) über `sheet`, damit die ganze Fläche klickbar ist.
-- **Theming**: Das `<a>` liest die globalen Tokens `--ran-color-link`, `--ran-color-primary` (Fokusring) und `--ran-radius-sm`; überschreibe diese Tokens, statt komponenteneigene `--ran-link-*`-Variablen zu erwarten (die gibt es nicht).

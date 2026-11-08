@@ -145,11 +145,3 @@ r-colorpicker {
   --ran-colorpicker-border-radius: 6px;
 }
 ```
-
-## Best Practices
-
-- **Input formats**: Feed `value` any CSS color string: HEX, `rgb(...)`, or `rgba(...)`; the picker normalizes it internally.
-- **Reading the result**: Listen for `change` and read `event.detail` for the exact format you need (`hex`, `rgb`, `rgba`, `alpha`).
-- **Alpha**: Use `rgba(...)` input or the alpha slider when you need transparency; the read-back `value` becomes an `rgba(...)` string whenever alpha drops below 1.
-- **Keyboard**: The swatch and both sliders are focusable and keyboard-operable; no mouse is required.
-- **Importing**: Load via `import 'ranui'` (registers every component) or the standalone `import 'ranui/colorpicker'`.

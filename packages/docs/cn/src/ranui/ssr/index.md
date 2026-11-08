@@ -82,10 +82,3 @@ const html = renderToString(new Button());
 主题由客户端应用。要避免主题闪烁，请在服务端模板里直接给 `<html>` 写好 `data-ran-theme`：值可以从
 cookie 取，也可以用一小段在首屏绘制前读取 `localStorage` 的内联脚本来设置，之后再交给
 [`initTheme`](/cn/ranui/theme/) 接管。
-
-## 最佳实践
-
-- **渲染前先引入 `ranui`（或具体的 `ranui/<component>` 入口）。** 注册表依赖引入时的副作用来填充；
-  没有引入的话，所有标签都会原样透传，页面就会悄无声息地少掉这些标记。
-- **对整页跑，而不是只对片段跑。** `renderHTMLToString` 对任意 HTML 都安全，不必把 ranui 的部分单独摘出来。
-- **别忘了样式表。** 声明式 Shadow DOM 标记自带组件样式，但页面级令牌来自 `ranui/style`（字体来自 `ranui/fonts`）。

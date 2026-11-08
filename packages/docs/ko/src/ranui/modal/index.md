@@ -8,6 +8,8 @@ description: 'ranui Modal(<r-modal>)은 집중된 상호작용을 위한 대화 
 
 > **이럴 때 씁니다.** 페이지 위에 겹쳐 집중된 상호작용을 시키는 대화 상자가 필요하고, 포커스 가두기·스크롤 잠금·배경 비활성화도 함께 원할 때. `<r-modal>`은 `open` 어트리뷰트나 명령형 `Modal.confirm` / `Modal.info` 헬퍼로 다룹니다.
 
+저장하지 않은 내용을 버리기 전에 확인하려면 `beforeclose`를 듣고 `preventDefault()`하세요. 동작은 `slot="footer"`에 두고, 슬롯에 내용이 있을 때만 푸터가 나타납니다. 닫을 수 없는 흐름에서는 `closable="false"`와 `maskClosable="false"`를 쓰세요. 열린 동안 `:has(r-modal[open]), :has(r-modal[closing])`로 쌓임 순서를 올려 닫기 전환 중 마스크가 아래로 내려가지 않게 하세요.
+
 ## 빠른 시작
 
 ### 기본 사용법
@@ -51,7 +53,7 @@ description: 'ranui Modal(<r-modal>)은 집중된 상호작용을 위한 대화 
 | `hideHeader`   | `boolean` | `false` | 제목 표시줄을 통째로 없애고 떠 있는 닫기 버튼만 남깁니다 |
 | `sheet`        | `string`  | `''`    | 섀도 DOM에 주입할 CSS                                    |
 
-`closing`은 요소가 자신에게 반영하는 읽기 전용 어트리뷰트입니다(설정할 수 있는 프로퍼티가 아닙니다). `close()`가 실행되는 순간부터 마스크와 대화 상자의 페이드·축소 트랜지션이 실제로 끝날 때까지(약 0.3초 뒤, `afterclose` 이벤트와 같은 시점) 붙어 있습니다. 그 시각적 여운 동안에도 모달을 "아직 있는 것"으로 세어야 하는 호스트 페이지에 유용합니다. 아래 모범 사례를 보세요.
+`closing`은 요소가 자신에게 반영하는 읽기 전용 어트리뷰트입니다(설정할 수 있는 프로퍼티가 아닙니다). `close()`가 실행되는 순간부터 마스크와 대화 상자의 페이드·축소 트랜지션이 실제로 끝날 때까지(약 0.3초 뒤, `afterclose` 이벤트와 같은 시점) 붙어 있습니다. 그 시각적 여운 동안에도 모달을 "아직 있는 것"으로 세어야 하는 호스트 페이지에 유용합니다. 
 
 ### 제목 `title`
 
@@ -234,12 +236,3 @@ r-modal {
 Part: `body` · `close` · `dialog` · `footer` · `header` · `mask` · `root` · `title`
 
 전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#modal)에 있고, 어떤 토큰을 쓸지는 [디자인 시스템](/ko/design/design-system/)이 다룹니다.
-
-## 모범 사례
-
-- **트리거와 토글**: `modal.open = true`로 열고 `modal.open = false`로 닫거나 `close()`를 호출하세요.
-- **파괴적인 닫기를 막으세요**: `beforeclose`를 듣고 `preventDefault()`하면, 저장하지 않은 작업을 버리기 전에 확인을 넣을 수 있습니다.
-- **푸터 동작**: 주요·보조 버튼은 `slot="footer"`에 두세요. 푸터 막대는 이 슬롯에 내용이 있을 때만 나타납니다.
-- **닫을 수 없는 흐름**: `closable="false"`와 `maskClosable="false"`를 함께 두면 분명한 선택을 강제할 수 있습니다.
-- **일회성 대화 상자**: 간단한 물음이라면 마크업을 쓰는 대신 `Modal.confirm` / `Modal.info`를 쓰세요.
-- **모달이 열린 동안 호스트 페이지를 위로 올릴 때**: `[open]`만이 아니라 `:has(r-modal[open]), :has(r-modal[closing])`에 매칭하세요. `open`은 `close()`가 실행되는 즉시 사라지지만, 마스크와 대화 상자의 트랜지션은 그 뒤로도 0.3초쯤 더 그려집니다. 페이드 도중에 z-index 승격을 거둬들이면, 아직 보이는 마스크가 그동안 위로 올려 두었던 것 아래에서 다시 그려집니다.

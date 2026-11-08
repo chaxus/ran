@@ -8,6 +8,8 @@ Selector desplegable para elegir un único valor de una lista de opciones, con b
 
 > **Úsalo cuando** necesites un desplegable de un solo valor construido con hijos `<r-option>`, con búsqueda opcional y participación en formularios nativos. `<r-select>` se encarga de abrir, filtrar y entregar el valor a `FormData`.
 
+Listas largas: activa `showSearch`. Prefiere `trigger="click"` cuando importe el tacto (`hover` se ignora en móvil). En layouts con overflow, usa `getPopupContainerId` para que el menú no se recorte. Pon `name` si un `<form>` nativo recoge el valor.
+
 ## Inicio rápido
 
 ### Uso básico
@@ -377,11 +379,3 @@ Hasta que se ejecuta el script del componente, el navegador coloca los `<r-optio
   <r-option hidden value="zh-CN">中文</r-option>
 </r-select>
 ```
-
-## Buenas prácticas
-
-- **Muchas opciones**: activa `showSearch` para que se pueda filtrar por etiqueta.
-- **Forma de abrir**: ajusta `trigger` a lo que la gente espera; en móvil se ignora `hover`, así que deja `click` disponible.
-- **Dónde se monta**: en maquetaciones con desplazamiento o con recorte por desbordamiento, usa `getPopupContainerId` para controlar dónde se monta el desplegable.
-- **Estilos propios**: usa `dropdownclass` o los nombres de `::part()` expuestos para rediseñar el disparador y el desplegable.
-- **Formularios**: dale un `name` al select para que su valor se recoja en `FormData` dentro de un `<form>` nativo.

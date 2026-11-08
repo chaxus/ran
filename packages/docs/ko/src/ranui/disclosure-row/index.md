@@ -161,9 +161,3 @@ r-disclosure-row {
 Part: `body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
 
 전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#disclosure-row)에 있고, 어떤 토큰을 골라야 하는지는 [디자인 시스템](/ko/design/design-system/)이 다룹니다.
-
-## 모범 사례
-
-- **행에 본문을 주거나, 아니면 펼칠 수 있게 만들지 마세요.** 빈 공간으로 열리는 꺾쇠는 아무 쓸모가 없습니다. `expandable`을 빼면 행은 한 줄로 남습니다.
-- **제목은 정해진 어휘로 유지하고**(`파일 읽기`, `테스트 실행`, `검색`) 변하는 부분은 요약에 두세요. 행을 세로로 쌓았을 때 눈으로 훑을 수 있는 것은 그 덕분입니다.
-- **`tone="error"`는 반드시 말과 함께 쓰고, 색에만 기대지 마세요.** 무엇이 실패했는지는 요약이 말해야 합니다.

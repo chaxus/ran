@@ -94,12 +94,3 @@ CSS inyectado en el shadow DOM del enlace. Sigue la misma convención `sheet` qu
   nav.append(link);
 </script>
 ```
-
-## Buenas prácticas
-
-- **Navegación interna**: usa un `href` relativo a la raíz (por ejemplo `/docs`) para que el enrutador lo gestione dentro de la app.
-- **Enlaces externos**: las URL absolutas y `mailto:` / `tel:` pasan al navegador; no hace falta configurar nada.
-- **Reemplazar el historial**: añade `replace` a los enlaces que no deban crear una entrada para el botón «atrás» (redirecciones, cambio de pestaña).
-- **Estado activo**: el host aplica estilos a `:host([active]) a` (negrita + subrayado), así que pon el atributo `active` para marcar el enlace actual.
-- **Como botón o tarjeta**: pon la superficie (fondo, borde, radio) en el host e inyecta el modelo de caja del `<a>` (`display`, `padding`, `width`) mediante `sheet`, para que toda el área sea clicable.
-- **Temas**: el `<a>` lee los tokens globales `--ran-color-link`, `--ran-color-primary` (anillo de foco) y `--ran-radius-sm`; sobrescribe esos tokens en lugar de esperar variables `--ran-link-*` propias del componente (no existen).

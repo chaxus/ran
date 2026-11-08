@@ -8,6 +8,8 @@ description: 'ranui Select（<r-select>）是从选项中选值的下拉选择�
 
 > **适用场景**：需要一个由 `<r-option>` 子元素构建的单值下拉选择器，可选支持搜索和原生表单参与：`<r-select>` 负责展开、过滤，以及 `FormData` 上报。
 
+选项很多时打开 `showSearch`。涉及触控时优先 `trigger="click"`（移动端会忽略 `hover`）。在会被裁切的滚动/overflow 布局里，用 `getPopupContainerId` 指定挂载点。参与原生 `<form>` 时设置 `name`。
+
 使用 `placeholder="选择成员"` 提供空值提示，使用 `label="成员"` 提供字段的可访问名称。修改提示不会改变选中值；清空 `value` 后会恢复提示。占位提示不能代替字段标签。
 
 ## 快速开始
@@ -393,11 +395,3 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
   <r-option hidden value="zh-CN">中文</r-option>
 </r-select>
 ```
-
-## 最佳实践
-
-- **选项较多时**：开启 `showSearch`，让用户能按标签过滤。
-- **触发方式**：`trigger` 要符合用户预期；`hover` 在移动端无效，记得保留 `click`。
-- **挂载位置**：在滚动或裁剪溢出内容的布局里，用 `getPopupContainerId` 控制下拉框挂载到哪里。
-- **自定义样式**：用 `dropdownclass` 或暴露的 `::part()` 名称来重新设计触发器和下拉框的样式。
-- **表单**：给 select 加上 `name`，这样它的值才能被原生 `<form>` 里的 `FormData` 收集到。

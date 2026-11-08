@@ -181,11 +181,3 @@ r-disclosure-row {
 Part：`body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
 
 完整清单见[样式令牌](/cn/ranui/style-tokens#disclosure-row)；该选哪个令牌见[设计系统](/cn/design/design-system/)。
-
-## 最佳实践
-
-- **要么给行配正文，要么别让它可展开。** 展开后却是空的，箭头就没有意义；不加 `expandable`，
-  这一行就保持单行。
-- **heading 用固定词表**（`Read file`、`Run tests`、`Search`），把变化的部分放进 summary。这正是一列
-  行能被快速扫读的原因。
-- **`tone="error"` 必须配文字，不能只靠颜色**：摘要要说清失败的是什么。

@@ -160,11 +160,3 @@ The toast stack lives in a body-portaled container; each `<r-message>` renders i
 | `--ran-message-text-color`            | `var(--ran-color-text)`        | Toast text color          |
 | `--ran-message-z-index`               | `var(--ran-z-message, 1200)`   | Stack z-index             |
 | `--ran-message-top`                   | `8px`                          | Stack offset from the top |
-
-## Best Practices
-
-- **State the change**: write toast copy as a result, such as "Project deleted" or "Changes saved", not a vague "Success".
-- **Success / Info**: use `message.success` / `message.info` for non-blocking confirmations.
-- **Errors / Warnings**: use `message.error` / `message.warning`; these escalate to an assertive ARIA live region so screen readers interrupt.
-- **Keep it brief**: a toast auto-dismisses, so reserve long or actionable content for a dialog.
-- **Tune duration sparingly**: raise `duration` for longer messages, but avoid making transient feedback sticky.

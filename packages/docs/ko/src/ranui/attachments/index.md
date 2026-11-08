@@ -172,11 +172,3 @@ r-attachments {
 Part: `attachment` · `icon` · `list` · `name` · `remove` · `size` · `thumb`
 
 전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#attachments)에 있고, 어떤 토큰을 골라야 하는지는 [디자인 시스템](/ko/design/design-system/)이 다룹니다.
-
-## 모범 사례
-
-- **서버에서도 검증하세요.** `accept`와 `max-size`는 첨부하는 사람을 위한 배려이지 보안 경계가
-  아닙니다.
-- **전송에 성공한 뒤에 비우세요**, 그 전이 아니라. 요청이 실패했다면 다시 시도할 수 있도록 파일이
-  그대로 남아 있어야 합니다.
-- **거절은 빠짐없이 설명하세요.** 이 이벤트는 스트립이 파일을 조용히 버리는 일이 없도록 존재합니다.

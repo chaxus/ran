@@ -67,7 +67,7 @@ description: 'ranui の Button（<r-button>）は、種類・サイズ・ロー�
 
 ### アイコン付きボタン `icon`
 
-> 💡 **ヒント**：アイコンの位置を細かく決めたいときは、Icon コンポーネントを直接使ってください。
+アイコンの位置を細かく決めたいときは、Icon コンポーネントを直接使ってください。
 
 <ran-demo>
   <r-button type="default" icon="user">Default Button</r-button>
@@ -131,11 +131,3 @@ r-button::part(content) {
 ```
 
 一覧は[スタイルトークン](/ja/ranui/style-tokens#button)に、どのトークンを選ぶかは[デザインシステム](/ja/design/design-system/)にあります。
-
-## ベストプラクティス
-
-- **主要な操作**：`type="primary"` を使う（モノクロ：白地に黒／黒地に白）
-- **危険な操作**：`type="warning"` を使う
-- **副次的な操作**：`type="text"` を使う
-- **無効状態**：操作できないときは `disabled` を使う
-- **アイコン**：関連するアイコンを添えて分かりやすくする

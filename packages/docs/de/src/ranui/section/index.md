@@ -111,10 +111,3 @@ r-section::part(subtitle) {
   max-width: 48ch;
 }
 ```
-
-## Bewährte Praxis
-
-- **Abschnittstitel**: Setze `heading`, um jeden wichtigen Bereich einer Seite zu benennen.
-- **Kontext**: Nimm `subtitle` für eine kurze begleitende Zeile; lässt du beide weg, entsteht eine schlichte Fläche ohne Kopfzeile.
-- **Barrierefreiheit**: Die Überschrift wird als ARIA-Überschrift der Ebene 2 ausgezeichnet und ist damit Teil der Dokumentgliederung — halte sie aussagekräftig.
-- **Theming**: Bevorzuge für wiederverwendbares Styling die CSS-Variablen `--ran-section-*` oder `::part()`-Selektoren gegenüber dem Attribut `sheet`.

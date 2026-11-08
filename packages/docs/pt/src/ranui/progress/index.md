@@ -18,7 +18,7 @@ Barra de progresso para mostrar o avanço de uma tarefa, com um puxador arrastá
 <r-progress percent="40%"></r-progress>
 ```
 
-> 💡 **Dica**: `r-progress` é um elemento de bloco sem largura intrínseca. Dentro de uma linha flex ele pode colapsar para largura zero; dê a ele uma largura explícita (por exemplo `style="width:100%"`) ou coloque-o num contexto de bloco.
+`r-progress` é um elemento de bloco sem largura intrínseca. Dentro de uma linha flex ele pode colapsar para largura zero; dê a ele uma largura explícita (por exemplo `style="width:100%"`) ou coloque-o num contexto de bloco.
 
 ## Referência da API
 
@@ -131,10 +131,3 @@ r-progress::part(fill) {
   background: var(--ran-color-primary);
 }
 ```
-
-## Boas práticas
-
-- **Barras estáticas**: use o `type="primary"` padrão para exibir progresso somente leitura.
-- **Barras interativas**: use `type="drag"` quando o usuário puder definir o valor, e escute o evento `change`.
-- **Porcentagem ou número**: combine `percent` e `total` à vontade, passando números crus quando corresponderem a um total conhecido, ou porcentagens para controle direto.
-- **Largura no layout**: envolva a barra num contêiner de bloco ou defina uma largura explícita para que ela não colapse em layouts flex.

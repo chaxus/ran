@@ -111,10 +111,3 @@ r-section::part(subtitle) {
   max-width: 48ch;
 }
 ```
-
-## Best Practices
-
-- **Section titles**: Set `heading` to label each major region of a page.
-- **Context**: Use `subtitle` for a short supporting line; omit both to render a plain surface with no header row.
-- **Accessibility**: The heading is exposed as an ARIA level-2 heading, so it participates in the document outline; keep headings meaningful.
-- **Theming**: Prefer the `--ran-section-*` CSS variables or `::part()` selectors over the `sheet` attribute for reusable styling.

@@ -125,11 +125,3 @@ Se dispara cuando esta salida se activa (su `path` coincide con la ruta actual).
 `r-route` no expone identificadores `::part()` ni variables CSS `--ran-route-*` propias. El host es un elemento `display: block` normal que se colapsa a `display: none` mientras está oculto. Usa el atributo `sheet` o da estilo al host directamente para personalizarlo.
 
 Impórtalo con `import 'ranui'` (registra todos los componentes) o con el independiente `import 'ranui/route'`.
-
-## Buenas prácticas
-
-- **Móntalo dentro de `r-router`**: `r-route` solo conmuta al navegar cuando tiene un antepasado [`r-router`](../router/) que lo sincronice.
-- **Usa `exact` en la raíz**: da a `path="/"` el atributo `exact` para que no coincida por prefijo con todas las demás rutas.
-- **Ordena de lo específico a lo general**: coloca al final una ruta comodín `path="/*"`, ya que una ruta sin `exact` coincide con su prefijo.
-- **Lee `params`, no analices la URL**: captura los segmentos dinámicos con `:param` y léelos de la propiedad `params`.
-- **Reacciona a la activación con `routematch`**: usa el evento `routematch`, que burbujea, para disparar la carga de datos cuando una ruta se activa.

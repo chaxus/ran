@@ -90,13 +90,3 @@ is guarded), so the theme is applied by the client. To avoid a flash of the wron
 `data-ran-theme` on `<html>` in your server template (from a cookie, or from a tiny inline
 script that reads `localStorage` before first paint) and let
 [`initTheme`](/ranui/theme/) take over afterwards.
-
-## Best Practices
-
-- **Import `ranui` (or the specific `ranui/<component>` entries) before rendering.** The
-  registry is populated by the import's side effect; without it every tag passes through
-  unexpanded and the page silently loses its markup.
-- **Render the page, not the fragment.** `renderHTMLToString` is safe over arbitrary HTML, so
-  there is no need to isolate the ranui parts.
-- **Ship the stylesheet.** DSD markup carries the component's styles, but page-level tokens
-  come from `ranui/style` (and `ranui/fonts` for the typefaces).

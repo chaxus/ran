@@ -137,12 +137,3 @@ r-card::part(header) {
 ## Events
 
 The card is a passive container and dispatches no custom events.
-
-## Best Practices
-
-- **Heading & Description**: Use `heading` for the heading and `description` for a short supporting subtitle. The header disappears when both are empty and the `extra` slot is empty.
-- **Body Content**: Place primary content in the default slot.
-- **Header Actions**: Use the `extra` slot for badges, links, or actions. It can appear without a heading; narrow cards wrap it below the heading when the row does not fit.
-- **Footer**: Use the `footer` slot for secondary actions or links; it stays hidden until you slot content into it.
-- **Hover Feedback**: Add `hoverable` only to cards that are clickable; non-interactive cards must not react to hover.
-- **Theming**: Prefer CSS variables and `::part()` over the `sheet` attribute for reusable styling.

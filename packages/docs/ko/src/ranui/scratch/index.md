@@ -95,10 +95,3 @@ description: 'Pointer Events API로, 캔버스 덮개를 문질러 지우면 아
 | `.ran-scratch-ticket-canvas` | 긁는 덮개 캔버스. `z-index: 2`. 호스트에 지정된 `--ran-scratch-cover-background`(기본 `var(--ran-color-text-secondary, #6b6b6b)`)로 채워집니다 |
 
 두 색 모두 테마 토큰을 거치고 리터럴 대비값을 가지므로 기본적으로 라이트·다크 모드에 맞춰지고, `--ran-scratch-award-background` / `--ran-scratch-cover-background`로 덮어쓸 수 있습니다. 호스트 크기는 평범한 `width` / `height`로 정하세요.
-
-## 권장 사항
-
-- **호스트 크기는 반드시 주세요**: `display: block`이며 고유 크기가 없습니다. `width`와 `height`를 명시적으로 주지 않으면 안쪽 `100%` 층들이 0으로 눌립니다.
-- **드러날 콘텐츠는 무엇이든 됩니다**: 텍스트, 이미지, `<r-icon>`, 여러 엘리먼트. 상품이 실제로 무엇이든 그대로 슬롯에 넣으세요. 우회해야 할 고정된 아이콘+크기 API는 없습니다.
-- **마우스·터치·펜에서 동작합니다**: Pointer Events가 셋을 통합하므로 데스크톱과 모바일에서 같은 방식으로 반응합니다.
-- **실험적인 것으로 여기세요**: 아직 만들어 가는 중입니다. 프로덕션 동작을 여기에 기대지 마세요.

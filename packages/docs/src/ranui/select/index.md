@@ -8,6 +8,8 @@ Dropdown selector for choosing a single value from a list of options, with optio
 
 > **Use when** you need a single-value dropdown selector built from `<r-option>` children, with optional search and native form participation. `<r-select>` handles opening, filtering, and `FormData` reporting.
 
+Long option lists need `showSearch`. Prefer `trigger="click"` when touch matters (`hover` is ignored on mobile). In overflow-clipped layouts, set `getPopupContainerId` so the menu is not clipped. Give the control a `name` when a native `<form>` collects it.
+
 Use `placeholder="Pick a teammate"` for the empty-field hint and `label="Teammate"` for its accessible name. Changing the hint preserves the selected value; clearing `value` restores the hint. Placeholder text is not a field label.
 
 ## Quick Start
@@ -395,11 +397,3 @@ Until the component's script runs, the browser lays the `<r-option>` elements ou
   <r-option hidden value="zh-CN">中文</r-option>
 </r-select>
 ```
-
-## Best Practices
-
-- **Many options**: Enable `showSearch` so users can filter by label.
-- **Trigger method**: Match `trigger` to user expectations; `hover` is ignored on mobile, so keep `click` available.
-- **Mount position**: In scroll or overflow-clipped layouts, use `getPopupContainerId` to control where the dropdown mounts.
-- **Custom styling**: Use `dropdownclass` or the exposed `::part()` names to restyle the trigger and dropdown.
-- **Forms**: Give the select a `name` so its value is captured by `FormData` inside a native `<form>`.

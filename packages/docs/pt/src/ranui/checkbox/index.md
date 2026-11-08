@@ -168,11 +168,3 @@ r-checkbox {
 Partes: `checkbox` · `inner` · `input` · `label` · `wrapper`
 
 A lista completa está em [tokens de estilo](/pt/ranui/style-tokens#checkbox); qual token escolher é assunto do [design system](/pt/design/design-system/).
-
-## Boas práticas
-
-- **Rotule suas caixas**: coloque texto no slot para que o controle tenha um nome acessível.
-- **`checked` e `value`**: use `checked` para o estado booleano; leia `value` (`'true'` / `'false'`) ao recolher os dados do formulário.
-- **Estado desabilitado**: use `disabled` quando a escolha não estiver disponível.
-- **Escute `change`**: leia `event.detail.checked` em vez de consultar o DOM de novo.
-- **Formulários**: coloque o `r-checkbox` dentro de um `<form>`; o valor é recolhido sozinho quando marcado. Veja [Forms](/pt/ranui/form/) para o auxiliar `serializeForm()`, que transforma um envio num objeto simples.

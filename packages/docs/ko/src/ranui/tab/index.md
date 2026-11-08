@@ -294,11 +294,3 @@ r-tabs {
 Part: `content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 
 전체 목록은 [스타일 토큰](/ko/ranui/style-tokens#tab)에 있고, 어떤 토큰을 골라야 하는지는 [디자인 시스템](/ko/design/design-system/)이 다룹니다.
-
-## 모범 사례
-
-- **안정적인 정체성**: 각 `<r-tab>`에 유일한 `r-key`를 주고, 위치 인덱스에 기대는 대신 `<r-tabs>`의 `active`로 선택을 다루세요.
-- **스타일 선택**: 가벼운 밑줄에는 `type="flat"`(기본)을, 탭 행을 아래 콘텐츠와 분명히 구분해야 할 때는 `type="line"`을, 미리보기와 코드 전환처럼 짧고 대등한 보기가 몇 개뿐일 때는 `type="segment"`를 쓰세요.
-- **정렬**: 넓은 컨테이너 안에서 헤더 줄의 위치를 옮기려면 `align="center"`나 `align="end"`를 쓰세요.
-- **비활성 패널**: 쓸 수 없는 패널에는 `disabled`를 표시하세요. 클릭에서도, 기본 선택에서도 건너뜁니다.
-- **키보드 탐색**: 헤더 줄은 WAI-ARIA tablist입니다. 화살표 키로 탭 사이를 오갈 수 있고(`Home`/`End`도 됩니다), 탭 순서에 들어가는 것은 활성 탭 하나뿐입니다.

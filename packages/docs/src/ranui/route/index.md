@@ -125,11 +125,3 @@ Fires when this outlet becomes active (its `path` matches the current path). It 
 `r-route` exposes no `::part()` handles and no dedicated `--ran-route-*` CSS variables. The host is a plain `display: block` element that collapses to `display: none` while hidden. Use the `sheet` attribute or style the host directly to customize it.
 
 Import it via `import 'ranui'` (registers every component) or the standalone `import 'ranui/route'`.
-
-## Best Practices
-
-- **Mount inside `r-router`**: `r-route` only switches on navigation when it has an [`r-router`](../router/) ancestor to sync it.
-- **Use `exact` for the root**: give `path="/"` the `exact` attribute so it doesn't prefix-match every other route.
-- **Order from specific to general**: place a catch-all `path="/*"` route last, since a non-exact route matches its prefix.
-- **Read `params`, don't parse the URL**: capture dynamic segments with `:param` and read them from the `params` property.
-- **React to activation with `routematch`**: use the bubbling `routematch` event to trigger data loading when a route becomes active.

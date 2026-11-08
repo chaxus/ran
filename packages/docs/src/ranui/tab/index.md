@@ -305,13 +305,3 @@ r-tabs {
 Parts: `content` · `content-wrap` · `header` · `indicator` · `nav` · `tabs`
 
 The full list is in [style tokens](/ranui/style-tokens#tab); which token to reach for is the [design system](/design/design-system/).
-
-## Best Practices
-
-- **Stable identity**: Give each `<r-tab>` a unique `r-key` and drive selection with `active` on `<r-tabs>` instead of relying on positional indexes.
-- **Style choice**: `type="flat"` (default) for a light underline; `type="line"` when the tab row needs a visible edge against the content below; `type="segment"` for a few short, equal-weight views, such as switching between preview and code.
-- **Alignment**: Use `align="center"` or `align="end"` to reposition the header row within wide containers.
-- **Disabled panes**: Mark unavailable panes with `disabled`; they are skipped for both clicks and default selection.
-- **Keyboard navigation**: The header row is a WAI-ARIA tablist: arrow keys move between tabs (with `Home`/`End`), and only the active tab is in the tab order.
-
-- **Long labels**: The header scrolls horizontally instead of clipping labels. Keyboard selection reveals the active header without changing the page scroll position.

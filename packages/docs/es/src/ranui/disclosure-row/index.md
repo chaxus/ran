@@ -161,9 +161,3 @@ r-disclosure-row {
 Partes: `body` · `disclosure` · `leading` · `row` · `separator` · `summary` · `title`
 
 La lista completa está en [tokens de estilo](/es/ranui/style-tokens#disclosure-row); cuál elegir lo explica el [sistema de diseño](/es/design/design-system/).
-
-## Buenas prácticas
-
-- **Dale un cuerpo a la fila, o no la hagas desplegable.** Una flecha que abre sobre un espacio vacío no sirve de nada; deja `expandable` sin poner y la fila se queda en una sola línea.
-- **Mantén el título con un vocabulario fijo** (`Leer archivo`, `Ejecutar pruebas`, `Buscar`) y pon la parte variable en el resumen. Eso es lo que hace que una columna de filas se pueda recorrer con la vista.
-- **Acompaña `tone="error"` de palabras, nunca solo de color**: el resumen debería decir qué falló.

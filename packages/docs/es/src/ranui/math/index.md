@@ -35,7 +35,7 @@ Renderiza fórmulas matemáticas LaTeX de alta calidad en páginas HTML mediante
 | `download` | `boolean` | `false`     | Muestra un botón o menú para descargar la fuente (`.tex`) o el MathML (`.mml`).               |
 | `sheet`    | `string`  | `''`        | CSS inyectado en el shadow DOM del componente.                                                |
 
-> 💡 **Nota**: el getter de la propiedad `latex` decodifica su valor con `decodeURIComponent`, así que las fórmulas codificadas en URI se decodifican antes de renderizar. Pasar la fórmula como texto en el slot no tiene efecto; solo se renderiza el atributo `latex`.
+el getter de la propiedad `latex` decodifica su valor con `decodeURIComponent`, así que las fórmulas codificadas en URI se decodifican antes de renderizar. Pasar la fórmula como texto en el slot no tiene efecto; solo se renderiza el atributo `latex`.
 
 ### Fórmula `latex`
 
@@ -79,16 +79,3 @@ r-math {
 Partes: `button` · `error` · `math` · `menu` · `render` · `toolbar`
 
 La lista completa está en [tokens de estilo](/es/ranui/style-tokens#math); cuál usar lo explica el [sistema de diseño](/es/design/design-system/).
-
-## Buenas prácticas
-
-- **Pasa la fórmula por `latex`**: define la fórmula en el atributo `latex`; el texto del slot no se renderiza.
-- **Escapa las barras invertidas en JavaScript**: al asignar `latex` desde una cadena JS, recuerda que `\` debe escaparse (por ejemplo `'\\frac{1}{2}'`).
-- **Gestiona los fallos de análisis**: escucha `error` (o mira el cuadro `::part(error)` renderizado) en lugar de dar por hecho que toda fórmula es LaTeX válido.
-- **Maquetación propia con `sheet`**: usa el atributo `sheet` para sobrescribir la disposición interna de `.ran-math` cuando haga falta.
-
-### Copiar y pantallas estrechas
-
-Los controles activados permanecen visibles en una fila discreta sobre el contenido: objetivos de 32px con puntero preciso, 44px con entrada táctil y una separación de 8px. Sin controles no se reserva espacio. Copiar conserva el foco e impide escrituras duplicadas mientras están pendientes. Los errores o la falta de acceso al portapapeles se muestran localmente en `::part(copy-status)` (`role="status"`), traducible con `label-copy-error`; el reintento usa el mismo botón. `copied` solo se emite tras copiar el contenido actual. Cambiar la fuente o el destino de copia invalida las respuestas anteriores. Al cambiar la fuente, el botón conserva el foco y permite copiar la nueva fuente de inmediato.
-
-Las ecuaciones anchas se desplazan horizontalmente dentro de `::part(render)`, sin ensanchar la página ni mover la barra.
