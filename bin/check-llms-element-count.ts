@@ -1,4 +1,3 @@
-#!/usr/bin/env tsx
 /**
  * Fail when packages/docs/public/llms.txt element counts disagree with
  * packages/ranui/docs/COMPONENTS.json. Wired into `pnpm verify:docs`.
