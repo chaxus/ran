@@ -23,6 +23,7 @@ import { mountEntrance } from './entrance.ts';
 import { mountNavigation, mountCodeCopy } from './interactions.ts';
 import { mountPlaygrounds } from './playground.ts';
 import { mountSidebar } from './sidebar.ts';
+import { mountHeaderTools } from './header-tools.ts';
 
 cacheVisitedAssets();
 mountComponents();
@@ -72,6 +73,7 @@ mountEntrance();
 
 mountNavigation();
 mountSidebar();
+mountHeaderTools();
 mountCodeCopy();
 
 mountIdlePrefetch();

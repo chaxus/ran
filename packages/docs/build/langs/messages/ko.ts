@@ -244,7 +244,7 @@ const ko: LocaleMessages = {
     lastUpdated: '마지막 수정',
     authorLink: '만든 사람: chaxus',
     searchButton: '검색',
-    searchPlaceholder: '상세 목록 표시',
+    searchPlaceholder: '문서 검색',
     noResults: '검색 결과 없음:',
     resetButton: '검색어 지우기',
     backButton: '뒤로',

@@ -244,7 +244,7 @@ const en: LocaleMessages = {
     lastUpdated: 'Last updated',
     authorLink: 'By chaxus',
     searchButton: 'Search',
-    searchPlaceholder: 'Display detailed list',
+    searchPlaceholder: 'Search docs',
     noResults: 'No results for',
     resetButton: 'Clear the query',
     backButton: 'Back',

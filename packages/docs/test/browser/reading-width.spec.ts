@@ -1,21 +1,28 @@
 import { expect, test } from './fixtures';
 
-test('prose, tables and code end on one edge with the outline beside them', async ({ page }) => {
+test('prose, tables and code end on one edge with the outline on the layout trailing edge', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/ranui/coding-guides/');
   const edges = await page.evaluate(() => {
     const right = (selector: string): number =>
       Math.round(document.querySelector(selector)!.getBoundingClientRect().right);
+    const left = (selector: string): number =>
+      Math.round(document.querySelector(selector)!.getBoundingClientRect().left);
+    const layout = document.querySelector('.layout')!.getBoundingClientRect();
     return {
       prose: right('.prose > p'),
       table: right('.prose .table-wrap'),
       code: right('.prose > figure.code'),
-      outlineGap: Math.round(document.querySelector('.toc')!.getBoundingClientRect().left) - right('.prose'),
+      outlineGap: left('.toc') - right('.prose'),
+      outlineTrailing: Math.round(layout.right) - right('.toc'),
     };
   });
   expect(edges.table).toBe(edges.prose);
   expect(edges.code).toBe(edges.prose);
-  expect(edges.outlineGap).toBeLessThanOrEqual(48);
+  // The doc column takes spare width; `.prose` stays at `--measure`, so the outline
+  // rides the layout's trailing edge instead of hugging the text with a thin gutter.
+  expect(edges.outlineTrailing).toBeLessThanOrEqual(48);
+  expect(edges.outlineGap).toBeGreaterThan(48);
 });
 
 test('an identifier in a table cell is never split across lines', async ({ page }) => {

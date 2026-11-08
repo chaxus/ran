@@ -245,7 +245,7 @@ const pt: LocaleMessages = {
     lastUpdated: 'Última atualização',
     authorLink: 'Por chaxus',
     searchButton: 'Pesquisar',
-    searchPlaceholder: 'Exibir lista detalhada',
+    searchPlaceholder: 'Pesquisar na documentação',
     noResults: 'Nenhum resultado para',
     resetButton: 'Limpar a busca',
     backButton: 'Voltar',

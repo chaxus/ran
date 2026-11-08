@@ -889,6 +889,10 @@
  * cards). Only the hero live tray picks up Regular glass so it sits with the floating header.
  */
 :root[data-ran-surface='glass'] .hero-live {
+  /* Content-layer plate: stay under sticky header menus (backdrop-filter would
+     otherwise composite above the header's overflowing langs list). */
+  position: relative;
+  z-index: 0;
   background: var(--glass-specular, none), color-mix(in srgb, var(--glass-white) 42%, transparent);
   border-color: var(--glass-rim);
   box-shadow: var(--glass-depth, none), var(--glass-inset, none);

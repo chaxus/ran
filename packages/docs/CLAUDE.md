@@ -309,6 +309,9 @@ The preview demo uses `client/preview.ts` to own its selected file URLs. Its sma
 width rule in `styles/demos.css` gives virtual page placeholders a definite parent
 width on desktop WebKit. Browser regressions exercise the built site with
 `pnpm -F docs test:preview`; build the workspace libraries and docs first.
+Glass chrome regressions (menu stacking, wash tokens, search copy, shell width) live in
+`test/browser/glass-chrome.spec.ts` — run that file when changing `styles/docs.css` glass
+rules, header menus, or surface tokens; prefer hit-tests and computed style over screenshots.
 
 **CSS may hide something only when script is there to bring it back.** The landing has no
 scroll reveal: every section is visible on first paint. Its sections keep a `.reveal` class only
