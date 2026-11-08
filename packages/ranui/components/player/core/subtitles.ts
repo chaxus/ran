@@ -83,6 +83,7 @@ export function createSubtitleHandlers(deps: PlayerSubtitleDeps): PlayerSubtitle
       // aligns the way every other path does, so what was implicit is stated.
       .attr('placement', 'top-center')
       .attr('dropdownclass', 'video-subtitle-dropdown')
+      .attr('dropdownsurface', 'solid')
       .aria('label', uiText(playerText, 'player.subtitles', refs.subtitleContainer))
       .attr('title', uiText(playerText, 'player.subtitles', refs.subtitleContainer))
       .children(Fragment as unknown as HTMLElement)

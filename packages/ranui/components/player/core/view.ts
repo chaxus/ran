@@ -202,6 +202,7 @@ export function ensurePlayerView(input: {
     .attr('placement', 'top')
     .attr('getPopupContainerId', playerIdentifier)
     .attr('dropdownclass', 'video-speed-dropdown')
+    .attr('dropdownsurface', 'solid')
     .aria('label', uiText(playerText, 'player.speed'))
     .attr('title', uiText(playerText, 'player.speed'))
     .children(...speedOptions.map((item) => View('r-option').attr('value', `${item.value}`).text(item.label).build()))

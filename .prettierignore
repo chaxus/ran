@@ -37,9 +37,11 @@ packages/docs/src/ranui/changelog.md
 packages/docs/src/ranui/style-tokens.md
 packages/docs/src/ranuts/api.md
 packages/ranui/components/player/index.less
+packages/ranui/docs/COMPONENTS.json
 packages/ranui/docs/COMPONENTS.md
 packages/ranui/docs/style-tokens-parts.md
 packages/ranui/docs/style-tokens-public.md
+packages/ranui/typings-elements.generated.d.ts
 packages/ranuts/docs/API.md
 playwright-report/
 plugins/ran/skills/design/references/

@@ -193,3 +193,16 @@
     }
   }
 }
+
+/*
+ * Document glass: the sliding header fill uses the same quiet wash as select /
+ * dropdown rows so hosts (and agents) do not invent a Graphite grey for tabs.
+ */
+:host-context([data-ran-surface='glass']) .ran-tab-header-hover,
+:host-context([surface='glass']) .ran-tab-header-hover {
+  background: var(--ran-tab-hover-background, var(--ran-surface-glass-hover));
+}
+:host-context([data-ran-surface='glass'])[type='segment'] .ran-tab-header-hover,
+:host-context([surface='glass'])[type='segment'] .ran-tab-header-hover {
+  background: var(--ran-tab-hover-background, var(--ran-surface-glass-hover));
+}

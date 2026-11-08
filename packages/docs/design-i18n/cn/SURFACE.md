@@ -1,4 +1,4 @@
-<!-- source: 44eb7be487378787a6dc07f01dcf65a96480d02d -->
+<!-- source: 8ad644dd82b964973e261e83fc4349e89e43ea80 -->
 
 # 表面语言
 
@@ -40,8 +40,9 @@
 磨砂板会冲淡浅填充。Graphite 上清楚的状态，在玻璃上可能消失。
 
 - **MUST** 悬停与选中彼此可区分，也与静止态可区分。
-- **MUST** 状态不只靠颜色（字重、描边、导轨或 chip 与颜色一起用）。
-- **SHOULD** 悬停用更浅的 chip；选中用更实的 chip 加字重（实心 Graphite 已有导轨处仍保留导轨）。
+- **MUST** 状态不只靠颜色（字重、导轨或 chip 与颜色一起用）。
+- **SHOULD** 悬停用安静的墨色洗色；浅色玻璃上选中用更亮的霜面抬升加字重（深色上用更实的白色 vibrancy），实心 Graphite 已有导轨处仍保留导轨。不要用描边或投影把选中 chip 压暗——那在磨砂板上会读成实心 chrome。
+- **SHOULD** 优先用库 token（`--ran-surface-glass-hover` / `--ran-surface-glass-selected`）以及文档级玻璃下试点控件的默认值（`r-dropdown-item`、`r-select` 触发器、`r-tabs` 标题滑块）。宿主不要为菜单另造一套 hover 灰色——那是 agents 偏离表面语言的常见路径。浮层面板应读 `--ran-surface-glass-overlay-*`，不要另起一套 fill。
 
 ## 宿主责任
 
@@ -52,7 +53,7 @@
 | 次要 / 工具条控件 | `glass`                     | 默认 `r-button`，在文档级 glass 或 `surface="glass"` 下起霜                                              |
 | 强调操作          | `glassProminent` / 实心填充 | `type="primary"` 与 `type="warning"` 保持**实心**                                                        |
 | 内容表面          | Standard materials          | `r-card`、`r-input` 在文档级 glass 下保持**实心**；仅当该元素本身是磨砂板时用 `surface="glass"` 选择加入 |
-| 瞬时浮层          | Clear / sheet 玻璃          | `r-modal`、非 toast 的 `r-message`，在文档级 glass 或 `surface="glass"` 下                               |
+| 瞬时浮层          | Clear / sheet 玻璃          | `r-modal`、非 toast 的 `r-message`、`r-dropdown`（select 菜单），在文档级 glass 或 `surface="glass"` 下  |
 | Toast 药丸        | 不透明强调                  | 保持**实心**                                                                                             |
 
 用 `surface="solid"` 退出文档级玻璃。

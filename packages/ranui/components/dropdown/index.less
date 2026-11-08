@@ -1,4 +1,5 @@
 @import url('../../base.less');
+@import url('../../theme/surface-frost.less');
 
 @arrow-size: var(--ran-dropdown-arrow-width, 16px);
 
@@ -297,6 +298,24 @@
       filter: var(--ran-dropdown-arrow-shadow, drop-shadow(0 -1px 0 var(--ran-color-border)));
     }
   }
+}
+
+/* Transient menus follow document glass (same overlay frost as modal / message).
+   Player menus opt out with surface="solid" — they sit on video, not page chrome. */
+.ran-dropdown-glass-surface() {
+  .ranui-dropdown {
+    .ran-frost-overlay();
+    .ran-frost-overlay-reduced();
+  }
+}
+
+:host([surface='glass']) {
+  .ran-dropdown-glass-surface();
+}
+
+/* Chromium drops :host-context(...):not(...); put the host check inside :host(). */
+:host-context([data-ran-surface='glass']):host(:not([surface='solid'])) {
+  .ran-dropdown-glass-surface();
 }
 
 // A floating panel appearing is exactly the kind of motion a reader who asked

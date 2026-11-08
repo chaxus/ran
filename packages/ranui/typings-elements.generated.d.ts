@@ -301,6 +301,7 @@ declare global {
     defaultvalue?: string;
     disabled?: boolean;
     dropdownclass?: string;
+    dropdownsurface?: string;
     getpopupcontainerid?: string;
     label?: string;
     open?: boolean;
