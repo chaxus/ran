@@ -580,6 +580,7 @@ a {
 }
 :root[data-ran-surface='glass'] .langs__summary {
   /* Keep the graphite utility metrics (32× chevron) on glass too. */
+  /* design-ok: spacing-scale match r-select chevron room (28px end), under the 4px step */
   padding: 0 28px 0 12px;
   min-height: 32px;
   height: 32px;
@@ -699,7 +700,7 @@ a {
 :root[data-ran-surface='glass'] .search-open {
   min-width: 0;
   height: 32px;
-  padding: 0 10px;
+  padding: 0 8px;
   gap: 4px;
 }
 @media (max-width: 1100px) {
@@ -1044,6 +1045,7 @@ a {
   /* Match r-select trigger: 32px box, 12px start / chevron room at the end. */
   min-height: 32px;
   height: 32px;
+  /* design-ok: spacing-scale match r-select chevron room (28px end), under the 4px step */
   padding: 0 28px 0 12px;
   border: 1px solid transparent;
   border-radius: 5px;
