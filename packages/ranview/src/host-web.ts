@@ -11,8 +11,9 @@ export const createWebHost = (doc: Document | null = globalThis.document ?? null
   if (doc == null) throw new Error('createWebHost requires a Document');
 
   return {
-    createElement(type) {
-      return doc.createElement(type) as unknown as HostNode;
+    createElement(type, options) {
+      const node = options?.namespace ? doc.createElementNS(options.namespace, type) : doc.createElement(type);
+      return node as unknown as HostNode;
     },
     createText(value) {
       return doc.createTextNode(value) as unknown as HostNode;
@@ -24,19 +25,17 @@ export const createWebHost = (doc: Document | null = globalThis.document ?? null
     },
     setProp(node, name, value) {
       const el = asElement(node) as HTMLElement;
-      if (name === 'class' || name === 'className') {
-        el.className = value == null || value === false ? '' : String(value);
-        return;
-      }
+      // Always `setAttribute` for class: SVG `className` is a read-only SVGAnimatedString.
+      const attr = name === 'className' ? 'class' : name;
       if (value === null || value === undefined || value === false) {
-        el.removeAttribute(name);
+        el.removeAttribute(attr);
         return;
       }
       if (value === true) {
-        el.setAttribute(name, '');
+        el.setAttribute(attr, '');
         return;
       }
-      el.setAttribute(name, String(value));
+      el.setAttribute(attr, String(value));
     },
     setStyle(node, style) {
       const el = asElement(node) as HTMLElement;

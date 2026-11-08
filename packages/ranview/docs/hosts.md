@@ -10,6 +10,7 @@ different backends. Spec:
 | Web (DOM) | `@alixex/ranview/host/web` (`createWebHost`) | First-party; today’s runtime |
 | NSH | `@alixex/ranview/host/nsh` (planned) | Tracks [chaxus/nsh](https://github.com/chaxus/nsh) `main` |
 
-`ElementBuilder` still targets the DOM directly in this release. Migrating builders onto
-`Host` is the next plan; then `host-nsh` unlocks iOS / Android / desktop / GPUI / terminal
-through the NSH fork.
+On the **client**, `ElementBuilder` creates nodes and applies attributes/text/simple
+listeners through `createWebHost`. SSR still uses `HTMLElementMock`. Shadow / `unsafeHtml`
+remain web-only. Next: optional explicit `build(host)` for non-DOM hosts, then `host-nsh`
+against [chaxus/nsh](https://github.com/chaxus/nsh) `main`.

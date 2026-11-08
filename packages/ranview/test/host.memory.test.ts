@@ -7,17 +7,20 @@ describe('createMemoryHost', () => {
     const root = host.createElement('div');
     const label = host.createText('hi');
     const child = host.createElement('span');
+    const svg = host.createElement('svg', { namespace: 'http://www.w3.org/2000/svg' });
     host.setProp(child, 'data-id', '1');
     host.setStyle?.(child, { color: 'red' });
     host.insert(child, label);
     host.insert(root, child);
+    host.insert(root, svg);
 
     const debug = host.debug(root);
-    expect(debug.children).toHaveLength(1);
+    expect(debug.children).toHaveLength(2);
     expect(debug.children[0].type).toBe('span');
     expect(debug.children[0].props.get('data-id')).toBe('1');
     expect(debug.children[0].style.color).toBe('red');
     expect(debug.children[0].children[0].text).toBe('hi');
+    expect(debug.children[1].namespace).toBe('http://www.w3.org/2000/svg');
   });
 
   it('inserts before a sibling, removes, and disposes listeners', () => {

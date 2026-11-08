@@ -3,6 +3,7 @@ import type { Host, HostListener, HostNode } from './host.ts';
 type MemoryRecord = {
   kind: 'element' | 'text';
   type: string;
+  namespace?: string;
   text: string;
   props: Map<string, unknown>;
   style: Record<string, string | number>;
@@ -16,10 +17,11 @@ const asRecord = (node: HostNode): MemoryRecord => node as unknown as MemoryReco
 /** In-memory host for contract tests and non-DOM environments. */
 export const createMemoryHost = (): Host & { /** test helper */ debug(node: HostNode): MemoryRecord } => {
   const host: Host & { debug(node: HostNode): MemoryRecord } = {
-    createElement(type) {
+    createElement(type, options) {
       const record: MemoryRecord = {
         kind: 'element',
         type,
+        namespace: options?.namespace,
         text: '',
         props: new Map(),
         style: {},

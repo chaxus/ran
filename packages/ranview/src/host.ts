@@ -10,8 +10,10 @@ export type HostNode = { readonly __brand: 'HostNode' };
 
 export type HostListener = (...args: unknown[]) => void;
 
+export type CreateElementOptions = { namespace?: string };
+
 export interface Host {
-  createElement(type: string): HostNode;
+  createElement(type: string, options?: CreateElementOptions): HostNode;
   createText(value: string): HostNode;
   setText(node: HostNode, value: string): void;
   setProp(node: HostNode, name: string, value: unknown): void;
