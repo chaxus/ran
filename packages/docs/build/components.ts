@@ -179,7 +179,7 @@ export const renderHome = (locale: LocaleDef): string => {
       )
       .join('') +
     `</div>` +
-    `<p class="choose-agents"><a href="${esc(href('/agents/'))}">${esc(t.agentsCta)}${ARROW_SM}</a></p>` +
+    `<div class="choose-agents"><a href="${esc(href('/agents/'))}">${esc(t.agentsCta)}${ARROW_SM}</a></div>` +
     `</section>` +
     // ── 4. capabilities beyond the usual set ──
     `<section class="section caps reveal" aria-labelledby="home-caps">` +
