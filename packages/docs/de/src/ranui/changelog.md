@@ -9,6 +9,15 @@ Aus `packages/ranui/CHANGELOG.md` im Repository erzeugt. Die Einträge bleiben i
 
 ::: v-pre
 
+## [0.5.5] — 2026-11-08
+
+Published to npm as [ranui@0.5.5](https://www.npmjs.com/package/ranui/v/0.5.5) on the `latest` tag.
+
+- Under document glass, `r-select` menus use one sliding wash cursor instead of per-row background flashes; `dropdownsurface="solid"` still opts out (player menus on video).
+- Public `surface` (`glass` | `solid`) is reflected on `r-button`, `r-card`, `r-input`, `r-modal`, `r-message` and `r-dropdown` so COMPONENTS / `check:attrs` and agents see the CSS paint contract.
+- `r-theme-switch` and `r-surface-switch` mark their portaled panels with `ran-chrome-menu` so hosts can match language menus (weight-selected, no check) without fighting closed-shadow styles.
+- Coordinate `ranuts@0.5.5` and `@alixex/ranview@0.2.5`; packed internal dependencies resolve to those exact versions.
+
 ## [0.5.4] — 2026-11-06
 
 Published to npm as [ranui@0.5.4](https://www.npmjs.com/package/ranui/v/0.5.4) on the `latest` tag.
