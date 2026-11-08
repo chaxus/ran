@@ -1,10 +1,10 @@
 ---
-description: '在真实界面上用好 ranui：选定用途，让令牌给出取值；设计每个可达状态；检查实际渲染出来的效果。'
+description: '在任意产品界面上应用设计方法：选定用途，让令牌给出取值；设计每个可达状态；检查实际渲染出来的效果。使用 <r-*> 时再看 ranui 适配。'
 ---
 
 # Design guidelines 设计规范
 
-在真实界面上使用 ranui：先确定元素的用途和状态，再让设计令牌（token）给出具体取值。
+在真实产品界面上应用设计方法：先确定元素的用途和状态，再让设计令牌（token）给出具体取值。界面使用 `<r-*>` 时，再通过 ranui 适配把这些用途映射到 ranui 的令牌与组件。
 
 规则本身放在两个地方，本页只给链接，不再复述：[设计指南](/cn/design/guide)讲适用于任何产品的方法，
 [ranui 实现适配](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/adapters/DESIGN.md)
@@ -13,7 +13,7 @@ description: '在真实界面上用好 ranui：选定用途，让令牌给出取
 [主题系统](/cn/ranui/theme/)说明运行时覆盖，
 [信息架构](/cn/design/information-architecture/)负责页面结构。
 
-> **适用场景**：为 `<r-*>` 元素搭建的界面选择颜色、间距、排版、纵深或动效。
+> **适用场景**：为任意产品界面选择颜色、间距、排版、纵深或动效。该界面用 `<r-*>` 搭建时，再看 ranui 适配。
 
 ## 原则
 

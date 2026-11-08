@@ -6,6 +6,12 @@ title: Agenten
 
 Ein ran-Plugin bietet drei Skills: design für Produktentscheidungen, ranui für Komponenten und ranuts für Hilfsfunktionen.
 
+Wähle den Skill nach der Entscheidung vor dir:
+
+- **design** — Layout, Interaktion, Bewegung, oder ob eine Oberfläche die Abnahme besteht
+- **ranui** — welches `<r-*>`-Element, seine Attribute oder Theme-Tokens
+- **ranuts** — welchen Helfer du importierst, oder welcher Einstiegspunkt das Problem trägt
+
 [design](../design/) · [ranui](../ranui/) · [ranuts](../ranuts/)
 
 Das Plugin von GitHub installieren.

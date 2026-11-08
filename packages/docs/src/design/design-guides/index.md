@@ -1,10 +1,10 @@
 ---
-description: 'How to apply ranui on a screen: pick a role and let the token supply the value, design every reachable state, and check what actually rendered.'
+description: 'How to apply design methods on any product screen: pick a role and let the token supply the value, design every reachable state, and check what actually rendered. Use the ranui adapter when the screen is built with <r-*>.'
 ---
 
 # Design guidelines
 
-How to apply ranui on a real screen: choose a role and a state, and let the tokens supply the values.
+How to apply the design method on a real product screen: choose a role and a state, and let the tokens supply the values. When the screen uses `<r-*>` elements, the ranui adapter maps those roles onto ranui tokens and components.
 
 The rules themselves live in two places, and this page links to them rather than restating them: the
 [design guide](/design/guide) for the method that applies to any product, and the
@@ -14,7 +14,7 @@ for ranui's tokens, tiers and component rules. Both ship in `node_modules/ranui/
 [theming](/ranui/theme/) covers runtime overrides, and
 [information architecture](/design/information-architecture/) covers page structure.
 
-> **Use when** choosing color, spacing, type, depth or motion for a screen built with `<r-*>` elements.
+> **Use when** choosing color, spacing, type, depth or motion for any product screen. Reach for the ranui adapter when that screen is built with `<r-*>` elements.
 
 ## Principles
 
