@@ -196,17 +196,21 @@ const R_CONTROL = /[\u0000-\u001f]/g;
 const R_SPECIAL = /[\s~`!@#$%^&*()\-_+=[\]{}|\\;:"'“”‘’<>,.?/]+/g;
 const R_COMBINING = /[\u0300-\u036f]/g;
 
-export const slugify = (text: string): string =>
-  text
+export const slugify = (text: string): string => {
+  // Collapse/trim hyphens with split+join instead of `-+` / `^-+|-+$` quantifiers:
+  // those patterns are CodeQL js/polynomial-redos on long runs of '-'.
+  const slug = text
     .normalize('NFKD')
     .replace(R_COMBINING, '')
     .replace(R_CONTROL, '')
     .replace(R_SPECIAL, '-')
-    .replace(/-{2,}/g, '-')
-    .replace(/^-+|-+$/g, '')
-    // An id may not begin with a digit in a CSS selector, so it gets a prefix.
-    .replace(/^(\d)/, '_$1')
-    .toLowerCase();
+    .toLowerCase()
+    .split('-')
+    .filter(Boolean)
+    .join('-');
+  // An id may not begin with a digit in a CSS selector, so it gets a prefix.
+  return slug.replace(/^(\d)/, '_$1');
+};
 
 // ── Plain text from tokens ──────────────────────────────────────────────────
 
