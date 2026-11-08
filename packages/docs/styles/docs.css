@@ -1106,6 +1106,17 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
     min-width: 6rem;
   }
 }
+/*
+ * No-JS / very narrow: a 6rem FOUC plate plus search and language overflows 320px
+ * (layout-audit). Keep a 32px square shell so the row does not jump when the
+ * deferred module upgrades, without claiming the longest-option floor.
+ */
+@media (max-width: 480px) {
+  .appearance .theme-switch:not(:defined) {
+    min-width: 32px;
+    width: 32px;
+  }
+}
 .appearance .theme-switch,
 .appearance .surface-switch {
   --ran-theme-switch-background: transparent;
