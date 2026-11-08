@@ -2954,6 +2954,12 @@ body.drawer-open {
     justify-content: center;
     padding: 0;
   }
+  /* 6rem theme + icon chrome was ~14px over on Firefox at 320; drop the floor. */
+  .appearance .theme-switch {
+    --ran-theme-switch-width: fit-content;
+    --ran-theme-switch-min-width: 0;
+    --ran-theme-switch-max-width: 5.25rem;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .nav__link,
