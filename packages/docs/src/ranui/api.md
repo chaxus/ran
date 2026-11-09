@@ -1,6 +1,6 @@
 ---
 title: ranui element API
-description: 'Every ranui custom element — 42 elements with their attributes, properties, events, slots and ::part() names, extracted from source.'
+description: 'Every ranui custom element — 43 elements with their attributes, properties, events, slots and ::part() names, extracted from source.'
 ---
 
 # ranui element API (generated)
@@ -20,7 +20,7 @@ shadow boundary) and `cancelable` (`preventDefault()` vetoes it). **`element-onl
 none of the three — a delegated listener on an ancestor never sees that event, so bind to
 the element itself.
 
-**42 custom elements.**
+**43 custom elements.**
 
 ## `<r-attachments>`
 
@@ -342,6 +342,20 @@ Source: `components/math/index.ts`
   - `render` · bubbles, composed · detail `{ ok }`
 - **Slots**: —
 - **Parts**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
+
+## `<r-menubar>`
+
+Source: `components/menubar/index.ts`
+
+- **Attributes**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
+- **Properties**:
+  - `duration: number` — FLIP morph duration in milliseconds.
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
+  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `sheet: string` — CSS injected into the component's shadow DOM.
+- **Events**: —
+- **Slots**: `default`
+- **Parts**: `root`
 
 ## `<r-mermaid>`
 

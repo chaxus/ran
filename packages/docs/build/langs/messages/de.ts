@@ -175,6 +175,7 @@ const de: LocaleMessages = {
     theming: 'Theming',
     themeswitch: 'Theme-Umschalter',
     surfaceswitch: 'Stil-Umschalter',
+    menubar: 'Menüleiste',
     builder: 'Builder',
     server_rendering: 'Server-Rendering',
     common: 'Allgemein',

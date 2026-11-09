@@ -1,6 +1,6 @@
 ---
 title: ranui 元素 API
-description: 'ranui 的全部自定义元素 —— 42 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。'
+description: 'ranui 的全部自定义元素 —— 43 个元素的属性、属性值、事件、插槽与 ::part() 名称，均从源码提取。'
 ---
 
 # ranui 元素 API（自动生成）
@@ -18,7 +18,7 @@ description: 'ranui 的全部自定义元素 —— 42 个元素的属性、属�
 `cancelable`（`preventDefault()` 可否决）。**`element-only`** 表示三者皆无——在祖先节点上
 做事件委托永远收不到它，请把监听绑在元素本身上。
 
-**共 42 个自定义元素。**
+**共 43 个自定义元素。**
 
 ## `<r-attachments>`
 
@@ -340,6 +340,20 @@ description: 'ranui 的全部自定义元素 —— 42 个元素的属性、属�
   - `render` · bubbles, composed · detail `{ ok }`
 - **插槽**: —
 - **Part**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
+
+## `<r-menubar>`
+
+源码: `components/menubar/index.ts`
+
+- **属性（attribute）**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
+- **属性值（property）**:
+  - `duration: number` — FLIP morph duration in milliseconds.
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
+  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `sheet: string` — CSS injected into the component's shadow DOM.
+- **事件**: —
+- **插槽**: `默认插槽`
+- **Part**: `root`
 
 ## `<r-mermaid>`
 

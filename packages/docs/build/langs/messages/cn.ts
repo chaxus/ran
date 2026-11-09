@@ -175,6 +175,7 @@ const cn: LocaleMessages = {
     theming: 'Theme 主题系统',
     themeswitch: '主题切换',
     surfaceswitch: '风格切换',
+    menubar: '菜单条',
     builder: '构建器',
     server_rendering: 'SSR 服务端渲染',
     common: '通用',

@@ -36,6 +36,14 @@ const loaders: Record<string, () => Promise<unknown>> = {
   'r-tab': () => import('ranui/tabpane'),
   // Theme/surface switches compose `r-select`; load it in the same chunk graph so
   // option registration is not dropped when the host only sees the switch tags.
+  // Menubar demos wrap select / theme / surface; load peers with the bar.
+  'r-menubar': () =>
+    Promise.all([
+      import('ranui/menubar'),
+      import('ranui/select'),
+      import('ranui/theme-switch'),
+      import('ranui/surface-switch'),
+    ]),
   'r-theme-switch': () => Promise.all([import('ranui/theme-switch'), import('ranui/select')]),
   'r-surface-switch': () => Promise.all([import('ranui/surface-switch'), import('ranui/select')]),
   'r-token-meter': () => import('ranui/token-meter'),

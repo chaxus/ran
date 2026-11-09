@@ -1,6 +1,6 @@
 ---
 title: ranui 엘리먼트 API
-description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 어트리뷰트, 프로퍼티, 이벤트, 슬롯, ::part() 이름. 모두 소스에서 추출했습니다.'
+description: 'ranui의 모든 커스텀 엘리먼트 — 43개 엘리먼트의 어트리뷰트, 프로퍼티, 이벤트, 슬롯, ::part() 이름. 모두 소스에서 추출했습니다.'
 ---
 
 # ranui 엘리먼트 API (자동 생성)
@@ -19,7 +19,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
 넘음), `cancelable`(`preventDefault()`로 취소 가능). **`element-only`** 은 셋 다 아니라는
 뜻이며, 조상 노드에 건 위임 리스너로는 절대 받을 수 없습니다. 엘리먼트 자체에 바인딩하세요.
 
-**커스텀 엘리먼트 42개.**
+**커스텀 엘리먼트 43개.**
 
 ## `<r-attachments>`
 
@@ -341,6 +341,20 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
   - `render` · bubbles, composed · detail `{ ok }`
 - **슬롯**: —
 - **Part**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
+
+## `<r-menubar>`
+
+소스: `components/menubar/index.ts`
+
+- **어트리뷰트**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
+- **프로퍼티**:
+  - `duration: number` — FLIP morph duration in milliseconds.
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
+  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `sheet: string` — CSS injected into the component's shadow DOM.
+- **이벤트**: —
+- **슬롯**: `기본 슬롯`
+- **Part**: `root`
 
 ## `<r-mermaid>`
 

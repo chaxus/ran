@@ -7,7 +7,10 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
   await page.waitForFunction(
     () =>
-      customElements.get('r-theme-switch') && customElements.get('r-surface-switch') && customElements.get('r-select'),
+      customElements.get('r-menubar') &&
+      customElements.get('r-theme-switch') &&
+      customElements.get('r-surface-switch') &&
+      customElements.get('r-select'),
   );
 });
 
@@ -47,10 +50,11 @@ test('hovering across chrome menus marks a handoff and morphs the panel', async 
     state.chromeHandoff = false;
     state.flipSamples = [];
     const watch = new MutationObserver(() => {
-      if (document.documentElement.hasAttribute('data-chrome-switch')) state.chromeHandoff = true;
+      if (document.documentElement.hasAttribute('data-ran-menubar-switch')) state.chromeHandoff = true;
     });
-    watch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-chrome-switch'] });
+    watch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-ran-menubar-switch'] });
   });
+  await page.waitForFunction(() => customElements.get('r-menubar'));
   await page.locator('.lang-switch').hover();
   await expect(chromePanel(page, 'English')).toBeVisible();
   const fromLeft = await chromePanel(page, 'English').evaluate((el) => el.getBoundingClientRect().left);
@@ -100,13 +104,16 @@ test('language chrome panel is wide enough for longer option labels', async ({ p
     return {
       hostWidth: Math.round(host.width),
       triggerWidth: Math.round(trigger.width),
-      minWidth: getComputedStyle(el).minWidth,
+      // Prefer the inline floor the library sets — WebKit can report computed
+      // min-width as 0px while width:max-content still grows past the trigger.
+      triggerFloor:
+        el.style.minWidth || el.style.getPropertyValue('--ran-select-trigger-width') || getComputedStyle(el).minWidth,
       sample: items.find((item) => /Português|简体中文/.test(item.text)) ?? items[0] ?? null,
     };
   });
   // Library floors min-width at the trigger (Floating UI / Radix); content may grow.
   expect(metrics.hostWidth).toBeGreaterThan(metrics.triggerWidth);
-  expect(parseFloat(metrics.minWidth)).toBeGreaterThanOrEqual(metrics.triggerWidth - 1);
+  expect(parseFloat(metrics.triggerFloor)).toBeGreaterThanOrEqual(metrics.triggerWidth - 1);
   expect(metrics.sample).not.toBeNull();
   // Option row sits inside the panel's 4px inset padding on each side.
   expect(metrics.sample!.width).toBeGreaterThanOrEqual(metrics.hostWidth - 16);
@@ -132,12 +139,14 @@ test('header tools share one gap and hug their labels', async ({ page }) => {
       searchPad: getComputedStyle(search!).paddingInline,
       githubHref: github?.getAttribute('href') ?? '',
       githubLabel: github?.getAttribute('aria-label') ?? '',
+      utils: q('.header-utils'),
       between: [
-        gapBetween(search, github),
-        gapBetween(github, langs),
+        gapBetween(search, q('.header-utils')),
         gapBetween(langs, theme),
         gapBetween(theme, surface),
+        gapBetween(q('.header-utils'), github),
       ],
+      order: [search, langs, theme, surface, github].map((el) => Math.round(el!.getBoundingClientRect().left)),
       themeMin: getComputedStyle(theme!).getPropertyValue('--ran-theme-switch-min-width').trim(),
       surfaceMin: getComputedStyle(surface!).getPropertyValue('--ran-surface-switch-min-width').trim(),
     };
@@ -152,6 +161,10 @@ test('header tools share one gap and hug their labels', async ({ page }) => {
   expect(metrics.githubHref).toBe('https://github.com/chaxus/ran');
   expect(metrics.githubLabel).toBe('GitHub');
   for (const gap of metrics.between) expect(gap).toBeCloseTo(8, 0);
+  // Search → chrome utils → GitHub (outbound last / rightmost).
+  for (let i = 1; i < metrics.order.length; i++) {
+    expect(metrics.order[i]!).toBeGreaterThan(metrics.order[i - 1]!);
+  }
   expect(['0', '0px']).toContain(metrics.themeMin);
   expect(['0', '0px']).toContain(metrics.surfaceMin);
 });

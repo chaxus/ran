@@ -175,6 +175,7 @@ const ko: LocaleMessages = {
     theming: '테마',
     themeswitch: '테마 전환',
     surfaceswitch: '스타일 전환',
+    menubar: '메뉴바',
     builder: '빌더',
     server_rendering: '서버 사이드 렌더링',
     common: '공통',

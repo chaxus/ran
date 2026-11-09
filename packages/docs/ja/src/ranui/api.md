@@ -1,6 +1,6 @@
 ---
 title: ranui 要素 API
-description: 'ranui のすべてのカスタム要素 —— 42 個の要素の属性、プロパティ、イベント、スロット、::part() 名。いずれもソースから抽出しています。'
+description: 'ranui のすべてのカスタム要素 —— 43 個の要素の属性、プロパティ、イベント、スロット、::part() 名。いずれもソースから抽出しています。'
 ---
 
 # ranui 要素 API（自動生成）
@@ -20,7 +20,7 @@ description: 'ranui のすべてのカスタム要素 —— 42 個の要素の�
 は三つとものない状態で、祖先要素へのイベント委譲では決して受け取れません。要素自身に
 リスナーを登録してください。
 
-**カスタム要素 42 個。**
+**カスタム要素 43 個。**
 
 ## `<r-attachments>`
 
@@ -342,6 +342,20 @@ description: 'ranui のすべてのカスタム要素 —— 42 個の要素の�
   - `render` · bubbles, composed · detail `{ ok }`
 - **スロット**: —
 - **Part**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
+
+## `<r-menubar>`
+
+ソース: `components/menubar/index.ts`
+
+- **属性（attribute）**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
+- **プロパティ（property）**:
+  - `duration: number` — FLIP morph duration in milliseconds.
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
+  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `sheet: string` — CSS injected into the component's shadow DOM.
+- **イベント**: —
+- **スロット**: `デフォルトスロット`
+- **Part**: `root`
 
 ## `<r-mermaid>`
 

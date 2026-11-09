@@ -175,6 +175,7 @@ const fa: LocaleMessages = {
     theming: 'پوسته',
     themeswitch: 'تعویض پوسته',
     surfaceswitch: 'تعویض سبک',
+    menubar: 'نوار منو',
     builder: 'سازنده',
     server_rendering: 'رندر سمت سرور',
     common: 'عمومی',

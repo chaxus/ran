@@ -1125,6 +1125,21 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 - `render`
 - `toolbar`
 
+### `menubar`
+
+- Tokens: 4
+- Parts: 1
+
+#### Tokens
+<!-- layers: internal: 4 -->
+- `--ran-menubar-align-items`
+- `--ran-menubar-flex`
+- `--ran-menubar-gap`
+- `--ran-space-2`
+
+#### Parts
+- `root`
+
 ### `mermaid`
 
 - Tokens: 35

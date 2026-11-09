@@ -955,12 +955,13 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   flex: none;
   min-width: 0;
 }
-/* Search + language + theme + surface: one tools cluster for a shared hover fill. */
+/* Search + chrome utils + GitHub: one tools cluster for a shared hover fill.
+   Order is search → language/theme/surface → GitHub (outbound last). */
 .header-tools {
   position: relative;
   display: flex;
   align-items: center;
-  /* 8px between peers — same step for search ↔ language ↔ appearance. */
+  /* 8px between peers — same step across the trailing tools row. */
   gap: 8px;
   flex: none;
   margin-inline-start: auto;
@@ -1250,15 +1251,12 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
     width: 32px;
   }
 }
-/* Peer hops: skip dropdown enter/exit so FLIP owns the shared-layout morph. */
-html[data-chrome-switch] r-dropdown.ran-chrome-menu {
-  --ran-dropdown-animation-duration: 0s;
-}
 /*
  * Language / theme / surface chrome menus: soft enter/exit from idle.
  * Width follows the library Floating UI / Radix recipe (min-width = trigger,
  * content may grow). Hosts only constrain height for short viewports.
- * Horizontal hops morph via FLIP in header-tools (Stripe shared-layout recipe).
+ * Horizontal hops: `<r-menubar>` morphs via FLIP and sets
+ * `html[data-ran-menubar-switch]` (library injects the 0s enter/exit rule).
  */
 r-dropdown.ran-chrome-menu {
   --ran-dropdown-animation-duration: 0.28s;

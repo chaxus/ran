@@ -175,6 +175,7 @@ const ja: LocaleMessages = {
     theming: 'テーマ',
     themeswitch: 'テーマ切り替え',
     surfaceswitch: 'スタイル切り替え',
+    menubar: 'メニューバー',
     builder: 'ビルダー',
     server_rendering: 'サーバーサイドレンダリング',
     common: '共通',

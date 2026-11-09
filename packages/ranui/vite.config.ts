@@ -156,6 +156,7 @@ export const componentEntries: Record<string, string> = {
   link: resolve(__dirname, 'components/link/index.ts'),
   'theme-switch': resolve(__dirname, 'components/theme-switch/index.ts'),
   'surface-switch': resolve(__dirname, 'components/surface-switch/index.ts'),
+  menubar: resolve(__dirname, 'components/menubar/index.ts'),
 };
 
 export const es: BuildOptions = {

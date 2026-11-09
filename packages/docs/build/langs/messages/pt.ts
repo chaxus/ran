@@ -175,6 +175,7 @@ const pt: LocaleMessages = {
     theming: 'Temas',
     themeswitch: 'Alternador de tema',
     surfaceswitch: 'Alternador de estilo',
+    menubar: 'Barra de menu',
     builder: 'Construtor',
     server_rendering: 'Renderização no servidor',
     common: 'Comuns',

@@ -143,6 +143,9 @@
       "surface-switch": [
         "./dist/components/surface-switch/index.d.ts"
       ],
+      "menubar": [
+        "./dist/components/menubar/index.d.ts"
+      ],
       "*": [
         "./dist/index.d.ts"
       ],
@@ -436,6 +439,10 @@
     "./surface-switch": {
       "types": "./dist/components/surface-switch/index.d.ts",
       "import": "./dist/surface-switch.js"
+    },
+    "./menubar": {
+      "types": "./dist/components/menubar/index.d.ts",
+      "import": "./dist/menubar.js"
     },
     "./type": {
       "types": "./dist/index.d.ts",

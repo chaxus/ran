@@ -1134,6 +1134,21 @@ once. The vocabulary is the [design system](/src/design/design-system/); the nam
 - `render`
 - `toolbar`
 
+## `menubar`
+
+- Tokens: 4
+- Parts: 1
+
+### Tokens
+<!-- layers: internal: 4 -->
+- `--ran-menubar-align-items`
+- `--ran-menubar-flex`
+- `--ran-menubar-gap`
+- `--ran-space-2`
+
+### Parts
+- `root`
+
 ## `mermaid`
 
 - Tokens: 35
