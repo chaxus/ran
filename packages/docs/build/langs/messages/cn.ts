@@ -164,7 +164,7 @@ const cn: LocaleMessages = {
     caching_precache: '缓存策略与预取',
     bridge_postmessage: 'Bridge 跨上下文通信',
     cross_context_messaging: 'postMessage 桥接',
-    element_api_all_42_elements: '元素 API（全部 42 个元素）',
+    element_api_all_43_elements: '元素 API（全部 43 个元素）',
     style_tokens_parts: '样式令牌与 Part',
     changelog: '更新日志',
     foundations: '基础能力',

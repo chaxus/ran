@@ -16,12 +16,12 @@ and a virtual DOM.
 - [Ran Design](https://ran.chaxus.com/design/): design methodology and canonical references
 - [Agents](https://ran.chaxus.com/agents/): unified plugin skills, installation and publication status
 
-- [ranui — Web Components UI library](https://ran.chaxus.com/ranui/): 42 custom elements including button, input, select, checkbox, card, tabs, modal, popover, dropdown, progress, message, icon, conversation, markdown, attachments, voice-button, token-meter, player, and more `<r-*>` elements, with theming, i18n, routing and SSR
+- [ranui — Web Components UI library](https://ran.chaxus.com/ranui/): 43 custom elements including button, input, select, checkbox, card, tabs, modal, popover, dropdown, progress, message, icon, conversation, markdown, attachments, voice-button, token-meter, player, and more `<r-*>` elements, with theming, i18n, routing and SSR
 - [Examples](https://ran.chaxus.com/examples/): complete compositions that connect design rationale, live interaction and source
 - [ranui design system](https://ran.chaxus.com/ranui/design-system/): the Geist-based token catalog — colour ladder, semantic tokens, spacing, typography, radius, elevation, stacking, motion
 - [ranui design guidelines](https://ran.chaxus.com/ranui/design-guides/): the rules for building a screen with it — pick a role, let the token supply the value, design every state
 - [ranui coding guidelines](https://ran.chaxus.com/ranui/coding-guides/): entry points, the attribute/property/event contract, styling across the Shadow DOM boundary, SSR, testing, antipatterns
-- [ranui element API](https://ran.chaxus.com/ranui/api): all 42 custom elements with their attributes, properties, events (detail shape + dispatch flags), slots and ::part() names, generated from source
+- [ranui element API](https://ran.chaxus.com/ranui/api): all 43 custom elements with their attributes, properties, events (detail shape + dispatch flags), slots and ::part() names, generated from source
 - [ranui builder](https://ran.chaxus.com/ranui/builder/): the fluent DOM builder with fine-grained reactivity — signals, Show/For/Index, ownership and teardown
 - [ranui server rendering](https://ran.chaxus.com/ranui/ssr/): declarative shadow DOM via renderHTMLToString / renderToStream, and what the client rebuilds
 - [ranui style tokens](https://ran.chaxus.com/ranui/style-tokens): the CSS custom properties and ::part() names every element exposes, extracted from its stylesheet
