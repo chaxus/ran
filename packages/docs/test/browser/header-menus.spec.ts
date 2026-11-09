@@ -6,7 +6,8 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
   await page.waitForFunction(
-    () => customElements.get('r-theme-switch') && customElements.get('r-surface-switch') && customElements.get('r-select'),
+    () =>
+      customElements.get('r-theme-switch') && customElements.get('r-surface-switch') && customElements.get('r-select'),
   );
 });
 
@@ -98,6 +99,7 @@ test('header tools share one gap and hug their labels', async ({ page }) => {
       searchMin: getComputedStyle(search!).minWidth,
       searchJustify: getComputedStyle(search!).justifyContent,
       searchWidth: search!.getBoundingClientRect().width,
+      searchPad: getComputedStyle(search!).paddingInline,
       between: [gapBetween(search, langs), gapBetween(langs, theme), gapBetween(theme, surface)],
       themeMin: getComputedStyle(theme!).getPropertyValue('--ran-theme-switch-min-width').trim(),
       surfaceMin: getComputedStyle(surface!).getPropertyValue('--ran-surface-switch-min-width').trim(),
@@ -109,7 +111,43 @@ test('header tools share one gap and hug their labels', async ({ page }) => {
   expect(['0px', 'auto']).toContain(metrics.searchMin);
   expect(metrics.searchJustify).not.toBe('space-between');
   expect(metrics.searchWidth).toBeLessThan(160);
+  expect(metrics.searchPad).toMatch(/12px/);
   for (const gap of metrics.between) expect(gap).toBeCloseTo(8, 0);
   expect(['0', '0px']).toContain(metrics.themeMin);
   expect(['0', '0px']).toContain(metrics.surfaceMin);
+});
+
+test('language select navigates on change without fine-pointer hover', async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = window.matchMedia.bind(window);
+    window.matchMedia = ((query: string) => {
+      if (/\(hover:\s*hover\)|\(pointer:\s*fine\)/.test(query)) {
+        return {
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener() {},
+          removeListener() {},
+          addEventListener() {},
+          removeEventListener() {},
+          dispatchEvent() {
+            return false;
+          },
+        } as MediaQueryList;
+      }
+      return original(query);
+    }) as typeof window.matchMedia;
+  });
+  await page.goto('/');
+  await page.waitForFunction(() => customElements.get('r-select'));
+  await page.locator('.lang-switch').evaluate((host: HTMLElement & { open: boolean }) => {
+    host.open = true;
+  });
+  const deutsch = page
+    .locator('r-dropdown.ran-chrome-menu[role="listbox"]')
+    .filter({ hasText: 'English' })
+    .locator('r-dropdown-item')
+    .filter({ hasText: 'Deutsch' });
+  await deutsch.click();
+  await page.waitForURL('**/de/**');
 });

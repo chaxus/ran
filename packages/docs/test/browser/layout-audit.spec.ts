@@ -103,9 +103,19 @@ for (const prefix of ['/cn', '/fa']) {
       .poll(async () => menu.evaluate((element) => Math.ceil(element.getBoundingClientRect().bottom)))
       .toBeLessThanOrEqual(320);
     expect(await menu.evaluate((element) => element.scrollHeight - element.clientHeight)).toBeGreaterThan(0);
+    // Scroll the portaled host — option nodes live in light DOM but may not take focus on Firefox.
+    await menu.evaluate((el) => {
+      el.scrollTop = el.scrollHeight;
+    });
     const last = menu.locator('r-dropdown-item').last();
-    await last.evaluate((el) => el.scrollIntoView({ block: 'nearest' }));
-    await expect(last).toBeInViewport();
+    await expect
+      .poll(async () =>
+        last.evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          return r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight + 1;
+        }),
+      )
+      .toBe(true);
   });
 }
 

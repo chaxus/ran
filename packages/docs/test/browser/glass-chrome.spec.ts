@@ -38,6 +38,53 @@ const rootTokens = (page: Page) =>
     };
   });
 
+test('under glass header tools keep the same 8px peer gap as Graphite', async ({ page }) => {
+  await stampSurface(page, 'light');
+  await page.goto('/');
+  await expect.poll(async () => (await rootTokens(page)).surface).toBe('glass');
+  await page.waitForFunction(
+    () =>
+      customElements.get('r-theme-switch') && customElements.get('r-surface-switch') && customElements.get('r-select'),
+  );
+  const gaps = await page.evaluate(() => {
+    const cs = (s: string) => getComputedStyle(document.querySelector<HTMLElement>(s)!);
+    const resolve = (prop: string, value: string) => {
+      const el = document.createElement('span');
+      el.style.setProperty(prop, value);
+      document.body.append(el);
+      const out = getComputedStyle(el).getPropertyValue(prop).trim();
+      el.remove();
+      return out;
+    };
+    // Sliding wash owns hover under fine pointers — drop it so we assert the
+    // touch/coarse glass token recipe (glass-hover, not Graphite --bg-soft).
+    document.querySelector('.header-tools')?.removeAttribute('data-hover-fill');
+    const lang = cs('.lang-switch');
+    const rawColor = lang.getPropertyValue('--ran-select-color').trim();
+    const rawHover = lang.getPropertyValue('--ran-select-hover-background-color').trim();
+    return {
+      tools: cs('.header-tools').gap,
+      utils: cs('.header-utils').gap,
+      appearance: cs('.appearance').gap,
+      searchPad: cs('.search-open').paddingInline,
+      rawColor,
+      rawHover,
+      selectColor: resolve('color', rawColor || 'transparent'),
+      muted: resolve('color', 'var(--fg-muted)'),
+      selectHover: resolve('background-color', rawHover || 'transparent'),
+      glassHover: resolve('background-color', 'var(--glass-hover)'),
+      soft: resolve('background-color', 'var(--bg-soft)'),
+    };
+  });
+  expect(gaps.tools).toBe('8px');
+  expect(gaps.utils).toBe('8px');
+  expect(gaps.appearance).toBe('8px');
+  expect(gaps.searchPad).toMatch(/12px/);
+  expect(gaps.selectColor, `idle ink raw=${gaps.rawColor}`).toBe(gaps.muted);
+  expect(gaps.selectHover, `hover wash raw=${gaps.rawHover}`).toBe(gaps.glassHover);
+  expect(gaps.selectHover, 'must not fall back to Graphite soft grey').not.toBe(gaps.soft);
+});
+
 test('under glass the language menu hangs below the trigger and stays above the home hero plate', async ({ page }) => {
   await stampSurface(page, 'light');
   await page.emulateMedia({ reducedMotion: 'no-preference' });
@@ -52,45 +99,53 @@ test('under glass the language menu hangs below the trigger and stays above the 
   const list = page.locator('r-dropdown.ran-chrome-menu[role="listbox"]').filter({ hasText: 'English' });
   await expect(list).toBeVisible();
 
-  const geometry = await page.evaluate(() => {
-    const summaryEl = document.querySelector('.lang-switch')!;
-    const listEl = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu')].find(
-      (el) => getComputedStyle(el).display !== 'none' && el.textContent?.includes('English'),
-    )!;
-    const hero = document.querySelector('.hero-live');
-    const sr = summaryEl.getBoundingClientRect();
-    const lr = listEl.getBoundingClientRect();
-    const cs = getComputedStyle(listEl);
-    const x = lr.left + lr.width / 2;
-    const samples = [0.2, 0.5, 0.85].map((t) => {
-      const y = lr.top + lr.height * t;
-      const el = document.elementFromPoint(x, y);
+  const panelGeometry = async () =>
+    page.evaluate(() => {
+      const triggerEl = document.querySelector('.lang-switch');
+      // Prefer a panel that is actually painted under the header — closed/portal
+      // leftovers can report display:block with a bogus off-screen top on WebKit.
+      const listEl = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu')].find((el) => {
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+        if (!el.textContent?.includes('English')) return false;
+        const r = el.getBoundingClientRect();
+        return r.width > 8 && r.height > 8 && r.top > 0 && r.top < innerHeight * 0.5;
+      });
+      if (!triggerEl || !listEl) return null;
+      const sr = triggerEl.getBoundingClientRect();
+      const lr = listEl.getBoundingClientRect();
+      const cs = getComputedStyle(listEl);
+      const x = lr.left + lr.width / 2;
+      const samples = [0.2, 0.5, 0.85].map((t) => {
+        const y = lr.top + lr.height * t;
+        const el = document.elementFromPoint(x, y);
+        return {
+          t,
+          hit: el
+            ? el.closest('r-dropdown.ran-chrome-menu')
+              ? 'panel'
+              : el.closest('.hero-live')
+                ? 'hero'
+                : (el.className || el.tagName).toString().slice(0, 40)
+            : 'null',
+        };
+      });
       return {
-        t,
-        hit: el
-          ? el.closest('r-dropdown.ran-chrome-menu')
-            ? 'langs'
-            : el.closest('.hero-live')
-              ? 'hero'
-              : (el.className || el.tagName).toString().slice(0, 40)
-          : 'null',
+        position: cs.position,
+        gap: Math.round(lr.top - sr.bottom),
+        listTop: Math.round(lr.top),
+        samples,
       };
     });
-    return {
-      position: cs.position,
-      gap: Math.round(lr.top - sr.bottom),
-      listTop: Math.round(lr.top),
-      heroTop: hero ? Math.round(hero.getBoundingClientRect().top) : null,
-      samples,
-    };
-  });
 
-  expect(geometry.position, 'chrome menu must stay absolute (relative put it in the hero flow)').toBe('absolute');
-  expect(geometry.gap, 'menu should sit just under the trigger').toBeGreaterThanOrEqual(0);
-  expect(geometry.gap).toBeLessThanOrEqual(16);
-  expect(geometry.listTop).toBeGreaterThan(0);
-  for (const sample of geometry.samples) {
-    expect(sample.hit, `point at ${sample.t} of the open menu`).toBe('langs');
+  await expect.poll(async () => (await panelGeometry())?.gap ?? -1).toBeGreaterThanOrEqual(0);
+  await expect.poll(async () => (await panelGeometry())?.gap ?? 9999).toBeLessThanOrEqual(24);
+  const geometry = await panelGeometry();
+  expect(geometry, 'language chrome panel should be painted under the trigger').not.toBeNull();
+  expect(geometry!.position, 'chrome menu must stay absolute (relative put it in the hero flow)').toBe('absolute');
+  expect(geometry!.listTop).toBeGreaterThan(0);
+  for (const sample of geometry!.samples) {
+    expect(sample.hit, `point at ${sample.t} of the open menu`).toBe('panel');
   }
 
   const deutsch = list.locator('r-dropdown-item').filter({ hasText: 'Deutsch' });

@@ -86,7 +86,8 @@ const tocHtml = (page: DocPage, label: string): string => {
 };
 
 /**
- * The language menu, rendered as links rather than a script-driven dropdown.
+ * Header language control: the same r-select chrome recipe as theme/surface.
+ * Option values are locale URLs; the client navigates on change.
  *
  * Only locales that actually ship this page appear. A switcher that offers a language
  * and then 404s is worse than one that offers fewer.

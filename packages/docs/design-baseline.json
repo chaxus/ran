@@ -4,7 +4,7 @@
     "dark-unsafe-fallback": {},
     "bare-colour": {
       "styles/demos.css": 3,
-      "styles/docs.css": 4
+      "styles/docs.css": 3
     },
     "spacing-scale": {
       "styles/demos.css": 4

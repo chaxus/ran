@@ -637,7 +637,7 @@ a {
 :root[data-ran-surface='glass'] .header-tools {
   margin-inline-start: auto;
 }
-/* Utilities stay ghost on the plate — icon / label / chevron carry the affordance. */
+/* Utilities stay ghost on the plate — icon / label carry the affordance (no chevron). */
 :root[data-ran-surface='glass'] .search-open {
   position: relative;
   border-radius: var(--glass-control-radius);
@@ -689,11 +689,15 @@ a {
   border-color: transparent;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 18%, transparent);
 }
-:root[data-ran-surface='glass'] .header-primary,
+:root[data-ran-surface='glass'] .header-primary {
+  /* Product links stay a tight capsule on the glass plate. */
+  gap: 4px;
+}
 :root[data-ran-surface='glass'] .header-tools,
 :root[data-ran-surface='glass'] .header-utils,
 :root[data-ran-surface='glass'] .appearance {
-  gap: 4px;
+  /* Same 8px chrome rhythm as Graphite — language / theme / surface are peers. */
+  gap: 8px;
 }
 :root[data-ran-surface='glass'] .hu__hover {
   background: var(--glass-hover);
@@ -724,7 +728,9 @@ a {
   --ran-select-border-radius: var(--glass-control-radius);
   --ran-select-hover-border: 1px solid transparent;
   --ran-select-focus-border: 1px solid transparent;
-  --ran-select-color: var(--fg);
+  /* Match Graphite + search: muted idle ink; glass wash on hover (not Graphite grey). */
+  --ran-select-color: var(--fg-muted);
+  --ran-select-hover-background-color: var(--glass-hover);
   --ran-select-icon-color: var(--fg-muted);
 }
 /*
@@ -745,8 +751,9 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 :root[data-ran-surface='glass'] .search-open {
   min-width: 0;
   height: 32px;
-  padding: 0 8px;
-  gap: 4px;
+  /* Same 12px insets as language / theme / surface triggers — one utility rhythm. */
+  padding: 0 12px;
+  gap: 8px;
 }
 
 /*
@@ -996,6 +1003,7 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 .appearance .surface-switch:not(:defined) {
   min-width: 5.5rem;
 }
+:root[data-ran-surface='glass'] .header-utils .lang-switch:not(:defined),
 :root[data-ran-surface='glass'] .appearance .theme-switch:not(:defined),
 :root[data-ran-surface='glass'] .appearance .surface-switch:not(:defined) {
   border-radius: var(--glass-control-radius, 10px);
@@ -1049,7 +1057,7 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   --ran-select-hover-background-color: var(--bg-soft);
   --ran-select-focus-border: 1px solid transparent;
   --ran-select-color: var(--fg-muted);
-  /* Match language summary weight. */
+  /* Match language trigger weight. */
   --ran-select-font-weight: 400;
   --ran-select-icon-color: var(--fg-muted);
   /* Same soft pill feedback as language and sidebar rows (design: hover ≤100ms). */
@@ -1070,15 +1078,11 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
     display: none;
   }
 }
-@media (max-width: 720px) {
-  .appearance {
-    gap: 0;
-  }
-  .header-tools,
-  .header-utils {
-    gap: 4px;
-  }
-}
+/*
+ * Surface already hides below 1100px, so the utility cluster is search + language +
+ * theme only. Keep the same 8px peer gap as desktop — hug triggers leave enough room
+ * at 320 without tightening the rhythm.
+ */
 /* One fill slides between header tools — same motion language as `.sb__hover`. */
 .hu__hover {
   position: absolute;
@@ -2695,6 +2699,10 @@ ran-demo p {
     min-width: 44px;
     min-height: 44px;
     justify-content: center;
+    padding: 0;
+  }
+  /* Glass densifies search at 12px insets above — reset so the 44× icon target stays centered. */
+  :root[data-ran-surface='glass'] .search-open {
     padding: 0;
   }
 }

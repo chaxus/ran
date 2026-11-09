@@ -110,20 +110,37 @@ const flipChromePanel = (from: DOMRect): void => {
   requestAnimationFrame(() => requestAnimationFrame(run));
 };
 
+/** Locale URLs live in option values — navigate on change (select is not a link menu). */
+const wireLangNavigation = (lang: ChromeSwitch): void => {
+  lang.addEventListener('change', (event) => {
+    const value = (event as CustomEvent<{ value?: string }>).detail?.value || lang.value;
+    if (!value) return;
+    const next = new URL(value, location.href);
+    if (next.pathname === location.pathname && next.search === location.search) return;
+    location.assign(next.href);
+  });
+};
+
 /**
  * Language / theme / surface open on hover and hand off with a FLIP morph so the
  * panel slides with horizontal travel. First open from idle keeps the usual
- * dropdown enter animation. Touch keeps click.
+ * dropdown enter animation. Touch keeps click — but language navigation must
+ * still mount when there is no fine pointer (hover arming stays gated).
  */
 const mountChromeMenus = (): void => {
   const utils = document.querySelector<HTMLElement>('.header-utils');
-  if (!utils || !finePointer()) return;
+  if (!utils) return;
 
   const wire = (): void => {
     const lang = utils.querySelector('.lang-switch') as ChromeSwitch | null;
     const theme = utils.querySelector('.theme-switch') as ChromeSwitch | null;
     const surface = utils.querySelector('.surface-switch') as ChromeSwitch | null;
     if (!lang && !theme && !surface) return;
+
+    // Always wire locale navigation — touch and keyboard rely on click, not hover.
+    if (lang) wireLangNavigation(lang);
+
+    if (!finePointer()) return;
 
     let armed = false;
     let active: ChromeKind | null = null;
@@ -159,7 +176,7 @@ const mountChromeMenus = (): void => {
       window.clearTimeout(leaveTimer);
       if (active === which && armed) return;
       const hopping = armed && active !== null && active !== which;
-      const from = hopping ? openChromePanel()?.getBoundingClientRect() ?? null : null;
+      const from = hopping ? (openChromePanel()?.getBoundingClientRect() ?? null) : null;
       if (hopping) markSwitch();
       armed = true;
       active = which;
@@ -182,15 +199,6 @@ const mountChromeMenus = (): void => {
     lang?.addEventListener('pointerenter', () => arm('lang'));
     theme?.addEventListener('pointerenter', () => arm('theme'));
     surface?.addEventListener('pointerenter', () => arm('surface'));
-
-    // Locale URLs live in option values — navigate on change (select is not a link menu).
-    lang?.addEventListener('change', (event) => {
-      const value = (event as CustomEvent<{ value?: string }>).detail?.value || lang.value;
-      if (!value) return;
-      const next = new URL(value, location.href);
-      if (next.pathname === location.pathname && next.search === location.search) return;
-      location.assign(next.href);
-    });
 
     document.addEventListener('pointerover', (event) => {
       const el = event.target as Element | null;
