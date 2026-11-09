@@ -180,6 +180,40 @@ test('product-nav hops drop the outgoing sidebar snapshot', async ({ page, brows
     .toEqual({ oldOpacity: '0', newOpacity: '1' });
 });
 
+test('leaving a railed page drops the outgoing rail snapshot', async ({ page, browserName }) => {
+  // Unpaired old(sb-rail) faded for the slow morph and read as a dark 2px spine on overview/home.
+  test.skip(browserName !== 'chromium', 'Cross-document view transitions own the rail snapshots');
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.addInitScript(() => {
+    addEventListener('pagereveal', (event) => {
+      const transition = (event as Event & { viewTransition: ViewTransition | null }).viewTransition;
+      const state = window as unknown as {
+        railVt?: { oldOpacity: string; fading: boolean } | 'none';
+      };
+      state.railVt = 'none';
+      void transition?.ready.then(() => {
+        const oldOpacity = getComputedStyle(document.documentElement, '::view-transition-old(sb-rail)').opacity;
+        const fading = document
+          .getAnimations()
+          .some(
+            (animation) =>
+              (animation.effect as KeyframeEffect | null)?.pseudoElement === '::view-transition-old(sb-rail)' &&
+              animation.playState === 'running',
+          );
+        state.railVt = { oldOpacity, fading };
+      });
+    });
+  });
+  await page.goto('/ranui/button/');
+  await expect(page.locator('.sidebar .sb__rail')).toHaveCount(1);
+  await page.locator('.site-header .nav__link[href="/ranuts/"]').click();
+  await page.waitForURL('**/ranuts/');
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { railVt?: unknown }).railVt))
+    .toEqual({ oldOpacity: '0', fading: false });
+});
+
 test('the rail marks the current page only where a group line runs, inside the sidebar', async ({ page }) => {
   await page.goto('/design/guide');
   await expect(page.locator('.sidebar .sb__link[aria-current="page"]')).toHaveCount(1);

@@ -1774,6 +1774,21 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 ::view-transition-group(sidebar) {
   animation-duration: 0s;
 }
+/*
+ * The rail is captured apart from the sidebar so a same-tree row change can slide.
+ * An unpaired old rail (deep docs → product overview / home) used the slow group
+ * duration as a fade and read as a dark 2px spine over the new page. Hide the
+ * outgoing snapshot; the group morph still carries a paired new rail.
+ */
+::view-transition-old(sb-rail) {
+  animation: none;
+  opacity: 0;
+  mix-blend-mode: normal;
+}
+::view-transition-new(sb-rail) {
+  animation: none;
+  mix-blend-mode: normal;
+}
 ::view-transition-group(sb-rail) {
   animation-duration: var(--ran-motion-duration-slow);
   animation-timing-function: var(--ran-motion-ease-standard);

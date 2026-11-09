@@ -61,6 +61,11 @@ const mountHoverFill = (root: HTMLElement, targetSelector: string): void => {
   root.addEventListener('focusout', (event) => {
     if (!root.contains(event.relatedTarget as Node | null) && !root.matches(':hover')) hide();
   });
+  // Drop the wash before the navigation snapshot so a hovered product link is not
+  // frozen into the outgoing root capture as a grey pill over the next header.
+  root.addEventListener('click', (event) => {
+    if (targetOf(event.target)) hide();
+  });
   window.addEventListener('resize', () => {
     if (current) place(current);
   });

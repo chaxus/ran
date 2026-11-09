@@ -86,6 +86,11 @@ export const mountSidebar = (): void => {
   sidebar.addEventListener('focusout', (event) => {
     if (!sidebar.contains(event.relatedTarget as Node | null) && !sidebar.matches(':hover')) hide();
   });
+  // Same as the header wash: clear before the outgoing snapshot so a hovered row is not
+  // painted into the next page's root cross-fade.
+  sidebar.addEventListener('click', (event) => {
+    if ((event.target as Element).closest?.('.sb__link')) hide();
+  });
   // Opening or closing a group moves every row below it (`toggle` does not bubble), and a
   // resize or a font-size change can rewrap the labels.
   const replace = (): void => {
