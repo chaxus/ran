@@ -616,8 +616,8 @@ export class Select extends RanElement {
   /**
    * Under document glass (or an explicit glass dropdown surface), one sliding
    * fill tracks the listbox cursor instead of each row flashing its own
-   * background. Value menus stay `r-select`; URL menus (docs language) stay
-   * `<details>` + `<a>` — unify the overlay chrome, not the tag.
+   * background. Header chrome (language / theme / surface) and form selects
+   * share this path; hosts may still orchestrate hover handoff across peers.
    */
   _usesGlassMenuChrome = (): boolean => {
     const explicit = this.dropdownsurface || this._selectionDropdown?.getAttribute('surface') || '';
