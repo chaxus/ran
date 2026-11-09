@@ -1755,11 +1755,18 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   }
 }
 /*
- * Paired docs→docs: old/new stay put (no cross-fade of the rail column). Unpaired
- * docs→landing: hide the orphaned glass snapshot immediately — a default fade shows the
- * backdrop-filter plate as a blurred rectangle over the home hero.
+ * Keep the sidebar column from morphing, but never show old and new snapshots together.
+ * `animation: none` on both left two full-opacity captures stacked for the whole
+ * transition (extended by the slow sb-rail morph) — product-nav hops then double the
+ * labels and leave the captured scrollbar as a dark spine. Drop the outgoing snapshot
+ * immediately; the incoming one holds the column. Same cut clears an unpaired
+ * docs→landing sidebar so it cannot flash over the home hero.
  */
-::view-transition-old(sidebar),
+::view-transition-old(sidebar) {
+  animation: none;
+  opacity: 0;
+  mix-blend-mode: normal;
+}
 ::view-transition-new(sidebar) {
   animation: none;
   mix-blend-mode: normal;
