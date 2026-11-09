@@ -43,7 +43,7 @@ A sticky 60px header, a 272px sidebar from 900px, and a 224px outline from 1240p
 Live examples use real `r-*` elements, loaded per page on demand. `<ran-demo>` and the other `ran-*`
 elements are zero-JavaScript presentational wrappers, so examples stay indexable and readable without
 script. Navigation, sidebar and outline are generated HTML. Language / theme / surface use the same
-`r-select` chrome in the header.
+`r-select` chrome in the header; the repository link sits with search as a peer utility.
 
 ## Motion
 

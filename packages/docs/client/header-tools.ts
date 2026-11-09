@@ -248,7 +248,7 @@ export const mountHeaderTools = (): void => {
   if (primary) mountHoverFill(primary, '.wordmark, .nav__link');
 
   const tools = document.querySelector<HTMLElement>('.header-tools');
-  if (tools) mountHoverFill(tools, '.search-open, .lang-switch, .theme-switch, .surface-switch');
+  if (tools) mountHoverFill(tools, '.search-open, .header-github, .lang-switch, .theme-switch, .surface-switch');
 
   mountChromeMenus();
 };

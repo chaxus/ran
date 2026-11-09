@@ -89,6 +89,7 @@ test('header tools share one gap and hug their labels', async ({ page }) => {
     const gapBetween = (a: HTMLElement | null, b: HTMLElement | null) =>
       a && b ? b.getBoundingClientRect().left - a.getBoundingClientRect().right : NaN;
     const search = q('.search-open');
+    const github = q('.header-github');
     const langs = q('.lang-switch');
     const theme = q('.theme-switch');
     const surface = q('.surface-switch');
@@ -100,7 +101,14 @@ test('header tools share one gap and hug their labels', async ({ page }) => {
       searchJustify: getComputedStyle(search!).justifyContent,
       searchWidth: search!.getBoundingClientRect().width,
       searchPad: getComputedStyle(search!).paddingInline,
-      between: [gapBetween(search, langs), gapBetween(langs, theme), gapBetween(theme, surface)],
+      githubHref: github?.getAttribute('href') ?? '',
+      githubLabel: github?.getAttribute('aria-label') ?? '',
+      between: [
+        gapBetween(search, github),
+        gapBetween(github, langs),
+        gapBetween(langs, theme),
+        gapBetween(theme, surface),
+      ],
       themeMin: getComputedStyle(theme!).getPropertyValue('--ran-theme-switch-min-width').trim(),
       surfaceMin: getComputedStyle(surface!).getPropertyValue('--ran-surface-switch-min-width').trim(),
     };
@@ -112,6 +120,8 @@ test('header tools share one gap and hug their labels', async ({ page }) => {
   expect(metrics.searchJustify).not.toBe('space-between');
   expect(metrics.searchWidth).toBeLessThan(160);
   expect(metrics.searchPad).toMatch(/12px/);
+  expect(metrics.githubHref).toBe('https://github.com/chaxus/ran');
+  expect(metrics.githubLabel).toBe('GitHub');
   for (const gap of metrics.between) expect(gap).toBeCloseTo(8, 0);
   expect(['0', '0px']).toContain(metrics.themeMin);
   expect(['0', '0px']).toContain(metrics.surfaceMin);
