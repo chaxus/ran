@@ -830,30 +830,28 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 :root[data-ran-surface='glass'] .langs__list[data-hover-fill] .langs__link[aria-current='true']:hover {
   background: transparent;
 }
-/*
- * Open/close the language panel with the same scale+fade language as r-dropdown.
- * `allow-discrete` keeps display in the transition so close can fade out.
- */
+/* Glass language panel keeps the same rise+scale open/close as Graphite. */
 :root[data-ran-surface='glass'] .langs__list {
+  transform-origin: top center;
   transition:
-    opacity var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-standard, ease),
-    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-standard, ease),
-    display var(--ran-motion-duration-base, 0.2s) allow-discrete;
+    opacity 0.22s var(--ran-motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform 0.22s var(--ran-motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
+    display 0.22s allow-discrete;
 }
 :root[data-ran-surface='glass'] .langs:not([open]) > .langs__list {
   opacity: 0;
-  transform: scaleY(0.92);
+  transform: translateY(6px) scale(0.96);
   display: none;
 }
 :root[data-ran-surface='glass'] .langs[open] > .langs__list {
   opacity: 1;
-  transform: scaleY(1);
+  transform: translateY(0) scale(1);
   display: block;
 }
 @starting-style {
   :root[data-ran-surface='glass'] .langs[open] > .langs__list {
     opacity: 0;
-    transform: scaleY(0.92);
+    transform: translateY(6px) scale(0.96);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1045,21 +1043,22 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 4px;
+  /* 8px between peers — same step for search ↔ language ↔ appearance. */
+  gap: 8px;
   flex: none;
   margin-inline-start: auto;
 }
-/* Language + theme + surface share one 4px cluster so the three peers read as a set. */
+/* Language + theme + surface share the same 8px rhythm as search. */
 .header-utils {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   flex: none;
 }
 .appearance {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   flex: none;
   padding: 0;
   border: none;
@@ -1088,10 +1087,11 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   vertical-align: middle;
 }
 .appearance .theme-switch:not(:defined) {
-  min-width: 6.5rem;
+  /* Hug the current label; panel min-width covers longer options. */
+  min-width: 4.5rem;
 }
 .appearance .surface-switch:not(:defined) {
-  min-width: 8.75rem;
+  min-width: 5.5rem;
 }
 :root[data-ran-surface='glass'] .appearance .theme-switch:not(:defined),
 :root[data-ran-surface='glass'] .appearance .surface-switch:not(:defined) {
@@ -1126,14 +1126,15 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   --ran-theme-switch-font-size: var(--type-label-1);
   --ran-surface-switch-font-size: var(--type-label-1);
   /*
-   * Fit the current label, but never narrower than the longest option — the portaled
-   * panel copies the trigger width, so a "Light"-sized trigger was clipping "System".
+   * Hug the current label so header peers share one visual rhythm. Longer options
+   * (System / Liquid glass) size the portaled panel via ::part(dropdown) min-width
+   * instead of padding empty space into every trigger.
    */
   --ran-theme-switch-width: fit-content;
-  --ran-theme-switch-min-width: 6.5rem;
+  --ran-theme-switch-min-width: 0;
   --ran-theme-switch-max-width: none;
   --ran-surface-switch-width: fit-content;
-  --ran-surface-switch-min-width: 8.75rem;
+  --ran-surface-switch-min-width: 0;
   --ran-surface-switch-max-width: none;
   --ran-select-item-left: 12px;
   --ran-select-item-right: 12px;
@@ -1170,9 +1171,9 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   .appearance {
     gap: 0;
   }
-  .appearance .theme-switch {
-    --ran-theme-switch-width: 6.5rem;
-    --ran-theme-switch-min-width: 6rem;
+  .header-tools,
+  .header-utils {
+    gap: 4px;
   }
 }
 /* One fill slides between header tools — same motion language as `.sb__hover`. */
@@ -1345,30 +1346,32 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   border: 1px solid var(--rule);
   border-radius: 8px;
   box-shadow: 0 8px 28px -14px rgba(0, 0, 0, 0.4);
-  transform-origin: top right;
+  transform-origin: top center;
   /*
-   * Same scale+fade language as r-dropdown (theme/surface). `allow-discrete` keeps
-   * display in the transition so close can fade out instead of popping.
+   * Fade + soft rise + scale — more travel than a bare scaleY so open/close reads
+   * as motion, not a pop. `allow-discrete` keeps display in the transition so
+   * close can fade out instead of cutting.
    */
   transition:
-    opacity var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-standard, ease),
-    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-standard, ease),
-    display var(--ran-motion-duration-base, 0.2s) allow-discrete;
+    opacity 0.22s var(--ran-motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform 0.22s var(--ran-motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
+    display 0.22s allow-discrete;
 }
 .langs:not([open]) > .langs__list {
   opacity: 0;
-  transform: scaleY(0.92);
+  /* Rise into place from slightly below — keeps the 6px trigger gap during flight. */
+  transform: translateY(6px) scale(0.96);
   display: none;
 }
 .langs[open] > .langs__list {
   opacity: 1;
-  transform: scaleY(1);
+  transform: translateY(0) scale(1);
   display: block;
 }
 @starting-style {
   .langs[open] > .langs__list {
     opacity: 0;
-    transform: scaleY(0.92);
+    transform: translateY(6px) scale(0.96);
   }
 }
 .langs__link {
@@ -1405,6 +1408,18 @@ html[data-chrome-switch] .langs__list {
 }
 html[data-chrome-switch] r-dropdown.ran-chrome-menu {
   --ran-dropdown-animation-duration: 0s;
+}
+/*
+ * Theme/surface chrome menus: a touch more enter/exit travel than the library
+ * default, and a panel floor so a narrow trigger ("Light") does not clip
+ * longer options ("System" / "Liquid glass").
+ */
+r-dropdown.ran-chrome-menu {
+  --ran-dropdown-animation-duration: 0.24s;
+  --ran-dropdown-animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+r-dropdown.ran-chrome-menu::part(dropdown) {
+  min-width: max(100%, 9rem);
 }
 
 /* ── Drawer (no script) ──────────────────────────────────────────────────── */
@@ -1470,7 +1485,8 @@ html[data-chrome-switch] r-dropdown.ran-chrome-menu {
   box-sizing: border-box;
   height: 32px;
   min-height: 32px;
-  padding: 0 8px 0 12px;
+  /* Match language / select trigger insets — hug content, no 180px dead band. */
+  padding: 0 12px;
   border: 1px solid transparent;
   border-radius: 5px;
   background: transparent;
@@ -1647,10 +1663,6 @@ html[data-chrome-switch] r-dropdown.ran-chrome-menu {
 }
 
 @media (min-width: 720px) {
-  .search-open {
-    min-width: 180px;
-    justify-content: space-between;
-  }
   .search-open__text {
     display: inline;
   }

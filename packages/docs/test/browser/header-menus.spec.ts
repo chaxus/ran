@@ -70,3 +70,70 @@ test('language row wash sits under the label, not over it', async ({ page }) => 
   // Not washed-out white-on-wash — body ink on the soft pill.
   expect(contrast.color).not.toMatch(/^rgba?\(255/);
 });
+
+test('header tools share one gap and hug their labels', async ({ page }) => {
+  const metrics = await page.evaluate(() => {
+    const q = (s: string) => document.querySelector<HTMLElement>(s);
+    const gapBetween = (a: HTMLElement | null, b: HTMLElement | null) =>
+      a && b ? b.getBoundingClientRect().left - a.getBoundingClientRect().right : NaN;
+    const search = q('.search-open');
+    const langs = q('.langs__summary');
+    const theme = q('.theme-switch');
+    const surface = q('.surface-switch');
+    return {
+      toolsGap: getComputedStyle(q('.header-tools')!).gap,
+      utilsGap: getComputedStyle(q('.header-utils')!).gap,
+      appearanceGap: getComputedStyle(q('.appearance')!).gap,
+      searchMin: getComputedStyle(search!).minWidth,
+      searchJustify: getComputedStyle(search!).justifyContent,
+      searchWidth: search!.getBoundingClientRect().width,
+      between: [gapBetween(search, langs), gapBetween(langs, theme), gapBetween(theme, surface)],
+      themeMin: getComputedStyle(theme!).getPropertyValue('--ran-theme-switch-min-width').trim(),
+      surfaceMin: getComputedStyle(surface!).getPropertyValue('--ran-surface-switch-min-width').trim(),
+    };
+  });
+  expect(metrics.toolsGap).toBe('8px');
+  expect(metrics.utilsGap).toBe('8px');
+  expect(metrics.appearanceGap).toBe('8px');
+  // Hug content: no 180px floor (computed min-width is auto/0).
+  expect(['0px', 'auto']).toContain(metrics.searchMin);
+  expect(metrics.searchJustify).not.toBe('space-between');
+  expect(metrics.searchWidth).toBeLessThan(160);
+  for (const gap of metrics.between) expect(gap).toBeCloseTo(8, 0);
+  expect(['0', '0px']).toContain(metrics.themeMin);
+  expect(['0', '0px']).toContain(metrics.surfaceMin);
+});
+
+test('language menu open transition travels through opacity and rise', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', '@starting-style open sampling is chromium-first');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.mouse.move(0, 0);
+  await page.evaluate(() => {
+    const details = document.querySelector<HTMLDetailsElement>('details.langs');
+    if (details) details.open = false;
+  });
+  const samples: Array<{ open: boolean; opacity: number; y: number }> = [];
+  const hover = page.locator('.langs__summary').hover();
+  for (let i = 0; i < 10; i++) {
+    samples.push(
+      await page.evaluate(() => {
+        const list = document.querySelector('.langs__list');
+        const cs = list ? getComputedStyle(list) : null;
+        const transform = cs?.transform ?? 'none';
+        const match = /matrix\(([^)]+)\)/.exec(transform);
+        const parts = match?.[1]?.split(',').map((n) => Number(n.trim())) ?? [];
+        return {
+          open: !!document.querySelector('.langs[open]'),
+          opacity: Number(cs?.opacity ?? 0),
+          y: parts.length >= 6 ? parts[5]! : 0,
+        };
+      }),
+    );
+    await page.waitForTimeout(20);
+  }
+  await hover;
+  const mid = samples.find((s) => s.open && s.opacity > 0.05 && s.opacity < 0.95);
+  expect(mid, `expected a mid-flight sample, got ${JSON.stringify(samples)}`).toBeTruthy();
+  // Opens by rising from below (positive Y) into place.
+  expect(mid!.y).toBeGreaterThan(0);
+});

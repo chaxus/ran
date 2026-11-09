@@ -50,6 +50,15 @@ test('under glass the language menu hangs below the trigger and stays above the 
   await summary.click();
   const list = page.locator('.langs[open] > .langs__list');
   await expect(list).toBeVisible();
+  // Wait out the open rise+fade so geometry is the settled panel, not mid-flight translateY.
+  await expect
+    .poll(async () =>
+      list.evaluate((el) => {
+        const t = getComputedStyle(el).transform;
+        return t === 'none' || t === 'matrix(1, 0, 0, 1, 0, 0)';
+      }),
+    )
+    .toBe(true);
 
   const geometry = await page.evaluate(() => {
     const summaryEl = document.querySelector('.langs__summary')!;
