@@ -601,7 +601,10 @@ description: 'همهٔ عناصر سفارشی ranui — 42 عنصر همراه 
 کد منبع: `components/surface-switch/index.ts`
 
 - **ویژگی‌ها (attribute)**: `label`, `label-glass`, `label-solid`, `sheet: string`
-- **خصیصه‌ها (property)**: `sheet: string`, `value: RanSurfaceName`
+- **خصیصه‌ها (property)**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
+  - `sheet: string`
+  - `value: RanSurfaceName`
 - **رویدادها**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **اسلات‌ها**: —
@@ -634,6 +637,7 @@ description: 'همهٔ عناصر سفارشی ranui — 42 عنصر همراه 
 
 - **ویژگی‌ها (attribute)**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **خصیصه‌ها (property)**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
   - `sheet: string`
   - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **رویدادها**:

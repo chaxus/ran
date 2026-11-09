@@ -340,6 +340,7 @@ declare global {
     'label-solid'?: string;
     labelSolid?: string;
     sheet?: string;
+    open?: boolean;
     value?: string;
   };
   'r-tab': {
@@ -368,6 +369,7 @@ declare global {
     'label-system'?: string;
     labelSystem?: string;
     sheet?: string;
+    open?: boolean;
     value?: string;
   };
   'r-token-meter': {

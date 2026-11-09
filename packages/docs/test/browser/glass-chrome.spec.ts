@@ -125,7 +125,9 @@ test('under glass the theme menu uses a sliding wash, weight-selected, and no ch
     host.open = true;
   });
   // Home also mounts a Role r-select — scope to the chrome menu class.
-  const panel = page.locator('r-dropdown.ran-chrome-menu[role="listbox"][data-hover-fill]').filter({ hasText: 'Light' });
+  const panel = page
+    .locator('r-dropdown.ran-chrome-menu[role="listbox"][data-hover-fill]')
+    .filter({ hasText: 'Light' });
   await expect(panel).toBeVisible();
 
   // r-dropdown-item uses a closed shadow root — assert the host CSS-var contract

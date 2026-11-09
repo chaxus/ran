@@ -2402,6 +2402,11 @@
       ],
       "properties": [
         {
+          "name": "open",
+          "type": "boolean",
+          "desc": "Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it."
+        },
+        {
           "name": "sheet",
           "type": "string",
           "desc": ""
@@ -2561,6 +2566,11 @@
         "sheet"
       ],
       "properties": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "desc": "Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it."
+        },
         {
           "name": "sheet",
           "type": "string",

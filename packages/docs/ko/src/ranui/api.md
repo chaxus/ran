@@ -601,7 +601,10 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
 소스: `components/surface-switch/index.ts`
 
 - **어트리뷰트**: `label`, `label-glass`, `label-solid`, `sheet: string`
-- **프로퍼티**: `sheet: string`, `value: RanSurfaceName`
+- **프로퍼티**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
+  - `sheet: string`
+  - `value: RanSurfaceName`
 - **이벤트**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **슬롯**: —
@@ -634,6 +637,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 42개 엘리먼트의 �
 
 - **어트리뷰트**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **프로퍼티**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
   - `sheet: string`
   - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **이벤트**:

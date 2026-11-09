@@ -602,7 +602,10 @@ description: 'ranui のすべてのカスタム要素 —— 42 個の要素の�
 ソース: `components/surface-switch/index.ts`
 
 - **属性（attribute）**: `label`, `label-glass`, `label-solid`, `sheet: string`
-- **プロパティ（property）**: `sheet: string`, `value: RanSurfaceName`
+- **プロパティ（property）**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
+  - `sheet: string`
+  - `value: RanSurfaceName`
 - **イベント**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **スロット**: —
@@ -635,6 +638,7 @@ description: 'ranui のすべてのカスタム要素 —— 42 個の要素の�
 
 - **属性（attribute）**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **プロパティ（property）**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
   - `sheet: string`
   - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **イベント**:

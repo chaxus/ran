@@ -604,7 +604,10 @@ Código fuente: `components/state-dot/index.ts`
 Código fuente: `components/surface-switch/index.ts`
 
 - **Atributos**: `label`, `label-glass`, `label-solid`, `sheet: string`
-- **Propiedades**: `sheet: string`, `value: RanSurfaceName`
+- **Propiedades**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
+  - `sheet: string`
+  - `value: RanSurfaceName`
 - **Eventos**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **Slots**: —
@@ -637,6 +640,7 @@ Código fuente: `components/theme-switch/index.ts`
 
 - **Atributos**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **Propiedades**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
   - `sheet: string`
   - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **Eventos**:
