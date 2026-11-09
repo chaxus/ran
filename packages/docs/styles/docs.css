@@ -638,7 +638,8 @@ a {
   margin-inline-start: auto;
 }
 /* Utilities stay ghost on the plate — icon / label carry the affordance (no chevron). */
-:root[data-ran-surface='glass'] .search-open {
+:root[data-ran-surface='glass'] .search-open,
+:root[data-ran-surface='glass'] .header-github {
   position: relative;
   border-radius: var(--glass-control-radius);
   background: transparent;
@@ -665,7 +666,8 @@ a {
   );
   pointer-events: none;
 }
-:root[data-ran-surface='glass'] .search-open:hover {
+:root[data-ran-surface='glass'] .search-open:hover,
+:root[data-ran-surface='glass'] .header-github:hover {
   background: var(--glass-hover);
   border-color: transparent;
 }
@@ -675,7 +677,8 @@ a {
   border-color: color-mix(in srgb, var(--fg-muted) 28%, transparent);
   color: var(--fg-muted);
 }
-:root[data-ran-theme='dark'][data-ran-surface='glass'] .search-open:hover {
+:root[data-ran-theme='dark'][data-ran-surface='glass'] .search-open:hover,
+:root[data-ran-theme='dark'][data-ran-surface='glass'] .header-github:hover {
   background: var(--glass-hover);
   border-color: transparent;
 }
@@ -705,7 +708,8 @@ a {
 }
 :root[data-ran-surface='glass'] .header-primary[data-hover-fill] .wordmark:hover,
 :root[data-ran-surface='glass'] .header-primary[data-hover-fill] .nav__link:hover,
-:root[data-ran-surface='glass'] .header-tools[data-hover-fill] .search-open:hover {
+:root[data-ran-surface='glass'] .header-tools[data-hover-fill] .search-open:hover,
+:root[data-ran-surface='glass'] .header-tools[data-hover-fill] .header-github:hover {
   /* Sliding pill owns the wash; controls stay rimless. */
   background: transparent;
 }
@@ -745,10 +749,12 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   --ran-dropdown-option-selected-padding-inline-end: var(--ran-space-3, 12px);
 }
 /* Glass chrome is already dense — icon + kbd is enough; label fights the selects. */
-:root[data-ran-surface='glass'] .search-open__text {
+:root[data-ran-surface='glass'] .search-open__text,
+:root[data-ran-surface='glass'] .header-github__text {
   display: none;
 }
-:root[data-ran-surface='glass'] .search-open {
+:root[data-ran-surface='glass'] .search-open,
+:root[data-ran-surface='glass'] .header-github {
   min-width: 0;
   height: 32px;
   /* Same 12px insets as language / theme / surface triggers — one utility rhythm. */
@@ -914,6 +920,7 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 @media (prefers-reduced-motion: reduce) {
   :root[data-ran-surface='glass'] .nav__link,
   :root[data-ran-surface='glass'] .search-open,
+  :root[data-ran-surface='glass'] .header-github,
   :root[data-ran-surface='glass'] .wordmark {
     transition: none;
   }
@@ -1111,7 +1118,8 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 }
 .header-primary[data-hover-fill] .wordmark:hover,
 .header-primary[data-hover-fill] .nav__link:hover,
-.header-tools[data-hover-fill] .search-open:hover {
+.header-tools[data-hover-fill] .search-open:hover,
+.header-tools[data-hover-fill] .header-github:hover {
   background: transparent;
 }
 .header-tools[data-hover-fill] .header-utils .lang-switch,
@@ -1361,6 +1369,45 @@ r-dropdown.ran-chrome-menu::part(dropdown) {
 }
 
 /*
+ * Repository jump — same 32px ghost peer as search. Icon carries the mark on
+ * narrow widths; the word shows beside search's label from 720px up.
+ */
+.header-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  height: 32px;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: var(--type-label-1);
+  text-decoration: none;
+  flex: none;
+  transition:
+    background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
+    border-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease);
+}
+.header-github:hover {
+  background: var(--bg-soft);
+  border-color: transparent;
+  color: var(--fg);
+}
+.header-github__icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+.header-github__text {
+  display: none;
+}
+
+/*
  * `display` belongs on `[open]`, not on the dialog itself.
  *
  * A `<dialog>` is `display: none` until opened — a flat `display: flex` here overrides
@@ -1505,7 +1552,8 @@ r-dropdown.ran-chrome-menu::part(dropdown) {
 }
 
 @media (min-width: 720px) {
-  .search-open__text {
+  .search-open__text,
+  .header-github__text {
     display: inline;
   }
 }
@@ -2701,6 +2749,13 @@ ran-demo p {
     justify-content: center;
     padding: 0;
   }
+  /*
+   * Drawer secondary already lists GitHub. Drop the header peer under 720 so
+   * drawer + wordmark + search + language + theme still fit 320.
+   */
+  .header-github {
+    display: none;
+  }
   /* Glass densifies search at 12px insets above — reset so the 44× icon target stays centered. */
   :root[data-ran-surface='glass'] .search-open {
     padding: 0;
@@ -2854,7 +2909,8 @@ body.drawer-open {
 }
 @media (prefers-reduced-motion: reduce) {
   .nav__link,
-  .search-open {
+  .search-open,
+  .header-github {
     transition: none;
   }
   .header-utils .lang-switch,
