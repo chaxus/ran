@@ -1258,10 +1258,11 @@ html[data-chrome-switch] r-dropdown.ran-chrome-menu {
  * Language / theme / surface chrome menus: soft enter/exit from idle.
  * Width follows the library Floating UI / Radix recipe (min-width = trigger,
  * content may grow). Hosts only constrain height for short viewports.
+ * Horizontal hops morph via FLIP in header-tools (Stripe shared-layout recipe).
  */
 r-dropdown.ran-chrome-menu {
-  --ran-dropdown-animation-duration: 0.24s;
-  --ran-dropdown-animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  --ran-dropdown-animation-duration: 0.28s;
+  --ran-dropdown-animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
   max-height: calc(100dvh - var(--header-h, 60px) - var(--pad, 16px));
   overflow-x: hidden;
   overflow-y: auto;

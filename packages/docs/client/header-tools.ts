@@ -84,30 +84,121 @@ const openChromePanel = (): HTMLElement | null => {
   return null;
 };
 
-/** Shared-layout handoff: morph the new panel from the outgoing panel's box (FLIP). */
+/** Hop duration — keep `data-chrome-switch` this long so enter/exit CSS cannot fight FLIP. */
+const CHROME_HANDOFF_MS = 280;
+/** Decelerating ease matching `--ran-motion-ease-standard`. */
+const CHROME_HANDOFF_EASE = 'cubic-bezier(0.2, 0, 0, 1)';
+
+type ChromePanelHost = HTMLElement & { _shadowDom?: ShadowRoot };
+
+/**
+ * Shared-layout handoff (Stripe / GSAP Flip recipe):
+ * 1. Snap the incoming host onto the outgoing box *before the next paint*
+ *    so the final-size panel never flashes for a frame.
+ * 2. Morph position + size on the host.
+ * 3. Inverse-scale + fade the painted surface so labels do not stretch.
+ */
 const flipChromePanel = (from: DOMRect): void => {
   if (reduceMotion()) return;
-  const run = (): void => {
-    const el = openChromePanel();
-    if (!el) return;
+
+  const paintedOf = (host: ChromePanelHost): HTMLElement | null =>
+    host._shadowDom?.querySelector<HTMLElement>('.ranui-dropdown') ?? null;
+
+  const clearInlineMotion = (host: ChromePanelHost, painted: HTMLElement | null): void => {
+    host.style.transform = '';
+    host.style.transformOrigin = '';
+    host.style.opacity = '';
+    if (!painted) return;
+    painted.style.transform = '';
+    painted.style.transformOrigin = '';
+    painted.style.opacity = '';
+  };
+
+  const run = (attempt: number): void => {
+    const el = openChromePanel() as ChromePanelHost | null;
+    if (!el) {
+      if (attempt < 8) requestAnimationFrame(() => run(attempt + 1));
+      return;
+    }
     const to = el.getBoundingClientRect();
-    if (to.width < 1 || to.height < 1) return;
+    if (to.width < 1 || to.height < 1) {
+      if (attempt < 8) {
+        requestAnimationFrame(() => run(attempt + 1));
+        return;
+      }
+      // Give up: never leave the hop panel invisible.
+      el.style.opacity = '';
+      return;
+    }
     const dx = from.left - to.left;
     const dy = from.top - to.top;
-    const sx = from.width / to.width;
-    const sy = from.height / to.height;
-    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(sx - 1) < 0.02 && Math.abs(sy - 1) < 0.02) return;
+    const sx = from.width / Math.max(to.width, 1);
+    const sy = from.height / Math.max(to.height, 1);
+    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(sx - 1) < 0.02 && Math.abs(sy - 1) < 0.02) {
+      clearInlineMotion(el, paintedOf(el));
+      return;
+    }
+
+    const painted = paintedOf(el);
     el.getAnimations().forEach((animation) => animation.cancel());
-    el.animate(
-      [
-        { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, transformOrigin: '0 0' },
-        { transform: 'translate(0, 0) scale(1, 1)', transformOrigin: '0 0' },
-      ],
-      { duration: 220, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
-    );
+    painted?.getAnimations().forEach((animation) => animation.cancel());
+
+    // Snap onto the outgoing box in this frame (rAF runs before paint) — no
+    // final-position flash. Opacity stays muted until the morph is committed.
+    const fromHost = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+    const invX = 1 / sx;
+    const invY = 1 / sy;
+    el.style.transformOrigin = '0 0';
+    el.style.transform = fromHost;
+    el.style.opacity = '1';
+    if (painted) {
+      painted.style.transformOrigin = '0 0';
+      painted.style.transform = `scale(${invX}, ${invY})`;
+      painted.style.opacity = '0.5';
+    }
+
+    requestAnimationFrame(() => {
+      // Re-check the host still owns the open chrome panel (a faster hop may
+      // have replaced it).
+      if (openChromePanel() !== el) {
+        clearInlineMotion(el, painted);
+        return;
+      }
+      const hostAnim = el.animate(
+        [
+          { transform: fromHost, opacity: 1, transformOrigin: '0 0' },
+          { transform: 'translate(0, 0) scale(1, 1)', opacity: 1, transformOrigin: '0 0' },
+        ],
+        { duration: CHROME_HANDOFF_MS, easing: CHROME_HANDOFF_EASE, fill: 'none' },
+      );
+      void hostAnim.finished
+        .catch(() => undefined)
+        .finally(() => {
+          if (openChromePanel() === el) clearInlineMotion(el, painted);
+        });
+
+      if (!painted) return;
+      const contentAnim = painted.animate(
+        [
+          { transform: `scale(${invX}, ${invY})`, opacity: 0.5, transformOrigin: '0 0' },
+          { transform: 'scale(1, 1)', opacity: 1, transformOrigin: '0 0' },
+        ],
+        { duration: CHROME_HANDOFF_MS, easing: CHROME_HANDOFF_EASE, fill: 'none' },
+      );
+      void contentAnim.finished
+        .catch(() => undefined)
+        .finally(() => {
+          if (openChromePanel() === el) {
+            painted.style.transform = '';
+            painted.style.transformOrigin = '';
+            painted.style.opacity = '';
+          }
+        });
+    });
   };
-  // Select portals + measures on the next frames; wait until the host box is real.
-  requestAnimationFrame(() => requestAnimationFrame(run));
+
+  // First rAF: select has positioned the portal. Snap before that frame paints.
+  requestAnimationFrame(() => run(0));
 };
 
 /** Locale URLs live in option values — navigate on change (select is not a link menu). */
@@ -150,9 +241,10 @@ const mountChromeMenus = (): void => {
     const markSwitch = (): void => {
       document.documentElement.setAttribute('data-chrome-switch', '');
       window.clearTimeout(switchTimer);
+      // Hold for the full morph so a late enter keyframe cannot flash mid-hop.
       switchTimer = window.setTimeout(() => {
         document.documentElement.removeAttribute('data-chrome-switch');
-      }, 100);
+      }, CHROME_HANDOFF_MS + 40);
     };
 
     const setOpen = (host: ChromeSwitch | null, open: boolean): void => {
@@ -182,7 +274,13 @@ const mountChromeMenus = (): void => {
       active = which;
       closePeers(which);
       openWhich(which);
-      if (from) flipChromePanel(from);
+      if (from) {
+        // Hide the incoming host until FLIP snaps it onto `from` — otherwise one
+        // paint shows the final box and reads as a blink.
+        const incoming = openChromePanel();
+        if (incoming) incoming.style.opacity = '0';
+        flipChromePanel(from);
+      }
     };
 
     const disarm = (): void => {
