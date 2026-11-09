@@ -2,10 +2,8 @@
  * One hover fill that slides between sibling controls, matching the sidebar's soft
  * pill motion instead of each control flashing on its own.
  *
- * Header language stays `<details>` + `<a>` (options are locale URLs). Theme and
- * surface stay `r-select` (persisted values). Under glass, r-select owns the same
- * sliding-wash recipe inside its portaled panel — this helper is for in-flow chrome
- * and the language list, not a second select implementation.
+ * Header language, theme and surface are all `r-select` chrome (`ran-chrome-menu`).
+ * Language options are locale URLs (navigate on change); theme/surface persist values.
  */
 const mountHoverFill = (root: HTMLElement, targetSelector: string): void => {
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -72,27 +70,80 @@ const mountHoverFill = (root: HTMLElement, targetSelector: string): void => {
 };
 
 const finePointer = (): boolean => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+const reduceMotion = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-type ChromeSwitch = HTMLElement & { open: boolean };
+type ChromeSwitch = HTMLElement & { open: boolean; value?: string };
+type ChromeKind = 'lang' | 'theme' | 'surface';
+
+const openChromePanel = (): HTMLElement | null => {
+  for (const el of document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu')) {
+    if (getComputedStyle(el).display === 'none') continue;
+    if (el.getClientRects().length === 0) continue;
+    return el;
+  }
+  return null;
+};
+
+/** Shared-layout handoff: morph the new panel from the outgoing panel's box (FLIP). */
+const flipChromePanel = (from: DOMRect): void => {
+  if (reduceMotion()) return;
+  const run = (): void => {
+    const el = openChromePanel();
+    if (!el) return;
+    const to = el.getBoundingClientRect();
+    if (to.width < 1 || to.height < 1) return;
+    const dx = from.left - to.left;
+    const dy = from.top - to.top;
+    const sx = from.width / to.width;
+    const sy = from.height / to.height;
+    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(sx - 1) < 0.02 && Math.abs(sy - 1) < 0.02) return;
+    el.getAnimations().forEach((animation) => animation.cancel());
+    el.animate(
+      [
+        { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, transformOrigin: '0 0' },
+        { transform: 'translate(0, 0) scale(1, 1)', transformOrigin: '0 0' },
+      ],
+      { duration: 220, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+    );
+  };
+  // Select portals + measures on the next frames; wait until the host box is real.
+  requestAnimationFrame(() => requestAnimationFrame(run));
+};
+
+/** Locale URLs live in option values — navigate on change (select is not a link menu). */
+const wireLangNavigation = (lang: ChromeSwitch): void => {
+  lang.addEventListener('change', (event) => {
+    const value = (event as CustomEvent<{ value?: string }>).detail?.value || lang.value;
+    if (!value) return;
+    const next = new URL(value, location.href);
+    if (next.pathname === location.pathname && next.search === location.search) return;
+    location.assign(next.href);
+  });
+};
 
 /**
- * Language / theme / surface open on hover and hand off without a close→open blink.
- * A first open from idle keeps the usual scale+fade; peer hops set `data-chrome-switch`
- * so exit/enter animations are skipped for one frame. Touch keeps click / details.
+ * Language / theme / surface open on hover and hand off with a FLIP morph so the
+ * panel slides with horizontal travel. First open from idle keeps the usual
+ * dropdown enter animation. Touch keeps click — but language navigation must
+ * still mount when there is no fine pointer (hover arming stays gated).
  */
 const mountChromeMenus = (): void => {
   const utils = document.querySelector<HTMLElement>('.header-utils');
-  const langs = document.querySelector<HTMLDetailsElement>('details.langs');
-  if (!utils || !finePointer()) return;
-
-  const summary = langs?.querySelector<HTMLElement>('.langs__summary');
+  if (!utils) return;
 
   const wire = (): void => {
+    const lang = utils.querySelector('.lang-switch') as ChromeSwitch | null;
     const theme = utils.querySelector('.theme-switch') as ChromeSwitch | null;
     const surface = utils.querySelector('.surface-switch') as ChromeSwitch | null;
-    if (!theme && !surface && !langs) return;
+    if (!lang && !theme && !surface) return;
+
+    // Always wire locale navigation — touch and keyboard rely on click, not hover.
+    if (lang) wireLangNavigation(lang);
+
+    if (!finePointer()) return;
 
     let armed = false;
+    let active: ChromeKind | null = null;
     let leaveTimer: number | undefined;
     let switchTimer: number | undefined;
 
@@ -101,54 +152,54 @@ const mountChromeMenus = (): void => {
       window.clearTimeout(switchTimer);
       switchTimer = window.setTimeout(() => {
         document.documentElement.removeAttribute('data-chrome-switch');
-      }, 80);
+      }, 100);
     };
 
-    const setLangsOpen = (open: boolean): void => {
-      if (!langs || langs.open === open) return;
-      langs.open = open;
-    };
-
-    const setSwitchOpen = (host: ChromeSwitch | null, open: boolean): void => {
+    const setOpen = (host: ChromeSwitch | null, open: boolean): void => {
       if (!host || host.open === open) return;
       host.open = open;
     };
 
-    const closePeers = (keep: 'langs' | 'theme' | 'surface' | null): void => {
-      if (keep !== 'langs') setLangsOpen(false);
-      if (keep !== 'theme') setSwitchOpen(theme, false);
-      if (keep !== 'surface') setSwitchOpen(surface, false);
+    const closePeers = (keep: ChromeKind | null): void => {
+      if (keep !== 'lang') setOpen(lang, false);
+      if (keep !== 'theme') setOpen(theme, false);
+      if (keep !== 'surface') setOpen(surface, false);
     };
 
-    const arm = (which: 'langs' | 'theme' | 'surface'): void => {
+    const openWhich = (which: ChromeKind): void => {
+      if (which === 'lang') setOpen(lang, true);
+      else if (which === 'theme') setOpen(theme, true);
+      else setOpen(surface, true);
+    };
+
+    const arm = (which: ChromeKind): void => {
       window.clearTimeout(leaveTimer);
-      if (armed) markSwitch();
+      if (active === which && armed) return;
+      const hopping = armed && active !== null && active !== which;
+      const from = hopping ? (openChromePanel()?.getBoundingClientRect() ?? null) : null;
+      if (hopping) markSwitch();
       armed = true;
-      // Drive open via the switch `open` API (inner select stays click for touch/keyboard).
+      active = which;
       closePeers(which);
-      if (which === 'langs') setLangsOpen(true);
-      else if (which === 'theme') setSwitchOpen(theme, true);
-      else setSwitchOpen(surface, true);
+      openWhich(which);
+      if (from) flipChromePanel(from);
     };
 
     const disarm = (): void => {
       window.clearTimeout(leaveTimer);
       leaveTimer = window.setTimeout(() => {
-        // Portaled panels sit under <body>; relatedTarget is often null on synthetic
-        // hovers, so re-check whether the pointer still covers utils or a chrome menu.
         if (utils.matches(':hover') || document.querySelector('r-dropdown.ran-chrome-menu:hover')) return;
         closePeers(null);
         armed = false;
+        active = null;
         document.documentElement.removeAttribute('data-chrome-switch');
       }, 180);
     };
 
-    langs?.addEventListener('pointerenter', () => arm('langs'));
+    lang?.addEventListener('pointerenter', () => arm('lang'));
     theme?.addEventListener('pointerenter', () => arm('theme'));
     surface?.addEventListener('pointerenter', () => arm('surface'));
 
-    // Portaled select panels live under <body>; keep the cluster armed while the pointer
-    // is on an open chrome menu, and cancel a pending leave when re-entering it.
     document.addEventListener('pointerover', (event) => {
       const el = event.target as Element | null;
       if (!el?.closest?.('r-dropdown.ran-chrome-menu')) return;
@@ -168,25 +219,23 @@ const mountChromeMenus = (): void => {
       disarm();
     });
 
-    // Hover owns open/close; a summary click must not toggle the panel shut mid-hover.
-    summary?.addEventListener('click', (event) => {
-      if (!finePointer()) return;
-      event.preventDefault();
-      arm('langs');
-    });
-
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;
       closePeers(null);
       armed = false;
+      active = null;
     });
   };
 
-  // Switches use a closed shadow tree; wire once the `open` API exists. Prefer sync
-  // when already upgraded so the first hover after `whenDefined` is not a missed microtask.
-  if (customElements.get('r-theme-switch') && customElements.get('r-surface-switch')) wire();
+  const ready =
+    (!document.querySelector('.lang-switch') || customElements.get('r-select')) &&
+    (!document.querySelector('.theme-switch') || customElements.get('r-theme-switch')) &&
+    (!document.querySelector('.surface-switch') || customElements.get('r-surface-switch'));
+
+  if (ready) wire();
   else {
     void Promise.all([
+      customElements.whenDefined('r-select'),
       customElements.whenDefined('r-theme-switch'),
       customElements.whenDefined('r-surface-switch'),
     ]).then(wire);
@@ -199,11 +248,7 @@ export const mountHeaderTools = (): void => {
   if (primary) mountHoverFill(primary, '.wordmark, .nav__link');
 
   const tools = document.querySelector<HTMLElement>('.header-tools');
-  if (tools) mountHoverFill(tools, '.search-open, .langs__summary, .theme-switch, .surface-switch');
-
-  /* Language panel: URL links keep details; wash matches glass r-select rows. */
-  const langsList = document.querySelector<HTMLElement>('.langs__list');
-  if (langsList) mountHoverFill(langsList, '.langs__link');
+  if (tools) mountHoverFill(tools, '.search-open, .lang-switch, .theme-switch, .surface-switch');
 
   mountChromeMenus();
 };

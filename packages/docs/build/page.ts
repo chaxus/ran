@@ -2,10 +2,11 @@
  * The documentation page document.
  *
  * Everything that is not the article itself — the top nav, the sidebar, the outline,
- * previous/next, the language menu — is rendered here, server-side, as plain HTML. The
- * mobile drawer is a checkbox and a label; the only thing the client bundle adds is the
- * theme switch and the code-group tabs. A documentation site that needs JavaScript to
- * show its navigation is a documentation site that shows nothing to a crawler.
+ * previous/next — is rendered here, server-side, as plain HTML. The mobile drawer is a
+ * checkbox and a label. Language / theme / surface are `r-select` chrome (same menu
+ * recipe); they upgrade from the client bundle. A documentation site that needs
+ * JavaScript to show its *navigation* is a documentation site that shows nothing to a
+ * crawler — product links stay plain HTML.
  */
 import type { Assets } from 'ranpress';
 import { LOCALES, SITE } from './config.ts';
@@ -85,7 +86,8 @@ const tocHtml = (page: DocPage, label: string): string => {
 };
 
 /**
- * The language menu, rendered as links rather than a script-driven dropdown.
+ * Header language control: the same r-select chrome recipe as theme/surface.
+ * Option values are locale URLs; the client navigates on change.
  *
  * Only locales that actually ship this page appear. A switcher that offers a language
  * and then 404s is worse than one that offers fewer.
@@ -97,22 +99,20 @@ const langMenuHtml = (page: DocPage, urls: ReadonlySet<string>, label: string): 
     page.kind === 'notfound' ? (dir ? `/${dir}/` : '/') : pageUrl(page.baseRel, dir);
   const options = LOCALES.filter((locale) => page.kind === 'notfound' || urls.has(urlIn(locale.dir)));
   if (options.length < 2) return '';
+  const current = urlIn(page.locale.dir);
   const items = options
     .map(
       (locale) =>
-        `<li><a class="langs__link" href="${escapeHtml(urlIn(locale.dir))}" lang="${locale.lang}"${
-          locale.dir === page.locale.dir ? ' aria-current="true"' : ''
-        }>${escapeHtml(locale.label)}</a></li>`,
+        `<r-option value="${escapeHtml(urlIn(locale.dir))}" lang="${escapeHtml(locale.lang)}">${escapeHtml(
+          locale.label,
+        )}</r-option>`,
     )
     .join('');
-  // Locale options are URLs — keep <details>+<a> (middle-click / new tab / copy link).
-  // Do not fold this into r-select; theme/surface selects are value menus, not navigation.
+  // Same r-select chrome as theme/surface so header menus share hover + FLIP handoff.
+  // Option values are locale URLs; the client navigates on change.
   return (
-    `<details class="langs"><summary class="langs__summary" aria-label="${escapeHtml(label)}">` +
-    `<span class="langs__current">${escapeHtml(page.locale.label)}</span>` +
-    // Globe only on the narrowest phones (label collapses). No chevron — header menus open on hover.
-    `<svg class="langs__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>` +
-    `</summary><ul class="langs__list">${items}</ul></details>`
+    `<r-select class="lang-switch" value="${escapeHtml(current)}" aria-label="${escapeHtml(label)}"` +
+    ` dropdownclass="ran-chrome-menu">${items}</r-select>`
   );
 };
 

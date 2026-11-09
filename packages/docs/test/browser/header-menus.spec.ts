@@ -5,12 +5,19 @@ test.use({ viewport: { width: 1440, height: 900 } });
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
-  await page.waitForFunction(() => customElements.get('r-theme-switch') && customElements.get('r-select'));
+  await page.waitForFunction(
+    () =>
+      customElements.get('r-theme-switch') && customElements.get('r-surface-switch') && customElements.get('r-select'),
+  );
 });
+
+const chromePanel = (page: import('@playwright/test').Page, text: string) =>
+  page.locator('r-dropdown.ran-chrome-menu[role="listbox"]').filter({ hasText: text });
 
 test('header chrome menus have no chevron and open on hover', async ({ page, browserName }) => {
   test.skip(browserName === 'firefox', 'hover menus need a fine pointer hover path');
-  await expect(page.locator('.langs__chevron')).toHaveCount(0);
+  await expect(page.locator('.langs__chevron, details.langs')).toHaveCount(0);
+  await expect(page.locator('.lang-switch')).toHaveCount(1);
 
   const themeIcon = page.locator('.appearance .theme-switch');
   const iconHidden = await themeIcon.evaluate((host) => {
@@ -21,52 +28,126 @@ test('header chrome menus have no chevron and open on hover', async ({ page, bro
   });
   expect(iconHidden).toBe(true);
 
-  await page.locator('.langs__summary').hover();
-  await expect(page.locator('.langs[open] > .langs__list')).toBeVisible();
+  await page.locator('.lang-switch').hover();
+  await expect(chromePanel(page, 'English')).toBeVisible();
 
   await page.locator('.appearance .theme-switch').hover();
-  await expect(page.locator('.langs[open]')).toHaveCount(0);
-  await expect(page.locator('r-dropdown.ran-chrome-menu').filter({ hasText: 'Light' })).toBeVisible();
+  await expect(chromePanel(page, 'Light')).toBeVisible();
+  await expect(chromePanel(page, 'English')).toBeHidden();
+
+  await page.locator('.appearance .surface-switch').hover();
+  await expect(chromePanel(page, 'Graphite')).toBeVisible();
+  await expect(chromePanel(page, 'Light')).toBeHidden();
 });
 
-test('hovering across language and theme skips the close-open blink', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'data-chrome-switch is a fine-pointer handoff');
+test('hovering across chrome menus marks a handoff and morphs the panel', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'FLIP handoff sampling is chromium-first');
   await page.evaluate(() => {
-    const state = window as unknown as { chromeHandoff?: boolean };
+    const state = window as unknown as { chromeHandoff?: boolean; flipSamples?: number[] };
     state.chromeHandoff = false;
+    state.flipSamples = [];
     const watch = new MutationObserver(() => {
       if (document.documentElement.hasAttribute('data-chrome-switch')) state.chromeHandoff = true;
     });
     watch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-chrome-switch'] });
   });
-  await page.locator('.langs__summary').hover();
-  await expect(page.locator('.langs[open] > .langs__list')).toBeVisible();
+  await page.locator('.lang-switch').hover();
+  await expect(chromePanel(page, 'English')).toBeVisible();
+  const fromLeft = await chromePanel(page, 'English').evaluate((el) => el.getBoundingClientRect().left);
+
   await page.locator('.appearance .theme-switch').hover();
-  await expect(page.locator('.langs[open]')).toHaveCount(0);
-  await expect(page.locator('r-dropdown.ran-chrome-menu').filter({ hasText: 'Light' })).toBeVisible();
+  await expect(chromePanel(page, 'Light')).toBeVisible();
   expect(await page.evaluate(() => (window as unknown as { chromeHandoff?: boolean }).chromeHandoff)).toBe(true);
+
+  // Sample the morphing host while FLIP runs — left should travel toward the theme trigger.
+  const samples: number[] = [];
+  for (let i = 0; i < 8; i++) {
+    samples.push(
+      await page.evaluate(() => {
+        const el = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu')].find(
+          (node) => getComputedStyle(node).display !== 'none' && node.getClientRects().length,
+        );
+        if (!el) return NaN;
+        const t = getComputedStyle(el).transform;
+        const m = /matrix\(([^)]+)\)/.exec(t);
+        const parts = m?.[1]?.split(',').map((n) => Number(n.trim())) ?? [];
+        const dx = parts.length >= 6 ? parts[4]! : 0;
+        return el.getBoundingClientRect().left - dx;
+      }),
+    );
+    await page.waitForTimeout(25);
+  }
+  const toLeft = await chromePanel(page, 'Light').evaluate((el) => el.getBoundingClientRect().left);
+  expect(Math.abs(toLeft - fromLeft)).toBeGreaterThan(8);
+  const mid = samples.find((x) => Number.isFinite(x) && x !== fromLeft && x !== toLeft);
+  expect(mid, `expected a mid-flight left, got ${JSON.stringify(samples)}`).toBeTruthy();
 });
 
-test('language row wash sits under the label, not over it', async ({ page }) => {
-  await page.locator('.langs__summary').hover();
-  const list = page.locator('.langs[open] > .langs__list');
-  await expect(list).toBeVisible();
-  const row = list.locator('.langs__link').nth(1);
-  await row.hover();
-  const contrast = await row.evaluate((link) => {
-    const fill = link.closest('.langs__list')?.querySelector('.hu__hover') as HTMLElement | null;
-    const cs = getComputedStyle(link);
-    const fillZ = fill ? getComputedStyle(fill).zIndex : 'none';
+test('header tools share one gap and hug their labels', async ({ page }) => {
+  const metrics = await page.evaluate(() => {
+    const q = (s: string) => document.querySelector<HTMLElement>(s);
+    const gapBetween = (a: HTMLElement | null, b: HTMLElement | null) =>
+      a && b ? b.getBoundingClientRect().left - a.getBoundingClientRect().right : NaN;
+    const search = q('.search-open');
+    const langs = q('.lang-switch');
+    const theme = q('.theme-switch');
+    const surface = q('.surface-switch');
     return {
-      color: cs.color,
-      zIndex: cs.zIndex,
-      position: cs.position,
-      fillZ,
-      fillOpacity: fill ? getComputedStyle(fill).opacity : '0',
+      toolsGap: getComputedStyle(q('.header-tools')!).gap,
+      utilsGap: getComputedStyle(q('.header-utils')!).gap,
+      appearanceGap: getComputedStyle(q('.appearance')!).gap,
+      searchMin: getComputedStyle(search!).minWidth,
+      searchJustify: getComputedStyle(search!).justifyContent,
+      searchWidth: search!.getBoundingClientRect().width,
+      searchPad: getComputedStyle(search!).paddingInline,
+      between: [gapBetween(search, langs), gapBetween(langs, theme), gapBetween(theme, surface)],
+      themeMin: getComputedStyle(theme!).getPropertyValue('--ran-theme-switch-min-width').trim(),
+      surfaceMin: getComputedStyle(surface!).getPropertyValue('--ran-surface-switch-min-width').trim(),
     };
   });
-  expect(contrast.position).toBe('relative');
-  expect(Number(contrast.zIndex)).toBeGreaterThan(Number(contrast.fillZ === 'auto' ? 0 : contrast.fillZ));
-  // Not washed-out white-on-wash — body ink on the soft pill.
-  expect(contrast.color).not.toMatch(/^rgba?\(255/);
+  expect(metrics.toolsGap).toBe('8px');
+  expect(metrics.utilsGap).toBe('8px');
+  expect(metrics.appearanceGap).toBe('8px');
+  expect(['0px', 'auto']).toContain(metrics.searchMin);
+  expect(metrics.searchJustify).not.toBe('space-between');
+  expect(metrics.searchWidth).toBeLessThan(160);
+  expect(metrics.searchPad).toMatch(/12px/);
+  for (const gap of metrics.between) expect(gap).toBeCloseTo(8, 0);
+  expect(['0', '0px']).toContain(metrics.themeMin);
+  expect(['0', '0px']).toContain(metrics.surfaceMin);
+});
+
+test('language select navigates on change without fine-pointer hover', async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = window.matchMedia.bind(window);
+    window.matchMedia = ((query: string) => {
+      if (/\(hover:\s*hover\)|\(pointer:\s*fine\)/.test(query)) {
+        return {
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener() {},
+          removeListener() {},
+          addEventListener() {},
+          removeEventListener() {},
+          dispatchEvent() {
+            return false;
+          },
+        } as MediaQueryList;
+      }
+      return original(query);
+    }) as typeof window.matchMedia;
+  });
+  await page.goto('/');
+  await page.waitForFunction(() => customElements.get('r-select'));
+  await page.locator('.lang-switch').evaluate((host: HTMLElement & { open: boolean }) => {
+    host.open = true;
+  });
+  const deutsch = page
+    .locator('r-dropdown.ran-chrome-menu[role="listbox"]')
+    .filter({ hasText: 'English' })
+    .locator('r-dropdown-item')
+    .filter({ hasText: 'Deutsch' });
+  await deutsch.click();
+  await page.waitForURL('**/de/**');
 });

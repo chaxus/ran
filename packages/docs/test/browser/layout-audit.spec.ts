@@ -17,8 +17,8 @@ test.describe('native global navigation', () => {
       await page.emulateMedia({ colorScheme: ['/de', '/pt', '/fa'].includes(prefix) ? 'dark' : 'light' });
       await page.goto(`${prefix}/`);
       // A closed off-canvas menu must not expose invisible Tab stops.
-      const language = page.locator('.langs__summary');
-      await language.focus();
+      const search = page.locator('.search-open');
+      await search.focus();
       await page.keyboard.press('Tab');
       expect(await page.locator('.sidebar').evaluate((element) => element.contains(document.activeElement))).toBe(
         false,
@@ -53,7 +53,7 @@ test.describe('native global navigation', () => {
       await toggle.focus();
       await page.keyboard.press('Space');
       await expect(toggle).not.toBeChecked();
-      await language.focus();
+      await search.focus();
       await page.keyboard.press('Tab');
       expect(await page.locator('.sidebar').evaluate((element) => element.contains(document.activeElement))).toBe(
         false,
@@ -93,12 +93,29 @@ for (const prefix of ['/cn', '/fa']) {
   test(`the language menu remains usable in a short touch viewport on ${prefix}`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 320 });
     await page.goto(`${prefix}/ranui/`);
-    await page.locator('.langs__summary').click();
-    const menu = page.locator('.langs__list');
-    expect(await menu.evaluate((element) => element.getBoundingClientRect().bottom)).toBeLessThanOrEqual(320);
+    await page.waitForFunction(() => customElements.get('r-select'));
+    await page.locator('.lang-switch').evaluate((host: HTMLElement & { open: boolean }) => {
+      host.open = true;
+    });
+    const menu = page.locator('r-dropdown.ran-chrome-menu[role="listbox"]').filter({ hasText: 'English' });
+    await expect(menu).toBeVisible();
+    await expect
+      .poll(async () => menu.evaluate((element) => Math.ceil(element.getBoundingClientRect().bottom)))
+      .toBeLessThanOrEqual(320);
     expect(await menu.evaluate((element) => element.scrollHeight - element.clientHeight)).toBeGreaterThan(0);
-    await menu.locator('a').last().focus();
-    await expect(menu.locator('a').last()).toBeInViewport();
+    // Scroll the portaled host — option nodes live in light DOM but may not take focus on Firefox.
+    await menu.evaluate((el) => {
+      el.scrollTop = el.scrollHeight;
+    });
+    const last = menu.locator('r-dropdown-item').last();
+    await expect
+      .poll(async () =>
+        last.evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          return r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight + 1;
+        }),
+      )
+      .toBe(true);
   });
 }
 
