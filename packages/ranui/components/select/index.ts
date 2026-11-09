@@ -83,15 +83,23 @@ export class Select extends RanElement {
     placement: () => this.placement,
     offset: 4,
     containerId: () => this.getPopupContainerId,
-    // The panel host tracks the trigger's width, and it has to be set before the
-    // panel is measured: the flip decision reads a height that depends on it.
+    // Floating UI / Radix select sizing: floor at the trigger (`min-width`), let
+    // content grow past it (`width: max-content`). Locking `width` to the trigger
+    // clipped longer options once the host also scrolled (`overflow-y` forces
+    // overflow-x to clip). Expose the trigger width for hosts that want exact
+    // match via CSS (`min-width: var(--ran-select-trigger-width)`).
     beforeMeasure: (anchorRect, panel) => {
-      panel.style.setProperty('width', `${anchorRect.width}px`);
+      const triggerWidth = `${anchorRect.width}px`;
+      panel.style.setProperty('--ran-select-trigger-width', triggerWidth);
+      panel.style.setProperty('min-width', triggerWidth);
+      panel.style.setProperty('width', 'max-content');
+      // Inner surface follows the host: grow with options, never stay narrower
+      // than the trigger floor above.
+      panel.style.setProperty('--ran-dropdown-width', 'max-content');
+      panel.style.setProperty('--ran-dropdown-min-width', '100%');
     },
-    // A consumer can widen the panel *inside* that host (`::part(dropdown)`),
-    // and the overflow is invisible to a measurement taken on the host — so
-    // align and flip against what is actually painted. See r-player's quality
-    // menu, whose trigger is far narrower than its options.
+    // Consumers may still widen further via `::part(dropdown) { min-width }`.
+    // Measure what is painted so align/flip use the visible box (r-player quality).
     measurePanel: (panel) => {
       const shadow = (panel as unknown as { _shadowDom?: ShadowRoot })._shadowDom;
       const rendered = shadow?.querySelector<HTMLElement>('.ranui-dropdown')?.getBoundingClientRect();

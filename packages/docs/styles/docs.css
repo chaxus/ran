@@ -1255,25 +1255,20 @@ html[data-chrome-switch] r-dropdown.ran-chrome-menu {
   --ran-dropdown-animation-duration: 0s;
 }
 /*
- * Language / theme / surface chrome menus: soft enter/exit from idle, and a panel
- * floor so a narrow trigger does not clip longer options (System / Liquid glass /
- * 简体中文). Graphite and glass both use ran-chrome-menu.
- *
- * Select pins the host width to the trigger before measure. Overflow-y on that
- * host also forces overflow-x to clip — so a panel only as wide as "English"
- * ate the right edge of 简体中文 / Português. Floor the host min-width so the
- * scroll container is already wide enough for the longest chrome labels.
+ * Language / theme / surface chrome menus: soft enter/exit from idle.
+ * Width follows the library Floating UI / Radix recipe (min-width = trigger,
+ * content may grow). Hosts only constrain height for short viewports.
  */
 r-dropdown.ran-chrome-menu {
   --ran-dropdown-animation-duration: 0.24s;
   --ran-dropdown-animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  min-width: 10.5rem;
   max-height: calc(100dvh - var(--header-h, 60px) - var(--pad, 16px));
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 r-dropdown.ran-chrome-menu::part(dropdown) {
+  /* Fill the host; host is already max(trigger, content) from r-select. */
   min-width: 100%;
   width: 100%;
   max-height: inherit;

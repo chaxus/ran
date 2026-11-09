@@ -186,8 +186,8 @@ describe('FloatingController', () => {
   });
 
   it('positions against the measured panel size when the host box understates it', async () => {
-    // r-select pins the panel host's width to the trigger's; a consumer can make
-    // the panel inside wider, and that overflow is invisible to the host's rect.
+    // A consumer can widen the painted panel past the host (`::part(dropdown)`),
+    // and that overflow is invisible to the host's rect.
     const { host, panel } = mount();
     host.getBoundingClientRect = () =>
       ({ top: 100, left: 200, width: 50, height: 20, bottom: 120, right: 250 }) as DOMRect;

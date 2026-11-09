@@ -136,18 +136,16 @@ export interface FloatingOptions {
   containerId?: () => string;
   /**
    * Called before the panel is measured, for a component that sizes its panel
-   * from the anchor -- r-select matches the trigger's width, and the width has
-   * to be in place before the height that the flip decision needs is real.
+   * from the anchor. r-select floors `min-width` at the trigger (Floating UI /
+   * Radix pattern) and lets content grow; that sizing must be in place before
+   * the height the flip decision reads is real.
    */
   beforeMeasure?: (anchorRect: DOMRect, panel: HTMLElement) => void;
   /**
-   * The panel's size, when its own box does not report it. r-select pins the
-   * panel host's width to the trigger's, but a consumer can make the panel
-   * *inside* that host wider (`::part(dropdown) { min-width }`, so a long option
-   * is not clipped by a deliberately narrow trigger -- r-player's quality menu
-   * does exactly this). The extra width simply overflows the host, invisible to
-   * a measurement taken on it, and both the alignment and the flip decision
-   * would then be computed against a width nobody sees.
+   * The panel's size, when its own box does not report it. A consumer can still
+   * widen the painted surface past the host (`::part(dropdown) { min-width }`,
+   * e.g. r-player's quality menu). Measure what is painted so align/flip do not
+   * reason about a width nobody sees.
    */
   measurePanel?: (panel: HTMLElement) => { width: number; height: number };
   /**
