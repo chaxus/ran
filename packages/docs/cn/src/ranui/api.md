@@ -600,7 +600,10 @@ description: 'ranui 的全部自定义元素 —— 42 个元素的属性、属�
 源码: `components/surface-switch/index.ts`
 
 - **属性（attribute）**: `label`, `label-glass`, `label-solid`, `sheet: string`
-- **属性值（property）**: `sheet: string`, `value: RanSurfaceName`
+- **属性值（property）**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
+  - `sheet: string`
+  - `value: RanSurfaceName`
 - **事件**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **插槽**: —
@@ -633,6 +636,7 @@ description: 'ranui 的全部自定义元素 —— 42 个元素的属性、属�
 
 - **属性（attribute）**: `label`, `label-dark`, `label-light`, `label-system`, `sheet: string`
 - **属性值（property）**:
+  - `open: boolean` — Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it.
   - `sheet: string`
   - `value: RanThemeName` — Current color theme; falls back to 'system' when nothing is forced.
 - **事件**:

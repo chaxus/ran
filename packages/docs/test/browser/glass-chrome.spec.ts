@@ -120,14 +120,22 @@ test('under glass the theme menu uses a sliding wash, weight-selected, and no ch
   await page.waitForFunction(() => customElements.get('r-theme-switch') && customElements.get('r-select'));
 
   const theme = page.locator('.appearance .theme-switch');
-  await theme.click();
-  const panel = page.locator('r-dropdown[role="listbox"][data-hover-fill]');
+  // Open via the host API so this assertion does not depend on hover-controller timing.
+  await theme.evaluate((host: HTMLElement & { open: boolean }) => {
+    host.open = true;
+  });
+  // Home also mounts a Role r-select — scope to the chrome menu class.
+  const panel = page
+    .locator('r-dropdown.ran-chrome-menu[role="listbox"][data-hover-fill]')
+    .filter({ hasText: 'Light' });
   await expect(panel).toBeVisible();
 
   // r-dropdown-item uses a closed shadow root — assert the host CSS-var contract
   // (weight / no-check) rather than shadow computed styles.
   const chrome = await page.evaluate(() => {
-    const list = document.querySelector('r-dropdown[role="listbox"][data-hover-fill]');
+    const list = [...document.querySelectorAll('r-dropdown.ran-chrome-menu[role="listbox"][data-hover-fill]')].find(
+      (el) => el.textContent?.includes('Light'),
+    );
     if (!list) return null;
     const fill = list.querySelector('.ran-select-option-hover') as HTMLElement | null;
     const items = [...list.querySelectorAll('r-dropdown-item')];
@@ -159,15 +167,28 @@ test('under glass the theme menu uses a sliding wash, weight-selected, and no ch
 
   // Move the cursor to another option; the wash should follow.
   const before = await page.evaluate(() => {
-    const fill = document.querySelector('r-dropdown[data-hover-fill] .ran-select-option-hover') as HTMLElement;
+    const list = [...document.querySelectorAll('r-dropdown.ran-chrome-menu[data-hover-fill]')].find((el) =>
+      el.textContent?.includes('Light'),
+    );
+    const fill = list?.querySelector('.ran-select-option-hover') as HTMLElement | null;
     return fill?.style.transform ?? '';
   });
-  await page.keyboard.press('ArrowDown');
-  const after = await page.evaluate(() => {
-    const fill = document.querySelector('r-dropdown[data-hover-fill] .ran-select-option-hover') as HTMLElement;
-    return fill?.style.transform ?? '';
-  });
-  expect(after).not.toBe(before);
+  // Light is selected under stampSurface('light'); move to Dark so the wash must travel.
+  const option = panel.locator('r-dropdown-item').nth(2);
+  const box = await option.boundingBox();
+  expect(box).not.toBeNull();
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+  await expect
+    .poll(async () =>
+      page.evaluate(() => {
+        const list = [...document.querySelectorAll('r-dropdown.ran-chrome-menu[data-hover-fill]')].find((el) =>
+          el.textContent?.includes('Light'),
+        );
+        const fill = list?.querySelector('.ran-select-option-hover') as HTMLElement | null;
+        return fill?.style.transform ?? '';
+      }),
+    )
+    .not.toBe(before);
 });
 
 test('search placeholder reads as search', async ({ page }) => {

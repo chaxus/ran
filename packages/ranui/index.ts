@@ -78,12 +78,15 @@ export type { SSGPage } from '@/utils/ssg';
 export { I18nCore, createI18n, useI18n } from '@/utils/i18n';
 export type { I18nConfig, MessageDict, LocaleMessages, TranslateParams, LocaleChangeHandler } from '@/utils/i18n';
 
+// Scratch registers through the barrel without exposing a named constructor.
+import '@/components/scratch';
+
 // ── Typed custom elements ───────────────────────────────────────────────────
 // Augment the DOM tag map so `document.querySelector('r-select')` and
 // `document.createElement('r-input')` are typed as the component class — no
 // `as` casts needed to read `.value` and other component properties.
 // Companion tags (`r-option`, `r-dropdown-item`, `r-content`) register with their
-// owners (`ranui/select`, `ranui/popover`). `r-scratch` registers only via `ranui/scratch`.
+// owners (`ranui/select`, `ranui/popover`).
 import type { Button as TButton } from '@/components/button';
 import type { Icon as TIcon } from '@/components/icon';
 import type { ImageElement as TImage } from '@/components/image';

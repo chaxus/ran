@@ -110,9 +110,8 @@ const langMenuHtml = (page: DocPage, urls: ReadonlySet<string>, label: string): 
   return (
     `<details class="langs"><summary class="langs__summary" aria-label="${escapeHtml(label)}">` +
     `<span class="langs__current">${escapeHtml(page.locale.label)}</span>` +
-    // Globe only on the narrowest phones (label collapses); chevron matches theme/surface selects.
+    // Globe only on the narrowest phones (label collapses). No chevron — header menus open on hover.
     `<svg class="langs__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>` +
-    `<svg class="langs__chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10.5c1.6 1.8 2.8 2.8 4 2.8s2.4-1 4-2.8"/></svg>` +
     `</summary><ul class="langs__list">${items}</ul></details>`
   );
 };

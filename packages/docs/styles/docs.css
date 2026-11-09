@@ -623,9 +623,8 @@ a {
   padding: 0 12px;
 }
 :root[data-ran-surface='glass'] .langs__summary {
-  /* Keep the graphite utility metrics (32× chevron) on glass too. */
-  /* design-ok: spacing-scale match r-select chevron room (28px end), under the 4px step */
-  padding: 0 28px 0 12px;
+  /* Same 32× ghost chip as theme/surface — equal 12px inset, no chevron. */
+  padding: 0 12px;
   min-height: 32px;
   height: 32px;
 }
@@ -754,9 +753,6 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   background: transparent;
   border-color: transparent;
   color: var(--fg);
-}
-:root[data-ran-surface='glass'] .langs__chevron {
-  color: var(--fg-muted);
 }
 /* Glass chrome is already dense — icon + kbd is enough; label fights the selects. */
 :root[data-ran-surface='glass'] .search-open__text {
@@ -1140,14 +1136,16 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   --ran-surface-switch-min-width: 8.75rem;
   --ran-surface-switch-max-width: none;
   --ran-select-item-left: 12px;
-  --ran-select-item-right: 28px;
+  --ran-select-item-right: 12px;
   --ran-select-icon-inset-inline-end: 8px;
+  /* Header menus open on hover — drop the chevron; label alone is the affordance. */
+  --ran-select-icon-display: none;
   /* Select hover/focus inherit into the shadow tree. */
   --ran-select-hover-border: 1px solid transparent;
   --ran-select-hover-background-color: var(--bg-soft);
   --ran-select-focus-border: 1px solid transparent;
   --ran-select-color: var(--fg-muted);
-  /* Match language summary weight and chevron ink. */
+  /* Match language summary weight. */
   --ran-select-font-weight: 400;
   --ran-select-icon-color: var(--fg-muted);
   /* Same soft pill feedback as language and sidebar rows (design: hover ≤100ms). */
@@ -1303,11 +1301,10 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 .langs__summary {
   list-style: none;
   cursor: pointer;
-  /* Match r-select trigger: 32px box, 12px start / chevron room at the end. */
+  /* Match r-select trigger: 32px box, equal 12px inset — no chevron room. */
   min-height: 32px;
   height: 32px;
-  /* design-ok: spacing-scale match r-select chevron room (28px end), under the 4px step */
-  padding: 0 28px 0 12px;
+  padding: 0 12px;
   border: 1px solid transparent;
   border-radius: 5px;
   font-size: var(--type-label-1);
@@ -1329,16 +1326,6 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   color: var(--fg);
   background: var(--bg-soft);
 }
-.langs__chevron {
-  position: absolute;
-  inset-inline-end: 8px;
-  top: 50%;
-  width: 16px;
-  height: 16px;
-  transform: translateY(-50%);
-  color: var(--fg-muted);
-  pointer-events: none;
-}
 .langs__list {
   position: absolute;
   inset-inline-end: 0;
@@ -1358,12 +1345,40 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   border: 1px solid var(--rule);
   border-radius: 8px;
   box-shadow: 0 8px 28px -14px rgba(0, 0, 0, 0.4);
+  transform-origin: top right;
+  /*
+   * Same scale+fade language as r-dropdown (theme/surface). `allow-discrete` keeps
+   * display in the transition so close can fade out instead of popping.
+   */
+  transition:
+    opacity var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-standard, ease),
+    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-standard, ease),
+    display var(--ran-motion-duration-base, 0.2s) allow-discrete;
+}
+.langs:not([open]) > .langs__list {
+  opacity: 0;
+  transform: scaleY(0.92);
+  display: none;
+}
+.langs[open] > .langs__list {
+  opacity: 1;
+  transform: scaleY(1);
+  display: block;
+}
+@starting-style {
+  .langs[open] > .langs__list {
+    opacity: 0;
+    transform: scaleY(0.92);
+  }
 }
 .langs__link {
+  /* Above the sliding .hu__hover (z-index:0) — without this the wash covers the label. */
+  position: relative;
+  z-index: 1;
   display: block;
   padding: 8px 12px;
   border-radius: 5px;
-  color: var(--fg-muted);
+  color: var(--fg);
   text-decoration: none;
   font-size: var(--type-label-1);
 }
@@ -1371,9 +1386,25 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   color: var(--fg);
   background: var(--bg-soft);
 }
+.langs__list[data-hover-fill] .langs__link:hover,
+.langs__list[data-hover-fill] .langs__link[aria-current='true']:hover {
+  background: transparent;
+}
 .langs__link[aria-current='true'] {
   color: var(--accent);
   font-weight: 600;
+}
+@media (prefers-reduced-motion: reduce) {
+  .langs__list {
+    transition: none;
+  }
+}
+/* Peer hops (language ↔ theme ↔ surface): skip open/close blink for one handoff. */
+html[data-chrome-switch] .langs__list {
+  transition: none;
+}
+html[data-chrome-switch] r-dropdown.ran-chrome-menu {
+  --ran-dropdown-animation-duration: 0s;
 }
 
 /* ── Drawer (no script) ──────────────────────────────────────────────────── */
@@ -1755,17 +1786,39 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   }
 }
 /*
- * Paired docs→docs: old/new stay put (no cross-fade of the rail column). Unpaired
- * docs→landing: hide the orphaned glass snapshot immediately — a default fade shows the
- * backdrop-filter plate as a blurred rectangle over the home hero.
+ * Keep the sidebar column from morphing, but never show old and new snapshots together.
+ * `animation: none` on both left two full-opacity captures stacked for the whole
+ * transition (extended by the slow sb-rail morph) — product-nav hops then double the
+ * labels and leave the captured scrollbar as a dark spine. Drop the outgoing snapshot
+ * immediately; the incoming one holds the column. Same cut clears an unpaired
+ * docs→landing sidebar so it cannot flash over the home hero.
  */
-::view-transition-old(sidebar),
+::view-transition-old(sidebar) {
+  animation: none;
+  opacity: 0;
+  mix-blend-mode: normal;
+}
 ::view-transition-new(sidebar) {
   animation: none;
   mix-blend-mode: normal;
 }
 ::view-transition-group(sidebar) {
   animation-duration: 0s;
+}
+/*
+ * The rail is captured apart from the sidebar so a same-tree row change can slide.
+ * An unpaired old rail (deep docs → product overview / home) used the slow group
+ * duration as a fade and read as a dark 2px spine over the new page. Hide the
+ * outgoing snapshot; the group morph still carries a paired new rail.
+ */
+::view-transition-old(sb-rail) {
+  animation: none;
+  opacity: 0;
+  mix-blend-mode: normal;
+}
+::view-transition-new(sb-rail) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 ::view-transition-group(sb-rail) {
   animation-duration: var(--ran-motion-duration-slow);
@@ -2938,8 +2991,7 @@ body.drawer-open {
     gap: var(--ran-space-1, 4px);
     padding-inline: var(--ran-space-2, 8px);
   }
-  .langs__current,
-  .langs__chevron {
+  .langs__current {
     display: none;
   }
   .langs__icon {
