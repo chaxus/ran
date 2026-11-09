@@ -228,6 +228,32 @@ describe('FloatingController', () => {
     remove.mockRestore();
   });
 
+  it('does not re-pin the panel when the scroll is inside the panel itself', async () => {
+    // A long select list overflows on the panel. Capture-phase window scroll
+    // still sees those events; treating them like page scroll made the menu
+    // flash on every wheel tick while the pointer stayed put.
+    const { host, panel } = mount();
+    const controller = controllerFor(host, panel);
+    controller.apply(true);
+    await nextFrame();
+
+    const position = vi.spyOn(controller, 'position');
+    const scroll = new Event('scroll', { bubbles: true });
+    Object.defineProperty(scroll, 'target', { value: panel });
+    window.dispatchEvent(scroll);
+    await nextFrame();
+    expect(position).not.toHaveBeenCalled();
+
+    // A page (or outer scroller) scroll still must follow the anchor.
+    const pageScroll = new Event('scroll', { bubbles: true });
+    Object.defineProperty(pageScroll, 'target', { value: document });
+    window.dispatchEvent(pageScroll);
+    await nextFrame();
+    expect(position).toHaveBeenCalled();
+
+    position.mockRestore();
+  });
+
   it('hands the hooks the resolved side and alignment', async () => {
     const { host, panel } = mount();
     const afterPosition = vi.fn();

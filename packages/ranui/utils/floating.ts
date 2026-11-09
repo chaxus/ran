@@ -410,13 +410,34 @@ export class FloatingController {
   }
 
   /**
+   * True when the scroll (or similar) happened inside the floating panel itself.
+   *
+   * Capture-phase window listeners see panel-internal overflow scrolls too. The
+   * anchor has not moved in that case — re-pinning the box every tick is what
+   * makes a long select list flash while the pointer wheels through it.
+   */
+  private scrollIsInsidePanel = (event: Event): boolean => {
+    const panel = this.options.panel();
+    if (!panel) return false;
+    // composedPath walks closed shadow trees (inner ::part overflow surfaces).
+    if (typeof event.composedPath === 'function') {
+      const path = event.composedPath();
+      if (path.includes(panel)) return true;
+    }
+    const target = event.target;
+    return target instanceof Node && (target === panel || panel.contains(target));
+  };
+
+  /**
    * The panel is portalled and positioned once on open, so it comes adrift when
    * the page or any scroll container moves under it -- a select in a sticky
    * header, a popover in a scrolling pane. Capture-phase scroll catches nested
-   * scrollers, which do not bubble.
+   * scrollers, which do not bubble. Scrolls *inside* the panel are ignored: the
+   * list moves, the floating box must stay put.
    */
-  private reposition = (): void => {
+  private reposition = (event?: Event): void => {
     if (!this.opened || this.repositionFrame) return;
+    if (event?.type === 'scroll' && this.scrollIsInsidePanel(event)) return;
     if (typeof requestAnimationFrame !== 'function') {
       this.position();
       return;
