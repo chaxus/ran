@@ -83,6 +83,36 @@ test('hovering across chrome menus marks a handoff and morphs the panel', async 
   expect(mid, `expected a mid-flight left, got ${JSON.stringify(samples)}`).toBeTruthy();
 });
 
+test('language chrome panel is wide enough for longer option labels', async ({ page }) => {
+  await page.locator('.lang-switch').evaluate((host: HTMLElement & { open: boolean }) => {
+    host.open = true;
+  });
+  const panel = page.locator('r-dropdown.ran-chrome-menu[role="listbox"]').filter({ hasText: 'English' });
+  await expect(panel).toBeVisible();
+  const metrics = await panel.evaluate((el) => {
+    const host = el.getBoundingClientRect();
+    const trigger = document.querySelector('.lang-switch')!.getBoundingClientRect();
+    const items = [...el.querySelectorAll('r-dropdown-item')].map((item) => ({
+      text: item.textContent?.trim() ?? '',
+      // Light-DOM host width — closed shadow labels are not readable here.
+      width: Math.round(item.getBoundingClientRect().width),
+    }));
+    return {
+      hostWidth: Math.round(host.width),
+      triggerWidth: Math.round(trigger.width),
+      minWidth: getComputedStyle(el).minWidth,
+      sample: items.find((item) => /Português|简体中文/.test(item.text)) ?? items[0] ?? null,
+    };
+  });
+  // Select pins width to the trigger; min-width must still win so labels are not clipped.
+  expect(metrics.hostWidth).toBeGreaterThan(metrics.triggerWidth);
+  expect(metrics.hostWidth).toBeGreaterThanOrEqual(Math.round(10.5 * 16) - 1);
+  expect(metrics.minWidth).toMatch(/10\.5rem|168px/);
+  expect(metrics.sample).not.toBeNull();
+  // Option row sits inside the panel's 4px inset padding on each side.
+  expect(metrics.sample!.width).toBeGreaterThanOrEqual(metrics.hostWidth - 16);
+});
+
 test('header tools share one gap and hug their labels', async ({ page }) => {
   const metrics = await page.evaluate(() => {
     const q = (s: string) => document.querySelector<HTMLElement>(s);
