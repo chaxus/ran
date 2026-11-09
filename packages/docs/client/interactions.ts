@@ -128,9 +128,8 @@ export const mountNavigation = (): void => {
   document.querySelector('.mobile-toc')?.addEventListener('click', (event) => {
     if ((event.target as Element)?.closest('a')) (event.currentTarget as HTMLDetailsElement).open = false;
   });
-  for (const menu of document.querySelectorAll<HTMLDetailsElement>('.langs, .mobile-toc')) {
+  for (const menu of document.querySelectorAll<HTMLDetailsElement>('.mobile-toc')) {
     const panel =
-      menu.querySelector<HTMLElement>('.langs__list') ??
       menu.querySelector<HTMLElement>('.toc__list') ??
       ([...menu.children].find((child) => child.tagName !== 'SUMMARY') as HTMLElement | undefined);
     const syncInert = (): void => {

@@ -40,29 +40,23 @@ const rootTokens = (page: Page) =>
 
 test('under glass the language menu hangs below the trigger and stays above the home hero plate', async ({ page }) => {
   await stampSurface(page, 'light');
-  // Opt into motion: reduced-motion kills the open transition and can leave display:none mid-way
-  // under allow-discrete in some engines.
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
   await expect.poll(async () => (await rootTokens(page)).surface).toBe('glass');
+  await page.waitForFunction(() => customElements.get('r-select'));
 
-  const summary = page.locator('.langs__summary');
-  await summary.click();
-  const list = page.locator('.langs[open] > .langs__list');
+  const lang = page.locator('.lang-switch');
+  await lang.evaluate((host: HTMLElement & { open: boolean }) => {
+    host.open = true;
+  });
+  const list = page.locator('r-dropdown.ran-chrome-menu[role="listbox"]').filter({ hasText: 'English' });
   await expect(list).toBeVisible();
-  // Wait out the open rise+fade so geometry is the settled panel, not mid-flight translateY.
-  await expect
-    .poll(async () =>
-      list.evaluate((el) => {
-        const t = getComputedStyle(el).transform;
-        return t === 'none' || t === 'matrix(1, 0, 0, 1, 0, 0)';
-      }),
-    )
-    .toBe(true);
 
   const geometry = await page.evaluate(() => {
-    const summaryEl = document.querySelector('.langs__summary')!;
-    const listEl = document.querySelector('.langs[open] > .langs__list')!;
+    const summaryEl = document.querySelector('.lang-switch')!;
+    const listEl = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu')].find(
+      (el) => getComputedStyle(el).display !== 'none' && el.textContent?.includes('English'),
+    )!;
     const hero = document.querySelector('.hero-live');
     const sr = summaryEl.getBoundingClientRect();
     const lr = listEl.getBoundingClientRect();
@@ -74,7 +68,7 @@ test('under glass the language menu hangs below the trigger and stays above the 
       return {
         t,
         hit: el
-          ? el.closest('.langs__list')
+          ? el.closest('r-dropdown.ran-chrome-menu')
             ? 'langs'
             : el.closest('.hero-live')
               ? 'hero'
@@ -91,16 +85,15 @@ test('under glass the language menu hangs below the trigger and stays above the 
     };
   });
 
-  expect(geometry.position, 'langs list must stay absolute (relative put it in the hero flow)').toBe('absolute');
-  expect(geometry.gap, 'menu should sit just under the summary').toBeGreaterThanOrEqual(4);
-  expect(geometry.gap).toBeLessThanOrEqual(12);
+  expect(geometry.position, 'chrome menu must stay absolute (relative put it in the hero flow)').toBe('absolute');
+  expect(geometry.gap, 'menu should sit just under the trigger').toBeGreaterThanOrEqual(0);
+  expect(geometry.gap).toBeLessThanOrEqual(16);
   expect(geometry.listTop).toBeGreaterThan(0);
   for (const sample of geometry.samples) {
     expect(sample.hit, `point at ${sample.t} of the open menu`).toBe('langs');
   }
 
-  // A real click through the overlap proves the menu is not only painted but interactive.
-  const deutsch = page.locator('.langs__link', { hasText: 'Deutsch' });
+  const deutsch = list.locator('r-dropdown-item').filter({ hasText: 'Deutsch' });
   await deutsch.click();
   await page.waitForURL('**/de/**');
 });

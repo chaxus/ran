@@ -450,12 +450,12 @@ chosen by the host, and are never a component's default.
   `label`, `label-system`, `label-light`, `label-dark`). For style / surface language, use
   `<r-surface-switch>` (select of solid / liquid glass). Keep the axes separate so glass still
   respects light and dark, unless the host already owns appearance switching.
-- **SHOULD** Header language (and any menu whose options are **URLs**) stays host `<details>` +
-  `<a>` so middle-click / open-in-new-tab / copy-link work. Theme and surface stay `r-select`
-  because options are **persisted values**, not destinations. Under glass, both use the same
-  overlay cursor recipe (sliding wash, weight for selected; chrome menus may hide the select
-  check via `--ran-dropdown-option-selected-check-display`). Do not force language into
-  `r-select` or theme into `<details>`.
+- **SHOULD** Header language, theme and surface share one `r-select` chrome recipe (ghost
+  trigger, `dropdownclass` such as `ran-chrome-menu`, sliding wash under glass, weight for
+  selected; chrome menus may hide the select check via
+  `--ran-dropdown-option-selected-check-display`). Language options may be locale URLs the host
+  navigates on `change`; theme/surface stay persisted values. Prefer one menu family in the
+  header so hover open and shared-layout handoff stay consistent across Graphite and glass.
 - **SHOULD** Host sidebar / nav sliding washes span the **full row width**, not `fit-content`
   around the label — short copy (e.g. "i18n") still needs a hittable target.
 - **SHOULD** Map the guide's navigation choices to ranui: `r-modal` for a short confirmation or one

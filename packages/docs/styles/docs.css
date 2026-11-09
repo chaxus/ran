@@ -496,8 +496,8 @@ a {
 :root[data-ran-surface='glass'] .site-header__inner {
   /*
    * Frost lives on ::before, not on this box. backdrop-filter on the same element as
-   * the langs <details> list clips absolute overflow to the capsule — the menu then
-   * disappears under the hero. Children keep overflow: visible and paint above the plate.
+   * chrome menus (portaled r-select panels) need overflow visible — frost on this box
+   * would clip them under the hero. Children keep overflow: visible and paint above the plate.
    */
   position: relative;
   overflow: visible;
@@ -606,30 +606,20 @@ a {
   /* design-ok: spacing-scale hairline between capsule links, under the 4px step */
   gap: 1px;
 }
-:root[data-ran-surface='glass'] .nav__link,
-:root[data-ran-surface='glass'] .langs__summary {
+:root[data-ran-surface='glass'] .nav__link {
   border-radius: var(--glass-control-radius);
   border: 1px solid transparent;
+  /* Same 32× box as language / search / selects — hover fill height must match. */
+  height: 32px;
+  min-height: 32px;
+  padding: 0 12px;
   transition:
     background var(--glass-duration) var(--glass-ease),
     color var(--glass-duration) var(--glass-ease),
     border-color var(--glass-duration) var(--glass-ease),
     box-shadow var(--glass-duration) var(--glass-ease);
 }
-:root[data-ran-surface='glass'] .nav__link {
-  /* Same 32× box as language / search / selects — hover fill height must match. */
-  height: 32px;
-  min-height: 32px;
-  padding: 0 12px;
-}
-:root[data-ran-surface='glass'] .langs__summary {
-  /* Same 32× ghost chip as theme/surface — equal 12px inset, no chevron. */
-  padding: 0 12px;
-  min-height: 32px;
-  height: 32px;
-}
-:root[data-ran-surface='glass'] .nav__link:hover,
-:root[data-ran-surface='glass'] .langs__summary:hover {
+:root[data-ran-surface='glass'] .nav__link:hover {
   /* Wash only — no second rim inside the glass plate. */
   background: var(--glass-hover);
   color: var(--fg);
@@ -689,8 +679,7 @@ a {
   background: var(--glass-hover);
   border-color: transparent;
 }
-:root[data-ran-theme='dark'][data-ran-surface='glass'] .nav__link:hover,
-:root[data-ran-theme='dark'][data-ran-surface='glass'] .langs__summary:hover {
+:root[data-ran-theme='dark'][data-ran-surface='glass'] .nav__link:hover {
   background: var(--glass-hover);
   border-color: transparent;
   box-shadow: none;
@@ -712,11 +701,11 @@ a {
 }
 :root[data-ran-surface='glass'] .header-primary[data-hover-fill] .wordmark:hover,
 :root[data-ran-surface='glass'] .header-primary[data-hover-fill] .nav__link:hover,
-:root[data-ran-surface='glass'] .header-tools[data-hover-fill] .langs__summary:hover,
 :root[data-ran-surface='glass'] .header-tools[data-hover-fill] .search-open:hover {
   /* Sliding pill owns the wash; controls stay rimless. */
   background: transparent;
 }
+:root[data-ran-surface='glass'] .header-utils .lang-switch,
 :root[data-ran-surface='glass'] .appearance .theme-switch,
 :root[data-ran-surface='glass'] .appearance .surface-switch {
   /* Same ghost triggers as Graphite — the outer plate is already the glass. */
@@ -726,14 +715,14 @@ a {
   --ran-surface-switch-border-color: transparent;
   --ran-theme-switch-radius: var(--glass-control-radius);
   --ran-surface-switch-radius: var(--glass-control-radius);
-  /* Same 32px trigger as language / search — not a denser 30px sibling. */
   --ran-theme-switch-trigger-min-height: 32px;
   --ran-surface-switch-trigger-min-height: 32px;
-  /* Width/min-width come from `.appearance` — keep longest-option floors on glass too. */
   --ran-theme-switch-width: fit-content;
   --ran-surface-switch-width: fit-content;
+  --ran-select-background-color: transparent;
+  --ran-select-border: 1px solid transparent;
+  --ran-select-border-radius: var(--glass-control-radius);
   --ran-select-hover-border: 1px solid transparent;
-  /* Trigger hover wash: library glass default (--ran-surface-glass-hover); do not re-set. */
   --ran-select-focus-border: 1px solid transparent;
   --ran-select-color: var(--fg);
   --ran-select-icon-color: var(--fg-muted);
@@ -749,11 +738,6 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   --ran-dropdown-option-selected-font-weight: 600;
   --ran-dropdown-option-selected-padding-inline-end: var(--ran-space-3, 12px);
 }
-:root[data-ran-surface='glass'] .langs__summary {
-  background: transparent;
-  border-color: transparent;
-  color: var(--fg);
-}
 /* Glass chrome is already dense — icon + kbd is enough; label fights the selects. */
 :root[data-ran-surface='glass'] .search-open__text {
   display: none;
@@ -764,17 +748,11 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   padding: 0 8px;
   gap: 4px;
 }
-:root[data-ran-surface='glass'] .langs__summary:hover {
-  background: var(--glass-hover);
-  border-color: transparent;
-  box-shadow: none;
-}
 
 /*
  * Transient panels — one overlay language via library tokens (glass root remaps
  * --ran-surface-glass-overlay-* to the site recipe above). Same path as r-dropdown frost.
  */
-:root[data-ran-surface='glass'] .langs__list,
 :root[data-ran-surface='glass'] .search {
   background: var(--ran-surface-glass-overlay-specular), var(--ran-surface-glass-overlay-fill);
   -webkit-backdrop-filter: blur(var(--ran-surface-glass-overlay-blur, 28px)) saturate(180%);
@@ -786,79 +764,6 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 /* Radius only — fill/blur/shadow already come from library overlay frost + token remap. */
 :root[data-ran-surface='glass'] r-dropdown:not([surface='solid'])::part(dropdown) {
   border-radius: 16px;
-}
-/*
- * Language panel chrome siblings the glass r-select overlay: same inset (4px),
- * row radius (8px / sm), ink wash, weight for current. Language stays
- * <details>+<a> (URLs); theme/surface stay r-select (persisted values).
- */
-:root[data-ran-surface='glass'] .langs__list {
-  /* Keep position:absolute from the base rule — relative put the panel in flow and
-     shoved it down the hero (under Invite). Absolute still contains .hu__hover. */
-  min-width: 9rem;
-  padding: var(--ran-space-1, 4px);
-  transform-origin: top right;
-}
-:root[data-ran-surface='glass'] .langs__link {
-  position: relative;
-  z-index: 1;
-  text-align: start;
-  border-radius: var(--ran-radius-sm, 8px);
-  padding: var(--ran-space-2, 8px) var(--ran-space-3, 12px);
-  transition:
-    background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
-    color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease);
-}
-:root[data-ran-surface='glass'] .langs__link:hover {
-  background: var(--glass-hover);
-  color: var(--fg);
-}
-:root[data-ran-surface='glass'] .langs__link[aria-current='true'] {
-  background: transparent;
-  color: var(--fg);
-  font-weight: 600;
-}
-:root[data-ran-surface='glass'] .langs__link[aria-current='true']:hover {
-  background: var(--glass-hover);
-}
-/* Sliding wash inside the language panel — same motion as header / select glass wash. */
-:root[data-ran-surface='glass'] .langs__list .hu__hover {
-  border-radius: var(--ran-radius-sm, 8px);
-  background: var(--glass-hover);
-}
-:root[data-ran-surface='glass'] .langs__list[data-hover-fill] .langs__link:hover,
-:root[data-ran-surface='glass'] .langs__list[data-hover-fill] .langs__link[aria-current='true']:hover {
-  background: transparent;
-}
-/* Glass language panel keeps the same rise+scale open/close as Graphite. */
-:root[data-ran-surface='glass'] .langs__list {
-  transform-origin: top center;
-  transition:
-    opacity 0.22s var(--ran-motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
-    transform 0.22s var(--ran-motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
-    display 0.22s allow-discrete;
-}
-:root[data-ran-surface='glass'] .langs:not([open]) > .langs__list {
-  opacity: 0;
-  transform: translateY(6px) scale(0.96);
-  display: none;
-}
-:root[data-ran-surface='glass'] .langs[open] > .langs__list {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  display: block;
-}
-@starting-style {
-  :root[data-ran-surface='glass'] .langs[open] > .langs__list {
-    opacity: 0;
-    transform: translateY(6px) scale(0.96);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  :root[data-ran-surface='glass'] .langs__list,
-  :root[data-ran-surface='glass'] .langs__link {
-    transition: none;
-  }
 }
 
 /* Reading column: solid enough to read; quieter plate so chrome stays the hero. */
@@ -1001,7 +906,6 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 
 @media (prefers-reduced-motion: reduce) {
   :root[data-ran-surface='glass'] .nav__link,
-  :root[data-ran-surface='glass'] .langs__summary,
   :root[data-ran-surface='glass'] .search-open,
   :root[data-ran-surface='glass'] .wordmark {
     transition: none;
@@ -1012,7 +916,6 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   :root[data-ran-surface='glass'] .site-header__inner::before,
   :root[data-ran-surface='glass'] .sidebar,
   :root[data-ran-surface='glass'] .toc,
-  :root[data-ran-surface='glass'] .langs__list,
   :root[data-ran-surface='glass'] .search {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -1204,10 +1107,10 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 }
 .header-primary[data-hover-fill] .wordmark:hover,
 .header-primary[data-hover-fill] .nav__link:hover,
-.header-tools[data-hover-fill] .search-open:hover,
-.header-tools[data-hover-fill] .langs__summary:hover {
+.header-tools[data-hover-fill] .search-open:hover {
   background: transparent;
 }
+.header-tools[data-hover-fill] .header-utils .lang-switch,
 .header-tools[data-hover-fill] .appearance .theme-switch,
 .header-tools[data-hover-fill] .appearance .surface-switch {
   --ran-select-hover-background-color: transparent;
@@ -1294,132 +1197,67 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   background: transparent;
 }
 
-/* Language menu — a <details>, so it opens with no script and closes on Escape. */
-.langs {
-  position: relative;
+/* Language is an r-select peer of theme/surface — same chrome recipe. */
+.header-utils .lang-switch {
   flex: none;
-}
-.langs__summary {
-  list-style: none;
-  cursor: pointer;
-  /* Match r-select trigger: 32px box, equal 12px inset — no chevron room. */
-  min-height: 32px;
-  height: 32px;
-  padding: 0 12px;
-  border: 1px solid transparent;
-  border-radius: 5px;
-  font-size: var(--type-label-1);
-  color: var(--fg-muted);
-  white-space: nowrap;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-  transition:
+  width: fit-content;
+  min-width: 0;
+  --ran-select-min-height: 32px;
+  --ran-select-font-size: var(--type-label-1);
+  --ran-select-border-radius: 5px;
+  --ran-select-background-color: transparent;
+  --ran-select-border: 1px solid transparent;
+  --ran-select-item-left: 12px;
+  --ran-select-item-right: 12px;
+  --ran-select-icon-display: none;
+  --ran-select-hover-border: 1px solid transparent;
+  --ran-select-hover-background-color: var(--bg-soft);
+  --ran-select-focus-border: 1px solid transparent;
+  --ran-select-color: var(--fg-muted);
+  --ran-select-font-weight: 400;
+  --ran-select-icon-color: var(--fg-muted);
+  --ran-select-transition:
     background-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
     color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
     border-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease);
 }
-.langs__summary::-webkit-details-marker {
-  display: none;
-}
-.langs__summary:hover {
-  color: var(--fg);
-  background: var(--bg-soft);
-}
-.langs__list {
-  position: absolute;
-  inset-inline-end: 0;
-  top: calc(100% + 6px);
-  /* Above header peers (hu__hover) so the open menu is not covered in-header. */
-  z-index: 2;
-  margin: 0;
-  padding: 8px;
-  list-style: none;
-  /* Hug the longest label — a fixed min-width left a dead band beside short names. */
-  width: max-content;
-  min-width: 0;
-  max-height: calc(100dvh - var(--header-h) - var(--pad));
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  background: var(--bg);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  box-shadow: 0 8px 28px -14px rgba(0, 0, 0, 0.4);
-  transform-origin: top center;
-  /*
-   * Fade + soft rise + scale — more travel than a bare scaleY so open/close reads
-   * as motion, not a pop. `allow-discrete` keeps display in the transition so
-   * close can fade out instead of cutting.
-   */
-  transition:
-    opacity 0.22s var(--ran-motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
-    transform 0.22s var(--ran-motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
-    display 0.22s allow-discrete;
-}
-.langs:not([open]) > .langs__list {
-  opacity: 0;
-  /* Rise into place from slightly below — keeps the 6px trigger gap during flight. */
-  transform: translateY(6px) scale(0.96);
-  display: none;
-}
-.langs[open] > .langs__list {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  display: block;
-}
-@starting-style {
-  .langs[open] > .langs__list {
-    opacity: 0;
-    transform: translateY(6px) scale(0.96);
-  }
-}
-.langs__link {
-  /* Above the sliding .hu__hover (z-index:0) — without this the wash covers the label. */
-  position: relative;
-  z-index: 1;
-  display: block;
-  padding: 8px 12px;
-  border-radius: 5px;
-  color: var(--fg);
-  text-decoration: none;
-  font-size: var(--type-label-1);
-}
-.langs__link:hover {
-  color: var(--fg);
-  background: var(--bg-soft);
-}
-.langs__list[data-hover-fill] .langs__link:hover,
-.langs__list[data-hover-fill] .langs__link[aria-current='true']:hover {
+.header-utils .lang-switch:not(:defined) {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 32px;
+  min-height: 32px;
+  min-width: 3.5rem;
   background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  vertical-align: middle;
 }
-.langs__link[aria-current='true'] {
-  color: var(--accent);
-  font-weight: 600;
-}
-@media (prefers-reduced-motion: reduce) {
-  .langs__list {
-    transition: none;
+@media (max-width: 480px) {
+  .header-utils .lang-switch:not(:defined) {
+    min-width: 32px;
+    width: 32px;
   }
 }
-/* Peer hops (language ↔ theme ↔ surface): skip open/close blink for one handoff. */
-html[data-chrome-switch] .langs__list {
-  transition: none;
-}
+/* Peer hops: skip dropdown enter/exit so FLIP owns the shared-layout morph. */
 html[data-chrome-switch] r-dropdown.ran-chrome-menu {
   --ran-dropdown-animation-duration: 0s;
 }
 /*
- * Theme/surface chrome menus: a touch more enter/exit travel than the library
- * default, and a panel floor so a narrow trigger ("Light") does not clip
- * longer options ("System" / "Liquid glass").
+ * Language / theme / surface chrome menus: soft enter/exit from idle, and a panel
+ * floor so a narrow trigger does not clip longer options (System / Liquid glass /
+ * 简体中文). Graphite and glass both use ran-chrome-menu.
  */
 r-dropdown.ran-chrome-menu {
   --ran-dropdown-animation-duration: 0.24s;
   --ran-dropdown-animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Short viewports: scroll inside the panel instead of past the fold. */
+  max-height: calc(100dvh - var(--header-h, 60px) - var(--pad, 16px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 r-dropdown.ran-chrome-menu::part(dropdown) {
   min-width: max(100%, 9rem);
+  max-height: inherit;
 }
 
 /* ── Drawer (no script) ──────────────────────────────────────────────────── */
@@ -2889,8 +2727,6 @@ body.drawer-open {
   }
 }
 @media (pointer: coarse) {
-  .langs__summary,
-  .langs__link,
   .sb__link,
   .search__close {
     min-height: 44px;
@@ -2988,11 +2824,6 @@ body.drawer-open {
 .copy-status:empty {
   display: none;
 }
-.langs__icon {
-  display: none;
-  width: 18px;
-  height: 18px;
-}
 @media (max-width: 620px) {
   .site-header__inner {
     gap: var(--ran-space-2, 8px);
@@ -3003,34 +2834,22 @@ body.drawer-open {
     gap: var(--ran-space-1, 4px);
     padding-inline: var(--ran-space-2, 8px);
   }
-  .langs__current {
-    display: none;
+  /* Drawer + wordmark + search + lang + theme must fit 320; cap chrome selects. */
+  .header-utils .lang-switch {
+    max-width: 4.5rem;
   }
-  .langs__icon {
-    display: block;
-  }
-  .langs__summary {
-    min-width: 44px;
-    min-height: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-  }
-  /* 6rem theme + icon chrome was ~14px over on Firefox at 320; drop the floor. */
   .appearance .theme-switch {
     --ran-theme-switch-width: fit-content;
     --ran-theme-switch-min-width: 0;
-    --ran-theme-switch-max-width: 5.25rem;
+    --ran-theme-switch-max-width: 4.5rem;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .nav__link,
-  .langs__summary,
   .search-open {
     transition: none;
   }
+  .header-utils .lang-switch,
   .appearance .theme-switch,
   .appearance .surface-switch {
     --ran-select-transition: none;

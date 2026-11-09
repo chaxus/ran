@@ -42,13 +42,15 @@ A sticky 60px header, a 272px sidebar from 900px, and a 224px outline from 1240p
 
 Live examples use real `r-*` elements, loaded per page on demand. `<ran-demo>` and the other `ran-*`
 elements are zero-JavaScript presentational wrappers, so examples stay indexable and readable without
-script. Navigation, sidebar, outline and language menu are generated HTML.
+script. Navigation, sidebar and outline are generated HTML. Language / theme / surface use the same
+`r-select` chrome in the header.
 
 ## Motion
 
 Interaction feedback only. Every landing section is visible on first paint; there is no scroll reveal.
-The sidebar's hover fill slides from row to row, and moving between docs pages cross-fades the content
-while the header and sidebar hold still. Both stop under reduced motion.
+The sidebar's hover fill slides from row to row; header language / theme / surface menus open on
+hover and hand off with a shared-layout morph. Moving between docs pages cross-fades the content
+while the header and sidebar hold still. All of that stops under reduced motion.
 
 ## Responsive Rules
 
