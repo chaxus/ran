@@ -48,10 +48,11 @@ export class SurfaceSwitch extends RanElement {
     });
 
     // Portaled panel is outside this shadow tree — chrome menu vars land via dropdownclass.
+    // Host `trigger` (e.g. docs header `hover click`) wins; default stays click.
     this._select = View('r-select')
       .class('ran-surface-switch')
       .attr('part', 'select')
-      .attr('trigger', 'click')
+      .attr('trigger', this.getAttribute('trigger') || 'click')
       .attr('dropdownclass', 'ran-chrome-menu')
       .attr('value', 'solid')
       .children(...options)
@@ -72,6 +73,14 @@ export class SurfaceSwitch extends RanElement {
   }
   set value(v: RanSurfaceName) {
     if (CHOICES.includes(v)) this._selectChoice(v);
+  }
+
+  /** Forwarded to the inner `r-select` so hosts (e.g. docs header hover menus) can open/close it. */
+  get open(): boolean {
+    return Boolean((this._select as unknown as { open?: boolean }).open);
+  }
+  set open(value: boolean) {
+    (this._select as unknown as { open: boolean }).open = Boolean(value);
   }
 
   _label(choice: RanSurfaceName): string {
