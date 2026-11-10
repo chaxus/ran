@@ -233,4 +233,21 @@ describe('mountMenubarHandoff', () => {
     expect(document.documentElement.hasAttribute('data-ran-menubar-viewport')).toBe(false);
     expect(document.querySelector('.ran-menubar-viewport')).toBeNull();
   });
+
+  it('ships a sliding option wash like docs sidebar hover', () => {
+    const root = document.createElement('div');
+    const item = makeItem();
+    root.appendChild(item);
+    document.body.appendChild(root);
+    const stop = mountMenubarHandoff({ root });
+    const viewport = document.querySelector('.ran-menubar-viewport');
+    const fill = document.querySelector('.ran-menubar-viewport__hover');
+    const css = document.getElementById('ran-menubar-viewport-style')?.textContent || '';
+    expect(viewport?.hasAttribute('data-hover-fill')).toBe(true);
+    expect(fill).toBeTruthy();
+    expect(css).toContain('ran-menubar-viewport__hover');
+    expect(css).toMatch(/transform\s+\d+ms/);
+    expect(css).toContain('data-hover-fill');
+    stop();
+  });
 });
