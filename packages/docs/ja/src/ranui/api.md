@@ -623,7 +623,7 @@ description: 'ranui のすべてのカスタム要素 —— 43 個の要素の�
 - **イベント**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **スロット**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-tab>`
 
@@ -658,7 +658,7 @@ description: 'ranui のすべてのカスタム要素 —— 43 個の要素の�
 - **イベント**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **スロット**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-token-meter>`
 

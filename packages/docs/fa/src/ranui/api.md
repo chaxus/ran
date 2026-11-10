@@ -622,7 +622,7 @@ description: 'همهٔ عناصر سفارشی ranui — 43 عنصر همراه 
 - **رویدادها**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **اسلات‌ها**: —
-- **Part‌ها**: `option ${choice}`, `select`
+- **Part‌ها**: `option ${choice}`
 
 ## `<r-tab>`
 
@@ -657,7 +657,7 @@ description: 'همهٔ عناصر سفارشی ranui — 43 عنصر همراه 
 - **رویدادها**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **اسلات‌ها**: —
-- **Part‌ها**: `option ${choice}`, `select`
+- **Part‌ها**: `option ${choice}`
 
 ## `<r-token-meter>`
 

@@ -972,6 +972,13 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   align-items: center;
   gap: 8px;
   flex: none;
+  /*
+   * Build-time Declarative Shadow DOM paints the full select chrome inside the
+   * host before upgrade. Without clipping, that shadow content expands
+   * scrollWidth on narrow no-JS loads (layout-audit / drawer specs).
+   * Portaled menus attach to `document.body`, so host overflow does not clip them.
+   */
+  overflow: hidden;
 }
 .appearance {
   display: flex;
@@ -982,10 +989,17 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   border: none;
   background: transparent;
   box-shadow: none;
+  overflow: hidden;
 }
 .theme-switch,
 .surface-switch {
   flex: none;
+}
+.header-utils .lang-switch,
+.appearance .theme-switch,
+.appearance .surface-switch {
+  overflow: hidden;
+  max-width: 100%;
 }
 /*
  * Before the deferred module upgrades the switches, empty hosts collapse and the

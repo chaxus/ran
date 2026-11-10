@@ -625,7 +625,7 @@ Código fuente: `components/surface-switch/index.ts`
 - **Eventos**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **Slots**: —
-- **Partes**: `option ${choice}`, `select`
+- **Partes**: `option ${choice}`
 
 ## `<r-tab>`
 
@@ -660,7 +660,7 @@ Código fuente: `components/theme-switch/index.ts`
 - **Eventos**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **Slots**: —
-- **Partes**: `option ${choice}`, `select`
+- **Partes**: `option ${choice}`
 
 ## `<r-token-meter>`
 

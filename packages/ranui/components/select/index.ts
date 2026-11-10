@@ -1282,22 +1282,66 @@ export class Select extends RanElement {
       HTMLElement | undefined;
     let label = live ? live.getAttribute('title') || live.textContent?.trim() || '' : '';
     if (!label) {
-      const html = this.innerHTML || '';
-      const optionRe = /<r-option\b([^>]*)>([\s\S]*?)<\/r-option>/gi;
-      let match: RegExpExecArray | null;
-      while ((match = optionRe.exec(html)) !== null) {
-        const attrs = match[1] ?? '';
-        const attrValue = /(?:^|\s)value\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/.exec(attrs);
-        const optionValue = attrValue?.[1] ?? attrValue?.[2] ?? attrValue?.[3] ?? '';
-        if (optionValue !== value) continue;
-        label = match[2]
-          .replace(/<[^>]*>/g, '')
-          .replace(/\s+/g, ' ')
-          .trim();
-        break;
-      }
+      // Prefer a DOM parse over regex on markup — avoids ReDoS / incomplete tag stripping.
+      label = this._labelFromSerializedOptions(value);
     }
     if (label) this._text.textContent = label;
+  }
+
+  /** Read the selected option's text from SSR-injected light-DOM HTML. */
+  private _labelFromSerializedOptions(value: string): string {
+    // Structured children first (appendChild'd options under the HTMLElementMock).
+    try {
+      for (const child of Array.from(this.querySelectorAll('r-option'))) {
+        if (child.getAttribute('value') !== value) continue;
+        return (child.textContent || '').replace(/\s+/g, ' ').trim();
+      }
+    } catch {
+      /* Host may not expose querySelectorAll during serialize. */
+    }
+    const html = this.innerHTML || '';
+    if (!html.includes('r-option')) return '';
+    if (typeof DOMParser !== 'undefined') {
+      try {
+        const doc = new DOMParser().parseFromString(`<div>${html}</div>`, 'text/html');
+        const option = Array.from(doc.querySelectorAll('r-option')).find(
+          (item) => item.getAttribute('value') === value,
+        );
+        return option?.textContent?.replace(/\s+/g, ' ').trim() || '';
+      } catch {
+        /* fall through to linear scan */
+      }
+    }
+    // Linear scan — no nested quantifiers (CodeQL). Option labels in SSR are plain text.
+    const open = '<r-option';
+    const close = '</r-option>';
+    let pos = 0;
+    while (pos < html.length) {
+      const start = html.indexOf(open, pos);
+      if (start === -1) break;
+      const tagEnd = html.indexOf('>', start);
+      if (tagEnd === -1) break;
+      const end = html.indexOf(close, tagEnd + 1);
+      if (end === -1) break;
+      const attrs = html.slice(start + open.length, tagEnd);
+      // SSR always emits quoted attributes (`value="…"` / `value='…'`).
+      if (attrs.includes(`value="${value}"`) || attrs.includes(`value='${value}'`)) {
+        // Option hosts may carry a nested DSD `<template>` plus light-DOM label text.
+        let raw = html.slice(tagEnd + 1, end);
+        let cursor = 0;
+        while (cursor < raw.length) {
+          const tOpen = raw.indexOf('<template', cursor);
+          if (tOpen === -1) break;
+          const tClose = raw.indexOf('</template>', tOpen);
+          if (tClose === -1) break;
+          raw = raw.slice(0, tOpen) + raw.slice(tClose + '</template>'.length);
+          cursor = tOpen;
+        }
+        if (!raw.includes('<')) return raw.replace(/\s+/g, ' ').trim();
+      }
+      pos = end + close.length;
+    }
+    return '';
   }
 }
 

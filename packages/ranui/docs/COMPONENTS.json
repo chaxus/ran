@@ -2469,8 +2469,7 @@
         }
       ],
       "parts": [
-        "option ${choice}",
-        "select"
+        "option ${choice}"
       ],
       "defaultSlot": false,
       "namedSlots": []
@@ -2634,8 +2633,7 @@
         }
       ],
       "parts": [
-        "option ${choice}",
-        "select"
+        "option ${choice}"
       ],
       "defaultSlot": false,
       "namedSlots": []

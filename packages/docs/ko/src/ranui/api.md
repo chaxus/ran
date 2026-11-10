@@ -622,7 +622,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 43개 엘리먼트의 �
 - **이벤트**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **슬롯**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-tab>`
 
@@ -657,7 +657,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 43개 엘리먼트의 �
 - **이벤트**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **슬롯**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-token-meter>`
 

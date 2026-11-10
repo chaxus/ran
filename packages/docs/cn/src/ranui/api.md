@@ -621,7 +621,7 @@ description: 'ranui 的全部自定义元素 —— 43 个元素的属性、属�
 - **事件**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **插槽**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-tab>`
 
@@ -656,7 +656,7 @@ description: 'ranui 的全部自定义元素 —— 43 个元素的属性、属�
 - **事件**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **插槽**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-token-meter>`
 
