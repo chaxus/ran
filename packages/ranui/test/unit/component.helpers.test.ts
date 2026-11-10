@@ -4,6 +4,7 @@ import {
   getStringAttribute,
   hostInternals,
   mountShadowTree,
+  paintedShadowChild,
   setBooleanAttribute,
   setStringAttribute,
   syncSheetAttribute,
@@ -65,6 +66,17 @@ describe('utils/component helpers', () => {
     expect(root.querySelector('.dsd')).toBeNull();
     expect(root.firstElementChild).toBe(live);
     expect(root.querySelector('style')?.textContent).toContain('.mounted {}');
+  });
+
+  it('paintedShadowChild skips style tags and returns the first content element', () => {
+    const host = document.createElement('div');
+    const root = host.attachShadow({ mode: 'open' });
+    const style = document.createElement('style');
+    style.textContent = '.x{}';
+    const content = document.createElement('div');
+    content.className = 'content';
+    root.append(style, content);
+    expect(paintedShadowChild(root)).toBe(content);
   });
 
   it('hostInternals caches ElementInternals per host', () => {

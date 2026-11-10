@@ -304,6 +304,13 @@ export class ShadowRootMock {
     this.options = options;
   }
 
+  /** Element children only — matches `ParentNode.children` for DSD hydrate helpers. */
+  get children(): HTMLElementMock[] {
+    return this.childrenList.filter(
+      (child): child is HTMLElementMock => typeof child !== 'string' && !(child instanceof DocumentFragmentMock),
+    );
+  }
+
   appendChild(node: any): any {
     this.childrenList.push(node);
     return node;

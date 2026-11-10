@@ -16,6 +16,7 @@ import {
   getStringAttribute,
   hostInternals,
   mountShadowTree,
+  paintedShadowChild,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -188,8 +189,12 @@ export class Select extends RanElement {
     this._optionValueMapLabel = new Map();
 
     this._shadowDom = ensureShadowRoot(this, selectCss, { mode: 'closed' }, this._internals);
-    // Always build with ranview refs. DSD is paint-only until upgrade; mounting
-    // replaceChildren the snapshot so we never querySelector to re-bind nodes.
+    // Keep a Declarative Shadow DOM snapshot when present — replaceChildren here
+    // is the refresh flash. Bind by builder child order (no CSS selectors).
+    const painted = paintedShadowChild(this._shadowDom);
+    // Avoid `instanceof HTMLElement` — undefined under Node SSR mocks.
+    if (painted && this._bindPaintedTree(painted as HTMLElement)) return;
+
     const selectionRef = createRef<HTMLDivElement>();
     const selectorRef = createRef<HTMLDivElement>();
     const iconRef = createRef<HTMLElement>();
@@ -237,6 +242,27 @@ export class Select extends RanElement {
     this._text = shadowPart(textRef, 'selection item');
     this._search = shadowPart(searchRef, 'selection search');
     this._slot = shadowPart(slotRef, 'slot');
+  }
+
+  /** Wire refs from a DSD snapshot that matches the builder child order. */
+  private _bindPaintedTree(wrap: HTMLElement): boolean {
+    const selection = wrap.children.item(0) as HTMLDivElement | null;
+    const icon = selection?.children.item(0) as HTMLElement | null;
+    const selector = selection?.children.item(1) as HTMLDivElement | null;
+    const text = selector?.children.item(0) as HTMLSpanElement | null;
+    const search = selector?.children.item(1) as HTMLInputElement | null;
+    const slot = wrap.children.item(1) as HTMLSlotElement | null;
+    if (!selection || !icon || !selector || !text || !search || !slot || slot.tagName.toLowerCase() !== 'slot') {
+      return false;
+    }
+    this._select = wrap as HTMLDivElement;
+    this._selection = selection;
+    this._selector = selector;
+    this._icon = icon;
+    this._text = text;
+    this._search = search;
+    this._slot = slot;
+    return true;
   }
   /**
    * Value of the selected option, submitted with the owning form. Setting it selects the matching option; an empty value clears the selection.

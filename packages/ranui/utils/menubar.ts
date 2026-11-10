@@ -158,18 +158,32 @@ const harvestFromPanel = (panel: HTMLElement): Harvest | null => {
   return { items, width: box.width, height: box.height };
 };
 
-/** True when harvested values look like they belong to this trigger. */
-const harvestMatchesItem = (item: MenubarItem, harvest: Harvest): boolean => {
-  const values = harvest.items.map((entry) => entry.value);
+const THEME_VALUES = new Set(['system', 'light', 'dark']);
+const SURFACE_VALUES = new Set(['solid', 'glass']);
+
+/**
+ * True when harvested option values belong to this trigger.
+ *
+ * Must be strict: during a peer hop the previous portal can still be open, and a
+ * loose match paints the wrong menu under the new trigger (language showing
+ * theme/surface rows, with a clipped outgoing label stuck as a floating chip).
+ */
+export const harvestMatchesItem = (item: MenubarItem, harvest: Harvest): boolean => {
+  const values = harvest.items.map((entry) => entry.value).filter(Boolean);
+  if (!values.length) return false;
   const tag = item.tagName;
-  if (tag === 'R-THEME-SWITCH')
-    return values.some((value) => value === 'light' || value === 'system' || value === 'dark');
-  if (tag === 'R-SURFACE-SWITCH') return values.some((value) => value === 'solid' || value === 'glass');
-  if (tag === 'R-SELECT') {
-    // Language chrome uses locale path values; other selects still match by default.
-    if (values.some((value) => value.startsWith('/') || /^https?:/i.test(value))) return true;
-  }
-  return true;
+  if (tag === 'R-THEME-SWITCH') return values.every((value) => THEME_VALUES.has(value));
+  if (tag === 'R-SURFACE-SWITCH') return values.every((value) => SURFACE_VALUES.has(value));
+
+  // Prefer the select's own light-DOM options (docs language chrome).
+  const options = [...item.querySelectorAll(':scope > r-option')]
+    .map((el) => el.getAttribute('value') || '')
+    .filter(Boolean);
+  if (options.length) return values.every((value) => options.includes(value));
+
+  // Unknown r-select: accept locale-like values only — never theme/surface tokens.
+  if (values.some((value) => THEME_VALUES.has(value) || SURFACE_VALUES.has(value))) return false;
+  return values.every((value) => value.startsWith('/') || /^https?:/i.test(value));
 };
 
 const harvestPanel = (panelSelector: string, item?: MenubarItem): Harvest | null => {
@@ -305,17 +319,20 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     const enterMotion = direction === 'right' ? 'from-end' : 'from-start';
     const leaveMotion = direction === 'right' ? 'to-start' : 'to-end';
     const incoming = buildLayer(harvest, enterMotion, onPick);
+    // Drop any prior leaving layer so a clipped label cannot linger as a chip.
+    for (const stale of [...clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer[data-leaving]`)]) {
+      stale.remove();
+    }
     const outgoing = clip.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__layer:not([data-leaving])`);
     if (outgoing) {
       outgoing.setAttribute('data-leaving', '');
       outgoing.setAttribute('data-motion', leaveMotion);
-      outgoing.addEventListener(
-        'animationend',
-        () => {
-          outgoing.remove();
-        },
-        { once: true },
-      );
+      const drop = (): void => {
+        outgoing.remove();
+      };
+      outgoing.addEventListener('animationend', drop, { once: true });
+      // animationend can miss (interrupted morph / reduced motion mid-flight).
+      window.setTimeout(drop, duration + 80);
     }
     clip.appendChild(incoming);
     // Morph shell toward the new trigger / content box.
