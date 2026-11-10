@@ -16,16 +16,16 @@ import {
 } from '@/utils/component';
 ```
 
-| API                                                        | 说明                                                                          |
-| :--------------------------------------------------------- | :---------------------------------------------------------------------------- |
+| API                                                        | 说明                                                                                      |
+| :--------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
 | `ensureShadowRoot(host, cssText?, options?, internals?)`   | 创建或复用缓存 / Declarative Shadow Root，并应用组件 CSS；不要直接调用 `attachShadow()`。 |
-| `hostInternals(host)`                                      | 创建或复用 `ElementInternals`（封闭 DSD + 表单关联）。 |
-| `mountShadowTree(root, cssText, node)`                     | 用 builder 树 `replaceChildren`（DSD 只负责首屏）；重新应用样式。不做节点查找。 |
-| `shadowPart(ref, name)`                                    | 取出 builder 用 `.ref()` 捕获的元素；从未捕获时抛错并指出是哪个字段。         |
-| `getStringAttribute(element, name, fallback?)`             | 读取属性，并在属性不存在时返回字符串兜底值。                                  |
-| `setStringAttribute(element, name, value, options?)`       | 设置字符串属性；`removeEmpty: true` 会移除空值。                              |
-| `setBooleanAttribute(element, name, value, options?)`      | 设置或移除布尔属性，可选同步到 `aria-*` 属性。                                |
-| `syncSheetAttribute(host, root, name, oldValue, newValue)` | `sheet` 属性变化时，用当前值替换该 Shadow Root 的动态样式。                   |
+| `hostInternals(host)`                                      | 创建或复用 `ElementInternals`（封闭 DSD + 表单关联）。                                    |
+| `mountShadowTree(root, cssText, node)`                     | 用 builder 树 `replaceChildren`（DSD 只负责首屏）；重新应用样式。不做节点查找。           |
+| `shadowPart(ref, name)`                                    | 取出 builder 用 `.ref()` 捕获的元素；从未捕获时抛错并指出是哪个字段。                     |
+| `getStringAttribute(element, name, fallback?)`             | 读取属性，并在属性不存在时返回字符串兜底值。                                              |
+| `setStringAttribute(element, name, value, options?)`       | 设置字符串属性；`removeEmpty: true` 会移除空值。                                          |
+| `setBooleanAttribute(element, name, value, options?)`      | 设置或移除布尔属性，可选同步到 `aria-*` 属性。                                            |
+| `syncSheetAttribute(host, root, name, oldValue, newValue)` | `sheet` 属性变化时，用当前值替换该 Shadow Root 的动态样式。                               |
 
 组件约定：
 

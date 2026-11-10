@@ -16,16 +16,16 @@ import {
 } from '@/utils/component';
 ```
 
-| API                                                        | Description                                                                                             |
-| :--------------------------------------------------------- | :------------------------------------------------------------------------------------------------------ |
+| API                                                        | Description                                                                                                           |
+| :--------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | `ensureShadowRoot(host, cssText?, options?, internals?)`   | Create or reuse a cached / Declarative Shadow Root and apply component CSS. Prefer this over direct `attachShadow()`. |
-| `hostInternals(host)`                                      | Attach or reuse `ElementInternals` (closed DSD + form association). |
-| `mountShadowTree(root, cssText, node)`                     | `replaceChildren` the live builder tree (DSD is paint-only); re-applies styles. No lookups. |
-| `shadowPart(ref, name)`                                    | The element a builder captured with `.ref()`; throws, naming the field, if it never was.                |
-| `getStringAttribute(element, name, fallback?)`             | Read an attribute with a string fallback.                                                               |
-| `setStringAttribute(element, name, value, options?)`       | Set a string attribute; `removeEmpty: true` removes empty values.                                       |
-| `setBooleanAttribute(element, name, value, options?)`      | Set or remove a boolean attribute, optionally mirroring to `aria-*`.                                    |
-| `syncSheetAttribute(host, root, name, oldValue, newValue)` | Replace the root's `sheet` stylesheet with the attribute's current text when it changes.                |
+| `hostInternals(host)`                                      | Attach or reuse `ElementInternals` (closed DSD + form association).                                                   |
+| `mountShadowTree(root, cssText, node)`                     | `replaceChildren` the live builder tree (DSD is paint-only); re-applies styles. No lookups.                           |
+| `shadowPart(ref, name)`                                    | The element a builder captured with `.ref()`; throws, naming the field, if it never was.                              |
+| `getStringAttribute(element, name, fallback?)`             | Read an attribute with a string fallback.                                                                             |
+| `setStringAttribute(element, name, value, options?)`       | Set a string attribute; `removeEmpty: true` removes empty values.                                                     |
+| `setBooleanAttribute(element, name, value, options?)`      | Set or remove a boolean attribute, optionally mirroring to `aria-*`.                                                  |
+| `syncSheetAttribute(host, root, name, oldValue, newValue)` | Replace the root's `sheet` stylesheet with the attribute's current text when it changes.                              |
 
 Component conventions:
 
