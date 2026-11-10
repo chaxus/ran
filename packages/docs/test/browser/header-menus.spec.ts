@@ -119,6 +119,36 @@ test('language chrome panel is wide enough for longer option labels', async ({ p
   expect(metrics.sample!.width).toBeGreaterThanOrEqual(metrics.hostWidth - 16);
 });
 
+test('surface chrome panel does not clip Liquid glass', async ({ page }) => {
+  // Surface may be hidden below ~1100px; this suite uses 1440.
+  await page.locator('.appearance .surface-switch').evaluate((host: HTMLElement & { open: boolean }) => {
+    host.open = true;
+  });
+  const panel = page.locator('r-dropdown.ran-chrome-menu[role="listbox"]').filter({ hasText: 'Liquid glass' });
+  await expect(panel).toBeVisible();
+  const metrics = await panel.evaluate((el) => {
+    const host = el.getBoundingClientRect();
+    const trigger = document.querySelector('.appearance .surface-switch')!.getBoundingClientRect();
+    const liquid = [...el.querySelectorAll('r-dropdown-item')].find((item) =>
+      /Liquid glass|液态玻璃/.test(item.textContent ?? ''),
+    );
+    const item = liquid?.getBoundingClientRect();
+    return {
+      hostWidth: Math.round(host.width),
+      triggerWidth: Math.round(trigger.width),
+      itemWidth: item ? Math.round(item.width) : 0,
+      itemRight: item ? Math.round(item.right) : 0,
+      hostRight: Math.round(host.right),
+      clipped: item ? item.right > host.right + 1 : true,
+    };
+  });
+  expect(metrics.hostWidth).toBeGreaterThan(metrics.triggerWidth);
+  expect(metrics.itemWidth).toBeGreaterThan(0);
+  expect(metrics.clipped, `Liquid glass clipped: itemRight=${metrics.itemRight} hostRight=${metrics.hostRight}`).toBe(
+    false,
+  );
+});
+
 test('header tools share one gap and hug their labels', async ({ page }) => {
   const metrics = await page.evaluate(() => {
     const q = (s: string) => document.querySelector<HTMLElement>(s);

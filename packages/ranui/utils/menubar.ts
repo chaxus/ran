@@ -1,11 +1,11 @@
 /**
  * Hover menubar handoff for chrome selects (language / theme / surface).
  *
- * Industry recipe (Stripe shared-layout / GSAP Flip / Radix menubar hop):
- * - Open on fine-pointer hover; leave with a short delay.
- * - When hopping between peers, morph the incoming portaled panel from the
- *   outgoing box (FLIP) before the next paint — no final-size flash.
- * - Inverse-scale the painted surface so labels do not stretch during the morph.
+ * Industry recipe (Stripe morphing nav / react-flip-toolkit / Radix NavigationMenu):
+ * - One panel “shell” morphs between peers via FLIP (`transform` only — GPU).
+ * - Content sits under an inverse scale so labels do not stretch (Stripe’s
+ *   split background/content trick; we inverse-scale the painted surface).
+ * - Hop keeps opacity at 1 — no fade flash; idle open still uses dropdown enter.
  * - Skip dropdown enter/exit CSS for the hop via `html[data-ran-menubar-switch]`.
  *
  * Used by `<r-menubar>` and available as `mountMenubarHandoff` for hosts that
@@ -26,17 +26,19 @@ export interface MenubarHandoffOptions {
   panelSelector?: string;
   /** Delay before closing after pointer leaves root + panels. Default 180. */
   leaveDelay?: number;
-  /** FLIP morph duration in ms. Default 280 (`--ran-motion-duration-slow`). */
+  /** FLIP morph duration in ms. Default 320 (Stripe-like settle). */
   duration?: number;
-  /** FLIP easing. Default `--ran-motion-ease-standard`. */
+  /** FLIP easing. Default `--ran-motion-ease-spring`. */
   easing?: string;
 }
 
 const DEFAULT_PANEL = 'r-dropdown.ran-chrome-menu';
 const SWITCH_ATTR = 'data-ran-menubar-switch';
 const STYLE_ID = 'ran-menubar-handoff-style';
-const DEFAULT_DURATION = 280;
-const DEFAULT_EASE = 'cubic-bezier(0.2, 0, 0, 1)';
+/** Slightly longer than `--ran-motion-duration-slow` — Stripe morphs ~300–400ms. */
+const DEFAULT_DURATION = 320;
+/** Spring decelerate — same token as ranui motion spring. */
+const DEFAULT_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
 const DEFAULT_LEAVE = 180;
 
 type PanelHost = HTMLElement & { _shadowDom?: ShadowRoot };
@@ -91,29 +93,33 @@ const paintedOf = (host: PanelHost): HTMLElement | null =>
 const clearInlineMotion = (host: PanelHost, painted: HTMLElement | null): void => {
   host.style.transform = '';
   host.style.transformOrigin = '';
-  host.style.opacity = '';
+  host.style.willChange = '';
   if (!painted) return;
   painted.style.transform = '';
   painted.style.transformOrigin = '';
-  painted.style.opacity = '';
+  painted.style.willChange = '';
 };
 
+/**
+ * Stripe / Lokesh FLIP: snap the shell to the previous box before paint, then
+ * animate transform only. Inverse-scale the painted surface so text stays crisp.
+ * Two rAFs before measuring “to” so select’s px width lock has settled.
+ */
 const flipPanel = (from: DOMRect, panelSelector: string, duration: number, easing: string): void => {
   if (reduceMotion()) return;
 
   const run = (attempt: number): void => {
     const el = openPanel(panelSelector);
     if (!el) {
-      if (attempt < 8) requestAnimationFrame(() => run(attempt + 1));
+      if (attempt < 10) requestAnimationFrame(() => run(attempt + 1));
       return;
     }
     const to = el.getBoundingClientRect();
     if (to.width < 1 || to.height < 1) {
-      if (attempt < 8) {
+      if (attempt < 10) {
         requestAnimationFrame(() => run(attempt + 1));
         return;
       }
-      el.style.opacity = '';
       return;
     }
     const dx = from.left - to.left;
@@ -132,14 +138,18 @@ const flipPanel = (from: DOMRect, panelSelector: string, duration: number, easin
     const fromHost = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
     const invX = 1 / sx;
     const invY = 1 / sy;
+
+    // Snap before the next paint — no final-size flash (Stripe FLIP first frame).
+    el.style.willChange = 'transform';
     el.style.transformOrigin = '0 0';
     el.style.transform = fromHost;
-    el.style.opacity = '1';
     if (painted) {
+      painted.style.willChange = 'transform';
       painted.style.transformOrigin = '0 0';
       painted.style.transform = `scale(${invX}, ${invY})`;
-      painted.style.opacity = '0.5';
     }
+    // Force style flush so the snap is committed before we schedule the play.
+    void el.offsetWidth;
 
     requestAnimationFrame(() => {
       if (openPanel(panelSelector) !== el) {
@@ -148,8 +158,8 @@ const flipPanel = (from: DOMRect, panelSelector: string, duration: number, easin
       }
       const hostAnim = el.animate(
         [
-          { transform: fromHost, opacity: 1, transformOrigin: '0 0' },
-          { transform: 'translate(0, 0) scale(1, 1)', opacity: 1, transformOrigin: '0 0' },
+          { transform: fromHost, transformOrigin: '0 0' },
+          { transform: 'translate(0, 0) scale(1, 1)', transformOrigin: '0 0' },
         ],
         { duration, easing, fill: 'none' },
       );
@@ -162,8 +172,8 @@ const flipPanel = (from: DOMRect, panelSelector: string, duration: number, easin
       if (!painted) return;
       const contentAnim = painted.animate(
         [
-          { transform: `scale(${invX}, ${invY})`, opacity: 0.5, transformOrigin: '0 0' },
-          { transform: 'scale(1, 1)', opacity: 1, transformOrigin: '0 0' },
+          { transform: `scale(${invX}, ${invY})`, transformOrigin: '0 0' },
+          { transform: 'scale(1, 1)', transformOrigin: '0 0' },
         ],
         { duration, easing, fill: 'none' },
       );
@@ -173,13 +183,14 @@ const flipPanel = (from: DOMRect, panelSelector: string, duration: number, easin
           if (openPanel(panelSelector) === el) {
             painted.style.transform = '';
             painted.style.transformOrigin = '';
-            painted.style.opacity = '';
+            painted.style.willChange = '';
           }
         });
     });
   };
 
-  requestAnimationFrame(() => run(0));
+  // Two frames: (1) panel opens + select measurePanel locks px width, (2) morph.
+  requestAnimationFrame(() => requestAnimationFrame(() => run(0)));
 };
 
 /**
@@ -240,11 +251,9 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     active = item;
     closeOthers(item);
     setOpen(item, true);
-    if (from) {
-      const incoming = openPanel(panelSelector);
-      if (incoming) incoming.style.opacity = '0';
-      flipPanel(from, panelSelector, duration, easing);
-    }
+    // Do not zero opacity on the incoming panel — Stripe keeps the shell visible
+    // and only morphs transform; a fade reads as flicker on short chrome menus.
+    if (from) flipPanel(from, panelSelector, duration, easing);
   };
 
   const disarm = (): void => {

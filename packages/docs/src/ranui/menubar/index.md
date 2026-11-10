@@ -75,7 +75,7 @@ const stop = mountMenubarHandoff({ root: document.querySelector('.chrome') });
 | ---------------- | ---------------------------- | ----------------------------------------------- |
 | `panel-selector` | `r-dropdown.ran-chrome-menu` | Portaled panels the hop morphs between.         |
 | `leave-delay`    | `180`                        | ms before close after leaving the bar + panels. |
-| `duration`       | `280`                        | FLIP morph duration in ms.                      |
+| `duration`       | `320`                        | FLIP morph duration in ms (Stripe-like settle). |
 | `sheet`          | `''`                         | CSS injected into the component's shadow DOM.   |
 
 ### CSS Parts

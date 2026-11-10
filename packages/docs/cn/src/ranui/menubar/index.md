@@ -68,7 +68,7 @@ const stop = mountMenubarHandoff({ root: document.querySelector('.chrome') });
 | ---------------- | ---------------------------- | -------------------------------- |
 | `panel-selector` | `r-dropdown.ran-chrome-menu` | 跳转时变形的浮层面板。           |
 | `leave-delay`    | `180`                        | 离开条带与面板后关闭前的毫秒数。 |
-| `duration`       | `280`                        | FLIP 变形时长（毫秒）。          |
+| `duration`       | `320`                        | FLIP 变形时长（毫秒，偏 Stripe）。 |
 | `sheet`          | `''`                         | 注入组件 shadow DOM 的 CSS。     |
 
 ### CSS Parts

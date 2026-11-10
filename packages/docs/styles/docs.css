@@ -1253,23 +1253,23 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 }
 /*
  * Language / theme / surface chrome menus: soft enter/exit from idle.
- * Width follows the library Floating UI / Radix recipe (min-width = trigger,
- * content may grow). Hosts only constrain height for short viewports.
- * Horizontal hops: `<r-menubar>` morphs via FLIP and sets
- * `html[data-ran-menubar-switch]` (library injects the 0s enter/exit rule).
+ * Width is owned by r-select (trigger floor + content, locked in px). Do not
+ * force `::part(dropdown) { width: 100% }` here — that looped with overflow-y
+ * and clipped longer labels (“Liquid glass”). Hosts only cap height.
+ * Horizontal hops: `<r-menubar>` Stripe-style FLIP
+ * (`html[data-ran-menubar-switch]` skips enter/exit).
  */
 r-dropdown.ran-chrome-menu {
   --ran-dropdown-animation-duration: 0.28s;
-  --ran-dropdown-animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  --ran-dropdown-animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   max-height: calc(100dvh - var(--header-h, 60px) - var(--pad, 16px));
-  overflow-x: hidden;
+  /* Y scroll only when the short-viewport cap hits; X must not clip labels. */
+  overflow-x: visible;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 r-dropdown.ran-chrome-menu::part(dropdown) {
-  /* Fill the host; host is already max(trigger, content) from r-select. */
-  min-width: 100%;
-  width: 100%;
+  /* Let the library’s --ran-dropdown-width (max-content → 100% after lock) win. */
   max-height: inherit;
   box-sizing: border-box;
 }

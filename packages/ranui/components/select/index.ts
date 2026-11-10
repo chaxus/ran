@@ -84,27 +84,41 @@ export class Select extends RanElement {
     offset: 4,
     containerId: () => this.getPopupContainerId,
     // Floating UI / Radix select sizing: floor at the trigger (`min-width`), let
-    // content grow past it (`width: max-content`). Locking `width` to the trigger
-    // clipped longer options once the host also scrolled (`overflow-y` forces
-    // overflow-x to clip). Expose the trigger width for hosts that want exact
-    // match via CSS (`min-width: var(--ran-select-trigger-width)`).
+    // content grow past it. A host `::part(dropdown) { width: 100% }` override
+    // plus `overflow-y: auto` used to collapse `max-content` back to the trigger
+    // floor and clip longer labels — lock an explicit px width after measuring
+    // the painted surface so that cycle cannot win. Expose
+    // `--ran-select-trigger-width` for exact-match hosts.
     beforeMeasure: (anchorRect, panel) => {
       const triggerWidth = `${anchorRect.width}px`;
       panel.style.setProperty('--ran-select-trigger-width', triggerWidth);
       panel.style.setProperty('min-width', triggerWidth);
+      // Intrinsic pass first so scrollWidth/content can exceed the trigger.
       panel.style.setProperty('width', 'max-content');
-      // Inner surface follows the host: grow with options, never stay narrower
-      // than the trigger floor above.
       panel.style.setProperty('--ran-dropdown-width', 'max-content');
-      panel.style.setProperty('--ran-dropdown-min-width', '100%');
+      panel.style.setProperty('--ran-dropdown-min-width', triggerWidth);
     },
     // Consumers may still widen further via `::part(dropdown) { min-width }`.
-    // Measure what is painted so align/flip use the visible box (r-player quality).
+    // Measure what is painted so align/flip use the visible box (r-player quality),
+    // then pin the host to that size in px.
     measurePanel: (panel) => {
       const shadow = (panel as unknown as { _shadowDom?: ShadowRoot })._shadowDom;
-      const rendered = shadow?.querySelector<HTMLElement>('.ranui-dropdown')?.getBoundingClientRect();
+      const painted = shadow?.querySelector<HTMLElement>('.ranui-dropdown');
+      const triggerFloor = parseFloat(panel.style.minWidth) || 0;
+      const contentWidth = painted ? Math.max(painted.scrollWidth, painted.getBoundingClientRect().width) : 0;
+      const hostWidth = Math.max(triggerFloor, contentWidth, panel.scrollWidth, panel.getBoundingClientRect().width);
+      const widthPx = `${Math.ceil(hostWidth)}px`;
+      panel.style.setProperty('width', widthPx);
+      panel.style.setProperty('min-width', widthPx);
+      // Fill the locked host — overrides cannot shrink past content anymore.
+      panel.style.setProperty('--ran-dropdown-width', '100%');
+      panel.style.setProperty('--ran-dropdown-min-width', '100%');
+      const rendered = painted?.getBoundingClientRect();
       const own = panel.getBoundingClientRect();
-      return { width: rendered?.width ?? own.width, height: rendered?.height ?? own.height };
+      return {
+        width: Math.max(rendered?.width ?? 0, own.width, hostWidth),
+        height: rendered?.height ?? own.height,
+      };
     },
   });
   _optionList: Option[];

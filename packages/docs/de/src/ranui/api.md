@@ -351,7 +351,7 @@ Quelltext: `components/menubar/index.ts`
 
 - **Attribute**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
 - **Eigenschaften**:
-  - `duration: number` — FLIP morph duration in milliseconds.
+  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
   - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
   - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.

@@ -347,7 +347,7 @@ description: 'ranui 的全部自定义元素 —— 43 个元素的属性、属�
 
 - **属性（attribute）**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
 - **属性值（property）**:
-  - `duration: number` — FLIP morph duration in milliseconds.
+  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
   - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
   - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.

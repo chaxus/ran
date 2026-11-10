@@ -67,11 +67,11 @@ export class Menubar extends RanElement {
     this.setAttribute('leave-delay', String(value));
   }
 
-  /** FLIP morph duration in milliseconds. */
+  /** FLIP morph duration in milliseconds (Stripe-like settle; default 320). */
   get duration(): number {
     const raw = this.getAttribute('duration');
     const n = raw == null || raw === '' ? NaN : Number(raw);
-    return Number.isFinite(n) ? n : 280;
+    return Number.isFinite(n) ? n : 320;
   }
   set duration(value: number) {
     this.setAttribute('duration', String(value));

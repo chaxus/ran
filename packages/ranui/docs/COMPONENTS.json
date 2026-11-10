@@ -1302,7 +1302,7 @@
         {
           "name": "duration",
           "type": "number",
-          "desc": "FLIP morph duration in milliseconds."
+          "desc": "FLIP morph duration in milliseconds (Stripe-like settle; default 320)."
         },
         {
           "name": "leaveDelay",
