@@ -190,8 +190,6 @@ declare global {
     'panel-selector'?: string;
     panelSelector?: string;
     sheet?: string;
-    'switch-hold'?: number;
-    switchHold?: number;
   };
   'r-mermaid': {
     code?: string;

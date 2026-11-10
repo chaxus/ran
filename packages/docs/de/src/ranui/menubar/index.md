@@ -1,29 +1,27 @@
 ---
-description: 'Hover handoff across sibling chrome selects — open on hover, soft-fade between peers.'
+description: 'Hover handoff across sibling chrome selects — shared viewport morphs between peers.'
 ---
 
 # Menubar
 
-A thin bar that wires **hover open** and **soft peer handoff** across sibling chrome
+A thin bar that wires **hover open** and a **shared viewport hop** across sibling chrome
 selects (`r-select`, `r-theme-switch`, `r-surface-switch`, or any host with `open`).
 
-On a fine pointer, moving across triggers opens the next menu under its own trigger
-with a short opacity + directional slide on the painted surface. Scale enter/exit is
-skipped for the hop (`html[data-ran-menubar-switch]`). Independent select portals stay
-independent — no shared-layout FLIP scale (that pattern belongs to mega-nav viewports,
-not chrome selects). Touch keeps each control’s own click. Soft enter from idle stays
-on the dropdown.
+On a fine pointer, moving across triggers keeps one floating shell that morphs size and
+position under the active trigger while content slides by direction (Stripe /
+Radix NavigationMenu). Native select portals stay for state but are visually suppressed
+while the viewport is open. Touch keeps each control’s own click. Soft enter from idle
+fades the shell in.
 
-> **Use when** a row of chrome menus should open on hover without blinking closed
-> between peers (docs headers, settings toolbars). For a single select, use
-> [`<r-select>`](/ranui/select/) alone.
+> **Use when** a row of chrome menus should feel like one surface (docs headers, settings
+> toolbars). For a single select, use [`<r-select>`](/ranui/select/) alone.
 
 ## Quick Start
 
 ### Language + theme + surface
 
-Hover across the three controls (desktop). The next panel soft-fades under its
-trigger — a short slide, not a scale morph.
+Hover across the three controls (desktop). The shell slides with the pointer and content
+cross-fades by direction.
 
 <ran-demo>
   <r-menubar style="gap: 8px">
@@ -57,11 +55,9 @@ import 'ranui/surface-switch';
 ```
 
 Mark portaled panels with `dropdownclass="ran-chrome-menu"` (theme/surface switches already
-do). That class is what leave-delay watches for hover forgiveness.
+do). The handoff harvests that class into the shared viewport.
 
 ### Imperative host (no custom element)
-
-Hosts that already own the markup can call the same wiring:
 
 ```js
 import { mountMenubarHandoff } from 'ranui/menubar';
@@ -74,13 +70,12 @@ const stop = mountMenubarHandoff({ root: document.querySelector('.chrome') });
 
 ### Attributes
 
-| Attribute        | Default                      | Description                                                       |
-| ---------------- | ---------------------------- | ----------------------------------------------------------------- |
-| `panel-selector` | `r-dropdown.ran-chrome-menu` | Portaled panels watched for leave forgiveness.                    |
-| `leave-delay`    | `180`                        | ms before close after leaving the bar + panels.                   |
-| `switch-hold`    | `360`                        | ms peer-hop CSS (zero scale enter/exit) stays armed.              |
-| `duration`       | `280`                        | Soft hop duration in ms (opacity + translate on painted surface). |
-| `sheet`          | `''`                         | CSS injected into the component's shadow DOM.                     |
+| Attribute        | Default                      | Description                                       |
+| ---------------- | ---------------------------- | ------------------------------------------------- |
+| `panel-selector` | `r-dropdown.ran-chrome-menu` | Native panels harvested into the shared viewport. |
+| `leave-delay`    | `180`                        | ms before close after leaving the bar + viewport. |
+| `duration`       | `280`                        | Shell morph + content slide duration in ms.       |
+| `sheet`          | `''`                         | CSS injected into the component's shadow DOM.     |
 
 ### CSS Parts
 
@@ -99,5 +94,5 @@ r-menubar {
 - Triggers are light-DOM descendants tagged `r-select`, `r-theme-switch`,
   `r-surface-switch`, or `[data-ran-menubar-item]` that expose `open`.
 - Nested wrappers (e.g. an `.appearance` group) are fine — the bar finds the hosts.
-- Peer hops do not FLIP-scale portal size/position; each panel positions under its
-  trigger, then soft-fades in with a short directional slide.
+- Peer hops use one viewport (`html[data-ran-menubar-viewport]`); reduced motion skips
+  slides and snaps the shell.

@@ -9,11 +9,10 @@ import type { MenubarHandoffOptions, MenubarItem } from '@/utils/menubar';
 /**
  * `<r-menubar>` — hover handoff across sibling chrome selects.
  *
- * Wrap `r-select` / `r-theme-switch` / `r-surface-switch` (or any host with `open`)
- * and on fine pointers the bar opens on hover and soft-hands off between peers
- * (opacity + directional slide on the painted surface — no cross-portal FLIP).
- * Touch keeps each control's own click trigger. Soft enter from idle stays on
- * the dropdown; peer hops skip scale enter/exit via `html[data-ran-menubar-switch]`.
+ * Wrap `r-select` / `r-theme-switch` / `r-surface-switch` (or any host with `open`).
+ * On fine pointers the bar opens on hover and morphs a **shared viewport** between
+ * peers (Stripe / Radix NavigationMenu): shell size/position transitions, content
+ * slides by direction. Touch keeps each control's own click trigger.
  *
  * ```html
  * <r-menubar>
@@ -25,7 +24,7 @@ import type { MenubarHandoffOptions, MenubarItem } from '@/utils/menubar';
  */
 export class Menubar extends RanElement {
   static get observedAttributes(): string[] {
-    return ['panel-selector', 'leave-delay', 'switch-hold', 'duration', 'sheet'];
+    return ['panel-selector', 'leave-delay', 'duration', 'sheet'];
   }
 
   _events = new EventManager();
@@ -36,7 +35,6 @@ export class Menubar extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, menubarCss);
-    // `display: contents` on the shell so slotted triggers flex on `:host`.
     this._slot = Slot().build() as HTMLSlotElement;
     this._shadowDom.appendChild(View('div').class('ran-menubar').attr('part', 'root').children(this._slot).build());
   }
@@ -49,7 +47,7 @@ export class Menubar extends RanElement {
     setStringAttribute(this, 'sheet', value);
   }
 
-  /** Portaled panels watched for hover leave forgiveness. Defaults to `r-dropdown.ran-chrome-menu`. */
+  /** Native panels harvested into the shared viewport. Defaults to `r-dropdown.ran-chrome-menu`. */
   get panelSelector(): string {
     return getStringAttribute(this, 'panel-selector') || 'r-dropdown.ran-chrome-menu';
   }
@@ -57,7 +55,7 @@ export class Menubar extends RanElement {
     setStringAttribute(this, 'panel-selector', value, { removeEmpty: true });
   }
 
-  /** Milliseconds before close after the pointer leaves the bar and panels. */
+  /** Milliseconds before close after the pointer leaves the bar and viewport. */
   get leaveDelay(): number {
     const raw = this.getAttribute('leave-delay');
     const n = raw == null || raw === '' ? NaN : Number(raw);
@@ -67,17 +65,7 @@ export class Menubar extends RanElement {
     this.setAttribute('leave-delay', String(value));
   }
 
-  /** How long peer-hop CSS stays armed, in milliseconds. */
-  get switchHold(): number {
-    const raw = this.getAttribute('switch-hold');
-    const n = raw == null || raw === '' ? NaN : Number(raw);
-    return Number.isFinite(n) ? n : 360;
-  }
-  set switchHold(value: number) {
-    this.setAttribute('switch-hold', String(value));
-  }
-
-  /** Soft hop duration in milliseconds (opacity + translate on `::part(dropdown)`). */
+  /** Shared viewport morph + content slide duration in milliseconds. */
   get duration(): number {
     const raw = this.getAttribute('duration');
     const n = raw == null || raw === '' ? NaN : Number(raw);
@@ -91,7 +79,6 @@ export class Menubar extends RanElement {
     root: this,
     panelSelector: this.panelSelector,
     leaveDelay: this.leaveDelay,
-    switchHold: this.switchHold,
     duration: this.duration,
     items: () => this._items(),
   });
@@ -119,7 +106,6 @@ export class Menubar extends RanElement {
   connectedCallback(): void {
     this.handlerExternalCss();
     this._remount();
-    // Rebind when slotted triggers arrive or upgrade.
     this._events.on(this._slot, 'slotchange', this._remount);
   }
 

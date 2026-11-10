@@ -1296,34 +1296,28 @@
         "duration",
         "leave-delay",
         "panel-selector",
-        "sheet",
-        "switch-hold"
+        "sheet"
       ],
       "properties": [
         {
           "name": "duration",
           "type": "number",
-          "desc": "Soft hop duration in milliseconds (opacity + translate on `::part(dropdown)`)."
+          "desc": "Shared viewport morph + content slide duration in milliseconds."
         },
         {
           "name": "leaveDelay",
           "type": "number",
-          "desc": "Milliseconds before close after the pointer leaves the bar and panels."
+          "desc": "Milliseconds before close after the pointer leaves the bar and viewport."
         },
         {
           "name": "panelSelector",
           "type": "string",
-          "desc": "Portaled panels watched for hover leave forgiveness. Defaults to `r-dropdown.ran-chrome-menu`."
+          "desc": "Native panels harvested into the shared viewport. Defaults to `r-dropdown.ran-chrome-menu`."
         },
         {
           "name": "sheet",
           "type": "string",
           "desc": "CSS injected into the component's shadow DOM."
-        },
-        {
-          "name": "switchHold",
-          "type": "number",
-          "desc": "How long peer-hop CSS stays armed, in milliseconds."
         }
       ],
       "events": [],

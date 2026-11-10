@@ -1,0 +1,26 @@
+/**
+ * Build-time Declarative Shadow DOM for header chrome.
+ *
+ * Language / theme / surface are custom elements. Without SSR they paint as empty
+ * hosts until the deferred client chunk upgrades them. `ranui/ssr-stream` expands
+ * registered tags to closed DSD so first paint already shows the trigger chrome
+ * and selected labels; the client still rebuilds on upgrade (closed roots).
+ */
+import 'ranui/select';
+import 'ranui/theme-switch';
+import 'ranui/surface-switch';
+import 'ranui/menubar';
+import { renderHTMLToString } from 'ranui/ssr-stream';
+
+const HEADER_UTILS_RE = /<r-menubar\b[^>]*class="header-utils"[^>]*>[\s\S]*?<\/r-menubar>/i;
+
+/**
+ * Expand the docs header `<r-menubar class="header-utils">…</r-menubar>` fragment
+ * to Declarative Shadow DOM. Leaves the rest of the page untouched.
+ */
+export const ssrHeaderChrome = async (html: string): Promise<string> => {
+  const match = HEADER_UTILS_RE.exec(html);
+  if (!match) return html;
+  const expanded = await renderHTMLToString(match[0]);
+  return html.slice(0, match.index) + expanded + html.slice(match.index + match[0].length);
+};

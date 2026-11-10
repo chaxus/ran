@@ -346,13 +346,12 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 43개 엘리먼트의 �
 
 소스: `components/menubar/index.ts`
 
-- **어트리뷰트**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`, `switch-hold`
+- **어트리뷰트**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
 - **프로퍼티**:
-  - `duration: number` — Soft hop duration in milliseconds (opacity + translate on `::part(dropdown)`).
-  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
-  - `panelSelector: string` — Portaled panels watched for hover leave forgiveness. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `duration: number` — Shared viewport morph + content slide duration in milliseconds.
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and viewport.
+  - `panelSelector: string` — Native panels harvested into the shared viewport. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
-  - `switchHold: number` — How long peer-hop CSS stays armed, in milliseconds.
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`
 - **Part**: `root`

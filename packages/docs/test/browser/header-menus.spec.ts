@@ -31,86 +31,51 @@ test('header chrome menus have no chevron and open on hover', async ({ page, bro
   });
   expect(iconHidden).toBe(true);
 
+  const viewportOption = (text: string) => page.locator('.ran-menubar-viewport__option', { hasText: text });
+
   await page.locator('.lang-switch').hover();
-  await expect(chromePanel(page, 'English')).toBeVisible();
+  await expect(page.locator('.ran-menubar-viewport__shell')).toBeVisible();
+  await expect(viewportOption('English')).toBeVisible();
 
   await page.locator('.appearance .theme-switch').hover();
-  await expect(chromePanel(page, 'Light')).toBeVisible();
-  await expect(chromePanel(page, 'English')).toBeHidden();
+  await expect(viewportOption('Light')).toBeVisible();
+  await expect(viewportOption('English')).toHaveCount(0);
 
   await page.locator('.appearance .surface-switch').hover();
-  await expect(chromePanel(page, 'Graphite')).toBeVisible();
-  await expect(chromePanel(page, 'Light')).toBeHidden();
+  await expect(viewportOption('Graphite')).toBeVisible();
+  await expect(viewportOption('Light')).toHaveCount(0);
 });
 
-test('hovering across chrome menus soft-fades the peer handoff', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'handoff attribute sampling is chromium-first');
-  await page.evaluate(() => {
-    const state = window as unknown as { chromeHandoff?: boolean; hopSamples?: number[] };
-    state.chromeHandoff = false;
-    state.hopSamples = [];
-    const watch = new MutationObserver(() => {
-      if (document.documentElement.hasAttribute('data-ran-menubar-switch')) state.chromeHandoff = true;
-    });
-    watch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-ran-menubar-switch'] });
-  });
+test('hovering across chrome menus morphs the shared viewport', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'viewport morph sampling is chromium-first');
   await page.waitForFunction(() => customElements.get('r-menubar'));
   await page.locator('.lang-switch').hover();
-  await expect(chromePanel(page, 'English')).toBeVisible();
+  await expect(page.locator('.ran-menubar-viewport__shell')).toBeVisible();
+  await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'English' })).toBeVisible();
 
   const langLeft = await page.locator('.lang-switch').evaluate((el) => el.getBoundingClientRect().left);
   const themeLeft = await page.locator('.appearance .theme-switch').evaluate((el) => el.getBoundingClientRect().left);
+  const fromX = await page.locator('.ran-menubar-viewport__shell').evaluate((el) => el.getBoundingClientRect().left);
 
   await page.locator('.appearance .theme-switch').hover();
-  await expect(chromePanel(page, 'Light')).toBeVisible();
-  await expect(chromePanel(page, 'English')).toBeHidden();
-  expect(await page.evaluate(() => (window as unknown as { chromeHandoff?: boolean }).chromeHandoff)).toBe(true);
+  await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'Light' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.getAttribute('data-ran-menubar-viewport'))).toMatch(
+    /left|right/,
+  );
 
-  // Soft hop: direction attr arms, then ::part(dropdown) fades/slides in.
-  const hopDir = await page.evaluate(() => document.documentElement.getAttribute('data-ran-menubar-switch'));
-  expect(hopDir === 'left' || hopDir === 'right').toBe(true);
-
+  // Shell should travel toward the theme trigger while morphing.
   const samples: number[] = [];
   for (let i = 0; i < 8; i++) {
-    samples.push(
-      await page.evaluate(() => {
-        const host = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu')].find(
-          (node) => getComputedStyle(node).display !== 'none' && node.getClientRects().length,
-        ) as { _shadowDom?: ShadowRoot } | undefined;
-        const painted = host?._shadowDom?.querySelector<HTMLElement>('.ranui-dropdown');
-        return painted ? Number(getComputedStyle(painted).opacity) : NaN;
-      }),
-    );
+    samples.push(await page.locator('.ran-menubar-viewport__shell').evaluate((el) => el.getBoundingClientRect().left));
     await page.waitForTimeout(30);
   }
-
-  // Independent portals: next panel under its own trigger — host has no FLIP scale.
   await page.waitForTimeout(280);
-  const toMetrics = await page.evaluate(() => {
-    const el = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu[role="listbox"]')].find(
-      (node) =>
-        getComputedStyle(node).display !== 'none' &&
-        node.getClientRects().length > 0 &&
-        /Light/.test(node.textContent ?? ''),
-    );
-    if (!el) return null;
-    const box = el.getBoundingClientRect();
-    const painted = (el as unknown as { _shadowDom?: ShadowRoot })._shadowDom?.querySelector<HTMLElement>(
-      '.ranui-dropdown',
-    );
-    return {
-      left: box.left,
-      hostTransform: getComputedStyle(el).transform,
-      paintedOpacity: painted ? Number(getComputedStyle(painted).opacity) : NaN,
-    };
-  });
-  expect(toMetrics).not.toBeNull();
+  const toX = await page.locator('.ran-menubar-viewport__shell').evaluate((el) => el.getBoundingClientRect().left);
   expect(Math.abs(themeLeft - langLeft)).toBeGreaterThan(8);
-  expect(Math.abs(toMetrics!.left - themeLeft)).toBeLessThan(8);
-  expect(toMetrics!.hostTransform === 'none' || toMetrics!.hostTransform === 'matrix(1, 0, 0, 1, 0, 0)').toBe(true);
-  expect(toMetrics!.paintedOpacity).toBeGreaterThan(0.95);
-  const midOpacity = samples.find((n) => Number.isFinite(n) && n > 0 && n < 0.999);
-  expect(midOpacity, `expected a mid-hop opacity, got ${JSON.stringify(samples)}`).toBeTruthy();
+  expect(Math.abs(toX - themeLeft)).toBeLessThan(12);
+  expect(Math.abs(toX - fromX)).toBeGreaterThan(8);
+  const mid = samples.find((x) => Number.isFinite(x) && Math.abs(x - fromX) > 2 && Math.abs(x - toX) > 2);
+  expect(mid, `expected a mid-flight shell left, got ${JSON.stringify(samples)}`).toBeTruthy();
 });
 
 test('language chrome panel is wide enough for longer option labels', async ({ page }) => {
@@ -122,38 +87,44 @@ test('language chrome panel is wide enough for longer option labels', async ({ p
 
   // Wait for select measurePanel to lock width — WebKit can paint max-content
   // before the inline floor/vars are readable via CSSOM.
-  const metrics = await expect
+  await expect
     .poll(async () => {
-      return panel.evaluate((el) => {
-        const host = el.getBoundingClientRect();
-        const trigger = document.querySelector('.lang-switch')!.getBoundingClientRect();
-        const styleAttr = el.getAttribute('style') ?? '';
-        const fromAttr =
-          /--ran-select-trigger-width:\s*([\d.]+px)/.exec(styleAttr)?.[1] ||
-          /min-width:\s*([\d.]+px)/.exec(styleAttr)?.[1] ||
-          '';
-        // Prefer the inline floor the library sets — WebKit often reports computed
-        // min-width as 0px; fall back to the style attribute string.
-        const triggerFloor =
-          el.style.getPropertyValue('--ran-select-trigger-width') ||
-          el.style.minWidth ||
-          getComputedStyle(el).getPropertyValue('--ran-select-trigger-width') ||
-          fromAttr ||
-          getComputedStyle(el).minWidth;
-        const items = [...el.querySelectorAll('r-dropdown-item')].map((item) => ({
-          text: item.textContent?.trim() ?? '',
-          // Light-DOM host width — closed shadow labels are not readable here.
-          width: Math.round(item.getBoundingClientRect().width),
-        }));
-        return {
-          hostWidth: Math.round(host.width),
-          triggerWidth: Math.round(trigger.width),
-          triggerFloor,
-          sample: items.find((item) => /Português|简体中文/.test(item.text)) ?? items[0] ?? null,
-        };
-      });
+      const hostWidth = await panel.evaluate((el) => Math.round(el.getBoundingClientRect().width));
+      const triggerWidth = await page
+        .locator('.lang-switch')
+        .evaluate((el) => Math.round(el.getBoundingClientRect().width));
+      return hostWidth > triggerWidth;
     })
-    .toPass((m) => m.hostWidth > m.triggerWidth);
+    .toBe(true);
+
+  const metrics = await panel.evaluate((el) => {
+    const host = el.getBoundingClientRect();
+    const trigger = document.querySelector('.lang-switch')!.getBoundingClientRect();
+    const styleAttr = el.getAttribute('style') ?? '';
+    const fromAttr =
+      /--ran-select-trigger-width:\s*([\d.]+px)/.exec(styleAttr)?.[1] ||
+      /min-width:\s*([\d.]+px)/.exec(styleAttr)?.[1] ||
+      '';
+    // Prefer the inline floor the library sets — WebKit often reports computed
+    // min-width as 0px; fall back to the style attribute string.
+    const triggerFloor =
+      el.style.getPropertyValue('--ran-select-trigger-width') ||
+      el.style.minWidth ||
+      getComputedStyle(el).getPropertyValue('--ran-select-trigger-width') ||
+      fromAttr ||
+      getComputedStyle(el).minWidth;
+    const items = [...el.querySelectorAll('r-dropdown-item')].map((item) => ({
+      text: item.textContent?.trim() ?? '',
+      // Light-DOM host width — closed shadow labels are not readable here.
+      width: Math.round(item.getBoundingClientRect().width),
+    }));
+    return {
+      hostWidth: Math.round(host.width),
+      triggerWidth: Math.round(trigger.width),
+      triggerFloor,
+      sample: items.find((item) => /Português|简体中文/.test(item.text)) ?? items[0] ?? null,
+    };
+  });
 
   // Library floors min-width at the trigger (Floating UI / Radix); content may grow.
   expect(metrics.hostWidth).toBeGreaterThan(metrics.triggerWidth);

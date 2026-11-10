@@ -4,9 +4,9 @@
  * Everything that is not the article itself — the top nav, the sidebar, the outline,
  * previous/next — is rendered here, server-side, as plain HTML. The mobile drawer is a
  * checkbox and a label. Language / theme / surface are `r-select` chrome (same menu
- * recipe); they upgrade from the client bundle. A documentation site that needs
- * JavaScript to show its *navigation* is a documentation site that shows nothing to a
- * crawler — product links stay plain HTML.
+ * recipe). Build-time SSR (`ssrHeaderChrome`) expands them to Declarative Shadow DOM
+ * so first paint shows trigger labels before the client chunk upgrades; product links
+ * stay plain HTML.
  */
 import type { Assets } from 'ranpress';
 import { LOCALES, SITE } from './config.ts';
@@ -207,11 +207,11 @@ ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
         <span class="search-open__text">${escapeHtml(ui.searchButton)}</span>
         <kbd class="search-open__kbd">/</kbd>
       </button>
-      <r-menubar class="header-utils">
+      <r-menubar class="header-utils" lang="${escapeHtml(page.locale.lang)}">
         ${langMenuHtml(page, urls, ui.langMenu)}
         <div class="appearance" role="group" aria-label="${escapeHtml(ui.appearance)}">
-          <r-theme-switch class="theme-switch"></r-theme-switch>
-          <r-surface-switch class="surface-switch"></r-surface-switch>
+          <r-theme-switch class="theme-switch" lang="${escapeHtml(page.locale.lang)}"></r-theme-switch>
+          <r-surface-switch class="surface-switch" lang="${escapeHtml(page.locale.lang)}"></r-surface-switch>
         </div>
       </r-menubar>
       <!-- Trailing outbound jump: after in-page chrome, last in the tools row. -->

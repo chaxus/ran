@@ -1269,6 +1269,36 @@ export class Select extends RanElement {
     if (this._text.textContent === label) return;
     this.selectOptionElement(option, false);
   };
+
+  /**
+   * Fill the closed-state label before Declarative Shadow DOM serialization.
+   * SSR streams often inject light-DOM options as an `innerHTML` string (not live
+   * `querySelector` nodes); parse that fallback so first paint shows the selected text.
+   */
+  _preSerialize(): void {
+    const value = this.getAttribute('value');
+    if (!value || !this._text) return;
+    const live = Array.from(this.querySelectorAll('r-option')).find((item) => item.getAttribute('value') === value) as
+      HTMLElement | undefined;
+    let label = live ? live.getAttribute('title') || live.textContent?.trim() || '' : '';
+    if (!label) {
+      const html = this.innerHTML || '';
+      const optionRe = /<r-option\b([^>]*)>([\s\S]*?)<\/r-option>/gi;
+      let match: RegExpExecArray | null;
+      while ((match = optionRe.exec(html)) !== null) {
+        const attrs = match[1] ?? '';
+        const attrValue = /(?:^|\s)value\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/.exec(attrs);
+        const optionValue = attrValue?.[1] ?? attrValue?.[2] ?? attrValue?.[3] ?? '';
+        if (optionValue !== value) continue;
+        label = match[2]
+          .replace(/<[^>]*>/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+        break;
+      }
+    }
+    if (label) this._text.textContent = label;
+  }
 }
 
 defineSSR('r-select', Select as unknown as new () => HTMLElement);

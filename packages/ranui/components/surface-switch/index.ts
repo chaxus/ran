@@ -47,17 +47,18 @@ export class SurfaceSwitch extends RanElement {
       return option;
     });
 
+    // Use the Select class directly so SSR builds a real select shadow tree
+    // (View('r-select') is only an HTMLElementMock under Node and skips DSD chrome).
     // Portaled panel is outside this shadow tree — chrome menu vars land via dropdownclass.
     // Host `trigger` (e.g. docs header `hover click`) wins; default stays click.
-    this._select = View('r-select')
-      .class('ran-surface-switch')
-      .attr('part', 'select')
-      .attr('trigger', this.getAttribute('trigger') || 'click')
-      .attr('dropdownclass', 'ran-chrome-menu')
-      .attr('value', 'solid')
-      .children(...options)
-      .build() as HTMLElement & { value: string };
-
+    const select = new Select() as HTMLElement & { value: string };
+    select.classList.add('ran-surface-switch');
+    select.setAttribute('part', 'select');
+    select.setAttribute('trigger', this.getAttribute('trigger') || 'click');
+    select.setAttribute('dropdownclass', 'ran-chrome-menu');
+    select.setAttribute('value', 'solid');
+    for (const option of options) select.appendChild(option);
+    this._select = select;
     this._shadowDom.appendChild(this._select);
   }
 
@@ -141,6 +142,18 @@ export class SurfaceSwitch extends RanElement {
     if (old === next) return;
     if (name === 'sheet') this.handlerExternalCss();
     if (name.startsWith('label')) this._syncLabels();
+  }
+
+  /**
+   * SSR / Declarative Shadow DOM: fill option labels and the closed-state selection
+   * before serialize so first paint shows Graphite / Liquid glass, not an empty trigger.
+   */
+  _preSerialize(): void {
+    this._syncLabels();
+    const current = this.value;
+    this._select.setAttribute('value', current);
+    const select = this._select as HTMLElement & { _preSerialize?: () => void };
+    select._preSerialize?.();
   }
 }
 
