@@ -1,9 +1,9 @@
 /**
  * Build-time Declarative Shadow DOM for header chrome.
  *
- * Client upgrade reuses the closed DSD snapshot through `ElementInternals.shadowRoot`
- * (`ensureShadowRoot` + adopt paths on menubar / theme / surface / select) — do not
- * skip this pass or first paint falls back to empty FOUC plates again.
+ * Client upgrade reuses the closed root via `ElementInternals.shadowRoot` and keeps
+ * the painted tree (structure bind, no remount wipe). Skip this pass and first paint
+ * falls back to empty FOUC plates again.
  */
 import 'ranui/select';
 import 'ranui/theme-switch';

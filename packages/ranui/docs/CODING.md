@@ -64,11 +64,11 @@ rules it encodes:
   cannot leak in, and nothing outside can look in. On upgrade, reuse the closed root via
   `hostInternals` / `ElementInternals.shadowRoot` — calling `attachShadow` again throws or
   wipes first paint.
-- **Build the tree once, in the constructor**, with the ranview builder and `.ref()`. Mount
-  it with `mountShadowTree` (not bare `appendChild`): Declarative Shadow DOM is
-  **paint-only** until upgrade; `replaceChildren` drops that snapshot and installs the live
-  builder tree so refs stay from `.ref()` / `shadowPart` — never `querySelector` to re-bind
-  a DSD tree. A second build from `connectedCallback` still duplicates on reconnect.
+- **Build the tree once, in the constructor**, with the ranview builder and `.ref()`. Cold
+  path: `mountShadowTree`. When Declarative Shadow DOM already painted content, **keep it**
+  (`paintedShadowChild` + bind by builder child order) — remounting with `replaceChildren`
+  is the refresh flash. Never `querySelector` / class strings to re-bind. A second build
+  from `connectedCallback` still duplicates on reconnect.
 - **Hold what you build.** Capture every element with `.ref()` while building and read it
   back with `shadowPart`. `querySelector` re-derives an element through a _string_: rename
   the class in the LESS file and the two sides drift, `!` waves the `null` through, and the

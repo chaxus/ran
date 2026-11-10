@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Menubar } from '@/components/menubar';
 import '@/components/menubar';
-import { mountMenubarHandoff } from '@/utils/menubar';
+import { harvestMatchesItem, mountMenubarHandoff } from '@/utils/menubar';
+import type { MenubarItem } from '@/utils/menubar';
 
 type OpenHost = HTMLElement & { open: boolean };
 
@@ -108,6 +109,79 @@ describe('r-menubar contract', () => {
     theme.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
     expect(theme.open).toBe(true);
     expect(lang.open).toBe(false);
+  });
+});
+
+describe('harvestMatchesItem', () => {
+  it('rejects theme/surface harvests for a language r-select', () => {
+    const lang = makeItem('r-select') as MenubarItem;
+    const en = document.createElement('r-option');
+    en.setAttribute('value', '/');
+    en.textContent = 'English';
+    const cn = document.createElement('r-option');
+    cn.setAttribute('value', '/cn/');
+    cn.textContent = '简体中文';
+    lang.append(en, cn);
+
+    expect(
+      harvestMatchesItem(lang, {
+        items: [
+          { value: 'system', label: 'System', active: true },
+          { value: 'light', label: 'Light', active: false },
+        ],
+        width: 120,
+        height: 80,
+      }),
+    ).toBe(false);
+    expect(
+      harvestMatchesItem(lang, {
+        items: [
+          { value: 'solid', label: 'Graphite', active: true },
+          { value: 'glass', label: 'Liquid glass', active: false },
+        ],
+        width: 120,
+        height: 80,
+      }),
+    ).toBe(false);
+    expect(
+      harvestMatchesItem(lang, {
+        items: [
+          { value: '/', label: 'English', active: true },
+          { value: '/cn/', label: '简体中文', active: false },
+        ],
+        width: 160,
+        height: 200,
+      }),
+    ).toBe(true);
+  });
+
+  it('matches theme and surface switches only to their own values', () => {
+    const theme = makeItem('r-theme-switch') as MenubarItem;
+    const surface = makeItem('r-surface-switch') as MenubarItem;
+    expect(
+      harvestMatchesItem(theme, {
+        items: [{ value: 'system', label: 'System', active: true }],
+        width: 100,
+        height: 40,
+      }),
+    ).toBe(true);
+    expect(
+      harvestMatchesItem(theme, {
+        items: [{ value: '/', label: 'English', active: true }],
+        width: 100,
+        height: 40,
+      }),
+    ).toBe(false);
+    expect(
+      harvestMatchesItem(surface, {
+        items: [
+          { value: 'solid', label: 'Graphite', active: true },
+          { value: 'glass', label: 'Liquid glass', active: false },
+        ],
+        width: 100,
+        height: 40,
+      }),
+    ).toBe(true);
   });
 });
 

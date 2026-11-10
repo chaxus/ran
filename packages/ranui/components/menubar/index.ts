@@ -5,6 +5,7 @@ import {
   ensureShadowRoot,
   getStringAttribute,
   mountShadowTree,
+  paintedShadowChild,
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
@@ -41,7 +42,13 @@ export class Menubar extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, menubarCss);
-    // DSD shell is paint-only; live tree always comes from the builder + refs.
+    // Keep Declarative Shadow DOM shell when present (slot by builder child order).
+    const painted = paintedShadowChild(this._shadowDom);
+    const paintedSlot = painted?.children.item(0) ?? painted?.children[0] ?? null;
+    if (paintedSlot?.tagName?.toLowerCase() === 'slot') {
+      this._slot = paintedSlot as HTMLSlotElement;
+      return;
+    }
     this._slot = Slot().build() as HTMLSlotElement;
     mountShadowTree(
       this._shadowDom,

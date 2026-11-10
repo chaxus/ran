@@ -5,6 +5,7 @@ import {
   ensureShadowRoot,
   getStringAttribute,
   mountShadowTree,
+  paintedShadowChild,
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
@@ -48,6 +49,27 @@ export class ThemeSwitch extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, themeSwitchCss);
 
+    // Keep Declarative Shadow DOM select when present — remounting flashes labels.
+    const painted = paintedShadowChild(this._shadowDom);
+    if (painted?.tagName?.toLowerCase() === 'r-select') {
+      this._select = painted as HTMLElement & { value: string };
+      for (const choice of CHOICES) {
+        let option: HTMLElement | null = null;
+        for (const child of painted.children) {
+          if (child.tagName.toLowerCase() === 'r-option' && child.getAttribute('value') === choice) {
+            option = child as HTMLElement;
+            break;
+          }
+        }
+        if (!option) {
+          option = View('r-option').attr('value', choice).attr('part', `option ${choice}`).build() as HTMLElement;
+          painted.appendChild(option);
+        }
+        this._options.set(choice, option);
+      }
+      return;
+    }
+
     const options = CHOICES.map((choice) => {
       const option = View('r-option').attr('value', choice).attr('part', `option ${choice}`).build() as HTMLElement;
       this._options.set(choice, option);
@@ -58,7 +80,6 @@ export class ThemeSwitch extends RanElement {
     // (View('r-select') is only an HTMLElementMock under Node and skips DSD chrome).
     // Portaled panel is outside this shadow tree — chrome menu vars land via dropdownclass.
     // Host `trigger` (e.g. docs header `hover click`) wins; default stays click.
-    // DSD snapshot is paint-only: mountShadowTree replaceChildren it; refs stay from builder.
     const select = new Select() as HTMLElement & { value: string };
     select.classList.add('ran-theme-switch');
     select.setAttribute('part', 'select');

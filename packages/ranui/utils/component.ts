@@ -90,13 +90,26 @@ export const ensureShadowRoot = (
 };
 
 /**
- * Mount the live shadow tree from the builder — never look nodes up.
+ * First element child of a shadow root that is not a style fallback tag.
  *
- * Declarative Shadow DOM may already paint a snapshot inside a reused closed
- * root. `replaceChildren` drops that paint-only tree (and any style-tag
- * fallback); constructable `adoptedStyleSheets` stay on the root. Styles are
- * re-applied afterward so the fallback path stays intact. Callers keep refs
- * from `.ref()` / `shadowPart` only.
+ * Used to detect a Declarative Shadow DOM snapshot without CSS selectors —
+ * callers then bind refs by known builder child order.
+ */
+export const paintedShadowChild = (root: ShadowRoot): Element | null => {
+  for (const child of root.children) {
+    if (child.tagName === 'STYLE') continue;
+    return child;
+  }
+  return null;
+};
+
+/**
+ * Mount a cold-path builder tree into an empty shadow root.
+ *
+ * When Declarative Shadow DOM already painted content, do **not** call this —
+ * replacing that snapshot is the refresh flash. Bind the painted nodes by
+ * structure instead and keep refs from that bind (or from `.ref()` on a fresh
+ * build). Styles are re-applied so the `<style>` fallback path stays intact.
  */
 export const mountShadowTree = (root: ShadowRoot, cssText: string, node: Node): void => {
   root.replaceChildren(node);
