@@ -162,7 +162,8 @@ const harvestFromPanel = (panel: HTMLElement): Harvest | null => {
 const harvestMatchesItem = (item: MenubarItem, harvest: Harvest): boolean => {
   const values = harvest.items.map((entry) => entry.value);
   const tag = item.tagName;
-  if (tag === 'R-THEME-SWITCH') return values.some((value) => value === 'light' || value === 'system' || value === 'dark');
+  if (tag === 'R-THEME-SWITCH')
+    return values.some((value) => value === 'light' || value === 'system' || value === 'dark');
   if (tag === 'R-SURFACE-SWITCH') return values.some((value) => value === 'solid' || value === 'glass');
   if (tag === 'R-SELECT') {
     // Language chrome uses locale path values; other selects still match by default.
