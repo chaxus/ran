@@ -77,7 +77,7 @@ const stop = mountMenubarHandoff({ root: document.querySelector('.chrome') });
 | ---------------- | ---------------------------- | ----------------------------------------------- |
 | `panel-selector` | `r-dropdown.ran-chrome-menu` | Portaled panels watched for leave forgiveness.  |
 | `leave-delay`    | `180`                        | ms before close after leaving the bar + panels. |
-| `switch-hold`    | `120`                        | ms peer-hop CSS (zero enter/exit) stays armed.  |
+| `switch-hold`    | `280`                        | ms peer-hop CSS (zero enter/exit) stays armed.  |
 | `sheet`          | `''`                         | CSS injected into the component's shadow DOM.   |
 
 ### CSS Parts

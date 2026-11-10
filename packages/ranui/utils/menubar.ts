@@ -29,8 +29,8 @@ export interface MenubarHandoffOptions {
   /** Delay before closing after pointer leaves root + panels. Default 180. */
   leaveDelay?: number;
   /**
-   * How long peer-hop CSS (zero enter/exit) stays armed, in ms. Default 120.
-   * Long enough to cover close→open of the next select; not a morph duration.
+   * How long peer-hop CSS (zero enter/exit) stays armed, in ms. Default 280.
+   * Must outlast select’s async portal mount + measure; not a morph duration.
    */
   switchHold?: number;
 }
@@ -38,8 +38,11 @@ export interface MenubarHandoffOptions {
 const DEFAULT_PANEL = 'r-dropdown.ran-chrome-menu';
 const SWITCH_ATTR = 'data-ran-menubar-switch';
 const STYLE_ID = 'ran-menubar-handoff-style';
-/** Cover one close→open frame pair without lingering zero-duration forever. */
-const DEFAULT_SWITCH_HOLD = 120;
+/**
+ * Cover close → portal mount → measurePanel. Shorter holds let enter CSS
+ * restart after the attr drops and read as a flash.
+ */
+const DEFAULT_SWITCH_HOLD = 280;
 const DEFAULT_LEAVE = 180;
 
 const finePointer = (): boolean =>

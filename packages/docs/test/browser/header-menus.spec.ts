@@ -56,23 +56,34 @@ test('hovering across chrome menus marks an instant peer handoff', async ({ page
   await page.waitForFunction(() => customElements.get('r-menubar'));
   await page.locator('.lang-switch').hover();
   await expect(chromePanel(page, 'English')).toBeVisible();
-  const fromLeft = await chromePanel(page, 'English').evaluate((el) => el.getBoundingClientRect().left);
+
+  const langLeft = await page.locator('.lang-switch').evaluate((el) => el.getBoundingClientRect().left);
+  const themeLeft = await page.locator('.appearance .theme-switch').evaluate((el) => el.getBoundingClientRect().left);
 
   await page.locator('.appearance .theme-switch').hover();
   await expect(chromePanel(page, 'Light')).toBeVisible();
+  await expect(chromePanel(page, 'English')).toBeHidden();
   expect(await page.evaluate(() => (window as unknown as { chromeHandoff?: boolean }).chromeHandoff)).toBe(true);
 
-  // Independent portals: next panel sits under its own trigger — no FLIP mid-flight.
-  const toMetrics = await chromePanel(page, 'Light').evaluate((el) => {
+  // Independent portals: next panel under its own trigger, no FLIP transform.
+  const toMetrics = await page.evaluate(() => {
+    const el = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu[role="listbox"]')].find(
+      (node) =>
+        getComputedStyle(node).display !== 'none' &&
+        node.getClientRects().length > 0 &&
+        /Light/.test(node.textContent ?? ''),
+    );
+    if (!el) return null;
     const box = el.getBoundingClientRect();
     return {
       left: box.left,
       transform: getComputedStyle(el).transform,
-      animDuration: getComputedStyle(el).getPropertyValue('--ran-dropdown-animation-duration').trim(),
     };
   });
-  expect(Math.abs(toMetrics.left - fromLeft)).toBeGreaterThan(8);
-  expect(toMetrics.transform === 'none' || toMetrics.transform === 'matrix(1, 0, 0, 1, 0, 0)').toBe(true);
+  expect(toMetrics).not.toBeNull();
+  expect(Math.abs(themeLeft - langLeft)).toBeGreaterThan(8);
+  expect(Math.abs(toMetrics!.left - themeLeft)).toBeLessThan(8);
+  expect(toMetrics!.transform === 'none' || toMetrics!.transform === 'matrix(1, 0, 0, 1, 0, 0)').toBe(true);
 });
 
 test('language chrome panel is wide enough for longer option labels', async ({ page }) => {

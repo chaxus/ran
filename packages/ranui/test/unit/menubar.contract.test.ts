@@ -62,7 +62,7 @@ describe('r-menubar contract', () => {
     document.body.appendChild(el);
     expect(el.panelSelector).toBe('r-dropdown.ran-chrome-menu');
     expect(el.leaveDelay).toBe(180);
-    expect(el.switchHold).toBe(120);
+    expect(el.switchHold).toBe(280);
 
     el.panelSelector = '.panel';
     el.leaveDelay = 90;

@@ -68,7 +68,7 @@ const stop = mountMenubarHandoff({ root: document.querySelector('.chrome') });
 | ---------------- | ---------------------------- | ---------------------------------------- |
 | `panel-selector` | `r-dropdown.ran-chrome-menu` | 用于离开宽容的浮层面板选择器。           |
 | `leave-delay`    | `180`                        | 离开条带与面板后关闭前的毫秒数。         |
-| `switch-hold`    | `120`                        | 同伴跳转时「零进出场」CSS 保持的毫秒数。 |
+| `switch-hold`    | `280`                        | 同伴跳转时「零进出场」CSS 保持的毫秒数。 |
 | `sheet`          | `''`                         | 注入组件 shadow DOM 的 CSS。             |
 
 ### CSS Parts

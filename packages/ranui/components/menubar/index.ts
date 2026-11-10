@@ -71,7 +71,7 @@ export class Menubar extends RanElement {
   get switchHold(): number {
     const raw = this.getAttribute('switch-hold');
     const n = raw == null || raw === '' ? NaN : Number(raw);
-    return Number.isFinite(n) ? n : 120;
+    return Number.isFinite(n) ? n : 280;
   }
   set switchHold(value: number) {
     this.setAttribute('switch-hold', String(value));
