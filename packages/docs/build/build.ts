@@ -22,7 +22,6 @@ import { LANGS, ORIGIN } from './config.ts';
 import { componentRenderers, resolveCurrentLink } from './components.ts';
 import { loadDocs } from './content.ts';
 import { renderDoc } from './page.ts';
-import { ssrHeaderChrome } from './ssr-chrome.ts';
 import { DESIGN_ASSETS } from './design-reference.ts';
 import { designIllustrationFiles } from './design-illustrations.ts';
 import { createOfflineManifest } from './offline.ts';
@@ -156,9 +155,10 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
 
   const written: string[] = [];
   for (const page of content.pages) {
-    const raw = renderDoc({ page, head: headFor(page, content), assets, urls: content.urls });
-    // Expand header chrome custom elements to Declarative Shadow DOM for first paint.
-    writeOut(DIST_DIR, page.outFile, await ssrHeaderChrome(raw));
+    // Header chrome stays as empty custom-element hosts until the client upgrades them.
+    // Closed Declarative Shadow DOM first paint is wiped on attachShadow (ranui closed
+    // roots), which flashed harder than the FOUC plates — skip SSR until open-root hydration.
+    writeOut(DIST_DIR, page.outFile, renderDoc({ page, head: headFor(page, content), assets, urls: content.urls }));
     written.push(page.outFile);
   }
   writeOut(DIST_DIR, '_redirects', redirectsFile());

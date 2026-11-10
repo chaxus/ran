@@ -47,15 +47,6 @@ test('undefined header switches and invite fields keep reserved shells', async (
     };
   });
 
-  // Build-time Declarative Shadow DOM ships closed roots so first paint shows
-  // trigger chrome before the deferred modules upgrade the hosts. Read the wire
-  // HTML — after parse the browser consumes `<template shadowrootmode>` into a
-  // real shadow root, so `page.content()` no longer contains the template tag.
-  const wire = await page.request.get(page.url()).then((res) => res.text());
-  expect(wire).toMatch(/<r-menubar\b[^>]*class="header-utils"[\s\S]*?<template shadowrootmode="closed">/);
-  expect(wire).toMatch(/<r-theme-switch\b[^>]*class="theme-switch"[\s\S]*?<template shadowrootmode="closed">/);
-  expect(wire).toMatch(/selection-item[^>]*>[^<]+</);
-
   // FOUC plates hug labels (4.5rem / 5.5rem) — panel min-width covers longer options.
   expect(shells.lang, 'language select shell').toMatchObject({ height: 32 });
   expect(shells.lang!.width).toBeGreaterThanOrEqual(56);

@@ -4,9 +4,9 @@
  * Everything that is not the article itself — the top nav, the sidebar, the outline,
  * previous/next — is rendered here, server-side, as plain HTML. The mobile drawer is a
  * checkbox and a label. Language / theme / surface are `r-select` chrome (same menu
- * recipe). Build-time SSR (`ssrHeaderChrome`) expands them to Declarative Shadow DOM
- * so first paint shows trigger labels before the client chunk upgrades; product links
- * stay plain HTML.
+ * recipe); CSS FOUC plates reserve their footprint until the client upgrades them.
+ * Closed DSD SSR was tried and reverted — attachShadow rebuilds wipe first paint and
+ * flash harder. Product links stay plain HTML.
  */
 import type { Assets } from 'ranpress';
 import { LOCALES, SITE } from './config.ts';

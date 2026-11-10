@@ -1,10 +1,10 @@
 /**
  * Build-time Declarative Shadow DOM for header chrome.
  *
- * Language / theme / surface are custom elements. Without SSR they paint as empty
- * hosts until the deferred client chunk upgrades them. `ranui/ssr-stream` expands
- * registered tags to closed DSD so first paint already shows the trigger chrome
- * and selected labels; the client still rebuilds on upgrade (closed roots).
+ * Not wired into `build.ts` today: ranui attaches **closed** shadow roots, so the
+ * client `attachShadow` wipe-rebuilds the DSD snapshot and first paint flashes
+ * harder than empty FOUC plates. Keep this helper for when open-root hydration
+ * lands; call it from the page writer only after upgrade reuses the snapshot.
  */
 import 'ranui/select';
 import 'ranui/theme-switch';

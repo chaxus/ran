@@ -25,6 +25,13 @@ import { mountPlaygrounds } from './playground.ts';
 import { mountSidebar } from './sidebar.ts';
 import { mountHeaderTools } from './header-tools.ts';
 
+// Kick header chrome registration as early as the client module runs so the
+// FOUC plates upgrade before heavier, deferred demo chunks finish.
+void import('ranui/menubar');
+void import('ranui/select');
+void import('ranui/theme-switch');
+void import('ranui/surface-switch');
+
 cacheVisitedAssets();
 mountComponents();
 mountPreviewDemo();
