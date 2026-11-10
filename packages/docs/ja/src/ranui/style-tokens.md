@@ -1926,7 +1926,7 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 ## `surface-switch`
 
 - Tokens: 15
-- Parts: 2
+- Parts: 1
 
 ### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 7 -->
@@ -1948,7 +1948,6 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ### Parts
 - `option ${choice}`
-- `select`
 
 ## `tab`
 
@@ -2025,7 +2024,7 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 ## `theme-switch`
 
 - Tokens: 16
-- Parts: 2
+- Parts: 1
 
 ### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 8 -->
@@ -2048,7 +2047,6 @@ description: 'ranui の各要素が公開する CSS カスタムプロパティ�
 
 ### Parts
 - `option ${choice}`
-- `select`
 
 ## `token-meter`
 
