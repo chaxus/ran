@@ -25,13 +25,6 @@ import { mountPlaygrounds } from './playground.ts';
 import { mountSidebar } from './sidebar.ts';
 import { mountHeaderTools } from './header-tools.ts';
 
-// Kick header chrome chunks immediately so DSD hosts upgrade with less gap after first paint.
-// Still async (upgrade-shells can hold the routes); not deferred behind IntersectionObserver.
-void import('ranui/menubar');
-void import('ranui/select');
-void import('ranui/theme-switch');
-void import('ranui/surface-switch');
-
 cacheVisitedAssets();
 mountComponents();
 mountPreviewDemo();
