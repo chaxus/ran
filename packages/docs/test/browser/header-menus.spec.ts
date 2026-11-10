@@ -78,6 +78,43 @@ test('hovering across chrome menus morphs the shared viewport', async ({ page, b
   expect(mid, `expected a mid-flight shell left, got ${JSON.stringify(samples)}`).toBeTruthy();
 });
 
+test('chrome menu option wash slides between rows', async ({ page, browserName }) => {
+  test.skip(browserName === 'firefox', 'hover menus need a fine pointer hover path');
+  await page.locator('.lang-switch').hover();
+  const shell = page.locator('.ran-menubar-viewport__shell');
+  await expect(shell).toBeVisible();
+  const fill = page.locator('.ran-menubar-viewport__hover');
+  await expect(fill).toBeVisible();
+  await expect
+    .poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity))
+    .toBe('1');
+
+  const before = await fill.evaluate((el) => (el as HTMLElement).style.transform);
+  const portuguese = page.locator('.ran-menubar-viewport__option', { hasText: 'Português' });
+  await expect(portuguese).toBeVisible();
+  const box = await portuguese.boundingBox();
+  expect(box).not.toBeNull();
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+  await expect
+    .poll(async () => fill.evaluate((el) => (el as HTMLElement).style.transform))
+    .not.toBe(before);
+  // Selected row must not keep a second static fill while the wash travels.
+  const paints = await page.evaluate(() => {
+    const selected = document.querySelector('.ran-menubar-viewport__option[aria-selected="true"]');
+    const hovered = [...document.querySelectorAll('.ran-menubar-viewport__option')].find((el) =>
+      (el.textContent || '').includes('Português'),
+    );
+    if (!selected || !hovered) return null;
+    return {
+      selectedBg: getComputedStyle(selected).backgroundColor,
+      hoveredBg: getComputedStyle(hovered).backgroundColor,
+    };
+  });
+  expect(paints).not.toBeNull();
+  expect(paints!.selectedBg).toMatch(/rgba?\(0,\s*0,\s*0,\s*0\)|transparent/i);
+  expect(paints!.hoveredBg).toMatch(/rgba?\(0,\s*0,\s*0,\s*0\)|transparent/i);
+});
+
 test('language chrome panel is wide enough for longer option labels', async ({ page }) => {
   await page.locator('.lang-switch').evaluate((host: HTMLElement & { open: boolean }) => {
     host.open = true;

@@ -90,22 +90,42 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
 @keyframes ran-menubar-to-start{from{opacity:1;transform:translateX(0)}50%{opacity:0}to{opacity:0;transform:translateX(-${SLIDE_DX}px)}}
 @keyframes ran-menubar-to-end{from{opacity:1;transform:translateX(0)}50%{opacity:0}to{opacity:0;transform:translateX(${SLIDE_DX}px)}}
 @keyframes ran-menubar-fade-in{from{opacity:0}to{opacity:1}}
+/* One wash slides between rows — same motion as docs .sb__hover / r-select glass fill. */
+.${VIEWPORT_CLASS}__hover{
+  position:absolute;top:0;left:0;z-index:0;width:0;height:0;
+  border-radius:var(--ran-radius-sm,8px);
+  background:var(--ran-color-bg-hover,var(--ran-color-fill-secondary,rgba(0,0,0,.06)));
+  opacity:0;pointer-events:none;
+  transition:
+    transform ${duration}ms ${easing},
+    width ${duration}ms ${easing},
+    height ${duration}ms ${easing},
+    opacity ${Math.min(180, duration)}ms linear;
+}
+:root[data-ran-surface=glass] .${VIEWPORT_CLASS}__hover{
+  background:var(--ran-surface-glass-hover,color-mix(in srgb,var(--ran-gray-1000,#111113) 8%,transparent));
+}
+.${VIEWPORT_CLASS}__hover[data-instant]{transition:opacity ${Math.min(180, duration)}ms linear}
 .${VIEWPORT_CLASS}__option{
   appearance:none;border:0;background:transparent;margin:0;cursor:pointer;text-align:start;
+  position:relative;z-index:1;
   display:block;width:100%;box-sizing:border-box;
   padding:6px 12px;border-radius:var(--ran-radius-sm,8px);
   color:var(--ran-color-text,rgba(0,0,0,.88));
   font:inherit;font-size:var(--ran-text-label-1,14px);font-weight:var(--ran-text-label-weight,500);
   line-height:1.4;white-space:nowrap;
 }
-.${VIEWPORT_CLASS}__option:hover,.${VIEWPORT_CLASS}__option:focus-visible{
-  outline:none;background:var(--ran-color-fill-secondary,rgba(0,0,0,.06));
+.${VIEWPORT_CLASS}__option:hover,.${VIEWPORT_CLASS}__option:focus-visible{outline:none}
+/* Selection is weight, not a second fill — the sliding wash owns the transient cue. */
+.${VIEWPORT_CLASS}[data-hover-fill] .${VIEWPORT_CLASS}__option:hover,
+.${VIEWPORT_CLASS}[data-hover-fill] .${VIEWPORT_CLASS}__option:focus-visible,
+.${VIEWPORT_CLASS}[data-hover-fill] .${VIEWPORT_CLASS}__option[aria-selected=true]{
+  background:transparent;
 }
-.${VIEWPORT_CLASS}__option[aria-selected=true]{
-  background:var(--ran-color-fill-secondary,rgba(0,0,0,.06));
-}
+.${VIEWPORT_CLASS}__option[aria-selected=true]{font-weight:600}
 @media (prefers-reduced-motion:reduce){
   .${VIEWPORT_CLASS}__shell{transition:none}
+  .${VIEWPORT_CLASS}__hover{transition:none}
   .${VIEWPORT_CLASS}__layer[data-motion]{animation:none}
 }`;
   const existing = document.getElementById(STYLE_ID);
@@ -231,15 +251,45 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
   const viewport = document.createElement('div');
   viewport.className = VIEWPORT_CLASS;
   viewport.setAttribute('aria-hidden', 'true');
+  viewport.setAttribute('data-hover-fill', '');
   const shell = document.createElement('div');
   shell.className = `${VIEWPORT_CLASS}__shell`;
   shell.setAttribute('role', 'listbox');
+  const hover = document.createElement('span');
+  hover.className = `${VIEWPORT_CLASS}__hover`;
+  hover.setAttribute('aria-hidden', 'true');
   const clip = document.createElement('div');
   clip.className = `${VIEWPORT_CLASS}__clip`;
-  shell.appendChild(clip);
+  // Fill sits under the clip so layer rebuilds do not drop it.
+  shell.append(hover, clip);
   viewport.appendChild(shell);
   document.body.appendChild(viewport);
   cleanups.push(() => viewport.remove());
+
+  let hoverTarget: HTMLElement | null = null;
+  const placeHover = (option: HTMLElement): void => {
+    const box = option.getBoundingClientRect();
+    const Matrix = typeof DOMMatrixReadOnly !== 'undefined' ? DOMMatrixReadOnly : undefined;
+    const shift = Matrix ? new Matrix(getComputedStyle(hover).transform) : { e: 0, f: 0 };
+    const at = hover.getBoundingClientRect();
+    hover.toggleAttribute('data-instant', hoverTarget === null);
+    hover.style.transform = `translate(${box.left - (at.left - shift.e)}px, ${box.top - (at.top - shift.f)}px)`;
+    hover.style.width = `${box.width}px`;
+    hover.style.height = `${box.height}px`;
+    hover.style.opacity = '1';
+    hoverTarget = option;
+  };
+  const hideHover = (): void => {
+    hover.style.opacity = '0';
+    hoverTarget = null;
+  };
+  const syncHoverToLayer = (layer: HTMLElement): void => {
+    // New panel: fade in on the committed row (same as r-select open), do not slide from the previous menu.
+    hoverTarget = null;
+    const selected = layer.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
+    if (selected) placeHover(selected);
+    else hideHover();
+  };
 
   const setShellBox = (x: number, y: number, w: number, h: number, opacity: number, instant: boolean): void => {
     if (instant) shell.style.transition = 'none';
@@ -257,6 +307,7 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
   const hideViewport = (): void => {
     document.documentElement.removeAttribute(VIEWPORT_ATTR);
     setShellBox(0, 0, 0, 0, 0, true);
+    hideHover();
     clip.replaceChildren();
     viewport.setAttribute('aria-hidden', 'true');
   };
@@ -311,8 +362,10 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     };
 
     if (!hopping || reduceMotion()) {
-      clip.replaceChildren(buildLayer(harvest, hopping ? null : 'fade', onPick));
+      const layer = buildLayer(harvest, hopping ? null : 'fade', onPick);
+      clip.replaceChildren(layer);
       setShellBox(x, y, w, h, 1, !hopping);
+      syncHoverToLayer(layer);
       return;
     }
 
@@ -337,6 +390,7 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     clip.appendChild(incoming);
     // Morph shell toward the new trigger / content box.
     setShellBox(x, y, w, h, 1, false);
+    syncHoverToLayer(incoming);
   };
 
   const setOpen = (item: MenubarItem, open: boolean): void => {
@@ -414,6 +468,17 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     const next = event.relatedTarget as Element | null;
     if (next && root.contains(next)) return;
     disarm();
+  });
+  // Sliding wash follows the pointer inside the rebuilt option list.
+  shell.addEventListener('pointerover', (event: PointerEvent) => {
+    const option = (event.target as Element | null)?.closest?.<HTMLElement>(`.${VIEWPORT_CLASS}__option`);
+    if (!option || option.closest('[data-leaving]') || option === hoverTarget) return;
+    placeHover(option);
+  });
+  shell.addEventListener('focusin', (event: FocusEvent) => {
+    const option = (event.target as Element | null)?.closest?.<HTMLElement>(`.${VIEWPORT_CLASS}__option`);
+    if (!option || option.closest('[data-leaving]')) return;
+    placeHover(option);
   });
 
   const onRootLeave = (event: PointerEvent): void => {

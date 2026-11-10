@@ -62,12 +62,13 @@ export class Select extends RanElement {
   removeTimeId?: ReturnType<typeof setTimeout>;
   _listboxId: string;
   _activeIndex: number;
-  _slot: HTMLSlotElement;
+  // Assigned on both the Declarative Shadow DOM bind path and the mount path.
+  _slot!: HTMLSlotElement;
   _shadowDom: ShadowRoot;
-  _select: HTMLDivElement;
-  _selection: HTMLDivElement;
-  _search: HTMLInputElement;
-  _icon: HTMLElement;
+  _select!: HTMLDivElement;
+  _selection!: HTMLDivElement;
+  _search!: HTMLInputElement;
+  _icon!: HTMLElement;
   _selectDropdown?: HTMLDivElement;
   _selectionDropdown?: HTMLElement;
   /**
@@ -144,8 +145,8 @@ export class Select extends RanElement {
   _optionHover?: HTMLElement;
   _optionHoverTarget: HTMLElement | null = null;
   _lastPointerAt = '';
-  _text: HTMLSpanElement;
-  _selector: HTMLDivElement;
+  _text!: HTMLSpanElement;
+  _selector!: HTMLDivElement;
   _label: HTMLLabelElement | undefined;
   onSearch?: (this: HTMLElement, ev: Event) => unknown;
   // WAI-ARIA combobox type-ahead: accumulated recently-typed characters, reset
