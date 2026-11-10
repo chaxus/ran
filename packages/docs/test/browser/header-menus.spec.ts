@@ -109,6 +109,61 @@ test('chrome menu option wash slides between rows', async ({ page, browserName }
   expect(paints).not.toBeNull();
   expect(paints!.selectedBg).toMatch(/rgba?\(0,\s*0,\s*0,\s*0\)|transparent/i);
   expect(paints!.hoveredBg).toMatch(/rgba?\(0,\s*0,\s*0,\s*0\)|transparent/i);
+
+  // Shell height follows rebuilt rows — no tall empty pad under the last option.
+  const gap = await page.evaluate(() => {
+    const shell = document.querySelector('.ran-menubar-viewport__shell');
+    const options = [...document.querySelectorAll('.ran-menubar-viewport__option')];
+    const last = options[options.length - 1];
+    if (!shell || !last) return null;
+    return Math.round(shell.getBoundingClientRect().bottom - last.getBoundingClientRect().bottom);
+  });
+  expect(gap).not.toBeNull();
+  expect(gap!).toBeGreaterThanOrEqual(2);
+  expect(gap!).toBeLessThanOrEqual(12);
+});
+
+test('after a peer hop the option wash settles on the selected row', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'hop settle sampling is chromium-first');
+  await page.locator('.lang-switch').hover();
+  await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'English' })).toBeVisible();
+  await page.locator('.appearance .theme-switch').hover();
+  await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'Light' })).toBeVisible();
+  // Wait for shell morph + wash settle (280ms motion + rAF).
+  await page.waitForTimeout(400);
+  const aligned = await page.evaluate(() => {
+    const fill = document.querySelector('.ran-menubar-viewport__hover') as HTMLElement | null;
+    const selected = document.querySelector(
+      '.ran-menubar-viewport__layer:not([data-leaving]) .ran-menubar-viewport__option[aria-selected="true"]',
+    );
+    if (!fill || !selected) return null;
+    const a = fill.getBoundingClientRect();
+    const b = selected.getBoundingClientRect();
+    return {
+      opacity: fill.style.opacity,
+      dx: Math.abs(a.left - b.left),
+      dy: Math.abs(a.top - b.top),
+      dw: Math.abs(a.width - b.width),
+      emptyGap: (() => {
+        const shell = document.querySelector('.ran-menubar-viewport__shell');
+        const options = [
+          ...document.querySelectorAll(
+            '.ran-menubar-viewport__layer:not([data-leaving]) .ran-menubar-viewport__option',
+          ),
+        ];
+        const last = options[options.length - 1];
+        if (!shell || !last) return null;
+        return Math.round(shell.getBoundingClientRect().bottom - last.getBoundingClientRect().bottom);
+      })(),
+    };
+  });
+  expect(aligned).not.toBeNull();
+  expect(aligned!.opacity).toBe('1');
+  expect(aligned!.dx).toBeLessThan(2);
+  expect(aligned!.dy).toBeLessThan(2);
+  expect(aligned!.dw).toBeLessThan(2);
+  expect(aligned!.emptyGap).not.toBeNull();
+  expect(aligned!.emptyGap!).toBeLessThanOrEqual(12);
 });
 
 test('language chrome panel is wide enough for longer option labels', async ({ page }) => {
