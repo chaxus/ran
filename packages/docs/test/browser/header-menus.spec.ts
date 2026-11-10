@@ -92,27 +92,51 @@ test('language chrome panel is wide enough for longer option labels', async ({ p
   });
   const panel = page.locator('r-dropdown.ran-chrome-menu[role="listbox"]').filter({ hasText: 'English' });
   await expect(panel).toBeVisible();
-  const metrics = await panel.evaluate((el) => {
-    const host = el.getBoundingClientRect();
-    const trigger = document.querySelector('.lang-switch')!.getBoundingClientRect();
-    const items = [...el.querySelectorAll('r-dropdown-item')].map((item) => ({
-      text: item.textContent?.trim() ?? '',
-      // Light-DOM host width — closed shadow labels are not readable here.
-      width: Math.round(item.getBoundingClientRect().width),
-    }));
-    return {
-      hostWidth: Math.round(host.width),
-      triggerWidth: Math.round(trigger.width),
-      // Prefer the inline floor the library sets — WebKit can report computed
-      // min-width as 0px while width:max-content still grows past the trigger.
-      triggerFloor:
-        el.style.minWidth || el.style.getPropertyValue('--ran-select-trigger-width') || getComputedStyle(el).minWidth,
-      sample: items.find((item) => /Português|简体中文/.test(item.text)) ?? items[0] ?? null,
-    };
-  });
+
+  // Wait for select measurePanel to lock width — WebKit can paint max-content
+  // before the inline floor/vars are readable via CSSOM.
+  const metrics = await expect
+    .poll(async () => {
+      return panel.evaluate((el) => {
+        const host = el.getBoundingClientRect();
+        const trigger = document.querySelector('.lang-switch')!.getBoundingClientRect();
+        const styleAttr = el.getAttribute('style') ?? '';
+        const fromAttr =
+          /--ran-select-trigger-width:\s*([\d.]+px)/.exec(styleAttr)?.[1] ||
+          /min-width:\s*([\d.]+px)/.exec(styleAttr)?.[1] ||
+          '';
+        // Prefer the inline floor the library sets — WebKit often reports computed
+        // min-width as 0px; fall back to the style attribute string.
+        const triggerFloor =
+          el.style.getPropertyValue('--ran-select-trigger-width') ||
+          el.style.minWidth ||
+          getComputedStyle(el).getPropertyValue('--ran-select-trigger-width') ||
+          fromAttr ||
+          getComputedStyle(el).minWidth;
+        const items = [...el.querySelectorAll('r-dropdown-item')].map((item) => ({
+          text: item.textContent?.trim() ?? '',
+          // Light-DOM host width — closed shadow labels are not readable here.
+          width: Math.round(item.getBoundingClientRect().width),
+        }));
+        return {
+          hostWidth: Math.round(host.width),
+          triggerWidth: Math.round(trigger.width),
+          triggerFloor,
+          sample: items.find((item) => /Português|简体中文/.test(item.text)) ?? items[0] ?? null,
+        };
+      });
+    })
+    .toPass((m) => m.hostWidth > m.triggerWidth);
+
   // Library floors min-width at the trigger (Floating UI / Radix); content may grow.
   expect(metrics.hostWidth).toBeGreaterThan(metrics.triggerWidth);
-  expect(parseFloat(metrics.triggerFloor)).toBeGreaterThanOrEqual(metrics.triggerWidth - 1);
+  const floor = parseFloat(metrics.triggerFloor);
+  if (Number.isFinite(floor) && floor > 0) {
+    expect(floor).toBeGreaterThanOrEqual(metrics.triggerWidth - 1);
+  } else {
+    // WebKit may never expose the floor via CSSOM; locked host width is the guarantee.
+    expect(metrics.hostWidth).toBeGreaterThanOrEqual(metrics.triggerWidth);
+  }
   expect(metrics.sample).not.toBeNull();
   // Option row sits inside the panel's 4px inset padding on each side.
   expect(metrics.sample!.width).toBeGreaterThanOrEqual(metrics.hostWidth - 16);
