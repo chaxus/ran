@@ -1,10 +1,9 @@
 /**
  * Build-time Declarative Shadow DOM for header chrome.
  *
- * Not wired into `build.ts` today: ranui attaches **closed** shadow roots, so the
- * client `attachShadow` wipe-rebuilds the DSD snapshot and first paint flashes
- * harder than empty FOUC plates. Keep this helper for when open-root hydration
- * lands; call it from the page writer only after upgrade reuses the snapshot.
+ * Client upgrade reuses the closed DSD snapshot through `ElementInternals.shadowRoot`
+ * (`ensureShadowRoot` + adopt paths on menubar / theme / surface / select) — do not
+ * skip this pass or first paint falls back to empty FOUC plates again.
  */
 import 'ranui/select';
 import 'ranui/theme-switch';

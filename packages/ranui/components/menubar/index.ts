@@ -35,6 +35,14 @@ export class Menubar extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, menubarCss);
+    // Adopt Declarative Shadow DOM shell when present so upgrade does not
+    // append a second menubar wrapper beside the SSR snapshot.
+    const existing = this._shadowDom.querySelector('.ran-menubar') as HTMLElement | null;
+    const existingSlot = existing?.querySelector('slot') as HTMLSlotElement | null;
+    if (existingSlot) {
+      this._slot = existingSlot;
+      return;
+    }
     this._slot = Slot().build() as HTMLSlotElement;
     this._shadowDom.appendChild(View('div').class('ran-menubar').attr('part', 'root').children(this._slot).build());
   }

@@ -2,6 +2,7 @@ import { adoptStyles, replaceSheetText } from './style';
 import type { Ref } from '@alixex/ranview';
 
 const shadowRootCache = new WeakMap<HTMLElement, ShadowRoot>();
+const internalsCache = new WeakMap<HTMLElement, ElementInternals>();
 
 /**
  * Honour the user's "reduce motion" OS setting in every component. Adopted into
@@ -45,12 +46,44 @@ const withReducedMotion = (cssText: string): string => {
   return joined;
 };
 
+/**
+ * Attach (or reuse) `ElementInternals` for a host.
+ *
+ * Closed Declarative Shadow DOM is reachable only through `internals.shadowRoot` —
+ * `host.shadowRoot` stays null. Call this once and pass the result into
+ * `ensureShadowRoot` (or let `ensureShadowRoot` call it) so upgrade never
+ * `attachShadow`s over an existing closed DSD snapshot.
+ */
+export const hostInternals = (host: HTMLElement): ElementInternals | undefined => {
+  const cached = internalsCache.get(host);
+  if (cached) return cached;
+  try {
+    const attach = (host as HTMLElement & { attachInternals?: () => ElementInternals }).attachInternals;
+    if (typeof attach !== 'function') return undefined;
+    const internals = attach.call(host);
+    internalsCache.set(host, internals);
+    return internals;
+  } catch {
+    // Not a custom element, already attached outside this helper, or unsupported runtime.
+    return undefined;
+  }
+};
+
+/**
+ * Create or reuse the host's shadow root and adopt component CSS.
+ *
+ * Reuse order: open `host.shadowRoot` → WeakMap cache → closed DSD via
+ * `ElementInternals.shadowRoot` → `attachShadow`. Passing an existing
+ * `internals` (from form-associated fields) avoids a second `attachInternals`.
+ */
 export const ensureShadowRoot = (
   host: HTMLElement,
   cssText = '',
   options: ShadowRootInit = { mode: 'closed' },
+  internals?: ElementInternals,
 ): ShadowRoot => {
-  const root = host.shadowRoot || shadowRootCache.get(host) || host.attachShadow(options);
+  const resolved = internals ?? hostInternals(host);
+  const root = host.shadowRoot || shadowRootCache.get(host) || resolved?.shadowRoot || host.attachShadow(options);
   shadowRootCache.set(host, root);
   adoptStyles(root, withReducedMotion(cssText));
   return root;

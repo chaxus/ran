@@ -19,6 +19,8 @@ test('undefined header switches and invite fields keep reserved shells', async (
   // Held module scripts never finish, so `load` may never fire (WebKit). DOM is enough
   // to assert the CSS shells before the deferred chunks upgrade the hosts.
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  // Header chrome ships closed Declarative Shadow DOM so first paint is not empty hosts.
+  await expect.poll(async () => (await page.content()).includes('shadowrootmode=')).toBe(true);
   await expect.poll(() => page.locator('.theme-switch:not(:defined)').count()).toBe(1);
   await expect.poll(() => page.locator('.lang-switch:not(:defined)').count()).toBe(1);
   await expect.poll(() => page.locator('.example__field:not(:defined)').count()).toBe(2);

@@ -28,6 +28,7 @@ import { createOfflineManifest } from './offline.ts';
 import { absoluteUrl, generatedFiles, headFor } from './seo.ts';
 import { legacyRedirects } from './urls.ts';
 import type { DocContent } from './content.ts';
+import { ssrHeaderChrome } from './ssr-chrome.ts';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const DIST_DIR = join(ROOT, 'dist');
@@ -155,10 +156,9 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
 
   const written: string[] = [];
   for (const page of content.pages) {
-    // Header chrome stays as empty custom-element hosts until the client upgrades them.
-    // Closed Declarative Shadow DOM first paint is wiped on attachShadow (ranui closed
-    // roots), which flashed harder than the FOUC plates — skip SSR until open-root hydration.
-    writeOut(DIST_DIR, page.outFile, renderDoc({ page, head: headFor(page, content), assets, urls: content.urls }));
+    // Closed DSD for header-utils; client hydrates via ElementInternals.shadowRoot.
+    const html = await ssrHeaderChrome(renderDoc({ page, head: headFor(page, content), assets, urls: content.urls }));
+    writeOut(DIST_DIR, page.outFile, html);
     written.push(page.outFile);
   }
   writeOut(DIST_DIR, '_redirects', redirectsFile());

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  hostInternals,
   setBooleanAttribute,
   setStringAttribute,
   syncSheetAttribute,
@@ -34,6 +35,34 @@ describe('utils/component helpers', () => {
     const first = ensureShadowRoot(host);
     const second = ensureShadowRoot(host);
 
+    expect(second).toBe(first);
+  });
+
+  it('ensureShadowRoot reuses a closed Declarative Shadow DOM via ElementInternals', () => {
+    const host = document.createElement('div');
+    const existing = host.attachShadow({ mode: 'closed' });
+    existing.appendChild(document.createElement('span')).className = 'dsd';
+    const attachSpy = vi.spyOn(host, 'attachShadow');
+    const internals = { shadowRoot: existing } as ElementInternals;
+
+    const root = ensureShadowRoot(host, '.hydrated {}', { mode: 'closed' }, internals);
+
+    expect(root).toBe(existing);
+    expect(root.querySelector('.dsd')).toBeTruthy();
+    expect(attachSpy).not.toHaveBeenCalled();
+  });
+
+  it('hostInternals caches ElementInternals per host', () => {
+    class HostInternalsProbe extends HTMLElement {
+      static formAssociated = true;
+    }
+    if (!customElements.get('ran-host-internals-probe')) {
+      customElements.define('ran-host-internals-probe', HostInternalsProbe);
+    }
+    const host = document.createElement('ran-host-internals-probe');
+    const first = hostInternals(host);
+    const second = hostInternals(host);
+    expect(first).toBeTruthy();
     expect(second).toBe(first);
   });
 

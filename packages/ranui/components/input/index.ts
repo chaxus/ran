@@ -5,6 +5,7 @@ import '@/components/icon/index';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  hostInternals,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -58,13 +59,8 @@ export class Input extends RanElement {
   _defaultValueCaptured = false;
   constructor() {
     super();
-    // attachInternals is allowed in the constructor; guard for SSR/old runtimes.
-    try {
-      this._internals = this.attachInternals();
-    } catch {
-      this._internals = undefined;
-    }
-    this._shadowDom = ensureShadowRoot(this, inputCss);
+    this._internals = hostInternals(this);
+    this._shadowDom = ensureShadowRoot(this, inputCss, { mode: 'closed' }, this._internals);
     const inputContentRef = createRef<HTMLInputElement>();
     const wrap = Div()
       .class('ran-input')

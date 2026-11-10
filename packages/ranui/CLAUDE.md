@@ -237,7 +237,8 @@ After creating `components/mycomp/index.ts`:
 
 ```typescript
 // Create or reuse shadow root (cached via WeakMap, applies CSS)
-ensureShadowRoot(host: HTMLElement, cssText?: string, options?: ShadowRootInit): ShadowRoot
+ensureShadowRoot(host: HTMLElement, cssText?: string, options?: ShadowRootInit, internals?: ElementInternals): ShadowRoot
+hostInternals(host: HTMLElement): ElementInternals | undefined
 
 // The element a builder captured; throws, naming the field, if `.ref()` never filled it
 shadowPart<T>(ref: Ref<T>, name: string): T

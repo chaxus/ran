@@ -18,7 +18,8 @@ import {
 
 | API                                                        | 说明                                                                          |
 | :--------------------------------------------------------- | :---------------------------------------------------------------------------- |
-| `ensureShadowRoot(host, cssText?, options?)`               | 创建或复用缓存的 Shadow Root，并应用组件 CSS；不要直接调用 `attachShadow()`。 |
+| `ensureShadowRoot(host, cssText?, options?, internals?)`   | 创建或复用缓存 / Declarative Shadow Root，并应用组件 CSS；不要直接调用 `attachShadow()`。 |
+| `hostInternals(host)`                                      | 创建或复用 `ElementInternals`（封闭 DSD + 表单关联）。 |
 | `shadowPart(ref, name)`                                    | 取出 builder 用 `.ref()` 捕获的元素；从未捕获时抛错并指出是哪个字段。         |
 | `getStringAttribute(element, name, fallback?)`             | 读取属性，并在属性不存在时返回字符串兜底值。                                  |
 | `setStringAttribute(element, name, value, options?)`       | 设置字符串属性；`removeEmpty: true` 会移除空值。                              |
@@ -363,7 +364,7 @@ const html = renderToString(btn);
 // 输出：<r-button effect="true"><template shadowrootmode="closed">...</template></r-button>
 ```
 
-组件构造函数应使用 `ensureShadowRoot`，这样浏览器初始化时可以复用已存在的 Declarative Shadow DOM root。
+组件构造函数应使用 `ensureShadowRoot`，这样浏览器初始化时可以复用已存在的 Declarative Shadow DOM root。封闭根通过 `hostInternals(host)` → `ElementInternals.shadowRoot` 取回（不要二次 `attachShadow`）。表单关联字段把同一份 internals 传入 `ensureShadowRoot`，保证 `attachInternals` 只调用一次。
 
 `RanElement` 从 `utils/index.ts` 导出：
 
