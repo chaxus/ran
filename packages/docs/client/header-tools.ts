@@ -3,7 +3,7 @@
  * pill motion instead of each control flashing on its own.
  *
  * Header language / theme / surface live inside `<r-menubar class="header-utils">`
- * (library FLIP handoff). This module only wires the shared tool wash and language
+ * (library hover handoff). This module only wires the shared tool wash and language
  * URL navigation.
  */
 const mountHoverFill = (root: HTMLElement, targetSelector: string): void => {
@@ -84,8 +84,8 @@ const wireLangNavigation = (lang: ChromeSwitch): void => {
 };
 
 /**
- * Language change still navigates on every pointer type. Hover open + FLIP between
- * language / theme / surface is owned by `<r-menubar>` in the library.
+ * Language change still navigates on every pointer type. Hover open + peer handoff
+ * between language / theme / surface is owned by `<r-menubar>` in the library.
  */
 const mountChromeMenus = (): void => {
   const utils = document.querySelector<HTMLElement>('.header-utils');

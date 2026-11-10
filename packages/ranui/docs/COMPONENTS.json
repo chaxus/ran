@@ -1293,17 +1293,12 @@
       "tag": "r-menubar",
       "file": "components/menubar/index.ts",
       "attributes": [
-        "duration",
         "leave-delay",
         "panel-selector",
-        "sheet"
+        "sheet",
+        "switch-hold"
       ],
       "properties": [
-        {
-          "name": "duration",
-          "type": "number",
-          "desc": "FLIP morph duration in milliseconds (Stripe-like settle; default 320)."
-        },
         {
           "name": "leaveDelay",
           "type": "number",
@@ -1312,12 +1307,17 @@
         {
           "name": "panelSelector",
           "type": "string",
-          "desc": "Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`."
+          "desc": "Portaled panels watched for hover leave forgiveness. Defaults to `r-dropdown.ran-chrome-menu`."
         },
         {
           "name": "sheet",
           "type": "string",
           "desc": "CSS injected into the component's shadow DOM."
+        },
+        {
+          "name": "switchHold",
+          "type": "number",
+          "desc": "How long peer-hop CSS (zero enter/exit) stays armed, in milliseconds."
         }
       ],
       "events": [],

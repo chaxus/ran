@@ -43,12 +43,11 @@ test('header chrome menus have no chevron and open on hover', async ({ page, bro
   await expect(chromePanel(page, 'Light')).toBeHidden();
 });
 
-test('hovering across chrome menus marks a handoff and morphs the panel', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'FLIP handoff sampling is chromium-first');
+test('hovering across chrome menus marks an instant peer handoff', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'handoff attribute sampling is chromium-first');
   await page.evaluate(() => {
-    const state = window as unknown as { chromeHandoff?: boolean; flipSamples?: number[] };
+    const state = window as unknown as { chromeHandoff?: boolean };
     state.chromeHandoff = false;
-    state.flipSamples = [];
     const watch = new MutationObserver(() => {
       if (document.documentElement.hasAttribute('data-ran-menubar-switch')) state.chromeHandoff = true;
     });
@@ -63,28 +62,17 @@ test('hovering across chrome menus marks a handoff and morphs the panel', async 
   await expect(chromePanel(page, 'Light')).toBeVisible();
   expect(await page.evaluate(() => (window as unknown as { chromeHandoff?: boolean }).chromeHandoff)).toBe(true);
 
-  // Sample the morphing host while FLIP runs — left should travel toward the theme trigger.
-  const samples: number[] = [];
-  for (let i = 0; i < 8; i++) {
-    samples.push(
-      await page.evaluate(() => {
-        const el = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu')].find(
-          (node) => getComputedStyle(node).display !== 'none' && node.getClientRects().length,
-        );
-        if (!el) return NaN;
-        const t = getComputedStyle(el).transform;
-        const m = /matrix\(([^)]+)\)/.exec(t);
-        const parts = m?.[1]?.split(',').map((n) => Number(n.trim())) ?? [];
-        const dx = parts.length >= 6 ? parts[4]! : 0;
-        return el.getBoundingClientRect().left - dx;
-      }),
-    );
-    await page.waitForTimeout(25);
-  }
-  const toLeft = await chromePanel(page, 'Light').evaluate((el) => el.getBoundingClientRect().left);
-  expect(Math.abs(toLeft - fromLeft)).toBeGreaterThan(8);
-  const mid = samples.find((x) => Number.isFinite(x) && x !== fromLeft && x !== toLeft);
-  expect(mid, `expected a mid-flight left, got ${JSON.stringify(samples)}`).toBeTruthy();
+  // Independent portals: next panel sits under its own trigger — no FLIP mid-flight.
+  const toMetrics = await chromePanel(page, 'Light').evaluate((el) => {
+    const box = el.getBoundingClientRect();
+    return {
+      left: box.left,
+      transform: getComputedStyle(el).transform,
+      animDuration: getComputedStyle(el).getPropertyValue('--ran-dropdown-animation-duration').trim(),
+    };
+  });
+  expect(Math.abs(toMetrics.left - fromLeft)).toBeGreaterThan(8);
+  expect(toMetrics.transform === 'none' || toMetrics.transform === 'matrix(1, 0, 0, 1, 0, 0)').toBe(true);
 });
 
 test('language chrome panel is wide enough for longer option labels', async ({ page }) => {

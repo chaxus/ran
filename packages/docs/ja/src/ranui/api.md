@@ -347,12 +347,12 @@ description: 'ranui のすべてのカスタム要素 —— 43 個の要素の�
 
 ソース: `components/menubar/index.ts`
 
-- **属性（attribute）**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
+- **属性（attribute）**: `leave-delay`, `panel-selector`, `sheet: string`, `switch-hold`
 - **プロパティ（property）**:
-  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
   - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
-  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `panelSelector: string` — Portaled panels watched for hover leave forgiveness. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
+  - `switchHold: number` — How long peer-hop CSS (zero enter/exit) stays armed, in milliseconds.
 - **イベント**: —
 - **スロット**: `デフォルトスロット`
 - **Part**: `root`

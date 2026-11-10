@@ -62,20 +62,20 @@ describe('r-menubar contract', () => {
     document.body.appendChild(el);
     expect(el.panelSelector).toBe('r-dropdown.ran-chrome-menu');
     expect(el.leaveDelay).toBe(180);
-    expect(el.duration).toBe(320);
+    expect(el.switchHold).toBe(120);
 
     el.panelSelector = '.panel';
     el.leaveDelay = 90;
-    el.duration = 120;
+    el.switchHold = 80;
     expect(el.getAttribute('panel-selector')).toBe('.panel');
     expect(el.getAttribute('leave-delay')).toBe('90');
-    expect(el.getAttribute('duration')).toBe('120');
+    expect(el.getAttribute('switch-hold')).toBe('80');
     expect(el.panelSelector).toBe('.panel');
     expect(el.leaveDelay).toBe(90);
-    expect(el.duration).toBe(120);
+    expect(el.switchHold).toBe(80);
   });
 
-  it('opens a slotted select on fine-pointer hover', () => {
+  it('opens a slotted select on fine-pointer hover and marks peer hops', () => {
     const bar = document.createElement('r-menubar') as Menubar;
     const a = makeItem();
     const b = makeItem();
@@ -87,6 +87,7 @@ describe('r-menubar contract', () => {
     a.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
     expect(a.open).toBe(true);
     expect(b.open).toBe(false);
+    expect(document.documentElement.hasAttribute('data-ran-menubar-switch')).toBe(false);
 
     b.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
     expect(a.open).toBe(false);

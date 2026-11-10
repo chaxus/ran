@@ -349,12 +349,12 @@ Código fuente: `components/math/index.ts`
 
 Código fuente: `components/menubar/index.ts`
 
-- **Atributos**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
+- **Atributos**: `leave-delay`, `panel-selector`, `sheet: string`, `switch-hold`
 - **Propiedades**:
-  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
   - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
-  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `panelSelector: string` — Portaled panels watched for hover leave forgiveness. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
+  - `switchHold: number` — How long peer-hop CSS (zero enter/exit) stays armed, in milliseconds.
 - **Eventos**: —
 - **Slots**: `por defecto`
 - **Partes**: `root`

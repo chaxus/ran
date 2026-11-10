@@ -1,20 +1,20 @@
 ---
-description: '一组 chrome 下拉在悬停时交接：打开菜单，并在同伴之间变形面板。'
+description: '一组 chrome 下拉在悬停时交接：打开菜单，同伴之间瞬时切换并跳过进出场。'
 ---
 
 # Menubar
 
-把一组 chrome 选择器（`r-select` / `r-theme-switch` / `r-surface-switch`，或任意带 `open` 的宿主）串成**悬停打开**，并在同伴之间做**共享布局跳转**。
+把一组 chrome 选择器（`r-select` / `r-theme-switch` / `r-surface-switch`，或任意带 `open` 的宿主）串成**悬停打开**，并在同伴之间做**瞬时交接**。
 
-在精细指针上，滑过触发器会打开下一个菜单，并把浮层面板从上一块盒子变形过来（Stripe / Floating UI FLIP）。触控仍走各自的点击。空闲首次打开保留下拉的进入动画；同伴跳转通过 `html[data-ran-menubar-switch]` 跳过进出场。
+在精细指针上，滑过触发器会在各自触发器下方打开下一个菜单，并通过 `html[data-ran-menubar-switch]` 跳过进出场动画。各 select 仍是独立浮层——不做跨 portal 的共享布局缩放（那是大导航 viewport 的做法，不适合 chrome 选择器）。触控仍走各自的点击。空闲首次打开保留下拉的进入动画。
 
-> **适用**：文档站顶栏、设置工具条等「一排 chrome 菜单应像同一块表面」。单个选择器用 [`<r-select>`](/cn/ranui/select/) 即可。
+> **适用**：文档站顶栏、设置工具条等「一排 chrome 菜单应悬停打开、同伴之间不闪关」。单个选择器用 [`<r-select>`](/cn/ranui/select/) 即可。
 
 ## 快速开始
 
 ### 语言 + 主题 + 风格
 
-在桌面端横向滑过三个控件：面板跟着指针滑，而不是闪关闪开。
+在桌面端横向滑过三个控件：下一个面板在对应触发器下打开，同伴之间不闪淡入淡出。
 
 <ran-demo>
   <r-menubar style="gap: 8px">
@@ -47,7 +47,7 @@ import 'ranui/theme-switch';
 import 'ranui/surface-switch';
 ```
 
-浮层面板需带 `dropdownclass="ran-chrome-menu"`（主题/风格开关已自带）。交接按这个类测量并变形。
+浮层面板需带 `dropdownclass="ran-chrome-menu"`（主题/风格开关已自带）。离开延迟按这个类做悬停宽容。
 
 ### 命令式宿主（不用自定义元素）
 
@@ -64,12 +64,12 @@ const stop = mountMenubarHandoff({ root: document.querySelector('.chrome') });
 
 ### 属性
 
-| 属性             | 默认                         | 说明                             |
-| ---------------- | ---------------------------- | -------------------------------- |
-| `panel-selector` | `r-dropdown.ran-chrome-menu` | 跳转时变形的浮层面板。           |
-| `leave-delay`    | `180`                        | 离开条带与面板后关闭前的毫秒数。 |
-| `duration`       | `320`                        | FLIP 变形时长（毫秒，偏 Stripe）。 |
-| `sheet`          | `''`                         | 注入组件 shadow DOM 的 CSS。     |
+| 属性             | 默认                         | 说明                                     |
+| ---------------- | ---------------------------- | ---------------------------------------- |
+| `panel-selector` | `r-dropdown.ran-chrome-menu` | 用于离开宽容的浮层面板选择器。           |
+| `leave-delay`    | `180`                        | 离开条带与面板后关闭前的毫秒数。         |
+| `switch-hold`    | `120`                        | 同伴跳转时「零进出场」CSS 保持的毫秒数。 |
+| `sheet`          | `''`                         | 注入组件 shadow DOM 的 CSS。             |
 
 ### CSS Parts
 
@@ -87,4 +87,4 @@ r-menubar {
 
 - 触发器是 light DOM 里的 `r-select`、`r-theme-switch`、`r-surface-switch`，或带 `open` 的 `[data-ran-menubar-item]`。
 - 外层包装（例如 `.appearance`）没问题——条带会找到真正的宿主。
-- 减少动效时跳过变形，面板仍会开关。
+- 同伴跳转不变形浮层尺寸/位置；每个面板各自定位在触发器下方。

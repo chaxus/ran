@@ -346,12 +346,12 @@ description: 'همهٔ عناصر سفارشی ranui — 43 عنصر همراه 
 
 کد منبع: `components/menubar/index.ts`
 
-- **ویژگی‌ها (attribute)**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
+- **ویژگی‌ها (attribute)**: `leave-delay`, `panel-selector`, `sheet: string`, `switch-hold`
 - **خصیصه‌ها (property)**:
-  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
   - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
-  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `panelSelector: string` — Portaled panels watched for hover leave forgiveness. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
+  - `switchHold: number` — How long peer-hop CSS (zero enter/exit) stays armed, in milliseconds.
 - **رویدادها**: —
 - **اسلات‌ها**: `پیش‌فرض`
 - **Part‌ها**: `root`
