@@ -260,20 +260,30 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
   hover.setAttribute('aria-hidden', 'true');
   const clip = document.createElement('div');
   clip.className = `${VIEWPORT_CLASS}__clip`;
-  // Fill sits under the clip so layer rebuilds do not drop it.
-  shell.append(hover, clip);
+  // Fill lives in the clip (same containing block as options) so shell morph
+  // cannot leave a stale viewport-space translate.
+  clip.appendChild(hover);
+  shell.appendChild(clip);
   viewport.appendChild(shell);
   document.body.appendChild(viewport);
   cleanups.push(() => viewport.remove());
 
+  const SHELL_PAD = 4;
   let hoverTarget: HTMLElement | null = null;
+  let hoverSettleTimer: number | undefined;
+  let hoverGen = 0;
+
+  const ensureHoverInClip = (): void => {
+    if (hover.parentNode !== clip) clip.prepend(hover);
+  };
+
+  /** Place in clip-local coordinates — stable while the shell itself translates. */
   const placeHover = (option: HTMLElement): void => {
+    ensureHoverInClip();
+    const clipBox = clip.getBoundingClientRect();
     const box = option.getBoundingClientRect();
-    const Matrix = typeof DOMMatrixReadOnly !== 'undefined' ? DOMMatrixReadOnly : undefined;
-    const shift = Matrix ? new Matrix(getComputedStyle(hover).transform) : { e: 0, f: 0 };
-    const at = hover.getBoundingClientRect();
     hover.toggleAttribute('data-instant', hoverTarget === null);
-    hover.style.transform = `translate(${box.left - (at.left - shift.e)}px, ${box.top - (at.top - shift.f)}px)`;
+    hover.style.transform = `translate(${box.left - clipBox.left}px, ${box.top - clipBox.top}px)`;
     hover.style.width = `${box.width}px`;
     hover.style.height = `${box.height}px`;
     hover.style.opacity = '1';
@@ -283,12 +293,15 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     hover.style.opacity = '0';
     hoverTarget = null;
   };
-  const syncHoverToLayer = (layer: HTMLElement): void => {
-    // New panel: fade in on the committed row (same as r-select open), do not slide from the previous menu.
-    hoverTarget = null;
-    const selected = layer.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
-    if (selected) placeHover(selected);
-    else hideHover();
+
+  const layerContentHeight = (layer: HTMLElement): number => {
+    let h = 0;
+    for (const child of layer.children) {
+      if (!(child instanceof HTMLElement)) continue;
+      if (child === hover || child.classList.contains(`${VIEWPORT_CLASS}__hover`)) continue;
+      h += child.offsetHeight;
+    }
+    return h;
   };
 
   const setShellBox = (x: number, y: number, w: number, h: number, opacity: number, instant: boolean): void => {
@@ -304,7 +317,60 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     }
   };
 
+  /**
+   * Fit height to the rebuilt rows (native harvest height was often taller —
+   * empty gap under the last option). Keep harvest width as the floor so labels
+   * match the measured chrome panel.
+   */
+  const fitAndShow = (
+    layer: HTMLElement,
+    x: number,
+    y: number,
+    minWidth: number,
+    opacity: number,
+    instant: boolean,
+  ): void => {
+    ensureHoverInClip();
+    // Width first so nowrap labels lay out; height follows content.
+    setShellBox(x, y, minWidth, Math.max(layerContentHeight(layer) + SHELL_PAD * 2, SHELL_PAD * 2 + 1), opacity, true);
+    const h = layerContentHeight(layer) + SHELL_PAD * 2;
+    const w = Math.max(minWidth, layer.scrollWidth + SHELL_PAD * 2);
+    setShellBox(x, y, w, h, opacity, instant);
+  };
+
+  const syncHoverToLayer = (layer: HTMLElement, afterShellMotion: boolean): void => {
+    window.clearTimeout(hoverSettleTimer);
+    const gen = ++hoverGen;
+    // Hide until coordinates match the settled shell — avoids the mid-morph skew.
+    hideHover();
+    const selected = layer.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
+    const apply = (): void => {
+      if (gen !== hoverGen) return;
+      if (selected?.isConnected) placeHover(selected);
+      else hideHover();
+    };
+    if (!afterShellMotion || reduceMotion()) {
+      requestAnimationFrame(() => requestAnimationFrame(apply));
+      return;
+    }
+    const onEnd = (event: TransitionEvent): void => {
+      if (event.target !== shell) return;
+      if (event.propertyName !== 'transform' && event.propertyName !== 'width' && event.propertyName !== 'height') {
+        return;
+      }
+      shell.removeEventListener('transitionend', onEnd);
+      apply();
+    };
+    shell.addEventListener('transitionend', onEnd);
+    hoverSettleTimer = window.setTimeout(() => {
+      shell.removeEventListener('transitionend', onEnd);
+      apply();
+    }, duration + 50);
+  };
+
   const hideViewport = (): void => {
+    window.clearTimeout(hoverSettleTimer);
+    hoverGen += 1;
     document.documentElement.removeAttribute(VIEWPORT_ATTR);
     setShellBox(0, 0, 0, 0, 0, true);
     hideHover();
@@ -344,8 +410,8 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     // Align to trigger start (same as default select bottom placement).
     const x = trigger.left;
     const y = trigger.bottom + 4;
+    // Width floor from the native panel; height is measured from rebuilt rows.
     const w = harvest.width;
-    const h = harvest.height;
 
     document.documentElement.setAttribute(VIEWPORT_ATTR, direction || 'open');
     viewport.setAttribute('aria-hidden', 'false');
@@ -363,9 +429,9 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
 
     if (!hopping || reduceMotion()) {
       const layer = buildLayer(harvest, hopping ? null : 'fade', onPick);
-      clip.replaceChildren(layer);
-      setShellBox(x, y, w, h, 1, !hopping);
-      syncHoverToLayer(layer);
+      clip.replaceChildren(hover, layer);
+      fitAndShow(layer, x, y, w, 1, !hopping);
+      syncHoverToLayer(layer, false);
       return;
     }
 
@@ -387,10 +453,13 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       // animationend can miss (interrupted morph / reduced motion mid-flight).
       window.setTimeout(drop, duration + 80);
     }
+    ensureHoverInClip();
     clip.appendChild(incoming);
-    // Morph shell toward the new trigger / content box.
-    setShellBox(x, y, w, h, 1, false);
-    syncHoverToLayer(incoming);
+    // Morph shell toward the new trigger; height follows rebuilt rows, not a tall harvest.
+    const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
+    const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
+    setShellBox(x, y, nextW, nextH, 1, false);
+    syncHoverToLayer(incoming, true);
   };
 
   const setOpen = (item: MenubarItem, open: boolean): void => {
