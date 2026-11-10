@@ -972,6 +972,13 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   align-items: center;
   gap: 8px;
   flex: none;
+  /*
+   * Build-time Declarative Shadow DOM paints the full select chrome inside the
+   * host before upgrade. Without clipping, that shadow content expands
+   * scrollWidth on narrow no-JS loads (layout-audit / drawer specs).
+   * Portaled menus attach to `document.body`, so host overflow does not clip them.
+   */
+  overflow: hidden;
 }
 .appearance {
   display: flex;
@@ -982,10 +989,17 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   border: none;
   background: transparent;
   box-shadow: none;
+  overflow: hidden;
 }
 .theme-switch,
 .surface-switch {
   flex: none;
+}
+.header-utils .lang-switch,
+.appearance .theme-switch,
+.appearance .surface-switch {
+  overflow: hidden;
+  max-width: 100%;
 }
 /*
  * Before the deferred module upgrades the switches, empty hosts collapse and the
@@ -1256,8 +1270,8 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
  * Width is owned by r-select (trigger floor + content, locked in px). Do not
  * force `::part(dropdown) { width: 100% }` here — that looped with overflow-y
  * and clipped longer labels (“Liquid glass”). Hosts only cap height.
- * Horizontal hops: `<r-menubar>` Stripe-style FLIP
- * (`html[data-ran-menubar-switch]` skips enter/exit).
+ * Horizontal hops: `<r-menubar>` shared viewport (shell morph + directional
+ * content slide; native `ran-chrome-menu` portals are suppressed while open).
  */
 r-dropdown.ran-chrome-menu {
   --ran-dropdown-animation-duration: 0.28s;

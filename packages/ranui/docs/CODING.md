@@ -61,10 +61,14 @@ rules it encodes:
 - **Extend `RanElement`, register with `defineSSR`.** Never `customElements.define` directly
   — the SSR registry is what lets the server construct the element.
 - **`ensureShadowRoot`, never `attachShadow`.** Roots are **closed** by design: page CSS
-  cannot leak in, and nothing outside can look in.
-- **Build the tree once, in the constructor.** A second build from `connectedCallback` adds a
-  duplicate subtree on every reconnect, and its refs replace the ones the component is
-  already driving.
+  cannot leak in, and nothing outside can look in. On upgrade, reuse the closed root via
+  `hostInternals` / `ElementInternals.shadowRoot` — calling `attachShadow` again throws or
+  wipes first paint.
+- **Build the tree once, in the constructor**, with the ranview builder and `.ref()`. Mount
+  it with `mountShadowTree` (not bare `appendChild`): Declarative Shadow DOM is
+  **paint-only** until upgrade; `replaceChildren` drops that snapshot and installs the live
+  builder tree so refs stay from `.ref()` / `shadowPart` — never `querySelector` to re-bind
+  a DSD tree. A second build from `connectedCallback` still duplicates on reconnect.
 - **Hold what you build.** Capture every element with `.ref()` while building and read it
   back with `shadowPart`. `querySelector` re-derives an element through a _string_: rename
   the class in the LESS file and the two sides drift, `!` waves the `null` through, and the

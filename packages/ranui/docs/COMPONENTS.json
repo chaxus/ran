@@ -1302,17 +1302,17 @@
         {
           "name": "duration",
           "type": "number",
-          "desc": "FLIP morph duration in milliseconds (Stripe-like settle; default 320)."
+          "desc": "Shared viewport morph + content slide duration in milliseconds."
         },
         {
           "name": "leaveDelay",
           "type": "number",
-          "desc": "Milliseconds before close after the pointer leaves the bar and panels."
+          "desc": "Milliseconds before close after the pointer leaves the bar and viewport."
         },
         {
           "name": "panelSelector",
           "type": "string",
-          "desc": "Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`."
+          "desc": "Native panels harvested into the shared viewport. Defaults to `r-dropdown.ran-chrome-menu`."
         },
         {
           "name": "sheet",
@@ -2469,8 +2469,7 @@
         }
       ],
       "parts": [
-        "option ${choice}",
-        "select"
+        "option ${choice}"
       ],
       "defaultSlot": false,
       "namedSlots": []
@@ -2634,8 +2633,7 @@
         }
       ],
       "parts": [
-        "option ${choice}",
-        "select"
+        "option ${choice}"
       ],
       "defaultSlot": false,
       "namedSlots": []

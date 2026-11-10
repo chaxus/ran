@@ -1924,7 +1924,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 ## `surface-switch`
 
 - Tokens: 15
-- Parts: 2
+- Parts: 1
 
 ### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 7 -->
@@ -1946,7 +1946,6 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ### Parts
 - `option ${choice}`
-- `select`
 
 ## `tab`
 
@@ -2023,7 +2022,7 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 ## `theme-switch`
 
 - Tokens: 16
-- Parts: 2
+- Parts: 1
 
 ### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 8 -->
@@ -2046,7 +2045,6 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 
 ### Parts
 - `option ${choice}`
-- `select`
 
 ## `token-meter`
 

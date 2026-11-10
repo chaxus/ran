@@ -1926,7 +1926,7 @@ once. The vocabulary is the [design system](/src/design/design-system/); the nam
 ## `surface-switch`
 
 - Tokens: 15
-- Parts: 2
+- Parts: 1
 
 ### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 7 -->
@@ -1948,7 +1948,6 @@ once. The vocabulary is the [design system](/src/design/design-system/); the nam
 
 ### Parts
 - `option ${choice}`
-- `select`
 
 ## `tab`
 
@@ -2025,7 +2024,7 @@ once. The vocabulary is the [design system](/src/design/design-system/); the nam
 ## `theme-switch`
 
 - Tokens: 16
-- Parts: 2
+- Parts: 1
 
 ### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 8 -->
@@ -2048,7 +2047,6 @@ once. The vocabulary is the [design system](/src/design/design-system/); the nam
 
 ### Parts
 - `option ${choice}`
-- `select`
 
 ## `token-meter`
 

@@ -5,6 +5,7 @@ import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updat
 import {
   ensureShadowRoot,
   getStringAttribute,
+  hostInternals,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -40,13 +41,8 @@ export class Checkbox extends RanElement {
   _defaultCaptured = false;
   constructor() {
     super();
-    // attachInternals is allowed in the constructor; guard for SSR/old runtimes.
-    try {
-      this._internals = this.attachInternals();
-    } catch {
-      this._internals = undefined;
-    }
-    this._shadowDom = ensureShadowRoot(this, checkboxCss);
+    this._internals = hostInternals(this);
+    this._shadowDom = ensureShadowRoot(this, checkboxCss, { mode: 'closed' }, this._internals);
     const containerRef = createRef<HTMLDivElement>();
     const checkInputRef = createRef<HTMLInputElement>();
     const checkInnerRef = createRef<HTMLSpanElement>();

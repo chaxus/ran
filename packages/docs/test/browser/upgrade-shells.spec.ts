@@ -19,6 +19,10 @@ test('undefined header switches and invite fields keep reserved shells', async (
   // Held module scripts never finish, so `load` may never fire (WebKit). DOM is enough
   // to assert the CSS shells before the deferred chunks upgrade the hosts.
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  // Closed DSD is consumed into a closed root — it will not appear in page.content().
+  // Assert the wire HTML still ships the declarative templates for header chrome.
+  const wire = await page.request.get(page.url());
+  expect(await wire.text()).toMatch(/header-utils[\s\S]*shadowrootmode="closed"/);
   await expect.poll(() => page.locator('.theme-switch:not(:defined)').count()).toBe(1);
   await expect.poll(() => page.locator('.lang-switch:not(:defined)').count()).toBe(1);
   await expect.poll(() => page.locator('.example__field:not(:defined)').count()).toBe(2);

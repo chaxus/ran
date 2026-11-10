@@ -1,16 +1,17 @@
 ---
-description: 'Hover handoff across sibling chrome selects — open on hover, morph the panel between peers.'
+description: 'Hover handoff across sibling chrome selects — shared viewport morphs between peers.'
 ---
 
 # Menubar
 
-A thin bar that wires **hover open** and a **shared-layout hop** across sibling chrome
+A thin bar that wires **hover open** and a **shared viewport hop** across sibling chrome
 selects (`r-select`, `r-theme-switch`, `r-surface-switch`, or any host with `open`).
 
-On a fine pointer, moving across triggers opens the next menu and morphs the portaled
-panel from the previous box (Stripe / Floating UI FLIP). Touch keeps each control’s own
-click. Soft enter from idle stays on the dropdown; hops skip enter/exit via
-`html[data-ran-menubar-switch]`.
+On a fine pointer, moving across triggers keeps one floating shell that morphs size and
+position under the active trigger while content slides by direction (Stripe /
+Radix NavigationMenu). Native select portals stay for state but are visually suppressed
+while the viewport is open. Touch keeps each control’s own click. Soft enter from idle
+fades the shell in.
 
 > **Use when** a row of chrome menus should feel like one surface (docs headers, settings
 > toolbars). For a single select, use [`<r-select>`](/ranui/select/) alone.
@@ -19,8 +20,8 @@ click. Soft enter from idle stays on the dropdown; hops skip enter/exit via
 
 ### Language + theme + surface
 
-Hover across the three controls (desktop). The panel slides with the pointer instead of
-blinking closed and open.
+Hover across the three controls (desktop). The shell slides with the pointer and content
+cross-fades by direction.
 
 <ran-demo>
   <r-menubar style="gap: 8px">
@@ -54,11 +55,9 @@ import 'ranui/surface-switch';
 ```
 
 Mark portaled panels with `dropdownclass="ran-chrome-menu"` (theme/surface switches already
-do). That class is what the handoff measures and morphs.
+do). The handoff harvests that class into the shared viewport.
 
 ### Imperative host (no custom element)
-
-Hosts that already own the markup can call the same wiring:
 
 ```js
 import { mountMenubarHandoff } from 'ranui/menubar';
@@ -71,12 +70,12 @@ const stop = mountMenubarHandoff({ root: document.querySelector('.chrome') });
 
 ### Attributes
 
-| Attribute        | Default                      | Description                                     |
-| ---------------- | ---------------------------- | ----------------------------------------------- |
-| `panel-selector` | `r-dropdown.ran-chrome-menu` | Portaled panels the hop morphs between.         |
-| `leave-delay`    | `180`                        | ms before close after leaving the bar + panels. |
-| `duration`       | `320`                        | FLIP morph duration in ms (Stripe-like settle). |
-| `sheet`          | `''`                         | CSS injected into the component's shadow DOM.   |
+| Attribute        | Default                      | Description                                       |
+| ---------------- | ---------------------------- | ------------------------------------------------- |
+| `panel-selector` | `r-dropdown.ran-chrome-menu` | Native panels harvested into the shared viewport. |
+| `leave-delay`    | `180`                        | ms before close after leaving the bar + viewport. |
+| `duration`       | `280`                        | Shell morph + content slide duration in ms.       |
+| `sheet`          | `''`                         | CSS injected into the component's shadow DOM.     |
 
 ### CSS Parts
 
@@ -95,4 +94,5 @@ r-menubar {
 - Triggers are light-DOM descendants tagged `r-select`, `r-theme-switch`,
   `r-surface-switch`, or `[data-ran-menubar-item]` that expose `open`.
 - Nested wrappers (e.g. an `.appearance` group) are fine — the bar finds the hosts.
-- Reduced motion skips the morph; panels still open and close.
+- Peer hops use one viewport (`html[data-ran-menubar-viewport]`); reduced motion skips
+  slides and snaps the shell.

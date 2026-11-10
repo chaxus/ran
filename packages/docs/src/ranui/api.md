@@ -349,9 +349,9 @@ Source: `components/menubar/index.ts`
 
 - **Attributes**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
 - **Properties**:
-  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
-  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
-  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `duration: number` — Shared viewport morph + content slide duration in milliseconds.
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and viewport.
+  - `panelSelector: string` — Native panels harvested into the shared viewport. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
 - **Events**: —
 - **Slots**: `default`
@@ -623,7 +623,7 @@ Source: `components/surface-switch/index.ts`
 - **Events**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **Slots**: —
-- **Parts**: `option ${choice}`, `select`
+- **Parts**: `option ${choice}`
 
 ## `<r-tab>`
 
@@ -658,7 +658,7 @@ Source: `components/theme-switch/index.ts`
 - **Events**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **Slots**: —
-- **Parts**: `option ${choice}`, `select`
+- **Parts**: `option ${choice}`
 
 ## `<r-token-meter>`
 

@@ -41,7 +41,7 @@ describe('r-menubar contract', () => {
 
   beforeEach(() => {
     document.body.innerHTML = '';
-    document.documentElement.removeAttribute('data-ran-menubar-switch');
+    document.documentElement.removeAttribute('data-ran-menubar-viewport');
     media = finePointer(true);
   });
 
@@ -49,8 +49,8 @@ describe('r-menubar contract', () => {
     media?.mockRestore();
     media = null;
     document.body.innerHTML = '';
-    document.documentElement.removeAttribute('data-ran-menubar-switch');
-    document.getElementById('ran-menubar-handoff-style')?.remove();
+    document.documentElement.removeAttribute('data-ran-menubar-viewport');
+    document.getElementById('ran-menubar-viewport-style')?.remove();
   });
 
   it('does not throw on createElement', () => {
@@ -62,20 +62,20 @@ describe('r-menubar contract', () => {
     document.body.appendChild(el);
     expect(el.panelSelector).toBe('r-dropdown.ran-chrome-menu');
     expect(el.leaveDelay).toBe(180);
-    expect(el.duration).toBe(320);
+    expect(el.duration).toBe(280);
 
     el.panelSelector = '.panel';
     el.leaveDelay = 90;
-    el.duration = 120;
+    el.duration = 160;
     expect(el.getAttribute('panel-selector')).toBe('.panel');
     expect(el.getAttribute('leave-delay')).toBe('90');
-    expect(el.getAttribute('duration')).toBe('120');
+    expect(el.getAttribute('duration')).toBe('160');
     expect(el.panelSelector).toBe('.panel');
     expect(el.leaveDelay).toBe(90);
-    expect(el.duration).toBe(120);
+    expect(el.duration).toBe(160);
   });
 
-  it('opens a slotted select on fine-pointer hover', () => {
+  it('opens a slotted select on fine-pointer hover and arms the shared viewport', () => {
     const bar = document.createElement('r-menubar') as Menubar;
     const a = makeItem();
     const b = makeItem();
@@ -87,11 +87,12 @@ describe('r-menubar contract', () => {
     a.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
     expect(a.open).toBe(true);
     expect(b.open).toBe(false);
+    expect(document.documentElement.hasAttribute('data-ran-menubar-viewport')).toBe(true);
 
     b.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
     expect(a.open).toBe(false);
     expect(b.open).toBe(true);
-    expect(document.documentElement.hasAttribute('data-ran-menubar-switch')).toBe(true);
+    expect(document.documentElement.getAttribute('data-ran-menubar-viewport')).toMatch(/left|right|pending|open/);
   });
 
   it('finds triggers nested under a wrapper', () => {
@@ -115,7 +116,7 @@ describe('mountMenubarHandoff', () => {
 
   beforeEach(() => {
     document.body.innerHTML = '';
-    document.documentElement.removeAttribute('data-ran-menubar-switch');
+    document.documentElement.removeAttribute('data-ran-menubar-viewport');
     media = finePointer(true);
   });
 
@@ -123,8 +124,8 @@ describe('mountMenubarHandoff', () => {
     media?.mockRestore();
     media = null;
     document.body.innerHTML = '';
-    document.documentElement.removeAttribute('data-ran-menubar-switch');
-    document.getElementById('ran-menubar-handoff-style')?.remove();
+    document.documentElement.removeAttribute('data-ran-menubar-viewport');
+    document.getElementById('ran-menubar-viewport-style')?.remove();
   });
 
   it('no-ops when the pointer is not fine', () => {
@@ -155,6 +156,7 @@ describe('mountMenubarHandoff', () => {
     expect(a.open).toBe(false);
     expect(b.open).toBe(true);
     stop();
-    expect(document.documentElement.hasAttribute('data-ran-menubar-switch')).toBe(false);
+    expect(document.documentElement.hasAttribute('data-ran-menubar-viewport')).toBe(false);
+    expect(document.querySelector('.ran-menubar-viewport')).toBeNull();
   });
 });

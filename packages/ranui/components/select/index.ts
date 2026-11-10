@@ -14,6 +14,8 @@ import { createRef, Div, EventManager, InputBuilder, Label, Slot, Span, View } f
 import {
   ensureShadowRoot,
   getStringAttribute,
+  hostInternals,
+  mountShadowTree,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -177,19 +179,17 @@ export class Select extends RanElement {
   }
   constructor() {
     super();
-    // attachInternals is allowed in the constructor; guard for SSR/old runtimes.
-    try {
-      this._internals = this.attachInternals();
-    } catch {
-      this._internals = undefined;
-    }
+    // Form association + closed DSD hydrate both need the same ElementInternals.
+    this._internals = hostInternals(this);
     this._listboxId = `ran-select-listbox-${Math.random().toString(36).slice(2, 9)}`;
     this._activeIndex = -1;
     this._optionList = [];
     this._optionLabelMapValue = new Map();
     this._optionValueMapLabel = new Map();
 
-    this._shadowDom = ensureShadowRoot(this, selectCss);
+    this._shadowDom = ensureShadowRoot(this, selectCss, { mode: 'closed' }, this._internals);
+    // Always build with ranview refs. DSD is paint-only until upgrade; mounting
+    // replaceChildren the snapshot so we never querySelector to re-bind nodes.
     const selectionRef = createRef<HTMLDivElement>();
     const selectorRef = createRef<HTMLDivElement>();
     const iconRef = createRef<HTMLElement>();
@@ -228,7 +228,7 @@ export class Select extends RanElement {
         Slot().ref(slotRef).class('slot'),
       )
       .build() as HTMLDivElement;
-    this._shadowDom.appendChild(wrap);
+    mountShadowTree(this._shadowDom, selectCss, wrap);
 
     this._select = wrap;
     this._selection = shadowPart(selectionRef, 'selection');
@@ -1269,6 +1269,80 @@ export class Select extends RanElement {
     if (this._text.textContent === label) return;
     this.selectOptionElement(option, false);
   };
+
+  /**
+   * Fill the closed-state label before Declarative Shadow DOM serialization.
+   * SSR streams often inject light-DOM options as an `innerHTML` string (not live
+   * `querySelector` nodes); parse that fallback so first paint shows the selected text.
+   */
+  _preSerialize(): void {
+    const value = this.getAttribute('value');
+    if (!value || !this._text) return;
+    const live = Array.from(this.querySelectorAll('r-option')).find((item) => item.getAttribute('value') === value) as
+      HTMLElement | undefined;
+    let label = live ? live.getAttribute('title') || live.textContent?.trim() || '' : '';
+    if (!label) {
+      // Prefer a DOM parse over regex on markup — avoids ReDoS / incomplete tag stripping.
+      label = this._labelFromSerializedOptions(value);
+    }
+    if (label) this._text.textContent = label;
+  }
+
+  /** Read the selected option's text from SSR-injected light-DOM HTML. */
+  private _labelFromSerializedOptions(value: string): string {
+    // Structured children first (appendChild'd options under the HTMLElementMock).
+    try {
+      for (const child of Array.from(this.querySelectorAll('r-option'))) {
+        if (child.getAttribute('value') !== value) continue;
+        return (child.textContent || '').replace(/\s+/g, ' ').trim();
+      }
+    } catch {
+      /* Host may not expose querySelectorAll during serialize. */
+    }
+    const html = this.innerHTML || '';
+    if (!html.includes('r-option')) return '';
+    if (typeof DOMParser !== 'undefined') {
+      try {
+        const doc = new DOMParser().parseFromString(`<div>${html}</div>`, 'text/html');
+        const option = Array.from(doc.querySelectorAll('r-option')).find(
+          (item) => item.getAttribute('value') === value,
+        );
+        return option?.textContent?.replace(/\s+/g, ' ').trim() || '';
+      } catch {
+        /* fall through to linear scan */
+      }
+    }
+    // Linear scan — no nested quantifiers (CodeQL). Option labels in SSR are plain text.
+    const open = '<r-option';
+    const close = '</r-option>';
+    let pos = 0;
+    while (pos < html.length) {
+      const start = html.indexOf(open, pos);
+      if (start === -1) break;
+      const tagEnd = html.indexOf('>', start);
+      if (tagEnd === -1) break;
+      const end = html.indexOf(close, tagEnd + 1);
+      if (end === -1) break;
+      const attrs = html.slice(start + open.length, tagEnd);
+      // SSR always emits quoted attributes (`value="…"` / `value='…'`).
+      if (attrs.includes(`value="${value}"`) || attrs.includes(`value='${value}'`)) {
+        // Option hosts may carry a nested DSD `<template>` plus light-DOM label text.
+        let raw = html.slice(tagEnd + 1, end);
+        let cursor = 0;
+        while (cursor < raw.length) {
+          const tOpen = raw.indexOf('<template', cursor);
+          if (tOpen === -1) break;
+          const tClose = raw.indexOf('</template>', tOpen);
+          if (tClose === -1) break;
+          raw = raw.slice(0, tOpen) + raw.slice(tClose + '</template>'.length);
+          cursor = tOpen;
+        }
+        if (!raw.includes('<')) return raw.replace(/\s+/g, ' ').trim();
+      }
+      pos = end + close.length;
+    }
+    return '';
+  }
 }
 
 defineSSR('r-select', Select as unknown as new () => HTMLElement);

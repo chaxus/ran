@@ -348,9 +348,9 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 43개 엘리먼트의 �
 
 - **어트리뷰트**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
 - **프로퍼티**:
-  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
-  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
-  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `duration: number` — Shared viewport morph + content slide duration in milliseconds.
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and viewport.
+  - `panelSelector: string` — Native panels harvested into the shared viewport. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
 - **이벤트**: —
 - **슬롯**: `기본 슬롯`
@@ -622,7 +622,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 43개 엘리먼트의 �
 - **이벤트**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **슬롯**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-tab>`
 
@@ -657,7 +657,7 @@ description: 'ranui의 모든 커스텀 엘리먼트 — 43개 엘리먼트의 �
 - **이벤트**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **슬롯**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-token-meter>`
 

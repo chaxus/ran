@@ -1927,7 +1927,7 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 ## `surface-switch`
 
 - Tokens: 15
-- Parts: 2
+- Parts: 1
 
 ### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 7 -->
@@ -1949,7 +1949,6 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 
 ### Parts
 - `option ${choice}`
-- `select`
 
 ## `tab`
 
@@ -2026,7 +2025,7 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 ## `theme-switch`
 
 - Tokens: 16
-- Parts: 2
+- Parts: 1
 
 ### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 8 -->
@@ -2049,7 +2048,6 @@ nomenclatura es `--ran-{component}-{element}[-{state}]-{property}`.
 
 ### Parts
 - `option ${choice}`
-- `select`
 
 ## `token-meter`
 

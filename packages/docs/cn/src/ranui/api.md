@@ -347,9 +347,9 @@ description: 'ranui 的全部自定义元素 —— 43 个元素的属性、属�
 
 - **属性（attribute）**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
 - **属性值（property）**:
-  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
-  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
-  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `duration: number` — Shared viewport morph + content slide duration in milliseconds.
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and viewport.
+  - `panelSelector: string` — Native panels harvested into the shared viewport. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
 - **事件**: —
 - **插槽**: `默认插槽`
@@ -621,7 +621,7 @@ description: 'ranui 的全部自定义元素 —— 43 个元素的属性、属�
 - **事件**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **插槽**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-tab>`
 
@@ -656,7 +656,7 @@ description: 'ranui 的全部自定义元素 —— 43 个元素的属性、属�
 - **事件**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **插槽**: —
-- **Part**: `option ${choice}`, `select`
+- **Part**: `option ${choice}`
 
 ## `<r-token-meter>`
 

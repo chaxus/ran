@@ -348,9 +348,9 @@ description: 'همهٔ عناصر سفارشی ranui — 43 عنصر همراه 
 
 - **ویژگی‌ها (attribute)**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
 - **خصیصه‌ها (property)**:
-  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
-  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
-  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `duration: number` — Shared viewport morph + content slide duration in milliseconds.
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and viewport.
+  - `panelSelector: string` — Native panels harvested into the shared viewport. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
 - **رویدادها**: —
 - **اسلات‌ها**: `پیش‌فرض`
@@ -622,7 +622,7 @@ description: 'همهٔ عناصر سفارشی ranui — 43 عنصر همراه 
 - **رویدادها**:
   - `change` · bubbles, composed · detail `{ surface }`
 - **اسلات‌ها**: —
-- **Part‌ها**: `option ${choice}`, `select`
+- **Part‌ها**: `option ${choice}`
 
 ## `<r-tab>`
 
@@ -657,7 +657,7 @@ description: 'همهٔ عناصر سفارشی ranui — 43 عنصر همراه 
 - **رویدادها**:
   - `change` · bubbles, composed · detail `{ theme }`
 - **اسلات‌ها**: —
-- **Part‌ها**: `option ${choice}`, `select`
+- **Part‌ها**: `option ${choice}`
 
 ## `<r-token-meter>`
 

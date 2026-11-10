@@ -1917,7 +1917,7 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 ### `surface-switch`
 
 - Tokens: 15
-- Parts: 2
+- Parts: 1
 
 #### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 7 -->
@@ -1939,7 +1939,6 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 #### Parts
 - `option ${choice}`
-- `select`
 
 ### `tab`
 
@@ -2016,7 +2015,7 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 ### `theme-switch`
 
 - Tokens: 16
-- Parts: 2
+- Parts: 1
 
 #### Tokens
 <!-- layers: semantic: 3 · component: 5 · internal: 8 -->
@@ -2039,7 +2038,6 @@ It is a filtered, public-facing style API view (structural/internal tokens exclu
 
 #### Parts
 - `option ${choice}`
-- `select`
 
 ### `token-meter`
 

@@ -1,7 +1,7 @@
 import glassCss from './index.less?inline';
 import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, shadowPart } from '@/utils/component';
+import { ensureShadowRoot, getStringAttribute, hostInternals, setStringAttribute, shadowPart } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { isActivationKey } from '@/utils/a11y';
 import { createRimRenderer, type RimRenderer } from './rim';
@@ -81,7 +81,8 @@ export class Glass extends RanElement {
 
   constructor() {
     super();
-    this._shadowDom = ensureShadowRoot(this, glassCss);
+    this._internals = hostInternals(this) ?? null;
+    this._shadowDom = ensureShadowRoot(this, glassCss, { mode: 'closed' }, this._internals ?? undefined);
     const specularRef = createRef<HTMLDivElement>();
     const refractionRef = createRef<HTMLDivElement>();
     this._glass = Div()
@@ -96,7 +97,6 @@ export class Glass extends RanElement {
     this._shadowDom.appendChild(this._glass);
     this._specular = shadowPart(specularRef, 'specular layer');
     this._refractionLayer = shadowPart(refractionRef, 'refraction layer');
-    this._internals = typeof this.attachInternals === 'function' ? this.attachInternals() : null;
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────────
