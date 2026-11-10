@@ -85,9 +85,7 @@ test('chrome menu option wash slides between rows', async ({ page, browserName }
   await expect(shell).toBeVisible();
   const fill = page.locator('.ran-menubar-viewport__hover');
   await expect(fill).toBeVisible();
-  await expect
-    .poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity))
-    .toBe('1');
+  await expect.poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity)).toBe('1');
 
   const before = await fill.evaluate((el) => (el as HTMLElement).style.transform);
   const portuguese = page.locator('.ran-menubar-viewport__option', { hasText: 'Português' });
@@ -95,9 +93,7 @@ test('chrome menu option wash slides between rows', async ({ page, browserName }
   const box = await portuguese.boundingBox();
   expect(box).not.toBeNull();
   await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
-  await expect
-    .poll(async () => fill.evaluate((el) => (el as HTMLElement).style.transform))
-    .not.toBe(before);
+  await expect.poll(async () => fill.evaluate((el) => (el as HTMLElement).style.transform)).not.toBe(before);
   // Selected row must not keep a second static fill while the wash travels.
   const paints = await page.evaluate(() => {
     const selected = document.querySelector('.ran-menubar-viewport__option[aria-selected="true"]');
