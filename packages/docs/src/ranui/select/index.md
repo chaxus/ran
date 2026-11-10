@@ -156,7 +156,7 @@ labeled input placed side by side in a form line up (same height, same top edge)
 
 A side can carry an alignment suffix: `bottom-end`, `top-center`, and so on, the same grammar `r-popover` takes. A bare side means `-start`, which lines the panel's leading edge up with the trigger's.
 
-The suffix only changes anything when the panel is a different width from its trigger, since the panel tracks the trigger's width by default. Widen it (`r-dropdown::part(dropdown)`, reached through `dropdownclass`, because the panel is portalled to `<body>` rather than living in the select's shadow root) and the alignment is computed against what is actually painted:
+By default the panel floors at the trigger's width (`min-width`) and may grow with longer options — the Floating UI / Radix select recipe. The open panel also exposes `--ran-select-trigger-width` if a host wants an exact match (`width: var(--ran-select-trigger-width)`). The placement suffix only differs once the painted panel is wider than the trigger; widen further via `r-dropdown::part(dropdown)` (through `dropdownclass`, because the panel is portalled to `<body>`), and alignment is computed against what is actually painted:
 
 ```html
 <style>

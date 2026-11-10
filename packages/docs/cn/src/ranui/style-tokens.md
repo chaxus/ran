@@ -1132,6 +1132,21 @@ description: 'ranui 每个元素暴露的 CSS 自定义属性与 ::part() 名称
 - `render`
 - `toolbar`
 
+## `menubar`
+
+- Tokens: 4
+- Parts: 1
+
+### Tokens
+<!-- layers: internal: 4 -->
+- `--ran-menubar-align-items`
+- `--ran-menubar-flex`
+- `--ran-menubar-gap`
+- `--ran-space-2`
+
+### Parts
+- `root`
+
 ## `mermaid`
 
 - Tokens: 35

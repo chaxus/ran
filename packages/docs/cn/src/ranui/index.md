@@ -94,7 +94,7 @@ document.body.appendChild(button);
 
 ## 组件
 
-共 42 个元素。每个元素的属性（attribute / property）、事件、插槽和 `::part()` 名称，都列在
+共 43 个元素。每个元素的属性（attribute / property）、事件、插槽和 `::part()` 名称，都列在
 [元素 API 参考](/cn/ranui/api)里。
 
 **通用**：[Button 按钮](/cn/ranui/button/) · [Icon 图标](/cn/ranui/icon/) ·

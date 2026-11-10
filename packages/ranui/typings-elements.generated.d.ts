@@ -183,6 +183,14 @@ declare global {
     copyTarget?: 'source' | 'mathml';
     downloadable?: boolean;
   };
+  'r-menubar': {
+    duration?: number;
+    'leave-delay'?: number;
+    leaveDelay?: number;
+    'panel-selector'?: string;
+    panelSelector?: string;
+    sheet?: string;
+  };
   'r-mermaid': {
     code?: string;
     copy?: string;

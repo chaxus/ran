@@ -366,13 +366,51 @@ test('select — emits show/after-show and hide/after-hide around the transition
   expect(seen).toEqual(['show', 'after-show', 'hide', 'after-hide']);
 });
 
-// The alignment suffix on r-select, which needs a shape to be visible in at all:
-// the panel host tracks the trigger's width, so with a panel the same width as
-// its trigger every alignment computes the same position. It only differs once a
-// consumer widens the panel past the trigger — and then it also exercises the
-// part that made this awkward, that the extra width overflows the panel *host*
-// and is invisible to a measurement taken on it. Alignment and flip both have to
-// use what is actually painted.
+// Floating UI / Radix: floor at the trigger (`min-width`), let longer options
+// grow the panel past it — never lock `width` to the trigger alone.
+test('select — panel grows past a narrow trigger for longer options', async ({ page }) => {
+  await page.setViewportSize({ width: 800, height: 500 });
+  await mount(
+    page,
+    `
+    <div style="padding: 40px;">
+      <r-select id="sel" style="width: 72px" trigger="click" defaultValue="en">
+        <r-option value="en">EN</r-option>
+        <r-option value="pt">Português (Brasil)</r-option>
+        <r-option value="zh">简体中文</r-option>
+      </r-select>
+    </div>
+  `,
+  );
+  await page.waitForTimeout(50);
+  await page.locator('#sel').evaluate((node: HTMLElement & { open: boolean }) => {
+    node.open = true;
+  });
+  await page.waitForTimeout(400);
+  const metrics = await page.locator('#sel').evaluate((node: HTMLElement & { _selectionDropdown?: HTMLElement }) => {
+    const trigger = node.getBoundingClientRect();
+    const host = node._selectionDropdown!;
+    const painted = (host as HTMLElement & { _shadowDom?: ShadowRoot })._shadowDom
+      ?.querySelector('.ranui-dropdown')
+      ?.getBoundingClientRect();
+    return {
+      triggerWidth: Math.round(trigger.width),
+      hostWidth: Math.round(host.getBoundingClientRect().width),
+      hostMinWidth: getComputedStyle(host).minWidth,
+      paintedWidth: Math.round(painted?.width ?? 0),
+      triggerVar: host.style.getPropertyValue('--ran-select-trigger-width').trim(),
+    };
+  });
+  expect(metrics.triggerWidth).toBeLessThan(100);
+  expect(parseFloat(metrics.hostMinWidth)).toBeGreaterThanOrEqual(metrics.triggerWidth - 1);
+  expect(metrics.triggerVar).toBe(`${metrics.triggerWidth}px`);
+  expect(metrics.hostWidth).toBeGreaterThan(metrics.triggerWidth);
+  expect(metrics.paintedWidth).toBeGreaterThan(metrics.triggerWidth);
+});
+
+// Placement suffixes only differ once the painted panel is wider than the
+// trigger. Consumers can still widen via `::part(dropdown)`; measure against
+// what is painted so align/flip do not reason about a width nobody sees.
 test('select — the placement suffix aligns the panel that is painted, not the host box', async ({ page }) => {
   // Stacked, and kept well clear of both viewport edges: the boundary shift
   // outranks the alignment (as it should — a correctly aligned panel off-screen

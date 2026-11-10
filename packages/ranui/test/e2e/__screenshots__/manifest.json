@@ -12,7 +12,7 @@
     "systemFontsSha256": "c339750d748e2a442eec2756219b1e49e9601fe3a6927100deea37040547d226",
     "systemFontFiles": 48,
     "localFontsSha256": "a95cd2bae45daa40ee591ea0ed3affc47db95cc32c42eb2f2f6f23c46f7b237e",
-    "harnessSha256": "23dbac11807338013acb3288bde64f5ebf297dfb71ae178bef8441069de68798"
+    "harnessSha256": "0a07840a12662d5770370d5478880d7a09f38f464eac07581203910c3df6e409"
   },
   "image": "ranui-visual:local",
   "snapshots": {

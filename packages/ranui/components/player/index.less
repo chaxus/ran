@@ -32,14 +32,9 @@
   --ran-dropdown-option-selected-padding-inline-end: 2px;
   --ran-dropdown-option-selected-background-color: rgba(255, 255, 255, 0.2); // design-ok: bare-colour player menus sit on video, not the page theme
   --ran-dropdown-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45); // design-ok: bare-colour player menus sit on video, not the page theme
-  // The panel's own `min-width` defaults to the trigger's width (`r-select`'s
-  // closed-state box, ~46px here) via `--ran-dropdown-min-width`, which
-  // `r-popover`'s positioning JS sets as an *inline* style — a class-level
-  // custom-property override can't beat that, so the panel was clipping
-  // "1.5X"/"0.8X" down to "1.5…"/"0.8…". `::part(dropdown)` reaches past the
-  // shadow boundary to set `min-width` as a normal property on the panel
-  // itself instead, the same mechanism `r-select`'s own `::part(selection)`
-  // overrides already rely on elsewhere in this file.
+  // r-select floors the panel at the trigger (~46px here). Rate labels need a
+  // bit more room; `::part(dropdown)` sets a painted min-width past the host,
+  // the same override path `::part(selection)` uses elsewhere in this file.
   &::part(dropdown) {
     min-width: 56px;
   }

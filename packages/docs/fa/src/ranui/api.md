@@ -1,6 +1,6 @@
 ---
 title: API عناصر ranui
-description: 'همهٔ عناصر سفارشی ranui — 42 عنصر همراه با ویژگی‌ها، خصیصه‌ها، رویدادها، اسلات‌ها و نام‌های ()::part، همگی استخراج‌شده از کد منبع.'
+description: 'همهٔ عناصر سفارشی ranui — 43 عنصر همراه با ویژگی‌ها، خصیصه‌ها، رویدادها، اسلات‌ها و نام‌های ()::part، همگی استخراج‌شده از کد منبع.'
 ---
 
 # API عناصر ranui (تولید خودکار)
@@ -19,7 +19,7 @@ description: 'همهٔ عناصر سفارشی ranui — 42 عنصر همراه 
 مرز Shadow) و `cancelable` (امکان وتو با `preventDefault()`). **`element-only`** یعنی هیچ‌کدام
 از این سه — شنوندهٔ واگذارشده روی یک گره والد هرگز آن را نمی‌بیند، پس شنونده را به خود عنصر ببندید.
 
-**42 عنصر سفارشی.**
+**43 عنصر سفارشی.**
 
 ## `<r-attachments>`
 
@@ -341,6 +341,20 @@ description: 'همهٔ عناصر سفارشی ranui — 42 عنصر همراه 
   - `render` · bubbles, composed · detail `{ ok }`
 - **اسلات‌ها**: —
 - **Part‌ها**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
+
+## `<r-menubar>`
+
+کد منبع: `components/menubar/index.ts`
+
+- **ویژگی‌ها (attribute)**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
+- **خصیصه‌ها (property)**:
+  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
+  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `sheet: string` — CSS injected into the component's shadow DOM.
+- **رویدادها**: —
+- **اسلات‌ها**: `پیش‌فرض`
+- **Part‌ها**: `root`
 
 ## `<r-mermaid>`
 

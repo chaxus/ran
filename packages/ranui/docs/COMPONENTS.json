@@ -1,6 +1,6 @@
 {
   "generatedBy": "bin/generate-component-api.ts",
-  "count": 42,
+  "count": 43,
   "elements": [
     {
       "tag": "r-attachments",
@@ -1287,6 +1287,44 @@
         "toolbar"
       ],
       "defaultSlot": false,
+      "namedSlots": []
+    },
+    {
+      "tag": "r-menubar",
+      "file": "components/menubar/index.ts",
+      "attributes": [
+        "duration",
+        "leave-delay",
+        "panel-selector",
+        "sheet"
+      ],
+      "properties": [
+        {
+          "name": "duration",
+          "type": "number",
+          "desc": "FLIP morph duration in milliseconds (Stripe-like settle; default 320)."
+        },
+        {
+          "name": "leaveDelay",
+          "type": "number",
+          "desc": "Milliseconds before close after the pointer leaves the bar and panels."
+        },
+        {
+          "name": "panelSelector",
+          "type": "string",
+          "desc": "Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`."
+        },
+        {
+          "name": "sheet",
+          "type": "string",
+          "desc": "CSS injected into the component's shadow DOM."
+        }
+      ],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "defaultSlot": true,
       "namedSlots": []
     },
     {

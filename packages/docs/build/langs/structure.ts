@@ -493,7 +493,7 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
   '/ranui/': [
     { kind: 'suffix', key: 'ranui_overview', name: 'Overview', link: '/ranui/' },
     { kind: 'full', key: 'examples', link: '/examples/' },
-    { kind: 'full', key: 'element_api_all_42_elements', link: '/ranui/api' },
+    { kind: 'full', key: 'element_api_all_43_elements', link: '/ranui/api' },
     { kind: 'full', key: 'style_tokens_parts', link: '/ranui/style-tokens' },
     { kind: 'suffix', key: 'changelog', name: 'Changelog', link: '/ranui/changelog' },
     {
@@ -504,6 +504,7 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
         { kind: 'full', key: 'theming', link: '/ranui/theme/' },
         { kind: 'suffix', key: 'themeswitch', name: 'ThemeSwitch', link: '/ranui/theme-switch/' },
         { kind: 'suffix', key: 'surfaceswitch', name: 'SurfaceSwitch', link: '/ranui/surface-switch/' },
+        { kind: 'suffix', key: 'menubar', name: 'Menubar', link: '/ranui/menubar/' },
         { kind: 'suffix', key: 'ranui_i18n_foundation', name: 'i18n', link: '/ranui/i18n/' },
         { kind: 'suffix', key: 'builder', name: 'Builder', link: '/ranui/builder/' },
         { kind: 'full', key: 'server_rendering', link: '/ranui/ssr/' },

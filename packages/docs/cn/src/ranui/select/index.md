@@ -155,7 +155,7 @@ token 与布局，所以并排放置的带标题 select 和带标题 input 会�
 
 方向可以带一个对齐后缀，比如 `bottom-end`、`top-center`，和 `r-popover` 是同一套写法。只写方向等同于 `-start`，即面板的起始边与触发器的起始边对齐。
 
-只有当面板和触发器不一样宽时，后缀才会产生差别：默认情况下面板宽度就跟着触发器走。把面板撑宽（用 `r-dropdown::part(dropdown)`，经 `dropdownclass` 定位到它，因为面板是挂到 `<body>` 上的、并不在 select 的 shadow root 里），对齐就会按真正绘制出来的宽度计算：
+默认面板以触发器宽度为下限（`min-width`），选项更长时可以继续变宽——这是 Floating UI / Radix select 的常规做法。打开时还会暴露 `--ran-select-trigger-width`，宿主若要严格对齐可写 `width: var(--ran-select-trigger-width)`。只有绘制出的面板比触发器更宽时，对齐后缀才会产生差别；还可经 `dropdownclass` 用 `r-dropdown::part(dropdown)` 再撑宽（面板挂在 `<body>`，不在 select 的 shadow root 里），对齐按真正绘制的宽度计算：
 
 ```html
 <style>

@@ -1,0 +1,13 @@
+:host {
+  display: var(--ran-menubar-display, inline-flex);
+  align-items: var(--ran-menubar-align-items, center);
+  gap: var(--ran-menubar-gap, var(--ran-space-2, 8px));
+  flex: var(--ran-menubar-flex, none);
+  box-sizing: border-box;
+}
+
+.ran-menubar,
+.ran-menubar > slot {
+  /* Pass slotted triggers through so the host flex/gap owns the row. */
+  display: contents;
+}

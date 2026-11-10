@@ -54,6 +54,9 @@ export { Route } from '@/components/route';
 export { Link } from '@/components/link';
 export { ThemeSwitch } from '@/components/theme-switch';
 export { SurfaceSwitch } from '@/components/surface-switch';
+export { Menubar } from '@/components/menubar';
+export { mountMenubarHandoff } from '@/utils/menubar';
+export type { MenubarHandoffOptions, MenubarItem } from '@/utils/menubar';
 export {
   RouterCore,
   createRouter,
@@ -128,6 +131,7 @@ import type { Route as TRoute } from '@/components/route';
 import type { Link as TLink } from '@/components/link';
 import type { ThemeSwitch as TThemeSwitch } from '@/components/theme-switch';
 import type { SurfaceSwitch as TSurfaceSwitch } from '@/components/surface-switch';
+import type { Menubar as TMenubar } from '@/components/menubar';
 import type TScratch from '@/components/scratch';
 
 declare global {
@@ -173,6 +177,7 @@ declare global {
     'r-link': TLink;
     'r-theme-switch': TThemeSwitch;
     'r-surface-switch': TSurfaceSwitch;
+    'r-menubar': TMenubar;
     'r-scratch': TScratch;
   }
 }

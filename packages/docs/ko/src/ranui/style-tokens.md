@@ -1134,6 +1134,21 @@ description: 'ranui의 각 엘리먼트가 노출하는 CSS 커스텀 프로퍼�
 - `render`
 - `toolbar`
 
+## `menubar`
+
+- Tokens: 4
+- Parts: 1
+
+### Tokens
+<!-- layers: internal: 4 -->
+- `--ran-menubar-align-items`
+- `--ran-menubar-flex`
+- `--ran-menubar-gap`
+- `--ran-space-2`
+
+### Parts
+- `root`
+
 ## `mermaid`
 
 - Tokens: 35

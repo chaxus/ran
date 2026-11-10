@@ -1,6 +1,6 @@
 ---
 title: ranui-Element-API
-description: 'Alle Custom Elements von ranui — 42 Elemente mit ihren Attributen, Eigenschaften, Events, Slots und ::part()-Namen, aus dem Quelltext extrahiert.'
+description: 'Alle Custom Elements von ranui — 43 Elemente mit ihren Attributen, Eigenschaften, Events, Slots und ::part()-Namen, aus dem Quelltext extrahiert.'
 ---
 
 # ranui-Element-API (generiert)
@@ -22,7 +22,7 @@ Zu jedem Event stehen die Optionen, mit denen es ausgelöst wird: `bubbles`, `co
 **`element-only`** heißt: keine der drei — ein delegierter Listener an einem Vorfahren sieht
 dieses Event nie, binde ihn also an das Element selbst.
 
-**42 Custom Elements.**
+**43 Custom Elements.**
 
 ## `<r-attachments>`
 
@@ -344,6 +344,20 @@ Quelltext: `components/math/index.ts`
   - `render` · bubbles, composed · detail `{ ok }`
 - **Slots**: —
 - **Parts**: `button`, `copy-status`, `error`, `math`, `menu`, `render`, `toolbar`
+
+## `<r-menubar>`
+
+Quelltext: `components/menubar/index.ts`
+
+- **Attribute**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`
+- **Eigenschaften**:
+  - `duration: number` — FLIP morph duration in milliseconds (Stripe-like settle; default 320).
+  - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
+  - `panelSelector: string` — Portaled panels the hop morphs between. Defaults to `r-dropdown.ran-chrome-menu`.
+  - `sheet: string` — CSS injected into the component's shadow DOM.
+- **Events**: —
+- **Slots**: `Standard`
+- **Parts**: `root`
 
 ## `<r-mermaid>`
 
