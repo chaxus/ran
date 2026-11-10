@@ -62,17 +62,21 @@ describe('r-menubar contract', () => {
     document.body.appendChild(el);
     expect(el.panelSelector).toBe('r-dropdown.ran-chrome-menu');
     expect(el.leaveDelay).toBe(180);
-    expect(el.switchHold).toBe(280);
+    expect(el.switchHold).toBe(360);
+    expect(el.duration).toBe(280);
 
     el.panelSelector = '.panel';
     el.leaveDelay = 90;
     el.switchHold = 80;
+    el.duration = 160;
     expect(el.getAttribute('panel-selector')).toBe('.panel');
     expect(el.getAttribute('leave-delay')).toBe('90');
     expect(el.getAttribute('switch-hold')).toBe('80');
+    expect(el.getAttribute('duration')).toBe('160');
     expect(el.panelSelector).toBe('.panel');
     expect(el.leaveDelay).toBe(90);
     expect(el.switchHold).toBe(80);
+    expect(el.duration).toBe(160);
   });
 
   it('opens a slotted select on fine-pointer hover and marks peer hops', () => {

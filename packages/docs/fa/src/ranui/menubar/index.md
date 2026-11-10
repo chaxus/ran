@@ -1,17 +1,18 @@
 ---
-description: 'Hover handoff across sibling chrome selects — open on hover, skip enter/exit between peers.'
+description: 'Hover handoff across sibling chrome selects — open on hover, soft-fade between peers.'
 ---
 
 # Menubar
 
-A thin bar that wires **hover open** and **instant peer handoff** across sibling chrome
+A thin bar that wires **hover open** and **soft peer handoff** across sibling chrome
 selects (`r-select`, `r-theme-switch`, `r-surface-switch`, or any host with `open`).
 
 On a fine pointer, moving across triggers opens the next menu under its own trigger
-and skips enter/exit CSS for the hop (`html[data-ran-menubar-switch]`). Independent
-select portals stay independent — no shared-layout scale morph (that pattern belongs
-to mega-nav viewports, not chrome selects). Touch keeps each control’s own click.
-Soft enter from idle stays on the dropdown.
+with a short opacity + directional slide on the painted surface. Scale enter/exit is
+skipped for the hop (`html[data-ran-menubar-switch]`). Independent select portals stay
+independent — no shared-layout FLIP scale (that pattern belongs to mega-nav viewports,
+not chrome selects). Touch keeps each control’s own click. Soft enter from idle stays
+on the dropdown.
 
 > **Use when** a row of chrome menus should open on hover without blinking closed
 > between peers (docs headers, settings toolbars). For a single select, use
@@ -21,8 +22,8 @@ Soft enter from idle stays on the dropdown.
 
 ### Language + theme + surface
 
-Hover across the three controls (desktop). The next panel opens under its trigger
-without a fade flash between peers.
+Hover across the three controls (desktop). The next panel soft-fades under its
+trigger — a short slide, not a scale morph.
 
 <ran-demo>
   <r-menubar style="gap: 8px">
@@ -73,12 +74,13 @@ const stop = mountMenubarHandoff({ root: document.querySelector('.chrome') });
 
 ### Attributes
 
-| Attribute        | Default                      | Description                                     |
-| ---------------- | ---------------------------- | ----------------------------------------------- |
-| `panel-selector` | `r-dropdown.ran-chrome-menu` | Portaled panels watched for leave forgiveness.  |
-| `leave-delay`    | `180`                        | ms before close after leaving the bar + panels. |
-| `switch-hold`    | `280`                        | ms peer-hop CSS (zero enter/exit) stays armed.  |
-| `sheet`          | `''`                         | CSS injected into the component's shadow DOM.   |
+| Attribute        | Default                      | Description                                                       |
+| ---------------- | ---------------------------- | ----------------------------------------------------------------- |
+| `panel-selector` | `r-dropdown.ran-chrome-menu` | Portaled panels watched for leave forgiveness.                    |
+| `leave-delay`    | `180`                        | ms before close after leaving the bar + panels.                   |
+| `switch-hold`    | `360`                        | ms peer-hop CSS (zero scale enter/exit) stays armed.              |
+| `duration`       | `280`                        | Soft hop duration in ms (opacity + translate on painted surface). |
+| `sheet`          | `''`                         | CSS injected into the component's shadow DOM.                     |
 
 ### CSS Parts
 
@@ -97,4 +99,5 @@ r-menubar {
 - Triggers are light-DOM descendants tagged `r-select`, `r-theme-switch`,
   `r-surface-switch`, or `[data-ran-menubar-item]` that expose `open`.
 - Nested wrappers (e.g. an `.appearance` group) are fine — the bar finds the hosts.
-- Peer hops do not morph portal size/position; each panel positions under its trigger.
+- Peer hops do not FLIP-scale portal size/position; each panel positions under its
+  trigger, then soft-fades in with a short directional slide.

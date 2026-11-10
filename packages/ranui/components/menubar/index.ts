@@ -10,10 +10,10 @@ import type { MenubarHandoffOptions, MenubarItem } from '@/utils/menubar';
  * `<r-menubar>` — hover handoff across sibling chrome selects.
  *
  * Wrap `r-select` / `r-theme-switch` / `r-surface-switch` (or any host with `open`)
- * and on fine pointers the bar opens on hover and hands off between peers without
- * morphing independent portals. Touch keeps each control's own click trigger.
- * Soft enter from idle stays on the dropdown; peer hops skip enter/exit via
- * `html[data-ran-menubar-switch]`.
+ * and on fine pointers the bar opens on hover and soft-hands off between peers
+ * (opacity + directional slide on the painted surface — no cross-portal FLIP).
+ * Touch keeps each control's own click trigger. Soft enter from idle stays on
+ * the dropdown; peer hops skip scale enter/exit via `html[data-ran-menubar-switch]`.
  *
  * ```html
  * <r-menubar>
@@ -25,7 +25,7 @@ import type { MenubarHandoffOptions, MenubarItem } from '@/utils/menubar';
  */
 export class Menubar extends RanElement {
   static get observedAttributes(): string[] {
-    return ['panel-selector', 'leave-delay', 'switch-hold', 'sheet'];
+    return ['panel-selector', 'leave-delay', 'switch-hold', 'duration', 'sheet'];
   }
 
   _events = new EventManager();
@@ -67,14 +67,24 @@ export class Menubar extends RanElement {
     this.setAttribute('leave-delay', String(value));
   }
 
-  /** How long peer-hop CSS (zero enter/exit) stays armed, in milliseconds. */
+  /** How long peer-hop CSS stays armed, in milliseconds. */
   get switchHold(): number {
     const raw = this.getAttribute('switch-hold');
     const n = raw == null || raw === '' ? NaN : Number(raw);
-    return Number.isFinite(n) ? n : 280;
+    return Number.isFinite(n) ? n : 360;
   }
   set switchHold(value: number) {
     this.setAttribute('switch-hold', String(value));
+  }
+
+  /** Soft hop duration in milliseconds (opacity + translate on `::part(dropdown)`). */
+  get duration(): number {
+    const raw = this.getAttribute('duration');
+    const n = raw == null || raw === '' ? NaN : Number(raw);
+    return Number.isFinite(n) ? n : 280;
+  }
+  set duration(value: number) {
+    this.setAttribute('duration', String(value));
   }
 
   private _options = (): MenubarHandoffOptions => ({
@@ -82,6 +92,7 @@ export class Menubar extends RanElement {
     panelSelector: this.panelSelector,
     leaveDelay: this.leaveDelay,
     switchHold: this.switchHold,
+    duration: this.duration,
     items: () => this._items(),
   });
 

@@ -184,6 +184,7 @@ declare global {
     downloadable?: boolean;
   };
   'r-menubar': {
+    duration?: number;
     'leave-delay'?: number;
     leaveDelay?: number;
     'panel-selector'?: string;

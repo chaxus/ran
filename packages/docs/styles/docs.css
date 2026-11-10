@@ -1256,8 +1256,8 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
  * Width is owned by r-select (trigger floor + content, locked in px). Do not
  * force `::part(dropdown) { width: 100% }` here — that looped with overflow-y
  * and clipped longer labels (“Liquid glass”). Hosts only cap height.
- * Horizontal hops: `<r-menubar>` instant peer handoff
- * (`html[data-ran-menubar-switch]` skips enter/exit — no cross-portal FLIP).
+ * Horizontal hops: `<r-menubar>` soft peer handoff (opacity + translate on the
+ * painted surface; `html[data-ran-menubar-switch]` skips scale enter/exit).
  */
 r-dropdown.ran-chrome-menu {
   --ran-dropdown-animation-duration: 0.28s;

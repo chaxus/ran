@@ -43,11 +43,12 @@ test('header chrome menus have no chevron and open on hover', async ({ page, bro
   await expect(chromePanel(page, 'Light')).toBeHidden();
 });
 
-test('hovering across chrome menus marks an instant peer handoff', async ({ page, browserName }) => {
+test('hovering across chrome menus soft-fades the peer handoff', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'handoff attribute sampling is chromium-first');
   await page.evaluate(() => {
-    const state = window as unknown as { chromeHandoff?: boolean };
+    const state = window as unknown as { chromeHandoff?: boolean; hopSamples?: number[] };
     state.chromeHandoff = false;
+    state.hopSamples = [];
     const watch = new MutationObserver(() => {
       if (document.documentElement.hasAttribute('data-ran-menubar-switch')) state.chromeHandoff = true;
     });
@@ -65,7 +66,26 @@ test('hovering across chrome menus marks an instant peer handoff', async ({ page
   await expect(chromePanel(page, 'English')).toBeHidden();
   expect(await page.evaluate(() => (window as unknown as { chromeHandoff?: boolean }).chromeHandoff)).toBe(true);
 
-  // Independent portals: next panel under its own trigger, no FLIP transform.
+  // Soft hop: direction attr arms, then ::part(dropdown) fades/slides in.
+  const hopDir = await page.evaluate(() => document.documentElement.getAttribute('data-ran-menubar-switch'));
+  expect(hopDir === 'left' || hopDir === 'right').toBe(true);
+
+  const samples: number[] = [];
+  for (let i = 0; i < 8; i++) {
+    samples.push(
+      await page.evaluate(() => {
+        const host = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu')].find(
+          (node) => getComputedStyle(node).display !== 'none' && node.getClientRects().length,
+        ) as { _shadowDom?: ShadowRoot } | undefined;
+        const painted = host?._shadowDom?.querySelector<HTMLElement>('.ranui-dropdown');
+        return painted ? Number(getComputedStyle(painted).opacity) : NaN;
+      }),
+    );
+    await page.waitForTimeout(30);
+  }
+
+  // Independent portals: next panel under its own trigger — host has no FLIP scale.
+  await page.waitForTimeout(280);
   const toMetrics = await page.evaluate(() => {
     const el = [...document.querySelectorAll<HTMLElement>('r-dropdown.ran-chrome-menu[role="listbox"]')].find(
       (node) =>
@@ -75,15 +95,22 @@ test('hovering across chrome menus marks an instant peer handoff', async ({ page
     );
     if (!el) return null;
     const box = el.getBoundingClientRect();
+    const painted = (el as unknown as { _shadowDom?: ShadowRoot })._shadowDom?.querySelector<HTMLElement>(
+      '.ranui-dropdown',
+    );
     return {
       left: box.left,
-      transform: getComputedStyle(el).transform,
+      hostTransform: getComputedStyle(el).transform,
+      paintedOpacity: painted ? Number(getComputedStyle(painted).opacity) : NaN,
     };
   });
   expect(toMetrics).not.toBeNull();
   expect(Math.abs(themeLeft - langLeft)).toBeGreaterThan(8);
   expect(Math.abs(toMetrics!.left - themeLeft)).toBeLessThan(8);
-  expect(toMetrics!.transform === 'none' || toMetrics!.transform === 'matrix(1, 0, 0, 1, 0, 0)').toBe(true);
+  expect(toMetrics!.hostTransform === 'none' || toMetrics!.hostTransform === 'matrix(1, 0, 0, 1, 0, 0)').toBe(true);
+  expect(toMetrics!.paintedOpacity).toBeGreaterThan(0.95);
+  const midOpacity = samples.find((n) => Number.isFinite(n) && n > 0 && n < 0.999);
+  expect(midOpacity, `expected a mid-hop opacity, got ${JSON.stringify(samples)}`).toBeTruthy();
 });
 
 test('language chrome panel is wide enough for longer option labels', async ({ page }) => {

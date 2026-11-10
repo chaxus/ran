@@ -1293,12 +1293,18 @@
       "tag": "r-menubar",
       "file": "components/menubar/index.ts",
       "attributes": [
+        "duration",
         "leave-delay",
         "panel-selector",
         "sheet",
         "switch-hold"
       ],
       "properties": [
+        {
+          "name": "duration",
+          "type": "number",
+          "desc": "Soft hop duration in milliseconds (opacity + translate on `::part(dropdown)`)."
+        },
         {
           "name": "leaveDelay",
           "type": "number",
@@ -1317,7 +1323,7 @@
         {
           "name": "switchHold",
           "type": "number",
-          "desc": "How long peer-hop CSS (zero enter/exit) stays armed, in milliseconds."
+          "desc": "How long peer-hop CSS stays armed, in milliseconds."
         }
       ],
       "events": [],

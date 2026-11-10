@@ -1,20 +1,20 @@
 ---
-description: '一组 chrome 下拉在悬停时交接：打开菜单，同伴之间瞬时切换并跳过进出场。'
+description: '一组 chrome 下拉在悬停时交接：打开菜单，同伴之间轻量淡入滑动。'
 ---
 
 # Menubar
 
-把一组 chrome 选择器（`r-select` / `r-theme-switch` / `r-surface-switch`，或任意带 `open` 的宿主）串成**悬停打开**，并在同伴之间做**瞬时交接**。
+把一组 chrome 选择器（`r-select` / `r-theme-switch` / `r-surface-switch`，或任意带 `open` 的宿主）串成**悬停打开**，并在同伴之间做**轻量交接**。
 
-在精细指针上，滑过触发器会在各自触发器下方打开下一个菜单，并通过 `html[data-ran-menubar-switch]` 跳过进出场动画。各 select 仍是独立浮层——不做跨 portal 的共享布局缩放（那是大导航 viewport 的做法，不适合 chrome 选择器）。触控仍走各自的点击。空闲首次打开保留下拉的进入动画。
+在精细指针上，滑过触发器会在各自触发器下方打开下一个菜单，并对绘制层做短促的透明度 + 方向位移过渡。缩放进出场通过 `html[data-ran-menubar-switch]` 跳过。各 select 仍是独立浮层——不做跨 portal 的共享布局 FLIP 缩放（那是大导航 viewport 的做法）。触控仍走各自的点击。空闲首次打开保留下拉的进入动画。
 
-> **适用**：文档站顶栏、设置工具条等「一排 chrome 菜单应悬停打开、同伴之间不闪关」。单个选择器用 [`<r-select>`](/cn/ranui/select/) 即可。
+> **适用**：文档站顶栏、设置工具条等「一排 chrome 菜单应悬停打开、同伴之间有过渡但不闪」。单个选择器用 [`<r-select>`](/cn/ranui/select/) 即可。
 
 ## 快速开始
 
 ### 语言 + 主题 + 风格
 
-在桌面端横向滑过三个控件：下一个面板在对应触发器下打开，同伴之间不闪淡入淡出。
+在桌面端横向滑过三个控件：下一个面板在对应触发器下轻量淡入，短促滑动，不做缩放变形。
 
 <ran-demo>
   <r-menubar style="gap: 8px">
@@ -64,12 +64,13 @@ const stop = mountMenubarHandoff({ root: document.querySelector('.chrome') });
 
 ### 属性
 
-| 属性             | 默认                         | 说明                                     |
-| ---------------- | ---------------------------- | ---------------------------------------- |
-| `panel-selector` | `r-dropdown.ran-chrome-menu` | 用于离开宽容的浮层面板选择器。           |
-| `leave-delay`    | `180`                        | 离开条带与面板后关闭前的毫秒数。         |
-| `switch-hold`    | `280`                        | 同伴跳转时「零进出场」CSS 保持的毫秒数。 |
-| `sheet`          | `''`                         | 注入组件 shadow DOM 的 CSS。             |
+| 属性             | 默认                         | 说明                                         |
+| ---------------- | ---------------------------- | -------------------------------------------- |
+| `panel-selector` | `r-dropdown.ran-chrome-menu` | 用于离开宽容的浮层面板选择器。               |
+| `leave-delay`    | `180`                        | 离开条带与面板后关闭前的毫秒数。             |
+| `switch-hold`    | `360`                        | 同伴跳转时「零缩放进出场」CSS 保持的毫秒数。 |
+| `duration`       | `280`                        | 轻量交接时长（毫秒，绘制层透明度 + 位移）。  |
+| `sheet`          | `''`                         | 注入组件 shadow DOM 的 CSS。                 |
 
 ### CSS Parts
 
@@ -87,4 +88,4 @@ r-menubar {
 
 - 触发器是 light DOM 里的 `r-select`、`r-theme-switch`、`r-surface-switch`，或带 `open` 的 `[data-ran-menubar-item]`。
 - 外层包装（例如 `.appearance`）没问题——条带会找到真正的宿主。
-- 同伴跳转不变形浮层尺寸/位置；每个面板各自定位在触发器下方。
+- 同伴跳转不做跨 portal 的 FLIP 缩放；每个面板定位在触发器下方，再以短促方向滑动淡入。

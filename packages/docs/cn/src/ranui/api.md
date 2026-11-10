@@ -345,12 +345,13 @@ description: 'ranui 的全部自定义元素 —— 43 个元素的属性、属�
 
 源码: `components/menubar/index.ts`
 
-- **属性（attribute）**: `leave-delay`, `panel-selector`, `sheet: string`, `switch-hold`
+- **属性（attribute）**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`, `switch-hold`
 - **属性值（property）**:
+  - `duration: number` — Soft hop duration in milliseconds (opacity + translate on `::part(dropdown)`).
   - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
   - `panelSelector: string` — Portaled panels watched for hover leave forgiveness. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
-  - `switchHold: number` — How long peer-hop CSS (zero enter/exit) stays armed, in milliseconds.
+  - `switchHold: number` — How long peer-hop CSS stays armed, in milliseconds.
 - **事件**: —
 - **插槽**: `默认插槽`
 - **Part**: `root`

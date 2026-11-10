@@ -339,12 +339,13 @@ Source: `components/math/index.ts`
 
 Source: `components/menubar/index.ts`
 
-- **Attributes**: `leave-delay`, `panel-selector`, `sheet: string`, `switch-hold`
+- **Attributes**: `duration: number`, `leave-delay`, `panel-selector`, `sheet: string`, `switch-hold`
 - **Properties**:
+  - `duration: number` — Soft hop duration in milliseconds (opacity + translate on `::part(dropdown)`).
   - `leaveDelay: number` — Milliseconds before close after the pointer leaves the bar and panels.
   - `panelSelector: string` — Portaled panels watched for hover leave forgiveness. Defaults to `r-dropdown.ran-chrome-menu`.
   - `sheet: string` — CSS injected into the component's shadow DOM.
-  - `switchHold: number` — How long peer-hop CSS (zero enter/exit) stays armed, in milliseconds.
+  - `switchHold: number` — How long peer-hop CSS stays armed, in milliseconds.
 - **Events**: —
 - **Slots**: `default`
 - **Parts**: `root`
