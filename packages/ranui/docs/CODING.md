@@ -61,19 +61,20 @@ rules it encodes:
 - **Extend `RanElement`, register with `defineSSR`.** Never `customElements.define` directly
   — the SSR registry is what lets the server construct the element.
 - **`ensureShadowRoot`, never `attachShadow`.** Roots are **closed** by design: page CSS
-  cannot leak in, and nothing outside can look in. On upgrade, reuse a Declarative Shadow
-  DOM snapshot via `hostInternals` / `ElementInternals.shadowRoot` — calling `attachShadow`
-  again throws or wipes first paint.
-- **Build the tree once, in the constructor.** A second build from `connectedCallback` adds a
-  duplicate subtree on every reconnect, and its refs replace the ones the component is
-  already driving. When a DSD snapshot already holds the tree, **adopt** those nodes instead
-  of appending a second copy.
+  cannot leak in, and nothing outside can look in. On upgrade, reuse the closed root via
+  `hostInternals` / `ElementInternals.shadowRoot` — calling `attachShadow` again throws or
+  wipes first paint.
+- **Build the tree once, in the constructor**, with the ranview builder and `.ref()`. Mount
+  it with `mountShadowTree` (not bare `appendChild`): Declarative Shadow DOM is
+  **paint-only** until upgrade; `replaceChildren` drops that snapshot and installs the live
+  builder tree so refs stay from `.ref()` / `shadowPart` — never `querySelector` to re-bind
+  a DSD tree. A second build from `connectedCallback` still duplicates on reconnect.
 - **Hold what you build.** Capture every element with `.ref()` while building and read it
   back with `shadowPart`. `querySelector` re-derives an element through a _string_: rename
   the class in the LESS file and the two sides drift, `!` waves the `null` through, and the
   failure surfaces far from the rename. The exception is a container whose children arrive
-  later (options rendered from data, nodes a third-party library injects) **or a Declarative
-  Shadow DOM hydrate** — mark those with a comment saying what puts them there.
+  later (options rendered from data, nodes a third-party library injects) — mark those with a
+  comment saying what puts them there.
 - **Guard `attributeChangedCallback` with `if (old === next) return;`** and keep it a
   dispatcher: it decides what to sync, it does not contain the syncing.
 - **Lifecycle listeners go through `EventManager`**, aborted in `disconnectedCallback`. A

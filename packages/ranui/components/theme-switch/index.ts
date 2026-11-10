@@ -1,7 +1,13 @@
 import themeSwitchCss from './index.less?inline';
 import { EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { getTheme, setTheme } from '@/utils/theme';
 import type { RanThemeName } from '@/utils/theme';
@@ -42,29 +48,6 @@ export class ThemeSwitch extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, themeSwitchCss);
 
-    // Reuse the Declarative Shadow DOM select when present (docs header SSR).
-    // Building a second `new Select()` would wipe the painted closed-state label.
-    const existing = this._shadowDom.querySelector('r-select.ran-theme-switch, r-select[part~="select"]') as
-      (HTMLElement & { value: string }) | null;
-    if (existing) {
-      this._select = existing;
-      for (const choice of CHOICES) {
-        let option = existing.querySelector(`r-option[value="${choice}"]`) as HTMLElement | null;
-        if (!option) {
-          option = View('r-option').attr('value', choice).attr('part', `option ${choice}`).build() as HTMLElement;
-          existing.appendChild(option);
-        }
-        this._options.set(choice, option);
-      }
-      if (!existing.hasAttribute('trigger')) {
-        existing.setAttribute('trigger', this.getAttribute('trigger') || 'click');
-      }
-      if (!existing.hasAttribute('dropdownclass')) {
-        existing.setAttribute('dropdownclass', 'ran-chrome-menu');
-      }
-      return;
-    }
-
     const options = CHOICES.map((choice) => {
       const option = View('r-option').attr('value', choice).attr('part', `option ${choice}`).build() as HTMLElement;
       this._options.set(choice, option);
@@ -75,6 +58,7 @@ export class ThemeSwitch extends RanElement {
     // (View('r-select') is only an HTMLElementMock under Node and skips DSD chrome).
     // Portaled panel is outside this shadow tree — chrome menu vars land via dropdownclass.
     // Host `trigger` (e.g. docs header `hover click`) wins; default stays click.
+    // DSD snapshot is paint-only: mountShadowTree replaceChildren it; refs stay from builder.
     const select = new Select() as HTMLElement & { value: string };
     select.classList.add('ran-theme-switch');
     select.setAttribute('part', 'select');
@@ -83,7 +67,7 @@ export class ThemeSwitch extends RanElement {
     select.setAttribute('value', 'system');
     for (const option of options) select.appendChild(option);
     this._select = select;
-    this._shadowDom.appendChild(this._select);
+    mountShadowTree(this._shadowDom, themeSwitchCss, this._select);
   }
 
   get sheet(): string {

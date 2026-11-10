@@ -15,6 +15,7 @@ import {
   ensureShadowRoot,
   getStringAttribute,
   hostInternals,
+  mountShadowTree,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -187,37 +188,8 @@ export class Select extends RanElement {
     this._optionValueMapLabel = new Map();
 
     this._shadowDom = ensureShadowRoot(this, selectCss, { mode: 'closed' }, this._internals);
-    // Declarative Shadow DOM may already hold the closed-state tree — adopt it
-    // instead of appending a second wrap (which would flash empty then rebuild).
-    const existing = this._shadowDom.querySelector('.ran-select') as HTMLDivElement | null;
-    if (existing) {
-      this._adoptShadowTree(existing);
-      return;
-    }
-    this._buildShadowTree();
-  }
-
-  /** Wire refs from a Declarative Shadow DOM snapshot. Put there by SSR serialize. */
-  private _adoptShadowTree(wrap: HTMLDivElement): void {
-    const selection = wrap.querySelector('.selection') as HTMLDivElement | null;
-    const selector = wrap.querySelector('.selection-value') as HTMLDivElement | null;
-    const icon = wrap.querySelector('.icon') as HTMLElement | null;
-    const text = wrap.querySelector('.selection-item') as HTMLSpanElement | null;
-    const search = wrap.querySelector('.selection-search') as HTMLInputElement | null;
-    const slot = wrap.querySelector('slot.slot, slot') as HTMLSlotElement | null;
-    if (!selection || !selector || !icon || !text || !search || !slot) {
-      throw new Error('ranui: r-select hydrate missing selection chrome from Declarative Shadow DOM');
-    }
-    this._select = wrap;
-    this._selection = selection;
-    this._selector = selector;
-    this._icon = icon;
-    this._text = text;
-    this._search = search;
-    this._slot = slot;
-  }
-
-  private _buildShadowTree(): void {
+    // Always build with ranview refs. DSD is paint-only until upgrade; mounting
+    // replaceChildren the snapshot so we never querySelector to re-bind nodes.
     const selectionRef = createRef<HTMLDivElement>();
     const selectorRef = createRef<HTMLDivElement>();
     const iconRef = createRef<HTMLElement>();
@@ -256,7 +228,7 @@ export class Select extends RanElement {
         Slot().ref(slotRef).class('slot'),
       )
       .build() as HTMLDivElement;
-    this._shadowDom.appendChild(wrap);
+    mountShadowTree(this._shadowDom, selectCss, wrap);
 
     this._select = wrap;
     this._selection = shadowPart(selectionRef, 'selection');

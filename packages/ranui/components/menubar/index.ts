@@ -1,7 +1,13 @@
 import menubarCss from './index.less?inline';
 import { EventManager, Slot, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { mountMenubarHandoff } from '@/utils/menubar';
 import type { MenubarHandoffOptions, MenubarItem } from '@/utils/menubar';
@@ -35,16 +41,13 @@ export class Menubar extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, menubarCss);
-    // Adopt Declarative Shadow DOM shell when present so upgrade does not
-    // append a second menubar wrapper beside the SSR snapshot.
-    const existing = this._shadowDom.querySelector('.ran-menubar') as HTMLElement | null;
-    const existingSlot = existing?.querySelector('slot') as HTMLSlotElement | null;
-    if (existingSlot) {
-      this._slot = existingSlot;
-      return;
-    }
+    // DSD shell is paint-only; live tree always comes from the builder + refs.
     this._slot = Slot().build() as HTMLSlotElement;
-    this._shadowDom.appendChild(View('div').class('ran-menubar').attr('part', 'root').children(this._slot).build());
+    mountShadowTree(
+      this._shadowDom,
+      menubarCss,
+      View('div').class('ran-menubar').attr('part', 'root').children(this._slot).build(),
+    );
   }
 
   /** CSS injected into the component's shadow DOM. */

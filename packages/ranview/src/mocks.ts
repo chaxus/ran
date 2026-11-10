@@ -309,6 +309,11 @@ export class ShadowRootMock {
     return node;
   }
 
+  /** Match DOM `ShadowRoot.replaceChildren` so mountShadowTree works under SSR. */
+  replaceChildren(...nodes: any[]): void {
+    this.childrenList = nodes.filter((node) => node != null);
+  }
+
   querySelector(selector: string): HTMLElementMock | null {
     const result = this.querySelectorAll(selector);
     return result.length > 0 ? result[0] : null;

@@ -90,6 +90,20 @@ export const ensureShadowRoot = (
 };
 
 /**
+ * Mount the live shadow tree from the builder — never look nodes up.
+ *
+ * Declarative Shadow DOM may already paint a snapshot inside a reused closed
+ * root. `replaceChildren` drops that paint-only tree (and any style-tag
+ * fallback); constructable `adoptedStyleSheets` stay on the root. Styles are
+ * re-applied afterward so the fallback path stays intact. Callers keep refs
+ * from `.ref()` / `shadowPart` only.
+ */
+export const mountShadowTree = (root: ShadowRoot, cssText: string, node: Node): void => {
+  root.replaceChildren(node);
+  adoptStyles(root, withReducedMotion(cssText));
+};
+
+/**
  * The element the builder captured for this component, or a loud failure.
  *
  * Components build their shadow tree once, in the constructor, so `.ref()` on the builder
