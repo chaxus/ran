@@ -78,6 +78,30 @@ test('hovering across chrome menus morphs the shared viewport', async ({ page, b
   expect(mid, `expected a mid-flight shell left, got ${JSON.stringify(samples)}`).toBeTruthy();
 });
 
+test('selected wash paints with the first open frame', async ({ page, browserName }) => {
+  test.skip(browserName === 'firefox', 'hover menus need a fine pointer hover path');
+  await page.locator('.lang-switch').hover();
+  await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'English' })).toBeVisible();
+  // No settle wait — selected wash must already sit on English.
+  const snap = await page.evaluate(() => {
+    const fill = document.querySelector('.ran-menubar-viewport__hover') as HTMLElement | null;
+    const selected = document.querySelector('.ran-menubar-viewport__option[aria-selected="true"]');
+    if (!fill || !selected) return null;
+    const a = fill.getBoundingClientRect();
+    const b = selected.getBoundingClientRect();
+    return {
+      opacity: fill.style.opacity,
+      dy: Math.abs(a.top - b.top),
+      dw: Math.abs(a.width - b.width),
+      transition: getComputedStyle(fill).transitionDuration,
+    };
+  });
+  expect(snap).not.toBeNull();
+  expect(snap!.opacity).toBe('1');
+  expect(snap!.dy).toBeLessThan(2);
+  expect(snap!.dw).toBeLessThan(2);
+});
+
 test('chrome menu option wash slides between rows', async ({ page, browserName }) => {
   test.skip(browserName === 'firefox', 'hover menus need a fine pointer hover path');
   await page.locator('.lang-switch').hover();

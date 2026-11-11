@@ -9,6 +9,8 @@ describe('header chrome DSD labels', () => {
   it('serializes theme-switch with a closed-state selection label', async () => {
     const theme = await renderHTMLToString(`<r-theme-switch class="theme-switch" lang="en"></r-theme-switch>`);
     expect(theme).toContain('shadowrootmode="closed"');
+    // Styles must ship inside DSD or first paint is unstyled until upgrade.
+    expect(theme).toMatch(/<template shadowrootmode="closed"><style>/);
     const selection = theme.match(/selection-item[^>]*>([^<]*)</)?.[1] ?? '';
     expect(selection.length).toBeGreaterThan(0);
     expect(theme).toMatch(/<r-option[^>]*>\s*(System|Light|Dark)/);
@@ -19,12 +21,14 @@ describe('header chrome DSD labels', () => {
       `<r-select class="lang-switch" value="/cn/" aria-label="Language" dropdownclass="ran-chrome-menu"><r-option value="/">English</r-option><r-option value="/cn/">简体中文</r-option></r-select>`,
     );
     expect(lang).toContain('shadowrootmode="closed"');
+    expect(lang).toMatch(/<template shadowrootmode="closed"><style>/);
     expect(lang.match(/selection-item[^>]*>([^<]*)</)?.[1]).toBe('简体中文');
   });
 
   it('serializes surface-switch with a closed-state selection label', async () => {
     const surface = await renderHTMLToString(`<r-surface-switch class="surface-switch" lang="en"></r-surface-switch>`);
     expect(surface).toContain('shadowrootmode="closed"');
+    expect(surface).toMatch(/<template shadowrootmode="closed"><style>/);
     const selection = surface.match(/selection-item[^>]*>([^<]*)</)?.[1] ?? '';
     expect(selection.length).toBeGreaterThan(0);
   });

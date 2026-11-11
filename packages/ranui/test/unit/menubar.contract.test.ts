@@ -248,6 +248,7 @@ describe('mountMenubarHandoff', () => {
     expect(css).toContain('ran-menubar-viewport__hover');
     expect(css).toMatch(/transform\s+\d+ms/);
     expect(css).toContain('data-hover-fill');
+    expect(css).toMatch(/__hover\[data-instant\]\{transition:none\}/);
     stop();
   });
 });

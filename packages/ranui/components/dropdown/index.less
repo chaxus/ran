@@ -326,8 +326,9 @@
     opacity var(--ran-motion-duration-fast, 0.14s) linear
   );
 }
+/* First paint / reopen: snap on — a fade reads as “selected late”. */
 ::slotted(.ran-select-option-hover[data-instant]) {
-  transition: opacity var(--ran-motion-duration-fast, 0.14s) linear;
+  transition: none;
 }
 @media (prefers-reduced-motion: reduce) {
   ::slotted(.ran-select-option-hover) {

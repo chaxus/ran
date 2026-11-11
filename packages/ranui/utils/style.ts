@@ -23,9 +23,18 @@ export const RANUI_SHEET_MARKER = 'data-ranui-sheet';
 /**
  * 把组件的静态样式注入到指定的 Shadow DOM。
  * 优先 Constructable Stylesheets，不支持时降级为一个带 `data-ranui` 标记的 <style>。
+ *
+ * Under SSR, also record cssText on the mock's `adoptedStyleSheets` so Declarative
+ * Shadow DOM serialization emits `<style>` even if a stale `ranuts` dist still
+ * no-ops when `document` is missing.
  */
-export const adoptStyles = (shadowRoot: ShadowRoot, cssText: string): void =>
+export const adoptStyles = (shadowRoot: ShadowRoot, cssText: string): void => {
+  if (typeof document === 'undefined' && cssText) {
+    const sheets = (shadowRoot as ShadowRoot & { adoptedStyleSheets?: unknown[] }).adoptedStyleSheets;
+    if (Array.isArray(sheets) && !sheets.includes(cssText)) sheets.push(cssText);
+  }
   adoptStylesBase(shadowRoot, cssText, RANUI_STYLE_MARKER);
+};
 
 /** 每个 shadowRoot 当前占着 `sheet` 槽位的内容；`sheet` 为空表示走的是 <style> 降级 */
 const slots = new WeakMap<ShadowRoot, { text: string; sheet?: CSSStyleSheet }>();

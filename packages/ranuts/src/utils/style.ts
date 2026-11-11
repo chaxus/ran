@@ -45,7 +45,9 @@ const adoptConstructable = (shadowRoot: ShadowRoot, cssText: string, cache: Map<
 /**
  * @description: Inject a component's static styles into a shadow root.
  *
- * - SSR-safe: skipped outright when there is no `document`
+ * - Under SSR (no `document`), records `cssText` on `adoptedStyleSheets` so a
+ *   Declarative Shadow DOM serializer can emit `<style>` into the snapshot.
+ *   Skipping that left first paint unstyled, then a visible pop on upgrade.
  * - Idempotent: one shadowRoot is never injected into twice
  * - The fallback de-duplicates per **root**: a shadowRoot keeps exactly one marked <style>,
  *   first writer wins. A component's static styles should exist once per root, so a second
@@ -57,9 +59,16 @@ const adoptConstructable = (shadowRoot: ShadowRoot, cssText: string, cache: Map<
  * @return {void}
  */
 export const adoptStyles = (shadowRoot: ShadowRoot, cssText: string, marker = ADOPTED_STYLE_MARKER): void => {
-  // SSR guard
-  if (typeof document === 'undefined') return;
   if (!cssText) return;
+
+  // SSR / serialize path: ranview's ShadowRootMock keeps string sheets and emits <style>.
+  if (typeof document === 'undefined') {
+    const sheets = (shadowRoot as ShadowRoot & { adoptedStyleSheets?: unknown[] }).adoptedStyleSheets;
+    if (Array.isArray(sheets) && !sheets.includes(cssText)) {
+      sheets.push(cssText);
+    }
+    return;
+  }
 
   if (adoptConstructable(shadowRoot, cssText, sheetCache)) return;
 

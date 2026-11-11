@@ -335,7 +335,11 @@ export class ShadowRootMock {
   serialize(): string {
     const mode = this.options.mode;
     const delegatesFocus = this.options.delegatesFocus ? ' shadowrootdelegatesfocus' : '';
-    const styles = this.adoptedStyleSheets.map((s) => `<style>${escapeHtml(s)}</style>`).join('');
+    // Style text is raw-text content: do not HTML-escape (`>` combinators must stay).
+    // Only break out of the element if a literal `</style` appears in the CSS.
+    const styles = this.adoptedStyleSheets
+      .map((s) => `<style>${String(s).replace(/<\/style/gi, '<\\/style')}</style>`)
+      .join('');
     const content = this.childrenList
       .map((child) => {
         if (typeof child === 'string') return escapeHtml(child);

@@ -105,7 +105,7 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
 :root[data-ran-surface=glass] .${VIEWPORT_CLASS}__hover{
   background:var(--ran-surface-glass-hover,color-mix(in srgb,var(--ran-gray-1000,#111113) 8%,transparent));
 }
-.${VIEWPORT_CLASS}__hover[data-instant]{transition:opacity ${Math.min(180, duration)}ms linear}
+.${VIEWPORT_CLASS}__hover[data-instant]{transition:none}
 .${VIEWPORT_CLASS}__option{
   appearance:none;border:0;background:transparent;margin:0;cursor:pointer;text-align:start;
   position:relative;z-index:1;
@@ -341,18 +341,20 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
   const syncHoverToLayer = (layer: HTMLElement, afterShellMotion: boolean): void => {
     window.clearTimeout(hoverSettleTimer);
     const gen = ++hoverGen;
-    // Hide until coordinates match the settled shell — avoids the mid-morph skew.
-    hideHover();
     const selected = layer.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
     const apply = (): void => {
       if (gen !== hoverGen) return;
       if (selected?.isConnected) placeHover(selected);
       else hideHover();
     };
+    // First open / reduced motion: shell is already at its final box — place now so
+    // the selected wash paints with the first visible frame (no double-rAF fade-in).
     if (!afterShellMotion || reduceMotion()) {
-      requestAnimationFrame(() => requestAnimationFrame(apply));
+      apply();
       return;
     }
+    // Hop morph: hide until the shell settles, then snap onto the selected row.
+    hideHover();
     const onEnd = (event: TransitionEvent): void => {
       if (event.target !== shell) return;
       if (event.propertyName !== 'transform' && event.propertyName !== 'width' && event.propertyName !== 'height') {
