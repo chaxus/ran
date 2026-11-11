@@ -29,11 +29,11 @@ export class Checkbox extends RanElement {
   static formAssociated = true;
   _events = new EventManager();
   _internals?: ElementInternals;
-  checkInput: HTMLInputElement;
-  checkInner: HTMLSpanElement;
-  context: Context;
-  container: HTMLElement;
-  _shadowDom: ShadowRoot;
+  checkInput!: HTMLInputElement;
+  checkInner!: HTMLSpanElement;
+  context!: Context;
+  container!: HTMLElement;
+  _shadowDom!: ShadowRoot;
   static get observedAttributes(): string[] {
     return ['disabled', 'checked', 'value', 'required', 'sheet'];
   }

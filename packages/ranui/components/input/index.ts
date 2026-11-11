@@ -47,10 +47,10 @@ export class Input extends RanElement {
     ];
   }
   _events = new EventManager();
-  _shadowDom: ShadowRoot;
-  _input: HTMLDivElement;
+  _shadowDom!: ShadowRoot;
+  _input!: HTMLDivElement;
   _label: HTMLLabelElement | undefined;
-  _inputContent: HTMLInputElement;
+  _inputContent!: HTMLInputElement;
   _icon: HTMLElement | undefined;
   _message: HTMLElement | undefined;
   // Snapshot of the pre-interaction value, captured once on first connect,

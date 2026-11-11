@@ -7,7 +7,7 @@ description: リキッドガラス下で select・tabs・menubar の選択 wash 
 
 Under **Liquid glass**, list cursors share one sliding wash instead of flashing each row's own background. Selected uses weight; the wash owns hover and the open cursor. Set **Style → Liquid glass** in the header, then open the demos below.
 
-Rules (from [Design · Motion](../design/) and [Surface language](../design/surface/)):
+Rules (from [Design · Motion](../design/) and [Surface language](/design/surface)):
 
 - One fill travels between rows; selected is not a second static fill.
 - When a menu opens, the wash already sits on the selected row — no fade-in after the list appears.
