@@ -11,6 +11,12 @@ import '../styles/home.css';
 import '../styles/demos.css';
 import '../styles/design-illustrations.css';
 import 'ranui/style';
+// Header chrome is on every page: static imports so the upgrade rides the main
+// module graph instead of a post-paint dynamic import waterfall (refresh flash).
+import 'ranui/menubar';
+import 'ranui/select';
+import 'ranui/theme-switch';
+import 'ranui/surface-switch';
 import { mountPreviewDemo } from './preview.ts';
 import { mountComponents } from './components.ts';
 import { cacheVisitedAssets } from './visited-assets.ts';
