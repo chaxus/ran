@@ -191,6 +191,7 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
 <script type="speculationrules">${SPECULATION_RULES}</script>
 ${head.join('\n')}
 ${assets.css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n')}
+${assets.js.map((src) => `<link rel="modulepreload" href="${src}">`).join('\n')}
 </head>
 <body${sb ? ' class="has-sidebar"' : ''}>
 <a class="skip" href="#main">${escapeHtml(feedback.skip)}</a>

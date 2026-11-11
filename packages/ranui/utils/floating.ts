@@ -284,6 +284,9 @@ export class FloatingController {
       registerPanel(panel, host, this.options.onEscape);
       this.resolvedSide = undefined;
       host.dispatchEvent(new CustomEvent('show'));
+      // Hold invisible until the first position + afterPosition (wash) run —
+      // display:block alone still paints an empty / unwashed list for a frame.
+      panel.style.setProperty('visibility', 'hidden');
       panel.style.setProperty('display', 'block');
       this.attachReposition();
       this.position(true);
@@ -308,6 +311,7 @@ export class FloatingController {
     settlePresence(panel, () => {
       if (generation !== this.generation) return;
       panel.style.setProperty('display', 'none');
+      panel.style.setProperty('visibility', 'hidden');
       panel.removeAttribute('transit');
       host.dispatchEvent(new CustomEvent('after-hide'));
     });
@@ -403,8 +407,12 @@ export class FloatingController {
     panel.style.setProperty('inset', `${position.top}px auto auto ${position.left}px`);
     panel.style.setProperty('--ran-x', `${position.left}px`);
     panel.style.setProperty('--ran-y', `${position.top}px`);
-    if (applyEntranceTransit) panel.setAttribute('transit', TRANSIT[position.side].enter);
+    // Place chrome (e.g. select wash) before the enter opacity class — otherwise
+    // the first painted frame of the list has no selected fill, then it fades in.
     afterPosition?.(position, panel);
+    if (applyEntranceTransit) panel.setAttribute('transit', TRANSIT[position.side].enter);
+    // Reveal only after geometry + wash are written (pairs with apply()'s hidden open).
+    panel.style.setProperty('visibility', 'visible');
   }
 
   /**

@@ -347,13 +347,14 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       if (selected?.isConnected) placeHover(selected);
       else hideHover();
     };
-    // First open / reduced motion: shell is already at its final box — place now so
-    // the selected wash paints with the first visible frame (no double-rAF fade-in).
+    // Prefer placing on the same frame as the layer (first open and hops). Hiding
+    // until shell `transitionend` left the selected wash missing while the menu
+    // was already open — reads as a late fade-in.
     if (!afterShellMotion || reduceMotion()) {
       apply();
       return;
     }
-    // Hop morph: hide until the shell settles, then snap onto the selected row.
+    // Optional deferred path (callers that still pass afterShellMotion=true).
     hideHover();
     const onEnd = (event: TransitionEvent): void => {
       if (event.target !== shell) return;
@@ -430,7 +431,8 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     };
 
     if (!hopping || reduceMotion()) {
-      const layer = buildLayer(harvest, hopping ? null : 'fade', onPick);
+      // No content fade on first open — a fade reads as “selected wash arrived late”.
+      const layer = buildLayer(harvest, null, onPick);
       clip.replaceChildren(hover, layer);
       fitAndShow(layer, x, y, w, 1, !hopping);
       syncHoverToLayer(layer, false);
@@ -456,12 +458,15 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       window.setTimeout(drop, duration + 80);
     }
     ensureHoverInClip();
+    // Reset travel target so the new selected row snaps (data-instant) while the
+    // shell morphs — never hide→fade the wash after the menu is already open.
+    hoverTarget = null;
     clip.appendChild(incoming);
     // Morph shell toward the new trigger; height follows rebuilt rows, not a tall harvest.
     const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
     const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
     setShellBox(x, y, nextW, nextH, 1, false);
-    syncHoverToLayer(incoming, true);
+    syncHoverToLayer(incoming, false);
   };
 
   const setOpen = (item: MenubarItem, open: boolean): void => {
@@ -490,8 +495,10 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       }
       showViewport(item, harvested, hopping, direction);
     };
-    // Two frames so select measurePanel can lock px width before harvest.
-    requestAnimationFrame(() => requestAnimationFrame(() => tryHarvest(0)));
+    // One frame so select measurePanel can lock px width before harvest.
+    // A second rAF left the shared viewport empty after the native portal was
+    // already suppressed — that gap reads as a late wash / blank menu.
+    requestAnimationFrame(() => tryHarvest(0));
   };
 
   const arm = (item: MenubarItem): void => {
