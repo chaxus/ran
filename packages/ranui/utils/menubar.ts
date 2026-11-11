@@ -270,20 +270,33 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
 
   const SHELL_PAD = 4;
   let hoverTarget: HTMLElement | null = null;
-  let hoverSettleTimer: number | undefined;
   let hoverGen = 0;
 
   const ensureHoverInClip = (): void => {
     if (hover.parentNode !== clip) clip.prepend(hover);
   };
 
-  /** Place in clip-local coordinates — stable while the shell itself translates. */
-  const placeHover = (option: HTMLElement): void => {
+  /**
+   * Place in clip-local layout space. Strip the option layer's slide transform so the
+   * wash sits on the resting row immediately — waiting for shell/layer motion made the
+   * selected row look unselected for ~300ms after hover.
+   */
+  const placeHover = (option: HTMLElement, instant = false): void => {
     ensureHoverInClip();
     const clipBox = clip.getBoundingClientRect();
     const box = option.getBoundingClientRect();
-    hover.toggleAttribute('data-instant', hoverTarget === null);
-    hover.style.transform = `translate(${box.left - clipBox.left}px, ${box.top - clipBox.top}px)`;
+    const layer = option.closest<HTMLElement>(`.${VIEWPORT_CLASS}__layer`);
+    let slideX = 0;
+    let slideY = 0;
+    if (layer) {
+      const Matrix = typeof DOMMatrixReadOnly !== 'undefined' ? DOMMatrixReadOnly : undefined;
+      const shift = Matrix ? new Matrix(getComputedStyle(layer).transform) : { e: 0, f: 0 };
+      slideX = shift.e;
+      slideY = shift.f;
+    }
+    // Instant when first shown, or when correcting after shell morph (peer hop).
+    hover.toggleAttribute('data-instant', instant || hoverTarget === null);
+    hover.style.transform = `translate(${box.left - clipBox.left - slideX}px, ${box.top - clipBox.top - slideY}px)`;
     hover.style.width = `${box.width}px`;
     hover.style.height = `${box.height}px`;
     hover.style.opacity = '1';
@@ -338,40 +351,36 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     setShellBox(x, y, w, h, opacity, instant);
   };
 
-  const syncHoverToLayer = (layer: HTMLElement, afterShellMotion: boolean): void => {
-    window.clearTimeout(hoverSettleTimer);
+  const syncHoverToLayer = (layer: HTMLElement): void => {
     const gen = ++hoverGen;
     const selected = layer.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
-    const apply = (): void => {
+    // Place on this frame so the selected row is marked as soon as the panel exists.
+    // A double-rAF / transitionend wait was the "hover then wait for selection" lag.
+    const retarget = (instant: boolean): void => {
       if (gen !== hoverGen) return;
-      if (selected?.isConnected) placeHover(selected);
+      if (selected?.isConnected) placeHover(selected, instant);
       else hideHover();
     };
-    // First open / reduced motion: shell is already at its final box — place now so
-    // the selected wash paints with the first visible frame (no double-rAF fade-in).
-    if (!afterShellMotion || reduceMotion()) {
-      apply();
-      return;
-    }
-    // Hop morph: hide until the shell settles, then snap onto the selected row.
-    hideHover();
-    const onEnd = (event: TransitionEvent): void => {
+    retarget(false);
+    // Peer hops morph shell width/height over `duration`. One rAF left the wash
+    // size stuck mid-morph (dx/dw never settled). Retarget when morph ends.
+    requestAnimationFrame(() => retarget(false));
+    const onShellEnd = (event: TransitionEvent): void => {
       if (event.target !== shell) return;
-      if (event.propertyName !== 'transform' && event.propertyName !== 'width' && event.propertyName !== 'height') {
+      if (event.propertyName !== 'width' && event.propertyName !== 'height' && event.propertyName !== 'transform') {
         return;
       }
-      shell.removeEventListener('transitionend', onEnd);
-      apply();
+      shell.removeEventListener('transitionend', onShellEnd);
+      retarget(true);
     };
-    shell.addEventListener('transitionend', onEnd);
-    hoverSettleTimer = window.setTimeout(() => {
-      shell.removeEventListener('transitionend', onEnd);
-      apply();
-    }, duration + 50);
+    shell.addEventListener('transitionend', onShellEnd);
+    window.setTimeout(() => {
+      shell.removeEventListener('transitionend', onShellEnd);
+      retarget(true);
+    }, duration + 80);
   };
 
   const hideViewport = (): void => {
-    window.clearTimeout(hoverSettleTimer);
     hoverGen += 1;
     document.documentElement.removeAttribute(VIEWPORT_ATTR);
     setShellBox(0, 0, 0, 0, 0, true);
@@ -433,7 +442,7 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       const layer = buildLayer(harvest, hopping ? null : 'fade', onPick);
       clip.replaceChildren(hover, layer);
       fitAndShow(layer, x, y, w, 1, !hopping);
-      syncHoverToLayer(layer, false);
+      syncHoverToLayer(layer);
       return;
     }
 
@@ -461,7 +470,7 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
     const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
     setShellBox(x, y, nextW, nextH, 1, false);
-    syncHoverToLayer(incoming, true);
+    syncHoverToLayer(incoming);
   };
 
   const setOpen = (item: MenubarItem, open: boolean): void => {
@@ -507,8 +516,10 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     armed = true;
     active = item;
     const gen = ++hopGeneration;
-    // Hide native portals before open so the harvest frame does not flash.
-    document.documentElement.setAttribute(VIEWPORT_ATTR, direction || 'pending');
+    // First open: leave the native portal visible until harvest swaps in the
+    // shared viewport (suppressing first left a blank gap). Peer hops: keep
+    // suppression so two native panels do not stack during the morph.
+    if (hopping) document.documentElement.setAttribute(VIEWPORT_ATTR, direction || 'pending');
     closeOthers(item);
     setOpen(item, true);
     present(item, hopping, direction, gen);

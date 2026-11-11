@@ -153,41 +153,82 @@ test('after a peer hop the option wash settles on the selected row', async ({ pa
   await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'English' })).toBeVisible();
   await page.locator('.appearance .theme-switch').hover();
   await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'Light' })).toBeVisible();
-  // Wait for shell morph + wash settle (280ms motion + rAF).
-  await page.waitForTimeout(400);
-  const aligned = await page.evaluate(() => {
-    const fill = document.querySelector('.ran-menubar-viewport__hover') as HTMLElement | null;
-    const selected = document.querySelector(
-      '.ran-menubar-viewport__layer:not([data-leaving]) .ran-menubar-viewport__option[aria-selected="true"]',
-    );
-    if (!fill || !selected) return null;
-    const a = fill.getBoundingClientRect();
-    const b = selected.getBoundingClientRect();
-    return {
-      opacity: fill.style.opacity,
-      dx: Math.abs(a.left - b.left),
-      dy: Math.abs(a.top - b.top),
-      dw: Math.abs(a.width - b.width),
-      emptyGap: (() => {
-        const shell = document.querySelector('.ran-menubar-viewport__shell');
-        const options = [
-          ...document.querySelectorAll(
-            '.ran-menubar-viewport__layer:not([data-leaving]) .ran-menubar-viewport__option',
-          ),
-        ];
-        const last = options[options.length - 1];
-        if (!shell || !last) return null;
-        return Math.round(shell.getBoundingClientRect().bottom - last.getBoundingClientRect().bottom);
-      })(),
-    };
-  });
+  // Wash lights immediately (no 280ms blank). Geometry catches up when the
+  // content slide finishes — mid-flight getBoundingClientRect still includes SLIDE_DX.
+  const fill = page.locator('.ran-menubar-viewport__hover');
+  await expect.poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity), { timeout: 200 }).toBe('1');
+  const measure = () =>
+    page.evaluate(() => {
+      const fillEl = document.querySelector('.ran-menubar-viewport__hover') as HTMLElement | null;
+      const selected = document.querySelector(
+        '.ran-menubar-viewport__layer:not([data-leaving]) .ran-menubar-viewport__option[aria-selected="true"]',
+      );
+      if (!fillEl || !selected) return null;
+      const a = fillEl.getBoundingClientRect();
+      const b = selected.getBoundingClientRect();
+      return {
+        opacity: fillEl.style.opacity,
+        dx: Math.abs(a.left - b.left),
+        dy: Math.abs(a.top - b.top),
+        dw: Math.abs(a.width - b.width),
+        emptyGap: (() => {
+          const shell = document.querySelector('.ran-menubar-viewport__shell');
+          const options = [
+            ...document.querySelectorAll(
+              '.ran-menubar-viewport__layer:not([data-leaving]) .ran-menubar-viewport__option',
+            ),
+          ];
+          const last = options[options.length - 1];
+          if (!shell || !last) return null;
+          return Math.round(shell.getBoundingClientRect().bottom - last.getBoundingClientRect().bottom);
+        })(),
+      };
+    });
+  await expect
+    .poll(async () => {
+      const aligned = await measure();
+      return aligned && aligned.dx < 2 && aligned.dy < 2 && aligned.dw < 2;
+    })
+    .toBe(true);
+  const aligned = await measure();
   expect(aligned).not.toBeNull();
   expect(aligned!.opacity).toBe('1');
-  expect(aligned!.dx).toBeLessThan(2);
-  expect(aligned!.dy).toBeLessThan(2);
-  expect(aligned!.dw).toBeLessThan(2);
   expect(aligned!.emptyGap).not.toBeNull();
   expect(aligned!.emptyGap!).toBeLessThanOrEqual(12);
+});
+
+test('header chrome triggers hug their labels — short Light does not keep an 80px floor', async ({ page }) => {
+  await page.locator('.appearance .theme-switch').evaluate((host: HTMLElement & { value?: string }) => {
+    host.value = 'light';
+  });
+  await expect
+    .poll(async () =>
+      page.locator('.appearance .theme-switch').evaluate((el) => Math.round(el.getBoundingClientRect().width)),
+    )
+    .toBeLessThan(72);
+  const rhythm = await page.evaluate(() => {
+    const gapBetween = (a: Element, b: Element) => b.getBoundingClientRect().left - a.getBoundingClientRect().right;
+    const search = document.querySelector('.search-open')!;
+    const lang = document.querySelector('.lang-switch')!;
+    const theme = document.querySelector('.theme-switch')!;
+    const surface = document.querySelector('.surface-switch')!;
+    const github = document.querySelector('.header-github')!;
+    return {
+      gaps: [
+        gapBetween(search, lang),
+        gapBetween(lang, theme),
+        gapBetween(theme, surface),
+        gapBetween(surface, github),
+      ],
+      themeW: Math.round(theme.getBoundingClientRect().width),
+      langW: Math.round(lang.getBoundingClientRect().width),
+      selectMin: getComputedStyle(lang).getPropertyValue('--ran-select-min-width').trim(),
+    };
+  });
+  for (const gap of rhythm.gaps) expect(gap).toBeCloseTo(8, 0);
+  expect(rhythm.selectMin).toBe('0');
+  expect(rhythm.themeW).toBeLessThan(72);
+  expect(rhythm.langW).toBeLessThan(80);
 });
 
 test('language chrome panel is wide enough for longer option labels', async ({ page }) => {
