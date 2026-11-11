@@ -9,6 +9,8 @@ describe('ssrHeaderChrome', () => {
     expect(out).toContain('ran-menubar');
     expect(out).toContain('selection-item');
     expect(out).toContain('class="header-utils"');
+    // Closed DSD must carry component CSS — bare structure paints then pops on upgrade.
+    expect(out).toMatch(/<template shadowrootmode="closed"><style>/);
   });
 
   it('leaves pages without header-utils unchanged', async () => {

@@ -924,7 +924,8 @@ describe('r-select contract', () => {
     try {
       const select = await createSelectWithOptions();
       select.show();
-      await sleep(20);
+      // FloatingController positions on rAF; wash placement waits for afterPosition.
+      await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
       const dropdown = select._selectionDropdown!;
       expect(dropdown.hasAttribute('data-hover-fill')).toBe(true);
       const fill = dropdown.querySelector('.ran-select-option-hover') as HTMLElement | null;

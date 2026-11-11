@@ -124,6 +124,13 @@ export class Select extends RanElement {
         height: rendered?.height ?? own.height,
       };
     },
+    // Placement is deferred a frame on open — place the selected wash only after
+    // option boxes are real, or the fill starts at 0×0 and fades in late.
+    afterPosition: () => {
+      this._glassMenuLaidOut = true;
+      this._optionHoverTarget = null;
+      this._syncGlassMenuChrome();
+    },
   });
   _optionList: Option[];
   /**
@@ -144,6 +151,8 @@ export class Select extends RanElement {
    */
   _optionHover?: HTMLElement;
   _optionHoverTarget: HTMLElement | null = null;
+  /** True after FloatingController has written open coordinates for this show. */
+  _glassMenuLaidOut = false;
   _lastPointerAt = '';
   _text!: HTMLSpanElement;
   _selector!: HTMLDivElement;
@@ -573,10 +582,12 @@ export class Select extends RanElement {
       const value = this.getAttribute('value');
       const selected = this.getDropdownOptions().findIndex((item) => !!value && item.getAttribute('value') === value);
       if (selected >= 0) this.setActiveOptionByIndex(selected, false);
+    } else {
+      this._glassMenuLaidOut = false;
     }
     this._floating.apply(this.open);
-    // After the panel is shown/hidden, sync the glass sliding wash to the cursor.
-    this._syncGlassMenuChrome();
+    // Close: hide the wash immediately. Open: afterPosition places once geometry is real.
+    if (!this.open) this._syncGlassMenuChrome();
   };
 
   /** Open the dropdown. */
@@ -721,6 +732,8 @@ export class Select extends RanElement {
     }
     const fill = this._ensureOptionHover();
     if (fill.parentNode !== dropdown) dropdown.prepend(fill);
+    // Opening measures on the next frame — placing earlier puts the wash at 0×0.
+    if (!this._glassMenuLaidOut) return;
     if (this._activeOption?.isConnected) this._placeOptionHover(this._activeOption);
     else this._hideOptionHover();
   };

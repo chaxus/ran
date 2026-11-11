@@ -487,10 +487,15 @@ describe('ShadowRootMock', () => {
     expect(html).toContain(':host { display: block; }');
   });
 
-  it('serialize escapes style content', () => {
+  it('serialize keeps CSS combinators and only escapes style close tags', () => {
     const shadow = makeShadow();
-    shadow.adoptedStyleSheets.push('/* a & b */');
-    expect(shadow.serialize()).toContain('/* a &amp; b */');
+    // Raw-text <style>: HTML-escaping would turn `>` into `&gt;` and break selectors.
+    shadow.adoptedStyleSheets.push('div > span { color: red; } /* a & b */');
+    const html = shadow.serialize();
+    expect(html).toContain('div > span { color: red; } /* a & b */');
+    shadow.adoptedStyleSheets = ['color: red; </style><script>'];
+    expect(shadow.serialize()).toContain('<\\/style>');
+    expect(shadow.serialize()).not.toMatch(/<\/style><script>/);
   });
 
   it('serialize includes child elements', () => {
