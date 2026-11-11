@@ -178,9 +178,28 @@ test('under glass the invite Role menu stays above the hero plate', async ({ pag
     const hero = document.querySelector('.hero-live');
     if (!panel || !hero) return null;
     const r = panel.getBoundingClientRect();
+    /** WebKit often returns a closed-shadow descendant; closest() stops at the root. */
+    const ownsHit = (el: Element | null): boolean => {
+      if (!el) return false;
+      if (el === panel || panel.contains(el)) return true;
+      if (el.closest?.('r-dropdown') === panel) return true;
+      const root = el.getRootNode();
+      if (root instanceof ShadowRoot && root.host) {
+        if (root.host === panel) return true;
+        if (root.host.closest?.('r-dropdown') === panel) return true;
+      }
+      return false;
+    };
     const samples = [0.2, 0.5, 0.85].map((t) => {
-      const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height * t);
-      return el?.closest('r-dropdown') ? 'panel' : el?.closest('.hero-live') ? 'hero' : 'other';
+      const x = r.left + r.width / 2;
+      const y = r.top + r.height * t;
+      const stack = document.elementsFromPoint(x, y);
+      const panelIdx = stack.findIndex((el) => ownsHit(el));
+      const heroIdx = stack.findIndex((el) => el === hero || el.closest?.('.hero-live') === hero);
+      if (panelIdx >= 0 && (heroIdx < 0 || panelIdx < heroIdx)) return 'panel';
+      if (heroIdx === 0) return 'hero';
+      const top = stack[0] ?? null;
+      return top ? ((top.className || top.tagName).toString().slice(0, 40) as string) : 'null';
     });
     const heroStyle = getComputedStyle(hero);
     return {
