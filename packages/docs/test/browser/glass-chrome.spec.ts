@@ -153,6 +153,54 @@ test('under glass the language menu hangs below the trigger and stays above the 
   await page.waitForURL('**/de/**');
 });
 
+test('under glass the invite Role menu stays above the hero plate', async ({ page }) => {
+  await stampSurface(page, 'light');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  await expect.poll(async () => (await rootTokens(page)).surface).toBe('glass');
+  await page.waitForFunction(() => customElements.get('r-select'));
+
+  await page
+    .locator('.example r-select')
+    .first()
+    .evaluate((host: HTMLElement & { open: boolean }) => {
+      host.open = true;
+    });
+  const list = page.locator('r-dropdown[role="listbox"]').filter({ hasText: 'Editor' });
+  await expect(list).toBeVisible();
+
+  const stacking = await page.evaluate(() => {
+    const panel = [...document.querySelectorAll<HTMLElement>('r-dropdown')].find((el) => {
+      const cs = getComputedStyle(el);
+      if (cs.display === 'none') return false;
+      return /Admin|Editor|Viewer/.test(el.textContent || '');
+    });
+    const hero = document.querySelector('.hero-live');
+    if (!panel || !hero) return null;
+    const r = panel.getBoundingClientRect();
+    const samples = [0.2, 0.5, 0.85].map((t) => {
+      const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height * t);
+      return el?.closest('r-dropdown') ? 'panel' : el?.closest('.hero-live') ? 'hero' : 'other';
+    });
+    return {
+      panelZ: getComputedStyle(panel).zIndex,
+      wrapZ: panel.parentElement ? getComputedStyle(panel.parentElement).zIndex : null,
+      heroZ: getComputedStyle(hero).zIndex,
+      heroFilter: getComputedStyle(hero).backdropFilter || getComputedStyle(hero).webkitBackdropFilter,
+      samples,
+    };
+  });
+
+  expect(stacking, 'Role panel should be painted').not.toBeNull();
+  expect(Number.parseInt(stacking!.panelZ, 10)).toBeGreaterThanOrEqual(1100);
+  expect(stacking!.heroZ).toBe('0');
+  // Frost is on ::before — the plate itself must not run backdrop-filter.
+  expect(stacking!.heroFilter === 'none' || stacking!.heroFilter === '').toBe(true);
+  for (const hit of stacking!.samples) {
+    expect(hit, 'Role menu must hit-test above the glass hero plate').toBe('panel');
+  }
+});
+
 for (const theme of ['light', 'dark'] as const) {
   test(`glass interactive washes resolve under ${theme}`, async ({ page }) => {
     await stampSurface(page, theme);

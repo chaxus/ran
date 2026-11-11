@@ -2,9 +2,11 @@
  * Hover menubar handoff for chrome selects (language / theme / surface).
  *
  * Industry pattern for smooth peer hops (Stripe / Radix NavigationMenu):
- * one shared viewport shell morphs position + size; content layers cross-slide
- * with directional `data-motion`. Independent select portals stay open for
- * state/a11y but are visually suppressed while the viewport is showing.
+ * one shared viewport shell morphs position + size. Incoming content slides by
+ * direction at full opacity; the outgoing layer is dropped immediately so hops
+ * never paint two menus at once (no cross-fade residual). Independent select
+ * portals stay open for state/a11y but are visually suppressed while the
+ * viewport is showing.
  *
  * Used by `<r-menubar>` and available as `mountMenubarHandoff`.
  */
@@ -79,17 +81,12 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
   -webkit-backdrop-filter:blur(var(--ran-surface-glass-blur,16px));
 }
 .${VIEWPORT_CLASS}__clip{position:relative;width:100%;height:100%;overflow:hidden}
-.${VIEWPORT_CLASS}__layer{position:absolute;inset:0;display:flex;flex-direction:column;gap:0}
+.${VIEWPORT_CLASS}__layer{position:absolute;inset:0;display:flex;flex-direction:column;gap:0;opacity:1}
 .${VIEWPORT_CLASS}__layer[data-motion=from-start]{animation:ran-menubar-from-start ${duration}ms ${easing} both}
 .${VIEWPORT_CLASS}__layer[data-motion=from-end]{animation:ran-menubar-from-end ${duration}ms ${easing} both}
-.${VIEWPORT_CLASS}__layer[data-motion=to-start]{animation:ran-menubar-to-start ${duration}ms ${easing} both}
-.${VIEWPORT_CLASS}__layer[data-motion=to-end]{animation:ran-menubar-to-end ${duration}ms ${easing} both}
-.${VIEWPORT_CLASS}__layer[data-motion=fade]{animation:ran-menubar-fade-in ${Math.min(180, duration)}ms ${easing} both}
-@keyframes ran-menubar-from-start{from{opacity:0;transform:translateX(-${SLIDE_DX}px)}to{opacity:1;transform:translateX(0)}}
-@keyframes ran-menubar-from-end{from{opacity:0;transform:translateX(${SLIDE_DX}px)}to{opacity:1;transform:translateX(0)}}
-@keyframes ran-menubar-to-start{from{opacity:1;transform:translateX(0)}50%{opacity:0}to{opacity:0;transform:translateX(-${SLIDE_DX}px)}}
-@keyframes ran-menubar-to-end{from{opacity:1;transform:translateX(0)}50%{opacity:0}to{opacity:0;transform:translateX(${SLIDE_DX}px)}}
-@keyframes ran-menubar-fade-in{from{opacity:0}to{opacity:1}}
+/* Transform only — opacity fades stacked two menus and read as hop residual. */
+@keyframes ran-menubar-from-start{from{transform:translateX(-${SLIDE_DX}px)}to{transform:translateX(0)}}
+@keyframes ran-menubar-from-end{from{transform:translateX(${SLIDE_DX}px)}to{transform:translateX(0)}}
 /* One wash slides between rows — same motion as docs .sb__hover / r-select glass fill. */
 .${VIEWPORT_CLASS}__hover{
   position:absolute;top:0;left:0;z-index:0;width:0;height:0;
@@ -447,22 +444,10 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     }
 
     const enterMotion = direction === 'right' ? 'from-end' : 'from-start';
-    const leaveMotion = direction === 'right' ? 'to-start' : 'to-end';
     const incoming = buildLayer(harvest, enterMotion, onPick);
-    // Drop any prior leaving layer so a clipped label cannot linger as a chip.
-    for (const stale of [...clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer[data-leaving]`)]) {
+    // Drop every prior layer before paint — cross-fading leave+enter left dual-menu residual.
+    for (const stale of [...clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer`)]) {
       stale.remove();
-    }
-    const outgoing = clip.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__layer:not([data-leaving])`);
-    if (outgoing) {
-      outgoing.setAttribute('data-leaving', '');
-      outgoing.setAttribute('data-motion', leaveMotion);
-      const drop = (): void => {
-        outgoing.remove();
-      };
-      outgoing.addEventListener('animationend', drop, { once: true });
-      // animationend can miss (interrupted morph / reduced motion mid-flight).
-      window.setTimeout(drop, duration + 80);
     }
     ensureHoverInClip();
     clip.appendChild(incoming);

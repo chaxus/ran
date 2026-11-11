@@ -901,31 +901,52 @@
  * cards). Only the hero live tray picks up Regular glass so it sits with the floating header.
  */
 :root[data-ran-surface='glass'] .hero-live {
-  /* Content-layer plate: stay under sticky header chrome menus (backdrop-filter would
-     otherwise composite above a portaled ran-chrome-menu). */
+  /*
+   * Content-layer plate under sticky header chrome and the invite Role menu.
+   * Frost lives on ::before (same as .site-header__inner): backdrop-filter on this
+   * box would composite above a portaled r-dropdown even when z-index is 0.
+   */
   position: relative;
   z-index: 0;
-  background: var(--glass-specular, none), color-mix(in srgb, var(--glass-white) 42%, transparent);
+  overflow: visible;
+  isolation: isolate;
+  background: transparent;
   border-color: var(--glass-rim);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+:root[data-ran-surface='glass'] .hero-live::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  border: 1px solid transparent;
+  background: var(--glass-specular, none), color-mix(in srgb, var(--glass-white) 42%, transparent);
   box-shadow: var(--glass-depth, none), var(--glass-inset, none);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   backdrop-filter: blur(18px) saturate(160%);
+  pointer-events: none;
+}
+:root[data-ran-surface='glass'] .hero-live > * {
+  position: relative;
+  z-index: 1;
 }
 :root[data-ran-surface='glass'] .example {
   background: color-mix(in srgb, var(--bg) 94%, transparent);
   border-color: color-mix(in srgb, var(--rule) 70%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 65%, transparent);
 }
-:root[data-ran-theme='dark'][data-ran-surface='glass'] .hero-live {
+:root[data-ran-theme='dark'][data-ran-surface='glass'] .hero-live::before {
   background: var(--glass-specular, none), color-mix(in srgb, var(--glass-slate) 55%, transparent);
-  border-color: var(--glass-rim);
 }
 :root[data-ran-theme='dark'][data-ran-surface='glass'] .example {
   background: color-mix(in srgb, var(--bg) 92%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-white) 8%, transparent);
 }
 @media (prefers-reduced-transparency: reduce) {
-  :root[data-ran-surface='glass'] .hero-live {
+  :root[data-ran-surface='glass'] .hero-live::before {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background: var(--bg-soft);

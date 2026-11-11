@@ -147,6 +147,29 @@ test('chrome menu option wash slides between rows', async ({ page, browserName }
   expect(gap!).toBeLessThanOrEqual(12);
 });
 
+test('peer hops never keep two content layers painted together', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'hop residual sampling is chromium-first');
+  await page.locator('.lang-switch').hover();
+  await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'English' })).toBeVisible();
+  const dualDuringHop: number[] = [];
+  const sample = page.evaluate(() => {
+    const layers = [...document.querySelectorAll('.ran-menubar-viewport__layer')];
+    return layers.filter((el) => Number.parseFloat(getComputedStyle(el).opacity) > 0.05).length;
+  });
+  dualDuringHop.push(await sample);
+  await page.locator('.appearance .theme-switch').hover();
+  for (let i = 0; i < 8; i += 1) {
+    dualDuringHop.push(await sample);
+    await page.waitForTimeout(30);
+  }
+  await page.locator('.appearance .surface-switch').hover();
+  for (let i = 0; i < 8; i += 1) {
+    dualDuringHop.push(await sample);
+    await page.waitForTimeout(30);
+  }
+  expect(Math.max(...dualDuringHop), `dual layers sampled=${dualDuringHop.join(',')}`).toBeLessThanOrEqual(1);
+});
+
 test('after a peer hop the option wash settles on the selected row', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'hop settle sampling is chromium-first');
   await page.locator('.lang-switch').hover();
