@@ -392,11 +392,11 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 
 ## `dropdown`
 
-- Tokens: 37
+- Tokens: 36
 - Parts: 1
 
 ### Tokens
-<!-- layers: semantic: 11 · skin: 1 · component: 20 · internal: 5 -->
+<!-- layers: semantic: 10 · skin: 1 · component: 20 · internal: 5 -->
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-text`
@@ -419,7 +419,6 @@ description: 'ویژگی‌های سفارشی CSS و نام‌های ()::part �
 - `--ran-dropdown-font-weight`
 - `--ran-dropdown-option-item-border-radius`
 - `--ran-motion-duration-base`
-- `--ran-motion-duration-fast`
 - `--ran-motion-duration-slow`
 - `--ran-motion-ease-standard`
 - `--ran-radius-md`

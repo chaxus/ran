@@ -434,10 +434,10 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       // No content fade on first open — a fade reads as “selected wash arrived late”.
       const layer = buildLayer(harvest, null, onPick);
       clip.replaceChildren(hover, layer);
-      // Wash opacity/geometry before fitAndShow's forced reflow — otherwise the
-      // first paint can flush with opacity 0 and read as a late fill.
-      syncHoverToLayer(layer, false);
       fitAndShow(layer, x, y, w, 1, !hopping);
+      // Place once after layout, with data-instant — placing before fitAndShow
+      // baked wrong clip-local coords and left the wash short of the selected row.
+      hoverTarget = null;
       syncHoverToLayer(layer, false);
       return;
     }
@@ -461,16 +461,14 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       window.setTimeout(drop, duration + 80);
     }
     ensureHoverInClip();
-    // Reset travel target so the new selected row snaps (data-instant) while the
-    // shell morphs — never hide→fade the wash after the menu is already open.
-    hoverTarget = null;
     clip.appendChild(incoming);
-    syncHoverToLayer(incoming, false);
     // Morph shell toward the new trigger; height follows rebuilt rows, not a tall harvest.
     const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
     const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
     setShellBox(x, y, nextW, nextH, 1, false);
-    syncHoverToLayer(incoming, false);
+    // Wait for shell morph to finish measuring, then snap wash (opacity has no
+    // transition — hide/show is instant, not a late fade).
+    syncHoverToLayer(incoming, true);
   };
 
   const setOpen = (item: MenubarItem, open: boolean): void => {
