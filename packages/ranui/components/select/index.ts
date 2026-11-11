@@ -994,10 +994,6 @@ export class Select extends RanElement {
       this._selectDropdown = Div()
         .style('-webkit-tap-highlight-color', 'transparent')
         .style('outline', '0')
-        // Portal wrapper sits on <body>; carry the overlay tier so a static parent
-        // cannot leave the host's z-index competing with page glass plates.
-        .style('position', 'relative')
-        .style('z-index', 'var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100))')
         .on('click', this.clickOption)
         .on('pointermove', this._cursorFromPointer)
         .build() as HTMLDivElement;

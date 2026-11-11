@@ -182,11 +182,12 @@ test('under glass the invite Role menu stays above the hero plate', async ({ pag
       const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height * t);
       return el?.closest('r-dropdown') ? 'panel' : el?.closest('.hero-live') ? 'hero' : 'other';
     });
+    const heroStyle = getComputedStyle(hero);
     return {
       panelZ: getComputedStyle(panel).zIndex,
       wrapZ: panel.parentElement ? getComputedStyle(panel.parentElement).zIndex : null,
-      heroZ: getComputedStyle(hero).zIndex,
-      heroFilter: getComputedStyle(hero).backdropFilter || getComputedStyle(hero).webkitBackdropFilter,
+      heroZ: heroStyle.zIndex,
+      heroFilter: heroStyle.backdropFilter || heroStyle.getPropertyValue('-webkit-backdrop-filter'),
       samples,
     };
   });
