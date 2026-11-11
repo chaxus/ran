@@ -304,23 +304,40 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     return h;
   };
 
-  const setShellBox = (x: number, y: number, w: number, h: number, opacity: number, instant: boolean): void => {
+  const setShellBox = (
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    opacity: number,
+    instant: boolean,
+    /** When false, leave `transition: none` applied so callers can paint wash before flush. */
+    flush = true,
+  ): void => {
     if (instant) shell.style.transition = 'none';
     shell.style.setProperty('--ran-menubar-x', `${Math.round(x)}px`);
     shell.style.setProperty('--ran-menubar-y', `${Math.round(y)}px`);
     shell.style.setProperty('--ran-menubar-w', `${Math.ceil(w)}px`);
     shell.style.setProperty('--ran-menubar-h', `${Math.ceil(h)}px`);
     shell.style.setProperty('--ran-menubar-opacity', String(opacity));
-    if (instant) {
+    if (instant && flush) {
       void shell.offsetWidth;
       shell.style.transition = '';
     }
+  };
+
+  const flushShellTransition = (): void => {
+    void shell.offsetWidth;
+    shell.style.transition = '';
   };
 
   /**
    * Fit height to the rebuilt rows (native harvest height was often taller —
    * empty gap under the last option). Keep harvest width as the floor so labels
    * match the measured chrome panel.
+   *
+   * `afterLayout` runs after size is written but **before** the instant flush —
+   * place the selected wash there so the first painted frame already has it.
    */
   const fitAndShow = (
     layer: HTMLElement,
@@ -329,46 +346,25 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     minWidth: number,
     opacity: number,
     instant: boolean,
+    afterLayout?: () => void,
   ): void => {
     ensureHoverInClip();
-    // Width first so nowrap labels lay out; height follows content.
-    setShellBox(x, y, minWidth, Math.max(layerContentHeight(layer) + SHELL_PAD * 2, SHELL_PAD * 2 + 1), opacity, true);
+    // Width first so nowrap labels lay out; height follows content. No flush yet.
+    setShellBox(x, y, minWidth, Math.max(layerContentHeight(layer) + SHELL_PAD * 2, SHELL_PAD * 2 + 1), opacity, true, false);
     const h = layerContentHeight(layer) + SHELL_PAD * 2;
     const w = Math.max(minWidth, layer.scrollWidth + SHELL_PAD * 2);
-    setShellBox(x, y, w, h, opacity, instant);
+    setShellBox(x, y, w, h, opacity, instant, false);
+    afterLayout?.();
+    if (instant) flushShellTransition();
+    else shell.style.transition = '';
   };
 
-  const syncHoverToLayer = (layer: HTMLElement, afterShellMotion: boolean): void => {
+  const syncHoverToLayer = (layer: HTMLElement): void => {
     window.clearTimeout(hoverSettleTimer);
-    const gen = ++hoverGen;
+    hoverGen += 1;
     const selected = layer.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
-    const apply = (): void => {
-      if (gen !== hoverGen) return;
-      if (selected?.isConnected) placeHover(selected);
-      else hideHover();
-    };
-    // Prefer placing on the same frame as the layer (first open and hops). Hiding
-    // until shell `transitionend` left the selected wash missing while the menu
-    // was already open — reads as a late fade-in.
-    if (!afterShellMotion || reduceMotion()) {
-      apply();
-      return;
-    }
-    // Optional deferred path (callers that still pass afterShellMotion=true).
-    hideHover();
-    const onEnd = (event: TransitionEvent): void => {
-      if (event.target !== shell) return;
-      if (event.propertyName !== 'transform' && event.propertyName !== 'width' && event.propertyName !== 'height') {
-        return;
-      }
-      shell.removeEventListener('transitionend', onEnd);
-      apply();
-    };
-    shell.addEventListener('transitionend', onEnd);
-    hoverSettleTimer = window.setTimeout(() => {
-      shell.removeEventListener('transitionend', onEnd);
-      apply();
-    }, duration + 50);
+    if (selected?.isConnected) placeHover(selected);
+    else hideHover();
   };
 
   const hideViewport = (): void => {
@@ -434,11 +430,11 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       // No content fade on first open — a fade reads as “selected wash arrived late”.
       const layer = buildLayer(harvest, null, onPick);
       clip.replaceChildren(hover, layer);
-      fitAndShow(layer, x, y, w, 1, !hopping);
-      // Place once after layout, with data-instant — placing before fitAndShow
-      // baked wrong clip-local coords and left the wash short of the selected row.
-      hoverTarget = null;
-      syncHoverToLayer(layer, false);
+      fitAndShow(layer, x, y, w, 1, true, () => {
+        // Same commit as first paint: wash + rows together (before offsetWidth flush).
+        hoverTarget = null;
+        syncHoverToLayer(layer);
+      });
       return;
     }
 
@@ -466,9 +462,30 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
     const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
     setShellBox(x, y, nextW, nextH, 1, false);
-    // Wait for shell morph to finish measuring, then snap wash (opacity has no
-    // transition — hide/show is instant, not a late fade).
-    syncHoverToLayer(incoming, true);
+    // Wash with the incoming rows immediately — never hide until morph ends.
+    hoverTarget = null;
+    syncHoverToLayer(incoming);
+    // Re-snap after morph so clip-local coords match the settled box (no hide).
+    const selected = incoming.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
+    const realign = (): void => {
+      if (!selected?.isConnected) return;
+      hoverTarget = null;
+      placeHover(selected);
+    };
+    const onEnd = (event: TransitionEvent): void => {
+      if (event.target !== shell) return;
+      if (event.propertyName !== 'transform' && event.propertyName !== 'width' && event.propertyName !== 'height') {
+        return;
+      }
+      shell.removeEventListener('transitionend', onEnd);
+      realign();
+    };
+    shell.addEventListener('transitionend', onEnd);
+    window.clearTimeout(hoverSettleTimer);
+    hoverSettleTimer = window.setTimeout(() => {
+      shell.removeEventListener('transitionend', onEnd);
+      realign();
+    }, duration + 50);
   };
 
   const setOpen = (item: MenubarItem, open: boolean): void => {
