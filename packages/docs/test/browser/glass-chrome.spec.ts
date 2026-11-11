@@ -160,65 +160,80 @@ test('under glass the invite Role menu stays above the hero plate', async ({ pag
   await expect.poll(async () => (await rootTokens(page)).surface).toBe('glass');
   await page.waitForFunction(() => customElements.get('r-select'));
 
-  await page
-    .locator('.example r-select')
-    .first()
-    .evaluate((host: HTMLElement & { open: boolean }) => {
-      host.open = true;
-    });
+  const role = page.locator('.example r-select').first();
+  await role.scrollIntoViewIfNeeded();
+  await role.evaluate((host: HTMLElement & { open: boolean }) => {
+    host.open = true;
+  });
   const list = page.locator('r-dropdown[role="listbox"]').filter({ hasText: 'Editor' });
   await expect(list).toBeVisible();
 
-  const stacking = await page.evaluate(() => {
-    const panel = [...document.querySelectorAll<HTMLElement>('r-dropdown')].find((el) => {
-      const cs = getComputedStyle(el);
-      if (cs.display === 'none') return false;
-      return /Admin|Editor|Viewer/.test(el.textContent || '');
+  const readStacking = () =>
+    page.evaluate(() => {
+      // Prefer a panel that is actually painted in the viewport — WebKit/Firefox can
+      // briefly report display:block at a pre-position off-screen box after open=.
+      const panel = [...document.querySelectorAll<HTMLElement>('r-dropdown')].find((el) => {
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+        if (!/Admin|Editor|Viewer/.test(el.textContent || '')) return false;
+        const box = el.getBoundingClientRect();
+        return box.width > 8 && box.height > 8 && box.top > 0 && box.top < innerHeight * 0.9;
+      });
+      const hero = document.querySelector('.hero-live');
+      if (!panel || !hero) return null;
+      const r = panel.getBoundingClientRect();
+      /** Closed-shadow hits: closest() stops at the root; also walk the host. */
+      const ownsHit = (el: Element | null): boolean => {
+        if (!el) return false;
+        if (el === panel || panel.contains(el)) return true;
+        if (el.closest?.('r-dropdown') === panel) return true;
+        let node: Element | null = el;
+        for (let i = 0; i < 6 && node; i += 1) {
+          const root = node.getRootNode();
+          if (!(root instanceof ShadowRoot)) break;
+          if (root.host === panel || root.host.closest?.('r-dropdown') === panel) return true;
+          node = root.host;
+        }
+        return false;
+      };
+      const samples = [0.2, 0.5, 0.85].map((t) => {
+        const x = r.left + r.width / 2;
+        const y = r.top + r.height * t;
+        const stack = document.elementsFromPoint(x, y);
+        const panelIdx = stack.findIndex((el) => ownsHit(el));
+        const heroIdx = stack.findIndex((el) => el === hero || el.closest?.('.hero-live') === hero);
+        if (panelIdx >= 0 && (heroIdx < 0 || panelIdx < heroIdx)) return 'panel';
+        if (heroIdx === 0) return 'hero';
+        const top = document.elementFromPoint(x, y);
+        if (!top) return `null@${Math.round(x)},${Math.round(y)}`;
+        return (top.className || top.tagName).toString().slice(0, 40);
+      });
+      const heroStyle = getComputedStyle(hero);
+      return {
+        panelZ: getComputedStyle(panel).zIndex,
+        heroZ: heroStyle.zIndex,
+        heroFilter: heroStyle.backdropFilter || heroStyle.getPropertyValue('-webkit-backdrop-filter'),
+        rect: { top: Math.round(r.top), left: Math.round(r.left), w: Math.round(r.width), h: Math.round(r.height) },
+        samples,
+      };
     });
-    const hero = document.querySelector('.hero-live');
-    if (!panel || !hero) return null;
-    const r = panel.getBoundingClientRect();
-    /** WebKit often returns a closed-shadow descendant; closest() stops at the root. */
-    const ownsHit = (el: Element | null): boolean => {
-      if (!el) return false;
-      if (el === panel || panel.contains(el)) return true;
-      if (el.closest?.('r-dropdown') === panel) return true;
-      const root = el.getRootNode();
-      if (root instanceof ShadowRoot && root.host) {
-        if (root.host === panel) return true;
-        if (root.host.closest?.('r-dropdown') === panel) return true;
-      }
-      return false;
-    };
-    const samples = [0.2, 0.5, 0.85].map((t) => {
-      const x = r.left + r.width / 2;
-      const y = r.top + r.height * t;
-      const stack = document.elementsFromPoint(x, y);
-      const panelIdx = stack.findIndex((el) => ownsHit(el));
-      const heroIdx = stack.findIndex((el) => el === hero || el.closest?.('.hero-live') === hero);
-      if (panelIdx >= 0 && (heroIdx < 0 || panelIdx < heroIdx)) return 'panel';
-      if (heroIdx === 0) return 'hero';
-      const top = stack[0] ?? null;
-      return top ? ((top.className || top.tagName).toString().slice(0, 40) as string) : 'null';
-    });
-    const heroStyle = getComputedStyle(hero);
-    return {
-      panelZ: getComputedStyle(panel).zIndex,
-      wrapZ: panel.parentElement ? getComputedStyle(panel.parentElement).zIndex : null,
-      heroZ: heroStyle.zIndex,
-      heroFilter: heroStyle.backdropFilter || heroStyle.getPropertyValue('-webkit-backdrop-filter'),
-      samples,
-    };
-  });
 
+  // FloatingController places on rAF — poll until samples land on the panel.
+  await expect
+    .poll(async () => {
+      const snap = await readStacking();
+      if (!snap) return 'missing';
+      if (snap.samples.every((hit) => hit === 'panel')) return 'ok';
+      return snap.samples.join('|');
+    })
+    .toBe('ok');
+
+  const stacking = await readStacking();
   expect(stacking, 'Role panel should be painted').not.toBeNull();
-  expect(Number.parseInt(stacking!.panelZ, 10)).toBeGreaterThanOrEqual(1100);
+  expect(Number.parseInt(stacking!.panelZ, 10), `rect=${JSON.stringify(stacking!.rect)}`).toBeGreaterThanOrEqual(1100);
   expect(stacking!.heroZ).toBe('0');
   // Frost is on ::before — the plate itself must not run backdrop-filter.
   expect(stacking!.heroFilter === 'none' || stacking!.heroFilter === '').toBe(true);
-  for (const hit of stacking!.samples) {
-    expect(hit, 'Role menu must hit-test above the glass hero plate').toBe('panel');
-  }
 });
 
 for (const theme of ['light', 'dark'] as const) {
