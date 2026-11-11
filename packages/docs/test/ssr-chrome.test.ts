@@ -26,6 +26,14 @@ describe('ssrHeaderChrome', () => {
     expect(out).toMatch(/r-input[\s\S]*shadowrootmode="closed"[\s\S]*ran-input/);
     expect(out).toMatch(/r-button[\s\S]*shadowrootmode="closed"[\s\S]*ran-btn/);
     expect(out).toMatch(/<template shadowrootmode="closed"><style>/);
+    // Captions + placeholder must be in the DSD first paint (not only after upgrade).
+    // Strip <style> so class names in CSS do not false-match.
+    const body = out.replace(/<style>[\s\S]*?<\/style>/g, '');
+    expect(body).toContain('class="ran-input-label"');
+    expect(body).toMatch(/ran-input-label[^>]*>Work email</);
+    expect(body).toMatch(/ran-input-content[^>]*placeholder="ada@company.com"/);
+    expect(body).toContain('class="ran-select-label"');
+    expect(body).toMatch(/ran-select-label[^>]*>Role</);
   });
 
   it('leaves pages without header-utils unchanged', async () => {

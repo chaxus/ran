@@ -657,6 +657,19 @@ export class Input extends RanElement {
     }
   };
   /**
+   * Paint label / placeholder / type into Declarative Shadow DOM before serialize.
+   * SSR `setAttribute` does not run `attributeChangedCallback`, so without this the
+   * invite-card first paint is a bare field until the client upgrades (~hundreds of ms).
+   */
+  _preSerialize(): void {
+    const label = this.getAttribute('label');
+    if (label != null) this.listenLabel('label', label);
+    const placeholder = this.getAttribute('placeholder');
+    if (placeholder != null) this.listenPlaceholder('placeholder', placeholder);
+    const type = this.getAttribute('type');
+    if (type != null) this.listenType('type', type);
+  }
+  /**
    * @description: 聚合监听事件
    * @param {string} name
    * @param {string} oldValue

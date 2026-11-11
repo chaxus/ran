@@ -272,6 +272,11 @@ export class Select extends RanElement {
     this._text = text;
     this._search = search;
     this._slot = slot;
+    // DSD may already include the caption from `_preSerialize` — reuse it.
+    for (const child of this._shadowDom.children) {
+      if (child === wrap) break;
+      if (child.tagName.toLowerCase() === 'label') this._label = child as HTMLLabelElement;
+    }
     return true;
   }
   /**
@@ -1316,6 +1321,9 @@ export class Select extends RanElement {
    * `querySelector` nodes); parse that fallback so first paint shows the selected text.
    */
   _preSerialize(): void {
+    // Field caption must ship in DSD — ACC does not run during SSR setAttribute.
+    const fieldLabel = this.getAttribute('label');
+    if (fieldLabel != null) this._syncLabel(fieldLabel);
     const value = this.getAttribute('value');
     if (!value || !this._text) return;
     const live = Array.from(this.querySelectorAll('r-option')).find((item) => item.getAttribute('value') === value) as
