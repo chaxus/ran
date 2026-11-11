@@ -281,7 +281,7 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
    * wash sits on the resting row immediately — waiting for shell/layer motion made the
    * selected row look unselected for ~300ms after hover.
    */
-  const placeHover = (option: HTMLElement): void => {
+  const placeHover = (option: HTMLElement, instant = false): void => {
     ensureHoverInClip();
     const clipBox = clip.getBoundingClientRect();
     const box = option.getBoundingClientRect();
@@ -294,7 +294,8 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       slideX = shift.e;
       slideY = shift.f;
     }
-    hover.toggleAttribute('data-instant', hoverTarget === null);
+    // Instant when first shown, or when correcting after shell morph (peer hop).
+    hover.toggleAttribute('data-instant', instant || hoverTarget === null);
     hover.style.transform = `translate(${box.left - clipBox.left - slideX}px, ${box.top - clipBox.top - slideY}px)`;
     hover.style.width = `${box.width}px`;
     hover.style.height = `${box.height}px`;
@@ -355,14 +356,28 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     const selected = layer.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
     // Place on this frame so the selected row is marked as soon as the panel exists.
     // A double-rAF / transitionend wait was the "hover then wait for selection" lag.
-    if (selected?.isConnected) placeHover(selected);
-    else hideHover();
-    // One follow-up after layout settles (fitAndShow may still be adjusting width).
-    requestAnimationFrame(() => {
+    const retarget = (instant: boolean): void => {
       if (gen !== hoverGen) return;
-      if (selected?.isConnected) placeHover(selected);
+      if (selected?.isConnected) placeHover(selected, instant);
       else hideHover();
-    });
+    };
+    retarget(false);
+    // Peer hops morph shell width/height over `duration`. One rAF left the wash
+    // size stuck mid-morph (dx/dw never settled). Retarget when morph ends.
+    requestAnimationFrame(() => retarget(false));
+    const onShellEnd = (event: TransitionEvent): void => {
+      if (event.target !== shell) return;
+      if (event.propertyName !== 'width' && event.propertyName !== 'height' && event.propertyName !== 'transform') {
+        return;
+      }
+      shell.removeEventListener('transitionend', onShellEnd);
+      retarget(true);
+    };
+    shell.addEventListener('transitionend', onShellEnd);
+    window.setTimeout(() => {
+      shell.removeEventListener('transitionend', onShellEnd);
+      retarget(true);
+    }, duration + 80);
   };
 
   const hideViewport = (): void => {
