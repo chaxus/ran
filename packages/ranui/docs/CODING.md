@@ -69,6 +69,11 @@ rules it encodes:
   (`paintedShadowChild` + bind by builder child order) — remounting with `replaceChildren`
   is the refresh flash. Never `querySelector` / class strings to re-bind. A second build
   from `connectedCallback` still duplicates on reconnect.
+- **SSR `adoptStyles` must reach the DSD snapshot.** Under Node, push CSS text onto the
+  mock's `adoptedStyleSheets` so serialization emits `<style>` inside
+  `<template shadowrootmode>`. Structure without styles still flashes unstyled → upgraded.
+  Do not HTML-escape that CSS (`>` combinators must survive); only neutralize a literal
+  `</style` sequence.
 - **Hold what you build.** Capture every element with `.ref()` while building and read it
   back with `shadowPart`. `querySelector` re-derives an element through a _string_: rename
   the class in the LESS file and the two sides drift, `!` waves the `null` through, and the
@@ -98,6 +103,11 @@ rules it encodes:
   `getBoundingClientRect()` is stale after the next reflow — re-measure on `resize`, on
   `scroll` (capture phase, for portaled panels), or through a `ResizeObserver` on the element
   that actually drives the measurement.
+- **Geometry-dependent chrome waits for layout.** Sliding washes, arrows and FLIP shells that
+  read option boxes must run after `FloatingController`'s `afterPosition` (or the equivalent
+  settled shell), not in the same turn as `open = true`. First place snaps (`data-instant` /
+  `transition: none`); later moves may ease. Placing before the panel is positioned paints a
+  0×0 wash that fades in late.
 
 **Async work belongs to an intent and a lifecycle.** If a component starts asynchronous work,
 associate completion with the initiating input/context and current connection. Cancel obsolete work
@@ -168,6 +178,18 @@ Events are the outward half of the contract, so treat a change to one as a break
 - New components are covered by `test/ssr/components/every-component.test.ts` automatically.
   If one cannot render on the server, add it to that file's exemption map **with a reason** —
   the point of the map is that the number cannot grow silently.
+
+### First-paint flash vs list-cursor wash (triage)
+
+Not every element needs DSD keep or a sliding wash. Apply by class of problem:
+
+| Class              | When                                               | Components (docs / library)                                                                               | Treatment                                                                                              |
+| ------------------ | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| First-paint chrome | Visible before the client bundle upgrades the host | `r-menubar`, `r-select`, `r-theme-switch`, `r-surface-switch`, home `r-input` / `r-button` / `r-checkbox` | Closed DSD **with styles** in the HTML; keep tree on upgrade (`paintedShadowChild`)                    |
+| List cursor        | Glass / nav row hover and selection                | `r-select` menus, `r-menubar` viewport, `r-tabs` header fill, host sidebar / header tool washes           | One sliding fill; **snap** on first place (`data-instant` → `transition: none`); ease only when moving |
+| Deferred / overlay | Loaded near viewport or opened by the reader       | `r-player`, `r-markdown`, `r-modal`, `r-message`, most others                                             | FOUC size plate or no plate; no wash requirement                                                       |
+
+Do **not** add entrance motion or a wash to every control — that invents noise. Fix flash where first paint is empty; fix wash where a list cursor already exists.
 
 ## 8. Testing
 

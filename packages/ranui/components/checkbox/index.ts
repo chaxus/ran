@@ -4,6 +4,8 @@ import { createRef, Div, EventManager, InputBuilder, Slot, Span } from '@/utils/
 import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import {
   ensureShadowRoot,
+  mountShadowTree,
+  paintedShadowChild,
   getStringAttribute,
   hostInternals,
   setBooleanAttribute,
@@ -27,11 +29,11 @@ export class Checkbox extends RanElement {
   static formAssociated = true;
   _events = new EventManager();
   _internals?: ElementInternals;
-  checkInput: HTMLInputElement;
-  checkInner: HTMLSpanElement;
-  context: Context;
-  container: HTMLElement;
-  _shadowDom: ShadowRoot;
+  checkInput!: HTMLInputElement;
+  checkInner!: HTMLSpanElement;
+  context!: Context;
+  container!: HTMLElement;
+  _shadowDom!: ShadowRoot;
   static get observedAttributes(): string[] {
     return ['disabled', 'checked', 'value', 'required', 'sheet'];
   }
@@ -43,6 +45,12 @@ export class Checkbox extends RanElement {
     super();
     this._internals = hostInternals(this);
     this._shadowDom = ensureShadowRoot(this, checkboxCss, { mode: 'closed' }, this._internals);
+    const painted = paintedShadowChild(this._shadowDom);
+    if (painted && this._bindPaintedTree(painted as HTMLElement)) {
+      this.context = { checked: false };
+      return;
+    }
+
     const containerRef = createRef<HTMLDivElement>();
     const checkInputRef = createRef<HTMLInputElement>();
     const checkInnerRef = createRef<HTMLSpanElement>();
@@ -61,7 +69,7 @@ export class Checkbox extends RanElement {
         Span().class('ran-checkbox-label').part('label').children(Slot()),
       )
       .build();
-    this._shadowDom.appendChild(wrapper);
+    mountShadowTree(this._shadowDom, checkboxCss, wrapper);
 
     this.container = shadowPart(containerRef, 'ran checkbox');
     this.checkInput = shadowPart(checkInputRef, 'input');
@@ -75,6 +83,19 @@ export class Checkbox extends RanElement {
     this.context = {
       checked: false,
     };
+  }
+
+  private _bindPaintedTree(wrapper: HTMLElement): boolean {
+    const box = wrapper.children.item(0) as HTMLDivElement | null;
+    const input = box?.children.item(0) as HTMLInputElement | null;
+    const inner = box?.children.item(1) as HTMLSpanElement | null;
+    if (!box || !input || !inner || input.tagName.toLowerCase() !== 'input') return false;
+    this.container = box;
+    this.checkInput = input;
+    this.checkInner = inner;
+    this.checkInput.setAttribute('aria-hidden', 'true');
+    this.checkInput.tabIndex = -1;
+    return true;
   }
   get disabled(): boolean {
     return isDisabled(this);

@@ -13,6 +13,21 @@ describe('ssrHeaderChrome', () => {
     expect(out).toMatch(/<template shadowrootmode="closed"><style>/);
   });
 
+  it('expands home invite example fields to Declarative Shadow DOM', async () => {
+    const html =
+      `<div class="example" data-home-example>` +
+      `<r-input class="example__field" name="email" type="email" label="Work email" placeholder="ada@company.com"></r-input>` +
+      `<r-select class="example__field" name="role" label="Role" value="editor"><r-option value="editor">Editor</r-option></r-select>` +
+      `<r-checkbox class="example__simulate" name="simulate">Simulate</r-checkbox>` +
+      `<r-button class="example__submit" type="primary">Send invite</r-button>` +
+      `</div>`;
+    const out = await ssrHeaderChrome(html);
+    expect(out).toContain('shadowrootmode="closed"');
+    expect(out).toMatch(/r-input[\s\S]*shadowrootmode="closed"[\s\S]*ran-input/);
+    expect(out).toMatch(/r-button[\s\S]*shadowrootmode="closed"[\s\S]*ran-btn/);
+    expect(out).toMatch(/<template shadowrootmode="closed"><style>/);
+  });
+
   it('leaves pages without header-utils unchanged', async () => {
     const html = '<main><p>no chrome</p></main>';
     expect(await ssrHeaderChrome(html)).toBe(html);

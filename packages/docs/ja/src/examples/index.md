@@ -10,6 +10,7 @@ ranui 要素と ranuts ユーティリティを製品画面でどう組み合わ
 - [Chat composer](chat-composer) — transcript, input, attachments, voice, token meter
 - [Overlay form](overlay-form) — modal or popover with form fields
 - [Content render](content-render) — markdown, math, and diagrams together
+- [ガラス chrome のモーション](glass-chrome) — select・tabs・menubar のスライド wash
 - [Build AI chat](../ranui/ai-chat/) — empty file to streaming chat
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [Design](../design/)

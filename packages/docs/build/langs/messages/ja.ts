@@ -17,6 +17,7 @@ const ja: LocaleMessages = {
     chat_composer: 'チャット入力',
     overlay_form: 'オーバーレイフォーム',
     content_render: 'コンテンツ描画',
+    glass_chrome: 'ガラス chrome のモーション',
     build_ai_chat: 'AI チャット構築',
     doc_editor: 'ドキュメントエディタ',
     github: 'GitHub',

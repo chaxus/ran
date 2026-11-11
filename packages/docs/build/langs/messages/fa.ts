@@ -17,6 +17,7 @@ const fa: LocaleMessages = {
     chat_composer: 'ورودی گفتگو',
     overlay_form: 'فرم روی لایه',
     content_render: 'رندر محتوا',
+    glass_chrome: 'حرکت کروم شیشه‌ای',
     build_ai_chat: 'ساخت گفتگوی هوش مصنوعی',
     doc_editor: 'ویرایشگر سند',
     github: 'GitHub',

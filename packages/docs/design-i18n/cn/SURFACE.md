@@ -1,4 +1,4 @@
-<!-- source: 733bd36544d9931f7f109d3a1d1e3fc685efb17f -->
+<!-- source: 11d3b0adb57fa5a07ea1606d026982f57bb11790 -->
 
 # 表面语言
 
@@ -44,6 +44,8 @@
 - **SHOULD** 悬停用安静的墨色洗色；浅色玻璃上选中用更亮的霜面抬升加字重（深色上用更实的白色 vibrancy），实心 Graphite 已有导轨处仍保留导轨。不要用描边或投影把选中 chip 压暗——那在磨砂板上会读成实心 chrome。
 - **SHOULD** 优先用库 token（`--ran-surface-glass-hover` / `--ran-surface-glass-selected`）以及文档级玻璃下试点控件的默认值（`r-dropdown-item`、`r-select` 触发器、`r-tabs` 标题滑块）。宿主不要为菜单另造一套 hover 灰色——那是 agents 偏离表面语言的常见路径。浮层面板应读 `--ran-surface-glass-overlay-*`，不要另起一套 fill。
 - **SHOULD** 统一玻璃**菜单 chrome**（滑动 wash 光标、选中用字重），不要强行统一标签：语言等 URL 菜单继续用 `<details>` + `<a>`；主题 / 表面等取值菜单继续用 `r-select`。
+- **MUST** 玻璃菜单打开时，wash 在第一帧绘制里就已经落在选中行上。打开后再晚半拍才出高亮，读起来像选中坏了，而不是动效。
+- **SHOULD** 凡是玻璃下列表光标会移动的地方，复用同一套 wash：`r-select` 列表、`r-menubar` 共享视口、`r-tabs` 标题填充，以及宿主侧栏 / 导航行 wash。一块填充、整行宽度、选中用字重（不要第二块填充）。
 
 ## 宿主责任
 

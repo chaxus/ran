@@ -187,29 +187,32 @@ test('under glass the theme menu uses a sliding wash, weight-selected, and no ch
     .filter({ hasText: 'Light' });
   await expect(panel).toBeVisible();
 
-  // r-dropdown-item uses a closed shadow root — assert the host CSS-var contract
-  // (weight / no-check) rather than shadow computed styles.
-  const chrome = await page.evaluate(() => {
-    const list = [...document.querySelectorAll('r-dropdown.ran-chrome-menu[role="listbox"][data-hover-fill]')].find(
-      (el) => el.textContent?.includes('Light'),
-    );
-    if (!list) return null;
-    const fill = list.querySelector('.ran-select-option-hover') as HTMLElement | null;
-    const items = [...list.querySelectorAll('r-dropdown-item')];
-    const selected = items.find((el) => el.hasAttribute('selected'));
-    const itemCs = selected ? getComputedStyle(selected) : null;
-    return {
-      hasFill: !!fill,
-      fillOpacity: fill?.style.opacity ?? '',
-      fillWidth: fill?.style.width ?? '',
-      itemCount: items.length,
-      listClass: list.className,
-      hasHoverFill: list.hasAttribute('data-hover-fill'),
-      varWeight: itemCs?.getPropertyValue('--ran-dropdown-option-selected-font-weight').trim() ?? '',
-      varCheck: itemCs?.getPropertyValue('--ran-dropdown-option-selected-check-display').trim() ?? '',
-      varPad: itemCs?.getPropertyValue('--ran-dropdown-option-selected-padding-inline-end').trim() ?? '',
-    };
-  });
+  // Wash place waits for FloatingController afterPosition — poll past that frame
+  // (Firefox/WebKit can open the panel a tick before opacity is written).
+  const readChrome = () =>
+    page.evaluate(() => {
+      const list = [...document.querySelectorAll('r-dropdown.ran-chrome-menu[role="listbox"][data-hover-fill]')].find(
+        (el) => el.textContent?.includes('Light'),
+      );
+      if (!list) return null;
+      const fill = list.querySelector('.ran-select-option-hover') as HTMLElement | null;
+      const items = [...list.querySelectorAll('r-dropdown-item')];
+      const selected = items.find((el) => el.hasAttribute('selected'));
+      const itemCs = selected ? getComputedStyle(selected) : null;
+      return {
+        hasFill: !!fill,
+        fillOpacity: fill?.style.opacity ?? '',
+        fillWidth: fill?.style.width ?? '',
+        itemCount: items.length,
+        listClass: list.className,
+        hasHoverFill: list.hasAttribute('data-hover-fill'),
+        varWeight: itemCs?.getPropertyValue('--ran-dropdown-option-selected-font-weight').trim() ?? '',
+        varCheck: itemCs?.getPropertyValue('--ran-dropdown-option-selected-check-display').trim() ?? '',
+        varPad: itemCs?.getPropertyValue('--ran-dropdown-option-selected-padding-inline-end').trim() ?? '',
+      };
+    });
+  await expect.poll(async () => (await readChrome())?.fillOpacity ?? '').toBe('1');
+  const chrome = await readChrome();
 
   expect(chrome).not.toBeNull();
   expect(chrome!.listClass).toContain('ran-chrome-menu');
@@ -218,7 +221,6 @@ test('under glass the theme menu uses a sliding wash, weight-selected, and no ch
   expect(chrome!.varCheck).toBe('none');
   expect(chrome!.varPad).not.toBe('');
   expect(chrome!.hasFill).toBe(true);
-  expect(chrome!.fillOpacity).toBe('1');
   expect(chrome!.fillWidth).not.toBe('0px');
   expect(chrome!.itemCount).toBeGreaterThanOrEqual(2);
 

@@ -17,6 +17,7 @@ const es: LocaleMessages = {
     chat_composer: 'Compositor de chat',
     overlay_form: 'Formulario en capa',
     content_render: 'Renderizado de contenido',
+    glass_chrome: 'Movimiento del chrome glass',
     build_ai_chat: 'Construir chat con IA',
     doc_editor: 'editor de documentos',
     github: 'GitHub',

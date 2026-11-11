@@ -10,6 +10,7 @@ description: ranui 组合示例——聊天输入区、浮层表单、富内容�
 - [聊天输入区](chat-composer) — 会话区、输入框、附件、语音、上下文计量
 - [浮层表单](overlay-form) — 对话框或气泡层中的表单控件
 - [内容渲染](content-render) — Markdown、公式与图表同屏展示
+- [玻璃菜单动效](glass-chrome) — select、tabs 与 menubar 的滑动选中 wash
 - [搭建 AI 聊天](../ranui/ai-chat/) — 从空文件到流式聊天
 
 [ranui](../ranui/) · [ranuts](../ranuts/) · [设计](../design/)

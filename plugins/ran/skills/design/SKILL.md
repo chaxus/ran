@@ -27,6 +27,12 @@ recordings for changed transitions, streaming, navigation and interruption. Say 
 inspected, what you observed, what you only inferred and what you could not check. Do not mark your
 own review as accepted; the host project's approval rules still apply.
 
+When the work touches glass menus, tabs, sidebar rows or shared menubar viewports, follow the
+checklist [Motion](references/DESIGN.md#motion) and [Surface · Interactive state on
+glass](references/SURFACE.md#interactive-state-on-glass) rules for sliding washes: one fill that
+travels, selected wash present on the first open frame (snap, no fade-in lag), full row width.
+Prefer the project's existing wash tokens and pilots over inventing a second hover grey.
+
 ## Before handing back
 
 Walk the [checklist](references/DESIGN.md) again, including the five-second and trunk tests on any

@@ -488,6 +488,7 @@ export const SIDEBAR: Record<string, SidebarNode[]> = {
     { kind: 'full', key: 'chat_composer', link: '/examples/chat-composer' },
     { kind: 'full', key: 'overlay_form', link: '/examples/overlay-form' },
     { kind: 'full', key: 'content_render', link: '/examples/content-render' },
+    { kind: 'full', key: 'glass_chrome', link: '/examples/glass-chrome' },
     { kind: 'full', key: 'build_ai_chat', link: '/ranui/ai-chat/' },
   ],
   '/ranui/': [
