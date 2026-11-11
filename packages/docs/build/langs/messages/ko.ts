@@ -17,6 +17,7 @@ const ko: LocaleMessages = {
     chat_composer: '채팅 입력',
     overlay_form: '오버레이 폼',
     content_render: '콘텐츠 렌더링',
+    glass_chrome: '글래스 크롬 모션',
     build_ai_chat: 'AI 채팅 구축',
     doc_editor: '문서 편집기',
     github: 'GitHub',

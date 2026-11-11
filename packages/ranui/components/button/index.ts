@@ -4,7 +4,13 @@ import { Div, Slot, createRef, EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/ssr';
 import { isDisabled } from '@/utils/dom';
 import { defineSSR } from '@/utils/ssr-registry';
-import { ensureShadowRoot, shadowPart, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  mountShadowTree,
+  paintedShadowChild,
+  shadowPart,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { isActivationKey } from '@/utils/a11y';
 
 export class Button extends RanElement {
@@ -23,6 +29,10 @@ export class Button extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, buttonCss);
+    // Keep Declarative Shadow DOM when present (home invite submit first paint).
+    const painted = paintedShadowChild(this._shadowDom);
+    if (painted && this._bindPaintedTree(painted as HTMLElement)) return;
+
     const btnContentRef = createRef<HTMLDivElement>();
     const slotRef = createRef<HTMLSlotElement>();
 
@@ -39,10 +49,23 @@ export class Button extends RanElement {
           .children(Slot().ref(slotRef).class('slot')),
       )
       .build();
-    this._shadowDom.appendChild(btn);
+    mountShadowTree(this._shadowDom, buttonCss, btn);
     this._btn = btn;
     this._btnContent = shadowPart(btnContentRef, 'content');
     this._slot = shadowPart(slotRef, 'slot');
+  }
+
+  private _bindPaintedTree(btn: HTMLElement): boolean {
+    const part = btn.getAttribute('part') || '';
+    const cls = typeof btn.className === 'string' ? btn.className : '';
+    if (!part.includes('button') && !cls.includes('ran-btn')) return false;
+    const content = btn.children.item(0) as HTMLDivElement | null;
+    const slot = content?.children.item(0) as HTMLSlotElement | null;
+    if (!content || !slot || slot.tagName.toLowerCase() !== 'slot') return false;
+    this._btn = btn as HTMLDivElement;
+    this._btnContent = content;
+    this._slot = slot;
+    return true;
   }
 
   // ── Properties ─────────────────────────────────────────────────────────────

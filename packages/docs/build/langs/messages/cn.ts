@@ -17,6 +17,7 @@ const cn: LocaleMessages = {
     chat_composer: '聊天输入区',
     overlay_form: '浮层表单',
     content_render: '内容渲染',
+    glass_chrome: '玻璃菜单动效',
     build_ai_chat: '搭建 AI 聊天',
     doc_editor: '文档编辑器',
     github: 'GitHub',

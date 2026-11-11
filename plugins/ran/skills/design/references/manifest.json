@@ -4,9 +4,9 @@
   "sources": [
     {
       "source": "design/DESIGN.md",
-      "sha256": "a63b23fea3d057b75549c0c26e9a5b1a675627a73a68bb8fc7ddbf2e748466af",
+      "sha256": "716fe968001d8fc15a702ae5967fbeabee2298adb6e196cb50ab08f34ddbbb39",
       "output": "DESIGN.md",
-      "outputSha256": "0e4efc146b7c7492c8ea0a15901f433e93e7c2807153675cb48a87054a9ee9c0"
+      "outputSha256": "b3af7d29b68a24c1ea04f982a7be08b78059147b763b077ba74213d6406bcbcd"
     },
     {
       "source": "design/README.md",
@@ -16,9 +16,9 @@
     },
     {
       "source": "design/SURFACE.md",
-      "sha256": "040183693883d230184c33b2eea1d60a43231aad0cefdea52733451054c4970a",
+      "sha256": "a6a7fb7f9016092c8433e9ac43f2bef0afb27811a750dc5e5d9de1e0b9d60003",
       "output": "SURFACE.md",
-      "outputSha256": "df7efca015af5240cdf76926d0131c51d460d24cad329fe5fce62c7cf2598788"
+      "outputSha256": "ce25c78dba5d4f084883ff26d7e1c36c410c6cb1c1df8a72e1ee8d37bdc33c23"
     },
     {
       "source": "design/assets/alignment-spines.svg",

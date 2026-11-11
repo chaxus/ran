@@ -22,7 +22,10 @@ test('undefined header switches and invite fields keep reserved shells', async (
   // Closed DSD is consumed into a closed root — it will not appear in page.content().
   // Assert the wire HTML still ships the declarative templates for header chrome.
   const wire = await page.request.get(page.url());
-  expect(await wire.text()).toMatch(/header-utils[\s\S]*shadowrootmode="closed"/);
+  const wireHtml = await wire.text();
+  expect(wireHtml).toMatch(/header-utils[\s\S]*shadowrootmode="closed"/);
+  expect(wireHtml).toMatch(/r-input class="example__field"[\s\S]*shadowrootmode="closed"/);
+  expect(wireHtml).toMatch(/r-select class="example__field"[\s\S]*shadowrootmode="closed"/);
   await expect.poll(() => page.locator('.theme-switch:not(:defined)').count()).toBe(1);
   await expect.poll(() => page.locator('.lang-switch:not(:defined)').count()).toBe(1);
   await expect.poll(() => page.locator('.example__field:not(:defined)').count()).toBe(2);

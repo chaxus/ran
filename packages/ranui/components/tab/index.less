@@ -44,8 +44,9 @@
         height var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
         opacity var(--ran-motion-duration-fast, 0.14s) linear
       );
+      /* First appear snaps — a fade reads as “hover late”, not motion. */
       &[data-instant] {
-        transition: opacity var(--ran-motion-duration-fast, 0.14s) linear;
+        transition: none;
       }
     }
     &-nav {

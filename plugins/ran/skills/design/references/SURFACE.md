@@ -72,6 +72,11 @@ Frosted plates wash out faint fills. State that was clear on Graphite can disapp
 - **SHOULD** Unify glass **menu chrome** (sliding wash cursor, weight for selected), not the
   host tag: language and other URL menus stay `<details>` + `<a>`; theme / surface and other
   value menus stay `r-select`.
+- **MUST** When a glass menu opens, the wash already sits on the selected row in that first
+  painted frame. Delayed highlight after open reads as broken selection, not motion.
+- **SHOULD** Reuse the same wash recipe everywhere a list cursor moves under glass: `r-select`
+  lists, `r-menubar` shared viewport, `r-tabs` header fill, and host sidebar / nav row washes.
+  One fill, full row width, weight (not a second fill) for selected.
 
 ## Host responsibilities
 

@@ -1124,7 +1124,7 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
     opacity var(--ran-motion-duration-fast) linear;
 }
 .hu__hover[data-instant] {
-  transition: opacity var(--ran-motion-duration-fast) linear;
+  transition: none;
 }
 .header-primary > :not(.hu__hover),
 .header-tools > :not(.hu__hover) {
@@ -1876,7 +1876,7 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
     opacity var(--ran-motion-duration-fast) linear;
 }
 .sb__hover[data-instant] {
-  transition: opacity var(--ran-motion-duration-fast) linear;
+  transition: none;
 }
 @media (prefers-reduced-motion: reduce) {
   .sb__hover {

@@ -150,6 +150,13 @@ MUST be able to answer, without scrolling:
   `transition: all`.
 - MUST: under reduced motion nothing travels or keeps running; at most a short fade. **(checked)**
 - Motion is interruptible and reverses cleanly. Watch it as a recording, not a still.
+- A sliding **selection / hover wash** (menus, tabs, sidebar rows) is one fill that moves, not a
+  per-row background flash. Travel between rows may ease; the wash on the **already selected** row
+  MUST be present on the first visible frame when a menu or panel opens — never fade in after the
+  list appears. Hopping a shared panel between peers may morph the shell; settle the wash only after
+  that shell's geometry is final, then snap (no opacity fade) onto the selected row.
+- First paint MUST already show chrome labels and control chrome that SSR can provide; an empty
+  host that pops into place after upgrade is a flash, not an entrance.
 
 ## Words
 

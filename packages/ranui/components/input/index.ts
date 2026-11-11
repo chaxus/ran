@@ -6,6 +6,8 @@ import {
   ensureShadowRoot,
   getStringAttribute,
   hostInternals,
+  mountShadowTree,
+  paintedShadowChild,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -61,18 +63,46 @@ export class Input extends RanElement {
     super();
     this._internals = hostInternals(this);
     this._shadowDom = ensureShadowRoot(this, inputCss, { mode: 'closed' }, this._internals);
+    // Keep Declarative Shadow DOM when present — remounting wipes the invite-card first paint.
+    const painted = paintedShadowChild(this._shadowDom);
+    if (painted && this._bindPaintedTree(painted as HTMLElement)) return;
+
     const inputContentRef = createRef<HTMLInputElement>();
     const wrap = Div()
       .class('ran-input')
       .part('input')
       .children(InputBuilder().class('ran-input-content').ref(inputContentRef).part('content'))
       .build();
-    this._shadowDom.appendChild(wrap);
+    mountShadowTree(this._shadowDom, inputCss, wrap);
     this._input = wrap;
     this._inputContent = shadowPart(inputContentRef, 'content');
     // A stable id so a rendered <label> can point its `for` at this control,
     // giving it an accessible name and click-to-focus (both in the same shadow root).
     if (!this._inputContent.id) this._inputContent.id = `ran-input-${++inputIdSeq}`;
+  }
+
+  /** Wire refs from a DSD snapshot (optional label / message siblings around the wrap). */
+  private _bindPaintedTree(wrap: HTMLElement): boolean {
+    const part = wrap.getAttribute('part') || '';
+    const cls = typeof wrap.className === 'string' ? wrap.className : '';
+    if (!part.includes('input') && !cls.includes('ran-input')) return false;
+    const content = wrap.children.item(0) as HTMLInputElement | null;
+    if (!content || content.tagName.toLowerCase() !== 'input') return false;
+    this._input = wrap as HTMLDivElement;
+    this._inputContent = content;
+    if (!this._inputContent.id) this._inputContent.id = `ran-input-${++inputIdSeq}`;
+    for (const child of this._shadowDom.children) {
+      if (child === wrap) break;
+      if (child.tagName.toLowerCase() === 'label') this._label = child as HTMLLabelElement;
+    }
+    for (const child of this._shadowDom.children) {
+      if (child === wrap || child === this._label) continue;
+      const childPart = (child as HTMLElement).getAttribute?.('part') || '';
+      if (child.tagName.toLowerCase() === 'div' && childPart.includes('message')) {
+        this._message = child as HTMLElement;
+      }
+    }
+    return true;
   }
   /**
    * @description: 聚焦到内部原生 <input>。宿主自身不在 tab 序、也无内建 focus 行为，
