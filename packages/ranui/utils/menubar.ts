@@ -350,7 +350,15 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
   ): void => {
     ensureHoverInClip();
     // Width first so nowrap labels lay out; height follows content. No flush yet.
-    setShellBox(x, y, minWidth, Math.max(layerContentHeight(layer) + SHELL_PAD * 2, SHELL_PAD * 2 + 1), opacity, true, false);
+    setShellBox(
+      x,
+      y,
+      minWidth,
+      Math.max(layerContentHeight(layer) + SHELL_PAD * 2, SHELL_PAD * 2 + 1),
+      opacity,
+      true,
+      false,
+    );
     const h = layerContentHeight(layer) + SHELL_PAD * 2;
     const w = Math.max(minWidth, layer.scrollWidth + SHELL_PAD * 2);
     setShellBox(x, y, w, h, opacity, instant, false);
