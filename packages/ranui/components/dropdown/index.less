@@ -318,15 +318,16 @@
   background: var(--ran-select-option-hover-background, var(--ran-surface-glass-hover));
   opacity: 0;
   pointer-events: none;
+  /* Travel is transform/size only — opacity must never ease (Stripe / Radix pattern).
+     Fading opacity on open or row change reads as “selection arrived late”. */
   transition: var(
     --ran-select-option-hover-transition,
     transform var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
     width var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
-    height var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
-    opacity var(--ran-motion-duration-fast, 0.14s) linear
+    height var(--ran-motion-duration-slow, 0.28s) var(--ran-motion-ease-standard, cubic-bezier(0.2, 0, 0, 1))
   );
 }
-/* First paint / reopen: snap on — a fade reads as “selected late”. */
+/* First paint / reopen: snap geometry on — no travel ease from 0×0. */
 ::slotted(.ran-select-option-hover[data-instant]) {
   transition: none;
 }

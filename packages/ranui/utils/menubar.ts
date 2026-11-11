@@ -96,11 +96,11 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
   border-radius:var(--ran-radius-sm,8px);
   background:var(--ran-color-bg-hover,var(--ran-color-fill-secondary,rgba(0,0,0,.06)));
   opacity:0;pointer-events:none;
+  /* Transform/size only — never ease opacity (open/hop must not read as a late fill). */
   transition:
     transform ${duration}ms ${easing},
     width ${duration}ms ${easing},
-    height ${duration}ms ${easing},
-    opacity ${Math.min(180, duration)}ms linear;
+    height ${duration}ms ${easing};
 }
 :root[data-ran-surface=glass] .${VIEWPORT_CLASS}__hover{
   background:var(--ran-surface-glass-hover,color-mix(in srgb,var(--ran-gray-1000,#111113) 8%,transparent));
@@ -434,6 +434,9 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       // No content fade on first open — a fade reads as “selected wash arrived late”.
       const layer = buildLayer(harvest, null, onPick);
       clip.replaceChildren(hover, layer);
+      // Wash opacity/geometry before fitAndShow's forced reflow — otherwise the
+      // first paint can flush with opacity 0 and read as a late fill.
+      syncHoverToLayer(layer, false);
       fitAndShow(layer, x, y, w, 1, !hopping);
       syncHoverToLayer(layer, false);
       return;
@@ -462,6 +465,7 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     // shell morphs — never hide→fade the wash after the menu is already open.
     hoverTarget = null;
     clip.appendChild(incoming);
+    syncHoverToLayer(incoming, false);
     // Morph shell toward the new trigger; height follows rebuilt rows, not a tall harvest.
     const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
     const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
