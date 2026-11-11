@@ -1,4 +1,6 @@
 export { isSSR } from './env';
+export type { Host, HostNode, HostListener } from './host';
+export { createMemoryHost, emitMemoryEvent, createWebHost } from './hosts';
 export { EventManager } from './events';
 export {
   signal,
