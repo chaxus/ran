@@ -213,7 +213,16 @@ test('after a peer hop the option wash settles on the selected row', async ({ pa
   await expect
     .poll(async () => {
       const aligned = await measure();
-      return aligned && aligned.dx < 2 && aligned.dy < 2 && aligned.dw < 2;
+      // Wait for shell height settle too — wash can align mid-morph while a tall
+      // previous menu still leaves ~90px under theme/system rows.
+      return (
+        !!aligned &&
+        aligned.dx < 2 &&
+        aligned.dy < 2 &&
+        aligned.dw < 2 &&
+        aligned.emptyGap !== null &&
+        aligned.emptyGap <= 12
+      );
     })
     .toBe(true);
   const aligned = await measure();
