@@ -1,13 +1,13 @@
 /**
  * Hover menubar handoff for chrome selects (language / theme / surface).
  *
- * Industry pattern for smooth peer hops (Stripe / Radix NavigationMenu):
- * one shared viewport shell morphs position + size. Outgoing content is dropped
- * immediately (no cross-fade residual). Incoming rows snap inside the shell —
- * a translateX slide at full opacity read as the panel sitting off the new
- * trigger. Direction is carried by the shell morph alone. Independent select
- * portals stay open for state/a11y but are visually suppressed while the
- * viewport is showing.
+ * Industry pattern for peer hops (Stripe / Radix NavigationMenu viewport):
+ * one shared shell, outgoing content dropped immediately (no cross-fade
+ * residual). Hop **snaps** the shell to the new trigger — a CSS morph left the
+ * panel visibly stranded under the previous item while the pointer was already
+ * on the next (English → System read as a miss). First open still paints wash
+ * with the first layout. Independent select portals stay open for state/a11y
+ * but are visually suppressed while the viewport is showing.
  *
  * Used by `<r-menubar>` and available as `mountMenubarHandoff`.
  */
@@ -423,55 +423,14 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       hideViewport();
     };
 
-    if (!hopping || reduceMotion()) {
-      // No content fade on first open — a fade reads as “selected wash arrived late”.
-      const layer = buildLayer(harvest, null, onPick);
-      clip.replaceChildren(hover, layer);
-      fitAndShow(layer, x, y, w, 1, true, () => {
-        // Same commit as first paint: wash + rows together (before offsetWidth flush).
-        hoverTarget = null;
-        syncHoverToLayer(layer);
-      });
-      return;
-    }
-
-    // No content translateX — at full opacity that offset read as “panel missed the trigger”.
-    // Shell morph already carries hop direction; rows stay locked to the shell box.
-    const incoming = buildLayer(harvest, null, onPick);
-    // Drop every prior layer before paint — cross-fading leave+enter left dual-menu residual.
-    for (const stale of [...clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer`)]) {
-      stale.remove();
-    }
-    ensureHoverInClip();
-    clip.appendChild(incoming);
-    // Morph shell toward the new trigger; height follows rebuilt rows, not a tall harvest.
-    const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
-    const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
-    setShellBox(x, y, nextW, nextH, 1, false);
-    // Wash with the incoming rows immediately — never hide until morph ends.
-    hoverTarget = null;
-    syncHoverToLayer(incoming);
-    // Re-snap after morph so clip-local coords match the settled box (no hide).
-    const selected = incoming.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
-    const realign = (): void => {
-      if (!selected?.isConnected) return;
+    // First open and hop share one recipe: instant shell + wash in the same commit.
+    // A CSS morph stranded the panel under the previous trigger mid-flight.
+    const layer = buildLayer(harvest, null, onPick);
+    clip.replaceChildren(hover, layer);
+    fitAndShow(layer, x, y, w, 1, true, () => {
       hoverTarget = null;
-      placeHover(selected);
-    };
-    const onEnd = (event: TransitionEvent): void => {
-      if (event.target !== shell) return;
-      if (event.propertyName !== 'transform' && event.propertyName !== 'width' && event.propertyName !== 'height') {
-        return;
-      }
-      shell.removeEventListener('transitionend', onEnd);
-      realign();
-    };
-    shell.addEventListener('transitionend', onEnd);
-    window.clearTimeout(hoverSettleTimer);
-    hoverSettleTimer = window.setTimeout(() => {
-      shell.removeEventListener('transitionend', onEnd);
-      realign();
-    }, duration + 50);
+      syncHoverToLayer(layer);
+    });
   };
 
   const setOpen = (item: MenubarItem, open: boolean): void => {

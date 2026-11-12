@@ -249,7 +249,7 @@ describe('mountMenubarHandoff', () => {
     expect(css).toMatch(/transform\s+\d+ms/);
     expect(css).toContain('data-hover-fill');
     expect(css).toMatch(/__hover\[data-instant\]\{transition:none\}/);
-    // Hop: shell morph only — content translateX at full opacity read as a miss.
+    // Hop snaps the shell; no content slide / cross-fade keyframes.
     expect(css).not.toContain('ran-menubar-from-start');
     expect(css).not.toContain('ran-menubar-to-start');
     expect(css).not.toContain('ran-menubar-fade-in');
