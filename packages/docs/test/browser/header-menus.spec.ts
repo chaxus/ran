@@ -442,3 +442,14 @@ test('language select navigates on change without fine-pointer hover', async ({ 
   await deutsch.click();
   await page.waitForURL('**/de/**');
 });
+
+test('menubar language pick navigates (fine pointer viewport commit)', async ({ page, browserName }) => {
+  test.skip(browserName === 'firefox', 'hover menus need a fine pointer hover path');
+  await page.goto('/');
+  await page.waitForFunction(() => customElements.get('r-menubar') && customElements.get('r-select'));
+  await page.locator('.lang-switch').hover();
+  await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'Português' })).toBeVisible();
+  await page.locator('.ran-menubar-viewport__option', { hasText: 'Português' }).click();
+  await page.waitForURL('**/pt/**');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pt');
+});
