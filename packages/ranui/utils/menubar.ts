@@ -107,7 +107,7 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
 .${VIEWPORT_CLASS}__option{
   appearance:none;border:0;background:transparent;margin:0;cursor:pointer;text-align:start;
   position:relative;z-index:1;
-  display:block;width:100%;box-sizing:border-box;
+  display:block;width:100%;min-width:100%;box-sizing:border-box;align-self:stretch;
   padding:6px 12px;border-radius:var(--ran-radius-sm,8px);
   color:var(--ran-color-text,rgba(0,0,0,.88));
   font:inherit;font-size:var(--ran-text-label-1,14px);font-weight:var(--ran-text-label-weight,500);
@@ -275,14 +275,18 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     if (hover.parentNode !== clip) clip.prepend(hover);
   };
 
-  /** Place in clip-local coordinates — stable while the shell itself translates. */
+  /**
+   * Place in clip-local coordinates — stable while the shell itself translates.
+   * Width spans the full clip (DESIGN: nav wash is full row, not fit-content);
+   * Y/height follow the option.
+   */
   const placeHover = (option: HTMLElement): void => {
     ensureHoverInClip();
     const clipBox = clip.getBoundingClientRect();
     const box = option.getBoundingClientRect();
     hover.toggleAttribute('data-instant', hoverTarget === null);
-    hover.style.transform = `translate(${box.left - clipBox.left}px, ${box.top - clipBox.top}px)`;
-    hover.style.width = `${box.width}px`;
+    hover.style.transform = `translate(0px, ${box.top - clipBox.top}px)`;
+    hover.style.width = `${Math.max(clip.clientWidth, box.width)}px`;
     hover.style.height = `${box.height}px`;
     hover.style.opacity = '1';
     hoverTarget = option;

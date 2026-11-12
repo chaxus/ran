@@ -249,6 +249,8 @@ describe('mountMenubarHandoff', () => {
     expect(css).toMatch(/transform\s+\d+ms/);
     expect(css).toContain('data-hover-fill');
     expect(css).toMatch(/__hover\[data-instant\]\{transition:none\}/);
+    // Options stretch so the wash can span the full clip row.
+    expect(css).toContain('min-width:100%');
     // Hop: incoming fade+slide only — no outgoing cross-fade residual.
     expect(css).toContain('ran-menubar-from-start');
     expect(css).toContain('ran-menubar-from-end');
